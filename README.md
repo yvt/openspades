@@ -20,7 +20,7 @@ you might also have to install more packages by ```sudo apt-get install libjpeg-
 2. ```./autogen.sh && ./configure && make```
 3. ```sudo make install```
 4. Download windows binary of OpenSpades from https://sites.google.com/a/yvt.jp/openspades/downloads, extract it,
-and copy the contents of Resources directory into /usr/share/openspades/Resources or ~/.openspades/Resources
+and copy the contents of Resources directory into /usr/local/share/openspades/Resources or ~/.openspades/Resources
 5. ```openspades``` and enjoy
 
 Licensing
