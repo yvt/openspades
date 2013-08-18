@@ -1,3 +1,9 @@
+# Non-GPLv3 assets
+Resources/Gfx
+Resources/Models
+Resources/Sounds
+Resources/Textures
+
 # Compiled Object files
 *.slo
 *.lo
