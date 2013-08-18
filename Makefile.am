@@ -1,3 +1,7 @@
+SUBDIRS = Resources
+
+Resourcesdir = $(datadir)/Resources
+
 bin_PROGRAMS = openspades
 
 AM_CPPFLAGS = -I$(srcdir)/Sources/ENet/include
@@ -10,6 +14,7 @@ AM_CPPFLAGS += $(ZLIB_CFLAGS)
 # AM_CPPFLAGS += $(PNG_CFLAGS)
 
 AM_CPPFLAGS += -DNDEBUG=1
+AM_CPPFLAGS += $(RESOURCES_CFLAGS)
 
 openspades_LDADD = $(GL_LIBS)
 openspades_LDADD += $(GLEW_LIBS)
@@ -305,6 +310,7 @@ Sources/unzip/ioapi.h \
 Sources/Imports/SDL.h \
 Sources/Imports/OpenGL.h
 
+
 EXTRA_DIST = \
 Sources/ENet/LICENSE \
 Sources/ENet/README \
@@ -312,9 +318,8 @@ Sources/kiss_fft130/CHANGELOG \
 Sources/kiss_fft130/COPYING \
 Sources/kiss_fft130/README \
 Sources/kiss_fft130/README.simd \
-Sources/Gui/AboutText.html
-
-
+Sources/Gui/AboutText.html \
+autogen.sh
 
 
 

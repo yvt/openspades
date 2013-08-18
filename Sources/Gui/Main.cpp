@@ -84,6 +84,12 @@ int main(int argc, char ** argv)
 	spades::FileManager::AddFileSystem
 	(new spades::DirectoryFileSystem("/usr/share/openspades/Resources", false));
 #endif
+	
+#ifdef RESDIR
+	spades::FileManager::AddFileSystem
+	(new spades::DirectoryFileSystem(RESDIR, false));
+#endif
+	
 	/*
 	spades::FileManager::AddFileSystem
 	(new spades::DirectoryFileSystem("/Users/tcpp/Programs/MacPrograms2/OpenSpades/Resources", false));

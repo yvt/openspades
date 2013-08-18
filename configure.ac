@@ -76,6 +76,19 @@ AC_SUBST(FLTK_LIBS)
 
 AC_SUBST(WIN32_LIBS)
 
+# Data directory
+
+case $host_os in
+  windows*|mingw*|winnt)
+		RESOURCES_CFLAGS=""
+		;;
+ * )
+		RESOURCES_CFLAGS="-DRESDIR=\\\"${datadir}/Resources\\\""
+		;;
+esac
+
+AC_SUBST(RESOURCES_CFLAGS)
+
 # Checks for header files.
 AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h netdb.h netinet/in.h stdint.h stdlib.h string.h sys/ioctl.h sys/socket.h sys/time.h unistd.h])
 
@@ -109,5 +122,5 @@ AC_CHECK_TYPE(socklen_t, [AC_DEFINE(HAS_SOCKLEN_T)], ,
               #include <sys/socket.h>
 )
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile Resources/Makefile])
 AC_OUTPUT
