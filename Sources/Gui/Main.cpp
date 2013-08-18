@@ -80,9 +80,6 @@ int main(int argc, char ** argv)
 	
 	spades::FileManager::AddFileSystem
 	(new spades::DirectoryFileSystem(home+"/.openspades/Resources", true));
-	
-	spades::FileManager::AddFileSystem
-	(new spades::DirectoryFileSystem("/usr/share/openspades/Resources", false));
 #endif
 	
 #ifdef RESDIR
