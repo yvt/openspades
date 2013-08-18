@@ -16,6 +16,21 @@
 Makefile
 Makefile.in
 configure
+.deps
+.dirstamp
+aclocal.m4
+autom4te.cache
+compile
+config.guess
+config.log
+config.status
+config.sub
+depcomp
+install-sh
+missing
+
+# output binary
+openspades
 
 # Xcode Generated Files
 DerivedData
