@@ -11,3 +11,9 @@
 	* Modified reload volume
 	* fogColor in GLShadowShader is now linearized
 
+2013-08-18 yvt <i@yvt.jp>
+
+	* Added support for installing shaders by make install
+	* Support for RESDIR variable
+	* Removed fixed and deprecated resource directory
+
