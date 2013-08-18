@@ -32,6 +32,9 @@ missing
 # output binary
 openspades
 
+# mac related
+*.DS_Store
+
 # Xcode Generated Files
 DerivedData
 xcuserdata
