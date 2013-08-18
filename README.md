@@ -26,3 +26,5 @@ and copy the contents of Resources directory into /usr/share/openspades/Resource
 Licensing
 ---------
 Please see the file called LICENSE.
+
+Note that other assets including sounds and models are not open source.
