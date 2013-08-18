@@ -11,3 +11,23 @@
 *.lai
 *.la
 *.a
+
+# autotools
+Makefile
+Makefile.in
+configure
+
+# Xcode Generated Files
+DerivedData
+xcuserdata
+*~.nib
+*.pbxuser
+*.perspective
+*.perspectivev2
+#!xcuserdata/
+#*.xcuserstate
+UserInterfaceState.xcuserstate
+
+# Windows related
+Thumbs.db
+

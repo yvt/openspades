@@ -1,0 +1,64 @@
+//
+//  ZipFileSystem.h
+//  OpenSpades
+//
+//  Created by yvt on 8/8/13.
+//  Copyright (c) 2013 yvt.jp. All rights reserved.
+//
+
+#pragma once
+
+#include "IFileSystem.h"
+#include <stdint.h>
+
+extern "C"{
+	typedef void *unzFile;
+	struct zlib_filefunc_def_s;
+	typedef struct zlib_filefunc_def_s zlib_filefunc_def;
+}
+	
+namespace spades {
+	class ZipFileSystem: public IFileSystem {
+		class ZipFileInputStream;
+		class ZipFileHandle;
+		
+		IStream *baseStream;
+		bool autoClose;
+		unzFile zip;
+		
+		ZipFileInputStream *currentStream;
+		
+		uint64_t cursorPos;
+		
+		static ZipFileHandle *InternalOpen(ZipFileSystem *fs,
+										   const char *fn,
+										   int mode);
+		
+		static uint32_t InternalRead(ZipFileSystem *fs,
+										   ZipFileHandle *h,
+										   void *buf, uint32_t size);
+		static uint32_t InternalWrite(ZipFileSystem *fs,
+										   ZipFileHandle *h,
+										   void *buf, uint32_t size);
+		static long InternalTell(ZipFileSystem *fs,
+									  ZipFileHandle *h);
+		static long InternalSeek(ZipFileSystem *fs,
+								 ZipFileHandle *h,
+								 int32_t offset, int origin);
+		static int InternalClose(ZipFileSystem *fs,
+								 ZipFileHandle *h);
+		static int InternalTestError(ZipFileSystem *fs,
+								 ZipFileHandle *h);
+		
+		zlib_filefunc_def CreateZLibFileFunc();
+	public:
+		ZipFileSystem(IStream *, bool autoClose = true);
+		virtual ~ZipFileSystem();
+		
+		virtual std::vector<std::string> EnumFiles(const char *);
+		
+		virtual IStream *OpenForReading(const char *);
+		virtual IStream *OpenForWriting(const char *);
+		virtual bool FileExists(const char *);
+	};
+}

@@ -1,0 +1,23 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0302 
+header_name {.h} 
+code_name {.cpp}
+widget_class DetailConfigWindow {
+  label {Advanced Settings} open
+  xywh {594 187 591 513} type Double
+  code0 {\#include "DetailConfigTable.h"}
+  class Fl_Window visible
+} {
+  Fl_Return_Button {} {
+    label Dismiss
+    callback {table->EndEditing();
+hide();} selected
+    xywh {480 475 100 25}
+  }
+  Fl_Table table {open
+    xywh {10 10 570 455}
+    class DetailConfigTable
+  } {}
+  Function {Init()} {open
+  } {}
+} 

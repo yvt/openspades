@@ -1,0 +1,321 @@
+//
+//  ALFuncs.cpp
+//  OpenSpades
+//
+//  Created by yvt on 7/14/13.
+//  Copyright (c) 2013 yvt.jp. All rights reserved.
+//
+
+#include "ALFuncs.h"
+#include "../Core/DynamicLibrary.h"
+#include "../Core/Exception.h"
+#include "../Core/Settings.h"
+
+#if defined(__APPLE__)
+SPADES_SETTING(s_alDriver, "/Library/Frameworks/OpenAL-Soft.framework/OpenAL-Soft");
+#elif defined(WIN32)
+SPADES_SETTING(s_alDriver, "OpenAL32.dll");
+#else
+SPADES_SETTING(s_alDriver, "/usr/lib/i386-linux-gnu/libopenal.so");
+#endif
+
+namespace al{
+
+	LPALENABLE qalEnable;
+	LPALDISABLE qalDisable;
+	LPALISENABLED qalIsEnabled;
+	LPALGETSTRING qalGetString;
+	LPALGETBOOLEANV qalGetBooleanv;
+	LPALGETINTEGERV qalGetIntegerv;
+	LPALGETFLOATV qalGetFloatv;
+	LPALGETDOUBLEV qalGetDoublev;
+	LPALGETBOOLEAN qalGetBoolean;
+	LPALGETINTEGER qalGetInteger;
+	LPALGETFLOAT qalGetFloat;
+	LPALGETDOUBLE qalGetDouble;
+	LPALGETERROR qalGetError;
+	LPALISEXTENSIONPRESENT qalIsExtensionPresent;
+	LPALGETPROCADDRESS qalGetProcAddress = NULL;
+	LPALGETENUMVALUE qalGetEnumValue;
+	LPALLISTENERF qalListenerf;
+	LPALLISTENER3F qalListener3f;
+	LPALLISTENERFV qalListenerfv;
+	LPALLISTENERI qalListeneri;
+	LPALGETLISTENERF qalGetListenerf;
+	LPALGETLISTENER3F qalGetListener3f;
+	LPALGETLISTENERFV qalGetListenerfv;
+	LPALGETLISTENERI qalGetListeneri;
+	LPALGENSOURCES qalGenSources;
+	LPALDELETESOURCES qalDeleteSources;
+	LPALISSOURCE qalIsSource;
+	LPALSOURCEF qalSourcef;
+	LPALSOURCE3F qalSource3f;
+	LPALSOURCEFV qalSourcefv;
+	LPALSOURCEI qalSourcei;
+	LPALSOURCE3I qalSource3i;
+	LPALGETSOURCEF qalGetSourcef;
+	LPALGETSOURCE3F qalGetSource3f;
+	LPALGETSOURCEFV qalGetSourcefv;
+	LPALGETSOURCEI qalGetSourcei;
+	LPALSOURCEPLAYV qalSourcePlayv;
+	LPALSOURCESTOPV qalSourceStopv;
+	LPALSOURCEREWINDV qalSourceRewindv;
+	LPALSOURCEPAUSEV qalSourcePausev;
+	LPALSOURCEPLAY qalSourcePlay;
+	LPALSOURCESTOP qalSourceStop;
+	LPALSOURCEREWIND qalSourceRewind;
+	LPALSOURCEPAUSE qalSourcePause;
+	LPALSOURCEQUEUEBUFFERS qalSourceQueueBuffers;
+	LPALSOURCEUNQUEUEBUFFERS qalSourceUnqueueBuffers;
+	LPALGENBUFFERS qalGenBuffers;
+	LPALDELETEBUFFERS qalDeleteBuffers;
+	LPALISBUFFER qalIsBuffer;
+	LPALBUFFERDATA qalBufferData;
+	LPALGETBUFFERF qalGetBufferf;
+	LPALGETBUFFERI qalGetBufferi;
+	LPALDOPPLERFACTOR qalDopplerFactor;
+	LPALDOPPLERVELOCITY qalDopplerVelocity;
+	LPALDISTANCEMODEL qalDistanceModel;
+
+	LPALGENEFFECTS qalGenEffects;
+	LPALDELETEEFFECTS qalDeleteEffects;
+	LPALISEFFECT qalIsEffect;
+	LPALEFFECTI qalEffecti;
+	LPALEFFECTIV qalEffectiv;
+	LPALEFFECTF qalEffectf;
+	LPALEFFECTFV qalEffectfv;
+	LPALGETEFFECTI qalGetEffecti;
+	LPALGETEFFECTIV qalGetEffectiv;
+	LPALGETEFFECTF qalGetEffectf;
+	LPALGETEFFECTFV qalGetEffectfv;
+	LPALGENFILTERS qalGenFilters;
+	LPALDELETEFILTERS qalDeleteFilters;
+	LPALISFILTER qalIsFilter;
+	LPALFILTERI qalFilteri;
+	LPALFILTERIV qalFilteriv;
+	LPALFILTERF qalFilterf;
+	LPALFILTERFV qalFilterfv;
+	LPALGETFILTERI qalGetFilteri;
+	LPALGETFILTERIV qalGetFilteriv;
+	LPALGETFILTERF qalGetFilterf;
+	LPALGETFILTERFV qalGetFilterfv;
+	LPALGENAUXILIARYEFFECTSLOTS qalGenAuxiliaryEffectSlots;
+	LPALDELETEAUXILIARYEFFECTSLOTS qalDeleteAuxiliaryEffectSlots;
+	LPALISAUXILIARYEFFECTSLOT qalIsAuxiliaryEffectSlot;
+	LPALAUXILIARYEFFECTSLOTI qalAuxiliaryEffectSloti;
+	LPALAUXILIARYEFFECTSLOTIV qalAuxiliaryEffectSlotiv;
+	LPALAUXILIARYEFFECTSLOTF qalAuxiliaryEffectSlotf;
+	LPALAUXILIARYEFFECTSLOTFV qalAuxiliaryEffectSlotfv;
+	LPALGETAUXILIARYEFFECTSLOTI qalGetAuxiliaryEffectSloti;
+	LPALGETAUXILIARYEFFECTSLOTIV qalGetAuxiliaryEffectSlotiv;
+	LPALGETAUXILIARYEFFECTSLOTF qalGetAuxiliaryEffectSlotf;
+	LPALGETAUXILIARYEFFECTSLOTFV qalGetAuxiliaryEffectSlotfv;
+
+	// Mac OS X Extensions
+	// ALC_EXT_MAC_OSX
+	alcMacOSXRenderingQualityProcPtr qalcMacOSXRenderingQuality;
+	alMacOSXRenderChannelCountProcPtr qalMacOSXRenderChannelCount;
+	alcMacOSXMixerMaxiumumBussesProcPtr qalcMacOSXMixerMaxiumumBusses;
+	alcMacOSXMixerOutputRateProcPtr qalcMacOSXMixerOutputRate;
+	alcMacOSXGetRenderingQualityProcPtr qalcMacOSXGetRenderingQuality;
+	alMacOSXGetRenderChannelCountProcPtr qalMacOSXGetRenderChannelCount;
+	alcMacOSXGetMixerMaxiumumBussesProcPtr qalcMacOSXGetMixerMaxiumumBusses;
+	alcMacOSXGetMixerOutputRateProcPtr qalcMacOSXGetMixerOutputRate;
+	// ALC_EXT_ASA
+	alcASAGetSourceProcPtr qalcASAGetSource;
+	alcASASetSourceProcPtr qalcASASetSource;
+	alcASAGetListenerProcPtr qalcASAGetListener;
+	alcASASetListenerProcPtr qalcASASetListener;
+
+	LPALCCREATECONTEXT qalcCreateContext;
+	LPALCMAKECONTEXTCURRENT qalcMakeContextCurrent;
+	LPALCPROCESSCONTEXT qalcProcessContext;
+	LPALCSUSPENDCONTEXT qalcSuspendContext;
+	LPALCDESTROYCONTEXT qalcDestroyContext;
+	LPALCGETCURRENTCONTEXT qalcGetCurrentContext;
+	LPALCGETCONTEXTSDEVICE qalcGetContextsDevice;
+	LPALCOPENDEVICE qalcOpenDevice;
+	LPALCCLOSEDEVICE qalcCloseDevice;
+	LPALCGETERROR qalcGetError;
+	LPALCISEXTENSIONPRESENT qalcIsExtensionPresent;
+	LPALCGETPROCADDRESS qalcGetProcAddress;
+	LPALCGETENUMVALUE qalcGetEnumValue;
+	LPALCGETSTRING qalcGetString;
+	LPALCGETINTEGERV qalcGetIntegerv;
+	LPALCCAPTUREOPENDEVICE qalcCaptureOpenDevice;
+	LPALCCAPTURECLOSEDEVICE qalcCaptureCloseDevice;
+	LPALCCAPTURESTART qalcCaptureStart;
+	LPALCCAPTURESTOP qalcCaptureStop;
+	LPALCCAPTURESAMPLES qalcCaptureSamples;
+
+	static spades::DynamicLibrary *alLibrary = NULL;
+
+	static void *GPA(const char *str)
+	{
+		if(!alLibrary){
+			alLibrary = new spades::DynamicLibrary(s_alDriver.CString());
+		}
+		
+		if(qalGetProcAddress){
+			void *v = qalGetProcAddress(str);
+			if(v)
+				return v;
+		}
+		
+		return alLibrary->GetSymbol(str);
+	}
+
+#define L(name) \
+	*(void **)(&(q ## name)) = GPA( #name )
+
+	void InitEAX(void){
+		ALCdevice *pDevice = NULL;
+		ALCcontext *pContext = NULL;
+		
+		pContext = qalcGetCurrentContext();
+		pDevice = qalcGetContextsDevice(pContext);
+
+		if (qalcIsExtensionPresent(pDevice, (ALCchar*)ALC_EXT_EFX_NAME)){
+			L(alGenEffects);
+			L(alDeleteEffects);
+			L(alIsEffect);
+			L(alEffecti);
+			L(alEffectiv);
+			L(alEffectf);
+			L(alEffectfv);
+			L(alGetEffecti);
+			L(alGetEffectiv);
+			L(alGetEffectf);
+			L(alGetEffectfv);
+			L(alGenFilters);
+			L(alDeleteFilters);
+			L(alIsFilter);
+			L(alFilteri);
+			L(alFilteriv);
+			L(alFilterf);
+			L(alFilterfv);
+			L(alGetFilteri);
+			L(alGetFilteriv);
+			L(alGetFilterf);
+			L(alGetFilterfv);
+			L(alGenAuxiliaryEffectSlots);
+			L(alDeleteAuxiliaryEffectSlots);
+			L(alIsAuxiliaryEffectSlot);
+			L(alAuxiliaryEffectSloti);
+			L(alAuxiliaryEffectSlotiv);
+			L(alAuxiliaryEffectSlotf);
+			L(alAuxiliaryEffectSlotfv);
+			L(alGetAuxiliaryEffectSloti);
+			L(alGetAuxiliaryEffectSlotiv);
+			L(alGetAuxiliaryEffectSlotf);
+			L(alGetAuxiliaryEffectSlotfv);
+		}else{
+			SPRaise("Extension not found: '%s'",
+					ALC_EXT_EFX_NAME);
+		}
+		
+	}
+	
+	void Link(void) {
+		L(alEnable);
+		L(alDisable);
+		L(alIsEnabled);
+		L(alGetString);
+		L(alGetBooleanv);
+		L(alGetIntegerv);
+		L(alGetFloatv);
+		L(alGetDoublev);
+		L(alGetBoolean);
+		L(alGetInteger);
+		L(alGetFloat);
+		L(alGetDouble);
+		L(alGetError);
+		L(alIsExtensionPresent);
+		L(alGetProcAddress);
+		L(alGetEnumValue);
+		L(alListenerf);
+		L(alListener3f);
+		L(alListenerfv);
+		L(alListeneri);
+		L(alGetListenerf);
+		L(alGetListener3f);
+		L(alGetListenerfv);
+		L(alGetListeneri);
+		L(alGenSources);
+		L(alDeleteSources);
+		L(alIsSource);
+		L(alSourcef);
+		L(alSource3f);
+		L(alSourcefv);
+		L(alSourcei);
+		L(alSource3i);
+		L(alGetSourcef);
+		L(alGetSource3f);
+		L(alGetSourcefv);
+		L(alGetSourcei);
+		L(alSourcePlayv);
+		L(alSourceStopv);
+		L(alSourceRewindv);
+		L(alSourcePausev);
+		L(alSourcePlay);
+		L(alSourceStop);
+		L(alSourceRewind);
+		L(alSourcePause);
+		L(alSourceQueueBuffers);
+		L(alSourceUnqueueBuffers);
+		L(alGenBuffers);
+		L(alDeleteBuffers);
+		L(alIsBuffer);
+		L(alBufferData);
+		L(alGetBufferf);
+		L(alGetBufferi);
+		L(alDopplerFactor);
+		L(alDopplerVelocity);
+		L(alDistanceModel);
+		
+		L(alcCreateContext);
+		L(alcMakeContextCurrent);
+		L(alcProcessContext);
+		L(alcSuspendContext);
+		L(alcDestroyContext);
+		L(alcGetCurrentContext);
+		L(alcGetContextsDevice);
+		L(alcOpenDevice);
+		L(alcCloseDevice);
+		L(alcGetError);
+		L(alcIsExtensionPresent);
+		L(alcGetProcAddress);
+		L(alcGetEnumValue);
+		L(alcGetString);
+		L(alcGetIntegerv);
+		
+	}
+	
+	const char *DescribeError(ALenum e){
+		switch(e){
+			case AL_NO_ERROR:
+				return "No error";
+			case AL_INVALID_NAME:
+				return "Invalid name";
+			case AL_INVALID_ENUM:
+				return "Invalid enumerator";
+			case AL_INVALID_VALUE:
+				return "Invalid value";
+			case AL_INVALID_OPERATION:
+				return "Invalid operation";
+			case AL_OUT_OF_MEMORY:
+				return "Out of memory";
+			default:
+				return "Unknown error";
+		}
+	}
+	
+	void CheckError(void){
+		ALenum e;
+		e = qalGetError();
+		if(e != AL_NO_ERROR) {
+			SPRaise("OpenAL error %d: %s", (int)e, DescribeError(e));
+		}
+	}
+}
+

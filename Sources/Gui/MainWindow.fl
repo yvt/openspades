@@ -1,0 +1,145 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0302 
+header_name {.h} 
+code_name {.cpp}
+widget_class MainWindow {
+  label {OpenSpades Startup} open
+  xywh {471 270 615 355} type Double labelsize 12 align 80
+  code0 {\#include <string>}
+  code1 {\#include <vector>}
+  class Fl_Window visible
+} {
+  Fl_Input quickHostInput {
+    label {Quick Connect:}
+    callback {SavePrefs();}
+    private xywh {135 80 365 25}
+  }
+  Fl_Tabs {} {open
+    private xywh {5 110 605 240} labelsize 11
+  } {
+    Fl_Group {} {
+      label About open selected
+      xywh {10 130 595 215}
+    } {
+      Fl_Help_View aboutView {
+        xywh {10 135 595 210}
+      }
+    }
+    Fl_Group {} {
+      label Setup open
+      private xywh {10 130 595 220} hide
+    } {
+      Fl_Group {} {
+        label Video open
+        private xywh {10 150 385 70} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Choice msaaSelect {
+          label {MSAA:}
+          callback {SavePrefs();} open
+          private xywh {295 160 90 25} down_box BORDER_BOX when 1
+        } {}
+        Fl_Check_Button fullscreenCheck {
+          label {Full Screen}
+          callback {SavePrefs();}
+          private xywh {20 190 100 25} down_box DOWN_BOX
+        }
+        Fl_Input_Choice modeSelect {
+          label Mode
+          callback {SavePrefs();} open
+          private xywh {65 160 160 25} when 1
+        } {}
+      }
+      Fl_Group {} {
+        label Audio open
+        private xywh {400 240 205 45} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Spinner polyInput {
+          label {Sources:}
+          callback {SavePrefs();}
+          private xywh {545 250 50 25} when 1
+        }
+        Fl_Light_Button eaxCheck {
+          label EAX
+          callback {SavePrefs();}
+          private xywh {410 250 50 25} when 1
+        }
+      }
+      Fl_Group {} {
+        label Graphics open
+        private xywh {10 240 385 105} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Light_Button advancedLensCheck {
+          label {Lens Sim.}
+          callback {SavePrefs();}
+          private xywh {20 250 185 25} when 1
+        }
+        Fl_Light_Button softParticleCheck {
+          label {Soft Particles}
+          callback {SavePrefs();}
+          private xywh {210 250 175 25} when 1
+        }
+        Fl_Light_Button radiosityCheck {
+          label {Global Illumination}
+          callback {SavePrefs();}
+          xywh {20 280 140 25} when 1
+        }
+        Fl_Choice directLightSelect {
+          label Lighting
+          callback {SavePrefs();} open
+          xywh {230 280 155 25} down_box BORDER_BOX when 1
+        } {}
+        Fl_Choice shaderSelect {
+          label {Shader Effects}
+          callback {SavePrefs();} open
+          xywh {230 310 155 25} down_box BORDER_BOX when 1
+        } {}
+        Fl_Light_Button bloodCheck {
+          label Blood
+          callback {SavePrefs();}
+          xywh {20 310 100 25} when 1
+        }
+      }
+      Fl_Group {} {
+        label {Game Options} open
+        private xywh {400 150 205 70} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Input playerNameInput {
+          label {Player Name:}
+          callback {SavePrefs();}
+          private xywh {410 175 185 25} align 5 when 1
+        }
+      }
+      Fl_Button {} {
+        label {Advanced Settings...}
+        callback {OpenDetailConfig();}
+        xywh {415 305 170 25}
+      }
+    }
+  }
+  Fl_Box bannerBox {
+    private xywh {5 5 605 70} box THIN_DOWN_FRAME
+  }
+  Fl_Return_Button {} {
+    label Connect
+    callback {QuickConnectPressed();}
+    private xywh {505 80 105 25}
+  }
+  Function {QuickConnectPressed()} {open private
+  } {}
+  Function {StartGame(const std::string& host)} {open private
+  } {}
+  Function {LoadPrefs()} {open
+  } {}
+  Function {SavePrefs()} {open private
+  } {}
+  decl {bool inited;} {private local
+  }
+  code {inited = false;} {}
+  Function {OpenDetailConfig()} {open private
+  } {}
+  Function {Init()} {open
+  } {}
+} 
+
+data aboutText {public local filename {AboutText.html}
+} 

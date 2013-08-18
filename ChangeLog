@@ -1,0 +1,13 @@
+
+2013-08-12 yvt <i@yvt.jp>
+
+	* Software Rendered Reflective Shadow Map
+
+2013-08-17 yvt <i@yvt.jp>
+
+	* Do some works in vertex shader rather than frag. shader
+	* Made chunkPosition uniform
+	* Corrected killer for fall death
+	* Modified reload volume
+	* fogColor in GLShadowShader is now linearized
+
