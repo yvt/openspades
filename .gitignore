@@ -8,6 +8,7 @@ Resources/Textures
 *.slo
 *.lo
 *.o
+build
 
 # Compiled Dynamic libraries
 *.so
