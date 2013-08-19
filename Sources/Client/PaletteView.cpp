@@ -16,59 +16,41 @@
 
 namespace spades {
 	namespace client {
+		static IntVector3 SanitizeCol(IntVector3 col) {
+			if(col.x < 0) col.x = 0;
+			if(col.y < 0) col.y = 0;
+			if(col.z < 0) col.z = 0;
+			return col;
+		}
+		
 		PaletteView::PaletteView(Client *client):
 		client(client),
 		renderer(client->GetRenderer()){
 			IntVector3 cols[] = {
-				{112, 112, 112},
-				{224, 0, 0},
-				{224, 112, 0},
-				{224, 224, 0},
-				{0, 224, 0},
-				{0, 224, 224},
-				{0, 0, 224},
-				{224, 0, 224}
+				{128, 128, 128},
+				{256, 0, 0},
+				{256, 128, 0},
+				{256, 256, 0},
+				{0, 256, 0},
+				{0, 256, 256},
+				{0, 0, 256},
+				{256, 0, 256}
 			};
 			
 			for(int i = 0; i < 8; i++) {
-				colors.push_back(cols[i] / 7);
-				colors.push_back(cols[i] / 112 * 27);
-				colors.push_back(cols[i] * 3 / 7);
-				colors.push_back(cols[i]);
+				colors.push_back(SanitizeCol(cols[i] / 8 - 1));
+				colors.push_back(SanitizeCol(cols[i] * 3 / 8 - 1));
+				colors.push_back(SanitizeCol(cols[i] * 5 / 8 - 1));
+				colors.push_back(SanitizeCol(cols[i] * 7 / 8 - 1));
 				
-				IntVector3 rem = IntVector3::Make(255, 255, 255);
+				IntVector3 rem = IntVector3::Make(256, 256, 256);
 				rem -= cols[i];
 				
-				colors.push_back(cols[i] + rem / 4);
-				colors.push_back(cols[i] + rem * 85 / 255);
-				colors.push_back(cols[i] + rem / 2);
+				colors.push_back(cols[i] + rem / 8 - 1);
+				colors.push_back(cols[i] + rem * 3 / 8 - 1);
+				colors.push_back(cols[i] + rem * 5 / 8 - 1);
+				colors.push_back(cols[i] + rem * 7 / 8 - 1);
 				
-				switch(i){
-					case 0:
-						colors.push_back(IntVector3::Make(240, 240, 240));
-						break;
-					case 1:
-						colors.push_back(IntVector3::Make(224, 255, 255));
-						break;
-					case 2:
-						colors.push_back(IntVector3::Make(224, 240, 255));
-						break;
-					case 3:
-						colors.push_back(IntVector3::Make(224, 224, 255));
-						break;
-					case 4:
-						colors.push_back(IntVector3::Make(255, 224, 255));
-						break;
-					case 5:
-						colors.push_back(IntVector3::Make(255, 224, 224));
-						break;
-					case 6:
-						colors.push_back(IntVector3::Make(255, 255, 224));
-						break;
-					case 7:
-						colors.push_back(IntVector3::Make(224, 255, 224));
-						break;
-				}
 			}
 			
 			defaultColor = 3;
