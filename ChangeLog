@@ -21,4 +21,6 @@
 
 	* Add SMG sound layer (Mech%.wav)
 	* Corrected Palette
+	* Support explosion in blockpower by removing local-player check
+	  when NetClient is processing grenade packet
 

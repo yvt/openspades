@@ -724,12 +724,12 @@ namespace spades {
 					vel.x = reader.ReadFloat();
 					vel.y = reader.ReadFloat();
 					vel.z = reader.ReadFloat();
-					
+					/* blockpower mode may emit local player's grenade
 					if(p == GetLocalPlayerOrNull()){
 						// local player's grenade is already
 						// emit by Player
 						break;
-					}
+					}*/
 					
 					Grenade *g = new Grenade(GetWorld(),
 											 pos, vel, fuseLen);
