@@ -3198,7 +3198,7 @@ namespace spades {
 				
 				// play far sound
 				c = audioDevice->RegisterSound((weapPrefix + "/FireFar.wav").c_str());
-				param.volume = 1.6f;
+				param.volume = 1.0f;
 				//if(p->GetWeapon()->GetWeaponType() == SMG_WEAPON)
 				//	param.volume *= .3f;
 				param.referenceDistance = 10.f;
@@ -3222,6 +3222,32 @@ namespace spades {
 									  - p->GetUp() * .3f
 									  + p->GetRight() * .4f,
 									  param);
+				
+				if(p->GetWeapon()->GetWeaponType() == SMG_WEAPON){
+					switch((rand() >> 8) & 3) {
+						case 0:
+							c = audioDevice->RegisterSound((weapPrefix + "/Mech1.wav").c_str());
+							break;
+						case 1:
+							c = audioDevice->RegisterSound((weapPrefix + "/Mech2.wav").c_str());
+							break;
+						case 2:
+							c = audioDevice->RegisterSound((weapPrefix + "/Mech3.wav").c_str());
+							break;
+						case 3:
+							c = audioDevice->RegisterSound((weapPrefix + "/Mech4.wav").c_str());
+							break;
+					}
+					param.volume = 1.6f;
+					if(isLocal)
+						audioDevice->PlayLocal(c,MakeVector3(.4f, -.3f, .5f),
+											   param);
+					else
+						audioDevice->Play(c, p->GetEye() + p->GetFront() * 0.5f
+										  - p->GetUp() * .3f
+										  + p->GetRight() * .4f,
+										  param);
+				}
 				
 			}
 		}

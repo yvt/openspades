@@ -17,3 +17,6 @@
 	* Support for RESDIR variable
 	* Removed fixed and deprecated resource directory
 
+2013-08-19 yvt <i@yvt.jp>
+
+	* Add SMG sound layer (Mech%.wav)
