@@ -57,6 +57,7 @@ namespace spades {
 			nextDigTime = 0.f;
 			nextGrenadeTime = 0.f;
 			nextBlockTime = 0.f;
+			firstDig = false;
 			
 			blockCursorActive = false;
 			blockCursorDragging = false;
@@ -102,6 +103,7 @@ namespace spades {
 					if(newInput.secondary){
 						// "dig" is always delayed
 						nextDigTime = world->GetTime() + 1.5f;
+						firstDig = true;
 					}
 				}
 			}else if(tool == ToolGrenade) {
@@ -111,10 +113,15 @@ namespace spades {
 				if(grenades == 0){
 					newInput.primary = false;
 				}
+				if(weapInput.primary && holdingGrenade &&
+				   GetGrenadeCookTime() < .15f) {
+					// pin is not pulled yet
+					newInput.primary = true;
+				}
 				if(newInput.primary != weapInput.primary){
 					if(!newInput.primary){
 						if(holdingGrenade){
-							nextGrenadeTime = world->GetTime() + 1.f;
+							nextGrenadeTime = world->GetTime() + .5f;
 							ThrowGrenade();
 						}
 					}else{
@@ -301,6 +308,7 @@ namespace spades {
 					if(world->GetTime() > nextDigTime){
 						DigWithSpade();
 						nextDigTime = world->GetTime() + GetToolSecondaryDelay();
+						firstDig = false;
 					}
 				}
 			}else if(tool == ToolBlock){
@@ -1079,6 +1087,10 @@ namespace spades {
 			SPAssert(weapInput.secondary);
 			return 1.f - (nextDigTime - world->GetTime())
 			/ GetToolSecondaryDelay();
+		}
+		
+		float Player::GetTimeToNextGrenade() {
+			return nextGrenadeTime - world->GetTime();
 		}
 		
 		void Player::KilledBy(KillType type,

@@ -937,7 +937,19 @@ namespace spades {
 			   world->GetLocalPlayer()->IsToolWeapon() == false ||
 			   world->GetLocalPlayer()->IsAlive() == false)
 				return 1.f;
-			return 1.f + powf(aimDownState, 5.f) * 0.8f;
+			float delta = .8f;
+			switch(world->GetLocalPlayer()->GetWeapon()->GetWeaponType()) {
+				case SMG_WEAPON:
+					delta = .8f;
+					break;
+				case RIFLE_WEAPON:
+					delta = 1.4f;
+					break;
+				case SHOTGUN_WEAPON:
+					delta = .4f;
+					break;
+			}
+			return 1.f + powf(aimDownState, 5.f) * delta;
 		}
 		
 		SceneDefinition Client::SceneDef() {
@@ -1338,6 +1350,47 @@ namespace spades {
 						mat = Matrix4::Rotate(MakeVector3(1, 0, 0),
 											  per * 1.7f) * mat;
 						mat = Matrix4::Translate(MakeVector3(0, per*0.3f, 0)) * mat;
+					}else if(inp.secondary) {
+						float per = p->GetDigAnimationProgress();
+						bool first = p->IsFirstDig();
+						float ang;
+						const float readyFront = -0.8f;
+						float front = readyFront;
+						float side = 1.f;
+						const float digAngle = .6f;
+						const float readyAngle = 0.6f;
+						if(per < .5f) {
+							if(first) {
+								// bringing to the position
+								per += .5f;
+								per *= per;
+								ang = per * readyAngle;
+								side = per;
+								front = per * readyFront;
+							}else{
+								// digged!
+								ang = readyAngle;
+								per = (.5f - per) / .5f;
+								per *= per;
+								per *= per;
+								ang += per * digAngle;
+								front += per * 2.f;
+							}
+						}else{
+							per = (per - .5f) / .5f;
+							per = 1.f - (1.f-per)*(1.f-per);
+							ang = readyAngle +
+							per * digAngle;
+							front += per * 2.f;
+						}
+						mat = Matrix4::Rotate(MakeVector3(1, 0, 0),
+											  ang) * mat;
+						mat = Matrix4::Rotate(MakeVector3(0, 0, 1),
+											  front * .15f) * mat;
+						
+						side *= .3f;
+						front *= .1f;
+						mat = Matrix4::Translate(MakeVector3(side, front, front * .2f)) * mat;
 					}
 					
 					if(sprint > 0.f){
@@ -1351,7 +1404,7 @@ namespace spades {
 					mat = Matrix4::Translate(-0.3f, .7f, 0.3f) * mat;
 					mat = Matrix4::Translate(viewWeaponOffset) * mat;
 					
-					leftHand = (mat * MakeVector3(0.0f, 0.0f, 4.f)).GetXYZ();
+					leftHand = (mat * MakeVector3(0.0f, 0.0f, 7.f)).GetXYZ();
 					rightHand = (mat * MakeVector3(0.0f, 0.0f, -2.f)).GetXYZ();
 					
 					mat = eyeMatrix * mat;
@@ -1389,18 +1442,49 @@ namespace spades {
 						renderer->RenderModel(model, param);
 					}
 				}else if(p->GetTool() == Player::ToolGrenade){
+					float tim = p->GetTimeToNextGrenade();
 					if(p->IsReadyToUseTool()){
+						WeaponInput inp = p->GetWeaponInput();
+						float bring = 0.f;
+						float pin = 0.f;
+						float side = 0.f;
+						if(tim < 0.f) {
+							bring = std::min(1.f, -tim * 5.f);
+							bring = 1.f - bring;
+							bring = 1.f - bring * bring;
+						}
+						
+						if(inp.primary) {
+							pin = p->GetGrenadeCookTime() * 8.f;
+							if(pin > 2.f)pin = 2.f;
+							
+							if(pin > 1.f){
+								side += pin - 1.f;
+								bring -= (pin - 1.f) * 2.f;
+							}
+						}
+						
 						Matrix4 mat = Matrix4::Scale(0.033f);
 						if(sprint > 0.f){
 							mat = Matrix4::Rotate(MakeVector3(0, 0, 1),
 												  sprint * -0.3f) * mat;
 							mat = Matrix4::Translate(MakeVector3(0.1f, -0.4f, -0.05f) * sprint) * mat;
 						}
-						mat = Matrix4::Translate(-0.3f, .7f, 0.3f) * mat;
+						mat = Matrix4::Translate(-0.3f - side * .8f,
+												 .8 - bring * .1f,
+												 0.45f - bring * .15f) * mat;
 						mat = Matrix4::Translate(viewWeaponOffset) * mat;
 						
-						leftHand = (mat * MakeVector3(2.0f, -1.0f, 6.f)).GetXYZ();
-						rightHand = (mat * MakeVector3(-2.f, 1.0f, -1.f)).GetXYZ();
+						leftHand = (mat * MakeVector3(10.0f, -1.0f, 10.f)).GetXYZ();
+						rightHand = (mat * MakeVector3(-3.f, 1.0f, 5.f)).GetXYZ();
+						
+						Vector3 leftHand2 = (mat * MakeVector3(2.f, 1.0f, -2.f)).GetXYZ();
+						Vector3 leftHand3 = (mat * MakeVector3(8.0f, -1.0f, 10.f)).GetXYZ();
+						if(pin < 1.f){
+							leftHand = Mix(leftHand, leftHand2, pin);
+						}else{
+							leftHand = Mix(leftHand2, leftHand3, pin - 1.f);
+						}
 						
 						mat = eyeMatrix * mat;
 						
@@ -1410,6 +1494,18 @@ namespace spades {
 						
 						IModel *model = renderer->RegisterModel("Models/Weapons/Grenade/Grenade.kv6");
 						renderer->RenderModel(model, param);
+					}else{
+						// throwing
+						float per = .5f - p->GetTimeToNextGrenade();
+						per *= 6.f;
+						if(per > 1.f) per = 1.f;
+						
+						leftHand = MakeVector3(0.5f, 0.5f, 0.6f);
+						
+						float p2 = per - .6f;
+						p2 = .9f - p2 * p2 * 2.5f;
+						rightHand = MakeVector3(-0.2f, p2,
+												-.9f + per * 1.8f);
 					}
 				}else if(p->GetTool() == Player::ToolWeapon){
 					Matrix4 mat = Matrix4::Scale(0.033f);

@@ -97,6 +97,7 @@ namespace spades {
 			// tools
 			float nextSpadeTime;
 			float nextDigTime;
+			bool firstDig;
 			float nextGrenadeTime;
 			float nextBlockTime;
 			bool holdingGrenade;
@@ -199,6 +200,8 @@ namespace spades {
 			
 			float GetSpadeAnimationProgress();
 			float GetDigAnimationProgress();
+			bool IsFirstDig() const { return firstDig; }
+			float GetTimeToNextGrenade();
 			
 			float GetWalkAnimationProgress();
 			
