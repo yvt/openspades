@@ -664,6 +664,8 @@ namespace spades {
 		}
 		vec.resize(vec.size() - 1);
 	}
+			
+	Vector3 Mix(Vector3 a, Vector3 b, float frac);
 	
 	/** @return true if any portion of the box is in the positive side of plane. */
 	bool PlaneCullTest(const Plane3&, const AABB3&);

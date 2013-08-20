@@ -21,7 +21,8 @@ namespace spades {
 		shooting(false),
 		reloading(false),
 		nextShotTime(0.f),
-		reloadEndTime(0.f),
+		reloadEndTime(-100.f),
+		reloadStartTime(-101.f),
 		lastDryFire(false)
 		{
 			SPADES_MARK_FUNCTION();
@@ -53,6 +54,14 @@ namespace spades {
 		bool Weapon::IsReadyToShoot()  {
 			return ammo > 0 && time >= nextShotTime &&
 			(!reloading || IsReloadSlow());
+		}
+		
+		float Weapon::GetReloadProgress() {
+			return (time - reloadStartTime) / (reloadEndTime - reloadStartTime);
+		}
+		
+		float Weapon::TimeToNextFire() {
+			return nextShotTime - time;
 		}
 		
 		bool Weapon::FrameNext(float dt){
@@ -114,6 +123,7 @@ namespace spades {
 				return;
 			reloading = true;
 			shooting = false;
+			reloadStartTime = time;
 			reloadEndTime = time + GetReloadTime();
 			
 			if(world->GetListener())

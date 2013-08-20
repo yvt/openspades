@@ -472,4 +472,8 @@ namespace spades {
 	float SmoothStep(float v){
 		return v * v * (3.f - 2.f * v);
 	}
+	
+	Vector3 Mix(Vector3 a, Vector3 b, float frac) {
+		return a + (b - a) * frac;
+	}
 }

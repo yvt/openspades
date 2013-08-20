@@ -24,3 +24,9 @@
 	* Support explosion in blockpower by removing local-player check
 	  when NetClient is processing grenade packet
 
+2013-08-20 yvt <i@yvt.jp>
+
+	* Added player's hands in local view
+	* Added reload animation
+	
+

@@ -27,6 +27,7 @@ namespace spades {
 			bool shooting;
 			bool reloading;
 			float nextShotTime;
+			float reloadStartTime;
 			float reloadEndTime;
 			
 			bool lastDryFire;
@@ -66,6 +67,9 @@ namespace spades {
 			bool IsReloading() const { return reloading; }
 			int GetAmmo() { return ammo; }
 			int GetStock() { return stock;}
+			
+			float GetReloadProgress();
+			float TimeToNextFire();
 			
 			bool IsReadyToShoot() ;
 		};

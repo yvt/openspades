@@ -1325,6 +1325,8 @@ namespace spades {
 										.8f, 0.f);
 				}
 				
+				Vector3 leftHand, rightHand;
+				
 				// view weapon
 				float sprint = SmoothStep(sprintState);
 				if(p->GetTool() == Player::ToolSpade){
@@ -1341,13 +1343,17 @@ namespace spades {
 					if(sprint > 0.f){
 						
 						mat = Matrix4::Rotate(MakeVector3(0, 1, 0),
-											  sprint * -1.3f) * mat;
+											  sprint * 1.3f) * mat;
 						mat = Matrix4::Translate(MakeVector3(0.3f, -0.4f, -0.1f) * sprint) * mat;
 						
 					}
 					
 					mat = Matrix4::Translate(-0.3f, .7f, 0.3f) * mat;
 					mat = Matrix4::Translate(viewWeaponOffset) * mat;
+					
+					leftHand = (mat * MakeVector3(0.0f, 0.0f, 4.f)).GetXYZ();
+					rightHand = (mat * MakeVector3(0.0f, 0.0f, -2.f)).GetXYZ();
+					
 					mat = eyeMatrix * mat;
 					
 					ModelRenderParam param;
@@ -1356,6 +1362,8 @@ namespace spades {
 					
 					IModel *model = renderer->RegisterModel("Models/Weapons/Spade/Spade.kv6");
 					renderer->RenderModel(model, param);
+					
+					
 				}else if(p->GetTool() == Player::ToolBlock){
 					if(p->IsReadyToUseTool()){
 						Matrix4 mat = Matrix4::Scale(0.033f);
@@ -1366,6 +1374,10 @@ namespace spades {
 						}
 						mat = Matrix4::Translate(-0.3f, .7f, 0.3f) * mat;
 						mat = Matrix4::Translate(viewWeaponOffset) * mat;
+						
+						leftHand = (mat * MakeVector3(5.0f, -1.0f, 4.f)).GetXYZ();
+						rightHand = (mat * MakeVector3(-5.5f, 3.0f, -5.f)).GetXYZ();
+						
 						mat = eyeMatrix * mat;
 						
 						ModelRenderParam param;
@@ -1386,6 +1398,10 @@ namespace spades {
 						}
 						mat = Matrix4::Translate(-0.3f, .7f, 0.3f) * mat;
 						mat = Matrix4::Translate(viewWeaponOffset) * mat;
+						
+						leftHand = (mat * MakeVector3(2.0f, -1.0f, 6.f)).GetXYZ();
+						rightHand = (mat * MakeVector3(-2.f, 1.0f, -1.f)).GetXYZ();
+						
 						mat = eyeMatrix * mat;
 						
 						ModelRenderParam param;
@@ -1396,46 +1412,364 @@ namespace spades {
 						renderer->RenderModel(model, param);
 					}
 				}else if(p->GetTool() == Player::ToolWeapon){
-					if(!p->GetWeapon()->IsReloading()){
-						Matrix4 mat = Matrix4::Scale(0.033f);
-						float vib = GetLocalFireVibration();
-						float aDown = SmoothStep(aimDownState);
-						float motion = 1.f - aDown * 0.4f;
-						float weapUp = aDown;
-						switch(p->GetWeapon()->GetWeaponType()){
-							case RIFLE_WEAPON: weapUp *= 0.05f; break;
-							case SMG_WEAPON: weapUp *= 0.028f; break;
-							case SHOTGUN_WEAPON: weapUp *= 0.05f; break;
-							default: SPInvalidEnum("p->GetWeapon()->GetWeaponType()", p->GetWeapon()->GetWeaponType());
-						}
-						if(sprint > 0.f){
-							
-							mat = Matrix4::Rotate(MakeVector3(0, 0, 1),
-												  sprint * -1.3f) * mat;
-							mat = Matrix4::Rotate(MakeVector3(0, 1, 0),
-												  sprint *
-												  0.2f) * mat;
-							mat = Matrix4::Translate(MakeVector3(0.2f, -0.2f, 0.05f) * sprint) * mat;
-							
-						}
-						mat = Matrix4::Translate(-0.13f * (1.f - aDown),
-												 .5f,
-												 0.2f - weapUp) * mat;
-						mat = Matrix4::Translate(viewWeaponOffset * motion) * mat;
-						mat = Matrix4::Translate(sinf(vib*M_PI*2.f)*0.008f * motion,
-												 vib*(vib-1.f)*0.14f * motion,
-												 vib*(1.f-vib)*0.03f * motion) * mat;
-						mat = eyeMatrix * mat;
-						
-						ModelRenderParam param;
-						param.matrix = mat;
-						param.depthHack = true;
-						
-						std::string path = weapPrefix + "/Weapon.kv6";
-						IModel *model = renderer->RegisterModel(path.c_str());
-						renderer->RenderModel(model, param);
+					Matrix4 mat = Matrix4::Scale(0.033f);
+					float vib = GetLocalFireVibration();
+					float aDown = SmoothStep(aimDownState);
+					float motion = 1.f - aDown * 0.4f;
+					float weapUp = aDown;
+					switch(p->GetWeapon()->GetWeaponType()){
+						case RIFLE_WEAPON: weapUp *= 0.05f; break;
+						case SMG_WEAPON: weapUp *= 0.028f; break;
+						case SHOTGUN_WEAPON: weapUp *= 0.05f; break;
+						default: SPInvalidEnum("p->GetWeapon()->GetWeaponType()", p->GetWeapon()->GetWeaponType());
 					}
+					if(sprint > 0.f){
+						
+						mat = Matrix4::Rotate(MakeVector3(0, 0, 1),
+											  sprint * -1.3f) * mat;
+						mat = Matrix4::Rotate(MakeVector3(0, 1, 0),
+											  sprint *
+											  0.2f) * mat;
+						mat = Matrix4::Translate(MakeVector3(0.2f, -0.2f, 0.05f) * sprint) * mat;
+						
+					}
+					mat = Matrix4::Translate(-0.13f * (1.f - aDown),
+											 .5f,
+											 0.2f - weapUp) * mat;
+					mat = Matrix4::Translate(viewWeaponOffset * motion) * mat;
+					mat = Matrix4::Translate(sinf(vib*M_PI*2.f)*0.008f * motion,
+											 vib*(vib-1.f)*0.14f * motion,
+											 vib*(1.f-vib)*0.03f * motion) * mat;
+					bool reloading = p->GetWeapon()->IsReloading();
+					float reload = p->GetWeapon()->GetReloadProgress();
+					
+					switch(p->GetWeapon()->GetWeaponType()){
+						case SMG_WEAPON:
+						{
+							leftHand = (mat * MakeVector3(1.0f, 6.0f, 1.f)).GetXYZ();
+							rightHand = (mat * MakeVector3(0.f, -8.0f, 2.f)).GetXYZ();
+							
+							Vector3 leftHand2 = (mat * MakeVector3(5.0f, -10.0f, 4.f)).GetXYZ();
+							Vector3 leftHand3 = (mat * MakeVector3(1.0f, 6.0f, -4.f)).GetXYZ();
+							Vector3 leftHand4 = (mat * MakeVector3(1.0f, 9.0f, -6.f)).GetXYZ();
+							
+							ModelRenderParam param;
+							param.depthHack = true;
+							param.matrix = eyeMatrix * mat;
+							
+							{
+								std::string path = weapPrefix + "/WeaponNoMagazine.kv6";
+								IModel *model = renderer->RegisterModel(path.c_str());
+								renderer->RenderModel(model, param);
+							}
+							
+							mat = mat * Matrix4::Translate(0.f, 3.f, 1.f);
+							reload *= 2.5f;
+							if(reloading) {
+								if(reload < 0.7f){
+									float per = reload / .7f;
+									mat = mat * Matrix4::Translate(0.f, 0.f, per * per * 50.f);
+									leftHand = Mix(leftHand, leftHand2, SmoothStep(per));
+								}else if(reload < 1.4f){
+									float per = (1.4f - reload) / .7f;
+									if(per < .3f) {
+										per *= 4.f;
+										per -= .4f;
+										per = std::max(std::min(per, .3f), 0.f);
+									}
+									mat = mat * Matrix4::Translate(0.f, 0.f, per * per * 10.f);
+									
+									leftHand = (mat * MakeVector3(0.f, 0.f, 4.f)).GetXYZ();
+								}else if(reload < 1.9f){
+									float per = (reload - 1.4f) / .5f;
+									leftHand = (mat * MakeVector3(0.f, 0.f, 4.f)).GetXYZ();
+									leftHand = Mix(leftHand, leftHand3, SmoothStep(per));
+								}else if(reload < 2.2f){
+									float per = (reload - 1.9f) / .3f;
+									leftHand = Mix(leftHand3, leftHand4, SmoothStep(per));
+								}else {
+									float per = (reload - 2.2f) / .3f;
+									leftHand = Mix(leftHand4, leftHand, SmoothStep(per));
+								}
+							}
+							param.matrix = eyeMatrix * mat;
+							{
+								std::string path = weapPrefix + "/Magazine.kv6";
+								IModel *model = renderer->RegisterModel(path.c_str());
+								renderer->RenderModel(model, param);
+							}
+						}
+							break;
+							
+						case RIFLE_WEAPON:
+						{
+							leftHand = (mat * MakeVector3(1.0f, 6.0f, 1.f)).GetXYZ();
+							rightHand = (mat * MakeVector3(0.f, -8.0f, 2.f)).GetXYZ();
+							
+							Vector3 leftHand2 = (mat * MakeVector3(5.0f, -10.0f, 4.f)).GetXYZ();
+							Vector3 rightHand3 = (mat * MakeVector3(-2.0f, -7.0f, -4.f)).GetXYZ();
+							Vector3 rightHand4 = (mat * MakeVector3(-3.0f, -4.0f, -6.f)).GetXYZ();
+							
+							ModelRenderParam param;
+							param.depthHack = true;
+							param.matrix = eyeMatrix * mat;
+							
+							{
+								std::string path = weapPrefix + "/WeaponNoMagazine.kv6";
+								IModel *model = renderer->RegisterModel(path.c_str());
+								renderer->RenderModel(model, param);
+							}
+							
+							mat = mat * Matrix4::Translate(0.f, 1.f, 1.f);
+							reload *= 2.5f;
+							if(reloading) {
+								if(reload < 0.1f){
+									float per = reload / .1f;
+									
+									leftHand = Mix(leftHand,
+												   (mat * MakeVector3(0.f, 0.f, 4.f)).GetXYZ(),
+												   SmoothStep(per));
+								}else if(reload < 0.7f){
+									float per = (reload-.1f) / .6f;
+									if(per < .2f) {
+										per *= 4.f;
+										per -= .4f;
+										per = std::max(std::min(per, .2f), 0.f);
+									}
+									if(per > .5f){
+										per += per - .5f;
+									}
+									mat = mat * Matrix4::Translate(0.f, 0.f, per * per * 10.f);
+									
+									leftHand = (mat * MakeVector3(0.f, 0.f, 4.f)).GetXYZ();
+									if(per > .5f){
+										per = (per - .5f);
+										leftHand = Mix(leftHand, leftHand2, SmoothStep(per));
+									}
+								}else if(reload < 1.4f){
+									float per = (1.4f - reload) / .7f;
+									if(per < .3f) {
+										per *= 4.f;
+										per -= .4f;
+										per = std::max(std::min(per, .3f), 0.f);
+									}
+									mat = mat * Matrix4::Translate(0.f, 0.f, per * per * 10.f);
+									
+									leftHand = (mat * MakeVector3(0.f, 0.f, 4.f)).GetXYZ();
+								}else if(reload < 1.9f){
+									float per = (reload - 1.4f) / .5f;
+									Vector3 orig = leftHand;
+									leftHand = (mat * MakeVector3(0.f, 0.f, 4.f)).GetXYZ();
+									leftHand = Mix(leftHand, orig, SmoothStep(per));
+									rightHand = Mix(rightHand, rightHand3, SmoothStep(per));
+								}else if(reload < 2.2f){
+									float per = (reload - 1.9f) / .3f;
+									rightHand = Mix(rightHand3, rightHand4, SmoothStep(per));
+								}else {
+									float per = (reload - 2.2f) / .3f;
+									rightHand = Mix(rightHand4, rightHand, SmoothStep(per));
+								}
+							}
+							param.matrix = eyeMatrix * mat;
+							{
+								std::string path = weapPrefix + "/Magazine.kv6";
+								IModel *model = renderer->RegisterModel(path.c_str());
+								renderer->RenderModel(model, param);
+							}
+						}
+							break;
+							
+						case SHOTGUN_WEAPON:
+						{
+							rightHand = (mat * MakeVector3(0.f, -8.0f, 2.f)).GetXYZ();
+							
+							Vector3 leftHand2 = (mat * MakeVector3(5.0f, -10.0f, 4.f)).GetXYZ();
+							Vector3 leftHand3 = (mat * MakeVector3(1.0f, 1.0f, 2.f)).GetXYZ();
+							
+							ModelRenderParam param;
+							param.depthHack = true;
+							param.matrix = eyeMatrix * mat;
+							
+							{
+								std::string path = weapPrefix + "/WeaponNoPump.kv6";
+								IModel *model = renderer->RegisterModel(path.c_str());
+								renderer->RenderModel(model, param);
+							}
+							
+							//mat = mat * Matrix4::Translate(0.f, 0.f, 0.f);
+							reload *= .5f;
+							
+							leftHand = (mat * MakeVector3(0.f, 4.f, 2.f)).GetXYZ();
+							
+							
+							if(reloading) {
+								if(reload < 0.2f){
+									float per = reload / .2f;
+									
+									leftHand = Mix(leftHand,
+												   leftHand2,
+												   SmoothStep(per));
+								}else if(reload < 0.35f){
+									float per = (reload-.2f) / .15f;
+									
+									leftHand = Mix(leftHand2,
+												   leftHand3,
+												   SmoothStep(per));
+								}else if(reload < .5f){
+									float per = (reload-.35f) / .15f;
+									
+									leftHand = Mix(leftHand3,
+												   leftHand,
+												   SmoothStep(per));
+									
+								}
+							}
+							
+							float cockFade = 1.f;
+							if(reloading) {
+								if(reload < .25f ||
+								   p->GetWeapon()->GetAmmo() <
+								   p->GetWeapon()->GetClipSize() - 1){
+									cockFade = 0.f;
+								}else{
+									cockFade = (reload - .25f) * 10.f;
+									if(cockFade > 1.f) cockFade = 1.f;
+								}
+							}
+							if(cockFade > 0.f) {
+								float cock = 0.f;
+								float tim = p->GetWeapon()->TimeToNextFire();
+								if(tim < 0.f){
+									// might be right after reloading...
+									if(p->GetWeapon()->GetAmmo() ==
+									   p->GetWeapon()->GetClipSize() &&
+									   reload > .5f && reload < 1.f) {
+										tim = reload - .4f;
+										if(tim < .05f) {
+											cock = 0.f;
+										}else if(tim < .12f){
+											cock = (tim - .05f) / .07f;
+										}else if(tim < .26f) {
+											cock = 1.f;
+										}else if(tim < .36f){
+											cock = 1.f - (tim - .26f) / .1f;
+										}
+									}
+								}if(tim < .2f) {
+									cock = 0.f;
+								}else if(tim < .3f) {
+									cock = (tim - .2f) / .1f;
+								}else if(tim < .42f) {
+									cock = 1.f;
+								}else if(tim < .52f) {
+									cock = 1.f - (tim - .42f) / .1f;
+								}else{
+									cock = 0.f;
+								}
+								cock *= cockFade;
+								mat = mat * Matrix4::Translate(0.f, -cock * 1.5f, 0.f);
+								leftHand = Mix(leftHand,
+											   (mat * MakeVector3(0.f, 4.f, 2.f)).GetXYZ(),
+											   cockFade);
+							}
+							
+							param.matrix = eyeMatrix * mat;
+							{
+								std::string path = weapPrefix + "/Pump.kv6";
+								IModel *model = renderer->RegisterModel(path.c_str());
+								renderer->RenderModel(model, param);
+							}
+						}
+							break;
+							
+						default:
+							abort();
+					}
+					
+					
 				}
+				
+				// view hands
+				{
+					
+					
+					ModelRenderParam param;
+					param.depthHack = true;
+					
+					IModel *model = renderer->RegisterModel
+					("Models/Player/Arm.kv6");
+					IModel *model2 = renderer->RegisterModel
+					("Models/Player/UpperArm.kv6");
+					
+					IntVector3 col = p->GetColor();
+					param.customColor = MakeVector3(col.x/255.f,
+													col.y/255.f,
+													col.z/255.f);
+					
+					const float armlen = 0.5f;
+					
+					Vector3 shoulders[] = {{0.4f, 0.0f, 0.25f},
+										   {-0.4f, 0.0f, 0.25f}};
+					Vector3 hands[] = {leftHand, rightHand};
+					Vector3 benddirs[] = {0.5f, 0.2f, 0.f,
+					                      -0.5f, 0.2f, 0.f};
+					for(int i = 0; i < 2; i++){
+						Vector3 shoulder = shoulders[i];
+						Vector3 hand = hands[i];
+						Vector3 benddir = benddirs[i];
+						
+						float len2 = (hand - shoulder).GetPoweredLength();
+						// len2/4 + x^2 = armlen^2
+						float bendlen = sqrtf(std::max(armlen*armlen - len2*.25f, 0.f));
+						
+						Vector3 bend = Vector3::Cross(benddir, hand-shoulder);
+						bend = bend.Normalize();
+						
+						if(bend.z < 0.f) bend.z = -bend.z;
+						
+						Vector3 elbow = (hand + shoulder) * .5f;
+						elbow += bend * bendlen;
+						
+						{
+							Vector3 axises[3];
+							axises[2] = (hand - elbow).Normalize();
+							axises[0] = MakeVector3(0, 0, 1);
+							axises[1] = Vector3::Cross(axises[2], axises[0]).Normalize();
+							axises[0] = Vector3::Cross(axises[1], axises[2]).Normalize();
+							
+							Matrix4 mat = Matrix4::Scale(.05f);
+							mat = Matrix4::FromAxis(axises[0],
+													axises[1],
+													axises[2],
+													elbow) * mat;
+							mat = eyeMatrix * mat;
+							
+							param.matrix = mat;
+							renderer->RenderModel(model, param);
+						}
+						
+						{
+							Vector3 axises[3];
+							axises[2] = (elbow - shoulder).Normalize();
+							axises[0] = MakeVector3(0, 0, 1);
+							axises[1] = Vector3::Cross(axises[2], axises[0]).Normalize();
+							axises[0] = Vector3::Cross(axises[1], axises[2]).Normalize();
+							
+							Matrix4 mat = Matrix4::Scale(.05f);
+							mat = Matrix4::FromAxis(axises[0],
+													axises[1],
+													axises[2],
+													shoulder) * mat;
+							mat = eyeMatrix * mat;
+							
+							param.matrix = mat;
+							renderer->RenderModel(model2, param);
+						}
+					}
+					
+				}
+				
+				// --- local view ends
 			} else {
 				ModelRenderParam param;
 				IModel *model;
