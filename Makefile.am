@@ -206,6 +206,8 @@ Sources/Draw/GLImageRenderer.cpp \
 Sources/Draw/GLImageRenderer.h \
 Sources/Draw/GLLensFilter.cpp \
 Sources/Draw/GLLensFilter.h \
+Sources/Draw/GLLensFlareFilter.cpp \
+Sources/Draw/GLLensFlareFilter.h \
 Sources/Draw/GLMapChunk.cpp \
 Sources/Draw/GLMapChunk.h \
 Sources/Draw/GLMapRenderer.cpp \

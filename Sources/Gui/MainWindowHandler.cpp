@@ -42,6 +42,8 @@ SPADES_SETTING(r_colorBits, "0");
 SPADES_SETTING(r_videoWidth, "1024");
 SPADES_SETTING(r_videoHeight, "640");
 SPADES_SETTING(r_fullscreen, "0");
+SPADES_SETTING(r_fogShadow, "0");
+SPADES_SETTING(r_lensFlare, "1");
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
 
@@ -125,7 +127,7 @@ void MainWindow::LoadPrefs() {
 	fullscreenCheck->value(r_fullscreen ? 1 : 0);
 	
 	// --- graphics
-	if(r_cameraBlur && r_bloom && r_lens) {
+	if(r_cameraBlur && r_bloom && r_lens && r_lensFlare) {
 		advancedLensCheck->value(1);
 	}else{
 		advancedLensCheck->value(0);
@@ -141,11 +143,11 @@ void MainWindow::LoadPrefs() {
 	directLightSelect->add("High");
 	directLightSelect->add("Custom");
 	
-	if((!r_mapSoftShadow) && (!r_dlights) && (!r_modelShadows)){
+	if((!r_mapSoftShadow) && (!r_dlights) && (!r_modelShadows) && (!r_fogShadow)){
 		directLightSelect->value(0);
-	}else if((!r_mapSoftShadow) && (r_dlights) && (r_modelShadows)){
+	}else if((!r_mapSoftShadow) && (r_dlights) && (r_modelShadows) && (!r_fogShadow)){
 		directLightSelect->value(1);
-	}else if((!r_mapSoftShadow) && (r_dlights) && (r_modelShadows)){
+	}else if((r_mapSoftShadow) && (r_dlights) && (r_modelShadows) && (r_fogShadow)){
 		directLightSelect->value(2);
 	}else{
 		directLightSelect->value(3);
@@ -232,6 +234,7 @@ void MainWindow::SavePrefs() {
 	cg_blood = bloodCheck->value() ? 1 : 0;
 	r_bloom = advancedLensCheck->value() ? 1 : 0;
 	r_lens = advancedLensCheck->value() ? 1 : 0;
+	r_lensFlare = advancedLensCheck->value() ? 1 : 0;
 	r_cameraBlur = advancedLensCheck->value() ? 1 : 0;
 	r_softParticles = softParticleCheck->value() ? 1 : 0;
 	r_radiosity = radiosityCheck->value() ? 1 : 0;
@@ -240,16 +243,19 @@ void MainWindow::SavePrefs() {
 			r_modelShadows = 0;
 			r_dlights = 0;
 			r_mapSoftShadow = 0;
+			r_fogShadow = 0;
 			break;
 		case 1:
 			r_modelShadows = 1;
 			r_dlights = 1;
 			r_mapSoftShadow = 0;
+			r_fogShadow = 0;
 			break;
 		case 2:
 			r_modelShadows = 1;
 			r_dlights = 1;
 			r_mapSoftShadow = 1;
+			r_fogShadow = 1;
 			break;
 	}
 	switch(shaderSelect->value()){

@@ -38,10 +38,12 @@
 #include "GLAmbientShadowRenderer.h"
 #include "GLRadiosityRenderer.h"
 #include "GLFogFilter.h"
+#include "GLLensFlareFilter.h"
 
 SPADES_SETTING(r_water, "1");
 SPADES_SETTING(r_bloom, "1");
 SPADES_SETTING(r_lens, "1");
+SPADES_SETTING(r_lensFlare, "1");
 SPADES_SETTING(r_softParticles, "1");
 SPADES_SETTING(r_cameraBlur, "1");
 SPADES_SETTING(r_dlights, "1");
@@ -517,7 +519,12 @@ namespace spades {
 							  IGLDevice::OneMinusSrcAlpha);
 			
 			if(r_cameraBlur && !sceneDef.denyCameraBlur)
-				handle = cameraBlur.Filter(handle);/*
+				handle = cameraBlur.Filter(handle);
+			if(r_lensFlare){
+				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
+				GLLensFlareFilter(this).Draw();
+			}
+			/*
 			if(r_bloom)
 				handle = GLBloomFilter(this).Filter(handle);*/
 			if(r_lens)
