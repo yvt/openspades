@@ -356,7 +356,7 @@ namespace spades {
 			
 			static GLProgramUniform fogColor("fogColor");
 			fogColor(program);
-			Vector3 fogCol = renderer->GetFogColor();
+			Vector3 fogCol = renderer->GetFogColorForSolidPass();
 			fogCol *= fogCol;
 			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 			

@@ -77,6 +77,7 @@ namespace spades {
 			lastImage = NULL;
 			program->Use();
 			
+			device->Enable(IGLDevice::Blend, true);
 			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			
 			projectionViewMatrix(program);

@@ -37,6 +37,7 @@
 #include "GLWaterRenderer.h"
 #include "GLAmbientShadowRenderer.h"
 #include "GLRadiosityRenderer.h"
+#include "GLFogFilter.h"
 
 SPADES_SETTING(r_water, "1");
 SPADES_SETTING(r_bloom, "1");
@@ -46,6 +47,8 @@ SPADES_SETTING(r_cameraBlur, "1");
 SPADES_SETTING(r_dlights, "1");
 SPADES_SETTING(r_optimizedVoxelModel, "1");
 SPADES_SETTING(r_radiosity, "0");
+SPADES_SETTING(r_fogShadow, "0");
+
 
 namespace spades {
 	namespace draw {
@@ -181,6 +184,14 @@ namespace spades {
 		float GLRenderer::ScreenHeight() {
 			return device->ScreenHeight();
 		}
+		
+		Vector3 GLRenderer::GetFogColorForSolidPass() {
+			if(r_fogShadow && mapShadowRenderer){
+				return MakeVector3(0, 0, 0);
+			}else{
+				return GetFogColor();
+			}
+		}
 
 #pragma mark - Resource Manager
 		
@@ -294,7 +305,8 @@ namespace spades {
 			projectionViewMatrix = projectionMatrix * viewMatrix;
 			
 			device->ClearDepth(1.f);
-			device->ClearColor(fogColor.x, fogColor.y, fogColor.z, 1.f);
+			Vector3 bgCol = GetFogColorForSolidPass();
+			device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
 			device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
 			device->DepthRange(0.f, 1.f);
 			device->Enable(IGLDevice::Blend, false);
@@ -487,6 +499,11 @@ namespace spades {
 			// now process the non-multisampled buffer.
 			// depth buffer is also can be read
 			GLFramebufferManager::BufferHandle handle = fbManager->StartPostProcessing();
+			if(r_fogShadow && mapShadowRenderer &&
+			   fogColor.GetPoweredLength() > .000001f) {
+				GLFogFilter fogfilter(this);
+				handle = fogfilter.Filter(handle);
+			}
 			device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
 			
 			if(r_softParticles) {// softparticle is a part of postprocess
@@ -494,6 +511,7 @@ namespace spades {
 								  IGLDevice::OneMinusSrcAlpha);
 				spriteRenderer->Render();
 			}
+			
 			
 			device->BlendFunc(IGLDevice::SrcAlpha,
 							  IGLDevice::OneMinusSrcAlpha);

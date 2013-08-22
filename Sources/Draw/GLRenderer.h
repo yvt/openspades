@@ -110,6 +110,7 @@ namespace spades {
 			
 			Vector3 GetFogColor() { return fogColor; }
 			float GetFogDistance() { return fogDistance; }
+			Vector3 GetFogColorForSolidPass();
 			
 			virtual void StartScene(const client::SceneDefinition&);
 			

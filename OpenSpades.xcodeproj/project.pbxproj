@@ -57,6 +57,8 @@
 		E8567E791793DC37009D83E0 /* VoxelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E771793DC37009D83E0 /* VoxelModel.cpp */; };
 		E8567E7C1793E105009D83E0 /* GLModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E7A1793E105009D83E0 /* GLModel.cpp */; };
 		E8567E7F1793E1B3009D83E0 /* GLVoxelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E7D1793E1B3009D83E0 /* GLVoxelModel.cpp */; };
+		E859510C17C5DA060012810C /* GLFogFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859510A17C5DA060012810C /* GLFogFilter.cpp */; };
+		E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859510D17C61F850012810C /* GLLensFlareFilter.cpp */; };
 		E88318AB1790EBAA002ABE6D /* GLProgramUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88318A91790EBAA002ABE6D /* GLProgramUniform.cpp */; };
 		E88318AE1790EDDF002ABE6D /* GLProgramAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88318AC1790EDDF002ABE6D /* GLProgramAttribute.cpp */; };
 		E88318B11790F740002ABE6D /* GLMapRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88318AF1790F73F002ABE6D /* GLMapRenderer.cpp */; };
@@ -285,6 +287,10 @@
 		E8567E7B1793E105009D83E0 /* GLModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLModel.h; sourceTree = "<group>"; };
 		E8567E7D1793E1B3009D83E0 /* GLVoxelModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLVoxelModel.cpp; sourceTree = "<group>"; };
 		E8567E7E1793E1B3009D83E0 /* GLVoxelModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLVoxelModel.h; sourceTree = "<group>"; };
+		E859510A17C5DA060012810C /* GLFogFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFogFilter.cpp; sourceTree = "<group>"; };
+		E859510B17C5DA060012810C /* GLFogFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFogFilter.h; sourceTree = "<group>"; };
+		E859510D17C61F850012810C /* GLLensFlareFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLensFlareFilter.cpp; sourceTree = "<group>"; };
+		E859510E17C61F850012810C /* GLLensFlareFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLensFlareFilter.h; sourceTree = "<group>"; };
 		E88318A91790EBAA002ABE6D /* GLProgramUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgramUniform.cpp; sourceTree = "<group>"; };
 		E88318AA1790EBAA002ABE6D /* GLProgramUniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgramUniform.h; sourceTree = "<group>"; };
 		E88318AC1790EDDF002ABE6D /* GLProgramAttribute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgramAttribute.cpp; sourceTree = "<group>"; };
@@ -666,6 +672,10 @@
 				E8D88AB3179C45B7004C2451 /* GLLensFilter.h */,
 				E8E4469C179D59A900BE8855 /* GLCameraBlurFilter.cpp */,
 				E8E4469D179D59A900BE8855 /* GLCameraBlurFilter.h */,
+				E859510A17C5DA060012810C /* GLFogFilter.cpp */,
+				E859510B17C5DA060012810C /* GLFogFilter.h */,
+				E859510D17C61F850012810C /* GLLensFlareFilter.cpp */,
+				E859510E17C61F850012810C /* GLLensFlareFilter.h */,
 			);
 			name = "Post Filters";
 			sourceTree = "<group>";
@@ -1264,6 +1274,8 @@
 				E80B28DE17B39EEF0056179E /* ZipFileSystem.cpp in Sources */,
 				E80B28E117B4FDDA0056179E /* DynamicMemoryStream.cpp in Sources */,
 				E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */,
+				E859510C17C5DA060012810C /* GLFogFilter.cpp in Sources */,
+				E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

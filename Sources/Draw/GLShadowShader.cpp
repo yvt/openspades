@@ -97,7 +97,7 @@ namespace spades {
 							   def.viewAxis[2].y,
 							   def.viewAxis[2].z);
 			
-			Vector3 fc = renderer->GetFogColor();
+			Vector3 fc = renderer->GetFogColorForSolidPass();
 			fc *= fc; // linearize
 			fogColor.SetValue(fc.x,fc.y,fc.z);
 			
@@ -170,7 +170,7 @@ namespace spades {
 			if(r_radiosity) {
 				
 				
-				Vector3 ac = fc;
+				Vector3 ac = renderer->GetFogColor(); ac *= ac; // linearize
 				ambientColor(program);
 				//ac += .2f;
 				ac *= 0.5f;

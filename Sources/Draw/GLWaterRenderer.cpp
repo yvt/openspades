@@ -637,7 +637,7 @@ namespace spades {
 			GLColorBuffer colorBuffer = renderer->GetFramebufferManager()->PrepareForWaterRendering(tempFramebuffer);
 			
 			float fogDist = renderer->GetFogDistance();
-			Vector3 fogCol = renderer->GetFogColor();
+			Vector3 fogCol = renderer->GetFogColorForSolidPass();
 			fogCol *= fogCol; // linearize
 			
 			const client::SceneDefinition& def = renderer->GetSceneDef();
