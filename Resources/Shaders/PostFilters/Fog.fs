@@ -53,7 +53,7 @@ void main() {
 	dir = normalize(dir);
 	
 	if(dir.z < -0.000001) {
-		ceilTime = -startPos.z / dir.z;
+		ceilTime = -startPos.z / dir.z - 0.0001;
 		maxTime = min(maxTime, ceilTime);
 	}
 	
@@ -74,7 +74,7 @@ void main() {
 	float time = 0.;
 	float total = 0.;
 	
-	for(int i = 0; i < 256; i++){
+	for(int i = 0; i < 512; i++){
 		float diffTime;
 		
 		float val = texture2D(shadowMapTexture, voxelIndex * voxelSize).w;
@@ -110,7 +110,7 @@ void main() {
 		total += val * diffDens;
 		
 		if(diffTime <= 0.) {
-			if(nextTime == ceilTime) {
+			if(nextTime >= ceilTime) {
 				diffDens = fogDensFunc(fogDistanceTime) - fogDensFunc(time);;
 				total += val * max(diffDens, 0.);
 			}
