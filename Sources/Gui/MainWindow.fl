@@ -18,8 +18,8 @@ widget_class MainWindow {
     private xywh {5 110 605 240} labelsize 11
   } {
     Fl_Group {} {
-      label About open selected
-      xywh {10 130 595 215}
+      label About open
+      xywh {10 130 595 215} hide
     } {
       Fl_Help_View aboutView {
         xywh {10 135 595 210}
@@ -27,16 +27,19 @@ widget_class MainWindow {
     }
     Fl_Group {} {
       label Setup open
-      private xywh {10 130 595 220} hide
+      private xywh {10 130 595 220}
     } {
       Fl_Group {} {
         label Video open
         private xywh {10 150 385 70} box ENGRAVED_FRAME align 5
       } {
         Fl_Choice msaaSelect {
-          label {MSAA:}
-          callback {SavePrefs();} open
-          private xywh {295 160 90 25} down_box BORDER_BOX when 1
+          label {AA:}
+          callback {if(msaaSelect->value() >= 1 &&
+   msaaSelect->value() <= 2)
+	MSAAEnabled();
+SavePrefs();} open selected
+          private xywh {270 160 115 25} down_box BORDER_BOX when 1
         } {}
         Fl_Check_Button fullscreenCheck {
           label {Full Screen}
@@ -85,12 +88,16 @@ widget_class MainWindow {
         }
         Fl_Choice directLightSelect {
           label Lighting
-          callback {SavePrefs();} open
+          callback {if(directLightSelect->value() == 2)
+	DisableMSAA();
+SavePrefs();} open
           xywh {230 280 155 25} down_box BORDER_BOX when 1
         } {}
         Fl_Choice shaderSelect {
           label {Shader Effects}
-          callback {SavePrefs();} open
+          callback {if(shaderSelect->value() == 1)
+	DisableMSAA();
+SavePrefs();} open
           xywh {230 310 155 25} down_box BORDER_BOX when 1
         } {}
         Fl_Light_Button bloodCheck {
@@ -138,6 +145,10 @@ widget_class MainWindow {
   Function {OpenDetailConfig()} {open private
   } {}
   Function {Init()} {open
+  } {}
+  Function {DisableMSAA()} {open private return_type void
+  } {}
+  Function {MSAAEnabled()} {open private return_type void
   } {}
 } 
 

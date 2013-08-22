@@ -59,6 +59,7 @@
 		E8567E7F1793E1B3009D83E0 /* GLVoxelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E7D1793E1B3009D83E0 /* GLVoxelModel.cpp */; };
 		E859510C17C5DA060012810C /* GLFogFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859510A17C5DA060012810C /* GLFogFilter.cpp */; };
 		E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859510D17C61F850012810C /* GLLensFlareFilter.cpp */; };
+		E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511017C645000012810C /* GLFXAAFilter.cpp */; };
 		E88318AB1790EBAA002ABE6D /* GLProgramUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88318A91790EBAA002ABE6D /* GLProgramUniform.cpp */; };
 		E88318AE1790EDDF002ABE6D /* GLProgramAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88318AC1790EDDF002ABE6D /* GLProgramAttribute.cpp */; };
 		E88318B11790F740002ABE6D /* GLMapRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88318AF1790F73F002ABE6D /* GLMapRenderer.cpp */; };
@@ -291,6 +292,8 @@
 		E859510B17C5DA060012810C /* GLFogFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFogFilter.h; sourceTree = "<group>"; };
 		E859510D17C61F850012810C /* GLLensFlareFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLensFlareFilter.cpp; sourceTree = "<group>"; };
 		E859510E17C61F850012810C /* GLLensFlareFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLensFlareFilter.h; sourceTree = "<group>"; };
+		E859511017C645000012810C /* GLFXAAFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFXAAFilter.cpp; sourceTree = "<group>"; };
+		E859511117C645000012810C /* GLFXAAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFXAAFilter.h; sourceTree = "<group>"; };
 		E88318A91790EBAA002ABE6D /* GLProgramUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgramUniform.cpp; sourceTree = "<group>"; };
 		E88318AA1790EBAA002ABE6D /* GLProgramUniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgramUniform.h; sourceTree = "<group>"; };
 		E88318AC1790EDDF002ABE6D /* GLProgramAttribute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgramAttribute.cpp; sourceTree = "<group>"; };
@@ -676,6 +679,8 @@
 				E859510B17C5DA060012810C /* GLFogFilter.h */,
 				E859510D17C61F850012810C /* GLLensFlareFilter.cpp */,
 				E859510E17C61F850012810C /* GLLensFlareFilter.h */,
+				E859511017C645000012810C /* GLFXAAFilter.cpp */,
+				E859511117C645000012810C /* GLFXAAFilter.h */,
 			);
 			name = "Post Filters";
 			sourceTree = "<group>";
@@ -1276,6 +1281,7 @@
 				E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */,
 				E859510C17C5DA060012810C /* GLFogFilter.cpp in Sources */,
 				E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */,
+				E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

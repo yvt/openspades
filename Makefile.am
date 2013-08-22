@@ -196,6 +196,8 @@ Sources/Draw/GLFlatMapRenderer.cpp \
 Sources/Draw/GLFlatMapRenderer.h \
 Sources/Draw/GLFramebufferManager.cpp \
 Sources/Draw/GLFramebufferManager.h \
+Sources/Draw/GLFXAAFilter.cpp \
+Sources/Draw/GLFXAAFilter.h \
 Sources/Draw/GLFogFilter.cpp \
 Sources/Draw/GLFogFilter.h \
 Sources/Draw/GLImage.cpp \

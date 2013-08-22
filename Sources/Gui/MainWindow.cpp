@@ -10,7 +10,10 @@ void MainWindow::cb_quickHostInput(Fl_Input* o, void* v) {
 }
 
 void MainWindow::cb_msaaSelect_i(Fl_Choice*, void*) {
-  SavePrefs();
+  if(msaaSelect->value() >= 1 &&
+   msaaSelect->value() <= 2)
+	MSAAEnabled();
+SavePrefs();
 }
 void MainWindow::cb_msaaSelect(Fl_Choice* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_msaaSelect_i(o,v);
@@ -66,14 +69,18 @@ void MainWindow::cb_radiosityCheck(Fl_Light_Button* o, void* v) {
 }
 
 void MainWindow::cb_directLightSelect_i(Fl_Choice*, void*) {
-  SavePrefs();
+  if(directLightSelect->value() == 2)
+	DisableMSAA();
+SavePrefs();
 }
 void MainWindow::cb_directLightSelect(Fl_Choice* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_directLightSelect_i(o,v);
 }
 
 void MainWindow::cb_shaderSelect_i(Fl_Choice*, void*) {
-  SavePrefs();
+  if(shaderSelect->value() == 1)
+	DisableMSAA();
+SavePrefs();
 }
 void MainWindow::cb_shaderSelect(Fl_Choice* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_shaderSelect_i(o,v);
@@ -139,16 +146,16 @@ this->when(FL_WHEN_RELEASE);
 { Fl_Tabs* o = new Fl_Tabs(5, 110, 605, 240);
   o->labelsize(11);
   { Fl_Group* o = new Fl_Group(10, 130, 595, 215, "About");
+    o->hide();
     { aboutView = new Fl_Help_View(10, 135, 595, 210);
     } // Fl_Help_View* aboutView
     o->end();
   } // Fl_Group* o
   { Fl_Group* o = new Fl_Group(10, 130, 595, 220, "Setup");
-    o->hide();
     { Fl_Group* o = new Fl_Group(10, 150, 385, 70, "Video");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { msaaSelect = new Fl_Choice(295, 160, 90, 25, "MSAA:");
+      { msaaSelect = new Fl_Choice(270, 160, 115, 25, "AA:");
         msaaSelect->down_box(FL_BORDER_BOX);
         msaaSelect->callback((Fl_Callback*)cb_msaaSelect);
         msaaSelect->when(FL_WHEN_CHANGED);

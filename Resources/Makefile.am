@@ -44,6 +44,12 @@ Shaders/Water.program \
 Shaders/WaterDepth.fs \
 Shaders/WaterDepth.vs \
 Shaders/WaterDepth.program \
+Shaders/LensFlare/Draw.fs \
+Shaders/LensFlare/Draw.vs \
+Shaders/LensFlare/Draw.program \
+Shaders/LensFlare/Scanner.fs \
+Shaders/LensFlare/Scanner.vs \
+Shaders/LensFlare/Scanner.program \
 Shaders/PostFilters/CameraBlur.fs \
 Shaders/PostFilters/CameraBlur.vs \
 Shaders/PostFilters/CameraBlur.program \
@@ -56,6 +62,12 @@ Shaders/PostFilters/Gauss1D.program \
 Shaders/PostFilters/Lens.fs \
 Shaders/PostFilters/Lens.vs \
 Shaders/PostFilters/Lens.program \
+Shaders/PostFilters/FXAA.fs \
+Shaders/PostFilters/FXAA.vs \
+Shaders/PostFilters/FXAA.program \
+Shaders/PostFilters/Fog.fs \
+Shaders/PostFilters/Fog.vs \
+Shaders/PostFilters/Fog.program \
 Shaders/PostFilters/PassThrough.fs \
 Shaders/PostFilters/PassThrough.vs \
 Shaders/PostFilters/PassThrough.program \

@@ -39,6 +39,7 @@
 #include "GLRadiosityRenderer.h"
 #include "GLFogFilter.h"
 #include "GLLensFlareFilter.h"
+#include "GLFXAAFilter.h"
 
 SPADES_SETTING(r_water, "1");
 SPADES_SETTING(r_bloom, "1");
@@ -50,6 +51,7 @@ SPADES_SETTING(r_dlights, "1");
 SPADES_SETTING(r_optimizedVoxelModel, "1");
 SPADES_SETTING(r_radiosity, "0");
 SPADES_SETTING(r_fogShadow, "0");
+SPADES_SETTING(r_fxaa, "1");
 
 
 namespace spades {
@@ -529,6 +531,9 @@ namespace spades {
 				handle = GLBloomFilter(this).Filter(handle);*/
 			if(r_lens)
 				handle = GLLensFilter(this).Filter(handle);
+			
+			if(r_fxaa)
+				handle = GLFXAAFilter(this).Filter(handle);
 			
 			// copy buffer to WM given framebuffer
 			device->BindFramebuffer(IGLDevice::Framebuffer, 0);

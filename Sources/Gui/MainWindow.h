@@ -91,6 +91,9 @@ private:
   void OpenDetailConfig();
 public:
   void Init();
+private:
+  void DisableMSAA();
+  void MSAAEnabled();
 };
 extern unsigned char aboutText[3447];
 #endif

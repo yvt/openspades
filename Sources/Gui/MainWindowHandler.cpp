@@ -37,6 +37,7 @@ SPADES_SETTING(r_radiosity, "0");
 SPADES_SETTING(r_dlights, "1");
 SPADES_SETTING(r_water, "1");
 SPADES_SETTING(r_multisamples, "0");
+SPADES_SETTING(r_fxaa, "1");
 SPADES_SETTING(r_depthBits, "24");
 SPADES_SETTING(r_colorBits, "0");
 SPADES_SETTING(r_videoWidth, "1024");
@@ -107,20 +108,30 @@ void MainWindow::LoadPrefs() {
 	
 	msaaSelect->clear();
 	msaaSelect->add("Off");
-	msaaSelect->add("2x");
-	msaaSelect->add("4x");
-	switch((int)r_multisamples){
-		case 0:
-		case 1:
-		default:
-			msaaSelect->value(0);
-			break;
-		case 2:
-			msaaSelect->value(1);
-			break;
-		case 4:
-			msaaSelect->value(2);
-			break;
+	msaaSelect->add("MSAA 2x");
+	msaaSelect->add("MSAA 4x");
+	msaaSelect->add("FXAA");
+	msaaSelect->add("Custom");
+	if(r_fxaa) {
+		if(r_multisamples){
+			msaaSelect->value(4);
+		}else{
+			msaaSelect->value(3);
+		}
+	}else{
+		switch((int)r_multisamples){
+			case 0:
+			case 1:
+			default:
+				msaaSelect->value(0);
+				break;
+			case 2:
+				msaaSelect->value(1);
+				break;
+			case 4:
+				msaaSelect->value(2);
+				break;
+		}
 	}
 	
 	quickHostInput->value(cg_lastQuickConnectHost.CString());
@@ -225,9 +236,10 @@ void MainWindow::SavePrefs() {
 	cg_lastQuickConnectHost = quickHostInput->value();
 	r_fullscreen = fullscreenCheck->value() ? 1 : 0;
 	switch(msaaSelect->value()){
-		case 0: r_multisamples = 0; break;
-		case 1: r_multisamples = 2; break;
-		case 2: r_multisamples = 4; break;
+		case 0: r_multisamples = 0; r_fxaa = 0; break;
+		case 1: r_multisamples = 2; r_fxaa = 0; break;
+		case 2: r_multisamples = 4; r_fxaa = 0; break;
+		case 3: r_multisamples = 0; r_fxaa = 1; break;
 	}
 	
 	// --- graphics
@@ -274,6 +286,18 @@ void MainWindow::SavePrefs() {
 	// --- game
 	cg_playerName = playerNameInput->value();
 	
+}
+
+void MainWindow::DisableMSAA() {
+	if(msaaSelect->value() >= 1 && msaaSelect->value() <= 2)
+		msaaSelect->value(3);
+}
+
+void MainWindow::MSAAEnabled() {
+	if(shaderSelect->value() == 1)
+		shaderSelect->value(0);
+	if(directLightSelect->value() == 2)
+		directLightSelect->value(1);
 }
 
 void MainWindow::OpenDetailConfig() {
