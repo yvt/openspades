@@ -1,7 +1,7 @@
 
 
 attribute vec2 positionAttribute;
-attribute vec4 colorAttribute;
+uniform vec4 colorUniform;
 
 uniform vec4 texCoordRange;
 
@@ -16,7 +16,7 @@ void main() {
 	
 	gl_Position = vec4(scrPos, 0.5, 1.);
 	
-	color = colorAttribute;
+	color = colorUniform;
 	texCoord = pos * texCoordRange.zw + texCoordRange.xy;
 }
 

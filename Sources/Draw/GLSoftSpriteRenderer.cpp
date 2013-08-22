@@ -298,20 +298,20 @@ namespace spades {
 				// composite
 				program = renderer->RegisterProgram("Shaders/PostFilters/PassThrough.program");
 				static GLProgramAttribute positionAttribute("positionAttribute");
-				static GLProgramAttribute colorAttribute("colorAttribute");
+				static GLProgramUniform colorUniform("colorUniform");
 				static GLProgramUniform textureUniform("texture");
 				static GLProgramUniform texCoordRange("texCoordRange");
 				
 				positionAttribute(program);
 				textureUniform(program);
 				texCoordRange(program);
-				colorAttribute(program);
+				colorUniform(program);
 				
 				program->Use();
 				
 				textureUniform.SetValue(0);
 				texCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
-				device->VertexAttrib(colorAttribute(), 1.f, 1.f, 1.f, 1.f);
+				colorUniform.SetValue(1.f, 1.f, 1.f, 1.f);
 				
 				qr.SetCoordAttributeIndex(positionAttribute());
 				device->BindFramebuffer(IGLDevice::Framebuffer, lastFb);

@@ -43,7 +43,7 @@ namespace spades {
 			
 			GLProgram *thru = renderer->RegisterProgram("Shaders/PostFilters/PassThrough.program");
 			static GLProgramAttribute thruPosition("positionAttribute");
-			static GLProgramAttribute thruColor("colorAttribute");
+			static GLProgramUniform thruColor("colorUniform");
 			static GLProgramUniform thruTexture("texture");
 			static GLProgramUniform thruTexCoordRange("texCoordRange");
 			
@@ -66,7 +66,7 @@ namespace spades {
 			gammaMixMix2(gammaMix);
 			
 			thru->Use();
-			dev->VertexAttrib(thruColor(), 1, 1, 1, 1);
+			thruColor.SetValue(1.f, 1.f, 1.f, 1.f);
 			thruTexture.SetValue(0);
 			dev->Enable(IGLDevice::Blend, false);
 			
@@ -120,7 +120,7 @@ namespace spades {
 				dev->BindTexture(IGLDevice::Texture2D, curLevel.GetTexture());
 				dev->BindFramebuffer(IGLDevice::Framebuffer, targLevel.GetFramebuffer());
 				dev->Viewport(0, 0, targLevel.GetWidth(), targLevel.GetHeight());
-				dev->VertexAttrib(thruColor(), 1, 1, 1, alpha);
+				thruColor.SetValue(1.f, 1.f, 1.f, alpha);
 				qr.Draw();
 				dev->BindTexture(IGLDevice::Texture2D, 0);
 			}
