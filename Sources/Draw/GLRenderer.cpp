@@ -522,15 +522,16 @@ namespace spades {
 			
 			if(r_cameraBlur && !sceneDef.denyCameraBlur)
 				handle = cameraBlur.Filter(handle);
-			if(r_lensFlare){
-				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
-				GLLensFlareFilter(this).Draw();
-			}
 			/*
 			if(r_bloom)
 				handle = GLBloomFilter(this).Filter(handle);*/
 			if(r_lens)
 				handle = GLLensFilter(this).Filter(handle);
+			
+			if(r_lensFlare){
+				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
+				GLLensFlareFilter(this).Draw();
+			}
 			
 			if(r_fxaa)
 				handle = GLFXAAFilter(this).Filter(handle);
