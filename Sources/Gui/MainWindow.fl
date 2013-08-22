@@ -38,7 +38,7 @@ widget_class MainWindow {
           callback {if(msaaSelect->value() >= 1 &&
    msaaSelect->value() <= 2)
 	MSAAEnabled();
-SavePrefs();} open selected
+SavePrefs();} open
           private xywh {270 160 115 25} down_box BORDER_BOX when 1
         } {}
         Fl_Check_Button fullscreenCheck {
@@ -68,7 +68,7 @@ SavePrefs();} open selected
         }
       }
       Fl_Group {} {
-        label Graphics open
+        label Graphics open selected
         private xywh {10 240 385 105} box ENGRAVED_FRAME align 5
       } {
         Fl_Light_Button advancedLensCheck {
@@ -84,14 +84,14 @@ SavePrefs();} open selected
         Fl_Light_Button radiosityCheck {
           label {Global Illumination}
           callback {SavePrefs();}
-          xywh {20 280 140 25} when 1
+          xywh {20 280 160 25} when 1
         }
         Fl_Choice directLightSelect {
           label Lighting
           callback {if(directLightSelect->value() == 2)
 	DisableMSAA();
 SavePrefs();} open
-          xywh {230 280 155 25} down_box BORDER_BOX when 1
+          xywh {255 280 130 25} down_box BORDER_BOX when 1
         } {}
         Fl_Choice shaderSelect {
           label {Shader Effects}

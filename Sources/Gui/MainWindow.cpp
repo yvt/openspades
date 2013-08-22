@@ -194,11 +194,11 @@ this->when(FL_WHEN_RELEASE);
         softParticleCheck->callback((Fl_Callback*)cb_softParticleCheck);
         softParticleCheck->when(FL_WHEN_CHANGED);
       } // Fl_Light_Button* softParticleCheck
-      { radiosityCheck = new Fl_Light_Button(20, 280, 140, 25, "Global Illumination");
+      { radiosityCheck = new Fl_Light_Button(20, 280, 160, 25, "Global Illumination");
         radiosityCheck->callback((Fl_Callback*)cb_radiosityCheck);
         radiosityCheck->when(FL_WHEN_CHANGED);
       } // Fl_Light_Button* radiosityCheck
-      { directLightSelect = new Fl_Choice(230, 280, 155, 25, "Lighting");
+      { directLightSelect = new Fl_Choice(255, 280, 130, 25, "Lighting");
         directLightSelect->down_box(FL_BORDER_BOX);
         directLightSelect->callback((Fl_Callback*)cb_directLightSelect);
         directLightSelect->when(FL_WHEN_CHANGED);
