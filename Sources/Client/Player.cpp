@@ -51,7 +51,7 @@ namespace spades {
 			health = 100;
 			grenades = 3;
 			blockStocks = 50;
-			blockColor = IntVector3::Make(112, 112, 112);
+			blockColor = IntVector3::Make(111, 111, 111);
 		
 			nextSpadeTime = 0.f;
 			nextDigTime = 0.f;
