@@ -38,5 +38,7 @@
 
 	* volumetric fog
 	* lens flare
+	* disabled soft map shadow due to quality issue
+
 
 

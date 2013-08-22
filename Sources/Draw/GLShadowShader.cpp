@@ -50,7 +50,7 @@ namespace spades {
 			shaders.push_back(r->RegisterShader("Shaders/Shadow/Common.fs"));
 			shaders.push_back(r->RegisterShader("Shaders/Shadow/Common.vs"));
 			
-			if(r_mapSoftShadow){
+			if(r_mapSoftShadow && false){
 				
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapSoft.fs"));
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapSoft.vs"));

@@ -8,13 +8,14 @@ uniform sampler2D mapShadowTexture;
 
 varying vec3 mapShadowCoord;
 
-vec2 MapSoft_BlockSample(vec2 sample, float depth) {
+vec3 MapSoft_BlockSample(vec2 sample, float depth,
+						 float shiftedDepth) {
 	const float factor = 1. / 512.;
 	float val = texture2D(mapShadowTexture, sample.xy * factor).w;
-	float distance = depth - val;
+	float distance = shiftedDepth - val;
 	float weight = step(0., distance);
-	weight = clamp(distance*100000., 0., 1.);
-	return vec2(distance, 1.) * weight;
+	weight = clamp(distance*255. - 1., 0., 1.);
+	return vec3(distance, 1., step(0., shiftedDepth - val)) * weight;
 }
 
 float VisibilityOfSunLight_Map() {
@@ -32,21 +33,22 @@ float VisibilityOfSunLight_Map() {
 	
 	// blocker distance estimation
 	vec4 distSampPos = vec4(iPosShifted, iPosShifted + sampShift);
-	vec2 samp1 = MapSoft_BlockSample(distSampPos.xy, depth);
-	vec2 samp2 = MapSoft_BlockSample(distSampPos.zy, depth);
-	vec2 samp3 = MapSoft_BlockSample(distSampPos.xw, depth);
-	vec2 samp4 = MapSoft_BlockSample(distSampPos.zw, depth);
-	vec2 distWeighted1 = samp1;
+	float depthShifted = depth + sampShift.y / 255.;
+	vec3 samp1 = MapSoft_BlockSample(distSampPos.xy, depth, depth);
+	vec3 samp2 = MapSoft_BlockSample(distSampPos.zy, depth, depth);
+	vec3 samp3 = MapSoft_BlockSample(distSampPos.xw, depth, depthShifted);
+	vec3 samp4 = MapSoft_BlockSample(distSampPos.zw, depth, depthShifted);
+	vec3 distWeighted1 = samp1;
 	distWeighted1 = mix(distWeighted1,
 						samp2,
 						fracPosHSAbs.x);
 	
-	vec2 distWeighted2 = samp3;
+	vec3 distWeighted2 = samp3;
 	distWeighted2 = mix(distWeighted2,
 						samp4,
 						fracPosHSAbs.x);
 	
-	vec2 distWeighted3 = mix(distWeighted1, distWeighted2,
+	vec3 distWeighted3 = mix(distWeighted1, distWeighted2,
 							 fracPosHSAbs.y);
 	
 	distWeighted3.x /= distWeighted3.y + 1.e-10;
@@ -60,9 +62,26 @@ float VisibilityOfSunLight_Map() {
 	vec2 blurWeight = 0.5 - (0.5 - fracPosHSAbs) / blur;
 	blurWeight = max(blurWeight, 0.);
 	
-	float val1 = mix(samp1.y, samp2.y, blurWeight.x);
-	float val2 = mix(samp3.y, samp4.y, blurWeight.x);
+	float val1 = mix(samp1.z, samp2.z, blurWeight.x);
+	float val2 = mix(samp3.z, samp4.z, blurWeight.x);
 	float val = 1. - mix(val1, val2, blurWeight.y);
+	
+	// --- sharp shadow
+	vec4 sharpCol = texture2D(mapShadowTexture, floor(mapShadowCoord.xy) / 512.);
+	float sharpVal = sharpCol.w;
+	
+	// side shadow?
+	if(sharpCol.x > .499) {
+		sharpVal -= fract(mapShadowCoord.y) / 255.;
+	}
+	
+	float dist = sharpVal - mapShadowCoord.z + 0.001;
+	sharpVal = step(0., dist);
+	
+	float sharpWeight = clamp(4. + dist * 200., 0., 1.);
+	sharpVal = mix(1., sharpVal, sharpWeight);
+	
+	val *= sharpVal;
 	
 	return val;
 }
