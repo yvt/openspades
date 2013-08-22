@@ -1,6 +1,6 @@
 SUBDIRS = Resources
 
-Resourcesdir = $(datadir)/Resources
+Resourcesdir = $(datadir)/openspades/Resources
 
 bin_PROGRAMS = openspades
 

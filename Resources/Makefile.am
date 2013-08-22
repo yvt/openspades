@@ -1,5 +1,5 @@
 
-Resourcesdir = $(datadir)/Resources
+Resourcesdir = $(datadir)/openspades/Resources
 
 SHADERS = \
 Shaders/Basic.fs \
@@ -85,6 +85,10 @@ Shaders/Shadow/MapRadiosityNull.fs \
 Shaders/Shadow/MapRadiosityNull.vs \
 Shaders/Shadow/MapRadiosity.fs \
 Shaders/Shadow/MapRadiosity.vs \
+Shaders/ShadowMap/Common.fs \
+Shaders/ShadowMap/Common.vs \
+Shaders/ShadowMap/Basic.fs \
+Shaders/ShadowMap/Basic.vs \
 Shaders/DynamicLight/Common.fs \
 Shaders/DynamicLight/Common.vs \
 Shaders/DynamicLight/MapNull.fs \
@@ -96,7 +100,9 @@ install-data-local:
 	$(mkinstalldirs) $(Resourcesdir)/Shaders
 	$(mkinstalldirs) $(Resourcesdir)/Shaders/PostFilters
 	$(mkinstalldirs) $(Resourcesdir)/Shaders/Shadow
+	$(mkinstalldirs) $(Resourcesdir)/Shaders/ShadowMap
 	$(mkinstalldirs) $(Resourcesdir)/Shaders/DynamicLight
+	$(mkinstalldirs) $(Resourcesdir)/Shaders/LensFlare
 	for i in $(SHADERS); do \
 	$(INSTALL_DATA) $(srcdir)/$$i $(Resourcesdir)/$$i; \
 	done

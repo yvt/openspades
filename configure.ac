@@ -83,7 +83,7 @@ case $host_os in
 		RESOURCES_CFLAGS=""
 		;;
  * )
-		RESOURCES_CFLAGS="-DRESDIR=\\\"${datadir}/Resources\\\""
+		RESOURCES_CFLAGS="-DRESDIR=\\\"${datadir}/openspades/Resources\\\""
 		;;
 esac
 
