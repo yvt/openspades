@@ -23,10 +23,16 @@ namespace spades {
 		class GLMapShadowRenderer {
 			friend class GLRadiosityRenderer;
 			
+			enum {
+				CoarseSize = 8,
+				CoarseBits = 3
+			};
+			
 			GLRenderer *renderer;
 			IGLDevice *device;
 			client::GameMap *map;
 			IGLDevice::UInteger texture;
+			IGLDevice::UInteger coarseTexture;
 			
 			int w, h, d;
 			
@@ -34,6 +40,7 @@ namespace spades {
 			std::vector<uint32_t> updateBitmap;
 			
 			std::vector<uint32_t> bitmap;
+			std::vector<uint16_t> coarseBitmap;
 			
 			uint32_t GeneratePixel(int x, int y);
 			void MarkUpdate(int x, int y);
@@ -46,6 +53,7 @@ namespace spades {
 			void Update();
 			
 			IGLDevice::UInteger GetTexture() { return texture; }
+			IGLDevice::UInteger GetCoarseTexture() { return coarseTexture; }
 		};
 	}
 }

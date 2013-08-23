@@ -1,7 +1,12 @@
 
+#define USE_COARSE_SHADOWMAP 1
+
 uniform sampler2D colorTexture;
 uniform sampler2D depthTexture;
 uniform sampler2D shadowMapTexture;
+#if USE_COARSE_SHADOWMAP
+uniform sampler2D coarseShadowMapTexture;
+#endif
 uniform vec2 zNearFar;
 
 uniform vec3 fogColor;
@@ -49,7 +54,8 @@ void main() {
 	//vec2 dir = vec2(1., 4.);
 	vec3 dir = shadowRayDirection.xyz; //dirVec;
 	if(length(dir.xy) < .0001) dir.xy = vec2(0.0001);
-	//dir /= length(dir.xy);
+	if(dir.x == 0.) dir.x = .00001;
+	if(dir.y == 0.) dir.y = .00001;
 	dir = normalize(dir);
 	
 	if(dir.z < -0.000001) {
@@ -58,9 +64,10 @@ void main() {
 	}
 	
 	vec2 dirSign = sign(dir.xy);
-	vec2 dirSign2 = dirSign * .5 + .5;
+	vec2 dirSign2 = dirSign * .5 + .5; // 0, 1
+	vec2 dirSign3 = dirSign * .5 - .5; // -1, 0
 	
-	vec3 pos = startPos;
+	vec3 pos = startPos + dir * 0.0001;
 	vec2 voxelIndex = floor(pos.xy);
 	if(pos.xy == voxelIndex) {
 		// exact coord doesn't work well
@@ -74,6 +81,139 @@ void main() {
 	float time = 0.;
 	float total = 0.;
 	
+#if USE_COARSE_SHADOWMAP
+	const float coarseLevel = 8.;
+	const float coarseLevelInv = 1. / coarseLevel;
+	
+	const vec2 coarseVoxels = voxels / coarseLevel;
+	const vec2 coarseVoxelSize = voxelSize * coarseLevel;
+	
+	vec3 coarseDir = dir * vec3(coarseLevelInv, coarseLevelInv, 1.);
+	vec3 coarsePos = pos * vec3(coarseLevelInv, coarseLevelInv, 1.);
+	vec2 coarseVoxelIndex = floor(coarsePos.xy);
+	if(coarsePos.xy == coarseVoxelIndex) {
+		// exact coord doesn't work well
+		coarsePos += 0.0001;
+	}
+	vec2 coarseNextVoxelIndex = coarseVoxelIndex + dirSign;
+	vec2 coarseNextVoxelIndex2 = coarseVoxelIndex + dirSign2;
+	vec2 coarseTimePerVoxel = timePerVoxel * coarseLevel;
+	vec2 coarseTimePerVoxelAbs = timePerVoxelAbs * coarseLevel;
+	vec2 coarseTimeToNextVoxel = (coarseNextVoxelIndex2 - coarsePos.xy) * coarseTimePerVoxel;
+	
+	
+	for(int i = 0; i < 64; i++) {
+		float diffTime;
+		vec2 coarseVal = texture2D(coarseShadowMapTexture,
+							  coarseVoxelIndex * coarseVoxelSize).xy;
+		diffTime = min(coarseTimeToNextVoxel.x, coarseTimeToNextVoxel.y);
+		
+		float nextTime = min(time + diffTime, maxTime);
+		float limitedDiffTime = nextTime - time;
+		
+		vec2 passingZ = vec2(coarsePos.z);
+		passingZ.y += limitedDiffTime * coarseDir.z;
+		
+		bvec2 stat = bvec2(min(passingZ.x, passingZ.y) > coarseVal.y,
+						   max(passingZ.x, passingZ.y) < coarseVal.x);
+		
+		vec2 oldCoarseVoxelIndex = coarseVoxelIndex;
+		vec3 nextCoarsePos = coarsePos + diffTime * coarseDir;
+		// advance coarse ray
+		if(coarseTimeToNextVoxel.x < coarseTimeToNextVoxel.y) {
+			coarseVoxelIndex.x += dirSign.x;
+			//nextCoarsePos.x = coarseVoxelIndex.x - dirSign3.x;
+			
+			coarseTimeToNextVoxel.y -= diffTime;
+			coarseTimeToNextVoxel.x = coarseTimePerVoxelAbs.x;
+		}else{
+			coarseVoxelIndex.y += dirSign.y;
+			//nextCoarsePos.y = coarseVoxelIndex.y - dirSign3.y;
+			
+			coarseTimeToNextVoxel.x -= diffTime;
+			coarseTimeToNextVoxel.y = coarseTimePerVoxelAbs.y;
+		}
+		
+		
+		if(any(stat)) {
+			if(stat.y) {
+				// always in light
+				float diffDens = fogDensFunc(nextTime) - fogDensFunc(time);
+				total += diffDens;
+			}
+			time = nextTime;
+			diffTime = limitedDiffTime;
+		}else if(limitedDiffTime < 0.000000001){
+			// no advance in this coarse voxel
+			time = nextTime;
+			diffTime = limitedDiffTime;
+		}else{
+			// do detail tracing
+			
+			pos = coarsePos * vec3(coarseLevel, coarseLevel, 1.);
+			voxelIndex = floor(pos.xy);
+			if(pos.xy == voxelIndex) {
+				// exact coord doesn't work well
+				pos += 0.001;
+			}
+			nextVoxelIndex = voxelIndex + dirSign;
+			nextVoxelIndex2 = voxelIndex + dirSign2;
+			timeToNextVoxel = (nextVoxelIndex2 - pos.xy) * timePerVoxel;
+		
+			for(int j = 0; j < 64; j++){
+				
+				float val = texture2D(shadowMapTexture, voxelIndex * voxelSize).w;
+				val = step(pos.z, val);
+				
+				diffTime = min(timeToNextVoxel.x, timeToNextVoxel.y);
+				if(timeToNextVoxel.x < timeToNextVoxel.y) {
+					voxelIndex.x += dirSign.x;
+					
+					timeToNextVoxel.y -= diffTime;
+					timeToNextVoxel.x = timePerVoxelAbs.x;
+				}else{
+					voxelIndex.y += dirSign.y;
+					
+					timeToNextVoxel.x -= diffTime;
+					timeToNextVoxel.y = timePerVoxelAbs.y;
+				}
+				
+				pos += dir * diffTime;
+				
+				float nextTime = min(time + diffTime, maxTime);
+				float diffDens = fogDensFunc(nextTime) - fogDensFunc(time);
+				diffTime = nextTime - time;
+				time = nextTime;
+				
+				total += val * diffDens;
+				
+				if(time >= maxTime) {
+					break;
+				}
+				
+				// if goes another coarse voxel,
+				// return to coarse ray tracing
+				if(floor((voxelIndex.xy + .5) * coarseLevelInv) !=
+				   oldCoarseVoxelIndex)
+					break;
+			}
+			
+			// --- detail tracing ends here
+		}
+		
+		
+		if(time >= maxTime) {
+			if(nextTime >= ceilTime) {
+				float diffDens = fogDensFunc(fogDistanceTime) - fogDensFunc(time);;
+				total += max(diffDens, 0.);
+			}
+			break;
+		}
+		
+		coarsePos = nextCoarsePos;
+	}
+	
+#else
 	for(int i = 0; i < 512; i++){
 		float diffTime;
 		
@@ -117,8 +257,10 @@ void main() {
 			break;
 		}
 	}
+#endif
 	
 	total /= fogDensFunc(fogDistanceTime);
+	
 	
 	// add gradient
 	vec3 sunDir = normalize(vec3(0., -1., -1.));

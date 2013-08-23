@@ -21,6 +21,7 @@ namespace spades{
 		device(renderer->GetGLDevice()), map(map){
 			SPADES_MARK_FUNCTION();
 			texture = device->GenTexture();
+			coarseTexture = device->GenTexture();
 			device->BindTexture(IGLDevice::Texture2D, texture);
 			device->TexImage2D(IGLDevice::Texture2D, 0,
 							   IGLDevice::RGBA,
@@ -40,12 +41,34 @@ namespace spades{
 							  IGLDevice::TextureWrapT,
 							  IGLDevice::Repeat);
 			
+			device->BindTexture(IGLDevice::Texture2D, coarseTexture);
+			device->TexImage2D(IGLDevice::Texture2D, 0,
+							   IGLDevice::RGBA,
+							   map->Width() / CoarseSize,
+							   map->Height() / CoarseSize,
+							   0, IGLDevice::RG, IGLDevice::UnsignedByte,
+							   NULL);
+			device->TexParamater(IGLDevice::Texture2D,
+								 IGLDevice::TextureMagFilter,
+								 IGLDevice::Nearest);
+			device->TexParamater(IGLDevice::Texture2D,
+								 IGLDevice::TextureMinFilter,
+								 IGLDevice::Nearest);
+			device->TexParamater(IGLDevice::Texture2D,
+								 IGLDevice::TextureWrapS,
+								 IGLDevice::Repeat);
+			device->TexParamater(IGLDevice::Texture2D,
+								 IGLDevice::TextureWrapT,
+								 IGLDevice::Repeat);
+			
 			w = map->Width();
 			h = map->Height();
 			d = map->Depth();
 			
 			updateBitmapPitch = (w + 31) / 32;
 			updateBitmap.resize(updateBitmapPitch * h);
+			
+			coarseBitmap.resize((w * h) >> (CoarseBits * 2));
 			
 			bitmap.resize(w * h);
 			std::fill(updateBitmap.begin(), updateBitmap.end(),
@@ -56,12 +79,19 @@ namespace spades{
 			SPADES_MARK_FUNCTION();
 			
 			device->DeleteTexture(texture);
+			device->DeleteTexture(coarseTexture);
 		}
 		
 		void GLMapShadowRenderer::Update() {
 			SPADES_MARK_FUNCTION();
 			
 			GLRadiosityRenderer *radiosity = renderer->GetRadiosityRenderer();
+			
+			std::vector<uint8_t> coarseUpdateBitmap;
+			coarseUpdateBitmap.resize(coarseBitmap.size());
+			std::fill(coarseUpdateBitmap.begin(),
+					  coarseUpdateBitmap.end(),
+					  0);
 			
 			device->BindTexture(IGLDevice::Texture2D, texture);
 			for(size_t i = 0; i < updateBitmap.size(); i++){
@@ -91,12 +121,65 @@ namespace spades{
 					}
 				}
 				
+				for(int j = 0; j < 32; j += CoarseSize)
+					coarseUpdateBitmap[((x + j) >> CoarseBits) +
+									   (y >> CoarseBits) *
+									   (w >> CoarseBits)] = 1;
+				
 				device->TexSubImage2D(IGLDevice::Texture2D,
 									  0, x, y, 32, 1,
 									  IGLDevice::RGBA, IGLDevice::UnsignedByte,
 									  pixels);
 				
 				updateBitmap[i] = 0;
+			}
+			
+			{
+				bool coarseUpdated = false;
+				int bx = 0, by = 0;
+				for(size_t i = 0; i < coarseUpdateBitmap.size(); i++) {
+					if(coarseUpdateBitmap[i]){
+						int minValue = -1, maxValue;
+						
+						uint32_t *bmp = bitmap.data();
+						bmp += bx + by * w;
+						for(int y = 0; y < CoarseSize; y++){
+							for(int x = 0; x < CoarseSize; x++){
+								uint32_t value = bmp[x];
+								int depth = (int)(value >> 24);
+								if(minValue == -1) {
+									minValue = maxValue = depth;
+								}else{
+									if(depth < minValue)
+										minValue = depth;
+									if(depth > maxValue)
+										maxValue = depth;
+								}
+							}
+							bmp += w;
+						}
+						
+						uint16_t out = minValue;
+						out |= maxValue << 8;
+						coarseBitmap[i] = out;
+					
+						coarseUpdated = true;
+					}
+					bx += CoarseSize;
+					if(bx >= w){
+						bx = 0; by += CoarseSize;
+					}
+				}
+				if(coarseUpdated) {
+					device->BindTexture(IGLDevice::Texture2D, coarseTexture);
+					device->TexSubImage2D(IGLDevice::Texture2D,
+										  0, 0, 0,
+										  w >> CoarseBits,
+										  h >> CoarseBits,
+										  IGLDevice::RG,
+										  IGLDevice::UnsignedByte,
+										  coarseBitmap.data());
+				}
 			}
 		}
 		

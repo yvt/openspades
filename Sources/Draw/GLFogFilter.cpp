@@ -34,6 +34,7 @@ namespace spades {
 			GLProgram *lens = renderer->RegisterProgram("Shaders/PostFilters/Fog.program");
 			static GLProgramAttribute lensPosition("positionAttribute");
 			static GLProgramUniform lensShadowMapTexture("shadowMapTexture");
+			static GLProgramUniform lensCoarseShadowMapTexture("coarseShadowMapTexture");
 			static GLProgramUniform lensColorTexture("colorTexture");
 			static GLProgramUniform lensDepthTexture("depthTexture");
 			static GLProgramUniform lensFov("fov");
@@ -49,6 +50,7 @@ namespace spades {
 			
 			lensPosition(lens);
 			lensShadowMapTexture(lens);
+			lensCoarseShadowMapTexture(lens);
 			lensColorTexture(lens);
 			lensDepthTexture(lens);
 			lensFov(lens);
@@ -89,6 +91,7 @@ namespace spades {
 			lensColorTexture.SetValue(0);
 			lensDepthTexture.SetValue(1);
 			lensShadowMapTexture.SetValue(2);
+			lensCoarseShadowMapTexture.SetValue(3);
 			
 			// composite to the final image
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
@@ -102,6 +105,8 @@ namespace spades {
 			dev->BindTexture(IGLDevice::Texture2D, input.GetManager()->GetDepthTexture());
 			dev->ActiveTexture(2);
 			dev->BindTexture(IGLDevice::Texture2D, renderer->GetMapShadowRenderer()->GetTexture());
+			dev->ActiveTexture(3);
+			dev->BindTexture(IGLDevice::Texture2D, renderer->GetMapShadowRenderer()->GetCoarseTexture());
 			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
 			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
 			qr.Draw();
