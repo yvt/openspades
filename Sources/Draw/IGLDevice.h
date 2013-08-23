@@ -35,6 +35,7 @@ namespace spades {
 				CullFace,
 				Blend,
 				Multisample,
+				FramebufferSRGB,
 				
 				// Parameters
 				FramebufferBinding,

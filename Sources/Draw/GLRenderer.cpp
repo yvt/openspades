@@ -52,6 +52,7 @@ SPADES_SETTING(r_optimizedVoxelModel, "1");
 SPADES_SETTING(r_radiosity, "0");
 SPADES_SETTING(r_fogShadow, "0");
 SPADES_SETTING(r_fxaa, "1");
+SPADES_SETTING(r_srgb, "1");
 
 
 namespace spades {
@@ -319,7 +320,8 @@ namespace spades {
 			device->Enable(IGLDevice::DepthTest, true);
 			device->Enable(IGLDevice::Texture2D, true);
 			
-			
+			if(r_srgb)
+				device->Enable(IGLDevice::FramebufferSRGB, false);
 			
 		}
 		
@@ -489,6 +491,9 @@ namespace spades {
 			
 			device->Enable(IGLDevice::Blend, true);
 			
+			if(r_srgb)
+				device->Enable(IGLDevice::FramebufferSRGB, true);
+			
 			device->DepthMask(false);
 			if(!r_softParticles){ // softparticle is a part of postprocess
 				device->BlendFunc(IGLDevice::One,
@@ -535,6 +540,10 @@ namespace spades {
 			
 			if(r_fxaa)
 				handle = GLFXAAFilter(this).Filter(handle);
+			
+			
+			if(r_srgb)
+				device->Enable(IGLDevice::FramebufferSRGB, false);
 			
 			// copy buffer to WM given framebuffer
 			device->BindFramebuffer(IGLDevice::Framebuffer, 0);

@@ -133,6 +133,7 @@ namespace spades {
 				case Blend: type = GL_BLEND; break;
 				case Texture2D: type = GL_TEXTURE_2D; break;
 				case Multisample: type = GL_MULTISAMPLE; break;
+				case FramebufferSRGB: type = GL_FRAMEBUFFER_SRGB; break;
 				default: SPInvalidEnum("state", state);
 			}
 			if(b)
