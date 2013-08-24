@@ -53,6 +53,9 @@ namespace spades {
 			virtual void DeleteBuffer(UInteger);
 			virtual void BindBuffer(Enum, UInteger);
 			
+			virtual void *MapBuffer(Enum target, Enum access);
+			virtual void UnmapBuffer(Enum target);
+			
 			virtual void BufferData(Enum target,
 									Sizei size,
 									const void *data,

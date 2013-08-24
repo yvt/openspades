@@ -265,6 +265,7 @@ namespace spades {
 		}
 		
 		IGLDevice::UInteger SDLGLDevice::GenBuffer() {
+			SPADES_MARK_FUNCTION_DEBUG();
 			GLuint i;
 			glGenBuffers(1, &i);
 			CheckError();
@@ -272,8 +273,37 @@ namespace spades {
 		}
 		
 		void SDLGLDevice::DeleteBuffer(UInteger i) {
+			SPADES_MARK_FUNCTION_DEBUG();
 			GLuint v = (GLuint)i;
 			glDeleteBuffers(1, &v);
+			CheckError();
+		}
+		
+		void *SDLGLDevice::MapBuffer(Enum target,
+								   Enum access) {
+			SPADES_MARK_FUNCTION_DEBUG();
+			GLenum acc;
+			switch(access){
+				case draw::IGLDevice::ReadOnly:
+					acc = GL_READ_ONLY;
+					break;
+				case draw::IGLDevice::WriteOnly:
+					acc = GL_WRITE_ONLY;
+					break;
+				case draw::IGLDevice::ReadWrite:
+					acc = GL_READ_WRITE;
+					break;
+				default:
+					SPInvalidEnum("access", access);
+			}
+			void *ret = glMapBuffer(parseBufferTarget(target),
+									acc);
+			CheckError();
+			return ret;
+		}
+		
+		void SDLGLDevice::UnmapBuffer(Enum target) {
+			glUnmapBuffer(parseBufferTarget(target));
 			CheckError();
 		}
 		
@@ -282,6 +312,8 @@ namespace spades {
 			switch(v){
 				case ArrayBuffer: return GL_ARRAY_BUFFER;
 				case ElementArrayBuffer: return GL_ELEMENT_ARRAY_BUFFER;
+				case PixelPackBuffer: return GL_PIXEL_PACK_BUFFER;
+				case PixelUnpackBuffer: return GL_PIXEL_UNPACK_BUFFER;
 				default: SPInvalidEnum("v", v);
 			}
 		}
@@ -391,6 +423,7 @@ namespace spades {
 				case FloatType: return GL_FLOAT;
 				case UnsignedShort5551: return GL_UNSIGNED_SHORT_5_5_5_1;
 				case UnsignedShort1555Rev: return GL_UNSIGNED_SHORT_1_5_5_5_REV;
+				case UnsignedInt2101010Rev: return GL_UNSIGNED_INT_2_10_10_10_REV;
 				default: SPInvalidEnum("v", v);
 			}
 		}

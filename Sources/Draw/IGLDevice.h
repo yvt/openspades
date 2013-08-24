@@ -29,6 +29,7 @@ namespace spades {
 				FloatType,
 				UnsignedShort5551,
 				UnsignedShort1555Rev,
+				UnsignedInt2101010Rev,
 				
 				// State
 				DepthTest,
@@ -88,11 +89,18 @@ namespace spades {
 				// Buffer target
 				ArrayBuffer,
 				ElementArrayBuffer,
+				PixelPackBuffer,
+				PixelUnpackBuffer,
 				
 				// Buffer usage
 				StaticDraw,
 				StreamDraw,
 				DynamicDraw,
+				
+				// Buffer Map access
+				ReadOnly,
+				WriteOnly,
+				ReadWrite,
 				
 				// Texture targets
 				Texture2D,
@@ -242,6 +250,9 @@ namespace spades {
 									   Sizei offset,
 									   Sizei size,
 									   const void *data) = 0;
+			
+			virtual void *MapBuffer(Enum target, Enum access) = 0;
+			virtual void UnmapBuffer(Enum target) = 0;
 			
 			virtual UInteger GenTexture() = 0;
 			virtual void DeleteTexture(UInteger) = 0;
