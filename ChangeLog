@@ -47,5 +47,9 @@
 	* Support SRGB
 	* faster volumetric fog
 	
+2013-08-25 yvt <i@yvt.jp>
+
+	* Support PBO
+	* Improve radiosity's color precision to 30bit
 
 

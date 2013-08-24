@@ -23,6 +23,8 @@ namespace spades {
 		class IGLDevice;
 		class GLRadiosityRenderer {
 			
+			typedef uint32_t VoxelType;
+			
 			class UpdateDispatch;
 			enum {
 				ChunkSize = 16,
@@ -35,10 +37,10 @@ namespace spades {
 			
 			struct Chunk {
 				int cx, cy, cz;
-				uint16_t dataFlat[ChunkSize][ChunkSize][ChunkSize];
-				uint16_t dataX[ChunkSize][ChunkSize][ChunkSize];
-				uint16_t dataY[ChunkSize][ChunkSize][ChunkSize];
-				uint16_t dataZ[ChunkSize][ChunkSize][ChunkSize];
+				VoxelType dataFlat[ChunkSize][ChunkSize][ChunkSize];
+				VoxelType dataX[ChunkSize][ChunkSize][ChunkSize];
+				VoxelType dataY[ChunkSize][ChunkSize][ChunkSize];
+				VoxelType dataZ[ChunkSize][ChunkSize][ChunkSize];
 				bool dirty;
 				int dirtyMinX, dirtyMaxX;
 				int dirtyMinY, dirtyMaxY;

@@ -76,23 +76,23 @@ namespace spades {
 				c.dirtyMaxZ = ChunkSize - 1;
 				c.transfered = true;
 				
-				uint16_t *data;
+				uint32_t *data;
 				
-				data = (uint16_t *)c.dataFlat;
+				data = (uint32_t *)c.dataFlat;
 				std::fill(data, data + ChunkSize*ChunkSize*ChunkSize,
-						  0x4210);
+						  0x20080200);
 				
-				data = (uint16_t *)c.dataX;
+				data = (uint32_t *)c.dataX;
 				std::fill(data, data + ChunkSize*ChunkSize*ChunkSize,
-						  0x4210);
+						  0x20080200);
 				
-				data = (uint16_t *)c.dataY;
+				data = (uint32_t *)c.dataY;
 				std::fill(data, data + ChunkSize*ChunkSize*ChunkSize,
-						  0x4210);
+						  0x20080200);
 				
-				data = (uint16_t *)c.dataZ;
+				data = (uint32_t *)c.dataZ;
 				std::fill(data, data + ChunkSize*ChunkSize*ChunkSize,
-						  0x4210);
+						  0x20080200);
 			}
 			
 			for(int x = 0; x < chunkW; x++)
@@ -129,18 +129,18 @@ namespace spades {
 									 IGLDevice::TextureWrapR,
 									 IGLDevice::ClampToEdge);
 				device->TexImage3D(IGLDevice::Texture3D, 0,
-								   IGLDevice::RGB5A1,
+								   IGLDevice::RGB10A2,
 								   w, h, d, 0,
 								   IGLDevice::BGRA,
-								   IGLDevice::UnsignedShort1555Rev,
+								   IGLDevice::UnsignedInt2101010Rev,
 								   NULL);
 				
 			}
 			
-			std::vector<uint16_t> v;
+			std::vector<uint32_t> v;
 			v.resize(w * h);
 			std::fill(v.begin(), v.end(),
-					  0x4210);
+					  0x20080200 /*0x4210 */);
 			
 			for(int j = 0; j < 4; j++) {
 				
@@ -150,7 +150,7 @@ namespace spades {
 										  0, 0, 0, i,
 										  w, h, 1,
 										  IGLDevice::BGRA,
-										  IGLDevice::UnsignedShort1555Rev,
+										  IGLDevice::UnsignedInt2101010Rev,
 										  v.data());
 				}
 			}
@@ -379,7 +379,7 @@ namespace spades {
 										  ChunkSize,
 										  ChunkSize,
 										  IGLDevice::BGRA,
-										  IGLDevice::UnsignedShort1555Rev,
+										  IGLDevice::UnsignedInt2101010Rev,
 										  c.dataFlat);
 					
 					
@@ -393,7 +393,7 @@ namespace spades {
 										  ChunkSize,
 										  ChunkSize,
 										  IGLDevice::BGRA,
-										  IGLDevice::UnsignedShort1555Rev,
+										  IGLDevice::UnsignedInt2101010Rev,
 										  c.dataX);
 					
 					
@@ -407,7 +407,7 @@ namespace spades {
 										  ChunkSize,
 										  ChunkSize,
 										  IGLDevice::BGRA,
-										  IGLDevice::UnsignedShort1555Rev,
+										  IGLDevice::UnsignedInt2101010Rev,
 										  c.dataY);
 					
 					
@@ -421,7 +421,7 @@ namespace spades {
 										  ChunkSize,
 										  ChunkSize,
 										  IGLDevice::BGRA,
-										  IGLDevice::UnsignedShort1555Rev,
+										  IGLDevice::UnsignedInt2101010Rev,
 										  c.dataZ);
 					
 					
@@ -494,43 +494,44 @@ namespace spades {
 		}
 		
 		static float CompressDynamicRange(float v){
+			return v;/*
 			if(v >= 0.f)
 				return sqrtf(v);
 			else
-				return -sqrtf(-v);
+				return -sqrtf(-v);*/
 		}
 		
-		static uint16_t EncodeValue(Vector3 vec) {
+		static uint32_t EncodeValue(Vector3 vec) {
 			float v;
 			int iv;
-			unsigned int out = 0x8000;
+			unsigned int out = 0xC0000000;
 			
 			vec.x = CompressDynamicRange(vec.x);
 			vec.y = CompressDynamicRange(vec.y);
 			vec.z = CompressDynamicRange(vec.z);
 			
 			vec *= .5f; vec += .5f;
-			vec *= 30.f / 31.f;
+			vec *= 1022.f / 1023.f;
 			
-			v = vec.x * 31.f + .5f;
-			if(v > 31.2f)v = 31.2f; if(v < 0.f) v = 0.f;
+			v = vec.x * 1023.f + .5f;
+			if(v > 1023.2f)v = 1023.2f; if(v < 0.f) v = 0.f;
 			iv = (unsigned int)v;
-			if(iv > 31) iv = 31; if(iv < 0)iv = 0;
+			if(iv > 1023) iv = 1023; if(iv < 0)iv = 0;
+			out |= iv << 20;
+			
+			v = vec.y * 1023.f + .5f;
+			if(v > 1023.2f)v = 1023.2f; if(v < 0.f) v = 0.f;
+			iv = (unsigned int)v;
+			if(iv > 1023) iv = 1023; if(iv < 0)iv = 0;
 			out |= iv << 10;
 			
-			v = vec.y * 31.f + .5f;
-			if(v > 31.2f)v = 31.2f; if(v < 0.f) v = 0.f;
+			v = vec.z * 1023.f + .5f;
+			if(v > 1023.2f)v = 1023.2f; if(v < 0.f) v = 0.f;
 			iv = (unsigned int)v;
-			if(iv > 31) iv = 31; if(iv < 0)iv = 0;
-			out |= iv << 5;
-			
-			v = vec.z * 31.f + .5f;
-			if(v > 31.2f)v = 31.2f; if(v < 0.f) v = 0.f;
-			iv = (unsigned int)v;
-			if(iv > 31) iv = 31; if(iv < 0)iv = 0;
+			if(iv > 1023) iv = 1023; if(iv < 0)iv = 0;
 			out |= iv;
 			
-			return (uint16_t)out;
+			return (uint32_t)out;
 		}
 		
 		void GLRadiosityRenderer::UpdateChunk(int cx, int cy, int cz) {

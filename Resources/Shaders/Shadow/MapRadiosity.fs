@@ -40,9 +40,9 @@ uniform vec3 ambientColor;
 
 vec3 DecodeRadiosityValue(vec3 val){
 	// reverse bias
-	val *= 31. / 30.;
+	val *= 1023. / 1022.;
 	val = (val * 2.) - 1.;
-	val *= val * sign(val);
+	//val *= val * sign(val);
 	return val;
 }
 
