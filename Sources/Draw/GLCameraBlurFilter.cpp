@@ -18,6 +18,7 @@
 #include "GLProgramUniform.h"
 #include "GLRenderer.h"
 #include "../Core/Debug.h"
+#include "GLProfiler.h"
 
 namespace spades {
 	namespace draw {
@@ -130,6 +131,7 @@ namespace spades {
 			dev->ActiveTexture(0);
 			
 			for(int i = 0; i < levels; i++){
+				GLProfiler measure(dev, "Apply [%d / %d]", i+1,levels);
 				GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 				programShutterTimeScale.SetValue(shutterTimeScale);
 				dev->BindTexture(IGLDevice::Texture2D, buf.GetTexture());

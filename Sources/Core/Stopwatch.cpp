@@ -10,14 +10,32 @@
 #include "../Imports/SDL.h"
 #include "Debug.h"
 
+#ifdef WIN32
+#include <windows.h>
+static uint64_t GetSWTicks() {
+	LARGE_INTEGER val, freq;
+	QueryPerformanceCounter(&val);
+	QueryPerformanceFrequency(&freq);
+	return (double)val.QuadPart / (double)freq.QuadPart;
+}
+#else
+#include <sys/time.h>
+static double GetSWTicks() {
+	struct timeval val;
+	gettimeofday(&val, NULL);
+	return (double)val.tv_usec / 1000000. +
+	(double)val.tv_sec;
+}
+#endif
+
 namespace  spades {
 	Stopwatch::Stopwatch(){
 		Reset();
 	}
 	void Stopwatch::Reset() {
-		start = SDL_GetTicks();
+		start = GetSWTicks();
 	}
-	unsigned int Stopwatch::GetTime() {
-		return SDL_GetTicks() - start;
+	double Stopwatch::GetTime() {
+		return GetSWTicks() - start;
 	}
 }

@@ -21,6 +21,7 @@
 #include "GLShadowShader.h"
 #include "../Core/Settings.h"
 #include "GLDynamicLightShader.h"
+#include "GLProfiler.h"
 
 namespace spades {
 	namespace draw {
@@ -128,6 +129,7 @@ namespace spades {
 		
 		void GLMapRenderer::RenderSunlightPass() {
 			SPADES_MARK_FUNCTION();
+			GLProfiler profiler(device, "Map");
 			
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
 			
@@ -231,8 +233,11 @@ namespace spades {
 		void GLMapRenderer::RenderDynamicLightPass(std::vector<GLDynamicLight> lights) {
 			SPADES_MARK_FUNCTION();
 			
+			GLProfiler profiler(device, "Map");
+			
 			if(lights.empty())
 				return;
+			
 			
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
 			

@@ -12,10 +12,12 @@
 
 namespace spades {
 	class Stopwatch {
-		uint32_t start;
+		double start;
 	public:
 		Stopwatch();
 		void Reset();
-		unsigned int GetTime();
+		
+		/** @return elapsed time in seconds */
+		double GetTime();
 	};
 }

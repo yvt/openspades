@@ -12,6 +12,7 @@
 #include "../Core/Debug.h"
 #include "../Core/Exception.h"
 #include "../Core/Settings.h"
+#include "GLProfiler.h"
 
 SPADES_SETTING(r_shadowMapSize, "2048");
 
@@ -249,6 +250,10 @@ namespace spades {
 			float nearDist = 0.f;
 			
 			for(int i = 0; i < NumSlices; i++){
+				
+				GLProfiler profiler(device, "Slice %d / %d", i + 1,
+									(int)NumSlices);
+				
 				float farDist;
 				// TODO: variable far distance according to the scene definition
 				//       (note that this needs uniform shader variable)

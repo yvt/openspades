@@ -21,6 +21,7 @@
 #include "../Core/ConcurrentDispatch.h"
 #include <stdlib.h>
 #include "../kiss_fft130/kiss_fft.h"
+#include "GLProfiler.h"
 
 namespace spades {
 	namespace draw {
@@ -634,7 +635,14 @@ namespace spades {
 		void GLWaterRenderer::Render() {
 			SPADES_MARK_FUNCTION();
 			
-			GLColorBuffer colorBuffer = renderer->GetFramebufferManager()->PrepareForWaterRendering(tempFramebuffer);
+			GLProfiler profiler(device, "Render");
+			
+			GLColorBuffer colorBuffer;
+			
+			{
+				GLProfiler profiler(device, "Preparation");
+				colorBuffer = renderer->GetFramebufferManager()->PrepareForWaterRendering(tempFramebuffer);
+			}
 			
 			float fogDist = renderer->GetFogDistance();
 			Vector3 fogCol = renderer->GetFogColorForSolidPass();
@@ -651,6 +659,7 @@ namespace spades {
 			mat = mat * Matrix4::Scale(waterRange, waterRange, 1.f);
 			
 			
+			GLProfiler profiler2(device, "Draw Plane");
 			
 			// do color
 			device->DepthFunc(IGLDevice::Less);
@@ -782,42 +791,57 @@ namespace spades {
 		
 		void GLWaterRenderer::Update(float dt) {
 			SPADES_MARK_FUNCTION();
+			GLProfiler profiler(device, "Update");
 			
 			// update wavetank simulation
-			waveTank->Join();
-			device->BindTexture(IGLDevice::Texture2D, waveTexture);
-			device->TexSubImage2D(IGLDevice::Texture2D, 0,
-								  0, 0, waveTank->GetSize(), waveTank->GetSize(),
-								  IGLDevice::BGRA, IGLDevice::UnsignedByte,
-								  waveTank->GetBitmap());
-			device->GenerateMipmap(IGLDevice::Texture2D);
+			{
+				GLProfiler profiler(device, "Waiting for Simulation To Done");
+				waveTank->Join();
+			}
+			{
+				{
+					GLProfiler profiler(device, "Upload");
+					device->BindTexture(IGLDevice::Texture2D, waveTexture);
+					device->TexSubImage2D(IGLDevice::Texture2D, 0,
+										  0, 0, waveTank->GetSize(), waveTank->GetSize(),
+										  IGLDevice::BGRA, IGLDevice::UnsignedByte,
+										  waveTank->GetBitmap());
+				}
+				{
+					GLProfiler profiler(device, "Generate Mipmap");
+					device->GenerateMipmap(IGLDevice::Texture2D);
+				}
+			}
 			waveTank->SetTimeStep(dt);
 			waveTank->Start();
 			
-			device->BindTexture(IGLDevice::Texture2D, texture);
-			for(size_t i = 0; i < updateBitmap.size(); i++){
-				int y = i / updateBitmapPitch;
-				int x = (i - y * updateBitmapPitch) * 32;
-				if(updateBitmap[i] == 0)
-					continue;
-				
-				
-				uint32_t pixels[32];
-				for(int j = 0; j < 32; j++){
-					uint32_t col = map->GetColor(x+j, y, 63);
+			{
+				GLProfiler profiler(device, "Upload Water Color Texture");
+				device->BindTexture(IGLDevice::Texture2D, texture);
+				for(size_t i = 0; i < updateBitmap.size(); i++){
+					int y = i / updateBitmapPitch;
+					int x = (i - y * updateBitmapPitch) * 32;
+					if(updateBitmap[i] == 0)
+						continue;
 					
-					col = LinearlizeColor(col);
 					
-					pixels[j] = col;
-					//pixels[j] = GeneratePixel(x + j, y);
+					uint32_t pixels[32];
+					for(int j = 0; j < 32; j++){
+						uint32_t col = map->GetColor(x+j, y, 63);
+						
+						col = LinearlizeColor(col);
+						
+						pixels[j] = col;
+						//pixels[j] = GeneratePixel(x + j, y);
+					}
+					
+					device->TexSubImage2D(IGLDevice::Texture2D,
+										  0, x, y, 32, 1,
+										  IGLDevice::RGBA, IGLDevice::UnsignedByte,
+										  pixels);
+					
+					updateBitmap[i] = 0;
 				}
-				
-				device->TexSubImage2D(IGLDevice::Texture2D,
-									  0, x, y, 32, 1,
-									  IGLDevice::RGBA, IGLDevice::UnsignedByte,
-									  pixels);
-				
-				updateBitmap[i] = 0;
 			}
 		}
 		

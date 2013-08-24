@@ -28,6 +28,7 @@ namespace spades {
 			};
 			
 			std::vector<RenderModel> models;
+			int modelCount;
 			
 		public:
 			GLModelRenderer(GLRenderer *);

@@ -17,6 +17,7 @@
 #include "GLRenderer.h"
 #include "../Core/Debug.h"
 #include "GLMapShadowRenderer.h"
+#include "GLProfiler.h"
 
 namespace spades {
 	namespace draw {
@@ -106,6 +107,8 @@ namespace spades {
 			GLQuadRenderer qr(dev);
 			
 			{
+				GLProfiler measure(dev, "Occlusion Test");
+				
 				GLProgram *scanner = renderer->RegisterProgram("Shaders/LensFlare/Scanner.program");
 				static GLProgramAttribute positionAttribute("positionAttribute");
 				static GLProgramUniform scanRange("scanRange");
@@ -178,6 +181,8 @@ namespace spades {
 								 lastFramebuffer);
 			
 			{
+				GLProfiler measure(dev, "Draw");
+				
 				GLProgram *draw = renderer->RegisterProgram("Shaders/LensFlare/Draw.program");
 				static GLProgramAttribute positionAttribute("positionAttribute");
 				static GLProgramUniform drawRange("drawRange");

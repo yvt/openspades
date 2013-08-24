@@ -10,13 +10,14 @@
 #include "GLModel.h"
 #include "GLRenderer.h"
 #include "../Core/Debug.h"
+#include "GLProfiler.h"
 
 namespace spades {
 	namespace draw {
 		GLModelRenderer::GLModelRenderer(GLRenderer *r):
 		device(r->GetGLDevice()), renderer(r){
 			SPADES_MARK_FUNCTION();
-			
+			modelCount = 0;
 		}
 		
 		GLModelRenderer::~GLModelRenderer() {
@@ -33,12 +34,15 @@ namespace spades {
 				m.model = model;
 				models.push_back(m);
 			}
-			
+			modelCount++;
 			models[model->renderId].params.push_back(param);
 		}
 		
 		void GLModelRenderer::RenderShadowMapPass() {
 			SPADES_MARK_FUNCTION();
+			
+			GLProfiler profiler(device, "Model [%d model(s), %d unique model type(s)]", modelCount, (int)models.size());
+			
 			int numModels = 0;
 			for(size_t i = 0; i < models.size(); i++){
 				RenderModel& m = models[i];
@@ -59,6 +63,9 @@ namespace spades {
 		
 		void GLModelRenderer::RenderSunlightPass() {
 			SPADES_MARK_FUNCTION();
+			
+			GLProfiler profiler(device, "Model [%d model(s), %d unique model type(s)]", modelCount, (int)models.size());
+			
 			for(size_t i = 0; i < models.size(); i++){
 				RenderModel& m = models[i];
 				GLModel *model = m.model;
@@ -69,6 +76,8 @@ namespace spades {
 		
 		void GLModelRenderer::RenderDynamicLightPass(std::vector<GLDynamicLight> lights) {
 			SPADES_MARK_FUNCTION();
+			
+			GLProfiler profiler(device, "Model [%d model(s), %d unique model type(s)]", modelCount, (int)models.size());
 			
 			if(!lights.empty()){
 				
@@ -86,6 +95,8 @@ namespace spades {
 				models[i].model->renderId = -1;
 			}
 			models.clear();
+			
+			modelCount = 0;
 		}
 	}
 }

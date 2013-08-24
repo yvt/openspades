@@ -224,6 +224,8 @@ Sources/Draw/GLModelRenderer.cpp \
 Sources/Draw/GLModelRenderer.h \
 Sources/Draw/GLOptimizedVoxelModel.cpp \
 Sources/Draw/GLOptimizedVoxelModel.h \
+Sources/Draw/GLProfiler.cpp \
+Sources/Draw/GLProfiler.h \
 Sources/Draw/GLProgram.cpp \
 Sources/Draw/GLProgram.h \
 Sources/Draw/GLProgramAttribute.cpp \

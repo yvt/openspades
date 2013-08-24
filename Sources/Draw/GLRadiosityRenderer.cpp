@@ -18,6 +18,8 @@
 #include <xmmintrin.h>
 #endif
 
+#include "GLProfiler.h"
+
 namespace spades {
 	namespace draw {
 		class GLRadiosityRenderer::UpdateDispatch:
@@ -364,7 +366,12 @@ namespace spades {
 				dispatch = new UpdateDispatch(this);
 				dispatch->Start();
 			}
-			
+			int cnt = 0;
+			for(int i = 0; i < chunks.size(); i++) {
+				if(!chunks[i].transfered)
+					cnt++;
+			}
+			GLProfiler profiler(device, "Radiosity [>= %d chunk(s)]", cnt);
 			for(int i = 0; i < chunks.size(); i++){
 				Chunk& c = chunks[i];
 				if(!c.transfered){

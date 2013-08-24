@@ -51,5 +51,6 @@
 
 	* Support PBO
 	* Improve radiosity's color precision to 30bit
+	* Render Performance Profiler
 
 

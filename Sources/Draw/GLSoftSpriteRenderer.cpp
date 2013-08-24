@@ -14,6 +14,7 @@
 #include "GLImage.h"
 #include "GLFramebufferManager.h"
 #include "GLQuadRenderer.h"
+#include "GLProfiler.h"
 
 namespace spades {
 	namespace draw {
@@ -135,53 +136,56 @@ namespace spades {
 			thresRange = thresLow * .5f;
 			
 			// full-resolution sprites
-			for(size_t i = 0; i < sprites.size(); i++){
-				Sprite& spr = sprites[i];
-				float layer = LayerForSprite(spr);
-				if(layer == 1.f)
-					continue;
-				if(spr.image != lastImage){
-					Flush();
-					lastImage = spr.image;
-					SPAssert(vertices.empty());
+			{
+				GLProfiler measure(device, "Full Resolution");
+				for(size_t i = 0; i < sprites.size(); i++){
+					Sprite& spr = sprites[i];
+					float layer = LayerForSprite(spr);
+					if(layer == 1.f)
+						continue;
+					if(spr.image != lastImage){
+						Flush();
+						lastImage = spr.image;
+						SPAssert(vertices.empty());
+					}
+					
+					Vertex v;
+					v.x = spr.center.x;
+					v.y = spr.center.y;
+					v.z = spr.center.z;
+					v.radius = spr.radius;
+					v.angle = spr.angle;
+					v.r = spr.color.x;
+					v.g = spr.color.y;
+					v.b = spr.color.z;
+					v.a = spr.color.w;
+					
+					float fade = 1.f - layer;
+					v.r *= fade;
+					v.g *= fade;
+					v.b *= fade;
+					v.a *= fade;
+					
+					uint32_t idx = (uint32_t)vertices.size();
+					v.sx = -1; v.sy = -1;
+					vertices.push_back(v);
+					v.sx = 1; v.sy = -1;
+					vertices.push_back(v);
+					v.sx = -1; v.sy = 1;
+					vertices.push_back(v);
+					v.sx = 1; v.sy = 1;
+					vertices.push_back(v);
+					
+					indices.push_back(idx);
+					indices.push_back(idx + 1);
+					indices.push_back(idx + 2);
+					indices.push_back(idx + 1);
+					indices.push_back(idx + 3);
+					indices.push_back(idx + 2);
 				}
 				
-				Vertex v;
-				v.x = spr.center.x;
-				v.y = spr.center.y;
-				v.z = spr.center.z;
-				v.radius = spr.radius;
-				v.angle = spr.angle;
-				v.r = spr.color.x;
-				v.g = spr.color.y;
-				v.b = spr.color.z;
-				v.a = spr.color.w;
-				
-				float fade = 1.f - layer;
-				v.r *= fade;
-				v.g *= fade;
-				v.b *= fade;
-				v.a *= fade;
-				
-				uint32_t idx = (uint32_t)vertices.size();
-				v.sx = -1; v.sy = -1;
-				vertices.push_back(v);
-				v.sx = 1; v.sy = -1;
-				vertices.push_back(v);
-				v.sx = -1; v.sy = 1;
-				vertices.push_back(v);
-				v.sx = 1; v.sy = 1;
-				vertices.push_back(v);
-				
-				indices.push_back(idx);
-				indices.push_back(idx + 1);
-				indices.push_back(idx + 2);
-				indices.push_back(idx + 1);
-				indices.push_back(idx + 3);
-				indices.push_back(idx + 2);
+				Flush();
 			}
-			
-			Flush();
 			
 			// low-res sprites
 			IGLDevice::UInteger lastFb = device->GetInteger(IGLDevice::FramebufferBinding);
@@ -194,55 +198,57 @@ namespace spades {
 			device->Clear(IGLDevice::ColorBufferBit);
 			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			device->Viewport(0, 0, lW, lH);
-			for(size_t i = 0; i < sprites.size(); i++){
-				Sprite& spr = sprites[i];
-				float layer = LayerForSprite(spr);
-				if(layer == 0.f)
-					continue;
-				if(spr.image != lastImage){
-					Flush();
-					lastImage = spr.image;
-					SPAssert(vertices.empty());
+			{
+				GLProfiler measure(device, "Low Resolution");
+				for(size_t i = 0; i < sprites.size(); i++){
+					Sprite& spr = sprites[i];
+					float layer = LayerForSprite(spr);
+					if(layer == 0.f)
+						continue;
+					if(spr.image != lastImage){
+						Flush();
+						lastImage = spr.image;
+						SPAssert(vertices.empty());
+					}
+					
+					numLowResSprites++;
+					
+					Vertex v;
+					v.x = spr.center.x;
+					v.y = spr.center.y;
+					v.z = spr.center.z;
+					v.radius = spr.radius;
+					v.angle = spr.angle;
+					v.r = spr.color.x;
+					v.g = spr.color.y;
+					v.b = spr.color.z;
+					v.a = spr.color.w;
+					
+					float fade = layer;
+					v.r *= fade;
+					v.g *= fade;
+					v.b *= fade;
+					v.a *= fade;
+					
+					uint32_t idx = (uint32_t)vertices.size();
+					v.sx = -1; v.sy = -1;
+					vertices.push_back(v);
+					v.sx = 1; v.sy = -1;
+					vertices.push_back(v);
+					v.sx = -1; v.sy = 1;
+					vertices.push_back(v);
+					v.sx = 1; v.sy = 1;
+					vertices.push_back(v);
+					
+					indices.push_back(idx);
+					indices.push_back(idx + 1);
+					indices.push_back(idx + 2);
+					indices.push_back(idx + 1);
+					indices.push_back(idx + 3);
+					indices.push_back(idx + 2);
 				}
-				
-				numLowResSprites++;
-				
-				Vertex v;
-				v.x = spr.center.x;
-				v.y = spr.center.y;
-				v.z = spr.center.z;
-				v.radius = spr.radius;
-				v.angle = spr.angle;
-				v.r = spr.color.x;
-				v.g = spr.color.y;
-				v.b = spr.color.z;
-				v.a = spr.color.w;
-				
-				float fade = layer;
-				v.r *= fade;
-				v.g *= fade;
-				v.b *= fade;
-				v.a *= fade;
-				
-				uint32_t idx = (uint32_t)vertices.size();
-				v.sx = -1; v.sy = -1;
-				vertices.push_back(v);
-				v.sx = 1; v.sy = -1;
-				vertices.push_back(v);
-				v.sx = -1; v.sy = 1;
-				vertices.push_back(v);
-				v.sx = 1; v.sy = 1;
-				vertices.push_back(v);
-				
-				indices.push_back(idx);
-				indices.push_back(idx + 1);
-				indices.push_back(idx + 2);
-				indices.push_back(idx + 1);
-				indices.push_back(idx + 3);
-				indices.push_back(idx + 2);
+				Flush();
 			}
-			Flush();
-			
 			
 			// finalize
 			
@@ -259,6 +265,7 @@ namespace spades {
 			// composite downsampled sprite
 			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			if(numLowResSprites > 0){
+				GLProfiler measure(device, "Finalize");
 				GLQuadRenderer qr(device);
 				
 				// do gaussian blur

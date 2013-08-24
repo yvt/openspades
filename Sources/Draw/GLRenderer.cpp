@@ -40,6 +40,10 @@
 #include "GLFogFilter.h"
 #include "GLLensFlareFilter.h"
 #include "GLFXAAFilter.h"
+#include "../Core/Stopwatch.h"
+#include <stdarg.h>
+#include <stdlib.h>
+#include "GLProfiler.h"
 
 SPADES_SETTING(r_water, "1");
 SPADES_SETTING(r_bloom, "1");
@@ -54,10 +58,12 @@ SPADES_SETTING(r_fogShadow, "0");
 SPADES_SETTING(r_fxaa, "1");
 SPADES_SETTING(r_srgb, "1");
 
+SPADES_SETTING(r_debugTiming, "0");
 
 namespace spades {
 	namespace draw {
 		
+				
 		GLRenderer::GLRenderer(IGLDevice *_device):
 		device(_device),
 		cameraBlur(this){
@@ -293,8 +299,6 @@ namespace spades {
 			
 			sceneDef = def;
 			fbManager->PrepareSceneRendering();
-			if(mapShadowRenderer)
-				mapShadowRenderer->Update();
 			
 			// clear scene objects
 			debugLines.clear();
@@ -437,54 +441,75 @@ namespace spades {
 		void GLRenderer::EndScene() {
 			SPADES_MARK_FUNCTION();
 			
+			GLProfiler rootProfiler(device, "EndScene");
+			
 			float dt = (float)(sceneDef.time - lastTime) / 1000.f;
 			if(dt > .1f) dt = .1f;
 			if(dt < 0.f) dt = 0.f;
 			
-			if(ambientShadowRenderer){
-				ambientShadowRenderer->Update();
-			}
-			if(radiosityRenderer){
-				radiosityRenderer->Update();
+			{
+				GLProfiler profiler(device, "Uploading Software Rendered Stuff");
+				if(mapShadowRenderer)
+					mapShadowRenderer->Update();
+				if(ambientShadowRenderer){
+					ambientShadowRenderer->Update();
+				}
+				if(radiosityRenderer){
+					radiosityRenderer->Update();
+				}
 			}
 				
 			// build shadowmap
-			device->Enable(IGLDevice::DepthTest, true);
-			device->DepthFunc(IGLDevice::Less);
-			if(shadowMapRenderer)
-				shadowMapRenderer->Render();
+			{
+				GLProfiler profiler(device, "Shadow Map Pass");
+				device->Enable(IGLDevice::DepthTest, true);
+				device->DepthFunc(IGLDevice::Less);
+				if(shadowMapRenderer)
+					shadowMapRenderer->Render();
+			}
 			
 			// draw opaque objects, and do dynamic lighting
-			device->DepthFunc(IGLDevice::Less);
-			if(!sceneDef.skipWorld && mapRenderer){
-				mapRenderer->Prerender();
+			{
+				GLProfiler profiler(device, "Sunlight Pass");
+				
+				device->DepthFunc(IGLDevice::Less);
+				if(!sceneDef.skipWorld && mapRenderer){
+					mapRenderer->Prerender();
+				}
+				modelRenderer->Prerender();
+				
+				if(!sceneDef.skipWorld && mapRenderer){
+					mapRenderer->RenderSunlightPass();
+				}
+				modelRenderer->RenderSunlightPass();
 			}
-			modelRenderer->Prerender();
 			
-			if(!sceneDef.skipWorld && mapRenderer){
-				mapRenderer->RenderSunlightPass();
+			{
+				GLProfiler profiler(device, "Dynamic Light Pass [%d light(s)]", (int)lights.size());
+				
+				device->Enable(IGLDevice::Blend, true);
+				device->Enable(IGLDevice::DepthTest, true);
+				device->DepthFunc(IGLDevice::Equal);
+				device->BlendFunc(IGLDevice::SrcAlpha,
+								  IGLDevice::One);
+				
+				if(!sceneDef.skipWorld && mapRenderer){
+					mapRenderer->RenderDynamicLightPass(lights);
+				}
+				modelRenderer->RenderDynamicLightPass(lights);
 			}
-			modelRenderer->RenderSunlightPass();
 			
-			
-			device->Enable(IGLDevice::Blend, true);
-			device->Enable(IGLDevice::DepthTest, true);
-			device->DepthFunc(IGLDevice::Equal);
-			device->BlendFunc(IGLDevice::SrcAlpha,
-							  IGLDevice::One);
-			
-			if(!sceneDef.skipWorld && mapRenderer){
-				mapRenderer->RenderDynamicLightPass(lights);
+			{
+				GLProfiler profiler(device, "Debug Line");
+				device->Enable(IGLDevice::Blend, false);
+				device->Enable(IGLDevice::DepthTest, true);
+				device->DepthFunc(IGLDevice::Less);
+				RenderDebugLines();
 			}
-			modelRenderer->RenderDynamicLightPass(lights);
-			
-			device->Enable(IGLDevice::Blend, false);
-			device->Enable(IGLDevice::DepthTest, true);
-			device->DepthFunc(IGLDevice::Less);
-			RenderDebugLines();
 			
 			device->Enable(IGLDevice::CullFace, false);
 			if(r_water && waterRenderer){
+				GLProfiler profiler(device, "Water");
 				waterRenderer->Update(dt);
 				waterRenderer->Render();
 			}
@@ -496,6 +521,7 @@ namespace spades {
 			
 			device->DepthMask(false);
 			if(!r_softParticles){ // softparticle is a part of postprocess
+				GLProfiler profiler(device, "Particle");
 				device->BlendFunc(IGLDevice::One,
 								  IGLDevice::OneMinusSrcAlpha);
 				spriteRenderer->Render();
@@ -505,58 +531,78 @@ namespace spades {
 			
 			device->Enable(IGLDevice::DepthTest, false);
 			
-			// now process the non-multisampled buffer.
-			// depth buffer is also can be read
-			GLFramebufferManager::BufferHandle handle = fbManager->StartPostProcessing();
-			if(r_fogShadow && mapShadowRenderer &&
-			   fogColor.GetPoweredLength() > .000001f) {
-				GLFogFilter fogfilter(this);
-				handle = fogfilter.Filter(handle);
-			}
-			device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
-			
-			if(r_softParticles) {// softparticle is a part of postprocess
-				device->BlendFunc(IGLDevice::One,
-								  IGLDevice::OneMinusSrcAlpha);
-				spriteRenderer->Render();
-			}
-			
-			
-			device->BlendFunc(IGLDevice::SrcAlpha,
-							  IGLDevice::OneMinusSrcAlpha);
-			
-			if(r_cameraBlur && !sceneDef.denyCameraBlur)
-				handle = cameraBlur.Filter(handle);
-			/*
-			if(r_bloom)
-				handle = GLBloomFilter(this).Filter(handle);*/
-			if(r_lens)
-				handle = GLLensFilter(this).Filter(handle);
-			
-			if(r_lensFlare){
+			GLFramebufferManager::BufferHandle handle;
+			{
+				GLProfiler profiler(device, "Post-process");
+				
+				// now process the non-multisampled buffer.
+				// depth buffer is also can be read
+				{
+					GLProfiler profiler(device, "Preparation");
+					handle = fbManager->StartPostProcessing();
+				}
+				if(r_fogShadow && mapShadowRenderer &&
+				   fogColor.GetPoweredLength() > .000001f) {
+					GLProfiler profiler(device, "Volumetric Fog");
+					GLFogFilter fogfilter(this);
+					handle = fogfilter.Filter(handle);
+				}
 				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
-				GLLensFlareFilter(this).Draw();
+				
+				if(r_softParticles) {// softparticle is a part of postprocess
+					GLProfiler profiler(device, "Soft Particle");
+					device->BlendFunc(IGLDevice::One,
+									  IGLDevice::OneMinusSrcAlpha);
+					spriteRenderer->Render();
+				}
+				
+				
+				device->BlendFunc(IGLDevice::SrcAlpha,
+								  IGLDevice::OneMinusSrcAlpha);
+				
+				if(r_cameraBlur && !sceneDef.denyCameraBlur){
+					GLProfiler profiler(device, "Camera Blur");
+					handle = cameraBlur.Filter(handle);
+				}
+				/*
+				if(r_bloom)
+					handle = GLBloomFilter(this).Filter(handle);*/
+				if(r_lens){
+					GLProfiler profiler(device, "Lens Filter");
+					handle = GLLensFilter(this).Filter(handle);
+				}
+				
+				if(r_lensFlare){
+					GLProfiler profiler(device, "Lens Flare");
+					device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
+					GLLensFlareFilter(this).Draw();
+				}
+				
+				if(r_fxaa){
+					GLProfiler profiler(device, "FXAA");
+					handle = GLFXAAFilter(this).Filter(handle);
+				}
 			}
-			
-			if(r_fxaa)
-				handle = GLFXAAFilter(this).Filter(handle);
-			
-			
+				
 			if(r_srgb)
 				device->Enable(IGLDevice::FramebufferSRGB, false);
 			
 			// copy buffer to WM given framebuffer
-			device->BindFramebuffer(IGLDevice::Framebuffer, 0);
-			device->Enable(IGLDevice::Blend, false);
-			device->Viewport(0, 0, handle.GetWidth(), handle.GetHeight());
-			GLImage image(handle.GetTexture(),
-						  device,
-						  handle.GetWidth(),
-						  handle.GetHeight(),
-						  false);
-			SetColor(MakeVector4(1, 1, 1, 1));
-			DrawImage(&image, AABB2(0,handle.GetHeight(),handle.GetWidth(),-handle.GetHeight()));
-			imageRenderer->Flush(); // must flush now because handle is released soon
+			{
+				GLProfiler profiler(device, "Copying to WM-given Framebuffer");
+				
+				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
+				device->Enable(IGLDevice::Blend, false);
+				device->Viewport(0, 0, handle.GetWidth(), handle.GetHeight());
+				GLImage image(handle.GetTexture(),
+							  device,
+							  handle.GetWidth(),
+							  handle.GetHeight(),
+							  false);
+				SetColor(MakeVector4(1, 1, 1, 1));
+				DrawImage(&image, AABB2(0,handle.GetHeight(),handle.GetWidth(),-handle.GetHeight()));
+				imageRenderer->Flush(); // must flush now because handle is released soon
+			}
 			
 			handle.Release();
 			fbManager->MakeSureAllBuffersReleased();

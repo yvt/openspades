@@ -10,6 +10,7 @@
 #include "GLRenderer.h"
 #include "../Client/GameMap.h"
 #include <stdlib.h>
+#include "GLProfiler.h"
 
 #include "../Core/ConcurrentDispatch.h"
 
@@ -286,6 +287,13 @@ namespace spades {
 				dispatch = new UpdateDispatch(this);
 				dispatch->Start();
 			}
+			
+			int cnt = 0;
+			for(int i = 0; i < chunks.size(); i++) {
+				if(!chunks[i].transfered)
+					cnt++;
+			}
+			GLProfiler profiler(device, "Large Ambient Occlusion [>= %d chunk(s)]", cnt);
 			
 			device->BindTexture(IGLDevice::Texture3D, texture);
 			for(int i = 0; i < chunks.size(); i++){
