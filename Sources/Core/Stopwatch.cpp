@@ -12,10 +12,12 @@
 
 #ifdef WIN32
 #include <windows.h>
-static uint64_t GetSWTicks() {
+static double GetSWTicks() {
 	LARGE_INTEGER val, freq;
-	QueryPerformanceCounter(&val);
-	QueryPerformanceFrequency(&freq);
+	if(QueryPerformanceFrequency(&freq) == 0 || freq.QuadPart == 0 ||
+	   QueryPerformanceCounter(&val) == 0 || val.QuadPart == 0){
+		return (uint64_t)GetTickCount() / 1000.;
+	}
 	return (double)val.QuadPart / (double)freq.QuadPart;
 }
 #else

@@ -90,7 +90,7 @@ namespace spades {
 				}
 			}
 			
-			printf("GameMapWrapper: %.3f msecs to rebuild\n",
+			SPLog("%.3f msecs to rebuild",
 				   stopwatch.GetTime() * 1000.);
 			
 		}
