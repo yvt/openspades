@@ -284,6 +284,7 @@ namespace spades {
 	baseStream(stream), autoClose(autoClose){
 		SPADES_MARK_FUNCTION();
 		
+		cursorPos = stream->GetPosition();
 		zlib_filefunc_def def = CreateZLibFileFunc();
 		zip = unzOpen2("ZipFile.zip", &def);
 		if(!zip){
@@ -291,7 +292,6 @@ namespace spades {
 		}
 		
 		currentStream = NULL;
-		cursorPos = stream->GetPosition();
 	}
 	
 	ZipFileSystem::~ZipFileSystem() {
