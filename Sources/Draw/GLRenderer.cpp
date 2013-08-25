@@ -69,6 +69,8 @@ namespace spades {
 		cameraBlur(this){
 			SPADES_MARK_FUNCTION();
 			
+			SPLog("GLRenderer initializing");
+			
 			fbManager = new GLFramebufferManager(_device);
 			shadowMapRenderer = GLShadowMapShader::CreateShadowMapRenderer(this);
 			programManager = new GLProgramManager(_device, shadowMapRenderer);
@@ -87,6 +89,8 @@ namespace spades {
 			ambientShadowRenderer = NULL;
 			radiosityRenderer = NULL;
 			lastTime = 0;
+			
+			SPLog("GLRenderer initialized");
 		}
 		
 		GLRenderer::~GLRenderer() {
@@ -94,6 +98,7 @@ namespace spades {
 			
 			// FIXME: remove itself from map's listener
 			
+			SPLog("GLRender finalizing");
 			if(radiosityRenderer)
 				delete radiosityRenderer;
 			if(ambientShadowRenderer)
@@ -118,6 +123,7 @@ namespace spades {
 			delete programManager;
 			delete imageManager;
 			delete fbManager;
+			SPLog("GLRenderer finalized");
 		}
 		
 		client::IImage *GLRenderer::RegisterImage(const char *filename) {
@@ -153,6 +159,7 @@ namespace spades {
 		void GLRenderer::SetGameMap(client::GameMap *mp){
 			SPADES_MARK_FUNCTION();
 			
+			SPLog("New map loaded; freeing old renderers...");
 			if(radiosityRenderer)
 				delete radiosityRenderer;
 			if(mapRenderer)
@@ -167,19 +174,32 @@ namespace spades {
 				delete ambientShadowRenderer;
 			radiosityRenderer = NULL;
 			if(mp){
+				SPLog("Creating new renderers...");
+				
+				SPLog("Creating Terrain Shadow Map Renderer");
 				mapShadowRenderer = new GLMapShadowRenderer(this,mp);
+				SPLog("Creating TerrainRenderer");
 				mapRenderer = new GLMapRenderer(mp, this);
+				SPLog("Creating Minimap Renderer");
 				flatMapRenderer = new GLFlatMapRenderer(this, mp);
+				SPLog("Creating Water Renderer");
 				waterRenderer = new GLWaterRenderer(this, mp);
 				
 				if(r_radiosity){
+					SPLog("Creating Ray-traced Ambient Occlusion Renderer");
 					ambientShadowRenderer = new GLAmbientShadowRenderer(this, mp);
+					SPLog("Creating Relective Shadow Maps Renderer");
 					radiosityRenderer = new GLRadiosityRenderer(this, mp);
-				}else
+				}else{
+					SPLog("Radiosity is disabled");
+					
 					ambientShadowRenderer = NULL;
+				}
 				
 				mp->SetListener(this);
+				SPLog("Created");
 			}else{
+				SPLog("No map loaded");
 				mapShadowRenderer = NULL;
 				mapRenderer = NULL;
 				flatMapRenderer = NULL;

@@ -17,6 +17,7 @@
 #include "GLDynamicLightShader.h"
 #include "IGLShadowMapRenderer.h"
 #include "GLShadowMapShader.h"
+#include "../Core/Stopwatch.h"
 
 namespace spades {
 	namespace draw {
@@ -68,6 +69,7 @@ namespace spades {
 		GLProgram *GLProgramManager::CreateProgram(const std::string &name) {
 			SPADES_MARK_FUNCTION();
 			
+			SPLog("Loading GLSL program '%s'", name.c_str());
 			std::string text = FileManager::ReadAllBytes(name.c_str());
 			std::vector<std::string> lines = SplitIntoLines(text);
 			
@@ -101,7 +103,9 @@ namespace spades {
 				p->Attach(s);
 			}
 			
+			Stopwatch sw;
 			p->Link();
+			SPLog("Successfully linked GLSL program '%s' in %.3fms", name.c_str(), sw.GetTime() * 1000.);
 			//p->Validate();
 			return p;
 		}
@@ -109,6 +113,7 @@ namespace spades {
 		GLShader *GLProgramManager::CreateShader(const std::string &name) {
 			SPADES_MARK_FUNCTION();
 			
+			SPLog("Loading GLSL shader '%s'", name.c_str());
 			std::string text = FileManager::ReadAllBytes(name.c_str());
 			GLShader::Type type;
 			
@@ -122,7 +127,11 @@ namespace spades {
 			
 			GLShader *s = new GLShader(device, type);
 			s->AddSource(text);
+			
+			Stopwatch sw;
 			s->Compile();
+			SPLog("Successfully compiled GLSL program '%s' in %.3fms", name.c_str(),
+				  sw.GetTime() * 1000.);
 			return s;
 		}
 		

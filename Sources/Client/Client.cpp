@@ -92,6 +92,7 @@ namespace spades {
 					   std::string host, std::string playerName):
 		renderer(r), audioDevice(audioDev), playerName(playerName) {
 			SPADES_MARK_FUNCTION();
+			SPLog("Initializing...");
 			/*
 			designFont = new Quake3Font(renderer,
 										renderer->RegisterImage("Gfx/Fonts/Orbitron.tga"),
@@ -104,18 +105,21 @@ namespace spades {
 										(const int *)UnsteadyOversteerMap,
 										30,
 										18);
+			SPLog("Font 'Unsteady Oversteer' Loaded");
 			
 			textFont = new Quake3Font(renderer,
 										renderer->RegisterImage("Gfx/Fonts/UbuntuCondensed.tga"),
 										(const int*)UbuntuCondensedMap,
 										24,
-										4);
+									  4);
+			SPLog("Font 'Ubuntu Condensed' Loaded");
 			
 			bigTextFont = new Quake3Font(renderer,
 									  renderer->RegisterImage("Gfx/Fonts/UbuntuCondensedBig.tga"),
 									  (const int*)UbuntuCondensedBigMap,
 									  48,
-									  8);
+										 8);
+			SPLog("Font 'Ubuntu Condensed (Large)' Loaded");
 			
 			world = NULL;
 			
@@ -160,6 +164,8 @@ namespace spades {
 			// preload
 			SmokeSpriteEntity(this, Vector4(), 20.f);
 			
+			
+			SPLog("Started connecting to '%s'", host.c_str());
 			net = new NetClient(this);
 			net->Connect(host);
 			//net->Connect("192.168.24.24");
@@ -172,6 +178,7 @@ namespace spades {
 			if(world == w){
 				return;
 			}
+			
 			
 			RemoveAllCorpses();
 			lastHealth = 0;
@@ -190,10 +197,14 @@ namespace spades {
 			}
 			world = w;
 			if(world){
+				SPLog("World set");
 				world->SetListener(this);
 				map = world->GetMap();
 				renderer->SetGameMap(map);
 				audioDevice->SetGameMap(map);
+			}else{
+				
+				SPLog("World removed");
 			}
 			
 			limbo->SetSelectedTeam(2);
@@ -211,8 +222,12 @@ namespace spades {
 		Client::~Client() {
 			SPADES_MARK_FUNCTION();
 			
+			
+			SPLog("Disconnecting");
 			net->Disconnect();
 			delete net;
+			
+			SPLog("Disconnected");
 			
 			RemoveAllLocalEntities();
 			RemoveAllCorpses();
@@ -249,8 +264,7 @@ namespace spades {
 				else
 					net->DoEvents(30);
 			}catch(const std::exception& ex){
-				puts("--- NETWORK EXCEPTION ---");
-				puts(ex.what());
+				SPLog("Exception while processing network packets (ignored):\n%s", ex.what());
 				if(net->GetStatus() == NetClientStatusNotConnected)
 					throw;
 			}
@@ -552,8 +566,8 @@ namespace spades {
 										  sceneDef.viewAxis[2],
 										  sceneDef.viewAxis[1]);
 			}catch(const std::exception& ex){
-				puts("---- OPENAL EXCEPTION -----");
-				puts(ex.what());
+				SPLog("Audio subsystem returned error (ignored):\n%s",
+					  ex.what());
 			}
 					
 			// render scene

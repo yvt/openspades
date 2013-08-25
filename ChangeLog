@@ -53,4 +53,6 @@
 	* Improve radiosity's color precision to 30bit
 	* Render Performance Profiler
 
+2013-08-26 yvt <i@yvt.jp>
 
+	* Added Logging Interface

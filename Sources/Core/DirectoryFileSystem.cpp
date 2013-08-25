@@ -24,7 +24,8 @@ namespace spades {
 	DirectoryFileSystem::DirectoryFileSystem(const std::string& r, bool canWrite):
 	rootPath(r), canWrite(canWrite) {
 		SPADES_MARK_FUNCTION();
-		
+		SPLog("Directory File System Initialized: %s (%s)",
+			  r.c_str(), canWrite ? "Read/Write" : "Read-only");
 	}
 	
 	DirectoryFileSystem::~DirectoryFileSystem(){

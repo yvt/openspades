@@ -104,6 +104,9 @@ namespace spades {
 						c.cx = x; c.cy = y; c.cz = z;
 					}
 			
+			SPLog("Chunk buffer allocated (%d bytes)",
+				  sizeof(Chunk) * chunkW * chunkH * chunkD);
+			
 			// make texture
 			textureFlat = device->GenTexture();
 			textureX = device->GenTexture();
@@ -139,6 +142,8 @@ namespace spades {
 				
 			}
 			
+			SPLog("Chunk texture allocated");
+			
 			std::vector<uint32_t> v;
 			v.resize(w * h);
 			std::fill(v.begin(), v.end(),
@@ -158,6 +163,8 @@ namespace spades {
 			}
 			dispatch = NULL;
 			
+			SPLog("Chunk texture initialized");
+			
 		}
 		
 		GLRadiosityRenderer::~GLRadiosityRenderer() {
@@ -166,6 +173,8 @@ namespace spades {
 				dispatch->Join();
 				delete dispatch;
 			}
+			SPLog("Releasing textures");
+			
 			device->DeleteTexture(textureFlat);
 			device->DeleteTexture(textureX);
 			device->DeleteTexture(textureY);

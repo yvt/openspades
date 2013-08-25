@@ -266,6 +266,8 @@ namespace spades {
 				if(!("auto" == core_numDispatchQueueThreads)){
 					cnt = core_numDispatchQueueThreads;
 				}
+				SPLog("Creating %d dispatch thread(s)",
+					  cnt);
 				for(int i = 0; i < cnt; i++){
 					DispatchThread *t = new DispatchThread();
 					threads.push_back(t);

@@ -16,7 +16,8 @@ SPADES_SETTING(s_alDriver, "/Library/Frameworks/OpenAL-Soft.framework/OpenAL-Sof
 #elif defined(WIN32)
 SPADES_SETTING(s_alDriver, "OpenAL32.dll");
 #else
-SPADES_SETTING(s_alDriver, "/usr/lib/i386-linux-gnu/libopenal.so");
+//SPADES_SETTING(s_alDriver, "/usr/lib/i386-linux-gnu/libopenal.so");
+SPADES_SETTING(s_alDriver, "libopenal.so");
 #endif
 
 namespace al{
@@ -154,6 +155,7 @@ namespace al{
 	{
 		if(!alLibrary){
 			alLibrary = new spades::DynamicLibrary(s_alDriver.CString());
+			SPLog("'%s' loaded", s_alDriver.CString());
 		}
 		
 		if(qalGetProcAddress){
@@ -217,6 +219,7 @@ namespace al{
 	}
 	
 	void Link(void) {
+		SPLog("Linking with OpenGL library.");
 		L(alEnable);
 		L(alDisable);
 		L(alIsEnabled);

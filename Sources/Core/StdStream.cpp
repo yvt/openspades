@@ -95,6 +95,8 @@ namespace spades {
 		ftruncate(fileno(handle), len);
 	}
 	
-	
+	void StdStream::Flush() {
+		fflush(handle);
+	}
 	
 }

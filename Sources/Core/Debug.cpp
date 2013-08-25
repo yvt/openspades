@@ -11,7 +11,10 @@
 #include <map>
 #include "../Imports/SDL.h"
 #include <string>
-
+#include "IStream.h"
+#include "FileManager.h"
+#include <stdarg.h>
+#include <time.h>
 
 #define SPADES_USE_TLS 1
 
@@ -146,5 +149,57 @@ namespace spades {
 			return message;
 		}
 	}
+	
+#pragma mark - 
+	
+	static IStream *logStream = NULL;
+	static bool attemptedToInitializeLog = false;
+	static std::string accumlatedLog;
+	
+	void StartLog() {
+		attemptedToInitializeLog = true;
+		logStream = FileManager::OpenForWriting("SystemMessages.log");
+		
+		logStream->Write(accumlatedLog);
+		accumlatedLog.clear();
+	}
+	
+	void LogMessage(const char *file, int line,
+					const char *format, ...) {
+		char buf[4096];
+		va_list va;
+		va_start(va, format);
+		vsprintf(buf, format, va);
+		va_end(va);
+		std::string str = buf;
+		std::string fn = file;
+		if(fn.rfind('/') != std::string::npos)
+			fn=fn.substr(fn.rfind('/')+1);
+		
+		time_t t;
+		struct tm tm;
+		time(&t);
+		tm = *localtime(&t);
+		
+		std::string timeStr = asctime(&tm);
+		
+		// remove '\n' in the end of the result of asctime().
+		timeStr.resize(timeStr.size()-1);
+		
+		sprintf(buf, "%s [%s:%d] %s\n",
+				timeStr.c_str(),
+				fn.c_str(), line, str.c_str());
+		
+		printf("%s", buf);
+		
+		if(logStream || !attemptedToInitializeLog) {
+			
+			if(attemptedToInitializeLog)
+				logStream->Write(buf);
+			else
+				accumlatedLog += buf;
+		}
+	}
+	
 }
 

@@ -67,8 +67,7 @@ void MainWindow::StartGame(const std::string &host) {
 			r.Run();
 		}
 	}catch(const std::exception& ex){
-		puts("-------- UNHANDLED EXCEPTION --------");
-		puts(ex.what());
+		SPLog("Unhandled exception in SDLRunner:\n%s", ex.what());
 		fl_message("Error occured:\n\n%s", ex.what());
 	}
 #endif
@@ -86,6 +85,7 @@ void MainWindow::QuickConnectPressed() {
 void MainWindow::LoadPrefs() {
 	SPADES_MARK_FUNCTION();
 	
+	SPLog("Loading Preferences to MainWindow");
 	
 	// --- video
 	// add modes
@@ -101,6 +101,8 @@ void MainWindow::LoadPrefs() {
 				continue;
 			sprintf(buf, "%dx%d", mode.w, mode.h);
 			modeSelect->add(buf);
+			
+			SPLog("Video Mode Found: %s", buf);
 		}
 	}
 	sprintf(buf, "%dx%d", (int)r_videoWidth, (int)r_videoHeight);

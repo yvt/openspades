@@ -55,9 +55,9 @@ namespace spades {
 					parent->msg += out;
 				}else {
 					static int th = 0;
-					printf("----- Renderer Profile [%8d] -----\n",
-						   ++th);
-					puts(out.c_str());
+					SPLog("Renderer Profile [%8d]\n%s",
+						  ++th, out.c_str());
+					
 				}
 			}
 		}

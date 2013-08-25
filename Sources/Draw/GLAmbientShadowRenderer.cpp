@@ -81,6 +81,9 @@ namespace spades {
 						c.cx = x; c.cy = y; c.cz = z;
 					}
 			
+			SPLog("Chunk buffer allocated (%d bytes)",
+				  sizeof(Chunk) * chunkW * chunkH * chunkD);
+			
 			// make texture
 			texture = device->GenTexture();
 			device->BindTexture(IGLDevice::Texture3D, texture);
@@ -106,6 +109,8 @@ namespace spades {
 							   IGLDevice::FloatType,
 							   NULL);
 			
+			SPLog("Chunk texture allocated");
+			
 			std::vector<float> v;
 			v.resize(w * h);
 			std::fill(v.begin(), v.end(),
@@ -118,6 +123,8 @@ namespace spades {
 									  IGLDevice::FloatType,
 									  v.data());
 			}
+			
+			SPLog("Chunk texture initialized");
 			
 			dispatch = NULL;
 			

@@ -24,9 +24,13 @@ namespace spades {
 		device(dev){
 			SPADES_MARK_FUNCTION();
 			
+			SPLog("Initializing framebuffer manager");
+			
 			useMultisample = (int)r_multisamples > 0;
 			
 			if(useMultisample){
+				SPLog("Multi-sample Antialiasing Enabled");
+				
 				// for multisample rendering, use
 				// multisample renderbuffer for scene
 				// rendering.
@@ -39,6 +43,7 @@ namespace spades {
 										 IGLDevice::RGB10A2,
 										 dev->ScreenWidth(),
 										 dev->ScreenHeight());
+				SPLog("MSAA Color Buffer Allocated");
 			
 				multisampledDepthRenderbuffer = dev->GenRenderbuffer();
 				dev->BindRenderbuffer(IGLDevice::Renderbuffer,
@@ -48,6 +53,7 @@ namespace spades {
 										 IGLDevice::DepthComponent24,
 										 dev->ScreenWidth(),
 										 dev->ScreenHeight());
+				SPLog("MSAA Depth Buffer Allocated");
 				
 				multisampledFramebuffer = dev->GenFramebuffer();
 				dev->BindFramebuffer(IGLDevice::Framebuffer,
@@ -60,8 +66,11 @@ namespace spades {
 											 IGLDevice::DepthAttachment,
 											 IGLDevice::Renderbuffer,
 											 multisampledDepthRenderbuffer);
+				SPLog("MSAA Framebuffer Allocated");
 				
 			}
+			
+			SPLog("Creating Non-MSAA Buffer");
 			
 			// in non-multisampled rendering,
 			// we can directly draw into
@@ -81,6 +90,7 @@ namespace spades {
 							0,
 							IGLDevice::RGBA,
 							IGLDevice::UnsignedByte, NULL);
+			SPLog("Color Buffer Allocated");
 			dev->TexParamater(IGLDevice::Texture2D,
 							  IGLDevice::TextureMagFilter,
 							  IGLDevice::Linear);
@@ -105,6 +115,7 @@ namespace spades {
 							0,
 							IGLDevice::DepthComponent,
 							IGLDevice::UnsignedInt, NULL);
+			SPLog("Depth Buffer Allocated");
 			dev->TexParamater(IGLDevice::Texture2D,
 							  IGLDevice::TextureMagFilter,
 							  IGLDevice::Nearest);
@@ -129,6 +140,7 @@ namespace spades {
 									  IGLDevice::DepthAttachment,
 									  IGLDevice::Texture2D,
 									  renderDepthTexture, 0);
+			SPLog("Framebuffer Created");
 			
 			// add render buffer as a registered buffer
 			Buffer buf;
@@ -289,6 +301,9 @@ namespace spades {
 				SPRaise("Maximum number of framebuffers exceeded");
 			}
 			
+			SPLog("New GLColorBuffer requested (w = %d, h = %d, alpha = %s)",
+				  w, h, alpha?"yes":"no");
+			
 			// no buffer is free!
 			IGLDevice::UInteger tex = device->GenTexture();
 			device->BindTexture(IGLDevice::Texture2D,
@@ -301,6 +316,7 @@ namespace spades {
 							0,
 							alpha?IGLDevice::RGBA:IGLDevice::RGB,
 							   IGLDevice::UnsignedByte, NULL);
+			SPLog("Texture allocated.");
 			device->TexParamater(IGLDevice::Texture2D,
 							  IGLDevice::TextureMagFilter,
 							  IGLDevice::Linear);
@@ -320,7 +336,8 @@ namespace spades {
 			device->FramebufferTexture2D(IGLDevice::Framebuffer,
 									  IGLDevice::ColorAttachment0,
 									  IGLDevice::Texture2D,
-									  tex, 0);
+										 tex, 0);
+			SPLog("Framebuffer created.");
 			
 			device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 			

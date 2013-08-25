@@ -27,6 +27,8 @@
 #include <xmmintrin.h>
 #endif
 
+#include <FL/fl_ask.H>
+
 int main(int argc, char ** argv)
 {
 	
@@ -41,6 +43,8 @@ int main(int argc, char ** argv)
 	
 #endif
 	
+	
+	Fl::scheme("gtk+");
 	
 	spades::reflection::Backtrace::StartBacktrace();
 	
@@ -61,6 +65,8 @@ int main(int argc, char ** argv)
 								 CSIDL_APPDATA,
 								 NULL, 0,
 								 buf))){
+		
+		
 		std::string datadir = buf;
 		datadir += "\\OpenSpades\\Resources";
 		spades::FileManager::AddFileSystem
@@ -81,6 +87,14 @@ int main(int argc, char ** argv)
 	spades::FileManager::AddFileSystem
 	(new spades::DirectoryFileSystem(home+"/.openspades/Resources", true));
 #endif
+	
+	try{
+		spades::StartLog();
+	}catch(const std::exception& ex){
+		fl_alert("Failed to start recording log because of the following error:\n%s\n\n"
+				 "OpenSpades will continue to run, but any critical events are not logged.", ex.what());
+	}
+	SPLog("Log Started.");
 	
 #ifdef RESDIR
 	spades::FileManager::AddFileSystem
@@ -110,7 +124,7 @@ int main(int argc, char ** argv)
 			if(spades::FileManager::FileExists(name.c_str())) {
 				spades::IStream *stream = spades::FileManager::OpenForReading(name.c_str());
 				spades::ZipFileSystem *fs = new spades::ZipFileSystem(stream);
-				printf("Pak loaded: %s\n", name.c_str());
+				SPLog("Pak Registered: %s\n", name.c_str());
 				fss.push_back(fs);
 			}
 		}
@@ -119,16 +133,14 @@ int main(int argc, char ** argv)
 		}
 	}
 	
-	
-	Fl::scheme("gtk+");
-	
 	MainWindow win;
 	win.Init();
 	win.show(argc, argv);
 	
-	// TODO: do ConcurrentDispatch::DoMainQueue
+	SPLog("Entering FLTK main loop");
 	Fl::run();
 	
+	SPLog("Leaving FLTK main loop");
 	spades::Settings::GetInstance()->Flush();
 	
     return 0;

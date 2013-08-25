@@ -30,7 +30,9 @@ namespace spades {
 			client::IRenderer *renderer;
 			client::IAudioDevice *audio;
 			virtual void Run() {
+				SPLog("Starting Client Thread");
 				runner->ClientThreadProc(renderer, audio);
+				SPLog("Client Thread Done");
 			}
 		};
 		
@@ -45,6 +47,7 @@ namespace spades {
 			cliThread.audio = audio;
 			cliThread.Start();
 			
+			SPLog("Main event loop started");
 			while(cliThread.IsAlive()) {
 				
 				
@@ -112,7 +115,10 @@ namespace spades {
 				DispatchQueue::GetThreadQueue()->ProcessQueue();
 			}
 			
+			SPLog("Main event loop ended");
 			if(!clientError.empty()){
+				SPLog("Client reported an error: \n%s",
+					  clientError.c_str());
 				SPRaise("Client error:\n%s", clientError.c_str());
 			}
 		}
@@ -176,6 +182,8 @@ namespace spades {
 				cliQueue = NULL;
 				currentClient = NULL;
 			}catch(const std::exception& ex){
+				SPLog("Exiting Client Event Loop due to exception:\n%s",
+					  ex.what());
 				cliQueue = NULL;
 				currentClient = NULL;
 				clientError = ex.what();

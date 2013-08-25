@@ -175,16 +175,22 @@ namespace spades {
 			
 			void DumpDebug() {
 #if 1
-				printf("Packet 0x%02x [len=%d]", (int)GetType(),
+				char buf[1024];
+				std::string str;
+				sprintf(buf, "Packet 0x%02x [len=%d]", (int)GetType(),
 					   (int)data.size());
+				str = buf;
 				int bytes = (int)data.size();
 				if(bytes > 64){
 					bytes = 64;
 				}
-				for(int i = 0; i < bytes; i++)
-					printf(" %02x", (unsigned int)(unsigned char)data[i]);
+				for(int i = 0; i < bytes; i++){
+					sprintf(buf, " %02x", (unsigned int)(unsigned char)data[i]);
+					str += buf;
+				}
 			
-				printf("\n");
+				
+				SPLog("%s", str.c_str());
 #endif
 			}
 		};
@@ -256,16 +262,20 @@ namespace spades {
 			client = c;
 			
 			enet_initialize();
+			SPLog("ENet initialized");
 			
 			host = enet_host_create(NULL,
 									1, 1,
-									50000, 50000);
+									100000, 100000);
+			SPLog("ENet host created");
 			if(!host){
 				SPRaise("Failed to create ENet host");
 			}
 			
 			if(enet_host_compress_with_range_coder(host) < 0)
 				SPRaise("Failed to enable ENet Range coder.");
+			
+			SPLog("ENet Range Coder Enabled");
 			
 			peer = NULL;
 			status = NetClientStatusNotConnected;
@@ -278,6 +288,7 @@ namespace spades {
 			
 			Disconnect();
 			enet_host_destroy(host);
+			SPLog("ENet host destroyed");
 		}
 		
 		void NetClient::Connect(std::string hostname) {
@@ -309,6 +320,10 @@ namespace spades {
 				address.host = (uint32_t)atoll(addr.c_str());
 			}
 			
+			
+			SPLog("Connecting to %u:%u",
+				  (unsigned int)address.host, (unsigned int)address.port);
+			
 			savedPackets.clear();
 			
 			peer = enet_host_connect(host, &address, 1, 3);
@@ -334,6 +349,7 @@ namespace spades {
 			savedPackets.clear();
 			
 			ENetEvent event;
+			SPLog("Waiting for graceful disconnection");
 			while(enet_host_service(host, &event, 1000) > 0){
 				switch(event.type){
 					case ENET_EVENT_TYPE_RECEIVE:
@@ -350,6 +366,8 @@ namespace spades {
 				}
 			}
 			
+			
+			SPLog("Connection terminated");
 			enet_peer_reset(peer);
 			// FXIME: release peer
 			peer = NULL;
@@ -371,6 +389,9 @@ namespace spades {
 					enet_peer_reset(peer);
 					peer = NULL;
 					status = NetClientStatusNotConnected;
+					
+					SPLog("Disconnected (data = 0x%08x)",
+						  (unsigned int)event.data);
 					statusString = "Disconnected: " + DisconnectReasonString(event.data);
 					SPRaise("Disconnected: %s", DisconnectReasonString(event.data).c_str());
 				}
@@ -416,6 +437,8 @@ namespace spades {
 								}catch(const std::exception& ex){
 									if(strstr(ex.what(), "File truncated") ||
 									   strstr(ex.what(), "EOF reached")){
+										SPLog("Map decoder returned error. Maybe we will get more data...:\n%s",
+											  ex.what());
 										// hack: more data to load...
 										status = NetClientStatusReceivingMap;
 										statusString = "Still loading...";
@@ -449,6 +472,8 @@ namespace spades {
 									tryMapLoadOnPacketType = false;
 									if(strstr(ex.what(), "File truncated") ||
 									   strstr(ex.what(), "EOF reached")){
+										SPLog("Map decoder returned error. Maybe we will get more data...:\n%s",
+											  ex.what());
 										// hack: more data to load...
 										status = NetClientStatusReceivingMap;
 										statusString = "Still loading...";
@@ -501,6 +526,8 @@ namespace spades {
 								strstr(ex.what(), "EOF reached")) &&
 							   savedPackets.size() < 400){
 								// hack: more data to load...
+								SPLog("Map decoder returned error. Maybe we will get more data...:\n%s",
+									  ex.what());
 								status = NetClientStatusReceivingMap;
 								statusString = "Still loading...";
 								timeToTryMapLoad = 200;
@@ -1570,14 +1597,21 @@ namespace spades {
 			GameMap *map;
 			map = GameMap::Load(&inflate);
 			
+			SPLog("Map decoding succeeded.");
+			
 			// now initialize world
 			World *w = new World();
 			w->SetMap(map);
+			SPLog("World initialized.");
+			
 			client->SetWorld(w);
 			
 			mapData.clear();
 			
 			SPAssert(GetWorld());
+			
+			SPLog("World loaded. Processing saved packets (%d)...",
+				  (int)savedPackets.size());
 			
 			// do saved packets
 			try{
@@ -1586,6 +1620,7 @@ namespace spades {
 					Handle(r);
 				}
 				savedPackets.clear();
+				SPLog("Done.");
 			}catch(...){
 				savedPackets.clear();
 				throw;

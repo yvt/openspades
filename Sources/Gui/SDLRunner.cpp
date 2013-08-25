@@ -138,6 +138,8 @@ namespace spades {
 				bool lastShift = false;
 				bool lastCtrl = false;
 				
+				SPLog("Starting Client Loop");
+				
 				while(running){
 					SDL_Event event;
 					
@@ -152,6 +154,7 @@ namespace spades {
 					if(client.WantsToBeClosed()){
 						client.Closing();
 						running = false;
+						SPLog("Close requested by Client");
 						break;
 					}
 					
@@ -185,6 +188,8 @@ namespace spades {
 					}
 					//Fl::check();
 				}
+				
+				SPLog("Leaving Client Loop");
 			}
 		}
 		

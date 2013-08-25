@@ -356,6 +356,25 @@ namespace spades {
 				
 				al::qalcMakeContextCurrent(alContext);
 				
+				SPLog("OpenAL Info:");
+				SPLog("  Vendor: %s", al::qalGetString(AL_VENDOR));
+				SPLog("  Version: %s", al::qalGetString(AL_VERSION));
+				SPLog("  Renderer: %s", al::qalGetString(AL_RENDERER));
+				if(al::qalGetString(AL_EXTENSIONS)){
+					std::vector<std::string> strs = Split(al::qalGetString(AL_EXTENSIONS), " ");
+					SPLog("OpenAL Extensions:");
+					for(size_t i = 0; i < strs.size(); i++) {
+						SPLog("  %s", strs[i].c_str());
+					}
+				}
+				if(al::qalcGetString(alDevice, ALC_EXTENSIONS)){
+					std::vector<std::string> strs = Split(al::qalcGetString(alDevice, ALC_EXTENSIONS), " ");
+					SPLog("OpenAL ALC Extensions:");
+					for(size_t i = 0; i < strs.size(); i++) {
+						SPLog("  %s", strs[i].c_str());
+					}
+				}
+				
 				map = NULL;
 				roomHistoryPos = 0;
 				
@@ -363,19 +382,23 @@ namespace spades {
 					try{
 						al::InitEAX();
 						useEAX = true;
+						SPLog("EAX enabled");
 					}catch(const std::exception& ex){
 						useEAX = false;
 						s_eax = 0;
-						fprintf(stderr, "Failed to initialize EAX: %s\n",
+						SPLog("Failed to initialize EAX: \n%s",
 								ex.what());
 					}
 				}else{
+					SPLog("EAX is disabled by configuration (s_eax)");
 					useEAX = false;
 				}
 				
 				for(int i = 0; i < (int)s_maxPolyphonics; i++){
 					srcs.push_back(new ALSrc(this));
 				}
+				
+				SPLog("%d source(s) initialized", (int)s_maxPolyphonics);
 				
 				al::qalDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 				

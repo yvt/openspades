@@ -61,6 +61,9 @@ namespace spades {
 			std::string ToString() const;
 		};
 	}
+	void StartLog();
+	void LogMessage(const char *file, int line,
+						   const char *format, ...);
 }
 
 #define SPADES_MARK_FUNCTION() \
@@ -79,6 +82,7 @@ static ::spades::reflection::Function thisFunction(__PRETTY_FUNCTION__, __FILE__
 #define SPAssert(cond) ((!(cond)) ? SPRaise("SPAssertion failed: %s", #cond ) : (void)0)
 #endif
 
+#define SPLog(format, args...) ::spades::LogMessage(__FILE__, __LINE__, format, ##args )
 
 #ifdef __GNUC__
 #define DEPRECATED(func) func __attribute__ ((deprecated))

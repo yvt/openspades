@@ -54,7 +54,7 @@ namespace  spades {
 				SPRaise("Error while linking a program '%s':\n\n%s",name.c_str(), err.c_str());
 			}else{
 				if(errMsg.size() > 4){
-					printf("Messages for linking program '%s':\n%s",
+					SPLog("Messages for linking program '%s':\n%s",
 						   name.c_str(), err.c_str());
 				}
 			}

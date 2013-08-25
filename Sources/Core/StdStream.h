@@ -32,5 +32,7 @@ namespace spades {
 		
 		virtual uint64_t GetLength();
 		virtual void SetLength(uint64_t);
+		
+		virtual void Flush();
 	};
 }
