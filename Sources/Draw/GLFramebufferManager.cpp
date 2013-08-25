@@ -27,6 +27,7 @@ namespace spades {
 			SPLog("Initializing framebuffer manager");
 			
 			useMultisample = (int)r_multisamples > 0;
+			useHighPrec = true;
 			
 			if(useMultisample){
 				SPLog("Multi-sample Antialiasing Enabled");
@@ -38,11 +39,22 @@ namespace spades {
 				multisampledColorRenderbuffer = dev->GenRenderbuffer();
 				dev->BindRenderbuffer(IGLDevice::Renderbuffer,
 									  multisampledColorRenderbuffer);
-				dev->RenderbufferStorage(IGLDevice::Renderbuffer,
-										 (int)r_multisamples,
-										 IGLDevice::RGB10A2,
-										 dev->ScreenWidth(),
-										 dev->ScreenHeight());
+				try{
+					dev->RenderbufferStorage(IGLDevice::Renderbuffer,
+											 (int)r_multisamples,
+											 IGLDevice::RGB10A2,
+											 dev->ScreenWidth(),
+											 dev->ScreenHeight());
+					
+				}catch(...){
+					SPLog("Renderbuffer creation failed: trying with RGB8");
+					useHighPrec = false;
+					dev->RenderbufferStorage(IGLDevice::Renderbuffer,
+											 (int)r_multisamples,
+											 IGLDevice::RGBA8,
+											 dev->ScreenWidth(),
+											 dev->ScreenHeight());
+				}
 				SPLog("MSAA Color Buffer Allocated");
 			
 				multisampledDepthRenderbuffer = dev->GenRenderbuffer();
@@ -82,14 +94,27 @@ namespace spades {
 			renderColorTexture = dev->GenTexture();
 			dev->BindTexture(IGLDevice::Texture2D,
 							 renderColorTexture);
-			dev->TexImage2D(IGLDevice::Texture2D,
-							0,
-							IGLDevice::RGB10A2,
-							dev->ScreenWidth(),
-							dev->ScreenHeight(),
-							0,
-							IGLDevice::RGBA,
-							IGLDevice::UnsignedByte, NULL);
+			try{
+				dev->TexImage2D(IGLDevice::Texture2D,
+								0,
+								IGLDevice::RGB10A2,
+								dev->ScreenWidth(),
+								dev->ScreenHeight(),
+								0,
+								IGLDevice::RGBA,
+								IGLDevice::UnsignedByte, NULL);
+			}catch(...){
+				SPLog("Texture creation failed: trying with RGB8");
+				useHighPrec = false;
+				dev->TexImage2D(IGLDevice::Texture2D,
+								0,
+								IGLDevice::RGBA8,
+								dev->ScreenWidth(),
+								dev->ScreenHeight(),
+								0,
+								IGLDevice::RGBA,
+								IGLDevice::UnsignedByte, NULL);
+			}
 			SPLog("Color Buffer Allocated");
 			dev->TexParamater(IGLDevice::Texture2D,
 							  IGLDevice::TextureMagFilter,
@@ -310,7 +335,9 @@ namespace spades {
 							 tex);
 			device->TexImage2D(IGLDevice::Texture2D,
 							0,
-							alpha?IGLDevice::RGBA:IGLDevice::RGB10A2,
+							alpha?IGLDevice::RGBA8:
+							   (useHighPrec?IGLDevice::RGB10A2:
+								IGLDevice::RGB8),
 							w,
 							h,
 							0,

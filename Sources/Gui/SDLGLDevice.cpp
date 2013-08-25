@@ -471,6 +471,8 @@ namespace spades {
 				case R16F: return GL_R16F;
 				case RGB5: return GL_RGB5;
 				case RGB5A1: return GL_RGB5_A1;
+				case RGB8: return GL_RGB8;
+				case RGBA8: return GL_RGBA8;
 				default: SPInvalidEnum("v", v);
 			}
 		}
