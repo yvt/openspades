@@ -138,7 +138,7 @@ namespace spades {
 			if(inRect.GetMaxY() > mapSize.y)
 				inRect = inRect.Translated(0, mapSize.y - inRect.GetMaxY());
 			
-			AABB2 outRect(16.f, 16.f,
+			AABB2 outRect(renderer->ScreenWidth() - mapWndSize.x - 16.f, 16.f,
 						  mapWndSize.x,
 						  mapWndSize.y);
 			renderer->SetColor(MakeVector4(1,1,1,1));
