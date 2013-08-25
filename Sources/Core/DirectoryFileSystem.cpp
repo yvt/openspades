@@ -131,12 +131,13 @@ namespace spades {
 		std::string path = physicalPath(fn);
 		
 		// create required directory
-		if(path.find('/') != std::string::npos){
-			size_t pos = path.find('/') + 1;
+		if(path.find_first_of("/\\") != std::string::npos){
+			size_t pos = path.find_first_of("/\\") + 1;
 			while(pos < path.size()){
 				size_t nextPos = pos;
 				while(nextPos < path.size() &&
-					  path[nextPos] != '/')
+					  path[nextPos] != '/' &&
+					  path[nextPos] != '\\')
 					nextPos++;
 				if(nextPos == path.size())
 					break;
