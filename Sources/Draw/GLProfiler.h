@@ -21,6 +21,7 @@ namespace spades {
 			std::string name;
 			Stopwatch *watch;
 			IGLDevice *device;
+			double time, timeNoFinish;
 		public:
 			static void ResetLevel();
 			GLProfiler(IGLDevice *, const char *format, ...);

@@ -36,6 +36,7 @@ namespace spades {
 				name = buf;
 				
 				this->device = device;
+				device->Finish();
 				watch = new Stopwatch;
 			}
 		}
@@ -44,7 +45,9 @@ namespace spades {
 				SPAssert(levels.back() == this);
 				levels.pop_back();
 				
+				timeNoFinish = watch->GetTime();
 				device->Finish();
+				time = watch->GetTime();
 				std::string out = GetProfileMessage();
 				
 				if(!levels.empty()) {
@@ -63,8 +66,9 @@ namespace spades {
 			int indent = levels.size() * 2;
 			for(int i = 0; i < indent; i++)
 				buf[i] = ' ';
-			sprintf(buf + indent, "%s - %.3fms\n", name.c_str(),
-					watch->GetTime() * 1000.);
+			sprintf(buf + indent, "%s - %.3fms (%.3fms w/o glFinish)\n",	name.c_str(),
+					time * 1000.,
+					timeNoFinish * 1000.);
 			delete watch;
 			
 			std::string out = buf + msg;
