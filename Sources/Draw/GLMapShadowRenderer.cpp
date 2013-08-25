@@ -105,6 +105,7 @@ namespace spades{
 				size_t bitmapPixelPosBase = i * 32;
 				
 				uint32_t pixels[32];
+				bool modified = false;
 				for(int j = 0; j < 32; j++){
 					pixels[j] = GeneratePixel(x + j, y);
 					if(bitmap[bitmapPixelPosBase + j] != pixels[j]){
@@ -120,18 +121,21 @@ namespace spades{
 													  map);
 						}
 						bitmap[bitmapPixelPosBase + j] = pixels[j];
+						modified = true;
 					}
 				}
 				
-				for(int j = 0; j < 32; j += CoarseSize)
-					coarseUpdateBitmap[((x + j) >> CoarseBits) +
-									   (y >> CoarseBits) *
-									   (w >> CoarseBits)] = 1;
-				
-				device->TexSubImage2D(IGLDevice::Texture2D,
-									  0, x, y, 32, 1,
-									  IGLDevice::RGBA, IGLDevice::UnsignedByte,
-									  pixels);
+				if(modified) {
+					for(int j = 0; j < 32; j += CoarseSize)
+						coarseUpdateBitmap[((x + j) >> CoarseBits) +
+										   (y >> CoarseBits) *
+										   (w >> CoarseBits)] = 1;
+					
+					device->TexSubImage2D(IGLDevice::Texture2D,
+										  0, x, y, 32, 1,
+										  IGLDevice::RGBA, IGLDevice::UnsignedByte,
+										  pixels);
+				}
 				
 				updateBitmap[i] = 0;
 			}
