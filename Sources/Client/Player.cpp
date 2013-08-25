@@ -372,11 +372,13 @@ namespace spades {
 			// speed hack (shotgun does this)
 			bool blockDestroyed = false;
 			
+			Vector3 dir2 = GetFront();
 			for(int i =0 ; i < pellets; i++){
-				Vector3 dir = GetFront();
-				dir += right * ((GetRandom() - GetRandom()) * spread);
-				dir += up * ((GetRandom() - GetRandom()) * spread);
-				dir = dir.Normalize();
+				// AoS 0.75's way (dir2 shouldn't be normalized!)
+				dir2.x += (GetRandom() * 2.f - 1.f) * spread;
+				dir2.y += (GetRandom() * 2.f - 1.f) * spread;
+				dir2.z += (GetRandom() * 2.f - 1.f) * spread;
+				Vector3 dir = dir2.Normalize();
 				
 				// first do map raycast
 				GameMap::RayCastResult mapResult;
@@ -517,8 +519,13 @@ namespace spades {
 				// one pellet done
 			}
 			
-			Turn(weapon->GetRecoil().x,
-				 weapon->GetRecoil().y);
+			// in AoS 0.75's way
+			Vector3 o = orientation;
+			Vector3 rec = weapon->GetRecoil();
+			o += GetUp() * rec.y;
+			o += GetRight() * rec.x * sinf(world->GetTime() * 2.f);
+			o = o.Normalize();
+			SetOrientation(o);
 		}
 		
 		void Player::ThrowGrenade(){
