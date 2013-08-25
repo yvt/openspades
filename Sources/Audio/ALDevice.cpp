@@ -571,7 +571,7 @@ namespace spades {
 					
 					EFXEAXREVERBPROPERTIES prop = EFX_REVERB_PRESET_ROOM;
 					prop.flDecayTime = .161f * roomVolume / roomArea / .4f;
-					prop.flGain = reflections;
+					prop.flGain = reflections * 0.8f;
 					if(prop.flDecayTime > AL_EAXREVERB_MAX_DECAY_TIME)
 						prop.flDecayTime = AL_EAXREVERB_MAX_DECAY_TIME;
 					if(prop.flDecayTime < AL_EAXREVERB_MIN_DECAY_TIME)
