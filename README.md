@@ -17,10 +17,10 @@ Installation
 
 1. ```sudo apt-get install pkg-config libsdl1.2-dev libfltk1.3-dev libglew-dev``` (because of a bug in some distributions, 
 you might also have to install more packages by ```sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev```)
-2. ```./autogen.sh && ./configure && make```
-3. ```sudo make install```
-4. Download windows binary of OpenSpades from https://sites.google.com/a/yvt.jp/openspades/downloads, extract it,
-and copy the contents of Resources directory into /usr/local/share/openspades/Resources or ~/.openspades/Resources
+2. ```./autogen.sh && ./configure PKG_CONFIG=pkg-config && make```
+3. Download windows binary of OpenSpades from https://sites.google.com/a/yvt.jp/openspades/downloads, extract it,
+and copy the .pak files inside Resources directory into /usr/local/share/openspades/Resources or ~/.openspades/Resources
+4. ```sudo make install```
 5. ```openspades``` and enjoy
 
 Licensing
