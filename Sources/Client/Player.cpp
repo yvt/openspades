@@ -545,6 +545,8 @@ namespace spades {
 				vel = MakeVector3(0,0,0);
 			}
 			
+			vel += GetVelocty();
+			
 			if(this == world->GetLocalPlayer()){
 				Grenade *gren = new Grenade(world, muzzle, vel, fuse);
 				world->AddGrenade(gren);
