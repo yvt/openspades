@@ -66,9 +66,9 @@ SPADES_SETTING(cg_keyReloadWeapon, "r");
 SPADES_SETTING(cg_keyFlashlight, "f");
 
 SPADES_SETTING(cg_keyMoveLeft, "a");
-SPADES_SETTING(cg_keyMoveRight, "s");
+SPADES_SETTING(cg_keyMoveRight, "d");
 SPADES_SETTING(cg_keyMoveForward, "w");
-SPADES_SETTING(cg_keyMoveBackward, "z");
+SPADES_SETTING(cg_keyMoveBackward, "s");
 SPADES_SETTING(cg_keyJump, " ");
 SPADES_SETTING(cg_keyCrouch, "Control");
 SPADES_SETTING(cg_keySprint, "Shift");
