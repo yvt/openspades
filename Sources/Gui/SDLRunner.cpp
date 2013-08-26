@@ -123,6 +123,13 @@ namespace spades {
 					client->KeyEvent(TranslateKey(event.key.keysym),
 									false);
 					break;
+				case SDL_ACTIVEEVENT:
+					if(event.active.gain){
+						SDL_WM_GrabInput( SDL_GRAB_ON );
+					}else{
+						SDL_WM_GrabInput( SDL_GRAB_OFF );
+					}
+					break;
 				default:
 					break;
 			}
