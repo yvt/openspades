@@ -334,8 +334,17 @@ namespace spades {
 		IGLDevice::UInteger SDLGLDevice::GenBuffer() {
 			SPADES_MARK_FUNCTION_DEBUG();
 			GLuint i;
+#if GLEW
+			if(glGenBuffers)
+				glGenBuffers(1, &i);
+			else if(glGenBuffersARB)
+				glGenBuffersARB(1, &i);
+			else
+				ReportMissingFunc("glGenBuffers");
+#else
 			CheckExistence(glGenBuffers);
 			glGenBuffers(1, &i);
+#endif
 			CheckError();
 			return i;
 		}
@@ -343,8 +352,17 @@ namespace spades {
 		void SDLGLDevice::DeleteBuffer(UInteger i) {
 			SPADES_MARK_FUNCTION_DEBUG();
 			GLuint v = (GLuint)i;
+#if GLEW
+			if(glDeleteBuffers)
+				glDeleteBuffers(1, &v);
+			else if(glDeleteBuffersARB)
+				glDeleteBuffersARB(1, &v);
+			else
+				ReportMissingFunc("glDeleteBuffers");
+#else
 			CheckExistence(glDeleteBuffers);
 			glDeleteBuffers(1, &v);
+#endif
 			CheckError();
 		}
 		
@@ -365,16 +383,37 @@ namespace spades {
 				default:
 					SPInvalidEnum("access", access);
 			}
+			void *ret;
+#if GLEW
+			if(glMapBuffer)
+				ret = glMapBuffer(parseBufferTarget(target),
+								  acc);
+			else if(glMapBufferARB)
+				ret = glMapBufferARB(parseBufferTarget(target),
+								  acc);
+			else
+				ReportMissingFunc("glMapBuffer");
+#else
 			CheckExistence(glMapBuffer);
-			void *ret = glMapBuffer(parseBufferTarget(target),
+			ret = glMapBuffer(parseBufferTarget(target),
 									acc);
+#endif
 			CheckError();
 			return ret;
 		}
 		
 		void SDLGLDevice::UnmapBuffer(Enum target) {
+#if GLEW
+			if(glUnmapBuffer)
+				glUnmapBuffer(parseBufferTarget(target));
+			else if(glUnmapBufferARB)
+				glUnmapBufferARB(parseBufferTarget(target));
+			else
+				ReportMissingFunc("glUnmapBuffer");
+#else
 			CheckExistence(glUnmapBuffer);
 			glUnmapBuffer(parseBufferTarget(target));
+#endif
 			CheckError();
 		}
 		
@@ -390,8 +429,17 @@ namespace spades {
 		}
 		
 		void SDLGLDevice::BindBuffer(Enum target, UInteger i){
+#if GLEW
+			if(glBindBuffer)
+				glBindBuffer(parseBufferTarget(target), (GLuint)i);
+			else if(glBindBufferARB)
+				glBindBufferARB(parseBufferTarget(target), (GLuint)i);
+			else
+				ReportMissingFunc("glBindBuffer");
+#else
 			CheckExistence(glBindBuffer);
 			glBindBuffer(parseBufferTarget(target), (GLuint)i);
+#endif
 			CheckError();
 		}
 		
@@ -406,16 +454,38 @@ namespace spades {
 				case DynamicDraw: usageVal = GL_DYNAMIC_DRAW; break;
 				default: SPInvalidEnum("usage", usage);
 			}
+#if GLEW
+			if(glBufferData)
+				glBufferData(parseBufferTarget(target), (GLsizeiptr)size,
+							 data, usageVal);
+			else if(glBufferDataARB)
+				glBufferDataARB(parseBufferTarget(target), (GLsizeiptr)size,
+							 data, usageVal);
+			else
+				ReportMissingFunc("glBufferData");
+#else
 			CheckExistence(glBufferData);
 			glBufferData(parseBufferTarget(target), (GLsizeiptr)size,
 						 data, usageVal);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::BufferSubData(Enum target, Sizei offset,
 										Sizei size, const void *data) {
+#if GLEW
+			if(glBufferSubData)
+				glBufferSubData(parseBufferTarget(target), offset,
+								size, data);
+			else if(glBufferSubDataARB)
+				glBufferSubDataARB(parseBufferTarget(target), offset,
+								size, data);
+			else
+				ReportMissingFunc("glBufferSubData");
+#else
 			CheckExistence(glBufferSubData);
 			glBufferSubData(parseBufferTarget(target), offset,
 							size, data);
+#endif
 			CheckError();
 		}
 		
@@ -443,8 +513,17 @@ namespace spades {
 		}
 		
 		void SDLGLDevice::ActiveTexture(UInteger stage) {
+#if GLEW
+			if(glActiveTexture)
+				glActiveTexture(GL_TEXTURE0 + stage);
+			else if(glActiveTextureARB)
+				glActiveTextureARB(GL_TEXTURE0 + stage);
+			else
+				ReportMissingFunc("glActiveTexture");
+#else
 			CheckExistence(glActiveTexture);
 			glActiveTexture(GL_TEXTURE0 + stage);
+#endif
 			CheckError();
 		}
 		
@@ -530,12 +609,29 @@ namespace spades {
 									 Integer border,
 									 Enum format, Enum type,
 									 const void *data) {
+#if GLEW
+			if(glTexImage3D)
+				glTexImage3D(parseTextureTarget(target),
+							 level, parseTextureInternalFormat(intFmt),
+							 width, height, depth, border,
+							 parseTextureFormat(format),
+							 parseType(type), data);
+			else if(glTexImage3DEXT)
+				glTexImage3DEXT(parseTextureTarget(target),
+							 level, parseTextureInternalFormat(intFmt),
+							 width, height, depth, border,
+							 parseTextureFormat(format),
+							 parseType(type), data);
+			else
+				ReportMissingFunc("glTexImage3D");
+#else
 			CheckExistence(glTexImage3D);
 			glTexImage3D(parseTextureTarget(target),
 						 level, parseTextureInternalFormat(intFmt),
 						 width, height, depth, border,
 						 parseTextureFormat(format),
 						 parseType(type), data);
+#endif
 			CheckError();
 		}
 		
@@ -561,11 +657,26 @@ namespace spades {
 										Sizei depth,
 										Enum format, Enum type,
 										const void *data) {
+#if GLEW
+			if(glTexSubImage3D)
+				glTexSubImage3D(parseTextureTarget(target), level,
+								x, y, z, width, height, depth,
+								parseTextureFormat(format),
+								parseType(type), data);
+			else if(glTexSubImage3DEXT)
+				glTexSubImage3DEXT(parseTextureTarget(target), level,
+								x, y, z, width, height, depth,
+								parseTextureFormat(format),
+								parseType(type), data);
+			else
+				ReportMissingFunc("glTexSubImage3D");
+#else
 			CheckExistence(glTexSubImage3D);
 			glTexSubImage3D(parseTextureTarget(target), level,
 							x, y, z, width, height, depth,
 							parseTextureFormat(format),
 							parseType(type), data);
+#endif
 			CheckError();
 		}
 		
@@ -663,32 +774,77 @@ namespace spades {
 		}
 		
 		void SDLGLDevice::GenerateMipmap(spades::draw::IGLDevice::Enum target){
+#if GLEW
+			if(glGenerateMipmap)
+				glGenerateMipmap(parseTextureTarget(target));
+			else if(glGenerateMipmapEXT)
+				glGenerateMipmapEXT(parseTextureTarget(target));
+			else
+				ReportMissingFunc("glGenerateMipmap");
+#else
 			CheckExistence(glGenerateMipmap);
 			glGenerateMipmap(parseTextureTarget(target));
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::VertexAttrib(UInteger index, Float x) {
+#if GLEW
+			if(glVertexAttrib1f)
+				glVertexAttrib1f(index, x);
+			else if(glVertexAttrib1fARB)
+				glVertexAttrib1fARB(index, x);
+			else
+				ReportMissingFunc("glVertexAttrib1f");
+#else
 			CheckExistence(glVertexAttrib1f);
 			glVertexAttrib1f(index, x);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::VertexAttrib(UInteger index, Float x, Float y) {
+#if GLEW
+			if(glVertexAttrib2f)
+				glVertexAttrib2f(index, x, y);
+			else if(glVertexAttrib2fARB)
+				glVertexAttrib2fARB(index, x, y);
+			else
+				ReportMissingFunc("glVertexAttrib2f");
+#else
 			CheckExistence(glVertexAttrib2f);
 			glVertexAttrib2f(index, x, y);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::VertexAttrib(UInteger index, Float x, Float y, Float z) {
-			CheckExistence(glVertexAttrib3f);
+#if GLEW
+			if(glVertexAttrib3f)
+				glVertexAttrib3f(index, x, y, z);
+			else if(glVertexAttrib3fARB)
+				glVertexAttrib3fARB(index, x, y, z);
+			else
+				ReportMissingFunc("glVertexAttrib3f");
+#else
+			CheckExistence(glVertexAttrib2f);
 			glVertexAttrib3f(index, x, y, z);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::VertexAttrib(UInteger index, Float x, Float y, Float z, Float w) {
+#if GLEW
+			if(glVertexAttrib4f)
+				glVertexAttrib4f(index, x, y, z, w);
+			else if(glVertexAttrib4fARB)
+				glVertexAttrib4fARB(index, x, y, z, w);
+			else
+				ReportMissingFunc("glVertexAttrib4f");
+#else
 			CheckExistence(glVertexAttrib4f);
 			glVertexAttrib4f(index, x, y, z, w);
+#endif
 			CheckError();
 		}
 		
@@ -697,9 +853,20 @@ namespace spades {
 											  Enum type, bool normalized,
 											  Sizei stride,
 											  const void *data) {
+#if GLEW
+			if(glVertexAttribPointer)
+				glVertexAttribPointer(index, size, parseType(type),
+									  normalized, stride, data);
+			else if(glVertexAttribPointerARB)
+				glVertexAttribPointerARB(index, size, parseType(type),
+									  normalized, stride, data);
+			else
+				ReportMissingFunc("glVertexAttribPointer");
+#else
 			CheckExistence(glVertexAttribPointer);
 			glVertexAttribPointer(index, size, parseType(type),
 								  normalized, stride, data);
+#endif
 			CheckError();
 		}
 		
@@ -708,19 +875,45 @@ namespace spades {
 											  Enum type,
 											  Sizei stride,
 											  const void *data) {
+#if GLEW
+			if(glVertexAttribIPointer)
+				glVertexAttribIPointer(index, size, parseType(type),
+									  stride, data);
+			else if(glVertexAttribIPointerEXT)
+				glVertexAttribIPointerEXT(index, size, parseType(type),
+										 stride, data);
+			else
+				ReportMissingFunc("glVertexAttribPointer");
+#else
 			CheckExistence(glVertexAttribIPointer);
 			glVertexAttribIPointer(index, size, parseType(type),
-								   stride, data);
+								  stride, data);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::EnableVertexAttribArray(UInteger index, bool b){
+#if GLEW
+			if(glEnableVertexAttribArray){
+				if(b)
+					glEnableVertexAttribArray(index);
+				else
+					glDisableVertexAttribArray(index);
+			}else if(glEnableVertexAttribArrayARB){
+				if(b)
+					glEnableVertexAttribArrayARB(index);
+				else
+					glDisableVertexAttribArrayARB(index);
+			}else
+				ReportMissingFunc("glEnableVertexAttribArray");
+#else
 			CheckExistence(glEnableVertexAttribArray);
 			CheckExistence(glDisableVertexAttribArray);
 			if(b)
 				glEnableVertexAttribArray(index);
 			else
 				glDisableVertexAttribArray(index);
+#endif
 			CheckError();
 		}
 		
@@ -792,7 +985,7 @@ namespace spades {
 			else if(glDrawArraysInstancedEXT)
 				glDrawArraysInstancedEXT(md, first, count, instances);
 			else
-				SPRaise("glDrawArraysInstanced not found");
+				ReportMissingFunc("glDrawArraysInstanced");
 #else
 			glDrawArraysInstanced(md, first, count, instances);
 #endif
@@ -823,7 +1016,7 @@ namespace spades {
 			else if(glDrawElementsInstancedEXT)
 				glDrawElementsInstancedEXT(md, count, parseType(type), indices, instances);
 			else
-				SPRaise("glDrawElementsInstanced not found");
+				ReportMissingFunc("glDrawElementsInstanced");
 #else
 			glDrawElementsInstanced(md, count, parseType(type), indices, instances);
 #endif
@@ -834,6 +1027,26 @@ namespace spades {
 		
 		IGLDevice::UInteger SDLGLDevice::CreateShader(Enum type) {
 			SPADES_MARK_FUNCTION();
+#if GLEW
+			if(glCreateShader)
+				switch(type){
+					case draw::IGLDevice::FragmentShader:
+						return glCreateShader(GL_FRAGMENT_SHADER);
+					case draw::IGLDevice::VertexShader:
+						return glCreateShader(GL_VERTEX_SHADER);
+					default: SPInvalidEnum("type", type);
+				}
+			else if(glCreateShaderObjectARB)
+				switch(type){
+					case draw::IGLDevice::FragmentShader:
+						return glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
+					case draw::IGLDevice::VertexShader:
+						return glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
+					default: SPInvalidEnum("type", type);
+				}
+			else
+				ReportMissingFunc("glCreateShader");
+#else
 			CheckExistence(glCreateShader);
 			switch(type){
 				case draw::IGLDevice::FragmentShader:
@@ -842,24 +1055,52 @@ namespace spades {
 					return glCreateShader(GL_VERTEX_SHADER);
 				default: SPInvalidEnum("type", type);
 			}
+#endif
 		}
 		
 		void SDLGLDevice::ShaderSource(UInteger shader, Sizei count,
 									   const char **string, const int *len) {
+#if GLEW
+			if(glShaderSource)
+				glShaderSource(shader, count, (const GLchar **)string, len);
+			else if(glShaderSourceARB)
+				glShaderSourceARB(shader, count, (const GLchar **)string, len);
+			else
+				ReportMissingFunc("glShaderSource");
+#else
 			CheckExistence(glShaderSource);
 			glShaderSource(shader, count, (const GLchar **)string, len);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::CompileShader(UInteger i) {
+#if GLEW
+			if(glCompileShader)
+				glCompileShader(i);
+			else if(glCompileShaderARB)
+				glCompileShaderARB(i);
+			else
+				ReportMissingFunc("glCompileShader");
+#else
 			CheckExistence(glCompileShader);
 			glCompileShader(i);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::DeleteShader(UInteger i){
+#if GLEW
+			if(glDeleteShader)
+				glDeleteShader(i);
+			else if(glDeleteObjectARB)
+				glDeleteObjectARB(i);
+			else
+				ReportMissingFunc("glDeleteShader");
+#else
 			CheckExistence(glDeleteShader);
 			glDeleteShader(i);
+#endif
 			CheckError();
 		}
 		
@@ -867,6 +1108,49 @@ namespace spades {
 														 Enum param) {
 			SPADES_MARK_FUNCTION();
 			GLint ret;
+#if GLEW
+			if(glGetShaderiv)
+				switch(param){
+					case ShaderType:
+						glGetShaderiv(shader, GL_SHADER_TYPE, &ret);
+						break;
+					case DeleteStatus:
+						glGetShaderiv(shader, GL_DELETE_STATUS, &ret);
+						break;
+					case CompileStatus:
+						glGetShaderiv(shader, GL_COMPILE_STATUS, &ret);
+						break;
+					case InfoLogLength:
+						glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &ret);
+						break;
+					case ShaderSourceLength:
+						glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &ret);
+						break;
+					default:
+						SPInvalidEnum("param", param);
+				}
+			else if(glGetObjectParameterivARB)
+				switch(param){
+					case ShaderType:
+						SPRaise("GL_SHADER_TYPE not supported for GL_ARB_shader_objects");
+					case DeleteStatus:
+						glGetObjectParameterivARB(shader, GL_OBJECT_DELETE_STATUS_ARB, &ret);
+						break;
+					case CompileStatus:
+						glGetObjectParameterivARB(shader, GL_OBJECT_COMPILE_STATUS_ARB, &ret);
+						break;
+					case InfoLogLength:
+						glGetObjectParameterivARB(shader, GL_OBJECT_INFO_LOG_LENGTH_ARB, &ret);
+						break;
+					case ShaderSourceLength:
+						glGetObjectParameterivARB(shader, GL_OBJECT_SHADER_SOURCE_LENGTH_ARB, &ret);
+						break;
+					default:
+						SPInvalidEnum("param", param);
+				}
+			else
+				ReportMissingFunc("glGetShaderiv");
+#else
 			CheckExistence(glGetShaderiv);
 			switch(param){
 				case ShaderType:
@@ -887,15 +1171,27 @@ namespace spades {
 				default:
 					SPInvalidEnum("param", param);
 			}
+#endif
 			CheckError();
 			return ret;
 		}
 		
 		void SDLGLDevice::GetShaderInfoLog(UInteger shader, Sizei bufferSize,
 										   Sizei *length, char *outString) {
+#if GLEW
+			if(glGetShaderInfoLog)
+				glGetShaderInfoLog(shader, bufferSize, (GLsizei *)length,
+								   (GLchar *)outString);
+			else if(glGetInfoLogARB)
+				glGetInfoLogARB(shader, bufferSize, (GLsizei *)length,
+								   (GLchar *)outString);
+			else
+				ReportMissingFunc("glGetShaderInfoLog");
+#else
 			CheckExistence(glGetShaderInfoLog);
 			glGetShaderInfoLog(shader, bufferSize, (GLsizei *)length,
 							   (GLchar *)outString);
+#endif
 			CheckError();
 		}
 		
@@ -903,6 +1199,44 @@ namespace spades {
 														 Enum param) {
 			SPADES_MARK_FUNCTION();
 			GLint ret;
+#if GLEW
+			if(glGetProgramiv)
+				switch(param){
+					case DeleteStatus:
+						glGetProgramiv(shader, GL_DELETE_STATUS, &ret);
+						break;
+					case LinkStatus:
+						glGetProgramiv(shader, GL_LINK_STATUS, &ret);
+						break;
+					case ValidateStatus:
+						glGetProgramiv(shader, GL_VALIDATE_STATUS, &ret);
+						break;
+					case InfoLogLength:
+						glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &ret);
+						break;
+					default:
+						SPInvalidEnum("param", param);
+				}
+			else if(glGetObjectParameterivARB)
+				switch(param){
+					case DeleteStatus:
+						glGetObjectParameterivARB(shader, GL_OBJECT_DELETE_STATUS_ARB, &ret);
+						break;
+					case LinkStatus:
+						glGetObjectParameterivARB(shader, GL_OBJECT_LINK_STATUS_ARB, &ret);
+						break;
+					case ValidateStatus:
+						glGetObjectParameterivARB(shader, GL_OBJECT_VALIDATE_STATUS_ARB, &ret);
+						break;
+					case InfoLogLength:
+						glGetObjectParameterivARB(shader, GL_OBJECT_INFO_LOG_LENGTH_ARB, &ret);
+						break;
+					default:
+						SPInvalidEnum("param", param);
+				}
+			else
+				ReportMissingFunc("glGetProgramiv");
+#else
 			CheckExistence(glGetProgramiv);
 			switch(param){
 				case DeleteStatus:
@@ -920,120 +1254,306 @@ namespace spades {
 				default:
 					SPInvalidEnum("param", param);
 			}
+#endif
 			CheckError();
 			return ret;
 		}
 		
 		void SDLGLDevice::GetProgramInfoLog(UInteger p, Sizei bufferSize,
 										   Sizei *length, char *outString) {
+#if GLEW
+			if(glGetProgramInfoLog)
+				glGetProgramInfoLog(p, bufferSize, (GLsizei *)length,
+								   (GLchar *)outString);
+			else if(glGetInfoLogARB)
+				glGetInfoLogARB(p, bufferSize, (GLsizei *)length,
+								(GLchar *)outString);
+			else
+				ReportMissingFunc("glGetShaderInfoLog");
+#else
 			CheckExistence(glGetProgramInfoLog);
 			glGetProgramInfoLog(p, bufferSize, (GLsizei *)length,
 								(GLchar *)outString);
+#endif
 			CheckError();
 		}
 		
 		IGLDevice::UInteger SDLGLDevice::CreateProgram() {
+#if GLEW
+			if(glCreateProgram)
+				return glCreateProgram();
+			else if(glCreateProgramObjectARB)
+				return glCreateProgramObjectARB();
+			else
+				ReportMissingFunc("glCreateProgram");
+#else
 			CheckExistence(glCreateProgram);
 			return glCreateProgram();
+#endif
 		}
 		
 		void SDLGLDevice::AttachShader(UInteger program, UInteger shader){
+#if GLEW
+			if(glAttachShader)
+				glAttachShader(program, shader);
+			else if(glAttachObjectARB)
+				glAttachObjectARB(program, shader);
+			else
+				ReportMissingFunc("glAttachShader");
+				
+#else
 			CheckExistence(glAttachShader);
 			glAttachShader(program, shader);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::DetachShader(UInteger program, UInteger shader){
+#if GLEW
+			if(glDetachShader)
+				glDetachShader(program, shader);
+			else if(glDetachObjectARB)
+				glDetachObjectARB(program, shader);
+			else
+				ReportMissingFunc("glDetachShader");
+#else
 			CheckExistence(glDetachShader);
 			glDetachShader(program, shader);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::LinkProgram(UInteger program) {
+#if GLEW
+			if(glLinkProgram)
+				glLinkProgram(program);
+			else if(glLinkProgramARB)
+				glLinkProgramARB(program);
+			else
+				ReportMissingFunc("glLinkProgram");
+#else
 			CheckExistence(glLinkProgram);
 			glLinkProgram(program);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::UseProgram(UInteger program) {
+#if GLEW
+			if(glUseProgram)
+				glUseProgram(program);
+			else if(glUseProgramObjectARB)
+				glUseProgramObjectARB(program);
+			else
+				ReportMissingFunc("glUseProgram");
+#else
 			CheckExistence(glUseProgram);
 			glUseProgram(program);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::DeleteProgram(UInteger program) {
+#if GLEW
+			if(glDeleteProgram)
+				glDeleteProgram(program);
+			else if(glDeleteObjectARB)
+				glDeleteObjectARB(program);
+			else
+				ReportMissingFunc("glDeleteProgram");
+#else
 			CheckExistence(glDeleteProgram);
 			glDeleteProgram(program);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::ValidateProgram(UInteger program) {
+#if GLEW
+			if(glValidateProgram)
+				glValidateProgram(program);
+			else if(glValidateProgramARB)
+				glValidateProgramARB(program);
+			else
+				ReportMissingFunc("glValidateProgram");
+#else
 			CheckExistence(glValidateProgram);
 			glValidateProgram(program);
+#endif
 			CheckError();
 		}
 		
 		IGLDevice::Integer SDLGLDevice::GetAttribLocation(UInteger program, const char *name){
+#if GLEW
+			if(glGetAttribLocation)
+				return glGetAttribLocation(program, name);
+			else if(glGetAttribLocationARB)
+				return glGetAttribLocationARB(program, name);
+			else
+				ReportMissingFunc("glGetAttribLocation");
+#else
 			CheckExistence(glGetAttribLocation);
 			return glGetAttribLocation(program, name);
+#endif
 		}
 		
 		void SDLGLDevice::BindAttribLocation(UInteger program, UInteger index, const char *name) {
+#if GLEW
+			if(glBindAttribLocation)
+				glBindAttribLocation(program, index, name);
+			else if(glBindAttribLocationARB)
+				glBindAttribLocationARB(program, index, name);
+			else
+				ReportMissingFunc("glBindAttribLocation");
+#else
 			CheckExistence(glBindAttribLocation);
 			glBindAttribLocation(program, index, name);
+#endif
 			CheckError();
 		}
 		
 		IGLDevice::Integer SDLGLDevice::GetUniformLocation(UInteger program, const char *name) {
+#if GLEW
+			if(glGetUniformLocation)
+				return glGetUniformLocation(program, name);
+			else if(glGetUniformLocationARB)
+				return glGetUniformLocationARB(program, name);
+			else
+				ReportMissingFunc("glGetUniformLocation");
+#else
 			CheckExistence(glGetUniformLocation);
 			return glGetUniformLocation(program, name);
+#endif
 		}
 		
 		void SDLGLDevice::Uniform(Integer loc, Float x) {
+#if GLEW
+			if(glUniform1f)
+				glUniform1f(loc, x);
+			else if(glUniform1fARB)
+				glUniform1fARB(loc, x);
+			else
+				ReportMissingFunc("glUniform1f");
+#else
 			CheckExistence(glUniform1f);
 			glUniform1f(loc, x);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::Uniform(Integer loc, Float x, Float y) {
+#if GLEW
+			if(glUniform2f)
+				glUniform2f(loc, x, y);
+			else if(glUniform2fARB)
+				glUniform2fARB(loc, x, y);
+			else
+				ReportMissingFunc("glUniform2f");
+#else
 			CheckExistence(glUniform2f);
 			glUniform2f(loc, x, y);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::Uniform(Integer loc, Float x, Float y, Float z) {
+#if GLEW
+			if(glUniform3f)
+				glUniform3f(loc, x, y, z);
+			else if(glUniform3fARB)
+				glUniform3fARB(loc, x, y, z);
+			else
+				ReportMissingFunc("glUniform3f");
+#else
 			CheckExistence(glUniform3f);
 			glUniform3f(loc, x, y, z);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::Uniform(Integer loc, Float x, Float y, Float z, Float w) {
+#if GLEW
+			if(glUniform4f)
+				glUniform4f(loc, x, y, z, w);
+			else if(glUniform4fARB)
+				glUniform4fARB(loc, x, y, z, w);
+			else
+				ReportMissingFunc("glUniform4f");
+#else
 			CheckExistence(glUniform4f);
 			glUniform4f(loc, x, y, z, w);
+#endif
 			CheckError();
 		}
 		
 		void SDLGLDevice::Uniform(Integer loc, Integer x) {
+#if GLEW
+			if(glUniform1i)
+				glUniform1i(loc, x);
+			else if(glUniform1iARB)
+				glUniform1iARB(loc, x);
+			else
+				ReportMissingFunc("glUniform1i");
+#else
 			CheckExistence(glUniform1i);
 			glUniform1i(loc, x);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::Uniform(Integer loc, Integer x, Integer y) {
+#if GLEW
+			if(glUniform2i)
+				glUniform2i(loc, x, y);
+			else if(glUniform2iARB)
+				glUniform2iARB(loc, x, y);
+			else
+				ReportMissingFunc("glUniform2i");
+#else
 			CheckExistence(glUniform2i);
 			glUniform2i(loc, x, y);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::Uniform(Integer loc, Integer x, Integer y, Integer z) {
+#if GLEW
+			if(glUniform3i)
+				glUniform3i(loc, x, y, z);
+			else if(glUniform3iARB)
+				glUniform3iARB(loc, x, y, z);
+			else
+				ReportMissingFunc("glUniform3i");
+#else
 			CheckExistence(glUniform3i);
 			glUniform3i(loc, x, y, z);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::Uniform(Integer loc, Integer x, Integer y, Integer z, Integer w) {
+#if GLEW
+			if(glUniform4i)
+				glUniform4i(loc, x, y, z, w);
+			else if(glUniform4iARB)
+				glUniform4iARB(loc, x, y, z, w);
+			else
+				ReportMissingFunc("glUniform4i");
+#else
 			CheckExistence(glUniform4i);
 			glUniform4i(loc, x, y, z, w);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::Uniform(Integer loc, bool transpose, const spades::Matrix4 &mat) {
+#if GLEW
+			if(glUniformMatrix4fv)
+				glUniformMatrix4fv(loc, 1, transpose ? GL_TRUE : GL_FALSE,
+								   mat.m);
+			else if(glUniformMatrix4fvARB)
+				glUniformMatrix4fvARB(loc, 1, transpose ? GL_TRUE : GL_FALSE,
+									  mat.m);
+			else
+				ReportMissingFunc("glUniformMatrix4fv");
+#else
 			CheckExistence(glUniformMatrix4fv);
 			glUniformMatrix4fv(loc, 1, transpose ? GL_TRUE : GL_FALSE,
 							   mat.m);
+#endif
 			CheckError();
 		}
 		
@@ -1053,20 +1573,49 @@ namespace spades {
 		
 		IGLDevice::UInteger SDLGLDevice::GenFramebuffer() {
 			GLuint v;
+#if GLEW
+			if(glGenFramebuffers)
+				glGenFramebuffers(1, &v);
+			else if(glGenFramebuffersEXT)
+				glGenFramebuffersEXT(1, &v);
+			else
+				ReportMissingFunc("glGenFramebuffers");
+#else
 			CheckExistence(glGenFramebuffers);
 			glGenFramebuffers(1, &v);
+#endif
 			return (IGLDevice::UInteger)v;
 		}
 		void SDLGLDevice::BindFramebuffer(Enum target,
 										  UInteger framebuffer) {
+#if GLEW
+			if(glBindFramebuffer)
+				glBindFramebuffer(parseFramebufferTarget(target),
+								  framebuffer);
+			else if(glBindFramebufferEXT)
+				glBindFramebufferEXT(parseFramebufferTarget(target),
+								  framebuffer);
+			else
+				ReportMissingFunc("glBindFramebuffer");
+#else
 			CheckExistence(glBindFramebuffer);
 			glBindFramebuffer(parseFramebufferTarget(target),
 							  framebuffer);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::DeleteFramebuffer(UInteger fb){
+#if GLEW
+			if(glDeleteFramebuffers)
+				glDeleteFramebuffers(1, &fb);
+			else if(glDeleteFramebuffersEXT)
+				glDeleteFramebuffersEXT(1, &fb);
+			else
+				ReportMissingFunc("glDeleteFramebuffers");
+#else
 			CheckExistence(glDeleteFramebuffers);
 			glDeleteFramebuffers(1, &fb);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::FramebufferTexture2D(Enum target,
@@ -1111,10 +1660,23 @@ namespace spades {
 				default:
 					SPInvalidEnum("attachment",attachment);
 			}
+#if GLEW
+			if(glFramebufferTexture2D)
+				glFramebufferTexture2D(parseFramebufferTarget(target),
+									   a, parseTextureTarget(texTarget),
+									   texture, level);
+			else if(glFramebufferTexture2DEXT)
+				glFramebufferTexture2DEXT(parseFramebufferTarget(target),
+									   a, parseTextureTarget(texTarget),
+									   texture, level);
+			else
+				ReportMissingFunc("glFramebufferTexture2D");
+#else
 			CheckExistence(glFramebufferTexture2D);
 			glFramebufferTexture2D(parseFramebufferTarget(target),
 								   a, parseTextureTarget(texTarget),
 								   texture, level);
+#endif
 			CheckError();
 		}
 		
@@ -1149,10 +1711,23 @@ namespace spades {
 				m |= GL_DEPTH_BUFFER_BIT;
 			if(mask & StencilBufferBit)
 				m |= GL_STENCIL_BUFFER_BIT;
+#if GLEW
+			if(glBlitFramebuffer)
+				glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1,
+								  dstX0, dstY0, dstX1, dstY1,
+								  m, flt);
+			else if(glBlitFramebufferEXT)
+				glBlitFramebufferEXT(srcX0, srcY0, srcX1, srcY1,
+								  dstX0, dstY0, dstX1, dstY1,
+								  m, flt);
+			else
+				ReportMissingFunc("glBlitFramebuffer");
+#else
 			CheckExistence(glBlitFramebuffer);
 			glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1,
 							  dstX0, dstY0, dstX1, dstY1,
 							  m, flt);
+#endif
 			CheckError();
 		}
 		
@@ -1168,21 +1743,50 @@ namespace spades {
 		
 		IGLDevice::UInteger SDLGLDevice::GenRenderbuffer() {
 			GLuint v;
+#if GLEW
+			if(glGenRenderbuffers)
+				glGenRenderbuffers(1, &v);
+			else if(glGenRenderbuffersEXT)
+				glGenRenderbuffersEXT(1, &v);
+			else
+				ReportMissingFunc("glGenRenderbuffers");
+#else
 			CheckExistence(glGenRenderbuffers);
 			glGenRenderbuffers(1, &v);
+#endif
 			CheckError();
 			return v;
 		}
 		void SDLGLDevice::DeleteRenderbuffer(UInteger v){
+#if GLEW
+			if(glDeleteRenderbuffers)
+				glDeleteRenderbuffers(1, &v);
+			else if(glDeleteRenderbuffersEXT)
+				glDeleteRenderbuffersEXT(1, &v);
+			else
+				ReportMissingFunc("glDeleteRenderbuffers");
+#else
 			CheckExistence(glDeleteRenderbuffers);
 			glDeleteRenderbuffers(1, &v);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::BindRenderbuffer(Enum target, UInteger v){
 			SPADES_MARK_FUNCTION_DEBUG();
+#if GLEW
+			if(glBindRenderbuffer)
+				glBindRenderbuffer(parseRenderbufferTarget(target),
+								   v);
+			else if(glBindRenderbufferEXT)
+				glBindRenderbufferEXT(parseRenderbufferTarget(target),
+								   v);
+			else
+				ReportMissingFunc("glBindRenderbuffer");
+#else
 			CheckExistence(glBindRenderbuffer);
 			glBindRenderbuffer(parseRenderbufferTarget(target),
 							   v);
+#endif
 			CheckError();
 			
 		}
@@ -1190,20 +1794,50 @@ namespace spades {
 											  Enum intFormat,
 											  Sizei width,
 											  Sizei height){
+#if GLEW
+			if(glRenderbufferStorage)
+				glRenderbufferStorage(parseRenderbufferTarget(target),
+									  parseTextureInternalFormat(intFormat),
+									  width, height);
+			else if(glRenderbufferStorageEXT)
+				glRenderbufferStorageEXT(parseRenderbufferTarget(target),
+									  parseTextureInternalFormat(intFormat),
+									  width, height);
+			else
+				ReportMissingFunc("glRenderbufferStorage");
+				
+#else
+			CheckExistence(glRenderbufferStorage);
 			glRenderbufferStorage(parseRenderbufferTarget(target),
 								  parseTextureInternalFormat(intFormat),
 								  width, height);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::RenderbufferStorage(Enum target,
 											  Sizei samples,
 											  Enum intFormat,
 											  Sizei width, Sizei height){
-			CheckExistence(glRenderbufferStorage);
+#if GLEW
+			if(glRenderbufferStorageMultisample)
+				glRenderbufferStorageMultisample(parseRenderbufferTarget(target),
+												 samples,
+												 parseTextureInternalFormat(intFormat),
+												 width, height);
+			else if(glRenderbufferStorageMultisampleEXT)
+				glRenderbufferStorageMultisampleEXT(parseRenderbufferTarget(target),
+												 samples,
+												 parseTextureInternalFormat(intFormat),
+												 width, height);
+			else
+				ReportMissingFunc("glRenderbufferStorageMultisample");
+#else
+			CheckExistence(glRenderbufferStorageMultisample);
 			glRenderbufferStorageMultisample(parseRenderbufferTarget(target),
 											 samples,
 											 parseTextureInternalFormat(intFormat),
 											 width, height);
+#endif
 			CheckError();
 		}
 		void SDLGLDevice::FramebufferRenderbuffer(Enum target,
@@ -1244,10 +1878,23 @@ namespace spades {
 				default:
 					SPInvalidEnum("attachment",attachment);
 			}
+#if GLEW
+			if(glFramebufferRenderbuffer)
+				glFramebufferRenderbuffer(parseFramebufferTarget(target),
+										  a, parseRenderbufferTarget(rbTarget),
+										  rb);
+			else if(glFramebufferRenderbufferEXT)
+				glFramebufferRenderbufferEXT(parseFramebufferTarget(target),
+										  a, parseRenderbufferTarget(rbTarget),
+										  rb);
+			else
+				ReportMissingFunc("glFramebufferRenderbuffer");
+#else
 			CheckExistence(glFramebufferRenderbuffer);
 			glFramebufferRenderbuffer(parseFramebufferTarget(target),
 									  a, parseRenderbufferTarget(rbTarget),
 									  rb);
+#endif
 			CheckError();
 		}
 		
