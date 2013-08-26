@@ -45,6 +45,9 @@
 #include "PaletteView.h"
 #include "TCGameMode.h"
 #include "TCProgressView.h"
+#include "IStream.h"
+#include <stdarg.h>
+#include <time.h>
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;
@@ -171,6 +174,47 @@ namespace spades {
 			net->Connect(host);
 			//net->Connect("192.168.24.24");
 			//net->Connect("127.0.0.1");
+			
+			// decide log file name
+			std::string fn = host;
+			if(fn.find("aos:///") == 0)
+				fn = fn.substr(7);
+			if(fn.find("aos://") == 0)
+				fn = fn.substr(6);
+			std::string fn2;
+			{
+				time_t t;
+				struct tm tm;
+				::time(&t);
+				tm = *localtime(&t);
+				char buf[256];
+				sprintf(buf, "%04d%02d%02d%02d%02d%02d_",
+						tm.tm_year + 1900,
+						tm.tm_mon + 1,
+						tm.tm_mday,
+						tm.tm_hour,
+						tm.tm_min,
+						tm.tm_sec);
+				fn2 = buf;
+			}
+			for(size_t i = 0; i < fn.size(); i++){
+				char c = fn[i];
+				if((c >= 'a' && c <= 'z') ||
+				   (c >= 'A' && c <= 'Z') ||
+				   (c >= '0' && c <= '9')) {
+					fn2 += c;
+				}else{
+					fn2 += '_';
+				}
+			}
+			fn2 = "NetLogs/" + fn2 + ".log";
+		
+			try{
+				logStream = FileManager::OpenForWriting(fn2.c_str());
+				SPLog("Netlog Started at '%s'", fn2.c_str());
+			}catch(const std::exception& ex){
+				SPLog("Failed to open netlog file '%s'", fn2.c_str());
+			}
 		}
 		
 		void Client::SetWorld(spades::client::World *w) {
@@ -203,9 +247,11 @@ namespace spades {
 				map = world->GetMap();
 				renderer->SetGameMap(map);
 				audioDevice->SetGameMap(map);
+				NetLog("------ World Loaded ------");
 			}else{
 				
 				SPLog("World removed");
+				NetLog("------ World Unloaded ------");
 			}
 			
 			limbo->SetSelectedTeam(2);
@@ -223,6 +269,11 @@ namespace spades {
 		Client::~Client() {
 			SPADES_MARK_FUNCTION();
 			
+			NetLog("Disconnecting");
+			if(logStream) {
+				SPLog("Closing netlog");
+				delete logStream;
+			}
 			
 			SPLog("Disconnecting");
 			net->Disconnect();
@@ -266,9 +317,13 @@ namespace spades {
 				else
 					net->DoEvents(30);
 			}catch(const std::exception& ex){
-				SPLog("Exception while processing network packets (ignored):\n%s", ex.what());
-				if(net->GetStatus() == NetClientStatusNotConnected)
+				if(net->GetStatus() == NetClientStatusNotConnected){
+					SPLog("Disconnected because of error:\n%s", ex.what());
+					NetLog("Disconnected because of error:\n%s", ex.what());
 					throw;
+				}else{
+					SPLog("Exception while processing network packets (ignored):\n%s", ex.what());
+				}
 			}
 			
 			hurtRingView->Update(dt);
@@ -886,6 +941,35 @@ namespace spades {
 				if(team != 2 && p->GetWeapon()->GetWeaponType() != weap){
 					net->SendWeaponChange(weap);
 				}
+			}
+		}
+		
+		void Client::NetLog(const char *format, ...) {
+			char buf[4096];
+			va_list va;
+			va_start(va, format);
+			vsprintf(buf, format, va);
+			va_end(va);
+			std::string str = buf;
+			
+			time_t t;
+			struct tm tm;
+			::time(&t);
+			tm = *localtime(&t);
+			
+			std::string timeStr = asctime(&tm);
+			
+			// remove '\n' in the end of the result of asctime().
+			timeStr.resize(timeStr.size()-1);
+			
+			sprintf(buf, "%s %s\n",
+					timeStr.c_str(), str.c_str());
+			
+			printf("%s", buf);
+			
+			if(logStream) {
+				logStream->Write(buf);
+				logStream->Flush();
 			}
 		}
 		
@@ -2784,6 +2868,16 @@ namespace spades {
 			s += ": ";
 			s += msg;
 			chatWindow->AddMessage(s);
+			if(global)
+				NetLog("[Global] %s (%s): %s",
+					   p->GetName().c_str(),
+					   world->GetTeam(p->GetTeamId()).name.c_str(),
+					   msg.c_str());
+			else
+				NetLog("[Team] %s (%s): %s",
+					   p->GetName().c_str(),
+					   world->GetTeam(p->GetTeamId()).name.c_str(),
+					   msg.c_str());
 			
 			if(!IsMuted()) {
 				IAudioChunk *chunk = audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
@@ -2793,6 +2887,7 @@ namespace spades {
 		
 		void Client::ServerSentMessage(const std::string &msg) {
 			chatWindow->AddMessage(msg);
+			NetLog("%s", msg.c_str());
 			if(msg.find(playerName) != std::string::npos){
 				printf("Mention: %s\n", msg.c_str());
 			}
@@ -3347,6 +3442,7 @@ namespace spades {
 			}else{
 				msg += "an Neutral Territory";
 			}
+			NetLog("%s", msg.c_str());
 			centerMessageView->AddMessage(msg);
 			
 			if(world->GetLocalPlayer() && !IsMuted()){
@@ -3374,6 +3470,7 @@ namespace spades {
 			msg += " captured ";
 			msg += world->GetTeam(1 - p->GetTeamId()).name;
 			msg += "'s Intel.";
+			NetLog("%s", msg.c_str());
 			centerMessageView->AddMessage(msg);
 			
 			if(world->GetLocalPlayer() && !IsMuted()){
@@ -3400,6 +3497,7 @@ namespace spades {
 			msg += " picked up ";
 			msg += world->GetTeam(1 - p->GetTeamId()).name;
 			msg += "'s intel.";
+			NetLog("%s", msg.c_str());
 			centerMessageView->AddMessage(msg);
 			
 			if(!IsMuted()) {
@@ -3421,6 +3519,7 @@ namespace spades {
 			msg += " dropped ";
 			msg += world->GetTeam(1 - p->GetTeamId()).name;
 			msg += "'s intel.";
+			NetLog("%s", msg.c_str());
 			centerMessageView->AddMessage(msg);
 		}
 		
@@ -3492,6 +3591,7 @@ namespace spades {
 			
 			msg = world->GetTeam(teamId).name;
 			msg += " wins!";
+			NetLog("%s", msg.c_str());
 			centerMessageView->AddMessage(msg);
 			
 			if(world->GetLocalPlayer()){
@@ -4029,6 +4129,21 @@ namespace spades {
 			}
 			
 			killfeedWindow->AddMessage(s);
+			
+			// log to netlog
+			if(killer != victim) {
+				NetLog("%s (%s)%s%s (%s)",
+					   killer->GetName().c_str(),
+					   world->GetTeam(killer->GetTeamId()).name.c_str(),
+					   cause.c_str(),
+					   victim->GetName().c_str(),
+					   world->GetTeam(victim->GetTeamId()).name.c_str());
+			}else{
+				NetLog("%s (%s)%s",
+					   killer->GetName().c_str(),
+					   world->GetTeam(killer->GetTeamId()).name.c_str(),
+					   cause.c_str());
+			}
 			
 			// show big message if player is involved
 			if(victim != killer){

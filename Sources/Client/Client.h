@@ -16,6 +16,7 @@
 #include <list>
 
 namespace spades {
+	class IStream;
 	namespace client {
 		class IRenderer;
 		struct SceneDefinition;
@@ -61,6 +62,7 @@ namespace spades {
 			
 			NetClient *net;
 			std::string playerName;
+			IStream *logStream;
 			
 			World *world;
 			GameMap *map;
@@ -179,6 +181,8 @@ namespace spades {
 			
 			std::string ScreenShotPath();
 			void TakeScreenShot(bool sceneOnly);
+			
+			void NetLog(const char *format, ...);
 			
 		public:
 			Client(IRenderer *, IAudioDevice *,

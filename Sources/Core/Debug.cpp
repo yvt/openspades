@@ -194,9 +194,10 @@ namespace spades {
 		
 		if(logStream || !attemptedToInitializeLog) {
 			
-			if(attemptedToInitializeLog)
+			if(attemptedToInitializeLog){
 				logStream->Write(buf);
-			else
+				logStream->Flush();
+			}else
 				accumlatedLog += buf;
 		}
 	}

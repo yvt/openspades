@@ -170,7 +170,9 @@ namespace spades {
 				return ReadData(siz).c_str(); // TODO: decode
 			}
 			std::string ReadRemainingString() {
-				return ReadRemainingData(); // TODO: decode
+				// convert to C string once so that
+				// null-chars are removed
+				return ReadRemainingData().c_str(); // TODO: decode
 			}
 			
 			void DumpDebug() {
