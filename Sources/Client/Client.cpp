@@ -595,6 +595,24 @@ namespace spades {
 					if(dt > 0.f)
 						viewWeaponOffset *= powf(.02f, dt);
 					
+					if(player->GetTool() == Player::ToolWeapon &&
+					   player->GetWeaponInput().secondary) {
+						
+						if(dt > 0.f)
+							viewWeaponOffset *= powf(.01f, dt);
+						
+						const float limitX = .01f;
+						const float limitY = .01f;
+						if(viewWeaponOffset.x < -limitX)
+							viewWeaponOffset.x = Mix(viewWeaponOffset.x, -limitX, .5f);
+						if(viewWeaponOffset.x > limitX)
+							viewWeaponOffset.x = Mix(viewWeaponOffset.x, limitX, .5f);
+						if(viewWeaponOffset.z < 0.f)
+							viewWeaponOffset.z = Mix(viewWeaponOffset.z, 0.f, .5f);
+						if(viewWeaponOffset.z > limitY)
+							viewWeaponOffset.z = Mix(viewWeaponOffset.z, limitY, .5f);
+					}
+					
 				}else{
 					viewWeaponOffset = MakeVector3(0,0,0);
 				}

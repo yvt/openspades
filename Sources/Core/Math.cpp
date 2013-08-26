@@ -473,6 +473,12 @@ namespace spades {
 		return v * v * (3.f - 2.f * v);
 	}
 	
+	float Mix(float a, float b, float frac) {
+		return a + (b - a) * frac;
+	}
+	Vector2 Mix(Vector2 a, Vector2 b, float frac) {
+		return a + (b - a) * frac;
+	}
 	Vector3 Mix(Vector3 a, Vector3 b, float frac) {
 		return a + (b - a) * frac;
 	}
