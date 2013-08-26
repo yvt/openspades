@@ -82,6 +82,7 @@ namespace spades {
 			
 			// chat
 			ChatWindow *chatWindow;
+			ChatWindow *killfeedWindow;
 			bool chatEditing;
 			bool chatGlobal;
 			std::string chatText;

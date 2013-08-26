@@ -133,7 +133,8 @@ namespace spades {
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));
 			
-			chatWindow = new ChatWindow(this, textFont);
+			chatWindow = new ChatWindow(this, textFont, false);
+			killfeedWindow = new ChatWindow(this, textFont, true);
 			chatEditing = false;
 			
 			hurtRingView = new HurtRingView(this);
@@ -243,6 +244,7 @@ namespace spades {
 			delete scoreboard;
 			delete mapView;
 			delete chatWindow;
+			delete killfeedWindow;
 			delete paletteView;
 			delete centerMessageView;
 			delete hurtRingView;
@@ -554,6 +556,7 @@ namespace spades {
 			}
 			
 			chatWindow->Update(dt);
+			killfeedWindow->Update(dt);
 			limbo->Update(dt);
 			
 			// SceneDef also can be used for sounds
@@ -2673,6 +2676,7 @@ namespace spades {
 					}
 					
 					chatWindow->Draw();
+					killfeedWindow->Draw();
 					
 					if(scoreboardVisible)
 						scoreboard->Draw();
@@ -4024,7 +4028,7 @@ namespace spades {
 									 victim->GetTeamId());
 			}
 			
-			chatWindow->AddMessage(s);
+			killfeedWindow->AddMessage(s);
 			
 			// show big message if player is involved
 			if(victim != killer){

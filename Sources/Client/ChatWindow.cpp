@@ -18,9 +18,10 @@
 namespace spades {
 	namespace client{
 		
-		ChatWindow::ChatWindow(Client *cli, IFont *fnt):
+		ChatWindow::ChatWindow(Client *cli, IFont *fnt,
+							   bool killfeed):
 		client(cli), renderer(cli->GetRenderer()),
-		font(fnt){
+		font(fnt), killfeed(killfeed){
 			firstY = 0.f;
 		}
 		ChatWindow::~ChatWindow(){}
@@ -207,7 +208,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			float winX = 4.f;
-			float winY = (float)renderer->ScreenHeight() * .5f;
+			float winY = killfeed ? 8.f :
+			(float)renderer->ScreenHeight() * .5f;
 			std::list<ChatEntry>::iterator it;
 			
 			float lHeight = GetLineHeight();

@@ -42,6 +42,7 @@ namespace spades {
 			
 			std::list<ChatEntry> entries;
 			float firstY;
+			bool killfeed;
 			
 			float GetWidth();
 			float GetHeight();
@@ -50,7 +51,8 @@ namespace spades {
 			Vector4 GetColor(char);
 			
 		public:
-			ChatWindow(Client *, IFont *font);
+			ChatWindow(Client *, IFont *font,
+					   bool killfeed);
 			~ChatWindow();
 			
 			void AddMessage(const std::string&);
