@@ -45,7 +45,7 @@
 #include "PaletteView.h"
 #include "TCGameMode.h"
 #include "TCProgressView.h"
-#include "IStream.h"
+#include "../Core/IStream.h"
 #include <stdarg.h>
 #include <time.h>
 
