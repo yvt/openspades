@@ -33,6 +33,8 @@ namespace spades {
 		sprintf(buf, "[%s:%d] %s", file, line, message.c_str());
 		message = buf;
 		
+		shortMessage = message;
+		
 		message += "\nCollected backtrace:\n";
 		message += trace.ToString();
 	}

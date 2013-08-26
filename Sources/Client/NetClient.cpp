@@ -619,7 +619,7 @@ namespace spades {
 				case 10:
 					return "You were kicked from this server. (2)";
 				default:
-					return "Unknown";
+					return "Unknown Reason";
 			}
 		}
 		

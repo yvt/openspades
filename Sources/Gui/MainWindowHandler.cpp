@@ -66,9 +66,12 @@ void MainWindow::StartGame(const std::string &host) {
 			SDLRunner r(host, cg_playerName);
 			r.Run();
 		}
+	}catch(const spades::Exception& ex){
+		SPLog("Unhandled exception in SDLRunner:\n%s", ex.what());
+		fl_message("Game was terminated due to an unexpected error:\n\n%s\n\nSee SystemMessages.log for more details.", ex.GetShortMessage().c_str());
 	}catch(const std::exception& ex){
 		SPLog("Unhandled exception in SDLRunner:\n%s", ex.what());
-		fl_message("Error occured:\n\n%s", ex.what());
+		fl_message("Game was terminated due to an unexpected error:\n\n%s\n\nSee SystemMessages.log for more details.", ex.what());
 	}
 #endif
 
