@@ -87,6 +87,7 @@ SPADES_SETTING(cg_keyLimbo, "l");
 SPADES_SETTING(cg_keyScreenshot, "0");
 SPADES_SETTING(cg_keySceneshot, "9");
 
+SPADES_SETTING(cg_switchToolByWheel, "1");
 
 namespace spades {
 	namespace client {
@@ -877,6 +878,49 @@ namespace spades {
 						flashlightOnTime = time;
 						IAudioChunk *chunk = audioDevice->RegisterSound("Sounds/Player/Flashlight.wav");
 						audioDevice->PlayLocal(chunk, AudioParam());
+					}else if(cg_switchToolByWheel && down) {
+						bool rev = (int)cg_switchToolByWheel < 0;
+						if(name == (rev ? "WheelDown":"WheelUp")) {
+							if(world->GetLocalPlayer()->GetTeamId() < 2){
+								Player::ToolType t = world->GetLocalPlayer()->GetTool();
+								switch(t){
+									case Player::ToolSpade:
+										t = Player::ToolGrenade;
+										break;
+									case Player::ToolBlock:
+										t = Player::ToolSpade;
+										break;
+									case Player::ToolWeapon:
+										t = Player::ToolBlock;
+										break;
+									case Player::ToolGrenade:
+										t = Player::ToolWeapon;
+										break;
+								}
+								world->GetLocalPlayer()->SetTool(t);
+								net->SendTool();
+							}
+						}else if(name == (rev ? "WheelUp":"WheelDown")) {
+							if(world->GetLocalPlayer()->GetTeamId() < 2){
+								Player::ToolType t = world->GetLocalPlayer()->GetTool();
+								switch(t){
+									case Player::ToolSpade:
+										t = Player::ToolBlock;
+										break;
+									case Player::ToolBlock:
+										t = Player::ToolWeapon;
+										break;
+									case Player::ToolWeapon:
+										t = Player::ToolGrenade;
+										break;
+									case Player::ToolGrenade:
+										t = Player::ToolSpade;
+										break;
+								}
+								world->GetLocalPlayer()->SetTool(t);
+								net->SendTool();
+							}
+						}
 					}
 				}else{
 					// limbo

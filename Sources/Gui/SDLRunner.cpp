@@ -41,6 +41,8 @@ namespace spades {
 			switch(b){
 				case SDL_BUTTON_LEFT: return "LeftMouseButton";
 				case SDL_BUTTON_RIGHT: return "RightMouseButton";
+				case SDL_BUTTON_WHEELUP: return "WheelUp";
+				case SDL_BUTTON_WHEELDOWN: return "WheelDown";
 				default: return std::string();
 			}
 		}
