@@ -37,15 +37,50 @@ namespace spades {
 		} \
 	}while(0)
 		
+#define CheckErrorAlways() do{ \
+GLenum err; \
+err = glGetError(); \
+if(err != GL_NO_ERROR) \
+ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
+}while(0)
+		
 #define CheckExistence(func) do { \
 		if(!func) { \
 			ReportMissingFunc( #func ); \
 		}\
 	} while(0)
 		
+		static std::string ErrorToString(GLenum err) {
+			switch(err) {
+				case GL_NO_ERROR:
+					return "No Error";
+				case GL_INVALID_ENUM:
+					return "Invalid Enum";
+				case GL_INVALID_VALUE:
+					return "Invalid Value";
+				case GL_INVALID_OPERATION:
+					return "Invalid Operation";
+				case GL_INVALID_FRAMEBUFFER_OPERATION:
+					return "Invalid Framebuffer Operation";
+				case GL_OUT_OF_MEMORY:
+					return "Out of Memory";
+				default:
+				{
+					char buf[256];
+					sprintf(buf, "0x%08x", (unsigned int)err);
+					return buf;
+				}
+			}
+		}
+		
 		static void ReportError(GLenum err, int line, const char *func){
-			SPRaise("GL error 0x%08x in %s at %s:%d",
-					(int)err,
+			std::string msg;
+			msg = ErrorToString(err);
+			while((err = glGetError()) != GL_NO_ERROR) {
+				msg += ", "; msg += ErrorToString(err);
+			}
+			SPRaise("GL error %s in %s at %s:%d",
+					msg.c_str(),
 					func, __FILE__, line);
 		}
 		static void ReportMissingFunc(const char *func){
@@ -141,6 +176,7 @@ namespace spades {
 		
 		void SDLGLDevice::Swap() {
 			//glFinish();
+			CheckErrorAlways();
 			SDL_GL_SwapBuffers();
 #if 0
 			Uint32 t = SDL_GetTicks();
@@ -599,7 +635,7 @@ namespace spades {
 						 width, height, border,
 						 parseTextureFormat(format),
 						 parseType(type), data);
-			CheckError();
+			CheckErrorAlways();
 		}
 		
 		void SDLGLDevice::TexImage3D(Enum target, Integer level,
@@ -632,7 +668,7 @@ namespace spades {
 						 parseTextureFormat(format),
 						 parseType(type), data);
 #endif
-			CheckError();
+			CheckErrorAlways();
 		}
 		
 		void SDLGLDevice::TexSubImage2D(Enum target,
@@ -1027,21 +1063,26 @@ namespace spades {
 		
 		IGLDevice::UInteger SDLGLDevice::CreateShader(Enum type) {
 			SPADES_MARK_FUNCTION();
+			IGLDevice::UInteger ret;
 #if GLEW
 			if(glCreateShader)
 				switch(type){
 					case draw::IGLDevice::FragmentShader:
-						return glCreateShader(GL_FRAGMENT_SHADER);
+						ret = glCreateShader(GL_FRAGMENT_SHADER);
+						break;
 					case draw::IGLDevice::VertexShader:
-						return glCreateShader(GL_VERTEX_SHADER);
+						ret = glCreateShader(GL_VERTEX_SHADER);
+						break;
 					default: SPInvalidEnum("type", type);
 				}
 			else if(glCreateShaderObjectARB)
 				switch(type){
 					case draw::IGLDevice::FragmentShader:
-						return glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
+						ret = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
+						break;
 					case draw::IGLDevice::VertexShader:
-						return glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
+						ret = glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
+						break;
 					default: SPInvalidEnum("type", type);
 				}
 			else
@@ -1050,12 +1091,13 @@ namespace spades {
 			CheckExistence(glCreateShader);
 			switch(type){
 				case draw::IGLDevice::FragmentShader:
-					return glCreateShader(GL_FRAGMENT_SHADER);
+					ret = glCreateShader(GL_FRAGMENT_SHADER); break;
 				case draw::IGLDevice::VertexShader:
-					return glCreateShader(GL_VERTEX_SHADER);
+					ret = glCreateShader(GL_VERTEX_SHADER); break;
 				default: SPInvalidEnum("type", type);
 			}
 #endif
+			return ret;
 		}
 		
 		void SDLGLDevice::ShaderSource(UInteger shader, Sizei count,
@@ -1677,7 +1719,7 @@ namespace spades {
 								   a, parseTextureTarget(texTarget),
 								   texture, level);
 #endif
-			CheckError();
+			CheckErrorAlways();
 		}
 		
 		void SDLGLDevice::BlitFramebuffer(Integer srcX0,
@@ -1812,7 +1854,7 @@ namespace spades {
 								  parseTextureInternalFormat(intFormat),
 								  width, height);
 #endif
-			CheckError();
+			CheckErrorAlways();
 		}
 		void SDLGLDevice::RenderbufferStorage(Enum target,
 											  Sizei samples,
@@ -1838,7 +1880,7 @@ namespace spades {
 											 parseTextureInternalFormat(intFormat),
 											 width, height);
 #endif
-			CheckError();
+			CheckErrorAlways();
 		}
 		void SDLGLDevice::FramebufferRenderbuffer(Enum target,
 												  Enum attachment, Enum rbTarget, UInteger rb) {
@@ -1895,7 +1937,7 @@ namespace spades {
 									  a, parseRenderbufferTarget(rbTarget),
 									  rb);
 #endif
-			CheckError();
+			CheckErrorAlways();
 		}
 		
 		void SDLGLDevice::ReadPixels(Integer x,
@@ -1908,7 +1950,7 @@ namespace spades {
 			glReadPixels(x, y, width, height,
 						 parseTextureFormat(format),
 						 parseType(type), data);
-			CheckError();
+			CheckErrorAlways();
 		}
 		
 		
