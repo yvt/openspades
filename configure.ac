@@ -44,14 +44,17 @@ case $host_os in
 		CXX="clang++ -arch i386"
 	    ZLIB_LIBS="-lz"
 	    ZLIB_CFLAGS="-I/usr/include" # ??
+		DL_LIBS="-ldl"
         ;;
   windows*|mingw*|winnt)
 		GL_LIBS="-lopengl32"
 		WIN32_LIBS="-lwsock32 -lws2_32 -lwinmm"
+		DL_LIBS=""
 		PKG_CHECK_MODULES(GLEW, glew)
 		;;
  * )
 		PKG_CHECK_MODULES(GLEW, glew)
+		DL_LIBS="-ldl"
 		;;
 esac
 
@@ -75,6 +78,8 @@ AC_SUBST(FLTK_CFLAGS)
 AC_SUBST(FLTK_LIBS)
 
 AC_SUBST(WIN32_LIBS)
+
+AC_SUBST(DL_LIBS)
 
 # Data directory
 
