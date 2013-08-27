@@ -23,6 +23,7 @@
 
 namespace spades {
 	namespace client {
+		int protoVersion = 0;
 		
 		
 		World::World(){
