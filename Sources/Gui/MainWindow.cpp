@@ -107,11 +107,11 @@ void MainWindow::cb_Advanced(Fl_Button* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()))->cb_Advanced_i(o,v);
 }
 
-void MainWindow::cb_Connect_i(Fl_Return_Button*, void*) {
+void MainWindow::cb_connectButton_i(Fl_Return_Button*, void*) {
   QuickConnectPressed();
 }
-void MainWindow::cb_Connect(Fl_Return_Button* o, void* v) {
-  ((MainWindow*)(o->parent()))->cb_Connect_i(o,v);
+void MainWindow::cb_connectButton(Fl_Return_Button* o, void* v) {
+  ((MainWindow*)(o->parent()))->cb_connectButton_i(o,v);
 }
 MainWindow::MainWindow(int X, int Y, int W, int H, const char *L)
   : Fl_Window(X, Y, W, H, L) {
@@ -125,7 +125,7 @@ MainWindow::MainWindow(int W, int H, const char *L)
 }
 
 MainWindow::MainWindow()
-  : Fl_Window(0, 0, 615, 439, "OpenSpades Startup") {
+  : Fl_Window(0, 0, 615, 356, "OpenSpades Startup") {
   clear_flag(16);
   _MainWindow();
 }
@@ -143,13 +143,14 @@ this->when(FL_WHEN_RELEASE);
 { quickHostInput = new Fl_Input(135, 80, 365, 25, "Quick Connect:");
   quickHostInput->callback((Fl_Callback*)cb_quickHostInput);
 } // Fl_Input* quickHostInput
-{ Fl_Tabs* o = new Fl_Tabs(5, 110, 605, 240);
-  o->labelsize(11);
-  { Fl_Group* o = new Fl_Group(10, 130, 595, 215, "About");
+{ mainTab = new Fl_Tabs(5, 110, 605, 240);
+  mainTab->labelsize(11);
+  { groupAbout = new Fl_Group(10, 130, 595, 215, "About");
+    groupAbout->hide();
     { aboutView = new Fl_Help_View(10, 135, 595, 210);
     } // Fl_Help_View* aboutView
-    o->end();
-  } // Fl_Group* o
+    groupAbout->end();
+  } // Fl_Group* groupAbout
   { Fl_Group* o = new Fl_Group(10, 130, 595, 220, "Setup");
     o->hide();
     { Fl_Group* o = new Fl_Group(10, 150, 385, 70, "Video");
@@ -229,18 +230,38 @@ this->when(FL_WHEN_RELEASE);
     } // Fl_Button* o
     o->end();
   } // Fl_Group* o
-  o->end();
-} // Fl_Tabs* o
+  { groupReport = new Fl_Group(10, 130, 595, 220, "System Report");
+    { Fl_Group* o = new Fl_Group(10, 150, 595, 195, "Graphics");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { outputGLRenderer = new Fl_Output(145, 160, 455, 20, "OpenGL Renderer");
+        outputGLRenderer->labelsize(12);
+        outputGLRenderer->textsize(12);
+      } // Fl_Output* outputGLRenderer
+      { outputGLVersion = new Fl_Output(145, 185, 455, 20, "OpenGL Version");
+        outputGLVersion->labelsize(12);
+        outputGLVersion->textsize(12);
+      } // Fl_Output* outputGLVersion
+      { outputGLSLVersion = new Fl_Output(145, 210, 455, 20, "GLSL Version");
+        outputGLSLVersion->labelsize(12);
+        outputGLSLVersion->textsize(12);
+      } // Fl_Output* outputGLSLVersion
+      { glInfoView = new Fl_Help_View(145, 235, 455, 105, "OpenGL Extensions");
+        glInfoView->labelsize(12);
+        glInfoView->align(Fl_Align(FL_ALIGN_LEFT_TOP));
+      } // Fl_Help_View* glInfoView
+      o->end();
+    } // Fl_Group* o
+    groupReport->end();
+  } // Fl_Group* groupReport
+  mainTab->end();
+} // Fl_Tabs* mainTab
 { bannerBox = new Fl_Box(5, 5, 605, 70);
   bannerBox->box(FL_THIN_DOWN_FRAME);
 } // Fl_Box* bannerBox
-{ Fl_Return_Button* o = new Fl_Return_Button(505, 80, 100, 25, "Connect");
-  o->callback((Fl_Callback*)cb_Connect);
-} // Fl_Return_Button* o
-{ gpu_info = new Fl_Text_Display(75, 365, 525, 60, "GPU Info:");
-  gpu_info->box(FL_DOWN_BOX);
-  gpu_info->align(Fl_Align(FL_ALIGN_LEFT_TOP));
-} // Fl_Text_Display* gpu_info
+{ connectButton = new Fl_Return_Button(505, 80, 100, 25, "Connect");
+  connectButton->callback((Fl_Callback*)cb_connectButton);
+} // Fl_Return_Button* connectButton
 inited = false;
 end();
 }

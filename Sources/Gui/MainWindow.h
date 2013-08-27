@@ -16,9 +16,9 @@
 #include <FL/Fl_Spinner.H>
 #include <FL/Fl_Light_Button.H>
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Output.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Text_Display.H>
 
 class MainWindow : public Fl_Window {
   void _MainWindow();
@@ -30,7 +30,9 @@ private:
   Fl_Input *quickHostInput;
   inline void cb_quickHostInput_i(Fl_Input*, void*);
   static void cb_quickHostInput(Fl_Input*, void*);
+  Fl_Tabs *mainTab;
 public:
+  Fl_Group *groupAbout;
   Fl_Help_View *aboutView;
 private:
   Fl_Choice *msaaSelect;
@@ -79,12 +81,17 @@ private:
   static void cb_playerNameInput(Fl_Input*, void*);
   inline void cb_Advanced_i(Fl_Button*, void*);
   static void cb_Advanced(Fl_Button*, void*);
-  Fl_Box *bannerBox;
-  inline void cb_Connect_i(Fl_Return_Button*, void*);
-  static void cb_Connect(Fl_Return_Button*, void*);
 public:
-  Fl_Text_Display *gpu_info;
+  Fl_Group *groupReport;
+  Fl_Output *outputGLRenderer;
+  Fl_Output *outputGLVersion;
+  Fl_Output *outputGLSLVersion;
+  Fl_Help_View *glInfoView;
 private:
+  Fl_Box *bannerBox;
+  Fl_Return_Button *connectButton;
+  inline void cb_connectButton_i(Fl_Return_Button*, void*);
+  static void cb_connectButton(Fl_Return_Button*, void*);
   bool inited; 
   void QuickConnectPressed();
   void StartGame(const std::string& host);

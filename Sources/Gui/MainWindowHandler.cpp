@@ -214,6 +214,8 @@ void MainWindow::Init() {
 	
 	aboutView->value(text.c_str());
 	
+	mainTab->value(groupAbout);
+	
 }
 
 /** This function is called after showing window.
@@ -224,6 +226,7 @@ void MainWindow::CheckGLCapability() {
 	
 	// check GL capabilities
 	
+	SPLog("Initializing SDL for capability query");
 	SDL_Init(SDL_INIT_VIDEO);
 	
 	SDL_Rect **modes = SDL_ListModes(NULL, SDL_OPENGL | SDL_FULLSCREEN |
@@ -240,16 +243,107 @@ void MainWindow::CheckGLCapability() {
 		
 	}
 	
-	SDL_SetVideoMode(640,480, 0, SDL_OPENGL );
+	bool capable = true;
+	std::string msg;
+	if(!SDL_SetVideoMode(1,1, 0, SDL_OPENGL|SDL_NOFRAME)){
+		// OpenGL initialization failed!
+		outputGLRenderer->value("N/A");
+		outputGLVersion->value("N/A");
+		outputGLSLVersion->value("N/A");
+		
+		std::string err = SDL_GetError();
+		SPLog("SDL_SetVideoMode failed: %s", err.c_str());
+		msg = "<b>OpenGL/SDL couldn't be initialized. "
+						  "You cannot play OpenSpades.</b><br><br>"
+						  "<b>Message from SDL</b><br>"
+		+ err;
+		capable = false;
+	}else{
+		
+		const char *str;
+		SPLog("--- OpenGL Renderer Info ---");
+		if((str = (const char*)glGetString(GL_VENDOR)) != NULL) {
+			SPLog("Vendor: %s", str);
+		}
+		if((str = (const char *)glGetString(GL_RENDERER)) != NULL) {
+			outputGLRenderer->value(str);
+			SPLog("Name: %s", str);
+		}else{
+			outputGLRenderer->value("(unknown)");
+		}
+		if((str = (const char *)glGetString(GL_VERSION)) != NULL) {
+			outputGLVersion->value(str);
+			SPLog("Version: %s", str);
+		}else{
+			outputGLVersion->value("(unknown)");
+		}
+		if((str = (const char *)glGetString(GL_SHADING_LANGUAGE_VERSION)) != NULL) {
+			outputGLSLVersion->value(str);
+			SPLog("Shading Language Version: %s", str);
+		}else{
+			outputGLSLVersion->value("(unknown)");
+		}
+		
+		str = (const char*)glGetString(GL_EXTENSIONS);
+		std::string extensions;
+		if(str)
+			extensions = str;
+		const char * const requiredExtensions[] = {
+			"GL_ARB_multitexture",
+			"GL_ARB_shader_objects",
+			"GL_ARB_shading_language_100",
+			"GL_ARB_vertex_buffer_object",
+			"GL_EXT_framebuffer_object",
+			"GL_EXT_framebuffer_blit",
+			NULL
+		};
+		
+		SPLog("--- Extensions ---");
+		std::vector<std::string> strs = spades::Split(str, " ");
+		for(size_t i = 0; i < strs.size(); i++)
+			SPLog("%s", strs[i].c_str());
+		SPLog("------------------");
+		
+		for(size_t i = 0; requiredExtensions[i]; i++) {
+			const char *ex = requiredExtensions[i];
+			if(extensions.find(ex) == std::string::npos) {
+				// extension not found
+				msg += "<font color=#ff0000>";
+				msg += ex;
+				msg += " NOT SUPPORTED!";
+				msg += "</font>";
+				capable = false;
+			}else{
+				msg += "<font color=#007f00>";
+				msg += ex;
+				msg += " is supported";
+				msg += "</font>";
+			}
+			msg += "<br>";
+		}
+		
+		if(capable){
+			msg = "Your video card supports all "
+			"required OpenGL extensions.<br>" + msg;
+		}else{
+			msg = "<b>Your video card/driver doesn't support "
+			"at least one of required OpenGL extensions."
+			 " You cannot play OpenSpades.</b><br>" + msg;
+		}
+		
+	}
+	msg = "<font face=Helvetica>" + msg + "</font><a name=last></a>";
 	
-	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-	gpu_info->buffer(buff);
-	std::string glrendererstr = std::string((const char*)glGetString(GL_RENDERER));
-	std::string glversionstr = std::string((const char*)glGetString(GL_VERSION));
-	std::string glshadinglangueverstr = std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
-	buff->text(("GPU name: " + glrendererstr + "\r\nOpenGL Version (3.0 required): " + glversionstr + "\r\nGL Shading Language Version: " + glshadinglangueverstr).c_str());
+	glInfoView->value(msg.c_str());
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
+	SPLog("SDL video subsystem finalized");
 	
+	SPLog("System is OpenSpades capable: %s",
+		  capable ? "YES": "NO");
+	if(!capable) {
+		mainTab->value(groupReport);
+		connectButton->deactivate();
+	}
 	
 	LoadPrefs();
 	

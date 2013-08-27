@@ -4,7 +4,7 @@ header_name {.h}
 code_name {.cpp}
 widget_class MainWindow {
   label {OpenSpades Startup} open
-  xywh {471 270 615 439} type Double labelsize 12 align 80
+  xywh {335 219 615 356} type Double labelsize 12 align 80
   code0 {\#include <string>}
   code1 {\#include <vector>}
   class Fl_Window visible
@@ -14,12 +14,12 @@ widget_class MainWindow {
     callback {SavePrefs();}
     private xywh {135 80 365 25}
   }
-  Fl_Tabs {} {open
+  Fl_Tabs mainTab {open
     private xywh {5 110 605 240} labelsize 11
   } {
-    Fl_Group {} {
-      label About open selected
-      xywh {10 130 595 215}
+    Fl_Group groupAbout {
+      label About open
+      xywh {10 130 595 215} hide
     } {
       Fl_Help_View aboutView {
         xywh {10 135 595 210}
@@ -122,18 +122,40 @@ SavePrefs();} open
         xywh {415 305 170 25}
       }
     }
+    Fl_Group groupReport {
+      label {System Report} open
+      xywh {10 130 595 220}
+    } {
+      Fl_Group {} {
+        label Graphics open
+        xywh {10 150 595 195} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Output outputGLRenderer {
+          label {OpenGL Renderer}
+          xywh {145 160 455 20} labelsize 12 textsize 12
+        }
+        Fl_Output outputGLVersion {
+          label {OpenGL Version}
+          xywh {145 185 455 20} labelsize 12 textsize 12
+        }
+        Fl_Output outputGLSLVersion {
+          label {GLSL Version}
+          xywh {145 210 455 20} labelsize 12 textsize 12
+        }
+        Fl_Help_View glInfoView {
+          label {OpenGL Extensions}
+          xywh {145 235 455 105} labelsize 12 align 7
+        }
+      }
+    }
   }
   Fl_Box bannerBox {
     private xywh {5 5 605 70} box THIN_DOWN_FRAME
   }
-  Fl_Return_Button {} {
+  Fl_Return_Button connectButton {
     label Connect
-    callback {QuickConnectPressed();}
+    callback {QuickConnectPressed();} selected
     private xywh {505 80 100 25}
-  }
-  Fl_Text_Display gpu_info {
-    label {GPU Info:}
-    xywh {75 365 525 60} box DOWN_BOX align 7
   }
   Function {QuickConnectPressed()} {open private
   } {}
