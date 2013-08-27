@@ -32,7 +32,7 @@ else
 fi
 
 FLTK_CFLAGS=`${FLTK_CONFIG} --cxxflags --use-images`
-FLTK_LIBS=`${FLTK_CONFIG} --ldstaticflags --use-images`
+FLTK_LIBS=`${FLTK_CONFIG} --ldflags --use-images`
 
 case $host_os in
   darwin* )

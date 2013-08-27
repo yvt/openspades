@@ -23,6 +23,9 @@
 #include <string.h>
 #include <math.h>
 #include "TCGameMode.h"
+#include "../Core/Settings.h"
+
+SPADES_SETTING(ne_version, "3");
 
 namespace spades {
 	namespace client {
@@ -299,6 +302,11 @@ namespace spades {
 			Disconnect();
 			SPAssert(status == NetClientStatusNotConnected);
 			
+			if((int)ne_version != 3 && (int)ne_version != 4)
+				SPRaise("Invalid ne_version, should be 3 or 4");
+
+			protoVersion = (int)ne_version;
+
 			if(hostname.find("aos:///") == 0){
 				hostname = hostname.substr(7);
 			}else if(hostname.find("aos://") == 0){
@@ -328,7 +336,7 @@ namespace spades {
 			
 			savedPackets.clear();
 			
-			peer = enet_host_connect(host, &address, 1, 3);
+			peer = enet_host_connect(host, &address, 1, (int)ne_version);
 			if(peer == NULL){
 				SPRaise("Failed to create ENet peer");
 			}
@@ -653,8 +661,20 @@ namespace spades {
 				}
 					break;
 				case PacketTypeWorldUpdate:
+				{
 					//reader.DumpDebug();
+					int bytesPerEntry = 24;
+					if((int)ne_version == 4)
+						bytesPerEntry++;
+
+					int entries = reader.GetData().size() / bytesPerEntry;
 					for(int i = 0; i < 32; i++){
+						int idx = i;
+						if((int)ne_version == 4)
+						{
+							idx = reader.ReadByte();
+							SPAssert(idx >= 0 && idx < 32);
+						}
 						Vector3 pos, front;
 						pos.x = reader.ReadFloat();
 						pos.y = reader.ReadFloat();
@@ -680,7 +700,7 @@ namespace spades {
 							SPAssert(!isnan(front.z));
 							SPAssert(front.GetLength() < 40.f);
 							if(GetWorld()){
-								p = GetWorld()->GetPlayer(i);
+								p = GetWorld()->GetPlayer(idx);
 								if(p){
 									if(p != GetWorld()->GetLocalPlayer()){
 										p->SetPosition(pos);
@@ -691,6 +711,7 @@ namespace spades {
 						}
 					}
 					SPAssert(reader.ReadRemainingData().empty());
+				}
 					break;
 				case PacketTypeInputData:
 					if(!GetWorld())
