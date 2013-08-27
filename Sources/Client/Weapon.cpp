@@ -11,6 +11,7 @@
 #include "IWorldListener.h"
 #include "../Core/Exception.h"
 #include "../Core/Debug.h"
+#include "../Core/Settings.h"
 
 namespace spades {
 	namespace client {
@@ -130,9 +131,9 @@ namespace spades {
 				world->GetListener()->PlayerReloadingWeapon(owner);
 		}
 		
-		class RifleWeapon: public Weapon {
+		class RifleWeapon3: public Weapon {
 		public:
-			RifleWeapon(World*w,Player*p):Weapon(w,p){}
+			RifleWeapon3(World*w,Player*p):Weapon(w,p){}
 			virtual std::string GetName() { return "Rifle"; }
 			virtual float GetDelay() { return 0.5f; }
 			virtual int GetClipSize() { return 10; }
@@ -156,9 +157,9 @@ namespace spades {
 			virtual int GetPelletSize() { return 1; }
 		};
 		
-		class SMGWeapon: public Weapon {
+		class SMGWeapon3: public Weapon {
 		public:
-			SMGWeapon(World*w,Player*p):Weapon(w,p){}
+			SMGWeapon3(World*w,Player*p):Weapon(w,p){}
 			virtual std::string GetName() { return "SMG"; }
 			virtual float GetDelay() { return 0.1f; }
 			virtual int GetClipSize() { return 30; }
@@ -182,9 +183,9 @@ namespace spades {
 			virtual int GetPelletSize() { return 1; }
 		};
 		
-		class ShotgunWeapon: public Weapon {
+		class ShotgunWeapon3: public Weapon {
 		public:
-			ShotgunWeapon(World*w,Player*p):Weapon(w,p){}
+			ShotgunWeapon3(World*w,Player*p):Weapon(w,p){}
 			virtual std::string GetName() { return "Shotgun"; }
 			virtual float GetDelay() { return 1.f; }
 			virtual int GetClipSize() { return 6; }
@@ -199,10 +200,8 @@ namespace spades {
 					case HitTypeArms: return 16;
 					case HitTypeLegs: return 16;
 					case HitTypeBlock:
-						if(distance < 15.f)
-							return 100;
-						else
-							return (int)(15.f / distance * 100.f);
+						// Actually, you cast a hit per pallet. This value is a guess, by the way. --GM
+						return 34;
 				}
 			}
 			virtual Vector3 GetRecoil () {
@@ -212,18 +211,114 @@ namespace spades {
 			virtual int GetPelletSize() { return 8; }
 		};
 		
+		class RifleWeapon4: public Weapon {
+		public:
+			RifleWeapon4(World*w,Player*p):Weapon(w,p){}
+			virtual std::string GetName() { return "Rifle"; }
+			virtual float GetDelay() { return 0.6f; }
+			virtual int GetClipSize() { return 8; }
+			virtual int GetMaxStock() { return 48; }
+			virtual float GetReloadTime() { return 2.5f; }
+			virtual bool IsReloadSlow() { return false; }
+			virtual WeaponType GetWeaponType() { return RIFLE_WEAPON; }
+			virtual int GetDamage(HitType type, float distance) {
+				switch(type){
+					// These are the 0.75 damage values.
+					// To be honest, we don't need this information, as the server decides the damage.
+					// EXCEPT for blocks, that is.
+					// --GM
+					case HitTypeTorso: return 49;
+					case HitTypeHead: return 100;
+					case HitTypeArms: return 33;
+					case HitTypeLegs: return 33;
+					case HitTypeBlock: return 50;
+				}
+			}
+			virtual Vector3 GetRecoil () {
+				return MakeVector3(0.0001f, 0.075f, 0.f);
+			}
+			virtual float GetSpread() { return 0.004f; }
+			virtual int GetPelletSize() { return 1; }
+		};
+		
+		class SMGWeapon4: public Weapon {
+		public:
+			SMGWeapon4(World*w,Player*p):Weapon(w,p){}
+			virtual std::string GetName() { return "SMG"; }
+			virtual float GetDelay() { return 0.1f; }
+			virtual int GetClipSize() { return 30; }
+			virtual int GetMaxStock() { return 150; }
+			virtual float GetReloadTime() { return 2.5f; }
+			virtual bool IsReloadSlow() { return false; }
+			virtual WeaponType GetWeaponType() { return SMG_WEAPON; }
+			virtual int GetDamage(HitType type, float distance) {
+				switch(type){
+					case HitTypeTorso: return 29;
+					case HitTypeHead: return 75;
+					case HitTypeArms: return 18;
+					case HitTypeLegs: return 18;
+					case HitTypeBlock: return 34;
+				}
+			}
+			virtual Vector3 GetRecoil () {
+				return MakeVector3(0.00005f, 0.0125f, 0.f);
+			}
+			virtual float GetSpread() { return 0.012f; }
+			virtual int GetPelletSize() { return 1; }
+		};
+		
+		class ShotgunWeapon4: public Weapon {
+		public:
+			ShotgunWeapon4(World*w,Player*p):Weapon(w,p){}
+			virtual std::string GetName() { return "Shotgun"; }
+			virtual float GetDelay() { return 0.8f; }
+			virtual int GetClipSize() { return 8; }
+			virtual int GetMaxStock() { return 48; }
+			virtual float GetReloadTime() { return 0.4f; }
+			virtual bool IsReloadSlow() { return true; }
+			virtual WeaponType GetWeaponType() { return SHOTGUN_WEAPON; }
+			virtual int GetDamage(HitType type, float distance) {
+				switch(type){
+					case HitTypeTorso: return 27;
+					case HitTypeHead: return 37;
+					case HitTypeArms: return 16;
+					case HitTypeLegs: return 16;
+					case HitTypeBlock:
+						return 34;
+				}
+			}
+			virtual Vector3 GetRecoil () {
+				return MakeVector3(0.0002f, 0.075f, 0.f);
+			}
+			virtual float GetSpread() { return 0.036f; }
+			virtual int GetPelletSize() { return 8; }
+		};
+		
 		Weapon *Weapon::CreateWeapon(WeaponType type, Player *p) {
 			SPADES_MARK_FUNCTION();
 			
-			switch(type){
-				case RIFLE_WEAPON:
-					return new RifleWeapon(p->GetWorld(), p);
-				case SMG_WEAPON:
-					return new SMGWeapon(p->GetWorld(), p);
-				case SHOTGUN_WEAPON:
-					return new ShotgunWeapon(p->GetWorld(), p);
-				default:
-					SPInvalidEnum("type", type);
+			if(spades::client::protoVersion == 4) {
+				switch(type) {
+					case RIFLE_WEAPON:
+						return new RifleWeapon4(p->GetWorld(), p);
+					case SMG_WEAPON:
+						return new SMGWeapon4(p->GetWorld(), p);
+					case SHOTGUN_WEAPON:
+						return new ShotgunWeapon4(p->GetWorld(), p);
+					default:
+						SPInvalidEnum("type", type);
+				}
+			} else {
+				switch(type) {
+					case RIFLE_WEAPON:
+						return new RifleWeapon3(p->GetWorld(), p);
+					case SMG_WEAPON:
+						return new SMGWeapon3(p->GetWorld(), p);
+					case SHOTGUN_WEAPON:
+						return new ShotgunWeapon3(p->GetWorld(), p);
+					default:
+						SPInvalidEnum("type", type);
+				}
 			}
 		}
 		
