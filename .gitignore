@@ -56,3 +56,10 @@ UserInterfaceState.xcuserstate
 # Windows related
 Thumbs.db
 
+OpenSpades.msvc/Debug/
+OpenSpades.msvc/Release/
+OpenSpades.msvc/OpenSpades.sdf
+OpenSpades.msvc/OpenSpades.idb
+OpenSpades.msvc/OpenSpades.vcxproj.filters
+OpenSpades.msvc/OpenSpades.opensdf
+OpenSpades.msvc/ipch/

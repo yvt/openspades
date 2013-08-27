@@ -66,6 +66,10 @@ namespace spades {
 						   const char *format, ...);
 }
 
+#ifdef _MSC_VER
+#define __PRETTY_FUNCTION__ __FUNCDNAME__
+#endif
+
 #define SPADES_MARK_FUNCTION() \
 static ::spades::reflection::Function thisFunction(__PRETTY_FUNCTION__, __FILE__, __LINE__); \
 ::spades::reflection::BacktraceEntryAdder backtraceEntryAdder((::spades::reflection::BacktraceEntry(&thisFunction)))
@@ -82,7 +86,11 @@ static ::spades::reflection::Function thisFunction(__PRETTY_FUNCTION__, __FILE__
 #define SPAssert(cond) ((!(cond)) ? SPRaise("SPAssertion failed: %s", #cond ) : (void)0)
 #endif
 
+#ifdef _MSC_VER
+#define SPLog(format, ...) ::spades::LogMessage(__FILE__, __LINE__, format, __VA_ARGS__ )
+#else
 #define SPLog(format, args...) ::spades::LogMessage(__FILE__, __LINE__, format, ##args )
+#endif
 
 #ifdef __GNUC__
 #define DEPRECATED(func) func __attribute__ ((deprecated))
