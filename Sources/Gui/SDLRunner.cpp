@@ -206,7 +206,15 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			SDL_Init(SDL_INIT_VIDEO);
 			try{
-				SDL_WM_SetCaption("OpenSpades", "OpenSpades");
+				{
+					std::string pkg;
+#ifdef PACKAGE_STRING
+					pkg = PACKAGE_STRING;
+#else
+					pkg = "OpenSpades";
+#endif
+					SDL_WM_SetCaption(pkg.c_str(), pkg.c_str());
+				}
 				
 				SDL_Surface *surface;
 				

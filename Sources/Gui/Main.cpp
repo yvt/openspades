@@ -51,6 +51,13 @@ int main(int argc, char ** argv)
 	SPADES_MARK_FUNCTION();
 	spades::DispatchQueue::GetThreadQueue()->MarkSDLVideoThread();
 	
+#ifdef PACKAGE_STRING
+	SPLog("Package: %s", PACKAGE_STRING);
+	pkg = PACKAGE_STRING;
+#else
+	SPLog("Package: (unknown)");
+#endif
+	
 	// default resource directories
 #ifdef WIN32
 	static char buf[4096];
