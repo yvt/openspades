@@ -22,7 +22,9 @@
 #if defined(WIN32)
 #include <windows.h>
 #endif
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 #include "ThreadLocalStorage.h"
 
 SPADES_SETTING(core_numDispatchQueueThreads, "auto");

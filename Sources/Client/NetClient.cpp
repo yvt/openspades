@@ -326,7 +326,7 @@ namespace spades {
 			if(addr.find('.') != std::string::npos){
 				enet_address_set_host(&address, addr.c_str());
 			}else{
-				address.host = (uint32_t)atoll(addr.c_str());
+				address.host = (uint32_t)atol(addr.c_str());
 			}
 			
 			
