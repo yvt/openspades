@@ -412,7 +412,7 @@ namespace spades {
 								hitFlag = 0;
 							}
 							hitPlayerDistance = dist;
-							hitFlag |= 1; // head
+							hitFlag = 1; // head
 						}
 					}
 					if(hb.torso.RayCast(muzzle, dir, &hitPos)) {
@@ -424,7 +424,7 @@ namespace spades {
 								hitFlag = 0;
 							}
 							hitPlayerDistance = dist;
-							hitFlag |= 2; // torso
+							hitFlag = 2; // torso
 						}
 					}
 					for(int j = 0; j < 3 ;j++){
@@ -438,9 +438,9 @@ namespace spades {
 								}
 								hitPlayerDistance = dist;
 								if(j == 2)
-									hitFlag |= 8; // arms
+									hitFlag = 8; // arms
 								else
-									hitFlag |= 4; // leg
+									hitFlag = 4; // leg
 							}
 						}
 					}
