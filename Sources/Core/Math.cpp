@@ -466,6 +466,20 @@ namespace spades {
 		return plane.GetDistanceTo(testVertex) >= 0.f;
 	}
 	
+	bool EqualsIgnoringCase(const std::string& a,
+							const std::string& b) {
+		if(a.size() != b.size())
+			return false;
+		if(&a == &b)
+			return true;
+		for(size_t siz = a.size(), i = 0; i < siz; i++) {
+			char x = a[i], y = b[i];
+			if(tolower(x) != tolower(y))
+				return false;
+		}
+		return true;
+	}
+	
 	float GetRandom() {
 		return (float)rand() / (float)RAND_MAX;
 	}

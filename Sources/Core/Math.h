@@ -676,6 +676,9 @@ namespace spades {
 						const std::string& before,
 						const std::string& after);
 			
+	bool EqualsIgnoringCase(const std::string&,
+							const std::string&);
+			
 	std::vector<std::string> Split(const std::string&, const std::string& sep);
 
 	std::vector<std::string> SplitIntoLines(const std::string&);

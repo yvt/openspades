@@ -72,7 +72,7 @@ SPADES_SETTING(cg_keyMoveLeft, "a");
 SPADES_SETTING(cg_keyMoveRight, "d");
 SPADES_SETTING(cg_keyMoveForward, "w");
 SPADES_SETTING(cg_keyMoveBackward, "s");
-SPADES_SETTING(cg_keyJump, " ");
+SPADES_SETTING(cg_keyJump, "Space");
 SPADES_SETTING(cg_keyCrouch, "Control");
 SPADES_SETTING(cg_keySprint, "Shift");
 SPADES_SETTING(cg_keySneak, "v");
@@ -738,6 +738,31 @@ namespace spades {
 			}
 		}
 		
+		// TODO: this might not be a fast way
+		static bool CheckKey(const std::string& cfg,
+							 const std::string& input) {
+			if(cfg.empty())
+				return false;
+			std::vector<std::string> keys = Split(cfg,",");
+			static const std::string space1("space");
+			static const std::string space2("spacebar");
+			static const std::string space3("spacekey");
+			for(size_t i = 0; i < keys.size(); i++) {
+				std::string key = keys[i];
+				if(EqualsIgnoringCase(key, space1) ||
+				   EqualsIgnoringCase(key, space2) ||
+				   EqualsIgnoringCase(key, space3)) {
+					if(input == " ")
+						return true;
+				}else{
+					if(EqualsIgnoringCase(key, input))
+						return true;
+				}
+			}
+			
+			return false;
+		}
+		
 		void Client::KeyEvent(const std::string& name, bool down){
 			SPADES_MARK_FUNCTION();
 			
@@ -763,14 +788,14 @@ namespace spades {
 					return;
 				}
 				if(IsFollowing()){
-					if(name == cg_keyAttack){
+					if(CheckKey(cg_keyAttack, name)){
 						if(down){
 							if(world->GetLocalPlayer()->GetTeamId() >= 2 ||
 							   time > lastAliveTime + 1.3f)
 								FollowNextPlayer();
 						}
 						return;
-					}else if(name == cg_keyAltAttack){
+					}else if(CheckKey(cg_keyAltAttack, name)){
 						if(down){
 							if(world->GetLocalPlayer()){
 								followingPlayerId = world->GetLocalPlayerIndex();
@@ -788,42 +813,42 @@ namespace spades {
 						}
 					}
 					
-					if(name == cg_keyMoveLeft){
+					if(CheckKey(cg_keyMoveLeft, name)){
 						playerInput.moveLeft = down;
 						keypadInput.left = down;
 						if(down) playerInput.moveRight = false;
 						else playerInput.moveRight = keypadInput.right;
-					}else if(name == cg_keyMoveRight){
+					}else if(CheckKey(cg_keyMoveRight, name)){
 						playerInput.moveRight = down;
 						keypadInput.right = down;
 						if(down) playerInput.moveLeft = false;
 						else playerInput.moveLeft = keypadInput.left;
-					}else if(name == cg_keyMoveForward){
+					}else if(CheckKey(cg_keyMoveForward, name)){
 						playerInput.moveForward = down;
 						keypadInput.forward = down;
 						if(down) playerInput.moveBackward = false;
 						else playerInput.moveBackward = keypadInput.backward;
-					}else if(name == cg_keyMoveBackward){
+					}else if(CheckKey(cg_keyMoveBackward, name)){
 						playerInput.moveBackward = down;
 						keypadInput.backward = down;
 						if(down) playerInput.moveForward = false;
 						else playerInput.moveForward = keypadInput.forward;
-					}else if(name == cg_keyCrouch){
+					}else if(CheckKey(cg_keyCrouch, name)){
 						playerInput.crouch = down;
-					}else if(name == cg_keySprint){
+					}else if(CheckKey(cg_keySprint, name)){
 						playerInput.sprint = down;
 						if(down){
 							if(world->GetLocalPlayer()->IsToolWeapon()){
 								weapInput.secondary = false;
 							}
 						}
-					}else if(name == cg_keySneak){
+					}else if(CheckKey(cg_keySneak, name)){
 						playerInput.sneak = down;
-					}else if(name == cg_keyJump){
+					}else if(CheckKey(cg_keyJump, name)){
 						playerInput.jump = down;
-					}else if(name == cg_keyAttack){
+					}else if(CheckKey(cg_keyAttack, name)){
 						weapInput.primary = down;
-					}else if(name == cg_keyAltAttack){
+					}else if(CheckKey(cg_keyAltAttack, name)){
 						if(world->GetLocalPlayer()->IsToolWeapon()){
 							if(down && !playerInput.sprint){
 								weapInput.secondary = !weapInput.secondary;
@@ -831,45 +856,45 @@ namespace spades {
 						}else{
 							weapInput.secondary = down;
 						}
-					}else if(name == cg_keyReloadWeapon && down){
+					}else if(CheckKey(cg_keyReloadWeapon, name) && down){
 						world->GetLocalPlayer()->Reload();
 						if(world->GetLocalPlayer()->IsToolWeapon()){
 							weapInput.secondary = false;
 						}
 						net->SendReload();
-					}else if(name == cg_keyToolSpade && down){
+					}else if(CheckKey(cg_keyToolSpade, name) && down){
 						if(world->GetLocalPlayer()->GetTeamId() < 2){
 							world->GetLocalPlayer()->SetTool(Player::ToolSpade);
 							net->SendTool();
 						}
-					}else if(name == cg_keyToolBlock && down){
+					}else if(CheckKey(cg_keyToolBlock, name) && down){
 						if(world->GetLocalPlayer()->GetTeamId() < 2){
 							world->GetLocalPlayer()->SetTool(Player::ToolBlock);
 							net->SendTool();
 						}
-					}else if(name == cg_keyToolWeapon && down){
+					}else if(CheckKey(cg_keyToolWeapon, name) && down){
 						if(world->GetLocalPlayer()->GetTeamId() < 2){
 							world->GetLocalPlayer()->SetTool(Player::ToolWeapon);
 							net->SendTool();
 						}
-					}else if(name == cg_keyToolGrenade && down){
+					}else if(CheckKey(cg_keyToolGrenade, name) && down){
 						if(world->GetLocalPlayer()->GetTeamId() < 2){
 							world->GetLocalPlayer()->SetTool(Player::ToolGrenade);
 							net->SendTool();
 						}
-					}else if(name == cg_keyGlobalChat && down){
+					}else if(CheckKey(cg_keyGlobalChat, name) && down){
 						// global chat
 						ActivateChatTextEditor(true);
-					}else if(name == cg_keyTeamChat && down){
+					}else if(CheckKey(cg_keyTeamChat, name) && down){
 						// team chat
 						ActivateChatTextEditor(false);
-					}else if(name == cg_keyCaptureColor && down){
+					}else if(CheckKey(cg_keyCaptureColor, name) && down){
 						CaptureColor();
-					}else if(name == cg_keyChangeMapScale && down){
+					}else if(CheckKey(cg_keyChangeMapScale, name) && down){
 						mapView->SwitchScale();
 						IAudioChunk *chunk = audioDevice->RegisterSound("Sounds/Misc/SwitchMapZoom.wav");
 						audioDevice->PlayLocal(chunk, AudioParam());
-					}else if(name == cg_keyToggleMapZoom && down){
+					}else if(CheckKey(cg_keyToggleMapZoom, name) && down){
 						if(largeMapView->ToggleZoom()){
 							IAudioChunk *chunk = audioDevice->RegisterSound("Sounds/Misc/OpenMap.wav");
 							audioDevice->PlayLocal(chunk, AudioParam());
@@ -877,17 +902,17 @@ namespace spades {
 							IAudioChunk *chunk = audioDevice->RegisterSound("Sounds/Misc/CloseMap.wav");
 							audioDevice->PlayLocal(chunk, AudioParam());
 						}
-					}else if(name == cg_keyScoreboard){
+					}else if(CheckKey(cg_keyScoreboard, name)){
 						scoreboardVisible = down;
-					}else if(name == cg_keyLimbo && down){
+					}else if(CheckKey(cg_keyLimbo, name) && down){
 						limbo->SetSelectedTeam(world->GetLocalPlayer()->GetTeamId());
 						limbo->SetSelectedWeapon(world->GetLocalPlayer()->GetWeapon()->GetWeaponType());
 						inGameLimbo = true;
-					}else if(name == cg_keySceneshot && down){
+					}else if(CheckKey(cg_keySceneshot, name) && down){
 						TakeScreenShot(true);
-					}else if(name == cg_keyScreenshot && down){
+					}else if(CheckKey(cg_keyScreenshot, name) && down){
 						TakeScreenShot(false);
-					}else if(name == cg_keyFlashlight && down){
+					}else if(CheckKey(cg_keyFlashlight, name) && down){
 						flashlightOn = !flashlightOn;
 						flashlightOnTime = time;
 						IAudioChunk *chunk = audioDevice->RegisterSound("Sounds/Player/Flashlight.wav");
