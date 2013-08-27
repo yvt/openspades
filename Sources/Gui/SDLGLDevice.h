@@ -197,6 +197,7 @@ namespace spades {
 										 Integer dstY1,
 										 UInteger mask,
 										 Enum filter);
+			virtual Enum CheckFramebufferStatus(Enum target);
 			
 			virtual void ReadPixels(Integer x,
 								   Integer y,

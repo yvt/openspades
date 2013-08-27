@@ -20,6 +20,38 @@ SPADES_SETTING(r_colorBits, "0");  // TOOD: use this value
 
 namespace spades {
 	namespace draw {
+		static void RaiseFBStatusError(IGLDevice::Enum status) {
+			std::string type;
+			switch(status){
+				case IGLDevice::FramebufferComplete:
+					type = "GL_FRAMEBUFFER_COMPLETE";
+					break;
+				case IGLDevice::FramebufferUndefined:
+					type = "GL_FRAMEBUFFER_UNDEFINED";
+					break;
+				case IGLDevice::FramebufferIncompleteAttachment:
+					type = "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT";
+					break;
+				case IGLDevice::				FramebufferIncompleteMissingAttachment:
+					type = "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT";
+					break;
+				case IGLDevice::				FramebufferIncompleteDrawBuffer:
+					type = "GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER";
+					break;
+				case IGLDevice::				FramebufferIncompleteReadBuffer:
+					type = "GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER";
+					break;
+				case IGLDevice::				FramebufferIncompleteMultisample:
+					type = "GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE";
+					break;
+				case IGLDevice::				FramebufferIncompleteLayerTargets:
+					type = "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS";
+					break;
+			}
+			SPRaise("OpenGL Framebuffer completeness check failed: %s",
+					type.c_str());
+		}
+		
 		GLFramebufferManager::GLFramebufferManager(IGLDevice *dev):
 		device(dev){
 			SPADES_MARK_FUNCTION();
@@ -36,26 +68,9 @@ namespace spades {
 				// multisample renderbuffer for scene
 				// rendering.
 				
-				multisampledColorRenderbuffer = dev->GenRenderbuffer();
-				dev->BindRenderbuffer(IGLDevice::Renderbuffer,
-									  multisampledColorRenderbuffer);
-				try{
-					dev->RenderbufferStorage(IGLDevice::Renderbuffer,
-											 (int)r_multisamples,
-											 IGLDevice::RGB10A2,
-											 dev->ScreenWidth(),
-											 dev->ScreenHeight());
-					
-				}catch(...){
-					SPLog("Renderbuffer creation failed: trying with RGB8");
-					useHighPrec = false;
-					dev->RenderbufferStorage(IGLDevice::Renderbuffer,
-											 (int)r_multisamples,
-											 IGLDevice::RGBA8,
-											 dev->ScreenWidth(),
-											 dev->ScreenHeight());
-				}
-				SPLog("MSAA Color Buffer Allocated");
+				multisampledFramebuffer = dev->GenFramebuffer();
+				dev->BindFramebuffer(IGLDevice::Framebuffer,
+									 multisampledFramebuffer);
 			
 				multisampledDepthRenderbuffer = dev->GenRenderbuffer();
 				dev->BindRenderbuffer(IGLDevice::Renderbuffer,
@@ -67,18 +82,53 @@ namespace spades {
 										 dev->ScreenHeight());
 				SPLog("MSAA Depth Buffer Allocated");
 				
-				multisampledFramebuffer = dev->GenFramebuffer();
-				dev->BindFramebuffer(IGLDevice::Framebuffer,
-									 multisampledFramebuffer);
-				dev->FramebufferRenderbuffer(IGLDevice::Framebuffer,
-											 IGLDevice::ColorAttachment0,
-											 IGLDevice::Renderbuffer,
-											 multisampledColorRenderbuffer);
 				dev->FramebufferRenderbuffer(IGLDevice::Framebuffer,
 											 IGLDevice::DepthAttachment,
 											 IGLDevice::Renderbuffer,
 											 multisampledDepthRenderbuffer);
-				SPLog("MSAA Framebuffer Allocated");
+				
+				multisampledColorRenderbuffer = dev->GenRenderbuffer();
+				dev->BindRenderbuffer(IGLDevice::Renderbuffer,
+									  multisampledColorRenderbuffer);
+				try{
+					dev->RenderbufferStorage(IGLDevice::Renderbuffer,
+											 (int)r_multisamples,
+											 IGLDevice::RGB10A2,
+											 dev->ScreenWidth(),
+											 dev->ScreenHeight());
+					SPLog("MSAA Color Buffer Allocated");
+					
+					dev->FramebufferRenderbuffer(IGLDevice::Framebuffer,
+												 IGLDevice::ColorAttachment0,
+												 IGLDevice::Renderbuffer,
+												 multisampledColorRenderbuffer);
+					IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+					if(status != IGLDevice::FramebufferComplete) {
+						RaiseFBStatusError(status);
+					}
+					SPLog("MSAA Framebuffer Allocated");
+					
+				}catch(...){
+					SPLog("Renderbuffer creation failed: trying with RGB8");
+					useHighPrec = false;
+					dev->RenderbufferStorage(IGLDevice::Renderbuffer,
+											 (int)r_multisamples,
+											 IGLDevice::RGBA8,
+											 dev->ScreenWidth(),
+											 dev->ScreenHeight());
+					
+					SPLog("MSAA Color Buffer Allocated");
+					
+					dev->FramebufferRenderbuffer(IGLDevice::Framebuffer,
+												 IGLDevice::ColorAttachment0,
+												 IGLDevice::Renderbuffer,
+												 multisampledColorRenderbuffer);
+					IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+					if(status != IGLDevice::FramebufferComplete) {
+						RaiseFBStatusError(status);
+					}
+					SPLog("MSAA Framebuffer Allocated");
+				}
 				
 			}
 			
@@ -91,43 +141,9 @@ namespace spades {
 			// we must first copy to non-multismapled
 			// framebuffer to use it in shader as a texture.
 			
-			renderColorTexture = dev->GenTexture();
-			dev->BindTexture(IGLDevice::Texture2D,
-							 renderColorTexture);
-			try{
-				dev->TexImage2D(IGLDevice::Texture2D,
-								0,
-								IGLDevice::RGB10A2,
-								dev->ScreenWidth(),
-								dev->ScreenHeight(),
-								0,
-								IGLDevice::RGBA,
-								IGLDevice::UnsignedByte, NULL);
-			}catch(...){
-				SPLog("Texture creation failed: trying with RGB8");
-				useHighPrec = false;
-				dev->TexImage2D(IGLDevice::Texture2D,
-								0,
-								IGLDevice::RGBA8,
-								dev->ScreenWidth(),
-								dev->ScreenHeight(),
-								0,
-								IGLDevice::RGBA,
-								IGLDevice::UnsignedByte, NULL);
-			}
-			SPLog("Color Buffer Allocated");
-			dev->TexParamater(IGLDevice::Texture2D,
-							  IGLDevice::TextureMagFilter,
-							  IGLDevice::Linear);
-			dev->TexParamater(IGLDevice::Texture2D,
-							  IGLDevice::TextureMinFilter,
-							  IGLDevice::Linear);
-			dev->TexParamater(IGLDevice::Texture2D,
-							  IGLDevice::TextureWrapS,
-							  IGLDevice::ClampToEdge);
-			dev->TexParamater(IGLDevice::Texture2D,
-							  IGLDevice::TextureWrapT,
-							  IGLDevice::ClampToEdge);
+			renderFramebuffer = dev->GenFramebuffer();
+			dev->BindFramebuffer(IGLDevice::Framebuffer,
+								 renderFramebuffer);
 			
 			renderDepthTexture = dev->GenTexture();
 			dev->BindTexture(IGLDevice::Texture2D,
@@ -154,18 +170,83 @@ namespace spades {
 							  IGLDevice::TextureWrapT,
 							  IGLDevice::ClampToEdge);
 			
-			renderFramebuffer = dev->GenFramebuffer();
-			dev->BindFramebuffer(IGLDevice::Framebuffer,
-								 renderFramebuffer);
-			dev->FramebufferTexture2D(IGLDevice::Framebuffer,
-									  IGLDevice::ColorAttachment0,
-									  IGLDevice::Texture2D,
-									  renderColorTexture, 0);
 			dev->FramebufferTexture2D(IGLDevice::Framebuffer,
 									  IGLDevice::DepthAttachment,
 									  IGLDevice::Texture2D,
 									  renderDepthTexture, 0);
-			SPLog("Framebuffer Created");
+			
+			renderColorTexture = dev->GenTexture();
+			dev->BindTexture(IGLDevice::Texture2D,
+							 renderColorTexture);
+			try{
+				dev->TexImage2D(IGLDevice::Texture2D,
+								0,
+								IGLDevice::RGB10A2,
+								dev->ScreenWidth(),
+								dev->ScreenHeight(),
+								0,
+								IGLDevice::RGBA,
+								IGLDevice::UnsignedByte, NULL);
+				SPLog("Color Buffer Allocated");
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureMagFilter,
+								  IGLDevice::Linear);
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureMinFilter,
+								  IGLDevice::Linear);
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureWrapS,
+								  IGLDevice::ClampToEdge);
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureWrapT,
+								  IGLDevice::ClampToEdge);
+				
+				dev->FramebufferTexture2D(IGLDevice::Framebuffer,
+										  IGLDevice::ColorAttachment0,
+										  IGLDevice::Texture2D,
+										  renderColorTexture, 0);
+				
+				IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+				if(status != IGLDevice::FramebufferComplete) {
+					RaiseFBStatusError(status);
+				}
+				SPLog("Framebuffer Created");
+			}catch(...){
+				SPLog("Texture creation failed: trying with RGB8");
+				useHighPrec = false;
+				dev->TexImage2D(IGLDevice::Texture2D,
+								0,
+								IGLDevice::RGBA8,
+								dev->ScreenWidth(),
+								dev->ScreenHeight(),
+								0,
+								IGLDevice::RGBA,
+								IGLDevice::UnsignedByte, NULL);
+				SPLog("Color Buffer Allocated");
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureMagFilter,
+								  IGLDevice::Linear);
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureMinFilter,
+								  IGLDevice::Linear);
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureWrapS,
+								  IGLDevice::ClampToEdge);
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureWrapT,
+								  IGLDevice::ClampToEdge);
+				
+				dev->FramebufferTexture2D(IGLDevice::Framebuffer,
+										  IGLDevice::ColorAttachment0,
+										  IGLDevice::Texture2D,
+										  renderColorTexture, 0);
+				
+				IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+				if(status != IGLDevice::FramebufferComplete) {
+					RaiseFBStatusError(status);
+				}
+				SPLog("Framebuffer Created");
+			}
 			
 			// add render buffer as a registered buffer
 			Buffer buf;

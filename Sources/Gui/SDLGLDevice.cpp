@@ -137,6 +137,9 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 			
 			CheckExistence(glFrontFace);
 			glFrontFace(GL_CW);
+			
+			// clear error state
+			while(glGetError() != GL_NO_ERROR);
 		}
 		
 		void SDLGLDevice::DepthRange(Float near, Float far){
@@ -1626,10 +1629,12 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 			CheckExistence(glGenFramebuffers);
 			glGenFramebuffers(1, &v);
 #endif
+			CheckError();
 			return (IGLDevice::UInteger)v;
 		}
 		void SDLGLDevice::BindFramebuffer(Enum target,
 										  UInteger framebuffer) {
+			
 #if GLEW
 			if(glBindFramebuffer)
 				glBindFramebuffer(parseFramebufferTarget(target),
@@ -1659,6 +1664,41 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 			glDeleteFramebuffers(1, &fb);
 #endif
 			CheckError();
+		}
+		IGLDevice::Enum SDLGLDevice::CheckFramebufferStatus(spades::draw::IGLDevice::Enum target) {
+			GLenum ret;
+#if GLEW
+			if(glCheckFramebufferStatus)
+				ret = glCheckFramebufferStatus(parseFramebufferTarget(target));
+			else if(glCheckFramebufferStatusEXT)
+				ret = glCheckFramebufferStatusEXT(parseFramebufferTarget(target));
+			else
+				ReportMissingFunc("glCheckFramebufferStatus");
+#else
+			CheckExistence(glCheckFramebufferStatus);
+			ret = glCheckFramebufferStatus(parseFramebufferTarget(target));
+#endif
+			CheckError();
+			switch(ret){
+				case GL_FRAMEBUFFER_COMPLETE:
+					return FramebufferComplete;
+				case GL_FRAMEBUFFER_UNDEFINED:
+					return FramebufferUndefined;
+				case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+					return FramebufferIncompleteAttachment;
+				case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+					return FramebufferIncompleteMissingAttachment;
+				case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+					return FramebufferIncompleteDrawBuffer;
+				case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+					return FramebufferIncompleteReadBuffer;
+				case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+					return FramebufferIncompleteMultisample;
+				case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+					return FramebufferIncompleteLayerTargets;
+				default:
+					return FramebufferUnsupported;
+			}
 		}
 		void SDLGLDevice::FramebufferTexture2D(Enum target,
 											   Enum attachment,

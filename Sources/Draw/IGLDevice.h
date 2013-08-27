@@ -196,6 +196,17 @@ namespace spades {
 				DepthAttachment,
 				StencilAttachment,
 				
+				// framebuffer status
+				FramebufferComplete,
+				FramebufferUndefined,
+				FramebufferIncompleteAttachment,
+				FramebufferIncompleteMissingAttachment,
+				FramebufferIncompleteDrawBuffer,
+				FramebufferIncompleteReadBuffer,
+				FramebufferUnsupported,
+				FramebufferIncompleteMultisample,
+				FramebufferIncompleteLayerTargets,
+				
 				ColorBufferBit = 1,
 				DepthBufferBit = 2,
 				StencilBufferBit = 4
@@ -387,6 +398,7 @@ namespace spades {
 										 Integer dstY1,
 										 UInteger mask,
 										 Enum filter) = 0;
+			virtual Enum CheckFramebufferStatus(Enum target) = 0;
 			
 			virtual void ReadPixels(Integer x,
 									Integer y,
