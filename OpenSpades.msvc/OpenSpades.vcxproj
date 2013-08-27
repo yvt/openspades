@@ -338,11 +338,13 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</LinkIncremental>
+    <CustomBuildBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    </CustomBuildBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>E:\thirdparty\fltk-1.3.2;E:\thirdparty\GL;E:\thirdparty\zlib-1.2.7;E:\thirdparty\SDL-1.2.15\include;..\Sources\ENet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\thirdparty\fltk-1.3.2;E:\thirdparty\GL;E:\thirdparty\zlib-1.2.7;E:\thirdparty\SDL-1.2.15\include;..\Sources\ENet\include;../OpenSpaces.msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NOMINMAX;RESDIR="D:\\OpenSpades\\Game\\Resources";_USE_MATH_DEFINES;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -361,10 +363,12 @@
       <AdditionalLibraryDirectories>E:\thirdparty\SDL-1.2.15\lib\x86;E:\thirdparty\zlib-1.2.7\win32;E:\thirdparty\GL\GL;E:\thirdparty\fltk-1.3.2\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>zdll.lib;SDL.lib;ws2_32.lib;opengl32.lib;glew.lib;winmm.lib;fltkd.lib;fltkimagesd.lib;fltkpngd.lib;fltkjpegd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep />
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>E:\thirdparty\fltk-1.3.2;E:\thirdparty\GL;E:\thirdparty\zlib-1.2.7;E:\thirdparty\SDL-1.2.15\include;..\Sources\ENet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\thirdparty\fltk-1.3.2;E:\thirdparty\GL;E:\thirdparty\zlib-1.2.7;E:\thirdparty\SDL-1.2.15\include;..\Sources\ENet\include;../OpenSpaces.msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NOMINMAX;RESDIR="D:\\OpenSpades\\Game\\Resources";_USE_MATH_DEFINES;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -382,6 +386,8 @@
       <AdditionalLibraryDirectories>E:\thirdparty\SDL-1.2.15\lib\x86;E:\thirdparty\zlib-1.2.7\win32;E:\thirdparty\GL\GL;E:\thirdparty\fltk-1.3.2\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>zdll.lib;SDL.lib;ws2_32.lib;opengl32.lib;glew.lib;winmm.lib;fltk.lib;fltkimages.lib;fltkpng.lib;fltkjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep />
+    <CustomBuildStep />
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

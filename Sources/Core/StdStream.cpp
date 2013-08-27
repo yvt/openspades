@@ -8,14 +8,14 @@
 
 #include "StdStream.h"
 #include "Exception.h"
+#ifndef _MSC_VER
 #include <unistd.h>
-#include "Debug.h"
-
-#ifdef _MSC_VER
+#else
 #include <io.h>
 #define ftruncate	_chsize
 #define fileno		_fileno
 #endif
+#include "Debug.h"
 
 namespace spades {
 	StdStream::StdStream(FILE *f, bool ac):
