@@ -522,7 +522,9 @@ namespace spades {
 			// in AoS 0.75's way
 			Vector3 o = orientation;
 			Vector3 rec = weapon->GetRecoil();
-			o += GetUp() * rec.y;
+			float upLimit = Vector3::Dot(GetFront2D(), o);
+			upLimit -= 0.03f;
+			o += GetUp() * std::min(rec.y, std::max(0.f, upLimit));
 			o += GetRight() * rec.x * sinf(world->GetTime() * 2.f);
 			o = o.Normalize();
 			SetOrientation(o);
