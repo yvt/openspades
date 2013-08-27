@@ -867,8 +867,16 @@ namespace spades {
 						CaptureColor();
 					}else if(name == cg_keyChangeMapScale && down){
 						mapView->SwitchScale();
+						IAudioChunk *chunk = audioDevice->RegisterSound("Sounds/Misc/SwitchMapZoom.wav");
+						audioDevice->PlayLocal(chunk, AudioParam());
 					}else if(name == cg_keyToggleMapZoom && down){
-						largeMapView->ToggleZoom();
+						if(largeMapView->ToggleZoom()){
+							IAudioChunk *chunk = audioDevice->RegisterSound("Sounds/Misc/OpenMap.wav");
+							audioDevice->PlayLocal(chunk, AudioParam());
+						}else{
+							IAudioChunk *chunk = audioDevice->RegisterSound("Sounds/Misc/CloseMap.wav");
+							audioDevice->PlayLocal(chunk, AudioParam());
+						}
 					}else if(name == cg_keyScoreboard){
 						scoreboardVisible = down;
 					}else if(name == cg_keyLimbo && down){

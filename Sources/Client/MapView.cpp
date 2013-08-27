@@ -53,7 +53,7 @@ namespace spades {
 					SPAssert(false);
 			}
 			if(actualScale != scale){
-				float spd = fabsf(scale - lastScale) * 4.f;
+				float spd = fabsf(scale - lastScale) * 6.f;
 				spd = std::max(spd, 0.2f);
 				spd *= dt;
 				if(scale > actualScale){
@@ -114,8 +114,9 @@ namespace spades {
 			lastScale = actualScale;
 		}
 		
-		void MapView::ToggleZoom() {
+		bool MapView::ToggleZoom() {
 			zoomed = !zoomed;
+			return zoomed;
 		}
 		
 		void MapView::Draw(){

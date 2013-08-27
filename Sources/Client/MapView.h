@@ -40,7 +40,7 @@ namespace spades {
 			
 			void Update(float dt);
 			void SwitchScale();
-			void ToggleZoom();
+			bool ToggleZoom();
 			
 			void Draw();
 		};
