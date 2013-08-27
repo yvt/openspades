@@ -21,6 +21,8 @@
 #include "DetailConfigWindow.h"
 #include "../Core/Math.h"
 
+#include "../Imports/OpenGL.h" //for gpu info
+
 using namespace spades::gui;
 
 SPADES_SETTING(cg_smp, "0");
@@ -205,6 +207,15 @@ void MainWindow::Init() {
 	Fl_PNG_Image *img = new Fl_PNG_Image("Gfx/Banner.png", (const unsigned char *)data.data(), data.size());
 	bannerBox->image(img);
 	
+	SDL_SetVideoMode(1, 1, 8, SDL_OPENGL | SDL_NOFRAME);
+	
+	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
+	gpu_info->buffer(buff);
+	std::string glrendererstr = std::string((const char*)glGetString(GL_RENDERER));
+	std::string glversionstr = std::string((const char*)glGetString(GL_VERSION));
+	std::string glshadinglangueverstr = std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+	buff->text(("GPU name: " + glrendererstr + "\r\nOpenGL Version (3.0 required): " + glversionstr + "\r\nGL Shading Language Version: " + glshadinglangueverstr).c_str());
+	SDL_Quit();
 	
 	// --- about
 	std::string text, pkg;

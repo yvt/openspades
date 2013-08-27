@@ -18,6 +18,7 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Return_Button.H>
+#include <FL/Fl_Text_Display.H>
 
 class MainWindow : public Fl_Window {
   void _MainWindow();
@@ -81,6 +82,9 @@ private:
   Fl_Box *bannerBox;
   inline void cb_Connect_i(Fl_Return_Button*, void*);
   static void cb_Connect(Fl_Return_Button*, void*);
+public:
+  Fl_Text_Display *gpu_info;
+private:
   bool inited; 
   void QuickConnectPressed();
   void StartGame(const std::string& host);

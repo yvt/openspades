@@ -125,7 +125,7 @@ MainWindow::MainWindow(int W, int H, const char *L)
 }
 
 MainWindow::MainWindow()
-  : Fl_Window(0, 0, 615, 355, "OpenSpades Startup") {
+  : Fl_Window(0, 0, 615, 444, "OpenSpades Startup") {
   clear_flag(16);
   _MainWindow();
 }
@@ -234,9 +234,13 @@ this->when(FL_WHEN_RELEASE);
 { bannerBox = new Fl_Box(5, 5, 605, 70);
   bannerBox->box(FL_THIN_DOWN_FRAME);
 } // Fl_Box* bannerBox
-{ Fl_Return_Button* o = new Fl_Return_Button(505, 80, 105, 25, "Connect");
+{ Fl_Return_Button* o = new Fl_Return_Button(505, 80, 100, 25, "Connect");
   o->callback((Fl_Callback*)cb_Connect);
 } // Fl_Return_Button* o
+{ gpu_info = new Fl_Text_Display(75, 375, 525, 60, "GPU Info:");
+  gpu_info->box(FL_DOWN_BOX);
+  gpu_info->align(Fl_Align(FL_ALIGN_LEFT_TOP));
+} // Fl_Text_Display* gpu_info
 inited = false;
 end();
 }
