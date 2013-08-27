@@ -79,9 +79,18 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 			while((err = glGetError()) != GL_NO_ERROR) {
 				msg += ", "; msg += ErrorToString(err);
 			}
-			SPRaise("GL error %s in %s at %s:%d",
-					msg.c_str(),
-					func, __FILE__, line);
+			if(r_ignoreGLErrors){
+				SPRaise("GL error %s in %s at %s:%d\n\n"
+						"WARNING: r_ignoreGLErrors is enabled. "
+						"Information contained in this message is "
+						"inaccurate and non-informative.",
+						msg.c_str(),
+						func, __FILE__, line);
+			}else{
+				SPRaise("GL error %s in %s at %s:%d",
+						msg.c_str(),
+						func, __FILE__, line);
+			}
 		}
 		static void ReportMissingFunc(const char *func){
 			SPRaise("GL function %s missing",
@@ -137,6 +146,15 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 			
 			CheckExistence(glFrontFace);
 			glFrontFace(GL_CW);
+			
+			if(r_ignoreGLErrors) {
+				SPLog("NOTICE: r_ignoreGLErrors is enabled. "
+					  "OpenGL error detection might not work correctly.");
+			}else{
+				SPLog("NOTICE: r_ignoreGLErrors is disabled. "
+					  "OpenGL error is checked for every GL call, but "
+					  "performance may be reduced.");
+			}
 			
 			// clear error state
 			while(glGetError() != GL_NO_ERROR);
