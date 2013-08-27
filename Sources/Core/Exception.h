@@ -27,7 +27,11 @@ namespace spades {
 	};
 }
 
+#ifdef _MSC_VER
+#define SPRaise(fmt, ...) throw ::spades::Exception(__FILE__, __LINE__, fmt, __VA_ARGS__ )
+#else
 #define SPRaise(fmt, val...) throw ::spades::Exception(__FILE__, __LINE__, fmt, ##val )
+#endif
 
 #define SPNotImplemented() SPRaise("Not implemented")
 

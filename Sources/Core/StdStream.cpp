@@ -11,6 +11,12 @@
 #include <unistd.h>
 #include "Debug.h"
 
+#ifdef _MSC_VER
+#include <io.h>
+#define ftruncate	_chsize
+#define fileno		_fileno
+#endif
+
 namespace spades {
 	StdStream::StdStream(FILE *f, bool ac):
 	handle(f), autoClose(ac){

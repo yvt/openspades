@@ -632,7 +632,7 @@ namespace spades {
 		}
 		
 		
-#pragma mark - 2D Drawings
+//#pragma mark - 2D Drawings
 		
 		void GLRenderer::MultiplyScreenColor(spades::Vector3 color){
 			SPADES_MARK_FUNCTION();

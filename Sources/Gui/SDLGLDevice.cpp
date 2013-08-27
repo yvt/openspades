@@ -19,6 +19,10 @@ using namespace spades::draw;
 #define GLEW 1
 #endif
 
+#ifdef _MSC_VER
+#define __PRETTY_FUNCTION__	__FUNCDNAME__
+#endif
+
 SPADES_SETTING(r_ignoreGLErrors, "1");
 
 static uint32_t vertCount = 0;

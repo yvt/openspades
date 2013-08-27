@@ -13,6 +13,12 @@
 #include "../Core/Debug.h"
 #include <string>
 
+#ifdef _MSC_VER
+#define isnan _isnan
+static inline float roundf(float x) { return x >= 0.0f ? floorf(x + 0.5f) : ceilf(x - 0.5f); }
+static inline long lround(double num) { return (long)(num > 0 ? num + 0.5 : ceil(num - 0.5)); }
+#endif
+
 namespace spades {
 	
 #pragma mark - Integer Vector

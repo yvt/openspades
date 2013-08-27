@@ -360,6 +360,7 @@ namespace spades {
 			result.hit = false;
 			result.startSolid = false;
 			result.hitPos = v0;
+			return result;
 		}
 		
 		static uint32_t swapColor(uint32_t col ){

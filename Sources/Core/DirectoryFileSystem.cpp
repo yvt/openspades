@@ -15,6 +15,10 @@
 #ifdef WIN32
 #include <windows.h>
 #include <io.h>
+#ifdef _MSC_VER
+#include <direct.h>
+#define mkdir		_mkdir
+#endif
 #else
 #include <dirent.h>
 #endif
