@@ -14,7 +14,7 @@
 
 namespace spades {
 	namespace client {
-		
+		extern int protoVersion; // TODO: move this somewhere better
 		class GameMap;
 		class GameMapWrapper;
 		class Player;

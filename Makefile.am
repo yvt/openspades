@@ -23,6 +23,7 @@ openspades_LDADD += $(FLTK_LIBS)
 openspades_LDADD += $(ZLIB_LIBS)
 # openspades_LDADD += $(PNG_LIBS)
 openspades_LDADD += $(WIN32_LIBS)
+openspades_LDADD += -ldl
 
 # pkg-config doesn't seem to work...
 # openspades_LDADD += -ljpeg
