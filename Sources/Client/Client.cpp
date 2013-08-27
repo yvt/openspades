@@ -81,6 +81,7 @@ SPADES_SETTING(cg_keyCaptureColor, "e");
 SPADES_SETTING(cg_keyGlobalChat, "t");
 SPADES_SETTING(cg_keyTeamChat, "y");
 SPADES_SETTING(cg_keyChangeMapScale, "m");
+SPADES_SETTING(cg_keyToggleMapZoom, "n");
 SPADES_SETTING(cg_keyScoreboard, "Tab");
 SPADES_SETTING(cg_keyLimbo, "l");
 
@@ -143,7 +144,8 @@ namespace spades {
 			
 			hurtRingView = new HurtRingView(this);
 			centerMessageView = new CenterMessageView(this, bigTextFont);
-			mapView = new MapView(this);
+			mapView = new MapView(this, false);
+			largeMapView = new MapView(this, true);
 			scoreboard = new ScoreboardView(this);
 			limbo = new LimboView(this);
 			paletteView = new PaletteView(this);
@@ -295,6 +297,7 @@ namespace spades {
 			delete limbo;
 			delete scoreboard;
 			delete mapView;
+			delete largeMapView;
 			delete chatWindow;
 			delete killfeedWindow;
 			delete paletteView;
@@ -330,6 +333,7 @@ namespace spades {
 			hurtRingView->Update(dt);
 			centerMessageView->Update(dt);
 			mapView->Update(dt);
+			largeMapView->Update(dt);
 			
 			//puts(net->GetStatusString().c_str());
 			if(world){
@@ -863,6 +867,8 @@ namespace spades {
 						CaptureColor();
 					}else if(name == cg_keyChangeMapScale && down){
 						mapView->SwitchScale();
+					}else if(name == cg_keyToggleMapZoom && down){
+						largeMapView->ToggleZoom();
 					}else if(name == cg_keyScoreboard){
 						scoreboardVisible = down;
 					}else if(name == cg_keyLimbo && down){
@@ -2720,8 +2726,6 @@ namespace spades {
 						// draw map
 						mapView->Draw();
 						
-					
-						
 						// --- end of "player is alive" drawing
 					}else {
 						
@@ -2806,8 +2810,16 @@ namespace spades {
 					chatWindow->Draw();
 					killfeedWindow->Draw();
 					
+					if(p->IsAlive()) {
+						
+						// large map view should come in front
+						largeMapView->Draw();
+						
+					}
+					
 					if(scoreboardVisible)
 						scoreboard->Draw();
+					
 					
 					// --- end "player is there" render
 				}else{

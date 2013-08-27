@@ -15,14 +15,19 @@
 #include "Client.h"
 #include "GameMap.h"
 #include "TCGameMode.h"
+#include "../Core/Settings.h"
+
+SPADES_SETTING(cg_minimapSize, "128");
 
 namespace spades {
 	namespace client {
-		MapView::MapView(Client *c):
-		client(c), renderer(c->GetRenderer()){
+		MapView::MapView(Client *c, bool largeMap):
+		client(c), renderer(c->GetRenderer()), largeMap(largeMap){
 			scaleMode = 2;
 			actualScale = 1.f;
 			lastScale = 1.f;
+			zoomed = false;
+			zoomState = 0.f;
 		}
 		
 		MapView::~MapView(){
@@ -60,6 +65,14 @@ namespace spades {
 					if(actualScale < scale)
 						actualScale = scale;
 				}
+			}
+			
+			if(zoomed){
+				zoomState += dt * 5.f;
+				if(zoomState > 1.f) zoomState = 1.f;
+			}else{
+				zoomState -= dt * 5.f;
+				if(zoomState < 0.f) zoomState = 0.f;
 			}
 		}
 		
@@ -101,6 +114,10 @@ namespace spades {
 			lastScale = actualScale;
 		}
 		
+		void MapView::ToggleZoom() {
+			zoomed = !zoomed;
+		}
+		
 		void MapView::Draw(){
 			World *world = client->GetWorld();
 			if(!world)
@@ -116,32 +133,133 @@ namespace spades {
 			if(!player->IsAlive())
 				return;
 			
-			
+			if(largeMap)
+				if(zoomState < .0001f)
+					return;
 			
 			GameMap *map = world->GetMap();
+			Vector2 mapSize = MakeVector2(map->Width(), map->Height());
 			
 			Vector3 pos = player->GetPosition();;
 			if(player->GetTeamId() >= 2){
 				pos = client->followPos;
 			}
 			Vector2 center = {pos.x, pos.y};
-			Vector2 mapWndSize = {256, 256};
-			Vector2 inRange = mapWndSize * .5f * actualScale;
-			Vector2 mapSize = MakeVector2(map->Width(), map->Height());
+			float cfgMapSize = cg_minimapSize;
+			if(cfgMapSize < 32) cfgMapSize = 32;
+			if(cfgMapSize > 256) cfgMapSize = 256;
+			Vector2 mapWndSize = {cfgMapSize, cfgMapSize};
+			float scale = actualScale;
+			
+			center = Mix(center,
+						 mapSize * .5f,
+						 zoomState);
+			
+			Vector2 zoomedSize = {512, 512};
+			if(renderer->ScreenWidth() < 512.f ||
+			   renderer->ScreenHeight() < 512.f)
+				zoomedSize = MakeVector2(256, 256);
+			if(largeMap){
+				float per = zoomState;
+				per = 1.f - per;
+				per *= per;
+				per = 1.f - per;
+				per = Mix(.7f, 1.f, per);
+				zoomedSize = Mix(MakeVector2(0, 0),
+								 zoomedSize,
+								 per);
+				mapWndSize = zoomedSize;
+			}
+			
+			Vector2 inRange = mapWndSize * .5f * scale;
 			AABB2 inRect(center - inRange, center + inRange);
-			if(inRect.GetMinX() < 0.f)
-				inRect = inRect.Translated(-inRect.GetMinX(), 0.f);
-			if(inRect.GetMinY() < 0.f)
-				inRect = inRect.Translated(0, -inRect.GetMinY());
-			if(inRect.GetMaxX() > mapSize.x)
-				inRect = inRect.Translated(mapSize.x - inRect.GetMaxX(), 0.f);
-			if(inRect.GetMaxY() > mapSize.y)
-				inRect = inRect.Translated(0, mapSize.y - inRect.GetMaxY());
+			if(largeMap){
+				inRect.min = MakeVector2(0, 0);
+				inRect.max = mapSize;
+			}else{
+				if(inRect.GetMinX() < 0.f)
+					inRect = inRect.Translated(-inRect.GetMinX(), 0.f);
+				if(inRect.GetMinY() < 0.f)
+					inRect = inRect.Translated(0, -inRect.GetMinY());
+				if(inRect.GetMaxX() > mapSize.x)
+					inRect = inRect.Translated(mapSize.x - inRect.GetMaxX(), 0.f);
+				if(inRect.GetMaxY() > mapSize.y)
+					inRect = inRect.Translated(0, mapSize.y - inRect.GetMaxY());
+			}
+			
 			
 			AABB2 outRect(renderer->ScreenWidth() - mapWndSize.x - 16.f, 16.f,
 						  mapWndSize.x,
 						  mapWndSize.y);
-			renderer->SetColor(MakeVector4(1,1,1,1));
+			if(largeMap){
+				outRect.min = MakeVector2((renderer->ScreenWidth() - zoomedSize.x) * .5f,
+										  (renderer->ScreenHeight() - zoomedSize.y) * .5f);
+				outRect.max =MakeVector2((renderer->ScreenWidth() + zoomedSize.x) * .5f,
+										 (renderer->ScreenHeight() + zoomedSize.y) * .5f);
+			}
+			
+			float alpha = 1.f;
+			if(largeMap){
+				alpha = zoomState;
+			}
+			
+			// draw border
+			IImage *border;
+			float borderWidth;
+			AABB2 borderRect = outRect;
+			if(largeMap) {
+				border = renderer->RegisterImage("Gfx/MapBorder.png");
+				borderWidth = 3.f * outRect.GetHeight() / zoomedSize.y;
+			}else{
+				border = renderer->RegisterImage("Gfx/MinimapBorder.png");
+				borderWidth = 2.f;
+			}
+			borderRect = borderRect.Inflate(borderWidth - 8.f);
+			
+			renderer->SetColor(MakeVector4(1,1,1,alpha));
+			renderer->DrawImage(border,
+								AABB2(borderRect.GetMinX()-16,
+									  borderRect.GetMinY()-16,
+									  16, 16),
+								AABB2(0, 0, 16, 16));
+			renderer->DrawImage(border,
+								AABB2(borderRect.GetMaxX(),
+									  borderRect.GetMinY()-16,
+									  16, 16),
+								AABB2(16, 0, 16, 16));
+			renderer->DrawImage(border,
+								AABB2(borderRect.GetMinX()-16,
+									  borderRect.GetMaxY(),
+									  16, 16),
+								AABB2(0, 16, 16, 16));
+			renderer->DrawImage(border,
+								AABB2(borderRect.GetMaxX(),
+									  borderRect.GetMaxY(),
+									  16, 16),
+								AABB2(16, 16, 16, 16));
+			renderer->DrawImage(border,
+								AABB2(borderRect.GetMinX(),
+									  borderRect.GetMinY()-16,
+									  borderRect.GetWidth(), 16),
+								AABB2(16, 0, 0, 16));
+			renderer->DrawImage(border,
+								AABB2(borderRect.GetMinX(),
+									  borderRect.GetMaxY(),
+									  borderRect.GetWidth(), 16),
+								AABB2(16, 16, 0, 16));
+			renderer->DrawImage(border,
+								AABB2(borderRect.GetMinX()-16,
+									  borderRect.GetMinY(),
+									  16, borderRect.GetHeight()),
+								AABB2(0, 16, 16, 0));
+			renderer->DrawImage(border,
+								AABB2(borderRect.GetMaxX(),
+									  borderRect.GetMinY(),
+									  16, borderRect.GetHeight()),
+								AABB2(16, 16, 16, 0));
+			
+			// draw map
+			renderer->SetColor(MakeVector4(1,1,1,alpha));
 			renderer->DrawFlatGameMap(outRect, inRect);
 			
 			this->inRect = inRect;
@@ -149,11 +267,11 @@ namespace spades {
 			
 			// draw grid
 			
-			renderer->SetColor(MakeVector4(0,0,0,0.8));
+			renderer->SetColor(MakeVector4(0,0,0,0.8*alpha));
 			IImage *dashLine = renderer->RegisterImage("Gfx/DashLine.tga");
 			for(float x = 64.f; x < map->Width(); x += 64.f){
 				float wx = (x - inRect.GetMinX()) / inRect.GetWidth();
-				if(wx < 0.f || wx > 1.f)
+				if(wx < 0.f || wx >= 1.f)
 					continue;
 				wx = (wx * outRect.GetWidth()) + outRect.GetMinX();
 				wx = roundf(wx);
@@ -163,7 +281,7 @@ namespace spades {
 			}
 			for(float y = 64.f; y < map->Height(); y += 64.f){
 				float wy = (y - inRect.GetMinY()) / inRect.GetHeight();
-				if(wy < 0.f || wy > 1.f)
+				if(wy < 0.f || wy >= 1.f)
 					continue;
 				wy = (wy * outRect.GetHeight()) + outRect.GetMinY();
 				wy = roundf(wy);
@@ -173,7 +291,7 @@ namespace spades {
 			}
 			
 			// draw grid label
-			renderer->SetColor(MakeVector4(1,1,1,0.8));
+			renderer->SetColor(MakeVector4(1,1,1,0.8*alpha));
 			IImage *mapFont = renderer->RegisterImage("Gfx/Fonts/MapFont.tga");
 			for(int i = 0; i < 8; i++){
 				float startX = (float)i * 64.f;
@@ -184,7 +302,7 @@ namespace spades {
 				float fade = std::min((std::min(endX, inRect.GetMaxX()) -
 									   std::max(startX, inRect.GetMinX())) /
 									  (endX - startX) * 2.f, 1.f);
-				renderer->SetColor(MakeVector4(1,1,1,fade * .8f));
+				renderer->SetColor(MakeVector4(1,1,1,fade * .8f * alpha));
 				
 				float center = std::max(startX, inRect.GetMinX());
 				center = .5f * (center + std::min(endX, inRect.GetMaxX()));
@@ -208,7 +326,7 @@ namespace spades {
 				float fade = std::min((std::min(endY, inRect.GetMaxY()) -
 									   std::max(startY, inRect.GetMinY())) /
 									  (endY - startY) * 2.f, 1.f);
-				renderer->SetColor(MakeVector4(1,1,1,fade * .8f));
+				renderer->SetColor(MakeVector4(1,1,1,fade * .8f * alpha));
 				
 				float center = std::max(startY, inRect.GetMinY());
 				center = .5f * (center + std::min(endY, inRect.GetMaxY()));
@@ -231,7 +349,7 @@ namespace spades {
 				
 				IntVector3 teamColor = world->GetTeam(world->GetLocalPlayer()->GetTeamId()).color;
 				Vector4 teamColorF = {teamColor.x /255.f,
-					teamColor.y / 255.f, teamColor.z / 255.f, 1.f};
+					teamColor.y / 255.f, teamColor.z / 255.f, alpha};
 				for(int i = 0; i < world->GetNumPlayerSlots(); i++){
 					Player * p = world->GetPlayer(i);
 					if(p == NULL ||
@@ -246,7 +364,7 @@ namespace spades {
 					}
 					
 					if(p == world->GetLocalPlayer())
-						renderer->SetColor(MakeVector4(0,1,1,1));
+						renderer->SetColor(MakeVector4(0,1,1,alpha));
 					else{
 						renderer->SetColor(teamColorF);
 					}
@@ -265,13 +383,13 @@ namespace spades {
 					CTFGameMode::Team& team = ctf->GetTeam(tId);
 					IntVector3 teamColor = world->GetTeam(tId).color;
 					Vector4 teamColorF = {teamColor.x /255.f,
-						teamColor.y / 255.f, teamColor.z / 255.f, 1.f};
+						teamColor.y / 255.f, teamColor.z / 255.f, alpha};
 					
 					// draw base
 					renderer->SetColor(teamColorF);
 					DrawIcon(team.basePos, baseIcon, 0.f);
 					
-					renderer->SetColor(MakeVector4(1,1,1,1));
+					renderer->SetColor(MakeVector4(1,1,1,alpha));
 					DrawIcon(team.basePos, medicalIcon, 0.f);
 					
 					
@@ -310,7 +428,7 @@ namespace spades {
 						teamColor = world->GetTeam(t->ownerTeamId).color;
 					}
 					Vector4 teamColorF = {teamColor.x /255.f,
-						teamColor.y / 255.f, teamColor.z / 255.f, 1.f};
+						teamColor.y / 255.f, teamColor.z / 255.f, alpha};
 					
 					// draw base
 					renderer->SetColor(teamColorF);

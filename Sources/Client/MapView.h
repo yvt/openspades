@@ -23,6 +23,11 @@ namespace spades {
 			float actualScale;
 			float lastScale; // used for animation
 			
+			float zoomState;
+			bool zoomed;
+			
+			bool largeMap;
+			
 			AABB2 inRect;
 			AABB2 outRect;
 			
@@ -30,11 +35,12 @@ namespace spades {
 						  IImage *img,
 						  float rotation);
 		public:
-			MapView(Client *);
+			MapView(Client *, bool largeMap);
 			~MapView();
 			
 			void Update(float dt);
 			void SwitchScale();
+			void ToggleZoom();
 			
 			void Draw();
 		};

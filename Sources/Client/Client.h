@@ -77,6 +77,7 @@ namespace spades {
 			CenterMessageView *centerMessageView;
 			HurtRingView * hurtRingView;
 			MapView *mapView;
+			MapView *largeMapView;
 			ScoreboardView *scoreboard;
 			LimboView *limbo;
 			PaletteView *paletteView;
