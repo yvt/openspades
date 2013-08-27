@@ -98,6 +98,8 @@ public:
 private:
   void DisableMSAA();
   void MSAAEnabled();
+public:
+  void CheckGLCapability();
 };
 extern unsigned char aboutText[3447];
 #endif

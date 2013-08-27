@@ -125,7 +125,7 @@ MainWindow::MainWindow(int W, int H, const char *L)
 }
 
 MainWindow::MainWindow()
-  : Fl_Window(0, 0, 615, 444, "OpenSpades Startup") {
+  : Fl_Window(0, 0, 615, 439, "OpenSpades Startup") {
   clear_flag(16);
   _MainWindow();
 }
@@ -146,12 +146,12 @@ this->when(FL_WHEN_RELEASE);
 { Fl_Tabs* o = new Fl_Tabs(5, 110, 605, 240);
   o->labelsize(11);
   { Fl_Group* o = new Fl_Group(10, 130, 595, 215, "About");
-    o->hide();
     { aboutView = new Fl_Help_View(10, 135, 595, 210);
     } // Fl_Help_View* aboutView
     o->end();
   } // Fl_Group* o
   { Fl_Group* o = new Fl_Group(10, 130, 595, 220, "Setup");
+    o->hide();
     { Fl_Group* o = new Fl_Group(10, 150, 385, 70, "Video");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
@@ -237,7 +237,7 @@ this->when(FL_WHEN_RELEASE);
 { Fl_Return_Button* o = new Fl_Return_Button(505, 80, 100, 25, "Connect");
   o->callback((Fl_Callback*)cb_Connect);
 } // Fl_Return_Button* o
-{ gpu_info = new Fl_Text_Display(75, 375, 525, 60, "GPU Info:");
+{ gpu_info = new Fl_Text_Display(75, 365, 525, 60, "GPU Info:");
   gpu_info->box(FL_DOWN_BOX);
   gpu_info->align(Fl_Align(FL_ALIGN_LEFT_TOP));
 } // Fl_Text_Display* gpu_info

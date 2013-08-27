@@ -136,6 +136,7 @@ int main(int argc, char ** argv)
 	MainWindow win;
 	win.Init();
 	win.show(argc, argv);
+	win.CheckGLCapability();
 	
 	SPLog("Entering FLTK main loop");
 	Fl::run();

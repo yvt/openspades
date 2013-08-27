@@ -50,6 +50,8 @@ SPADES_SETTING(r_lensFlare, "1");
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
 
+static std::vector<spades::IntVector3> g_modes;
+
 void MainWindow::StartGame(const std::string &host) {
 	SPADES_MARK_FUNCTION();
 	
@@ -95,20 +97,11 @@ void MainWindow::LoadPrefs() {
 	// --- video
 	// add modes
 	char buf[64];
-	SDL_InitSubSystem(SDL_INIT_VIDEO);
-	SDL_Rect **modes = SDL_ListModes(NULL, SDL_OPENGL | SDL_FULLSCREEN |
-									 SDL_DOUBLEBUF);
-	if(modes && modes != (SDL_Rect **)-1){
-		modeSelect->clear();
-		for(size_t i = 0; modes[i]; i++){
-			SDL_Rect mode = *(modes[i]);
-			if(mode.w < 800 || mode.h < 600)
-				continue;
-			sprintf(buf, "%dx%d", mode.w, mode.h);
-			modeSelect->add(buf);
-			
-			SPLog("Video Mode Found: %s", buf);
-		}
+	modeSelect->clear();
+	for(size_t i = 0; i < g_modes.size(); i++){
+		spades::IntVector3 mode = g_modes[i];
+		sprintf(buf, "%dx%d", mode.x, mode.y);
+		modeSelect->add(buf);
 	}
 	sprintf(buf, "%dx%d", (int)r_videoWidth, (int)r_videoHeight);
 	modeSelect->value(buf);
@@ -200,22 +193,13 @@ void MainWindow::LoadPrefs() {
 void MainWindow::Init() {
 	SPADES_MARK_FUNCTION();
 	
-	LoadPrefs();
 	
 	// banner
 	std::string data = spades::FileManager::ReadAllBytes("Gfx/Banner.png");
 	Fl_PNG_Image *img = new Fl_PNG_Image("Gfx/Banner.png", (const unsigned char *)data.data(), data.size());
 	bannerBox->image(img);
 	
-	SDL_SetVideoMode(1, 1, 8, SDL_OPENGL | SDL_NOFRAME);
 	
-	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-	gpu_info->buffer(buff);
-	std::string glrendererstr = std::string((const char*)glGetString(GL_RENDERER));
-	std::string glversionstr = std::string((const char*)glGetString(GL_VERSION));
-	std::string glshadinglangueverstr = std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
-	buff->text(("GPU name: " + glrendererstr + "\r\nOpenGL Version (3.0 required): " + glversionstr + "\r\nGL Shading Language Version: " + glshadinglangueverstr).c_str());
-	SDL_Quit();
 	
 	// --- about
 	std::string text, pkg;
@@ -229,6 +213,45 @@ void MainWindow::Init() {
 						   pkg);
 	
 	aboutView->value(text.c_str());
+	
+}
+
+/** This function is called after showing window.
+ * Creating SDL window before showing MainWindow results in
+ * internal error on Mac OS X. */
+void MainWindow::CheckGLCapability() {
+	SPADES_MARK_FUNCTION();
+	
+	// check GL capabilities
+	
+	SDL_Init(SDL_INIT_VIDEO);
+	
+	SDL_Rect **modes = SDL_ListModes(NULL, SDL_OPENGL | SDL_FULLSCREEN |
+									 SDL_DOUBLEBUF);
+	if(modes && modes != (SDL_Rect **)-1){
+		g_modes.clear();
+		for(size_t i = 0; modes[i]; i++){
+			SDL_Rect mode = *(modes[i]);
+			if(mode.w < 800 || mode.h < 600)
+				continue;
+			g_modes.push_back(spades::IntVector3::Make(mode.w, mode.h, 0));
+			SPLog("Video Mode Found: %dx%d", mode.w, mode.h);
+		}
+		
+	}
+	
+	SDL_SetVideoMode(640,480, 0, SDL_OPENGL );
+	
+	Fl_Text_Buffer *buff = new Fl_Text_Buffer();
+	gpu_info->buffer(buff);
+	std::string glrendererstr = std::string((const char*)glGetString(GL_RENDERER));
+	std::string glversionstr = std::string((const char*)glGetString(GL_VERSION));
+	std::string glshadinglangueverstr = std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+	buff->text(("GPU name: " + glrendererstr + "\r\nOpenGL Version (3.0 required): " + glversionstr + "\r\nGL Shading Language Version: " + glshadinglangueverstr).c_str());
+	SDL_QuitSubSystem(SDL_INIT_VIDEO);
+	
+	
+	LoadPrefs();
 	
 	inited = true;
 }
