@@ -7,7 +7,8 @@ uniform mat4 shadowMapViewMatrix;
 varying vec4 shadowMapCoord1;
 varying vec4 shadowMapCoord2;
 varying vec4 shadowMapCoord3;
-varying vec4 shadowMapViewPos;
+// varying vec4 shadowMapViewPos;
+#define shadowMapViewPosZ shadowMapCoord1.w
 
 void TransformShadowMatrix(out vec4 shadowMapCoord,
 						   in vec3 vertexCoord,
@@ -21,7 +22,7 @@ void TransformShadowMatrix(out vec4 shadowMapCoord,
 }
 
 void PrepareForShadow_Model(vec3 vertexCoord, vec3 normal) {
-	shadowMapViewPos = shadowMapViewMatrix * vec4(vertexCoord, 1.);
+	vec4 shadowMapViewPos = shadowMapViewMatrix * vec4(vertexCoord, 1.);
 	TransformShadowMatrix(shadowMapCoord1,
 						  vertexCoord,
 						  shadowMapMatrix1);
@@ -31,5 +32,6 @@ void PrepareForShadow_Model(vec3 vertexCoord, vec3 normal) {
 	TransformShadowMatrix(shadowMapCoord3,
 						  vertexCoord,
 						  shadowMapMatrix3);
+	shadowMapViewPosZ = shadowMapViewPos.z;
 	
 }

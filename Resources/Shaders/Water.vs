@@ -12,11 +12,7 @@ attribute vec2 positionAttribute;
 varying vec3 fogDensity;
 varying vec3 screenPosition;
 varying vec3 viewPosition;
-varying vec2 worldPosition;
-varying vec3 worldPositionFromOrigin;
-
-varying vec4 waveCoord;
-varying vec2 waveCoord2;
+varying vec3 worldPosition;
 
 //varying vec2 detailCoord;
 
@@ -39,13 +35,7 @@ void main() {
 	
 	viewPosition = viewPos.xyz;
 	
-	worldPosition = (modelMatrix * vertexPos).xy;
-	
-	worldPositionFromOrigin = vec3(worldPosition, 63.) - viewOrigin;
-	
-	waveCoord.xy = worldPosition * .08;
-	waveCoord.zw = waveCoord.xy * 1.963 + vec2(.754, .1315);
-	waveCoord2.xy = waveCoord.xy * 0.263 + vec2(.154, .7315);
+	worldPosition = (modelMatrix * vertexPos).xyz;
 	
 	PrepareForShadow((modelMatrix * vertexPos).xyz, vec3(0., 0., -1.));
 }

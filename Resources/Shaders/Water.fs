@@ -4,11 +4,7 @@
 varying vec3 fogDensity;
 varying vec3 screenPosition;
 varying vec3 viewPosition;
-varying vec2 worldPosition;
-varying vec3 worldPositionFromOrigin;
-
-varying vec4 waveCoord;
-varying vec2 waveCoord2;
+varying vec3 worldPosition;
 
 uniform sampler2D screenTexture;
 uniform sampler2D depthTexture;
@@ -18,6 +14,7 @@ uniform vec3 fogColor;
 uniform vec2 zNearFar;
 uniform vec4 fovTan;
 uniform vec4 waterPlane;
+uniform vec3 viewOrigin;
 
 uniform vec2 displaceScale;
 
@@ -34,6 +31,11 @@ float depthAt(vec2 pt){
 }
 
 void main() {
+	vec3 worldPositionFromOrigin = worldPosition - viewOrigin;
+	vec4 waveCoord = worldPosition.xyxy * vec4(vec2(0.08), vec2(0.15704))
+	+ vec4(0., 0., 0.754, 0.1315);
+	vec2 waveCoord2 = worldPosition.xy * 0.02344 + vec2(.154, .7315);
+	
 	// evaluate waveform
 	vec4 wave = texture2D(waveTexture, waveCoord.xy).xyzw;
 	wave = mix(vec4(-1.), vec4(1.), wave);
@@ -57,8 +59,8 @@ void main() {
 	vec2 scrPos = origScrPos;
 	
 	// TODO: do displacement
-	vec2 xToUV = dFdx(worldPosition);
-	vec2 yToUV = dFdy(worldPosition);
+	vec2 xToUV = dFdx(worldPosition.xy);
+	vec2 yToUV = dFdy(worldPosition.xy);
 	float scale = 1. / dot(xToUV.xy, yToUV.yx * vec2(1., -1.));
 	vec2 disp = vec2(dot(xToUV, wave.xy * vec2(1., -1.)),
 					 dot(yToUV, wave.xy * vec2(-1., 1.)));
@@ -93,7 +95,7 @@ void main() {
 	
 	// water color
 	// TODO: correct integral
-	vec2 waterCoord = worldPosition;
+	vec2 waterCoord = worldPosition.xy;
 	vec2 integralCoord = floor(waterCoord) + .5;
 	vec2 blurDir = (worldPositionFromOrigin.xy);
 	blurDir /= max(length(blurDir), 1.);

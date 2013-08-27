@@ -7,7 +7,8 @@ varying vec4 shadowMapCoord1;
 varying vec4 shadowMapCoord2;
 varying vec4 shadowMapCoord3;
 
-varying vec4 shadowMapViewPos;
+// varying vec4 shadowMapViewPos;
+#define shadowMapViewPosZ shadowMapCoord1.w
 
 bool DepthValidateRange(vec4 coord){
 	return all(lessThanEqual(abs(coord.xy-vec2(0.5)), vec2(0.5)));
@@ -15,11 +16,11 @@ bool DepthValidateRange(vec4 coord){
 
 float VisibilityOfSunLight_Model() {
 	
-	if(/*DepthValidateRange(shadowMapCoord1)*/ shadowMapViewPos.z > -12.){
+	if(/*DepthValidateRange(shadowMapCoord1)*/ shadowMapViewPosZ > -12.){
 		vec4 scoord = shadowMapCoord1.xyzw;
 		float v = shadow2D(shadowMapTexture1, scoord.xyz).x;
 		return v;
-	}else if(/*DepthValidateRange(shadowMapCoord2)*/ shadowMapViewPos.z > -40.){
+	}else if(/*DepthValidateRange(shadowMapCoord2)*/ shadowMapViewPosZ > -40.){
 		vec4 scoord = shadowMapCoord2.xyzw;
 		float v = shadow2D(shadowMapTexture2, scoord.xyz).x;
 		return v;
