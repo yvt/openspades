@@ -204,6 +204,19 @@ namespace spades {
 				alpha = zoomState;
 			}
 			
+			// fades bg
+			if(largeMap) {
+				IImage *bg = renderer->RegisterImage("Gfx/MapBg.png");
+				Vector2 scrSize = {renderer->ScreenWidth(),
+				renderer->ScreenHeight()};
+				float size = std::max(scrSize.x, scrSize.y);
+				renderer->SetColor(MakeVector4(0, 0, 0,alpha * .5f));
+				renderer->DrawImage(bg,
+									AABB2((scrSize.x - size) * .5f,
+										  (scrSize.y - size) * .5f,
+										  size, size));
+			}
+			
 			// draw border
 			IImage *border;
 			float borderWidth;
