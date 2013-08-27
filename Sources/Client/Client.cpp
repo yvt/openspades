@@ -1515,6 +1515,8 @@ namespace spades {
 				}
 				
 				Vector3 leftHand, rightHand;
+				leftHand = MakeVector3(0, 0, 0);
+				rightHand = MakeVector3(0, 0, 0);
 				
 				// view weapon
 				float sprint = SmoothStep(sprintState);
@@ -1963,7 +1965,8 @@ namespace spades {
 				}
 				
 				// view hands
-				{
+				if(leftHand.GetPoweredLength() > 0.001f &&
+				   rightHand.GetPoweredLength() > 0.001f){
 					
 					
 					ModelRenderParam param;
