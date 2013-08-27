@@ -25,7 +25,7 @@
 #include "TCGameMode.h"
 #include "../Core/Settings.h"
 
-SPADES_SETTING(ne_version, "3");
+SPADES_SETTING(cg_protocolVersion, "3");
 
 namespace spades {
 	namespace client {
@@ -302,10 +302,10 @@ namespace spades {
 			Disconnect();
 			SPAssert(status == NetClientStatusNotConnected);
 			
-			if((int)ne_version != 3 && (int)ne_version != 4)
-				SPRaise("Invalid ne_version, should be 3 or 4");
+			if((int)cg_protocolVersion != 3 && (int)cg_protocolVersion != 4)
+				SPRaise("Invalid cg_protocolVersion, should be 3 or 4");
 
-			protoVersion = (int)ne_version;
+			protoVersion = (int)cg_protocolVersion;
 
 			if(hostname.find("aos:///") == 0){
 				hostname = hostname.substr(7);
@@ -336,7 +336,7 @@ namespace spades {
 			
 			savedPackets.clear();
 			
-			peer = enet_host_connect(host, &address, 1, (int)ne_version);
+			peer = enet_host_connect(host, &address, 1, (int)cg_protocolVersion);
 			if(peer == NULL){
 				SPRaise("Failed to create ENet peer");
 			}
@@ -664,13 +664,13 @@ namespace spades {
 				{
 					//reader.DumpDebug();
 					int bytesPerEntry = 24;
-					if((int)ne_version == 4)
+					if((int)cg_protocolVersion == 4)
 						bytesPerEntry++;
 
 					int entries = reader.GetData().size() / bytesPerEntry;
 					for(int i = 0; i < 32; i++){
 						int idx = i;
-						if((int)ne_version == 4)
+						if((int)cg_protocolVersion == 4)
 						{
 							idx = reader.ReadByte();
 							SPAssert(idx >= 0 && idx < 32);
