@@ -1,0 +1,938 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{4104d169-0e8c-4f83-b0a2-c587f2003bc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio\AL">
+      <UniqueIdentifier>{d06a9ede-93fe-4020-9648-ec47cdd17afd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="binpack2d">
+      <UniqueIdentifier>{cea9d806-547b-4635-b616-49e25431c0c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client">
+      <UniqueIdentifier>{16ae9401-be18-4408-b8a0-aba5ae423474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{e57baa48-5260-431b-9be4-c0e6fbacb97c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw">
+      <UniqueIdentifier>{1dcd807b-5873-499a-99d9-44a4e7fa943e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ENet">
+      <UniqueIdentifier>{6cf3248e-c22a-422c-a384-d67efd123100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gui">
+      <UniqueIdentifier>{edda2398-8a5b-4c32-a8a2-1eaab85d0142}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Imports">
+      <UniqueIdentifier>{11133c4f-c1e0-43af-9dfb-1bace0ac60b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kiss_fft130">
+      <UniqueIdentifier>{97b2db9f-bcb1-4591-be94-e5b49a15d6c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="poly2tri">
+      <UniqueIdentifier>{2dee1a53-df41-4465-a470-2a70ac0c5f1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="unzip">
+      <UniqueIdentifier>{7a8bbb95-baf7-4bcb-9640-960b190adb0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="poly2tri\common">
+      <UniqueIdentifier>{75eaf784-b14a-412f-89cc-bea2af5a9aa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="poly2tri\sweep">
+      <UniqueIdentifier>{ae6d344b-c0f2-4857-b342-e4d413515f53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ENet\include">
+      <UniqueIdentifier>{c1d9089b-550d-4d40-8575-ca3a208b30f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ENet\include\enet">
+      <UniqueIdentifier>{3faade5e-1264-42bd-a6dd-9ccc18dd202d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="msvc">
+      <UniqueIdentifier>{b487f309-a1c8-4b20-9634-2538d95a78f2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Sources\Audio\ALDevice.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Audio\ALFuncs.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\unzip\ioapi.c">
+      <Filter>unzip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\unzip\unzip.c">
+      <Filter>unzip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\poly2tri\sweep\advancing_front.cc">
+      <Filter>poly2tri\sweep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\poly2tri\sweep\cdt.cc">
+      <Filter>poly2tri\sweep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\poly2tri\sweep\sweep.cc">
+      <Filter>poly2tri\sweep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\poly2tri\sweep\sweep_context.cc">
+      <Filter>poly2tri\sweep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\poly2tri\common\shapes.cc">
+      <Filter>poly2tri\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\kiss_fft130\kiss_fft.c">
+      <Filter>kiss_fft130</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Gui\DetailConfigWindow.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Gui\DetailConfigWindowHandler.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Gui\Main.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Gui\MainWindow.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Gui\MainWindowHandler.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Gui\SDLAsyncRunner.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Gui\SDLGLDevice.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Gui\SDLRunner.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Gui\DetailConfigTable.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\ENet\callbacks.c">
+      <Filter>ENet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\ENet\compress.c">
+      <Filter>ENet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\ENet\host.c">
+      <Filter>ENet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\ENet\list.c">
+      <Filter>ENet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\ENet\packet.c">
+      <Filter>ENet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\ENet\peer.c">
+      <Filter>ENet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\ENet\protocol.c">
+      <Filter>ENet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\ENet\unix.c">
+      <Filter>ENet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\ENet\win32.c">
+      <Filter>ENet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLBloomFilter.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLCameraBlurFilter.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLDynamicLight.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLDynamicLightShader.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLFlatMapRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLFogFilter.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLFramebufferManager.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLFXAAFilter.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLImage.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLImageManager.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLImageRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLLensFilter.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLLensFlareFilter.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLMapChunk.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLMapRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLMapShadowRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLModel.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLModelManager.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLModelRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLOptimizedVoxelModel.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLProfiler.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLProgram.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLProgramAttribute.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLProgramManager.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLProgramUniform.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLQuadRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLRadiosityRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLShader.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLShadowMapShader.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLShadowShader.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLSoftSpriteRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLSpriteRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLVoxelModel.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLWaterRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\IGLDevice.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\IGLShadowMapRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\IGLSpriteRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLAmbientShadowRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Draw\GLBasicShadowMapRenderer.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\BitmapAtlasGenerator.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\ConcurrentDispatch.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\Debug.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\DeflateStream.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\Deque.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\DirectoryFileSystem.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\DynamicLibrary.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\DynamicMemoryStream.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\Exception.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\FileManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\FltkImageReader.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\IAudioStream.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\IBitmapCodec.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\IFileSystem.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\ILockable.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\IRunnable.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\IStream.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\Math.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\MemoryStream.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\Mutex.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\Semaphore.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\Settings.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\StdStream.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\Stopwatch.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\TargaReader.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\TargaWriter.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\Thread.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\ThreadLocalStorage.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\VoxelModel.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\WavAudioStream.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\ZipFileSystem.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\AutoLocker.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Core\Bitmap.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\CenterMessageView.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\ChatWindow.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\Client.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\Corpse.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\CTFGameMode.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\FallingBlock.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\GameMap.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\GameMapWrapper.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\Grenade.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\GunCasing.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\HurtRingView.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\IAudioChunk.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\IAudioDevice.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\IFont.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\IGameMapListener.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\IGameMode.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\IImage.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\IInputInterface.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\ILocalEntity.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\IModel.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\IRenderer.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\IWorldListener.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\LimboView.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\MapView.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\NetClient.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\PaletteView.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\ParticleSpriteEntity.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\Player.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\Quake3Font.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\SceneDefinition.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\ScoreboardView.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\SmokeSpriteEntity.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\TCGameMode.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\TCProgressView.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\Weapon.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\World.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Client\AsyncRenderer.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Sources\Audio\ALDevice.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Audio\ALFuncs.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Audio\AL\altypes.h">
+      <Filter>Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Audio\AL\alut.h">
+      <Filter>Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Audio\AL\efx.h">
+      <Filter>Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Audio\AL\efx-creative.h">
+      <Filter>Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Audio\AL\efx-presets.h">
+      <Filter>Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Audio\AL\al.h">
+      <Filter>Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Audio\AL\alc.h">
+      <Filter>Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Audio\AL\alctypes.h">
+      <Filter>Audio\AL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\binpack2d\binpack2d.hpp">
+      <Filter>binpack2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\unzip\ioapi.h">
+      <Filter>unzip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\unzip\unzip.h">
+      <Filter>unzip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\poly2tri\poly2tri.h">
+      <Filter>poly2tri</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\poly2tri\sweep\advancing_front.h">
+      <Filter>poly2tri\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\poly2tri\sweep\cdt.h">
+      <Filter>poly2tri\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\poly2tri\sweep\sweep.h">
+      <Filter>poly2tri\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\poly2tri\sweep\sweep_context.h">
+      <Filter>poly2tri\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\poly2tri\common\shapes.h">
+      <Filter>poly2tri\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\poly2tri\common\utils.h">
+      <Filter>poly2tri\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Imports\OpenGL.h">
+      <Filter>Imports</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Imports\SDL.h">
+      <Filter>Imports</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\kiss_fft130\kiss_fft.h">
+      <Filter>kiss_fft130</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\kiss_fft130\_kiss_fft_guts.h">
+      <Filter>kiss_fft130</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Gui\DetailConfigTable.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Gui\DetailConfigWindow.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Gui\MainWindow.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Gui\SDLAsyncRunner.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Gui\SDLGLDevice.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Gui\SDLRunner.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\ENet\include\enet\callbacks.h">
+      <Filter>ENet\include\enet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\ENet\include\enet\enet.h">
+      <Filter>ENet\include\enet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\ENet\include\enet\list.h">
+      <Filter>ENet\include\enet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\ENet\include\enet\protocol.h">
+      <Filter>ENet\include\enet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\ENet\include\enet\time.h">
+      <Filter>ENet\include\enet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\ENet\include\enet\types.h">
+      <Filter>ENet\include\enet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\ENet\include\enet\unix.h">
+      <Filter>ENet\include\enet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\ENet\include\enet\utility.h">
+      <Filter>ENet\include\enet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\ENet\include\enet\win32.h">
+      <Filter>ENet\include\enet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLBasicShadowMapRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLBloomFilter.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLCameraBlurFilter.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLDynamicLight.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLDynamicLightShader.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLFlatMapRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLFogFilter.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLFramebufferManager.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLFXAAFilter.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLImage.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLImageManager.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLImageRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLLensFilter.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLLensFlareFilter.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLMapChunk.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLMapRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLMapShadowRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLModel.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLModelManager.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLModelRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLOptimizedVoxelModel.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLProfiler.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLProgram.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLProgramAttribute.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLProgramManager.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLProgramUniform.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLQuadRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLRadiosityRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLShader.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLShadowMapShader.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLShadowShader.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLSoftSpriteRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLSpriteRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLVoxelModel.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLWaterRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\IGLDevice.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\IGLShadowMapRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\IGLSpriteRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Draw\GLAmbientShadowRenderer.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\Bitmap.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\BitmapAtlasGenerator.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\ConcurrentDispatch.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\Debug.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\DeflateStream.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\Deque.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\DirectoryFileSystem.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\DynamicLibrary.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\DynamicMemoryStream.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\Exception.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\FileManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\IAudioStream.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\IBitmapCodec.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\IFileSystem.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\ILockable.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\IRunnable.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\IStream.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\Math.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\MemoryStream.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\Mutex.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\Semaphore.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\Settings.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\StdStream.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\Stopwatch.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\Thread.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\ThreadLocalStorage.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\VoxelModel.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\WavAudioStream.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\ZipFileSystem.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Core\AutoLocker.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\CenterMessageView.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\ChatWindow.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\Client.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\Corpse.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\CTFGameMode.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\FallingBlock.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\FontData.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\GameMap.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\GameMapWrapper.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\Grenade.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\GunCasing.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\HurtRingView.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\IAudioChunk.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\IAudioDevice.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\IFont.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\IGameMapListener.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\IGameMode.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\IImage.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\IInputInterface.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\ILocalEntity.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\IModel.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\IRenderer.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\IWorldListener.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\LimboView.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\MapView.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\NetClient.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\PaletteView.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\ParticleSpriteEntity.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\PhysicsConstants.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\Player.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\Quake3Font.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\SceneDefinition.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\ScoreboardView.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\SmokeSpriteEntity.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\TCGameMode.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\TCProgressView.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\Weapon.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\World.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Client\AsyncRenderer.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="stdint.h">
+      <Filter>msvc</Filter>
+    </ClInclude>
+    <ClInclude Include="unistd.h">
+      <Filter>msvc</Filter>
+    </ClInclude>
+    <ClInclude Include="inttypes.h">
+      <Filter>msvc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Sources\Gui\DetailConfigWindow.fl">
+      <Filter>Gui</Filter>
+    </None>
+    <None Include="..\Sources\Gui\MainWindow.fl">
+      <Filter>Gui</Filter>
+    </None>
+    <None Include="..\Sources\Gui\AboutText.html">
+      <Filter>Gui</Filter>
+    </None>
+  </ItemGroup>
+</Project>
