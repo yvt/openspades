@@ -13,6 +13,8 @@
 #include "../Core/Debug.h"
 #include "../Core/Settings.h"
 
+SPADES_SETTING(cg_protocolVersion, "3");
+
 namespace spades {
 	namespace client {
 		Weapon::Weapon(World *w, Player *p):
@@ -297,7 +299,7 @@ namespace spades {
 		Weapon *Weapon::CreateWeapon(WeaponType type, Player *p) {
 			SPADES_MARK_FUNCTION();
 			
-			if(spades::client::protoVersion == 4) {
+			if((int)cg_protocolVersion == 4) {
 				switch(type) {
 					case RIFLE_WEAPON:
 						return new RifleWeapon4(p->GetWorld(), p);

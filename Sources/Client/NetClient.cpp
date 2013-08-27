@@ -302,10 +302,9 @@ namespace spades {
 			Disconnect();
 			SPAssert(status == NetClientStatusNotConnected);
 			
-			if((int)cg_protocolVersion != 3 && (int)cg_protocolVersion != 4)
+			if((int)cg_protocolVersion != 3 &&
+			   (int)cg_protocolVersion != 4)
 				SPRaise("Invalid cg_protocolVersion, should be 3 or 4");
-
-			protoVersion = (int)cg_protocolVersion;
 
 			if(hostname.find("aos:///") == 0){
 				hostname = hostname.substr(7);
