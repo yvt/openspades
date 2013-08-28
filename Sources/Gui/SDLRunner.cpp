@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 yvt.jp. All rights reserved.
 //
 
+#include <OpenSpades.h>
 #include "SDLGLDevice.h"
 
 #include "SDLRunner.h"
@@ -208,11 +209,7 @@ namespace spades {
 			try{
 				{
 					std::string pkg;
-#ifdef PACKAGE_STRING
 					pkg = PACKAGE_STRING;
-#else
-					pkg = "OpenSpades";
-#endif
 					SDL_WM_SetCaption(pkg.c_str(), pkg.c_str());
 				}
 				
