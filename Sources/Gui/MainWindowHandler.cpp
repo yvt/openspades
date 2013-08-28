@@ -47,6 +47,7 @@ SPADES_SETTING(r_videoHeight, "640");
 SPADES_SETTING(r_fullscreen, "0");
 SPADES_SETTING(r_fogShadow, "0");
 SPADES_SETTING(r_lensFlare, "1");
+SPADES_SETTING(r_srgb, "1");
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
 
@@ -320,6 +321,15 @@ void MainWindow::CheckGLCapability() {
 				msg += "</font>";
 			}
 			msg += "<br>";
+		}
+		
+		// non-requred extensions
+		if(extensions.find("GL_ARB_framebuffer_sRGB") ==
+		   std::string::npos) {
+			if(r_srgb) {
+				r_srgb = 0;
+				SPLog("Disabling r_srgb: no GL_ARB_framebuffer_sRGB");
+			}
 		}
 		
 		if(capable){
