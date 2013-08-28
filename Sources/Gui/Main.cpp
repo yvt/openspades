@@ -53,7 +53,6 @@ int main(int argc, char ** argv)
 	
 #ifdef PACKAGE_STRING
 	SPLog("Package: %s", PACKAGE_STRING);
-	pkg = PACKAGE_STRING;
 #else
 	SPLog("Package: (unknown)");
 #endif
