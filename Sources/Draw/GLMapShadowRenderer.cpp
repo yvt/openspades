@@ -44,7 +44,7 @@ namespace spades{
 			
 			device->BindTexture(IGLDevice::Texture2D, coarseTexture);
 			device->TexImage2D(IGLDevice::Texture2D, 0,
-							   IGLDevice::RGBA,
+							   IGLDevice::RG,
 							   map->Width() / CoarseSize,
 							   map->Height() / CoarseSize,
 							   0, IGLDevice::RG, IGLDevice::UnsignedByte,
