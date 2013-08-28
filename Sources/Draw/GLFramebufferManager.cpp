@@ -272,14 +272,18 @@ namespace spades {
 			if(useMultisample){
 				// ---- multisampled
 				device->BindFramebuffer(IGLDevice::Framebuffer,
-									 multisampledFramebuffer);
+										multisampledFramebuffer);
+				device->Enable(IGLDevice::Multisample, useMultisample);
 			}else {
 				// ---- single sampled
 				device->BindFramebuffer(IGLDevice::Framebuffer,
 									 renderFramebuffer);
+				
+				// calling glDisable(GL_MULTISAMPLE) on non-MSAA FB
+				// causes GL_INVALID_FRAMEBUFFER_OPERATION on
+				// some video drivers?
 			}
 			
-			device->Enable(IGLDevice::Multisample, useMultisample);
 			device->Enable(IGLDevice::DepthTest, true);
 			device->DepthMask(true);
 		}
@@ -371,7 +375,6 @@ namespace spades {
 										0);
 			}
 			
-			device->Enable(IGLDevice::Multisample, false);
 			device->Enable(IGLDevice::DepthTest, false);
 			device->DepthMask(false);
 			
