@@ -418,7 +418,7 @@ private:
     
     bool operator()(const Coord &a, const Coord &b) const {
      
-      return sqrt( a.x * a.x + a.y * a.y ) < sqrt( b.x * b.x + b.y * b.y );
+      return sqrtf( a.x * a.x + a.y * a.y ) < sqrtf( b.x * b.x + b.y * b.y );
       
      
       if(a.y != b.y)
