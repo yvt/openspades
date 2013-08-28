@@ -23,7 +23,7 @@
 SPADES_SETTING(r_videoWidth, "1024");
 SPADES_SETTING(r_videoHeight, "640");
 SPADES_SETTING(r_fullscreen, "0");
-SPADES_SETTING(r_colorBits, "0");
+SPADES_SETTING(r_colorBits, "32");
 
 namespace spades {
 	namespace gui {

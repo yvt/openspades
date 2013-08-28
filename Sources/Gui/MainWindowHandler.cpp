@@ -246,7 +246,7 @@ void MainWindow::CheckGLCapability() {
 	
 	bool capable = true;
 	std::string msg;
-	if(!SDL_SetVideoMode(1,1, 0, SDL_OPENGL|SDL_NOFRAME)){
+	if(!SDL_SetVideoMode(1,1, 32, SDL_OPENGL|SDL_NOFRAME)){
 		// OpenGL initialization failed!
 		outputGLRenderer->value("N/A");
 		outputGLVersion->value("N/A");
