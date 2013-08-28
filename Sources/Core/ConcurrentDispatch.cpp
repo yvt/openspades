@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 yvt.jp. All rights reserved.
 //
 
+#include <OpenSpades.h>
 #include "ConcurrentDispatch.h"
 #include "../Imports/SDL.h"
 #include "Mutex.h"
@@ -22,7 +23,7 @@
 #if defined(WIN32)
 #include <windows.h>
 #endif
-#ifndef _MSC_VER
+#ifdef HAS_UNISTD_H
 #include <unistd.h>
 #endif
 #include "ThreadLocalStorage.h"

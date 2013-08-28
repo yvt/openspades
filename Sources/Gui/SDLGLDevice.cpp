@@ -47,13 +47,22 @@ err = glGetError(); \
 if(err != GL_NO_ERROR) \
 ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 }while(0)
-		
+
+
+//lm: The macro would not work on windows, the application simply fails to start if dependency's are missing.
+//	unline *nix, runtime dependency's are all resolved at application start.
+//	one would need a construction like OpenAL, where functions are resolved dynamically (GetProcAddress / dlsym)
+
+#ifdef _MSC_VER
+#define CheckExistence(func)
+#else
 #define CheckExistence(func) do { \
 		if(!func) { \
 			ReportMissingFunc( #func ); \
 		}\
 	} while(0)
-		
+#endif
+
 		static std::string ErrorToString(GLenum err) {
 			switch(err) {
 				case GL_NO_ERROR:

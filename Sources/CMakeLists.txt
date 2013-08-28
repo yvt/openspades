@@ -1,0 +1,49 @@
+
+
+file(GLOB AUDIO_FILES Audio/*.cpp Audio/*.h)
+file(GLOB AUDIO_AL_FILES Audio/AL/*.cpp Audio/AL/*.h)
+set(BINPACK_FILES binpack2d/binpack2d.hpp)
+file(GLOB CLIENT_FILES Client/*.cpp Client/*.h)
+file(GLOB CORE_FILES Core/*.cpp Core/*.h)
+file(GLOB DRAW_FILES Draw/*.cpp Draw/*.h)
+file(GLOB ENET_FILES Enet/*.c Enet/*.h)
+file(GLOB GUI_FILES Gui/*.cpp Gui/*.h)
+file(GLOB IMPORTS_FILES Imports/*.h)
+file(GLOB KISS_FILES kiss_fft130/*.c kiss_fft130/*.h)
+file(GLOB POLY2TRI_FILES poly2tri/*.cc poly2tri/*.h)
+file(GLOB POLY2TRI_COMMON_FILES poly2tri/common/*.cc poly2tri/common/*.h)
+file(GLOB POLY2TRI_SWEEP_FILES poly2tri/sweep/*.cc poly2tri/sweep/*.h)
+file(GLOB UNZIP_FILES unzip/*.c unzip/*.h)
+
+include_directories("Enet/include")
+
+add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${GUI_FILES} ${IMPORTS_FILES} ${KISS_FILES}
+	${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES} ${UNZIP_FILES})
+set_target_properties(OpenSpades PROPERTIES LINKER_LANGUAGE CXX)
+source_group("Audio" FILES ${AUDIO_FILES})
+source_group("Audio\\AL" FILES ${AUDIO_AL_FILES})
+source_group("binpack2d" FILES ${BINPACK_FILES})
+source_group("Client" FILES ${CLIENT_FILES})
+source_group("Core" FILES ${CORE_FILES})
+source_group("Draw" FILES ${DRAW_FILES})
+source_group("Enet" FILES ${ENET_FILES})
+source_group("Gui" FILES ${GUI_FILES})
+source_group("Imports" FILES ${IMPORTS_FILES})
+source_group("kiss_fft130" FILES ${KISS_FILES})
+source_group("poly2tri" FILES ${POLY2TRI_FILES})
+source_group("poly2tri\\common" FILES ${POLY2TRI_COMMON_FILES})
+source_group("poly2tri\\sweep" FILES ${POLY2TRI_SWEEP_FILES})
+source_group("unzip" FILES ${UNZIP_SWEEP_FILES})
+
+
+
+target_link_libraries(OpenSpades ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_BASE_LIBRARY} ${FLTK_IMAGES_LIBRARY} ${FLTK_PNG} ${FLTK_JPEG} ${ZLIB_LIBRARIES})
+
+if(OPENAL_FOUND)
+	target_link_libraries(OpenSpades ${OPENAL_LIBRARY})
+	include_directories(${OPENAL_INCLUDE_DIRS})
+endif()
+
+if(WIN32)
+	target_link_libraries(OpenSpades ws2_32.lib winmm.lib)
+endif()

@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 yvt.jp. All rights reserved.
 //
 
+#include <OpenSpades.h>
 #include "MainWindow.h"
 #include <stdlib.h>
 
@@ -204,11 +205,7 @@ void MainWindow::Init() {
 	
 	// --- about
 	std::string text, pkg;
-#ifdef PACKAGE_STRING
 	pkg = PACKAGE_STRING;
-#else
-	pkg = "OpenSpades [Unknown Version]";
-#endif
 	text = std::string((const char *)aboutText, sizeof(aboutText));
 	text = spades::Replace(text, "${PACKAGE_STRING}",
 						   pkg);

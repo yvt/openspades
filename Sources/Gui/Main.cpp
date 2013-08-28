@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 yvt.jp. All rights reserved.
 //
 
+#include <OpenSpades.h>
 #include "MainWindow.h"
 #include "../Core/FileManager.h"
 #include "../Core/DirectoryFileSystem.h"
@@ -51,11 +52,7 @@ int main(int argc, char ** argv)
 	SPADES_MARK_FUNCTION();
 	spades::DispatchQueue::GetThreadQueue()->MarkSDLVideoThread();
 	
-#ifdef PACKAGE_STRING
-	SPLog("Package: %s", PACKAGE_STRING);
-#else
-	SPLog("Package: (unknown)");
-#endif
+	SPLog("Package: " PACKAGE_STRING);
 	
 	// default resource directories
 #ifdef WIN32
