@@ -70,7 +70,7 @@ SPADES_SETTING(cg_blood, "1");
 SPADES_SETTING(cg_ejectBrass, "1");
 
 SPADES_SETTING(cg_mouseSensitivity, "1");
-SPADES_SETTING(cg_zoomedMouseSensScale, "1");
+SPADES_SETTING(cg_zoomedMouseSensScale, "0.6");
 
 SPADES_SETTING(cg_keyAttack, "LeftMouseButton");
 SPADES_SETTING(cg_keyAltAttack, "RightMouseButton");
