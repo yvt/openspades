@@ -506,7 +506,7 @@ namespace spades {
 					Vector3 vel = player->GetVelocty();
 					vel.z = 0.f;
 					if(actualInput.sprint && player->IsAlive() &&
-					   vel.GetLength() > .2f && !player->GetWade()){
+					   vel.GetLength() > .1f){
 						sprintState += dt * 4.f;
 						if(sprintState > 1.f)
 							sprintState = 1.f;
