@@ -308,6 +308,22 @@ namespace spades {
 			SPLog("ENet host destroyed");
 		}
 		
+		// unsigned long version of atol, cross-platform (including MSVC)
+		static uint32_t ParseIntegerAddress(const std::string& str) {
+			uint32_t vl = 0;
+			for(size_t i = 0; i < str.size(); i++) {
+				char c = str[i];
+				if(c >= '0' && c<= '9'){
+					vl *= 10;
+					vl += (uint32_t)(c - '0');
+				}else{
+					break;
+				}
+			}
+			
+			return vl;
+		}
+		
 		void NetClient::Connect(std::string hostname) {
 			SPADES_MARK_FUNCTION();
 			
@@ -338,7 +354,7 @@ namespace spades {
 			if(addr.find('.') != std::string::npos){
 				enet_address_set_host(&address, addr.c_str());
 			}else{
-				address.host = (uint32_t)atol(addr.c_str());
+				address.host = ParseIntegerAddress(addr);
 			}
 			
 			
