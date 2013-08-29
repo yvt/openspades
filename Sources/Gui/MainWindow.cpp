@@ -10,9 +10,7 @@ void MainWindow::cb_quickHostInput(Fl_Input* o, void* v) {
 }
 
 void MainWindow::cb_msaaSelect_i(Fl_Choice*, void*) {
-  if(msaaSelect->value() >= 1 &&
-   msaaSelect->value() <= 2)
-	MSAAEnabled();
+  MSAAEnabled();
 SavePrefs();
 }
 void MainWindow::cb_msaaSelect(Fl_Choice* o, void* v) {
@@ -152,7 +150,6 @@ this->when(FL_WHEN_RELEASE);
     groupAbout->end();
   } // Fl_Group* groupAbout
   { Fl_Group* o = new Fl_Group(10, 130, 595, 220, "Setup");
-    o->hide();
     { Fl_Group* o = new Fl_Group(10, 150, 385, 70, "Video");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
@@ -231,6 +228,7 @@ this->when(FL_WHEN_RELEASE);
     o->end();
   } // Fl_Group* o
   { groupReport = new Fl_Group(10, 130, 595, 220, "System Report");
+    groupReport->hide();
     { Fl_Group* o = new Fl_Group(10, 150, 595, 195, "Graphics");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));

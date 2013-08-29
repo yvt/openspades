@@ -346,6 +346,9 @@ namespace spades {
 			
 			projectionViewMatrix = projectionMatrix * viewMatrix;
 			
+			if(r_srgb)
+				device->Enable(IGLDevice::FramebufferSRGB, true);
+			
 			device->ClearDepth(1.f);
 			Vector3 bgCol = GetFogColorForSolidPass();
 			device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
@@ -357,8 +360,6 @@ namespace spades {
 			device->Enable(IGLDevice::DepthTest, true);
 			device->Enable(IGLDevice::Texture2D, true);
 			
-			if(r_srgb)
-				device->Enable(IGLDevice::FramebufferSRGB, true);
 			
 		}
 		

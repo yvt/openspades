@@ -653,7 +653,8 @@ namespace spades {
 			
 			{
 				GLProfiler profiler(device, "Preparation");
-				colorBuffer = renderer->GetFramebufferManager()->PrepareForWaterRendering(tempFramebuffer);
+				colorBuffer = renderer->GetFramebufferManager()->PrepareForWaterRendering(tempFramebuffer,
+																						  tempDepthTexture);
 			}
 			
 			float fogDist = renderer->GetFogDistance();

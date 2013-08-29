@@ -83,7 +83,8 @@ namespace spades {
 			/** setups device for scene rendering. */
 			void PrepareSceneRendering();
 			
-			BufferHandle PrepareForWaterRendering(IGLDevice::UInteger tempFb);
+			BufferHandle PrepareForWaterRendering(IGLDevice::UInteger tempFb,
+												  IGLDevice::UInteger tempDepthTex);
 			BufferHandle StartPostProcessing();
 			
 			void MakeSureAllBuffersReleased();

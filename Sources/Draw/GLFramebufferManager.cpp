@@ -29,6 +29,7 @@ SPADES_SETTING(r_multisamples, "0");
 SPADES_SETTING(r_depthBits, "24"); // TODO: use this value
 SPADES_SETTING(r_colorBits, "0");  // TOOD: use this value
 SPADES_SETTING(r_srgb, "1");
+SPADES_SETTING(r_blitFramebuffer, "1");
 
 namespace spades {
 	namespace draw {
@@ -69,6 +70,11 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			SPLog("Initializing framebuffer manager");
+			
+			if((!r_blitFramebuffer) && r_multisamples) {
+				SPLog("WARNING: Disabling MSAA: no support for MSAA when r_blitFramebuffer = 0");
+				r_multisamples = 0;
+			}
 			
 			useMultisample = (int)r_multisamples > 0;
 			useHighPrec = true;
@@ -358,7 +364,8 @@ namespace spades {
 			device->DepthMask(true);
 		}
 		
-		GLColorBuffer GLFramebufferManager::PrepareForWaterRendering(IGLDevice::UInteger tempFb) {
+		GLColorBuffer GLFramebufferManager::PrepareForWaterRendering(IGLDevice::UInteger tempFb,
+																	 IGLDevice::UInteger tempDepthTex) {
 			SPADES_MARK_FUNCTION();
 			BufferHandle handle;
 			
@@ -383,27 +390,45 @@ namespace spades {
 			int w = device->ScreenWidth();
 			int h = device->ScreenHeight();
 			
-			if(useMultisample){
+			if(r_blitFramebuffer){
+				if(useMultisample){
+					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
+											multisampledFramebuffer);
+				}else{
+					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
+											renderFramebuffer);
+				}
+				device->BindFramebuffer(IGLDevice::DrawFramebuffer,
+										tempFb);
+				device->BlitFramebuffer(0, 0, w, h,
+										0, 0, w, h,
+										IGLDevice::ColorBufferBit,
+										IGLDevice::Nearest);
+				device->BlitFramebuffer(0, 0, w, h,
+										0, 0, w, h,
+										IGLDevice::DepthBufferBit,
+										IGLDevice::Nearest);
 				device->BindFramebuffer(IGLDevice::ReadFramebuffer,
-										multisampledFramebuffer);
+										0);
+				device->BindFramebuffer(IGLDevice::DrawFramebuffer,
+										0);
 			}else{
-				device->BindFramebuffer(IGLDevice::ReadFramebuffer,
-										renderFramebuffer);
+				if(useMultisample){
+					device->BindFramebuffer(IGLDevice::Framebuffer,
+											multisampledFramebuffer);
+				}else{
+					device->BindFramebuffer(IGLDevice::Framebuffer,
+											renderFramebuffer);
+				}
+				device->BindTexture(IGLDevice::Texture2D, handle.GetTexture());
+				device->CopyTexSubImage2D(IGLDevice::Texture2D,
+										  0, 0, 0,
+										  0, 0, w, h);
+				device->BindTexture(IGLDevice::Texture2D, tempDepthTex);
+				device->CopyTexSubImage2D(IGLDevice::Texture2D,
+										  0, 0, 0,
+										  0, 0, w, h);
 			}
-			device->BindFramebuffer(IGLDevice::DrawFramebuffer,
-									tempFb);
-			device->BlitFramebuffer(0, 0, w, h,
-									0, 0, w, h,
-									IGLDevice::ColorBufferBit,
-									IGLDevice::Nearest);
-			device->BlitFramebuffer(0, 0, w, h,
-									0, 0, w, h,
-									IGLDevice::DepthBufferBit,
-									IGLDevice::Nearest);
-			device->BindFramebuffer(IGLDevice::ReadFramebuffer,
-									0);
-			device->BindFramebuffer(IGLDevice::DrawFramebuffer,
-									0);
 			
 			
 			// restore render framebuffer
@@ -426,23 +451,35 @@ namespace spades {
 				// downsample
 				int w = device->ScreenWidth();
 				int h = device->ScreenHeight();
-				
-				device->BindFramebuffer(IGLDevice::ReadFramebuffer,
-										multisampledFramebuffer);
-				device->BindFramebuffer(IGLDevice::DrawFramebuffer,
-										renderFramebuffer);
-				device->BlitFramebuffer(0, 0, w, h,
-										0, 0, w, h,
-										IGLDevice::ColorBufferBit,
-										IGLDevice::Nearest);
-				device->BlitFramebuffer(0, 0, w, h,
-										0, 0, w, h,
-										IGLDevice::DepthBufferBit,
-										IGLDevice::Nearest);
-				device->BindFramebuffer(IGLDevice::ReadFramebuffer,
-										0);
-				device->BindFramebuffer(IGLDevice::DrawFramebuffer,
-										0);
+				if(r_blitFramebuffer){
+					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
+											multisampledFramebuffer);
+					device->BindFramebuffer(IGLDevice::DrawFramebuffer,
+											renderFramebuffer);
+					device->BlitFramebuffer(0, 0, w, h,
+											0, 0, w, h,
+											IGLDevice::ColorBufferBit,
+											IGLDevice::Nearest);
+					device->BlitFramebuffer(0, 0, w, h,
+											0, 0, w, h,
+											IGLDevice::DepthBufferBit,
+											IGLDevice::Nearest);
+					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
+											0);
+					device->BindFramebuffer(IGLDevice::DrawFramebuffer,
+											0);
+				}else{
+					device->BindFramebuffer(IGLDevice::Framebuffer,
+											multisampledFramebuffer);
+					device->BindTexture(IGLDevice::Texture2D, renderColorTexture);
+					device->CopyTexSubImage2D(IGLDevice::Texture2D,
+											  0, 0, 0, 0, 0,
+											  w, h);
+					device->BindTexture(IGLDevice::Texture2D, renderDepthTexture);
+					device->CopyTexSubImage2D(IGLDevice::Texture2D,
+											  0, 0, 0, 0, 0,
+											  w, h);
+				}
 			}
 			
 			device->Enable(IGLDevice::DepthTest, false);

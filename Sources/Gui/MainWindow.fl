@@ -27,7 +27,7 @@ widget_class MainWindow {
     }
     Fl_Group {} {
       label Setup open
-      private xywh {10 130 595 220} hide
+      private xywh {10 130 595 220}
     } {
       Fl_Group {} {
         label Video open
@@ -35,9 +35,7 @@ widget_class MainWindow {
       } {
         Fl_Choice msaaSelect {
           label {AA:}
-          callback {if(msaaSelect->value() >= 1 &&
-   msaaSelect->value() <= 2)
-	MSAAEnabled();
+          callback {MSAAEnabled();
 SavePrefs();} open
           private xywh {270 160 115 25} down_box BORDER_BOX when 1
         } {}
@@ -90,7 +88,7 @@ SavePrefs();} open
           label Lighting
           callback {if(directLightSelect->value() == 2)
 	DisableMSAA();
-SavePrefs();} open
+SavePrefs();} open selected
           xywh {255 280 130 25} down_box BORDER_BOX when 1
         } {}
         Fl_Choice shaderSelect {
@@ -124,7 +122,7 @@ SavePrefs();} open
     }
     Fl_Group groupReport {
       label {System Report} open
-      xywh {10 130 595 220}
+      xywh {10 130 595 220} hide
     } {
       Fl_Group {} {
         label Graphics open
@@ -154,7 +152,7 @@ SavePrefs();} open
   }
   Fl_Return_Button connectButton {
     label Connect
-    callback {QuickConnectPressed();} selected
+    callback {QuickConnectPressed();}
     private xywh {505 80 100 25}
   }
   Function {QuickConnectPressed()} {open private
