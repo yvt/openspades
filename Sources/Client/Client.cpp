@@ -70,6 +70,7 @@ SPADES_SETTING(cg_blood, "1");
 SPADES_SETTING(cg_ejectBrass, "1");
 
 SPADES_SETTING(cg_mouseSensitivity, "1");
+SPADES_SETTING(cg_zoomedMouseSensScale, "1");
 
 SPADES_SETTING(cg_keyAttack, "LeftMouseButton");
 SPADES_SETTING(cg_keyAltAttack, "RightMouseButton");
@@ -728,6 +729,14 @@ namespace spades {
 				if(p->IsAlive()){
 					x /= GetAimDownZoomScale();
 					y /= GetAimDownZoomScale();
+					
+					if(aimDownState > 0.f) {
+						float scale = cg_zoomedMouseSensScale;
+						scale = powf(scale, aimDownState);
+						x *= scale;
+						y *= scale;
+					}
+					
 					x *= (float)cg_mouseSensitivity;
 					y *= (float)cg_mouseSensitivity;
 					
