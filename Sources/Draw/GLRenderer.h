@@ -85,6 +85,9 @@ namespace spades {
 			
 			GLCameraBlurFilter cameraBlur;
 			
+			// used when r_srgb = 1
+			IGLDevice::UInteger lastColorBufferTexture;
+			
 			float fogDistance;
 			Vector3 fogColor;
 			

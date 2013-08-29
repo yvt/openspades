@@ -28,7 +28,7 @@
 SPADES_SETTING(r_multisamples, "0");
 SPADES_SETTING(r_depthBits, "24"); // TODO: use this value
 SPADES_SETTING(r_colorBits, "0");  // TOOD: use this value
-
+SPADES_SETTING(r_srgb, "1");
 
 namespace spades {
 	namespace draw {
@@ -102,30 +102,12 @@ namespace spades {
 				multisampledColorRenderbuffer = dev->GenRenderbuffer();
 				dev->BindRenderbuffer(IGLDevice::Renderbuffer,
 									  multisampledColorRenderbuffer);
-				try{
-					dev->RenderbufferStorage(IGLDevice::Renderbuffer,
-											 (int)r_multisamples,
-											 IGLDevice::RGB10A2,
-											 dev->ScreenWidth(),
-											 dev->ScreenHeight());
-					SPLog("MSAA Color Buffer Allocated");
-					
-					dev->FramebufferRenderbuffer(IGLDevice::Framebuffer,
-												 IGLDevice::ColorAttachment0,
-												 IGLDevice::Renderbuffer,
-												 multisampledColorRenderbuffer);
-					IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
-					if(status != IGLDevice::FramebufferComplete) {
-						RaiseFBStatusError(status);
-					}
-					SPLog("MSAA Framebuffer Allocated");
-					
-				}catch(...){
-					SPLog("Renderbuffer creation failed: trying with RGB8");
+				if(r_srgb){
+					SPLog("Creating MSAA Color Buffer with SRGB8_ALPHA");
 					useHighPrec = false;
 					dev->RenderbufferStorage(IGLDevice::Renderbuffer,
 											 (int)r_multisamples,
-											 IGLDevice::RGBA8,
+											 IGLDevice::SRGB8Alpha,
 											 dev->ScreenWidth(),
 											 dev->ScreenHeight());
 					
@@ -140,8 +122,47 @@ namespace spades {
 						RaiseFBStatusError(status);
 					}
 					SPLog("MSAA Framebuffer Allocated");
+				}else{
+					try{
+						dev->RenderbufferStorage(IGLDevice::Renderbuffer,
+												 (int)r_multisamples,
+												 IGLDevice::RGB10A2,
+												 dev->ScreenWidth(),
+												 dev->ScreenHeight());
+						SPLog("MSAA Color Buffer Allocated");
+						
+						dev->FramebufferRenderbuffer(IGLDevice::Framebuffer,
+													 IGLDevice::ColorAttachment0,
+													 IGLDevice::Renderbuffer,
+													 multisampledColorRenderbuffer);
+						IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+						if(status != IGLDevice::FramebufferComplete) {
+							RaiseFBStatusError(status);
+						}
+						SPLog("MSAA Framebuffer Allocated");
+						
+					}catch(...){
+						SPLog("Renderbuffer creation failed: trying with RGB8");
+						useHighPrec = false;
+						dev->RenderbufferStorage(IGLDevice::Renderbuffer,
+												 (int)r_multisamples,
+												 IGLDevice::RGBA8,
+												 dev->ScreenWidth(),
+												 dev->ScreenHeight());
+						
+						SPLog("MSAA Color Buffer Allocated");
+						
+						dev->FramebufferRenderbuffer(IGLDevice::Framebuffer,
+													 IGLDevice::ColorAttachment0,
+													 IGLDevice::Renderbuffer,
+													 multisampledColorRenderbuffer);
+						IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+						if(status != IGLDevice::FramebufferComplete) {
+							RaiseFBStatusError(status);
+						}
+						SPLog("MSAA Framebuffer Allocated");
+					}
 				}
-				
 			}
 			
 			SPLog("Creating Non-MSAA Buffer");
@@ -190,45 +211,12 @@ namespace spades {
 			renderColorTexture = dev->GenTexture();
 			dev->BindTexture(IGLDevice::Texture2D,
 							 renderColorTexture);
-			try{
-				dev->TexImage2D(IGLDevice::Texture2D,
-								0,
-								IGLDevice::RGB10A2,
-								dev->ScreenWidth(),
-								dev->ScreenHeight(),
-								0,
-								IGLDevice::RGBA,
-								IGLDevice::UnsignedByte, NULL);
-				SPLog("Color Buffer Allocated");
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureMagFilter,
-								  IGLDevice::Linear);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureMinFilter,
-								  IGLDevice::Linear);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureWrapS,
-								  IGLDevice::ClampToEdge);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureWrapT,
-								  IGLDevice::ClampToEdge);
-				
-				dev->FramebufferTexture2D(IGLDevice::Framebuffer,
-										  IGLDevice::ColorAttachment0,
-										  IGLDevice::Texture2D,
-										  renderColorTexture, 0);
-				
-				IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
-				if(status != IGLDevice::FramebufferComplete) {
-					RaiseFBStatusError(status);
-				}
-				SPLog("Framebuffer Created");
-			}catch(...){
-				SPLog("Texture creation failed: trying with RGB8");
+			if(r_srgb){
+				SPLog("Creating Non-MSAA SRGB buffer");
 				useHighPrec = false;
 				dev->TexImage2D(IGLDevice::Texture2D,
 								0,
-								IGLDevice::RGBA8,
+								IGLDevice::SRGB8Alpha,
 								dev->ScreenWidth(),
 								dev->ScreenHeight(),
 								0,
@@ -258,6 +246,76 @@ namespace spades {
 					RaiseFBStatusError(status);
 				}
 				SPLog("Framebuffer Created");
+			}else{
+				try{
+					dev->TexImage2D(IGLDevice::Texture2D,
+									0,
+									IGLDevice::RGB10A2,
+									dev->ScreenWidth(),
+									dev->ScreenHeight(),
+									0,
+									IGLDevice::RGBA,
+									IGLDevice::UnsignedByte, NULL);
+					SPLog("Color Buffer Allocated");
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureMagFilter,
+									  IGLDevice::Linear);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureMinFilter,
+									  IGLDevice::Linear);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureWrapS,
+									  IGLDevice::ClampToEdge);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureWrapT,
+									  IGLDevice::ClampToEdge);
+					
+					dev->FramebufferTexture2D(IGLDevice::Framebuffer,
+											  IGLDevice::ColorAttachment0,
+											  IGLDevice::Texture2D,
+											  renderColorTexture, 0);
+					
+					IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+					if(status != IGLDevice::FramebufferComplete) {
+						RaiseFBStatusError(status);
+					}
+					SPLog("Framebuffer Created");
+				}catch(...){
+					SPLog("Texture creation failed: trying with RGB8");
+					useHighPrec = false;
+					dev->TexImage2D(IGLDevice::Texture2D,
+									0,
+									IGLDevice::RGBA8,
+									dev->ScreenWidth(),
+									dev->ScreenHeight(),
+									0,
+									IGLDevice::RGBA,
+									IGLDevice::UnsignedByte, NULL);
+					SPLog("Color Buffer Allocated");
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureMagFilter,
+									  IGLDevice::Linear);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureMinFilter,
+									  IGLDevice::Linear);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureWrapS,
+									  IGLDevice::ClampToEdge);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureWrapT,
+									  IGLDevice::ClampToEdge);
+					
+					dev->FramebufferTexture2D(IGLDevice::Framebuffer,
+											  IGLDevice::ColorAttachment0,
+											  IGLDevice::Texture2D,
+											  renderColorTexture, 0);
+					
+					IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+					if(status != IGLDevice::FramebufferComplete) {
+						RaiseFBStatusError(status);
+					}
+					SPLog("Framebuffer Created");
+				}
 			}
 			
 			// add render buffer as a registered buffer
@@ -426,14 +484,30 @@ namespace spades {
 				  w, h, alpha?"yes":"no");
 			
 			// no buffer is free!
+			IGLDevice::Enum ifmt;
+			if(alpha){
+				if(r_srgb)
+					ifmt = IGLDevice::SRGB8Alpha;
+				else
+					ifmt = IGLDevice::RGBA8;
+			}else{
+				if(r_srgb) {
+					ifmt = IGLDevice::SRGB8;
+				}else{
+					if(useHighPrec) {
+						ifmt = IGLDevice::RGB10A2;
+					}else{
+						ifmt = IGLDevice::RGB8;
+					}
+				}
+			}
+			
 			IGLDevice::UInteger tex = device->GenTexture();
 			device->BindTexture(IGLDevice::Texture2D,
 							 tex);
 			device->TexImage2D(IGLDevice::Texture2D,
 							0,
-							alpha?IGLDevice::RGBA8:
-							   (useHighPrec?IGLDevice::RGB10A2:
-								IGLDevice::RGB8),
+							ifmt,
 							w,
 							h,
 							0,

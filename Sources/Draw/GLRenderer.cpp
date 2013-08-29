@@ -69,6 +69,7 @@ SPADES_SETTING(r_radiosity, "0");
 SPADES_SETTING(r_fogShadow, "0");
 SPADES_SETTING(r_fxaa, "1");
 SPADES_SETTING(r_srgb, "1");
+SPADES_SETTING(r_srgb2D, "1");
 
 SPADES_SETTING(r_debugTiming, "0");
 
@@ -357,7 +358,7 @@ namespace spades {
 			device->Enable(IGLDevice::Texture2D, true);
 			
 			if(r_srgb)
-				device->Enable(IGLDevice::FramebufferSRGB, false);
+				device->Enable(IGLDevice::FramebufferSRGB, true);
 			
 		}
 		
@@ -490,7 +491,10 @@ namespace spades {
 					radiosityRenderer->Update();
 				}
 			}
-				
+			
+			if(r_srgb)
+				device->Enable(IGLDevice::FramebufferSRGB, false);
+			
 			// build shadowmap
 			{
 				GLProfiler profiler(device, "Shadow Map Pass");
@@ -499,6 +503,9 @@ namespace spades {
 				if(shadowMapRenderer)
 					shadowMapRenderer->Render();
 			}
+			
+			if(r_srgb)
+				device->Enable(IGLDevice::FramebufferSRGB, true);
 			
 			// draw opaque objects, and do dynamic lighting
 			{
@@ -517,8 +524,6 @@ namespace spades {
 			}
 			
 			
-			if(r_srgb)
-				device->Enable(IGLDevice::FramebufferSRGB, true);
 			{
 				GLProfiler profiler(device, "Dynamic Light Pass [%d light(s)]", (int)lights.size());
 				
@@ -533,8 +538,6 @@ namespace spades {
 				}
 				modelRenderer->RenderDynamicLightPass(lights);
 			}
-			if(r_srgb)
-				device->Enable(IGLDevice::FramebufferSRGB, false);
 			
 			{
 				GLProfiler profiler(device, "Debug Line");
@@ -553,9 +556,6 @@ namespace spades {
 			
 			device->Enable(IGLDevice::Blend, true);
 			
-			if(r_srgb)
-				device->Enable(IGLDevice::FramebufferSRGB, true);
-			
 			device->DepthMask(false);
 			if(!r_softParticles){ // softparticle is a part of postprocess
 				GLProfiler profiler(device, "Particle");
@@ -565,6 +565,7 @@ namespace spades {
 			}
 			
 			
+
 			
 			device->Enable(IGLDevice::DepthTest, false);
 			
@@ -620,12 +621,20 @@ namespace spades {
 					handle = GLFXAAFilter(this).Filter(handle);
 				}
 			}
-				
-			if(r_srgb)
-				device->Enable(IGLDevice::FramebufferSRGB, false);
 			
-			// copy buffer to WM given framebuffer
-			{
+			if(r_srgb && r_srgb2D){
+				// in gamma corrected mode,
+				// 2d drawings are done on gamma-corrected FB
+				// see also: FrameDone
+				lastColorBufferTexture = handle.GetTexture();
+				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
+				device->Enable(IGLDevice::FramebufferSRGB, true);
+				
+			}else{
+				// copy buffer to WM given framebuffer
+				if(r_srgb)
+					device->Enable(IGLDevice::FramebufferSRGB, false);
+				
 				GLProfiler profiler(device, "Copying to WM-given Framebuffer");
 				
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
@@ -801,6 +810,28 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			imageRenderer->Flush();
+			
+			if(r_srgb && r_srgb2D) {
+				// copy buffer to WM given framebuffer
+				int w = device->ScreenWidth();
+				int h = device->ScreenHeight();
+				
+				device->Enable(IGLDevice::FramebufferSRGB, false);
+				;
+				GLProfiler profiler(device, "Copying to WM-given Framebuffer");
+				
+				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
+				device->Enable(IGLDevice::Blend, false);
+				device->Viewport(0, 0, w,h);
+				GLImage image(lastColorBufferTexture,
+							  device,
+							  w,h,
+							  false);
+				SetColor(MakeVector4(1, 1, 1, 1));
+				DrawImage(&image, AABB2(0,h,w,-h));
+				imageRenderer->Flush(); // must flush now because handle is released soon
+			}
+			
 			lastTime = sceneDef.time;
 			
 		}

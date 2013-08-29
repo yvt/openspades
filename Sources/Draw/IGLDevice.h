@@ -156,6 +156,8 @@ namespace spades {
 				RGB5A1,
 				RGB8,
 				RGBA8,
+				SRGB8,
+				SRGB8Alpha,
 				
 				// Texture wrap
 				ClampToEdge,

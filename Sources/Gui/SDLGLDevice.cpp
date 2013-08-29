@@ -589,6 +589,8 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 				case RGB5A1: return GL_RGB5_A1;
 				case RGB8: return GL_RGB8;
 				case RGBA8: return GL_RGBA8;
+				case SRGB8: return GL_SRGB8;
+				case SRGB8Alpha: return GL_SRGB8_ALPHA8;
 				default: SPInvalidEnum("v", v);
 			}
 		}

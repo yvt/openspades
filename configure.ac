@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([OpenSpades], [0.0.7], [i@yvt.jp])
+AC_INIT([OpenSpades], [0.0.8], [i@yvt.jp])
 AM_INIT_AUTOMAKE([-Wall foreign subdir-objects])
 AC_CONFIG_SRCDIR([Sources/Audio/ALDevice.cpp])
 # AC_CONFIG_HEADERS([BuildConfig.h])
