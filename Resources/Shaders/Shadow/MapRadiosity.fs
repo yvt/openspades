@@ -82,6 +82,7 @@ vec3 Radiosity_Map(float detailAmbientOcclusion) {
 	(texture3D(radiosityTextureZ,
 			   radiosityTextureCoord).xyz);
 	col = max(col, 0.);
+	col *= 1.5;
 	
 	// ambient occlusion
 	float amb = texture3D(ambientShadowTexture, ambientShadowTextureCoord).x;
@@ -95,7 +96,7 @@ vec3 Radiosity_Map(float detailAmbientOcclusion) {
 	// method3:
 	//amb = min(amb, detailAmbientOcclusion);
 	
-	col *= detailAmbientOcclusion;
+	amb *= .8 - normalVarying.z * .2;
 	col += amb * ambientColor;
 	
 	return col;
