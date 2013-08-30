@@ -1174,7 +1174,7 @@ namespace spades {
 			Vector3 front = GetFront();
 			
 			float yaw = atan2(front.y, front.x) + M_PI * .5f;
-			//float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));
+			float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));
 			
 			// lower axis
 			Matrix4 lower = Matrix4::Translate(GetOrigin());
@@ -1206,8 +1206,12 @@ namespace spades {
 				hb.limbs[2] = torso * hb.limbs[2];
 				
 				// head
-				hb.head = AABB3(-.3f, -.3f, -0.55f,
+				hb.head = AABB3(-.3f, -.3f, -0.45f,
 								.6f, .6f, 0.6f);
+				hb.head = Matrix4::Translate(0, 0, -0.15f) * hb.head;
+				hb.head = Matrix4::Rotate(MakeVector3(1,0,0),
+										  pitch) * hb.head;
+				hb.head = Matrix4::Translate(0, 0, 0.15f) * hb.head;
 				hb.head = torso * hb.head;
 			}else{
 				// lower
@@ -1232,7 +1236,11 @@ namespace spades {
 				
 				// head
 				hb.head = AABB3(-.3f, -.3f, -0.5f,
-								 .6f, .6f, 0.6f);
+								.6f, .6f, 0.6f);
+				hb.head = Matrix4::Translate(0, 0, -0.1f) * hb.head;
+				hb.head = Matrix4::Rotate(MakeVector3(1,0,0),
+										  pitch) * hb.head;
+				hb.head = Matrix4::Translate(0, 0, 0.1f) * hb.head;
 				hb.head = torso * hb.head;
 			}
 			
