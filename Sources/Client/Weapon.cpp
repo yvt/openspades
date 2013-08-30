@@ -102,14 +102,20 @@ namespace spades {
 					// reload done
 					reloading = false;
 					if(IsReloadSlow()){
+						// TODO: dealing with ammo/stock value
+						// server sends for local player
 						ammo++;
 						stock--;
 						Reload();
 					}else{
-						int newStock;
-						newStock = std::max(0, stock - GetClipSize() + ammo);
-						ammo += stock - newStock;
-						stock = newStock;
+						// for local player, server sends
+						// new ammo/stock value
+						if(owner != owner->GetWorld()->GetLocalPlayer()){
+							int newStock;
+							newStock = std::max(0, stock - GetClipSize() + ammo);
+							ammo += stock - newStock;
+							stock = newStock;
+						}
 					}
 					
 					
@@ -125,6 +131,11 @@ namespace spades {
 			}
 			lastDryFire = dryFire;
 			return fired;
+		}
+		
+		void Weapon::ReloadDone(int ammo, int stock) {
+			this->ammo = ammo;
+			this->stock = stock;
 		}
 		
 		void Weapon::Reload() {

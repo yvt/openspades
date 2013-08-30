@@ -119,6 +119,10 @@ namespace spades {
 			IntVector3 blockCursorPos;
 			IntVector3 blockCursorDragPos;
 			
+			// for local players, completion of reload is
+			// notified to client
+			bool reloadingServerSide;
+			
 			float respawnTime;
 			
 			void RepositionPlayer(const Vector3&);
@@ -162,6 +166,7 @@ namespace spades {
 			int GetNumBlocks() { return blockStocks;}
 			int GetNumGrenades() { return grenades; }
 			void Reload();
+			void ReloadDone(int clip, int stock);
 			void Restock();
 			void GotBlock();
 			
@@ -169,6 +174,9 @@ namespace spades {
 				return tool == ToolWeapon;
 			}
 			bool IsToolSelectable(ToolType);
+			bool IsAwaitingReloadCompletion() {
+				return reloadingServerSide;
+			}
 			
 			void SetPosition(const Vector3&);
 			void SetOrientation(const Vector3&);

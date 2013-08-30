@@ -483,6 +483,11 @@ namespace spades {
 						winp.secondary = false;
 					}
 					
+					if(player->GetTool() == Player::ToolWeapon &&
+					   player->IsAwaitingReloadCompletion()) {
+						winp.primary = false;
+					}
+					
 					player->SetInput(inp);
 					player->SetWeaponInput(winp);
 					
@@ -922,11 +927,15 @@ namespace spades {
 							weapInput.secondary = down;
 						}
 					}else if(CheckKey(cg_keyReloadWeapon, name) && down){
-						world->GetLocalPlayer()->Reload();
-						if(world->GetLocalPlayer()->IsToolWeapon()){
-							weapInput.secondary = false;
+						Weapon *w = world->GetLocalPlayer()->GetWeapon();
+						if(w->GetAmmo() < w->GetClipSize() &&
+						   w->GetStock() > 0){
+							world->GetLocalPlayer()->Reload();
+							if(world->GetLocalPlayer()->IsToolWeapon()){
+								weapInput.secondary = false;
+							}
+							net->SendReload();
 						}
-						net->SendReload();
 					}else if(CheckKey(cg_keyToolSpade, name) && down){
 						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
 						   world->GetLocalPlayer()->IsAlive() &&
@@ -2837,7 +2846,8 @@ namespace spades {
 								case Player::ToolWeapon:
 								{
 									Weapon *weap = p->GetWeapon();
-									if(weap->IsReloading()){
+									if(weap->IsReloading() ||
+									   p->IsAwaitingReloadCompletion()){
 										msg = "Reloading";
 									}else if(weap->GetAmmo() == 0 &&
 											 weap->GetStock() == 0){
