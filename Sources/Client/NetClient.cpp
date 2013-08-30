@@ -1046,10 +1046,11 @@ namespace spades {
 					for(size_t i = 0; i < cells.size(); i++){
 						if(!GetWorld()->GetMap()->IsSolid(cells[i].x, cells[i].y, cells[i].z)){
 							GetWorld()->CreateBlock(cells[i], col);
-							if(p)
-							p->UsedBlocks(1);
+							
 						}
 					}
+					
+					p->UsedBlocks(cells.size());
 					
 					if(p){
 						client->PlayerCreatedBlock(p);
