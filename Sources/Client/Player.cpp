@@ -534,7 +534,7 @@ namespace spades {
 					}
 				}
 				
-				if(world->GetListener())
+				if(world->GetListener() && this != world->GetLocalPlayer())
 					world->GetListener()->AddBulletTracer(this,
 														  muzzle, finalHitPos);
 				
