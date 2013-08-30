@@ -5,7 +5,6 @@ set(OpenSpades_VERSION_MAJOR 0)
 set(OpenSpades_VERSION_MINOR 0)
 set(OpenSpades_VERSION_REVISION 7)
 
-
 include(FindSDL)
 if(NOT SDL_FOUND)
 	message(FATAL_ERROR "OpenSDL not found, set ENV{SDLDIR} to point to OpenSDL, and optionally set the cmake var SDL_LIBRARY_TEMP to the lib dir")
@@ -67,9 +66,12 @@ check_function_exists(gethostbyname_r HAS_GETHOSTBYNAME_R)
 check_function_exists(inet_pton HAS_INET_PTON)
 check_function_exists(inet_ntop HAS_INET_NTOP)
 
-set(RESDIR "" CACHE STRING "Resource dir to use while developing")
-if(RESDIR)
+set(OPENSPADES_RESDIR "" CACHE STRING "Resource dir to use while developing")
+if(OPENSPADES_RESDIR)
+	set(RESDIR ${OPENSPADES_RESDIR})
 	set(RESDIR_DEFINED TRUE)
+	mark_as_advanced(RESDIR)
+	mark_as_advanced(RESDIR_DEFINED)
 endif()
 
 

@@ -24,7 +24,4 @@
 
 
 #cmakedefine RESDIR_DEFINED
-
-#if defined(RESDIR_DEFINED)
 #define RESDIR "${RESDIR}"
-#endif

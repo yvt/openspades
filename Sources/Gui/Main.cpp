@@ -111,7 +111,7 @@ int main(int argc, char ** argv)
 	}
 	SPLog("Log Started.");
 	
-#ifdef RESDIR
+#if defined(RESDIR_DEFINED)
 	spades::FileManager::AddFileSystem
 	(new spades::DirectoryFileSystem(RESDIR, false));
 #endif

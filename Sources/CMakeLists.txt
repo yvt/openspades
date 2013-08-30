@@ -20,6 +20,15 @@ include_directories("Enet/include")
 add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${GUI_FILES} ${IMPORTS_FILES} ${KISS_FILES}
 	${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES} ${UNZIP_FILES})
 set_target_properties(OpenSpades PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set_target_properties(OpenSpades PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+if(WIN32)
+	string(REGEX REPLACE "\\.lib$" ".dll" SDL_DLL ${SDL_LIBRARY})
+	add_custom_command(TARGET OpenSpades POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SDL_DLL}" "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/")
+endif()
+
 source_group("Audio" FILES ${AUDIO_FILES})
 source_group("Audio\\AL" FILES ${AUDIO_AL_FILES})
 source_group("binpack2d" FILES ${BINPACK_FILES})

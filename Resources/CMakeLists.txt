@@ -1,6 +1,6 @@
 
 
-if(RESDIR)
+if(RESDIR_DEFINED)
 	add_custom_target(copy_resources ALL COMMENT "Copying resources")
 
 	file(GLOB_RECURSE SHADERS Shaders/*)
