@@ -1284,10 +1284,10 @@ namespace spades {
 						def.viewAxis[2] = front;
 						
 						
-						def.fovY = 60.f * M_PI /180.f;
-						def.fovX = atanf(tanf(def.fovY * .5f) *
-										 renderer->ScreenWidth() /
-										 renderer->ScreenHeight()) * 2.f;
+						def.fovX = 90.f * M_PI /180.f;
+						def.fovY = atanf(tanf(def.fovX * .5f) *
+										 renderer->ScreenHeight() /
+										 renderer->ScreenWidth()) * 2.f;
 						
 						// update initial spectate pos
 						// this is not used now, but if the local player is
