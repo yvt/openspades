@@ -67,6 +67,12 @@ check_function_exists(gethostbyname_r HAS_GETHOSTBYNAME_R)
 check_function_exists(inet_pton HAS_INET_PTON)
 check_function_exists(inet_ntop HAS_INET_NTOP)
 
+set(RESDIR "" CACHE STRING "Resource dir to use while developing")
+if(RESDIR)
+	set(RESDIR_DEFINED TRUE)
+endif()
+
+
 configure_file("${PROJECT_SOURCE_DIR}/OpenSpades.h.in" "${PROJECT_BINARY_DIR}/OpenSpades.h")
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories("${SDL_INCLUDE_DIR}")

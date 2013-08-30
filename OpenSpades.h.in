@@ -21,3 +21,10 @@
 
 #cmakedefine HAS_FCNTL_H
 #cmakedefine HAS_UNISTD_H
+
+
+#cmakedefine RESDIR_DEFINED
+
+#if defined(RESDIR_DEFINED)
+#define RESDIR "${RESDIR}"
+#endif
