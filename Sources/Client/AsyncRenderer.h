@@ -1,10 +1,22 @@
-//
-//  AsyncRenderer.h
-//  OpenSpades
-//
-//  Created by yvt on 7/29/13.
-//  Copyright (c) 2013 yvt.jp. All rights reserved.
-//
+/*
+ Copyright (c) 2013 yvt
+ 
+ This file is part of OpenSpades.
+ 
+ OpenSpades is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ OpenSpades is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ */
 
 #pragma once
 
@@ -61,6 +73,7 @@ namespace spades {
 			virtual void AddDebugLine(Vector3 a, Vector3 b, Vector4 color);
 			
 			virtual void AddSprite(IImage *, Vector3 center, float radius, float rotation);
+			virtual void AddLongSprite(IImage *, Vector3 p1, Vector3 p2, float radius);
 			
 			/** Finalizes a scene. 2D drawing follows. */
 			virtual void EndScene();

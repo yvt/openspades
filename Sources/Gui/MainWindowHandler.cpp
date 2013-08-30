@@ -1,10 +1,22 @@
-//
-//  MainWindowHandler.cpp
-//  OpenSpades
-//
-//  Created by yvt on 7/22/13.
-//  Copyright (c) 2013 yvt.jp. All rights reserved.
-//
+/*
+ Copyright (c) 2013 yvt
+ 
+ This file is part of OpenSpades.
+ 
+ OpenSpades is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ OpenSpades is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ */
 
 #include <OpenSpades.h>
 #include "MainWindow.h"
@@ -48,6 +60,7 @@ SPADES_SETTING(r_videoHeight, "640");
 SPADES_SETTING(r_fullscreen, "0");
 SPADES_SETTING(r_fogShadow, "0");
 SPADES_SETTING(r_lensFlare, "1");
+SPADES_SETTING(r_blitFramebuffer, "1");
 SPADES_SETTING(r_srgb, "1");
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
@@ -109,30 +122,56 @@ void MainWindow::LoadPrefs() {
 	modeSelect->value(buf);
 	
 	msaaSelect->clear();
-	msaaSelect->add("Off");
-	msaaSelect->add("MSAA 2x");
-	msaaSelect->add("MSAA 4x");
-	msaaSelect->add("FXAA");
-	msaaSelect->add("Custom");
-	if(r_fxaa) {
-		if(r_multisamples){
-			msaaSelect->value(4);
+	if(r_blitFramebuffer) {
+		msaaSelect->add("Off");
+		msaaSelect->add("MSAA 2x");
+		msaaSelect->add("MSAA 4x");
+		msaaSelect->add("FXAA");
+		msaaSelect->add("Custom");
+		if(r_fxaa) {
+			if(r_multisamples){
+				msaaSelect->value(4);
+			}else{
+				msaaSelect->value(3);
+			}
 		}else{
-			msaaSelect->value(3);
+			switch((int)r_multisamples){
+				case 0:
+				case 1:
+				default:
+					msaaSelect->value(0);
+					break;
+				case 2:
+					msaaSelect->value(1);
+					break;
+				case 4:
+					msaaSelect->value(2);
+					break;
+			}
 		}
-	}else{
-		switch((int)r_multisamples){
-			case 0:
-			case 1:
-			default:
-				msaaSelect->value(0);
-				break;
-			case 2:
-				msaaSelect->value(1);
-				break;
-			case 4:
+	}else {
+		// MSAA is not supported with r_blitFramebuffer = 0
+		msaaSelect->add("Off");
+		msaaSelect->add("FXAA");
+		msaaSelect->add("Custom");
+		if(r_fxaa) {
+			if(r_multisamples){
 				msaaSelect->value(2);
-				break;
+			}else{
+				msaaSelect->value(1);
+			}
+		}else{
+			switch((int)r_multisamples){
+				case 0:
+				case 1:
+				default:
+					msaaSelect->value(0);
+					break;
+				case 2:
+				case 4:
+					msaaSelect->value(2);
+					break;
+			}
 		}
 	}
 	
@@ -292,7 +331,6 @@ void MainWindow::CheckGLCapability() {
 			"GL_ARB_shading_language_100",
 			"GL_ARB_vertex_buffer_object",
 			"GL_EXT_framebuffer_object",
-			"GL_EXT_framebuffer_blit",
 			NULL
 		};
 		
@@ -326,6 +364,17 @@ void MainWindow::CheckGLCapability() {
 			if(r_srgb) {
 				r_srgb = 0;
 				SPLog("Disabling r_srgb: no GL_ARB_framebuffer_sRGB");
+			}
+		}
+		if(extensions.find("GL_EXT_framebuffer_blit") ==
+		   std::string::npos) {
+			if(r_blitFramebuffer) {
+				r_blitFramebuffer = 0;
+				SPLog("Disabling r_blitFramebuffer: no GL_EXT_framebuffer_blit");
+			}
+			if(r_multisamples) {
+				r_multisamples = 0;
+				SPLog("Disabling r_multisamples: no GL_EXT_framebuffer_blit");
 			}
 		}
 		
@@ -429,15 +478,21 @@ void MainWindow::SavePrefs() {
 }
 
 void MainWindow::DisableMSAA() {
-	if(msaaSelect->value() >= 1 && msaaSelect->value() <= 2)
-		msaaSelect->value(3);
+	if(r_blitFramebuffer){
+		if(msaaSelect->value() >= 1 && msaaSelect->value() <= 2)
+			msaaSelect->value(3);
+	}
 }
 
 void MainWindow::MSAAEnabled() {
-	if(shaderSelect->value() == 1)
-		shaderSelect->value(0);
-	if(directLightSelect->value() == 2)
-		directLightSelect->value(1);
+	if(msaaSelect->value() >= 1 &&
+	   msaaSelect->value() <= 2 &&
+	   r_blitFramebuffer){
+		if(shaderSelect->value() == 1)
+			shaderSelect->value(0);
+		if(directLightSelect->value() == 2)
+			directLightSelect->value(1);
+	}
 }
 
 void MainWindow::OpenDetailConfig() {

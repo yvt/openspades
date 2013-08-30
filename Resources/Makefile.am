@@ -29,6 +29,9 @@ Shaders/SoftSprite.program \
 Shaders/Sprite.fs \
 Shaders/Sprite.vs \
 Shaders/Sprite.program \
+Shaders/LongSprite.fs \
+Shaders/LongSprite.vs \
+Shaders/LongSprite.program \
 Shaders/VoxelModel.fs \
 Shaders/VoxelModel.vs \
 Shaders/VoxelModel.program \

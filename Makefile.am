@@ -118,6 +118,8 @@ Sources/Client/Weapon.cpp \
 Sources/Client/Weapon.h \
 Sources/Client/World.cpp \
 Sources/Client/World.h \
+Sources/Client/Tracer.cpp \
+Sources/Client/Tracer.h \
 Sources/Core/AutoLocker.cpp \
 Sources/Core/AutoLocker.h \
 Sources/Core/Bitmap.cpp \
@@ -251,6 +253,8 @@ Sources/Draw/GLSoftSpriteRenderer.cpp \
 Sources/Draw/GLSoftSpriteRenderer.h \
 Sources/Draw/GLSpriteRenderer.cpp \
 Sources/Draw/GLSpriteRenderer.h \
+Sources/Draw/GLLongSpriteRenderer.cpp \
+Sources/Draw/GLLongSpriteRenderer.h \
 Sources/Draw/GLVoxelModel.cpp \
 Sources/Draw/GLVoxelModel.h \
 Sources/Draw/GLWaterRenderer.cpp \

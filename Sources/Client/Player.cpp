@@ -1,10 +1,22 @@
-//
-//  Player.cpp
-//  OpenSpades
-//
-//  Created by yvt on 7/14/13.
-//  Copyright (c) 2013 yvt.jp. All rights reserved.
-//
+/*
+ Copyright (c) 2013 yvt
+ 
+ This file is part of OpenSpades.
+ 
+ OpenSpades is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ OpenSpades is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ */
 
 #include "Player.h"
 #include "PhysicsConstants.h"
@@ -446,11 +458,16 @@ namespace spades {
 					}
 				}
 				
+				Vector3 finalHitPos;
+				finalHitPos = muzzle + dir * 128.f;
+				
 				if(mapResult.hit && (mapResult.hitPos - muzzle).GetLength() < 128.f &&
 				   (hitPlayer == NULL || (mapResult.hitPos - muzzle).GetLength() < hitPlayerDistance)){
 					IntVector3 outBlockCoord = mapResult.hitBlock;
 					// TODO: set correct ray distance
 					// FIXME: why ray casting twice?
+					
+					finalHitPos = mapResult.hitPos;
 					
 					if(outBlockCoord.x >= 0 && outBlockCoord.y >= 0 && outBlockCoord.z >= 0 &&
 					   outBlockCoord.x < map->Width() && outBlockCoord.y < map->Height() &&
@@ -490,6 +507,8 @@ namespace spades {
 			    }else if(hitPlayer != NULL){
 					if(hitPlayerDistance < 128.f){
 						
+						finalHitPos = muzzle + dir * hitPlayerDistance;
+						
 						if(world->GetListener()){
 							if(hitFlag & 1)
 								world->GetListener()->BulletHitPlayer(hitPlayer,
@@ -515,6 +534,9 @@ namespace spades {
 					}
 				}
 				
+				if(world->GetListener() && this != world->GetLocalPlayer())
+					world->GetListener()->AddBulletTracer(this,
+														  muzzle, finalHitPos);
 				
 				// one pellet done
 			}
@@ -705,7 +727,7 @@ namespace spades {
 					
 					uint32_t color = map->GetColor(x, y, z);
 					int health = color >> 24;
-					health -= 40;
+					health -= 55;
 					if(health <= 0){
 						health = 0;
 						// send destroy command only for local cmd
@@ -1242,6 +1264,22 @@ namespace spades {
 					return true;
 				case ToolWeapon:
 					return weapon->IsReadyToShoot();
+			}
+		}
+		
+		bool Player::IsToolSelectable(ToolType type) {
+			switch(type){
+				case ToolSpade:
+					return true;
+				case ToolBlock:
+					return blockStocks > 0;
+				case ToolWeapon:
+					return weapon->GetAmmo() > 0 ||
+					weapon->GetStock() > 0;
+				case ToolGrenade:
+					return grenades > 0;
+				default:
+					SPAssert(false);
 			}
 		}
 		

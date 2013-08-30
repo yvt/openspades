@@ -1,10 +1,22 @@
-//
-//  AsyncRenderer.cpp
-//  OpenSpades
-//
-//  Created by yvt on 7/29/13.
-//  Copyright (c) 2013 yvt.jp. All rights reserved.
-//
+/*
+ Copyright (c) 2013 yvt
+ 
+ This file is part of OpenSpades.
+ 
+ OpenSpades is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ OpenSpades is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ */
 
 #include "AsyncRenderer.h"
 #include <new>
@@ -215,6 +227,16 @@ namespace spades {
 				float radius, rotation;
 				virtual void Execute(IRenderer *r){
 					r->AddSprite(img->GetImage(), center, radius, rotation);
+					delete img;
+				}
+			};
+			class AddLongSprite: public Command {
+			public:
+				AsyncImage *img;
+				Vector3 p1, p2;
+				float radius;
+				virtual void Execute(IRenderer *r){
+					r->AddLongSprite(img->GetImage(), p1, p2, radius);
 					delete img;
 				}
 			};
@@ -594,6 +616,16 @@ namespace spades {
 			cmd->center = center;
 			cmd->radius = radius;
 			cmd->rotation = rotation;
+		}
+		
+		void AsyncRenderer::AddLongSprite(IImage *img, Vector3 p1, Vector3 p2,
+									  float radius){
+			SPADES_MARK_FUNCTION();
+			rcmds::AddLongSprite *cmd = generator->AllocCommand<rcmds::AddLongSprite>();
+			cmd->img = static_cast<AsyncImage *>(img)->Copy();
+			cmd->p1 = p1;
+			cmd->p2 = p2;
+			cmd->radius = radius;
 		}
 		
 		void AsyncRenderer::EndScene() {

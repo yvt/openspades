@@ -1,10 +1,22 @@
-//
-//  NetClient.cpp
-//  OpenSpades
-//
-//  Created by yvt on 7/16/13.
-//  Copyright (c) 2013 yvt.jp. All rights reserved.
-//
+/*
+ Copyright (c) 2013 yvt
+ 
+ This file is part of OpenSpades.
+ 
+ OpenSpades is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ OpenSpades is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ */
 
 #include "NetClient.h"
 #include "../Core/Debug.h"
@@ -296,6 +308,22 @@ namespace spades {
 			SPLog("ENet host destroyed");
 		}
 		
+		// unsigned long version of atol, cross-platform (including MSVC)
+		static uint32_t ParseIntegerAddress(const std::string& str) {
+			uint32_t vl = 0;
+			for(size_t i = 0; i < str.size(); i++) {
+				char c = str[i];
+				if(c >= '0' && c<= '9'){
+					vl *= 10;
+					vl += (uint32_t)(c - '0');
+				}else{
+					break;
+				}
+			}
+			
+			return vl;
+		}
+		
 		void NetClient::Connect(std::string hostname) {
 			SPADES_MARK_FUNCTION();
 			
@@ -326,7 +354,7 @@ namespace spades {
 			if(addr.find('.') != std::string::npos){
 				enet_address_set_host(&address, addr.c_str());
 			}else{
-				address.host = (uint32_t)atol(addr.c_str());
+				address.host = ParseIntegerAddress(addr);
 			}
 			
 			
@@ -1018,10 +1046,11 @@ namespace spades {
 					for(size_t i = 0; i < cells.size(); i++){
 						if(!GetWorld()->GetMap()->IsSolid(cells[i].x, cells[i].y, cells[i].z)){
 							GetWorld()->CreateBlock(cells[i], col);
-							if(p)
-							p->UsedBlocks(1);
+							
 						}
 					}
+					
+					p->UsedBlocks(cells.size());
 					
 					if(p){
 						client->PlayerCreatedBlock(p);
