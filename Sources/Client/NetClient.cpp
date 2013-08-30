@@ -1359,7 +1359,13 @@ namespace spades {
 					Player *p = GetPlayer(reader.ReadByte());
 					if(p != GetLocalPlayerOrNull())
 						p->Reload();
-					
+					else{
+						int clip = reader.ReadByte();
+						int reserve = reader.ReadByte();
+						if(clip < 255 && reserve < 255) {
+							p->ReloadDone(clip, reserve);
+						}
+					}
 					// FIXME: use of "clip ammo" and "reserve ammo"?
 				}
 					break;
@@ -1519,8 +1525,11 @@ namespace spades {
 			NetPacketWriter wri(PacketTypeWeaponReload);
 			wri.Write((uint8_t)GetLocalPlayer()->GetId());
 			
-			wri.Write((uint8_t)0); // clip_ammo; not used?
-			wri.Write((uint8_t)0); // reserve_ammo; not used?
+			// these value should be 255, or
+			// NetClient will think reload was done when
+			// it receives echoed WeaponReload packet
+			wri.Write((uint8_t)255); // clip_ammo; not used?
+			wri.Write((uint8_t)255); // reserve_ammo; not used?
 			
 			enet_peer_send(peer, 0, wri.CreatePacket());
 		}

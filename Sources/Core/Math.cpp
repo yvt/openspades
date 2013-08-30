@@ -289,7 +289,7 @@ namespace spades {
 		if(dotY != 0.f){
 			float startp = Vector3::Dot(start, normY);
 			float endp = Vector3::Dot(end, normY);
-			float boxp = Vector3::Dot(normX, normY);
+			float boxp = Vector3::Dot(normY, normY);
 			float hit; // 0=start, 1=end
 			if(startp < endp){
 				hit = startp / (startp - endp);
@@ -315,7 +315,7 @@ namespace spades {
 		if(dotZ != 0.f){
 			float startp = Vector3::Dot(start, normZ);
 			float endp = Vector3::Dot(end, normZ);
-			float boxp = Vector3::Dot(normX, normZ);
+			float boxp = Vector3::Dot(normZ, normZ);
 			float hit; // 0=start, 1=end
 			if(startp < endp){
 				hit = startp / (startp - endp);

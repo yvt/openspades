@@ -75,6 +75,7 @@ namespace spades {
 			blockCursorDragging = false;
 			
 			holdingGrenade = false;
+			reloadingServerSide = false;
 			
 		}
 		
@@ -213,6 +214,13 @@ namespace spades {
 				return;
 			}
 			weapon->Reload();
+			if(this == world->GetLocalPlayer())
+				reloadingServerSide = true;
+		}
+		
+		void Player::ReloadDone(int clip, int stock) {
+			reloadingServerSide = false;
+			weapon->ReloadDone(clip, stock);
 		}
 		
 		void Player::Restock() {
