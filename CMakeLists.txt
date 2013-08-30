@@ -35,8 +35,16 @@ if(NOT FLTK_FOUND)
 	message(FATAL_ERROR "FLTK not found, manually set FLTK_INCLUDE_DIR in CMake")
 endif()
 
+set(FLTK_OS_LIBS ${FLTK_BASE_LIBRARY} ${FLTK_IMAGES_LIBRARY})
 find_library(FLTK_PNG NAMES fltkpng fltkpngd fltk_png PATHS ${FLTK_LIBRARY_SEARCH_PATH})
+if(FLTK_PNG)
+	list(APPEND FLTK_OS_LIBS ${FLTK_PNG})
+endif()
 find_library(FLTK_JPEG NAMES fltkjpeg fltkjpegd fltk_jpeg PATHS ${FLTK_LIBRARY_SEARCH_PATH})
+if(FLTK_JPEG)
+	list(APPEND FLTK_OS_LIBS ${FLTK_JPEG})
+endif()
+
 
 include(FindZLIB)
 if(NOT ZLIB_FOUND)
