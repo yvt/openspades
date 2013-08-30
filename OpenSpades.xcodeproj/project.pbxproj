@@ -44,6 +44,7 @@
 		E834F56817979F5A004EBE88 /* Quake3Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56617979F55004EBE88 /* Quake3Font.cpp */; };
 		E834F56B17979FD7004EBE88 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56917979FD3004EBE88 /* IFont.cpp */; };
 		E834F56F1797D934004EBE88 /* ChatWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56D1797D92F004EBE88 /* ChatWindow.cpp */; };
+		E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */; };
 		E8567E571792B24D009D83E0 /* IAudioChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E551792B24D009D83E0 /* IAudioChunk.cpp */; };
 		E8567E5A1792BEFC009D83E0 /* ALDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E581792BEFC009D83E0 /* ALDevice.cpp */; };
 		E8567E5D1792C089009D83E0 /* ALFuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E5C1792C089009D83E0 /* ALFuncs.cpp */; };
@@ -262,6 +263,8 @@
 		E834F56D1797D92F004EBE88 /* ChatWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChatWindow.cpp; sourceTree = "<group>"; };
 		E834F56E1797D932004EBE88 /* ChatWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatWindow.h; sourceTree = "<group>"; };
 		E842D48B17C0D06300381B49 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLongSpriteRenderer.cpp; sourceTree = "<group>"; };
+		E844886117CFB32B005105D0 /* GLLongSpriteRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLongSpriteRenderer.h; sourceTree = "<group>"; };
 		E8567E551792B24D009D83E0 /* IAudioChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IAudioChunk.cpp; sourceTree = "<group>"; };
 		E8567E561792B24D009D83E0 /* IAudioChunk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAudioChunk.h; sourceTree = "<group>"; };
 		E8567E581792BEFC009D83E0 /* ALDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ALDevice.cpp; sourceTree = "<group>"; };
@@ -998,6 +1001,8 @@
 				E80B287017A4CA2C0056179E /* GLOptimizedVoxelModel.h */,
 				E80B289717AA63FC0056179E /* GLWaterRenderer.cpp */,
 				E80B289817AA63FF0056179E /* GLWaterRenderer.h */,
+				E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */,
+				E844886117CFB32B005105D0 /* GLLongSpriteRenderer.h */,
 			);
 			name = "Client Object";
 			sourceTree = "<group>";
@@ -1288,6 +1293,7 @@
 				E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */,
 				E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */,
 				E859511517C96B270012810C /* GLProfiler.cpp in Sources */,
+				E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

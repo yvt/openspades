@@ -53,6 +53,7 @@
 #include "GLLensFlareFilter.h"
 #include "GLFXAAFilter.h"
 #include "../Core/Stopwatch.h"
+#include "GLLongSpriteRenderer.h"
 #include <stdarg.h>
 #include <stdlib.h>
 #include "GLProfiler.h"
@@ -97,6 +98,7 @@ namespace spades {
 				spriteRenderer = new GLSoftSpriteRenderer(this);
 			else
 				spriteRenderer = new GLSpriteRenderer(this);
+			longSpriteRenderer = new GLLongSpriteRenderer(this);
 			modelRenderer = new GLModelRenderer(this);
 			waterRenderer = NULL;
 			ambientShadowRenderer = NULL;
@@ -128,6 +130,7 @@ namespace spades {
 				delete ambientShadowRenderer;
 			if(shadowMapRenderer)
 				delete shadowMapRenderer;
+			delete longSpriteRenderer;
 			delete waterRenderer;
 			delete modelRenderer;
 			delete spriteRenderer;
@@ -336,6 +339,7 @@ namespace spades {
 			// clear scene objects
 			debugLines.clear();
 			spriteRenderer->Clear();
+			longSpriteRenderer->Clear();
 			lights.clear();
 			
 			device->DepthMask(true);
@@ -409,6 +413,19 @@ namespace spades {
 			
 			spriteRenderer->Add(im, center, radius, rotation,
 								drawColor);
+		}
+		
+		void GLRenderer::AddLongSprite(client::IImage *img,
+									   spades::Vector3 p1,
+									   spades::Vector3 p2,
+									   float radius) {
+			SPADES_MARK_FUNCTION_DEBUG();
+			GLImage *im = dynamic_cast<GLImage *>(img);
+			if(!im)
+				SPInvalidArgument("im");
+			
+			longSpriteRenderer->Add(im, p1, p2,
+									radius, drawColor);
 		}
 		
 #pragma mark - Scene Finalizer
@@ -565,6 +582,12 @@ namespace spades {
 				spriteRenderer->Render();
 			}
 			
+			{
+				GLProfiler profiler(device, "Long Particle");
+				device->BlendFunc(IGLDevice::One,
+								  IGLDevice::OneMinusSrcAlpha);
+				longSpriteRenderer->Render();
+			}
 			
 
 			

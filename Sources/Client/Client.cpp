@@ -1491,10 +1491,11 @@ namespace spades {
 			}
 			// debug
 			if(false){
-			renderer->AddDebugLine(lastSceneDef.viewOrigin +
-								   MakeVector3(0, 0, 1),
-								   p->GetOrigin(),
-								   MakeVector4(1, 1, 0, 0));
+				IImage *img = renderer->RegisterImage("Gfx/Ball.png");
+				renderer->SetColor(MakeVector4(1, 0, 0, 0));
+				renderer->AddLongSprite(img, lastSceneDef.viewOrigin +
+										MakeVector3(0, 0, 1),
+										p->GetOrigin(), 0.5f);
 			}
 			
 			float distancePowered = (p->GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
@@ -1782,6 +1783,15 @@ namespace spades {
 								std::string path = weapPrefix + "/WeaponNoMagazine.kv6";
 								IModel *model = renderer->RegisterModel(path.c_str());
 								renderer->RenderModel(model, param);
+							}
+							
+							if(false){ // just debug
+								IImage *img = renderer->RegisterImage("Gfx/Ball.png");
+								renderer->SetColor(MakeVector4(1, 0.3f, 0.1f, 0));
+								renderer->AddLongSprite(img,
+														(param.matrix * MakeVector3(0, 10, -2)).GetXYZ(),
+														(param.matrix * MakeVector3(0, 1000, -2)).GetXYZ(),
+														0.03f);
 							}
 							
 							mat = mat * Matrix4::Translate(0.f, 3.f, 1.f);

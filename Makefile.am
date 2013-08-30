@@ -251,6 +251,8 @@ Sources/Draw/GLSoftSpriteRenderer.cpp \
 Sources/Draw/GLSoftSpriteRenderer.h \
 Sources/Draw/GLSpriteRenderer.cpp \
 Sources/Draw/GLSpriteRenderer.h \
+Sources/Draw/GLLongSpriteRenderer.cpp \
+Sources/Draw/GLLongSpriteRenderer.h \
 Sources/Draw/GLVoxelModel.cpp \
 Sources/Draw/GLVoxelModel.h \
 Sources/Draw/GLWaterRenderer.cpp \

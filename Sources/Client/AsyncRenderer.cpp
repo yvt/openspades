@@ -230,6 +230,16 @@ namespace spades {
 					delete img;
 				}
 			};
+			class AddLongSprite: public Command {
+			public:
+				AsyncImage *img;
+				Vector3 p1, p2;
+				float radius;
+				virtual void Execute(IRenderer *r){
+					r->AddLongSprite(img->GetImage(), p1, p2, radius);
+					delete img;
+				}
+			};
 			class EndScene: public Command {
 			public:
 				virtual void Execute(IRenderer *r){
@@ -606,6 +616,16 @@ namespace spades {
 			cmd->center = center;
 			cmd->radius = radius;
 			cmd->rotation = rotation;
+		}
+		
+		void AsyncRenderer::AddLongSprite(IImage *img, Vector3 p1, Vector3 p2,
+									  float radius){
+			SPADES_MARK_FUNCTION();
+			rcmds::AddLongSprite *cmd = generator->AllocCommand<rcmds::AddLongSprite>();
+			cmd->img = static_cast<AsyncImage *>(img)->Copy();
+			cmd->p1 = p1;
+			cmd->p2 = p2;
+			cmd->radius = radius;
 		}
 		
 		void AsyncRenderer::EndScene() {

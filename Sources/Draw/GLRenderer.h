@@ -41,6 +41,7 @@ namespace spades {
 		class GLImageRenderer;
 		class GLFlatMapRenderer;
 		class IGLSpriteRenderer;
+		class GLLongSpriteRenderer;
 		class GLFramebufferManager;
 		class GLMapShadowRenderer;
 		class GLModelRenderer;
@@ -79,6 +80,7 @@ namespace spades {
 			GLFlatMapRenderer *flatMapRenderer;
 			GLModelRenderer *modelRenderer;
 			IGLSpriteRenderer *spriteRenderer;
+			GLLongSpriteRenderer *longSpriteRenderer;
 			GLWaterRenderer *waterRenderer;
 			GLAmbientShadowRenderer *ambientShadowRenderer;
 			GLRadiosityRenderer *radiosityRenderer;
@@ -136,6 +138,7 @@ namespace spades {
 			virtual void AddDebugLine(Vector3 a, Vector3 b, Vector4 color);
 			
 			virtual void AddSprite(client::IImage *, Vector3 center, float radius, float rotation);
+			virtual void AddLongSprite(client::IImage *, Vector3 p1, Vector3 p2, float radius);
 			
 			virtual void EndScene();
 			

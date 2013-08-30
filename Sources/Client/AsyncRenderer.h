@@ -73,6 +73,7 @@ namespace spades {
 			virtual void AddDebugLine(Vector3 a, Vector3 b, Vector4 color);
 			
 			virtual void AddSprite(IImage *, Vector3 center, float radius, float rotation);
+			virtual void AddLongSprite(IImage *, Vector3 p1, Vector3 p2, float radius);
 			
 			/** Finalizes a scene. 2D drawing follows. */
 			virtual void EndScene();
