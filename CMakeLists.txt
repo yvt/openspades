@@ -16,7 +16,7 @@ if(NOT OPENGL_FOUND AND NOT OPENGL_XMESA_FOUND AND NOT OPENGL_GLU_FOUND)
 	message(FATAL_ERROR "OpenGL not found, please install it")
 endif()
 
-include(FindGLEW)
+include(cmake/FindGLEW2.cmake)
 if(NOT GLEW_FOUND)
 	message(FATAL_ERROR "GLEW not found, please install it and make sure CMake can find it (add it to the PATH)")
 endif()
