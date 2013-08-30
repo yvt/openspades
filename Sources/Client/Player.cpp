@@ -727,7 +727,7 @@ namespace spades {
 					
 					uint32_t color = map->GetColor(x, y, z);
 					int health = color >> 24;
-					health -= 40;
+					health -= 55;
 					if(health <= 0){
 						health = 0;
 						// send destroy command only for local cmd
