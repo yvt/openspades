@@ -60,6 +60,7 @@
 #include "../Core/IStream.h"
 #include <stdarg.h>
 #include <time.h>
+#include "Tracer.h"
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;
@@ -4342,6 +4343,25 @@ namespace spades {
 				audioDevice->Play(c, shiftedHitPos,
 								  AudioParam());
 			}
+		}
+		
+		void Client::AddBulletTracer(spades::client::Player *player,
+									 spades::Vector3 muzzlePos,
+									 spades::Vector3 hitPos) {
+			Tracer *t;
+			float vel;
+			switch(player->GetWeapon()->GetWeaponType()) {
+				case RIFLE_WEAPON:
+					vel = 700.f;
+					break;
+				case SMG_WEAPON:
+					vel = 360.f;
+					break;
+				case SHOTGUN_WEAPON:
+					return;
+			}
+			t = new Tracer(this, muzzlePos, hitPos, vel);
+			AddLocalEntity(t);
 		}
 		
 		void Client::BlocksFell(std::vector<IntVector3> blocks) {

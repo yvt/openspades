@@ -458,11 +458,16 @@ namespace spades {
 					}
 				}
 				
+				Vector3 finalHitPos;
+				finalHitPos = muzzle + dir * 128.f;
+				
 				if(mapResult.hit && (mapResult.hitPos - muzzle).GetLength() < 128.f &&
 				   (hitPlayer == NULL || (mapResult.hitPos - muzzle).GetLength() < hitPlayerDistance)){
 					IntVector3 outBlockCoord = mapResult.hitBlock;
 					// TODO: set correct ray distance
 					// FIXME: why ray casting twice?
+					
+					finalHitPos = mapResult.hitPos;
 					
 					if(outBlockCoord.x >= 0 && outBlockCoord.y >= 0 && outBlockCoord.z >= 0 &&
 					   outBlockCoord.x < map->Width() && outBlockCoord.y < map->Height() &&
@@ -502,6 +507,8 @@ namespace spades {
 			    }else if(hitPlayer != NULL){
 					if(hitPlayerDistance < 128.f){
 						
+						finalHitPos = muzzle + dir * hitPlayerDistance;
+						
 						if(world->GetListener()){
 							if(hitFlag & 1)
 								world->GetListener()->BulletHitPlayer(hitPlayer,
@@ -527,6 +534,9 @@ namespace spades {
 					}
 				}
 				
+				if(world->GetListener())
+					world->GetListener()->AddBulletTracer(this,
+														  muzzle, finalHitPos);
 				
 				// one pellet done
 			}

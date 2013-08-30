@@ -55,6 +55,9 @@ namespace spades {
 			virtual void BulletHitBlock(Vector3 hitPos,
 										IntVector3 blockPos,
 										IntVector3 normal) = 0;
+			virtual void AddBulletTracer(Player *player,
+									  Vector3 muzzlePos,
+									  Vector3 hitPos) = 0;
 			
 			virtual void GrenadeExploded(Grenade *) = 0;
 			virtual void GrenadeBounced(Grenade *) = 0;

@@ -45,6 +45,7 @@
 		E834F56B17979FD7004EBE88 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56917979FD3004EBE88 /* IFont.cpp */; };
 		E834F56F1797D934004EBE88 /* ChatWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56D1797D92F004EBE88 /* ChatWindow.cpp */; };
 		E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */; };
+		E844886617D0C43B005105D0 /* Tracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886417D0C43B005105D0 /* Tracer.cpp */; };
 		E8567E571792B24D009D83E0 /* IAudioChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E551792B24D009D83E0 /* IAudioChunk.cpp */; };
 		E8567E5A1792BEFC009D83E0 /* ALDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E581792BEFC009D83E0 /* ALDevice.cpp */; };
 		E8567E5D1792C089009D83E0 /* ALFuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E5C1792C089009D83E0 /* ALFuncs.cpp */; };
@@ -265,6 +266,8 @@
 		E842D48B17C0D06300381B49 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLongSpriteRenderer.cpp; sourceTree = "<group>"; };
 		E844886117CFB32B005105D0 /* GLLongSpriteRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLongSpriteRenderer.h; sourceTree = "<group>"; };
+		E844886417D0C43B005105D0 /* Tracer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tracer.cpp; sourceTree = "<group>"; };
+		E844886517D0C43B005105D0 /* Tracer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tracer.h; sourceTree = "<group>"; };
 		E8567E551792B24D009D83E0 /* IAudioChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IAudioChunk.cpp; sourceTree = "<group>"; };
 		E8567E561792B24D009D83E0 /* IAudioChunk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAudioChunk.h; sourceTree = "<group>"; };
 		E8567E581792BEFC009D83E0 /* ALDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ALDevice.cpp; sourceTree = "<group>"; };
@@ -590,6 +593,25 @@
 			path = unzip;
 			sourceTree = "<group>";
 		};
+		E844886317D0C404005105D0 /* Local Entities */ = {
+			isa = PBXGroup;
+			children = (
+				E8E0AFAA179ADC2100C6B5A9 /* ILocalEntity.cpp */,
+				E8E0AFAB179ADC2100C6B5A9 /* ILocalEntity.h */,
+				E8E0AFAD179ADDCB00C6B5A9 /* ParticleSpriteEntity.cpp */,
+				E8E0AFAE179ADDCB00C6B5A9 /* ParticleSpriteEntity.h */,
+				E8E0AFB0179AF4E600C6B5A9 /* SmokeSpriteEntity.cpp */,
+				E8E0AFB1179AF4E600C6B5A9 /* SmokeSpriteEntity.h */,
+				E89A649217A1677F00FDA893 /* FallingBlock.cpp */,
+				E89A649317A1677F00FDA893 /* FallingBlock.h */,
+				E89A649517A1835900FDA893 /* GunCasing.cpp */,
+				E89A649617A1835900FDA893 /* GunCasing.h */,
+				E844886417D0C43B005105D0 /* Tracer.cpp */,
+				E844886517D0C43B005105D0 /* Tracer.h */,
+			);
+			name = "Local Entities";
+			sourceTree = "<group>";
+		};
 		E8567E541792B119009D83E0 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -829,6 +851,7 @@
 		E8E0AF8B17993C2300C6B5A9 /* Client Main */ = {
 			isa = PBXGroup;
 			children = (
+				E844886317D0C404005105D0 /* Local Entities */,
 				E8CF03C1178EE6D8000683D4 /* Client.cpp */,
 				E8CF03C2178EE6D8000683D4 /* Client.h */,
 				E834F56D1797D92F004EBE88 /* ChatWindow.cpp */,
@@ -845,16 +868,6 @@
 				E8E0AFA2179A8F1000C6B5A9 /* ScoreboardView.h */,
 				E8E0AFA4179AA31B00C6B5A9 /* LimboView.cpp */,
 				E8E0AFA5179AA31C00C6B5A9 /* LimboView.h */,
-				E8E0AFAA179ADC2100C6B5A9 /* ILocalEntity.cpp */,
-				E8E0AFAB179ADC2100C6B5A9 /* ILocalEntity.h */,
-				E8E0AFAD179ADDCB00C6B5A9 /* ParticleSpriteEntity.cpp */,
-				E8E0AFAE179ADDCB00C6B5A9 /* ParticleSpriteEntity.h */,
-				E8E0AFB0179AF4E600C6B5A9 /* SmokeSpriteEntity.cpp */,
-				E8E0AFB1179AF4E600C6B5A9 /* SmokeSpriteEntity.h */,
-				E89A649217A1677F00FDA893 /* FallingBlock.cpp */,
-				E89A649317A1677F00FDA893 /* FallingBlock.h */,
-				E89A649517A1835900FDA893 /* GunCasing.cpp */,
-				E89A649617A1835900FDA893 /* GunCasing.h */,
 				E80B28CB17AFCCC40056179E /* PaletteView.cpp */,
 				E80B28CC17AFCCC70056179E /* PaletteView.h */,
 				E80B28D117AFF77B0056179E /* TCProgressView.cpp */,
@@ -1294,6 +1307,7 @@
 				E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */,
 				E859511517C96B270012810C /* GLProfiler.cpp in Sources */,
 				E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */,
+				E844886617D0C43B005105D0 /* Tracer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

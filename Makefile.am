@@ -118,6 +118,8 @@ Sources/Client/Weapon.cpp \
 Sources/Client/Weapon.h \
 Sources/Client/World.cpp \
 Sources/Client/World.h \
+Sources/Client/Tracer.cpp \
+Sources/Client/Tracer.h \
 Sources/Core/AutoLocker.cpp \
 Sources/Core/AutoLocker.h \
 Sources/Core/Bitmap.cpp \
