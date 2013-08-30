@@ -1267,6 +1267,22 @@ namespace spades {
 			}
 		}
 		
+		bool Player::IsToolSelectable(ToolType type) {
+			switch(type){
+				case ToolSpade:
+					return true;
+				case ToolBlock:
+					return blockStocks > 0;
+				case ToolWeapon:
+					return weapon->GetAmmo() > 0 ||
+					weapon->GetStock() > 0;
+				case ToolGrenade:
+					return grenades > 0;
+				default:
+					SPAssert(false);
+			}
+		}
+		
 #pragma mark - Block Construction
 		bool Player::IsBlockCursorActive(){
 			return tool == ToolBlock && blockCursorActive;

@@ -120,6 +120,9 @@ namespace spades {
 			int lastKills;
 			float worldSetTime;
 			
+			Player::ToolType selectedTool;
+			float toolRaiseState;
+			
 			// view
 			SceneDefinition lastSceneDef;
 			Vector3 viewWeaponOffset;

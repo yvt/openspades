@@ -168,6 +168,7 @@ namespace spades {
 			bool IsToolWeapon() {
 				return tool == ToolWeapon;
 			}
+			bool IsToolSelectable(ToolType);
 			
 			void SetPosition(const Vector3&);
 			void SetOrientation(const Vector3&);

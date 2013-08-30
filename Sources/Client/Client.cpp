@@ -463,6 +463,7 @@ namespace spades {
 				}else if(player){
 					// joined in a team
 					PlayerInput inp = playerInput;
+					WeaponInput winp = weapInput;
 					
 					if(inp.crouch == false){
 						if(player->GetInput().crouch){
@@ -476,11 +477,17 @@ namespace spades {
 							inp.jump = false;
 					}
 
+					if(selectedTool != player->GetTool() ||
+					   toolRaiseState < .999f) {
+						winp.primary = false;
+						winp.secondary = false;
+					}
 					
 					player->SetInput(inp);
-					player->SetWeaponInput(weapInput);
+					player->SetWeaponInput(winp);
 					
 					//send player input
+					// FIXME: send only there are any changed
 					net->SendPlayerInput(inp);
 					net->SendWeaponInput(weapInput);
 					
@@ -515,6 +522,42 @@ namespace spades {
 						sprintState -= dt * 3.f;
 						if(sprintState < 0.f)
 							sprintState = 0.f;
+					}
+					
+					if(!player->IsToolSelectable(selectedTool)) {
+						// select another tool
+						Player::ToolType t = selectedTool;
+						do{
+							switch(t){
+								case Player::ToolSpade:
+									t = Player::ToolGrenade;
+									break;
+								case Player::ToolBlock:
+									t = Player::ToolSpade;
+									break;
+								case Player::ToolWeapon:
+									t = Player::ToolBlock;
+									break;
+								case Player::ToolGrenade:
+									t = Player::ToolWeapon;
+									break;
+							}
+						}while(!world->GetLocalPlayer()->IsToolSelectable(t));
+						selectedTool = t;
+					}
+					if(selectedTool == player->GetTool()) {
+						toolRaiseState += dt * 4.f;
+						if(toolRaiseState > 1.f)
+							toolRaiseState = 1.f;
+					}else{
+						toolRaiseState -= dt * 4.f;
+						if(toolRaiseState < 0.f){
+							toolRaiseState = 0.f;
+							player->SetTool(selectedTool);
+							net->SendTool();
+							
+							// TODO: play tool raise sound
+						}
 					}
 					
 					Vector3 curFront = player->GetFront();
@@ -885,24 +928,28 @@ namespace spades {
 						}
 						net->SendReload();
 					}else if(CheckKey(cg_keyToolSpade, name) && down){
-						if(world->GetLocalPlayer()->GetTeamId() < 2){
-							world->GetLocalPlayer()->SetTool(Player::ToolSpade);
-							net->SendTool();
+						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
+						   world->GetLocalPlayer()->IsAlive() &&
+						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolSpade)){
+							selectedTool = Player::ToolSpade;
 						}
 					}else if(CheckKey(cg_keyToolBlock, name) && down){
-						if(world->GetLocalPlayer()->GetTeamId() < 2){
-							world->GetLocalPlayer()->SetTool(Player::ToolBlock);
-							net->SendTool();
+						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
+						   world->GetLocalPlayer()->IsAlive() &&
+						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolBlock)){
+							selectedTool = Player::ToolBlock;
 						}
 					}else if(CheckKey(cg_keyToolWeapon, name) && down){
-						if(world->GetLocalPlayer()->GetTeamId() < 2){
-							world->GetLocalPlayer()->SetTool(Player::ToolWeapon);
-							net->SendTool();
+						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
+						   world->GetLocalPlayer()->IsAlive() &&
+						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolWeapon)){
+							selectedTool = Player::ToolWeapon;
 						}
 					}else if(CheckKey(cg_keyToolGrenade, name) && down){
-						if(world->GetLocalPlayer()->GetTeamId() < 2){
-							world->GetLocalPlayer()->SetTool(Player::ToolGrenade);
-							net->SendTool();
+						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
+						   world->GetLocalPlayer()->IsAlive() &&
+						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolGrenade)){
+							selectedTool = Player::ToolGrenade;
 						}
 					}else if(CheckKey(cg_keyGlobalChat, name) && down){
 						// global chat
@@ -940,46 +987,50 @@ namespace spades {
 						IAudioChunk *chunk = audioDevice->RegisterSound("Sounds/Player/Flashlight.wav");
 						audioDevice->PlayLocal(chunk, AudioParam());
 					}else if(cg_switchToolByWheel && down) {
-						bool rev = (int)cg_switchToolByWheel < 0;
+						bool rev = (int)cg_switchToolByWheel > 0;
 						if(name == (rev ? "WheelDown":"WheelUp")) {
-							if(world->GetLocalPlayer()->GetTeamId() < 2){
-								Player::ToolType t = world->GetLocalPlayer()->GetTool();
-								switch(t){
-									case Player::ToolSpade:
-										t = Player::ToolGrenade;
-										break;
-									case Player::ToolBlock:
-										t = Player::ToolSpade;
-										break;
-									case Player::ToolWeapon:
-										t = Player::ToolBlock;
-										break;
-									case Player::ToolGrenade:
-										t = Player::ToolWeapon;
-										break;
-								}
-								world->GetLocalPlayer()->SetTool(t);
-								net->SendTool();
+							if(world->GetLocalPlayer()->GetTeamId() < 2 &&
+							   world->GetLocalPlayer()->IsAlive()){
+								Player::ToolType t = selectedTool;
+								do{
+									switch(t){
+										case Player::ToolSpade:
+											t = Player::ToolGrenade;
+											break;
+										case Player::ToolBlock:
+											t = Player::ToolSpade;
+											break;
+										case Player::ToolWeapon:
+											t = Player::ToolBlock;
+											break;
+										case Player::ToolGrenade:
+											t = Player::ToolWeapon;
+											break;
+									}
+								}while(!world->GetLocalPlayer()->IsToolSelectable(t));
+								selectedTool = t;
 							}
 						}else if(name == (rev ? "WheelUp":"WheelDown")) {
-							if(world->GetLocalPlayer()->GetTeamId() < 2){
-								Player::ToolType t = world->GetLocalPlayer()->GetTool();
-								switch(t){
-									case Player::ToolSpade:
-										t = Player::ToolBlock;
-										break;
-									case Player::ToolBlock:
-										t = Player::ToolWeapon;
-										break;
-									case Player::ToolWeapon:
-										t = Player::ToolGrenade;
-										break;
-									case Player::ToolGrenade:
-										t = Player::ToolSpade;
-										break;
-								}
-								world->GetLocalPlayer()->SetTool(t);
-								net->SendTool();
+							if(world->GetLocalPlayer()->GetTeamId() < 2 &&
+							   world->GetLocalPlayer()->IsAlive()){
+								Player::ToolType t = selectedTool;
+								do{
+									switch(t){
+										case Player::ToolSpade:
+											t = Player::ToolBlock;
+											break;
+										case Player::ToolBlock:
+											t = Player::ToolWeapon;
+											break;
+										case Player::ToolWeapon:
+											t = Player::ToolGrenade;
+											break;
+										case Player::ToolGrenade:
+											t = Player::ToolSpade;
+											break;
+									}
+								}while(!world->GetLocalPlayer()->IsToolSelectable(t));
+								selectedTool = t;
 							}
 						}
 					}
@@ -1568,6 +1619,9 @@ namespace spades {
 				
 				// view weapon
 				float sprint = SmoothStep(sprintState);
+				float putdown = 1.f - toolRaiseState;
+				putdown *= putdown;
+				putdown = std::min(1.f, putdown * 1.5f);
 				if(p->GetTool() == Player::ToolSpade){
 					WeaponInput inp = p->GetWeaponInput();
 					Matrix4 mat = Matrix4::Scale(0.033f);
@@ -1620,13 +1674,16 @@ namespace spades {
 						mat = Matrix4::Translate(MakeVector3(side, front, front * .2f)) * mat;
 					}
 					
-					if(sprint > 0.f){
+					if(sprint > 0.f || putdown > 0.f){
 						
+						float per = std::max(sprint, putdown);
 						mat = Matrix4::Rotate(MakeVector3(0, 1, 0),
-											  sprint * 1.3f) * mat;
-						mat = Matrix4::Translate(MakeVector3(0.3f, -0.4f, -0.1f) * sprint) * mat;
+											  per * 1.3f) * mat;
+						mat = Matrix4::Translate(MakeVector3(0.3f, -0.4f, -0.1f) * per) * mat;
 						
 					}
+					
+					mat = Matrix4::Translate(0.f, putdown * -.3f, 0.f) * mat;
 					
 					mat = Matrix4::Translate(-0.3f, .7f, 0.3f) * mat;
 					mat = Matrix4::Translate(viewWeaponOffset) * mat;
@@ -1654,6 +1711,11 @@ namespace spades {
 						}
 						mat = Matrix4::Translate(-0.3f, .7f, 0.3f) * mat;
 						mat = Matrix4::Translate(viewWeaponOffset) * mat;
+						
+						
+						mat = Matrix4::Translate(putdown * -.1f,
+												 putdown * -.3f,
+												 putdown * .2f) * mat;
 						
 						leftHand = (mat * MakeVector3(5.0f, -1.0f, 4.f)).GetXYZ();
 						rightHand = (mat * MakeVector3(-5.5f, 3.0f, -5.f)).GetXYZ();
@@ -1700,6 +1762,12 @@ namespace spades {
 						mat = Matrix4::Translate(-0.3f - side * .8f,
 												 .8 - bring * .1f,
 												 0.45f - bring * .15f) * mat;
+						
+						
+						mat = Matrix4::Translate(putdown * -.1f,
+												 putdown * -.3f,
+												 putdown * .1f) * mat;
+						
 						mat = Matrix4::Translate(viewWeaponOffset) * mat;
 						
 						leftHand = (mat * MakeVector3(10.0f, -1.0f, 10.f)).GetXYZ();
@@ -1756,6 +1824,17 @@ namespace spades {
 						mat = Matrix4::Translate(MakeVector3(0.2f, -0.2f, 0.05f) * sprint) * mat;
 						
 					}
+					
+					if(putdown > 0.f){
+						mat = Matrix4::Rotate(MakeVector3(0, 0, 1),
+											  putdown * -1.3f) * mat;
+						mat = Matrix4::Rotate(MakeVector3(0, 1, 0),
+											  putdown *
+											  0.2f) * mat;
+						mat = Matrix4::Translate(MakeVector3(0.1f, -0.3f, 0.1f) * putdown) * mat;
+					}
+					
+					
 					mat = Matrix4::Translate(-0.13f * (1.f - aDown),
 											 .5f,
 											 0.2f - weapUp) * mat;
@@ -3520,6 +3599,9 @@ namespace spades {
 			weapInput = WeaponInput();
 			playerInput = PlayerInput();
 			keypadInput = KeypadInput();
+			
+			selectedTool = world->GetLocalPlayer()->GetTool();
+			toolRaiseState = .0f;
 		}
 		
 		void Client::JoinedGame() {
