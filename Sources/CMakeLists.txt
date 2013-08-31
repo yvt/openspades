@@ -15,7 +15,7 @@ file(GLOB POLY2TRI_COMMON_FILES poly2tri/common/*.cc poly2tri/common/*.h)
 file(GLOB POLY2TRI_SWEEP_FILES poly2tri/sweep/*.cc poly2tri/sweep/*.h)
 file(GLOB UNZIP_FILES unzip/*.c unzip/*.h)
 
-include_directories("Enet/include")
+include_directories("ENet/include")
 
 add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${GUI_FILES} ${IMPORTS_FILES} ${KISS_FILES}
 	${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES} ${UNZIP_FILES})
