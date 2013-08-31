@@ -2,9 +2,12 @@
 version 1.0302 
 header_name {.h} 
 code_name {.cpp}
+decl {namespace spades { class Serverbrowser; }} {public global
+} 
+
 widget_class MainWindow {
   label {OpenSpades Startup} open
-  xywh {335 219 615 356} type Double labelsize 12 align 80
+  xywh {356 242 615 356} type Double labelsize 12 align 80
   code0 {\#include <string>}
   code1 {\#include <vector>}
   class Fl_Window visible
@@ -26,8 +29,8 @@ widget_class MainWindow {
       }
     }
     Fl_Group {} {
-      label Setup open
-      private xywh {10 130 595 220}
+      label Setup
+      private xywh {10 130 595 220} hide
     } {
       Fl_Group {} {
         label Video open
@@ -88,7 +91,7 @@ SavePrefs();} open
           label Lighting
           callback {if(directLightSelect->value() == 2)
 	DisableMSAA();
-SavePrefs();} open selected
+SavePrefs();} open
           xywh {255 280 130 25} down_box BORDER_BOX when 1
         } {}
         Fl_Choice shaderSelect {
@@ -146,6 +149,56 @@ SavePrefs();} open
         }
       }
     }
+    Fl_Tabs {} {
+      label Serverlist open
+      xywh {10 130 595 220}
+    } {
+      Fl_Browser serverListbox {
+        label Serverlist
+        callback {ServerSelectionChanged();}
+        protected xywh {10 150 595 200} type Hold
+      }
+      Fl_Group {} {
+        label Filters open
+        xywh {10 150 595 200} hide
+      } {
+        Fl_Group {} {
+          label Players open
+          xywh {20 175 80 35}
+        } {
+          Fl_Check_Button checkFilterEmpty {
+            label Empty
+            callback {updateFilters();}
+            xywh {20 175 80 15} down_box DOWN_BOX value 1 when 1
+          }
+          Fl_Check_Button checkFilterFull {
+            label Full
+            callback {updateFilters();}
+            xywh {20 195 80 15} down_box DOWN_BOX value 1 when 1
+          }
+        }
+        Fl_Group {} {
+          label Version open
+          xywh {95 175 104 60}
+        } {
+          Fl_Check_Button checkFilterV75 {
+            label {0.75}
+            callback {updateFilters();}
+            xywh {100 175 80 15} down_box DOWN_BOX value 1 when 1
+          }
+          Fl_Check_Button checkFilterV76 {
+            label {0.76}
+            callback {updateFilters();}
+            xywh {100 190 80 25} down_box DOWN_BOX value 1 when 1
+          }
+          Fl_Check_Button checkFilterVOther {
+            label Other
+            callback {updateFilters();}
+            xywh {100 205 64 30} down_box DOWN_BOX value 1 when 1
+          }
+        }
+      }
+    }
   }
   Fl_Box bannerBox {
     private xywh {5 5 605 70} box THIN_DOWN_FRAME
@@ -166,6 +219,7 @@ SavePrefs();} open
   decl {bool inited;} {private local
   }
   code {inited = false;} {}
+  code {browser = 0;} {}
   Function {OpenDetailConfig()} {open private
   } {}
   Function {Init()} {open
@@ -175,6 +229,12 @@ SavePrefs();} open
   Function {MSAAEnabled()} {open private return_type void
   } {}
   Function {CheckGLCapability()} {open return_type void
+  } {}
+  Function {ServerSelectionChanged()} {open selected private
+  } {}
+  decl {spades::Serverbrowser* browser;} {protected local
+  }
+  Function {updateFilters();} {open return_type void
   } {}
 } 
 

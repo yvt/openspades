@@ -18,6 +18,7 @@
  
  */
 
+#include <OpenSpades.h>
 #include "MainWindow.h"
 #include "../Core/FileManager.h"
 #include "../Core/DirectoryFileSystem.h"
@@ -63,11 +64,7 @@ int main(int argc, char ** argv)
 	SPADES_MARK_FUNCTION();
 	spades::DispatchQueue::GetThreadQueue()->MarkSDLVideoThread();
 	
-#ifdef PACKAGE_STRING
-	SPLog("Package: %s", PACKAGE_STRING);
-#else
-	SPLog("Package: (unknown)");
-#endif
+	SPLog("Package: " PACKAGE_STRING);
 	
 	// default resource directories
 #ifdef WIN32
@@ -114,7 +111,7 @@ int main(int argc, char ** argv)
 	}
 	SPLog("Log Started.");
 	
-#ifdef RESDIR
+#if defined(RESDIR_DEFINED)
 	spades::FileManager::AddFileSystem
 	(new spades::DirectoryFileSystem(RESDIR, false));
 #endif

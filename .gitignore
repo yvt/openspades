@@ -57,9 +57,4 @@ UserInterfaceState.xcuserstate
 Thumbs.db
 
 # MSVC related
-OpenSpades.msvc/Debug/
-OpenSpades.msvc/Release/
-OpenSpades.msvc/OpenSpades.sdf
-OpenSpades.msvc/OpenSpades.idb
-OpenSpades.msvc/OpenSpades.opensdf
-OpenSpades.msvc/ipch/
+OpenSpades.msvc/
