@@ -3,6 +3,7 @@
 #ifndef MainWindow_h
 #define MainWindow_h
 #include <FL/Fl.H>
+namespace spades { class Serverbrowser; }; 
 #include <FL/Fl_Window.H>
 #include <string>
 #include <vector>
@@ -17,6 +18,7 @@
 #include <FL/Fl_Light_Button.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Output.H>
+#include <FL/Fl_Browser.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Return_Button.H>
 
@@ -87,12 +89,44 @@ public:
   Fl_Output *outputGLVersion;
   Fl_Output *outputGLSLVersion;
   Fl_Help_View *glInfoView;
+protected:
+  Fl_Browser *serverListbox;
 private:
+  inline void cb_serverListbox_i(Fl_Browser*, void*);
+  static void cb_serverListbox(Fl_Browser*, void*);
+public:
+  Fl_Check_Button *checkFilterEmpty;
+private:
+  inline void cb_checkFilterEmpty_i(Fl_Check_Button*, void*);
+  static void cb_checkFilterEmpty(Fl_Check_Button*, void*);
+public:
+  Fl_Check_Button *checkFilterFull;
+private:
+  inline void cb_checkFilterFull_i(Fl_Check_Button*, void*);
+  static void cb_checkFilterFull(Fl_Check_Button*, void*);
+public:
+  Fl_Check_Button *checkFilterV75;
+private:
+  inline void cb_checkFilterV75_i(Fl_Check_Button*, void*);
+  static void cb_checkFilterV75(Fl_Check_Button*, void*);
+public:
+  Fl_Check_Button *checkFilterV76;
+private:
+  inline void cb_checkFilterV76_i(Fl_Check_Button*, void*);
+  static void cb_checkFilterV76(Fl_Check_Button*, void*);
+public:
+  Fl_Check_Button *checkFilterVOther;
+private:
+  inline void cb_checkFilterVOther_i(Fl_Check_Button*, void*);
+  static void cb_checkFilterVOther(Fl_Check_Button*, void*);
   Fl_Box *bannerBox;
   Fl_Return_Button *connectButton;
   inline void cb_connectButton_i(Fl_Return_Button*, void*);
   static void cb_connectButton(Fl_Return_Button*, void*);
   bool inited; 
+protected:
+  spades::Serverbrowser* browser; 
+private:
   void QuickConnectPressed();
   void StartGame(const std::string& host);
 public:
@@ -107,6 +141,10 @@ private:
   void MSAAEnabled();
 public:
   void CheckGLCapability();
+private:
+  void ServerSelectionChanged();
+public:
+  void updateFilters();;
 };
-extern unsigned char aboutText[3447];
+extern unsigned char aboutText[3496];
 #endif

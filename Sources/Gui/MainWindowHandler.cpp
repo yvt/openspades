@@ -33,6 +33,7 @@
 #include "SDLAsyncRunner.h"
 #include "DetailConfigWindow.h"
 #include "../Core/Math.h"
+#include "Serverbrowser.h"
 
 #include "../Imports/OpenGL.h" //for gpu info
 
@@ -251,8 +252,9 @@ void MainWindow::Init() {
 	
 	aboutView->value(text.c_str());
 	
-	mainTab->value(groupAbout);
-	
+	browser = new spades::Serverbrowser( serverListbox );
+	updateFilters();
+	browser->Start();
 }
 
 /** This function is called after showing window.
@@ -508,5 +510,38 @@ void MainWindow::OpenDetailConfig() {
 	LoadPrefs();
 }
 
+void MainWindow::ServerSelectionChanged()
+{
+	SPADES_MARK_FUNCTION();
+	if( browser ) {
+		int item = serverListbox->value();
+		if( item ) {
+			browser->onSelection( serverListbox->data( item ), quickHostInput );
+		}
+	}	
+}
 
+void MainWindow::updateFilters()
+{
+	if( browser ) {
+		spades::ServerFilter::Flags flags = spades::ServerFilter::None;
+		if( checkFilterEmpty->value() ) {
+			flags |= spades::ServerFilter::Empty;
+		}
+		if( checkFilterFull->value() ) {
+			flags |= spades::ServerFilter::Full;
+		}
+		if( checkFilterV75->value() ) {
+			flags |= spades::ServerFilter::Ver075;
+		}
+		if( checkFilterV76->value() ) {
+			flags |= spades::ServerFilter::Ver076;
+		}
+		if( checkFilterVOther->value() ) {
+			flags |= spades::ServerFilter::VerOther;
+		}
+		browser->setFilter( flags );
+		browser->refreshList();
+	}
+}
 
