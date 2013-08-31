@@ -929,7 +929,10 @@ namespace spades {
 					}else if(CheckKey(cg_keyReloadWeapon, name) && down){
 						Weapon *w = world->GetLocalPlayer()->GetWeapon();
 						if(w->GetAmmo() < w->GetClipSize() &&
-						   w->GetStock() > 0){
+						   w->GetStock() > 0 &&
+						   (!world->GetLocalPlayer()->IsAwaitingReloadCompletion()) &&
+						   (!w->IsReloading()) &&
+						   world->GetLocalPlayer()->GetTool() == Player::ToolWeapon){
 							world->GetLocalPlayer()->Reload();
 							if(world->GetLocalPlayer()->IsToolWeapon()){
 								weapInput.secondary = false;
