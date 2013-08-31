@@ -43,6 +43,7 @@ namespace spades {
 			struct PlayerPersistent {
 				std::string name;
 				int kills;
+				PlayerPersistent() : kills(0) {;}
 			};
 		private:
 			IWorldListener *listener;
