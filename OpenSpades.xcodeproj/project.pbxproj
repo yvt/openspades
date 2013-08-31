@@ -46,6 +46,11 @@
 		E834F56F1797D934004EBE88 /* ChatWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56D1797D92F004EBE88 /* ChatWindow.cpp */; };
 		E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */; };
 		E844886617D0C43B005105D0 /* Tracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886417D0C43B005105D0 /* Tracer.cpp */; };
+		E844886A17D262E4005105D0 /* Serverbrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886817D262E3005105D0 /* Serverbrowser.cpp */; };
+		E844888217D2633C005105D0 /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887B17D2633C005105D0 /* json_reader.cpp */; };
+		E844888317D2633C005105D0 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887C17D2633C005105D0 /* json_value.cpp */; };
+		E844888417D2633C005105D0 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887E17D2633C005105D0 /* json_writer.cpp */; };
+		E844888717D2669C005105D0 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.dylib */; };
 		E8567E571792B24D009D83E0 /* IAudioChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E551792B24D009D83E0 /* IAudioChunk.cpp */; };
 		E8567E5A1792BEFC009D83E0 /* ALDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E581792BEFC009D83E0 /* ALDevice.cpp */; };
 		E8567E5D1792C089009D83E0 /* ALFuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E5C1792C089009D83E0 /* ALFuncs.cpp */; };
@@ -268,6 +273,30 @@
 		E844886117CFB32B005105D0 /* GLLongSpriteRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLongSpriteRenderer.h; sourceTree = "<group>"; };
 		E844886417D0C43B005105D0 /* Tracer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tracer.cpp; sourceTree = "<group>"; };
 		E844886517D0C43B005105D0 /* Tracer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tracer.h; sourceTree = "<group>"; };
+		E844886717D262C1005105D0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		E844886817D262E3005105D0 /* Serverbrowser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Serverbrowser.cpp; sourceTree = "<group>"; };
+		E844886917D262E4005105D0 /* Serverbrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Serverbrowser.h; sourceTree = "<group>"; };
+		E844886D17D2633C005105D0 /* AUTHORS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
+		E844887017D2633C005105D0 /* autolink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = autolink.h; sourceTree = "<group>"; };
+		E844887117D2633C005105D0 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		E844887217D2633C005105D0 /* features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = features.h; sourceTree = "<group>"; };
+		E844887317D2633C005105D0 /* forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forwards.h; sourceTree = "<group>"; };
+		E844887417D2633C005105D0 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		E844887517D2633C005105D0 /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
+		E844887617D2633C005105D0 /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value.h; sourceTree = "<group>"; };
+		E844887717D2633C005105D0 /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
+		E844887817D2633C005105D0 /* json_batchallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_batchallocator.h; sourceTree = "<group>"; };
+		E844887917D2633C005105D0 /* json_internalarray.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_internalarray.inl; sourceTree = "<group>"; };
+		E844887A17D2633C005105D0 /* json_internalmap.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_internalmap.inl; sourceTree = "<group>"; };
+		E844887B17D2633C005105D0 /* json_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_reader.cpp; sourceTree = "<group>"; };
+		E844887C17D2633C005105D0 /* json_value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_value.cpp; sourceTree = "<group>"; };
+		E844887D17D2633C005105D0 /* json_valueiterator.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_valueiterator.inl; sourceTree = "<group>"; };
+		E844887E17D2633C005105D0 /* json_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_writer.cpp; sourceTree = "<group>"; };
+		E844887F17D2633C005105D0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		E844888017D2633C005105D0 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		E844888117D2633C005105D0 /* version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version; sourceTree = "<group>"; };
+		E844888517D26411005105D0 /* OpenSpades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenSpades.h; sourceTree = SOURCE_ROOT; };
+		E844888617D26699005105D0 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
 		E8567E551792B24D009D83E0 /* IAudioChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IAudioChunk.cpp; sourceTree = "<group>"; };
 		E8567E561792B24D009D83E0 /* IAudioChunk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAudioChunk.h; sourceTree = "<group>"; };
 		E8567E581792BEFC009D83E0 /* ALDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ALDevice.cpp; sourceTree = "<group>"; };
@@ -485,9 +514,6 @@
 		E8E446A5179EAC7800BE8855 /* GLShadowShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLShadowShader.cpp; sourceTree = "<group>"; };
 		E8E446A6179EAC7800BE8855 /* GLShadowShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShadowShader.h; sourceTree = "<group>"; };
 		E8E446A8179F822D00BE8855 /* TargaWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TargaWriter.cpp; sourceTree = "<group>"; };
-		E8E446AD17A02EDA00BE8855 /* configure.ac */ = {isa = PBXFileReference; lastKnownFileType = text; path = configure.ac; sourceTree = "<group>"; };
-		E8E446AE17A02EDA00BE8855 /* Makefile.am */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
-		E8E446AF17A036CC00BE8855 /* m4 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = m4; sourceTree = "<group>"; };
 		E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRadiosityRenderer.cpp; sourceTree = "<group>"; };
 		E8EE08A017B8F4B000631987 /* GLRadiosityRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRadiosityRenderer.h; sourceTree = "<group>"; };
 		E8EE08A217BA016F00631987 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
@@ -501,6 +527,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E844888717D2669C005105D0 /* libcurl.dylib in Frameworks */,
 				E8E44692179CE7B800BE8855 /* libpng15.15.dylib in Frameworks */,
 				E8E4468F179CE7A200BE8855 /* libfltk_images.a in Frameworks */,
 				E8E44690179CE7A200BE8855 /* libfltk_jpeg.a in Frameworks */,
@@ -612,6 +639,48 @@
 			name = "Local Entities";
 			sourceTree = "<group>";
 		};
+		E844886C17D26337005105D0 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				E844886D17D2633C005105D0 /* AUTHORS */,
+				E844886E17D2633C005105D0 /* include */,
+				E844887817D2633C005105D0 /* json_batchallocator.h */,
+				E844887917D2633C005105D0 /* json_internalarray.inl */,
+				E844887A17D2633C005105D0 /* json_internalmap.inl */,
+				E844887B17D2633C005105D0 /* json_reader.cpp */,
+				E844887C17D2633C005105D0 /* json_value.cpp */,
+				E844887D17D2633C005105D0 /* json_valueiterator.inl */,
+				E844887E17D2633C005105D0 /* json_writer.cpp */,
+				E844887F17D2633C005105D0 /* LICENSE */,
+				E844888017D2633C005105D0 /* README.txt */,
+				E844888117D2633C005105D0 /* version */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
+		E844886E17D2633C005105D0 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				E844886F17D2633C005105D0 /* json */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		E844886F17D2633C005105D0 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				E844887017D2633C005105D0 /* autolink.h */,
+				E844887117D2633C005105D0 /* config.h */,
+				E844887217D2633C005105D0 /* features.h */,
+				E844887317D2633C005105D0 /* forwards.h */,
+				E844887417D2633C005105D0 /* json.h */,
+				E844887517D2633C005105D0 /* reader.h */,
+				E844887617D2633C005105D0 /* value.h */,
+				E844887717D2633C005105D0 /* writer.h */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
 		E8567E541792B119009D83E0 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -716,6 +785,7 @@
 		E8CF037C178ED9D2000683D4 = {
 			isa = PBXGroup;
 			children = (
+				E844888617D26699005105D0 /* libcurl.dylib */,
 				E8E446AB17A02EC700BE8855 /* Supporting Files */,
 				E8E44691179CE7B800BE8855 /* libpng15.15.dylib */,
 				E8E4468D179CE7A200BE8855 /* libfltk_images.a */,
@@ -748,6 +818,8 @@
 		E8CF0387178ED9D2000683D4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E844888517D26411005105D0 /* OpenSpades.h */,
+				E844886C17D26337005105D0 /* json */,
 				E80B28D517B39CFE0056179E /* unzip */,
 				E80B28B117ABAC6C0056179E /* kiss_fft130 */,
 				E80B288917A52CB70056179E /* binpack2d */,
@@ -766,6 +838,8 @@
 		E8CF039D178EDDBF000683D4 /* Gui */ = {
 			isa = PBXGroup;
 			children = (
+				E844886817D262E3005105D0 /* Serverbrowser.cpp */,
+				E844886917D262E4005105D0 /* Serverbrowser.h */,
 				E80B28C217AF85300056179E /* DetailConfigWindow.cpp */,
 				E80B28C317AF85310056179E /* DetailConfigWindow.h */,
 				E8CF03BE178EE50E000683D4 /* Main.cpp */,
@@ -1105,14 +1179,12 @@
 		E8E446AB17A02EC700BE8855 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E8E446AF17A036CC00BE8855 /* m4 */,
-				E8E446AD17A02EDA00BE8855 /* configure.ac */,
+				E844886717D262C1005105D0 /* CMakeLists.txt */,
 				E8EE08A217BA016F00631987 /* AUTHORS */,
 				E8EE08A317BA016F00631987 /* ChangeLog */,
 				E8EE08A417BA016F00631987 /* NEWS */,
 				E842D48B17C0D06300381B49 /* README.md */,
 				E8EE08A517BA016F00631987 /* README */,
-				E8E446AE17A02EDA00BE8855 /* Makefile.am */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1308,6 +1380,10 @@
 				E859511517C96B270012810C /* GLProfiler.cpp in Sources */,
 				E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */,
 				E844886617D0C43B005105D0 /* Tracer.cpp in Sources */,
+				E844886A17D262E4005105D0 /* Serverbrowser.cpp in Sources */,
+				E844888217D2633C005105D0 /* json_reader.cpp in Sources */,
+				E844888317D2633C005105D0 /* json_value.cpp in Sources */,
+				E844888417D2633C005105D0 /* json_writer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1349,11 +1425,15 @@
 					/usr/local/include/FL/images,
 					/usr/local/include,
 					Sources/ENet/include,
+					"$(SRCROOT)",
+					Sources,
+					Sources/json/include,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -1390,10 +1470,14 @@
 					/usr/local/include/FL/images,
 					/usr/local/include,
 					Sources/ENet/include,
+					"$(SRCROOT)",
+					Sources,
+					Sources/json/include,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};

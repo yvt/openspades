@@ -19,6 +19,9 @@ build
 *.la
 *.a
 
+# cmake generated
+OpenSpades.h
+
 # autotools
 Makefile
 Makefile.in
