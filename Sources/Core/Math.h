@@ -394,7 +394,7 @@ namespace spades {
 		return Vector3::Make(x, y, z);
 	}
 	static inline Vector3 MakeVector3(IntVector3 v) {
-		return Vector3::Make(v.x, v.y, v.z);
+		return Vector3::Make( static_cast<float>(v.x), static_cast<float>(v.y), static_cast<float>(v.z));
 	}
 	static inline Vector4 MakeVector4(float x, float y, float z, float w) {
 		return Vector4::Make(x, y, z, w);
