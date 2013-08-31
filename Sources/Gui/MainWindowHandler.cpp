@@ -524,21 +524,21 @@ void MainWindow::ServerSelectionChanged()
 void MainWindow::updateFilters()
 {
 	if( browser ) {
-		spades::ServerFilter::Flags flags = spades::ServerFilter::None;
+		spades::ServerFilter::Flags flags = spades::ServerFilter::flt_None;
 		if( checkFilterEmpty->value() ) {
-			flags |= spades::ServerFilter::Empty;
+			flags |= spades::ServerFilter::flt_Empty;
 		}
 		if( checkFilterFull->value() ) {
-			flags |= spades::ServerFilter::Full;
+			flags |= spades::ServerFilter::flt_Full;
 		}
 		if( checkFilterV75->value() ) {
-			flags |= spades::ServerFilter::Ver075;
+			flags |= spades::ServerFilter::flt_Ver075;
 		}
 		if( checkFilterV76->value() ) {
-			flags |= spades::ServerFilter::Ver076;
+			flags |= spades::ServerFilter::flt_Ver076;
 		}
 		if( checkFilterVOther->value() ) {
-			flags |= spades::ServerFilter::VerOther;
+			flags |= spades::ServerFilter::flt_VerOther;
 		}
 		browser->setFilter( flags );
 		browser->refreshList();

@@ -164,20 +164,20 @@ void Serverbrowser::refreshList()
 	mBrowser->add( Serveritem::rowHeaders().c_str() );
 	for( size_t n = 0; n < mServers.size(); ++n ) {
 		Serveritem* i = mServers[n];
-		if( (i->Players() == 0 && !hasFlag(ServerFilter::Empty)) ||
-			(i->Players() == i->MaxPlayers() && !hasFlag(ServerFilter::Full) ) ) {
+		if( (i->Players() == 0 && !hasFlag(ServerFilter::flt_Empty)) ||
+			(i->Players() == i->MaxPlayers() && !hasFlag(ServerFilter::flt_Full) ) ) {
 			continue;
 		}
 		if( "0.75" == i->Version() ) {
-			if( !hasFlag( ServerFilter::Ver075 ) ) {
+			if( !hasFlag( ServerFilter::flt_Ver075 ) ) {
 				continue;
 			}
 		} else if( "0.76" == i->Version() ) {
-			if( !hasFlag( ServerFilter::Ver076 ) ) {
+			if( !hasFlag( ServerFilter::flt_Ver076 ) ) {
 				continue;
 			}
 		} else {
-			if( !hasFlag( ServerFilter::VerOther ) ) {
+			if( !hasFlag( ServerFilter::flt_VerOther ) ) {
 				continue;
 			}
 		}

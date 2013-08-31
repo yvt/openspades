@@ -61,12 +61,12 @@ public:
 namespace ServerFilter
 {
 	enum Flags {
-		None = 0,
-		Empty = (1<<0),
-		Full = (1<<1),
-		Ver075 = (1<<2),
-		Ver076 = (1<<3),
-		VerOther = (1<<4)
+		flt_None = 0,
+		flt_Empty = (1<<0),
+		flt_Full = (1<<1),
+		flt_Ver075 = (1<<2),
+		flt_Ver076 = (1<<3),
+		flt_VerOther = (1<<4)
 	};
 };
 
