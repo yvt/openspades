@@ -46,7 +46,7 @@ source_group("unzip" FILES ${UNZIP_SWEEP_FILES})
 
 
 
-target_link_libraries(OpenSpades ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${FLTK_PNG} ${FLTK_JPEG} ${ZLIB_LIBRARIES})
+target_link_libraries(OpenSpades ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${ZLIB_LIBRARIES})
 
 if(OPENAL_FOUND)
 	target_link_libraries(OpenSpades ${OPENAL_LIBRARY})
