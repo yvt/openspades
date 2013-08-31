@@ -122,6 +122,7 @@ namespace spades {
 			
 			Player::ToolType selectedTool;
 			float toolRaiseState;
+			void SetSelectedTool(Player::ToolType, bool quiet = false);
 			
 			// view
 			SceneDefinition lastSceneDef;

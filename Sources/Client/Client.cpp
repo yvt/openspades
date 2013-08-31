@@ -548,7 +548,7 @@ namespace spades {
 									break;
 							}
 						}while(!world->GetLocalPlayer()->IsToolSelectable(t));
-						selectedTool = t;
+						SetSelectedTool(t);
 					}
 					if(selectedTool == player->GetTool()) {
 						toolRaiseState += dt * 4.f;
@@ -940,25 +940,25 @@ namespace spades {
 						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
 						   world->GetLocalPlayer()->IsAlive() &&
 						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolSpade)){
-							selectedTool = Player::ToolSpade;
+							SetSelectedTool(Player::ToolSpade);
 						}
 					}else if(CheckKey(cg_keyToolBlock, name) && down){
 						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
 						   world->GetLocalPlayer()->IsAlive() &&
 						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolBlock)){
-							selectedTool = Player::ToolBlock;
+							SetSelectedTool(Player::ToolBlock);
 						}
 					}else if(CheckKey(cg_keyToolWeapon, name) && down){
 						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
 						   world->GetLocalPlayer()->IsAlive() &&
 						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolWeapon)){
-							selectedTool = Player::ToolWeapon;
+							SetSelectedTool(Player::ToolWeapon);
 						}
 					}else if(CheckKey(cg_keyToolGrenade, name) && down){
 						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
 						   world->GetLocalPlayer()->IsAlive() &&
 						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolGrenade)){
-							selectedTool = Player::ToolGrenade;
+							SetSelectedTool(Player::ToolGrenade);
 						}
 					}else if(CheckKey(cg_keyGlobalChat, name) && down){
 						// global chat
@@ -1017,7 +1017,7 @@ namespace spades {
 											break;
 									}
 								}while(!world->GetLocalPlayer()->IsToolSelectable(t));
-								selectedTool = t;
+								SetSelectedTool(t);
 							}
 						}else if(name == (rev ? "WheelUp":"WheelDown")) {
 							if(world->GetLocalPlayer()->GetTeamId() < 2 &&
@@ -1039,7 +1039,7 @@ namespace spades {
 											break;
 									}
 								}while(!world->GetLocalPlayer()->IsToolSelectable(t));
-								selectedTool = t;
+								SetSelectedTool(t);
 							}
 						}
 					}
@@ -1135,6 +1135,18 @@ namespace spades {
 			if(logStream) {
 				logStream->Write(buf);
 				logStream->Flush();
+			}
+		}
+		
+		void Client::SetSelectedTool(Player::ToolType type, bool quiet) {
+			if(type == selectedTool)
+				return;
+			selectedTool = type;
+			
+			if(!quiet) {
+				IAudioChunk *c = audioDevice->RegisterSound("Sounds/Weapons/SwitchLocal.wav");
+				audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f),
+									   AudioParam());
 			}
 		}
 		
@@ -4119,9 +4131,36 @@ namespace spades {
 			
 			if(!IsMuted()){
 				bool isLocal = p == world->GetLocalPlayer();
-				IAudioChunk *c = isLocal ?
-				audioDevice->RegisterSound("Sounds/Weapons/SwitchLocal.wav"):
-				audioDevice->RegisterSound("Sounds/Weapons/Switch.wav");
+				IAudioChunk *c;
+				if(isLocal){
+					switch(p->GetTool()) {
+						case Player::ToolSpade:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Spade/RaiseLocal.wav");
+							break;
+						case Player::ToolBlock:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Block/RaiseLocal.wav");
+							break;
+						case Player::ToolWeapon:
+							switch(p->GetWeapon()->GetWeaponType()){
+								case RIFLE_WEAPON:
+									c = audioDevice->RegisterSound("Sounds/Weapons/Rifle/RaiseLocal.wav");
+									break;
+								case SMG_WEAPON:
+									c = audioDevice->RegisterSound("Sounds/Weapons/SMG/RaiseLocal.wav");
+									break;
+								case SHOTGUN_WEAPON:
+									c = audioDevice->RegisterSound("Sounds/Weapons/Shotgun/RaiseLocal.wav");
+									break;
+							}
+							
+							break;
+						case Player::ToolGrenade:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/RaiseLocal.wav");
+							break;
+					}
+				}else{
+					c = audioDevice->RegisterSound("Sounds/Weapons/Switch.wav");
+				}
 				if(isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f),
 										   AudioParam());
