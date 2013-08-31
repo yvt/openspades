@@ -20,11 +20,15 @@
 
 #include <OpenSpades.h>
 #include "Serverbrowser.h"
+#include <Core/Settings.h>
 #include <curl/curl.h>
 #include <json/json.h>
 #include <FL/Fl_Browser.H>
 #include <FL/Fl_Input.H>
 #include <sstream>
+
+
+SPADES_SETTING(cg_protocolVersion, "3");
 
 #define SERVICE_URL	"http://services.buildandshoot.com/serverlist.json"
 
@@ -191,6 +195,11 @@ void Serverbrowser::onSelection( void* ptr, Fl_Input* input )
 	if( serverItem ) {
 		std::string ip = serverItem->Ip();
 		input->value( ip.c_str() );
+		if( serverItem->Version() == "0.75" ) {
+			cg_protocolVersion = "3";
+		} else if( serverItem->Version() == "0.76" ) {
+			cg_protocolVersion = "4";
+		}
 	}
 }
 
