@@ -336,7 +336,8 @@ namespace spades {
 				result = GetWorld()->GetMap()->CastRay2(GetEye(),
 														GetFront(),
 														8);
-				if(result.hit && (result.hitBlock + result.normal).z < 62){
+				if(result.hit && (result.hitBlock + result.normal).z < 62 &&
+				   !OverlapsWithOneBlock(result.hitBlock + result.normal)){
 					blockCursorActive = true;
 					blockCursorPos = result.hitBlock + result.normal;
 				}else{
@@ -1136,7 +1137,8 @@ namespace spades {
 		
 		void Player::KilledBy(KillType type,
 							Player *killer,
-							int respawnTime) {
+							  int respawnTime) {
+			SPADES_MARK_FUNCTION();
 			health = 0;
 			weapon->SetShooting(false);
 			
@@ -1169,6 +1171,7 @@ namespace spades {
 		}
 		
 		Player::HitBoxes Player::GetHitBoxes() {
+			SPADES_MARK_FUNCTION_DEBUG();
 			Player::HitBoxes hb;
 			
 			Vector3 front = GetFront();
@@ -1258,6 +1261,7 @@ namespace spades {
 		}
 		
 		void Player::SetWeaponType(WeaponType weap){
+			SPADES_MARK_FUNCTION_DEBUG();
 			if(this->weapon->GetWeaponType() == weap)
 				return;
 			delete this->weapon;
@@ -1269,6 +1273,7 @@ namespace spades {
 		}
 		
 		bool Player::IsReadyToUseTool() {
+			SPADES_MARK_FUNCTION_DEBUG();
 			switch(tool){
 				case ToolBlock:
 					return world->GetTime() > nextBlockTime &&
@@ -1284,6 +1289,7 @@ namespace spades {
 		}
 		
 		bool Player::IsToolSelectable(ToolType type) {
+			SPADES_MARK_FUNCTION_DEBUG();
 			switch(type){
 				case ToolSpade:
 					return true;
@@ -1297,6 +1303,29 @@ namespace spades {
 				default:
 					SPAssert(false);
 			}
+		}
+		
+		bool Player::OverlapsWith(const spades::AABB3 &aabb) {
+			SPADES_MARK_FUNCTION_DEBUG();
+			float offset, m;
+			if(input.crouch){
+				offset = .45f;
+				m = .9f;
+			}else{
+				offset = .9f;
+				m = 1.35f;
+			}
+			AABB3 playerBox(eye.x - .45f,
+							eye.y - .45f,
+							eye.z,
+							.9f, .9f, offset + m);
+			return aabb && playerBox;
+		}
+		
+		bool Player::OverlapsWithOneBlock(spades::IntVector3 vec) {
+			SPADES_MARK_FUNCTION_DEBUG();
+			return OverlapsWith(AABB3(vec.x, vec.y, vec.z,
+									  1, 1, 1));
 		}
 		
 #pragma mark - Block Construction

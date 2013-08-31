@@ -236,6 +236,9 @@ namespace spades {
 			 * @param dir normalized direction vector.
 			 * @return true if ray may hit the player. */
 			bool RayCastApprox(Vector3 start, Vector3 dir);
+			
+			bool OverlapsWith(const AABB3&);
+			bool OverlapsWithOneBlock(IntVector3);
 		};
 	}
 }
