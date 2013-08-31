@@ -2769,6 +2769,8 @@ namespace spades {
 							int clipSize = weap->GetClipSize();
 							int clip = weap->GetAmmo();
 							
+							clipSize = std::max(clipSize, clip);
+							
 							for(int i = 0; i < clipSize; i++){
 								float x = scrWidth - 16.f - (float)(i+1) *
 								(iconWidth + spacing);
