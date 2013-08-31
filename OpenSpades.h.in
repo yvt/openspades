@@ -13,15 +13,5 @@
 
 #cmakedefine HAS_OPENAL
 
-#cmakedefine HAS_GETHOSTBYADDR_R
-#cmakedefine HAS_GETHOSTBYNAME_R
-#cmakedefine HAS_POLL
-#cmakedefine HAS_INET_PTON
-#cmakedefine HAS_INET_NTOP
-
-#cmakedefine HAS_FCNTL_H
-#cmakedefine HAS_UNISTD_H
-
-
 #cmakedefine RESDIR_DEFINED
 #define RESDIR "${RESDIR}"
