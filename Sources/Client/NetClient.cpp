@@ -297,6 +297,9 @@ namespace spades {
 			peer = NULL;
 			status = NetClientStatusNotConnected;
 			
+			lastPlayerInput = 0;
+			lastWeaponInput = 0;
+			
 			savedPlayerPos.resize(32);
 			savedPlayerFront.resize(32);
 		}
@@ -980,8 +983,11 @@ namespace spades {
 					if(!name.empty()) // sometimes becomes empty
 						pers.name = name;
 					
-					if(pId == GetWorld()->GetLocalPlayerIndex())
+					if(pId == GetWorld()->GetLocalPlayerIndex()){
 						client->LocalPlayerCreated();
+						lastPlayerInput = 0xffffffff;
+						lastWeaponInput = 0xffffffff;
+					}
 				}
 					break;
 				case PacketTypeBlockAction:
@@ -1467,6 +1473,10 @@ namespace spades {
 			if(inp.sprint)		bits |= 1 << 7;
 			wri.Write(bits);
 			
+			if((unsigned int)bits == lastPlayerInput)
+				return;
+			lastPlayerInput = bits;
+			
 			enet_peer_send(peer, 0, wri.CreatePacket());
 		}
 		
@@ -1479,6 +1489,10 @@ namespace spades {
 			if(inp.primary)		bits |= 1 << 0;
 			if(inp.secondary)	bits |= 1 << 1;
 			wri.Write(bits);
+			
+			if((unsigned int)bits == lastWeaponInput)
+				return;
+			lastWeaponInput = bits;
 			
 			enet_peer_send(peer, 0, wri.CreatePacket());
 		}
