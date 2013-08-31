@@ -8,8 +8,6 @@ file(GLOB CORE_FILES Core/*.cpp Core/*.h)
 file(GLOB DRAW_FILES Draw/*.cpp Draw/*.h)
 file(GLOB ENET_FILES ENet/*.c ENet/*.h)
 file(GLOB ENET_INCLUDE ENet/include/enet/*.h)
-file(GLOB CURL_FILES curl/*.c curl/*.h)
-file(GLOB CURL_INCLUDE curl/include/curl/*.h)
 file(GLOB GUI_FILES Gui/*.cpp Gui/*.h)
 file(GLOB IMPORTS_FILES Imports/*.h)
 file(GLOB KISS_FILES kiss_fft130/*.c kiss_fft130/*.h)
@@ -23,17 +21,8 @@ file(GLOB UNZIP_FILES unzip/*.c unzip/*.h)
 include_directories(".")
 include_directories("json/include")
 include_directories("ENet/include")
-include_directories("curl/include")
 
-add_definitions(-DBUILDING_LIBCURL)
-add_definitions(-DCURL_DISABLE_LDAP=1)
-add_definitions(-DCURL_DISABLE_LDAPS=1)
-add_definitions(-DCURL_DISABLE_TELNET=1)
-add_definitions(-DCURL_DISABLE_FTP=1)
-add_definitions(-DCURL_DISABLE_TFTP=1)
-
-
-add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${CURL_FILES} ${CURL_INCLUDE} ${GUI_FILES}
+add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${GUI_FILES}
 	${IMPORTS_FILES} ${KISS_FILES} ${JSON_FILES} ${JSON_INCLUDE} ${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES} ${UNZIP_FILES})
 set_target_properties(OpenSpades PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -43,6 +32,7 @@ set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BIN
 if(WIN32)
 	string(REGEX REPLACE "\\.lib$" ".dll" SDL_DLL ${SDL_LIBRARY})
 	add_custom_command(TARGET OpenSpades POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SDL_DLL}" "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/")
+	add_definitions(-DCURL_STATICLIB)
 endif()
 
 source_group("Audio" FILES ${AUDIO_FILES})
@@ -53,8 +43,6 @@ source_group("Core" FILES ${CORE_FILES})
 source_group("Draw" FILES ${DRAW_FILES})
 source_group("Enet" FILES ${ENET_FILES})
 source_group("Enet\\include" FILES ${ENET_INCLUDE})
-source_group("cURL" FILES ${CURL_FILES})
-source_group("cURL\\include" FILES ${CURL_INCLUDE})
 source_group("Gui" FILES ${GUI_FILES})
 source_group("Imports" FILES ${IMPORTS_FILES})
 source_group("kiss_fft130" FILES ${KISS_FILES})
@@ -66,8 +54,7 @@ source_group("poly2tri\\sweep" FILES ${POLY2TRI_SWEEP_FILES})
 source_group("unzip" FILES ${UNZIP_FILES})
 
 
-
-target_link_libraries(OpenSpades ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${ZLIB_LIBRARIES})
+target_link_libraries(OpenSpades ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${ZLIB_LIBRARIES} ${CURL_LIBRARY})
 
 if(OPENAL_FOUND)
 	target_link_libraries(OpenSpades ${OPENAL_LIBRARY})
