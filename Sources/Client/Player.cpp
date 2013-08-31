@@ -254,8 +254,12 @@ namespace spades {
 			blockCursorActive = false;
 			blockCursorDragging = false;
 			
+			reloadingServerSide = false;
+			
 			WeaponInput inp;
 			SetWeaponInput(inp);
+			
+			weapon->AbortReload();
 			
 			if(world->GetListener())
 				world->GetListener()->PlayerChangedTool(this);

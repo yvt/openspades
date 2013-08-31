@@ -74,6 +74,7 @@ namespace spades {
 			bool FrameNext(float);
 			
 			void Reload();
+			void AbortReload();
 			
 			bool IsShooting() const {return shooting;}
 			bool IsReloading() const { return reloading; }
