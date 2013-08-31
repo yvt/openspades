@@ -134,8 +134,14 @@ namespace spades {
 		}
 		
 		void Weapon::ReloadDone(int ammo, int stock) {
+			SPADES_MARK_FUNCTION_DEBUG();
 			this->ammo = ammo;
 			this->stock = stock;
+		}
+		
+		void Weapon::AbortReload() {
+			SPADES_MARK_FUNCTION_DEBUG();
+			reloading = false;
 		}
 		
 		void Weapon::Reload() {

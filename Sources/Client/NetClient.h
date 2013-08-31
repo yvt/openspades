@@ -60,6 +60,9 @@ namespace spades {
 			int timeToTryMapLoad;
 			bool tryMapLoadOnPacketType;
 			
+			unsigned int lastPlayerInput;
+			unsigned int lastWeaponInput;
+			
 			// used for some scripts including Arena by Yourself
 			IntVector3 temporaryPlayerBlockColor;
 			
