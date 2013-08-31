@@ -55,7 +55,7 @@ SPADES_SETTING(r_water, "1");
 SPADES_SETTING(r_multisamples, "0");
 SPADES_SETTING(r_fxaa, "1");
 SPADES_SETTING(r_depthBits, "24");
-SPADES_SETTING(r_colorBits, "0");
+SPADES_SETTING(r_colorBits, "");
 SPADES_SETTING(r_videoWidth, "1024");
 SPADES_SETTING(r_videoHeight, "640");
 SPADES_SETTING(r_fullscreen, "0");
