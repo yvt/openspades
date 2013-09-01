@@ -347,6 +347,7 @@ void MainWindow::CheckGLCapability() {
 			"GL_ARB_multitexture",
 			"GL_ARB_shader_objects",
 			"GL_ARB_shading_language_100",
+			"GL_ARB_texture_non_power_of_two",
 			"GL_ARB_vertex_buffer_object",
 			"GL_EXT_framebuffer_object",
 			NULL
