@@ -3797,6 +3797,23 @@ namespace spades {
 			}
 		}
 		
+		void Client::PlayerLeaving(spades::client::Player *p) {
+			std::string msg;
+			msg = "Player " + chatWindow->TeamColorMessage(p->GetName(), p->GetTeamId());
+			msg += " has left";
+			chatWindow->AddMessage(msg);
+		}
+		
+		void Client::PlayerJoinedTeam(spades::client::Player *p) {
+			std::string msg;
+			msg = p->GetName();
+			msg += " joined ";
+			msg += chatWindow->TeamColorMessage(world->GetTeam(p->GetTeamId()).name,
+												p->GetTeamId());
+			msg += " team";
+			chatWindow->AddMessage(msg);
+		}
+		
 		void Client::GrenadeDestroyedBlock(spades::IntVector3 blk){
 			for(int x = blk.x - 1; x <= blk.x + 1; x++)
 				for(int y = blk.y - 1; y <= blk.y + 1; y++)

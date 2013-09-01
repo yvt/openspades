@@ -242,6 +242,8 @@ namespace spades {
 			void PlayerDestroyedBlockWithWeaponOrTool(IntVector3);
 			void PlayerDiggedBlock(IntVector3);
 			void GrenadeDestroyedBlock(IntVector3);
+			void PlayerLeaving(Player *);
+			void PlayerJoinedTeam(Player *);
 			
 			virtual void PlayerMadeFootstep(Player *);
 			virtual void PlayerJumped(Player *);

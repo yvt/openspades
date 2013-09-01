@@ -302,6 +302,10 @@ namespace spades {
 			
 			savedPlayerPos.resize(32);
 			savedPlayerFront.resize(32);
+			savedPlayerTeam.resize(32);
+			
+			std::fill(savedPlayerTeam.begin(),
+					  savedPlayerTeam.end(), -1);
 		}
 		NetClient::~NetClient(){
 			SPADES_MARK_FUNCTION();
@@ -889,6 +893,8 @@ namespace spades {
 					World::PlayerPersistent& pers = GetWorld()->GetPlayerPersistent(pId);
 					pers.name = name;
 					pers.kills = kills;
+					
+					savedPlayerTeam[pId] = team;
 				}
 					break;
 				case PacketTypeShortPlayerData:
@@ -987,7 +993,15 @@ namespace spades {
 						client->LocalPlayerCreated();
 						lastPlayerInput = 0xffffffff;
 						lastWeaponInput = 0xffffffff;
+					}else{
+						if(savedPlayerTeam[pId] != team && team < 2){
+							
+							client->PlayerJoinedTeam(p);
+							
+							savedPlayerTeam[pId] = team;
+						}
 					}
+					
 				}
 					break;
 				case PacketTypeBlockAction:
@@ -1243,6 +1257,10 @@ namespace spades {
 				case PacketTypePlayerLeft:
 				{
 					Player *p = GetPlayer(reader.ReadByte());
+					
+					client->PlayerLeaving(p);
+					
+					savedPlayerTeam[p->GetId()] = -1;
 					GetWorld()->SetPlayer(p->GetId(), NULL);
 					// TODO: message
 				}

@@ -54,6 +54,7 @@ namespace spades {
 			
 			std::vector<Vector3> savedPlayerPos;
 			std::vector<Vector3> savedPlayerFront;
+			std::vector<int> savedPlayerTeam;
 			
 			std::vector<std::vector<char> > savedPackets;
 			
