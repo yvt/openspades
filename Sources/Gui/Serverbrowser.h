@@ -42,7 +42,7 @@ class Serveritem
 		int ping, int players, int maxPlayers );
 public:
 	static Serveritem* create( Json::Value& val );
-	static std::string rowHeaders();
+	static std::string rowHeaders( int sort );
 	static int* colSizes();
 
 	std::string toRow();
@@ -74,10 +74,12 @@ namespace ServerFilter
 
 class Serverbrowser : public Thread
 {
+	bool mStopRequested;
 	std::string mBuffer;
 	std::vector<Serveritem*> mServers;
 	Fl_Browser* mBrowser;
 	ServerFilter::Flags mFlags;
+	int mSort, mSortOrder;
 
 	virtual void Run();
 	static size_t curlWriteCallback( void *ptr, size_t size, size_t nmemb, Serverbrowser* data );
@@ -88,8 +90,11 @@ class Serverbrowser : public Thread
 
 public:
 	Serverbrowser( Fl_Browser* box );
+	void stopReading() { mStopRequested = true; }
 	void onSelection( void* ptr, Fl_Input* input );
+	void onHeaderClick( int x );
 	void setFilter( ServerFilter::Flags newFlags );
+	inline ServerFilter::Flags Filter() { return mFlags; }
 	void refreshList();
 };
 

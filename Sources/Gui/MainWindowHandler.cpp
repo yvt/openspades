@@ -55,7 +55,7 @@ SPADES_SETTING(r_water, "1");
 SPADES_SETTING(r_multisamples, "0");
 SPADES_SETTING(r_fxaa, "1");
 SPADES_SETTING(r_depthBits, "24");
-SPADES_SETTING(r_colorBits, "0");
+SPADES_SETTING(r_colorBits, "");
 SPADES_SETTING(r_videoWidth, "1024");
 SPADES_SETTING(r_videoHeight, "640");
 SPADES_SETTING(r_fullscreen, "0");
@@ -67,6 +67,17 @@ SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
 
 static std::vector<spades::IntVector3> g_modes;
+
+MainWindow::~MainWindow()
+{
+	if( browser ) {
+		if( browser->IsAlive() ) {
+			browser->stopReading();
+			browser->Join();
+		}
+		delete browser;
+	}
+}
 
 void MainWindow::StartGame(const std::string &host) {
 	SPADES_MARK_FUNCTION();
@@ -253,7 +264,12 @@ void MainWindow::Init() {
 	aboutView->value(text.c_str());
 	
 	browser = new spades::Serverbrowser( serverListbox );
-	updateFilters();
+	spades::ServerFilter::Flags flags = browser->Filter();
+	checkFilterEmpty->value( flags & spades::ServerFilter::flt_Empty );
+	checkFilterFull->value( flags & spades::ServerFilter::flt_Full );
+	checkFilterV75->value( flags & spades::ServerFilter::flt_Ver075 );
+	checkFilterV76->value( flags & spades::ServerFilter::flt_Ver076 );
+	checkFilterVOther->value( flags & spades::ServerFilter::flt_VerOther );
 	browser->Start();
 }
 
@@ -515,8 +531,10 @@ void MainWindow::ServerSelectionChanged()
 	SPADES_MARK_FUNCTION();
 	if( browser ) {
 		int item = serverListbox->value();
-		if( item ) {
+		if( item > 1 ) {
 			browser->onSelection( serverListbox->data( item ), quickHostInput );
+		} else if( item == 1 ) {
+			browser->onHeaderClick( Fl::event_x() - serverListbox->x() );
 		}
 	}	
 }
