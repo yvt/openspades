@@ -34,6 +34,7 @@
 #include "DetailConfigWindow.h"
 #include "../Core/Math.h"
 #include "Serverbrowser.h"
+#include "ErrorDialog.h"
 
 #include "../Imports/OpenGL.h" //for gpu info
 
@@ -89,7 +90,7 @@ void MainWindow::StartGame(const std::string &host) {
 	SDLRunner r(host);
 	r.Run();
 #else
-	
+	std::string err;
 	try{
 		if(cg_smp){
 			SDLAsyncRunner r(host, cg_playerName);
@@ -99,12 +100,31 @@ void MainWindow::StartGame(const std::string &host) {
 			r.Run();
 		}
 	}catch(const spades::Exception& ex){
+		err = ex.GetShortMessage();
 		SPLog("Unhandled exception in SDLRunner:\n%s", ex.what());
-		fl_message("Game was terminated due to an unexpected error:\n\n%s\n\nSee SystemMessages.log for more details.", ex.GetShortMessage().c_str());
 	}catch(const std::exception& ex){
+		err = ex.what();
 		SPLog("Unhandled exception in SDLRunner:\n%s", ex.what());
-		fl_message("Game was terminated due to an unexpected error:\n\n%s\n\nSee SystemMessages.log for more details.", ex.what());
 	}
+	if(!err.empty()){
+		ErrorDialog dlg;
+		dlg.set_modal();
+		dlg.result = 0;
+		
+		Fl_Text_Buffer buf;
+		buf.append(err.c_str());
+		dlg.infoView->wrap_mode(Fl_Text_Display::WRAP_AT_BOUNDS, 0);
+		dlg.infoView->buffer(buf);
+		dlg.helpView->value("See SystemMessages.log for more details.");
+		dlg.show();
+		while(dlg.visible()){
+			Fl::wait();
+		}
+		if( dlg.result == 1 ){
+			show();
+		}
+	}
+	
 #endif
 
 }

@@ -51,6 +51,7 @@
 		E844888317D2633C005105D0 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887C17D2633C005105D0 /* json_value.cpp */; };
 		E844888417D2633C005105D0 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887E17D2633C005105D0 /* json_writer.cpp */; };
 		E844888717D2669C005105D0 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.dylib */; };
+		E844888A17D39CD3005105D0 /* ErrorDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844888817D39CD0005105D0 /* ErrorDialog.cpp */; };
 		E8567E571792B24D009D83E0 /* IAudioChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E551792B24D009D83E0 /* IAudioChunk.cpp */; };
 		E8567E5A1792BEFC009D83E0 /* ALDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E581792BEFC009D83E0 /* ALDevice.cpp */; };
 		E8567E5D1792C089009D83E0 /* ALFuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E5C1792C089009D83E0 /* ALFuncs.cpp */; };
@@ -297,6 +298,9 @@
 		E844888117D2633C005105D0 /* version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version; sourceTree = "<group>"; };
 		E844888517D26411005105D0 /* OpenSpades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenSpades.h; sourceTree = SOURCE_ROOT; };
 		E844888617D26699005105D0 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
+		E844888817D39CD0005105D0 /* ErrorDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorDialog.cpp; sourceTree = "<group>"; };
+		E844888917D39CD2005105D0 /* ErrorDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorDialog.h; sourceTree = "<group>"; };
+		E844888B17D3A059005105D0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		E8567E551792B24D009D83E0 /* IAudioChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IAudioChunk.cpp; sourceTree = "<group>"; };
 		E8567E561792B24D009D83E0 /* IAudioChunk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAudioChunk.h; sourceTree = "<group>"; };
 		E8567E581792BEFC009D83E0 /* ALDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ALDevice.cpp; sourceTree = "<group>"; };
@@ -818,6 +822,7 @@
 		E8CF0387178ED9D2000683D4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E844888B17D3A059005105D0 /* CMakeLists.txt */,
 				E844888517D26411005105D0 /* OpenSpades.h */,
 				E844886C17D26337005105D0 /* json */,
 				E80B28D517B39CFE0056179E /* unzip */,
@@ -838,6 +843,8 @@
 		E8CF039D178EDDBF000683D4 /* Gui */ = {
 			isa = PBXGroup;
 			children = (
+				E844888817D39CD0005105D0 /* ErrorDialog.cpp */,
+				E844888917D39CD2005105D0 /* ErrorDialog.h */,
 				E844886817D262E3005105D0 /* Serverbrowser.cpp */,
 				E844886917D262E4005105D0 /* Serverbrowser.h */,
 				E80B28C217AF85300056179E /* DetailConfigWindow.cpp */,
@@ -1384,6 +1391,7 @@
 				E844888217D2633C005105D0 /* json_reader.cpp in Sources */,
 				E844888317D2633C005105D0 /* json_value.cpp in Sources */,
 				E844888417D2633C005105D0 /* json_writer.cpp in Sources */,
+				E844888A17D39CD3005105D0 /* ErrorDialog.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

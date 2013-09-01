@@ -1,0 +1,31 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0302 
+header_name {.h} 
+code_name {.cpp}
+widget_class ErrorDialog {
+  label {OpenSpades Error} open
+  xywh {166 317 595 171} type Double align 80
+  class Fl_Window visible
+} {
+  Fl_Text_Display infoView {
+    label {An error caused OpenSpades to stop working:}
+    xywh {25 40 550 70} align 5
+  }
+  Fl_Return_Button {} {
+    label OK
+    callback {this->result = 1;
+hide();}
+    xywh {365 125 100 25}
+  }
+  Fl_Button {} {
+    label Quit
+    callback {this->result = 0;
+hide();}
+    xywh {475 125 100 25}
+  }
+  decl {int result;} {public local
+  }
+  Fl_Output helpView {selected
+    xywh {25 125 330 25} box FLAT_BOX color 49 textsize 12
+  }
+} 
