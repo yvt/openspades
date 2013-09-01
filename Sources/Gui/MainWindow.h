@@ -145,6 +145,7 @@ private:
   void ServerSelectionChanged();
 public:
   void updateFilters();;
+  ~MainWindow();
 };
 extern unsigned char aboutText[3496];
 #endif

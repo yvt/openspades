@@ -26,9 +26,12 @@
 #include <FL/Fl_Browser.H>
 #include <FL/Fl_Input.H>
 #include <sstream>
+#include <cctype>
+#include <algorithm>
 
-
-SPADES_SETTING(cg_protocolVersion, "3");
+SPADES_SETTING2(cg_protocolVersion, "", "The protocol version to use, 3 = 0.75, 4 = 0.76");
+SPADES_SETTING(cg_serverlistFilter, "31");
+SPADES_SETTING(cg_serverlistSort, "0");
 
 #define SERVICE_URL	"http://services.buildandshoot.com/serverlist.json"
 
@@ -69,7 +72,7 @@ Serveritem* Serveritem::create( Json::Value& val )
 std::string Serveritem::toRow()
 {
 	std::stringstream ss;
-	ss << mPing << COLUMN_CHAR
+	ss << "@." << mPing << COLUMN_CHAR
 		<< mPlayers << "/" << mMaxPlayers << COLUMN_CHAR
 		<< mName << COLUMN_CHAR
 		<< mMap << COLUMN_CHAR
@@ -79,15 +82,20 @@ std::string Serveritem::toRow()
 	return ss.str();
 }
 
-std::string Serveritem::rowHeaders()
+#define HEAD_FMT	"@b"
+#define SORT_FMT	"@C216"
+
+std::string Serveritem::rowHeaders(int sort)
 {
-	return "Ping" COLUMN_CHAR
-		"Players" COLUMN_CHAR
-		"Name" COLUMN_CHAR
-		"Map" COLUMN_CHAR
-		"Gamemode" COLUMN_CHAR
-		"Version" COLUMN_CHAR
-		"Loc";
+	std::stringstream ss;
+	ss << (sort == 0 ? SORT_FMT : "") << HEAD_FMT "Ping" COLUMN_CHAR
+		<< (sort == 1 ? SORT_FMT : "") << HEAD_FMT "Players" COLUMN_CHAR
+		<< (sort == 2 ? SORT_FMT : "") << HEAD_FMT "Name" COLUMN_CHAR
+		<< (sort == 3 ? SORT_FMT : "") << HEAD_FMT "Map" COLUMN_CHAR
+		<< (sort == 4 ? SORT_FMT : "") << HEAD_FMT "Gamemode" COLUMN_CHAR
+		<< (sort == 5 ? SORT_FMT : "") << HEAD_FMT "Version" COLUMN_CHAR
+		<< (sort == 6 ? SORT_FMT : "") << HEAD_FMT "Loc";
+	return ss.str();
 }
 
 int size_Array[] = { 40, 60, 250, 80, 60, 50, 40, 0 };
@@ -97,20 +105,70 @@ int* Serveritem::colSizes()
 	return size_Array;
 }
 
+struct serverSorter {
+	int type, order;
+	serverSorter( int type_, int order_ ) : type(type_), order(order_) {;}
+	bool operator() ( Serveritem* x, Serveritem* y ) const
+	{
+		if( order ) {
+			Serveritem* t = x;
+			x = y;
+			y = t;
+		}
+		switch( type ) {
+			default:
+			case 0:	return asInt( x->Ping(), y->Ping() );
+			case 1:	return asInt( x->Players(), y->Players() );
+			case 2:	return asString( x->Name(), y->Name() );
+			case 3:	return asString( x->Map(), y->Map() );
+			case 4: return asString( x->GameMode(), y->GameMode() );
+			case 5: return asString( x->Version(), y->Version() );
+			case 6: return asString( x->Country(), y->Country() );
+		}
+	}
+	bool asInt( int x, int y ) const
+	{
+		if( x == y ) return false;
+		return (x<y);
+	}
+	bool asString( const std::string& x, const std::string& y ) const
+	{
+		std::string::size_type t = 0;
+		for( t = 0; t < x.length() && t < y.length(); ++ t ) {
+			int xx = std::tolower(x[t]);
+			int yy = std::tolower(y[t]);
+			if( xx != yy ) {
+				return xx < yy;
+			}
+		}
+		if( x.length() == y.length() ) {
+			return false;
+		}
+		return x.length() < y.length();
+	}
+	static bool ciCharLess( char c1, char c2 )
+	{
+		return (std::tolower( static_cast<char>( c1 ) ) < std::tolower( static_cast<char>( c1 ) ));
+	}
+};
+
 
 
 Serverbrowser::Serverbrowser( Fl_Browser* box )
-: mBrowser( box )
+: mStopRequested(false), mBrowser( box ), mSort(0), mSortOrder(0)
 {
+	mFlags = static_cast<ServerFilter::Flags>((int)cg_serverlistFilter);
+	mSortOrder = ((int)cg_serverlistSort & 0x4000) ? 1 : 0;
+	mSort = ((int)cg_serverlistSort) & 0xfff;
 	curl_global_init( CURL_GLOBAL_ALL );
-	mBrowser->clear();
-	mBrowser->add( "Fetching servers, please wait..." );
 }
 
 void Serverbrowser::Run()
 {
 	CURL* cHandle = curl_easy_init();
+	mBrowser->clear();
 	if( cHandle ) {
+		mBrowser->add( "Fetching servers, please wait..." );
 		mBuffer = "";
 		curl_easy_setopt( cHandle, CURLOPT_USERAGENT, OpenSpades_VER_STR );
 		curl_easy_setopt( cHandle, CURLOPT_URL, SERVICE_URL );
@@ -119,6 +177,8 @@ void Serverbrowser::Run()
 		if( 0 == curl_easy_perform( cHandle ) ) {
 			parse();
 			refreshList();
+		} else {
+			mBrowser->add( "Sorry, couldnt fetch servers..." );
 		}
 		curl_easy_cleanup( cHandle );
 	}
@@ -132,7 +192,7 @@ size_t Serverbrowser::curlWriteCallback( void *ptr, size_t size, size_t nmemb, S
 
 size_t Serverbrowser::writeCallback( void *ptr, size_t size )
 {
-	if( false ) {
+	if( mStopRequested ) {
 		return 0;	//abort.
 	}
 	mBuffer.append( reinterpret_cast<char*>(ptr), size );
@@ -161,11 +221,11 @@ bool Serverbrowser::hasFlag( ServerFilter::Flags flag )
 
 void Serverbrowser::refreshList()
 {
-	//std::sort(bla)
+	std::sort( mServers.begin(), mServers.end(), serverSorter( mSort, mSortOrder ) );
 	mBrowser->clear();
 	mBrowser->column_widths( Serveritem::colSizes() );
 	mBrowser->column_char( COLUMN_CHAR[0] );
-	mBrowser->add( Serveritem::rowHeaders().c_str() );
+	mBrowser->add( Serveritem::rowHeaders( mSort ).c_str() );
 	for( size_t n = 0; n < mServers.size(); ++n ) {
 		Serveritem* i = mServers[n];
 		if( (i->Players() == 0 && !hasFlag(ServerFilter::flt_Empty)) ||
@@ -203,9 +263,29 @@ void Serverbrowser::onSelection( void* ptr, Fl_Input* input )
 	}
 }
 
+void Serverbrowser::onHeaderClick( int x )
+{
+	int* p = Serveritem::colSizes();
+	int num = 0;
+	while( p[num] && x > p[num] ) {
+		x -= p[num++];
+	}
+	if( p[num] ) {
+		if( num == mSort ) {
+			mSortOrder ^= 1;
+		} else {
+			mSort = num;
+			mSortOrder = 0;
+		}
+		cg_serverlistSort = (mSort & 0xfff) | (mSortOrder ? 0x4000 : 0);
+		refreshList();
+	}
+}
+
 void Serverbrowser::setFilter( ServerFilter::Flags newFlags )
 {
 	mFlags = newFlags;
+	cg_serverlistFilter = static_cast<int>(newFlags);
 }
 
 }; //namespace spades

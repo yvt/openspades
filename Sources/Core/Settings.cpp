@@ -73,7 +73,7 @@ namespace spades {
 			
 			item->string = buf;
 			
-			item->value = atof(item->string.c_str());
+			item->value = static_cast<float>(atof(item->string.c_str()));
 			item->intValue = atoi(item->string.c_str());
 			
 			item->desc = desc;
@@ -87,7 +87,7 @@ namespace spades {
 	
 	void Settings::Item::Set(const std::string &str) {
 		string = str;
-		value = atof(str.c_str());
+		value = static_cast<float>(atof(str.c_str()));
 		intValue = atoi(str.c_str());
 		
 		pref->set(name.c_str(), string.c_str());
@@ -117,13 +117,13 @@ namespace spades {
 									 const std::string& def,
 									 const std::string& desc){
 		item = Settings::GetInstance()->GetItem(name, def, desc);
-		if(def.size() > 0 && item->defaultValue.size() == 0){
+		if( !def.empty() && item->defaultValue.empty() ){
 			item->defaultValue = def;
 		}
-		if(desc.size() > 0 && item->desc.size() == 0){
+		if( !desc.empty() && item->desc.empty() ){
 			item->desc = desc;
 		}
-		if(item->defaultValue != def && def.size() > 0){
+		if( item->defaultValue != def && !def.empty() ){
 			fprintf(stderr, "WARNING: setting '%s' has multiple default values ('%s', '%s')\n",
 					name.c_str(), def.c_str(), item->defaultValue.c_str());
 		}
