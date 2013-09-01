@@ -3,7 +3,7 @@ project(OpenSpades)
 
 set(OpenSpades_VERSION_MAJOR 0)
 set(OpenSpades_VERSION_MINOR 0)
-set(OpenSpades_VERSION_REVISION 7)
+set(OpenSpades_VERSION_REVISION 8)
 
 include(FindSDL)
 if(NOT SDL_FOUND)
