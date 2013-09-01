@@ -239,6 +239,8 @@ namespace spades {
 			
 			bool OverlapsWith(const AABB3&);
 			bool OverlapsWithOneBlock(IntVector3);
+			
+			float BoxDistanceToBlock(IntVector3);
 		};
 	}
 }

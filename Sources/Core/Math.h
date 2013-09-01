@@ -74,6 +74,17 @@ namespace spades {
 			return Make(-x, -y, -z);
 		}
 		
+		int GetManhattanLength() const {
+			return std::max(x, -x) + std::max(y, -y)
+			 + std::max(z, -z);
+		}
+		
+		int GetChebyshevLength() const {
+			return std::max(std::max(x, -x),
+							std::max(std::max(y, -y),
+									 std::max(z, -z)));
+		}
+		
 		void operator +=(const IntVector3& v) {
 			x += v.x; y += v.y; z += v.z;
 		}
@@ -175,6 +186,14 @@ namespace spades {
 		
 		float GetLength() const {
 			return sqrtf(GetPoweredLength());
+		}
+		
+		float GetManhattanLength() const {
+			return fabsf(x) + fabsf(y);
+		}
+		
+		float GetChebyshevLength() const {
+			return std::max(fabsf(x), fabsf(y));
 		}
 		
 		Vector2 Normalize() const {
@@ -280,6 +299,14 @@ namespace spades {
 			return sqrtf(GetPoweredLength());
 		}
 		
+		float GetManhattanLength() const {
+			return fabsf(x) + fabsf(y) + fabsf(z);
+		}
+		
+		float GetChebyshevLength() const {
+			return std::max(fabsf(x), std::max(fabsf(y), fabsf(z)));
+		}
+		
 		Vector3 Normalize() const {
 			float scale = GetLength();
 			if(scale != 0.f) scale = 1.f / scale;
@@ -367,7 +394,6 @@ namespace spades {
 						 const Vector4& b) {
 			return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 		}
-		
 				
 		float GetPoweredLength() const {
 			return x * x + y * y + z * z + w * w;
@@ -375,6 +401,14 @@ namespace spades {
 		
 		float GetLength() const {
 			return sqrtf(GetPoweredLength());
+		}
+		
+		float GetManhattanLength() const {
+			return fabsf(x) + fabsf(y) + fabsf(z) + fabsf(w);
+		}
+		
+		float GetChebyshevLength() const {
+			return std::max(std::max(fabsf(x), std::max(fabsf(y), fabsf(z))), fabsf(w));
 		}
 		
 		Vector4 Normalize() const {

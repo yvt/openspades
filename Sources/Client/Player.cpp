@@ -339,9 +339,10 @@ namespace spades {
 				GameMap::RayCastResult result;
 				result = GetWorld()->GetMap()->CastRay2(GetEye(),
 														GetFront(),
-														8);
+														12);
 				if(result.hit && (result.hitBlock + result.normal).z < 62 &&
-				   !OverlapsWithOneBlock(result.hitBlock + result.normal)){
+				   (!OverlapsWithOneBlock(result.hitBlock + result.normal)) &&
+				   BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f){
 					blockCursorActive = true;
 					blockCursorPos = result.hitBlock + result.normal;
 				}else{
@@ -615,7 +616,7 @@ namespace spades {
 			outBlockCoord = mapResult.hitBlock;
 			
 			// TODO: set correct ray distance
-			if(mapResult.hit && (mapResult.hitPos - muzzle).GetLength() < 6.f &&
+			if(mapResult.hit && BoxDistanceToBlock(mapResult.hitBlock + mapResult.normal) < 3.f &&
 			   outBlockCoord.x >= 0 && outBlockCoord.y >= 0 && outBlockCoord.z >= 0 &&
 			   outBlockCoord.x < map->Width() && outBlockCoord.y < map->Height() &&
 			   outBlockCoord.z < map->Depth()){
@@ -676,56 +677,33 @@ namespace spades {
 					continue;
 				if(!other->RayCastApprox(muzzle, dir))
 					continue;
+				if((eye - other->GetEye()).GetChebyshevLength() >=
+				   MELEE_DISTANCE_F)
+					continue;
 				
-				HitBoxes hb = other->GetHitBoxes();
-				Vector3 hitPos;
+				Vector3 diff = other->GetEye() - eye;
+				Vector3 view;
+				view.x = Vector3::Dot(diff, GetRight());
+				view.y = Vector3::Dot(diff, GetUp());
+				view.z = Vector3::Dot(diff, GetFront());
 				
-				if(hb.head.RayCast(muzzle, dir, &hitPos)) {
-					float dist = (hitPos - muzzle).GetLength();
-					if(hitPlayer == NULL ||
-					   dist < hitPlayerDistance){
-						if(hitPlayer != other){
-							hitPlayer = other;
-							hitFlag = 0;
-						}
-						hitPlayerDistance = dist;
-						hitFlag |= 1; // head
-					}
-				}
-				if(hb.torso.RayCast(muzzle, dir, &hitPos)) {
-					float dist = (hitPos - muzzle).GetLength();
-					if(hitPlayer == NULL ||
-					   dist < hitPlayerDistance){
-						if(hitPlayer != other){
-							hitPlayer = other;
-							hitFlag = 0;
-						}
-						hitPlayerDistance = dist;
-						hitFlag |= 2; // torso
-					}
-				}
-				for(int j = 0; j < 3 ;j++){
-					if(hb.limbs[j].RayCast(muzzle, dir, &hitPos)) {
-						float dist = (hitPos - muzzle).GetLength();
-						if(hitPlayer == NULL ||
-						   dist < hitPlayerDistance){
-							if(hitPlayer != other){
-								hitPlayer = other;
-								hitFlag = 0;
-							}
-							hitPlayerDistance = dist;
-							if(j == 2)
-								hitFlag |= 8; // arms
-							else
-								hitFlag |= 4; // leg
-						}
-					}
+				if(view.z < 0.f)
+					continue;
+				
+				view.x /= view.z;
+				view.y /= view.z;
+				view.z = 0.f;
+				
+				if(view.GetChebyshevLength() < 5.f) {
+					hitPlayer = other;
+					hitFlag = 1;
+					break;
 				}
 			}
 			
 			outBlockCoord = mapResult.hitBlock;
-			if(mapResult.hit && (mapResult.hitPos - muzzle).GetLength() < 6.f &&
-			   (hitPlayer == NULL || (mapResult.hitPos - muzzle).GetLength() < hitPlayerDistance) &&
+			if(mapResult.hit && BoxDistanceToBlock(mapResult.hitBlock + mapResult.normal) < 3.f &&
+			   (hitPlayer == NULL) &&
 			   outBlockCoord.x >= 0 && outBlockCoord.y >= 0 &&
 			   outBlockCoord.z >= 0 &&
 			   outBlockCoord.x < map->Width() &&
@@ -762,16 +740,15 @@ namespace spades {
 				}
 			}else if(hitPlayer != NULL){
 				
-				if(hitPlayerDistance < 3.f){
 					
-					if(world->GetListener()){
-						if(hitFlag)
-							world->GetListener()->BulletHitPlayer(hitPlayer,
-																  HitTypeMelee,
-																  muzzle + dir * hitPlayerDistance,
-																  this);
-					}
+				if(world->GetListener()){
+					if(hitFlag)
+						world->GetListener()->BulletHitPlayer(hitPlayer,
+															  HitTypeMelee,
+															  hitPlayer->GetEye(),
+															  this);
 				}
+			
 				
 			}
 			
@@ -1338,6 +1315,12 @@ namespace spades {
 		}
 		bool Player::IsBlockCursorDragging() {
 			return tool == ToolBlock && blockCursorDragging;
+		}
+		float Player::BoxDistanceToBlock(spades::IntVector3 v){
+			Vector3 e = {(float)v.x, (float)v.y, (float)v.z};
+			e += .5f;
+			
+			return (e-eye).GetChebyshevLength();
 		}
 	}
 }

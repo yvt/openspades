@@ -31,6 +31,13 @@
 #define TC_CAPTURE_RATE 0.05f
 #define TC_CAPTURE_DISTANCE 16.f
 
+// actually this is server-side constraint.
+// actual value differs on vanilla client
+#define MELEE_DISTANCE_F 3.f
+#define MELEE_DISTANCE  3
+#define MAX_BLOCK_DISTANCE 6
+#define MAX_DIG_DISTANCE 6
+
 enum WeaponType {
 	RIFLE_WEAPON,
 	SMG_WEAPON,
