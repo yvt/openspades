@@ -116,8 +116,7 @@ namespace spades {
 					newInput.primary = false;
 				if(newInput.secondary != weapInput.secondary){
 					if(newInput.secondary){
-						// "dig" is always delayed
-						nextDigTime = world->GetTime() + 1.5f;
+						nextDigTime = world->GetTime() + 1.f;
 						firstDig = true;
 					}
 				}

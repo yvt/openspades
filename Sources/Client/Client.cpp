@@ -1667,7 +1667,7 @@ namespace spades {
 						if(per < .5f) {
 							if(first) {
 								// bringing to the position
-								per += .5f;
+								per *= 2.f;
 								per *= per;
 								ang = per * readyAngle;
 								side = per;
