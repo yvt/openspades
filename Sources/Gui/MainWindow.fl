@@ -7,7 +7,7 @@ decl {namespace spades { class Serverbrowser; }} {public global
 
 widget_class MainWindow {
   label {OpenSpades Startup} open
-  xywh {356 242 615 356} type Double labelsize 12 align 80
+  xywh {386 222 615 356} type Double labelsize 12 align 80
   code0 {\#include <string>}
   code1 {\#include <vector>}
   class Fl_Window visible
@@ -17,7 +17,7 @@ widget_class MainWindow {
     callback {SavePrefs();}
     private xywh {135 80 365 25}
   }
-  Fl_Tabs mainTab {open
+  Fl_Tabs mainTab {
     private xywh {5 110 605 240} labelsize 11
   } {
     Fl_Group groupAbout {
@@ -230,11 +230,13 @@ SavePrefs();} open
   } {}
   Function {CheckGLCapability()} {open return_type void
   } {}
-  Function {ServerSelectionChanged()} {open selected private
+  Function {ServerSelectionChanged()} {open private
   } {}
   decl {spades::Serverbrowser* browser;} {protected local
   }
   Function {updateFilters();} {open return_type void
+  } {}
+  Function {~MainWindow()} {open selected
   } {}
 } 
 

@@ -27,7 +27,7 @@
 
 SPADES_SETTING(r_multisamples, "0");
 SPADES_SETTING(r_depthBits, "24"); // TODO: use this value
-SPADES_SETTING(r_colorBits, "0");  // TOOD: use this value
+SPADES_SETTING(r_colorBits, "");  // TOOD: use this value
 SPADES_SETTING(r_srgb, "1");
 SPADES_SETTING(r_blitFramebuffer, "1");
 
