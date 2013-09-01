@@ -121,7 +121,7 @@ void MainWindow::StartGame(const std::string &host) {
 			Fl::wait();
 		}
 		if( dlg.result == 1 ){
-			show();
+			//show();
 		}
 	}
 	

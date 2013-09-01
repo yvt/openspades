@@ -17,10 +17,10 @@ public:
   ErrorDialog();
   Fl_Text_Display *infoView;
 private:
-  inline void cb_OK_i(Fl_Return_Button*, void*);
-  static void cb_OK(Fl_Return_Button*, void*);
-  inline void cb_Quit_i(Fl_Button*, void*);
-  static void cb_Quit(Fl_Button*, void*);
+  inline void cb_Quit_i(Fl_Return_Button*, void*);
+  static void cb_Quit(Fl_Return_Button*, void*);
+  inline void cb_Quit1_i(Fl_Button*, void*);
+  static void cb_Quit1(Fl_Button*, void*);
 public:
   int result; 
   Fl_Output *helpView;

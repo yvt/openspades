@@ -12,20 +12,20 @@ widget_class ErrorDialog {
     xywh {25 40 550 70} align 5
   }
   Fl_Return_Button {} {
-    label OK
+    label Quit
     callback {this->result = 1;
-hide();}
-    xywh {365 125 100 25}
+hide();} selected
+    xywh {475 125 100 25}
   }
   Fl_Button {} {
     label Quit
     callback {this->result = 0;
 hide();}
-    xywh {475 125 100 25}
+    xywh {440 145 100 25} hide
   }
   decl {int result;} {public local
   }
-  Fl_Output helpView {selected
+  Fl_Output helpView {
     xywh {25 125 330 25} box FLAT_BOX color 49 textsize 12
   }
 } 
