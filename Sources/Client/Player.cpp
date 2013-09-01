@@ -71,12 +71,14 @@ namespace spades {
 			nextBlockTime = 0.f;
 			firstDig = false;
 			
+			pendingPlaceBlock = false;
+			
 			blockCursorActive = false;
 			blockCursorDragging = false;
 			
 			holdingGrenade = false;
 			reloadingServerSide = false;
-			
+			canPending = false;
 		}
 		
 		Player::~Player() {
@@ -171,9 +173,9 @@ namespace spades {
 									GetWorld()->GetListener()->LocalPlayerCreatedLineBlock(blockCursorDragPos, blockCursorPos);
 								//blockStocks -= blocks.size(); decrease when created
 							}
-						}
-						if(blockCursorActive){
-							nextBlockTime = world->GetTime() + GetToolSecondaryDelay();
+							if(blockCursorActive){
+								nextBlockTime = world->GetTime() + GetToolSecondaryDelay();
+							}
 						}
 						blockCursorDragging = false;
 						blockCursorActive = false;
@@ -190,6 +192,10 @@ namespace spades {
 							// blockStocks--; decrease when created
 							
 							nextBlockTime = world->GetTime() + GetToolPrimaryDelay();
+						}else if(blockStocks > 0 && airborne && canPending &&
+								 this == world->GetLocalPlayer()) {
+							pendingPlaceBlock = true;
+							pendingPlaceBlockPos = blockCursorPos;
 						}
 						
 						blockCursorDragging = false;
@@ -340,13 +346,33 @@ namespace spades {
 				result = GetWorld()->GetMap()->CastRay2(GetEye(),
 														GetFront(),
 														12);
+				canPending = false;
 				if(result.hit && (result.hitBlock + result.normal).z < 62 &&
 				   (!OverlapsWithOneBlock(result.hitBlock + result.normal)) &&
-				   BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f){
+				   BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f &&
+				   !pendingPlaceBlock){
 					blockCursorActive = true;
 					blockCursorPos = result.hitBlock + result.normal;
+				}else if(pendingPlaceBlock){
+					if(airborne == false || blockStocks <= 0){
+						pendingPlaceBlock = false;
+					}else if((!OverlapsWithOneBlock(pendingPlaceBlockPos)) &&
+							 BoxDistanceToBlock(pendingPlaceBlockPos) < 3.f){
+						SPAssert(this == world->GetLocalPlayer());
+						
+						if(GetWorld()->GetListener())
+							GetWorld()->GetListener()->LocalPlayerBlockAction(pendingPlaceBlockPos, BlockActionCreate);
+						
+						pendingPlaceBlock = false;
+						// blockStocks--; decrease when created
+						
+						nextBlockTime = world->GetTime() + GetToolPrimaryDelay();
+					}
 				}else{
+					canPending = result.hit && (result.hitBlock + result.normal).z < 62 &&
+					BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f;
 					blockCursorActive = false;
+					blockCursorPos = result.hitBlock + result.normal;
 				}
 			}else if(tool == ToolWeapon){
 			}else if(tool == ToolGrenade){
@@ -1296,6 +1322,7 @@ namespace spades {
 				offset = .9f;
 				m = 1.35f;
 			}
+			m -= .5f;
 			AABB3 playerBox(eye.x - .45f,
 							eye.y - .45f,
 							eye.z,

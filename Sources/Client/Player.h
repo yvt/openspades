@@ -119,6 +119,10 @@ namespace spades {
 			IntVector3 blockCursorPos;
 			IntVector3 blockCursorDragPos;
 			
+			bool pendingPlaceBlock;
+			bool canPending;
+			IntVector3 pendingPlaceBlockPos;
+			
 			// for local players, completion of reload is
 			// notified to client
 			bool reloadingServerSide;
