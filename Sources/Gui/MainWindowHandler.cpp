@@ -63,6 +63,7 @@ SPADES_SETTING(r_fogShadow, "0");
 SPADES_SETTING(r_lensFlare, "1");
 SPADES_SETTING(r_blitFramebuffer, "1");
 SPADES_SETTING(r_srgb, "1");
+SPADES_SETTING(r_shadowMapSize, "2048");
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
 
@@ -389,7 +390,7 @@ void MainWindow::CheckGLCapability() {
 			msg += "<br>";
 		}
 		
-		msg += "<br><br>";
+		msg += "<br>&nbsp;<br>";
 		msg += "<b>Other Extensions:</b><br>";
 		
 		// non-requred extensions
@@ -425,14 +426,46 @@ void MainWindow::CheckGLCapability() {
 			msg += "</font><br>";
 		}
 		
+		msg += "<br>&nbsp;<br>";
+		msg += "<b>Miscellaneous:</b><br>";
+		char buf[256];
+		sprintf(buf, "Max Texture Size: %d<br>", (int)maxTextureSize);
+		msg += buf;
+		if(maxTextureSize < 1024) {
+			capable = false;
+			msg += "<font color=#ff0000>";
+			msg += "&nbsp;&nbsp;TOO SMALL (1024 required)";
+			msg += "</font><br>";
+		}
+		if((int)r_shadowMapSize > maxTextureSize) {
+			SPLog("Changed r_shadowMapSize from %d to %d: too small GL_MAX_TEXTURE_SIZE", (int)r_shadowMapSize, maxTextureSize);
+			
+			r_shadowMapSize = maxTextureSize;
+		}
+		
+		sprintf(buf, "Max 3D Texture Size: %d<br>", (int)max3DTextureSize);
+		msg += buf;
+		if(max3DTextureSize < 512) {
+			msg += "  Global Illumation is disabled (512 required)<br>";
+			
+			if(r_radiosity) {
+				r_radiosity = 0;
+				SPLog("Disabling r_radiosity: too small GL_MAX_3D_TEXTURE_SIZE");
+				
+				radiosityCheck->deactivate();
+			}
+		}
+		
 		if(capable){
 			msg = "Your video card supports all "
-			"required OpenGL extensions.<br>" + msg;
+			"required OpenGL extensions/features.<br>&nbsp;<br>" + msg;
 		}else{
 			msg = "<b>Your video card/driver doesn't support "
-			"at least one of required OpenGL extensions."
-			 " You cannot play OpenSpades.</b><br>" + msg;
+			"at least one of required OpenGL extensions/features."
+			 " You cannot play OpenSpades.</b><br>&nbsp;<br>" + msg;
 		}
+		
+		
 		
 	}
 	msg = "<font face=Helvetica>" + msg + "</font><a name=last></a>";
