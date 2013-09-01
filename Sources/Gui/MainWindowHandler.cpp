@@ -316,6 +316,8 @@ void MainWindow::CheckGLCapability() {
 	}else{
 		
 		const char *str;
+		GLint maxTextureSize;
+		GLint max3DTextureSize;
 		SPLog("--- OpenGL Renderer Info ---");
 		if((str = (const char*)glGetString(GL_VENDOR)) != NULL) {
 			SPLog("Vendor: %s", str);
@@ -337,6 +339,16 @@ void MainWindow::CheckGLCapability() {
 			SPLog("Shading Language Version: %s", str);
 		}else{
 			outputGLSLVersion->value("(unknown)");
+		}
+		maxTextureSize = 0;
+		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+		if(maxTextureSize > 0) {
+			SPLog("Max Texture Size: %d", (int)maxTextureSize);
+		}
+		max3DTextureSize = 0;
+		glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &max3DTextureSize);
+		if(max3DTextureSize > 0) {
+			SPLog("Max 3D Texture Size: %d", (int)max3DTextureSize);
 		}
 		
 		str = (const char*)glGetString(GL_EXTENSIONS);
@@ -377,6 +389,9 @@ void MainWindow::CheckGLCapability() {
 			msg += "<br>";
 		}
 		
+		msg += "<br><br>";
+		msg += "<b>Other Extensions:</b><br>";
+		
 		// non-requred extensions
 		if(extensions.find("GL_ARB_framebuffer_sRGB") ==
 		   std::string::npos) {
@@ -384,6 +399,12 @@ void MainWindow::CheckGLCapability() {
 				r_srgb = 0;
 				SPLog("Disabling r_srgb: no GL_ARB_framebuffer_sRGB");
 			}
+			msg += "GL_ARB_framebuffer_sRGB is NOT SUPPORTED<br>";
+			msg += "&nbsp;&nbsp;r_srgb is disabled.<br>";
+		}else{
+			msg += "<font color=#007f00>";
+			msg += "GL_ARB_framebuffer_sRGB is supported";
+			msg += "</font><br>";
 		}
 		if(extensions.find("GL_EXT_framebuffer_blit") ==
 		   std::string::npos) {
@@ -395,6 +416,13 @@ void MainWindow::CheckGLCapability() {
 				r_multisamples = 0;
 				SPLog("Disabling r_multisamples: no GL_EXT_framebuffer_blit");
 			}
+			msg += "GL_EXT_framebuffer_blit is NOT SUPPORTED<br>";
+			msg += "&nbsp;&nbsp;MSAA is disabled.<br>";
+			msg += "&nbsp;&nbsp;r_blitFramebuffer is disabled.<br>";
+		}else{
+			msg += "<font color=#007f00>";
+			msg += "GL_EXT_framebuffer_blit is supported";
+			msg += "</font><br>";
 		}
 		
 		if(capable){
