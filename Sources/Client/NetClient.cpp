@@ -755,7 +755,7 @@ namespace spades {
 										PosRecord& rec = playerPosRecords[idx];
 										if(rec.valid) {
 											float timespan = GetWorld()->GetTime() - rec.time;
-											timespan = std::max(0.02f, timespan);
+											timespan = std::max(0.16f, timespan);
 											Vector3 vel = (pos - rec.pos) / timespan;
 											vel *= 1.f / 32.f;
 											p->SetVelocity(vel);
