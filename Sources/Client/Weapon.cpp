@@ -104,8 +104,10 @@ namespace spades {
 					if(IsReloadSlow()){
 						// TODO: dealing with ammo/stock value
 						// server sends for local player
-						ammo++;
-						stock--;
+						if(ammo < GetClipSize() && stock > 0) {
+							ammo++;
+							stock--;
+						}
 						Reload();
 					}else{
 						// for local player, server sends
