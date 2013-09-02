@@ -230,7 +230,7 @@ void MainWindow::LoadPrefs() {
 	directLightSelect->add("High");
 	directLightSelect->add("Custom");
 	
-	if((!r_mapSoftShadow) && (!r_dlights) && (!r_modelShadows) && (!r_fogShadow)){
+	if((!r_mapSoftShadow) && (r_dlights) && (!r_modelShadows) && (!r_fogShadow)){
 		directLightSelect->value(0);
 	}else if((!r_mapSoftShadow) && (r_dlights) && (r_modelShadows) && (!r_fogShadow)){
 		directLightSelect->value(1);
@@ -619,7 +619,7 @@ void MainWindow::SavePrefs() {
 	switch(directLightSelect->value()){
 		case 0:
 			r_modelShadows = 0;
-			r_dlights = 0;
+			r_dlights = 1;
 			r_mapSoftShadow = 0;
 			r_fogShadow = 0;
 			break;
