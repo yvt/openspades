@@ -484,7 +484,8 @@ namespace spades {
 					}
 					
 					if(player->GetTool() == Player::ToolWeapon &&
-					   player->IsAwaitingReloadCompletion()) {
+					   player->IsAwaitingReloadCompletion() &&
+					   !player->GetWeapon()->IsReloadSlow()) {
 						winp.primary = false;
 					}
 					

@@ -589,6 +589,8 @@ namespace spades {
 			o += GetRight() * rec.x * sinf(world->GetTime() * 2.f);
 			o = o.Normalize();
 			SetOrientation(o);
+			
+			reloadingServerSide = false;
 		}
 		
 		void Player::ThrowGrenade(){
