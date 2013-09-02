@@ -219,7 +219,8 @@ namespace spades {
 				return;
 			}
 			weapon->Reload();
-			if(this == world->GetLocalPlayer())
+			if(this == world->GetLocalPlayer() &&
+			   weapon->IsReloading())
 				reloadingServerSide = true;
 		}
 		
