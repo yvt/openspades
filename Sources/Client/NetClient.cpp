@@ -340,6 +340,15 @@ namespace spades {
 			if((int)cg_protocolVersion != 3 &&
 			   (int)cg_protocolVersion != 4)
 				SPRaise("Invalid cg_protocolVersion, should be 3 or 4");
+			
+			switch((int)cg_protocolVersion) {
+				case 3:
+					SPLog("Using Ace of Spades 0.75 protocol");
+					break;
+				case 4:
+					SPLog("Using Ace of Spades 0.76 protocol");
+					break;
+			}
 
 			if(hostname.find("aos:///") == 0){
 				hostname = hostname.substr(7);
