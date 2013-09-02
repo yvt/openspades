@@ -76,6 +76,8 @@ namespace spades {
 			std::string playerName;
 			IStream *logStream;
 			
+			std::string hostname;
+			
 			World *world;
 			GameMap *map;
 			GameMapWrapper *mapWrapper;
@@ -84,6 +86,9 @@ namespace spades {
 			float time;
 			bool readyToClose;
 			float worldSubFrame;
+			
+			int frameToRendererInit;
+			float timeSinceInit;
 			
 			// other windows
 			CenterMessageView *centerMessageView;
@@ -192,6 +197,10 @@ namespace spades {
 			float GetAimDownZoomScale();
 			void RemoveAllLocalEntities();
 			Vector3 Project(Vector3);
+			
+			void DrawSplash();
+			void DrawStartupScreen();
+			void DoInit();
 			
 			void DrawScene();
 			void Draw2D();

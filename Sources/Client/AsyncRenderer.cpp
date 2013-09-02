@@ -163,6 +163,12 @@ namespace spades {
 		};
 		
 		namespace rcmds {
+			class Init: public Command {
+			public:
+				virtual void Execute(IRenderer *r) {
+					r->Init();
+				}
+			};
 			class SetGameMap: public Command {
 			public:
 				GameMap *map;
@@ -448,6 +454,11 @@ namespace spades {
 				return img;
 			}
 			return it->second;
+		}
+		
+		void AsyncRenderer::Init() {
+			SPADES_MARK_FUNCTION();
+			generator->AllocCommand<rcmds::Init>();
 		}
 		
 		IImage *AsyncRenderer::CreateImage(spades::Bitmap *bmp) {

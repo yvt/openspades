@@ -63,6 +63,9 @@ namespace spades {
 			IGLDevice *device;
 			GLFramebufferManager *fbManager;
 			
+			bool inited;
+			bool sceneUsedInThisFrame;
+			
 			client::SceneDefinition sceneDef;
 			Plane3 frustrum[6];
 			
@@ -110,6 +113,8 @@ namespace spades {
 		public:
 			GLRenderer(IGLDevice *glDevice);
 			virtual ~GLRenderer();
+			
+			virtual void Init();
 			
 			virtual client::IImage *RegisterImage(const char *filename);
 			virtual client::IModel *RegisterModel(const char *filename);

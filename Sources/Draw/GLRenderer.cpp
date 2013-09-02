@@ -83,29 +83,28 @@ namespace spades {
 		cameraBlur(this){
 			SPADES_MARK_FUNCTION();
 			
-			SPLog("GLRenderer initializing");
+			SPLog("GLRenderer bootstrap");
 			
+			inited = false;
 			fbManager = new GLFramebufferManager(_device);
-			shadowMapRenderer = GLShadowMapShader::CreateShadowMapRenderer(this);
+			
 			programManager = new GLProgramManager(_device, shadowMapRenderer);
 			imageManager = new GLImageManager(_device);
-			modelManager = new GLModelManager(this);
-			mapShadowRenderer = NULL;
-			mapRenderer = NULL;
 			imageRenderer = new GLImageRenderer(this);
-			flatMapRenderer = NULL;
-			if(r_softParticles)
-				spriteRenderer = new GLSoftSpriteRenderer(this);
-			else
-				spriteRenderer = new GLSpriteRenderer(this);
-			longSpriteRenderer = new GLLongSpriteRenderer(this);
-			modelRenderer = new GLModelRenderer(this);
+			
 			waterRenderer = NULL;
 			ambientShadowRenderer = NULL;
 			radiosityRenderer = NULL;
 			lastTime = 0;
 			
-			SPLog("GLRenderer initialized");
+			sceneUsedInThisFrame = false;
+			
+			// ready for 2d draw
+			device->BlendFunc(IGLDevice::SrcAlpha,
+							  IGLDevice::OneMinusSrcAlpha);
+			device->Enable(IGLDevice::Blend, true);
+			
+			SPLog("GLRenderer started");
 		}
 		
 		GLRenderer::~GLRenderer() {
@@ -140,6 +139,22 @@ namespace spades {
 			delete imageManager;
 			delete fbManager;
 			SPLog("GLRenderer finalized");
+		}
+		
+		void GLRenderer::Init() {
+			SPLog("GLRenderer initializing for 3D rendering");
+			shadowMapRenderer = GLShadowMapShader::CreateShadowMapRenderer(this);
+			modelManager = new GLModelManager(this);
+			mapShadowRenderer = NULL;
+			mapRenderer = NULL;
+			flatMapRenderer = NULL;
+			if(r_softParticles)
+				spriteRenderer = new GLSoftSpriteRenderer(this);
+			else
+				spriteRenderer = new GLSpriteRenderer(this);
+			longSpriteRenderer = new GLLongSpriteRenderer(this);
+			modelRenderer = new GLModelRenderer(this);
+			SPLog("GLRenderer initialized");
 		}
 		
 		client::IImage *GLRenderer::RegisterImage(const char *filename) {
@@ -335,6 +350,8 @@ namespace spades {
 			
 			sceneDef = def;
 			fbManager->PrepareSceneRendering();
+			
+			sceneUsedInThisFrame = true;
 			
 			// clear scene objects
 			debugLines.clear();
@@ -835,7 +852,7 @@ namespace spades {
 			
 			imageRenderer->Flush();
 			
-			if(r_srgb && r_srgb2D) {
+			if(r_srgb && r_srgb2D && sceneUsedInThisFrame) {
 				// copy buffer to WM given framebuffer
 				int w = device->ScreenWidth();
 				int h = device->ScreenHeight();
@@ -857,6 +874,11 @@ namespace spades {
 			}
 			
 			lastTime = sceneDef.time;
+			
+			// ready for 2d draw of next frame
+			device->BlendFunc(IGLDevice::SrcAlpha,
+							  IGLDevice::OneMinusSrcAlpha);
+			device->Enable(IGLDevice::Blend, true);
 			
 		}
 		

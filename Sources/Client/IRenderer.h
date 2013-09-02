@@ -72,6 +72,8 @@ namespace spades {
 			
 			virtual ~IRenderer() {}
 			
+			virtual void Init() = 0;
+			
 			virtual IImage *RegisterImage(const char *filename) = 0;
 			virtual IModel *RegisterModel(const char *filename) = 0;
 			

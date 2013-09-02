@@ -112,6 +112,8 @@ namespace spades {
 		renderer(r), audioDevice(audioDev), playerName(playerName) {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
+			
+			hostname = host;
 			/*
 			designFont = new Quake3Font(renderer,
 										renderer->RegisterImage("Gfx/Fonts/Orbitron.tga"),
@@ -141,6 +143,8 @@ namespace spades {
 			SPLog("Font 'Ubuntu Condensed (Large)' Loaded");
 			
 			world = NULL;
+			
+			frameToRendererInit = 5;
 			
 			// preferences?
 			corpseSoftTimeLimit = 30.f; // TODO: this is not used
@@ -172,6 +176,8 @@ namespace spades {
 			flashlightOn = false;
 			lastKills = 0;
 			
+			logStream = NULL;
+			
 			localFireVibrationTime = -1.f;
 			viewWeaponOffset = MakeVector3(0, 0, 0);
 			
@@ -182,56 +188,8 @@ namespace spades {
 			
 			nextScreenShotIndex = 0;
 			
-			// preload
-			SmokeSpriteEntity(this, Vector4(), 20.f);
-			
-			
-			SPLog("Started connecting to '%s'", host.c_str());
-			net = new NetClient(this);
-			net->Connect(host);
-			//net->Connect("192.168.24.24");
-			//net->Connect("127.0.0.1");
-			
-			// decide log file name
-			std::string fn = host;
-			if(fn.find("aos:///") == 0)
-				fn = fn.substr(7);
-			if(fn.find("aos://") == 0)
-				fn = fn.substr(6);
-			std::string fn2;
-			{
-				time_t t;
-				struct tm tm;
-				::time(&t);
-				tm = *localtime(&t);
-				char buf[256];
-				sprintf(buf, "%04d%02d%02d%02d%02d%02d_",
-						tm.tm_year + 1900,
-						tm.tm_mon + 1,
-						tm.tm_mday,
-						tm.tm_hour,
-						tm.tm_min,
-						tm.tm_sec);
-				fn2 = buf;
-			}
-			for(size_t i = 0; i < fn.size(); i++){
-				char c = fn[i];
-				if((c >= 'a' && c <= 'z') ||
-				   (c >= 'A' && c <= 'Z') ||
-				   (c >= '0' && c <= '9')) {
-					fn2 += c;
-				}else{
-					fn2 += '_';
-				}
-			}
-			fn2 = "NetLogs/" + fn2 + ".log";
-		
-			try{
-				logStream = FileManager::OpenForWriting(fn2.c_str());
-				SPLog("Netlog Started at '%s'", fn2.c_str());
-			}catch(const std::exception& ex){
-				SPLog("Failed to open netlog file '%s'", fn2.c_str());
-			}
+						
+			timeSinceInit = 0.f;
 		}
 		
 		void Client::SetWorld(spades::client::World *w) {
@@ -292,9 +250,11 @@ namespace spades {
 				delete logStream;
 			}
 			
-			SPLog("Disconnecting");
-			net->Disconnect();
-			delete net;
+			if(net){
+				SPLog("Disconnecting");
+				net->Disconnect();
+				delete net;
+			}
 			
 			SPLog("Disconnected");
 			
@@ -326,8 +286,79 @@ namespace spades {
 			return readyToClose;
 		}
 		
+		void Client::DoInit() {
+			renderer->Init();
+			// preload
+			SmokeSpriteEntity(this, Vector4(), 20.f);
+			
+			
+			SPLog("Started connecting to '%s'", hostname.c_str());
+			net = new NetClient(this);
+			net->Connect(hostname);
+			
+			//net->Connect("192.168.24.24");
+			//net->Connect("127.0.0.1");
+			
+			// decide log file name
+			std::string fn = hostname;
+			if(fn.find("aos:///") == 0)
+				fn = fn.substr(7);
+			if(fn.find("aos://") == 0)
+				fn = fn.substr(6);
+			std::string fn2;
+			{
+				time_t t;
+				struct tm tm;
+				::time(&t);
+				tm = *localtime(&t);
+				char buf[256];
+				sprintf(buf, "%04d%02d%02d%02d%02d%02d_",
+						tm.tm_year + 1900,
+						tm.tm_mon + 1,
+						tm.tm_mday,
+						tm.tm_hour,
+						tm.tm_min,
+						tm.tm_sec);
+				fn2 = buf;
+			}
+			for(size_t i = 0; i < fn.size(); i++){
+				char c = fn[i];
+				if((c >= 'a' && c <= 'z') ||
+				   (c >= 'A' && c <= 'Z') ||
+				   (c >= '0' && c <= '9')) {
+					fn2 += c;
+				}else{
+					fn2 += '_';
+				}
+			}
+			fn2 = "NetLogs/" + fn2 + ".log";
+			
+			try{
+				logStream = FileManager::OpenForWriting(fn2.c_str());
+				SPLog("Netlog Started at '%s'", fn2.c_str());
+			}catch(const std::exception& ex){
+				SPLog("Failed to open netlog file '%s'", fn2.c_str());
+			}
+		}
+		
 		void Client::RunFrame(float dt) {
 			SPADES_MARK_FUNCTION();
+			
+			if(frameToRendererInit > 0){
+				// waiting for renderer initialization
+				
+				DrawStartupScreen();
+				
+				frameToRendererInit--;
+				if(frameToRendererInit == 0){
+					DoInit();
+
+				}else{
+					return;
+				}
+			}
+			
+			timeSinceInit += dt;
 			
 			try{
 				if(net->GetStatus() == NetClientStatusConnected)
@@ -2691,6 +2722,54 @@ namespace spades {
 			return v2;
 		}
 		
+		void Client::DrawSplash() {
+			IImage *img;
+			Vector2 siz;
+			Vector2 scrSize = {renderer->ScreenWidth(),
+				renderer->ScreenHeight()};
+			renderer->SetColor(MakeVector4(1, 1, 1, 1.));
+			img = renderer->RegisterImage("Gfx/Splash.jpg");
+			
+			siz = MakeVector2(img->GetWidth(), img->GetHeight());
+			siz *= scrSize.x / siz.x;
+			siz *= std::min(1.f, scrSize.y / siz.y);
+			
+			renderer->DrawImage(img, AABB2((scrSize.x - siz.x) * .5f,
+										   (scrSize.y - siz.y) * .5f,
+										   siz.x, siz.y));
+			
+			
+		}
+		
+		void Client::DrawStartupScreen() {
+			IImage *img;
+			Vector2 scrSize = {renderer->ScreenWidth(),
+				renderer->ScreenHeight()};
+			
+			renderer->SetColor(MakeVector4(0, 0, 0, 1.));
+			img = renderer->RegisterImage("Gfx/White.tga");
+			renderer->DrawImage(img, AABB2(0, 0,
+										   scrSize.x, scrSize.y));
+			
+			DrawSplash();
+			
+			IFont *font = designFont;
+			std::string str = "NOW LOADING";
+			Vector2 size = font->Measure(str);
+			Vector2 pos = MakeVector2(scrSize.x - 16.f,
+									  scrSize.y - 16.f);
+			pos -= size;
+			font->Draw(str,
+					   pos + MakeVector2(1,1),
+					   1.f, MakeVector4(0,0,0,0.5));
+			font->Draw(str,
+					   pos,
+					   1.f, MakeVector4(1,1,1,1));
+			
+			renderer->FrameDone();
+			renderer->Flip();
+		}
+		
 		void Client::Draw2D(){
 			SPADES_MARK_FUNCTION();
 			
@@ -3027,25 +3106,28 @@ namespace spades {
 				
 			}else{
 				// no world; loading?
+				DrawSplash();
+				
+				float fade = std::min(1.f, timeSinceInit);
 				
 				// background
 				IImage *img;
 				float bgSize = std::max(scrWidth, scrHeight);
-				renderer->SetColor(MakeVector4(1, 1, 1, .1));
+				renderer->SetColor(MakeVector4(1, 1, 1, .4 * fade));
 				img = renderer->RegisterImage("Gfx/CircleGradient.png");
 				
 				renderer->DrawImage(img, AABB2((scrWidth - bgSize) * .5f,
 											   (scrHeight - bgSize) * .5f,
 											   bgSize, bgSize));
 				
-				renderer->SetColor(MakeVector4(1, 1, 1, .1));
+				renderer->SetColor(MakeVector4(.1, .1, .1, .8 * fade));
 				img = renderer->RegisterImage("Gfx/White.tga");
 				renderer->DrawImage(img, AABB2(0,0,scrWidth,scrHeight));
 				
 				
 				// loading window
 				
-				renderer->SetColor(MakeVector4(1, 1, 1, 1));
+				renderer->SetColor(MakeVector4(1, 1, 1, fade));
 				
 				float wndX, wndY;
 				img = renderer->RegisterImage("Gfx/LoadingWindow.png");
@@ -3057,7 +3139,7 @@ namespace spades {
 				renderer->DrawImage(img, MakeVector2(wndX, wndY));
 				
 				
-				renderer->SetColor(MakeVector4(1, 1, 1, .2));
+				renderer->SetColor(MakeVector4(1, 1, 1, .2 * fade));
 				img = renderer->RegisterImage("Gfx/LoadingWindowGlow.png");
 				
 				renderer->DrawImage(img, AABB2((scrWidth - 512.f) * .5f,
@@ -3065,7 +3147,7 @@ namespace spades {
 											   512.f, 256.f));
 				
 				
-				renderer->SetColor(MakeVector4(1, 1, 1, 1));
+				renderer->SetColor(MakeVector4(1, 1, 1, fade));
 				img = renderer->RegisterImage("Gfx/LoadingStripe.png");
 				float scrX = time * 32.f;
 				scrX = fmodf(scrX, 16.f);
@@ -3080,7 +3162,7 @@ namespace spades {
 						   MakeVector2(wndX + 8.f,
 									   wndY + 8.f),
 						   1.f,
-						   MakeVector4(0,0,0,1.f));
+						   MakeVector4(0,0,0,fade));
 								
 			}
 			
