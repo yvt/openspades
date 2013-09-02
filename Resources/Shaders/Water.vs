@@ -34,14 +34,22 @@ varying vec3 screenPosition;
 varying vec3 viewPosition;
 varying vec3 worldPosition;
 
+uniform sampler2D waveTexture;
 //varying vec2 detailCoord;
 
 void PrepareForShadow(vec3 worldOrigin, vec3 normal);
+float DisplaceWater(vec2 worldPos);
 
 void main() {
 	
 	vec4 vertexPos = vec4(positionAttribute.xy, 0., 1.);
 	
+	worldPosition = (modelMatrix * vertexPos).xyz;
+
+	vertexPos.z += DisplaceWater(worldPosition.xy);
+	
+	worldPosition = (modelMatrix * vertexPos).xyz;
+
 	gl_Position = projectionViewModelMatrix * vertexPos;
 	screenPosition = gl_Position.xyw;
 	screenPosition.xy = (screenPosition.xy + screenPosition.z) * .5;
@@ -55,7 +63,6 @@ void main() {
 	
 	viewPosition = viewPos.xyz;
 	
-	worldPosition = (modelMatrix * vertexPos).xyz;
 	
 	PrepareForShadow((modelMatrix * vertexPos).xyz, vec3(0., 0., -1.));
 }

@@ -85,6 +85,9 @@ namespace spades {
 			virtual void TexParamater(Enum target,
 									  Enum paramater,
 									  Enum value);
+			virtual void TexParamater(Enum target,
+									  Enum paramater,
+									  float value);
 			virtual void TexImage2D(Enum target,
 									Integer level,
 									Enum internalFormat,

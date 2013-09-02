@@ -821,6 +821,22 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 			CheckError();
 		}
 		
+		void SDLGLDevice::TexParamater(Enum target,Enum param, float val) {
+			SPADES_MARK_FUNCTION();
+			GLenum targ = parseTextureTarget(target);
+			CheckExistence(glTexParameterf);
+			switch(param){
+				case TextureMaxAnisotropy:
+					glTexParameterf(targ, GL_TEXTURE_MAX_ANISOTROPY_EXT, val);
+					break;
+				
+				default:
+					SPInvalidEnum("param", param);
+			}
+			
+			CheckError();
+		}
+		
 		void SDLGLDevice::GenerateMipmap(spades::draw::IGLDevice::Enum target){
 #if GLEW
 			if(glGenerateMipmap)

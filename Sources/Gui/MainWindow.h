@@ -127,6 +127,7 @@ private:
 protected:
   spades::Serverbrowser* browser; 
 private:
+  bool shaderHighCapable; 
   void QuickConnectPressed();
   void StartGame(const std::string& host);
 public:
@@ -147,5 +148,5 @@ public:
   void updateFilters();;
   ~MainWindow();
 };
-extern unsigned char aboutText[3496];
+extern unsigned char aboutText[3447];
 #endif

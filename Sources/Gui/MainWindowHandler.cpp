@@ -67,6 +67,7 @@ SPADES_SETTING(r_srgb, "1");
 SPADES_SETTING(r_shadowMapSize, "2048");
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
+SPADES_SETTING(r_maxAnisotropy, "8");
 
 static std::vector<spades::IntVector3> g_modes;
 
@@ -111,8 +112,9 @@ void MainWindow::StartGame(const std::string &host) {
 		dlg.set_modal();
 		dlg.result = 0;
 		
-		Fl_Text_Buffer buf;
-		buf.append(err.c_str());
+		// TODO: free this buffer (just leaking)
+		Fl_Text_Buffer *buf = new Fl_Text_Buffer;
+		buf->append(err.c_str());
 		dlg.infoView->wrap_mode(Fl_Text_Display::WRAP_AT_BOUNDS, 0);
 		dlg.infoView->buffer(buf);
 		dlg.helpView->value("See SystemMessages.log for more details.");
@@ -240,15 +242,30 @@ void MainWindow::LoadPrefs() {
 	
 	shaderSelect->clear();
 	shaderSelect->add("Low");
-	shaderSelect->add("High");
+	shaderSelect->add("Medium");
+	if(shaderHighCapable){
+		shaderSelect->add("High");
+	}
 	shaderSelect->add("Custom");
 	
-	if((!r_water)){
-		shaderSelect->value(0);
-	}else if((r_water)){
-		shaderSelect->value(1);
+	if(shaderHighCapable){
+		if((!r_water)){
+			shaderSelect->value(0);
+		}else if((int)r_water == 1){
+			shaderSelect->value(1);
+		}else if((int)r_water == 2){
+			shaderSelect->value(2);
+		}else{
+			shaderSelect->value(3);
+		}
 	}else{
-		shaderSelect->value(2);
+		if((!r_water)){
+			shaderSelect->value(0);
+		}else if((int)r_water == 1){
+			shaderSelect->value(1);
+		}else{
+			shaderSelect->value(2);
+		}
 	}
 	
 	// --- audio
@@ -334,11 +351,16 @@ void MainWindow::CheckGLCapability() {
 						  "<b>Message from SDL</b><br>"
 		+ err;
 		capable = false;
+		shaderHighCapable = false;
 	}else{
+		
+		shaderHighCapable = true;
 		
 		const char *str;
 		GLint maxTextureSize;
 		GLint max3DTextureSize;
+		GLint maxCombinedTextureUnits;
+		GLint maxVertexTextureUnits;
 		SPLog("--- OpenGL Renderer Info ---");
 		if((str = (const char*)glGetString(GL_VENDOR)) != NULL) {
 			SPLog("Vendor: %s", str);
@@ -361,6 +383,7 @@ void MainWindow::CheckGLCapability() {
 		}else{
 			outputGLSLVersion->value("(unknown)");
 		}
+		
 		maxTextureSize = 0;
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
 		if(maxTextureSize > 0) {
@@ -370,6 +393,18 @@ void MainWindow::CheckGLCapability() {
 		glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &max3DTextureSize);
 		if(max3DTextureSize > 0) {
 			SPLog("Max 3D Texture Size: %d", (int)max3DTextureSize);
+		}
+		
+		maxCombinedTextureUnits = 0;
+		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &maxCombinedTextureUnits);
+		if(maxCombinedTextureUnits > 0) {
+			SPLog("Max Combined Texture Image Units: %d", (int)maxCombinedTextureUnits);
+		}
+		
+		maxVertexTextureUnits = 0;
+		glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &maxVertexTextureUnits);
+		if(maxVertexTextureUnits > 0) {
+			SPLog("Max Vertex Texture Image Units: %d", (int)maxVertexTextureUnits);
 		}
 		
 		str = (const char*)glGetString(GL_EXTENSIONS);
@@ -445,6 +480,19 @@ void MainWindow::CheckGLCapability() {
 			msg += "GL_EXT_framebuffer_blit is supported";
 			msg += "</font><br>";
 		}
+		if(extensions.find("GL_EXT_texture_filter_anisotropic") ==
+		   std::string::npos) {
+			if((float)r_maxAnisotropy > 1.1f) {
+				r_maxAnisotropy = 1;
+				SPLog("Setting r_maxAnisotropy to 1: no GL_EXT_texture_filter_anisotropic");
+			}
+			msg += "GL_EXT_texture_filter_anisotropic is NOT SUPPORTED<br>";
+			msg += "&nbsp;&nbsp;r_maxAnisotropy is disabled.<br>";
+		}else{
+			msg += "<font color=#007f00>";
+			msg += "GL_EXT_texture_filter_anisotropic is supported";
+			msg += "</font><br>";
+		}
 		
 		msg += "<br>&nbsp;<br>";
 		msg += "<b>Miscellaneous:</b><br>";
@@ -466,7 +514,7 @@ void MainWindow::CheckGLCapability() {
 		sprintf(buf, "Max 3D Texture Size: %d<br>", (int)max3DTextureSize);
 		msg += buf;
 		if(max3DTextureSize < 512) {
-			msg += "  Global Illumation is disabled (512 required)<br>";
+			msg += "&nbsp;&nbsp;Global Illumation is disabled (512 required)<br>";
 			
 			if(r_radiosity) {
 				r_radiosity = 0;
@@ -475,6 +523,35 @@ void MainWindow::CheckGLCapability() {
 				radiosityCheck->deactivate();
 			}
 		}
+		
+		
+		sprintf(buf, "Max Combined Texture Image Units: %d<br>", (int)maxCombinedTextureUnits);
+		msg += buf;
+		if(maxCombinedTextureUnits < 12) {
+			msg += "&nbsp;&nbsp;Global Illumation is disabled (12 required)<br>";
+			
+			if(r_radiosity) {
+				r_radiosity = 0;
+				SPLog("Disabling r_radiosity: too small GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS");
+				
+				radiosityCheck->deactivate();
+			}
+		}
+
+		sprintf(buf, "Max Vertex Texture Image Units: %d<br>", (int)maxVertexTextureUnits);
+		msg += buf;
+		if(maxVertexTextureUnits < 3) {
+			msg += "&nbsp;&nbsp;Water 2 is disabled (3 required)<br>";
+			msg += "&nbsp;&nbsp;(Shader Effects is limited to Medium)<br>";
+			shaderHighCapable = false;
+			
+			if((int)r_water >= 2) {
+				r_water = 1;
+				SPLog("Disabling Water 2: too small GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS");
+			}
+		}
+		
+		
 		
 		if(capable){
 			msg = "Your video card supports all "
@@ -559,13 +636,27 @@ void MainWindow::SavePrefs() {
 			r_fogShadow = 1;
 			break;
 	}
-	switch(shaderSelect->value()){
-		case 0:
-			r_water = 0;
-			break;
-		case 1:
-			r_water = 1;
-			break;
+	if(shaderHighCapable){
+		switch(shaderSelect->value()){
+			case 0:
+				r_water = 0;
+				break;
+			case 1:
+				r_water = 1;
+				break;
+			case 2:
+				r_water = 2;
+				break;
+		}
+	}else{
+		switch(shaderSelect->value()){
+			case 0:
+				r_water = 0;
+				break;
+			case 1:
+				r_water = 1;
+				break;
+		}
 	}
 	
 	// --- audio

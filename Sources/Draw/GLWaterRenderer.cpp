@@ -34,6 +34,10 @@
 #include <stdlib.h>
 #include "../kiss_fft130/kiss_fft.h"
 #include "GLProfiler.h"
+#include "../Core/Settings.h"
+
+SPADES_SETTING(r_water, "2");
+SPADES_SETTING(r_maxAnisotropy, "8");
 
 namespace spades {
 	namespace draw {
@@ -68,7 +72,7 @@ namespace spades {
 				out = Encode8bit(z);
 				out |= Encode8bit(y) << 8;
 				out |= Encode8bit(x) << 16;
-				out |= Encode8bit(h) << 24;
+				out |= Encode8bit(h * -10.f) << 24;
 				return out;
 			}
 			
@@ -494,7 +498,10 @@ namespace spades {
 		device(renderer->GetGLDevice()),
 		map(map){
 			SPADES_MARK_FUNCTION();
-			program = renderer->RegisterProgram("Shaders/Water.program");
+			if((int)r_water >= 2)
+				program = renderer->RegisterProgram("Shaders/Water2.program");
+			else
+				program = renderer->RegisterProgram("Shaders/Water.program");
 			programDepth = renderer->RegisterProgram("Shaders/WaterDepth.program");
 			BuildVertices();
 			
@@ -534,7 +541,7 @@ namespace spades {
 			texture = device->GenTexture();
 			device->BindTexture(IGLDevice::Texture2D, texture);
 			device->TexImage2D(IGLDevice::Texture2D, 0,
-							   IGLDevice::RGBA,
+							   IGLDevice::RGBA8,
 							   map->Width(), map->Height(),
 							   0, IGLDevice::RGBA, IGLDevice::UnsignedByte,
 							   NULL);
@@ -567,7 +574,7 @@ namespace spades {
 			waveTexture = device->GenTexture();
 			device->BindTexture(IGLDevice::Texture2D, waveTexture);
 			device->TexImage2D(IGLDevice::Texture2D, 0,
-							   IGLDevice::RGBA,
+							   IGLDevice::RGBA8,
 							   waveTank->GetSize(), waveTank->GetSize(),
 							   0, IGLDevice::BGRA, IGLDevice::UnsignedByte,
 							   NULL);
@@ -583,6 +590,11 @@ namespace spades {
 			device->TexParamater(IGLDevice::Texture2D,
 								 IGLDevice::TextureWrapT,
 								 IGLDevice::Repeat);
+			if((float)r_maxAnisotropy > 1.1f) {
+				device->TexParamater(IGLDevice::Texture2D,
+									 IGLDevice::TextureMaxAnisotropy,
+									 (float)r_maxAnisotropy);
+			}
 			
 			
 		}
@@ -596,12 +608,15 @@ namespace spades {
 			std::vector<Vertex> vertices;
 			std::vector<uint16_t> indices;
 			
-			const int meshSize = 16;
+			int meshSize = 16;
+			if((int)r_water >= 2)
+				meshSize = 64;
+			float meshSizeInv = 1.f / (float)meshSize;
 			for(int y = -meshSize; y <= meshSize; y++) {
 				for(int x = -meshSize; x <= meshSize; x++){
 					Vertex v;
-					v.x = (float)(x) / (float)meshSize;
-					v.y = (float)(y) / (float)meshSize;
+					v.x = (float)(x) * meshSizeInv;
+					v.y = (float)(y) * meshSizeInv;
 					vertices.push_back(v);
 				}
 			}
@@ -661,6 +676,9 @@ namespace spades {
 			Vector3 fogCol = renderer->GetFogColorForSolidPass();
 			fogCol *= fogCol; // linearize
 			
+			Vector3 skyCol = renderer->GetFogColor();
+			skyCol *= skyCol; // linearize
+			
 			const client::SceneDefinition& def = renderer->GetSceneDef();
 			float waterLevel = 63.f;
 			float waterDist = def.viewOrigin.z - waterLevel;
@@ -686,6 +704,7 @@ namespace spades {
 				static GLProgramUniform viewModelMatrix("viewModelMatrix");
 				static GLProgramUniform fogDistance("fogDistance");
 				static GLProgramUniform fogColor("fogColor");
+				static GLProgramUniform skyColor("skyColor");
 				static GLProgramUniform zNearFar("zNearFar");
 				static GLProgramUniform viewOrigin("viewOrigin");
 				static GLProgramUniform displaceScale("displaceScale");
@@ -697,6 +716,7 @@ namespace spades {
 				viewModelMatrix(prg);
 				fogDistance(prg);
 				fogColor(prg);
+				skyColor(prg);
 				zNearFar(prg);
 				viewOrigin(prg);
 				displaceScale(prg);
@@ -708,6 +728,7 @@ namespace spades {
 				viewModelMatrix.SetValue(renderer->GetViewMatrix() * mat);
 				fogDistance.SetValue(fogDist);
 				fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
+				skyColor.SetValue(skyCol.x, skyCol.y, skyCol.z);
 				zNearFar.SetValue(def.zNear, def.zFar);
 				viewOrigin.SetValue(def.viewOrigin.x,
 									def.viewOrigin.y,

@@ -126,6 +126,7 @@ namespace spades {
 				TextureWrapR,
 				TextureCompareMode,
 				TextureCompareFunc,
+				TextureMaxAnisotropy,
 				
 				// texture compare mode
 				CompareRefToTexture,
@@ -289,6 +290,9 @@ namespace spades {
 			virtual void TexParamater(Enum target,
 									  Enum paramater,
 									  Enum value) = 0;
+			virtual void TexParamater(Enum target,
+									  Enum paramater,
+									  float value) = 0;
 			virtual void TexImage2D(Enum target,
 									Integer level,
 									Enum internalFormat,

@@ -31,6 +31,7 @@ uniform sampler2D depthTexture;
 uniform sampler2D texture;
 uniform sampler2D waveTexture;
 uniform vec3 fogColor;
+uniform vec3 skyColor;
 uniform vec2 zNearFar;
 uniform vec4 fovTan;
 uniform vec4 waterPlane;
@@ -59,18 +60,18 @@ void main() {
 	// evaluate waveform
 	vec4 wave = texture2D(waveTexture, waveCoord.xy).xyzw;
 	wave = mix(vec4(-1.), vec4(1.), wave);
-	wave.z = sqrt(1. - dot(wave.xy, wave.xy));
+	//wave.z = sqrt(1. - dot(wave.xy, wave.xy));
 	
 	// detail (Far Cry seems to use this technique)
 	vec4 wave2 = texture2D(waveTexture, waveCoord.zw).xyzw;
 	wave2 = mix(vec4(-1.), vec4(1.), wave2);
-	wave2.z = sqrt(1. - dot(wave2.xy, wave2.xy));
+	//wave2.z = sqrt(1. - dot(wave2.xy, wave2.xy));
 	wave += wave2;
 	
 	// rough
 	wave2 = texture2D(waveTexture, waveCoord2.xy).xyzw;
 	wave2 = mix(vec4(-1.), vec4(1.), wave2);
-	wave2.z = sqrt(1. - dot(wave2.xy, wave2.xy));
+	//wave2.z = sqrt(1. - dot(wave2.xy, wave2.xy));
 	wave += wave2;
 	
 	wave.xyz = normalize(wave.xyz);
@@ -110,7 +111,7 @@ void main() {
 		depth -= viewPosition.z;
 	}
 	
-	float envelope = min((depth + viewPosition.z), 1.);
+	float envelope = clamp((depth + viewPosition.z), 0., 1.);
 	envelope = 1. - (1. - envelope) * (1. - envelope);
 	
 	// water color
@@ -180,7 +181,7 @@ void main() {
 	fres *= fres;
 	fres *= fres;
 	fres += .03;
-	gl_FragColor.xyz += fogColor * fres * .6 * att;
+	gl_FragColor.xyz += skyColor * fres * .6 * att;
 	
 	
 	

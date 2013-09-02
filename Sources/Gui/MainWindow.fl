@@ -236,8 +236,10 @@ SavePrefs();} open
   }
   Function {updateFilters();} {open return_type void
   } {}
-  Function {~MainWindow()} {open selected
+  Function {~MainWindow()} {open
   } {}
+  decl {bool shaderHighCapable;} {selected private local
+  }
 } 
 
 data aboutText {public local filename {AboutText.html}
