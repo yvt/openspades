@@ -1079,9 +1079,9 @@ namespace spades {
 						}
 					}
 					
-					p->UsedBlocks(cells.size());
 					
 					if(p){
+						p->UsedBlocks(cells.size());
 						client->PlayerCreatedBlock(p);
 					}
 				}

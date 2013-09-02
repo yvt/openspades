@@ -28,6 +28,7 @@
 #include "GameMapWrapper.h"
 #include "Grenade.h"
 #include "../Core/Debug.h"
+#include "../Core/Settings.h"
 
 namespace spades {
 	namespace client {
@@ -70,6 +71,7 @@ namespace spades {
 			nextGrenadeTime = 0.f;
 			nextBlockTime = 0.f;
 			firstDig = false;
+			lastReloadingTime = 0.f;
 			
 			pendingPlaceBlock = false;
 			
@@ -387,6 +389,16 @@ namespace spades {
 				weapon->SetShooting(false);
 			if(weapon->FrameNext(dt)){
 				FireWeapon();
+			}
+			
+			if(weapon->IsReloading()) {
+				lastReloadingTime = world->GetTime();
+			}else if(reloadingServerSide) {
+				// for some reason a server didn't return
+				// WeaponReload packet.
+				if(world->GetTime() + lastReloadingTime + .5f) {
+					reloadingServerSide = false;
+				}
 			}
 		}
 		
