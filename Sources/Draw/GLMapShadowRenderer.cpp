@@ -86,6 +86,9 @@ namespace spades{
 			bitmap.resize(w * h);
 			std::fill(updateBitmap.begin(), updateBitmap.end(),
 					  0xffffffffUL);
+			std::fill(bitmap.begin(), bitmap.end(),
+					  0xffffffffUL);
+			
 		}
 		
 		GLMapShadowRenderer::~GLMapShadowRenderer(){
@@ -138,10 +141,13 @@ namespace spades{
 				}
 				
 				if(modified) {
-					for(int j = 0; j < 32; j += CoarseSize)
-						coarseUpdateBitmap[((x + j) >> CoarseBits) +
+					if(!coarseUpdateBitmap[(x >> CoarseBits) +
 										   (y >> CoarseBits) *
-										   (w >> CoarseBits)] = 1;
+										   (w >> CoarseBits)])
+						for(int j = 0; j < 32; j += CoarseSize)
+							coarseUpdateBitmap[((x + j) >> CoarseBits) +
+											   (y >> CoarseBits) *
+											   (w >> CoarseBits)] = 1;
 					
 					device->TexSubImage2D(IGLDevice::Texture2D,
 										  0, x, y, 32, 1,
