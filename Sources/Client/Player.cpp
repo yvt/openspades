@@ -281,8 +281,14 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			position = v;
-			eye = v; // FIXME
+			eye = v;
 			
+		}
+		
+		void Player::SetVelocity(const spades::Vector3 &v) {
+			SPADES_MARK_FUNCTION();
+			
+			velocity = v;
 		}
 		
 		void Player::SetOrientation(const spades::Vector3 &v) {

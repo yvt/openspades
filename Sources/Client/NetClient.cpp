@@ -303,6 +303,7 @@ namespace spades {
 			savedPlayerPos.resize(32);
 			savedPlayerFront.resize(32);
 			savedPlayerTeam.resize(32);
+			playerPosRecords.reserve(32);
 			
 			std::fill(savedPlayerTeam.begin(),
 					  savedPlayerTeam.end(), -1);
@@ -711,12 +712,14 @@ namespace spades {
 						bytesPerEntry++;
 
 					int entries = reader.GetData().size() / bytesPerEntry;
-					for(int i = 0; i < 32; i++){
+					for(int i = 0; i < entries; i++){
 						int idx = i;
 						if((int)cg_protocolVersion == 4)
 						{
 							idx = reader.ReadByte();
-							SPAssert(idx >= 0 && idx < 32);
+							if(idx < 0 || idx >= 32) {
+								SPRaise("Invalid player number %d received with WorldUpdate", idx);
+							}
 						}
 						Vector3 pos, front;
 						pos.x = reader.ReadFloat();
@@ -726,8 +729,8 @@ namespace spades {
 						front.y = reader.ReadFloat();
 						front.z = reader.ReadFloat();
 						
-						savedPlayerPos[i] = pos;
-						savedPlayerFront[i] = front;
+						savedPlayerPos[idx] = pos;
+						savedPlayerFront[idx] = front;
 						if(pos.x != 0.f ||
 						   pos.y != 0.f ||
 						   pos.z != 0.f ||
@@ -748,6 +751,19 @@ namespace spades {
 									if(p != GetWorld()->GetLocalPlayer()){
 										p->SetPosition(pos);
 										p->SetOrientation(front);
+										
+										PosRecord& rec = playerPosRecords[idx];
+										if(rec.valid) {
+											float timespan = GetWorld()->GetTime() - rec.time;
+											timespan = std::max(0.02f, timespan);
+											Vector3 vel = (pos - rec.pos) / timespan;
+											vel *= 1.f / 32.f;
+											p->SetVelocity(vel);
+										}
+										
+										rec.valid = true;
+										rec.pos = pos;
+										rec.time = GetWorld()->GetTime();
 									}
 								}
 							}
@@ -997,6 +1013,8 @@ namespace spades {
 					
 					if(!name.empty()) // sometimes becomes empty
 						pers.name = name;
+					
+					playerPosRecords[pId].valid = false;
 					
 					if(pId == GetWorld()->GetLocalPlayerIndex()){
 						client->LocalPlayerCreated();
@@ -1270,6 +1288,7 @@ namespace spades {
 					client->PlayerLeaving(p);
 					
 					savedPlayerTeam[p->GetId()] = -1;
+					playerPosRecords[p->GetId()].valid = false;
 					GetWorld()->SetPlayer(p->GetId(), NULL);
 					// TODO: message
 				}
@@ -1713,6 +1732,12 @@ namespace spades {
 			
 			SPLog("World loaded. Processing saved packets (%d)...",
 				  (int)savedPackets.size());
+			
+			for(size_t i = 0; i < playerPosRecords.size(); i++)
+				playerPosRecords[i].valid = false;
+			std::fill(savedPlayerTeam.begin(),
+					  savedPlayerTeam.end(),
+					  -1);
 			
 			// do saved packets
 			try{

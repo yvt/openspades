@@ -56,6 +56,16 @@ namespace spades {
 			std::vector<Vector3> savedPlayerFront;
 			std::vector<int> savedPlayerTeam;
 			
+			struct PosRecord {
+				float time;
+				bool valid;
+				Vector3 pos;
+				
+				PosRecord():valid(false){}
+			};
+			
+			std::vector<PosRecord> playerPosRecords;
+			
 			std::vector<std::vector<char> > savedPackets;
 			
 			int timeToTryMapLoad;

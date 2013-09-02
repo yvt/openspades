@@ -185,6 +185,7 @@ namespace spades {
 			
 			void SetPosition(const Vector3&);
 			void SetOrientation(const Vector3&);
+			void SetVelocity(const Vector3&);
 			void Turn(float longitude, float latitude);
 			
 			void SetHP(int hp, HurtType, Vector3);
