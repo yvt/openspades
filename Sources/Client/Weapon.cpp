@@ -102,13 +102,19 @@ namespace spades {
 					// reload done
 					reloading = false;
 					if(IsReloadSlow()){
-						// TODO: dealing with ammo/stock value
-						// server sends for local player
-						if(ammo < GetClipSize() && stock > 0) {
+						// for local player, server sends
+						// new ammo/stock value
+						if(ammo < GetClipSize() && stock > 0 &&
+						   owner != owner->GetWorld()->GetLocalPlayer()) {
 							ammo++;
 							stock--;
 						}
-						Reload();
+						slowReloadLeftCount--;
+						if(slowReloadLeftCount > 0)
+							Reload(false);
+						else
+							if(world->GetListener())
+								world->GetListener()->PlayerReloadedWeapon(owner);
 					}else{
 						// for local player, server sends
 						// new ammo/stock value
@@ -118,11 +124,11 @@ namespace spades {
 							ammo += stock - newStock;
 							stock = newStock;
 						}
+						if(world->GetListener())
+							world->GetListener()->PlayerReloadedWeapon(owner);
 					}
 					
 					
-					if(world->GetListener())
-						world->GetListener()->PlayerReloadedWeapon(owner);
 				}
 			}
 			time += dt;
@@ -146,7 +152,7 @@ namespace spades {
 			reloading = false;
 		}
 		
-		void Weapon::Reload() {
+		void Weapon::Reload(bool manual) {
 			SPADES_MARK_FUNCTION();
 			
 			if(reloading)
@@ -155,6 +161,8 @@ namespace spades {
 				return;
 			if(stock == 0)
 				return;
+			if(manual)
+				slowReloadLeftCount = stock - std::max(0, stock - GetClipSize() + ammo);
 			reloading = true;
 			shooting = false;
 			reloadStartTime = time;

@@ -4116,9 +4116,7 @@ namespace spades {
 			bool plays = false;
 			if(p->GetWeapon()->IsReloadSlow()){
 				Weapon *w = p->GetWeapon();
-				if(w->GetAmmo() == w->GetClipSize() ||
-				   w->GetStock() == 0)
-					plays = true;
+				plays = true;
 			}
 			
 			if(!plays)

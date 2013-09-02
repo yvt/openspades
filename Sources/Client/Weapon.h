@@ -42,6 +42,8 @@ namespace spades {
 			float reloadStartTime;
 			float reloadEndTime;
 			
+			int slowReloadLeftCount;
+			
 			bool lastDryFire;
 			
 			int ammo;
@@ -73,7 +75,7 @@ namespace spades {
 			/** @return true when fired. */
 			bool FrameNext(float);
 			
-			void Reload();
+			void Reload(bool manual = true);
 			void AbortReload();
 			
 			bool IsShooting() const {return shooting;}
