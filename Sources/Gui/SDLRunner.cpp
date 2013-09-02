@@ -37,6 +37,7 @@ SPADES_SETTING(r_videoWidth, "1024");
 SPADES_SETTING(r_videoHeight, "640");
 SPADES_SETTING(r_fullscreen, "0");
 SPADES_SETTING(r_colorBits, "32");
+SPADES_SETTING(r_depthBits, "16");
 
 namespace spades {
 	namespace gui {
@@ -236,7 +237,7 @@ namespace spades {
 				//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 				
 				SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-				SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
+				SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, r_depthBits);
 				
 				surface = SDL_SetVideoMode(r_videoWidth,
 										   r_videoHeight,
