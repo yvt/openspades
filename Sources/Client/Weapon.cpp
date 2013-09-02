@@ -174,6 +174,13 @@ namespace spades {
 				world->GetListener()->PlayerReloadingWeapon(owner);
 		}
 		
+		void Weapon::ForceReloadDone() {
+			int newStock;
+			newStock = std::max(0, stock - GetClipSize() + ammo);
+			ammo += stock - newStock;
+			stock = newStock;
+		}
+		
 		class RifleWeapon3: public Weapon {
 		public:
 			RifleWeapon3(World*w,Player*p):Weapon(w,p){}

@@ -396,8 +396,9 @@ namespace spades {
 			}else if(reloadingServerSide) {
 				// for some reason a server didn't return
 				// WeaponReload packet.
-				if(world->GetTime() + lastReloadingTime + .5f) {
+				if(world->GetTime() + lastReloadingTime + .8f) {
 					reloadingServerSide = false;
+					weapon->ForceReloadDone();
 				}
 			}
 		}

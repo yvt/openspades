@@ -86,6 +86,8 @@ namespace spades {
 			// for local player
 			void ReloadDone(int ammo, int stock);
 			
+			void ForceReloadDone();
+			
 			float GetReloadProgress();
 			float TimeToNextFire();
 			
