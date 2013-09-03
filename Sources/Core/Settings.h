@@ -31,10 +31,13 @@ namespace spades {
 			std::string string;
 			float value;
 			int intValue;
+		
+			bool loaded;
 			
 			std::string defaultValue;
 			std::string desc;
 			
+			void Load();
 			void Set(const std::string&);
 			void Set(int);
 			void Set(float);

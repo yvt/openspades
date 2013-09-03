@@ -64,17 +64,7 @@ namespace spades {
 		if(it == items.end()){
 			Item *item = new Item();
 			item->name = name;
-			
-			char buf[2048];
-			buf[2047] = 0;
-			SPAssert(pref != NULL);
-			pref->get(name.c_str(), buf, def.c_str(), 2047);
-			SPAssert(buf);
-			
-			item->string = buf;
-			
-			item->value = static_cast<float>(atof(item->string.c_str()));
-			item->intValue = atoi(item->string.c_str());
+			item->loaded = false;
 			
 			item->desc = desc;
 			item->defaultValue = def;
@@ -85,13 +75,34 @@ namespace spades {
 		return it->second;
 	}
 	
+	void Settings::Item::Load() {
+		if(this->loaded){
+			return;
+		}
+		
+		char buf[2048];
+		buf[2047] = 0;
+		SPAssert(pref != NULL);
+		pref->get(name.c_str(), buf, defaultValue.c_str(), 2047);
+		SPAssert(buf);
+		
+		this->string = buf;
+		
+		this->value = static_cast<float>(atof(this->string.c_str()));
+		this->intValue = atoi(this->string.c_str());
+		
+		this->loaded = true;
+	}
+	
 	void Settings::Item::Set(const std::string &str) {
 		string = str;
 		value = static_cast<float>(atof(str.c_str()));
 		intValue = atoi(str.c_str());
 		
 		pref->set(name.c_str(), string.c_str());
+		loaded = true;
 	}
+	
 	
 	void Settings::Item::Set(int v) {
 		char buf[256];
@@ -101,6 +112,7 @@ namespace spades {
 		value = (float)v;
 		
 		pref->set(name.c_str(), string.c_str());
+		loaded = true;
 	}
 	
 	void Settings::Item::Set(float v){
@@ -111,6 +123,8 @@ namespace spades {
 		value = v;
 		
 		pref->set(name.c_str(), string.c_str());
+		
+		loaded = true;
 	}
 	
 	Settings::ItemHandle::ItemHandle(const std::string& name,
@@ -139,18 +153,23 @@ namespace spades {
 		item->Set(value);
 	}
 	Settings::ItemHandle::operator std::string() {
+		item->Load();
 		return item->string;
 	}
 	Settings::ItemHandle::operator int() {
+		item->Load();
 		return item->intValue;
 	}
 	Settings::ItemHandle::operator float() {
+		item->Load();
 		return item->value;
 	}
 	Settings::ItemHandle::operator bool() {
+		item->Load();
 		return item->intValue != 0;
 	}
 	const char *Settings::ItemHandle::CString() {
+		item->Load();
 		return item->string.c_str();
 	}
 	std::string Settings::ItemHandle::GetDescription() {
