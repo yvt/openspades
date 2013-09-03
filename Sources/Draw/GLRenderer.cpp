@@ -58,7 +58,7 @@
 #include <stdlib.h>
 #include "GLProfiler.h"
 
-SPADES_SETTING(r_water, "1");
+SPADES_SETTING(r_water, "2");
 SPADES_SETTING(r_bloom, "1");
 SPADES_SETTING(r_lens, "1");
 SPADES_SETTING(r_lensFlare, "1");

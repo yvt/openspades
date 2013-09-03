@@ -52,7 +52,7 @@ SPADES_SETTING(r_mapSoftShadow, "0");
 SPADES_SETTING(r_modelShadows, "1");
 SPADES_SETTING(r_radiosity, "0");
 SPADES_SETTING(r_dlights, "1");
-SPADES_SETTING(r_water, "1");
+SPADES_SETTING(r_water, "2");
 SPADES_SETTING(r_multisamples, "0");
 SPADES_SETTING(r_fxaa, "1");
 SPADES_SETTING(r_depthBits, "24");

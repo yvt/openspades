@@ -30,7 +30,7 @@
 #include "../Core/Settings.h"
 #include "GLDynamicLightShader.h"
 
-SPADES_SETTING(r_water, "1");
+SPADES_SETTING(r_water, "2");
 
 namespace spades {
 	namespace draw {

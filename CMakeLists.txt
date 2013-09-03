@@ -5,6 +5,7 @@ set(OpenSpades_VERSION_MAJOR 0)
 set(OpenSpades_VERSION_MINOR 0)
 set(OpenSpades_VERSION_REVISION 8)
 
+
 include(FindSDL)
 if(NOT SDL_FOUND)
 	message(FATAL_ERROR "OpenSDL not found, set ENV{SDLDIR} to point to OpenSDL, and optionally set the cmake var SDL_LIBRARY_TEMP to the lib dir")
@@ -130,7 +131,6 @@ include_directories("${CURL_INCLUDE_DIRS}")
 
 add_subdirectory(Resources)
 add_subdirectory(Sources)
-
 
 #EXECUTABLE_OUTPUT_PATH
 
