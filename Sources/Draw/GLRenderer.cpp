@@ -93,8 +93,18 @@ namespace spades {
 			imageRenderer = new GLImageRenderer(this);
 			
 			waterRenderer = NULL;
-			ambientShadowRenderer = NULL;
 			radiosityRenderer = NULL;
+			mapShadowRenderer = NULL;
+			mapShadowRenderer = NULL;
+			mapRenderer = NULL;
+			flatMapRenderer = NULL;
+			ambientShadowRenderer = NULL;
+			shadowMapRenderer = NULL;
+			modelManager = NULL;
+			spriteRenderer = NULL;
+			longSpriteRenderer = NULL;
+			modelRenderer = NULL;
+			
 			lastTime = 0;
 			
 			sceneUsedInThisFrame = false;
@@ -145,9 +155,6 @@ namespace spades {
 			SPLog("GLRenderer initializing for 3D rendering");
 			shadowMapRenderer = GLShadowMapShader::CreateShadowMapRenderer(this);
 			modelManager = new GLModelManager(this);
-			mapShadowRenderer = NULL;
-			mapRenderer = NULL;
-			flatMapRenderer = NULL;
 			if(r_softParticles)
 				spriteRenderer = new GLSoftSpriteRenderer(this);
 			else

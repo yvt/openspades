@@ -567,6 +567,13 @@ namespace spades {
 			bitmap.resize(w * h);
 			std::fill(updateBitmap.begin(), updateBitmap.end(),
 					  0xffffffffUL);
+			std::fill(bitmap.begin(), bitmap.end(),
+					  0xffffffffUL);
+			
+			device->TexSubImage2D(IGLDevice::Texture2D,
+								  0, 0, 0, w, h,
+								  IGLDevice::BGRA, IGLDevice::UnsignedByte,
+								  bitmap.data());
 			
 			// create wave tank simlation
 			waveTank = new FFTWaveTank();//new StandardWaveTank(256);
@@ -820,7 +827,7 @@ namespace spades {
 			r = (r * r + 128) >> 8;
 			g = (g * g + 128) >> 8;
 			b = (b * b + 128) >> 8;
-			return r|(g<<8)|(b<<16);
+			return b|(g<<8)|(r<<16);
 		}
 		
 		void GLWaterRenderer::Update(float dt) {
@@ -852,36 +859,82 @@ namespace spades {
 			{
 				GLProfiler profiler(device, "Upload Water Color Texture");
 				device->BindTexture(IGLDevice::Texture2D, texture);
+				bool fullUpdate = true;
 				for(size_t i = 0; i < updateBitmap.size(); i++){
-					int y = i / updateBitmapPitch;
-					int x = (i - y * updateBitmapPitch) * 32;
-					if(updateBitmap[i] == 0)
-						continue;
-					
-					
-					uint32_t pixels[32];
+					if(updateBitmap[i] == 0){
+						fullUpdate = false;
+						break;
+					}
+				}
+				
+				if(fullUpdate) {
+					uint32_t *pixels = bitmap.data();
 					bool modified = false;
-					for(int j = 0; j < 32; j++){
-						uint32_t col = map->GetColor(x+j, y, 63);
+					int x = 0, y = 0;
+					for(int i = w * h; i > 0; i--){
+						uint32_t col = map->GetColor(x, y, 63);
+						
+						x++;
+						if(x == w){
+							x = 0; y++;
+						}
 						
 						col = LinearlizeColor(col);
 						
-						if(pixels[j] != col)
+						if(*pixels != col)
 							modified = true;
-						else
+						else{
+							pixels++;
 							continue;
-						pixels[j] = col;
-						//pixels[j] = GeneratePixel(x + j, y);
+						}
+						*(pixels++) = col;
 					}
 					
 					if(modified) {
 						device->TexSubImage2D(IGLDevice::Texture2D,
-											  0, x, y, 32, 1,
-											  IGLDevice::RGBA, IGLDevice::UnsignedByte,
-											  pixels);
+											  0, 0, 0, w, h,
+											  IGLDevice::BGRA, IGLDevice::UnsignedByte,
+											  bitmap.data());
 					}
 					
-					updateBitmap[i] = 0;
+					
+					for(size_t i = 0; i < updateBitmap.size(); i++){
+						updateBitmap[i] = 0;
+					}
+				}else{
+					// partial update
+					for(size_t i = 0; i < updateBitmap.size(); i++){
+						int y = i / updateBitmapPitch;
+						int x = (i - y * updateBitmapPitch) * 32;
+						if(updateBitmap[i] == 0)
+							continue;
+						
+						
+						uint32_t *pixels = bitmap.data() + x + y * w;
+						bool modified = false;
+						for(int j = 0; j < 32; j++){
+							uint32_t col = map->GetColor(x+j, y, 63);
+							
+							col = LinearlizeColor(col);
+							
+							if(pixels[j] != col)
+								modified = true;
+							else
+								continue;
+							pixels[j] = col;
+							//pixels[j] = GeneratePixel(x + j, y);
+						}
+						
+						if(modified) {
+							device->TexSubImage2D(IGLDevice::Texture2D,
+												  0, x, y, 32, 1,
+												  IGLDevice::BGRA, IGLDevice::UnsignedByte,
+												  pixels);
+						}
+						
+						updateBitmap[i] = 0;
+					}
+					// partial update - done
 				}
 			}
 		}
