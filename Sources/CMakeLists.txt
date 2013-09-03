@@ -54,7 +54,7 @@ source_group("poly2tri\\sweep" FILES ${POLY2TRI_SWEEP_FILES})
 source_group("unzip" FILES ${UNZIP_FILES})
 
 
-target_link_libraries(OpenSpades ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${ZLIB_LIBRARIES} ${CURL_LIBRARY})
+target_link_libraries(OpenSpades ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${CMAKE_DL_LIBS})
 
 if(OPENAL_FOUND)
 	target_link_libraries(OpenSpades ${OPENAL_LIBRARY})
