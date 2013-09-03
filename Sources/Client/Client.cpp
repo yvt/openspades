@@ -696,7 +696,7 @@ namespace spades {
 				if(time > lastPosSentTime + 1.f &&
 				   world->GetLocalPlayer()){
 					Player *p = world->GetLocalPlayer();
-					if(p->IsAlive()){
+					if(p->IsAlive() && p->GetTeamId() >= 2){
 						net->SendPosition();
 						lastPosSentTime = time;
 					}
