@@ -69,7 +69,7 @@ SPADES_SETTING(r_optimizedVoxelModel, "1");
 SPADES_SETTING(r_radiosity, "0");
 SPADES_SETTING(r_fogShadow, "0");
 SPADES_SETTING(r_fxaa, "1");
-SPADES_SETTING(r_srgb, "1");
+SPADES_SETTING(r_srgb, "");
 SPADES_SETTING(r_srgb2D, "1");
 
 SPADES_SETTING(r_debugTiming, "0");

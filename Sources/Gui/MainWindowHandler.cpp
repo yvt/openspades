@@ -63,7 +63,7 @@ SPADES_SETTING(r_fullscreen, "0");
 SPADES_SETTING(r_fogShadow, "0");
 SPADES_SETTING(r_lensFlare, "1");
 SPADES_SETTING(r_blitFramebuffer, "1");
-SPADES_SETTING(r_srgb, "1");
+SPADES_SETTING(r_srgb, "");
 SPADES_SETTING(r_shadowMapSize, "2048");
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
