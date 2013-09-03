@@ -358,7 +358,7 @@ namespace spades {
 				}
 			}
 			
-			timeSinceInit += dt;
+			timeSinceInit += std::min(dt, .03f);
 			
 			try{
 				if(net->GetStatus() == NetClientStatusConnected)
@@ -3108,7 +3108,7 @@ namespace spades {
 				// no world; loading?
 				DrawSplash();
 				
-				float fade = std::min(1.f, timeSinceInit);
+				float fade = std::min(1.f, timeSinceInit * 2.f);
 				
 				// background
 				IImage *img;
