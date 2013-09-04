@@ -59,9 +59,10 @@ void main() {
 	
 	// evaluate waveform
 	vec4 wave = texture2D(waveTexture, waveCoord.xy).xyzw;
-	wave = mix(vec4(-1.), vec4(1.), wave);
-	//wave.z = sqrt(1. - dot(wave.xy, wave.xy));
+	wave = mix(vec4(-.25), vec4(.25), wave);
+	wave.z = sqrt(1. - dot(wave.xy, wave.xy));
 	
+#if 0
 	// detail (Far Cry seems to use this technique)
 	vec4 wave2 = texture2D(waveTexture, waveCoord.zw).xyzw;
 	wave2 = mix(vec4(-1.), vec4(1.), wave2);
@@ -73,6 +74,7 @@ void main() {
 	wave2 = mix(vec4(-1.), vec4(1.), wave2);
 	//wave2.z = sqrt(1. - dot(wave2.xy, wave2.xy));
 	wave += wave2;
+#endif
 	
 	wave.xyz = normalize(wave.xyz);
 	
@@ -142,9 +144,23 @@ void main() {
 	// attenuation factor for addition blendings below
 	vec3 att = 1. - fogDensity;
 	
-	// specular reflection
+	// reflectivity
 	vec3 sunlight = EvaluateSunLight();
 	vec3 ongoing = normalize(worldPositionFromOrigin);
+	float reflective = dot(ongoing, wave.xyz);
+	reflective = clamp(1. - reflective, 0., 1.);
+	reflective *= reflective;
+	reflective *= reflective;
+	reflective += .03;
+	
+	// fresnel refrection to sky
+	gl_FragColor.xyz = mix(gl_FragColor.xyz,
+						   skyColor * reflective * att * .6,
+						   reflective);
+	
+	
+	
+	// specular reflection
 	if(dot(sunlight, vec3(1.)) > 0.0001){
 		vec3 refl = reflect(ongoing,
 							wave.xyz);
@@ -167,23 +183,11 @@ void main() {
 		spec *= spec; // ^256
 		spec *= spec; // ^512
 		spec *= spec; // ^1024
-		spec *= 1.;
-		gl_FragColor.xyz += sunlight * spec * 10. * att;
+		spec *= reflective;
+		gl_FragColor.xyz += sunlight * spec * 1000. * att;
 		
 		
 	}
-	
-	// fresnel refrection to sky
-	float fres = dot(ongoing, wave.xyz);
-	fres = clamp(1. - fres, 0., 1.);
-	fres *= fres;
-	fres *= fres;
-	fres *= fres;
-	fres *= fres;
-	fres += .03;
-	gl_FragColor.xyz += skyColor * fres * .6 * att;
-	
-	
 	
 	
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);

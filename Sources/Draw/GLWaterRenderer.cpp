@@ -63,15 +63,15 @@ namespace spades {
 			}
 			
 			uint32_t MakeBitmapPixel(float dx, float dy, float h){
-				float x = dx, y = dy, z = 0.02f;
+				float x = dx, y = dy, z = 0.04f;
 				float len = sqrtf(x*x+y*y+z*z);
 				float scale = 1.f / len;
 				x *= scale; y *= scale; z *= scale;
 				
 				uint32_t out;
 				out = Encode8bit(z);
-				out |= Encode8bit(y) << 8;
-				out |= Encode8bit(x) << 16;
+				out |= Encode8bit(y * 4.f) << 8;
+				out |= Encode8bit(x * 4.f) << 16;
 				out |= Encode8bit(h * -10.f) << 24;
 				return out;
 			}
@@ -225,8 +225,10 @@ namespace spades {
 							float mag = 0.8f / dist / (float)Size;
 							mag /= dist;
 							
-							if(dist > (float)SizeHalf * .9f)
-								mag = 0.f;
+							float scal = dist / (float)SizeHalf;
+							scal *= scal;
+							mag *= expf(-scal * 4.f);
+							
 							
 							cell.magnitude = mag;
 							cell.phase = rand() | ((uint32_t)rand() << 16);
