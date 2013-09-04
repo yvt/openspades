@@ -777,6 +777,11 @@ namespace spades {
 			handle.Release();
 			fbManager->MakeSureAllBuffersReleased();
 			
+			// model renderer must be cleared because
+			// GLModelRenderer::Clear accesses added model and
+			// some models might be deleted before the next frame
+			modelRenderer->Clear();
+			
 			// prepare for 2d drawing
 			device->Enable(IGLDevice::Blend, true);
 		}
