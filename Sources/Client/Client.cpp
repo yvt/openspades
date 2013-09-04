@@ -1579,6 +1579,11 @@ namespace spades {
 			IModel *model;
 			model = renderer->RegisterModel("Models/Weapons/Grenade/Grenade.kv6");
 			
+			if(g->GetPosition().z > 63.f) {
+				// work-around for water refraction problem
+				return;
+			}
+			
 			ModelRenderParam param;
 			Matrix4 mat = Matrix4::Scale(0.03f);
 			mat = Matrix4::Translate(g->GetPosition()) * mat;
