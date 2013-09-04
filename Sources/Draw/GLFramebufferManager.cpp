@@ -506,15 +506,20 @@ namespace spades {
 			return handle;
 		}
 		
-		void GLFramebufferManager::CopyToMirrorTexture() {
+		void GLFramebufferManager::CopyToMirrorTexture(IGLDevice::UInteger fb) {
 			SPADES_MARK_FUNCTION();
 			int w = device->ScreenWidth();
 			int h = device->ScreenHeight();
+			if(fb == 0){
+				fb = useMultisample ?
+				multisampledFramebuffer :
+				renderFramebuffer;
+			}
 			if(useMultisample){
 				// downsample
 				if(r_blitFramebuffer){
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
-											multisampledFramebuffer);
+											fb);
 					device->BindFramebuffer(IGLDevice::DrawFramebuffer,
 											mirrorFramebuffer);
 					device->BlitFramebuffer(0, 0, w, h,
@@ -527,7 +532,7 @@ namespace spades {
 											0);
 				}else{
 					device->BindFramebuffer(IGLDevice::Framebuffer,
-											multisampledFramebuffer);
+											fb);
 					device->BindTexture(IGLDevice::Texture2D, mirrorColorTexture);
 					device->CopyTexSubImage2D(IGLDevice::Texture2D,
 											  0, 0, 0, 0, 0,
@@ -537,7 +542,7 @@ namespace spades {
 				// copy
 				if(r_blitFramebuffer){
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
-											renderFramebuffer);
+											fb);
 					device->BindFramebuffer(IGLDevice::DrawFramebuffer,
 											mirrorFramebuffer);
 					device->BlitFramebuffer(0, 0, w, h,
@@ -550,7 +555,7 @@ namespace spades {
 											0);
 				}else{
 					device->BindFramebuffer(IGLDevice::Framebuffer,
-											renderFramebuffer);
+											fb);
 					device->BindTexture(IGLDevice::Texture2D, mirrorColorTexture);
 					device->CopyTexSubImage2D(IGLDevice::Texture2D,
 											  0, 0, 0, 0, 0,
@@ -569,6 +574,8 @@ namespace spades {
 										renderFramebuffer);
 			}
 			
+			device->Enable(IGLDevice::DepthTest, true);
+			device->DepthMask(true);
 		}
 		
 		GLFramebufferManager::BufferHandle GLFramebufferManager::StartPostProcessing() {

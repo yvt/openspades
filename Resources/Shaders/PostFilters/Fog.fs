@@ -89,6 +89,16 @@ void main() {
 	vec2 dirSign2 = dirSign * .5 + .5; // 0, 1
 	vec2 dirSign3 = dirSign * .5 - .5; // -1, 0
 	
+	float time = 0.;
+	float total = 0.;
+	
+	if(startPos.z > (63. / 255.) && dir.z < 0.) {
+		// fog pass for mirror scene
+		time = ((63. / 255.) - startPos.z) / dir.z;
+		total += fogDensFunc(time);
+		startPos += time * dir;
+	}
+	
 	vec3 pos = startPos + dir * 0.0001;
 	vec2 voxelIndex = floor(pos.xy);
 	if(pos.xy == voxelIndex) {
@@ -100,8 +110,6 @@ void main() {
 	vec2 timePerVoxel = 1. / dir.xy;
 	vec2 timePerVoxelAbs = abs(timePerVoxel);
 	vec2 timeToNextVoxel = (nextVoxelIndex2 - pos.xy) * timePerVoxel;
-	float time = 0.;
-	float total = 0.;
 	
 	if(ceilTime <= 0.) {
 		// camera is above ceil, and
@@ -292,6 +300,8 @@ void main() {
 #endif
 		
 #else // USE_COARSE_SHADOWMAP
+		
+#warning Non-coarse routine doesnt support water reflection
 		for(int i = 0; i < 512; i++){
 			float diffTime;
 			

@@ -78,6 +78,12 @@ namespace spades {
 			client::SceneDefinition def = renderer->GetSceneDef();
 			lensFov.SetValue(tanf(def.fovX * .5f),
 							 tanf(def.fovY * .5f));
+			if(renderer->IsRenderingMirror()) {
+				def.viewOrigin.z = 63.f * 2.f - def.viewOrigin.z;
+				def.viewAxis[0].z = -def.viewAxis[0].z;
+				def.viewAxis[1].z = -def.viewAxis[1].z;
+				def.viewAxis[2].z = -def.viewAxis[2].z;
+			}
 			lensViewOrigin.SetValue(def.viewOrigin.x,
 									def.viewOrigin.y,
 									def.viewOrigin.z);

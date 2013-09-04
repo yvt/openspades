@@ -99,7 +99,7 @@ namespace spades {
 			}
 			BufferHandle CreateBufferHandle(int w=-1, int h=-1, bool alpha=false);
 			
-			void CopyToMirrorTexture();
+			void CopyToMirrorTexture(IGLDevice::UInteger fb = 0);
 			IGLDevice::UInteger GetMirrorTexture(){
 				return mirrorColorTexture;
 			}

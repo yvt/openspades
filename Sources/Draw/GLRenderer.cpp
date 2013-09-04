@@ -257,7 +257,7 @@ namespace spades {
 		}
 		
 		Vector3 GLRenderer::GetFogColorForSolidPass() {
-			if(r_fogShadow && mapShadowRenderer && !renderingMirror){
+			if(r_fogShadow && mapShadowRenderer){
 				return MakeVector3(0, 0, 0);
 			}else{
 				return GetFogColor();
@@ -625,7 +625,22 @@ namespace spades {
 					std::swap(view, viewMatrix);
 					projectionViewMatrix = projectionMatrix * viewMatrix;
 					
-					fbManager->CopyToMirrorTexture();
+					
+					if(r_fogShadow && mapShadowRenderer &&
+					   fogColor.GetPoweredLength() > .000001f) {
+						GLProfiler profiler(device, "Volumetric Fog");
+						
+						GLFramebufferManager::BufferHandle handle;
+						GLFogFilter fogfilter(this);
+						
+						handle = fbManager->StartPostProcessing();
+						handle = fogfilter.Filter(handle);
+						fbManager->CopyToMirrorTexture(handle.GetFramebuffer());
+					}else{
+						fbManager->CopyToMirrorTexture();
+						
+					}
+					
 					
 					renderingMirror = false;
 				}catch(...){
