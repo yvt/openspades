@@ -90,7 +90,7 @@ void main() {
 	float scale = 1. / dot(xToUV.xy, yToUV.yx * vec2(1., -1.));
 	vec2 disp = vec2(dot(xToUV, wave.xy * vec2(1., -1.)),
 					 dot(yToUV, wave.xy * vec2(-1., 1.)));
-	scrPos += disp * scale * displaceScale ;
+	scrPos += disp * scale * displaceScale  * 4.;
 	
 	// check envelope length.
 	// if the displaced location points the out of the water,
