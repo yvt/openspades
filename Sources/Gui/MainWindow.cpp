@@ -192,7 +192,6 @@ this->when(FL_WHEN_RELEASE);
     groupAbout->end();
   } // Fl_Group* groupAbout
   { Fl_Group* o = new Fl_Group(10, 130, 595, 220, "Setup");
-    o->hide();
     { Fl_Group* o = new Fl_Group(10, 150, 385, 70, "Video");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
@@ -227,7 +226,7 @@ this->when(FL_WHEN_RELEASE);
     { Fl_Group* o = new Fl_Group(10, 240, 385, 105, "Graphics");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { advancedLensCheck = new Fl_Light_Button(20, 250, 185, 25, "Lens Sim.");
+      { advancedLensCheck = new Fl_Light_Button(20, 250, 185, 25, "HQ Postprocess");
         advancedLensCheck->callback((Fl_Callback*)cb_advancedLensCheck);
         advancedLensCheck->when(FL_WHEN_CHANGED);
       } // Fl_Light_Button* advancedLensCheck
@@ -296,6 +295,7 @@ this->when(FL_WHEN_RELEASE);
     groupReport->end();
   } // Fl_Group* groupReport
   { Fl_Tabs* o = new Fl_Tabs(10, 130, 595, 220, "Serverlist");
+    o->hide();
     { serverListbox = new Fl_Browser(10, 150, 595, 200, "Serverlist");
       serverListbox->type(2);
       serverListbox->callback((Fl_Callback*)cb_serverListbox);

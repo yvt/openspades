@@ -137,6 +137,7 @@
 		E8CF0417179052F7000683D4 /* DirectoryFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF0415179052F6000683D4 /* DirectoryFileSystem.cpp */; };
 		E8CF041B1790CCAB000683D4 /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF04191790CCAB000683D4 /* GLShader.cpp */; };
 		E8CF041E1790D6D6000683D4 /* GLProgramManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF041C1790D6D5000683D4 /* GLProgramManager.cpp */; };
+		E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */; };
 		E8D88AB1179C3004004C2451 /* GLQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */; };
 		E8D88AB4179C45B7004C2451 /* GLLensFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AB2179C45B7004C2451 /* GLLensFilter.cpp */; };
 		E8E0AF8A1798278000C6B5A9 /* GLImageRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E0AF881798278000C6B5A9 /* GLImageRenderer.cpp */; };
@@ -467,6 +468,8 @@
 		E8CF041A1790CCAB000683D4 /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShader.h; sourceTree = "<group>"; };
 		E8CF041C1790D6D5000683D4 /* GLProgramManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgramManager.cpp; sourceTree = "<group>"; };
 		E8CF041D1790D6D5000683D4 /* GLProgramManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgramManager.h; sourceTree = "<group>"; };
+		E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLColorCorrectionFilter.cpp; sourceTree = "<group>"; };
+		E8D2ACE217D704E600BE5490 /* GLColorCorrectionFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLColorCorrectionFilter.h; sourceTree = "<group>"; };
 		E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLQuadRenderer.cpp; sourceTree = "<group>"; };
 		E8D88AB0179C3004004C2451 /* GLQuadRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLQuadRenderer.h; sourceTree = "<group>"; };
 		E8D88AB2179C45B7004C2451 /* GLLensFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLensFilter.cpp; sourceTree = "<group>"; };
@@ -782,6 +785,8 @@
 				E859510E17C61F850012810C /* GLLensFlareFilter.h */,
 				E859511017C645000012810C /* GLFXAAFilter.cpp */,
 				E859511117C645000012810C /* GLFXAAFilter.h */,
+				E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */,
+				E8D2ACE217D704E600BE5490 /* GLColorCorrectionFilter.h */,
 			);
 			name = "Post Filters";
 			sourceTree = "<group>";
@@ -1392,6 +1397,7 @@
 				E844888317D2633C005105D0 /* json_value.cpp in Sources */,
 				E844888417D2633C005105D0 /* json_writer.cpp in Sources */,
 				E844888A17D39CD3005105D0 /* ErrorDialog.cpp in Sources */,
+				E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

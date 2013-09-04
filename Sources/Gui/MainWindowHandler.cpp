@@ -68,6 +68,7 @@ SPADES_SETTING(r_shadowMapSize, "2048");
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
 SPADES_SETTING(r_maxAnisotropy, "8");
+SPADES_SETTING(r_colorCorrection, "1");
 SPADES_SETTING(r_physicalLighting, "");
 
 static std::vector<spades::IntVector3> g_modes;
@@ -215,7 +216,8 @@ void MainWindow::LoadPrefs() {
 	fullscreenCheck->value(r_fullscreen ? 1 : 0);
 	
 	// --- graphics
-	if(r_cameraBlur && r_bloom && r_lens && r_lensFlare) {
+	if(r_cameraBlur && r_bloom && r_lens && r_lensFlare &&
+	   r_colorCorrection) {
 		advancedLensCheck->value(1);
 	}else{
 		advancedLensCheck->value(0);
@@ -615,6 +617,7 @@ void MainWindow::SavePrefs() {
 	r_lens = advancedLensCheck->value() ? 1 : 0;
 	r_lensFlare = advancedLensCheck->value() ? 1 : 0;
 	r_cameraBlur = advancedLensCheck->value() ? 1 : 0;
+	r_colorCorrection = advancedLensCheck->value() ? 1 : 0;
 	r_softParticles = softParticleCheck->value() ? 1 : 0;
 	r_radiosity = radiosityCheck->value() ? 1 : 0;
 	switch(directLightSelect->value()){

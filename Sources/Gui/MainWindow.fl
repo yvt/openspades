@@ -17,7 +17,7 @@ widget_class MainWindow {
     callback {SavePrefs();}
     private xywh {135 80 365 25}
   }
-  Fl_Tabs mainTab {
+  Fl_Tabs mainTab {open
     private xywh {5 110 605 240} labelsize 11
   } {
     Fl_Group groupAbout {
@@ -29,8 +29,8 @@ widget_class MainWindow {
       }
     }
     Fl_Group {} {
-      label Setup
-      private xywh {10 130 595 220} hide
+      label Setup open
+      private xywh {10 130 595 220}
     } {
       Fl_Group {} {
         label Video open
@@ -73,8 +73,8 @@ SavePrefs();} open
         private xywh {10 240 385 105} box ENGRAVED_FRAME align 5
       } {
         Fl_Light_Button advancedLensCheck {
-          label {Lens Sim.}
-          callback {SavePrefs();}
+          label {HQ Postprocess}
+          callback {SavePrefs();} selected
           private xywh {20 250 185 25} when 1
         }
         Fl_Light_Button softParticleCheck {
@@ -151,7 +151,7 @@ SavePrefs();} open
     }
     Fl_Tabs {} {
       label Serverlist open
-      xywh {10 130 595 220}
+      xywh {10 130 595 220} hide
     } {
       Fl_Browser serverListbox {
         label Serverlist
@@ -238,7 +238,7 @@ SavePrefs();} open
   } {}
   Function {~MainWindow()} {open
   } {}
-  decl {bool shaderHighCapable;} {selected private local
+  decl {bool shaderHighCapable;} {private local
   }
 } 
 
