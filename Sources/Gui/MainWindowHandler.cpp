@@ -68,6 +68,7 @@ SPADES_SETTING(r_shadowMapSize, "2048");
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
 SPADES_SETTING(r_maxAnisotropy, "8");
+SPADES_SETTING(r_physicalLighting, "");
 
 static std::vector<spades::IntVector3> g_modes;
 
@@ -230,11 +231,11 @@ void MainWindow::LoadPrefs() {
 	directLightSelect->add("High");
 	directLightSelect->add("Custom");
 	
-	if((!r_mapSoftShadow) && (r_dlights) && (!r_modelShadows) && (!r_fogShadow)){
+	if((!r_mapSoftShadow) && (r_dlights) && (!r_modelShadows) && (!r_fogShadow) && (!r_physicalLighting)){
 		directLightSelect->value(0);
-	}else if((!r_mapSoftShadow) && (r_dlights) && (r_modelShadows) && (!r_fogShadow)){
+	}else if((!r_mapSoftShadow) && (r_dlights) && (r_modelShadows) && (!r_fogShadow) && (!r_physicalLighting)){
 		directLightSelect->value(1);
-	}else if((r_mapSoftShadow) && (r_dlights) && (r_modelShadows) && (r_fogShadow)){
+	}else if((r_mapSoftShadow) && (r_dlights) && (r_modelShadows) && (r_fogShadow) && (r_physicalLighting)){
 		directLightSelect->value(2);
 	}else{
 		directLightSelect->value(3);
@@ -622,18 +623,21 @@ void MainWindow::SavePrefs() {
 			r_dlights = 1;
 			r_mapSoftShadow = 0;
 			r_fogShadow = 0;
+			r_physicalLighting = 0;
 			break;
 		case 1:
 			r_modelShadows = 1;
 			r_dlights = 1;
 			r_mapSoftShadow = 0;
 			r_fogShadow = 0;
+			r_physicalLighting = 0;
 			break;
 		case 2:
 			r_modelShadows = 1;
 			r_dlights = 1;
 			r_mapSoftShadow = 1;
 			r_fogShadow = 1;
+			r_physicalLighting = 1;
 			break;
 	}
 	if(shaderHighCapable){

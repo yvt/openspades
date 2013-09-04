@@ -35,6 +35,8 @@
 #include "GLDynamicLightShader.h"
 #include "GLProfiler.h"
 
+SPADES_SETTING(r_physicalLighting, "0");
+
 namespace spades {
 	namespace draw {
 		GLMapRenderer::GLMapRenderer(client::GameMap *m, GLRenderer *r):
@@ -59,7 +61,10 @@ namespace spades {
 										   i % numChunkDepth);
 			
 			
-			basicProgram = renderer->RegisterProgram("Shaders/BasicBlock.program");
+			if(r_physicalSolidLighting)
+				basicProgram = renderer->RegisterProgram("Shaders/BasicBlockPhys.program");
+			else
+				basicProgram = renderer->RegisterProgram("Shaders/BasicBlock.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
 			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
 			detailImage = (GLImage *)renderer->RegisterImage("Textures/detail.jpg");
@@ -166,6 +171,11 @@ namespace spades {
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(basicProgram);
 			fogDistance.SetValue(renderer->GetFogDistance());
+			
+			static GLProgramUniform viewSpaceLight("viewSpaceLight");
+			viewSpaceLight(basicProgram);
+			Vector3 vspLight = (renderer->GetViewMatrix() * MakeVector4(0, -1, -1, 0)).GetXYZ();
+			viewSpaceLight.SetValue(vspLight.x, vspLight.y, vspLight.z);
 			
 			static GLProgramUniform fogColor("fogColor");
 			fogColor(basicProgram);
