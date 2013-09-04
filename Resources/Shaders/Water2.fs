@@ -63,19 +63,19 @@ void main() {
 	
 	// evaluate waveform
 	vec3 wave = texture2D(waveTexture1, waveCoord.xy).xyz;
-	wave = mix(vec3(-0.005), vec3(0.005), wave);
+	wave = mix(vec3(-0.0025), vec3(0.0025), wave);
 	wave.xy *= 0.08 * 1.;
 	
 	// detail (Far Cry seems to use this technique)
 	vec2 wave2 = texture2D(waveTexture2, waveCoord.zw).xy;
-	wave2 = mix(vec2(-0.005), vec2(0.005), wave2);
+	wave2 = mix(vec2(-0.0025), vec2(0.0025), wave2);
 	wave2.xy *= 0.15704 * 0.5;
 	wave.xy += wave2;
 	
 	// rough
 	wave2 = texture2D(waveTexture3, waveCoord2.xy).xy;
-	wave2 = mix(vec2(-0.005), vec2(0.005), wave2);
-	wave2.xy *= 0.02344 * 2.;
+	wave2 = mix(vec2(-0.0025), vec2(0.0025), wave2);
+	wave2.xy *= 0.02344 * 1.5;
 	wave.xy += wave2;
 	
 	wave.z = (1. / 128.) / (4.);
@@ -160,7 +160,7 @@ void main() {
 	vec2 scrPos2 = origScrPos;
 	//disp = vec2(dot(xToUV, wave.xy * vec2(1., -1.)),
 	//				dot(yToUV, wave.xy * vec2(-1., 1.)));
-	scrPos2 -= disp * scale * displaceScale * 4.;
+	scrPos2 -= disp * scale * displaceScale * 13.;
 	vec3 refl = texture2D(mirrorTexture, scrPos2).xyz;
 	refl *= refl; // linearize
 	
