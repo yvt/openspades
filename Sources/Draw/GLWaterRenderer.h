@@ -41,7 +41,7 @@ namespace spades {
 			IGLDevice *device;
 			client::GameMap *map;
 			
-			IWaveTank *waveTank;
+			std::vector<IWaveTank *> waveTanks;
 			
 			int w, h;
 			
@@ -51,7 +51,7 @@ namespace spades {
 			std::vector<uint32_t> bitmap;
 			
 			IGLDevice::UInteger texture; // water color
-			IGLDevice::UInteger waveTexture; // bumpmap
+			std::vector<IGLDevice::UInteger> waveTextures; // bumpmap
 			
 			struct Vertex;
 			

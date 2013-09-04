@@ -1,4 +1,3 @@
-Shaders/Water.fs
-Shaders/Water.vs
-Shaders/WaterDisplace.vs
+Shaders/Water2.fs
+Shaders/Water2.vs
 *shadow*

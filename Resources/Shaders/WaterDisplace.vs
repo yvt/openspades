@@ -20,25 +20,3 @@
 
 uniform sampler2D waveTexture;
 
-float DisplaceWater(vec2 worldPos){
-	
-	vec4 waveCoord = worldPos.xyxy * vec4(vec2(0.08), vec2(0.15704))
-	+ vec4(0., 0., 0.754, 0.1315);
-	
-	vec2 waveCoord2 = worldPos.xy * 0.02344 + vec2(.154, .7315);
-	
-	
-	vec4 wave = texture2DLod(waveTexture, waveCoord.xy, 2.).xyzw;
-	float disp = mix(-.9,1., wave.w);
-	
-#if 0
-	vec4 wave2 = texture2DLod(waveTexture, waveCoord.zw, 0.).xyzw;
-	disp += mix(-1.,1., wave2.w) * (0.15704 / 0.08);
-	
-	wave2 = texture2DLod(waveTexture, waveCoord2.xy, 0.).xyzw;
-	disp += mix(-1.,1., wave2.w) * (0.02344 / 0.08);
-#endif
-
-	return disp * 0.8;
-}
-

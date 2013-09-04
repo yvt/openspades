@@ -29,7 +29,9 @@ varying vec3 worldPosition;
 uniform sampler2D screenTexture;
 uniform sampler2D depthTexture;
 uniform sampler2D texture;
-uniform sampler2D waveTexture;
+uniform sampler2D waveTexture1;
+uniform sampler2D waveTexture2;
+uniform sampler2D waveTexture3;
 uniform vec3 fogColor;
 uniform vec3 skyColor;
 uniform vec2 zNearFar;
@@ -53,28 +55,29 @@ float depthAt(vec2 pt){
 
 void main() {
 	vec3 worldPositionFromOrigin = worldPosition - viewOrigin;
-	vec4 waveCoord = worldPosition.xyxy * vec4(vec2(0.08), vec2(0.15704))
+	vec4 waveCoord = worldPosition.xyxy * vec4(vec2(0.08),
+											   vec2(0.15704))
 	+ vec4(0., 0., 0.754, 0.1315);
 	vec2 waveCoord2 = worldPosition.xy * 0.02344 + vec2(.154, .7315);
 	
 	// evaluate waveform
-	vec3 wave = texture2D(waveTexture, waveCoord.xy).xyz;
-	wave = mix(vec3(-1.), vec3(1.), wave);
-	wave.xy *= 0.08 / 200.;
+	vec3 wave = texture2D(waveTexture1, waveCoord.xy).xyz;
+	wave = mix(vec3(-0.005), vec3(0.005), wave);
+	wave.xy *= 0.08 * 1.;
 	
 	// detail (Far Cry seems to use this technique)
-	vec2 wave2 = texture2D(waveTexture, waveCoord.zw).xy;
-	wave2 = mix(vec2(-1.), vec2(1.), wave2);
-	wave2.xy *= 0.15704 / 200.;
+	vec2 wave2 = texture2D(waveTexture2, waveCoord.zw).xy;
+	wave2 = mix(vec2(-0.005), vec2(0.005), wave2);
+	wave2.xy *= 0.15704 * 0.5;
 	wave.xy += wave2;
 	
 	// rough
-	wave2 = texture2D(waveTexture, waveCoord2.xy).xy;
-	wave2 = mix(vec2(-1.), vec2(1.), wave2);
-	wave2.xy *= 0.02344 / 200.;
+	wave2 = texture2D(waveTexture3, waveCoord2.xy).xy;
+	wave2 = mix(vec2(-0.005), vec2(0.005), wave2);
+	wave2.xy *= 0.02344 * 2.;
 	wave.xy += wave2;
 	
-	wave.z = (1. / 128.);
+	wave.z = (1. / 128.) / (4.);
 	wave.xyz = normalize(wave.xyz);
 	
 	vec2 origScrPos = screenPosition.xy / screenPosition.z;

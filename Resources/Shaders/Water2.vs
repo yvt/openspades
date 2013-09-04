@@ -20,7 +20,7 @@
 
 
 
-uniform mat4 projectionViewModelMatrix;
+uniform mat4 projectionViewMatrix;
 uniform mat4 modelMatrix;
 uniform mat4 viewModelMatrix;
 uniform vec3 viewOrigin;
@@ -34,10 +34,31 @@ varying vec3 screenPosition;
 varying vec3 viewPosition;
 varying vec3 worldPosition;
 
-uniform sampler2D waveTexture;
-//varying vec2 detailCoord;
+uniform sampler2D waveTexture1;
+uniform sampler2D waveTexture2;
+uniform sampler2D waveTexture3;
 
 void PrepareForShadow(vec3 worldOrigin, vec3 normal);
+
+float DisplaceWater(vec2 worldPos){
+	
+	vec4 waveCoord = worldPos.xyxy * vec4(vec2(0.08), vec2(0.15704))
+	+ vec4(0., 0., 0.754, 0.1315);
+	
+	vec2 waveCoord2 = worldPos.xy * 0.02344 + vec2(.154, .7315);
+	
+	
+	vec4 wave = texture2DLod(waveTexture1, waveCoord.xy, 3.).xyzw;
+	float disp = mix(-0.1, 0.1, wave.w) * 1.;
+	
+	vec4 wave2 = texture2DLod(waveTexture2, waveCoord.zw, 4.).xyzw;
+	disp += mix(-0.1, 0.1, wave2.w) * 0.5;
+	
+	wave2 = texture2DLod(waveTexture3, waveCoord2.xy, 2.).xyzw;
+	disp += mix(-0.1, 0.1, wave2.w) * 2.;
+	
+	return disp * 4.;
+}
 
 void main() {
 	
@@ -45,7 +66,9 @@ void main() {
 	
 	worldPosition = (modelMatrix * vertexPos).xyz;
 
-	gl_Position = projectionViewModelMatrix * vertexPos;
+	worldPosition.z += DisplaceWater(worldPosition.xy);
+	
+	gl_Position = projectionViewMatrix * vec4(worldPosition, 1.);
 	screenPosition = gl_Position.xyw;
 	screenPosition.xy = (screenPosition.xy + screenPosition.z) * .5;
 		
