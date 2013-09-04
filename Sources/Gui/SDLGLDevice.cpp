@@ -230,6 +230,21 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 			CheckError();
 		}
 		
+		void SDLGLDevice::FrontFace(Enum val) {
+			CheckExistence(glFrontFace);
+			switch (val) {
+				case draw::IGLDevice::CW:
+					glFrontFace(GL_CW);
+					break;
+				case draw::IGLDevice::CCW:
+					glFrontFace(GL_CCW);
+					break;
+				default:
+					SPInvalidEnum("val", "val");
+			}
+			CheckError();
+		}
+		
 		void SDLGLDevice::Enable(spades::draw::IGLDevice::Enum state, bool b){
 			SPADES_MARK_FUNCTION();
 			GLenum type;

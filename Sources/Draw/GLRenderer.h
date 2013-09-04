@@ -99,6 +99,7 @@ namespace spades {
 			Matrix4 projectionMatrix;
 			Matrix4 viewMatrix;
 			Matrix4 projectionViewMatrix;
+			bool renderingMirror;
 			
 			Vector4 drawColor;
 			
@@ -109,6 +110,8 @@ namespace spades {
 			void BuildFrustrum();
 			
 			void RenderDebugLines();
+			
+			void RenderObjects();
 			
 		public:
 			GLRenderer(IGLDevice *glDevice);
@@ -177,6 +180,8 @@ namespace spades {
 			const Matrix4& GetProjectionMatrix() const { return projectionMatrix; }
 			const Matrix4& GetProjectionViewMatrix() const { return projectionViewMatrix; }
 			const Matrix4& GetViewMatrix() const { return viewMatrix; }
+			
+			bool IsRenderingMirror() const { return renderingMirror; }
 			
 			virtual void GameMapChanged(int x, int y, int z, client::GameMap *);
 					

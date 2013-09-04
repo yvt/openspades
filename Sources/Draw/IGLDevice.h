@@ -43,6 +43,10 @@ namespace spades {
 				UnsignedShort1555Rev,
 				UnsignedInt2101010Rev,
 				
+				// Front face
+				CW,
+				CCW,
+				
 				// State
 				DepthTest,
 				CullFace,
@@ -250,6 +254,7 @@ namespace spades {
 			virtual void Finish() = 0;
 			virtual void Flush() = 0;
 			
+			virtual void FrontFace(Enum) = 0;
 			virtual void Enable(Enum state, bool) = 0;
 			
 			virtual const char *GetString(Enum type) = 0;

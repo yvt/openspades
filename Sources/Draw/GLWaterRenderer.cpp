@@ -755,8 +755,10 @@ namespace spades {
 				viewOrigin.SetValue(def.viewOrigin.x,
 									def.viewOrigin.y,
 									def.viewOrigin.z);
-				displaceScale.SetValue(1.f / renderer->ScreenWidth() / tanf(def.fovX * .5f),
-									   1.f / renderer->ScreenHeight() / tanf(def.fovY) * .5f);
+				/*displaceScale.SetValue(1.f / renderer->ScreenWidth() / tanf(def.fovX * .5f),
+									   1.f / renderer->ScreenHeight() / tanf(def.fovY) * .5f);*/
+				displaceScale.SetValue(.3f / renderer->ScreenWidth(),
+									   .3f / renderer->ScreenHeight());
 				fovTan.SetValue(tanf(def.fovX * .5f), -tanf(def.fovY * .5f),
 								-tanf(def.fovX * .5f), tanf(def.fovY * .5f));
 				
@@ -773,6 +775,7 @@ namespace spades {
 				static GLProgramUniform waveTextureUnif1("waveTexture1");
 				static GLProgramUniform waveTextureUnif2("waveTexture2");
 				static GLProgramUniform waveTextureUnif3("waveTexture3");
+				static GLProgramUniform mirrorTexture("mirrorTexture");
 				
 				screenTexture(prg);
 				depthTexture(prg);
@@ -781,6 +784,7 @@ namespace spades {
 				waveTextureUnif1(prg);
 				waveTextureUnif2(prg);
 				waveTextureUnif3(prg);
+				mirrorTexture(prg);
 				
 				device->ActiveTexture(0);
 				device->BindTexture(IGLDevice::Texture2D, colorBuffer.GetTexture());
@@ -822,7 +826,12 @@ namespace spades {
 					device->BindTexture(IGLDevice::Texture2D, waveTextures[2]);
 					waveTextureUnif3.SetValue(5);
 					
-					shadowShader(renderer, prg, 6);
+					// mirror
+					device->ActiveTexture(6);
+					device->BindTexture(IGLDevice::Texture2D, renderer->GetFramebufferManager()->GetMirrorTexture());
+					mirrorTexture.SetValue(6);
+					
+					shadowShader(renderer, prg, 7);
 				}else{
 					SPAssert(false);
 				}

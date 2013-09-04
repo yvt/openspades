@@ -31,6 +31,7 @@ SPADES_SETTING(r_colorBits, "");  // TOOD: use this value
 SPADES_SETTING(r_srgb, "0");
 SPADES_SETTING(r_highPrec, "1");
 SPADES_SETTING(r_blitFramebuffer, "1");
+SPADES_SETTING(r_water, "2");
 
 namespace spades {
 	namespace draw {
@@ -128,6 +129,7 @@ namespace spades {
 					if(status != IGLDevice::FramebufferComplete) {
 						RaiseFBStatusError(status);
 					}
+					fbInternalFormat = IGLDevice::SRGB8Alpha;
 					SPLog("MSAA Framebuffer Allocated");
 				}else{
 					try{
@@ -150,6 +152,7 @@ namespace spades {
 						if(status != IGLDevice::FramebufferComplete) {
 							RaiseFBStatusError(status);
 						}
+						fbInternalFormat = IGLDevice::RGB10A2;
 						SPLog("MSAA Framebuffer Allocated");
 						
 					}catch(...){
@@ -171,6 +174,7 @@ namespace spades {
 						if(status != IGLDevice::FramebufferComplete) {
 							RaiseFBStatusError(status);
 						}
+						fbInternalFormat = IGLDevice::RGBA8;
 						SPLog("MSAA Framebuffer Allocated");
 					}
 				}
@@ -256,6 +260,7 @@ namespace spades {
 				if(status != IGLDevice::FramebufferComplete) {
 					RaiseFBStatusError(status);
 				}
+				fbInternalFormat = IGLDevice::SRGB8Alpha;
 				SPLog("Framebuffer Created");
 			}else{
 				try{
@@ -294,6 +299,7 @@ namespace spades {
 					if(status != IGLDevice::FramebufferComplete) {
 						RaiseFBStatusError(status);
 					}
+					fbInternalFormat = IGLDevice::RGB10A2;
 					SPLog("Framebuffer Created");
 				}catch(...){
 					SPLog("Texture creation failed: trying with RGB8A8");
@@ -329,9 +335,55 @@ namespace spades {
 					if(status != IGLDevice::FramebufferComplete) {
 						RaiseFBStatusError(status);
 					}
+					fbInternalFormat = IGLDevice::RGBA8;
 					SPLog("Framebuffer Created");
 				}
 			}
+			
+			if((int)r_water >= 2) {
+				SPLog("Creating Mirror framebuffer");
+				mirrorFramebuffer = dev->GenFramebuffer();
+				dev->BindFramebuffer(IGLDevice::Framebuffer,
+									 mirrorFramebuffer);
+				
+			
+				mirrorColorTexture = dev->GenTexture();
+				dev->BindTexture(IGLDevice::Texture2D,
+								 mirrorColorTexture);
+				SPLog("Creating Mirror texture");
+				dev->TexImage2D(IGLDevice::Texture2D,
+								0,
+								fbInternalFormat,
+								dev->ScreenWidth(),
+								dev->ScreenHeight(),
+								0,
+								IGLDevice::RGBA,
+								IGLDevice::UnsignedByte, NULL);
+				SPLog("Color Buffer Allocated");
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureMagFilter,
+								  IGLDevice::Linear);
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureMinFilter,
+								  IGLDevice::Linear);
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureWrapS,
+								  IGLDevice::ClampToEdge);
+				dev->TexParamater(IGLDevice::Texture2D,
+								  IGLDevice::TextureWrapT,
+								  IGLDevice::ClampToEdge);
+				
+				dev->FramebufferTexture2D(IGLDevice::Framebuffer,
+										  IGLDevice::ColorAttachment0,
+										  IGLDevice::Texture2D,
+										  mirrorColorTexture, 0);
+				
+				IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+				if(status != IGLDevice::FramebufferComplete) {
+					RaiseFBStatusError(status);
+				}
+				SPLog("Mirror Framebuffer Created");
+			} // (int)r_water >= 2
 			
 			// add render buffer as a registered buffer
 			Buffer buf;
@@ -452,6 +504,71 @@ namespace spades {
 			}
 			
 			return handle;
+		}
+		
+		void GLFramebufferManager::CopyToMirrorTexture() {
+			SPADES_MARK_FUNCTION();
+			int w = device->ScreenWidth();
+			int h = device->ScreenHeight();
+			if(useMultisample){
+				// downsample
+				if(r_blitFramebuffer){
+					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
+											multisampledFramebuffer);
+					device->BindFramebuffer(IGLDevice::DrawFramebuffer,
+											mirrorFramebuffer);
+					device->BlitFramebuffer(0, 0, w, h,
+											0, 0, w, h,
+											IGLDevice::ColorBufferBit,
+											IGLDevice::Nearest);
+					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
+											0);
+					device->BindFramebuffer(IGLDevice::DrawFramebuffer,
+											0);
+				}else{
+					device->BindFramebuffer(IGLDevice::Framebuffer,
+											multisampledFramebuffer);
+					device->BindTexture(IGLDevice::Texture2D, mirrorColorTexture);
+					device->CopyTexSubImage2D(IGLDevice::Texture2D,
+											  0, 0, 0, 0, 0,
+											  w, h);
+				}
+			}else{
+				// copy
+				if(r_blitFramebuffer){
+					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
+											renderFramebuffer);
+					device->BindFramebuffer(IGLDevice::DrawFramebuffer,
+											mirrorFramebuffer);
+					device->BlitFramebuffer(0, 0, w, h,
+											0, 0, w, h,
+											IGLDevice::ColorBufferBit,
+											IGLDevice::Nearest);
+					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
+											0);
+					device->BindFramebuffer(IGLDevice::DrawFramebuffer,
+											0);
+				}else{
+					device->BindFramebuffer(IGLDevice::Framebuffer,
+											renderFramebuffer);
+					device->BindTexture(IGLDevice::Texture2D, mirrorColorTexture);
+					device->CopyTexSubImage2D(IGLDevice::Texture2D,
+											  0, 0, 0, 0, 0,
+											  w, h);
+				}
+			}
+			
+			// restore framebuffer
+			if(useMultisample){
+				// ---- multisampled
+				device->BindFramebuffer(IGLDevice::Framebuffer,
+										multisampledFramebuffer);
+			}else {
+				// ---- single sampled
+				device->BindFramebuffer(IGLDevice::Framebuffer,
+										renderFramebuffer);
+			}
+			
 		}
 		
 		GLFramebufferManager::BufferHandle GLFramebufferManager::StartPostProcessing() {

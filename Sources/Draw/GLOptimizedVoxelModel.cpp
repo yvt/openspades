@@ -849,7 +849,6 @@ namespace spades {
 		void GLOptimizedVoxelModel::RenderShadowMapPass(std::vector<client::ModelRenderParam> params) {
 			SPADES_MARK_FUNCTION();
 			
-			
 			device->Enable(IGLDevice::CullFace, true);
 			device->Enable(IGLDevice::DepthTest, true);
 			
@@ -937,6 +936,7 @@ namespace spades {
 		void GLOptimizedVoxelModel::RenderSunlightPass(std::vector<client::ModelRenderParam> params) {
 			SPADES_MARK_FUNCTION();
 			
+			bool mirror = renderer->IsRenderingMirror();
 			
 			device->ActiveTexture(0);
 			aoImage->Bind(IGLDevice::Texture2D);
@@ -1027,6 +1027,9 @@ namespace spades {
 			for(size_t i = 0; i < params.size(); i++){
 				const client::ModelRenderParam& param = params[i];
 				
+				if(mirror && param.depthHack)
+					continue;
+				
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
@@ -1090,6 +1093,8 @@ namespace spades {
 		
 		void GLOptimizedVoxelModel::RenderDynamicLightPass(std::vector<client::ModelRenderParam> params, std::vector<GLDynamicLight> lights) {
 			SPADES_MARK_FUNCTION();
+			
+			bool mirror = renderer->IsRenderingMirror();
 			
 			device->ActiveTexture(0);
 			aoImage->Bind(IGLDevice::Texture2D);
@@ -1163,6 +1168,9 @@ namespace spades {
 			
 			for(size_t i = 0; i < params.size(); i++){
 				const client::ModelRenderParam& param = params[i];
+				
+				if(mirror && param.depthHack)
+					continue;
 				
 				// frustrum cull
 				float rad = radius;

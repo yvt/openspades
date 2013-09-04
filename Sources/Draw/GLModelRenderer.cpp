@@ -101,6 +101,10 @@ namespace spades {
 					
 			}
 			
+			
+		}
+		
+		void GLModelRenderer::Clear() {
 			// last phase: clear scene
 			for(size_t i = 0; i < models.size(); i++){
 				models[i].model->renderId = -1;

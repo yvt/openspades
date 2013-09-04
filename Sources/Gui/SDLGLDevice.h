@@ -45,6 +45,7 @@ namespace spades {
 			virtual void DepthMask(bool);
 			virtual void ColorMask(bool r, bool g, bool b, bool a);
 			
+			virtual void FrontFace(Enum);
 			virtual void Enable(Enum state, bool);
 			
 			virtual Integer GetInteger(Enum type);

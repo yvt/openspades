@@ -32,6 +32,7 @@ uniform sampler2D texture;
 uniform sampler2D waveTexture1;
 uniform sampler2D waveTexture2;
 uniform sampler2D waveTexture3;
+uniform sampler2D mirrorTexture;
 uniform vec3 fogColor;
 uniform vec3 skyColor;
 uniform vec2 zNearFar;
@@ -155,9 +156,17 @@ void main() {
 	reflective *= reflective;
 	reflective += .03;
 	
+	// compute reflection color
+	vec2 scrPos2 = origScrPos;
+	//disp = vec2(dot(xToUV, wave.xy * vec2(1., -1.)),
+	//				dot(yToUV, wave.xy * vec2(-1., 1.)));
+	scrPos2 -= disp * scale * displaceScale * 4.;
+	vec3 refl = texture2D(mirrorTexture, scrPos2).xyz;
+	refl *= refl; // linearize
+	
 	// fresnel refrection to sky
 	gl_FragColor.xyz = mix(gl_FragColor.xyz,
-						   mix(skyColor * reflective * .6,
+						   mix(refl * reflective,
 							   fogColor, fogDensity),
 						   reflective);
 	

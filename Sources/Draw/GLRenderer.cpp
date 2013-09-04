@@ -257,7 +257,7 @@ namespace spades {
 		}
 		
 		Vector3 GLRenderer::GetFogColorForSolidPass() {
-			if(r_fogShadow && mapShadowRenderer){
+			if(r_fogShadow && mapShadowRenderer && !renderingMirror){
 				return MakeVector3(0, 0, 0);
 			}else{
 				return GetFogColor();
@@ -358,7 +358,6 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			sceneDef = def;
-			fbManager->PrepareSceneRendering();
 			
 			sceneUsedInThisFrame = true;
 			
@@ -366,6 +365,7 @@ namespace spades {
 			debugLines.clear();
 			spriteRenderer->Clear();
 			longSpriteRenderer->Clear();
+			modelRenderer->Clear();
 			lights.clear();
 			
 			device->DepthMask(true);
@@ -379,18 +379,7 @@ namespace spades {
 			if(r_srgb)
 				device->Enable(IGLDevice::FramebufferSRGB, true);
 			
-			device->ClearDepth(1.f);
-			Vector3 bgCol = GetFogColorForSolidPass();
-			device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
-			device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
-			device->DepthRange(0.f, 1.f);
-			device->Enable(IGLDevice::Blend, false);
-			//device-(IGLDevice::Front);
-			
-			device->Enable(IGLDevice::DepthTest, true);
-			device->Enable(IGLDevice::Texture2D, true);
-			
-			
+						
 		}
 		
 #pragma mark - Add Scene Objects
@@ -515,41 +504,11 @@ namespace spades {
 			
 		}
 		
-		void GLRenderer::EndScene() {
-			SPADES_MARK_FUNCTION();
+		void GLRenderer::RenderObjects() {
 			
-			GLProfiler rootProfiler(device, "EndScene");
-			
-			float dt = (float)(sceneDef.time - lastTime) / 1000.f;
-			if(dt > .1f) dt = .1f;
-			if(dt < 0.f) dt = 0.f;
-			
-			{
-				GLProfiler profiler(device, "Uploading Software Rendered Stuff");
-				if(mapShadowRenderer)
-					mapShadowRenderer->Update();
-				if(ambientShadowRenderer){
-					ambientShadowRenderer->Update();
-				}
-				if(radiosityRenderer){
-					radiosityRenderer->Update();
-				}
-			}
-			
-			if(r_srgb)
-				device->Enable(IGLDevice::FramebufferSRGB, false);
-			
-			// build shadowmap
-			{
-				GLProfiler profiler(device, "Shadow Map Pass");
-				device->Enable(IGLDevice::DepthTest, true);
-				device->DepthFunc(IGLDevice::Less);
-				if(shadowMapRenderer)
-					shadowMapRenderer->Render();
-			}
-			
-			if(r_srgb)
-				device->Enable(IGLDevice::FramebufferSRGB, true);
+			device->Enable(IGLDevice::DepthTest, true);
+			device->Enable(IGLDevice::Texture2D, true);
+			device->Enable(IGLDevice::Blend, false);
 			
 			// draw opaque objects, and do dynamic lighting
 			{
@@ -590,7 +549,102 @@ namespace spades {
 				device->DepthFunc(IGLDevice::Less);
 				RenderDebugLines();
 			}
+		}
+		
+		void GLRenderer::EndScene() {
+			SPADES_MARK_FUNCTION();
 			
+			GLProfiler rootProfiler(device, "EndScene");
+			
+			float dt = (float)(sceneDef.time - lastTime) / 1000.f;
+			if(dt > .1f) dt = .1f;
+			if(dt < 0.f) dt = 0.f;
+			
+			renderingMirror = false;
+			
+			{
+				GLProfiler profiler(device, "Uploading Software Rendered Stuff");
+				if(mapShadowRenderer)
+					mapShadowRenderer->Update();
+				if(ambientShadowRenderer){
+					ambientShadowRenderer->Update();
+				}
+				if(radiosityRenderer){
+					radiosityRenderer->Update();
+				}
+			}
+			
+			if(r_srgb)
+				device->Enable(IGLDevice::FramebufferSRGB, false);
+			
+			// build shadowmap
+			{
+				GLProfiler profiler(device, "Shadow Map Pass");
+				device->Enable(IGLDevice::DepthTest, true);
+				device->DepthFunc(IGLDevice::Less);
+				if(shadowMapRenderer)
+					shadowMapRenderer->Render();
+			}
+			
+			
+			fbManager->PrepareSceneRendering();
+			
+			if(r_srgb)
+				device->Enable(IGLDevice::FramebufferSRGB, true);
+			
+			Vector3 bgCol;
+			
+			device->ClearDepth(1.f);
+			device->DepthRange(0.f, 1.f);
+			
+			if((int)r_water >= 2) {
+				// for Water 2 (r_water >= 2), we need to render
+				// reflection
+				try{
+					device->FrontFace(IGLDevice::CCW);
+					renderingMirror = true;
+					
+					bgCol = GetFogColorForSolidPass();
+					device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
+					device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+					
+					// save normal matrices
+					Matrix4 view;
+					view = viewMatrix * Matrix4::Translate(0, 0, 63);
+					view = view * Matrix4::Scale(1, 1, -1);
+					view = view * Matrix4::Translate(0, 0, -63);
+					
+					std::swap(view, viewMatrix);
+					projectionViewMatrix = projectionMatrix * viewMatrix;
+					
+					// render scene
+					GLProfiler profiler(device, "Mirrored Objects");
+					RenderObjects();
+					
+					// restore matrices
+					std::swap(view, viewMatrix);
+					projectionViewMatrix = projectionMatrix * viewMatrix;
+					
+					fbManager->CopyToMirrorTexture();
+					
+					renderingMirror = false;
+				}catch(...){
+					renderingMirror = false;
+					throw;
+				}
+			}
+			
+			bgCol = GetFogColorForSolidPass();
+			device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
+			device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+			
+			device->FrontFace(IGLDevice::CW);
+			
+			{
+				GLProfiler profiler(device, "Non-mirrored Objects");
+				RenderObjects();
+			}
+				
 			device->Enable(IGLDevice::CullFace, false);
 			if(r_water && waterRenderer){
 				GLProfiler profiler(device, "Water");
@@ -925,6 +979,19 @@ namespace spades {
 		}
 		
 		bool GLRenderer::BoxFrustrumCull(const AABB3& box) {
+			if(IsRenderingMirror()) {
+				// reflect
+				AABB3 bx = box;
+				std::swap(bx.min.z, bx.max.z);
+				bx.min.z = 63.f * 2.f - bx.min.z;
+				bx.max.z = 63.f * 2.f - bx.max.z;
+				return PlaneCullTest(frustrum[0], bx) &&
+				PlaneCullTest(frustrum[1], bx) &&
+				PlaneCullTest(frustrum[2], bx) &&
+				PlaneCullTest(frustrum[3], bx) &&
+				PlaneCullTest(frustrum[4], bx) &&
+				PlaneCullTest(frustrum[5], bx);
+			}
 			return PlaneCullTest(frustrum[0], box) &&
 			PlaneCullTest(frustrum[1], box) &&
 			PlaneCullTest(frustrum[2], box) &&
@@ -933,7 +1000,17 @@ namespace spades {
 			PlaneCullTest(frustrum[5], box);
 		}
 		bool GLRenderer::SphereFrustrumCull(const Vector3& center,
-												float radius) {
+											float radius) {
+			if(IsRenderingMirror()) {
+				// reflect
+				Vector3 vx = center;
+				vx.z = 63.f * 2.f - vx.z;
+				for(int i = 0; i < 6; i++){
+					if(frustrum[i].GetDistanceTo(vx) < -radius)
+						return false;
+				}
+				return true;
+			}
 			for(int i = 0; i < 6; i++){
 				if(frustrum[i].GetDistanceTo(center) < -radius)
 					return false;
