@@ -61,7 +61,7 @@ namespace spades {
 										   i % numChunkDepth);
 			
 			
-			if(r_physicalSolidLighting)
+			if(r_physicalLighting)
 				basicProgram = renderer->RegisterProgram("Shaders/BasicBlockPhys.program");
 			else
 				basicProgram = renderer->RegisterProgram("Shaders/BasicBlock.program");

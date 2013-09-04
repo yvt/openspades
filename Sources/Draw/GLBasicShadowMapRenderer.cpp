@@ -26,7 +26,7 @@
 #include "../Core/Settings.h"
 #include "GLProfiler.h"
 
-SPADES_SETTING(r_shadowMapSize, "2048");
+SPADES_SETTING(r_shadowMapSize, "1024");
 
 namespace spades {
 	namespace draw {
