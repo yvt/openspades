@@ -56,10 +56,10 @@ namespace spades{
 			
 			device->BindTexture(IGLDevice::Texture2D, coarseTexture);
 			device->TexImage2D(IGLDevice::Texture2D, 0,
-							   IGLDevice::RG,
+							   IGLDevice::RGBA8,
 							   map->Width() / CoarseSize,
 							   map->Height() / CoarseSize,
-							   0, IGLDevice::RG, IGLDevice::UnsignedByte,
+							   0, IGLDevice::BGRA, IGLDevice::UnsignedByte,
 							   NULL);
 			device->TexParamater(IGLDevice::Texture2D,
 								 IGLDevice::TextureMagFilter,
@@ -183,7 +183,7 @@ namespace spades{
 							bmp += w;
 						}
 						
-						uint16_t out = minValue;
+						uint32_t out = minValue << 16;
 						out |= maxValue << 8;
 						coarseBitmap[i] = out;
 					
@@ -202,7 +202,7 @@ namespace spades{
 										  0, 0, 0,
 										  w >> CoarseBits,
 										  h >> CoarseBits,
-										  IGLDevice::RG,
+										  IGLDevice::BGRA,
 										  IGLDevice::UnsignedByte,
 										  coarseBitmap.data());
 				}

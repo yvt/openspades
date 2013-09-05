@@ -52,7 +52,7 @@ namespace spades {
 			std::vector<uint32_t> updateBitmap;
 			
 			std::vector<uint32_t> bitmap;
-			std::vector<uint16_t> coarseBitmap;
+			std::vector<uint32_t> coarseBitmap;
 			
 			uint32_t GeneratePixel(int x, int y);
 			void MarkUpdate(int x, int y);
