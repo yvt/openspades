@@ -1,5 +1,6 @@
 /*
  Copyright (c) 2013 yvt
+ based on code of pysnip (c) Mathias Kaerlev 2011-2012.
  
  This file is part of OpenSpades.
  
