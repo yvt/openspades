@@ -84,6 +84,8 @@ namespace spades {
 			virtual void EndQuery(Enum target);
 			virtual UInteger GetQueryObjectUInteger(UInteger query,
 													Enum pname);
+			virtual void BeginConditionalRender(UInteger query, Enum);
+			virtual void EndConditionalRender();
 			
 			virtual UInteger GenTexture();
 			virtual void DeleteTexture(UInteger);

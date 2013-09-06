@@ -109,6 +109,12 @@ namespace spades {
 				QueryResult,
 				QueryResultAvailable,
 				
+				// Conditional Render
+				QueryWait,
+				QueryNoWait,
+				QueryByRegionWait,
+				QueryByRegionNoWait,
+				
 				// Buffer target
 				ArrayBuffer,
 				ElementArrayBuffer,
@@ -297,6 +303,8 @@ namespace spades {
 			virtual void EndQuery(Enum target) = 0;
 			virtual UInteger GetQueryObjectUInteger(UInteger query,
 										   Enum pname) = 0;
+			virtual void BeginConditionalRender(UInteger query, Enum mode) = 0;
+			virtual void EndConditionalRender() = 0;
 			
 			virtual void *MapBuffer(Enum target, Enum access) = 0;
 			virtual void UnmapBuffer(Enum target) = 0;

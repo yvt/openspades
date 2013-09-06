@@ -675,6 +675,56 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 			return val;
 		}
 		
+		void SDLGLDevice::BeginConditionalRender(UInteger query, Enum mode) {
+			SPADES_MARK_FUNCTION_DEBUG();
+			GLenum md;
+			switch(mode){
+				case draw::IGLDevice::QueryWait:
+					md = GL_QUERY_WAIT;
+					break;
+				case draw::IGLDevice::QueryNoWait:
+					md = GL_QUERY_NO_WAIT;
+					break;
+				case draw::IGLDevice::QueryByRegionWait:
+					md = GL_QUERY_BY_REGION_WAIT;
+					break;
+				case draw::IGLDevice::QueryByRegionNoWait:
+					md = GL_QUERY_BY_REGION_NO_WAIT;
+					break;
+				default:
+					SPInvalidEnum("mode", mode);
+			}
+			
+#if GLEW
+			if(glBeginConditionalRender)
+				glBeginConditionalRender(query, md);
+			else if(glBeginConditionalRenderNV)
+				glBeginConditionalRenderNV(query, md);
+			else
+				ReportMissingFunc("glBeginConditionalRender");
+#else
+			CheckExistence(glBeginConditionalRender);
+			glBeginConditionalRender(query, md);
+#endif
+			CheckError();
+		}
+		
+		void SDLGLDevice::EndConditionalRender() {
+			SPADES_MARK_FUNCTION_DEBUG();
+#if GLEW
+			if(glEndConditionalRender)
+				glEndConditionalRender();
+			else if(glEndConditionalRenderNV)
+				glEndConditionalRenderNV();
+			else
+				ReportMissingFunc("glEndConditionalRender");
+#else
+			CheckExistence(glEndConditionalRender);
+			glEndConditionalRender();
+#endif
+			CheckError();
+		}
+		
 		IGLDevice::UInteger SDLGLDevice::GenTexture() {
 			GLuint i;
 			CheckExistence(glGenTextures);

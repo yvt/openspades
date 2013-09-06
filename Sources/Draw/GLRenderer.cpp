@@ -634,12 +634,13 @@ namespace spades {
 				// for Water 2 (r_water >= 2), we need to render
 				// reflection
 				try{
+					
+					IGLDevice::UInteger occQu = waterRenderer ? waterRenderer->GetOcclusionQuery() : 0;
+					
 					device->FrontFace(IGLDevice::CCW);
 					renderingMirror = true;
 					
-					bgCol = GetFogColorForSolidPass();
-					device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
-					device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+					
 					
 					// save normal matrices
 					Matrix4 view;
@@ -649,6 +650,16 @@ namespace spades {
 					
 					std::swap(view, viewMatrix);
 					projectionViewMatrix = projectionMatrix * viewMatrix;
+					
+					if(occQu){
+						fbManager->ClearMirrorTexture(GetFogColor());
+						device->BeginConditionalRender(occQu, IGLDevice::QueryWait);
+					}
+					
+					bgCol = GetFogColorForSolidPass();
+					device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
+					device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+					
 					
 					// render scene
 					GLProfiler profiler(device, "Mirrored Objects");
@@ -671,9 +682,11 @@ namespace spades {
 						fbManager->CopyToMirrorTexture(handle.GetFramebuffer());
 					}else{
 						fbManager->CopyToMirrorTexture();
-						
 					}
 					
+					if(occQu) {
+						device->EndConditionalRender();
+					}
 					
 					renderingMirror = false;
 				}catch(...){

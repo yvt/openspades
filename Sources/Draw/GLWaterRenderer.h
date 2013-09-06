@@ -62,6 +62,8 @@ namespace spades {
 			IGLDevice::UInteger tempFramebuffer;
 			IGLDevice::UInteger tempDepthTexture;
 			
+			IGLDevice::UInteger occlusionQuery;
+			
 			GLProgram *program;
 			
 			void BuildVertices();
@@ -78,6 +80,9 @@ namespace spades {
 			
 			void GameMapChanged(int x, int y, int z, client::GameMap *);
 			
+			IGLDevice::UInteger GetOcclusionQuery() {
+				return occlusionQuery;
+			}
 		};
 	}
 }

@@ -506,6 +506,26 @@ namespace spades {
 			return handle;
 		}
 		
+		void GLFramebufferManager::ClearMirrorTexture(spades::Vector3 bgCol) {
+			device->BindFramebuffer(IGLDevice::Framebuffer,
+									mirrorFramebuffer);
+			device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
+			device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
+			device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+			
+			
+			// restore framebuffer
+			if(useMultisample){
+				// ---- multisampled
+				device->BindFramebuffer(IGLDevice::Framebuffer,
+										multisampledFramebuffer);
+			}else {
+				// ---- single sampled
+				device->BindFramebuffer(IGLDevice::Framebuffer,
+										renderFramebuffer);
+			}
+		}
+		
 		void GLFramebufferManager::CopyToMirrorTexture(IGLDevice::UInteger fb) {
 			SPADES_MARK_FUNCTION();
 			int w = device->ScreenWidth();

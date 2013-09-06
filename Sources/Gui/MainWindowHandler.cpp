@@ -497,6 +497,36 @@ void MainWindow::CheckGLCapability() {
 			msg += "</font><br>";
 		}
 		
+		if(extensions.find("GL_ARB_occlusion_query") ==
+		   std::string::npos) {
+			if((int)r_water >= 2) {
+				r_water = 1;
+				SPLog("Disabling Water 2: no GL_ARB_occlusion_query");
+			}
+			msg += "GL_ARB_occlusion_query is NOT SUPPORTED<br>";
+			msg += "&nbsp;&nbsp;Water 2 is disabled (3 required)<br>";
+			msg += "&nbsp;&nbsp;(Shader Effects is limited to Medium)<br>";
+		}else{
+			msg += "<font color=#007f00>";
+			msg += "GL_ARB_occlusion_query is supported";
+			msg += "</font><br>";
+		}
+		
+		if(extensions.find("GL_NV_conditional_render") ==
+		   std::string::npos) {
+			if((int)r_water >= 2) {
+				r_water = 1;
+				SPLog("Disabling Water 2: no GL_NV_conditional_render");
+			}
+			msg += "GL_NV_conditional_render is NOT SUPPORTED<br>";
+			msg += "&nbsp;&nbsp;Water 2 is disabled (3 required)<br>";
+			msg += "&nbsp;&nbsp;(Shader Effects is limited to Medium)<br>";
+		}else{
+			msg += "<font color=#007f00>";
+			msg += "GL_NV_conditional_render is supported";
+			msg += "</font><br>";
+		}
+		
 		msg += "<br>&nbsp;<br>";
 		msg += "<b>Miscellaneous:</b><br>";
 		char buf[256];

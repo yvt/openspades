@@ -620,6 +620,8 @@ namespace spades {
 					
 			}
 			
+			occlusionQuery = 0;
+			
 		}
 		
 		struct GLWaterRenderer::Vertex {
@@ -677,6 +679,9 @@ namespace spades {
 			device->DeleteTexture(tempDepthTexture);
 			device->DeleteTexture(texture);
 			
+			if(occlusionQuery)
+				device->DeleteQuery(occlusionQuery);
+			
 			for(size_t i = 0; i < waveTextures.size(); i++) {
 				device->DeleteTexture(waveTextures[i]);
 				
@@ -690,6 +695,9 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			GLProfiler profiler(device, "Render");
+			
+			if(!occlusionQuery)
+				occlusionQuery = device->GenQuery();
 			
 			GLColorBuffer colorBuffer;
 			
@@ -857,8 +865,14 @@ namespace spades {
 				device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 				
 				device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
+				
+				device->BeginQuery(IGLDevice::SamplesPassed,
+								   occlusionQuery);
+				
 				device->DrawElements(IGLDevice::Triangles, numIndices,
 									 IGLDevice::UnsignedInt, NULL);
+				
+				device->EndQuery(IGLDevice::SamplesPassed);
 				
 				device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
 				
