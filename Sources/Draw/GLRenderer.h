@@ -88,7 +88,7 @@ namespace spades {
 			GLAmbientShadowRenderer *ambientShadowRenderer;
 			GLRadiosityRenderer *radiosityRenderer;
 			
-			GLCameraBlurFilter cameraBlur;
+			GLCameraBlurFilter *cameraBlur;
 			
 			// used when r_srgb = 1
 			IGLDevice::UInteger lastColorBufferTexture;

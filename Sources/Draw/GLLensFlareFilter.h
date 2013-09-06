@@ -25,8 +25,10 @@
 namespace spades {
 	namespace draw {
 		class GLRenderer;
+		class GLProgram;
 		class GLLensFlareFilter {
 			GLRenderer *renderer;
+			GLProgram *blurProgram, *scannerProgram, *drawProgram;
 			GLColorBuffer Blur(GLColorBuffer, float spread = 1.f);
 		public:
 			GLLensFlareFilter(GLRenderer *);

@@ -26,7 +26,9 @@
 namespace spades {
 	namespace draw {
 		class GLRenderer;
+		class GLProgram;
 		class GLCameraBlurFilter {
+			GLProgram *program;
 			GLRenderer *renderer;
 			Matrix4 prevMatrix;
 		public:

@@ -25,6 +25,7 @@
 #include "../Core/FileManager.h"
 #include "../Core/IStream.h"
 #include "../Core/Debug.h"
+#include "GLRenderer.h"
 
 namespace spades {
 	namespace draw {
@@ -71,7 +72,32 @@ namespace spades {
 			return GLImage::FromBitmap(bmp, device);
 		}
 		
-		
+		// draw all imaegs so that all textures are resident
+		// TODO: call this after all images are loaded
+		void GLImageManager::DrawAllImages(GLRenderer *r) {
+			if(images.empty())
+				return;
+			int count = (int)images.size();
+			int w = (int)ceil(sqrt((double)count)) + 1;
+			int h = (count + w - 1) / w;
+			float scrW = r->ScreenWidth();
+			float scrH = r->ScreenHeight();
+			
+			int x = 0, y = 0;
+			for(std::map<std::string, GLImage *>::iterator it = images.begin(); it != images.end(); it++){
+				GLImage *img = it->second;
+				
+				r->DrawImage(img, AABB2(scrW * (float)y / (float)w,
+										scrH * (float)y / (float)h,
+										1.f / (float)w,
+										1.f / (float)h));
+				
+				x++;
+				if(x >= w){
+					x = 0; y++;
+				}
+			}
+		}
 	}
 }
 

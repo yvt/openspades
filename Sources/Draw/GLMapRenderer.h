@@ -76,6 +76,8 @@ namespace spades {
 			GLMapRenderer(client::GameMap *, GLRenderer *);
 			virtual ~GLMapRenderer();
 			
+			static void PreloadShaders(GLRenderer *);
+			
 			void GameMapChanged(int x, int y, int z, client::GameMap *);
 			
 			client::GameMap *GetMap() { return gameMap; }

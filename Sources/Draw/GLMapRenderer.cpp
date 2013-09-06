@@ -39,6 +39,16 @@ SPADES_SETTING(r_physicalLighting, "0");
 
 namespace spades {
 	namespace draw {
+		void GLMapRenderer::PreloadShaders(spades::draw::GLRenderer *renderer) {
+			if(r_physicalLighting)
+				renderer->RegisterProgram("Shaders/BasicBlockPhys.program");
+			else
+				renderer->RegisterProgram("Shaders/BasicBlock.program");
+			renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
+			renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
+			renderer->RegisterImage("Textures/detail.jpg");
+		}
+		
 		GLMapRenderer::GLMapRenderer(client::GameMap *m, GLRenderer *r):
 		gameMap(m), renderer(r) {
 			SPADES_MARK_FUNCTION();

@@ -32,6 +32,12 @@
 
 namespace spades {
 	namespace draw {
+		void GLVoxelModel::PreloadShaders(spades::draw::GLRenderer *renderer) {
+			renderer->RegisterProgram("Shaders/VoxelModel.program");
+			renderer->RegisterProgram("Shaders/VoxelModelDynamicLit.program");
+			renderer->RegisterProgram("Shaders/VoxelModelShadowMap.program");
+			renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
+		}
 		GLVoxelModel::GLVoxelModel(VoxelModel *m,
 								   GLRenderer *r){
 			SPADES_MARK_FUNCTION();

@@ -35,13 +35,15 @@ namespace spades {
 	namespace draw {
 		GLLensFlareFilter::GLLensFlareFilter(GLRenderer *renderer):
 		renderer(renderer){
-			
+			blurProgram = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
+			scannerProgram = renderer->RegisterProgram("Shaders/LensFlare/Scanner.program");
+			drawProgram = renderer->RegisterProgram("Shaders/LensFlare/Draw.program");
 		}
 		
 		GLColorBuffer GLLensFlareFilter::Blur(GLColorBuffer buffer,
 											  float spread) {
 			// do gaussian blur
-			GLProgram *program = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
+			GLProgram *program = blurProgram;
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 			int w = buffer.GetWidth();
@@ -121,7 +123,7 @@ namespace spades {
 			{
 				GLProfiler measure(dev, "Occlusion Test");
 				
-				GLProgram *scanner = renderer->RegisterProgram("Shaders/LensFlare/Scanner.program");
+				GLProgram *scanner = scannerProgram;
 				static GLProgramAttribute positionAttribute("positionAttribute");
 				static GLProgramUniform scanRange("scanRange");
 				static GLProgramUniform drawRange("drawRange");
@@ -195,7 +197,7 @@ namespace spades {
 			{
 				GLProfiler measure(dev, "Draw");
 				
-				GLProgram *draw = renderer->RegisterProgram("Shaders/LensFlare/Draw.program");
+				GLProgram *draw = drawProgram;
 				static GLProgramAttribute positionAttribute("positionAttribute");
 				static GLProgramUniform drawRange("drawRange");
 				static GLProgramUniform color("color");

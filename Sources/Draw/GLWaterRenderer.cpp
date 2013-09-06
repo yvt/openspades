@@ -499,6 +499,14 @@ namespace spades {
 		
 #pragma mark - Water Renderer
 		
+		void GLWaterRenderer::PreloadShaders(spades::draw::GLRenderer *renderer) {
+			if((int)r_water >= 2)
+				renderer->RegisterProgram("Shaders/Water2.program");
+			else
+				renderer->RegisterProgram("Shaders/Water.program");
+			
+		}
+		
 		GLWaterRenderer::GLWaterRenderer(GLRenderer *renderer, client::GameMap *map):
 		renderer(renderer),
 		device(renderer->GetGLDevice()),
@@ -508,7 +516,6 @@ namespace spades {
 				program = renderer->RegisterProgram("Shaders/Water2.program");
 			else
 				program = renderer->RegisterProgram("Shaders/Water.program");
-			programDepth = renderer->RegisterProgram("Shaders/WaterDepth.program");
 			BuildVertices();
 			
 			tempDepthTexture = device->GenTexture();

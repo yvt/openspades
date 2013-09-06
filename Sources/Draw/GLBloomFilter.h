@@ -25,7 +25,9 @@
 namespace spades {
 	namespace draw {
 		class GLRenderer;
+		class GLProgram;
 		class GLBloomFilter {
+			GLProgram *thru;
 			GLRenderer *renderer;
 		public:
 			GLBloomFilter(GLRenderer *);

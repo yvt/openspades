@@ -87,6 +87,8 @@ namespace spades {
 			GLOptimizedVoxelModel(VoxelModel *, GLRenderer *r);
 			virtual ~GLOptimizedVoxelModel();
 			
+			static void PreloadShaders(GLRenderer *);
+			
 			virtual void RenderShadowMapPass(std::vector<client::ModelRenderParam> params);
 			
 			virtual void RenderSunlightPass(std::vector<client::ModelRenderParam> params);
