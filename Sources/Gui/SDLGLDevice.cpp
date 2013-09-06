@@ -550,6 +550,131 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 			CheckError();
 		}
 		
+		IGLDevice::UInteger SDLGLDevice::GenQuery() {
+			SPADES_MARK_FUNCTION_DEBUG();
+			GLuint val;
+#if GLEW
+			if(glGenQueries)
+				glGenQueries(1, &val);
+			else if(glGenQueriesARB)
+				glGenQueriesARB(1, &val);
+			else
+				ReportMissingFunc("glGenQueries");
+#else
+			CheckExistence(glGenQueries);
+			glGenQueries(1, &val);
+#endif
+			CheckError();
+			return val;
+		}
+		
+		void SDLGLDevice::DeleteQuery(UInteger query) {
+			SPADES_MARK_FUNCTION_DEBUG();
+#if GLEW
+			if(glDeleteQueries)
+				glDeleteQueries(1, &query);
+			else if(glDeleteQueriesARB)
+				glDeleteQueriesARB(1, &query);
+			else
+				ReportMissingFunc("glDeleteQueries");
+#else
+			CheckExistence(glDeleteQueries);
+			glDeleteQueries(1, &query);
+#endif
+			CheckError();
+		}
+		
+		static GLenum parseQueryTarget(IGLDevice::Enum target){
+			SPADES_MARK_FUNCTION_DEBUG();
+			switch(target){
+				case IGLDevice::SamplesPassed:
+					return GL_SAMPLES_PASSED;
+				case IGLDevice::AnySamplesPassed:
+					return GL_ANY_SAMPLES_PASSED;
+				default:
+					SPInvalidEnum("target", target);
+			}
+		}
+		
+		void SDLGLDevice::BeginQuery(Enum target, UInteger query){
+			SPADES_MARK_FUNCTION_DEBUG();
+#if GLEW
+			if(glBeginQuery)
+				glBeginQuery(parseQueryTarget(target), query);
+			else if(glBeginQueryARB)
+				glBeginQueryARB(parseQueryTarget(target), query);
+			else
+				ReportMissingFunc("glBeginQuery");
+#else
+			CheckExistence(glBeginQuery);
+			glBeginQuery(parseQueryTarget(target), query);
+#endif
+			CheckError();
+		}
+		
+		void SDLGLDevice::EndQuery(Enum target) {
+			SPADES_MARK_FUNCTION_DEBUG();
+#if GLEW
+			if(glEndQuery)
+				glEndQuery(parseQueryTarget(target));
+			else if(glEndQueryARb)
+				glEndQueryARb(parseQueryTarget(target));
+			else
+				ReportMissingFunc("glBeginQuery");
+#else
+			CheckExistence(glEndQuery);
+			glEndQuery(parseQueryTarget(target));
+#endif
+			CheckError();
+		}
+		
+		IGLDevice::UInteger SDLGLDevice::GetQueryObjectUInteger(UInteger query, Enum pname) {
+			GLuint val;
+			SPADES_MARK_FUNCTION_DEBUG();
+			
+#if GLEW
+			if(glGetQueryObjectuiv){
+				switch(pname) {
+					case draw::IGLDevice::QueryResult:
+						glGetQueryObjectuiv(query, GL_QUERY_RESULT, &val);
+						break;
+					case draw::IGLDevice::QueryResultAvailable:
+						glGetQueryObjectuiv(query, GL_QUERY_RESULT_AVAILABLE, &val);
+						break;
+					default:
+						SPInvalidEnum("pname", pname);
+				}
+			}else if(glGetQueryObjectuivARB){
+				switch(pname) {
+					case draw::IGLDevice::QueryResult:
+						glGetQueryObjectuivARB(query, GL_QUERY_RESULT, &val);
+						break;
+					case draw::IGLDevice::QueryResultAvailable:
+						glGetQueryObjectuivARB(query, GL_QUERY_RESULT_AVAILABLE, &val);
+						break;
+					default:
+						SPInvalidEnum("pname", pname);
+				}
+			}else{
+				ReportMissingFunc("glGetQueryObjectuiv");
+			}
+#else
+			CheckExistence(glGetQueryObjectuiv);
+			switch(pname) {
+				case draw::IGLDevice::QueryResult:
+					glGetQueryObjectuiv(query, GL_QUERY_RESULT, &val);
+					break;
+				case draw::IGLDevice::QueryResultAvailable:
+					glGetQueryObjectuiv(query, GL_QUERY_RESULT_AVAILABLE, &val);
+					break;
+				default:
+					SPInvalidEnum("pname", pname);
+			}
+#endif
+			CheckError();
+			return val;
+		}
+		
 		IGLDevice::UInteger SDLGLDevice::GenTexture() {
 			GLuint i;
 			CheckExistence(glGenTextures);

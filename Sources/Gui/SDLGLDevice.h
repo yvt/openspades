@@ -78,6 +78,13 @@ namespace spades {
 									   Sizei size,
 									   const void *data);
 			
+			virtual UInteger GenQuery();
+			virtual void DeleteQuery(UInteger);
+			virtual void BeginQuery(Enum target, UInteger query);
+			virtual void EndQuery(Enum target);
+			virtual UInteger GetQueryObjectUInteger(UInteger query,
+													Enum pname);
+			
 			virtual UInteger GenTexture();
 			virtual void DeleteTexture(UInteger);
 			

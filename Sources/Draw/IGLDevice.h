@@ -102,6 +102,13 @@ namespace spades {
 				Back,
 				FrontAndBack,
 				
+				// Query Object
+				SamplesPassed,
+				AnySamplesPassed,
+				
+				QueryResult,
+				QueryResultAvailable,
+				
 				// Buffer target
 				ArrayBuffer,
 				ElementArrayBuffer,
@@ -283,6 +290,13 @@ namespace spades {
 									   Sizei offset,
 									   Sizei size,
 									   const void *data) = 0;
+			
+			virtual UInteger GenQuery() = 0;
+			virtual void DeleteQuery(UInteger) = 0;
+			virtual void BeginQuery(Enum target, UInteger query) = 0;
+			virtual void EndQuery(Enum target) = 0;
+			virtual UInteger GetQueryObjectUInteger(UInteger query,
+										   Enum pname) = 0;
 			
 			virtual void *MapBuffer(Enum target, Enum access) = 0;
 			virtual void UnmapBuffer(Enum target) = 0;
