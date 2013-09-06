@@ -1500,14 +1500,16 @@ namespace spades {
 						vibYaw += sinf(localFireVibration * (float)M_PI * 2.f) * 0.001f;
 						
 						// sprint bob
-						if(sprintState > 0.f){
+						{
 							float sp = SmoothStep(sprintState);
 							vibYaw += sinf(player->GetWalkAnimationProgress() * M_PI * 2.f) * 0.01f * sp;
-							roll -= sinf(player->GetWalkAnimationProgress() * M_PI * 2.f) * 0.005f * sp;
+							roll -= sinf(player->GetWalkAnimationProgress() * M_PI * 2.f) * 0.005f * (sp);
 							float p = cosf(player->GetWalkAnimationProgress() * M_PI * 2.f);
 							p = p * p; p *= p; p *= p; p *= p; 
 							vibPitch += p * 0.01f * sp;
 						}
+						
+						
 						
 						scale /= GetAimDownZoomScale();
 						
@@ -1742,6 +1744,30 @@ namespace spades {
 				float putdown = 1.f - toolRaiseState;
 				putdown *= putdown;
 				putdown = std::min(1.f, putdown * 1.5f);
+				
+				Vector3 viewWeaponOffset = this->viewWeaponOffset;
+				
+				// bobbing
+				{
+					float sp = 1.f - aimDownState;
+					sp *= .3f;
+					sp *= std::min(1.f, p->GetVelocty().GetLength() * 5.f);
+					viewWeaponOffset.x += sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.01f * sp;
+					float vl = cosf(p->GetWalkAnimationProgress() * M_PI * 2.f);
+					vl *= vl;
+					viewWeaponOffset.z += vl * 0.012f * sp;
+				}
+				
+				// slow pulse
+				{
+					float sp = 1.f - aimDownState;
+					float vl = sinf(world->GetTime() * 1.f);
+					
+					viewWeaponOffset.x += vl * 0.001f * sp;
+					viewWeaponOffset.y += vl * 0.0007f * sp;
+					viewWeaponOffset.z += vl * 0.003f * sp;
+				}
+				
 				if(p->GetTool() == Player::ToolSpade){
 					WeaponInput inp = p->GetWeaponInput();
 					Matrix4 mat = Matrix4::Scale(0.033f);
