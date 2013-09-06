@@ -4,6 +4,6 @@ CREDITS
 
 "yvt" - Most of the code
 "Dany0" - System profiler, ideas, etc.
-"learn-more" - CMake support, server browser, ideas
+"learn_more" - CMake support, server browser, ideas
 "iamgreaser" - AoS 0.76 protocol support
 "Ericson2314" - Better installation guide
