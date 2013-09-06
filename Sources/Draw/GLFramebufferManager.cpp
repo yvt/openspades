@@ -26,7 +26,7 @@
 #include "../Core/Exception.h"
 
 SPADES_SETTING(r_multisamples, "0");
-SPADES_SETTING(r_depthBits, "24"); // TODO: use this value
+SPADES_SETTING(r_depthBits, ""); // TODO: use this value
 SPADES_SETTING(r_colorBits, "");  // TOOD: use this value
 SPADES_SETTING(r_srgb, "0");
 SPADES_SETTING(r_highPrec, "1");
