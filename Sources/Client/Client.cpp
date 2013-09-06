@@ -2329,6 +2329,20 @@ namespace spades {
 				if(inp.crouch){
 					Matrix4 leg1 = Matrix4::Translate(-0.25f, 0.2f, -0.1f);
 					Matrix4 leg2 = Matrix4::Translate( 0.25f, 0.2f, -0.1f);
+					
+					float ang = sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
+					float walkVel = Vector3::Dot(p->GetVelocty(), p->GetFront2D()) * 4.f;
+					leg1 = leg1 * Matrix4::Rotate(MakeVector3(1,0,0),
+												  ang * walkVel);
+					leg2 = leg2 * Matrix4::Rotate(MakeVector3(1,0,0),
+												  -ang * walkVel);
+					
+					walkVel = Vector3::Dot(p->GetVelocty(), p->GetRight()) * 3.f;
+					leg1 = leg1 * Matrix4::Rotate(MakeVector3(0,1,0),
+												  ang * walkVel);
+					leg2 = leg2 * Matrix4::Rotate(MakeVector3(0,1,0),
+												  -ang * walkVel);
+					
 					leg1 = lower * leg1;
 					leg2 = lower * leg2;
 					
@@ -2357,12 +2371,17 @@ namespace spades {
 					Matrix4 leg2 = Matrix4::Translate( 0.25f, 0.f, -0.1f);
 					
 					float ang = sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
-					float walkVel = Vector3::Dot(p->GetVelocty(), p->GetFront2D()) * 2.f;
-					ang *= walkVel;
+					float walkVel = Vector3::Dot(p->GetVelocty(), p->GetFront2D()) * 4.f;
 					leg1 = leg1 * Matrix4::Rotate(MakeVector3(1,0,0),
-												  ang);
+												  ang * walkVel);
 					leg2 = leg2 * Matrix4::Rotate(MakeVector3(1,0,0),
-												  -ang);
+												  -ang * walkVel);
+					
+					walkVel = Vector3::Dot(p->GetVelocty(), p->GetRight()) * 3.f;
+					leg1 = leg1 * Matrix4::Rotate(MakeVector3(0,1,0),
+												  ang * walkVel);
+					leg2 = leg2 * Matrix4::Rotate(MakeVector3(0,1,0),
+												  -ang * walkVel);
 										
 					leg1 = lower * leg1;
 					leg2 = lower * leg2;
@@ -2389,8 +2408,17 @@ namespace spades {
 					arms = torso * arms;
 				}
 				
+				float armPitch = pitch;
+				if(inp.sprint) {
+					armPitch -= .5f;
+				}
+				if(armPitch < 0.f) {
+					armPitch = std::max(armPitch, -(float)M_PI * .5f);
+					armPitch *= .9f;
+				}
+				
 				arms = arms * Matrix4::Rotate(MakeVector3(1,0,0),
-											  pitch);
+											  armPitch);
 				
 				model = renderer->RegisterModel
 				("Models/Player/Arms.kv6");
