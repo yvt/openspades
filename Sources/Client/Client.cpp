@@ -2666,7 +2666,8 @@ namespace spades {
 				// draw block cursor
 				// FIXME: don't use debug line
 				if(p){
-					if(p->IsBlockCursorActive()){
+					if(p->IsBlockCursorActive() &&
+					   p->IsReadyToUseTool()){
 						std::vector<IntVector3> blocks;
 						if(p->IsBlockCursorDragging()){
 							blocks = world->CubeLine(p->GetBlockCursorDragPos(),

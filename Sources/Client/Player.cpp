@@ -199,6 +199,9 @@ namespace spades {
 							pendingPlaceBlock = true;
 							pendingPlaceBlockPos = blockCursorPos;
 						}
+						if(!blockCursorActive) {
+							newInput.primary = false;
+						}
 						
 						blockCursorDragging = false;
 						blockCursorActive = false;
