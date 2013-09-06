@@ -28,6 +28,7 @@ namespace spades {
 	namespace draw {
 		class IGLDevice;
 		class GLImage;
+		class GLRenderer;
 		
 		class GLImageManager {
 			IGLDevice *device;
@@ -39,6 +40,8 @@ namespace spades {
 			~GLImageManager();
 			
 			GLImage *RegisterImage(const std::string&);
+			
+			void DrawAllImages(GLRenderer *);
 		};
 	}
 }

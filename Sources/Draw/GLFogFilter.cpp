@@ -34,7 +34,7 @@ namespace spades {
 	namespace draw {
 		GLFogFilter::GLFogFilter(GLRenderer *renderer):
 		renderer(renderer){
-			
+			lens = renderer->RegisterProgram("Shaders/PostFilters/Fog.program");
 		}
 		GLColorBuffer GLFogFilter::Filter(GLColorBuffer input) {
 			SPADES_MARK_FUNCTION();
@@ -42,7 +42,7 @@ namespace spades {
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 			
-			GLProgram *lens = renderer->RegisterProgram("Shaders/PostFilters/Fog.program");
+			
 			static GLProgramAttribute lensPosition("positionAttribute");
 			static GLProgramUniform lensShadowMapTexture("shadowMapTexture");
 			static GLProgramUniform lensCoarseShadowMapTexture("coarseShadowMapTexture");

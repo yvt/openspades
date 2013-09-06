@@ -36,6 +36,7 @@ namespace spades {
 		GLCameraBlurFilter::GLCameraBlurFilter(GLRenderer *renderer):
 		renderer(renderer){
 			prevMatrix = Matrix4::Identity();
+			program = renderer->RegisterProgram("Shaders/PostFilters/CameraBlur.program");
 		}
 		
 #define M(r,c) (d.m[(r)+(c)*4])
@@ -72,7 +73,6 @@ namespace spades {
 			
 			dev->Enable(IGLDevice::Blend, false);
 			
-			GLProgram *program = renderer->RegisterProgram("Shaders/PostFilters/CameraBlur.program");
 			static GLProgramAttribute programPosition("positionAttribute");
 			static GLProgramUniform programTexture("texture");
 			static GLProgramUniform programDepthTexture("depthTexture");

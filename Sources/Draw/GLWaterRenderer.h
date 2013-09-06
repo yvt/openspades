@@ -63,13 +63,14 @@ namespace spades {
 			IGLDevice::UInteger tempDepthTexture;
 			
 			GLProgram *program;
-			GLProgram *programDepth;
 			
 			void BuildVertices();
 			void MarkUpdate(int x, int y);
 		public:
 			GLWaterRenderer(GLRenderer *, client::GameMap *map);
 			~GLWaterRenderer();
+			
+			static void PreloadShaders(GLRenderer *);
 			
 			void Render();
 			

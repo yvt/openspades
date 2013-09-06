@@ -81,8 +81,7 @@ namespace spades {
 		
 				
 		GLRenderer::GLRenderer(IGLDevice *_device):
-		device(_device),
-		cameraBlur(this){
+		device(_device){
 			SPADES_MARK_FUNCTION();
 			
 			SPLog("GLRenderer bootstrap");
@@ -141,6 +140,8 @@ namespace spades {
 				delete ambientShadowRenderer;
 			if(shadowMapRenderer)
 				delete shadowMapRenderer;
+			if(cameraBlur)
+				delete cameraBlur;
 			delete longSpriteRenderer;
 			delete waterRenderer;
 			delete modelRenderer;
@@ -163,6 +164,38 @@ namespace spades {
 				spriteRenderer = new GLSpriteRenderer(this);
 			longSpriteRenderer = new GLLongSpriteRenderer(this);
 			modelRenderer = new GLModelRenderer(this);
+			
+			// preload
+			SPLog("Preloading Assets");
+			GLMapRenderer::PreloadShaders(this);
+			GLVoxelModel::PreloadShaders(this);
+			GLOptimizedVoxelModel::PreloadShaders(this);
+			if(r_water)
+				GLWaterRenderer::PreloadShaders(this);
+			
+			cameraBlur = new GLCameraBlurFilter(this);
+			
+			if(r_fogShadow) {
+				GLFogFilter(this);
+			}
+			
+			if(r_lens){
+				GLLensFilter(this);
+			}
+			
+			if(r_lensFlare){
+				GLLensFlareFilter(this);
+			}
+			
+			if(r_colorCorrection){
+				GLColorCorrectionFilter(this);
+			}
+			
+			if(r_fxaa){
+				GLFXAAFilter(this);
+			}
+			
+			device->Finish();
 			SPLog("GLRenderer initialized");
 		}
 		
@@ -650,7 +683,7 @@ namespace spades {
 				
 				if(r_cameraBlur && !sceneDef.denyCameraBlur){
 					GLProfiler profiler(device, "Camera Blur");
-					handle = cameraBlur.Filter(handle);
+					handle = cameraBlur->Filter(handle);
 				}
 				/*
 				if(r_bloom)

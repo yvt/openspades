@@ -33,7 +33,7 @@ namespace spades {
 	namespace draw {
 		GLFXAAFilter::GLFXAAFilter(GLRenderer *renderer):
 		renderer(renderer){
-			
+			lens = renderer->RegisterProgram("Shaders/PostFilters/FXAA.program");
 		}
 		GLColorBuffer GLFXAAFilter::Filter(GLColorBuffer input) {
 			SPADES_MARK_FUNCTION();
@@ -41,7 +41,6 @@ namespace spades {
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 			
-			GLProgram *lens = renderer->RegisterProgram("Shaders/PostFilters/FXAA.program");
 			static GLProgramAttribute lensPosition("positionAttribute");
 			static GLProgramUniform lensTexture("texture");
 			static GLProgramUniform inverseVP("inverseVP");

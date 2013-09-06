@@ -292,6 +292,64 @@ namespace spades {
 			// preload
 			SmokeSpriteEntity(this, Vector4(), 20.f);
 			
+			renderer->RegisterModel("Models/Weapons/Grenade/Grenade.kv6");
+			renderer->RegisterImage("Textures/Fluid.png");
+			renderer->RegisterImage("Textures/WaterExpl.png");
+			renderer->RegisterImage("Gfx/White.tga");
+			audioDevice->RegisterSound("Sounds/Weapons/Block/Build.wav");
+			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal1.wav");
+			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal2.wav");
+			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal3.wav");
+			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal4.wav");
+			audioDevice->RegisterSound("Sounds/Misc/SwitchMapZoom.wav");
+			audioDevice->RegisterSound("Sounds/Misc/OpenMap.wav");
+			audioDevice->RegisterSound("Sounds/Misc/CloseMap.wav");
+			audioDevice->RegisterSound("Sounds/Player/Flashlight.wav");
+			audioDevice->RegisterSound("Sounds/Weapons/SwitchLocal.wav");
+			renderer->RegisterImage("Gfx/Ball.png");
+			renderer->RegisterModel("Models/Player/Dead.kv6");
+			renderer->RegisterImage("Gfx/Spotlight.tga");
+			renderer->RegisterImage("Gfx/Glare.tga");
+			renderer->RegisterModel("Models/Weapons/Spade/Spade.kv6");
+			renderer->RegisterModel("Models/Weapons/Block/Block2.kv6");
+			renderer->RegisterModel("Models/Weapons/Grenade/Grenade.kv6");
+			renderer->RegisterModel("Models/Weapons/SMG/Weapon.kv6");
+			renderer->RegisterModel("Models/Weapons/SMG/WeaponNoMagazine.kv6");
+			renderer->RegisterModel("Models/Weapons/SMG/Magazine.kv6");
+			renderer->RegisterModel("Models/Weapons/Rifle/Weapon.kv6");
+			renderer->RegisterModel("Models/Weapons/Rifle/WeaponNoMagazine.kv6");
+			renderer->RegisterModel("Models/Weapons/Rifle/Magazine.kv6");
+			renderer->RegisterModel("Models/Weapons/Shotgun/Weapon.kv6");
+			renderer->RegisterModel("Models/Weapons/Shotgun/WeaponNoPump.kv6");
+			renderer->RegisterModel("Models/Weapons/Shotgun/Pump.kv6");
+			renderer->RegisterModel
+			("Models/Player/Arm.kv6");
+			renderer->RegisterModel
+			("Models/Player/UpperArm.kv6");
+			renderer->RegisterModel
+			("Models/Player/LegCrouch.kv6");
+			renderer->RegisterModel
+			("Models/Player/TorsoCrouch.kv6");
+			renderer->RegisterModel
+			("Models/Player/Leg.kv6");
+			renderer->RegisterModel
+			("Models/Player/Torso.kv6");
+			renderer->RegisterModel
+			("Models/Player/Arms.kv6");
+			renderer->RegisterModel
+			("Models/Player/Head.kv6");
+			renderer->RegisterModel
+			("Models/MapObjects/Intel.kv6");
+			renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
+			renderer->RegisterImage("Gfx/Sight.tga");
+			renderer->RegisterImage("Gfx/Bullet/7.62mm.tga");
+			renderer->RegisterImage("Gfx/Bullet/9mm.tga");
+			renderer->RegisterImage("Gfx/Bullet/12gauge.tga");
+			renderer->RegisterImage("Gfx/CircleGradient.png");
+			renderer->RegisterImage("Gfx/LoadingWindow.png");
+			renderer->RegisterImage("Gfx/LoadingWindowGlow.png");
+			renderer->RegisterImage("Gfx/LoadingStripe.png");
+			audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
 			
 			SPLog("Started connecting to '%s'", hostname.c_str());
 			net = new NetClient(this);

@@ -33,7 +33,7 @@ namespace spades {
 	namespace draw {
 		GLBloomFilter::GLBloomFilter(GLRenderer *renderer):
 		renderer(renderer){
-			
+			thru = renderer->RegisterProgram("Shaders/PostFilters/PassThrough.program");
 		}
 		
 #define Level BloomLevel
@@ -53,7 +53,6 @@ namespace spades {
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 			
-			GLProgram *thru = renderer->RegisterProgram("Shaders/PostFilters/PassThrough.program");
 			static GLProgramAttribute thruPosition("positionAttribute");
 			static GLProgramUniform thruColor("colorUniform");
 			static GLProgramUniform thruTexture("texture");

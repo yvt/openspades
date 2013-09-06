@@ -37,6 +37,12 @@
 
 namespace spades {
 	namespace draw {
+		void GLOptimizedVoxelModel::PreloadShaders(spades::draw::GLRenderer *renderer) {
+			renderer->RegisterProgram("Shaders/OptimizedVoxelModel.program");
+			renderer->RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
+			renderer->RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
+			renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
+		}
 		GLOptimizedVoxelModel::GLOptimizedVoxelModel(VoxelModel *m,
 								   GLRenderer *r){
 			SPADES_MARK_FUNCTION();
