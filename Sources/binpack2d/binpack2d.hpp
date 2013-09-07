@@ -23,9 +23,6 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
-
-
 /**
  * BinPack2D is a 2 dimensional, multi-bin, bin-packer. ( Texture Atlas Array! )
  * It supports an arbitrary number of bins, at arbitrary sizes.
@@ -361,6 +358,8 @@ public:
       }
     }
     
+	  return false; // yvt: BitmapAtlasGenerator doesn't support rotated contents.
+	  
     // EXPERIMENTAL - TRY ROTATED?
     content.Rotate();
     for( Coord::List::iterator itor = topLefts.begin(); itor != topLefts.end(); itor++ ) {
