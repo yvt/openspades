@@ -617,8 +617,8 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 #if GLEW
 			if(glEndQuery)
 				glEndQuery(parseQueryTarget(target));
-			else if(glEndQueryARb)
-				glEndQueryARb(parseQueryTarget(target));
+			else if(glEndQueryARB)
+				glEndQueryARB(parseQueryTarget(target));
 			else
 				ReportMissingFunc("glBeginQuery");
 #else
