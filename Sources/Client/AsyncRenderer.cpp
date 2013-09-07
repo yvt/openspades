@@ -131,6 +131,8 @@ namespace spades {
 						return this;
 					}else{
 						arenderer->deletedModels.push_back(model);
+						locker.Release();
+						mutex.Unlock();
 						delete this;
 						return NULL;
 					}
@@ -446,6 +448,7 @@ namespace spades {
 			
 			std::map<std::string, IImage *>::iterator it = images.find(filename);
 			if(it == images.end()) {
+				FlushCommands();
 				RegisterImageDispatch dispatch(base, filename);
 				dispatch.StartOn(queue);
 				dispatch.Join();
@@ -488,6 +491,7 @@ namespace spades {
 				}
 			};
 			
+			FlushCommands();
 			CreateImageDispatch dispatch(base, bmp);
 			dispatch.StartOn(queue);
 			dispatch.Join();
@@ -525,6 +529,7 @@ namespace spades {
 			
 			std::map<std::string, IModel *>::iterator it = models.find(filename);
 			if(it == models.end()) {
+				FlushCommands();
 				RegisterModelDispatch dispatch(base, filename);
 				dispatch.StartOn(queue);
 				dispatch.Join();
@@ -562,6 +567,7 @@ namespace spades {
 				}
 			};
 			
+			FlushCommands();
 			CreateModelDispatch dispatch(base, bmp);
 			dispatch.StartOn(queue);
 			dispatch.Join();
