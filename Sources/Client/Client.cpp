@@ -105,6 +105,8 @@ SPADES_SETTING(cg_keySceneshot, "9");
 
 SPADES_SETTING(cg_switchToolByWheel, "1");
 
+SPADES_SETTING(cg_fov, "68");
+
 namespace spades {
 	namespace client {
 		
@@ -1450,10 +1452,10 @@ namespace spades {
 						def.viewAxis[2] = front;
 						
 						
-						def.fovX = 90.f * M_PI /180.f;
-						def.fovY = atanf(tanf(def.fovX * .5f) *
-										 renderer->ScreenHeight() /
-										 renderer->ScreenWidth()) * 2.f;
+						def.fovY = (float)cg_fov * M_PI /180.f;
+						def.fovX = atanf(tanf(def.fovY * .5f) *
+										 renderer->ScreenWidth() /
+										 renderer->ScreenHeight()) * 2.f;
 						
 						// update initial spectate pos
 						// this is not used now, but if the local player is
@@ -1477,7 +1479,7 @@ namespace spades {
 						def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
 						def.viewAxis[2] = front;
 						
-						def.fovY = 60.f * M_PI /180.f;
+						def.fovY = (float)cg_fov * M_PI /180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) *
 										 renderer->ScreenWidth() /
 										 renderer->ScreenHeight()) * 2.f;
@@ -1518,7 +1520,7 @@ namespace spades {
 						def.viewAxis[1] = up;
 						def.viewAxis[2] = front;
 						
-						def.fovY = 60.f * M_PI /180.f;
+						def.fovY = (float)cg_fov * M_PI /180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) *
 										 renderer->ScreenWidth() /
 										 renderer->ScreenHeight()) * 2.f;
@@ -1579,7 +1581,7 @@ namespace spades {
 					def.viewAxis[1] = MakeVector3(0, 1, 0);
 					def.viewAxis[2] = MakeVector3(0, 0, 1);
 					
-					def.fovY = 60.f * M_PI /180.f;
+					def.fovY = (float)cg_fov * M_PI /180.f;
 					def.fovX = atanf(tanf(def.fovY * .5f) *
 									 renderer->ScreenWidth() /
 									 renderer->ScreenHeight()) * 2.f;
@@ -1596,7 +1598,7 @@ namespace spades {
 				def.viewAxis[1] = MakeVector3(0, 0, -1);
 				def.viewAxis[2] = MakeVector3(0, 0, 1);
 				
-				def.fovY = 60.f * M_PI /180.f;
+				def.fovY = (float)cg_fov * M_PI /180.f;
 				def.fovX = atanf(tanf(def.fovY * .5f) *
 								 renderer->ScreenWidth() /
 								 renderer->ScreenHeight()) * 2.f;
