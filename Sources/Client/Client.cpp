@@ -4642,7 +4642,7 @@ namespace spades {
 			
 			// don't bleed local player
 			if(hurtPlayer != world->GetLocalPlayer() ||
-			   !ShouldRenderInThirdPersonView()){
+			   ShouldRenderInThirdPersonView()){
 				Bleed(hitPos);
 			}
 			
