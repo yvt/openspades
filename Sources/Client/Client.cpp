@@ -107,6 +107,9 @@ SPADES_SETTING(cg_switchToolByWheel, "1");
 
 SPADES_SETTING(cg_fov, "68");
 
+
+SPADES_SETTING(cg_debugAim, "0");
+
 namespace spades {
 	namespace client {
 		
@@ -2951,6 +2954,74 @@ namespace spades {
 						renderer->DrawImage(sight,
 											MakeVector2((scrWidth - sight->GetWidth()) * .5f,
 														(scrHeight - sight->GetHeight()) * .5f));
+						
+						if(cg_debugAim && p->GetTool() == Player::ToolWeapon) {
+							Weapon *w = p->GetWeapon();
+							float spread = w->GetSpread();
+							
+							AABB2 boundary(0,0,0,0);
+							for(int i = 0; i < 8; i++){
+								Vector3 vec = p->GetFront();
+								if(i & 1) vec.x += spread;
+								else vec.x -= spread;
+								if(i & 2) vec.y += spread;
+								else vec.y -= spread;
+								if(i & 4) vec.z += spread;
+								else vec.z -= spread;
+								
+								Vector3 viewPos;
+								viewPos.x = Vector3::Dot(vec, p->GetRight());
+								viewPos.y = Vector3::Dot(vec, p->GetUp());
+								viewPos.z = Vector3::Dot(vec, p->GetFront());
+								
+								Vector2 p;
+								p.x = viewPos.x / viewPos.z;
+								p.y = viewPos.y / viewPos.z;
+								boundary.min.x = std::min(boundary.min.x, p.x);
+								boundary.min.y = std::min(boundary.min.y, p.y);
+								boundary.max.x = std::max(boundary.max.x, p.x);
+								boundary.max.y = std::max(boundary.max.y, p.y);
+							}
+							
+							
+							IImage *img = renderer->RegisterImage("Gfx/White.tga");
+							boundary.min *= renderer->ScreenHeight() * .5f;
+							boundary.max *= renderer->ScreenHeight() * .5f;
+							boundary.min /= tanf(lastSceneDef.fovY * .5f);
+							boundary.max /= tanf(lastSceneDef.fovY * .5f);
+							IntVector3 cent;
+							cent.x = (int)(renderer->ScreenWidth() * .5f);
+							cent.y = (int)(renderer->ScreenHeight() * .5f);
+							
+							
+							IntVector3 p1 = cent;
+							IntVector3 p2 = cent;
+							
+							p1.x += (int)floorf(boundary.min.x);
+							p1.y += (int)floorf(boundary.min.y);
+							p2.x += (int)ceilf(boundary.max.x);
+							p2.y += (int)ceilf(boundary.max.y);
+							
+							renderer->SetColor(MakeVector4(0,0,0,1));
+							renderer->DrawImage(img, AABB2(p1.x - 2, p1.y - 2,
+														   p2.x - p1.x + 4, 1));
+							renderer->DrawImage(img, AABB2(p1.x - 2, p1.y - 2,
+														   1, p2.y - p1.y + 4));
+							renderer->DrawImage(img, AABB2(p1.x - 2, p2.y + 1,
+														   p2.x - p1.x + 4, 1));
+							renderer->DrawImage(img, AABB2(p2.x + 1, p1.y - 2,
+														   1, p2.y - p1.y + 4));
+							
+							renderer->SetColor(MakeVector4(1,1,1,1));
+							renderer->DrawImage(img, AABB2(p1.x - 1, p1.y - 1,
+														   p2.x - p1.x + 2, 1));
+							renderer->DrawImage(img, AABB2(p1.x - 1, p1.y - 1,
+														   1, p2.y - p1.y + 2));
+							renderer->DrawImage(img, AABB2(p1.x - 1, p2.y,
+														   p2.x - p1.x + 2, 1));
+							renderer->DrawImage(img, AABB2(p2.x, p1.y - 1,
+														   1, p2.y - p1.y + 2));
+						}
 						
 						// draw ammo
 						Weapon *weap = p->GetWeapon();
