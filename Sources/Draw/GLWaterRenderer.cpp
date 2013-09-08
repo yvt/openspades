@@ -68,11 +68,6 @@ namespace spades {
 				float scale = 200.f;
 				x *= scale; y *= scale; z *= scale;
 				
-				static float mv = 0.f;
-				if(x < mv){
-					mv = x; printf("%f\n", mv);
-				}
-				
 				uint32_t out;
 				out = Encode8bit(z);
 				out |= Encode8bit(y) << 8;
