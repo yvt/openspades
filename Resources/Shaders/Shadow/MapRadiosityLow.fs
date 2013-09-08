@@ -34,6 +34,7 @@ vec3 DecodeRadiosityValue(vec3 val){
 	// reverse bias
 	val *= 1023. / 1022.;
 	val = (val * 2.) - 1.;
+	val *= val * sign(val);
 	return val;
 }
 

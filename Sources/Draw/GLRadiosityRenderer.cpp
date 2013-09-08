@@ -25,12 +25,15 @@
 #include <stdlib.h>
 #include "GLMapShadowRenderer.h"
 
+#include "../Core/Settings.h"
 #include "../Core/ConcurrentDispatch.h"
 #ifdef __APPLE__
 #include <xmmintrin.h>
 #endif
 
 #include "GLProfiler.h"
+
+SPADES_SETTING(r_radiosity, "0");
 
 namespace spades {
 	namespace draw {
@@ -146,7 +149,7 @@ namespace spades {
 									 IGLDevice::TextureWrapR,
 									 IGLDevice::ClampToEdge);
 				device->TexImage3D(IGLDevice::Texture3D, 0,
-								   IGLDevice::RGB10A2,
+								   ((int)r_radiosity >= 2) ? IGLDevice::RGB10A2 : IGLDevice::RGB5A1,
 								   w, h, d, 0,
 								   IGLDevice::BGRA,
 								   IGLDevice::UnsignedInt2101010Rev,
@@ -522,11 +525,10 @@ namespace spades {
 		}
 		
 		static float CompressDynamicRange(float v){
-			return v;/*
 			if(v >= 0.f)
 				return sqrtf(v);
 			else
-				return -sqrtf(-v);*/
+				return -sqrtf(-v);
 		}
 		
 		static uint32_t EncodeValue(Vector3 vec) {
