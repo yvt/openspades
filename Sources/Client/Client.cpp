@@ -1556,8 +1556,8 @@ namespace spades {
 						def.viewAxis[0] = right * cosf(roll) - up * sinf(roll);
 						def.viewAxis[1] = up * cosf(roll) + right * sinf(roll);
 						
-						def.fovX *= scale;
-						def.fovY *= scale;
+                        def.fovX = atanf(tanf(def.fovX * .5f) * scale) * 2.f;
+                        def.fovY = atanf(tanf(def.fovY * .5f) * scale) * 2.f;
 					}
 					{
 						Vector3 u = def.viewAxis[1];
