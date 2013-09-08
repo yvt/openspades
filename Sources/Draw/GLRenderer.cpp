@@ -105,6 +105,7 @@ namespace spades {
 			spriteRenderer = NULL;
 			longSpriteRenderer = NULL;
 			modelRenderer = NULL;
+            cameraBlur = NULL;
 			
 			lastTime = 0;
 			
