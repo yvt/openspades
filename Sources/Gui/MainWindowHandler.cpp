@@ -70,6 +70,7 @@ SPADES_SETTING(s_eax, "1");
 SPADES_SETTING(r_maxAnisotropy, "8");
 SPADES_SETTING(r_colorCorrection, "1");
 SPADES_SETTING(r_physicalLighting, "");
+SPADES_SETTING(r_occlusionQuery, "");
 
 static std::vector<spades::IntVector3> g_modes;
 
@@ -499,13 +500,12 @@ void MainWindow::CheckGLCapability() {
 		
 		if(extensions.find("GL_ARB_occlusion_query") ==
 		   std::string::npos) {
-			if((int)r_water >= 2) {
-				r_water = 1;
-				SPLog("Disabling Water 2: no GL_ARB_occlusion_query");
+			if(r_occlusionQuery) {
+				r_occlusionQuery = 0;
+				SPLog("Disabling r_occlusionQuery: no GL_ARB_occlusion_query");
 			}
 			msg += "GL_ARB_occlusion_query is NOT SUPPORTED<br>";
-			msg += "&nbsp;&nbsp;Water 2 is disabled (3 required)<br>";
-			msg += "&nbsp;&nbsp;(Shader Effects is limited to Medium)<br>";
+			msg += "&nbsp;&nbsp;r_occlusionQuery is disabled<br>";
 		}else{
 			msg += "<font color=#007f00>";
 			msg += "GL_ARB_occlusion_query is supported";
@@ -514,13 +514,12 @@ void MainWindow::CheckGLCapability() {
 		
 		if(extensions.find("GL_NV_conditional_render") ==
 		   std::string::npos) {
-			if((int)r_water >= 2) {
-				r_water = 1;
-				SPLog("Disabling Water 2: no GL_NV_conditional_render");
+			if(r_occlusionQuery) {
+				r_occlusionQuery = 0;
+				SPLog("Disabling r_occlusionQuery: no GL_NV_conditional_render");
 			}
 			msg += "GL_NV_conditional_render is NOT SUPPORTED<br>";
-			msg += "&nbsp;&nbsp;Water 2 is disabled (3 required)<br>";
-			msg += "&nbsp;&nbsp;(Shader Effects is limited to Medium)<br>";
+			msg += "&nbsp;&nbsp;r_occlusionQuery is disabled<br>";
 		}else{
 			msg += "<font color=#007f00>";
 			msg += "GL_NV_conditional_render is supported";

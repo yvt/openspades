@@ -38,6 +38,7 @@
 
 SPADES_SETTING(r_water, "2");
 SPADES_SETTING(r_maxAnisotropy, "8");
+SPADES_SETTING(r_occlusionQuery, "1");
 
 namespace spades {
 	namespace draw {
@@ -696,7 +697,7 @@ namespace spades {
 			
 			GLProfiler profiler(device, "Render");
 			
-			if(!occlusionQuery)
+			if(occlusionQuery == 0 && r_occlusionQuery)
 				occlusionQuery = device->GenQuery();
 			
 			GLColorBuffer colorBuffer;
@@ -866,13 +867,15 @@ namespace spades {
 				
 				device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
 				
-				device->BeginQuery(IGLDevice::SamplesPassed,
-								   occlusionQuery);
+                if(occlusionQuery)
+                    device->BeginQuery(IGLDevice::SamplesPassed,
+                                       occlusionQuery);
 				
 				device->DrawElements(IGLDevice::Triangles, numIndices,
 									 IGLDevice::UnsignedInt, NULL);
 				
-				device->EndQuery(IGLDevice::SamplesPassed);
+                if(occlusionQuery)
+                    device->EndQuery(IGLDevice::SamplesPassed);
 				
 				device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
 				
