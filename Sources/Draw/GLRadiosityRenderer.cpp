@@ -525,6 +525,8 @@ namespace spades {
 		}
 		
 		static float CompressDynamicRange(float v){
+			if((int)r_radiosity >= 2)
+				return v;
 			if(v >= 0.f)
 				return sqrtf(v);
 			else
