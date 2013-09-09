@@ -270,10 +270,12 @@ namespace spades {
 					intensity *= invDiffLenSmooth;
 					
 					// smooth envelope cull
+					/*
 					float distFalloff = 1.f - diffLen * diffLen * (1.f / (Envelope * Envelope + 1));
 					if(distFalloff < 0.f)
 						continue;
 					intensity *= distFalloff;
+					*/
 					
 					// normalize
 					Vector3 normDiff = diff * -invDiffLen;
