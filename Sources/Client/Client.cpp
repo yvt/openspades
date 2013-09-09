@@ -74,6 +74,8 @@ SPADES_SETTING(cg_ejectBrass, "1");
 SPADES_SETTING(cg_mouseSensitivity, "1");
 SPADES_SETTING(cg_zoomedMouseSensScale, "0.6");
 
+SPADES_SETTING(cg_holdAimDownSight, "0");
+
 SPADES_SETTING(cg_keyAttack, "LeftMouseButton");
 SPADES_SETTING(cg_keyAltAttack, "RightMouseButton");
 SPADES_SETTING(cg_keyToolSpade, "1");
@@ -1015,12 +1017,16 @@ namespace spades {
 					}else if(CheckKey(cg_keyAttack, name)){
 						weapInput.primary = down;
 					}else if(CheckKey(cg_keyAltAttack, name)){
-						if(world->GetLocalPlayer()->IsToolWeapon()){
+						if(world->GetLocalPlayer()->IsToolWeapon() && (!cg_holdAimDownSight)){
 							if(down && !playerInput.sprint){
 								weapInput.secondary = !weapInput.secondary;
 							}
 						}else{
-							weapInput.secondary = down;
+							if(!playerInput.sprint){
+								weapInput.secondary = down;
+							}else{
+								weapInput.secondary = down;
+							}
 						}
 					}else if(CheckKey(cg_keyReloadWeapon, name) && down){
 						Weapon *w = world->GetLocalPlayer()->GetWeapon();
