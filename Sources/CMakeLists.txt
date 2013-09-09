@@ -18,6 +18,9 @@ file(GLOB POLY2TRI_COMMON_FILES poly2tri/common/*.cc poly2tri/common/*.h)
 file(GLOB POLY2TRI_SWEEP_FILES poly2tri/sweep/*.cc poly2tri/sweep/*.h)
 file(GLOB UNZIP_FILES unzip/*.c unzip/*.h)
 
+add_subdirectory(AngelScript/projects/cmake)
+set(ANGELSCRIPT_LIBS Angelscript)
+
 include_directories(".")
 include_directories("json/include")
 include_directories("ENet/include")
@@ -28,6 +31,8 @@ set_target_properties(OpenSpades PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+add_dependencies(OpenSpades Angelscript)
 
 if(WIN32)
 	string(REGEX REPLACE "\\.lib$" ".dll" SDL_DLL ${SDL_LIBRARY})
@@ -54,7 +59,7 @@ source_group("poly2tri\\sweep" FILES ${POLY2TRI_SWEEP_FILES})
 source_group("unzip" FILES ${UNZIP_FILES})
 
 
-target_link_libraries(OpenSpades ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${CMAKE_DL_LIBS})
+target_link_libraries(OpenSpades ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS})
 
 if(OPENAL_FOUND)
 	target_link_libraries(OpenSpades ${OPENAL_LIBRARY})

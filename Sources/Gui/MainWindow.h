@@ -148,5 +148,5 @@ public:
   void updateFilters();;
   ~MainWindow();
 };
-extern unsigned char aboutText[3678];
+extern unsigned char aboutText[4625];
 #endif
