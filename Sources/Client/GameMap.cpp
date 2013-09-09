@@ -430,6 +430,10 @@ namespace spades {
 							for(z = top_color_start; z <= top_color_end; z++)
 								map->Set(x, y, z, true, swapColor(*(color++)));
 							
+							if(top_color_end == 62) {
+								map->Set(x, y, 63, true, map->GetColor(x, y, 62));
+							}
+							
 							len_bottom = top_color_end - top_color_start + 1;
 							
 							if(number_4byte_chunks == 0){
@@ -449,7 +453,11 @@ namespace spades {
 							bottom_color_start = bottom_color_end - len_top;
 							
 							for(z = bottom_color_start; z < bottom_color_end; z++){
-								map->Set(x, y, z, true, swapColor(*(color++)));
+								uint32_t col = swapColor(*(color++));
+								map->Set(x, y, z, true, col);
+							}
+							if(bottom_color_end == 63) {
+								map->Set(x, y, 63, true, map->GetColor(x, y, 62));
 							}
 						}
 						
