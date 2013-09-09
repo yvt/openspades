@@ -45,6 +45,7 @@ namespace spades {
 			else
 				renderer->RegisterProgram("Shaders/BasicBlock.program");
 			renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
+			renderer->RegisterProgram("Shaders/BackFaceBlock.program");
 			renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
 			renderer->RegisterImage("Textures/detail.jpg");
 		}
@@ -76,6 +77,7 @@ namespace spades {
 			else
 				basicProgram = renderer->RegisterProgram("Shaders/BasicBlock.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
+			backfaceProgram = renderer->RegisterProgram("Shaders/BackFaceBlock.program");
 			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
 			detailImage = (GLImage *)renderer->RegisterImage("Textures/detail.jpg");
 			
@@ -149,9 +151,8 @@ namespace spades {
 		
 		void GLMapRenderer::Prerender() {
 			SPADES_MARK_FUNCTION();
-			//Vector3 eye = renderer->GetSceneDef().viewOrigin;
 			
-			// nothing to do now
+			// nothing to do now (maybe depth-only pass?)
 		}
 		
 		void GLMapRenderer::RenderSunlightPass() {
@@ -159,6 +160,11 @@ namespace spades {
 			GLProfiler profiler(device, "Map");
 			
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
+			
+			// draw back face to avoid cheating.
+			// without this, players can see through blocks by
+			// covering themselves by ones.
+			RenderBackface();
 			
 			device->ActiveTexture(0);
 			aoImage->Bind(IGLDevice::Texture2D);
@@ -357,6 +363,130 @@ namespace spades {
 				GetChunk(cx, cy, z)->RenderDLightPass(lights);
 			for(int z = std::min(cz - 1, 63); z >= 0; z--)
 				GetChunk(cx, cy, z)->RenderDLightPass(lights);
+		}
+		
+#pragma mark - BackFaceBlock
+		
+		struct BFVertex {
+			uint16_t x, y, z;
+			uint16_t pad;
+			
+			static BFVertex Make(int x, int y, int z) {
+				BFVertex v = {(uint16_t)x, (uint16_t)y, (uint16_t)z, 0};
+				return v;
+			}
+		};
+		
+		static void EmitBackFace(int x, int y, int z,
+								 int ux, int uy, int uz,
+								 int vx, int vy, int vz,
+								 std::vector<BFVertex>& vertices,
+								 std::vector<uint16_t>& indices) {
+			uint16_t idx = (uint16_t)vertices.size();
+			
+			vertices.push_back(BFVertex::Make(x, y, z));
+			vertices.push_back(BFVertex::Make(x + ux, y + uy, z + uz));
+			vertices.push_back(BFVertex::Make(x + vx, y + vy, z + vz));
+			vertices.push_back(BFVertex::Make(x + ux + vx, y + uy + vy, z + uz + vz));
+			
+			indices.push_back(idx);
+			indices.push_back(idx+1);
+			indices.push_back(idx+2);
+			indices.push_back(idx+1);
+			indices.push_back(idx+3);
+			indices.push_back(idx+2);
+		}
+		
+		void GLMapRenderer::RenderBackface() {
+			GLProfiler profiler(device, "Back-face");
+			
+			IntVector3 eye = renderer->GetSceneDef().viewOrigin.Floor();
+			std::vector<BFVertex> vertices;
+			std::vector<uint16_t> indices;
+			client::GameMap *m = gameMap;
+			
+			int x, y, z;
+			const int range = 1;
+			for(x = eye.x - range; x <= eye.x + range; x++) {
+				for(y = eye.y - range; y <= eye.y + range; y++) {
+					for(z = eye.z - range; z <= eye.z + range; z++) {
+						if(z >= 63) continue;
+						if(z < 0) continue;
+						if(!m->IsSolidWrapped(x, y, z))
+							continue;
+						SPAssert(m->IsSolidWrapped(x, y, z));
+						
+						if(m->IsSolidWrapped(x-1, y, z)) {
+							EmitBackFace(x, y, z,
+										 0, 1, 0,
+										 0, 0, 1,
+										 vertices, indices);
+						}
+						if(m->IsSolidWrapped(x+1, y, z)) {
+							EmitBackFace(x+1, y, z,
+										 0, 1, 0,
+										 0, 0, 1,
+										 vertices, indices);
+						}
+						if(m->IsSolidWrapped(x, y-1, z)) {
+							EmitBackFace(x, y, z,
+										 1, 0, 0,
+										 0, 0, 1,
+										 vertices, indices);
+						}
+						if(m->IsSolidWrapped(x, y+1, z)) {
+							EmitBackFace(x, y+1, z,
+										 1, 0, 0,
+										 0, 0, 1,
+										 vertices, indices);
+						}
+						if(m->IsSolidWrapped(x, y, z-1)) {
+							EmitBackFace(x, y, z,
+										 1, 0, 0,
+										 0, 1, 0,
+										 vertices, indices);
+						}
+						if(m->IsSolidWrapped(x, y, z+1)) {
+							EmitBackFace(x, y, z+1,
+										 1, 0, 0,
+										 0, 1, 0,
+										 vertices, indices);
+						}
+					}
+				}
+			}
+			
+			if(vertices.empty())
+				return;
+			
+			device->Enable(IGLDevice::CullFace, false);
+			
+			backfaceProgram->Use();
+			
+			static GLProgramAttribute positionAttribute("positionAttribute");
+			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
+			
+			positionAttribute(backfaceProgram);
+			projectionViewMatrix(backfaceProgram);
+			
+			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
+			
+			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			device->VertexAttribPointer(positionAttribute(),
+										3, IGLDevice::UnsignedShort,
+										false, sizeof(BFVertex),
+										vertices.data());
+			
+			device->EnableVertexAttribArray(positionAttribute(), true);
+			
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
+			device->DrawElements(IGLDevice::Triangles, indices.size(),
+								 IGLDevice::UnsignedShort, indices.data());
+			
+			device->EnableVertexAttribArray(positionAttribute(), false);
+			
+			device->Enable(IGLDevice::CullFace, true);
+			
 		}
 	}
 }

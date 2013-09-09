@@ -42,6 +42,7 @@ namespace spades {
 			
 			GLProgram *basicProgram;
 			GLProgram *dlightProgram;
+			GLProgram *backfaceProgram;
 			GLImage *aoImage;
 			GLImage *detailImage;
 			
@@ -71,6 +72,8 @@ namespace spades {
 			
 			void DrawColumnSunlight(int cx, int cy, int cz, Vector3 eye);
 			void DrawColumnDLight(int cx, int cy, int cz, Vector3 eye, const std::vector<GLDynamicLight>& lights);
+			
+			void RenderBackface();
 			
 		public:
 			GLMapRenderer(client::GameMap *, GLRenderer *);
