@@ -136,6 +136,7 @@
 		E8B6B6DD17E0850D00E35523 /* scriptstdstring_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B6D017E0850B00E35523 /* scriptstdstring_utils.cpp */; };
 		E8B6B6DE17E0850D00E35523 /* scriptstdstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B6D117E0850C00E35523 /* scriptstdstring.cpp */; };
 		E8B6B6DF17E0850D00E35523 /* weakref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B6D317E0850D00E35523 /* weakref.cpp */; };
+		E8B6B6E217E08BAF00E35523 /* ScriptManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B6E017E08BAE00E35523 /* ScriptManager.cpp */; };
 		E8CF0396178EDA75000683D4 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0395178EDA75000683D4 /* SDL.framework */; };
 		E8CF0398178EDA86000683D4 /* SDL_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0397178EDA86000683D4 /* SDL_net.framework */; };
 		E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0399178EDABD000683D4 /* OpenAL.framework */; };
@@ -536,6 +537,8 @@
 		E8B6B6D217E0850C00E35523 /* scriptstdstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scriptstdstring.h; sourceTree = "<group>"; };
 		E8B6B6D317E0850D00E35523 /* weakref.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = weakref.cpp; sourceTree = "<group>"; };
 		E8B6B6D417E0850D00E35523 /* weakref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = weakref.h; sourceTree = "<group>"; };
+		E8B6B6E017E08BAE00E35523 /* ScriptManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptManager.cpp; sourceTree = "<group>"; };
+		E8B6B6E117E08BAF00E35523 /* ScriptManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScriptManager.h; sourceTree = "<group>"; };
 		E8CF0385178ED9D2000683D4 /* OpenSpades */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenSpades; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CF0395178EDA75000683D4 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = ../../../../../Library/Frameworks/SDL.framework; sourceTree = "<group>"; };
 		E8CF0397178EDA86000683D4 /* SDL_net.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_net.framework; path = ../../../../../Library/Frameworks/SDL_net.framework; sourceTree = "<group>"; };
@@ -1208,6 +1211,8 @@
 				E834F5551794BBD4004EBE88 /* Debug.h */,
 				E8E0AFB3179BF25B00C6B5A9 /* Settings.cpp */,
 				E8E0AFB4179BF25B00C6B5A9 /* Settings.h */,
+				E8B6B6E017E08BAE00E35523 /* ScriptManager.cpp */,
+				E8B6B6E117E08BAF00E35523 /* ScriptManager.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1726,6 +1731,7 @@
 				E8B6B6DD17E0850D00E35523 /* scriptstdstring_utils.cpp in Sources */,
 				E8B6B6DE17E0850D00E35523 /* scriptstdstring.cpp in Sources */,
 				E8B6B6DF17E0850D00E35523 /* weakref.cpp in Sources */,
+				E8B6B6E217E08BAF00E35523 /* ScriptManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

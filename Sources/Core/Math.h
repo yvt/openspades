@@ -44,6 +44,11 @@ namespace spades {
 			return v;
 		}
 		
+		static int Dot(const IntVector3& a,
+					   const IntVector3& b) {
+			return a.x * b.x + a.y * b.y + a.z * b.z;
+		}
+		
 		IntVector3 operator + (const IntVector3& v) const {
 			return Make(x + v.x, y + v.y, z + v.z);
 		}
@@ -74,6 +79,10 @@ namespace spades {
 			return Make(-x, -y, -z);
 		}
 		
+		bool operator == (const IntVector3& v) const {
+			return x == v.x && y == v.y && z == v.z;
+		}
+		
 		int GetManhattanLength() const {
 			return std::max(x, -x) + std::max(y, -y)
 			 + std::max(z, -z);
@@ -85,20 +94,40 @@ namespace spades {
 									 std::max(z, -z)));
 		}
 		
-		void operator +=(const IntVector3& v) {
-			x += v.x; y += v.y; z += v.z;
+		IntVector3 &operator +=(const IntVector3& v) {
+			x += v.x; y += v.y; z += v.z; return *this;
 		}
 		
-		void operator -=(const IntVector3& v) {
-			x -= v.x; y -= v.y; z -= v.z;
+		IntVector3 &operator -=(const IntVector3& v) {
+			x -= v.x; y -= v.y; z -= v.z; return *this;
 		}
 		
-		void operator *=(const IntVector3& v) {
-			x *= v.x; y *= v.y; z *= v.z;
+		IntVector3 &operator *=(const IntVector3& v) {
+			x *= v.x; y *= v.y; z *= v.z; return *this;
 		}
 		
-		void operator /=(const IntVector3& v) {
-			x /= v.x; y /= v.y; z /= v.z;
+		IntVector3 &operator /=(const IntVector3& v) {
+			x /= v.x; y /= v.y; z /= v.z; return *this;
+		}
+		
+		IntVector3& operator +=(int v) {
+			x += v; y += v; z += v;
+			return *this;
+		}
+		
+		IntVector3& operator -=(int v) {
+			x -= v; y -= v; z -= v;
+			return *this;
+		}
+		
+		IntVector3& operator *=(int v) {
+			x *= v; y *= v; z *= v;
+			return *this;
+		}
+		
+		IntVector3& operator /=(int v) {
+			x /= v; y /= v; z /= v;
+			return *this;
 		}
 	};
 	
@@ -142,37 +171,40 @@ namespace spades {
 		Vector2 operator - () const {
 			return Make(-x, -y);
 		}
-		
-		void operator +=(const Vector2& v) {
-			x += v.x; y += v.y; 
+		bool operator == (const Vector2& v) const {
+			return x == v.x && y == v.y;
 		}
 		
-		void operator -=(const Vector2& v) {
-			x -= v.x; y -= v.y;
+		Vector2& operator +=(const Vector2& v) {
+			x += v.x; y += v.y;  return *this;
 		}
 		
-		void operator *=(const Vector2& v) {
-			x *= v.x; y *= v.y;
+		Vector2& operator -=(const Vector2& v) {
+			x -= v.x; y -= v.y; return *this;
 		}
 		
-		void operator /=(const Vector2& v) {
-			x /= v.x; y /= v.y;
+		Vector2& operator *=(const Vector2& v) {
+			x *= v.x; y *= v.y; return *this;
 		}
 		
-		void operator +=(float v) {
-			x += v; y += v; 
+		Vector2& operator /=(const Vector2& v) {
+			x /= v.x; y /= v.y; return *this;
 		}
 		
-		void operator -=(float v) {
-			x -= v; y -= v; 
+		Vector2& operator +=(float v) {
+			x += v; y += v; return *this;
 		}
 		
-		void operator *=(float v) {
-			x *= v; y *= v; 
+		Vector2& operator -=(float v) {
+			x -= v; y -= v;  return *this;
 		}
 		
-		void operator /=(float v) {
-			x /= v; y /= v; 
+		Vector2& operator *=(float v) {
+			x *= v; y *= v;  return *this;
+		}
+		
+		Vector2& operator /=(float v) {
+			x /= v; y /= v;  return *this;
 		}
 		
 		static float Dot(const Vector2& a,
@@ -240,37 +272,48 @@ namespace spades {
 		Vector3 operator - () const {
 			return Make(-x, -y, -z);
 		}
+		bool operator == (const Vector3& v) const {
+			return x == v.x && y == v.y && z == v.z;
+		}
 		
-		void operator +=(const Vector3& v) {
+		Vector3& operator +=(const Vector3& v) {
 			x += v.x; y += v.y; z += v.z;
+			return *this;
 		}
 		
-		void operator -=(const Vector3& v) {
+		Vector3& operator -=(const Vector3& v) {
 			x -= v.x; y -= v.y; z -= v.z;
+			return *this;
 		}
 		
-		void operator *=(const Vector3& v) {
+		Vector3& operator *=(const Vector3& v) {
 			x *= v.x; y *= v.y; z *= v.z;
+			return *this;
 		}
 		
-		void operator /=(const Vector3& v) {
+		Vector3& operator /=(const Vector3& v) {
 			x /= v.x; y /= v.y; z /= v.z;
+			return *this;
 		}
 		
-		void operator +=(float v) {
+		Vector3& operator +=(float v) {
 			x += v; y += v; z += v;
+			return *this;
 		}
 		
-		void operator -=(float v) {
+		Vector3& operator -=(float v) {
 			x -= v; y -= v; z -= v;
+			return *this;
 		}
 		
-		void operator *=(float v) {
+		Vector3& operator *=(float v) {
 			x *= v; y *= v; z *= v;
+			return *this;
 		}
 		
-		void operator /=(float v) {
+		Vector3& operator /=(float v) {
 			x /= v; y /= v; z /= v;
+			return *this;
 		}
 		
 		static float Dot(const Vector3& a,
@@ -358,36 +401,44 @@ namespace spades {
 			return Make(-x, -y, -z, -w);
 		}
 		
-		void operator +=(const Vector4& v) {
+		Vector4& operator +=(const Vector4& v) {
 			x += v.x; y += v.y; z += v.z; w += v.w;
+			return *this;
 		}
 		
-		void operator -=(const Vector4& v) {
+		Vector4& operator -=(const Vector4& v) {
 			x -= v.x; y -= v.y; z -= v.z; w -= v.w;
+			return *this;
 		}
 		
-		void operator *=(const Vector4& v) {
+		Vector4& operator *=(const Vector4& v) {
 			x *= v.x; y *= v.y; z *= v.z; w *= v.w;
+			return *this;
 		}
 		
-		void operator /=(const Vector4& v) {
+		Vector4& operator /=(const Vector4& v) {
 			x /= v.x; y /= v.y; z /= v.z; w /= v.w;
+			return *this;
 		}
 		
-		void operator +=(float v) {
+		Vector4& operator +=(float v) {
 			x += v; y += v; z += v; w += v;
+			return *this;
 		}
 		
-		void operator -=(float v) {
+		Vector4& operator -=(float v) {
 			x -= v; y -= v; z -= v; w -= v;
+			return *this;
 		}
 		
-		void operator *=(float v) {
+		Vector4& operator *=(float v) {
 			x *= v; y *= v; z *= v; w *= v;
+			return *this;
 		}
 		
-		void operator /=(float v) {
+		Vector4& operator /=(float v) {
 			x /= v; y /= v; z /= v; w /= v;
+			return *this;
 		}
 		
 		static float Dot(const Vector4& a,
@@ -576,6 +627,10 @@ namespace spades {
 								Vector3 origin);
 		
 		Matrix4 operator *(const Matrix4& other) const;
+		Matrix4 &operator *= (const Matrix4& other) {
+			*this = *this * other;
+			return *this;
+		}
 	};
 	
 	Vector4 operator *(const Matrix4& mat, const Vector4& v);
