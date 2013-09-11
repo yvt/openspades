@@ -176,6 +176,7 @@ namespace spades {
 			GLAmbientShadowRenderer *GetAmbientShadowRenderer() { return ambientShadowRenderer; }
 			GLMapShadowRenderer *GetMapShadowRenderer() { return mapShadowRenderer; }
 			GLRadiosityRenderer *GetRadiosityRenderer() { return radiosityRenderer; }
+			GLModelRenderer *GetModelRenderer() { return modelRenderer; }
 			
 			const Matrix4& GetProjectionMatrix() const { return projectionMatrix; }
 			const Matrix4& GetProjectionViewMatrix() const { return projectionViewMatrix; }

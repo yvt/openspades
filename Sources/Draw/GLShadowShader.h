@@ -45,6 +45,10 @@ namespace spades {
 			GLProgramUniform radiosityTextureX;
 			GLProgramUniform radiosityTextureY;
 			GLProgramUniform radiosityTextureZ;
+			GLProgramUniform pagetableSize;
+			GLProgramUniform pagetableSizeInv;
+			GLProgramUniform minLod;
+			GLProgramUniform shadowMapSizeInv;
 		public:
 			GLShadowShader();
 			~GLShadowShader(){}

@@ -625,12 +625,28 @@ namespace spades {
 			v.x < max.x && v.y < max.y;
 		}
 			
-			bool operator &&(const AABB2& o) const {
-				return min.x < o.max.x &&
-				   min.y < o.max.y &&
-				   max.x > o.min.x &&
-				   max.y > o.min.y;
-			}
+		bool operator &&(const AABB2& o) const {
+			return min.x < o.max.x &&
+			   min.y < o.max.y &&
+			   max.x > o.min.x &&
+			   max.y > o.min.y;
+		}
+		
+			
+		void operator += (const Vector2& vec) {
+			if(vec.x < min.x) min.x = vec.x;
+			if(vec.y < min.y) min.y = vec.y;
+			if(vec.x > max.x) max.x = vec.x;
+			if(vec.y > max.y) max.y = vec.y;
+		}
+		
+		void operator += (const AABB2& b) {
+			if(b.min.x < min.x) min.x = b.min.x;
+			if(b.min.y < min.y) min.y = b.min.y;
+			if(b.max.x > max.x) max.x = b.max.x;
+			if(b.max.y > max.y) max.y = b.max.y;
+		}
+		
 	};
 	
 	class OBB3;
@@ -679,6 +695,25 @@ namespace spades {
 			max.y > o.min.y &&
 			max.z > o.min.z;
 		}
+		
+		void operator += (const Vector3& vec) {
+			if(vec.x < min.x) min.x = vec.x;
+			if(vec.y < min.y) min.y = vec.y;
+			if(vec.z < min.z) min.z = vec.z;
+			if(vec.x > max.x) max.x = vec.x;
+			if(vec.y > max.y) max.y = vec.y;
+			if(vec.z > max.z) max.z = vec.z;
+		}
+		
+		void operator += (const AABB3& b) {
+			if(b.min.x < min.x) min.x = b.min.x;
+			if(b.min.y < min.y) min.y = b.min.y;
+			if(b.min.z < min.z) min.z = b.min.z;
+			if(b.max.x > max.x) max.x = b.max.x;
+			if(b.max.y > max.y) max.y = b.max.y;
+			if(b.max.z > max.z) max.z = b.max.z;
+		}
+		
 	};
 	
 	
@@ -687,7 +722,8 @@ namespace spades {
 	
 	class OBB3{
 	public:
-		/** matrix M where M * [x, y, z] = (coord in box) */
+		/** matrix M where M * [x, y, z] = (coord in box)
+		 * (0 <= x, y, z, <= 1) */
 		Matrix4 m;
 		
 		OBB3(): m(Matrix4::Identity()){}
@@ -700,6 +736,7 @@ namespace spades {
 		bool operator &&(const Vector3& v) const ;
 		float GetDistanceTo(const Vector3&) const;
 		bool RayCast(Vector3 start, Vector3 dir, Vector3 *hitPos);
+		AABB3 GetBoundingAABB() const;
 	};
 	
 	static OBB3 operator *(const Matrix4&m, const OBB3& b) {

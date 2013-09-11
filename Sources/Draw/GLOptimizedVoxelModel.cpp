@@ -87,6 +87,9 @@ namespace spades {
 			};
 			radius = maxDiff.GetLength();
 			
+			boundingBox.min = minPos;
+			boundingBox.max = maxPos;
+			
 			// clean up
 			numIndices = (unsigned int)indices.size();
 			std::vector<Vertex>().swap(vertices);

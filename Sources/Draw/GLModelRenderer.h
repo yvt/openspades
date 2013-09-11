@@ -30,7 +30,10 @@ namespace spades {
 	namespace draw {
 		class GLRenderer;
 		class GLModel;
+		class GLSparseShadowMapRenderer;
 		class GLModelRenderer {
+			friend class GLSparseShadowMapRenderer;
+			
 			GLRenderer *renderer;
 			IGLDevice *device;
 			

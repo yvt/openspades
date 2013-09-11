@@ -18,36 +18,25 @@
  
  */
 
-#pragma once
 
-#include "../Core/Math.h"
+uniform mat4 shadowMapMatrix1;
 
-namespace spades {
-	namespace draw {
-		
-		class GLRenderer;
-		
-		struct GLShadowMapRenderParam {
-			Matrix4 matrix;
-			
-			virtual ~GLShadowMapRenderParam(){}
-			
-		};
-		
-		class IGLShadowMapRenderer{
-			GLRenderer *renderer;
-		protected:
-			virtual void RenderShadowMapPass();
-		public:
-			IGLShadowMapRenderer(GLRenderer *);
-			virtual ~IGLShadowMapRenderer(){}
-			
-			GLRenderer *GetRenderer() { return renderer; }
-			
-			virtual void Render() = 0;
-			
-			virtual bool Cull(const AABB3&) = 0;
-			virtual bool SphereCull(const Vector3& center, float rad) = 0;
-		};
-	}
+varying vec4 shadowMapCoord;
+
+void TransformShadowMatrix(out vec4 shadowMapCoord,
+						   in vec3 vertexCoord,
+						   in mat4 matrix) {
+	vec4 c;
+	c = matrix * vec4(vertexCoord, 1.);
+	c.xyz = (c.xyz * 0.5) + c.w * 0.5;
+	// bias
+	c.z -= c.w * 0.0003;
+	shadowMapCoord = c;
+}
+
+void PrepareForShadow_Model(vec3 vertexCoord, vec3 normal) {
+	TransformShadowMatrix(shadowMapCoord,
+						  vertexCoord,
+						  shadowMapMatrix1);
+	
 }

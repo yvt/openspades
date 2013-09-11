@@ -64,6 +64,8 @@ namespace spades {
 			Vector3 origin;
 			float radius;
 			
+			AABB3 boundingBox;
+			
 			uint8_t calcAOID(VoxelModel *,
 							 int x, int y, int z,
 							 int ux, int uy, int uz,
@@ -94,6 +96,8 @@ namespace spades {
 			virtual void RenderSunlightPass(std::vector<client::ModelRenderParam> params);
 			
 			virtual void RenderDynamicLightPass(std::vector<client::ModelRenderParam> params, std::vector<GLDynamicLight> lights);
+			
+			virtual AABB3 GetBoundingBox() { return boundingBox; }
 		};
 	}
 }

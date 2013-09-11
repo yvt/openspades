@@ -376,6 +376,22 @@ namespace spades {
 		return len;
 	}
 	
+	AABB3 OBB3::GetBoundingAABB() const {
+		Vector3 orig = m.GetOrigin();
+		Vector3 axis1 = m.GetAxis(0);
+		Vector3 axis2 = m.GetAxis(1);
+		Vector3 axis3 = m.GetAxis(2);
+		AABB3 ab(orig.x, orig.y, orig.z, 0, 0, 0);
+		ab += orig + axis1;
+		ab += orig + axis2;
+		ab += orig + axis1 + axis2;
+		ab += orig + axis3;
+		ab += orig + axis3 + axis1;
+		ab += orig + axis3 + axis2;
+		ab += orig + axis3 + axis1 + axis2;
+		return ab;
+	}
+	
 	std::string Replace(const std::string& text,
 						const std::string& before,
 						const std::string& after) {

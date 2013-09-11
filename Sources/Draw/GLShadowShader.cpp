@@ -28,11 +28,13 @@
 #include "../Core/Debug.h"
 #include "GLAmbientShadowRenderer.h"
 #include "GLRadiosityRenderer.h"
+#include "GLSparseShadowMapRenderer.h"
 
 SPADES_SETTING(r_mapSoftShadow, "0");
 SPADES_SETTING(r_radiosity, "0");
 
 SPADES_SETTING(r_modelShadows, "1");
+SPADES_SETTING(r_sparseShadowMaps, "1");
 
 namespace spades {
 	namespace draw {
@@ -53,7 +55,11 @@ namespace spades {
 		radiosityTextureX("radiosityTextureX"),
 		radiosityTextureY("radiosityTextureY"),
 		radiosityTextureZ("radiosityTextureZ"),
-		ambientColor("ambientColor")
+		ambientColor("ambientColor"),
+		pagetableSize("pagetableSize"),
+		pagetableSizeInv("pagetableSizeInv"),
+		minLod("minLod"),
+		shadowMapSizeInv("shadowMapSizeInv")
 		{}
 		
 		std::vector<GLShader *> GLShadowShader::RegisterShader(spades::draw::GLProgramManager *r) {
@@ -75,8 +81,13 @@ namespace spades {
 			}
 			
 			if(r_modelShadows){
-				shaders.push_back(r->RegisterShader("Shaders/Shadow/Model.fs"));
-				shaders.push_back(r->RegisterShader("Shaders/Shadow/Model.vs"));
+				if(r_sparseShadowMaps){
+					shaders.push_back(r->RegisterShader("Shaders/Shadow/ModelSparse.fs"));
+					shaders.push_back(r->RegisterShader("Shaders/Shadow/ModelSparse.vs"));
+				}else{
+					shaders.push_back(r->RegisterShader("Shaders/Shadow/Model.fs"));
+					shaders.push_back(r->RegisterShader("Shaders/Shadow/Model.vs"));
+				}
 			}else{
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/ModelNull.fs"));
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/ModelNull.vs"));
@@ -127,59 +138,100 @@ namespace spades {
 			
 			if(r_modelShadows){
 				
-				shadowMapTexture1(program);
-				shadowMapTexture2(program);
-				shadowMapTexture3(program);
-				shadowMapMatrix1(program);
-				shadowMapMatrix2(program);
-				shadowMapMatrix3(program);
-				shadowMapViewMatrix(program);
-				
-				GLBasicShadowMapRenderer *s = static_cast<GLBasicShadowMapRenderer *>
-				(renderer->GetShadowMapRenderer());
-				SPAssert(s != NULL);
-				
-				
-				dev->ActiveTexture(texStage);
-				dev->BindTexture(IGLDevice::Texture2D, s->texture[0]);
-				shadowMapTexture1.SetValue(texStage);
-				shadowMapMatrix1.SetValue(s->matrices[0]);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureCompareMode,
-								  IGLDevice::CompareRefToTexture);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureCompareFunc,
-								  IGLDevice::Less);
-				
-				texStage++;
-				
-				dev->ActiveTexture(texStage);
-				dev->BindTexture(IGLDevice::Texture2D, s->texture[1]);
-				shadowMapTexture2.SetValue(texStage);
-				shadowMapMatrix2.SetValue(s->matrices[1]);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureCompareMode,
-								  IGLDevice::CompareRefToTexture);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureCompareFunc,
-								  IGLDevice::Less);
-				
-				texStage++;
-				
-				dev->ActiveTexture(texStage);
-				dev->BindTexture(IGLDevice::Texture2D, s->texture[2]);
-				shadowMapTexture3.SetValue(texStage);
-				shadowMapMatrix3.SetValue(s->matrices[2]);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureCompareMode,
-								  IGLDevice::CompareRefToTexture);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureCompareFunc,
-								  IGLDevice::Less);
-				
-				texStage++;
-				
-				shadowMapViewMatrix.SetValue(renderer->GetViewMatrix());
+				if(r_sparseShadowMaps){
+					shadowMapTexture1(program);
+					shadowMapTexture2(program);
+					shadowMapMatrix1(program);
+					pagetableSize(program);
+					pagetableSizeInv(program);
+					minLod(program);
+					shadowMapSizeInv(program);
+					
+					GLSparseShadowMapRenderer *s = static_cast<GLSparseShadowMapRenderer *>
+					(renderer->GetShadowMapRenderer());
+					SPAssert(s != NULL);
+					
+					pagetableSize.SetValue((float)GLSparseShadowMapRenderer::Tiles);
+					pagetableSizeInv.SetValue(1.f / (float)GLSparseShadowMapRenderer::Tiles);
+					minLod.SetValue((float)(1 << s->minLod));
+					shadowMapSizeInv.SetValue(1.f / (float)s->textureSize);
+					
+					dev->ActiveTexture(texStage);
+					dev->BindTexture(IGLDevice::Texture2D, s->texture);
+					shadowMapTexture1.SetValue(texStage);
+					shadowMapMatrix1.SetValue(s->matrix);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureCompareMode,
+									  IGLDevice::CompareRefToTexture);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureCompareFunc,
+									  IGLDevice::Less);
+					
+					texStage++;
+					
+					dev->ActiveTexture(texStage);
+					dev->BindTexture(IGLDevice::Texture2D, s->pagetableTexture);
+					shadowMapTexture2.SetValue(texStage);
+					
+					texStage++;
+					
+				}else{
+					
+					shadowMapTexture1(program);
+					shadowMapTexture2(program);
+					shadowMapTexture3(program);
+					shadowMapMatrix1(program);
+					shadowMapMatrix2(program);
+					shadowMapMatrix3(program);
+					shadowMapViewMatrix(program);
+					
+					GLBasicShadowMapRenderer *s = static_cast<GLBasicShadowMapRenderer *>
+					(renderer->GetShadowMapRenderer());
+					SPAssert(s != NULL);
+					
+					
+					dev->ActiveTexture(texStage);
+					dev->BindTexture(IGLDevice::Texture2D, s->texture[0]);
+					shadowMapTexture1.SetValue(texStage);
+					shadowMapMatrix1.SetValue(s->matrices[0]);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureCompareMode,
+									  IGLDevice::CompareRefToTexture);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureCompareFunc,
+									  IGLDevice::Less);
+					
+					texStage++;
+					
+					dev->ActiveTexture(texStage);
+					dev->BindTexture(IGLDevice::Texture2D, s->texture[1]);
+					shadowMapTexture2.SetValue(texStage);
+					shadowMapMatrix2.SetValue(s->matrices[1]);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureCompareMode,
+									  IGLDevice::CompareRefToTexture);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureCompareFunc,
+									  IGLDevice::Less);
+					
+					texStage++;
+					
+					dev->ActiveTexture(texStage);
+					dev->BindTexture(IGLDevice::Texture2D, s->texture[2]);
+					shadowMapTexture3.SetValue(texStage);
+					shadowMapMatrix3.SetValue(s->matrices[2]);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureCompareMode,
+									  IGLDevice::CompareRefToTexture);
+					dev->TexParamater(IGLDevice::Texture2D,
+									  IGLDevice::TextureCompareFunc,
+									  IGLDevice::Less);
+					
+					texStage++;
+					
+					shadowMapViewMatrix.SetValue(renderer->GetViewMatrix());
+						
+				}
 				
 			}
 			

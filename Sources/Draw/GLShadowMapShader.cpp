@@ -24,9 +24,11 @@
 #include "GLMapShadowRenderer.h"
 #include "../Core/Settings.h"
 #include "GLBasicShadowMapRenderer.h"
+#include "GLSparseShadowMapRenderer.h"
 #include "../Core/Debug.h"
 
 SPADES_SETTING(r_modelShadows, "1");
+SPADES_SETTING(r_sparseShadowMaps, "1");
 
 namespace spades {
 	namespace draw {
@@ -54,6 +56,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			if(!r_modelShadows)
 				return NULL;
+			if(r_sparseShadowMaps)
+				return new GLSparseShadowMapRenderer(r);
 			return new GLBasicShadowMapRenderer(r);
 		}
 		
@@ -63,10 +67,17 @@ namespace spades {
 			
 			IGLDevice *dev = program->GetDevice();
 			
-			GLBasicShadowMapRenderer *r = static_cast<GLBasicShadowMapRenderer *>(renderer->GetShadowMapRenderer());
-			
-			projectionViewMatrix(program);
-			projectionViewMatrix.SetValue(r->matrix);
+			if(r_sparseShadowMaps){
+				GLSparseShadowMapRenderer *r = static_cast<GLSparseShadowMapRenderer *>(renderer->GetShadowMapRenderer());
+				
+				projectionViewMatrix(program);
+				projectionViewMatrix.SetValue(r->matrix);
+			}else{
+				GLBasicShadowMapRenderer *r = static_cast<GLBasicShadowMapRenderer *>(renderer->GetShadowMapRenderer());
+				
+				projectionViewMatrix(program);
+				projectionViewMatrix.SetValue(r->matrix);
+			}
 			
 			dev->ActiveTexture(texStage);
 			
