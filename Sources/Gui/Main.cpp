@@ -126,9 +126,32 @@ int main(int argc, char ** argv)
 		
 		std::vector<std::string> files = spades::FileManager::EnumFiles("");
 		
+		struct Comparator {
+			static int GetPakId(const std::string& str) {
+				if(str.size() >= 4 && str[0] == 'p' &&
+				   str[1] == 'a' && str[2] == 'k' &&
+				   (str[3] >= '0' && str[3] <= '9')){
+					return atoi(str.c_str() + 3);
+				}else{
+					return 32767;
+				}
+			}
+			static bool Compare(const std::string& a,
+								const std::string& b) {
+				int pa = GetPakId(a);
+				int pb = GetPakId(b);
+				if(pa == pb){
+					return a < b;
+				}else{
+					return pa < pb;
+				}
+			}
+		};
+		
+		std::sort(files.begin(), files.end(), Comparator::Compare);
+		
 		for(size_t i = 0; i < files.size(); i++){
 			std::string name = files[i];
-			
 			
 			// check extension
 			if(name.size() < 4 ||
