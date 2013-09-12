@@ -546,6 +546,9 @@ namespace spades {
 					OBB3 modelBounds = inst.model->GetBoundingBox();
 					for(size_t i = 0; i < rmodel.params.size(); i++) {
 						inst.param = &(rmodel.params[i]);
+                        
+                        if(inst.param->depthHack)
+                            continue;
 						
 						OBB3 instWorldBoundsOBB = inst.param->matrix * modelBounds;
 						// w should be 1, so this should wor
