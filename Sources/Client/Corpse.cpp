@@ -105,6 +105,7 @@ namespace spades {
 			SetNode(Head, (nodes[Torso1].pos + nodes[Torso2].pos)
 					* .5f + MakeVector3(0,0,-0.6f));
 			
+			
 		}
 		
 		static float VelNoise() {
@@ -382,9 +383,46 @@ namespace spades {
 			}
 			
 		}
+		
+		void Corpse::AngularMomentum(int eId,
+									 NodeType a,
+									 NodeType b){
+			Edge& e = edges[eId];
+			e.velDiff = nodes[b].vel - nodes[a].vel;
+			if(e.node1 != a || e.node2 != b){
+				e.lastVelDiff = e.velDiff;
+				e.node1 = a; e.node2 = b;
+				return;
+			}
+			
+			Vector3 force = e.lastVelDiff - e.velDiff;
+			force *= .5f;
+			nodes[b].vel += force;
+			nodes[a].vel -= force;
+			
+			e.lastVelDiff = e.velDiff;
+		}
 
 		void Corpse::ApplyConstraint(float dt) {
 			SPADES_MARK_FUNCTION();
+			
+			
+			AngularMomentum(0,
+							Torso1, Torso2);
+			AngularMomentum(1,
+							Torso2, Torso3);
+			AngularMomentum(2,
+							Torso3, Torso4);
+			AngularMomentum(3,
+							Torso4, Torso1);
+			AngularMomentum(4,
+							Torso1, Arm1);
+			AngularMomentum(5,
+							Torso2, Arm2);
+			AngularMomentum(6,
+							Torso3, Leg1);
+			AngularMomentum(7,
+							Torso4, Leg2);
 			
 			Spring(Torso1, Torso2,
 				   0.8f, dt);
@@ -447,6 +485,7 @@ namespace spades {
 			LineCollision(Torso2, Arm2, dt);
 			LineCollision(Torso3, Leg1, dt);
 			LineCollision(Torso4, Leg2, dt);
+			
 			
 			return;
 			AngleSpring(Torso4,

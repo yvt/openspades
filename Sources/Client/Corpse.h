@@ -52,11 +52,21 @@ namespace spades {
 				Vector3 lastForce;
 			};
 			
+			struct Edge {
+				NodeType node1, node2;
+				Vector3 lastVelDiff;
+				Vector3 velDiff;
+				Edge(){
+					node1=node2=NodeCount;
+				}
+			};
+			
 			IRenderer *renderer;
 			GameMap *map;
 			Vector3 color;
 			
 			Node nodes[NodeCount];
+			Edge edges[8];
 			
 			void SetNode(NodeType n, Vector3);
 			void SetNode(NodeType n, Vector4);
@@ -82,6 +92,8 @@ namespace spades {
 							 float minDot,
 							 float maxDot,
 							 float dt);
+			void AngularMomentum(int eId,
+								 NodeType a, NodeType b);
 			
 			void ApplyConstraint(float dt);
 			
