@@ -4718,7 +4718,7 @@ namespace spades {
 				}else if(kt == KillTypeGrenade){
 					corp->AddImpulse(MakeVector3(0, 0, -4.f - GetRandom() * 4.f));
 				}
-				corp->AddImpulse(victim->GetVelocty());
+				corp->AddImpulse(victim->GetVelocty() * 32.f);
 				corpses.push_back(corp);
 				
 				if(corpses.size() > corpseHardLimit){

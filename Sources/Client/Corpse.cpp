@@ -470,7 +470,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			float damp = 1.f;
 			if(dt > 0.f)
-				damp = powf(.95f, dt);
+				damp = powf(.9f, dt);
 			//dt *= 0.1f;
 			
 			for(int i = 0; i <NodeCount; i++){
