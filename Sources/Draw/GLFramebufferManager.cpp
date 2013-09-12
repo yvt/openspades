@@ -392,7 +392,7 @@ namespace spades {
 			buf.refCount = 0;
 			buf.w = device->ScreenWidth();
 			buf.h = device->ScreenHeight();
-			buf.alpha = false; // actually has alpha, but low-prec (2bit)
+			buf.internalFormat = fbInternalFormat;
 			buffers.push_back(buf);
 			
 			dev->BindFramebuffer(IGLDevice::Framebuffer, 0);
@@ -650,7 +650,19 @@ namespace spades {
 			}
 		}
 		
-		GLFramebufferManager::BufferHandle GLFramebufferManager::CreateBufferHandle(int w, int h, bool alpha) {
+		GLFramebufferManager::BufferHandle GLFramebufferManager::CreateBufferHandle(int w, int h, bool alpha){
+			IGLDevice::Enum ifmt;
+			if(alpha){
+				if(r_srgb)
+					ifmt = IGLDevice::SRGB8Alpha;
+				else
+					ifmt = IGLDevice::RGBA8;
+			}else{
+				ifmt = fbInternalFormat;
+			}
+			return CreateBufferHandle(w, h, ifmt);
+		}
+		GLFramebufferManager::BufferHandle GLFramebufferManager::CreateBufferHandle(int w, int h, IGLDevice::Enum iFormat) {
 			SPADES_MARK_FUNCTION();
 			
 			if(w < 0) w = device->ScreenWidth();
@@ -661,7 +673,7 @@ namespace spades {
 					continue;
 				if(b.w != w || b.h != h)
 					continue;
-				if(b.alpha != alpha)
+				if(b.internalFormat != iFormat)
 					continue;
 				return BufferHandle(this, i);
 			}
@@ -670,27 +682,11 @@ namespace spades {
 				SPRaise("Maximum number of framebuffers exceeded");
 			}
 			
-			SPLog("New GLColorBuffer requested (w = %d, h = %d, alpha = %s)",
-				  w, h, alpha?"yes":"no");
+			SPLog("New GLColorBuffer requested (w = %d, h = %d, ifmt = 0x%04x)",
+				  w, h, (int)iFormat);
 			
 			// no buffer is free!
-			IGLDevice::Enum ifmt;
-			if(alpha){
-				if(r_srgb)
-					ifmt = IGLDevice::SRGB8Alpha;
-				else
-					ifmt = IGLDevice::RGBA8;
-			}else{
-				if(r_srgb) {
-					ifmt = IGLDevice::SRGB8;
-				}else{
-					if(useHighPrec) {
-						ifmt = IGLDevice::RGB10A2;
-					}else{
-						ifmt = IGLDevice::RGB8;
-					}
-				}
-			}
+			IGLDevice::Enum ifmt = iFormat;
 			
 			IGLDevice::UInteger tex = device->GenTexture();
 			device->BindTexture(IGLDevice::Texture2D,
@@ -701,7 +697,7 @@ namespace spades {
 							w,
 							h,
 							0,
-							alpha?IGLDevice::RGBA:IGLDevice::RGB,
+							   IGLDevice::Red,
 							   IGLDevice::UnsignedByte, NULL);
 			SPLog("Texture allocated.");
 			device->TexParamater(IGLDevice::Texture2D,
@@ -734,7 +730,7 @@ namespace spades {
 			buf.refCount = 0;
 			buf.w = w;
 			buf.h = h;
-			buf.alpha = alpha;
+			buf.internalFormat = ifmt;
 			buffers.push_back(buf);
 			return BufferHandle(this, buffers.size() - 1);
 		}
@@ -806,7 +802,11 @@ namespace spades {
 			Buffer&b = manager->buffers[bufferIndex];
 			return b.h;
 		}
-		
+		IGLDevice::Enum GLFramebufferManager::BufferHandle::GetInternalFormat() {
+			SPAssert(valid);
+			Buffer&b = manager->buffers[bufferIndex];
+			return b.internalFormat;
+		}
 	}
 }
 

@@ -45,6 +45,8 @@ namespace spades {
 				int GetWidth();
 				int GetHeight();
 				
+				IGLDevice::Enum GetInternalFormat();
+				
 				GLFramebufferManager *GetManager() {
 					return manager;
 				}
@@ -57,7 +59,7 @@ namespace spades {
 				IGLDevice::UInteger texture;
 				int refCount;
 				int w, h;
-				bool alpha;
+				IGLDevice::Enum internalFormat;
 			};
 			
 			bool useMultisample;
@@ -98,6 +100,7 @@ namespace spades {
 				return renderDepthTexture;
 			}
 			BufferHandle CreateBufferHandle(int w=-1, int h=-1, bool alpha=false);
+			BufferHandle CreateBufferHandle(int w, int h, IGLDevice::Enum internalFormat);
 			
 			void CopyToMirrorTexture(IGLDevice::UInteger fb = 0);
 			void ClearMirrorTexture(Vector3);
