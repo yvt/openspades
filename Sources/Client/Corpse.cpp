@@ -469,8 +469,11 @@ namespace spades {
 		void Corpse::Update(float dt) {
 			SPADES_MARK_FUNCTION();
 			float damp = 1.f;
-			if(dt > 0.f)
+            float damp2 = 1.f;
+			if(dt > 0.f){
 				damp = powf(.9f, dt);
+				damp2 = powf(.371f, dt);
+            }
 			//dt *= 0.1f;
 			
 			for(int i = 0; i <NodeCount; i++){
@@ -485,8 +488,10 @@ namespace spades {
 				if(node.pos.z > 63.f){
 					node.vel.z -= dt * 6.f; // buoyancy
 					node.vel *= damp;
-				}else
-				node.vel.z += dt * 12.f; // gravity
+				}else{
+                    node.vel.z += dt * 32.f; // gravity
+                    node.vel.z *= damp2;
+                }
 				
 				//node.vel *= damp;
 				
