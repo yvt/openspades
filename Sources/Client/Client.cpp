@@ -151,6 +151,7 @@ namespace spades {
 			SPLog("Font 'Ubuntu Condensed (Large)' Loaded");
 			
 			world = NULL;
+			net = NULL;
 			
 			frameToRendererInit = 5;
 			
@@ -1536,6 +1537,10 @@ namespace spades {
 						
 						// for 1st view, camera blur can be used
 						def.denyCameraBlur = false;
+					
+						float per = aimDownState;
+						per *= per * per;
+						def.depthOfFieldNearRange = per * 7.f + .01f;
 						
 					}
 					

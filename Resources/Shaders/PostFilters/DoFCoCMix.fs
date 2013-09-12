@@ -17,32 +17,22 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
-#pragma once
 
-#include "../Core/Math.h"
 
-namespace spades {
-	namespace client {
-		struct SceneDefinition {
-			int viewportLeft,  viewportTop;
-			int viewportWidth, viewportHeight;
-			float fovX, fovY;
-			Vector3 viewOrigin;
-			Vector3 viewAxis[3];
-			float zNear, zFar;
-			bool skipWorld;
-			
-			float depthOfFieldNearRange;
-			
-			unsigned int time;
-			
-			bool denyCameraBlur;
-			
-			SceneDefinition() {
-				depthOfFieldNearRange = 0.f;
-				denyCameraBlur = true;
-				time = 0;
-			}
-		};
-	}
+uniform sampler2D cocTexture;
+uniform sampler2D cocBlurTexture;
+
+varying vec2 texCoord;
+
+
+void main() {
+	
+	float coc = texture2D(cocTexture, texCoord).x;
+	float cocBlur = texture2D(cocBlurTexture, texCoord).x;
+
+	float op = 2. * max(cocBlur, coc) - coc;
+	
+	gl_FragColor = vec4(op);
+	
 }
+

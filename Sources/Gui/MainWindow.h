@@ -52,9 +52,6 @@ private:
   Fl_Light_Button *eaxCheck;
   inline void cb_eaxCheck_i(Fl_Light_Button*, void*);
   static void cb_eaxCheck(Fl_Light_Button*, void*);
-  Fl_Light_Button *advancedLensCheck;
-  inline void cb_advancedLensCheck_i(Fl_Light_Button*, void*);
-  static void cb_advancedLensCheck(Fl_Light_Button*, void*);
   Fl_Light_Button *softParticleCheck;
   inline void cb_softParticleCheck_i(Fl_Light_Button*, void*);
   static void cb_softParticleCheck(Fl_Light_Button*, void*);
@@ -78,6 +75,11 @@ public:
 private:
   inline void cb_bloodCheck_i(Fl_Light_Button*, void*);
   static void cb_bloodCheck(Fl_Light_Button*, void*);
+public:
+  Fl_Choice *postFilterSelect;
+private:
+  inline void cb_postFilterSelect_i(Fl_Choice*, void*);
+  static void cb_postFilterSelect(Fl_Choice*, void*);
   Fl_Input *playerNameInput;
   inline void cb_playerNameInput_i(Fl_Input*, void*);
   static void cb_playerNameInput(Fl_Input*, void*);
@@ -128,6 +130,7 @@ protected:
   spades::Serverbrowser* browser; 
 private:
   bool shaderHighCapable; 
+  bool postFilterHighCapable; 
   void QuickConnectPressed();
   void StartGame(const std::string& host);
 public:

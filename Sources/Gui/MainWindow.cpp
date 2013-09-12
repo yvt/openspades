@@ -45,13 +45,6 @@ void MainWindow::cb_eaxCheck(Fl_Light_Button* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_eaxCheck_i(o,v);
 }
 
-void MainWindow::cb_advancedLensCheck_i(Fl_Light_Button*, void*) {
-  SavePrefs();
-}
-void MainWindow::cb_advancedLensCheck(Fl_Light_Button* o, void* v) {
-  ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_advancedLensCheck_i(o,v);
-}
-
 void MainWindow::cb_softParticleCheck_i(Fl_Light_Button*, void*) {
   SavePrefs();
 }
@@ -89,6 +82,13 @@ void MainWindow::cb_bloodCheck_i(Fl_Light_Button*, void*) {
 }
 void MainWindow::cb_bloodCheck(Fl_Light_Button* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_bloodCheck_i(o,v);
+}
+
+void MainWindow::cb_postFilterSelect_i(Fl_Choice*, void*) {
+  SavePrefs();
+}
+void MainWindow::cb_postFilterSelect(Fl_Choice* o, void* v) {
+  ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_postFilterSelect_i(o,v);
 }
 
 void MainWindow::cb_playerNameInput_i(Fl_Input*, void*) {
@@ -226,11 +226,7 @@ this->when(FL_WHEN_RELEASE);
     { Fl_Group* o = new Fl_Group(10, 240, 385, 105, "Graphics");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { advancedLensCheck = new Fl_Light_Button(20, 250, 185, 25, "HQ Postprocess");
-        advancedLensCheck->callback((Fl_Callback*)cb_advancedLensCheck);
-        advancedLensCheck->when(FL_WHEN_CHANGED);
-      } // Fl_Light_Button* advancedLensCheck
-      { softParticleCheck = new Fl_Light_Button(210, 250, 175, 25, "Soft Particles");
+      { softParticleCheck = new Fl_Light_Button(20, 250, 160, 25, "Soft Particles");
         softParticleCheck->callback((Fl_Callback*)cb_softParticleCheck);
         softParticleCheck->when(FL_WHEN_CHANGED);
       } // Fl_Light_Button* softParticleCheck
@@ -252,6 +248,10 @@ this->when(FL_WHEN_RELEASE);
         bloodCheck->callback((Fl_Callback*)cb_bloodCheck);
         bloodCheck->when(FL_WHEN_CHANGED);
       } // Fl_Light_Button* bloodCheck
+      { postFilterSelect = new Fl_Choice(255, 250, 130, 25, "Post FX");
+        postFilterSelect->down_box(FL_BORDER_BOX);
+        postFilterSelect->callback((Fl_Callback*)cb_postFilterSelect);
+      } // Fl_Choice* postFilterSelect
       o->end();
     } // Fl_Group* o
     { Fl_Group* o = new Fl_Group(400, 150, 205, 70, "Game Options");

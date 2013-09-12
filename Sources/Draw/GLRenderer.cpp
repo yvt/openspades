@@ -58,10 +58,12 @@
 #include <stdlib.h>
 #include "GLProfiler.h"
 #include "GLColorCorrectionFilter.h"
+#include "GLDepthOfFieldFilter.h"
 
 SPADES_SETTING(r_water, "2");
 SPADES_SETTING(r_bloom, "1");
 SPADES_SETTING(r_lens, "1");
+SPADES_SETTING(r_depthOfField, "0");
 SPADES_SETTING(r_lensFlare, "1");
 SPADES_SETTING(r_softParticles, "1");
 SPADES_SETTING(r_cameraBlur, "1");
@@ -143,15 +145,24 @@ namespace spades {
 				delete shadowMapRenderer;
 			if(cameraBlur)
 				delete cameraBlur;
-			delete longSpriteRenderer;
-			delete waterRenderer;
-			delete modelRenderer;
-			delete spriteRenderer;
-			delete imageRenderer;
-			delete modelManager;
-			delete programManager;
-			delete imageManager;
-			delete fbManager;
+			if(longSpriteRenderer)
+				delete longSpriteRenderer;
+			if(waterRenderer)
+				delete waterRenderer;
+			if(modelRenderer)
+				delete modelRenderer;
+			if(spriteRenderer)
+				delete spriteRenderer;
+			if(imageRenderer)
+				delete imageRenderer;
+			if(modelRenderer)
+				delete modelManager;
+			if(programManager)
+				delete programManager;
+			if(imageManager)
+				delete imageManager;
+			if(fbManager)
+				delete fbManager;
 			SPLog("GLRenderer finalized");
 		}
 		
@@ -194,6 +205,10 @@ namespace spades {
 			
 			if(r_fxaa){
 				GLFXAAFilter(this);
+			}
+			
+			if(r_depthOfField){
+				GLDepthOfFieldFilter(this);
 			}
 			
 			device->Finish();
@@ -763,6 +778,13 @@ namespace spades {
 				
 				device->BlendFunc(IGLDevice::SrcAlpha,
 								  IGLDevice::OneMinusSrcAlpha);
+				
+				if(r_depthOfField){
+					GLProfiler profiler(device, "Depth of Field");
+					handle = GLDepthOfFieldFilter(this).Filter(handle,
+															   sceneDef.depthOfFieldNearRange);
+					
+				}
 				
 				if(r_cameraBlur && !sceneDef.denyCameraBlur){
 					GLProfiler profiler(device, "Camera Blur");

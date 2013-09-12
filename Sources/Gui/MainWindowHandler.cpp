@@ -71,6 +71,7 @@ SPADES_SETTING(r_maxAnisotropy, "8");
 SPADES_SETTING(r_colorCorrection, "1");
 SPADES_SETTING(r_physicalLighting, "");
 SPADES_SETTING(r_occlusionQuery, "");
+SPADES_SETTING(r_depthOfField, "");
 
 static std::vector<spades::IntVector3> g_modes;
 
@@ -217,11 +218,28 @@ void MainWindow::LoadPrefs() {
 	fullscreenCheck->value(r_fullscreen ? 1 : 0);
 	
 	// --- graphics
-	if(r_cameraBlur && r_bloom && r_lens && r_lensFlare &&
-	   r_colorCorrection) {
-		advancedLensCheck->value(1);
+	postFilterSelect->clear();
+	postFilterSelect->add("Low");
+	postFilterSelect->add("Medium");
+	if(postFilterHighCapable){
+		postFilterSelect->add("High");
+	}
+	postFilterSelect->add("Custom");
+	if(postFilterHighCapable){
+		postFilterSelect->value(3);
 	}else{
-		advancedLensCheck->value(0);
+		postFilterSelect->value(2);
+	}
+	
+	if(r_cameraBlur && r_bloom && r_lens && r_lensFlare &&
+	   r_colorCorrection && r_depthOfField
+	   && postFilterHighCapable) {
+		postFilterSelect->value(2);
+	}else if(r_cameraBlur && r_bloom && r_lens && r_lensFlare &&
+	   r_colorCorrection && (!r_depthOfField)) {
+		postFilterSelect->value(1);
+	}else{
+		postFilterSelect->value(0);
 	}
 	
 	softParticleCheck->value(r_softParticles ? 1 : 0);
@@ -356,9 +374,11 @@ void MainWindow::CheckGLCapability() {
 		+ err;
 		capable = false;
 		shaderHighCapable = false;
+		postFilterHighCapable = false;
 	}else{
 		
 		shaderHighCapable = true;
+		postFilterHighCapable = true;
 		
 		const char *str;
 		GLint maxTextureSize;
@@ -642,11 +662,34 @@ void MainWindow::SavePrefs() {
 	
 	// --- graphics
 	cg_blood = bloodCheck->value() ? 1 : 0;
-	r_bloom = advancedLensCheck->value() ? 1 : 0;
-	r_lens = advancedLensCheck->value() ? 1 : 0;
-	r_lensFlare = advancedLensCheck->value() ? 1 : 0;
-	r_cameraBlur = advancedLensCheck->value() ? 1 : 0;
-	r_colorCorrection = advancedLensCheck->value() ? 1 : 0;
+	switch(postFilterSelect->value()){
+		case 0:
+			r_bloom = 0;
+			r_lens = 0;
+			r_lensFlare = 0;
+			r_cameraBlur = 0;
+			r_colorCorrection = 0;
+			r_depthOfField = 0;
+			break;
+		case 1:
+			r_bloom = 1;
+			r_lens = 1;
+			r_lensFlare = 1;
+			r_cameraBlur = 1;
+			r_colorCorrection = 1;
+			r_depthOfField = 0;
+			break;
+		case 2:
+			if(postFilterHighCapable){
+				r_bloom = 1;
+				r_lens = 1;
+				r_lensFlare = 1;
+				r_cameraBlur = 1;
+				r_colorCorrection = 1;
+				r_depthOfField = 1;
+			}
+			break;
+	}
 	r_softParticles = softParticleCheck->value() ? 1 : 0;
 	r_radiosity = radiosityCheck->value() ? 1 : 0;
 	switch(directLightSelect->value()){
