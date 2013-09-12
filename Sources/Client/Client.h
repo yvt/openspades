@@ -125,6 +125,13 @@ namespace spades {
 			float lastAliveTime;
 			int lastKills;
 			float worldSetTime;
+			struct HurtSprite {
+				float angle;
+				float horzShift;
+				float scale;
+				float strength;
+			};
+			std::vector<HurtSprite> hurtSprites;
 			
 			Player::ToolType selectedTool;
 			float toolRaiseState;
@@ -205,6 +212,7 @@ namespace spades {
 			
 			void DrawScene();
 			void Draw2D();
+			void DrawHurtSprites();
 			
 			std::string ScreenShotPath();
 			void TakeScreenShot(bool sceneOnly);

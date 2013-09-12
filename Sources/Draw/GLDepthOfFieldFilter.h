@@ -37,7 +37,7 @@ namespace spades {
 			GLProgram *blurProgram; // program to mix CoC radius
 			GLProgram *finalMix; // program to mix CoC radius
 			
-			GLColorBuffer GenerateCoC(float blurDepthRange);
+			GLColorBuffer GenerateCoC(float blurDepthRange, float vignetteBlur);
 			GLColorBuffer BlurCoC(GLColorBuffer, float spread);
 			GLColorBuffer Blur(GLColorBuffer,
 							   GLColorBuffer coc,
@@ -51,7 +51,7 @@ namespace spades {
 			GLColorBuffer UnderSample(GLColorBuffer);
 		public:
 			GLDepthOfFieldFilter(GLRenderer *);
-			GLColorBuffer Filter(GLColorBuffer, float blurDepthRange);
+			GLColorBuffer Filter(GLColorBuffer, float blurDepthRange, float vignetteBlur);
 		};
 	}
 }

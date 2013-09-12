@@ -89,7 +89,7 @@ namespace spades {
 			return buf3;
 		}
 		
-		GLColorBuffer GLDepthOfFieldFilter::GenerateCoC(float blurDepthRange) {
+		GLColorBuffer GLDepthOfFieldFilter::GenerateCoC(float blurDepthRange, float vignetteBlur) {
 			SPADES_MARK_FUNCTION();
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
@@ -138,7 +138,7 @@ namespace spades {
 					vignetteScale.SetValue(2.f,
 										   2.f * (float)h / (float)w);
 				}
-				maxVignetteBlur.SetValue(sinf(std::max(def.fovX, def.fovY) * .5f) * .5f);
+				maxVignetteBlur.SetValue(sinf(std::max(def.fovX, def.fovY) * .5f) * vignetteBlur);
 				
 				qr.SetCoordAttributeIndex(positionAttribute());
 				dev->BindTexture(IGLDevice::Texture2D, renderer->GetFramebufferManager()->GetDepthTexture());
@@ -371,7 +371,7 @@ namespace spades {
 		}
 		
 		
-		GLColorBuffer GLDepthOfFieldFilter::Filter(GLColorBuffer input, float blurDepthRange) {
+		GLColorBuffer GLDepthOfFieldFilter::Filter(GLColorBuffer input, float blurDepthRange, float vignetteBlur) {
 			SPADES_MARK_FUNCTION();
 			
 			IGLDevice *dev = renderer->GetGLDevice();
@@ -386,12 +386,14 @@ namespace spades {
             
             {
                 GLProfiler p(dev, "CoC Computation");
-                coc = GenerateCoC(blurDepthRange);
+                coc = GenerateCoC(blurDepthRange, vignetteBlur);
             }
 			
 			float maxCoc = (float)std::max(w, h) / 100.f;
 			float cos60 = cosf(M_PI / 3.f);
 			float sin60 = sinf(M_PI / 3.f);
+			
+			maxCoc *= .7f + vignetteBlur * 0.5f;
 			
 			// reduce resolution to make it faster
 			int divide = 1;

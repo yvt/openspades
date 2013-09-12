@@ -779,10 +779,13 @@ namespace spades {
 				device->BlendFunc(IGLDevice::SrcAlpha,
 								  IGLDevice::OneMinusSrcAlpha);
 				
-				if(r_depthOfField){
+				if(r_depthOfField &&
+				   (sceneDef.depthOfFieldNearRange > 0.f ||
+					sceneDef.blurVignette > 0.f)){
 					GLProfiler profiler(device, "Depth of Field");
 					handle = GLDepthOfFieldFilter(this).Filter(handle,
-															   sceneDef.depthOfFieldNearRange);
+															   sceneDef.depthOfFieldNearRange,
+															   sceneDef.blurVignette);
 					
 				}
 				

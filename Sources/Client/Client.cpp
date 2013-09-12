@@ -357,6 +357,8 @@ namespace spades {
 			renderer->RegisterImage("Gfx/LoadingWindow.png");
 			renderer->RegisterImage("Gfx/LoadingWindowGlow.png");
 			renderer->RegisterImage("Gfx/LoadingStripe.png");
+			renderer->RegisterImage("Gfx/HurtSprite.png");
+			renderer->RegisterImage("Gfx/HurtRing.tga");
 			audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
 			
 			SPLog("Started connecting to '%s'", hostname.c_str());
@@ -698,6 +700,19 @@ namespace spades {
 								break;
 						}
 						
+						hurtSprites.resize(5);
+						float hpper = player->GetHealth() / 100.f;
+						for(size_t i = 0; i < hurtSprites.size(); i++) {
+							HurtSprite& spr = hurtSprites[i];
+							spr.angle = GetRandom() * (2.f * M_PI);
+							spr.scale = .5f + GetRandom() * .3f;
+							spr.horzShift = GetRandom();
+							spr.strength = .3f + GetRandom() * .7f;
+							if(hpper > .5f) {
+								spr.strength *= 1.5f - hpper;
+							}
+						}
+						
 						audioDevice->PlayLocal(c, AudioParam());
 					}else{
 						lastHealth = player->GetHealth();
@@ -980,6 +995,13 @@ namespace spades {
 						if(paletteView->KeyInput(name)){
 							return;
 						}
+					}
+					
+					if(name == "h" && down) {
+						// TODO: debug; remove this
+						int h = p->GetHealth();
+						h -= 10; if(h <= 0) h = 100;
+						p->SetHP(h, HurtTypeWeapon, MakeVector3(0, 0, 0));
 					}
 					
 					if(CheckKey(cg_keyMoveLeft, name)){
@@ -1274,6 +1296,13 @@ namespace spades {
 			renderer->FrameDone();
 			
 			Bitmap *bmp = renderer->ReadBitmap();
+			// force 100% opacity
+			
+			uint32_t *pixels = bmp->GetPixels();
+			for(size_t i = bmp->GetWidth() * bmp->GetHeight(); i > 0; i--) {
+				*(pixels++) |= 0xff000000UL;
+			}
+			
 			try{
 				std::string name = ScreenShotPath();
 				bmp->Save(name);
@@ -1368,6 +1397,8 @@ namespace spades {
 												  fogColor.z / 255.f));
 				
 				Player *player = world->GetLocalPlayer();
+				
+				def.blurVignette = .4f;
 				
 				if(IsFollowing()){
 					int limit = 100;
@@ -1541,6 +1572,15 @@ namespace spades {
 						float per = aimDownState;
 						per *= per * per;
 						def.depthOfFieldNearRange = per * 13.f + .01f;
+					
+						def.blurVignette = .4f;
+						
+						float wTime = world->GetTime();
+						if(wTime < lastHurtTime + .15f){
+							float per = 1.f - (wTime - lastHurtTime) / .15f;
+							per *= .5f + player->GetHealth() / 100.f * .3f;
+							def.blurVignette += per * 5.f;
+						}
 						
 					}
 					
@@ -2905,6 +2945,44 @@ namespace spades {
 			renderer->Flip();
 		}
 		
+		void Client::DrawHurtSprites() {
+			float per = (world->GetTime() - lastHurtTime) / .6f;
+			if(per > 1.f) return;
+			IImage *img = renderer->RegisterImage("Gfx/HurtSprite.png");
+			
+			Vector2 scrSize = {renderer->ScreenWidth(), renderer->ScreenHeight()};
+			Vector2 scrCenter = scrSize * .5f;
+			float radius = scrSize.GetLength() * .5f;
+			
+			for(size_t i = 0 ; i < hurtSprites.size(); i++) {
+				HurtSprite& spr = hurtSprites[i];
+				float alpha = spr.strength - per;
+				if(alpha < 0.f) continue;
+				if(alpha > 1.f) alpha = 1.f;
+				
+				Vector2 radDir = {
+					cosf(spr.angle), sinf(spr.angle)
+				};
+				Vector2 angDir = {
+					-sinf(spr.angle), cosf(spr.angle)
+				};
+				float siz = spr.scale * radius;
+				Vector2 base = radDir * radius + scrCenter;
+				Vector2 centVect = radDir * (-siz);
+				Vector2 sideVect1 = angDir * (siz * 4.f * (spr.horzShift));
+				Vector2 sideVect2 = angDir * (siz * 4.f * (spr.horzShift - 1.f));
+				
+				Vector2 v1 = base + centVect + sideVect1;
+				Vector2 v2 = base + centVect + sideVect2;
+				Vector2 v3 = base + sideVect1;
+				
+				renderer->SetColor(MakeVector4(0.f, 0.f, 0.f, alpha));
+				renderer->DrawImage(img,
+									v1, v2, v3,
+									AABB2(0, 8.f, img->GetWidth(), img->GetHeight()));
+			}
+		}
+		
 		void Client::Draw2D(){
 			SPADES_MARK_FUNCTION();
 			
@@ -2925,8 +3003,14 @@ namespace spades {
 				Player *p = GetWorld()->GetLocalPlayer();
 				if(p){
 					
-					if(wTime < lastHurtTime + .2f){
-						float per = (wTime - lastHurtTime) / .2f;
+					DrawHurtSprites();
+					
+					if(wTime < lastHurtTime + .35f){
+						float per = (wTime - lastHurtTime) / .35f;
+						per = 1.f - per;
+						per *= .3f + p->GetHealth() / 100.f * .7f;
+						per = std::min(per, 0.9f);
+						per = 1.f - per;
 						Vector3 color = {1.f, per, per};
 						renderer->MultiplyScreenColor(color);
 					}
