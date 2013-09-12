@@ -1296,6 +1296,13 @@ namespace spades {
 			renderer->FrameDone();
 			
 			Bitmap *bmp = renderer->ReadBitmap();
+			// force 100% opacity
+			
+			uint32_t *pixels = bmp->GetPixels();
+			for(size_t i = bmp->GetWidth() * bmp->GetHeight(); i > 0; i--) {
+				*(pixels++) |= 0xff000000UL;
+			}
+			
 			try{
 				std::string name = ScreenShotPath();
 				bmp->Save(name);
