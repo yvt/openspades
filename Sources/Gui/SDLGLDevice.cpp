@@ -772,6 +772,11 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 		GLenum SDLGLDevice::parseTextureInternalFormat(Enum v) {
 			SPADES_MARK_FUNCTION_DEBUG();
 			switch(v){
+				case 1:
+				case 2:
+				case 3:
+				case 4:
+					return (int)v;
 				case Red: return GL_RED;
 				case RG: return GL_RG;
 				case RGB: return GL_RGB;
