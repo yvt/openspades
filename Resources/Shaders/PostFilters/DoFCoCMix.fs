@@ -31,7 +31,7 @@ void main() {
 	float cocBlur = texture2D(cocBlurTexture, texCoord).x;
 
 	float op = 2. * max(cocBlur, coc) - coc;
-	
+	op = max(op, coc);
 	gl_FragColor = vec4(op);
 	
 }

@@ -39,8 +39,8 @@ void main() {
 	vec4 b = doGamma(texture2D(blurTexture1, texCoord));
 	b += doGamma(texture2D(blurTexture2, texCoord));
 	b *= 0.5;
-	
-	float per = clamp(0., 1., coc * 5.);
+
+	float per = min(1., coc * 5.);
 	vec4 v = mix(a, b, per);
 	v.xyz = sqrt(v.xyz);
 	

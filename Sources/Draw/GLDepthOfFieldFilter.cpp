@@ -180,6 +180,8 @@ namespace spades {
 				qr.Draw();
 				dev->BindTexture(IGLDevice::Texture2D, 0);
 			}
+            
+            coc2 = BlurCoC(coc2, .5f);
 			
 			return coc2;
 		}
