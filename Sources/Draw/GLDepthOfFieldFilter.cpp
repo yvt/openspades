@@ -30,6 +30,9 @@
 #include "GLRenderer.h"
 #include "../Core/Debug.h"
 #include "GLProfiler.h"
+#include "../Core/Settings.h"
+
+SPADES_SETTING(r_depthOfField, "");
 
 namespace spades {
 	namespace draw {
@@ -221,8 +224,8 @@ namespace spades {
 				qr.Draw();
 				buffer = buf2;
 				
-				offset *= .25f;
-				len *= .25f;
+				offset *= .125f;
+				len *= .125f;
 			}
 			
 			return buffer;
