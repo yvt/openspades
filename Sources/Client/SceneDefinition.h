@@ -38,10 +38,13 @@ namespace spades {
 			
 			bool denyCameraBlur;
 			
+			float blurVignette;
+			
 			SceneDefinition() {
 				depthOfFieldNearRange = 0.f;
 				denyCameraBlur = true;
 				time = 0;
+				blurVignette = 0.f;
 			}
 		};
 	}
