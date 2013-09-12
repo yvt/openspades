@@ -1022,6 +1022,13 @@ namespace spades {
 						lastPlayerInput = 0xffffffff;
 						lastWeaponInput = 0xffffffff;
 					}else{
+                        if(team < 2 && pId < (int)playerPosRecords.size()) {
+                            PosRecord& rec = playerPosRecords[pId];
+                            
+                            rec.valid = true;
+                            rec.pos = pos;
+                            rec.time = GetWorld()->GetTime();
+                        }
 						if(savedPlayerTeam[pId] != team && team < 2){
 							
 							client->PlayerJoinedTeam(p);
