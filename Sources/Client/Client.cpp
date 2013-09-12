@@ -1576,7 +1576,8 @@ namespace spades {
 						def.blurVignette = .4f;
 						
 						float wTime = world->GetTime();
-						if(wTime < lastHurtTime + .15f){
+						if(wTime < lastHurtTime + .15f &&
+                           wTime >= lastHurtTime){
 							float per = 1.f - (wTime - lastHurtTime) / .15f;
 							per *= .5f + player->GetHealth() / 100.f * .3f;
 							def.blurVignette += per * 5.f;
@@ -2948,6 +2949,7 @@ namespace spades {
 		void Client::DrawHurtSprites() {
 			float per = (world->GetTime() - lastHurtTime) / .6f;
 			if(per > 1.f) return;
+            if(per < 0.f) return;
 			IImage *img = renderer->RegisterImage("Gfx/HurtSprite.png");
 			
 			Vector2 scrSize = {renderer->ScreenWidth(), renderer->ScreenHeight()};
@@ -3005,7 +3007,8 @@ namespace spades {
 					
 					DrawHurtSprites();
 					
-					if(wTime < lastHurtTime + .35f){
+					if(wTime < lastHurtTime + .35f &&
+                       wTime >= lastHurtTime){
 						float per = (wTime - lastHurtTime) / .35f;
 						per = 1.f - per;
 						per *= .3f + (1.f - p->GetHealth() / 100.f) * .7f;
