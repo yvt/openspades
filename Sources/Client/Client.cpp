@@ -1540,7 +1540,7 @@ namespace spades {
 					
 						float per = aimDownState;
 						per *= per * per;
-						def.depthOfFieldNearRange = per * 7.f + .01f;
+						def.depthOfFieldNearRange = per * 13.f + .01f;
 						
 					}
 					
