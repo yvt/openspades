@@ -1398,6 +1398,8 @@ namespace spades {
 				
 				Player *player = world->GetLocalPlayer();
 				
+				def.blurVignette = .4f;
+				
 				if(IsFollowing()){
 					int limit = 100;
 					// if current following player has left,
