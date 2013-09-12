@@ -368,11 +368,11 @@ namespace spades {
 #pragma mark - BackFaceBlock
 		
 		struct BFVertex {
-			uint16_t x, y, z;
+			int16_t x, y, z;
 			uint16_t pad;
 			
 			static BFVertex Make(int x, int y, int z) {
-				BFVertex v = {(uint16_t)x, (uint16_t)y, (uint16_t)z, 0};
+				BFVertex v = {(int16_t)x, (int16_t)y, (int16_t)z, 0};
 				return v;
 			}
 		};
@@ -473,7 +473,7 @@ namespace spades {
 			
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device->VertexAttribPointer(positionAttribute(),
-										3, IGLDevice::UnsignedShort,
+										3, IGLDevice::Short,
 										false, sizeof(BFVertex),
 										vertices.data());
 			
