@@ -29,6 +29,7 @@
 #include "GLProgramUniform.h"
 #include "GLRenderer.h"
 #include "../Core/Debug.h"
+#include "GLProfiler.h"
 
 namespace spades {
 	namespace draw {
@@ -282,7 +283,12 @@ namespace spades {
 			
 			dev->Enable(IGLDevice::Blend, false);
 			
-			GLColorBuffer coc = GenerateCoC(blurDepthRange);
+			GLColorBuffer coc;
+            
+            {
+                GLProfiler p(dev, "CoC Computation");
+                coc = GenerateCoC(blurDepthRange);
+            }
 			
 			float maxCoc = (float)std::max(w, h) / 100.f;
 			float cos60 = cosf(M_PI / 3.f);
@@ -290,20 +296,39 @@ namespace spades {
 			
 			dev->Viewport(0, 0, w, h);
 			
-			GLColorBuffer buf1 = Blur(input, coc,
-									  MakeVector2(0.f, -1.f) * maxCoc);
-			GLColorBuffer buf2 = Blur(input, coc,
+            GLColorBuffer buf1, buf2;
+            {
+                GLProfiler p(dev, "Blur 1");
+                buf1 = Blur(input, coc,
+                            MakeVector2(0.f, -1.f) * maxCoc);
+            }
+            {
+                GLProfiler p(dev, "Blur 2");
+                buf2 = Blur(input, coc,
 									  MakeVector2(-sin60, cos60) * maxCoc);
-			buf2 = AddMix(buf1, buf2);
-			//return buf2;
-			buf1 = Blur(buf1, coc,
+            }
+            {
+                GLProfiler p(dev, "Mix 1");
+                buf2 = AddMix(buf1, buf2);
+			}
+                //return buf2;
+            {
+                GLProfiler p(dev, "Blur 3");
+                buf1 = Blur(buf1, coc,
 						MakeVector2(-sin60, cos60) * maxCoc);
-			buf2 = Blur(buf2, coc,
+			}
+            {
+                GLProfiler p(dev, "Blur 4");
+                buf2 = Blur(buf2, coc,
 						MakeVector2(sin60, cos60) * maxCoc);
+            }
 			
-			GLColorBuffer output = AddMix(buf1, buf2);
+            {
+                GLProfiler p(dev, "Mix 2");
+                GLColorBuffer output = AddMix(buf1, buf2);
+                return output;
+            }
 			
-			return output;
 		}
 	}
 }
