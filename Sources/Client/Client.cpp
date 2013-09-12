@@ -700,12 +700,12 @@ namespace spades {
 								break;
 						}
 						
-						hurtSprites.resize(5);
+						hurtSprites.resize(12);
 						float hpper = player->GetHealth() / 100.f;
 						for(size_t i = 0; i < hurtSprites.size(); i++) {
 							HurtSprite& spr = hurtSprites[i];
 							spr.angle = GetRandom() * (2.f * M_PI);
-							spr.scale = .5f + GetRandom() * .3f;
+							spr.scale = .2f + GetRandom() * .6f;
 							spr.horzShift = GetRandom();
 							spr.strength = .3f + GetRandom() * .7f;
 							if(hpper > .5f) {
@@ -997,8 +997,8 @@ namespace spades {
 						}
 					}
 					
-					if(name == "h" && down) {
-						// TODO: debug; remove this
+					if(name == "h" && down && false) {
+						// debug
 						int h = p->GetHealth();
 						h -= 10; if(h <= 0) h = 100;
 						p->SetHP(h, HurtTypeWeapon, MakeVector3(0, 0, 0));
@@ -3008,11 +3008,14 @@ namespace spades {
 					if(wTime < lastHurtTime + .35f){
 						float per = (wTime - lastHurtTime) / .35f;
 						per = 1.f - per;
-						per *= .3f + p->GetHealth() / 100.f * .7f;
+						per *= .3f + (1.f - p->GetHealth() / 100.f) * .7f;
 						per = std::min(per, 0.9f);
 						per = 1.f - per;
 						Vector3 color = {1.f, per, per};
 						renderer->MultiplyScreenColor(color);
+						renderer->SetColor(MakeVector4(1,0,0,(1.f - per) * .1f));
+                        renderer->DrawImage(renderer->RegisterImage("Gfx/White.tga"),
+                                            AABB2(0, 0, scrWidth, scrHeight));
 					}
 					
 					Player *hottracked = HotTrackedPlayer();
