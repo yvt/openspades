@@ -75,6 +75,9 @@ namespace spades {
 		void operator =(const ScriptContextHandle&);
 		asIScriptContext *GetContext() const;
 		asIScriptContext *operator ->() const;
+		
+		ScriptManager *GetManager() const { return manager; }
+		void ExecuteChecked();
 	};
 	
 	class ScriptObjectRegistrar {

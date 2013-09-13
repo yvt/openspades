@@ -218,6 +218,26 @@ namespace spades {
 		return GetContext();
 	}
 	
+	void ScriptContextHandle::ExecuteChecked() {
+		SPADES_MARK_FUNCTION();
+		asIScriptContext * ctx = GetContext();
+		int r = ctx->Execute();
+		manager->CheckError(r);
+		if(r == asEXECUTION_ABORTED) {
+			SPRaise("Script execution aborted.");
+		}else if(r == asEXECUTION_SUSPENDED) {
+			SPRaise("Script execution suspended."); // TODO: shouldn't raise error?
+		}else if(r == asEXECUTION_EXCEPTION) {
+			const char *secName = NULL;
+			int line = 0, column = 0;
+			asIScriptFunction *func = ctx->GetExceptionFunction();
+			// TODO: backtrace generation
+			line = ctx->GetExceptionLineNumber(&column, &secName);
+			SPRaise("%s @ [%s:%d,%d] %s", ctx->GetExceptionString(),
+					secName?secName:"(stub)", line, column,
+					func->GetDeclaration(true, true));
+		}
+	}
 	
 	static std::map<std::string, ScriptObjectRegistrar *> * registrars = NULL;
 	
