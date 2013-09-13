@@ -31,10 +31,21 @@
 #include "../AngelScript/source/scriptmathcomplex.h"
 #include "../AngelScript/source/scriptstdstring.h"
 #include "../AngelScript/source/weakref.h"
+#include "Mutex.h"
+#include <list>
 
 namespace spades {
 	
+	class ScriptContextHandle;
+	
 	class ScriptManager {
+		friend class ScriptContextHandle;
+		struct Context {
+			asIScriptContext *obj;
+			int refCount;
+		};
+		Mutex contextMutex;
+		std::list<Context *> contextFreeList;
 		
 		asIScriptEngine *engine;
 		
@@ -46,6 +57,24 @@ namespace spades {
 		static void CheckError(int);
 		
 		asIScriptEngine *GetEngine() const { return engine; }
+		
+		ScriptContextHandle GetContext();
+	};
+	
+	class ScriptContextHandle{
+		ScriptManager *manager;
+		ScriptManager::Context *obj;
+		
+		void Release();
+	public:
+		ScriptContextHandle();
+		ScriptContextHandle(ScriptManager::Context *,
+							ScriptManager *manager);
+		ScriptContextHandle(const ScriptContextHandle&);
+		~ScriptContextHandle();
+		void operator =(const ScriptContextHandle&);
+		asIScriptContext *GetContext() const;
+		asIScriptContext *operator ->() const;
 	};
 	
 	class ScriptObjectRegistrar {

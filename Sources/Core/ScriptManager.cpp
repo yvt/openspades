@@ -22,15 +22,18 @@
 #include "Debug.h"
 #include <vector>
 #include "Exception.h"
+#include "AutoLocker.h"
 
 namespace spades {
 	
 	ScriptManager *ScriptManager::GetInstance() {
+		SPADES_MARK_FUNCTION_DEBUG();
 		ScriptManager *m = new ScriptManager();
 		return m;
 	}
 	
 	static void MessageCallback(const asSMessageInfo *msg, void *param){
+		SPADES_MARK_FUNCTION();
 		const char *type = "ERR ";
 		if( msg->type == asMSGTYPE_WARNING )
 			type = "WARN";
@@ -40,6 +43,7 @@ namespace spades {
 	}
 	
 	ScriptManager::ScriptManager() {
+		SPADES_MARK_FUNCTION();
 		engine = asCreateScriptEngine(ANGELSCRIPT_VERSION);
 		
 		try{
@@ -65,6 +69,7 @@ namespace spades {
 	}
 	
 	static std::string ASErrorToString(int ret){
+		SPADES_MARK_FUNCTION();
 		switch(ret){
 			case asSUCCESS:
 				return "Success";
@@ -127,13 +132,92 @@ namespace spades {
 	
 	void ScriptManager::CheckError(int ret){
 		if(ret < 0){
+			SPADES_MARK_FUNCTION();
 			SPRaise("%s", ASErrorToString(ret).c_str());
 		}
 	}
 	
 	ScriptManager::~ScriptManager() {
+		SPADES_MARK_FUNCTION();
 		engine->Release();
 	}
+	
+	ScriptContextHandle ScriptManager::GetContext() {
+		SPADES_MARK_FUNCTION_DEBUG();
+		AutoLocker locker(&contextMutex);
+		if(contextFreeList.empty()){
+			// no free context; create one
+			Context *ctx = new Context();
+			ctx->obj = engine->CreateContext();
+			ctx->refCount = 0;
+			return ScriptContextHandle(ctx, this);
+		}else{
+			// get one
+			Context *ctx = contextFreeList.front();
+			contextFreeList.pop_front();
+			SPAssert(ctx->refCount == 0);
+			return ScriptContextHandle(ctx, this);
+		}
+	}
+	
+	ScriptContextHandle::ScriptContextHandle():
+	manager(NULL), obj(NULL){
+		
+	}
+	
+	ScriptContextHandle::ScriptContextHandle(ScriptManager::Context *ctx,
+											 ScriptManager *manager):
+	manager(manager), obj(ctx){
+		AutoLocker locker(&manager->contextMutex);
+		ctx->refCount++;
+	}
+	
+	ScriptContextHandle::ScriptContextHandle(const ScriptContextHandle& h) :
+	manager(h.manager), obj(h.obj){
+		AutoLocker locker(&manager->contextMutex);
+		obj->refCount++;
+	}
+	
+	ScriptContextHandle::~ScriptContextHandle() {
+		Release();
+	}
+	
+	void ScriptContextHandle::Release() {
+		if(obj){
+			AutoLocker locker(&manager->contextMutex);
+			obj->refCount--;
+			if(obj->refCount == 0){
+				// this context is no longer used;
+				// add to freelist
+				manager->contextFreeList.push_back(obj);
+			}
+			
+			obj = NULL;
+			manager = NULL;
+		}
+	}
+	
+	void ScriptContextHandle::operator=(const spades::ScriptContextHandle & h) {
+		if(h.obj == obj) return;
+		Release();
+		
+		manager = h.manager;
+		obj = h.obj;
+		AutoLocker locker(&manager->contextMutex);
+		obj->refCount++;
+	}
+	
+	asIScriptContext *ScriptContextHandle::GetContext() const {
+		SPADES_MARK_FUNCTION_DEBUG();
+		SPAssert(obj != NULL);
+		return obj->obj;
+	}
+	
+	asIScriptContext *ScriptContextHandle::operator->() const {
+		SPADES_MARK_FUNCTION_DEBUG();
+		return GetContext();
+	}
+	
 	
 	static std::map<std::string, ScriptObjectRegistrar *> * registrars = NULL;
 	
