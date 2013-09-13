@@ -17,7 +17,7 @@ BEGIN_AS_NAMESPACE
 //lm: thanks gcc...
 #ifdef Complex
 #undef Complex
-#undef Complex
+#endif
 
 struct Complex
 {
