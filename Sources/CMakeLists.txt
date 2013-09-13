@@ -19,7 +19,8 @@ file(GLOB POLY2TRI_SWEEP_FILES poly2tri/sweep/*.cc poly2tri/sweep/*.h)
 file(GLOB UNZIP_FILES unzip/*.c unzip/*.h)
 
 add_subdirectory(AngelScript/projects/cmake)
-set(ANGELSCRIPT_LIBS Angelscript)
+add_subdirectory(AngelScript/projects/cmake_addons)
+set(ANGELSCRIPT_LIBS Angelscript Angelscript_addons)
 
 include_directories(".")
 include_directories("json/include")
@@ -32,7 +33,7 @@ set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BIN
 set_target_properties(OpenSpades PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_dependencies(OpenSpades Angelscript)
+add_dependencies(OpenSpades Angelscript Angelscript_addons)
 
 if(WIN32)
 	string(REGEX REPLACE "\\.lib$" ".dll" SDL_DLL ${SDL_LIBRARY})
