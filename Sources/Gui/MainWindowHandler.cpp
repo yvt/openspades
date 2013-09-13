@@ -250,16 +250,19 @@ void MainWindow::LoadPrefs() {
 	directLightSelect->add("Low");
 	directLightSelect->add("Medium");
 	directLightSelect->add("High");
+	directLightSelect->add("Ultra");
 	directLightSelect->add("Custom");
 	
 	if((!r_mapSoftShadow) && (r_dlights) && (!r_modelShadows) && (!r_fogShadow) && (!r_physicalLighting)){
 		directLightSelect->value(0);
 	}else if((!r_mapSoftShadow) && (r_dlights) && (r_modelShadows) && (!r_fogShadow) && (!r_physicalLighting)){
 		directLightSelect->value(1);
-	}else if((r_mapSoftShadow) && (r_dlights) && (r_modelShadows) && (r_fogShadow) && (r_physicalLighting)){
+	}else if((r_mapSoftShadow) && (r_dlights) && (r_modelShadows) && (!r_fogShadow) && (r_physicalLighting)){
 		directLightSelect->value(2);
-	}else{
+	}else if((r_mapSoftShadow) && (r_dlights) && (r_modelShadows) && (r_fogShadow) && (r_physicalLighting)){
 		directLightSelect->value(3);
+	}else{
+		directLightSelect->value(4);
 	}
 	
 	shaderSelect->clear();
@@ -711,6 +714,13 @@ void MainWindow::SavePrefs() {
 			r_modelShadows = 1;
 			r_dlights = 1;
 			r_mapSoftShadow = 1;
+			r_fogShadow = 0;
+			r_physicalLighting = 1;
+			break;
+		case 3:
+			r_modelShadows = 1;
+			r_dlights = 1;
+			r_mapSoftShadow = 1;
 			r_fogShadow = 1;
 			r_physicalLighting = 1;
 			break;
@@ -760,8 +770,8 @@ void MainWindow::MSAAEnabled() {
 	   r_blitFramebuffer){
 		if(shaderSelect->value() == 1)
 			shaderSelect->value(0);
-		if(directLightSelect->value() == 2)
-			directLightSelect->value(1);
+		if(directLightSelect->value() == 3)
+			directLightSelect->value(2);
 	}
 }
 
