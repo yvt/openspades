@@ -20,22 +20,21 @@
 
 #include <OpenSpades.h>
 #include "MainWindow.h"
-#include "../Core/FileManager.h"
-#include "../Core/DirectoryFileSystem.h"
-#include "../Core/Debug.h"
-#include "../Core/Settings.h"
-#include "../Core/ConcurrentDispatch.h"
-#include "../Core/ZipFileSystem.h"
+#include <Core/FileManager.h>
+#include <Core/DirectoryFileSystem.h>
+#include <Core/Debug.h>
+#include <Core/Settings.h>
+#include <Core/ConcurrentDispatch.h>
+#include <Core/ZipFileSystem.h>
 #include "ErrorDialog.h"
 
-#include "../Core/VoxelModel.h"
-#include "../Draw/GLOptimizedVoxelModel.h"
+#include <Core/VoxelModel.h>
+#include <Draw/GLOptimizedVoxelModel.h>
 
-#include "../Core/ScriptManager.h"
+#include <Core/ScriptManager.h>
 
 #include <algorithm>	//std::sort
 
-//using namespace spades::gui;
 #ifdef WIN32
 #include <windows.h>
 #include <shlobj.h>
