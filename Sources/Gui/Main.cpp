@@ -33,6 +33,8 @@
 
 #include "../Core/ScriptManager.h"
 
+#include <algorithm>	//std::sort
+
 //using namespace spades::gui;
 #ifdef WIN32
 #include <windows.h>
