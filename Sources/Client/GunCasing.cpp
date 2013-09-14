@@ -26,6 +26,7 @@
 #include "IAudioDevice.h"
 #include <stdlib.h>
 #include "ParticleSpriteEntity.h"
+#include "IAudioChunk.h"
 
 namespace spades {
 	namespace client{
@@ -39,6 +40,11 @@ namespace spades {
 		client(client),
 		renderer(client->GetRenderer()), model(model),
 		dropSound(dropSound), waterSound(waterSound){
+			
+			if(dropSound)
+				dropSound->AddRef();
+			if(waterSound)
+				waterSound->AddRef();
 			
 			Vector3 up = MakeVector3(0, 0, 1);
 			Vector3 right = Vector3::Cross(dir, up).Normalize();
@@ -55,7 +61,10 @@ namespace spades {
 			rotSpeed = 40.f;
 		}
 		GunCasing::~GunCasing(){
-			
+			if(dropSound)
+				dropSound->Release();
+			if(waterSound)
+				waterSound->Release();
 		}
 		static Vector3 RandomAxis(){
 			Vector3 v;

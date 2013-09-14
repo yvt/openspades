@@ -20,13 +20,15 @@
 
 #pragma once
 
+#include <Core/RefCountedObject.h>
+
 namespace spades {
 	namespace client {
-		class IAudioChunk {
+		class IAudioChunk: public RefCountedObject {
 		protected:
 			IAudioChunk(){}
-		public:
 			virtual ~IAudioChunk() {}
+		public:
 		};
 	}
 }

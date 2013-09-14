@@ -25,6 +25,7 @@
 #include "IFont.h"
 #include "World.h"
 #include "IAudioDevice.h"
+#include "IAudioChunk.h"
 
 namespace spades{
 	namespace client {
@@ -119,7 +120,7 @@ namespace spades{
 					MenuItem& item = items[i];
 					if(item.hover){
 						IAudioDevice *dev = client->audioDevice;
-						IAudioChunk *chunk = dev->RegisterSound("Sounds/Feedback/Limbo/Select.wav");
+						Handle<IAudioChunk> chunk = dev->RegisterSound("Sounds/Feedback/Limbo/Select.wav");
 						dev->PlayLocal(chunk, AudioParam());
 						switch(item.type){
 							case MenuTeam1:
@@ -173,7 +174,7 @@ namespace spades{
 					newHover = false;
 				if(newHover && !item.hover){
 					IAudioDevice *dev = client->audioDevice;
-					IAudioChunk *chunk = dev->RegisterSound("Sounds/Feedback/Limbo/Hover.wav");
+					Handle<IAudioChunk> chunk = dev->RegisterSound("Sounds/Feedback/Limbo/Hover.wav");
 					dev->PlayLocal(chunk, AudioParam());
 				}
 				item.hover = newHover;
