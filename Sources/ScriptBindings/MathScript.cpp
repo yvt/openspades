@@ -594,13 +594,13 @@ namespace spades {
 					manager->CheckError(r);
 					
 					r = eng->RegisterObjectMethod("Matrix4",
-												  "Matrix4 get_Inversed() const",
+												  "Matrix4 get_Inverted() const",
 												  asMETHOD(Matrix4, Inversed),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					
 					r = eng->RegisterObjectMethod("Matrix4",
-												  "float get_InversedFast() const",
+												  "float get_InvertedFast() const",
 												  asMETHOD(Matrix4, InversedFast),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
@@ -753,12 +753,12 @@ namespace spades {
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
-					r = eng->RegisterGlobalFunction("Vector2 Mix(Vector2,Vector2,Vector2)",
+					r = eng->RegisterGlobalFunction("Vector2 Mix(Vector2,Vector2,float)",
 													asFUNCTIONPR(Mix, (Vector2,Vector2,float), Vector2),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
-					r = eng->RegisterGlobalFunction("Vector3 Mix(Vector3,Vector3,Vector3)",
+					r = eng->RegisterGlobalFunction("Vector3 Mix(Vector3,Vector3,float)",
 													asFUNCTIONPR(Mix, (Vector3,Vector3,float), Vector3),
 													asCALL_CDECL);
 					manager->CheckError(r);

@@ -246,12 +246,24 @@ namespace spades {
 														asOFFSET(SceneDefinition, time));
 						manager->CheckError(r);
 						r = eng->RegisterObjectProperty("SceneDefinition",
-														"float denyCameraBlur",
+														"bool denyCameraBlur",
 														asOFFSET(SceneDefinition, denyCameraBlur));
 						manager->CheckError(r);
 						r = eng->RegisterObjectProperty("SceneDefinition",
 														"float blurVignette",
 														asOFFSET(SceneDefinition, blurVignette));
+						manager->CheckError(r);
+						
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void Init()",
+													  asMETHOD(IRenderer, Init),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void Shutdown()",
+													  asMETHOD(IRenderer, Shutdown),
+													  asCALL_THISCALL);
 						manager->CheckError(r);
 						
 						r = eng->RegisterObjectMethod("Renderer",

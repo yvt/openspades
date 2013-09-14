@@ -95,6 +95,18 @@ namespace spades {
 														 asFUNCTION(AudioParamFactory),
 														 asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("AudioParam",
+														"float volume",
+														asOFFSET(AudioParam, volume));
+						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("AudioParam",
+														"float pitch",
+														asOFFSET(AudioParam, pitch));
+						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("AudioParam",
+														"float referenceDistance",
+														asOFFSET(AudioParam, referenceDistance));
+						manager->CheckError(r);
 						break;
 					default:
 						break;
