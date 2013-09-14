@@ -700,12 +700,13 @@ namespace spades {
 								break;
 						}
 						
-						hurtSprites.resize(12);
 						float hpper = player->GetHealth() / 100.f;
+						int cnt = 18 - (int)(player->GetHealth() / 100.f * 8.f);
+						hurtSprites.resize(std::max(cnt, 6));
 						for(size_t i = 0; i < hurtSprites.size(); i++) {
 							HurtSprite& spr = hurtSprites[i];
 							spr.angle = GetRandom() * (2.f * M_PI);
-							spr.scale = .2f + GetRandom() * .6f;
+							spr.scale = .2f + GetRandom() * GetRandom() * .7f;
 							spr.horzShift = GetRandom();
 							spr.strength = .3f + GetRandom() * .7f;
 							if(hpper > .5f) {
@@ -997,7 +998,7 @@ namespace spades {
 						}
 					}
 					
-					if(name == "h" && down && false) {
+					if(name == "h" && down) {
 						// debug
 						int h = p->GetHealth();
 						h -= 10; if(h <= 0) h = 100;
@@ -2945,7 +2946,7 @@ namespace spades {
 		}
 		
 		void Client::DrawHurtSprites() {
-			float per = (world->GetTime() - lastHurtTime) / .6f;
+			float per = (world->GetTime() - lastHurtTime) / 1.5f;
 			if(per > 1.f) return;
             if(per < 0.f) return;
 			Handle<IImage> img = renderer->RegisterImage("Gfx/HurtSprite.png");
