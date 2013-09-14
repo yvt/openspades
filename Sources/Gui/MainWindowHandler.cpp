@@ -330,6 +330,7 @@ void MainWindow::Init() {
 	checkFilterV76->value( flags & spades::ServerFilter::flt_Ver076 );
 	checkFilterVOther->value( flags & spades::ServerFilter::flt_VerOther );
 	browser->startQuery();
+	mainTab->value(groupServerlist);
 }
 
 /** This function is called after showing window.
@@ -395,7 +396,16 @@ void MainWindow::CheckGLCapability() {
 			outputGLRenderer->value("(unknown)");
 		}
 		if((str = (const char *)glGetString(GL_VERSION)) != NULL) {
-			outputGLVersion->value(str);
+			double ver = atof(str);
+			if( ver <= 0.1 ) {		//TODO: determine required version!
+				std::string tmp = str;
+				tmp += "  (too old)";
+				outputGLVersion->textcolor( FL_RED );
+				outputGLVersion->value( tmp.c_str() );
+				capable = false;
+			}else{
+				outputGLVersion->value( str );
+			}
 			SPLog("Version: %s", str);
 		}else{
 			outputGLVersion->value("(unknown)");
