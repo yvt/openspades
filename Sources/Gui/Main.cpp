@@ -31,7 +31,7 @@
 #include <Core/VoxelModel.h>
 #include <Draw/GLOptimizedVoxelModel.h>
 
-#include <Core/ScriptManager.h>
+#include <ScriptBindings/ScriptManager.h>
 
 #include <algorithm>	//std::sort
 
