@@ -998,7 +998,7 @@ namespace spades {
 						}
 					}
 					
-					if(name == "h" && down) {
+					if(name == "h" && down && false) {
 						// debug
 						int h = p->GetHealth();
 						h -= 10; if(h <= 0) h = 100;
