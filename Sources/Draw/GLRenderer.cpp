@@ -108,6 +108,7 @@ namespace spades {
 			longSpriteRenderer = NULL;
 			modelRenderer = NULL;
             cameraBlur = NULL;
+			map = NULL;
 			
 			lastTime = 0;
 			
@@ -248,6 +249,8 @@ namespace spades {
 		void GLRenderer::SetGameMap(client::GameMap *mp){
 			SPADES_MARK_FUNCTION();
 			
+			client::GameMap *oldMap = map;
+			
 			SPLog("New map loaded; freeing old renderers...");
 			if(radiosityRenderer)
 				delete radiosityRenderer;
@@ -286,6 +289,7 @@ namespace spades {
 				}
 				
 				mp->SetListener(this);
+				mp->AddRef();
 				SPLog("Created");
 			}else{
 				SPLog("No map loaded");
@@ -294,6 +298,9 @@ namespace spades {
 				flatMapRenderer = NULL;
 				waterRenderer = NULL;
 				ambientShadowRenderer = NULL;
+			}
+			if(oldMap) {
+				oldMap->Release();
 			}
 		}
 		

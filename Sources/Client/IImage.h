@@ -20,14 +20,23 @@
 
 #pragma once
 
+#include <Core/ScriptManager.h>
+
 namespace spades{
 	namespace client {
+		class LowLevelNativeImage;
 		class IImage {
+			LowLevelNativeImage *lowLevelNativeImage;
+			asIScriptObject *scriptImage;
 		public:
-			virtual ~IImage(){}
+			IImage();
+			virtual ~IImage();
 			
 			virtual float GetWidth() = 0;
 			virtual float GetHeight() = 0;
+			
+			LowLevelNativeImage *GetLowLevelNativeImage(bool addRef);
+			asIScriptObject *GetScriptImage();
 		};
 	}
 }

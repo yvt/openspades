@@ -87,7 +87,7 @@ namespace spades {
 			}
 			if(map){
 				delete mapWrapper;
-				delete map;
+				map->Release();
 			}
 		}
 		
@@ -113,13 +113,17 @@ namespace spades {
 		}
 		
 		void World::SetMap(spades::client::GameMap *newMap){
+			if(map == newMap)
+				return;
+			
 			if(map){
-				delete map;
+				map->Release();
 				delete mapWrapper;
 			}
 			
 			map = newMap;
 			if(map){
+				map->AddRef();
 				mapWrapper = new GameMapWrapper(map);
 				mapWrapper->Rebuild();
 			}

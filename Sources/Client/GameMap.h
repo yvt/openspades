@@ -41,6 +41,9 @@ namespace spades{
 			GameMap();
 			~GameMap();
 			
+			void AddRef();
+			void Release();
+			
 			static GameMap *Load(IStream *);
 			
 			int Width() { return DefaultWidth; }
@@ -131,6 +134,7 @@ namespace spades{
 			uint64_t solidMap[DefaultWidth][DefaultHeight];
 			uint32_t colorMap[DefaultWidth][DefaultHeight][DefaultDepth];
 			IGameMapListener *listener;
+			int refCount;
 		};
 	}
 }

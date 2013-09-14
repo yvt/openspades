@@ -31,6 +31,7 @@ namespace spades {
 		int width, height, depth;
 		uint64_t *solidBits;
 		uint32_t *colors;
+		int refCount;
 	public:
 		VoxelModel(int width, int height, int depth);
 		~VoxelModel();
@@ -94,5 +95,8 @@ namespace spades {
 		int GetWidth() const { return width; }
 		int GetHeight() const { return height; }
 		int GetDepth() const { return depth; }
+		
+		void AddRef();
+		void Release();
 	};
 }

@@ -543,19 +543,23 @@ namespace spades {
 					manager->CheckError(r);
 					r = eng->RegisterObjectType("Vector2",
 												sizeof(Vector2),
-												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLINTS);
+												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLFLOATS);
 					manager->CheckError(r);
 					r = eng->RegisterObjectType("Vector3",
 												sizeof(Vector3),
-												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLINTS);
+												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLFLOATS);
 					manager->CheckError(r);
 					r = eng->RegisterObjectType("Vector4",
 												sizeof(Vector4),
-												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLINTS);
+												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLFLOATS);
 					manager->CheckError(r);
 					r = eng->RegisterObjectType("Matrix4",
 												sizeof(Matrix4),
-												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLINTS);
+												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLFLOATS);
+					manager->CheckError(r);
+					r = eng->RegisterObjectType("AABB2",
+												sizeof(AABB2),
+												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLFLOATS);
 					manager->CheckError(r);
 					break;
 				case PhaseObjectMember:
@@ -575,6 +579,18 @@ namespace spades {
 							self->x = (int)old.x; self->y = (int)old.y; self->z = (int)old.z;
 						}
 					};
+					r = eng->RegisterObjectProperty("IntVector3",
+													"int x",
+													asOFFSET(IntVector3, x));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("IntVector3",
+													"int y",
+													asOFFSET(IntVector3, y));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("IntVector3",
+													"int z",
+													asOFFSET(IntVector3, z));
+					manager->CheckError(r);
 					// Register the constructors
 					r = eng->RegisterObjectBehaviour("IntVector3", asBEHAVE_CONSTRUCT,
 														"void f()",
@@ -666,6 +682,15 @@ namespace spades {
 							self->x = x; self->y = y;
 						}
 					};
+					r = eng->RegisterObjectProperty("Vector2",
+													"float x",
+													asOFFSET(Vector2, x));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Vector2",
+													"float y",
+													asOFFSET(Vector2, y));
+					manager->CheckError(r);
+					
 					// Register the constructors
 					r = eng->RegisterObjectBehaviour("Vector2", asBEHAVE_CONSTRUCT,
 													 "void f()",
@@ -779,6 +804,18 @@ namespace spades {
 							return Vector3::Make(ceilf(v.x), ceilf(v.y), ceilf(v.z));
 						}
 					};
+					r = eng->RegisterObjectProperty("Vector3",
+													"float x",
+													asOFFSET(Vector3, x));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Vector3",
+													"float y",
+													asOFFSET(Vector3, y));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Vector3",
+													"float z",
+													asOFFSET(Vector3, z));
+					manager->CheckError(r);
 					// Register the constructors
 					r = eng->RegisterObjectBehaviour("Vector3", asBEHAVE_CONSTRUCT,
 													 "void f()",
@@ -905,6 +942,70 @@ namespace spades {
 											  m03, m13, m23, m33);
 						}
 					};
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m00",
+													asOFFSET(Matrix4, m[0]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m10",
+													asOFFSET(Matrix4, m[1]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m20",
+													asOFFSET(Matrix4, m[2]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m30",
+													asOFFSET(Matrix4, m[3]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m01",
+													asOFFSET(Matrix4, m[4]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m11",
+													asOFFSET(Matrix4, m[5]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m21",
+													asOFFSET(Matrix4, m[6]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m31",
+													asOFFSET(Matrix4, m[7]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m02",
+													asOFFSET(Matrix4, m[8]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m12",
+													asOFFSET(Matrix4, m[9]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m22",
+													asOFFSET(Matrix4, m[10]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m32",
+													asOFFSET(Matrix4, m[11]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m03",
+													asOFFSET(Matrix4, m[12]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m13",
+													asOFFSET(Matrix4, m[13]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m23",
+													asOFFSET(Matrix4, m[14]));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Matrix4",
+													"float m33",
+													asOFFSET(Matrix4, m[15]));
+					manager->CheckError(r);
 					// Register the constructors
 					r = eng->RegisterObjectBehaviour("Matrix4", asBEHAVE_CONSTRUCT,
 													 "void f()",
@@ -1000,6 +1101,87 @@ namespace spades {
 													asFUNCTION(Matrix4::FromAxis),
 													asCALL_CDECL);
 					manager->CheckError(r);
+					
+					
+					struct AABB2Funcs {
+						static void Construct1(AABB2 *self) {
+							new(self) AABB2();
+						}
+						static void Construct2(const AABB2& old, AABB2 *self) {
+							new(self) AABB2(old);
+						}
+						static void Construct3(float x, float y, float w, float h, AABB2 *self) {
+							new(self) AABB2(x, y, w, h);
+						}
+						static void Construct4(Vector2 minVec, Vector2 maxVec, AABB2 *self) {
+							new(self) AABB2(minVec, maxVec);
+						}
+					};
+					r = eng->RegisterObjectProperty("AABB2",
+													"Vector2 min",
+													asOFFSET(AABB2, min));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("AABB2",
+													"Vector2 max",
+													asOFFSET(AABB2, max));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("AABB2",
+													"float minX",
+													asOFFSET(AABB2, min.x));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("AABB2",
+													"float minY",
+													asOFFSET(AABB2, min.y));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("AABB2",
+													"float maxX",
+													asOFFSET(AABB2, max.x));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("AABB2",
+													"float maxY",
+													asOFFSET(AABB2, max.y));
+					manager->CheckError(r);
+					
+					// Register the constructors
+					r = eng->RegisterObjectBehaviour("AABB2", asBEHAVE_CONSTRUCT,
+													 "void f()",
+													 asFUNCTION(AABB2Funcs::Construct1),
+													 asCALL_CDECL_OBJLAST);
+					manager->CheckError(r);
+					r = eng->RegisterObjectBehaviour("AABB2", asBEHAVE_CONSTRUCT,
+													 "void f(const AABB2 &in)",
+													 asFUNCTION(AABB2Funcs::Construct2),
+													 asCALL_CDECL_OBJLAST);
+					manager->CheckError(r);
+					r = eng->RegisterObjectBehaviour("AABB2", asBEHAVE_CONSTRUCT,
+													 "void f(float, float, float, float)",
+													 asFUNCTION(AABB2Funcs::Construct3),
+													 asCALL_CDECL_OBJLAST);
+					manager->CheckError(r);
+					r = eng->RegisterObjectBehaviour("AABB2", asBEHAVE_CONSTRUCT,
+													 "void f(Vector2, Vector2)",
+													 asFUNCTION(AABB2Funcs::Construct4),
+													 asCALL_CDECL_OBJLAST);
+					manager->CheckError(r);
+					
+					// Register the operator overloads
+					r = eng->RegisterObjectMethod("AABB2",
+												  "bool Contains(const Vector2 &in)",
+												  asMETHOD(AABB2, Contains), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("AABB2",
+												  "bool Intersects(const AABB2 &in)",
+												  asMETHOD(AABB2, Intersects), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("AABB2",
+												  "void Add(const Vector2& in)",
+												  asMETHODPR(AABB2, operator+=, (const Vector2 &), void), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("AABB2",
+												  "void Add(const AABB2& in)",
+												  asMETHODPR(AABB2, operator+=, (const AABB2 &), void), asCALL_THISCALL);
+					manager->CheckError(r);
+
 					
 					/*** Other Global Functions ***/
 					

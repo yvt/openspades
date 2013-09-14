@@ -29,7 +29,7 @@ namespace spades {
 	class Bitmap {
 		int w, h;
 		uint32_t *pixels;
-		
+		int refCount;
 	public:
 		Bitmap(int w, int h);
 		~Bitmap();
@@ -41,5 +41,10 @@ namespace spades {
 		int GetWidth() { return w; }
 		int GetHeight() { return h; }
 		
+		uint32_t GetPixel(int x, int y);
+		void SetPixel(int x, int y, uint32_t);
+		
+		void AddRef();
+		void Release();
 	};
 }

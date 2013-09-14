@@ -62,6 +62,7 @@ namespace spades {
 			
 			IGLDevice *device;
 			GLFramebufferManager *fbManager;
+			client::GameMap *map;
 			
 			bool inited;
 			bool sceneUsedInThisFrame;

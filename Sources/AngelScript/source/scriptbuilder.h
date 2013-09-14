@@ -107,7 +107,8 @@ protected:
 	void ClearAll();
 	int  Build();
 	int  ProcessScriptSection(const char *script, unsigned int length, const char *sectionname);
-	int  LoadScriptSection(const char *filename);
+	// yvt: changed to virtual function
+	virtual int  LoadScriptSection(const char *filename);
 	bool IncludeIfNotAlreadyIncluded(const char *filename);
 
 	int  SkipStatement(int pos);

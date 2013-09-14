@@ -23,6 +23,8 @@
 #include <vector>
 #include "Exception.h"
 #include "AutoLocker.h"
+#include "FileManager.h"
+#include "IStream.h"
 
 namespace spades {
 	
@@ -42,12 +44,49 @@ namespace spades {
 		SPLog("%s (%d, %d) : %s : %s\n", msg->section, msg->row, msg->col, type, msg->message);
 	}
 	
+	class ScriptBuilder: public CScriptBuilder {
+	public:
+		ScriptBuilder(){
+			
+		}
+	protected:
+		virtual int  LoadScriptSection(const char *filename) {
+			if(filename[0] != '/') {
+				SPLog("Invalid script path detected: not starting with '/'");
+				return -1;
+			}
+			
+			// path validation should be done by filesystem...
+			std::string data;
+			try{
+				std::string fn = "Scripts";
+				fn += filename;
+				data = FileManager::ReadAllBytes(fn.c_str());
+			}catch(const std::exception& ex) {
+				SPLog("Failed to include '%s':%s",
+					  filename, ex.what());
+				return -1;
+			}
+			
+			SPLog("Loading script '%s'",
+				  filename);
+			return ProcessScriptSection(data.c_str(), (unsigned int)(data.length()), filename);
+		}
+	};
+	
+	
 	ScriptManager::ScriptManager() {
 		SPADES_MARK_FUNCTION();
+		
+		SPLog("Creating script engine");
 		engine = asCreateScriptEngine(ANGELSCRIPT_VERSION);
 		
 		try{
+			SPLog("Configuring");
+			engine->SetEngineProperty(asEP_REQUIRE_ENUM_SCOPE, 1);
+			engine->SetEngineProperty(asEP_DISALLOW_GLOBAL_VARS, 1);
 			engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
+			SPLog("Registering standard libray functions");
 			RegisterScriptAny(engine);
 			RegisterScriptWeakRef(engine);
 			RegisterScriptHandle(engine);
@@ -58,10 +97,30 @@ namespace spades {
 			RegisterStdStringUtils(engine);
 			RegisterScriptDictionary(engine);
 			
+			SPLog("Registering APIs");
+			engine->SetDefaultNamespace("");
 			ScriptObjectRegistrar::RegisterAll(this,
-											  ScriptObjectRegistrar::PhaseObjectType);
+											   ScriptObjectRegistrar::PhaseObjectType);
+			ScriptObjectRegistrar::RegisterAll(this,
+											   ScriptObjectRegistrar::PhaseGlobalFunction);
 			ScriptObjectRegistrar::RegisterAll(this,
 											  ScriptObjectRegistrar::PhaseObjectMember);
+			
+			SPLog("Loading scripts");
+			engine->SetDefaultNamespace("");
+			ScriptBuilder builder;
+			if(builder.StartNewModule(engine, "Client") < 0){
+				SPRaise("Failed to create script module.");
+			}
+			builder.DefineWord("CLIENT");
+			if(builder.AddSectionFromFile("/Main.as") < 0){
+				SPRaise("Failed to load '/Main.as'.");
+			}
+			SPLog("Building");
+			if(builder.BuildModule() < 0){
+				SPRaise("Failed to build at least one of the scripts.");
+			}
+			
 		}catch(...){
 			engine->Release();
 			throw;
@@ -220,23 +279,7 @@ namespace spades {
 	
 	void ScriptContextHandle::ExecuteChecked() {
 		SPADES_MARK_FUNCTION();
-		asIScriptContext * ctx = GetContext();
-		int r = ctx->Execute();
-		manager->CheckError(r);
-		if(r == asEXECUTION_ABORTED) {
-			SPRaise("Script execution aborted.");
-		}else if(r == asEXECUTION_SUSPENDED) {
-			SPRaise("Script execution suspended."); // TODO: shouldn't raise error?
-		}else if(r == asEXECUTION_EXCEPTION) {
-			const char *secName = NULL;
-			int line = 0, column = 0;
-			asIScriptFunction *func = ctx->GetExceptionFunction();
-			// TODO: backtrace generation
-			line = ctx->GetExceptionLineNumber(&column, &secName);
-			SPRaise("%s @ [%s:%d,%d] %s", ctx->GetExceptionString(),
-					secName?secName:"(stub)", line, column,
-					func->GetDeclaration(true, true));
-		}
+		ScriptContextUtils(GetContext()).ExecuteChecked();
 	}
 	
 	static std::map<std::string, ScriptObjectRegistrar *> * registrars = NULL;
@@ -245,6 +288,10 @@ namespace spades {
 	name(name){
 		if(!registrars)
 			registrars = new std::map<std::string, ScriptObjectRegistrar *>();
+		if(registrars->find(name) != registrars->end()){
+			SPLog("WARNING: there are more than one ScriptObjectRegistrar with name '%s'", name.c_str());
+			
+		}
 		(*registrars)[name]=this;
 		std::fill(phaseDone, phaseDone + PhaseCount, false);
 	}
@@ -276,4 +323,80 @@ namespace spades {
 		}
 	}
 	
+#pragma mark - Context Utils
+	
+	ScriptContextUtils::ScriptContextUtils():
+	context(asGetActiveContext()){
+		
+	}
+	
+	ScriptContextUtils::ScriptContextUtils(asIScriptContext *ctx):
+	context(ctx){}
+	
+	void ScriptContextUtils::ExecuteChecked() {
+		SPADES_MARK_FUNCTION();
+		int r = context->Execute();
+		ScriptManager::CheckError(r);
+		if(r == asEXECUTION_ABORTED) {
+			SPRaise("Script execution aborted.");
+		}else if(r == asEXECUTION_SUSPENDED) {
+			SPRaise("Script execution suspended."); // TODO: shouldn't raise error?
+		}else if(r == asEXECUTION_EXCEPTION) {
+			const char *secName = NULL;
+			int line = 0, column = 0;
+			asIScriptFunction *func = context->GetExceptionFunction();
+			// TODO: backtrace generation
+			line = context->GetExceptionLineNumber(&column, &secName);
+			SPRaise("%s @ [%s:%d,%d] %s", context->GetExceptionString(),
+					secName?secName:"(stub)", line, column,
+					func->GetDeclaration(true, true));
+		}
+	}
+	
+	void ScriptContextUtils::SetNativeException(const std::exception &ex) {
+		context->SetException(ex.what());
+	}
+	
+	
+#pragma mark - Some Script Functions
+	
+	class SomeScriptFunctionRegistrar: public ScriptObjectRegistrar {
+	public:
+		SomeScriptFunctionRegistrar():
+		ScriptObjectRegistrar("SomeScriptFunc"){}
+		
+		static void Raise(const std::string& str) {
+			asGetActiveContext()->SetException(str.c_str());
+		}
+		
+		static void Assert(bool cond) {
+			if(!cond){
+				Raise("Assertion failed");
+			}
+		}
+	
+		static void NotImplemented() {
+			Raise("Not implemented");
+		}
+		
+		virtual void Register(ScriptManager *manager, Phase phase){
+			asIScriptEngine *eng = manager->GetEngine();
+			eng->SetDefaultNamespace("spades");
+			switch(phase){
+				case PhaseGlobalFunction:
+					eng->RegisterGlobalFunction("void Raise(const string& in)", asFUNCTION(Raise),
+												asCALL_CDECL);
+					eng->RegisterGlobalFunction("void Assert(bool cond)", asFUNCTION(Assert),
+												asCALL_CDECL);
+					eng->RegisterGlobalFunction("void NotImplemented()", asFUNCTION(NotImplemented),
+												asCALL_CDECL);
+					break;
+				default:
+					break;
+			}
+		}
+		
+	};
+	
+	static SomeScriptFunctionRegistrar ssfReg;
 }

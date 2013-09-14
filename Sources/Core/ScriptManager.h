@@ -61,6 +61,15 @@ namespace spades {
 		ScriptContextHandle GetContext();
 	};
 	
+	class ScriptContextUtils {
+		asIScriptContext *context;
+	public:
+		ScriptContextUtils();
+		ScriptContextUtils(asIScriptContext *);
+		void ExecuteChecked();
+		void SetNativeException(const std::exception&);
+	};
+	
 	class ScriptContextHandle{
 		ScriptManager *manager;
 		ScriptManager::Context *obj;
@@ -77,6 +86,7 @@ namespace spades {
 		asIScriptContext *operator ->() const;
 		
 		ScriptManager *GetManager() const { return manager; }
+		
 		void ExecuteChecked();
 	};
 	
@@ -84,6 +94,7 @@ namespace spades {
 	public:
 		enum Phase {
 			PhaseObjectType,
+			PhaseGlobalFunction,
 			PhaseObjectMember,
 			PhaseCount
 		};

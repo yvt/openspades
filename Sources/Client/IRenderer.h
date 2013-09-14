@@ -24,6 +24,7 @@
 #include "../Core/Math.h"
 #include "SceneDefinition.h"
 #include "IModel.h"
+#include <Core/ScriptManager.h>
 
 namespace spades {
 	class Bitmap;
@@ -67,10 +68,15 @@ namespace spades {
 			}
 		};
 		
+		class LowLevelNativeRenderer;
+		
 		class IRenderer {
+			LowLevelNativeRenderer *scriptLLRenderer;
+			asIScriptObject *scriptRenderer;
 		public:
 			
-			virtual ~IRenderer() {}
+			IRenderer();
+			virtual ~IRenderer();
 			
 			virtual void Init() = 0;
 			
@@ -123,6 +129,9 @@ namespace spades {
 			
 			virtual float ScreenWidth() = 0;
 			virtual float ScreenHeight() = 0;
+			
+			LowLevelNativeRenderer *GetLowLevelNativeRenderer();
+			asIScriptObject *GetScriptRenderer();
 		};
 
 	}

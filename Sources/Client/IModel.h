@@ -20,11 +20,20 @@
 
 #pragma once
 
+#include <Core/ScriptManager.h>
+
 namespace spades {
 	namespace client {
+		class LowLevelNativeModel;
 		class IModel {
+			LowLevelNativeModel *lowLevelNativeModel;
+			asIScriptObject *scriptModel;
 		public:
-			virtual ~IModel() {}
+			IModel();
+			virtual ~IModel();
+			
+			LowLevelNativeModel *GetLowLevelNativeModel(bool addRed);
+			asIScriptObject *GetScriptModel();
 		};
 	}
 }
