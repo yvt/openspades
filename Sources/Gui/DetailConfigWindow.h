@@ -6,6 +6,7 @@
 #include <FL/Fl_Window.H>
 #include "DetailConfigTable.h"
 #include <FL/Fl_Return_Button.H>
+#include <FL/Fl_Input.H>
 
 class DetailConfigWindow : public Fl_Window {
   void _DetailConfigWindow();
@@ -18,6 +19,11 @@ private:
   static void cb_Dismiss(Fl_Return_Button*, void*);
 public:
   DetailConfigTable *table;
-  void Init();
+  Fl_Input *inputFilter;
+private:
+  inline void cb_inputFilter_i(Fl_Input*, void*);
+  static void cb_inputFilter(Fl_Input*, void*);
+public:
+  void onFilterChange();
 };
 #endif

@@ -78,10 +78,6 @@ static std::vector<spades::IntVector3> g_modes;
 MainWindow::~MainWindow()
 {
 	if( browser ) {
-		if( browser->IsAlive() ) {
-			browser->stopReading();
-			browser->Join();
-		}
 		delete browser;
 	}
 }
@@ -333,7 +329,7 @@ void MainWindow::Init() {
 	checkFilterV75->value( flags & spades::ServerFilter::flt_Ver075 );
 	checkFilterV76->value( flags & spades::ServerFilter::flt_Ver076 );
 	checkFilterVOther->value( flags & spades::ServerFilter::flt_VerOther );
-	browser->Start();
+	browser->startQuery();
 }
 
 /** This function is called after showing window.
@@ -780,7 +776,6 @@ void MainWindow::OpenDetailConfig() {
 	
 	DetailConfigWindow cfg;
 	cfg.set_modal();
-	cfg.Init();
 	cfg.show();
 	while(cfg.visible()){
 		Fl::wait();

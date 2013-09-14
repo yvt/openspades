@@ -198,7 +198,8 @@ namespace spades {
 		// remove '\n' in the end of the result of asctime().
 		timeStr.resize(timeStr.size()-1);
 		
-		sprintf(buf, "%s [%s:%d] %s\n",
+		//lm: using \r\n instead of \n so that some shitty windows editors (notepad f.e.) can parse this file aswell (all decent editors should ignore it anyway)
+		sprintf(buf, "%s [%s:%d] %s\r\n",
 				timeStr.c_str(),
 				fn.c_str(), line, str.c_str());
 		

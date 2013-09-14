@@ -4,20 +4,25 @@ header_name {.h}
 code_name {.cpp}
 widget_class DetailConfigWindow {
   label {Advanced Settings} open
-  xywh {594 187 591 513} type Double
+  xywh {382 218 591 513} type Double
   code0 {\#include "DetailConfigTable.h"}
   class Fl_Window visible
 } {
   Fl_Return_Button {} {
     label Dismiss
     callback {table->EndEditing();
-hide();} selected
+hide();}
     xywh {480 475 100 25}
   }
   Fl_Table table {open
-    xywh {10 10 570 455}
+    xywh {10 35 570 430}
     class DetailConfigTable
   } {}
-  Function {Init()} {open
+  Function {onFilterChange()} {open
   } {}
+  Fl_Input inputFilter {
+    label {Filter:}
+    callback {onFilterChange();}
+    xywh {50 11 530 24} when 1
+  }
 } 

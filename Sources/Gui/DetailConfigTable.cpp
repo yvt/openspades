@@ -22,6 +22,7 @@
 #include <FL/Fl_Window.H>
 #include "../Core/Settings.h"
 #include <FL/fl_draw.H>
+#include <algorithm>
 
 DetailConfigTable::DetailConfigTable(int X,int Y,int W,int H,const char* L) : Fl_Table(X,Y,W,H,L) {
 	callback(&event_callback, (void*)this);
@@ -36,15 +37,37 @@ DetailConfigTable::DetailConfigTable(int X,int Y,int W,int H,const char* L) : Fl
 	input->box(FL_THIN_UP_BOX);
 	row_edit = col_edit = 0;
 	s_left = s_top = s_right = s_bottom = 0;
-	/*for (int c = 0; c < MAX_COLS; c++)
-		for (int r = 0; r < MAX_ROWS; r++)
-			values[r][c] = (r + 2) * (c + 3);		// initialize cells
-	*/
 	
-	items = spades::Settings::GetInstance()->GetAllItemNames();
-	
+	mAllItems = spades::Settings::GetInstance()->GetAllItemNames();
+
+	filterUpdated();	
+}
+
+bool iEqual( char left, char right )
+{
+	return toupper(left) == toupper(right);
+}
+
+void DetailConfigTable::setFilter( const char* newFilter )
+{
+	if( mFilter != newFilter ) {
+		mFilter = newFilter;
+		filterUpdated();
+	}
+}
+
+void DetailConfigTable::filterUpdated()
+{
+	mFilteredItems.clear();
+	for( size_t n = 0; n < mAllItems.size(); ++n ) {
+		std::string& cur = mAllItems[n];
+		if( cur.end() != std::search( cur.begin(), cur.end(), mFilter.begin(), mFilter.end(), iEqual ) ) {
+			mFilteredItems.push_back( cur );
+		}
+	}
+	begin();
 	row_header(0);
-	rows(items.size());
+	rows(mFilteredItems.size());
 	cols(2);
 	
 	col_width(0, 250);
@@ -52,10 +75,11 @@ DetailConfigTable::DetailConfigTable(int X,int Y,int W,int H,const char* L) : Fl
 	row_height_all(20);
 	
 	end();
+
 }
 
 void DetailConfigTable::set_value_hide() {
-	spades::Settings::ItemHandle item(items[row_edit]);
+	spades::Settings::ItemHandle item(mFilteredItems[row_edit]);
 	
 	std::string old = item;
 	std::string newv = input->value();
@@ -75,7 +99,7 @@ void DetailConfigTable::done_editing() {
 }
 
 void DetailConfigTable::start_editing(int R, int C) {
-	spades::Settings::ItemHandle item(items[R]);
+	spades::Settings::ItemHandle item(mFilteredItems[R]);
     row_edit = R;					// Now editing this row/col
     col_edit = C;
     int X,Y,W,H;
@@ -187,10 +211,10 @@ void DetailConfigTable::draw_cell(TableContext context, int R,int C, int X,int Y
 				fl_color(FL_FOREGROUND_COLOR);
 				fl_font(FL_HELVETICA, 12);		// ..in regular font
 				
-				spades::Settings::ItemHandle item(items[R]);
+				spades::Settings::ItemHandle item(mFilteredItems[R]);
 				const char *str;
 				if(C == 0){
-					str = items[R].c_str();
+					str = mFilteredItems[R].c_str();
 				}else{
 					str = item.CString();
 				}

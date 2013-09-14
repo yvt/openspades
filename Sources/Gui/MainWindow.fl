@@ -7,7 +7,7 @@ decl {namespace spades { class Serverbrowser; }} {public global
 
 widget_class MainWindow {
   label {OpenSpades Startup} open
-  xywh {534 291 615 356} type Double labelsize 12 align 80
+  xywh {148 243 615 356} type Double labelsize 12 align 80
   code0 {\#include <string>}
   code1 {\#include <vector>}
   class Fl_Window visible
@@ -30,7 +30,7 @@ widget_class MainWindow {
     }
     Fl_Group {} {
       label Setup open
-      private xywh {10 130 595 220}
+      private xywh {10 130 595 220} hide
     } {
       Fl_Group {} {
         label Video open
@@ -69,7 +69,7 @@ SavePrefs();} open
         }
       }
       Fl_Group {} {
-        label Graphics open selected
+        label Graphics open
         private xywh {10 240 385 105} box ENGRAVED_FRAME align 5
       } {
         Fl_Light_Button softParticleCheck {
@@ -149,9 +149,9 @@ SavePrefs();} open
         }
       }
     }
-    Fl_Tabs {} {
-      label Serverlist open
-      xywh {10 130 595 220} hide
+    Fl_Tabs groupServerlist {
+      label Serverlist open selected
+      xywh {10 130 595 220}
     } {
       Fl_Browser serverListbox {
         label Serverlist
