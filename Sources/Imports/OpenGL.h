@@ -13,5 +13,11 @@
 #include <OpenGL/gl3.h>
 #include <OpenGL/gl3ext.h>
 #else
-#include <GL/glew.h> // <glew.h>?
+#include <GL/glew.h>
+
+// v3.3 / GL_ARB_occlusion_query2
+#ifndef GL_ANY_SAMPLES_PASSED
+#  define GL_ANY_SAMPLES_PASSED 0x8C2F
+#endif
+
 #endif

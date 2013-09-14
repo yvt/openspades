@@ -26,8 +26,10 @@
 #include <string>
 
 class DetailConfigTable: public Fl_Table {
-	std::vector<std::string> items;
-	
+	std::vector<std::string> mAllItems;
+	std::vector<std::string> mFilteredItems;
+	std::string mFilter;
+
 	Fl_Input *input;
 	
 	int row_edit, col_edit;				// row/col being modified
@@ -45,11 +47,12 @@ class DetailConfigTable: public Fl_Table {
 	}
 protected:
 	
-	
+	void filterUpdated();
 	virtual void draw_cell(TableContext context, int R,int C, int X,int Y,int W,int H);
 public:
 	DetailConfigTable(int X,int Y,int W,int H,const char* L=0);
 	~DetailConfigTable() { }
-	
+	void setFilter( const char* newFilter );
+
 	void EndEditing() { done_editing(); }
 };

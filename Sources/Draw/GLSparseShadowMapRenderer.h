@@ -18,6 +18,7 @@
  
  */
 
+#include <stdint.h>
 #include "IGLShadowMapRenderer.h"
 #include "IGLDevice.h"
 

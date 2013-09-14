@@ -91,6 +91,7 @@ public:
   Fl_Output *outputGLVersion;
   Fl_Output *outputGLSLVersion;
   Fl_Help_View *glInfoView;
+  Fl_Tabs *groupServerlist;
 protected:
   Fl_Browser *serverListbox;
 private:
@@ -151,5 +152,5 @@ public:
   void updateFilters();;
   ~MainWindow();
 };
-extern unsigned char aboutText[4625];
+extern unsigned char aboutText[4695];
 #endif

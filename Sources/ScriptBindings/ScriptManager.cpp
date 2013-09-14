@@ -19,9 +19,9 @@
  */
 
 #include "ScriptManager.h"
-#include "Debug.h"
+#include <Core/Debug.h>
 #include <vector>
-#include "Exception.h"
+#include <Core/Exception.h>
 
 namespace spades {
 	

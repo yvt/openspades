@@ -22,6 +22,10 @@ build
 # cmake generated
 OpenSpades.h
 
+# cmake input dir (optional)
+Sources/Externals/include/
+Sources/Externals/lib/
+
 # autotools
 Makefile
 Makefile.in
