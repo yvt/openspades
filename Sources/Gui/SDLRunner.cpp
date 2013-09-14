@@ -255,10 +255,12 @@ namespace spades {
 				
 				{
 					SDLGLDevice glDevice(surface);
-					draw::GLRenderer renderer(&glDevice);
+					Handle<draw::GLRenderer> renderer = new draw::GLRenderer(&glDevice);
 					audio::ALDevice audio;
 					
-					RunClientLoop(&renderer, &audio);
+					RunClientLoop(renderer, &audio);
+					
+					renderer->Shutdown();
 				}
 			}catch(...){
 				SDL_Quit();

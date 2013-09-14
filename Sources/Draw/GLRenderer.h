@@ -114,11 +114,14 @@ namespace spades {
 			
 			void RenderObjects();
 			
-		public:
-			GLRenderer(IGLDevice *glDevice);
+		protected:
 			virtual ~GLRenderer();
 			
+		public:
+			GLRenderer(IGLDevice *glDevice);
+			
 			virtual void Init();
+			virtual void Shutdown();
 			
 			virtual client::IImage *RegisterImage(const char *filename);
 			virtual client::IModel *RegisterModel(const char *filename);

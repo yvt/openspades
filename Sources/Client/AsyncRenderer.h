@@ -52,6 +52,7 @@ namespace spades {
 			virtual ~AsyncRenderer();
 			
 			virtual void Init();
+			virtual void Shutdown();
 			
 			virtual IImage *RegisterImage(const char *filename);
 			virtual IModel *RegisterModel(const char *filename);

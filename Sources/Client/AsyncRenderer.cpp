@@ -49,6 +49,12 @@ namespace spades {
 					r->Init();
 				}
 			};
+			class Shutdown: public Command {
+			public:
+				virtual void Execute(IRenderer *r) {
+					r->Shutdown();
+				}
+			};
 			class SetGameMap: public Command {
 			public:
 				GameMap *map;
@@ -322,6 +328,11 @@ namespace spades {
 		void AsyncRenderer::Init() {
 			SPADES_MARK_FUNCTION();
 			generator->AllocCommand<rcmds::Init>();
+		}
+		
+		void AsyncRenderer::Shutdown() {
+			SPADES_MARK_FUNCTION();
+			generator->AllocCommand<rcmds::Shutdown>();
 		}
 		
 		IImage *AsyncRenderer::CreateImage(spades::Bitmap *bmp) {

@@ -80,7 +80,7 @@ SPADES_SETTING(r_debugTiming, "0");
 
 namespace spades {
 	namespace draw {
-		
+		// TODO: raise error for any calls after Shutdown().
 				
 		GLRenderer::GLRenderer(IGLDevice *_device):
 		device(_device){
@@ -125,46 +125,8 @@ namespace spades {
 		GLRenderer::~GLRenderer() {
 			SPADES_MARK_FUNCTION();
 			
-			// FIXME: remove itself from map's listener
+			Shutdown();
 			
-			SPLog("GLRender finalizing");
-			if(radiosityRenderer)
-				delete radiosityRenderer;
-			if(ambientShadowRenderer)
-				delete ambientShadowRenderer;
-			if(flatMapRenderer)
-				delete flatMapRenderer;
-			if(mapShadowRenderer)
-				delete mapShadowRenderer;
-			if(mapRenderer)
-				delete mapRenderer;
-			if(waterRenderer)
-				delete waterRenderer;
-			if(ambientShadowRenderer)
-				delete ambientShadowRenderer;
-			if(shadowMapRenderer)
-				delete shadowMapRenderer;
-			if(cameraBlur)
-				delete cameraBlur;
-			if(longSpriteRenderer)
-				delete longSpriteRenderer;
-			if(waterRenderer)
-				delete waterRenderer;
-			if(modelRenderer)
-				delete modelRenderer;
-			if(spriteRenderer)
-				delete spriteRenderer;
-			if(imageRenderer)
-				delete imageRenderer;
-			if(modelRenderer)
-				delete modelManager;
-			if(programManager)
-				delete programManager;
-			if(imageManager)
-				delete imageManager;
-			if(fbManager)
-				delete fbManager;
-			SPLog("GLRenderer finalized");
 		}
 		
 		void GLRenderer::Init() {
@@ -214,6 +176,49 @@ namespace spades {
 			
 			device->Finish();
 			SPLog("GLRenderer initialized");
+		}
+		
+		void GLRenderer::Shutdown() {
+			// FIXME: remove itself from map's listener
+			
+			SPLog("GLRender finalizing");
+			if(radiosityRenderer)
+				delete radiosityRenderer;
+			if(ambientShadowRenderer)
+				delete ambientShadowRenderer;
+			if(flatMapRenderer)
+				delete flatMapRenderer;
+			if(mapShadowRenderer)
+				delete mapShadowRenderer;
+			if(mapRenderer)
+				delete mapRenderer;
+			if(waterRenderer)
+				delete waterRenderer;
+			if(ambientShadowRenderer)
+				delete ambientShadowRenderer;
+			if(shadowMapRenderer)
+				delete shadowMapRenderer;
+			if(cameraBlur)
+				delete cameraBlur;
+			if(longSpriteRenderer)
+				delete longSpriteRenderer;
+			if(waterRenderer)
+				delete waterRenderer;
+			if(modelRenderer)
+				delete modelRenderer;
+			if(spriteRenderer)
+				delete spriteRenderer;
+			if(imageRenderer)
+				delete imageRenderer;
+			if(modelRenderer)
+				delete modelManager;
+			if(programManager)
+				delete programManager;
+			if(imageManager)
+				delete imageManager;
+			if(fbManager)
+				delete fbManager;
+			SPLog("GLRenderer finalized");
 		}
 		
 		client::IImage *GLRenderer::RegisterImage(const char *filename) {
