@@ -98,7 +98,7 @@ namespace spades {
 		GLOptimizedVoxelModel::~GLOptimizedVoxelModel() {
 			SPADES_MARK_FUNCTION();
 			
-			delete image;
+			image->Release();
 			device->DeleteBuffer(idxBuffer);
 			device->DeleteBuffer(buffer);
 		}
@@ -113,10 +113,10 @@ namespace spades {
 			}
 			
 			BitmapAtlasGenerator::Result result = atlasGen.Pack();
-			Bitmap *bmp = result.bitmap;
+			Handle<Bitmap> bmp = result.bitmap;
 			SPAssert(result.items.size() == bmps.size());
 			for(size_t i = 0; i < bmps.size(); i++){
-				delete bmps[i];
+				bmps[i]->Release();
 			}
 			bmps.clear();
 			
@@ -140,7 +140,6 @@ namespace spades {
 			std::vector<uint16_t>().swap(bmpIndex);
 			
 			image = static_cast<GLImage *>(renderer->CreateImage(bmp));
-			delete bmp;
 		}
 		
 		uint8_t GLOptimizedVoxelModel::calcAOID(VoxelModel *m,

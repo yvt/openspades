@@ -20,20 +20,15 @@
 
 #pragma once
 
-#include <Core/ScriptManager.h>
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	namespace client {
-		class LowLevelNativeModel;
-		class IModel {
-			LowLevelNativeModel *lowLevelNativeModel;
-			asIScriptObject *scriptModel;
+		class IModel: public RefCountedObject {
+		protected:
+			virtual ~IModel(){}
 		public:
-			IModel();
-			virtual ~IModel();
-			
-			LowLevelNativeModel *GetLowLevelNativeModel(bool addRed);
-			asIScriptObject *GetScriptModel();
+			IModel(){}
 		};
 	}
 }

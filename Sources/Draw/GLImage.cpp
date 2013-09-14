@@ -31,14 +31,22 @@ namespace spades {
 		width(w), height(h),
 		autoDelete(autoDelete){
 			SPADES_MARK_FUNCTION();
+			valid = true;
 		}
 		GLImage::~GLImage(){
 			SPADES_MARK_FUNCTION();
-			if(autoDelete)
-				device->DeleteTexture(tex);
+			if(valid){
+				Invalidate();
+			}
+		}
+		void GLImage::MakeSureValid() {
+			if(!valid){
+				SPRaise("Attempted to use an invalid image.");
+			}
 		}
 		void GLImage::Bind(IGLDevice::Enum target) {
 			SPADES_MARK_FUNCTION();
+			MakeSureValid();
 			device->BindTexture(target, tex);
 		}
 		
@@ -70,11 +78,21 @@ namespace spades {
 		}
 		
 		void GLImage::SubImage(spades::Bitmap *bmp, int x, int y){
+			MakeSureValid();
 			Bind(IGLDevice::Texture2D);
 			device->TexSubImage2D(IGLDevice::Texture2D, 0,
 								  x, y, bmp->GetWidth(), bmp->GetHeight(),
 								  IGLDevice::RGBA, IGLDevice::UnsignedByte,
 								  bmp->GetPixels());
+		}
+		
+		void GLImage::Invalidate() {
+			SPADES_MARK_FUNCTION();
+			MakeSureValid();
+			valid = false;
+			
+			if(autoDelete)
+				device->DeleteTexture(tex);
 		}
 	}
 }

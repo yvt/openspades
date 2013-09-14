@@ -160,7 +160,12 @@ namespace spades {
 								radius,
 								angle);
 		}
-		
+		void ParticleSpriteEntity::SetImage(IImage *img) {
+			if(img == image) return;
+			image->Release();
+			image = img;
+			image->AddRef();
+		}
 	}
 }
 

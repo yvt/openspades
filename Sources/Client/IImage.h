@@ -20,23 +20,19 @@
 
 #pragma once
 
-#include <Core/ScriptManager.h>
+#include <Core/RefCountedObject.h>
 
 namespace spades{
 	namespace client {
 		class LowLevelNativeImage;
-		class IImage {
-			LowLevelNativeImage *lowLevelNativeImage;
-			asIScriptObject *scriptImage;
+		class IImage: public RefCountedObject {
+		protected:
+			virtual ~IImage(){}
 		public:
-			IImage();
-			virtual ~IImage();
+			IImage(){}
 			
 			virtual float GetWidth() = 0;
 			virtual float GetHeight() = 0;
-			
-			LowLevelNativeImage *GetLowLevelNativeImage(bool addRef);
-			asIScriptObject *GetScriptImage();
 		};
 	}
 }

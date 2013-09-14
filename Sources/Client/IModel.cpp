@@ -18,84 +18,17 @@
  
  */
 
+#include "ScriptManager.h"
 #include "IModel.h"
 
 namespace spades{
 	namespace client {
-		class LowLevelNativeModel {
-			friend class IModel;
-			IModel *img;
-			
-			int refCount;
-			bool MakeSureAvailable() {
-				if(!img) {
-					asIScriptContext *ctx = asGetActiveContext();
-					ctx->SetException("Model is unavailable.");
-					return false;
-				}
-				return true;
-			}
+		
+		
+		class RendererModelModelRegistrar: public ScriptObjectRegistrar {
 		public:
-			LowLevelNativeModel(IModel *img):img(img),refCount(1){
-				
-			}
-			~LowLevelNativeModel() {
-				if(img){
-					delete img;
-				}
-			}
-			void AddRef() {
-				asAtomicInc(refCount);
-			}
-			void Release() {
-				if(asAtomicDec(refCount) <= 0) {
-					delete this;
-				}
-			}
-		};
-		
-		IModel::IModel() {
-			lowLevelNativeModel = NULL;
-			scriptModel = NULL;
-		}
-		
-		IModel::~IModel() {
-			if(lowLevelNativeModel){
-				lowLevelNativeModel->img = NULL;
-				lowLevelNativeModel->Release();
-			}
-		}
-		
-		LowLevelNativeModel *IModel::GetLowLevelNativeModel(bool addRef) {
-			if(!lowLevelNativeModel){
-				lowLevelNativeModel = new LowLevelNativeModel(this);
-			}
-			if(addRef)
-				lowLevelNativeModel->AddRef();
-			return lowLevelNativeModel;
-		}
-		
-		asIScriptObject *IModel::GetScriptModel() {
-			if(!scriptModel){
-				
-				asIScriptEngine *eng = ScriptManager::GetInstance()->GetEngine();
-				asIObjectType *typ = eng->GetObjectTypeByName("spades::NativeModel");
-				asIScriptFunction *func = typ->GetFactoryByDecl("NativeModel @NativeModel(LowLevelNativeModel@)");
-				
-				ScriptContextHandle handle = ScriptManager::GetInstance()->GetContext();
-				handle->Prepare(func);
-				handle->SetArgObject(0, GetLowLevelNativeModel(false));
-				handle.ExecuteChecked();
-				
-				scriptModel = static_cast<asIScriptObject *>(handle->GetReturnObject());
-			}
-			return scriptModel;
-		}
-		
-		class LowLevelNativeModelRegistrar: public ScriptObjectRegistrar {
-		public:
-			LowLevelNativeModelRegistrar():
-			ScriptObjectRegistrar("LowLevelNativeModel"){
+			RendererModelModelRegistrar():
+			ScriptObjectRegistrar("RendererModelModel"){
 				
 			}
 			virtual void Register(ScriptManager *manager, Phase phase) {
@@ -104,17 +37,17 @@ namespace spades{
 				eng->SetDefaultNamespace("spades");
 				switch(phase){
 					case PhaseObjectType:
-						r = eng->RegisterObjectType("LowLevelNativeModel",
+						r = eng->RegisterObjectType("RendererModel",
 													0, asOBJ_REF);
 						manager->CheckError(r);
-						r = eng->RegisterObjectBehaviour("LowLevelNativeModel",
+						r = eng->RegisterObjectBehaviour("RendererModel",
 														 asBEHAVE_ADDREF, "void f()",
-														 asMETHOD(LowLevelNativeModel, AddRef),
+														 asMETHOD(IModel, AddRef),
 														 asCALL_THISCALL);
 						manager->CheckError(r);
-						r = eng->RegisterObjectBehaviour("LowLevelNativeModel",
+						r = eng->RegisterObjectBehaviour("RendererModel",
 														 asBEHAVE_RELEASE, "void f()",
-														 asMETHOD(LowLevelNativeModel, Release),
+														 asMETHOD(IModel, Release),
 														 asCALL_THISCALL);
 						manager->CheckError(r);
 						
@@ -128,6 +61,6 @@ namespace spades{
 			}
 		};
 		
-		static LowLevelNativeModelRegistrar registrar;
+		static RendererModelModelRegistrar registrar;
 	}
 }

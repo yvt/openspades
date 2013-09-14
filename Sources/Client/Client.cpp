@@ -1295,7 +1295,7 @@ namespace spades {
 			// Well done!
 			renderer->FrameDone();
 			
-			Bitmap *bmp = renderer->ReadBitmap();
+			Handle<Bitmap> bmp = renderer->ReadBitmap();
 			// force 100% opacity
 			
 			uint32_t *pixels = bmp->GetPixels();
@@ -1315,7 +1315,6 @@ namespace spades {
 				msg += name;
 				msg = ChatWindow::ColoredMessage(msg, MsgColorSysInfo);
 				chatWindow->AddMessage(msg);
-				delete bmp;
 			}catch(const std::exception& ex){
 				std::string msg;
 				msg = "Screenshot failed: ";
@@ -1323,7 +1322,6 @@ namespace spades {
 				msg += lines[0];
 				msg = ChatWindow::ColoredMessage(msg, MsgColorRed);
 				chatWindow->AddMessage(msg);
-				delete bmp;
 			}
 		}
 		
@@ -1722,7 +1720,7 @@ namespace spades {
 			}
 			// debug
 			if(false){
-				IImage *img = renderer->RegisterImage("Gfx/Ball.png");
+				Handle<IImage> img = renderer->RegisterImage("Gfx/Ball.png");
 				renderer->SetColor(MakeVector4(1, 0, 0, 0));
 				renderer->AddLongSprite(img, lastSceneDef.viewOrigin +
 										MakeVector3(0, 0, 1),
@@ -2069,7 +2067,7 @@ namespace spades {
 							}
 							
 							if(false){ // just debug
-								IImage *img = renderer->RegisterImage("Gfx/Ball.png");
+								Handle<IImage> img = renderer->RegisterImage("Gfx/Ball.png");
 								renderer->SetColor(MakeVector4(1, 0.3f, 0.1f, 0));
 								renderer->AddLongSprite(img,
 														(param.matrix * MakeVector3(0, 10, -2)).GetXYZ(),
@@ -2899,7 +2897,7 @@ namespace spades {
 		}
 		
 		void Client::DrawSplash() {
-			IImage *img;
+			Handle<IImage> img;
 			Vector2 siz;
 			Vector2 scrSize = {renderer->ScreenWidth(),
 				renderer->ScreenHeight()};
@@ -2918,7 +2916,7 @@ namespace spades {
 		}
 		
 		void Client::DrawStartupScreen() {
-			IImage *img;
+			Handle<IImage> img;
 			Vector2 scrSize = {renderer->ScreenWidth(),
 				renderer->ScreenHeight()};
 			
@@ -2950,7 +2948,7 @@ namespace spades {
 			float per = (world->GetTime() - lastHurtTime) / .6f;
 			if(per > 1.f) return;
             if(per < 0.f) return;
-			IImage *img = renderer->RegisterImage("Gfx/HurtSprite.png");
+			Handle<IImage> img = renderer->RegisterImage("Gfx/HurtSprite.png");
 			
 			Vector2 scrSize = {renderer->ScreenWidth(), renderer->ScreenHeight()};
 			Vector2 scrCenter = scrSize * .5f;
@@ -3050,7 +3048,7 @@ namespace spades {
 						hurtRingView->Draw();
 						
 						// draw sight
-						IImage *sight = renderer->RegisterImage("Gfx/Sight.tga");
+						Handle<IImage> sight = renderer->RegisterImage("Gfx/Sight.tga");
 						renderer->SetColor(MakeVector4(1,1,1,1));
 						renderer->DrawImage(sight,
 											MakeVector2((scrWidth - sight->GetWidth()) * .5f,
@@ -3085,7 +3083,7 @@ namespace spades {
 							}
 							
 							
-							IImage *img = renderer->RegisterImage("Gfx/White.tga");
+							Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 							boundary.min *= renderer->ScreenHeight() * .5f;
 							boundary.max *= renderer->ScreenHeight() * .5f;
 							boundary.min /= tanf(lastSceneDef.fovY * .5f);
@@ -3126,7 +3124,7 @@ namespace spades {
 						
 						// draw ammo
 						Weapon *weap = p->GetWeapon();
-						IImage *ammoIcon;
+						Handle<IImage> ammoIcon;
 						float iconWidth, iconHeight;
 						float spacing = 2.f;
 						int stockNum;
@@ -3404,7 +3402,7 @@ namespace spades {
 				float fade = std::min(1.f, timeSinceInit * 2.f);
 				
 				// background
-				IImage *img;
+				Handle<IImage> img;
 				float bgSize = std::max(scrWidth, scrHeight);
 				renderer->SetColor(MakeVector4(1, 1, 1, .4 * fade));
 				img = renderer->RegisterImage("Gfx/CircleGradient.png");
@@ -3621,8 +3619,8 @@ namespace spades {
 			   150.f * 150.f)
 				return;
 			
-			//IImage *img = renderer->RegisterImage("Textures/SoftBall.tga");
-			IImage *img = renderer->RegisterImage("Gfx/White.tga");
+			//Handle<IImage> img = renderer->RegisterImage("Textures/SoftBall.tga");
+			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {0.5f, 0.02f, 0.04f, 1.f};
 			for(int i = 0; i < 10; i++){
 				ParticleSpriteEntity *ent =
@@ -3666,7 +3664,7 @@ namespace spades {
 			   150.f * 150.f)
 				return;
 			
-			IImage *img = renderer->RegisterImage("Gfx/White.tga");
+			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {c.x / 255.f,
 			c.y / 255.f, c.z / 255.f, 1.f};
 			for(int i = 0; i < 7; i++){
@@ -3735,7 +3733,7 @@ namespace spades {
 			   150.f * 150.f)
 				return;
 			
-			IImage *img = renderer->RegisterImage("Gfx/White.tga");
+			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {c.x / 255.f,
 				c.y / 255.f, c.z / 255.f, 1.f};
 			for(int i = 0; i < 8; i++){
@@ -3861,7 +3859,7 @@ namespace spades {
 			}
 			
 			// fragments
-			IImage *img = renderer->RegisterImage("Gfx/White.tga");
+			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			color = MakeVector4(0.01, 0.03, 0, 1.f);
 			for(int i = 0; i < 42; i++){
 				ParticleSpriteEntity *ent =
@@ -3914,7 +3912,7 @@ namespace spades {
 			Vector4 color;
 			color = MakeVector4( .95f, .95f, .95f, .6f);
 			// water1
-			IImage *img = renderer->RegisterImage("Textures/WaterExpl.png");
+			Handle<IImage> img = renderer->RegisterImage("Textures/WaterExpl.png");
 			for(int i = 0; i < 7; i++){
 				ParticleSpriteEntity *ent =
 				new ParticleSpriteEntity(this, img, color);

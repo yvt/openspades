@@ -53,6 +53,7 @@ namespace spades {
 				models[name] = m;
 				return m;
 			}
+			it->second->AddRef();
 			return it->second;
 		}
 		

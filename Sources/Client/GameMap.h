@@ -26,11 +26,14 @@
 #include "../Core/Math.h"
 
 #include "IGameMapListener.h"
+#include <Core/RefCountedObject.h>
 
 namespace spades{
 	class IStream;
 	namespace client {
-		class GameMap {
+		class GameMap: public RefCountedObject {
+		protected:
+			~GameMap();
 		public:
 			// fixed for now
 			enum {
@@ -39,10 +42,6 @@ namespace spades{
 				DefaultDepth = 64 // should be <= 64
 			};
 			GameMap();
-			~GameMap();
-			
-			void AddRef();
-			void Release();
 			
 			static GameMap *Load(IStream *);
 			
@@ -134,7 +133,6 @@ namespace spades{
 			uint64_t solidMap[DefaultWidth][DefaultHeight];
 			uint32_t colorMap[DefaultWidth][DefaultHeight][DefaultDepth];
 			IGameMapListener *listener;
-			int refCount;
 		};
 	}
 }

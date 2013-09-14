@@ -105,7 +105,7 @@ namespace spades {
 					if(dist < 40.f * 40.f){
 						int splats = rand() % 3;
 						
-						IImage *img = client->GetRenderer()->RegisterImage("Gfx/White.tga");
+						Handle<IImage> img = client->GetRenderer()->RegisterImage("Gfx/White.tga");
 						
 						Vector4 col = {1, 1, 1, 0.8f};
 						Vector3 pt = matrix.GetOrigin();

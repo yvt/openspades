@@ -32,18 +32,22 @@ namespace spades {
 			IGLDevice::UInteger tex;
 			float width, height;
 			bool autoDelete;
+			bool valid;
+			void MakeSureValid();
+		protected:
+			virtual ~GLImage();
 		public:
 			GLImage(IGLDevice::UInteger textureObject,
 					IGLDevice *device, float w, float h,
 					bool autoDelete = true);
 			static GLImage *FromBitmap(Bitmap *, IGLDevice *);
-			virtual ~GLImage();
 			void Bind(IGLDevice::Enum target);
 			
 			virtual float GetWidth() { return width; }
 			virtual float GetHeight() { return height; }
 			
 			void SubImage(Bitmap *bmp, int x, int y);
+			void Invalidate();
 		};
 	}
 }

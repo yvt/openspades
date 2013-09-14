@@ -38,7 +38,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			for(std::map<std::string, GLImage *>::iterator it = images.begin(); it != images.end(); it++){
-				delete it->second;
+				it->second->Invalidate();
+				it->second->Release();
 			}
 		}
 		
@@ -52,6 +53,7 @@ namespace spades {
 				images[name] = img;
 				return img;
 			}
+			it->second->AddRef();
 			return it->second;
 		}
 		

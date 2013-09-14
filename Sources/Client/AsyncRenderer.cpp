@@ -31,128 +31,6 @@
 namespace spades {
 	namespace client {
 		
-#pragma mark - Resources
-		
-		class AsyncImage: public IImage {
-		public:
-			virtual ~AsyncImage(){}
-			virtual IImage *GetImage() = 0;
-			virtual float GetWidth() { return GetImage()->GetWidth(); }
-			virtual float GetHeight() { return GetImage()->GetHeight(); }
-			virtual AsyncImage *Copy() = 0;
-		};
-		
-		class SharedAsyncImage: public AsyncImage {
-			IImage *img;
-		public:
-			SharedAsyncImage(IImage *img):img(img){}
-			virtual ~SharedAsyncImage() {}
-			virtual IImage *GetImage() { return img; }
-			virtual AsyncImage *Copy() {
-				return new SharedAsyncImage(img);
-			}
-		};
-		
-		class TemporaryAsyncImage: public AsyncImage {
-			struct Data {
-				int refCount;
-				AsyncRenderer *arenderer;
-				Mutex mutex;
-				IImage *img;
-				Data(IImage *img):
-				refCount(1), img(img){}
-				Data *Retain() {
-					AutoLocker locker(&mutex);
-					refCount++;
-					return this;
-				}
-				Data *Release() {
-					AutoLocker locker(&mutex);
-					refCount--;
-					if(refCount > 0){
-						return this;
-					}else{
-						arenderer->deletedImages.push_back(img);
-						delete this;
-						return NULL;
-					}
-				}
-			};
-			Data *data;
-		public:
-			TemporaryAsyncImage(IImage *img, AsyncRenderer *r):
-			data(new Data(img)){
-				data->arenderer = r;
-			}
-			TemporaryAsyncImage(Data *d):
-			data(d){}
-			virtual ~TemporaryAsyncImage() { data->Release(); }
-			virtual IImage *GetImage() { return data->img; }
-			virtual AsyncImage *Copy() {
-				return new TemporaryAsyncImage(data->Retain());
-			}
-		};
-		
-		class AsyncModel: public IModel {
-		public:
-			virtual ~AsyncModel(){}
-			virtual IModel *GetModel() = 0;
-			virtual AsyncModel *Copy() = 0;
-		};
-		
-		class SharedAsyncModel: public AsyncModel {
-			IModel *model;
-		public:
-			SharedAsyncModel(IModel *model):model(model){}
-			virtual ~SharedAsyncModel() {}
-			virtual IModel *GetModel() { return model; }
-			virtual AsyncModel *Copy() {
-				return new SharedAsyncModel(model);
-			}
-		};
-		
-		class TemporaryAsyncModel: public AsyncModel {
-			struct Data {
-				int refCount;
-				AsyncRenderer *arenderer;
-				Mutex mutex;
-				IModel *model;
-				Data(IModel *model):
-				refCount(1), model(model){}
-				Data *Retain() {
-					AutoLocker locker(&mutex);
-					refCount++;
-					return this;
-				}
-				Data *Release() {
-					AutoLocker locker(&mutex);
-					refCount--;
-					if(refCount > 0){
-						return this;
-					}else{
-						arenderer->deletedModels.push_back(model);
-						locker.Release();
-						mutex.Unlock();
-						delete this;
-						return NULL;
-					}
-				}
-			};
-			Data *data;
-		public:
-			TemporaryAsyncModel(IModel *model, AsyncRenderer *r):
-			data(new Data(model)){
-				data->arenderer = r;
-			}
-			TemporaryAsyncModel(Data *d):
-			data(d){}
-			virtual ~TemporaryAsyncModel() { data->Release(); }
-			virtual IModel *GetModel() { return data->model; }
-			virtual AsyncModel *Copy() {
-				return new TemporaryAsyncModel(data->Retain());
-			}
-		};
-		
 		
 		
 #pragma mark - Commands
@@ -201,23 +79,25 @@ namespace spades {
 			};
 			class AddLight: public Command {
 			public:
-				AsyncImage *img;
+				IImage *img;
 				DynamicLightParam def;
 				virtual void Execute(IRenderer *r){
 					if(img){
-						def.image = img->GetImage();
-						delete img;
+						def.image = img; img = NULL;
 					}
 					r->AddLight(def);
+					if(img){
+						img->Release();
+					}
 				}
 			};
 			class RenderModel: public Command {
 			public:
-				AsyncModel *model;
+				IModel *model;
 				ModelRenderParam param;
 				virtual void Execute(IRenderer *r){
-					r->RenderModel(model->GetModel(), param);
-					delete model;
+					r->RenderModel(model, param);
+					model->Release(); model = NULL;
 				}
 			};
 			class AddDebugLine: public Command {
@@ -230,22 +110,22 @@ namespace spades {
 			};
 			class AddSprite: public Command {
 			public:
-				AsyncImage *img;
+				IImage *img;
 				Vector3 center;
 				float radius, rotation;
 				virtual void Execute(IRenderer *r){
-					r->AddSprite(img->GetImage(), center, radius, rotation);
-					delete img;
+					r->AddSprite(img, center, radius, rotation);
+					img->Release(); img = NULL;
 				}
 			};
 			class AddLongSprite: public Command {
 			public:
-				AsyncImage *img;
+				IImage *img;
 				Vector3 p1, p2;
 				float radius;
 				virtual void Execute(IRenderer *r){
-					r->AddLongSprite(img->GetImage(), p1, p2, radius);
-					delete img;
+					r->AddLongSprite(img, p1, p2, radius);
+					img->Release(); img = NULL;
 				}
 			};
 			class EndScene: public Command {
@@ -270,15 +150,15 @@ namespace spades {
 			};
 			class DrawImage: public Command {
 			public:
-				AsyncImage *img;
+				IImage *img;
 				Vector2 outTopLeft;
 				Vector2 outTopRight;
 				Vector2 outBottomLeft;
 				AABB2 inRect;
 				virtual void Execute(IRenderer *r){
-					r->DrawImage(img->GetImage(), outTopLeft, outTopRight, outBottomLeft,
+					r->DrawImage(img, outTopLeft, outTopRight, outBottomLeft,
 								 inRect);
-					delete img;
+					img->Release(); img = NULL;
 				}
 			};
 			class DrawFlatGameMap: public Command {
@@ -294,7 +174,6 @@ namespace spades {
 				virtual void Execute(IRenderer *r){
 					r->FrameDone();
 					
-					arenderer->DeleteDeferredResources();
 				}
 			};
 			class Flip: public Command {
@@ -376,15 +255,6 @@ namespace spades {
 		
 		AsyncRenderer::~AsyncRenderer(){
 			Sync();
-			DeleteDeferredResources();
-			
-			for(std::map<std::string, IImage *>::iterator it =
-				images.begin(); it != images.end(); it++)
-				delete it->second;
-			
-			for(std::map<std::string, IModel *>::iterator it =
-				models.begin(); it != models.end(); it++)
-				delete it->second;
 			
 			delete dispatch;
 			delete generator;
@@ -403,18 +273,6 @@ namespace spades {
 		void AsyncRenderer::Sync(){
 			FlushCommands();
 			dispatch->Join();
-		}
-		
-		void AsyncRenderer::DeleteDeferredResources(){
-			
-			
-			for(std::vector<IModel *>::iterator it = deletedModels.begin(); it != deletedModels.end(); it++)
-				delete *it;
-			deletedModels.clear();
-			
-			for(std::vector<IImage *>::iterator it = deletedImages.begin(); it != deletedImages.end(); it++)
-				delete *it;
-			deletedImages.clear();
 		}
 		
 #pragma mark - General COmmands
@@ -452,8 +310,10 @@ namespace spades {
 				RegisterImageDispatch dispatch(base, filename);
 				dispatch.StartOn(queue);
 				dispatch.Join();
-				AsyncImage *img = new SharedAsyncImage(dispatch.GetResult());
+				
+				IImage *img = dispatch.GetResult();
 				images[filename] = img;
+				img->AddRef();
 				return img;
 			}
 			return it->second;
@@ -496,8 +356,7 @@ namespace spades {
 			dispatch.StartOn(queue);
 			dispatch.Join();
 			IImage *img = dispatch.GetResult();
-			AsyncImage *i = new TemporaryAsyncImage(img, this);
-			return i;
+			return img;
 		}
 		
 		IModel *AsyncRenderer::RegisterModel(const char *filename) {
@@ -533,8 +392,9 @@ namespace spades {
 				RegisterModelDispatch dispatch(base, filename);
 				dispatch.StartOn(queue);
 				dispatch.Join();
-				AsyncModel *img = new SharedAsyncModel(dispatch.GetResult());
+				IModel *img = dispatch.GetResult();
 				models[filename] = img;
+				img->AddRef();
 				return img;
 			}
 			return it->second;
@@ -572,8 +432,7 @@ namespace spades {
 			dispatch.StartOn(queue);
 			dispatch.Join();
 			IModel *img = dispatch.GetResult();
-			AsyncModel *i = new TemporaryAsyncModel(img, this);
-			return i;
+			return img;
 		}
 		
 		void AsyncRenderer::SetGameMap(GameMap *gm) {
@@ -604,7 +463,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			rcmds::AddLight *cmd = generator->AllocCommand<rcmds::AddLight>();
 			if(light.image){
-				cmd->img = static_cast<AsyncImage *>(light.image)->Copy();
+				cmd->img = light.image;
+				cmd->img->AddRef();
 			}else{
 				cmd->img = NULL;
 			}
@@ -614,7 +474,8 @@ namespace spades {
 		void AsyncRenderer::RenderModel(IModel *m, const ModelRenderParam&p) {
 			SPADES_MARK_FUNCTION();
 			rcmds::RenderModel *cmd = generator->AllocCommand<rcmds::RenderModel>();
-			cmd->model = static_cast<AsyncModel *>(m)->Copy();
+			cmd->model = m;
+			m->AddRef();
 			cmd->param = p;
 		}
 		
@@ -629,7 +490,8 @@ namespace spades {
 									  float radius, float rotation){
 			SPADES_MARK_FUNCTION();
 			rcmds::AddSprite *cmd = generator->AllocCommand<rcmds::AddSprite>();
-			cmd->img = static_cast<AsyncImage *>(img)->Copy();
+			cmd->img = img;
+			img->AddRef();
 			cmd->center = center;
 			cmd->radius = radius;
 			cmd->rotation = rotation;
@@ -639,7 +501,8 @@ namespace spades {
 									  float radius){
 			SPADES_MARK_FUNCTION();
 			rcmds::AddLongSprite *cmd = generator->AllocCommand<rcmds::AddLongSprite>();
-			cmd->img = static_cast<AsyncImage *>(img)->Copy();
+			cmd->img = img;
+			img->AddRef();
 			cmd->p1 = p1;
 			cmd->p2 = p2;
 			cmd->radius = radius;
@@ -716,13 +579,13 @@ namespace spades {
 								   const spades::AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 			
-			AsyncImage *img = dynamic_cast<AsyncImage *>(image);
-			if(!img){
+			if(!image){
 				SPInvalidArgument("image");
 			}
 			
 			rcmds::DrawImage *cmd = generator->AllocCommand<rcmds::DrawImage>();
-			cmd->img = img->Copy();
+			cmd->img = image;
+			image->AddRef();
 			cmd->outTopLeft = outTopLeft;
 			cmd->outTopRight = outTopRight;
 			cmd->outBottomLeft = outBottomLeft;

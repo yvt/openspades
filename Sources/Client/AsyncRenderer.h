@@ -43,8 +43,6 @@ namespace spades {
 			
 			std::map<std::string, IImage *> images;
 			std::map<std::string, IModel *> models;
-			std::vector<IModel *> deletedModels;
-			std::vector<IImage *> deletedImages;
 			
 			void FlushCommands();
 			void Sync();
@@ -105,7 +103,6 @@ namespace spades {
 			virtual float ScreenWidth();
 			virtual float ScreenHeight();
 			
-			void DeleteDeferredResources();
 		};
 	}
 }

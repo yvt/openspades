@@ -91,7 +91,7 @@ namespace spades {
 			ctf = dynamic_cast<CTFGameMode *>(world->GetMode());
 			tc = dynamic_cast<TCGameMode *>(world->GetMode());
 			
-			IImage *image;
+			Handle<IImage>image;
 			IFont *font;
 			Vector2 pos, size;
 			char buf[256];
@@ -99,7 +99,7 @@ namespace spades {
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 			const Vector4 whiteColor = {1,1,1,1};
-			IImage *whiteImage = renderer->RegisterImage("Gfx/White.tga");
+			Handle<IImage> whiteImage = renderer->RegisterImage("Gfx/White.tga");
 			
 			float teamBarTop = 120.f;
 			float teamBarHeight = 60.f;

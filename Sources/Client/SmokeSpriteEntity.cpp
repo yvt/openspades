@@ -37,6 +37,8 @@ namespace spades{
 				char buf[256];
 				sprintf(buf, "Textures/Smoke/%03d.tga", i);
 				lastSeq[i] = r->RegisterImage(buf);
+				
+				lastSeq[i]->Release(); // renderer owns this
 			}
 			
 			lastRenderer = r;

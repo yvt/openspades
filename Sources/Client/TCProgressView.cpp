@@ -74,8 +74,8 @@ namespace spades {
 			float scrW = renderer->ScreenWidth();
 			float scrH = renderer->ScreenHeight();
 			
-			IImage *prgBg = renderer->RegisterImage("Gfx/TC/ProgressBg.png");
-			IImage *prgBar = renderer->RegisterImage("Gfx/TC/ProgressBar.png");
+			Handle<IImage> prgBg = renderer->RegisterImage("Gfx/TC/ProgressBg.png");
+			Handle<IImage> prgBar = renderer->RegisterImage("Gfx/TC/ProgressBar.png");
 			
 			Player *p = w->GetLocalPlayer();
 			if(p && p->GetTeamId() < 2 && p->IsAlive()){

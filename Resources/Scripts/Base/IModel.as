@@ -1,4 +1,0 @@
-namespace spades {
-	interface IModel {
-	}
-}
