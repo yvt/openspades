@@ -57,6 +57,7 @@ namespace spades {
 										  GetRandom(),
 										  GetRandom());
 				dir = dir.Normalize();
+				dir += 0.01f;
 				rays[i] = dir;
 			}
 			
