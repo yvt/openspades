@@ -104,7 +104,12 @@ namespace spades {
 			// chat
 			ChatWindow *chatWindow;
 			ChatWindow *killfeedWindow;
-			bool chatEditing;
+			enum keyDest_t {
+				kd_Game,
+				kd_Chat,
+				kd_ExitQuestion,
+			};
+			keyDest_t keyDest;
 			bool chatGlobal;
 			std::string chatText;
 			void ActivateChatTextEditor(bool global);

@@ -304,7 +304,7 @@ namespace spades {
 			savedPlayerPos.resize(32);
 			savedPlayerFront.resize(32);
 			savedPlayerTeam.resize(32);
-			playerPosRecords.reserve(32);
+			playerPosRecords.resize(32);
 			
 			std::fill(savedPlayerTeam.begin(),
 					  savedPlayerTeam.end(), -1);
