@@ -146,6 +146,9 @@
 		E8B6B71D17E4193A00E35523 /* scriptstdstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B71017E4193A00E35523 /* scriptstdstring.cpp */; };
 		E8B6B71E17E4193A00E35523 /* scriptstdstring_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B71217E4193A00E35523 /* scriptstdstring_utils.cpp */; };
 		E8B6B71F17E4193A00E35523 /* weakref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B71317E4193A00E35523 /* weakref.cpp */; };
+		E8B6B72117E4508C00E35523 /* IAudioDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72017E4508C00E35523 /* IAudioDevice.cpp */; };
+		E8B6B72317E452ED00E35523 /* IAudioChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72217E452EC00E35523 /* IAudioChunk.cpp */; };
+		E8B6B72517E46C1D00E35523 /* PrimitiveArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72417E46C1B00E35523 /* PrimitiveArray.cpp */; };
 		E8CF0396178EDA75000683D4 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0395178EDA75000683D4 /* SDL.framework */; };
 		E8CF0398178EDA86000683D4 /* SDL_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0397178EDA86000683D4 /* SDL_net.framework */; };
 		E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0399178EDABD000683D4 /* OpenAL.framework */; };
@@ -559,6 +562,9 @@
 		E8B6B71217E4193A00E35523 /* scriptstdstring_utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scriptstdstring_utils.cpp; sourceTree = "<group>"; };
 		E8B6B71317E4193A00E35523 /* weakref.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = weakref.cpp; sourceTree = "<group>"; };
 		E8B6B71417E4193A00E35523 /* weakref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = weakref.h; sourceTree = "<group>"; };
+		E8B6B72017E4508C00E35523 /* IAudioDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IAudioDevice.cpp; sourceTree = "<group>"; };
+		E8B6B72217E452EC00E35523 /* IAudioChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IAudioChunk.cpp; sourceTree = "<group>"; };
+		E8B6B72417E46C1B00E35523 /* PrimitiveArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PrimitiveArray.cpp; sourceTree = "<group>"; };
 		E8CF0385178ED9D2000683D4 /* OpenSpades */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenSpades; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CF0395178EDA75000683D4 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = ../../../../../Library/Frameworks/SDL.framework; sourceTree = "<group>"; };
 		E8CF0397178EDA86000683D4 /* SDL_net.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_net.framework; path = ../../../../../Library/Frameworks/SDL_net.framework; sourceTree = "<group>"; };
@@ -1094,6 +1100,9 @@
 				E8B6B6F817E4130E00E35523 /* GameMap.cpp */,
 				E8B6B6FB17E413AB00E35523 /* Bitmap.cpp */,
 				E8B6B6FD17E4141000E35523 /* VoxelModel.cpp */,
+				E8B6B72017E4508C00E35523 /* IAudioDevice.cpp */,
+				E8B6B72217E452EC00E35523 /* IAudioChunk.cpp */,
+				E8B6B72417E46C1B00E35523 /* PrimitiveArray.cpp */,
 			);
 			name = ScriptBindings;
 			path = Sources/ScriptBindings;
@@ -1789,6 +1798,9 @@
 				E8B6B71D17E4193A00E35523 /* scriptstdstring.cpp in Sources */,
 				E8B6B71E17E4193A00E35523 /* scriptstdstring_utils.cpp in Sources */,
 				E8B6B71F17E4193A00E35523 /* weakref.cpp in Sources */,
+				E8B6B72117E4508C00E35523 /* IAudioDevice.cpp in Sources */,
+				E8B6B72317E452ED00E35523 /* IAudioChunk.cpp in Sources */,
+				E8B6B72517E46C1D00E35523 /* PrimitiveArray.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

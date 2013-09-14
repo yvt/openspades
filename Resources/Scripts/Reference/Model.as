@@ -17,18 +17,13 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
-
-#pragma once
-
-#include <Core/RefCountedObject.h>
-
+ 
 namespace spades {
-	namespace client {
-		class IAudioChunk: public RefCountedObject {
-		protected:
-			IAudioChunk(){}
-			virtual ~IAudioChunk() {}
-		public:
-		};
+	
+	/** Model is an opaque type which can be passed to rendering methods to 
+	 *  draw an three-dimensional model. */
+	class Model {
+		
 	}
+	
 }

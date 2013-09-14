@@ -400,6 +400,11 @@ namespace spades {
 		Vector4 operator - () const {
 			return Make(-x, -y, -z, -w);
 		}
+		bool operator == (const Vector4& v) const {
+			return x == v.x && y == v.y && z == v.z &&
+			w == v.w;
+		}
+		
 		
 		Vector4& operator +=(const Vector4& v) {
 			x += v.x; y += v.y; z += v.z; w += v.w;

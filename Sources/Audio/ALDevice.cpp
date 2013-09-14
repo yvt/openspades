@@ -53,6 +53,13 @@ namespace spades {
 		class ALAudioChunk: public client::IAudioChunk {
 			ALuint handle;
 			ALuint format;
+		protected:
+			
+			virtual ~ALAudioChunk() {
+				SPADES_MARK_FUNCTION();
+				
+				al::qalDeleteBuffers(1, &handle);
+			}
 		public:
 			ALuint GetHandle() {
 				return handle;
@@ -112,11 +119,6 @@ namespace spades {
 				al::CheckError();
 				
 				
-			}
-			virtual ~ALAudioChunk() {
-				SPADES_MARK_FUNCTION();
-				
-				al::qalDeleteBuffers(1, &handle);
 			}
 			
 			ALuint GetFormat() {
@@ -690,8 +692,10 @@ namespace spades {
 			if(it == chunks.end()){
 				ALAudioChunk *c = CreateChunk(name);
 				chunks[name] = c;
+				// release audiochunk later (to eliminate memory leak)
 				return c;
 			}
+			it->second->AddRef();
 			return it->second;
 		}
 		

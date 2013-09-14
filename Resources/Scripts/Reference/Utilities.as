@@ -17,18 +17,16 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
-
-#pragma once
-
-#include <Core/RefCountedObject.h>
-
+ 
 namespace spades {
-	namespace client {
-		class IAudioChunk: public RefCountedObject {
-		protected:
-			IAudioChunk(){}
-			virtual ~IAudioChunk() {}
-		public:
-		};
-	}
+	
+	/** Replaces any occurrence of the pattern string with another string. */
+	string Replace(const string@ str, 
+	               const string@ pattern,
+	               const string@ after) {}
+	
+	
+	/** Removes preceding/following white-spaces. */
+	string TrimSpaces(const string@ input) {}
+	
 }

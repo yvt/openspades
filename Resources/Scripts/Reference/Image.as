@@ -17,18 +17,21 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
-
-#pragma once
-
-#include <Core/RefCountedObject.h>
-
+ 
 namespace spades {
-	namespace client {
-		class IAudioChunk: public RefCountedObject {
-		protected:
-			IAudioChunk(){}
-			virtual ~IAudioChunk() {}
-		public:
-		};
+	
+	/** Image is an opaque type which can be passed to rendering methods to 
+	 *  draw an image quickly. */
+	class Image {
+		/** Retrieves the width of the image, in pixels. */
+		float Width {
+			get {}
+		}
+		
+		/** Retrieves the width of the image, in pixels. */
+		float Height {
+			get {}
+		}
 	}
+	
 }

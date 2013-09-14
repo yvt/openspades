@@ -17,18 +17,13 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
-
-#pragma once
-
-#include <Core/RefCountedObject.h>
-
+ 
 namespace spades {
-	namespace client {
-		class IAudioChunk: public RefCountedObject {
-		protected:
-			IAudioChunk(){}
-			virtual ~IAudioChunk() {}
-		public:
-		};
+	
+	/** AudioChunk is an opaque type which can be passed to an audio device to 
+	 *  play sounds. */
+	class AudioChunk {
+		
 	}
+	
 }

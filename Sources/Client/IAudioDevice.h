@@ -21,6 +21,7 @@
 #pragma once
 
 #include "../Core/Math.h"
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	namespace client {
@@ -39,7 +40,7 @@ namespace spades {
 			}
 		};
 		
-		class IAudioDevice {
+		class IAudioDevice: public RefCountedObject {
 		public:
 			virtual ~IAudioDevice() {}
 			

@@ -17,18 +17,16 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
-
-#pragma once
-
-#include <Core/RefCountedObject.h>
-
+ 
 namespace spades {
-	namespace client {
-		class IAudioChunk: public RefCountedObject {
-		protected:
-			IAudioChunk(){}
-			virtual ~IAudioChunk() {}
-		public:
-		};
-	}
+	
+	/** Raises an exception, usually resulting a program crash. */
+	void Raise(const string& description) {}
+	
+	/** Asserts the expression is true. */
+	void Assert(bool cond) {}
+	
+	/** Raises 'not implemented' exception. */
+	void NotImplemented() {}
+	
 }
