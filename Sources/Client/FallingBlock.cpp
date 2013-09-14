@@ -88,8 +88,8 @@ namespace spades {
 		}
 		
 		FallingBlock::~FallingBlock(){
-			delete model;
-			delete vmodel;
+			model->Release();
+			vmodel->Release();
 		}
 		
 		bool FallingBlock::Update(float dt) {
@@ -115,7 +115,7 @@ namespace spades {
 				Vector3 vmAxis2 = vmat.GetAxis(1);
 				Vector3 vmAxis3 = vmat.GetAxis(2);
 				
-				IImage *img = client->GetRenderer()->RegisterImage("Gfx/White.tga");
+				Handle<IImage> img = client->GetRenderer()->RegisterImage("Gfx/White.tga");
 				
 				bool usePrecisePhysics = false;
 				float dist =(client->GetLastSceneDef().viewOrigin - matrix.GetOrigin()).GetLength();

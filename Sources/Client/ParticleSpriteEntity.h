@@ -84,7 +84,7 @@ namespace spades {
 				blockHitAction = act;
 			}
 			
-			void SetImage(IImage *img) { image = img;}
+			void SetImage(IImage *img);
 			void SetColor(Vector4 col) { color = col;}
 			
 			IRenderer *GetRenderer() { return renderer; }

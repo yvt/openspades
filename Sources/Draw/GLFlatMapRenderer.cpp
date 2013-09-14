@@ -37,12 +37,10 @@ namespace spades {
 			for(int i = 0; i < chunkRows * chunkCols; i++)
 				chunkInvalid.push_back(false);
 			
-			Bitmap *bmp = GenerateBitmap(0, 0, m->Width(), m->Height());
+			Handle<Bitmap> bmp = GenerateBitmap(0, 0, m->Width(), m->Height());
 			try{
 				image = static_cast<GLImage *>(renderer->CreateImage(bmp));
-				delete bmp;
 			}catch(...){
-				delete bmp;
 				throw;
 			}
 			
@@ -58,12 +56,12 @@ namespace spades {
 		}
 		
 		GLFlatMapRenderer::~GLFlatMapRenderer() {
-			delete image;
+			image->Release();
 		}
 		
 		Bitmap *GLFlatMapRenderer::GenerateBitmap(int mx, int my, int w, int h){
 			SPADES_MARK_FUNCTION();
-			Bitmap *bmp = new Bitmap(w, h);
+			Handle<Bitmap> bmp = new Bitmap(w, h);
 			try{
 				uint32_t *pixels = bmp->GetPixels();
 				
@@ -82,10 +80,9 @@ namespace spades {
 					}
 				}
 			}catch(...){
-				delete bmp;
 				throw;
 			}
-			return bmp;
+			return bmp.Unmanage();
 		}
 		
 		void GLFlatMapRenderer::GameMapChanged(int x, int y, int z,
@@ -115,14 +112,12 @@ namespace spades {
 				int chunkX = ((int)i) % chunkCols;
 				int chunkY = ((int)i) / chunkCols;
 				
-				Bitmap *bmp = GenerateBitmap(chunkX * ChunkSize,
+				Handle<Bitmap> bmp = GenerateBitmap(chunkX * ChunkSize,
 											 chunkY * ChunkSize,
 											 ChunkSize, ChunkSize);
 				try{
 					image->SubImage(bmp, chunkX * ChunkSize, chunkY * ChunkSize);
-					delete bmp;
 				}catch(...){
-					delete bmp;
 					throw;
 				}
 				chunkInvalid[i] = false;

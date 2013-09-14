@@ -20,21 +20,32 @@
 
 #pragma once
 
-#include <AngelScript/include/angelscript.h>
-#include <AngelScript/addons/scriptany.h>
-#include <AngelScript/addons/scriptarray.h>
-#include <AngelScript/addons/scriptbuilder.h>
-#include <AngelScript/addons/scriptdictionary.h>
-#include <AngelScript/addons/scripthandle.h>
-#include <AngelScript/addons/scripthelper.h>
-#include <AngelScript/addons/scriptmath.h>
-#include <AngelScript/addons/scriptmathcomplex.h>
-#include <AngelScript/addons/scriptstdstring.h>
-#include <AngelScript/addons/weakref.h>
+#include "../AngelScript/include/angelscript.h"
+#include "../AngelScript/addons/scriptany.h"
+#include "../AngelScript/addons/scriptarray.h"
+#include "../AngelScript/addons/scriptbuilder.h"
+#include "../AngelScript/addons/scriptdictionary.h"
+#include "../AngelScript/addons/scripthandle.h"
+#include "../AngelScript/addons/scripthelper.h"
+#include "../AngelScript/addons/scriptmath.h"
+#include "../AngelScript/addons/scriptmathcomplex.h"
+#include "../AngelScript/addons/scriptstdstring.h"
+#include "../AngelScript/addons/weakref.h"
+#include "Mutex.h"
+#include <list>
 
 namespace spades {
 	
+	class ScriptContextHandle;
+	
 	class ScriptManager {
+		friend class ScriptContextHandle;
+		struct Context {
+			asIScriptContext *obj;
+			int refCount;
+		};
+		Mutex contextMutex;
+		std::list<Context *> contextFreeList;
 		
 		asIScriptEngine *engine;
 		
@@ -46,12 +57,44 @@ namespace spades {
 		static void CheckError(int);
 		
 		asIScriptEngine *GetEngine() const { return engine; }
+		
+		ScriptContextHandle GetContext();
+	};
+	
+	class ScriptContextUtils {
+		asIScriptContext *context;
+	public:
+		ScriptContextUtils();
+		ScriptContextUtils(asIScriptContext *);
+		void ExecuteChecked();
+		void SetNativeException(const std::exception&);
+	};
+	
+	class ScriptContextHandle{
+		ScriptManager *manager;
+		ScriptManager::Context *obj;
+		
+		void Release();
+	public:
+		ScriptContextHandle();
+		ScriptContextHandle(ScriptManager::Context *,
+							ScriptManager *manager);
+		ScriptContextHandle(const ScriptContextHandle&);
+		~ScriptContextHandle();
+		void operator =(const ScriptContextHandle&);
+		asIScriptContext *GetContext() const;
+		asIScriptContext *operator ->() const;
+		
+		ScriptManager *GetManager() const { return manager; }
+		
+		void ExecuteChecked();
 	};
 	
 	class ScriptObjectRegistrar {
 	public:
 		enum Phase {
 			PhaseObjectType,
+			PhaseGlobalFunction,
 			PhaseObjectMember,
 			PhaseCount
 		};

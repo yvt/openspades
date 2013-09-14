@@ -23,10 +23,15 @@
 #include <algorithm>
 #include <vector>
 #include "Debug.h"
+#include "ScriptManager.h"
+#include "FileManager.h"
 
 namespace spades {
 	VoxelModel::VoxelModel(int w, int h, int d) {
 		SPADES_MARK_FUNCTION();
+		
+		if(w < 1 || h < 1 || d < 1 || w > 4096 || h > 4096)
+			SPRaise("Invalid dimension: %dx%dx%d", w, h, d);
 		
 		width = w;
 		height = h;
@@ -39,6 +44,7 @@ namespace spades {
 		colors = new uint32_t[w * h * d];
 		
 		std::fill(solidBits, solidBits + w * h, 0);
+		
 		
 	}
 	VoxelModel::~VoxelModel() {
@@ -160,5 +166,5 @@ namespace spades {
 			throw;
 		}
 	}
-	
+		
 }

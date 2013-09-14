@@ -24,6 +24,7 @@
 #include "../Core/Math.h"
 #include "SceneDefinition.h"
 #include "IModel.h"
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	class Bitmap;
@@ -67,12 +68,15 @@ namespace spades {
 			}
 		};
 		
-		class IRenderer {
+		class IRenderer: public RefCountedObject {
+		protected:
+			virtual ~IRenderer(){}
 		public:
 			
-			virtual ~IRenderer() {}
+			IRenderer(){}
 			
 			virtual void Init() = 0;
+			virtual void Shutdown() = 0;
 			
 			virtual IImage *RegisterImage(const char *filename) = 0;
 			virtual IModel *RegisterModel(const char *filename) = 0;

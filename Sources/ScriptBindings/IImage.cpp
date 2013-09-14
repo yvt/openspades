@@ -19,16 +19,15 @@
  */
 
 #include "ScriptManager.h"
-#include "IModel.h"
+#include <Client/IImage.h>
 
 namespace spades{
 	namespace client {
 		
-		
-		class RendererModelModelRegistrar: public ScriptObjectRegistrar {
+		class ImageRegistrar: public ScriptObjectRegistrar {
 		public:
-			RendererModelModelRegistrar():
-			ScriptObjectRegistrar("RendererModelModel"){
+			ImageRegistrar():
+			ScriptObjectRegistrar("Image"){
 				
 			}
 			virtual void Register(ScriptManager *manager, Phase phase) {
@@ -37,22 +36,32 @@ namespace spades{
 				eng->SetDefaultNamespace("spades");
 				switch(phase){
 					case PhaseObjectType:
-						r = eng->RegisterObjectType("RendererModel",
+						r = eng->RegisterObjectType("Image",
 													0, asOBJ_REF);
 						manager->CheckError(r);
-						r = eng->RegisterObjectBehaviour("RendererModel",
+						r = eng->RegisterObjectBehaviour("Image",
 														 asBEHAVE_ADDREF, "void f()",
-														 asMETHOD(IModel, AddRef),
+														 asMETHOD(IImage, AddRef),
 														 asCALL_THISCALL);
 						manager->CheckError(r);
-						r = eng->RegisterObjectBehaviour("RendererModel",
+						r = eng->RegisterObjectBehaviour("Image",
 														 asBEHAVE_RELEASE, "void f()",
-														 asMETHOD(IModel, Release),
+														 asMETHOD(IImage, Release),
 														 asCALL_THISCALL);
 						manager->CheckError(r);
 						
 						break;
 					case PhaseObjectMember:
+						r = eng->RegisterObjectMethod("Image",
+													  "float get_Width()",
+													  asMETHOD(IImage, GetWidth),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Image",
+													  "float get_Height()",
+													  asMETHOD(IImage, GetHeight),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
 						break;
 					default:
 						
@@ -61,6 +70,7 @@ namespace spades{
 			}
 		};
 		
-		static RendererModelModelRegistrar registrar;
+		static ImageRegistrar registrar;
 	}
 }
+

@@ -19,3 +19,10 @@
  */
 
 #include "IImage.h"
+
+namespace spades{
+	namespace client {
+		
+	}
+}
+

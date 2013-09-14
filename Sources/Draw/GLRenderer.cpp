@@ -80,7 +80,7 @@ SPADES_SETTING(r_debugTiming, "0");
 
 namespace spades {
 	namespace draw {
-		
+		// TODO: raise error for any calls after Shutdown().
 				
 		GLRenderer::GLRenderer(IGLDevice *_device):
 		device(_device){
@@ -108,6 +108,7 @@ namespace spades {
 			longSpriteRenderer = NULL;
 			modelRenderer = NULL;
             cameraBlur = NULL;
+			map = NULL;
 			
 			lastTime = 0;
 			
@@ -124,46 +125,8 @@ namespace spades {
 		GLRenderer::~GLRenderer() {
 			SPADES_MARK_FUNCTION();
 			
-			// FIXME: remove itself from map's listener
+			Shutdown();
 			
-			SPLog("GLRender finalizing");
-			if(radiosityRenderer)
-				delete radiosityRenderer;
-			if(ambientShadowRenderer)
-				delete ambientShadowRenderer;
-			if(flatMapRenderer)
-				delete flatMapRenderer;
-			if(mapShadowRenderer)
-				delete mapShadowRenderer;
-			if(mapRenderer)
-				delete mapRenderer;
-			if(waterRenderer)
-				delete waterRenderer;
-			if(ambientShadowRenderer)
-				delete ambientShadowRenderer;
-			if(shadowMapRenderer)
-				delete shadowMapRenderer;
-			if(cameraBlur)
-				delete cameraBlur;
-			if(longSpriteRenderer)
-				delete longSpriteRenderer;
-			if(waterRenderer)
-				delete waterRenderer;
-			if(modelRenderer)
-				delete modelRenderer;
-			if(spriteRenderer)
-				delete spriteRenderer;
-			if(imageRenderer)
-				delete imageRenderer;
-			if(modelRenderer)
-				delete modelManager;
-			if(programManager)
-				delete programManager;
-			if(imageManager)
-				delete imageManager;
-			if(fbManager)
-				delete fbManager;
-			SPLog("GLRenderer finalized");
 		}
 		
 		void GLRenderer::Init() {
@@ -215,6 +178,49 @@ namespace spades {
 			SPLog("GLRenderer initialized");
 		}
 		
+		void GLRenderer::Shutdown() {
+			// FIXME: remove itself from map's listener
+			
+			SPLog("GLRender finalizing");
+			if(radiosityRenderer)
+				delete radiosityRenderer;
+			if(ambientShadowRenderer)
+				delete ambientShadowRenderer;
+			if(flatMapRenderer)
+				delete flatMapRenderer;
+			if(mapShadowRenderer)
+				delete mapShadowRenderer;
+			if(mapRenderer)
+				delete mapRenderer;
+			if(waterRenderer)
+				delete waterRenderer;
+			if(ambientShadowRenderer)
+				delete ambientShadowRenderer;
+			if(shadowMapRenderer)
+				delete shadowMapRenderer;
+			if(cameraBlur)
+				delete cameraBlur;
+			if(longSpriteRenderer)
+				delete longSpriteRenderer;
+			if(waterRenderer)
+				delete waterRenderer;
+			if(modelRenderer)
+				delete modelRenderer;
+			if(spriteRenderer)
+				delete spriteRenderer;
+			if(imageRenderer)
+				delete imageRenderer;
+			if(modelRenderer)
+				delete modelManager;
+			if(programManager)
+				delete programManager;
+			if(imageManager)
+				delete imageManager;
+			if(fbManager)
+				delete fbManager;
+			SPLog("GLRenderer finalized");
+		}
+		
 		client::IImage *GLRenderer::RegisterImage(const char *filename) {
 			SPADES_MARK_FUNCTION();
 			return imageManager->RegisterImage(filename);
@@ -247,6 +253,8 @@ namespace spades {
 		
 		void GLRenderer::SetGameMap(client::GameMap *mp){
 			SPADES_MARK_FUNCTION();
+			
+			client::GameMap *oldMap = map;
 			
 			SPLog("New map loaded; freeing old renderers...");
 			if(radiosityRenderer)
@@ -286,6 +294,7 @@ namespace spades {
 				}
 				
 				mp->SetListener(this);
+				mp->AddRef();
 				SPLog("Created");
 			}else{
 				SPLog("No map loaded");
@@ -294,6 +303,9 @@ namespace spades {
 				flatMapRenderer = NULL;
 				waterRenderer = NULL;
 				ambientShadowRenderer = NULL;
+			}
+			if(oldMap) {
+				oldMap->Release();
 			}
 		}
 		
@@ -836,13 +848,13 @@ namespace spades {
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
 				device->Viewport(0, 0, handle.GetWidth(), handle.GetHeight());
-				GLImage image(handle.GetTexture(),
-							  device,
-							  handle.GetWidth(),
-							  handle.GetHeight(),
-							  false);
+				Handle<GLImage> image = new GLImage(handle.GetTexture(),
+													device,
+													handle.GetWidth(),
+													handle.GetHeight(),
+													false);
 				SetColor(MakeVector4(1, 1, 1, 1));
-				DrawImage(&image, AABB2(0,handle.GetHeight(),handle.GetWidth(),-handle.GetHeight()));
+				DrawImage(image, AABB2(0,handle.GetHeight(),handle.GetWidth(),-handle.GetHeight()));
 				imageRenderer->Flush(); // must flush now because handle is released soon
 			}
 			
@@ -1024,12 +1036,12 @@ namespace spades {
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
 				device->Viewport(0, 0, w,h);
-				GLImage image(lastColorBufferTexture,
+				Handle<GLImage> image = new GLImage(lastColorBufferTexture,
 							  device,
 							  w,h,
 							  false);
 				SetColor(MakeVector4(1, 1, 1, 1));
-				DrawImage(&image, AABB2(0,h,w,-h));
+				DrawImage(image, AABB2(0,h,w,-h));
 				imageRenderer->Flush(); // must flush now because handle is released soon
 			}
 			

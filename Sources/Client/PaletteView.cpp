@@ -154,7 +154,7 @@ namespace spades {
 		}
 		
 		void PaletteView::Draw() {
-			IImage *img = renderer->RegisterImage("Gfx/Palette.png");
+			Handle<IImage> img = renderer->RegisterImage("Gfx/Palette.png");
 			
 			int sel = GetSelectedIndex();
 			

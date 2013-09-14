@@ -26,11 +26,16 @@
 #include "Debug.h"
 #include "IBitmapCodec.h"
 #include "FileManager.h"
+#include "ScriptManager.h"
 
 namespace spades {
 	Bitmap::Bitmap(int ww, int hh):
 	w(ww), h(hh){
 		SPADES_MARK_FUNCTION();
+		
+		if(w < 1 || h < 1 || w > 8192 || h > 8192) {
+			SPRaise("Invalid dimension: %dx%d", w, h);
+		}
 		
 		pixels = new uint32_t[w * h];
 		SPAssert(pixels != NULL);
@@ -85,5 +90,18 @@ namespace spades {
 		SPRaise("Bitmap codec not found for filename: %s", filename.c_str());
 		
 	}
+	
+	uint32_t Bitmap::GetPixel(int x, int y) {
+		SPAssert(x >= 0); SPAssert(y >= 0);
+		SPAssert(x < w); SPAssert(y < h);
+		return pixels[x + y * w];
+	}
+	
+	void Bitmap::SetPixel(int x, int y, uint32_t p) {
+		SPAssert(x >= 0); SPAssert(y >= 0);
+		SPAssert(x < w); SPAssert(y < h);
+		pixels[x + y * w] = p;
+	}
+	
 	
 }

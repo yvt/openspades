@@ -59,7 +59,7 @@ namespace spades {
 			int height = img->h();
 			int pitch = width * depth + img->ld();
 			
-			Bitmap *bmp;
+			Handle<Bitmap> bmp;
 			try{
 				bmp = new Bitmap(width, height);
 			}catch(...){
@@ -113,10 +113,9 @@ namespace spades {
 					}
 				}
 				delete img;
-				return bmp;
+				return bmp.Unmanage();
 			}catch(...){
 				delete img;
-				delete bmp;
 				throw;
 			}
 		}

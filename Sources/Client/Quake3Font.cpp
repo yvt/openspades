@@ -34,6 +34,7 @@ namespace spades {
 		glyphHeight(gh), spaceWidth(sw){
 			SPADES_MARK_FUNCTION();
 			
+			tex->AddRef();
 			for(int i = 0; i < 128; i++){
 				int x = *(mp++);
 				int y = *(mp++);
@@ -60,7 +61,7 @@ namespace spades {
 		
 		Quake3Font::~Quake3Font(){
 			SPADES_MARK_FUNCTION();
-			
+			tex->Release();
 		}
 		
 		Vector2 Quake3Font::Measure(const std::string &txt) {

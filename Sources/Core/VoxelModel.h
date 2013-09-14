@@ -24,16 +24,18 @@
 #include "../Core/Debug.h"
 #include "IStream.h"
 #include "Math.h"
+#include <Core/RefCountedObject.h>
 
 namespace spades {
-	class VoxelModel {
+	class VoxelModel: public RefCountedObject {
 		Vector3 origin;
 		int width, height, depth;
 		uint64_t *solidBits;
 		uint32_t *colors;
+	protected:
+		virtual ~VoxelModel();
 	public:
 		VoxelModel(int width, int height, int depth);
-		~VoxelModel();
 		
 		static VoxelModel *LoadKV6(IStream *);
 		
@@ -94,5 +96,6 @@ namespace spades {
 		int GetWidth() const { return width; }
 		int GetHeight() const { return height; }
 		int GetDepth() const { return depth; }
+		
 	};
 }

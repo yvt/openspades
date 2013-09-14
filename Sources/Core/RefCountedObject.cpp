@@ -18,17 +18,24 @@
  
  */
 
-#pragma once
-
-#include <Core/RefCountedObject.h>
+#include "RefCountedObject.h"
+#include "../ScriptBindings/ScriptManager.h"
 
 namespace spades {
-	namespace client {
-		class IModel: public RefCountedObject {
-		protected:
-			virtual ~IModel(){}
-		public:
-			IModel(){}
-		};
+	RefCountedObject::RefCountedObject() {
+		refCount = 1;
+	}
+	
+	RefCountedObject::~RefCountedObject(){
+		
+	}
+	
+	void RefCountedObject::AddRef() {
+		asAtomicInc(refCount);
+	}
+	
+	void RefCountedObject::Release() {
+		if(asAtomicInc(refCount) <= 0)
+			delete this;
 	}
 }

@@ -19,16 +19,16 @@
  */
 
 #include "ScriptManager.h"
-#include "IModel.h"
+#include <Client/IModel.h>
 
 namespace spades{
 	namespace client {
 		
 		
-		class RendererModelModelRegistrar: public ScriptObjectRegistrar {
+		class ModelRegistrar: public ScriptObjectRegistrar {
 		public:
-			RendererModelModelRegistrar():
-			ScriptObjectRegistrar("RendererModelModel"){
+			ModelRegistrar():
+			ScriptObjectRegistrar("Model"){
 				
 			}
 			virtual void Register(ScriptManager *manager, Phase phase) {
@@ -37,15 +37,15 @@ namespace spades{
 				eng->SetDefaultNamespace("spades");
 				switch(phase){
 					case PhaseObjectType:
-						r = eng->RegisterObjectType("RendererModel",
+						r = eng->RegisterObjectType("Model",
 													0, asOBJ_REF);
 						manager->CheckError(r);
-						r = eng->RegisterObjectBehaviour("RendererModel",
+						r = eng->RegisterObjectBehaviour("Model",
 														 asBEHAVE_ADDREF, "void f()",
 														 asMETHOD(IModel, AddRef),
 														 asCALL_THISCALL);
 						manager->CheckError(r);
-						r = eng->RegisterObjectBehaviour("RendererModel",
+						r = eng->RegisterObjectBehaviour("Model",
 														 asBEHAVE_RELEASE, "void f()",
 														 asMETHOD(IModel, Release),
 														 asCALL_THISCALL);
@@ -61,6 +61,6 @@ namespace spades{
 			}
 		};
 		
-		static RendererModelModelRegistrar registrar;
+		static ModelRegistrar registrar;
 	}
 }

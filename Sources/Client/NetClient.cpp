@@ -1730,6 +1730,7 @@ namespace spades {
 			// now initialize world
 			World *w = new World();
 			w->SetMap(map);
+			map->Release();
 			SPLog("World initialized.");
 			
 			client->SetWorld(w);

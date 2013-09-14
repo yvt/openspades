@@ -218,7 +218,7 @@ namespace spades {
 			
 			// fades bg
 			if(largeMap) {
-				IImage *bg = renderer->RegisterImage("Gfx/MapBg.png");
+				Handle<IImage> bg = renderer->RegisterImage("Gfx/MapBg.png");
 				Vector2 scrSize = {renderer->ScreenWidth(),
 				renderer->ScreenHeight()};
 				float size = std::max(scrSize.x, scrSize.y);
@@ -230,7 +230,7 @@ namespace spades {
 			}
 			
 			// draw border
-			IImage *border;
+			Handle<IImage> border;
 			float borderWidth;
 			AABB2 borderRect = outRect;
 			if(largeMap) {
@@ -294,7 +294,7 @@ namespace spades {
 			// draw grid
 			
 			renderer->SetColor(MakeVector4(0,0,0,0.8*alpha));
-			IImage *dashLine = renderer->RegisterImage("Gfx/DashLine.tga");
+			Handle<IImage> dashLine = renderer->RegisterImage("Gfx/DashLine.tga");
 			for(float x = 64.f; x < map->Width(); x += 64.f){
 				float wx = (x - inRect.GetMinX()) / inRect.GetWidth();
 				if(wx < 0.f || wx >= 1.f)
@@ -318,7 +318,7 @@ namespace spades {
 			
 			// draw grid label
 			renderer->SetColor(MakeVector4(1,1,1,0.8*alpha));
-			IImage *mapFont = renderer->RegisterImage("Gfx/Fonts/MapFont.tga");
+			Handle<IImage> mapFont = renderer->RegisterImage("Gfx/Fonts/MapFont.tga");
 			for(int i = 0; i < 8; i++){
 				float startX = (float)i * 64.f;
 				float endX = startX + 64.f;
@@ -369,7 +369,7 @@ namespace spades {
 			}
 			
 			//draw objects
-			IImage *playerIcon = renderer->RegisterImage("Gfx/Player.tga");
+			Handle<IImage> playerIcon = renderer->RegisterImage("Gfx/Player.tga");
 			
 			{
 				
@@ -402,9 +402,9 @@ namespace spades {
 			
 			CTFGameMode *ctf = dynamic_cast<CTFGameMode *>(world->GetMode());
 			if(ctf){
-				IImage *intelIcon = renderer->RegisterImage("Gfx/Intel.tga");
-				IImage *baseIcon = renderer->RegisterImage("Gfx/CTFBase.tga");
-				IImage *medicalIcon = renderer->RegisterImage("Gfx/Medical.tga");
+				Handle<IImage> intelIcon = renderer->RegisterImage("Gfx/Intel.tga");
+				Handle<IImage> baseIcon = renderer->RegisterImage("Gfx/CTFBase.tga");
+				Handle<IImage> medicalIcon = renderer->RegisterImage("Gfx/Medical.tga");
 				for(int tId = 0; tId < 2; tId++){
 					CTFGameMode::Team& team = ctf->GetTeam(tId);
 					IntVector3 teamColor = world->GetTeam(tId).color;
@@ -445,7 +445,7 @@ namespace spades {
 		
 			TCGameMode *tc = dynamic_cast<TCGameMode *>(world->GetMode());
 			if(tc){
-				IImage *icon = renderer->RegisterImage("Gfx/TCTerritory.tga");
+				Handle<IImage> icon = renderer->RegisterImage("Gfx/TCTerritory.tga");
 				int cnt = tc->GetNumTerritories();
 				for(int i = 0; i < cnt; i++){
 					TCGameMode::Territory *t = tc->GetTerritory(i);

@@ -24,16 +24,16 @@
 
 namespace spades {
 	/*
-	Vector3 Line3::Project(spades::Vector3 v,
-						   bool supposeUnbounded) {
-		
-	}
-	
-	float Line3::GetDistanceTo(spades::Vector3 v,
-							   bool supposeUnbounded){
-		
-	}
-	*/
+	 Vector3 Line3::Project(spades::Vector3 v,
+	 bool supposeUnbounded) {
+	 
+	 }
+	 
+	 float Line3::GetDistanceTo(spades::Vector3 v,
+	 bool supposeUnbounded){
+	 
+	 }
+	 */
 	void Matrix4Multiply(const float a[16], const float b[16], float out[16]) {
 		out[ 0] = b[ 0]*a[ 0] + b[ 1]*a[ 4] + b[ 2]*a[ 8] + b[ 3]*a[12];
         out[ 1] = b[ 0]*a[ 1] + b[ 1]*a[ 5] + b[ 2]*a[ 9] + b[ 3]*a[13];
@@ -249,7 +249,7 @@ namespace spades {
 		start -= origin;
 		
 		Vector3 end = start + dir;
-	
+		
 		float dotX = Vector3::Dot(dir, normX);
 		float dotY = Vector3::Dot(dir, normY);
 		float dotZ = Vector3::Dot(dir, normZ);

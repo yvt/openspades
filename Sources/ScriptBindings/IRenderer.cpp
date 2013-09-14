@@ -19,16 +19,18 @@
  */
 
 #include "ScriptManager.h"
-#include "IModel.h"
+#include <Client/IRenderer.h>
 
-namespace spades{
-	namespace client {
+namespace spades {
+	namespace client{
 		
 		
-		class RendererModelModelRegistrar: public ScriptObjectRegistrar {
+		
+		class RendererRegistrar: public ScriptObjectRegistrar {
+			
 		public:
-			RendererModelModelRegistrar():
-			ScriptObjectRegistrar("RendererModelModel"){
+			RendererRegistrar():
+			ScriptObjectRegistrar("Renderer"){
 				
 			}
 			virtual void Register(ScriptManager *manager, Phase phase) {
@@ -37,30 +39,49 @@ namespace spades{
 				eng->SetDefaultNamespace("spades");
 				switch(phase){
 					case PhaseObjectType:
-						r = eng->RegisterObjectType("RendererModel",
+						r = eng->RegisterObjectType("Renderer",
 													0, asOBJ_REF);
 						manager->CheckError(r);
-						r = eng->RegisterObjectBehaviour("RendererModel",
+						r = eng->RegisterObjectBehaviour("Renderer",
 														 asBEHAVE_ADDREF, "void f()",
-														 asMETHOD(IModel, AddRef),
+														 asMETHOD(IRenderer, AddRef),
 														 asCALL_THISCALL);
 						manager->CheckError(r);
-						r = eng->RegisterObjectBehaviour("RendererModel",
+						r = eng->RegisterObjectBehaviour("Renderer",
 														 asBEHAVE_RELEASE, "void f()",
-														 asMETHOD(IModel, Release),
+														 asMETHOD(IRenderer, Release),
 														 asCALL_THISCALL);
 						manager->CheckError(r);
 						
 						break;
 					case PhaseObjectMember:
+						r = eng->RegisterObjectMethod("Renderer",
+													  "Image@ RegisterImage(const string& in)",
+													  asMETHOD(IRenderer, RegisterImage),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "Model@ RegisterModel(const string& in)",
+													  asMETHOD(IRenderer, RegisterModel),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "Image@ CreateImage(Bitmap@)",
+													  asMETHOD(IRenderer, CreateImage),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "Model@ CreateModel(VoxelModel@)",
+													  asMETHOD(IRenderer, CreateModel),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
 						break;
 					default:
-						
 						break;
 				}
 			}
 		};
 		
-		static RendererModelModelRegistrar registrar;
+		static RendererRegistrar registrar;
 	}
 }

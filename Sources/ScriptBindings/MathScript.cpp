@@ -55,6 +55,10 @@ namespace spades {
 												sizeof(Matrix4),
 												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLINTS);
 					manager->CheckError(r);
+					r = eng->RegisterObjectType("AABB2",
+												sizeof(AABB2),
+												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLFLOATS);
+					manager->CheckError(r);
 					break;
 				case PhaseObjectMember:
 					struct IntVector3Funcs {
@@ -498,7 +502,86 @@ namespace spades {
 													asFUNCTION(Matrix4::FromAxis),
 													asCALL_CDECL);
 					manager->CheckError(r);
+					struct AABB2Funcs {
+						static void Construct1(AABB2 *self) {
+							new(self) AABB2();
+						}
+						static void Construct2(const AABB2& old, AABB2 *self) {
+							new(self) AABB2(old);
+						}
+						static void Construct3(float x, float y, float w, float h, AABB2 *self) {
+							new(self) AABB2(x, y, w, h);
+						}
+						static void Construct4(Vector2 minVec, Vector2 maxVec, AABB2 *self) {
+							new(self) AABB2(minVec, maxVec);
+						}
+					};
+					r = eng->RegisterObjectProperty("AABB2",
+													"Vector2 min",
+													asOFFSET(AABB2, min));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("AABB2",
+													"Vector2 max",
+													asOFFSET(AABB2, max));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("AABB2",
+													"float minX",
+													asOFFSET(AABB2, min.x));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("AABB2",
+													"float minY",
+													asOFFSET(AABB2, min.y));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("AABB2",
+													"float maxX",
+													asOFFSET(AABB2, max.x));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("AABB2",
+													"float maxY",
+													asOFFSET(AABB2, max.y));
+					manager->CheckError(r);
 					
+					// Register the constructors
+					r = eng->RegisterObjectBehaviour("AABB2", asBEHAVE_CONSTRUCT,
+													 "void f()",
+													 asFUNCTION(AABB2Funcs::Construct1),
+													 asCALL_CDECL_OBJLAST);
+					manager->CheckError(r);
+					r = eng->RegisterObjectBehaviour("AABB2", asBEHAVE_CONSTRUCT,
+													 "void f(const AABB2 &in)",
+													 asFUNCTION(AABB2Funcs::Construct2),
+													 asCALL_CDECL_OBJLAST);
+					manager->CheckError(r);
+					r = eng->RegisterObjectBehaviour("AABB2", asBEHAVE_CONSTRUCT,
+													 "void f(float, float, float, float)",
+													 asFUNCTION(AABB2Funcs::Construct3),
+													 asCALL_CDECL_OBJLAST);
+					manager->CheckError(r);
+					r = eng->RegisterObjectBehaviour("AABB2", asBEHAVE_CONSTRUCT,
+													 "void f(Vector2, Vector2)",
+													 asFUNCTION(AABB2Funcs::Construct4),
+													 asCALL_CDECL_OBJLAST);
+					manager->CheckError(r);
+					
+					// Register the operator overloads
+					r = eng->RegisterObjectMethod("AABB2",
+												  "bool Contains(const Vector2 &in)",
+												  asMETHOD(AABB2, Contains), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("AABB2",
+												  "bool Intersects(const AABB2 &in)",
+												  asMETHOD(AABB2, Intersects), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("AABB2",
+												  "void Add(const Vector2& in)",
+												  asMETHODPR(AABB2, operator+=, (const Vector2 &), void), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("AABB2",
+												  "void Add(const AABB2& in)",
+												  asMETHODPR(AABB2, operator+=, (const AABB2 &), void), asCALL_THISCALL);
+					manager->CheckError(r);
+					
+
 					/*** Other Global Functions ***/
 					
 					r = eng->RegisterGlobalFunction("string Replace(const string&in, const string& in, const string&in)",

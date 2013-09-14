@@ -23,16 +23,17 @@
 #include <stdint.h>
 #include <string>
 #include "Debug.h"
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	class IStream;
-	class Bitmap {
+	class Bitmap: public RefCountedObject {
 		int w, h;
 		uint32_t *pixels;
-		
+	protected:
+		~Bitmap();
 	public:
 		Bitmap(int w, int h);
-		~Bitmap();
 		
 		static Bitmap *Load(const std::string&);
 		void Save(const std::string&);
@@ -40,6 +41,9 @@ namespace spades {
 		uint32_t *GetPixels() { return pixels; }
 		int GetWidth() { return w; }
 		int GetHeight() { return h; }
+		
+		uint32_t GetPixel(int x, int y);
+		void SetPixel(int x, int y, uint32_t);
 		
 	};
 }

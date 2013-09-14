@@ -26,6 +26,7 @@
 #include <math.h>
 #include "../Core/Debug.h"
 #include <stdlib.h>
+#include "FileManager.h"
 
 // silly VOXLAP function
 static inline void ftol(float f, long *a)
@@ -38,7 +39,6 @@ namespace spades {
 		GameMap::GameMap():
 		listener(NULL){
 			SPADES_MARK_FUNCTION();
-			
 			
 			uint32_t rnd = (uint32_t)rand() ^ ((uint32_t)rand() << 16);
 			rnd ^= 0x7abd4513;
@@ -470,5 +470,8 @@ namespace spades {
 				throw;
 			}
 		}
+		
+		
+
 	}
 }
