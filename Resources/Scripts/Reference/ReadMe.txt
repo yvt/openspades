@@ -2,7 +2,7 @@
 About Reference Directory
 =========================
 
-This directory contains a prototype definition for public APIs which can be
+This directory contains a prototype declaration for public APIs which can be
 used by game scripts. You can refer to the source codes in this directory for 
 the definition of the provided APIs.
 
