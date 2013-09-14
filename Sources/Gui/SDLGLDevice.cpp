@@ -62,10 +62,11 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 
 
 //lm: The macro would not work on windows, the application simply fails to start if dependency's are missing.
-//	unline *nix, runtime dependency's are all resolved at application start.
+//	unline ?mac?, runtime dependency's are all resolved at application start.
 //	one would need a construction like OpenAL, where functions are resolved dynamically (GetProcAddress / dlsym)
+//on GCC this was giving me warnings aswell...
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__GNUC__)
 #define CheckExistence(func)
 #else
 #define CheckExistence(func) do { \
@@ -240,7 +241,7 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 					glFrontFace(GL_CCW);
 					break;
 				default:
-					SPInvalidEnum("val", "val");
+					SPInvalidEnum("val", val);
 			}
 			CheckError();
 		}

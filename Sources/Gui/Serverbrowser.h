@@ -72,7 +72,7 @@ namespace ServerFilter
 
 
 
-class Serverbrowser : public Thread
+class Serverbrowser : protected Thread
 {
 	bool mStopRequested;
 	std::string mBuffer;
@@ -90,7 +90,10 @@ class Serverbrowser : public Thread
 
 public:
 	Serverbrowser( Fl_Browser* box );
-	void stopReading() { mStopRequested = true; }
+	~Serverbrowser();
+	void startQuery();
+	void stopQuery() { mStopRequested = true; }
+	bool isBusy() { return IsAlive(); }
 	void onSelection( void* ptr, Fl_Input* input );
 	void onHeaderClick( int x );
 	void setFilter( ServerFilter::Flags newFlags );
@@ -100,6 +103,7 @@ public:
 
 }; //namespace spades
 
+//saves casting when working with enum.
 inline static spades::ServerFilter::Flags& operator |= (spades::ServerFilter::Flags& a, const spades::ServerFilter::Flags b)
 {
 	a = static_cast<spades::ServerFilter::Flags>(static_cast<unsigned int>(a) | static_cast<unsigned int>(b));

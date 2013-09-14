@@ -9,6 +9,13 @@ hide();
 void DetailConfigWindow::cb_Dismiss(Fl_Return_Button* o, void* v) {
   ((DetailConfigWindow*)(o->parent()))->cb_Dismiss_i(o,v);
 }
+
+void DetailConfigWindow::cb_inputFilter_i(Fl_Input*, void*) {
+  onFilterChange();
+}
+void DetailConfigWindow::cb_inputFilter(Fl_Input* o, void* v) {
+  ((DetailConfigWindow*)(o->parent()))->cb_inputFilter_i(o,v);
+}
 DetailConfigWindow::DetailConfigWindow(int X, int Y, int W, int H, const char *L)
   : Fl_Window(X, Y, W, H, L) {
   _DetailConfigWindow();
@@ -39,7 +46,7 @@ this->when(FL_WHEN_RELEASE);
 { Fl_Return_Button* o = new Fl_Return_Button(480, 475, 100, 25, "Dismiss");
   o->callback((Fl_Callback*)cb_Dismiss);
 } // Fl_Return_Button* o
-{ table = new DetailConfigTable(10, 10, 570, 455);
+{ table = new DetailConfigTable(10, 35, 570, 430);
   table->box(FL_THIN_DOWN_FRAME);
   table->color(FL_BACKGROUND_COLOR);
   table->selection_color(FL_BACKGROUND_COLOR);
@@ -51,5 +58,9 @@ this->when(FL_WHEN_RELEASE);
   table->when(FL_WHEN_RELEASE);
   table->end();
 } // DetailConfigTable* table
+{ inputFilter = new Fl_Input(50, 11, 530, 24, "Filter:");
+  inputFilter->callback((Fl_Callback*)cb_inputFilter);
+  inputFilter->when(FL_WHEN_CHANGED);
+} // Fl_Input* inputFilter
 end();
 }

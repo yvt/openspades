@@ -31,7 +31,7 @@
 
 SPADES_SETTING2(cg_protocolVersion, "", "The protocol version to use, 3 = 0.75, 4 = 0.76");
 SPADES_SETTING(cg_serverlistFilter, "31");
-SPADES_SETTING(cg_serverlistSort, "0");
+SPADES_SETTING(cg_serverlistSort, "16385");		//0x4001  (sort on players, descending)
 
 #define SERVICE_URL	"http://services.buildandshoot.com/serverlist.json"
 
@@ -161,6 +161,20 @@ Serverbrowser::Serverbrowser( Fl_Browser* box )
 	mSortOrder = ((int)cg_serverlistSort & 0x4000) ? 1 : 0;
 	mSort = ((int)cg_serverlistSort) & 0xfff;
 	curl_global_init( CURL_GLOBAL_ALL );
+}
+
+Serverbrowser::~Serverbrowser()
+{
+	if( IsAlive() ) {
+		stopQuery();
+		Join();
+	}
+}
+
+void Serverbrowser::startQuery()
+{
+	mStopRequested = false;
+	Start();
 }
 
 void Serverbrowser::Run()

@@ -23,9 +23,7 @@
 #include <vector>
 #include <string>
 
-void DetailConfigWindow::Init() {
-	std::vector<std::string> items;
-	items = spades::Settings::GetInstance()->GetAllItemNames();
-	
+void DetailConfigWindow::onFilterChange()
+{
+	table->setFilter( inputFilter->value() );
 }
-
