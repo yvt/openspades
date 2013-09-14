@@ -37,8 +37,12 @@ set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BIN
 add_dependencies(OpenSpades Angelscript Angelscript_addons)
 
 if(WIN32)
-	string(REGEX REPLACE "\\.lib$" ".dll" SDL_DLL ${SDL_LIBRARY})
-	add_custom_command(TARGET OpenSpades POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SDL_DLL}" "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/")
+	foreach(LIB ${SDL_LIBRARY})
+		string(REGEX REPLACE "\\.lib$" ".dll" SDL_DLL ${LIB})
+		if(EXISTS "${SDL_DLL}")
+			add_custom_command(TARGET OpenSpades POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SDL_DLL}" "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/")
+		endif()
+	endforeach()
 	add_definitions(-DCURL_STATICLIB)
 endif()
 

@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.8)
 project(OpenSpades)
 
 set(OpenSpades_VERSION_MAJOR 0)
 set(OpenSpades_VERSION_MINOR 0)
 set(OpenSpades_VERSION_REVISION 8)
 
+set(CMAKE_PREFIX_PATH Sources/Externals)
 
 include(FindSDL)
 if(NOT SDL_FOUND)
@@ -20,13 +21,6 @@ include(cmake/FindGLEW2.cmake)
 if(NOT GLEW_FOUND)
 	message(FATAL_ERROR "GLEW not found, please install it and make sure CMake can find it (add it to the PATH)")
 endif()
-
-#include(FindOpenAL)
-#if(OPENAL_FOUND)
-#	set(HAVE_OPENAL TRUE)
-#else()
-#	message(STATUS "OpenAL not found, set ENV{OPENALDIR} to point to OpenAL")
-#endif()
 
 set(FLTK_SKIP_OPENGL TRUE)
 set(FLTK_SKIP_FORMS TRUE)
@@ -118,6 +112,16 @@ if(OPENSPADES_RESDIR)
 endif()
 
 
+if(CMAKE_CXX_COMPILER_ID)
+	if(CMAKE_CXX_COMPILER_VERSION)
+		set(_version " ${CMAKE_CXX_COMPILER_VERSION}")
+	else()
+		set(_version "")
+	endif()
+	set(OPENSPADES_COMPILER ${CMAKE_CXX_COMPILER_ID}${_version})
+endif()
+
+
 configure_file("${PROJECT_SOURCE_DIR}/OpenSpades.h.in" "${PROJECT_BINARY_DIR}/OpenSpades.h")
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories("${SDL_INCLUDE_DIR}")
@@ -132,21 +136,4 @@ include_directories("${CURL_INCLUDE_DIRS}")
 add_subdirectory(Resources)
 add_subdirectory(Sources)
 
-#EXECUTABLE_OUTPUT_PATH
 
-#if test "$prefix" = "NONE"; then
-#	FLTK_CONFIG="fltk-config"
-#else
-#	FLTK_CONFIG="${prefix}/bin/fltk-config"
-#fi
-
-#FLTK_CFLAGS=`${FLTK_CONFIG} --cxxflags --use-images`
-#FLTK_LIBS=`${FLTK_CONFIG} --ldflags --use-images`
-
-
-#AC_CHECK_MEMBER(struct msghdr.msg_flags, [AC_DEFINE(HAS_MSGHDR_FLAGS)], , [#include <sys/socket.h>])
-
-#AC_CHECK_TYPE(socklen_t, [AC_DEFINE(HAS_SOCKLEN_T)], , 
-              #include <sys/types.h>
-              #include <sys/socket.h>
-#)
