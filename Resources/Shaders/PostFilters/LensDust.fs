@@ -58,7 +58,7 @@ void main() {
 	final *= final;
 	
 	final *= 0.95;
-	final += sum;
+	final += sum * 0.6;
 	
 	// non-linearize
 	final = sqrt(final);
