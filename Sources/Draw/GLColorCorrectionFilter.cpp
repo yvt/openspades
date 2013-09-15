@@ -29,6 +29,9 @@
 #include "GLProgramUniform.h"
 #include "GLRenderer.h"
 #include "../Core/Debug.h"
+#include <Core/Settings.h>
+
+SPADES_SETTING(r_bloom, "");
 
 namespace spades {
 	namespace draw {
@@ -45,12 +48,29 @@ namespace spades {
 			static GLProgramAttribute lensPosition("positionAttribute");
 			static GLProgramUniform lensTexture("texture");
 			
+			static GLProgramUniform saturation("saturation");
+			static GLProgramUniform enhancement("enhancement");
+			
+			saturation(lens);
+			enhancement(lens);
+			
+			
 			dev->Enable(IGLDevice::Blend, false);
 			
 			lensPosition(lens);
 			lensTexture(lens);
 			
 			lens->Use();
+			
+			
+			if(r_bloom) {
+				// make image sharper
+				saturation.SetValue(.9f);
+				enhancement.SetValue(0.7f);
+			}else{
+				saturation.SetValue(1.f);
+				enhancement.SetValue(0.3f);
+			}
 			
 			lensTexture.SetValue(0);
 			

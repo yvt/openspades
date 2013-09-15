@@ -59,6 +59,7 @@
 #include "GLProfiler.h"
 #include "GLColorCorrectionFilter.h"
 #include "GLDepthOfFieldFilter.h"
+#include "GLLensDustFilter.h"
 
 SPADES_SETTING(r_water, "2");
 SPADES_SETTING(r_bloom, "1");
@@ -805,9 +806,9 @@ namespace spades {
 					GLProfiler profiler(device, "Camera Blur");
 					handle = cameraBlur->Filter(handle);
 				}
-				/*
+				
 				if(r_bloom)
-					handle = GLBloomFilter(this).Filter(handle);*/
+					handle = GLLensDustFilter(this).Filter(handle);
 				if(r_lens){
 					GLProfiler profiler(device, "Lens Filter");
 					handle = GLLensFilter(this).Filter(handle);

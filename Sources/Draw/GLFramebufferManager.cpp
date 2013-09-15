@@ -678,7 +678,7 @@ namespace spades {
 				return BufferHandle(this, i);
 			}
 			
-			if(buffers.size() > 32){
+			if(buffers.size() > 128){
 				SPRaise("Maximum number of framebuffers exceeded");
 			}
 			

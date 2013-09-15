@@ -19,25 +19,29 @@
  */
 
 
-uniform sampler2D texture;
+
+attribute vec2 positionAttribute;
 
 varying vec2 texCoord;
-
-uniform float enhancement;
-uniform float saturation;
+varying vec4 dustTexCoord1;
+varying vec4 dustTexCoord2;
 
 void main() {
 	
-	gl_FragColor = texture2D(texture, texCoord);
+	vec2 pos = positionAttribute;
 	
-	gl_FragColor.xyz = mix(gl_FragColor.xyz,
-						   smoothstep(0., 1., gl_FragColor.xyz),
-						   enhancement);
+	vec2 scrPos = pos * 2. - 1.;
 	
-	vec3 gray = vec3(dot(gl_FragColor.xyz, vec3(1. / 3.)));
-	gl_FragColor.xyz = mix(gray, gl_FragColor.xyz, saturation);
-
-	gl_FragColor.w = 1.;
-
+	gl_Position = vec4(scrPos, 0.5, 1.);
+	
+	texCoord = pos;
+	
+	vec2 dustCoord = texCoord * (511. / 1024.) +
+		(0.5 / 1024.);
+	dustCoord.y = 0.5 - dustCoord.y;
+	dustTexCoord1 = dustCoord.xyxy +
+		vec4(0.0, 0.0, 0.5, 0.0);
+	dustTexCoord2 = dustCoord.xyxy +
+		vec4(0.0, 0.5, 0.5, 0.5);
 }
 

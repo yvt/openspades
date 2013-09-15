@@ -18,26 +18,24 @@
  
  */
 
+#pragma once
 
-uniform sampler2D texture;
+#include "GLFramebufferManager.h"
 
-varying vec2 texCoord;
-
-uniform float enhancement;
-uniform float saturation;
-
-void main() {
-	
-	gl_FragColor = texture2D(texture, texCoord);
-	
-	gl_FragColor.xyz = mix(gl_FragColor.xyz,
-						   smoothstep(0., 1., gl_FragColor.xyz),
-						   enhancement);
-	
-	vec3 gray = vec3(dot(gl_FragColor.xyz, vec3(1. / 3.)));
-	gl_FragColor.xyz = mix(gray, gl_FragColor.xyz, saturation);
-
-	gl_FragColor.w = 1.;
-
+namespace spades {
+	namespace draw {
+		class GLRenderer;
+		class GLProgram;
+		class GLImage;
+		class GLLensDustFilter {
+			GLProgram *thru;
+			GLProgram *dust;
+			GLImage *dustImg;
+			GLRenderer *renderer;
+			GLColorBuffer DownSample(GLColorBuffer, bool linearize = false);
+		public:
+			GLLensDustFilter(GLRenderer *);
+			GLColorBuffer Filter(GLColorBuffer);
+		};
+	}
 }
-

@@ -44,7 +44,7 @@ SPADES_SETTING(cg_smp, "0");
 SPADES_SETTING(cg_blood, "1");
 SPADES_SETTING(cg_lastQuickConnectHost, "127.0.0.1");
 SPADES_SETTING(cg_playerName, "Deuce");
-SPADES_SETTING(r_bloom, "1");
+SPADES_SETTING(r_bloom, "0");
 SPADES_SETTING(r_lens, "1");
 SPADES_SETTING(r_cameraBlur, "1");
 SPADES_SETTING(r_softParticles, "1");
@@ -232,7 +232,7 @@ void MainWindow::LoadPrefs() {
 	   r_colorCorrection && r_depthOfField
 	   && postFilterHighCapable) {
 		postFilterSelect->value(2);
-	}else if(r_cameraBlur && r_bloom && r_lens && r_lensFlare &&
+	}else if(r_cameraBlur && (!r_bloom) && r_lens && r_lensFlare &&
 	   r_colorCorrection && (!r_depthOfField)) {
 		postFilterSelect->value(1);
 	}else{
@@ -682,7 +682,7 @@ void MainWindow::SavePrefs() {
 			r_depthOfField = 0;
 			break;
 		case 1:
-			r_bloom = 1;
+			r_bloom = 0;
 			r_lens = 1;
 			r_lensFlare = 1;
 			r_cameraBlur = 1;

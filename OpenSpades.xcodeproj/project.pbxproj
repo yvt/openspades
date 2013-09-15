@@ -149,6 +149,8 @@
 		E8B6B72117E4508C00E35523 /* IAudioDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72017E4508C00E35523 /* IAudioDevice.cpp */; };
 		E8B6B72317E452ED00E35523 /* IAudioChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72217E452EC00E35523 /* IAudioChunk.cpp */; };
 		E8B6B72517E46C1D00E35523 /* PrimitiveArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72417E46C1B00E35523 /* PrimitiveArray.cpp */; };
+		E8B6B72817E5AC9C00E35523 /* ServerAddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72617E5AC9C00E35523 /* ServerAddress.cpp */; };
+		E8B6B72B17E6095900E35523 /* GLLensDustFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72917E6095800E35523 /* GLLensDustFilter.cpp */; };
 		E8CF0396178EDA75000683D4 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0395178EDA75000683D4 /* SDL.framework */; };
 		E8CF0398178EDA86000683D4 /* SDL_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0397178EDA86000683D4 /* SDL_net.framework */; };
 		E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0399178EDABD000683D4 /* OpenAL.framework */; };
@@ -565,6 +567,10 @@
 		E8B6B72017E4508C00E35523 /* IAudioDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IAudioDevice.cpp; sourceTree = "<group>"; };
 		E8B6B72217E452EC00E35523 /* IAudioChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IAudioChunk.cpp; sourceTree = "<group>"; };
 		E8B6B72417E46C1B00E35523 /* PrimitiveArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PrimitiveArray.cpp; sourceTree = "<group>"; };
+		E8B6B72617E5AC9C00E35523 /* ServerAddress.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ServerAddress.cpp; sourceTree = "<group>"; };
+		E8B6B72717E5AC9C00E35523 /* ServerAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAddress.h; sourceTree = "<group>"; };
+		E8B6B72917E6095800E35523 /* GLLensDustFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLensDustFilter.cpp; sourceTree = "<group>"; };
+		E8B6B72A17E6095800E35523 /* GLLensDustFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLensDustFilter.h; sourceTree = "<group>"; };
 		E8CF0385178ED9D2000683D4 /* OpenSpades */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenSpades; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CF0395178EDA75000683D4 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = ../../../../../Library/Frameworks/SDL.framework; sourceTree = "<group>"; };
 		E8CF0397178EDA86000683D4 /* SDL_net.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_net.framework; path = ../../../../../Library/Frameworks/SDL_net.framework; sourceTree = "<group>"; };
@@ -964,6 +970,8 @@
 				E8D2ACE217D704E600BE5490 /* GLColorCorrectionFilter.h */,
 				E8B6B6E317E165A400E35523 /* GLDepthOfFieldFilter.cpp */,
 				E8B6B6E417E165A500E35523 /* GLDepthOfFieldFilter.h */,
+				E8B6B72917E6095800E35523 /* GLLensDustFilter.cpp */,
+				E8B6B72A17E6095800E35523 /* GLLensDustFilter.h */,
 			);
 			name = "Post Filters";
 			sourceTree = "<group>";
@@ -1485,6 +1493,8 @@
 		E8E44681179CC49C00BE8855 /* I/O */ = {
 			isa = PBXGroup;
 			children = (
+				E8B6B72617E5AC9C00E35523 /* ServerAddress.cpp */,
+				E8B6B72717E5AC9C00E35523 /* ServerAddress.h */,
 				E8CF04091790471D000683D4 /* IFileSystem.cpp */,
 				E8CF040A1790471D000683D4 /* IFileSystem.h */,
 				E8CF040C17904970000683D4 /* FileManager.cpp */,
@@ -1801,6 +1811,8 @@
 				E8B6B72117E4508C00E35523 /* IAudioDevice.cpp in Sources */,
 				E8B6B72317E452ED00E35523 /* IAudioChunk.cpp in Sources */,
 				E8B6B72517E46C1D00E35523 /* PrimitiveArray.cpp in Sources */,
+				E8B6B72817E5AC9C00E35523 /* ServerAddress.cpp in Sources */,
+				E8B6B72B17E6095900E35523 /* GLLensDustFilter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

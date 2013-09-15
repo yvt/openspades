@@ -21,23 +21,12 @@
 
 uniform sampler2D texture;
 
+varying vec4 color;
 varying vec2 texCoord;
 
-uniform float enhancement;
-uniform float saturation;
-
 void main() {
-	
 	gl_FragColor = texture2D(texture, texCoord);
-	
-	gl_FragColor.xyz = mix(gl_FragColor.xyz,
-						   smoothstep(0., 1., gl_FragColor.xyz),
-						   enhancement);
-	
-	vec3 gray = vec3(dot(gl_FragColor.xyz, vec3(1. / 3.)));
-	gl_FragColor.xyz = mix(gray, gl_FragColor.xyz, saturation);
-
 	gl_FragColor.w = 1.;
-
+	gl_FragColor *= color;
 }
 
