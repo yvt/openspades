@@ -19,14 +19,14 @@
  
  */
 
-#include "GameMap.h"
-#include "../Core/IStream.h"
 #include <vector>
-#include "../Core/Exception.h"
-#include <math.h>
-#include "../Core/Debug.h"
 #include <stdlib.h>
-#include "FileManager.h"
+#include <math.h>
+#include "GameMap.h"
+#include <Core/IStream.h>
+#include <Core/Exception.h>
+#include <Core/Debug.h>
+#include <Core/FileManager.h>
 
 // silly VOXLAP function
 static inline void ftol(float f, long *a)

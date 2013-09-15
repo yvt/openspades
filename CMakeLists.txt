@@ -52,7 +52,7 @@ if(NOT CURL_FOUND)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "-Wall")
+	set(CMAKE_CXX_FLAGS "-Wall -Wno-unknown-pragmas")	#lm: output is spammed like shit by all those #pragma mark items
 endif()
 
 if(MSVC)

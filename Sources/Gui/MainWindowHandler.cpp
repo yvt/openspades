@@ -82,7 +82,7 @@ MainWindow::~MainWindow()
 	}
 }
 
-void MainWindow::StartGame(const std::string &host) {
+void MainWindow::StartGame(const spades::ServerAddress &host) {
 	SPADES_MARK_FUNCTION();
 	
 	hide();
@@ -133,8 +133,9 @@ void MainWindow::StartGame(const std::string &host) {
 
 void MainWindow::QuickConnectPressed() {
 	SPADES_MARK_FUNCTION();
-	
-	StartGame(quickHostInput->value());
+
+	spades::ServerAddress host(quickHostInput->value());
+	StartGame(host);
 }
 
 #pragma mark - Setup

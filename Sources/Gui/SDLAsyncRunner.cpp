@@ -26,7 +26,7 @@
 
 namespace spades {
 	namespace gui {
-		SDLAsyncRunner::SDLAsyncRunner(std::string host,
+		SDLAsyncRunner::SDLAsyncRunner(const ServerAddress& host,
 									   std::string pn):
 		SDLRunner(host, pn){
 			currentClient = NULL;

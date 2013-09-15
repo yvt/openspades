@@ -18,7 +18,7 @@
  
  */
 
-#include "ScriptManager.h"
+#include <ScriptBindings/ScriptManager.h>
 #include "IModel.h"
 
 namespace spades{

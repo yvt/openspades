@@ -3,7 +3,7 @@
 #ifndef MainWindow_h
 #define MainWindow_h
 #include <FL/Fl.H>
-namespace spades { class Serverbrowser; }; 
+namespace spades { class Serverbrowser; class ServerAddress; }; 
 #include <FL/Fl_Window.H>
 #include <string>
 #include <vector>
@@ -133,7 +133,7 @@ private:
   bool shaderHighCapable; 
   bool postFilterHighCapable; 
   void QuickConnectPressed();
-  void StartGame(const std::string& host);
+  void StartGame(const spades::ServerAddress& host);
 public:
   void LoadPrefs();
 private:

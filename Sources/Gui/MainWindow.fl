@@ -2,7 +2,7 @@
 version 1.0302 
 header_name {.h} 
 code_name {.cpp}
-decl {namespace spades { class Serverbrowser; }} {public global
+decl {namespace spades { class Serverbrowser; class ServerAddress; }} {public global
 } 
 
 widget_class MainWindow {
@@ -150,7 +150,7 @@ SavePrefs();} open
       }
     }
     Fl_Tabs groupServerlist {
-      label Serverlist open selected
+      label Serverlist open
       xywh {10 130 595 220}
     } {
       Fl_Browser serverListbox {
@@ -210,7 +210,7 @@ SavePrefs();} open
   }
   Function {QuickConnectPressed()} {open private
   } {}
-  Function {StartGame(const std::string& host)} {open private
+  Function {StartGame(const spades::ServerAddress& host)} {open selected private
   } {}
   Function {LoadPrefs()} {open
   } {}

@@ -31,7 +31,7 @@
 #include "../AngelScript/addons/scriptmathcomplex.h"
 #include "../AngelScript/addons/scriptstdstring.h"
 #include "../AngelScript/addons/weakref.h"
-#include "Mutex.h"
+#include <Core/Mutex.h>
 #include <list>
 
 namespace spades {
