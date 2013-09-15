@@ -24,7 +24,8 @@
 #include <string>
 #include "Player.h"
 #include "IWorldListener.h"
-#include "../Core/Math.h"
+#include <Core/Math.h>
+#include <Core/ServerAddress.h>
 #include "IRenderer.h"
 #include <list>
 
@@ -77,7 +78,7 @@ namespace spades {
 			std::string playerName;
 			IStream *logStream;
 			
-			std::string hostname;
+			ServerAddress hostname;
 			
 			World *world;
 			GameMap *map;
@@ -226,7 +227,7 @@ namespace spades {
 			
 		public:
 			Client(IRenderer *, IAudioDevice *,
-				   std::string host, std::string playerName);
+				   const ServerAddress& host, std::string playerName);
 			~Client();
 			
 			void RunFrame(float dt);

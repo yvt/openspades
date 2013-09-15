@@ -22,9 +22,9 @@
 #include <Core/Debug.h>
 #include <vector>
 #include <Core/Exception.h>
-#include "AutoLocker.h"
-#include "FileManager.h"
-#include "IStream.h"
+#include <Core/AutoLocker.h>
+#include <Core/FileManager.h>
+#include <Core/IStream.h>
 
 namespace spades {
 	

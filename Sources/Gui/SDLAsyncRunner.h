@@ -21,7 +21,7 @@
 #pragma once
 
 #include "SDLRunner.h"
-#include "../Core/ConcurrentDispatch.h"
+#include <Core/ConcurrentDispatch.h>
 
 namespace spades {
 	namespace client{
@@ -40,7 +40,7 @@ namespace spades {
 			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
 			virtual void ClientThreadProc(client::IRenderer *renderer, client::IAudioDevice *dev);
 		public:
-			SDLAsyncRunner(std::string host, std::string playerName);
+			SDLAsyncRunner(const class ServerAddress& host, std::string playerName);
 			virtual ~SDLAsyncRunner();
 		};
 	}

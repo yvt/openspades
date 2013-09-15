@@ -26,7 +26,7 @@
 #include "Debug.h"
 #include "IBitmapCodec.h"
 #include "FileManager.h"
-#include "ScriptManager.h"
+#include <ScriptBindings/ScriptManager.h>
 
 namespace spades {
 	Bitmap::Bitmap(int ww, int hh):

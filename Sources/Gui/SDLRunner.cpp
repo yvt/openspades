@@ -41,7 +41,7 @@ SPADES_SETTING(r_depthBits, "16");
 
 namespace spades {
 	namespace gui {
-		SDLRunner::SDLRunner(std::string h, std::string pn):
+		SDLRunner::SDLRunner(const ServerAddress& h, std::string pn):
 		host(h), playerName(pn){
 			
 		}

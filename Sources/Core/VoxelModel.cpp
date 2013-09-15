@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <vector>
 #include "Debug.h"
-#include "ScriptManager.h"
+#include <ScriptBindings/ScriptManager.h>
 #include "FileManager.h"
 
 namespace spades {

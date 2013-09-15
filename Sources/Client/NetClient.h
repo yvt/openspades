@@ -21,12 +21,18 @@
 
 #pragma once 
 
-#include <enet/enet.h>
 #include <string>
 #include <vector>
-#include "../Core/Math.h"
+#include <Core/ServerAddress.h>
+#include <Core/Math.h>
 #include "PhysicsConstants.h"
 #include "Player.h"
+
+struct _ENetHost;
+struct _ENetPeer;
+typedef _ENetHost ENetHost;
+typedef _ENetPeer ENetPeer;
+
 
 namespace spades {
 	namespace client {
@@ -85,7 +91,7 @@ namespace spades {
 			Player *GetLocalPlayer();
 			Player *GetLocalPlayerOrNull();
 			
-			std::string DisconnectReasonString(enet_uint32);
+			std::string DisconnectReasonString(uint32_t);
 			
 			void MapLoaded();
 		public:
@@ -100,7 +106,7 @@ namespace spades {
 				return statusString;
 			}
 			
-			void Connect(std::string hostname);
+			void Connect(const ServerAddress& hostname);
 			void Disconnect();
 			
 			void DoEvents(int timeout = 0);

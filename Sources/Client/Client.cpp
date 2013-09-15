@@ -116,7 +116,7 @@ namespace spades {
 	namespace client {
 		
 		Client::Client(IRenderer *r, IAudioDevice *audioDev,
-					   std::string host, std::string playerName):
+					   const ServerAddress& host, std::string playerName):
 		renderer(r), audioDevice(audioDev), playerName(playerName) {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
@@ -361,7 +361,7 @@ namespace spades {
 			renderer->RegisterImage("Gfx/HurtRing.tga");
 			audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
 			
-			SPLog("Started connecting to '%s'", hostname.c_str());
+			SPLog("Started connecting to '%s'", hostname.asString(true));
 			net = new NetClient(this);
 			net->Connect(hostname);
 			
@@ -369,11 +369,7 @@ namespace spades {
 			//net->Connect("127.0.0.1");
 			
 			// decide log file name
-			std::string fn = hostname;
-			if(fn.find("aos:///") == 0)
-				fn = fn.substr(7);
-			if(fn.find("aos://") == 0)
-				fn = fn.substr(6);
+			std::string fn = hostname.asString(false);
 			std::string fn2;
 			{
 				time_t t;

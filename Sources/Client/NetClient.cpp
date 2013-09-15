@@ -19,24 +19,26 @@
  
  */
 
-#include "NetClient.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
 #include <vector>
-#include "../Core/Debug.h"
-#include "../Core/Math.h"
+#include <string.h>
+#include <math.h>
+
+#include "NetClient.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Debug.h>
+#include <Core/Math.h>
 #include "World.h"
 #include "Player.h"
 #include "Client.h"
 #include "Grenade.h"
 #include "CTFGameMode.h"
-#include "../Core/DeflateStream.h"
-#include "../Core/MemoryStream.h"
+#include <Core/DeflateStream.h>
+#include <Core/MemoryStream.h>
 #include "GameMap.h"
-#include <string.h>
-#include <math.h>
 #include "TCGameMode.h"
-#include "../Core/Settings.h"
+#include <Core/Settings.h>
+#include <enet/enet.h>
 
 SPADES_SETTING(cg_protocolVersion, "3");
 
@@ -250,6 +252,7 @@ namespace spades {
 				Write((uint8_t)v.x);
 			}
 			
+			//lm: http://www.unicode.org/Public/MAPPINGS/VENDORS/MISC/IBMGRAPH.TXT
 			void Write(std::string str){
 				// TODO: encode from utf-8 to cp437
 				data.insert(data.end(),
@@ -316,33 +319,17 @@ namespace spades {
 			enet_host_destroy(host);
 			SPLog("ENet host destroyed");
 		}
-		
-		// unsigned long version of atol, cross-platform (including MSVC)
-		static uint32_t ParseIntegerAddress(const std::string& str) {
-			uint32_t vl = 0;
-			for(size_t i = 0; i < str.size(); i++) {
-				char c = str[i];
-				if(c >= '0' && c<= '9'){
-					vl *= 10;
-					vl += (uint32_t)(c - '0');
-				}else{
-					break;
-				}
-			}
-			
-			return vl;
-		}
-		
-		void NetClient::Connect(std::string hostname) {
+				
+		void NetClient::Connect(const ServerAddress& hostname) {
 			SPADES_MARK_FUNCTION();
 			
 			Disconnect();
 			SPAssert(status == NetClientStatusNotConnected);
 			
-			if((int)cg_protocolVersion != 3 &&
-			   (int)cg_protocolVersion != 4)
-				SPRaise("Invalid cg_protocolVersion, should be 3 or 4");
-			
+			if( hostname.protocol() != ProtocolVersion::Unknown ) {
+				cg_protocolVersion = (int)hostname.protocol();
+			}
+
 			switch((int)cg_protocolVersion) {
 				case 3:
 					SPLog("Using Ace of Spades 0.75 protocol");
@@ -350,38 +337,17 @@ namespace spades {
 				case 4:
 					SPLog("Using Ace of Spades 0.76 protocol");
 					break;
+				default:
+					SPRaise("Invalid cg_protocolVersion, should be 3 or 4");
+					break;
 			}
 
-			if(hostname.find("aos:///") == 0){
-				hostname = hostname.substr(7);
-			}else if(hostname.find("aos://") == 0){
-				hostname = hostname.substr(6);
-			}
-			
-			ENetAddress address;
-			std::string addr = hostname;
-			size_t pos = hostname.find(':');
-			if(pos == std::string::npos){
-				addr = hostname;
-				address.port = 32887;
-			}else{
-				address.port = atoi(hostname.substr(pos+1).c_str());
-				addr = hostname.substr(0, pos);
-			}
-			
-			if(addr.find('.') != std::string::npos){
-				enet_address_set_host(&address, addr.c_str());
-			}else{
-				address.host = ParseIntegerAddress(addr);
-			}
-			
-			
-			SPLog("Connecting to %u:%u",
-				  (unsigned int)address.host, (unsigned int)address.port);
+			ENetAddress addr = hostname.asAddress();
+			SPLog("Connecting to %u:%u", (unsigned int)addr.host, (unsigned int)addr.port);
 			
 			savedPackets.clear();
 			
-			peer = enet_host_connect(host, &address, 1, (int)cg_protocolVersion);
+			peer = enet_host_connect(host, &addr, 1, (int)cg_protocolVersion);
 			if(peer == NULL){
 				SPRaise("Failed to create ENet peer");
 			}
