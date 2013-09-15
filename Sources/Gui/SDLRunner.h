@@ -20,9 +20,10 @@
 
 #pragma once
 
-#include "../Core/IRunnable.h"
+#include <Core/IRunnable.h>
 #include "../Imports/SDL.h"
 #include <string>
+#include <Core/ServerAddress.h>
 
 namespace spades {
 	namespace client{
@@ -34,7 +35,7 @@ namespace spades {
 		class SDLRunner: public IRunnable {
 			
 		protected:
-			std::string host;
+			ServerAddress host;
 			std::string playerName;
 			std::string TranslateKey(const SDL_keysym&);
 			std::string TranslateButton(Uint8 b);
@@ -43,7 +44,7 @@ namespace spades {
 							  client::Client *);
 			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
 		public:
-			SDLRunner(std::string host, std::string playerName);
+			SDLRunner(const ServerAddress& host, std::string playerName);
 			virtual ~SDLRunner();
 			virtual void Run();
 		};

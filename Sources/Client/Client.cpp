@@ -62,6 +62,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include "Tracer.h"
+#include <stdlib.h>
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;
@@ -116,7 +117,7 @@ namespace spades {
 	namespace client {
 		
 		Client::Client(IRenderer *r, IAudioDevice *audioDev,
-					   std::string host, std::string playerName):
+					   const ServerAddress& host, std::string playerName):
 		renderer(r), audioDevice(audioDev), playerName(playerName) {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
@@ -167,7 +168,7 @@ namespace spades {
 			
 			chatWindow = new ChatWindow(this, textFont, false);
 			killfeedWindow = new ChatWindow(this, textFont, true);
-			chatEditing = false;
+			keyDest = kd_Game;
 			
 			hurtRingView = new HurtRingView(this);
 			centerMessageView = new CenterMessageView(this, bigTextFont);
@@ -361,7 +362,7 @@ namespace spades {
 			renderer->RegisterImage("Gfx/HurtRing.tga");
 			audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
 			
-			SPLog("Started connecting to '%s'", hostname.c_str());
+			SPLog("Started connecting to '%s'", hostname.asString(true).c_str());
 			net = new NetClient(this);
 			net->Connect(hostname);
 			
@@ -369,11 +370,7 @@ namespace spades {
 			//net->Connect("127.0.0.1");
 			
 			// decide log file name
-			std::string fn = hostname;
-			if(fn.find("aos:///") == 0)
-				fn = fn.substr(7);
-			if(fn.find("aos://") == 0)
-				fn = fn.substr(6);
+			std::string fn = hostname.asString(false);
 			std::string fn2;
 			{
 				time_t t;
@@ -912,18 +909,16 @@ namespace spades {
 		void Client::CharEvent(const std::string &ch){
 			SPADES_MARK_FUNCTION();
 			
-			if(chatEditing){
-				ChatCharEvent(ch);
-				return;
-			}
-			
-			if(ch == "/"){
-				ActivateChatTextEditor(false);
-				ChatCharEvent("/");
+			if( kd_Chat == keyDest || (kd_Game == keyDest && ch == "/") ) {
+				if( kd_Game == keyDest ) {
+					ActivateChatTextEditor(false);
+				}
+				ChatCharEvent( ch );
 			}
 		}
 		
 		// TODO: this might not be a fast way
+		//lm: ideally we should normalize the key when reading the config.
 		static bool CheckKey(const std::string& cfg,
 							 const std::string& input) {
 			if(cfg.empty())
@@ -951,9 +946,19 @@ namespace spades {
 		void Client::KeyEvent(const std::string& name, bool down){
 			SPADES_MARK_FUNCTION();
 			
-			if(chatEditing){
-				if(down)
+			if( kd_Chat == keyDest ){
+				if( down ) {
 					ChatKeyEvent(name);
+				}
+				return;
+			} else if( kd_ExitQuestion == keyDest ) {
+				if( down ) {
+					if( "y" == name || "Y" == name ) {
+						readyToClose = true;
+					} else if( "n" == name || "N" == name || "Escape" == name ) {
+						keyDest = kd_Game;
+					}
+				}
 				return;
 			}
 			
@@ -962,7 +967,7 @@ namespace spades {
 					if(inGameLimbo){
 						inGameLimbo = false;
 					}else{
-						readyToClose = true;
+						keyDest = kd_ExitQuestion;
 					}
 				}
 			}else if(world){
@@ -3378,7 +3383,7 @@ namespace spades {
 					limbo->Draw();
 				
 				// FIXME: when to draw chat editor?
-				if(chatEditing){
+				if( kd_Chat == keyDest ){
 					Vector2 pos;
 					pos.x = 8.f;
 					pos.y = scrHeight - 24.f;
@@ -3394,6 +3399,12 @@ namespace spades {
 					textFont->Draw(str, pos+MakeVector2(1, 1), 1.f,
 								   MakeVector4(0,0,0,0.5));
 					textFont->Draw(str, pos, 1.f, MakeVector4(1,1,1,1));
+				} else if( kd_ExitQuestion == keyDest ) {
+					float scale = 1.5f;
+					Vector2 tw = textFont->Measure( "Quit, are you sure?" ) * scale;
+					bigTextFont->Draw( "Quit, are you sure?", MakeVector2( scrWidth * 0.5f - tw.x, scrHeight * 0.5f - tw.y * 1.1f ), scale, MakeVector4( 1,0,0,1 ) );
+					tw = textFont->Measure( "Y / N" ) * scale;
+					bigTextFont->Draw( "Y / N", MakeVector2( scrWidth * 0.5f - tw.x, scrHeight * 0.5f + tw.y * 1.1f ), scale, MakeVector4( 1,0,0,1 ) );
 				}
 				
 			}else{
@@ -3499,7 +3510,7 @@ namespace spades {
 		}
 		
 		void Client::ActivateChatTextEditor(bool global) {
-			chatEditing = true;
+			keyDest = kd_Chat;
 			chatGlobal = global;
 			
 			playerInput = PlayerInput();
@@ -3508,17 +3519,17 @@ namespace spades {
 		}
 		
 		void Client::CloseChatTextEditor() {
-			chatEditing = false;
+			keyDest = kd_Game;
 			chatText.clear();
 		}
 		
 		void Client::ChatCharEvent(const std::string& ch){
-			SPAssert(chatEditing);
+			SPAssert(kd_Chat == keyDest);
 			chatText += ch;
 		}
 		
 		void Client::ChatKeyEvent(const std::string &key) {
-			SPAssert(chatEditing);
+			SPAssert(kd_Chat == keyDest);
 			
 			if(key == "BackSpace"){
 				if(!chatText.empty())
