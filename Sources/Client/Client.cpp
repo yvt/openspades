@@ -62,6 +62,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include "Tracer.h"
+#include <stdlib.h>
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;
@@ -361,7 +362,7 @@ namespace spades {
 			renderer->RegisterImage("Gfx/HurtRing.tga");
 			audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
 			
-			SPLog("Started connecting to '%s'", hostname.asString(true));
+			SPLog("Started connecting to '%s'", hostname.asString(true).c_str());
 			net = new NetClient(this);
 			net->Connect(hostname);
 			
