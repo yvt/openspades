@@ -155,6 +155,10 @@ namespace spades {
 				GLFogFilter(this);
 			}
 			
+			if(r_bloom){
+				GLLensDustFilter(this);
+			}
+			
 			if(r_lens){
 				GLLensFilter(this);
 			}
