@@ -65,7 +65,7 @@ namespace spades {
 			
 			if(r_bloom) {
 				// make image sharper
-				saturation.SetValue(.9f);
+				saturation.SetValue(.85f);
 				enhancement.SetValue(0.7f);
 			}else{
 				saturation.SetValue(1.f);
