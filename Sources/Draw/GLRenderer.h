@@ -49,6 +49,7 @@ namespace spades {
 		class GLWaterRenderer;
 		class GLAmbientShadowRenderer;
 		class GLRadiosityRenderer;
+		class GLLensDustFilter;
 		
 		class GLRenderer: public client::IRenderer, public client::IGameMapListener  {
 			friend class GLShadowShader;
@@ -90,6 +91,7 @@ namespace spades {
 			GLRadiosityRenderer *radiosityRenderer;
 			
 			GLCameraBlurFilter *cameraBlur;
+			GLLensDustFilter *lensDustFilter;
 			
 			// used when r_srgb = 1
 			IGLDevice::UInteger lastColorBufferTexture;

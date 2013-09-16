@@ -109,6 +109,7 @@ namespace spades {
 			longSpriteRenderer = NULL;
 			modelRenderer = NULL;
             cameraBlur = NULL;
+			lensDustFilter = NULL;
 			map = NULL;
 			
 			lastTime = 0;
@@ -149,14 +150,16 @@ namespace spades {
 			if(r_water)
 				GLWaterRenderer::PreloadShaders(this);
 			
-			cameraBlur = new GLCameraBlurFilter(this);
-			
+			if(r_cameraBlur) {
+				cameraBlur = new GLCameraBlurFilter(this);
+			}
+				
 			if(r_fogShadow) {
 				GLFogFilter(this);
 			}
 			
 			if(r_bloom){
-				GLLensDustFilter(this);
+				lensDustFilter = new GLLensDustFilter(this);
 			}
 			
 			if(r_lens){
@@ -187,6 +190,8 @@ namespace spades {
 			// FIXME: remove itself from map's listener
 			
 			SPLog("GLRender finalizing");
+			if(lensDustFilter)
+				delete lensDustFilter;
 			if(radiosityRenderer)
 				delete radiosityRenderer;
 			if(ambientShadowRenderer)
@@ -812,7 +817,7 @@ namespace spades {
 				}
 				
 				if(r_bloom)
-					handle = GLLensDustFilter(this).Filter(handle);
+					handle = lensDustFilter->Filter(handle);
 				if(r_lens){
 					GLProfiler profiler(device, "Lens Filter");
 					handle = GLLensFilter(this).Filter(handle);

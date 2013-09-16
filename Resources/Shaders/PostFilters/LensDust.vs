@@ -25,6 +25,9 @@ attribute vec2 positionAttribute;
 varying vec2 texCoord;
 varying vec4 dustTexCoord1;
 varying vec4 dustTexCoord2;
+varying vec4 noiseTexCoord;
+
+uniform vec4 noiseTexCoordFactor;
 
 void main() {
 	
@@ -43,5 +46,7 @@ void main() {
 		vec4(0.0, 0.0, 0.5, 0.0);
 	dustTexCoord2 = dustCoord.xyxy +
 		vec4(0.0, 0.5, 0.5, 0.5);
+	
+	noiseTexCoord = texCoord.xyxy * noiseTexCoordFactor;
 }
 

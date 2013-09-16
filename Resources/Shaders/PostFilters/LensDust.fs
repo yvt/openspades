@@ -25,10 +25,12 @@ uniform sampler2D blurTexture3;
 uniform sampler2D blurTexture4;
 uniform sampler2D dustTexture;
 uniform sampler2D inputTexture;
+uniform sampler2D noiseTexture;
 
 varying vec2 texCoord;
 varying vec4 dustTexCoord1;
 varying vec4 dustTexCoord2;
+varying vec4 noiseTexCoord;
 
 void main() {
 	// dust filter texture
@@ -59,6 +61,12 @@ void main() {
 	
 	final *= 0.95;
 	final += sum * 0.6;
+	
+	// add grain
+	float grain = texture2D(noiseTexture, noiseTexCoord.xy).x;
+	grain += texture2D(noiseTexture, noiseTexCoord.zw).x;
+	grain = fract(grain) - 0.5;
+	final += grain * 0.003;
 	
 	// non-linearize
 	final = sqrt(final);

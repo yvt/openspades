@@ -21,6 +21,8 @@
 #pragma once
 
 #include "GLFramebufferManager.h"
+#include "IGLDevice.h"
+#include <vector>
 
 namespace spades {
 	namespace draw {
@@ -32,9 +34,13 @@ namespace spades {
 			GLProgram *dust;
 			GLImage *dustImg;
 			GLRenderer *renderer;
+			IGLDevice::UInteger noiseTex;
+			std::vector<uint32_t> noise;
 			GLColorBuffer DownSample(GLColorBuffer, bool linearize = false);
+			void UpdateNoise();
 		public:
 			GLLensDustFilter(GLRenderer *);
+			~GLLensDustFilter();
 			GLColorBuffer Filter(GLColorBuffer);
 		};
 	}

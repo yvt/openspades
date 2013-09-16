@@ -29,6 +29,7 @@
 #include "GLRenderer.h"
 #include "../Core/Debug.h"
 #include "GLImage.h"
+#include <stdlib.h>
 
 namespace spades {
 	namespace draw {
@@ -37,6 +38,31 @@ namespace spades {
 			thru = renderer->RegisterProgram("Shaders/PostFilters/PassThroughConstAlpha.program");
 			dust = renderer->RegisterProgram("Shaders/PostFilters/LensDust.program");
 			dustImg = (GLImage *)renderer->RegisterImage("Textures/RealLens.jpg");
+			
+			IGLDevice *dev = renderer->GetGLDevice();
+			noiseTex = dev->GenTexture();
+			dev->BindTexture(IGLDevice::Texture2D, noiseTex);
+			dev->TexImage2D(IGLDevice::Texture2D, 0,
+							   IGLDevice::RGBA8,
+							   128, 128,
+							   0, IGLDevice::BGRA, IGLDevice::UnsignedByte,
+							   NULL);
+			dev->TexParamater(IGLDevice::Texture2D,
+								 IGLDevice::TextureMagFilter,
+								 IGLDevice::Nearest);
+			dev->TexParamater(IGLDevice::Texture2D,
+								 IGLDevice::TextureMinFilter,
+								 IGLDevice::Nearest);
+			dev->TexParamater(IGLDevice::Texture2D,
+								 IGLDevice::TextureWrapS,
+								 IGLDevice::Repeat);
+			dev->TexParamater(IGLDevice::Texture2D,
+								 IGLDevice::TextureWrapT,
+								 IGLDevice::Repeat);
+		}
+		
+		GLLensDustFilter::~GLLensDustFilter() {
+			renderer->GetGLDevice()->DeleteTexture(noiseTex);
 		}
 		
 #define Level GLLensDustFilterLevel
@@ -84,6 +110,28 @@ namespace spades {
 			return buf2;
 		}
 		
+		void GLLensDustFilter::UpdateNoise() {
+			SPADES_MARK_FUNCTION();
+			
+			noise.resize(128 * 128);
+			uint32_t rnd = (uint32_t)rand() ^ ((uint32_t)rand() << 16);
+			rnd ^= 0x7abd4513;
+			for(size_t i = 0; i < 128 * 128; i++) {
+				noise[i] = rnd;
+				
+				rnd = (rnd * 0x71931) + 0x981f311;
+				if(rnd == 0xffffffff) // mod 2^32-1
+					rnd = 0;
+			}
+			
+			IGLDevice *dev = renderer->GetGLDevice();
+			dev->BindTexture(IGLDevice::Texture2D, noiseTex);
+			dev->TexSubImage2D(IGLDevice::Texture2D,
+							   0, 0, 0, 128, 128,
+							   IGLDevice::BGRA, IGLDevice::UnsignedByte,
+							   noise.data());
+		}
+		
 		struct Level {
 			int w, h;
 			GLColorBuffer buffer;
@@ -93,7 +141,7 @@ namespace spades {
 		GLColorBuffer GLLensDustFilter::Filter(GLColorBuffer input) {
 			SPADES_MARK_FUNCTION();
 			
-			
+			UpdateNoise();
 			
 			std::vector<Level> levels;
 			
@@ -206,6 +254,8 @@ namespace spades {
 			static GLProgramUniform dustBlurTexture3("blurTexture3");
 			static GLProgramUniform dustBlurTexture4("blurTexture4");
 			static GLProgramUniform dustInputTexture("inputTexture");
+			static GLProgramUniform dustNoiseTexture("noiseTexture");
+			static GLProgramUniform dustNoiseTexCoordFactor("noiseTexCoordFactor");
 			
 			dustPosition(dust);
 			dustDustTexture(dust);
@@ -214,9 +264,16 @@ namespace spades {
 			dustBlurTexture3(dust);
 			dustBlurTexture4(dust);
 			dustInputTexture(dust);
+			dustNoiseTexture(dust);
+			dustNoiseTexCoordFactor(dust);
 			
 			dust->Use();
 			
+			float facX = renderer->ScreenWidth() / 128.f;
+			float facY = renderer->ScreenHeight() / 128.f;
+			dustNoiseTexCoordFactor.SetValue(facX, facY,
+											 facX / 128.f,
+											 facY / 128.f);
 			
 			// composite to the final image
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
@@ -238,6 +295,8 @@ namespace spades {
 			dev->BindTexture(IGLDevice::Texture2D, topLevel4.GetTexture());
 			dev->ActiveTexture(5);
 			dustImg->Bind(IGLDevice::Texture2D);
+			dev->ActiveTexture(6);
+			dev->BindTexture(IGLDevice::Texture2D, noiseTex);
 			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
 			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
 			dustBlurTexture1.SetValue(2);
@@ -245,6 +304,7 @@ namespace spades {
 			dustBlurTexture3.SetValue(3);
 			dustBlurTexture4.SetValue(4);
 			dustDustTexture.SetValue(5);
+			dustNoiseTexture.SetValue(6);
 			dustInputTexture.SetValue(0);
 			qr.Draw();
 			dev->BindTexture(IGLDevice::Texture2D, 0);
