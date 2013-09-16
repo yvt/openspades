@@ -151,6 +151,7 @@
 		E8B6B72517E46C1D00E35523 /* PrimitiveArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72417E46C1B00E35523 /* PrimitiveArray.cpp */; };
 		E8B6B72817E5AC9C00E35523 /* ServerAddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72617E5AC9C00E35523 /* ServerAddress.cpp */; };
 		E8B6B72B17E6095900E35523 /* GLLensDustFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72917E6095800E35523 /* GLLensDustFilter.cpp */; };
+		E8B6B72E17E68B1C00E35523 /* GLSoftLitSpriteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B72C17E68B1B00E35523 /* GLSoftLitSpriteRenderer.cpp */; };
 		E8CF0396178EDA75000683D4 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0395178EDA75000683D4 /* SDL.framework */; };
 		E8CF0398178EDA86000683D4 /* SDL_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0397178EDA86000683D4 /* SDL_net.framework */; };
 		E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0399178EDABD000683D4 /* OpenAL.framework */; };
@@ -571,6 +572,8 @@
 		E8B6B72717E5AC9C00E35523 /* ServerAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAddress.h; sourceTree = "<group>"; };
 		E8B6B72917E6095800E35523 /* GLLensDustFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLensDustFilter.cpp; sourceTree = "<group>"; };
 		E8B6B72A17E6095800E35523 /* GLLensDustFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLensDustFilter.h; sourceTree = "<group>"; };
+		E8B6B72C17E68B1B00E35523 /* GLSoftLitSpriteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSoftLitSpriteRenderer.cpp; sourceTree = "<group>"; };
+		E8B6B72D17E68B1B00E35523 /* GLSoftLitSpriteRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLSoftLitSpriteRenderer.h; sourceTree = "<group>"; };
 		E8CF0385178ED9D2000683D4 /* OpenSpades */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenSpades; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CF0395178EDA75000683D4 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = ../../../../../Library/Frameworks/SDL.framework; sourceTree = "<group>"; };
 		E8CF0397178EDA86000683D4 /* SDL_net.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_net.framework; path = ../../../../../Library/Frameworks/SDL_net.framework; sourceTree = "<group>"; };
@@ -1459,6 +1462,8 @@
 				E80B289817AA63FF0056179E /* GLWaterRenderer.h */,
 				E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */,
 				E844886117CFB32B005105D0 /* GLLongSpriteRenderer.h */,
+				E8B6B72C17E68B1B00E35523 /* GLSoftLitSpriteRenderer.cpp */,
+				E8B6B72D17E68B1B00E35523 /* GLSoftLitSpriteRenderer.h */,
 			);
 			name = "Client Object";
 			sourceTree = "<group>";
@@ -1813,6 +1818,7 @@
 				E8B6B72517E46C1D00E35523 /* PrimitiveArray.cpp in Sources */,
 				E8B6B72817E5AC9C00E35523 /* ServerAddress.cpp in Sources */,
 				E8B6B72B17E6095900E35523 /* GLLensDustFilter.cpp in Sources */,
+				E8B6B72E17E68B1C00E35523 /* GLSoftLitSpriteRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -239,7 +239,21 @@ void MainWindow::LoadPrefs() {
 		postFilterSelect->value(0);
 	}
 	
-	softParticleCheck->value(r_softParticles ? 1 : 0);
+	particleSelect->clear();
+	particleSelect->add("Low");
+	particleSelect->add("Medium");
+	if(particleHighCapable) {
+		particleSelect->add("High");
+	}
+	particleSelect->add("Custom");
+	particleSelect->value(particleHighCapable ? 3 : 2);
+	if((int)r_softParticles >= 2 && particleHighCapable) {
+		particleSelect->value(2);
+	}else if((int)r_softParticles == 1) {
+		particleSelect->value(1);
+	}else if((int)r_softParticles == 0){
+		particleSelect->value(0);
+	}
 	radiosityCheck->value(r_radiosity ? 1 : 0);
 	bloodCheck->value(cg_blood ? 1 : 0);
 	
@@ -376,16 +390,19 @@ void MainWindow::CheckGLCapability() {
 		capable = false;
 		shaderHighCapable = false;
 		postFilterHighCapable = false;
+		particleHighCapable = false;
 	}else{
 		
 		shaderHighCapable = true;
 		postFilterHighCapable = true;
+		particleHighCapable = true;
 		
 		const char *str;
 		GLint maxTextureSize;
 		GLint max3DTextureSize;
 		GLint maxCombinedTextureUnits;
 		GLint maxVertexTextureUnits;
+		GLint maxVaryingComponents;
 		SPLog("--- OpenGL Renderer Info ---");
 		if((str = (const char*)glGetString(GL_VENDOR)) != NULL) {
 			SPLog("Vendor: %s", str);
@@ -439,6 +456,12 @@ void MainWindow::CheckGLCapability() {
 		glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &maxVertexTextureUnits);
 		if(maxVertexTextureUnits > 0) {
 			SPLog("Max Vertex Texture Image Units: %d", (int)maxVertexTextureUnits);
+		}
+		
+		maxVaryingComponents = 0;
+		glGetIntegerv(GL_MAX_VARYING_COMPONENTS, &maxVaryingComponents);
+		if(maxVaryingComponents > 0) {
+			SPLog("Max Varying Components: %d", (int)maxVaryingComponents);
 		}
 		
 		str = (const char*)glGetString(GL_EXTENSIONS);
@@ -613,6 +636,19 @@ void MainWindow::CheckGLCapability() {
 			}
 		}
 		
+		sprintf(buf, "Max Varying Components: %d<br>", (int)maxVaryingComponents);
+		msg += buf;
+		if(maxVaryingComponents < 37) {
+			msg += "&nbsp;&nbsp;Shaded Particle is disabled (37 required)<br>";
+			msg += "&nbsp;&nbsp;(Particle is limited to Medium)<br>";
+			particleHighCapable = false;
+			
+			if((int)r_softParticles >= 2) {
+				r_softParticles = 1;
+				SPLog("Disabling Water 2: too small GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS");
+			}
+		}
+		
 		
 		
 		if(capable){
@@ -700,7 +736,19 @@ void MainWindow::SavePrefs() {
 			}
 			break;
 	}
-	r_softParticles = softParticleCheck->value() ? 1 : 0;
+	switch(particleSelect->value()){
+		case 0:
+			r_softParticles = 0;
+			break;
+		case 1:
+			r_softParticles = 1;
+			break;
+		case 2:
+			if(particleHighCapable){
+				r_softParticles = 2;
+			}
+			break;
+	}
 	r_radiosity = radiosityCheck->value() ? 1 : 0;
 	switch(directLightSelect->value()){
 		case 0:

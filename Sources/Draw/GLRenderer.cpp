@@ -60,6 +60,7 @@
 #include "GLColorCorrectionFilter.h"
 #include "GLDepthOfFieldFilter.h"
 #include "GLLensDustFilter.h"
+#include "GLSoftLitSpriteRenderer.h"
 
 SPADES_SETTING(r_water, "2");
 SPADES_SETTING(r_bloom, "1");
@@ -135,7 +136,9 @@ namespace spades {
 			SPLog("GLRenderer initializing for 3D rendering");
 			shadowMapRenderer = GLShadowMapShader::CreateShadowMapRenderer(this);
 			modelManager = new GLModelManager(this);
-			if(r_softParticles)
+			if((int)r_softParticles >= 2)
+				spriteRenderer = new GLSoftLitSpriteRenderer(this);
+			else if(r_softParticles)
 				spriteRenderer = new GLSoftSpriteRenderer(this);
 			else
 				spriteRenderer = new GLSpriteRenderer(this);

@@ -29,6 +29,7 @@
 #include "GLAmbientShadowRenderer.h"
 #include "GLRadiosityRenderer.h"
 #include "GLSparseShadowMapRenderer.h"
+#include "GLImage.h"
 
 SPADES_SETTING(r_mapSoftShadow, "0");
 SPADES_SETTING(r_radiosity, "0");
@@ -62,7 +63,7 @@ namespace spades {
 		shadowMapSizeInv("shadowMapSizeInv")
 		{}
 		
-		std::vector<GLShader *> GLShadowShader::RegisterShader(spades::draw::GLProgramManager *r) {
+		std::vector<GLShader *> GLShadowShader::RegisterShader(spades::draw::GLProgramManager *r, bool variance) {
 			std::vector<GLShader *>  shaders;
 			
 			shaders.push_back(r->RegisterShader("Shaders/Shadow/Common.fs"));
@@ -72,6 +73,11 @@ namespace spades {
 				
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapSoft.fs"));
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapSoft.vs"));
+				
+			}else if(variance){
+				
+				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapVariance.fs"));
+				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapVariance.vs"));
 				
 			}else{
 				
@@ -131,8 +137,15 @@ namespace spades {
 			
 			IGLDevice *dev = program->GetDevice();
 			dev->ActiveTexture(texStage);
-			dev->BindTexture(IGLDevice::Texture2D,
-							 renderer->mapShadowRenderer->GetTexture());
+			if(renderer->mapShadowRenderer) {
+				dev->BindTexture(IGLDevice::Texture2D,
+								 renderer->mapShadowRenderer->GetTexture());
+			}else{
+				// TODO: do this case properly
+				GLImage *img = (GLImage*)renderer->RegisterImage("Gfx/White.tga");
+				img->Bind(IGLDevice::Texture2D);
+				
+			}
 			mapShadowTexture.SetValue(texStage);
 			texStage++;
 			
@@ -249,6 +262,9 @@ namespace spades {
 				radiosityTextureX(program);
 				radiosityTextureY(program);
 				radiosityTextureZ(program);
+				
+				// TODO: deal with the case that renderer->ambientShadowRenderer is null
+				SPAssert( renderer->ambientShadowRenderer != NULL);
 				
 				dev->ActiveTexture(texStage);
 				dev->BindTexture(IGLDevice::Texture3D,

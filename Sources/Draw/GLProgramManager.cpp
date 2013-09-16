@@ -97,6 +97,11 @@ namespace spades {
 					for(size_t i = 0; i < shaders.size(); i++)
 						p->Attach(shaders[i]);
 					continue;
+				}else if(text == "*shadow-variance*"){
+					std::vector<GLShader *> shaders = GLShadowShader::RegisterShader(this, true);
+					for(size_t i = 0; i < shaders.size(); i++)
+						p->Attach(shaders[i]);
+					continue;
 				}else if(text == "*dlight*"){
 					std::vector<GLShader *> shaders = GLDynamicLightShader::RegisterShader(this);
 					for(size_t i = 0; i < shaders.size(); i++)

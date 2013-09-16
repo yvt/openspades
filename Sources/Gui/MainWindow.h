@@ -52,9 +52,6 @@ private:
   Fl_Light_Button *eaxCheck;
   inline void cb_eaxCheck_i(Fl_Light_Button*, void*);
   static void cb_eaxCheck(Fl_Light_Button*, void*);
-  Fl_Light_Button *softParticleCheck;
-  inline void cb_softParticleCheck_i(Fl_Light_Button*, void*);
-  static void cb_softParticleCheck(Fl_Light_Button*, void*);
 public:
   Fl_Light_Button *radiosityCheck;
 private:
@@ -80,6 +77,11 @@ public:
 private:
   inline void cb_postFilterSelect_i(Fl_Choice*, void*);
   static void cb_postFilterSelect(Fl_Choice*, void*);
+public:
+  Fl_Choice *particleSelect;
+private:
+  inline void cb_particleSelect_i(Fl_Choice*, void*);
+  static void cb_particleSelect(Fl_Choice*, void*);
   Fl_Input *playerNameInput;
   inline void cb_playerNameInput_i(Fl_Input*, void*);
   static void cb_playerNameInput(Fl_Input*, void*);
@@ -132,6 +134,7 @@ protected:
 private:
   bool shaderHighCapable; 
   bool postFilterHighCapable; 
+  bool particleHighCapable; 
   void QuickConnectPressed();
   void StartGame(const spades::ServerAddress& host);
 public:
@@ -152,5 +155,5 @@ public:
   void updateFilters();;
   ~MainWindow();
 };
-extern unsigned char aboutText[4695];
+extern unsigned char aboutText[4625];
 #endif

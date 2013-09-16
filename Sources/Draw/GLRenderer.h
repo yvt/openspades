@@ -50,11 +50,13 @@ namespace spades {
 		class GLAmbientShadowRenderer;
 		class GLRadiosityRenderer;
 		class GLLensDustFilter;
+		class GLSoftLitSpriteRenderer;
 		
 		class GLRenderer: public client::IRenderer, public client::IGameMapListener  {
 			friend class GLShadowShader;
 			friend class IGLShadowMapRenderer;
 			friend class GLRadiosityRenderer;
+			friend class GLSoftLitSpriteRenderer;
 			
 			struct DebugLine{
 				Vector3 v1, v2;

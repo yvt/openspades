@@ -30,7 +30,7 @@ widget_class MainWindow {
     }
     Fl_Group {} {
       label Setup open
-      private xywh {10 130 595 220} hide
+      private xywh {10 130 595 220}
     } {
       Fl_Group {} {
         label Video open
@@ -72,22 +72,17 @@ SavePrefs();} open
         label Graphics open
         private xywh {10 240 385 105} box ENGRAVED_FRAME align 5
       } {
-        Fl_Light_Button softParticleCheck {
-          label {Soft Particles}
-          callback {SavePrefs();}
-          private xywh {20 250 160 25} when 1
-        }
         Fl_Light_Button radiosityCheck {
           label {Global Illumination}
-          callback {SavePrefs();}
-          xywh {20 280 160 25} when 1
+          callback {SavePrefs();} selected
+          xywh {20 280 170 25} when 1
         }
         Fl_Choice directLightSelect {
           label Lighting
           callback {if(directLightSelect->value() == 2)
 	DisableMSAA();
 SavePrefs();} open
-          xywh {255 280 130 25} down_box BORDER_BOX when 1
+          xywh {265 280 120 25} down_box BORDER_BOX when 1
         } {}
         Fl_Choice shaderSelect {
           label {Shader Effects}
@@ -104,7 +99,12 @@ SavePrefs();} open
         Fl_Choice postFilterSelect {
           label {Post FX}
           callback {SavePrefs();} open
-          xywh {255 250 130 25} down_box BORDER_BOX
+          xywh {265 250 120 25} down_box BORDER_BOX
+        } {}
+        Fl_Choice particleSelect {
+          label Particle
+          callback {SavePrefs();} open
+          xywh {90 250 100 25} down_box BORDER_BOX
         } {}
       }
       Fl_Group {} {
@@ -151,7 +151,7 @@ SavePrefs();} open
     }
     Fl_Tabs groupServerlist {
       label Serverlist open
-      xywh {10 130 595 220}
+      xywh {10 130 595 220} hide
     } {
       Fl_Browser serverListbox {
         label Serverlist
@@ -210,7 +210,7 @@ SavePrefs();} open
   }
   Function {QuickConnectPressed()} {open private
   } {}
-  Function {StartGame(const spades::ServerAddress& host)} {open selected private
+  Function {StartGame(const spades::ServerAddress& host)} {open private
   } {}
   Function {LoadPrefs()} {open
   } {}
@@ -241,6 +241,8 @@ SavePrefs();} open
   decl {bool shaderHighCapable;} {private local
   }
   decl {bool postFilterHighCapable;} {private local
+  }
+  decl {bool particleHighCapable;} {private local
   }
 } 
 
