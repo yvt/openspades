@@ -25,6 +25,7 @@ uniform vec3 rightVector;
 uniform vec3 upVector;
 uniform vec3 frontVector;
 uniform vec3 viewOriginVector;
+uniform vec2 zNearFar;
 
 uniform float fogDistance;
 
@@ -58,7 +59,6 @@ void main() {
 	// move sprite to the front of the volume
 	float centerDepth = dot(center - viewOriginVector, frontVector);
 	depthRange.xy = vec2(centerDepth) + vec2(-1., 1.) * radius;
-	depthRange.z = radius * 2.;
 	
 	// clip the volume by the near clip plane
 	float frontDepth = depthRange.x;
@@ -90,5 +90,16 @@ void main() {
 	fogDensity = vec4(distance);
 	fogDensity = pow(fogDensity, vec4(1., .9, .7, 1.));
 	fogDensity *= fogDensity; // FIXME
+	
+	
+	
+	// precompute some value in vertex shader to
+	// reduce instruction count in frag. shader
+	depthRange.z = 1. / (depthRange.y - depthRange.w);
+	depthRange.y = depthRange.x;
+	depthRange.x *= -depthRange.z;
+	
+	depthRange.y /= (zNearFar.x * zNearFar.y);
+	depthRange.z *= (zNearFar.x * zNearFar.y);
 }
 

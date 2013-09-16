@@ -31,7 +31,7 @@ varying vec4 fogDensity;
 varying vec4 depthRange;
 
 float decodeDepth(float w, float near, float far){
-	return far * near / mix(far, near, w);
+	return 1. /*far * near*/ / mix(far, near, w);
 }
 
 float depthAt(vec2 pt){
@@ -44,7 +44,7 @@ void main() {
 	// get depth
 	float depth = depthAt(texCoord.zw);
 	
-	if(depth < depthRange.x){
+	if(depth < /*depthRange.x*/ depthRange.y){
 		discard;
 	}
 	
@@ -52,12 +52,13 @@ void main() {
 	gl_FragColor.xyz *= gl_FragColor.w; // premultiplied alpha
 	gl_FragColor *= color;
 	
-	vec4 fogColorPremuld = vec4(fogColor, 1.);
+	vec3 fogColorPremuld = fogColor;
 	fogColorPremuld *= gl_FragColor.w;
-	gl_FragColor = mix(gl_FragColor, fogColorPremuld, fogDensity);
+	gl_FragColor.xyz = mix(gl_FragColor.xyz, fogColorPremuld, fogDensity.xyz);
 	
 	
-	float soft = (depth - depthRange.x) / (depthRange.y - depthRange.w);
+	//float soft = (depth - depthRange.x) / (depthRange.y - depthRange.w);
+	float soft = depth * depthRange.z + depthRange.x;
 	soft = clamp(soft, 0., 1.);
 	gl_FragColor *= soft;
 	
