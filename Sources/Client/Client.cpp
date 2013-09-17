@@ -1575,17 +1575,11 @@ namespace spades {
 					
 						float per = aimDownState;
 						per *= per * per;
-						def.depthOfFieldNearRange = per * 13.f + .01f;
+						def.depthOfFieldNearRange = per * 13.f + .054f;
 					
 						def.blurVignette = .4f;
 						
-						float wTime = world->GetTime();
-						if(wTime < lastHurtTime + .15f &&
-                           wTime >= lastHurtTime){
-							float per = 1.f - (wTime - lastHurtTime) / .15f;
-							per *= .5f + player->GetHealth() / 100.f * .3f;
-							def.blurVignette += per * 5.f;
-						}
+						
 						
 					}
 					
@@ -1628,6 +1622,15 @@ namespace spades {
 						
 						def.viewAxis[0] = u * cosf(vibYaw) - v * sinf(vibYaw);
 						def.viewAxis[2] = v * cosf(vibYaw) + u * sinf(vibYaw);
+					}
+					{
+						float wTime = world->GetTime();
+						if(wTime < lastHurtTime + .15f &&
+                           wTime >= lastHurtTime){
+							float per = 1.f - (wTime - lastHurtTime) / .15f;
+							per *= .5f + player->GetHealth() / 100.f * .3f;
+							def.blurVignette += per * 5.f;
+						}
 					}
 					
 					def.zNear = 0.05f;
