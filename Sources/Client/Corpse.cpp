@@ -45,7 +45,7 @@ namespace spades {
 			bool crouch = p->GetInput().crouch;
 			Vector3 front = p->GetFront();
 			
-			float yaw = atan2(front.y, front.x) + M_PI * .5f;
+			float yaw = atan2(front.y, front.x) + static_cast<float>(M_PI) * .5f;
 			//float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));
 			
 			// lower axis
@@ -56,8 +56,8 @@ namespace spades {
 			Matrix4 torso;
 			
 			if(crouch){
-				lower = lower * Matrix4::Translate(0, 0, -0.4);
-				torso = lower * Matrix4::Translate(0, 0, -0.3);
+				lower = lower * Matrix4::Translate(0, 0, -0.4f);
+				torso = lower * Matrix4::Translate(0, 0, -0.3f);
 				
 				SetNode(Torso1,
 						torso*MakeVector3(0.4f, -.15f, 0.1f));
@@ -189,7 +189,7 @@ namespace spades {
 		static float MyACos(float v){
 			SPAssert(!isnan(v));
 			if(v >= 1.f) return 0.f;
-			if(v <= -1.f) return M_PI;
+			if(v <= -1.f) return static_cast<float>(M_PI);
 			float vv = acosf(v);
 			if(isnan(vv)){
 				vv = acosf(v * .9999f);

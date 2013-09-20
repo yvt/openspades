@@ -403,7 +403,7 @@ namespace spades {
 				logStream = FileManager::OpenForWriting(fn2.c_str());
 				SPLog("Netlog Started at '%s'", fn2.c_str());
 			}catch(const std::exception& ex){
-				SPLog("Failed to open netlog file '%s'", fn2.c_str());
+				SPLog("Failed to open netlog file '%s' (%s)", fn2.c_str(), ex.what());
 			}
 		}
 		
@@ -702,7 +702,7 @@ namespace spades {
 						hurtSprites.resize(std::max(cnt, 6));
 						for(size_t i = 0; i < hurtSprites.size(); i++) {
 							HurtSprite& spr = hurtSprites[i];
-							spr.angle = GetRandom() * (2.f * M_PI);
+							spr.angle = GetRandom() * (2.f * static_cast<float>(M_PI));
 							spr.scale = .2f + GetRandom() * GetRandom() * .7f;
 							spr.horzShift = GetRandom();
 							spr.strength = .3f + GetRandom() * .7f;
@@ -882,9 +882,9 @@ namespace spades {
 				}
 				followYaw -= x * 0.003f;
 				followPitch -= y * 0.003f;
-				if(followPitch < -M_PI*.45f) followPitch = -M_PI*.45f;
-				if(followPitch > M_PI*.45f) followPitch = M_PI * .45f;
-				followYaw = fmodf(followYaw, M_PI*2.f);
+				if(followPitch < -static_cast<float>(M_PI)*.45f) followPitch = -static_cast<float>(M_PI)*.45f;
+				if(followPitch > static_cast<float>(M_PI)*.45f) followPitch = static_cast<float>(M_PI) * .45f;
+				followYaw = fmodf(followYaw, static_cast<float>(M_PI)*2.f);
 			}else if(world && world->GetLocalPlayer()){
 				Player *p = world->GetLocalPlayer();
 				if(p->IsAlive()){
@@ -1497,7 +1497,7 @@ namespace spades {
 						def.viewAxis[2] = front;
 						
 						
-						def.fovY = (float)cg_fov * M_PI /180.f;
+						def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) *
 										 renderer->ScreenWidth() /
 										 renderer->ScreenHeight()) * 2.f;
@@ -1524,7 +1524,7 @@ namespace spades {
 						def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
 						def.viewAxis[2] = front;
 						
-						def.fovY = (float)cg_fov * M_PI /180.f;
+						def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) *
 										 renderer->ScreenWidth() /
 										 renderer->ScreenHeight()) * 2.f;
@@ -1544,14 +1544,14 @@ namespace spades {
 						scale += nextRandom() * 0.04f * localFireVibration;
 						
 						vibPitch += localFireVibration * (1.f - localFireVibration) * 0.01f;
-						vibYaw += sinf(localFireVibration * (float)M_PI * 2.f) * 0.001f;
+						vibYaw += sinf(localFireVibration * static_cast<float>(M_PI) * 2.f) * 0.001f;
 						
 						// sprint bob
 						{
 							float sp = SmoothStep(sprintState);
-							vibYaw += sinf(player->GetWalkAnimationProgress() * M_PI * 2.f) * 0.01f * sp;
-							roll -= sinf(player->GetWalkAnimationProgress() * M_PI * 2.f) * 0.005f * (sp);
-							float p = cosf(player->GetWalkAnimationProgress() * M_PI * 2.f);
+							vibYaw += sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.01f * sp;
+							roll -= sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.005f * (sp);
+							float p = cosf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f);
 							p = p * p; p *= p; p *= p; p *= p; 
 							vibPitch += p * 0.01f * sp;
 						}
@@ -1565,7 +1565,7 @@ namespace spades {
 						def.viewAxis[1] = up;
 						def.viewAxis[2] = front;
 						
-						def.fovY = (float)cg_fov * M_PI /180.f;
+						def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) *
 										 renderer->ScreenWidth() /
 										 renderer->ScreenHeight()) * 2.f;
@@ -1643,7 +1643,7 @@ namespace spades {
 					def.viewAxis[1] = MakeVector3(0, 1, 0);
 					def.viewAxis[2] = MakeVector3(0, 0, 1);
 					
-					def.fovY = (float)cg_fov * M_PI /180.f;
+					def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 					def.fovX = atanf(tanf(def.fovY * .5f) *
 									 renderer->ScreenWidth() /
 									 renderer->ScreenHeight()) * 2.f;
@@ -1660,7 +1660,7 @@ namespace spades {
 				def.viewAxis[1] = MakeVector3(0, 0, -1);
 				def.viewAxis[2] = MakeVector3(0, 0, 1);
 				
-				def.fovY = (float)cg_fov * M_PI /180.f;
+				def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 				def.fovX = atanf(tanf(def.fovY * .5f) *
 								 renderer->ScreenWidth() /
 								 renderer->ScreenHeight()) * 2.f;
@@ -1779,7 +1779,7 @@ namespace spades {
 					light.color = MakeVector3(1, .7f, .5f) * 1.5f * brightness;
 					light.radius = 40.f;
 					light.type = DynamicLightTypeSpotlight;
-					light.spotAngle = 30.f * M_PI / 180.f;
+					light.spotAngle = 30.f * static_cast<float>(M_PI) / 180.f;
 					light.spotAxis[0] = p->GetRight();
 					light.spotAxis[1] = p->GetUp();
 					light.spotAxis[2] = p->GetFront();
@@ -1816,8 +1816,8 @@ namespace spades {
 					float sp = 1.f - aimDownState;
 					sp *= .3f;
 					sp *= std::min(1.f, p->GetVelocty().GetLength() * 5.f);
-					viewWeaponOffset.x += sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.01f * sp;
-					float vl = cosf(p->GetWalkAnimationProgress() * M_PI * 2.f);
+					viewWeaponOffset.x += sinf(p->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.01f * sp;
+					float vl = cosf(p->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f);
 					vl *= vl;
 					viewWeaponOffset.z += vl * 0.012f * sp;
 				}
@@ -1970,7 +1970,7 @@ namespace spades {
 							mat = Matrix4::Translate(MakeVector3(0.1f, -0.4f, -0.05f) * sprint) * mat;
 						}
 						mat = Matrix4::Translate(-0.3f - side * .8f,
-												 .8 - bring * .1f,
+												 .8f - bring * .1f,
 												 0.45f - bring * .15f) * mat;
 						
 						
@@ -2049,7 +2049,7 @@ namespace spades {
 											 .5f,
 											 0.2f - weapUp) * mat;
 					mat = Matrix4::Translate(viewWeaponOffset * motion) * mat;
-					mat = Matrix4::Translate(sinf(vib*M_PI*2.f)*0.008f * motion,
+					mat = Matrix4::Translate(sinf(vib*static_cast<float>(M_PI)*2.f)*0.008f * motion,
 											 vib*(vib-1.f)*0.14f * motion,
 											 vib*(1.f-vib)*0.03f * motion) * mat;
 					bool reloading = p->GetWeapon()->IsReloading();
@@ -2401,7 +2401,7 @@ namespace spades {
 												col.y/255.f,
 												col.z/255.f);
 				
-				float yaw = atan2(front.y, front.x) + M_PI * .5f;
+				float yaw = atan2(front.y, front.x) + static_cast<float>(M_PI) * .5f;
 				float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));
 				
 				// lower axis
@@ -2420,7 +2420,7 @@ namespace spades {
 					Matrix4 leg1 = Matrix4::Translate(-0.25f, 0.2f, -0.1f);
 					Matrix4 leg2 = Matrix4::Translate( 0.25f, 0.2f, -0.1f);
 					
-					float ang = sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
+					float ang = sinf(p->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.6f;
 					float walkVel = Vector3::Dot(p->GetVelocty(), p->GetFront2D()) * 4.f;
 					leg1 = leg1 * Matrix4::Rotate(MakeVector3(1,0,0),
 												  ang * walkVel);
@@ -2460,7 +2460,7 @@ namespace spades {
 					Matrix4 leg1 = Matrix4::Translate(-0.25f, 0.f, -0.1f);
 					Matrix4 leg2 = Matrix4::Translate( 0.25f, 0.f, -0.1f);
 					
-					float ang = sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
+					float ang = sinf(p->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.6f;
 					float walkVel = Vector3::Dot(p->GetVelocty(), p->GetFront2D()) * 4.f;
 					leg1 = leg1 * Matrix4::Rotate(MakeVector3(1,0,0),
 												  ang * walkVel);
@@ -2801,7 +2801,7 @@ namespace spades {
 						}
 						
 						Vector4 color = {1,1,1,1};
-						if(blocks.size() > (int)p->GetNumBlocks())
+						if(blocks.size() > (unsigned int)p->GetNumBlocks())
 							color = MakeVector4(1,0,0,1);
 						
 						for(size_t i = 0; i < blocks.size(); i++){
@@ -3174,7 +3174,7 @@ namespace spades {
 								if(clip >= i + 1){
 									renderer->SetColor(MakeVector4(1,1,1,1));
 								}else{
-									renderer->SetColor(MakeVector4(0.4,0.4,0.4,1));
+									renderer->SetColor(MakeVector4(0.4f,0.4f,0.4f,1));
 								}
 								
 								renderer->DrawImage(ammoIcon,
@@ -3419,14 +3419,14 @@ namespace spades {
 				// background
 				Handle<IImage> img;
 				float bgSize = std::max(scrWidth, scrHeight);
-				renderer->SetColor(MakeVector4(1, 1, 1, .4 * fade));
+				renderer->SetColor(MakeVector4(1, 1, 1, .4f * fade));
 				img = renderer->RegisterImage("Gfx/CircleGradient.png");
 				
 				renderer->DrawImage(img, AABB2((scrWidth - bgSize) * .5f,
 											   (scrHeight - bgSize) * .5f,
 											   bgSize, bgSize));
 				
-				renderer->SetColor(MakeVector4(.1, .1, .1, .8 * fade));
+				renderer->SetColor(MakeVector4(.1f, .1f, .1f, .8f * fade));
 				img = renderer->RegisterImage("Gfx/White.tga");
 				renderer->DrawImage(img, AABB2(0,0,scrWidth,scrHeight));
 				
@@ -3445,7 +3445,7 @@ namespace spades {
 				renderer->DrawImage(img, MakeVector2(wndX, wndY));
 				
 				
-				renderer->SetColor(MakeVector4(1, 1, 1, .2 * fade));
+				renderer->SetColor(MakeVector4(1, 1, 1, .2f * fade));
 				img = renderer->RegisterImage("Gfx/LoadingWindowGlow.png");
 				
 				renderer->DrawImage(img, AABB2((scrWidth - 512.f) * .5f,
@@ -3875,7 +3875,7 @@ namespace spades {
 			
 			// fragments
 			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
-			color = MakeVector4(0.01, 0.03, 0, 1.f);
+			color = MakeVector4(0.01f, 0.03f, 0, 1.f);
 			for(int i = 0; i < 42; i++){
 				ParticleSpriteEntity *ent =
 				new ParticleSpriteEntity(this, img, color);
@@ -4691,7 +4691,7 @@ namespace spades {
 				
 				Vector3 v = -victim->GetFront();
 				followYaw = atan2(v.y, v.x);
-				followPitch = 30.f * M_PI /180.f;
+				followPitch = 30.f * static_cast<float>(M_PI) /180.f;
 			}
 			
 			// emit blood (also for local player)

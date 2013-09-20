@@ -203,7 +203,7 @@ namespace spades {
 					al::qalSourcefv(handle, AL_POSITION, pos);
 					al::qalSourcefv(handle, AL_VELOCITY, vel);
 					al::qalSourcei(handle, AL_SOURCE_RELATIVE, local ? AL_TRUE:AL_FALSE);
-					al::qalSourcei(handle, AL_ROLLOFF_FACTOR, (local || stereo) ? 0.f : 1.f);
+					al::qalSourcef(handle, AL_ROLLOFF_FACTOR, (local || stereo) ? 0.f : 1.f);
 					if(internal->useEAX){
 						al::qalSource3i(handle, AL_AUXILIARY_SEND_FILTER,
 										internal->reverbFXSlot, 0, AL_FILTER_NULL);
@@ -220,7 +220,7 @@ namespace spades {
 					al::qalSourcefv(handle, AL_POSITION, pos);
 					al::qalSourcefv(handle, AL_VELOCITY, vel);
 					al::qalSourcei(handle, AL_SOURCE_RELATIVE, AL_TRUE);
-					al::qalSourcei(handle, AL_ROLLOFF_FACTOR, 0.f);
+					al::qalSourcef(handle, AL_ROLLOFF_FACTOR, 0.f);
 					if(internal->useEAX){
 						al::qalSource3i(handle, AL_AUXILIARY_SEND_FILTER,
 										AL_EFFECTSLOT_NULL, 0, AL_FILTER_NULL);
@@ -569,7 +569,7 @@ namespace spades {
 						}
 						
 						// monte-carlo integration 
-						int rayHitCount = 0;
+						unsigned int rayHitCount = 0;
 						roomVolume = 0.f;
 						roomArea = 0.f;
 						roomSize = 0.f;

@@ -134,21 +134,21 @@ namespace spades {
 			size = font->Measure(buf);
 			pos.x = scrWidth * .5f - size.x - 16.f;
 			font->Draw(buf, pos + MakeVector2(0, 1), 1.f,
-					   MakeVector4(0, 0, 0, 0.3));
+					   MakeVector4(0, 0, 0, 0.3f));
 			font->Draw(buf, pos, 1.f, whiteColor);
 			
 			sprintf(buf, "%d", GetTeamScore(1));
 			size = font->Measure(buf);
 			pos.x = scrWidth * .5f + 16.f;
 			font->Draw(buf, pos + MakeVector2(0, 1), 1.f,
-					   MakeVector4(0, 0, 0, 0.3));
+					   MakeVector4(0, 0, 0, 0.3f));
 			font->Draw(buf, pos, 1.f, whiteColor);
 			
 			sprintf(buf, "-");
 			size = font->Measure(buf);
 			pos.x = scrWidth * .5f  - size.x * .5f;
 			font->Draw(buf, pos + MakeVector2(0, 1), 1.f,
-					   MakeVector4(0, 0, 0, 0.3));
+					   MakeVector4(0, 0, 0, 0.3f));
 			font->Draw(buf, pos, 1.f, whiteColor);
 			
 			// draw team bar

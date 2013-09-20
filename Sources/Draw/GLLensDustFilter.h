@@ -22,6 +22,7 @@
 
 #include "GLFramebufferManager.h"
 #include "IGLDevice.h"
+#include <stdint.h>
 #include <vector>
 
 namespace spades {
