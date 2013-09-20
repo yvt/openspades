@@ -17,6 +17,21 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
- 
- #include "Utils.as"
 
+#pragma once
+
+#include "ScriptFunction.h"
+#include <Core/Math.h>
+
+namespace spades {
+	namespace client {
+		
+		class ScriptIGrenadeSkin {
+			asIScriptObject *obj;
+		public:
+			ScriptIGrenadeSkin(asIScriptObject *obj);
+			void SetReadyState(float);
+			void SetCookTime(float);
+		};
+	}
+}

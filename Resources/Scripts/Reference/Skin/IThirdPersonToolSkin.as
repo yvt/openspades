@@ -18,5 +18,17 @@
  
  */
  
- #include "Utils.as"
-
+namespace spades {
+	
+	/** A skin of all tools for third-person view. A class that implements 
+	 * this might also have to implement IToolSkin. */
+	interface IThirdPersonToolSkin {
+	
+		/** Receives a transform matrix from tool coordinate to world one. */
+		Matrix4 OriginMatrix { set; }
+		
+		float PitchBias { get; }
+		
+	}
+	
+}

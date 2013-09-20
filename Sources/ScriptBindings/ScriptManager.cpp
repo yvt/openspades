@@ -30,7 +30,7 @@ namespace spades {
 	
 	ScriptManager *ScriptManager::GetInstance() {
 		SPADES_MARK_FUNCTION_DEBUG();
-		ScriptManager *m = new ScriptManager();
+		static ScriptManager *m = new ScriptManager();
 		return m;
 	}
 	

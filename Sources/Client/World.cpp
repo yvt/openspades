@@ -156,6 +156,8 @@ namespace spades {
 			if(players[i])
 				delete players[i];
 			players[i] = p;
+			if(listener)
+				listener->PlayerObjectSet(i);
 		}
 		
 		void World::SetMode(spades::client::IGameMode *m) {

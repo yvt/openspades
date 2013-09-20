@@ -18,5 +18,16 @@
  
  */
  
- #include "Utils.as"
-
+#include "BasicViewWeapon.as"
+#include "Spade/ThirdPerson.as"
+#include "Spade/View.as"
+#include "Block/ThirdPerson.as"
+#include "Block/View.as"
+#include "Grenade/ThirdPerson.as"
+#include "Grenade/View.as"
+#include "Rifle/ThirdPerson.as"
+#include "Rifle/View.as"
+#include "SMG/ThirdPerson.as"
+#include "SMG/View.as"
+#include "Shotgun/ThirdPerson.as"
+#include "Shotgun/View.as"

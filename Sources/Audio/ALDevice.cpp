@@ -588,9 +588,9 @@ namespace spades {
 						
 						if(rayHitCount > roomHistory.size() / 4){
 							roomVolume /= (float)rayHitCount;
-							roomVolume *= 4.f / 3.f * (float)M_PI;
+							roomVolume *= 4.f / 3.f * static_cast<float>(M_PI);
 							roomArea /= (float)rayHitCount;
-							roomArea *= 4.f * M_PI;
+							roomArea *= 4.f * static_cast<float>(M_PI);
 							roomSize /= (float)rayHitCount;
 							reflections = (float)rayHitCount / (float)roomHistory.size();
 						}else{

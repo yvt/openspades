@@ -79,7 +79,7 @@ namespace spades {
 						torso*MakeVector3(-0.2f, -.4f, .2f));
 				
 			}else{
-				torso = lower * Matrix4::Translate(0, 0, -1.1);
+				torso = lower * Matrix4::Translate(0, 0, -1.1f);
 				
 				SetNode(Torso1,
 						torso*MakeVector3(0.4f, 0.f, 0.1f));

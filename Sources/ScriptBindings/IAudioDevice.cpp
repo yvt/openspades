@@ -30,6 +30,14 @@ namespace spades {
 			static void AudioParamFactory(AudioParam *p) {
 				new(p) AudioParam();
 			}
+			static IAudioChunk *RegisterSound(const std::string& name, IAudioDevice *dev) {
+				try{
+					return dev->RegisterSound(name.c_str());
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+					return NULL;
+				}
+			}
 		public:
 			AudioDeviceRegistrar():
 			ScriptObjectRegistrar("AudioDevice"){
@@ -62,8 +70,8 @@ namespace spades {
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("AudioDevice",
 													  "AudioChunk@ RegisterSound(const string& in)",
-													  asMETHOD(IAudioDevice, RegisterSound),
-													  asCALL_THISCALL);
+													  asFUNCTION(RegisterSound),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("AudioDevice",
 													  "void set_GameMap(GameMap@)",

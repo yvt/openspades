@@ -101,7 +101,12 @@ namespace spades {
 				}
 				m->Set(x, y, z, true, col);
 			}
-			
+			static GameMap::RayCastResult CastRay(const Vector3& v0,
+												  const Vector3& dir,
+												  int maxSteps,
+												  GameMap *m) {
+				return m->CastRay2(v0, dir, maxSteps);
+			}
 			
 		public:
 			GameMapRegistrar():
@@ -211,9 +216,9 @@ namespace spades {
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("GameMap",
-													  "GameMapRayCastResult CastRay(Vector3, Vector3, int)",
-													  asMETHOD(GameMap, CastRay2),
-													  asCALL_THISCALL);
+													  "GameMapRayCastResult CastRay(const Vector3& in, const Vector3& in, int)",
+													  asFUNCTION(CastRay),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						
 						r = eng->RegisterObjectProperty("GameMapRayCastResult",

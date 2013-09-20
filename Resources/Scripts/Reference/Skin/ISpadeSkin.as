@@ -18,5 +18,24 @@
  
  */
  
- #include "Utils.as"
+namespace spades {
 
+	/** Action what a user doing with his/her spade. */
+	enum SpadeActionType {
+		Idle,
+		Bash,
+		Dig,
+		DigStart
+	}
+	
+	/** A skin of spades. A class that implements this might also have to
+	 * implement either IThirdPersonToolSkin or IViewToolSkin. */
+	interface ISpadeSkin {
+		SpadeActionType ActionType { set; }
+		
+		/** Receives an action progress. 0 = soon after swinging,
+		 * 1 = ready for the next swing.  */
+		float ActionProgress { set; }
+	}
+	
+}

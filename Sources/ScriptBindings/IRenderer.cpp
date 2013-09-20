@@ -28,6 +28,78 @@ namespace spades {
 		
 		
 		class RendererRegistrar: public ScriptObjectRegistrar {
+			static IModel *RegisterModel(const std::string& str,
+										 IRenderer *r) {
+				try{
+					return r->RegisterModel(str.c_str());
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+					return NULL;
+				}
+			}
+			static IImage *RegisterImage(const std::string& str,
+										 IRenderer *r) {
+				try{
+					return r->RegisterImage(str.c_str());
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+					return NULL;
+				}
+			}
+			static void AddDebugLine(const Vector3& a, const Vector3& b,
+									 const Vector4& color,
+									 IRenderer *r) {
+				try{
+					return r->AddDebugLine(a, b, color);
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void AddSprite(IImage *img, const Vector3& center,
+								  float rad, float rot,
+								  IRenderer *r) {
+				try{
+					return r->AddSprite(img, center, rad, rot);
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void AddLongSprite(IImage *img,
+									  const Vector3& p1,
+									  const Vector3& p2,
+								  float rad, 
+								  IRenderer *r) {
+				try{
+					return r->AddLongSprite(img, p1, p2, rad);
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void MultiplyScreenColor(const Vector3& v,
+											IRenderer *r){
+				try{
+					return r->MultiplyScreenColor(v);
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void SetColor(const Vector4& v,
+											IRenderer *r){
+				try{
+					return r->SetColor(v);
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			
+			static void SetFogColor(const Vector3& v,
+								 IRenderer *r){
+				try{
+					return r->SetFogColor(v);
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
 			static void ModelRenderParamFactory(ModelRenderParam *p) {
 				new(p) ModelRenderParam();
 			}
@@ -268,13 +340,13 @@ namespace spades {
 						
 						r = eng->RegisterObjectMethod("Renderer",
 													  "Image@ RegisterImage(const string& in)",
-													  asMETHOD(IRenderer, RegisterImage),
-													  asCALL_THISCALL);
+													  asFUNCTION(RegisterImage),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "Model@ RegisterModel(const string& in)",
-													  asMETHOD(IRenderer, RegisterModel),
-													  asCALL_THISCALL);
+													  asFUNCTION(RegisterModel),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "Image@ CreateImage(Bitmap@)",
@@ -297,9 +369,9 @@ namespace spades {
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void set_FogColor(float)",
-													  asMETHOD(IRenderer, SetFogColor),
-													  asCALL_THISCALL);
+													  "void set_FogColor(Vector3)",
+													  asFUNCTION(SetFogColor),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void StartScene(const SceneDefinition& in)",
@@ -317,19 +389,19 @@ namespace spades {
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void AddDebugLine(Vector3, Vector3, Vector4)",
-													  asMETHOD(IRenderer, AddDebugLine),
-													  asCALL_THISCALL);
+													  "void AddDebugLine(const Vector3&in, const Vector3&in, const Vector4&in)",
+													  asFUNCTION(AddDebugLine),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void AddSprite(Image@, Vector3, float, float)",
-													  asMETHOD(IRenderer, AddSprite),
-													  asCALL_THISCALL);
+													  "void AddSprite(Image@, const Vector3&in, float, float)",
+													  asFUNCTION(AddSprite),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void AddLongSprite(Image@, Vector3, Vector3, float)",
-													  asMETHOD(IRenderer, AddLongSprite),
-													  asCALL_THISCALL);
+													  "void AddLongSprite(Image@, const Vector3& in, const Vector3& in, float)",
+													  asFUNCTION(AddLongSprite),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void EndScene()",
@@ -337,14 +409,14 @@ namespace spades {
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void MultiplyScreenColor(Vector3)",
-													  asMETHOD(IRenderer, MultiplyScreenColor),
-													  asCALL_THISCALL);
+													  "void MultiplyScreenColor(const Vector3& in)",
+													  asFUNCTION(MultiplyScreenColor),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void set_Color(Vector4)",
-													  asMETHOD(IRenderer, SetColor),
-													  asCALL_THISCALL);
+													  "void set_Color(const Vector4&in)",
+													  asFUNCTION(SetColor),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void DrawImage(Image@, const Vector2& in)",
