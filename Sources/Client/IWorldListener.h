@@ -29,6 +29,7 @@ namespace spades {
 		class Grenade;
 		class IWorldListener{
 		public:
+			virtual void PlayerObjectSet(int playerId) = 0;
 			virtual void PlayerMadeFootstep(Player *) = 0;
 			virtual void PlayerJumped(Player *) = 0;
 			virtual void PlayerLanded(Player *, bool hurt) = 0;

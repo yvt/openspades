@@ -18,5 +18,17 @@
  
  */
  
- #include "Utils.as"
-
+namespace spades {
+	
+	/** A skin of blocks held in hands. A class that implements 
+	 * this might also have to implement either IThirdPersonToolSkin 
+	 * or IViewToolSkin. */
+	interface IBlockSkin {
+		/** Receives a ready state. 0 = soon after placing a block,
+		 * >=1 = ready to place a block. */
+		float ReadyState { set; }
+		
+		Vector3 BlockColor { set; }
+	}
+	
+}

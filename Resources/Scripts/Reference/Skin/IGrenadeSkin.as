@@ -18,5 +18,19 @@
  
  */
  
- #include "Utils.as"
-
+namespace spades {
+	
+	/** A skin of grenades. A class that implements 
+	 * this might also have to implement either IThirdPersonToolSkin 
+	 * or IViewToolSkin. */
+	interface IGrenadeSkin {
+		/** Receives a ready state. 0 = soon after placing a block,
+		 * >=1 = ready to place a block. */
+		float ReadyState { set; }
+		
+		/** Receives how long a player is cooking the grenade.
+		 * 0 if the player isn't cooking a grenade. */
+		float CookTime { set; }
+	}
+	
+}

@@ -17,6 +17,22 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
- 
- #include "Utils.as"
 
+#pragma once
+
+#include "ScriptFunction.h"
+#include <Core/Math.h>
+
+namespace spades {
+	namespace client {
+		class ScriptIViewToolSkin {
+			asIScriptObject *obj;
+		public:
+			ScriptIViewToolSkin(asIScriptObject *obj);
+			void SetEyeMatrix(Matrix4 m);
+			void SetSwing(Vector3);
+			Vector3 GetLeftHandPosition();
+			Vector3 GetRightHandPosition();
+		};
+	}
+}

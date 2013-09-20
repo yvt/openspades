@@ -17,6 +17,22 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
- 
- #include "Utils.as"
 
+#pragma once
+
+#include <string>
+#include "ScriptManager.h"
+
+namespace spades {
+	class ScriptFunction {
+		std::string decl, type;
+		asIScriptEngine *lastEngine;
+		asIScriptFunction *func;
+		void Load(asIScriptEngine *);
+	public:
+		ScriptFunction(const std::string& decl);
+		ScriptFunction(const std::string& objectTypeName,
+					   const std::string& decl);
+		ScriptContextHandle Prepare();
+	};
+}

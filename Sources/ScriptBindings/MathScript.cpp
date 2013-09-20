@@ -61,6 +61,13 @@ namespace spades {
 					manager->CheckError(r);
 					break;
 				case PhaseObjectMember:
+					static float PiF = (float)M_PI;
+					static double Pi = (double)M_PI;
+					r = eng->RegisterGlobalProperty("const float PiF", &PiF);
+					manager->CheckError(r);
+					r = eng->RegisterGlobalProperty("const double Pi", &Pi);
+					manager->CheckError(r);
+					
 					struct IntVector3Funcs {
 						static void Construct1(IntVector3 *self) {
 							new(self) IntVector3();
@@ -207,6 +214,22 @@ namespace spades {
 												  asMETHODPR(Vector2, operator/=, (const Vector2 &), Vector2&), asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("Vector2",
+												  "Vector2 &opAddAssign(float)",
+												  asMETHODPR(Vector2, operator+=, (float), Vector2&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector2",
+												  "Vector2 &opSubAssign(float)",
+												  asMETHODPR(Vector2, operator-=, (float), Vector2&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector2",
+												  "Vector2 &opMulAssign(float)",
+												  asMETHODPR(Vector2, operator*=, (float), Vector2&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector2",
+												  "Vector2 &opDivAssign(float)",
+												  asMETHODPR(Vector2, operator/=, (float), Vector2&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector2",
 												  "bool opEquals(const Vector2 &in) const",
 												  asMETHODPR(Vector2, operator==, (const Vector2 &) const, bool), asCALL_THISCALL);
 					manager->CheckError(r);
@@ -225,6 +248,22 @@ namespace spades {
 					r = eng->RegisterObjectMethod("Vector2",
 												  "Vector2 opDiv(const Vector2 &in) const",
 												  asMETHODPR(Vector2, operator/, (const Vector2 &) const, Vector2), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector2",
+												  "Vector2 opAdd(float) const",
+												  asMETHODPR(Vector2, operator+, (float) const, Vector2), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector2",
+												  "Vector2 opSub(float) const",
+												  asMETHODPR(Vector2, operator-, (float) const, Vector2), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector2",
+												  "Vector2 opMul(float) const",
+												  asMETHODPR(Vector2, operator*, (float) const, Vector2), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector2",
+												  "Vector2 opDiv(float) const",
+												  asMETHODPR(Vector2, operator/, (float) const, Vector2), asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("Vector2",
 												  "Vector2 opNeg() const",
@@ -329,6 +368,22 @@ namespace spades {
 												  asMETHODPR(Vector3, operator/=, (const Vector3 &), Vector3&), asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("Vector3",
+												  "Vector3 &opAddAssign(float)",
+												  asMETHODPR(Vector3, operator+=, (float), Vector3&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector3",
+												  "Vector3 &opSubAssign(float)",
+												  asMETHODPR(Vector3, operator-=, (float), Vector3&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector3",
+												  "Vector3 &opMulAssign(float)",
+												  asMETHODPR(Vector3, operator*=, (float), Vector3&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector3",
+												  "Vector3 &opDivAssign(float)",
+												  asMETHODPR(Vector3, operator/=, (float), Vector3&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector3",
 												  "bool opEquals(const Vector3 &in) const",
 												  asMETHODPR(Vector3, operator==, (const Vector3 &) const, bool), asCALL_THISCALL);
 					manager->CheckError(r);
@@ -347,6 +402,22 @@ namespace spades {
 					r = eng->RegisterObjectMethod("Vector3",
 												  "Vector3 opDiv(const Vector3 &in) const",
 												  asMETHODPR(Vector3, operator/, (const Vector3 &) const, Vector3), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector3",
+												  "Vector3 opAdd(float) const",
+												  asMETHODPR(Vector3, operator+, (float) const, Vector3), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector3",
+												  "Vector3 opSub(float) const",
+												  asMETHODPR(Vector3, operator-, (float) const, Vector3), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector3",
+												  "Vector3 opMul(float) const",
+												  asMETHODPR(Vector3, operator*, (float) const, Vector3), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector3",
+												  "Vector3 opDiv(float) const",
+												  asMETHODPR(Vector3, operator/, (float) const, Vector3), asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("Vector3",
 												  "Vector3 opNeg() const",
@@ -452,6 +523,22 @@ namespace spades {
 												  asMETHODPR(Vector4, operator/=, (const Vector4 &), Vector4&), asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("Vector4",
+												  "Vector4 &opAddAssign(float)",
+												  asMETHODPR(Vector4, operator+=, (float), Vector4&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector4",
+												  "Vector4 &opSubAssign(float)",
+												  asMETHODPR(Vector4, operator-=, (float), Vector4&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector4",
+												  "Vector4 &opMulAssign(float)",
+												  asMETHODPR(Vector4, operator*=, (float), Vector4&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector4",
+												  "Vector4 &opDivAssign(float)",
+												  asMETHODPR(Vector4, operator/=, (float), Vector4&), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector4",
 												  "bool opEquals(const Vector4 &in) const",
 												  asMETHODPR(Vector4, operator==, (const Vector4 &) const, bool), asCALL_THISCALL);
 					manager->CheckError(r);
@@ -470,6 +557,22 @@ namespace spades {
 					r = eng->RegisterObjectMethod("Vector4",
 												  "Vector4 opDiv(const Vector4 &in) const",
 												  asMETHODPR(Vector4, operator/, (const Vector4 &) const, Vector4), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector4",
+												  "Vector4 opAdd(float) const",
+												  asMETHODPR(Vector4, operator+, (float) const, Vector4), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector4",
+												  "Vector4 opSub(float) const",
+												  asMETHODPR(Vector4, operator-, (float) const, Vector4), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector4",
+												  "Vector4 opMul(float) const",
+												  asMETHODPR(Vector4, operator*, (float) const, Vector4), asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("Vector4",
+												  "Vector4 opDiv(float) const",
+												  asMETHODPR(Vector4, operator/, (float) const, Vector4), asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("Vector4",
 												  "Vector4 opNeg() const",
@@ -547,6 +650,21 @@ namespace spades {
 						static Vector4 Transform4(const Vector4& vec, Matrix4 *self) {
 							return *self * vec;
 						}
+						static Matrix4 Translate(const Vector3& vec) {
+							return Matrix4::Translate(vec);
+						}
+						static Matrix4 Rotate(const Vector3& axis, float rad) {
+							return Matrix4::Rotate(axis, rad);
+						}
+						static Matrix4 Scale(const Vector3& vec) {
+							return Matrix4::Scale(vec);
+						}
+						static Matrix4 FromAxes(const Vector3& v1,
+												const Vector3& v2,
+												const Vector3& v3,
+												const Vector3& v4) {
+							return Matrix4::FromAxis(v1, v2, v3, v4);
+						}
 					};
 					// Register the constructors
 					r = eng->RegisterObjectBehaviour("Matrix4", asBEHAVE_CONSTRUCT,
@@ -617,8 +735,8 @@ namespace spades {
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					
-					r = eng->RegisterGlobalFunction("Matrix4 CreateTranslateMatrix(Vector3)",
-													asFUNCTIONPR(Matrix4::Translate, (Vector3), Matrix4),
+					r = eng->RegisterGlobalFunction("Matrix4 CreateTranslateMatrix(const Vector3& in)",
+													asFUNCTION(Matrix4Funcs::Translate),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
@@ -627,8 +745,8 @@ namespace spades {
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
-					r = eng->RegisterGlobalFunction("Matrix4 CreateRotateMatrix(Vector3, float)",
-													asFUNCTION(Matrix4::Rotate),
+					r = eng->RegisterGlobalFunction("Matrix4 CreateRotateMatrix(const Vector3& in, float)",
+													asFUNCTION(Matrix4Funcs::Rotate),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
@@ -637,8 +755,8 @@ namespace spades {
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
-					r = eng->RegisterGlobalFunction("Matrix4 CreateScaleMatrix(Vector3)",
-													asFUNCTIONPR(Matrix4::Scale, (Vector3), Matrix4),
+					r = eng->RegisterGlobalFunction("Matrix4 CreateScaleMatrix(const Vector3& in)",
+													asFUNCTION(Matrix4Funcs::Scale),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
@@ -647,8 +765,8 @@ namespace spades {
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
-					r = eng->RegisterGlobalFunction("Matrix4 CreateMatrixFromAxes(Vector3,Vector3,Vector3,Vector3)",
-													asFUNCTION(Matrix4::FromAxis),
+					r = eng->RegisterGlobalFunction("Matrix4 CreateMatrixFromAxes(const Vector3&in, const Vector3&in, const Vector3&in, const Vector3& in)",
+													asFUNCTION(Matrix4Funcs::FromAxes),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					struct AABB2Funcs {
@@ -753,13 +871,13 @@ namespace spades {
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
-					r = eng->RegisterGlobalFunction("Vector2 Mix(Vector2,Vector2,float)",
-													asFUNCTIONPR(Mix, (Vector2,Vector2,float), Vector2),
+					r = eng->RegisterGlobalFunction("Vector2 Mix(const Vector2& in,const Vector2& in,float)",
+													asFUNCTIONPR(Mix, (const Vector2&,const Vector2&,float), Vector2),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
-					r = eng->RegisterGlobalFunction("Vector3 Mix(Vector3,Vector3,float)",
-													asFUNCTIONPR(Mix, (Vector3,Vector3,float), Vector3),
+					r = eng->RegisterGlobalFunction("Vector3 Mix(const Vector3& in,const Vector3& in,float)",
+													asFUNCTIONPR(Mix, (const Vector3&,const Vector3&,float), Vector3),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					

@@ -827,8 +827,8 @@ namespace spades {
 	}
 			
 	float Mix(float a, float b, float frac);
-	Vector2 Mix(Vector2 a, Vector2 b, float frac);
-	Vector3 Mix(Vector3 a, Vector3 b, float frac);
+	Vector2 Mix(const Vector2& a, const Vector2& b, float frac);
+	Vector3 Mix(const Vector3& a, const Vector3& b, float frac);
 	
 	/** @return true if any portion of the box is in the positive side of plane. */
 	bool PlaneCullTest(const Plane3&, const AABB3&);

@@ -78,20 +78,21 @@ namespace spades {
 		
 		/** Adds a line for debugging.
 		 * This should be called between StartScene and EndScene. */
-		void AddDebugLine(Vector3 pt1, Vector3 pt2, Vector4 color) {}
+		void AddDebugLine(const Vector3@ pt1, const Vector3@ pt2, 
+		                  const Vector4@ color) {}
 		
 		/** Adds a sprite.
 		 * This should be called between StartScene and EndScene.
 		 * The color is specified using the property `Color` with
 		 * alpha values premultiplied.  */
-		void AddSprite(Image@, Vector3 origin, float radius, 
+		void AddSprite(Image@, const Vector3@ origin, float radius, 
 		               float rotateRadians) {}
 		
 		/** Adds a long-sprite.
 		 * This should be called between StartScene and EndScene.
 		 * The color is specified using the property `Color` with
 		 * alpha values premultiplied. */
-		void AddLongSprite(Image@, Vector3 pt1, Vector3 pt2, float radius) {}
+		void AddLongSprite(Image@, const Vector3@ pt1, const Vector3@ pt2, float radius) {}
 		
 		/** Ends a 3D scene rendering. */
 		void EndScene() {}

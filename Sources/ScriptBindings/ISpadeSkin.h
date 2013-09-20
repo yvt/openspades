@@ -17,6 +17,28 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
- 
- #include "Utils.as"
 
+#pragma once
+
+#include "ScriptFunction.h"
+#include <Core/Math.h>
+
+namespace spades {
+	namespace client {
+		
+		enum SpadeActionType {
+			SpadeActionTypeIdle = 0,
+			SpadeActionTypeBash,
+			SpadeActionTypeDig,
+			SpadeActionTypeDigStart
+		};
+		
+		class ScriptISpadeSkin {
+			asIScriptObject *obj;
+		public:
+			ScriptISpadeSkin(asIScriptObject *obj);
+			void SetActionType(SpadeActionType);
+			void SetActionProgress(float);
+		};
+	}
+}
