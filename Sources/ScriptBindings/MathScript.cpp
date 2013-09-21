@@ -26,6 +26,58 @@
 namespace spades {
 
 	class MathScriptObjectRegistrar: public ScriptObjectRegistrar {
+		static unsigned int GetRandomInt(unsigned int range) {
+			switch(range){
+				case 0:
+					asGetActiveContext()->SetException("Invalid argument.");
+					return 0;
+				case 1:
+					return 0;
+				case 2:
+					return rand() & 1;
+				case 4:
+					return rand() & 3;
+				case 8:
+					return rand() & 7;
+				case 16:
+					return rand() & 15;
+				case 32:
+					return rand() & 31;
+				case 64:
+					return rand() & 63;
+			}
+			unsigned int ret;
+			unsigned int mask = range;
+			for(unsigned int i = range - 1; i != 0; i >>= 1) {
+				mask |= i;
+			}
+			do {
+				ret = rand();
+				if(range - 1 > (unsigned int)RAND_MAX) {
+					ret += rand() * ((unsigned int)(RAND_MAX) + 1);
+				}
+				ret &= mask;
+			} while( ret >= range );
+			return ret;
+		}
+		static unsigned int GetRandomUIntRange(unsigned int a,
+											   unsigned int b){
+			if(a > b) {
+				std::swap(a, b); a++; b++;
+			}
+				
+			return GetRandomInt(b - a) + a;
+		}
+		static int GetRandomIntRange(int a,
+									 int b){
+			if(a > b) {
+				std::swap(a, b); a++; b++;
+			}
+			return (int)(GetRandomInt((unsigned int)(b - a)) + (unsigned int)a);
+		}
+		static float GetRandomFloatRange(float a, float b) {
+			return GetRandom() * (b - a) + a;
+		}
 	public:
 		MathScriptObjectRegistrar():
 		ScriptObjectRegistrar("Math"){}
@@ -863,6 +915,26 @@ namespace spades {
 					
 					r = eng->RegisterGlobalFunction("float GetRandom()",
 													asFUNCTION(GetRandom),
+													asCALL_CDECL);
+					manager->CheckError(r);
+					
+					r = eng->RegisterGlobalFunction("uint GetRandom(uint)",
+													asFUNCTION(GetRandomInt),
+													asCALL_CDECL);
+					manager->CheckError(r);
+					
+					r = eng->RegisterGlobalFunction("uint GetRandom(uint, uint)",
+													asFUNCTION(GetRandomUIntRange),
+													asCALL_CDECL);
+					manager->CheckError(r);
+					
+					r = eng->RegisterGlobalFunction("int GetRandom(int, int)",
+													asFUNCTION(GetRandomIntRange),
+													asCALL_CDECL);
+					manager->CheckError(r);
+					
+					r = eng->RegisterGlobalFunction("float GetRandom(float, float)",
+													asFUNCTION(GetRandomFloatRange),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
