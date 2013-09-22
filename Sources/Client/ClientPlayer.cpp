@@ -340,7 +340,10 @@ namespace spades {
 				
 				ScriptISpadeSkin interface(skin);
 				WeaponInput inp = p->GetWeaponInput();
-				if(inp.primary) {
+				if(p->GetTool() != Player::ToolSpade){
+					interface.SetActionType(SpadeActionTypeIdle);
+					interface.SetActionProgress(0.f);
+				}else if(inp.primary) {
 					interface.SetActionType(SpadeActionTypeBash);
 					interface.SetActionProgress(p->GetSpadeAnimationProgress());
 				}else if(inp.secondary) {
@@ -356,7 +359,11 @@ namespace spades {
 				
 				// TODO: smooth ready state
 				ScriptIBlockSkin interface(skin);
-				if(p->IsReadyToUseTool()) {
+				if(p->GetTool() != Player::ToolBlock){
+					// FIXME: use block's IsReadyToUseTool
+					// for smoother transition
+					interface.SetReadyState(0.f);
+				}else if(p->IsReadyToUseTool()) {
 					interface.SetReadyState(1.f);
 				}else{
 					interface.SetReadyState(0.f);
