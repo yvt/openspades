@@ -510,7 +510,8 @@ namespace spades {
 	}
 	
 	float GetRandom() {
-		return (float)rand() / (float)RAND_MAX;
+		const double factor = 1.f / ((double)RAND_MAX + 1.);
+		return (float)((double)rand() * factor);
 	}
 	float SmoothStep(float v){
 		return v * v * (3.f - 2.f * v);

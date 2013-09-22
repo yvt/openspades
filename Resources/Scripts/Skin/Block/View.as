@@ -93,6 +93,8 @@
 		void AddToScene() {
 			if(readyState < .99f){
 				// not ready
+				leftHand = Vector3(0.5f, 0.5f, 0.6f);
+				rightHand = Vector3(-0.5f, 0.5f, 0.6f);
 				return;
 			}
 			
