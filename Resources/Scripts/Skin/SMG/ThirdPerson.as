@@ -130,7 +130,7 @@
 				AudioChunk@ mechSound;
 				@mechSound = fireMechSounds[GetRandom(fireMechSounds.length)];
 				param.volume = 1.4;
-				audioDevice.PlayLocal(mechSound, origin, param);
+				audioDevice.Play(mechSound, origin, param);
 			}
 		}
 		void ReloadingWeapon() {
