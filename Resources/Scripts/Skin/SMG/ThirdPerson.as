@@ -84,6 +84,7 @@
 		private AudioChunk@ fireSound;
 		private AudioChunk@ fireFarSound;
 		private AudioChunk@ fireStereoSound;
+		private AudioChunk@[] fireMechSounds(4);
 		private AudioChunk@ reloadSound;
 		
 		ThirdPersonSMGSkin(Renderer@ r, AudioDevice@ dev) {
@@ -101,6 +102,15 @@
 				("Sounds/Weapons/SMG/FireStereo.wav");
 			@reloadSound = dev.RegisterSound
 				("Sounds/Weapons/SMG/Reload.wav");
+				
+			@fireMechSounds[0] = dev.RegisterSound
+				("Sounds/Weapons/SMG/Mech1.wav");
+			@fireMechSounds[1] = dev.RegisterSound
+				("Sounds/Weapons/SMG/Mech2.wav");
+			@fireMechSounds[2] = dev.RegisterSound
+				("Sounds/Weapons/SMG/Mech3.wav");
+			@fireMechSounds[3] = dev.RegisterSound
+				("Sounds/Weapons/SMG/Mech4.wav");
 		}
 		
 		void Update(float dt) {
@@ -116,6 +126,11 @@
 				param.volume = 1.f;
 				audioDevice.Play(fireFarSound, origin, param);
 				audioDevice.Play(fireStereoSound, origin, param);
+				
+				AudioChunk@ mechSound;
+				@mechSound = fireMechSounds[GetRandom(fireMechSounds.length)];
+				param.volume = 1.4;
+				audioDevice.PlayLocal(mechSound, origin, param);
 			}
 		}
 		void ReloadingWeapon() {
