@@ -434,7 +434,6 @@ namespace spades {
 		void ClientPlayer::AddToSceneFirstPersonView() {
 			Player *p = player;
 			IRenderer *renderer = client->GetRenderer();
-			const SceneDefinition& lastSceneDef = client->GetLastSceneDef();
 			World *world = client->GetWorld();
 			Matrix4 eyeMatrix = GetEyeMatrix();
 			
@@ -622,7 +621,6 @@ namespace spades {
 
 			Player *p = player;
 			IRenderer *renderer = client->GetRenderer();
-			const SceneDefinition& lastSceneDef = client->GetLastSceneDef();
 			World *world = client->GetWorld();
 			
 			
@@ -848,7 +846,6 @@ namespace spades {
 			Player *p = player;
 			IRenderer *renderer = client->GetRenderer();
 			const SceneDefinition& lastSceneDef = client->GetLastSceneDef();
-			World *world = client->GetWorld();
 			
 			if(p->GetTeamId() >= 2){
 				// spectator, or dummy player
@@ -963,30 +960,11 @@ namespace spades {
 			}
 			
 			asIScriptObject *skin;
+			// FIXME: what if current tool isn't weapon?
 			if(ShouldRenderInThirdPersonView()){
-				if(currentTool == Player::ToolSpade) {
-					skin = spadeSkin;
-				}else if(currentTool == Player::ToolBlock) {
-					skin = blockSkin;
-				}else if(currentTool == Player::ToolGrenade) {
-					skin = grenadeSkin;
-				}else if(currentTool == Player::ToolWeapon) {
-					skin = weaponSkin;
-				}else{
-					SPInvalidEnum("currentTool", currentTool);
-				}
+				skin = weaponSkin;
 			}else{
-				if(currentTool == Player::ToolSpade) {
-					skin = spadeViewSkin;
-				}else if(currentTool == Player::ToolBlock) {
-					skin = blockViewSkin;
-				}else if(currentTool == Player::ToolGrenade) {
-					skin = grenadeViewSkin;
-				}else if(currentTool == Player::ToolWeapon) {
-					skin = weaponViewSkin;
-				}else{
-					SPInvalidEnum("currentTool", currentTool);
-				}
+				skin = weaponViewSkin;
 			}
 			
 			{
@@ -998,30 +976,11 @@ namespace spades {
 		
 		void ClientPlayer::ReloadingWeapon() {
 			asIScriptObject *skin;
+			// FIXME: what if current tool isn't weapon?
 			if(ShouldRenderInThirdPersonView()){
-				if(currentTool == Player::ToolSpade) {
-					skin = spadeSkin;
-				}else if(currentTool == Player::ToolBlock) {
-					skin = blockSkin;
-				}else if(currentTool == Player::ToolGrenade) {
-					skin = grenadeSkin;
-				}else if(currentTool == Player::ToolWeapon) {
-					skin = weaponSkin;
-				}else{
-					SPInvalidEnum("currentTool", currentTool);
-				}
+				skin = weaponSkin;
 			}else{
-				if(currentTool == Player::ToolSpade) {
-					skin = spadeViewSkin;
-				}else if(currentTool == Player::ToolBlock) {
-					skin = blockViewSkin;
-				}else if(currentTool == Player::ToolGrenade) {
-					skin = grenadeViewSkin;
-				}else if(currentTool == Player::ToolWeapon) {
-					skin = weaponViewSkin;
-				}else{
-					SPInvalidEnum("currentTool", currentTool);
-				}
+				skin = weaponViewSkin;
 			}
 			
 			{
@@ -1032,32 +991,13 @@ namespace spades {
 		
 		void ClientPlayer::ReloadedWeapon() {
 			asIScriptObject *skin;
+			// FIXME: what if current tool isn't weapon?
 			if(ShouldRenderInThirdPersonView()){
-				if(currentTool == Player::ToolSpade) {
-					skin = spadeSkin;
-				}else if(currentTool == Player::ToolBlock) {
-					skin = blockSkin;
-				}else if(currentTool == Player::ToolGrenade) {
-					skin = grenadeSkin;
-				}else if(currentTool == Player::ToolWeapon) {
-					skin = weaponSkin;
-				}else{
-					SPInvalidEnum("currentTool", currentTool);
-				}
+				skin = weaponSkin;
 			}else{
-				if(currentTool == Player::ToolSpade) {
-					skin = spadeViewSkin;
-				}else if(currentTool == Player::ToolBlock) {
-					skin = blockViewSkin;
-				}else if(currentTool == Player::ToolGrenade) {
-					skin = grenadeViewSkin;
-				}else if(currentTool == Player::ToolWeapon) {
-					skin = weaponViewSkin;
-				}else{
-					SPInvalidEnum("currentTool", currentTool);
-				}
+				skin = weaponViewSkin;
 			}
-			
+
 			{
 				ScriptIWeaponSkin interface(skin);
 				interface.ReloadedWeapon();
