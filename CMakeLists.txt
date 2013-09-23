@@ -135,5 +135,3 @@ include_directories("${CURL_INCLUDE_DIRS}")
 
 add_subdirectory(Resources)
 add_subdirectory(Sources)
-
-
