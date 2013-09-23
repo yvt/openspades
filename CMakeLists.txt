@@ -52,11 +52,33 @@ if(NOT CURL_FOUND)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "-Wall -Wno-unknown-pragmas")	#lm: output is spammed like shit by all those #pragma mark items
-endif()
+	# GCC C++11 support
+	# from http://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-compiler-with-cmake
+	#
+	execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
+	if (GCC_VERSION VERSION_GREATER 4.7 OR GCC_VERSION VERSION_EQUAL 4.7)
+		message(STATUS "C++11 activated.")
+		add_definitions("-std=gnu++11")
+	elseif(GCC_VERSION VERSION_GREATER 4.3 OR GCC_VERSION VERSION_EQUAL 4.3)
+		message(WARNING "C++0x activated. If you get any errors update to a compiler which fully supports C++11")
+		add_definitions("-std=gnu++0x")
+	else ()
+		message(FATAL_ERROR "C++11 needed. Therefore a gcc compiler with a version higher than 4.3 is needed.")
+	endif()
 
-if(MSVC)
-	add_definitions( "/D_CRT_SECURE_NO_WARNINGS /wd4068 /DNOMINMAX /D_USE_MATH_DEFINES" )
+	add_definitions(
+		-Wall
+		-Wextra
+		-Wno-unknown-pragmas #learn_more: output is spammed like shit by all those #pragma mark items
+	)
+
+elseif(MSVC)
+	add_definitions(
+		/D_CRT_SECURE_NO_WARNINGS
+		/wd4068
+		/DNOMINMAX
+		/D_USE_MATH_DEFINES
+	)
 endif()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)	#msvc / xcode: group files in project
