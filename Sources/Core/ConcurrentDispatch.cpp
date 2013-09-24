@@ -35,7 +35,7 @@
 #if defined(WIN32)
 #include <windows.h>
 #endif
-#ifdef HAS_UNISTD_H
+#ifndef _MSC_VER
 #include <unistd.h>
 #endif
 #include "ThreadLocalStorage.h"
