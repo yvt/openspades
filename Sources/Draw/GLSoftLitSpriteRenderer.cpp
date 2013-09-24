@@ -104,6 +104,7 @@ namespace spades {
 				if(spr.color.w < .0001f) {
 					// maybe emissive sprite...
 					spr.emission = spr.color.GetXYZ();
+					spr.color = MakeVector4(0.f, 0.f, 0.f, 0.f);
 				}else{
 					spr.emission = MakeVector3(0.f, 0.f, 0.f);
 				}
