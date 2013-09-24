@@ -110,7 +110,7 @@ namespace spades {
 			sunScreen.x = sunView.x / (sunView.z * fov.x);
 			sunScreen.y = sunView.y / (sunView.z * fov.y);
 			
-			const float sunRadiusTan = tanf(.53f * .5f * M_PI / 180.f);
+			const float sunRadiusTan = tanf(.53f * .5f * static_cast<float>(M_PI) / 180.f);
 			Vector2 sunSize = {
 				sunRadiusTan / fov.x,
 				sunRadiusTan / fov.y
