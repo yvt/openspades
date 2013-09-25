@@ -510,7 +510,8 @@ namespace spades {
 	}
 	
 	float GetRandom() {
-		return (float)rand() / (float)RAND_MAX;
+		const double factor = 1.f / ((double)RAND_MAX + 1.);
+		return (float)((double)rand() * factor);
 	}
 	float SmoothStep(float v){
 		return v * v * (3.f - 2.f * v);
@@ -519,10 +520,10 @@ namespace spades {
 	float Mix(float a, float b, float frac) {
 		return a + (b - a) * frac;
 	}
-	Vector2 Mix(Vector2 a, Vector2 b, float frac) {
+	Vector2 Mix(const Vector2& a, const Vector2& b, float frac) {
 		return a + (b - a) * frac;
 	}
-	Vector3 Mix(Vector3 a, Vector3 b, float frac) {
+	Vector3 Mix(const Vector3& a, const Vector3& b, float frac) {
 		return a + (b - a) * frac;
 	}
 }

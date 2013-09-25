@@ -469,7 +469,7 @@ namespace spades {
 					g.tile2 = tile2;
 					g.firstInstance = NoInstance;
 					g.lastInstance = NoInstance;
-					g.lod = -100.f;
+					g.lod = -100;	//lod is an int
 					g.valid = true;
 					groups.push_back(g);
 					

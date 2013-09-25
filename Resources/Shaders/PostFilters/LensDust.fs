@@ -60,7 +60,7 @@ void main() {
 	final *= final;
 	
 	final *= 0.95;
-	final += sum * 0.8;
+	final += sum * 0.4;
 	
 	// add grain
 	float grain = texture2D(noiseTexture, noiseTexCoord.xy).x;

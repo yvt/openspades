@@ -169,7 +169,7 @@ namespace spades {
 						   IsBlockCursorDragging()){
 							std::vector<IntVector3> blocks = GetWorld()->CubeLine(blockCursorDragPos,
 																				  blockCursorPos, 256);
-							if(blocks.size() <= (int)blockStocks){
+							if((int)blocks.size() <= blockStocks){
 								if(GetWorld()->GetListener() &&
 								   this == world->GetLocalPlayer())
 									GetWorld()->GetListener()->LocalPlayerCreatedLineBlock(blockCursorDragPos, blockCursorPos);
@@ -311,10 +311,10 @@ namespace spades {
 			lng += longitude;
 			lat += latitude;
 			
-			if(lat < -M_PI * .49f)
-				lat = -M_PI * .49f;
-			if(lat > M_PI * .49f)
-				lat = M_PI * .49f;
+			if(lat < -static_cast<float>(M_PI) * .49f)
+				lat = -static_cast<float>(M_PI) * .49f;
+			if(lat > static_cast<float>(M_PI) * .49f)
+				lat = static_cast<float>(M_PI) * .49f;
 			
 			o.x = cosf(lng) * cosf(lat);
 			o.y = sinf(lng) * cosf(lat);
@@ -1208,7 +1208,7 @@ namespace spades {
 			
 			Vector3 front = GetFront();
 			
-			float yaw = atan2(front.y, front.x) + M_PI * .5f;
+			float yaw = atan2(front.y, front.x) + static_cast<float>(M_PI) * .5f;
 			float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));
 			
 			// lower axis
@@ -1219,7 +1219,7 @@ namespace spades {
 			Matrix4 torso;
 			
 			if(input.crouch){
-				lower = lower * Matrix4::Translate(0, 0, -0.4);
+				lower = lower * Matrix4::Translate(0, 0, -0.4f);
 				// lower
 				hb.limbs[0] = AABB3(-.4f, -.15f, 0.5f,
 									0.3f, .3f, 0.5f);
@@ -1229,7 +1229,7 @@ namespace spades {
 									0.3f, .3f, 0.5f);
 				hb.limbs[1] = lower * hb.limbs[1];
 				
-				torso = lower * Matrix4::Translate(0, 0, -0.3);
+				torso = lower * Matrix4::Translate(0, 0, -0.3f);
 				
 				// torso
 				hb.torso = AABB3(-.4f, -.15f, 0.1f,
@@ -1258,7 +1258,7 @@ namespace spades {
 									0.3f, .3f, 1.f);
 				hb.limbs[1] = lower * hb.limbs[1];
 				
-				torso = lower * Matrix4::Translate(0, 0, -1.1);
+				torso = lower * Matrix4::Translate(0, 0, -1.1f);
 				
 				// torso
 				hb.torso = AABB3(-.4f, -.15f, 0.1f,

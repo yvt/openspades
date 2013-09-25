@@ -39,8 +39,9 @@ void main() {
 	
 	texCoord = pos;
 	
-	vec2 dustCoord = texCoord * (511. / 1024.) +
-		(0.5 / 1024.);
+	vec2 dustCoord = texCoord *
+	vec2(511. / 1024., 255. / 512.) +
+	vec2(0.5 / 1024., 0.5 / 512.);
 	dustCoord.y = 0.5 - dustCoord.y;
 	dustTexCoord1 = dustCoord.xyxy +
 		vec4(0.0, 0.0, 0.5, 0.0);

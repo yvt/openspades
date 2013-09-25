@@ -390,8 +390,8 @@ namespace spades {
             }
 			
 			float maxCoc = (float)std::max(w, h) / 100.f;
-			float cos60 = cosf(M_PI / 3.f);
-			float sin60 = sinf(M_PI / 3.f);
+			float cos60 = cosf(static_cast<float>(M_PI) / 3.f);
+			float sin60 = sinf(static_cast<float>(M_PI) / 3.f);
 			
 			maxCoc *= .7f + vignetteBlur * 0.5f;
 			

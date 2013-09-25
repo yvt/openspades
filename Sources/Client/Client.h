@@ -54,6 +54,7 @@ namespace spades {
 		class Player;
 		class PaletteView;
 		class TCProgressView;
+		class ClientPlayer;
 		
 		class Client: public IWorldListener {
 			friend class ScoreboardView;
@@ -62,6 +63,7 @@ namespace spades {
 			friend class FallingBlock;
 			friend class PaletteView;
 			friend class TCProgressView;
+			friend class ClientPlayer;
 			
 			/** used to keep the input state of keypad so that
 			 * after user user pressed left and right, and 
@@ -91,6 +93,9 @@ namespace spades {
 			
 			int frameToRendererInit;
 			float timeSinceInit;
+			
+			// view/drawing state for some world objects
+			std::vector<ClientPlayer *> clientPlayers;
 			
 			// other windows
 			CenterMessageView *centerMessageView;
@@ -126,8 +131,6 @@ namespace spades {
 			float lastPosSentTime;
 			int lastHealth;
 			float lastHurtTime;
-			float aimDownState;
-			float sprintState;
 			float lastAliveTime;
 			int lastKills;
 			float worldSetTime;
@@ -138,14 +141,14 @@ namespace spades {
 				float strength;
 			};
 			std::vector<HurtSprite> hurtSprites;
+			float GetAimDownState();
+			float GetSprintState();
 			
-			Player::ToolType selectedTool;
 			float toolRaiseState;
 			void SetSelectedTool(Player::ToolType, bool quiet = false);
 			
 			// view
 			SceneDefinition lastSceneDef;
-			Vector3 viewWeaponOffset;
 			float localFireVibrationTime;
 			float grenadeVibration;
 			bool scoreboardVisible;
@@ -192,13 +195,12 @@ namespace spades {
 			std::list<Corpse *> corpses;
 			Corpse *lastMyCorpse;
 			float corpseSoftTimeLimit;
-			int corpseSoftLimit;
-			int corpseHardLimit;
+			unsigned int corpseSoftLimit;
+			unsigned int corpseHardLimit;
 			
 			int nextScreenShotIndex;
 			
 			std::string GetWeaponPrefix(std::string fold, WeaponType);
-			void AddPlayerToScene(Player *);
 			void AddGrenadeToScene(Grenade *);
 			void AddDebugObjectToScene(const OBB3&,
 									   const Vector4& col = MakeVector4(1,1,1,1));
@@ -269,6 +271,7 @@ namespace spades {
 			void PlayerLeaving(Player *);
 			void PlayerJoinedTeam(Player *);
 			
+			virtual void PlayerObjectSet(int);
 			virtual void PlayerMadeFootstep(Player *);
 			virtual void PlayerJumped(Player *);
 			virtual void PlayerLanded(Player *, bool hurt);

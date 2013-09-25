@@ -320,7 +320,7 @@ namespace spades {
 			
 			Bitmap *bmp = new Bitmap(columns, rows);
 			byte *out = (byte *)bmp->GetPixels();
-			for(int i = 0; i <numPixels; i++)
+			for(unsigned int i = 0; i <numPixels; i++)
 				out[i] = targa_rgba[i];
 			
 			return bmp;

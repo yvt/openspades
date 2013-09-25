@@ -161,8 +161,8 @@ namespace spades {
 			float scrW = renderer->ScreenWidth();
 			float scrH = renderer->ScreenHeight();
 			
-			for(int phase = 0; phase < 2; phase++){
-				for(int i = 0; i < colors.size(); i++){
+			for(size_t phase = 0; phase < 2; phase++){
+				for(size_t i = 0; i < colors.size(); i++){
 					if((sel == i) != (phase == 1))
 						continue;
 					

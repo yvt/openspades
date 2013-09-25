@@ -819,9 +819,12 @@ namespace spades {
 					handle = cameraBlur->Filter(handle);
 				}
 				
-				if(r_bloom)
+				if(r_bloom){
+					GLProfiler profiler(device, "Lens Dust Filter");
 					handle = lensDustFilter->Filter(handle);
-				if(r_lens){
+				}
+				
+				if(r_lens && false){
 					GLProfiler profiler(device, "Lens Filter");
 					handle = GLLensFilter(this).Filter(handle);
 				}

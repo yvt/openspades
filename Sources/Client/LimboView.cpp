@@ -194,7 +194,7 @@ namespace spades{
 				Vector2 pos;
 				pos.x = left + 10.f;
 				pos.y = top + 10.f;
-				font->Draw(msg, pos + MakeVector2(0, 1), 1.f, MakeVector4(0,0,0,0.4));
+				font->Draw(msg, pos + MakeVector2(0, 1), 1.f, MakeVector4(0,0,0,0.4f));
 				font->Draw(msg, pos, 1.f, MakeVector4(1, 1, 1, 1));
 			}
 			if(selectedTeam != 2){
@@ -202,7 +202,7 @@ namespace spades{
 				Vector2 pos;
 				pos.x = left + 260.f;
 				pos.y = top + 10.f;
-				font->Draw(msg, pos + MakeVector2(0, 1), 1.f, MakeVector4(0,0,0,0.4));
+				font->Draw(msg, pos + MakeVector2(0, 1), 1.f, MakeVector4(0,0,0,0.4f));
 				font->Draw(msg, pos, 1.f, MakeVector4(1, 1, 1, 1));
 			}
 			
@@ -227,7 +227,7 @@ namespace spades{
 						selected = false;
 				}
 				
-				Vector4 fillColor = {0.2, 0.2, 0.2, 0.5};
+				Vector4 fillColor = {0.2f, 0.2f, 0.2f, 0.5f};
 				Vector4 ringColor = {0, 0, 0, 0};
 				
 				if(item.hover){
@@ -248,7 +248,7 @@ namespace spades{
 					Vector2 pos;
 					pos.x = item.rect.GetMinX() + (item.rect.GetWidth() - size.x) / 2.f + 2.f;
 					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f + 2.f;
-					bFont->Draw(msg, pos + MakeVector2(0, 2), 1.f, MakeVector4(0,0,0,0.4));
+					bFont->Draw(msg, pos + MakeVector2(0, 2), 1.f, MakeVector4(0,0,0,0.4f));
 					bFont->Draw(msg, pos, 1.f, MakeVector4(1, 1, 1, 1));
 				}else{
 					renderer->DrawImage(menuItemImage, item.rect);
@@ -262,7 +262,7 @@ namespace spades{
 					Vector2 pos;
 					pos.x = item.rect.GetMinX() + 5.f;
 					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f + 2.f;
-					font->Draw(msg, pos + MakeVector2(0, 1), 1.f, MakeVector4(0,0,0,0.4));
+					font->Draw(msg, pos + MakeVector2(0, 1), 1.f, MakeVector4(0,0,0,0.4f));
 					font->Draw(msg, pos, 1.f, MakeVector4(1, 1, 1, 1));
 				}
 			}

@@ -81,7 +81,7 @@ namespace spades {
 		StreamHandle(IStream *);
 		StreamHandle(const StreamHandle&);
 		~StreamHandle();
-		void operator =(const StreamHandle&);
+		spades::StreamHandle & operator =(const StreamHandle&);
 		void Reset();
 		IStream *operator ->() const;
 		operator IStream *() const;

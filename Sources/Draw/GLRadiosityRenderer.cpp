@@ -82,7 +82,7 @@ namespace spades {
 			
 			chunks.resize(chunkW * chunkH * chunkD);
 			
-			for(int i = 0; i < chunks.size(); i++){
+			for(size_t i = 0; i < chunks.size(); i++){
 				Chunk& c = chunks[i];
 				c.dirty = true;
 				c.dirtyMinX = 0;
@@ -227,7 +227,7 @@ namespace spades {
 					
 					// if true, this is negative-y faced plane
 					// if false, this is negative-z faced plane
-					bool isSide = pixel & 0x80;
+					bool isSide = pixel & 0x80 != 0;
 					
 					// direction dependent process
 					Vector3 center; // center of face
@@ -281,9 +281,9 @@ namespace spades {
 					Vector3 normDiff = diff * -invDiffLen;
 					
 					// extract shadowmap color
-					float red = (pixel) & 0x3f;
-					float green = (pixel >> 8) & 0x3f;
-					float blue = (pixel >> 16) & 0x3f;
+					float red = static_cast<float>((pixel) & 0x3f);
+					float green = static_cast<float>((pixel >> 8) & 0x3f);
+					float blue = static_cast<float>((pixel >> 16) & 0x3f);
 					
 					Vector3 color = {red, green, blue};
 					color *= intensity;
@@ -375,7 +375,7 @@ namespace spades {
 		
 		int GLRadiosityRenderer::GetNumDirtyChunks() {
 			int cnt = 0;
-			for(int i = 0; i < chunks.size(); i++){
+			for(size_t i = 0; i < chunks.size(); i++){
 				Chunk& c = chunks[i];
 				if(c.dirty) cnt++;
 			}
@@ -393,12 +393,12 @@ namespace spades {
 				dispatch->Start();
 			}
 			int cnt = 0;
-			for(int i = 0; i < chunks.size(); i++) {
+			for(size_t i = 0; i < chunks.size(); i++) {
 				if(!chunks[i].transfered)
 					cnt++;
 			}
 			GLProfiler profiler(device, "Radiosity [>= %d chunk(s)]", cnt);
-			for(int i = 0; i < chunks.size(); i++){
+			for(size_t i = 0; i < chunks.size(); i++){
 				Chunk& c = chunks[i];
 				if(!c.transfered){
 					c.transfered = true;
@@ -475,7 +475,7 @@ namespace spades {
 			int eyeY = (int)(eyePos.y) >> ChunkSizeBits;
 			int eyeZ = (int)(eyePos.z) >> ChunkSizeBits;
 			
-			for(int i = 0; i < chunks.size(); i++){
+			for(size_t i = 0; i < chunks.size(); i++){
 				Chunk& c = chunks[i];
 				int dx = (c.cx - eyeX) & (chunkW - 1);
 				int dy = (c.cy - eyeY) & (chunkH - 1);
@@ -496,7 +496,7 @@ namespace spades {
 			
 			// far chunks
 			if(numDirtyChunks == 0){
-				for(int i = 0; i < chunks.size(); i++){
+				for(size_t i = 0; i < chunks.size(); i++){
 					Chunk& c = chunks[i];
 					if(c.dirty){
 						dirtyChunkIds[numDirtyChunks++] = i;
