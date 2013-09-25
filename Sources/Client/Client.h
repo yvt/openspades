@@ -195,8 +195,8 @@ namespace spades {
 			std::list<Corpse *> corpses;
 			Corpse *lastMyCorpse;
 			float corpseSoftTimeLimit;
-			int corpseSoftLimit;
-			int corpseHardLimit;
+			unsigned int corpseSoftLimit;
+			unsigned int corpseHardLimit;
 			
 			int nextScreenShotIndex;
 			

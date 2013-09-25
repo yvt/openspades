@@ -71,7 +71,7 @@ namespace spades {
 			
 			chunks.resize(chunkW * chunkH * chunkD);
 			
-			for(int i = 0; i < chunks.size(); i++){
+			for(size_t i = 0; i < chunks.size(); i++){
 				Chunk& c = chunks[i];
 				c.dirty = true;
 				c.dirtyMinX = 0;
@@ -290,7 +290,7 @@ namespace spades {
 		
 		int GLAmbientShadowRenderer::GetNumDirtyChunks() {
 			int cnt = 0;
-			for(int i = 0; i < chunks.size(); i++){
+			for(size_t i = 0; i < chunks.size(); i++){
 				Chunk& c = chunks[i];
 				if(c.dirty) cnt++;
 			}
@@ -309,14 +309,14 @@ namespace spades {
 			}
 			
 			int cnt = 0;
-			for(int i = 0; i < chunks.size(); i++) {
+			for(size_t i = 0; i < chunks.size(); i++) {
 				if(!chunks[i].transfered)
 					cnt++;
 			}
 			GLProfiler profiler(device, "Large Ambient Occlusion [>= %d chunk(s)]", cnt);
 			
 			device->BindTexture(IGLDevice::Texture3D, texture);
-			for(int i = 0; i < chunks.size(); i++){
+			for(size_t i = 0; i < chunks.size(); i++){
 				Chunk& c = chunks[i];
 				if(!c.transfered){
 					c.transfered = true;
@@ -346,7 +346,7 @@ namespace spades {
 			int eyeY = (int)(eyePos.y) >> ChunkSizeBits;
 			int eyeZ = (int)(eyePos.z) >> ChunkSizeBits;
 			
-			for(int i = 0; i < chunks.size(); i++){
+			for(size_t i = 0; i < chunks.size(); i++){
 				Chunk& c = chunks[i];
 				int dx = (c.cx - eyeX) & (chunkW - 1);
 				int dy = (c.cy - eyeY) & (chunkH - 1);
@@ -367,7 +367,7 @@ namespace spades {
 			
 			// far chunks
 			if(numDirtyChunks == 0){
-				for(int i = 0; i < chunks.size(); i++){
+				for(size_t i = 0; i < chunks.size(); i++){
 					Chunk& c = chunks[i];
 					if(c.dirty){
 						dirtyChunkIds[numDirtyChunks++] = i;

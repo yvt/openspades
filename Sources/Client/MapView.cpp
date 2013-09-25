@@ -293,7 +293,7 @@ namespace spades {
 			
 			// draw grid
 			
-			renderer->SetColor(MakeVector4(0,0,0,0.8*alpha));
+			renderer->SetColor(MakeVector4(0,0,0,0.8f*alpha));
 			Handle<IImage> dashLine = renderer->RegisterImage("Gfx/DashLine.tga");
 			for(float x = 64.f; x < map->Width(); x += 64.f){
 				float wx = (x - inRect.GetMinX()) / inRect.GetWidth();
@@ -317,7 +317,7 @@ namespace spades {
 			}
 			
 			// draw grid label
-			renderer->SetColor(MakeVector4(1,1,1,0.8*alpha));
+			renderer->SetColor(MakeVector4(1,1,1,0.8f*alpha));
 			Handle<IImage> mapFont = renderer->RegisterImage("Gfx/Fonts/MapFont.tga");
 			for(int i = 0; i < 8; i++){
 				float startX = (float)i * 64.f;
@@ -337,8 +337,8 @@ namespace spades {
 				wx = (wx * outRect.GetWidth()) + outRect.GetMinX();
 				wx = roundf(wx);
 				
-				int fntX = (i & 3) * 8;
-				int fntY = (i >> 2) * 8;
+				float fntX = static_cast<float>((i & 3) * 8);
+				float fntY = static_cast<float>((i >> 2) * 8);
 				renderer->DrawImage(mapFont,
 									MakeVector2(wx - 4.f, outRect.GetMinY() + 4),
 									AABB2(fntX, fntY, 8, 8));
@@ -386,7 +386,7 @@ namespace spades {
 					Vector3 front = p->GetFront2D();
 					float ang = atan2(front.x, -front.y);
 					if(player->GetTeamId() >= 2){
-						ang = client->followYaw - M_PI*.5f;
+						ang = client->followYaw - static_cast<float>(M_PI) * .5f;
 					}
 					
 					if(p == world->GetLocalPlayer())

@@ -84,7 +84,7 @@ namespace spades {
 													IntVector3 v2,
 													int maxLength);
 			
-			Player *GetPlayer(int i){
+			Player *GetPlayer(unsigned int i){
 				SPAssert(i >= 0);
 				SPAssert(i < players.size());
 				return players[i];
