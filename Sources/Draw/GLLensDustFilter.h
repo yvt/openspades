@@ -24,6 +24,7 @@
 #include "IGLDevice.h"
 #include <stdint.h>
 #include <vector>
+#include <stdint.h>
 
 namespace spades {
 	namespace draw {
