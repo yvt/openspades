@@ -31,7 +31,7 @@
 #include <sys/types.h>
 #if defined(__APPLE__)
 #include <sys/sysctl.h>
-#endif
+#else
 #if defined(WIN32)
 #include <windows.h>
 #endif
@@ -41,6 +41,8 @@
 #if defined(__GNUC__)
 #include <sys/sysinfo.h>
 #endif
+#endif
+
 #include "ThreadLocalStorage.h"
 
 SPADES_SETTING(core_numDispatchQueueThreads, "auto");
