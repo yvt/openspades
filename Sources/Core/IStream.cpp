@@ -146,15 +146,15 @@ namespace  spades {
 		Reset();
 	}
 	
-	void StreamHandle::operator=(const spades::StreamHandle &h){
-		if(o == h.o)
-			return;
-		
+	spades::StreamHandle & StreamHandle::operator=(const spades::StreamHandle &h){
 		SPADES_MARK_FUNCTION();
-		SharedStream *old = o;
-		o = h.o;
-		o->Retain();
-		old->Release();
+		if(o != h.o) {
+			SharedStream *old = o;
+			o = h.o;
+			o->Retain();
+			old->Release();
+		}
+		return *this;
 	}
 	
 	IStream *StreamHandle::operator->() const{

@@ -473,9 +473,9 @@ namespace spades {
 					int ox = rand() % (size - 2);
 					int oy = rand() % (size - 2);
 					static const float gauss[] = {
-						0.225610111284052,
-						0.548779777431897,
-						0.225610111284052
+						0.225610111284052f,
+						0.548779777431897f,
+						0.225610111284052f
 					};
 					float strength = (GetRandom()-GetRandom()) * 0.15f * 100.f;
 					for(int x = 0; x < 3; x++)
@@ -938,7 +938,7 @@ namespace spades {
 						waveTanks[i]->SetTimeStep(dt * 0.15704f / .08f);
 						break;
 					case 2:
-						waveTanks[i]->SetTimeStep(dt * 0.02344 / .08f);
+						waveTanks[i]->SetTimeStep(dt * 0.02344f / .08f);
 						break;
 				}
 				waveTanks[i]->Start();

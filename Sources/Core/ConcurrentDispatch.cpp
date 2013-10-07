@@ -35,8 +35,11 @@
 #if defined(WIN32)
 #include <windows.h>
 #endif
-#ifdef HAS_UNISTD_H
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
+#if defined(__GNUC__)
+#include <sys/sysinfo.h>
 #endif
 #include "ThreadLocalStorage.h"
 
@@ -61,6 +64,8 @@ static int GetNumCores() {
         if(count < 1) { count = 1; }
     }
     return count;
+#elif defined(__GNUC__)
+    return get_nprocs();
 #else
     return sysconf(_SC_NPROCESSORS_ONLN);
 #endif

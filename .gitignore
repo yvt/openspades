@@ -21,30 +21,14 @@ build
 
 # cmake generated
 OpenSpades.h
+Makefile
+CMakeCache.txt
+*CMakeFiles/
+*.cmake
 
 # cmake input dir (optional)
 Sources/Externals/include/
 Sources/Externals/lib/
-
-# autotools
-Makefile
-Makefile.in
-configure
-.deps
-.dirstamp
-aclocal.m4
-autom4te.cache
-compile
-config.guess
-config.log
-config.status
-config.sub
-depcomp
-install-sh
-missing
-
-# output binary
-openspades
 
 # mac related
 *.DS_Store

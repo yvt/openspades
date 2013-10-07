@@ -427,7 +427,7 @@ namespace spades {
 				logStream = FileManager::OpenForWriting(fn2.c_str());
 				SPLog("Netlog Started at '%s'", fn2.c_str());
 			}catch(const std::exception& ex){
-				SPLog("Failed to open netlog file '%s'", fn2.c_str());
+				SPLog("Failed to open netlog file '%s' (%s)", fn2.c_str(), ex.what());
 			}
 		}
 		
@@ -691,7 +691,7 @@ namespace spades {
 						hurtSprites.resize(std::max(cnt, 6));
 						for(size_t i = 0; i < hurtSprites.size(); i++) {
 							HurtSprite& spr = hurtSprites[i];
-							spr.angle = GetRandom() * (2.f * M_PI);
+							spr.angle = GetRandom() * (2.f * static_cast<float>(M_PI));
 							spr.scale = .2f + GetRandom() * GetRandom() * .7f;
 							spr.horzShift = GetRandom();
 							spr.strength = .3f + GetRandom() * .7f;
@@ -838,9 +838,9 @@ namespace spades {
 				}
 				followYaw -= x * 0.003f;
 				followPitch -= y * 0.003f;
-				if(followPitch < -M_PI*.45f) followPitch = -M_PI*.45f;
-				if(followPitch > M_PI*.45f) followPitch = M_PI * .45f;
-				followYaw = fmodf(followYaw, M_PI*2.f);
+				if(followPitch < -M_PI*.45f) followPitch = -static_cast<float>(M_PI)*.45f;
+				if(followPitch > M_PI*.45f) followPitch = static_cast<float>(M_PI) * .45f;
+				followYaw = fmodf(followYaw, static_cast<float>(M_PI)*2.f);
 			}else if(world && world->GetLocalPlayer()){
 				Player *p = world->GetLocalPlayer();
 				float aimDownState = GetAimDownState();
@@ -1478,7 +1478,7 @@ namespace spades {
 						def.viewAxis[2] = front;
 						
 						
-						def.fovY = (float)cg_fov * M_PI /180.f;
+						def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) *
 										 renderer->ScreenWidth() /
 										 renderer->ScreenHeight()) * 2.f;
@@ -1505,7 +1505,7 @@ namespace spades {
 						def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
 						def.viewAxis[2] = front;
 						
-						def.fovY = (float)cg_fov * M_PI /180.f;
+						def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) *
 										 renderer->ScreenWidth() /
 										 renderer->ScreenHeight()) * 2.f;
@@ -1530,9 +1530,9 @@ namespace spades {
 						// sprint bob
 						{
 							float sp = SmoothStep(GetSprintState());
-							vibYaw += sinf(player->GetWalkAnimationProgress() * M_PI * 2.f) * 0.01f * sp;
-							roll -= sinf(player->GetWalkAnimationProgress() * M_PI * 2.f) * 0.005f * (sp);
-							float p = cosf(player->GetWalkAnimationProgress() * M_PI * 2.f);
+							vibYaw += sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.01f * sp;
+							roll -= sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.005f * (sp);
+							float p = cosf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f);
 							p = p * p; p *= p; p *= p; p *= p; 
 							vibPitch += p * 0.01f * sp;
 						}
@@ -1546,7 +1546,7 @@ namespace spades {
 						def.viewAxis[1] = up;
 						def.viewAxis[2] = front;
 						
-						def.fovY = (float)cg_fov * M_PI /180.f;
+						def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) *
 										 renderer->ScreenWidth() /
 										 renderer->ScreenHeight()) * 2.f;
@@ -1625,7 +1625,7 @@ namespace spades {
 					def.viewAxis[1] = MakeVector3(0, 1, 0);
 					def.viewAxis[2] = MakeVector3(0, 0, 1);
 					
-					def.fovY = (float)cg_fov * M_PI /180.f;
+					def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 					def.fovX = atanf(tanf(def.fovY * .5f) *
 									 renderer->ScreenWidth() /
 									 renderer->ScreenHeight()) * 2.f;
@@ -1642,7 +1642,7 @@ namespace spades {
 				def.viewAxis[1] = MakeVector3(0, 0, -1);
 				def.viewAxis[2] = MakeVector3(0, 0, 1);
 				
-				def.fovY = (float)cg_fov * M_PI /180.f;
+				def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 				def.fovX = atanf(tanf(def.fovY * .5f) *
 								 renderer->ScreenWidth() /
 								 renderer->ScreenHeight()) * 2.f;
@@ -1890,7 +1890,7 @@ namespace spades {
 						}
 						
 						Vector4 color = {1,1,1,1};
-						if(blocks.size() > (int)p->GetNumBlocks())
+						if((int)blocks.size() > p->GetNumBlocks())
 							color = MakeVector4(1,0,0,1);
 						
 						for(size_t i = 0; i < blocks.size(); i++){

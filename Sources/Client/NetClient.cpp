@@ -1116,8 +1116,8 @@ namespace spades {
 							mode->SetCaptureLimit(reader.ReadByte());
 							
 							int intelFlags = reader.ReadByte();
-							mt1.hasIntel = (intelFlags & 1);
-							mt2.hasIntel = (intelFlags & 2);
+							mt1.hasIntel = (intelFlags & 1) != 0;
+							mt2.hasIntel = (intelFlags & 2) != 0;
 							
 							if(mt2.hasIntel){
 								mt1.carrier = reader.ReadByte();
