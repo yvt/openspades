@@ -157,3 +157,33 @@ include_directories("${CURL_INCLUDE_DIRS}")
 
 add_subdirectory(Resources)
 add_subdirectory(Sources)
+
+install(FILES AUTHORS ChangeLog LICENSE README.md DESTINATION bin)
+
+#see http://www.cmake.org/cmake/help/v2.8.11/cpack.html
+
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenSpades")
+set(CPACK_PACKAGE_VENDOR "yvt, assorted")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_VERSION_MAJOR ${OpenSpades_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${OpenSpades_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${OpenSpades_VERSION_REVISION})
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "CMake ${CMake_VERSION_MAJOR}.${CMake_VERSION_MINOR}")
+if(WIN32 AND NOT UNIX)
+	# There is a bug in NSIS that does not handle full unix paths properly. Make
+	# sure there is at least one set of four (4) backlasshes.
+	set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\OpenSpades.exe")
+	set(CPACK_NSIS_HELP_LINK "https://sites.google.com/a/yvt.jp/openspades/")
+	set(CPACK_NSIS_URL_INFO_ABOUT "http://buildandshoot.com/viewforum.php?f=57")
+	#SET(CPACK_NSIS_CONTACT "me@my-personal-home-page.com")
+	set(CPACK_NSIS_MODIFY_PATH ON)
+	set(CPACK_PACKAGING_INSTALL_PREFIX "/")
+else()
+	set(CPACK_STRIP_FILES "bin/OpenSpades")
+	set(CPACK_SOURCE_STRIP_FILES "")
+endif(WIN32 AND NOT UNIX)
+set(CPACK_PACKAGE_EXECUTABLES "OpenSpades" "OpenSpades")
+set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY FALSE)		#everyone hates a dir inside a zip named exactly like the zip
+include(CPack)
+
