@@ -79,7 +79,7 @@
 				Vector3 origin = Vector3(0.4f, -0.3f, 0.5f);
 				AudioParam param;
 				param.volume = 0.2f;
-				audioDevice.PlayLocal(fireSound, origin, param);
+				audioDevice.PlayLocal(reloadSound, origin, param);
 			}
 		}
 		

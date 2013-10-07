@@ -28,10 +28,9 @@
 		private Model@ gunModel;
 		private Model@ magazineModel;
 		
-		private AudioChunk@ fireSound;
+		private AudioChunk@[] fireSounds(4);
 		private AudioChunk@ fireFarSound;
 		private AudioChunk@ fireStereoSound;
-		private AudioChunk@[] fireMechSounds(4);
 		private AudioChunk@ reloadSound;
 		
 		ViewSMGSkin(Renderer@ r, AudioDevice@ dev) {
@@ -42,8 +41,14 @@
 			@magazineModel = renderer.RegisterModel
 				("Models/Weapons/SMG/Magazine.kv6");
 				
-			@fireSound = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireLocal.wav");
+			@fireSounds[0] = dev.RegisterSound
+				("Sounds/Weapons/SMG/FireLocal1.wav");
+			@fireSounds[1] = dev.RegisterSound
+				("Sounds/Weapons/SMG/FireLocal2.wav");
+			@fireSounds[2] = dev.RegisterSound
+				("Sounds/Weapons/SMG/FireLocal3.wav");
+			@fireSounds[3] = dev.RegisterSound
+				("Sounds/Weapons/SMG/FireLocal4.wav");
 			@fireFarSound = dev.RegisterSound
 				("Sounds/Weapons/SMG/FireFar.wav");
 			@fireStereoSound = dev.RegisterSound
@@ -51,14 +56,6 @@
 			@reloadSound = dev.RegisterSound
 				("Sounds/Weapons/SMG/ReloadLocal.wav");
 				
-			@fireMechSounds[0] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Mech1.wav");
-			@fireMechSounds[1] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Mech2.wav");
-			@fireMechSounds[2] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Mech3.wav");
-			@fireMechSounds[3] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Mech4.wav");
 		}
 		
 		void Update(float dt) {
@@ -72,16 +69,12 @@
 				Vector3 origin = Vector3(0.4f, -0.3f, 0.5f);
 				AudioParam param;
 				param.volume = 8.f;
-				audioDevice.PlayLocal(fireSound, origin, param);
+				audioDevice.PlayLocal(fireSounds[GetRandom(fireSounds.length)], origin, param);
 				
-				param.volume = 1.f;
+				param.volume = 1.5f;
 				audioDevice.PlayLocal(fireFarSound, origin, param);
 				audioDevice.PlayLocal(fireStereoSound, origin, param);
 				
-				AudioChunk@ mechSound;
-				@mechSound = fireMechSounds[GetRandom(fireMechSounds.length)];
-				param.volume = 1.4;
-				audioDevice.PlayLocal(mechSound, origin, param);
 			}
 		}
 		

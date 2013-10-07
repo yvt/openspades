@@ -3883,26 +3883,35 @@ namespace spades {
 				GrenadeExplosion(g->GetPosition());
 				
 				if(!IsMuted()){
-					Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode.wav");
+					Handle<IAudioChunk> c = audioDevice->RegisterSound((rand()&32)?"Sounds/Weapons/Grenade/Explode1.wav":
+																	   "Sounds/Weapons/Grenade/Explode2.wav");
 					AudioParam param;
 					param.volume = 10.f;
+					param.referenceDistance = 5.f;
+					audioDevice->Play(c, g->GetPosition(),
+									  param);
+					
+					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeStereo.wav");
 					audioDevice->Play(c, g->GetPosition(),
 									  param);
 					
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFar.wav");
-					param.volume = 40.f;
+					param.volume = .3f;
+					param.referenceDistance = 50.f;
 					audioDevice->Play(c, g->GetPosition(),
 									  param);
 					
 					
-					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeStereo.wav");
-					param.volume = 40.f;
+					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFarStereo.wav");
+					param.volume = .3f;
+					param.referenceDistance = 50.f;
 					audioDevice->Play(c, g->GetPosition(),
 									  param);
 					
 					// debri sound
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Debris.wav");
 					param.volume = 5.f;
+					param.referenceDistance = 1.f;
 					IntVector3 outPos;
 					Vector3 soundPos = g->GetPosition();
 					if(world->GetMap()->CastRay(soundPos,

@@ -81,7 +81,8 @@
 		private AudioDevice@ audioDevice;
 		private Model@ model;
 		
-		private AudioChunk@ fireSound;
+		private AudioChunk@[] fireSounds(4);
+		private AudioChunk@[] fireMediumSounds(4);
 		private AudioChunk@ fireFarSound;
 		private AudioChunk@ fireStereoSound;
 		private AudioChunk@[] fireMechSounds(4);
@@ -94,8 +95,22 @@
 				("Models/Weapons/SMG/Weapon.kv6");
 				
 				
-			@fireSound = dev.RegisterSound
-				("Sounds/Weapons/SMG/Fire.wav");
+			@fireSounds[0] = dev.RegisterSound
+				("Sounds/Weapons/SMG/Fire1.wav");
+			@fireSounds[1] = dev.RegisterSound
+				("Sounds/Weapons/SMG/Fire2.wav");
+			@fireSounds[2] = dev.RegisterSound
+				("Sounds/Weapons/SMG/Fire3.wav");
+			@fireSounds[3] = dev.RegisterSound
+				("Sounds/Weapons/SMG/Fire4.wav");
+			@fireMediumSounds[0] = dev.RegisterSound
+				("Sounds/Weapons/SMG/FireMedium1.wav");
+			@fireMediumSounds[1] = dev.RegisterSound
+				("Sounds/Weapons/SMG/FireMedium2.wav");
+			@fireMediumSounds[2] = dev.RegisterSound
+				("Sounds/Weapons/SMG/FireMedium3.wav");
+			@fireMediumSounds[3] = dev.RegisterSound
+				("Sounds/Weapons/SMG/FireMedium4.wav");
 			@fireFarSound = dev.RegisterSound
 				("Sounds/Weapons/SMG/FireFar.wav");
 			@fireStereoSound = dev.RegisterSound
@@ -103,14 +118,6 @@
 			@reloadSound = dev.RegisterSound
 				("Sounds/Weapons/SMG/Reload.wav");
 				
-			@fireMechSounds[0] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Mech1.wav");
-			@fireMechSounds[1] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Mech2.wav");
-			@fireMechSounds[2] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Mech3.wav");
-			@fireMechSounds[3] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Mech4.wav");
 		}
 		
 		void Update(float dt) {
@@ -120,17 +127,14 @@
 			if(!muted){
 				Vector3 origin = originMatrix * Vector3(0.f, 0.f, 0.f);
 				AudioParam param;
-				param.volume = 8.f;
-				audioDevice.Play(fireSound, origin, param);
+				param.volume = 4.f;
+				audioDevice.Play(fireMediumSounds[GetRandom(fireMediumSounds.length)], origin, param);
 				
-				param.volume = 1.f;
+				param.volume = .8f;
+				param.referenceDistance = 5.f;
 				audioDevice.Play(fireFarSound, origin, param);
 				audioDevice.Play(fireStereoSound, origin, param);
 				
-				AudioChunk@ mechSound;
-				@mechSound = fireMechSounds[GetRandom(fireMechSounds.length)];
-				param.volume = 1.4;
-				audioDevice.Play(mechSound, origin, param);
 			}
 		}
 		void ReloadingWeapon() {
