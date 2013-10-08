@@ -126,6 +126,7 @@ endif()
 
 
 set(OPENSPADES_RESDIR "" CACHE STRING "Resource dir to use while developing")
+set(OPENSPADES_EXTRATITLE "" CACHE STRING "Extra info to add to the package name")
 if(OPENSPADES_RESDIR)
 	set(RESDIR ${OPENSPADES_RESDIR})
 	set(RESDIR_DEFINED TRUE)
