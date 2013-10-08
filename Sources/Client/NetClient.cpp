@@ -423,7 +423,7 @@ namespace spades {
 						NetPacketReader reader(event.packet);
 						reader.DumpDebug();
 						if(reader.GetType() != PacketTypeMapStart){
-							SPRaise("Unexpeted packet: %d", (int)reader.GetType());
+							SPRaise("Unexpected packet: %d", (int)reader.GetType());
 						}
 						
 						mapSize = reader.ReadInt();
@@ -953,6 +953,10 @@ namespace spades {
 					std::string name = reader.ReadRemainingString();
 					// TODO: decode name?
 					
+					if( pId < 0 || pId >= 32 ) {
+						SPLog( "Ignoring player 32 (bug in pyspades?: %s)", name.c_str() );
+						break;
+					}
 					WeaponType wType;
 					switch(weapon){
 						case 0:
