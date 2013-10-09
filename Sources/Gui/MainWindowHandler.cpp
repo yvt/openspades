@@ -82,10 +82,13 @@ MainWindow::~MainWindow()
 	}
 }
 
+//lm: this doesnt really belong here, should be somewhere in core or client probably?
+//	we might need to introduce some base object that will handle global state and whatnot..
+//	now all windows just spawn eachother, instead of being managed from a central place.
 void MainWindow::StartGame(const spades::ServerAddress &host) {
 	SPADES_MARK_FUNCTION();
 	
-	hide();
+	//hide();
 	
 #if 0
 	SDLRunner r(host);
@@ -135,6 +138,7 @@ void MainWindow::QuickConnectPressed() {
 	SPADES_MARK_FUNCTION();
 
 	spades::ServerAddress host(quickHostInput->value());
+	hide();
 	StartGame(host);
 }
 

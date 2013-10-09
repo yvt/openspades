@@ -26,6 +26,7 @@
 #include <Core/Settings.h>
 #include <Core/ConcurrentDispatch.h>
 #include <Core/ZipFileSystem.h>
+#include <Core/ServerAddress.h>
 #include "ErrorDialog.h"
 
 #include <Core/VoxelModel.h>
@@ -38,6 +39,8 @@
 #ifdef WIN32
 #include <windows.h>
 #include <shlobj.h>
+#define strncasecmp(x,y,z)	_strnicmp(x,y,z)
+#define strcasecmp(x,y)		_stricmp(x,y)
 #endif
 
 #ifdef __APPLE__
@@ -45,6 +48,33 @@
 #endif
 
 #include <FL/fl_ask.H>
+
+SPADES_SETTING(cg_lastQuickConnectHost, "");
+SPADES_SETTING(cg_protocolVersion, "");
+int cg_autoConnect = 0;
+
+int argsHandler(int argc, char **argv, int &i)
+{
+	if( char* a = argv[i] ) {
+		if( !strncasecmp( a, "aos://", 6 ) ) {
+			cg_lastQuickConnectHost = a;
+			cg_autoConnect = 1;
+			return ++i;
+		}
+		//lm: we attempt to detect protocol version, allowing with or without a prefix 'v='
+		//we set proto, but without url we will not auto-connect
+		if( a[0] == 'v' && a[1] == '=' ) { a += 2; }
+		if( !strcasecmp( a, "75" ) || !strcasecmp( a, "075" ) || !strcasecmp( a, "0.75" ) ) {
+			cg_protocolVersion = 3;
+			return ++i;
+		}
+		if( !strcasecmp( a, "76" ) || !strcasecmp( a, "076" ) || !strcasecmp( a, "0.76" ) ) {
+			cg_protocolVersion = 4;
+			return ++i;
+		}
+	}
+	return 0;
+}
 
 int main(int argc, char ** argv)
 {
@@ -179,11 +209,18 @@ int main(int argc, char ** argv)
 		spades::ScriptManager::GetInstance();
 		
 		SPLog("Initializing main window");
-		
-		MainWindow win;
-		win.Init();
-		win.show(argc, argv);
-		win.CheckGLCapability();
+		int dum = 0;
+		Fl::args( argc, argv, dum, argsHandler );
+
+		if( !cg_autoConnect ) {
+			MainWindow win;
+			win.Init();
+			win.show(argc, argv);
+			win.CheckGLCapability();
+		} else {
+			spades::ServerAddress host(cg_lastQuickConnectHost.CString(), (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076 );
+			MainWindow::StartGame( host );
+		}
 		
 		SPLog("Entering FLTK main loop");
 		Fl::run();

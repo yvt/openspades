@@ -136,8 +136,8 @@ private:
   bool postFilterHighCapable; 
   bool particleHighCapable; 
   void QuickConnectPressed();
-  void StartGame(const spades::ServerAddress& host);
 public:
+  static void StartGame(const spades::ServerAddress& host);
   void LoadPrefs();
 private:
   void SavePrefs();
@@ -155,5 +155,5 @@ public:
   void updateFilters();;
   ~MainWindow();
 };
-extern unsigned char aboutText[4625];
+extern unsigned char aboutText[4695];
 #endif
