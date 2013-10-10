@@ -212,11 +212,12 @@ int main(int argc, char ** argv)
 		int dum = 0;
 		Fl::args( argc, argv, dum, argsHandler );
 
+		MainWindow* win = NULL;
 		if( !cg_autoConnect ) {
-			MainWindow win;
-			win.Init();
-			win.show(argc, argv);
-			win.CheckGLCapability();
+			win = new MainWindow();
+			win->Init();
+			win->show(argc, argv);
+			win->CheckGLCapability();
 		} else {
 			spades::ServerAddress host(cg_lastQuickConnectHost.CString(), (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076 );
 			MainWindow::StartGame( host );
@@ -228,6 +229,10 @@ int main(int argc, char ** argv)
 		SPLog("Leaving FLTK main loop");
 		spades::Settings::GetInstance()->Flush();
 		
+		if( win ) {
+			delete win;
+		}
+
 	}catch(const std::exception& ex) {
 		
 		ErrorDialog dlg;
