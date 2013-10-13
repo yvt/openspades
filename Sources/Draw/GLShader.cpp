@@ -85,7 +85,7 @@ namespace spades {
 				std::string err = errMsg.data();
 				SPRaise("Error while compiling a shader:\n\n%s\n\n"
 						"Shader source:\n\n%s\n", errMsg.data(),
-						src.c_str());
+						src.substr(0,500).c_str());
 			}
 			
 			compiled = true;
