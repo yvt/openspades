@@ -157,8 +157,9 @@ void main() {
     
     // bluring for far surface
     float lodBias = dot(abs(vec4(xToUV, yToUV)), vec4(1. / 4.));
-    lodBias = max(1., lodBias * 200.);
+    lodBias = max(1., lodBias * 120.);
     lodBias = log2(lodBias);
+    lodBias = clamp(lodBias, 0., 5.);
     
 	vec3 refl = texture2D(mirrorTexture, scrPos2, lodBias).xyz;
 	refl *= refl; // linearize
