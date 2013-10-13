@@ -44,7 +44,7 @@ namespace spades {
 		texture("texture"),
 		viewMatrix("viewMatrix"),
 		fogDistance("fogDistance"),
-		fogColor("fogColor"),
+		fogColor("sRGBFogColor"),
 		depthTexture("depthTexture"),
 		zNearFar("zNearFar"),
 		frontVector("frontVector"),

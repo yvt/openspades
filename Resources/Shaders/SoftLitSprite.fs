@@ -22,7 +22,7 @@
 uniform sampler2D depthTexture;
 uniform sampler2D texture;
 
-uniform vec3 fogColor;
+uniform vec3 sRGBFogColor;
 uniform vec2 zNearFar;
 
 varying vec4 color;
@@ -75,7 +75,7 @@ void main() {
 	gl_FragColor.xyz *= gl_FragColor.w; // premultiplied alpha
 	gl_FragColor *= computedColor;
 	
-	vec3 fogColorPremuld = fogColor;
+	vec3 fogColorPremuld = sRGBFogColor;
 	fogColorPremuld *= gl_FragColor.w;
 	gl_FragColor.xyz = mix(gl_FragColor.xyz, fogColorPremuld, fogDensity.xyz);
 	
