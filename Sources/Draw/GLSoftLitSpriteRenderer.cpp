@@ -163,18 +163,18 @@ namespace spades {
 					Vector4 final;
 					
 					if(unif < .9999f) {
-						Vector3 directional = v;
+						Vector4 directional = {v.x, v.y, v.z, 1.f
+                        };
 						directional *= att * directionalFactor * (1.f - unif) / sqrtf(powdist);
-						final.x = directional.x;
-						final.y = directional.y;
-						final.z = directional.z;
+                        final = directional;
 					}else {
 						final.x = 0.f;
 						final.y = 0.f;
 						final.z = 0.f;
+                        final.w = 0.f;
 					}
 					
-					final.w = unif * att;
+					final.w += unif * att;
 					
 					spr.dlR += final * dl.color.x;
 					spr.dlG += final * dl.color.y;
