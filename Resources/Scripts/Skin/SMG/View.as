@@ -71,7 +71,7 @@
 				param.volume = 8.f;
 				audioDevice.PlayLocal(fireSounds[GetRandom(fireSounds.length)], origin, param);
 				
-				param.volume = 1.5f;
+				param.volume = 0.7f;
 				audioDevice.PlayLocal(fireFarSound, origin, param);
 				audioDevice.PlayLocal(fireStereoSound, origin, param);
 				

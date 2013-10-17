@@ -115,7 +115,7 @@
 				param.volume = 8.f;
 				audioDevice.Play(fireSound, origin, param);
 				
-				param.volume = 1.f;
+				param.volume = 2.f;
 				audioDevice.Play(fireFarSound, origin, param);
 				audioDevice.Play(fireStereoSound, origin, param);
 			}
