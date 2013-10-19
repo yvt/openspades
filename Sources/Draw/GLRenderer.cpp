@@ -537,8 +537,7 @@ namespace spades {
 			std::vector<DebugLineVertex> vertices;
 			vertices.resize(debugLines.size() * 2);
 			
-			for(size_t i = 0, j = 0; i < debugLines.size();
-				i++){
+			for(size_t i = 0, j = 0; i < debugLines.size(); i++){
 				const DebugLine& line = debugLines[i];
 				vertices[j++] = DebugLineVertex::Create(line.v1, line.color);
 				vertices[j++] = DebugLineVertex::Create(line.v2, line.color);
@@ -569,9 +568,7 @@ namespace spades {
 			projectionViewMatrix(program);
 			projectionViewMatrix.SetValue(GetProjectionViewMatrix());
 			
-			device->DrawArrays(IGLDevice::Lines,
-							   0,
-							   vertices.size());
+			device->DrawArrays(IGLDevice::Lines, 0, vertices.size());
 			
 			device->EnableVertexAttribArray(positionAttribute(), false);
 			device->EnableVertexAttribArray(colorAttribute(), false);

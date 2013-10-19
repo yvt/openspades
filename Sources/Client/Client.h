@@ -174,7 +174,7 @@ namespace spades {
 			bool IsLimboViewActive();
 			void SpawnPressed();
 			
-			Player *HotTrackedPlayer();
+			Player *HotTrackedPlayer( hitTag_t* hitFlag );
 			
 			// effects (local entity, etc)
 			std::vector<DynamicLightParam> flashDlights;

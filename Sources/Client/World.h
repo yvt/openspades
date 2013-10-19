@@ -22,6 +22,7 @@
 #pragma once
 
 #include "../Core/Math.h"
+#include "PhysicsConstants.h"
 #include <vector>
 #include <list>
 
@@ -112,6 +113,7 @@ namespace spades {
 				Player *player;
 				IntVector3 blockPos;
 				Vector3 hitPos;
+				hitTag_t hitFlag;
 			};
 			
 			WeaponRayCastResult WeaponRayCast(Vector3 startPos, Vector3 dir, Player *exclude);
