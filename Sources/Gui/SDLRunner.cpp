@@ -225,7 +225,9 @@ namespace spades {
 #if !NDEBUG
 					pkg.append( " DEBUG build" );
 #endif
+#ifdef OPENSPADES_COMPILER_STR
 					pkg.append( " " OPENSPADES_COMPILER_STR );	//add compiler to window title
+#endif
 					SDL_WM_SetCaption(pkg.c_str(), pkg.c_str());
 				}
 				
