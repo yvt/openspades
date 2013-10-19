@@ -147,10 +147,12 @@ namespace spades {
 		Vector3 GetLocalFireVibrationOffset() {
 			float vib = GetLocalFireVibration();
 			float motion = GetMotionGain();
-			return Vector3(
+			Vector3 hip = Vector3(
 				sin(vib * PiF * 2.f) * 0.008f * motion,
 				vib * (vib - 1.f) * 0.14f * motion,
 				vib * (1.f - vib) * 0.03f * motion);
+			Vector3 ads = Vector3(0.f, vib * (vib - 1.f) * vib * 0.3f * motion, 0.f);
+			return Mix(hip, ads, AimDownSightStateSmooth);
 		}
 		
 		Matrix4 GetViewWeaponMatrix() {

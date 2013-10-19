@@ -127,10 +127,10 @@
 			if(!muted){
 				Vector3 origin = originMatrix * Vector3(0.f, 0.f, 0.f);
 				AudioParam param;
-				param.volume = 4.f;
+				param.volume = 9.f;
 				audioDevice.Play(fireMediumSounds[GetRandom(fireMediumSounds.length)], origin, param);
 				
-				param.volume = .8f;
+				param.volume = .4f;
 				param.referenceDistance = 5.f;
 				audioDevice.Play(fireFarSound, origin, param);
 				audioDevice.Play(fireStereoSound, origin, param);

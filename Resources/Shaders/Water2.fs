@@ -75,7 +75,7 @@ void main() {
 	// rough
 	wave2 = texture2D(waveTexture3, waveCoord2.xy).xy;
 	wave2 = mix(vec2(-0.0025), vec2(0.0025), wave2);
-	wave2.xy *= 0.02344 * 1.5;
+	wave2.xy *= 0.02344 * 2.5;
 	wave.xy += wave2;
 	
 	wave.z = (1. / 128.) / (4.);
@@ -147,22 +147,36 @@ void main() {
 	// attenuation factor for addition blendings below
 	vec3 att = 1. - fogDensity;
 	
+	/* ------- Reflection -------- */
+    
+	// compute reflection color
+	vec2 scrPos2 = origScrPos;
+	//disp = vec2(dot(xToUV, wave.xy * vec2(1., -1.)),
+	//				dot(yToUV, wave.xy * vec2(-1., 1.)));
+	scrPos2 -= disp * scale * displaceScale * 15.;
+    
+    // bluring for far surface
+    float lodBias = dot(abs(vec4(xToUV, yToUV)), vec4(1. / 4.));
+    lodBias = max(1., lodBias * 120.);
+    lodBias = log2(lodBias);
+    lodBias = clamp(lodBias, 0., 5.);
+    
+	vec3 refl = texture2D(mirrorTexture, scrPos2, lodBias).xyz;
+	refl *= refl; // linearize
+    
+    
 	// reflectivity
 	vec3 sunlight = EvaluateSunLight();
 	vec3 ongoing = normalize(worldPositionFromOrigin);
 	float reflective = dot(ongoing, wave.xyz);
 	reflective = clamp(1. - reflective, 0., 1.);
+    
+    float orig_reflective = reflective;
 	reflective *= reflective;
 	reflective *= reflective;
-	reflective += .03;
-	
-	// compute reflection color
-	vec2 scrPos2 = origScrPos;
-	//disp = vec2(dot(xToUV, wave.xy * vec2(1., -1.)),
-	//				dot(yToUV, wave.xy * vec2(-1., 1.)));
-	scrPos2 -= disp * scale * displaceScale * 13.;
-	vec3 refl = texture2D(mirrorTexture, scrPos2).xyz;
-	refl *= refl; // linearize
+    reflective = mix(reflective, orig_reflective * .6,
+        clamp(lodBias * .13 - .13, 0., 1.));
+	//reflective += .03;
 	
 	// fresnel refrection to sky
 	gl_FragColor.xyz = mix(gl_FragColor.xyz,
@@ -171,6 +185,7 @@ void main() {
 						   reflective);
 	
 	
+	/* ------- Specular Reflection -------- */
 	
 	// specular reflection
 	if(dot(sunlight, vec3(1.)) > 0.0001){
