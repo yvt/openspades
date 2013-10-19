@@ -3709,9 +3709,14 @@ namespace spades {
 			
 			// show big message if player is involved
 			if(victim != killer){
-				if(killer == world->GetLocalPlayer()){
+				Player* local = world->GetLocalPlayer();
+				if(killer == local || victim == local){
 					char buf[256];
-					sprintf(buf, "You have killed %s", victim->GetName().c_str());
+					if( killer == local ) {
+						sprintf(buf, "You have killed %s", victim->GetName().c_str());
+					} else {
+						sprintf(buf, "You were killed by %s", killer->GetName().c_str());
+					}
 					centerMessageView->AddMessage(buf);
 				}
 			}
