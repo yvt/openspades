@@ -193,14 +193,9 @@ namespace spades {
 		time(&t);
 		tm = *localtime(&t);
 		
-		std::string timeStr = asctime(&tm);
-		
-		// remove '\n' in the end of the result of asctime().
-		timeStr.resize(timeStr.size()-1);
-		
 		//lm: using \r\n instead of \n so that some shitty windows editors (notepad f.e.) can parse this file aswell (all decent editors should ignore it anyway)
-		sprintf(buf, "%s [%s:%d] %s\r\n",
-				timeStr.c_str(),
+		sprintf(buf, "%04d/%02d/%02d %02d:%02d:%02d [%s:%d] %s\r\n",
+				tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec,
 				fn.c_str(), line, str.c_str());
 		
 		printf("%s", buf);

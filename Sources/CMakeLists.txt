@@ -45,6 +45,12 @@ if(WIN32)
 		endif()
 	endforeach()
 	add_definitions(-DCURL_STATICLIB)
+	get_filename_component(GLEWLIBFILE ${GLEW_LIBRARY} NAME_WE)
+	if("glew32s" STREQUAL ${GLEWLIBFILE})
+		add_definitions(-DGLEW_STATIC)	#static linked
+	endif()
+	#lm: this sucks, msvc fucks up some linking (conflicts)
+	set_target_properties(OpenSpades PROPERTIES LINK_FLAGS_RELEASE "/NODEFAULTLIB:\"libcmt.lib\" /NODEFAULTLIB:\"libcmtd.lib\"")
 endif()
 
 source_group("Audio" FILES ${AUDIO_FILES})

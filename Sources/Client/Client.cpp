@@ -1951,21 +1951,19 @@ namespace spades {
 			// draw player hottrack
 			// FIXME: don't use debug line
 			{
-				Player *hottracked = HotTrackedPlayer();
+				hitTag_t tag = hit_None;
+				Player *hottracked = HotTrackedPlayer( &tag );
 				if(hottracked){
 					IntVector3 col = world->GetTeam(hottracked->GetTeamId()).color;
-					Vector4 color;
-					color.x = col.x / 255.f;
-					color.y = col.y / 255.f;
-					color.z = col.z / 255.f;
-					color.w = 1.f;
+					Vector4 color = Vector4::Make( col.x / 255.f, col.y / 255.f, col.z / 255.f, 1.f );
+					Vector4 color2 = Vector4::Make( 1, 1, 1, 1);
 					
 					Player::HitBoxes hb = hottracked->GetHitBoxes();
-					AddDebugObjectToScene(hb.head, color);
-					AddDebugObjectToScene(hb.torso, color);
-					AddDebugObjectToScene(hb.limbs[0], color);
-					AddDebugObjectToScene(hb.limbs[1], color);
-					AddDebugObjectToScene(hb.limbs[2], color);
+					AddDebugObjectToScene(hb.head, (tag & hit_Head) ? color2 : color );
+					AddDebugObjectToScene(hb.torso, (tag & hit_Torso) ? color2 : color );
+					AddDebugObjectToScene(hb.limbs[0], (tag & hit_Legs) ? color2 : color );
+					AddDebugObjectToScene(hb.limbs[1], (tag & hit_Legs) ? color2 : color );
+					AddDebugObjectToScene(hb.limbs[2], (tag & hit_Arms) ? color2 : color );
 				}
 			}
 			
@@ -2117,7 +2115,8 @@ namespace spades {
                                             AABB2(0, 0, scrWidth, scrHeight));
 					}
 					
-					Player *hottracked = HotTrackedPlayer();
+					hitTag_t tag = hit_None;
+					Player *hottracked = HotTrackedPlayer( &tag );
 					if(hottracked){
 						Vector3 posxyz = Project(hottracked->GetEye());
 						Vector2 pos = {posxyz.x, posxyz.y};
@@ -2682,7 +2681,7 @@ namespace spades {
 		
 #pragma mark - Effects
 		
-		Player *Client::HotTrackedPlayer(){
+		Player *Client::HotTrackedPlayer( hitTag_t* hitFlag ){
 			if(!world)
 				return NULL;
 			Player *p = world->GetLocalPlayer();
@@ -2692,9 +2691,7 @@ namespace spades {
 				return NULL;
 			Vector3 origin = p->GetEye();
 			Vector3 dir = p->GetFront();
-			World::WeaponRayCastResult result = world->WeaponRayCast(origin,
-																	 dir,
-																	 p);
+			World::WeaponRayCastResult result = world->WeaponRayCast(origin, dir, p);
 			
 			if(result.hit == false || result.player == NULL)
 				return NULL;
@@ -2703,7 +2700,9 @@ namespace spades {
 			if(result.player->GetTeamId() != p->GetTeamId() &&
 			   p->GetTeamId() < 2)
 				return NULL;
-			
+			if( hitFlag ) {
+				*hitFlag = result.hitFlag;
+			}
 			return result.player;
 		}
 		
@@ -3540,11 +3539,6 @@ namespace spades {
 			}
 		}
 		
-		void Client::PlayerHitPlayerWithSpade(spades::client::Player *p){
-			SPADES_MARK_FUNCTION();
-			SPRaise("Obsolete function called");
-		}
-		
 		void Client::PlayerHitBlockWithSpade(spades::client::Player *p,
 											 Vector3 hitPos,
 											 IntVector3 blockPos,
@@ -3617,9 +3611,7 @@ namespace spades {
 			// create ragdoll corpse
 			if(cg_ragdoll && victim->GetTeamId() < 2){
 				Corpse *corp;
-				corp = new Corpse(renderer,
-								  map,
-								  victim);
+				corp = new Corpse(renderer, map, victim);
 				if(victim == world->GetLocalPlayer())
 					lastMyCorpse = corp;
 				if(killer != victim && kt != KillTypeGrenade){
@@ -3717,9 +3709,14 @@ namespace spades {
 			
 			// show big message if player is involved
 			if(victim != killer){
-				if(killer == world->GetLocalPlayer()){
+				Player* local = world->GetLocalPlayer();
+				if(killer == local || victim == local){
 					char buf[256];
-					sprintf(buf, "You have killed %s", victim->GetName().c_str());
+					if( killer == local ) {
+						sprintf(buf, "You have killed %s", victim->GetName().c_str());
+					} else {
+						sprintf(buf, "You were killed by %s", killer->GetName().c_str());
+					}
 					centerMessageView->AddMessage(buf);
 				}
 			}

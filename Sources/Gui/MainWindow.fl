@@ -74,7 +74,7 @@ SavePrefs();} open
       } {
         Fl_Light_Button radiosityCheck {
           label {Global Illumination}
-          callback {SavePrefs();} selected
+          callback {SavePrefs();}
           xywh {20 280 170 25} when 1
         }
         Fl_Choice directLightSelect {
@@ -210,7 +210,7 @@ SavePrefs();} open
   }
   Function {QuickConnectPressed()} {open private
   } {}
-  Function {StartGame(const spades::ServerAddress& host)} {open private
+  Function {StartGame(const spades::ServerAddress& host)} {open selected return_type {static void}
   } {}
   Function {LoadPrefs()} {open
   } {}

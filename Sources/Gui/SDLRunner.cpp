@@ -221,8 +221,11 @@ namespace spades {
 			SDL_Init(SDL_INIT_VIDEO);
 			try{
 				{
-					std::string pkg;
-					pkg = PACKAGE_STRING;
+					std::string pkg = PACKAGE_STRING;
+#if !NDEBUG
+					pkg.append( " DEBUG build" );
+#endif
+					pkg.append( " " OPENSPADES_COMPILER_STR );	//add compiler to window title
 					SDL_WM_SetCaption(pkg.c_str(), pkg.c_str());
 				}
 				

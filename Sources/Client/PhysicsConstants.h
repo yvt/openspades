@@ -77,3 +77,17 @@ enum KillType {
 	KillTypeClassChange
 };
 
+//Flags to be used in a raycast.
+enum hitTag_t {
+	hit_None = 0,
+	hit_Head = 1,
+	hit_Torso = 2,
+	hit_Legs = 4,
+	hit_Arms = 8
+};
+
+static hitTag_t& operator |= ( hitTag_t& left, const hitTag_t& right )
+{
+	left = static_cast<hitTag_t>( static_cast<int>(left) | static_cast<int>(right) );
+	return left;
+}

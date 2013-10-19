@@ -311,7 +311,7 @@ namespace spades {
 			WeaponRayCastResult result;
 			Player *hitPlayer = NULL;
 			float hitPlayerDistance = 0.f;
-			int hitFlag = 0;
+			hitTag_t hitFlag = hit_None;
 			
 			for(int i = 0; i < (int)players.size(); i++){
 				Player *p = players[i];
@@ -331,10 +331,10 @@ namespace spades {
 					   dist < hitPlayerDistance){
 						if(hitPlayer != p){
 							hitPlayer = p;
-							hitFlag = 0;
+							hitFlag = hit_None;
 						}
 						hitPlayerDistance = dist;
-						hitFlag |= 1; // head
+						hitFlag |= hit_Head;
 					}
 				}
 				if(hb.torso.RayCast(startPos, dir, &hitPos)) {
@@ -343,10 +343,10 @@ namespace spades {
 					   dist < hitPlayerDistance){
 						if(hitPlayer != p){
 							hitPlayer = p;
-							hitFlag = 0;
+							hitFlag = hit_None;
 						}
 						hitPlayerDistance = dist;
-						hitFlag |= 2; // torso
+						hitFlag |= hit_Torso;
 					}
 				}
 				for(int j = 0; j < 3 ;j++){
@@ -356,13 +356,14 @@ namespace spades {
 						   dist < hitPlayerDistance){
 							if(hitPlayer != p){
 								hitPlayer = p;
-								hitFlag = 0;
+								hitFlag = hit_None;
 							}
 							hitPlayerDistance = dist;
-							if(j == 2)
-								hitFlag |= 8; // arms
-							else
-								hitFlag |= 4; // leg
+							if(j == 2) {
+								hitFlag |= hit_Arms;
+							} else {
+								hitFlag |= hit_Legs;
+							}
 						}
 					}
 				}
@@ -378,6 +379,7 @@ namespace spades {
 				result.hit = true;
 				result.startSolid = res2.startSolid;
 				result.player = NULL;
+				result.hitFlag = hit_None;
 				result.blockPos = res2.hitBlock;
 				result.hitPos = res2.hitPos;
 			}else if(hitPlayer) {
@@ -385,6 +387,7 @@ namespace spades {
 				result.startSolid = false; // FIXME: startSolid for player
 				result.player = hitPlayer;
 				result.hitPos = startPos + dir * hitPlayerDistance;
+				result.hitFlag = hitFlag;
 			}else{
 				result.hit = false;
 			}

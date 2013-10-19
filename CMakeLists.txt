@@ -79,6 +79,8 @@ elseif(MSVC)
 		/DNOMINMAX
 		/D_USE_MATH_DEFINES
 	)
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")	#static link to msv runtime (MSVCR(P)xxx.dll)
+	#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 endif()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)	#msvc / xcode: group files in project
@@ -126,6 +128,7 @@ endif()
 
 
 set(OPENSPADES_RESDIR "" CACHE STRING "Resource dir to use while developing")
+set(OPENSPADES_EXTRATITLE "" CACHE STRING "Extra info to add to the package name")
 if(OPENSPADES_RESDIR)
 	set(RESDIR ${OPENSPADES_RESDIR})
 	set(RESDIR_DEFINED TRUE)
