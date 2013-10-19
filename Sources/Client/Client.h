@@ -285,7 +285,6 @@ namespace spades {
 			virtual void PlayerRestocked(Player *);
 			
 			/** @deprecated use BulletHitPlayer */
-			virtual void PlayerHitPlayerWithSpade(Player *);
 			virtual void PlayerHitBlockWithSpade(Player *,
 												 Vector3 hitPos,
 												 IntVector3 blockPos,

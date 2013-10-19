@@ -40,7 +40,6 @@ namespace spades {
 			virtual void PlayerChangedTool(Player *) = 0;
 			virtual void PlayerThrownGrenade(Player *, Grenade *) = 0;
 			virtual void PlayerMissedSpade(Player *) = 0;
-			virtual void PlayerHitPlayerWithSpade(Player *) = 0;
 			virtual void PlayerHitBlockWithSpade(Player *,
 												 Vector3 hitPos,
 												 IntVector3 blockPos,

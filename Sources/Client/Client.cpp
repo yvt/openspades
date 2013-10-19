@@ -3539,11 +3539,6 @@ namespace spades {
 			}
 		}
 		
-		void Client::PlayerHitPlayerWithSpade(spades::client::Player *p){
-			SPADES_MARK_FUNCTION();
-			SPRaise("Obsolete function called");
-		}
-		
 		void Client::PlayerHitBlockWithSpade(spades::client::Player *p,
 											 Vector3 hitPos,
 											 IntVector3 blockPos,
@@ -3616,9 +3611,7 @@ namespace spades {
 			// create ragdoll corpse
 			if(cg_ragdoll && victim->GetTeamId() < 2){
 				Corpse *corp;
-				corp = new Corpse(renderer,
-								  map,
-								  victim);
+				corp = new Corpse(renderer, map, victim);
 				if(victim == world->GetLocalPlayer())
 					lastMyCorpse = corp;
 				if(killer != victim && kt != KillTypeGrenade){
