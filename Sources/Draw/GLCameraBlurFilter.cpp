@@ -111,21 +111,20 @@ namespace spades {
 			}
 			
 			float movePixels = MyACos(diffMatrix.m[0]);
+			float shutterTimeScale = .3f;
 			movePixels = std::max(movePixels, MyACos(diffMatrix.m[5]));
 			movePixels = std::max(movePixels, MyACos(diffMatrix.m[10]));
 			movePixels = tanf(movePixels) / tanf(def.fovX * .5f);
 			movePixels *= (float)dev->ScreenWidth() * .5f;
-			movePixels *= .3f;
+			movePixels *= shutterTimeScale;
 			if(movePixels < 1.f){
 				// too less change, skip camera blur
 				return input;
 			}
 			
-			movePixels /= 3.f;
 			int levels = (int)ceilf(logf(movePixels) / logf(5.f));
 			if(levels <= 0)
 				levels = 1;
-			float shutterTimeScale = .3f;
 			
 			program->Use();
 			
