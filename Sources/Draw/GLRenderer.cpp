@@ -1103,18 +1103,18 @@ namespace spades {
 				bx.min.z = 63.f * 2.f - bx.min.z;
 				bx.max.z = 63.f * 2.f - bx.max.z;
 				return PlaneCullTest(frustrum[0], bx) &&
-				PlaneCullTest(frustrum[1], bx) &&
-				PlaneCullTest(frustrum[2], bx) &&
-				PlaneCullTest(frustrum[3], bx) &&
-				PlaneCullTest(frustrum[4], bx) &&
-				PlaneCullTest(frustrum[5], bx);
+						PlaneCullTest(frustrum[1], bx) &&
+						PlaneCullTest(frustrum[2], bx) &&
+						PlaneCullTest(frustrum[3], bx) &&
+						PlaneCullTest(frustrum[4], bx) &&
+						PlaneCullTest(frustrum[5], bx);
 			}
 			return PlaneCullTest(frustrum[0], box) &&
-			PlaneCullTest(frustrum[1], box) &&
-			PlaneCullTest(frustrum[2], box) &&
-			PlaneCullTest(frustrum[3], box) &&
-			PlaneCullTest(frustrum[4], box) &&
-			PlaneCullTest(frustrum[5], box);
+					PlaneCullTest(frustrum[1], box) &&
+					PlaneCullTest(frustrum[2], box) &&
+					PlaneCullTest(frustrum[3], box) &&
+					PlaneCullTest(frustrum[4], box) &&
+					PlaneCullTest(frustrum[5], box);
 		}
 		bool GLRenderer::SphereFrustrumCull(const Vector3& center,
 											float radius) {

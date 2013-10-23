@@ -1,4 +1,5 @@
 
+set(OS_SRC_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 file(GLOB AUDIO_FILES Audio/*.cpp Audio/*.h)
 file(GLOB AUDIO_AL_FILES Audio/AL/*.cpp Audio/AL/*.h)
@@ -87,3 +88,5 @@ else()
 endif()
 
 install(TARGETS OpenSpades DESTINATION bin)
+
+add_subdirectory(Tests)

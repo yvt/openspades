@@ -241,6 +241,7 @@ namespace spades {
 					fade *= ent.timeFade;
 				shadowColor.w = .5f * fade;
 				color.w *= fade;
+				std::string ch = "a";	//let's not make a new object for each character.
 				for(size_t i = 0; i < msg.size(); i++){
 					if(msg[i] == 13 || msg[i] == 10){
 						tx = 0.f; ty += lHeight;
@@ -248,7 +249,7 @@ namespace spades {
 						color = GetColor(msg[i]);
 						color.w *= fade;
 					}else{
-						std::string ch(&msg[i], 1);
+						ch[0] = msg[i];
 						font->Draw(ch,
 								   MakeVector2(tx + winX + 1.f,
 											   ty + winY + 1.f),
