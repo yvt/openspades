@@ -47,6 +47,8 @@ namespace spades {
 			get { return muted; }
 		}
 		
+		
+		
 		// IWeaponSkin
 		
 		private float aimDownSightState;
@@ -127,9 +129,14 @@ namespace spades {
 			}
 		}
 		
+		private Renderer@ renderer;
+		private Image@ sightImage;
 		
-		BasicViewWeapon() {
+		BasicViewWeapon(Renderer@ renderer) {
+			@this.renderer = renderer;
 			localFireVibration = 0.f;
+			@sightImage = renderer.RegisterImage
+				("Gfx/Sight.tga");
 		}
 		
 		float GetLocalFireVibration() {
@@ -204,6 +211,13 @@ namespace spades {
 		}
 		
 		void ReloadedWeapon() {
+		}
+		
+		void Draw2D() {
+			renderer.Color = (Vector4(1.f, 1.f, 1.f, 1.f));
+			renderer.DrawImage(sightImage,
+				Vector2((renderer.ScreenWidth - sightImage.Width) * 0.5f,
+						(renderer.ScreenHeight - sightImage.Height) * 0.5f));
 		}
 	}
 	

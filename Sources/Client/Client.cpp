@@ -1610,8 +1610,14 @@ namespace spades {
 						if(wTime < lastHurtTime + .15f &&
                            wTime >= lastHurtTime){
 							float per = 1.f - (wTime - lastHurtTime) / .15f;
-							per *= .5f + player->GetHealth() / 100.f * .3f;
-							def.blurVignette += per * 5.f;
+							per *= .5f - player->GetHealth() / 100.f * .3f;
+							def.blurVignette += per * 6.f;
+						}
+						if(wTime < lastHurtTime + .2f &&
+                           wTime >= lastHurtTime){
+							float per = 1.f - (wTime - lastHurtTime) / .2f;
+							per *= .5f - player->GetHealth() / 100.f * .3f;
+							def.saturation *= std::max(0.f, 1.f - per * 4.f);
 						}
 					}
 					
@@ -2144,12 +2150,8 @@ namespace spades {
 						// draw damage ring
 						hurtRingView->Draw();
 						
-						// draw sight
-						Handle<IImage> sight = renderer->RegisterImage("Gfx/Sight.tga");
-						renderer->SetColor(MakeVector4(1,1,1,1));
-						renderer->DrawImage(sight,
-											MakeVector2((scrWidth - sight->GetWidth()) * .5f,
-														(scrHeight - sight->GetHeight()) * .5f));
+						// draw local weapon's 2d things
+						clientPlayers[p->GetId()]->Draw2D();
 						
 						if(cg_debugAim && p->GetTool() == Player::ToolWeapon) {
 							Weapon *w = p->GetWeapon();
@@ -3880,8 +3882,23 @@ namespace spades {
 				GrenadeExplosion(g->GetPosition());
 				
 				if(!IsMuted()){
-					Handle<IAudioChunk> c = audioDevice->RegisterSound((rand()&32)?"Sounds/Weapons/Grenade/Explode1.wav":
-																	   "Sounds/Weapons/Grenade/Explode2.wav");
+					Handle<IAudioChunk> c;
+					
+					switch((rand() >> 8) & 3){
+					case 0:
+						c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode1.wav");
+						break;
+					case 1:
+						c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode2.wav");
+						break;
+					case 2:
+						c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode3.wav");
+						break;
+					case 3:
+						c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode4.wav");
+						break;
+					}
+					
 					AudioParam param;
 					param.volume = 10.f;
 					param.referenceDistance = 5.f;

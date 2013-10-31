@@ -880,6 +880,36 @@ namespace spades {
 			}
 		}
 		
+		void ClientPlayer::Draw2D() {
+			if(!ShouldRenderInThirdPersonView()) {
+				asIScriptObject *skin;
+				
+				if(currentTool == Player::ToolSpade) {
+					skin = spadeViewSkin;
+				}else if(currentTool == Player::ToolBlock) {
+					skin = blockViewSkin;
+				}else if(currentTool == Player::ToolGrenade) {
+					skin = grenadeViewSkin;
+				}else if(currentTool == Player::ToolWeapon) {
+					skin = weaponViewSkin;
+				}else{
+					SPInvalidEnum("currentTool", currentTool);
+				}
+				
+				SetSkinParameterForTool(currentTool, skin);
+				
+				SetCommonSkinParameter(skin);
+				
+				// common process
+				{
+					ScriptIViewToolSkin interface(skin);
+					interface.SetEyeMatrix(GetEyeMatrix());
+					interface.SetSwing(viewWeaponOffset);
+					interface.Draw2D();
+				}
+			}
+		}
+		
 		bool ClientPlayer::ShouldRenderInThirdPersonView() {
 			if(player != player->GetWorld()->GetLocalPlayer())
 				return true;

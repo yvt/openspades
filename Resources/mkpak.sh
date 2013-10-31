@@ -1,9 +1,18 @@
 #!/bin/sh
 
-rm -f Base.pak Sounds.pak Models.pak DevPaks.pak
+rm -f pak000-Base.pak pak001-Sounds.pak pak002-Models.pak pak010-BaseSkin.pak pak999-References.pak
 
-zip -r pak000-Base.pak Gfx Textures
-zip -r pak001-Models.pak Models
-zip -r pak002-Sounds.pak Sounds
+zip -r pak000-Base.pak Gfx Scripts/Main.as Scripts/Base Shaders Textures
 
-zip DevPaks.zip pak000-Base.pak pak001-Models.pak pak002-Sounds.pak
+zip -r pak001-Sounds.pak Sounds/Feedback Sounds/Misc Sounds/Player
+
+zip -r pak002-Models.pak Models/MapObjects
+
+zip -r pak010-BaseSkin.pak Models/Weapons Models/Player Scripts/Skin \
+Sounds/Weapons
+
+zip -r pak999-References.pak Scripts/Reference
+
+
+zip DevPaks.zip pak000-Base.pak pak001-Sounds.pak pak002-Models.pak pak010-BaseSkin.pak pak999-References.pak
+

@@ -23,7 +23,6 @@
 	IToolSkin, IViewToolSkin, IWeaponSkin,
 	BasicViewWeapon {
 		
-		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		private Model@ gunModel;
 		private Model@ magazineModel;
@@ -33,8 +32,8 @@
 		private AudioChunk@ fireStereoSound;
 		private AudioChunk@ reloadSound;
 		
-		ViewSMGSkin(Renderer@ r, AudioDevice@ dev) {
-			@renderer = r;
+		ViewSMGSkin(Renderer@ r, AudioDevice@ dev){
+			super(r);
 			@audioDevice = dev;
 			@gunModel = renderer.RegisterModel
 				("Models/Weapons/SMG/WeaponNoMagazine.kv6");
@@ -152,6 +151,7 @@
 			LeftHandPosition = leftHand;
 			RightHandPosition = rightHand;
 		}
+		
 	}
 	
 	IWeaponSkin@ CreateViewSMGSkin(Renderer@ r, AudioDevice@ dev) {

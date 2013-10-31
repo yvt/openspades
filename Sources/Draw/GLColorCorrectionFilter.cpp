@@ -62,13 +62,14 @@ namespace spades {
 			
 			lens->Use();
 			
+			const client::SceneDefinition& def  = renderer->GetSceneDef();
 			
 			if(r_bloom) {
 				// make image sharper
-				saturation.SetValue(.85f);
+				saturation.SetValue(.85f * def.saturation);
 				enhancement.SetValue(0.7f);
 			}else{
-				saturation.SetValue(1.f);
+				saturation.SetValue(1.f * def.saturation);
 				enhancement.SetValue(0.3f);
 			}
 			

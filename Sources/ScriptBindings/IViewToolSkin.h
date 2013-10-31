@@ -33,6 +33,7 @@ namespace spades {
 			void SetSwing(Vector3);
 			Vector3 GetLeftHandPosition();
 			Vector3 GetRightHandPosition();
+			void Draw2D();
 		};
 	}
 }

@@ -76,6 +76,7 @@ namespace spades {
 			
 			void Update(float dt);
 			void AddToScene();
+			void Draw2D();
 			
 			bool IsChangingTool();
 			void FiredWeapon();

@@ -34,12 +34,13 @@
 #else
 #if defined(WIN32)
 #include <windows.h>
-#endif
+#else
 #ifndef _MSC_VER
 #include <unistd.h>
 #endif
 #if defined(__GNUC__)
 #include <sys/sysinfo.h>
+#endif
 #endif
 #endif
 
