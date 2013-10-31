@@ -1610,8 +1610,14 @@ namespace spades {
 						if(wTime < lastHurtTime + .15f &&
                            wTime >= lastHurtTime){
 							float per = 1.f - (wTime - lastHurtTime) / .15f;
-							per *= .5f + player->GetHealth() / 100.f * .3f;
-							def.blurVignette += per * 5.f;
+							per *= .5f - player->GetHealth() / 100.f * .3f;
+							def.blurVignette += per * 6.f;
+						}
+						if(wTime < lastHurtTime + .2f &&
+                           wTime >= lastHurtTime){
+							float per = 1.f - (wTime - lastHurtTime) / .2f;
+							per *= .5f - player->GetHealth() / 100.f * .3f;
+							def.saturation *= std::max(0.f, 1.f - per * 4.f);
 						}
 					}
 					
