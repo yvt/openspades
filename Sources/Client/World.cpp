@@ -54,7 +54,7 @@ namespace spades {
 			
 			localPlayerIndex = -1;
 			for(int i = 0; i < 32; i++){
-				players.push_back(NULL);
+				players.push_back((Player *)NULL);
 				playerPersistents.push_back(PlayerPersistent());
 			}
 			/*
