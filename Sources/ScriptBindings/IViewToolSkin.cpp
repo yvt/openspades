@@ -76,6 +76,17 @@ namespace spades{
 			return *reinterpret_cast<Vector3 *>(ctx->GetReturnObject());
 		}
 		
+		void ScriptIViewToolSkin::Draw2D() {
+			SPADES_MARK_FUNCTION_DEBUG();
+			static ScriptFunction func("IViewToolSkin",
+									   "void Draw2D()");
+			ScriptContextHandle ctx = func.Prepare();
+			int r;
+			r = ctx->SetObject((void *)obj);
+			ScriptManager::CheckError(r);
+			ctx.ExecuteChecked();
+		}
+		
 		class IViewToolSkinRegistrar: public ScriptObjectRegistrar {
 		public:
 			IViewToolSkinRegistrar():
@@ -105,7 +116,10 @@ namespace spades{
 						manager->CheckError(r);
 						r = eng->RegisterInterfaceMethod("IViewToolSkin",
 														 "Vector3 get_RightHandPosition()");
-						manager->CheckError(r);
+					manager->CheckError(r);
+					r = eng->RegisterInterfaceMethod("IViewToolSkin",
+													 "void Draw2D()");
+					manager->CheckError(r);
 						break;
 					default:
 						

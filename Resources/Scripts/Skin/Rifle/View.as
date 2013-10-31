@@ -23,7 +23,6 @@
 	IToolSkin, IViewToolSkin, IWeaponSkin,
 	BasicViewWeapon {
 		
-		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		private Model@ gunModel;
 		private Model@ magazineModel;
@@ -33,8 +32,8 @@
 		private AudioChunk@ fireStereoSound;
 		private AudioChunk@ reloadSound;
 		
-		ViewRifleSkin(Renderer@ r, AudioDevice@ dev) {
-			@renderer = r;
+		ViewRifleSkin(Renderer@ r, AudioDevice@ dev){
+			super(r);
 			@audioDevice = dev;
 			@gunModel = renderer.RegisterModel
 				("Models/Weapons/Rifle/WeaponNoMagazine.kv6");

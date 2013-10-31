@@ -23,7 +23,6 @@
 	IToolSkin, IViewToolSkin, IWeaponSkin,
 	BasicViewWeapon {
 		
-		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		private Model@ gunModel;
 		private Model@ pumpModel;
@@ -34,8 +33,8 @@
 		private AudioChunk@ reloadSound;
 		private AudioChunk@ cockSound;
 		
-		ViewShotgunSkin(Renderer@ r, AudioDevice@ dev) {
-			@renderer = r;
+		ViewShotgunSkin(Renderer@ r, AudioDevice@ dev){
+			super(r);
 			@audioDevice = dev;
 			@gunModel = renderer.RegisterModel
 				("Models/Weapons/Shotgun/WeaponNoPump.kv6");

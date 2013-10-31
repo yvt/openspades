@@ -79,12 +79,15 @@
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		private Model@ model;
+		private Image@ sightImage;
 		
 		ViewGrenadeSkin(Renderer@ r, AudioDevice@ dev) {
 			@renderer = r;
 			@audioDevice = dev;
 			@model = renderer.RegisterModel
 				("Models/Weapons/Grenade/Grenade.kv6");
+			@sightImage = renderer.RegisterImage
+				("Gfx/Sight.tga");
 		}
 		
 		void Update(float dt) {
@@ -154,6 +157,12 @@
 				rightHand = Vector3(-0.2f, p2, -0.9f + per * 1.8f);
 			}
 			
+		}
+		void Draw2D() {
+			renderer.Color = (Vector4(1.f, 1.f, 1.f, 1.f));
+			renderer.DrawImage(sightImage,
+				Vector2((renderer.ScreenWidth - sightImage.Width) * 0.5f,
+						(renderer.ScreenHeight - sightImage.Height) * 0.5f));
 		}
 	}
 	

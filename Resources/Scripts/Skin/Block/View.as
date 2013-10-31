@@ -79,12 +79,15 @@
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		private Model@ model;
+		private Image@ sightImage;
 		
 		ViewBlockSkin(Renderer@ r, AudioDevice@ dev) {
 			@renderer = r;
 			@audioDevice = dev;
 			@model = renderer.RegisterModel
 				("Models/Weapons/Block/Block2.kv6");
+			@sightImage = renderer.RegisterImage
+				("Gfx/Sight.tga");
 		}
 		
 		void Update(float dt) {
@@ -121,6 +124,13 @@
 			param.customColor = blockColor;
 			param.depthHack = true;
 			renderer.AddModel(model, param);
+		}
+		
+		void Draw2D() {
+			renderer.Color = (Vector4(1.f, 1.f, 1.f, 1.f));
+			renderer.DrawImage(sightImage,
+				Vector2((renderer.ScreenWidth - sightImage.Width) * 0.5f,
+						(renderer.ScreenHeight - sightImage.Height) * 0.5f));
 		}
 	}
 	

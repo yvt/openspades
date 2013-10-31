@@ -33,6 +33,9 @@ namespace spades {
 		/** Returns positions for player hands in view coordinate. */
 		Vector3 LeftHandPosition { get; }
 		Vector3 RightHandPosition { get; }
+		
+		/** Issues draw commands to draw 2d images, such as HUD and crosshair. */
+		void Draw2D();
 	}
 	
 }
