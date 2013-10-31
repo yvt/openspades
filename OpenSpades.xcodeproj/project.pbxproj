@@ -594,7 +594,7 @@
 		E8B6B73B17E9F49700E35523 /* IBlockSkin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IBlockSkin.cpp; sourceTree = "<group>"; };
 		E8B6B73C17E9F49C00E35523 /* IBlockSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBlockSkin.h; sourceTree = "<group>"; };
 		E8B6B73E17EA060900E35523 /* IViewToolSkin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IViewToolSkin.cpp; sourceTree = "<group>"; };
-		E8B6B73F17EA060D00E35523 /* IViewToolSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IViewToolSkin.h; sourceTree = "<group>"; };
+		E8B6B73F17EA060D00E35523 /* IViewToolSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IViewToolSkin.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		E8B6B74117EA0B1500E35523 /* IThirdPersonToolSkin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IThirdPersonToolSkin.cpp; sourceTree = "<group>"; };
 		E8B6B74217EA0B1900E35523 /* IThirdPersonToolSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IThirdPersonToolSkin.h; sourceTree = "<group>"; };
 		E8B6B74417EA0F1B00E35523 /* IGrenadeSkin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IGrenadeSkin.cpp; sourceTree = "<group>"; };
