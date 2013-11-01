@@ -323,15 +323,12 @@ void MainWindow::LoadPrefs() {
 
 void MainWindow::Init() {
 	SPADES_MARK_FUNCTION();
-	
-	
+
 	// banner
 	std::string data = spades::FileManager::ReadAllBytes("Gfx/Banner.png");
 	Fl_PNG_Image *img = new Fl_PNG_Image("Gfx/Banner.png", (const unsigned char *)data.data(), data.size());
 	bannerBox->image(img);
-	
-	
-	
+
 	// --- about
 	std::string text, pkg;
 	pkg = PACKAGE_STRING;
@@ -838,6 +835,7 @@ void MainWindow::OpenDetailConfig() {
 	SPADES_MARK_FUNCTION();
 	
 	DetailConfigWindow cfg;
+	cfg.icon( icon() );	//use the icon from the main window
 	cfg.set_modal();
 	cfg.show();
 	while(cfg.visible()){
