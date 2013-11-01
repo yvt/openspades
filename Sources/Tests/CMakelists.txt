@@ -1,19 +1,19 @@
 
-set(SDL_MISCFILES ${OS_SRC_ROOT}/Gui/SDLGLDevice.cpp ${OS_SRC_ROOT}/Gui/SDLGLDevice.cpp)
-set(CORE_MISCFILES ${OS_SRC_ROOT}/Core/RefCountedObject.cpp ${OS_SRC_ROOT}/Core/RefCountedObject.h ${OS_SRC_ROOT}/Core/Math.cpp ${OS_SRC_ROOT}/Core/Math.h
-	${OS_SRC_ROOT}/Core/Debug.cpp ${OS_SRC_ROOT}/Core/Debug.h ${OS_SRC_ROOT}/Core/Exception.cpp ${OS_SRC_ROOT}/Core/Exception.h
-	${OS_SRC_ROOT}/Core/Settings.cpp ${OS_SRC_ROOT}/Core/Settings.h ${OS_SRC_ROOT}/Core/ConcurrentDispatch.cpp ${OS_SRC_ROOT}/Core/ConcurrentDispatch.h
-	${OS_SRC_ROOT}/Core/Bitmap.cpp ${OS_SRC_ROOT}/Core/Bitmap.h ${OS_SRC_ROOT}/Core/VoxelModel.cpp ${OS_SRC_ROOT}/Core/VoxelModel.h
-	${OS_SRC_ROOT}/Core/FileManager.cpp ${OS_SRC_ROOT}/Core/FileManager.h ${OS_SRC_ROOT}/Core/BitmapAtlasGenerator.cpp ${OS_SRC_ROOT}/Core/BitmapAtlasGenerator.h
-	${OS_SRC_ROOT}/Core/IStream.cpp ${OS_SRC_ROOT}/Core/IStream.h ${OS_SRC_ROOT}/Core/Stopwatch.cpp ${OS_SRC_ROOT}/Core/Stopwatch.h
-	${OS_SRC_ROOT}/Core/Thread.cpp ${OS_SRC_ROOT}/Core/Thread.h ${OS_SRC_ROOT}/Core/IBitmapCodec.cpp ${OS_SRC_ROOT}/Core/IBitmapCodec.h
-	${OS_SRC_ROOT}/Core/Mutex.cpp ${OS_SRC_ROOT}/Core/Mutex.h ${OS_SRC_ROOT}/Core/ThreadLocalStorage.cpp ${OS_SRC_ROOT}/Core/ThreadLocalStorage.h
-	${OS_SRC_ROOT}/Core/FileManager.cpp ${OS_SRC_ROOT}/Core/FileManager.h ${OS_SRC_ROOT}/Core/DirectoryFileSystem.cpp ${OS_SRC_ROOT}/Core/DirectoryFileSystem.h
-	${OS_SRC_ROOT}/Core/ZipFileSystem.cpp ${OS_SRC_ROOT}/Core/ZipFileSystem.h ${OS_SRC_ROOT}/Core/StdStream.cpp ${OS_SRC_ROOT}/Core/StdStream.h
-	${OS_SRC_ROOT}/Core/DynamicMemoryStream.cpp ${OS_SRC_ROOT}/Core/DynamicMemoryStream.h ${OS_SRC_ROOT}/Core/FltkImageReader.cpp ${OS_SRC_ROOT}/Core/TargaReader.cpp)
+set(SDL_MISCFILES ${OS_SRC_DIR}/Gui/SDLGLDevice.cpp ${OS_SRC_DIR}/Gui/SDLGLDevice.cpp)
+set(CORE_MISCFILES ${OS_SRC_DIR}/Core/RefCountedObject.cpp ${OS_SRC_DIR}/Core/RefCountedObject.h ${OS_SRC_DIR}/Core/Math.cpp ${OS_SRC_DIR}/Core/Math.h
+	${OS_SRC_DIR}/Core/Debug.cpp ${OS_SRC_DIR}/Core/Debug.h ${OS_SRC_DIR}/Core/Exception.cpp ${OS_SRC_DIR}/Core/Exception.h
+	${OS_SRC_DIR}/Core/Settings.cpp ${OS_SRC_DIR}/Core/Settings.h ${OS_SRC_DIR}/Core/ConcurrentDispatch.cpp ${OS_SRC_DIR}/Core/ConcurrentDispatch.h
+	${OS_SRC_DIR}/Core/Bitmap.cpp ${OS_SRC_DIR}/Core/Bitmap.h ${OS_SRC_DIR}/Core/VoxelModel.cpp ${OS_SRC_DIR}/Core/VoxelModel.h
+	${OS_SRC_DIR}/Core/FileManager.cpp ${OS_SRC_DIR}/Core/FileManager.h ${OS_SRC_DIR}/Core/BitmapAtlasGenerator.cpp ${OS_SRC_DIR}/Core/BitmapAtlasGenerator.h
+	${OS_SRC_DIR}/Core/IStream.cpp ${OS_SRC_DIR}/Core/IStream.h ${OS_SRC_DIR}/Core/Stopwatch.cpp ${OS_SRC_DIR}/Core/Stopwatch.h
+	${OS_SRC_DIR}/Core/Thread.cpp ${OS_SRC_DIR}/Core/Thread.h ${OS_SRC_DIR}/Core/IBitmapCodec.cpp ${OS_SRC_DIR}/Core/IBitmapCodec.h
+	${OS_SRC_DIR}/Core/Mutex.cpp ${OS_SRC_DIR}/Core/Mutex.h ${OS_SRC_DIR}/Core/ThreadLocalStorage.cpp ${OS_SRC_DIR}/Core/ThreadLocalStorage.h
+	${OS_SRC_DIR}/Core/FileManager.cpp ${OS_SRC_DIR}/Core/FileManager.h ${OS_SRC_DIR}/Core/DirectoryFileSystem.cpp ${OS_SRC_DIR}/Core/DirectoryFileSystem.h
+	${OS_SRC_DIR}/Core/ZipFileSystem.cpp ${OS_SRC_DIR}/Core/ZipFileSystem.h ${OS_SRC_DIR}/Core/StdStream.cpp ${OS_SRC_DIR}/Core/StdStream.h
+	${OS_SRC_DIR}/Core/DynamicMemoryStream.cpp ${OS_SRC_DIR}/Core/DynamicMemoryStream.h ${OS_SRC_DIR}/Core/FltkImageReader.cpp ${OS_SRC_DIR}/Core/TargaReader.cpp)
 	
-set(CLIENT_MISCFILES ${OS_SRC_ROOT}/Client/GameMap.cpp ${OS_SRC_ROOT}/Client/GameMap.h ${OS_SRC_ROOT}/Client/Quake3Font.cpp ${OS_SRC_ROOT}/Client/Quake3Font.h
-	${OS_SRC_ROOT}/Client/IFont.cpp ${OS_SRC_ROOT}/Client/IFont.h)
+set(CLIENT_MISCFILES ${OS_SRC_DIR}/Client/GameMap.cpp ${OS_SRC_DIR}/Client/GameMap.h ${OS_SRC_DIR}/Client/Quake3Font.cpp ${OS_SRC_DIR}/Client/Quake3Font.h
+	${OS_SRC_DIR}/Client/IFont.cpp ${OS_SRC_DIR}/Client/IFont.h ${OS_SRC_DIR}/Client/ChatWindow.cpp ${OS_SRC_DIR}/Client/ChatWindow.h)
 
 add_executable(DrawTest Main.cpp Draw.cpp ${SDL_MISCFILES} ${DRAW_FILES} ${CLIENT_MISCFILES} ${CORE_MISCFILES} ${POLY2TRI_FILES} ${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES}
 				${KISS_FILES})

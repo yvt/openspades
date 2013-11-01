@@ -4,6 +4,7 @@ CREDITS
 
 "yvt" - Most of the code
 "Dany0" - System profiler, ideas, etc.
-"learn_more" - CMake support, server browser, ideas
+"learn_more" - CMake support, server browser, ideas, Win32 build guide
 "iamgreaser" - AoS 0.76 protocol support
 "Ericson2314" - Better installation guide
+"JoJoe_Stinky" - Win32 Icon

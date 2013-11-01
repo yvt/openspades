@@ -1,5 +1,5 @@
 
-set(OS_SRC_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+set(OS_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 file(GLOB AUDIO_FILES Audio/*.cpp Audio/*.h)
 file(GLOB AUDIO_AL_FILES Audio/AL/*.cpp Audio/AL/*.h)
@@ -28,8 +28,12 @@ include_directories(".")
 include_directories("json/include")
 include_directories("ENet/include")
 
+if(WIN32)
+	set(RESOURCE_FILES ${PROJECT_BINARY_DIR}/OpenSpades.rc)
+endif()
+
 add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${GUI_FILES}
-	${IMPORTS_FILES} ${KISS_FILES} ${JSON_FILES} ${JSON_INCLUDE} ${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES} ${UNZIP_FILES} ${SCRIPTBINDING_FILES})
+	${IMPORTS_FILES} ${KISS_FILES} ${JSON_FILES} ${JSON_INCLUDE} ${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES} ${UNZIP_FILES} ${SCRIPTBINDING_FILES} ${RESOURCE_FILES})
 set_target_properties(OpenSpades PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -38,6 +42,7 @@ set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BIN
 add_dependencies(OpenSpades Angelscript Angelscript_addons)
 
 if(WIN32)
+	source_group("Resources" ${RESOURCE_FILES})
 	foreach(LIB ${SDL_LIBRARY})
 		string(REGEX REPLACE "\\.lib$" ".dll" SDL_DLL ${LIB})
 		if(EXISTS "${SDL_DLL}")
@@ -78,6 +83,8 @@ source_group("libs\\unzip" FILES ${UNZIP_FILES})
 
 target_link_libraries(OpenSpades ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS})
 
+#todo: MACOSX_BUNDLE_ICON_FILE ?
+
 if(OPENAL_FOUND)
 	target_link_libraries(OpenSpades ${OPENAL_LIBRARY})
 	include_directories(${OPENAL_INCLUDE_DIRS})
@@ -88,6 +95,20 @@ if(WIN32)
 else()
 	target_link_libraries(OpenSpades Xext)
 endif()
+
+if(FLTK_FLUID_EXECUTABLE)
+	file(GLOB_RECURSE FLTK_FORMS Gui/*.fl)
+	set(FRM_ALLFILES)
+	foreach(FRM ${FLTK_FORMS})
+		get_filename_component(FRM_FILE ${FRM} NAME_WE)
+		list(APPEND FRM_ALLFILES ${FRM_FILE}.cpp ${FRM_FILE}.h)
+		add_custom_command(OUTPUT ${FRM_FILE}.cpp ${FRM_FILE}.h COMMAND ${FLTK_FLUID_EXECUTABLE} -c ${FRM} COMMENT "Compiling ${FRM_FILE}" WORKING_DIRECTORY ${OS_SRC_DIR}/Gui)
+	endforeach()
+	add_custom_target(GenerateForms DEPENDS ${FRM_ALLFILES})
+else()
+	message(STATUS "FLTK binary not found, unable to add convenience target.")
+endif()
+
 
 install(TARGETS OpenSpades DESTINATION bin)
 
