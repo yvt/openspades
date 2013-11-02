@@ -29,5 +29,5 @@ Externals
 \---lib/
         (All libs here)
 
-A set of precompiled libraries (packed with the correct layout):
+A set of precompiled libraries (packed with the correct layout, built with Visual Studio 2010):
 http://ge.tt/87h2Oww/v/0?c

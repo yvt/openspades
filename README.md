@@ -36,15 +36,15 @@ Installation
 1. Get CMake, Visual studio, and the OpenSpades source.
    Official: https://github.com/yvt/openspades
    Unofficial: https://github.com/learn-more/openspades
-2. Extract or checkout the source (all examples will assume E:/Projects/openspades, update paths in the examples to reflect yours)
-3. Get (pre-compiled) copies of fltk, glew, curl, sdl and zlib, and place them in E:/Projects/openspades/Sources/Externals.
-   See the file E:/Projects/openspades/Sources/Externals/readme.txt for details (and a pre-compiled set of libraries).
+2. Extract or checkout the source (all examples will assume ```E:/Projects/openspades```, update paths in the examples to reflect yours)
+3. Get (pre-compiled) copies of fltk, glew, curl, sdl and zlib, and place them in ```E:/Projects/openspades/Sources/Externals```.
+   See the file ```E:/Projects/openspades/Sources/Externals/readme.txt``` for details (and a pre-compiled set of libraries).
 4. Run CMake, using the paths:
-   Source:   E:/Projects/openspades
-   Binaries: E:/Projects/openspades/OpenSpades.msvc
-   For your convenience, create the directory: E:/Projects/openspades/OpenSpades.msvc/os.Resources, extract the resources (.pak files) to this dir,
-   and set OPENSPADES_RESDIR to point to this directory. (Run CMake again, now when running debug builds openspades will also read resources from this dir)
-5. Open E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln in visual studio.
+   ```Source:   E:/Projects/openspades```
+   ```Binaries: E:/Projects/openspades/OpenSpades.msvc```
+   For your convenience, create the directory: ```E:/Projects/openspades/OpenSpades.msvc/os.Resources```, extract the resources (.pak files) to this dir,
+   set ```OPENSPADES_RESDIR``` to point to this directory. (Run CMake again, now when running debug builds openspades will also read resources from this dir)
+5. Open ```E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln``` in visual studio.
 
 Licensing
 ----------------------------------------------------------------------------------------------------
