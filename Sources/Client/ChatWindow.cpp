@@ -35,6 +35,20 @@ namespace spades {
 		client(cli), renderer(rend),
 		font(fnt), killfeed(killfeed){
 			firstY = 0.f;
+			mKillImages.push_back( renderer->RegisterImage("Killfeed/a-Rifle.png") );
+			mKillImages.push_back( renderer->RegisterImage("Killfeed/b-SMG.png") );
+			mKillImages.push_back( renderer->RegisterImage("Killfeed/c-Shotgun.png") );
+			mKillImages.push_back( renderer->RegisterImage("Killfeed/d-Headshot.png") );
+			mKillImages.push_back( renderer->RegisterImage("Killfeed/e-Melee.png") );
+			mKillImages.push_back( renderer->RegisterImage("Killfeed/f-Grenade.png") );
+			mKillImages.push_back( renderer->RegisterImage("Killfeed/g-Falling.png") );
+			mKillImages.push_back( renderer->RegisterImage("Killfeed/h-Teamchange.png") );
+			mKillImages.push_back( renderer->RegisterImage("Killfeed/i-Classchange.png") );
+			for( size_t n = 0; n < mKillImages.size(); ++n ) {
+				if( mKillImages[n]->GetHeight() > GetLineHeight() ) {
+					SPRaise( "Kill image (%d) height too big ", n );
+				}
+			}
 		}
 		ChatWindow::~ChatWindow(){}
 		
@@ -53,7 +67,30 @@ namespace spades {
 		static bool isWordChar(char c){
 			return isalnum(c) || c == '\'';
 		}
-		
+
+		std::string ChatWindow::killImage( int type, int weapon )
+		{
+			std::string tmp = "xx";
+			tmp[0] = 7;
+			switch( type ) {
+				case KillTypeWeapon:
+					switch( weapon ) {
+						case 0: case 1: case 2:
+							tmp[1] = 'a' + weapon;
+							break;
+						default:
+							return "";
+					}
+				case KillTypeHeadshot: case KillTypeMelee: case KillTypeGrenade:
+				case KillTypeFall: case KillTypeTeamChange: case KillTypeClassChange:
+					tmp[1] = 'a' + 2 + type;
+					break;
+				default:
+					return "";
+			}
+			return tmp;
+		}
+
 		void ChatWindow::AddMessage(const std::string &msg){
 			SPADES_MARK_FUNCTION();
 			
@@ -81,12 +118,10 @@ namespace spades {
 						if(wordStart != std::string::npos && wordStart != str.size()){
 							// adding a part of word.
 							// do word wrapping
-							
 							std::string s = msg.substr(wordStart, i - wordStart + 1);
 							float nw = font->Measure(s).x;
 							if(nw <= maxW){
 								// word wrap succeeds
-								
 								w = nw;
 								x = w;
 								h += lh;
@@ -201,7 +236,14 @@ namespace spades {
 			}
 		}
 		
-
+		IImage* ChatWindow::imageForIndex( char index )
+		{
+			int real = index - 'a';
+			if( real >= 0 && real < mKillImages.size() ) {
+				return mKillImages[real];
+			}
+			return NULL;
+		}
 
 		void ChatWindow::Draw() {
 			SPADES_MARK_FUNCTION();
@@ -232,8 +274,19 @@ namespace spades {
 					if(msg[i] == 13 || msg[i] == 10){
 						tx = 0.f; ty += lHeight;
 					}else if(msg[i] <= MsgColorMax){
-						color = GetColor(msg[i]);
-						color.w *= fade;
+						if( msg[i] == MsgImage ) {
+							IImage* kill = NULL;
+							if( i+1 < msg.size() && (kill = imageForIndex(msg[i+1]))  ) {
+								renderer->DrawImage( kill, MakeVector2( tx + winX, ty + winY ) );
+								tx += kill->GetWidth();
+								++i;
+							} else {
+								SPRaise( "Invalid killfeed image index" );
+							}
+						} else {
+							color = GetColor(msg[i]);
+							color.w *= fade;
+						}
 					}else{
 						ch[0] = msg[i];
 						font->DrawShadow(ch, MakeVector2(tx + winX, ty + winY), 1.f, color, shadowColor);

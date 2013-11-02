@@ -3610,29 +3610,8 @@ namespace spades {
 				ff = false;
 			
 			cause = " [";
-			switch(kt){
-				case KillTypeClassChange:
-					cause += "Weapon Change";
-					break;
-				case KillTypeFall:
-					cause += "Fall";
-					break;
-				case KillTypeGrenade:
-					cause += "Grenade";
-					break;
-				case KillTypeHeadshot:
-					cause += "Headshot";
-					break;
-				case KillTypeMelee:
-					cause += "Spade";
-					break;
-				case KillTypeTeamChange:
-					cause += "Team Change";
-					break;
-				case KillTypeWeapon:
-					cause += killer->GetWeapon()->GetName();
-					break;
-			}
+			Weapon* w = killer ? killer->GetWeapon() : NULL;	//only used in case of KillTypeWeapon
+			cause += ChatWindow::killImage( kt, w ? w->GetWeaponType() : RIFLE_WEAPON );
 			cause += "] ";
 			
 			if(ff)

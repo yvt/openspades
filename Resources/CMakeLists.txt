@@ -10,7 +10,7 @@ if(RESDIR_DEFINED)
 		${RESDIR}pak999-References.pak
 			DESTINATION bin/Resources)
 
-	file(GLOB_RECURSE RESOURCES Shaders/* Scripts/*)
+	file(GLOB_RECURSE RESOURCES Shaders/* Scripts/* Icons/* Killfeed/*)
 	foreach(FILE ${RESOURCES})
 		string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR} ${RESDIR} TARGETFILE ${FILE})
 		get_filename_component(TARGETDIR ${TARGETFILE} PATH)
@@ -21,3 +21,5 @@ endif()
 
 install(DIRECTORY "Scripts" DESTINATION bin/Resources)
 install(DIRECTORY "Shaders" DESTINATION bin/Resources)
+install(DIRECTORY "Killfeed" DESTINATION bin/Resources)
+install(DIRECTORY "Icons" DESTINATION bin/Resources)

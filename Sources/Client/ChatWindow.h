@@ -22,12 +22,13 @@
 
 #include <string>
 #include <list>
-#include "../Core/Math.h"
+#include <Core/Math.h>
 
 namespace spades {
 	namespace client {
 		class IRenderer;
 		class IFont;
+		class IImage;
 		class Client;
 		
 		static const char MsgColorTeam1 = 1;
@@ -38,6 +39,7 @@ namespace spades {
 		static const char MsgColorGreen = 5;
 		static const char MsgColorSysInfo = MsgColorGreen;
 		static const char MsgColorRestore = 6;
+		static const char MsgImage = 7;
 		static const char MsgColorMax = 9;
 		
 		class ChatWindow {
@@ -64,7 +66,8 @@ namespace spades {
 			float GetLineHeight();
 			
 			Vector4 GetColor(char);
-			
+			std::vector<IImage*> mKillImages;
+			IImage* imageForIndex( char index );
 		public:
 			ChatWindow(Client *, IRenderer* rend, IFont *font, bool killfeed);
 			~ChatWindow();
@@ -72,6 +75,7 @@ namespace spades {
 			void AddMessage(const std::string&);
 			static std::string ColoredMessage(const std::string&, char);
 			static std::string TeamColorMessage(const std::string&, int);
+			static std::string killImage( int killType, int weapon );
 			
 			void Update(float dt);
 			void Draw();

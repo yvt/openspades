@@ -1,10 +1,14 @@
 #include <OpenSpades.h>
 #include <iostream>
+#include <sstream>
 #include <Client/IRenderer.h>
 #include <Client/IImage.h>
 #include <Client/IFont.h>
 #include <Client/FontData.h>
 #include <Core/Settings.h>
+#include <Client/ChatWindow.h>
+#include <Client/PhysicsConstants.h>
+#include <Imports/SDL.h>
 
 
 SPADES_SETTING(cg_fov, "68");
@@ -15,7 +19,79 @@ spades::client::Quake3Font* bigTextFont = NULL;
 spades::client::Quake3Font* orbitronFont = NULL;
 
 spades::Handle<spades::client::IImage> whiteImage;
+spades::client::ChatWindow* chatWindow;
+spades::client::ChatWindow* killfeedWindow;
 
+const char* weapName( int idx )
+{
+	switch( idx ) {
+		case RIFLE_WEAPON: return "Rifle";
+		case SMG_WEAPON: return "SMG";
+		case SHOTGUN_WEAPON: return "Shotgun";
+		default: return "-";
+	}
+}
+
+const char* playName( int idx )
+{
+	switch( idx ) {
+		case 0: return "PlayerGreen";
+		case 1: return "PlayerBlue";
+		case 2: return "PlayerYellow";
+		default: return "-";
+	}
+}
+
+
+void addKill()
+{
+	int team1 = rand() % 3;
+	int team2 = rand() % 3;
+	std::stringstream ss;
+	ss << spades::client::ChatWindow::TeamColorMessage(playName(team1), team1);
+	bool ff = team1 == team2;
+	bool wasSelf = !(rand() % 10);
+	if( wasSelf ) {
+		ff = false;
+	}
+
+	std::string cause = " [";
+	int killNum = rand() % 8;
+	killNum = killNum > KillTypeClassChange ? 0 : killNum;	//we want 2 extra, because we have 3 weapons.
+	cause += spades::client::ChatWindow::killImage( (KillType)killNum, rand() % 3 );
+	cause += "] ";
+	ss << (ff ? spades::client::ChatWindow::ColoredMessage(cause, spades::client::MsgColorRed) : cause);
+			
+	if(!wasSelf){
+		ss << spades::client::ChatWindow::TeamColorMessage(playName(team2), team2);
+	}
+	killfeedWindow->AddMessage(ss.str());
+	killNum++;
+}
+
+void addChat()
+{
+	std::stringstream ss;
+	int idx = rand() % 5;
+	switch( idx )
+	{
+	case 0: case 1: case 2:
+		ss << "[Global] " << spades::client::ChatWindow::TeamColorMessage( "Deuce", idx) << ": Some chat";
+		break;
+	case 3:
+		ss << spades::client::ChatWindow::ColoredMessage("Screenshot saved: ", spades::client::MsgColorSysInfo);
+		break;
+	case 4:
+		ss << spades::client::ChatWindow::ColoredMessage("Screenshot failed: ", spades::client::MsgColorRed);
+		break;
+	}
+	chatWindow->AddMessage( ss.str() );
+}
+
+
+Uint32 ot = 0;
+Uint32 nextChat = 0;
+Uint32 nextKill = 0;
 void drawFrame( spades::client::IRenderer& renderer )
 {
 	if( !designFont ) {
@@ -25,6 +101,10 @@ void drawFrame( spades::client::IRenderer& renderer )
 		bigTextFont = new spades::client::Quake3Font(&renderer, renderer.RegisterImage("Gfx/Fonts/UbuntuCondensedBig.tga"), (const int*)UbuntuCondensedBigMap, 48, 8);
 		orbitronFont = new spades::client::Quake3Font(&renderer, renderer.RegisterImage("Gfx/Fonts/Orbitron.tga"), (const int*)OrbitronMap, 30, 18);
 		whiteImage = renderer.RegisterImage("Gfx/White.tga");
+		chatWindow = new spades::client::ChatWindow( NULL, &renderer, textFont, false );
+		killfeedWindow = new spades::client::ChatWindow( NULL, &renderer, textFont, true );
+		ot = SDL_GetTicks();
+		srand( ot );
 	}
 	spades::client::SceneDefinition sceneDef;
 	sceneDef.viewOrigin = spades::MakeVector3(0, 0, 0);
@@ -42,17 +122,28 @@ void drawFrame( spades::client::IRenderer& renderer )
 	renderer.EndScene();
 
 	spades::Vector2 scrSize = { renderer.ScreenWidth(), renderer.ScreenHeight() };
+	renderer.SetColor( spades::MakeVector4( 0.5f, 0.5f, 0.5f, 1 ) );
 	renderer.DrawImage( whiteImage, spades::AABB2(0, 0, scrSize.x, scrSize.y) );
 	
-	spades::Vector2 pos = spades::MakeVector2( 10, 10 );
-	for( int n = 0; n < 4; ++n ) {
-		spades::client::IFont *font = n == 0 ? designFont : ( n == 1 ? textFont : (n == 2 ? bigTextFont : orbitronFont) );
-		std::string str = "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\nthe quick brown fox jumps over the lazy dog\n0123456789";
-		font->Draw(str, pos + spades::MakeVector2(1,1), 1.f, spades::MakeVector4(0,0,0,0.5));
-		font->Draw(str, pos, 1.f, spades::MakeVector4(1,0,0,1));
-		spades::Vector2 size = font->Measure(str);
-		pos.y += size.y;
+
+	Uint32 dt = SDL_GetTicks() - ot;
+	float fdt = (float)dt / 1000.f;
+	chatWindow->Update( fdt );
+	killfeedWindow->Update( fdt );
+	ot += dt;
+	
+	if( !nextChat || ot >= nextChat ) {
+		nextChat = ot + 1000 + (rand() % 2000);
+		addChat();
 	}
+
+	if( !nextKill || ot >= nextKill ) {
+		nextKill = ot + 200 + (rand() % 1000);
+		addKill();
+	}
+
+	chatWindow->Draw();
+	killfeedWindow->Draw();
 
 	renderer.FrameDone();
 	renderer.Flip();
