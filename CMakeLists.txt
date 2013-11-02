@@ -3,7 +3,7 @@ project(OpenSpades)
 
 set(OpenSpades_VERSION_MAJOR 0)
 set(OpenSpades_VERSION_MINOR 0)
-set(OpenSpades_VERSION_REVISION 8)
+set(OpenSpades_VERSION_REVISION 9)
 
 set(CMAKE_PREFIX_PATH Sources/Externals)
 
