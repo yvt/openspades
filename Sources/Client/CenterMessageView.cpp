@@ -22,13 +22,13 @@
 #include "Client.h"
 #include "IRenderer.h"
 #include "IFont.h"
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace client {
-		CenterMessageView::CenterMessageView(Client *client,
-											 IFont *font):
-		client(client), font(font), renderer(client->GetRenderer()){
+		CenterMessageView::CenterMessageView(Client *client, IFont *font)
+			: client(client), font(font), renderer(client->GetRenderer())
+		{
 			SPADES_MARK_FUNCTION();
 			
 			for(int i = 0; i < 5; i++)
@@ -66,18 +66,17 @@ namespace spades {
 		void CenterMessageView::Update(float dt) {
 			SPADES_MARK_FUNCTION();
 			
-			std::list<Entry>::iterator it;
-			std::vector<std::list<Entry>::iterator> its;
-			for(it = entries.begin(); it != entries.end(); it++){
+			for(std::list<Entry>::iterator it = entries.begin(); it != entries.end();){
 				Entry& ent = *it;
 				ent.fade -= dt;
 				if(ent.fade < 0){
 					lineUsing[ent.line] = false;
-					its.push_back(it);
+					std::list<Entry>::iterator tmp = it++;
+					entries.erase( tmp );
+					continue;
 				}
+				++it;
 			}
-			for(size_t i = 0; i < its.size(); i++)
-				entries.erase(its[i]);
 		}
 		
 		void CenterMessageView::Draw() {
@@ -98,10 +97,7 @@ namespace spades {
 				Vector4 shadow = {0, 0, 0, fade * 0.5f};
 				Vector4 color = {1, 1, 1, fade};
 				
-				font->Draw(ent.msg, MakeVector2(x + 1, y + 1),
-						   1.f, shadow);
-				font->Draw(ent.msg, MakeVector2(x, y),
-						   1.f, color);
+				font->DrawShadow(ent.msg, MakeVector2(x, y), 1.f, color, shadow);
 			}
 		}
 	}

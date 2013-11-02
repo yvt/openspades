@@ -29,7 +29,13 @@ include_directories("json/include")
 include_directories("ENet/include")
 
 if(WIN32)
-	set(RESOURCE_FILES ${PROJECT_BINARY_DIR}/OpenSpades.rc)
+	if(MINGW)	# = gcc, can someone confirm that this works?
+		add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/OpenSpades_rc.o COMMAND windres.exe -I${CMAKE_CURRENT_BINARY_DIR}
+			-i${CMAKE_CURRENT_BINARY_DIR}/OpenSpades.rc -o ${CMAKE_CURRENT_BINARY_DIR}/OpenSpades_rc.o)
+		SET(RESOURCE_FILES ${CMAKE_CURRENT_BINARY_DIR}/OpenSpades_rc.o)
+	else()
+		set(RESOURCE_FILES ${PROJECT_BINARY_DIR}/OpenSpades.rc)	# msvc
+	endif()
 endif()
 
 add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${GUI_FILES}

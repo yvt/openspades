@@ -20,18 +20,14 @@
 
 #include "Quake3Font.h"
 #include "IRenderer.h"
-#include "../Core/Debug.h"
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace client {
-		Quake3Font::Quake3Font(IRenderer *r,
-							   IImage *tex,
-							   const int *mp,
-							   int gh,
-							   float sw):
-		renderer(r), tex(tex),
-		glyphHeight(gh), spaceWidth(sw){
+		Quake3Font::Quake3Font(IRenderer *r, IImage *tex, const int *mp, int gh, float sw)
+			:renderer(r), tex(tex),
+			glyphHeight(gh), spaceWidth(sw)
+		{
 			SPADES_MARK_FUNCTION();
 			
 			tex->AddRef();
@@ -96,10 +92,7 @@ namespace spades {
 			return MakeVector2(w, h);
 		}
 		
-		void Quake3Font::Draw(const std::string &txt,
-							  spades::Vector2 offset,
-							  float scale,
-							  spades::Vector4 color) {
+		void Quake3Font::Draw(const std::string &txt, spades::Vector2 offset, float scale, spades::Vector4 color) {
 			float x = 0.f, y = 0;
 			
 			if(scale == 1.f){
@@ -127,19 +120,13 @@ namespace spades {
 				else if(info.type == Space){
 					x += spaceWidth;
 				}else if(info.type == Image ) {
-					
-					AABB2 rt(x * scale + offset.x, y * scale + offset.y,
-							 info.imageRect.GetWidth() * scale,
-							 info.imageRect.GetHeight() * scale);
+					AABB2 rt(x * scale + offset.x, y * scale + offset.y, info.imageRect.GetWidth() * scale, info.imageRect.GetHeight() * scale);
 					renderer->DrawImage(tex, rt, info.imageRect);
-					
 					x += info.imageRect.GetWidth();
 				}
 				
 			}
 		}
-		
-		
 	}
 }
 

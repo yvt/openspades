@@ -50,6 +50,9 @@ namespace spades {
 				float height;
 				float fade;		// usual fade opacity
 				float timeFade; // timeout fade opacity
+
+				ChatEntry( const std::string& Msg, float Height, float Fade, float TimeFade )
+					: msg(Msg), height(Height), fade(Fade), timeFade(TimeFade) {;}
 			};
 			
 			std::list<ChatEntry> entries;
@@ -63,8 +66,7 @@ namespace spades {
 			Vector4 GetColor(char);
 			
 		public:
-			ChatWindow(Client *, IFont *font,
-					   bool killfeed);
+			ChatWindow(Client *, IRenderer* rend, IFont *font, bool killfeed);
 			~ChatWindow();
 			
 			void AddMessage(const std::string&);

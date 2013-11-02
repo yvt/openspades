@@ -27,13 +27,10 @@ namespace spades {
 		class IFont {
 		public:
 			virtual ~IFont();
-			
+
 			virtual Vector2 Measure(const std::string&) = 0;
-			virtual void Draw(const std::string&,
-							  Vector2 offset,
-							  float scale,
-							  Vector4 color) = 0;
-			
+			virtual void Draw(const std::string&, Vector2 offset, float scale, Vector4 color) = 0;
+			void DrawShadow( const std::string& message, const Vector2& offset, float scale, const Vector4& color, const Vector4& shadowColor );
 		};
 	}
 }
