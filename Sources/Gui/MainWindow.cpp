@@ -9,6 +9,20 @@ void MainWindow::cb_quickHostInput(Fl_Input* o, void* v) {
   ((MainWindow*)(o->parent()))->cb_quickHostInput_i(o,v);
 }
 
+void MainWindow::cb_versionChoice_i(Fl_Choice*, void*) {
+  versionSelectionChanged();
+}
+void MainWindow::cb_versionChoice(Fl_Choice* o, void* v) {
+  ((MainWindow*)(o->parent()))->cb_versionChoice_i(o,v);
+}
+
+void MainWindow::cb_connectButton_i(Fl_Return_Button*, void*) {
+  QuickConnectPressed();
+}
+void MainWindow::cb_connectButton(Fl_Return_Button* o, void* v) {
+  ((MainWindow*)(o->parent()))->cb_connectButton_i(o,v);
+}
+
 void MainWindow::cb_msaaSelect_i(Fl_Choice*, void*) {
   MSAAEnabled();
 SavePrefs();
@@ -147,11 +161,18 @@ void MainWindow::cb_checkFilterVOther(Fl_Check_Button* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()->parent()->parent()))->cb_checkFilterVOther_i(o,v);
 }
 
-void MainWindow::cb_connectButton_i(Fl_Return_Button*, void*) {
-  QuickConnectPressed();
+void MainWindow::cb_Connect_i(Fl_Button*, void*) {
+  connectLocal075Pressed();
 }
-void MainWindow::cb_connectButton(Fl_Return_Button* o, void* v) {
-  ((MainWindow*)(o->parent()))->cb_connectButton_i(o,v);
+void MainWindow::cb_Connect(Fl_Button* o, void* v) {
+  ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_Connect_i(o,v);
+}
+
+void MainWindow::cb_Connect1_i(Fl_Button*, void*) {
+  connectLocal076Pressed();
+}
+void MainWindow::cb_Connect1(Fl_Button* o, void* v) {
+  ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_Connect1_i(o,v);
 }
 MainWindow::MainWindow(int X, int Y, int W, int H, const char *L)
   : Fl_Window(X, Y, W, H, L) {
@@ -180,9 +201,16 @@ this->labelsize(12);
 this->labelcolor(FL_FOREGROUND_COLOR);
 this->align(Fl_Align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE));
 this->when(FL_WHEN_RELEASE);
-{ quickHostInput = new Fl_Input(135, 80, 365, 25, "Quick Connect:");
+{ quickHostInput = new Fl_Input(105, 80, 275, 25, "Quick Connect:");
   quickHostInput->callback((Fl_Callback*)cb_quickHostInput);
 } // Fl_Input* quickHostInput
+{ versionChoice = new Fl_Choice(440, 80, 60, 25, "Version");
+  versionChoice->down_box(FL_BORDER_BOX);
+  versionChoice->callback((Fl_Callback*)cb_versionChoice);
+} // Fl_Choice* versionChoice
+{ connectButton = new Fl_Return_Button(505, 80, 100, 25, "Connect");
+  connectButton->callback((Fl_Callback*)cb_connectButton);
+} // Fl_Return_Button* connectButton
 { mainTab = new Fl_Tabs(5, 110, 605, 240);
   mainTab->labelsize(11);
   { groupAbout = new Fl_Group(10, 130, 595, 215, "About");
@@ -192,6 +220,7 @@ this->when(FL_WHEN_RELEASE);
     groupAbout->end();
   } // Fl_Group* groupAbout
   { Fl_Group* o = new Fl_Group(10, 130, 595, 220, "Setup");
+    o->hide();
     { Fl_Group* o = new Fl_Group(10, 150, 385, 70, "Video");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
@@ -295,10 +324,10 @@ this->when(FL_WHEN_RELEASE);
     groupReport->end();
   } // Fl_Group* groupReport
   { groupServerlist = new Fl_Tabs(10, 130, 595, 220, "Serverlist");
-    groupServerlist->hide();
     { serverListbox = new Fl_Browser(10, 150, 595, 200, "Serverlist");
       serverListbox->type(2);
       serverListbox->callback((Fl_Callback*)cb_serverListbox);
+      serverListbox->hide();
     } // Fl_Browser* serverListbox
     { Fl_Group* o = new Fl_Group(10, 150, 595, 200, "Filters");
       o->hide();
@@ -340,6 +369,15 @@ this->when(FL_WHEN_RELEASE);
       } // Fl_Group* o
       o->end();
     } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(10, 150, 595, 200, "Misc");
+      { Fl_Button* o = new Fl_Button(20, 165, 140, 30, "Connect local v0.75");
+        o->callback((Fl_Callback*)cb_Connect);
+      } // Fl_Button* o
+      { Fl_Button* o = new Fl_Button(20, 200, 140, 30, "Connect local v0.76");
+        o->callback((Fl_Callback*)cb_Connect1);
+      } // Fl_Button* o
+      o->end();
+    } // Fl_Group* o
     groupServerlist->end();
   } // Fl_Tabs* groupServerlist
   mainTab->end();
@@ -347,9 +385,6 @@ this->when(FL_WHEN_RELEASE);
 { bannerBox = new Fl_Box(5, 5, 605, 70);
   bannerBox->box(FL_THIN_DOWN_FRAME);
 } // Fl_Box* bannerBox
-{ connectButton = new Fl_Return_Button(505, 80, 100, 25, "Connect");
-  connectButton->callback((Fl_Callback*)cb_connectButton);
-} // Fl_Return_Button* connectButton
 inited = false;
 browser = 0;
 end();

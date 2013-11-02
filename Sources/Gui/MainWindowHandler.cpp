@@ -43,6 +43,7 @@ using namespace spades::gui;
 SPADES_SETTING(cg_smp, "0");
 SPADES_SETTING(cg_blood, "1");
 SPADES_SETTING(cg_lastQuickConnectHost, "127.0.0.1");
+SPADES_SETTING(cg_protocolVersion, "");
 SPADES_SETTING(cg_playerName, "Deuce");
 SPADES_SETTING(r_bloom, "0");
 SPADES_SETTING(r_lens, "1");
@@ -129,17 +130,33 @@ void MainWindow::StartGame(const spades::ServerAddress &host) {
 			//show();
 		}
 	}
-	
 #endif
-
 }
 
 void MainWindow::QuickConnectPressed() {
 	SPADES_MARK_FUNCTION();
-
-	spades::ServerAddress host(quickHostInput->value());
+	spades::ServerAddress host(quickHostInput->value(), versionChoice->value() == 0 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076);
 	hide();
 	StartGame(host);
+}
+
+void MainWindow::connectLocal075Pressed()
+{
+	spades::ServerAddress host("aos://16777343:32887", spades::ProtocolVersion::v075 );
+	hide();
+	StartGame(host);
+}
+
+void MainWindow::connectLocal076Pressed()
+{
+	spades::ServerAddress host("aos://16777343:32887", spades::ProtocolVersion::v076 );
+	hide();
+	StartGame(host);
+}
+
+void MainWindow::versionSelectionChanged()
+{
+	cg_protocolVersion = versionChoice->value() + 3;
 }
 
 #pragma mark - Setup
@@ -216,6 +233,10 @@ void MainWindow::LoadPrefs() {
 	}
 	
 	quickHostInput->value(cg_lastQuickConnectHost.CString());
+	int v = (int)cg_protocolVersion;
+	versionChoice->add( "0.75" );
+	versionChoice->add( "0.76" );
+	versionChoice->value( v == 3 ? 0 : 1 ); 
 	fullscreenCheck->value(r_fullscreen ? 1 : 0);
 	
 	// --- graphics
@@ -333,9 +354,8 @@ void MainWindow::Init() {
 	std::string text, pkg;
 	pkg = PACKAGE_STRING;
 	text = std::string((const char *)aboutText, sizeof(aboutText));
-	text = spades::Replace(text, "${PACKAGE_STRING}",
-						   pkg);
-	
+	text = spades::Replace(text, "${PACKAGE_STRING}", pkg);
+
 	aboutView->value(text.c_str());
 	
 	browser = new spades::Serverbrowser( serverListbox );
@@ -347,6 +367,7 @@ void MainWindow::Init() {
 	checkFilterVOther->value( flags & spades::ServerFilter::flt_VerOther );
 	browser->startQuery();
 	mainTab->value(groupServerlist);
+	groupServerlist->value(serverListbox);
 }
 
 /** This function is called after showing window.
@@ -699,6 +720,7 @@ void MainWindow::SavePrefs() {
 	}
 	
 	cg_lastQuickConnectHost = quickHostInput->value();
+	cg_protocolVersion = versionChoice->value() + 3;	//0  = 3 = 0.75, 1 = 4 = 0.76
 	r_fullscreen = fullscreenCheck->value() ? 1 : 0;
 	switch(msaaSelect->value()){
 		case 0: r_multisamples = 0; r_fxaa = 0; break;

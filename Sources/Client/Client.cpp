@@ -2405,8 +2405,7 @@ namespace spades {
 							// just spectating
 						}else{
 							font = textFont;
-							std::string msg;
-							msg = "Following " + world->GetPlayerPersistent(followingPlayerId).name;
+							std::string msg = "Following " + world->GetPlayerPersistent(followingPlayerId).name;
 							Vector2 size = font->Measure(msg);
 							Vector2 pos = MakeVector2(scrWidth - 8.f, 256.f + 32.f);
 							pos.x -= size.x;
