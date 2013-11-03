@@ -81,6 +81,7 @@ namespace spades {
 						default:
 							return "";
 					}
+					break;
 				case KillTypeHeadshot: case KillTypeMelee: case KillTypeGrenade:
 				case KillTypeFall: case KillTypeTeamChange: case KillTypeClassChange:
 					tmp[1] = 'a' + 2 + type;
