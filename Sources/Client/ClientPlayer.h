@@ -26,9 +26,14 @@
 #include "Player.h"
 
 namespace spades {
+	
+	class ScriptFunction;
+	
 	namespace client {
 		
 		class Client;
+		class IRenderer;
+		class IAudioDevice;
 		
 		/** Representation of player which is used by
 		 * drawing/view layer of game client. */
@@ -66,6 +71,8 @@ namespace spades {
 			float GetLocalFireVibration();
 			
 			bool ShouldRenderInThirdPersonView();
+
+			asIScriptObject* initScriptFactory( ScriptFunction& creator, IRenderer* renderer, IAudioDevice* audio );
 		protected:
 			virtual ~ClientPlayer();
 		public:

@@ -21,6 +21,7 @@
 #include "ScriptManager.h"
 #include <Core/Debug.h>
 #include <vector>
+#include <sstream>
 #include <Core/Exception.h>
 #include <Core/AutoLocker.h>
 #include <Core/FileManager.h>
@@ -63,13 +64,11 @@ namespace spades {
 				fn += filename;
 				data = FileManager::ReadAllBytes(fn.c_str());
 			}catch(const std::exception& ex) {
-				SPLog("Failed to include '%s':%s",
-					  filename, ex.what());
+				SPLog("Failed to include '%s':%s", filename, ex.what());
 				return -1;
 			}
 			
-			SPLog("Loading script '%s'",
-				  filename);
+			SPLog("Loading script '%s'", filename);
 			return ProcessScriptSection(data.c_str(), (unsigned int)(data.length()), filename);
 		}
 	};
@@ -99,12 +98,9 @@ namespace spades {
 			
 			SPLog("Registering APIs");
 			engine->SetDefaultNamespace("");
-			ScriptObjectRegistrar::RegisterAll(this,
-											   ScriptObjectRegistrar::PhaseObjectType);
-			ScriptObjectRegistrar::RegisterAll(this,
-											   ScriptObjectRegistrar::PhaseGlobalFunction);
-			ScriptObjectRegistrar::RegisterAll(this,
-											  ScriptObjectRegistrar::PhaseObjectMember);
+			ScriptObjectRegistrar::RegisterAll(this, ScriptObjectRegistrar::PhaseObjectType);
+			ScriptObjectRegistrar::RegisterAll(this, ScriptObjectRegistrar::PhaseGlobalFunction);
+			ScriptObjectRegistrar::RegisterAll(this, ScriptObjectRegistrar::PhaseObjectMember);
 			
 			SPLog("Loading scripts");
 			engine->SetDefaultNamespace("");
@@ -333,6 +329,11 @@ namespace spades {
 	ScriptContextUtils::ScriptContextUtils(asIScriptContext *ctx):
 	context(ctx){}
 	
+	void ScriptContextUtils::appendLocation( std::stringstream& ss, asIScriptFunction* func, const char *secName, int line, int column )
+	{
+		ss << "[" << (secName?secName:"(stub)") << ":" << line << "," << column << "] " << func->GetDeclaration(true, true);
+	}
+
 	void ScriptContextUtils::ExecuteChecked() {
 		SPADES_MARK_FUNCTION();
 		int r = context->Execute();
@@ -345,11 +346,19 @@ namespace spades {
 			const char *secName = NULL;
 			int line = 0, column = 0;
 			asIScriptFunction *func = context->GetExceptionFunction();
-			// TODO: backtrace generation
 			line = context->GetExceptionLineNumber(&column, &secName);
-			SPRaise("%s @ [%s:%d,%d] %s", context->GetExceptionString(),
-					secName?secName:"(stub)", line, column,
-					func->GetDeclaration(true, true));
+			std::stringstream ss;
+			ss << context->GetExceptionString() << " @ ";
+			appendLocation( ss, func, secName, line, column );
+			asUINT num = context->GetCallstackSize();
+			for( asUINT n = 1; n < num; ++n ) {		//skip entry 0, that's the current / exception addr
+				func = context->GetFunction( n );
+				line = context->GetLineNumber( n, &column, &secName);
+				ss << std::endl << " > ";
+				appendLocation( ss, func, secName, line, column );
+			}
+			std::string tmp = ss.str();
+			SPRaise( tmp.c_str() );
 		}
 	}
 	

@@ -355,24 +355,15 @@ namespace spades {
 			renderer->RegisterModel("Models/Weapons/Shotgun/Weapon.kv6");
 			renderer->RegisterModel("Models/Weapons/Shotgun/WeaponNoPump.kv6");
 			renderer->RegisterModel("Models/Weapons/Shotgun/Pump.kv6");
-			renderer->RegisterModel
-			("Models/Player/Arm.kv6");
-			renderer->RegisterModel
-			("Models/Player/UpperArm.kv6");
-			renderer->RegisterModel
-			("Models/Player/LegCrouch.kv6");
-			renderer->RegisterModel
-			("Models/Player/TorsoCrouch.kv6");
-			renderer->RegisterModel
-			("Models/Player/Leg.kv6");
-			renderer->RegisterModel
-			("Models/Player/Torso.kv6");
-			renderer->RegisterModel
-			("Models/Player/Arms.kv6");
-			renderer->RegisterModel
-			("Models/Player/Head.kv6");
-			renderer->RegisterModel
-			("Models/MapObjects/Intel.kv6");
+			renderer->RegisterModel("Models/Player/Arm.kv6");
+			renderer->RegisterModel("Models/Player/UpperArm.kv6");
+			renderer->RegisterModel("Models/Player/LegCrouch.kv6");
+			renderer->RegisterModel("Models/Player/TorsoCrouch.kv6");
+			renderer->RegisterModel("Models/Player/Leg.kv6");
+			renderer->RegisterModel("Models/Player/Torso.kv6");
+			renderer->RegisterModel("Models/Player/Arms.kv6");
+			renderer->RegisterModel("Models/Player/Head.kv6");
+			renderer->RegisterModel("Models/MapObjects/Intel.kv6");
 			renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
 			renderer->RegisterImage("Gfx/Sight.tga");
 			renderer->RegisterImage("Gfx/Bullet/7.62mm.tga");
@@ -389,9 +380,6 @@ namespace spades {
 			SPLog("Started connecting to '%s'", hostname.asString(true).c_str());
 			net = new NetClient(this);
 			net->Connect(hostname);
-			
-			//net->Connect("192.168.24.24");
-			//net->Connect("127.0.0.1");
 			
 			// decide log file name
 			std::string fn = hostname.asString(false);
