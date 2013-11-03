@@ -200,8 +200,8 @@ int main(int argc, char ** argv)
 					fss.push_back(fs);
 				}
 			}
-			for(size_t i = 0; i < fss.size(); i++){
-				spades::FileManager::AddFileSystem(fss[i]);
+			for(size_t i = fss.size(); i > 0; i--){
+				spades::FileManager::AddFileSystem(fss[i - 1]);
 			}
 		}
 		
