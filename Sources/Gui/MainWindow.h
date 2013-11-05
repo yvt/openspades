@@ -169,5 +169,5 @@ protected:
 public:
   void versionSelectionChanged();
 };
-extern unsigned char aboutText[4740];
+extern unsigned char aboutText[4744];
 #endif
