@@ -1226,7 +1226,7 @@ namespace spades {
 					uint8_t pId = reader.ReadByte();
 					Player *p;
 					if(pId < 32){
-						p = GetPlayer(pId);
+						p = GetPlayerOrNull(pId);
 					}else{
 						p = NULL;
 					}
