@@ -8,10 +8,11 @@ namespace spades { class Serverbrowser; class ServerAddress; };
 #include <string>
 #include <vector>
 #include <FL/Fl_Input.H>
+#include <FL/Fl_Choice.H>
+#include <FL/Fl_Return_Button.H>
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Help_View.H>
-#include <FL/Fl_Choice.H>
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Input_Choice.H>
 #include <FL/Fl_Spinner.H>
@@ -20,7 +21,6 @@ namespace spades { class Serverbrowser; class ServerAddress; };
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Browser.H>
 #include <FL/Fl_Box.H>
-#include <FL/Fl_Return_Button.H>
 
 class MainWindow : public Fl_Window {
   void _MainWindow();
@@ -32,6 +32,14 @@ private:
   Fl_Input *quickHostInput;
   inline void cb_quickHostInput_i(Fl_Input*, void*);
   static void cb_quickHostInput(Fl_Input*, void*);
+public:
+  Fl_Choice *versionChoice;
+private:
+  inline void cb_versionChoice_i(Fl_Choice*, void*);
+  static void cb_versionChoice(Fl_Choice*, void*);
+  Fl_Return_Button *connectButton;
+  inline void cb_connectButton_i(Fl_Return_Button*, void*);
+  static void cb_connectButton(Fl_Return_Button*, void*);
   Fl_Tabs *mainTab;
 public:
   Fl_Group *groupAbout;
@@ -124,10 +132,11 @@ public:
 private:
   inline void cb_checkFilterVOther_i(Fl_Check_Button*, void*);
   static void cb_checkFilterVOther(Fl_Check_Button*, void*);
+  inline void cb_Connect_i(Fl_Button*, void*);
+  static void cb_Connect(Fl_Button*, void*);
+  inline void cb_Connect1_i(Fl_Button*, void*);
+  static void cb_Connect1(Fl_Button*, void*);
   Fl_Box *bannerBox;
-  Fl_Return_Button *connectButton;
-  inline void cb_connectButton_i(Fl_Return_Button*, void*);
-  static void cb_connectButton(Fl_Return_Button*, void*);
   bool inited; 
 protected:
   spades::Serverbrowser* browser; 
@@ -154,6 +163,11 @@ private:
 public:
   void updateFilters();;
   ~MainWindow();
+protected:
+  void connectLocal075Pressed();
+  void connectLocal076Pressed();
+public:
+  void versionSelectionChanged();
 };
-extern unsigned char aboutText[4695];
+extern unsigned char aboutText[4744];
 #endif

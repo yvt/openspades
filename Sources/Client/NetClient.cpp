@@ -865,10 +865,7 @@ namespace spades {
 							SPRaise("Received invalid weapon: %d", weapon);
 					}
 					
-					Player *p = new Player(GetWorld(), pId,
-										   wType, team,
-										   savedPlayerPos[pId],
-										    GetWorld()->GetTeam(team).color);
+					Player *p = new Player(GetWorld(), pId, wType, team, savedPlayerPos[pId], GetWorld()->GetTeam(team).color);
 					p->SetHeldBlockColor(color);
 					//p->SetOrientation(savedPlayerFront[pId]);
 					GetWorld()->SetPlayer(pId, p);
@@ -1483,9 +1480,7 @@ namespace spades {
 		
 		void NetClient::SendPlayerInput(PlayerInput inp) {
 			SPADES_MARK_FUNCTION();
-			NetPacketWriter wri(PacketTypeInputData);
-			wri.Write((uint8_t)GetLocalPlayer()->GetId());
-			
+
 			uint8_t bits = 0;
 			if(inp.moveForward)		bits |= 1 << 0;
 			if(inp.moveBackward)	bits |= 1 << 1;
@@ -1495,29 +1490,32 @@ namespace spades {
 			if(inp.crouch)		bits |= 1 << 5;
 			if(inp.sneak)		bits |= 1 << 6;
 			if(inp.sprint)		bits |= 1 << 7;
-			wri.Write(bits);
-			
+
 			if((unsigned int)bits == lastPlayerInput)
 				return;
 			lastPlayerInput = bits;
-			
+
+			NetPacketWriter wri(PacketTypeInputData);
+			wri.Write((uint8_t)GetLocalPlayer()->GetId());
+			wri.Write(bits);
+
 			enet_peer_send(peer, 0, wri.CreatePacket());
 		}
 		
 		void NetClient::SendWeaponInput( WeaponInput inp) {
 			SPADES_MARK_FUNCTION();
-			NetPacketWriter wri(PacketTypeWeaponInput);
-			wri.Write((uint8_t)GetLocalPlayer()->GetId());
-			
 			uint8_t bits = 0;
 			if(inp.primary)		bits |= 1 << 0;
 			if(inp.secondary)	bits |= 1 << 1;
-			wri.Write(bits);
-			
+
 			if((unsigned int)bits == lastWeaponInput)
 				return;
 			lastWeaponInput = bits;
-			
+
+			NetPacketWriter wri(PacketTypeWeaponInput);
+			wri.Write((uint8_t)GetLocalPlayer()->GetId());
+			wri.Write(bits);
+
 			enet_peer_send(peer, 0, wri.CreatePacket());
 		}
 		

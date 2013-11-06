@@ -5,6 +5,8 @@ set(OpenSpades_VERSION_MAJOR 0)
 set(OpenSpades_VERSION_MINOR 0)
 set(OpenSpades_VERSION_REVISION 9)
 
+set(OS_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
 set(CMAKE_PREFIX_PATH Sources/Externals)
 
 include(FindSDL)
@@ -148,6 +150,7 @@ endif()
 
 
 configure_file("${PROJECT_SOURCE_DIR}/OpenSpades.h.in" "${PROJECT_BINARY_DIR}/OpenSpades.h")
+configure_file("${PROJECT_SOURCE_DIR}/OpenSpades.rc.in" "${PROJECT_BINARY_DIR}/OpenSpades.rc")
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories("${SDL_INCLUDE_DIR}")
 if(OPENGL_INCLUDE_DIR)

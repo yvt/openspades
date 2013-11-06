@@ -63,6 +63,8 @@ namespace spades {
 	
 	class ScriptContextUtils {
 		asIScriptContext *context;
+
+		void appendLocation( std::stringstream& ss, asIScriptFunction* func, const char *secName, int line, int column );
 	public:
 		ScriptContextUtils();
 		ScriptContextUtils(asIScriptContext *);

@@ -41,7 +41,33 @@
 #include <shlobj.h>
 #define strncasecmp(x,y,z)	_strnicmp(x,y,z)
 #define strcasecmp(x,y)		_stricmp(x,y)
+
+//lm: without doing it this way, we will get a low-res icon or an ugly resampled icon in our window.
+//we cannot use the fltk function on the console window, because it's not an Fl_Window...
+void setIcon( HWND hWnd )
+{
+	HINSTANCE hInstance = GetModuleHandle(NULL);
+	HICON hIcon = (HICON)LoadImageA( hInstance, "AppIcon", IMAGE_ICON, GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON), 0 );
+	if( hIcon ) {
+		SendMessage( hWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon );
+	}
+	hIcon = (HICON)LoadImageA( hInstance, "AppIcon", IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), 0 );
+	if( hIcon ) {
+		SendMessage( hWnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon );
+	}
+}
+
 #endif
+
+//fltk
+void setWindowIcon( Fl_Window* window )
+{
+#ifdef _WIN32
+	window->icon( (char *)LoadIconA( GetModuleHandle(NULL), "AppIcon" ) );
+#else
+	//check for mac / linux icon with fltk?
+#endif
+}
 
 #ifdef __APPLE__
 #include <xmmintrin.h>
@@ -107,20 +133,19 @@ int main(int argc, char ** argv)
 		std::string appdir = buf;
 		appdir = appdir.substr(0, appdir.find_last_of('\\')+1);
 		
-		spades::FileManager::AddFileSystem
-		(new spades::DirectoryFileSystem(appdir + "Resources", false));
+		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(appdir + "Resources", false));
 		
-		if(SUCCEEDED(SHGetFolderPath(NULL,
-									 CSIDL_APPDATA,
-									 NULL, 0,
-									 buf))){
-			
-			
+		if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, buf))){
 			std::string datadir = buf;
 			datadir += "\\OpenSpades\\Resources";
-			spades::FileManager::AddFileSystem
-			(new spades::DirectoryFileSystem(datadir, true));
+			spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(datadir, true));
 		}
+		//fltk has a console window on windows (can disable while building, maybe use a builtin console for a later release?)
+		HWND hCon = GetConsoleWindow();
+		if( NULL != hCon ) {
+			setIcon( hCon );
+		}
+
 #elif defined(__APPLE__)
 		std::string home = getenv("HOME");
 		spades::FileManager::AddFileSystem
@@ -146,8 +171,7 @@ int main(int argc, char ** argv)
 		SPLog("Log Started.");
 		
 #if defined(RESDIR_DEFINED) && !NDEBUG
-		spades::FileManager::AddFileSystem
-		(new spades::DirectoryFileSystem(RESDIR, false));
+		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(RESDIR, false));
 #endif
 		
 		/*
@@ -216,6 +240,7 @@ int main(int argc, char ** argv)
 		if( !cg_autoConnect ) {
 			win = new MainWindow();
 			win->Init();
+			setWindowIcon( win );
 			win->show(argc, argv);
 			win->CheckGLCapability();
 		} else {
@@ -236,6 +261,7 @@ int main(int argc, char ** argv)
 	}catch(const std::exception& ex) {
 		
 		ErrorDialog dlg;
+		setWindowIcon( &dlg );
 		dlg.set_modal();
 		dlg.result = 0;
 		

@@ -22,8 +22,16 @@
 
 namespace spades {
 	namespace client{
-		IFont::~IFont(){}
+		IFont::~IFont()
+		{
+			//---
+		}
 		
+		void IFont::DrawShadow( const std::string& message, const Vector2& offset, float scale, const Vector4& color, const Vector4& shadowColor )
+		{
+			Draw( message, offset + MakeVector2(1,1), scale, shadowColor );
+			Draw( message, offset, scale, color );
+		}
 		
 	}
 }

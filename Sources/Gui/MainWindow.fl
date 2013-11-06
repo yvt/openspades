@@ -7,15 +7,25 @@ decl {namespace spades { class Serverbrowser; class ServerAddress; }} {public gl
 
 widget_class MainWindow {
   label {OpenSpades Startup} open
-  xywh {148 243 615 356} type Double labelsize 12 align 80
+  xywh {1876 226 615 356} type Double labelsize 12 align 80 hide
   code0 {\#include <string>}
   code1 {\#include <vector>}
-  class Fl_Window visible
+  class Fl_Window
 } {
   Fl_Input quickHostInput {
     label {Quick Connect:}
     callback {SavePrefs();}
-    private xywh {135 80 365 25}
+    private xywh {105 80 275 25}
+  }
+  Fl_Choice versionChoice {
+    label Version
+    callback {versionSelectionChanged();} open
+    xywh {440 80 60 25} down_box BORDER_BOX
+  } {}
+  Fl_Return_Button connectButton {
+    label Connect
+    callback {QuickConnectPressed();}
+    private xywh {505 80 100 25}
   }
   Fl_Tabs mainTab {open
     private xywh {5 110 605 240} labelsize 11
@@ -29,8 +39,8 @@ widget_class MainWindow {
       }
     }
     Fl_Group {} {
-      label Setup open
-      private xywh {10 130 595 220}
+      label Setup
+      private xywh {10 130 595 220} hide
     } {
       Fl_Group {} {
         label Video open
@@ -151,15 +161,15 @@ SavePrefs();} open
     }
     Fl_Tabs groupServerlist {
       label Serverlist open
-      xywh {10 130 595 220} hide
+      xywh {10 130 595 220}
     } {
       Fl_Browser serverListbox {
         label Serverlist
-        callback {ServerSelectionChanged();}
+        callback {ServerSelectionChanged();} selected
         protected xywh {10 150 595 200} type Hold
       }
       Fl_Group {} {
-        label Filters open
+        label Filters
         xywh {10 150 595 200} hide
       } {
         Fl_Group {} {
@@ -198,19 +208,29 @@ SavePrefs();} open
           }
         }
       }
+      Fl_Group {} {
+        label Misc open
+        xywh {10 150 595 200} hide
+      } {
+        Fl_Button {} {
+          label {Connect local v0.75}
+          callback {connectLocal075Pressed();}
+          xywh {20 165 140 30}
+        }
+        Fl_Button {} {
+          label {Connect local v0.76}
+          callback {connectLocal076Pressed();}
+          xywh {20 200 140 30}
+        }
+      }
     }
   }
   Fl_Box bannerBox {
     private xywh {5 5 605 70} box THIN_DOWN_FRAME
   }
-  Fl_Return_Button connectButton {
-    label Connect
-    callback {QuickConnectPressed();}
-    private xywh {505 80 100 25}
-  }
   Function {QuickConnectPressed()} {open private
   } {}
-  Function {StartGame(const spades::ServerAddress& host)} {open selected return_type {static void}
+  Function {StartGame(const spades::ServerAddress& host)} {open return_type {static void}
   } {}
   Function {LoadPrefs()} {open
   } {}
@@ -244,6 +264,12 @@ SavePrefs();} open
   }
   decl {bool particleHighCapable;} {private local
   }
+  Function {connectLocal075Pressed()} {open protected
+  } {}
+  Function {connectLocal076Pressed()} {open protected
+  } {}
+  Function {versionSelectionChanged()} {open
+  } {}
 } 
 
 data aboutText {public local filename {AboutText.html}

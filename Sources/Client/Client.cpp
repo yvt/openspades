@@ -167,8 +167,8 @@ namespace spades {
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));
 			
-			chatWindow = new ChatWindow(this, textFont, false);
-			killfeedWindow = new ChatWindow(this, textFont, true);
+			chatWindow = new ChatWindow(this, GetRenderer(), textFont, false);
+			killfeedWindow = new ChatWindow(this, GetRenderer(), textFont, true);
 			keyDest = kd_Game;
 			
 			hurtRingView = new HurtRingView(this);
@@ -355,24 +355,15 @@ namespace spades {
 			renderer->RegisterModel("Models/Weapons/Shotgun/Weapon.kv6");
 			renderer->RegisterModel("Models/Weapons/Shotgun/WeaponNoPump.kv6");
 			renderer->RegisterModel("Models/Weapons/Shotgun/Pump.kv6");
-			renderer->RegisterModel
-			("Models/Player/Arm.kv6");
-			renderer->RegisterModel
-			("Models/Player/UpperArm.kv6");
-			renderer->RegisterModel
-			("Models/Player/LegCrouch.kv6");
-			renderer->RegisterModel
-			("Models/Player/TorsoCrouch.kv6");
-			renderer->RegisterModel
-			("Models/Player/Leg.kv6");
-			renderer->RegisterModel
-			("Models/Player/Torso.kv6");
-			renderer->RegisterModel
-			("Models/Player/Arms.kv6");
-			renderer->RegisterModel
-			("Models/Player/Head.kv6");
-			renderer->RegisterModel
-			("Models/MapObjects/Intel.kv6");
+			renderer->RegisterModel("Models/Player/Arm.kv6");
+			renderer->RegisterModel("Models/Player/UpperArm.kv6");
+			renderer->RegisterModel("Models/Player/LegCrouch.kv6");
+			renderer->RegisterModel("Models/Player/TorsoCrouch.kv6");
+			renderer->RegisterModel("Models/Player/Leg.kv6");
+			renderer->RegisterModel("Models/Player/Torso.kv6");
+			renderer->RegisterModel("Models/Player/Arms.kv6");
+			renderer->RegisterModel("Models/Player/Head.kv6");
+			renderer->RegisterModel("Models/MapObjects/Intel.kv6");
 			renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
 			renderer->RegisterImage("Gfx/Sight.tga");
 			renderer->RegisterImage("Gfx/Bullet/7.62mm.tga");
@@ -389,9 +380,6 @@ namespace spades {
 			SPLog("Started connecting to '%s'", hostname.asString(true).c_str());
 			net = new NetClient(this);
 			net->Connect(hostname);
-			
-			//net->Connect("192.168.24.24");
-			//net->Connect("127.0.0.1");
 			
 			// decide log file name
 			std::string fn = hostname.asString(false);
@@ -2032,15 +2020,9 @@ namespace spades {
 			IFont *font = designFont;
 			std::string str = "NOW LOADING";
 			Vector2 size = font->Measure(str);
-			Vector2 pos = MakeVector2(scrSize.x - 16.f,
-									  scrSize.y - 16.f);
+			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
 			pos -= size;
-			font->Draw(str,
-					   pos + MakeVector2(1,1),
-					   1.f, MakeVector4(0,0,0,0.5));
-			font->Draw(str,
-					   pos,
-					   1.f, MakeVector4(1,1,1,1));
+			font->DrawShadow(str, pos, 1.f, MakeVector4(1,1,1,1), MakeVector4(0,0,0,0.5));
 			
 			renderer->FrameDone();
 			renderer->Flip();
@@ -2129,19 +2111,13 @@ namespace spades {
 						float dist = (hottracked->GetEye() - p->GetEye()).GetLength();
 						int idist = (int)floorf(dist + .5f);
 						char buf[64];
-						sprintf(buf, "%s [%d%s]", hottracked->GetName().c_str(),
-								idist, (idist == 1) ? "block":"blocks");
+						sprintf(buf, "%s [%d%s]", hottracked->GetName().c_str(), idist, (idist == 1) ? "block":"blocks");
 						
 						font = textFont;
 						Vector2 size = font->Measure(buf);
 						pos.x -= size.x * .5f;
 						pos.y -= size.y;
-						font->Draw(buf,
-								   pos + MakeVector2(1,1),
-								   1.f, MakeVector4(0,0,0,0.5));
-						font->Draw(buf,
-								   pos,
-								   1.f, MakeVector4(1,1,1,1));
+						font->DrawShadow(buf, pos, 1.f, MakeVector4(1,1,1,1), MakeVector4(0,0,0,0.5));
 					}
 					
 					tcView->Draw();
@@ -2307,12 +2283,7 @@ namespace spades {
 						Vector2 size = font->Measure(stockStr);
 						Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f - iconHeight);
 						pos -= size;
-						font->Draw(stockStr,
-								   pos + MakeVector2(1,1),
-								   1.f, MakeVector4(0,0,0,0.5));
-						font->Draw(stockStr,
-								   pos,
-								   1.f, numberColor);
+						font->DrawShadow(stockStr, pos, 1.f, numberColor, MakeVector4(0,0,0,0.5));
 						
 						
 						// draw "press ... to reload"
@@ -2354,12 +2325,7 @@ namespace spades {
 								Vector2 size = font->Measure(msg);
 								Vector2 pos = MakeVector2((scrWidth - size.x) * .5f,
 														  scrHeight * 2.f / 3.f);
-								font->Draw(msg,
-										   pos + MakeVector2(1,1),
-										   1.f, MakeVector4(0,0,0,0.5));
-								font->Draw(msg,
-										   pos,
-										   1.f, MakeVector4(1,1,1,1));
+								font->DrawShadow(msg, pos, 1.f, MakeVector4(1,1,1,1), MakeVector4(0,0,0,0.5));
 							}
 						}
 						
@@ -2389,14 +2355,9 @@ namespace spades {
 							if(!msg.empty()){
 								font = textFont;
 								Vector2 size = font->Measure(msg);
-								Vector2 pos = MakeVector2((scrWidth - size.x) * .5f,
-														  scrHeight / 3.f);
-								font->Draw(msg,
-										   pos + MakeVector2(1,1),
-										   1.f, MakeVector4(0,0,0,0.5));
-								font->Draw(msg,
-										   pos,
-										   1.f, MakeVector4(1,1,1,1));
+								Vector2 pos = MakeVector2((scrWidth - size.x) * .5f, scrHeight / 3.f);
+
+								font->DrawShadow(msg, pos, 1.f, MakeVector4(1,1,1,1), MakeVector4(0,0,0,0.5));
 							}
 						}
 						
@@ -2424,12 +2385,7 @@ namespace spades {
 						Vector2 size = font->Measure(stockStr);
 						Vector2 pos = MakeVector2(16.f, scrHeight - 16.f);
 						pos.y -= size.y;
-						font->Draw(stockStr,
-								   pos + MakeVector2(1,1),
-								   1.f, MakeVector4(0,0,0,0.5));
-						font->Draw(stockStr,
-								   pos,
-								   1.f, numberColor);
+						font->DrawShadow(stockStr, pos, 1.f, numberColor, MakeVector4(0,0,0,0.5));
 					}
 					
 					if(IsFollowing()){
@@ -2437,17 +2393,11 @@ namespace spades {
 							// just spectating
 						}else{
 							font = textFont;
-							std::string msg;
-							msg = "Following " + world->GetPlayerPersistent(followingPlayerId).name;
+							std::string msg = "Following " + world->GetPlayerPersistent(followingPlayerId).name;
 							Vector2 size = font->Measure(msg);
 							Vector2 pos = MakeVector2(scrWidth - 8.f, 256.f + 32.f);
 							pos.x -= size.x;
-							font->Draw(msg,
-									   pos + MakeVector2(1,1),
-									   1.f, MakeVector4(0,0,0,0.5));
-							font->Draw(msg,
-									   pos,
-									   1.f, MakeVector4(1, 1, 1, 1));
+							font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0,0,0,0.5));
 						}
 					}
 					
@@ -2488,16 +2438,14 @@ namespace spades {
 						str = "Team Chat: ";
 					str += chatText;
 					str += "_";
-					
-					textFont->Draw(str, pos+MakeVector2(1, 1), 1.f,
-								   MakeVector4(0,0,0,0.5));
-					textFont->Draw(str, pos, 1.f, MakeVector4(1,1,1,1));
+
+					textFont->DrawShadow(str, pos, 1.f, MakeVector4(1,1,1,1), MakeVector4(0,0,0,0.5));
 				} else if( kd_ExitQuestion == keyDest ) {
 					float scale = 1.5f;
 					Vector2 tw = textFont->Measure( "Quit, are you sure?" ) * scale;
-					bigTextFont->Draw( "Quit, are you sure?", MakeVector2( scrWidth * 0.5f - tw.x, scrHeight * 0.5f - tw.y * 1.1f ), scale, MakeVector4( 1,0,0,1 ) );
+					bigTextFont->DrawShadow( "Quit, are you sure?", MakeVector2( scrWidth * 0.5f - tw.x, scrHeight * 0.5f - tw.y * 1.1f ), scale, MakeVector4( 1,0,0,1 ), MakeVector4(0,0,0,0.5) );
 					tw = textFont->Measure( "Y / N" ) * scale;
-					bigTextFont->Draw( "Y / N", MakeVector2( scrWidth * 0.5f - tw.x, scrHeight * 0.5f + tw.y * 1.1f ), scale, MakeVector4( 1,0,0,1 ) );
+					bigTextFont->DrawShadow( "Y / N", MakeVector2( scrWidth * 0.5f - tw.x, scrHeight * 0.5f + tw.y * 1.1f ), scale, MakeVector4( 1,0,0,1 ), MakeVector4(0,0,0,0.5) );
 				}
 				
 			}else{
@@ -2554,12 +2502,7 @@ namespace spades {
 				
 				std::string msg = net->GetStatusString();
 				font = textFont;
-				font->Draw(msg,
-						   MakeVector2(wndX + 8.f,
-									   wndY + 8.f),
-						   1.f,
-						   MakeVector4(0,0,0,fade));
-								
+				font->Draw(msg, MakeVector2(wndX + 8.f, wndY + 8.f), 1.f, MakeVector4(0,0,0,fade));
 			}
 			
 			centerMessageView->Draw();
@@ -3581,8 +3524,7 @@ namespace spades {
 					if(!IsMuted()){
 						Handle<IAudioChunk> c =
 						audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh.wav");
-						audioDevice->Play(c, victim->GetEye(),
-										  AudioParam());
+						audioDevice->Play(c, victim->GetEye(), AudioParam());
 					}
 				}
 			}
@@ -3648,8 +3590,7 @@ namespace spades {
 			
 			// add chat message
 			std::string s;
-			s = ChatWindow::TeamColorMessage(killer->GetName(),
-							     killer->GetTeamId());
+			s = ChatWindow::TeamColorMessage(killer->GetName(), killer->GetTeamId());
 			
 			std::string cause;
 			bool ff = killer->GetTeamId() == victim->GetTeamId();
@@ -3657,29 +3598,8 @@ namespace spades {
 				ff = false;
 			
 			cause = " [";
-			switch(kt){
-				case KillTypeClassChange:
-					cause += "Weapon Change";
-					break;
-				case KillTypeFall:
-					cause += "Fall";
-					break;
-				case KillTypeGrenade:
-					cause += "Grenade";
-					break;
-				case KillTypeHeadshot:
-					cause += "Headshot";
-					break;
-				case KillTypeMelee:
-					cause += "Spade";
-					break;
-				case KillTypeTeamChange:
-					cause += "Team Change";
-					break;
-				case KillTypeWeapon:
-					cause += killer->GetWeapon()->GetName();
-					break;
-			}
+			Weapon* w = killer ? killer->GetWeapon() : NULL;	//only used in case of KillTypeWeapon
+			cause += ChatWindow::killImage( kt, w ? w->GetWeaponType() : RIFLE_WEAPON );
 			cause += "] ";
 			
 			if(ff)
@@ -3688,8 +3608,7 @@ namespace spades {
 				s += cause;
 			
 			if(killer != victim){
-				s += ChatWindow::TeamColorMessage(victim->GetName(),
-									 victim->GetTeamId());
+				s += ChatWindow::TeamColorMessage(victim->GetName(), victim->GetTeamId());
 			}
 			
 			killfeedWindow->AddMessage(s);

@@ -47,5 +47,9 @@ UserInterfaceState.xcuserstate
 # Windows related
 Thumbs.db
 
-# MSVC related
+# MSVC related (preferred build path)
 OpenSpades.msvc/
+
+# fltk / fluid output leftovers
+Sources/Gui/DetailConfigWindow.txt
+Sources/Gui/MainWindow.txt

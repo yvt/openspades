@@ -159,10 +159,7 @@ namespace spades {
 					x = (scrW - size.x) * .5f;
 					y += 35.f;
 					
-					font->Draw(str, MakeVector2(x+1, y+1), 1.f,
-							   MakeVector4(0, 0, 0, 0.5f*fade));
-					font->Draw(str, MakeVector2(x, y), 1.f,
-							   MakeVector4(1.f, 1.f, 1.f, fade));
+					font->DrawShadow(str, MakeVector2(x, y), 1.f, MakeVector4(1.f, 1.f, 1.f, fade), MakeVector4(0, 0, 0, 0.5f*fade));
 				}
 			}else{
 				// unable to show nearby territory

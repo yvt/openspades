@@ -2,8 +2,15 @@
 
 if(RESDIR_DEFINED)
 	add_custom_target(copy_resources ALL COMMENT "Copying resources")
-	install(FILES ${RESDIR}/pak000-Base.pak ${RESDIR}/pak001-Models.pak ${RESDIR}/pak002-Sounds.pak DESTINATION bin/Resources)
-	file(GLOB_RECURSE RESOURCES Shaders/* Scripts/*)
+	install(FILES
+		${RESDIR}/pak000-Base.pak
+		${RESDIR}/pak001-Sounds.pak
+		${RESDIR}/pak002-Models.pak
+		${RESDIR}/pak010-BaseSkin.pak
+		${RESDIR}pak999-References.pak
+			DESTINATION bin/Resources)
+
+	file(GLOB_RECURSE RESOURCES Shaders/* Scripts/* Icons/* Killfeed/*)
 	foreach(FILE ${RESOURCES})
 		string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR} ${RESDIR} TARGETFILE ${FILE})
 		get_filename_component(TARGETDIR ${TARGETFILE} PATH)
@@ -14,3 +21,5 @@ endif()
 
 install(DIRECTORY "Scripts" DESTINATION bin/Resources)
 install(DIRECTORY "Shaders" DESTINATION bin/Resources)
+install(DIRECTORY "Killfeed" DESTINATION bin/Resources)
+install(DIRECTORY "Icons" DESTINATION bin/Resources)

@@ -65,116 +65,42 @@ namespace spades {
 			IRenderer *renderer = client->GetRenderer();
 			IAudioDevice *audio = client->GetAudioDevice();
 			
-			static ScriptFunction spadeFactory
-			("ISpadeSkin@ CreateThirdPersonSpadeSkin(Renderer@, AudioDevice@)");
-			ctx = spadeFactory.Prepare();
-			ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-			ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
-			ctx.ExecuteChecked();
-			spadeSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-			spadeSkin->AddRef();
+			static ScriptFunction spadeFactory("ISpadeSkin@ CreateThirdPersonSpadeSkin(Renderer@, AudioDevice@)");
+			spadeSkin = initScriptFactory( spadeFactory, renderer, audio );
 			
-			static ScriptFunction spadeViewFactory
-			("ISpadeSkin@ CreateViewSpadeSkin(Renderer@, AudioDevice@)");
-			ctx = spadeViewFactory.Prepare();
-			ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-			ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
-			ctx.ExecuteChecked();
-			spadeViewSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-			spadeViewSkin->AddRef();
+			static ScriptFunction spadeViewFactory("ISpadeSkin@ CreateViewSpadeSkin(Renderer@, AudioDevice@)");
+			spadeViewSkin = initScriptFactory( spadeViewFactory, renderer, audio );
 			
-			static ScriptFunction blockFactory
-			("IBlockSkin@ CreateThirdPersonBlockSkin(Renderer@, AudioDevice@)");
-			ctx = blockFactory.Prepare();
-			ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-			ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
-			ctx.ExecuteChecked();
-			blockSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-			blockSkin->AddRef();
+			static ScriptFunction blockFactory("IBlockSkin@ CreateThirdPersonBlockSkin(Renderer@, AudioDevice@)");
+			blockSkin = initScriptFactory( blockFactory, renderer, audio );
 			
-			static ScriptFunction blockViewFactory
-			("IBlockSkin@ CreateViewBlockSkin(Renderer@, AudioDevice@)");
-			ctx = blockViewFactory.Prepare();
-			ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-			ctx.ExecuteChecked();
-			blockViewSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-			blockViewSkin->AddRef();
+			static ScriptFunction blockViewFactory("IBlockSkin@ CreateViewBlockSkin(Renderer@, AudioDevice@)");
+			blockViewSkin = initScriptFactory( blockViewFactory, renderer, audio );
 			
-			static ScriptFunction grenadeFactory
-			("IGrenadeSkin@ CreateThirdPersonGrenadeSkin(Renderer@, AudioDevice@)");
-			ctx = grenadeFactory.Prepare();
-			ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-			ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
-			ctx.ExecuteChecked();
-			grenadeSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-			grenadeSkin->AddRef();
+			static ScriptFunction grenadeFactory("IGrenadeSkin@ CreateThirdPersonGrenadeSkin(Renderer@, AudioDevice@)");
+			grenadeSkin = initScriptFactory( grenadeFactory, renderer, audio );
 			
-			static ScriptFunction grenadeViewFactory
-			("IGrenadeSkin@ CreateViewGrenadeSkin(Renderer@, AudioDevice@)");
-			ctx = grenadeViewFactory.Prepare();
-			ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-			ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
-			ctx.ExecuteChecked();
-			grenadeViewSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-			grenadeViewSkin->AddRef();
+			static ScriptFunction grenadeViewFactory("IGrenadeSkin@ CreateViewGrenadeSkin(Renderer@, AudioDevice@)");
+			grenadeViewSkin = initScriptFactory( grenadeViewFactory, renderer, audio );
 			
-			static ScriptFunction rifleFactory
-			("IWeaponSkin@ CreateThirdPersonRifleSkin(Renderer@, AudioDevice@)");
-			static ScriptFunction smgFactory
-			("IWeaponSkin@ CreateThirdPersonSMGSkin(Renderer@, AudioDevice@)");
-			static ScriptFunction shotgunFactory
-			("IWeaponSkin@ CreateThirdPersonShotgunSkin(Renderer@, AudioDevice@)");
-			static ScriptFunction rifleViewFactory
-			("IWeaponSkin@ CreateViewRifleSkin(Renderer@, AudioDevice@)");
-			static ScriptFunction smgViewFactory
-			("IWeaponSkin@ CreateViewSMGSkin(Renderer@, AudioDevice@)");
-			static ScriptFunction shotgunViewFactory
-			("IWeaponSkin@ CreateViewShotgunSkin(Renderer@, AudioDevice@)");
+			static ScriptFunction rifleFactory("IWeaponSkin@ CreateThirdPersonRifleSkin(Renderer@, AudioDevice@)");
+			static ScriptFunction smgFactory("IWeaponSkin@ CreateThirdPersonSMGSkin(Renderer@, AudioDevice@)");
+			static ScriptFunction shotgunFactory("IWeaponSkin@ CreateThirdPersonShotgunSkin(Renderer@, AudioDevice@)");
+			static ScriptFunction rifleViewFactory("IWeaponSkin@ CreateViewRifleSkin(Renderer@, AudioDevice@)");
+			static ScriptFunction smgViewFactory("IWeaponSkin@ CreateViewSMGSkin(Renderer@, AudioDevice@)");
+			static ScriptFunction shotgunViewFactory("IWeaponSkin@ CreateViewShotgunSkin(Renderer@, AudioDevice@)");
 			switch(p->GetWeapon()->GetWeaponType()){
 				case RIFLE_WEAPON:
-					ctx = rifleFactory.Prepare();
-					ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-					ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
-					ctx.ExecuteChecked();
-					weaponSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-					weaponSkin->AddRef();
-					
-					ctx = rifleViewFactory.Prepare();
-					ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-					ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
-					ctx.ExecuteChecked();
-					weaponViewSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-					weaponViewSkin->AddRef();
+					weaponSkin = initScriptFactory( rifleFactory, renderer, audio );
+					weaponViewSkin = initScriptFactory( rifleViewFactory, renderer, audio );
 					break;
 				case SMG_WEAPON:
-					ctx = smgFactory.Prepare();
-					ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-					ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
-					ctx.ExecuteChecked();
-					weaponSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-					weaponSkin->AddRef();
-					
-					ctx = smgViewFactory.Prepare();
-					ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-					ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
-					ctx.ExecuteChecked();
-					weaponViewSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-					weaponViewSkin->AddRef();
+					weaponSkin = initScriptFactory( smgFactory, renderer, audio );
+					weaponViewSkin = initScriptFactory( smgViewFactory, renderer, audio );
 					break;
 				case SHOTGUN_WEAPON:
-					ctx = shotgunFactory.Prepare();
-					ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-					ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
-					ctx.ExecuteChecked();
-					weaponSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-					weaponSkin->AddRef();
-					
-					ctx = shotgunViewFactory.Prepare();
-					ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
-					ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
-					ctx.ExecuteChecked();
-					weaponViewSkin = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
-					weaponViewSkin->AddRef();
+					weaponSkin = initScriptFactory( shotgunFactory, renderer, audio );
+					weaponViewSkin = initScriptFactory( shotgunViewFactory, renderer, audio );
 					break;
 				default:
 					SPAssert(false);
@@ -193,6 +119,18 @@ namespace spades {
 			grenadeViewSkin->Release();
 			
 		}
+
+		asIScriptObject* ClientPlayer::initScriptFactory( ScriptFunction& creator, IRenderer* renderer, IAudioDevice* audio )
+		{
+			ScriptContextHandle ctx = creator.Prepare();
+			ctx->SetArgObject(0, reinterpret_cast<void*>(renderer));
+			ctx->SetArgObject(1, reinterpret_cast<void*>(audio));
+			ctx.ExecuteChecked();
+			asIScriptObject* result = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
+			result->AddRef();
+			return result;
+		}
+
 		void ClientPlayer::Invalidate() {
 			player = NULL;
 		}
@@ -325,12 +263,7 @@ namespace spades {
 		
 		Matrix4 ClientPlayer::GetEyeMatrix() {
 			Player *p = player;
-			Matrix4 eyeMatrix = Matrix4::FromAxis(-p->GetRight(),
-												  p->GetFront(),
-												  -p->GetUp(),
-												  p->GetEye());
-			
-			return eyeMatrix;
+			return Matrix4::FromAxis(-p->GetRight(), p->GetFront(), -p->GetUp(), p->GetEye());
 		}
 		
 		void ClientPlayer::SetSkinParameterForTool(Player::ToolType type,
@@ -546,10 +479,8 @@ namespace spades {
 				ModelRenderParam param;
 				param.depthHack = true;
 				
-				IModel *model = renderer->RegisterModel
-				("Models/Player/Arm.kv6");
-				IModel *model2 = renderer->RegisterModel
-				("Models/Player/UpperArm.kv6");
+				IModel *model = renderer->RegisterModel("Models/Player/Arm.kv6");
+				IModel *model2 = renderer->RegisterModel("Models/Player/UpperArm.kv6");
 				
 				IntVector3 col = p->GetColor();
 				param.customColor = MakeVector3(col.x/255.f,
@@ -717,8 +648,7 @@ namespace spades {
 				leg1 = lower * leg1;
 				leg2 = lower * leg2;
 				
-				model = renderer->RegisterModel
-				("Models/Player/LegCrouch.kv6");
+				model = renderer->RegisterModel("Models/Player/LegCrouch.kv6");
 				param.matrix = leg1 * scaler;
 				renderer->RenderModel(model, param);
 				param.matrix = leg2 * scaler;
@@ -727,8 +657,7 @@ namespace spades {
 				torso = Matrix4::Translate(0.f,0.f,-0.55f);
 				torso = lower * torso;
 				
-				model = renderer->RegisterModel
-				("Models/Player/TorsoCrouch.kv6");
+				model = renderer->RegisterModel("Models/Player/TorsoCrouch.kv6");
 				param.matrix = torso * scaler;
 				renderer->RenderModel(model, param);
 				
@@ -757,8 +686,7 @@ namespace spades {
 				leg1 = lower * leg1;
 				leg2 = lower * leg2;
 				
-				model = renderer->RegisterModel
-				("Models/Player/Leg.kv6");
+				model = renderer->RegisterModel("Models/Player/Leg.kv6");
 				param.matrix = leg1 * scaler;
 				renderer->RenderModel(model, param);
 				param.matrix = leg2 * scaler;
@@ -767,8 +695,7 @@ namespace spades {
 				torso = Matrix4::Translate(0.f,0.f,-1.0f);
 				torso = lower * torso;
 				
-				model = renderer->RegisterModel
-				("Models/Player/Torso.kv6");
+				model = renderer->RegisterModel("Models/Player/Torso.kv6");
 				param.matrix = torso * scaler;
 				renderer->RenderModel(model, param);
 				
@@ -792,8 +719,7 @@ namespace spades {
 			arms = arms * Matrix4::Rotate(MakeVector3(1,0,0),
 										  armPitch);
 			
-			model = renderer->RegisterModel
-			("Models/Player/Arms.kv6");
+			model = renderer->RegisterModel("Models/Player/Arms.kv6");
 			param.matrix = arms * scaler;
 			renderer->RenderModel(model, param);
 			
@@ -801,8 +727,7 @@ namespace spades {
 			head = head * Matrix4::Rotate(MakeVector3(1,0,0),
 										  pitch);
 			
-			model = renderer->RegisterModel
-			("Models/Player/Head.kv6");
+			model = renderer->RegisterModel("Models/Player/Head.kv6");
 			param.matrix = head * scaler;
 			renderer->RenderModel(model, param);
 			
@@ -831,8 +756,7 @@ namespace spades {
 														col2.z/255.f);
 						Matrix4 mIntel = torso * Matrix4::Translate(0,0.6f,0.5f);
 						
-						model = renderer->RegisterModel
-						("Models/MapObjects/Intel.kv6");
+						model = renderer->RegisterModel("Models/MapObjects/Intel.kv6");
 						param.matrix = mIntel * scaler;
 						renderer->RenderModel(model, param);
 						
