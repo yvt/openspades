@@ -23,8 +23,10 @@
 
 #include <string>
 #include <vector>
+#include <OpenSpades.h>
 #include <Core/ServerAddress.h>
 #include <Core/Math.h>
+#include <Core/VersionInfo.h>
 #include "PhysicsConstants.h"
 #include "Player.h"
 
@@ -128,7 +130,8 @@ namespace spades {
 			void SendChat(std::string, bool global);
 			void SendWeaponChange(WeaponType);
 			void SendTeamChange(int team);
-			
+			void SendHandShakeValid(int challenge);
+			void SendVersion();
 		};
 	}
 }
