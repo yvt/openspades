@@ -282,7 +282,7 @@ namespace spades {
 								tx += kill->GetWidth();
 								++i;
 							} else {
-								SPRaise( "Invalid killfeed image index" );
+								// just ignore invalid icon specifier
 							}
 						} else {
 							color = GetColor(msg[i]);
