@@ -48,13 +48,13 @@ float DisplaceWater(vec2 worldPos){
 	vec2 waveCoord2 = worldPos.xy * 0.02344 + vec2(.154, .7315);
 	
 	
-	vec4 wave = texture2DLod(waveTexture1, waveCoord.xy, 3.).xyzw;
+	vec4 wave = texture2DLod(waveTexture1, waveCoord.xy, 1.).xyzw;
 	float disp = mix(-0.1, 0.1, wave.w) * 1.;
 	
-	vec4 wave2 = texture2DLod(waveTexture2, waveCoord.zw, 4.).xyzw;
+	vec4 wave2 = texture2DLod(waveTexture2, waveCoord.zw, 2.).xyzw;
 	disp += mix(-0.1, 0.1, wave2.w) * 0.5;
 	
-	wave2 = texture2DLod(waveTexture3, waveCoord2.xy, 2.).xyzw;
+	wave2 = texture2DLod(waveTexture3, waveCoord2.xy, 0.).xyzw;
 	disp += mix(-0.1, 0.1, wave2.w) * 2.5;
 	
 	return disp * 4.;

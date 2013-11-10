@@ -365,7 +365,7 @@ namespace spades {
 								  IGLDevice::Linear);
 				dev->TexParamater(IGLDevice::Texture2D,
 								  IGLDevice::TextureMinFilter,
-								  IGLDevice::LinearMipmapLinear);
+								  IGLDevice::Linear);
 				dev->TexParamater(IGLDevice::Texture2D,
 								  IGLDevice::TextureWrapS,
 								  IGLDevice::ClampToEdge);
@@ -584,7 +584,7 @@ namespace spades {
 			}
             
             device->BindTexture(IGLDevice::Texture2D, mirrorColorTexture);
-            device->GenerateMipmap(IGLDevice::Texture2D);
+            //device->GenerateMipmap(IGLDevice::Texture2D);
 			
 			// restore framebuffer
 			if(useMultisample){
