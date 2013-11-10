@@ -33,6 +33,7 @@ uniform sampler2D waveTexture1;
 uniform sampler2D waveTexture2;
 uniform sampler2D waveTexture3;
 uniform sampler2D mirrorTexture;
+uniform mat4 viewMatrix;
 uniform vec3 fogColor;
 uniform vec3 skyColor;
 uniform vec2 zNearFar;
@@ -84,12 +85,10 @@ void main() {
 	vec2 origScrPos = screenPosition.xy / screenPosition.z;
 	vec2 scrPos = origScrPos;
 	
-	// TODO: do displacement
 	vec2 xToUV = dFdx(worldPosition.xy);
 	vec2 yToUV = dFdy(worldPosition.xy);
-	float scale = 1. / dot(xToUV.xy, yToUV.yx * vec2(1., -1.));
-	vec2 disp = vec2(dot(xToUV, wave.xy * vec2(1., -1.)),
-					 dot(yToUV, wave.xy * vec2(-1., 1.)));
+	float scale = 1. / viewPosition.z;
+	vec2 disp = wave.xy * 0.1;
 	scrPos += disp * scale * displaceScale  * 4.;
 	
 	// check envelope length.
@@ -132,6 +131,7 @@ void main() {
 						  0., 1.);
 	vec2 sampCoord = integralCoord + subCoord * blurDirSign;
 	vec3 waterColor = texture2D(texture, sampCoord / 512.).xyz;
+	waterColor *= EvaluateSunLight() + EvaluateAmbientLight(1.);
 	
 	// underwater object color
 	gl_FragColor = texture2D(screenTexture, scrPos);
@@ -148,18 +148,19 @@ void main() {
 	vec3 att = 1. - fogDensity;
 	
 	/* ------- Reflection -------- */
+	
+	vec3 ongoing = normalize(worldPositionFromOrigin);
+	
+    // bluring for far surface
+	float lodBias = 1.0 / ongoing.z;
+	float dispScaleByLod = min(1., ongoing.z * 0.5);
+    lodBias = log2(lodBias);
+    lodBias = clamp(lodBias, 0., 2.);
     
 	// compute reflection color
 	vec2 scrPos2 = origScrPos;
-	//disp = vec2(dot(xToUV, wave.xy * vec2(1., -1.)),
-	//				dot(yToUV, wave.xy * vec2(-1., 1.)));
 	scrPos2 -= disp * scale * displaceScale * 15.;
     
-    // bluring for far surface
-    float lodBias = dot(abs(vec4(xToUV, yToUV)), vec4(1. / 4.));
-    lodBias = max(1., lodBias * 120.);
-    lodBias = log2(lodBias);
-    lodBias = clamp(lodBias, 0., 5.);
     
 	vec3 refl = texture2D(mirrorTexture, scrPos2, lodBias).xyz;
 	refl *= refl; // linearize
@@ -167,7 +168,6 @@ void main() {
     
 	// reflectivity
 	vec3 sunlight = EvaluateSunLight();
-	vec3 ongoing = normalize(worldPositionFromOrigin);
 	float reflective = dot(ongoing, wave.xyz);
 	reflective = clamp(1. - reflective, 0., 1.);
     
@@ -211,7 +211,7 @@ void main() {
 		spec *= spec; // ^512
 		spec *= spec; // ^1024
 		spec *= reflective;
-		gl_FragColor.xyz += sunlight * spec * 1000. * att;
+		gl_FragColor.xyz += sunlight * spec * 10000. * att;
 		
 		
 	}

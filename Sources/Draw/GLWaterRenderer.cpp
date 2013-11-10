@@ -733,6 +733,7 @@ namespace spades {
 				static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 				static GLProgramUniform modelMatrix("modelMatrix");
 				static GLProgramUniform viewModelMatrix("viewModelMatrix");
+				static GLProgramUniform viewMatrix("viewMatrix");
 				static GLProgramUniform fogDistance("fogDistance");
 				static GLProgramUniform fogColor("fogColor");
 				static GLProgramUniform skyColor("skyColor");
@@ -746,6 +747,7 @@ namespace spades {
 				projectionViewMatrix(prg);
 				modelMatrix(prg);
 				viewModelMatrix(prg);
+				viewMatrix(prg);
 				fogDistance(prg);
 				fogColor(prg);
 				skyColor(prg);
@@ -759,6 +761,7 @@ namespace spades {
 				projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
 				modelMatrix.SetValue(mat);
 				viewModelMatrix.SetValue(renderer->GetViewMatrix() * mat);
+				viewMatrix.SetValue(renderer->GetViewMatrix());
 				fogDistance.SetValue(fogDist);
 				fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 				skyColor.SetValue(skyCol.x, skyCol.y, skyCol.z);
@@ -768,8 +771,8 @@ namespace spades {
 									def.viewOrigin.z);
 				/*displaceScale.SetValue(1.f / renderer->ScreenWidth() / tanf(def.fovX * .5f),
 									   1.f / renderer->ScreenHeight() / tanf(def.fovY) * .5f);*/
-				displaceScale.SetValue(.3f / renderer->ScreenWidth(),
-									   .3f / renderer->ScreenHeight());
+				displaceScale.SetValue(1.f,
+									   1.f);
 				fovTan.SetValue(tanf(def.fovX * .5f), -tanf(def.fovY * .5f),
 								-tanf(def.fovX * .5f), tanf(def.fovY * .5f));
 				
@@ -840,6 +843,11 @@ namespace spades {
 					// mirror
 					device->ActiveTexture(6);
 					device->BindTexture(IGLDevice::Texture2D, renderer->GetFramebufferManager()->GetMirrorTexture());
+					if((float)r_maxAnisotropy > 1.1f) {
+						device->TexParamater(IGLDevice::Texture2D,
+											 IGLDevice::TextureMaxAnisotropy,
+											 (float)r_maxAnisotropy);
+					}
 					mirrorTexture.SetValue(6);
 					
 					shadowShader(renderer, prg, 7);
