@@ -227,7 +227,7 @@ namespace spades {
 					
 					// if true, this is negative-y faced plane
 					// if false, this is negative-z faced plane
-					bool isSide = pixel & 0x80 != 0;
+					bool isSide = (pixel & 0x80) != 0;
 					
 					// direction dependent process
 					Vector3 center; // center of face
