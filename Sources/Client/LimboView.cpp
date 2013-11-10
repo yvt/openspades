@@ -26,6 +26,7 @@
 #include "World.h"
 #include "IAudioDevice.h"
 #include "IAudioChunk.h"
+#include <sstream>
 
 namespace spades{
 	namespace client {
@@ -46,53 +47,22 @@ namespace spades{
 			float teamX = left + 10.f;
 			float firstY = top + 35.f;
 			
-			items.push_back(MenuItem(MenuTeam1,
-									 AABB2(teamX,
-										   firstY,
-										   menuWidth, menuHeight),
-									 "Team 1"));
-			
-			items.push_back(MenuItem(MenuTeam2,
-									 AABB2(teamX,
-										   firstY + rowHeight,
-										   menuWidth, menuHeight),
-									 "Team 2")); // TODO: use team name
-			items.push_back(MenuItem(MenuTeamSpectator,
-									 AABB2(teamX,
-										   firstY + rowHeight * 2.f,
-										   menuWidth, menuHeight),
-									 "Spectator"));
+			World* w = client->GetWorld();
+
+			items.push_back(MenuItem(MenuTeam1, AABB2(teamX, firstY, menuWidth, menuHeight), w ? w->GetTeam(0).name : "Team 1"));
+			items.push_back(MenuItem(MenuTeam2, AABB2(teamX, firstY + rowHeight, menuWidth, menuHeight), w ? w->GetTeam(1).name : "Team 2"));
+			items.push_back(MenuItem(MenuTeamSpectator, AABB2(teamX, firstY + rowHeight * 2.f, menuWidth, menuHeight), w ? w->GetTeam(2).name : "Spectator"));
 			
 			float weapX = left + 260.f;
 			
-			items.push_back(MenuItem(MenuWeaponRifle,
-									 AABB2(weapX,
-										   firstY,
-										   menuWidth, menuHeight),
-									 "Rifle"));
+			items.push_back(MenuItem(MenuWeaponRifle, AABB2(weapX, firstY, menuWidth, menuHeight), "Rifle"));
+			items.push_back(MenuItem(MenuWeaponSMG, AABB2(weapX, firstY + rowHeight, menuWidth, menuHeight), "SMG")); // TODO: use team name
+			items.push_back(MenuItem(MenuWeaponShotgun, AABB2(weapX, firstY + rowHeight * 2.f, menuWidth, menuHeight), "Shotgun"));
 			
-			items.push_back(MenuItem(MenuWeaponSMG,
-									 AABB2(weapX,
-										  firstY + rowHeight,
-										   menuWidth, menuHeight),
-									 "SMG")); // TODO: use team name
-			items.push_back(MenuItem(MenuWeaponShotgun,
-									 AABB2(weapX,
-										   firstY + rowHeight * 2.f,
-										   menuWidth, menuHeight),
-									 "Shotgun"));
-			
-			items.push_back(MenuItem(MenuSpawn,
-									 AABB2(left + contentsWidth - 266.f,
-										   firstY + 4.f,
-										   256.f, 64.f),
-									 "Spawn"));
-			
-			
-			
-			cursorPos = MakeVector2(renderer->ScreenWidth()*.5f,
-									renderer->ScreenHeight()*.5f);
-			
+			items.push_back(MenuItem(MenuSpawn, AABB2(left + contentsWidth - 266.f, firstY + 4.f, 256.f, 64.f), "Spawn"));
+
+			cursorPos = MakeVector2(renderer->ScreenWidth()*.5f, renderer->ScreenHeight()*.5f);
+
 			selectedTeam = 2;
 			selectedWeapon = RIFLE_WEAPON;
 		}
@@ -147,7 +117,25 @@ namespace spades{
 						}
 					}
 				}
-				
+			} else if( "1" == key ) {
+				if( 2 == selectedTeam ) {
+					selectedTeam = 0;
+				} else {
+					selectedWeapon = RIFLE_WEAPON;
+					client->SpawnPressed();
+				}
+			} else if( "2" == key ) {
+				if( 2 == selectedTeam ) {
+					selectedTeam = 1;
+				} else {
+					selectedWeapon = SMG_WEAPON;
+					client->SpawnPressed();
+				}
+			} else if( "3" == key ) {
+				if( 2 != selectedTeam ) {
+					selectedWeapon = SHOTGUN_WEAPON;
+				}
+				client->SpawnPressed();	//if we have 3 and are already spec someone wants to spec..
 			}
 		}
 		
@@ -194,16 +182,14 @@ namespace spades{
 				Vector2 pos;
 				pos.x = left + 10.f;
 				pos.y = top + 10.f;
-				font->Draw(msg, pos + MakeVector2(0, 1), 1.f, MakeVector4(0,0,0,0.4f));
-				font->Draw(msg, pos, 1.f, MakeVector4(1, 1, 1, 1));
+				font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0,0,0,0.4f));
 			}
 			if(selectedTeam != 2){
 				std::string msg = "Select Weapon:";
 				Vector2 pos;
 				pos.x = left + 260.f;
 				pos.y = top + 10.f;
-				font->Draw(msg, pos + MakeVector2(0, 1), 1.f, MakeVector4(0,0,0,0.4f));
-				font->Draw(msg, pos, 1.f, MakeVector4(1, 1, 1, 1));
+				font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0,0,0,0.4f));
 			}
 			
 			for(size_t i = 0; i < items.size(); i++){
@@ -212,17 +198,20 @@ namespace spades{
 				
 				if(!item.visible)
 					continue;
-				
+				int index = 0;
 				switch(item.type){
-					case MenuTeam1: selected = selectedTeam == 0; break;
-					case MenuTeam2: selected = selectedTeam == 1; break;
-					case MenuTeamSpectator: selected = selectedTeam == 2; break;
+					case MenuTeam1:
+					case MenuTeam2:
+					case MenuTeamSpectator:
+						selected = selectedTeam == item.type;
+						index = selectedTeam == 2 ? (1+item.type) : 0;
+						break;
 					case MenuWeaponRifle:
-						selected = selectedWeapon == RIFLE_WEAPON; break;
 					case MenuWeaponSMG:
-						selected = selectedWeapon == SMG_WEAPON; break;
 					case MenuWeaponShotgun:
-						selected = selectedWeapon == SHOTGUN_WEAPON; break;
+						selected = selectedWeapon == (item.type-3);
+						index = selectedTeam != 2 ? (1+(item.type-3)) : 0;
+						break;
 					default:
 						selected = false;
 				}
@@ -248,8 +237,7 @@ namespace spades{
 					Vector2 pos;
 					pos.x = item.rect.GetMinX() + (item.rect.GetWidth() - size.x) / 2.f + 2.f;
 					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f + 2.f;
-					bFont->Draw(msg, pos + MakeVector2(0, 2), 1.f, MakeVector4(0,0,0,0.4f));
-					bFont->Draw(msg, pos, 1.f, MakeVector4(1, 1, 1, 1));
+					bFont->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0,0,0,0.4f));
 				}else{
 					renderer->DrawImage(menuItemImage, item.rect);
 					
@@ -262,8 +250,14 @@ namespace spades{
 					Vector2 pos;
 					pos.x = item.rect.GetMinX() + 5.f;
 					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f + 2.f;
-					font->Draw(msg, pos + MakeVector2(0, 1), 1.f, MakeVector4(0,0,0,0.4f));
-					font->Draw(msg, pos, 1.f, MakeVector4(1, 1, 1, 1));
+					font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0,0,0,0.4f));
+					if( index > 0 ) {
+						std::stringstream ss;
+						ss << index;
+						msg = ss.str();
+						pos.x = item.rect.GetMaxX() - 5.f - font->Measure(msg).x;
+						font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0,0,0,0.4f));
+					}
 				}
 			}
 			

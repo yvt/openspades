@@ -811,8 +811,7 @@ namespace spades {
 						break;
 					}*/
 					
-					Grenade *g = new Grenade(GetWorld(),
-											 pos, vel, fuseLen);
+					Grenade *g = new Grenade(GetWorld(), pos, vel, fuseLen);
 					GetWorld()->AddGrenade(g);
 				}
 					break;
