@@ -25,6 +25,7 @@ attribute vec2 positionAttribute;
 uniform vec4 drawRange;
 
 varying vec2 texCoord;
+varying vec2 modulationTexCoord;
 
 void main() {
 	gl_Position.xy = mix(drawRange.xy, drawRange.zw,
@@ -33,5 +34,6 @@ void main() {
 	gl_Position.w = 1.;
 	
 	texCoord = mix(vec2(0.), vec2(1.), positionAttribute.xy);
+    modulationTexCoord = gl_Position.xy * 0.25 + vec2(0.25, 0.75);
 }
 
