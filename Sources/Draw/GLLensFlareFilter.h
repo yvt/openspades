@@ -38,7 +38,7 @@ namespace spades {
 			GLLensFlareFilter(GLRenderer *);
 			void Draw();
 			void Draw(Vector3 direction, bool reflections,
-					  Vector3 color);
+					  Vector3 color, bool infinityDistance);
 		};
 	}
 }

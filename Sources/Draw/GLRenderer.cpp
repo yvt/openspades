@@ -67,6 +67,7 @@ SPADES_SETTING(r_bloom, "1");
 SPADES_SETTING(r_lens, "1");
 SPADES_SETTING(r_depthOfField, "0");
 SPADES_SETTING(r_lensFlare, "1");
+SPADES_SETTING(r_lensFlareDynamic, "1");
 SPADES_SETTING(r_softParticles, "1");
 SPADES_SETTING(r_cameraBlur, "1");
 SPADES_SETTING(r_dlights, "1");
@@ -830,6 +831,49 @@ namespace spades {
 					GLProfiler profiler(device, "Lens Flare");
 					device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
 					GLLensFlareFilter(this).Draw();
+				}
+				
+				if(r_lensFlare && r_lensFlareDynamic) {
+					GLProfiler profiler(device, "Dynamic Light Lens Flare");
+					GLLensFlareFilter lensFlareRenderer(this);
+					device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
+					for(size_t i = 0; i < lights.size(); i++) {
+						const GLDynamicLight& dl = lights[i];
+						const client::DynamicLightParam& prm = dl.GetParam();
+						if(!prm.useLensFlare)
+							continue;
+						Vector3 color = prm.color * 0.6f;
+						{
+							// distance attenuation
+							float rad = (prm.origin - sceneDef.viewOrigin).GetPoweredLength();
+							rad /= prm.radius * prm.radius * 18.f;
+							if(rad > 1.f)
+								continue;
+							color *= 1.f - rad;
+						}
+						
+						if(prm.type == client::DynamicLightTypeSpotlight) {
+							// spotlight
+							Vector3 diff = (sceneDef.viewOrigin - prm.origin).Normalize();
+							Vector3 lightdir = prm.spotAxis[2];
+							lightdir = lightdir.Normalize();
+							float cosVal = Vector3::Dot(diff, lightdir);
+							float minCosVal = cosf(prm.spotAngle * 0.5f);
+							if(cosVal < minCosVal){
+								// out of range
+								continue;
+							}
+							color *= (cosVal - minCosVal) / (1.f - minCosVal);
+						}
+						
+						// view cull
+						if(Vector3::Dot(sceneDef.viewAxis[2], (prm.origin - sceneDef.viewOrigin)) < 0.f){
+							continue;
+						}
+						
+						lensFlareRenderer.Draw(prm.origin - sceneDef.viewOrigin,
+											   true, color, false);
+					}
 				}
 				
 				if(r_colorCorrection){

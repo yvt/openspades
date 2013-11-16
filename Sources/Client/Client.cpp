@@ -2845,6 +2845,7 @@ namespace spades {
 			l.radius = 16.f;
 			l.type = DynamicLightTypePoint;
 			l.color = MakeVector3(3.f, 1.6f, 0.5f);
+			l.useLensFlare = true;
 			flashDlights.push_back(l);
 			
 			Vector3 velBias = {0,0,0};

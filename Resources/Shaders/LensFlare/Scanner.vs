@@ -24,6 +24,7 @@ attribute vec2 positionAttribute;
 
 uniform vec4 scanRange;
 uniform vec4 drawRange;
+uniform float scanZ;
 
 varying vec3 scanPos;
 varying vec2 circlePos;
@@ -31,7 +32,7 @@ varying vec2 circlePos;
 void main() {
 	scanPos.xy = mix(scanRange.xy, scanRange.zw,
 				  positionAttribute.xy);
-	scanPos.z = .9999999;
+	scanPos.z = scanZ;
 	gl_Position.xy = mix(drawRange.xy, drawRange.zw,
 						 positionAttribute.xy);
 	gl_Position.z = 0.5;

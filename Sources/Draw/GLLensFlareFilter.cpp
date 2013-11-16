@@ -93,12 +93,13 @@ namespace spades {
 		
 		void GLLensFlareFilter::Draw() {
 			Draw(MakeVector3(0.f, -1.f, -1.f), true,
-				 MakeVector3(1.f, .9f, .8f));
+				 MakeVector3(1.f, .9f, .8f), true);
 		}
 		
 		void GLLensFlareFilter::Draw(Vector3 direction,
 									 bool renderReflections,
-									 Vector3 sunColor) {
+									 Vector3 sunColor,
+									 bool infinityDistance) {
 			SPADES_MARK_FUNCTION();
 			
 			IGLDevice *dev = renderer->GetGLDevice();
@@ -146,6 +147,7 @@ namespace spades {
 				static GLProgramUniform drawRange("drawRange");
 				static GLProgramUniform radius("radius");
 				static GLProgramUniform depthTexture("depthTexture");
+				static GLProgramUniform scanZ("scanZ");
 				
 				scanner->Use();
 				positionAttribute(scanner);
@@ -153,6 +155,16 @@ namespace spades {
 				drawRange(scanner);
 				radius(scanner);
 				depthTexture(scanner);
+				scanZ(scanner);
+				
+				if(infinityDistance)
+					scanZ.SetValue(.9999999f);
+				else{
+					float far = def.zFar;
+					float near = def.zNear;
+					float depth = sunView.z;
+					scanZ.SetValue(far * (near - depth) / (depth * (near - far)));
+				}
 				
 				dev->Enable(IGLDevice::Blend, false);
 				

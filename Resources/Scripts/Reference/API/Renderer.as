@@ -177,6 +177,8 @@ namespace spades {
 		Vector3 spotAxisZ;
 		Image@ image;
 		float spotAngle;
+		
+		bool useLensFlare;
 	}	
 	
 }

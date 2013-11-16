@@ -250,6 +250,10 @@ namespace spades {
 														"float spotAngle",
 														asOFFSET(DynamicLightParam, spotAngle));
 						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("DynamicLightParam",
+														"bool useLensFlare",
+														asOFFSET(DynamicLightParam, useLensFlare));
+						manager->CheckError(r);
 						
 						r = eng->RegisterObjectBehaviour("SceneDefinition",
 														 asBEHAVE_CONSTRUCT,
