@@ -159,6 +159,7 @@ void main() {
     
 	// compute reflection color
 	vec2 scrPos2 = origScrPos;
+	disp.y = -abs(disp.y * 3.);
 	scrPos2 -= disp * scale * displaceScale * 15.;
     
     
