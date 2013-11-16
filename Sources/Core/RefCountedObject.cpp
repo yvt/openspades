@@ -35,7 +35,8 @@ namespace spades {
 	}
 	
 	void RefCountedObject::Release() {
-		if(asAtomicInc(refCount) <= 0)
+		if(asAtomicDec(refCount) <= 0) {
 			delete this;
+		}
 	}
 }

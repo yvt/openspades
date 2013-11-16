@@ -19,6 +19,7 @@
  */
 
 #include "Math.h"
+#include <Core/Debug.h>
 #include <stdlib.h>
 #include <new>
 

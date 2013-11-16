@@ -20,6 +20,7 @@
 
 #include "ScriptManager.h"
 #include "IGrenadeSkin.h"
+#include <Core/Debug.h>
 
 namespace spades{
 	namespace client {

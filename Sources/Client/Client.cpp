@@ -1690,8 +1690,6 @@ namespace spades {
 			param.matrix = mat;
 			
 			renderer->RenderModel(model, param);
-			
-			
 		}
 		
 		void Client::AddDebugObjectToScene(const spades::OBB3 &obb,
