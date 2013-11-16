@@ -32,7 +32,7 @@ namespace spades {
 			GLProgram *lens;
 		public:
 			GLColorCorrectionFilter(GLRenderer *);
-			GLColorBuffer Filter(GLColorBuffer);
+			GLColorBuffer Filter(GLColorBuffer, Vector3 tint);
 		};
 	}
 }

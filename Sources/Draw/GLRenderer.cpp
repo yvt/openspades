@@ -114,6 +114,8 @@ namespace spades {
 			lensDustFilter = NULL;
 			map = NULL;
 			
+			smoothedFogColor = MakeVector3(-1.f, -1.f, -1.f);
+			
 			lastTime = 0;
 			
 			sceneUsedInThisFrame = false;
@@ -329,6 +331,12 @@ namespace spades {
 		
 		float GLRenderer::ScreenHeight() {
 			return device->ScreenHeight();
+		}
+		
+		void GLRenderer::SetFogColor(spades::Vector3 v) {
+			fogColor = v;
+			if(smoothedFogColor.x < 0.f)
+				smoothedFogColor = fogColor;
 		}
 		
 		Vector3 GLRenderer::GetFogColorForSolidPass() {
@@ -878,7 +886,15 @@ namespace spades {
 				
 				if(r_colorCorrection){
 					GLProfiler profiler(device, "Color Correction");
-					handle = GLColorCorrectionFilter(this).Filter(handle);
+					Vector3 tint = smoothedFogColor + MakeVector3(1.f, 1.f, 1.f);
+					tint = MakeVector3(1.f, 1.f, 1.f) / tint;
+					tint = Mix(tint, MakeVector3(1.f, 1.f, 1.f),
+							   0.4f);
+					tint *= 1.f / std::min(std::min(tint.x, tint.y), tint.z);
+					handle = GLColorCorrectionFilter(this).Filter(handle, tint);
+					
+					// update smoothed fog color
+					smoothedFogColor = Mix(smoothedFogColor, fogColor, 0.02f);
 				}
 				
 				if(r_fxaa){

@@ -101,6 +101,9 @@ namespace spades {
 			float fogDistance;
 			Vector3 fogColor;
 			
+			// used for color correction
+			Vector3 smoothedFogColor;
+			
 			Matrix4 projectionMatrix;
 			Matrix4 viewMatrix;
 			Matrix4 projectionViewMatrix;
@@ -138,7 +141,7 @@ namespace spades {
 			GLShader *RegisterShader(const std::string& name);
 			
 			virtual void SetGameMap(client::GameMap *);
-			virtual void SetFogColor(Vector3 v){fogColor = v;}
+			virtual void SetFogColor(Vector3 v);
 			virtual void SetFogDistance(float f){fogDistance = f;}
 			
 			Vector3 GetFogColor() { return fogColor; }
