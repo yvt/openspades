@@ -1269,7 +1269,7 @@ namespace spades {
 			// Well done!
 			renderer->FrameDone();
 			
-			Handle<Bitmap> bmp = renderer->ReadBitmap();
+			Handle<Bitmap> bmp(renderer->ReadBitmap(), false);
 			// force 100% opacity
 			
 			uint32_t *pixels = bmp->GetPixels();

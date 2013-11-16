@@ -57,7 +57,7 @@ namespace spades {
 		public:
 			ParticleSpriteEntity(Client *cli, IImage *image, Vector4 color);
 			
-			virtual ~ParticleSpriteEntity(){}
+			virtual ~ParticleSpriteEntity();
 			
 			virtual bool Update(float dt);
 			virtual void Render3D();

@@ -37,7 +37,7 @@ namespace spades {
 			for(int i = 0; i < chunkRows * chunkCols; i++)
 				chunkInvalid.push_back(false);
 			
-			Handle<Bitmap> bmp = GenerateBitmap(0, 0, m->Width(), m->Height());
+			Handle<Bitmap> bmp(GenerateBitmap(0, 0, m->Width(), m->Height()), false);
 			try{
 				image = static_cast<GLImage *>(renderer->CreateImage(bmp));
 			}catch(...){
@@ -61,7 +61,7 @@ namespace spades {
 		
 		Bitmap *GLFlatMapRenderer::GenerateBitmap(int mx, int my, int w, int h){
 			SPADES_MARK_FUNCTION();
-			Handle<Bitmap> bmp = new Bitmap(w, h);
+			Handle<Bitmap> bmp(new Bitmap(w, h), false);
 			try{
 				uint32_t *pixels = bmp->GetPixels();
 				
@@ -112,9 +112,9 @@ namespace spades {
 				int chunkX = ((int)i) % chunkCols;
 				int chunkY = ((int)i) / chunkCols;
 				
-				Handle<Bitmap> bmp = GenerateBitmap(chunkX * ChunkSize,
+				Handle<Bitmap> bmp(GenerateBitmap(chunkX * ChunkSize,
 											 chunkY * ChunkSize,
-											 ChunkSize, ChunkSize);
+											 ChunkSize, ChunkSize), false);
 				try{
 					image->SubImage(bmp, chunkX * ChunkSize, chunkY * ChunkSize);
 				}catch(...){

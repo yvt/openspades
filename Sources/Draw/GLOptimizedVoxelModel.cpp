@@ -113,7 +113,7 @@ namespace spades {
 			}
 			
 			BitmapAtlasGenerator::Result result = atlasGen.Pack();
-			Handle<Bitmap> bmp = result.bitmap;
+			Handle<Bitmap> bmp(result.bitmap, false);
 			SPAssert(result.items.size() == bmps.size());
 			for(size_t i = 0; i < bmps.size(); i++){
 				bmps[i]->Release();

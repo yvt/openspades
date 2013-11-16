@@ -260,12 +260,11 @@ namespace spades {
 				
 				{
 					SDLGLDevice glDevice(surface);
-					Handle<draw::GLRenderer> renderer = new draw::GLRenderer(&glDevice);
+					Handle<draw::GLRenderer> renderer(new draw::GLRenderer(&glDevice), false);
 					audio::ALDevice audio;
 					
 					RunClientLoop(renderer, &audio);
 					
-					renderer->Shutdown();
 				}
 			}catch(...){
 				SDL_Quit();

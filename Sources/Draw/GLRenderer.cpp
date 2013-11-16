@@ -905,14 +905,14 @@ namespace spades {
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
 				device->Viewport(0, 0, handle.GetWidth(), handle.GetHeight());
-				Handle<GLImage> image = new GLImage(handle.GetTexture(),
+				Handle<GLImage> image(new GLImage(handle.GetTexture(),
 													device,
 													handle.GetWidth(),
 													handle.GetHeight(),
-													false);
+													false), false);
 				SetColor(MakeVector4(1, 1, 1, 1));
 				DrawImage(image, AABB2(0,handle.GetHeight(),handle.GetWidth(),-handle.GetHeight()));
-				imageRenderer->Flush(); // must flush now because handle is released soon
+				imageRenderer->Flush();
 			}
 			
 			handle.Release();
@@ -1093,10 +1093,10 @@ namespace spades {
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
 				device->Viewport(0, 0, w,h);
-				Handle<GLImage> image = new GLImage(lastColorBufferTexture,
+				Handle<GLImage> image(new GLImage(lastColorBufferTexture,
 							  device,
 							  w,h,
-							  false);
+							  false), false);
 				SetColor(MakeVector4(1, 1, 1, 1));
 				DrawImage(image, AABB2(0,h,w,-h));
 				imageRenderer->Flush(); // must flush now because handle is released soon

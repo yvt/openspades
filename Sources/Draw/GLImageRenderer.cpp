@@ -63,6 +63,10 @@ namespace spades{
 		}
 		
 		GLImageRenderer::~GLImageRenderer(){
+			if(image != NULL){
+				image->Release();
+				image = NULL;
+			}
 			delete positionAttribute;
 			delete colorAttribute;
 			delete textureCoordAttribute;
@@ -117,6 +121,8 @@ namespace spades{
 			
 			vertices.clear();
 			indices.clear();
+			image->Release();
+			image = NULL;
 		}
 		
 		void GLImageRenderer::SetImage(spades::draw::GLImage *img){
@@ -124,6 +130,7 @@ namespace spades{
 				return;
 			Flush();
 			image = img;
+			image->AddRef();
 		}
 		
 		void GLImageRenderer::Add(float dx1, float dy1,

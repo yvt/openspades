@@ -44,11 +44,20 @@ namespace spades {
 			additive = false;
 			blockHitAction = Delete;
 			
+			if(image != NULL)
+				image->AddRef();
+			
 			renderer = cli->GetRenderer();
 			if(cli->GetWorld())
 			map = cli->GetWorld()->GetMap();
 			else
 				map = NULL;
+		}
+		
+		ParticleSpriteEntity::~ParticleSpriteEntity() {
+			if(image != NULL){
+				image->Release();
+			}
 		}
 		
 		void ParticleSpriteEntity::SetLifeTime(float lifeTime,
@@ -162,9 +171,11 @@ namespace spades {
 		}
 		void ParticleSpriteEntity::SetImage(IImage *img) {
 			if(img == image) return;
-			image->Release();
+			if(image != NULL)
+				image->Release();
 			image = img;
-			image->AddRef();
+			if(image != NULL)
+				image->AddRef();
 		}
 	}
 }
