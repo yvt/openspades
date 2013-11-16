@@ -988,6 +988,7 @@ namespace spades {
 						client->LocalPlayerCreated();
 						lastPlayerInput = 0xffffffff;
 						lastWeaponInput = 0xffffffff;
+                        SendHeldBlockColor(); // ensure block color synchronized
 					}else{
                         if(team < 2 && pId < (int)playerPosRecords.size()) {
                             PosRecord& rec = playerPosRecords[pId];
