@@ -876,7 +876,7 @@ void MainWindow::ServerSelectionChanged()
 	if( browser ) {
 		int item = serverListbox->value();
 		if( item > 1 ) {
-			browser->onSelection( serverListbox->data( item ), quickHostInput );
+			browser->onSelection( serverListbox->data( item ), quickHostInput, versionChoice );
 		} else if( item == 1 ) {
 			browser->onHeaderClick( Fl::event_x() - serverListbox->x() );
 		}
