@@ -771,8 +771,8 @@ namespace spades {
 									def.viewOrigin.z);
 				/*displaceScale.SetValue(1.f / renderer->ScreenWidth() / tanf(def.fovX * .5f),
 									   1.f / renderer->ScreenHeight() / tanf(def.fovY) * .5f);*/
-				displaceScale.SetValue(1.f,
-									   1.f);
+				displaceScale.SetValue(1.f / tanf(def.fovX * .5f),
+									   1.f / tanf(def.fovY * .5f));
 				fovTan.SetValue(tanf(def.fovX * .5f), -tanf(def.fovY * .5f),
 								-tanf(def.fovX * .5f), tanf(def.fovY * .5f));
 				

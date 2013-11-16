@@ -21,14 +21,17 @@
 
 
 uniform sampler2D visibilityTexture;
+uniform sampler2D modulationTexture;
 
 varying vec2 texCoord;
+varying vec2 modulationTexCoord;
 
 uniform vec3 color;
 
 void main() {
 	float val = texture2D(visibilityTexture, texCoord).x;
-	
 	gl_FragColor = vec4(color * val, 1.);
+    gl_FragColor.xyz *= mix(vec3(0.2), vec3(4.5),
+                            texture2D(modulationTexture, modulationTexCoord).xyz);
 }
 

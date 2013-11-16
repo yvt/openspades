@@ -30,6 +30,7 @@
 #include "../Core/Debug.h"
 #include "GLMapShadowRenderer.h"
 #include "GLProfiler.h"
+#include "GLImage.h"
 
 namespace spades {
 	namespace draw {
@@ -38,6 +39,7 @@ namespace spades {
 			blurProgram = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 			scannerProgram = renderer->RegisterProgram("Shaders/LensFlare/Scanner.program");
 			drawProgram = renderer->RegisterProgram("Shaders/LensFlare/Draw.program");
+			dustImg = (GLImage *)renderer->RegisterImage("Textures/RealLens.jpg");
 		}
 		
 		GLColorBuffer GLLensFlareFilter::Blur(GLColorBuffer buffer,
@@ -202,21 +204,28 @@ namespace spades {
 				static GLProgramUniform drawRange("drawRange");
 				static GLProgramUniform color("color");
 				static GLProgramUniform visibilityTexture("visibilityTexture");
+				static GLProgramUniform modulationTexture("modulationTexture");
 				
 				draw->Use();
 				
 				positionAttribute(draw);
 				drawRange(draw);
 				visibilityTexture(draw);
+                modulationTexture(draw);
 				color(draw);
 				
 				dev->Enable(IGLDevice::Blend, true);
 				dev->BlendFunc(IGLDevice::One,
 							   IGLDevice::One);
 				
+				dev->ActiveTexture(1);
+                dustImg->Bind(IGLDevice::Texture2D);
+				modulationTexture.SetValue(1);
+                
 				dev->ActiveTexture(0);
 				dev->BindTexture(IGLDevice::Texture2D, visiblityBuffer.GetTexture());
 				visibilityTexture.SetValue(0);
+                
 				
 				qr.SetCoordAttributeIndex(positionAttribute());
 				dev->Viewport(0, 0, dev->ScreenWidth(), dev->ScreenHeight());
@@ -260,19 +269,40 @@ namespace spades {
 				
 				qr.Draw();
 				
-				color.SetValue(.07f, .15f, .1f);
+				color.SetValue(.03f, .09f, .05f);
 				drawRange.SetValue(-(sunScreen.x - sunSize.x * 38.f) * 1.6f,
 								   -(sunScreen.y - sunSize.y * 38.f) * 1.6f,
 								   -(sunScreen.x + sunSize.x * 38.f) * 1.6f,
 								   -(sunScreen.y + sunSize.y * 38.f) * 1.6f);
 				
 				qr.Draw();
+				color.SetValue(.04f, .015f, .0f);
+				drawRange.SetValue(-(sunScreen.x - sunSize.x * 38.f) * 1.7f,
+								   -(sunScreen.y - sunSize.y * 38.f) * 1.7f,
+								   -(sunScreen.x + sunSize.x * 38.f) * 1.7f,
+								   -(sunScreen.y + sunSize.y * 38.f) * 1.7f);
 				
-				color.SetValue(.03f, .08f, .2f);
+				qr.Draw();
+				color.SetValue(.00f, .02f, .05f);
+				drawRange.SetValue(-(sunScreen.x - sunSize.x * 38.f) * 1.5f,
+								   -(sunScreen.y - sunSize.y * 38.f) * 1.5f,
+								   -(sunScreen.x + sunSize.x * 38.f) * 1.5f,
+								   -(sunScreen.y + sunSize.y * 38.f) * 1.5f);
+				
+				qr.Draw();
+				
+				color.SetValue(.03f, .08f, .15f);
 				drawRange.SetValue(-(sunScreen.x - sunSize.x * 18.f),
 								   -(sunScreen.y - sunSize.y * 18.f),
 								   -(sunScreen.x + sunSize.x * 18.f),
 								   -(sunScreen.y + sunSize.y * 18.f));
+				
+				qr.Draw();
+				color.SetValue(.01f, .03f, .01f);
+				drawRange.SetValue(-(sunScreen.x - sunSize.x * 18.f) * 1.02f,
+								   -(sunScreen.y - sunSize.y * 18.f) * 1.02f,
+								   -(sunScreen.x + sunSize.x * 18.f) * 1.02f,
+								   -(sunScreen.y + sunSize.y * 18.f) * 1.02f);
 				
 				qr.Draw();
 				
