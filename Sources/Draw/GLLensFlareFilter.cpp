@@ -40,6 +40,14 @@ namespace spades {
 			scannerProgram = renderer->RegisterProgram("Shaders/LensFlare/Scanner.program");
 			drawProgram = renderer->RegisterProgram("Shaders/LensFlare/Draw.program");
 			dustImg = (GLImage *)renderer->RegisterImage("Textures/RealLens.jpg");
+			flare1 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/1.tga");
+			flare2 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/2.tga");
+			flare3 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/3.tga");
+			flare4 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/4.jpg");
+			mask1 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/mask1.tga");
+			mask2 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/mask2.tga");
+			mask3 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/mask3.png");
+			white = (GLImage *)renderer->RegisterImage("Gfx/White.tga");
 		}
 		
 		GLColorBuffer GLLensFlareFilter::Blur(GLColorBuffer buffer,
@@ -84,6 +92,13 @@ namespace spades {
 		}
 		
 		void GLLensFlareFilter::Draw() {
+			Draw(MakeVector3(0.f, -1.f, -1.f), true,
+				 MakeVector3(1.f, .9f, .8f));
+		}
+		
+		void GLLensFlareFilter::Draw(Vector3 direction,
+									 bool renderReflections,
+									 Vector3 sunColor) {
 			SPADES_MARK_FUNCTION();
 			
 			IGLDevice *dev = renderer->GetGLDevice();
@@ -92,7 +107,7 @@ namespace spades {
 			client::SceneDefinition def = renderer->GetSceneDef();
 			
 			// transform sun into NDC
-			Vector3 sunWorld = MakeVector3(0, -1, -1);
+			Vector3 sunWorld = direction;
 			Vector3 sunView = {
 				Vector3::Dot(sunWorld, def.viewAxis[0]),
 				Vector3::Dot(sunWorld, def.viewAxis[1]),
@@ -193,6 +208,13 @@ namespace spades {
 			visiblityBuffer = Blur(visiblityBuffer, 2.f);
 			visiblityBuffer = Blur(visiblityBuffer, 4.f);
 			
+			// lens flare size doesn't follow sun size
+			sunSize = MakeVector2(.01f, .01f);
+			sunSize.x *= renderer->ScreenHeight() / renderer->ScreenWidth();
+			
+			float aroundness = sunScreen.GetPoweredLength() * 0.6f;
+			float aroundness2 = std::min(sunScreen.GetPoweredLength() * 3.2f, 1.f);
+			
 			dev->BindFramebuffer(IGLDevice::Framebuffer,
 								 lastFramebuffer);
 			
@@ -205,6 +227,7 @@ namespace spades {
 				static GLProgramUniform color("color");
 				static GLProgramUniform visibilityTexture("visibilityTexture");
 				static GLProgramUniform modulationTexture("modulationTexture");
+				static GLProgramUniform flareTexture("flareTexture");
 				
 				draw->Use();
 				
@@ -212,14 +235,19 @@ namespace spades {
 				drawRange(draw);
 				visibilityTexture(draw);
                 modulationTexture(draw);
+				flareTexture(draw);
 				color(draw);
 				
 				dev->Enable(IGLDevice::Blend, true);
 				dev->BlendFunc(IGLDevice::One,
 							   IGLDevice::One);
 				
+				dev->ActiveTexture(2);
+                white->Bind(IGLDevice::Texture2D);
+				flareTexture.SetValue(2);
+				
 				dev->ActiveTexture(1);
-                dustImg->Bind(IGLDevice::Texture2D);
+                white->Bind(IGLDevice::Texture2D);
 				modulationTexture.SetValue(1);
                 
 				dev->ActiveTexture(0);
@@ -230,15 +258,26 @@ namespace spades {
 				qr.SetCoordAttributeIndex(positionAttribute());
 				dev->Viewport(0, 0, dev->ScreenWidth(), dev->ScreenHeight());
 				
-				color.SetValue(.2f, .2f, .2f);
-				drawRange.SetValue(sunScreen.x - sunSize.x * 128.f,
-								   sunScreen.y - sunSize.y * 128.f,
-								   sunScreen.x + sunSize.x * 128.f,
-								   sunScreen.y + sunSize.y * 128.f);
+				/* render flare */
 				
+				dev->ActiveTexture(2);
+                flare4->Bind(IGLDevice::Texture2D);
+				
+				color.SetValue(sunColor.x * .04f,
+							   sunColor.y * .03f,
+							   sunColor.z * .04f);
+				drawRange.SetValue(sunScreen.x - sunSize.x * 256.f,
+								   sunScreen.y - sunSize.y * 256.f,
+								   sunScreen.x + sunSize.x * 256.f,
+								   sunScreen.y + sunSize.y * 256.f);
 				qr.Draw();
 				
-				color.SetValue(.4f, .4f, .4f);
+				dev->ActiveTexture(2);
+                white->Bind(IGLDevice::Texture2D);
+				
+				color.SetValue(sunColor.x * .3f,
+							   sunColor.y * .3f,
+							   sunColor.z * .3f);
 				drawRange.SetValue(sunScreen.x - sunSize.x * 64.f,
 								   sunScreen.y - sunSize.y * 64.f,
 								   sunScreen.x + sunSize.x * 64.f,
@@ -246,14 +285,18 @@ namespace spades {
 				qr.Draw();
 				
 				
-				color.SetValue(.5f, .5f, .5f);
+				color.SetValue(sunColor.x * .5f,
+							   sunColor.y * .5f,
+							   sunColor.z * .5f);
 				drawRange.SetValue(sunScreen.x - sunSize.x * 32.f,
 								   sunScreen.y - sunSize.y * 32.f,
 								   sunScreen.x + sunSize.x * 32.f,
 								   sunScreen.y + sunSize.y * 32.f);
 				qr.Draw();
 				
-				color.SetValue(.7f, .7f, .7f);
+				color.SetValue(sunColor.x * .8f,
+							   sunColor.y * .8f,
+							   sunColor.z * .8f);
 				drawRange.SetValue(sunScreen.x - sunSize.x * 16.f,
 								   sunScreen.y - sunSize.y * 16.f,
 								   sunScreen.x + sunSize.x * 16.f,
@@ -261,52 +304,9 @@ namespace spades {
 				qr.Draw();
 				
 				
-				color.SetValue(1.f, 1.f, 1.f);
-				drawRange.SetValue((sunScreen.x - sunSize.x * 4.f) * .4f,
-								   (sunScreen.y - sunSize.y * 4.f) * .4f,
-								   (sunScreen.x + sunSize.x * 4.f) * .4f,
-								   (sunScreen.y + sunSize.y * 4.f) * .4f);
-				
-				qr.Draw();
-				
-				color.SetValue(.03f, .09f, .05f);
-				drawRange.SetValue(-(sunScreen.x - sunSize.x * 38.f) * 1.6f,
-								   -(sunScreen.y - sunSize.y * 38.f) * 1.6f,
-								   -(sunScreen.x + sunSize.x * 38.f) * 1.6f,
-								   -(sunScreen.y + sunSize.y * 38.f) * 1.6f);
-				
-				qr.Draw();
-				color.SetValue(.04f, .015f, .0f);
-				drawRange.SetValue(-(sunScreen.x - sunSize.x * 38.f) * 1.7f,
-								   -(sunScreen.y - sunSize.y * 38.f) * 1.7f,
-								   -(sunScreen.x + sunSize.x * 38.f) * 1.7f,
-								   -(sunScreen.y + sunSize.y * 38.f) * 1.7f);
-				
-				qr.Draw();
-				color.SetValue(.00f, .02f, .05f);
-				drawRange.SetValue(-(sunScreen.x - sunSize.x * 38.f) * 1.5f,
-								   -(sunScreen.y - sunSize.y * 38.f) * 1.5f,
-								   -(sunScreen.x + sunSize.x * 38.f) * 1.5f,
-								   -(sunScreen.y + sunSize.y * 38.f) * 1.5f);
-				
-				qr.Draw();
-				
-				color.SetValue(.03f, .08f, .15f);
-				drawRange.SetValue(-(sunScreen.x - sunSize.x * 18.f),
-								   -(sunScreen.y - sunSize.y * 18.f),
-								   -(sunScreen.x + sunSize.x * 18.f),
-								   -(sunScreen.y + sunSize.y * 18.f));
-				
-				qr.Draw();
-				color.SetValue(.01f, .03f, .01f);
-				drawRange.SetValue(-(sunScreen.x - sunSize.x * 18.f) * 1.02f,
-								   -(sunScreen.y - sunSize.y * 18.f) * 1.02f,
-								   -(sunScreen.x + sunSize.x * 18.f) * 1.02f,
-								   -(sunScreen.y + sunSize.y * 18.f) * 1.02f);
-				
-				qr.Draw();
-				
-				color.SetValue(1.f, 1.f, 1.f);
+				color.SetValue(sunColor.x * 1.f,
+							   sunColor.y * 1.f,
+							   sunColor.z * 1.f);
 				drawRange.SetValue(sunScreen.x - sunSize.x * 4.f,
 								   sunScreen.y - sunSize.y * 4.f,
 								   sunScreen.x + sunSize.x * 4.f,
@@ -314,14 +314,138 @@ namespace spades {
 				
 				qr.Draw();
 				
-				color.SetValue(.02f, .07f, .4f);
+				color.SetValue(sunColor.x * .1f,
+							   sunColor.y * .05f,
+							   sunColor.z * .1f);
 				drawRange.SetValue(sunScreen.x - sunSize.x * 256.f,
-								   sunScreen.y - sunSize.y * 4.f,
+								   sunScreen.y - sunSize.y * 8.f,
 								   sunScreen.x + sunSize.x * 256.f,
-								   sunScreen.y + sunSize.y * 4.f);
+								   sunScreen.y + sunSize.y * 8.f);
 				
 				qr.Draw();
+				
+				/* render dusts */
+				
+				dev->ActiveTexture(1);
+				mask3->Bind(IGLDevice::Texture2D);
+				
+				color.SetValue(sunColor.x * .4f * aroundness,
+							   sunColor.y * .4f * aroundness,
+							   sunColor.z * .4f * aroundness);
+				drawRange.SetValue(sunScreen.x - sunSize.x * 188.f,
+								   sunScreen.y - sunSize.y * 188.f,
+								   sunScreen.x + sunSize.x * 188.f,
+								   sunScreen.y + sunSize.y * 188.f);
+				qr.Draw();
+
+				
+				if(renderReflections){
+					
+					dev->ActiveTexture(1);
+					white->Bind(IGLDevice::Texture2D);
+					dev->ActiveTexture(2);
+					flare2->Bind(IGLDevice::Texture2D);
+					
+					color.SetValue(sunColor.x * 1.f,
+								   sunColor.y * 1.f,
+								   sunColor.z * 1.f);
+					drawRange.SetValue(-(sunScreen.x - sunSize.x * 18.f) * .4f,
+									   -(sunScreen.y - sunSize.y * 18.f) * .4f,
+									   -(sunScreen.x + sunSize.x * 18.f) * .4f,
+									   -(sunScreen.y + sunSize.y * 18.f) * .4f);
+					
+					qr.Draw();
+					
+					color.SetValue(sunColor.x * .3f,
+								   sunColor.y * .3f,
+								   sunColor.z * .3f);
+					drawRange.SetValue(-(sunScreen.x - sunSize.x * 6.f) * .39f,
+									   -(sunScreen.y - sunSize.y * 6.f) * .39f,
+									   -(sunScreen.x + sunSize.x * 6.f) * .39f,
+									   -(sunScreen.y + sunSize.y * 6.f) * .39f);
+					
+					qr.Draw();
+					
+					color.SetValue(sunColor.x * 1.f,
+								   sunColor.y * 1.f,
+								   sunColor.z * 1.f);
+					drawRange.SetValue(-(sunScreen.x - sunSize.x * 6.f) * .3f,
+									   -(sunScreen.y - sunSize.y * 6.f) * .3f,
+									   -(sunScreen.x + sunSize.x * 6.f) * .3f,
+									   -(sunScreen.y + sunSize.y * 6.f) * .3f);
+					
+					qr.Draw();
+					
+					color.SetValue(sunColor.x * .3f,
+								   sunColor.y * .3f,
+								   sunColor.z * .3f);
+					drawRange.SetValue((sunScreen.x - sunSize.x * 12.f) * .6f,
+									   (sunScreen.y - sunSize.y * 12.f) * .6f,
+									   (sunScreen.x + sunSize.x * 12.f) * .6f,
+									   (sunScreen.y + sunSize.y * 12.f) * .6f);
+					
+					qr.Draw();
+					
+					dev->ActiveTexture(1);
+					mask2->Bind(IGLDevice::Texture2D);
+					dev->ActiveTexture(2);
+					flare1->Bind(IGLDevice::Texture2D);
+					
+					color.SetValue(sunColor.x * .5f,
+								   sunColor.y * .4f,
+								   sunColor.z * .3f);
+					drawRange.SetValue((sunScreen.x - sunSize.x * 96.f) * 2.3f,
+									   (sunScreen.y - sunSize.y * 96.f) * 2.3f,
+									   (sunScreen.x + sunSize.x * 96.f) * 2.3f,
+									   (sunScreen.y + sunSize.y * 96.f) * 2.3f);
+					
+					qr.Draw();
+					
+					color.SetValue(sunColor.x * .3f,
+								   sunColor.y * .2f,
+								   sunColor.z * .1f);
+					drawRange.SetValue((sunScreen.x - sunSize.x * 128.f) * 0.8f,
+									   (sunScreen.y - sunSize.y * 128.f) * 0.8f,
+									   (sunScreen.x + sunSize.x * 128.f) * 0.8f,
+									   (sunScreen.y + sunSize.y * 128.f) * 0.8f);
+					
+					qr.Draw();
+					
+					
+					dev->ActiveTexture(2);
+					flare3->Bind(IGLDevice::Texture2D);
+					
+					color.SetValue(sunColor.x * .3f,
+								   sunColor.y * .3f,
+								   sunColor.z * .3f);
+					drawRange.SetValue((sunScreen.x - sunSize.x * 18.f) * 0.5f,
+									   (sunScreen.y - sunSize.y * 18.f) * 0.5f,
+									   (sunScreen.x + sunSize.x * 18.f) * 0.5f,
+									   (sunScreen.y + sunSize.y * 18.f) * 0.5f);
+					
+					qr.Draw();
+					
+					dev->ActiveTexture(1);
+					mask1->Bind(IGLDevice::Texture2D);
+					dev->ActiveTexture(2);
+					flare3->Bind(IGLDevice::Texture2D);
+					
+					color.SetValue(sunColor.x * .8f * aroundness2,
+								   sunColor.y * .5f * aroundness2,
+								   sunColor.z * .3f * aroundness2);
+					float reflSize = 50.f + aroundness2 * 60.f;
+					drawRange.SetValue((sunScreen.x - sunSize.x * reflSize) * -2.f,
+									   (sunScreen.y - sunSize.y * reflSize) * -2.f,
+									   (sunScreen.x + sunSize.x * reflSize) * -2.f,
+									   (sunScreen.y + sunSize.y * reflSize) * -2.f);
+					
+					qr.Draw();
+										
+					
+				}
 			}
+			
+			dev->ActiveTexture(0);
 			
 			// restore blend mode
 			dev->BlendFunc(IGLDevice::SrcAlpha,
