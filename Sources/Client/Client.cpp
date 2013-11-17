@@ -912,7 +912,12 @@ namespace spades {
 					if(inGameLimbo){
 						inGameLimbo = false;
 					}else{
-						keyDest = kd_ExitQuestion;
+						if(GetWorld() == NULL)
+							// no world = loading now.
+							// in this case, quit the game immediately.
+							readyToClose = true;
+						else
+							keyDest = kd_ExitQuestion;
 					}
 				}
 			}else if(world){
