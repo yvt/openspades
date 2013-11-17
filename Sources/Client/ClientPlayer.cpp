@@ -215,8 +215,8 @@ namespace spades {
 					if(dt > 0.f)
 						viewWeaponOffset *= powf(.01f, dt);
 					
-					const float limitX = .01f;
-					const float limitY = .01f;
+					const float limitX = .003f;
+					const float limitY = .003f;
 					if(viewWeaponOffset.x < -limitX)
 						viewWeaponOffset.x = Mix(viewWeaponOffset.x, -limitX, .5f);
 					if(viewWeaponOffset.x > limitX)

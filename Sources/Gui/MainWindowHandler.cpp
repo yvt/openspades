@@ -63,6 +63,7 @@ SPADES_SETTING(r_videoHeight, "640");
 SPADES_SETTING(r_fullscreen, "0");
 SPADES_SETTING(r_fogShadow, "0");
 SPADES_SETTING(r_lensFlare, "1");
+SPADES_SETTING(r_lensFlareDynamic, "");
 SPADES_SETTING(r_blitFramebuffer, "1");
 SPADES_SETTING(r_srgb, "");
 SPADES_SETTING(r_shadowMapSize, "");
@@ -253,11 +254,11 @@ void MainWindow::LoadPrefs() {
 		postFilterSelect->value(2);
 	}
 	
-	if(r_cameraBlur && r_bloom && r_lens && r_lensFlare &&
+	if(r_cameraBlur && r_bloom && r_lens && r_lensFlare && r_lensFlareDynamic &&
 	   r_colorCorrection && r_depthOfField
 	   && postFilterHighCapable) {
 		postFilterSelect->value(2);
-	}else if(r_cameraBlur && (!r_bloom) && r_lens && r_lensFlare &&
+	}else if(r_cameraBlur && (!r_bloom) && r_lens && r_lensFlare && (!r_lensFlareDynamic) &&
 	   r_colorCorrection && (!r_depthOfField)) {
 		postFilterSelect->value(1);
 	}else{
@@ -736,6 +737,7 @@ void MainWindow::SavePrefs() {
 			r_bloom = 0;
 			r_lens = 0;
 			r_lensFlare = 0;
+			r_lensFlareDynamic = 0;
 			r_cameraBlur = 0;
 			r_colorCorrection = 0;
 			r_depthOfField = 0;
@@ -744,6 +746,7 @@ void MainWindow::SavePrefs() {
 			r_bloom = 0;
 			r_lens = 1;
 			r_lensFlare = 1;
+			r_lensFlareDynamic = 0;
 			r_cameraBlur = 1;
 			r_colorCorrection = 1;
 			r_depthOfField = 0;
@@ -753,6 +756,7 @@ void MainWindow::SavePrefs() {
 				r_bloom = 1;
 				r_lens = 1;
 				r_lensFlare = 1;
+				r_lensFlareDynamic = 1;
 				r_cameraBlur = 1;
 				r_colorCorrection = 1;
 				r_depthOfField = 1;
@@ -872,7 +876,7 @@ void MainWindow::ServerSelectionChanged()
 	if( browser ) {
 		int item = serverListbox->value();
 		if( item > 1 ) {
-			browser->onSelection( serverListbox->data( item ), quickHostInput );
+			browser->onSelection( serverListbox->data( item ), quickHostInput, versionChoice );
 		} else if( item == 1 ) {
 			browser->onHeaderClick( Fl::event_x() - serverListbox->x() );
 		}

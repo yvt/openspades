@@ -85,8 +85,6 @@ void main() {
 	vec2 origScrPos = screenPosition.xy / screenPosition.z;
 	vec2 scrPos = origScrPos;
 	
-	vec2 xToUV = dFdx(worldPosition.xy);
-	vec2 yToUV = dFdy(worldPosition.xy);
 	float scale = 1. / viewPosition.z;
 	vec2 disp = wave.xy * 0.1;
 	scrPos += disp * scale * displaceScale  * 4.;
@@ -159,6 +157,7 @@ void main() {
     
 	// compute reflection color
 	vec2 scrPos2 = origScrPos;
+	disp.y = -abs(disp.y * 3.);
 	scrPos2 -= disp * scale * displaceScale * 15.;
     
     

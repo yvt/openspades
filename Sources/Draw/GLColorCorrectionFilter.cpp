@@ -39,7 +39,7 @@ namespace spades {
 		renderer(renderer){
 			lens = renderer->RegisterProgram("Shaders/PostFilters/ColorCorrection.program");
 		}
-		GLColorBuffer GLColorCorrectionFilter::Filter(GLColorBuffer input) {
+		GLColorBuffer GLColorCorrectionFilter::Filter(GLColorBuffer input, Vector3 tintVal) {
 			SPADES_MARK_FUNCTION();
 			
 			IGLDevice *dev = renderer->GetGLDevice();
@@ -50,10 +50,11 @@ namespace spades {
 			
 			static GLProgramUniform saturation("saturation");
 			static GLProgramUniform enhancement("enhancement");
+			static GLProgramUniform tint("tint");
 			
 			saturation(lens);
 			enhancement(lens);
-			
+			tint(lens);
 			
 			dev->Enable(IGLDevice::Blend, false);
 			
@@ -61,6 +62,8 @@ namespace spades {
 			lensTexture(lens);
 			
 			lens->Use();
+			
+			tint.SetValue(tintVal.x, tintVal.y, tintVal.z);
 			
 			const client::SceneDefinition& def  = renderer->GetSceneDef();
 			

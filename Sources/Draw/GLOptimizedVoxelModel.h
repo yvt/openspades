@@ -85,9 +85,10 @@ namespace spades {
 						   VoxelModel *);
 			void BuildVertices(VoxelModel *);
 			void GenerateTexture();
+		protected:
+			virtual ~GLOptimizedVoxelModel();
 		public:
 			GLOptimizedVoxelModel(VoxelModel *, GLRenderer *r);
-			virtual ~GLOptimizedVoxelModel();
 			
 			static void PreloadShaders(GLRenderer *);
 			

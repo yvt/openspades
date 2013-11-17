@@ -61,7 +61,7 @@ namespace spades {
 			
 			Handle<Bitmap> bmp;
 			try{
-				bmp = new Bitmap(width, height);
+				bmp.Set(new Bitmap(width, height), false);
 			}catch(...){
 				delete img;
 				throw;

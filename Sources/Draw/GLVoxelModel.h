@@ -73,9 +73,10 @@ namespace spades {
 						  int nx, int ny, int nz,
 						  uint32_t color);
 			void BuildVertices(VoxelModel *);
+		protected:
+			virtual ~GLVoxelModel();
 		public:
 			GLVoxelModel(VoxelModel *, GLRenderer *r);
-			virtual ~GLVoxelModel();
 			
 			static void PreloadShaders(GLRenderer *);
 			

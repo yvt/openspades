@@ -39,7 +39,7 @@ namespace spades {
 	class Handle {
 		T *ptr;
 	public:
-		Handle(T *ptr, bool add = false):ptr(ptr) {
+		Handle(T *ptr, bool add = true):ptr(ptr) {
 			if(ptr && add)
 				ptr->AddRef();
 		}
@@ -68,7 +68,7 @@ namespace spades {
 			SPAssert(ptr != NULL);
 			return *ptr;
 		}
-		void Set(T *p, bool add = false) {
+		void Set(T *p, bool add = true) {
 			if(p == ptr){
 				if(!add)
 					ptr->Release();

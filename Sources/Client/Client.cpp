@@ -911,7 +911,12 @@ namespace spades {
 					if(inGameLimbo){
 						inGameLimbo = false;
 					}else{
-						keyDest = kd_ExitQuestion;
+						if(GetWorld() == NULL)
+							// no world = loading now.
+							// in this case, quit the game immediately.
+							readyToClose = true;
+						else
+							keyDest = kd_ExitQuestion;
 					}
 				}
 			}else if(world){
@@ -1268,7 +1273,7 @@ namespace spades {
 			// Well done!
 			renderer->FrameDone();
 			
-			Handle<Bitmap> bmp = renderer->ReadBitmap();
+			Handle<Bitmap> bmp(renderer->ReadBitmap(), false);
 			// force 100% opacity
 			
 			uint32_t *pixels = bmp->GetPixels();
@@ -2842,6 +2847,7 @@ namespace spades {
 			l.radius = 16.f;
 			l.type = DynamicLightTypePoint;
 			l.color = MakeVector3(3.f, 1.6f, 0.5f);
+			l.useLensFlare = true;
 			flashDlights.push_back(l);
 			
 			Vector3 velBias = {0,0,0};

@@ -27,6 +27,7 @@
 namespace Json { class Value; };
 class Fl_Browser;
 class Fl_Input;
+class Fl_Choice;
 
 namespace spades
 {
@@ -94,7 +95,7 @@ public:
 	void startQuery();
 	void stopQuery() { mStopRequested = true; }
 	bool isBusy() { return IsAlive(); }
-	void onSelection( void* ptr, Fl_Input* input );
+	void onSelection( void* ptr, Fl_Input* input, Fl_Choice *versionChoice );
 	void onHeaderClick( int x );
 	void setFilter( ServerFilter::Flags newFlags );
 	inline ServerFilter::Flags Filter() { return mFlags; }

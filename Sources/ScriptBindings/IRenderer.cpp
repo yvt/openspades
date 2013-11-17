@@ -31,7 +31,9 @@ namespace spades {
 			static IModel *RegisterModel(const std::string& str,
 										 IRenderer *r) {
 				try{
-					return r->RegisterModel(str.c_str());
+					IModel *m = r->RegisterModel(str.c_str());
+					m->AddRef();
+					return m;
 				}catch(const std::exception& ex) {
 					ScriptContextUtils().SetNativeException(ex);
 					return NULL;
@@ -40,7 +42,9 @@ namespace spades {
 			static IImage *RegisterImage(const std::string& str,
 										 IRenderer *r) {
 				try{
-					return r->RegisterImage(str.c_str());
+					IImage *im = r->RegisterImage(str.c_str());
+					im->AddRef();
+					return im;
 				}catch(const std::exception& ex) {
 					ScriptContextUtils().SetNativeException(ex);
 					return NULL;
@@ -249,6 +253,10 @@ namespace spades {
 						r = eng->RegisterObjectProperty("DynamicLightParam",
 														"float spotAngle",
 														asOFFSET(DynamicLightParam, spotAngle));
+						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("DynamicLightParam",
+														"bool useLensFlare",
+														asOFFSET(DynamicLightParam, useLensFlare));
 						manager->CheckError(r);
 						
 						r = eng->RegisterObjectBehaviour("SceneDefinition",

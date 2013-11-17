@@ -32,8 +32,8 @@ namespace spades {
 		}
 		
 		GLModelRenderer::~GLModelRenderer() {
-			
 			SPADES_MARK_FUNCTION();
+			Clear();
 		}
 		
 		void GLModelRenderer::AddModel(GLModel *model,
@@ -43,6 +43,7 @@ namespace spades {
 				model->renderId = (int)models.size();
 				RenderModel m;
 				m.model = model;
+				model->AddRef();
 				models.push_back(m);
 			}
 			modelCount++;
@@ -108,6 +109,7 @@ namespace spades {
 			// last phase: clear scene
 			for(size_t i = 0; i < models.size(); i++){
 				models[i].model->renderId = -1;
+				models[i].model->Release();
 			}
 			models.clear();
 			

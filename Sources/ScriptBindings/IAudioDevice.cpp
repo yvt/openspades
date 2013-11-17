@@ -20,6 +20,7 @@
 
 #include "ScriptManager.h"
 #include <Client/IAudioDevice.h>
+#include <Client/IAudioChunk.h>
 
 namespace spades {
 	namespace client{
@@ -32,7 +33,9 @@ namespace spades {
 			}
 			static IAudioChunk *RegisterSound(const std::string& name, IAudioDevice *dev) {
 				try{
-					return dev->RegisterSound(name.c_str());
+					IAudioChunk *c = dev->RegisterSound(name.c_str());
+					c->AddRef();
+					return c;
 				}catch(const std::exception& ex) {
 					ScriptContextUtils().SetNativeException(ex);
 					return NULL;

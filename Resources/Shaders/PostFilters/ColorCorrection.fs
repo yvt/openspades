@@ -25,10 +25,13 @@ varying vec2 texCoord;
 
 uniform float enhancement;
 uniform float saturation;
+uniform vec3 tint;
 
 void main() {
 	
 	gl_FragColor = texture2D(texture, texCoord);
+	
+	gl_FragColor.xyz *= tint;
 	
 	gl_FragColor.xyz = mix(gl_FragColor.xyz,
 						   smoothstep(0., 1., gl_FragColor.xyz),

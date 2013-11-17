@@ -39,7 +39,7 @@ namespace spades {
 			
 			for(std::map<std::string, GLModel *>::iterator it = models.begin();
 				it != models.end(); it++){
-				delete it->second;
+				it->second->Release();
 			}
 		}
 		
@@ -53,7 +53,7 @@ namespace spades {
 				models[name] = m;
 				return m;
 			}
-			it->second->AddRef();
+			it->second->AddRef(); // model manager owns this reference
 			return it->second;
 		}
 		
@@ -69,8 +69,14 @@ namespace spades {
 				delete stream;
 				throw;
 			}
-			
-			return static_cast<GLModel *>(renderer->CreateModelOptimized(bmp)); //new GLVoxelModel(bmp, renderer);
+			try{
+				GLModel *model = static_cast<GLModel *>(renderer->CreateModelOptimized(bmp)); //new GLVoxelModel(bmp, renderer);
+				bmp->Release();
+				return model;
+			}catch(...){
+				bmp->Release();
+				throw;
+			}
 		}
 		
 	}

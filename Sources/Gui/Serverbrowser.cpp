@@ -25,6 +25,7 @@
 #include <json/json.h>
 #include <FL/Fl_Browser.H>
 #include <FL/Fl_Input.H>
+#include <FL/Fl_Choice.H>
 #include <sstream>
 #include <cctype>
 #include <algorithm>
@@ -263,7 +264,7 @@ void Serverbrowser::refreshList()
 	}
 }
 
-void Serverbrowser::onSelection( void* ptr, Fl_Input* input )
+void Serverbrowser::onSelection( void* ptr, Fl_Input* input, Fl_Choice *versionChoice )
 {
 	Serveritem* serverItem = static_cast<Serveritem*>(ptr);
 	if( serverItem ) {
@@ -271,8 +272,10 @@ void Serverbrowser::onSelection( void* ptr, Fl_Input* input )
 		input->value( ip.c_str() );
 		if( serverItem->Version() == "0.75" ) {
 			cg_protocolVersion = "3";
+			versionChoice->value(0);
 		} else if( serverItem->Version() == "0.76" ) {
 			cg_protocolVersion = "4";
+			versionChoice->value(1);
 		}
 	}
 }

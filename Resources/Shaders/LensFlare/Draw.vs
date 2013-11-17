@@ -34,6 +34,6 @@ void main() {
 	gl_Position.w = 1.;
 	
 	texCoord = mix(vec2(0.), vec2(1.), positionAttribute.xy);
-    modulationTexCoord = gl_Position.xy * 0.25 + vec2(0.25, 0.75);
+    modulationTexCoord = gl_Position.xy * 0.5 + vec2(0.5, 0.5);
 }
 

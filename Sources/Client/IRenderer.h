@@ -61,10 +61,13 @@ namespace spades {
 			IImage *image;
 			float spotAngle;
 			
+			bool useLensFlare;
+			
 			DynamicLightParam() {
 				image = NULL;
 				type = DynamicLightTypePoint;
 				spotAngle = 0.f;
+				useLensFlare = false;
 			}
 		};
 		

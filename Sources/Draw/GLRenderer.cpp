@@ -67,6 +67,7 @@ SPADES_SETTING(r_bloom, "1");
 SPADES_SETTING(r_lens, "1");
 SPADES_SETTING(r_depthOfField, "0");
 SPADES_SETTING(r_lensFlare, "1");
+SPADES_SETTING(r_lensFlareDynamic, "1");
 SPADES_SETTING(r_softParticles, "1");
 SPADES_SETTING(r_cameraBlur, "1");
 SPADES_SETTING(r_dlights, "1");
@@ -112,6 +113,8 @@ namespace spades {
             cameraBlur = NULL;
 			lensDustFilter = NULL;
 			map = NULL;
+			
+			smoothedFogColor = MakeVector3(-1.f, -1.f, -1.f);
 			
 			lastTime = 0;
 			
@@ -328,6 +331,12 @@ namespace spades {
 		
 		float GLRenderer::ScreenHeight() {
 			return device->ScreenHeight();
+		}
+		
+		void GLRenderer::SetFogColor(spades::Vector3 v) {
+			fogColor = v;
+			if(smoothedFogColor.x < 0.f)
+				smoothedFogColor = fogColor;
 		}
 		
 		Vector3 GLRenderer::GetFogColorForSolidPass() {
@@ -832,9 +841,60 @@ namespace spades {
 					GLLensFlareFilter(this).Draw();
 				}
 				
+				if(r_lensFlare && r_lensFlareDynamic) {
+					GLProfiler profiler(device, "Dynamic Light Lens Flare");
+					GLLensFlareFilter lensFlareRenderer(this);
+					device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
+					for(size_t i = 0; i < lights.size(); i++) {
+						const GLDynamicLight& dl = lights[i];
+						const client::DynamicLightParam& prm = dl.GetParam();
+						if(!prm.useLensFlare)
+							continue;
+						Vector3 color = prm.color * 0.6f;
+						{
+							// distance attenuation
+							float rad = (prm.origin - sceneDef.viewOrigin).GetPoweredLength();
+							rad /= prm.radius * prm.radius * 18.f;
+							if(rad > 1.f)
+								continue;
+							color *= 1.f - rad;
+						}
+						
+						if(prm.type == client::DynamicLightTypeSpotlight) {
+							// spotlight
+							Vector3 diff = (sceneDef.viewOrigin - prm.origin).Normalize();
+							Vector3 lightdir = prm.spotAxis[2];
+							lightdir = lightdir.Normalize();
+							float cosVal = Vector3::Dot(diff, lightdir);
+							float minCosVal = cosf(prm.spotAngle * 0.5f);
+							if(cosVal < minCosVal){
+								// out of range
+								continue;
+							}
+							color *= (cosVal - minCosVal) / (1.f - minCosVal);
+						}
+						
+						// view cull
+						if(Vector3::Dot(sceneDef.viewAxis[2], (prm.origin - sceneDef.viewOrigin)) < 0.f){
+							continue;
+						}
+						
+						lensFlareRenderer.Draw(prm.origin - sceneDef.viewOrigin,
+											   true, color, false);
+					}
+				}
+				
 				if(r_colorCorrection){
 					GLProfiler profiler(device, "Color Correction");
-					handle = GLColorCorrectionFilter(this).Filter(handle);
+					Vector3 tint = smoothedFogColor + MakeVector3(1.f, 1.f, 1.f);
+					tint = MakeVector3(1.f, 1.f, 1.f) / tint;
+					tint = Mix(tint, MakeVector3(1.f, 1.f, 1.f),
+							   0.4f);
+					tint *= 1.f / std::min(std::min(tint.x, tint.y), tint.z);
+					handle = GLColorCorrectionFilter(this).Filter(handle, tint);
+					
+					// update smoothed fog color
+					smoothedFogColor = Mix(smoothedFogColor, fogColor, 0.02f);
 				}
 				
 				if(r_fxaa){
@@ -861,14 +921,14 @@ namespace spades {
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
 				device->Viewport(0, 0, handle.GetWidth(), handle.GetHeight());
-				Handle<GLImage> image = new GLImage(handle.GetTexture(),
+				Handle<GLImage> image(new GLImage(handle.GetTexture(),
 													device,
 													handle.GetWidth(),
 													handle.GetHeight(),
-													false);
+													false), false);
 				SetColor(MakeVector4(1, 1, 1, 1));
 				DrawImage(image, AABB2(0,handle.GetHeight(),handle.GetWidth(),-handle.GetHeight()));
-				imageRenderer->Flush(); // must flush now because handle is released soon
+				imageRenderer->Flush();
 			}
 			
 			handle.Release();
@@ -1049,10 +1109,10 @@ namespace spades {
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
 				device->Viewport(0, 0, w,h);
-				Handle<GLImage> image = new GLImage(lastColorBufferTexture,
+				Handle<GLImage> image(new GLImage(lastColorBufferTexture,
 							  device,
 							  w,h,
-							  false);
+							  false), false);
 				SetColor(MakeVector4(1, 1, 1, 1));
 				DrawImage(image, AABB2(0,h,w,-h));
 				imageRenderer->Flush(); // must flush now because handle is released soon

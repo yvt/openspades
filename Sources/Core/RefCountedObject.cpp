@@ -20,6 +20,7 @@
 
 #include "RefCountedObject.h"
 #include "../ScriptBindings/ScriptManager.h"
+#include "Exception.h"
 
 namespace spades {
 	RefCountedObject::RefCountedObject() {
@@ -35,8 +36,10 @@ namespace spades {
 	}
 	
 	void RefCountedObject::Release() {
-		if(asAtomicDec(refCount) <= 0) {
+		int cnt = asAtomicDec(refCount);
+		if(cnt == 0)
 			delete this;
-		}
+		else if(cnt < 0)
+			SPRaise("Attempted to release already destroyed object");
 	}
 }
