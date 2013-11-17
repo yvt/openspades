@@ -158,6 +158,20 @@ namespace spades {
 													 asCALL_CDECL_OBJLAST);
 					manager->CheckError(r);
 					
+					// Register member variables
+					r = eng->RegisterObjectProperty("IntVector3",
+													"int x",
+													asOFFSET(IntVector3, x));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("IntVector3",
+													"int y",
+													asOFFSET(IntVector3, y));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("IntVector3",
+													"int z",
+													asOFFSET(IntVector3, z));
+					manager->CheckError(r);
+					
 					// Register the operator overloads
 					r = eng->RegisterObjectMethod("IntVector3",
 												  "IntVector3 &opAddAssign(const IntVector3 &in)",
@@ -246,6 +260,16 @@ namespace spades {
 													 "void f(float, float)",
 													 asFUNCTION(Vector2Funcs::Construct3),
 													 asCALL_CDECL_OBJLAST);
+					manager->CheckError(r);
+					
+					// Register member variables
+					r = eng->RegisterObjectProperty("Vector2",
+													"float x",
+													asOFFSET(Vector3, x));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Vector2",
+													"float y",
+													asOFFSET(Vector2, y));
 					manager->CheckError(r);
 					
 					// Register the operator overloads
@@ -402,6 +426,20 @@ namespace spades {
 													 asCALL_CDECL_OBJLAST);
 					manager->CheckError(r);
 					
+					// Register member variables
+					r = eng->RegisterObjectProperty("Vector3",
+													"float x",
+													asOFFSET(Vector3, x));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Vector3",
+													"float y",
+													asOFFSET(Vector3, y));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Vector3",
+													"float z",
+													asOFFSET(Vector3, z));
+					manager->CheckError(r);
+					
 					// Register the operator overloads
 					r = eng->RegisterObjectMethod("Vector3",
 												  "Vector3 &opAddAssign(const Vector3 &in)",
@@ -555,6 +593,24 @@ namespace spades {
 													 "void f(float, float, float, float)",
 													 asFUNCTION(Vector4Funcs::Construct3),
 													 asCALL_CDECL_OBJLAST);
+					manager->CheckError(r);
+					
+					// Register member variables
+					r = eng->RegisterObjectProperty("Vector4",
+													"float x",
+													asOFFSET(Vector4, x));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Vector4",
+													"float y",
+													asOFFSET(Vector4, y));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Vector4",
+													"float z",
+													asOFFSET(Vector4, z));
+					manager->CheckError(r);
+					r = eng->RegisterObjectProperty("Vector4",
+													"float w",
+													asOFFSET(Vector4, w));
 					manager->CheckError(r);
 					
 					// Register the operator overloads
