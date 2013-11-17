@@ -29,16 +29,15 @@ namespace spades{
 		static IRenderer *lastRenderer = NULL;
 		static IImage *lastSeq[180];
 		
+        // FIXME: add "image manager"?
 		static void Load(IRenderer *r) {
 			if(r == lastRenderer)
 				return;
-			
+            
 			for(int i = 0; i < 180; i++){
 				char buf[256];
 				sprintf(buf, "Textures/Smoke/%03d.tga", i);
 				lastSeq[i] = r->RegisterImage(buf);
-				
-				lastSeq[i]->Release(); // renderer owns this
 			}
 			
 			lastRenderer = r;
