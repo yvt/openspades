@@ -85,8 +85,6 @@ void main() {
 	vec2 origScrPos = screenPosition.xy / screenPosition.z;
 	vec2 scrPos = origScrPos;
 	
-	vec2 xToUV = dFdx(worldPosition.xy);
-	vec2 yToUV = dFdy(worldPosition.xy);
 	float scale = 1. / viewPosition.z;
 	vec2 disp = wave.xy * 0.1;
 	scrPos += disp * scale * displaceScale  * 4.;

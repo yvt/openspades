@@ -80,13 +80,9 @@ void main() {
 	vec2 origScrPos = screenPosition.xy / screenPosition.z;
 	vec2 scrPos = origScrPos;
 	
-	// TODO: do displacement
-	vec2 xToUV = dFdx(worldPosition.xy);
-	vec2 yToUV = dFdy(worldPosition.xy);
-	float scale = 1. / dot(xToUV.xy, yToUV.yx * vec2(1., -1.));
-	vec2 disp = vec2(dot(xToUV, wave.xy * vec2(1., -1.)),
-					 dot(yToUV, wave.xy * vec2(-1., 1.)));
-	scrPos += disp * scale * displaceScale * 4.;
+	float scale = 1. / viewPosition.z;
+	vec2 disp = wave.xy * 0.1;
+	scrPos += disp * scale * displaceScale  * 4.;
 	
 	// check envelope length.
 	// if the displaced location points the out of the water,
