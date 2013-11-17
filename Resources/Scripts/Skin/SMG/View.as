@@ -26,6 +26,9 @@
 		private AudioDevice@ audioDevice;
 		private Model@ gunModel;
 		private Model@ magazineModel;
+		private Model@ sightModel1;
+		private Model@ sightModel2;
+		private Model@ sightModel3;
 		
 		private AudioChunk@[] fireSounds(4);
 		private AudioChunk@ fireFarSound;
@@ -39,6 +42,12 @@
 				("Models/Weapons/SMG/WeaponNoMagazine.kv6");
 			@magazineModel = renderer.RegisterModel
 				("Models/Weapons/SMG/Magazine.kv6");
+			@sightModel1 = renderer.RegisterModel
+				("Models/Weapons/SMG/Sight1.kv6");
+			@sightModel2 = renderer.RegisterModel
+				("Models/Weapons/SMG/Sight2.kv6");
+			@sightModel3 = renderer.RegisterModel
+				("Models/Weapons/SMG/Sight3.kv6");
 				
 			@fireSounds[0] = dev.RegisterSound
 				("Sounds/Weapons/SMG/FireLocal1.wav");
@@ -87,7 +96,22 @@
 		}
 		
 		float GetZPos() {
-			return 0.2f - AimDownSightStateSmooth * 0.028f;
+			return 0.2f - AimDownSightStateSmooth * 0.038f;
+		}
+		
+		// rotates gun matrix to ensure the sight is in
+		// the center of screen (0, ?, 0).
+		Matrix4 AdjustToAlignSight(Matrix4 mat, Vector3 sightPos, float fade) {
+			Vector3 p = mat * sightPos;
+			mat = CreateRotateMatrix(Vector3(0.f, 0.f, 1.f), atan(p.x / p.y) * fade) * mat;
+			mat = CreateRotateMatrix(Vector3(-1.f, 0.f, 0.f), atan(p.z / p.y) * fade) * mat;
+			return mat;
+		}
+		
+		void Draw2D() {
+			if(AimDownSightState > 0.6)
+				return;
+			BasicViewWeapon::Draw2D();
 		}
 		
 		void AddToScene() {
@@ -105,10 +129,34 @@
 			Vector3 leftHand3 = mat * Vector3(1.f, 6.f, -4.f);
 			Vector3 leftHand4 = mat * Vector3(1.f, 9.f, -6.f);
 			
+			if(AimDownSightStateSmooth > 0.8f){
+				mat = AdjustToAlignSight(mat, Vector3(0.f, 5.f, -4.9f), (AimDownSightStateSmooth - 0.8f) / 0.2f);
+			}
+			
 			ModelRenderParam param;
-			param.matrix = eyeMatrix * mat;
+			Matrix4 weapMatrix = eyeMatrix * mat;
+			param.matrix = weapMatrix;
 			param.depthHack = true;
 			renderer.AddModel(gunModel, param);
+			
+			// draw sights
+			Matrix4 sightMat = weapMatrix;
+			sightMat *= CreateTranslateMatrix(0.05f, 5.f, -4.85f);
+			sightMat *= CreateScaleMatrix(0.1f);
+			param.matrix = sightMat;
+			renderer.AddModel(sightModel1, param); // front
+			
+			sightMat = weapMatrix;
+			sightMat *= CreateTranslateMatrix(0.025f, 5.f, -4.85f);
+			sightMat *= CreateScaleMatrix(0.05f);
+			param.matrix = sightMat;
+			renderer.AddModel(sightModel3, param); // front pin
+			
+			sightMat = weapMatrix;
+			sightMat *= CreateTranslateMatrix(0.04f, -9.f, -4.9f);
+			sightMat *= CreateScaleMatrix(0.08f);
+			param.matrix = sightMat;
+			renderer.AddModel(sightModel2, param); // rear
 			
 			// magazine/reload action
 			mat *= CreateTranslateMatrix(0.f, 3.f, 1.f);
