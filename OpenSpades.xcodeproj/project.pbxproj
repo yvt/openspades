@@ -52,6 +52,7 @@
 		E844888417D2633C005105D0 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887E17D2633C005105D0 /* json_writer.cpp */; };
 		E844888717D2669C005105D0 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.dylib */; };
 		E844888A17D39CD3005105D0 /* ErrorDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844888817D39CD0005105D0 /* ErrorDialog.cpp */; };
+		E852337B1839B28C00F40541 /* VersionInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E85233791839B28C00F40541 /* VersionInfo.cpp */; };
 		E8567E571792B24D009D83E0 /* IAudioChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E551792B24D009D83E0 /* IAudioChunk.cpp */; };
 		E8567E5A1792BEFC009D83E0 /* ALDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E581792BEFC009D83E0 /* ALDevice.cpp */; };
 		E8567E5D1792C089009D83E0 /* ALFuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E5C1792C089009D83E0 /* ALFuncs.cpp */; };
@@ -368,6 +369,8 @@
 		E844888817D39CD0005105D0 /* ErrorDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorDialog.cpp; sourceTree = "<group>"; };
 		E844888917D39CD2005105D0 /* ErrorDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorDialog.h; sourceTree = "<group>"; };
 		E844888B17D3A059005105D0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		E85233791839B28C00F40541 /* VersionInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VersionInfo.cpp; sourceTree = "<group>"; };
+		E852337A1839B28C00F40541 /* VersionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionInfo.h; sourceTree = "<group>"; };
 		E8567E551792B24D009D83E0 /* IAudioChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IAudioChunk.cpp; sourceTree = "<group>"; };
 		E8567E561792B24D009D83E0 /* IAudioChunk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAudioChunk.h; sourceTree = "<group>"; };
 		E8567E581792BEFC009D83E0 /* ALDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ALDevice.cpp; sourceTree = "<group>"; };
@@ -1516,6 +1519,8 @@
 		E8E44680179CC48B00BE8855 /* System */ = {
 			isa = PBXGroup;
 			children = (
+				E85233791839B28C00F40541 /* VersionInfo.cpp */,
+				E852337A1839B28C00F40541 /* VersionInfo.h */,
 				E8CF03B0178EE300000683D4 /* Thread.cpp */,
 				E8CF03B1178EE300000683D4 /* Thread.h */,
 				E8CF03CF178EEF80000683D4 /* Semaphore.cpp */,
@@ -1833,6 +1838,7 @@
 				E8B6B6B417DE27B500E35523 /* as_string_util.cpp in Sources */,
 				E8B6B6B517DE27B500E35523 /* as_thread.cpp in Sources */,
 				E8B6B6B617DE27B500E35523 /* as_tokenizer.cpp in Sources */,
+				E852337B1839B28C00F40541 /* VersionInfo.cpp in Sources */,
 				E8B6B6B717DE27B500E35523 /* as_typeinfo.cpp in Sources */,
 				E8B6B6B817DE27B500E35523 /* as_variablescope.cpp in Sources */,
 				E8B6B6B917DE289700E35523 /* as_callfunc_x86.cpp in Sources */,
