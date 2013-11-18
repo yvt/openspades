@@ -132,7 +132,6 @@ namespace spades {
 						continue;
 					float att = 1.f - powdist / (effectiveRadius * effectiveRadius);
 					float unif;
-					float directionalFactor = 1.f;
 					unif = 1.f - powdist / (spr.radius * spr.radius);
 					unif = std::max(.2f, unif);
 					
@@ -142,7 +141,6 @@ namespace spades {
 							continue;
 						}else if(forward >= -spr.radius){
 							att *= .5f - (forward / spr.radius) * .5f;
-							directionalFactor = 1.f;
 						}else{
 							float cx = Vector3::Dot(spr.center - dl.origin, dl.spotAxis[0]);
 							float cy = Vector3::Dot(spr.center - dl.origin, dl.spotAxis[1]);
@@ -163,9 +161,14 @@ namespace spades {
 					Vector4 final;
 					
 					if(unif < .9999f) {
-						Vector4 directional = {v.x, v.y, v.z, 1.f
+                        float directionalScale = (1.f - unif) / sqrtf(powdist);
+						Vector4 directional = {
+                            v.x * directionalScale,
+                            v.y * directionalScale,
+                            v.z * directionalScale,
+                            unif
                         };
-						directional *= att * directionalFactor * (1.f - unif) / sqrtf(powdist);
+						directional *= att;
                         final = directional;
 					}else {
 						final.x = 0.f;
