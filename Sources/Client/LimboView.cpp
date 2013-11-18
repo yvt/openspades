@@ -56,7 +56,7 @@ namespace spades{
 			float weapX = left + 260.f;
 			
 			items.push_back(MenuItem(MenuWeaponRifle, AABB2(weapX, firstY, menuWidth, menuHeight), "Rifle"));
-			items.push_back(MenuItem(MenuWeaponSMG, AABB2(weapX, firstY + rowHeight, menuWidth, menuHeight), "SMG")); // TODO: use team name
+			items.push_back(MenuItem(MenuWeaponSMG, AABB2(weapX, firstY + rowHeight, menuWidth, menuHeight), "SMG"));
 			items.push_back(MenuItem(MenuWeaponShotgun, AABB2(weapX, firstY + rowHeight * 2.f, menuWidth, menuHeight), "Shotgun"));
 			
 			items.push_back(MenuItem(MenuSpawn, AABB2(left + contentsWidth - 266.f, firstY + 4.f, 256.f, 64.f), "Spawn"));
