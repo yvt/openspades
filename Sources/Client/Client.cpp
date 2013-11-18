@@ -113,6 +113,7 @@ SPADES_SETTING(cg_fov, "68");
 
 
 SPADES_SETTING(cg_debugAim, "0");
+SPADES_SETTING(cg_debugCorpse, "0");
 
 namespace spades {
 	namespace client {
@@ -982,6 +983,23 @@ namespace spades {
 						p->SetHP(h, HurtTypeWeapon, MakeVector3(0, 0, 0));
 					}
 					
+					if(cg_debugCorpse){
+						if(name == "p" && down){
+							Corpse *corp;
+							Player *victim = world->GetLocalPlayer();
+							corp = new Corpse(renderer, map, victim);
+							corp->AddImpulse(victim->GetFront() * 32.f);
+							corpses.push_back(corp);
+							
+							if(corpses.size() > corpseHardLimit){
+								corp = corpses.front();
+								delete corp;
+								corpses.pop_front();
+							}else if(corpses.size() > corpseSoftLimit){
+								RemoveInvisibleCorpses();
+							}
+						}
+					}
 					if(CheckKey(cg_keyMoveLeft, name)){
 						playerInput.moveLeft = down;
 						keypadInput.left = down;

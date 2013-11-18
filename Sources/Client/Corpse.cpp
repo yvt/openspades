@@ -326,6 +326,55 @@ namespace spades {
 			 }*/
 		}
 		
+		static float fractf(float v){
+			return v - floorf(v);
+		}
+		
+		static void CheckEscape(GameMap *map,
+								IntVector3 hitBlock,
+								IntVector3 a, IntVector3 b,
+								IntVector3 dir,
+								float& bestDist,
+								IntVector3& bestDir) {
+			hitBlock += dir;
+			IntVector3 aa = a + dir;
+			IntVector3 bb = b + dir;
+			if(map->IsSolidWrapped(hitBlock.x, hitBlock.y, hitBlock.z))
+				return;
+			if(map->IsSolidWrapped(aa.x, aa.y, aa.z))
+				return;
+			if(map->IsSolidWrapped(bb.x, bb.y, bb.z))
+				return;
+			float dist;
+			if(dir.x == 1) {
+				dist = 1.f - fractf(a.x);
+				dist += 1.f - fractf(b.x);
+			}else if(dir.x == -1) {
+				dist = fractf(a.x);
+				dist += fractf(b.x);
+			}else if(dir.y == 1) {
+				dist = 1.f - fractf(a.y);
+				dist += 1.f - fractf(b.y);
+			}else if(dir.y == -1) {
+				dist = fractf(a.y);
+				dist += fractf(b.y);
+			}else if(dir.z == 1) {
+				dist = 1.f - fractf(a.z);
+				dist += 1.f - fractf(b.z);
+			}else if(dir.z == -1) {
+				dist = fractf(a.z);
+				dist += fractf(b.z);
+			}else{
+				SPAssert(false);
+				return;
+			}
+			
+			if(dist < bestDist){
+				bestDist = dist;
+				bestDir = dir;
+			}
+		}
+		
 		void Corpse::LineCollision(NodeType a, NodeType b, float dt){
 			if(!r_corpseLineCollision)
 				return;
@@ -334,28 +383,30 @@ namespace spades {
 			
 			IntVector3 hitBlock;
 			
-			if(map->CastRay(n1.pos, n2.pos, 16.f, hitBlock)) {
-				GameMap::RayCastResult res1 = map->CastRay2(n1.pos, n2.pos - n1.pos, 8);
-				GameMap::RayCastResult res2 = map->CastRay2(n2.pos, n1.pos - n2.pos, 8);
+			if(map->CastRay(n1.lastPos, n2.lastPos, 16.f, hitBlock)) {
+				GameMap::RayCastResult res1 = map->CastRay2(n1.lastPos, n2.lastPos - n1.lastPos, 8);
+				GameMap::RayCastResult res2 = map->CastRay2(n2.lastPos, n1.lastPos - n2.lastPos, 8);
 				
 				if(!res1.hit) return;
 				if(!res2.hit) return;
-				if(res1.startSolid || res2.startSolid) return;
+				if(res1.startSolid || res2.startSolid){
+					return;
+				}
 				
 				// really hit?
-				if(Vector3::Dot(res1.hitPos - n1.pos, n2.pos - n1.pos)
+				if(Vector3::Dot(res1.hitPos - n1.lastPos, n2.lastPos - n1.lastPos)
 				   > (n2.pos-n1.pos).GetPoweredLength()){
 					return;
 				}
-				if(Vector3::Dot(res1.hitPos - n1.pos, n2.pos - n1.pos)
+				if(Vector3::Dot(res1.hitPos - n1.lastPos, n2.lastPos - n1.lastPos)
 				  < 0.f){
 					return;
 				}
-				if(Vector3::Dot(res2.hitPos - n2.pos, n1.pos - n2.pos)
+				if(Vector3::Dot(res2.hitPos - n2.lastPos, n1.lastPos - n2.lastPos)
 				   > (n2.pos-n1.pos).GetPoweredLength()){
 					return;
 				}
-				if(Vector3::Dot(res2.hitPos - n2.pos, n1.pos - n2.pos)
+				if(Vector3::Dot(res2.hitPos - n2.lastPos, n1.lastPos - n2.lastPos)
 				   < 0.f){
 					return;
 				}
@@ -367,18 +418,74 @@ namespace spades {
 				
 				float inlen = (res1.hitPos - res2.hitPos).GetLength();
 				
-				Vector3 dir = {0,0,0};
-				dir.x += res1.normal.x;
-				dir.y += res1.normal.y;
-				dir.z += res1.normal.z;
-				dir.x += res2.normal.x;
-				dir.y += res2.normal.y;
-				dir.z += res2.normal.z;
+				IntVector3 ivec = {0, 0, 0};
 				
-				dir *= dt * inlen * 40.f;
+				ivec.x += res1.normal.x;
+				ivec.y += res1.normal.y;
+				ivec.z += res1.normal.z;
+				ivec.x += res2.normal.x;
+				ivec.y += res2.normal.y;
+				ivec.z += res2.normal.z;
+				
+				Vector3 dir = {0.f, 0.f, 0.f};
+				if(ivec.x == 0 && ivec.y == 0 && ivec.z == 0) {
+					// hanging. which direction to escape?
+					float bestDist = 1000.f;
+					IntVector3 bestDir;
+					CheckEscape(map, hitBlock,
+								n1.pos.Floor(),
+								n2.pos.Floor(),
+								IntVector3::Make(1, 0, 0),
+								bestDist, bestDir);
+					CheckEscape(map, hitBlock,
+								n1.pos.Floor(),
+								n2.pos.Floor(),
+								IntVector3::Make(-1, 0, 0),
+								bestDist, bestDir);
+					CheckEscape(map, hitBlock,
+								n1.pos.Floor(),
+								n2.pos.Floor(),
+								IntVector3::Make(0, 1, 0),
+								bestDist, bestDir);
+					CheckEscape(map, hitBlock,
+								n1.pos.Floor(),
+								n2.pos.Floor(),
+								IntVector3::Make(0, -1, 0),
+								bestDist, bestDir);
+					CheckEscape(map, hitBlock,
+								n1.pos.Floor(),
+								n2.pos.Floor(),
+								IntVector3::Make(0, 0, 1),
+								bestDist, bestDir);
+					CheckEscape(map, hitBlock,
+								n1.pos.Floor(),
+								n2.pos.Floor(),
+								IntVector3::Make(0, 0, -1),
+								bestDist, bestDir);
+					if(bestDist > 10.f){
+						// failed to find appropriate direction.
+						return;
+					}
+					ivec = bestDir;
+					inlen = bestDist + .1f;
+				}
+				dir.x = ivec.x;
+				dir.y = ivec.y;
+				dir.z = ivec.z;
+				
+				Vector3 normDir = dir; // |D|
+				
+				n1.vel -= normDir * std::min(Vector3::Dot(normDir, n1.vel), 0.f);
+				n2.vel -= normDir * std::min(Vector3::Dot(normDir, n2.vel), 0.f);
+				
+				dir *= dt * inlen * 5.f;
 				
 				n1.vel += dir;
 				n2.vel += dir;
+				
+				// friction
+				n1.vel -= (n1.vel - normDir * Vector3::Dot(normDir, n1.vel)) * .2f;
+				n2.vel -= (n2.vel - normDir * Vector3::Dot(normDir, n2.vel)) * .2f;
 				
 			}
 			
