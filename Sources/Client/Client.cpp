@@ -468,6 +468,22 @@ namespace spades {
 					followVel *= powf(.3f, dt);
 					followPos += followVel * dt;
 					
+					if(followPos.x < 0.f) {
+						followVel.x = fabsf(followVel.x) * 0.2f;
+						followPos = lastPos + followVel * dt;
+					}
+					if(followPos.y < 0.f) {
+						followVel.y = fabsf(followVel.y) * 0.2f;
+						followPos = lastPos + followVel * dt;
+					}
+					if(followPos.x > (float)GetWorld()->GetMap()->Width()) {
+						followVel.x = fabsf(followVel.x) * -0.2f;
+						followPos = lastPos + followVel * dt;
+					}
+					if(followPos.y > (float)GetWorld()->GetMap()->Height()) {
+						followVel.y = fabsf(followVel.y) * -0.2f;
+						followPos = lastPos + followVel * dt;
+					}
 					
 					GameMap::RayCastResult minResult;
 					float minDist = 1.e+10f;
