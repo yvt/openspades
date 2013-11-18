@@ -618,6 +618,13 @@ namespace spades {
 					}
 					
 					if(!player->IsToolSelectable(player->GetTool())) {
+						// release mouse button before auto-switching tools
+						winp.primary = false;
+						winp.secondary = false;
+						weapInput = winp;
+						net->SendWeaponInput(weapInput);
+						actualWeapInput = winp = player->GetWeaponInput();
+						
 						// select another tool
 						Player::ToolType t = player->GetTool();
 						do{
