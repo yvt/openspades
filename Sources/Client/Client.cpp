@@ -325,7 +325,6 @@ namespace spades {
 			// preload
 			SmokeSpriteEntity(this, Vector4(), 20.f);
 			
-			renderer->RegisterModel("Models/Weapons/Grenade/Grenade.kv6");
 			renderer->RegisterImage("Textures/Fluid.png");
 			renderer->RegisterImage("Textures/WaterExpl.png");
 			renderer->RegisterImage("Gfx/White.tga");
@@ -1696,8 +1695,6 @@ namespace spades {
 			param.matrix = mat;
 			
 			renderer->RenderModel(model, param);
-			
-			
 		}
 		
 		void Client::AddDebugObjectToScene(const spades::OBB3 &obb,

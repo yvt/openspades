@@ -83,7 +83,11 @@ namespace spades {
 			PacketTypeWeaponReload = 28,	// C2S2P
 			PacketTypeChangeTeam = 29,		// C2S2P
 			PacketTypeChangeWeapon = 30,	// C2S2P
-			
+			PacketTypeHandShakeInit = 31,	// S2C
+			PacketTypeHandShakeReturn = 32, // C2S
+			PacketTypeVersionGet = 33,		// S2C
+			PacketTypeVersionSend = 34, 	// C2S
+
 		};
 		class NetPacketReader {
 			std::vector<char> data;
@@ -807,8 +811,7 @@ namespace spades {
 						break;
 					}*/
 					
-					Grenade *g = new Grenade(GetWorld(),
-											 pos, vel, fuseLen);
+					Grenade *g = new Grenade(GetWorld(), pos, vel, fuseLen);
 					GetWorld()->AddGrenade(g);
 				}
 					break;
@@ -1223,7 +1226,7 @@ namespace spades {
 					uint8_t pId = reader.ReadByte();
 					Player *p;
 					if(pId < 32){
-						p = GetPlayer(pId);
+						p = GetPlayerOrNull(pId);
 					}else{
 						p = NULL;
 					}
@@ -1427,6 +1430,12 @@ namespace spades {
 					// weapon...
 					//p->SetWeaponType(wType);
 				}
+					break;
+				case PacketTypeHandShakeInit:
+					SendHandShakeValid(reader.ReadInt());
+					break;
+				case PacketTypeVersionGet:
+					SendVersion();
 					break;
 				default:
 					printf("WARNING: dropped packet %d\n", (int)reader.GetType());
@@ -1683,7 +1692,27 @@ namespace spades {
 			wri.Write((uint8_t)GetLocalPlayer()->GetId());
 			wri.Write((uint8_t)team);
 			enet_peer_send(peer, 0, wri.CreatePacket());
-			
+		}
+
+
+		void NetClient::SendHandShakeValid(int challenge) {
+			SPADES_MARK_FUNCTION();
+			NetPacketWriter wri(PacketTypeHandShakeReturn);
+			wri.Write((uint32_t)challenge);
+			SPLog("Sending hand shake back.");
+			enet_peer_send(peer, 0, wri.CreatePacket());
+		}
+
+		void NetClient::SendVersion() {
+			SPADES_MARK_FUNCTION();
+			NetPacketWriter wri(PacketTypeVersionSend);
+			wri.Write((uint8_t)'o');
+			wri.Write((uint8_t)OpenSpades_VERSION_MAJOR);
+			wri.Write((uint8_t)OpenSpades_VERSION_MINOR);
+			wri.Write((uint8_t)OpenSpades_VERSION_REVISION);
+			wri.Write(VersionInfo::GetVersionInfo());
+			SPLog("Sending version back.");
+			enet_peer_send(peer, 0, wri.CreatePacket());
 		}
 		
 		void NetClient::MapLoaded() {

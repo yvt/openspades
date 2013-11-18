@@ -170,7 +170,7 @@ namespace spades {
 					DispatchQueue::GetThreadQueue()->ProcessQueue();
 					
 					Uint32 dt = SDL_GetTicks() - ot;
-					ot = SDL_GetTicks();
+					ot += dt;
 					if((int32_t)dt > 0)
 						client.RunFrame((float)dt / 1000.f);
 					
