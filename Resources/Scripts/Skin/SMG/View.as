@@ -58,7 +58,7 @@
 			@fireSounds[3] = dev.RegisterSound
 				("Sounds/Weapons/SMG/FireLocal4.wav");
 			@fireFarSound = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireFar.wav");
+				("Sounds/Weapons/SMG/FireFarLocal.wav");
 			@fireStereoSound = dev.RegisterSound
 				("Sounds/Weapons/SMG/FireStereo.wav");
 			@reloadSound = dev.RegisterSound
