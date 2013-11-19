@@ -3747,9 +3747,30 @@ namespace spades {
 			EmitBlockFragments(shiftedHitPos, colV);
 			
 			if(!IsMuted()){
-				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Hit.wav");
+				AudioParam param;
+				param.volume = 4.f;
+				
+				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Block.wav");
 				audioDevice->Play(c, shiftedHitPos,
-								  AudioParam());
+								  param);
+				
+				param.pitch = .9f + GetRandom() * 0.2f;
+				switch((rand() >> 6) & 3){
+					case 0:
+						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet1.wav");
+						break;
+					case 1:
+						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet2.wav");
+						break;
+					case 2:
+						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet3.wav");
+						break;
+					case 3:
+						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet4.wav");
+						break;
+				}
+				audioDevice->Play(c, shiftedHitPos,
+								  param);
 			}
 		}
 		
