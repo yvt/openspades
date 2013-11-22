@@ -41,9 +41,8 @@ SPADES_SETTING(r_depthBits, "16");
 
 namespace spades {
 	namespace gui {
-		SDLRunner::SDLRunner(const ServerAddress& h, std::string pn):
-		host(h), playerName(pn){
-			
+		
+		SDLRunner::SDLRunner() {
 		}
 		
 		SDLRunner::~SDLRunner() {
@@ -102,20 +101,20 @@ namespace spades {
 		}
 		
 		void SDLRunner::ProcessEvent(SDL_Event &event,
-									 client::Client *client) {
+									 View *view) {
 			switch (event.type) {
 				case SDL_QUIT:
-					client->Closing();
+					view->Closing();
 					//running = false;
 					break;
 				case SDL_MOUSEBUTTONDOWN:
-					client->KeyEvent(TranslateButton(event.button.button), true);
+					view->KeyEvent(TranslateButton(event.button.button), true);
 					break;
 				case SDL_MOUSEBUTTONUP:
-					client->KeyEvent(TranslateButton(event.button.button), false);
+					view->KeyEvent(TranslateButton(event.button.button), false);
 					break;
 				case SDL_MOUSEMOTION:
-					client->MouseEvent(event.motion.xrel,
+					view->MouseEvent(event.motion.xrel,
 									  event.motion.yrel);
 					break;
 				case SDL_KEYDOWN:
@@ -127,14 +126,14 @@ namespace spades {
 						   uni != 127){ // no enter
 							std::string s;
 							s += (char)uni;
-							client->CharEvent(s);
+							view->CharEvent(s);
 						}
 					}
-					client->KeyEvent(TranslateKey(event.key.keysym),
+					view->KeyEvent(TranslateKey(event.key.keysym),
 									true);
 					break;
 				case SDL_KEYUP:
-					client->KeyEvent(TranslateKey(event.key.keysym),
+					view->KeyEvent(TranslateKey(event.key.keysym),
 									false);
 					break;
 				case SDL_ACTIVEEVENT:
@@ -152,8 +151,7 @@ namespace spades {
 		void SDLRunner::RunClientLoop(spades::client::IRenderer *renderer,
 									  spades::client::IAudioDevice *audio) {
 			{
-				client::Client client(renderer, audio,
-									  host, playerName);
+				Handle<View> view(CreateView(renderer, audio), false);
 				Uint32 ot = SDL_GetTicks();
 				bool running = true;
 				
@@ -172,10 +170,10 @@ namespace spades {
 					Uint32 dt = SDL_GetTicks() - ot;
 					ot += dt;
 					if((int32_t)dt > 0)
-						client.RunFrame((float)dt / 1000.f);
+						view->RunFrame((float)dt / 1000.f);
 					
-					if(client.WantsToBeClosed()){
-						client.Closing();
+					if(view->WantsToBeClosed()){
+						view->Closing();
 						running = false;
 						SPLog("Close requested by Client");
 						break;
@@ -184,30 +182,30 @@ namespace spades {
 					int modState = GetModState();
 					if(modState & (KMOD_CTRL | KMOD_LCTRL | KMOD_RCTRL)){
 						if(!lastCtrl){
-							client.KeyEvent("Control", true);
+							view->KeyEvent("Control", true);
 							lastCtrl = true;
 						}
 					}else{
 						if(lastCtrl){
-							client.KeyEvent("Control", false);
+							view->KeyEvent("Control", false);
 							lastCtrl = false;
 						}
 					}
 					
 					if(modState & (KMOD_SHIFT | KMOD_LSHIFT | KMOD_RSHIFT)){
 						if(!lastShift){
-							client.KeyEvent("Shift", true);
+							view->KeyEvent("Shift", true);
 							lastShift = true;
 						}
 					}else{
 						if(lastShift){
-							client.KeyEvent("Shift", false);
+							view->KeyEvent("Shift", false);
 							lastShift = false;
 						}
 					}
 					
 					while(SDL_PollEvent(&event)) {
-						ProcessEvent(event, &client);
+						ProcessEvent(event, view);
 					}
 					//Fl::check();
 				}

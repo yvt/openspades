@@ -28,6 +28,7 @@
 #include <Core/ServerAddress.h>
 #include "IRenderer.h"
 #include <list>
+#include <Gui/View.h>
 
 namespace spades {
 	class IStream;
@@ -56,7 +57,7 @@ namespace spades {
 		class TCProgressView;
 		class ClientPlayer;
 		
-		class Client: public IWorldListener {
+		class Client: public IWorldListener, public gui::View {
 			friend class ScoreboardView;
 			friend class LimboView;
 			friend class MapView;
@@ -230,19 +231,20 @@ namespace spades {
 			void TakeMapShot();
 			
 			void NetLog(const char *format, ...);
+		protected:
+			virtual ~Client();
 			
 		public:
 			Client(IRenderer *, IAudioDevice *,
 				   const ServerAddress& host, std::string playerName);
-			~Client();
 			
-			void RunFrame(float dt);
+			virtual void RunFrame(float dt);
 			
-			void Closing();
-			void MouseEvent(float x, float y);
-			void KeyEvent(const std::string&,
+			virtual void Closing();
+			virtual void MouseEvent(float x, float y);
+			virtual void KeyEvent(const std::string&,
 						  bool down);
-			void CharEvent(const std::string&);
+			virtual void CharEvent(const std::string&);
 			
 			void SetWorld(World *);
 			World *GetWorld() const { return world; }
@@ -254,7 +256,7 @@ namespace spades {
 			SceneDefinition GetLastSceneDef() const { return lastSceneDef; }
 			IAudioDevice *GetAudioDevice() const {return audioDevice; }
 			
-			bool WantsToBeClosed();
+			virtual bool WantsToBeClosed();
 			bool IsMuted();
 			
 			void PlayerSentChatMessage(Player *, bool global,

@@ -27,24 +27,23 @@
 
 namespace spades {
 	namespace client{
-		class Client;
 		class IRenderer;
 		class IAudioDevice;
 	}
 	namespace gui {
+		class View;
 		class SDLRunner: public IRunnable {
 			
 		protected:
-			ServerAddress host;
-			std::string playerName;
 			std::string TranslateKey(const SDL_keysym&);
 			std::string TranslateButton(Uint8 b);
 			virtual int GetModState();
 			void ProcessEvent(SDL_Event& event,
-							  client::Client *);
+							  View *);
 			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
+			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) = 0;
 		public:
-			SDLRunner(const ServerAddress& host, std::string playerName);
+			SDLRunner();
 			virtual ~SDLRunner();
 			virtual void Run();
 		};

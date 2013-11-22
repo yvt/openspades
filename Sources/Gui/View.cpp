@@ -18,31 +18,10 @@
  
  */
 
-#pragma once
-
-#include "SDLRunner.h"
-#include <Core/ConcurrentDispatch.h>
+#include "View.h"
 
 namespace spades {
-	namespace client{
-		class Client;
-	}
 	namespace gui {
-		class SDLAsyncRunner: public SDLRunner {
-			class ClientThread;
-			ClientThread *cliThread;
-			View *currentView;
-			DispatchQueue *cliQueue;
-			int modState;
-			std::string clientError;
-		protected:
-			virtual int GetModState() { return modState; }
-			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
-			virtual void ClientThreadProc(client::IRenderer *renderer, client::IAudioDevice *dev);
-		public:
-			SDLAsyncRunner();
-			virtual ~SDLAsyncRunner();
-		};
+		
 	}
 }
-

@@ -35,6 +35,7 @@
 		E80B28DE17B39EEF0056179E /* ZipFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28DC17B39EEE0056179E /* ZipFileSystem.cpp */; };
 		E80B28E117B4FDDA0056179E /* DynamicMemoryStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28DF17B4FDD40056179E /* DynamicMemoryStream.cpp */; };
 		E81CE4A6183F7A3000F22685 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A4183F7A3000F22685 /* IFont.cpp */; };
+		E81CE4A9183F7F2000F22685 /* MainScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A7183F7F2000F22685 /* MainScreen.cpp */; };
 		E834F55017942C43004EBE88 /* Grenade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F54E17942C43004EBE88 /* Grenade.cpp */; };
 		E834F55317944779004EBE88 /* NetClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F55117944778004EBE88 /* NetClient.cpp */; };
 		E834F5561794BBD4004EBE88 /* Debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F5541794BBD4004EBE88 /* Debug.cpp */; };
@@ -236,6 +237,9 @@
 		E8E446A7179EAC7900BE8855 /* GLShadowShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E446A5179EAC7800BE8855 /* GLShadowShader.cpp */; };
 		E8E446AA179F822D00BE8855 /* TargaWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E446A8179F822D00BE8855 /* TargaWriter.cpp */; };
 		E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */; };
+		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
+		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
+		E8F74CEB183F92DA0085AA54 /* SDLmain.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CEA183F92DA0085AA54 /* SDLmain.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -318,6 +322,8 @@
 		E80B28DF17B4FDD40056179E /* DynamicMemoryStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicMemoryStream.cpp; sourceTree = "<group>"; };
 		E80B28E017B4FDD70056179E /* DynamicMemoryStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicMemoryStream.h; sourceTree = "<group>"; };
 		E81CE4A4183F7A3000F22685 /* IFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IFont.cpp; sourceTree = "<group>"; };
+		E81CE4A7183F7F2000F22685 /* MainScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScreen.cpp; sourceTree = "<group>"; };
+		E81CE4A8183F7F2000F22685 /* MainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScreen.h; sourceTree = "<group>"; };
 		E834F54E17942C43004EBE88 /* Grenade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grenade.cpp; sourceTree = "<group>"; };
 		E834F54F17942C43004EBE88 /* Grenade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grenade.h; sourceTree = "<group>"; };
 		E834F55117944778004EBE88 /* NetClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetClient.cpp; sourceTree = "<group>"; };
@@ -741,6 +747,13 @@
 		E8EE08A317BA016F00631987 /* ChangeLog */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
 		E8EE08A417BA016F00631987 /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		E8EE08A517BA016F00631987 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		E8F74CE3183F86AE0085AA54 /* View.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = View.cpp; sourceTree = "<group>"; };
+		E8F74CE4183F86AE0085AA54 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
+		E8F74CE6183F8A110085AA54 /* Main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Main.h; sourceTree = "<group>"; };
+		E8F74CE7183F8B9D0085AA54 /* Runner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Runner.cpp; sourceTree = "<group>"; };
+		E8F74CE8183F8B9D0085AA54 /* Runner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Runner.h; sourceTree = "<group>"; };
+		E8F74CEA183F92DA0085AA54 /* SDLmain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLmain.m; sourceTree = "<group>"; };
+		E8F74CEC183F931F0085AA54 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLMain.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1256,6 +1269,8 @@
 		E8CF039D178EDDBF000683D4 /* Gui */ = {
 			isa = PBXGroup;
 			children = (
+				E8F74CEC183F931F0085AA54 /* SDLMain.h */,
+				E8F74CEA183F92DA0085AA54 /* SDLmain.m */,
 				E844888817D39CD0005105D0 /* ErrorDialog.cpp */,
 				E844888917D39CD2005105D0 /* ErrorDialog.h */,
 				E844886817D262E3005105D0 /* Serverbrowser.cpp */,
@@ -1263,6 +1278,7 @@
 				E80B28C217AF85300056179E /* DetailConfigWindow.cpp */,
 				E80B28C317AF85310056179E /* DetailConfigWindow.h */,
 				E8CF03BE178EE50E000683D4 /* Main.cpp */,
+				E8F74CE6183F8A110085AA54 /* Main.h */,
 				E8CF03BB178EE502000683D4 /* SDLGLDevice.cpp */,
 				E8CF03BC178EE502000683D4 /* SDLGLDevice.h */,
 				E8CF03E1178EF57E000683D4 /* SDLRunner.cpp */,
@@ -1276,6 +1292,12 @@
 				E80B28C817AF8A450056179E /* DetailConfigTable.cpp */,
 				E80B28C917AF8A470056179E /* DetailConfigTable.h */,
 				E80B28D417B1100D0056179E /* AboutText.html */,
+				E81CE4A7183F7F2000F22685 /* MainScreen.cpp */,
+				E81CE4A8183F7F2000F22685 /* MainScreen.h */,
+				E8F74CE3183F86AE0085AA54 /* View.cpp */,
+				E8F74CE4183F86AE0085AA54 /* View.h */,
+				E8F74CE7183F8B9D0085AA54 /* Runner.cpp */,
+				E8F74CE8183F8B9D0085AA54 /* Runner.h */,
 			);
 			path = Gui;
 			sourceTree = "<group>";
@@ -1750,6 +1772,7 @@
 				E8E0AF9D179A5BC200C6B5A9 /* GLFlatMapRenderer.cpp in Sources */,
 				E8E0AFA0179A698800C6B5A9 /* MapView.cpp in Sources */,
 				E8E0AFA3179A8F1100C6B5A9 /* ScoreboardView.cpp in Sources */,
+				E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */,
 				E8E0AFA6179AA31C00C6B5A9 /* LimboView.cpp in Sources */,
 				E8E0AFA9179ACDDE00C6B5A9 /* GLSpriteRenderer.cpp in Sources */,
 				E8E0AFAC179ADC2200C6B5A9 /* ILocalEntity.cpp in Sources */,
@@ -1777,6 +1800,7 @@
 				E89A649A17A2402900FDA893 /* IGLShadowMapRenderer.cpp in Sources */,
 				E80B286217A2462D0056179E /* GLShadowMapShader.cpp in Sources */,
 				E80B286517A24AEE0056179E /* GLBasicShadowMapRenderer.cpp in Sources */,
+				E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */,
 				E80B286E17A3B0580056179E /* ConcurrentDispatch.cpp in Sources */,
 				E80B287117A4CA2D0056179E /* GLOptimizedVoxelModel.cpp in Sources */,
 				E80B288117A516D70056179E /* shapes.cc in Sources */,
@@ -1815,6 +1839,7 @@
 				E844888417D2633C005105D0 /* json_writer.cpp in Sources */,
 				E844888A17D39CD3005105D0 /* ErrorDialog.cpp in Sources */,
 				E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */,
+				E8F74CEB183F92DA0085AA54 /* SDLmain.m in Sources */,
 				E8B6B68F17DE27B500E35523 /* as_atomic.cpp in Sources */,
 				E8B6B69017DE27B500E35523 /* as_builder.cpp in Sources */,
 				E8B6B69117DE27B500E35523 /* as_bytecode.cpp in Sources */,
@@ -1882,6 +1907,7 @@
 				E8B6B74017EA061400E35523 /* IViewToolSkin.cpp in Sources */,
 				E8B6B74317EA0B2000E35523 /* IThirdPersonToolSkin.cpp in Sources */,
 				E8B6B74617EA0F2600E35523 /* IGrenadeSkin.cpp in Sources */,
+				E81CE4A9183F7F2000F22685 /* MainScreen.cpp in Sources */,
 				E8B6B74917EA12EC00E35523 /* IWeaponSkin.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1896,7 +1922,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
@@ -1943,7 +1969,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;

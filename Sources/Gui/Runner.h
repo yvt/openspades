@@ -20,29 +20,27 @@
 
 #pragma once
 
-#include "SDLRunner.h"
-#include <Core/ConcurrentDispatch.h>
 
 namespace spades {
 	namespace client{
-		class Client;
+		class IRenderer;
+		class IAudioDevice;
 	}
 	namespace gui {
-		class SDLAsyncRunner: public SDLRunner {
-			class ClientThread;
-			ClientThread *cliThread;
-			View *currentView;
-			DispatchQueue *cliQueue;
-			int modState;
-			std::string clientError;
+		class View;
+		class SDLRunner;
+		class SDLAsyncRunner;
+		
+		// FIXME: better naming
+		class Runner {
 		protected:
-			virtual int GetModState() { return modState; }
-			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
-			virtual void ClientThreadProc(client::IRenderer *renderer, client::IAudioDevice *dev);
+			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *audio) = 0;
 		public:
-			SDLAsyncRunner();
-			virtual ~SDLAsyncRunner();
+			Runner();
+			virtual ~Runner();
+			
+			void Run();
+			void RunProtected();
 		};
 	}
 }
-

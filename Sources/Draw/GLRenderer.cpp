@@ -136,6 +136,11 @@ namespace spades {
 		}
 		
 		void GLRenderer::Init() {
+			if(shadowMapRenderer != NULL){
+				// already initialized
+				return;
+			}
+			
 			SPLog("GLRenderer initializing for 3D rendering");
 			shadowMapRenderer = GLShadowMapShader::CreateShadowMapRenderer(this);
 			modelManager = new GLModelManager(this);

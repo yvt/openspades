@@ -20,7 +20,7 @@
 
 #include <OpenSpades.h>
 #include "MainWindow.h"
-#include <stdlib.h>
+#include "Main.h"
 
 #include "../Core/Debug.h"
 #include "SDLRunner.h"
@@ -90,48 +90,7 @@ MainWindow::~MainWindow()
 void MainWindow::StartGame(const spades::ServerAddress &host) {
 	SPADES_MARK_FUNCTION();
 	
-	//hide();
-	
-#if 0
-	SDLRunner r(host);
-	r.Run();
-#else
-	std::string err;
-	try{
-		if(cg_smp){
-			SDLAsyncRunner r(host, cg_playerName);
-			r.Run();
-		}else{
-			SDLRunner r(host, cg_playerName);
-			r.Run();
-		}
-	}catch(const spades::Exception& ex){
-		err = ex.GetShortMessage();
-		SPLog("Unhandled exception in SDLRunner:\n%s", ex.what());
-	}catch(const std::exception& ex){
-		err = ex.what();
-		SPLog("Unhandled exception in SDLRunner:\n%s", ex.what());
-	}
-	if(!err.empty()){
-		ErrorDialog dlg;
-		dlg.set_modal();
-		dlg.result = 0;
-		
-		// TODO: free this buffer (just leaking)
-		Fl_Text_Buffer *buf = new Fl_Text_Buffer;
-		buf->append(err.c_str());
-		dlg.infoView->wrap_mode(Fl_Text_Display::WRAP_AT_BOUNDS, 0);
-		dlg.infoView->buffer(buf);
-		dlg.helpView->value("See SystemMessages.log for more details.");
-		dlg.show();
-		while(dlg.visible()){
-			Fl::wait();
-		}
-		if( dlg.result == 1 ){
-			//show();
-		}
-	}
-#endif
+	spades::StartClient(host, cg_playerName);
 }
 
 void MainWindow::QuickConnectPressed() {

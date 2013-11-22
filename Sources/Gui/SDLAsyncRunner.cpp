@@ -26,10 +26,8 @@
 
 namespace spades {
 	namespace gui {
-		SDLAsyncRunner::SDLAsyncRunner(const ServerAddress& host,
-									   std::string pn):
-		SDLRunner(host, pn){
-			currentClient = NULL;
+		SDLAsyncRunner::SDLAsyncRunner(){
+			currentView = NULL;
 		}
 		
 		SDLAsyncRunner::~SDLAsyncRunner(){
@@ -65,7 +63,7 @@ namespace spades {
 				
 				modState = SDLRunner::GetModState();
 				
-				if(currentClient){
+				if(currentView){
 					
 					class SDLEventDispatch: public ConcurrentDispatch {
 						SDLAsyncRunner *runner;
@@ -78,9 +76,9 @@ namespace spades {
 							
 						}
 						virtual void Run() {
-							client::Client *cli = runner->currentClient;
-							if(cli){
-								runner->ProcessEvent(ev, cli);
+							View *view = runner->currentView;
+							if(view){
+								runner->ProcessEvent(ev, view);
 							}
 						}
 					};
@@ -137,12 +135,11 @@ namespace spades {
 		
 		void SDLAsyncRunner::ClientThreadProc(client::IRenderer *renderer, client::IAudioDevice *audio){
 			try{
-				client::Client client(renderer, audio,
-									  host, playerName);
+				Handle<View> view(CreateView(renderer, audio), false);
 				Uint32 ot = SDL_GetTicks();
 				bool running = true;
 				
-				currentClient = &client;
+				currentView = view;
 				cliQueue = DispatchQueue::GetThreadQueue();
 				
 				bool lastShift = false;
@@ -154,11 +151,11 @@ namespace spades {
 					DispatchQueue::GetThreadQueue()->ProcessQueue();
 					
 					Uint32 dt = SDL_GetTicks() - ot;
-					client.RunFrame((float)dt / 1000.f);
+					view->RunFrame((float)dt / 1000.f);
 					ot += dt;
 					
-					if(client.WantsToBeClosed()){
-						client.Closing();
+					if(view->WantsToBeClosed()){
+						view->Closing();
 						running = false;
 						break;
 					}
@@ -166,24 +163,24 @@ namespace spades {
 					int modState = GetModState();
 					if(modState & (KMOD_CTRL | KMOD_LCTRL | KMOD_RCTRL)){
 						if(!lastCtrl){
-							client.KeyEvent("Control", true);
+							view->KeyEvent("Control", true);
 							lastCtrl = true;
 						}
 					}else{
 						if(lastCtrl){
-							client.KeyEvent("Control", false);
+							view->KeyEvent("Control", false);
 							lastCtrl = false;
 						}
 					}
 					
 					if(modState & (KMOD_SHIFT | KMOD_LSHIFT | KMOD_RSHIFT)){
 						if(!lastShift){
-							client.KeyEvent("Shift", true);
+							view->KeyEvent("Shift", true);
 							lastShift = true;
 						}
 					}else{
 						if(lastShift){
-							client.KeyEvent("Shift", false);
+							view->KeyEvent("Shift", false);
 							lastShift = false;
 						}
 					}
@@ -192,12 +189,12 @@ namespace spades {
 				}
 				
 				cliQueue = NULL;
-				currentClient = NULL;
+				currentView = NULL;
 			}catch(const std::exception& ex){
 				SPLog("Exiting Client Event Loop due to exception:\n%s",
 					  ex.what());
 				cliQueue = NULL;
-				currentClient = NULL;
+				currentView = NULL;
 				clientError = ex.what();
 			}
 		}

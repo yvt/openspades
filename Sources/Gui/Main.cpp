@@ -19,7 +19,10 @@
  */
 
 #include <OpenSpades.h>
+#include <Imports/SDL.h>
+#include "Main.h"
 #include "MainWindow.h"
+#include "MainScreen.h"
 #include <Core/FileManager.h>
 #include <Core/DirectoryFileSystem.h>
 #include <Core/Debug.h>
@@ -28,6 +31,8 @@
 #include <Core/ZipFileSystem.h>
 #include <Core/ServerAddress.h>
 #include "ErrorDialog.h"
+#include "Runner.h"
+#include <Client/Client.h>
 
 #include <Core/VoxelModel.h>
 #include <Draw/GLOptimizedVoxelModel.h>
@@ -41,6 +46,8 @@
 #include <shlobj.h>
 #define strncasecmp(x,y,z)	_strnicmp(x,y,z)
 #define strcasecmp(x,y)		_stricmp(x,y)
+
+SPADES_SETTING(cg_smp, "0");
 
 //lm: without doing it this way, we will get a low-res icon or an ugly resampled icon in our window.
 //we cannot use the fltk function on the console window, because it's not an Fl_Window...
@@ -100,6 +107,36 @@ int argsHandler(int argc, char **argv, int &i)
 		}
 	}
 	return 0;
+}
+
+namespace spades {
+	void StartClient(const spades::ServerAddress& addr, const std::string& playerName){
+		class ConcreteRunner: public spades::gui::Runner {
+			spades::ServerAddress addr;
+			std::string playerName;
+		protected:
+			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer, spades::client::IAudioDevice *audio) {
+				return new spades::client::Client(renderer, audio, addr, playerName);
+			}
+		public:
+			ConcreteRunner(const spades::ServerAddress& addr,
+								  const std::string& playerName):
+			addr(addr), playerName(playerName){ }
+		};
+		ConcreteRunner runner(addr, playerName);
+		runner.RunProtected();
+	}
+	void StartMainScreen(){
+		class ConcreteRunner: public spades::gui::Runner {
+		protected:
+			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer, spades::client::IAudioDevice *audio) {
+				return new spades::gui::MainScreen(renderer, audio);
+			}
+		public:
+		};
+		ConcreteRunner runner;
+		runner.RunProtected();
+	}
 }
 
 int main(int argc, char ** argv)
@@ -232,26 +269,34 @@ int main(int argc, char ** argv)
 		SPLog("Initializing script engine");
 		spades::ScriptManager::GetInstance();
 		
-		SPLog("Initializing main window");
+		SPLog("Initializing window system");
 		int dum = 0;
 		Fl::args( argc, argv, dum, argsHandler );
 
 		MainWindow* win = NULL;
 		if( !cg_autoConnect ) {
-			win = new MainWindow();
-			win->Init();
-			setWindowIcon( win );
-			win->show(argc, argv);
-			win->CheckGLCapability();
+			if(!Fl::event_shift()) {
+				// TODO: always show main window for first run
+				
+				SPLog("Starting main screen");
+				spades::StartMainScreen();
+			}else{
+				SPLog("Initializing main window");
+				win = new MainWindow();
+				win->Init();
+				setWindowIcon( win );
+				win->show(argc, argv);
+				win->CheckGLCapability();
+				
+				SPLog("Entering FLTK main loop");
+				Fl::run();
+				SPLog("Leaving FLTK main loop");
+			}
 		} else {
 			spades::ServerAddress host(cg_lastQuickConnectHost.CString(), (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076 );
 			MainWindow::StartGame( host );
 		}
 		
-		SPLog("Entering FLTK main loop");
-		Fl::run();
-		
-		SPLog("Leaving FLTK main loop");
 		spades::Settings::GetInstance()->Flush();
 		
 		if( win ) {

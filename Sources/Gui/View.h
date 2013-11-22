@@ -20,29 +20,26 @@
 
 #pragma once
 
-#include "SDLRunner.h"
-#include <Core/ConcurrentDispatch.h>
+#include <Core/RefCountedObject.h>
 
 namespace spades {
-	namespace client{
-		class Client;
-	}
 	namespace gui {
-		class SDLAsyncRunner: public SDLRunner {
-			class ClientThread;
-			ClientThread *cliThread;
-			View *currentView;
-			DispatchQueue *cliQueue;
-			int modState;
-			std::string clientError;
+		class View: public RefCountedObject {
 		protected:
-			virtual int GetModState() { return modState; }
-			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
-			virtual void ClientThreadProc(client::IRenderer *renderer, client::IAudioDevice *dev);
+			virtual ~View() {}
 		public:
-			SDLAsyncRunner();
-			virtual ~SDLAsyncRunner();
+			View(){}
+			
+			virtual void MouseEvent(float x, float y) {}
+			virtual void KeyEvent(const std::string&,
+								  bool down) {}
+			virtual void CharEvent(const std::string&) {}
+			
+			virtual void RunFrame(float dt) {}
+			
+			virtual void Closing() {}
+			
+			virtual bool WantsToBeClosed() { return false; }
 		};
 	}
 }
-
