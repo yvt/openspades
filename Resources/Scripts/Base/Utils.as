@@ -54,6 +54,28 @@
  		return Min(Max(val, lower), upper);
  	}
  	
- 	
+ 	/** Renders an image in the way CSS border-image does. */
+ 	void DrawSliceImage(Renderer@ renderer, Image@ image, float x, float y, float w, float h, float border) {
+ 		float iw = image.Width;
+ 		float ih = image.Height;
+ 		renderer.DrawImage(image, AABB2(x, y, border, border), 
+ 			AABB2(0.f, 0.f, border, border));
+ 		renderer.DrawImage(image, AABB2(x + w - border, y, border, border), 
+ 			AABB2(iw - border, 0.f, border, border));
+ 		renderer.DrawImage(image, AABB2(x, y + h - border, border, border), 
+ 			AABB2(0.f, ih - border, border, border));
+ 		renderer.DrawImage(image, AABB2(x + w - border, y + h - border, border, border), 
+ 			AABB2(iw - border, ih - border, border, border));
+ 		renderer.DrawImage(image, AABB2(x + border, y, w - border - border, border), 
+ 			AABB2(border, 0.f, iw - border - border, border));
+ 		renderer.DrawImage(image, AABB2(x + border, y + h - border, w - border - border, border), 
+ 			AABB2(border, ih - border, iw - border - border, border));
+ 		renderer.DrawImage(image, AABB2(x, y + border, border, h - border - border), 
+			AABB2(0.f, border, border, ih - border - border));
+		renderer.DrawImage(image, AABB2(x + w - border, y + border, border, h - border - border), 
+			AABB2(iw - border, border, border, ih - border - border));
+		renderer.DrawImage(image, AABB2(x + border, y + border, w - border - border, h - border - border), 
+			AABB2(border, border, iw - border - border, ih - border - border));
+	}
  }
  
