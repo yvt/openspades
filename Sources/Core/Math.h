@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <math.h>
-//#include "../Core/Debug.h"
 #include <string>
 
 #ifdef _MSC_VER
