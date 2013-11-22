@@ -63,7 +63,7 @@ namespace spades {
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("Font",
-												  "void DrawShadow(const string& in, const Vector2& in, float, const Vector4& in)",
+												  "void DrawShadow(const string& in, const Vector2& in, float, const Vector4& in, const Vector4& in)",
 												  asMETHOD(client::IFont, DrawShadow),
 												  asCALL_THISCALL);
 					manager->CheckError(r);

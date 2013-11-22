@@ -97,6 +97,9 @@ namespace spades {
 			ptr = NULL;
 			return p;
 		}
+		operator bool() {
+			return ptr != NULL;
+		}
 	};
 	
 }

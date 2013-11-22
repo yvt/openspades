@@ -35,6 +35,7 @@ namespace spades {
 			
 		}
 		void Runner::RunProtected() {
+			SPADES_MARK_FUNCTION();
 			std::string err;
 			try{
 				Run();
@@ -63,6 +64,7 @@ namespace spades {
 			}
 		}
 		void Runner::Run() {
+			SPADES_MARK_FUNCTION();
 			class ConcreteRunner: public SDLRunner {
 				Runner *r;
 			protected:
