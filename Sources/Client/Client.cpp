@@ -313,9 +313,9 @@ namespace spades {
 			delete paletteView;
 			delete centerMessageView;
 			delete hurtRingView;
-			delete designFont;
-			delete textFont;
-			delete bigTextFont;
+			designFont->Release();
+			textFont->Release();
+			bigTextFont->Release();
 		}
 		
 		bool Client::WantsToBeClosed() {

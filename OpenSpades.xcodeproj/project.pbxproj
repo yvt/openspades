@@ -34,6 +34,7 @@
 		E80B28DB17B39D160056179E /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = E80B28D817B39D160056179E /* unzip.c */; };
 		E80B28DE17B39EEF0056179E /* ZipFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28DC17B39EEE0056179E /* ZipFileSystem.cpp */; };
 		E80B28E117B4FDDA0056179E /* DynamicMemoryStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28DF17B4FDD40056179E /* DynamicMemoryStream.cpp */; };
+		E81CE4A6183F7A3000F22685 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A4183F7A3000F22685 /* IFont.cpp */; };
 		E834F55017942C43004EBE88 /* Grenade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F54E17942C43004EBE88 /* Grenade.cpp */; };
 		E834F55317944779004EBE88 /* NetClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F55117944778004EBE88 /* NetClient.cpp */; };
 		E834F5561794BBD4004EBE88 /* Debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F5541794BBD4004EBE88 /* Debug.cpp */; };
@@ -316,6 +317,7 @@
 		E80B28DD17B39EEF0056179E /* ZipFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipFileSystem.h; sourceTree = "<group>"; };
 		E80B28DF17B4FDD40056179E /* DynamicMemoryStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicMemoryStream.cpp; sourceTree = "<group>"; };
 		E80B28E017B4FDD70056179E /* DynamicMemoryStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicMemoryStream.h; sourceTree = "<group>"; };
+		E81CE4A4183F7A3000F22685 /* IFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IFont.cpp; sourceTree = "<group>"; };
 		E834F54E17942C43004EBE88 /* Grenade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grenade.cpp; sourceTree = "<group>"; };
 		E834F54F17942C43004EBE88 /* Grenade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grenade.h; sourceTree = "<group>"; };
 		E834F55117944778004EBE88 /* NetClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetClient.cpp; sourceTree = "<group>"; };
@@ -1162,6 +1164,7 @@
 				E8B6B74517EA0F1E00E35523 /* IGrenadeSkin.h */,
 				E8B6B74717EA12E100E35523 /* IWeaponSkin.cpp */,
 				E8B6B74817EA12E500E35523 /* IWeaponSkin.h */,
+				E81CE4A4183F7A3000F22685 /* IFont.cpp */,
 			);
 			name = ScriptBindings;
 			path = Sources/ScriptBindings;
@@ -1818,6 +1821,7 @@
 				E8B6B69217DE27B500E35523 /* as_callfunc.cpp in Sources */,
 				E8B6B6A117DE27B500E35523 /* as_compiler.cpp in Sources */,
 				E8B6B6A217DE27B500E35523 /* as_configgroup.cpp in Sources */,
+				E81CE4A6183F7A3000F22685 /* IFont.cpp in Sources */,
 				E8B6B6A317DE27B500E35523 /* as_context.cpp in Sources */,
 				E8B6B6A417DE27B500E35523 /* as_datatype.cpp in Sources */,
 				E8B6B6A517DE27B500E35523 /* as_gc.cpp in Sources */,

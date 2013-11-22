@@ -20,13 +20,15 @@
 
 #pragma once
 
-#include "../Core/Math.h"
+#include <Core/Math.h>
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	namespace client{
-		class IFont {
-		public:
+		class IFont: public RefCountedObject {
+		protected:
 			virtual ~IFont();
+		public:
 
 			virtual Vector2 Measure(const std::string&) = 0;
 			virtual void Draw(const std::string&, Vector2 offset, float scale, Vector4 color) = 0;

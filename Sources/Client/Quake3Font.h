@@ -45,13 +45,14 @@ namespace spades {
 			int glyphHeight;
 			std::vector<GlyphInfo> glyphs;
 			float spaceWidth;
+		protected:
+			virtual ~Quake3Font();
 		public:
 			Quake3Font(IRenderer *,
 					   IImage *texture,
 					   const int *map,
 					   int glyphHeight,
 					   float spaceWidth);
-			virtual ~Quake3Font();
 			
 			virtual Vector2 Measure(const std::string&);
 			virtual void Draw(const std::string&,
