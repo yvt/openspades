@@ -60,6 +60,109 @@ namespace spades {
 			
 		}
 		
+		bool GameMap::IsSurface(int x, int y, int z) {
+			if(!IsSolid(x, y, z)) return false;
+			if(z == 0) return true;
+			if(x > 0 && !IsSolid(x - 1, y, z))
+				return true;
+			if(x < Width() - 1 && !IsSolid(x + 1, y, z))
+				return true;
+			if(y > 0 && !IsSolid(x, y - 1, z))
+				return true;
+			if(y < Height() - 1 && !IsSolid(x, y + 1, z))
+				return true;
+			if(!IsSolid(x, y, z - 1))
+				return true;
+			if(z < Depth() - 1 && !IsSolid(x, y, z + 1))
+				return true;
+			return false;
+		}
+		
+		static void WriteColor(std::vector<char>& buffer, int color) {
+			buffer.push_back((char)(color >> 16));
+			buffer.push_back((char)(color >> 8));
+			buffer.push_back((char)(color >> 0));
+			buffer.push_back((char)(color >> 24));
+		}
+		
+		// base on pysnip
+		void GameMap::Save(spades::IStream *stream){
+			int w = Width();
+			int h = Height();
+			int d = Depth();
+			std::vector<char> buffer;
+			buffer.reserve(10 * 1024 * 1024);
+			for(int y = 0; y < h; y++){
+				for(int x = 0; x < w; x++) {
+					int k = 0;
+					while(k < d) {
+						int z;
+						
+						int air_start;
+						int top_colors_start;
+						int top_colors_end; // exclusive
+						int bottom_colors_start;
+						int bottom_colors_end; // exclusive
+						int top_colors_len;
+						int bottom_colors_len;
+						int colors;
+						air_start = k;
+						while (k < d && !IsSolid(x, y, k))
+							++k;
+						top_colors_start = k;
+						while (k < d && IsSurface(x, y, k))
+							++k;
+						top_colors_end = k;
+						
+						while (k < d && IsSolid(x, y, k) &&
+							   !IsSurface(x, y, k))
+							++k;
+						
+						bottom_colors_start = k;
+						
+						z = k;
+						while (z < d && IsSurface(x, y, z))
+							++z;
+						
+						if (z != d) {
+							while (IsSurface(x, y, k))
+								++k;
+						}
+						bottom_colors_end = k;
+						
+						top_colors_len    = top_colors_end    - top_colors_start;
+						bottom_colors_len = bottom_colors_end - bottom_colors_start;
+						
+						colors = top_colors_len + bottom_colors_len;
+						
+						if (k == d)
+						{
+							buffer.push_back(0);
+						}
+						else
+						{
+							buffer.push_back(colors + 1);
+						}
+						buffer.push_back(top_colors_start);
+						buffer.push_back(top_colors_end - 1);
+						buffer.push_back(air_start);
+						
+						for (z=0; z < top_colors_len; ++z)
+						{
+							WriteColor(buffer, GetColor(x, y,
+															  top_colors_start + z));
+						}
+						for (z=0; z < bottom_colors_len; ++z)
+						{
+							WriteColor(buffer, GetColor(x, y,
+															  bottom_colors_start + z));
+						}
+					}
+				}
+			}
+			stream->Write(buffer.data(), buffer.size());
+		}
+		
 		bool GameMap::ClipBox(int x, int y, int z) {
 			int sz;
 			
