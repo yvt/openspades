@@ -45,6 +45,8 @@ namespace spades{
 			
 			static GameMap *Load(IStream *);
 			
+			void Save(IStream *);
+			
 			int Width() { return DefaultWidth; }
 			int Height() { return DefaultHeight; }
 			int Depth() { return DefaultDepth; }
@@ -133,6 +135,8 @@ namespace spades{
 			uint64_t solidMap[DefaultWidth][DefaultHeight];
 			uint32_t colorMap[DefaultWidth][DefaultHeight][DefaultDepth];
 			IGameMapListener *listener;
+			
+			bool IsSurface(int x, int y, int z);
 		};
 	}
 }

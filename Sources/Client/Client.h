@@ -199,6 +199,7 @@ namespace spades {
 			unsigned int corpseHardLimit;
 			
 			int nextScreenShotIndex;
+			int nextMapShotIndex;
 			
 			std::string GetWeaponPrefix(std::string fold, WeaponType);
 			void AddGrenadeToScene(Grenade *);
@@ -224,6 +225,9 @@ namespace spades {
 			
 			std::string ScreenShotPath();
 			void TakeScreenShot(bool sceneOnly);
+			
+			std::string MapShotPath();
+			void TakeMapShot();
 			
 			void NetLog(const char *format, ...);
 			

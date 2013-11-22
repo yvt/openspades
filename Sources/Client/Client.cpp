@@ -106,6 +106,7 @@ SPADES_SETTING(cg_keyLimbo, "l");
 
 SPADES_SETTING(cg_keyScreenshot, "0");
 SPADES_SETTING(cg_keySceneshot, "9");
+SPADES_SETTING(cg_keySaveMap, "8");
 
 SPADES_SETTING(cg_switchToolByWheel, "1");
 
@@ -198,7 +199,7 @@ namespace spades {
 			inGameLimbo = false;
 			
 			nextScreenShotIndex = 0;
-			
+			nextMapShotIndex = 0;
 						
 			timeSinceInit = 0.f;
 		}
@@ -1114,6 +1115,8 @@ namespace spades {
 						TakeScreenShot(true);
 					}else if(CheckKey(cg_keyScreenshot, name) && down){
 						TakeScreenShot(false);
+					}else if(CheckKey(cg_keySaveMap, name) && down){
+						TakeMapShot();
 					}else if(CheckKey(cg_keyFlashlight, name) && down){
 						flashlightOn = !flashlightOn;
 						flashlightOnTime = time;
@@ -1298,6 +1301,54 @@ namespace spades {
 		}
 		
 #pragma mark - Drawing
+		
+		void Client::TakeMapShot(){
+			
+			try{
+				std::string name = MapShotPath();
+				IStream *stream = FileManager::OpenForWriting(name.c_str());
+				try{
+					GameMap *map = GetWorld()->GetMap();
+					if(map == NULL){
+						SPRaise("No map loaded");
+					}
+					map->Save(stream);
+					delete stream;
+				}catch(...){
+					delete stream;
+					throw;
+				}
+				
+				std::string msg;
+				msg = "Map saved: " + name;
+				msg = ChatWindow::ColoredMessage(msg, MsgColorSysInfo);
+				chatWindow->AddMessage(msg);
+			}catch(const std::exception& ex){
+				std::string msg;
+				msg = "Saving map failed: ";
+				std::vector<std::string> lines = SplitIntoLines(ex.what());
+				msg += lines[0];
+				msg = ChatWindow::ColoredMessage(msg, MsgColorRed);
+				chatWindow->AddMessage(msg);
+			}
+		}
+		
+		std::string Client::MapShotPath() {
+			char buf[256];
+			for(int i = 0; i < 10000;i++){
+				sprintf(buf, "Mapshots/shot%04d.vxl", nextScreenShotIndex);
+				if(FileManager::FileExists(buf)){
+					nextScreenShotIndex++;
+					if(nextScreenShotIndex >= 10000)
+						nextScreenShotIndex = 0;
+					continue;
+				}
+				
+				return buf;
+			}
+			
+			SPRaise("No free file name");
+		}
 		
 		void Client::TakeScreenShot(bool sceneOnly){
 			SceneDefinition sceneDef = SceneDef();
