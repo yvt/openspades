@@ -18,7 +18,21 @@
  
  */
 
-#include "UIFramework.as"
-#include "UIControls.as"
-#include "MessageBox.as"
-#include "MainScreen.as"
+#pragma once
+
+#include <Core/RefCountedObject.h>
+
+namespace spades {
+	namespace gui {
+		class MainScreen;
+		class MainScreenHelper: public RefCountedObject {
+			MainScreen *mainScreen;
+		protected:
+			virtual ~MainScreenHelper();
+		public:
+			MainScreenHelper(MainScreen *scr);
+			void MainScreenDestroyed();
+			
+		};
+	}
+}

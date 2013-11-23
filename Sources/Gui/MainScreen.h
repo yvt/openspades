@@ -24,18 +24,27 @@
 #include <Client/IRenderer.h>
 #include <Client/IAudioDevice.h>
 #include "View.h"
+#include <ScriptBindings/ScriptManager.h>
 
 namespace spades {
 	namespace client {
 		class IFont;
 	}
 	namespace gui {
+		class MainScreenHelper;
 		class MainScreen: public View {
+			friend class MainScreenHelper;
 			Handle<client::IRenderer> renderer;
 			Handle<client::IAudioDevice> audioDevice;
 			Handle<View> subview;
 			Handle<client::IFont> font;
-			bool shouldBeClosed;
+			float timeToStartInitialization;
+			
+			Handle<MainScreenHelper> helper;
+			Handle<asIScriptObject> ui;
+			
+			void DrawStartupScreen();
+			void DoInit();
 		protected:
 			virtual ~MainScreen();
 		public:
@@ -53,7 +62,7 @@ namespace spades {
 			
 			virtual void Closing();
 			
-			virtual bool WantsToBeClosed() { return shouldBeClosed; }
+			virtual bool WantsToBeClosed();
 		};;
 	}
 }

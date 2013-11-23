@@ -17,8 +17,23 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
+#include "MainScreenHelper.h"
 
-#include "UIFramework.as"
-#include "UIControls.as"
-#include "MessageBox.as"
-#include "MainScreen.as"
+namespace spades {
+	namespace gui {
+		MainScreenHelper::MainScreenHelper(MainScreen *scr):
+		mainScreen(scr) {
+			
+		}
+		
+		MainScreenHelper::~MainScreenHelper() {
+			
+		}
+		
+		void MainScreenHelper::MainScreenDestroyed() {
+			mainScreen = NULL;
+		}
+		
+	}
+}
+

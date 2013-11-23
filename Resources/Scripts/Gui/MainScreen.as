@@ -19,17 +19,21 @@
  */
 
 namespace spades {
+	
+
 	class MainScreenUI {
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		private Font@ font;
 		private MainScreenHelper@ helper;
 		
-		private spades::ui::UIManager@ manager;
+		spades::ui::UIManager@ manager;
 		
-		private bool shouldExit = false;
+		MainScreenMainMenu@ mainMenu;
 		
-		private float time = 0.f;
+		bool shouldExit = false;
+		
+		private float time = -1.f;
 		
 		MainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, Font@ font, MainScreenHelper@ helper) {
 			@this.renderer = renderer;
@@ -37,18 +41,22 @@ namespace spades {
 			@this.font = font;
 			@this.helper = helper;
 			
-			// load map
-			@renderer.GameMap = GameMap("Maps/mesa.vxl");
-			renderer.FogColor = Vector3(0.11f, 0.10f, 0.2f);
-			renderer.FogDistance = 128.f;
+			SetupRenderer();
 			
 			@manager = spades::ui::UIManager(renderer, audioDevice);
 			@manager.RootElement.Font = font;
 			
-			spades::ui::Button button(manager);
-			button.Caption = "Not implemented! Sorry!";
-			button.Bounds = AABB2(200.f, 200.f, 120.f, 32.f);
-			manager.RootElement.AddChild(button);
+			@mainMenu = MainScreenMainMenu(this);
+			mainMenu.Bounds = manager.RootElement.Bounds;
+			manager.RootElement.AddChild(mainMenu);
+			
+		}
+		
+		private void SetupRenderer() {
+			// load map
+			@renderer.GameMap = GameMap("Maps/Title.vxl");
+			renderer.FogColor = Vector3(0.1f, 0.10f, 0.1f);
+			renderer.FogDistance = 128.f;
 		}
 		
 		void MouseEvent(float x, float y) {
@@ -56,10 +64,6 @@ namespace spades {
 		}
 		
 		void KeyEvent(string key, bool down) {
-			if(key == "Escape") {
-				shouldExit = true;
-				return;
-			}
 			manager.KeyEvent(key, down);
 		}
 		
@@ -82,24 +86,48 @@ namespace spades {
 		}
 		
 		void RunFrame(float dt) {
+			if(time < 0.f) {
+				time = 0.f;
+			}
+			
 			SceneDefinition sceneDef;
+			float cameraX = time;
+			cameraX -= floor(cameraX / 512.f) * 512.f;
+			cameraX = 512.f - cameraX;
 			sceneDef = SetupCamera(sceneDef, 
-				Vector3(256.f, 256.f, 1.f), Vector3(256.f, 257.f, 2.f), Vector3(0.f, 0.f, -1.f),
-				80.f);
-			sceneDef.zNear = 1.f;
-			sceneDef.zFar = 200.f;
+				Vector3(cameraX, 256.f, 12.f), Vector3(cameraX + .1f, 257.f, 12.5f), Vector3(0.f, 0.f, -1.f),
+				30.f);
+			sceneDef.zNear = 0.1f;
+			sceneDef.zFar = 222.f;
 			sceneDef.time = int(time * 1000.f);
 			sceneDef.viewportWidth = int(renderer.ScreenWidth);
 			sceneDef.viewportHeight = int(renderer.ScreenHeight);
 			sceneDef.denyCameraBlur = true;
+			sceneDef.depthOfFieldNearRange = 100.f;
+			sceneDef.skipWorld = false;
 			
 			renderer.StartScene(sceneDef);
 			renderer.EndScene();
 			
+			// fade the map
+			float fade = Clamp((time - 1.f) / 2.2f, 0.f, 1.f);
+			if(fade < 1.f) {
+				renderer.Color = Vector4(0.f, 0.f, 0.f, 1.f - fade);
+				renderer.DrawImage(renderer.RegisterImage("Gfx/White.tga"),
+					AABB2(0.f, 0.f, renderer.ScreenWidth, renderer.ScreenHeight));
+			}
+			
+			// draw title logo
+			Image@ img = renderer.RegisterImage("Gfx/Title/Logo.png");
+			renderer.Color = Vector4(1.f, 1.f, 1.f, 1.f);
+			renderer.DrawImage(img, Vector2((renderer.ScreenWidth - img.Width) * 0.5f, 64.f));
+			
+			manager.RunFrame(dt);
 			manager.Render();
+			
 			renderer.FrameDone();
 			renderer.Flip();
-			time += dt;
+			time += Min(dt, 0.05f);
 		}
 		
 		void Closing() {
@@ -110,6 +138,124 @@ namespace spades {
 			return shouldExit;
 		}
 	}
+	
+	class ServerListItem: spades::ui::ButtonBase {
+		string Text;
+		ServerListItem(spades::ui::UIManager@ manager){
+			super(manager);
+		}
+		void OnActivated() {
+			
+			ButtonBase::OnActivated();
+		}
+		void Render() {
+			Renderer@ renderer = Manager.Renderer;
+			Vector2 pos = ScreenPosition;
+			Vector2 size = Size;
+			Image@ img = renderer.RegisterImage("Gfx/White.tga");
+			if(Pressed && Hover) {
+				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.3f);
+			} else if(Hover) {
+				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.15f);
+			} else {
+				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.0f);
+			}
+			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
+			
+			Font.Draw(Text, ScreenPosition + Vector2(2.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw("TODO", ScreenPosition + Vector2(100.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw("Blahblah", ScreenPosition + Vector2(200.f, 2.f), 1.f, Vector4(1,1,1,1));
+		}
+	}
+
+	class ServerListModel: spades::ui::ListViewModel {
+		spades::ui::UIManager@ manager;
+		ServerListModel(spades::ui::UIManager@ manager) {
+			@this.manager = manager;
+		}
+		int NumRows { get { return 100; } }
+		spades::ui::UIElement@ CreateElement(int row) {
+			ServerListItem i(manager);
+			// TODO: implement
+			i.Text = "Row " + ToString(row);
+			return i;
+		}
+		void RecycleElement(spades::ui::UIElement@ elem) {}
+	}
+	
+	class MainScreenMainMenu: spades::ui::UIElement {
+		
+		MainScreenUI@ ui;
+		spades::ui::Field@ addressField;
+		
+		spades::ui::ListView@ serverList;
+		
+		private ConfigItem cg_lastQuickConnectHost("cg_lastQuickConnectHost");
+		
+		MainScreenMainMenu(MainScreenUI@ ui) {
+			super(ui.manager);
+			@this.ui = ui;
+			
+			float contentsWidth = 600.f;
+			float contentsLeft = (Manager.Renderer.ScreenWidth - contentsWidth) * 0.5f;
+			float footerPos = Manager.Renderer.ScreenHeight - 40.f;
+			{
+				spades::ui::Button button(Manager);
+				button.Caption = "Connect";
+				button.Bounds = AABB2(contentsLeft + contentsWidth - 150.f, 200.f, 150.f, 30.f);
+				button.Activated = EventHandler(this.OnConnectPressed);
+				AddChild(button);
+			}
+			{
+				@addressField = spades::ui::Field(Manager);
+				addressField.Bounds = AABB2(contentsLeft, 200, contentsWidth - 160.f, 30.f);
+				addressField.Placeholder = "Quick Connect";
+				addressField.Text = cg_lastQuickConnectHost.StringValue;
+				addressField.Changed = spades::ui::EventHandler(this.OnAddressChanged);
+				AddChild(addressField);
+			}
+			{
+				@serverList = spades::ui::ListView(Manager);
+				serverList.Bounds = AABB2(contentsLeft, 240.f, contentsWidth, footerPos - 250.f);
+				AddChild(serverList);
+				@serverList.Model = ServerListModel(Manager);
+			}
+		}
+		
+		private void OnAddressChanged(spades::ui::UIElement@ sender) {
+			cg_lastQuickConnectHost = addressField.Text;
+		}
+		
+		private void Connect() {
+			string text = "This feature is not implemented.";
+			text += text;
+			text += text;
+			text += text;
+			text += text;
+			text += text;
+			text += text;
+			AlertScreen al(this, text);
+			al.Run();
+		}
+		
+		private void OnConnectPressed(spades::ui::UIElement@ sender) {
+			Connect();
+		}
+		
+		void HotKey(string key) {
+			if(IsEnabled and key == "Enter") {
+				Connect();
+			} else if(IsEnabled and key == "Escape") {
+				ui.shouldExit = true;
+			} else {
+				UIElement::HotKey(key);
+			}
+		}
+		
+		
+	}
+	
+	
 	
 	MainScreenUI@ CreateMainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, 
 		Font@ font, MainScreenHelper@ helper) {

@@ -240,6 +240,9 @@
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
 		E8F74CEB183F92DA0085AA54 /* SDLmain.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CEA183F92DA0085AA54 /* SDLmain.m */; };
+		E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */; };
+		E8F74CF2183FBB070085AA54 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF0183FBB070085AA54 /* MainScreenHelper.cpp */; };
+		E8F74CF51840D4CC0085AA54 /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF31840D4CC0085AA54 /* Config.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -754,6 +757,10 @@
 		E8F74CE8183F8B9D0085AA54 /* Runner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Runner.h; sourceTree = "<group>"; };
 		E8F74CEA183F92DA0085AA54 /* SDLmain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLmain.m; sourceTree = "<group>"; };
 		E8F74CEC183F931F0085AA54 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLMain.h; sourceTree = "<group>"; };
+		E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScreenHelper.cpp; sourceTree = "<group>"; };
+		E8F74CEE183FBA9C0085AA54 /* MainScreenHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScreenHelper.h; sourceTree = "<group>"; };
+		E8F74CF0183FBB070085AA54 /* MainScreenHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScreenHelper.cpp; sourceTree = "<group>"; };
+		E8F74CF31840D4CC0085AA54 /* Config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Config.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1178,6 +1185,8 @@
 				E8B6B74717EA12E100E35523 /* IWeaponSkin.cpp */,
 				E8B6B74817EA12E500E35523 /* IWeaponSkin.h */,
 				E81CE4A4183F7A3000F22685 /* IFont.cpp */,
+				E8F74CF0183FBB070085AA54 /* MainScreenHelper.cpp */,
+				E8F74CF31840D4CC0085AA54 /* Config.cpp */,
 			);
 			name = ScriptBindings;
 			path = Sources/ScriptBindings;
@@ -1294,6 +1303,8 @@
 				E80B28D417B1100D0056179E /* AboutText.html */,
 				E81CE4A7183F7F2000F22685 /* MainScreen.cpp */,
 				E81CE4A8183F7F2000F22685 /* MainScreen.h */,
+				E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */,
+				E8F74CEE183FBA9C0085AA54 /* MainScreenHelper.h */,
 				E8F74CE3183F86AE0085AA54 /* View.cpp */,
 				E8F74CE4183F86AE0085AA54 /* View.h */,
 				E8F74CE7183F8B9D0085AA54 /* Runner.cpp */,
@@ -1764,6 +1775,7 @@
 				E834F56517951B1C004EBE88 /* MemoryStream.cpp in Sources */,
 				E834F56817979F5A004EBE88 /* Quake3Font.cpp in Sources */,
 				E834F56B17979FD7004EBE88 /* IFont.cpp in Sources */,
+				E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */,
 				E834F56F1797D934004EBE88 /* ChatWindow.cpp in Sources */,
 				E8E0AF8A1798278000C6B5A9 /* GLImageRenderer.cpp in Sources */,
 				E8E0AF94179942DB00C6B5A9 /* Corpse.cpp in Sources */,
@@ -1772,6 +1784,7 @@
 				E8E0AF9D179A5BC200C6B5A9 /* GLFlatMapRenderer.cpp in Sources */,
 				E8E0AFA0179A698800C6B5A9 /* MapView.cpp in Sources */,
 				E8E0AFA3179A8F1100C6B5A9 /* ScoreboardView.cpp in Sources */,
+				E8F74CF2183FBB070085AA54 /* MainScreenHelper.cpp in Sources */,
 				E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */,
 				E8E0AFA6179AA31C00C6B5A9 /* LimboView.cpp in Sources */,
 				E8E0AFA9179ACDDE00C6B5A9 /* GLSpriteRenderer.cpp in Sources */,
@@ -1807,6 +1820,7 @@
 				E80B288217A516D70056179E /* advancing_front.cc in Sources */,
 				E80B288317A516D70056179E /* cdt.cc in Sources */,
 				E80B288417A516D70056179E /* sweep.cc in Sources */,
+				E8F74CF51840D4CC0085AA54 /* Config.cpp in Sources */,
 				E80B288517A516D70056179E /* sweep_context.cc in Sources */,
 				E80B288817A52AB70056179E /* BitmapAtlasGenerator.cpp in Sources */,
 				E80B288D17A5FFB50056179E /* ThreadLocalStorage.cpp in Sources */,
