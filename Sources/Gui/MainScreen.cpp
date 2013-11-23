@@ -25,6 +25,12 @@
 #include <Client/FontData.h>
 #include <ScriptBindings/ScriptFunction.h>
 #include "MainScreenHelper.h"
+#include <Client/Client.h>
+#include <Core/Settings.h>
+
+SPADES_SETTING(cg_lastQuickConnectHost, "127.0.0.1");
+SPADES_SETTING(cg_protocolVersion, "");
+SPADES_SETTING(cg_playerName, "Deuce");
 
 namespace spades {
 	namespace gui {
@@ -55,6 +61,15 @@ namespace spades {
 		MainScreen::~MainScreen(){
 			SPADES_MARK_FUNCTION();
 			helper->MainScreenDestroyed();
+		}
+		
+		// Restores renderer's state (game map, fog color)
+		// after returning from the game client.
+		void MainScreen::RestoreRenderer() {
+			static ScriptFunction func("MainScreenUI", "void SetupRenderer()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
 		}
 		
 		void MainScreen::MouseEvent(float x, float y) {
@@ -146,8 +161,21 @@ namespace spades {
 		void MainScreen::RunFrame(float dt) {
 			SPADES_MARK_FUNCTION();
 			if(subview){
-				subview->RunFrame(dt);
-				return;
+				try{
+					subview->RunFrame(dt);
+					if(subview->WantsToBeClosed()) {
+						subview->Closing();
+						subview = NULL;
+						RestoreRenderer();
+					}else{
+						return;
+					}
+				}catch(const std::exception& ex) {
+					subview->Closing();
+					subview = NULL;
+					RestoreRenderer();
+					helper->errorMessage = ex.what();
+				}
 			}
 			if(timeToStartInitialization > 100.f){
 				timeToStartInitialization = 0.2f;
@@ -201,6 +229,17 @@ namespace spades {
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
 			c.ExecuteChecked();
+		}
+		
+		std::string MainScreen::Connect() {
+			spades::ServerAddress host(cg_lastQuickConnectHost, (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076);
+			try {
+				subview = new client::Client(&*renderer, &*audioDevice,
+											 host, cg_playerName);
+			}catch(const std::exception& ex) {
+				return ex.what();
+			}
+			return "";
 		}
 	}
 }

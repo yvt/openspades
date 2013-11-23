@@ -25,6 +25,7 @@
 #include <Core/Thread.h>
 #include <curl/curl.h>
 #include <json/json.h>
+#include "MainScreen.h"
 
 #define SERVICE_URL	"http://services.buildandshoot.com/serverlist.json"
 
@@ -166,15 +167,83 @@ namespace spades {
 			query->Start();
 		}
 		
-		CScriptArray *MainScreenHelper::GetServerList() {
+		struct serverSorter {
+			int type;
+			bool order;
+			serverSorter( int type_, bool order_ ) : type(type_), order(order_) {;}
+			bool operator() ( MainScreenServerItem* x, MainScreenServerItem* y ) const
+			{
+				if( order ) {
+					MainScreenServerItem* t = x;
+					x = y;
+					y = t;
+				}
+				switch( type ) {
+					default:
+					case 0:	return asInt( x->GetPing(), y->GetPing() );
+					case 1:	return asInt( x->GetNumPlayers(), y->GetNumPlayers() );
+					case 2:	return asString( x->GetName(), y->GetName() );
+					case 3:	return asString( x->GetMapName(), y->GetMapName() );
+					case 4: return asString( x->GetGameMode(), y->GetGameMode() );
+					case 5: return asString( x->GetProtocol(), y->GetProtocol() );
+					case 6: return asString( x->GetCountry(), y->GetCountry() );
+				}
+			}
+			bool asInt( int x, int y ) const
+			{
+				if( x == y ) return false;
+				return (x<y);
+			}
+			bool asString( const std::string& x, const std::string& y ) const
+			{
+				std::string::size_type t = 0;
+				for( t = 0; t < x.length() && t < y.length(); ++ t ) {
+					int xx = std::tolower(x[t]);
+					int yy = std::tolower(y[t]);
+					if( xx != yy ) {
+						return xx < yy;
+					}
+				}
+				if( x.length() == y.length() ) {
+					return false;
+				}
+				return x.length() < y.length();
+			}
+			static bool ciCharLess( char c1, char c2 )
+			{
+				return (std::tolower( static_cast<char>( c1 ) ) < std::tolower( static_cast<char>( c1 ) ));
+			}
+		};
+
+		
+		CScriptArray *MainScreenHelper::GetServerList(std::string sortKey, bool descending) {
 			if(result == NULL){
 				return NULL;
 			}
 			
-			// TODO: sort/filtering
-			std::vector<MainScreenServerItem *>& lst = result->list;
+			std::vector<MainScreenServerItem *> lst = result->list;
 			if(lst.empty())
 				return NULL;
+			
+			int sortKeyId = -1;
+			if(sortKey == "Ping") {
+				sortKeyId = 0;
+			}else if(sortKey == "NumPlayers") {
+				sortKeyId = 1;
+			}else if(sortKey == "Name") {
+				sortKeyId = 2;
+			}else if(sortKey == "MapName") {
+				sortKeyId = 3;
+			}else if(sortKey == "GameMode") {
+				sortKeyId = 4;
+			}else if(sortKey == "Protocol") {
+				sortKeyId = 5;
+			}else if(sortKey == "Country") {
+				sortKeyId = 6;
+			}
+			if(sortKeyId != -1){
+				std::sort( lst.begin(), lst.end(), serverSorter( sortKeyId, descending ) );
+			}
 			
 			asIScriptEngine *eng = ScriptManager::GetInstance()->GetEngine();
 			asIObjectType* t = eng->GetObjectTypeById(eng->GetTypeIdByDecl("array<spades::MainScreenServerItem@>"));
@@ -186,10 +255,23 @@ namespace spades {
 			return arr;
 		}
 		
+		std::string MainScreenHelper::ConnectServer() {
+			if(mainScreen == NULL){
+				return "mainScreen == NULL";
+			}
+			return mainScreen->Connect();
+		}
+		
 		std::string MainScreenHelper::GetServerListQueryMessage() {
 			if(result == NULL)
 				return "";
 			return result->message;
+		}
+		
+		std::string MainScreenHelper::GetPendingErrorMessage() {
+			std::string s = errorMessage;
+			errorMessage.clear();
+			return s;
 		}
 		
 		MainScreenServerList::~MainScreenServerList() {

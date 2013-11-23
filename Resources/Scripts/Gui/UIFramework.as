@@ -115,6 +115,9 @@ namespace spades {
 			}
 			
 			void KeyEvent(string key, bool down) {
+				if(key.length == 0){
+					return;
+				}
 				if(key == "Shift") {
 					IsShiftPressed = down;
 				}

@@ -65,6 +65,7 @@ namespace spades {
 		};
 		
 		class MainScreenHelper: public RefCountedObject {
+			friend class MainScreen;
 			class ServerListQuery;
 			
 			MainScreen *mainScreen;
@@ -72,6 +73,7 @@ namespace spades {
 			MainScreenServerList * volatile newResult;
 			Mutex newResultArrayLock;
 			ServerListQuery * volatile query;
+			std::string errorMessage;
 		protected:
 			virtual ~MainScreenHelper();
 		public:
@@ -80,8 +82,11 @@ namespace spades {
 		
 			bool PollServerListState();
 			void StartQuery();
-			CScriptArray *GetServerList();
+			CScriptArray *GetServerList(std::string sortKey, bool descending);
 			std::string GetServerListQueryMessage();
+			
+			std::string ConnectServer();
+			std::string GetPendingErrorMessage();
 		};
 	}
 }

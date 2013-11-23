@@ -45,6 +45,10 @@ namespace spades {
 			
 			void DrawStartupScreen();
 			void DoInit();
+			
+			void RestoreRenderer();
+			
+			std::string Connect();
 		protected:
 			virtual ~MainScreen();
 		public:

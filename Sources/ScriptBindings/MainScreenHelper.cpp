@@ -72,8 +72,18 @@ namespace spades {
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("MainScreenHelper",
-												  "array<spades::MainScreenServerItem@>@ GetServerList()",
+												  "array<spades::MainScreenServerItem@>@ GetServerList(string, bool)",
 												  asMETHOD(gui::MainScreenHelper, GetServerList),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenHelper",
+												  "string ConnectServer()",
+												  asMETHOD(gui::MainScreenHelper, ConnectServer),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenHelper",
+												  "string GetPendingErrorMessage()",
+												  asMETHOD(gui::MainScreenHelper, GetPendingErrorMessage),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					
