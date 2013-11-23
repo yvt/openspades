@@ -23,11 +23,11 @@ namespace spades {
 		funcdef void EventHandler(UIElement@ sender);
 		
 		class ButtonBase: UIElement {
-			bool Pressed;
-			bool Hover;
-			bool Toggled;
+			bool Pressed = false;
+			bool Hover = false;
+			bool Toggled = false;
 			
-			bool IsToggleButton;
+			bool IsToggleButton = false;
 			
 			EventHandler@ Activated;
 			string Caption;
@@ -138,6 +138,258 @@ namespace spades {
 					Vector4(1.f, 1.f, 1.f, 1.f), Vector4(0.f, 0.f, 0.f, 0.4f));
 			}
 			
+		}
+		
+		class FieldBase: UIElement {
+			bool Dragging = false;
+			EventHandler@ Changed;
+			string Text;
+			int MarkPosition = 0;
+			int CursorPosition = 0;
+			
+			Vector4 TextColor = Vector4(1.f, 1.f, 1.f, 1.f);
+			Vector4 HighlightColor = Vector4(1.f, 1.f, 1.f, 0.3f);
+			
+			Vector2 TextOrigin = Vector2(0.f, 0.f);
+			float TextScale = 1.f;
+			
+			FieldBase(UIManager@ manager) {
+				super(manager);
+				IsMouseInteractive = true;
+				AcceptsFocus = true;
+				@this.Cursor = Cursor(Manager, manager.Renderer.RegisterImage("Gfx/IBeam.png"), Vector2(16.f, 16.f));
+			}
+			
+			int SelectionStart {
+				get final { return Min(MarkPosition, CursorPosition); }
+				set {
+					Select(value, SelectionEnd - value);
+				}
+			}
+			
+			int SelectionEnd {
+				get final {
+					return Max(MarkPosition, CursorPosition);
+				}
+				set {
+					Select(SelectionStart, value - SelectionStart);
+				}
+			}
+			
+			int SelectionLength {
+				get final {
+					return SelectionEnd - SelectionStart;
+				}
+				set {
+					Select(SelectionStart, value);
+				}
+			}
+			
+			string SelectedText {
+				get final {
+					return Text.substr(SelectionStart, SelectionLength);
+				}
+				set {
+					Text = Text.substr(0, SelectionStart) + value + Text.substr(SelectionEnd);
+					SelectionLength = value.length;
+				}
+			}
+			
+			private int PointToCharIndex(float x) {
+				x -= TextOrigin.x;
+				if(x < 0.f) return 0;
+				x /= TextScale;
+				string text = Text;
+				int len = text.length;
+				float lastWidth = 0.f;
+				Font@ font = this.Font;
+				// FIXME: use binary search for better performance?
+				// FIXME: support multi-byte charset
+				for(int i = 1; i <= len; i++) {
+					float width = font.Measure(text.substr(0, i)).x;
+					if(width > x) {
+						if(x < (lastWidth + width) * 0.5f) {
+							return i - 1;
+						} else {
+							return i;
+						}
+					}
+					lastWidth = width;
+				}
+				return len;
+			}
+			int PointToCharIndex(Vector2 pt) {
+				return PointToCharIndex(pt.x);
+			}
+			
+			int ClampCursorPosition(int pos) {
+				return Clamp(pos, 0, Text.length);
+			}
+			
+			void Select(int start, int length = 0) {
+				MarkPosition = ClampCursorPosition(start);
+				CursorPosition = ClampCursorPosition(start + length);
+			}
+			
+			void SelectAll() {
+				Select(0, Text.length);
+			}
+			
+			void BackSpace() {
+				if(SelectionLength > 0) {
+					SelectedText = "";
+				} else {
+					Select(SelectionStart - 1, 1);
+					SelectedText = "";
+				}
+			}
+			
+			void Insert(string text) {
+				string oldText = SelectedText;
+				SelectedText = text;
+				
+				// if text overflows, deny the insertion
+				if(!FitsInBox(Text)) {
+					SelectedText = oldText;
+					return;
+				}
+				
+				Select(SelectionEnd);
+			}
+			
+			void KeyDown(string key) {
+				if(key == "BackSpace") {
+					BackSpace();
+				}else if(key == "Left") {
+					if(Manager.IsShiftPressed) {
+						CursorPosition = ClampCursorPosition(CursorPosition - 1);
+					}else {
+						if(SelectionLength == 0) {
+							// FIXME: support multi-byte charset
+							Select(CursorPosition - 1);
+						} else {
+							Select(SelectionStart);
+						}
+					}
+					return;
+				}else if(key == "Right") {
+					if(Manager.IsShiftPressed) {
+						CursorPosition = ClampCursorPosition(CursorPosition + 1);
+					}else {
+						if(SelectionLength == 0) {
+							// FIXME: support multi-byte charset
+							Select(CursorPosition + 1);
+						} else {
+							Select(SelectionEnd);
+						}
+					}
+					return;
+				}
+				if(manager.IsControlPressed) {
+					if(key == "a") {
+						SelectAll();
+						return;
+					}
+				}
+				manager.ProcessHotKey(key);
+			}
+			void KeyUp(string key) {
+			}
+			
+			void KeyPress(string text) {
+				if(!manager.IsControlPressed) {
+					Insert(text);
+				}
+			}
+			void MouseDown(MouseButton button, Vector2 clientPosition) {
+				if(button != spades::ui::MouseButton::LeftMouseButton) {
+					return;
+				}
+				Dragging = true; 
+				if(Manager.IsShiftPressed) {
+					MouseMove(clientPosition);
+				} else {
+					Select(PointToCharIndex(clientPosition));
+				}
+			}
+			void MouseMove(Vector2 clientPosition) {
+				if(Dragging) {
+					CursorPosition = PointToCharIndex(clientPosition);
+				}
+			}
+			void MouseUp(MouseButton button, Vector2 clientPosition) {
+				if(button != spades::ui::MouseButton::LeftMouseButton) {
+					return;
+				}
+				Dragging = false;
+			}
+			
+			bool FitsInBox(string text) {
+				return Font.Measure(text).x * TextScale < Size.x - TextOrigin.x;
+			}
+			
+			void DrawHighlight(float x, float y, float w, float h) {
+				Renderer@ renderer = Manager.Renderer;
+				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+				
+				Image@ img = renderer.RegisterImage("Gfx/White.tga");
+				renderer.DrawImage(img, AABB2(x, y, w, h));
+			}
+			
+			void DrawBeam(float x, float y, float h) {
+				Renderer@ renderer = Manager.Renderer;
+				float pulse = sin(Manager.Time * 5.f);
+				pulse = abs(pulse);
+				renderer.Color = Vector4(1.f, 1.f, 1.f, pulse);
+				
+				Image@ img = renderer.RegisterImage("Gfx/White.tga");
+				renderer.DrawImage(img, AABB2(x - 1.f, y, 2, h));
+			}
+			
+			void Render() {
+				Renderer@ renderer = Manager.Renderer;
+				Vector2 pos = ScreenPosition;
+				Vector2 size = Size;
+				Font@ font = this.Font;
+				Vector2 textPos = TextOrigin + pos;
+				string text = Text;
+				
+				font.Draw(text, textPos, TextScale, TextColor);
+				
+				if(IsFocused){
+					float fontHeight = font.Measure("A").y;
+					
+					// draw selection
+					int start = SelectionStart;
+					int end = SelectionEnd;
+					if(end == start) {
+						float x = font.Measure(text.substr(0, start)).x;
+						DrawBeam(x + textPos.x, textPos.y, fontHeight);
+					} else {
+						float x1 = font.Measure(text.substr(0, start)).x;
+						float x2 = font.Measure(text.substr(0, end)).x;
+						DrawHighlight(textPos.x + x1, textPos.y, x2 - x1, fontHeight);
+					}
+				}
+			}
+		}
+		
+		class Field: FieldBase {
+			Field(UIManager@ manager) {
+				super(manager);
+				TextOrigin = Vector2(2.f, 2.f);
+			}
+			void Render() {
+				// render background
+				Renderer@ renderer = Manager.Renderer;
+				Vector2 pos = ScreenPosition;
+				Vector2 size = Size;
+				Image@ img = renderer.RegisterImage("Gfx/White.tga");
+				renderer.Color = Vector4(0.f, 0.f, 0.f, IsFocused ? 0.3f : 0.1f);
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
+				
+				FieldBase::Render();
+			}
 		}
 	}
 }

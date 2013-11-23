@@ -29,6 +29,9 @@ namespace spades {
 			UIElement@ RootElement;
 			UIElement@ ActiveElement;
 			Cursor@ DefaultCursor;
+			float Time = 0.f;
+			bool IsControlPressed = false;
+			bool IsShiftPressed = false;
 			
 			private UIElement@ mouseCapturedElement;
 			private UIElement@ mouseHoverElement;
@@ -48,7 +51,8 @@ namespace spades {
 				@RootElement = UIElement(this);
 				RootElement.Size = Vector2(renderer.ScreenWidth, renderer.ScreenHeight);
 				
-				@DefaultCursor = Cursor(this, renderer.RegisterImage("Gfx/Limbo/Cursor.tga"), Vector2(16.f, 16.f));
+				@DefaultCursor = Cursor(this, renderer.RegisterImage("Gfx/Cursor.png"), Vector2(8.f, 8.f));
+				MouseCursorPosition = Vector2(renderer.ScreenWidth * 0.5f, renderer.ScreenHeight * 0.5f);
 			}
 			
 			private MouseButton TranslateMouseButton(string key){
@@ -106,6 +110,12 @@ namespace spades {
 			}
 			
 			void KeyEvent(string key, bool down) {
+				if(key == "Shift") {
+					IsShiftPressed = down;
+				}
+				if(key == "Control") {
+					IsControlPressed = down;
+				}
 				if(key == "WheelUp") {
 					UIElement@ e = GetMouseActiveElement();
 					if(e !is null) {
@@ -171,6 +181,10 @@ namespace spades {
 				if(audioDevice !is null) {
 					
 				}
+			}
+			
+			void RunFrame(float dt) {
+				Time += dt;
 			}
 			
 			void Render() {
