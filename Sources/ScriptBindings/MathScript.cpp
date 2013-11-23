@@ -963,6 +963,19 @@ namespace spades {
 
 					/*** Other Global Functions ***/
 					
+					struct UtilFuncs {
+						static std::string ToString(int i) {
+							char buf[256];
+							sprintf(buf, "%d", i);
+							return buf;
+						}
+						static std::string ToString(double i) {
+							char buf[256];
+							sprintf(buf, "%f", i);
+							return buf;
+						}
+					};
+					
 					r = eng->RegisterGlobalFunction("string Replace(const string&in, const string& in, const string&in)",
 													asFUNCTION(Replace),
 													asCALL_CDECL);
@@ -1015,6 +1028,16 @@ namespace spades {
 					
 					r = eng->RegisterGlobalFunction("float SmoothStep(float)",
 													asFUNCTION(SmoothStep),
+													asCALL_CDECL);
+					manager->CheckError(r);
+					
+					r = eng->RegisterGlobalFunction("string ToString(int)",
+													asFUNCTIONPR(UtilFuncs::ToString, (int), std::string),
+													asCALL_CDECL);
+					manager->CheckError(r);
+					
+					r = eng->RegisterGlobalFunction("string ToString(double)",
+													asFUNCTIONPR(UtilFuncs::ToString, (double), std::string),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					

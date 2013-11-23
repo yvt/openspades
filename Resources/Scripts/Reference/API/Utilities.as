@@ -29,4 +29,8 @@ namespace spades {
 	/** Removes preceding/following white-spaces. */
 	string TrimSpaces(const string@ input) {}
 	
+	string ToString(int) {}
+	
+	string ToString(double) {}
+	
 }
