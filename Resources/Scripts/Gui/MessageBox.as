@@ -81,7 +81,7 @@ namespace spades {
 		}
 		
 		void HotKey(string key) {
-			if(IsEnabled and key == "Enter") {
+			if(IsEnabled and (key == "Enter" or key == "Escape")) {
 				Close();
 			} else {
 				UIElement::HotKey(key);

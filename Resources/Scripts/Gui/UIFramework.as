@@ -53,7 +53,7 @@ namespace spades {
 				@RootElement = UIElement(this);
 				RootElement.Size = Vector2(renderer.ScreenWidth, renderer.ScreenHeight);
 				
-				@DefaultCursor = Cursor(this, renderer.RegisterImage("Gfx/Cursor.png"), Vector2(8.f, 8.f));
+				@DefaultCursor = Cursor(this, renderer.RegisterImage("Gfx/UI/Cursor.png"), Vector2(8.f, 8.f));
 				MouseCursorPosition = Vector2(renderer.ScreenWidth * 0.5f, renderer.ScreenHeight * 0.5f);
 			}
 			
@@ -165,7 +165,7 @@ namespace spades {
 						} else {
 							e.KeyUp(key);
 						}
-					} else {
+					} else if(down) {
 						ProcessHotKey(key);
 					}
 				}

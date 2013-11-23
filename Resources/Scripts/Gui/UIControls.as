@@ -212,10 +212,12 @@ namespace spades {
 			bool Dragging = false;
 			EventHandler@ Changed;
 			string Text;
+			string Placeholder;
 			int MarkPosition = 0;
 			int CursorPosition = 0;
 			
 			Vector4 TextColor = Vector4(1.f, 1.f, 1.f, 1.f);
+			Vector4 PlaceholderColor = Vector4(1.f, 1.f, 1.f, 0.5f);
 			Vector4 HighlightColor = Vector4(1.f, 1.f, 1.f, 0.3f);
 			
 			Vector2 TextOrigin = Vector2(0.f, 0.f);
@@ -225,7 +227,7 @@ namespace spades {
 				super(manager);
 				IsMouseInteractive = true;
 				AcceptsFocus = true;
-				@this.Cursor = Cursor(Manager, manager.Renderer.RegisterImage("Gfx/IBeam.png"), Vector2(16.f, 16.f));
+				@this.Cursor = Cursor(Manager, manager.Renderer.RegisterImage("Gfx/UI/IBeam.png"), Vector2(16.f, 16.f));
 			}
 			
 			void OnChanged() {
@@ -428,7 +430,11 @@ namespace spades {
 				Vector2 textPos = TextOrigin + pos;
 				string text = Text;
 				
-				font.Draw(text, textPos, TextScale, TextColor);
+				if(text.length == 0){
+					font.Draw(Placeholder, textPos, TextScale, PlaceholderColor);
+				}else{
+					font.Draw(text, textPos, TextScale, TextColor);
+				}
 				
 				if(IsFocused){
 					float fontHeight = font.Measure("A").y;
@@ -449,9 +455,16 @@ namespace spades {
 		}
 		
 		class Field: FieldBase {
+			private bool hover;
 			Field(UIManager@ manager) {
 				super(manager);
 				TextOrigin = Vector2(2.f, 2.f);
+			}
+			void MouseEnter() {
+				hover = true;
+			}
+			void MouseLeave() {
+				hover = false;
 			}
 			void Render() {
 				// render background
@@ -461,6 +474,18 @@ namespace spades {
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				renderer.Color = Vector4(0.f, 0.f, 0.f, IsFocused ? 0.3f : 0.1f);
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
+				
+				if(IsFocused) {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+				}else if(hover) {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.1f);
+				} else {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.06f);
+				}
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
+				renderer.DrawImage(img, AABB2(pos.x, pos.y + size.y - 1.f, size.x, 1.f));
+				renderer.DrawImage(img, AABB2(pos.x, pos.y + 1.f, 1.f, size.y - 2.f));
+				renderer.DrawImage(img, AABB2(pos.x + size.x - 1.f, pos.y + 1.f, 1.f, size.y - 2.f));
 				
 				FieldBase::Render();
 			}
@@ -520,6 +545,7 @@ namespace spades {
 			private bool dragging = false;
 			private double startValue;
 			private float startCursorPos;
+			private bool hover = false;
 			
 			ScrollBarTrackBar(ScrollBar@ scrollBar) {
 				super(scrollBar.Manager);
@@ -562,13 +588,32 @@ namespace spades {
 				}
 				dragging = false;
 			}
+			void MouseEnter() {
+				hover = true;
+			}
+			void MouseLeave() {
+				hover = false;
+			}
 			
 			void Render() {
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.4f);
+				
+				if(scrollBar.Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
+					pos.y += 4.f; size.y -= 8.f;
+				} else {
+					pos.x += 4.f; size.x -= 8.f;
+				}
+				
+				if(dragging) {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.4f);
+				} else if (hover) {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+				} else {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.1f);
+				}
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 			}
 		}
@@ -584,6 +629,15 @@ namespace spades {
 				Repeat = true;
 				this.up = up;
 			}
+			
+			void PlayMouseEnterSound() {
+				// suppress
+			}
+			
+			void PlayActivateSound() {
+				// suppress
+			}
+			
 			void Render() {
 				// nothing to draw
 			}
@@ -592,6 +646,7 @@ namespace spades {
 		class ScrollBarButton: ButtonBase {
 			private ScrollBar@ scrollBar;
 			private bool up;
+			private Image@ image;
 			
 			ScrollBarButton(ScrollBar@ scrollBar, bool up) {
 				super(scrollBar.Manager);
@@ -599,10 +654,54 @@ namespace spades {
 				IsMouseInteractive = true;
 				Repeat = true;
 				this.up = up;
+				@image = Manager.Renderer.RegisterImage("Gfx/UI/ScrollArrow.png");
+			}
+			
+			void PlayMouseEnterSound() {
+				// suppress
+			}
+			
+			void PlayActivateSound() {
+				// suppress
 			}
 			
 			void Render() {
-				// nothing to draw for now
+				Renderer@ r = Manager.Renderer;
+				Vector2 pos = ScreenPosition;
+				Vector2 size = Size;
+				pos += size * 0.5f;
+				float siz = image.Width * 0.5f;
+				AABB2 srcRect(0.f, 0.f, image.Width, image.Height);
+				
+				if(Pressed and Hover) {
+					r.Color = Vector4(1.f, 1.f, 1.f, 0.6f);
+				} else if (Hover) {
+					r.Color = Vector4(1.f, 1.f, 1.f, 0.4f);
+				} else {
+					r.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+				}
+				
+				if(scrollBar.Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
+					if(up) {
+						r.DrawImage(image, 
+							Vector2(pos.x + siz, pos.y - siz), Vector2(pos.x + siz, pos.y + siz), Vector2(pos.x - siz, pos.y - siz),
+							srcRect);
+					} else {
+						r.DrawImage(image, 
+							Vector2(pos.x - siz, pos.y + siz), Vector2(pos.x - siz, pos.y - siz), Vector2(pos.x + siz, pos.y + siz),
+							srcRect);
+					}
+				} else {
+					if(up) {
+						r.DrawImage(image, 
+							Vector2(pos.x + siz, pos.y + siz), Vector2(pos.x - siz, pos.y + siz), Vector2(pos.x + siz, pos.y - siz),
+							srcRect);
+					} else {
+						r.DrawImage(image, 
+							Vector2(pos.x - siz, pos.y - siz), Vector2(pos.x + siz, pos.y - siz), Vector2(pos.x - siz, pos.y + siz),
+							srcRect);
+					}
+				}
 			}
 		}
 		
