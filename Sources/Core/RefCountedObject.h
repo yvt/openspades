@@ -76,7 +76,7 @@ namespace spades {
 			}
 			T *old = ptr;
 			ptr = p;
-			if(add)
+			if(add && ptr)
 				ptr->AddRef();
 			if(old)
 				old->Release();
