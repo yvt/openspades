@@ -98,6 +98,12 @@ namespace spades {
 	}
 	
 	void Thread::MarkForAutoDeletion() {
+		AutoLocker locker(&lock);
+		if(threadInfo == NULL){
+			// already exited
+			delete this;
+			return;
+		}
 		autoDelete = true;
 	}
 }
