@@ -235,6 +235,9 @@ namespace spades {
 	/** Computes a dot-product of two vectors. */
 	float Dot(const Vector3@, const Vector3@);
 	
+	/** Computes a cross-product of two vectors. */
+	Vector3 Cross(const Vector3@, const Vector3@);
+	
 	/** Applies the floor function to the given vector, and 
 	 *  returns the computed one. */
 	Vector3 Floor(const Vector3@);

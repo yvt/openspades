@@ -377,7 +377,7 @@ namespace spades {
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void set_FogColor(Vector3)",
+													  "void set_FogColor(const Vector3& in)",
 													  asFUNCTION(SetFogColor),
 													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);

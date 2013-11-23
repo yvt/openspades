@@ -372,7 +372,7 @@ namespace spades {
 					manager->CheckError(r);
 					
 					r = eng->RegisterObjectMethod("Vector2",
-												  "float get_Normalized() const",
+												  "Vector2 get_Normalized() const",
 												  asMETHOD(Vector2, Normalize),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
@@ -540,13 +540,17 @@ namespace spades {
 					manager->CheckError(r);
 					
 					r = eng->RegisterObjectMethod("Vector3",
-												  "float get_Normalized() const",
+												  "Vector3 get_Normalized() const",
 												  asMETHOD(Vector3, Normalize),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					
 					r = eng->RegisterGlobalFunction("float Dot(const Vector3& in, const Vector3& in)",
 													asFUNCTION(Vector3::Dot),
+													asCALL_CDECL);
+					manager->CheckError(r);
+					r = eng->RegisterGlobalFunction("Vector3 Cross(const Vector3& in, const Vector3& in)",
+													asFUNCTION(Vector3::Cross),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					
@@ -713,7 +717,7 @@ namespace spades {
 					manager->CheckError(r);
 					
 					r = eng->RegisterObjectMethod("Vector4",
-												  "float get_Normalized() const",
+												  "Vector4 get_Normalized() const",
 												  asMETHOD(Vector4, Normalize),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
