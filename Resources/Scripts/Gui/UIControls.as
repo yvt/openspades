@@ -318,6 +318,7 @@ namespace spades {
 					Select(SelectionStart - 1, 1);
 					SelectedText = "";
 				}
+				OnChanged();
 			}
 			
 			void Insert(string text) {
@@ -331,6 +332,7 @@ namespace spades {
 				}
 				
 				Select(SelectionEnd);
+				OnChanged();
 			}
 			
 			void KeyDown(string key) {
@@ -831,7 +833,7 @@ namespace spades {
 		}
 		
 		/** Simple virtual stack panel implementation. */
-		class ListView: UIElement {
+		class ListViewBase: UIElement {
 			private ScrollBar@ scrollBar;
 			private ListViewModel@ model;
 			float RowHeight = 24.f;
@@ -839,7 +841,7 @@ namespace spades {
 			private UIElementDeque items;
 			private int loadedStartIndex = 0;
 			
-			ListView(UIManager@ manager) {
+			ListViewBase(UIManager@ manager) {
 				super(manager);
 				@scrollBar = ScrollBar(Manager);
 				scrollBar.Bounds = AABB2();
@@ -1022,7 +1024,30 @@ namespace spades {
 			void RecycleElement(UIElement@ elem) {}
 		}
 		
-		class TextViewer: ListView {
+		class ListView: ListViewBase {
+			ListView(UIManager@ manager) {
+				super(manager);
+			}
+			void Render() {
+				// render background
+				Renderer@ renderer = Manager.Renderer;
+				Vector2 pos = ScreenPosition;
+				Vector2 size = Size;
+				Image@ img = renderer.RegisterImage("Gfx/White.tga");
+				renderer.Color = Vector4(0.f, 0.f, 0.f, 0.2f);
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
+				
+				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.06f);
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
+				renderer.DrawImage(img, AABB2(pos.x, pos.y + size.y - 1.f, size.x, 1.f));
+				renderer.DrawImage(img, AABB2(pos.x, pos.y + 1.f, 1.f, size.y - 2.f));
+				renderer.DrawImage(img, AABB2(pos.x + size.x - 1.f, pos.y + 1.f, 1.f, size.y - 2.f));
+				
+				ListViewBase::Render();
+			}
+		}
+		
+		class TextViewer: ListViewBase {
 			private string text;
 			
 			TextViewer(UIManager@ manager) {
