@@ -27,7 +27,8 @@
 namespace spades {
 	
 	Thread::Thread():
-	runnable(NULL){
+	runnable(NULL),
+	autoDelete(false){
 		threadInfo = NULL;
 	}
 	
@@ -87,11 +88,17 @@ namespace spades {
 	void Thread::Quited() {
 		AutoLocker locker(&lock);
 		threadInfo = NULL;
+		if(autoDelete)
+			delete this;
 	}
 
 	void Thread::Run() {
 		if(runnable)
 			runnable->Run();
+	}
+	
+	void Thread::MarkForAutoDeletion() {
+		autoDelete = true;
 	}
 }
 

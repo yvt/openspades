@@ -29,6 +29,7 @@ namespace spades {
 		void *threadInfo;
 		Mutex lock;
 		IRunnable *runnable;
+		bool autoDelete;
 		
 		static int InternalRunner(void *);
 		void Quited();
@@ -43,6 +44,8 @@ namespace spades {
 		void Join();
 		
 		bool IsAlive();
+		
+		void MarkForAutoDeletion();
 	};
 	
 
