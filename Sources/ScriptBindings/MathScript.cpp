@@ -89,23 +89,23 @@ namespace spades {
 				case PhaseObjectType:
 					r = eng->RegisterObjectType("IntVector3",
 												sizeof(IntVector3),
-												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLINTS);
+												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS | asOBJ_APP_CLASS_ALLINTS);
 					manager->CheckError(r);
 					r = eng->RegisterObjectType("Vector2",
 												sizeof(Vector2),
-												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLINTS);
+												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS | asOBJ_APP_CLASS_ALLFLOATS);
 					manager->CheckError(r);
 					r = eng->RegisterObjectType("Vector3",
 												sizeof(Vector3),
-												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLINTS);
+												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS | asOBJ_APP_CLASS_ALLFLOATS);
 					manager->CheckError(r);
 					r = eng->RegisterObjectType("Vector4",
 												sizeof(Vector4),
-												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLINTS);
+												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS | asOBJ_APP_CLASS_ALLFLOATS);
 					manager->CheckError(r);
 					r = eng->RegisterObjectType("Matrix4",
 												sizeof(Matrix4),
-												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLINTS);
+												asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_CAK | asOBJ_APP_CLASS_ALLFLOATS);
 					manager->CheckError(r);
 					r = eng->RegisterObjectType("AABB2",
 												sizeof(AABB2),
