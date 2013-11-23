@@ -27,15 +27,20 @@ namespace spades {
 			bool Hover = false;
 			bool Toggled = false;
 			
-			bool IsToggleButton = false;
+			bool Toggle = false;
+			bool Repeat = false;
 			
 			EventHandler@ Activated;
 			string Caption;
 			string ActivateHotKey;
 			
+			private Timer@ repeatTimer;
+			
 			ButtonBase(UIManager@ manager) {
 				super(manager);
 				IsMouseInteractive = true;
+				@repeatTimer = Timer(Manager);
+				@repeatTimer.Tick = TimerTickEventHandler(this.RepeatTimerFired);
 			}
 			
 			void PlayMouseEnterSound() {
@@ -52,14 +57,41 @@ namespace spades {
 				}
 			}
 			
+			private void RepeatTimerFired(Timer@ timer) {
+				OnActivated();
+				timer.Interval = 0.1f;
+			}
+			
 			void MouseDown(MouseButton button, Vector2 clientPosition) {
 				if(button != spades::ui::MouseButton::LeftMouseButton) {
 					return;
 				}
 				Pressed = true;
+				Hover = true;
 				PlayActivateSound();
+				
+				if(Repeat) {
+					OnActivated();
+					repeatTimer.Interval = 0.3f;
+					repeatTimer.Start();
+				}
 			}
 			void MouseMove(Vector2 clientPosition) {
+				if(Pressed) {
+					bool newHover = AABB2(Vector2(0.f, 0.f), Size).Contains(clientPosition);
+					if(newHover != Hover) {
+						if(Repeat) {
+							if(newHover) {
+								OnActivated();
+								repeatTimer.Interval = 0.3f;
+								repeatTimer.Start();
+							} else {
+								repeatTimer.Stop();
+							}
+						}
+						Hover = newHover;
+					}
+				}
 			}
 			void MouseUp(MouseButton button, Vector2 clientPosition) {
 				if(button != spades::ui::MouseButton::LeftMouseButton) {
@@ -67,11 +99,15 @@ namespace spades {
 				}
 				if(Pressed) {
 					Pressed = false;
-					if(Hover) {
-						if(IsToggleButton) {
+					if(Hover and not Repeat) {
+						if(Toggle) {
 							Toggled = not Toggled;
 						}
 						OnActivated();
+					}
+					
+					if(Repeat and Hover){
+						repeatTimer.Stop();
 					}
 				}
 			}
@@ -158,6 +194,12 @@ namespace spades {
 				IsMouseInteractive = true;
 				AcceptsFocus = true;
 				@this.Cursor = Cursor(Manager, manager.Renderer.RegisterImage("Gfx/IBeam.png"), Vector2(16.f, 16.f));
+			}
+			
+			void OnChanged() {
+				if(Changed !is null) {
+					Changed(this);
+				}
 			}
 			
 			int SelectionStart {
@@ -389,6 +431,411 @@ namespace spades {
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 				
 				FieldBase::Render();
+			}
+		}
+		
+		enum ScrollBarOrientation {
+			Horizontal,
+			Vertical
+		}
+		
+		class ScrollBarBase: UIElement {
+			double MinValue = 0.0;
+			double MaxValue = 100.0;
+			double Value = 0.0;
+			double SmallChange = 1.0;
+			double LargeChange = 20.0;
+			EventHandler@ Changed;
+			
+			ScrollBarBase(UIManager@ manager) {
+				super(manager);
+			}
+			
+			void ScrollBy(double delta) {
+				ScrollTo(Value + delta);
+			}
+			
+			void ScrollTo(double val) {
+				val = Clamp(val, MinValue, MaxValue);
+				if(val == Value) {
+					return;
+				}
+				Value = val;
+				OnChanged();
+			}
+			
+			void OnChanged() {
+				if(Changed !is null) {
+					Changed(this);
+				}
+			}
+			
+			ScrollBarOrientation Orientation {
+				get {
+					if(Size.x > Size.y) {
+						return spades::ui::ScrollBarOrientation::Horizontal;
+					} else {
+						return spades::ui::ScrollBarOrientation::Vertical;
+					}
+				}
+			}
+			
+			
+		}
+		
+		class ScrollBarTrackBar: UIElement {
+			private ScrollBar@ scrollBar;
+			private bool dragging = false;
+			private double startValue;
+			private float startCursorPos;
+			
+			ScrollBarTrackBar(ScrollBar@ scrollBar) {
+				super(scrollBar.Manager);
+				@this.scrollBar = scrollBar;
+				IsMouseInteractive = true;
+			}
+			
+			private float GetCursorPos(Vector2 pos) {
+				if(scrollBar.Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
+					return pos.x + Position.x;
+				} else {
+					return pos.y + Position.y;
+				}
+			}
+			
+			void MouseDown(MouseButton button, Vector2 clientPosition) {
+				if(button != spades::ui::MouseButton::LeftMouseButton) {
+					return;
+				}
+				if(scrollBar.TrackBarMovementRange < 0.0001f) {
+					// immobile
+					return;
+				}
+				dragging = true;
+				startValue = scrollBar.Value;
+				startCursorPos = GetCursorPos(clientPosition);
+			}
+			void MouseMove(Vector2 clientPosition) {
+				if(dragging) {
+					double val = startValue;
+					float delta = GetCursorPos(clientPosition) - startCursorPos;
+					val += delta * (scrollBar.MaxValue - scrollBar.MinValue) / 
+						double(scrollBar.TrackBarMovementRange);
+					scrollBar.ScrollTo(val);
+				}
+			}
+			void MouseUp(MouseButton button, Vector2 clientPosition) {
+				if(button != spades::ui::MouseButton::LeftMouseButton) {
+					return;
+				}
+				dragging = false;
+			}
+			
+			void Render() {
+				Renderer@ renderer = Manager.Renderer;
+				Vector2 pos = ScreenPosition;
+				Vector2 size = Size;
+				Image@ img = renderer.RegisterImage("Gfx/White.tga");
+				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.4f);
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
+			}
+		}
+		
+		class ScrollBarFill: ButtonBase {
+			private ScrollBar@ scrollBar;
+			private bool up;
+			
+			ScrollBarFill(ScrollBar@ scrollBar, bool up) {
+				super(scrollBar.Manager);
+				@this.scrollBar = scrollBar;
+				IsMouseInteractive = true;
+				Repeat = true;
+				this.up = up;
+			}
+			void Render() {
+				// nothing to draw
+			}
+		}
+		
+		class ScrollBarButton: ButtonBase {
+			private ScrollBar@ scrollBar;
+			private bool up;
+			
+			ScrollBarButton(ScrollBar@ scrollBar, bool up) {
+				super(scrollBar.Manager);
+				@this.scrollBar = scrollBar;
+				IsMouseInteractive = true;
+				Repeat = true;
+				this.up = up;
+			}
+			
+			void Render() {
+				// nothing to draw for now
+			}
+		}
+		
+		class ScrollBar: ScrollBarBase {
+			
+			private ScrollBarTrackBar@ trackBar;
+			private ScrollBarFill@ fill1;
+			private ScrollBarFill@ fill2;
+			private ScrollBarButton@ button1;
+			private ScrollBarButton@ button2;
+			
+			private float ButtonSize = 16.f;
+			
+			ScrollBar(UIManager@ manager) {
+				super(manager);
+				
+				@trackBar = ScrollBarTrackBar(this);
+				AddChild(trackBar);
+				
+				@fill1 = ScrollBarFill(this, false);
+				@fill1.Activated = EventHandler(this.LargeDown);
+				AddChild(fill1);
+				@fill2 = ScrollBarFill(this, true);
+				@fill2.Activated = EventHandler(this.LargeUp);
+				AddChild(fill2);
+				
+				@button1 = ScrollBarButton(this, false);
+				@button1.Activated = EventHandler(this.SmallDown);
+				AddChild(button1);
+				@button2 = ScrollBarButton(this, true);
+				@button2.Activated = EventHandler(this.SmallUp);
+				AddChild(button2);
+			}
+			
+			private void LargeDown(UIElement@ e) {
+				ScrollBy(-LargeChange);
+			}
+			private void LargeUp(UIElement@ e) {
+				ScrollBy(LargeChange);
+			}
+			private void SmallDown(UIElement@ e) {
+				ScrollBy(-SmallChange);
+			}
+			private void SmallUp(UIElement@ e) {
+				ScrollBy(SmallChange);
+			}
+			
+			void OnChanged() {
+				Layout();
+				ScrollBarBase::OnChanged();
+				Layout();
+			}
+			
+			void Layout() {
+				Vector2 size = Size;
+				float tPos = TrackBarPosition;
+				float tLen = TrackBarLength;
+				if(Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
+					button1.Bounds = AABB2(0.f, 0.f, ButtonSize, size.y);
+					button2.Bounds = AABB2(size.x - ButtonSize, 0.f, ButtonSize, size.y);
+					fill1.Bounds = AABB2(ButtonSize, 0.f, tPos - ButtonSize, size.y);
+					fill2.Bounds = AABB2(tPos + tLen, 0.f, size.x - ButtonSize - tPos - tLen, size.y);
+					trackBar.Bounds = AABB2(tPos, 0.f, tLen, size.y);
+				} else {
+					button1.Bounds = AABB2(0.f, 0.f, size.x, ButtonSize);
+					button2.Bounds = AABB2(0.f, size.y - ButtonSize, size.x, ButtonSize);
+					fill1.Bounds = AABB2(0.f, ButtonSize, size.x, tPos - ButtonSize);
+					fill2.Bounds = AABB2(0.f, tPos + tLen, size.x, size.y - ButtonSize - tPos - tLen);
+					trackBar.Bounds = AABB2(0.f, tPos, size.x, tLen);
+				}
+			}
+			
+			void OnResized() {
+				Layout();
+				UIElement::OnResized();
+			}
+			
+			float Length {
+				get {
+					if(Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
+						return Size.x;
+					} else {
+						return Size.y;
+					}
+				}
+			}
+			
+			float TrackBarAreaLength {
+				get {
+					return Length - ButtonSize - ButtonSize;
+				}
+			}
+			
+			float TrackBarLength {
+				get {
+					return Max(TrackBarAreaLength *
+						(LargeChange / (MaxValue - MinValue + LargeChange)), 40.f);
+				}
+			}
+			
+			float TrackBarMovementRange {
+				get {
+					return TrackBarAreaLength - TrackBarLength;
+				}
+			}
+			
+			float TrackBarPosition { 
+				get {
+					if(MaxValue == MinValue) {
+						return 0.f;
+					}
+					return float((Value - MinValue) / (MaxValue - MinValue) * TrackBarMovementRange) + ButtonSize;
+				}
+			}
+			
+			void Render() {
+				Layout();
+				
+				ScrollBarBase::Render();
+			}
+		}
+		
+		class ListViewModel {
+			int NumRows { get { return 0; } }
+			UIElement@ CreateElement(int row) { return null; }
+			void RecycleElement(UIElement@ elem) {}
+		}
+		
+		/** Simple virtual stack panel implementation. */
+		class ListView: UIElement {
+			private ScrollBar@ scrollBar;
+			private ListViewModel@ model;
+			float RowHeight = 24.f;
+			float ScrollBarWidth = 16.f;
+			private UIElementDeque items;
+			private int loadedStartIndex = 0;
+			
+			ListView(UIManager@ manager) {
+				super(manager);
+				@scrollBar = ScrollBar(Manager);
+				scrollBar.Bounds = AABB2();
+				AddChild(scrollBar);
+				IsMouseInteractive = true;
+				
+				scrollBar.Changed = EventHandler(this.OnScrolled);
+				@model = ListViewModel();
+			}
+			
+			private void OnScrolled(UIElement@ sender) {
+				Layout();
+			}
+			
+			int NumVisibleRows {
+				get final {
+					return int(floor(Size.y / RowHeight));
+				}
+			}
+			
+			int MaxTopRowIndex {
+				get final {
+					return Max(0, model.NumRows - NumVisibleRows);
+				}
+			}
+			
+			int TopRowIndex {
+				get final {
+					int idx = int(floor(scrollBar.Value + 0.5));
+					return Clamp(idx, 0, MaxTopRowIndex);
+				}
+			}
+			
+			void OnResized() {
+				Layout();
+				UIElement::OnResized();
+			}
+			
+			void Layout() {
+				scrollBar.MaxValue = double(MaxTopRowIndex);
+				scrollBar.ScrollTo(scrollBar.Value); // ensures value is in range
+				scrollBar.LargeChange = double(NumVisibleRows);
+				
+				int numRows = model.NumRows;
+				
+				// load items
+				int visibleStart = TopRowIndex;
+				int visibleEnd = Min(visibleStart + NumVisibleRows, numRows);
+				int loadedStart = loadedStartIndex;
+				int loadedEnd = loadedStartIndex + items.Count;
+				
+				if(items.Count == 0 or visibleStart >= loadedEnd or visibleEnd <= loadedStart) {
+					// full reload
+					UnloadAll();
+					for(int i = visibleStart; i < visibleEnd; i++) {
+						items.PushBack(model.CreateElement(i));
+						AddChild(items.Back);
+					}
+					loadedStartIndex = visibleStart;
+				} else {
+					while(loadedStart < visibleStart) {
+						RemoveChild(items.Front);
+						model.RecycleElement(items.Front);
+						items.PopFront();
+						loadedStart++;
+					}
+					while(loadedEnd > visibleEnd) {
+						RemoveChild(items.Back);
+						model.RecycleElement(items.Back);
+						items.PopBack();
+						loadedEnd--;
+					}
+					while(visibleStart < loadedStart) {
+						loadedStart--;
+						items.PushFront(model.CreateElement(loadedStart));
+						AddChild(items.Front);
+					}
+					while(visibleEnd > loadedEnd) {
+						items.PushBack(model.CreateElement(loadedEnd));
+						AddChild(items.Back);
+						loadedEnd++;
+					}
+					loadedStartIndex = loadedStart;
+				}
+				
+				// relayout items
+				UIElementDeque@ items = this.items;
+				int count = items.Count;
+				float y = 0.f;
+				float w = Size.x - ScrollBarWidth;
+				for(int i = 0; i < count; i++){
+					items[i].Bounds = AABB2(0.f, y, w, RowHeight);
+					y += RowHeight;
+				}
+				
+				// move scroll bar
+				scrollBar.Bounds = AABB2(Size.x - ScrollBarWidth, 0.f, ScrollBarWidth, Size.y);
+			}
+			
+			void MouseWheel(float delta) {
+				scrollBar.ScrollBy(delta * 3.f);
+			}
+			
+			private void UnloadAll() {
+				UIElementDeque@ items = this.items;
+				int count = items.Count;
+				for(int i = 0; i < count; i++){
+					RemoveChild(items[i]);
+					model.RecycleElement(items[i]);
+				}
+				items.Clear();
+			}
+			
+			ListViewModel@ Model {
+				get final { return model; }
+				set {
+					if(model is value) {
+						return;
+					}
+					UnloadAll();
+					@model = value;
+					Layout();
+				}
+			}
+			
+			void ScrollToTop() {
+				scrollBar.ScrollTo(0.0);
 			}
 		}
 	}

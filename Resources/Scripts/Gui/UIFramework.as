@@ -36,6 +36,8 @@ namespace spades {
 			private UIElement@ mouseCapturedElement;
 			private UIElement@ mouseHoverElement;
 			
+			private Timer@[] timers = {};
+			
 			Renderer@ Renderer {
 				get final { return renderer; }
 			}
@@ -177,13 +179,35 @@ namespace spades {
 				}
 			}
 			
+			void AddTimer(Timer@ timer) {
+				timers.insertLast(timer);
+			}
+			
+			void RemoveTimer(Timer@ timer) {
+				int idx = -1;
+				Timer@[]@ t = timers;
+				for(int i = t.length - 1; i >= 0; i--){
+					if(t[i] is timer) {
+						idx = i;
+						break;
+					}
+				}
+				if(idx >= 0){
+					timers.removeAt(idx);
+				}
+			}
+			
 			void PlaySound(string filename) {
 				if(audioDevice !is null) {
-					
+					// TODO: play sound
 				}
 			}
 			
 			void RunFrame(float dt) {
+				Timer@[]@ timers = this.timers;
+				for(int i = timers.length - 1; i >= 0; i--) {
+					timers[i].RunFrame(dt);
+				}
 				Time += dt;
 			}
 			
@@ -200,6 +224,58 @@ namespace spades {
 			}
 		}
 		
+		funcdef void TimerTickEventHandler(Timer@);
+		class Timer {
+			private UIManager@ manager;
+			TimerTickEventHandler@ Tick;
+			
+			/** Minimum interval with which the timer fires. */
+			float Interval = 1.f;
+			
+			bool AutoReset = true;
+			
+			private float nextDelay;
+			
+			Timer(UIManager@ manager) {
+				@this.manager = manager;
+			}
+			
+			UIManager@ Manager {
+				get final {
+					return manager;
+				}
+			}
+			
+			void OnTick() {
+				if(Tick !is null) {
+					Tick(this);
+				}
+			}
+			
+			/** Called by UIManager. */
+			void RunFrame(float dt) {
+				nextDelay -= dt;
+				if(nextDelay < 0.f) {
+					OnTick();
+					if(AutoReset) {
+						nextDelay = Max(nextDelay + Interval, 0.f);
+					} else {
+						Stop();
+					}
+				}
+			}
+			
+			void Start() {
+				nextDelay = Interval;
+				manager.AddTimer(this);
+			}
+			
+			void Stop() {
+				manager.RemoveTimer(this);
+			}
+			
+		}
+		
 		enum MouseButton {
 			None,
 			LeftMouseButton,
@@ -207,10 +283,32 @@ namespace spades {
 			MiddleMouseButton
 		}
 		
+		class UIElementIterator {
+			private bool initial = true;
+			private UIElement@ e;
+			UIElementIterator(UIElement@ parent) {
+				@e = parent;
+			}
+			UIElement@ Current {
+				get { return initial ? null : e; }
+			}
+			bool MoveNext() {
+				if(initial) {
+					@e = e.FirstChild;
+					initial = false;
+				} else {
+					@e = e.NextSibling;
+				}
+				return @e !is null;
+			}
+		}
+		
 		class UIElement {
 			private UIManager@ manager;
 			private UIElement@ parent;
-			private UIElement@[] children = {};
+			//private UIElement@[] children = {};
+			private UIElement@ firstChild, lastChild;
+			private UIElement@ prevSibling, nextSibling;
 			private Font@ fontOverride;
 			private Cursor@ cursorOverride;
 			
@@ -222,6 +320,10 @@ namespace spades {
 			
 			/** When IsMouseInteractive is set to true, this element receives mouse events. */
 			bool IsMouseInteractive = false;
+			
+			/** When this is set to true, all mouse interraction outside the client area is
+			 * ignored for all sub-elements, reducing the CPU load. The visual is not clipped. */
+			bool ClipMouse = true;
 			
 			Vector2 Position;
 			Vector2 Size;
@@ -254,8 +356,90 @@ namespace spades {
 				get final { return manager; }
 			}
 			
-			UIElement@[] GetChildren() final {
-				return array<spades::ui::UIElement@>(children);
+			// used by UIElementIterator. Do not use.
+			UIElement@ FirstChild {
+				get final { return firstChild; }
+			}
+			
+			// used by UIElementIterator. Do not use.
+			UIElement@ NextSibling {
+				get final { return nextSibling; }
+			}
+			
+			UIElement@[]@ GetChildren() final {
+				UIElement@[] elems = {};
+				UIElement@ e = firstChild;
+				while(e !is null) {
+					elems.insertLast(e);
+					@e = e.nextSibling;
+				}
+				return elems;
+				//return array<spades::ui::UIElement@>(children);
+			}
+			
+			void AddChild(UIElement@ element) {
+				
+				UIElement@ oldParent = element.Parent;
+				if(oldParent is this){
+					return;
+				}else if(oldParent !is null){
+					@element.Parent = null;
+				}
+				
+				if(firstChild is null) {
+					@firstChild = element;
+					@lastChild = element;
+					@element.parent = this;
+				} else {
+					@element.prevSibling = @lastChild;
+					@lastChild.nextSibling = @element;
+					@lastChild = @element;
+					@element.parent = this;
+				}
+				
+			/*
+				children.insertLast(element);
+				@element.parent = this;*/
+			}
+			
+			void RemoveChild(UIElement@ element) {
+				if(element.parent !is this) {
+					return;
+				}
+				
+				if(firstChild is element) {
+					if(lastChild is element) {
+						@firstChild = null;
+						@lastChild = null;
+					} else {
+						@firstChild = element.nextSibling;
+						@firstChild.prevSibling = null;
+					}
+				} else if(lastChild is element) {
+					@lastChild = element.prevSibling;
+					@lastChild.nextSibling = null;
+				} else {
+					@element.prevSibling.nextSibling = @element.nextSibling;
+					@element.nextSibling.prevSibling = @element.prevSibling;
+				}
+				@element.prevSibling = null;
+				@element.nextSibling = null;
+				@element.parent = null;
+				
+			/*
+				int index = -1;
+				UIElement@[]@ c = children;
+				for(int i = c.length - 1; i >= 0; i--) {
+					if(c[i] is element) {
+						index = i;
+						break;
+					}
+				}
+				
+				if(index >= 0){
+					children.removeAt(index);
+					@element.parent = null;
+				}*/
 			}
 			
 			Font@ Font {
@@ -302,27 +486,6 @@ namespace spades {
 				}
 			}
 			
-			void AddChild(UIElement@ element) {
-				UIElement@ oldParent = element.Parent;
-				if(oldParent is this){
-					return;
-				}else if(oldParent !is null){
-					@element.Parent = null;
-				}
-				
-				children.insertLast(element);
-				@element.parent = this;
-			}
-			
-			void RemoveChild(UIElement@ element) {
-				int index = children.find(element);
-				
-				if(index >= 0){
-					children.removeAt(index);
-					@element.parent = null;
-				}
-			}
-			
 			Vector2 ScreenPosition {
 				get final {
 					if(parent is null) {
@@ -339,6 +502,7 @@ namespace spades {
 				set {
 					Position = value.min;
 					Size = value.max - value.min;
+					OnResized();
 				}
 			}
 			
@@ -349,21 +513,31 @@ namespace spades {
 				}
 			}
 			
+			void OnResized() {
+			}
+			
 			// relativePos is parent relative
 			UIElement@ MouseHitTest(Vector2 relativePos) final {
-				if(IsMouseInteractive) {
-					if(Bounds.Contains(relativePos)) {
-						return this;
+				if(ClipMouse) {
+					if(not Bounds.Contains(relativePos)) {
+						return null;
 					}
 				}
 				
-				relativePos -= Position;
 				
-				UIElement@[] c = children;
-				for(int i = c.length() - 1; i >= 0; i--) {
-					UIElement@ elem = c[i].MouseHitTest(relativePos);
+				Vector2 p = relativePos - Position;
+				
+				UIElementIterator iterator(this);
+				while(iterator.MoveNext()) {
+					UIElement@ elem = iterator.Current.MouseHitTest(p);
 					if(elem !is null){
 						return elem;
+					}
+				}
+				
+				if(IsMouseInteractive) {
+					if(Bounds.Contains(relativePos)) {
+						return this;
 					}
 				}
 				
@@ -375,12 +549,24 @@ namespace spades {
 			}
 			
 			void MouseWheel(float delta) {
+				if(Parent !is null) {
+					Parent.MouseWheel(delta);
+				}
 			}
 			void MouseDown(MouseButton button, Vector2 clientPosition) {
+				if(Parent !is null) {
+					Parent.MouseDown(button, clientPosition);
+				}
 			}
 			void MouseMove(Vector2 clientPosition) {
+				if(Parent !is null) {
+					Parent.MouseMove(clientPosition);
+				}
 			}
 			void MouseUp(MouseButton button, Vector2 clientPosition) {
+				if(Parent !is null) {
+					Parent.MouseUp(button, clientPosition);
+				}
 			}
 			void MouseEnter() {
 			}
@@ -397,19 +583,19 @@ namespace spades {
 			}
 			
 			void HotKey(string key) {
-				UIElement@[] c = children;
-				for(int i = 0, num = c.length(); i < num; i++) {
-					if(c[i].Visible) {
-						c[i].HotKey(key);
+				UIElementIterator iterator(this);
+				while(iterator.MoveNext()) {
+					if(iterator.Current.Visible) {
+						iterator.Current.HotKey(key);
 					}
 				}
 			}
 			
 			void Render() {
-				UIElement@[] c = children;
-				for(int i = 0, num = c.length(); i < num; i++) {
-					if(c[i].Visible) {
-						c[i].Render();
+				UIElementIterator iterator(this);
+				while(iterator.MoveNext()) {
+					if(iterator.Current.Visible) {
+						iterator.Current.Render();
 					}
 				}
 			}
@@ -433,5 +619,96 @@ namespace spades {
 			}
 		}
 		
+		
+		class UIElementDeque {
+			private UIElement@[]@ arr;
+			private int startIndex = 0;
+			private int count = 0;
+			
+			UIElementDeque() {
+				@arr = array<spades::ui::UIElement@>(4);
+			}
+			
+			private int MapIndex(int idx) const {
+				idx += startIndex;
+				if(idx >= int(arr.length))
+					idx -= int(arr.length);
+				return idx;
+			}
+			
+			UIElement@ get_opIndex(int idx) const {
+				return arr[MapIndex(idx)];
+			}
+			void set_opIndex(int idx, UIElement@ e) {
+				@arr[MapIndex(idx)] = e;
+			}
+			
+			void Reserve(int c) {
+				if(int(arr.length) >= c){
+					return;
+				}
+				int newCount = int(arr.length);
+				while(newCount < c) {
+					newCount *= 2;
+				}
+				
+				UIElement@[] newarr = array<spades::ui::UIElement@>(newCount);
+				UIElement@[] oldarr = arr;
+				int len = int(oldarr.length);
+				int idx = startIndex;
+				for(int i = 0; i < count; i++) {
+					@newarr[i] = oldarr[idx];
+					idx += 1;
+					if(idx >= len) {
+						idx = 0;
+					}
+				}
+				@arr = newarr;
+				startIndex = 0;
+			}
+			
+			void PushFront(UIElement@ elem) {
+				Reserve(count + 1);
+				startIndex = (startIndex == 0) ? (arr.length - 1) : (startIndex - 1);
+				count++;
+				@this.Front = elem;
+			}
+			
+			void PushBack(UIElement@ elem) {
+				Reserve(count + 1);
+				count++;
+				@this.Back = elem;
+			}
+			
+			void PopFront() {
+				@this.Front = null;
+				startIndex = MapIndex(1);
+				count--;
+			}
+			
+			void PopBack() {
+				@this.Back = null;
+				count--;
+			}
+			
+			int Count {
+				get { return count; }
+			}
+			
+			void Clear() {
+				@arr = array<spades::ui::UIElement@>(4);
+				count = 0;
+				startIndex = 0;
+			}
+			
+			UIElement@ Front {
+				get const { return arr[startIndex]; }
+				set { @arr[startIndex] = value; }
+			}
+			UIElement@ Back {
+				get const { return arr[MapIndex(count - 1)]; }
+				set { @arr[MapIndex(count - 1)] = value; }
+			}
+		}
 	}
 }
