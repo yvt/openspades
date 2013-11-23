@@ -6,7 +6,7 @@ zip -r pak000-Base.pak Gfx Scripts/Main.as Scripts/Base Shaders Textures
 
 zip -r pak001-Sounds.pak Sounds/Feedback Sounds/Misc Sounds/Player
 
-zip -r pak002-Models.pak Models/MapObjects
+zip -r pak002-Models.pak Models/MapObjects Maps
 
 zip -r pak010-BaseSkin.pak Models/Weapons Models/Player Scripts/Skin \
 Sounds/Weapons
