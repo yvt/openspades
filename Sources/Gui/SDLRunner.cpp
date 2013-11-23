@@ -123,6 +123,7 @@ namespace spades {
 						int uni = event.key.keysym.unicode;
 						if(uni > 0 && uni < 128 &&
 						   uni != 8 &&	// no backspace
+						   uni != 27 &&	// no escape
 						   uni != 13 && uni != 10 &&
 						   uni != 127){ // no enter
 							std::string s;
