@@ -21,18 +21,67 @@
 #pragma once
 
 #include <Core/RefCountedObject.h>
+#include <vector>
+#include <Core/Mutex.h>
+#include <ScriptBindings/ScriptManager.h>
+#include <AngelScript/addons/scriptarray.h>
 
 namespace spades {
+	class Serveritem;
 	namespace gui {
 		class MainScreen;
+		
+		class MainScreenServerItem: public RefCountedObject {
+			std::string name;
+			std::string address;
+			std::string mapName;
+			std::string gameMode;
+			std::string country;
+			std::string protocol;
+			int ping;
+			int numPlayers;
+			int maxPlayers;
+		protected:
+			~MainScreenServerItem();
+		public:
+			MainScreenServerItem(Serveritem *);
+			
+			std::string GetName() { return name; }
+			std::string GetAddress() { return address; }
+			std::string GetMapName() { return mapName; }
+			std::string GetGameMode() { return gameMode; }
+			std::string GetCountry() { return country; }
+			std::string GetProtocol() { return protocol; }
+			int GetPing() { return ping; }
+			int GetNumPlayers() { return numPlayers; }
+			int GetMaxPlayers() { return maxPlayers; }
+		};
+		
+		struct MainScreenServerList {
+			std::vector<MainScreenServerItem *> list;
+			std::string message;
+			
+			~MainScreenServerList();
+		};
+		
 		class MainScreenHelper: public RefCountedObject {
+			class ServerListQuery;
+			
 			MainScreen *mainScreen;
+			MainScreenServerList *result;
+			MainScreenServerList * volatile newResult;
+			Mutex newResultArrayLock;
+			ServerListQuery * volatile query;
 		protected:
 			virtual ~MainScreenHelper();
 		public:
 			MainScreenHelper(MainScreen *scr);
 			void MainScreenDestroyed();
-			
+		
+			bool PollServerListState();
+			void StartQuery();
+			CScriptArray *GetServerList();
+			std::string GetServerListQueryMessage();
 		};
 	}
 }

@@ -25,7 +25,7 @@ namespace spades {
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		private Font@ font;
-		private MainScreenHelper@ helper;
+		MainScreenHelper@ helper;
 		
 		spades::ui::UIManager@ manager;
 		
@@ -140,9 +140,10 @@ namespace spades {
 	}
 	
 	class ServerListItem: spades::ui::ButtonBase {
-		string Text;
-		ServerListItem(spades::ui::UIManager@ manager){
+		MainScreenServerItem@ item;
+		ServerListItem(spades::ui::UIManager@ manager, MainScreenServerItem@ item){
 			super(manager);
+			@this.item = item;
 		}
 		void OnActivated() {
 			
@@ -162,22 +163,27 @@ namespace spades {
 			}
 			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 			
-			Font.Draw(Text, ScreenPosition + Vector2(2.f, 2.f), 1.f, Vector4(1,1,1,1));
-			Font.Draw("TODO", ScreenPosition + Vector2(100.f, 2.f), 1.f, Vector4(1,1,1,1));
-			Font.Draw("Blahblah", ScreenPosition + Vector2(200.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw(item.Name, ScreenPosition + Vector2(2.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw(ToString(item.NumPlayers) + "/" + ToString(item.MaxPlayers), 
+					ScreenPosition + Vector2(300.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw(item.MapName, ScreenPosition + Vector2(360.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw(item.GameMode, ScreenPosition + Vector2(490.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw(item.Protocol, ScreenPosition + Vector2(550.f, 2.f), 1.f, Vector4(1,1,1,1));
 		}
 	}
 
 	class ServerListModel: spades::ui::ListViewModel {
 		spades::ui::UIManager@ manager;
-		ServerListModel(spades::ui::UIManager@ manager) {
+		MainScreenServerItem@[]@ list;
+		ServerListModel(spades::ui::UIManager@ manager, MainScreenServerItem@[]@ list) {
 			@this.manager = manager;
+			@this.list = list;
 		}
-		int NumRows { get { return 100; } }
+		int NumRows { 
+			get { return int(list.length); }
+		}
 		spades::ui::UIElement@ CreateElement(int row) {
-			ServerListItem i(manager);
-			// TODO: implement
-			i.Text = "Row " + ToString(row);
+			ServerListItem i(manager, list[row]);
 			return i;
 		}
 		void RecycleElement(spades::ui::UIElement@ elem) {}
@@ -186,15 +192,20 @@ namespace spades {
 	class MainScreenMainMenu: spades::ui::UIElement {
 		
 		MainScreenUI@ ui;
+		MainScreenHelper@ helper;
 		spades::ui::Field@ addressField;
 		
 		spades::ui::ListView@ serverList;
+		MainScreenServerListLoadingView@ loadingView;
+		MainScreenServerListErrorView@ errorView;
+		bool loading = false, loaded = false;
 		
 		private ConfigItem cg_lastQuickConnectHost("cg_lastQuickConnectHost");
 		
 		MainScreenMainMenu(MainScreenUI@ ui) {
 			super(ui.manager);
 			@this.ui = ui;
+			@this.helper = ui.helper;
 			
 			float contentsWidth = 600.f;
 			float contentsLeft = (Manager.Renderer.ScreenWidth - contentsWidth) * 0.5f;
@@ -218,7 +229,51 @@ namespace spades {
 				@serverList = spades::ui::ListView(Manager);
 				serverList.Bounds = AABB2(contentsLeft, 240.f, contentsWidth, footerPos - 250.f);
 				AddChild(serverList);
-				@serverList.Model = ServerListModel(Manager);
+			}
+			{
+				@loadingView = MainScreenServerListLoadingView(Manager);
+				loadingView.Bounds = AABB2(contentsLeft, 240.f, contentsWidth, 100.f);
+				loadingView.Visible = false;
+				AddChild(loadingView);
+			}
+			{
+				@errorView = MainScreenServerListErrorView(Manager);
+				errorView.Bounds = AABB2(contentsLeft, 240.f, contentsWidth, 100.f);
+				errorView.Visible = false;
+				AddChild(errorView);
+			}
+			LoadServerList();
+		}
+		
+		private void LoadServerList() {
+			if(loading) {
+				return;
+			}
+			loaded = false;
+			loading = true;
+			errorView.Visible = false;
+			loadingView.Visible = true;
+			helper.StartQuery();
+		}
+		
+		private void CheckServerList() {
+			if(helper.PollServerListState()) {
+				MainScreenServerItem@[]@ list = helper.GetServerList();
+				string message = helper.GetServerListQueryMessage();
+				if(list is null or list.length == 0) {
+					// failed.
+					// FIXME: show error message?
+					loaded = false; loading = false;
+					errorView.Visible = true;
+					loadingView.Visible = false;
+					return;
+				}
+				loading = false;
+				loaded = true;
+				errorView.Visible = false;
+				loadingView.Visible = false;
+				@serverList.Model = ServerListModel(Manager, list);
+				serverList.ScrollToTop();
 			}
 		}
 		
@@ -252,10 +307,47 @@ namespace spades {
 			}
 		}
 		
-		
+		void Render() {
+			CheckServerList();
+			UIElement::Render();
+		}
 	}
 	
+	class MainScreenServerListLoadingView: spades::ui::UIElement {
+		MainScreenServerListLoadingView(spades::ui::UIManager@ manager) {
+			super(manager);
+		}
+		void Render() {
+			Renderer@ renderer = Manager.Renderer;
+			Vector2 pos = ScreenPosition;
+			Vector2 size = Size;
+			Font@ font = this.Font;
+			string text = "Loading...";
+			Vector2 txtSize = font.Measure(text);
+			Vector2 txtPos;
+			txtPos = pos + (size - txtSize) * 0.5f;
+			
+			font.Draw(text, txtPos, 1.f, Vector4(1,1,1,0.8));
+		}
+	}
 	
+	class MainScreenServerListErrorView: spades::ui::UIElement {
+		MainScreenServerListErrorView(spades::ui::UIManager@ manager) {
+			super(manager);
+		}
+		void Render() {
+			Renderer@ renderer = Manager.Renderer;
+			Vector2 pos = ScreenPosition;
+			Vector2 size = Size;
+			Font@ font = this.Font;
+			string text = "Failed to fetch the server list.";
+			Vector2 txtSize = font.Measure(text);
+			Vector2 txtPos;
+			txtPos = pos + (size - txtSize) * 0.5f;
+			
+			font.Draw(text, txtPos, 1.f, Vector4(1,1,1,0.8));
+		}
+	}
 	
 	MainScreenUI@ CreateMainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, 
 		Font@ font, MainScreenHelper@ helper) {

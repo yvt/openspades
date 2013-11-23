@@ -38,6 +38,10 @@ namespace spades {
 					r = eng->RegisterObjectType("MainScreenHelper",
 												0, asOBJ_REF);
 					manager->CheckError(r);
+					
+					r = eng->RegisterObjectType("MainScreenServerItem",
+												0, asOBJ_REF);
+					manager->CheckError(r);
 					break;
 				case PhaseObjectMember:
 					r = eng->RegisterObjectBehaviour("MainScreenHelper",
@@ -51,12 +55,86 @@ namespace spades {
 													 "void f()",
 													 asMETHOD(gui::MainScreenHelper, Release),
 													 asCALL_THISCALL);
-					manager->CheckError(r);/*
-					r = eng->RegisterObjectMethod("Font",
-												  "Vector2 Measure(const string& in)",
-												  asMETHOD(client::IFont, Measure),
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenHelper",
+												  "void StartQuery()",
+												  asMETHOD(gui::MainScreenHelper, StartQuery),
 												  asCALL_THISCALL);
-					manager->CheckError(r);*/
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenHelper",
+												  "bool PollServerListState()",
+												  asMETHOD(gui::MainScreenHelper, PollServerListState),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenHelper",
+												  "string GetServerListQueryMessage()",
+												  asMETHOD(gui::MainScreenHelper, GetServerListQueryMessage),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenHelper",
+												  "array<spades::MainScreenServerItem@>@ GetServerList()",
+												  asMETHOD(gui::MainScreenHelper, GetServerList),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					
+					
+					r = eng->RegisterObjectBehaviour("MainScreenServerItem",
+													 asBEHAVE_ADDREF,
+													 "void f()",
+													 asMETHOD(gui::MainScreenServerItem, AddRef),
+													 asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectBehaviour("MainScreenServerItem",
+													 asBEHAVE_RELEASE,
+													 "void f()",
+													 asMETHOD(gui::MainScreenServerItem, Release),
+													 asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenServerItem",
+												  "string get_Name()",
+												  asMETHOD(gui::MainScreenServerItem, GetName),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenServerItem",
+												  "string get_Address()",
+												  asMETHOD(gui::MainScreenServerItem, GetAddress),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenServerItem",
+												  "string get_MapName()",
+												  asMETHOD(gui::MainScreenServerItem, GetMapName),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenServerItem",
+												  "string get_GameMode()",
+												  asMETHOD(gui::MainScreenServerItem, GetGameMode),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenServerItem",
+												  "string get_Country()",
+												  asMETHOD(gui::MainScreenServerItem, GetCountry),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenServerItem",
+												  "string get_Protocol()",
+												  asMETHOD(gui::MainScreenServerItem, GetProtocol),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenServerItem",
+												  "int get_Ping()",
+												  asMETHOD(gui::MainScreenServerItem, GetPing),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenServerItem",
+												  "int get_NumPlayers()",
+												  asMETHOD(gui::MainScreenServerItem, GetNumPlayers),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenServerItem",
+												  "int get_MaxPlayers()",
+												  asMETHOD(gui::MainScreenServerItem, GetMaxPlayers),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
 					break;
 				default:
 					break;

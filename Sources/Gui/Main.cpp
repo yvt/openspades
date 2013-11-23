@@ -138,7 +138,7 @@ namespace spades {
 		runner.RunProtected();
 	}
 }
-
+#include "GameMap.h"
 int main(int argc, char ** argv)
 {
 	
@@ -272,6 +272,26 @@ int main(int argc, char ** argv)
 		SPLog("Initializing window system");
 		int dum = 0;
 		Fl::args( argc, argv, dum, argsHandler );
+		
+		// MAPGEN
+		/*spades::client::GameMap *m = spades::client::GameMap::Load(spades::FileManager::OpenForReading("Maps/shot0000.vxl"));
+		for(int x = 0; x < 512; x++) {
+			for(int y = 0; y < 512; y++) {
+				for(int z = 0; z < 64; z++) {
+					if(m->IsSolid(x, y, z)) {
+						uint32_t col = m->GetColor(x, y, z);
+						int bri = (col & 0xff) + ((col >> 8) & 0xff) + ((col >> 16) & 0xff);
+						bri /= 3;
+						col = 0xff000000 + bri * 0x010101;
+						m->Set(x, y, z, true, col);
+					}
+				}
+			}
+		}
+		auto outs = spades::FileManager::OpenForWriting("Maps/Title.vxl");
+		m->Save(outs);
+		delete outs;
+		return 0;*/
 
 		MainWindow* win = NULL;
 		if( !cg_autoConnect ) {
