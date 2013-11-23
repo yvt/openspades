@@ -73,6 +73,9 @@ namespace spades {
 				if(mouseCapturedElement !is null){
 					return mouseCapturedElement;
 				}
+				if(not RootElement.Enable) {
+					return null;
+				}
 				UIElement@ elm = RootElement.MouseHitTest(MouseCursorPosition);
 				return elm;
 			}
@@ -162,6 +165,8 @@ namespace spades {
 						} else {
 							e.KeyUp(key);
 						}
+					} else {
+						ProcessHotKey(key);
 					}
 				}
 			}
@@ -199,11 +204,17 @@ namespace spades {
 			
 			void PlaySound(string filename) {
 				if(audioDevice !is null) {
-					// TODO: play sound
+					audioDevice.PlayLocal(audioDevice.RegisterSound(filename), AudioParam());
 				}
 			}
 			
 			void RunFrame(float dt) {
+				if(ActiveElement !is null) {
+					if(not (ActiveElement.IsVisible and ActiveElement.IsEnabled)) {
+						@ActiveElement = null;
+					}
+				}
+				
 				Timer@[]@ timers = this.timers;
 				for(int i = timers.length - 1; i >= 0; i--) {
 					timers[i].RunFrame(dt);
@@ -313,6 +324,7 @@ namespace spades {
 			private Cursor@ cursorOverride;
 			
 			bool Visible = true;
+			bool Enable = true;
 			
 			/** When AcceptsFocus is set to true, this element can be activated when
 			 *  it receives a mouse event. */
@@ -480,6 +492,14 @@ namespace spades {
 				}
 			}
 			
+			bool IsEnabled {
+				get final {
+					if(not Enable) return false;
+					if(parent is null) return true;
+					return parent.IsEnabled;
+				}
+			}
+			
 			bool IsFocused {
 				get final {
 					return manager.ActiveElement is this;
@@ -529,7 +549,11 @@ namespace spades {
 				
 				UIElementIterator iterator(this);
 				while(iterator.MoveNext()) {
-					UIElement@ elem = iterator.Current.MouseHitTest(p);
+					UIElement@ e = iterator.Current;
+					if(not (e.Visible and e.Enable)) {
+						continue;
+					}
+					UIElement@ elem = e.MouseHitTest(p);
 					if(elem !is null){
 						return elem;
 					}
@@ -585,7 +609,7 @@ namespace spades {
 			void HotKey(string key) {
 				UIElementIterator iterator(this);
 				while(iterator.MoveNext()) {
-					if(iterator.Current.Visible) {
+					if(iterator.Current.Visible and iterator.Current.Enable) {
 						iterator.Current.HotKey(key);
 					}
 				}

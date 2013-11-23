@@ -22,6 +22,38 @@ namespace spades {
 	namespace ui {
 		funcdef void EventHandler(UIElement@ sender);
 		
+		class Label: UIElement {
+			string Text;
+			Vector4 BackgroundColor = Vector4(0, 0, 0, 0);
+			Vector4 TextColor = Vector4(1, 1, 1, 1);
+			Vector2 Alignment = Vector2(0.f, 0.0f);
+			
+			Label(UIManager@ manager) {
+				super(manager);
+			}
+			void Render() {
+				Renderer@ renderer = Manager.Renderer;
+				Vector2 pos = ScreenPosition;
+				Vector2 size = Size;
+				
+				if(BackgroundColor.w > 0.f) {
+					Image@ img = renderer.RegisterImage("Gfx/White.tga");
+					renderer.Color = BackgroundColor;
+					renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
+				}
+				
+				if(Text.length > 0) {
+					Font@ font = this.Font;
+					string text = this.Text;
+					Vector2 txtSize = font.Measure(text);
+					Vector2 txtPos;
+					txtPos = pos + (size - txtSize) * Alignment;
+					
+					font.Draw(text, txtPos, 1.f, TextColor);
+				}
+			}
+		}
+		
 		class ButtonBase: UIElement {
 			bool Pressed = false;
 			bool Hover = false;
@@ -798,7 +830,7 @@ namespace spades {
 				UIElementDeque@ items = this.items;
 				int count = items.Count;
 				float y = 0.f;
-				float w = Size.x - ScrollBarWidth;
+				float w = ItemWidth;
 				for(int i = 0; i < count; i++){
 					items[i].Bounds = AABB2(0.f, y, w, RowHeight);
 					y += RowHeight;
@@ -806,6 +838,12 @@ namespace spades {
 				
 				// move scroll bar
 				scrollBar.Bounds = AABB2(Size.x - ScrollBarWidth, 0.f, ScrollBarWidth, Size.y);
+			}
+			
+			float ItemWidth {
+				get {
+					return Size.x - ScrollBarWidth;
+				}
 			}
 			
 			void MouseWheel(float delta) {
@@ -836,6 +874,69 @@ namespace spades {
 			
 			void ScrollToTop() {
 				scrollBar.ScrollTo(0.0);
+			}
+		}
+		
+		class TextViewerModel: ListViewModel {
+			UIManager@ manager;
+			string[]@ lines = array<string>();
+			Font@ font;
+			float width;
+			private void AddLine(string text) {
+				int startPos = 0;
+				int minEnd = 1, maxEnd = text.length;
+				if(font.Measure(text).x <= width) {
+					lines.insertLast(text);
+					return;
+				}
+				// find line-break point by binary search (O(n log n))
+				while(startPos < int(text.length)) {
+					if(minEnd >= maxEnd) {
+						lines.insertLast(text.substr(startPos, maxEnd - startPos));
+						startPos = maxEnd;
+						minEnd = startPos + 1;
+						maxEnd = text.length;
+						continue;
+					}
+					int midEnd = (minEnd + maxEnd + 1) >> 1;
+					if(font.Measure(text.substr(startPos, midEnd - startPos)).x > width) {
+						maxEnd = midEnd - 1;
+					} else {
+						minEnd = (minEnd == midEnd) ? (midEnd + 1) : midEnd;
+					}
+				}
+			}
+			TextViewerModel(UIManager@ manager, string text, Font@ font, float width) {
+				@this.manager = manager;
+				@this.font = font;
+				this.width = width;
+				string[]@ lines = text.split("\n");
+				for(uint i = 0; i < lines.length; i++)
+					AddLine(lines[i]);
+			}
+			int NumRows { get { return int(lines.length); } }
+			UIElement@ CreateElement(int row) {
+				Label i(manager);
+				i.Text = lines[row];
+				return i;
+			}
+			void RecycleElement(UIElement@ elem) {}
+		}
+		
+		class TextViewer: ListView {
+			private string text;
+			
+			TextViewer(UIManager@ manager) {
+				super(manager);
+			}
+			
+			/** Sets the displayed text. Ensure TextViewer.Font is not null before setting this proeprty. */
+			string Text {
+				get final { return text; }
+				set {
+					text = value;
+					@Model = TextViewerModel(Manager, text, Font, ItemWidth);
+				}
 			}
 		}
 	}
