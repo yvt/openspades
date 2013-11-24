@@ -234,8 +234,8 @@ namespace spades {
 		std::string MainScreen::Connect() {
 			spades::ServerAddress host(cg_lastQuickConnectHost, (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076);
 			try {
-				subview = new client::Client(&*renderer, &*audioDevice,
-											 host, cg_playerName);
+				subview.Set(new client::Client(&*renderer, &*audioDevice,
+											 host, cg_playerName), false);
 			}catch(const std::exception& ex) {
 				return ex.what();
 			}
