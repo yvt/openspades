@@ -295,7 +295,7 @@ int main(int argc, char ** argv)
 
 		MainWindow* win = NULL;
 		if( !cg_autoConnect ) {
-			if(!Fl::event_shift()) {
+			if(!(Fl::get_key(FL_Shift_L) | Fl::get_key(FL_Shift_R))) {
 				// TODO: always show main window for first run
 				
 				SPLog("Starting main screen");
