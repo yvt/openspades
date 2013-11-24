@@ -220,7 +220,8 @@ void MainWindow::LoadPrefs() {
 	}else if(r_cameraBlur && (!r_bloom) && r_lens && r_lensFlare && (!r_lensFlareDynamic) &&
 	   r_colorCorrection && (!r_depthOfField)) {
 		postFilterSelect->value(1);
-	}else{
+	}else if((!r_cameraBlur) && (!r_bloom) && (!r_lens) && (!r_lensFlare) && (!r_lensFlareDynamic) &&
+			 (!r_colorCorrection) && (!r_depthOfField)) {
 		postFilterSelect->value(0);
 	}
 	
