@@ -235,6 +235,21 @@ namespace spades {
 	}
 	
 	
+	class RefreshButton: spades::ui::SimpleButton {
+		RefreshButton(spades::ui::UIManager@ manager){
+			super(manager);
+		}
+		void Render() {
+			SimpleButton::Render();
+			
+			Renderer@ renderer = Manager.Renderer;
+			Vector2 pos = ScreenPosition;
+			Vector2 size = Size;
+			Image@ img = renderer.RegisterImage("Gfx/UI/Refresh.png");
+			renderer.DrawImage(img, pos + (size - Vector2(16.f, 16.f)) * 0.5f);
+		}
+	}
+	
 	class ProtocolButton: spades::ui::SimpleButton {
 		ProtocolButton(spades::ui::UIManager@ manager){
 			super(manager);
@@ -339,9 +354,8 @@ namespace spades {
 				AddChild(button);
 			}
 			{
-				spades::ui::Button button(Manager);
-				button.Caption = "Refresh Server List";
-				button.Bounds = AABB2(contentsLeft + contentsWidth - 364.f, footerPos, 160.f, 30.f);
+				RefreshButton button(Manager);
+				button.Bounds = AABB2(contentsLeft + contentsWidth - 364.f, footerPos, 30.f, 30.f);
 				button.Activated = EventHandler(this.OnRefreshServerListPressed);
 				AddChild(button);
 			}

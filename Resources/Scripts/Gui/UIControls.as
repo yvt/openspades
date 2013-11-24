@@ -174,7 +174,6 @@ namespace spades {
 		class SimpleButton: spades::ui::Button {
 			SimpleButton(spades::ui::UIManager@ manager){
 				super(manager);
-				Toggle = true;
 			}
 			void Render() {
 				Renderer@ renderer = Manager.Renderer;
