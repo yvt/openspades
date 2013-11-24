@@ -166,11 +166,15 @@ namespace spades {
 			
 			Font.Draw(item.Name, ScreenPosition + Vector2(4.f, 2.f), 1.f, Vector4(1,1,1,1));
 			string playersStr = ToString(item.NumPlayers) + "/" + ToString(item.MaxPlayers);
-			Font.Draw(playersStr, ScreenPosition + Vector2(340.f-Font.Measure(playersStr).x * 0.5f, 2.f), 1.f, Vector4(1,1,1,1));
-			Font.Draw(item.MapName, ScreenPosition + Vector2(420.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Vector4 col(1,1,1,1);
+			if(item.NumPlayers >= item.MaxPlayers) col = Vector4(1,0.7f,0.7f,1);
+			else if(item.NumPlayers >= item.MaxPlayers * 3 / 4) col = Vector4(1,1,0.7f,1);
+			else if(item.NumPlayers == 0) col = Vector4(0.7f,0.7f,1,1);
+			Font.Draw(playersStr, ScreenPosition + Vector2(340.f-Font.Measure(playersStr).x * 0.5f, 2.f), 1.f, col);
+			Font.Draw(item.MapName, ScreenPosition + Vector2(400.f, 2.f), 1.f, Vector4(1,1,1,1));
 			Font.Draw(item.GameMode, ScreenPosition + Vector2(550.f, 2.f), 1.f, Vector4(1,1,1,1));
-			Font.Draw(item.Protocol, ScreenPosition + Vector2(650.f, 2.f), 1.f, Vector4(1,1,1,1));
-			Font.Draw(item.Country, ScreenPosition + Vector2(700.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw(item.Protocol, ScreenPosition + Vector2(630.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw(item.Country, ScreenPosition + Vector2(680.f, 2.f), 1.f, Vector4(1,1,1,1));
 		}
 	}
 
@@ -231,38 +235,26 @@ namespace spades {
 	}
 	
 	
-	class ProtocolButton: spades::ui::Button {
+	class ProtocolButton: spades::ui::SimpleButton {
 		ProtocolButton(spades::ui::UIManager@ manager){
 			super(manager);
 			Toggle = true;
 		}
-		void Render() {
-			Renderer@ renderer = Manager.Renderer;
-			Vector2 pos = ScreenPosition;
-			Vector2 size = Size;
-			Image@ img = renderer.RegisterImage("Gfx/White.tga");
-			if((Pressed && Hover) || Toggled) {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
-			} else if(Hover) {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.12f);
-			} else {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.07f);
-			}
-			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
-			if((Pressed && Hover) || Toggled) {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.1f);
-			} else if(Hover) {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.07f);
-			} else {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.03f);
-			}
-			renderer.DrawImage(img, AABB2(pos.x, pos.y, 1.f, size.y));
-			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
-			renderer.DrawImage(img, AABB2(pos.x+size.x-1.f, pos.y, 1.f, size.y));
-			renderer.DrawImage(img, AABB2(pos.x, pos.y+size.y-1.f, size.x, 1.f));
-			Vector2 txtSize = Font.Measure(Caption);
-			Font.DrawShadow(Caption, pos + (size - txtSize) * 0.5f, 1.f, Vector4(1,1,1,1), Vector4(0,0,0,0.4f));
+	}
+	
+	uint8 ToLower(uint8 c) {
+		if(c >= uint8(0x41) and c <= uint8(0x5a)) {
+			return uint8(c - 0x41 + 0x61);
+		} else {
+			return c;
 		}
+	}
+	bool StringContainsCaseInsensitive(string text, string pattern) {
+		for(int i = text.length - 1; i >= 0; i--)
+			text[i] = ToLower(text[i]);
+		for(int i = pattern.length - 1; i >= 0; i--)
+			pattern[i] = ToLower(pattern[i]);
+		return text.findFirst(pattern) >= 0;
 	}
 	
 	class MainScreenMainMenu: spades::ui::UIElement {
@@ -273,6 +265,12 @@ namespace spades {
 		
 		spades::ui::Button@ protocol3Button;
 		spades::ui::Button@ protocol4Button;
+		
+		spades::ui::Button@ filterProtocol3Button;
+		spades::ui::Button@ filterProtocol4Button;
+		spades::ui::Button@ filterEmptyButton;
+		spades::ui::Button@ filterFullButton;
+		spades::ui::Field@ filterField;
 		
 		spades::ui::ListView@ serverList;
 		MainScreenServerListLoadingView@ loadingView;
@@ -290,7 +288,7 @@ namespace spades {
 			
 			float contentsWidth = 750.f;
 			float contentsLeft = (Manager.Renderer.ScreenWidth - contentsWidth) * 0.5f;
-			float footerPos = Manager.Renderer.ScreenHeight - 40.f;
+			float footerPos = Manager.Renderer.ScreenHeight - 50.f;
 			{
 				spades::ui::Button button(Manager);
 				button.Caption = "Connect";
@@ -327,8 +325,79 @@ namespace spades {
 				AddChild(protocol4Button);
 			}
 			{
+				spades::ui::Button button(Manager);
+				button.Caption = "Quit";
+				button.Bounds = AABB2(contentsLeft + contentsWidth - 100.f, footerPos, 100.f, 30.f);
+				button.Activated = EventHandler(this.OnQuitPressed);
+				AddChild(button);
+			}
+			{
+				spades::ui::Button button(Manager);
+				button.Caption = "Credits";
+				button.Bounds = AABB2(contentsLeft + contentsWidth - 202.f, footerPos, 100.f, 30.f);
+				button.Activated = EventHandler(this.OnCreditsPressed);
+				AddChild(button);
+			}
+			{
+				spades::ui::Button button(Manager);
+				button.Caption = "Refresh Server List";
+				button.Bounds = AABB2(contentsLeft + contentsWidth - 364.f, footerPos, 160.f, 30.f);
+				button.Activated = EventHandler(this.OnRefreshServerListPressed);
+				AddChild(button);
+			}
+			{
+				spades::ui::Label label(Manager);
+				label.Text = "Filter";
+				label.Bounds = AABB2(contentsLeft, footerPos, 50.f, 30.f);
+				label.Alignment = Vector2(0.f, 0.5f);
+				AddChild(label);
+			}
+			{
+				@filterProtocol3Button = ProtocolButton(Manager);
+				filterProtocol3Button.Bounds = AABB2(contentsLeft + 50.f, footerPos, 
+					40.f, 30.f);
+				filterProtocol3Button.Caption = "0.75";
+				filterProtocol3Button.Activated = spades::ui::EventHandler(this.OnFilterProtocol3Pressed);
+				filterProtocol3Button.Toggle = true;
+				AddChild(filterProtocol3Button);
+			}
+			{
+				@filterProtocol4Button = ProtocolButton(Manager);
+				filterProtocol4Button.Bounds = AABB2(contentsLeft + 90.f, footerPos, 
+					40.f, 30.f);
+				filterProtocol4Button.Caption = "0.76";
+				filterProtocol4Button.Activated = spades::ui::EventHandler(this.OnFilterProtocol4Pressed);
+				filterProtocol4Button.Toggle = true;
+				AddChild(filterProtocol4Button);
+			}
+			{
+				@filterEmptyButton = ProtocolButton(Manager);
+				filterEmptyButton.Bounds = AABB2(contentsLeft + 135.f, footerPos, 
+					50.f, 30.f);
+				filterEmptyButton.Caption = "Empty";
+				filterEmptyButton.Activated = spades::ui::EventHandler(this.OnFilterEmptyPressed);
+				filterEmptyButton.Toggle = true;
+				AddChild(filterEmptyButton);
+			}
+			{
+				@filterFullButton = ProtocolButton(Manager);
+				filterFullButton.Bounds = AABB2(contentsLeft + 185.f, footerPos, 
+					70.f, 30.f);
+				filterFullButton.Caption = "Not Full";
+				filterFullButton.Activated = spades::ui::EventHandler(this.OnFilterFullPressed);
+				filterFullButton.Toggle = true;
+				AddChild(filterFullButton);
+			}
+			{
+				@filterField = spades::ui::Field(Manager);
+				filterField.Bounds = AABB2(contentsLeft + 260.f, footerPos, 120.f, 30.f);
+				filterField.Placeholder = "Filter";
+				filterField.Changed = spades::ui::EventHandler(this.OnFilterTextChanged);
+				AddChild(filterField);
+			}
+			{
 				@serverList = spades::ui::ListView(Manager);
-				serverList.Bounds = AABB2(contentsLeft, 270.f, contentsWidth, footerPos - 290.f);
+				serverList.Bounds = AABB2(contentsLeft, 270.f, contentsWidth, footerPos - 280.f);
 				AddChild(serverList);
 			}
 			{
@@ -340,35 +409,35 @@ namespace spades {
 			}
 			{
 				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 300.f, 240.f, 120.f, 30.f);
+				header.Bounds = AABB2(contentsLeft + 300.f, 240.f, 100.f, 30.f);
 				header.Text = "Players";
 				header.Activated = spades::ui::EventHandler(this.SortServerListByNumPlayers);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 420.f, 240.f, 130.f, 30.f);
+				header.Bounds = AABB2(contentsLeft + 400.f, 240.f, 150.f, 30.f);
 				header.Text = "Map Name";
 				header.Activated = spades::ui::EventHandler(this.SortServerListByMapName);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 550.f, 240.f, 100.f, 30.f);
+				header.Bounds = AABB2(contentsLeft + 550.f, 240.f, 80.f, 30.f);
 				header.Text = "Game Mode";
 				header.Activated = spades::ui::EventHandler(this.SortServerListByGameMode);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 650.f, 240.f, 50.f, 30.f);
+				header.Bounds = AABB2(contentsLeft + 630.f, 240.f, 50.f, 30.f);
 				header.Text = "Ver.";
 				header.Activated = spades::ui::EventHandler(this.SortServerListByProtocol);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 700.f, 240.f, 50.f, 30.f);
+				header.Bounds = AABB2(contentsLeft + 680.f, 240.f, 50.f, 30.f);
 				header.Text = "Loc.";
 				header.Activated = spades::ui::EventHandler(this.SortServerListByCountry);
 				AddChild(header);
@@ -457,11 +526,43 @@ namespace spades {
 			}
 			MainScreenServerItem@[]@ list = helper.GetServerList(key, 
 				(cg_serverlistSort.IntValue & 0x4000) != 0);
-			if(list is null){
+			if((list is null) or (loading)){
 				@serverList.Model = spades::ui::ListViewModel(); // empty
 				return;
 			}
-			ServerListModel model(Manager, list);
+			
+			// filter the server list
+			bool filterProtocol3 = filterProtocol3Button.Toggled;
+			bool filterProtocol4 = filterProtocol4Button.Toggled;
+			bool filterEmpty = filterEmptyButton.Toggled;
+			bool filterFull = filterFullButton.Toggled;
+			string filterText = filterField.Text;
+			MainScreenServerItem@[]@ list2 = array<spades::MainScreenServerItem@>();
+			for(int i = 0, count = list.length; i < count; i++) {
+				MainScreenServerItem@ item = list[i];
+				if(filterProtocol3 and (item.Protocol != "0.75")) {
+					continue;
+				}
+				if(filterProtocol4 and (item.Protocol != "0.76")) {
+					continue;
+				}
+				if(filterEmpty and (item.NumPlayers > 0)) {
+					continue;
+				}
+				if(filterFull and (item.NumPlayers >= item.MaxPlayers)) {
+					continue;
+				}
+				if(filterText.length > 0) {
+					if(not (StringContainsCaseInsensitive(item.Name, filterText) or
+						StringContainsCaseInsensitive(item.MapName, filterText) or
+						StringContainsCaseInsensitive(item.GameMode, filterText))) {
+						continue;	
+					}
+				}
+				list2.insertLast(item);
+			}
+			
+			ServerListModel model(Manager, list2);
 			@serverList.Model = model;
 			@model.ItemActivated = ServerListItemEventHandler(this.ServerListItemActivated);
 			serverList.ScrollToTop();
@@ -505,6 +606,38 @@ namespace spades {
 			SetProtocolVersion(4);
 		}
 		
+		private void OnFilterProtocol3Pressed(spades::ui::UIElement@ sender) {
+			filterProtocol4Button.Toggled = false;
+			UpdateServerList();
+		}
+		private void OnFilterProtocol4Pressed(spades::ui::UIElement@ sender) {
+			filterProtocol3Button.Toggled = false;
+			UpdateServerList();
+		}
+		private void OnFilterFullPressed(spades::ui::UIElement@ sender) {
+			filterEmptyButton.Toggled = false;
+			UpdateServerList();
+		}
+		private void OnFilterEmptyPressed(spades::ui::UIElement@ sender) {
+			filterFullButton.Toggled = false;
+			UpdateServerList();
+		}
+		private void OnFilterTextChanged(spades::ui::UIElement@ sender) {
+			UpdateServerList();
+		}
+		
+		private void OnRefreshServerListPressed(spades::ui::UIElement@ sender) {
+			LoadServerList();
+		}
+		
+		private void OnQuitPressed(spades::ui::UIElement@ sender) {
+			ui.shouldExit = true;
+		}
+		
+		private void OnCreditsPressed(spades::ui::UIElement@ sender) {
+			AlertScreen al(this, "Not implemented");
+			al.Run();
+		}
 		
 		private void Connect() {
 			string msg = helper.ConnectServer();

@@ -171,6 +171,40 @@ namespace spades {
 			
 		}
 		
+		class SimpleButton: spades::ui::Button {
+			SimpleButton(spades::ui::UIManager@ manager){
+				super(manager);
+				Toggle = true;
+			}
+			void Render() {
+				Renderer@ renderer = Manager.Renderer;
+				Vector2 pos = ScreenPosition;
+				Vector2 size = Size;
+				Image@ img = renderer.RegisterImage("Gfx/White.tga");
+				if((Pressed && Hover) || Toggled) {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+				} else if(Hover) {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.12f);
+				} else {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.07f);
+				}
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
+				if((Pressed && Hover) || Toggled) {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.1f);
+				} else if(Hover) {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.07f);
+				} else {
+					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.03f);
+				}
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, 1.f, size.y));
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
+				renderer.DrawImage(img, AABB2(pos.x+size.x-1.f, pos.y, 1.f, size.y));
+				renderer.DrawImage(img, AABB2(pos.x, pos.y+size.y-1.f, size.x, 1.f));
+				Vector2 txtSize = Font.Measure(Caption);
+				Font.DrawShadow(Caption, pos + (size - txtSize) * 0.5f, 1.f, Vector4(1,1,1,1), Vector4(0,0,0,0.4f));
+			}
+		}
+		
 		class Button: ButtonBase {
 			private Image@ image;
 			
