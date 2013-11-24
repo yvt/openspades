@@ -290,8 +290,8 @@ namespace spades {
 			RemoveAllLocalEntities();
 			RemoveAllCorpses();
 			
-			// do before deleting world
 			renderer->SetGameMap(NULL);
+            audioDevice->SetGameMap(NULL);
 			
 			for(size_t i = 0; i < clientPlayers.size(); i++) {
 				if(clientPlayers[i]) {

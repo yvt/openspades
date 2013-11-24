@@ -726,8 +726,10 @@ namespace spades {
 		
 		void ALDevice::SetGameMap(client::GameMap *mp) {
 			SPADES_MARK_FUNCTION_DEBUG();
-			
+            client::GameMap *oldMap = d->map;
 			d->map = mp;
+            if(mp) mp->AddRef();
+            if(oldMap) oldMap->Release();
 		}
 	}
 }

@@ -325,6 +325,7 @@ namespace spades {
 				waterRenderer = NULL;
 				ambientShadowRenderer = NULL;
 			}
+            this->map = mp;
 			if(oldMap) {
 				oldMap->Release();
 			}
