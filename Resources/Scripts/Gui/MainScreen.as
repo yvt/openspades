@@ -684,6 +684,16 @@ namespace spades {
 			if(IsEnabled) {
 				string msg = helper.GetPendingErrorMessage();
 				if(msg.length > 0) {
+					// try to maek the "disconnected" message more friendly.
+					if(msg.findFirst("Disconnected:") >= 0) {
+						int ind1 = msg.findFirst("Disconnected:");
+						int ind2 = msg.findFirst("\n", ind1);
+						if(ind2 < 0) ind2 = msg.length;
+						ind1 += "Disconnected:".length;
+						msg = msg.substr(ind1, ind2 - ind1);
+						msg = "You were disconnected from the server because of the following reason:\n\n" + msg;
+					}
+					
 					// failed to connect.
 					AlertScreen al(this, msg);
 					al.Run();
