@@ -113,6 +113,8 @@ namespace spades {
 			
 			unsigned int lastTime;
 			
+			bool duringSceneRendering;
+			
 			void BuildProjectionMatrix();
 			void BuildView();
 			void BuildFrustrum();
@@ -120,6 +122,10 @@ namespace spades {
 			void RenderDebugLines();
 			
 			void RenderObjects();
+			
+			void EnsureInitialized();
+			void EnsureSceneStarted();
+			void EnsureSceneNotStarted();
 			
 		protected:
 			virtual ~GLRenderer();

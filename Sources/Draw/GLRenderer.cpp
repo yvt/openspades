@@ -86,39 +86,43 @@ namespace spades {
 		// TODO: raise error for any calls after Shutdown().
 				
 		GLRenderer::GLRenderer(IGLDevice *_device):
-		device(_device){
+		device(_device),
+		fbManager(NULL),
+		map(NULL),
+		inited(false),
+		sceneUsedInThisFrame(false),
+		programManager(NULL),
+		imageManager(NULL),
+		modelManager(NULL),
+		shadowMapRenderer(NULL),
+		mapShadowRenderer(NULL),
+		mapRenderer(NULL),
+		imageRenderer(NULL),
+		flatMapRenderer(NULL),
+		modelRenderer(NULL),
+		spriteRenderer(NULL),
+		longSpriteRenderer(NULL),
+		waterRenderer(NULL),
+		ambientShadowRenderer(NULL),
+		radiosityRenderer(NULL),
+		cameraBlur(NULL),
+		lensDustFilter(NULL),
+		lastColorBufferTexture(0),
+		fogDistance(128.f),
+		renderingMirror(false),
+		duringSceneRendering(false),
+		lastTime(0){
 			SPADES_MARK_FUNCTION();
 			
 			SPLog("GLRenderer bootstrap");
 			
-			inited = false;
 			fbManager = new GLFramebufferManager(_device);
 			
 			programManager = new GLProgramManager(_device, shadowMapRenderer);
 			imageManager = new GLImageManager(_device);
 			imageRenderer = new GLImageRenderer(this);
 			
-			waterRenderer = NULL;
-			radiosityRenderer = NULL;
-			mapShadowRenderer = NULL;
-			mapShadowRenderer = NULL;
-			mapRenderer = NULL;
-			flatMapRenderer = NULL;
-			ambientShadowRenderer = NULL;
-			shadowMapRenderer = NULL;
-			modelManager = NULL;
-			spriteRenderer = NULL;
-			longSpriteRenderer = NULL;
-			modelRenderer = NULL;
-            cameraBlur = NULL;
-			lensDustFilter = NULL;
-			map = NULL;
-			
 			smoothedFogColor = MakeVector3(-1.f, -1.f, -1.f);
-			
-			lastTime = 0;
-			
-			sceneUsedInThisFrame = false;
 			
 			// ready for 2d draw
 			device->BlendFunc(IGLDevice::SrcAlpha,
@@ -201,44 +205,44 @@ namespace spades {
 			// FIXME: remove itself from map's listener
 			
 			SPLog("GLRender finalizing");
-			if(lensDustFilter)
-				delete lensDustFilter;
-			if(radiosityRenderer)
-				delete radiosityRenderer;
-			if(ambientShadowRenderer)
-				delete ambientShadowRenderer;
-			if(flatMapRenderer)
-				delete flatMapRenderer;
-			if(mapShadowRenderer)
-				delete mapShadowRenderer;
-			if(mapRenderer)
-				delete mapRenderer;
-			if(waterRenderer)
-				delete waterRenderer;
-			if(ambientShadowRenderer)
-				delete ambientShadowRenderer;
-			if(shadowMapRenderer)
-				delete shadowMapRenderer;
-			if(cameraBlur)
-				delete cameraBlur;
-			if(longSpriteRenderer)
-				delete longSpriteRenderer;
-			if(waterRenderer)
-				delete waterRenderer;
-			if(modelRenderer)
-				delete modelRenderer;
-			if(spriteRenderer)
-				delete spriteRenderer;
-			if(imageRenderer)
-				delete imageRenderer;
-			if(modelRenderer)
-				delete modelManager;
-			if(programManager)
-				delete programManager;
-			if(imageManager)
-				delete imageManager;
-			if(fbManager)
-				delete fbManager;
+			delete lensDustFilter;
+			lensDustFilter = NULL;
+			delete radiosityRenderer;
+			radiosityRenderer = NULL;
+			delete ambientShadowRenderer;
+			ambientShadowRenderer = NULL;
+			delete flatMapRenderer;
+			flatMapRenderer = NULL;
+			delete mapShadowRenderer;
+			mapShadowRenderer = NULL;
+			delete mapRenderer;
+			mapRenderer = NULL;
+			delete waterRenderer;
+			waterRenderer = NULL;
+			delete ambientShadowRenderer;
+			ambientShadowRenderer = NULL;
+			delete shadowMapRenderer;
+			shadowMapRenderer = NULL;
+			delete cameraBlur;
+			cameraBlur = NULL;
+			delete longSpriteRenderer;
+			longSpriteRenderer = NULL;
+			delete waterRenderer;
+			waterRenderer = NULL;
+			delete modelRenderer;
+			modelRenderer = NULL;
+			delete spriteRenderer;
+			spriteRenderer = NULL;
+			delete imageRenderer;
+			imageRenderer = NULL;
+			delete modelManager;
+			modelManager = NULL;
+			delete programManager;
+			programManager = NULL;
+			delete imageManager;
+			imageManager = NULL;
+			delete fbManager;
+			fbManager = NULL;
 			SPLog("GLRenderer finalized");
 		}
 		
@@ -272,25 +276,35 @@ namespace spades {
 			}
 		}
 		
+		void GLRenderer::EnsureInitialized() {
+			SPADES_MARK_FUNCTION_DEBUG();
+			if(shadowMapRenderer == NULL){
+				SPRaise("Renderer is not initialized");
+			}
+		}
+		
 		void GLRenderer::SetGameMap(client::GameMap *mp){
 			SPADES_MARK_FUNCTION();
+			
+			if(mp)
+				EnsureInitialized();
 			
 			client::GameMap *oldMap = map;
 			
 			SPLog("New map loaded; freeing old renderers...");
-			if(radiosityRenderer)
-				delete radiosityRenderer;
-			if(mapRenderer)
-				delete mapRenderer;
-			if(flatMapRenderer)
-				delete flatMapRenderer;
-			if(mapShadowRenderer)
-				delete mapShadowRenderer;
-			if(waterRenderer)
-				delete waterRenderer;
-			if(ambientShadowRenderer)
-				delete ambientShadowRenderer;
+			delete radiosityRenderer;
 			radiosityRenderer = NULL;
+			delete mapRenderer;
+			mapRenderer = NULL;
+			delete flatMapRenderer;
+			flatMapRenderer = NULL;
+			delete mapShadowRenderer;
+			mapShadowRenderer = NULL;
+			delete waterRenderer;
+			waterRenderer = NULL;
+			delete ambientShadowRenderer;
+			ambientShadowRenderer = NULL;
+			
 			if(mp){
 				SPLog("Creating new renderers...");
 				
@@ -310,8 +324,6 @@ namespace spades {
 					radiosityRenderer = new GLRadiosityRenderer(this, mp);
 				}else{
 					SPLog("Radiosity is disabled");
-					
-					ambientShadowRenderer = NULL;
 				}
 				
 				mp->SetListener(this);
@@ -319,11 +331,6 @@ namespace spades {
 				SPLog("Created");
 			}else{
 				SPLog("No map loaded");
-				mapShadowRenderer = NULL;
-				mapRenderer = NULL;
-				flatMapRenderer = NULL;
-				waterRenderer = NULL;
-				ambientShadowRenderer = NULL;
 			}
             this->map = mp;
 			if(oldMap) {
@@ -443,12 +450,29 @@ namespace spades {
 			
 		}
 		
+		void GLRenderer::EnsureSceneStarted() {
+			SPADES_MARK_FUNCTION_DEBUG();
+			if(!duringSceneRendering) {
+				SPRaise("Illegal call outside of StartScene ... EndScene");
+			}
+		}
+		
+		void GLRenderer::EnsureSceneNotStarted() {
+			SPADES_MARK_FUNCTION_DEBUG();
+			if(duringSceneRendering) {
+				SPRaise("Illegal call between StartScene ... EndScene");
+			}
+		}
+		
 		void GLRenderer::StartScene(const client::SceneDefinition &def) {
 			SPADES_MARK_FUNCTION();
+			
+			EnsureInitialized();
 			
 			sceneDef = def;
 			
 			sceneUsedInThisFrame = true;
+			duringSceneRendering = true;
 			
 			// clear scene objects
 			debugLines.clear();
@@ -482,6 +506,9 @@ namespace spades {
 				SPInvalidArgument("model");
 			}
 			
+			EnsureInitialized();
+			EnsureSceneStarted();
+			
 			// TODO: early frustrum cull?
 			
 			modelRenderer->AddModel(m, param);
@@ -493,6 +520,8 @@ namespace spades {
 				return;
 			if(!SphereFrustrumCull(light.origin, light.radius))
 				return;
+			EnsureInitialized();
+			EnsureSceneStarted();
 			lights.push_back(GLDynamicLight(light));
 		}
 		
@@ -500,6 +529,8 @@ namespace spades {
 									  spades::Vector3 b,
 									  spades::Vector4 color) {
 			DebugLine line = {a, b, color};
+			EnsureInitialized();
+			EnsureSceneStarted();
 			debugLines.push_back(line);
 		}
 		
@@ -515,6 +546,9 @@ namespace spades {
 			if(!SphereFrustrumCull(center, radius * 1.5f))
 				return;
 			
+			EnsureInitialized();
+			EnsureSceneStarted();
+			
 			spriteRenderer->Add(im, center, radius, rotation,
 								drawColor);
 		}
@@ -527,6 +561,9 @@ namespace spades {
 			GLImage *im = dynamic_cast<GLImage *>(img);
 			if(!im)
 				SPInvalidArgument("im");
+			
+			EnsureInitialized();
+			EnsureSceneStarted();
 			
 			longSpriteRenderer->Add(im, p1, p2,
 									radius, drawColor);
@@ -640,12 +677,16 @@ namespace spades {
 		void GLRenderer::EndScene() {
 			SPADES_MARK_FUNCTION();
 			
+			EnsureInitialized();
+			EnsureSceneStarted();
+			
 			GLProfiler rootProfiler(device, "EndScene");
 			
 			float dt = (float)(sceneDef.time - lastTime) / 1000.f;
 			if(dt > .1f) dt = .1f;
 			if(dt < 0.f) dt = 0.f;
 			
+			duringSceneRendering = false;
 			renderingMirror = false;
 			
 			{
@@ -954,6 +995,7 @@ namespace spades {
 		
 		void GLRenderer::MultiplyScreenColor(spades::Vector3 color){
 			SPADES_MARK_FUNCTION();
+			void EnsureSceneNotStarted();
 			imageRenderer->Flush();
 			
 			device->BlendFunc(IGLDevice::Zero,
@@ -1065,6 +1107,8 @@ namespace spades {
 								   const spades::AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 			
+			void EnsureSceneNotStarted();
+			
 			// d = a + (b - a) + (c - a)
 			//   = b + c - a
 			Vector2 outBottomRight = outTopRight + outBottomLeft - outTopLeft;
@@ -1090,6 +1134,7 @@ namespace spades {
 		
 		void GLRenderer::DrawFlatGameMap(const spades::AABB2 &outRect,
 										 const spades::AABB2 &inRect){
+			void EnsureSceneNotStarted();
 			if(flatMapRenderer)
 				flatMapRenderer->Draw(outRect, inRect);
 		}
@@ -1100,6 +1145,8 @@ namespace spades {
 		
 		void GLRenderer::FrameDone() {
 			SPADES_MARK_FUNCTION();
+			
+			EnsureSceneNotStarted();
 			
 			imageRenderer->Flush();
 			
@@ -1136,12 +1183,14 @@ namespace spades {
 		void GLRenderer::Flip() {
 			SPADES_MARK_FUNCTION();
 			
+			EnsureSceneNotStarted();
 			device->Swap();
 		}
 		
 		Bitmap *GLRenderer::ReadBitmap() {
 			SPADES_MARK_FUNCTION();
 			Bitmap *bmp;
+			EnsureSceneNotStarted();
 			bmp = new Bitmap(device->ScreenWidth(),
 							 device->ScreenHeight());
 			device->ReadPixels(0, 0, device->ScreenWidth(), device->ScreenHeight(), IGLDevice::RGBA, IGLDevice::UnsignedByte, bmp->GetPixels());
