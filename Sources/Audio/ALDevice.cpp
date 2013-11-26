@@ -376,7 +376,7 @@ namespace spades {
 				}
 
 				SPLog("--- All devices ---");
-				const ALCchar* ext = al::qalcGetString( NULL, 33333/*ALC_ALL_DEVICES_SPECIFIER*/ );
+				const ALCchar* ext = al::qalcGetString( NULL, ALC_ALL_DEVICES_SPECIFIER );
 				while( ext && *ext ) {
 					SPLog( "%s", ext );
 					ext += (strlen(ext)+1);
