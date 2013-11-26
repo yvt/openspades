@@ -23,15 +23,14 @@
 
 #include "SDLRunner.h"
 
-#include "../Imports/SDL.h"
 #include <FL/Fl.H> // for FLTK message pumping
-#include "../Draw/GLRenderer.h"
-#include "../Client/Client.h"
-#include "../Audio/ALDevice.h"
+#include <Draw/GLRenderer.h>
+#include <Client/Client.h>
+#include <Audio/ALDevice.h>
 #include <ctype.h>
-#include "../Core/Debug.h"
-#include "../Core/Settings.h"
-#include "../Core/ConcurrentDispatch.h"
+#include <Core/Debug.h>
+#include <Core/Settings.h>
+#include <Core/ConcurrentDispatch.h>
 
 SPADES_SETTING(r_videoWidth, "1024");
 SPADES_SETTING(r_videoHeight, "640");
@@ -41,9 +40,9 @@ SPADES_SETTING(r_depthBits, "16");
 
 namespace spades {
 	namespace gui {
-		SDLRunner::SDLRunner(const ServerAddress& h, std::string pn):
-		host(h), playerName(pn){
-			
+		SDLRunner::SDLRunner(const ServerAddress& h, std::string pn)
+			: mActive(true), host(h), playerName(pn)
+		{
 		}
 		
 		SDLRunner::~SDLRunner() {
@@ -101,8 +100,7 @@ namespace spades {
 			return SDL_GetModState();
 		}
 		
-		void SDLRunner::ProcessEvent(SDL_Event &event,
-									 client::Client *client) {
+		void SDLRunner::ProcessEvent(SDL_Event &event, client::Client *client) {
 			switch (event.type) {
 				case SDL_QUIT:
 					client->Closing();
@@ -115,8 +113,9 @@ namespace spades {
 					client->KeyEvent(TranslateButton(event.button.button), false);
 					break;
 				case SDL_MOUSEMOTION:
-					client->MouseEvent(event.motion.xrel,
-									  event.motion.yrel);
+					if( mActive ) {
+						client->MouseEvent(event.motion.xrel, event.motion.yrel);
+					}
 					break;
 				case SDL_KEYDOWN:
 					if(event.key.keysym.unicode){
@@ -130,18 +129,22 @@ namespace spades {
 							client->CharEvent(s);
 						}
 					}
-					client->KeyEvent(TranslateKey(event.key.keysym),
-									true);
+					client->KeyEvent(TranslateKey(event.key.keysym), true);
 					break;
 				case SDL_KEYUP:
-					client->KeyEvent(TranslateKey(event.key.keysym),
-									false);
+					client->KeyEvent(TranslateKey(event.key.keysym), false);
 					break;
 				case SDL_ACTIVEEVENT:
-					if(event.active.gain){
-						SDL_WM_GrabInput( SDL_GRAB_ON );
-					}else{
-						SDL_WM_GrabInput( SDL_GRAB_OFF );
+					if( event.active.state & (SDL_APPACTIVE|SDL_APPINPUTFOCUS) ) {		//any of the 2 is good
+						if(event.active.gain){
+							SDL_ShowCursor(0);
+							SDL_WM_GrabInput( SDL_GRAB_ON );
+							mActive = true;
+						}else{
+							SDL_WM_GrabInput( SDL_GRAB_OFF );
+							mActive = false;
+							SDL_ShowCursor(1);
+						}
 					}
 					break;
 				default:
@@ -149,8 +152,8 @@ namespace spades {
 			}
 		}
 		
-		void SDLRunner::RunClientLoop(spades::client::IRenderer *renderer,
-									  spades::client::IAudioDevice *audio) {
+		void SDLRunner::RunClientLoop(spades::client::IRenderer *renderer, spades::client::IAudioDevice *audio)
+		{
 			{
 				client::Client client(renderer, audio,
 									  host, playerName);
@@ -244,10 +247,7 @@ namespace spades {
 				SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 				SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, r_depthBits);
 				
-				surface = SDL_SetVideoMode(r_videoWidth,
-										   r_videoHeight,
-										   r_colorBits,
-										   sdlFlags);
+				surface = SDL_SetVideoMode(r_videoWidth, r_videoHeight, r_colorBits, sdlFlags);
 				if(!surface){
 					std::string msg = SDL_GetError();
 					SPRaise("Failed to initialize video device: %s", msg.c_str());
@@ -257,6 +257,7 @@ namespace spades {
 				SDL_WM_GrabInput(SDL_GRAB_ON);
 				SDL_EnableUNICODE(1);
 				SDL_ShowCursor(0);
+				mActive = true;
 				
 				{
 					SDLGLDevice glDevice(surface);

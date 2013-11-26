@@ -790,14 +790,12 @@ namespace spades {
 				
 				if(r_softParticles) {// softparticle is a part of postprocess
 					GLProfiler profiler(device, "Soft Particle");
-					device->BlendFunc(IGLDevice::One,
-									  IGLDevice::OneMinusSrcAlpha);
+					device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 					spriteRenderer->Render();
 				}
 				
 				
-				device->BlendFunc(IGLDevice::SrcAlpha,
-								  IGLDevice::OneMinusSrcAlpha);
+				device->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::OneMinusSrcAlpha);
 				
 				if(r_depthOfField &&
 				   (sceneDef.depthOfFieldNearRange > 0.f ||

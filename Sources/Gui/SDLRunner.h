@@ -21,7 +21,7 @@
 #pragma once
 
 #include <Core/IRunnable.h>
-#include "../Imports/SDL.h"
+#include <Imports/SDL.h>
 #include <string>
 #include <Core/ServerAddress.h>
 
@@ -33,15 +33,14 @@ namespace spades {
 	}
 	namespace gui {
 		class SDLRunner: public IRunnable {
-			
+			bool mActive;
 		protected:
 			ServerAddress host;
 			std::string playerName;
 			std::string TranslateKey(const SDL_keysym&);
 			std::string TranslateButton(Uint8 b);
 			virtual int GetModState();
-			void ProcessEvent(SDL_Event& event,
-							  client::Client *);
+			void ProcessEvent(SDL_Event& event, client::Client *);
 			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
 		public:
 			SDLRunner(const ServerAddress& host, std::string playerName);

@@ -22,19 +22,25 @@
 #include "ALFuncs.h"
 #include <exception>
 #include <stdio.h>
-#include "../Client/IAudioChunk.h"
-#include "../Core/IAudioStream.h"
-#include "../Core/FileManager.h"
-#include "../Core/WavAudioStream.h"
+#include <Client/IAudioChunk.h>
+#include <Core/IAudioStream.h>
+#include <Core/FileManager.h>
+#include <Core/WavAudioStream.h>
 #include <vector>
-#include "../Core/Exception.h"
-#include "../Client/GameMap.h"
-#include "../Core/Debug.h"
-#include "../Core/Settings.h"
+#include <Core/Exception.h>
+#include <Client/GameMap.h>
+#include <Core/Debug.h>
+#include <Core/Settings.h>
 #include <stdlib.h>
 
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
+
+//lm: seems to be missing for me..
+#ifndef ALC_ALL_DEVICES_SPECIFIER
+#define ALC_ALL_DEVICES_SPECIFIER      0x1013
+#endif
+
 
 namespace spades {
 	namespace audio {
@@ -357,19 +363,6 @@ namespace spades {
 			Internal() {
 				SPADES_MARK_FUNCTION();
 				
-				alDevice = al::qalcOpenDevice(NULL);
-				if(!alDevice){
-					SPRaise("Failed to open OpenAL device.");
-				}
-				
-				alContext = al::qalcCreateContext(alDevice, NULL);
-				if(!alContext){
-					al::qalcCloseDevice(alDevice);
-					SPRaise("Failed to create OpenAL context.");
-				}
-				
-				al::qalcMakeContextCurrent(alContext);
-				
 				SPLog("OpenAL Info:");
 				SPLog("  Vendor: %s", al::qalGetString(AL_VENDOR));
 				SPLog("  Version: %s", al::qalGetString(AL_VERSION));
@@ -381,13 +374,55 @@ namespace spades {
 						SPLog("  %s", strs[i].c_str());
 					}
 				}
-				if(al::qalcGetString(alDevice, ALC_EXTENSIONS)){
-					std::vector<std::string> strs = Split(al::qalcGetString(alDevice, ALC_EXTENSIONS), " ");
+
+				SPLog("--- All devices ---");
+				const ALCchar* ext = al::qalcGetString( NULL, 33333/*ALC_ALL_DEVICES_SPECIFIER*/ );
+				while( ext && *ext ) {
+					SPLog( "%s", ext );
+					ext += (strlen(ext)+1);
+				}
+				SPLog("-------------------");
+
+				SPLog("--- Devices ---");
+				ext = al::qalcGetString( NULL, ALC_DEVICE_SPECIFIER );
+				while( ext && *ext ) {
+					SPLog( "%s", ext );
+					ext += (strlen(ext)+1);
+				}
+				SPLog("---------------");
+				const ALCchar* dev = al::qalcGetString( NULL, ALC_DEFAULT_DEVICE_SPECIFIER );
+				if( dev && *dev ) {
+					SPLog( "Default device: %s", dev );
+				}
+
+				alDevice = al::qalcOpenDevice(NULL);
+				if(!alDevice){
+					if(ext = al::qalcGetString(NULL, ALC_EXTENSIONS)){
+						std::vector<std::string> strs = Split(ext, " ");
+						SPLog("OpenAL ALC Extensions (NULL):");
+						for(size_t i = 0; i < strs.size(); i++) {
+							SPLog("  %s", strs[i].c_str());
+						}
+					}
+
+					SPRaise("Failed to open OpenAL device.");
+				}
+				
+				if(ext = al::qalcGetString(alDevice, ALC_EXTENSIONS)){
+					std::vector<std::string> strs = Split(ext, " ");
 					SPLog("OpenAL ALC Extensions:");
 					for(size_t i = 0; i < strs.size(); i++) {
 						SPLog("  %s", strs[i].c_str());
 					}
 				}
+
+				alContext = al::qalcCreateContext(alDevice, NULL);
+				if(!alContext){
+					al::qalcCloseDevice(alDevice);
+					SPRaise("Failed to create OpenAL context.");
+				}
+				
+				al::qalcMakeContextCurrent(alContext);
 				
 				map = NULL;
 				roomHistoryPos = 0;
