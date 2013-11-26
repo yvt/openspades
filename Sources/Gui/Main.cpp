@@ -42,13 +42,13 @@
 
 #include <algorithm>	//std::sort
 
+SPADES_SETTING(ui_forceClassicMainWindow, "0");
+
 #ifdef WIN32
 #include <windows.h>
 #include <shlobj.h>
 #define strncasecmp(x,y,z)	_strnicmp(x,y,z)
 #define strcasecmp(x,y)		_stricmp(x,y)
-
-SPADES_SETTING(cg_smp, "0");
 
 //lm: without doing it this way, we will get a low-res icon or an ugly resampled icon in our window.
 //we cannot use the fltk function on the console window, because it's not an Fl_Window...
@@ -297,7 +297,8 @@ int main(int argc, char ** argv)
 
 		MainWindow* win = NULL;
 		if( !cg_autoConnect ) {
-			if(!(Fl::get_key(FL_Shift_L) | Fl::get_key(FL_Shift_R))) {
+			if(!((int)ui_forceClassicMainWindow ||
+				 Fl::get_key(FL_Shift_L) || Fl::get_key(FL_Shift_R))) {
 				// TODO: always show main window for first run
 				
 				SPLog("Starting main screen");
