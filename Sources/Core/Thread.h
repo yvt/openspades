@@ -26,10 +26,11 @@
 namespace spades {
 	
 	class Thread {
-		void *threadInfo;
+		void * volatile threadInfo;
 		Mutex lock;
 		IRunnable *runnable;
-		bool autoDelete;
+		bool volatile autoDelete;
+		unsigned int volatile threadId;
 		
 		static int InternalRunner(void *);
 		void Quited();
@@ -39,6 +40,9 @@ namespace spades {
 		virtual ~Thread();
 		
 		virtual void Run();
+		
+		static void InitThreadSystem();
+		static void CleanupExitedThreads();
 		
 		void Start();
 		void Join();

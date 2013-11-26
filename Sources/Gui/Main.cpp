@@ -28,6 +28,7 @@
 #include <Core/Debug.h>
 #include <Core/Settings.h>
 #include <Core/ConcurrentDispatch.h>
+#include <Core/Thread.h>
 #include <Core/ZipFileSystem.h>
 #include <Core/ServerAddress.h>
 #include "ErrorDialog.h"
@@ -159,6 +160,7 @@ int main(int argc, char ** argv)
 		spades::reflection::Backtrace::StartBacktrace();
 		
 		SPADES_MARK_FUNCTION();
+		spades::Thread::InitThreadSystem();
 		spades::DispatchQueue::GetThreadQueue()->MarkSDLVideoThread();
 		
 		SPLog("Package: " PACKAGE_STRING);

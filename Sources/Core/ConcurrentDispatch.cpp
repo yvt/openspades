@@ -211,6 +211,7 @@ namespace spades {
 		while((ent = internal->Poll()) != NULL){
 			ent->dispatch->Execute();
 		}
+		Thread::CleanupExitedThreads();
 	}
 	
 	void DispatchQueue::EnterEventLoop() throw() {
