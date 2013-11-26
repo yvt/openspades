@@ -22,3 +22,4 @@
 #include "UIControls.as"
 #include "MessageBox.as"
 #include "MainScreen.as"
+#include "Preferences.as"

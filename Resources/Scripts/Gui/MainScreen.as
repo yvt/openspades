@@ -354,6 +354,13 @@ namespace spades {
 				AddChild(button);
 			}
 			{
+				spades::ui::Button button(Manager);
+				button.Caption = "Setup";
+				button.Bounds = AABB2(contentsLeft + contentsWidth - 304.f, footerPos, 100.f, 30.f);
+				button.Activated = EventHandler(this.OnSetupPressed);
+				AddChild(button);
+			}
+			{
 				RefreshButton button(Manager);
 				button.Bounds = AABB2(contentsLeft + contentsWidth - 364.f, footerPos, 30.f, 30.f);
 				button.Activated = EventHandler(this.OnRefreshServerListPressed);
@@ -650,6 +657,11 @@ namespace spades {
 		
 		private void OnCreditsPressed(spades::ui::UIElement@ sender) {
 			AlertScreen al(this, "Not implemented");
+			al.Run();
+		}
+		
+		private void OnSetupPressed(spades::ui::UIElement@ sender) {
+			PreferenceView al(this, PreferenceViewOptions());
 			al.Run();
 		}
 		

@@ -27,6 +27,7 @@ namespace spades {
 			Vector4 BackgroundColor = Vector4(0, 0, 0, 0);
 			Vector4 TextColor = Vector4(1, 1, 1, 1);
 			Vector2 Alignment = Vector2(0.f, 0.0f);
+			float TextScale = 1.f;
 			
 			Label(UIManager@ manager) {
 				super(manager);
@@ -45,11 +46,11 @@ namespace spades {
 				if(Text.length > 0) {
 					Font@ font = this.Font;
 					string text = this.Text;
-					Vector2 txtSize = font.Measure(text);
+					Vector2 txtSize = font.Measure(text) * TextScale;
 					Vector2 txtPos;
 					txtPos = pos + (size - txtSize) * Alignment;
 					
-					font.Draw(text, txtPos, 1.f, TextColor);
+					font.Draw(text, txtPos, TextScale, TextColor);
 				}
 			}
 		}
@@ -206,12 +207,13 @@ namespace spades {
 		
 		class Button: ButtonBase {
 			private Image@ image;
+			Vector2 Alignment = Vector2(0.5f, 0.5f);
 			
 			Button(UIManager@ manager) {
 				super(manager);
 				
 				Renderer@ renderer = Manager.Renderer;
-				@image = renderer.RegisterImage("Gfx/Limbo/MenuItem.tga");
+				@image = renderer.RegisterImage("Gfx/UI/Button.png");
 			}
 			
 			void Render() {
@@ -233,7 +235,9 @@ namespace spades {
 				string text = this.Caption;
 				Vector2 txtSize = font.Measure(text);
 				Vector2 txtPos;
-				txtPos = pos + (size - txtSize) * 0.5f;
+				pos += Vector2(8.f, 8.f);
+				size -= Vector2(16.f, 16.f);
+				txtPos = pos + (size - txtSize) * Alignment;
 				
 				font.DrawShadow(text, txtPos, 1.f, 
 					Vector4(1.f, 1.f, 1.f, 1.f), Vector4(0.f, 0.f, 0.f, 0.4f));
@@ -248,8 +252,10 @@ namespace spades {
 			string Placeholder;
 			int MarkPosition = 0;
 			int CursorPosition = 0;
+			int MaxLength = 255;
 			
 			Vector4 TextColor = Vector4(1.f, 1.f, 1.f, 1.f);
+			Vector4 DisabledTextColor = Vector4(1.f, 1.f, 1.f, 0.3f);
 			Vector4 PlaceholderColor = Vector4(1.f, 1.f, 1.f, 0.5f);
 			Vector4 HighlightColor = Vector4(1.f, 1.f, 1.f, 0.3f);
 			
@@ -359,7 +365,7 @@ namespace spades {
 				SelectedText = text;
 				
 				// if text overflows, deny the insertion
-				if(!FitsInBox(Text)) {
+				if((not FitsInBox(Text)) or (int(Text.length) > MaxLength)) {
 					SelectedText = oldText;
 					return;
 				}
@@ -466,9 +472,11 @@ namespace spades {
 				string text = Text;
 				
 				if(text.length == 0){
-					font.Draw(Placeholder, textPos, TextScale, PlaceholderColor);
+					if(IsEnabled) {
+						font.Draw(Placeholder, textPos, TextScale, PlaceholderColor);
+					}
 				}else{
-					font.Draw(text, textPos, TextScale, TextColor);
+					font.Draw(text, textPos, TextScale, IsEnabled ? TextColor : DisabledTextColor);
 				}
 				
 				if(IsFocused){
@@ -846,7 +854,7 @@ namespace spades {
 			float TrackBarPosition { 
 				get {
 					if(MaxValue == MinValue) {
-						return 0.f;
+						return ButtonSize;
 					}
 					return float((Value - MinValue) / (MaxValue - MinValue) * TrackBarMovementRange) + ButtonSize;
 				}
