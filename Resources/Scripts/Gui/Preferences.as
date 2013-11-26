@@ -212,6 +212,116 @@ namespace spades {
 		}
 	}
 	
+	class ConfigHotKeyField: spades::ui::UIElement {
+		ConfigItem@ config;
+		private bool hover;
+		spades::ui::EventHandler@ KeyBound;
+		
+		ConfigHotKeyField(spades::ui::UIManager manager, string configName) {
+			super(manager);
+			@config = ConfigItem(configName);
+			IsMouseInteractive = true;
+		}
+		
+		string BoundKey { 
+			get { return config.StringValue; }
+			set { config = value; }
+		}
+		
+		void KeyDown(string key) {
+			if(IsFocused) {
+				if(key != "Escape") {
+					if(key == " ") {
+						key = "Space";
+					} else if(key == "BackSpace" or key == "Delete") {
+						key = ""; // unbind
+					}
+					config = key;
+					KeyBound(this);
+				}
+				@Manager.ActiveElement = null;
+				AcceptsFocus = false;
+			} else {
+				UIElement::KeyDown(key);
+			}
+		}
+		
+		void MouseDown(spades::ui::MouseButton button, Vector2 clientPosition) {
+			if(not AcceptsFocus) {
+				AcceptsFocus = true;
+				@Manager.ActiveElement = this;
+				return;
+			}
+			if(IsFocused) {
+				if(button == spades::ui::MouseButton::LeftMouseButton) {
+					config = "LeftMouseButton";
+				}else if(button == spades::ui::MouseButton::RightMouseButton) {
+					config = "RightMouseButton";
+				}else if(button == spades::ui::MouseButton::MiddleMouseButton) {
+					config = "MiddleMouseButton";
+				}
+				KeyBound(this);
+				@Manager.ActiveElement = null;
+				AcceptsFocus = false;
+			}
+		}
+		
+		void MouseEnter() {
+			hover = true;
+		}
+		void MouseLeave() {
+			hover = false;
+		}
+		
+		void Render() {
+			// render background
+			Renderer@ renderer = Manager.Renderer;
+			Vector2 pos = ScreenPosition;
+			Vector2 size = Size;
+			Image@ img = renderer.RegisterImage("Gfx/White.tga");
+			renderer.Color = Vector4(0.f, 0.f, 0.f, IsFocused ? 0.3f : 0.1f);
+			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
+			
+			if(IsFocused) {
+				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+			}else if(hover) {
+				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.1f);
+			} else {
+				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.06f);
+			}
+			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
+			renderer.DrawImage(img, AABB2(pos.x, pos.y + size.y - 1.f, size.x, 1.f));
+			renderer.DrawImage(img, AABB2(pos.x, pos.y + 1.f, 1.f, size.y - 2.f));
+			renderer.DrawImage(img, AABB2(pos.x + size.x - 1.f, pos.y + 1.f, 1.f, size.y - 2.f));
+			
+			Font@ font = this.Font;
+			string text = IsFocused ? "Press Key to Bind or [Escape] to Cancel..." : config.StringValue;
+			
+			Vector4 color(1,1,1,1);
+			
+			if(IsFocused) {
+				color.w = abs(sin(Manager.Time * 2.f));
+			}else{
+				AcceptsFocus = false;
+			}
+			
+			if(text == " ") {
+				text = "Space";
+			}else if(text.length == 0) {
+				text = "Unbound";
+				color.w *= 0.3f;
+			}
+			
+			Vector2 txtSize = font.Measure(text);
+			Vector2 txtPos;
+			txtPos = pos + (size - txtSize) * 0.5f;
+			
+			
+			
+			font.Draw(text, txtPos, 1.f, color);
+		}
+	}
+	
 	class ConfigSimpleToggleButton: spades::ui::SimpleButton {
 		ConfigItem@ config;
 		int value;
@@ -255,6 +365,7 @@ namespace spades {
 		private float FieldX = 190.f;
 		private float FieldWidth = 370.f;
 		private spades::ui::UIElement@[] items;
+		private ConfigHotKeyField@[] hotkeyItems;
 		
 		StandardPreferenceLayouter(spades::ui::UIElement@ parent) {
 			@Parent = parent;
@@ -265,6 +376,20 @@ namespace spades {
 			elem.Size = Vector2(300.f, 32.f);
 			items.insertLast(elem);
 			return elem;
+		}
+		
+		private void OnKeyBound(spades::ui::UIElement@ sender) {
+			// unbind already bound key
+			ConfigHotKeyField@ bindField = cast<ConfigHotKeyField>(sender);
+			string key = bindField.BoundKey;
+			for(uint i = 0; i < hotkeyItems.length; i++) {
+				ConfigHotKeyField@ f = hotkeyItems[i];
+				if(f !is bindField) {
+					if(f.BoundKey == key) {
+						f.BoundKey = "";
+					}
+				}
+			}
 		}
 		
 		void AddHeading(string text) {
@@ -278,7 +403,7 @@ namespace spades {
 			container.AddChild(label);
 		}
 		
-		void AddInputField(string caption, string configName, bool enabled = true) {
+		ConfigField@ AddInputField(string caption, string configName, bool enabled = true) {
 			spades::ui::UIElement@ container = CreateItem();
 			
 			spades::ui::Label label(Parent.Manager);
@@ -289,16 +414,28 @@ namespace spades {
 			
 			ConfigField field(Parent.Manager, configName);
 			field.Bounds = AABB2(FieldX, 1.f, FieldWidth, 30.f);
-			field.MaxLength = 15;
 			field.Enable = enabled;
 			container.AddChild(field);
 			
+			return field;
 		}
 		
 		void AddControl(string caption, string configName, bool enabled = true) {
-			AddInputField(caption, configName, enabled);
-		
-			// TODO
+			spades::ui::UIElement@ container = CreateItem();
+			
+			spades::ui::Label label(Parent.Manager);
+			label.Text = caption;
+			label.Alignment = Vector2(0.f, 0.5f);
+			label.Bounds = AABB2(10.f, 0.f, 300.f, 32.f);
+			container.AddChild(label);
+			
+			ConfigHotKeyField field(Parent.Manager, configName);
+			field.Bounds = AABB2(FieldX, 1.f, FieldWidth, 30.f);
+			field.Enable = enabled;
+			container.AddChild(field);
+			
+			field.KeyBound = spades::ui::EventHandler(OnKeyBound);
+			hotkeyItems.insertLast(field); 
 		}
 		
 		void AddToggleField(string caption, string configName, bool enabled = true) {
@@ -340,7 +477,7 @@ namespace spades {
 			
 			StandardPreferenceLayouter layouter(this);
 			layouter.AddHeading("Player Information");
-			layouter.AddInputField("Player Name", "cg_playerName", not options.GameActive);
+			layouter.AddInputField("Player Name", "cg_playerName", not options.GameActive).MaxLength = 15;
 			
 			layouter.AddHeading("Effects");
 			layouter.AddToggleField("Blood", "cg_blood");
@@ -368,7 +505,7 @@ namespace spades {
 			layouter.AddControl("Equip Block", "cg_keyToolBlock");
 			layouter.AddControl("Equip Weapon", "cg_keyToolWeapon");
 			layouter.AddControl("Equip Grenade", "cg_keyToolGrenade");
-			layouter.AddToggleField("Switch Tool by Wheel", "cg_switchToolByWheel");
+			layouter.AddToggleField("Switch Tools by Wheel", "cg_switchToolByWheel");
 			// TODO: mouse sensitivity: cg_mouseSensitivity, cg_zoomedMouseSensScale
 			
 			layouter.AddHeading("Movement");

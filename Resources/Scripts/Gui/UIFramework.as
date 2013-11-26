@@ -490,7 +490,7 @@ namespace spades {
 			bool IsVisible {
 				get final {
 					if(not Visible) return false;
-					if(parent is null) return true;
+					if(parent is null) return this is Manager.RootElement;
 					return parent.IsVisible;
 				}
 			}
