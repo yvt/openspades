@@ -150,13 +150,14 @@ namespace spades {
 	}
 	
 	void Thread::MarkForAutoDeletion() {
-		AutoLocker locker(&lock);
+		lock.Lock();
 		if(threadInfo == NULL){
 			// already exited
 			delete this;
 			return;
 		}
 		autoDelete = true;
+		lock.Unlock();
 	}
 }
 
