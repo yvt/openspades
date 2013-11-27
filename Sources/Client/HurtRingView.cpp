@@ -38,7 +38,6 @@ namespace spades {
 		}
 		
 		HurtRingView::~HurtRingView() {
-			image->Release();
 		}
 		
 		void HurtRingView::ClearAll(){
