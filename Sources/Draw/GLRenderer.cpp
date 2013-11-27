@@ -140,7 +140,7 @@ namespace spades {
 		}
 		
 		void GLRenderer::Init() {
-			if(shadowMapRenderer != NULL){
+			if(modelManager != NULL){
 				// already initialized
 				return;
 			}
@@ -278,7 +278,7 @@ namespace spades {
 		
 		void GLRenderer::EnsureInitialized() {
 			SPADES_MARK_FUNCTION_DEBUG();
-			if(shadowMapRenderer == NULL){
+			if(modelManager == NULL){
 				SPRaise("Renderer is not initialized");
 			}
 		}
