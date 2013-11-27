@@ -2128,7 +2128,7 @@ namespace spades {
 			img = renderer->RegisterImage("Gfx/Title/Logo.png");
 			
 			siz = MakeVector2(img->GetWidth(), img->GetHeight());
-			siz *= scrSize.x / siz.x * 0.5f;
+			siz *= std::min(1.f, scrSize.x / siz.x * 0.5f);
 			siz *= std::min(1.f, scrSize.y / siz.y);
 			
 			renderer->DrawImage(img, AABB2((scrSize.x - siz.x) * .5f,
