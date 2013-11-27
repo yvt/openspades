@@ -18,6 +18,8 @@
  
  */
 
+#include "Flags.as"
+
 namespace spades {
 	
 
@@ -146,9 +148,11 @@ namespace spades {
 	
 	class ServerListItem: spades::ui::ButtonBase {
 		MainScreenServerItem@ item;
+		FlagIconRenderer@ flagIconRenderer;
 		ServerListItem(spades::ui::UIManager@ manager, MainScreenServerItem@ item){
 			super(manager);
 			@this.item = item;
+			@flagIconRenderer = FlagIconRenderer(manager.Renderer);
 		}
 		void Render() {
 			Renderer@ renderer = Manager.Renderer;
@@ -174,7 +178,9 @@ namespace spades {
 			Font.Draw(item.MapName, ScreenPosition + Vector2(400.f, 2.f), 1.f, Vector4(1,1,1,1));
 			Font.Draw(item.GameMode, ScreenPosition + Vector2(550.f, 2.f), 1.f, Vector4(1,1,1,1));
 			Font.Draw(item.Protocol, ScreenPosition + Vector2(630.f, 2.f), 1.f, Vector4(1,1,1,1));
-			Font.Draw(item.Country, ScreenPosition + Vector2(680.f, 2.f), 1.f, Vector4(1,1,1,1));
+			if(not flagIconRenderer.DrawIcon(item.Country, ScreenPosition + Vector2(700.f, size.y * 0.5f))) {
+				Font.Draw(item.Country, ScreenPosition + Vector2(680.f, 2.f), 1.f, Vector4(1,1,1,1));
+			}
 		}
 	}
 

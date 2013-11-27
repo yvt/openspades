@@ -1,7 +1,7 @@
 
 All paks for development vesion:
 
-http://yvt.jp/files/programs/osppaks/DevPaks15.zip
+http://yvt.jp/files/programs/osppaks/DevPaks16.zip
 
 (These paks are not included in the source tree because they contains some 
 non-opensource materials and they seem too large to include in the git tree.)
