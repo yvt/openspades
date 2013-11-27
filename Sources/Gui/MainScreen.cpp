@@ -49,7 +49,7 @@ namespace spades {
 									  (const int*)SquareFontMap,
 									  24,
 									  4);
-			SPLog("Font 'Ubuntu Condensed' Loaded");
+			SPLog("Font 'SquareFont' Loaded");
 			
 			helper = new MainScreenHelper(this);
 						

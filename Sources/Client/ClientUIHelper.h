@@ -1,5 +1,6 @@
 /*
  Copyright (c) 2013 yvt
+ Portion of the code is based on Serverbrowser.cpp.
  
  This file is part of OpenSpades.
  
@@ -17,10 +18,22 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
+#pragma once
 
-#include "UIFramework.as"
-#include "UIControls.as"
-#include "MessageBox.as"
-#include "MainScreen.as"
-#include "Preferences.as"
-#include "ClientUI.as"
+#include <Core/RefCountedObject.h>
+
+namespace spades {
+	namespace client {
+		class ClientUI;
+		class ClientUIHelper: public RefCountedObject {
+			
+			friend class ClientUI;
+			
+			ClientUI *ui;
+			
+		public:
+			ClientUIHelper(ClientUI *);
+			void ClientUIDestroyed();
+		};
+	}
+}

@@ -64,6 +64,7 @@
 #include "Tracer.h"
 #include <stdlib.h>
 #include "ClientPlayer.h"
+#include "ClientUI.h"
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;
@@ -139,13 +140,19 @@ namespace spades {
 										30,
 										18);
 			SPLog("Font 'Unsteady Oversteer' Loaded");
-			
+			/*
 			textFont = new Quake3Font(renderer,
 										renderer->RegisterImage("Gfx/Fonts/UbuntuCondensed.tga"),
 										(const int*)UbuntuCondensedMap,
 										24,
 									  4);
-			SPLog("Font 'Ubuntu Condensed' Loaded");
+			SPLog("Font 'Ubuntu Condensed' Loaded");*/
+			textFont = new client::Quake3Font(renderer,
+										 renderer->RegisterImage("Gfx/Fonts/SquareFontModified.png"),
+										 (const int*)SquareFontMap,
+										 24,
+										 4);
+			SPLog("Font 'SquareFont' Loaded");
 			
 			bigTextFont = new Quake3Font(renderer,
 									  renderer->RegisterImage("Gfx/Fonts/UbuntuCondensedBig.tga"),
@@ -181,6 +188,7 @@ namespace spades {
 			limbo = new LimboView(this);
 			paletteView = new PaletteView(this);
 			tcView = new TCProgressView(this);
+			scriptedUI.Set(new ClientUI(renderer, audioDev, textFont, this), false);
 			
 			time = 0.f;
 			lastAliveTime = 0.f;
@@ -303,6 +311,7 @@ namespace spades {
 			if(world)
 				delete world;
 			
+			scriptedUI->ClientDestroyed();
 			delete tcView;
 			delete limbo;
 			delete scoreboard;
@@ -820,6 +829,11 @@ namespace spades {
 			// draw 2d
 			Draw2D();
 			
+			// draw scripted GUI
+			scriptedUI->RunFrame(dt);
+			if(scriptedUI->WantsClientToBeClosed())
+				readyToClose = true;
+			
 			// Well done!
 			renderer->FrameDone();
 			renderer->Flip();
@@ -834,6 +848,11 @@ namespace spades {
 		
 		void Client::MouseEvent(float x, float y) {
 			SPADES_MARK_FUNCTION();
+			
+			if(scriptedUI->NeedsInput()) {
+				scriptedUI->MouseEvent(x, y);
+				return;
+			}
 			
 			if(IsLimboViewActive()){
 				limbo->MouseEvent(x, y);
@@ -878,6 +897,11 @@ namespace spades {
 		void Client::CharEvent(const std::string &ch){
 			SPADES_MARK_FUNCTION();
 			
+			if(scriptedUI->NeedsInput()) {
+				scriptedUI->CharEvent(ch);
+				return;
+			}
+			
 			if( kd_Chat == keyDest || (kd_Game == keyDest && ch == "/") ) {
 				if( kd_Game == keyDest ) {
 					ActivateChatTextEditor(false);
@@ -915,6 +939,11 @@ namespace spades {
 		void Client::KeyEvent(const std::string& name, bool down){
 			SPADES_MARK_FUNCTION();
 			
+			if(scriptedUI->NeedsInput()) {
+				scriptedUI->KeyEvent(name, down);
+				return;
+			}
+			
 			if( kd_Chat == keyDest ){
 				if( down ) {
 					ChatKeyEvent(name);
@@ -940,8 +969,10 @@ namespace spades {
 							// no world = loading now.
 							// in this case, quit the game immediately.
 							readyToClose = true;
-						else
-							keyDest = kd_ExitQuestion;
+						else {
+							scriptedUI->EnterClientMenu();
+							//keyDest = kd_ExitQuestion;
+						}
 					}
 				}
 			}else if(world){

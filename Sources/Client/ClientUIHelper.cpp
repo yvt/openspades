@@ -1,5 +1,6 @@
 /*
  Copyright (c) 2013 yvt
+ Portion of the code is based on Serverbrowser.cpp.
  
  This file is part of OpenSpades.
  
@@ -17,10 +18,18 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
+#include "ClientUIHelper.h"
 
-#include "UIFramework.as"
-#include "UIControls.as"
-#include "MessageBox.as"
-#include "MainScreen.as"
-#include "Preferences.as"
-#include "ClientUI.as"
+namespace spades {
+	namespace client {
+		ClientUIHelper::ClientUIHelper(ClientUI *ui):
+		ui(ui){
+			
+		}
+		
+		void ClientUIHelper::ClientUIDestroyed() {
+			ui = NULL;
+		}
+	}
+}
+

@@ -57,6 +57,8 @@ namespace spades {
 		class TCProgressView;
 		class ClientPlayer;
 		
+		class ClientUI;
+		
 		class Client: public IWorldListener, public gui::View {
 			friend class ScoreboardView;
 			friend class LimboView;
@@ -80,6 +82,8 @@ namespace spades {
 			NetClient *net;
 			std::string playerName;
 			IStream *logStream;
+			
+			Handle<ClientUI> scriptedUI;
 			
 			ServerAddress hostname;
 			

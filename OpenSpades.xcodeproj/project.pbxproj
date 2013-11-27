@@ -243,6 +243,9 @@
 		E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */; };
 		E8F74CF2183FBB070085AA54 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF0183FBB070085AA54 /* MainScreenHelper.cpp */; };
 		E8F74CF51840D4CC0085AA54 /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF31840D4CC0085AA54 /* Config.cpp */; };
+		E8F74CF81845C5000085AA54 /* ClientUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF61845C5000085AA54 /* ClientUI.cpp */; };
+		E8F74CFB1845C64B0085AA54 /* ClientUIHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF91845C64B0085AA54 /* ClientUIHelper.cpp */; };
+		E8F74CFD1845D4D00085AA54 /* ClientUIHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -761,6 +764,11 @@
 		E8F74CEE183FBA9C0085AA54 /* MainScreenHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScreenHelper.h; sourceTree = "<group>"; };
 		E8F74CF0183FBB070085AA54 /* MainScreenHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScreenHelper.cpp; sourceTree = "<group>"; };
 		E8F74CF31840D4CC0085AA54 /* Config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Config.cpp; sourceTree = "<group>"; };
+		E8F74CF61845C5000085AA54 /* ClientUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClientUI.cpp; sourceTree = "<group>"; };
+		E8F74CF71845C5000085AA54 /* ClientUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientUI.h; sourceTree = "<group>"; };
+		E8F74CF91845C64B0085AA54 /* ClientUIHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClientUIHelper.cpp; sourceTree = "<group>"; };
+		E8F74CFA1845C64B0085AA54 /* ClientUIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientUIHelper.h; sourceTree = "<group>"; };
+		E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ClientUIHelper.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1187,6 +1195,7 @@
 				E81CE4A4183F7A3000F22685 /* IFont.cpp */,
 				E8F74CF0183FBB070085AA54 /* MainScreenHelper.cpp */,
 				E8F74CF31840D4CC0085AA54 /* Config.cpp */,
+				E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */,
 			);
 			name = ScriptBindings;
 			path = Sources/ScriptBindings;
@@ -1402,6 +1411,10 @@
 				E80B28CC17AFCCC70056179E /* PaletteView.h */,
 				E80B28D117AFF77B0056179E /* TCProgressView.cpp */,
 				E80B28D217AFF77E0056179E /* TCProgressView.h */,
+				E8F74CF61845C5000085AA54 /* ClientUI.cpp */,
+				E8F74CF71845C5000085AA54 /* ClientUI.h */,
+				E8F74CF91845C64B0085AA54 /* ClientUIHelper.cpp */,
+				E8F74CFA1845C64B0085AA54 /* ClientUIHelper.h */,
 			);
 			name = "Client Main";
 			sourceTree = "<group>";
@@ -1706,6 +1719,7 @@
 				E8CF03AB178EDF74000683D4 /* GLRenderer.cpp in Sources */,
 				E8CF03AE178EDFCD000683D4 /* IGLDevice.cpp in Sources */,
 				E8CF03B2178EE300000683D4 /* Thread.cpp in Sources */,
+				E8F74CFB1845C64B0085AA54 /* ClientUIHelper.cpp in Sources */,
 				E8CF03BD178EE502000683D4 /* SDLGLDevice.cpp in Sources */,
 				E8CF03BF178EE50E000683D4 /* Main.cpp in Sources */,
 				E8CF03C3178EE6D8000683D4 /* Client.cpp in Sources */,
@@ -1797,6 +1811,7 @@
 				E8D88AB1179C3004004C2451 /* GLQuadRenderer.cpp in Sources */,
 				E8D88AB4179C45B7004C2451 /* GLLensFilter.cpp in Sources */,
 				E8E44686179CC4FF00BE8855 /* IBitmapCodec.cpp in Sources */,
+				E8F74CFD1845D4D00085AA54 /* ClientUIHelper.cpp in Sources */,
 				E8E44689179CC65900BE8855 /* TargaReader.cpp in Sources */,
 				E8E4468C179CCF5500BE8855 /* FltkImageReader.cpp in Sources */,
 				E8E44695179D19DC00BE8855 /* MainWindowHandler.cpp in Sources */,
@@ -1816,6 +1831,7 @@
 				E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */,
 				E80B286E17A3B0580056179E /* ConcurrentDispatch.cpp in Sources */,
 				E80B287117A4CA2D0056179E /* GLOptimizedVoxelModel.cpp in Sources */,
+				E8F74CF81845C5000085AA54 /* ClientUI.cpp in Sources */,
 				E80B288117A516D70056179E /* shapes.cc in Sources */,
 				E80B288217A516D70056179E /* advancing_front.cc in Sources */,
 				E80B288317A516D70056179E /* cdt.cc in Sources */,
