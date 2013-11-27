@@ -197,6 +197,8 @@ namespace spades {
 			flashlightOn = false;
 			lastKills = 0;
 			
+			renderer->SetGameMap(NULL);
+			
 			logStream = NULL;
 			
 			localFireVibrationTime = -1.f;
@@ -452,7 +454,7 @@ namespace spades {
 				if(net->GetStatus() == NetClientStatusConnected)
 					net->DoEvents(0);
 				else
-					net->DoEvents(30);
+					net->DoEvents(10);
 			}catch(const std::exception& ex){
 				if(net->GetStatus() == NetClientStatusNotConnected){
 					SPLog("Disconnected because of error:\n%s", ex.what());
@@ -2116,11 +2118,17 @@ namespace spades {
 			Vector2 siz;
 			Vector2 scrSize = {renderer->ScreenWidth(),
 				renderer->ScreenHeight()};
+			
+			
+			renderer->SetColor(MakeVector4(0, 0, 0, 1));
+			img = renderer->RegisterImage("Gfx/White.tga");
+			renderer->DrawImage(img, AABB2(0, 0, siz.x, siz.y));
+			
 			renderer->SetColor(MakeVector4(1, 1, 1, 1.));
-			img = renderer->RegisterImage("Gfx/Splash.jpg");
+			img = renderer->RegisterImage("Gfx/Title/Logo.png");
 			
 			siz = MakeVector2(img->GetWidth(), img->GetHeight());
-			siz *= scrSize.x / siz.x;
+			siz *= scrSize.x / siz.x * 0.5f;
 			siz *= std::min(1.f, scrSize.y / siz.y);
 			
 			renderer->DrawImage(img, AABB2((scrSize.x - siz.x) * .5f,
@@ -2142,7 +2150,7 @@ namespace spades {
 			
 			DrawSplash();
 			
-			IFont *font = designFont;
+			IFont *font = textFont;
 			std::string str = "NOW LOADING";
 			Vector2 size = font->Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
@@ -2577,57 +2585,28 @@ namespace spades {
 				// no world; loading?
 				DrawSplash();
 				
-				float fade = std::min(1.f, timeSinceInit * 2.f);
-				
-				// background
 				Handle<IImage> img;
-				float bgSize = std::max(scrWidth, scrHeight);
-				renderer->SetColor(MakeVector4(1, 1, 1, .4 * fade));
-				img = renderer->RegisterImage("Gfx/CircleGradient.png");
-				
-				renderer->DrawImage(img, AABB2((scrWidth - bgSize) * .5f,
-											   (scrHeight - bgSize) * .5f,
-											   bgSize, bgSize));
-				
-				renderer->SetColor(MakeVector4(.1, .1, .1, .8 * fade));
-				img = renderer->RegisterImage("Gfx/White.tga");
-				renderer->DrawImage(img, AABB2(0,0,scrWidth,scrHeight));
-				
-				
-				// loading window
-				
-				renderer->SetColor(MakeVector4(1, 1, 1, fade));
-				
-				float wndX, wndY;
-				img = renderer->RegisterImage("Gfx/LoadingWindow.png");
-				
-				wndX = (scrWidth - img->GetWidth()) * .5f;
-				wndY = (scrHeight - img->GetHeight()) * .5f;
-				wndX = floorf(wndX); wndY = floorf(wndY);
-				
-				renderer->DrawImage(img, MakeVector2(wndX, wndY));
-				
-				
-				renderer->SetColor(MakeVector4(1, 1, 1, .2 * fade));
-				img = renderer->RegisterImage("Gfx/LoadingWindowGlow.png");
-				
-				renderer->DrawImage(img, AABB2((scrWidth - 512.f) * .5f,
-											   (scrHeight - 256.f) * .5f,
-											   512.f, 256.f));
-				
-				
-				renderer->SetColor(MakeVector4(1, 1, 1, fade));
-				img = renderer->RegisterImage("Gfx/LoadingStripe.png");
-				float scrX = time * 32.f;
-				scrX = fmodf(scrX, 16.f);
-				
-				renderer->DrawImage(img,
-									MakeVector2(wndX+11, wndY+37),
-									AABB2(-scrX, 0, 218,14));
 				
 				std::string msg = net->GetStatusString();
 				font = textFont;
-				font->Draw(msg, MakeVector2(wndX + 8.f, wndY + 8.f), 1.f, MakeVector4(0,0,0,fade));
+				Vector2 textSize = font->Measure(msg);
+				font->Draw(msg, MakeVector2(scrWidth - 16.f, scrHeight - 24.f) - textSize, 1.f, MakeVector4(1,1,1,0.95f));
+				
+				img = renderer->RegisterImage("Gfx/White.tga");
+				float pos = timeSinceInit / 3.6f;
+				pos -= floorf(pos);
+				pos = 1.f - pos * 2.0f;
+				for(float v = 0; v < 0.6f; v += 0.14f) {
+					float p = pos + v;
+					if(p < 0.01f || p > .99f) continue;
+					p = asin(p * 2.f - 1.f);
+					p = p / (float)M_PI + 0.5f;
+					
+					float op = p * (1.f - p) * 4.f;
+					renderer->SetColor(MakeVector4(1.f, 1.f, 1.f, op));
+					renderer->DrawImage(img, AABB2(scrWidth - 236.f + p * 234.f, scrHeight - 18.f, 4.f, 4.f));
+				}
+				
 			}
 			
 			centerMessageView->Draw();
