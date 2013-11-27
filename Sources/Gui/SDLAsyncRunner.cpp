@@ -26,7 +26,8 @@
 
 namespace spades {
 	namespace gui {
-		SDLAsyncRunner::SDLAsyncRunner(){
+		SDLAsyncRunner::SDLAsyncRunner():
+		rendererErrorOccured(false){
 			currentView = NULL;
 		}
 		
@@ -39,6 +40,9 @@ namespace spades {
 			SDLAsyncRunner *runner;
 			client::IRenderer *renderer;
 			client::IAudioDevice *audio;
+			virtual ~ClientThread() {
+				renderer->Release();
+			}
 			virtual void Run() {
 				SPLog("Starting Client Thread");
 				runner->ClientThreadProc(renderer, audio);
@@ -48,83 +52,91 @@ namespace spades {
 		
 		void SDLAsyncRunner::RunClientLoop(client::IRenderer *renderer,
 										   client::IAudioDevice *audio) {
-			client::AsyncRenderer asyncRenderer(renderer,
+			client::AsyncRenderer *asyncRenderer = new client::AsyncRenderer(renderer,
 												DispatchQueue::GetThreadQueue());
 			modState = 0;
-			ClientThread cliThread;
-			cliThread.runner = this;
-			cliThread.renderer = &asyncRenderer;
-			cliThread.audio = audio;
-			cliThread.Start();
+			ClientThread *cliThread = new ClientThread();
+			cliThread->runner = this;
+			cliThread->renderer = asyncRenderer;
+			cliThread->audio = audio;
+			cliThread->Start();
 			
 			SPLog("Main event loop started");
-			while(cliThread.IsAlive()) {
-				
-				
-				modState = SDLRunner::GetModState();
-				
-				if(currentView){
+			try{
+				while(cliThread->IsAlive()) {
 					
-					class SDLEventDispatch: public ConcurrentDispatch {
-						SDLAsyncRunner *runner;
-						SDL_Event ev;
-					public:
-						SDLEventDispatch(SDLAsyncRunner *runner,
-										 const SDL_Event& ev):
-						runner(runner),
-						ev(ev){
-							
-						}
-						virtual void Run() {
-							View *view = runner->currentView;
-							if(view){
-								runner->ProcessEvent(ev, view);
+					
+					modState = SDLRunner::GetModState();
+					
+					if(currentView){
+						
+						class SDLEventDispatch: public ConcurrentDispatch {
+							SDLAsyncRunner *runner;
+							SDL_Event ev;
+						public:
+							SDLEventDispatch(SDLAsyncRunner *runner,
+											 const SDL_Event& ev):
+							runner(runner),
+							ev(ev){
+								
 							}
-						}
-					};
-					
-					SDL_Event event;
-					
-					if(SDL_WaitEvent(&event)){
-						{
-							SDLEventDispatch *disp = new SDLEventDispatch(this, event);
+							virtual void Run() {
+								View *view = runner->currentView;
+								if(view){
+									runner->ProcessEvent(ev, view);
+								}
+							}
+						};
+						
+						SDL_Event event;
+						
+						if(SDL_WaitEvent(&event)){
+							{
+								SDLEventDispatch *disp = new SDLEventDispatch(this, event);
+								
+								// FIXME: cliQueue may be deleted..
+								if(cliQueue){
+									disp->StartOn(cliQueue);
+									disp->Release();
+								}else{
+									delete disp;
+								}
+							}
 							
-							// FIXME: cliQueue may be deleted..
-							if(cliQueue){
-								disp->StartOn(cliQueue);
-								disp->Release();
-							}else{
-								delete disp;
+							while(SDL_PollEvent(&event)) {
+								SDLEventDispatch *disp = new SDLEventDispatch(this, event);
+								
+								// FIXME: cliQueue may be deleted..
+								if(cliQueue){
+									disp->StartOn(cliQueue);
+									disp->Release();
+								}else{
+									delete disp;
+								}
 							}
 						}
 						
-						while(SDL_PollEvent(&event)) {
-							SDLEventDispatch *disp = new SDLEventDispatch(this, event);
-							
-							// FIXME: cliQueue may be deleted..
-							if(cliQueue){
-								disp->StartOn(cliQueue);
-								disp->Release();
-							}else{
-								delete disp;
-							}
+						
+						
+					}else{
+						SDL_Event event;
+						SDL_WaitEvent(&event);
+						
+						if(event.type == SDL_QUIT){
+							break;
 						}
 					}
 					
-					
-					
-				}else{
-					SDL_Event event;
-					SDL_WaitEvent(&event);
-					
-					if(event.type == SDL_QUIT){
-						break;
-					}
+					DispatchQueue::GetThreadQueue()->ProcessQueue();
 				}
-				
-				DispatchQueue::GetThreadQueue()->ProcessQueue();
+			}catch(const std::exception& ex){
+				rendererErrorOccured = true;
+				SPLog("Renderer error:\n%s", ex.what());
+				cliThread->MarkForAutoDeletion();
+				SPLog("Main event loop terminated");
+				throw;
 			}
-			
+				
 			SPLog("Main event loop ended");
 			if(!clientError.empty()){
 				SPLog("Client reported an error: \n%s",
@@ -145,7 +157,7 @@ namespace spades {
 				bool lastShift = false;
 				bool lastCtrl = false;
 				
-				while(running){
+				while(running && !rendererErrorOccured){
 					
 					
 					DispatchQueue::GetThreadQueue()->ProcessQueue();
@@ -154,7 +166,7 @@ namespace spades {
 					view->RunFrame((float)dt / 1000.f);
 					ot += dt;
 					
-					if(view->WantsToBeClosed()){
+					if(view->WantsToBeClosed() || rendererErrorOccured){
 						view->Closing();
 						running = false;
 						break;

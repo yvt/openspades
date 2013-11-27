@@ -35,6 +35,7 @@ namespace spades {
 			DispatchQueue *cliQueue;
 			int modState;
 			std::string clientError;
+			bool volatile rendererErrorOccured;
 		protected:
 			virtual int GetModState() { return modState; }
 			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
