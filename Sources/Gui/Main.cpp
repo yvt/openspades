@@ -33,6 +33,7 @@
 #include <Core/ServerAddress.h>
 #include "ErrorDialog.h"
 #include "Runner.h"
+#include <Client/GameMap.h>
 #include <Client/Client.h>
 
 #include <Core/VoxelModel.h>
@@ -139,7 +140,7 @@ namespace spades {
 		runner.RunProtected();
 	}
 }
-#include "GameMap.h"
+
 int main(int argc, char ** argv)
 {
 	
