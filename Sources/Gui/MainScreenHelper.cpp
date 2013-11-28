@@ -26,6 +26,7 @@
 #include <curl/curl.h>
 #include <json/json.h>
 #include "MainScreen.h"
+#include <algorithm>
 
 #define SERVICE_URL	"http://services.buildandshoot.com/serverlist.json"
 
