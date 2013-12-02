@@ -26,10 +26,11 @@
 #include <curl/curl.h>
 #include <json/json.h>
 #include "MainScreen.h"
+#include <Core/Settings.h>
 
 #include "MainWindow.h" // for credits
 
-#define SERVICE_URL	"http://services.buildandshoot.com/serverlist.json"
+SPADES_SETTING(cl_serverListUrl, "http://services.buildandshoot.com/serverlist.json");
 
 namespace spades {
 	namespace gui {
@@ -93,7 +94,7 @@ namespace spades {
 					if( cHandle ) {
 						try{
 							curl_easy_setopt( cHandle, CURLOPT_USERAGENT, OpenSpades_VER_STR );
-							curl_easy_setopt( cHandle, CURLOPT_URL, SERVICE_URL );
+							curl_easy_setopt( cHandle, CURLOPT_URL, cl_serverListUrl.CString() );
 							curl_easy_setopt( cHandle, CURLOPT_WRITEFUNCTION, &ServerListQuery::curlWriteCallback );
 							curl_easy_setopt( cHandle, CURLOPT_WRITEDATA, this );
 							if( 0 == curl_easy_perform( cHandle ) ) {

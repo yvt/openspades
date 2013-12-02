@@ -34,9 +34,9 @@ SPADES_SETTING2(cg_protocolVersion, "", "The protocol version to use, 3 = 0.75, 
 SPADES_SETTING(cg_serverlistFilter, "31");
 SPADES_SETTING(cg_serverlistSort, "16385");		//0x4001  (sort on players, descending)
 
-#define SERVICE_URL	"http://services.buildandshoot.com/serverlist.json"
-
 #define COLUMN_CHAR	"\t"
+
+SPADES_SETTING(cl_serverListUrl, "http://services.buildandshoot.com/serverlist.json");
 
 namespace spades
 {
@@ -186,7 +186,7 @@ void Serverbrowser::Run()
 		mBrowser->add( "Fetching servers, please wait..." );
 		mBuffer = "";
 		curl_easy_setopt( cHandle, CURLOPT_USERAGENT, OpenSpades_VER_STR );
-		curl_easy_setopt( cHandle, CURLOPT_URL, SERVICE_URL );
+		curl_easy_setopt( cHandle, CURLOPT_URL, cl_serverListUrl.CString() );
 		curl_easy_setopt( cHandle, CURLOPT_WRITEFUNCTION, &Serverbrowser::curlWriteCallback );
 		curl_easy_setopt( cHandle, CURLOPT_WRITEDATA, this );
 		if( 0 == curl_easy_perform( cHandle ) ) {
