@@ -212,6 +212,93 @@ namespace spades {
 		}
 	}
 	
+	class ConfigNumberFormatter {
+		int digits;
+		string suffix;
+		ConfigNumberFormatter(int digits, string suffix) {
+			this.digits = digits;
+			this.suffix = suffix;
+		}
+		string Format(float value) {
+			if(value < 0.f) {
+				return "-" + Format(-value);
+			}
+			
+			// do rounding
+			float rounding = 0.5f;
+			for(int i = digits; i > 0; i--)
+				rounding *= 0.1f;
+			value += rounding;
+			
+			int intPart = int(value);
+			string s = ToString(intPart);
+			if(digits > 0){
+				s += ".";
+				for(int i = digits; i > 0; i--) {
+					value -= float(intPart);
+					value *= 10.f;
+					intPart = int(value);
+					if(intPart > 9) intPart = 9;
+					s += ToString(intPart);
+				}
+			}
+			s += suffix;
+			return s;
+		}
+	}
+	
+	class ConfigSlider: spades::ui::Slider {
+		ConfigItem@ config;
+		float stepSize;
+		spades::ui::Label@ label;
+		ConfigNumberFormatter@ formatter;
+		
+		ConfigSlider(spades::ui::UIManager manager, string configName,
+			float minValue, float maxValue, float stepValue,
+			ConfigNumberFormatter@ formatter) {
+			super(manager);
+			@config = ConfigItem(configName);
+			this.MinValue = minValue;
+			this.MaxValue = maxValue;
+			this.Value = Clamp(config.FloatValue, minValue, maxValue);
+			this.stepSize = stepValue;
+			@this.formatter = formatter;
+			
+			// compute large change
+			int steps = int((maxValue - minValue) / stepValue);
+			steps = (steps + 9) / 10;
+			this.LargeChange = float(steps) * stepValue;
+			
+			@label = spades::ui::Label(Manager);
+			label.Alignment = Vector2(1.f, 0.5f);
+			AddChild(label);
+			UpdateLabel();
+		}
+		
+		void OnResized() {
+			Slider::OnResized();
+			label.Bounds = AABB2(Size.x, 0.f, 80.f, Size.y);
+		}
+		
+		void UpdateLabel() {
+			label.Text = formatter.Format(config.FloatValue);
+		}
+		
+		void DoRounding() {
+			float v = float(this.Value - this.MinValue);
+			v = floor((v / stepSize) + 0.5) * stepSize;
+			v += float(this.MinValue);
+			this.Value = v;
+		}
+		
+		void OnChanged() {
+			Slider::OnChanged();
+			DoRounding();
+			config = this.Value;
+			UpdateLabel();
+		}
+	}
+	
 	class ConfigHotKeyField: spades::ui::UIElement {
 		ConfigItem@ config;
 		private bool hover;
@@ -420,6 +507,26 @@ namespace spades {
 			return field;
 		}
 		
+		ConfigSlider@ AddSliderField(string caption, string configName,
+			 float minRange, float maxRange, float step,
+			 ConfigNumberFormatter@ formatter, bool enabled = true) {
+			spades::ui::UIElement@ container = CreateItem();
+			
+			spades::ui::Label label(Parent.Manager);
+			label.Text = caption;
+			label.Alignment = Vector2(0.f, 0.5f);
+			label.Bounds = AABB2(10.f, 0.f, 300.f, 32.f);
+			container.AddChild(label);
+			
+			ConfigSlider slider(Parent.Manager, configName, minRange, maxRange, step,
+				formatter);
+			slider.Bounds = AABB2(FieldX, 8.f, FieldWidth - 80.f, 16.f);
+			slider.Enable = enabled;
+			container.AddChild(slider);
+			
+			return slider;
+		}
+		
 		void AddControl(string caption, string configName, bool enabled = true) {
 			spades::ui::UIElement@ container = CreateItem();
 			
@@ -485,6 +592,9 @@ namespace spades {
 			layouter.AddToggleField("Ragdoll", "cg_ragdoll");
 			
 			layouter.AddHeading("Misc");
+			layouter.AddSliderField("Field of View", "cg_fov", 30, 90, 1,
+				ConfigNumberFormatter(0, " deg"));
+			layouter.AddToggleField("Weapon Spread Guide", "cg_debugAim");
 			layouter.FinishLayout();
 			// cg_fov, cg_minimapSize
 		}
@@ -499,6 +609,10 @@ namespace spades {
 			layouter.AddControl("Attack", "cg_keyAttack");
 			layouter.AddControl("Alt. Attack", "cg_keyAltAttack");
 			layouter.AddToggleField("Hold Aim Down Sight", "cg_holdAimDownSight");
+			layouter.AddSliderField("Mouse Sensitivity", "cg_mouseSensitivity", 0.1, 10, 0.1,
+				ConfigNumberFormatter(1, "x"));
+			layouter.AddSliderField("ADS Mouse Sens. Scale", "cg_zoomedMouseSensScale", 0.05, 3, 0.05,
+				ConfigNumberFormatter(2, "x"));
 			layouter.AddControl("Reload", "cg_keyReloadWeapon");
 			layouter.AddControl("Capture Color", "cg_keyCaptureColor");
 			layouter.AddControl("Equip Spade", "cg_keyToolSpade");
