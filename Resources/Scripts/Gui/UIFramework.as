@@ -42,6 +42,8 @@ namespace spades {
 			private PasteClipboardEventHandler@ clipboardEventHandler;
 			
 			private Timer@[] timers = {};
+			private KeyRepeatManager keyRepeater;
+			private KeyRepeatManager charRepeater;
 			
 			Renderer@ Renderer {
 				get final { return renderer; }
@@ -60,6 +62,9 @@ namespace spades {
 				
 				@DefaultCursor = Cursor(this, renderer.RegisterImage("Gfx/UI/Cursor.png"), Vector2(8.f, 8.f));
 				MouseCursorPosition = Vector2(renderer.ScreenWidth * 0.5f, renderer.ScreenHeight * 0.5f);
+				
+				keyRepeater.handler = KeyRepeatEventHandler(this.HandleKeyInner);
+				charRepeater.handler = KeyRepeatEventHandler(this.HandleCharInner);
 			}
 			
 			private MouseButton TranslateMouseButton(string key){
@@ -119,6 +124,12 @@ namespace spades {
 				}
 			}
 			
+			// forces key repeat to stop.
+			void KeyPanic() {
+				keyRepeater.KeyUp();
+				charRepeater.KeyUp();
+			}
+			
 			void KeyEvent(string key, bool down) {
 				if(key.length == 0){
 					return;
@@ -165,26 +176,42 @@ namespace spades {
 					return;
 				}
 				
+				if(down) {
+					HandleKeyInner(key);
+					keyRepeater.KeyDown(key);
+				}else{
+					keyRepeater.KeyUp();
+					charRepeater.KeyUp();
+					UIElement@ e = ActiveElement;
+					if(e !is null) {
+						e.KeyUp(key);
+					} 
+				}
+			}
+			
+			void CharEvent(string chr) {
+				charRepeater.KeyDown(chr);
+				HandleCharInner(chr);
+			}
+			
+			private void HandleKeyInner(string key) {
 				{
 					UIElement@ e = ActiveElement;
 					if(e !is null) {
-						if(down) {
-							e.KeyDown(key);
-						} else {
-							e.KeyUp(key);
-						}
-					} else if(down) {
+						e.KeyDown(key);
+					} else {
 						ProcessHotKey(key);
 					}
 				}
 			}
 			
-			void CharEvent(string chr) {
+			private void HandleCharInner(string chr) {
 				UIElement@ e = ActiveElement;
 				if(e !is null) {
 					e.KeyPress(chr);
 				}
 			}
+			
 			
 			void ProcessHotKey(string key) {
 				if(RootElement.Visible) {
@@ -234,6 +261,8 @@ namespace spades {
 				for(int i = timers.length - 1; i >= 0; i--) {
 					timers[i].RunFrame(dt);
 				}
+				keyRepeater.RunFrame(dt);
+				charRepeater.RunFrame(dt);
 				Time += dt;
 			}
 			
@@ -259,6 +288,30 @@ namespace spades {
 			}
 		}
 		
+		funcdef void KeyRepeatEventHandler(string key);
+		class KeyRepeatManager {
+			string lastKey;
+			float nextDelay;
+			KeyRepeatEventHandler@ handler;
+			
+			void KeyDown(string key) {
+				lastKey = key;
+				nextDelay = 0.2f;
+			}
+			void KeyUp() {
+				lastKey = "";
+			}
+			
+			void RunFrame(float dt) {
+				if(lastKey.length == 0)
+					return;
+				nextDelay -= dt;
+				if(nextDelay < 0.f) {
+					handler(lastKey);
+					nextDelay = Max(nextDelay + 0.06f, 0.f);
+				}
+			}
+		}
 		
 		funcdef void TimerTickEventHandler(Timer@);
 		class Timer {

@@ -96,6 +96,7 @@ namespace spades {
 				activeUI.Bounds = manager.RootElement.Bounds;
 				manager.RootElement.AddChild(activeUI);
 			}
+			manager.KeyPanic();
 		}
 		spades::ui::UIElement@ get_ActiveUI(){ 
 			return activeUI; 
@@ -144,7 +145,8 @@ namespace spades {
 			{
 				spades::ui::Label label(Manager);
 				label.BackgroundColor = Vector4(0, 0, 0, 0.5f);
-				label.Bounds = Bounds;
+				label.Bounds = AABB2(0.f, 0.f, 
+					Manager.Renderer.ScreenWidth, Manager.Renderer.ScreenHeight);
 				AddChild(label);
 			}
 			

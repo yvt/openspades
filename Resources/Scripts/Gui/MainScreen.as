@@ -64,6 +64,9 @@ namespace spades {
 			// returned from the client game, so reload the server list.
 			if(mainMenu !is null)
 				mainMenu.LoadServerList();
+			
+			if(manager !is null)	
+				manager.KeyPanic();
 		}
 		
 		void MouseEvent(float x, float y) {
