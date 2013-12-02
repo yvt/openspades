@@ -67,6 +67,7 @@ namespace spades {
 			friend class PaletteView;
 			friend class TCProgressView;
 			friend class ClientPlayer;
+			friend class ClientUI;
 			
 			/** used to keep the input state of keypad so that
 			 * after user user pressed left and right, and 
@@ -115,18 +116,6 @@ namespace spades {
 			// chat
 			ChatWindow *chatWindow;
 			ChatWindow *killfeedWindow;
-			enum keyDest_t {
-				kd_Game,
-				kd_Chat,
-				kd_ExitQuestion,
-			};
-			keyDest_t keyDest;
-			bool chatGlobal;
-			std::string chatText;
-			void ActivateChatTextEditor(bool global);
-			void ChatKeyEvent(const std::string& key);
-			void ChatCharEvent(const std::string& key);
-			void CloseChatTextEditor();
 			
 			// player state
 			PlayerInput playerInput;

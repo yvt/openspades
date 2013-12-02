@@ -19,6 +19,7 @@
  
  */
 #include "ClientUIHelper.h"
+#include "ClientUI.h"
 
 namespace spades {
 	namespace client {
@@ -29,6 +30,16 @@ namespace spades {
 		
 		void ClientUIHelper::ClientUIDestroyed() {
 			ui = NULL;
+		}
+		
+		void ClientUIHelper::SayGlobal(const std::string &text) {
+			if(!ui) return;
+			ui->SendChat(text, true);
+		}
+		
+		void ClientUIHelper::SayTeam(const std::string &text){
+			if(!ui) return;
+			ui->SendChat(text, false);
 		}
 	}
 }

@@ -34,6 +34,9 @@ namespace spades {
 		public:
 			ClientUIHelper(ClientUI *);
 			void ClientUIDestroyed();
+			
+			void SayGlobal(const std::string&);
+			void SayTeam(const std::string&);
 		};
 	}
 }

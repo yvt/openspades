@@ -178,7 +178,6 @@ namespace spades {
 			
 			chatWindow = new ChatWindow(this, GetRenderer(), textFont, false);
 			killfeedWindow = new ChatWindow(this, GetRenderer(), textFont, true);
-			keyDest = kd_Game;
 			
 			hurtRingView = new HurtRingView(this);
 			centerMessageView = new CenterMessageView(this, bigTextFont);
@@ -221,6 +220,7 @@ namespace spades {
 				return;
 			}
 			
+			scriptedUI->CloseUI();
 			
 			RemoveAllCorpses();
 			lastHealth = 0;
@@ -633,7 +633,7 @@ namespace spades {
 					net->SendPlayerInput(inp);
 					net->SendWeaponInput(weapInput);
 					
-					PlayerInput actualInput = player->GetInput();
+					//PlayerInput actualInput = player->GetInput();
 					WeaponInput actualWeapInput = player->GetWeaponInput();
 					
 					if(actualWeapInput.secondary && player->IsToolWeapon() &&
@@ -904,11 +904,9 @@ namespace spades {
 				return;
 			}
 			
-			if( kd_Chat == keyDest || (kd_Game == keyDest && ch == "/") ) {
-				if( kd_Game == keyDest ) {
-					ActivateChatTextEditor(false);
-				}
-				ChatCharEvent( ch );
+			
+			if(ch == "/") {
+				scriptedUI->EnterCommandWindow();
 			}
 		}
 		
@@ -946,34 +944,18 @@ namespace spades {
 				return;
 			}
 			
-			if( kd_Chat == keyDest ){
-				if( down ) {
-					ChatKeyEvent(name);
-				}
-				return;
-			} else if( kd_ExitQuestion == keyDest ) {
-				if( down ) {
-					if( "y" == name || "Y" == name ) {
-						readyToClose = true;
-					} else if( "n" == name || "N" == name || "Escape" == name ) {
-						keyDest = kd_Game;
-					}
-				}
-				return;
-			}
-			
 			if(name == "Escape"){
 				if(down){
 					if(inGameLimbo){
 						inGameLimbo = false;
 					}else{
-						if(GetWorld() == NULL)
+						if(GetWorld() == NULL){
 							// no world = loading now.
 							// in this case, quit the game immediately.
 							readyToClose = true;
+						}
 						else {
 							scriptedUI->EnterClientMenu();
-							//keyDest = kd_ExitQuestion;
 						}
 					}
 				}
@@ -1120,10 +1102,10 @@ namespace spades {
 						}
 					}else if(CheckKey(cg_keyGlobalChat, name) && down){
 						// global chat
-						ActivateChatTextEditor(true);
+						scriptedUI->EnterGlobalChatWindow();
 					}else if(CheckKey(cg_keyTeamChat, name) && down){
 						// team chat
-						ActivateChatTextEditor(false);
+						scriptedUI->EnterTeamChatWindow();
 					}else if(CheckKey(cg_keyCaptureColor, name) && down){
 						CaptureColor();
 					}else if(CheckKey(cg_keyChangeMapScale, name) && down){
@@ -2558,28 +2540,6 @@ namespace spades {
 				if(IsLimboViewActive())
 					limbo->Draw();
 				
-				// FIXME: when to draw chat editor?
-				if( kd_Chat == keyDest ){
-					Vector2 pos;
-					pos.x = 8.f;
-					pos.y = scrHeight - 24.f;
-					
-					std::string str;
-					if(chatGlobal)
-						str = "Global Chat: ";
-					else
-						str = "Team Chat: ";
-					str += chatText;
-					str += "_";
-
-					textFont->DrawShadow(str, pos, 1.f, MakeVector4(1,1,1,1), MakeVector4(0,0,0,0.5));
-				} else if( kd_ExitQuestion == keyDest ) {
-					float scale = 1.5f;
-					Vector2 tw = textFont->Measure( "Quit, are you sure?" ) * scale;
-					bigTextFont->DrawShadow( "Quit, are you sure?", MakeVector2( scrWidth * 0.5f - tw.x, scrHeight * 0.5f - tw.y * 1.1f ), scale, MakeVector4( 1,0,0,1 ), MakeVector4(0,0,0,0.5) );
-					tw = textFont->Measure( "Y / N" ) * scale;
-					bigTextFont->DrawShadow( "Y / N", MakeVector2( scrWidth * 0.5f - tw.x, scrHeight * 0.5f + tw.y * 1.1f ), scale, MakeVector4( 1,0,0,1 ), MakeVector4(0,0,0,0.5) );
-				}
 				
 			}else{
 				// no world; loading?
@@ -2646,45 +2606,6 @@ namespace spades {
 			NetLog("%s", msg.c_str());
 			if(msg.find(playerName) != std::string::npos){
 				printf("Mention: %s\n", msg.c_str());
-			}
-		}
-		
-		void Client::ActivateChatTextEditor(bool global) {
-			keyDest = kd_Chat;
-			chatGlobal = global;
-			
-			playerInput = PlayerInput();
-			weapInput = WeaponInput();
-			keypadInput = KeypadInput();
-		}
-		
-		void Client::CloseChatTextEditor() {
-			keyDest = kd_Game;
-			chatText.clear();
-		}
-		
-		void Client::ChatCharEvent(const std::string& ch){
-			SPAssert(kd_Chat == keyDest);
-			chatText += ch;
-		}
-		
-		void Client::ChatKeyEvent(const std::string &key) {
-			SPAssert(kd_Chat == keyDest);
-			
-			if(key == "BackSpace"){
-				if(!chatText.empty())
-					chatText = chatText.substr(0, chatText.size() - 1);
-			}else if(key == "Enter"){
-				if(!chatText.empty()){
-					net->SendChat(chatText, chatGlobal);
-				}
-				CloseChatTextEditor();
-			}else if(key == "Left"){
-				// TODO: cursor
-			}else if(key == "Right"){
-				// TODO: cursor
-			}else if(key == "Escape"){
-				CloseChatTextEditor();
 			}
 		}
 		

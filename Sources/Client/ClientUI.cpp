@@ -28,6 +28,7 @@
 #include "ClientUIHelper.h"
 #include <Client/Client.h>
 #include <Core/Settings.h>
+#include "NetClient.h"
 
 namespace spades {
 	namespace client {
@@ -60,6 +61,12 @@ namespace spades {
 		ClientUI::~ClientUI(){
 			SPADES_MARK_FUNCTION();
 			helper->ClientUIDestroyed();
+		}
+		
+		void ClientUI::SendChat(const std::string &msg,
+								bool isGlobal) {
+			if(!client) return;
+			client->net->SendChat(msg, isGlobal);
 		}
 		
 		void ClientUI::ClientDestroyed() {
@@ -157,6 +164,46 @@ namespace spades {
 				return;
 			}
 			static ScriptFunction func("ClientUI", "void EnterClientMenu()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
+		}
+		void ClientUI::EnterGlobalChatWindow() {
+			SPADES_MARK_FUNCTION();
+			if(!ui){
+				return;
+			}
+			static ScriptFunction func("ClientUI", "void EnterGlobalChatWindow()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
+		}
+		void ClientUI::EnterTeamChatWindow() {
+			SPADES_MARK_FUNCTION();
+			if(!ui){
+				return;
+			}
+			static ScriptFunction func("ClientUI", "void EnterTeamChatWindow()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
+		}
+		void ClientUI::EnterCommandWindow() {
+			SPADES_MARK_FUNCTION();
+			if(!ui){
+				return;
+			}
+			static ScriptFunction func("ClientUI", "void EnterCommandWindow()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
+		}
+		void ClientUI::CloseUI() {
+			SPADES_MARK_FUNCTION();
+			if(!ui){
+				return;
+			}
+			static ScriptFunction func("ClientUI", "void CloseUI()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
 			c.ExecuteChecked();

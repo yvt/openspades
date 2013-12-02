@@ -22,43 +22,55 @@
 #include <Client/ClientUIHelper.h>
 
 namespace spades {
-	class ClientUIHelperRegistrar: public ScriptObjectRegistrar {
-		
-		
-	public:
-		ClientUIHelperRegistrar():
-		ScriptObjectRegistrar("ClientUIHelper") {}
-		
-		virtual void Register(ScriptManager *manager, Phase phase) {
-			asIScriptEngine *eng = manager->GetEngine();
-			int r;
-			eng->SetDefaultNamespace("spades");
-			switch(phase){
-				case PhaseObjectType:
-					r = eng->RegisterObjectType("ClientUIHelper",
-												0, asOBJ_REF);
-					manager->CheckError(r);
-					break;
-				case PhaseObjectMember:
-					r = eng->RegisterObjectBehaviour("ClientUIHelper",
-													 asBEHAVE_ADDREF,
-													 "void f()",
-													 asMETHOD(client::ClientUIHelper, AddRef),
-													 asCALL_THISCALL);
-					manager->CheckError(r);
-					r = eng->RegisterObjectBehaviour("ClientUIHelper",
-													 asBEHAVE_RELEASE,
-													 "void f()",
-													 asMETHOD(client::ClientUIHelper, Release),
-													 asCALL_THISCALL);
-					manager->CheckError(r);
-					break;
-				default:
-					break;
+	namespace client {
+		class ClientUIHelperRegistrar: public ScriptObjectRegistrar {
+			
+			
+		public:
+			ClientUIHelperRegistrar():
+			ScriptObjectRegistrar("ClientUIHelper") {}
+			
+			virtual void Register(ScriptManager *manager, Phase phase) {
+				asIScriptEngine *eng = manager->GetEngine();
+				int r;
+				eng->SetDefaultNamespace("spades");
+				switch(phase){
+					case PhaseObjectType:
+						r = eng->RegisterObjectType("ClientUIHelper",
+													0, asOBJ_REF);
+						manager->CheckError(r);
+						break;
+					case PhaseObjectMember:
+						r = eng->RegisterObjectBehaviour("ClientUIHelper",
+														 asBEHAVE_ADDREF,
+														 "void f()",
+														 asMETHOD(client::ClientUIHelper, AddRef),
+														 asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectBehaviour("ClientUIHelper",
+														 asBEHAVE_RELEASE,
+														 "void f()",
+														 asMETHOD(client::ClientUIHelper, Release),
+														 asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("ClientUIHelper",
+													  "void SayGlobal(const string& in)",
+													  asMETHOD(ClientUIHelper, SayGlobal),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("ClientUIHelper",
+													  "void SayTeam(const string& in)",
+													  asMETHOD(ClientUIHelper, SayTeam),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						break;
+					default:
+						break;
+				}
 			}
-		}
-	};
-	
-	static ClientUIHelperRegistrar registrar;
+		};
+		
+		static ClientUIHelperRegistrar registrar;
+	}
 }
 

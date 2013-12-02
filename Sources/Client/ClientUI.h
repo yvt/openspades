@@ -33,7 +33,7 @@ namespace spades {
 		class Client;
 		class ClientUIHelper;
 		class ClientUI: public RefCountedObject {
-			friend class MainScreenHelper;
+			friend class ClientUIHelper;
 			Handle<client::IRenderer> renderer;
 			Handle<client::IAudioDevice> audioDevice;
 			Handle<client::IFont> font;
@@ -43,6 +43,8 @@ namespace spades {
 			
 			// weak reference
 			Client *client;
+			
+			void SendChat(const std::string&, bool isGlobal);
 			
 		protected:
 			virtual ~ClientUI();
@@ -67,6 +69,10 @@ namespace spades {
 			bool NeedsInput();
 			
 			void EnterClientMenu();
+			void EnterGlobalChatWindow();
+			void EnterTeamChatWindow();
+			void EnterCommandWindow();
+			void CloseUI();
 		};;
 	}
 }
