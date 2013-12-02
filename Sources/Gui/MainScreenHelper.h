@@ -87,6 +87,8 @@ namespace spades {
 			
 			std::string ConnectServer();
 			std::string GetPendingErrorMessage();
+			
+			std::string GetCredits();
 		};
 	}
 }

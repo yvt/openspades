@@ -26,7 +26,7 @@ namespace spades {
 		spades::ui::EventHandler@ Closed;
 		spades::ui::UIElement@ owner;
 		
-		AlertScreen(spades::ui::UIElement@ owner, string text) {
+		AlertScreen(spades::ui::UIElement@ owner, string text, float height = 200.f) {
 			super(owner.Manager);
 			@this.owner = owner;
 			@Font = Manager.RootElement.Font;
@@ -34,7 +34,7 @@ namespace spades {
 			
 			float contentsWidth = 700.f;
 			float contentsLeft = (Manager.Renderer.ScreenWidth - contentsWidth) * 0.5f;
-			contentsHeight = 200.f;
+			contentsHeight = height;
 			contentsTop = (Manager.Renderer.ScreenHeight - contentsHeight) * 0.5f;
 			{
 				spades::ui::Label label(Manager);

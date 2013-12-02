@@ -665,7 +665,7 @@ namespace spades {
 		}
 		
 		private void OnCreditsPressed(spades::ui::UIElement@ sender) {
-			AlertScreen al(this, "Not implemented");
+			AlertScreen al(this, ui.helper.Credits, Min(500.f, Manager.Renderer.ScreenHeight - 100.f));
 			al.Run();
 		}
 		
