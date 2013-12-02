@@ -27,6 +27,7 @@
 #include <json/json.h>
 #include "MainScreen.h"
 #include <Core/Settings.h>
+#include <algorithm>
 
 #include "MainWindow.h" // for credits
 
