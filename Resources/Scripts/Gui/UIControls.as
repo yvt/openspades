@@ -406,6 +406,10 @@ namespace spades {
 					if(key == "a") {
 						SelectAll();
 						return;
+					}else if(key == "v") {
+						manager.Paste(PasteClipboardEventHandler(this.Insert));
+					}else if(key == "c") {
+						manager.Copy(this.SelectedText);
 					}
 				}
 				manager.ProcessHotKey(key);

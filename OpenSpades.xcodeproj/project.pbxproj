@@ -246,6 +246,7 @@
 		E8F74CF81845C5000085AA54 /* ClientUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF61845C5000085AA54 /* ClientUI.cpp */; };
 		E8F74CFB1845C64B0085AA54 /* ClientUIHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF91845C64B0085AA54 /* ClientUIHelper.cpp */; };
 		E8F74CFD1845D4D00085AA54 /* ClientUIHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */; };
+		E8F74CFF184C7D7C0085AA54 /* Clipboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CFE184C753F0085AA54 /* Clipboard.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -769,6 +770,7 @@
 		E8F74CF91845C64B0085AA54 /* ClientUIHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClientUIHelper.cpp; sourceTree = "<group>"; };
 		E8F74CFA1845C64B0085AA54 /* ClientUIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientUIHelper.h; sourceTree = "<group>"; };
 		E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ClientUIHelper.cpp; sourceTree = "<group>"; };
+		E8F74CFE184C753F0085AA54 /* Clipboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Clipboard.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1196,6 +1198,7 @@
 				E8F74CF0183FBB070085AA54 /* MainScreenHelper.cpp */,
 				E8F74CF31840D4CC0085AA54 /* Config.cpp */,
 				E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */,
+				E8F74CFE184C753F0085AA54 /* Clipboard.cpp */,
 			);
 			name = ScriptBindings;
 			path = Sources/ScriptBindings;
@@ -1788,6 +1791,7 @@
 				E834F55F17950E44004EBE88 /* DeflateStream.cpp in Sources */,
 				E834F56517951B1C004EBE88 /* MemoryStream.cpp in Sources */,
 				E834F56817979F5A004EBE88 /* Quake3Font.cpp in Sources */,
+				E8F74CFF184C7D7C0085AA54 /* Clipboard.cpp in Sources */,
 				E834F56B17979FD7004EBE88 /* IFont.cpp in Sources */,
 				E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */,
 				E834F56F1797D934004EBE88 /* ChatWindow.cpp in Sources */,

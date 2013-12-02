@@ -20,6 +20,9 @@
 
 namespace spades {
 	namespace ui {
+	
+		funcdef void PasteClipboardEventHandler(string text);
+		
 		/** Manages all input/output and rendering of the UI framework. */
 		class UIManager {
 			private Renderer@ renderer;
@@ -35,6 +38,8 @@ namespace spades {
 			
 			private UIElement@ mouseCapturedElement;
 			private UIElement@ mouseHoverElement;
+			
+			private PasteClipboardEventHandler@ clipboardEventHandler;
 			
 			private Timer@[] timers = {};
 			
@@ -218,6 +223,13 @@ namespace spades {
 					}
 				}
 				
+				if(clipboardEventHandler !is null) {
+					if(GotClipboardData()) {
+						clipboardEventHandler(GetClipboardData());
+						@clipboardEventHandler = null;
+					}
+				}
+				
 				Timer@[]@ timers = this.timers;
 				for(int i = timers.length - 1; i >= 0; i--) {
 					timers[i].RunFrame(dt);
@@ -236,7 +248,17 @@ namespace spades {
 					c.Render(MouseCursorPosition);
 				}
 			}
+			
+			void Copy(string text) {
+				SetClipboardData(text);
+			}
+			
+			void Paste(PasteClipboardEventHandler@ handler) {
+				RequestClipboardData();
+				@clipboardEventHandler = handler;
+			}
 		}
+		
 		
 		funcdef void TimerTickEventHandler(Timer@);
 		class Timer {
