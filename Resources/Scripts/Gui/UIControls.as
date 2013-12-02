@@ -245,14 +245,23 @@ namespace spades {
 			
 		}
 		
+		class FieldCommand {
+			int index;
+			string oldString;
+			string newString;
+		}
+		
 		class FieldBase: UIElement {
 			bool Dragging = false;
 			EventHandler@ Changed;
-			string Text;
 			string Placeholder;
 			int MarkPosition = 0;
 			int CursorPosition = 0;
 			int MaxLength = 255;
+			
+			private string text;
+			private FieldCommand@[] history;
+			private int historyPos = 0; // index to insert next command
 			
 			Vector4 TextColor = Vector4(1.f, 1.f, 1.f, 1.f);
 			Vector4 DisabledTextColor = Vector4(1.f, 1.f, 1.f, 0.3f);
@@ -267,6 +276,19 @@ namespace spades {
 				IsMouseInteractive = true;
 				AcceptsFocus = true;
 				@this.Cursor = Cursor(Manager, manager.Renderer.RegisterImage("Gfx/UI/IBeam.png"), Vector2(16.f, 16.f));
+			}
+			
+			string Text {
+				get { return text; }
+				set { 
+					text = value;
+					EraseUndoHistory();
+				 }
+			}
+			
+			private void EraseUndoHistory() {
+				history.length = 0;
+				historyPos = 0;
 			}
 			
 			void OnChanged() {
@@ -305,9 +327,62 @@ namespace spades {
 					return Text.substr(SelectionStart, SelectionLength);
 				}
 				set {
-					Text = Text.substr(0, SelectionStart) + value + Text.substr(SelectionEnd);
-					SelectionLength = value.length;
+					FieldCommand cmd;
+					cmd.oldString = this.SelectedText;
+					if(cmd.oldString == value) return; // no change
+					cmd.newString = value;
+					cmd.index = this.SelectionStart;
+					RunFieldCommand(cmd, true, true);
 				}
+			}
+			
+			private void RunFieldCommand(FieldCommand@ cmd, bool autoSelect, bool addHistory) {
+				text = text.substr(0, cmd.index) + cmd.newString + 
+					text.substr(cmd.index + cmd.oldString.length);
+				if(autoSelect)
+					Select(cmd.index, cmd.newString.length);
+				
+				if(addHistory) {
+					history.length = historyPos;
+					history.insertLast(cmd);
+					historyPos += 1;
+					// limit history length
+				}
+				
+			}
+			
+			private void UndoFieldCommand(FieldCommand@ cmd, bool autoSelect) {
+				text = text.substr(0, cmd.index) + cmd.oldString + 
+					text.substr(cmd.index + cmd.newString.length);
+				if(autoSelect)
+					Select(cmd.index, cmd.oldString.length);
+				
+			}
+			
+			private void SetHistoryPos(int index) {
+				int p = historyPos;
+				FieldCommand@[]@ h = history;
+				while(p < index) {
+					RunFieldCommand(h[p], true, false);
+					p++;
+				}
+				while(p > index) {
+					p--;
+					UndoFieldCommand(h[p], true);
+				}
+				historyPos = p;
+			}
+			
+			bool Undo() {
+				if(historyPos == 0) return false;
+				SetHistoryPos(historyPos - 1);
+				return true;
+			}
+			
+			bool Redo() {
+				if(historyPos >= history.length) return false;
+				SetHistoryPos(historyPos + 1);
+				return true;
 			}
 			
 			private int PointToCharIndex(float x) {
@@ -410,6 +485,19 @@ namespace spades {
 						manager.Paste(PasteClipboardEventHandler(this.Insert));
 					}else if(key == "c") {
 						manager.Copy(this.SelectedText);
+					}else if(key == "x") {
+						manager.Copy(this.SelectedText);
+						this.SelectedText = "";
+					}else if(key == "z") {
+						if(manager.IsShiftPressed){
+							if(Redo()) OnChanged();
+						}else{
+							if(Undo()) OnChanged();
+						}
+					}else if(key == "w") {
+						if(Redo()) {
+							OnChanged();
+						}
 					}
 				}
 				manager.ProcessHotKey(key);
