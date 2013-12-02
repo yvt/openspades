@@ -545,6 +545,8 @@ namespace spades {
 			hotkeyItems.insertLast(field); 
 		}
 		
+		// FIXME: generalize these (AddToggleField and AddPlusMinusField) fields
+		
 		void AddToggleField(string caption, string configName, bool enabled = true) {
 			spades::ui::UIElement@ container = CreateItem();
 			
@@ -563,6 +565,36 @@ namespace spades {
 			{
 				ConfigSimpleToggleButton field(Parent.Manager, "OFF", configName, 0);
 				field.Bounds = AABB2(FieldX + FieldWidth * 0.5f, 1.f, FieldWidth * 0.5f, 30.f);
+				field.Enable = enabled;
+				container.AddChild(field);
+			}
+			
+		}
+		
+		void AddPlusMinusField(string caption, string configName, bool enabled = true) {
+			spades::ui::UIElement@ container = CreateItem();
+			
+			spades::ui::Label label(Parent.Manager);
+			label.Text = caption;
+			label.Alignment = Vector2(0.f, 0.5f);
+			label.Bounds = AABB2(10.f, 0.f, 300.f, 32.f);
+			container.AddChild(label);
+			
+			{
+				ConfigSimpleToggleButton field(Parent.Manager, "ON", configName, 1);
+				field.Bounds = AABB2(FieldX, 1.f, FieldWidth * 0.33f, 30.f);
+				field.Enable = enabled;
+				container.AddChild(field);
+			}
+			{
+				ConfigSimpleToggleButton field(Parent.Manager, "REVERSED", configName, -1);
+				field.Bounds = AABB2(FieldX + FieldWidth * 0.33f, 1.f, FieldWidth * 0.34f, 30.f);
+				field.Enable = enabled;
+				container.AddChild(field);
+			}
+			{
+				ConfigSimpleToggleButton field(Parent.Manager, "OFF", configName, 0);
+				field.Bounds = AABB2(FieldX + FieldWidth * 0.67f, 1.f, FieldWidth * 0.33f, 30.f);
 				field.Enable = enabled;
 				container.AddChild(field);
 			}
@@ -594,6 +626,8 @@ namespace spades {
 			layouter.AddHeading("Misc");
 			layouter.AddSliderField("Field of View", "cg_fov", 30, 90, 1,
 				ConfigNumberFormatter(0, " deg"));
+			layouter.AddSliderField("Minimap size", "cg_minimapSize", 128, 256, 8,
+				ConfigNumberFormatter(0, " px"));
 			layouter.AddToggleField("Weapon Spread Guide", "cg_debugAim");
 			layouter.FinishLayout();
 			// cg_fov, cg_minimapSize
@@ -619,7 +653,7 @@ namespace spades {
 			layouter.AddControl("Equip Block", "cg_keyToolBlock");
 			layouter.AddControl("Equip Weapon", "cg_keyToolWeapon");
 			layouter.AddControl("Equip Grenade", "cg_keyToolGrenade");
-			layouter.AddToggleField("Switch Tools by Wheel", "cg_switchToolByWheel");
+			layouter.AddPlusMinusField("Switch Tools by Wheel", "cg_switchToolByWheel");
 			// TODO: mouse sensitivity: cg_mouseSensitivity, cg_zoomedMouseSensScale
 			
 			layouter.AddHeading("Movement");

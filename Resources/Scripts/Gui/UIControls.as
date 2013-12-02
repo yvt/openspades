@@ -1261,7 +1261,7 @@ namespace spades {
 			}
 			
 			void MouseWheel(float delta) {
-				scrollBar.ScrollBy(delta * 3.f);
+				scrollBar.ScrollBy(delta);
 			}
 			
 			private void UnloadAll() {
