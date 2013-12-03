@@ -450,9 +450,9 @@ namespace spades {
 			Vector3 dir2 = GetFront();
 			for(int i =0 ; i < pellets; i++){
 				// AoS 0.75's way (dir2 shouldn't be normalized!)
-				dir2.x += (GetRandom() * 2.f - 1.f) * spread;
-				dir2.y += (GetRandom() * 2.f - 1.f) * spread;
-				dir2.z += (GetRandom() * 2.f - 1.f) * spread;
+				dir2.x += (GetRandom() - GetRandom()) * spread;
+				dir2.y += (GetRandom() - GetRandom()) * spread;
+				dir2.z += (GetRandom() - GetRandom()) * spread;
 				Vector3 dir = dir2.Normalize();
 				
 				// first do map raycast
