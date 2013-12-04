@@ -21,7 +21,7 @@
 #pragma once
 
 #include <Core/IRunnable.h>
-#include "../Imports/SDL.h"
+#include <Imports/SDL.h>
 #include <string>
 #include <Core/ServerAddress.h>
 
@@ -33,7 +33,7 @@ namespace spades {
 	namespace gui {
 		class View;
 		class SDLRunner: public IRunnable {
-			
+			bool mActive;
 		protected:
 			std::string TranslateKey(const SDL_keysym&);
 			std::string TranslateButton(Uint8 b);

@@ -240,7 +240,7 @@ namespace spades {
 		IImage* ChatWindow::imageForIndex( char index )
 		{
 			int real = index - 'a';
-			if( real >= 0 && real < mKillImages.size() ) {
+			if( real >= 0 && real < (int)mKillImages.size() ) {
 				return mKillImages[real];
 			}
 			return NULL;

@@ -208,8 +208,7 @@ namespace spades {
 			}
 			
 			bool BoxFrustrumCull(const AABB3&);
-			bool SphereFrustrumCull(const Vector3& center,
-										float radius);
+			bool SphereFrustrumCull(const Vector3& center, float radius);
 			
 		};
 

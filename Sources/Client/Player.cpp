@@ -846,13 +846,7 @@ namespace spades {
 		Vector3 Player::GetOrigin() {
 			SPADES_MARK_FUNCTION_DEBUG();
 			Vector3 v = eye;
-			float offset;
-			if(input.crouch){
-				offset = .45f;
-			}else{
-				offset = .9f;
-			}
-			v.z += offset;
+			v.z += (input.crouch ? .45f : .9f);
 			v.z += .3f;
 			return v;
 		}
@@ -1202,7 +1196,8 @@ namespace spades {
 			(float)(moveSteps & 1) * .5f;
 		}
 		
-		Player::HitBoxes Player::GetHitBoxes() {
+		Player::HitBoxes Player::GetHitBoxes()
+		{
 			SPADES_MARK_FUNCTION_DEBUG();
 			Player::HitBoxes hb;
 			
@@ -1213,68 +1208,55 @@ namespace spades {
 			
 			// lower axis
 			Matrix4 lower = Matrix4::Translate(GetOrigin());
-			lower = lower * Matrix4::Rotate(MakeVector3(0,0,1),
-											yaw);
+			lower = lower * Matrix4::Rotate(MakeVector3(0,0,1), yaw);
 			
 			Matrix4 torso;
 			
 			if(input.crouch){
 				lower = lower * Matrix4::Translate(0, 0, -0.4f);
 				// lower
-				hb.limbs[0] = AABB3(-.4f, -.15f, 0.5f,
-									0.3f, .3f, 0.5f);
+				hb.limbs[0] = AABB3(-.4f, -.15f, 0.5f, 0.3f, .3f, 0.5f);
 				hb.limbs[0] = lower * hb.limbs[0];
 				
-				hb.limbs[1] = AABB3(.1f, -.15f, 0.5f,
-									0.3f, .3f, 0.5f);
+				hb.limbs[1] = AABB3(.1f, -.15f, 0.5f, 0.3f, .3f, 0.5f);
 				hb.limbs[1] = lower * hb.limbs[1];
 				
 				torso = lower * Matrix4::Translate(0, 0, -0.3f);
 				
 				// torso
-				hb.torso = AABB3(-.4f, -.15f, 0.1f,
-								 .8f, .8f, .6f);
+				hb.torso = AABB3(-.4f, -.15f, 0.1f, .8f, .8f, .6f);
 				hb.torso = torso * hb.torso;
 				
-				hb.limbs[2] = AABB3(-.6f, -.15f, 0.1f,
-									1.2f, .3f, .6f);
+				hb.limbs[2] = AABB3(-.6f, -.15f, 0.1f, 1.2f, .3f, .6f);
 				hb.limbs[2] = torso * hb.limbs[2];
 				
 				// head
-				hb.head = AABB3(-.3f, -.3f, -0.45f,
-								.6f, .6f, 0.6f);
+				hb.head = AABB3(-.3f, -.3f, -0.45f, .6f, .6f, 0.6f);
 				hb.head = Matrix4::Translate(0, 0, -0.15f) * hb.head;
-				hb.head = Matrix4::Rotate(MakeVector3(1,0,0),
-										  pitch) * hb.head;
+				hb.head = Matrix4::Rotate(MakeVector3(1,0,0), pitch) * hb.head;
 				hb.head = Matrix4::Translate(0, 0, 0.15f) * hb.head;
 				hb.head = torso * hb.head;
 			}else{
 				// lower
-				hb.limbs[0] = AABB3(-.4f, -.15f, 0.f,
-									0.3f, .3f, 1.f);
+				hb.limbs[0] = AABB3(-.4f, -.15f, 0.f, 0.3f, .3f, 1.f);
 				hb.limbs[0] = lower * hb.limbs[0];
 				
-				hb.limbs[1] = AABB3(.1f, -.15f, 0.f,
-									0.3f, .3f, 1.f);
+				hb.limbs[1] = AABB3(.1f, -.15f, 0.f, 0.3f, .3f, 1.f);
 				hb.limbs[1] = lower * hb.limbs[1];
 				
 				torso = lower * Matrix4::Translate(0, 0, -1.1f);
 				
 				// torso
-				hb.torso = AABB3(-.4f, -.15f, 0.1f,
-								 .8f, .3f, .9f);
+				hb.torso = AABB3(-.4f, -.15f, 0.1f, .8f, .3f, .9f);
 				hb.torso = torso * hb.torso;
 				
-				hb.limbs[2] = AABB3(-.6f, -.15f, 0.1f,
-								 1.2f, .3f, .9f);
+				hb.limbs[2] = AABB3(-.6f, -.15f, 0.1f, 1.2f, .3f, .9f);
 				hb.limbs[2] = torso * hb.limbs[2];
 				
 				// head
-				hb.head = AABB3(-.3f, -.3f, -0.5f,
-								.6f, .6f, 0.6f);
+				hb.head = AABB3(-.3f, -.3f, -0.5f, .6f, .6f, 0.6f);
 				hb.head = Matrix4::Translate(0, 0, -0.1f) * hb.head;
-				hb.head = Matrix4::Rotate(MakeVector3(1,0,0),
-										  pitch) * hb.head;
+				hb.head = Matrix4::Rotate(MakeVector3(1,0,0), pitch) * hb.head;
 				hb.head = Matrix4::Translate(0, 0, 0.1f) * hb.head;
 				hb.head = torso * hb.head;
 			}

@@ -525,19 +525,16 @@ namespace spades {
 			lights.push_back(GLDynamicLight(light));
 		}
 		
-		void GLRenderer::AddDebugLine(spades::Vector3 a,
-									  spades::Vector3 b,
-									  spades::Vector4 color) {
+		void GLRenderer::AddDebugLine(spades::Vector3 a, spades::Vector3 b, spades::Vector4 color)
+		{
 			DebugLine line = {a, b, color};
 			EnsureInitialized();
 			EnsureSceneStarted();
 			debugLines.push_back(line);
 		}
 		
-		void GLRenderer::AddSprite(client::IImage *img,
-								   spades::Vector3 center,
-								   float radius,
-								   float rotation){
+		void GLRenderer::AddSprite(client::IImage *img, spades::Vector3 center, float radius, float rotation)
+		{
 			SPADES_MARK_FUNCTION_DEBUG();
 			GLImage *im = dynamic_cast<GLImage *>(img);
 			if(!im)
@@ -604,14 +601,8 @@ namespace spades {
 			positionAttribute(program);
 			colorAttribute(program);
 			
-			device->VertexAttribPointer(positionAttribute(),
-										3, IGLDevice::FloatType,
-										false, sizeof(DebugLineVertex),
-										vertices.data());
-			device->VertexAttribPointer(colorAttribute(),
-										4, IGLDevice::FloatType,
-										false, sizeof(DebugLineVertex),
-										(const char*)vertices.data() + sizeof(float) * 3);
+			device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::FloatType, false, sizeof(DebugLineVertex), vertices.data());
+			device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false, sizeof(DebugLineVertex), (const char*)vertices.data() + sizeof(float) * 3);
 			
 			device->EnableVertexAttribArray(positionAttribute(), true);
 			device->EnableVertexAttribArray(colorAttribute(), true);
@@ -656,8 +647,7 @@ namespace spades {
 				device->Enable(IGLDevice::Blend, true);
 				device->Enable(IGLDevice::DepthTest, true);
 				device->DepthFunc(IGLDevice::Equal);
-				device->BlendFunc(IGLDevice::SrcAlpha,
-								  IGLDevice::One);
+				device->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::One);
 				
 				if(!sceneDef.skipWorld && mapRenderer){
 					mapRenderer->RenderDynamicLightPass(lights);
@@ -848,14 +838,12 @@ namespace spades {
 				
 				if(r_softParticles) {// softparticle is a part of postprocess
 					GLProfiler profiler(device, "Soft Particle");
-					device->BlendFunc(IGLDevice::One,
-									  IGLDevice::OneMinusSrcAlpha);
+					device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 					spriteRenderer->Render();
 				}
 				
 				
-				device->BlendFunc(IGLDevice::SrcAlpha,
-								  IGLDevice::OneMinusSrcAlpha);
+				device->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::OneMinusSrcAlpha);
 				
 				if(r_depthOfField &&
 				   (sceneDef.depthOfFieldNearRange > 0.f ||

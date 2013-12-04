@@ -82,12 +82,10 @@ namespace spades {
 			void AddGrenade(Grenade *);
 			std::vector<Grenade *> GetAllGrenades();
 			
-			std::vector<IntVector3> CubeLine(IntVector3 v1,
-													IntVector3 v2,
-													int maxLength);
+			std::vector<IntVector3> CubeLine(IntVector3 v1, IntVector3 v2, int maxLength);
 			
 			Player *GetPlayer(unsigned int i){
-				SPAssert(i >= 0);
+				//SPAssert(i >= 0);	lm: unsigned cannot be smaller than 0 :)
 				SPAssert(i < players.size());
 				return players[i];
 			}
@@ -119,8 +117,8 @@ namespace spades {
 			
 			WeaponRayCastResult WeaponRayCast(Vector3 startPos, Vector3 dir, Player *exclude);
 			
-			int GetNumPlayerSlots() {
-				return (int)players.size();
+			size_t GetNumPlayerSlots() {
+				return players.size();
 			}
 			
 			int GetLocalPlayerIndex() {

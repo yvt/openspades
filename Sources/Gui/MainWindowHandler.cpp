@@ -463,8 +463,9 @@ void MainWindow::CheckGLCapability() {
 		
 		SPLog("--- Extensions ---");
 		std::vector<std::string> strs = spades::Split(str, " ");
-		for(size_t i = 0; i < strs.size(); i++)
+		for(size_t i = 0; i < strs.size(); i++) {
 			SPLog("%s", strs[i].c_str());
+		}
 		SPLog("------------------");
 		
 		for(size_t i = 0; requiredExtensions[i]; i++) {

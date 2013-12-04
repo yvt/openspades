@@ -25,6 +25,7 @@ SPADES_SETTING(r_fullscreen, "0");
 
 //lm: meh, don't care about this stuff in a test project, so just go with dummy implementation
 extern "C" int asAtomicInc(int &value) { return ++value; }
+extern "C" int asAtomicDec(int &value) { return --value; }
 
 void drawFrame( spades::client::IRenderer& renderer );
 
