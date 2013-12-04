@@ -403,9 +403,7 @@ namespace spades {
 				
 				// add glare
 				renderer->SetColor(MakeVector4(1, .7f, .5f, 0) * brightness * .3f);
-				renderer->AddSprite(renderer->RegisterImage("Gfx/Glare.tga"),
-									(eyeMatrix * MakeVector3(0, 0.3f, -0.3f)).GetXYZ(),
-									.8f, 0.f);
+				renderer->AddSprite(renderer->RegisterImage("Gfx/Glare.tga"), (eyeMatrix * MakeVector3(0, 0.3f, -0.3f)).GetXYZ(), .8f, 0.f);
 			}
 			
 			Vector3 leftHand, rightHand;
@@ -483,9 +481,7 @@ namespace spades {
 				IModel *model2 = renderer->RegisterModel("Models/Player/UpperArm.kv6");
 				
 				IntVector3 col = p->GetColor();
-				param.customColor = MakeVector3(col.x/255.f,
-												col.y/255.f,
-												col.z/255.f);
+				param.customColor = MakeVector3(col.x/255.f, col.y/255.f, col.z/255.f);
 				
 				const float armlen = 0.5f;
 				
@@ -519,10 +515,7 @@ namespace spades {
 						axises[0] = Vector3::Cross(axises[1], axises[2]).Normalize();
 						
 						Matrix4 mat = Matrix4::Scale(.05f);
-						mat = Matrix4::FromAxis(axises[0],
-												axises[1],
-												axises[2],
-												elbow) * mat;
+						mat = Matrix4::FromAxis(axises[0], axises[1], axises[2], elbow) * mat;
 						mat = eyeMatrix * mat;
 						
 						param.matrix = mat;
@@ -537,10 +530,7 @@ namespace spades {
 						axises[0] = Vector3::Cross(axises[1], axises[2]).Normalize();
 						
 						Matrix4 mat = Matrix4::Scale(.05f);
-						mat = Matrix4::FromAxis(axises[0],
-												axises[1],
-												axises[2],
-												shoulder) * mat;
+						mat = Matrix4::FromAxis(axises[0], axises[1], axises[2], shoulder) * mat;
 						mat = eyeMatrix * mat;
 						
 						param.matrix = mat;
@@ -566,13 +556,10 @@ namespace spades {
 			if(!p->IsAlive()){
 				if(!cg_ragdoll){
 					ModelRenderParam param;
-					param.matrix = Matrix4::Translate(p->GetOrigin()+
-													  MakeVector3(0,0,1));
+					param.matrix = Matrix4::Translate(p->GetOrigin()+ MakeVector3(0,0,1));
 					param.matrix = param.matrix * Matrix4::Scale(.1f);
 					IntVector3 col = p->GetColor();
-					param.customColor = MakeVector3(col.x/255.f,
-													col.y/255.f,
-													col.z/255.f);
+					param.customColor = MakeVector3(col.x/255.f, col.y/255.f, col.z/255.f);
 					
 					IModel *model = renderer->RegisterModel("Models/Player/Dead.kv6");
 					renderer->RenderModel(model, param);
@@ -609,17 +596,14 @@ namespace spades {
 			IModel *model;
 			Vector3 front = p->GetFront();
 			IntVector3 col = p->GetColor();
-			param.customColor = MakeVector3(col.x/255.f,
-											col.y/255.f,
-											col.z/255.f);
+			param.customColor = MakeVector3(col.x/255.f, col.y/255.f, col.z/255.f);
 			
 			float yaw = atan2(front.y, front.x) + M_PI * .5f;
 			float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));
 			
 			// lower axis
 			Matrix4 lower = Matrix4::Translate(p->GetOrigin());
-			lower = lower * Matrix4::Rotate(MakeVector3(0,0,1),
-											yaw);
+			lower = lower * Matrix4::Rotate(MakeVector3(0,0,1), yaw);
 			
 			Matrix4 scaler = Matrix4::Scale(0.1f);
 			scaler  = scaler * Matrix4::Scale(-1,-1,1);
@@ -634,16 +618,12 @@ namespace spades {
 				
 				float ang = sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
 				float walkVel = Vector3::Dot(p->GetVelocty(), p->GetFront2D()) * 4.f;
-				leg1 = leg1 * Matrix4::Rotate(MakeVector3(1,0,0),
-											  ang * walkVel);
-				leg2 = leg2 * Matrix4::Rotate(MakeVector3(1,0,0),
-											  -ang * walkVel);
+				leg1 = leg1 * Matrix4::Rotate(MakeVector3(1,0,0), ang * walkVel);
+				leg2 = leg2 * Matrix4::Rotate(MakeVector3(1,0,0), -ang * walkVel);
 				
 				walkVel = Vector3::Dot(p->GetVelocty(), p->GetRight()) * 3.f;
-				leg1 = leg1 * Matrix4::Rotate(MakeVector3(0,1,0),
-											  ang * walkVel);
-				leg2 = leg2 * Matrix4::Rotate(MakeVector3(0,1,0),
-											  -ang * walkVel);
+				leg1 = leg1 * Matrix4::Rotate(MakeVector3(0,1,0), ang * walkVel);
+				leg2 = leg2 * Matrix4::Rotate(MakeVector3(0,1,0), -ang * walkVel);
 				
 				leg1 = lower * leg1;
 				leg2 = lower * leg2;
@@ -672,16 +652,12 @@ namespace spades {
 				
 				float ang = sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
 				float walkVel = Vector3::Dot(p->GetVelocty(), p->GetFront2D()) * 4.f;
-				leg1 = leg1 * Matrix4::Rotate(MakeVector3(1,0,0),
-											  ang * walkVel);
-				leg2 = leg2 * Matrix4::Rotate(MakeVector3(1,0,0),
-											  -ang * walkVel);
+				leg1 = leg1 * Matrix4::Rotate(MakeVector3(1,0,0), ang * walkVel);
+				leg2 = leg2 * Matrix4::Rotate(MakeVector3(1,0,0), -ang * walkVel);
 				
 				walkVel = Vector3::Dot(p->GetVelocty(), p->GetRight()) * 3.f;
-				leg1 = leg1 * Matrix4::Rotate(MakeVector3(0,1,0),
-											  ang * walkVel);
-				leg2 = leg2 * Matrix4::Rotate(MakeVector3(0,1,0),
-											  -ang * walkVel);
+				leg1 = leg1 * Matrix4::Rotate(MakeVector3(0,1,0), ang * walkVel);
+				leg2 = leg2 * Matrix4::Rotate(MakeVector3(0,1,0), -ang * walkVel);
 				
 				leg1 = lower * leg1;
 				leg2 = lower * leg2;
@@ -716,16 +692,14 @@ namespace spades {
 				armPitch *= .9f;
 			}
 			
-			arms = arms * Matrix4::Rotate(MakeVector3(1,0,0),
-										  armPitch);
+			arms = arms * Matrix4::Rotate(MakeVector3(1,0,0), armPitch);
 			
 			model = renderer->RegisterModel("Models/Player/Arms.kv6");
 			param.matrix = arms * scaler;
 			renderer->RenderModel(model, param);
 			
 			
-			head = head * Matrix4::Rotate(MakeVector3(1,0,0),
-										  pitch);
+			head = head * Matrix4::Rotate(MakeVector3(1,0,0), pitch);
 			
 			model = renderer->RegisterModel("Models/Player/Head.kv6");
 			param.matrix = head * scaler;
@@ -751,18 +725,14 @@ namespace spades {
 					if(team.hasIntel && team.carrier == p->GetId()){
 						
 						IntVector3 col2 = world->GetTeam(1-p->GetTeamId()).color;
-						param.customColor = MakeVector3(col2.x/255.f,
-														col2.y/255.f,
-														col2.z/255.f);
+						param.customColor = MakeVector3(col2.x/255.f, col2.y/255.f, col2.z/255.f);
 						Matrix4 mIntel = torso * Matrix4::Translate(0,0.6f,0.5f);
 						
 						model = renderer->RegisterModel("Models/MapObjects/Intel.kv6");
 						param.matrix = mIntel * scaler;
 						renderer->RenderModel(model, param);
 						
-						param.customColor = MakeVector3(col.x/255.f,
-														col.y/255.f,
-														col.z/255.f);
+						param.customColor = MakeVector3(col.x/255.f, col.y/255.f, col.z/255.f);
 					}
 				}
 			}
@@ -787,9 +757,7 @@ namespace spades {
 			if(false){
 				Handle<IImage> img = renderer->RegisterImage("Gfx/Ball.png");
 				renderer->SetColor(MakeVector4(1, 0, 0, 0));
-				renderer->AddLongSprite(img, lastSceneDef.viewOrigin +
-										MakeVector3(0, 0, 1),
-										p->GetOrigin(), 0.5f);
+				renderer->AddLongSprite(img, lastSceneDef.viewOrigin + MakeVector3(0, 0, 1), p->GetOrigin(), 0.5f);
 			}
 			
 			float distancePowered = (p->GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();

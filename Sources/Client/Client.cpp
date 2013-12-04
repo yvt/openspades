@@ -240,7 +240,7 @@ namespace spades {
 				SPLog("World set");
 				
 				clientPlayers.resize(world->GetNumPlayerSlots());
-				for(int i = 0; i < world->GetNumPlayerSlots(); i++) {
+				for(size_t i = 0; i < world->GetNumPlayerSlots(); i++) {
 					Player *p = world->GetPlayer(i);
 					if(p){
 						clientPlayers[i] = new ClientPlayer(p, this);
@@ -1789,8 +1789,7 @@ namespace spades {
 			renderer->RenderModel(model, param);
 		}
 		
-		void Client::AddDebugObjectToScene(const spades::OBB3 &obb,
-										   const Vector4& color) {
+		void Client::AddDebugObjectToScene(const spades::OBB3 &obb, const Vector4& color) {
 			const Matrix4& mat = obb.m;
 			Vector3 v[2][2][2];
 			v[0][0][0] = (mat * MakeVector3(0,0,0)).GetXYZ();
@@ -1929,7 +1928,7 @@ namespace spades {
 			if(world){
 				Player *p = world->GetLocalPlayer();
 				
-				for(int i = 0; i < world->GetNumPlayerSlots(); i++)
+				for(size_t i = 0; i < world->GetNumPlayerSlots(); i++)
 					if(world->GetPlayer(i)){
 						SPAssert(clientPlayers[i]);
 						clientPlayers[i]->AddToScene();

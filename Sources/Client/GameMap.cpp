@@ -445,9 +445,7 @@ namespace spades {
 					fv.z -= fabsf(dir.z) * nextBlockTime;
 				}
 				
-				if(IsSolidWrapped(nextBlock.x,
-								  nextBlock.y,
-								  nextBlock.z)){
+				if(IsSolidWrapped(nextBlock.x, nextBlock.y, nextBlock.z)){
 					// hit.
 					Vector3 hitPos;
 					if(dir.x > 0.f){

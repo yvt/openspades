@@ -19,9 +19,9 @@
  */
 
 #include "ALFuncs.h"
-#include "../Core/DynamicLibrary.h"
-#include "../Core/Exception.h"
-#include "../Core/Settings.h"
+#include <Core/DynamicLibrary.h>
+#include <Core/Exception.h>
+#include <Core/Settings.h>
 
 #if defined(__APPLE__)
 SPADES_SETTING(s_alDriver, "/Library/Frameworks/OpenAL-Soft.framework/OpenAL-Soft");
@@ -231,7 +231,7 @@ namespace al{
 	}
 	
 	void Link(void) {
-		SPLog("Linking with OpenGL library.");
+		SPLog("Linking with OpenAL library.");
 		L(alEnable);
 		L(alDisable);
 		L(alIsEnabled);

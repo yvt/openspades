@@ -76,26 +76,17 @@ namespace spades {
 			lens->Use();
 			
 			client::SceneDefinition def = renderer->GetSceneDef();
-			lensFov.SetValue(tanf(def.fovX * .5f),
-							 tanf(def.fovY * .5f));
+			lensFov.SetValue(tanf(def.fovX * .5f), tanf(def.fovY * .5f));
 			if(renderer->IsRenderingMirror()) {
 				def.viewOrigin.z = 63.f * 2.f - def.viewOrigin.z;
 				def.viewAxis[0].z = -def.viewAxis[0].z;
 				def.viewAxis[1].z = -def.viewAxis[1].z;
 				def.viewAxis[2].z = -def.viewAxis[2].z;
 			}
-			lensViewOrigin.SetValue(def.viewOrigin.x,
-									def.viewOrigin.y,
-									def.viewOrigin.z);
-			lensViewAxisUp.SetValue(def.viewAxis[1].x,
-									def.viewAxis[1].y,
-									def.viewAxis[1].z);
-			lensViewAxisSide.SetValue(def.viewAxis[0].x,
-									def.viewAxis[0].y,
-									  def.viewAxis[0].z);
-			lensViewAxisFront.SetValue(def.viewAxis[2].x,
-									  def.viewAxis[2].y,
-									   def.viewAxis[2].z);
+			lensViewOrigin.SetValue(def.viewOrigin.x, def.viewOrigin.y, def.viewOrigin.z);
+			lensViewAxisUp.SetValue(def.viewAxis[1].x, def.viewAxis[1].y, def.viewAxis[1].z);
+			lensViewAxisSide.SetValue(def.viewAxis[0].x, def.viewAxis[0].y, def.viewAxis[0].z);
+			lensViewAxisFront.SetValue(def.viewAxis[2].x, def.viewAxis[2].y, def.viewAxis[2].z);
 			zNearFar.SetValue(def.zNear, def.zFar);
 			
 			
