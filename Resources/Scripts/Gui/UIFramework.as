@@ -132,6 +132,10 @@ namespace spades {
 			
 			void KeyEvent(string key, bool down) {
 				if(key.length == 0){
+					if(!down) {
+						keyRepeater.KeyUp();
+						charRepeater.KeyUp();
+					}
 					return;
 				}
 				if(key == "Shift") {
