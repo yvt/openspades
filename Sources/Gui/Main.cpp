@@ -173,13 +173,13 @@ int main(int argc, char ** argv)
 		std::string appdir = buf;
 		appdir = appdir.substr(0, appdir.find_last_of('\\')+1);
 		
-		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(appdir + "Resources", false));
-		
 		if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, buf))){
 			std::string datadir = buf;
 			datadir += "\\OpenSpades\\Resources";
 			spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(datadir, true));
 		}
+		
+		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(appdir + "Resources", false));
 		//fltk has a console window on windows (can disable while building, maybe use a builtin console for a later release?)
 		HWND hCon = GetConsoleWindow();
 		if( NULL != hCon ) {
