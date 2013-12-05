@@ -180,9 +180,10 @@ namespace spades {
 		}
 		void World::DestroyBlock(std::vector<spades::IntVector3> pos){
 			std::vector<CellPos> cells;
+            bool allowToDestroyLand = pos.size() == 1;
 			for(size_t i = 0; i < pos.size(); i++){
 				const IntVector3& p = pos[i];
-				if(p.z >= 63 || p.z < 0 || p.x < 0 || p.y < 0 ||
+				if(p.z >= (allowToDestroyLand ? 63 : 62) || p.z < 0 || p.x < 0 || p.y < 0 ||
 				   p.x >= map->Width() || p.y >= map->Height())
 					continue;
 				if(!map->IsSolid(p.x, p.y, p.z))
