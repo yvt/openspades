@@ -205,6 +205,11 @@ namespace spades {
 			
 		}
 		
+        template<typename T>
+        static inline bool EqualTwoCond(T a, T b, T c, bool cond) {
+            return a == b || (cond && a == c);
+        }
+        
 		std::vector<CellPos> GameMapWrapper::RemoveBlocks(const std::vector<CellPos>& cells) {
 			SPADES_MARK_FUNCTION();
 			
@@ -221,8 +226,13 @@ namespace spades {
 			for(size_t i = 0; i < cells.size(); i++){
 				CellPos pos = cells[i];
 				m->Set(pos.x, pos.y, pos.z, false, 0);
-				if(GetLink(pos.x, pos.y, pos.z) == Invalid)
-					continue;
+				// if(GetLink(pos.x, pos.y, pos.z) == Invalid){
+                    // this block is already disconnected.
+                // }
+                
+                if(GetLink(pos.x, pos.y, pos.z) == Marked){
+                    continue;
+                }
 				SPAssert(GetLink(pos.x, pos.y, pos.z) != Root);
 				
 				SetLink(pos.x, pos.y, pos.z, Invalid);
@@ -237,34 +247,41 @@ namespace spades {
 					// don't "continue;" when non-solid
 					
 					int x = pos.x, y = pos.y, z = pos.z;
-					if(x > 0 && GetLink(x-1,y,z) == PositiveX){
-						SetLink(x-1, y, z, Invalid);
+					if(x > 0 && EqualTwoCond(GetLink(x-1,y,z), PositiveX, Invalid, m->IsSolid(x-1, y, z))){
+						SetLink(x-1, y, z, Marked);
 						queue.Push(CellPos(x-1, y, z));
 					}
-					if(x < width-1 && GetLink(x+1,y,z) == NegativeX){
-						SetLink(x+1, y, z, Invalid);
+					if(x < width-1 && EqualTwoCond(GetLink(x+1,y,z), NegativeX, Invalid, m->IsSolid(x+1, y, z))){
+						SetLink(x+1, y, z, Marked);
 						queue.Push(CellPos(x+1, y, z));
 					}
-					if(y > 0 && GetLink(x,y-1,z) == PositiveY){
-						SetLink(x, y-1, z, Invalid);
+					if(y > 0 && EqualTwoCond(GetLink(x,y-1,z), PositiveY, Invalid, m->IsSolid(x, y-1, z))){
+						SetLink(x, y-1, z, Marked);
 						queue.Push(CellPos(x, y-1, z));
 					}
-					if(y < height-1 && GetLink(x,y+1,z) == NegativeY){
-						SetLink(x, y+1, z, Invalid);
+					if(y < height-1 && EqualTwoCond(GetLink(x,y+1,z), NegativeY, Invalid, m->IsSolid(x, y+1, z))){
+						SetLink(x, y+1, z, Marked);
 						queue.Push(CellPos(x, y+1, z));
 					}
-					if(z > 0 && GetLink(x,y,z-1) == PositiveZ){
-						SetLink(x, y, z-1, Invalid);
+					if(z > 0 && EqualTwoCond(GetLink(x,y,z-1), PositiveZ, Invalid, m->IsSolid(x, y, z-1))){
+						SetLink(x, y, z-1, Marked);
 						queue.Push(CellPos(x, y, z-1));
 					}
-					if(z < depth-1 && GetLink(x,y,z+1) == NegativeZ){
-						SetLink(x, y, z+1, Invalid);
+					if(z < depth-1 && EqualTwoCond(GetLink(x,y,z+1), NegativeZ, Invalid, m->IsSolid(x, y, z+1))){
+						SetLink(x, y, z+1, Marked);
 						queue.Push(CellPos(x, y, z+1));
 					}
 				}
 				
 			}
 			
+            // remove "visited" mark
+			for(size_t i = 0; i < unlinkedCells.size(); i++){
+                const CellPos& pos = unlinkedCells[i];
+                if(GetLink(pos.x, pos.y, pos.z) == Marked)
+                    SetLink(pos.x, pos.y, pos.z, Invalid);
+            }
+            
 			SPAssert(queue.IsEmpty());
 			
 			// start relinking
