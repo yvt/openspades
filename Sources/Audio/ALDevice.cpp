@@ -32,6 +32,7 @@
 #include <Core/Debug.h>
 #include <Core/Settings.h>
 #include <stdlib.h>
+#include <cstring>
 
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
@@ -379,7 +380,7 @@ namespace spades {
 				const ALCchar* ext = al::qalcGetString( NULL, ALC_ALL_DEVICES_SPECIFIER );
 				while( ext && *ext ) {
 					SPLog( "%s", ext );
-					ext += (strlen(ext)+1);
+					ext += (std::strlen(ext)+1);
 				}
 				SPLog("-------------------");
 
@@ -387,7 +388,7 @@ namespace spades {
 				ext = al::qalcGetString( NULL, ALC_DEVICE_SPECIFIER );
 				while( ext && *ext ) {
 					SPLog( "%s", ext );
-					ext += (strlen(ext)+1);
+					ext += (std::strlen(ext)+1);
 				}
 				SPLog("---------------");
 				const ALCchar* dev = al::qalcGetString( NULL, ALC_DEFAULT_DEVICE_SPECIFIER );
