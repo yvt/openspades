@@ -67,7 +67,9 @@ namespace spades {
 				Invalid = 0, Root, 
 				NegativeX, PositiveX,
 				NegativeY, PositiveY,
-				NegativeZ, PositiveZ
+				NegativeZ, PositiveZ,
+                
+                Marked 
 			};
 			
 			
