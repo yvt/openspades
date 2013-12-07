@@ -629,6 +629,7 @@ namespace spades {
 			layouter.AddSliderField("Minimap size", "cg_minimapSize", 128, 256, 8,
 				ConfigNumberFormatter(0, " px"));
 			layouter.AddToggleField("Weapon Spread Guide", "cg_debugAim");
+			layouter.AddToggleField("Chat Notify Sounds", "cg_chatBeep");
 			layouter.FinishLayout();
 			// cg_fov, cg_minimapSize
 		}

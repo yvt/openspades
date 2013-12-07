@@ -77,6 +77,8 @@ SPADES_SETTING(cg_ejectBrass, "1");
 SPADES_SETTING(cg_mouseSensitivity, "1");
 SPADES_SETTING(cg_zoomedMouseSensScale, "0.6");
 
+SPADES_SETTING(cg_chatBeep, "1");
+
 SPADES_SETTING(cg_holdAimDownSight, "0");
 
 SPADES_SETTING(cg_keyAttack, "LeftMouseButton");
@@ -2594,7 +2596,7 @@ namespace spades {
 					   world->GetTeam(p->GetTeamId()).name.c_str(),
 					   msg.c_str());
 			
-			if(!IsMuted()) {
+			if((!IsMuted()) && (int)cg_chatBeep) {
 				Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
 				audioDevice->PlayLocal(chunk, AudioParam());
 			}
