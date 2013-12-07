@@ -717,8 +717,9 @@ namespace spades {
 			
 			
 			// draw intel in ctf
-			CTFGameMode *ctfMode = dynamic_cast<CTFGameMode *>(world->GetMode());
-			if(ctfMode){
+			IGameMode* mode = world->GetMode();
+			if( mode && IGameMode::m_CTF == mode->ModeType() ){
+				CTFGameMode *ctfMode = static_cast<CTFGameMode *>(world->GetMode());
 				int tId = p->GetTeamId();
 				if(tId < 3){
 					CTFGameMode::Team& team = ctfMode->GetTeam(p->GetTeamId());

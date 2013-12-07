@@ -68,8 +68,11 @@ namespace spades {
 				lastTerritoryId = -1;
 				return;
 			}
-			TCGameMode *tc = dynamic_cast<TCGameMode *>(w->GetMode());
-			if(!tc) return;
+			IGameMode* mode = w->GetMode();
+			if( !mode || IGameMode::m_TC != mode->ModeType() ){
+				return;
+			}
+			TCGameMode *tc = static_cast<TCGameMode *>(mode);
 			
 			float scrW = renderer->ScreenWidth();
 			float scrH = renderer->ScreenHeight();

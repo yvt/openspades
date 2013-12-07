@@ -25,7 +25,7 @@
 
 namespace spades {
 	namespace client {
-		TCGameMode::TCGameMode(World *w): world(w) {
+		TCGameMode::TCGameMode(World *w): IGameMode( m_TC ), world(w) {
 			SPADES_MARK_FUNCTION();
 			
 		}
