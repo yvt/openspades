@@ -363,10 +363,6 @@ namespace spades {
 			Internal() {
 				SPADES_MARK_FUNCTION();
 				
-				SPLog("OpenAL Info:");
-				SPLog("  Vendor: %s", al::qalGetString(AL_VENDOR));
-				SPLog("  Version: %s", al::qalGetString(AL_VERSION));
-				SPLog("  Renderer: %s", al::qalGetString(AL_RENDERER));
 				if(al::qalGetString(AL_EXTENSIONS)){
 					std::vector<std::string> strs = Split(al::qalGetString(AL_EXTENSIONS), " ");
 					SPLog("OpenAL Extensions:");
@@ -407,7 +403,11 @@ namespace spades {
 
 					SPRaise("Failed to open OpenAL device.");
 				}
-				
+				SPLog("OpenAL Info:");
+				SPLog("  Vendor: %s", al::qalGetString(AL_VENDOR));
+				SPLog("  Version: %s", al::qalGetString(AL_VERSION));
+				SPLog("  Renderer: %s", al::qalGetString(AL_RENDERER));
+
 				if(ext = al::qalcGetString(alDevice, ALC_EXTENSIONS)){
 					std::vector<std::string> strs = Split(ext, " ");
 					SPLog("OpenAL ALC Extensions:");
