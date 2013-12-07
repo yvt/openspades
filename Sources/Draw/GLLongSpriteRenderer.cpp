@@ -164,8 +164,8 @@ namespace spades {
 				
 				Vector3 vecX = def.viewAxis[0] * spr.radius;
 				Vector3 vecY = def.viewAxis[1] * spr.radius;
-				float normalThreshold = spr.radius / ((view1.z + view2.z) * .5f);
-				if((scr2 - scr1).GetPoweredLength() < normalThreshold) {
+				float normalThreshold = spr.radius * 0.5f / ((view1.z + view2.z) * .5f);
+				if((scr2 - scr1).GetPoweredLength() < normalThreshold * normalThreshold) {
 					// too short in screen; normal sprite
 					v = spr.start - vecX - vecY;
 					v.u = 0; v.v = 0;
