@@ -901,8 +901,9 @@ namespace spades {
 					pos.y = reader.ReadFloat();
 					pos.z = reader.ReadFloat();
 					
-					CTFGameMode *ctf = dynamic_cast<CTFGameMode *>(GetWorld()->GetMode());
-					if(ctf){
+					IGameMode* mode = GetWorld()->GetMode();
+					if( mode && IGameMode::m_CTF == mode->ModeType() ){
+						CTFGameMode *ctf = static_cast<CTFGameMode *>(mode);
 						switch(type){
 							case BLUE_BASE:
 								ctf->GetTeam(0).basePos = pos;
@@ -917,10 +918,8 @@ namespace spades {
 								ctf->GetTeam(1).flagPos = pos;
 								break;
 						}
-					}
-					
-					TCGameMode *tc = dynamic_cast<TCGameMode *>(GetWorld()->GetMode());
-					if(tc){
+					} else if( mode && IGameMode::m_TC == mode->ModeType() ){
+						TCGameMode *tc = static_cast<TCGameMode *>(mode);
 						if(type >= tc->GetNumTerritories()){
 							SPRaise("Invalid territory id specified: %d (max = %d)", (int)type, tc->GetNumTerritories() - 1);
 						}
@@ -1278,17 +1277,20 @@ namespace spades {
 					bool winning = reader.ReadByte() != 0;
 					int state = reader.ReadByte();
 					
-					TCGameMode *mode = dynamic_cast<TCGameMode *>(GetWorld()->GetMode());
-					if(!mode) SPRaise("Not TC");
+					IGameMode* mode = GetWorld()->GetMode();
+					if( mode->ModeType() != IGameMode::m_TC ) {
+						SPRaise("Received PacketTypeTerritoryCapture in non-TC gamemode");
+					}
+					TCGameMode *tc = static_cast<TCGameMode *>(mode);
 					
-					if(territoryId >= mode->GetNumTerritories()){
+					if(territoryId >= tc->GetNumTerritories()){
 						SPRaise("Invalid territory id %d specified (max = %d)", territoryId,
-								mode->GetNumTerritories()-1);
+								tc->GetNumTerritories()-1);
 					}
 					
 					client->TeamCapturedTerritory(state, territoryId);
 					
-					TCGameMode::Territory *t = mode->GetTerritory(territoryId);
+					TCGameMode::Territory *t = tc->GetTerritory(territoryId);
 					
 					t->ownerTeamId = state;
 					t->progressBasePos = 0.f;
@@ -1307,18 +1309,21 @@ namespace spades {
 					int rate = (int8_t)reader.ReadByte();
 					float progress = reader.ReadFloat();
 					
-					TCGameMode *mode = dynamic_cast<TCGameMode *>(GetWorld()->GetMode());
-					if(!mode) SPRaise("Not TC");
+					IGameMode* mode = GetWorld()->GetMode();
+					if( mode->ModeType() != IGameMode::m_TC ) {
+						SPRaise("Received PacketTypeProgressBar in non-TC gamemode");
+					}
+					TCGameMode *tc = static_cast<TCGameMode *>(mode);
 					
-					if(territoryId >= mode->GetNumTerritories()){
+					if(territoryId >= tc->GetNumTerritories()){
 						SPRaise("Invalid territory id %d specified (max = %d)", territoryId,
-								mode->GetNumTerritories()-1);
+								tc->GetNumTerritories()-1);
 					}
 					
 					if(progress < -0.1f || progress > 1.1f)
 						SPRaise("Progress value out of range(%f)", progress);
 					
-					TCGameMode::Territory *t = mode->GetTerritory(territoryId);
+					TCGameMode::Territory *t = tc->GetTerritory(territoryId);
 					
 					t->progressBasePos = progress;
 					t->progressRate = (float)rate * TC_CAPTURE_RATE;
@@ -1329,13 +1334,16 @@ namespace spades {
 				case PacketTypeIntelCapture:
 				{
 					if(!GetWorld()) SPRaise("No world");
-					CTFGameMode *mode = dynamic_cast<CTFGameMode *>(GetWorld()->GetMode());
-					if(!mode) SPRaise("Not CTF");
+					IGameMode* mode = GetWorld()->GetMode();
+					if( mode->ModeType() != IGameMode::m_CTF ) {
+						SPRaise("Received PacketTypeIntelCapture in non-TC gamemode");
+					}
+					CTFGameMode *ctf = static_cast<CTFGameMode *>(mode);
 					Player *p = GetPlayer(reader.ReadByte());
 					client->PlayerCapturedIntel(p);
 					GetWorld()->GetPlayerPersistent(p->GetId()).kills += 10;
-					mode->GetTeam(p->GetTeamId()).hasIntel = false;
-					mode->GetTeam(p->GetTeamId()).score++;
+					ctf->GetTeam(p->GetTeamId()).hasIntel = false;
+					ctf->GetTeam(p->GetTeamId()).score++;
 					
 					bool winning = reader.ReadByte() != 0;
 					if(winning)
@@ -1345,9 +1353,12 @@ namespace spades {
 				case PacketTypeIntelPickup:
 				{
 					Player *p = GetPlayer(reader.ReadByte());
-					CTFGameMode *mode = dynamic_cast<CTFGameMode *>(GetWorld()->GetMode());
-					if(!mode) SPRaise("Not CTF");
-					CTFGameMode::Team& team = mode->GetTeam(p->GetTeamId());
+					IGameMode* mode = GetWorld()->GetMode();
+					if( mode->ModeType() != IGameMode::m_CTF ) {
+						SPRaise("Received PacketTypeIntelPickup in non-TC gamemode");
+					}
+					CTFGameMode *ctf = static_cast<CTFGameMode *>(mode);
+					CTFGameMode::Team& team = ctf->GetTeam(p->GetTeamId());
 					team.hasIntel = true;
 					team.carrier = p->GetId();
 					client->PlayerPickedIntel(p);
@@ -1356,9 +1367,12 @@ namespace spades {
 				case PacketTypeIntelDrop:
 				{
 					Player *p = GetPlayer(reader.ReadByte());
-					CTFGameMode *mode = dynamic_cast<CTFGameMode *>(GetWorld()->GetMode());
-					if(!mode) SPRaise("Not CTF");
-					CTFGameMode::Team& team = mode->GetTeam(p->GetTeamId());
+					IGameMode* mode = GetWorld()->GetMode();
+					if( mode->ModeType() != IGameMode::m_CTF ) {
+						SPRaise("Received PacketTypeIntelPickup in non-TC gamemode");
+					}
+					CTFGameMode *ctf = static_cast<CTFGameMode *>(mode);
+					CTFGameMode::Team& team = ctf->GetTeam(p->GetTeamId());
 					team.hasIntel = false;
 					
 					Vector3 pos;
@@ -1366,7 +1380,7 @@ namespace spades {
 					pos.y = reader.ReadFloat();
 					pos.z = reader.ReadFloat();
 					
-					mode->GetTeam(1 - p->GetTeamId()).flagPos = pos;
+					ctf->GetTeam(1 - p->GetTeamId()).flagPos = pos;
 					
 					client->PlayerDropIntel(p);
 				}

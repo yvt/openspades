@@ -20,7 +20,7 @@
 
 #pragma once
 #include "IGameMode.h"
-#include "../Core/Math.h"
+#include <Core/Math.h>
 
 namespace spades {
 	namespace client {

@@ -88,8 +88,10 @@ namespace spades {
 				// no world
 				return;
 			}
-			ctf = dynamic_cast<CTFGameMode *>(world->GetMode());
-			tc = dynamic_cast<TCGameMode *>(world->GetMode());
+
+			IGameMode* mode = world->GetMode();
+			ctf = IGameMode::m_CTF == mode->ModeType() ? static_cast<CTFGameMode *>(mode) : NULL;
+			tc = IGameMode::m_TC == mode->ModeType() ? static_cast<TCGameMode *>(mode) : NULL;
 			
 			Handle<IImage>image;
 			IFont *font;
