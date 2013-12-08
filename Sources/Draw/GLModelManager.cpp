@@ -51,6 +51,7 @@ namespace spades {
 			if(it == models.end()){
 				GLModel *m = CreateModel(name);
 				models[name] = m;
+				m->AddRef();
 				return m;
 			}
 			it->second->AddRef(); // model manager owns this reference

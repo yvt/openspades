@@ -51,6 +51,7 @@ namespace spades {
 			if(it == images.end()){
 				GLImage *img = CreateImage(name);
 				images[name] = img;
+				img->AddRef();
 				return img;
 			}
 			it->second->AddRef();
@@ -60,16 +61,7 @@ namespace spades {
 		GLImage *GLImageManager::CreateImage(const std::string &name) {
 			SPADES_MARK_FUNCTION();
 			
-			Bitmap *bmp;
-			bmp = Bitmap::Load(name);
-			/*
-			IStream *stream = FileManager::OpenForReading(name.c_str());
-			try{
-				bmp = Bitmap::FromTarga(stream);
-			}catch(...){
-				delete stream;
-				throw;
-			}*/
+			Handle<Bitmap> bmp(Bitmap::Load(name),  false);
 			
 			return GLImage::FromBitmap(bmp, device);
 		}
