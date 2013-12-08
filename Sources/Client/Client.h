@@ -128,6 +128,7 @@ namespace spades {
 			float lastAliveTime;
 			int lastKills;
 			float worldSetTime;
+            bool hasDelayedReload;
 			struct HurtSprite {
 				float angle;
 				float horzShift;

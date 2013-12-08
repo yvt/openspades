@@ -125,7 +125,8 @@ namespace spades {
 		
 		Client::Client(IRenderer *r, IAudioDevice *audioDev,
 					   const ServerAddress& host, std::string playerName):
-		renderer(r), audioDevice(audioDev), playerName(playerName) {
+		renderer(r), audioDevice(audioDev), playerName(playerName) ,
+        hasDelayedReload(false) {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
 			
@@ -635,6 +636,12 @@ namespace spades {
 					// FIXME: send only there are any changed
 					net->SendPlayerInput(inp);
 					net->SendWeaponInput(weapInput);
+                    
+                    if(hasDelayedReload) {
+                        world->GetLocalPlayer()->Reload();
+                        net->SendReload();
+                        hasDelayedReload = false;
+                    }
 					
 					//PlayerInput actualInput = player->GetInput();
 					WeaponInput actualWeapInput = player->GetWeaponInput();
@@ -842,6 +849,9 @@ namespace spades {
 			// Well done!
 			renderer->FrameDone();
 			renderer->Flip();
+            
+            // reset all "delayed actions" (in case we forget to reset these)
+            hasDelayedReload = false;
 			
 			time += dt;
 		}
@@ -1092,10 +1102,17 @@ namespace spades {
 						   (!world->GetLocalPlayer()->IsAwaitingReloadCompletion()) &&
 						   (!w->IsReloading()) &&
 						   world->GetLocalPlayer()->GetTool() == Player::ToolWeapon){
-							world->GetLocalPlayer()->Reload();
 							if(world->GetLocalPlayer()->IsToolWeapon()){
-								weapInput.secondary = false;
+                                if(weapInput.secondary) {
+                                    // if we send WeaponInput after sending Reload,
+                                    // server might cancel the reload.
+                                    // https://github.com/infogulch/pyspades/blob/895879ed14ddee47bb278a77be86d62c7580f8b7/pyspades/server.py#343
+                                    hasDelayedReload = true;
+                                    weapInput.secondary = false;
+                                    return;
+                                }
 							}
+							world->GetLocalPlayer()->Reload();
 							net->SendReload();
 						}
 					}else if(CheckKey(cg_keyToolSpade, name) && down){
