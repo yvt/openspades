@@ -1075,7 +1075,7 @@ namespace spades {
 						weapInput.primary = down;
 					}else if(CheckKey(cg_keyAltAttack, name)){
 						if(world->GetLocalPlayer()->IsToolWeapon() && (!cg_holdAimDownSight)){
-							if(down && !playerInput.sprint){
+							if(down && !playerInput.sprint && !world->GetLocalPlayer()->GetWeapon()->IsReloading()){
 								weapInput.secondary = !weapInput.secondary;
 							}
 						}else{
