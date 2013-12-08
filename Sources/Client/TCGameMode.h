@@ -21,8 +21,8 @@
 #pragma once
 
 #include "IGameMode.h"
-#include "../Core/Math.h"
-#include "../Core/Debug.h"
+#include <Core/Math.h>
+#include <Core/Debug.h>
 #include <vector>
 
 namespace spades {

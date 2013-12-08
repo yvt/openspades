@@ -400,8 +400,9 @@ namespace spades {
 				}
 			}
 			
-			CTFGameMode *ctf = dynamic_cast<CTFGameMode *>(world->GetMode());
-			if(ctf){
+			IGameMode* mode = world->GetMode();
+			if( mode && IGameMode::m_CTF == mode->ModeType() ) {
+				CTFGameMode *ctf = static_cast<CTFGameMode *>(mode);
 				Handle<IImage> intelIcon = renderer->RegisterImage("Gfx/Intel.tga");
 				Handle<IImage> baseIcon = renderer->RegisterImage("Gfx/CTFBase.tga");
 				Handle<IImage> medicalIcon = renderer->RegisterImage("Gfx/Medical.tga");
@@ -441,10 +442,8 @@ namespace spades {
 						}
 					}
 				}
-			}
-		
-			TCGameMode *tc = dynamic_cast<TCGameMode *>(world->GetMode());
-			if(tc){
+			} else if( mode && IGameMode::m_TC == mode->ModeType() ) {
+				TCGameMode *tc = static_cast<TCGameMode *>(mode);
 				Handle<IImage> icon = renderer->RegisterImage("Gfx/TCTerritory.tga");
 				int cnt = tc->GetNumTerritories();
 				for(int i = 0; i < cnt; i++){

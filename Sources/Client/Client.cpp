@@ -1836,7 +1836,7 @@ namespace spades {
 		
 		void Client::DrawCTFObjects() {
 			SPADES_MARK_FUNCTION();
-			CTFGameMode *mode = dynamic_cast<CTFGameMode *>(world->GetMode());
+			CTFGameMode *mode = static_cast<CTFGameMode *>(world->GetMode());
 			int tId;
 			IModel *base = renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
 			IModel *intel = renderer->RegisterModel("Models/MapObjects/Intel.kv6");
@@ -1866,7 +1866,7 @@ namespace spades {
 		
 		void Client::DrawTCObjects() {
 			SPADES_MARK_FUNCTION();
-			TCGameMode *mode = dynamic_cast<TCGameMode *>(world->GetMode());
+			TCGameMode *mode = static_cast<TCGameMode *>(world->GetMode());
 			int tId;
 			IModel *base = renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
 			int cnt = mode->GetNumTerritories();
@@ -1965,10 +1965,9 @@ namespace spades {
 					}
 				}
 				
-				if(dynamic_cast<CTFGameMode *>(world->GetMode())){
+				if( IGameMode::m_CTF == world->GetMode()->ModeType() ){
 					DrawCTFObjects();
-				}
-				if(dynamic_cast<TCGameMode *>(world->GetMode())){
+				} else if( IGameMode::m_TC == world->GetMode()->ModeType() ){
 					DrawTCObjects();
 				}
 				

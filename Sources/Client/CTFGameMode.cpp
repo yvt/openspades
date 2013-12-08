@@ -23,7 +23,7 @@
 
 namespace spades {
 	namespace client {
-		CTFGameMode::CTFGameMode() {
+		CTFGameMode::CTFGameMode() : IGameMode( m_CTF ) {
 			SPADES_MARK_FUNCTION();
 			
 		}

@@ -105,7 +105,7 @@ namespace spades {
 			PlayerPersistent& GetPlayerPersistent(int index);
 			
 			void CreateBlock(IntVector3 pos, IntVector3 color);
-			void DestroyBlock(std::vector<IntVector3> pos);
+			void DestroyBlock(std::vector<IntVector3>& pos);
 			
 			struct WeaponRayCastResult {
 				bool hit, startSolid;

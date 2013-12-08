@@ -178,7 +178,7 @@ namespace spades {
 								 (color.z << 16) |
 								 (100UL << 24));
 		}
-		void World::DestroyBlock(std::vector<spades::IntVector3> pos){
+		void World::DestroyBlock(std::vector<spades::IntVector3>& pos){
 			std::vector<CellPos> cells;
             bool allowToDestroyLand = pos.size() == 1;
 			for(size_t i = 0; i < pos.size(); i++){
