@@ -34,7 +34,7 @@ namespace spades {
 		{
 			SPADES_MARK_FUNCTION();
 			
-			image = renderer->RegisterImage("Gfx/HurtRing.tga");
+			image = renderer->RegisterImage("Gfx/HurtRing2.png");
 		}
 		
 		HurtRingView::~HurtRingView() {
@@ -91,7 +91,7 @@ namespace spades {
 			float cx = renderer->ScreenWidth() * .5f;
 			float cy = renderer->ScreenHeight() * .5f;
 			static const float coords[][2]={
-				{-1,-1},{1,-1},{-1,1}
+				{-1,1},{1,1},{-1,0}
 			};
 			
 			std::list<Item>::iterator it;
@@ -100,7 +100,7 @@ namespace spades {
 				
 				float fade = item.fade * 2.f;
 				if(fade > 1.f)fade = 1.f;
-				Vector4 color = {fade,fade,fade,fade};
+				Vector4 color = {fade,fade,fade,0};
 				renderer->SetColorAlphaPremultiplied(color);
 				
 				Vector3 dir = -item.dir;
