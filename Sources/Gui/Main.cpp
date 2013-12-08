@@ -43,7 +43,7 @@
 
 #include <algorithm>	//std::sort
 
-SPADES_SETTING(ui_forceClassicMainWindow, "0");
+SPADES_SETTING(cl_showStartupWindow, "");
 
 #ifdef WIN32
 #include <windows.h>
@@ -86,6 +86,7 @@ void setWindowIcon( Fl_Window* window )
 
 SPADES_SETTING(cg_lastQuickConnectHost, "");
 SPADES_SETTING(cg_protocolVersion, "");
+SPADES_SETTING(cg_playerName, "");
 int cg_autoConnect = 0;
 
 int argsHandler(int argc, char **argv, int &i)
@@ -298,7 +299,7 @@ int main(int argc, char ** argv)
 
 		MainWindow* win = NULL;
 		if( !cg_autoConnect ) {
-			if(!((int)ui_forceClassicMainWindow ||
+			if(!((int)cl_showStartupWindow != 0 ||
 				 Fl::get_key(FL_Shift_L) || Fl::get_key(FL_Shift_R))) {
 				// TODO: always show main window for first run
 				
@@ -318,7 +319,7 @@ int main(int argc, char ** argv)
 			}
 		} else {
 			spades::ServerAddress host(cg_lastQuickConnectHost.CString(), (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076 );
-			MainWindow::StartGame( host );
+			spades::StartClient(host, cg_playerName);
 		}
 		
 		spades::Settings::GetInstance()->Flush();

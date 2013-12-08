@@ -7,13 +7,13 @@ namespace spades { class Serverbrowser; class ServerAddress; };
 #include <FL/Fl_Window.H>
 #include <string>
 #include <vector>
+#include <FL/Fl_Group.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Tabs.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Help_View.H>
 #include <FL/Fl_Check_Button.H>
+#include <FL/Fl_Tabs.H>
+#include <FL/Fl_Help_View.H>
 #include <FL/Fl_Input_Choice.H>
 #include <FL/Fl_Spinner.H>
 #include <FL/Fl_Light_Button.H>
@@ -29,6 +29,7 @@ public:
   MainWindow(int W, int H, const char *L = 0);
   MainWindow();
 private:
+  Fl_Group *quickConnectGroup;
   Fl_Input *quickHostInput;
   inline void cb_quickHostInput_i(Fl_Input*, void*);
   static void cb_quickHostInput(Fl_Input*, void*);
@@ -40,6 +41,12 @@ private:
   Fl_Return_Button *connectButton;
   inline void cb_connectButton_i(Fl_Return_Button*, void*);
   static void cb_connectButton(Fl_Return_Button*, void*);
+  Fl_Group *launchMainScreenGroup;
+  inline void cb_Start_i(Fl_Return_Button*, void*);
+  static void cb_Start(Fl_Return_Button*, void*);
+  Fl_Check_Button *bypassStartupCheck;
+  inline void cb_bypassStartupCheck_i(Fl_Check_Button*, void*);
+  static void cb_bypassStartupCheck(Fl_Check_Button*, void*);
   Fl_Tabs *mainTab;
 public:
   Fl_Group *groupAbout;
@@ -146,7 +153,6 @@ private:
   bool particleHighCapable; 
   void QuickConnectPressed();
 public:
-  static void StartGame(const spades::ServerAddress& host);
   void LoadPrefs();
 private:
   void SavePrefs();
@@ -168,6 +174,8 @@ protected:
   void connectLocal076Pressed();
 public:
   void versionSelectionChanged();
+private:
+  void StartGamePressed();
 };
-extern unsigned char aboutText[4744];
+extern unsigned char aboutText[4673];
 #endif

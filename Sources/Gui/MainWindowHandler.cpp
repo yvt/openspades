@@ -75,47 +75,73 @@ SPADES_SETTING(r_physicalLighting, "");
 SPADES_SETTING(r_occlusionQuery, "");
 SPADES_SETTING(r_depthOfField, "");
 
+SPADES_SETTING(cl_showStartupWindow, "-1");
+
 static std::vector<spades::IntVector3> g_modes;
 
 MainWindow::~MainWindow()
 {
+	SPADES_MARK_FUNCTION();
 	if( browser ) {
 		delete browser;
 	}
-}
-
-//lm: this doesnt really belong here, should be somewhere in core or client probably?
-//	we might need to introduce some base object that will handle global state and whatnot..
-//	now all windows just spawn eachother, instead of being managed from a central place.
-void MainWindow::StartGame(const spades::ServerAddress &host) {
-	SPADES_MARK_FUNCTION();
-	
-	spades::StartClient(host, cg_playerName);
 }
 
 void MainWindow::QuickConnectPressed() {
 	SPADES_MARK_FUNCTION();
 	spades::ServerAddress host(quickHostInput->value(), versionChoice->value() == 0 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076);
 	hide();
-	StartGame(host);
+	spades::StartClient(host, cg_playerName);
+}
+
+void MainWindow::StartGamePressed() {
+	SPADES_MARK_FUNCTION();
+	
+	if((int)cl_showStartupWindow == -1){
+		SPLog("This seems to be the first launch of the current version (cl_showStartupWindow = -1).");
+		switch(fl_choice("Do you want to bypass this startup window the next time you launch OpenSpades?\n\n"
+						 "Note: You can access the startup window again by holding the Shift key.",
+						 "No", "Yes", "Cancel")) {
+			case 1:
+				SPLog("User wants to bypass the startup window.");
+				SPLog("Setting cl_showStartupWindow to 0");
+				cl_showStartupWindow = 0;
+				break;
+			case 0:
+				SPLog("User don't want to bypass the startup window.");
+				SPLog("Setting cl_showStartupWindow to 1");
+				cl_showStartupWindow = 1;
+				break;
+			case 2:
+				return;
+		}
+	}
+	
+	
+	hide();
+	SPLog("Starting main screen");
+	spades::StartMainScreen();
 }
 
 void MainWindow::connectLocal075Pressed()
 {
+	SPADES_MARK_FUNCTION();
 	spades::ServerAddress host("aos://16777343:32887", spades::ProtocolVersion::v075 );
 	hide();
-	StartGame(host);
+	spades::StartClient(host, cg_playerName);
 }
 
 void MainWindow::connectLocal076Pressed()
 {
+	SPADES_MARK_FUNCTION();
 	spades::ServerAddress host("aos://16777343:32887", spades::ProtocolVersion::v076 );
 	hide();
-	StartGame(host);
+	spades::StartClient(host, cg_playerName);
 }
 
 void MainWindow::versionSelectionChanged()
 {
+	SPADES_MARK_FUNCTION();
 	cg_protocolVersion = versionChoice->value() + 3;
 }
 
@@ -125,6 +151,17 @@ void MainWindow::LoadPrefs() {
 	SPADES_MARK_FUNCTION();
 	
 	SPLog("Loading Preferences to MainWindow");
+	
+	switch((int)cl_showStartupWindow) {
+		case -1:
+		case 0:
+			bypassStartupCheck->value(1);
+			break;
+		default:
+			bypassStartupCheck->value(0);
+			break;
+	}
+	
 	
 	// --- video
 	// add modes
@@ -326,9 +363,13 @@ void MainWindow::Init() {
 	checkFilterV75->value( flags & spades::ServerFilter::flt_Ver075 );
 	checkFilterV76->value( flags & spades::ServerFilter::flt_Ver076 );
 	checkFilterVOther->value( flags & spades::ServerFilter::flt_VerOther );
-	browser->startQuery();
-	mainTab->value(groupServerlist);
-	groupServerlist->value(serverListbox);
+	//browser->startQuery();
+	//mainTab->value(groupServerlist);
+	//groupServerlist->value(serverListbox);
+	
+	mainTab->value(groupAbout);
+	groupServerlist->hide();
+	mainTab->remove(3);
 }
 
 /** This function is called after showing window.
@@ -658,6 +699,8 @@ void MainWindow::CheckGLCapability() {
 	if(!capable) {
 		mainTab->value(groupReport);
 		connectButton->deactivate();
+		cl_showStartupWindow = -1;
+		bypassStartupCheck->deactivate();
 	}
 	
 	LoadPrefs();
@@ -679,6 +722,14 @@ void MainWindow::SavePrefs() {
 			r_videoWidth = w;
 			r_videoHeight = h;
 		}
+	}
+	
+	if((int)cl_showStartupWindow == -1){
+		if(!bypassStartupCheck->value()) {
+			cl_showStartupWindow = 1;
+		}
+	}else{
+		cl_showStartupWindow = bypassStartupCheck->value() ? 0 : 1;
 	}
 	
 	cg_lastQuickConnectHost = quickHostInput->value();

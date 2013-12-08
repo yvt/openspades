@@ -7,25 +7,43 @@ decl {namespace spades { class Serverbrowser; class ServerAddress; }} {public gl
 
 widget_class MainWindow {
   label {OpenSpades Startup} open
-  xywh {1876 226 615 356} type Double labelsize 12 align 80 hide
+  xywh {631 252 615 356} type Double labelsize 12 align 80
   code0 {\#include <string>}
   code1 {\#include <vector>}
-  class Fl_Window
+  class Fl_Window visible
 } {
-  Fl_Input quickHostInput {
-    label {Quick Connect:}
-    callback {SavePrefs();}
-    private xywh {105 80 275 25}
+  Fl_Group quickConnectGroup {open
+    private xywh {105 80 500 25} hide
+  } {
+    Fl_Input quickHostInput {
+      label {Quick Connect:}
+      callback {SavePrefs();}
+      private xywh {105 80 275 25}
+    }
+    Fl_Choice versionChoice {
+      label Version
+      callback {versionSelectionChanged();} open
+      xywh {440 80 60 25} down_box BORDER_BOX
+    } {}
+    Fl_Return_Button connectButton {
+      label Connect
+      callback {QuickConnectPressed();}
+      private xywh {505 80 100 25}
+    }
   }
-  Fl_Choice versionChoice {
-    label Version
-    callback {versionSelectionChanged();} open
-    xywh {440 80 60 25} down_box BORDER_BOX
-  } {}
-  Fl_Return_Button connectButton {
-    label Connect
-    callback {QuickConnectPressed();}
-    private xywh {505 80 100 25}
+  Fl_Group launchMainScreenGroup {open
+    private xywh {5 80 605 25}
+  } {
+    Fl_Return_Button {} {
+      label {Start Game}
+      callback {StartGamePressed();}
+      xywh {475 80 135 25}
+    }
+    Fl_Check_Button bypassStartupCheck {
+      label {Bypass this startup screen the next time OpenSpades starts}
+      callback {SavePrefs();}
+      private xywh {5 80 465 25} down_box DOWN_BOX
+    }
   }
   Fl_Tabs mainTab {open
     private xywh {5 110 605 240} labelsize 11
@@ -39,8 +57,8 @@ widget_class MainWindow {
       }
     }
     Fl_Group {} {
-      label Setup
-      private xywh {10 130 595 220} hide
+      label Setup open selected
+      private xywh {10 130 595 220}
     } {
       Fl_Group {} {
         label Video open
@@ -104,7 +122,7 @@ SavePrefs();} open
         Fl_Light_Button bloodCheck {
           label Blood
           callback {SavePrefs();}
-          xywh {20 310 100 25} when 1
+          xywh {20 310 100 25} when 1 hide
         }
         Fl_Choice postFilterSelect {
           label {Post FX}
@@ -119,7 +137,7 @@ SavePrefs();} open
       }
       Fl_Group {} {
         label {Game Options} open
-        private xywh {400 150 205 70} box ENGRAVED_FRAME align 5
+        private xywh {400 150 205 70} box ENGRAVED_FRAME align 5 hide
       } {
         Fl_Input playerNameInput {
           label {Player Name:}
@@ -161,11 +179,11 @@ SavePrefs();} open
     }
     Fl_Tabs groupServerlist {
       label Serverlist open
-      xywh {10 130 595 220}
+      xywh {10 130 595 220} hide
     } {
       Fl_Browser serverListbox {
         label Serverlist
-        callback {ServerSelectionChanged();} selected
+        callback {ServerSelectionChanged();}
         protected xywh {10 150 595 200} type Hold
       }
       Fl_Group {} {
@@ -230,8 +248,6 @@ SavePrefs();} open
   }
   Function {QuickConnectPressed()} {open private
   } {}
-  Function {StartGame(const spades::ServerAddress& host)} {open return_type {static void}
-  } {}
   Function {LoadPrefs()} {open
   } {}
   Function {SavePrefs()} {open private
@@ -269,6 +285,8 @@ SavePrefs();} open
   Function {connectLocal076Pressed()} {open protected
   } {}
   Function {versionSelectionChanged()} {open
+  } {}
+  Function {StartGamePressed()} {open private return_type void
   } {}
 } 
 
