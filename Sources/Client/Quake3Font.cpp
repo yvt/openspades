@@ -100,7 +100,10 @@ namespace spades {
 				offset.y = floorf(offset.y);
 			}
 			
-			renderer->SetColor(color);
+			float a = color.w;
+			color.w = 1.f;
+			color *= a;
+			renderer->SetColorAlphaPremultiplied(color);
 			
 			for(size_t i = 0; i < txt.size(); i++){
 				int ch = ((int)txt[i]) & 127;

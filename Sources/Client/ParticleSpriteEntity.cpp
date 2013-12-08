@@ -163,7 +163,7 @@ namespace spades {
 			if(additive)
 				col.w = 0.f;
 			
-			renderer->SetColor(col);
+			renderer->SetColorAlphaPremultiplied(col);
 			renderer->AddSprite(image,
 								position,
 								radius,

@@ -182,7 +182,7 @@ namespace spades {
 					float x = scrW - 100.f + 10.f * col;
 					float y = scrH - 96.f + 10.f * row - 40.f;
 					
-					renderer->SetColor(cl);
+					renderer->SetColorAlphaPremultiplied(cl);
 					if(selected){
 						renderer->DrawImage(img,
 											MakeVector2(x, y),
@@ -193,7 +193,7 @@ namespace spades {
 											AABB2(0, 0, 16, 16));
 					}
 					
-					renderer->SetColor(MakeVector4(1, 1, 1, 1));
+					renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
 					if(selected){
 						renderer->DrawImage(img,
 											MakeVector2(x, y),

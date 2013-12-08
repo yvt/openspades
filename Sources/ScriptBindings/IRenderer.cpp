@@ -88,9 +88,34 @@ namespace spades {
 				}
 			}
 			static void SetColor(const Vector4& v,
-											IRenderer *r){
+								 IRenderer *r){
 				try{
 					return r->SetColor(v);
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void SetColorOpaque(const Vector3& v,
+								 IRenderer *r){
+				try{
+					return r->SetColorAlphaPremultiplied(MakeVector4(v.x,v.y,v.z,1.f));
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void SetColorAlphaPremultiplied(const Vector4& v,
+								 IRenderer *r){
+				try{
+					return r->SetColorAlphaPremultiplied(v);
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void SetColorAlphaNonPremultiplied(const Vector4& v,
+												   IRenderer *r){
+				Vector4 v2 = {v.x * v.w, v.y * v.w, v.z * v.w, v.w};
+				try{
+					return r->SetColorAlphaPremultiplied(v2);
 				}catch(const std::exception& ex) {
 					ScriptContextUtils().SetNativeException(ex);
 				}
@@ -424,6 +449,21 @@ namespace spades {
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void set_Color(const Vector4&in)",
 													  asFUNCTION(SetColor),
+													  asCALL_CDECL_OBJLAST);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void set_ColorOpaque(const Vector3&in)",
+													  asFUNCTION(SetColorOpaque),
+													  asCALL_CDECL_OBJLAST);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void set_ColorP(const Vector4&in)",
+													  asFUNCTION(SetColorAlphaPremultiplied),
+													  asCALL_CDECL_OBJLAST);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void set_ColorNP(const Vector4&in)",
+													  asFUNCTION(SetColorAlphaNonPremultiplied),
 													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",

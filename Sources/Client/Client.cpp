@@ -2102,11 +2102,11 @@ namespace spades {
 				renderer->ScreenHeight()};
 			
 			
-			renderer->SetColor(MakeVector4(0, 0, 0, 1));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 1));
 			img = renderer->RegisterImage("Gfx/White.tga");
 			renderer->DrawImage(img, AABB2(0, 0, siz.x, siz.y));
 			
-			renderer->SetColor(MakeVector4(1, 1, 1, 1.));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1.));
 			img = renderer->RegisterImage("Gfx/Title/Logo.png");
 			
 			siz = MakeVector2(img->GetWidth(), img->GetHeight());
@@ -2125,7 +2125,7 @@ namespace spades {
 			Vector2 scrSize = {renderer->ScreenWidth(),
 				renderer->ScreenHeight()};
 			
-			renderer->SetColor(MakeVector4(0, 0, 0, 1.));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 1.));
 			img = renderer->RegisterImage("Gfx/White.tga");
 			renderer->DrawImage(img, AABB2(0, 0,
 										   scrSize.x, scrSize.y));
@@ -2175,7 +2175,7 @@ namespace spades {
 				Vector2 v2 = base + centVect + sideVect2;
 				Vector2 v3 = base + sideVect1;
 				
-				renderer->SetColor(MakeVector4(0.f, 0.f, 0.f, alpha));
+				renderer->SetColorAlphaPremultiplied(MakeVector4(0.f, 0.f, 0.f, alpha));
 				renderer->DrawImage(img,
 									v1, v2, v3,
 									AABB2(0, 8.f, img->GetWidth(), img->GetHeight()));
@@ -2213,7 +2213,7 @@ namespace spades {
 						per = 1.f - per;
 						Vector3 color = {1.f, per, per};
 						renderer->MultiplyScreenColor(color);
-						renderer->SetColor(MakeVector4(1,0,0,(1.f - per) * .1f));
+						renderer->SetColorAlphaPremultiplied(MakeVector4((1.f - per) * .1f,0,0,(1.f - per) * .1f));
                         renderer->DrawImage(renderer->RegisterImage("Gfx/White.tga"),
                                             AABB2(0, 0, scrWidth, scrHeight));
 					}
@@ -2291,7 +2291,7 @@ namespace spades {
 							p2.x += (int)ceilf(boundary.max.x);
 							p2.y += (int)ceilf(boundary.max.y);
 							
-							renderer->SetColor(MakeVector4(0,0,0,1));
+							renderer->SetColorAlphaPremultiplied(MakeVector4(0,0,0,1));
 							renderer->DrawImage(img, AABB2(p1.x - 2, p1.y - 2,
 														   p2.x - p1.x + 4, 1));
 							renderer->DrawImage(img, AABB2(p1.x - 2, p1.y - 2,
@@ -2301,7 +2301,7 @@ namespace spades {
 							renderer->DrawImage(img, AABB2(p2.x + 1, p1.y - 2,
 														   1, p2.y - p1.y + 4));
 							
-							renderer->SetColor(MakeVector4(1,1,1,1));
+							renderer->SetColorAlphaPremultiplied(MakeVector4(1,1,1,1));
 							renderer->DrawImage(img, AABB2(p1.x - 1, p1.y - 1,
 														   p2.x - p1.x + 2, 1));
 							renderer->DrawImage(img, AABB2(p1.x - 1, p1.y - 1,
@@ -2353,9 +2353,9 @@ namespace spades {
 								float y = scrHeight - 16.f - iconHeight;
 								
 								if(clip >= i + 1){
-									renderer->SetColor(MakeVector4(1,1,1,1));
+									renderer->SetColorAlphaPremultiplied(MakeVector4(1,1,1,1));
 								}else{
-									renderer->SetColor(MakeVector4(0.4,0.4,0.4,1));
+									renderer->SetColorAlphaPremultiplied(MakeVector4(0.4,0.4,0.4,1));
 								}
 								
 								renderer->DrawImage(ammoIcon,
@@ -2563,7 +2563,7 @@ namespace spades {
 					p = p / (float)M_PI + 0.5f;
 					
 					float op = p * (1.f - p) * 4.f;
-					renderer->SetColor(MakeVector4(1.f, 1.f, 1.f, op));
+					renderer->SetColorAlphaPremultiplied(MakeVector4(op, op, op, op));
 					renderer->DrawImage(img, AABB2(scrWidth - 236.f + p * 234.f, scrHeight - 18.f, 4.f, 4.f));
 				}
 				

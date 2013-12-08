@@ -154,6 +154,13 @@ namespace spades {
 					r->SetColor(v);
 				}
 			};
+			class SetColorAlphaPremultiplied: public Command {
+			public:
+				Vector4 v;
+				virtual void Execute(IRenderer *r){
+					r->SetColorAlphaPremultiplied(v);
+				}
+			};
 			class DrawImage: public Command {
 			public:
 				IImage *img;
@@ -533,6 +540,12 @@ namespace spades {
 		void AsyncRenderer::SetColor(Vector4 c) {
 			SPADES_MARK_FUNCTION();
 			rcmds::SetColor *cmd = generator->AllocCommand<rcmds::SetColor>();
+			cmd->v = c;
+		}
+		
+		void AsyncRenderer::SetColorAlphaPremultiplied(Vector4 c) {
+			SPADES_MARK_FUNCTION();
+			rcmds::SetColorAlphaPremultiplied *cmd = generator->AllocCommand<rcmds::SetColorAlphaPremultiplied>();
 			cmd->v = c;
 		}
 		

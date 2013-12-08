@@ -83,6 +83,7 @@ namespace spades {
 			
 			/** Sets color for image drawing. */
 			virtual void SetColor(Vector4);
+			virtual void SetColorAlphaPremultiplied(Vector4);
 			
 			virtual void DrawImage(IImage *, const Vector2& outTopLeft);
 			virtual void DrawImage(IImage *, const AABB2& outRect);

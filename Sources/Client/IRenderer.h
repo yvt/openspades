@@ -108,8 +108,14 @@ namespace spades {
 			
 			virtual void MultiplyScreenColor(Vector3) = 0;
 			
-			/** Sets color for image drawing. */
+			/** Sets color for image drawing. Deprecated because
+			 * some methods treats this as an alpha premultiplied, while 
+			 * others treats this as an alpha non-premultiplied.
+			 * @deprecated */
 			virtual void SetColor(Vector4) = 0;
+			
+			/** Sets color for image drawing. Always alpha premultiplied. */
+			virtual void SetColorAlphaPremultiplied(Vector4) = 0;
 			
 			virtual void DrawImage(IImage *, const Vector2& outTopLeft) = 0;
 			virtual void DrawImage(IImage *, const AABB2& outRect) = 0;

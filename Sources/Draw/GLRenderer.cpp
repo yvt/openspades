@@ -125,7 +125,7 @@ namespace spades {
 			smoothedFogColor = MakeVector3(-1.f, -1.f, -1.f);
 			
 			// ready for 2d draw
-			device->BlendFunc(IGLDevice::SrcAlpha,
+			device->BlendFunc(IGLDevice::One,
 							  IGLDevice::OneMinusSrcAlpha);
 			device->Enable(IGLDevice::Blend, true);
 			
@@ -547,7 +547,7 @@ namespace spades {
 			EnsureSceneStarted();
 			
 			spriteRenderer->Add(im, center, radius, rotation,
-								drawColor);
+								drawColorAlphaPremultiplied);
 		}
 		
 		void GLRenderer::AddLongSprite(client::IImage *img,
@@ -563,7 +563,7 @@ namespace spades {
 			EnsureSceneStarted();
 			
 			longSpriteRenderer->Add(im, p1, p2,
-									radius, drawColor);
+									radius, drawColorAlphaPremultiplied);
 		}
 		
 #pragma mark - Scene Finalizer
@@ -961,7 +961,7 @@ namespace spades {
 													handle.GetWidth(),
 													handle.GetHeight(),
 													false), false);
-				SetColor(MakeVector4(1, 1, 1, 1));
+				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
 				DrawImage(image, AABB2(0,handle.GetHeight(),handle.GetWidth(),-handle.GetHeight()));
 				imageRenderer->Flush();
 			}
@@ -975,6 +975,7 @@ namespace spades {
 			modelRenderer->Clear();
 			
 			// prepare for 2d drawing
+			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			device->Enable(IGLDevice::Blend, true);
 		}
 		
@@ -1036,7 +1037,7 @@ namespace spades {
 			device->EnableVertexAttribArray(positionAttribute(), false);
 			device->EnableVertexAttribArray(colorAttribute(), false);
 			
-			device->BlendFunc(IGLDevice::SrcAlpha,
+			device->BlendFunc(IGLDevice::One,
 							  IGLDevice::OneMinusSrcAlpha);
 			
 		}
@@ -1107,6 +1108,15 @@ namespace spades {
 			
 			imageRenderer->SetImage(img);
 			
+			Vector4 col = drawColorAlphaPremultiplied;
+			if(legacyColorPremultiply) {
+				// in legacy mode, image color is
+				// non alpha-premultiplied.
+				col.x *= col.w;
+				col.y *= col.w;
+				col.z *= col.w;
+			}
+			
 			imageRenderer->Add(outTopLeft.x, outTopLeft.y,
 							   outTopRight.x, outTopRight.y,
 							   outBottomRight.x, outBottomRight.y,
@@ -1115,8 +1125,8 @@ namespace spades {
 							   inRect.GetMaxX(), inRect.GetMinY(),
 							   inRect.GetMaxX(), inRect.GetMaxY(),
 							   inRect.GetMinX(), inRect.GetMaxY(),
-							   drawColor.x, drawColor.y,
-							   drawColor.z, drawColor.w);
+							   col.x, col.y,
+							   col.z, col.w);
 			
 		}
 		
@@ -1128,7 +1138,13 @@ namespace spades {
 		}
 		
 		void GLRenderer::SetColor(spades::Vector4 col){
-			drawColor = col;
+			drawColorAlphaPremultiplied = col;
+			legacyColorPremultiply = true;
+		}
+		
+		void GLRenderer::SetColorAlphaPremultiplied(spades::Vector4 col){
+			legacyColorPremultiply = false;
+			drawColorAlphaPremultiplied = col;
 		}
 		
 		void GLRenderer::FrameDone() {
@@ -1154,7 +1170,7 @@ namespace spades {
 							  device,
 							  w,h,
 							  false), false);
-				SetColor(MakeVector4(1, 1, 1, 1));
+				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
 				DrawImage(image, AABB2(0,h,w,-h));
 				imageRenderer->Flush(); // must flush now because handle is released soon
 			}
@@ -1162,7 +1178,7 @@ namespace spades {
 			lastTime = sceneDef.time;
 			
 			// ready for 2d draw of next frame
-			device->BlendFunc(IGLDevice::SrcAlpha,
+			device->BlendFunc(IGLDevice::One,
 							  IGLDevice::OneMinusSrcAlpha);
 			device->Enable(IGLDevice::Blend, true);
 			

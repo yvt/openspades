@@ -222,7 +222,7 @@ namespace spades {
 				Vector2 scrSize = {renderer->ScreenWidth(),
 				renderer->ScreenHeight()};
 				float size = std::max(scrSize.x, scrSize.y);
-				renderer->SetColor(MakeVector4(0, 0, 0,alpha * .5f));
+				renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0,alpha * .5f));
 				renderer->DrawImage(bg,
 									AABB2((scrSize.x - size) * .5f,
 										  (scrSize.y - size) * .5f,
@@ -242,7 +242,7 @@ namespace spades {
 			}
 			borderRect = borderRect.Inflate(borderWidth - 8.f);
 			
-			renderer->SetColor(MakeVector4(1,1,1,alpha));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(alpha,alpha,alpha,alpha));
 			renderer->DrawImage(border,
 								AABB2(borderRect.GetMinX()-16,
 									  borderRect.GetMinY()-16,
@@ -285,7 +285,7 @@ namespace spades {
 								AABB2(16, 16, 16, 0));
 			
 			// draw map
-			renderer->SetColor(MakeVector4(1,1,1,alpha));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(alpha,alpha,alpha,alpha));
 			renderer->DrawFlatGameMap(outRect, inRect);
 			
 			this->inRect = inRect;
@@ -293,7 +293,7 @@ namespace spades {
 			
 			// draw grid
 			
-			renderer->SetColor(MakeVector4(0,0,0,0.8f*alpha));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(0,0,0,0.8f*alpha));
 			Handle<IImage> dashLine = renderer->RegisterImage("Gfx/DashLine.tga");
 			for(float x = 64.f; x < map->Width(); x += 64.f){
 				float wx = (x - inRect.GetMinX()) / inRect.GetWidth();
@@ -317,7 +317,7 @@ namespace spades {
 			}
 			
 			// draw grid label
-			renderer->SetColor(MakeVector4(1,1,1,0.8f*alpha));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(1,1,1,1)*(0.8f*alpha));
 			Handle<IImage> mapFont = renderer->RegisterImage("Gfx/Fonts/MapFont.tga");
 			for(int i = 0; i < 8; i++){
 				float startX = (float)i * 64.f;
@@ -328,7 +328,7 @@ namespace spades {
 				float fade = std::min((std::min(endX, inRect.GetMaxX()) -
 									   std::max(startX, inRect.GetMinX())) /
 									  (endX - startX) * 2.f, 1.f);
-				renderer->SetColor(MakeVector4(1,1,1,fade * .8f * alpha));
+				renderer->SetColorAlphaPremultiplied(MakeVector4(1,1,1,1)*(fade * .8f * alpha));
 				
 				float center = std::max(startX, inRect.GetMinX());
 				center = .5f * (center + std::min(endX, inRect.GetMaxX()));
@@ -352,7 +352,7 @@ namespace spades {
 				float fade = std::min((std::min(endY, inRect.GetMaxY()) -
 									   std::max(startY, inRect.GetMinY())) /
 									  (endY - startY) * 2.f, 1.f);
-				renderer->SetColor(MakeVector4(1,1,1,fade * .8f * alpha));
+				renderer->SetColorAlphaPremultiplied(MakeVector4(1,1,1,1)*(fade * .8f * alpha));
 				
 				float center = std::max(startY, inRect.GetMinY());
 				center = .5f * (center + std::min(endY, inRect.GetMaxY()));
@@ -375,7 +375,8 @@ namespace spades {
 				
 				IntVector3 teamColor = world->GetTeam(world->GetLocalPlayer()->GetTeamId()).color;
 				Vector4 teamColorF = {teamColor.x /255.f,
-					teamColor.y / 255.f, teamColor.z / 255.f, alpha};
+					teamColor.y / 255.f, teamColor.z / 255.f, 1};
+				teamColorF *= alpha;
 				for(int i = 0; i < world->GetNumPlayerSlots(); i++){
 					Player * p = world->GetPlayer(i);
 					if(p == NULL ||
@@ -390,9 +391,9 @@ namespace spades {
 					}
 					
 					if(p == world->GetLocalPlayer())
-						renderer->SetColor(MakeVector4(0,1,1,alpha));
+						renderer->SetColorAlphaPremultiplied(MakeVector4(0,alpha,alpha,alpha));
 					else{
-						renderer->SetColor(teamColorF);
+						renderer->SetColorAlphaPremultiplied(teamColorF);
 					}
 					DrawIcon(player->GetTeamId() >= 2 ?
 							 client->followPos :
@@ -410,19 +411,20 @@ namespace spades {
 					CTFGameMode::Team& team = ctf->GetTeam(tId);
 					IntVector3 teamColor = world->GetTeam(tId).color;
 					Vector4 teamColorF = {teamColor.x /255.f,
-						teamColor.y / 255.f, teamColor.z / 255.f, alpha};
+						teamColor.y / 255.f, teamColor.z / 255.f, 1};
+					teamColorF *= alpha;
 					
 					// draw base
-					renderer->SetColor(teamColorF);
+					renderer->SetColorAlphaPremultiplied(teamColorF);
 					DrawIcon(team.basePos, baseIcon, 0.f);
 					
-					renderer->SetColor(MakeVector4(1,1,1,alpha));
+					renderer->SetColorAlphaPremultiplied(MakeVector4(alpha,alpha,alpha,alpha));
 					DrawIcon(team.basePos, medicalIcon, 0.f);
 					
 					
 					// draw flag
 					if(!ctf->GetTeam(1-tId).hasIntel){
-						renderer->SetColor(teamColorF);
+						renderer->SetColorAlphaPremultiplied(teamColorF);
 						DrawIcon(team.flagPos, intelIcon, 0.f);
 					}else if(world->GetLocalPlayer()->GetTeamId() == 1-tId){
 						// local player's team is carrying
@@ -435,8 +437,8 @@ namespace spades {
 							   world->GetLocalPlayer()->GetTeamId()){
 								
 								Vector4 col = teamColorF;
-								col.w = fabsf(sinf(world->GetTime() * 4.f));
-								renderer->SetColor(col);
+								col *= fabsf(sinf(world->GetTime() * 4.f));
+								renderer->SetColorAlphaPremultiplied(col);
 								DrawIcon(carrier->GetPosition(), intelIcon, 0.f);
 							}
 						}
@@ -453,10 +455,11 @@ namespace spades {
 						teamColor = world->GetTeam(t->ownerTeamId).color;
 					}
 					Vector4 teamColorF = {teamColor.x /255.f,
-						teamColor.y / 255.f, teamColor.z / 255.f, alpha};
+						teamColor.y / 255.f, teamColor.z / 255.f, 1};
+					teamColorF *= alpha;
 					
 					// draw base
-					renderer->SetColor(teamColorF);
+					renderer->SetColorAlphaPremultiplied(teamColorF);
 					DrawIcon(t->pos, icon, 0.f);
 					
 				}

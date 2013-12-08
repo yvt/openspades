@@ -100,12 +100,12 @@ namespace spades {
 			Renderer@ r = Manager.Renderer;
 			Image@ img = r.RegisterImage("Gfx/White.tga");
 			
-			r.Color = Vector4(1, 1, 1, 0.08f);
+			r.ColorNP = Vector4(1, 1, 1, 0.08f);
 			r.DrawImage(img, 
 				AABB2(pos.x, pos.y + contentsTop - 15.f, size.x, 1.f));
 			r.DrawImage(img, 
 				AABB2(pos.x, pos.y + contentsTop + contentsHeight + 15.f, size.x, 1.f));
-			r.Color = Vector4(1, 1, 1, 0.2f);
+			r.ColorNP = Vector4(1, 1, 1, 0.2f);
 			r.DrawImage(img, 
 				AABB2(pos.x, pos.y + contentsTop - 14.f, size.x, 1.f));
 			r.DrawImage(img, 

@@ -128,12 +128,12 @@ namespace spades {
 			Renderer@ r = Manager.Renderer;
 			Image@ img = r.RegisterImage("Gfx/White.tga");
 			
-			r.Color = Vector4(1, 1, 1, 0.08f);
+			r.ColorNP = Vector4(1, 1, 1, 0.08f);
 			r.DrawImage(img, 
 				AABB2(pos.x, pos.y + ContentsTop - 15.f, size.x, 1.f));
 			r.DrawImage(img, 
 				AABB2(pos.x, pos.y + ContentsTop + ContentsHeight + 15.f, size.x, 1.f));
-			r.Color = Vector4(1, 1, 1, 0.2f);
+			r.ColorNP = Vector4(1, 1, 1, 0.2f);
 			r.DrawImage(img, 
 				AABB2(pos.x, pos.y + ContentsTop - 14.f, size.x, 1.f));
 			r.DrawImage(img, 
@@ -366,15 +366,15 @@ namespace spades {
 			Vector2 pos = ScreenPosition;
 			Vector2 size = Size;
 			Image@ img = renderer.RegisterImage("Gfx/White.tga");
-			renderer.Color = Vector4(0.f, 0.f, 0.f, IsFocused ? 0.3f : 0.1f);
+			renderer.ColorNP = Vector4(0.f, 0.f, 0.f, IsFocused ? 0.3f : 0.1f);
 			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 			
 			if(IsFocused) {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
 			}else if(hover) {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.1f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.1f);
 			} else {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.06f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.06f);
 			}
 			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
 			renderer.DrawImage(img, AABB2(pos.x, pos.y + size.y - 1.f, size.x, 1.f));

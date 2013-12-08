@@ -402,7 +402,7 @@ namespace spades {
 				renderer->AddLight(light);
 				
 				// add glare
-				renderer->SetColor(MakeVector4(1, .7f, .5f, 0) * brightness * .3f);
+				renderer->SetColorAlphaPremultiplied(MakeVector4(1, .7f, .5f, 0) * brightness * .3f);
 				renderer->AddSprite(renderer->RegisterImage("Gfx/Glare.tga"), (eyeMatrix * MakeVector3(0, 0.3f, -0.3f)).GetXYZ(), .8f, 0.f);
 			}
 			
@@ -757,7 +757,7 @@ namespace spades {
 			// debug
 			if(false){
 				Handle<IImage> img = renderer->RegisterImage("Gfx/Ball.png");
-				renderer->SetColor(MakeVector4(1, 0, 0, 0));
+				renderer->SetColorAlphaPremultiplied(MakeVector4(1, 0, 0, 0));
 				renderer->AddLongSprite(img, lastSceneDef.viewOrigin + MakeVector3(0, 0, 1), p->GetOrigin(), 0.5f);
 			}
 			

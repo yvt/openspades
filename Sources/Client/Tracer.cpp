@@ -56,7 +56,7 @@ namespace spades {
 			Vector3 pos2 = startPos + dir * endDist;
 			IRenderer *r = client->GetRenderer();
 			Vector4 col = {1.f, .6f, .2f, 0.f};
-			r->SetColor(col * 1.3f);
+			r->SetColorAlphaPremultiplied(col * 1.3f);
 			r->AddLongSprite(image, pos1, pos2, .05f);
 		}
 		

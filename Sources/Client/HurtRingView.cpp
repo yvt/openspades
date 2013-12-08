@@ -100,8 +100,8 @@ namespace spades {
 				
 				float fade = item.fade * 2.f;
 				if(fade > 1.f)fade = 1.f;
-				Vector4 color = {1,1,1,fade};
-				renderer->SetColor(color);
+				Vector4 color = {fade,fade,fade,fade};
+				renderer->SetColorAlphaPremultiplied(color);
 				
 				Vector3 dir = -item.dir;
 				float c = dir.x * playerFront.x + dir.y * playerFront.y;

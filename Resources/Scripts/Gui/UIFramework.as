@@ -720,7 +720,7 @@ namespace spades {
 			
 			void Render(Vector2 pos) {
 				Renderer@ renderer = manager.Renderer;
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 1.f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.f);
 				renderer.DrawImage(image, Vector2(pos.x - hotSpot.x, pos.y - hotSpot.y));
 			}
 		}

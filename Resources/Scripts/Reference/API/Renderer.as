@@ -60,8 +60,28 @@ namespace spades {
 			set {}
 		}
 		
-		/** Sets a color that is used for drawing. */
+		/** Sets a color that is used for drawing.
+		 * @deprecated Do not use this virtual property.
+		 *             Some methods treat this value as an alpha premultiplied,
+		 *             while others treat this value has a straight alpha. */
 		Vector4 Color { 
+			set { }
+		}
+		
+		/** Sets a opaque color that is used for drawing. */
+		Vector3 ColorOpaque { 
+			set { }
+		}
+		
+		/** Sets a color that is used for drawing. The color value is 
+		 * alpha premultiplied. */
+		Vector4 ColorP { 
+			set { }
+		}
+		
+		/** Sets a color that is used for drawing. The color value is 
+		 * alpha non-premultiplied (straight alpha). */
+		Vector4 ColorNP { 
 			set { }
 		}
 		

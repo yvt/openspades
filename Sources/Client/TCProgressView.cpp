@@ -121,10 +121,10 @@ namespace spades {
 					float y = scrH * 0.7f;
 					
 					if(nearTerritory->ownerTeamId == 2){
-						renderer->SetColor(MakeVector4(1, 1, 1, fade));
+						renderer->SetColorAlphaPremultiplied(MakeVector4(fade, fade, fade, fade));
 					}else{
 						IntVector3 c = w->GetTeam(nearTerritory->ownerTeamId).color;
-						renderer->SetColor(MakeVector4(c.x/255.f, c.y/255.f, c.z/255.f, fade));
+						renderer->SetColorAlphaPremultiplied(MakeVector4(c.x/255.f, c.y/255.f, c.z/255.f, 1) * fade);
 					}
 					renderer->DrawImage(prgBg, MakeVector2(x,y));
 					
@@ -133,7 +133,7 @@ namespace spades {
 					
 					if(state.team1 != 2){
 						IntVector3 c = w->GetTeam(state.team1).color;
-						renderer->SetColor(MakeVector4(c.x/255.f, c.y/255.f, c.z/255.f, fade*.8f));
+						renderer->SetColorAlphaPremultiplied(MakeVector4(c.x/255.f, c.y/255.f, c.z/255.f, 1) * (fade * 0.8f));
 						renderer->DrawImage(prgBar, MakeVector2(x, y),
 											AABB2(0,0,
 														  (1.f-state.progress)*256.f,32));
@@ -141,7 +141,7 @@ namespace spades {
 					
 					if(state.team2 != 2){
 						IntVector3 c = w->GetTeam(state.team2).color;
-						renderer->SetColor(MakeVector4(c.x/255.f, c.y/255.f, c.z/255.f, fade*.8f));
+						renderer->SetColorAlphaPremultiplied(MakeVector4(c.x/255.f, c.y/255.f, c.z/255.f, 1) * (fade * 0.8f));
 						renderer->DrawImage(prgBar, MakeVector2(x+
 																(1.f-state.progress)*256.f, y),
 											AABB2((1.f-state.progress)*256.f,0,

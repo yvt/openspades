@@ -143,7 +143,7 @@ namespace spades {
 			Vector2 scrSize = {renderer->ScreenWidth(),
 				renderer->ScreenHeight()};
 			
-			renderer->SetColor(MakeVector4(0, 0, 0, 1.));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 1.));
 			img = renderer->RegisterImage("Gfx/White.tga");
 			renderer->DrawImage(img, AABB2(0, 0,
 										   scrSize.x, scrSize.y));

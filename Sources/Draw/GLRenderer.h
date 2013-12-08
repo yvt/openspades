@@ -109,7 +109,8 @@ namespace spades {
 			Matrix4 projectionViewMatrix;
 			bool renderingMirror;
 			
-			Vector4 drawColor;
+			Vector4 drawColorAlphaPremultiplied;
+			bool legacyColorPremultiply;
 			
 			unsigned int lastTime;
 			
@@ -171,6 +172,7 @@ namespace spades {
 			virtual void MultiplyScreenColor(Vector3);
 			
 			virtual void SetColor(Vector4);
+			virtual void SetColorAlphaPremultiplied(Vector4);
 			
 			virtual void DrawImage(client::IImage *, const Vector2& outTopLeft);
 			virtual void DrawImage(client::IImage *, const AABB2& outRect);

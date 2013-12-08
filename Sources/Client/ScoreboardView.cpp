@@ -114,10 +114,10 @@ namespace spades {
 			// draw shadow
 			image = renderer->RegisterImage("Gfx/Scoreboard/TopShadow.tga");
 			size.y = 32.f;
-			renderer->SetColor(MakeVector4(0,0,0,0.2f));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(0,0,0,0.2f));
 			renderer->DrawImage(image, AABB2(0, teamBarTop-size.y,
 											 scrWidth, size.y));
-			renderer->SetColor(MakeVector4(0,0,0,0.2f));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(0,0,0,0.2f));
 			renderer->DrawImage(image, AABB2(0, playersBottom + size.y,
 											 scrWidth, -size.y));
 			
@@ -126,7 +126,7 @@ namespace spades {
 			size = MakeVector2(180.f, 32.f);
 			pos = MakeVector2((scrWidth - size.x) * .5f,
 							  teamBarTop - size.y);
-			renderer->SetColor(MakeVector4(1.f, .45f, .2f, 1.f));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(1.f, .45f, .2f, 1.f));
 			renderer->DrawImage(image, AABB2(pos.x,pos.y,size.x,size.y));
 			
 			pos.y = pos.y + 5.f;
@@ -155,11 +155,11 @@ namespace spades {
 			
 			// draw team bar
 			image = whiteImage;
-			renderer->SetColor(AdjustColor(GetTeamColor(0), 0.8f, 0.3f));
+			renderer->SetColorAlphaPremultiplied(AdjustColor(GetTeamColor(0), 0.8f, 0.3f));
 			renderer->DrawImage(image,
 								AABB2(0, teamBarTop,
 									  scrWidth * .5f, teamBarHeight));
-			renderer->SetColor(AdjustColor(GetTeamColor(1), 0.8f, 0.3f));
+			renderer->SetColorAlphaPremultiplied(AdjustColor(GetTeamColor(1), 0.8f, 0.3f));
 			renderer->DrawImage(image,
 								AABB2(scrWidth * .5f, teamBarTop,
 									  scrWidth * .5f, teamBarHeight));
@@ -191,7 +191,7 @@ namespace spades {
 			
 			// players background
 			image = renderer->RegisterImage("Gfx/Scoreboard/PlayersBg.tga");
-			renderer->SetColor(MakeVector4(0, 0, 0, 1.f));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 1.f));
 			renderer->DrawImage(image,
 								AABB2(0, playersTop,
 									  scrWidth, playersHeight));

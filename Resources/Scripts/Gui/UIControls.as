@@ -39,7 +39,7 @@ namespace spades {
 				
 				if(BackgroundColor.w > 0.f) {
 					Image@ img = renderer.RegisterImage("Gfx/White.tga");
-					renderer.Color = BackgroundColor;
+					renderer.ColorNP = BackgroundColor;
 					renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 				}
 				
@@ -182,19 +182,19 @@ namespace spades {
 				Vector2 size = Size;
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				if((Pressed && Hover) || Toggled) {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
 				} else if(Hover) {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.12f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.12f);
 				} else {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.07f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.07f);
 				}
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 				if((Pressed && Hover) || Toggled) {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.1f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.1f);
 				} else if(Hover) {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.07f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.07f);
 				} else {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.03f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.03f);
 				}
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, 1.f, size.y));
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
@@ -227,7 +227,7 @@ namespace spades {
 				}else if(Hover) {
 					color = Vector4(0.4f, 0.4f, 0.4f, 0.7f);
 				}
-				renderer.Color = color;
+				renderer.ColorNP = color;
 				
 				DrawSliceImage(renderer, image, pos.x, pos.y, size.x, size.y, 12.f);
 				
@@ -539,7 +539,7 @@ namespace spades {
 			
 			void DrawHighlight(float x, float y, float w, float h) {
 				Renderer@ renderer = Manager.Renderer;
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
 				
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				renderer.DrawImage(img, AABB2(x, y, w, h));
@@ -549,7 +549,7 @@ namespace spades {
 				Renderer@ renderer = Manager.Renderer;
 				float pulse = sin(Manager.Time * 5.f);
 				pulse = abs(pulse);
-				renderer.Color = Vector4(1.f, 1.f, 1.f, pulse);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, pulse);
 				
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				renderer.DrawImage(img, AABB2(x - 1.f, y, 2, h));
@@ -607,15 +607,15 @@ namespace spades {
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
-				renderer.Color = Vector4(0.f, 0.f, 0.f, IsFocused ? 0.3f : 0.1f);
+				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, IsFocused ? 0.3f : 0.1f);
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 				
 				if(IsFocused) {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
 				}else if(hover) {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.1f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.1f);
 				} else {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.06f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.06f);
 				}
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
 				renderer.DrawImage(img, AABB2(pos.x, pos.y + size.y - 1.f, size.x, 1.f));
@@ -743,11 +743,11 @@ namespace spades {
 				}
 				
 				if(dragging) {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.4f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.4f);
 				} else if (hover) {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
 				} else {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.1f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.1f);
 				}
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 			}
@@ -809,11 +809,11 @@ namespace spades {
 				AABB2 srcRect(0.f, 0.f, image.Width, image.Height);
 				
 				if(Pressed and Hover) {
-					r.Color = Vector4(1.f, 1.f, 1.f, 0.6f);
+					r.ColorNP = Vector4(1.f, 1.f, 1.f, 0.6f);
 				} else if (Hover) {
-					r.Color = Vector4(1.f, 1.f, 1.f, 0.4f);
+					r.ColorNP = Vector4(1.f, 1.f, 1.f, 0.4f);
 				} else {
-					r.Color = Vector4(1.f, 1.f, 1.f, 0.2f);
+					r.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
 				}
 				
 				if(scrollBar.Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
@@ -1014,15 +1014,15 @@ namespace spades {
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				
 				if (hover) {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.5f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.5f);
 				} else {
-					renderer.Color = Vector4(1.f, 1.f, 1.f, 0.3f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.3f);
 				}
 				renderer.DrawImage(img, 
 					AABB2(pos.x + size.x * 0.5f - 3.f, pos.y, 
 					6.f, size.y));
 				
-				renderer.Color = Vector4(0.f, 0.f, 0.f, 0.6f);
+				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 0.6f);
 				renderer.DrawImage(img, 
 					AABB2(pos.x + size.x * 0.5f - 2.f, pos.y + 1.f, 
 					4.f, size.y - 2.f));
@@ -1125,12 +1125,12 @@ namespace spades {
 				Vector2 size = Size;
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.1f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.1f);
 				renderer.DrawImage(img, 
 					AABB2(pos.x, pos.y + size.y * 0.5f - 3.f, 
 					size.x, 6.f));
 				
-				renderer.Color = Vector4(0.f, 0.f, 0.f, 0.2f);
+				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 0.2f);
 				renderer.DrawImage(img, 
 					AABB2(pos.x + 1.f, pos.y + size.y * 0.5f - 2.f,
 					size.x - 2.f, 4.f));
@@ -1347,10 +1347,10 @@ namespace spades {
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
-				renderer.Color = Vector4(0.f, 0.f, 0.f, 0.2f);
+				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 0.2f);
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 				
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.06f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.06f);
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
 				renderer.DrawImage(img, AABB2(pos.x, pos.y + size.y - 1.f, size.x, 1.f));
 				renderer.DrawImage(img, AABB2(pos.x, pos.y + 1.f, 1.f, size.y - 2.f));

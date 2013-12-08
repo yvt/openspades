@@ -122,14 +122,14 @@ namespace spades {
 			// fade the map
 			float fade = Clamp((time - 1.f) / 2.2f, 0.f, 1.f);
 			if(fade < 1.f) {
-				renderer.Color = Vector4(0.f, 0.f, 0.f, 1.f - fade);
+				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 1.f - fade);
 				renderer.DrawImage(renderer.RegisterImage("Gfx/White.tga"),
 					AABB2(0.f, 0.f, renderer.ScreenWidth, renderer.ScreenHeight));
 			}
 			
 			// draw title logo
 			Image@ img = renderer.RegisterImage("Gfx/Title/Logo.png");
-			renderer.Color = Vector4(1.f, 1.f, 1.f, 1.f);
+			renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.f);
 			renderer.DrawImage(img, Vector2((renderer.ScreenWidth - img.Width) * 0.5f, 64.f));
 			
 			manager.RunFrame(dt);
@@ -163,11 +163,11 @@ namespace spades {
 			Vector2 size = Size;
 			Image@ img = renderer.RegisterImage("Gfx/White.tga");
 			if(Pressed && Hover) {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.3f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.3f);
 			} else if(Hover) {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.15f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.15f);
 			} else {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.0f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.0f);
 			}
 			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 			
@@ -231,11 +231,11 @@ namespace spades {
 			Vector2 size = Size;
 			Image@ img = renderer.RegisterImage("Gfx/White.tga");
 			if(Pressed && Hover) {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.3f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.3f);
 			} else if(Hover) {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.15f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.15f);
 			} else {
-				renderer.Color = Vector4(1.f, 1.f, 1.f, 0.0f);
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.0f);
 			}
 			renderer.DrawImage(img, AABB2(pos.x - 2.f, pos.y, size.x, size.y));
 			

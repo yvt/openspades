@@ -220,14 +220,14 @@ namespace spades{
 				Vector4 ringColor = {0, 0, 0, 0};
 				
 				if(item.hover){
-					fillColor = MakeVector4(.4f, .4f, .4f, .7f);
-					ringColor = MakeVector4(.8f, .8f, .8f, .7f);
+					fillColor = MakeVector4(.4f, .4f, .4f, 1.f) * .7f;
+					ringColor = MakeVector4(.8f, .8f, .8f, 1.f) * .7f;
 				}
 				if(selected){
-					fillColor = MakeVector4(.7f, .7f, .7f, .9f);
+					fillColor = MakeVector4(.7f, .7f, .7f, 1.f) * .9f;
 				}
 				
-				renderer->SetColor(fillColor);
+				renderer->SetColorAlphaPremultiplied(fillColor);
 				if(item.type == MenuSpawn){
 					renderer->DrawImage(menuItemBigImage, item.rect);
 					
@@ -263,7 +263,7 @@ namespace spades{
 			
 			Handle<IImage> cursor = renderer->RegisterImage("Gfx/Limbo/Cursor.tga");
 			
-			renderer->SetColor(MakeVector4(1, 1, 1, 1));
+			renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
 			renderer->DrawImage(cursor, AABB2(cursorPos.x - 8,
 											  cursorPos.y - 8,
 											  32, 32));

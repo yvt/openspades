@@ -127,7 +127,7 @@
 		}
 		
 		void Draw2D() {
-			renderer.Color = (Vector4(1.f, 1.f, 1.f, 1.f));
+			renderer.ColorNP = (Vector4(1.f, 1.f, 1.f, 1.f));
 			renderer.DrawImage(sightImage,
 				Vector2((renderer.ScreenWidth - sightImage.Width) * 0.5f,
 						(renderer.ScreenHeight - sightImage.Height) * 0.5f));
