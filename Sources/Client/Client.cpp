@@ -76,6 +76,7 @@ SPADES_SETTING(cg_ejectBrass, "1");
 
 SPADES_SETTING(cg_mouseSensitivity, "1");
 SPADES_SETTING(cg_zoomedMouseSensScale, "0.6");
+SPADES_SETTING(cg_mouseExpPower, "1");
 
 SPADES_SETTING(cg_chatBeep, "1");
 
@@ -882,6 +883,25 @@ namespace spades {
 				if(p->IsAlive()){
 					x /= GetAimDownZoomScale();
 					y /= GetAimDownZoomScale();
+					
+					float rad = x * x + y * y;
+					if(rad > 0.f) {
+						if((float)cg_mouseExpPower < 0.001f ||
+						   isnan((float)cg_mouseExpPower)) {
+							SPLog("Invalid cg_mouseExpPower value, resetting to 1.0");
+							cg_mouseExpPower = 1.f;
+						}
+						float factor = renderer->ScreenWidth() * .1f;
+						factor *= factor;
+						rad /= factor;
+						rad = powf(rad, (float)cg_mouseExpPower * 0.5f - 0.5f);
+						
+						// shouldn't happen...
+						if(isnan(rad)) rad = 1.f;
+						
+						x *= rad;
+						y *= rad;
+					}
 					
 					if(aimDownState > 0.f) {
 						float scale = cg_zoomedMouseSensScale;

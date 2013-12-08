@@ -215,11 +215,18 @@ namespace spades {
 	class ConfigNumberFormatter {
 		int digits;
 		string suffix;
+		string prefix;
 		ConfigNumberFormatter(int digits, string suffix) {
 			this.digits = digits;
 			this.suffix = suffix;
+			this.prefix = "";
 		}
-		string Format(float value) {
+		ConfigNumberFormatter(int digits, string suffix, string prefix) {
+			this.digits = digits;
+			this.suffix = suffix;
+			this.prefix = prefix;
+		}
+		private string FormatInternal(float value) {
 			if(value < 0.f) {
 				return "-" + Format(-value);
 			}
@@ -244,6 +251,9 @@ namespace spades {
 			}
 			s += suffix;
 			return s;
+		}
+		string Format(float value) {
+			return prefix + FormatInternal(value);
 		}
 	}
 	
@@ -648,6 +658,8 @@ namespace spades {
 				ConfigNumberFormatter(1, "x"));
 			layouter.AddSliderField("ADS Mouse Sens. Scale", "cg_zoomedMouseSensScale", 0.05, 3, 0.05,
 				ConfigNumberFormatter(2, "x"));
+			layouter.AddSliderField("Exponential Power", "cg_mouseExpPower", 0.5, 1.5, 0.02,
+				ConfigNumberFormatter(2, "", "^"));
 			layouter.AddControl("Reload", "cg_keyReloadWeapon");
 			layouter.AddControl("Capture Color", "cg_keyCaptureColor");
 			layouter.AddControl("Equip Spade", "cg_keyToolSpade");
