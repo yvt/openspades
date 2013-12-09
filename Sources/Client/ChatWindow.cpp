@@ -270,6 +270,7 @@ namespace spades {
 				float fade = ent.fade;
 				if(ent.timeFade < 1.f) { fade *= ent.timeFade; }
 				shadowColor.w = .5f * fade;
+				color.w = fade;
 				std::string ch = "aaaaaa";	//let's not make a new object for each character.
 				// note: UTF-8's longest character is 6 bytes
 				for(size_t i = 0; i < msg.size(); i++){
@@ -292,6 +293,7 @@ namespace spades {
 							}
 						} else {
 							color = GetColor(msg[i]);
+							color.w = fade;
 						}
 					}else{
 						size_t ln = 0;
