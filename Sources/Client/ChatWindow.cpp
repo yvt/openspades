@@ -26,6 +26,7 @@
 #include "World.h"
 #include <Core/Exception.h>
 #include <ctype.h>
+#include <Core/Math.h>
 
 
 namespace spades {
@@ -269,15 +270,20 @@ namespace spades {
 				float fade = ent.fade;
 				if(ent.timeFade < 1.f) { fade *= ent.timeFade; }
 				shadowColor.w = .5f * fade;
-				color.w *= fade;
-				std::string ch = "a";	//let's not make a new object for each character.
+				std::string ch = "aaaaaa";	//let's not make a new object for each character.
+				// note: UTF-8's longest character is 6 bytes
 				for(size_t i = 0; i < msg.size(); i++){
 					if(msg[i] == 13 || msg[i] == 10){
 						tx = 0.f; ty += lHeight;
-					}else if(msg[i] <= MsgColorMax){
+					}else if(msg[i] <= MsgColorMax && msg[i] >= 1){
 						if( msg[i] == MsgImage ) {
 							IImage* kill = NULL;
 							if( i+1 < msg.size() && (kill = imageForIndex(msg[i+1]))  ) {
+								Vector4 colorpm = color;
+								colorpm.x *= colorpm.w;
+								colorpm.y *= colorpm.w;
+								colorpm.z *= colorpm.w;
+								renderer->SetColorAlphaPremultiplied(colorpm);
 								renderer->DrawImage( kill, MakeVector2( tx + winX, ty + winY ) );
 								tx += kill->GetWidth();
 								++i;
@@ -286,10 +292,14 @@ namespace spades {
 							}
 						} else {
 							color = GetColor(msg[i]);
-							color.w *= fade;
 						}
 					}else{
-						ch[0] = msg[i];
+						size_t ln = 0;
+						GetCodePointFromUTF8String(msg, i, &ln);
+						ch.resize(ln);
+						for(size_t k = 0; k < ln; k++)
+							ch[k] = msg[i + k];
+						i += ln - 1;
 						font->DrawShadow(ch, MakeVector2(tx + winX, ty + winY), 1.f, color, shadowColor);
 						tx += font->Measure(ch).x;
 					}

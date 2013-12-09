@@ -25,12 +25,25 @@
 
 namespace spades {
 	namespace client{
+		class FallbackFontRenderer;
+		class IRenderer;
 		class IFont: public RefCountedObject {
+			Handle<FallbackFontRenderer> fallback;
 		protected:
 			virtual ~IFont();
+			
+			float MeasureFallback(uint32_t unicodeCodePoint, float size);
+			
+			/** Draws a unicode character using fallback fonts.
+			 * @param color Premultiplied alpha color value. */
+			void DrawFallback(uint32_t unicodeCodePoint, Vector2 offset, float size, Vector4 color);
+			
 		public:
-
+			IFont(IRenderer *);
 			virtual Vector2 Measure(const std::string&) = 0;
+			
+			/** Draws text.
+			 * @param color Non-premultiplied alpha color value. */
 			virtual void Draw(const std::string&, Vector2 offset, float scale, Vector4 color) = 0;
 			void DrawShadow( const std::string& message, const Vector2& offset, float scale, const Vector4& color, const Vector4& shadowColor );
 		};
