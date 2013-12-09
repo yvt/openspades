@@ -1278,6 +1278,7 @@ namespace spades {
 					int state = reader.ReadByte();
 					
 					IGameMode* mode = GetWorld()->GetMode();
+                    if(mode == NULL) break;
 					if( mode->ModeType() != IGameMode::m_TC ) {
 						SPRaise("Received PacketTypeTerritoryCapture in non-TC gamemode");
 					}
@@ -1310,6 +1311,7 @@ namespace spades {
 					float progress = reader.ReadFloat();
 					
 					IGameMode* mode = GetWorld()->GetMode();
+                    if(mode == NULL) break;
 					if( mode->ModeType() != IGameMode::m_TC ) {
 						SPRaise("Received PacketTypeProgressBar in non-TC gamemode");
 					}
@@ -1335,6 +1337,7 @@ namespace spades {
 				{
 					if(!GetWorld()) SPRaise("No world");
 					IGameMode* mode = GetWorld()->GetMode();
+                    if(mode == NULL) break;
 					if( mode->ModeType() != IGameMode::m_CTF ) {
 						SPRaise("Received PacketTypeIntelCapture in non-TC gamemode");
 					}
@@ -1354,6 +1357,7 @@ namespace spades {
 				{
 					Player *p = GetPlayer(reader.ReadByte());
 					IGameMode* mode = GetWorld()->GetMode();
+                    if(mode == NULL) break;
 					if( mode->ModeType() != IGameMode::m_CTF ) {
 						SPRaise("Received PacketTypeIntelPickup in non-TC gamemode");
 					}
@@ -1368,6 +1372,7 @@ namespace spades {
 				{
 					Player *p = GetPlayer(reader.ReadByte());
 					IGameMode* mode = GetWorld()->GetMode();
+                    if(mode == NULL) break;
 					if( mode->ModeType() != IGameMode::m_CTF ) {
 						SPRaise("Received PacketTypeIntelPickup in non-TC gamemode");
 					}
