@@ -362,9 +362,61 @@ namespace spades {
 		SPRaise("ZIP file system doesn't support writing");
 	}
 	
+	static bool MatchesZipFile(const char *fn, const char *path) {
+		for(size_t i = 0;; i++) {
+			if(path[i] == 0){
+				return true;
+			}
+			if(fn[i] == 0) {
+				return false;
+			}
+			if((fn[i] == '/' || fn[i] == '\\') &&
+			   (path[i] == '/' || path[i] == '\\')) {
+				continue;
+			}
+			if(tolower(fn[i]) != tolower(path[i]))
+				return false;
+		}
+	}
+	
 	std::vector<std::string> ZipFileSystem::EnumFiles(const char *path) {
-		// TODO: implement
-		return std::vector<std::string> ();
+		
+		if(currentStream){
+			currentStream->ForceCloseUnzipFile();
+		}
+		
+		if(unzGoToFirstFile(zip) != UNZ_OK) {
+			SPRaise("There was a problem while seeking the zip file to the first file.");
+		}
+		
+		std::vector<std::string> lst;
+		size_t ln = strlen(path);
+		do{
+			char buf[513];
+			buf[512] = 0;
+			unzGetCurrentFileInfo(zip, nullptr,
+								  buf, 512, nullptr, 0, nullptr, 0);
+			
+			if(!MatchesZipFile(buf, path))
+				continue;
+			
+			if(buf[ln] != '/' && buf[ln] != '\\') {
+				// similar but bad pattern
+				// path = foo
+				// fn   = foobar\text.txt
+				continue;
+			}
+			if(strchr(buf + ln + 1, '/') ||
+			   strchr(buf + ln + 1, '\\')) {
+				// similar but bad pattern
+				// path = foo
+				// fn   = foo\bar\text.txt
+				continue;
+			}
+			lst.push_back(buf + ln + 1);
+		}while(unzGoToNextFile(zip) == UNZ_OK);
+		
+		return lst;
 	}
 	
 	bool ZipFileSystem::FileExists(const char *fn) {
