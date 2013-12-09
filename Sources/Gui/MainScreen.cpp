@@ -49,6 +49,7 @@ namespace spades {
 									  (const int*)SquareFontMap,
 									  24,
 									  4);
+			static_cast<client::Quake3Font*>(&*font)->SetGlyphYRange(4.f, 16.f);
 			SPLog("Font 'SquareFont' Loaded");
 			
 			helper = new MainScreenHelper(this);

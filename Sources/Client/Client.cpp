@@ -143,19 +143,22 @@ namespace spades {
 										(const int *)UnsteadyOversteerMap,
 										30,
 										18);
+			static_cast<client::Quake3Font*>(designFont)->SetGlyphYRange(9.f, 24.f);
 			SPLog("Font 'Unsteady Oversteer' Loaded");
 			/*
 			textFont = new Quake3Font(renderer,
 										renderer->RegisterImage("Gfx/Fonts/UbuntuCondensed.tga"),
 										(const int*)UbuntuCondensedMap,
 										24,
-									  4);
+			 4);
+			 static_cast<client::Quake3Font*>(&*textFont)->SetGlyphYRange(4.f, 16.f);
 			SPLog("Font 'Ubuntu Condensed' Loaded");*/
 			textFont = new client::Quake3Font(renderer,
 										 renderer->RegisterImage("Gfx/Fonts/SquareFontModified.png"),
 										 (const int*)SquareFontMap,
 										 24,
-										 4);
+											  4);
+			static_cast<client::Quake3Font*>(textFont)->SetGlyphYRange(4.f, 16.f);
 			SPLog("Font 'SquareFont' Loaded");
 			
 			bigTextFont = new Quake3Font(renderer,
@@ -163,6 +166,7 @@ namespace spades {
 									  (const int*)UbuntuCondensedBigMap,
 									  48,
 										 8);
+			static_cast<client::Quake3Font*>(bigTextFont)->SetGlyphYRange(10.f, 33.f);
 			SPLog("Font 'Ubuntu Condensed (Large)' Loaded");
 			
 			world = NULL;

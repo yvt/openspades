@@ -25,7 +25,7 @@
 namespace spades {
 	namespace client {
 		Quake3Font::Quake3Font(IRenderer *r, IImage *tex, const int *mp, int gh, float sw)
-			:renderer(r), tex(tex),
+			:IFont(r), renderer(r), tex(tex),
 			glyphHeight(gh), spaceWidth(sw)
 		{
 			SPADES_MARK_FUNCTION();
@@ -53,6 +53,9 @@ namespace spades {
 				
 				glyphs.push_back(info);
 			}
+			
+			yMin = 0.f;
+			yMax = (float)gh;
 		}
 		
 		Quake3Font::~Quake3Font(){
@@ -60,12 +63,24 @@ namespace spades {
 			tex->Release();
 		}
 		
+		void Quake3Font::SetGlyphYRange(float yMin, float yMax) {
+			this->yMin = yMin;
+			this->yMax = yMax;
+		}
+		
 		Vector2 Quake3Font::Measure(const std::string &txt) {
 			SPADES_MARK_FUNCTION();
 			
 			float x = 0.f, w = 0.f, h = (float)glyphHeight;
-			for(size_t i = 0; i < txt.size(); i++){
-				int ch = ((int)txt[i]) & 127;
+			for(size_t i = 0; i < txt.size();){
+				size_t chrLen = 0;
+				uint32_t ch = GetCodePointFromUTF8String(txt, i, &chrLen);
+				SPAssert(chrLen > 0);
+				i += chrLen;
+				if(ch >= 128) {
+					goto fallback;
+				}
+				
 				
 				if(ch == 13 || ch == 10){
 					// new line
@@ -74,17 +89,26 @@ namespace spades {
 					continue;
 				}
 				
-				SPAssert(ch >= 0); SPAssert(ch < 128);
-				const GlyphInfo& info = glyphs[ch];
-				
-				if(info.type == Invalid)
-					continue;
-				else if(info.type == Space){
-					x += spaceWidth;
-				}else if(info.type == Image ) {
-					x += info.imageRect.GetWidth();
+				SPAssert(ch < 128);
+				{
+					const GlyphInfo& info = glyphs[ch];
+					
+					if(info.type == Invalid)
+						goto fallback;
+					else if(info.type == Space){
+						x += spaceWidth;
+					}else if(info.type == Image ) {
+						x += info.imageRect.GetWidth();
+					}
+					
+					if(x > w){
+						w = x;
+					}
 				}
-				
+					
+				continue;
+			fallback:
+				x += MeasureFallback(ch, yMax - yMin);
 				if(x > w){
 					w = x;
 				}
@@ -105,8 +129,14 @@ namespace spades {
 			color *= a;
 			renderer->SetColorAlphaPremultiplied(color);
 			
-			for(size_t i = 0; i < txt.size(); i++){
-				int ch = ((int)txt[i]) & 127;
+			for(size_t i = 0; i < txt.size();){
+				size_t chrLen = 0;
+				uint32_t ch = GetCodePointFromUTF8String(txt, i, &chrLen);
+				SPAssert(chrLen > 0);
+				i += chrLen;
+				if(ch >= 128) {
+					goto fallback;
+				}
 				
 				if(ch == 13 || ch == 10){
 					// new line
@@ -115,19 +145,25 @@ namespace spades {
 					continue;
 				}
 				
-				SPAssert(ch >= 0); SPAssert(ch < 128);
-				const GlyphInfo& info = glyphs[ch];
-				
-				if(info.type == Invalid)
-					continue;
-				else if(info.type == Space){
-					x += spaceWidth;
-				}else if(info.type == Image ) {
-					AABB2 rt(x * scale + offset.x, y * scale + offset.y, info.imageRect.GetWidth() * scale, info.imageRect.GetHeight() * scale);
-					renderer->DrawImage(tex, rt, info.imageRect);
-					x += info.imageRect.GetWidth();
+				{
+					SPAssert(ch >= 0); SPAssert(ch < 128);
+					const GlyphInfo& info = glyphs[ch];
+					
+					if(info.type == Invalid)
+						goto fallback;
+					else if(info.type == Space){
+						x += spaceWidth;
+					}else if(info.type == Image ) {
+						AABB2 rt(x * scale + offset.x, y * scale + offset.y, info.imageRect.GetWidth() * scale, info.imageRect.GetHeight() * scale);
+						renderer->DrawImage(tex, rt, info.imageRect);
+						x += info.imageRect.GetWidth();
+					}
 				}
-				
+				continue;
+			fallback:
+				DrawFallback(ch, MakeVector2(x, y + yMin) * scale + offset,
+							 (yMax - yMin) * scale, color);
+				x += MeasureFallback(ch, (yMax - yMin) * scale);
 			}
 		}
 	}

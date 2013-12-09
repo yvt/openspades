@@ -510,6 +510,64 @@ namespace spades {
 		return true;
 	}
 	
+	uint32_t GetCodePointFromUTF8String(const std::string& str, size_t start, size_t *outNumBytes) {
+		if(start >= str.size()) {
+			if(outNumBytes) *outNumBytes = 0;
+			return 0;
+		}
+		if((str[start] & 0x80) == 0) {
+			if(outNumBytes) *outNumBytes = 1;
+			return (uint32_t)str[start];
+		}
+		
+		// WARNING: start <= str.size() - 2 is bad (this leads to security holes)
+		uint32_t ret;
+		if((str[start] & 0xe0) == 0xc0 && start + 2 <= str.size()) {
+			if(outNumBytes) *outNumBytes = 2;
+			ret = (str[start] & 0x1f) << 6;
+			ret |= (str[start + 1] & 0x3f);
+			return ret;
+		}
+		if((str[start] & 0xf0) == 0xe0 && start + 3 <= str.size()) {
+			if(outNumBytes) *outNumBytes = 3;
+			ret = (str[start] & 0xf) << 12;
+			ret |= (str[start + 1] & 0x3f) << 6;
+			ret |= (str[start + 2] & 0x3f);
+			return ret;
+		}
+		if((str[start] & 0xf8) == 0xf0 && start + 4 <= str.size()) {
+			if(outNumBytes) *outNumBytes = 4;
+			ret = (str[start] & 0x7) << 18;
+			ret |= (str[start + 1] & 0x3f) << 12;
+			ret |= (str[start + 2] & 0x3f) << 6;
+			ret |= (str[start + 3] & 0x3f);
+			return ret;
+		}
+		if((str[start] & 0xfc) == 0xf8 && start + 5 <= str.size()) {
+			if(outNumBytes) *outNumBytes = 5;
+			ret = (str[start] & 0x3) << 24;
+			ret |= (str[start + 1] & 0x3f) << 18;
+			ret |= (str[start + 2] & 0x3f) << 12;
+			ret |= (str[start + 3] & 0x3f) << 6;
+			ret |= (str[start + 4] & 0x3f);
+			return ret;
+		}
+		if((str[start] & 0xfe) == 0xfc && start + 6 <= str.size()) {
+			if(outNumBytes) *outNumBytes = 6;
+			ret = (str[start] & 0x1) << 30;
+			ret |= (str[start + 1] & 0x3f) << 24;
+			ret |= (str[start + 2] & 0x3f) << 18;
+			ret |= (str[start + 3] & 0x3f) << 12;
+			ret |= (str[start + 4] & 0x3f) << 6;
+			ret |= (str[start + 5] & 0x3f);
+			return ret;
+		}
+		
+		// invalid UTF8
+		if(outNumBytes) *outNumBytes = 1;
+		return (uint32_t)str[start];
+	}
+	
 	float GetRandom() {
 		const double factor = 1.f / ((double)RAND_MAX + 1.);
 		return (float)((double)rand() * factor);

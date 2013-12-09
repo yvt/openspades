@@ -45,6 +45,8 @@ namespace spades {
 			int glyphHeight;
 			std::vector<GlyphInfo> glyphs;
 			float spaceWidth;
+			
+			float yMin, yMax;
 		protected:
 			virtual ~Quake3Font();
 		public:
@@ -59,6 +61,7 @@ namespace spades {
 							  Vector2 offset,
 							  float scale,
 							  Vector4 color);
+			void SetGlyphYRange(float yMin, float yMax);
 		};
 	}
 }
