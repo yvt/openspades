@@ -259,7 +259,7 @@ namespace spades {
 			
 			float y = firstY;
 			
-			Vector4 shadowColor = {0, 0, 0, 0.5};
+			Vector4 shadowColor = {0, 0, 0, 0.8};
 			
 			for(it = entries.begin(); it != entries.end(); ++it){
 				ChatEntry& ent = *it;
@@ -269,7 +269,7 @@ namespace spades {
 				float tx = 0.f, ty = y;
 				float fade = ent.fade;
 				if(ent.timeFade < 1.f) { fade *= ent.timeFade; }
-				shadowColor.w = .5f * fade;
+				shadowColor.w = .8f * fade;
 				color.w = fade;
 				std::string ch = "aaaaaa";	//let's not make a new object for each character.
 				// note: UTF-8's longest character is 6 bytes
