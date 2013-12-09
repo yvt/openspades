@@ -164,8 +164,7 @@
 		E8B6B74317EA0B2000E35523 /* IThirdPersonToolSkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B74117EA0B1500E35523 /* IThirdPersonToolSkin.cpp */; };
 		E8B6B74617EA0F2600E35523 /* IGrenadeSkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B74417EA0F1B00E35523 /* IGrenadeSkin.cpp */; };
 		E8B6B74917EA12EC00E35523 /* IWeaponSkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B74717EA12E100E35523 /* IWeaponSkin.cpp */; };
-		E8CF0396178EDA75000683D4 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0395178EDA75000683D4 /* SDL.framework */; };
-		E8CF0398178EDA86000683D4 /* SDL_net.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0397178EDA86000683D4 /* SDL_net.framework */; };
+		E8B93AD518559EC700BD01E1 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
 		E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0399178EDABD000683D4 /* OpenAL.framework */; };
 		E8CF039C178EDAC9000683D4 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF039B178EDAC9000683D4 /* libz.dylib */; };
 		E8CF03A8178EDF6A000683D4 /* IRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03A6178EDF6A000683D4 /* IRenderer.cpp */; };
@@ -239,7 +238,6 @@
 		E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */; };
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
-		E8F74CEB183F92DA0085AA54 /* SDLmain.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CEA183F92DA0085AA54 /* SDLmain.m */; };
 		E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */; };
 		E8F74CF2183FBB070085AA54 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF0183FBB070085AA54 /* MainScreenHelper.cpp */; };
 		E8F74CF51840D4CC0085AA54 /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF31840D4CC0085AA54 /* Config.cpp */; };
@@ -619,9 +617,8 @@
 		E8B6B74517EA0F1E00E35523 /* IGrenadeSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGrenadeSkin.h; sourceTree = "<group>"; };
 		E8B6B74717EA12E100E35523 /* IWeaponSkin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IWeaponSkin.cpp; sourceTree = "<group>"; };
 		E8B6B74817EA12E500E35523 /* IWeaponSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWeaponSkin.h; sourceTree = "<group>"; };
+		E8B93AD418559EC600BD01E1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		E8CF0385178ED9D2000683D4 /* OpenSpades */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenSpades; sourceTree = BUILT_PRODUCTS_DIR; };
-		E8CF0395178EDA75000683D4 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = ../../../../../Library/Frameworks/SDL.framework; sourceTree = "<group>"; };
-		E8CF0397178EDA86000683D4 /* SDL_net.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_net.framework; path = ../../../../../Library/Frameworks/SDL_net.framework; sourceTree = "<group>"; };
 		E8CF0399178EDABD000683D4 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		E8CF039B178EDAC9000683D4 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		E8CF03A6178EDF6A000683D4 /* IRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IRenderer.cpp; path = Sources/Client/IRenderer.cpp; sourceTree = SOURCE_ROOT; };
@@ -791,8 +788,7 @@
 				E8CF03C5178EE78C000683D4 /* OpenGL.framework in Frameworks */,
 				E8CF039C178EDAC9000683D4 /* libz.dylib in Frameworks */,
 				E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */,
-				E8CF0398178EDA86000683D4 /* SDL_net.framework in Frameworks */,
-				E8CF0396178EDA75000683D4 /* SDL.framework in Frameworks */,
+				E8B93AD518559EC700BD01E1 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1235,6 +1231,7 @@
 		E8CF037C178ED9D2000683D4 = {
 			isa = PBXGroup;
 			children = (
+				E8B93AD418559EC600BD01E1 /* SDL2.framework */,
 				E844888617D26699005105D0 /* libcurl.dylib */,
 				E8E446AB17A02EC700BE8855 /* Supporting Files */,
 				E8E44691179CE7B800BE8855 /* libpng15.15.dylib */,
@@ -1249,8 +1246,6 @@
 				E8CF03C4178EE78C000683D4 /* OpenGL.framework */,
 				E8CF039B178EDAC9000683D4 /* libz.dylib */,
 				E8CF0399178EDABD000683D4 /* OpenAL.framework */,
-				E8CF0397178EDA86000683D4 /* SDL_net.framework */,
-				E8CF0395178EDA75000683D4 /* SDL.framework */,
 				E8CF041817905609000683D4 /* Resources */,
 				E8CF0387178ED9D2000683D4 /* Sources */,
 				E8CF0386178ED9D2000683D4 /* Products */,
@@ -1873,7 +1868,6 @@
 				E844888417D2633C005105D0 /* json_writer.cpp in Sources */,
 				E844888A17D39CD3005105D0 /* ErrorDialog.cpp in Sources */,
 				E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */,
-				E8F74CEB183F92DA0085AA54 /* SDLmain.m in Sources */,
 				E8B6B68F17DE27B500E35523 /* as_atomic.cpp in Sources */,
 				E8B6B69017DE27B500E35523 /* as_builder.cpp in Sources */,
 				E8B6B69117DE27B500E35523 /* as_bytecode.cpp in Sources */,
@@ -1979,8 +1973,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/SDL.framework/Headers,
-					/Library/Frameworks/SDL_net.framework/Headers,
+					/Library/Frameworks/SDL2.framework/Headers,
 					/usr/local/include/FL/images,
 					/usr/local/include,
 					Sources/ENet/include,
@@ -2024,8 +2017,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/SDL.framework/Headers,
-					/Library/Frameworks/SDL_net.framework/Headers,
+					/Library/Frameworks/SDL2.framework/Headers,
 					/usr/local/include/FL/images,
 					/usr/local/include,
 					Sources/ENet/include,
@@ -2043,6 +2035,10 @@
 		E8CF038F178ED9D2000683D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/X11/lib,
@@ -2054,6 +2050,10 @@
 		E8CF0390178ED9D2000683D4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/X11/lib,

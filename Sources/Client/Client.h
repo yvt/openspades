@@ -235,9 +235,14 @@ namespace spades {
 			
 			virtual void Closing();
 			virtual void MouseEvent(float x, float y);
+			virtual void WheelEvent(float x, float y);
 			virtual void KeyEvent(const std::string&,
-						  bool down);
-			virtual void CharEvent(const std::string&);
+								  bool down);
+			virtual void TextInputEvent(const std::string&);
+			virtual void TextEditingEvent(const std::string&,
+										  int start, int len);
+			virtual bool AcceptsTextInput();
+			virtual AABB2 GetTextInputRect();
 			
 			void SetWorld(World *);
 			World *GetWorld() const { return world; }

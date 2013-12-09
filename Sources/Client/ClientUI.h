@@ -56,9 +56,14 @@ namespace spades {
 			client::IAudioDevice *GetAudioDevice() { return &*audioDevice; }
 			
 			void MouseEvent(float x, float y);
+			void WheelEvent(float x, float y);
 			void KeyEvent(const std::string&,
-								  bool down);
-			void CharEvent(const std::string&);
+						  bool down);
+			void TextInputEvent(const std::string&);
+			void TextEditingEvent(const std::string&,
+										  int start, int len);
+			bool AcceptsTextInput();
+			AABB2 GetTextInputRect();
 			
 			void RunFrame(float dt);
 			

@@ -918,18 +918,61 @@ namespace spades {
 			}
 		}
 		
-		void Client::CharEvent(const std::string &ch){
+		void Client::WheelEvent(float x, float y) {
 			SPADES_MARK_FUNCTION();
 			
 			if(scriptedUI->NeedsInput()) {
-				scriptedUI->CharEvent(ch);
+				scriptedUI->WheelEvent(x, y);
 				return;
 			}
 			
+			if(y > .5f) {
+				KeyEvent("WheelDown", true);
+				KeyEvent("WheelDown", false);
+			}else if(y < -.5f){
+				KeyEvent("WheelUp", true);
+				KeyEvent("WheelUp", false);
+			}
+		}
+		
+		void Client::TextInputEvent(const std::string &ch){
+			SPADES_MARK_FUNCTION();
+			
+			if(scriptedUI->NeedsInput()) {
+				scriptedUI->TextInputEvent(ch);
+				return;
+			}
 			
 			if(ch == "/") {
 				scriptedUI->EnterCommandWindow();
 			}
+		}
+		
+		void Client::TextEditingEvent(const std::string &ch,
+									  int start, int len) {
+			SPADES_MARK_FUNCTION();
+			
+			if(scriptedUI->NeedsInput()) {
+				scriptedUI->TextEditingEvent(ch, start, len);
+				return;
+			}
+		}
+		
+		bool Client::AcceptsTextInput() {
+			SPADES_MARK_FUNCTION();
+			
+			if(scriptedUI->NeedsInput()) {
+				return scriptedUI->AcceptsTextInput();
+			}
+			return false;
+		}
+		
+		AABB2 Client::GetTextInputRect() {
+			SPADES_MARK_FUNCTION();
+			if(scriptedUI->NeedsInput()) {
+				return scriptedUI->GetTextInputRect();
+			}
+			return AABB2();
 		}
 		
 		// TODO: this might not be a fast way

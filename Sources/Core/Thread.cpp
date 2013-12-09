@@ -24,6 +24,7 @@
 #include "Debug.h"
 #include "ThreadLocalStorage.h"
 #include "ConcurrentDispatch.h"
+#include <typeinfo>
 
 namespace spades {
 	
@@ -90,8 +91,13 @@ namespace spades {
 		if(threadInfo)
 			return;
 		
+		const std::type_info& info = typeid(*this);
+		const char *name = info.name();
+		if(name == nullptr)
+			name = "(null)";
+		
 		threadId = 0;
-		threadInfo = SDL_CreateThread(InternalRunner, this);
+		threadInfo = SDL_CreateThread(InternalRunner, name, this);
 	}
 	
 	void Thread::Join() {

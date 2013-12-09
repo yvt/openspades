@@ -54,12 +54,28 @@ namespace spades {
 			manager.MouseEvent(x, y);
 		}
 		
+		void WheelEvent(float x, float y) {
+			manager.WheelEvent(x, y);
+		}
+		
 		void KeyEvent(string key, bool down) {
 			manager.KeyEvent(key, down);
 		}
 		
-		void CharEvent(string text) {
-			manager.CharEvent(text);
+		void TextInputEvent(string text) {
+			manager.TextInputEvent(text);
+		}
+		
+		void TextEditingEvent(string text, int start, int len) {
+			manager.TextEditingEvent(text, start, len);
+		}
+		
+		bool AcceptsTextInput() {
+			return manager.AcceptsTextInput;
+		}
+		
+		AABB2 GetTextInputRect() {
+			return manager.TextInputRect;
 		}
 		
 		void RunFrame(float dt) {

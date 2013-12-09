@@ -27,9 +27,12 @@
 namespace spades {
 	namespace gui {
 		class SDLGLDevice: public draw::IGLDevice {
-			SDL_Surface *surface;
+			SDL_Window *window;
+			SDL_GLContext context;
+			int w, h;
 		public:
-			SDLGLDevice(SDL_Surface *);
+			SDLGLDevice(SDL_Window *);
+			virtual ~SDLGLDevice();
 			
 			virtual void DepthRange(Float near, Float far);
 			virtual void Viewport(Integer x, Integer y,

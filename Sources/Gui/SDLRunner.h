@@ -35,7 +35,7 @@ namespace spades {
 		class SDLRunner: public IRunnable {
 			bool mActive;
 		protected:
-			std::string TranslateKey(const SDL_keysym&);
+			std::string TranslateKey(const SDL_Keysym&);
 			std::string TranslateButton(Uint8 b);
 			virtual int GetModState();
 			void ProcessEvent(SDL_Event& event,

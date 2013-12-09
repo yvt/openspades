@@ -36,6 +36,11 @@ namespace spades {
 			bool IsControlPressed = false;
 			bool IsShiftPressed = false;
 			
+			// IME (Input Method Editor) support
+			string EditingText;
+			int EditingStart = 0;
+			int EditingLength = 0;
+			
 			private UIElement@ mouseCapturedElement;
 			private UIElement@ mouseHoverElement;
 			
@@ -98,6 +103,13 @@ namespace spades {
 				return e.Cursor;
 			}
 			
+			void WheelEvent(float x, float y) {
+				UIElement@ e = GetMouseActiveElement();
+				if(e !is null) {
+					e.MouseWheel(y);
+				}
+			}
+			
 			void MouseEvent(float x, float y) {
 				MouseCursorPosition = Vector2(
 					Clamp(MouseCursorPosition.x + x, 0.f, renderer.ScreenWidth),
@@ -128,6 +140,9 @@ namespace spades {
 			void KeyPanic() {
 				keyRepeater.KeyUp();
 				charRepeater.KeyUp();
+				EditingText = "";
+				EditingStart = 0;
+				EditingLength = 0;
 			}
 			
 			void KeyEvent(string key, bool down) {
@@ -193,14 +208,55 @@ namespace spades {
 				}
 			}
 			
-			void CharEvent(string chr) {
+			void TextInputEvent(string chr) {
 				charRepeater.KeyDown(chr);
 				HandleCharInner(chr);
+			}
+			
+			void TextEditingEvent(string chr, int start, int len) {
+				EditingText = chr;
+				EditingStart = GetByteIndexForString(chr, start);
+				EditingLength = GetByteIndexForString(chr, len, EditingStart) - EditingStart;
+			}
+			
+			bool AcceptsTextInput {
+				get {
+					if(ActiveElement is null) {
+						EditingText = "";
+						EditingStart = 0;
+						EditingLength = 0;
+					}
+					return ActiveElement !is null;
+				}
+			}
+			
+			AABB2 TextInputRect {
+				get {
+					UIElement@ e = ActiveElement;
+					if(e !is null) {
+						AABB2 rt = e.TextInputRect;
+						Vector2 off = e.ScreenPosition;
+						rt.min += off;
+						rt.max += off;
+						return rt;
+					}else{
+						return AABB2();
+					}
+				}
 			}
 			
 			private void HandleKeyInner(string key) {
 				{
 					UIElement@ e = ActiveElement;
+					if(EditingText.length > 0) {
+						// now text is being composed by IME.
+						// ignore some keys to resolve confliction.
+						if(key == "Escape" || key == "BackSpace" || key == "Left" || key == "Right" ||
+						   key == "Space" || key == "Enter" || key == "Up" || key == "Down" || 
+						   key == "Tab") {
+						   	return;
+						}
+					}
 					if(e !is null) {
 						e.KeyDown(key);
 					} else {
@@ -612,6 +668,44 @@ namespace spades {
 				get final {
 					Vector2 screenPos = ScreenPosition;
 					return AABB2(screenPos, screenPos + Size);
+				}
+			}
+			
+			// IME supports
+			
+			AABB2 TextInputRect {
+				get {
+					return AABB2(0.f, 0.f, Size.x, Size.y);
+				}
+			}
+			
+			int TextEditingRangeStart {
+				get final {
+					if(this.IsFocused) {
+						return Manager.EditingStart;
+					}else{
+						return 0;
+					}
+				}
+			}
+			
+			int TextEditingRangeLength {
+				get final {
+					if(this.IsFocused) {
+						return Manager.EditingLength;
+					}else{
+						return 0;
+					}
+				}
+			}
+			
+			string EditingText {
+				get final {
+					if(this.IsFocused) {
+						return Manager.EditingText;
+					}else{
+						return "";
+					}
 				}
 			}
 			

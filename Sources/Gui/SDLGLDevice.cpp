@@ -123,8 +123,19 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 					func);
 		}
 		
-		SDLGLDevice::SDLGLDevice(SDL_Surface *s):
-		surface(s) {
+		SDLGLDevice::SDLGLDevice(SDL_Window *s):
+		window(s) {
+			
+			SDL_GetWindowSize(window, &w, &h);
+			context = SDL_GL_CreateContext(s);
+			if(!context) {
+				const char *err = SDL_GetError();
+				SPLog("Failed to create GL context!: %s", err);
+				SPRaise("Failed to create GL context: %s", err);
+			}
+			
+			SDL_GL_MakeCurrent(window, context);
+			
 #ifndef __APPLE__
 			GLenum err = glewInit();
 			if (GLEW_OK != err){
@@ -148,6 +159,10 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 			
 			// clear error state
 			while(glGetError() != GL_NO_ERROR);
+		}
+		
+		SDLGLDevice::~SDLGLDevice() {
+			SDL_GL_DeleteContext(context);
 		}
 		
 		void SDLGLDevice::DepthRange(Float near, Float far){
@@ -188,7 +203,7 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 		void SDLGLDevice::Swap() {
 			//glFinish();
 			CheckErrorAlways();
-			SDL_GL_SwapBuffers();
+			SDL_GL_SwapWindow(window);
 #if 0
 			Uint32 t = SDL_GetTicks();
 			if(lastFrame == 0) t = lastFrame - 30;
@@ -2216,11 +2231,11 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 		
 		
 		IGLDevice::Integer SDLGLDevice::ScreenWidth() {
-			return surface->w;
+			return w;
 		}
 		
 		IGLDevice::Integer SDLGLDevice::ScreenHeight() {
-			return surface->h;
+			return h;
 		}
 		
 	}

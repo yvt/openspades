@@ -90,6 +90,25 @@ namespace spades {
 			c.ExecuteChecked();
 		}
 		
+		
+		void MainScreen::WheelEvent(float x, float y) {
+			SPADES_MARK_FUNCTION();
+			if(subview){
+				subview->WheelEvent(x, y);
+				return;
+			}
+			if(!ui){
+				return;
+			}
+			
+			static ScriptFunction func("MainScreenUI", "void WheelEvent(float, float)");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c->SetArgFloat(0, x);
+			c->SetArgFloat(1, y);
+			c.ExecuteChecked();
+		}
+		
 		void MainScreen::KeyEvent(const std::string & key, bool down) {
 			SPADES_MARK_FUNCTION();
 			if(subview){
@@ -108,21 +127,71 @@ namespace spades {
 			c.ExecuteChecked();
 		}
 		
-		void MainScreen::CharEvent(const std::string &ch) {
+		void MainScreen::TextInputEvent(const std::string &ch) {
 			SPADES_MARK_FUNCTION();
 			if(subview){
-				subview->CharEvent(ch);
+				subview->TextInputEvent(ch);
 				return;
 			}
 			if(!ui){
 				return;
 			}
-			static ScriptFunction func("MainScreenUI", "void CharEvent(string)");
+			static ScriptFunction func("MainScreenUI", "void TextInputEvent(string)");
 			ScriptContextHandle c = func.Prepare();
 			std::string k = ch;
 			c->SetObject(&*ui);
 			c->SetArgObject(0, reinterpret_cast<void*>(&k));
 			c.ExecuteChecked();
+		}
+		
+		void MainScreen::TextEditingEvent(const std::string &ch,
+										  int start, int len) {
+			SPADES_MARK_FUNCTION();
+			if(subview){
+				subview->TextEditingEvent(ch, start, len);
+				return;
+			}
+			if(!ui){
+				return;
+			}
+			static ScriptFunction func("MainScreenUI", "void TextEditingEvent(string, int, int)");
+			ScriptContextHandle c = func.Prepare();
+			std::string k = ch;
+			c->SetObject(&*ui);
+			c->SetArgObject(0, reinterpret_cast<void*>(&k));
+			c->SetArgDWord(1, static_cast<asDWORD>(start));
+			c->SetArgDWord(2, static_cast<asDWORD>(len));
+			c.ExecuteChecked();
+		}
+		
+		bool MainScreen::AcceptsTextInput() {
+			SPADES_MARK_FUNCTION();
+			if(subview){
+				return subview->AcceptsTextInput();
+			}
+			if(!ui){
+				return false;
+			}
+			static ScriptFunction func("MainScreenUI", "bool AcceptsTextInput()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
+			return c->GetReturnByte() != 0;
+		}
+		
+		AABB2 MainScreen::GetTextInputRect() {
+			SPADES_MARK_FUNCTION();
+			if(subview){
+				return subview->GetTextInputRect();
+			}
+			if(!ui){
+				return AABB2();
+			}
+			static ScriptFunction func("MainScreenUI", "AABB2 GetTextInputRect()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
+			return *reinterpret_cast<AABB2*>(c->GetReturnObject());
 		}
 		
 		bool MainScreen::WantsToBeClosed() {

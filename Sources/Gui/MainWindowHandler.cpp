@@ -383,23 +383,41 @@ void MainWindow::CheckGLCapability() {
 	SPLog("Initializing SDL for capability query");
 	SDL_Init(SDL_INIT_VIDEO);
 	
-	SDL_Rect **modes = SDL_ListModes(NULL, SDL_OPENGL | SDL_FULLSCREEN |
-									 SDL_DOUBLEBUF);
-	if(modes && modes != (SDL_Rect **)-1){
-		g_modes.clear();
-		for(size_t i = 0; modes[i]; i++){
-			SDL_Rect mode = *(modes[i]);
+	int idDisplay = 0;
+	
+	int numDisplayMode = SDL_GetNumDisplayModes(idDisplay);
+	SDL_DisplayMode mode;
+	g_modes.clear();
+	if(numDisplayMode > 0){
+		for(int i = 0; i < numDisplayMode; i++) {
+			SDL_GetDisplayMode(idDisplay, i, &mode);
 			if(mode.w < 800 || mode.h < 600)
 				continue;
 			g_modes.push_back(spades::IntVector3::Make(mode.w, mode.h, 0));
 			SPLog("Video Mode Found: %dx%d", mode.w, mode.h);
 		}
-		
+	}else{
+		SPLog("Failed to get video mode list. Presetting default list");
+		g_modes.push_back(spades::IntVector3::Make(800, 600, 0));
+		g_modes.push_back(spades::IntVector3::Make(1024, 768, 0));
+		g_modes.push_back(spades::IntVector3::Make(1280, 720, 0));
+		g_modes.push_back(spades::IntVector3::Make(1920, 1080, 0));
 	}
+	
 	
 	bool capable = true;
 	std::string msg;
-	if(!SDL_SetVideoMode(1,1, 32, SDL_OPENGL|SDL_NOFRAME)){
+	SDL_Window *window = SDL_CreateWindow("Querying OpenGL Capabilities",
+									   1, 1, 1, 1,
+									   SDL_WINDOW_OPENGL | SDL_WINDOW_BORDERLESS);
+	if(window == nullptr) {
+		SPLog("Failed to create SDL window: %s", SDL_GetError());
+	}
+	SDL_GLContext context = window ? SDL_GL_CreateContext(window) : nullptr;
+	if(window != nullptr && context == nullptr) {
+		SPLog("Failed to create OpenGL context: %s", SDL_GetError());
+	}
+	if(!context){
 		// OpenGL initialization failed!
 		outputGLRenderer->value("N/A");
 		outputGLVersion->value("N/A");
@@ -416,6 +434,8 @@ void MainWindow::CheckGLCapability() {
 		postFilterHighCapable = false;
 		particleHighCapable = false;
 	}else{
+		
+		SDL_GL_MakeCurrent(window, context);
 		
 		shaderHighCapable = true;
 		postFilterHighCapable = true;
@@ -685,14 +705,16 @@ void MainWindow::CheckGLCapability() {
 			 " You cannot play OpenSpades.</b><br>&nbsp;<br>" + msg;
 		}
 		
+		SDL_GL_DeleteContext(context);
+		SDL_DestroyWindow(window);
 		
+		SPLog("SDL Capability Query Window finalized");
 		
 	}
 	msg = "<font face=Helvetica>" + msg + "</font><a name=last></a>";
 	
 	glInfoView->value(msg.c_str());
-	SDL_QuitSubSystem(SDL_INIT_VIDEO);
-	SPLog("SDL video subsystem finalized");
+	
 	
 	SPLog("System is OpenSpades capable: %s",
 		  capable ? "YES": "NO");

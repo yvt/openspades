@@ -385,6 +385,20 @@ namespace spades {
 				return true;
 			}
 			
+			AABB2 TextInputRect {
+				get {
+					Vector2 textPos = TextOrigin;
+					Vector2 siz = this.Size;
+					string text = Text;
+					int cursorPos = CursorPosition;
+					Font@ font = this.Font;
+					float width = font.Measure(text.substr(0, cursorPos)).x;
+					float fontHeight = font.Measure("A").y;
+					return AABB2(textPos.x + width, textPos.y,
+								 siz.x - textPos.x - width, fontHeight);
+				}
+			}
+			
 			private int PointToCharIndex(float x) {
 				x -= TextOrigin.x;
 				if(x < 0.f) return 0;
@@ -394,17 +408,22 @@ namespace spades {
 				float lastWidth = 0.f;
 				Font@ font = this.Font;
 				// FIXME: use binary search for better performance?
-				// FIXME: support multi-byte charset
+				int idx = 0;
 				for(int i = 1; i <= len; i++) {
-					float width = font.Measure(text.substr(0, i)).x;
+					int lastIdx = idx;
+					idx = GetByteIndexForString(text, 1, idx);
+					float width = font.Measure(text.substr(0, idx)).x;
 					if(width > x) {
 						if(x < (lastWidth + width) * 0.5f) {
-							return i - 1;
+							return lastIdx;
 						} else {
-							return i;
+							return idx;
 						}
 					}
 					lastWidth = width;
+					if(idx >= len) {
+						return len;
+					}
 				}
 				return len;
 			}
@@ -429,7 +448,10 @@ namespace spades {
 				if(SelectionLength > 0) {
 					SelectedText = "";
 				} else {
-					Select(SelectionStart - 1, 1);
+					int pos = CursorPosition;
+					int cIdx = GetCharIndexForString(Text, CursorPosition);
+					int bIdx = GetByteIndexForString(Text, cIdx - 1);
+					Select(bIdx, pos - bIdx);
 					SelectedText = "";
 				}
 				OnChanged();
@@ -457,8 +479,8 @@ namespace spades {
 						CursorPosition = ClampCursorPosition(CursorPosition - 1);
 					}else {
 						if(SelectionLength == 0) {
-							// FIXME: support multi-byte charset
-							Select(CursorPosition - 1);
+							int cIdx = GetCharIndexForString(Text, CursorPosition);
+							Select(GetByteIndexForString(Text, cIdx - 1));
 						} else {
 							Select(SelectionStart);
 						}
@@ -469,8 +491,8 @@ namespace spades {
 						CursorPosition = ClampCursorPosition(CursorPosition + 1);
 					}else {
 						if(SelectionLength == 0) {
-							// FIXME: support multi-byte charset
-							Select(CursorPosition + 1);
+							int cIdx = GetCharIndexForString(Text, CursorPosition);
+							Select(GetByteIndexForString(Text, cIdx + 1));
 						} else {
 							Select(SelectionEnd);
 						}
@@ -555,6 +577,14 @@ namespace spades {
 				renderer.DrawImage(img, AABB2(x - 1.f, y, 2, h));
 			}
 			
+			void DrawEditingLine(float x, float y, float w, float h) {
+				Renderer@ renderer = Manager.Renderer;
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, .3f);
+				
+				Image@ img = renderer.RegisterImage("Gfx/White.tga");
+				renderer.DrawImage(img, AABB2(x, y + h, w, 2.f));
+			}
+			
 			void Render() {
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
@@ -562,6 +592,20 @@ namespace spades {
 				Font@ font = this.Font;
 				Vector2 textPos = TextOrigin + pos;
 				string text = Text;
+				
+				string composition = this.EditingText;
+				int editStart = this.TextEditingRangeStart;
+				int editLen = this.TextEditingRangeLength;
+				
+				int markStart = SelectionStart;
+				int markEnd = SelectionEnd;
+				
+				if(composition.length > 0){
+					this.SelectedText = "";
+					markStart = SelectionStart + editStart;
+					markEnd = markStart + editLen;
+					text = text.substr(0, SelectionStart) + composition + text.substr(SelectionStart);
+				}
 				
 				if(text.length == 0){
 					if(IsEnabled) {
@@ -575,8 +619,8 @@ namespace spades {
 					float fontHeight = font.Measure("A").y;
 					
 					// draw selection
-					int start = SelectionStart;
-					int end = SelectionEnd;
+					int start = markStart;
+					int end = markEnd;
 					if(end == start) {
 						float x = font.Measure(text.substr(0, start)).x;
 						DrawBeam(x + textPos.x, textPos.y, fontHeight);
@@ -585,7 +629,18 @@ namespace spades {
 						float x2 = font.Measure(text.substr(0, end)).x;
 						DrawHighlight(textPos.x + x1, textPos.y, x2 - x1, fontHeight);
 					}
+					
+					// draw composition underline
+					if(composition.length > 0) {
+						start = SelectionStart;
+						end = start + composition.length;
+						float x1 = font.Measure(text.substr(0, start)).x;
+						float x2 = font.Measure(text.substr(0, end)).x;
+						DrawEditingLine(textPos.x + x1, textPos.y, x2 - x1, fontHeight);
+					}
 				}
+				
+				
 			}
 		}
 		

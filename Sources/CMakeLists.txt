@@ -49,7 +49,7 @@ add_dependencies(OpenSpades Angelscript Angelscript_addons)
 
 if(WIN32)
 	source_group("Resources" ${RESOURCE_FILES})
-	foreach(LIB ${SDL_LIBRARY})
+	foreach(LIB ${SDL2_LIBRARY})
 		string(REGEX REPLACE "\\.lib$" ".dll" SDL_DLL ${LIB})
 		if(EXISTS "${SDL_DLL}")
 			add_custom_command(TARGET OpenSpades POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SDL_DLL}" "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/")
@@ -87,7 +87,7 @@ source_group("ScriptBindings" FILES ${SCRIPTBINDING_FILES})
 source_group("libs\\unzip" FILES ${UNZIP_FILES})
 
 
-target_link_libraries(OpenSpades ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS})
+target_link_libraries(OpenSpades ${SDL2_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS})
 
 #todo: MACOSX_BUNDLE_ICON_FILE ?
 

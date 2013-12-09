@@ -77,5 +77,73 @@
 		renderer.DrawImage(image, AABB2(x + border, y + border, w - border - border, h - border - border), 
 			AABB2(border, border, iw - border - border, ih - border - border));
 	}
+	
+	/** Returns the byte index for a certain character index. */
+	int GetByteIndexForString(string s, int charIndex, int start = 0) {
+		int len = s.length;
+		while(start < len && charIndex > 0) {
+			int c = s[start];
+			if((c & 0x80) == 0) {
+				charIndex--;
+				start += 1;
+			}else if((c & 0xe0) == 0xc0) {
+				charIndex--;
+				start += 2;
+			}else if((c & 0xf0) == 0xe0) {
+				charIndex--;
+				start += 3;
+			}else if((c & 0xf8) == 0xf0) {
+				charIndex--;
+				start += 4;
+			}else if((c & 0xfc) == 0xf8) {
+				charIndex--;
+				start += 5;
+			}else if((c & 0xfe) == 0xfc) {
+				charIndex--;
+				start += 6;
+			}else{
+				// invalid!
+				charIndex--;
+				start++;
+			}
+		}
+		
+		if(start > len) start = len;
+		return start;
+	}
+	
+	/** Returns the byte index for a certain character index. */
+	int GetCharIndexForString(string s, int byteIndex, int start = 0) {
+		int len = s.length;
+		int charIndex = 0;
+		while(start < len && start < byteIndex && byteIndex > 0) {
+			int c = s[start];
+			if((c & 0x80) == 0) {
+				charIndex++;
+				start += 1;
+			}else if((c & 0xe0) == 0xc0) {
+				charIndex++;
+				start += 2;
+			}else if((c & 0xf0) == 0xe0) {
+				charIndex++;
+				start += 3;
+			}else if((c & 0xf8) == 0xf0) {
+				charIndex++;
+				start += 4;
+			}else if((c & 0xfc) == 0xf8) {
+				charIndex++;
+				start += 5;
+			}else if((c & 0xfe) == 0xfc) {
+				charIndex++;
+				start += 6;
+			}else{
+				// invalid!
+				charIndex++;
+				start++;
+			}
+		}
+		
+		return charIndex;
+	}
  }
  

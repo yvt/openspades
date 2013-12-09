@@ -21,6 +21,7 @@
 #pragma once
 
 #include <Core/RefCountedObject.h>
+#include <Core/Math.h>
 
 namespace spades {
 	namespace gui {
@@ -33,7 +34,12 @@ namespace spades {
 			virtual void MouseEvent(float x, float y) {}
 			virtual void KeyEvent(const std::string&,
 								  bool down) {}
-			virtual void CharEvent(const std::string&) {}
+			virtual void TextInputEvent(const std::string&) {}
+			virtual void TextEditingEvent(const std::string&,
+										  int start, int len) {}
+			virtual bool AcceptsTextInput() { return false; }
+			virtual AABB2 GetTextInputRect() { return AABB2(); }
+			virtual void WheelEvent(float x, float y) {}
 			
 			virtual void RunFrame(float dt) {}
 			

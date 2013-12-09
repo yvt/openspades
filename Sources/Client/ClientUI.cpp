@@ -87,6 +87,20 @@ namespace spades {
 			c.ExecuteChecked();
 		}
 		
+		void ClientUI::WheelEvent(float x, float y) {
+			SPADES_MARK_FUNCTION();
+			if(!ui){
+				return;
+			}
+			
+			static ScriptFunction func("ClientUI", "void WheelEvent(float, float)");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c->SetArgFloat(0, x);
+			c->SetArgFloat(1, y);
+			c.ExecuteChecked();
+		}
+		
 		void ClientUI::KeyEvent(const std::string & key, bool down) {
 			SPADES_MARK_FUNCTION();
 			if(!ui){
@@ -101,17 +115,57 @@ namespace spades {
 			c.ExecuteChecked();
 		}
 		
-		void ClientUI::CharEvent(const std::string &ch) {
+		void ClientUI::TextInputEvent(const std::string &ch) {
 			SPADES_MARK_FUNCTION();
 			if(!ui){
 				return;
 			}
-			static ScriptFunction func("ClientUI", "void CharEvent(string)");
+			static ScriptFunction func("ClientUI", "void TextInputEvent(string)");
 			ScriptContextHandle c = func.Prepare();
 			std::string k = ch;
 			c->SetObject(&*ui);
 			c->SetArgObject(0, reinterpret_cast<void*>(&k));
 			c.ExecuteChecked();
+		}
+		
+		void ClientUI::TextEditingEvent(const std::string &ch,
+										int start, int len) {
+			SPADES_MARK_FUNCTION();
+			if(!ui){
+				return;
+			}
+			static ScriptFunction func("ClientUI", "void TextEditingEvent(string,int,int)");
+			ScriptContextHandle c = func.Prepare();
+			std::string k = ch;
+			c->SetObject(&*ui);
+			c->SetArgObject(0, reinterpret_cast<void*>(&k));
+			c->SetArgDWord(1, static_cast<asDWORD>(start));
+			c->SetArgDWord(2, static_cast<asDWORD>(len));
+			c.ExecuteChecked();
+		}
+		
+		bool ClientUI::AcceptsTextInput() {
+			SPADES_MARK_FUNCTION();
+			if(!ui){
+				return false;
+			}
+			static ScriptFunction func("ClientUI", "bool AcceptsTextInput()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
+			return c->GetReturnByte() != 0;
+		}
+		
+		AABB2 ClientUI::GetTextInputRect() {
+			SPADES_MARK_FUNCTION();
+			if(!ui){
+				return AABB2();
+			}
+			static ScriptFunction func("ClientUI", "AABB2 GetTextInputRect()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
+			return *reinterpret_cast<AABB2*>(c->GetReturnObject());
 		}
 		
 		bool ClientUI::WantsClientToBeClosed() {
