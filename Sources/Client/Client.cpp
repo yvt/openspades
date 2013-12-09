@@ -166,7 +166,7 @@ namespace spades {
 									  (const int*)UbuntuCondensedBigMap,
 									  48,
 										 8);
-			static_cast<client::Quake3Font*>(bigTextFont)->SetGlyphYRange(10.f, 33.f);
+			static_cast<client::Quake3Font*>(bigTextFont)->SetGlyphYRange(11.f, 37.f);
 			SPLog("Font 'Ubuntu Condensed (Large)' Loaded");
 			
 			world = NULL;
