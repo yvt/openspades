@@ -38,6 +38,7 @@ SPADES_SETTING(r_fullscreen, "0");
 SPADES_SETTING(r_colorBits, "32");
 SPADES_SETTING(r_depthBits, "16");
 SPADES_SETTING(r_vsync, "1");
+SPADES_SETTING(r_allowSoftwareRendering, "0");
 
 namespace spades {
 	namespace gui {
@@ -266,6 +267,13 @@ namespace spades {
 				SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 				SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, r_depthBits);
 				SDL_GL_SetSwapInterval(r_vsync);
+				if(!r_allowSoftwareRendering)
+					SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+				/* someday...
+				SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+				*/
 				
 				window = SDL_CreateWindow(caption.c_str(),
 										  SDL_WINDOWPOS_CENTERED,
