@@ -268,8 +268,8 @@ namespace spades {
 				SDL_GL_SetSwapInterval(r_vsync);
 				
 				window = SDL_CreateWindow(caption.c_str(),
-										  SDL_WINDOWPOS_UNDEFINED,
-										  SDL_WINDOWPOS_UNDEFINED,
+										  SDL_WINDOWPOS_CENTERED,
+										  SDL_WINDOWPOS_CENTERED,
 										  r_videoWidth, r_videoHeight, sdlFlags);
 				
 				if(!window){
