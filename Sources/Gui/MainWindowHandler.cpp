@@ -74,6 +74,7 @@ SPADES_SETTING(r_colorCorrection, "1");
 SPADES_SETTING(r_physicalLighting, "");
 SPADES_SETTING(r_occlusionQuery, "");
 SPADES_SETTING(r_depthOfField, "");
+SPADES_SETTING(r_vsync, "");
 
 SPADES_SETTING(cl_showStartupWindow, "-1");
 
@@ -235,6 +236,7 @@ void MainWindow::LoadPrefs() {
 	versionChoice->add( "0.76" );
 	versionChoice->value( v == 3 ? 0 : 1 ); 
 	fullscreenCheck->value(r_fullscreen ? 1 : 0);
+	verticalSyncCheck->value(r_vsync ? 1 : 0);
 	
 	// --- graphics
 	postFilterSelect->clear();
@@ -745,6 +747,8 @@ void MainWindow::SavePrefs() {
 			r_videoHeight = h;
 		}
 	}
+	
+	r_vsync = verticalSyncCheck->value() ? 1 : 0;
 	
 	if((int)cl_showStartupWindow == -1){
 		if(!bypassStartupCheck->value()) {

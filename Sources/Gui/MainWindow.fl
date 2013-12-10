@@ -57,7 +57,7 @@ widget_class MainWindow {
       }
     }
     Fl_Group {} {
-      label Setup open selected
+      label Setup open
       private xywh {10 130 595 220}
     } {
       Fl_Group {} {
@@ -80,6 +80,11 @@ SavePrefs();} open
           callback {SavePrefs();} open
           private xywh {65 160 160 25} when 1
         } {}
+        Fl_Check_Button verticalSyncCheck {
+          label {Vertical Sync}
+          callback {SavePrefs();} selected
+          xywh {150 190 110 25} down_box DOWN_BOX
+        }
       }
       Fl_Group {} {
         label Audio open

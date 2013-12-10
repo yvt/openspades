@@ -59,6 +59,13 @@ void MainWindow::cb_modeSelect(Fl_Input_Choice* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_modeSelect_i(o,v);
 }
 
+void MainWindow::cb_verticalSyncCheck_i(Fl_Check_Button*, void*) {
+  SavePrefs();
+}
+void MainWindow::cb_verticalSyncCheck(Fl_Check_Button* o, void* v) {
+  ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_verticalSyncCheck_i(o,v);
+}
+
 void MainWindow::cb_polyInput_i(Fl_Spinner*, void*) {
   SavePrefs();
 }
@@ -264,6 +271,10 @@ this->when(FL_WHEN_RELEASE);
         modeSelect->callback((Fl_Callback*)cb_modeSelect);
         modeSelect->when(FL_WHEN_CHANGED);
       } // Fl_Input_Choice* modeSelect
+      { verticalSyncCheck = new Fl_Check_Button(150, 190, 110, 25, "Vertical Sync");
+        verticalSyncCheck->down_box(FL_DOWN_BOX);
+        verticalSyncCheck->callback((Fl_Callback*)cb_verticalSyncCheck);
+      } // Fl_Check_Button* verticalSyncCheck
       o->end();
     } // Fl_Group* o
     { Fl_Group* o = new Fl_Group(400, 240, 205, 45, "Audio");

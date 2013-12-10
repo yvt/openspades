@@ -61,6 +61,11 @@ private:
   Fl_Input_Choice *modeSelect;
   inline void cb_modeSelect_i(Fl_Input_Choice*, void*);
   static void cb_modeSelect(Fl_Input_Choice*, void*);
+public:
+  Fl_Check_Button *verticalSyncCheck;
+private:
+  inline void cb_verticalSyncCheck_i(Fl_Check_Button*, void*);
+  static void cb_verticalSyncCheck(Fl_Check_Button*, void*);
   Fl_Spinner *polyInput;
   inline void cb_polyInput_i(Fl_Spinner*, void*);
   static void cb_polyInput(Fl_Spinner*, void*);
