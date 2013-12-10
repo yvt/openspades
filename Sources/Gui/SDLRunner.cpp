@@ -86,6 +86,8 @@ namespace spades {
 					return "BackSpace";
 				case SDLK_RETURN:
 					return "Enter";
+                case SDLK_SLASH:
+                    return "/";
 				default:
 					if((k.sym >= 0 && k.sym < 128 && isalnum(k.sym))){
 						static std::string charKeys[128];

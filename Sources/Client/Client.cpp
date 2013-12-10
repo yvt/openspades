@@ -957,9 +957,7 @@ namespace spades {
 				return;
 			}
 			
-			if(ch == "/") {
-				scriptedUI->EnterCommandWindow();
-			}
+			// we don't get "/" here anymore
 		}
 		
 		void Client::TextEditingEvent(const std::string &ch,
@@ -1192,6 +1190,9 @@ namespace spades {
 					}else if(CheckKey(cg_keyTeamChat, name) && down){
 						// team chat
 						scriptedUI->EnterTeamChatWindow();
+					}else if(name == "/" && down){
+						// command
+						scriptedUI->EnterCommandWindow();
 					}else if(CheckKey(cg_keyCaptureColor, name) && down){
 						CaptureColor();
 					}else if(CheckKey(cg_keyChangeMapScale, name) && down){
