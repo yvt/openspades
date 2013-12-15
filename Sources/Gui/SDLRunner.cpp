@@ -20,6 +20,7 @@
 
 #include <OpenSpades.h>
 #include "SDLGLDevice.h"
+#include <memory>
 
 #include "SDLRunner.h"
 
@@ -27,10 +28,12 @@
 #include <Draw/GLRenderer.h>
 #include <Client/Client.h>
 #include <Audio/ALDevice.h>
+#include <Audio/YsrDevice.h>
 #include <ctype.h>
 #include <Core/Debug.h>
 #include <Core/Settings.h>
 #include <Core/ConcurrentDispatch.h>
+#include <Core/Math.h>
 
 SPADES_SETTING(r_videoWidth, "1024");
 SPADES_SETTING(r_videoHeight, "640");
@@ -39,6 +42,7 @@ SPADES_SETTING(r_colorBits, "32");
 SPADES_SETTING(r_depthBits, "16");
 SPADES_SETTING(r_vsync, "1");
 SPADES_SETTING(r_allowSoftwareRendering, "0");
+SPADES_SETTING(r_audioDriver, "ysr");
 
 namespace spades {
 	namespace gui {
@@ -48,6 +52,16 @@ namespace spades {
 		
 		SDLRunner::~SDLRunner() {
 			
+		}
+		
+		client::IAudioDevice *SDLRunner::CreateAudioDevice() {
+			if(EqualsIgnoringCase(r_audioDriver, "openal")) {
+				return new audio::ALDevice();
+			}else if(EqualsIgnoringCase(r_audioDriver, "ysr")) {
+				return new audio::YsrDevice();
+			}else{
+				SPRaise("Unknown audio driver name: %s (openal or ysr expected)", r_audioDriver.CString());
+			}
 		}
 		
 		std::string SDLRunner::TranslateButton(Uint8 b){
@@ -294,9 +308,9 @@ namespace spades {
 				{
 					SDLGLDevice glDevice(window);
 					Handle<draw::GLRenderer> renderer(new draw::GLRenderer(&glDevice), false);
-					audio::ALDevice audio;
+					Handle<client::IAudioDevice> audio(CreateAudioDevice(), false);
 					
-					RunClientLoop(renderer, &audio);
+					RunClientLoop(renderer, audio);
 					
 				}
 			}catch(...){

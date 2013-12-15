@@ -42,6 +42,7 @@ namespace spades {
 							  View *);
 			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
 			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) = 0;
+			virtual client::IAudioDevice *CreateAudioDevice();
 		public:
 			SDLRunner();
 			virtual ~SDLRunner();

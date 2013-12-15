@@ -34,6 +34,7 @@ namespace spades {
 		Runner::~Runner() {
 			
 		}
+		
 		void Runner::RunProtected() {
 			SPADES_MARK_FUNCTION();
 			std::string err;

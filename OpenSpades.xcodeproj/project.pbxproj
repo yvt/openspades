@@ -92,6 +92,7 @@
 		E883191E1792A7CC002ABE6D /* protocol.c in Sources */ = {isa = PBXBuildFile; fileRef = E88319141792A7CC002ABE6D /* protocol.c */; };
 		E883191F1792A7CC002ABE6D /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = E88319161792A7CC002ABE6D /* unix.c */; };
 		E88319201792A7CC002ABE6D /* win32.c in Sources */ = {isa = PBXBuildFile; fileRef = E88319171792A7CC002ABE6D /* win32.c */; };
+		E88EB02F185D9DC500565D07 /* YsrDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88EB02D185D9DC500565D07 /* YsrDevice.cpp */; };
 		E89A648E17A11B4F00FDA893 /* GLModelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A648C17A11B4E00FDA893 /* GLModelRenderer.cpp */; };
 		E89A649117A12FF900FDA893 /* GLDynamicLightShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A648F17A12FF800FDA893 /* GLDynamicLightShader.cpp */; };
 		E89A649417A1677F00FDA893 /* FallingBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A649217A1677F00FDA893 /* FallingBlock.cpp */; };
@@ -462,6 +463,8 @@
 		E88319151792A7CC002ABE6D /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		E88319161792A7CC002ABE6D /* unix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unix.c; sourceTree = "<group>"; };
 		E88319171792A7CC002ABE6D /* win32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = win32.c; sourceTree = "<group>"; };
+		E88EB02D185D9DC500565D07 /* YsrDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YsrDevice.cpp; sourceTree = "<group>"; };
+		E88EB02E185D9DC500565D07 /* YsrDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YsrDevice.h; sourceTree = "<group>"; };
 		E89A648C17A11B4E00FDA893 /* GLModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLModelRenderer.cpp; sourceTree = "<group>"; };
 		E89A648D17A11B4E00FDA893 /* GLModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLModelRenderer.h; sourceTree = "<group>"; };
 		E89A648F17A12FF800FDA893 /* GLDynamicLightShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLDynamicLightShader.cpp; sourceTree = "<group>"; };
@@ -938,6 +941,8 @@
 				E8567E591792BEFC009D83E0 /* ALDevice.h */,
 				E8567E5B1792BFFE009D83E0 /* ALFuncs.h */,
 				E8567E5C1792C089009D83E0 /* ALFuncs.cpp */,
+				E88EB02D185D9DC500565D07 /* YsrDevice.cpp */,
+				E88EB02E185D9DC500565D07 /* YsrDevice.h */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -1779,6 +1784,7 @@
 				E8567E7C1793E105009D83E0 /* GLModel.cpp in Sources */,
 				E8567E7F1793E1B3009D83E0 /* GLVoxelModel.cpp in Sources */,
 				E834F55017942C43004EBE88 /* Grenade.cpp in Sources */,
+				E88EB02F185D9DC500565D07 /* YsrDevice.cpp in Sources */,
 				E834F55317944779004EBE88 /* NetClient.cpp in Sources */,
 				E834F5561794BBD4004EBE88 /* Debug.cpp in Sources */,
 				E834F5591794DCFD004EBE88 /* IGameMode.cpp in Sources */,
