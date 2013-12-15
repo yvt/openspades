@@ -16,6 +16,7 @@
 #include <Core/WavAudioStream.h>
 #include <cstdlib>
 #include "../Imports/SDL.h"
+#include <Core/IStream.h>
 
 #if defined(__APPLE__)
 SPADES_SETTING(s_ysrDriver, "libysrspades.dylib");
@@ -333,6 +334,7 @@ namespace spades {
 						   const SDL_AudioSpec& spec,
 						   int allowedChanges):
 			id(0){
+				SDL_InitSubSystem(SDL_INIT_AUDIO);
 				id = SDL_OpenAudioDevice(deviceId, isCapture,
 										 &spec, &this->spec,
 										 allowedChanges);
@@ -435,10 +437,25 @@ namespace spades {
 		auto YsrDevice::CreateChunk(const char *name) -> YsrAudioChunk * {
 			SPADES_MARK_FUNCTION();
 			
-			std::unique_ptr<IStream> stream(FileManager::OpenForReading(name));
-			std::unique_ptr<IAudioStream> as(new WavAudioStream(stream.get(), true));
+			IStream *stream = NULL;
+			IAudioStream *as = NULL;
+			try{
+				stream = FileManager::OpenForReading(name);
+				as = new WavAudioStream(stream, true);
+			}catch(...){
+				if(stream)
+					delete stream;
+				throw;
+			}
 			
-			return new YsrAudioChunk(driver, as.get());
+			try{
+				YsrAudioChunk *ch =new YsrAudioChunk(driver, as);
+				delete as;
+				return ch;
+			}catch(...){
+				delete as;
+				throw;
+			}
 		}
 		
 		client::IAudioChunk *YsrDevice::RegisterSound(const char *name) {
@@ -448,7 +465,7 @@ namespace spades {
 			if(it == chunks.end()){
 				auto *c = CreateChunk(name);
 				chunks[name] = c;
-				it->second->AddRef();
+				c->AddRef();
 				return c;
 			}
 			it->second->AddRef();
