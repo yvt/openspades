@@ -18,10 +18,13 @@ namespace spades {
 		
 		class YsrDriver;
 		class YsrAudioChunk;
+		struct SdlAudioDevice;
 		
 		class YsrDevice: public client::IAudioDevice {
 			std::shared_ptr<YsrDriver> driver;
 			client::GameMap *gameMap;
+			std::unique_ptr<SdlAudioDevice> sdlAudioDevice;
+			Vector3 listenerPosition;
 			
 			int roomHistoryPos;
 			enum { RoomHistorySize = 128 };
@@ -30,9 +33,16 @@ namespace spades {
 			
 			std::map<std::string, YsrAudioChunk *> chunks;
 			YsrAudioChunk *CreateChunk(const char *name);
+			
+			static void SpatializeCallback(const void *,
+										   void *, YsrDevice *);
+			static void RenderCallback(YsrDevice *, float *, int);
+			void Render(float *stream, int numBytes);
+			void Spatialize(const void *, void *);
+		protected:
+			virtual ~YsrDevice();
 		public:
 			YsrDevice();
-			virtual ~YsrDevice();
 			
 			virtual client::IAudioChunk *RegisterSound(const char *name);
 			

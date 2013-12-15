@@ -15,6 +15,7 @@
 #include <Core/IAudioStream.h>
 #include <Core/WavAudioStream.h>
 #include <cstdlib>
+#include "../Imports/SDL.h"
 
 #if defined(__APPLE__)
 SPADES_SETTING(s_ysrDriver, "libysrspades.dylib");
@@ -23,6 +24,8 @@ SPADES_SETTING(s_ysrDriver, "YSR for OpenSpades.dll");
 #else
 SPADES_SETTING(s_ysrDriver, "libysrspades.so");
 #endif
+
+SPADES_SETTING(s_ysrNumThreads, "1");
 
 namespace spades {
 	namespace audio {
@@ -40,6 +43,9 @@ namespace spades {
 				YVec3() = default;
 				YVec3(const Vector3& v):
 				x(v.x), y(v.y), z(v.z) {}
+				operator Vector3() const {
+					return MakeVector3(x, y, z);
+				}
 			};
 			struct InitParam {
 				double samplingRate;
@@ -47,6 +53,7 @@ namespace spades {
 											SpatializeResult *,
 											void *userData);
 				void *spatializerUserData;
+				int numThreads;
 			};
 			struct ReverbParam {
 				float reflections;
@@ -85,6 +92,7 @@ namespace spades {
 			void (*playAbsolute)(ContextPrivate *, Buffer *, const YVec3 *, const PlayParam *);
 			void (*playRelative)(ContextPrivate *, Buffer *, const YVec3 *, const PlayParam *);
 			void (*playLocal)(ContextPrivate *, Buffer *, const PlayParam *);
+			void (*render)(ContextPrivate *, float *, int);
 			
 		public:
 			void Init(const InitParam& param) {
@@ -131,6 +139,10 @@ namespace spades {
 				YVec3 origin(v);
 				playAbsolute(priv, buffer, &origin, &param);
 			}
+			
+			void Render(float *buffer, int numSamples) {
+				render(priv, buffer, numSamples);
+			}
 		};
 		
 		class YsrBuffer;
@@ -157,6 +169,7 @@ namespace spades {
 			void PlayRelative(const std::shared_ptr<YsrBuffer>& buffer,
 						   const Vector3& origin,
 						   const YsrContext::PlayParam& param);
+			void Render(float *buffer, int numSamples);
 		};
 		
 		class YsrBuffer {
@@ -177,13 +190,12 @@ namespace spades {
 				SPLog("'%s' loaded", s_ysrDriver.CString());
 			}
 			
-			using InitializeFunc = const YsrContext *(*)(const char *magic, uint32_t version);
+			using InitializeFunc = const char *(*)(const char *magic, uint32_t version, YsrContext *);
 			auto initFunc = reinterpret_cast<InitializeFunc>(library->GetSymbol("YsrInitialize"));
-			const auto *a = (*initFunc)("OpenYsrSpades", 1);
-			if(a == nullptr) {
-				SPRaise("Failed to initialize YSR interface for OpenSpades.");
+			const char *a = (*initFunc)("OpenYsrSpades", 1, &ctx);
+			if(a) {
+				SPRaise("Failed to initialize YSR interface: %s", a);
 			}
-			ctx = *a;
 		}
 		
 		YsrDriver::~YsrDriver() {
@@ -192,6 +204,11 @@ namespace spades {
 		
 		void YsrDriver::Init(const YsrContext::InitParam &param) {
 			ctx.Init(param);
+			ctx.CheckError();
+		}
+		
+		void YsrDriver::Render(float *buffer, int numSamples) {
+			ctx.Render(buffer, numSamples);
 			ctx.CheckError();
 		}
 		
@@ -304,12 +321,60 @@ namespace spades {
 			
 		};
 		
+		struct SdlAudioDevice {
+			SDL_AudioDeviceID id;
+			SDL_AudioSpec spec;
+			
+			SdlAudioDevice(const char *deviceId,
+						   int isCapture,
+						   const SDL_AudioSpec& spec,
+						   int allowedChanges):
+			id(0){
+				id = SDL_OpenAudioDevice(deviceId, isCapture,
+										 &spec, &this->spec,
+										 allowedChanges);
+				if(id == 0){
+					SPRaise("Failed to initialize the audio device: %s", SDL_GetError());
+				}
+			}
+			
+			~SdlAudioDevice() {
+				if(id != 0)
+					SDL_CloseAudioDevice(id);
+			}
+			
+			decltype(id) operator()() const {
+				return id;
+			}
+		};
+		
 		YsrDevice::YsrDevice():
 		gameMap(nullptr),
 		driver(new YsrDriver()),
-		roomHistoryPos(0)
+		roomHistoryPos(0),
+		listenerPosition(MakeVector3(0, 0, 0))
 		{
+			SDL_AudioSpec spec;
+			spec.callback = reinterpret_cast<SDL_AudioCallback>(RenderCallback);
+			spec.userdata = this;
+			spec.format = AUDIO_F32SYS;
+			spec.freq = 44100;
+			spec.samples = 1024;
+			spec.channels = 2;
 			
+			sdlAudioDevice = decltype(sdlAudioDevice)
+			(new SdlAudioDevice(nullptr, SDL_FALSE,
+								spec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE));
+			
+			YsrContext::InitParam param;
+			param.numThreads = s_ysrNumThreads;
+			param.samplingRate = 44100.;
+			param.spatializerCallback = reinterpret_cast<void(*)(const YsrContext::YVec3 *, YsrContext::SpatializeResult *, void *)>(SpatializeCallback);
+			param.spatializerUserData = this;
+			driver->Init(param);
+			
+			
+			SDL_PauseAudioDevice((*sdlAudioDevice)(), 0);
 		}
 		
 		YsrDevice::~YsrDevice() {
@@ -318,6 +383,50 @@ namespace spades {
 			}
 			if(this->gameMap)
 				this->gameMap->Release();
+		}
+		
+		void YsrDevice::RenderCallback(YsrDevice *self,
+									   float *stream,
+									   int numBytes) {
+			self->Render(stream, numBytes);
+		}
+		
+		void YsrDevice::SpatializeCallback(const void *yorigin,
+										   void *_result,
+										   YsrDevice *self) {
+			self->Spatialize(yorigin, _result);
+		}
+		
+		void YsrDevice::Render(float *stream, int numBytes) {
+			driver->Render(stream, numBytes / 8);
+		}
+		
+		void YsrDevice::Spatialize(const void *yorigin, void *_result) {
+			Vector3 origin(*reinterpret_cast<const YsrContext::YVec3 *>(yorigin));
+			auto& result = *reinterpret_cast<YsrContext::SpatializeResult *>(_result);
+			
+			// check obstruction
+			if(gameMap) {
+				Vector3 eye = listenerPosition;
+				Vector3 pos = origin;
+				Vector3 checkPos;
+				result.directGain = 0.f;
+				for(int x = -1; x <= 1; x++)
+					for(int y = -1; y <= 1; y++)
+						for(int z = -1; z <= 1; z++){
+							IntVector3 hitPos;
+							checkPos.x = pos.x + (float)x * .2f;
+							checkPos.y = pos.y + (float)y * .2f;
+							checkPos.z = pos.z + (float)z * .2f;
+							if(!gameMap->CastRay(eye, (checkPos-eye).Normalize(),
+												 (checkPos-eye).GetLength(), hitPos)){
+								result.directGain = 1.f;
+							}
+						}
+			} else {
+				result.directGain = 1.f;
+			}
+			
 		}
 		
 		auto YsrDevice::CreateChunk(const char *name) -> YsrAudioChunk * {
@@ -359,6 +468,8 @@ namespace spades {
 									 const spades::Vector3 &front,
 									 const spades::Vector3 &up) {
 			SPADES_MARK_FUNCTION();
+			
+			listenerPosition = eye;
 			
 			YsrContext::ReverbParam reverbParam;
 			float maxDistance = 40.f;
