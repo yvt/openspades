@@ -368,7 +368,7 @@ namespace spades {
 			
 			YsrContext::InitParam param;
 			param.numThreads = s_ysrNumThreads;
-			param.samplingRate = 44100.;
+			param.samplingRate = static_cast<double>(sdlAudioDevice->spec.freq);
 			param.spatializerCallback = reinterpret_cast<void(*)(const YsrContext::YVec3 *, YsrContext::SpatializeResult *, void *)>(SpatializeCallback);
 			param.spatializerUserData = this;
 			driver->Init(param);
