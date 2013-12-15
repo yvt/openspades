@@ -26,6 +26,7 @@ SPADES_SETTING(s_ysrDriver, "libysrspades.so");
 #endif
 
 SPADES_SETTING(s_ysrNumThreads, "1");
+SPADES_SETTING(s_ysrBufferSize, "1024");
 
 namespace spades {
 	namespace audio {
@@ -70,6 +71,7 @@ namespace spades {
 				int sampleBits;
 				int numChannels;
 				int numSamples;
+				double samplingRate;
 			};
 			struct PlayParam {
 				float volume;
@@ -301,6 +303,7 @@ namespace spades {
 				param.data = reinterpret_cast<void *>(buffer.data());
 				param.numChannels = stream->GetNumChannels();
 				param.numSamples = static_cast<int>(stream->GetNumSamples());
+				param.samplingRate = stream->GetSamplingFrequency();
 				switch(stream->GetSampleFormat()) {
 					case IAudioStream::SignedShort:
 						param.sampleBits = 16;
@@ -359,7 +362,7 @@ namespace spades {
 			spec.userdata = this;
 			spec.format = AUDIO_F32SYS;
 			spec.freq = 44100;
-			spec.samples = 1024;
+			spec.samples = (int)s_ysrBufferSize;
 			spec.channels = 2;
 			
 			sdlAudioDevice = decltype(sdlAudioDevice)
