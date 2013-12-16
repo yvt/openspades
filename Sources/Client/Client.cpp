@@ -390,11 +390,8 @@ namespace spades {
 			renderer->RegisterImage("Gfx/Bullet/9mm.tga");
 			renderer->RegisterImage("Gfx/Bullet/12gauge.tga");
 			renderer->RegisterImage("Gfx/CircleGradient.png");
-			renderer->RegisterImage("Gfx/LoadingWindow.png");
-			renderer->RegisterImage("Gfx/LoadingWindowGlow.png");
-			renderer->RegisterImage("Gfx/LoadingStripe.png");
 			renderer->RegisterImage("Gfx/HurtSprite.png");
-			renderer->RegisterImage("Gfx/HurtRing.tga");
+			renderer->RegisterImage("Gfx/HurtRing2.png");
 			audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
 			
 			SPLog("Started connecting to '%s'", hostname.asString(true).c_str());
@@ -3633,8 +3630,8 @@ namespace spades {
 				// don't play on local: see BullethitPlayer
 				if(victim != world->GetLocalPlayer()) {
 					if(!IsMuted()){
-						Handle<IAudioChunk> c =
-						audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh.wav");
+						Handle<IAudioChunk> c;
+						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh.wav");
 						audioDevice->Play(c, victim->GetEye(), AudioParam());
 					}
 				}
