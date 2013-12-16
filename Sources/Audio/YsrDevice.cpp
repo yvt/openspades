@@ -26,7 +26,7 @@ SPADES_SETTING(s_ysrDriver, "YSR for OpenSpades.dll");
 SPADES_SETTING(s_ysrDriver, "libysrspades.so");
 #endif
 
-SPADES_SETTING(s_ysrNumThreads, "1");
+SPADES_SETTING(s_ysrNumThreads, "2");
 SPADES_SETTING(s_maxPolyphonics, "");
 SPADES_SETTING(s_ysrBufferSize, "1024");
 SPADES_SETTING(s_ysrDebug, "0");
