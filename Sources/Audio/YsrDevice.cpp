@@ -27,7 +27,8 @@ SPADES_SETTING(s_ysrDriver, "libysrspades.so");
 #endif
 
 SPADES_SETTING(s_ysrNumThreads, "1");
-SPADES_SETTING(s_ysrBufferSize, "1024");
+SPADES_SETTING(s_maxPolyphonics, "");
+SPADES_SETTING(s_ysrBufferSize, "2048");
 
 namespace spades {
 	namespace audio {
@@ -56,6 +57,7 @@ namespace spades {
 											void *userData);
 				void *spatializerUserData;
 				int numThreads;
+				int maxPolyphonics;
 			};
 			struct ReverbParam {
 				float reflections;
@@ -372,12 +374,18 @@ namespace spades {
 								spec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE));
 			
 			YsrContext::InitParam param;
+			param.maxPolyphonics = s_maxPolyphonics;
 			param.numThreads = s_ysrNumThreads;
 			param.samplingRate = static_cast<double>(sdlAudioDevice->spec.freq);
 			param.spatializerCallback = reinterpret_cast<void(*)(const YsrContext::YVec3 *, YsrContext::SpatializeResult *, void *)>(SpatializeCallback);
 			param.spatializerUserData = this;
+			
 			driver->Init(param);
 			
+			std::fill(roomHistory.begin(), roomHistory.end(),
+					  20000.f);
+			std::fill(roomFeedbackHistory.begin(), roomFeedbackHistory.end(),
+					  0.f);
 			
 			SDL_PauseAudioDevice((*sdlAudioDevice)(), 0);
 		}
@@ -415,7 +423,7 @@ namespace spades {
 				Vector3 eye = listenerPosition;
 				Vector3 pos = origin;
 				Vector3 checkPos;
-				result.directGain = 0.f;
+				result.directGain = 0.3f;
 				for(int x = -1; x <= 1; x++)
 					for(int y = -1; y <= 1; y++)
 						for(int z = -1; z <= 1; z++){
@@ -564,7 +572,7 @@ namespace spades {
 					reflections = (float)rayHitCount / (float)roomHistory.size();
 				}else{
 					roomVolume = 8.f;
-					reflections = 0.2f;
+					reflections = 0.1f;
 					roomArea = 100.f;
 					roomSize = 100.f;
 				}
