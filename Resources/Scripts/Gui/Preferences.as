@@ -633,13 +633,16 @@ namespace spades {
 			layouter.AddToggleField("Ejecting Brass", "cg_ejectBrass");
 			layouter.AddToggleField("Ragdoll", "cg_ragdoll");
 			
+			layouter.AddHeading("Feedbacks");
+			layouter.AddToggleField("Chat Notify Sounds", "cg_chatBeep");
+			layouter.AddToggleField("Hit Indicator", "cg_hitIndicator");
+			
 			layouter.AddHeading("Misc");
 			layouter.AddSliderField("Field of View", "cg_fov", 30, 90, 1,
 				ConfigNumberFormatter(0, " deg"));
 			layouter.AddSliderField("Minimap size", "cg_minimapSize", 128, 256, 8,
 				ConfigNumberFormatter(0, " px"));
 			layouter.AddToggleField("Weapon Spread Guide", "cg_debugAim");
-			layouter.AddToggleField("Chat Notify Sounds", "cg_chatBeep");
 			layouter.FinishLayout();
 			// cg_fov, cg_minimapSize
 		}

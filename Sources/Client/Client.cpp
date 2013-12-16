@@ -79,6 +79,7 @@ SPADES_SETTING(cg_zoomedMouseSensScale, "0.6");
 SPADES_SETTING(cg_mouseExpPower, "1");
 
 SPADES_SETTING(cg_chatBeep, "1");
+SPADES_SETTING(cg_hitIndicator, "1");
 
 SPADES_SETTING(cg_holdAimDownSight, "0");
 
@@ -126,7 +127,9 @@ namespace spades {
 		Client::Client(IRenderer *r, IAudioDevice *audioDev,
 					   const ServerAddress& host, std::string playerName):
 		renderer(r), audioDevice(audioDev), playerName(playerName) ,
-        hasDelayedReload(false) {
+        hasDelayedReload(false),
+		hitFeedbackIconState(0.f),
+		hitFeedbackFriendly(false){
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
 			
@@ -800,6 +803,12 @@ namespace spades {
 					grenadeVibration -= dt;
 					if(grenadeVibration < 0.f)
 						grenadeVibration = 0.f;
+				}
+				
+				if(hitFeedbackIconState > 0.f) {
+					hitFeedbackIconState -= dt * 4.f;
+					if(hitFeedbackIconState < 0.f)
+						hitFeedbackIconState = 0.f;
 				}
 				
 				if(time > lastPosSentTime + 1.f &&
@@ -2326,6 +2335,26 @@ namespace spades {
 						// draw local weapon's 2d things
 						clientPlayers[p->GetId()]->Draw2D();
 						
+						if(cg_hitIndicator && hitFeedbackIconState > 0.f) {
+							Handle<IImage> img(renderer->RegisterImage("Gfx/HitFeedback.png"), false);
+							Vector2 pos = {scrWidth * .5f, scrHeight * .5f};
+							pos.x -= img->GetWidth() * .5f;
+							pos.y -= img->GetHeight() * .5f;
+							
+							float op = hitFeedbackIconState;
+							Vector4 color;
+							if(hitFeedbackFriendly) {
+								color = MakeVector4(0.02f, 1.f, 0.02f, 1.f);
+							}else{
+								color = MakeVector4(1.f, 0.02f, 0.04f, 1.f);
+							}
+							color *= op;
+							
+							renderer->SetColorAlphaPremultiplied(color);
+							
+							renderer->DrawImage(img, pos);
+						}
+						
 						if(cg_debugAim && p->GetTool() == Player::ToolWeapon) {
 							Weapon *w = p->GetWeapon();
 							float spread = w->GetSpread();
@@ -3813,6 +3842,13 @@ namespace spades {
 			if(by == world->GetLocalPlayer() &&
 			   hurtPlayer){
 				net->SendHit(hurtPlayer->GetId(), type);
+				
+				hitFeedbackIconState = 1.f;
+				if(hurtPlayer->GetTeamId() == world->GetLocalPlayer()->GetTeamId()) {
+					hitFeedbackFriendly = true;
+				}else{
+					hitFeedbackFriendly = false;
+				}
 			}
 			
 			

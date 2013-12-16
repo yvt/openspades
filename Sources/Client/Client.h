@@ -150,6 +150,9 @@ namespace spades {
 			bool flashlightOn;
 			float flashlightOnTime;
 			
+			float hitFeedbackIconState;
+			bool hitFeedbackFriendly;
+			
 			// when dead...
 			/** Following player ID, which may be local player itself */
 			int followingPlayerId;
