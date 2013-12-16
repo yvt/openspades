@@ -103,6 +103,9 @@ namespace spades {
 			scrPos.y = (pos.y - inRect.GetMinY()) / inRect.GetHeight();
 			scrPos.y = (scrPos.y * outRect.GetHeight()) + outRect.GetMinY();
 			
+			scrPos.x = floorf(scrPos.x);
+			scrPos.y = floorf(scrPos.y);
+			
 			float c = rotation != 0.f ? cosf(rotation) : 1.f;
 			float s = rotation != 0.f ? sinf(rotation) : 0.f;
 			static const float coords[][2] = {{-1, -1}, {1, -1}, {-1, 1}};
@@ -129,6 +132,20 @@ namespace spades {
 		bool MapView::ToggleZoom() {
 			zoomed = !zoomed;
 			return zoomed;
+		}
+		
+		static Vector4 ModifyColor(IntVector3 v) {
+			Vector4 fv;
+			fv.x = static_cast<float>(v.x) / 255.f;
+			fv.y = static_cast<float>(v.y) / 255.f;
+			fv.z = static_cast<float>(v.z) / 255.f;
+			float avg = (fv.x + fv.y + fv.z) * (1.f / 3.f);;
+			fv.x = Mix(fv.x, avg, 0.5f);
+			fv.y = Mix(fv.y, avg, 0.5f);
+			fv.z = Mix(fv.z, avg, 0.5f);
+			fv = fv * 0.8f + 0.2f;
+			fv.w = 1.f;
+			return fv;
 		}
 		
 		void MapView::Draw(){
@@ -369,17 +386,37 @@ namespace spades {
 			}
 			
 			//draw objects
-			Handle<IImage> playerIcon = renderer->RegisterImage("Gfx/Player.tga");
+			Handle<IImage> playerIcon = renderer->RegisterImage("Gfx/Map/Player.png");
 			
 			{
 				
 				IntVector3 teamColor = world->GetTeam(world->GetLocalPlayer()->GetTeamId()).color;
-				Vector4 teamColorF = {teamColor.x /255.f,
-					teamColor.y / 255.f, teamColor.z / 255.f, 1};
+				Vector4 teamColorF = ModifyColor(teamColor);
 				teamColorF *= alpha;
+				
+				// draw local player's view
+				{
+					Player *p = player;
+					Handle<IImage> viewIcon = renderer->RegisterImage("Gfx/Map/View.png");
+					if(p->IsAlive()) {
+						Vector3 front = p->GetFront2D();
+						float ang = atan2(front.x, -front.y);
+						if(player->GetTeamId() >= 2){
+							ang = client->followYaw - static_cast<float>(M_PI) * .5f;
+						}
+						
+						renderer->SetColorAlphaPremultiplied(teamColorF * 0.9f);
+						
+						DrawIcon(player->GetTeamId() >= 2 ?
+								 client->followPos :
+								 p->GetPosition(), viewIcon, ang);
+					}
+				}
+				
+				// draw player's icon
 				for(int i = 0; i < world->GetNumPlayerSlots(); i++){
 					Player * p = world->GetPlayer(i);
-					if(p == NULL ||
+					if(p == nullptr ||
 					   p->GetTeamId() != world->GetLocalPlayer()->GetTeamId() ||
 					   !p->IsAlive())
 						continue;
@@ -390,11 +427,9 @@ namespace spades {
 						ang = client->followYaw - static_cast<float>(M_PI) * .5f;
 					}
 					
-					if(p == world->GetLocalPlayer())
-						renderer->SetColorAlphaPremultiplied(MakeVector4(0,alpha,alpha,alpha));
-					else{
-						renderer->SetColorAlphaPremultiplied(teamColorF);
-					}
+					
+					renderer->SetColorAlphaPremultiplied(teamColorF);
+					
 					DrawIcon(player->GetTeamId() >= 2 ?
 							 client->followPos :
 							 p->GetPosition(), playerIcon, ang);
@@ -404,22 +439,17 @@ namespace spades {
 			IGameMode* mode = world->GetMode();
 			if( mode && IGameMode::m_CTF == mode->ModeType() ) {
 				CTFGameMode *ctf = static_cast<CTFGameMode *>(mode);
-				Handle<IImage> intelIcon = renderer->RegisterImage("Gfx/Intel.tga");
-				Handle<IImage> baseIcon = renderer->RegisterImage("Gfx/CTFBase.tga");
-				Handle<IImage> medicalIcon = renderer->RegisterImage("Gfx/Medical.tga");
+				Handle<IImage> intelIcon = renderer->RegisterImage("Gfx/Map/Intel.png");
+				Handle<IImage> baseIcon = renderer->RegisterImage("Gfx/Map/CommandPost.png");
 				for(int tId = 0; tId < 2; tId++){
 					CTFGameMode::Team& team = ctf->GetTeam(tId);
 					IntVector3 teamColor = world->GetTeam(tId).color;
-					Vector4 teamColorF = {teamColor.x /255.f,
-						teamColor.y / 255.f, teamColor.z / 255.f, 1};
+					Vector4 teamColorF = ModifyColor(teamColor);
 					teamColorF *= alpha;
 					
 					// draw base
 					renderer->SetColorAlphaPremultiplied(teamColorF);
 					DrawIcon(team.basePos, baseIcon, 0.f);
-					
-					renderer->SetColorAlphaPremultiplied(MakeVector4(alpha,alpha,alpha,alpha));
-					DrawIcon(team.basePos, medicalIcon, 0.f);
 					
 					
 					// draw flag
@@ -446,16 +476,15 @@ namespace spades {
 				}
 			} else if( mode && IGameMode::m_TC == mode->ModeType() ) {
 				TCGameMode *tc = static_cast<TCGameMode *>(mode);
-				Handle<IImage> icon = renderer->RegisterImage("Gfx/TCTerritory.tga");
+				Handle<IImage> icon = renderer->RegisterImage("Gfx/Map/CommandPost.png");
 				int cnt = tc->GetNumTerritories();
 				for(int i = 0; i < cnt; i++){
 					TCGameMode::Territory *t = tc->GetTerritory(i);
-					IntVector3 teamColor = {0,0,0};
+					IntVector3 teamColor = {128,128,128};
 					if(t->ownerTeamId < 2){
 						teamColor = world->GetTeam(t->ownerTeamId).color;
 					}
-					Vector4 teamColorF = {teamColor.x /255.f,
-						teamColor.y / 255.f, teamColor.z / 255.f, 1};
+					Vector4 teamColorF = ModifyColor(teamColor);
 					teamColorF *= alpha;
 					
 					// draw base
