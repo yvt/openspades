@@ -3631,8 +3631,20 @@ namespace spades {
 				if(victim != world->GetLocalPlayer()) {
 					if(!IsMuted()){
 						Handle<IAudioChunk> c;
-						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh.wav");
-						audioDevice->Play(c, victim->GetEye(), AudioParam());
+						switch(rand()%3){
+							case 0:
+								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.wav");
+								break;
+							case 1:
+								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh2.wav");
+								break;
+							case 2:
+								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh3.wav");
+								break;
+						}
+						AudioParam param;
+						param.volume = 4.f;
+						audioDevice->Play(c, victim->GetEye(), param);
 					}
 				}
 			}
@@ -3779,10 +3791,22 @@ namespace spades {
 					audioDevice->Play(c, hitPos,
 									  AudioParam());
 				}else{
-					Handle<IAudioChunk> c = 
-					audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh.wav");
+					Handle<IAudioChunk> c;
+					switch(rand()%3){
+						case 0:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.wav");
+							break;
+						case 1:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh2.wav");
+							break;
+						case 2:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh3.wav");
+							break;
+					}
+					AudioParam param;
+					param.volume = 4.f;
 					audioDevice->Play(c, hitPos,
-									  AudioParam());
+									  param);
 				}
 			}
 			
