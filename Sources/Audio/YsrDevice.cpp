@@ -28,7 +28,8 @@ SPADES_SETTING(s_ysrDriver, "libysrspades.so");
 
 SPADES_SETTING(s_ysrNumThreads, "1");
 SPADES_SETTING(s_maxPolyphonics, "");
-SPADES_SETTING(s_ysrBufferSize, "2048");
+SPADES_SETTING(s_ysrBufferSize, "1024");
+SPADES_SETTING(s_ysrDebug, "0");
 
 namespace spades {
 	namespace audio {
@@ -58,6 +59,8 @@ namespace spades {
 				void *spatializerUserData;
 				int numThreads;
 				int maxPolyphonics;
+				void (*debugCallback)(const char *, void *);
+				void *debugUserData;
 			};
 			struct ReverbParam {
 				float reflections;
@@ -355,6 +358,11 @@ namespace spades {
 			}
 		};
 		
+		static void DebugLog(const char *msg,
+							 void *) {
+			SPLog("YSR Debug: %s", msg);
+		}
+		
 		YsrDevice::YsrDevice():
 		gameMap(nullptr),
 		driver(new YsrDriver()),
@@ -379,6 +387,12 @@ namespace spades {
 			param.samplingRate = static_cast<double>(sdlAudioDevice->spec.freq);
 			param.spatializerCallback = reinterpret_cast<void(*)(const YsrContext::YVec3 *, YsrContext::SpatializeResult *, void *)>(SpatializeCallback);
 			param.spatializerUserData = this;
+			if(s_ysrDebug) {
+				param.debugCallback = DebugLog;
+			}else{
+				param.debugCallback = nullptr;
+			}
+			param.debugUserData = nullptr;
 			
 			driver->Init(param);
 			
@@ -423,7 +437,7 @@ namespace spades {
 				Vector3 eye = listenerPosition;
 				Vector3 pos = origin;
 				Vector3 checkPos;
-				result.directGain = 0.3f;
+				result.directGain = 0.4f;
 				for(int x = -1; x <= 1; x++)
 					for(int y = -1; y <= 1; y++)
 						for(int z = -1; z <= 1; z++){
