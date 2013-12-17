@@ -27,6 +27,7 @@
 #include "FileManager.h"
 #include <stdarg.h>
 #include <time.h>
+#include "Math.h"
 
 #define SPADES_USE_TLS 1
 
@@ -198,12 +199,14 @@ namespace spades {
 				tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec,
 				fn.c_str(), line, str.c_str());
 		
-		printf("%s", buf);
+		std::string outStr = EscapeControlCharacters(buf);
+		
+		printf("%s", outStr.c_str());
 		
 		if(logStream || !attemptedToInitializeLog) {
 			
 			if(attemptedToInitializeLog){
-				logStream->Write(buf);
+				logStream->Write(outStr);
 				logStream->Flush();
 			}else
 				accumlatedLog += buf;

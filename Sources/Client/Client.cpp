@@ -1365,10 +1365,12 @@ namespace spades {
 			sprintf(buf, "%s %s\n",
 					timeStr.c_str(), str.c_str());
 			
-			printf("%s", buf);
+			std::string outStr = EscapeControlCharacters(buf);
+			
+			printf("%s", outStr.c_str());
 			
 			if(logStream) {
-				logStream->Write(buf);
+				logStream->Write(outStr);
 				logStream->Flush();
 			}
 		}

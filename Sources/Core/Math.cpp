@@ -451,6 +451,58 @@ namespace spades {
 		return strs;
 	}
 	
+	
+	std::string EscapeControlCharacters(const std::string& str) {
+		std::string out;
+		out.reserve(str.size() * 2);
+		for(size_t i = 0; i < str.size(); i++) {
+			char c = str[i];
+			if((c >= 0 && c < 0x20 && c != 10 && c != 13 &&
+				c != 9)) {
+				out += '<';
+				switch(c){
+					case 0x00: out += "NUL"; break;
+					case 0x01: out += "SOH"; break;
+					case 0x02: out += "STX"; break;
+					case 0x03: out += "ETX"; break;
+					case 0x04: out += "EOT"; break;
+					case 0x05: out += "ENQ"; break;
+					case 0x06: out += "ACK"; break;
+					case 0x07: out += "BEL"; break;
+					case 0x08: out += "BS"; break;
+					case 0x09: out += "TAB"; break;
+					case 0x0a: out += "LF"; break;
+					case 0x0b: out += "VT"; break;
+					case 0x0c: out += "FF"; break;
+					case 0x0d: out += "CR"; break;
+					case 0x0e: out += "SO"; break;
+					case 0x0f: out += "SI"; break;
+					case 0x10: out += "DLE"; break;
+					case 0x11: out += "DC1"; break;
+					case 0x12: out += "DC2"; break;
+					case 0x13: out += "DC3"; break;
+					case 0x14: out += "DC4"; break;
+					case 0x15: out += "NAK"; break;
+					case 0x16: out += "SYN"; break;
+					case 0x17: out += "ETB"; break;
+					case 0x18: out += "CAN"; break;
+					case 0x19: out += "EM"; break;
+					case 0x1a: out += "SUB"; break;
+					case 0x1b: out += "ESC"; break;
+					case 0x1c: out += "FS"; break;
+					case 0x1d: out += "GS"; break;
+					case 0x1e: out += "RS"; break;
+					case 0x1f: out += "US"; break;
+				}
+				out += '>';
+			}else{
+				out += c;
+			}
+		}
+		return out;
+	}
+	
+	
 	std::string TrimSpaces(const std::string& str){
 		size_t pos = str.find_first_not_of(" \t\n\r");
 		if(pos == std::string::npos)
