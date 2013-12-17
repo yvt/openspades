@@ -23,6 +23,7 @@
 #include <vector>
 #include <math.h>
 #include <string>
+#include <stdint.h>		//uint32_t --> msvc
 
 #ifdef _MSC_VER
 #define isnan _isnan

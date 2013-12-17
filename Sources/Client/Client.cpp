@@ -2195,7 +2195,7 @@ namespace spades {
 			
 			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 1));
 			img = renderer->RegisterImage("Gfx/White.tga");
-			renderer->DrawImage(img, AABB2(0, 0, siz.x, siz.y));
+			renderer->DrawImage(img, AABB2(0, 0, scrSize.x, scrSize.y));
 			
 			renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1.));
 			img = renderer->RegisterImage("Gfx/Title/Logo.png");
@@ -3763,7 +3763,7 @@ namespace spades {
 			killfeedWindow->AddMessage(s);
 			
 			// log to netlog
-			if(killer != victim) {
+			/*if(killer != victim) {
 				NetLog("%s (%s)%s%s (%s)",
 					   killer->GetName().c_str(),
 					   world->GetTeam(killer->GetTeamId()).name.c_str(),
@@ -3775,7 +3775,7 @@ namespace spades {
 					   killer->GetName().c_str(),
 					   world->GetTeam(killer->GetTeamId()).name.c_str(),
 					   cause.c_str());
-			}
+			}*/
 			
 			// show big message if player is involved
 			if(victim != killer){
