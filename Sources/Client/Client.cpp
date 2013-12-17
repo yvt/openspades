@@ -3765,7 +3765,7 @@ namespace spades {
 			killfeedWindow->AddMessage(s);
 			
 			// log to netlog
-			/*if(killer != victim) {
+			if(killer != victim) {
 				NetLog("%s (%s)%s%s (%s)",
 					   killer->GetName().c_str(),
 					   world->GetTeam(killer->GetTeamId()).name.c_str(),
@@ -3777,7 +3777,7 @@ namespace spades {
 					   killer->GetName().c_str(),
 					   world->GetTeam(killer->GetTeamId()).name.c_str(),
 					   cause.c_str());
-			}*/
+			}
 			
 			// show big message if player is involved
 			if(victim != killer){
