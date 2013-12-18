@@ -35,6 +35,14 @@ namespace spades {
 		class SDLRunner: public IRunnable {
 			bool mActive;
 		protected:
+			
+			enum class RendererType {
+				GL,
+				SW
+			};
+			
+			RendererType GetRendererType();
+			
 			std::string TranslateKey(const SDL_Keysym&);
 			std::string TranslateButton(Uint8 b);
 			virtual int GetModState();
@@ -43,6 +51,7 @@ namespace spades {
 			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
 			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) = 0;
 			virtual client::IAudioDevice *CreateAudioDevice();
+			client::IRenderer *CreateRenderer(SDL_Window *);
 		public:
 			SDLRunner();
 			virtual ~SDLRunner();

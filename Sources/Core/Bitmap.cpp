@@ -30,7 +30,7 @@
 
 namespace spades {
 	Bitmap::Bitmap(int ww, int hh):
-	w(ww), h(hh){
+	w(ww), h(hh), autoDelete(true), pixels(nullptr){
 		SPADES_MARK_FUNCTION();
 		
 		if(w < 1 || h < 1 || w > 8192 || h > 8192) {
@@ -38,6 +38,17 @@ namespace spades {
 		}
 		
 		pixels = new uint32_t[w * h];
+		SPAssert(pixels != NULL);
+	}
+	
+	Bitmap::Bitmap(uint32_t *pixels, int w, int h):
+	pixels(pixels), w(w), h(h), autoDelete(false) {
+		SPADES_MARK_FUNCTION();
+		
+		if(w < 1 || h < 1 || w > 8192 || h > 8192) {
+			SPRaise("Invalid dimension: %dx%d", w, h);
+		}
+		
 		SPAssert(pixels != NULL);
 	}
 	
@@ -103,5 +114,10 @@ namespace spades {
 		pixels[x + y * w] = p;
 	}
 	
-	
+	Handle<Bitmap> Bitmap::Clone() {
+		Bitmap *b = new Bitmap(w, h);
+		std::memcpy(b->GetPixels(), pixels,
+					static_cast<std::size_t>(w * h * 4));
+		return Handle<Bitmap>(b, false);
+	}
 }

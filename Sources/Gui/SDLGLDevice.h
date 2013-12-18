@@ -30,9 +30,10 @@ namespace spades {
 			SDL_Window *window;
 			SDL_GLContext context;
 			int w, h;
+		protected:
+			virtual ~SDLGLDevice();
 		public:
 			SDLGLDevice(SDL_Window *);
-			virtual ~SDLGLDevice();
 			
 			virtual void DepthRange(Float near, Float far);
 			virtual void Viewport(Integer x, Integer y,

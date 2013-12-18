@@ -34,6 +34,10 @@
 		E80B28DB17B39D160056179E /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = E80B28D817B39D160056179E /* unzip.c */; };
 		E80B28DE17B39EEF0056179E /* ZipFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28DC17B39EEE0056179E /* ZipFileSystem.cpp */; };
 		E80B28E117B4FDDA0056179E /* DynamicMemoryStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28DF17B4FDD40056179E /* DynamicMemoryStream.cpp */; };
+		E81A7C6418610AA900BF3FCE /* SWRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */; };
+		E81A7C6718610BE400BF3FCE /* SWPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6518610BE400BF3FCE /* SWPort.cpp */; };
+		E81A7C6B1861525D00BF3FCE /* SWImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C691861525D00BF3FCE /* SWImage.cpp */; };
+		E81A7C6E186152A400BF3FCE /* SWModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6C186152A400BF3FCE /* SWModel.cpp */; };
 		E81CE4A6183F7A3000F22685 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A4183F7A3000F22685 /* IFont.cpp */; };
 		E81CE4A9183F7F2000F22685 /* MainScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A7183F7F2000F22685 /* MainScreen.cpp */; };
 		E834F55017942C43004EBE88 /* Grenade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F54E17942C43004EBE88 /* Grenade.cpp */; };
@@ -327,6 +331,14 @@
 		E80B28DD17B39EEF0056179E /* ZipFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipFileSystem.h; sourceTree = "<group>"; };
 		E80B28DF17B4FDD40056179E /* DynamicMemoryStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicMemoryStream.cpp; sourceTree = "<group>"; };
 		E80B28E017B4FDD70056179E /* DynamicMemoryStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicMemoryStream.h; sourceTree = "<group>"; };
+		E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWRenderer.cpp; sourceTree = "<group>"; };
+		E81A7C6318610AA900BF3FCE /* SWRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRenderer.h; sourceTree = "<group>"; };
+		E81A7C6518610BE400BF3FCE /* SWPort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWPort.cpp; sourceTree = "<group>"; };
+		E81A7C6618610BE400BF3FCE /* SWPort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWPort.h; sourceTree = "<group>"; };
+		E81A7C691861525D00BF3FCE /* SWImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWImage.cpp; sourceTree = "<group>"; };
+		E81A7C6A1861525D00BF3FCE /* SWImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWImage.h; sourceTree = "<group>"; };
+		E81A7C6C186152A400BF3FCE /* SWModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModel.cpp; sourceTree = "<group>"; };
+		E81A7C6D186152A400BF3FCE /* SWModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModel.h; sourceTree = "<group>"; };
 		E81CE4A4183F7A3000F22685 /* IFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IFont.cpp; sourceTree = "<group>"; };
 		E81CE4A7183F7F2000F22685 /* MainScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScreen.cpp; sourceTree = "<group>"; };
 		E81CE4A8183F7F2000F22685 /* MainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScreen.h; sourceTree = "<group>"; };
@@ -870,6 +882,21 @@
 			path = unzip;
 			sourceTree = "<group>";
 		};
+		E81A7C68186140B000BF3FCE /* Software Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */,
+				E81A7C6318610AA900BF3FCE /* SWRenderer.h */,
+				E81A7C6518610BE400BF3FCE /* SWPort.cpp */,
+				E81A7C6618610BE400BF3FCE /* SWPort.h */,
+				E81A7C691861525D00BF3FCE /* SWImage.cpp */,
+				E81A7C6A1861525D00BF3FCE /* SWImage.h */,
+				E81A7C6C186152A400BF3FCE /* SWModel.cpp */,
+				E81A7C6D186152A400BF3FCE /* SWModel.h */,
+			);
+			name = "Software Renderer";
+			sourceTree = "<group>";
+		};
 		E844886317D0C404005105D0 /* Local Entities */ = {
 			isa = PBXGroup;
 			children = (
@@ -1328,6 +1355,7 @@
 		E8CF039E178EDDCF000683D4 /* Draw */ = {
 			isa = PBXGroup;
 			children = (
+				E81A7C68186140B000BF3FCE /* Software Renderer */,
 				E89E811E179C2BDC0059C649 /* Post Filters */,
 				E8E0AFBA179C0F5B00C6B5A9 /* Client Object */,
 				E8E0AFB9179C0F3500C6B5A9 /* Low Level */,
@@ -1855,6 +1883,7 @@
 				E80B28C717AF872C0056179E /* DetailConfigWindowHandler.cpp in Sources */,
 				E80B28CA17AF8A480056179E /* DetailConfigTable.cpp in Sources */,
 				E80B28CD17AFCCCB0056179E /* PaletteView.cpp in Sources */,
+				E81A7C6B1861525D00BF3FCE /* SWImage.cpp in Sources */,
 				E80B28D017AFE68A0056179E /* TCGameMode.cpp in Sources */,
 				E80B28D317AFF7810056179E /* TCProgressView.cpp in Sources */,
 				E80B28DA17B39D160056179E /* ioapi.c in Sources */,
@@ -1866,6 +1895,7 @@
 				E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */,
 				E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */,
 				E859511517C96B270012810C /* GLProfiler.cpp in Sources */,
+				E81A7C6718610BE400BF3FCE /* SWPort.cpp in Sources */,
 				E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */,
 				E844886617D0C43B005105D0 /* Tracer.cpp in Sources */,
 				E844886A17D262E4005105D0 /* Serverbrowser.cpp in Sources */,
@@ -1884,6 +1914,7 @@
 				E8B6B6A317DE27B500E35523 /* as_context.cpp in Sources */,
 				E8B6B6A417DE27B500E35523 /* as_datatype.cpp in Sources */,
 				E8B6B6A517DE27B500E35523 /* as_gc.cpp in Sources */,
+				E81A7C6418610AA900BF3FCE /* SWRenderer.cpp in Sources */,
 				E8B6B6A617DE27B500E35523 /* as_generic.cpp in Sources */,
 				E8B6B6A717DE27B500E35523 /* as_globalproperty.cpp in Sources */,
 				E8B6B6A817DE27B500E35523 /* as_memory.cpp in Sources */,
@@ -1899,6 +1930,7 @@
 				E8B6B6B217DE27B500E35523 /* as_scriptobject.cpp in Sources */,
 				E8B6B6B317DE27B500E35523 /* as_string.cpp in Sources */,
 				E8B6B6B417DE27B500E35523 /* as_string_util.cpp in Sources */,
+				E81A7C6E186152A400BF3FCE /* SWModel.cpp in Sources */,
 				E8B6B6B517DE27B500E35523 /* as_thread.cpp in Sources */,
 				E8B6B6B617DE27B500E35523 /* as_tokenizer.cpp in Sources */,
 				E852337B1839B28C00F40541 /* VersionInfo.cpp in Sources */,

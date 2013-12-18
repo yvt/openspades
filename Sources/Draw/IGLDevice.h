@@ -21,13 +21,16 @@
 #pragma once
 
 #include "../Core/Math.h"
+#include <Core/RefCountedObject.h>
 
 #undef Always
 #undef None
 
 namespace spades {
 	namespace draw {
-		class IGLDevice {
+		class IGLDevice: public RefCountedObject {
+		protected:
+			virtual ~IGLDevice() {}
 		public:
 			enum Enum {
 				
@@ -251,7 +254,6 @@ namespace spades {
 			typedef float Float;
 			typedef unsigned int Sizei;
 			
-			virtual ~IGLDevice() {}
 			
 			virtual void DepthRange(Float near, Float far) = 0;
 			virtual void Viewport(Integer x, Integer y,

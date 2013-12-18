@@ -20,33 +20,17 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <string>
-#include "Debug.h"
+#include <Core/Bitmap.h>
 #include <Core/RefCountedObject.h>
 
 namespace spades {
-	class IStream;
-	class Bitmap: public RefCountedObject {
-		int w, h;
-		uint32_t *pixels;
-		bool autoDelete;
-	protected:
-		~Bitmap();
-	public:
-		Bitmap(int w, int h);
-		Bitmap(uint32_t *pixels, int w, int h);
-		
-		static Bitmap *Load(const std::string&);
-		void Save(const std::string&);
-		
-		uint32_t *GetPixels() { return pixels; }
-		int GetWidth() { return w; }
-		int GetHeight() { return h; }
-		
-		uint32_t GetPixel(int x, int y);
-		void SetPixel(int x, int y, uint32_t);
-		
-		Handle<Bitmap> Clone();
-	};
+	namespace draw {
+		class SWPort: public RefCountedObject {
+		protected:
+			virtual ~SWPort() {}
+		public:
+			virtual Bitmap *GetFramebuffer() = 0;
+			virtual void Swap() = 0;
+		};
+	}
 }

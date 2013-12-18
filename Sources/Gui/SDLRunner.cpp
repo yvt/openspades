@@ -34,6 +34,8 @@
 #include <Core/Settings.h>
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Math.h>
+#include <Draw/SWRenderer.h>
+#include <Draw/SWPort.h>
 
 SPADES_SETTING(r_videoWidth, "1024");
 SPADES_SETTING(r_videoHeight, "640");
@@ -43,6 +45,7 @@ SPADES_SETTING(r_depthBits, "16");
 SPADES_SETTING(r_vsync, "1");
 SPADES_SETTING(r_allowSoftwareRendering, "0");
 SPADES_SETTING(r_audioDriver, "ysr");
+SPADES_SETTING(r_renderer, "gl");
 
 namespace spades {
 	namespace gui {
@@ -256,6 +259,74 @@ namespace spades {
 			}
 		}
 		
+		
+		auto SDLRunner::GetRendererType() -> RendererType {
+			if(EqualsIgnoringCase(r_renderer, "gl"))
+				return RendererType::GL;
+			else if(EqualsIgnoringCase(r_renderer, "sw"))
+				return RendererType::SW;
+			else
+				SPRaise("Unknown renderer name: %s", r_renderer.CString());
+		}
+		
+		class SDLSWPort: public draw::SWPort {
+			SDL_Window *wnd;
+			SDL_Surface *surface;
+			
+			Handle<Bitmap> framebuffer;
+			void SetFramebufferBitmap() {
+				framebuffer.Set
+				(new Bitmap(reinterpret_cast<uint32_t*>(surface->pixels), surface->w, surface->h), false);
+			}
+		protected:
+			virtual ~SDLSWPort() {
+				if(surface && SDL_MUSTLOCK(surface)) {
+					SDL_UnlockSurface(surface);
+				}
+			}
+		public:
+			SDLSWPort(SDL_Window *wnd):
+			wnd(wnd),
+			surface(nullptr){
+				surface = SDL_GetWindowSurface(wnd);
+				if(SDL_MUSTLOCK(surface)) {
+					SDL_LockSurface(surface);
+				}
+				SetFramebufferBitmap();
+			}
+			virtual Bitmap *GetFramebuffer() {
+				return framebuffer;
+			}
+			virtual void Swap() {
+				if(SDL_MUSTLOCK(surface)) {
+					SDL_UnlockSurface(surface);
+				}
+				SDL_UpdateWindowSurface(wnd);
+				if(SDL_MUSTLOCK(surface)) {
+					SDL_LockSurface(surface);
+					SetFramebufferBitmap();
+				}
+			}
+			
+		};
+		
+		client::IRenderer *SDLRunner::CreateRenderer(SDL_Window *wnd) {
+			switch(GetRendererType()) {
+				case RendererType::GL:
+				{
+					Handle<SDLGLDevice> glDevice(new SDLGLDevice(wnd), false);
+					return new draw::GLRenderer(glDevice);
+				}
+				case RendererType::SW:
+				{
+					Handle<SDLSWPort> port(new SDLSWPort(wnd), false);
+					return new draw::SWRenderer(port);
+				}
+				default:
+					SPRaise("Invalid renderer type");
+			}
+		}
+		
 		void SDLRunner::Run() {
 			SPADES_MARK_FUNCTION();
 			SDL_Init(SDL_INIT_VIDEO);
@@ -272,10 +343,19 @@ namespace spades {
 				}
 				
 				SDL_Window *window;
+				auto rtype = GetRendererType();
 				
 				Uint32 sdlFlags;
 				
-				sdlFlags = SDL_WINDOW_OPENGL;
+				switch(rtype) {
+					case RendererType::GL:
+						sdlFlags = SDL_WINDOW_OPENGL;
+						break;
+					case RendererType::SW:
+						sdlFlags = 0;
+						break;
+				}
+				
 				if(r_fullscreen)
 					sdlFlags |= SDL_WINDOW_FULLSCREEN;
 				
@@ -306,8 +386,7 @@ namespace spades {
 				mActive = true;
 				
 				{
-					SDLGLDevice glDevice(window);
-					Handle<draw::GLRenderer> renderer(new draw::GLRenderer(&glDevice), false);
+					Handle<client::IRenderer> renderer(CreateRenderer(window), false);
 					Handle<client::IAudioDevice> audio(CreateAudioDevice(), false);
 					
 					RunClientLoop(renderer, audio);

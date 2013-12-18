@@ -20,33 +20,31 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <string>
-#include "Debug.h"
-#include <Core/RefCountedObject.h>
+#include <Client/IModel.h>
+#include <Core/VoxelModel.h>
+#include <map>
 
 namespace spades {
-	class IStream;
-	class Bitmap: public RefCountedObject {
-		int w, h;
-		uint32_t *pixels;
-		bool autoDelete;
-	protected:
-		~Bitmap();
-	public:
-		Bitmap(int w, int h);
-		Bitmap(uint32_t *pixels, int w, int h);
+	namespace draw {
+		class SWModel: public client::IModel {
+			Handle<VoxelModel> rawModel;
+		protected:
+			virtual ~SWModel();
+		public:
+			SWModel(VoxelModel *model);
+			
+			VoxelModel *GetRawModel() { return rawModel; }
+		};
 		
-		static Bitmap *Load(const std::string&);
-		void Save(const std::string&);
-		
-		uint32_t *GetPixels() { return pixels; }
-		int GetWidth() { return w; }
-		int GetHeight() { return h; }
-		
-		uint32_t GetPixel(int x, int y);
-		void SetPixel(int x, int y, uint32_t);
-		
-		Handle<Bitmap> Clone();
-	};
+		class SWModelManager {
+			// unordered_map is preferred, but not supported by MSVC2010
+			std::map<std::string, SWModel *> models;
+		public:
+			SWModelManager() {}
+			~SWModelManager();
+			
+			SWModel *RegisterModel(const std::string&);
+			SWModel *CreateModel(VoxelModel *);
+		};
+	}
 }

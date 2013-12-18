@@ -20,33 +20,36 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <string>
-#include "Debug.h"
-#include <Core/RefCountedObject.h>
+#include <Client/IImage.h>
+#include <Core/Bitmap.h>
+#include <map>
 
 namespace spades {
-	class IStream;
-	class Bitmap: public RefCountedObject {
-		int w, h;
-		uint32_t *pixels;
-		bool autoDelete;
-	protected:
-		~Bitmap();
-	public:
-		Bitmap(int w, int h);
-		Bitmap(uint32_t *pixels, int w, int h);
+	namespace draw {
+		class SWImage: public client::IImage {
+			Handle<Bitmap> rawBmp;
+			
+			float w, h;
+		protected:
+			virtual ~SWImage();
+		public:
+			SWImage(Bitmap *bmp);
+			
+			Bitmap *GetRawBitmap() { return rawBmp; }
+			
+			virtual float GetWidth() { return w; }
+			virtual float GetHeight() { return h; }
+		};
 		
-		static Bitmap *Load(const std::string&);
-		void Save(const std::string&);
-		
-		uint32_t *GetPixels() { return pixels; }
-		int GetWidth() { return w; }
-		int GetHeight() { return h; }
-		
-		uint32_t GetPixel(int x, int y);
-		void SetPixel(int x, int y, uint32_t);
-		
-		Handle<Bitmap> Clone();
-	};
+		class SWImageManager {
+			// unordered_map is preferred, but not supported by MSVC2010
+			std::map<std::string, SWImage *> images;
+		public:
+			SWImageManager() {}
+			~SWImageManager();
+			
+			SWImage *RegisterImage(const std::string&);
+			SWImage *CreateImage(Bitmap *);
+		};
+	}
 }
