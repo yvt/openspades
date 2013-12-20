@@ -26,6 +26,8 @@
 #include <map>
 #include <memory>
 #include "../Client/IGameMapListener.h"
+#include <vector>
+#include "SWFeatureLevel.h"
 
 namespace spades {
 	namespace draw {
@@ -33,16 +35,22 @@ namespace spades {
 		class SWPort;
 		class SWImageManager;
 		class SWModelManager;
+		class SWImageRenderer;
 		
 		class SWRenderer: public client::IRenderer, public client::IGameMapListener  {
+			
+			SWFeatureLevel featureLevel;
 			
 			Handle<SWPort> port;
 			Handle<client::GameMap> map;
 			
-			Bitmap *fb;
+			Handle<Bitmap> fb;
+			std::vector<float> depthBuffer;
 			
 			std::shared_ptr<SWImageManager> imageManager;
 			std::shared_ptr<SWModelManager> modelManager;
+			
+			std::shared_ptr<SWImageRenderer> imageRenderer;
 			
 			bool inited;
 			bool sceneUsedInThisFrame;
@@ -84,11 +92,13 @@ namespace spades {
 			void EnsureSceneNotStarted();
 			void EnsureValid();
 			
+			void SetFramebuffer(Bitmap *);
+			
 		protected:
 			virtual ~SWRenderer();
 			
 		public:
-			SWRenderer(SWPort *port);
+			SWRenderer(SWPort *port, SWFeatureLevel featureLevel = DetectFeatureLevel());
 			
 			virtual void Init();
 			virtual void Shutdown();

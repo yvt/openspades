@@ -20,40 +20,32 @@
 
 #pragma once
 
-#include <Client/IImage.h>
-#include <Core/Bitmap.h>
-#include <map>
+#define ENABLE_MMX	0 // FIXME: move this to the proper place
+#define ENABLE_SSE2	1 // FIXME: move this to the proper place
+
+#if ENABLE_SSE2
+#include <emmintrin.h>
+#endif
 
 namespace spades {
 	namespace draw {
-		class SWImage: public client::IImage {
-			Handle<Bitmap> rawBmp;
-			
-			float w, h;
-			float iw, ih;
-		protected:
-			virtual ~SWImage();
-		public:
-			SWImage(Bitmap *bmp);
-			
-			Bitmap *GetRawBitmap() { return rawBmp; }
-			
-			virtual float GetWidth() { return w; }
-			virtual float GetHeight() { return h; }
-			virtual float GetInvWidth() { return iw; }
-			virtual float GetInvHeight() { return ih; }
+		enum class SWFeatureLevel {
+			None,
+#if ENABLE_MMX
+			MMX,
+#endif
+#if ENABLE_SSE2
+			SSE2,
+#endif
 		};
 		
+		static inline bool operator > (SWFeatureLevel a, SWFeatureLevel b) {
+			return static_cast<int>(a) > static_cast<int>(b);
+		}
+		static inline bool operator >= (SWFeatureLevel a, SWFeatureLevel b) {
+			return static_cast<int>(a) >= static_cast<int>(b);
+		}
 		
-		class SWImageManager {
-			// unordered_map is preferred, but not supported by MSVC2010
-			std::map<std::string, SWImage *> images;
-		public:
-			SWImageManager() {}
-			~SWImageManager();
-			
-			SWImage *RegisterImage(const std::string&);
-			SWImage *CreateImage(Bitmap *);
-		};
+		SWFeatureLevel DetectFeatureLevel();
 	}
 }

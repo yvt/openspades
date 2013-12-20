@@ -27,7 +27,8 @@ namespace spades {
 		SWImage::SWImage(Bitmap *m):
 		rawBmp(m),
 		w(static_cast<float>(m->GetWidth())),
-		h(static_cast<float>(m->GetHeight()))
+		h(static_cast<float>(m->GetHeight())),
+		iw(1.f / w), ih(1.f / h)
 		{
 			
 		}

@@ -38,6 +38,8 @@
 		E81A7C6718610BE400BF3FCE /* SWPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6518610BE400BF3FCE /* SWPort.cpp */; };
 		E81A7C6B1861525D00BF3FCE /* SWImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C691861525D00BF3FCE /* SWImage.cpp */; };
 		E81A7C6E186152A400BF3FCE /* SWModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6C186152A400BF3FCE /* SWModel.cpp */; };
+		E81A7C711861F4E200BF3FCE /* SWImageRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6F1861F4E200BF3FCE /* SWImageRenderer.cpp */; };
+		E81A7C741863566200BF3FCE /* SWFeatureLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C731863566200BF3FCE /* SWFeatureLevel.cpp */; };
 		E81CE4A6183F7A3000F22685 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A4183F7A3000F22685 /* IFont.cpp */; };
 		E81CE4A9183F7F2000F22685 /* MainScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A7183F7F2000F22685 /* MainScreen.cpp */; };
 		E834F55017942C43004EBE88 /* Grenade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F54E17942C43004EBE88 /* Grenade.cpp */; };
@@ -339,6 +341,10 @@
 		E81A7C6A1861525D00BF3FCE /* SWImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWImage.h; sourceTree = "<group>"; };
 		E81A7C6C186152A400BF3FCE /* SWModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModel.cpp; sourceTree = "<group>"; };
 		E81A7C6D186152A400BF3FCE /* SWModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModel.h; sourceTree = "<group>"; };
+		E81A7C6F1861F4E200BF3FCE /* SWImageRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWImageRenderer.cpp; sourceTree = "<group>"; };
+		E81A7C701861F4E200BF3FCE /* SWImageRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWImageRenderer.h; sourceTree = "<group>"; };
+		E81A7C721863562A00BF3FCE /* SWFeatureLevel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWFeatureLevel.h; sourceTree = "<group>"; };
+		E81A7C731863566200BF3FCE /* SWFeatureLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWFeatureLevel.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		E81CE4A4183F7A3000F22685 /* IFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IFont.cpp; sourceTree = "<group>"; };
 		E81CE4A7183F7F2000F22685 /* MainScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScreen.cpp; sourceTree = "<group>"; };
 		E81CE4A8183F7F2000F22685 /* MainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScreen.h; sourceTree = "<group>"; };
@@ -893,6 +899,10 @@
 				E81A7C6A1861525D00BF3FCE /* SWImage.h */,
 				E81A7C6C186152A400BF3FCE /* SWModel.cpp */,
 				E81A7C6D186152A400BF3FCE /* SWModel.h */,
+				E81A7C6F1861F4E200BF3FCE /* SWImageRenderer.cpp */,
+				E81A7C701861F4E200BF3FCE /* SWImageRenderer.h */,
+				E81A7C721863562A00BF3FCE /* SWFeatureLevel.h */,
+				E81A7C731863566200BF3FCE /* SWFeatureLevel.cpp */,
 			);
 			name = "Software Renderer";
 			sourceTree = "<group>";
@@ -1837,6 +1847,7 @@
 				E8E0AFA9179ACDDE00C6B5A9 /* GLSpriteRenderer.cpp in Sources */,
 				E8E0AFAC179ADC2200C6B5A9 /* ILocalEntity.cpp in Sources */,
 				E8E0AFAF179ADDCC00C6B5A9 /* ParticleSpriteEntity.cpp in Sources */,
+				E81A7C741863566200BF3FCE /* SWFeatureLevel.cpp in Sources */,
 				E8E0AFB2179AF4E700C6B5A9 /* SmokeSpriteEntity.cpp in Sources */,
 				E8E0AFB5179BF25B00C6B5A9 /* Settings.cpp in Sources */,
 				E8E0AFB8179C0F2900C6B5A9 /* GLFramebufferManager.cpp in Sources */,
@@ -1908,6 +1919,7 @@
 				E8B6B69017DE27B500E35523 /* as_builder.cpp in Sources */,
 				E8B6B69117DE27B500E35523 /* as_bytecode.cpp in Sources */,
 				E8B6B69217DE27B500E35523 /* as_callfunc.cpp in Sources */,
+				E81A7C711861F4E200BF3FCE /* SWImageRenderer.cpp in Sources */,
 				E8B6B6A117DE27B500E35523 /* as_compiler.cpp in Sources */,
 				E8B6B6A217DE27B500E35523 /* as_configgroup.cpp in Sources */,
 				E81CE4A6183F7A3000F22685 /* IFont.cpp in Sources */,

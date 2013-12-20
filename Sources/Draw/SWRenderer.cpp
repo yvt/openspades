@@ -25,10 +25,14 @@
 #include "SWModel.h"
 #include <Client/GameMap.h>
 #include <stdlib.h>
+#include "SWImageRenderer.h"
+#include <array>
+#include <algorithm>
 
 namespace spades {
 	namespace draw {
-		SWRenderer::SWRenderer(SWPort *port):
+		SWRenderer::SWRenderer(SWPort *port,
+							   SWFeatureLevel level):
 		port(port),
 		map(nullptr),
 		fb(nullptr),
@@ -39,7 +43,8 @@ namespace spades {
 		drawColorAlphaPremultiplied(MakeVector4(1,1,1,1)),
 		legacyColorPremultiply(false),
 		lastTime(0),
-		duringSceneRendering(false){
+		duringSceneRendering(false),
+		featureLevel(level){
 			
 			SPADES_MARK_FUNCTION();
 			
@@ -49,13 +54,19 @@ namespace spades {
 			
 			SPLog("---- SWRenderer early initialization started ---");
 			
+			SPLog("creating image manager");
 			imageManager = std::make_shared<SWImageManager>();
-			SPLog("Image Manager created.");
 			
-			fb = port->GetFramebuffer();
-			if(fb == nullptr) {
-				SPRaise("Framebuffer is null.");
-			}
+			SPLog("creating image renderer");
+			imageRenderer = std::make_shared<SWImageRenderer>(featureLevel);
+			
+			SPLog("setting framebuffer.");
+			SetFramebuffer(port->GetFramebuffer());
+			
+			// alloc depth buffer
+			SPLog("initializing depth buffer.");
+			depthBuffer.reserve(fb->GetWidth() * fb->GetHeight());
+			imageRenderer->SetDepthBuffer(depthBuffer.data());
 			
 			SPLog("---- SWRenderer early initialization done ---");
 		}
@@ -64,6 +75,18 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			Shutdown();
+		}
+		
+		void SWRenderer::SetFramebuffer(spades::Bitmap *bmp) {
+			if(bmp == nullptr) {
+				SPRaise("Framebuffer is null.");
+			}
+			if(fb) {
+				SPAssert(bmp->GetWidth() == fb->GetWidth());
+				SPAssert(bmp->GetHeight() == fb->GetHeight());
+			}
+			fb = bmp;
+			imageRenderer->SetFramebuffer(bmp);
 		}
 		
 		void SWRenderer::Init() {
@@ -86,7 +109,6 @@ namespace spades {
 			if(this->map)
 				this->map->SetListener(this);
 			map = nullptr;
-			fb = nullptr;
 			port = nullptr;
 			
 			inited = false;
@@ -288,9 +310,31 @@ namespace spades {
 			
 		}
 		
+		static uint32_t ConvertColor32(Vector4 col) {
+			auto convertColor = [](float f) {
+				int i = static_cast<int>(f * 255.f + .5f);
+				return static_cast<uint32_t>(std::max(std::min(i, 255), 0));
+			};
+			uint32_t c;
+			c = convertColor(col.x);
+			c |= convertColor(col.y) << 8;
+			c |= convertColor(col.z) << 16;
+			c |= convertColor(col.w) << 24;
+			return c;
+		}
+		
 		void SWRenderer::EndScene() {
 			EnsureInitialized();
 			EnsureSceneStarted();
+			
+			// clear scene
+			std::fill(fb->GetPixels(), fb->GetPixels() +
+					  fb->GetWidth() * fb->GetHeight(),
+					  ConvertColor32(MakeVector4(fogColor.x, fogColor.y, fogColor.z, 1.f)));
+			std::fill(fb->GetPixels(), fb->GetPixels() +
+					  fb->GetWidth() * fb->GetHeight(),
+					  0x7f7f7f);
+			
 			
 			duringSceneRendering = false;
 		}
@@ -373,13 +417,13 @@ namespace spades {
 			// d = a + (b - a) + (c - a)
 			//   = b + c - a
 			Vector2 outBottomRight = outTopRight + outBottomLeft - outTopLeft;
-			/*
-			 GLImage *img = dynamic_cast<GLImage *>(image);
+			
+			SWImage *img = dynamic_cast<SWImage *>(image);
 			if(!img){
 				SPInvalidArgument("image");
 			}
 			
-			imageRenderer->SetImage(img);
+			imageRenderer->SetShaderType(SWImageRenderer::ShaderType::Image);
 			
 			Vector4 col = drawColorAlphaPremultiplied;
 			if(legacyColorPremultiply) {
@@ -390,16 +434,28 @@ namespace spades {
 				col.z *= col.w;
 			}
 			
-			imageRenderer->Add(outTopLeft.x, outTopLeft.y,
-							   outTopRight.x, outTopRight.y,
-							   outBottomRight.x, outBottomRight.y,
-							   outBottomLeft.x, outBottomLeft.y,
-							   inRect.GetMinX(), inRect.GetMinY(),
-							   inRect.GetMaxX(), inRect.GetMinY(),
-							   inRect.GetMaxX(), inRect.GetMaxY(),
-							   inRect.GetMinX(), inRect.GetMaxY(),
-							   col.x, col.y,
-							   col.z, col.w);*/
+			std::array<SWImageRenderer::Vertex, 4> vtx;
+			vtx[0].color = col;
+			vtx[1].color = col;
+			vtx[2].color = col;
+			vtx[3].color = col;
+			
+			vtx[0].position = MakeVector4(outTopLeft.x, outTopLeft.y,
+										  1.f, 1.f);
+			vtx[1].position = MakeVector4(outTopRight.x, outTopRight.y,
+										  1.f, 1.f);
+			vtx[2].position = MakeVector4(outBottomLeft.x, outBottomLeft.y,
+										  1.f, 1.f);
+			vtx[3].position = MakeVector4(outBottomRight.x, outBottomRight.y,
+										  1.f, 1.f);
+			Vector2 scl = {img->GetInvWidth(), img->GetInvHeight()};
+			vtx[0].uv = MakeVector2(inRect.min.x, inRect.min.y) * scl;
+			vtx[1].uv = MakeVector2(inRect.max.x, inRect.min.y) * scl;
+			vtx[2].uv = MakeVector2(inRect.min.x, inRect.max.y) * scl;
+			vtx[3].uv = MakeVector2(inRect.max.x, inRect.max.y) * scl;
+			
+			imageRenderer->DrawPolygon(img, vtx[0], vtx[1], vtx[2]);
+			imageRenderer->DrawPolygon(img, vtx[1], vtx[3], vtx[2]);
 			
 		}
 
@@ -425,7 +481,7 @@ namespace spades {
 			{
 				uint32_t rdb = rand();
 				uint32_t *ptr = fb->GetPixels();
-				for(int pixels = fb->GetWidth() * fb->GetHeight();
+				for(int pixels = fb->GetWidth() * fb->GetHeight() / 10;
 					pixels > 0; pixels--) {
 					*ptr = ((rdb >> 16) & 0xff) * 0x10101;
 					rdb = (rdb * 34563511) ^ 1245525;
@@ -437,10 +493,7 @@ namespace spades {
 			port->Swap();
 			
 			// next frame's framebuffer
-			fb = port->GetFramebuffer();
-			if(fb == nullptr) {
-				SPRaise("Framebuffer is null.");
-			}
+			SetFramebuffer(port->GetFramebuffer());
 		}
 		
 		Bitmap *SWRenderer::ReadBitmap() {
