@@ -37,6 +37,7 @@ namespace spades {
 		class SWImageManager;
 		class SWModelManager;
 		class SWImageRenderer;
+		class SWFlatMapRenderer;
 		
 		class SWRenderer: public client::IRenderer, public client::IGameMapListener  {
 			
@@ -52,6 +53,8 @@ namespace spades {
 			std::shared_ptr<SWModelManager> modelManager;
 			
 			std::shared_ptr<SWImageRenderer> imageRenderer;
+			
+			std::shared_ptr<SWFlatMapRenderer> flatMapRenderer;
 			
 			bool inited;
 			bool sceneUsedInThisFrame;

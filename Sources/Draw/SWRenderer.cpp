@@ -29,7 +29,7 @@
 #include <array>
 #include <algorithm>
 #include <Core/Settings.h>
-
+#include "SWFlatMapRenderer.h"
 
 SPADES_SETTING(r_swStatistics, "0");
 
@@ -110,10 +110,13 @@ namespace spades {
 		void SWRenderer::Shutdown() {
 			SPADES_MARK_FUNCTION();
 			
+			imageRenderer.reset();
+			flatMapRenderer.reset();
+			
 			imageManager.reset();
 			modelManager.reset();
 			if(this->map)
-				this->map->SetListener(this);
+				this->map->SetListener(nullptr);
 			map = nullptr;
 			port = nullptr;
 			
@@ -147,11 +150,16 @@ namespace spades {
 		void SWRenderer::SetGameMap(client::GameMap *map) {
 			SPADES_MARK_FUNCTION();
 			EnsureInitialized();
+			
+			flatMapRenderer.reset();
+			
 			if(this->map)
 				this->map->SetListener(nullptr);
 			this->map = map;
-			if(this->map)
+			if(this->map) {
 				this->map->SetListener(this);
+				flatMapRenderer = std::make_shared<SWFlatMapRenderer>(this, map);
+			}
 		}
 		
 		void SWRenderer::SetFogColor(spades::Vector3 v) {
@@ -470,6 +478,11 @@ namespace spades {
 			EnsureValid();
 			EnsureSceneNotStarted();
 			
+			if(!flatMapRenderer) {
+				SPRaise("DrawFlatGameMap was called without an active map.");
+			}
+			
+			DrawImage(flatMapRenderer->GetImage(), outRect, inRect);
 		}
 		
 		void SWRenderer::FrameDone() {
@@ -493,7 +506,7 @@ namespace spades {
 			
 			imageRenderer->ResetPixelStatistics();
 			renderStopwatch.Reset();
-			
+			/*
 			{
 				uint32_t rdb = rand();
 				uint32_t *ptr = fb->GetPixels();
@@ -505,7 +518,7 @@ namespace spades {
 					ptr++;
 				}
 			}
-			
+			*/
 			port->Swap();
 			
 			// next frame's framebuffer
@@ -577,6 +590,7 @@ namespace spades {
 				return;
 			}
 			
+			flatMapRenderer->SetNeedsUpdate(x, y);
 		}
 	}
 }

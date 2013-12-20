@@ -41,6 +41,7 @@
 		E81A7C711861F4E200BF3FCE /* SWImageRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6F1861F4E200BF3FCE /* SWImageRenderer.cpp */; };
 		E81A7C741863566200BF3FCE /* SWFeatureLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C731863566200BF3FCE /* SWFeatureLevel.cpp */; };
 		E81A7C771864171100BF3FCE /* SWMapRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C751864171100BF3FCE /* SWMapRenderer.cpp */; };
+		E81A7C7A18642BCA00BF3FCE /* SWFlatMapRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C7818642BCA00BF3FCE /* SWFlatMapRenderer.cpp */; };
 		E81CE4A6183F7A3000F22685 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A4183F7A3000F22685 /* IFont.cpp */; };
 		E81CE4A9183F7F2000F22685 /* MainScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A7183F7F2000F22685 /* MainScreen.cpp */; };
 		E834F55017942C43004EBE88 /* Grenade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F54E17942C43004EBE88 /* Grenade.cpp */; };
@@ -348,6 +349,8 @@
 		E81A7C731863566200BF3FCE /* SWFeatureLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWFeatureLevel.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		E81A7C751864171100BF3FCE /* SWMapRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWMapRenderer.cpp; sourceTree = "<group>"; };
 		E81A7C761864171100BF3FCE /* SWMapRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMapRenderer.h; sourceTree = "<group>"; };
+		E81A7C7818642BCA00BF3FCE /* SWFlatMapRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWFlatMapRenderer.cpp; sourceTree = "<group>"; };
+		E81A7C7918642BCA00BF3FCE /* SWFlatMapRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWFlatMapRenderer.h; sourceTree = "<group>"; };
 		E81CE4A4183F7A3000F22685 /* IFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IFont.cpp; sourceTree = "<group>"; };
 		E81CE4A7183F7F2000F22685 /* MainScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScreen.cpp; sourceTree = "<group>"; };
 		E81CE4A8183F7F2000F22685 /* MainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScreen.h; sourceTree = "<group>"; };
@@ -908,6 +911,8 @@
 				E81A7C731863566200BF3FCE /* SWFeatureLevel.cpp */,
 				E81A7C751864171100BF3FCE /* SWMapRenderer.cpp */,
 				E81A7C761864171100BF3FCE /* SWMapRenderer.h */,
+				E81A7C7818642BCA00BF3FCE /* SWFlatMapRenderer.cpp */,
+				E81A7C7918642BCA00BF3FCE /* SWFlatMapRenderer.h */,
 			);
 			name = "Software Renderer";
 			sourceTree = "<group>";
@@ -1802,6 +1807,7 @@
 				E88318DB179256E5002ABE6D /* Player.cpp in Sources */,
 				E88318DE179257F1002ABE6D /* GameMapWrapper.cpp in Sources */,
 				E88318E117925F2E002ABE6D /* Deque.cpp in Sources */,
+				E81A7C7A18642BCA00BF3FCE /* SWFlatMapRenderer.cpp in Sources */,
 				E88318E41792698D002ABE6D /* Stopwatch.cpp in Sources */,
 				E88318E817928F86002ABE6D /* World.cpp in Sources */,
 				E88319181792A7CC002ABE6D /* callbacks.c in Sources */,
