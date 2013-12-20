@@ -29,7 +29,8 @@ namespace spades {
 		h(static_cast<float>(m->GetHeight())),
 		iw(1.f / w), ih(1.f / h),
 		ew(m->GetWidth()),
-		eh(m->GetHeight())
+		eh(m->GetHeight()),
+		isWhite(false)
 		{
 			bmp.resize(ew * eh);
 			
@@ -37,6 +38,7 @@ namespace spades {
 			{
 				uint32_t *inpix = m->GetPixels();
 				uint32_t *outpix = bmp.data();
+				bool foundNonWhite = false;
 				for(std::size_t i = ew * eh; i; i--) {
 					uint32_t col = *(inpix++);
 					unsigned int alpha = static_cast<unsigned int>(col >> 24);
@@ -50,10 +52,24 @@ namespace spades {
 					b = (b * alpha) >> 8;
 					
 					col &= 0xff000000;
-					col |= r | (g << 8) | (b << 16);
+					col |= b | (g << 8) | (r << 16); // swap RGB/BGR
 					*(outpix++) = col;
+					
+					if(col != 0xffffffff)
+						foundNonWhite = true;
 				}
+				isWhite = !foundNonWhite;
 			}
+		}
+		
+		SWImage::SWImage(int w, int h):
+		ew(w), eh(h),
+		w(static_cast<float>(ew)),
+		h(static_cast<float>(eh)),
+		iw(1.f / w),
+		ih(1.f / h),
+		isWhite(false){
+			bmp.reserve(ew * eh);
 		}
 		
 		SWImage::~SWImage() {

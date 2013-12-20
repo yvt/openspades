@@ -32,16 +32,21 @@ namespace spades {
 			std::vector<uint32_t> bmp;
 			int ew, eh; // exact size
 			
+			bool isWhite;
+			
 			float w, h;
 			float iw, ih;
 		protected:
 			virtual ~SWImage();
 		public:
 			SWImage(Bitmap *bmp);
+			SWImage(int w, int h);
 			
 			uint32_t *GetRawBitmap() { return bmp.data(); }
 			int GetRawWidth() { return ew; }
 			int GetRawHeight() { return eh; }
+			
+			bool IsWhiteImage() { return isWhite; }
 			
 			virtual float GetWidth() { return w; }
 			virtual float GetHeight() { return h; }

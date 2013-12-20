@@ -292,7 +292,8 @@ namespace spades {
 		SWFeatureLevel level,
 		bool needTransform,
 		bool ndc, // normalized device coordinate
-		bool depthTest
+		bool depthTest,
+		bool solidFill
 		>
 		struct SWImageRenderer::PolygonRenderer {
 			
@@ -371,9 +372,9 @@ namespace spades {
 					
 					if(ta == 256 && mulA == 256) {
 						// opaque
-						unsigned int tb = static_cast<unsigned int>((texture >> 0) & 0xff);
+						unsigned int tr = static_cast<unsigned int>((texture >> 0) & 0xff);
 						unsigned int tg = static_cast<unsigned int>((texture >> 8) & 0xff);
-						unsigned int tr = static_cast<unsigned int>((texture >>16) & 0xff);
+						unsigned int tb = static_cast<unsigned int>((texture >>16) & 0xff);
 						tr = (tr * mulR) >> 8; tg = (tg * mulG) >> 8;
 						tb = (tb * mulB) >> 8; ta = (ta * mulA) >> 8;
 						dest = tr | (tg << 8) | (tb << 16);
@@ -381,9 +382,9 @@ namespace spades {
 					}
 					
 					// already premultiplied. see SWImage.cpp
-					unsigned int tb = static_cast<unsigned int>((texture >> 0) & 0xff);
+					unsigned int tr = static_cast<unsigned int>((texture >> 0) & 0xff);
 					unsigned int tg = static_cast<unsigned int>((texture >> 8) & 0xff);
-					unsigned int tr = static_cast<unsigned int>((texture >>16) & 0xff);
+					unsigned int tb = static_cast<unsigned int>((texture >>16) & 0xff);
 					tr = (tr * mulR) >> 8; tg = (tg * mulG) >> 8;
 					tb = (tb * mulB) >> 8; ta = (ta * mulA) >> 8;
 					
@@ -528,14 +529,17 @@ namespace spades {
 			}
 		};
 		
-#pragma mark - SSE2
+		// TODO: Non-SSE2 renderer for solid polygons
 		
+#pragma mark - SSE2
 #if ENABLE_SSE2
+		
+#pragma mark General
 		template<
 		bool depthTest
 		>
 		struct SWImageRenderer::PolygonRenderer
-		<SWFeatureLevel::SSE2, false, false, depthTest> {
+		<SWFeatureLevel::SSE2, false, false, depthTest, false> {
 			
 			
 			static void DrawPolygonInternalInner(SWImage *img,
@@ -618,7 +622,7 @@ namespace spades {
 					
 					// convert to [u16.0x4], 8bit width
 					tcol = _mm_unpacklo_epi8(tcol, _mm_setzero_si128());
-					tcol = _mm_shufflelo_epi16(tcol, 0b11000110); // swap BGR/RGB
+					//tcol = _mm_shufflelo_epi16(tcol, 0b11000110); // swap BGR/RGB
 					
 					if(ta == 256 && mulA == 256) {
 						// opaque
@@ -700,8 +704,8 @@ namespace spades {
 					
 					// convert to [u16.0x4, u16.0x4], 8bit width
 					tcol = _mm_unpacklo_epi8(tcol, _mm_setzero_si128());
-					tcol = _mm_shufflelo_epi16(tcol, 0b11000110); // swap BGR/RGB
-					tcol = _mm_shufflehi_epi16(tcol, 0b11000110); // swap BGR/RGB
+					//tcol = _mm_shufflelo_epi16(tcol, 0b11000110); // swap BGR/RGB
+					//tcol = _mm_shufflehi_epi16(tcol, 0b11000110); // swap BGR/RGB
 					
 					/* FIXME
 					if(ta == 256 && mulA == 256) {
@@ -936,15 +940,298 @@ namespace spades {
 				}
 			}
 		};
+		
+#pragma mark Solid
+		template<
+		bool depthTest
+		>
+		struct SWImageRenderer::PolygonRenderer
+		<SWFeatureLevel::SSE2, false, false, depthTest, true> {
+			
+			
+			static void DrawPolygonInternalInner(SWImage *img,
+												 const Vertex& v1,
+												 const Vertex& v2,
+												 const Vertex& v3,
+												 SWImageRenderer& r) {
+				
+				
+				Bitmap *const fb = r.frame;
+				SPAssert(fb != nullptr);
+				
+				if(v3.position.y <= 0.f) {
+					// viewport cull
+					return;
+				}
+				
+				const int fbW = fb->GetWidth();
+				const int fbH = fb->GetHeight();
+				uint32_t *const bmp = fb->GetPixels();
+				
+				if(v1.position.y >= static_cast<float>(fbH)) {
+					// viewport cull
+					return;
+				}
+				
+				float *const depthBuffer = r.depthBuffer;
+				if(depthTest){
+					SPAssert(depthBuffer != nullptr);
+				}
+				
+				const int x1 = static_cast<int>(v1.position.x);
+				const int y1 = static_cast<int>(v1.position.y);
+				const int x2 = static_cast<int>(v2.position.x);
+				const int y2 = static_cast<int>(v2.position.y);
+				const int x3 = static_cast<int>(v3.position.x);
+				const int y3 = static_cast<int>(v3.position.y);
+				
+				if(x1 == x2 && x2 == x3) return; // area cull
+				if(y1 == y3) return; // area cull
+				if(std::min(std::min(x1, x2), x3) >= fbW) return; // viewport cull
+				if(std::max(std::max(x1, x2), x3) <= 0) return; // viewport cull
+				
+				auto convertColor = [](float f) {
+					// 255.f, not 256.f here because for solid rendering
+					// this color is directly used
+					int i = static_cast<int>(f * 255.f + .5f);
+					return static_cast<unsigned short>(std::max(std::min(i, 255), 0));
+				};
+				unsigned short mulR = convertColor(v1.color.x);
+				unsigned short mulG = convertColor(v1.color.y);
+				unsigned short mulB = convertColor(v1.color.z);
+				unsigned short mulA = convertColor(v1.color.w);
+				
+				if(mulA == 0 && mulR == 0 && mulG == 0 && mulB == 0)
+					return;
+				
+				__m128i mulCol = _mm_setr_epi16(mulB, mulG, mulR, mulA,
+												mulB, mulG, mulR, mulA);
+				__m128i mulInv = _mm_set1_epi16(256 - (mulA + (mulA >> 7)));
+				mulCol = _mm_slli_epi16(mulCol, 8);
+				
+				auto drawPixel = [mulCol, mulInv]
+				(uint32_t& dest, float& destDepth,
+				 float inDepth) {
+					if(depthTest) {
+						if(inDepth < destDepth) {
+							return;
+						}
+					}
+					
+					// load [u8.8x4]8bw
+					__m128i tcol = mulCol;
+					
+					// load [u8.0x4]
+					__m128i dcol = _mm_setr_epi32(dest, 0,0,0);
+					
+					// convert to [u16.0x4], 8bit width
+					dcol = _mm_unpacklo_epi8(dcol, _mm_setzero_si128());
+					
+					// modulate by inversed src alpha.
+					// now [u8.8 x 4]
+					dcol = _mm_mullo_epi16(dcol, mulInv);
+					
+					// additive blending with saturation.
+					dcol = _mm_adds_epu16(dcol, tcol);
+					
+					// pack.
+					dcol = _mm_srli_epi16(dcol, 8);
+					dcol = _mm_packus_epi16(dcol, dcol);
+					
+					// store.
+					_mm_store_ss(reinterpret_cast<float *>(&dest),
+								 dcol);
+				};
+				
+				auto drawPixel2 = [mulCol, mulInv, &drawPixel]
+				(uint32_t *dest, float *destDepth,
+				float inDepth1,
+				float inDepth2) {
+					if(depthTest) {
+						if(inDepth1 < destDepth[0]) {
+							drawPixel(dest[1], destDepth[1],
+									  inDepth2);
+							return;
+						}
+						if(inDepth2 < destDepth[1]) {
+							drawPixel(dest[0], destDepth[0],
+									  inDepth2);
+							return;
+						}
+					}
+					
+					// load [u8.8 x 4 x 2]
+					__m128i tcol = mulCol;
+					
+					// load [u8.0 x 4 x 2]
+					__m128i dcol = _mm_setr_epi32(dest[0], dest[1], 0,0);
+					
+					// convert to [u16.0 x 4 x 2], 8bit width
+					dcol = _mm_unpacklo_epi8(dcol, _mm_setzero_si128());
+					
+					// modulate by inversed src alpha.
+					// now [u8.8 x 4 x 2]
+					dcol = _mm_mullo_epi16(dcol, mulInv);
+					
+					// additive blending with saturation.
+					dcol = _mm_adds_epu16(dcol, tcol);
+					
+					// pack.
+					dcol = _mm_srli_epi16(dcol, 8);
+					dcol = _mm_packus_epi16(dcol, dcol);
+					
+					// store.
+					_mm_store_sd(reinterpret_cast<double *>(dest),
+								 dcol);
+				};
+				
+				auto drawScanline = [bmp, fbW, fbH, depthBuffer, &drawPixel, &drawPixel2, &r]
+				(int y, int x1, int x2,
+				 const SWImageVarying& vary1,
+				 const SWImageVarying& vary2,
+				 float z1, float z2) {
+					uint32_t *out = bmp + (y * fbW);
+					float *depthOut = nullptr;
+					if(depthTest) {
+						depthOut = depthBuffer + (y * fbW);
+					}
+					SPAssert(x1 < x2);
+					//int width = x2 - x1;
+					int minX = std::max(x1, 0);
+					int maxX = std::min(x2, fbW);
+					r.pixelsDrawn += maxX - minX;
+					out += minX;
+					if(depthTest) {
+						depthOut += minX;
+					}
+					
+					auto unalignedPixel = [&]() {
+						// FIXME: Z interpolation
+						drawPixel(*out, *depthOut, z1);
+						out++;
+						if(depthTest) {
+							depthOut ++;
+						}
+					};
+					while(minX & 1) {
+						// non-aligned.
+						unalignedPixel();
+						minX++;
+					}
+					int reminders = maxX & 1;
+					maxX -= reminders;
+					/* for(int x = minX; x < maxX; x+=2) */
+					if(maxX > minX)
+					for(auto *endPtr = out + (maxX - minX); out != endPtr;){
+						// FIXME: Z interpolation
+						
+						drawPixel2(out, depthOut, z1, z1);
+						out += 2;
+						if(depthTest) {
+							depthOut += 2;
+						}
+					}
+					while(reminders--) {
+						unalignedPixel();
+					}
+				};
+				
+				// FIXME: interpolated Z
+				
+				Interpolator longSpanX(x1, x3, y3 - y1);
+				SWImageGouraudInterpolator<SWFeatureLevel::SSE2> longSpan(v1, v3, y3 - y1);
+				{
+					Interpolator shortSpanX(x1, x2, y2 - y1);
+					SWImageGouraudInterpolator<SWFeatureLevel::SSE2> shortSpan(v1, v2, y2 - y1);
+					int minY = std::max(0, y1);
+					int maxY = std::min(fbH, y2);
+					shortSpanX.MoveNext(minY - y1);
+					shortSpan.MoveNext(minY - y1);
+					longSpanX.MoveNext(minY - y1);
+					longSpan.MoveNext(minY - y1);
+					for(int y = minY; y < maxY; y++) {
+						int lineX1 = shortSpanX.GetCurrent();
+						auto line1 = shortSpan.GetCurrent();
+						int lineX2 = longSpanX.GetCurrent();
+						auto line2 = longSpan.GetCurrent();
+						shortSpanX.MoveNext();
+						shortSpan.MoveNext();
+						longSpanX.MoveNext();
+						longSpan.MoveNext();
+						if(lineX1 == lineX2) continue;
+						if(lineX1 < lineX2) {
+							drawScanline(y, lineX1, lineX2, line1, line2,
+										 v1.position.z, v1.position.z);
+						}else{
+							drawScanline(y, lineX2, lineX1, line2, line1,
+										 v1.position.z, v1.position.z);
+						}
+					}
+				}
+				{
+					Interpolator shortSpanX(x2, x3, y3 - y2);
+					SWImageGouraudInterpolator<SWFeatureLevel::SSE2> shortSpan(v2, v3, y3 - y2);
+					int minY = std::max(0, y2);
+					int maxY = std::min(fbH, y3);
+					shortSpanX.MoveNext(minY - y2);
+					shortSpan.MoveNext(minY - y2);
+					longSpanX.MoveNext(minY - y2);
+					longSpan.MoveNext(minY - y2);
+					for(int y = minY; y < maxY; y++) {
+						int lineX1 = shortSpanX.GetCurrent();
+						auto line1 = shortSpan.GetCurrent();
+						int lineX2 = longSpanX.GetCurrent();
+						auto line2 = longSpan.GetCurrent();
+						shortSpanX.MoveNext();
+						shortSpan.MoveNext();
+						longSpanX.MoveNext();
+						longSpan.MoveNext();
+						if(lineX1 == lineX2) continue;
+						if(lineX1 < lineX2) {
+							drawScanline(y, lineX1, lineX2, line1, line2,
+										 v1.position.z, v1.position.z);
+						}else{
+							drawScanline(y, lineX2, lineX1, line2, line1,
+										 v1.position.z, v1.position.z);
+						}
+					}
+				}
+				// polygon, done!
+			}
+			
+			static void DrawPolygonInternal(SWImage *img,
+											const Vertex& v1,
+											const Vertex& v2,
+											const Vertex& v3,
+											SWImageRenderer& r) {
+				if(v2.position.y < v1.position.y) {
+					if(v3.position.y < v2.position.y) {
+						DrawPolygonInternalInner(img, v3, v2, v1, r);
+					}else if(v3.position.y < v1.position.y) {
+						DrawPolygonInternalInner(img, v2, v3, v1, r);
+					}else{
+						DrawPolygonInternalInner(img, v2, v1, v3, r);
+					}
+				}else if(v3.position.y < v1.position.y){
+					DrawPolygonInternalInner(img, v3, v1, v2, r);
+				}else if(v3.position.y < v2.position.y){
+					DrawPolygonInternalInner(img, v1, v3, v2, r);
+				}else{
+					DrawPolygonInternalInner(img, v1, v2, v3, r);
+				}
+			}
+		};
+
 #endif
 		
 #pragma mark - Intermediates
 		
 		template<
 		SWFeatureLevel featureLvl,
-		bool depthTest
+		bool depthTest,
+		bool solidFill
 		>
-		struct SWImageRenderer::PolygonRenderer<featureLvl, false, true, depthTest> {
+		struct SWImageRenderer::PolygonRenderer<featureLvl, false, true, depthTest, solidFill> {
 			static void DrawPolygonInternal(SWImage *img,
 											const Vertex& v1,
 											const Vertex& v2,
@@ -956,7 +1243,7 @@ namespace spades {
 				vv1.position = (vv1.position * r.fbSize4) + r.fbCenter4;
 				vv2.position = (vv2.position * r.fbSize4) + r.fbCenter4;
 				vv3.position = (vv3.position * r.fbSize4) + r.fbCenter4;
-				PolygonRenderer<featureLvl, false, false, depthTest>::DrawPolygonInternal(img,
+				PolygonRenderer<featureLvl, false, false, depthTest, solidFill>::DrawPolygonInternal(img,
 																   vv1, vv2, vv3, r);
 			}
 		};
@@ -964,9 +1251,10 @@ namespace spades {
 		template<
 		SWFeatureLevel featureLvl,
 		bool ndc, // normalized device coordinate
-		bool depthTest
+		bool depthTest,
+		bool solidFill
 		>
-		struct SWImageRenderer::PolygonRenderer<featureLvl, true, ndc, depthTest> {
+		struct SWImageRenderer::PolygonRenderer<featureLvl, true, ndc, depthTest, solidFill> {
 			template<class F>
 			static void Clip(Vertex& v1, Vertex& v2, Vertex& v3,
 							 Vector4 plane, F continuation) {
@@ -1084,10 +1372,33 @@ namespace spades {
 					 (v1, v2, v3,
 					  MakeVector4(0.f, 0.f, -1.f, 1.f),
 					  [img,&r](Vertex& v1, Vertex& v2, Vertex& v3) {
-						  PolygonRenderer<featureLvl, false, true, depthTest>::DrawPolygonInternal
+						  PolygonRenderer<featureLvl, false, true, depthTest, solidFill>::DrawPolygonInternal
 						  (img, v1, v2, v3, r);
 					  });
 				 });
+			}
+		};
+		
+		
+		template<
+		SWFeatureLevel level,
+		bool needTransform,
+		bool ndc, // normalized device coordinate
+		bool depthTest
+		>
+		struct SWImageRenderer::PolygonRenderer3 {
+			static void DrawPolygonInternal(SWImage *img,
+											const Vertex& v1,
+											const Vertex& v2,
+											const Vertex& v3,
+											SWImageRenderer& r) {
+				if(img->IsWhiteImage()) {
+					PolygonRenderer<level, needTransform, ndc, depthTest, true>::DrawPolygonInternal(img,
+																									  v1, v2, v3, r);
+					return;
+				}
+				PolygonRenderer<level, needTransform, ndc, depthTest, false>::DrawPolygonInternal(img,
+																										  v1, v2, v3, r);
 			}
 		};
 		
@@ -1106,12 +1417,12 @@ namespace spades {
 											SWFeatureLevel lvl) {
 #if ENABLE_SSE2
 				if(lvl >= SWFeatureLevel::SSE2) {
-					PolygonRenderer<SWFeatureLevel::SSE2, needTransform, ndc, depthTest>::DrawPolygonInternal(img,
+					PolygonRenderer3<SWFeatureLevel::SSE2, needTransform, ndc, depthTest>::DrawPolygonInternal(img,
 																											  v1, v2, v3, r);
 					return;
 				}
 #endif
-				PolygonRenderer<SWFeatureLevel::None, needTransform, ndc, depthTest>::DrawPolygonInternal(img,
+				PolygonRenderer3<SWFeatureLevel::None, needTransform, ndc, depthTest>::DrawPolygonInternal(img,
 																										  v1, v2, v3, r);
 			}
 		};
