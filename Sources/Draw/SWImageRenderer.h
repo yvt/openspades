@@ -49,6 +49,7 @@ namespace spades {
 			float zNear;
 			Matrix4 matrix;
 			SWFeatureLevel featureLevel;
+			unsigned long long pixelsDrawn;
 			
 			template<SWFeatureLevel, bool, bool, bool>
 			struct PolygonRenderer;
@@ -73,6 +74,8 @@ namespace spades {
 							 const Vertex& v2,
 							 const Vertex& v3);
 			
+			unsigned long long GetPixelsDrawn() { return pixelsDrawn; }
+			void ResetPixelStatistics() { pixelsDrawn = 0; }
 		};
 	}
 }

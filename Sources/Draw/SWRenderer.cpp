@@ -28,6 +28,10 @@
 #include "SWImageRenderer.h"
 #include <array>
 #include <algorithm>
+#include <Core/Settings.h>
+
+
+SPADES_SETTING(r_swStatistics, "0");
 
 namespace spades {
 	namespace draw {
@@ -59,6 +63,8 @@ namespace spades {
 			
 			SPLog("creating image renderer");
 			imageRenderer = std::make_shared<SWImageRenderer>(featureLevel);
+			imageRenderer->ResetPixelStatistics();
+			renderStopwatch.Reset();
 			
 			SPLog("setting framebuffer.");
 			SetFramebuffer(port->GetFramebuffer());
@@ -477,6 +483,16 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			EnsureValid();
 			EnsureSceneNotStarted();
+			
+			if(r_swStatistics) {
+				double dur = renderStopwatch.GetTime();
+				SPLog("==== SWRenderer Statistics ====");
+				SPLog("Elapsed Time: %.3fus", dur * 1000000.0);
+				SPLog("Polygon pixels drawn: %llu", imageRenderer->GetPixelsDrawn());
+			}
+			
+			imageRenderer->ResetPixelStatistics();
+			renderStopwatch.Reset();
 			
 			{
 				uint32_t rdb = rand();

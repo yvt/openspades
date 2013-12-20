@@ -28,6 +28,7 @@
 #include "../Client/IGameMapListener.h"
 #include <vector>
 #include "SWFeatureLevel.h"
+#include <Core/Stopwatch.h>
 
 namespace spades {
 	namespace draw {
@@ -76,6 +77,8 @@ namespace spades {
 			bool legacyColorPremultiply;
 			
 			unsigned int lastTime;
+			
+			Stopwatch renderStopwatch;
 			
 			bool duringSceneRendering;
 			

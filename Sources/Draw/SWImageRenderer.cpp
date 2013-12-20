@@ -403,7 +403,7 @@ namespace spades {
 					dest = outR | (outG << 8) | (outB << 16);
 				};
 				
-				auto drawScanline = [tw, th, tpixels, bmp, fbW, fbH, depthBuffer, &drawPixel]
+				auto drawScanline = [tw, th, tpixels, bmp, fbW, fbH, depthBuffer, &drawPixel, &r]
 				(int y, int x1, int x2,
 				 const SWImageVarying& vary1,
 				 const SWImageVarying& vary2,
@@ -423,6 +423,7 @@ namespace spades {
 					if(depthTest) {
 						depthOut += minX;
 					}
+					r.pixelsDrawn += maxX - minX;
 					for(int x = minX; x < maxX; x++) {
 						auto vr = vary.GetCurrent();
 						unsigned int u = static_cast<unsigned int>(vr.u & (texUVScaleInt-1));
@@ -759,7 +760,7 @@ namespace spades {
 								 dcol);
 				};
 				
-				auto drawScanline = [tw, th, tpixels, bmp, fbW, fbH, depthBuffer, &drawPixel, &drawPixel2]
+				auto drawScanline = [tw, th, tpixels, bmp, fbW, fbH, depthBuffer, &drawPixel, &drawPixel2, &r]
 				(int y, int x1, int x2,
 				 const SWImageVarying& vary1,
 				 const SWImageVarying& vary2,
@@ -774,6 +775,7 @@ namespace spades {
 					SWImageGouraudInterpolator<SWFeatureLevel::SSE2> vary(vary1, vary2, width);
 					int minX = std::max(x1, 0);
 					int maxX = std::min(x2, fbW);
+					r.pixelsDrawn += maxX - minX;
 					vary.MoveNext(minX - x1);
 					out += minX;
 					if(depthTest) {
