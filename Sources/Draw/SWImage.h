@@ -27,7 +27,10 @@
 namespace spades {
 	namespace draw {
 		class SWImage: public client::IImage {
-			Handle<Bitmap> rawBmp;
+			//Handle<Bitmap> rawBmp;
+			
+			std::vector<uint32_t> bmp;
+			int ew, eh; // exact size
 			
 			float w, h;
 			float iw, ih;
@@ -36,7 +39,9 @@ namespace spades {
 		public:
 			SWImage(Bitmap *bmp);
 			
-			Bitmap *GetRawBitmap() { return rawBmp; }
+			uint32_t *GetRawBitmap() { return bmp.data(); }
+			int GetRawWidth() { return ew; }
+			int GetRawHeight() { return eh; }
 			
 			virtual float GetWidth() { return w; }
 			virtual float GetHeight() { return h; }

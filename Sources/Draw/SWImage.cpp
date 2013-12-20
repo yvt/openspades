@@ -25,12 +25,35 @@
 namespace spades {
 	namespace draw {
 		SWImage::SWImage(Bitmap *m):
-		rawBmp(m),
 		w(static_cast<float>(m->GetWidth())),
 		h(static_cast<float>(m->GetHeight())),
-		iw(1.f / w), ih(1.f / h)
+		iw(1.f / w), ih(1.f / h),
+		ew(m->GetWidth()),
+		eh(m->GetHeight())
 		{
+			bmp.resize(ew * eh);
 			
+			// premultiplied alpha
+			{
+				uint32_t *inpix = m->GetPixels();
+				uint32_t *outpix = bmp.data();
+				for(std::size_t i = ew * eh; i; i--) {
+					uint32_t col = *(inpix++);
+					unsigned int alpha = static_cast<unsigned int>(col >> 24);
+					alpha += (alpha >> 7); // [0,255] to [0,256]
+					
+					unsigned int r = static_cast<unsigned int>((col >> 0) & 0xff);
+					unsigned int g = static_cast<unsigned int>((col >> 8) & 0xff);
+					unsigned int b = static_cast<unsigned int>((col >>16) & 0xff);
+					r = (r * alpha) >> 8;
+					g = (g * alpha) >> 8;
+					b = (b * alpha) >> 8;
+					
+					col &= 0xff000000;
+					col |= r | (g << 8) | (b << 16);
+					*(outpix++) = col;
+				}
+			}
 		}
 		
 		SWImage::~SWImage() {

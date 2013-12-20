@@ -175,7 +175,7 @@ namespace spades {
 			}
 		};
 		
-		static constexpr int texUVScaleBits = 18;
+		static constexpr int texUVScaleBits = 16;
 		static constexpr int texUVScaleInt = 1 << texUVScaleBits;
 		static constexpr float texUVScaleFloat = static_cast<float>(texUVScaleInt);
 		
@@ -246,7 +246,7 @@ namespace spades {
 				};
 			};
 			
-			SWImageGouraudInterpolator(const SWImageVarying& start,
+			inline SWImageGouraudInterpolator(const SWImageVarying& start,
 									   const SWImageVarying& end,
 									   int numSteps):
 			u(start.u, end.u, numSteps, true),
@@ -256,13 +256,13 @@ namespace spades {
 				uvStep = _mm_set_epi64x(u.fp.step, v.fp.step);
 			}
 			
-			SWImageVarying GetCurrent() {
+			inline SWImageVarying GetCurrent() {
 				SWImageVarying varying;
 				varying.uv_m128 = _mm_shuffle_epi32(uv, 0b00111101);
 				return varying;
 			}
 			
-			void MoveNext(int s) {
+			inline void MoveNext(int s) {
 				if(s == 0) return;
 				else if(s < 4){
 					auto v = uv, st = uvStep;
@@ -279,7 +279,7 @@ namespace spades {
 				}
 			}
 			
-			void MoveNext() {
+			inline void MoveNext() {
 				uv = _mm_add_epi64(uv, uvStep);
 			}
 		};
@@ -328,10 +328,9 @@ namespace spades {
 					SPAssert(depthBuffer != nullptr);
 				}
 				
-				Bitmap *const tbmp = img->GetRawBitmap();
-				const int tw = tbmp->GetWidth();
-				const int th = tbmp->GetHeight();
-				const uint32_t * const tpixels = tbmp->GetPixels();
+				uint32_t *const tpixels = img->GetRawBitmap();
+				const int tw = img->GetRawWidth();
+				const int th = img->GetRawHeight();
 				
 				const int x1 = static_cast<int>(v1.position.x);
 				const int y1 = static_cast<int>(v1.position.y);
@@ -349,9 +348,9 @@ namespace spades {
 					int i = static_cast<int>(f * 256.f + .5f);
 					return static_cast<unsigned short>(std::max(std::min(i, 256), 0));
 				};
-				unsigned short mulR = convertColor(v1.color.x);
+				unsigned short mulR = convertColor(v1.color.z);
 				unsigned short mulG = convertColor(v1.color.y);
-				unsigned short mulB = convertColor(v1.color.z);
+				unsigned short mulB = convertColor(v1.color.x);
 				unsigned short mulA = convertColor(v1.color.w);
 				
 				if(mulA == 0 && mulR == 0 && mulG == 0 && mulB == 0)
@@ -365,13 +364,26 @@ namespace spades {
 						}
 					}
 					
+					if(texture == 0) return; // transparent
+					
 					unsigned int ta = static_cast<unsigned int>(texture >> 24);
 					ta += (ta >> 7); // [0, 255] -> [0, 256]
-					texture = ((((texture & 0xff00ff) * ta) & 0xff00ff00) |
-					(((texture & 0x00ff00) * ta) & 0x00ff0000)) >> 8; // premultiply
-					unsigned int tr = static_cast<unsigned int>((texture >> 0) & 0xff);
+					
+					if(ta == 256 && mulA == 256) {
+						// opaque
+						unsigned int tb = static_cast<unsigned int>((texture >> 0) & 0xff);
+						unsigned int tg = static_cast<unsigned int>((texture >> 8) & 0xff);
+						unsigned int tr = static_cast<unsigned int>((texture >>16) & 0xff);
+						tr = (tr * mulR) >> 8; tg = (tg * mulG) >> 8;
+						tb = (tb * mulB) >> 8; ta = (ta * mulA) >> 8;
+						dest = tr | (tg << 8) | (tb << 16);
+						return;
+					}
+					
+					// already premultiplied. see SWImage.cpp
+					unsigned int tb = static_cast<unsigned int>((texture >> 0) & 0xff);
 					unsigned int tg = static_cast<unsigned int>((texture >> 8) & 0xff);
-					unsigned int tb = static_cast<unsigned int>((texture >>16) & 0xff);
+					unsigned int tr = static_cast<unsigned int>((texture >>16) & 0xff);
 					tr = (tr * mulR) >> 8; tg = (tg * mulG) >> 8;
 					tb = (tb * mulB) >> 8; ta = (ta * mulA) >> 8;
 					
@@ -554,10 +566,9 @@ namespace spades {
 					SPAssert(depthBuffer != nullptr);
 				}
 				
-				Bitmap *const tbmp = img->GetRawBitmap();
-				const int tw = tbmp->GetWidth();
-				const int th = tbmp->GetHeight();
-				const uint32_t * const tpixels = tbmp->GetPixels();
+				uint32_t *const tpixels = img->GetRawBitmap();
+				const int tw = img->GetRawWidth();
+				const int th = img->GetRawHeight();
 				
 				const int x1 = static_cast<int>(v1.position.x);
 				const int y1 = static_cast<int>(v1.position.y);
@@ -583,13 +594,10 @@ namespace spades {
 				if(mulA == 0 && mulR == 0 && mulG == 0 && mulB == 0)
 					return;
 				
-				mulR <<= 7;
-				mulG <<= 7;
-				mulB <<= 7;
-				__m128i mulCol = _mm_setr_epi16(mulR, mulG, mulB, mulA,
-												mulR, mulG, mulB, mulA);
+				__m128i mulCol = _mm_setr_epi16(mulB, mulG, mulR, mulA,
+												mulB, mulG, mulR, mulA);
 				
-				auto drawPixel = [mulCol]
+				auto drawPixel = [mulCol, mulA]
 				(uint32_t& dest, float& destDepth,
 				 uint32_t texture, float inDepth) {
 					if(depthTest) {
@@ -598,29 +606,45 @@ namespace spades {
 						}
 					}
 					
+					if(texture == 0)
+						return; // transparent
+					
 					unsigned int ta = static_cast<unsigned int>(texture >> 24);
 					ta += (ta >> 7); // [0, 255] -> [0, 256]
 					
 					// load [u8.0x4]
-					__m128i tcol = _mm_setr_epi32(texture | 0xff000000, 0,0,0);
+					__m128i tcol = _mm_setr_epi32(texture, 0,0,0);
 					
 					// convert to [u16.0x4], 8bit width
 					tcol = _mm_unpacklo_epi8(tcol, _mm_setzero_si128());
+					tcol = _mm_shufflelo_epi16(tcol, 0b11000110); // swap BGR/RGB
 					
-					__m128i taVec = _mm_set1_epi16(static_cast<short>(ta));
+					if(ta == 256 && mulA == 256) {
+						// opaque
+						tcol = _mm_mullo_epi16(tcol, mulCol);
+						
+						// pack.
+						tcol = _mm_srli_epi16(tcol, 8);
+						tcol = _mm_packus_epi16(tcol, tcol);
+						
+						// store.
+						_mm_store_ss(reinterpret_cast<float *>(&dest),
+									 tcol);
+						
+						return;
+					}
 					
-					// premultiply. now [u8.8x4]
-					tcol = _mm_mullo_epi16(tcol, taVec);
+					// tcol is already premultiplied. see SWImage.cpp
 					
-					// modulate by the constant color. now [u9.7x4], 8bit width
-					tcol = _mm_mulhi_epu16(tcol, mulCol);
+					// modulate by the constant color. now [u8.8x4], 8bit width
+					tcol = _mm_mullo_epi16(tcol, mulCol);
 					
 					// broadcast the alpha of the tcol.
 					__m128i tcolAlphaVec = _mm_shufflelo_epi16(tcol, 0b11111111);
 					
 					// make tcol [u8.8x4]
-					tcol = _mm_slli_epi16(tcol, 1);
-					
+					//tcol = _mm_slli_epi16(tcol, 1);
+					tcolAlphaVec = _mm_srli_epi16(tcolAlphaVec, 8); // make [u16x4]8bw
 					tcolAlphaVec = _mm_add_epi16(tcolAlphaVec,
 												 _mm_srli_epi16(tcolAlphaVec, 7)); // [0,255] -> [0,256]
 					
@@ -650,7 +674,92 @@ namespace spades {
 								 dcol);
 				};
 				
-				auto drawScanline = [tw, th, tpixels, bmp, fbW, fbH, depthBuffer, &drawPixel]
+				auto drawPixel2 = [mulCol, mulA, &drawPixel]
+				(uint32_t *dest, float *destDepth,
+				 uint32_t texture1, float inDepth1,
+				 uint32_t texture2, float inDepth2) {
+					if(depthTest) {
+						if(inDepth1 < destDepth[0]) {
+							drawPixel(dest[1], destDepth[1],
+									  texture2, inDepth2);
+							return;
+						}
+						if(inDepth2 < destDepth[1]) {
+							drawPixel(dest[0], destDepth[0],
+									  texture2, inDepth2);
+							return;
+						}
+					}
+					
+					if(texture1 == 0 && texture2 == 0)
+						return; // transparent
+					
+					// load [u8.0x4]
+					__m128i tcol = _mm_setr_epi32(texture1, texture2, 0,0);
+					
+					// convert to [u16.0x4, u16.0x4], 8bit width
+					tcol = _mm_unpacklo_epi8(tcol, _mm_setzero_si128());
+					tcol = _mm_shufflelo_epi16(tcol, 0b11000110); // swap BGR/RGB
+					tcol = _mm_shufflehi_epi16(tcol, 0b11000110); // swap BGR/RGB
+					
+					/* FIXME
+					if(ta == 256 && mulA == 256) {
+						// opaque
+						tcol = _mm_mullo_epi16(tcol, mulCol);
+						
+						// pack.
+						tcol = _mm_srli_epi16(tcol, 8);
+						tcol = _mm_packus_epi16(tcol, tcol);
+						
+						// store.
+						_mm_store_ss(reinterpret_cast<float *>(&dest),
+									 tcol);
+						
+						return;
+					}*/
+					
+					// tcol is already premultiplied. see SWImage.cpp
+					
+					// modulate by the constant color. now [u8.8x4, u8.8x4], 8bit width
+					tcol = _mm_mullo_epi16(tcol, mulCol);
+					
+					// broadcast the alpha of the tcol.
+					__m128i tcolAlphaVec = _mm_shufflelo_epi16(tcol, 0b11111111);
+					tcolAlphaVec = _mm_shufflehi_epi16(tcolAlphaVec, 0b11111111);
+					
+					// make tcol [u8.8x4]
+					//tcol = _mm_slli_epi16(tcol, 1);
+					tcolAlphaVec = _mm_srli_epi16(tcolAlphaVec, 8); // make [u16x4,u16x4]8bw
+					tcolAlphaVec = _mm_add_epi16(tcolAlphaVec,
+												 _mm_srli_epi16(tcolAlphaVec, 7)); // [0,255] -> [0,256]
+					
+					// inverse the alpha
+					tcolAlphaVec = _mm_sub_epi16(_mm_set1_epi16(0x100),
+												 tcolAlphaVec);
+					
+					// load [u8.0 x 4 x 2]
+					__m128i dcol = _mm_setr_epi32(dest[0], dest[1], 0,0);
+					
+					// convert to [u16.0 x 4 x 2], 8bit width
+					dcol = _mm_unpacklo_epi8(dcol, _mm_setzero_si128());
+					
+					// modulate by inversed src alpha.
+					// now [u8.8 x 4 x 2]
+					dcol = _mm_mullo_epi16(dcol, tcolAlphaVec);
+					
+					// additive blending with saturation.
+					dcol = _mm_adds_epu16(dcol, tcol);
+					
+					// pack.
+					dcol = _mm_srli_epi16(dcol, 8);
+					dcol = _mm_packus_epi16(dcol, dcol);
+					
+					// store.
+					_mm_store_sd(reinterpret_cast<double *>(dest),
+								 dcol);
+				};
+				
+				auto drawScanline = [tw, th, tpixels, bmp, fbW, fbH, depthBuffer, &drawPixel, &drawPixel2]
 				(int y, int x1, int x2,
 				 const SWImageVarying& vary1,
 				 const SWImageVarying& vary2,
@@ -671,8 +780,9 @@ namespace spades {
 						depthOut += minX;
 					}
 					auto uvMask = _mm_set1_epi32(texUVScaleInt - 1);
-					auto uvScale = _mm_setr_epi32(tw, 0, th, 0);
-					for(int x = minX; x < maxX; x++) {
+					auto uvScale = _mm_setr_epi32(tw, tw, th, th);
+					
+					auto unalignedPixel = [&]() {
 						auto vr = vary.GetCurrent();
 						union {
 							__m128i uv;
@@ -692,6 +802,50 @@ namespace spades {
 							depthOut ++;
 						}
 						vary.MoveNext();
+					};
+					while(minX & 1) {
+						// non-aligned.
+						unalignedPixel();
+						minX++;
+					}
+					int reminders = maxX & 1;
+					maxX -= reminders;
+					for(int x = minX; x < maxX; x+=2) {
+						auto vr1 = vary.GetCurrent();
+						vary.MoveNext();
+						auto vr2 = vary.GetCurrent();
+						union {
+							__m128i uv;
+							struct { unsigned int ui, dummy1, vi, dummy2; };
+						};
+						//static_assert(texUVScaleBits == 16, "texUVScaleBits must be 16");
+						uv = _mm_shuffle_ps(vr1.uv_m128, vr2.uv_m128, 0b10001000); // [u1,v1,u2,v2]
+						uv = _mm_shuffle_epi32(uv, 0b11011000); // [u1,u2,v1,v2]
+						uv = _mm_and_si128(uv, uvMask); // repeat
+						
+						auto tm = uv;
+						uv = _mm_mul_epu32(uv, uvScale);
+						uv = _mm_srli_epi64(uv, texUVScaleBits);
+						uint32_t tex1 = tpixels[ui + vi * tw];
+						
+						uv = _mm_shuffle_epi32(tm, 0b10110001); // [u2,u1,v2,v1]
+						uv = _mm_mul_epu32(uv, uvScale);
+						uv = _mm_srli_epi64(uv, texUVScaleBits);
+						uint32_t tex2 = tpixels[ui + vi * tw];
+						// FIXME: Z interpolation
+						// FIXME: perspective correction
+						//drawPixel(out[0], depthOut[0], tex1, z1);
+						//drawPixel(out[1], depthOut[1], tex2, z1);
+						
+						drawPixel2(out, depthOut, tex1, z1, tex2, z1);
+						out += 2;
+						if(depthTest) {
+							depthOut += 2;
+						}
+						vary.MoveNext();
+					}
+					while(reminders--) {
+						unalignedPixel();
 					}
 				};
 				
