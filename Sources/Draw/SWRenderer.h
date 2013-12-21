@@ -29,6 +29,7 @@
 #include <vector>
 #include "SWFeatureLevel.h"
 #include <Core/Stopwatch.h>
+#include <array>
 
 namespace spades {
 	namespace draw {
@@ -38,8 +39,11 @@ namespace spades {
 		class SWModelManager;
 		class SWImageRenderer;
 		class SWFlatMapRenderer;
+		class SWMapRenderer;
 		
 		class SWRenderer: public client::IRenderer, public client::IGameMapListener  {
+			friend class SWFlatMapRenderer;
+			friend class SWMapRenderer;
 			
 			SWFeatureLevel featureLevel;
 			
@@ -55,12 +59,13 @@ namespace spades {
 			std::shared_ptr<SWImageRenderer> imageRenderer;
 			
 			std::shared_ptr<SWFlatMapRenderer> flatMapRenderer;
+			std::shared_ptr<SWMapRenderer> mapRenderer;
 			
 			bool inited;
 			bool sceneUsedInThisFrame;
 			
 			client::SceneDefinition sceneDef;
-			Plane3 frustrum[6];
+			std::array<Plane3, 6> frustrum;
 			
 			struct DebugLine{
 				Vector3 v1, v2;

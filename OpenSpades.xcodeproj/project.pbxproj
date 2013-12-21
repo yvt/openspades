@@ -42,6 +42,7 @@
 		E81A7C741863566200BF3FCE /* SWFeatureLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C731863566200BF3FCE /* SWFeatureLevel.cpp */; };
 		E81A7C771864171100BF3FCE /* SWMapRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C751864171100BF3FCE /* SWMapRenderer.cpp */; };
 		E81A7C7A18642BCA00BF3FCE /* SWFlatMapRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C7818642BCA00BF3FCE /* SWFlatMapRenderer.cpp */; };
+		E81A7C7D1865A2E900BF3FCE /* MiniHeap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C7B1865A2E900BF3FCE /* MiniHeap.cpp */; };
 		E81CE4A6183F7A3000F22685 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A4183F7A3000F22685 /* IFont.cpp */; };
 		E81CE4A9183F7F2000F22685 /* MainScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A7183F7F2000F22685 /* MainScreen.cpp */; };
 		E834F55017942C43004EBE88 /* Grenade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F54E17942C43004EBE88 /* Grenade.cpp */; };
@@ -351,6 +352,8 @@
 		E81A7C761864171100BF3FCE /* SWMapRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMapRenderer.h; sourceTree = "<group>"; };
 		E81A7C7818642BCA00BF3FCE /* SWFlatMapRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWFlatMapRenderer.cpp; sourceTree = "<group>"; };
 		E81A7C7918642BCA00BF3FCE /* SWFlatMapRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWFlatMapRenderer.h; sourceTree = "<group>"; };
+		E81A7C7B1865A2E900BF3FCE /* MiniHeap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MiniHeap.cpp; sourceTree = "<group>"; };
+		E81A7C7C1865A2E900BF3FCE /* MiniHeap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MiniHeap.h; sourceTree = "<group>"; };
 		E81CE4A4183F7A3000F22685 /* IFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IFont.cpp; sourceTree = "<group>"; };
 		E81CE4A7183F7F2000F22685 /* MainScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScreen.cpp; sourceTree = "<group>"; };
 		E81CE4A8183F7F2000F22685 /* MainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScreen.h; sourceTree = "<group>"; };
@@ -1425,6 +1428,8 @@
 				E8E0AFB4179BF25B00C6B5A9 /* Settings.h */,
 				E8B6B6EF17E40DA700E35523 /* RefCountedObject.cpp */,
 				E8B6B6F017E40DAA00E35523 /* RefCountedObject.h */,
+				E81A7C7B1865A2E900BF3FCE /* MiniHeap.cpp */,
+				E81A7C7C1865A2E900BF3FCE /* MiniHeap.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1980,6 +1985,7 @@
 				E8B6B71A17E4193A00E35523 /* scripthelper.cpp in Sources */,
 				E8B6B71B17E4193A00E35523 /* scriptmath.cpp in Sources */,
 				E8B6B71C17E4193A00E35523 /* scriptmathcomplex.cpp in Sources */,
+				E81A7C7D1865A2E900BF3FCE /* MiniHeap.cpp in Sources */,
 				E8B6B71D17E4193A00E35523 /* scriptstdstring.cpp in Sources */,
 				E8B6B71E17E4193A00E35523 /* scriptstdstring_utils.cpp in Sources */,
 				E8B6B71F17E4193A00E35523 /* weakref.cpp in Sources */,

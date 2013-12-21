@@ -49,7 +49,7 @@ namespace spades {
 			
 			SWImage *GetImage() { Update(); return img; }
 			
-			void Update();
+			void Update(bool firstTime = false);
 			void SetNeedsUpdate(int x, int y);
 		};
 	}

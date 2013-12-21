@@ -20,7 +20,7 @@
 
 #include "SWRenderer.h"
 #include "SWPort.h"
-#include "Bitmap.h"
+#include <Core/Bitmap.h>
 #include "SWImage.h"
 #include "SWModel.h"
 #include <Client/GameMap.h>
@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <Core/Settings.h>
 #include "SWFlatMapRenderer.h"
+#include "SWMapRenderer.h"
 
 SPADES_SETTING(r_swStatistics, "0");
 
@@ -110,13 +111,13 @@ namespace spades {
 		void SWRenderer::Shutdown() {
 			SPADES_MARK_FUNCTION();
 			
+			SetGameMap(nullptr);
+			
 			imageRenderer.reset();
 			flatMapRenderer.reset();
 			
 			imageManager.reset();
 			modelManager.reset();
-			if(this->map)
-				this->map->SetListener(nullptr);
 			map = nullptr;
 			port = nullptr;
 			
@@ -152,6 +153,7 @@ namespace spades {
 			EnsureInitialized();
 			
 			flatMapRenderer.reset();
+			mapRenderer.reset();
 			
 			if(this->map)
 				this->map->SetListener(nullptr);
@@ -159,6 +161,7 @@ namespace spades {
 			if(this->map) {
 				this->map->SetListener(this);
 				flatMapRenderer = std::make_shared<SWFlatMapRenderer>(this, map);
+				mapRenderer = std::make_shared<SWMapRenderer>(this, map, featureLevel);
 			}
 		}
 		
@@ -349,6 +352,9 @@ namespace spades {
 					  fb->GetWidth() * fb->GetHeight(),
 					  0x7f7f7f);
 			
+			// draw map
+			if(mapRenderer)
+				mapRenderer->Render(sceneDef, fb, depthBuffer.data());
 			
 			duringSceneRendering = false;
 		}
@@ -529,7 +535,22 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			EnsureValid();
 			EnsureSceneNotStarted();
-			return fb->Clone();
+			
+			int w = fb->GetWidth();
+			int h = fb->GetHeight();
+			uint32_t *inPix = fb->GetPixels();
+			Bitmap *bm = new Bitmap(w, h);
+			uint32_t *outPix = bm->GetPixels();
+			for(int y = 0; y < h; y++) {
+				uint32_t *src = inPix + y*w;
+				uint32_t *dest = outPix + (h-1-y) * w;
+				for(int x = w; x != 0; x--) {
+					auto c = *(src++);
+					c = 0xff000000 | (c&0xff00) | ((c&0xff)<<16) | ((c&0xff0000)>>16);
+					*(dest++)=c;
+				}
+			}
+			return bm;
 		}
 		
 		float SWRenderer::ScreenWidth() {

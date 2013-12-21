@@ -25,6 +25,8 @@
 #include <algorithm>
 #include <Core/Exception.h>
 #include <Core/Debug.h>
+#include "SWMapRenderer.h"
+
 
 namespace spades {
 	namespace draw {
@@ -44,7 +46,7 @@ namespace spades {
 			updateMap2.resize(w * h / 32);
 			std::fill(updateMap2.begin(), updateMap2.end(), 0xffffffff);
 			
-			Update();
+			Update(true);
 		}
 		
 		SWFlatMapRenderer::~SWFlatMapRenderer() {
@@ -52,7 +54,7 @@ namespace spades {
 			
 		}
 		
-		void SWFlatMapRenderer::Update() {
+		void SWFlatMapRenderer::Update(bool firstTime) {
 			SPADES_MARK_FUNCTION();
 			{
 				std::lock_guard<std::mutex> lock(updateInfoLock);
@@ -61,22 +63,28 @@ namespace spades {
 					return;
 				needsUpdate = false;
 				updateMap.swap(updateMap2);
-				std::fill(updateMap.begin(), updateMap.end(), 0xffffffff);
+				std::fill(updateMap.begin(), updateMap.end(), 0);
 			}
 			auto *outPixels = img->GetRawBitmap();
+			
+			auto *mapRenderer = r->mapRenderer.get();
+			
 			int idx = 0;
 			for(int y = 0; y < h; y++) {
 				for(int x = 0; x < w; x += 32) {
-					uint32_t upd = updateMap[idx];
+					uint32_t upd = updateMap2[idx];
 					if(upd) {
 						for(int i = 0; i < 32; i++) {
 							if(upd & 1) {
 								auto c = GeneratePixel(x + i, y);
 								outPixels[i] = c;
+								if(!firstTime){
+									mapRenderer->UpdateRle(x+i, y);
+								}
 							}
 							upd >>= 1;
 						}
-						updateMap[idx] = 0;
+						//updateMap[idx] = 0;
 					}
 					outPixels += 32;
 					idx++;

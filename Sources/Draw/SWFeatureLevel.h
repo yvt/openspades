@@ -21,8 +21,12 @@
 #pragma once
 
 #define ENABLE_MMX	0 // FIXME: move this to the proper place
+#define ENABLE_SSE	1 // FIXME: move this to the proper place
 #define ENABLE_SSE2	1 // FIXME: move this to the proper place
 
+#if ENABLE_SSE
+#include <xmmintrin.h>
+#endif
 #if ENABLE_SSE2
 #include <emmintrin.h>
 #endif
@@ -33,6 +37,9 @@ namespace spades {
 			None,
 #if ENABLE_MMX
 			MMX,
+#endif
+#if ENABLE_SSE
+			SSE,
 #endif
 #if ENABLE_SSE2
 			SSE2,

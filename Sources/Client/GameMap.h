@@ -65,6 +65,10 @@ namespace spades{
 				return colorMap[x][y][z];
 			}
 			
+			inline uint64_t GetSolidMapWrapped(int x, int y) {
+				return solidMap[x & (Width() - 1)][y & (Height() - 1)];
+			}
+			
 			inline bool IsSolidWrapped(int x, int y, int z){
 				if(z < 0)
 					return false;
