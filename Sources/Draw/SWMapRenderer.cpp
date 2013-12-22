@@ -26,6 +26,7 @@
 #include <Core/MiniHeap.h>
 #include <Core/Settings.h>
 #include <Core/ConcurrentDispatch.h>
+#include <Core/Stopwatch.h>
 
 SPADES_SETTING(r_swUndersampling, "0");
 SPADES_SETTING(r_swNumThreads, "4");
@@ -139,6 +140,8 @@ namespace spades {
 			Vector3 horizonDir;
 			float pitchTanMin;
 			float pitchScale;
+			int pitchTanMinI;
+			int pitchScaleI;
 		};
 		
 
@@ -154,6 +157,11 @@ namespace spades {
 		renderer(r){
 			rle.resize(w * h);
 			rleLen.resize(w * h);
+			
+			Stopwatch sw;
+			sw.Reset();
+			SPLog("Building RLE map...");
+			
 			int idx = 0;
 			for(int y = 0; y < h; y++)
 				for(int x = 0; x < w; x++) {
@@ -168,6 +176,7 @@ namespace spades {
 					
 					idx++;
 				}
+			SPLog("RLE map created in %.6f seconds", sw.GetTime());
 		}
 		
 		SWMapRenderer::~SWMapRenderer() {
@@ -178,8 +187,17 @@ namespace spades {
 			out.clear();
 			
 			out.push_back(0); // [0] = +Z face position address
+			out.push_back(0); // [0] = +X face position address
+			out.push_back(0); // [0] = -X face position address
+			out.push_back(0); // [0] = +Y face position address
+			out.push_back(0); // [0] = -Y face position address
 			
 			uint64_t smap = map->GetSolidMapWrapped(x, y);
+			std::array<uint64_t, 4> adjs =
+			{map->GetSolidMapWrapped(x+1, y),
+			 map->GetSolidMapWrapped(x-1, y),
+			 map->GetSolidMapWrapped(x, y+1),
+			 map->GetSolidMapWrapped(x, y-1)};
 			bool old = false;
 			
 			for(int z = 0; z < 64; z++) {
@@ -202,6 +220,18 @@ namespace spades {
 				old = b;
 			}
 			out.push_back(-1);
+			
+			for(int k = 0; k < 4; k++) {
+				out[k + 1] = static_cast<RleData>(out.size());
+				for(int z = 0; z < 64; z++) {
+					if((smap >> z) & 1){
+						if(!((adjs[k] >> z) & 1)){
+							out.push_back(static_cast<RleData>(z));
+						}
+					}
+				}
+				out.push_back(-1);
+			}
 			
 		}
 		
@@ -277,9 +307,9 @@ namespace spades {
 						ang = atanf(ang);
 						
 						if(plane.z > 0.f) {
-							minPitch = std::max(minPitch, ang);
+							minPitch = std::max(minPitch, ang - 0.01f);
 						}else{
-							maxPitch = std::min(maxPitch, -ang);
+							maxPitch = std::min(maxPitch, -ang + 0.01f);
 						}
 					}
 				};
@@ -296,6 +326,8 @@ namespace spades {
 			
 			line.pitchTanMin = minTan;
 			line.pitchScale = lineResolution / (maxTan - minTan);
+			line.pitchTanMinI = static_cast<int>(minTan * 65536.f);
+			line.pitchScaleI = static_cast<int>(line.pitchScale * 65536.f);
 			
 			// TODO: pitch culling
 			
@@ -516,7 +548,7 @@ namespace spades {
 					auto ref = rle[(oirx & w-1) + ((oiry & h-1) * w)];
 					RleData *rle = rleHeap.Dereference<RleData>(ref);
 					{
-						RleData *ptr = rle + 1;
+						RleData *ptr = rle + 5;
 						while(*ptr != -1) {
 							int z = *ptr;
 							if(z > icz) {
@@ -539,7 +571,8 @@ namespace spades {
 				} // done: floor/ceiling
 				
 				// add walls
-				{
+				if(false){
+					// brute-force
 					auto checkRange = [&](uint32_t diff, bool upper,
 										   int begin, int end) {
 						int shift = upper ? 32 : 0;
@@ -581,7 +614,28 @@ namespace spades {
 					
 					recurse(solidMapDiff1, false);
 					recurse(solidMapDiff2, true);
-				}
+				}else{
+					// by RLE map
+					auto ref = rle[(irx & w-1) + ((iry & h-1) * w)];
+					RleData *rle = rleHeap.Dereference<RleData>(ref);
+					rle += rle[1 + static_cast<int>(wallFace)];
+					
+					while(*rle != -1) {
+						int z = *(rle++);
+						
+						int p1 = transform(invDist, z);
+						int p2 = transform(invDist, z + 1);
+						
+						LinePixel pix = BuildLinePixel(irx, iry, z, wallFace);
+						
+						for(int j = p1; j < p2; j++) {
+							auto& p = pixels[j];
+							if(!p.IsEmpty()) continue;
+							p.Set(pix);
+						}
+					}
+					
+				} // add wall - end
 				
 				
 				lastSolidMap1 = solidMap1;
@@ -710,90 +764,229 @@ namespace spades {
 			startX = (startX / blockSize) * blockSize;
 			endX = (endX / blockSize) * blockSize;
 			
-			v1 += deltaRight * static_cast<float>(startX);
+			v1 += deltaRight * static_cast<float>(startX / under);
 			
 			for(unsigned int fx = startX; fx < endX; fx+=blockSize){
 				Vector3 v2 = v1;
 				for(unsigned int fy = 0; fy < fh; fy+=blockSize){
-					Vector3 v3 = v2;
-					uint32_t *fb2 = fb + fx + fy * fw;
-					for(unsigned int x = 0; x < blockSize; x+=under) {
-						Vector3 v4 = v3;
-						uint32_t *fb3 = fb2 + x;
-						for(unsigned int y = 0; y < blockSize; y++) {
-							Vector3 vv = v4;
-							
-							// solve yaw
-							unsigned int yawIndex;
+					
+					if(v2.z > 0.96f || v2.z < -0.96f) {
+						// near to pole. cannot be approximated by piecewise
+						goto SlowBlockPath;
+					}
+					
+				FastBlockPath:
+					{
+						
+						// Use bi-linear interpolation for faster yaw/pitch
+						// computation.
+						
+						auto calcYawindex = [yawScale2, numLines, yawMin2](Vector3 v) {
+							int yawIndex;
 							{
-								float x = vv.x, y = vv.y;
+								float x = v.x, y = v.y;
 								int yaw;
 								yaw = fastATan2(y, x);
 								yaw -= yawMin2;
-								yawIndex = static_cast<unsigned int>
+								yawIndex = static_cast<int>
 								(yaw & 0xffff);
 							}
-							yawIndex = (yawIndex * yawScale2) >> 16;
-							yawIndex = (yawIndex * numLines) >> 16;
+							yawIndex <<= 8;
+							return yawIndex;
+						};
+						auto calcPitch = [] (Vector3 vv) {
+							float pitch;
+							pitch = vv.z * fastRSqrt(vv.x*vv.x+vv.y*vv.y);
+							pitch = ToSpecialTan(pitch);
+							return static_cast<int>(pitch * (65536.f * 8192.f));
+						};
+						int yawIndex1 = calcYawindex(v2);
+						int pitch1 = calcPitch(v2);
+						int yawIndex2 = calcYawindex(v2 + deltaRightLarge);
+						int pitch2 = calcPitch(v2 + deltaRightLarge);
+						int yawIndex3 = calcYawindex(v2 + deltaDownLarge);
+						int pitch3 = calcPitch(v2 + deltaDownLarge);
+						int yawIndex4 = calcYawindex(v2 + deltaRightLarge + deltaDownLarge);
+						int pitch4 = calcPitch(v2 + deltaRightLarge + deltaDownLarge);
+						
+						// note: `<<8>>8` is phase unwrapping
+						int yawDiff1 = ((yawIndex2 - yawIndex1)<<8>>8) / hBlock;
+						int yawDiff2 = ((yawIndex4 - yawIndex3)<<8>>8) / hBlock;
+						int pitchDiff1 = (pitch2 - pitch1) / hBlock;
+						int pitchDiff2 = (pitch4 - pitch3) / hBlock;
+						
+						int yawIndexA = yawIndex1;
+						int yawIndexB = yawIndex3;
+						int pitchA = pitch1;
+						int pitchB = pitch3;
+						
+						uint32_t *fb2 = fb + fx + fy * fw;
+						for(unsigned int x = 0; x < blockSize; x+=under) {
+							uint32_t *fb3 = fb2 + x;
+							int yawIndexC = yawIndexA;
+							int yawDelta = ((yawIndexB - yawIndexA)<<8>>8) / blockSize;
+							int pitchC = pitchA;
+							int pitchDelta = (pitchB - pitchA) / blockSize;
 							
-							auto& line = lineList[yawIndex];
-							
-							// solve pitch
-							int pitchIndex;
-							
-							{
-								float pitch;
-								pitch = vv.z * fastRSqrt(vv.x*vv.x+vv.y*vv.y);
-								pitch = ToSpecialTan(pitch);
-								pitch = (pitch - line.pitchTanMin) * line.pitchScale;
-								pitchIndex = static_cast<int>(pitch);
-								pitchIndex = std::max(pitchIndex, 0);
-								pitchIndex = std::min(pitchIndex, lineResolution - 1);
-							}
-							
-							auto& pix = line.pixels[pitchIndex];
-							
-							// write color.
-							// NOTE: combined contains both color and other information,
-							// though this isn't a problem as long as the color comes
-							// in the LSB's
+							for(unsigned int y = 0; y < blockSize; y++) {
+								unsigned int yawIndex = static_cast<unsigned int>(yawIndexC<<8>>16);
+								yawIndex = (yawIndex * yawScale2) >> 16;
+								yawIndex = (yawIndex * numLines) >> 16;
+								auto& line = lineList[yawIndex];
+								
+								// solve pitch
+								int pitchIndex;
+								
+								{
+									pitchIndex = pitchC >> 13;
+									pitchIndex -= line.pitchTanMinI;
+									pitchIndex = static_cast<int>
+									((static_cast<int64_t>(pitchIndex) *
+									  static_cast<int64_t>(line.pitchScaleI)) >> 32);
+									//pitch = (pitch - line.pitchTanMin) * line.pitchScale;
+									//pitchIndex = static_cast<int>(pitch);
+									pitchIndex = std::max(pitchIndex, 0);
+									pitchIndex = std::min(pitchIndex, lineResolution - 1);
+								}
+								
+								auto& pix = line.pixels[pitchIndex];
+								
+								// write color.
+								// NOTE: combined contains both color and other information,
+								// though this isn't a problem as long as the color comes
+								// in the LSB's
 #if ENABLE_SSE
-							if(flevel == SWFeatureLevel::SSE2) {
-								__m128i m;
-								
-								if(under == 1) {
-									_mm_stream_si32(reinterpret_cast<int *>(fb3),
-													static_cast<int>(pix.combined));
-								}else if(under == 2){
-									m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
-									m = _mm_shuffle_epi32(m, 0x00);
-									_mm_store_sd(reinterpret_cast<double *>(fb3),
-												 _mm_castsi128_pd(m));
-								}else if(under == 4){
-									m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
-									m = _mm_shuffle_epi32(m, 0x00);
-									_mm_stream_si128(reinterpret_cast<__m128i *>(fb3),
-												 (m));
-								}
-								
-							}else
+								if(flevel == SWFeatureLevel::SSE2) {
+									__m128i m;
+									
+									if(under == 1) {
+										_mm_stream_si32(reinterpret_cast<int *>(fb3),
+														static_cast<int>(pix.combined));
+									}else if(under == 2){
+										m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
+										m = _mm_shuffle_epi32(m, 0x00);
+										_mm_store_sd(reinterpret_cast<double *>(fb3),
+													 _mm_castsi128_pd(m));
+									}else if(under == 4){
+										m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
+										m = _mm_shuffle_epi32(m, 0x00);
+										_mm_stream_si128(reinterpret_cast<__m128i *>(fb3),
+														 (m));
+									}
+									
+								}else
 #endif
-								// non-optimized
-							{
-								uint32_t col = pix.combined;
-								
-								for(int k = 0; k < under; k++){
-									fb3[k] = col;
+									// non-optimized
+								{
+									uint32_t col = pix.combined;
+									
+									for(int k = 0; k < under; k++){
+										fb3[k] = col;
+									}
 								}
+								
+								
+								fb3 += fw;
+								
+								yawIndexC += yawDelta;
+								pitchC += pitchDelta;
 							}
 							
-							
-							fb3 += fw;
-							
-							v4 += deltaDown;
-						} // y
-						v3 += deltaRight;
-					} // x
+							yawIndexA += yawDiff1;
+							yawIndexB += yawDiff2;
+							pitchA += pitchDiff1;
+							pitchB += pitchDiff2;
+						}
+						
+					}
+					goto Converge;
+					
+				SlowBlockPath:
+					{
+						Vector3 v3 = v2;
+						uint32_t *fb2 = fb + fx + fy * fw;
+						for(unsigned int x = 0; x < blockSize; x+=under) {
+							Vector3 v4 = v3;
+							uint32_t *fb3 = fb2 + x;
+							for(unsigned int y = 0; y < blockSize; y++) {
+								Vector3 vv = v4;
+								
+								// solve yaw
+								unsigned int yawIndex;
+								{
+									float x = vv.x, y = vv.y;
+									int yaw;
+									yaw = fastATan2(y, x);
+									yaw -= yawMin2;
+									yawIndex = static_cast<unsigned int>
+									(yaw & 0xffff);
+								}
+								yawIndex = (yawIndex * yawScale2) >> 16;
+								yawIndex = (yawIndex * numLines) >> 16;
+								
+								auto& line = lineList[yawIndex];
+								
+								// solve pitch
+								int pitchIndex;
+								
+								{
+									float pitch;
+									pitch = vv.z * fastRSqrt(vv.x*vv.x+vv.y*vv.y);
+									pitch = ToSpecialTan(pitch);
+									pitch = (pitch - line.pitchTanMin) * line.pitchScale;
+									pitchIndex = static_cast<int>(pitch);
+									pitchIndex = std::max(pitchIndex, 0);
+									pitchIndex = std::min(pitchIndex, lineResolution - 1);
+								}
+								
+								auto& pix = line.pixels[pitchIndex];
+								
+								// write color.
+								// NOTE: combined contains both color and other information,
+								// though this isn't a problem as long as the color comes
+								// in the LSB's
+	#if ENABLE_SSE
+								if(flevel == SWFeatureLevel::SSE2) {
+									__m128i m;
+									
+									if(under == 1) {
+										_mm_stream_si32(reinterpret_cast<int *>(fb3),
+														static_cast<int>(pix.combined));
+									}else if(under == 2){
+										m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
+										m = _mm_shuffle_epi32(m, 0x00);
+										_mm_store_sd(reinterpret_cast<double *>(fb3),
+													 _mm_castsi128_pd(m));
+									}else if(under == 4){
+										m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
+										m = _mm_shuffle_epi32(m, 0x00);
+										_mm_stream_si128(reinterpret_cast<__m128i *>(fb3),
+													 (m));
+									}
+									
+								}else
+	#endif
+									// non-optimized
+								{
+									uint32_t col = pix.combined;
+									
+									for(int k = 0; k < under; k++){
+										fb3[k] = col;
+									}
+								}
+								
+								
+								fb3 += fw;
+								
+								v4 += deltaDown;
+							} // y
+							v3 += deltaRight;
+						} // x
+						
+					} // end SlowBlockPath
+					
+				Converge:
+					
 					v2 += deltaDownLarge;
 				} // fy
 				v1 += deltaRightLarge;
