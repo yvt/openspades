@@ -42,7 +42,7 @@ SPADES_SETTING(r_colorBits, "32");
 SPADES_SETTING(r_depthBits, "16");
 SPADES_SETTING(r_vsync, "1");
 SPADES_SETTING(r_allowSoftwareRendering, "0");
-SPADES_SETTING(r_audioDriver, "ysr");
+SPADES_SETTING(r_audioDriver, "openal");
 
 namespace spades {
 	namespace gui {
