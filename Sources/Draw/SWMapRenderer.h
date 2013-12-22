@@ -68,7 +68,8 @@ namespace spades {
 			
 			template<SWFeatureLevel level, int undersamp>
 			void RenderFinal(float yawMin, float yawMax,
-							 unsigned int numLines);
+							 unsigned int numLines,
+							 unsigned int threadId, unsigned int numThreads);
 			
 			template<SWFeatureLevel level>
 			void RenderInner(const client::SceneDefinition&,

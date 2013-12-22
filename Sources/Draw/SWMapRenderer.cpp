@@ -108,27 +108,26 @@ namespace spades {
 		struct SWMapRenderer::LinePixel {
 			union {
 				struct {
-					short vx;
-					short vy;
-					short vz;
-					Face face;
+					uint32_t combined;
 				};
 				struct {
-					uint64_t align;
+					unsigned int color: 24;
+					//Face face: 7;
+					bool filled: 1;
 				};
 			};
 			
 			// using "operator =" makes this struct non-POD
 			void Set(const LinePixel& p){
-				align = p.align;
+				combined = p.combined;
 			}
 		
 			inline void Clear() {
-				vx = -1;
+				combined = 0;
 			}
 			
 			inline bool IsEmpty() const {
-				return vx == -1;
+				return combined == 0;
 			}
 		};
 		
@@ -223,6 +222,17 @@ namespace spades {
 		template<SWFeatureLevel flevel>
 		void SWMapRenderer::BuildLine(Line& line,
 									  float minPitch, float maxPitch) {
+			
+			// hard code for further optimization
+			enum {
+				w = 512, h = 512
+			};
+			SPAssert(map->Width() == 512);
+			SPAssert(map->Height() == 512);
+			
+			const auto *rle = this->rle.data();
+			auto& rleHeap = this->rleHeap;
+			client::GameMap *map = this->map;
 			
 			// pitch culling
 			{
@@ -416,16 +426,71 @@ namespace spades {
 				auto solidMapDiff1 = solidMap1 & ~lastSolidMap1;
 				auto solidMapDiff2 = solidMap2 & ~lastSolidMap2;
 				
+				
+				auto BuildLinePixel = [map](int x, int y, int z,
+											Face face) {
+					LinePixel px;
+#if ENABLE_SSE
+					if(flevel == SWFeatureLevel::SSE2) {
+						__m128i m;
+						uint32_t col = map->GetColorWrapped(x, y, z);
+						m = _mm_setr_epi32(col, 0,0,0);
+						m = _mm_unpacklo_epi8(m, _mm_setzero_si128());
+						m = _mm_shufflelo_epi16(m, 0xc6);
+						
+						switch(face){
+							case Face::PosZ:
+								m = _mm_srli_epi16(m, 1);
+								break;
+							case Face::PosX:
+							case Face::PosY:
+							case Face::NegX:
+								m = _mm_adds_epi16
+								(_mm_srli_epi16(m, 1), _mm_srli_epi16(m, 2));
+								break;
+							default:
+								break;
+						}
+						if((col>>24)<100) {
+							m = _mm_srli_epi16(m, 1);
+						}
+						m = _mm_packus_epi16(m, m);
+						_mm_store_ss(reinterpret_cast<float *>(&px.combined),
+										 _mm_castsi128_ps(m));
+						px.filled = true;
+					}else
+#endif
+						// non-optimized
+					{
+						uint32_t col;
+						col = map->GetColorWrapped(x, y, z);
+						col = (col & 0xff00) | ((col & 0xff) << 16) | ((col & 0xff0000) >> 16);
+						switch(face){
+							case Face::PosZ:
+								col = (col & 0xfcfcfc) >> 2;
+								break;
+							case Face::PosX:
+							case Face::PosY:
+							case Face::NegX:
+								col = (col & 0xfefefe) >> 1;
+								break;
+							default:
+								break;
+						}
+						px.combined = col;
+						px.filled = true;
+					}
+					return px;
+				};
+				
 				// floor/ceiling
 				{
 					
 					// linear code
-					auto addFloor = [&](short vx, short vy, short vz) {
+					auto addFloor = [&](int vx, int vy, int vz) {
 						int p1 = transform(invDist, vz);
 						int p2 = transform(oldInvDist, vz);
-						LinePixel pix;
-						pix.vx = oirx; pix.vy = oiry; pix.vz = vz;
-						pix.face = Face::NegZ;
+						LinePixel pix = BuildLinePixel(vx, vy, vz, Face::NegZ);
 						
 						for(int j = p1; j < p2; j++) {
 							auto& p = pixels[j];
@@ -433,12 +498,10 @@ namespace spades {
 							p.Set(pix);
 						}
 					};
-					auto addCeiling = [&](short vx, short vy, short vz) {
+					auto addCeiling = [&](int vx, int vy, int vz) {
 						int p1 = transform(invDist, vz + 1);
 						int p2 = transform(oldInvDist, vz + 1);
-						LinePixel pix;
-						pix.vx = oirx; pix.vy = oiry; pix.vz = vz;
-						pix.face = Face::PosZ;
+						LinePixel pix = BuildLinePixel(vx, vy, vz, Face::PosZ);
 						
 						for(int j = p2; j < p1; j++) {
 							auto& p = pixels[j];
@@ -484,9 +547,7 @@ namespace spades {
 								int p1 = transform(invDist, i + shift);
 								int p2 = transform(invDist, i + 1 + shift);
 								
-								LinePixel pix;
-								pix.vx = irx; pix.vy = iry; pix.vz = i + shift;
-								pix.face = wallFace;
+								LinePixel pix = BuildLinePixel(irx, iry, i+shift, wallFace);
 								
 								for(int j = p1; j < p2; j++) {
 									auto& p = pixels[j];
@@ -539,34 +600,42 @@ namespace spades {
 
 		
 		struct AtanTable {
-			std::array<float, 5000> sm;
-			std::array<float, 5000> lg;
-			std::array<float, 5000> smN;
-			std::array<float, 5000> lgN;
+			std::array<uint16_t, 5000> sm;
+			std::array<uint16_t, 5000> lg;
+			std::array<uint16_t, 5000> smN;
+			std::array<uint16_t, 5000> lgN;
+			
+			// [0, 2pi] -> [0, 65536]
+			static uint16_t ToFixed(float v) {
+				v /= (M_PI * 2.f);
+				v *= 65536.f;
+				int i = static_cast<int>(v);
+				return static_cast<uint16_t>(i & 65535);
+			}
 			
 			AtanTable() {
 				for(int i = 0; i < 5000; i++) {
-					sm[i] = atanf(i / 4096.f);
-					lg[i] = atanf(1.f / ((i + .5f) / 4096.f));
-					smN[i] = -atanf(i / 4096.f);
-					lgN[i] = -atanf(1.f / ((i + .5f) / 4096.f));
+					sm[i] = ToFixed(atanf(i / 4096.f));
+					lg[i] = ToFixed(atanf(1.f / ((i + .5f) / 4096.f)));
+					smN[i] = ToFixed(-atanf(i / 4096.f));
+					lgN[i] = ToFixed(-atanf(1.f / ((i + .5f) / 4096.f)));
 				}
 			}
 		};
 		static AtanTable atanTable;
-		static inline float fastATan(float v){
+		static inline uint16_t fastATan(float v){
 			if(v < 0.f) {
 				if(v > -1.f) {
 					v *= -4096.f;
 					int idx = static_cast<int>(v);
 					//v -= idx;
-					float ret = atanTable.smN[idx];
+					auto ret = atanTable.smN[idx];
 					return ret;
 				}else{
 					v = fastDiv(-4096.f, v);
 					int idx = static_cast<int>(v);
 					//v -= idx;
-					float ret = atanTable.lgN[idx];
+					auto ret = atanTable.lgN[idx];
 					return ret;
 				}
 			}else{
@@ -574,7 +643,7 @@ namespace spades {
 					v *= 4096.f;
 					int idx = static_cast<int>(v);
 					//v -= idx;
-					float ret = atanTable.sm[idx];
+					auto ret = atanTable.sm[idx];
 					return ret;
 					//ret += (atanTable.sm[idx + 1] - ret) * v;
 					//return ret;
@@ -582,7 +651,7 @@ namespace spades {
 					v = fastDiv(4096.f, v);
 					int idx = static_cast<int>(v);
 					//v -= idx;
-					float ret = atanTable.lg[idx];
+					auto ret = atanTable.lg[idx];
 					return ret;
 					//ret += (atanTable.lg[idx + 1] - ret) * v;
 					//return ret;
@@ -590,28 +659,30 @@ namespace spades {
 			}
 		}
 		
-		static inline float fastATan2(float y, float x) {
-			static const float pi = M_PI;
+		static inline uint16_t fastATan2(float y, float x) {
 			if(x == 0.f) {
-				return y > 0.f ? (pi * 0.5f) : (-pi * 0.5f);
+				return y > 0.f ? 16384 : -16384;
+				//y > 0.f ? (pi * 0.5f) : (-pi * 0.5f);
 			}else if(x > 0.f) {
 				return fastATan(fastDiv(y, x));
 			}else{
-				return fastATan(fastDiv(y, x)) + pi;
+				return fastATan(fastDiv(y, x)) + 32768;
 			}
 		}
 		
 		template<SWFeatureLevel flevel, int under>
 		void SWMapRenderer::RenderFinal(float yawMin, float yawMax,
-										unsigned int numLines) {
+										unsigned int numLines,
+										unsigned int threadId,
+										unsigned int numThreads) {
 			float fovX = tanf(sceneDef.fovX * 0.5f);
 			float fovY = tanf(sceneDef.fovY * 0.5f);
 			Vector3 front = sceneDef.viewAxis[2];
 			Vector3 right = sceneDef.viewAxis[0];
 			Vector3 down = sceneDef.viewAxis[1];
 			
-			int fw = frameBuf->GetWidth();
-			int fh = frameBuf->GetHeight();
+			unsigned int fw = frameBuf->GetWidth();
+			unsigned int fh = frameBuf->GetHeight();
 			uint32_t *fb = frameBuf->GetPixels();
 			Vector3 v1 = front - right * fovX + down * fovY;
 			Vector3 deltaDown = -down * (fovY * 2.f / static_cast<float>(fh));
@@ -620,6 +691,7 @@ namespace spades {
 			static const float pi = M_PI;
 			float yawScale = 65536.f / (pi * 2.f);
 			int yawScale2 = static_cast<int>(pi * 2.f / (yawMax - yawMin) * 65536.f);
+			int yawMin2 = static_cast<int>(yawMin * yawScale);
 			auto& lineList = this->lines;
 			
 			enum {
@@ -630,26 +702,32 @@ namespace spades {
 			Vector3 deltaDownLarge = deltaDown * blockSize;
 			Vector3 deltaRightLarge = deltaRight * hBlock;
 			
-			for(int fx = 0; fx < fw; fx+=blockSize){
+			unsigned int startX = threadId * fw / numThreads;
+			unsigned int endX = (threadId + 1) * fw / numThreads;
+			
+			startX = (startX / blockSize) * blockSize;
+			endX = (endX / blockSize) * blockSize;
+			
+			for(unsigned int fx = startX; fx < endX; fx+=blockSize){
 				Vector3 v2 = v1;
-				for(int fy = 0; fy < fh; fy+=blockSize){
+				for(unsigned int fy = 0; fy < fh; fy+=blockSize){
 					Vector3 v3 = v2;
 					uint32_t *fb2 = fb + fx + fy * fw;
-					for(int x = 0; x < blockSize; x+=under) {
+					for(unsigned int x = 0; x < blockSize; x+=under) {
 						Vector3 v4 = v3;
 						uint32_t *fb3 = fb2 + x;
-						for(int y = 0; y < blockSize; y++) {
+						for(unsigned int y = 0; y < blockSize; y++) {
 							Vector3 vv = v4;
 							
 							// solve yaw
 							unsigned int yawIndex;
 							{
 								float x = vv.x, y = vv.y;
-								float yaw;
+								int yaw;
 								yaw = fastATan2(y, x);
-								yaw -= yawMin;
+								yaw -= yawMin2;
 								yawIndex = static_cast<unsigned int>
-								(static_cast<int>(yaw * yawScale) & 0xffff);
+								(yaw & 0xffff);
 							}
 							yawIndex = (yawIndex * yawScale2) >> 16;
 							yawIndex = (yawIndex * numLines) >> 16;
@@ -671,30 +749,40 @@ namespace spades {
 							
 							auto& pix = line.pixels[pitchIndex];
 							
-							// solve color
-							uint32_t col;
-							if(pix.IsEmpty()) {
-								col = 0xff7f7f7f;
-							}else{
-								col = map->GetColorWrapped(pix.vx,pix.vy,pix.vz);
-								col = (col & 0xff00) | ((col & 0xff) << 16) | ((col & 0xff0000) >> 16);
-								switch(pix.face){
-									case Face::PosZ:
-										col = (col & 0xfcfcfc) >> 2;
-										break;
-									case Face::PosX:
-									case Face::PosY:
-									case Face::NegX:
-										col = (col & 0xfefefe) >> 1;
-										break;
-									default:
-										break;
+							// write color.
+							// NOTE: combined contains both color and other information,
+							// though this isn't a problem as long as the color comes
+							// in the LSB's
+#if ENABLE_SSE
+							if(flevel == SWFeatureLevel::SSE2) {
+								__m128i m;
+								
+								if(under == 1) {
+									_mm_stream_si32(reinterpret_cast<int *>(fb3),
+													static_cast<int>(pix.combined));
+								}else if(under == 2){
+									m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
+									m = _mm_shuffle_epi32(m, 0x00);
+									_mm_store_sd(reinterpret_cast<double *>(fb3),
+												 _mm_castsi128_pd(m));
+								}else if(under == 4){
+									m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
+									m = _mm_shuffle_epi32(m, 0x00);
+									_mm_stream_si128(reinterpret_cast<__m128i *>(fb3),
+												 (m));
+								}
+								
+							}else
+#endif
+								// non-optimized
+							{
+								uint32_t col = pix.combined;
+								
+								for(int k = 0; k < under; k++){
+									fb3[k] = col;
 								}
 							}
 							
-							for(int k = 0; k < under; k++){
-								fb3[k] = col;
-							}
 							
 							fb3 += fw;
 							
@@ -810,13 +898,16 @@ namespace spades {
 			int under = r_swUndersampling;
 			if(under <= 1){
 				RenderFinal<flevel, 1>(yawMin, yawMax,
-									static_cast<unsigned int>(numLines));
+									static_cast<unsigned int>(numLines),
+									   0, 1);
 			}else if(under <= 2){
 				RenderFinal<flevel, 2>(yawMin, yawMax,
-									   static_cast<unsigned int>(numLines));
+									   static_cast<unsigned int>(numLines),
+									   0, 1);
 			}else{
 				RenderFinal<flevel, 4>(yawMin, yawMax,
-									   static_cast<unsigned int>(numLines));
+									   static_cast<unsigned int>(numLines),
+									   0, 1);
 			}
 			
 			
