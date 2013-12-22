@@ -74,7 +74,7 @@ namespace spades {
 #endif
 		// special tan function whose value is finite.
 		static inline float SpecialTan(float v) {
-			constexpr float pi = M_PI;
+			static const float pi = M_PI;
 			if(v <= -pi * 0.5f) {
 				return -2.f;
 			}else if(v < -pi * 0.25f) {
@@ -227,7 +227,7 @@ namespace spades {
 			// pitch culling
 			{
 				const auto& frustrum = renderer->frustrum;
-				constexpr float pi = M_PI;
+				static const float pi = M_PI;
 				const auto& horz = line.horizonDir;
 				minPitch = -pi * 0.4999f;
 				maxPitch = pi * 0.4999f;
@@ -591,7 +591,7 @@ namespace spades {
 		}
 		
 		static inline float fastATan2(float y, float x) {
-			constexpr float pi = M_PI;
+			static const float pi = M_PI;
 			if(x == 0.f) {
 				return y > 0.f ? (pi * 0.5f) : (-pi * 0.5f);
 			}else if(x > 0.f) {
@@ -617,13 +617,15 @@ namespace spades {
 			Vector3 deltaDown = -down * (fovY * 2.f / static_cast<float>(fh));
 			Vector3 deltaRight = right * (fovX * 2.f / static_cast<float>(fw) * under);
 			
-			constexpr float pi = M_PI;
+			static const float pi = M_PI;
 			float yawScale = 65536.f / (pi * 2.f);
 			int yawScale2 = static_cast<int>(pi * 2.f / (yawMax - yawMin) * 65536.f);
 			auto& lineList = this->lines;
 			
-			constexpr int blockSize = 16;
-			constexpr int hBlock = blockSize / under;
+			enum {
+				blockSize = 16,
+				hBlock = blockSize / under
+			};
 			
 			Vector3 deltaDownLarge = deltaDown * blockSize;
 			Vector3 deltaRightLarge = deltaRight * hBlock;
@@ -724,7 +726,7 @@ namespace spades {
 				float fovDiag = sqrtf(fovX * fovX + fovY * fovY);
 				float fovDiagAng = atanf(fovDiag);
 				float pitch = asinf(def.viewAxis[2].z);
-				constexpr float pi = M_PI;
+				static const float pi = M_PI;
 				
 				//pitch = 0.f;
 				
@@ -828,7 +830,7 @@ namespace spades {
 			if(!depthBuffer) SPInvalidArgument("depthBuffer");
 			
 #if ENABLE_SSE2
-			if(level >= SWFeatureLevel::SSE2) {
+			if(static_cast<int>(level) >= static_cast<int>(SWFeatureLevel::SSE2)) {
 				RenderInner<SWFeatureLevel::SSE2>(def, frame, depthBuffer);
 				return;
 			}

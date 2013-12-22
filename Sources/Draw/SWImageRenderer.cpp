@@ -175,9 +175,11 @@ namespace spades {
 			}
 		};
 		
-		static constexpr int texUVScaleBits = 16;
-		static constexpr int texUVScaleInt = 1 << texUVScaleBits;
-		static constexpr float texUVScaleFloat = static_cast<float>(texUVScaleInt);
+		enum {
+			texUVScaleBits = 16,
+			texUVScaleInt = 1 << texUVScaleBits
+		};
+		static const float texUVScaleFloat = static_cast<float>(texUVScaleInt);
 		
 		struct SWImageVarying {
 			union {
@@ -252,13 +254,15 @@ namespace spades {
 			u(start.u, end.u, numSteps, true),
 			v(start.v, end.v, numSteps, true)
 			{
-				uv = _mm_set_epi64x(u.fp.counter, v.fp.counter);
-				uvStep = _mm_set_epi64x(u.fp.step, v.fp.step);
+				uvU = u.fp.counter;
+				uvV = v.fp.counter;
+				stepU = u.fp.step;
+				stepV = v.fp.step;
 			}
 			
 			inline SWImageVarying GetCurrent() {
 				SWImageVarying varying;
-				varying.uv_m128 = _mm_shuffle_epi32(uv, 0b00111101);
+				varying.uv_m128 = _mm_shuffle_epi32(uv, 0x3d);
 				return varying;
 			}
 			
@@ -634,7 +638,7 @@ namespace spades {
 						
 						// store.
 						_mm_store_ss(reinterpret_cast<float *>(&dest),
-									 tcol);
+									 _mm_castsi128_ps(tcol));
 						
 						return;
 					}
@@ -645,7 +649,7 @@ namespace spades {
 					tcol = _mm_mullo_epi16(tcol, mulCol);
 					
 					// broadcast the alpha of the tcol.
-					__m128i tcolAlphaVec = _mm_shufflelo_epi16(tcol, 0b11111111);
+					__m128i tcolAlphaVec = _mm_shufflelo_epi16(tcol, 0xff);
 					
 					// make tcol [u8.8x4]
 					//tcol = _mm_slli_epi16(tcol, 1);
@@ -676,7 +680,7 @@ namespace spades {
 					
 					// store.
 					_mm_store_ss(reinterpret_cast<float *>(&dest),
-								 dcol);
+								 _mm_castsi128_ps(dcol));
 				};
 				
 				auto drawPixel2 = [mulCol, mulA, &drawPixel]
@@ -729,8 +733,8 @@ namespace spades {
 					tcol = _mm_mullo_epi16(tcol, mulCol);
 					
 					// broadcast the alpha of the tcol.
-					__m128i tcolAlphaVec = _mm_shufflelo_epi16(tcol, 0b11111111);
-					tcolAlphaVec = _mm_shufflehi_epi16(tcolAlphaVec, 0b11111111);
+					__m128i tcolAlphaVec = _mm_shufflelo_epi16(tcol, 0xff);
+					tcolAlphaVec = _mm_shufflehi_epi16(tcolAlphaVec, 0xff);
 					
 					// make tcol [u8.8x4]
 					//tcol = _mm_slli_epi16(tcol, 1);
@@ -761,7 +765,7 @@ namespace spades {
 					
 					// store.
 					_mm_store_sd(reinterpret_cast<double *>(dest),
-								 dcol);
+								 _mm_castsi128_pd(dcol));
 				};
 				
 				auto drawScanline = [tw, th, tpixels, bmp, fbW, fbH, depthBuffer, &drawPixel, &drawPixel2, &r]
@@ -809,7 +813,7 @@ namespace spades {
 						}
 						vary.MoveNext();
 					};
-					while(minX & 1) {
+					while((minX & 1) && (minX < maxX)) {
 						// non-aligned.
 						unalignedPixel();
 						minX++;
@@ -825,8 +829,10 @@ namespace spades {
 							struct { unsigned int ui, dummy1, vi, dummy2; };
 						};
 						//static_assert(texUVScaleBits == 16, "texUVScaleBits must be 16");
-						uv = _mm_shuffle_ps(vr1.uv_m128, vr2.uv_m128, 0b10001000); // [u1,v1,u2,v2]
-						uv = _mm_shuffle_epi32(uv, 0b11011000); // [u1,u2,v1,v2]
+						uv = _mm_castps_si128
+						(_mm_shuffle_ps(_mm_castsi128_ps(vr1.uv_m128),
+											_mm_castsi128_ps(vr2.uv_m128), 0x88)); // [u1,v1,u2,v2]
+						uv = _mm_shuffle_epi32(uv, 0xd8); // [u1,u2,v1,v2]
 						uv = _mm_and_si128(uv, uvMask); // repeat
 						
 						auto tm = uv;
@@ -834,7 +840,7 @@ namespace spades {
 						uv = _mm_srli_epi64(uv, texUVScaleBits);
 						uint32_t tex1 = tpixels[ui + vi * tw];
 						
-						uv = _mm_shuffle_epi32(tm, 0b10110001); // [u2,u1,v2,v1]
+						uv = _mm_shuffle_epi32(tm, 0xb1); // [u2,u1,v2,v1]
 						uv = _mm_mul_epu32(uv, uvScale);
 						uv = _mm_srli_epi64(uv, texUVScaleBits);
 						uint32_t tex2 = tpixels[ui + vi * tw];
@@ -1040,7 +1046,7 @@ namespace spades {
 					
 					// store.
 					_mm_store_ss(reinterpret_cast<float *>(&dest),
-								 dcol);
+								 _mm_castsi128_ps(dcol));
 				};
 				
 				auto drawPixel2 = [mulCol, mulInv, &drawPixel]
@@ -1082,7 +1088,7 @@ namespace spades {
 					
 					// store.
 					_mm_store_sd(reinterpret_cast<double *>(dest),
-								 dcol);
+								 _mm_castsi128_pd(dcol));
 				};
 				
 				auto drawScanline = [bmp, fbW, fbH, depthBuffer, &drawPixel, &drawPixel2, &r]
@@ -1416,7 +1422,7 @@ namespace spades {
 											SWImageRenderer& r,
 											SWFeatureLevel lvl) {
 #if ENABLE_SSE2
-				if(lvl >= SWFeatureLevel::SSE2) {
+				if(static_cast<int>(lvl) >= static_cast<int>(SWFeatureLevel::SSE2)) {
 					PolygonRenderer3<SWFeatureLevel::SSE2, needTransform, ndc, depthTest>::DrawPolygonInternal(img,
 																											  v1, v2, v3, r);
 					return;
