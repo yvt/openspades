@@ -150,7 +150,8 @@ namespace spades {
 		
 		void SWRenderer::SetGameMap(client::GameMap *map) {
 			SPADES_MARK_FUNCTION();
-			EnsureInitialized();
+			if(map)
+				EnsureInitialized();
 			
 			flatMapRenderer.reset();
 			mapRenderer.reset();

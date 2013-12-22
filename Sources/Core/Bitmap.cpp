@@ -55,7 +55,8 @@ namespace spades {
 	Bitmap::~Bitmap() {
 		SPADES_MARK_FUNCTION();
 		
-		delete[] pixels;
+		if(autoDelete)
+			delete[] pixels;
 	}
 	
 	Bitmap *Bitmap::Load(const std::string& filename) {
