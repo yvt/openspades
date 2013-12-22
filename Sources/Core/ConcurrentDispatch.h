@@ -78,4 +78,15 @@ namespace spades {
 		IRunnable *GetRunnable() const { return runnable; }
 		
 	};
+	
+	template <class F>
+	class FunctionDispatch: public ConcurrentDispatch {
+		F f;
+	public:
+		FunctionDispatch(F f): f(f){}
+		virtual void Run(){
+			f();
+		}
+	};
+	
 }
