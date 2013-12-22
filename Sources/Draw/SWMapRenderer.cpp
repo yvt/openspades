@@ -623,7 +623,7 @@ namespace spades {
 			auto& lineList = this->lines;
 			
 			enum {
-				blockSize = 16,
+				blockSize = 8,
 				hBlock = blockSize / under
 			};
 			
