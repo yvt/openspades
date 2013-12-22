@@ -25,8 +25,10 @@
 #include "SWRenderer.h"
 #include <Core/MiniHeap.h>
 #include <Core/Settings.h>
+#include <Core/ConcurrentDispatch.h>
 
 SPADES_SETTING(r_swUndersampling, "0");
+SPADES_SETTING(r_swNumThreads, "4");
 
 namespace spades {
 	namespace draw {
@@ -708,6 +710,8 @@ namespace spades {
 			startX = (startX / blockSize) * blockSize;
 			endX = (endX / blockSize) * blockSize;
 			
+			v1 += deltaRight * static_cast<float>(startX);
+			
 			for(unsigned int fx = startX; fx < endX; fx+=blockSize){
 				Vector3 v2 = v1;
 				for(unsigned int fy = 0; fy < fh; fy+=blockSize){
@@ -796,6 +800,24 @@ namespace spades {
 			} // fx
 			
 		}
+		template <class F>
+		static void InvokeParallel(F f, unsigned int numThreads) {
+			SPAssert(numThreads <= 32);
+			std::array<std::unique_ptr<ConcurrentDispatch>, 32> disp;
+			for(auto i = 1U; i < numThreads; i++) {
+				auto ff = [i, &f]() {
+					f(i);
+				};
+				disp[i] = std::unique_ptr<ConcurrentDispatch>
+				(static_cast<ConcurrentDispatch *>(new FunctionDispatch<decltype(ff)>(ff)));
+				disp[i]->Start();
+			}
+			f(0);
+			for(auto i = 1U; i < numThreads; i++) {
+				disp[i]->Join();
+			}
+		}
+		
 		template<SWFeatureLevel flevel>
 		void SWMapRenderer::RenderInner(const client::SceneDefinition &def,
 								   Bitmap *frame, float *depthBuffer) {
@@ -889,26 +911,41 @@ namespace spades {
 				}
 			}
 			
-			//size_t spans = 0;
-			for(size_t i = 0; i < numLines; i++) {
-				BuildLine<flevel>(lines[i],  pitchMin, pitchMax);
-			}
+			unsigned int numThreads = static_cast<unsigned int>((int)r_swNumThreads);
+			numThreads = std::max(numThreads, 1U);
+			numThreads = std::min(numThreads, 32U);
 			
+			{
+				unsigned int nlines = static_cast<unsigned int>(numLines);
+				InvokeParallel([&](unsigned int th) {
+					unsigned int start = th * nlines / numThreads;
+					unsigned int end = (th+1) * nlines / numThreads;
+					
+					for(size_t i = start; i < end; i++) {
+						BuildLine<flevel>(lines[i],  pitchMin, pitchMax);
+					}
+				}, numThreads);
+			}
 			
 			int under = r_swUndersampling;
-			if(under <= 1){
-				RenderFinal<flevel, 1>(yawMin, yawMax,
-									static_cast<unsigned int>(numLines),
-									   0, 1);
-			}else if(under <= 2){
-				RenderFinal<flevel, 2>(yawMin, yawMax,
-									   static_cast<unsigned int>(numLines),
-									   0, 1);
-			}else{
-				RenderFinal<flevel, 4>(yawMin, yawMax,
-									   static_cast<unsigned int>(numLines),
-									   0, 1);
-			}
+			
+			InvokeParallel([&](unsigned int th) {
+				
+				if(under <= 1){
+					RenderFinal<flevel, 1>(yawMin, yawMax,
+										   static_cast<unsigned int>(numLines),
+										   th, numThreads);
+				}else if(under <= 2){
+					RenderFinal<flevel, 2>(yawMin, yawMax,
+										   static_cast<unsigned int>(numLines),
+										   th, numThreads);
+				}else{
+					RenderFinal<flevel, 4>(yawMin, yawMax,
+										   static_cast<unsigned int>(numLines),
+										   th, numThreads);
+				}
+			}, numThreads);
+			
 			
 			
 			frameBuf = nullptr;
