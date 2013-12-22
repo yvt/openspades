@@ -80,6 +80,10 @@ namespace spades {
 								outPixels[i] = c;
 								if(!firstTime){
 									mapRenderer->UpdateRle(x+i, y);
+									mapRenderer->UpdateRle((x+i+1)&(w-1), y);
+									mapRenderer->UpdateRle((x+i-1)&(w-1), y);
+									mapRenderer->UpdateRle(x+i, (y+1)&(h-1));
+									mapRenderer->UpdateRle(x+i, (y-1)&(h-1));
 								}
 							}
 							upd >>= 1;

@@ -354,8 +354,12 @@ namespace spades {
 					  0x7f7f7f);
 			
 			// draw map
-			if(mapRenderer)
+			if(mapRenderer){
+				// flat map renderer sends 'Update RLE' to map renderer.
+				// rendering map before this leads to the corrupted renderer image.
+				flatMapRenderer->Update();
 				mapRenderer->Render(sceneDef, fb, depthBuffer.data());
+			}
 			
 			duringSceneRendering = false;
 		}

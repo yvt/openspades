@@ -112,17 +112,22 @@ namespace spades {
 			union {
 				struct {
 					uint32_t combined;
+					float depth;
 				};
 				struct {
 					unsigned int color: 24;
 					//Face face: 7;
 					bool filled: 1;
+					
+				};
+				struct {
+					uint64_t allData;
 				};
 			};
 			
 			// using "operator =" makes this struct non-POD
 			void Set(const LinePixel& p){
-				combined = p.combined;
+				allData = p.allData;
 			}
 		
 			inline void Clear() {
@@ -449,6 +454,7 @@ namespace spades {
 				oldInvDist = 1.f / oldDistance;
 #endif
 				
+				//float medDist = (distance + oldDistance) * 0.5f;
 				
 				// check for new spans
 				uint32_t solidMap1, solidMap2;
