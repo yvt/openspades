@@ -42,11 +42,7 @@ SPADES_SETTING(r_colorBits, "32");
 SPADES_SETTING(r_depthBits, "16");
 SPADES_SETTING(r_vsync, "1");
 SPADES_SETTING(r_allowSoftwareRendering, "0");
-#if defined(WIN32)
-SPADES_SETTING(r_audioDriver, "openal");		//until we have ?ysr? for windows..
-#else
-SPADES_SETTING(r_audioDriver, "ysr");
-#endif
+SPADES_SETTING(r_audioDriver, "openal");
 
 namespace spades {
 	namespace gui {
