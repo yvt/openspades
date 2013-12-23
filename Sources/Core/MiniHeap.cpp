@@ -25,8 +25,12 @@ namespace spades {
 	bool MiniHeap::Validate() {
 		Ref fl = firstFreeRegion;
 		Ref minPos = 0;
-		int count = 100000;
+		int count = 1000000;
+		Ref lst = NoFreeRegion;
 		while(fl != NoFreeRegion) {
+			if(fl > buffer.size()) {
+				SPRaise("Inconsistency detected: broken link");
+			}
 			if((--count) < 1) {
 				SPRaise("Inconsistency detected: looped linked list");
 			}
@@ -37,6 +41,18 @@ namespace spades {
 				}
 				SPRaise("Inconsistency detected: unsorted list");
 			}
+			if(f->start == 0xdeadbeef) {
+				SPRaise("Inconsistency detected: not initialized (1)");
+			}
+			if(f->len == 0xdeadbeef) {
+				SPRaise("Inconsistency detected: not initialized (1)");
+			}
+			if(f->next == 0xdeadbeef) {
+				SPRaise("Inconsistency detected: not initialized (1)");
+			}
+			if(f->prev == 0xdeadbeef) {
+				SPRaise("Inconsistency detected: not initialized (1)");
+			}
 			if(f->GetEnd() > buffer.size()) {
 				SPRaise("Inconsistency detected: overflow");
 			}
@@ -45,7 +61,10 @@ namespace spades {
 			if(f->next == fl){
 				SPRaise("Inconsistency detected: self link");
 			}
-			
+			if(f->prev != lst) {
+				SPRaise("Inconsistency detected: singly linked");
+			}
+			lst = fl;
 			fl = f->next;
 		}
 		return true;

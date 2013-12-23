@@ -49,6 +49,7 @@ namespace spades {
 				// FIXME: call destructor?
 				heap->Free(ref, sizeof(T));
 			}
+			
 		};
 	private:
 		std::vector<char> buffer;
@@ -77,6 +78,11 @@ namespace spades {
 		}
 		void ReleaseFreeRegion(Ref r) {
 			freeRegionPool.push_back(r);
+			auto *fr = Dereference<FreeRegion>(r);
+			fr->start = 0xdeadbeef;
+			fr->len = 0xdeadbeef;
+			fr->prev = 0xdeadbeef;
+			fr->next = 0xdeadbeef;
 		}
 		
 		Ref FindFreeRegion(size_t bytes) {
@@ -190,6 +196,7 @@ namespace spades {
 				f->len -= bytes;
 			}
 			SPAssert(pos + bytes <= buffer.size());
+			SPAssert(Validate());
 			return pos;
 			
 		}
@@ -202,6 +209,10 @@ namespace spades {
 		void Free(Ref offset, Ref len) {
 			Ref fl = firstFreeRegion;
 			Ref last = fl;
+			Validate();
+			auto extraFreeRegion = NoFreeRegion;
+		TryAgain:
+			fl = firstFreeRegion;
 			while(fl != NoFreeRegion) {
 				last = fl;
 				auto *f = Dereference<FreeRegion>(fl);
@@ -217,7 +228,8 @@ namespace spades {
 							DeleteFreeListNode(f->next);
 						}
 					}
-					return;
+					SPAssert(Validate());
+					goto EoP;
 				}else if(f->GetEnd() > offset && f->start < offset + len) {
 					SPRaise("Internal inconsistency detected: double free");
 				}else if(f->start == offset + len){
@@ -234,14 +246,20 @@ namespace spades {
 							DeleteFreeListNode(f->prev);
 						}
 					}
-					return;
+					SPAssert(Validate());
+					goto EoP;
 				}else if(f->start > offset + len){
 					// insert here.
 					Ref prev = f->prev;
-					auto reg = AllocFreeRegion();
+					auto reg = extraFreeRegion;
+					if(reg == NoFreeRegion) {
+						extraFreeRegion = AllocFreeRegion();
+						goto TryAgain;
+					}
+					extraFreeRegion = NoFreeRegion;
 					f = Dereference<FreeRegion>(fl);
 					f->prev = reg;
-					FreeRegion *r = reg;
+					FreeRegion *r = Dereference<FreeRegion>(reg);
 					r->next = fl;
 					r->prev = prev;
 					r->start = offset;
@@ -251,7 +269,8 @@ namespace spades {
 					}else{
 						Dereference<FreeRegion>(prev)->next = reg;
 					}
-					return;
+					SPAssert(Validate());
+					goto EoP;
 				}
 				SPAssert(f->start >= offset + len || f->GetEnd() <= offset);
 				fl = f->next;
@@ -277,6 +296,11 @@ namespace spades {
 				lastFreeRegion = reg;
 				Dereference<FreeRegion>(last)->next = reg;
 			}
+		EoP:
+			if(extraFreeRegion != NoFreeRegion){
+				ReleaseFreeRegion(extraFreeRegion);
+			}
+			SPAssert(Validate());
 		}
 		template<typename T>
 		T *Dereference(Ref ref) {
