@@ -105,6 +105,9 @@ namespace spades {
 			
 			void SetFramebuffer(Bitmap *);
 			
+			template<SWFeatureLevel>
+			void ApplyFog();
+			
 		protected:
 			virtual ~SWRenderer();
 			

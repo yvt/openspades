@@ -798,6 +798,7 @@
 		E8F74CFA1845C64B0085AA54 /* ClientUIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientUIHelper.h; sourceTree = "<group>"; };
 		E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ClientUIHelper.cpp; sourceTree = "<group>"; };
 		E8F74CFE184C753F0085AA54 /* Clipboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Clipboard.cpp; sourceTree = "<group>"; };
+		E8FC02D8186829BC00F84A0D /* SWUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWUtils.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -916,6 +917,7 @@
 				E81A7C761864171100BF3FCE /* SWMapRenderer.h */,
 				E81A7C7818642BCA00BF3FCE /* SWFlatMapRenderer.cpp */,
 				E81A7C7918642BCA00BF3FCE /* SWFlatMapRenderer.h */,
+				E8FC02D8186829BC00F84A0D /* SWUtils.h */,
 			);
 			name = "Software Renderer";
 			sourceTree = "<group>";

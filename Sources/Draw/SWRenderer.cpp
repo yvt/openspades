@@ -31,8 +31,12 @@
 #include <Core/Settings.h>
 #include "SWFlatMapRenderer.h"
 #include "SWMapRenderer.h"
+#include <fenv.h>
+
+#include "SWUtils.h"
 
 SPADES_SETTING(r_swStatistics, "0");
+SPADES_SETTING(r_swNumThreads, "4");
 
 namespace spades {
 	namespace draw {
@@ -59,6 +63,11 @@ namespace spades {
 			
 			SPLog("---- SWRenderer early initialization started ---");
 			
+#ifdef FE_DFL_DISABLE_SSE_DENORMS_ENV
+			SPLog("initializing FPU");
+			fesetenv(FE_DFL_DISABLE_SSE_DENORMS_ENV);
+#endif
+			
 			SPLog("creating image manager");
 			imageManager = std::make_shared<SWImageManager>();
 			
@@ -72,7 +81,7 @@ namespace spades {
 			
 			// alloc depth buffer
 			SPLog("initializing depth buffer.");
-			depthBuffer.reserve(fb->GetWidth() * fb->GetHeight());
+			depthBuffer.resize(fb->GetWidth() * fb->GetHeight());
 			imageRenderer->SetDepthBuffer(depthBuffer.data());
 			
 			SPLog("---- SWRenderer early initialization done ---");
@@ -249,6 +258,196 @@ namespace spades {
 			
 		}
 		
+		
+		template<SWFeatureLevel level>
+		void SWRenderer::ApplyFog() {
+			int fw = this->fb->GetWidth();
+			int fh = this->fb->GetHeight();
+			
+			float fovX = tanf(sceneDef.fovX * 0.5f);
+			float fovY = tanf(sceneDef.fovY * 0.5f);
+			
+			float dvx = -fovX * 2.f / static_cast<float>(fw / 4);
+			float dvy = -fovY * 2.f / static_cast<float>(fh / 4);
+			
+			int fogR = ToFixed8(fogColor.x);
+			int fogG = ToFixed8(fogColor.y);
+			int fogB = ToFixed8(fogColor.z);
+			uint32_t fog1 = static_cast<uint32_t>(fogB + fogR * 0x10000);
+			uint32_t fog2 = static_cast<uint32_t>(fogG * 0x100);
+			
+			float scale = 255.f / fogDistance;
+			
+			InvokeParallel2([&](unsigned int threadId, unsigned int numThreads) {
+				int startY = fh * threadId / numThreads;
+				int endY = fh * (threadId + 1) / numThreads;
+				startY &= ~3;
+				endY &= ~3;
+				
+				float vy = fovY;
+				auto *fb = this->fb->GetPixels();
+				float *db = depthBuffer.data();
+				
+				vy += dvy * (startY >> 2);
+				fb += fw * startY;
+				db += fw * startY;
+				
+				for(int y = startY; y < endY; y += 4) {
+					float vx = fovX;
+					
+					for(int x = 0; x < fw; x += 4) {
+						float depthScale = (1.f + vx*vx+vy*vy);
+						depthScale *= fastRSqrt(depthScale) * scale;
+						auto *fb2 = fb + x;
+						auto *db2 = db + x;
+						for(int by = 0; by < 4; by++) {
+							auto *fb3 = fb2;
+							auto *db3 = db2;
+							
+							for(int bx = 0; bx < 4; bx++) {
+								
+								float dist = *db3 * depthScale;
+								int factor = std::min(static_cast<int>(dist),
+													  256);
+								factor = std::max(0, factor);
+								int factor2 = 256 - factor;
+								
+								uint32_t color = *fb3;
+								uint32_t v1 = (color & 0xff00ff) * factor2;
+								uint32_t v2 = (color & 0x00ff00) * factor2;
+								v1 += fog1 * factor;
+								v2 += fog2 * factor;
+								v1 &= 0xff00ff00;
+								v2 &= 0xff0000;
+								*fb3 = (v1 | v2) >> 8;
+								
+								fb3++;
+								db3++;
+							}
+							
+							fb2 += fw;
+							db2 += fw;
+						}
+						
+						vx += dvx;
+					}
+					
+					vy += dvy;
+					fb += fw * 4;
+					db += fw * 4;
+				}
+			});
+			
+			
+		} // ApplyFog()
+		
+#if ENABLE_SSE2
+		
+		template<>
+		void SWRenderer::ApplyFog<SWFeatureLevel::SSE2>() {
+			int fw = this->fb->GetWidth();
+			int fh = this->fb->GetHeight();
+			
+			float fovX = tanf(sceneDef.fovX * 0.5f);
+			float fovY = tanf(sceneDef.fovY * 0.5f);
+			
+			float dvx = -fovX * 2.f / static_cast<float>(fw / 4);
+			float dvy = -fovY * 2.f / static_cast<float>(fh / 4);
+			
+			int fogR = ToFixed8(fogColor.x);
+			int fogG = ToFixed8(fogColor.y);
+			int fogB = ToFixed8(fogColor.z);
+			__m128i fog = _mm_setr_epi16(fogB, fogG, fogR, 0, fogB, fogG, fogR, 0);
+			
+			float scale = 255.f / fogDistance;
+			
+			InvokeParallel2([&](unsigned int threadId, unsigned int numThreads) {
+				int startY = fh * threadId / numThreads;
+				int endY = fh * (threadId + 1) / numThreads;
+				startY &= ~3;
+				endY &= ~3;
+				
+				float vy = fovY;
+				auto *fb = this->fb->GetPixels();
+				float *db = depthBuffer.data();
+				
+				vy += dvy * (startY >> 2);
+				fb += fw * startY;
+				db += fw * startY;
+				
+				for(int y = startY; y < endY; y += 4) {
+					float vx = fovX;
+					
+					for(int x = 0; x < fw; x += 4) {
+						float depthScale = (1.f + vx*vx+vy*vy);
+						depthScale *= fastRSqrt(depthScale) * scale;
+						auto depthScale4 = _mm_set1_ps(depthScale);
+						
+						auto *fb2 = fb + x;
+						auto *db2 = db + x;
+						for(int by = 0; by < 4; by++) {
+							auto *fb3 = fb2;
+							auto *db3 = db2;
+							
+							auto dist = _mm_load_ps(db3);
+							auto color = _mm_load_si128(reinterpret_cast<__m128i*>(fb3));
+							
+							dist = _mm_mul_ps(dist, depthScale4);
+							dist = _mm_max_ps(dist,
+											  _mm_set1_ps(0.f));
+							dist = _mm_min_ps(dist,
+											  _mm_set1_ps(256.f));
+							auto factorX = _mm_cvtps_epi32(dist);
+							
+							auto factorY = _mm_sub_epi32(_mm_set1_epi32(0x100),
+														 factorX);
+							
+							factorX = _mm_shufflelo_epi16(factorX, 0xa0);
+							factorX = _mm_shufflehi_epi16(factorX, 0xa0);
+							factorY = _mm_shufflelo_epi16(factorY, 0xa0);
+							factorY = _mm_shufflehi_epi16(factorY, 0xa0);
+							
+							// first 2px
+							auto color1 = _mm_unpacklo_epi8(color, _mm_setzero_si128());
+							auto factor1X = _mm_shuffle_epi32(factorY, 0x50);
+							auto factor1Y = _mm_shuffle_epi32(factorX, 0x50);
+							color1 = _mm_mullo_epi16(color1, factor1X);
+							auto fog1 = _mm_mullo_epi16(fog, factor1Y);
+							fog1 = _mm_adds_epu16(fog1, color1);
+							fog1 = _mm_srli_epi16(fog1, 8);
+							
+							// next 2px
+							auto color2 = _mm_unpackhi_epi8(color, _mm_setzero_si128());
+							auto factor2X = _mm_shuffle_epi32(factorY, 0xfa);
+							auto factor2Y = _mm_shuffle_epi32(factorX, 0xfa);
+							color2 = _mm_mullo_epi16(color2, factor2X);
+							auto fog2 = _mm_mullo_epi16(fog, factor2Y);
+							fog2 = _mm_adds_epu16(fog2, color2);
+							fog2 = _mm_srli_epi16(fog2, 8);
+							
+							auto pack = _mm_packus_epi16(fog1, fog2);
+							_mm_store_si128(reinterpret_cast<__m128i*>(fb3), pack);
+							
+							fb2 += fw;
+							db2 += fw;
+						}
+						
+						vx += dvx;
+					}
+					
+					vy += dvy;
+					fb += fw * 4;
+					db += fw * 4;
+				}
+			});
+			
+			
+		} // ApplyFog()
+		
+#endif
+		
+		
+		
 		void SWRenderer::EnsureSceneStarted() {
 			SPADES_MARK_FUNCTION_DEBUG();
 			if(!duringSceneRendering) {
@@ -360,6 +559,13 @@ namespace spades {
 				flatMapRenderer->Update();
 				mapRenderer->Render(sceneDef, fb, depthBuffer.data());
 			}
+			
+#if ENABLE_SSE2
+			if(static_cast<int>(featureLevel) >= static_cast<int>(SWFeatureLevel::SSE2))
+				ApplyFog<SWFeatureLevel::SSE2>();
+			else
+#endif
+			ApplyFog<SWFeatureLevel::None>();
 			
 			duringSceneRendering = false;
 		}
@@ -618,6 +824,7 @@ namespace spades {
 			
 			flatMapRenderer->SetNeedsUpdate(x, y);
 		}
+	
 	}
 }
 

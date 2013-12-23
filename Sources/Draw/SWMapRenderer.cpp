@@ -27,54 +27,15 @@
 #include <Core/Settings.h>
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Stopwatch.h>
+#include "SWUtils.h"
 
 SPADES_SETTING(r_swUndersampling, "0");
-SPADES_SETTING(r_swNumThreads, "4");
 
 namespace spades {
 	namespace draw {
 		
 		
 		
-#if ENABLE_SSE // assume SSE availability (no checks!)
-		static inline float fastDiv(float a, float b) {
-			union {
-				float tmp;
-				__m128 mtmp;
-			};
-			tmp = b;
-			mtmp = _mm_rcp_ss(mtmp);
-			return a * tmp;
-		}
-		static inline float fastRcp(float b) {
-			union {
-				float tmp;
-				__m128 mtmp;
-			};
-			tmp = b;
-			mtmp = _mm_rcp_ss(mtmp);
-			return tmp;
-		}
-		static inline float fastRSqrt(float v) {
-			union {
-				float tmp;
-				__m128 mtmp;
-			};
-			tmp = v;
-			mtmp = _mm_rsqrt_ss(mtmp);
-			return tmp;
-		}
-#else
-		static inline float fastDiv(float a, float b) {
-			return a / b;
-		}
-		static inline float fastRcp(float b) {
-			return 1.f / b;
-		}
-		static inline float fastRSqrt(float b) {
-			return 1.f / sqrtf(b);
-		}
-#endif
 		// special tan function whose value is finite.
 		static inline float SpecialTan(float v) {
 			static const float pi = M_PI;
@@ -132,6 +93,7 @@ namespace spades {
 		
 			inline void Clear() {
 				combined = 0;
+				depth = 10000.f;
 			}
 			
 			inline bool IsEmpty() const {
@@ -156,7 +118,7 @@ namespace spades {
 		map(m),
 		frameBuf(nullptr),
 		depthBuf(nullptr),
-		rleHeap(m->Width() * m->Height() * 16),
+		rleHeap(m->Width() * m->Height() * 64),
 		level(level),
 		w(m->Width()), h(m->Height()),
 		renderer(r){
@@ -214,6 +176,7 @@ namespace spades {
 			}
 			out.push_back(-1);
 			
+			size_t lastOffset = out.size();
 			out[0] = static_cast<RleData>(out.size());
 			
 			old = true;
@@ -227,7 +190,8 @@ namespace spades {
 			out.push_back(-1);
 			
 			for(int k = 0; k < 4; k++) {
-				out[k + 1] = static_cast<RleData>(out.size());
+				out[k + 1] = static_cast<RleData>(out.size() - lastOffset);
+				lastOffset = out.size();
 				for(int z = 0; z < 64; z++) {
 					if((smap >> z) & 1){
 						if(!((adjs[k] >> z) & 1)){
@@ -397,6 +361,19 @@ namespace spades {
 				lastSolidMap2 = static_cast<uint32_t>(lastSolidMap >> 32);
 			}
 			
+			float zscale; // travel distance -> view Z value factor
+			zscale = Vector3::Dot(line.horizonDir, sceneDef.viewAxis[2]);
+			
+			float heightScale; // Z value -> view Z value factor
+			heightScale = sceneDef.viewAxis[2].z;
+			
+			std::array<float, 65> heightScaleVal; // precompute (heightScale * z)
+			for(size_t i = 0; i < zval.size(); i++)
+				heightScaleVal[i] = (static_cast<float>(i) * heightScale);
+			
+			float depthBias;
+			depthBias = -cz * heightScale;
+			
 			int count = 1;
 			
 			while(distance < fogDist) {
@@ -454,7 +431,7 @@ namespace spades {
 				oldInvDist = 1.f / oldDistance;
 #endif
 				
-				//float medDist = (distance + oldDistance) * 0.5f;
+				float medDist = distance * zscale + depthBias;//(distance + oldDistance) * 0.5f;
 				
 				// check for new spans
 				uint32_t solidMap1, solidMap2;
@@ -468,8 +445,9 @@ namespace spades {
 				
 				
 				auto BuildLinePixel = [map](int x, int y, int z,
-											Face face) {
+											Face face, float dist) {
 					LinePixel px;
+					px.depth = dist;
 #if ENABLE_SSE
 					if(flevel == SWFeatureLevel::SSE2) {
 						__m128i m;
@@ -530,7 +508,8 @@ namespace spades {
 					auto addFloor = [&](int vx, int vy, int vz) {
 						int p1 = transform(invDist, vz);
 						int p2 = transform(oldInvDist, vz);
-						LinePixel pix = BuildLinePixel(vx, vy, vz, Face::NegZ);
+						LinePixel pix = BuildLinePixel(vx, vy, vz, Face::NegZ,
+													   medDist + heightScaleVal[vz]);
 						
 						for(int j = p1; j < p2; j++) {
 							auto& p = pixels[j];
@@ -541,7 +520,8 @@ namespace spades {
 					auto addCeiling = [&](int vx, int vy, int vz) {
 						int p1 = transform(invDist, vz + 1);
 						int p2 = transform(oldInvDist, vz + 1);
-						LinePixel pix = BuildLinePixel(vx, vy, vz, Face::PosZ);
+						LinePixel pix = BuildLinePixel(vx, vy, vz, Face::PosZ,
+													   medDist + heightScaleVal[vz]);
 						
 						for(int j = p2; j < p1; j++) {
 							auto& p = pixels[j];
@@ -588,7 +568,8 @@ namespace spades {
 								int p1 = transform(invDist, i + shift);
 								int p2 = transform(invDist, i + 1 + shift);
 								
-								LinePixel pix = BuildLinePixel(irx, iry, i+shift, wallFace);
+								LinePixel pix = BuildLinePixel(irx, iry, i+shift, wallFace,
+															   medDist + heightScaleVal[i]);
 								
 								for(int j = p1; j < p2; j++) {
 									auto& p = pixels[j];
@@ -624,15 +605,20 @@ namespace spades {
 					// by RLE map
 					auto ref = rle[(irx & w-1) + ((iry & h-1) * w)];
 					RleData *rle = rleHeap.Dereference<RleData>(ref);
-					rle += rle[1 + static_cast<int>(wallFace)];
+					auto *ptr = rle;
+					for(int k = 1 + static_cast<int>(wallFace); k >= 0; k--) {
+						ptr += rle[k];
+					}
+					//rle += rle[1 + static_cast<int>(wallFace)];
 					
-					while(*rle != -1) {
-						int z = *(rle++);
+					while(*ptr != -1) {
+						int z = *(ptr++);
 						
 						int p1 = transform(invDist, z);
 						int p2 = transform(invDist, z + 1);
 						
-						LinePixel pix = BuildLinePixel(irx, iry, z, wallFace);
+						LinePixel pix = BuildLinePixel(irx, iry, z, wallFace,
+													   medDist + heightScaleVal[z]);
 						
 						for(int j = p1; j < p2; j++) {
 							auto& p = pixels[j];
@@ -746,9 +732,14 @@ namespace spades {
 			unsigned int fw = frameBuf->GetWidth();
 			unsigned int fh = frameBuf->GetHeight();
 			uint32_t *fb = frameBuf->GetPixels();
+			float *depthBuf = this->depthBuf;
 			Vector3 v1 = front - right * fovX + down * fovY;
 			Vector3 deltaDown = -down * (fovY * 2.f / static_cast<float>(fh));
 			Vector3 deltaRight = right * (fovX * 2.f / static_cast<float>(fw) * under);
+			
+			Vector2 screenPos = {-fovX, -fovY};
+			float deltaScreenPosRight = fovX * 2.f / static_cast<float>(fw);
+			float deltaScreenPosDown = fovY * 2.f / static_cast<float>(fh);
 			
 			static const float pi = M_PI;
 			float yawScale = 65536.f / (pi * 2.f);
@@ -770,13 +761,25 @@ namespace spades {
 			startX = (startX / blockSize) * blockSize;
 			endX = (endX / blockSize) * blockSize;
 			
+			float deltaScreenPosRightSmall = deltaScreenPosRight * under;
+			float deltaScreenPosDownSmall = deltaScreenPosDown;
+			
+			deltaScreenPosRight *= static_cast<float>(blockSize);
+			deltaScreenPosDown *= static_cast<float>(blockSize);
+			
 			v1 += deltaRight * static_cast<float>(startX / under);
+			screenPos.x += deltaScreenPosRight * static_cast<float>(startX / blockSize);
 			
 			for(unsigned int fx = startX; fx < endX; fx+=blockSize){
 				Vector3 v2 = v1;
+				screenPos.y = -fovY;
 				for(unsigned int fy = 0; fy < fh; fy+=blockSize){
 					
-					if(v2.z > 0.96f || v2.z < -0.96f) {
+					
+					uint32_t *fb2 = fb + fx + fy * fw;
+					float *db2 = depthBuf + fx + fy * fw;
+					
+					if(v2.z > 0.99f || v2.z < -0.99f) {
 						// near to pole. cannot be approximated by piecewise
 						goto SlowBlockPath;
 					}
@@ -826,15 +829,17 @@ namespace spades {
 						int pitchA = pitch1;
 						int pitchB = pitch3;
 						
-						uint32_t *fb2 = fb + fx + fy * fw;
 						for(unsigned int x = 0; x < blockSize; x+=under) {
 							uint32_t *fb3 = fb2 + x;
+							auto *db3 = db2 + x;
+							
 							int yawIndexC = yawIndexA;
 							int yawDelta = ((yawIndexB - yawIndexA)<<8>>8) / blockSize;
 							int pitchC = pitchA;
 							int pitchDelta = (pitchB - pitchA) / blockSize;
 							
 							for(unsigned int y = 0; y < blockSize; y++) {
+								
 								unsigned int yawIndex = static_cast<unsigned int>(yawIndexC<<8>>16);
 								yawIndex = (yawIndex * yawScale2) >> 16;
 								yawIndex = (yawIndex * numLines) >> 16;
@@ -868,16 +873,22 @@ namespace spades {
 									if(under == 1) {
 										_mm_stream_si32(reinterpret_cast<int *>(fb3),
 														static_cast<int>(pix.combined));
+										*db3 = pix.depth; // FIXME: stream
+										/*
+										_mm_stream_si32(reinterpret_cast<int *>(db3),
+														reinterpret_cast<int>(pix.depth * distScale));*/
 									}else if(under == 2){
-										m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
-										m = _mm_shuffle_epi32(m, 0x00);
+										m = _mm_castpd_si128(_mm_load_sd(reinterpret_cast<const double *>(&pix)));
 										_mm_store_sd(reinterpret_cast<double *>(fb3),
-													 _mm_castsi128_pd(m));
+													 _mm_castsi128_pd(_mm_shuffle_epi32(m, 0x00)));
+										_mm_store_sd(reinterpret_cast<double *>(db3),
+													 _mm_castsi128_pd(_mm_shuffle_epi32(m, 0x55)));
 									}else if(under == 4){
-										m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
-										m = _mm_shuffle_epi32(m, 0x00);
+										m = _mm_castpd_si128(_mm_load_sd(reinterpret_cast<const double *>(&pix)));
 										_mm_stream_si128(reinterpret_cast<__m128i *>(fb3),
-														 (m));
+														 _mm_shuffle_epi32(m, 0x00));
+										_mm_stream_si128(reinterpret_cast<__m128i *>(db3),
+														 _mm_shuffle_epi32(m, 0x55));
 									}
 									
 								}else
@@ -885,14 +896,17 @@ namespace spades {
 									// non-optimized
 								{
 									uint32_t col = pix.combined;
+									float d = pix.depth;
 									
 									for(int k = 0; k < under; k++){
 										fb3[k] = col;
+										db3[k] = d;
 									}
 								}
 								
 								
 								fb3 += fw;
+								db3 += fw;
 								
 								yawIndexC += yawDelta;
 								pitchC += pitchDelta;
@@ -910,10 +924,13 @@ namespace spades {
 				SlowBlockPath:
 					{
 						Vector3 v3 = v2;
-						uint32_t *fb2 = fb + fx + fy * fw;
+						Vector2 screenPos2 = screenPos;
 						for(unsigned int x = 0; x < blockSize; x+=under) {
 							Vector3 v4 = v3;
 							uint32_t *fb3 = fb2 + x;
+							auto *db3 = db2 + x;
+							screenPos2.y = screenPos.y;
+							
 							for(unsigned int y = 0; y < blockSize; y++) {
 								Vector3 vv = v4;
 								
@@ -951,42 +968,52 @@ namespace spades {
 								// NOTE: combined contains both color and other information,
 								// though this isn't a problem as long as the color comes
 								// in the LSB's
-	#if ENABLE_SSE
+#if ENABLE_SSE
 								if(flevel == SWFeatureLevel::SSE2) {
 									__m128i m;
 									
 									if(under == 1) {
 										_mm_stream_si32(reinterpret_cast<int *>(fb3),
 														static_cast<int>(pix.combined));
+										*db3 = pix.depth; // FIXME: stream
+										/*
+										 _mm_stream_si32(reinterpret_cast<int *>(db3),
+										 reinterpret_cast<int>(pix.depth * distScale));*/
 									}else if(under == 2){
-										m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
-										m = _mm_shuffle_epi32(m, 0x00);
+										m = _mm_castpd_si128(_mm_load_sd(reinterpret_cast<const double *>(&pix)));
 										_mm_store_sd(reinterpret_cast<double *>(fb3),
-													 _mm_castsi128_pd(m));
+													 _mm_castsi128_pd(_mm_shuffle_epi32(m, 0x00)));
+										_mm_store_sd(reinterpret_cast<double *>(db3),
+													 _mm_castsi128_pd(_mm_shuffle_epi32(m, 0x55)));
 									}else if(under == 4){
-										m = _mm_castps_si128(_mm_load_ss(reinterpret_cast<const float *>(&pix)));
-										m = _mm_shuffle_epi32(m, 0x00);
+										m = _mm_castpd_si128(_mm_load_sd(reinterpret_cast<const double *>(&pix)));
 										_mm_stream_si128(reinterpret_cast<__m128i *>(fb3),
-													 (m));
+														 _mm_shuffle_epi32(m, 0x00));
+										_mm_stream_si128(reinterpret_cast<__m128i *>(db3),
+														 _mm_shuffle_epi32(m, 0x55));
 									}
 									
 								}else
-	#endif
+#endif
 									// non-optimized
 								{
 									uint32_t col = pix.combined;
+									float d = pix.depth;
 									
 									for(int k = 0; k < under; k++){
 										fb3[k] = col;
+										db3[k] = d;
 									}
 								}
 								
-								
 								fb3 += fw;
+								db3 += fw;
 								
 								v4 += deltaDown;
+								screenPos2.y += deltaScreenPosDownSmall;
 							} // y
 							v3 += deltaRight;
+							screenPos2.x += deltaScreenPosRightSmall;
 						} // x
 						
 					} // end SlowBlockPath
@@ -994,27 +1021,12 @@ namespace spades {
 				Converge:
 					
 					v2 += deltaDownLarge;
+					screenPos.y += deltaScreenPosDown;
 				} // fy
 				v1 += deltaRightLarge;
+				screenPos.x += deltaScreenPosRight;
 			} // fx
 			
-		}
-		template <class F>
-		static void InvokeParallel(F f, unsigned int numThreads) {
-			SPAssert(numThreads <= 32);
-			std::array<std::unique_ptr<ConcurrentDispatch>, 32> disp;
-			for(auto i = 1U; i < numThreads; i++) {
-				auto ff = [i, &f]() {
-					f(i);
-				};
-				disp[i] = std::unique_ptr<ConcurrentDispatch>
-				(static_cast<ConcurrentDispatch *>(new FunctionDispatch<decltype(ff)>(ff)));
-				disp[i]->Start();
-			}
-			f(0);
-			for(auto i = 1U; i < numThreads; i++) {
-				disp[i]->Join();
-			}
 		}
 		
 		template<SWFeatureLevel flevel>
@@ -1110,25 +1122,21 @@ namespace spades {
 				}
 			}
 			
-			unsigned int numThreads = static_cast<unsigned int>((int)r_swNumThreads);
-			numThreads = std::max(numThreads, 1U);
-			numThreads = std::min(numThreads, 32U);
-			
 			{
 				unsigned int nlines = static_cast<unsigned int>(numLines);
-				InvokeParallel([&](unsigned int th) {
+				InvokeParallel2([&](unsigned int th, unsigned int numThreads) {
 					unsigned int start = th * nlines / numThreads;
 					unsigned int end = (th+1) * nlines / numThreads;
 					
 					for(size_t i = start; i < end; i++) {
 						BuildLine<flevel>(lines[i],  pitchMin, pitchMax);
 					}
-				}, numThreads);
+				});
 			}
 			
 			int under = r_swUndersampling;
 			
-			InvokeParallel([&](unsigned int th) {
+			InvokeParallel2([&](unsigned int th, unsigned int numThreads) {
 				
 				if(under <= 1){
 					RenderFinal<flevel, 1>(yawMin, yawMax,
@@ -1143,7 +1151,7 @@ namespace spades {
 										   static_cast<unsigned int>(numLines),
 										   th, numThreads);
 				}
-			}, numThreads);
+			});
 			
 			
 			
