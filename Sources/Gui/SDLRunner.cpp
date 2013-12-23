@@ -371,10 +371,22 @@ namespace spades {
 				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 				*/
 				
+				int w = r_videoWidth;
+				int h = r_videoHeight;
+				
+				if(rtype == RendererType::SW) {
+					// software renderer requires the framebuffer size to be
+					// multiple of 8.
+					if((w & 7) || (h & 7)) {
+						w &= ~7;
+						h &= ~7;
+					}
+				}
+				
 				window = SDL_CreateWindow(caption.c_str(),
 										  SDL_WINDOWPOS_CENTERED,
 										  SDL_WINDOWPOS_CENTERED,
-										  r_videoWidth, r_videoHeight, sdlFlags);
+										  w, h, sdlFlags);
 				
 				if(!window){
 					std::string msg = SDL_GetError();

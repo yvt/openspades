@@ -103,6 +103,9 @@ namespace spades {
 			}
 			fb = bmp;
 			imageRenderer->SetFramebuffer(bmp);
+			if((bmp->GetWidth() & 7) || (bmp->GetHeight() & 7)) {
+				SPRaise("Framebuffer size is not multiple of 8.");
+			}
 		}
 		
 		void SWRenderer::Init() {
