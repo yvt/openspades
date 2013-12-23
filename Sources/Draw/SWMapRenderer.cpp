@@ -154,10 +154,20 @@ namespace spades {
 			out.clear();
 			
 			out.push_back(0); // [0] = +Z face position address
-			out.push_back(0); // [0] = +X face position address
-			out.push_back(0); // [0] = -X face position address
-			out.push_back(0); // [0] = +Y face position address
-			out.push_back(0); // [0] = -Y face position address
+			out.push_back(0);
+			out.push_back(0); // [2] = +X face position address
+			out.push_back(0);
+			out.push_back(0); // [4] = -X face position address
+			out.push_back(0);
+			out.push_back(0); // [6] = +Y face position address
+			out.push_back(0);
+			out.push_back(0); // [8] = -Y face position address
+			out.push_back(0);
+			
+			auto setHeader = [&](size_t idx, size_t val){
+				reinterpret_cast<short *>(out.data())[idx]
+				= static_cast<short>(val);
+			};
 			
 			uint64_t smap = map->GetSolidMapWrapped(x, y);
 			std::array<uint64_t, 4> adjs =
@@ -176,8 +186,7 @@ namespace spades {
 			}
 			out.push_back(-1);
 			
-			size_t lastOffset = out.size();
-			out[0] = static_cast<RleData>(out.size());
+			setHeader(0, out.size());
 			
 			old = true;
 			for(int z = 63; z >= 0; z--) {
@@ -190,8 +199,7 @@ namespace spades {
 			out.push_back(-1);
 			
 			for(int k = 0; k < 4; k++) {
-				out[k + 1] = static_cast<RleData>(out.size() - lastOffset);
-				lastOffset = out.size();
+				setHeader(k + 1, out.size());
 				for(int z = 0; z < 64; z++) {
 					if((smap >> z) & 1){
 						if(!((adjs[k] >> z) & 1)){
@@ -202,6 +210,10 @@ namespace spades {
 				out.push_back(-1);
 			}
 			
+			// padding
+			while(out.size() & 3){
+				out.push_back(42);
+			}
 		}
 		
 		void SWMapRenderer::UpdateRle(int x, int y) {
@@ -303,12 +315,20 @@ namespace spades {
 			// ray direction
 			float dirX = line.horizonDir.x;
 			float dirY = line.horizonDir.y;
-			if(dirY == 0.f) dirY = 1.e-20f;
-			if(dirX == 0.f) dirX = 1.e-20f;
+			if(fabsf(dirY) < 1.e-4f) dirY = 1.e-4f;
+			if(fabsf(dirX) < 1.e-4f) dirX = 1.e-4f;
 			float invDirX = 1.f / dirX;
 			float invDirY = 1.f / dirY;
 			int signX = dirX > 0.f ? 1 : -1;
 			int signY = dirY > 0.f ? 1 : -1;
+			int invDirXI = static_cast<int>(invDirX * 256.f);
+			int invDirYI = static_cast<int>(invDirY * 256.f);
+			int dirXI = static_cast<int>(dirX * 512.f);
+			int dirYI = static_cast<int>(dirY * 512.f);
+			if(invDirXI < 0) invDirXI = -invDirXI;
+			if(invDirYI < 0) invDirYI = -invDirYI;
+			if(dirXI < 0) dirXI = -dirXI;
+			if(dirYI < 0) dirYI = -dirYI;
 			
 			// camera position
 			float cx = sceneDef.viewOrigin.x;
@@ -318,24 +338,52 @@ namespace spades {
 			int icz = static_cast<int>(floorf(cz));
 			
 			// ray position
-			float rx = cx, ry = cy;
+			//float rx = cx, ry = cy;
+			int rx = static_cast<int>(cx * 512.f);
+			int ry = static_cast<int>(cy * 512.f);
 			
 			// ray position in integer
-			int irx = static_cast<int>(floorf(rx));
-			int iry = static_cast<int>(floorf(ry));
+			int irx = rx >> 9; //static_cast<int>(floorf(rx));
+			int iry = ry >> 9; //static_cast<int>(floorf(ry));
 			
 			float fogDist = 128.f;
-			float distance = 1.e-40f; // traveled path
+			float distance = 1.e-20f; // traveled path
+			float invDist = 1.f / distance;
 			
-			auto& pixels = line.pixels;
+			//auto& pixels = line.pixels;
 			
-			pixels.resize(lineResolution);
+			line.pixels.resize(lineResolution);
+			auto *pixels = line.pixels.data(); // std::vector feels slow...
 			
-			const float transScale = static_cast<float>(pixels.size()) / (maxTan - minTan);
+			const float transScale = static_cast<float>(lineResolution) / (maxTan - minTan);
 			const float transOffset = -minTan * transScale;
 			
-			for(size_t i = 0; i < pixels.size(); i++)
+#if ENABLE_SSE
+			if(lineResolution > 4){
+				static_assert(sizeof(LinePixel) == 8, "size of LinePixel has changed; needs code modification");
+				union {
+					LinePixel pxs[2];
+					__m128 m;
+				};
+				pxs[0].Clear();
+				pxs[1].Clear();
+				auto *ptr = pixels;
+				for(auto *e = pixels + lineResolution; (reinterpret_cast<size_t>(ptr) & 0xf) &&
+					(ptr < e); ptr++) {
+					ptr->Clear();
+				}
+				for(auto *e = pixels + lineResolution - 2;
+					ptr < e; ptr += 2) {
+					_mm_store_ps(reinterpret_cast<float *>(ptr), m);
+				}
+				for(auto *e = pixels + lineResolution; ptr < e; ptr++) {
+					ptr->Clear();
+				}
+			}else
+#endif
+			for(size_t i = 0; i < lineResolution; i++)
 				pixels[i].Clear();
+
 			
 			// if culled out, bail out now (pixels are filled)
 			if(minPitch >= maxPitch)
@@ -353,14 +401,6 @@ namespace spades {
 				return static_cast<int>(p);
 			};
 			
-			uint32_t lastSolidMap1;
-			uint32_t lastSolidMap2;
-			{
-				auto lastSolidMap = map->GetSolidMapWrapped(irx, iry);
-				lastSolidMap1 = static_cast<uint32_t>(lastSolidMap);
-				lastSolidMap2 = static_cast<uint32_t>(lastSolidMap >> 32);
-			}
-			
 			float zscale; // travel distance -> view Z value factor
 			zscale = Vector3::Dot(line.horizonDir, sceneDef.viewAxis[2]);
 			
@@ -374,75 +414,121 @@ namespace spades {
 			float depthBias;
 			depthBias = -cz * heightScale;
 			
-			int count = 1;
+			RleData *lastRle;
+			{
+				auto ref = rle[(irx & w-1) + ((iry & h-1) * w)];
+				lastRle = rleHeap.Dereference<RleData>(ref);
+			}
 			
-			while(distance < fogDist) {
-				
-				int nextIRX = irx + signX;
-				int nextIRY = iry + signY;
-				
-				float oldDistance = distance;
-				
-				float timeToNextX =
-				(signX > 0 ? (nextIRX - rx) :
-				 (irx - rx)) * invDirX;
-				
-				float timeToNextY =
-				(signY > 0 ? (nextIRY - ry) :
-				 (iry - ry)) * invDirY;
-				
+			int count = 1;
+			int cnt2 = static_cast<int>(fogDist * 8.f);
+			
+			while(distance < fogDist && (--cnt2) > 0) {
+				int nextIRX, nextIRY;
 				int oirx = irx, oiry = iry;
+				
+				// DDE
 				Face wallFace;
 				
-				if(timeToNextX < timeToNextY) {
-					// go across x plane
-					irx += signX;
-					rx = signX > 0 ? irx : (irx + 1);
-					ry += dirY * timeToNextX;
-					distance += timeToNextX;
-					wallFace = signX > 0 ? Face::NegX : Face::PosX;
-				}else{
-					// go across y plane
-					iry += signY;
-					rx += dirX * timeToNextY;
-					ry = signY > 0 ? iry : (iry + 1);
-					distance += timeToNextY;
-					wallFace = signY > 0 ? Face::NegY : Face::PosY;
+				if(signX > 0){
+					nextIRX = irx + 1;
+					if(signY > 0) {
+						nextIRY = iry + 1;
+						
+						int timeToNextX = (512 - (rx & 511)) * invDirXI;
+						int timeToNextY = (512 - (ry & 511)) * invDirYI;
+						
+						if(timeToNextX < timeToNextY) {
+							// go across x plane
+							irx = nextIRX;
+							rx = irx << 9;
+							ry += (dirYI * timeToNextX) >> 17;
+							distance += static_cast<float>(timeToNextX) * (1.f / 512.f / 256.f);
+							wallFace = Face::NegX;
+						}else{
+							// go across y plane
+							iry = nextIRY;
+							rx += (dirXI * timeToNextY) >> 17;
+							ry = iry << 9;
+							distance += static_cast<float>(timeToNextY) * (1.f / 512.f / 256.f);
+							wallFace = Face::NegY;
+						}
+					}else /* (signY < 0) */{
+						nextIRY = iry - 1;
+						
+						int timeToNextX = (512 - (rx & 511)) * invDirXI;
+						int timeToNextY = (ry & 511) * invDirYI;
+						
+						if(timeToNextX < timeToNextY) {
+							// go across x plane
+							irx = nextIRX;
+							rx = irx << 9;
+							ry -= (dirYI * timeToNextX) >> 17;
+							distance += static_cast<float>(timeToNextX) * (1.f / 512.f / 256.f);
+							wallFace = Face::NegX;
+						}else{
+							// go across y plane
+							iry = nextIRY;
+							rx += (dirXI * timeToNextY) >> 17;
+							ry = (iry << 9) - 1;
+							distance += static_cast<float>(timeToNextY) * (1.f / 512.f / 256.f);
+							wallFace = Face::PosY;
+						}
+					}
+				}else /* signX < 0 */ {
+					nextIRX = irx - 1;
+					if(signY > 0) {
+						nextIRY = iry + 1;
+						
+						int timeToNextX = (rx & 511) * invDirXI;
+						int timeToNextY = (512 - (ry & 511)) * invDirYI;
+						
+						if(timeToNextX < timeToNextY) {
+							// go across x plane
+							irx = nextIRX;
+							rx = (irx << 9) - 1;
+							ry += (dirYI * timeToNextX) >> 17;
+							distance += static_cast<float>(timeToNextX) * (1.f / 512.f / 256.f);
+							wallFace = Face::PosX;
+						}else{
+							// go across y plane
+							iry = nextIRY;
+							rx -= (dirXI * timeToNextY) >> 17;
+							ry = iry << 9;
+							distance += static_cast<float>(timeToNextY) * (1.f / 512.f / 256.f);
+							wallFace = Face::NegY;
+						}
+					}else /* (signY < 0) */{
+						nextIRY = iry - 1;
+						
+						int timeToNextX = (rx & 511) * invDirXI;
+						int timeToNextY = (ry & 511) * invDirYI;
+						
+						if(timeToNextX < timeToNextY) {
+							// go across x plane
+							irx = nextIRX;
+							rx = (irx << 9) - 1;
+							ry -= (dirYI * timeToNextX) >> 17;
+							distance += static_cast<float>(timeToNextX) * (1.f / 512.f / 256.f);
+							wallFace = Face::PosX;
+						}else{
+							// go across y plane
+							iry = nextIRY;
+							rx -= (dirXI * timeToNextY) >> 17;
+							ry = (iry << 9) - 1;
+							distance += static_cast<float>(timeToNextY) * (1.f / 512.f / 256.f);
+							wallFace = Face::PosY;
+						}
+					}
 				}
 				
-				// finalize active spans
-				float invDist;// = 1.f / distance;
-				float oldInvDist;
+				float oldInvDist = invDist;
 				
-#if ENABLE_SSE
-				{
-					union {
-						struct{
-							float v, v2;
-						};
-						__m128 m;
-					};
-					m = _mm_rcp_ps(_mm_setr_ps(distance, oldDistance, 0.f, 0.f));
-					invDist = v;
-					oldInvDist = v2;
-				}
-#else
-				invDist = 1.f / distance;
-				oldInvDist = 1.f / oldDistance;
-#endif
+				invDist = fastRcp(distance);
 				
 				float medDist = distance * zscale + depthBias;//(distance + oldDistance) * 0.5f;
 				
 				// check for new spans
-				uint32_t solidMap1, solidMap2;
-				{
-					auto solidMap = map->GetSolidMapWrapped(irx, iry);
-					solidMap1 = static_cast<uint32_t>(solidMap);
-					solidMap2 = static_cast<uint32_t>(solidMap >> 32);
-				}
-				auto solidMapDiff1 = solidMap1 & ~lastSolidMap1;
-				auto solidMapDiff2 = solidMap2 & ~lastSolidMap2;
-				
 				
 				auto BuildLinePixel = [map](int x, int y, int z,
 											Face face, float dist) {
@@ -505,50 +591,41 @@ namespace spades {
 				{
 					
 					// linear code
-					auto addFloor = [&](int vx, int vy, int vz) {
-						int p1 = transform(invDist, vz);
-						int p2 = transform(oldInvDist, vz);
-						LinePixel pix = BuildLinePixel(vx, vy, vz, Face::NegZ,
-													   medDist + heightScaleVal[vz]);
-						
-						for(int j = p1; j < p2; j++) {
-							auto& p = pixels[j];
-							if(!p.IsEmpty()) continue;
-							p.Set(pix);
-						}
-					};
-					auto addCeiling = [&](int vx, int vy, int vz) {
-						int p1 = transform(invDist, vz + 1);
-						int p2 = transform(oldInvDist, vz + 1);
-						LinePixel pix = BuildLinePixel(vx, vy, vz, Face::PosZ,
-													   medDist + heightScaleVal[vz]);
-						
-						for(int j = p2; j < p1; j++) {
-							auto& p = pixels[j];
-							if(!p.IsEmpty()) continue;
-							p.Set(pix);
-						}
-					};
 					
 					// RLE scan
-					auto ref = rle[(oirx & w-1) + ((oiry & h-1) * w)];
-					RleData *rle = rleHeap.Dereference<RleData>(ref);
+					RleData *rle = lastRle;
 					{
-						RleData *ptr = rle + 5;
+						RleData *ptr = rle + 10;
 						while(*ptr != -1) {
 							int z = *ptr;
 							if(z > icz) {
-								addFloor(oirx, oiry, z);
+								int p1 = transform(invDist, z);
+								int p2 = transform(oldInvDist, z);
+								LinePixel pix = BuildLinePixel(oirx, oiry, z, Face::NegZ,
+															   medDist + heightScaleVal[z]);
+								
+								for(int j = p1; j < p2; j++) {
+									auto& p = pixels[j];
+									if(!p.IsEmpty()) continue;
+									p.Set(pix);
+								}
 							}
 							ptr++;
 						}
-					}
-					{
-						RleData *ptr = rle + rle[0];
+						ptr++;
 						while(*ptr != -1) {
 							int z = *ptr;
 							if(z < icz) {
-								addCeiling(oirx, oiry, z);
+								int p1 = transform(invDist, z + 1);
+								int p2 = transform(oldInvDist, z + 1);
+								LinePixel pix = BuildLinePixel(oirx, oiry, z, Face::PosZ,
+															   medDist + heightScaleVal[z]);
+								
+								for(int j = p2; j < p1; j++) {
+									auto& p = pixels[j];
+									if(!p.IsEmpty()) continue;
+									p.Set(pix);
+								}
 							}
 							ptr++;
 						}
@@ -557,59 +634,14 @@ namespace spades {
 				} // done: floor/ceiling
 				
 				// add walls
-				if(false){
-					// brute-force
-					auto checkRange = [&](uint32_t diff, bool upper,
-										   int begin, int end) {
-						int shift = upper ? 32 : 0;
-						for(int i = begin; i < end; i++) {
-							
-							if(diff & (1UL << i)) {
-								int p1 = transform(invDist, i + shift);
-								int p2 = transform(invDist, i + 1 + shift);
-								
-								LinePixel pix = BuildLinePixel(irx, iry, i+shift, wallFace,
-															   medDist + heightScaleVal[i]);
-								
-								for(int j = p1; j < p2; j++) {
-									auto& p = pixels[j];
-									if(!p.IsEmpty()) continue;
-									p.Set(pix);
-								}
-							} /* end if(solidMapDiff & (1ULL << i)) */
-						}
-					};
-					
-					auto recurse = [&](uint32_t diff, bool upper) {
-						if(diff == 0) {
-							return;
-						}
-						
-						if(diff & 0xff) {
-							checkRange(diff, upper, 0, 8);
-						}
-						if(diff & 0xff00) {
-							checkRange(diff, upper, 8, 16);
-						}
-						if(diff & 0xff0000) {
-							checkRange(diff, upper, 16, 24);
-						}
-						if(diff & 0xff000000) {
-							checkRange(diff, upper, 24, 32);
-						}
-					};
-					
-					recurse(solidMapDiff1, false);
-					recurse(solidMapDiff2, true);
-				}else{
+				{
 					// by RLE map
 					auto ref = rle[(irx & w-1) + ((iry & h-1) * w)];
 					RleData *rle = rleHeap.Dereference<RleData>(ref);
+					lastRle = rle;
 					auto *ptr = rle;
-					for(int k = 1 + static_cast<int>(wallFace); k >= 0; k--) {
-						ptr += rle[k];
-					}
-					//rle += rle[1 + static_cast<int>(wallFace)];
+					ptr += reinterpret_cast<unsigned short *>(rle)
+					[1 + static_cast<int>(wallFace)];
 					
 					while(*ptr != -1) {
 						int z = *(ptr++);
@@ -628,11 +660,6 @@ namespace spades {
 					}
 					
 				} // add wall - end
-				
-				
-				lastSolidMap1 = solidMap1;
-				lastSolidMap2 = solidMap2;
-				
 				
 				// check pitch cull
 				if((--count) == 0){
@@ -1098,11 +1125,11 @@ namespace spades {
 					SPRaise("Too many lines emit: %d", static_cast<int>(numLines));
 				}
 				lines.resize(std::max(numLines, lines.size()));
-				
+				/*
 				SPLog("numlines: %d, each %f deg, and %d res",
 					  static_cast<int>(numLines),
 					  interval * 180.f / pi,
-					  static_cast<int>(lineResolution));
+					  static_cast<int>(lineResolution));*/
 			}
 			
 			// calculate vector for each lines
