@@ -63,7 +63,7 @@ namespace spades {
 				Vector4 color;
 			};
 			
-			IGLDevice *device;
+			Handle<IGLDevice> device;
 			GLFramebufferManager *fbManager;
 			client::GameMap *map;
 			
