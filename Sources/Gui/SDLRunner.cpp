@@ -272,11 +272,18 @@ namespace spades {
 		class SDLSWPort: public draw::SWPort {
 			SDL_Window *wnd;
 			SDL_Surface *surface;
+			bool adjusted;
+			int actualW, actualH;
 			
 			Handle<Bitmap> framebuffer;
 			void SetFramebufferBitmap() {
-				framebuffer.Set
-				(new Bitmap(reinterpret_cast<uint32_t*>(surface->pixels), surface->w, surface->h), false);
+				if(adjusted){
+					framebuffer.Set
+					(new Bitmap(actualW, actualH), false);
+				}else{
+					framebuffer.Set
+					(new Bitmap(reinterpret_cast<uint32_t*>(surface->pixels), surface->w, surface->h), false);
+				}
 			}
 		protected:
 			virtual ~SDLSWPort() {
@@ -289,8 +296,21 @@ namespace spades {
 			wnd(wnd),
 			surface(nullptr){
 				surface = SDL_GetWindowSurface(wnd);
+				// FIXME: check pixel format
 				if(SDL_MUSTLOCK(surface)) {
 					SDL_LockSurface(surface);
+				}
+				actualW = surface->w & ~7;
+				actualH = surface->h & ~7;
+				if(actualW != surface->w ||
+				   actualH != surface->h) {
+					SPLog("Surface size %dx%d doesn't match the software renderer's"
+						  " requirements. Rounded to %dx%d using an intermediate surface.",
+						  surface->w, surface->h, actualW, actualH);
+					adjusted = true;
+					memset(surface->pixels, 0, surface->w * surface->h * 4);
+				}else{
+					adjusted = false;
 				}
 				SetFramebufferBitmap();
 			}
@@ -298,13 +318,30 @@ namespace spades {
 				return framebuffer;
 			}
 			virtual void Swap() {
+				if(adjusted) {
+					int sy = (surface->h - actualH) >> 1;
+					int sx = (surface->w - actualW) >> 1;
+					uint32_t *outPixels = reinterpret_cast<uint32_t *>(surface->pixels);
+					outPixels += sx + sy * (surface->pitch >> 2);
+					
+					uint32_t *inPixels = framebuffer->GetPixels();
+					for(int y = 0; y < actualH; y++) {
+						
+						std::memcpy(outPixels, inPixels, actualW * 4);
+						
+						outPixels += surface->pitch >> 2;
+						inPixels += actualW;
+					}
+				}
 				if(SDL_MUSTLOCK(surface)) {
 					SDL_UnlockSurface(surface);
 				}
 				SDL_UpdateWindowSurface(wnd);
 				if(SDL_MUSTLOCK(surface)) {
 					SDL_LockSurface(surface);
-					SetFramebufferBitmap();
+					if(!adjusted){
+						SetFramebufferBitmap();
+					}
 				}
 			}
 			
@@ -350,6 +387,18 @@ namespace spades {
 				switch(rtype) {
 					case RendererType::GL:
 						sdlFlags = SDL_WINDOW_OPENGL;
+						SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+						SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, r_depthBits);
+						SDL_GL_SetSwapInterval(r_vsync);
+						if(!r_allowSoftwareRendering)
+							SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+						
+						/* someday...
+						 SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+						 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+						 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+						 */
+						
 						break;
 					case RendererType::SW:
 						sdlFlags = 0;
@@ -360,28 +409,9 @@ namespace spades {
 					sdlFlags |= SDL_WINDOW_FULLSCREEN;
 				
 				
-				SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-				SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, r_depthBits);
-				SDL_GL_SetSwapInterval(r_vsync);
-				if(!r_allowSoftwareRendering)
-					SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-				/* someday...
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-				*/
 				
 				int w = r_videoWidth;
 				int h = r_videoHeight;
-				
-				if(rtype == RendererType::SW) {
-					// software renderer requires the framebuffer size to be
-					// multiple of 8.
-					if((w & 7) || (h & 7)) {
-						w &= ~7;
-						h &= ~7;
-					}
-				}
 				
 				window = SDL_CreateWindow(caption.c_str(),
 										  SDL_WINDOWPOS_CENTERED,
