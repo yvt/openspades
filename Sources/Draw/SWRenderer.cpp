@@ -527,6 +527,8 @@ namespace spades {
 			EnsureInitialized();
 			EnsureSceneStarted();
 			
+			DebugLine l = {a, b, color};
+			debugLines.push_back(l);
 		}
 		
 		void SWRenderer::AddSprite(client::IImage *image, spades::Vector3 center,
@@ -649,6 +651,108 @@ namespace spades {
 				}
 				sprites.clear();
 			}
+			
+			// render debug lines
+			{
+				float cw = fb->GetWidth() * 0.5f;
+				float ch = fb->GetHeight() * 0.5f;
+				for(size_t i = 0; i < debugLines.size(); i++) {
+					auto& l = debugLines[i];
+					auto v1 = projectionViewMatrix * l.v1;
+					auto v2 = projectionViewMatrix * l.v2;
+					if(v1.z < 0.001f || v2.z < 0.001f) continue;
+					
+					v1 *= fastRcp(v1.w);
+					v2 *= fastRcp(v2.w);
+					
+					int x1 = static_cast<int>(v1.x * cw + cw);
+					int y1 = static_cast<int>(ch - v1.y * ch);
+					int x2 = static_cast<int>(v2.x * cw + cw);
+					int y2 = static_cast<int>(ch - v2.y * ch);
+					
+					auto *fb = this->fb->GetPixels();
+					int fw = this->fb->GetWidth();
+					int fh = this->fb->GetHeight();
+					
+					uint32_t col;
+					col = ToFixed8(l.color.z) |
+					(ToFixed8(l.color.y) << 8) |
+					(ToFixed8(l.color.x) << 16);
+					
+					if(x1 == x2 && y1 == y2){
+						if(x1 >= 0 && y1 >= 0 &&
+						   x1 < fw && y1 < fh)
+							fb[x1 + y1 * fw] = col;
+						continue;
+					}
+					
+					if(abs(x2 - x1) > abs(y2 - y1)) {
+						if(x1 >= x2){
+							std::swap(x1, x2);
+							std::swap(y1, y2);
+						}
+						int sgn = (y2 > y1) ? 1 : -1;
+						int cy = y1;
+						int dy = abs(y2 - y1);
+						int fract = 0;
+						int divisor = x2 - x1;
+						int minX = std::max(x1, 0);
+						int maxX = std::min(x2, fw - 1);
+						if(x1 < 0){
+							long long v = dy;
+							v *= -x1;
+							cy += sgn * (v / divisor);
+							fract = v % divisor;
+						}
+						fb += minX;
+						for(int x = minX; x <= maxX; x++){
+							if(cy >= 0 && cy < fh) {
+								fb[fw * cy] = col;
+							}
+							fract += dy;
+							if(fract >= divisor) {
+								cy += sgn;
+								fract -= divisor;
+							}
+							fb++;
+						}
+					}else{
+						if(y1 >= y2){
+							std::swap(x1, x2);
+							std::swap(y1, y2);
+						}
+						int sgn = (x2 > x1) ? 1 : -1;
+						int cx = x1;
+						int dx = abs(x2 - x1);
+						int fract = 0;
+						int divisor = y2 - y1;
+						int minY = std::max(y1, 0);
+						int maxY = std::min(y2, fh - 1);
+						if(y1 < 0){
+							long long v = dx;
+							v *= -y1;
+							cx += sgn * (v / divisor);
+							fract = v % divisor;
+						}
+						fb += minY * fw;
+						for(int y = minY; y <= maxY; y++){
+							if(cx >= 0 && cx < fw) {
+								fb[cx] = col;
+							}
+							fract += dx;
+							if(fract >= divisor) {
+								cx += sgn;
+								fract -= divisor;
+							}
+							fb += fw;
+						}
+					}
+					
+				}
+				debugLines.clear();
+			}
+			
+			// all objects were rendered
 			
 			duringSceneRendering = false;
 		}
