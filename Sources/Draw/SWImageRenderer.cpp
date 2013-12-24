@@ -1119,7 +1119,7 @@ namespace spades {
 							depthOut ++;
 						}
 					};
-					while(minX & 1) {
+					while((minX & 1) && (minX < maxX)) {
 						// non-aligned.
 						unalignedPixel();
 						minX++;
