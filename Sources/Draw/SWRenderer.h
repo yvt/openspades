@@ -40,6 +40,7 @@ namespace spades {
 		class SWImageRenderer;
 		class SWFlatMapRenderer;
 		class SWMapRenderer;
+		class SWImage;
 		
 		class SWRenderer: public client::IRenderer, public client::IGameMapListener  {
 			friend class SWFlatMapRenderer;
@@ -60,6 +61,24 @@ namespace spades {
 			
 			std::shared_ptr<SWFlatMapRenderer> flatMapRenderer;
 			std::shared_ptr<SWMapRenderer> mapRenderer;
+			
+			struct Sprite {
+				Handle<SWImage> img;
+				Vector3 center;
+				float radius;
+				float rotation;
+				Vector4 color;
+			};
+			std::vector<Sprite> sprites;
+			
+			struct LongSprite {
+				Handle<SWImage> img;
+				Vector3 start;
+				Vector3 end;
+				float radius;
+				Vector4 color;
+			};
+			std::vector<LongSprite> longSprites;
 			
 			bool inited;
 			bool sceneUsedInThisFrame;

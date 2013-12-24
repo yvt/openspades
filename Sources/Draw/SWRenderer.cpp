@@ -493,7 +493,7 @@ namespace spades {
 			BuildView();
 			BuildFrustrum();
 			
-			
+			projectionViewMatrix = projectionMatrix * viewMatrix;
 		}
 		
 		void SWRenderer::RenderModel(client::IModel *model, const client::ModelRenderParam &) {
@@ -516,18 +516,35 @@ namespace spades {
 			
 		}
 		
-		void SWRenderer::AddSprite(client::IImage *, spades::Vector3 center, float radius, float rotation) {
+		void SWRenderer::AddSprite(client::IImage *image, spades::Vector3 center,
+								   float radius, float rotation) {
 			SPADES_MARK_FUNCTION();
 			EnsureInitialized();
 			EnsureSceneStarted();
 			
+			if(!SphereFrustrumCull(center, radius * 1.5f))
+				return;
+			
+			SWImage *img = dynamic_cast<SWImage *>(image);
+			if(!img){
+				SPInvalidArgument("image");
+			}
+			
+			sprites.push_back(Sprite());
+			auto& spr = sprites.back();
+			
+			spr.img = img;
+			spr.center = center;
+			spr.radius = radius;
+			spr.rotation = rotation;
+			spr.color = drawColorAlphaPremultiplied;
 		}
 		
 		void SWRenderer::AddLongSprite(client::IImage *, spades::Vector3 p1, spades::Vector3 p2, float radius) {
 			SPADES_MARK_FUNCTION();
 			EnsureInitialized();
 			EnsureSceneStarted();
-			
+			// TODO: long sprite
 		}
 		
 		static uint32_t ConvertColor32(Vector4 col) {
@@ -569,6 +586,48 @@ namespace spades {
 			else
 #endif
 			ApplyFog<SWFeatureLevel::None>();
+			
+			// render sprites
+			{
+				imageRenderer->SetShaderType(SWImageRenderer::ShaderType::Sprite);
+				imageRenderer->SetMatrix(projectionViewMatrix);
+				imageRenderer->SetZRange(sceneDef.zNear, sceneDef.zFar);
+				
+				auto right = sceneDef.viewAxis[0];
+				auto up = sceneDef.viewAxis[1];
+				for(std::size_t i = 0; i < sprites.size(); i++) {
+					auto& spr = sprites[i];
+					float s = sinf(spr.rotation) * spr.radius;
+					float c = cosf(spr.rotation) * spr.radius;
+					auto trans = [s,c,&spr,right,up](float x, float y) {
+						auto v = spr.center;
+						v += right * (c*x-s*y);
+						v += up * (s*x+c*y);
+						return MakeVector4(v.x, v.y, v.z, 1.f);
+					};
+					auto x1 = trans(-1.f, -1.f);
+					auto x2 = trans( 1.f, -1.f);
+					auto x3 = trans(-1.f,  1.f);
+					auto x4 = trans( 1.f,  1.f);
+					SWImageRenderer::Vertex v1, v2, v3;
+					v1.color = v2.color = v3.color = spr.color;
+					v1.uv = MakeVector2( 0.f,  0.f);
+					v1.position = x1;
+					v2.uv = MakeVector2( 1.f,  0.f);
+					v2.position = x2;
+					v3.uv = MakeVector2( 0.f,  1.f);
+					v3.position = x3;
+					imageRenderer->DrawPolygon(spr.img, v1, v2, v3);
+					v1.uv = MakeVector2( 1.f,  0.f);
+					v1.position = x2;
+					v2.uv = MakeVector2( 1.f,  1.f);
+					v2.position = x4;
+					v3.uv = MakeVector2( 0.f,  1.f);
+					v3.position = x3;
+					imageRenderer->DrawPolygon(spr.img, v1, v2, v3);
+				}
+				sprites.clear();
+			}
 			
 			duringSceneRendering = false;
 		}

@@ -38,7 +38,7 @@ namespace spades {
 			this->frame = bmp;
 			if(bmp) {
 				fbSize4 = MakeVector4(static_cast<float>(bmp->GetWidth()) * .5f,
-									  static_cast<float>(bmp->GetHeight()) * .5f,
+									  static_cast<float>(bmp->GetHeight()) * -.5f,
 									  1.f, 1.f);
 				fbCenter4 = MakeVector4(static_cast<float>(bmp->GetWidth()) * .5f,
 										static_cast<float>(bmp->GetHeight()) * .5f,
@@ -364,7 +364,7 @@ namespace spades {
 				auto drawPixel = [mulR, mulG, mulB, mulA](uint32_t& dest, float& destDepth,
 														  uint32_t texture, float inDepth) {
 					if(depthTest) {
-						if(inDepth < destDepth) {
+						if(inDepth > destDepth) {
 							return;
 						}
 					}
@@ -610,7 +610,7 @@ namespace spades {
 				(uint32_t& dest, float& destDepth,
 				 uint32_t texture, float inDepth) {
 					if(depthTest) {
-						if(inDepth < destDepth) {
+						if(inDepth > destDepth) {
 							return;
 						}
 					}
@@ -688,12 +688,12 @@ namespace spades {
 				 uint32_t texture1, float inDepth1,
 				 uint32_t texture2, float inDepth2) {
 					if(depthTest) {
-						if(inDepth1 < destDepth[0]) {
+						if(inDepth1 > destDepth[0]) {
 							drawPixel(dest[1], destDepth[1],
 									  texture2, inDepth2);
 							return;
 						}
-						if(inDepth2 < destDepth[1]) {
+						if(inDepth2 > destDepth[1]) {
 							drawPixel(dest[0], destDepth[0],
 									  texture2, inDepth2);
 							return;
@@ -1019,7 +1019,7 @@ namespace spades {
 				(uint32_t& dest, float& destDepth,
 				 float inDepth) {
 					if(depthTest) {
-						if(inDepth < destDepth) {
+						if(inDepth > destDepth) {
 							return;
 						}
 					}
@@ -1054,12 +1054,12 @@ namespace spades {
 				float inDepth1,
 				float inDepth2) {
 					if(depthTest) {
-						if(inDepth1 < destDepth[0]) {
+						if(inDepth1 > destDepth[0]) {
 							drawPixel(dest[1], destDepth[1],
 									  inDepth2);
 							return;
 						}
-						if(inDepth2 < destDepth[1]) {
+						if(inDepth2 > destDepth[1]) {
 							drawPixel(dest[0], destDepth[0],
 									  inDepth2);
 							return;
@@ -1274,8 +1274,8 @@ namespace spades {
 					out.uv = v1.uv + (v2.uv - v1.uv) * per;
 				};
 				float d1 = distance(v1.position, plane);
-				float d2 = distance(v1.position, plane);
-				float d3 = distance(v1.position, plane);
+				float d2 = distance(v2.position, plane);
+				float d3 = distance(v3.position, plane);
 				bool nc1 = d1 >= 0.f;
 				bool nc2 = d2 >= 0.f;
 				bool nc3 = d3 >= 0.f;
@@ -1372,8 +1372,40 @@ namespace spades {
 				
 				Clip
 				(vv1, vv2, vv3,
-				 MakeVector4(0.f, 0.f, 1.f, 1.f),
+				 MakeVector4(0.f, 0.f, 1.f, -r.zNear),
 				 [img,&r](Vertex& v1, Vertex& v2, Vertex& v3) {
+					 Vertex vv1 = v1;
+					 Vertex vv2 = v2;
+					 Vertex vv3 = v3;
+					 // want to save Z
+					 float orig1 = vv1.position.z;
+					 float orig2 = vv2.position.z;
+					 float orig3 = vv3.position.z;
+#if ENABLE_SSE
+					 union {
+						 __m128 m;
+						 Vector4 v;
+					 };
+					 m = _mm_setr_ps(vv1.position.w,
+										  vv2.position.w,
+										  vv3.position.w,
+										  1.f);
+					 m = _mm_rcp_ps(m);
+					 vv1.position *= v.x;
+					 vv2.position *= v.y;
+					 vv3.position *= v.z;
+#else
+					 vv1.position /= vv1.position.w;
+					 vv2.position /= vv2.position.w;
+					 vv3.position /= vv3.position.w;
+#endif
+					 vv1.position.z = orig1;
+					 vv2.position.z = orig2;
+					 vv3.position.z = orig3;
+					 
+					 PolygonRenderer<featureLvl, false, true, depthTest, solidFill>::DrawPolygonInternal
+					 (img, vv1, vv2, vv3, r);
+					 return;
 					 Clip
 					 (v1, v2, v3,
 					  MakeVector4(0.f, 0.f, -1.f, 1.f),
