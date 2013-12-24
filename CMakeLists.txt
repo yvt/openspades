@@ -3,7 +3,7 @@ project(OpenSpades)
 
 set(OpenSpades_VERSION_MAJOR 0)
 set(OpenSpades_VERSION_MINOR 0)
-set(OpenSpades_VERSION_REVISION 9)
+set(OpenSpades_VERSION_REVISION 95)
 
 set(OS_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
