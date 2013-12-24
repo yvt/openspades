@@ -26,6 +26,7 @@
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Debug.h>
 #include <Core/Settings.h>
+#include <array>
 
 namespace spades {
 	namespace draw {
