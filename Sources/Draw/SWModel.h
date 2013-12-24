@@ -23,16 +23,29 @@
 #include <Client/IModel.h>
 #include <Core/VoxelModel.h>
 #include <map>
+#include <vector>
 
 namespace spades {
 	namespace draw {
+		class SWModelRenderer;
+		
 		class SWModel: public client::IModel {
+			friend class SWModelRenderer;
+			
 			Handle<VoxelModel> rawModel;
+			float radius;
+			Vector3 center;
+			
+			std::vector<uint32_t> renderData;
+			std::vector<uint32_t> renderDataAddr;
+			
 		protected:
 			virtual ~SWModel();
 		public:
 			SWModel(VoxelModel *model);
 			
+			float GetRadius() { return radius; }
+			Vector3 GetCenter() { return center; }
 			VoxelModel *GetRawModel() { return rawModel; }
 		};
 		

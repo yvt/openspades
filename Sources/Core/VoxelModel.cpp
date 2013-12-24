@@ -76,6 +76,105 @@ namespace spades {
 		return (u.c & 0xffffff);
 	}
 	
+	void VoxelModel::HollowFill() {
+		std::vector<IntVector3> stack;
+		std::vector<uint8_t> flags;
+		flags.resize(width * height * depth);
+		std::memset(flags.data(), 0, flags.size());
+		
+		stack.reserve(width * height * depth);
+		
+		auto Flag = [&](int x, int y, int z) -> uint8_t& {
+			return flags[x + width * (y + height * z)];
+		};
+		
+		for(int x = 0; x < width; x++) for(int y = 0; y < height; y++) {
+			auto m = GetSolidBitsAt(x, y);
+			for(int z = 0; z < depth; z++){
+				if(m & (1ULL << z)) {
+					Flag(x, y, z) = 1;
+				}
+			}
+		}
+		for(int x = 0; x < width; x++) for(int y = 0; y < height; y++){
+			if(!IsSolid(x, y, 0)){
+				stack.push_back(IntVector3::Make(x, y, 0));
+				Flag(x, y, 0) = 1;
+			}
+			if(!IsSolid(x, y, depth - 1)){
+				stack.push_back(IntVector3::Make(x, y, depth - 1));
+				Flag(x, y, depth - 1) = 1;
+			}
+		}
+		for(int x = 0; x < width; x++) for(int z = 1; z < depth - 1; z++){
+			if(!IsSolid(x, 0, z)){
+				stack.push_back(IntVector3::Make(x, 0, z));
+				Flag(x, 0, z) = 1;
+			}
+			if(!IsSolid(x, height - 1, z)){
+				stack.push_back(IntVector3::Make(x, height - 1, z));
+				Flag(x, height - 1, z) = 1;
+			}
+		}
+		for(int y = 1; y < height - 1; y++) for(int z = 1; z < depth - 1; z++){
+			if(!IsSolid(0, y, z)){
+				stack.push_back(IntVector3::Make(0, y, z));
+				Flag(0, y, z) = 1;
+			}
+			if(!IsSolid(width - 1, y, z)){
+				stack.push_back(IntVector3::Make(width - 1, y, z));
+				Flag(width - 1, y, z) = 1;
+			}
+		}
+		
+		while(!stack.empty()){
+			auto v = stack.back();
+			stack.pop_back();
+			
+			auto Visit = [&](int x, int y, int z) {
+				SPAssert(x >= 0);
+				SPAssert(x < width);
+				SPAssert(y >= 0);
+				SPAssert(y < height);
+				SPAssert(z >= 0);
+				SPAssert(z < depth);
+				Flag(x, y, z) = 1;
+				stack.push_back(IntVector3::Make(x, y, z));
+			};
+			
+			if(v.x > 0 && !Flag(v.x - 1, v.y, v.z)) Visit(v.x - 1, v.y, v.z);
+			if(v.x < width-1 && !Flag(v.x + 1, v.y, v.z)) Visit(v.x + 1, v.y, v.z);
+			if(v.y > 0 && !Flag(v.x, v.y - 1, v.z)) Visit(v.x, v.y - 1, v.z);
+			if(v.y < height-1 && !Flag(v.x, v.y + 1, v.z)) Visit(v.x, v.y + 1, v.z);
+			if(v.z > 0 && !Flag(v.x, v.y, v.z - 1)) Visit(v.x, v.y, v.z - 1);
+			if(v.z < depth-1 && !Flag(v.x, v.y, v.z + 1)) Visit(v.x, v.y, v.z + 1);
+		}
+		
+		for(int z = 0, idx = 0; z < depth; z++)
+			for(int y = 0; y < height; y++)
+				for(int x = 0; x < width; x++, idx++)  {
+					if(!flags[idx]) {
+						SPAssert(!IsSolid(x, y, z));
+						SetSolid(x, y, z, 0xddbeef);
+					}
+				}
+		
+		for(int z = 0, idx = 0; z < depth; z++)
+			for(int y = 0; y < height; y++)
+				for(int x = 0; x < width; x++, idx++)  {
+					if(!flags[idx]) {
+						SPAssert(IsSolid(x, y, z));
+						SPAssert(IsSolid(x+1, y, z));
+						SPAssert(IsSolid(x-1, y, z));
+						SPAssert(IsSolid(x, y+1, z));
+						SPAssert(IsSolid(x, y-1, z));
+						SPAssert(IsSolid(x, y, z+1));
+						SPAssert(IsSolid(x, y, z-1));
+					}
+				}
+		
+		
+	}
 	
 	VoxelModel *VoxelModel::LoadKV6(spades::IStream *stream) {
 		SPADES_MARK_FUNCTION();
@@ -159,7 +258,7 @@ namespace spades {
 				}
 			
 			SPAssert(pos == blkdata.size());
-			
+			model->HollowFill();
 			return model;
 		}catch(...){
 			delete model;

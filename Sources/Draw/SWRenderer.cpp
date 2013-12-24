@@ -32,6 +32,7 @@
 #include "SWFlatMapRenderer.h"
 #include "SWMapRenderer.h"
 #include <fenv.h>
+#include "SWModelRenderer.h"
 
 #include "SWUtils.h"
 
@@ -114,6 +115,9 @@ namespace spades {
 			SPLog("---- SWRenderer late initialization started ---");
 			modelManager = std::make_shared<SWModelManager>();
 			
+			SPLog("creating model renderer");
+			modelRenderer = std::make_shared<SWModelRenderer>(this, featureLevel);
+			renderStopwatch.Reset();
 			
 			SPLog("---- SWRenderer late initialization done ---");
 			
@@ -496,11 +500,20 @@ namespace spades {
 			projectionViewMatrix = projectionMatrix * viewMatrix;
 		}
 		
-		void SWRenderer::RenderModel(client::IModel *model, const client::ModelRenderParam &) {
+		void SWRenderer::RenderModel(client::IModel *model, const client::ModelRenderParam &param) {
 			SPADES_MARK_FUNCTION();
 			EnsureInitialized();
 			EnsureSceneStarted();
 			
+			auto *mdl = dynamic_cast<SWModel *>(model);
+			if(mdl == nullptr)
+				SPInvalidArgument("model");
+			
+			Model m;
+			m.model = mdl;
+			m.param = param;
+			
+			models.push_back(m);
 		}
 		
 		void SWRenderer::AddLight(const client::DynamicLightParam &light) {
@@ -579,6 +592,14 @@ namespace spades {
 				flatMapRenderer->Update();
 				mapRenderer->Render(sceneDef, fb, depthBuffer.data());
 			}
+			
+			// draw models
+			for(size_t i = 0; i < models.size(); i++) {
+				auto& m = models[i];
+				modelRenderer->Render(m.model,
+									  m.param);
+			}
+			models.clear();
 			
 #if ENABLE_SSE2
 			if(static_cast<int>(featureLevel) >= static_cast<int>(SWFeatureLevel::SSE2))

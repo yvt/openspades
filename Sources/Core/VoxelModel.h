@@ -37,6 +37,8 @@ namespace spades {
 	public:
 		VoxelModel(int width, int height, int depth);
 		
+		void HollowFill();
+		
 		static VoxelModel *LoadKV6(IStream *);
 		
 		const uint64_t& GetSolidBitsAt(int x, int y) const {

@@ -38,12 +38,15 @@ namespace spades {
 		class SWImageManager;
 		class SWModelManager;
 		class SWImageRenderer;
+		class SWModelRenderer;
 		class SWFlatMapRenderer;
 		class SWMapRenderer;
 		class SWImage;
+		class SWModel;
 		
 		class SWRenderer: public client::IRenderer, public client::IGameMapListener  {
 			friend class SWFlatMapRenderer;
+			friend class SWModelRenderer;
 			friend class SWMapRenderer;
 			
 			SWFeatureLevel featureLevel;
@@ -58,6 +61,7 @@ namespace spades {
 			std::shared_ptr<SWModelManager> modelManager;
 			
 			std::shared_ptr<SWImageRenderer> imageRenderer;
+			std::shared_ptr<SWModelRenderer> modelRenderer;
 			
 			std::shared_ptr<SWFlatMapRenderer> flatMapRenderer;
 			std::shared_ptr<SWMapRenderer> mapRenderer;
@@ -79,6 +83,12 @@ namespace spades {
 				Vector4 color;
 			};
 			std::vector<LongSprite> longSprites;
+			
+			struct Model {
+				Handle<SWModel> model;
+				client::ModelRenderParam param;
+			};
+			std::vector<Model> models;
 			
 			bool inited;
 			bool sceneUsedInThisFrame;
