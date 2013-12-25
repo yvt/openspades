@@ -24,6 +24,7 @@
 #include <Core/FileManager.h>
 #include <Core/IStream.h>
 #include <memory>
+#include <cstring>
 #include <Core/Exception.h>
 
 namespace spades {
@@ -90,7 +91,7 @@ namespace spades {
 				if(s->Read(buf, 16) < 16) {
 					SPRaise("Reading %s: file truncated", path.c_str());
 				}
-				if(strcmp(buf, "OpenSpadesFontFl")) {
+				if(std::strcmp(buf, "OpenSpadesFontFl")) {
 					SPRaise("Reading %s: font file corrupted", path.c_str());
 				}
 				
