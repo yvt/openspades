@@ -156,6 +156,8 @@ namespace spades {
 				
 				bool lastShift = false;
 				bool lastCtrl = false;
+				bool lastGui = false;
+				bool lastAlt = false;
 				
 				while(running && !rendererErrorOccured){
 					
@@ -196,6 +198,31 @@ namespace spades {
 							lastShift = false;
 						}
 					}
+					
+					if(modState & KMOD_GUI){
+						if(!lastGui){
+							view->KeyEvent("Meta", true);
+							lastGui = true;
+						}
+					}else{
+						if(lastGui){
+							view->KeyEvent("Meta", false);
+							lastGui = false;
+						}
+					}
+					
+					if(modState & KMOD_ALT){
+						if(!lastAlt){
+							view->KeyEvent("Alt", true);
+							lastAlt = true;
+						}
+					}else{
+						if(lastAlt){
+							view->KeyEvent("Alt", false);
+							lastAlt = false;
+						}
+					}
+					
 					
 					// TODO: support text inputing for cg_smp runner.
 					//       see SDLRunner.cpp and grep SDL_StartTextInput

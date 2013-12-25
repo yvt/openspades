@@ -180,6 +180,8 @@ namespace spades {
 				bool lastShift = false;
 				bool lastCtrl = false;
 				bool editing = false;
+				bool lastGui = false;
+				bool lastAlt = false;
 				
 				SPLog("Starting Client Loop");
 				
@@ -214,7 +216,7 @@ namespace spades {
 						}
 					}
 					
-					if(modState & (KMOD_SHIFT | KMOD_LSHIFT | KMOD_RSHIFT)){
+					if(modState & KMOD_SHIFT){
 						if(!lastShift){
 							view->KeyEvent("Shift", true);
 							lastShift = true;
@@ -225,6 +227,32 @@ namespace spades {
 							lastShift = false;
 						}
 					}
+					
+					
+					if(modState & KMOD_GUI){
+						if(!lastGui){
+							view->KeyEvent("Meta", true);
+							lastGui = true;
+						}
+					}else{
+						if(lastGui){
+							view->KeyEvent("Meta", false);
+							lastGui = false;
+						}
+					}
+					
+					if(modState & KMOD_ALT){
+						if(!lastAlt){
+							view->KeyEvent("Alt", true);
+							lastAlt = true;
+						}
+					}else{
+						if(lastAlt){
+							view->KeyEvent("Alt", false);
+							lastAlt = false;
+						}
+					}
+					
 					
 					bool ed = view->AcceptsTextInput();
 					if(ed && !editing) {

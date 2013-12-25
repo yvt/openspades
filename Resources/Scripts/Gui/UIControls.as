@@ -499,7 +499,8 @@ namespace spades {
 					}
 					return;
 				}
-				if(manager.IsControlPressed) {
+				if(manager.IsControlPressed or
+				   manager.IsMetaPressed /* for OSX; Cmd + [a-z] */) {
 					if(key == "a") {
 						SelectAll();
 						return;
@@ -528,7 +529,8 @@ namespace spades {
 			}
 			
 			void KeyPress(string text) {
-				if(!manager.IsControlPressed) {
+				if(!(manager.IsControlPressed or
+				     manager.IsMetaPressed)) {
 					Insert(text);
 				}
 			}
