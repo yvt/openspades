@@ -285,6 +285,14 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			SDL_Init(SDL_INIT_VIDEO);
 			try{
+				
+				{
+					SDL_version linked;
+					SDL_GetVersion(&linked);
+					SPLog("SDL Version: %d.%d.%d %s", linked.major, linked.minor, linked.patch,
+						  SDL_GetRevision());
+				}
+				
 				std::string caption;
 				{
 					caption = PACKAGE_STRING;
