@@ -390,7 +390,10 @@ namespace spades {
 			
 			{
 				
-				IntVector3 teamColor = world->GetTeam(world->GetLocalPlayer()->GetTeamId()).color;
+				IntVector3 teamColor =
+				world->GetLocalPlayer()->GetTeamId() >= 2 ?
+				IntVector3::Make(200, 200, 200) :
+				world->GetTeam(world->GetLocalPlayer()->GetTeamId()).color;
 				Vector4 teamColorF = ModifyColor(teamColor);
 				teamColorF *= alpha;
 				
