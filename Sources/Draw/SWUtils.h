@@ -27,6 +27,7 @@
 #include <Core/Debug.h>
 #include <Core/Settings.h>
 #include <array>
+#include <memory>
 
 namespace spades {
 	namespace draw {

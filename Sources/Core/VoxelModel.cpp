@@ -22,6 +22,7 @@
 #include "Exception.h"
 #include <algorithm>
 #include <vector>
+#include <cstring>
 #include "Debug.h"
 #include <ScriptBindings/ScriptManager.h>
 #include "FileManager.h"
