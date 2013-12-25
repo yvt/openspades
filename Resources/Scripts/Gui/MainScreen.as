@@ -157,7 +157,7 @@ namespace spades {
 		}
 		
 		void Closing() {
-			
+			shouldExit = true;
 		}
 		
 		bool WantsToBeClosed() {

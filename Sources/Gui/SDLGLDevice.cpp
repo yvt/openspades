@@ -125,6 +125,7 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 		
 		SDLGLDevice::SDLGLDevice(SDL_Window *s):
 		window(s) {
+			SPLog("starting SDLGLDevice");
 			
 			SDL_GetWindowSize(window, &w, &h);
 			context = SDL_GL_CreateContext(s);
@@ -142,8 +143,43 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 				SPRaise("GLEW error: %s",  glewGetErrorString(err));
 			}
 #endif
-			SPLog("SDLGLDevice created");
+			SPLog("GLEW initialized");
 			
+			SPLog("--- OpenGL Renderer Info ---");
+			const char *ret;
+			if((ret = (const char*)glGetString(GL_VENDOR)) != NULL) {
+				SPLog("Vendor: %s", ret);
+			}
+			if((ret = (const char*)glGetString(GL_RENDERER)) != NULL) {
+				SPLog("Name: %s", ret);
+			}
+			if((ret = (const char*)glGetString(GL_VERSION)) != NULL) {
+				SPLog("Version: %s", ret);
+			}
+			if((ret = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION)) != NULL) {
+				SPLog("Shading Language Version: %s", ret);
+			}
+			SPLog("--- Extensions ---");
+			if(glGetStringi) {
+				GLint cnt = 0;
+				glGetIntegerv(GL_NUM_EXTENSIONS, &cnt);
+				if(cnt <= 0) goto retrvFail;
+				for(GLint i = 0; i < cnt; i++) {
+					ret = (const char*)glGetStringi(GL_EXTENSIONS, i);
+					SPLog("%s", ret);
+				}
+			}else{
+			retrvFail:
+				if((ret = (const char*)glGetString(GL_EXTENSIONS)) != NULL) {
+					std::vector<std::string> strs = Split(ret, " ");
+					for(size_t i = 0; i < strs.size(); i++)
+						SPLog("%s", strs[i].c_str());
+				}else{
+					SPLog("no information");
+				}
+				
+			}
+			SPLog("------------------");
 			
 			CheckExistence(glFrontFace);
 			glFrontFace(GL_CW);
