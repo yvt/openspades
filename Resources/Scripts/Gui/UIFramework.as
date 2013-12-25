@@ -35,6 +35,8 @@ namespace spades {
 			float Time = 0.f;
 			bool IsControlPressed = false;
 			bool IsShiftPressed = false;
+			bool IsAltPressed = false;
+			bool IsMetaPressed = false;
 			
 			// IME (Input Method Editor) support
 			string EditingText;
@@ -143,6 +145,10 @@ namespace spades {
 				EditingText = "";
 				EditingStart = 0;
 				EditingLength = 0;
+				IsShiftPressed = false;
+				IsControlPressed = false;
+				IsAltPressed = false;
+				IsMetaPressed = false;
 			}
 			
 			void KeyEvent(string key, bool down) {
@@ -158,6 +164,12 @@ namespace spades {
 				}
 				if(key == "Control") {
 					IsControlPressed = down;
+				}
+				if(key == "Alt") {
+					IsAltPressed = down;
+				}
+				if(key == "Meta") {
+					IsMetaPressed = down;
 				}
 				if(key == "WheelUp") {
 					UIElement@ e = GetMouseActiveElement();

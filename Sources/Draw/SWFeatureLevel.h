@@ -39,6 +39,9 @@
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Debug.h>
 
+// X11 macro
+#undef None
+
 namespace spades {
 	namespace draw {
 		enum class SWFeatureLevel {

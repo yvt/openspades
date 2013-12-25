@@ -21,6 +21,7 @@
 #include "Bitmap.h"
 #include "IStream.h"
 #include <vector>
+#include <cstring>
 #include "Exception.h"
 #include "../Core/Debug.h"
 #include "Debug.h"
