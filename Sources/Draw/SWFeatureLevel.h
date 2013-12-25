@@ -20,9 +20,13 @@
 
 #pragma once
 
+#include <Core/CpuID.h>
+
+#if defined(__i386__) || defined(_M_IX86)
 #define ENABLE_MMX	0 // FIXME: move this to the proper place
 #define ENABLE_SSE	1 // FIXME: move this to the proper place
 #define ENABLE_SSE2	1 // FIXME: move this to the proper place
+#endif
 
 #if ENABLE_SSE
 #include <xmmintrin.h>

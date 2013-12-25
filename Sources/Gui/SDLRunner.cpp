@@ -45,7 +45,7 @@ SPADES_SETTING(r_depthBits, "16");
 SPADES_SETTING(r_vsync, "1");
 SPADES_SETTING(r_allowSoftwareRendering, "0");
 SPADES_SETTING(r_renderer, "gl");
-SPADES_SETTING(r_audioDriver, "openal");
+SPADES_SETTING(s_audioDriver, "openal");
 
 namespace spades {
 	namespace gui {
@@ -58,12 +58,12 @@ namespace spades {
 		}
 		
 		client::IAudioDevice *SDLRunner::CreateAudioDevice() {
-			if(EqualsIgnoringCase(r_audioDriver, "openal")) {
+			if(EqualsIgnoringCase(s_audioDriver, "openal")) {
 				return new audio::ALDevice();
-			}else if(EqualsIgnoringCase(r_audioDriver, "ysr")) {
+			}else if(EqualsIgnoringCase(s_audioDriver, "ysr")) {
 				return new audio::YsrDevice();
 			}else{
-				SPRaise("Unknown audio driver name: %s (openal or ysr expected)", r_audioDriver.CString());
+				SPRaise("Unknown audio driver name: %s (openal or ysr expected)", s_audioDriver.CString());
 			}
 		}
 		

@@ -35,6 +35,7 @@
 #include "Runner.h"
 #include <Client/GameMap.h>
 #include <Client/Client.h>
+#include <Core/CpuID.h>
 
 #include <Core/VoxelModel.h>
 #include <Draw/GLOptimizedVoxelModel.h>
@@ -210,6 +211,29 @@ int main(int argc, char ** argv)
 					 "OpenSpades will continue to run, but any critical events are not logged.", ex.what());
 		}
 		SPLog("Log Started.");
+		
+		{
+			spades::CpuID cpuid;
+			SPLog("---- CPU Information ----");
+			SPLog("Vendor ID: %s", cpuid.GetVendorId().c_str());
+			SPLog("Brand ID: %s", cpuid.GetBrand().c_str());
+			SPLog("Supports MMX: %s", cpuid.Supports(spades::CpuFeature::MMX)?"YES":"NO");
+			SPLog("Supports SSE: %s", cpuid.Supports(spades::CpuFeature::SSE)?"YES":"NO");
+			SPLog("Supports SSE2: %s", cpuid.Supports(spades::CpuFeature::SSE2)?"YES":"NO");
+			SPLog("Supports SSE3: %s", cpuid.Supports(spades::CpuFeature::SSE3)?"YES":"NO");
+			SPLog("Supports SSSE3: %s", cpuid.Supports(spades::CpuFeature::SSSE3)?"YES":"NO");
+			SPLog("Supports FMA: %s", cpuid.Supports(spades::CpuFeature::FMA)?"YES":"NO");
+			SPLog("Supports AVX: %s", cpuid.Supports(spades::CpuFeature::AVX)?"YES":"NO");
+			SPLog("Supports AVX2: %s", cpuid.Supports(spades::CpuFeature::AVX2)?"YES":"NO");
+			SPLog("Supports AVX512F: %s", cpuid.Supports(spades::CpuFeature::AVX512F)?"YES":"NO");
+			SPLog("Supports AVX512CD: %s", cpuid.Supports(spades::CpuFeature::AVX512CD)?"YES":"NO");
+			SPLog("Supports AVX512ER: %s", cpuid.Supports(spades::CpuFeature::AVX512ER)?"YES":"NO");
+			SPLog("Supports AVX512PF: %s", cpuid.Supports(spades::CpuFeature::AVX512PF)?"YES":"NO");
+			SPLog("Simultaneous Multithreading: %s", cpuid.Supports(spades::CpuFeature::SimultaneousMT)?"YES":"NO");
+			SPLog("Misc:");
+			SPLog("%s", cpuid.GetMiscInfo().c_str());
+			SPLog("-------------------------");
+		}
 		
 #if defined(RESDIR_DEFINED) && !NDEBUG
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(RESDIR, false));

@@ -42,8 +42,11 @@ private:
   inline void cb_connectButton_i(Fl_Return_Button*, void*);
   static void cb_connectButton(Fl_Return_Button*, void*);
   Fl_Group *launchMainScreenGroup;
-  inline void cb_Start_i(Fl_Return_Button*, void*);
-  static void cb_Start(Fl_Return_Button*, void*);
+public:
+  Fl_Return_Button *startButton;
+private:
+  inline void cb_startButton_i(Fl_Return_Button*, void*);
+  static void cb_startButton(Fl_Return_Button*, void*);
   Fl_Check_Button *bypassStartupCheck;
   inline void cb_bypassStartupCheck_i(Fl_Check_Button*, void*);
   static void cb_bypassStartupCheck(Fl_Check_Button*, void*);
@@ -52,9 +55,6 @@ public:
   Fl_Group *groupAbout;
   Fl_Help_View *aboutView;
 private:
-  Fl_Choice *msaaSelect;
-  inline void cb_msaaSelect_i(Fl_Choice*, void*);
-  static void cb_msaaSelect(Fl_Choice*, void*);
   Fl_Check_Button *fullscreenCheck;
   inline void cb_fullscreenCheck_i(Fl_Check_Button*, void*);
   static void cb_fullscreenCheck(Fl_Check_Button*, void*);
@@ -66,12 +66,20 @@ public:
 private:
   inline void cb_verticalSyncCheck_i(Fl_Check_Button*, void*);
   static void cb_verticalSyncCheck(Fl_Check_Button*, void*);
+public:
+  Fl_Choice *rendererSelect;
+private:
+  inline void cb_rendererSelect_i(Fl_Choice*, void*);
+  static void cb_rendererSelect(Fl_Choice*, void*);
   Fl_Spinner *polyInput;
   inline void cb_polyInput_i(Fl_Spinner*, void*);
   static void cb_polyInput(Fl_Spinner*, void*);
-  Fl_Light_Button *eaxCheck;
-  inline void cb_eaxCheck_i(Fl_Light_Button*, void*);
-  static void cb_eaxCheck(Fl_Light_Button*, void*);
+public:
+  Fl_Choice *audioSelect;
+private:
+  inline void cb_audioSelect_i(Fl_Choice*, void*);
+  static void cb_audioSelect(Fl_Choice*, void*);
+  Fl_Group *glRendererGroup;
 public:
   Fl_Light_Button *radiosityCheck;
 private:
@@ -102,11 +110,20 @@ public:
 private:
   inline void cb_particleSelect_i(Fl_Choice*, void*);
   static void cb_particleSelect(Fl_Choice*, void*);
+  Fl_Choice *msaaSelect;
+  inline void cb_msaaSelect_i(Fl_Choice*, void*);
+  static void cb_msaaSelect(Fl_Choice*, void*);
   Fl_Input *playerNameInput;
   inline void cb_playerNameInput_i(Fl_Input*, void*);
   static void cb_playerNameInput(Fl_Input*, void*);
   inline void cb_Advanced_i(Fl_Button*, void*);
   static void cb_Advanced(Fl_Button*, void*);
+public:
+  Fl_Group *swRendererGroup;
+  Fl_Choice *fastModeSelect;
+private:
+  inline void cb_fastModeSelect_i(Fl_Choice*, void*);
+  static void cb_fastModeSelect(Fl_Choice*, void*);
 public:
   Fl_Group *groupReport;
   Fl_Output *outputGLRenderer;
@@ -156,6 +173,7 @@ private:
   bool shaderHighCapable; 
   bool postFilterHighCapable; 
   bool particleHighCapable; 
+  bool glCapable; 
   void QuickConnectPressed();
 public:
   void LoadPrefs();

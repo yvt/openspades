@@ -23,11 +23,11 @@ void MainWindow::cb_connectButton(Fl_Return_Button* o, void* v) {
   ((MainWindow*)(o->parent()->parent()))->cb_connectButton_i(o,v);
 }
 
-void MainWindow::cb_Start_i(Fl_Return_Button*, void*) {
+void MainWindow::cb_startButton_i(Fl_Return_Button*, void*) {
   StartGamePressed();
 }
-void MainWindow::cb_Start(Fl_Return_Button* o, void* v) {
-  ((MainWindow*)(o->parent()->parent()))->cb_Start_i(o,v);
+void MainWindow::cb_startButton(Fl_Return_Button* o, void* v) {
+  ((MainWindow*)(o->parent()->parent()))->cb_startButton_i(o,v);
 }
 
 void MainWindow::cb_bypassStartupCheck_i(Fl_Check_Button*, void*) {
@@ -35,14 +35,6 @@ void MainWindow::cb_bypassStartupCheck_i(Fl_Check_Button*, void*) {
 }
 void MainWindow::cb_bypassStartupCheck(Fl_Check_Button* o, void* v) {
   ((MainWindow*)(o->parent()->parent()))->cb_bypassStartupCheck_i(o,v);
-}
-
-void MainWindow::cb_msaaSelect_i(Fl_Choice*, void*) {
-  MSAAEnabled();
-SavePrefs();
-}
-void MainWindow::cb_msaaSelect(Fl_Choice* o, void* v) {
-  ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_msaaSelect_i(o,v);
 }
 
 void MainWindow::cb_fullscreenCheck_i(Fl_Check_Button*, void*) {
@@ -66,6 +58,13 @@ void MainWindow::cb_verticalSyncCheck(Fl_Check_Button* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_verticalSyncCheck_i(o,v);
 }
 
+void MainWindow::cb_rendererSelect_i(Fl_Choice*, void*) {
+  SavePrefs();
+}
+void MainWindow::cb_rendererSelect(Fl_Choice* o, void* v) {
+  ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_rendererSelect_i(o,v);
+}
+
 void MainWindow::cb_polyInput_i(Fl_Spinner*, void*) {
   SavePrefs();
 }
@@ -73,11 +72,11 @@ void MainWindow::cb_polyInput(Fl_Spinner* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_polyInput_i(o,v);
 }
 
-void MainWindow::cb_eaxCheck_i(Fl_Light_Button*, void*) {
+void MainWindow::cb_audioSelect_i(Fl_Choice*, void*) {
   SavePrefs();
 }
-void MainWindow::cb_eaxCheck(Fl_Light_Button* o, void* v) {
-  ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_eaxCheck_i(o,v);
+void MainWindow::cb_audioSelect(Fl_Choice* o, void* v) {
+  ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_audioSelect_i(o,v);
 }
 
 void MainWindow::cb_radiosityCheck_i(Fl_Light_Button*, void*) {
@@ -126,6 +125,14 @@ void MainWindow::cb_particleSelect(Fl_Choice* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_particleSelect_i(o,v);
 }
 
+void MainWindow::cb_msaaSelect_i(Fl_Choice*, void*) {
+  MSAAEnabled();
+SavePrefs();
+}
+void MainWindow::cb_msaaSelect(Fl_Choice* o, void* v) {
+  ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_msaaSelect_i(o,v);
+}
+
 void MainWindow::cb_playerNameInput_i(Fl_Input*, void*) {
   SavePrefs();
 }
@@ -138,6 +145,13 @@ void MainWindow::cb_Advanced_i(Fl_Button*, void*) {
 }
 void MainWindow::cb_Advanced(Fl_Button* o, void* v) {
   ((MainWindow*)(o->parent()->parent()->parent()))->cb_Advanced_i(o,v);
+}
+
+void MainWindow::cb_fastModeSelect_i(Fl_Choice*, void*) {
+  SavePrefs();
+}
+void MainWindow::cb_fastModeSelect(Fl_Choice* o, void* v) {
+  ((MainWindow*)(o->parent()->parent()->parent()->parent()))->cb_fastModeSelect_i(o,v);
 }
 
 void MainWindow::cb_serverListbox_i(Fl_Browser*, void*) {
@@ -207,7 +221,7 @@ MainWindow::MainWindow(int W, int H, const char *L)
 }
 
 MainWindow::MainWindow()
-  : Fl_Window(0, 0, 615, 356, "OpenSpades Startup") {
+  : Fl_Window(0, 0, 616, 357, "OpenSpades Startup") {
   clear_flag(16);
   _MainWindow();
 }
@@ -237,9 +251,9 @@ this->when(FL_WHEN_RELEASE);
   quickConnectGroup->end();
 } // Fl_Group* quickConnectGroup
 { launchMainScreenGroup = new Fl_Group(5, 80, 605, 25);
-  { Fl_Return_Button* o = new Fl_Return_Button(475, 80, 135, 25, "Start Game");
-    o->callback((Fl_Callback*)cb_Start);
-  } // Fl_Return_Button* o
+  { startButton = new Fl_Return_Button(475, 80, 135, 25, "Start Game");
+    startButton->callback((Fl_Callback*)cb_startButton);
+  } // Fl_Return_Button* startButton
   { bypassStartupCheck = new Fl_Check_Button(5, 80, 465, 25, "Bypass this startup screen the next time OpenSpades starts");
     bypassStartupCheck->down_box(FL_DOWN_BOX);
     bypassStartupCheck->callback((Fl_Callback*)cb_bypassStartupCheck);
@@ -258,11 +272,6 @@ this->when(FL_WHEN_RELEASE);
     { Fl_Group* o = new Fl_Group(10, 150, 385, 70, "Video");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { msaaSelect = new Fl_Choice(270, 160, 115, 25, "AA:");
-        msaaSelect->down_box(FL_BORDER_BOX);
-        msaaSelect->callback((Fl_Callback*)cb_msaaSelect);
-        msaaSelect->when(FL_WHEN_CHANGED);
-      } // Fl_Choice* msaaSelect
       { fullscreenCheck = new Fl_Check_Button(20, 190, 100, 25, "Full Screen");
         fullscreenCheck->down_box(FL_DOWN_BOX);
         fullscreenCheck->callback((Fl_Callback*)cb_fullscreenCheck);
@@ -275,25 +284,29 @@ this->when(FL_WHEN_RELEASE);
         verticalSyncCheck->down_box(FL_DOWN_BOX);
         verticalSyncCheck->callback((Fl_Callback*)cb_verticalSyncCheck);
       } // Fl_Check_Button* verticalSyncCheck
+      { rendererSelect = new Fl_Choice(235, 160, 150, 25);
+        rendererSelect->down_box(FL_BORDER_BOX);
+        rendererSelect->callback((Fl_Callback*)cb_rendererSelect);
+      } // Fl_Choice* rendererSelect
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(400, 240, 205, 45, "Audio");
+    { Fl_Group* o = new Fl_Group(400, 150, 205, 80, "Audio");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { polyInput = new Fl_Spinner(545, 250, 50, 25, "Sources:");
+      { polyInput = new Fl_Spinner(545, 195, 50, 25, "Max Polyphonics:");
         polyInput->callback((Fl_Callback*)cb_polyInput);
         polyInput->when(FL_WHEN_CHANGED);
       } // Fl_Spinner* polyInput
-      { eaxCheck = new Fl_Light_Button(410, 250, 50, 25, "EAX");
-        eaxCheck->callback((Fl_Callback*)cb_eaxCheck);
-        eaxCheck->when(FL_WHEN_CHANGED);
-      } // Fl_Light_Button* eaxCheck
+      { audioSelect = new Fl_Choice(410, 160, 185, 25);
+        audioSelect->down_box(FL_BORDER_BOX);
+        audioSelect->callback((Fl_Callback*)cb_audioSelect);
+      } // Fl_Choice* audioSelect
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(10, 240, 385, 105, "Graphics");
-      o->box(FL_ENGRAVED_FRAME);
-      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { radiosityCheck = new Fl_Light_Button(20, 280, 170, 25, "Global Illumination");
+    { glRendererGroup = new Fl_Group(10, 240, 385, 105, "Graphics");
+      glRendererGroup->box(FL_ENGRAVED_FRAME);
+      glRendererGroup->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { radiosityCheck = new Fl_Light_Button(20, 310, 170, 25, "Global Illumination");
         radiosityCheck->callback((Fl_Callback*)cb_radiosityCheck);
         radiosityCheck->when(FL_WHEN_CHANGED);
       } // Fl_Light_Button* radiosityCheck
@@ -302,7 +315,7 @@ this->when(FL_WHEN_RELEASE);
         directLightSelect->callback((Fl_Callback*)cb_directLightSelect);
         directLightSelect->when(FL_WHEN_CHANGED);
       } // Fl_Choice* directLightSelect
-      { shaderSelect = new Fl_Choice(230, 310, 155, 25, "Shader Effects");
+      { shaderSelect = new Fl_Choice(265, 310, 120, 25, "Shader FX");
         shaderSelect->down_box(FL_BORDER_BOX);
         shaderSelect->callback((Fl_Callback*)cb_shaderSelect);
         shaderSelect->when(FL_WHEN_CHANGED);
@@ -316,12 +329,17 @@ this->when(FL_WHEN_RELEASE);
         postFilterSelect->down_box(FL_BORDER_BOX);
         postFilterSelect->callback((Fl_Callback*)cb_postFilterSelect);
       } // Fl_Choice* postFilterSelect
-      { particleSelect = new Fl_Choice(90, 250, 100, 25, "Particle");
+      { particleSelect = new Fl_Choice(90, 280, 100, 25, "Particle");
         particleSelect->down_box(FL_BORDER_BOX);
         particleSelect->callback((Fl_Callback*)cb_particleSelect);
       } // Fl_Choice* particleSelect
-      o->end();
-    } // Fl_Group* o
+      { msaaSelect = new Fl_Choice(90, 250, 100, 25, "AA:");
+        msaaSelect->down_box(FL_BORDER_BOX);
+        msaaSelect->callback((Fl_Callback*)cb_msaaSelect);
+        msaaSelect->when(FL_WHEN_CHANGED);
+      } // Fl_Choice* msaaSelect
+      glRendererGroup->end();
+    } // Fl_Group* glRendererGroup
     { Fl_Group* o = new Fl_Group(400, 150, 205, 70, "Game Options");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
@@ -336,6 +354,15 @@ this->when(FL_WHEN_RELEASE);
     { Fl_Button* o = new Fl_Button(415, 305, 170, 25, "Advanced Settings...");
       o->callback((Fl_Callback*)cb_Advanced);
     } // Fl_Button* o
+    { swRendererGroup = new Fl_Group(10, 240, 385, 105, "Graphics");
+      swRendererGroup->box(FL_ENGRAVED_BOX);
+      swRendererGroup->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { fastModeSelect = new Fl_Choice(120, 255, 125, 25, "Fast Mode");
+        fastModeSelect->down_box(FL_BORDER_BOX);
+        fastModeSelect->callback((Fl_Callback*)cb_fastModeSelect);
+      } // Fl_Choice* fastModeSelect
+      swRendererGroup->end();
+    } // Fl_Group* swRendererGroup
     o->end();
   } // Fl_Group* o
   { groupReport = new Fl_Group(10, 130, 595, 220, "System Report");

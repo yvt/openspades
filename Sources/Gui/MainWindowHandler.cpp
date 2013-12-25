@@ -75,6 +75,9 @@ SPADES_SETTING(r_physicalLighting, "");
 SPADES_SETTING(r_occlusionQuery, "");
 SPADES_SETTING(r_depthOfField, "");
 SPADES_SETTING(r_vsync, "");
+SPADES_SETTING(r_renderer, "");
+SPADES_SETTING(r_swUndersampling, "");
+SPADES_SETTING(s_audioDriver, "");
 
 SPADES_SETTING(cl_showStartupWindow, "-1");
 
@@ -239,6 +242,21 @@ void MainWindow::LoadPrefs() {
 	verticalSyncCheck->value(r_vsync ? 1 : 0);
 	
 	// --- graphics
+	swRendererGroup->hide();
+	glRendererGroup->hide();
+	rendererSelect->clear();
+	rendererSelect->add("Software");
+	if(glCapable)
+		rendererSelect->add("OpenGL");
+	if(spades::EqualsIgnoringCase(r_renderer, "sw")) {
+		swRendererGroup->show();
+		rendererSelect->value(0);
+	}else if(spades::EqualsIgnoringCase(r_renderer, "gl")) {
+		glRendererGroup->show();
+		rendererSelect->value(1);
+	}
+	
+	// --- GL graphics
 	postFilterSelect->clear();
 	postFilterSelect->add("Low");
 	postFilterSelect->add("Medium");
@@ -329,12 +347,37 @@ void MainWindow::LoadPrefs() {
 		}
 	}
 	
+	// --- SW graphics
+	fastModeSelect->clear();
+	fastModeSelect->add("1x");
+	fastModeSelect->add("2x");
+	fastModeSelect->add("4x");
+	switch((int)r_swUndersampling) {
+		case 2:
+			fastModeSelect->value(1);
+			break;
+		case 4:
+			fastModeSelect->value(2);
+			break;
+		default:
+			fastModeSelect->value(0);
+			break;
+	}
+	
 	// --- audio
 	polyInput->step(16.);
 	polyInput->range(32., 256.);
 	polyInput->value((int)s_maxPolyphonics);
 	
-	eaxCheck->value(s_eax ? 1 : 0);
+	audioSelect->clear();
+	audioSelect->add("OpenAL");
+	audioSelect->add("OpenAL + EAX");
+	audioSelect->add("YSR");
+	if(spades::EqualsIgnoringCase(s_audioDriver, "ysr")) {
+		audioSelect->value(2);
+	}else{
+		audioSelect->value(s_eax ? 1 : 0);
+	}
 	
 	// --- game
 	playerNameInput->value(cg_playerName.CString());
@@ -428,7 +471,7 @@ void MainWindow::CheckGLCapability() {
 		std::string err = SDL_GetError();
 		SPLog("SDL_SetVideoMode failed: %s", err.c_str());
 		msg = "<b>OpenGL/SDL couldn't be initialized. "
-						  "You cannot play OpenSpades.</b><br><br>"
+						  "Falling back to the software renderer.</b><br><br>"
 						  "<b>Message from SDL</b><br>"
 		+ err;
 		capable = false;
@@ -704,7 +747,7 @@ void MainWindow::CheckGLCapability() {
 		}else{
 			msg = "<b>Your video card/driver doesn't support "
 			"at least one of required OpenGL extensions/features."
-			 " You cannot play OpenSpades.</b><br>&nbsp;<br>" + msg;
+			 " Falling back to the software renderer.</b><br>&nbsp;<br>" + msg;
 		}
 		
 		SDL_GL_DeleteContext(context);
@@ -718,13 +761,14 @@ void MainWindow::CheckGLCapability() {
 	glInfoView->value(msg.c_str());
 	
 	
-	SPLog("System is OpenSpades capable: %s",
+	SPLog("OpenGL driver is OpenSpades capable: %s",
 		  capable ? "YES": "NO");
-	if(!capable) {
-		mainTab->value(groupReport);
-		connectButton->deactivate();
-		cl_showStartupWindow = -1;
-		bypassStartupCheck->deactivate();
+	glCapable = capable;
+	if(!glCapable) {
+		if(spades::EqualsIgnoringCase(r_renderer, "gl")){
+			SPLog("Switched to software renderer");
+			r_renderer = "sw";
+		}
 	}
 	
 	LoadPrefs();
@@ -769,6 +813,14 @@ void MainWindow::SavePrefs() {
 	}
 	
 	// --- graphics
+	switch(rendererSelect->value()) {
+		case 1:
+			r_renderer = "gl";
+			break;
+		case 0:
+			r_renderer = "sw";
+			break;
+	}
 	cg_blood = bloodCheck->value() ? 1 : 0;
 	switch(postFilterSelect->value()){
 		case 0:
@@ -867,14 +919,47 @@ void MainWindow::SavePrefs() {
 				break;
 		}
 	}
+	switch(fastModeSelect->value()){
+		case 0:
+			r_swUndersampling = 1;
+			break;
+		case 1:
+			r_swUndersampling = 2;
+			break;
+		case 2:
+			r_swUndersampling = 4;
+			break;
+	}
 	
 	// --- audio
 	s_maxPolyphonics = (int)polyInput->value();
-	s_eax = eaxCheck->value() ? 1 : 0;
+	switch(audioSelect->value()){
+		case 0:
+			s_audioDriver = "openal";
+			s_eax = 0;
+			break;
+		case 1:
+			s_audioDriver = "openal";
+			s_eax = 1;
+			break;
+		case 2:
+			s_audioDriver = "ysr";
+			s_eax = 1;
+			break;
+	}
 	
 	// --- game
 	cg_playerName = playerNameInput->value();
 	
+	swRendererGroup->hide();
+	glRendererGroup->hide();
+	if(spades::EqualsIgnoringCase(r_renderer, "sw")) {
+		swRendererGroup->show();
+		rendererSelect->value(0);
+	}else if(spades::EqualsIgnoringCase(r_renderer, "gl")) {
+		glRendererGroup->show();
+		rendererSelect->value(1);
+	}
 }
 
 void MainWindow::DisableMSAA() {

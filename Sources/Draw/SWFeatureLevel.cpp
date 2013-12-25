@@ -19,6 +19,7 @@
  */
 
 #include "SWFeatureLevel.h"
+#include <Core/CpuID.h>
 
 namespace spades {
 	namespace draw {
@@ -27,7 +28,16 @@ namespace spades {
 		
 #if ENABLE_SSE2
 		SWFeatureLevel DetectFeatureLevel() {
-			return SWFeatureLevel::SSE2;
+			CpuID cpuid;
+			if(cpuid.Supports(CpuFeature::SSE2))
+				return SWFeatureLevel::SSE2;
+			
+			// at least sse should be supported
+			return SWFeatureLevel::SSE;
+		}
+#elif ENABLE_SSE
+		SWFeatureLevel DetectFeatureLevel() {
+			return SWFeatureLevel::SSE;
 		}
 #else
 		SWFeatureLevel DetectFeatureLevel() {

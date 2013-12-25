@@ -7,7 +7,7 @@ decl {namespace spades { class Serverbrowser; class ServerAddress; }} {public gl
 
 widget_class MainWindow {
   label {OpenSpades Startup} open
-  xywh {631 252 615 356} type Double labelsize 12 align 80
+  xywh {426 303 616 357} type Double labelsize 12 align 80
   code0 {\#include <string>}
   code1 {\#include <vector>}
   class Fl_Window visible
@@ -34,7 +34,7 @@ widget_class MainWindow {
   Fl_Group launchMainScreenGroup {open
     private xywh {5 80 605 25}
   } {
-    Fl_Return_Button {} {
+    Fl_Return_Button startButton {
       label {Start Game}
       callback {StartGamePressed();}
       xywh {475 80 135 25}
@@ -64,12 +64,6 @@ widget_class MainWindow {
         label Video open
         private xywh {10 150 385 70} box ENGRAVED_FRAME align 5
       } {
-        Fl_Choice msaaSelect {
-          label {AA:}
-          callback {MSAAEnabled();
-SavePrefs();} open
-          private xywh {270 160 115 25} down_box BORDER_BOX when 1
-        } {}
         Fl_Check_Button fullscreenCheck {
           label {Full Screen}
           callback {SavePrefs();}
@@ -82,33 +76,36 @@ SavePrefs();} open
         } {}
         Fl_Check_Button verticalSyncCheck {
           label {Vertical Sync}
-          callback {SavePrefs();} selected
+          callback {SavePrefs();}
           xywh {150 190 110 25} down_box DOWN_BOX
         }
+        Fl_Choice rendererSelect {
+          callback {SavePrefs();} open
+          xywh {235 160 150 25} down_box BORDER_BOX
+        } {}
       }
       Fl_Group {} {
         label Audio open
-        private xywh {400 240 205 45} box ENGRAVED_FRAME align 5
+        private xywh {400 150 205 80} box ENGRAVED_FRAME align 5
       } {
         Fl_Spinner polyInput {
-          label {Sources:}
+          label {Max Polyphonics:}
           callback {SavePrefs();}
-          private xywh {545 250 50 25} when 1
+          private xywh {545 195 50 25} when 1
         }
-        Fl_Light_Button eaxCheck {
-          label EAX
-          callback {SavePrefs();}
-          private xywh {410 250 50 25} when 1
-        }
+        Fl_Choice audioSelect {
+          callback {SavePrefs();} open
+          xywh {410 160 185 25} down_box BORDER_BOX
+        } {}
       }
-      Fl_Group {} {
+      Fl_Group glRendererGroup {
         label Graphics open
         private xywh {10 240 385 105} box ENGRAVED_FRAME align 5
       } {
         Fl_Light_Button radiosityCheck {
           label {Global Illumination}
           callback {SavePrefs();}
-          xywh {20 280 170 25} when 1
+          xywh {20 310 170 25} when 1
         }
         Fl_Choice directLightSelect {
           label Lighting
@@ -118,11 +115,11 @@ SavePrefs();} open
           xywh {265 280 120 25} down_box BORDER_BOX when 1
         } {}
         Fl_Choice shaderSelect {
-          label {Shader Effects}
+          label {Shader FX}
           callback {if(shaderSelect->value() == 1)
 	DisableMSAA();
 SavePrefs();} open
-          xywh {230 310 155 25} down_box BORDER_BOX when 1
+          xywh {265 310 120 25} down_box BORDER_BOX when 1
         } {}
         Fl_Light_Button bloodCheck {
           label Blood
@@ -137,7 +134,13 @@ SavePrefs();} open
         Fl_Choice particleSelect {
           label Particle
           callback {SavePrefs();} open
-          xywh {90 250 100 25} down_box BORDER_BOX
+          xywh {90 280 100 25} down_box BORDER_BOX
+        } {}
+        Fl_Choice msaaSelect {
+          label {AA:}
+          callback {MSAAEnabled();
+SavePrefs();} open
+          private xywh {90 250 100 25} down_box BORDER_BOX when 1
         } {}
       }
       Fl_Group {} {
@@ -154,6 +157,16 @@ SavePrefs();} open
         label {Advanced Settings...}
         callback {OpenDetailConfig();}
         xywh {415 305 170 25}
+      }
+      Fl_Group swRendererGroup {
+        label Graphics open
+        xywh {10 240 385 105} box ENGRAVED_BOX align 5
+      } {
+        Fl_Choice fastModeSelect {
+          label {Fast Mode}
+          callback {SavePrefs();} open
+          xywh {120 255 125 25} down_box BORDER_BOX
+        } {}
       }
     }
     Fl_Group groupReport {
@@ -293,6 +306,8 @@ SavePrefs();} open
   } {}
   Function {StartGamePressed()} {open private return_type void
   } {}
+  decl {bool glCapable;} {selected private local
+  }
 } 
 
 data aboutText {public local filename {AboutText.html}
