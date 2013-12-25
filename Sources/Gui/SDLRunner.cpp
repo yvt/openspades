@@ -276,6 +276,10 @@ namespace spades {
 				if(r_fullscreen)
 					sdlFlags |= SDL_WINDOW_FULLSCREEN;
 				
+#ifdef __MACOSX__
+				if(!r_fullscreen)
+					sdlFlags |= SDL_WINDOW_BORDERLESS;
+#endif
 				
 				SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 				SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, r_depthBits);
