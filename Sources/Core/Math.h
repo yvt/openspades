@@ -23,6 +23,7 @@
 #include <vector>
 #include <math.h>
 #include <string>
+#include <stdint.h>		//uint32_t --> msvc
 
 #ifdef _MSC_VER
 #define isnan _isnan
@@ -842,6 +843,7 @@ namespace spades {
 	std::vector<std::string> Split(const std::string&, const std::string& sep);
 
 	std::vector<std::string> SplitIntoLines(const std::string&);
+	std::string EscapeControlCharacters(const std::string& str);
 	
 	uint32_t GetCodePointFromUTF8String(const std::string&, size_t start = 0, size_t *outNumBytes = nullptr);
 

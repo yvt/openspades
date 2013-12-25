@@ -1365,10 +1365,12 @@ namespace spades {
 			sprintf(buf, "%s %s\n",
 					timeStr.c_str(), str.c_str());
 			
-			printf("%s", buf);
+			std::string outStr = EscapeControlCharacters(buf);
+			
+			printf("%s", outStr.c_str());
 			
 			if(logStream) {
-				logStream->Write(buf);
+				logStream->Write(outStr);
 				logStream->Flush();
 			}
 		}
@@ -2195,7 +2197,7 @@ namespace spades {
 			
 			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 1));
 			img = renderer->RegisterImage("Gfx/White.tga");
-			renderer->DrawImage(img, AABB2(0, 0, siz.x, siz.y));
+			renderer->DrawImage(img, AABB2(0, 0, scrSize.x, scrSize.y));
 			
 			renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1.));
 			img = renderer->RegisterImage("Gfx/Title/Logo.png");

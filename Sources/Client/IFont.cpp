@@ -24,6 +24,7 @@
 #include <Core/FileManager.h>
 #include <Core/IStream.h>
 #include <memory>
+#include <cstring>
 #include <Core/Exception.h>
 
 namespace spades {
@@ -90,7 +91,7 @@ namespace spades {
 				if(s->Read(buf, 16) < 16) {
 					SPRaise("Reading %s: file truncated", path.c_str());
 				}
-				if(strcmp(buf, "OpenSpadesFontFl")) {
+				if(std::strcmp(buf, "OpenSpadesFontFl")) {
 					SPRaise("Reading %s: font file corrupted", path.c_str());
 				}
 				
@@ -113,8 +114,8 @@ namespace spades {
 					SPRaise("Reading %s: file truncated: trying to read %d byte(s)", path.c_str(), (int)siz);
 				}
 				
-				for(const auto& i: infos) {
-					glyphs[i.unicode] = i;
+				for(auto i = infos.begin(); i != infos.end(); ++i) {
+					glyphs[i->unicode] = *i;
 				}
 				
 				// remove .ospfont and add .tga
@@ -136,12 +137,12 @@ namespace spades {
 			
 			FallbackFontManager() {
 				auto files = FileManager::EnumFiles("Gfx/Fonts");
-				for(const auto& file: files) {
-					if(file.rfind(".ospfont") != file.size() - 8) {
+				for(auto file = files.begin(); file != files.end(); ++file) {
+					if(file->rfind(".ospfont") != file->size() - 8) {
 						continue;
 					}
 					
-					std::string path = "Gfx/Fonts/" + file;
+					std::string path = "Gfx/Fonts/" + *file;
 					auto fnt = new FallbackFont(path);
 					fonts.push_back(fnt);
 				}
@@ -164,8 +165,8 @@ namespace spades {
 		FallbackFontRenderer::FallbackFontRenderer(IRenderer *renderer,
 												   FallbackFontManager *manager):
 		renderer(renderer), manager(manager){
-			for(auto* font: manager->fonts) {
-				auto imgPath = font->imagePath;
+			for(auto font = manager->fonts.begin(); font != manager->fonts.end(); ++font) {
+				auto imgPath = (*font)->imagePath;
 				auto *img = renderer->RegisterImage(imgPath.c_str()); // addref'd
 				images.push_back(img);
 			}
@@ -173,8 +174,8 @@ namespace spades {
 		}
 		
 		FallbackFontRenderer::~FallbackFontRenderer() {
-			for(auto* img: images) {
-				img->Release();
+			for(auto img = images.begin(); img != images.end(); ++img) {
+				(*img)->Release();
 			}
 			images.clear();
 		}

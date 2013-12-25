@@ -28,7 +28,7 @@
 #include "MainScreen.h"
 #include <Core/Settings.h>
 #include <algorithm>
-
+#include <cctype>
 #include "MainWindow.h" // for credits
 
 SPADES_SETTING(cl_serverListUrl, "http://services.buildandshoot.com/serverlist.json");

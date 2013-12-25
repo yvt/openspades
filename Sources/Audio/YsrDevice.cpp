@@ -44,7 +44,7 @@ namespace spades {
 			struct SpatializeResult;
 			struct YVec3 {
 				float x, y, z;
-				YVec3() = default;
+				YVec3() : x(0), y(0), z(0) {;}
 				YVec3(const Vector3& v):
 				x(v.x), y(v.y), z(v.z) {}
 				operator Vector3() const {
@@ -198,7 +198,7 @@ namespace spades {
 				SPLog("'%s' loaded", s_ysrDriver.CString());
 			}
 			
-			using InitializeFunc = const char *(*)(const char *magic, uint32_t version, YsrContext *);
+			typedef const char *(*InitializeFunc)(const char *magic, uint32_t version, YsrContext *);
 			auto initFunc = reinterpret_cast<InitializeFunc>(library->GetSymbol("YsrInitialize"));
 			const char *a = (*initFunc)("OpenYsrSpades", 1, &ctx);
 			if(a) {
@@ -353,7 +353,7 @@ namespace spades {
 					SDL_CloseAudioDevice(id);
 			}
 			
-			decltype(id) operator()() const {
+			SDL_AudioDeviceID operator()() const {
 				return id;
 			}
 		};
@@ -377,8 +377,7 @@ namespace spades {
 			spec.samples = (int)s_ysrBufferSize;
 			spec.channels = 2;
 			
-			sdlAudioDevice = decltype(sdlAudioDevice)
-			(new SdlAudioDevice(nullptr, SDL_FALSE,
+			sdlAudioDevice = std::unique_ptr<SdlAudioDevice>(new SdlAudioDevice(nullptr, SDL_FALSE,
 								spec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE));
 			
 			YsrContext::InitParam param;
@@ -405,8 +404,8 @@ namespace spades {
 		}
 		
 		YsrDevice::~YsrDevice() {
-			for(auto& chunk: chunks){
-				chunk.second->Release();
+			for(auto chunk = chunks.begin(); chunk != chunks.end(); ++chunk){
+				chunk->second->Release();
 			}
 			if(this->gameMap)
 				this->gameMap->Release();
