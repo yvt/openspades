@@ -21,6 +21,7 @@
 #include <OpenSpades.h>
 #include "SDLGLDevice.h"
 #include <memory>
+#include <cstring>
 
 #include "SDLRunner.h"
 

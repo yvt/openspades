@@ -22,6 +22,7 @@
 #include <Client/GameMap.h>
 #include <Core/Bitmap.h>
 #include <array>
+#include <cstring>
 #include "SWRenderer.h"
 #include <Core/MiniHeap.h>
 #include <Core/Settings.h>
