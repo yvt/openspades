@@ -67,6 +67,43 @@ void setIcon( HWND hWnd )
 	}
 }
 
+#include <DbgHelp.h>
+
+LONG WINAPI UnhandledExceptionProc( LPEXCEPTION_POINTERS lpEx )
+{
+	typedef BOOL (WINAPI* PDUMPFN)( HANDLE hProcess, DWORD ProcessId, HANDLE hFile, MINIDUMP_TYPE DumpType, PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam, PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam, PMINIDUMP_CALLBACK_INFORMATION CallbackParam );
+	HMODULE hLib = LoadLibrary( "DbgHelp.dll" );
+	PDUMPFN pMiniDumpWriteDump = (PDUMPFN)GetProcAddress(hLib, "MiniDumpWriteDump");
+
+	static char buf[MAX_PATH+120] = {0};	//this is our display buffer.
+	if( pMiniDumpWriteDump ) {
+		static char fullBuf[MAX_PATH+120] = {0};
+		if( SUCCEEDED(SHGetFolderPath(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0, buf)) ){	//max length = MAX_PATH (temp abuse this buffer space)
+			strcat_s( buf, "\\" );	// ensure we end with a slash.
+		} else {
+			buf[0] = 0;	//empty it, the file will now end up in the working directory :(
+		}
+		sprintf( fullBuf, "%sOpenSpadesCrash%d.dmp", buf, GetTickCount() );		//some sort of randomization.
+		HANDLE hFile = CreateFile( fullBuf, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ); 
+		if( hFile != INVALID_HANDLE_VALUE ) {
+			MINIDUMP_EXCEPTION_INFORMATION mdei = {0};
+			mdei.ThreadId = GetCurrentThreadId();
+			mdei.ExceptionPointers = lpEx;
+			mdei.ClientPointers = TRUE;
+			MINIDUMP_TYPE mdt = MiniDumpNormal;
+			BOOL rv = pMiniDumpWriteDump( GetCurrentProcess(), GetCurrentProcessId(), hFile, mdt, (lpEx != 0) ? &mdei : 0, 0, 0 );
+			CloseHandle( hFile );
+			sprintf_s( buf, "Something went horribly wrong, please send the file \n%s\nfor analysis.", fullBuf );
+		} else {
+			sprintf_s( buf, "Something went horribly wrong,\ni even failed to store information about the problem... (0x%08x)", lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff );
+		}
+	} else {
+		sprintf_s( buf, "Something went horribly wrong,\ni even failed to retrieve information about the problem... (0x%08x)", lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff );
+	}
+	MessageBoxA( NULL, buf, "Oops, we crashed...", MB_OK | MB_ICONERROR );
+	ExitProcess( -1 );
+	//return EXCEPTION_EXECUTE_HANDLER;
+}
 #endif
 
 //fltk
@@ -145,7 +182,9 @@ namespace spades {
 
 int main(int argc, char ** argv)
 {
-	
+#ifdef WIN32
+	SetUnhandledExceptionFilter( UnhandledExceptionProc );
+#endif
 	// Enable FPE
 #if 0
 #ifdef __APPLE__

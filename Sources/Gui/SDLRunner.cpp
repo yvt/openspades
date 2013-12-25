@@ -156,20 +156,17 @@ namespace spades {
 				case SDL_TEXTEDITING:
 					view->TextEditingEvent(event.edit.text, event.edit.start, event.edit.length);
 					break;
-					/* TODO: activation/deactivation
-				case SDL_ACTIVEEVENT:
-					if( event.active.state & (SDL_APPACTIVE|SDL_APPINPUTFOCUS) ) {		//any of the 2 is good
-						if(event.active.gain){
-							SDL_ShowCursor(0);
-							SDL_WM_GrabInput( SDL_GRAB_ON );
-							mActive = true;
-						}else{
-							SDL_WM_GrabInput( SDL_GRAB_OFF );
-							mActive = false;
-							SDL_ShowCursor(1);
-						}
+				case SDL_WINDOWEVENT:
+					if(event.window.type ==  SDL_WINDOWEVENT_FOCUS_GAINED){
+						SDL_ShowCursor(0);
+						SDL_SetRelativeMouseMode( SDL_TRUE );
+						mActive = true;
+					}else if( event.window.type ==  SDL_WINDOWEVENT_FOCUS_LOST ) {
+						SDL_SetRelativeMouseMode( SDL_FALSE );
+						mActive = false;
+						SDL_ShowCursor(1);
 					}
-					break;*/
+					break;
 				default:
 					break;
 			}
@@ -408,6 +405,10 @@ namespace spades {
 				if(r_fullscreen)
 					sdlFlags |= SDL_WINDOW_FULLSCREEN;
 				
+#ifdef __MACOSX__
+				if(!r_fullscreen)
+					sdlFlags |= SDL_WINDOW_BORDERLESS;
+#endif
 				
 				
 				int w = r_videoWidth;
