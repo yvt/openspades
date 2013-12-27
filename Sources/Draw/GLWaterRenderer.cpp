@@ -638,6 +638,11 @@ namespace spades {
 					Vertex v;
 					v.x = (float)(x) * meshSizeInv;
 					v.y = (float)(y) * meshSizeInv;
+					
+					// higher density near the camera
+					v.x *= v.x * v.x;
+					v.y *= v.y * v.y;
+					
 					vertices.push_back(v);
 				}
 			}
