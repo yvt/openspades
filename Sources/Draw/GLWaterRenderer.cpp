@@ -38,7 +38,7 @@
 
 SPADES_SETTING(r_water, "2");
 SPADES_SETTING(r_maxAnisotropy, "8");
-SPADES_SETTING(r_occlusionQuery, "1");
+SPADES_SETTING(r_occlusionQuery, "0");
 
 namespace spades {
 	namespace draw {
@@ -638,6 +638,11 @@ namespace spades {
 					Vertex v;
 					v.x = (float)(x) * meshSizeInv;
 					v.y = (float)(y) * meshSizeInv;
+					
+					// higher density near the camera
+					v.x *= v.x * v.x;
+					v.y *= v.y * v.y;
+					
 					vertices.push_back(v);
 				}
 			}
