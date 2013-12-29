@@ -626,7 +626,9 @@ namespace spades {
 			
 			StandardPreferenceLayouter layouter(this);
 			layouter.AddHeading("Player Information");
-			layouter.AddInputField("Player Name", "cg_playerName", not options.GameActive).MaxLength = 15;
+			ConfigField@ nameField = layouter.AddInputField("Player Name", "cg_playerName", not options.GameActive);
+			nameField.MaxLength = 15;
+			nameField.DenyNonAscii = true;
 			
 			layouter.AddHeading("Effects");
 			layouter.AddToggleField("Blood", "cg_blood");
@@ -636,6 +638,9 @@ namespace spades {
 			layouter.AddHeading("Feedbacks");
 			layouter.AddToggleField("Chat Notify Sounds", "cg_chatBeep");
 			layouter.AddToggleField("Hit Indicator", "cg_hitIndicator");
+			
+			//layouter.AddHeading("AoS 0.75/0.76 Compatibility");
+			//layouter.AddToggleField("Compatible Charset", "cg_legacyCharset");
 			
 			layouter.AddHeading("Misc");
 			layouter.AddSliderField("Field of View", "cg_fov", 30, 90, 1,
