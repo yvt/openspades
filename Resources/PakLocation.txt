@@ -10,6 +10,15 @@ non-opensource materials and they seem too large to include in the git tree.
 
 
 
+unifont (Generic Unicode Font)
+------------------------------
+
+You can get the Unicode font pak from:
+
+http://yvt.jp/files/programs/osppaks/font-unifont.pak
+
+
+
 M+ BITMAP FONTS (Japanese Font)
 -------------------------------
 
