@@ -1840,7 +1840,7 @@ int main(int argc, char **argv) {
 	
 	char32_t currentChar = 0;
 	int dwidth;
-	int size;
+	int size = 16;
 	
 	std::string lineBuffer;
 	while(!std::cin.eof()) {
@@ -1854,9 +1854,11 @@ int main(int argc, char **argv) {
 		
 		if(cmd == "STARTCHAR") {
 			auto hexCode = lineBuffer.substr(firstPartIndex + 1);
-			
-			currentChar = decoder->Decode(hexCode);
-			
+			if(hexCode.find("U+") == 0){
+				currentChar = std::stoi(hexCode.substr(2), nullptr, 16);
+			}else{
+				currentChar = decoder->Decode(hexCode);
+			}
 			//char buf[32];
 			//std::cerr << hexCode << " -> UTF " << currentChar << std::endl;
 		}else if(cmd == "DWIDTH") {
