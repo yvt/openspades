@@ -846,6 +846,38 @@ namespace spades {
 	std::string EscapeControlCharacters(const std::string& str);
 	
 	uint32_t GetCodePointFromUTF8String(const std::string&, size_t start = 0, size_t *outNumBytes = nullptr);
+	template<typename Iterator>
+	static Iterator CodePointToUTF8(Iterator output, uint32_t cp) {
+		if(cp < 0x80) {
+			*(output++) = static_cast<char>(cp);
+		}else if(cp < 0x800) {
+			*(output++) = static_cast<char>((cp>>6) | 0xc0);
+			*(output++) = static_cast<char>((cp&0x3f) | 0x80);
+		}else if(cp < 0x10000) {
+			*(output++) = static_cast<char>((cp>>12) | 0xe0);
+			*(output++) = static_cast<char>(((cp>>6)&0x3f) | 0x80);
+			*(output++) = static_cast<char>((cp&0x3f) | 0x80);
+		}else if(cp < 0x200000) {
+			*(output++) = static_cast<char>((cp>>18) | 0xf0);
+			*(output++) = static_cast<char>(((cp>>12)&0x3f) | 0x80);
+			*(output++) = static_cast<char>(((cp>>6)&0x3f) | 0x80);
+			*(output++) = static_cast<char>((cp&0x3f) | 0x80);
+		}else if(cp < 0x4000000) {
+			*(output++) = static_cast<char>((cp>>24) | 0xf8);
+			*(output++) = static_cast<char>(((cp>>18)&0x3f) | 0x80);
+			*(output++) = static_cast<char>(((cp>>12)&0x3f) | 0x80);
+			*(output++) = static_cast<char>(((cp>>6)&0x3f) | 0x80);
+			*(output++) = static_cast<char>((cp&0x3f) | 0x80);
+		}else{
+			*(output++) = static_cast<char>((cp>>30) | 0xfc);
+			*(output++) = static_cast<char>(((cp>>24)&0x3f) | 0x80);
+			*(output++) = static_cast<char>(((cp>>18)&0x3f) | 0x80);
+			*(output++) = static_cast<char>(((cp>>12)&0x3f) | 0x80);
+			*(output++) = static_cast<char>(((cp>>6)&0x3f) | 0x80);
+			*(output++) = static_cast<char>((cp&0x3f) | 0x80);
+		}
+		return output;
+	}
 
 	std::string TrimSpaces(const std::string&);
 	

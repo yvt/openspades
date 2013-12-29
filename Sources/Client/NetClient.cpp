@@ -39,11 +39,16 @@
 #include "TCGameMode.h"
 #include <Core/Settings.h>
 #include <enet/enet.h>
+#include <Core/CP437.h>
 
 SPADES_SETTING(cg_protocolVersion, "3");
+SPADES_SETTING(cg_legacyCharset, "1");
 
 namespace spades {
 	namespace client {
+		
+		static const char UtfSign = -1;
+		
 		enum{
 			BLUE_FLAG = 0,
 			GREEN_FLAG = 1,
@@ -89,6 +94,30 @@ namespace spades {
 			PacketTypeVersionSend = 34, 	// C2S
 
 		};
+		
+		static std::string EncodeString(std::string str) {
+			auto str2 = CP437::Encode(str, -1);
+			if(str2.find(-1) != std::string::npos) {
+				// some fallbacks; always use UTF8
+				str.insert(0, &UtfSign, 1);
+			}else{
+				if(cg_legacyCharset) {
+					str = str2;
+				}
+			}
+			return str;
+		}
+		
+		static std::string DecodeString(std::string s) {
+			if(s.size() > 0 && s[0] == UtfSign){
+				return s.substr(1);
+			}
+			if(cg_legacyCharset) {
+				return CP437::Decode(s);
+			}
+			return s;
+		}
+		
 		class NetPacketReader {
 			std::vector<char> data;
 			size_t pos;
@@ -189,12 +218,16 @@ namespace spades {
 			std::string ReadString(size_t siz){
 				// convert to C string once so that
 				// null-chars are removed
-				return ReadData(siz).c_str(); // TODO: decode
+				std::string s = ReadData(siz).c_str();
+				s = DecodeString(s);
+				return s;
 			}
 			std::string ReadRemainingString() {
 				// convert to C string once so that
 				// null-chars are removed
-				return ReadRemainingData().c_str(); // TODO: decode
+				std::string s = ReadRemainingData().c_str();
+				s = DecodeString(s);
+				return s;
 			}
 			
 			void DumpDebug() {
@@ -256,16 +289,15 @@ namespace spades {
 				Write((uint8_t)v.x);
 			}
 			
-			//lm: http://www.unicode.org/Public/MAPPINGS/VENDORS/MISC/IBMGRAPH.TXT
 			void Write(std::string str){
-				// TODO: encode from utf-8 to cp437
+				str = EncodeString(str);
 				data.insert(data.end(),
 							str.begin(),
 							str.end());
 			}
 			
 			void Write(std::string str, size_t fillLen){
-				// TODO: encode from utf-8 to cp437
+				str = EncodeString(str);
 				Write(str.substr(0, fillLen));
 				size_t sz = str.size();
 				while(sz < fillLen){

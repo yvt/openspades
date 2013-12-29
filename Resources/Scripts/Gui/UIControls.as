@@ -258,6 +258,7 @@ namespace spades {
 			int MarkPosition = 0;
 			int CursorPosition = 0;
 			int MaxLength = 255;
+			bool DenyNonAscii = false;
 			
 			private string text;
 			private FieldCommand@[] history;
@@ -289,6 +290,18 @@ namespace spades {
 			private void EraseUndoHistory() {
 				history.length = 0;
 				historyPos = 0;
+			}
+			
+			private bool CheckCharType(string s) {
+				if(DenyNonAscii) {
+					for(uint i = 0, len = s.length; i < len; i++) {
+						int c = s[i];
+						if((c & 0x80) != 0) {
+							return false;
+						}
+					}
+				}
+				return true;
 			}
 			
 			void OnChanged() {
@@ -327,6 +340,9 @@ namespace spades {
 					return Text.substr(SelectionStart, SelectionLength);
 				}
 				set {
+					if(!CheckCharType(value)) {
+						return;
+					}
 					FieldCommand cmd;
 					cmd.oldString = this.SelectedText;
 					if(cmd.oldString == value) return; // no change
@@ -458,6 +474,9 @@ namespace spades {
 			}
 			
 			void Insert(string text) {
+				if(!CheckCharType(text)) {
+					return;
+				}
 				string oldText = SelectedText;
 				SelectedText = text;
 				
@@ -476,7 +495,8 @@ namespace spades {
 					BackSpace();
 				}else if(key == "Left") {
 					if(Manager.IsShiftPressed) {
-						CursorPosition = ClampCursorPosition(CursorPosition - 1);
+						int cIdx = GetCharIndexForString(Text, CursorPosition);
+						CursorPosition = ClampCursorPosition(GetByteIndexForString(Text, cIdx - 1));
 					}else {
 						if(SelectionLength == 0) {
 							int cIdx = GetCharIndexForString(Text, CursorPosition);
@@ -488,7 +508,8 @@ namespace spades {
 					return;
 				}else if(key == "Right") {
 					if(Manager.IsShiftPressed) {
-						CursorPosition = ClampCursorPosition(CursorPosition + 1);
+						int cIdx = GetCharIndexForString(Text, CursorPosition);
+						CursorPosition = ClampCursorPosition(GetByteIndexForString(Text, cIdx + 1));
 					}else {
 						if(SelectionLength == 0) {
 							int cIdx = GetCharIndexForString(Text, CursorPosition);
