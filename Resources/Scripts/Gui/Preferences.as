@@ -356,6 +356,10 @@ namespace spades {
 					config = "RightMouseButton";
 				}else if(button == spades::ui::MouseButton::MiddleMouseButton) {
 					config = "MiddleMouseButton";
+				}else if(button == spades::ui::MouseButton::MouseButton4) {
+					config = "MouseButton4";
+				}else if(button == spades::ui::MouseButton::MouseButton5) {
+					config = "MouseButton5";
 				}
 				KeyBound(this);
 				@Manager.ActiveElement = null;
