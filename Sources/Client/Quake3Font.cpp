@@ -24,17 +24,24 @@
 
 namespace spades {
 	namespace client {
-		Quake3Font::Quake3Font(IRenderer *r, IImage *tex, const int *mp, int gh, float sw)
+		Quake3Font::Quake3Font(IRenderer *r, IImage *tex, const int *mp, int gh, float sw,
+							   bool extended)
 			:IFont(r), renderer(r), tex(tex),
 			glyphHeight(gh), spaceWidth(sw)
 		{
 			SPADES_MARK_FUNCTION();
 			
 			tex->AddRef();
-			for(int i = 0; i < 128; i++){
+			for(int i = 0; i < (extended ? 256 : 128); i++){
 				int x = *(mp++);
 				int y = *(mp++);
 				int w = *(mp++);
+				int adv;
+				if(extended) {
+					adv = *(mp++);
+				}else{
+					adv = w;
+				}
 				
 				GlyphInfo info;
 				if(w == -1){
@@ -42,7 +49,7 @@ namespace spades {
 					glyphs.push_back(info);
 					continue;
 				}
-				if(w == PROP_SPACE_WIDTH){
+				if(adv == PROP_SPACE_WIDTH){
 					info.type = Space;
 					glyphs.push_back(info);
 					continue;
@@ -50,6 +57,7 @@ namespace spades {
 				
 				info.type = Image;
 				info.imageRect = AABB2(x, y, w, gh);
+				info.advance = adv;
 				
 				glyphs.push_back(info);
 			}
@@ -77,7 +85,7 @@ namespace spades {
 				uint32_t ch = GetCodePointFromUTF8String(txt, i, &chrLen);
 				SPAssert(chrLen > 0);
 				i += chrLen;
-				if(ch >= 128) {
+				if(ch >= static_cast<uint32_t>(glyphs.size())) {
 					goto fallback;
 				}
 				
@@ -89,7 +97,6 @@ namespace spades {
 					continue;
 				}
 				
-				SPAssert(ch < 128);
 				{
 					const GlyphInfo& info = glyphs[ch];
 					
@@ -98,7 +105,7 @@ namespace spades {
 					else if(info.type == Space){
 						x += spaceWidth;
 					}else if(info.type == Image ) {
-						x += info.imageRect.GetWidth();
+						x += info.advance;
 					}
 					
 					if(x > w){
@@ -134,7 +141,7 @@ namespace spades {
 				uint32_t ch = GetCodePointFromUTF8String(txt, i, &chrLen);
 				SPAssert(chrLen > 0);
 				i += chrLen;
-				if(ch >= 128) {
+				if(ch >= static_cast<uint32_t>(glyphs.size())) {
 					goto fallback;
 				}
 				
@@ -146,7 +153,6 @@ namespace spades {
 				}
 				
 				{
-					SPAssert(ch >= 0); SPAssert(ch < 128);
 					const GlyphInfo& info = glyphs[ch];
 					
 					if(info.type == Invalid)
@@ -156,7 +162,7 @@ namespace spades {
 					}else if(info.type == Image ) {
 						AABB2 rt(x * scale + offset.x, y * scale + offset.y, info.imageRect.GetWidth() * scale, info.imageRect.GetHeight() * scale);
 						renderer->DrawImage(tex, rt, info.imageRect);
-						x += info.imageRect.GetWidth();
+						x += info.advance;
 					}
 				}
 				continue;

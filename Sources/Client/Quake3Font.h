@@ -37,7 +37,7 @@ namespace spades {
 			struct GlyphInfo {
 				GlyphType type;
 				AABB2 imageRect;
-				
+				float advance;
 			};
 			
 			IRenderer *renderer;
@@ -54,7 +54,8 @@ namespace spades {
 					   IImage *texture,
 					   const int *map,
 					   int glyphHeight,
-					   float spaceWidth);
+					   float spaceWidth,
+					   bool extended = false);
 			
 			virtual Vector2 Measure(const std::string&);
 			virtual void Draw(const std::string&,
