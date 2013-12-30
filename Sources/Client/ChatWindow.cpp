@@ -36,15 +36,15 @@ namespace spades {
 		client(cli), renderer(rend),
 		font(fnt), killfeed(killfeed){
 			firstY = 0.f;
-			mKillImages.push_back( renderer->RegisterImage("Killfeed/a-Rifle.png") );
-			mKillImages.push_back( renderer->RegisterImage("Killfeed/b-SMG.png") );
-			mKillImages.push_back( renderer->RegisterImage("Killfeed/c-Shotgun.png") );
-			mKillImages.push_back( renderer->RegisterImage("Killfeed/d-Headshot.png") );
-			mKillImages.push_back( renderer->RegisterImage("Killfeed/e-Melee.png") );
-			mKillImages.push_back( renderer->RegisterImage("Killfeed/f-Grenade.png") );
-			mKillImages.push_back( renderer->RegisterImage("Killfeed/g-Falling.png") );
-			mKillImages.push_back( renderer->RegisterImage("Killfeed/h-Teamchange.png") );
-			mKillImages.push_back( renderer->RegisterImage("Killfeed/i-Classchange.png") );
+			mKillImages.push_back( renderer->RegisterImage("Gfx/Killfeed/a-Rifle.png") );
+			mKillImages.push_back( renderer->RegisterImage("Gfx/Killfeed/b-SMG.png") );
+			mKillImages.push_back( renderer->RegisterImage("Gfx/Killfeed/c-Shotgun.png") );
+			mKillImages.push_back( renderer->RegisterImage("Gfx/Killfeed/d-Headshot.png") );
+			mKillImages.push_back( renderer->RegisterImage("Gfx/Killfeed/e-Melee.png") );
+			mKillImages.push_back( renderer->RegisterImage("Gfx/Killfeed/f-Grenade.png") );
+			mKillImages.push_back( renderer->RegisterImage("Gfx/Killfeed/g-Falling.png") );
+			mKillImages.push_back( renderer->RegisterImage("Gfx/Killfeed/h-Teamchange.png") );
+			mKillImages.push_back( renderer->RegisterImage("Gfx/Killfeed/i-Classchange.png") );
 			for( size_t n = 0; n < mKillImages.size(); ++n ) {
 				if( mKillImages[n]->GetHeight() > GetLineHeight() ) {
 					SPRaise( "Kill image (%d) height too big ", n );

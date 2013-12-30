@@ -160,17 +160,18 @@ namespace spades {
 										 renderer->RegisterImage("Gfx/Fonts/SquareFontModified.png"),
 										 (const int*)SquareFontMap,
 										 24,
-											  4);
+											  4,
+											  true);
 			static_cast<client::Quake3Font*>(textFont)->SetGlyphYRange(4.f, 16.f);
 			SPLog("Font 'SquareFont' Loaded");
 			
 			bigTextFont = new Quake3Font(renderer,
-									  renderer->RegisterImage("Gfx/Fonts/UbuntuCondensedBig.tga"),
-									  (const int*)UbuntuCondensedBigMap,
+									  renderer->RegisterImage("Gfx/Fonts/SquareFontBig.png"),
+									  (const int*)SquareFontBigMap,
 									  48,
-										 8);
+										 8, true);
 			static_cast<client::Quake3Font*>(bigTextFont)->SetGlyphYRange(11.f, 37.f);
-			SPLog("Font 'Ubuntu Condensed (Large)' Loaded");
+			SPLog("Font 'SquareFont (Large)' Loaded");
 			
 			world = NULL;
 			net = NULL;

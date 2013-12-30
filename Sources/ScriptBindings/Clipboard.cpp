@@ -20,59 +20,36 @@
 
 #include "ScriptManager.h"
 #include <Client/IModel.h>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl.H>
+#include <Imports/SDL.h>
 
 namespace spades{
-		
-	class ClipboardReceiver: public Fl_Widget {
-	public:
-		std::string clipboardData;
-		bool hasClipboardData;
-		
-		ClipboardReceiver():
-		Fl_Widget(0,0,2,2,NULL),
-		hasClipboardData(false){
-			
-		}
-		
-		virtual int handle(int event) {
-			if(event == FL_PASTE) {
-				hasClipboardData = true;
-				clipboardData = Fl::event_text();
-				return 1;
-			}
-			return Fl_Widget::handle(event);
-		}
-		virtual void draw(){}
-	};
-	
-	static ClipboardReceiver *receiver = NULL;
+	static bool hasClipboardData = false;
+	static std::string clipboardData;
 	class ClipboardRegistrar: public ScriptObjectRegistrar {
-		static void EnsureReceiver() {
-			if(!receiver) {
-				receiver = new ClipboardReceiver();
-			}
-		}
+		
 		
 		static bool GotClipboardData() {
-			EnsureReceiver();
-			return receiver->hasClipboardData;
+			if(!hasClipboardData) {
+				auto *txt = SDL_GetClipboardText();
+				if(txt == nullptr) {
+					return false;
+				}
+				clipboardData = txt;
+				free(txt);
+				hasClipboardData = true;
+			}
+			return hasClipboardData;
 		}
 		static std::string GetClipboardData() {
-			EnsureReceiver();
-			std::string s = receiver->clipboardData;
-			receiver->hasClipboardData = false;
-			return s;
+			hasClipboardData = false;
+			return clipboardData;
 		}
 		
 		static void RequestClipboardData() {
-			EnsureReceiver();
-			Fl::paste(*receiver, 1);
 		}
 		
 		static void SetClipboardData(const std::string& s) {
-			Fl::copy(s.data(), s.size(), 1);
+			SDL_SetClipboardText(s.c_str());
 		}
 		
 	public:
