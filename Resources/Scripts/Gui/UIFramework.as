@@ -81,6 +81,10 @@ namespace spades {
 					return spades::ui::MouseButton::RightMouseButton;
 				}else if(key == "MiddleMouseButton") {
 					return spades::ui::MouseButton::MiddleMouseButton;
+				}else if(key == "MouseButton4") {
+					return spades::ui::MouseButton::MouseButton4;
+				}else if(key == "MouseButton5") {
+					return spades::ui::MouseButton::MouseButton5;
 				}else {
 					return spades::ui::MouseButton::None;
 				}
@@ -441,7 +445,9 @@ namespace spades {
 			None,
 			LeftMouseButton,
 			RightMouseButton,
-			MiddleMouseButton
+			MiddleMouseButton,
+			MouseButton4,
+			MouseButton5
 		}
 		
 		class UIElementIterator {
