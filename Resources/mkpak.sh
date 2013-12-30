@@ -11,6 +11,8 @@ zip -r pak002-Models.pak Models/MapObjects Maps
 zip -r pak010-BaseSkin.pak Models/Weapons Models/Player Scripts/Skin \
 Sounds/Weapons
 
+zip -r pak011-Gui.pak Scripts/Gui
+
 zip -r pak999-References.pak Scripts/Reference
 
 
