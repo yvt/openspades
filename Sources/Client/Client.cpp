@@ -3520,7 +3520,11 @@ namespace spades {
 					"Sounds/Player/Footstep1.wav",
 					"Sounds/Player/Footstep2.wav",
 					"Sounds/Player/Footstep3.wav",
-					"Sounds/Player/Footstep4.wav"
+					"Sounds/Player/Footstep4.wav",
+					"Sounds/Player/Footstep5.wav",
+					"Sounds/Player/Footstep6.wav",
+					"Sounds/Player/Footstep7.wav",
+					"Sounds/Player/Footstep8.wav"
 				};
 				const char *wsnds[] = {
 					"Sounds/Player/Wade1.wav",
@@ -3529,8 +3533,8 @@ namespace spades {
 					"Sounds/Player/Wade4.wav"
 				};
 				Handle<IAudioChunk> c = p->GetWade() ?
-				audioDevice->RegisterSound(wsnds[rand() % 4]):
-				audioDevice->RegisterSound(snds[rand() % 4]);
+				audioDevice->RegisterSound(wsnds[(rand() >> 8) % 4]):
+				audioDevice->RegisterSound(snds[(rand() >> 8) % 8]);
 				audioDevice->Play(c, p->GetOrigin(),
 								  AudioParam());
 			}
@@ -4028,13 +4032,14 @@ namespace spades {
 									  param);
 					
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeFar.wav");
-					param.volume = 40.f;
+					param.volume = 6.f;
+					param.referenceDistance = 10.f;
 					audioDevice->Play(c, g->GetPosition(),
 									  param);
 					
 					
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeStereo.wav");
-					param.volume = 40.f;
+					param.volume = 2.f;
 					audioDevice->Play(c, g->GetPosition(),
 									  param);
 				}
@@ -4045,50 +4050,45 @@ namespace spades {
 				GrenadeExplosion(g->GetPosition());
 				
 				if(!IsMuted()){
-					Handle<IAudioChunk> c;
+					Handle<IAudioChunk> c, cs;
 					
-					switch((rand() >> 8) & 3){
-					case 0:
-						c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode1.wav");
-						break;
-					case 1:
-						c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode2.wav");
-						break;
-					case 2:
-						c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode3.wav");
-						break;
-					case 3:
-						c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode4.wav");
-						break;
+					switch((rand() >> 8) & 1){
+						case 0:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode1.wav");
+							cs = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeStereo1.wav");
+							break;
+						case 1:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode2.wav");
+							cs = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeStereo2.wav");
+							break;
 					}
 					
 					AudioParam param;
-					param.volume = 10.f;
+					param.volume = 30.f;
 					param.referenceDistance = 5.f;
 					audioDevice->Play(c, g->GetPosition(),
 									  param);
 					
-					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeStereo.wav");
-					audioDevice->Play(c, g->GetPosition(),
+					param.referenceDistance = 1.f;
+					audioDevice->Play(cs, g->GetPosition(),
 									  param);
 					
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFar.wav");
-					param.volume = .3f;
-					param.referenceDistance = 50.f;
+					param.volume = 6.f;
+					param.referenceDistance = 40.f;
 					audioDevice->Play(c, g->GetPosition(),
 									  param);
 					
 					
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFarStereo.wav");
-					param.volume = .3f;
-					param.referenceDistance = 50.f;
+					param.referenceDistance = 10.f;
 					audioDevice->Play(c, g->GetPosition(),
 									  param);
 					
 					// debri sound
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Debris.wav");
 					param.volume = 5.f;
-					param.referenceDistance = 1.f;
+					param.referenceDistance = 3.f;
 					IntVector3 outPos;
 					Vector3 soundPos = g->GetPosition();
 					if(world->GetMap()->CastRay(soundPos,

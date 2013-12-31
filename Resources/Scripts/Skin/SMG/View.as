@@ -58,7 +58,7 @@
 			@fireSounds[3] = dev.RegisterSound
 				("Sounds/Weapons/SMG/FireLocal4.wav");
 			@fireFarSound = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireFarLocal.wav");
+				("Sounds/Weapons/SMG/FireFar.wav");
 			@fireStereoSound = dev.RegisterSound
 				("Sounds/Weapons/SMG/FireStereo.wav");
 			@reloadSound = dev.RegisterSound
@@ -79,8 +79,9 @@
 				param.volume = 8.f;
 				audioDevice.PlayLocal(fireSounds[GetRandom(fireSounds.length)], origin, param);
 				
-				param.volume = 0.7f;
+				param.volume = 4.f;
 				audioDevice.PlayLocal(fireFarSound, origin, param);
+				param.volume = 1.f;
 				audioDevice.PlayLocal(fireStereoSound, origin, param);
 				
 			}

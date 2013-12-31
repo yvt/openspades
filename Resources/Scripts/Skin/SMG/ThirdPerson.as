@@ -132,7 +132,8 @@
 				
 				param.volume = .4f;
 				param.referenceDistance = 5.f;
-				audioDevice.Play(fireFarSound, origin, param);
+				audioDevice.Play(fireFarSound,  origin, param);
+				param.referenceDistance = 1.f;
 				audioDevice.Play(fireStereoSound, origin, param);
 				
 			}

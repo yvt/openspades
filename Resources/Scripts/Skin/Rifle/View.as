@@ -69,8 +69,10 @@
 				param.volume = 8.f;
 				audioDevice.PlayLocal(fireSound, origin, param);
 				
+				param.referenceDistance = 4.f;
 				param.volume = 1.f;
 				audioDevice.PlayLocal(fireFarSound, origin, param);
+				param.referenceDistance = 1.f;
 				audioDevice.PlayLocal(fireStereoSound, origin, param);
 			}
 		}
