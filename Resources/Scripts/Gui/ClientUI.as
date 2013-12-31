@@ -30,6 +30,8 @@ namespace spades {
 		spades::ui::UIManager@ manager;
 		spades::ui::UIElement@ activeUI;
 		
+		ChatLogWindow@ chatLogWindow;
+		
 		ClientMenu@ clientMenu;
 		
 		bool shouldExit = false;
@@ -48,6 +50,7 @@ namespace spades {
 			@clientMenu = ClientMenu(this);
 			clientMenu.Bounds = manager.RootElement.Bounds;
 			
+			@chatLogWindow = ChatLogWindow(this);
 		}
 		
 		void MouseEvent(float x, float y) {
@@ -143,6 +146,10 @@ namespace spades {
 		void CloseUI() {
 			@ActiveUI = null;
 		}
+		
+		void RecordChatLog(string text, Vector4 color) {
+			chatLogWindow.Record(text, color);
+		}
 	}
 	
 	class ClientMenu: spades::ui::UIElement {
@@ -154,7 +161,7 @@ namespace spades {
 			@this.ui = ui;
 			@this.helper = ui.helper;
 			
-			float winW = 180.f, winH = 94.f;
+			float winW = 180.f, winH = 32.f * 4.f - 2.f;
 			float winX = (Manager.Renderer.ScreenWidth - winW) * 0.5f;
 			float winY = (Manager.Renderer.ScreenHeight - winH) * 0.5f;
 			
@@ -181,15 +188,22 @@ namespace spades {
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Setup";
+				button.Caption = "Chat Log";
 				button.Bounds = AABB2(winX, winY + 32.f, winW, 30.f);
+				button.Activated = EventHandler(this.OnChatLog);
+				AddChild(button);
+			}
+			{
+				spades::ui::Button button(Manager);
+				button.Caption = "Setup";
+				button.Bounds = AABB2(winX, winY + 64.f, winW, 30.f);
 				button.Activated = EventHandler(this.OnSetup);
 				AddChild(button);
 			}
 			{
 				spades::ui::Button button(Manager);
 				button.Caption = "Disconnect";
-				button.Bounds = AABB2(winX, winY + 64.f, winW, 30.f);
+				button.Bounds = AABB2(winX, winY + 96.f, winW, 30.f);
 				button.Activated = EventHandler(this.OnDisconnect);
 				AddChild(button);
 			}
@@ -204,6 +218,10 @@ namespace spades {
 			
 			PreferenceView al(this, opt);
 			al.Run();
+		}
+		private void OnChatLog(spades::ui::UIElement@ sender) {
+			@ui.ActiveUI = @ui.chatLogWindow;
+			ui.chatLogWindow.ScrollToEnd();
 		}
 		private void OnDisconnect(spades::ui::UIElement@ sender) {
 			ui.shouldExit = true;
@@ -298,32 +316,41 @@ namespace spades {
 			sayButton.Enable = field.Text.length > 0;
 		}
 		
+		bool IsTeamChat {
+			get final { return isTeamChat; }
+			set {
+				if(isTeamChat == value) return;
+				isTeamChat = value;
+				teamButton.Toggled = isTeamChat;
+				globalButton.Toggled = not isTeamChat;
+				UpdateState();
+			}
+		}
+		
 		private void OnSetGlobal(spades::ui::UIElement@ sender) {
-			teamButton.Toggled = false;
-			globalButton.Toggled = true;
-			isTeamChat = false;
-			UpdateState();
+			IsTeamChat = false;
 		}
 		private void OnSetTeam(spades::ui::UIElement@ sender) {
-			teamButton.Toggled = true;
-			globalButton.Toggled = false;
-			isTeamChat = true;
-			UpdateState();
+			IsTeamChat = true;
 		}
 		
 		private void OnFieldChanged(spades::ui::UIElement@ sender) {
 			UpdateState();
 		}
 		
-		private void OnCancel(spades::ui::UIElement@ sender) {
+		private void Close() {
 			@ui.ActiveUI = null;
+		}
+		
+		private void OnCancel(spades::ui::UIElement@ sender) {
+			Close();
 		}
 		private void OnSay(spades::ui::UIElement@ sender) {
 			if(isTeamChat)
 				ui.helper.SayTeam(field.Text);
 			else
 				ui.helper.SayGlobal(field.Text);
-			@ui.ActiveUI = null;
+			Close();
 		}
 		
 		void HotKey(string key) {
@@ -339,6 +366,186 @@ namespace spades {
 				UIElement::HotKey(key);
 			}
 		}
+	}
+	
+	class ChatLogSayWindow: ClientChatWindow {
+		ChatLogWindow@ owner;
+		
+		ChatLogSayWindow(ChatLogWindow@ own, bool isTeamChat) {
+			super(own.ui, isTeamChat);
+			@owner = own;
+		}
+		
+		void Close() {
+			owner.SayWindowClosed();
+			@this.Parent = null;
+		}
+	}
+	
+	class ChatLogWindow: spades::ui::UIElement {
+		
+		float contentsTop, contentsHeight;
+		
+		ClientUI@ ui;
+		private ClientUIHelper@ helper;
+		
+		private spades::ui::TextViewer@ viewer;
+		ChatLogSayWindow@ sayWindow;
+		
+		private spades::ui::UIElement@ sayButton1;
+		private spades::ui::UIElement@ sayButton2;
+		
+		ChatLogWindow(ClientUI@ ui) {
+			super(ui.manager);
+			@this.ui = ui;
+			@this.helper = ui.helper;
+			
+			@Font = Manager.RootElement.Font;
+			this.Bounds = Manager.RootElement.Bounds;
+			
+			float contentsWidth = 700.f;
+			float contentsLeft = (Manager.Renderer.ScreenWidth - contentsWidth) * 0.5f;
+			contentsHeight = Manager.Renderer.ScreenHeight - 200.f;
+			contentsTop = (Manager.Renderer.ScreenHeight - contentsHeight - 106.f) * 0.5f;
+			{
+				spades::ui::Label label(Manager);
+				label.BackgroundColor = Vector4(0, 0, 0, 0.4f);
+				label.Bounds = Bounds;
+				AddChild(label);
+			}
+			{
+				spades::ui::Label label(Manager);
+				label.BackgroundColor = Vector4(0, 0, 0, 0.8f);
+				label.Bounds = AABB2(0.f, contentsTop - 13.f, Size.x, contentsHeight + 27.f);
+				AddChild(label);
+			}
+			{
+				spades::ui::Button button(Manager);
+				button.Caption = "Close";
+				button.Bounds = AABB2(
+					contentsLeft + contentsWidth - 150.f, 
+					contentsTop + contentsHeight - 30.f
+					, 150.f, 30.f);
+				button.Activated = spades::ui::EventHandler(this.OnOkPressed);
+				AddChild(button);
+			}
+			{
+				spades::ui::Button button(Manager);
+				button.Caption = "Say Global";
+				button.Bounds = AABB2(
+					contentsLeft, 
+					contentsTop + contentsHeight - 30.f
+					, 150.f, 30.f);
+				button.Activated = spades::ui::EventHandler(this.OnGlobalChat);
+				AddChild(button);
+				@this.sayButton1 = button;
+			}
+			{
+				spades::ui::Button button(Manager);
+				button.Caption = "Say Team";
+				button.Bounds = AABB2(
+					contentsLeft + 155.f, 
+					contentsTop + contentsHeight - 30.f
+					, 150.f, 30.f);
+				button.Activated = spades::ui::EventHandler(this.OnTeamChat);
+				AddChild(button);
+				@this.sayButton2 = button;
+			}
+			{
+				spades::ui::TextViewer viewer(Manager);
+				AddChild(viewer);
+				viewer.Bounds = AABB2(contentsLeft, contentsTop, contentsWidth, contentsHeight - 40.f);
+				@this.viewer = viewer;
+			}
+		}
+		
+		void ScrollToEnd() {
+			viewer.Layout();
+			viewer.ScrollToEnd();
+		}
+		
+		void Close() {
+			@ui.ActiveUI = null;
+		}
+		
+		void SayWindowClosed() {
+			@sayWindow = null;
+			sayButton1.Enable = true;
+			sayButton2.Enable = true;
+		}
+		
+		private void OnOkPressed(spades::ui::UIElement@ sender) {
+			Close();
+		}
+		
+		private void OnTeamChat(spades::ui::UIElement@ sender) {
+			if(sayWindow !is null) {
+				sayWindow.IsTeamChat = true;
+				return;
+			}
+			sayButton1.Enable = false;
+			sayButton2.Enable = false;
+			ChatLogSayWindow wnd(this, true);
+			AddChild(wnd);
+			wnd.Bounds = this.Bounds;
+			@this.sayWindow = wnd;
+			@manager.ActiveElement = wnd.field;
+		}
+		
+		private void OnGlobalChat(spades::ui::UIElement@ sender) {
+			if(sayWindow !is null) {
+				sayWindow.IsTeamChat = false;
+				return;
+			}
+			sayButton1.Enable = false;
+			sayButton2.Enable = false;
+			ChatLogSayWindow wnd(this, false);
+			AddChild(wnd);
+			wnd.Bounds = this.Bounds;
+			@this.sayWindow = wnd;
+			@manager.ActiveElement = wnd.field;
+		}
+		
+		void HotKey(string key) {
+			if(sayWindow !is null) {
+				UIElement::HotKey(key);
+				return;
+			}
+			if(IsEnabled and (key == "Escape")) {
+				Close();
+			} else if(IsEnabled and (key == "y")) {
+				OnTeamChat(this);
+			} else if(IsEnabled and (key == "t")) {
+				OnGlobalChat(this);
+			} else {
+				UIElement::HotKey(key);
+			}
+		}
+		
+		void Record(string text, Vector4 color) {
+			viewer.AddLine(text, this.IsVisible, color);
+		}
+		
+		void Render() {
+			Vector2 pos = ScreenPosition;
+			Vector2 size = Size;
+			Renderer@ r = Manager.Renderer;
+			Image@ img = r.RegisterImage("Gfx/White.tga");
+			
+			r.ColorNP = Vector4(1, 1, 1, 0.08f);
+			r.DrawImage(img, 
+				AABB2(pos.x, pos.y + contentsTop - 15.f, size.x, 1.f));
+			r.DrawImage(img, 
+				AABB2(pos.x, pos.y + contentsTop + contentsHeight + 15.f, size.x, 1.f));
+			r.ColorNP = Vector4(1, 1, 1, 0.2f);
+			r.DrawImage(img, 
+				AABB2(pos.x, pos.y + contentsTop - 14.f, size.x, 1.f));
+			r.DrawImage(img, 
+				AABB2(pos.x, pos.y + contentsTop + contentsHeight + 14.f, size.x, 1.f));
+				
+			UIElement::Render();
+		}
+		
 	}
 	
 	ClientUI@ CreateClientUI(Renderer@ renderer, AudioDevice@ audioDevice, 

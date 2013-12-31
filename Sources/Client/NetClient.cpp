@@ -42,7 +42,7 @@
 #include <Core/CP437.h>
 
 SPADES_SETTING(cg_protocolVersion, "3");
-SPADES_SETTING(cg_legacyCharset, "1");
+SPADES_SETTING(cg_unicode, "1");
 
 namespace spades {
 	namespace client {
@@ -97,13 +97,15 @@ namespace spades {
 		
 		static std::string EncodeString(std::string str) {
 			auto str2 = CP437::Encode(str, -1);
+			if(!cg_unicode) {
+				// ignore fallbacks
+				return str2;
+			}
 			if(str2.find(-1) != std::string::npos) {
 				// some fallbacks; always use UTF8
 				str.insert(0, &UtfSign, 1);
 			}else{
-				if(cg_legacyCharset) {
-					str = str2;
-				}
+				str = str2;
 			}
 			return str;
 		}
@@ -112,10 +114,7 @@ namespace spades {
 			if(s.size() > 0 && s[0] == UtfSign){
 				return s.substr(1);
 			}
-			if(cg_legacyCharset) {
-				return CP437::Decode(s);
-			}
-			return s;
+			return CP437::Decode(s);
 		}
 		
 		class NetPacketReader {

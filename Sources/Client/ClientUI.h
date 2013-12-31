@@ -73,6 +73,8 @@ namespace spades {
 			
 			bool NeedsInput();
 			
+			void RecordChatLog(const std::string&, Vector4 color);
+			
 			void EnterClientMenu();
 			void EnterGlobalChatWindow();
 			void EnterTeamChatWindow();

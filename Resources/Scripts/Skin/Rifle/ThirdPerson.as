@@ -80,7 +80,7 @@
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		private Model@ model;
-		private AudioChunk@ fireSound;
+		private AudioChunk@[] fireSounds(3);
 		private AudioChunk@ fireFarSound;
 		private AudioChunk@ fireStereoSound;
 		private AudioChunk@ reloadSound;
@@ -91,8 +91,12 @@
 			@model = renderer.RegisterModel
 				("Models/Weapons/Rifle/Weapon.kv6");
 			
-			@fireSound = dev.RegisterSound
-				("Sounds/Weapons/Rifle/Fire.wav");
+			@fireSounds[0] = dev.RegisterSound
+				("Sounds/Weapons/Rifle/Fire1.wav");
+			@fireSounds[1] = dev.RegisterSound
+				("Sounds/Weapons/Rifle/Fire2.wav");
+			@fireSounds[2] = dev.RegisterSound
+				("Sounds/Weapons/Rifle/Fire3.wav");
 			@fireFarSound = dev.RegisterSound
 				("Sounds/Weapons/Rifle/FireFar.wav");
 			@fireStereoSound = dev.RegisterSound
@@ -108,11 +112,14 @@
 			if(!muted){
 				Vector3 origin = originMatrix * Vector3(0.f, 0.f, 0.f);
 				AudioParam param;
-				param.volume = 8.f;
-				audioDevice.Play(fireSound, origin, param);
+				param.volume = 20.f;
+				audioDevice.Play(fireSounds[GetRandom(fireSounds.length)], origin, param);
 				
-				param.volume = 3.f;
+				param.volume = 1.f;
+				param.referenceDistance = 26.f;
 				audioDevice.Play(fireFarSound, origin, param);
+				param.referenceDistance = 4.f;
+				param.volume = 1.f;
 				audioDevice.Play(fireStereoSound, origin, param);
 			}
 		}
