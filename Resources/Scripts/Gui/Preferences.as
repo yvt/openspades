@@ -643,8 +643,8 @@ namespace spades {
 			layouter.AddToggleField("Chat Notify Sounds", "cg_chatBeep");
 			layouter.AddToggleField("Hit Indicator", "cg_hitIndicator");
 			
-			//layouter.AddHeading("AoS 0.75/0.76 Compatibility");
-			//layouter.AddToggleField("Compatible Charset", "cg_legacyCharset");
+			layouter.AddHeading("AoS 0.75/0.76 Compatibility");
+			layouter.AddToggleField("Allow Unicode", "cg_unicode");
 			
 			layouter.AddHeading("Misc");
 			layouter.AddSliderField("Field of View", "cg_fov", 30, 90, 1,
