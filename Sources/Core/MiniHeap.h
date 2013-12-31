@@ -25,7 +25,8 @@
 #include "Debug.h"
 
 namespace spades {
-	
+	// FIXME: namespace pollution...
+	static const size_t NoFreeRegion = static_cast<size_t>(-1);
 	class MiniHeap {
 	public:
 		typedef size_t Ref;
@@ -55,7 +56,6 @@ namespace spades {
 		std::vector<char> buffer;
 		std::vector<Ref> freeRegionPool;
 		
-		static constexpr size_t NoFreeRegion = static_cast<size_t>(-1);
 		Ref firstFreeRegion;
 		Ref lastFreeRegion;
 		

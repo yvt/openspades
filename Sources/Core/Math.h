@@ -23,7 +23,8 @@
 #include <vector>
 #include <math.h>
 #include <string>
-#include <stdint.h>		//uint32_t --> msvc
+#include <stdint.h>		// uint32_t --> msvc
+#include <algorithm>	// std::max / std::min
 
 #ifdef _MSC_VER
 #define isnan _isnan
