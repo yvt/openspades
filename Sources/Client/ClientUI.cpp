@@ -212,6 +212,21 @@ namespace spades {
 			c.ExecuteChecked();
 		}
 		
+		void ClientUI::RecordChatLog(const std::string &msg,
+									 Vector4 color) {
+			SPADES_MARK_FUNCTION();
+			if(!ui){
+				return;
+			}
+			static ScriptFunction func("ClientUI", "void RecordChatLog(string, Vector4)");
+			ScriptContextHandle c = func.Prepare();
+			std::string k = msg;
+			c->SetObject(&*ui);
+			c->SetArgObject(0, reinterpret_cast<void*>(&k));
+			c->SetArgObject(1, reinterpret_cast<void*>(&color));
+			c.ExecuteChecked();
+		}
+		
 		void ClientUI::EnterClientMenu() {
 			SPADES_MARK_FUNCTION();
 			if(!ui){

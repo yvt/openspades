@@ -2691,13 +2691,32 @@ namespace spades {
 		void Client::PlayerSentChatMessage(spades::client::Player *p,
 										   bool global,
 										   const std::string &msg){
-			std::string s;
-			if(global)
-				s = "[Global] ";
-			s += ChatWindow::TeamColorMessage(p->GetName(), p->GetTeamId());
-			s += ": ";
-			s += msg;
-			chatWindow->AddMessage(s);
+			{
+				std::string s;
+				if(global)
+					s = "[Global] ";
+				s += ChatWindow::TeamColorMessage(p->GetName(), p->GetTeamId());
+				s += ": ";
+				s += msg;
+				chatWindow->AddMessage(s);
+			}
+			{
+				std::string s;
+				if(global)
+					s = "[Global] ";
+				s += p->GetName();
+				s += ": ";
+				s += msg;
+				
+				auto col = p->GetTeamId() < 2 ?
+				world->GetTeam(p->GetTeamId()).color :
+				IntVector3::Make(255, 255, 255);
+				
+				scriptedUI->RecordChatLog(s,
+										  MakeVector4(col.x / 255.f, col.y / 255.f,
+													  col.z / 255.f, 0.8f));
+				
+			}
 			if(global)
 				NetLog("[Global] %s (%s): %s",
 					   p->GetName().c_str(),
@@ -2709,6 +2728,7 @@ namespace spades {
 					   world->GetTeam(p->GetTeamId()).name.c_str(),
 					   msg.c_str());
 			
+			
 			if((!IsMuted()) && (int)cg_chatBeep) {
 				Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
 				audioDevice->PlayLocal(chunk, AudioParam());
@@ -2718,9 +2738,7 @@ namespace spades {
 		void Client::ServerSentMessage(const std::string &msg) {
 			chatWindow->AddMessage(msg);
 			NetLog("%s", msg.c_str());
-			if(msg.find(playerName) != std::string::npos){
-				printf("Mention: %s\n", msg.c_str());
-			}
+			scriptedUI->RecordChatLog(msg, Vector4::Make(1.f, 1.f, 1.f, 0.8f));
 		}
 		
 #pragma mark - Follow / Spectate
@@ -3359,20 +3377,52 @@ namespace spades {
 		}
 		
 		void Client::PlayerLeaving(spades::client::Player *p) {
-			std::string msg;
-			msg = "Player " + chatWindow->TeamColorMessage(p->GetName(), p->GetTeamId());
-			msg += " has left";
-			chatWindow->AddMessage(msg);
+			{
+				std::string msg;
+				msg = "Player " + chatWindow->TeamColorMessage(p->GetName(), p->GetTeamId());
+				msg += " has left";
+				chatWindow->AddMessage(msg);
+			}
+			{
+				std::string msg;
+				msg = "Player " + p->GetName();
+				msg += " has left";
+				
+				auto col = p->GetTeamId() < 2 ?
+				world->GetTeam(p->GetTeamId()).color :
+				IntVector3::Make(255, 255, 255);
+				
+				scriptedUI->RecordChatLog(msg,
+										  MakeVector4(col.x / 255.f, col.y / 255.f,
+													  col.z / 255.f, 0.8f));
+			}
 		}
 		
 		void Client::PlayerJoinedTeam(spades::client::Player *p) {
-			std::string msg;
-			msg = p->GetName();
-			msg += " joined ";
-			msg += chatWindow->TeamColorMessage(world->GetTeam(p->GetTeamId()).name,
-												p->GetTeamId());
-			msg += " team";
-			chatWindow->AddMessage(msg);
+			{
+				std::string msg;
+				msg = p->GetName();
+				msg += " joined ";
+				msg += chatWindow->TeamColorMessage(world->GetTeam(p->GetTeamId()).name,
+													p->GetTeamId());
+				msg += " team";
+				chatWindow->AddMessage(msg);
+			}
+			{
+				std::string msg;
+				msg = p->GetName();
+				msg += " joined ";
+				msg += world->GetTeam(p->GetTeamId()).name;
+				msg += " team";
+				
+				auto col = p->GetTeamId() < 2 ?
+				world->GetTeam(p->GetTeamId()).color :
+				IntVector3::Make(255, 255, 255);
+				
+				scriptedUI->RecordChatLog(msg,
+										  MakeVector4(col.x / 255.f, col.y / 255.f,
+													  col.z / 255.f, 0.8f));
+			}
 		}
 		
 		void Client::GrenadeDestroyedBlock(spades::IntVector3 blk){
@@ -3404,6 +3454,8 @@ namespace spades {
 			msg += " wins!";
 			NetLog("%s", msg.c_str());
 			centerMessageView->AddMessage(msg);
+			
+			scriptedUI->RecordChatLog(msg, MakeVector4(1.f, 1.f, 1.f, 0.8f));
 			
 			if(world->GetLocalPlayer()){
 				if(teamId == world->GetLocalPlayer()->GetTeamId()){

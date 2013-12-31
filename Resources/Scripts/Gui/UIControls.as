@@ -227,6 +227,9 @@ namespace spades {
 				}else if(Hover) {
 					color = Vector4(0.4f, 0.4f, 0.4f, 0.7f);
 				}
+				if(!IsEnabled) {
+					color.w *= 0.5f;
+				}
 				renderer.ColorNP = color;
 				
 				DrawSliceImage(renderer, image, pos.x, pos.y, size.x, size.y, 12.f);
@@ -239,8 +242,13 @@ namespace spades {
 				size -= Vector2(16.f, 16.f);
 				txtPos = pos + (size - txtSize) * Alignment;
 				
-				font.DrawShadow(text, txtPos, 1.f, 
-					Vector4(1.f, 1.f, 1.f, 1.f), Vector4(0.f, 0.f, 0.f, 0.4f));
+				if(IsEnabled){
+					font.DrawShadow(text, txtPos, 1.f, 
+						Vector4(1.f, 1.f, 1.f, 1.f), Vector4(0.f, 0.f, 0.f, 0.4f));
+				}else{
+					font.DrawShadow(text, txtPos, 1.f, 
+						Vector4(1.f, 1.f, 1.f, 0.5f), Vector4(0.f, 0.f, 0.f, 0.1f));
+				}
 			}
 			
 		}
@@ -1367,24 +1375,31 @@ namespace spades {
 			void ScrollToTop() {
 				scrollBar.ScrollTo(0.0);
 			}
+			
+			void ScrollToEnd() {
+				scrollBar.ScrollTo(scrollBar.MaxValue);
+			}
 		}
 		
 		class TextViewerModel: ListViewModel {
 			UIManager@ manager;
 			string[]@ lines = array<string>();
+			Vector4[]@ colors = array<spades::Vector4>();
 			Font@ font;
 			float width;
-			private void AddLine(string text) {
+			void AddLine(string text, Vector4 color) {
 				int startPos = 0;
 				int minEnd = 1, maxEnd = text.length;
 				if(font.Measure(text).x <= width) {
 					lines.insertLast(text);
+					colors.insertLast(color);
 					return;
 				}
 				// find line-break point by binary search (O(n log n))
 				while(startPos < int(text.length)) {
 					if(minEnd >= maxEnd) {
 						lines.insertLast(text.substr(startPos, maxEnd - startPos));
+						colors.insertLast(color);
 						startPos = maxEnd;
 						minEnd = startPos + 1;
 						maxEnd = text.length;
@@ -1404,12 +1419,13 @@ namespace spades {
 				this.width = width;
 				string[]@ lines = text.split("\n");
 				for(uint i = 0; i < lines.length; i++)
-					AddLine(lines[i]);
+					AddLine(lines[i], Vector4(1.f, 1.f, 1.f, 1.f));
 			}
 			int NumRows { get { return int(lines.length); } }
 			UIElement@ CreateElement(int row) {
 				Label i(manager);
 				i.Text = lines[row];
+				i.TextColor = colors[row];
 				return i;
 			}
 			void RecycleElement(UIElement@ elem) {}
@@ -1440,6 +1456,7 @@ namespace spades {
 		
 		class TextViewer: ListViewBase {
 			private string text;
+			private TextViewerModel@ textmodel;
 			
 			TextViewer(UIManager@ manager) {
 				super(manager);
@@ -1450,7 +1467,25 @@ namespace spades {
 				get final { return text; }
 				set {
 					text = value;
-					@Model = TextViewerModel(Manager, text, Font, ItemWidth);
+					@textmodel = TextViewerModel(Manager, text, Font, ItemWidth);
+					@Model = textmodel;
+				}
+			}
+			
+			void AddLine(string line, bool autoscroll = false, Vector4 color = Vector4(1.f, 1.f, 1.f, 1.f)) {
+				if(textmodel is null) {
+					this.Text = "";
+				}
+				if(autoscroll){
+					this.Layout();
+					if(this.scrollBar.Value < this.scrollBar.MaxValue) {
+						autoscroll = false;
+					}
+				}
+				textmodel.AddLine(line, color);
+				if(autoscroll) {
+					this.Layout();
+					this.ScrollToEnd();
 				}
 			}
 		}
