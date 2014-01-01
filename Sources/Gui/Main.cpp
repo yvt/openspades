@@ -52,6 +52,28 @@ SPADES_SETTING(cl_showStartupWindow, "");
 #define strncasecmp(x,y,z)	_strnicmp(x,y,z)
 #define strcasecmp(x,y)		_stricmp(x,y)
 
+SPADES_SETTING(core_win32BeginPeriod, "1");
+
+class ThreadQuantumSetter {
+public:
+	ThreadQuantumSetter() {
+		if(core_win32BeginPeriod){
+			timeBeginPeriod(1);
+			SPLog("Thread quantum was modified to 1ms by timeBeginPeriod");
+			SPLog("(to disable this behavior, set core_win32BeginPeriod to 0)");
+		}else{
+			SPLog("Thread quantum is not modified");
+			SPLog("(to enable this behavior, set core_win32BeginPeriod to 1)");
+		}
+	}
+	~ThreadQuantumSetter() {
+		if(core_win32BeginPeriod){
+			timeEndPeriod(1);
+			SPLog("Thread quantum was restored");
+		}
+	}
+};
+
 //lm: without doing it this way, we will get a low-res icon or an ugly resampled icon in our window.
 //we cannot use the fltk function on the console window, because it's not an Fl_Window...
 void setIcon( HWND hWnd )
@@ -104,6 +126,12 @@ LONG WINAPI UnhandledExceptionProc( LPEXCEPTION_POINTERS lpEx )
 	ExitProcess( -1 );
 	//return EXCEPTION_EXECUTE_HANDLER;
 }
+#else
+
+class ThreadQuantumSetter {
+	
+};
+
 #endif
 
 //fltk
@@ -113,6 +141,7 @@ void setWindowIcon( Fl_Window* window )
 	window->icon( (char *)LoadIconA( GetModuleHandle(NULL), "AppIcon" ) );
 #else
 	//check for mac / linux icon with fltk?
+	// yvt: no window icon on os x.
 #endif
 }
 
@@ -360,6 +389,8 @@ int main(int argc, char ** argv)
 		delete outs;
 		return 0;*/
 
+		ThreadQuantumSetter quantumSetter;
+		
 		MainWindow* win = NULL;
 		if( !cg_autoConnect ) {
 			if(!((int)cl_showStartupWindow != 0 ||
