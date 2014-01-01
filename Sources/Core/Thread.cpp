@@ -144,10 +144,13 @@ namespace spades {
 	}
 	
 	void Thread::Quited() {
-		AutoLocker locker(&lock);
+		lock.Lock();
 		threadInfo = NULL;
-		if(autoDelete)
+		if(autoDelete) {
 			delete this;
+			return;
+		}
+		lock.Unlock();
 	}
 
 	void Thread::Run() {
