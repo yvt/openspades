@@ -30,4 +30,4 @@ Externals
         (All libs here)
 
 A set of precompiled libraries (packed with the correct layout, built with Visual Studio 2010):
-http://ge.tt/87h2Oww/v/0?c
+http://ge.tt/71D5rQC1/v/0?c
