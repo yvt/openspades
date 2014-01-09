@@ -15,21 +15,25 @@ Installation
 
 ### On Linux
 
-1. *On Debian-derived distributions*: ```sudo apt-get install pkg-config libsdl1.2-dev
-   libfltk1.3-dev libglew-dev libcurl3-openssl-dev``` (because of a bug in some distributions, you
-   might also have to install more packages by ```sudo apt-get install libjpeg-dev libxinerama-dev
-   libxft-dev```)
-2. ```mkdir openspades.mk && cd openspades.mk && cmake .. && make OpenSpades```
-3. ```sudo make install```
-4. Two choices:
-    - Download windows binary of OpenSpades from
-      https://sites.google.com/a/yvt.jp/openspades/downloads, extract it, and copy the .pak files
-      inside Resources directory into `/usr/local/share/openspades/Resources` or
-      `~/.openspades/Resources`
-    - Download CMake, and run the cmake-gui (don't set the binary dir to be the same dir as your
-      project dir, but preferably set it to something like `OpenSpades.msvc` (this directory is
-      ignored by git).
-5. ```openspades``` and enjoy
+1. *On Debian-derived distributions*: ```sudo apt-get install pkg-config libfltk1.3-dev
+   libglew-dev libcurl3-openssl-dev``` (because of a bug in some distributions, you might also
+   have to install more packages by ```sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev```)
+2. Download & install SDL2
+   ```tar xvf SDL2-2.0.1.tar.gz
+   cd SDL2-2.0.1/
+   ./configure
+   make
+   sudo make install```
+3. ```mkdir openspades.mk && cd openspades.mk && cmake .. && make OpenSpades```
+4. ~~```sudo make install```~~
+   -- note: the make install seems broken atm (it puts all files in /urs/local/bin)
+   some linux guru / expert (or really, just anyone that used it more than once) should either fix the
+   cmake script, or explain to someone how the build should be installed (what files go where)
+5. Download windows binary of OpenSpades from
+   https://sites.google.com/a/yvt.jp/openspades/downloads, extract it, and copy the .pak files
+   inside Resources directory into `/usr/local/share/openspades/Resources` or
+   `~/.openspades/Resources`
+6. ```openspades``` and enjoy
 
 
 ### On Windows (with visual studio)
@@ -37,7 +41,7 @@ Installation
    Official: https://github.com/yvt/openspades
    Unofficial: https://github.com/learn-more/openspades
 2. Extract or checkout the source (all examples will assume ```E:/Projects/openspades```, update paths in the examples to reflect yours)
-3. Get (pre-compiled) copies of fltk, glew, curl, sdl and zlib, and place them in ```E:/Projects/openspades/Sources/Externals```.
+3. Get (pre-compiled) copies of fltk, glew, curl, sdl2 and zlib, and place them in ```E:/Projects/openspades/Sources/Externals```.
    See the file ```E:/Projects/openspades/Sources/Externals/readme.txt``` for details (and a pre-compiled set of libraries).
 4. Run CMake, using the paths:
    ```Source:   E:/Projects/openspades```
