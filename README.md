@@ -18,20 +18,9 @@ Installation
 1. *On Debian-derived distributions*: ```sudo apt-get install pkg-config libfltk1.3-dev
    libglew-dev libcurl3-openssl-dev``` (because of a bug in some distributions, you might also
    have to install more packages by ```sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev```)
-2. Download & install SDL2
-
-```tar xvf SDL2-2.0.1.tar.gz
-    cd SDL2-2.0.1/
-    ./configure
-    make
-    sudo make install```
-2b.For the people that do not understand it, this is the part where you cd to your openspades directory...
-3. 
-
-```mkdir openspades.mk
-    cd openspades.mk
-    cmake ..
-    make OpenSpades```
+2. Download & install SDL2 ```tar xvf SDL2-2.0.1.tar.gz && cd SDL2-2.0.1/ && ./configure && make && sudo make install```
+3. For the people that do not understand it, this is the part where you cd to your openspades directory...
+   ```mkdir openspades.mk && cd openspades.mk && cmake .. && make OpenSpades```
 4. ~~```sudo make install```~~
    -- note: the make install seems broken atm (it puts all files in /urs/local/bin)
    some linux guru / expert (or really, just anyone that used linux more than once) should either fix the
