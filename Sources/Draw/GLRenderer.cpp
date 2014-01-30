@@ -853,7 +853,8 @@ namespace spades {
 					GLProfiler profiler(device, "Depth of Field");
 					handle = GLDepthOfFieldFilter(this).Filter(handle,
 															   sceneDef.depthOfFieldNearRange,
-															   sceneDef.blurVignette);
+															   sceneDef.blurVignette,
+															   sceneDef.globalBlur);
 					
 				}
 				

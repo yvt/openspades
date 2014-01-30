@@ -362,6 +362,10 @@ namespace spades {
 														"float radialBlur",
 														asOFFSET(SceneDefinition, radialBlur));
 						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("SceneDefinition",
+														"float globalBlur",
+														asOFFSET(SceneDefinition, globalBlur));
+						manager->CheckError(r);
 						
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void Init()",
