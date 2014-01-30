@@ -64,12 +64,20 @@ namespace spades {
 				return acosf(v);
 		}
 		
-		GLColorBuffer GLCameraBlurFilter::Filter(GLColorBuffer input) {
+		GLColorBuffer GLCameraBlurFilter::Filter(GLColorBuffer input, float radialBlur) {
 			SPADES_MARK_FUNCTION();
 			
+			if(radialBlur > 0.f)
+				radialBlur = 1.f - radialBlur;
+			else
+				radialBlur = 1.f;
+			
+			bool hasRadialBlur = radialBlur < .9999f;
 			
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
+			
+			
 			
 			dev->Enable(IGLDevice::Blend, false);
 			
@@ -106,8 +114,13 @@ namespace spades {
 			if(diffMatrix.m[0] < .3f ||
 			   diffMatrix.m[5] < .3f ||
 			   diffMatrix.m[10] < .3f){
-				// too much change, skip camera blur
-				return input;
+				// too much change
+				if(hasRadialBlur) {
+					diffMatrix = Matrix4::Identity();
+				}else{
+					// skip blur
+					return input;
+				}
 			}
 			
 			float movePixels = MyACos(diffMatrix.m[0]);
@@ -117,6 +130,10 @@ namespace spades {
 			movePixels = tanf(movePixels) / tanf(def.fovX * .5f);
 			movePixels *= (float)dev->ScreenWidth() * .5f;
 			movePixels *= shutterTimeScale;
+			
+			movePixels = std::max(movePixels,
+								  (1.f - radialBlur) * dev->ScreenWidth() * 0.5f);
+			
 			if(movePixels < 1.f){
 				// too less change, skip camera blur
 				return input;
@@ -125,6 +142,11 @@ namespace spades {
 			int levels = (int)ceilf(logf(movePixels) / logf(5.f));
 			if(levels <= 0)
 				levels = 1;
+			
+			if(hasRadialBlur)
+				radialBlur *= radialBlur;
+			reverseMatrix = Matrix4::Scale(radialBlur, radialBlur, 1.f)
+				* reverseMatrix;
 			
 			program->Use();
 			

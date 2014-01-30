@@ -1721,6 +1721,7 @@ namespace spades {
 						
 						vibPitch += localFireVibration * (1.f - localFireVibration) * 0.01f;
 						vibYaw += sinf(localFireVibration * (float)M_PI * 2.f) * 0.001f;
+						def.radialBlur += localFireVibration * 0.08f;
 						
 						// sprint bob
 						{
@@ -1772,6 +1773,8 @@ namespace spades {
 							vibPitch += (nextRandom() - nextRandom()) * 0.1f * grenVib;
 							vibYaw += (nextRandom() - nextRandom()) * 0.1f * grenVib;
 							scale -= (nextRandom()-nextRandom()) * 0.1f * grenVib;
+							
+							def.radialBlur += grenVib * 0.5f;
 						}
 					}
 					
@@ -1859,6 +1862,8 @@ namespace spades {
 			SPAssert(!isnan(def.viewOrigin.x));
 			SPAssert(!isnan(def.viewOrigin.y));
 			SPAssert(!isnan(def.viewOrigin.z));
+			
+			def.radialBlur = std::min(def.radialBlur, 1.f);
 			
 			return def;
 		}

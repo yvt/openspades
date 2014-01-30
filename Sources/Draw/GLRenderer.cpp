@@ -469,6 +469,8 @@ namespace spades {
 			
 			EnsureInitialized();
 			
+			if(def.radialBlur < 0.f || def.radialBlur > 1.f)
+				SPRaise("Invalid value of radialBlur.");
 			sceneDef = def;
 			
 			sceneUsedInThisFrame = true;
@@ -857,7 +859,8 @@ namespace spades {
 				
 				if(r_cameraBlur && !sceneDef.denyCameraBlur){
 					GLProfiler profiler(device, "Camera Blur");
-					handle = cameraBlur->Filter(handle);
+					// FIXME: better (correctly constructed) radial blur algorithm
+					handle = cameraBlur->Filter(handle, sceneDef.radialBlur);
 				}
 				
 				if(r_bloom){
