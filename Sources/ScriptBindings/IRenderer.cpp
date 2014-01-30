@@ -358,6 +358,14 @@ namespace spades {
 														"float blurVignette",
 														asOFFSET(SceneDefinition, blurVignette));
 						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("SceneDefinition",
+														"float radialBlur",
+														asOFFSET(SceneDefinition, radialBlur));
+						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("SceneDefinition",
+														"float globalBlur",
+														asOFFSET(SceneDefinition, globalBlur));
+						manager->CheckError(r);
 						
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void Init()",

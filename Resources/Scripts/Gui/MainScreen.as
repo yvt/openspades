@@ -132,11 +132,14 @@ namespace spades {
 			sceneDef.depthOfFieldNearRange = 100.f;
 			sceneDef.skipWorld = false;
 			
+			// fade the map
+			float fade = Clamp((time - 1.f) / 2.2f, 0.f, 1.f);
+			sceneDef.globalBlur = 1.f - fade;
+			
 			renderer.StartScene(sceneDef);
 			renderer.EndScene();
 			
-			// fade the map
-			float fade = Clamp((time - 1.f) / 2.2f, 0.f, 1.f);
+			// fade the map (draw)
 			if(fade < 1.f) {
 				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 1.f - fade);
 				renderer.DrawImage(renderer.RegisterImage("Gfx/White.tga"),

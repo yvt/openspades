@@ -33,7 +33,7 @@ namespace spades {
 			Matrix4 prevMatrix;
 		public:
 			GLCameraBlurFilter(GLRenderer *);
-			GLColorBuffer Filter(GLColorBuffer);
+			GLColorBuffer Filter(GLColorBuffer, float radialBlur = 0.f);
 			
 		};
 	}

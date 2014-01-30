@@ -39,14 +39,18 @@ namespace spades {
 			bool denyCameraBlur;
 			
 			float blurVignette;
+			float globalBlur;
 			float saturation;
+			float radialBlur;
 			
 			SceneDefinition() {
 				depthOfFieldNearRange = 0.f;
 				denyCameraBlur = true;
 				time = 0;
 				blurVignette = 0.f;
+				globalBlur = 0.f;
 				saturation = 1.f;
+				radialBlur = 0.f;
 			}
 		};
 	}

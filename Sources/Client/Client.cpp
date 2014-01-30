@@ -1721,6 +1721,7 @@ namespace spades {
 						
 						vibPitch += localFireVibration * (1.f - localFireVibration) * 0.01f;
 						vibYaw += sinf(localFireVibration * (float)M_PI * 2.f) * 0.001f;
+						def.radialBlur += localFireVibration * 0.08f;
 						
 						// sprint bob
 						{
@@ -1772,6 +1773,8 @@ namespace spades {
 							vibPitch += (nextRandom() - nextRandom()) * 0.1f * grenVib;
 							vibYaw += (nextRandom() - nextRandom()) * 0.1f * grenVib;
 							scale -= (nextRandom()-nextRandom()) * 0.1f * grenVib;
+							
+							def.radialBlur += grenVib * 0.5f;
 						}
 					}
 					
@@ -1859,6 +1862,8 @@ namespace spades {
 			SPAssert(!isnan(def.viewOrigin.x));
 			SPAssert(!isnan(def.viewOrigin.y));
 			SPAssert(!isnan(def.viewOrigin.z));
+			
+			def.radialBlur = std::min(def.radialBlur, 1.f);
 			
 			return def;
 		}
@@ -3047,7 +3052,7 @@ namespace spades {
 			}
 			
 			// slow smoke
-			color.w = .25f;
+			color.w = .15f;
 			for(int i = 0; i < 8; i++){
 				ParticleSpriteEntity *ent =
 				new SmokeSpriteEntity(this, color, 20.f);
@@ -3060,7 +3065,7 @@ namespace spades {
 				ent->SetRadius(1.4f + GetRandom()*GetRandom()*0.8f,
 							   0.2f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(6.f + GetRandom() * 5.f, 0.1f, 8.f);
+				ent->SetLifeTime(4.f + GetRandom() * 5.f, 0.1f, 8.f);
 				localEntities.push_back(ent);
 			}
 			

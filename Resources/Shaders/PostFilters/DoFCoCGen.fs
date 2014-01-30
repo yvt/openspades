@@ -26,6 +26,7 @@ uniform float depthScale;
 
 uniform float maxVignetteBlur;
 uniform vec2 vignetteScale;
+uniform float globalBlur;
 
 varying vec2 texCoord;
 
@@ -46,7 +47,7 @@ float CoCAt(vec2 pt) {
 
 void main() {
 	
-	float val =0.;
+	float val = 0.;
 	
 	val += CoCAt(texCoord);
 	val += CoCAt(texCoord + pixelShift * vec2(1., 0.));
@@ -74,5 +75,7 @@ void main() {
 	// don't blur the center
 	float scl = min(1., sq * 10.);
 	gl_FragColor.x *= scl;
+	
+	gl_FragColor.x = min(gl_FragColor.x + globalBlur, 1.);
 }
 
