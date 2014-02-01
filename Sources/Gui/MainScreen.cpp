@@ -74,6 +74,14 @@ namespace spades {
 			c.ExecuteChecked();
 		}
 		
+		bool MainScreen::NeedsAbsoluteMouseCoordinate() {
+			SPADES_MARK_FUNCTION();
+			if(subview){
+				return subview->NeedsAbsoluteMouseCoordinate();
+			}
+			return true;
+		}
+		
 		void MainScreen::MouseEvent(float x, float y) {
 			SPADES_MARK_FUNCTION();
 			if(subview){

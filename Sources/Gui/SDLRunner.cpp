@@ -137,7 +137,12 @@ namespace spades {
 					break;
 				case SDL_MOUSEMOTION:
 					if( mActive ) {
-						view->MouseEvent(event.motion.xrel, event.motion.yrel);
+						// FIXME: this might fail with cg_smp
+						if(view->NeedsAbsoluteMouseCoordinate()) {
+							view->MouseEvent(event.motion.x, event.motion.y);
+						}else{
+							view->MouseEvent(event.motion.xrel, event.motion.yrel);
+						}
 					}
 					break;
 				case SDL_MOUSEWHEEL:
@@ -186,6 +191,7 @@ namespace spades {
 				bool editing = false;
 				bool lastGui = false;
 				bool lastAlt = false;
+				bool absoluteMouseCoord = true;
 				
 				SPLog("Starting Client Loop");
 				
@@ -273,6 +279,12 @@ namespace spades {
 						srt.w = (int)rt.GetWidth();
 						srt.h = (int)rt.GetHeight();
 						SDL_SetTextInputRect(&srt);
+					}
+					
+					bool ab = view->NeedsAbsoluteMouseCoordinate();
+					if(ab != absoluteMouseCoord) {
+						absoluteMouseCoord = ab;
+						SDL_SetRelativeMouseMode(absoluteMouseCoord?SDL_FALSE:SDL_TRUE);
 					}
 					
 					while(SDL_PollEvent(&event)) {
@@ -461,7 +473,7 @@ namespace spades {
 					SPRaise("Failed to create graphics window: %s", msg.c_str());
 				}
 				
-				SDL_SetRelativeMouseMode(SDL_TRUE);
+				SDL_SetRelativeMouseMode(SDL_FALSE);
 				SDL_ShowCursor(0);
 				mActive = true;
 				

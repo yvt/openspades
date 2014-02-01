@@ -247,6 +247,7 @@ namespace spades {
 										  int start, int len);
 			virtual bool AcceptsTextInput();
 			virtual AABB2 GetTextInputRect();
+			virtual bool NeedsAbsoluteMouseCoordinate();
 			
 			void SetWorld(World *);
 			World *GetWorld() const { return world; }

@@ -116,12 +116,7 @@ namespace spades {
 				}
 			}
 			
-			void MouseEvent(float x, float y) {
-				MouseCursorPosition = Vector2(
-					Clamp(MouseCursorPosition.x + x, 0.f, renderer.ScreenWidth),
-					Clamp(MouseCursorPosition.y + y, 0.f, renderer.ScreenHeight)
-				);
-				
+			private void MouseEventDone() {
 				UIElement@ e = GetMouseActiveElement();
 				if(e !is null) {
 					e.MouseMove(e.ScreenToClient(MouseCursorPosition));
@@ -140,6 +135,22 @@ namespace spades {
 						e.MouseEnter();
 					}
 				}
+			}
+			
+			void MouseEvent(float x, float y) {
+				/*
+				MouseCursorPosition = Vector2(
+					Clamp(MouseCursorPosition.x + x, 0.f, renderer.ScreenWidth),
+					Clamp(MouseCursorPosition.y + y, 0.f, renderer.ScreenHeight)
+				);
+				*/
+				// in current version, absolute mouse mode is supported.
+				MouseCursorPosition = Vector2(
+					Clamp(x, 0.f, renderer.ScreenWidth),
+					Clamp(y, 0.f, renderer.ScreenHeight)
+				);
+				
+				MouseEventDone();
 			}
 			
 			// forces key repeat to stop.
@@ -205,7 +216,7 @@ namespace spades {
 							// FIXME: release the mouse capture when all button are released?
 							@mouseCapturedElement = null;
 							e.MouseUp(mb, e.ScreenToClient(MouseCursorPosition));
-							MouseEvent(0.f, 0.f);
+							MouseEventDone();
 						}
 					}
 					return;

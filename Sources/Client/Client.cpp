@@ -872,6 +872,21 @@ namespace spades {
 			
 		}
 		
+		bool Client::NeedsAbsoluteMouseCoordinate() {
+			SPADES_MARK_FUNCTION();
+			if(scriptedUI->NeedsInput()) {
+				return true;
+			}
+			if(!world) {
+				// now loading.
+				return true;
+			}
+			if(IsLimboViewActive()) {
+				return true;
+			}
+			return false;
+		}
+		
 		void Client::MouseEvent(float x, float y) {
 			SPADES_MARK_FUNCTION();
 			
@@ -1319,7 +1334,6 @@ namespace spades {
 					return true;
 				}
 			}
-			// TODO: anytime limbo
 			return false;
 		}
 		
@@ -1721,7 +1735,7 @@ namespace spades {
 						
 						vibPitch += localFireVibration * (1.f - localFireVibration) * 0.01f;
 						vibYaw += sinf(localFireVibration * (float)M_PI * 2.f) * 0.001f;
-						def.radialBlur += localFireVibration * 0.08f;
+						def.radialBlur += localFireVibration * 0.2f;
 						
 						// sprint bob
 						{
@@ -1774,7 +1788,7 @@ namespace spades {
 							vibYaw += (nextRandom() - nextRandom()) * 0.1f * grenVib;
 							scale -= (nextRandom()-nextRandom()) * 0.1f * grenVib;
 							
-							def.radialBlur += grenVib * 0.5f;
+							def.radialBlur += grenVib * 0.8f;
 						}
 					}
 					

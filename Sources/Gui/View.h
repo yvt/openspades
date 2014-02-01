@@ -39,6 +39,7 @@ namespace spades {
 										  int start, int len) {}
 			virtual bool AcceptsTextInput() { return false; }
 			virtual AABB2 GetTextInputRect() { return AABB2(); }
+			virtual bool NeedsAbsoluteMouseCoordinate() { return false; }
 			virtual void WheelEvent(float x, float y) {}
 			
 			virtual void RunFrame(float dt) {}

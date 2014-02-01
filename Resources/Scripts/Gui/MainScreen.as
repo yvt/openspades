@@ -134,7 +134,10 @@ namespace spades {
 			
 			// fade the map
 			float fade = Clamp((time - 1.f) / 2.2f, 0.f, 1.f);
-			sceneDef.globalBlur = 1.f - fade;
+			sceneDef.globalBlur = Clamp((1.f - (time - 1.f) / 2.5f) * 4.f, 0.f, 1.f);
+			if(!mainMenu.IsEnabled) {
+				sceneDef.globalBlur = Max(sceneDef.globalBlur, 0.5f);
+			}
 			
 			renderer.StartScene(sceneDef);
 			renderer.EndScene();
