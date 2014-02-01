@@ -66,6 +66,7 @@ namespace spades {
 			virtual bool AcceptsTextInput();
 			virtual AABB2 GetTextInputRect();
 			virtual void WheelEvent(float x, float y);
+			virtual bool NeedsAbsoluteMouseCoordinate();
 			
 			virtual void RunFrame(float dt);
 			

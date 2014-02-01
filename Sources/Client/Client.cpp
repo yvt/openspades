@@ -872,6 +872,21 @@ namespace spades {
 			
 		}
 		
+		bool Client::NeedsAbsoluteMouseCoordinate() {
+			SPADES_MARK_FUNCTION();
+			if(scriptedUI->NeedsInput()) {
+				return true;
+			}
+			if(!world) {
+				// now loading.
+				return true;
+			}
+			if(IsLimboViewActive()) {
+				return true;
+			}
+			return false;
+		}
+		
 		void Client::MouseEvent(float x, float y) {
 			SPADES_MARK_FUNCTION();
 			
@@ -1319,7 +1334,6 @@ namespace spades {
 					return true;
 				}
 			}
-			// TODO: anytime limbo
 			return false;
 		}
 		

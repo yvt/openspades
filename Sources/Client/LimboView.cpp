@@ -31,6 +31,8 @@
 namespace spades{
 	namespace client {
 		
+		// TODO: make limbo view scriptable using the existing
+		//       UI framework.
 		
 		static float contentsWidth = 800.f;
 		
@@ -71,8 +73,8 @@ namespace spades{
 		}
 		
 		void LimboView::MouseEvent(float x, float y){
-			cursorPos.x += x;
-			cursorPos.y += y;
+			cursorPos.x = x;
+			cursorPos.y = y;
 			
 			// clip
 			float w = renderer->ScreenWidth();
