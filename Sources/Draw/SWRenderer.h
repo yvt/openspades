@@ -90,6 +90,12 @@ namespace spades {
 			};
 			std::vector<Model> models;
 			
+			struct DynamicLight {
+				client::DynamicLightParam param;
+				int minX, maxX, minY, maxY;
+			};
+			std::vector<DynamicLight> lights;
+			
 			bool inited;
 			bool sceneUsedInThisFrame;
 			
@@ -136,6 +142,9 @@ namespace spades {
 			
 			template<SWFeatureLevel>
 			void ApplyFog();
+			
+			template<SWFeatureLevel>
+			void ApplyDynamicLight(const DynamicLight&);
 			
 		protected:
 			virtual ~SWRenderer();

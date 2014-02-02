@@ -78,5 +78,10 @@ namespace spades {
 			int i = static_cast<int>(v * 255.f + .5f);
 			return std::max(std::min(i, 255), 0);
 		}
+		
+		static inline int ToFixedFactor8(float v) {
+			int i = static_cast<int>(v * 256.f + .5f);
+			return std::max(std::min(i, 256), 0);
+		}
 	}
 }

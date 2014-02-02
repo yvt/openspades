@@ -265,6 +265,117 @@ namespace spades {
 			
 		}
 		
+		template<SWFeatureLevel>
+		void SWRenderer::ApplyDynamicLight(const DynamicLight &light) {
+			int fw = this->fb->GetWidth();
+			int fh = this->fb->GetHeight();
+			
+			float fovX = tanf(sceneDef.fovX * 0.5f);
+			float fovY = tanf(sceneDef.fovY * 0.5f);
+			
+			float dvx = -fovX * 2.f / static_cast<float>(fw);
+			float dvy = -fovY * 2.f / static_cast<float>(fh);
+			
+			int minX = light.minX;
+			int minY = light.minY;
+			int maxX = light.maxX;
+			int maxY = light.maxY;
+			int lightHeight = maxY - minY;
+			
+			SPAssert(minX >= 0);
+			SPAssert(minY >= 0);
+			SPAssert(maxX <= fw);
+			SPAssert(maxY <= fh);
+			
+			Vector3 lightCenter;
+			Vector3 diff = light.param.origin - sceneDef.viewOrigin;
+			lightCenter.x = Vector3::Dot(diff, sceneDef.viewAxis[0]);
+			lightCenter.y = Vector3::Dot(diff, sceneDef.viewAxis[1]);
+			lightCenter.z = Vector3::Dot(diff, sceneDef.viewAxis[2]);
+			
+			int lightR = ToFixedFactor8(light.param.color.x);
+			int lightG = ToFixedFactor8(light.param.color.y);
+			int lightB = ToFixedFactor8(light.param.color.z);
+			
+			float invRadius2 = 1.f / (light.param.radius * light.param.radius);
+			
+			InvokeParallel2([=](unsigned int threadId, unsigned int numThreads) {
+				int startY = lightHeight * threadId / numThreads;
+				int endY = lightHeight * (threadId + 1) / numThreads;
+				startY += minY;
+				endY += minY;
+				
+				auto *fb = this->fb->GetPixels();
+				float *db = depthBuffer.data();
+				fb += startY * fw + minX;
+				db += startY * fw + minX;
+				
+				float vy = fovY + dvy * startY;
+				float vx = fovX + dvx * minX;
+				
+				int lightWidth = maxX - minX;
+				
+				for(int y = startY; y < endY; y++) {
+					float vx2 = vx;
+					auto *fb2 = fb;
+					auto *db2 = db;
+					
+					for(int x = lightWidth; x > 0; x--) {
+						Vector3 pos;
+						
+						pos.z = *db2;
+						pos.x = vx2 * pos.z;
+						pos.y = vy  * pos.z;
+						
+						pos -= lightCenter;
+						
+						float dist = pos.GetPoweredLength();
+						dist *= invRadius2;
+						
+						if(dist < 1.f) {
+							float strength = 1.f - dist;
+							strength *= strength;
+							strength *= 256.f;
+							
+							int factor = static_cast<int>(strength);
+							
+							int actualLightR = lightR * factor;
+							int actualLightG = lightG * factor;
+							int actualLightB = lightB * factor;
+							
+							auto srcColor = *fb2;
+							auto srcColorR = (srcColor >> 16) & 0xff;
+							auto srcColorG = (srcColor >> 8) & 0xff;
+							auto srcColorB = srcColor & 0xff;
+							
+							actualLightR *= srcColorR;
+							actualLightG *= srcColorG;
+							actualLightB *= srcColorB;
+							
+							auto destColorR = actualLightR >> 16;
+							auto destColorG = actualLightG >> 16;
+							auto destColorB = actualLightB >> 16;
+							
+							destColorR = std::min<uint32_t>(destColorR+srcColorR, 255);
+							destColorG = std::min<uint32_t>(destColorG+srcColorG, 255);
+							destColorB = std::min<uint32_t>(destColorB+srcColorB, 255);
+							
+							uint32_t destColor = destColorB |
+							(destColorG<<8) | (destColorR<<16);
+							
+							*fb2 = destColor;
+						}
+						
+						vx2 += dvx;
+						fb2++; db2++;
+					}
+					
+					vy += dvy;
+					fb += fw;
+					db += fw;
+				}
+			});
+		}
 		
 		template<SWFeatureLevel level>
 		void SWRenderer::ApplyFog() {
@@ -516,10 +627,94 @@ namespace spades {
 			models.push_back(m);
 		}
 		
-		void SWRenderer::AddLight(const client::DynamicLightParam &light) {
+		void SWRenderer::AddLight(const client::DynamicLightParam &param) {
 			SPADES_MARK_FUNCTION();
 			EnsureInitialized();
 			EnsureSceneStarted();
+			
+			if(param.type != client::DynamicLightTypePoint) {
+				// TODO: support non-point lights
+				return;
+			}
+			
+			
+			auto diff = param.origin - sceneDef.viewOrigin;
+			float rad2 = param.radius * param.radius;
+			float poweredLength = diff.GetPoweredLength();
+			
+			float fogCullRange = param.radius + fogDistance;
+			if(poweredLength > fogCullRange * fogCullRange) {
+				// fog cull
+				return;
+			}
+			
+			DynamicLight light;
+			if(poweredLength < rad2) {
+				light.minX = 0; light.minY = 0;
+				light.maxX = fb->GetWidth();
+				light.maxY = fb->GetHeight();
+			}else if(Vector3::Dot(diff,
+								  sceneDef.viewAxis[2]) < 0.f){
+				// view plane cull
+				return;
+			}else{
+				auto viewRange = [](float cx, float cy, float fov, float screenSize) -> std::array<int, 2> {
+					auto trans = [screenSize,fov](float v) {
+						v = (v / fov) * 0.5f + 0.5f;
+						v = std::max(v, 0.f);
+						v = std::min(v, 1.f);
+						v *= screenSize;
+						return static_cast<int>(v);
+					};
+					auto dist = cx * cx + cy * cy - 1.f;
+					if(dist <= 0.f) {
+						return {0, static_cast<int>(screenSize)};
+					}
+					
+					auto denom = cx * cx - 1.f;
+					if(fabsf(denom) < 1.e-10f) {
+						denom = 1.e-8f;
+					}
+					denom = 1.f / denom;
+					
+					dist = sqrtf(dist);
+					
+					if(cx <= 1.f) {
+						if(cy > 0.f) {
+							return {
+								trans(cx * cy - dist),
+								static_cast<int>(screenSize)
+							};
+						}else{
+							return {
+								0,
+								trans(cx * cy + dist)
+							};
+						}
+					}else{
+						return {
+							trans(cx * cy - dist),
+							trans(cx * cy + dist)
+						};
+					}
+				};
+				auto invRad = 1.f / param.radius;
+				auto rangeX = viewRange(Vector3::Dot(diff, sceneDef.viewAxis[2]) * invRad,
+										Vector3::Dot(diff, sceneDef.viewAxis[0]) * invRad,
+										tanf(sceneDef.fovX * 0.5f),
+										ScreenWidth());
+				auto rangeY = viewRange(Vector3::Dot(diff, sceneDef.viewAxis[1]) * invRad,
+										Vector3::Dot(diff, sceneDef.viewAxis[0]) * invRad,
+										tanf(sceneDef.fovY * 0.5f),
+										ScreenHeight());
+				light.minX = rangeX[0];
+				light.maxX = rangeX[1];
+				light.minY = rangeY[0];
+				light.maxY = rangeY[1];
+			}
+			
+			light.param = param;
+			lights.push_back(light);
 			
 		}
 		
@@ -596,12 +791,17 @@ namespace spades {
 			}
 			
 			// draw models
-			for(size_t i = 0; i < models.size(); i++) {
-				auto& m = models[i];
+			for(auto& m: models) {
 				modelRenderer->Render(m.model,
 									  m.param);
 			}
 			models.clear();
+			
+			// deferred lighting
+			for(const auto& light: lights) {
+				ApplyDynamicLight<SWFeatureLevel::None>(light);
+			}
+			lights.clear();
 			
 #if ENABLE_SSE2
 			if(static_cast<int>(featureLevel) >= static_cast<int>(SWFeatureLevel::SSE2))
