@@ -65,7 +65,6 @@ void main() {
 	sunlight = max(sunlight, 0.);
 	flatShading = sunlight;
 	
-	
 	vec4 viewPos = viewModelMatrix * vertexPos;
 	float distance = dot(viewPos.xyz, viewPos.xyz);
 	fogDensity = FogDensity(distance).xyz;

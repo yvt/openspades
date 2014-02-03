@@ -54,19 +54,10 @@ void main() {
 	color.xyz *= color.xyz; // linearize
 	
 	vec4 viewPos = viewMatrix * vertexPos;
-	/*float distance = length(viewPos.xyz) / fogDistance;
-	distance = clamp(distance, 0., 1.);
-	fogDensity = vec3(distance);
-	fogDensity = pow(fogDensity, vec3(1., .9, .7));
-	fogDensity *= fogDensity;*/
 	float distance = dot(viewPos.xyz, viewPos.xyz);
 	fogDensity = FogDensity(distance).xyz;
 	
-	/*
-	detailCoord = (vec2(dot(tan1, vertexPos.xyz), dot(tan2, vertexPos.xyz))) / 2.;
-	*/
-	
-	vec3 normal = normalAttribute; //cross(tan2, tan1);
+	vec3 normal = normalAttribute;
 	vec3 shadowVertexPos = vertexPos.xyz;
 	
 	PrepareForDynamicLightNoBump(shadowVertexPos, normal);
