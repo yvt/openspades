@@ -1,3 +1,4 @@
 Shaders/SoftLitSprite.fs
 Shaders/SoftLitSprite.vs
 *shadow-variance*
+Shaders/Fog.vs

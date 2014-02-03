@@ -1,3 +1,4 @@
 Shaders/OptimizedVoxelModelDynamicLit.fs
 Shaders/OptimizedVoxelModelDynamicLit.vs
 *dlight*
+Shaders/Fog.vs

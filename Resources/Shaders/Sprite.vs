@@ -34,6 +34,8 @@ varying vec4 color;
 varying vec2 texCoord;
 varying vec4 fogDensity;
 
+vec4 FogDensity(float poweredLength);
+
 void main() {
 	vec3 pos = positionAttribute.xyz;
 	float radius = positionAttribute.w;
@@ -60,10 +62,7 @@ void main() {
 	// cannot gamma correct because sprite may be
 	// alpha-blended.
 	vec4 viewPos = viewMatrix * vec4(pos,1.);
-	float distance = length(viewPos.xyz) / fogDistance;
-	distance = clamp(distance, 0., 1.);
-	fogDensity = vec4(distance);
-	fogDensity = pow(fogDensity, vec4(1., .9, .7, 1.));
-	fogDensity *= fogDensity; // FIXME
+	float distance = dot(viewPos.xyz, viewPos.xyz);
+	fogDensity = FogDensity(distance);
 }
 

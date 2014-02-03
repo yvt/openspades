@@ -1,2 +1,3 @@
 Shaders/SoftSprite.fs
 Shaders/SoftSprite.vs
+Shaders/Fog.vs

@@ -1,3 +1,4 @@
 Shaders/BasicBlockDynamicLit.fs
 Shaders/BasicBlockDynamicLit.vs
 *dlight*
+Shaders/Fog.vs

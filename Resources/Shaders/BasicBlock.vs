@@ -44,6 +44,7 @@ varying vec3 fogDensity;
 varying vec2 detailCoord;
 
 void PrepareForShadow(vec3 worldOrigin, vec3 normal);
+vec4 FogDensity(float poweredLength);
 
 void main() {
 	
@@ -60,11 +61,13 @@ void main() {
 	ambientOcclusionCoord = (ambientOcclusionCoordAttribute + .5) / 256.;
 
 	vec4 viewPos = viewMatrix * vertexPos;
-	float distance = length(viewPos.xyz) / fogDistance;
+	/*float distance = length(viewPos.xyz) / fogDistance;
 	distance = clamp(distance, 0., 1.);
 	fogDensity = vec3(distance);
 	fogDensity = pow(fogDensity, vec3(1., .9, .7));
-	fogDensity *= fogDensity;
+	fogDensity *= fogDensity;*/
+	float distance = dot(viewPos.xyz, viewPos.xyz);
+	fogDensity = FogDensity(distance).xyz;
 	
 	/*
 	detailCoord = (vec2(dot(tan1, vertexPos.xyz), dot(tan2, vertexPos.xyz))) / 2.;

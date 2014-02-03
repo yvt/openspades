@@ -46,6 +46,7 @@
 		E834F56817979F5A004EBE88 /* Quake3Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56617979F55004EBE88 /* Quake3Font.cpp */; };
 		E834F56B17979FD7004EBE88 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56917979FD3004EBE88 /* IFont.cpp */; };
 		E834F56F1797D934004EBE88 /* ChatWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56D1797D92F004EBE88 /* ChatWindow.cpp */; };
+		E8428888189FE1710060743D /* Fog.vs in Sources */ = {isa = PBXBuildFile; fileRef = E8428887189FE1710060743D /* Fog.vs */; };
 		E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */; };
 		E844886617D0C43B005105D0 /* Tracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886417D0C43B005105D0 /* Tracer.cpp */; };
 		E844886A17D262E4005105D0 /* Serverbrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886817D262E3005105D0 /* Serverbrowser.cpp */; };
@@ -352,6 +353,7 @@
 		E834F56C1797AA2C004EBE88 /* FontData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FontData.h; sourceTree = "<group>"; };
 		E834F56D1797D92F004EBE88 /* ChatWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChatWindow.cpp; sourceTree = "<group>"; };
 		E834F56E1797D932004EBE88 /* ChatWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatWindow.h; sourceTree = "<group>"; };
+		E8428887189FE1710060743D /* Fog.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = Fog.vs; path = Resources/Shaders/Fog.vs; sourceTree = "<group>"; };
 		E842D48B17C0D06300381B49 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLongSpriteRenderer.cpp; sourceTree = "<group>"; };
 		E844886117CFB32B005105D0 /* GLLongSpriteRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLongSpriteRenderer.h; sourceTree = "<group>"; };
@@ -1239,6 +1241,7 @@
 		E8CF037C178ED9D2000683D4 = {
 			isa = PBXGroup;
 			children = (
+				E8428887189FE1710060743D /* Fog.vs */,
 				E8B93AD418559EC600BD01E1 /* SDL2.framework */,
 				E844888617D26699005105D0 /* libcurl.dylib */,
 				E8E446AB17A02EC700BE8855 /* Supporting Files */,
@@ -1938,6 +1941,7 @@
 				E8B6B72517E46C1D00E35523 /* PrimitiveArray.cpp in Sources */,
 				E8B6B72817E5AC9C00E35523 /* ServerAddress.cpp in Sources */,
 				E8B6B72B17E6095900E35523 /* GLLensDustFilter.cpp in Sources */,
+				E8428888189FE1710060743D /* Fog.vs in Sources */,
 				E8B6B72E17E68B1C00E35523 /* GLSoftLitSpriteRenderer.cpp in Sources */,
 				E8B6B73017E8C4F000E35523 /* IToolSkin.cpp in Sources */,
 				E8B6B73417E8CE1C00E35523 /* ScriptFunction.cpp in Sources */,

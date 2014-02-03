@@ -42,6 +42,7 @@ varying vec3 fogDensity;
 //varying vec2 detailCoord;
 
 void PrepareForDynamicLightNoBump(vec3 vertexCoord, vec3 normal);
+vec4 FogDensity(float poweredLength);
 
 void main() {
 	
@@ -54,11 +55,8 @@ void main() {
 	textureCoord = textureCoordAttribute.xy * texScale.xy;
 	
 	vec4 viewPos = viewModelMatrix * vertexPos;
-	float distance = length(viewPos.xyz) / fogDistance;
-	distance = clamp(distance, 0., 1.);
-	fogDensity = vec3(distance);
-	fogDensity = pow(fogDensity, vec3(1., .9, .7));
-	fogDensity *= fogDensity;
+	float distance = dot(viewPos.xyz, viewPos.xyz);
+	fogDensity = FogDensity(distance).xyz;
 	
 	// compute normal
 	vec3 normal = normalAttribute;
