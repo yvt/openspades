@@ -1,3 +1,4 @@
 Shaders/Water.fs
 Shaders/Water.vs
 *shadow*
+Shaders/Fog.vs

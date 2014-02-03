@@ -46,6 +46,7 @@ varying vec3 viewSpaceCoord;
 varying vec3 viewSpaceNormal;
 
 void PrepareForShadow(vec3 worldOrigin, vec3 normal);
+vec4 FogDensity(float poweredLength);
 
 void main() {
 	
@@ -64,20 +65,13 @@ void main() {
 	
 	
 	// ambient occlusion
-	ambientOcclusionCoord = (ambientOcclusionCoordAttribute + .5) / 256.;
+	ambientOcclusionCoord = (ambientOcclusionCoordAttribute + .5) * (1. / 256.);
 
 	vec4 viewPos = viewMatrix * vertexPos;
-	float distance = length(viewPos.xyz) / fogDistance;
-	distance = clamp(distance, 0., 1.);
-	fogDensity = vec3(distance);
-	fogDensity = pow(fogDensity, vec3(1., .9, .7));
-	fogDensity *= fogDensity;
-	
-	/*
-	detailCoord = (vec2(dot(tan1, vertexPos.xyz), dot(tan2, vertexPos.xyz))) / 2.;
-	*/
+	float distance = dot(viewPos.xyz, viewPos.xyz);
+	fogDensity = FogDensity(distance).xyz;
 
-	vec3 normal = normalAttribute; //cross(tan2, tan1);
+	vec3 normal = normalAttribute;
 	vec3 shadowVertexPos = vertexPos.xyz;
 	if(abs(normal.x) > .1) // avoid self shadowing
 		shadowVertexPos += normal * 0.01;

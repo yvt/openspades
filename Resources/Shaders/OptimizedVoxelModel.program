@@ -1,3 +1,4 @@
 Shaders/OptimizedVoxelModel.fs
 Shaders/OptimizedVoxelModel.vs
 *shadow*
+Shaders/Fog.vs

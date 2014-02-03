@@ -46,6 +46,7 @@ varying vec3 normal;
 varying vec4 dlR, dlG, dlB;
 
 void PrepareForShadow(vec3 worldOrigin, vec3 normal);
+vec4 FogDensity(float poweredLength);
 
 void main() {
 	vec3 center = positionAttribute.xyz;
@@ -99,16 +100,11 @@ void main() {
 	texCoord.zw = vec2(.5) + (gl_Position.xy / gl_Position.w) * .5;
 	
 	// fog.
-	// cannot gamma correct because sprite may be
+	// FIXME: cannot gamma correct because sprite may be
 	// alpha-blended.
 	vec4 viewPos = viewMatrix * vec4(pos,1.);
-	float distance = length(viewPos.xyz) / fogDistance;
-	distance = clamp(distance, 0., 1.);
-	fogDensity = vec4(distance);
-	fogDensity = pow(fogDensity, vec4(1., .9, .7, 1.));
-	fogDensity *= fogDensity; // FIXME
-	
-	
+	float distance = dot(viewPos.xyz, viewPos.xyz);
+	fogDensity = FogDensity(distance);
 	
 	// precompute some value in vertex shader to
 	// reduce instruction count in frag. shader

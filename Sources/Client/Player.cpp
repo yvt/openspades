@@ -152,6 +152,16 @@ namespace spades {
 					}
 				}
 			}else if(tool == ToolBlock){
+				// work-around for bug that placing block
+				// occasionally becomes impossible
+				if(nextBlockTime > world->GetTime() +
+				   std::max(GetToolPrimaryDelay(),
+							GetToolSecondaryDelay())) {
+				    nextBlockTime = world->GetTime() +
+				    std::max(GetToolPrimaryDelay(),
+							 GetToolSecondaryDelay());
+			    }
+				
 				if(world->GetTime() < nextBlockTime){
 					newInput.primary = false;
 					newInput.secondary = false;

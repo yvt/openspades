@@ -1,3 +1,4 @@
 Shaders/BasicBlock.fs
 Shaders/BasicBlock.vs
 *shadow*
+Shaders/Fog.vs

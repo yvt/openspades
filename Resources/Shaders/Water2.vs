@@ -39,6 +39,7 @@ uniform sampler2D waveTexture2;
 uniform sampler2D waveTexture3;
 
 void PrepareForShadow(vec3 worldOrigin, vec3 normal);
+vec4 FogDensity(float poweredLength);
 
 float DisplaceWater(vec2 worldPos){
 	
@@ -73,11 +74,8 @@ void main() {
 	screenPosition.xy = (screenPosition.xy + screenPosition.z) * .5;
 		
 	vec4 viewPos = viewModelMatrix * vertexPos;
-	float distance = length(viewPos.xyz) / fogDistance;
-	distance = clamp(distance, 0., 1.);
-	fogDensity = vec3(distance);
-	fogDensity = pow(fogDensity, vec3(1., .9, .7));
-	fogDensity *= fogDensity;
+	float distance = dot(viewPos.xyz, viewPos.xyz);
+	fogDensity = FogDensity(distance).xyz;
 	
 	viewPosition = viewPos.xyz;
 	

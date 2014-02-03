@@ -1,2 +1,3 @@
 Shaders/LongSprite.fs
 Shaders/LongSprite.vs
+Shaders/Fog.vs

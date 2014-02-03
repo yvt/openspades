@@ -1,3 +1,4 @@
 Shaders/Water2.fs
 Shaders/Water2.vs
 *shadow-variance*
+Shaders/Fog.vs
