@@ -293,7 +293,7 @@ namespace spades {
 			}
 		}
 		
-		void SDLRunner::Run() {
+		void SDLRunner::Run(int width, int height) {
 			SPADES_MARK_FUNCTION();
 			SDL_Init(SDL_INIT_VIDEO);
 			try{
@@ -343,7 +343,7 @@ namespace spades {
 				window = SDL_CreateWindow(caption.c_str(),
 										  SDL_WINDOWPOS_CENTERED,
 										  SDL_WINDOWPOS_CENTERED,
-										  r_videoWidth, r_videoHeight, sdlFlags);
+										  width, height, sdlFlags);
 				
 				if(!window){
 					std::string msg = SDL_GetError();
