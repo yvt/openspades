@@ -41,7 +41,7 @@ namespace spades {
 				SW
 			};
 			
-			RendererType GetRendererType();
+			virtual RendererType GetRendererType();
 			
 			std::string TranslateKey(const SDL_Keysym&);
 			std::string TranslateButton(Uint8 b);
