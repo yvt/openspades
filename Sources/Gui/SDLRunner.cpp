@@ -51,7 +51,8 @@ SPADES_SETTING(s_audioDriver, "openal");
 namespace spades {
 	namespace gui {
 		
-		SDLRunner::SDLRunner() {
+		SDLRunner::SDLRunner():
+		m_hasSystemMenu(false){
 		}
 		
 		SDLRunner::~SDLRunner() {
@@ -451,14 +452,15 @@ namespace spades {
 						break;
 				}
 				
-				if(r_fullscreen)
-					sdlFlags |= SDL_WINDOW_FULLSCREEN;
+				if(!m_hasSystemMenu) {
+					if(r_fullscreen)
+						sdlFlags |= SDL_WINDOW_FULLSCREEN;
 				
 #ifdef __MACOSX__
-				if(!r_fullscreen)
-					sdlFlags |= SDL_WINDOW_BORDERLESS;
+					if(!r_fullscreen)
+						sdlFlags |= SDL_WINDOW_BORDERLESS;
 #endif
-				
+				}
 				
 				int w = width;
 				int h = height;

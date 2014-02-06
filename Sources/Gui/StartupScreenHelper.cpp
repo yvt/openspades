@@ -1,5 +1,6 @@
 /*
  Copyright (c) 2013 yvt
+ Portion of the code is based on Serverbrowser.cpp.
  
  This file is part of OpenSpades.
  
@@ -17,11 +18,37 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
+#include <OpenSpades.h>
+#include "StartupScreenHelper.h"
+#include "StartupScreen.h"
+#include <Core/Settings.h>
+#include <algorithm>
+#include <cctype>
 
-#include "UIFramework.as"
-#include "UIControls.as"
-#include "MessageBox.as"
-#include "MainScreen.as"
-#include "StartupScreen.as"
-#include "Preferences.as"
-#include "ClientUI.as"
+namespace spades {
+	namespace gui {
+		
+		StartupScreenHelper::StartupScreenHelper(StartupScreen *scr):
+		scr(scr){
+			SPADES_MARK_FUNCTION();
+		}
+		
+		StartupScreenHelper::~StartupScreenHelper() {
+			SPADES_MARK_FUNCTION();
+		}
+		
+		void StartupScreenHelper::StartupScreenDestroyed() {
+			SPADES_MARK_FUNCTION();
+			scr = nullptr;
+		}
+		
+		void StartupScreenHelper::Start() {
+			if(scr == nullptr){
+				return;
+			}
+			scr->Start();
+		}
+				
+	}
+}
+

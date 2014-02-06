@@ -36,6 +36,7 @@
 #include <Client/GameMap.h>
 #include <Client/Client.h>
 #include <Core/CpuID.h>
+#include <Gui/StartupScreen.h>
 
 #include <Core/VoxelModel.h>
 #include <Draw/GLOptimizedVoxelModel.h>
@@ -400,6 +401,9 @@ int main(int argc, char ** argv)
 				SPLog("Starting main screen");
 				spades::StartMainScreen();
 			}else{
+				SPLog("Starting startup window");
+				::spades::gui::StartupScreen::Run();
+				/*
 				SPLog("Initializing main window");
 				win = new MainWindow();
 				win->Init();
@@ -409,7 +413,7 @@ int main(int argc, char ** argv)
 				
 				SPLog("Entering FLTK main loop");
 				Fl::run();
-				SPLog("Leaving FLTK main loop");
+				SPLog("Leaving FLTK main loop");*/
 			}
 		} else {
 			spades::ServerAddress host(cg_lastQuickConnectHost.CString(), (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076 );

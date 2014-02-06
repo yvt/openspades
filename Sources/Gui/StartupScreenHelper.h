@@ -18,10 +18,28 @@
  
  */
 
-#include "UIFramework.as"
-#include "UIControls.as"
-#include "MessageBox.as"
-#include "MainScreen.as"
-#include "StartupScreen.as"
-#include "Preferences.as"
-#include "ClientUI.as"
+#pragma once
+
+#include <Core/RefCountedObject.h>
+#include <vector>
+#include <Core/Mutex.h>
+#include <ScriptBindings/ScriptManager.h>
+#include <AngelScript/addons/scriptarray.h>
+
+namespace spades {
+	class Serveritem;
+	namespace gui {
+		class StartupScreen;
+		class StartupScreenHelper: public RefCountedObject {
+			friend class StartupScreen;
+			StartupScreen *scr;
+		protected:
+			virtual ~StartupScreenHelper();
+		public:
+			StartupScreenHelper(StartupScreen *scr);
+			void StartupScreenDestroyed();
+			
+			void Start();
+		};
+	}
+}

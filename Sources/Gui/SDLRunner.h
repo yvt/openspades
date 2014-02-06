@@ -34,6 +34,7 @@ namespace spades {
 		class View;
 		class SDLRunner {
 			bool mActive;
+			bool m_hasSystemMenu;
 		protected:
 			
 			enum class RendererType {
@@ -56,6 +57,7 @@ namespace spades {
 			SDLRunner();
 			virtual ~SDLRunner();
 			void Run(int width, int height);
+			void SetHasSystemMenu(bool b) { m_hasSystemMenu = b; }
 		};
 	}
 }

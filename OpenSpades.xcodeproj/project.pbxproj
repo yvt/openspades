@@ -56,6 +56,10 @@
 		E834F56B17979FD7004EBE88 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56917979FD3004EBE88 /* IFont.cpp */; };
 		E834F56F1797D934004EBE88 /* ChatWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56D1797D92F004EBE88 /* ChatWindow.cpp */; };
 		E8428888189FE1710060743D /* Fog.vs in Sources */ = {isa = PBXBuildFile; fileRef = E8428887189FE1710060743D /* Fog.vs */; };
+		E842888B18A3CF6C0060743D /* StartupScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842888918A3CF6C0060743D /* StartupScreen.cpp */; };
+		E842888E18A3D1520060743D /* StartupScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842888C18A3D1520060743D /* StartupScreenHelper.cpp */; };
+		E842889018A3D6470060743D /* StartupScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842888F18A3D6470060743D /* StartupScreenHelper.cpp */; };
+		E842889318A3D9C50060743D /* NullDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842889118A3D9C40060743D /* NullDevice.cpp */; };
 		E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */; };
 		E844886617D0C43B005105D0 /* Tracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886417D0C43B005105D0 /* Tracer.cpp */; };
 		E844886A17D262E4005105D0 /* Serverbrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886817D262E3005105D0 /* Serverbrowser.cpp */; };
@@ -383,6 +387,13 @@
 		E834F56D1797D92F004EBE88 /* ChatWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChatWindow.cpp; sourceTree = "<group>"; };
 		E834F56E1797D932004EBE88 /* ChatWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatWindow.h; sourceTree = "<group>"; };
 		E8428887189FE1710060743D /* Fog.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = Fog.vs; path = Resources/Shaders/Fog.vs; sourceTree = "<group>"; };
+		E842888918A3CF6C0060743D /* StartupScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreen.cpp; sourceTree = "<group>"; };
+		E842888A18A3CF6C0060743D /* StartupScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupScreen.h; sourceTree = "<group>"; };
+		E842888C18A3D1520060743D /* StartupScreenHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreenHelper.cpp; sourceTree = "<group>"; };
+		E842888D18A3D1520060743D /* StartupScreenHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupScreenHelper.h; sourceTree = "<group>"; };
+		E842888F18A3D6470060743D /* StartupScreenHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreenHelper.cpp; sourceTree = "<group>"; };
+		E842889118A3D9C40060743D /* NullDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NullDevice.cpp; sourceTree = "<group>"; };
+		E842889218A3D9C40060743D /* NullDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NullDevice.h; sourceTree = "<group>"; };
 		E842D48B17C0D06300381B49 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLongSpriteRenderer.cpp; sourceTree = "<group>"; };
 		E844886117CFB32B005105D0 /* GLLongSpriteRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLongSpriteRenderer.h; sourceTree = "<group>"; };
@@ -1008,6 +1019,8 @@
 				E8567E5C1792C089009D83E0 /* ALFuncs.cpp */,
 				E88EB02D185D9DC500565D07 /* YsrDevice.cpp */,
 				E88EB02E185D9DC500565D07 /* YsrDevice.h */,
+				E842889118A3D9C40060743D /* NullDevice.cpp */,
+				E842889218A3D9C40060743D /* NullDevice.h */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -1262,6 +1275,7 @@
 				E8B6B74817EA12E500E35523 /* IWeaponSkin.h */,
 				E81CE4A4183F7A3000F22685 /* IFont.cpp */,
 				E8F74CF0183FBB070085AA54 /* MainScreenHelper.cpp */,
+				E842888F18A3D6470060743D /* StartupScreenHelper.cpp */,
 				E8F74CF31840D4CC0085AA54 /* Config.cpp */,
 				E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */,
 				E8F74CFE184C753F0085AA54 /* Clipboard.cpp */,
@@ -1387,6 +1401,10 @@
 				E8F74CE4183F86AE0085AA54 /* View.h */,
 				E8F74CE7183F8B9D0085AA54 /* Runner.cpp */,
 				E8F74CE8183F8B9D0085AA54 /* Runner.h */,
+				E842888918A3CF6C0060743D /* StartupScreen.cpp */,
+				E842888A18A3CF6C0060743D /* StartupScreen.h */,
+				E842888C18A3D1520060743D /* StartupScreenHelper.cpp */,
+				E842888D18A3D1520060743D /* StartupScreenHelper.h */,
 			);
 			path = Gui;
 			sourceTree = "<group>";
@@ -1796,6 +1814,7 @@
 				E8CF03AE178EDFCD000683D4 /* IGLDevice.cpp in Sources */,
 				E8CF03B2178EE300000683D4 /* Thread.cpp in Sources */,
 				E8F74CFB1845C64B0085AA54 /* ClientUIHelper.cpp in Sources */,
+				E842889018A3D6470060743D /* StartupScreenHelper.cpp in Sources */,
 				E8CF03BD178EE502000683D4 /* SDLGLDevice.cpp in Sources */,
 				E8CF03BF178EE50E000683D4 /* Main.cpp in Sources */,
 				E8CF03C3178EE6D8000683D4 /* Client.cpp in Sources */,
@@ -1816,6 +1835,7 @@
 				E8CF03FF178FB1E1000683D4 /* IGameMapListener.cpp in Sources */,
 				E8CF0402178FB52F000683D4 /* GLImage.cpp in Sources */,
 				E890F310187046990090AAB8 /* CP437.cpp in Sources */,
+				E842889318A3D9C50060743D /* NullDevice.cpp in Sources */,
 				E8CF0405178FF776000683D4 /* Exception.cpp in Sources */,
 				E8CF04081790455B000683D4 /* GLProgram.cpp in Sources */,
 				E8CF040B1790471E000683D4 /* IFileSystem.cpp in Sources */,
@@ -1882,6 +1902,7 @@
 				E8E0AFA3179A8F1100C6B5A9 /* ScoreboardView.cpp in Sources */,
 				E8F74CF2183FBB070085AA54 /* MainScreenHelper.cpp in Sources */,
 				E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */,
+				E842888E18A3D1520060743D /* StartupScreenHelper.cpp in Sources */,
 				E8E0AFA6179AA31C00C6B5A9 /* LimboView.cpp in Sources */,
 				E8E0AFA9179ACDDE00C6B5A9 /* GLSpriteRenderer.cpp in Sources */,
 				E81A7C771864171100BF3FCE /* SWMapRenderer.cpp in Sources */,
@@ -1923,6 +1944,7 @@
 				E8F74CF51840D4CC0085AA54 /* Config.cpp in Sources */,
 				E80B288517A516D70056179E /* sweep_context.cc in Sources */,
 				E80B288817A52AB70056179E /* BitmapAtlasGenerator.cpp in Sources */,
+				E842888B18A3CF6C0060743D /* StartupScreen.cpp in Sources */,
 				E80B288D17A5FFB50056179E /* ThreadLocalStorage.cpp in Sources */,
 				E80B289017A659F30056179E /* AsyncRenderer.cpp in Sources */,
 				E80B289317A683510056179E /* SDLAsyncRunner.cpp in Sources */,
