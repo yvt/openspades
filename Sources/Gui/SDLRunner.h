@@ -32,7 +32,7 @@ namespace spades {
 	}
 	namespace gui {
 		class View;
-		class SDLRunner: public IRunnable {
+		class SDLRunner {
 			bool mActive;
 		protected:
 			
@@ -55,7 +55,7 @@ namespace spades {
 		public:
 			SDLRunner();
 			virtual ~SDLRunner();
-			virtual void Run();
+			void Run(int width, int height);
 		};
 	}
 }

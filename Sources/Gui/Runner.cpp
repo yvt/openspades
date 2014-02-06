@@ -24,12 +24,21 @@
 #include "SDLAsyncRunner.h"
 #include "ErrorDialog.h"
 #include <Core/Settings.h>
+#include <Core/Exception.h>
 
 SPADES_SETTING(cg_smp, "0");
+SPADES_SETTING(r_videoWidth, "1024");
+SPADES_SETTING(r_videoHeight, "640");
 
 namespace spades {
 	namespace gui {
-		Runner::Runner() {
+		Runner::Runner():
+		m_videoWidth(r_videoWidth),
+		m_videoHeight(r_videoHeight){
+			if(m_videoWidth < 1 || m_videoWidth > 16384)
+				SPRaise("Value of r_videoWidth is invalid.");
+			if(m_videoHeight < 1 || m_videoHeight > 16384)
+				SPRaise("Value of r_videoHeight is invalid.");
 		}
 		Runner::~Runner() {
 			
@@ -87,12 +96,21 @@ namespace spades {
 		
 			if(cg_smp){
 				ConcreteAsnycRunner r(this);
-				r.Run();
+				r.Run(m_videoWidth, m_videoHeight);
 			}else{
 				ConcreteRunner r(this);
-				r.Run();
+				r.Run(m_videoWidth, m_videoHeight);
 			}
 		
+		}
+		
+		void Runner::OverrideVideoSize(int width, int height) {
+			if(width < 1 || width > 16384)
+				SPInvalidArgument("width");
+			if(height < 1 || height > 16384)
+				SPInvalidArgument("height");
+			m_videoWidth = width;
+			m_videoHeight = height;
 		}
 	}
 }

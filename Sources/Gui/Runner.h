@@ -33,11 +33,15 @@ namespace spades {
 		
 		// FIXME: better naming
 		class Runner {
+			int m_videoWidth;
+			int m_videoHeight;
 		protected:
 			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *audio) = 0;
 		public:
 			Runner();
 			virtual ~Runner();
+			
+			void OverrideVideoSize(int width, int height);
 			
 			void Run();
 			void RunProtected();
