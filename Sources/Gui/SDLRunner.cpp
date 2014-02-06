@@ -402,7 +402,7 @@ namespace spades {
 			}
 		}
 		
-		void SDLRunner::Run() {
+		void SDLRunner::Run(int width, int height) {
 			SPADES_MARK_FUNCTION();
 			SDL_Init(SDL_INIT_VIDEO);
 			try{
@@ -460,8 +460,8 @@ namespace spades {
 #endif
 				
 				
-				int w = r_videoWidth;
-				int h = r_videoHeight;
+				int w = width;
+				int h = height;
 				
 				window = SDL_CreateWindow(caption.c_str(),
 										  SDL_WINDOWPOS_CENTERED,
