@@ -31,8 +31,10 @@ namespace spades {
 		
 		NullDevice::~NullDevice() {}
 		
+		static NullChunk nullChunkInstance;
+		
 		client::IAudioChunk *NullDevice::RegisterSound(const char *) {
-			return new NullChunk();
+			return &nullChunkInstance;
 		}
 		
 		void NullDevice::SetGameMap(client::GameMap *) {}
