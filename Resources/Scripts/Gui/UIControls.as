@@ -204,6 +204,38 @@ namespace spades {
 			}
 		}
 		
+		
+		class CheckBox: spades::ui::Button {
+			CheckBox(spades::ui::UIManager@ manager){
+				super(manager);
+				this.Toggle = true;
+			}
+			void Render() {
+				Renderer@ renderer = Manager.Renderer;
+				Vector2 pos = ScreenPosition;
+				Vector2 size = Size;
+				Image@ img = renderer.RegisterImage("Gfx/White.tga");
+				if(Pressed && Hover) {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
+				} else if(Hover) {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.12f);
+				} else {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.00f);
+				}
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
+				Vector2 txtSize = Font.Measure(Caption);
+				Font.DrawShadow(Caption, pos + (size - txtSize) * Vector2(0.f, 0.5f) + Vector2(16.f, 0.f), 
+					1.f, Vector4(1,1,1,1), Vector4(0,0,0,0.2f));
+				
+				@img = renderer.RegisterImage("Gfx/UI/CheckBox.png");
+				
+				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, Toggled ? .9f : 0.6f);
+				renderer.DrawImage(img, AABB2(pos.x, pos.y + (size.y - 16.f) * 0.5f, 16.f, 16.f),
+					AABB2(Toggled ? 16.f : 0.f, 0.f, 16.f, 16.f));
+					
+			}
+		}
+		
 		class Button: ButtonBase {
 			private Image@ image;
 			Vector2 Alignment = Vector2(0.5f, 0.5f);
