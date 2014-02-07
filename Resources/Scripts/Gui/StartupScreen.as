@@ -26,7 +26,7 @@ namespace spades {
 	class StartupScreenUI {
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
-		private Font@ font;
+		Font@ font;
 		StartupScreenHelper@ helper;
 		
 		spades::ui::UIManager@ manager;
@@ -94,7 +94,7 @@ namespace spades {
 			// draw title logo
 			Image@ img = renderer.RegisterImage("Gfx/Title/Logo.png");
 			renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.f);
-			renderer.DrawImage(img, Vector2((renderer.ScreenWidth - img.Width) * 0.5f, 64.f));
+			renderer.DrawImage(img, AABB2(10.f, 10.f, img.Width * 0.4f, img.Height * 0.4f));
 			
 			manager.RunFrame(dt);
 			manager.Render();
@@ -130,16 +130,41 @@ namespace spades {
 			@this.ui = ui;
 			@this.helper = ui.helper;
 			
+			@this.Font = ui.font;
+			
 			float width = Manager.Renderer.ScreenWidth;
 			float height = Manager.Renderer.ScreenHeight;
 			{
 				spades::ui::Button button(Manager);
 				button.Caption = "Start";
-				button.Bounds = AABB2((width - 150.f) * 0.5f, height - 100.f, 150.f, 30.f);
+				button.Bounds = AABB2(width - 170.f, 20.f, 150.f, 30.f);
 				button.Activated = EventHandler(this.OnStartPressed);
 				AddChild(button);
 			}
+			spades::ui::UIElement graphicsTab(Manager);
+			spades::ui::UIElement audioTab(Manager);
+			spades::ui::UIElement profileTab(Manager);
+			AABB2 clientArea(10.f, 100.f, width - 20.f, height - 110.f);
+			graphicsTab.Bounds = clientArea;
+			audioTab.Bounds = clientArea;
+			profileTab.Bounds = clientArea;
+			AddChild(graphicsTab);
+			AddChild(audioTab);
+			AddChild(profileTab);
+			audioTab.Visible = false;
+			profileTab.Visible = false;
 			
+			
+			
+			{
+				spades::ui::SimpleTabStrip tabStrip(Manager);
+				AddChild(tabStrip);
+				tabStrip.Bounds = AABB2(10.f, 70.f, width - 20.f, 24.f);
+				tabStrip.AddItem("Graphics", graphicsTab);
+				tabStrip.AddItem("Audio", audioTab);
+				tabStrip.AddItem("System Info", profileTab);
+				
+			}
 		}
 		
 		

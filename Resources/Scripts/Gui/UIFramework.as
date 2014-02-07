@@ -21,6 +21,7 @@
 namespace spades {
 	namespace ui {
 	
+		funcdef void EventHandler(UIElement@ sender);
 		funcdef void PasteClipboardEventHandler(string text);
 		
 		/** Manages all input/output and rendering of the UI framework. */
@@ -490,6 +491,9 @@ namespace spades {
 			private Font@ fontOverride;
 			private Cursor@ cursorOverride;
 			
+			EventHandler@ MouseEntered;
+			EventHandler@ MouseLeft;
+			
 			bool Visible = true;
 			bool Enable = true;
 			
@@ -798,8 +802,14 @@ namespace spades {
 				}
 			}
 			void MouseEnter() {
+				if(MouseEntered !is null) {
+					MouseEntered(this);
+				}
 			}
 			void MouseLeave() {
+				if(MouseLeft !is null) {
+					MouseLeft(this);
+				}
 			}
 			
 			void KeyDown(string key) {
