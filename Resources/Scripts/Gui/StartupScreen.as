@@ -92,9 +92,9 @@ namespace spades {
 		
 			
 			// draw title logo
-			Image@ img = renderer.RegisterImage("Gfx/Title/Logo.png");
+			Image@ img = renderer.RegisterImage("Gfx/Title/LogoSmall.png");
 			renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.f);
-			renderer.DrawImage(img, AABB2(10.f, 10.f, img.Width * 0.4f, img.Height * 0.4f));
+			renderer.DrawImage(img, AABB2(10.f, 10.f, img.Width, img.Height));
 			
 			manager.RunFrame(dt);
 			manager.Render();
@@ -120,10 +120,9 @@ namespace spades {
 		StartupScreenHelper@ helper;
 		
 		spades::ui::ListView@ serverList;
+		spades::ui::CheckBox@ bypassStartupWindowCheck;
 		
-		private ConfigItem cg_protocolVersion("cg_protocolVersion");
-		private ConfigItem cg_lastQuickConnectHost("cg_lastQuickConnectHost");
-		private ConfigItem cg_serverlistSort("cg_serverlistSort", "16385");
+		private ConfigItem cl_showStartupWindow("cl_showStartupWindow", "-1");
 		
 		StartupScreenMainMenu(StartupScreenUI@ ui) {
 			super(ui.manager);
@@ -141,6 +140,27 @@ namespace spades {
 				button.Activated = EventHandler(this.OnStartPressed);
 				AddChild(button);
 			}
+			{
+				spades::ui::CheckBox button(Manager);
+				button.Caption = "Skip this screen next time";
+				button.Bounds = AABB2(360.f, 62.f, width - 380.f, 20.f);
+				AddChild(button);
+				@bypassStartupWindowCheck = button;
+				button.Activated = EventHandler(this.OnBypassStartupWindowCheckChanged);
+				switch(cl_showStartupWindow.IntValue) {
+				case -1:
+					button.Toggled = false;
+					break;
+				case 0:
+					button.Toggled = true;
+					break;
+				default:
+					button.Toggled = false;
+					break;
+				}
+				
+			}
+			
 			spades::ui::UIElement graphicsTab(Manager);
 			spades::ui::UIElement audioTab(Manager);
 			spades::ui::UIElement profileTab(Manager);
@@ -165,6 +185,10 @@ namespace spades {
 				tabStrip.AddItem("System Info", profileTab);
 				
 			}
+		}
+		
+		private void OnBypassStartupWindowCheckChanged(spades::ui::UIElement@ sender) {
+			cl_showStartupWindow.IntValue = (bypassStartupWindowCheck.Toggled ? 0 : 1);
 		}
 		
 		
