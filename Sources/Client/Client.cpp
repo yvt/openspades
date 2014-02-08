@@ -34,7 +34,6 @@
 #include "Grenade.h"
 #include "../Core/Debug.h"
 #include "NetClient.h"
-#include "FontData.h"
 #include "Quake3Font.h"
 #include "../Core/Exception.h"
 #include "ChatWindow.h"
@@ -65,6 +64,7 @@
 #include <stdlib.h>
 #include "ClientPlayer.h"
 #include "ClientUI.h"
+#include "Fonts.h"
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;
@@ -134,44 +134,9 @@ namespace spades {
 			SPLog("Initializing...");
 			
 			hostname = host;
-			/*
-			designFont = new Quake3Font(renderer,
-										renderer->RegisterImage("Gfx/Fonts/Orbitron.tga"),
-										(const int*)OrbitronMap,
-										30,
-										18);
-			*/
-			designFont = new Quake3Font(renderer,
-										renderer->RegisterImage("Gfx/Fonts/UnsteadyOversteer.tga"),
-										(const int *)UnsteadyOversteerMap,
-										30,
-										18);
-			static_cast<client::Quake3Font*>(designFont)->SetGlyphYRange(9.f, 24.f);
-			SPLog("Font 'Unsteady Oversteer' Loaded");
-			/*
-			textFont = new Quake3Font(renderer,
-										renderer->RegisterImage("Gfx/Fonts/UbuntuCondensed.tga"),
-										(const int*)UbuntuCondensedMap,
-										24,
-			 4);
-			 static_cast<client::Quake3Font*>(&*textFont)->SetGlyphYRange(4.f, 16.f);
-			SPLog("Font 'Ubuntu Condensed' Loaded");*/
-			textFont = new client::Quake3Font(renderer,
-										 renderer->RegisterImage("Gfx/Fonts/SquareFontModified.png"),
-										 (const int*)SquareFontMap,
-										 24,
-											  4,
-											  true);
-			static_cast<client::Quake3Font*>(textFont)->SetGlyphYRange(4.f, 16.f);
-			SPLog("Font 'SquareFont' Loaded");
-			
-			bigTextFont = new Quake3Font(renderer,
-									  renderer->RegisterImage("Gfx/Fonts/SquareFontBig.png"),
-									  (const int*)SquareFontBigMap,
-									  48,
-										 8, true);
-			static_cast<client::Quake3Font*>(bigTextFont)->SetGlyphYRange(11.f, 37.f);
-			SPLog("Font 'SquareFont (Large)' Loaded");
+			designFont = CreateSquareDesignFont(renderer);
+			textFont = CreateGuiFont(renderer);
+			bigTextFont = CreateLargeFont(renderer);
 			
 			world = NULL;
 			net = NULL;

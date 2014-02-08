@@ -29,6 +29,7 @@
 #include <Gui/SDLRunner.h>
 #include <Gui/Main.h>
 #include <Audio/NullDevice.h>
+#include <Client/Fonts.h>
 
 namespace spades {
 	namespace gui {
@@ -44,14 +45,7 @@ namespace spades {
 				SPInvalidArgument("a");
 			
 			
-			font = new client::Quake3Font(renderer,
-										  renderer->RegisterImage("Gfx/Fonts/SquareFontModified.png"),
-										  (const int*)SquareFontMap,
-										  24,
-										  4,
-										  true);
-			static_cast<client::Quake3Font*>(&*font)->SetGlyphYRange(4.f, 16.f);
-			SPLog("Font 'SquareFont' Loaded");
+			font = client::CreateGuiFont(r);
 			
 			helper->BindStartupScreen(this);
 			

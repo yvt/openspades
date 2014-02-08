@@ -60,6 +60,7 @@
 		E842888E18A3D1520060743D /* StartupScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842888C18A3D1520060743D /* StartupScreenHelper.cpp */; };
 		E842889018A3D6470060743D /* StartupScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842888F18A3D6470060743D /* StartupScreenHelper.cpp */; };
 		E842889318A3D9C50060743D /* NullDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842889118A3D9C40060743D /* NullDevice.cpp */; };
+		E842889618A667930060743D /* Fonts.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842889418A667930060743D /* Fonts.cpp */; };
 		E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */; };
 		E844886617D0C43B005105D0 /* Tracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886417D0C43B005105D0 /* Tracer.cpp */; };
 		E844886A17D262E4005105D0 /* Serverbrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886817D262E3005105D0 /* Serverbrowser.cpp */; };
@@ -394,6 +395,8 @@
 		E842888F18A3D6470060743D /* StartupScreenHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreenHelper.cpp; sourceTree = "<group>"; };
 		E842889118A3D9C40060743D /* NullDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NullDevice.cpp; sourceTree = "<group>"; };
 		E842889218A3D9C40060743D /* NullDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NullDevice.h; sourceTree = "<group>"; };
+		E842889418A667930060743D /* Fonts.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fonts.cpp; sourceTree = "<group>"; };
+		E842889518A667930060743D /* Fonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fonts.h; sourceTree = "<group>"; };
 		E842D48B17C0D06300381B49 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLongSpriteRenderer.cpp; sourceTree = "<group>"; };
 		E844886117CFB32B005105D0 /* GLLongSpriteRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLongSpriteRenderer.h; sourceTree = "<group>"; };
@@ -1562,6 +1565,8 @@
 				E834F56917979FD3004EBE88 /* IFont.cpp */,
 				E834F56A17979FD5004EBE88 /* IFont.h */,
 				E834F56C1797AA2C004EBE88 /* FontData.h */,
+				E842889418A667930060743D /* Fonts.cpp */,
+				E842889518A667930060743D /* Fonts.h */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1819,6 +1824,7 @@
 				E8CF03BF178EE50E000683D4 /* Main.cpp in Sources */,
 				E8CF03C3178EE6D8000683D4 /* Client.cpp in Sources */,
 				E8CF03C8178EE81A000683D4 /* IAudioDevice.cpp in Sources */,
+				E842889618A667930060743D /* Fonts.cpp in Sources */,
 				E8CF03CB178EE869000683D4 /* IInputInterface.cpp in Sources */,
 				E8CF03CE178EE95F000683D4 /* Math.cpp in Sources */,
 				E8CF03D1178EEF80000683D4 /* Semaphore.cpp in Sources */,

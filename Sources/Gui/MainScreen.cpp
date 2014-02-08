@@ -22,11 +22,11 @@
 #include "MainScreen.h"
 #include <Core/Exception.h>
 #include <Client/Quake3Font.h>
-#include <Client/FontData.h>
 #include <ScriptBindings/ScriptFunction.h>
 #include "MainScreenHelper.h"
 #include <Client/Client.h>
 #include <Core/Settings.h>
+#include <Client/Fonts.h>
 
 SPADES_SETTING(cg_lastQuickConnectHost, "127.0.0.1");
 SPADES_SETTING(cg_protocolVersion, "");
@@ -43,15 +43,7 @@ namespace spades {
 			if(a == NULL)
 				SPInvalidArgument("a");
 			
-			
-			font = new client::Quake3Font(renderer,
-									  renderer->RegisterImage("Gfx/Fonts/SquareFontModified.png"),
-									  (const int*)SquareFontMap,
-									  24,
-									  4,
-										  true);
-			static_cast<client::Quake3Font*>(&*font)->SetGlyphYRange(4.f, 16.f);
-			SPLog("Font 'SquareFont' Loaded");
+			font = client::CreateGuiFont(renderer);
 			
 			helper = new MainScreenHelper(this);
 						
