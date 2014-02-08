@@ -54,7 +54,7 @@ namespace spades {
 		protected:
 			virtual ~StartupScreen();
 		public:
-			StartupScreen(client::IRenderer *, client::IAudioDevice *);
+			StartupScreen(client::IRenderer *, client::IAudioDevice *, StartupScreenHelper *helper);
 			
 			client::IRenderer *GetRenderer() { return &*renderer; }
 			client::IAudioDevice *GetAudioDevice() { return &*audioDevice; }

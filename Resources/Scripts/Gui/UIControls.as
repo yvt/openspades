@@ -148,9 +148,11 @@ namespace spades {
 				if(not Pressed) {
 					PlayMouseEnterSound();
 				}
+				UIElement::MouseEnter();
 			}
 			void MouseLeave() {
 				Hover = false;
+				UIElement::MouseLeave();
 			}
 			
 			void KeyDown(string key) {
@@ -232,6 +234,77 @@ namespace spades {
 				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, Toggled ? .9f : 0.6f);
 				renderer.DrawImage(img, AABB2(pos.x, pos.y + (size.y - 16.f) * 0.5f, 16.f, 16.f),
 					AABB2(Toggled ? 16.f : 0.f, 0.f, 16.f, 16.f));
+					
+			}
+		}
+		
+		
+		class RadioButton: spades::ui::Button {
+			string GroupName;
+			
+			RadioButton(spades::ui::UIManager@ manager){
+				super(manager);
+				this.Toggle = true;
+			}
+			void Check() {
+				this.Toggled = true;
+					
+				// uncheck others
+				if(GroupName.length > 0) {
+					UIElement@[]@ children = this.Parent.GetChildren();
+					for(uint i = 0, count = children.length; i < children.length; i++) {
+						RadioButton@ btn = cast<RadioButton>(children[i]);
+						if(btn is this) continue;
+						if(btn !is null) {
+							if(GroupName == btn.GroupName) {
+								btn.Toggled = false;
+							}
+						}
+					}
+				}
+			}
+			void OnActivated() {
+				Check();
+				
+				Button::OnActivated();
+			}
+			void Render() {
+				Renderer@ renderer = Manager.Renderer;
+				Vector2 pos = ScreenPosition;
+				Vector2 size = Size;
+				Image@ img = renderer.RegisterImage("Gfx/White.tga");
+				if(!this.Enable) {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.07f);
+				} else if((Pressed && Hover) || Toggled) {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
+				} else if(Hover) {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.12f);
+				} else {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.07f);
+				}
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
+				if(!this.Enable) {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.03f);
+				} if((Pressed && Hover) || Toggled) {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.1f);
+				} else if(Hover) {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.07f);
+				} else {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.03f);
+				}
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, 1.f, size.y));
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
+				renderer.DrawImage(img, AABB2(pos.x+size.x-1.f, pos.y, 1.f, size.y));
+				renderer.DrawImage(img, AABB2(pos.x, pos.y+size.y-1.f, size.x, 1.f));
+				Vector2 txtSize = Font.Measure(Caption);
+				Font.DrawShadow(Caption, pos + (size - txtSize) * 0.5f + Vector2(8.f, 0.f), 1.f, 
+					Vector4(1,1,1,this.Enable ? 1.f : 0.4f), Vector4(0,0,0,0.4f));
+				
+				if(Toggled) {
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.6f);
+					renderer.DrawImage(img, AABB2(pos.x + 4.f, pos.y + (size.y - 8.f) * 0.5f, 8.f, 8.f));
+				}
+				
 					
 			}
 		}
@@ -714,9 +787,11 @@ namespace spades {
 			}
 			void MouseEnter() {
 				hover = true;
+				FieldBase::MouseEnter();
 			}
 			void MouseLeave() {
 				hover = false;
+				FieldBase::MouseLeave();
 			}
 			void Render() {
 				// render background
@@ -842,9 +917,11 @@ namespace spades {
 			}
 			void MouseEnter() {
 				hover = true;
+				UIElement::MouseEnter();
 			}
 			void MouseLeave() {
 				hover = false;
+				UIElement::MouseLeave();
 			}
 			
 			void Render() {
@@ -1119,9 +1196,11 @@ namespace spades {
 			}
 			void MouseEnter() {
 				hover = true;
+				UIElement::MouseEnter();
 			}
 			void MouseLeave() {
 				hover = false;
+				UIElement::MouseLeave();
 			}
 			
 			void Render() {

@@ -57,6 +57,46 @@ namespace spades {
 												  asMETHOD(gui::StartupScreenHelper, Start),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "int GetNumVideoModes()",
+												  asMETHOD(gui::StartupScreenHelper, GetNumVideoModes),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "int GetVideoModeWidth(int)",
+												  asMETHOD(gui::StartupScreenHelper, GetVideoModeWidth),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "int GetVideoModeHeight(int)",
+												  asMETHOD(gui::StartupScreenHelper, GetVideoModeHeight),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "int GetNumReportLines()",
+												  asMETHOD(gui::StartupScreenHelper, GetNumReportLines),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "string GetReport()",
+												  asMETHOD(gui::StartupScreenHelper, GetReport),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "string GetReportLineText()",
+												  asMETHOD(gui::StartupScreenHelper, GetReportLineText),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "Vector4 GetReportLineColor()",
+												  asMETHOD(gui::StartupScreenHelper, GetReportLineColor),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "string CheckConfigCapability(const string&in, const string&in)",
+												  asMETHOD(gui::StartupScreenHelper, CheckConfigCapability),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
 					break;
 				default:
 					break;

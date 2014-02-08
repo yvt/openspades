@@ -32,10 +32,11 @@
 
 namespace spades {
 	namespace gui {
-		StartupScreen::StartupScreen(client::IRenderer *r, client::IAudioDevice *a) :
+		StartupScreen::StartupScreen(client::IRenderer *r, client::IAudioDevice *a, StartupScreenHelper *helper) :
 		renderer(r),
 		audioDevice(a),
-		startRequested(false){
+		startRequested(false),
+		helper(helper){
 			SPADES_MARK_FUNCTION();
 			if(r == NULL)
 				SPInvalidArgument("r");
@@ -52,7 +53,7 @@ namespace spades {
 			static_cast<client::Quake3Font*>(&*font)->SetGlyphYRange(4.f, 16.f);
 			SPLog("Font 'SquareFont' Loaded");
 			
-			helper = new StartupScreenHelper(this);
+			helper->BindStartupScreen(this);
 			
 			DoInit();
 		}
@@ -186,6 +187,8 @@ namespace spades {
 		
 		void StartupScreen::DrawStartupScreen() {
 			SPADES_MARK_FUNCTION();
+			
+			// FIXME: not used
 			Handle<client::IImage> img;
 			Vector2 scrSize = {renderer->ScreenWidth(),
 				renderer->ScreenHeight()};
@@ -207,18 +210,6 @@ namespace spades {
 		
 		void StartupScreen::RunFrame(float dt) {
 			SPADES_MARK_FUNCTION();
-			/*if(timeToStartInitialization > 100.f){
-				timeToStartInitialization = 0.2f;
-			}
-			if(timeToStartInitialization > 0.f){
-				DrawStartupScreen();
-				timeToStartInitialization -= dt;
-				if(timeToStartInitialization <= 0.f){
-					// do init
-					DoInit();
-				}
-				return;
-			}*/
 			
 			static ScriptFunction func("StartupScreenUI", "void RunFrame(float)");
 			ScriptContextHandle c = func.Prepare();
@@ -262,9 +253,14 @@ namespace spades {
 		
 		void StartupScreen::Run() {
 			
+			SDL_InitSubSystem(SDL_INIT_VIDEO);
+			
+			auto *helper = new StartupScreenHelper();
+			helper->ExamineSystem();
+			
 			class ConcreteRunner: public SDLRunner {
 				Handle<StartupScreen> view;
-				
+				StartupScreenHelper *helper;
 			protected:
 				
 				virtual auto GetRendererType() -> RendererType {
@@ -274,20 +270,23 @@ namespace spades {
 					return new audio::NullDevice();
 				}
 				virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) {
-					view.Set(new StartupScreen(renderer, dev), true);
+					view.Set(new StartupScreen(renderer, dev, helper), true);
 					return view;
 				}
 			public:
-				
+				ConcreteRunner(StartupScreenHelper *helper):
+				helper(helper){
+					
+				}
 				bool RunAndGetStartFlag() {
-					this->Run(600, 300);
+					this->Run(720, 480);
 					return view->startRequested;
 				}
 			};
 			
 			bool startFlag;
 			{
-				ConcreteRunner runner;
+				ConcreteRunner runner(helper);
 				runner.SetHasSystemMenu(true);
 				startFlag = runner.RunAndGetStartFlag();
 			}
