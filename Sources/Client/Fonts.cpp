@@ -52,7 +52,7 @@ namespace spades {
 										  20,
 										  4,
 										  true);
-			font->SetGlyphYRange(4.f, 16.f);
+			font->SetGlyphYRange(3.f, 17.f);
 			SPLog("Font 'CMUSansCondensed' Loaded");
 			return font;
 		}

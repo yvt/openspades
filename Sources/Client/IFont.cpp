@@ -26,6 +26,7 @@
 #include <memory>
 #include <cstring>
 #include <Core/Exception.h>
+#include <Draw/SWRenderer.h> // FIXME: better way to check linear interpolation is performed
 
 namespace spades {
 	namespace client{
@@ -42,9 +43,11 @@ namespace spades {
 			IRenderer *renderer;
 			FallbackFontManager *manager;
 			Handle<IImage> whiteImage; // used for last resort
+			bool roundSize;
 			
 			struct FindResult {
 				IImage *img;
+				float size;
 				float sizeInverse;
 				float advance;
 				int x, y, w, h;
@@ -171,6 +174,11 @@ namespace spades {
 				images.push_back(img);
 			}
 			whiteImage.Set(renderer->RegisterImage("Gfx/White.tga"), false);
+			
+			// SW renderer doesn't perform linear interpolation on
+			// rendering images, so size rounding must be done to
+			// avoid unreadable texts.
+			roundSize = dynamic_cast<draw::SWRenderer *>(renderer) != nullptr;
 		}
 		
 		FallbackFontRenderer::~FallbackFontRenderer() {
@@ -189,6 +197,7 @@ namespace spades {
 					continue;
 				}
 				result.img = images[i];
+				result.size = font->fontSize;
 				result.sizeInverse = font->fontSizeInverse;
 				result.advance = it->second.advance;
 				result.x = it->second.x;
@@ -225,6 +234,15 @@ namespace spades {
 			}
 			
 			float scale = size * glyph.sizeInverse;
+			if(roundSize) {
+				// some fallback fonts is stored with 2x scaled
+				// so it looks pixellated
+				float newScale = scale <= 1.f ?
+				0.5f : floorf(scale);
+				// vertical-align: baseline
+				y += (scale - newScale) * glyph.size;
+				scale = newScale;
+			}
 			
 			AABB2 inRect(glyph.x, glyph.y, glyph.w, glyph.h);
 			AABB2 outRect(glyph.offX, glyph.offY, glyph.w, glyph.h);
@@ -257,6 +275,11 @@ namespace spades {
 			}
 			
 			float scale = size * glyph.sizeInverse;
+			if(roundSize) {
+				float newScale = scale <= 1.f ?
+				0.5f : floorf(scale);
+				scale = newScale;
+			}
 			return glyph.advance * scale;
 		}
 		
