@@ -482,6 +482,26 @@ namespace spades {
 			}
 		}
 		
+		class UIElementReverseIterator {
+			private bool initial = true;
+			private UIElement@ e;
+			UIElementReverseIterator(UIElement@ parent) {
+				@e = parent;
+			}
+			UIElement@ Current {
+				get { return initial ? null : e; }
+			}
+			bool MoveNext() {
+				if(initial) {
+					@e = e.LastChild;
+					initial = false;
+				} else {
+					@e = e.PrevSibling;
+				}
+				return @e !is null;
+			}
+		}
+		
 		class UIElement {
 			private UIManager@ manager;
 			private UIElement@ parent;
@@ -543,10 +563,18 @@ namespace spades {
 			UIElement@ FirstChild {
 				get final { return firstChild; }
 			}
+			// used by UIElementIterator. Do not use.
+			UIElement@ LastChild {
+				get final { return lastChild; }
+			}
 			
 			// used by UIElementIterator. Do not use.
 			UIElement@ NextSibling {
 				get final { return nextSibling; }
+			}
+			// used by UIElementIterator. Do not use.
+			UIElement@ PrevSibling {
+				get final { return prevSibling; }
 			}
 			
 			UIElement@[]@ GetChildren() final {
@@ -560,7 +588,7 @@ namespace spades {
 				//return array<spades::ui::UIElement@>(children);
 			}
 			
-			void AddChild(UIElement@ element) {
+			void AppendChild(UIElement@ element) {
 				
 				UIElement@ oldParent = element.Parent;
 				if(oldParent is this){
@@ -579,10 +607,30 @@ namespace spades {
 					@lastChild = @element;
 					@element.parent = this;
 				}
+			}
+			void PrependChild(UIElement@ element) {
 				
-			/*
-				children.insertLast(element);
-				@element.parent = this;*/
+				UIElement@ oldParent = element.Parent;
+				if(oldParent is this){
+					return;
+				}else if(oldParent !is null){
+					@element.Parent = null;
+				}
+				
+				if(firstChild is null) {
+					@firstChild = element;
+					@lastChild = element;
+					@element.parent = this;
+				} else {
+					@element.nextSibling = @firstChild;
+					@firstChild.prevSibling = @element;
+					@firstChild = @element;
+					@element.parent = this;
+				}
+			}
+			
+			void AddChild(UIElement@ element) {
+				AppendChild(element);
 			}
 			
 			void RemoveChild(UIElement@ element) {
@@ -756,7 +804,7 @@ namespace spades {
 				
 				Vector2 p = relativePos - Position;
 				
-				UIElementIterator iterator(this);
+				UIElementReverseIterator iterator(this);
 				while(iterator.MoveNext()) {
 					UIElement@ e = iterator.Current;
 					if(not (e.Visible and e.Enable)) {
@@ -822,7 +870,7 @@ namespace spades {
 			}
 			
 			void HotKey(string key) {
-				UIElementIterator iterator(this);
+				UIElementReverseIterator iterator(this);
 				while(iterator.MoveNext()) {
 					if(iterator.Current.Visible and iterator.Current.Enable) {
 						iterator.Current.HotKey(key);

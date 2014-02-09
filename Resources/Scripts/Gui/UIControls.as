@@ -61,6 +61,7 @@ namespace spades {
 			
 			bool Toggle = false;
 			bool Repeat = false;
+			bool ActivateOnMouseDown = false;
 			
 			EventHandler@ Activated;
 			string Caption;
@@ -102,10 +103,12 @@ namespace spades {
 				Hover = true;
 				PlayActivateSound();
 				
-				if(Repeat) {
+				if(Repeat or ActivateOnMouseDown) {
 					OnActivated();
-					repeatTimer.Interval = 0.3f;
-					repeatTimer.Start();
+					if(Repeat) {
+						repeatTimer.Interval = 0.3f;
+						repeatTimer.Start();
+					}
 				}
 			}
 			void MouseMove(Vector2 clientPosition) {
@@ -131,7 +134,7 @@ namespace spades {
 				}
 				if(Pressed) {
 					Pressed = false;
-					if(Hover and not Repeat) {
+					if(Hover and not (Repeat or ActivateOnMouseDown)) {
 						if(Toggle) {
 							Toggled = not Toggled;
 						}
@@ -1460,6 +1463,11 @@ namespace spades {
 				scrollBar.ScrollBy(delta);
 			}
 			
+			void Reload() {
+				UnloadAll();
+				Layout();
+			}
+			
 			private void UnloadAll() {
 				UIElementDeque@ items = this.items;
 				int count = items.Count;
@@ -1499,29 +1507,49 @@ namespace spades {
 			float width;
 			void AddLine(string text, Vector4 color) {
 				int startPos = 0;
-				int minEnd = 1, maxEnd = text.length;
 				if(font.Measure(text).x <= width) {
 					lines.insertLast(text);
 					colors.insertLast(color);
 					return;
 				}
-				// find line-break point by binary search (O(n log n))
-				while(startPos < int(text.length)) {
-					if(minEnd >= maxEnd) {
-						lines.insertLast(text.substr(startPos, maxEnd - startPos));
-						colors.insertLast(color);
-						startPos = maxEnd;
-						minEnd = startPos + 1;
-						maxEnd = text.length;
-						continue;
+				
+				int pos = 0;
+				int len = int(text.length);
+				bool charMode = false;
+				while(startPos < len) {
+					int nextPos = pos + 1;
+					if(!charMode) {
+						while(nextPos < len && text[nextPos] != 0x20)
+							nextPos++;
 					}
-					int midEnd = (minEnd + maxEnd + 1) >> 1;
-					if(font.Measure(text.substr(startPos, midEnd - startPos)).x > width) {
-						maxEnd = midEnd - 1;
-					} else {
-						minEnd = (minEnd == midEnd) ? (midEnd + 1) : midEnd;
+					if(font.Measure(text.substr(startPos, nextPos - startPos)).x > width) {
+						if(pos == startPos) {
+							if(charMode) {
+								pos = nextPos;
+							}else{
+								charMode = true;
+							}
+							continue;
+						}else{
+							lines.insertLast(text.substr(startPos, pos - startPos));
+							colors.insertLast(color);
+							startPos = pos;
+							while(startPos < len && text[startPos] == 0x20)
+								startPos++;
+							pos = startPos;
+							charMode = false;
+							continue;
+						}
+					}else{
+						pos = nextPos;
+						if(nextPos >= len) {
+							lines.insertLast(text.substr(startPos, nextPos - startPos));
+							colors.insertLast(color);
+							break;
+						}
 					}
 				}
+				
 			}
 			TextViewerModel(UIManager@ manager, string text, Font@ font, float width) {
 				@this.manager = manager;
@@ -1639,8 +1667,16 @@ namespace spades {
 		class SimpleTabStrip: UIElement {
 			private float nextX = 0.f;
 			
+			EventHandler@ Changed;
+			
 			SimpleTabStrip(UIManager@ manager) {
 				super(manager);
+			}
+			
+			private void OnChanged() {
+				if(Changed !is null) {
+					Changed(this);
+				}
 			}
 			
 			private void OnItemActivated(UIElement@ sender) {
@@ -1651,6 +1687,7 @@ namespace spades {
 					SimpleTabStripItem@ otherItem = cast<SimpleTabStripItem>(children[i]);
 					otherItem.linkedElement.Visible = (otherItem.linkedElement is linked);
 				}
+				OnChanged();
 			}
 			
 			void AddItem(string title, UIElement@ linkedElement) {

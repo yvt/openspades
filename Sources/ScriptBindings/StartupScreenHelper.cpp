@@ -83,12 +83,12 @@ namespace spades {
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("StartupScreenHelper",
-												  "string GetReportLineText()",
+												  "string GetReportLineText(int)",
 												  asMETHOD(gui::StartupScreenHelper, GetReportLineText),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("StartupScreenHelper",
-												  "Vector4 GetReportLineColor()",
+												  "Vector4 GetReportLineColor(int)",
 												  asMETHOD(gui::StartupScreenHelper, GetReportLineColor),
 												  asCALL_THISCALL);
 					manager->CheckError(r);

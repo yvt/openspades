@@ -974,6 +974,20 @@ namespace spades {
 							sprintf(buf, "%f", i);
 							return buf;
 						}
+						static int ParseInt(const std::string& s) {
+							try{
+								return std::stoi(s);
+							}catch(...){
+								return 0;
+							}
+						}
+						static double ParseDouble(const std::string& s) {
+							try{
+								return std::stod(s);
+							}catch(...){
+								return 0.0;
+							}
+						}
 					};
 					
 					r = eng->RegisterGlobalFunction("string Replace(const string&in, const string& in, const string&in)",
@@ -1038,6 +1052,14 @@ namespace spades {
 					
 					r = eng->RegisterGlobalFunction("string ToString(double)",
 													asFUNCTIONPR(UtilFuncs::ToString, (double), std::string),
+													asCALL_CDECL);
+					manager->CheckError(r);
+					r = eng->RegisterGlobalFunction("int ParseInt(const string& in)",
+													asFUNCTION(UtilFuncs::ParseInt),
+													asCALL_CDECL);
+					manager->CheckError(r);
+					r = eng->RegisterGlobalFunction("double ParseDouble(const string& in)",
+													asFUNCTION(UtilFuncs::ParseDouble),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					

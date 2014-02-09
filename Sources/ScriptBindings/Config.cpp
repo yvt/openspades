@@ -22,6 +22,7 @@
 #include <Core/Settings.h>
 #include <Core/RefCountedObject.h>
 
+
 namespace spades {
 	class ConfigRegistrar: public ScriptObjectRegistrar {
 		
@@ -81,6 +82,19 @@ namespace spades {
 				return (std::string)handle;
 			}
 		};
+		
+		static CScriptArray *GetAllConfigNames() {
+			auto *ctx = asGetActiveContext();
+			auto *engine = ctx->GetEngine();
+			auto *arrayType = engine->GetObjectTypeById(engine->GetTypeIdByDecl("array<string>"));
+			auto *array = new CScriptArray(0, arrayType);
+			auto names = Settings::GetInstance()->GetAllItemNames();
+			array->Resize(static_cast<asUINT>(names.size()));
+			for(std::size_t i = 0; i < names.size(); i++) {
+				reinterpret_cast<std::string *>(array->At(static_cast<asUINT>(i)))->assign(names[i]);
+			}
+			return array;
+		}
 		
 		virtual void Register(ScriptManager *manager, Phase phase) {
 			asIScriptEngine *eng = manager->GetEngine();
@@ -161,6 +175,11 @@ namespace spades {
 												  "string get_StringValue()",
 												  asMETHOD(ConfigItem, GetStringValue),
 												  asCALL_THISCALL);
+					manager->CheckError(r);
+					
+					r = eng->RegisterGlobalFunction("array<string>@ GetAllConfigNames()",
+												  asFUNCTION(GetAllConfigNames),
+												  asCALL_CDECL);
 					manager->CheckError(r);
 					break;
 				default:

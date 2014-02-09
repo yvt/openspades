@@ -237,8 +237,8 @@ namespace spades {
 			if(roundSize) {
 				// some fallback fonts is stored with 2x scaled
 				// so it looks pixellated
-				float newScale = scale <= 1.f ?
-				0.5f : floorf(scale);
+				float newScale = scale <= .8f ?
+				0.5f : std::max(1.f, floorf(scale));
 				// vertical-align: baseline
 				y += (scale - newScale) * glyph.size;
 				scale = newScale;
@@ -276,8 +276,8 @@ namespace spades {
 			
 			float scale = size * glyph.sizeInverse;
 			if(roundSize) {
-				float newScale = scale <= 1.f ?
-				0.5f : floorf(scale);
+				float newScale = scale <= .8f ?
+				0.5f : std::max(1.f, floorf(scale));
 				scale = newScale;
 			}
 			return glyph.advance * scale;
