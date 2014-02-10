@@ -48,6 +48,6 @@ Installation
 
 Licensing
 ----------------------------------------------------------------------------------------------------
-Please see the file called LICENSE.
+Please see the file named LICENSE.
 
 Note that other assets including sounds and models are not open source.
