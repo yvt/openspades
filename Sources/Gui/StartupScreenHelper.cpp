@@ -527,12 +527,12 @@ namespace spades {
 		}
 		
 		int StartupScreenHelper::GetVideoModeWidth(int index) {
-			if(index < 0 || index >= GetNumReportLines())
+			if(index < 0 || index >= GetNumVideoModes())
 				SPInvalidArgument("index");
 			return modes[index].x;
 		}
 		int StartupScreenHelper::GetVideoModeHeight(int index) {
-			if(index < 0 || index >= GetNumReportLines())
+			if(index < 0 || index >= GetNumVideoModes())
 				SPInvalidArgument("index");
 			return modes[index].y;
 		}
