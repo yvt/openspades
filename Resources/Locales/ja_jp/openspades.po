@@ -286,37 +286,37 @@ msgctxt "Preferences"
 msgid "Exponential Power"
 msgstr "マウス加速指数"
 
-#: ../../Scripts/Gui/Preferences.as:675
+#: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:676
 msgctxt "Preferences"
 msgid "Reload"
 msgstr "リロード"
 
-#: ../../Scripts/Gui/Preferences.as:676
+#: ../../Scripts/Gui/Preferences.as:676 ../../Scripts/Gui/Preferences.as:677
 msgctxt "Preferences"
 msgid "Capture Color"
 msgstr "色をコピー"
 
-#: ../../Scripts/Gui/Preferences.as:677
+#: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:678
 msgctxt "Preferences"
 msgid "Equip Spade"
 msgstr "スペードを装備"
 
-#: ../../Scripts/Gui/Preferences.as:678
+#: ../../Scripts/Gui/Preferences.as:678 ../../Scripts/Gui/Preferences.as:679
 msgctxt "Preferences"
 msgid "Equip Block"
 msgstr "ブロックを装備"
 
-#: ../../Scripts/Gui/Preferences.as:679
+#: ../../Scripts/Gui/Preferences.as:679 ../../Scripts/Gui/Preferences.as:680
 msgctxt "Preferences"
 msgid "Equip Weapon"
 msgstr "銃を装備"
 
-#: ../../Scripts/Gui/Preferences.as:680
+#: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:681
 msgctxt "Preferences"
 msgid "Equip Grenade"
 msgstr "手榴弾を装備"
 
-#: ../../Scripts/Gui/Preferences.as:681
+#: ../../Scripts/Gui/Preferences.as:681 ../../Scripts/Gui/Preferences.as:682
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
 msgstr "ホイールで装備切替"
@@ -472,41 +472,49 @@ msgid "Say Team"
 msgstr "チームチャット"
 
 #: ../../../Sources/Client/Client.cpp:2250
+#: ../../../Sources/Client/Client.cpp:2254
 msgctxt "Client"
 msgid "NOW LOADING"
 msgstr "読み込み中"
 
 #: ../../../Sources/Client/Client.cpp:2545
+#: ../../../Sources/Client/Client.cpp:2549
 msgctxt "Client"
 msgid "Out of Block"
 msgstr "ブロックがありません"
 
 #: ../../../Sources/Client/Client.cpp:2550
+#: ../../../Sources/Client/Client.cpp:2554
 msgctxt "Client"
 msgid "Out of Grenade"
 msgstr "手榴弾がありません"
 
 #: ../../../Sources/Client/Client.cpp:2558
+#: ../../../Sources/Client/Client.cpp:2562
 msgctxt "Client"
 msgid "Reloading"
 msgstr "リロード中"
 
 #: ../../../Sources/Client/Client.cpp:2561
+#: ../../../Sources/Client/Client.cpp:2565
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr "弾切れです"
 
 #: ../../../Sources/Client/Client.cpp:2564
+#: ../../../Sources/Client/Client.cpp:2568
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
 msgstr "[{0}] を押すとリロードします"
 
 #: ../../../Sources/Client/Client.cpp:2600
+#: ../../../Sources/Client/Client.cpp:2604
 msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr "リスポーンを待機中"
 
 #: ../../../Sources/Client/Client.cpp:2643
+#: ../../../Sources/Client/Client.cpp:2647
 msgctxt "Client"
 msgid "Following {0}"
 msgstr "{0} を追跡中"
@@ -552,11 +560,18 @@ msgid "{0}'s Territory"
 msgstr "{0}のテリトリー"
 
 #: ../../../Sources/Gui/MainScreen.cpp:230
+#: ../../../Sources/Gui/MainScreen.cpp:231
 msgctxt "MainScreen"
 msgid "NOW LOADING"
 msgstr "読み込み中"
 
 #: ../../../Sources/Client/Client.cpp:2598
+#: ../../../Sources/Client/Client.cpp:2602
 msgctxt "Client"
 msgid "You will respawn in: {0}"
 msgstr "リスポーンまであと: {0}秒"
+
+#: ../../Scripts/Gui/Preferences.as:675
+msgctxt "Preferences"
+msgid "Invert Y-axis Mouse Input"
+msgstr "Y軸の入力を反転"

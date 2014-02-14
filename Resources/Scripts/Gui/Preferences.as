@@ -672,6 +672,7 @@ namespace spades {
 				ConfigNumberFormatter(2, "x"));
 			layouter.AddSliderField(_Tr("Preferences", "Exponential Power"), "cg_mouseExpPower", 0.5, 1.5, 0.02,
 				ConfigNumberFormatter(2, "", "^"));
+			layouter.AddToggleField(_Tr("Preferences", "Invert Y-axis Mouse Input"), "cg_invertMouseY");
 			layouter.AddControl(_Tr("Preferences", "Reload"), "cg_keyReloadWeapon");
 			layouter.AddControl(_Tr("Preferences", "Capture Color"), "cg_keyCaptureColor");
 			layouter.AddControl(_Tr("Preferences", "Equip Spade"), "cg_keyToolSpade");

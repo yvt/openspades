@@ -281,37 +281,37 @@ msgctxt "Preferences"
 msgid "Exponential Power"
 msgstr ""
 
-#: ../../Scripts/Gui/Preferences.as:675
+#: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:676
 msgctxt "Preferences"
 msgid "Reload"
 msgstr ""
 
-#: ../../Scripts/Gui/Preferences.as:676
+#: ../../Scripts/Gui/Preferences.as:676 ../../Scripts/Gui/Preferences.as:677
 msgctxt "Preferences"
 msgid "Capture Color"
 msgstr ""
 
-#: ../../Scripts/Gui/Preferences.as:677
+#: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:678
 msgctxt "Preferences"
 msgid "Equip Spade"
 msgstr ""
 
-#: ../../Scripts/Gui/Preferences.as:678
+#: ../../Scripts/Gui/Preferences.as:678 ../../Scripts/Gui/Preferences.as:679
 msgctxt "Preferences"
 msgid "Equip Block"
 msgstr ""
 
-#: ../../Scripts/Gui/Preferences.as:679
+#: ../../Scripts/Gui/Preferences.as:679 ../../Scripts/Gui/Preferences.as:680
 msgctxt "Preferences"
 msgid "Equip Weapon"
 msgstr ""
 
-#: ../../Scripts/Gui/Preferences.as:680
+#: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:681
 msgctxt "Preferences"
 msgid "Equip Grenade"
 msgstr ""
 
-#: ../../Scripts/Gui/Preferences.as:681
+#: ../../Scripts/Gui/Preferences.as:681 ../../Scripts/Gui/Preferences.as:682
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
 msgstr ""
@@ -467,41 +467,49 @@ msgid "Say Team"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2250
+#: ../../../Sources/Client/Client.cpp:2254
 msgctxt "Client"
 msgid "NOW LOADING"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2545
+#: ../../../Sources/Client/Client.cpp:2549
 msgctxt "Client"
 msgid "Out of Block"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2550
+#: ../../../Sources/Client/Client.cpp:2554
 msgctxt "Client"
 msgid "Out of Grenade"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2558
+#: ../../../Sources/Client/Client.cpp:2562
 msgctxt "Client"
 msgid "Reloading"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2561
+#: ../../../Sources/Client/Client.cpp:2565
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2564
+#: ../../../Sources/Client/Client.cpp:2568
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2600
+#: ../../../Sources/Client/Client.cpp:2604
 msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2643
+#: ../../../Sources/Client/Client.cpp:2647
 msgctxt "Client"
 msgid "Following {0}"
 msgstr ""
@@ -547,11 +555,18 @@ msgid "{0}'s Territory"
 msgstr ""
 
 #: ../../../Sources/Gui/MainScreen.cpp:230
+#: ../../../Sources/Gui/MainScreen.cpp:231
 msgctxt "MainScreen"
 msgid "NOW LOADING"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2598
+#: ../../../Sources/Client/Client.cpp:2602
 msgctxt "Client"
 msgid "You will respawn in: {0}"
+msgstr ""
+
+#: ../../Scripts/Gui/Preferences.as:675
+msgctxt "Preferences"
+msgid "Invert Y-axis Mouse Input"
 msgstr ""
