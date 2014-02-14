@@ -778,7 +778,7 @@ namespace spades {
 			for(uint i = 0; i < presets.length; i++) {
 				lst.insertLast(presets[i].Name);
 			}
-			lst.insertLast("Custom");
+			lst.insertLast(_Tr("StartupScreen", "Custom"));
 			return join(lst, "|");
 		}
 	}

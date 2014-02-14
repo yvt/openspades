@@ -965,3 +965,8 @@ msgstr ""
 "中間的に画面より数倍程度の高解像度な画像を生成しアンチエイリアシングを行います。見た目は最も良くなりますが、一部の設定と相性が悪い場合があります。\n"
 "\n"
 "FXAA: 描画された画像からジャギーを検出してぼかすことによりアンチエイリアシングを行います。|オフ|MSAA 2x|4x|FXAA"
+
+#: ../../Scripts/Gui/StartupScreen.as:781
+msgctxt "StartupScreen"
+msgid "Custom"
+msgstr "カスタム"

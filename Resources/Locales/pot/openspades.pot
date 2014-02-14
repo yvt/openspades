@@ -944,3 +944,8 @@ msgid ""
 "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
 "Off|MSAA 2x|4x|FXAA"
 msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:781
+msgctxt "StartupScreen"
+msgid "Custom"
+msgstr ""
