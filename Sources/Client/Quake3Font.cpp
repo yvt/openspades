@@ -136,6 +136,8 @@ namespace spades {
 			color *= a;
 			renderer->SetColorAlphaPremultiplied(color);
 			
+			float invScale = 1.f / scale;
+			
 			for(size_t i = 0; i < txt.size();){
 				size_t chrLen = 0;
 				uint32_t ch = GetCodePointFromUTF8String(txt, i, &chrLen);
@@ -169,7 +171,7 @@ namespace spades {
 			fallback:
 				DrawFallback(ch, MakeVector2(x, y + yMin) * scale + offset,
 							 (yMax - yMin) * scale, color);
-				x += MeasureFallback(ch, (yMax - yMin) * scale);
+				x += MeasureFallback(ch, (yMax - yMin) * scale) * invScale;
 			}
 		}
 	}
