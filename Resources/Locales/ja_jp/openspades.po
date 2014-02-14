@@ -19,7 +19,7 @@ msgstr ""
 "X-Language: ja_JP\n"
 "X-Source-Language: C\n"
 
-#: ../../../Sources/Gui/Main.cpp:344
+#: ../../../Sources/Gui/Main.cpp:344 ../../../Sources/Gui/Main.cpp:369
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr "ローカライゼーションシステムが読み込まれました"
@@ -472,41 +472,49 @@ msgid "Say Team"
 msgstr "チームチャット"
 
 #: ../../../Sources/Client/Client.cpp:2250
+#: ../../../Sources/Client/Client.cpp:2215
 msgctxt "Client"
 msgid "NOW LOADING"
 msgstr "読み込み中"
 
 #: ../../../Sources/Client/Client.cpp:2545
+#: ../../../Sources/Client/Client.cpp:2510
 msgctxt "Client"
 msgid "Out of Block"
 msgstr "ブロックがありません"
 
 #: ../../../Sources/Client/Client.cpp:2550
+#: ../../../Sources/Client/Client.cpp:2515
 msgctxt "Client"
 msgid "Out of Grenade"
 msgstr "手榴弾がありません"
 
 #: ../../../Sources/Client/Client.cpp:2558
+#: ../../../Sources/Client/Client.cpp:2523
 msgctxt "Client"
 msgid "Reloading"
 msgstr "リロード中"
 
 #: ../../../Sources/Client/Client.cpp:2561
+#: ../../../Sources/Client/Client.cpp:2526
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr "弾切れです"
 
 #: ../../../Sources/Client/Client.cpp:2564
+#: ../../../Sources/Client/Client.cpp:2529
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
 msgstr "[{0}] を押すとリロードします"
 
 #: ../../../Sources/Client/Client.cpp:2600
+#: ../../../Sources/Client/Client.cpp:2565
 msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr "リスポーンを待機中"
 
 #: ../../../Sources/Client/Client.cpp:2643
+#: ../../../Sources/Client/Client.cpp:2608
 msgctxt "Client"
 msgid "Following {0}"
 msgstr "{0} を追跡中"
@@ -552,11 +560,408 @@ msgid "{0}'s Territory"
 msgstr "{0}のテリトリー"
 
 #: ../../../Sources/Gui/MainScreen.cpp:230
+#: ../../../Sources/Gui/MainScreen.cpp:223
 msgctxt "MainScreen"
 msgid "NOW LOADING"
 msgstr "読み込み中"
 
 #: ../../../Sources/Client/Client.cpp:2598
+#: ../../../Sources/Client/Client.cpp:2563
 msgctxt "Client"
 msgid "You will respawn in: {0}"
 msgstr "リスポーンまであと: {0}秒"
+
+#: ../../Scripts/Gui/StartupScreen.as:142
+msgctxt "StartupScreen"
+msgid "Start"
+msgstr "スタート"
+
+#: ../../Scripts/Gui/StartupScreen.as:149
+msgctxt "StartupScreen"
+msgid "Skip this screen next time"
+msgstr "次回起動時はこの画面を表示しない"
+
+#: ../../Scripts/Gui/StartupScreen.as:181
+#, fuzzy
+msgctxt "StartupScreen"
+msgid "Graphics"
+msgstr "映像"
+
+#: ../../Scripts/Gui/StartupScreen.as:182
+msgctxt "StartupScreen"
+msgid "Audio"
+msgstr "音声"
+
+#: ../../Scripts/Gui/StartupScreen.as:183
+msgctxt "StartupScreen"
+msgid "System Info"
+msgstr "システム情報"
+
+#: ../../Scripts/Gui/StartupScreen.as:184
+msgctxt "StartupScreen"
+msgid "Advanced"
+msgstr "高度な設定"
+
+#: ../../Scripts/Gui/StartupScreen.as:907
+msgctxt "StartupScreen"
+msgid "Close"
+msgstr "閉じる"
+
+#: ../../Scripts/Gui/StartupScreen.as:1013
+msgctxt "StartupScreen"
+msgid "Graphics Settings"
+msgstr "グラフィックス設定"
+
+#: ../../Scripts/Gui/StartupScreen.as:1018
+msgctxt "StartupScreen"
+msgid "Resolution"
+msgstr "画面解像度"
+
+#: ../../Scripts/Gui/StartupScreen.as:1028
+msgctxt "StartupScreen"
+msgid "Fullscreen Mode"
+msgstr "フルスクリーンモード"
+
+#: ../../Scripts/Gui/StartupScreen.as:1031
+msgctxt "StartupScreen"
+msgid ""
+"By running in fullscreen mode OpenSpades occupies the screen, making it "
+"easier for you to concentrate on playing the game."
+msgstr "フルスクリーンモードを使用すると画面全体を占領してプレイできるため、ゲームに集中しやすくなります。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1038
+#: ../../Scripts/Gui/StartupScreen.as:1404
+msgctxt "StartupScreen"
+msgid "Backend"
+msgstr "バックエンド"
+
+#: ../../Scripts/Gui/StartupScreen.as:1041
+msgctxt "StartupScreen"
+msgid "OpenGL"
+msgstr "OpenGL"
+
+#: ../../Scripts/Gui/StartupScreen.as:1045
+msgctxt "StartupScreen"
+msgid ""
+"OpenGL renderer uses your computer's graphics accelerator to generate the "
+"game screen."
+msgstr "OpenGLレンダラーはコンピュータに内蔵されたGPUを使用してゲーム画面を描画します。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1053
+msgctxt "StartupScreen"
+msgid "Software"
+msgstr "ソフトウェア"
+
+#: ../../Scripts/Gui/StartupScreen.as:1057
+msgctxt "StartupScreen"
+msgid ""
+"Software renderer uses CPU to generate the game screen. Its quality and "
+"performance might be inferior to OpenGL renderer, but it works even with an "
+"unsupported GPU."
+msgstr ""
+"ソフトウェアレンダラーはCPUを使用してゲーム画面を描画します。画質やパフォーマンスはOpenGLには劣りますが、対応していないGPUでも常に動作します。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1078
+msgctxt "StartupScreen"
+msgid "Global Illumination"
+msgstr "大域照明"
+
+#: ../../Scripts/Gui/StartupScreen.as:1080
+msgctxt "StartupScreen"
+msgid ""
+"Enables a physically based simulation of light path for more realistic "
+"lighting."
+msgstr "物理的に比較的正確な計算手法を使用することにより、より写実的な光表現を行います。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1085
+msgctxt "StartupScreen"
+msgid "Camera Blur"
+msgstr "カメラブラー"
+
+#: ../../Scripts/Gui/StartupScreen.as:1086
+msgctxt "StartupScreen"
+msgid "Blurs the screen when you turns quickly."
+msgstr "急速な方向転換時のブレを再現します。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1088
+msgctxt "StartupScreen"
+msgid "Lens Scattering Filter"
+msgstr "レンズ散乱フィルタ"
+
+#: ../../Scripts/Gui/StartupScreen.as:1089
+msgctxt "StartupScreen"
+msgid "Simulates light being scattered by dust on the camera lens."
+msgstr "レンズの汚れによる光の散乱を再現します。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1092
+msgctxt "StartupScreen"
+msgid "Lens Flare"
+msgstr "レンズフレア"
+
+#: ../../Scripts/Gui/StartupScreen.as:1093
+msgctxt "StartupScreen"
+msgid "The Sun causes lens flare."
+msgstr "太陽を直視したときにレンズフレアを描画します。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1095
+msgctxt "StartupScreen"
+msgid "Flares for Dynamic Lights"
+msgstr "動的ライトにレンズフレア"
+
+#: ../../Scripts/Gui/StartupScreen.as:1096
+msgctxt "StartupScreen"
+msgid "Enables lens flare for light sources other than the Sun."
+msgstr "太陽以外の光源を直視したときにレンズフレアを描画します。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1098
+msgctxt "StartupScreen"
+msgid "Color Correction"
+msgstr "色調補正"
+
+#: ../../Scripts/Gui/StartupScreen.as:1099
+msgctxt "StartupScreen"
+msgid "Applies cinematic color correction to make the image look better."
+msgstr "色調補正を適用することにより見た目を改善します。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1101
+msgctxt "StartupScreen"
+msgid "Depth of Field"
+msgstr "被写界深度"
+
+#: ../../Scripts/Gui/StartupScreen.as:1102
+msgctxt "StartupScreen"
+msgid "Blurs out-of-focus objects."
+msgstr "ピントの合っていない物体をぼかします。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1104
+#: ../../Scripts/Gui/StartupScreen.as:1142
+#: ../../Scripts/Gui/StartupScreen.as:1164
+msgctxt "StartupScreen"
+msgid "Low"
+msgstr "低"
+
+#: ../../Scripts/Gui/StartupScreen.as:1105
+#: ../../Scripts/Gui/StartupScreen.as:1143
+#: ../../Scripts/Gui/StartupScreen.as:1165
+msgctxt "StartupScreen"
+msgid "Medium"
+msgstr "中"
+
+#: ../../Scripts/Gui/StartupScreen.as:1106
+#: ../../Scripts/Gui/StartupScreen.as:1144
+#: ../../Scripts/Gui/StartupScreen.as:1166
+msgctxt "StartupScreen"
+msgid "High"
+msgstr "高"
+
+#: ../../Scripts/Gui/StartupScreen.as:1109
+msgctxt "StartupScreen"
+msgid "Post-process"
+msgstr "後処理"
+
+#: ../../Scripts/Gui/StartupScreen.as:1110
+msgctxt "StartupScreen"
+msgid ""
+"Post-process modifies the image to make it look better and more realistic."
+msgstr "後処理により描画された画面を加工しより良く見せます。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1117
+msgctxt "StartupScreen"
+msgid ""
+"Particles|Low:Artifact occurs when a particle intersects other "
+"objects.|Medium:Particle intersects objects smoothly.|High:Particle "
+"intersects objects smoothly, and some objects casts their shadow to "
+"particles."
+msgstr ""
+"パーティクル|低:パーティクルが他のオブジェクトと交差すると鋭い境界が現れます。|中:パーティクルは他のオブジェクトと滑らかに交わります。|高:パーティクルは他のオブジェクトと滑らかに交わります。また一部のオブジェクトがパーティクルに影を落とします。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1127
+msgctxt "StartupScreen"
+msgid "Dynamic Lights"
+msgstr "動的ライト"
+
+#: ../../Scripts/Gui/StartupScreen.as:1129
+msgctxt "StartupScreen"
+msgid ""
+"Gives some objects an ability to emit light to give them an energy-emitting "
+"impression."
+msgstr "一部のオブジェクトが発光するようにし、エネルギーを発しているような印象を与えます。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1132
+msgctxt "StartupScreen"
+msgid "Shadows"
+msgstr "影"
+
+#: ../../Scripts/Gui/StartupScreen.as:1133
+msgctxt "StartupScreen"
+msgid "Non-static object casts a shadow."
+msgstr "動的なオブジェクトが影を落とします。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1135
+msgctxt "StartupScreen"
+msgid "Volumetric Fog"
+msgstr "ボリューメトリックフォグ"
+
+#: ../../Scripts/Gui/StartupScreen.as:1136
+msgctxt "StartupScreen"
+msgid ""
+"Simulates shadow being casted to the fog particles using a super highly "
+"computationally demanding algorithm. "
+msgstr "極めて計算量が膨大なアルゴリズムを使用することにより、大気中の霧の粒子に影が落とされる様子をシミュレーションします。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1139
+msgctxt "StartupScreen"
+msgid "Physically Based Lighting"
+msgstr "物理ベースライティング"
+
+#: ../../Scripts/Gui/StartupScreen.as:1140
+msgctxt "StartupScreen"
+msgid ""
+"Uses more accurate approximation techniques to decide the brightness of "
+"objects."
+msgstr "直接反射光の明るさを物理的により正確な手法を用いて計算します。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1145
+msgctxt "StartupScreen"
+msgid "Ultra"
+msgstr "最高"
+
+#: ../../Scripts/Gui/StartupScreen.as:1148
+msgctxt "StartupScreen"
+msgid "Direct Lights"
+msgstr "直接光"
+
+#: ../../Scripts/Gui/StartupScreen.as:1149
+msgctxt "StartupScreen"
+msgid ""
+"Controls how light encounting a material and atmosphere directly affects its "
+"appearance."
+msgstr "物体(大気含む)に直接当たった光がどのようにその外観に影響するかを制御します。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1159
+msgctxt "StartupScreen"
+msgid ""
+"Water Shader|None:Water is rendered in the same way that normal blocks are "
+"done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving "
+"water is simulated as well as reflection and refraction."
+msgstr ""
+"水シェーダー|オフ:水は通常のブロックと同じように描画されます。|レベル 1:屈折と太陽光の反射が描画されます。|レベル "
+"2:屈折・太陽光の反射に加え、波やその他の反射も描画されます。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1169
+msgctxt "StartupScreen"
+msgid "Shader Effects"
+msgstr "シェーダー効果"
+
+#: ../../Scripts/Gui/StartupScreen.as:1169
+msgctxt "StartupScreen"
+msgid "Special effects."
+msgstr "特殊効果。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1186
+msgctxt "StartupScreen"
+msgid ""
+"Fast Mode:Reduces the image resolution to make the rendering "
+"faster.|Off|2x|4x"
+msgstr "高速モード:画面解像度を低下させ、描画を高速化します。|オフ|2x|4x"
+
+#: ../../Scripts/Gui/StartupScreen.as:1398
+msgctxt "StartupScreen"
+msgid "Audio Settings"
+msgstr "音声の設定"
+
+#: ../../Scripts/Gui/StartupScreen.as:1407
+msgctxt "StartupScreen"
+msgid "OpenAL"
+msgstr "OpenAL"
+
+#: ../../Scripts/Gui/StartupScreen.as:1411
+msgctxt "StartupScreen"
+msgid ""
+"Uses an OpenAL-capable sound card to process sound. In most cases where "
+"there isn't such a sound card, software emulation is used."
+msgstr ""
+"OpenALに対応したサウンドカードを使用して音声を処理します。ほとんどの場合このようなサウンドカードがありませんので、ソフトウェアエミュレーションが使用されます。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1420
+msgctxt "StartupScreen"
+msgid "YSR"
+msgstr "YSR"
+
+#: ../../Scripts/Gui/StartupScreen.as:1424
+msgctxt "StartupScreen"
+msgid ""
+"YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
+"features several enhanced features including automatic load control, "
+"dynamics compressor, HRTF-based 3D audio, and high quality reverb."
+msgstr ""
+"YSRはOpenSpadesに最適化された、実験的な3D "
+"HDRサウンドエンジンです。自動負荷制御やダイナミクスコンプレッサー、HRTFベースの立体音響や高音質リバーブエフェクタを備えています。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1438
+#: ../../Scripts/Gui/StartupScreen.as:1462
+msgctxt "StartupScreen"
+msgid "Polyphonics"
+msgstr "最大同時発音数"
+
+#: ../../Scripts/Gui/StartupScreen.as:1439
+msgctxt "StartupScreen"
+msgid ""
+"Specifies how many sounds can be played simultaneously. Higher value needs "
+"more processing power, so setting this too high might cause an overload "
+"(especially with a software emulation)."
+msgstr ""
+"同時に発音可能な音声の個数を指定します。この値が大きいと必要な処理能力も増大するため、特にソフトウェアエミュレーションにおいて過負荷状態を生じることがあります。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1446
+msgctxt "StartupScreen"
+msgid "EAX"
+msgstr "EAX"
+
+#: ../../Scripts/Gui/StartupScreen.as:1447
+msgctxt "StartupScreen"
+msgid ""
+"Enables extended features provided by the OpenAL driver to create more "
+"ambience."
+msgstr "OpenALドライバが提供する拡張機能を利用して臨場感を高めます。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1463
+msgctxt "StartupScreen"
+msgid ""
+"Specifies how many sounds can be played simultaneously. No matter what value "
+"is set, YSR might reduce the number of sounds when an overload is detected."
+msgstr "同時に発音可能な音声の個数を指定します。この値によらず、YSRは過負荷を防ぐために同時発音数を減らすことがあります。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1533
+msgctxt "StartupScreen"
+msgid "Copy to Clipboard"
+msgstr "クリップボードにコピー"
+
+#: ../../Scripts/Gui/StartupScreen.as:1569
+msgctxt "StartupScreen"
+msgid "Advanced Settings"
+msgstr "高度な設定"
+
+#: ../../Scripts/Gui/StartupScreen.as:1578
+msgctxt "StartupScreen"
+msgid "Filter"
+msgstr "フィルタ"
+
+#: ../../Scripts/Gui/StartupScreen.as:1071
+msgctxt "StartupScreen"
+msgid ""
+"Antialias:Enables a technique to improve the appearance of high-constrast "
+"edges.\n"
+"\n"
+"MSAA: Performs antialiasing by generating an intermediate high-resolution "
+"image. Looks best, but doesn't cope with some settings.\n"
+"\n"
+"FXAA: Performs antialiasing by smoothing artifacts out as a "
+"post-process.|Off|MSAA 2x|4x|FXAA"
+msgstr ""
+"アンチエイリアシング:オブジェクトの輪郭に発生する階段上のギザギザ(ジャギー)を除去する手法を有効にします。\n"
+"\n"
+"MSAA: "
+"中間的に画面より数倍程度の高解像度な画像を生成しアンチエイリアシングを行います。見た目は最も良くなりますが、一部の設定と相性が悪い場合があります。\n"
+"\n"
+"FXAA: 描画された画像からジャギーを検出してぼかすことによりアンチエイリアシングを行います。|オフ|MSAA 2x|4x|FXAA"

@@ -139,14 +139,14 @@ namespace spades {
 			float height = Manager.Renderer.ScreenHeight;
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Start";
+				button.Caption = _Tr("StartupScreen", "Start");
 				button.Bounds = AABB2(width - 170.f, 20.f, 150.f, 30.f);
 				button.Activated = EventHandler(this.OnStartPressed);
 				AddChild(button);
 			}
 			{
 				spades::ui::CheckBox button(Manager);
-				button.Caption = "Skip this screen next time";
+				button.Caption = _Tr("StartupScreen", "Skip this screen next time");
 				button.Bounds = AABB2(360.f, 62.f, width - 380.f, 20.f);
 				AddChild(button);
 				@bypassStartupWindowCheck = button;
@@ -178,10 +178,10 @@ namespace spades {
 				spades::ui::SimpleTabStrip tabStrip(Manager);
 				AddChild(tabStrip);
 				tabStrip.Bounds = AABB2(10.f, 70.f, width - 20.f, 24.f);
-				tabStrip.AddItem("Graphics", graphicsTab);
-				tabStrip.AddItem("Audio", audioTab);
-				tabStrip.AddItem("System Info", profileTab);
-				tabStrip.AddItem("Advanced", advancedTab);
+				tabStrip.AddItem(_Tr("StartupScreen", "Graphics"), graphicsTab);
+				tabStrip.AddItem(_Tr("StartupScreen", "Audio"), audioTab);
+				tabStrip.AddItem(_Tr("StartupScreen", "System Info"), profileTab);
+				tabStrip.AddItem(_Tr("StartupScreen", "Advanced"), advancedTab);
 				@tabStrip.Changed = EventHandler(this.OnTabChanged);
 			}
 			
@@ -904,7 +904,7 @@ namespace spades {
 			
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Close";
+				button.Caption = _Tr("StartupScreen", "Close");
 				button.Bounds = AABB2(size.x - 160.f, ContentsTop + ContentsHeight - 30.f, 150.f, 30.f);
 				button.Activated = EventHandler(this.CloseActivated);
 				AddChild(button);
@@ -1010,12 +1010,12 @@ namespace spades {
 				spades::ui::TextViewer e(Manager);
 				e.Bounds = AABB2(mainWidth + 10.f, 0.f, size.x - mainWidth - 10.f, size.y);
 				@e.Font = ui.font;
-				e.Text = "Graphics Settings";
+				e.Text = _Tr("StartupScreen", "Graphics Settings");
 				AddChild(e);
 				@helpView = e;
 			}
 			
-			AddLabel(0.f, 0.f, 24.f, "Resolution");
+			AddLabel(0.f, 0.f, 24.f, _Tr("StartupScreen", "Resolution"));
 			{
 				StartupScreenGraphicsDisplayResolutionEditor e(ui);
 				e.Bounds = AABB2(100.f, 0.f, 124.f, 24.f);
@@ -1025,32 +1025,38 @@ namespace spades {
 			
 			{
 				spades::ui::CheckBox e(Manager);
-				e.Caption = "Fullscreen Mode";
+				e.Caption = _Tr("StartupScreen", "Fullscreen Mode");
 				e.Bounds = AABB2(230.f, 0.f, 150.f, 24.f);
-				HelpHandler(helpView, "By running in fullscreen mode OpenSpades occupies the "
-					"screen, making it easier for you to concentrate on playing the game.").Watch(e);
+				HelpHandler(helpView, 
+					_Tr("StartupScreen", "By running in fullscreen mode OpenSpades occupies the "
+					"screen, making it easier for you to concentrate on playing the game.")).Watch(e);
 				@e.Activated = EventHandler(this.OnFullscreenCheck);
 				AddChild(e);
 				@fullscreenCheck = e;
 			}
 			
-			AddLabel(0.f, 30.f, 24.f, "Backend");
+			AddLabel(0.f, 30.f, 24.f, _Tr("StartupScreen", "Backend"));
 			{
 				spades::ui::RadioButton e(Manager);
-				e.Caption = "OpenGL";
+				e.Caption = _Tr("StartupScreen", "OpenGL");
 				e.Bounds = AABB2(100.f, 30.f, 100.f, 24.f);
 				e.GroupName = "driver";
-				HelpHandler(helpView, "OpenGL renderer uses your computer's graphics accelerator to generate the game screen.").Watch(e);
+				HelpHandler(helpView, 
+					_Tr("StartupScreen", "OpenGL renderer uses your computer's graphics "
+						"accelerator to generate the game screen.")).Watch(e);
 				@e.Activated = EventHandler(this.OnDriverOpenGL);
 				AddChild(e);
 				@driverOpenGL = e;
 			}
 			{
 				spades::ui::RadioButton e(Manager);
-				e.Caption = "Software";
+				e.Caption = _Tr("StartupScreen", "Software");
 				e.Bounds = AABB2(210.f, 30.f, 100.f, 24.f);
 				e.GroupName = "driver";
-				HelpHandler(helpView, "Software renderer uses CPU to generate the game screen. Its quality and performance might be inferior to OpenGL renderer, but it works even with an unsupported GPU.").Watch(e);
+				HelpHandler(helpView, 
+				_Tr("StartupScreen", "Software renderer uses CPU to generate the game "
+					"screen. Its quality and performance might be inferior to OpenGL "
+					"renderer, but it works even with an unsupported GPU.")).Watch(e);
 				@e.Activated = EventHandler(this.OnDriverSoftware);
 				AddChild(e);
 				@driverSoftware = e;
@@ -1061,81 +1067,87 @@ namespace spades {
 				
 				cfg.AddRow(StartupScreenConfigSelectItemEditor(ui, 
 					StartupScreenGraphicsAntialiasConfig(ui), "0|2|4|fxaa",
+					_Tr("StartupScreen", 
 					"Antialias:Enables a technique to improve the appearance of high-constrast edges.\n\n"
 					"MSAA: Performs antialiasing by generating an intermediate high-resolution image. "
 					"Looks best, but doesn't cope with some settings.\n\n"
 					"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
-					"Off|MSAA 2x|4x|FXAA"));
+					"Off|MSAA 2x|4x|FXAA")));
 				
 				cfg.AddRow(StartupScreenConfigCheckItemEditor(ui, 
-					StartupScreenConfig(ui, "r_radiosity"), "0", "1", "Global Illumination",
-					"Enables a physically based simulation of light path for more realistic lighting."));
+					StartupScreenConfig(ui, "r_radiosity"), "0", "1", _Tr("StartupScreen", "Global Illumination"),
+					_Tr("StartupScreen", 
+					"Enables a physically based simulation of light path for more realistic lighting.")));
 				
 				{
 					StartupScreenComplexConfig cplx;
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
-					StartupScreenConfig(ui, "r_cameraBlur"), "0", "1", "Camera Blur",
-					"Blurs the screen when you turns quickly."));
+					StartupScreenConfig(ui, "r_cameraBlur"), "0", "1", _Tr("StartupScreen", "Camera Blur"),
+					_Tr("StartupScreen", "Blurs the screen when you turns quickly.")));
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
-					StartupScreenConfig(ui, "r_bloom"), "0", "1", "Lens Scattering Filter",
-					"Simulates light being scattered by dust on the camera lens."));
+					StartupScreenConfig(ui, "r_bloom"), "0", "1", _Tr("StartupScreen", "Lens Scattering Filter"),
+					_Tr("StartupScreen", "Simulates light being scattered by dust on the camera lens.")));
 					// r_lens is currently no-op
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
-					StartupScreenConfig(ui, "r_lensFlare"), "0", "1", "Lens Flare",
-					"The Sun causes lens flare."));
+					StartupScreenConfig(ui, "r_lensFlare"), "0", "1", _Tr("StartupScreen", "Lens Flare"),
+					_Tr("StartupScreen", "The Sun causes lens flare.")));
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
-					StartupScreenConfig(ui, "r_lensFlareDynamic"), "0", "1", "Flares for Dynamic Lights",
-					"Enables lens flare for light sources other than the Sun."));
+					StartupScreenConfig(ui, "r_lensFlareDynamic"), "0", "1", _Tr("StartupScreen", "Flares for Dynamic Lights"),
+					_Tr("StartupScreen", "Enables lens flare for light sources other than the Sun.")));
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
-					StartupScreenConfig(ui, "r_colorCorrection"), "0", "1", "Color Correction",
-					"Applies cinematic color correction to make the image look better."));
+					StartupScreenConfig(ui, "r_colorCorrection"), "0", "1", _Tr("StartupScreen", "Color Correction"),
+					_Tr("StartupScreen", "Applies cinematic color correction to make the image look better.")));
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
-					StartupScreenConfig(ui, "r_depthOfField"), "0", "1", "Depth of Field",
-					"Blurs out-of-focus objects."));
+					StartupScreenConfig(ui, "r_depthOfField"), "0", "1", _Tr("StartupScreen", "Depth of Field"),
+					_Tr("StartupScreen", "Blurs out-of-focus objects.")));
 					
-					cplx.AddPreset(StartupScreenComplexConfigPreset("Low", "0|0|0|0|0|0"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset("Medium", "1|0|1|0|1|0"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset("High", "1|1|1|1|1|1"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "0|0|0|0|0|0"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1|0|1|0|1|0"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|1|1|1|1"));
 					
 					cfg.AddRow(StartupScreenConfigComplexItemEditor(ui, cplx,
-						"Post-process", "Post-process modifies the image to make it look better and "
-										"more realistic."));
+						_Tr("StartupScreen", "Post-process"), 
+						_Tr("StartupScreen", "Post-process modifies the image to make it look better and "
+							"more realistic.")));
 				}
 				
 				cfg.AddRow(StartupScreenConfigSelectItemEditor(ui, 
 					StartupScreenConfig(ui, "r_softParticles"), "0|1|2",
+					_Tr("StartupScreen", 
 					"Particles|"
 					"Low:Artifact occurs when a particle intersects other objects.|"
 					"Medium:Particle intersects objects smoothly.|"
 					"High:Particle intersects objects smoothly, and some objects casts "
-					"their shadow to particles."));
+					"their shadow to particles.")));
 					
 				{
 					StartupScreenComplexConfig cplx;
 					// r_mapSoftShadow is currently no-op
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
-					StartupScreenConfig(ui, "r_dlights"), "0", "1", "Dynamic Lights",
+					StartupScreenConfig(ui, "r_dlights"), "0", "1", _Tr("StartupScreen", "Dynamic Lights"),
+					_Tr("StartupScreen", 
 					"Gives some objects an ability to emit light to give them "
-					"an energy-emitting impression."));
+					"an energy-emitting impression.")));
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
-					StartupScreenConfig(ui, "r_modelShadows"), "0", "1", "Shadows",
-					"Non-static object casts a shadow."));
+					StartupScreenConfig(ui, "r_modelShadows"), "0", "1", _Tr("StartupScreen", "Shadows"),
+					_Tr("StartupScreen", "Non-static object casts a shadow.")));
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
-					StartupScreenConfig(ui, "r_fogShadow"), "0", "1", "Volumetric Fog",
-					"Simulates shadow being casted to the fog particles using a "
-					"super highly computationally demanding algorithm. "));
+					StartupScreenConfig(ui, "r_fogShadow"), "0", "1", _Tr("StartupScreen", "Volumetric Fog"),
+					_Tr("StartupScreen", "Simulates shadow being casted to the fog particles using a "
+					"super highly computationally demanding algorithm. ")));
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
-					StartupScreenConfig(ui, "r_physicalLighting"), "0", "1", "Physically Based Lighting",
-					"Uses more accurate approximation techniques to decide the brightness of objects."));
+					StartupScreenConfig(ui, "r_physicalLighting"), "0", "1", _Tr("StartupScreen", "Physically Based Lighting"),
+					_Tr("StartupScreen", "Uses more accurate approximation techniques to decide the brightness of objects.")));
 					
-					cplx.AddPreset(StartupScreenComplexConfigPreset("Low", "1|0|0|0"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset("Medium", "1|1|0|0"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset("High", "1|1|0|1"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset("Ultra", "1|1|1|1"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "1|0|0|0"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1|1|0|0"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|0|1"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Ultra"), "1|1|1|1"));
 					
 					cfg.AddRow(StartupScreenConfigComplexItemEditor(ui, cplx,
-						"Direct Lights", "Controls how light encounting a material and atmosphere directly "
-										   "affects its appearance."));
+						_Tr("StartupScreen", "Direct Lights"), 
+						_Tr("StartupScreen", "Controls how light encounting a material and atmosphere directly "
+										   "affects its appearance.")));
 				}
 				
 				{
@@ -1143,17 +1155,18 @@ namespace spades {
 					
 					cplx.AddEditor(StartupScreenConfigSelectItemEditor(ui, 
 						StartupScreenConfig(ui, "r_water"), "0|1|2",
+						_Tr("StartupScreen", 
 						"Water Shader|"
 						"None:Water is rendered in the same way that normal blocks are done.|"
 						"Level 1:Refraction and the reflected Sun are simulated.|"
-						"Level 2:Waving water is simulated as well as reflection and refraction."));
+						"Level 2:Waving water is simulated as well as reflection and refraction.")));
 					
-					cplx.AddPreset(StartupScreenComplexConfigPreset("Low", "0"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset("Medium", "1"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset("High", "2"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "0"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "2"));
 					
 					cfg.AddRow(StartupScreenConfigComplexItemEditor(ui, cplx,
-						"Shader Effects", "Special effects."));
+						_Tr("StartupScreen", "Shader Effects"), _Tr("StartupScreen", "Special effects.")));
 				}
 				
 				
@@ -1169,8 +1182,9 @@ namespace spades {
 				
 				cfg.AddRow(StartupScreenConfigSelectItemEditor(ui, 
 					StartupScreenConfig(ui, "r_swUndersampling"), "0|1|2",
+					_Tr("StartupScreen", 
 					"Fast Mode:Reduces the image resolution to make the rendering faster.|"
-					"Off|2x|4x"));
+					"Off|2x|4x")));
 				
 				
 				cfg.Finalize();
@@ -1381,34 +1395,36 @@ namespace spades {
 				spades::ui::TextViewer e(Manager);
 				e.Bounds = AABB2(mainWidth + 10.f, 0.f, size.x - mainWidth - 10.f, size.y);
 				@e.Font = ui.font;
-				e.Text = "Audio Settings";
+				e.Text = _Tr("StartupScreen", "Audio Settings");
 				AddChild(e);
 				@helpView = e;
 			}
 			
 			
-			AddLabel(0.f, 0.f, 24.f, "Backend");
+			AddLabel(0.f, 0.f, 24.f, _Tr("StartupScreen", "Backend"));
 			{
 				spades::ui::RadioButton e(Manager);
-				e.Caption = "OpenAL";
+				e.Caption = _Tr("StartupScreen", "OpenAL");
 				e.Bounds = AABB2(100.f, 0.f, 100.f, 24.f);
 				e.GroupName = "driver";
-				HelpHandler(helpView, "Uses an OpenAL-capable sound card to process sound. "
+				HelpHandler(helpView, 
+					_Tr("StartupScreen", "Uses an OpenAL-capable sound card to process sound. "
 					"In most cases where there isn't such a sound card, software emulation is "
-					"used.").Watch(e);
+					"used.")).Watch(e);
 				@e.Activated = EventHandler(this.OnDriverOpenAL);
 				AddChild(e);
 				@driverOpenAL = e;
 			}
 			{
 				spades::ui::RadioButton e(Manager);
-				e.Caption = "YSR";
+				e.Caption = _Tr("StartupScreen", "YSR");
 				e.Bounds = AABB2(210.f, 0.f, 100.f, 24.f);
 				e.GroupName = "driver";
-				HelpHandler(helpView, "YSR is an experimental 3D HDR sound engine optimized "
+				HelpHandler(helpView, 
+					_Tr("StartupScreen", "YSR is an experimental 3D HDR sound engine optimized "
 					"for OpenSpades. It features several enhanced features including "
 					"automatic load control, dynamics compressor, HRTF-based "
-					"3D audio, and high quality reverb.").Watch(e);
+					"3D audio, and high quality reverb.")).Watch(e);
 				@e.Activated = EventHandler(this.OnDriverYSR);
 				AddChild(e);
 				@driverYSR = e;
@@ -1419,15 +1435,17 @@ namespace spades {
 				
 				cfg.AddRow(StartupScreenConfigSliderItemEditor(ui, 
 					StartupScreenConfig(ui, "s_maxPolyphonics"), 16.0, 256.0, 8.0,
-					"Polyphonics", "Specifies how many sounds can be played simultaneously. "
+					_Tr("StartupScreen", "Polyphonics"), _Tr("StartupScreen", 
+					"Specifies how many sounds can be played simultaneously. "
 					"Higher value needs more processing power, so setting this too high might "
-					"cause an overload (especially with a software emulation).",
+					"cause an overload (especially with a software emulation)."),
 					ConfigNumberFormatter(0, " poly")));
 					
 				cfg.AddRow(StartupScreenConfigCheckItemEditor(ui, 
 					StartupScreenConfig(ui, "s_eax"), "0", "1",
-					"EAX", "Enables extended features provided by the OpenAL driver to create "
-					"more ambience."));
+					_Tr("StartupScreen", "EAX"), _Tr("StartupScreen", 
+					"Enables extended features provided by the OpenAL driver to create "
+					"more ambience.")));
 				
 				cfg.Finalize();
 				cfg.SetHelpTextHandler(HelpTextHandler(this.HandleHelpText));
@@ -1441,9 +1459,10 @@ namespace spades {
 				
 				cfg.AddRow(StartupScreenConfigSliderItemEditor(ui, 
 					StartupScreenConfig(ui, "s_maxPolyphonics"), 16.0, 256.0, 8.0,
-					"Polyphonics", "Specifies how many sounds can be played simultaneously. "
+					_Tr("StartupScreen", "Polyphonics"), _Tr("StartupScreen", 
+					"Specifies how many sounds can be played simultaneously. "
 					"No matter what value is set, YSR might reduce the number of sounds "
-					"when an overload is detected.",
+					"when an overload is detected."),
 					ConfigNumberFormatter(0, " poly")));
 				
 				
@@ -1511,7 +1530,7 @@ namespace spades {
 			
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Copy to Clipboard";
+				button.Caption = _Tr("StartupScreen", "Copy to Clipboard");
 				button.Bounds = AABB2(size.x - 180.f, size.y - 30.f, 180.f, 30.f);
 				button.Activated = EventHandler(this.OnCopyReport);
 				AddChild(button);
@@ -1547,7 +1566,7 @@ namespace spades {
 				spades::ui::TextViewer e(Manager);
 				e.Bounds = AABB2(mainWidth + 10.f, 0.f, size.x - mainWidth - 10.f, size.y);
 				@e.Font = ui.font;
-				e.Text = "Advanced Settings";
+				e.Text = _Tr("StartupScreen", "Advanced Settings");
 				e.Visible = false;
 				AddChild(e);
 				@helpView = e;
@@ -1556,7 +1575,7 @@ namespace spades {
 			
 			{
 				spades::ui::Field e(Manager);
-				e.Placeholder = "Filter";
+				e.Placeholder = _Tr("StartupScreen", "Filter");
 				e.Bounds = AABB2(0.f, 0.f, size.x, 24.f);
 				@e.Changed = EventHandler(this.OnFilterChanged);
 				AddChild(e);
