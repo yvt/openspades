@@ -78,6 +78,7 @@ SPADES_SETTING(cg_ejectBrass, "1");
 SPADES_SETTING(cg_mouseSensitivity, "1");
 SPADES_SETTING(cg_zoomedMouseSensScale, "0.6");
 SPADES_SETTING(cg_mouseExpPower, "1");
+SPADES_SETTING(cg_invertMouseY, "0");
 
 SPADES_SETTING(cg_chatBeep, "1");
 SPADES_SETTING(cg_hitIndicator, "1");
@@ -914,6 +915,9 @@ namespace spades {
 					
 					x *= (float)cg_mouseSensitivity;
 					y *= (float)cg_mouseSensitivity;
+					
+					if(cg_invertMouseY)
+						y = -y;
 					
 					p->Turn(x * 0.003f, y * 0.003f);
 				}
