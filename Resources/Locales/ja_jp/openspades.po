@@ -471,42 +471,50 @@ msgctxt "Client"
 msgid "Say Team"
 msgstr "チームチャット"
 
-#: ../../../Sources/Client/Client.cpp:2250
+#: ../../../Sources/Client/Client.cpp:2219
+#: ../../../Sources/Client/Client.cpp:2218
 msgctxt "Client"
 msgid "NOW LOADING"
 msgstr "読み込み中"
 
 #: ../../../Sources/Client/Client.cpp:2545
+#: ../../../Sources/Client/Client.cpp:2513
 msgctxt "Client"
 msgid "Out of Block"
 msgstr "ブロックがありません"
 
 #: ../../../Sources/Client/Client.cpp:2550
+#: ../../../Sources/Client/Client.cpp:2518
 msgctxt "Client"
 msgid "Out of Grenade"
 msgstr "手榴弾がありません"
 
 #: ../../../Sources/Client/Client.cpp:2558
+#: ../../../Sources/Client/Client.cpp:2526
 msgctxt "Client"
 msgid "Reloading"
 msgstr "リロード中"
 
 #: ../../../Sources/Client/Client.cpp:2561
+#: ../../../Sources/Client/Client.cpp:2529
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr "弾切れです"
 
 #: ../../../Sources/Client/Client.cpp:2564
+#: ../../../Sources/Client/Client.cpp:2532
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
 msgstr "[{0}] を押すとリロードします"
 
 #: ../../../Sources/Client/Client.cpp:2600
+#: ../../../Sources/Client/Client.cpp:2568
 msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr "リスポーンを待機中"
 
 #: ../../../Sources/Client/Client.cpp:2643
+#: ../../../Sources/Client/Client.cpp:2611
 msgctxt "Client"
 msgid "Following {0}"
 msgstr "{0} を追跡中"
@@ -552,11 +560,13 @@ msgid "{0}'s Territory"
 msgstr "{0}のテリトリー"
 
 #: ../../../Sources/Gui/MainScreen.cpp:230
+#: ../../../Sources/Gui/MainScreen.cpp:223
 msgctxt "MainScreen"
 msgid "NOW LOADING"
 msgstr "読み込み中"
 
 #: ../../../Sources/Client/Client.cpp:2598
+#: ../../../Sources/Client/Client.cpp:2566
 msgctxt "Client"
 msgid "You will respawn in: {0}"
 msgstr "リスポーンまであと: {0}秒"
@@ -572,7 +582,6 @@ msgid "Skip this screen next time"
 msgstr "次回起動時はこの画面を表示しない"
 
 #: ../../Scripts/Gui/StartupScreen.as:181
-#, fuzzy
 msgctxt "StartupScreen"
 msgid "Graphics"
 msgstr "映像"
@@ -966,3 +975,114 @@ msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
 msgstr "Y軸の入力を反転"
 
+#: ../../../Sources/Client/Client.cpp:1418
+msgctxt "Client"
+msgid "Map saved: {0}"
+msgstr "マップデータを保存しました: {0}"
+
+#: ../../../Sources/Client/Client.cpp:1423
+msgctxt "Client"
+msgid "Saving map failed: "
+msgstr "マップの保存に失敗しました:"
+
+#: ../../../Sources/Client/Client.cpp:1477
+msgctxt "Client"
+msgid "Sceneshot saved: {0}"
+msgstr "シーンショットを保存しました: {0}"
+
+#: ../../../Sources/Client/Client.cpp:1479
+msgctxt "Client"
+msgid "Screenshot saved: {0}"
+msgstr "スクリーンショットを保存しました: {0}"
+
+#: ../../../Sources/Client/Client.cpp:1484
+msgctxt "Client"
+msgid "Screenshot failed: "
+msgstr "スクリーンショットに失敗しました:"
+
+#: ../../../Sources/Client/Client.cpp:2684
+msgctxt "Client"
+msgid "[Global] "
+msgstr "[全体] "
+
+#: ../../../Sources/Client/Client.cpp:3229
+msgctxt "Client"
+msgid "{0} captured {1}'s territory"
+msgstr "{0} が {1} の陣地を占領しました"
+
+#: ../../../Sources/Client/Client.cpp:3231
+msgctxt "Client"
+msgid "{0} captured an neutral territory"
+msgstr "{0} が未占領の陣地を占領しました"
+
+#: ../../../Sources/Client/Client.cpp:3238
+msgctxt "Client"
+msgid "{0} captured {1}'s Territory"
+msgstr "{0} が {1} の陣地を占領しました"
+
+#: ../../../Sources/Client/Client.cpp:3240
+msgctxt "Client"
+msgid "{0} captured an Neutral Territory"
+msgstr "{0} が未占領の陣地を占領しました"
+
+#: ../../../Sources/Client/Client.cpp:3264
+msgctxt "Client"
+msgid "{0} captured {1}'s intel"
+msgstr "{0} が {1} のIntelをキャプチャーしました"
+
+#: ../../../Sources/Client/Client.cpp:3271
+msgctxt "Client"
+msgid "{0} captured {1}'s Intel."
+msgstr "{0} が {1} のIntelをキャプチャーしました"
+
+#: ../../../Sources/Client/Client.cpp:3293
+msgctxt "Client"
+msgid "{0} picked up {1}'s intel"
+msgstr "{0} が {1} のIntelを入手しました"
+
+#: ../../../Sources/Client/Client.cpp:3300
+msgctxt "Client"
+msgid "{0} picked up {1}'s Intel."
+msgstr "{0} が {1} のIntelを入手しました"
+
+#: ../../../Sources/Client/Client.cpp:3317
+msgctxt "Client"
+msgid "{0} dropped {1}'s intel"
+msgstr "{0} が {1} のIntelを落としました"
+
+#: ../../../Sources/Client/Client.cpp:3324
+msgctxt "Client"
+msgid "{0} dropped {1}'s Intel"
+msgstr "{0} が {1} のIntelを落としました"
+
+#: ../../../Sources/Client/Client.cpp:3374
+#: ../../../Sources/Client/Client.cpp:3379
+msgctxt "Client"
+msgid "Player {0} has left"
+msgstr "プレイヤー {0} が退場しました"
+
+#: ../../../Sources/Client/Client.cpp:3395
+#: ../../../Sources/Client/Client.cpp:3402
+msgctxt "Client"
+msgid "{0} joined {1} team"
+msgstr "プレイヤー {0} が {1} に加わりました"
+
+#: ../../../Sources/Client/Client.cpp:3438
+msgctxt "Client"
+msgid "{0} wins!"
+msgstr "{0} の勝ち!"
+
+#: ../../../Sources/Client/Client.cpp:3443
+msgctxt "Client"
+msgid "{0} Wins!"
+msgstr "{0} の勝ち!"
+
+#: ../../../Sources/Client/Client.cpp:3834
+msgctxt "Client"
+msgid "You have killed {0}"
+msgstr "{0} を殺害しました"
+
+#: ../../../Sources/Client/Client.cpp:3836
+msgctxt "Client"
+msgid "You were killed by {0}"
+msgstr "{0} に殺害されました"

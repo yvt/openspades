@@ -1415,12 +1415,12 @@ namespace spades {
 				}
 				
 				std::string msg;
-				msg = "Map saved: " + name;
+				msg = _Tr("Client", "Map saved: {0}", name);
 				msg = ChatWindow::ColoredMessage(msg, MsgColorSysInfo);
 				chatWindow->AddMessage(msg);
 			}catch(const std::exception& ex){
 				std::string msg;
-				msg = "Saving map failed: ";
+				msg = _Tr("Client", "Saving map failed: ");
 				std::vector<std::string> lines = SplitIntoLines(ex.what());
 				msg += lines[0];
 				msg = ChatWindow::ColoredMessage(msg, MsgColorRed);
@@ -1474,15 +1474,14 @@ namespace spades {
 				
 				std::string msg;
 				if(sceneOnly)
-					msg = "Sceneshot saved: ";
+					msg = _Tr("Client", "Sceneshot saved: {0}", name);
 				else
-					msg = "Screenshot saved: ";
-				msg += name;
+					msg = _Tr("Client", "Screenshot saved: {0}", name);
 				msg = ChatWindow::ColoredMessage(msg, MsgColorSysInfo);
 				chatWindow->AddMessage(msg);
 			}catch(const std::exception& ex){
 				std::string msg;
-				msg = "Screenshot failed: ";
+				msg = _Tr("Client", "Screenshot failed: ");
 				std::vector<std::string> lines = SplitIntoLines(ex.what());
 				msg += lines[0];
 				msg = ChatWindow::ColoredMessage(msg, MsgColorRed);
@@ -2681,7 +2680,8 @@ namespace spades {
 			{
 				std::string s;
 				if(global)
-					s = "[Global] ";
+					/// prefix added to global chat messages.
+					s = _Tr("Client", "[Global] ");
 				s += ChatWindow::TeamColorMessage(p->GetName(), p->GetTeamId());
 				s += ": ";
 				s += msg;
@@ -3221,25 +3221,23 @@ namespace spades {
 			TCGameMode::Territory *ter = static_cast<TCGameMode *>(world->GetMode())->GetTerritory(terId);
 			int old = ter->ownerTeamId;
 			std::string msg;
-			msg = chatWindow->TeamColorMessage(world->GetTeam(teamId).name,
+			std::string teamName = chatWindow->TeamColorMessage(world->GetTeam(teamId).name,
 											   teamId);
-			msg += " captured ";
 			if(old < 2){
-				msg += chatWindow->TeamColorMessage(world->GetTeam(old).name,
+				std::string otherTeam = chatWindow->TeamColorMessage(world->GetTeam(old).name,
 													old);
-				msg += "'s territory";
+				msg = _Tr("Client", "{0} captured {1}'s territory", teamName, otherTeam);
 			}else{
-				msg += "an neutral territory";
+				msg = _Tr("Client", "{0} captured an neutral territory", teamName);
 			}
 			chatWindow->AddMessage(msg);
 			
-			msg = world->GetTeam(teamId).name;
-			msg += " captured ";
+			teamName = world->GetTeam(teamId).name;
 			if(old < 2){
-				msg += world->GetTeam(old).name;
-				msg += "'s Territory";
+				std::string otherTeam = world->GetTeam(old).name;
+				msg = _Tr("Client", "{0} captured {1}'s Territory", teamName, otherTeam);
 			}else{
-				msg += "an Neutral Territory";
+				msg = _Tr("Client", "{0} captured an Neutral Territory", teamName);
 			}
 			NetLog("%s", msg.c_str());
 			centerMessageView->AddMessage(msg);
@@ -3258,19 +3256,22 @@ namespace spades {
 		
 		void Client::PlayerCapturedIntel(spades::client::Player *p){
 			std::string msg;
-			msg = chatWindow->TeamColorMessage(p->GetName(), p->GetTeamId());
-			msg += " captured ";
-			msg += chatWindow->TeamColorMessage(world->GetTeam(1 - p->GetTeamId()).name,
-												1 - p->GetTeamId());
-			msg += "'s intel";
-			chatWindow->AddMessage(msg);
+			{
+				std::string holderName = chatWindow->TeamColorMessage(p->GetName(), p->GetTeamId());
+				
+				std::string otherTeamName = chatWindow->TeamColorMessage(world->GetTeam(1 - p->GetTeamId()).name,
+													1 - p->GetTeamId());
+				msg = _Tr("Client", "{0} captured {1}'s intel", holderName, otherTeamName);
+				chatWindow->AddMessage(msg);
+			}
 			
-			msg = p->GetName();
-			msg += " captured ";
-			msg += world->GetTeam(1 - p->GetTeamId()).name;
-			msg += "'s Intel.";
-			NetLog("%s", msg.c_str());
-			centerMessageView->AddMessage(msg);
+			{
+				std::string holderName = p->GetName();
+				std::string otherTeamName = world->GetTeam(1 - p->GetTeamId()).name;
+				msg = _Tr("Client", "{0} captured {1}'s Intel.", holderName, otherTeamName);
+				NetLog("%s", msg.c_str());
+				centerMessageView->AddMessage(msg);
+			}
 			
 			if(world->GetLocalPlayer() && !IsMuted()){
 				if(p->GetTeamId() == world->GetLocalPlayer()->GetTeamId()){
@@ -3285,19 +3286,21 @@ namespace spades {
 		
 		void Client::PlayerPickedIntel(spades::client::Player *p) {
 			std::string msg;
-			msg = chatWindow->TeamColorMessage(p->GetName(), p->GetTeamId());
-			msg += " picked up ";
-			msg += chatWindow->TeamColorMessage(world->GetTeam(1 - p->GetTeamId()).name,
-												1 - p->GetTeamId());
-			msg += "'s intel";
-			chatWindow->AddMessage(msg);
+			{
+				std::string holderName = chatWindow->TeamColorMessage(p->GetName(), p->GetTeamId());
+				std::string otherTeamName = chatWindow->TeamColorMessage(world->GetTeam(1 - p->GetTeamId()).name,
+																	   1 - p->GetTeamId());
+				msg = _Tr("Client", "{0} picked up {1}'s intel", holderName, otherTeamName);
+				chatWindow->AddMessage(msg);
+			}
 			
-			msg = p->GetName();
-			msg += " picked up ";
-			msg += world->GetTeam(1 - p->GetTeamId()).name;
-			msg += "'s intel.";
-			NetLog("%s", msg.c_str());
-			centerMessageView->AddMessage(msg);
+			{
+				std::string holderName = msg = p->GetName();
+				std::string otherTeamName = msg += world->GetTeam(1 - p->GetTeamId()).name;
+				msg = _Tr("Client", "{0} picked up {1}'s Intel.", holderName, otherTeamName);
+				NetLog("%s", msg.c_str());
+				centerMessageView->AddMessage(msg);
+			}
 			
 			if(!IsMuted()) {
 				Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/CTF/PickedUp.wav");
@@ -3307,19 +3310,21 @@ namespace spades {
 		
 		void Client::PlayerDropIntel(spades::client::Player *p) {
 			std::string msg;
-			msg = chatWindow->TeamColorMessage(p->GetName(), p->GetTeamId());
-			msg += " dropped ";
-			msg += chatWindow->TeamColorMessage(world->GetTeam(1 - p->GetTeamId()).name,
-												1 - p->GetTeamId());
-			msg += "'s intel";
-			chatWindow->AddMessage(msg);
+			{
+				std::string holderName = chatWindow->TeamColorMessage(p->GetName(), p->GetTeamId());
+				std::string otherTeamName = chatWindow->TeamColorMessage(world->GetTeam(1 - p->GetTeamId()).name,
+													1 - p->GetTeamId());
+				msg = _Tr("Client", "{0} dropped {1}'s intel", holderName, otherTeamName);
+				chatWindow->AddMessage(msg);
+			}
 			
-			msg = p->GetName();
-			msg += " dropped ";
-			msg += world->GetTeam(1 - p->GetTeamId()).name;
-			msg += "'s intel.";
-			NetLog("%s", msg.c_str());
-			centerMessageView->AddMessage(msg);
+			{
+				std::string holderName = p->GetName();
+				std::string otherTeamName = world->GetTeam(1 - p->GetTeamId()).name;
+				msg = _Tr("Client", "{0} dropped {1}'s Intel", holderName, otherTeamName);
+				NetLog("%s", msg.c_str());
+				centerMessageView->AddMessage(msg);
+			}
 		}
 		
 		void Client::PlayerDestroyedBlockWithWeaponOrTool(spades::IntVector3 blk){
@@ -3366,19 +3371,18 @@ namespace spades {
 		void Client::PlayerLeaving(spades::client::Player *p) {
 			{
 				std::string msg;
-				msg = "Player " + chatWindow->TeamColorMessage(p->GetName(), p->GetTeamId());
-				msg += " has left";
+				msg = _Tr("Client", "Player {0} has left", chatWindow->TeamColorMessage(p->GetName(), p->GetTeamId()));
 				chatWindow->AddMessage(msg);
 			}
 			{
 				std::string msg;
-				msg = "Player " + p->GetName();
-				msg += " has left";
+				msg = _Tr("Client", "Player {0} has left", p->GetName());
 				
 				auto col = p->GetTeamId() < 2 ?
 				world->GetTeam(p->GetTeamId()).color :
 				IntVector3::Make(255, 255, 255);
 				
+				NetLog("%s", msg.c_str());
 				scriptedUI->RecordChatLog(msg,
 										  MakeVector4(col.x / 255.f, col.y / 255.f,
 													  col.z / 255.f, 0.8f));
@@ -3388,24 +3392,21 @@ namespace spades {
 		void Client::PlayerJoinedTeam(spades::client::Player *p) {
 			{
 				std::string msg;
-				msg = p->GetName();
-				msg += " joined ";
-				msg += chatWindow->TeamColorMessage(world->GetTeam(p->GetTeamId()).name,
-													p->GetTeamId());
-				msg += " team";
+				msg = _Tr("Client", "{0} joined {1} team", p->GetName(),
+						  chatWindow->TeamColorMessage(world->GetTeam(p->GetTeamId()).name,
+													   p->GetTeamId()));
 				chatWindow->AddMessage(msg);
 			}
 			{
 				std::string msg;
-				msg = p->GetName();
-				msg += " joined ";
-				msg += world->GetTeam(p->GetTeamId()).name;
-				msg += " team";
+				msg = _Tr("Client", "{0} joined {1} team", p->GetName(),
+						  world->GetTeam(p->GetTeamId()).name);
 				
 				auto col = p->GetTeamId() < 2 ?
 				world->GetTeam(p->GetTeamId()).color :
 				IntVector3::Make(255, 255, 255);
 				
+				NetLog("%s", msg.c_str());
 				scriptedUI->RecordChatLog(msg,
 										  MakeVector4(col.x / 255.f, col.y / 255.f,
 													  col.z / 255.f, 0.8f));
@@ -3434,11 +3435,12 @@ namespace spades {
 			std::string msg;
 			msg = chatWindow->TeamColorMessage(world->GetTeam(teamId).name,
 												teamId);
-			msg += " wins!";
+			msg = _Tr("Client", "{0} wins!", msg);
 			chatWindow->AddMessage(msg);
 			
 			msg = world->GetTeam(teamId).name;
 			msg += " wins!";
+			msg = _Tr("Client", "{0} Wins!", msg);
 			NetLog("%s", msg.c_str());
 			centerMessageView->AddMessage(msg);
 			
@@ -3827,13 +3829,13 @@ namespace spades {
 			if(victim != killer){
 				Player* local = world->GetLocalPlayer();
 				if(killer == local || victim == local){
-					char buf[256];
+					std::string msg;
 					if( killer == local ) {
-						sprintf(buf, "You have killed %s", victim->GetName().c_str());
+						msg = _Tr("Client", "You have killed {0}", victim->GetName());
 					} else {
-						sprintf(buf, "You were killed by %s", killer->GetName().c_str());
+						msg = _Tr("Client", "You were killed by {0}", killer->GetName());
 					}
-					centerMessageView->AddMessage(buf);
+					centerMessageView->AddMessage(msg);
 				}
 			}
 		}

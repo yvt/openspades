@@ -467,41 +467,49 @@ msgid "Say Team"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2219
+#: ../../../Sources/Client/Client.cpp:2218
 msgctxt "Client"
 msgid "NOW LOADING"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2545
+#: ../../../Sources/Client/Client.cpp:2513
 msgctxt "Client"
 msgid "Out of Block"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2550
+#: ../../../Sources/Client/Client.cpp:2518
 msgctxt "Client"
 msgid "Out of Grenade"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2558
+#: ../../../Sources/Client/Client.cpp:2526
 msgctxt "Client"
 msgid "Reloading"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2561
+#: ../../../Sources/Client/Client.cpp:2529
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2564
+#: ../../../Sources/Client/Client.cpp:2532
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2600
+#: ../../../Sources/Client/Client.cpp:2568
 msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2643
+#: ../../../Sources/Client/Client.cpp:2611
 msgctxt "Client"
 msgid "Following {0}"
 msgstr ""
@@ -547,11 +555,13 @@ msgid "{0}'s Territory"
 msgstr ""
 
 #: ../../../Sources/Gui/MainScreen.cpp:230
+#: ../../../Sources/Gui/MainScreen.cpp:223
 msgctxt "MainScreen"
 msgid "NOW LOADING"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2598
+#: ../../../Sources/Client/Client.cpp:2566
 msgctxt "Client"
 msgid "You will respawn in: {0}"
 msgstr ""
@@ -943,4 +953,116 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:675
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:1418
+msgctxt "Client"
+msgid "Map saved: {0}"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:1423
+msgctxt "Client"
+msgid "Saving map failed: "
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:1477
+msgctxt "Client"
+msgid "Sceneshot saved: {0}"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:1479
+msgctxt "Client"
+msgid "Screenshot saved: {0}"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:1484
+msgctxt "Client"
+msgid "Screenshot failed: "
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:2684
+msgctxt "Client"
+msgid "[Global] "
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3229
+msgctxt "Client"
+msgid "{0} captured {1}'s territory"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3231
+msgctxt "Client"
+msgid "{0} captured an neutral territory"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3238
+msgctxt "Client"
+msgid "{0} captured {1}'s Territory"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3240
+msgctxt "Client"
+msgid "{0} captured an Neutral Territory"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3264
+msgctxt "Client"
+msgid "{0} captured {1}'s intel"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3271
+msgctxt "Client"
+msgid "{0} captured {1}'s Intel."
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3293
+msgctxt "Client"
+msgid "{0} picked up {1}'s intel"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3300
+msgctxt "Client"
+msgid "{0} picked up {1}'s Intel."
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3317
+msgctxt "Client"
+msgid "{0} dropped {1}'s intel"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3324
+msgctxt "Client"
+msgid "{0} dropped {1}'s Intel"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3374
+#: ../../../Sources/Client/Client.cpp:3379
+msgctxt "Client"
+msgid "Player {0} has left"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3395
+#: ../../../Sources/Client/Client.cpp:3402
+msgctxt "Client"
+msgid "{0} joined {1} team"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3438
+msgctxt "Client"
+msgid "{0} wins!"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3443
+msgctxt "Client"
+msgid "{0} Wins!"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3834
+msgctxt "Client"
+msgid "You have killed {0}"
+msgstr ""
+
+#: ../../../Sources/Client/Client.cpp:3836
+msgctxt "Client"
+msgid "You were killed by {0}"
 msgstr ""
