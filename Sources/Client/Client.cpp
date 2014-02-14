@@ -3295,8 +3295,8 @@ namespace spades {
 			}
 			
 			{
-				std::string holderName = msg = p->GetName();
-				std::string otherTeamName = msg += world->GetTeam(1 - p->GetTeamId()).name;
+				std::string holderName = p->GetName();
+				std::string otherTeamName = world->GetTeam(1 - p->GetTeamId()).name;
 				msg = _Tr("Client", "{0} picked up {1}'s Intel.", holderName, otherTeamName);
 				NetLog("%s", msg.c_str());
 				centerMessageView->AddMessage(msg);
