@@ -57,12 +57,12 @@ namespace spades {
 				AddChild(label);
 			}
 			
-			AddTab(GameOptionsPanel(Manager, options), "Game Options");
-			AddTab(ControlOptionsPanel(Manager, options), "Controls");
+			AddTab(GameOptionsPanel(Manager, options), _Tr("Preferences", "Game Options"));
+			AddTab(ControlOptionsPanel(Manager, options), _Tr("Preferences", "Controls"));
 			
 			{
 				PreferenceTabButton button(Manager);
-				button.Caption = "Back";
+				button.Caption = _Tr("Preferences", "Back");
 				button.Bounds = AABB2(
 					ContentsLeft + 10.f, 
 					ContentsTop + 10.f + float(tabs.length) * 32.f + 5.f
@@ -396,7 +396,7 @@ namespace spades {
 			renderer.DrawImage(img, AABB2(pos.x + size.x - 1.f, pos.y + 1.f, 1.f, size.y - 2.f));
 			
 			Font@ font = this.Font;
-			string text = IsFocused ? "Press Key to Bind or [Escape] to Cancel..." : config.StringValue;
+			string text = IsFocused ? _Tr("Preferences", "Press Key to Bind or [Escape] to Cancel...") : config.StringValue;
 			
 			Vector4 color(1,1,1,1);
 			
@@ -407,9 +407,9 @@ namespace spades {
 			}
 			
 			if(text == " ") {
-				text = "Space";
+				text = _Tr("Preferences", "Space");
 			}else if(text.length == 0) {
-				text = "Unbound";
+				text = _Tr("Preferences", "Unbound");
 				color.w *= 0.3f;
 			}
 			
@@ -571,13 +571,13 @@ namespace spades {
 			container.AddChild(label);
 			
 			{
-				ConfigSimpleToggleButton field(Parent.Manager, "ON", configName, 1);
+				ConfigSimpleToggleButton field(Parent.Manager, _Tr("Preferences", "ON"), configName, 1);
 				field.Bounds = AABB2(FieldX, 1.f, FieldWidth * 0.5f, 30.f);
 				field.Enable = enabled;
 				container.AddChild(field);
 			}
 			{
-				ConfigSimpleToggleButton field(Parent.Manager, "OFF", configName, 0);
+				ConfigSimpleToggleButton field(Parent.Manager, _Tr("Preferences", "OFF"), configName, 0);
 				field.Bounds = AABB2(FieldX + FieldWidth * 0.5f, 1.f, FieldWidth * 0.5f, 30.f);
 				field.Enable = enabled;
 				container.AddChild(field);
@@ -595,19 +595,19 @@ namespace spades {
 			container.AddChild(label);
 			
 			{
-				ConfigSimpleToggleButton field(Parent.Manager, "ON", configName, 1);
+				ConfigSimpleToggleButton field(Parent.Manager, _Tr("Preferences", "ON"), configName, 1);
 				field.Bounds = AABB2(FieldX, 1.f, FieldWidth * 0.33f, 30.f);
 				field.Enable = enabled;
 				container.AddChild(field);
 			}
 			{
-				ConfigSimpleToggleButton field(Parent.Manager, "REVERSED", configName, -1);
+				ConfigSimpleToggleButton field(Parent.Manager, _Tr("Preferences", "REVERSED"), configName, -1);
 				field.Bounds = AABB2(FieldX + FieldWidth * 0.33f, 1.f, FieldWidth * 0.34f, 30.f);
 				field.Enable = enabled;
 				container.AddChild(field);
 			}
 			{
-				ConfigSimpleToggleButton field(Parent.Manager, "OFF", configName, 0);
+				ConfigSimpleToggleButton field(Parent.Manager, _Tr("Preferences", "OFF"), configName, 0);
 				field.Bounds = AABB2(FieldX + FieldWidth * 0.67f, 1.f, FieldWidth * 0.33f, 30.f);
 				field.Enable = enabled;
 				container.AddChild(field);
@@ -629,29 +629,29 @@ namespace spades {
 			super(manager);
 			
 			StandardPreferenceLayouter layouter(this);
-			layouter.AddHeading("Player Information");
-			ConfigField@ nameField = layouter.AddInputField("Player Name", "cg_playerName", not options.GameActive);
+			layouter.AddHeading(_Tr("Preferences", "Player Information"));
+			ConfigField@ nameField = layouter.AddInputField(_Tr("Preferences", "Player Name"), "cg_playerName", not options.GameActive);
 			nameField.MaxLength = 15;
 			nameField.DenyNonAscii = true;
 			
-			layouter.AddHeading("Effects");
-			layouter.AddToggleField("Blood", "cg_blood");
-			layouter.AddToggleField("Ejecting Brass", "cg_ejectBrass");
-			layouter.AddToggleField("Ragdoll", "cg_ragdoll");
+			layouter.AddHeading(_Tr("Preferences", "Effects"));
+			layouter.AddToggleField(_Tr("Preferences", "Blood"), "cg_blood");
+			layouter.AddToggleField(_Tr("Preferences", "Ejecting Brass"), "cg_ejectBrass");
+			layouter.AddToggleField(_Tr("Preferences", "Ragdoll"), "cg_ragdoll");
 			
-			layouter.AddHeading("Feedbacks");
-			layouter.AddToggleField("Chat Notify Sounds", "cg_chatBeep");
-			layouter.AddToggleField("Hit Indicator", "cg_hitIndicator");
+			layouter.AddHeading(_Tr("Preferences", "Feedbacks"));
+			layouter.AddToggleField(_Tr("Preferences", "Chat Notify Sounds"), "cg_chatBeep");
+			layouter.AddToggleField(_Tr("Preferences", "Hit Indicator"), "cg_hitIndicator");
 			
-			layouter.AddHeading("AoS 0.75/0.76 Compatibility");
-			layouter.AddToggleField("Allow Unicode", "cg_unicode");
+			layouter.AddHeading(_Tr("Preferences", "AoS 0.75/0.76 Compatibility"));
+			layouter.AddToggleField(_Tr("Preferences", "Allow Unicode"), "cg_unicode");
 			
-			layouter.AddHeading("Misc");
-			layouter.AddSliderField("Field of View", "cg_fov", 30, 90, 1,
+			layouter.AddHeading(_Tr("Preferences", "Misc"));
+			layouter.AddSliderField(_Tr("Preferences", "Field of View"), "cg_fov", 30, 90, 1,
 				ConfigNumberFormatter(0, " deg"));
-			layouter.AddSliderField("Minimap size", "cg_minimapSize", 128, 256, 8,
+			layouter.AddSliderField(_Tr("Preferences", "Minimap size"), "cg_minimapSize", 128, 256, 8,
 				ConfigNumberFormatter(0, " px"));
-			layouter.AddToggleField("Weapon Spread Guide", "cg_debugAim");
+			layouter.AddToggleField(_Tr("Preferences", "Weapon Spread Guide"), "cg_debugAim");
 			layouter.FinishLayout();
 			// cg_fov, cg_minimapSize
 		}
@@ -662,45 +662,44 @@ namespace spades {
 			super(manager);
 			
 			StandardPreferenceLayouter layouter(this);
-			layouter.AddHeading("Weapons/Tools");
-			layouter.AddControl("Attack", "cg_keyAttack");
-			layouter.AddControl("Alt. Attack", "cg_keyAltAttack");
-			layouter.AddToggleField("Hold Aim Down Sight", "cg_holdAimDownSight");
-			layouter.AddSliderField("Mouse Sensitivity", "cg_mouseSensitivity", 0.1, 10, 0.1,
+			layouter.AddHeading(_Tr("Preferences", "Weapons/Tools"));
+			layouter.AddControl(_Tr("Preferences", "Attack"), "cg_keyAttack");
+			layouter.AddControl(_Tr("Preferences", "Alt. Attack"), "cg_keyAltAttack");
+			layouter.AddToggleField(_Tr("Preferences", "Hold Aim Down Sight"), "cg_holdAimDownSight");
+			layouter.AddSliderField(_Tr("Preferences", "Mouse Sensitivity"), "cg_mouseSensitivity", 0.1, 10, 0.1,
 				ConfigNumberFormatter(1, "x"));
-			layouter.AddSliderField("ADS Mouse Sens. Scale", "cg_zoomedMouseSensScale", 0.05, 3, 0.05,
+			layouter.AddSliderField(_Tr("Preferences", "ADS Mouse Sens. Scale"), "cg_zoomedMouseSensScale", 0.05, 3, 0.05,
 				ConfigNumberFormatter(2, "x"));
-			layouter.AddSliderField("Exponential Power", "cg_mouseExpPower", 0.5, 1.5, 0.02,
+			layouter.AddSliderField(_Tr("Preferences", "Exponential Power"), "cg_mouseExpPower", 0.5, 1.5, 0.02,
 				ConfigNumberFormatter(2, "", "^"));
-			layouter.AddControl("Reload", "cg_keyReloadWeapon");
-			layouter.AddControl("Capture Color", "cg_keyCaptureColor");
-			layouter.AddControl("Equip Spade", "cg_keyToolSpade");
-			layouter.AddControl("Equip Block", "cg_keyToolBlock");
-			layouter.AddControl("Equip Weapon", "cg_keyToolWeapon");
-			layouter.AddControl("Equip Grenade", "cg_keyToolGrenade");
-			layouter.AddPlusMinusField("Switch Tools by Wheel", "cg_switchToolByWheel");
-			// TODO: mouse sensitivity: cg_mouseSensitivity, cg_zoomedMouseSensScale
+			layouter.AddControl(_Tr("Preferences", "Reload"), "cg_keyReloadWeapon");
+			layouter.AddControl(_Tr("Preferences", "Capture Color"), "cg_keyCaptureColor");
+			layouter.AddControl(_Tr("Preferences", "Equip Spade"), "cg_keyToolSpade");
+			layouter.AddControl(_Tr("Preferences", "Equip Block"), "cg_keyToolBlock");
+			layouter.AddControl(_Tr("Preferences", "Equip Weapon"), "cg_keyToolWeapon");
+			layouter.AddControl(_Tr("Preferences", "Equip Grenade"), "cg_keyToolGrenade");
+			layouter.AddPlusMinusField(_Tr("Preferences", "Switch Tools by Wheel"), "cg_switchToolByWheel");
 			
-			layouter.AddHeading("Movement");
-			layouter.AddControl("Forward", "cg_keyMoveForward");
-			layouter.AddControl("Backpedal", "cg_keyMoveBackward");
-			layouter.AddControl("Move Left", "cg_keyMoveLeft");
-			layouter.AddControl("Move Right", "cg_keyMoveRight");
-			layouter.AddControl("Crouch", "cg_keyCrouch");
-			layouter.AddControl("Sneak", "cg_keySneak");
-			layouter.AddControl("Jump", "cg_keyJump");
-			layouter.AddControl("Sprint", "cg_keySprint");
+			layouter.AddHeading(_Tr("Preferences", "Movement"));
+			layouter.AddControl(_Tr("Preferences", "Walk Forward"), "cg_keyMoveForward");
+			layouter.AddControl(_Tr("Preferences", "Backpedal"), "cg_keyMoveBackward");
+			layouter.AddControl(_Tr("Preferences", "Move Left"), "cg_keyMoveLeft");
+			layouter.AddControl(_Tr("Preferences", "Move Right"), "cg_keyMoveRight");
+			layouter.AddControl(_Tr("Preferences", "Crouch"), "cg_keyCrouch");
+			layouter.AddControl(_Tr("Preferences", "Sneak"), "cg_keySneak");
+			layouter.AddControl(_Tr("Preferences", "Jump"), "cg_keyJump");
+			layouter.AddControl(_Tr("Preferences", "Sprint"), "cg_keySprint");
 			
-			layouter.AddHeading("Misc");
-			layouter.AddControl("Minimap Scale", "cg_keyChangeMapScale");
-			layouter.AddControl("Toggle Map", "cg_keyToggleMapZoom");
-			layouter.AddControl("Flashlight", "cg_keyFlashlight");
-			layouter.AddControl("Global Chat", "cg_keyGlobalChat");
-			layouter.AddControl("Team Chat", "cg_keyTeamChat");
-			layouter.AddControl("Limbo Menu", "cg_keyLimbo");
-			layouter.AddControl("Save Map", "cg_keySaveMap");
-			layouter.AddControl("Save Sceneshot", "cg_keySceneshot");
-			layouter.AddControl("Save Screenshot", "cg_keyScreenshot");
+			layouter.AddHeading(_Tr("Preferences", "Misc"));
+			layouter.AddControl(_Tr("Preferences", "Minimap Scale"), "cg_keyChangeMapScale");
+			layouter.AddControl(_Tr("Preferences", "Toggle Map"), "cg_keyToggleMapZoom");
+			layouter.AddControl(_Tr("Preferences", "Flashlight"), "cg_keyFlashlight");
+			layouter.AddControl(_Tr("Preferences", "Global Chat"), "cg_keyGlobalChat");
+			layouter.AddControl(_Tr("Preferences", "Team Chat"), "cg_keyTeamChat");
+			layouter.AddControl(_Tr("Preferences", "Limbo Menu"), "cg_keyLimbo");
+			layouter.AddControl(_Tr("Preferences", "Save Map"), "cg_keySaveMap");
+			layouter.AddControl(_Tr("Preferences", "Save Sceneshot"), "cg_keySceneshot");
+			layouter.AddControl(_Tr("Preferences", "Save Screenshot"), "cg_keyScreenshot");
 			
 			layouter.FinishLayout();
 		}

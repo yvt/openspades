@@ -35,6 +35,7 @@
 #include "Runner.h"
 #include <Client/GameMap.h>
 #include <Client/Client.h>
+#include <Core/Strings.h>
 
 #include <Core/VoxelModel.h>
 #include <Draw/GLOptimizedVoxelModel.h>
@@ -337,6 +338,10 @@ int main(int argc, char ** argv)
 				spades::FileManager::AddFileSystem(fss[i - 1]);
 			}
 		}
+		
+		SPLog("Initializing localization system");
+		spades::LoadCurrentLocale();
+		_Tr("Main", "Localization System Loaded");
 		
 		SPLog("Initializing script engine");
 		spades::ScriptManager::GetInstance();

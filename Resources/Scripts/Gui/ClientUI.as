@@ -181,28 +181,28 @@ namespace spades {
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Back to Game";
+				button.Caption = _Tr("Client", "Back to Game");
 				button.Bounds = AABB2(winX, winY, winW, 30.f);
 				button.Activated = EventHandler(this.OnBackToGame);
 				AddChild(button);
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Chat Log";
+				button.Caption = _Tr("Client", "Chat Log");
 				button.Bounds = AABB2(winX, winY + 32.f, winW, 30.f);
 				button.Activated = EventHandler(this.OnChatLog);
 				AddChild(button);
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Setup";
+				button.Caption = _Tr("Client", "Setup");
 				button.Bounds = AABB2(winX, winY + 64.f, winW, 30.f);
 				button.Activated = EventHandler(this.OnSetup);
 				AddChild(button);
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Disconnect";
+				button.Caption = _Tr("Client", "Disconnect");
 				button.Bounds = AABB2(winX, winY + 96.f, winW, 30.f);
 				button.Activated = EventHandler(this.OnDisconnect);
 				AddChild(button);
@@ -272,7 +272,7 @@ namespace spades {
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Say";
+				button.Caption = _Tr("Client", "Say");
 				button.Bounds = AABB2(winX + winW - 244.f, winY + 36.f, 120.f, 30.f);
 				button.Activated = EventHandler(this.OnSay);
 				AddChild(button);
@@ -280,7 +280,7 @@ namespace spades {
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Cancel";
+				button.Caption = _Tr("Client", "Cancel");
 				button.Bounds = AABB2(winX + winW - 120.f, winY + 36.f, 120.f, 30.f);
 				button.Activated = EventHandler(this.OnCancel);
 				AddChild(button);
@@ -288,7 +288,7 @@ namespace spades {
 			{
 				@field = spades::ui::Field(Manager);
 				field.Bounds = AABB2(winX, winY, winW, 30.f);
-				field.Placeholder = "Chat Text";
+				field.Placeholder = _Tr("Client", "Chat Text");
 				field.Changed = spades::ui::EventHandler(this.OnFieldChanged);
 				AddChild(field);
 			}
@@ -296,7 +296,7 @@ namespace spades {
 				@globalButton = spades::ui::SimpleButton(Manager);
 				globalButton.Toggle = true;
 				globalButton.Toggled = isTeamChat == false;
-				globalButton.Caption = "Global";
+				globalButton.Caption = _Tr("Client", "Global");
 				globalButton.Bounds = AABB2(winX, winY + 36.f, 70.f, 30.f);
 				globalButton.Activated = EventHandler(this.OnSetGlobal);
 				AddChild(globalButton);
@@ -305,7 +305,7 @@ namespace spades {
 				@teamButton = spades::ui::SimpleButton(Manager);
 				teamButton.Toggle = true;
 				teamButton.Toggled = isTeamChat == true;
-				teamButton.Caption = "Team";
+				teamButton.Caption = _Tr("Client", "Team");
 				teamButton.Bounds = AABB2(winX + 70.f, winY + 36.f, 70.f, 30.f);
 				teamButton.Activated = EventHandler(this.OnSetTeam);
 				AddChild(teamButton);
@@ -421,7 +421,7 @@ namespace spades {
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Close";
+				button.Caption = _Tr("Client", "Close");
 				button.Bounds = AABB2(
 					contentsLeft + contentsWidth - 150.f, 
 					contentsTop + contentsHeight - 30.f
@@ -431,7 +431,7 @@ namespace spades {
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Say Global";
+				button.Caption = _Tr("Client", "Say Global");
 				button.Bounds = AABB2(
 					contentsLeft, 
 					contentsTop + contentsHeight - 30.f
@@ -442,7 +442,7 @@ namespace spades {
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Say Team";
+				button.Caption = _Tr("Client", "Say Team");
 				button.Bounds = AABB2(
 					contentsLeft + 155.f, 
 					contentsTop + contentsHeight - 30.f
