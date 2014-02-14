@@ -1,0 +1,411 @@
+# OpenSpades translation
+# Copyright (C) 2014 yvt
+# This file is distributed under the same license as the OpenSpades package.
+# yvt <i@yvt.jp>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSpades\n"
+"Report-Msgid-Bugs-To: i at yvt.jp\n"
+"POT-Creation-Date: 2014-02-14 15:34+0900\n"
+"PO-Revision-Date: 2014-02-14 15:35+0900\n"
+"Last-Translator: yvt <i@yvt.jp>\n"
+"Language-Team: Japanese\n"
+"Language: ja_jp\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Language: ja_JP\n"
+"X-Source-Language: C\n"
+
+#: ../../../Sources/Gui/Main.cpp:344
+msgctxt "Main"
+msgid "Localization System Loaded"
+msgstr "ローカライゼーションシステムが読み込まれました"
+
+#: ../../Scripts/Gui/MainScreen.as:340
+msgctxt "MainScreen"
+msgid "Connect"
+msgstr "接続"
+
+#: ../../Scripts/Gui/MainScreen.as:348
+msgctxt "MainScreen"
+msgid "Quick Connect"
+msgstr "クイック接続"
+
+#: ../../Scripts/Gui/MainScreen.as:357 ../../Scripts/Gui/MainScreen.as:411
+msgctxt "MainScreen"
+msgid "0.75"
+msgstr "0.75"
+
+#: ../../Scripts/Gui/MainScreen.as:367 ../../Scripts/Gui/MainScreen.as:420
+msgctxt "MainScreen"
+msgid "0.76"
+msgstr "0.76"
+
+#: ../../Scripts/Gui/MainScreen.as:375
+msgctxt "MainScreen"
+msgid "Quit"
+msgstr "終了"
+
+#: ../../Scripts/Gui/MainScreen.as:382
+msgctxt "MainScreen"
+msgid "Credits"
+msgstr "クレジット"
+
+#: ../../Scripts/Gui/MainScreen.as:389
+msgctxt "MainScreen"
+msgid "Setup"
+msgstr "オプション"
+
+#: ../../Scripts/Gui/MainScreen.as:402 ../../Scripts/Gui/MainScreen.as:446
+msgctxt "MainScreen"
+msgid "Filter"
+msgstr "フィルタ"
+
+#: ../../Scripts/Gui/MainScreen.as:429
+msgctxt "MainScreen"
+msgid "Empty"
+msgstr "無人"
+
+#: ../../Scripts/Gui/MainScreen.as:438
+msgctxt "MainScreen"
+msgid "Not Full"
+msgstr "空有り"
+
+#: ../../Scripts/Gui/MainScreen.as:458
+msgctxt "MainScreen"
+msgid "Server Name"
+msgstr "サーバー名"
+
+#: ../../Scripts/Gui/MainScreen.as:465
+msgctxt "MainScreen"
+msgid "Players"
+msgstr "プレイヤー数"
+
+#: ../../Scripts/Gui/MainScreen.as:472
+msgctxt "MainScreen"
+msgid "Map Name"
+msgstr "マップ名"
+
+#: ../../Scripts/Gui/MainScreen.as:479
+msgctxt "MainScreen"
+msgid "Game Mode"
+msgstr "ゲームモード"
+
+#: ../../Scripts/Gui/MainScreen.as:486
+msgctxt "MainScreen"
+msgid "Ver."
+msgstr "Ver."
+
+#: ../../Scripts/Gui/MainScreen.as:493
+msgctxt "MainScreen"
+msgid "Loc."
+msgstr "国"
+
+#: ../../Scripts/Gui/MainScreen.as:737
+msgctxt "MainScreen"
+msgid ""
+"You were disconnected from the server because of the following reason:\n"
+"\n"
+"{0}"
+msgstr ""
+"サーバーから切断されました。理由は以下のとおりです:\n"
+"\n"
+"{0}"
+
+#: ../../Scripts/Gui/MainScreen.as:757
+msgctxt "MainScreen"
+msgid "Loading..."
+msgstr "読み込み中..."
+
+#: ../../Scripts/Gui/MainScreen.as:775
+msgctxt "MainScreen"
+msgid "Failed to fetch the server list."
+msgstr "サーバー一覧のダウンロード中にエラーが発生しました。"
+
+#: ../../Scripts/Gui/MessageBox.as:53
+msgctxt "MessageBox"
+msgid "OK"
+msgstr "OK"
+
+#: ../../Scripts/Gui/Preferences.as:60
+msgctxt "Preferences"
+msgid "Game Options"
+msgstr "ゲームオプション"
+
+#: ../../Scripts/Gui/Preferences.as:61
+msgctxt "Preferences"
+msgid "Controls"
+msgstr "操作"
+
+#: ../../Scripts/Gui/Preferences.as:65
+msgctxt "Preferences"
+msgid "Back"
+msgstr "戻る"
+
+#: ../../Scripts/Gui/Preferences.as:399
+msgctxt "Preferences"
+msgid "Press Key to Bind or [Escape] to Cancel..."
+msgstr "割り当てるキーを押下して下さい。[Esc]でキャンセルします..."
+
+#: ../../Scripts/Gui/Preferences.as:410
+msgctxt "Preferences"
+msgid "Space"
+msgstr "スペース"
+
+#: ../../Scripts/Gui/Preferences.as:412
+msgctxt "Preferences"
+msgid "Unbound"
+msgstr "未割り当て"
+
+#: ../../Scripts/Gui/Preferences.as:574 ../../Scripts/Gui/Preferences.as:598
+msgctxt "Preferences"
+msgid "ON"
+msgstr "ON"
+
+#: ../../Scripts/Gui/Preferences.as:580 ../../Scripts/Gui/Preferences.as:610
+msgctxt "Preferences"
+msgid "OFF"
+msgstr "OFF"
+
+#: ../../Scripts/Gui/Preferences.as:604
+msgctxt "Preferences"
+msgid "REVERSED"
+msgstr "反転"
+
+#: ../../Scripts/Gui/Preferences.as:632
+msgctxt "Preferences"
+msgid "Player Information"
+msgstr "プレイヤー情報"
+
+#: ../../Scripts/Gui/Preferences.as:633
+msgctxt "Preferences"
+msgid "Player Name"
+msgstr "プレイヤー名"
+
+#: ../../Scripts/Gui/Preferences.as:637
+msgctxt "Preferences"
+msgid "Effects"
+msgstr "エフェクト"
+
+#: ../../Scripts/Gui/Preferences.as:638
+msgctxt "Preferences"
+msgid "Blood"
+msgstr "流血表現"
+
+#: ../../Scripts/Gui/Preferences.as:639
+msgctxt "Preferences"
+msgid "Ejecting Brass"
+msgstr "薬莢"
+
+#: ../../Scripts/Gui/Preferences.as:640
+msgctxt "Preferences"
+msgid "Ragdoll"
+msgstr "ラグドール表現"
+
+#: ../../Scripts/Gui/Preferences.as:642
+msgctxt "Preferences"
+msgid "Feedbacks"
+msgstr "通知"
+
+#: ../../Scripts/Gui/Preferences.as:643
+msgctxt "Preferences"
+msgid "Chat Notify Sounds"
+msgstr "チャット新着通知音"
+
+#: ../../Scripts/Gui/Preferences.as:644
+msgctxt "Preferences"
+msgid "Hit Indicator"
+msgstr "命中表示"
+
+#: ../../Scripts/Gui/Preferences.as:646
+msgctxt "Preferences"
+msgid "AoS 0.75/0.76 Compatibility"
+msgstr "AoS 0.75/0.76 互換性"
+
+#: ../../Scripts/Gui/Preferences.as:647
+msgctxt "Preferences"
+msgid "Allow Unicode"
+msgstr "Unicodeの送信を許可する"
+
+#: ../../Scripts/Gui/Preferences.as:649 ../../Scripts/Gui/Preferences.as:694
+msgctxt "Preferences"
+msgid "Misc"
+msgstr "その他"
+
+#: ../../Scripts/Gui/Preferences.as:650
+msgctxt "Preferences"
+msgid "Field of View"
+msgstr "視界"
+
+#: ../../Scripts/Gui/Preferences.as:652
+msgctxt "Preferences"
+msgid "Minimap size"
+msgstr "ミニマップのサイズ"
+
+#: ../../Scripts/Gui/Preferences.as:654
+msgctxt "Preferences"
+msgid "Weapon Spread Guide"
+msgstr "武器バラつき表示"
+
+#: ../../Scripts/Gui/Preferences.as:665
+msgctxt "Preferences"
+msgid "Weapons/Tools"
+msgstr "武器/道具"
+
+#: ../../Scripts/Gui/Preferences.as:666
+msgctxt "Preferences"
+msgid "Attack"
+msgstr "攻撃"
+
+#: ../../Scripts/Gui/Preferences.as:667
+msgctxt "Preferences"
+msgid "Alt. Attack"
+msgstr "副攻撃"
+
+#: ../../Scripts/Gui/Preferences.as:668
+msgctxt "Preferences"
+msgid "Hold Aim Down Sight"
+msgstr "ホールドしてADS"
+
+#: ../../Scripts/Gui/Preferences.as:669
+msgctxt "Preferences"
+msgid "Mouse Sensitivity"
+msgstr "マウス速度"
+
+#: ../../Scripts/Gui/Preferences.as:671
+msgctxt "Preferences"
+msgid "ADS Mouse Sens. Scale"
+msgstr "ADS時マウス速度"
+
+#: ../../Scripts/Gui/Preferences.as:673
+msgctxt "Preferences"
+msgid "Exponential Power"
+msgstr "マウス加速指数"
+
+#: ../../Scripts/Gui/Preferences.as:675
+msgctxt "Preferences"
+msgid "Reload"
+msgstr "リロード"
+
+#: ../../Scripts/Gui/Preferences.as:676
+msgctxt "Preferences"
+msgid "Capture Color"
+msgstr "色をコピー"
+
+#: ../../Scripts/Gui/Preferences.as:677
+msgctxt "Preferences"
+msgid "Equip Spade"
+msgstr "スペードを装備"
+
+#: ../../Scripts/Gui/Preferences.as:678
+msgctxt "Preferences"
+msgid "Equip Block"
+msgstr "ブロックを装備"
+
+#: ../../Scripts/Gui/Preferences.as:679
+msgctxt "Preferences"
+msgid "Equip Weapon"
+msgstr "銃を装備"
+
+#: ../../Scripts/Gui/Preferences.as:680
+msgctxt "Preferences"
+msgid "Equip Grenade"
+msgstr "手榴弾を装備"
+
+#: ../../Scripts/Gui/Preferences.as:681
+msgctxt "Preferences"
+msgid "Switch Tools by Wheel"
+msgstr "ホイールで装備切替"
+
+#: ../../Scripts/Gui/Preferences.as:684
+msgctxt "Preferences"
+msgid "Movement"
+msgstr "移動"
+
+#: ../../Scripts/Gui/Preferences.as:685
+msgctxt "Preferences"
+msgid "Walk Forward"
+msgstr "前方に移動"
+
+#: ../../Scripts/Gui/Preferences.as:686
+msgctxt "Preferences"
+msgid "Backpedal"
+msgstr "後方に移動"
+
+#: ../../Scripts/Gui/Preferences.as:687
+msgctxt "Preferences"
+msgid "Move Left"
+msgstr "左に移動"
+
+#: ../../Scripts/Gui/Preferences.as:688
+msgctxt "Preferences"
+msgid "Move Right"
+msgstr "右に移動"
+
+#: ../../Scripts/Gui/Preferences.as:689
+msgctxt "Preferences"
+msgid "Crouch"
+msgstr "しゃがむ"
+
+#: ../../Scripts/Gui/Preferences.as:690
+msgctxt "Preferences"
+msgid "Sneak"
+msgstr "忍び足"
+
+#: ../../Scripts/Gui/Preferences.as:691
+msgctxt "Preferences"
+msgid "Jump"
+msgstr "ジャンプ"
+
+#: ../../Scripts/Gui/Preferences.as:692
+msgctxt "Preferences"
+msgid "Sprint"
+msgstr "全力疾走"
+
+#: ../../Scripts/Gui/Preferences.as:695
+msgctxt "Preferences"
+msgid "Minimap Scale"
+msgstr "ミニマップ縮尺切替"
+
+#: ../../Scripts/Gui/Preferences.as:696
+msgctxt "Preferences"
+msgid "Toggle Map"
+msgstr "マップ拡大"
+
+#: ../../Scripts/Gui/Preferences.as:697
+msgctxt "Preferences"
+msgid "Flashlight"
+msgstr "ヘッドライト"
+
+#: ../../Scripts/Gui/Preferences.as:698
+msgctxt "Preferences"
+msgid "Global Chat"
+msgstr "全体チャット"
+
+#: ../../Scripts/Gui/Preferences.as:699
+msgctxt "Preferences"
+msgid "Team Chat"
+msgstr "チームチャット"
+
+#: ../../Scripts/Gui/Preferences.as:700
+msgctxt "Preferences"
+msgid "Limbo Menu"
+msgstr "武器・チーム切替"
+
+#: ../../Scripts/Gui/Preferences.as:701
+msgctxt "Preferences"
+msgid "Save Map"
+msgstr "マップを保存"
+
+#: ../../Scripts/Gui/Preferences.as:702
+msgctxt "Preferences"
+msgid "Save Sceneshot"
+msgstr "シーンショット"
+
+#: ../../Scripts/Gui/Preferences.as:703
+msgctxt "Preferences"
+msgid "Save Screenshot"
+msgstr "スクリーンショット"

@@ -363,6 +363,10 @@ int main(int argc, char ** argv)
 			}
 		}
 		
+		SPLog("Initializing localization system");
+		spades::LoadCurrentLocale();
+		_Tr("Main", "Localization System Loaded");
+		
 		SPLog("Initializing script engine");
 		spades::ScriptManager::GetInstance();
 		

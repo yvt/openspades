@@ -2211,7 +2211,7 @@ namespace spades {
 			DrawSplash();
 			
 			IFont *font = textFont;
-			std::string str = "NOW LOADING";
+			std::string str = _Tr("Client", "NOW LOADING");
 			Vector2 size = font->Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
 			pos -= size;
@@ -2506,12 +2506,12 @@ namespace spades {
 							switch(p->GetTool()){
 								case Player::ToolBlock:
 									if(p->GetNumBlocks() == 0){
-										msg = "Out of Block";
+										msg = _Tr("Client", "Out of Block");
 									}
 									break;
 								case Player::ToolGrenade:
 									if(p->GetNumGrenades() == 0){
-										msg = "Out of Grenade";
+										msg = _Tr("Client", "Out of Grenade");
 									}
 									break;
 								case Player::ToolWeapon:
@@ -2519,13 +2519,13 @@ namespace spades {
 									Weapon *weap = p->GetWeapon();
 									if(weap->IsReloading() ||
 									   p->IsAwaitingReloadCompletion()){
-										msg = "Reloading";
+										msg = _Tr("Client", "Reloading");
 									}else if(weap->GetAmmo() == 0 &&
 											 weap->GetStock() == 0){
-										msg = "Out of Ammo";
+										msg = _Tr("Client", "Out of Ammo");
 									}else if(weap->GetStock() > 0 &&
 											 weap->GetAmmo() < weap->GetClipSize() / 4){
-										msg = "Press [" + (std::string)cg_keyReloadWeapon + "] to Reload";
+										msg = _Tr("Client", "Press [{0}] to Reload", (std::string)cg_keyReloadWeapon);
 									}
 								}
 									break;
@@ -2557,13 +2557,11 @@ namespace spades {
 							std::string msg;
 							
 							float secs = p->GetRespawnTime() - world->GetTime();
-							char buf[64];
-							if(secs > 0.f)
-								sprintf(buf, "You will respawn in: %d", (int)ceilf(secs));
-							else
-								strcpy(buf, "Waiting for respawn");
 							
-							msg = buf;
+							if(secs > 0.f)
+								msg = _Tr("Client", "You will respawn in: {0}", (int)ceilf(secs));
+							else
+								msg = _Tr("Client", "Waiting for respawn");
 							
 							if(!msg.empty()){
 								font = textFont;
@@ -2606,7 +2604,7 @@ namespace spades {
 							// just spectating
 						}else{
 							font = textFont;
-							std::string msg = "Following " + world->GetPlayerPersistent(followingPlayerId).name;
+							std::string msg = _Tr("Client", "Following {0}", world->GetPlayerPersistent(followingPlayerId).name);
 							Vector2 size = font->Measure(msg);
 							Vector2 pos = MakeVector2(scrWidth - 8.f, 256.f + 32.f);
 							pos.x -= size.x;

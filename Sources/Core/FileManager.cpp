@@ -30,7 +30,8 @@ namespace spades {
 	static std::vector<IFileSystem *> g_fileSystems;
 	IStream *FileManager::OpenForReading(const char *fn) {
 		SPADES_MARK_FUNCTION();
-		
+		if(!fn) SPInvalidArgument("fn");
+		if(fn[0] == 0) SPFileNotFound(fn);
 		for(size_t i = 0; i < g_fileSystems.size(); i++){
 			IFileSystem *fs = g_fileSystems[i];
 			if(fs->FileExists(fn))
@@ -40,7 +41,8 @@ namespace spades {
 	}
 	IStream *FileManager::OpenForWriting(const char *fn) {
 		SPADES_MARK_FUNCTION();
-		
+		if(!fn) SPInvalidArgument("fn");
+		if(fn[0] == 0) SPFileNotFound(fn);
 		for(size_t i = 0; i < g_fileSystems.size(); i++){
 			IFileSystem *fs = g_fileSystems[i];
 			if(fs->FileExists(fn))
@@ -60,6 +62,7 @@ namespace spades {
 	}
 	bool FileManager::FileExists(const char *fn) {
 		SPADES_MARK_FUNCTION();
+		if(!fn) SPInvalidArgument("fn");
 		
 		for(size_t i = 0; i < g_fileSystems.size(); i++){
 			IFileSystem *fs = g_fileSystems[i];
@@ -71,6 +74,7 @@ namespace spades {
 	
 	void FileManager::AddFileSystem(spades::IFileSystem *fs){
 		SPADES_MARK_FUNCTION();
+		if(!fs) SPInvalidArgument("fs");
 		
 		g_fileSystems.push_back(fs);
 	}
@@ -92,6 +96,7 @@ namespace spades {
 	std::vector<std::string> FileManager::EnumFiles(const char *path) {
 		std::vector<std::string> list;
 		std::set<std::string> set;
+		if(!path) SPInvalidArgument("path");
 		
 		for(size_t i = 0; i < g_fileSystems.size(); i++){
 			IFileSystem *fs = g_fileSystems[i];

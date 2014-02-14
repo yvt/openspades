@@ -50,7 +50,7 @@ namespace spades {
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "OK";
+				button.Caption = _Tr("MessageBox", "OK");
 				button.Bounds = AABB2(
 					contentsLeft + contentsWidth - 150.f, 
 					contentsTop + contentsHeight - 30.f
