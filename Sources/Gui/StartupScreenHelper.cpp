@@ -94,11 +94,16 @@ namespace spades {
 			SDL_DisplayMode mode;
 			modes.clear();
 			if(numDisplayMode > 0){
+                std::set<std::pair<int,int>> foundModes;
 				for(int i = 0; i < numDisplayMode; i++) {
 					SDL_GetDisplayMode(idDisplay, i, &mode);
 					if(mode.w < 800 || mode.h < 600)
 						continue;
-					modes.push_back(spades::IntVector3::Make(mode.w, mode.h, 0));
+                    if(foundModes.find(std::make_pair(mode.w, mode.h)) != foundModes.end())
+                        continue;
+                    
+                    foundModes.insert(std::make_pair(mode.w, mode.h));
+                    modes.push_back(spades::IntVector3::Make(mode.w, mode.h, 0));
 					SPLog("Video Mode Found: %dx%d", mode.w, mode.h);
 				}
 			}else{
