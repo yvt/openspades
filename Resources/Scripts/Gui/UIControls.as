@@ -1518,7 +1518,12 @@ namespace spades {
 				bool charMode = false;
 				while(startPos < len) {
 					int nextPos = pos + 1;
-					if(!charMode) {
+					if(charMode) {
+						// skip to the next UTF-8 character boundary
+						while(nextPos < len && ((text[nextPos] & 0x80) != 0) && 
+							  ((text[nextPos] & 0xc0) != 0xc0))
+							nextPos++;
+					} else {
 						while(nextPos < len && text[nextPos] != 0x20)
 							nextPos++;
 					}
