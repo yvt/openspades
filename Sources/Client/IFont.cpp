@@ -249,14 +249,16 @@ namespace spades {
 			
 			// margin to make the border completely transparent
 			// (considering the OpenGL's linear interpolation)
-			inRect.min.x -= 0.5f;
-			inRect.min.y -= 0.5f;
-			outRect.min.x -= 0.5f;
-			outRect.min.y -= 0.5f;
-			inRect.max.x += 0.5f;
-			inRect.max.y += 0.5f;
-			outRect.max.x += 0.5f;
-			outRect.max.y += 0.5f;
+			if(!roundSize){
+				inRect.min.x -= 0.5f;
+				inRect.min.y -= 0.5f;
+				outRect.min.x -= 0.5f;
+				outRect.min.y -= 0.5f;
+				inRect.max.x += 0.5f;
+				inRect.max.y += 0.5f;
+				outRect.max.x += 0.5f;
+				outRect.max.y += 0.5f;
+			}
 			
 			outRect.min *= scale;
 			outRect.max *= scale;
