@@ -65,6 +65,7 @@
 #include "ClientPlayer.h"
 #include "ClientUI.h"
 #include "Fonts.h"
+#include <Core/Strings.h>
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;

@@ -27,6 +27,7 @@
 #include <Client/Client.h>
 #include <Core/Settings.h>
 #include <Client/Fonts.h>
+#include <Core/Strings.h>
 
 SPADES_SETTING(cg_lastQuickConnectHost, "127.0.0.1");
 SPADES_SETTING(cg_protocolVersion, "");

@@ -37,6 +37,7 @@
 #include <Client/Client.h>
 #include <Core/CpuID.h>
 #include <Gui/StartupScreen.h>
+#include <Core/Strings.h>
 
 #include <Core/VoxelModel.h>
 #include <Draw/GLOptimizedVoxelModel.h>
