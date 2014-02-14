@@ -1026,7 +1026,7 @@ namespace spades {
 			{
 				spades::ui::CheckBox e(Manager);
 				e.Caption = _Tr("StartupScreen", "Fullscreen Mode");
-				e.Bounds = AABB2(230.f, 0.f, 150.f, 24.f);
+				e.Bounds = AABB2(230.f, 0.f, 200.f, 24.f);
 				HelpHandler(helpView, 
 					_Tr("StartupScreen", "By running in fullscreen mode OpenSpades occupies the "
 					"screen, making it easier for you to concentrate on playing the game.")).Watch(e);
@@ -1039,7 +1039,7 @@ namespace spades {
 			{
 				spades::ui::RadioButton e(Manager);
 				e.Caption = _Tr("StartupScreen", "OpenGL");
-				e.Bounds = AABB2(100.f, 30.f, 100.f, 24.f);
+				e.Bounds = AABB2(100.f, 30.f, 140.f, 24.f);
 				e.GroupName = "driver";
 				HelpHandler(helpView, 
 					_Tr("StartupScreen", "OpenGL renderer uses your computer's graphics "
@@ -1051,7 +1051,7 @@ namespace spades {
 			{
 				spades::ui::RadioButton e(Manager);
 				e.Caption = _Tr("StartupScreen", "Software");
-				e.Bounds = AABB2(210.f, 30.f, 100.f, 24.f);
+				e.Bounds = AABB2(250.f, 30.f, 140.f, 24.f);
 				e.GroupName = "driver";
 				HelpHandler(helpView, 
 				_Tr("StartupScreen", "Software renderer uses CPU to generate the game "
