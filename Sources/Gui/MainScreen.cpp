@@ -27,6 +27,7 @@
 #include <Client/Client.h>
 #include <Core/Settings.h>
 #include <Client/Fonts.h>
+#include <Core/Strings.h>
 
 SPADES_SETTING(cg_lastQuickConnectHost, "127.0.0.1");
 SPADES_SETTING(cg_protocolVersion, "");
@@ -219,7 +220,7 @@ namespace spades {
 			renderer->DrawImage(img, AABB2(0, 0,
 										   scrSize.x, scrSize.y));
 			
-			std::string str = "NOW LOADING";
+			std::string str = _Tr("MainScreen", "NOW LOADING");
 			Vector2 size = font->Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
 			pos -= size;

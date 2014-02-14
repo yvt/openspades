@@ -24,6 +24,7 @@
 #include "TCGameMode.h"
 #include "IRenderer.h"
 #include "IFont.h"
+#include <Core/Strings.h>
 
 namespace spades {
 	namespace client {
@@ -152,10 +153,10 @@ namespace spades {
 					std::string str;
 					
 					if(nearTerritory->ownerTeamId == 2){
-						str = "Neutral Territory";
+						str = _Tr("Client", "Neutral Territory");
 					}else{
 						str = w->GetTeam(nearTerritory->ownerTeamId).name;
-						str += "'s Territory";
+						str = _Tr("Client", "{0}'s Territory", str);
 					}
 					
 					Vector2 size = font->Measure(str);

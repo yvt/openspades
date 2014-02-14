@@ -337,7 +337,7 @@ namespace spades {
 			float footerPos = Manager.Renderer.ScreenHeight - 50.f;
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Connect";
+				button.Caption = _Tr("MainScreen", "Connect");
 				button.Bounds = AABB2(contentsLeft + contentsWidth - 150.f, 200.f, 150.f, 30.f);
 				button.Activated = EventHandler(this.OnConnectPressed);
 				AddChild(button);
@@ -345,7 +345,7 @@ namespace spades {
 			{
 				@addressField = spades::ui::Field(Manager);
 				addressField.Bounds = AABB2(contentsLeft, 200, contentsWidth - 240.f, 30.f);
-				addressField.Placeholder = "Quick Connect";
+				addressField.Placeholder = _Tr("MainScreen", "Quick Connect");
 				addressField.Text = cg_lastQuickConnectHost.StringValue;
 				addressField.Changed = spades::ui::EventHandler(this.OnAddressChanged);
 				AddChild(addressField);
@@ -354,7 +354,7 @@ namespace spades {
 				@protocol3Button = ProtocolButton(Manager);
 				protocol3Button.Bounds = AABB2(contentsLeft + contentsWidth - 240.f + 6.f, 200, 
 					40.f, 30.f);
-				protocol3Button.Caption = "0.75";
+				protocol3Button.Caption = _Tr("MainScreen", "0.75");
 				protocol3Button.Activated = spades::ui::EventHandler(this.OnProtocol3Pressed);
 				protocol3Button.Toggle = true;
 				protocol3Button.Toggled = cg_protocolVersion.IntValue == 3;
@@ -364,7 +364,7 @@ namespace spades {
 				@protocol4Button = ProtocolButton(Manager);
 				protocol4Button.Bounds = AABB2(contentsLeft + contentsWidth - 200.f + 6.f, 200, 
 					40.f, 30.f);
-				protocol4Button.Caption = "0.76";
+				protocol4Button.Caption = _Tr("MainScreen", "0.76");
 				protocol4Button.Activated = spades::ui::EventHandler(this.OnProtocol4Pressed);
 				protocol4Button.Toggle = true;
 				protocol4Button.Toggled = cg_protocolVersion.IntValue == 4;
@@ -372,21 +372,21 @@ namespace spades {
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Quit";
+				button.Caption = _Tr("MainScreen", "Quit");
 				button.Bounds = AABB2(contentsLeft + contentsWidth - 100.f, footerPos, 100.f, 30.f);
 				button.Activated = EventHandler(this.OnQuitPressed);
 				AddChild(button);
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Credits";
+				button.Caption = _Tr("MainScreen", "Credits");
 				button.Bounds = AABB2(contentsLeft + contentsWidth - 202.f, footerPos, 100.f, 30.f);
 				button.Activated = EventHandler(this.OnCreditsPressed);
 				AddChild(button);
 			}
 			{
 				spades::ui::Button button(Manager);
-				button.Caption = "Setup";
+				button.Caption = _Tr("MainScreen", "Setup");
 				button.Bounds = AABB2(contentsLeft + contentsWidth - 304.f, footerPos, 100.f, 30.f);
 				button.Activated = EventHandler(this.OnSetupPressed);
 				AddChild(button);
@@ -399,7 +399,7 @@ namespace spades {
 			}
 			{
 				spades::ui::Label label(Manager);
-				label.Text = "Filter";
+				label.Text = _Tr("MainScreen", "Filter");
 				label.Bounds = AABB2(contentsLeft, footerPos, 50.f, 30.f);
 				label.Alignment = Vector2(0.f, 0.5f);
 				AddChild(label);
@@ -408,7 +408,7 @@ namespace spades {
 				@filterProtocol3Button = ProtocolButton(Manager);
 				filterProtocol3Button.Bounds = AABB2(contentsLeft + 50.f, footerPos, 
 					40.f, 30.f);
-				filterProtocol3Button.Caption = "0.75";
+				filterProtocol3Button.Caption = _Tr("MainScreen", "0.75");
 				filterProtocol3Button.Activated = spades::ui::EventHandler(this.OnFilterProtocol3Pressed);
 				filterProtocol3Button.Toggle = true;
 				AddChild(filterProtocol3Button);
@@ -417,7 +417,7 @@ namespace spades {
 				@filterProtocol4Button = ProtocolButton(Manager);
 				filterProtocol4Button.Bounds = AABB2(contentsLeft + 90.f, footerPos, 
 					40.f, 30.f);
-				filterProtocol4Button.Caption = "0.76";
+				filterProtocol4Button.Caption = _Tr("MainScreen", "0.76");
 				filterProtocol4Button.Activated = spades::ui::EventHandler(this.OnFilterProtocol4Pressed);
 				filterProtocol4Button.Toggle = true;
 				AddChild(filterProtocol4Button);
@@ -426,7 +426,7 @@ namespace spades {
 				@filterEmptyButton = ProtocolButton(Manager);
 				filterEmptyButton.Bounds = AABB2(contentsLeft + 135.f, footerPos, 
 					50.f, 30.f);
-				filterEmptyButton.Caption = "Empty";
+				filterEmptyButton.Caption = _Tr("MainScreen", "Empty");
 				filterEmptyButton.Activated = spades::ui::EventHandler(this.OnFilterEmptyPressed);
 				filterEmptyButton.Toggle = true;
 				AddChild(filterEmptyButton);
@@ -435,7 +435,7 @@ namespace spades {
 				@filterFullButton = ProtocolButton(Manager);
 				filterFullButton.Bounds = AABB2(contentsLeft + 185.f, footerPos, 
 					70.f, 30.f);
-				filterFullButton.Caption = "Not Full";
+				filterFullButton.Caption = _Tr("MainScreen", "Not Full");
 				filterFullButton.Activated = spades::ui::EventHandler(this.OnFilterFullPressed);
 				filterFullButton.Toggle = true;
 				AddChild(filterFullButton);
@@ -443,7 +443,7 @@ namespace spades {
 			{
 				@filterField = spades::ui::Field(Manager);
 				filterField.Bounds = AABB2(contentsLeft + 260.f, footerPos, 120.f, 30.f);
-				filterField.Placeholder = "Filter";
+				filterField.Placeholder = _Tr("MainScreen", "Filter");
 				filterField.Changed = spades::ui::EventHandler(this.OnFilterTextChanged);
 				AddChild(filterField);
 			}
@@ -455,42 +455,42 @@ namespace spades {
 			{
 				ServerListHeader header(Manager);
 				header.Bounds = AABB2(contentsLeft + 2.f, 240.f, 300.f - 2.f, 30.f);
-				header.Text = "Server Name";
+				header.Text = _Tr("MainScreen", "Server Name");
 				header.Activated = spades::ui::EventHandler(this.SortServerListByName);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
 				header.Bounds = AABB2(contentsLeft + 300.f, 240.f, 100.f, 30.f);
-				header.Text = "Players";
+				header.Text = _Tr("MainScreen", "Players");
 				header.Activated = spades::ui::EventHandler(this.SortServerListByNumPlayers);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
 				header.Bounds = AABB2(contentsLeft + 400.f, 240.f, 150.f, 30.f);
-				header.Text = "Map Name";
+				header.Text = _Tr("MainScreen", "Map Name");
 				header.Activated = spades::ui::EventHandler(this.SortServerListByMapName);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
 				header.Bounds = AABB2(contentsLeft + 550.f, 240.f, 80.f, 30.f);
-				header.Text = "Game Mode";
+				header.Text = _Tr("MainScreen", "Game Mode");
 				header.Activated = spades::ui::EventHandler(this.SortServerListByGameMode);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
 				header.Bounds = AABB2(contentsLeft + 630.f, 240.f, 50.f, 30.f);
-				header.Text = "Ver.";
+				header.Text = _Tr("MainScreen", "Ver.");
 				header.Activated = spades::ui::EventHandler(this.SortServerListByProtocol);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
 				header.Bounds = AABB2(contentsLeft + 680.f, 240.f, 50.f, 30.f);
-				header.Text = "Loc.";
+				header.Text = _Tr("MainScreen", "Loc.");
 				header.Activated = spades::ui::EventHandler(this.SortServerListByCountry);
 				AddChild(header);
 			}
@@ -734,7 +734,7 @@ namespace spades {
 						if(ind2 < 0) ind2 = msg.length;
 						ind1 += "Disconnected:".length;
 						msg = msg.substr(ind1, ind2 - ind1);
-						msg = "You were disconnected from the server because of the following reason:\n\n" + msg;
+						msg = _Tr("MainScreen", "You were disconnected from the server because of the following reason:\n\n{0}", msg);
 					}
 					
 					// failed to connect.
@@ -754,7 +754,7 @@ namespace spades {
 			Vector2 pos = ScreenPosition;
 			Vector2 size = Size;
 			Font@ font = this.Font;
-			string text = "Loading...";
+			string text = _Tr("MainScreen", "Loading...");
 			Vector2 txtSize = font.Measure(text);
 			Vector2 txtPos;
 			txtPos = pos + (size - txtSize) * 0.5f;
@@ -772,7 +772,7 @@ namespace spades {
 			Vector2 pos = ScreenPosition;
 			Vector2 size = Size;
 			Font@ font = this.Font;
-			string text = "Failed to fetch the server list.";
+			string text = _Tr("MainScreen", "Failed to fetch the server list.");
 			Vector2 txtSize = font.Measure(text);
 			Vector2 txtPos;
 			txtPos = pos + (size - txtSize) * 0.5f;

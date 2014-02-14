@@ -55,6 +55,8 @@
 		E834F56817979F5A004EBE88 /* Quake3Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56617979F55004EBE88 /* Quake3Font.cpp */; };
 		E834F56B17979FD7004EBE88 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56917979FD3004EBE88 /* IFont.cpp */; };
 		E834F56F1797D934004EBE88 /* ChatWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F56D1797D92F004EBE88 /* ChatWindow.cpp */; };
+		E838D41F18AC726B00EE3C53 /* Strings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E838D41D18AC726B00EE3C53 /* Strings.cpp */; };
+		E838D42218ADDE2800EE3C53 /* StringsScript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E838D42018ADDE2800EE3C53 /* StringsScript.cpp */; };
 		E8428888189FE1710060743D /* Fog.vs in Sources */ = {isa = PBXBuildFile; fileRef = E8428887189FE1710060743D /* Fog.vs */; };
 		E842888B18A3CF6C0060743D /* StartupScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842888918A3CF6C0060743D /* StartupScreen.cpp */; };
 		E842888E18A3D1520060743D /* StartupScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842888C18A3D1520060743D /* StartupScreenHelper.cpp */; };
@@ -387,6 +389,9 @@
 		E834F56C1797AA2C004EBE88 /* FontData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FontData.h; sourceTree = "<group>"; };
 		E834F56D1797D92F004EBE88 /* ChatWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChatWindow.cpp; sourceTree = "<group>"; };
 		E834F56E1797D932004EBE88 /* ChatWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatWindow.h; sourceTree = "<group>"; };
+		E838D41D18AC726B00EE3C53 /* Strings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Strings.cpp; sourceTree = "<group>"; };
+		E838D41E18AC726B00EE3C53 /* Strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Strings.h; sourceTree = "<group>"; };
+		E838D42018ADDE2800EE3C53 /* StringsScript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringsScript.cpp; sourceTree = "<group>"; };
 		E8428887189FE1710060743D /* Fog.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = Fog.vs; path = Resources/Shaders/Fog.vs; sourceTree = "<group>"; };
 		E842888918A3CF6C0060743D /* StartupScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreen.cpp; sourceTree = "<group>"; };
 		E842888A18A3CF6C0060743D /* StartupScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupScreen.h; sourceTree = "<group>"; };
@@ -1249,6 +1254,7 @@
 			isa = PBXGroup;
 			children = (
 				E8B6B6E717E40AF500E35523 /* MathScript.cpp */,
+				E838D42018ADDE2800EE3C53 /* StringsScript.cpp */,
 				E8B6B6E817E40AF500E35523 /* ScriptManager.cpp */,
 				E8B6B6E917E40AF500E35523 /* ScriptManager.h */,
 				E8B6B6EC17E40B5900E35523 /* IImage.cpp */,
@@ -1469,6 +1475,8 @@
 				E81A7C7C1865A2E900BF3FCE /* MiniHeap.h */,
 				E890F30E187046990090AAB8 /* CP437.cpp */,
 				E890F30F187046990090AAB8 /* CP437.h */,
+				E838D41D18AC726B00EE3C53 /* Strings.cpp */,
+				E838D41E18AC726B00EE3C53 /* Strings.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1901,6 +1909,7 @@
 				E834F56F1797D934004EBE88 /* ChatWindow.cpp in Sources */,
 				E8E0AF8A1798278000C6B5A9 /* GLImageRenderer.cpp in Sources */,
 				E8E0AF94179942DB00C6B5A9 /* Corpse.cpp in Sources */,
+				E838D42218ADDE2800EE3C53 /* StringsScript.cpp in Sources */,
 				E8E0AF97179980F500C6B5A9 /* CenterMessageView.cpp in Sources */,
 				E8E0AF9A179996A100C6B5A9 /* HurtRingView.cpp in Sources */,
 				E8E0AF9D179A5BC200C6B5A9 /* GLFlatMapRenderer.cpp in Sources */,
@@ -1964,6 +1973,7 @@
 				E80B28CD17AFCCCB0056179E /* PaletteView.cpp in Sources */,
 				E81A7C6B1861525D00BF3FCE /* SWImage.cpp in Sources */,
 				E80B28D017AFE68A0056179E /* TCGameMode.cpp in Sources */,
+				E838D41F18AC726B00EE3C53 /* Strings.cpp in Sources */,
 				E80B28D317AFF7810056179E /* TCProgressView.cpp in Sources */,
 				E80B28DA17B39D160056179E /* ioapi.c in Sources */,
 				E80B28DB17B39D160056179E /* unzip.c in Sources */,

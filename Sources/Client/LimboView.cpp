@@ -27,6 +27,7 @@
 #include "IAudioDevice.h"
 #include "IAudioChunk.h"
 #include <sstream>
+#include <Core/Strings.h>
 
 namespace spades{
 	namespace client {
@@ -57,11 +58,11 @@ namespace spades{
 			
 			float weapX = left + 260.f;
 			
-			items.push_back(MenuItem(MenuWeaponRifle, AABB2(weapX, firstY, menuWidth, menuHeight), "Rifle"));
-			items.push_back(MenuItem(MenuWeaponSMG, AABB2(weapX, firstY + rowHeight, menuWidth, menuHeight), "SMG"));
-			items.push_back(MenuItem(MenuWeaponShotgun, AABB2(weapX, firstY + rowHeight * 2.f, menuWidth, menuHeight), "Shotgun"));
+			items.push_back(MenuItem(MenuWeaponRifle, AABB2(weapX, firstY, menuWidth, menuHeight), _Tr("Client", "Rifle")));
+			items.push_back(MenuItem(MenuWeaponSMG, AABB2(weapX, firstY + rowHeight, menuWidth, menuHeight), _Tr("Client", "SMG")));
+			items.push_back(MenuItem(MenuWeaponShotgun, AABB2(weapX, firstY + rowHeight * 2.f, menuWidth, menuHeight), _Tr("Client", "Shotgun")));
 			
-			items.push_back(MenuItem(MenuSpawn, AABB2(left + contentsWidth - 266.f, firstY + 4.f, 256.f, 64.f), "Spawn"));
+			items.push_back(MenuItem(MenuSpawn, AABB2(left + contentsWidth - 266.f, firstY + 4.f, 256.f, 64.f), _Tr("Client", "Spawn")));
 
 			cursorPos = MakeVector2(renderer->ScreenWidth()*.5f, renderer->ScreenHeight()*.5f);
 
@@ -180,14 +181,14 @@ namespace spades{
 			float left = (renderer->ScreenWidth() - contentsWidth) * .5f;
 			float top = renderer->ScreenHeight() - 150.f;
 			{
-				std::string msg = "Select Team:";
+				std::string msg = _Tr("Client", "Select Team:");
 				Vector2 pos;
 				pos.x = left + 10.f;
 				pos.y = top + 10.f;
 				font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0,0,0,0.4f));
 			}
 			if(selectedTeam != 2){
-				std::string msg = "Select Weapon:";
+				std::string msg = _Tr("Client", "Select Weapon:");
 				Vector2 pos;
 				pos.x = left + 260.f;
 				pos.y = top + 10.f;
