@@ -121,7 +121,7 @@ namespace spades {
 		}
 		
 		virtual bool CheckExtension(const std::string& fn) {
-			return EndsWith(fn, ".png");
+			return EndsWith(fn, ".png") || EndsWith(fn, ".jpg") || EndsWith(fn, ".tif") || EndsWith(fn, ".bmp");
 		}
 	} imgReader;
 	
