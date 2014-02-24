@@ -227,7 +227,6 @@ namespace spades {
 					// TODO: support text inputing for cg_smp runner.
 					//       see SDLRunner.cpp and grep SDL_StartTextInput
 					
-					//Fl::check();
 				}
 				
 				cliQueue = NULL;

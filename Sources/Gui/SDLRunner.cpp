@@ -291,7 +291,6 @@ namespace spades {
 					while(SDL_PollEvent(&event)) {
 						ProcessEvent(event, view);
 					}
-					//Fl::check();
 				}
 				
 				SPLog("Leaving Client Loop");
