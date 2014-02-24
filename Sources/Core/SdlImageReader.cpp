@@ -57,9 +57,6 @@ namespace spades {
 				SPRaise("SDL surface was loaded, but format conversion failed.");
 			}
 			
-			SPAssert(img);
-			SPAssert(img->count() >= 1);
-			
 			const unsigned char* inPixels =
 			(const unsigned char *)img->pixels;
 			int width = img->w;
