@@ -62,7 +62,6 @@
 		E842889618A667930060743D /* Fonts.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842889418A667930060743D /* Fonts.cpp */; };
 		E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886017CFB32B005105D0 /* GLLongSpriteRenderer.cpp */; };
 		E844886617D0C43B005105D0 /* Tracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886417D0C43B005105D0 /* Tracer.cpp */; };
-		E844886A17D262E4005105D0 /* Serverbrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844886817D262E3005105D0 /* Serverbrowser.cpp */; };
 		E844888217D2633C005105D0 /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887B17D2633C005105D0 /* json_reader.cpp */; };
 		E844888317D2633C005105D0 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887C17D2633C005105D0 /* json_value.cpp */; };
 		E844888417D2633C005105D0 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887E17D2633C005105D0 /* json_writer.cpp */; };
@@ -395,8 +394,6 @@
 		E844886417D0C43B005105D0 /* Tracer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tracer.cpp; sourceTree = "<group>"; };
 		E844886517D0C43B005105D0 /* Tracer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tracer.h; sourceTree = "<group>"; };
 		E844886717D262C1005105D0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		E844886817D262E3005105D0 /* Serverbrowser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Serverbrowser.cpp; sourceTree = "<group>"; };
-		E844886917D262E4005105D0 /* Serverbrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Serverbrowser.h; sourceTree = "<group>"; };
 		E844886D17D2633C005105D0 /* AUTHORS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
 		E844887017D2633C005105D0 /* autolink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = autolink.h; sourceTree = "<group>"; };
 		E844887117D2633C005105D0 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
@@ -1375,8 +1372,6 @@
 			children = (
 				E8F74CEC183F931F0085AA54 /* SDLMain.h */,
 				E8F74CEA183F92DA0085AA54 /* SDLmain.m */,
-				E844886817D262E3005105D0 /* Serverbrowser.cpp */,
-				E844886917D262E4005105D0 /* Serverbrowser.h */,
 				E8CF03BE178EE50E000683D4 /* Main.cpp */,
 				E8F74CE6183F8A110085AA54 /* Main.h */,
 				E8CF03BB178EE502000683D4 /* SDLGLDevice.cpp */,
@@ -1967,7 +1962,6 @@
 				E81A7C6718610BE400BF3FCE /* SWPort.cpp in Sources */,
 				E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */,
 				E844886617D0C43B005105D0 /* Tracer.cpp in Sources */,
-				E844886A17D262E4005105D0 /* Serverbrowser.cpp in Sources */,
 				E844888217D2633C005105D0 /* json_reader.cpp in Sources */,
 				E844888317D2633C005105D0 /* json_value.cpp in Sources */,
 				E844888417D2633C005105D0 /* json_writer.cpp in Sources */,

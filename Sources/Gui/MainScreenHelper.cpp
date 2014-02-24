@@ -1,6 +1,7 @@
 /*
  Copyright (c) 2013 yvt
- Portion of the code is based on Serverbrowser.cpp.
+ 
+ Portion of the code is based on Serverbrowser.cpp (Copyright (c) 2013 learn_more).
  
  This file is part of OpenSpades.
  
@@ -20,7 +21,6 @@
  */
 #include <OpenSpades.h>
 #include "MainScreenHelper.h"
-#include "Serverbrowser.h"
 #include <Core/AutoLocker.h>
 #include <Core/Thread.h>
 #include <curl/curl.h>
@@ -33,7 +33,62 @@
 SPADES_SETTING(cl_serverListUrl, "http://services.buildandshoot.com/serverlist.json");
 
 namespace spades {
+	
+	class Serveritem
+	{
+		//NetClient::Connect
+		std::string mName, mIp, mMap, mGameMode;
+		std::string mCountry, mVersion;
+		int mPing, mPlayers, mMaxPlayers;
+		
+		Serveritem( const std::string& name, const std::string& ip, const std::string& map, const std::string& gameMode, const std::string& country, const std::string& version,
+				   int ping, int players, int maxPlayers );
+	public:
+		static Serveritem* create( Json::Value& val );
+		
+		inline const std::string& Name() const { return mName; }
+		inline const std::string& Ip() const { return mIp; }
+		inline const std::string& Map() const { return mMap; }
+		inline const std::string& GameMode() const { return mGameMode; }
+		inline const std::string& Country() const { return mCountry; }
+		inline const std::string& Version() const { return mVersion; }
+		inline int Ping() const { return mPing; }
+		inline int Players() const { return mPlayers; }
+		inline int MaxPlayers() const { return mMaxPlayers; }
+	};
+	
+	
+	Serveritem::Serveritem( const std::string& name, const std::string& ip, const std::string& map, const std::string& gameMode, const std::string& country, const std::string& version, int ping, int players, int maxPlayers )
+	: mName(name), mIp(ip), mMap(map), mGameMode(gameMode), mCountry(country), mVersion(version), mPing(ping), mPlayers(players), mMaxPlayers(maxPlayers)
+	{
+	}
+	
+	Serveritem* Serveritem::create( Json::Value& val )
+	{
+		Serveritem* item = NULL;
+		if( val.type() == Json::objectValue ) {
+			std::string name, ip, map, gameMode, country, version;
+			int ping = 0, players = 0, maxPlayers = 0;
+			
+			name = val["name"].asString();
+			ip = val["identifier"].asString();
+			map = val["map"].asString();
+			gameMode = val["game_mode"].asString();
+			country = val["country"].asString();
+			version = val["game_version"].asString();
+			
+			ping = val["latency"].asInt();
+			players = val["players_current"].asInt();
+			maxPlayers = val["players_max"].asInt();
+			item = new Serveritem( name, ip, map, gameMode, country, version, ping, players, maxPlayers );
+		}
+		return item;
+	}
+	
+	
+	
 	namespace gui {
+		
 		
 		// FIXME: mostly duplicated code with Serverbrowser.cpp
 		class MainScreenHelper::ServerListQuery: public Thread {
