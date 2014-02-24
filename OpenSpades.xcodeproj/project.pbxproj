@@ -326,7 +326,6 @@
 		E80B28CF17AFE68A0056179E /* TCGameMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCGameMode.h; sourceTree = "<group>"; };
 		E80B28D117AFF77B0056179E /* TCProgressView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCProgressView.cpp; sourceTree = "<group>"; };
 		E80B28D217AFF77E0056179E /* TCProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCProgressView.h; sourceTree = "<group>"; };
-		E80B28D417B1100D0056179E /* AboutText.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AboutText.html; sourceTree = "<group>"; };
 		E80B28D617B39D160056179E /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
 		E80B28D717B39D160056179E /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
 		E80B28D817B39D160056179E /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
@@ -1386,7 +1385,6 @@
 				E8CF03E2178EF57E000683D4 /* SDLRunner.h */,
 				E80B289117A683500056179E /* SDLAsyncRunner.cpp */,
 				E80B289217A683500056179E /* SDLAsyncRunner.h */,
-				E80B28D417B1100D0056179E /* AboutText.html */,
 				E81CE4A7183F7F2000F22685 /* MainScreen.cpp */,
 				E81CE4A8183F7F2000F22685 /* MainScreen.h */,
 				E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */,
