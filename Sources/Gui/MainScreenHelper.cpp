@@ -29,7 +29,6 @@
 #include <Core/Settings.h>
 #include <algorithm>
 #include <cctype>
-#include "MainWindow.h" // for credits
 
 SPADES_SETTING(cl_serverListUrl, "http://services.buildandshoot.com/serverlist.json");
 
@@ -221,12 +220,13 @@ namespace spades {
 			return out;
 		}
 		
+#include "Credits.inc" // C++11 raw string literal makes some tools (ex. xgettext, Xcode) misbehave
+		
 		std::string MainScreenHelper::GetCredits() {
-			std::string html = std::string(reinterpret_cast<const char *>(aboutText), sizeof(aboutText));
+			std::string html = credits;
 			html = Replace(html, "${PACKAGE_STRING}", PACKAGE_STRING);
-			html = Replace(html, "&copy;", "(C)");
 			
-			return TextifyHTML(html);
+			return html;
 		}
 		
 		struct serverSorter {

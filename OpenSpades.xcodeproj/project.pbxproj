@@ -71,6 +71,9 @@
 		E844888417D2633C005105D0 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887E17D2633C005105D0 /* json_writer.cpp */; };
 		E844888717D2669C005105D0 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.dylib */; };
 		E844888A17D39CD3005105D0 /* ErrorDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844888817D39CD0005105D0 /* ErrorDialog.cpp */; };
+		E84E221618BB4601001282B0 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF039B178EDAC9000683D4 /* libz.dylib */; };
+		E84E221718BB4B41001282B0 /* libfltk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03E4178EF5FF000683D4 /* libfltk.a */; };
+		E84E221918BB4BA0001282B0 /* Credits.inc in Sources */ = {isa = PBXBuildFile; fileRef = E84E221818BB4BA0001282B0 /* Credits.inc */; };
 		E852337B1839B28C00F40541 /* VersionInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E85233791839B28C00F40541 /* VersionInfo.cpp */; };
 		E8567E571792B24D009D83E0 /* IAudioChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E551792B24D009D83E0 /* IAudioChunk.cpp */; };
 		E8567E5A1792BEFC009D83E0 /* ALDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E581792BEFC009D83E0 /* ALDevice.cpp */; };
@@ -189,7 +192,6 @@
 		E8C92A0C18695EA500740C9F /* SWModelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */; };
 		E8C92A0F186A902500740C9F /* CpuID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C92A0E186A902500740C9F /* CpuID.cpp */; };
 		E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0399178EDABD000683D4 /* OpenAL.framework */; };
-		E8CF039C178EDAC9000683D4 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF039B178EDAC9000683D4 /* libz.dylib */; };
 		E8CF03A8178EDF6A000683D4 /* IRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03A6178EDF6A000683D4 /* IRenderer.cpp */; };
 		E8CF03AB178EDF74000683D4 /* GLRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03A9178EDF74000683D4 /* GLRenderer.cpp */; };
 		E8CF03AE178EDFCD000683D4 /* IGLDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03AC178EDFCD000683D4 /* IGLDevice.cpp */; };
@@ -207,8 +209,6 @@
 		E8CF03DA178EF166000683D4 /* AutoLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03D8178EF165000683D4 /* AutoLocker.cpp */; };
 		E8CF03E0178EF4E9000683D4 /* IRunnable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03DE178EF4E9000683D4 /* IRunnable.cpp */; };
 		E8CF03E3178EF57E000683D4 /* SDLRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03E1178EF57E000683D4 /* SDLRunner.cpp */; };
-		E8CF03E5178EF600000683D4 /* libfltk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03E4178EF5FF000683D4 /* libfltk.a */; };
-		E8CF03E9178EF822000683D4 /* MainWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03E7178EF822000683D4 /* MainWindow.cpp */; };
 		E8CF03EB178EF8FE000683D4 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03EA178EF8FE000683D4 /* CoreFoundation.framework */; };
 		E8CF03ED178EF904000683D4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03EC178EF904000683D4 /* CoreGraphics.framework */; };
 		E8CF03EF178EF909000683D4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03EE178EF909000683D4 /* CoreText.framework */; };
@@ -247,10 +247,6 @@
 		E8E0AFB8179C0F2900C6B5A9 /* GLFramebufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E0AFB6179C0F2800C6B5A9 /* GLFramebufferManager.cpp */; };
 		E8E44686179CC4FF00BE8855 /* IBitmapCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E44684179CC4FF00BE8855 /* IBitmapCodec.cpp */; };
 		E8E44689179CC65900BE8855 /* TargaReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E44687179CC65900BE8855 /* TargaReader.cpp */; };
-		E8E4468F179CE7A200BE8855 /* libfltk_images.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E4468D179CE7A200BE8855 /* libfltk_images.a */; };
-		E8E44690179CE7A200BE8855 /* libfltk_jpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E4468E179CE7A200BE8855 /* libfltk_jpeg.a */; };
-		E8E44692179CE7B800BE8855 /* libpng15.15.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8E44691179CE7B800BE8855 /* libpng15.15.dylib */; };
-		E8E44695179D19DC00BE8855 /* MainWindowHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E44693179D19DC00BE8855 /* MainWindowHandler.cpp */; };
 		E8E44698179D2CA100BE8855 /* IGLSpriteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E44696179D2CA100BE8855 /* IGLSpriteRenderer.cpp */; };
 		E8E4469B179D2EDD00BE8855 /* GLSoftSpriteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E44699179D2EDC00BE8855 /* GLSoftSpriteRenderer.cpp */; };
 		E8E4469E179D59A900BE8855 /* GLCameraBlurFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E4469C179D59A900BE8855 /* GLCameraBlurFilter.cpp */; };
@@ -437,6 +433,7 @@
 		E844888B17D3A059005105D0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		E84E221318BB449A001282B0 /* FindGLEW2.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindGLEW2.cmake; sourceTree = "<group>"; };
 		E84E221418BB449A001282B0 /* FindSDL2.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindSDL2.cmake; sourceTree = "<group>"; };
+		E84E221818BB4BA0001282B0 /* Credits.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = Credits.inc; sourceTree = "<group>"; };
 		E85233791839B28C00F40541 /* VersionInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VersionInfo.cpp; sourceTree = "<group>"; };
 		E852337A1839B28C00F40541 /* VersionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionInfo.h; sourceTree = "<group>"; };
 		E8567E551792B24D009D83E0 /* IAudioChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IAudioChunk.cpp; sourceTree = "<group>"; };
@@ -721,8 +718,6 @@
 		E8CF03E1178EF57E000683D4 /* SDLRunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDLRunner.cpp; sourceTree = "<group>"; };
 		E8CF03E2178EF57E000683D4 /* SDLRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLRunner.h; sourceTree = "<group>"; };
 		E8CF03E4178EF5FF000683D4 /* libfltk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfltk.a; path = ../../../../../usr/local/lib/libfltk.a; sourceTree = "<group>"; };
-		E8CF03E7178EF822000683D4 /* MainWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainWindow.cpp; sourceTree = "<group>"; };
-		E8CF03E8178EF822000683D4 /* MainWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainWindow.h; sourceTree = "<group>"; };
 		E8CF03EA178EF8FE000683D4 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		E8CF03EC178EF904000683D4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		E8CF03EE178EF909000683D4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -797,7 +792,6 @@
 		E8E4468D179CE7A200BE8855 /* libfltk_images.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfltk_images.a; path = ../../../../../usr/local/lib/libfltk_images.a; sourceTree = "<group>"; };
 		E8E4468E179CE7A200BE8855 /* libfltk_jpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfltk_jpeg.a; path = ../../../../../usr/local/lib/libfltk_jpeg.a; sourceTree = "<group>"; };
 		E8E44691179CE7B800BE8855 /* libpng15.15.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng15.15.dylib; path = ../../../../../opt/X11/lib/libpng15.15.dylib; sourceTree = "<group>"; };
-		E8E44693179D19DC00BE8855 /* MainWindowHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainWindowHandler.cpp; sourceTree = "<group>"; };
 		E8E44696179D2CA100BE8855 /* IGLSpriteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IGLSpriteRenderer.cpp; sourceTree = "<group>"; };
 		E8E44697179D2CA100BE8855 /* IGLSpriteRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGLSpriteRenderer.h; sourceTree = "<group>"; };
 		E8E44699179D2EDC00BE8855 /* GLSoftSpriteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSoftSpriteRenderer.cpp; sourceTree = "<group>"; };
@@ -840,19 +834,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E84E221718BB4B41001282B0 /* libfltk.a in Frameworks */,
+				E84E221618BB4601001282B0 /* libz.dylib in Frameworks */,
 				E87AB82518BB3A04006B7D73 /* SDL2_image.framework in Frameworks */,
 				E844888717D2669C005105D0 /* libcurl.dylib in Frameworks */,
-				E8E44692179CE7B800BE8855 /* libpng15.15.dylib in Frameworks */,
-				E8E4468F179CE7A200BE8855 /* libfltk_images.a in Frameworks */,
-				E8E44690179CE7A200BE8855 /* libfltk_jpeg.a in Frameworks */,
 				E8CF03F3178EF916000683D4 /* Cocoa.framework in Frameworks */,
 				E8CF03F1178EF911000683D4 /* Foundation.framework in Frameworks */,
 				E8CF03EF178EF909000683D4 /* CoreText.framework in Frameworks */,
 				E8CF03ED178EF904000683D4 /* CoreGraphics.framework in Frameworks */,
 				E8CF03EB178EF8FE000683D4 /* CoreFoundation.framework in Frameworks */,
-				E8CF03E5178EF600000683D4 /* libfltk.a in Frameworks */,
 				E8CF03C5178EE78C000683D4 /* OpenGL.framework in Frameworks */,
-				E8CF039C178EDAC9000683D4 /* libz.dylib in Frameworks */,
 				E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */,
 				E8B93AD518559EC700BD01E1 /* SDL2.framework in Frameworks */,
 			);
@@ -1408,9 +1399,6 @@
 				E8CF03BC178EE502000683D4 /* SDLGLDevice.h */,
 				E8CF03E1178EF57E000683D4 /* SDLRunner.cpp */,
 				E8CF03E2178EF57E000683D4 /* SDLRunner.h */,
-				E8CF03E7178EF822000683D4 /* MainWindow.cpp */,
-				E8CF03E8178EF822000683D4 /* MainWindow.h */,
-				E8E44693179D19DC00BE8855 /* MainWindowHandler.cpp */,
 				E80B289117A683500056179E /* SDLAsyncRunner.cpp */,
 				E80B289217A683500056179E /* SDLAsyncRunner.h */,
 				E80B28C517AF872A0056179E /* DetailConfigWindowHandler.cpp */,
@@ -1429,6 +1417,7 @@
 				E842888A18A3CF6C0060743D /* StartupScreen.h */,
 				E842888C18A3D1520060743D /* StartupScreenHelper.cpp */,
 				E842888D18A3D1520060743D /* StartupScreenHelper.h */,
+				E84E221818BB4BA0001282B0 /* Credits.inc */,
 			);
 			path = Gui;
 			sourceTree = "<group>";
@@ -1857,7 +1846,6 @@
 				E8CF03DA178EF166000683D4 /* AutoLocker.cpp in Sources */,
 				E8CF03E0178EF4E9000683D4 /* IRunnable.cpp in Sources */,
 				E8CF03E3178EF57E000683D4 /* SDLRunner.cpp in Sources */,
-				E8CF03E9178EF822000683D4 /* MainWindow.cpp in Sources */,
 				E8CF03F6178FAA8B000683D4 /* IImage.cpp in Sources */,
 				E8CF03F9178FABA4000683D4 /* SceneDefinition.cpp in Sources */,
 				E8C92A0C18695EA500740C9F /* SWModelRenderer.cpp in Sources */,
@@ -1949,7 +1937,6 @@
 				E8E44686179CC4FF00BE8855 /* IBitmapCodec.cpp in Sources */,
 				E8F74CFD1845D4D00085AA54 /* ClientUIHelper.cpp in Sources */,
 				E8E44689179CC65900BE8855 /* TargaReader.cpp in Sources */,
-				E8E44695179D19DC00BE8855 /* MainWindowHandler.cpp in Sources */,
 				E8E44698179D2CA100BE8855 /* IGLSpriteRenderer.cpp in Sources */,
 				E8E4469B179D2EDD00BE8855 /* GLSoftSpriteRenderer.cpp in Sources */,
 				E8E4469E179D59A900BE8855 /* GLCameraBlurFilter.cpp in Sources */,
@@ -2041,6 +2028,7 @@
 				E8B6B6B617DE27B500E35523 /* as_tokenizer.cpp in Sources */,
 				E852337B1839B28C00F40541 /* VersionInfo.cpp in Sources */,
 				E8B6B6B717DE27B500E35523 /* as_typeinfo.cpp in Sources */,
+				E84E221918BB4BA0001282B0 /* Credits.inc in Sources */,
 				E8B6B6B817DE27B500E35523 /* as_variablescope.cpp in Sources */,
 				E8B6B6B917DE289700E35523 /* as_callfunc_x86.cpp in Sources */,
 				E8B6B6BF17DF456F00E35523 /* GLSparseShadowMapRenderer.cpp in Sources */,
