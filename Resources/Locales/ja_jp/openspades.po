@@ -20,6 +20,7 @@ msgstr ""
 "X-Source-Language: C\n"
 
 #: ../../../Sources/Gui/Main.cpp:344 ../../../Sources/Gui/Main.cpp:369
+#: ../../../Sources/Gui/Main.cpp:368
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr "ローカライゼーションシステムが読み込まれました"
@@ -1073,16 +1074,39 @@ msgid "{0} wins!"
 msgstr "{0} の勝ち!"
 
 #: ../../../Sources/Client/Client.cpp:3443
+#: ../../../Sources/Client/Client.cpp:3442
 msgctxt "Client"
 msgid "{0} Wins!"
 msgstr "{0} の勝ち!"
 
 #: ../../../Sources/Client/Client.cpp:3834
+#: ../../../Sources/Client/Client.cpp:3833
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr "{0} を殺害しました"
 
 #: ../../../Sources/Client/Client.cpp:3836
+#: ../../../Sources/Client/Client.cpp:3835
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr "{0} に殺害されました"
+
+#: ../../../Sources/Gui/Main.cpp:401
+msgctxt "Main"
+msgid ""
+"A serious error caused OpenSpades to stop working:\n"
+"\n"
+"{0}\n"
+"\n"
+"See SystemMessages.log for more details."
+msgstr ""
+"深刻な問題により、OpenSpadesは動作を停止しました:\n"
+"\n"
+"{0}\n"
+"\n"
+"詳細については SystemMessages.log をご覧下さい。"
+
+#: ../../../Sources/Gui/Main.cpp:406
+msgctxt "Main"
+msgid "OpenSpades Fatal Error"
+msgstr "OpenSpades 重大なエラー"

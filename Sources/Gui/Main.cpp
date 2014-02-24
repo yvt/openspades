@@ -21,7 +21,6 @@
 #include <OpenSpades.h>
 #include <Imports/SDL.h>
 #include "Main.h"
-#include "MainWindow.h"
 #include "MainScreen.h"
 #include <Core/FileManager.h>
 #include <Core/DirectoryFileSystem.h>
@@ -31,7 +30,6 @@
 #include <Core/Thread.h>
 #include <Core/ZipFileSystem.h>
 #include <Core/ServerAddress.h>
-#include "ErrorDialog.h"
 #include "Runner.h"
 #include <Client/GameMap.h>
 #include <Client/Client.h>
@@ -45,6 +43,7 @@
 #include <ScriptBindings/ScriptManager.h>
 
 #include <algorithm>	//std::sort
+#include <FL/Fl.H>
 
 SPADES_SETTING(cl_showStartupWindow, "");
 
@@ -136,17 +135,6 @@ class ThreadQuantumSetter {
 
 #endif
 
-//fltk
-void setWindowIcon( Fl_Window* window )
-{
-#ifdef _WIN32
-	window->icon( (char *)LoadIconA( GetModuleHandle(NULL), "AppIcon" ) );
-#else
-	//check for mac / linux icon with fltk?
-	// yvt: no window icon on os x.
-#endif
-}
-
 #ifdef __APPLE__
 #include <xmmintrin.h>
 #endif
@@ -227,8 +215,6 @@ int main(int argc, char ** argv)
 	
 #endif
 	try{
-		
-		Fl::scheme("gtk+");
 		
 		spades::reflection::Backtrace::StartBacktrace();
 		
@@ -374,30 +360,10 @@ int main(int argc, char ** argv)
 		SPLog("Initializing window system");
 		int dum = 0;
 		Fl::args( argc, argv, dum, argsHandler );
-		
-		// MAPGEN
-		/*spades::client::GameMap *m = spades::client::GameMap::Load(spades::FileManager::OpenForReading("Maps/shot0000.vxl"));
-		for(int x = 0; x < 512; x++) {
-			for(int y = 0; y < 512; y++) {
-				for(int z = 0; z < 64; z++) {
-					if(m->IsSolid(x, y, z)) {
-						uint32_t col = m->GetColor(x, y, z);
-						int bri = (col & 0xff) + ((col >> 8) & 0xff) + ((col >> 16) & 0xff);
-						bri /= 3;
-						col = 0xff000000 + bri * 0x010101;
-						m->Set(x, y, z, true, col);
-					}
-				}
-			}
-		}
-		auto outs = spades::FileManager::OpenForWriting("Maps/Title.vxl");
-		m->Save(outs);
-		delete outs;
-		return 0;*/
 
 		ThreadQuantumSetter quantumSetter;
+		(void)quantumSetter; // suppress "unused variable" warning
 		
-		MainWindow* win = NULL;
 		if( !cg_autoConnect ) {
 			if(!((int)cl_showStartupWindow != 0 ||
 				 Fl::get_key(FL_Shift_L) || Fl::get_key(FL_Shift_R))) {
@@ -408,17 +374,6 @@ int main(int argc, char ** argv)
 			}else{
 				SPLog("Starting startup window");
 				::spades::gui::StartupScreen::Run();
-				/*
-				SPLog("Initializing main window");
-				win = new MainWindow();
-				win->Init();
-				setWindowIcon( win );
-				win->show(argc, argv);
-				win->CheckGLCapability();
-				
-				SPLog("Entering FLTK main loop");
-				Fl::run();
-				SPLog("Leaving FLTK main loop");*/
 			}
 		} else {
 			spades::ServerAddress host(cg_lastQuickConnectHost.CString(), (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076 );
@@ -426,27 +381,18 @@ int main(int argc, char ** argv)
 		}
 		
 		spades::Settings::GetInstance()->Flush();
-		
-		if( win ) {
-			delete win;
-		}
 
 	}catch(const std::exception& ex) {
 		
-		ErrorDialog dlg;
-		setWindowIcon( &dlg );
-		dlg.set_modal();
-		dlg.result = 0;
+		std::string msg = ex.what();
+		msg = _Tr("Main", "A serious error caused OpenSpades to stop working:\n\n{0}\n\nSee SystemMessages.log for more details.", msg);
 		
-		// TODO: free this buffer (just leaking)
-		Fl_Text_Buffer *buf = new Fl_Text_Buffer;
-		buf->append(ex.what());
-		dlg.infoView->wrap_mode(Fl_Text_Display::WRAP_AT_BOUNDS, 0);
-		dlg.infoView->buffer(buf);
-		dlg.helpView->value("See SystemMessages.log for more details.");
-		dlg.show();
-		while(dlg.visible()){
-			Fl::wait();
+		SPLog("[!] Terminating due to the fatal error: %s", ex.what());
+		
+		SDL_InitSubSystem(SDL_INIT_VIDEO);
+		if(SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, _Tr("Main", "OpenSpades Fatal Error").c_str(), msg.c_str(), nullptr)) {
+			// showing dialog failed.
+			// TODO: do appropriate action
 		}
 		
 	}

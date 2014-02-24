@@ -22,9 +22,9 @@
 #include "View.h"
 #include "SDLRunner.h"
 #include "SDLAsyncRunner.h"
-#include "ErrorDialog.h"
 #include <Core/Settings.h>
 #include <Core/Exception.h>
+#include <Core/Strings.h>
 
 SPADES_SETTING(cg_smp, "0");
 SPADES_SETTING(r_videoWidth, "1024");
@@ -51,26 +51,24 @@ namespace spades {
 				Run();
 			}catch(const spades::Exception& ex){
 				err = ex.GetShortMessage();
-				SPLog("Unhandled exception in SDLRunner:\n%s", ex.what());
+				SPLog("[!] Unhandled exception in SDLRunner:\n%s", ex.what());
 			}catch(const std::exception& ex){
 				err = ex.what();
-				SPLog("Unhandled exception in SDLRunner:\n%s", ex.what());
+				SPLog("[!] Unhandled exception in SDLRunner:\n%s", ex.what());
 			}
 			if(!err.empty()){
-				ErrorDialog dlg;
-				dlg.set_modal();
-				dlg.result = 0;
 				
-				// TODO: free this buffer (just leaking)
-				Fl_Text_Buffer *buf = new Fl_Text_Buffer;
-				buf->append(err.c_str());
-				dlg.infoView->wrap_mode(Fl_Text_Display::WRAP_AT_BOUNDS, 0);
-				dlg.infoView->buffer(buf);
-				dlg.helpView->value("See SystemMessages.log for more details.");
-				dlg.show();
-				while(dlg.visible()){
-					Fl::wait();
+				std::string msg = err;
+				msg = _Tr("Main", "A serious error caused OpenSpades to stop working:\n\n{0}\n\nSee SystemMessages.log for more details.", msg);
+				
+				
+				SDL_InitSubSystem(SDL_INIT_VIDEO);
+				if(SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, _Tr("Main", "OpenSpades Fatal Error").c_str(), msg.c_str(), nullptr)) {
+					// showing dialog failed.
+					// TODO: do appropriate action
 				}
+		
+				
 			}
 		}
 		void Runner::Run() {

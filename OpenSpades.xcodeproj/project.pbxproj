@@ -24,9 +24,6 @@
 		E80B289917AA64020056179E /* GLWaterRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B289717AA63FC0056179E /* GLWaterRenderer.cpp */; };
 		E80B28BE17ABB2590056179E /* kiss_fft.c in Sources */ = {isa = PBXBuildFile; fileRef = E80B28B817ABAC790056179E /* kiss_fft.c */; };
 		E80B28C117AE7FF20056179E /* GLAmbientShadowRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28BF17AE7FEB0056179E /* GLAmbientShadowRenderer.cpp */; };
-		E80B28C417AF85320056179E /* DetailConfigWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28C217AF85300056179E /* DetailConfigWindow.cpp */; };
-		E80B28C717AF872C0056179E /* DetailConfigWindowHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28C517AF872A0056179E /* DetailConfigWindowHandler.cpp */; };
-		E80B28CA17AF8A480056179E /* DetailConfigTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28C817AF8A450056179E /* DetailConfigTable.cpp */; };
 		E80B28CD17AFCCCB0056179E /* PaletteView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28CB17AFCCC40056179E /* PaletteView.cpp */; };
 		E80B28D017AFE68A0056179E /* TCGameMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28CE17AFE68A0056179E /* TCGameMode.cpp */; };
 		E80B28D317AFF7810056179E /* TCProgressView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28D117AFF77B0056179E /* TCProgressView.cpp */; };
@@ -70,7 +67,6 @@
 		E844888317D2633C005105D0 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887C17D2633C005105D0 /* json_value.cpp */; };
 		E844888417D2633C005105D0 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887E17D2633C005105D0 /* json_writer.cpp */; };
 		E844888717D2669C005105D0 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.dylib */; };
-		E844888A17D39CD3005105D0 /* ErrorDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844888817D39CD0005105D0 /* ErrorDialog.cpp */; };
 		E84E221618BB4601001282B0 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF039B178EDAC9000683D4 /* libz.dylib */; };
 		E84E221718BB4B41001282B0 /* libfltk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03E4178EF5FF000683D4 /* libfltk.a */; };
 		E84E221918BB4BA0001282B0 /* Credits.inc in Sources */ = {isa = PBXBuildFile; fileRef = E84E221818BB4BA0001282B0 /* Credits.inc */; };
@@ -324,11 +320,6 @@
 		E80B28BC17ABAC790056179E /* README.simd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.simd; sourceTree = "<group>"; };
 		E80B28BF17AE7FEB0056179E /* GLAmbientShadowRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLAmbientShadowRenderer.cpp; sourceTree = "<group>"; };
 		E80B28C017AE7FEE0056179E /* GLAmbientShadowRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLAmbientShadowRenderer.h; sourceTree = "<group>"; };
-		E80B28C217AF85300056179E /* DetailConfigWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DetailConfigWindow.cpp; sourceTree = "<group>"; };
-		E80B28C317AF85310056179E /* DetailConfigWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailConfigWindow.h; sourceTree = "<group>"; };
-		E80B28C517AF872A0056179E /* DetailConfigWindowHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DetailConfigWindowHandler.cpp; sourceTree = "<group>"; };
-		E80B28C817AF8A450056179E /* DetailConfigTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DetailConfigTable.cpp; sourceTree = "<group>"; };
-		E80B28C917AF8A470056179E /* DetailConfigTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailConfigTable.h; sourceTree = "<group>"; };
 		E80B28CB17AFCCC40056179E /* PaletteView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PaletteView.cpp; sourceTree = "<group>"; };
 		E80B28CC17AFCCC70056179E /* PaletteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaletteView.h; sourceTree = "<group>"; };
 		E80B28CE17AFE68A0056179E /* TCGameMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCGameMode.cpp; sourceTree = "<group>"; };
@@ -428,8 +419,6 @@
 		E844888117D2633C005105D0 /* version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version; sourceTree = "<group>"; };
 		E844888517D26411005105D0 /* OpenSpades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenSpades.h; sourceTree = SOURCE_ROOT; };
 		E844888617D26699005105D0 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
-		E844888817D39CD0005105D0 /* ErrorDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorDialog.cpp; sourceTree = "<group>"; };
-		E844888917D39CD2005105D0 /* ErrorDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorDialog.h; sourceTree = "<group>"; };
 		E844888B17D3A059005105D0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		E84E221318BB449A001282B0 /* FindGLEW2.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindGLEW2.cmake; sourceTree = "<group>"; };
 		E84E221418BB449A001282B0 /* FindSDL2.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindSDL2.cmake; sourceTree = "<group>"; };
@@ -1387,12 +1376,8 @@
 			children = (
 				E8F74CEC183F931F0085AA54 /* SDLMain.h */,
 				E8F74CEA183F92DA0085AA54 /* SDLmain.m */,
-				E844888817D39CD0005105D0 /* ErrorDialog.cpp */,
-				E844888917D39CD2005105D0 /* ErrorDialog.h */,
 				E844886817D262E3005105D0 /* Serverbrowser.cpp */,
 				E844886917D262E4005105D0 /* Serverbrowser.h */,
-				E80B28C217AF85300056179E /* DetailConfigWindow.cpp */,
-				E80B28C317AF85310056179E /* DetailConfigWindow.h */,
 				E8CF03BE178EE50E000683D4 /* Main.cpp */,
 				E8F74CE6183F8A110085AA54 /* Main.h */,
 				E8CF03BB178EE502000683D4 /* SDLGLDevice.cpp */,
@@ -1401,9 +1386,6 @@
 				E8CF03E2178EF57E000683D4 /* SDLRunner.h */,
 				E80B289117A683500056179E /* SDLAsyncRunner.cpp */,
 				E80B289217A683500056179E /* SDLAsyncRunner.h */,
-				E80B28C517AF872A0056179E /* DetailConfigWindowHandler.cpp */,
-				E80B28C817AF8A450056179E /* DetailConfigTable.cpp */,
-				E80B28C917AF8A470056179E /* DetailConfigTable.h */,
 				E80B28D417B1100D0056179E /* AboutText.html */,
 				E81CE4A7183F7F2000F22685 /* MainScreen.cpp */,
 				E81CE4A8183F7F2000F22685 /* MainScreen.h */,
@@ -1969,9 +1951,6 @@
 				E80B289917AA64020056179E /* GLWaterRenderer.cpp in Sources */,
 				E80B28BE17ABB2590056179E /* kiss_fft.c in Sources */,
 				E80B28C117AE7FF20056179E /* GLAmbientShadowRenderer.cpp in Sources */,
-				E80B28C417AF85320056179E /* DetailConfigWindow.cpp in Sources */,
-				E80B28C717AF872C0056179E /* DetailConfigWindowHandler.cpp in Sources */,
-				E80B28CA17AF8A480056179E /* DetailConfigTable.cpp in Sources */,
 				E80B28CD17AFCCCB0056179E /* PaletteView.cpp in Sources */,
 				E81A7C6B1861525D00BF3FCE /* SWImage.cpp in Sources */,
 				E80B28D017AFE68A0056179E /* TCGameMode.cpp in Sources */,
@@ -1994,7 +1973,6 @@
 				E844888217D2633C005105D0 /* json_reader.cpp in Sources */,
 				E844888317D2633C005105D0 /* json_value.cpp in Sources */,
 				E844888417D2633C005105D0 /* json_writer.cpp in Sources */,
-				E844888A17D39CD3005105D0 /* ErrorDialog.cpp in Sources */,
 				E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */,
 				E8B6B68F17DE27B500E35523 /* as_atomic.cpp in Sources */,
 				E8B6B69017DE27B500E35523 /* as_builder.cpp in Sources */,
