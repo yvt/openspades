@@ -387,6 +387,7 @@ namespace spades {
 			
 			GLColorBuffer coc;
             
+			globalBlur = std::min(globalBlur * 3.f, 1.f);
             {
                 GLProfiler p(dev, "CoC Computation");
                 coc = GenerateCoC(blurDepthRange, vignetteBlur, globalBlur);
@@ -397,8 +398,7 @@ namespace spades {
 			float sin60 = sinf(static_cast<float>(M_PI) / 3.f);
 			
 			maxCoc *= .7f + vignetteBlur * 0.5f;
-			maxCoc += 1.f + 5.f * globalBlur;
-			globalBlur = std::min(globalBlur * 5.f, 1.f);
+			maxCoc *= 1.f + 3.f * globalBlur;
 			
 			// reduce resolution to make it faster
 			int divide = 1;

@@ -394,7 +394,7 @@ namespace spades {
 
 				alDevice = al::qalcOpenDevice(NULL);
 				if(!alDevice){
-					if(ext = al::qalcGetString(NULL, ALC_EXTENSIONS)){
+					if((ext = al::qalcGetString(NULL, ALC_EXTENSIONS))){
 						std::vector<std::string> strs = Split(ext, " ");
 						SPLog("OpenAL ALC Extensions (NULL):");
 						for(size_t i = 0; i < strs.size(); i++) {
@@ -409,7 +409,7 @@ namespace spades {
 				SPLog("  Version: %s", al::qalGetString(AL_VERSION));
 				SPLog("  Renderer: %s", al::qalGetString(AL_RENDERER));
 
-				if(ext = al::qalcGetString(alDevice, ALC_EXTENSIONS)){
+				if((ext = al::qalcGetString(alDevice, ALC_EXTENSIONS))){
 					std::vector<std::string> strs = Split(ext, " ");
 					SPLog("OpenAL ALC Extensions:");
 					for(size_t i = 0; i < strs.size(); i++) {

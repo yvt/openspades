@@ -242,24 +242,27 @@ namespace spades {
 			else if (c.x != a.x) {
 				d.x =  1; f.x = a.x+1-v0.x; g.x = (v1.x-v0.x)*1024; cnt += c.x-a.x;
 			}
-			else
-				f.x = g.x = 0;
+			else {
+				d.x = 0; f.x = g.x = 0;
+			}
 			if (c.y <  a.y) {
 				d.y = -1; f.y = v0.y-a.y;   g.y = (v0.y-v1.y)*1024; cnt += a.y-c.y;
 			}
 			else if (c.y != a.y) {
 				d.y =  1; f.y = a.y+1-v0.y; g.y = (v1.y-v0.y)*1024; cnt += c.y-a.y;
 			}
-			else
-				f.y = g.y = 0;
+			else {
+				d.y = 0; f.y = g.y = 0;
+			}
 			if (c.z <  a.z) {
 				d.z = -1; f.z = v0.z-a.z;   g.z = (v0.z-v1.z)*1024; cnt += a.z-c.z;
 			}
 			else if (c.z != a.z) {
 				d.z =  1; f.z = a.z+1-v0.z; g.z = (v1.z-v0.z)*1024; cnt += c.z-a.z;
 			}
-			else
-				f.z = g.z = 0;
+			else {
+				d.z = 0; f.z = g.z = 0;
+			}
 			
 			Vector3 pp = MakeVector3(f.x * g.z - f.z * g.x,
 									 f.y * g.z - f.z * g.y,

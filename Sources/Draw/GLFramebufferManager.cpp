@@ -62,6 +62,8 @@ namespace spades {
 				case IGLDevice::				FramebufferIncompleteLayerTargets:
 					type = "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS";
 					break;
+				default: // IGLDevice::Enum contains values unrelevant to framebuffer status error causing static analyzer to say something
+					type = "Unknown";
 			}
 			SPRaise("OpenGL Framebuffer completeness check failed: %s",
 					type.c_str());

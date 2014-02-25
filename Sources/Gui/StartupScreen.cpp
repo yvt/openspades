@@ -21,7 +21,6 @@
 #include "StartupScreen.h"
 #include <Core/Exception.h>
 #include <Client/Quake3Font.h>
-#include <Client/FontData.h>
 #include <ScriptBindings/ScriptFunction.h>
 #include "StartupScreenHelper.h"
 #include <Client/Client.h>

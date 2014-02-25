@@ -22,6 +22,8 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ yvt: modified to fix some bug
 */
 /**
  * BinPack2D is a 2 dimensional, multi-bin, bin-packer. ( Texture Atlas Array! )
@@ -162,6 +164,7 @@ public:
     
     if(this->w != that.w) return this->w < that.w;
     if(this->h != that.h) return this->h < that.h;
+	  return false; // yvt
   }
 };
 
@@ -199,6 +202,7 @@ public:
     if(this->x != that.x) return this->x < that.x;
     if(this->y != that.y) return this->y < that.y;
     if(this->z != that.z) return this->z < that.z;
+	  return false; // yvt
   }
 };
 

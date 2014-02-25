@@ -199,6 +199,7 @@ namespace spades {
 					case HitTypeArms: return 33;
 					case HitTypeLegs: return 33;
 					case HitTypeBlock: return 50;
+					default: SPAssert(false); return 0;
 				}
 			}
 			virtual Vector3 GetRecoil () {
@@ -225,6 +226,7 @@ namespace spades {
 					case HitTypeArms: return 18;
 					case HitTypeLegs: return 18;
 					case HitTypeBlock: return 25;
+					default: SPAssert(false); return 0;
 				}
 			}
 			virtual Vector3 GetRecoil () {
@@ -253,6 +255,7 @@ namespace spades {
 					case HitTypeBlock:
 						// Actually, you cast a hit per pallet. This value is a guess, by the way. --GM
 						return 34;
+					default: SPAssert(false); return 0;
 				}
 			}
 			virtual Vector3 GetRecoil () {
@@ -283,6 +286,7 @@ namespace spades {
 					case HitTypeArms: return 33;
 					case HitTypeLegs: return 33;
 					case HitTypeBlock: return 50;
+					default: SPAssert(false); return 0;
 				}
 			}
 			virtual Vector3 GetRecoil () {
@@ -309,6 +313,7 @@ namespace spades {
 					case HitTypeArms: return 18;
 					case HitTypeLegs: return 18;
 					case HitTypeBlock: return 34;
+					default: SPAssert(false); return 0;
 				}
 			}
 			virtual Vector3 GetRecoil () {
@@ -336,6 +341,7 @@ namespace spades {
 					case HitTypeLegs: return 16;
 					case HitTypeBlock:
 						return 34;
+					default: SPAssert(false); return 0;
 				}
 			}
 			virtual Vector3 GetRecoil () {

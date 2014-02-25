@@ -70,7 +70,7 @@ namespace spades {
 		}
 		void Set(T *p, bool add = true) {
 			if(p == ptr){
-				if(!add)
+				if((!add) && ptr != nullptr)
 					ptr->Release();
 				return;
 			}

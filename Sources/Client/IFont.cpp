@@ -240,7 +240,8 @@ namespace spades {
 				float newScale = scale <= .8f ?
 				0.5f : std::max(1.f, floorf(scale));
 				// vertical-align: baseline
-				y += (scale - newScale) * glyph.size;
+				// FIXME: not working correctly
+				offset.y += (scale - newScale) * glyph.size;
 				scale = newScale;
 			}
 			

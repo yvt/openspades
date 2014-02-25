@@ -243,6 +243,7 @@ namespace spades {
 													  "void opAssign(const DynamicLightParam& in)",
 													  asFUNCTION(DynamicLightParamAssign),
 													  asCALL_CDECL_OBJLAST);
+						manager->CheckError(r);
 						r = eng->RegisterObjectProperty("DynamicLightParam",
 														"DynamicLightType type",
 														asOFFSET(DynamicLightParam, type));
