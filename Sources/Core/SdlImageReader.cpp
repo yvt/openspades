@@ -25,6 +25,7 @@
 #include "Bitmap.h"
 #include <Imports/SDL.h>
 #include <string.h>
+#include <memory>
 
 namespace spades {
 	class SdlImageReader: public IBitmapCodec {

@@ -21,6 +21,7 @@
 #include "Strings.h"
 #include <unordered_map>
 #include <unordered_set>
+#include <memory>
 #include <cstdint>
 #include "Settings.h"
 #include "DynamicLibrary.h"
