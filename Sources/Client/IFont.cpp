@@ -107,7 +107,7 @@ namespace spades {
 				if(s->Read(&fontSize, 4) < 4) {
 					SPRaise("Reading %s: file truncated", path.c_str());
 				}
-				fontSize = (float)fontSize;
+				this->fontSize = (float)fontSize;
 				fontSizeInverse = 1.f / fontSize;
 				
 				std::vector<GlyphInfo> infos;
@@ -240,7 +240,6 @@ namespace spades {
 				float newScale = scale <= .8f ?
 				0.5f : std::max(1.f, floorf(scale));
 				// vertical-align: baseline
-				// FIXME: not working correctly
 				offset.y += (scale - newScale) * glyph.size;
 				scale = newScale;
 			}
