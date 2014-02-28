@@ -40,6 +40,7 @@
 #include <Core/Settings.h>
 #include <enet/enet.h>
 #include <Core/CP437.h>
+#include <Core/Strings.h>
 
 SPADES_SETTING(cg_protocolVersion, "3");
 SPADES_SETTING(cg_unicode, "1");
@@ -388,7 +389,7 @@ namespace spades {
 			}
 			
 			status = NetClientStatusConnecting;
-			statusString = "Connecting to the server";
+			statusString = _Tr("NetClient", "Connecting to the server");
 			timeToTryMapLoad = 0;
 		}
 		
@@ -400,7 +401,7 @@ namespace spades {
 			enet_peer_disconnect(peer, 0);
 			
 			status = NetClientStatusNotConnected;
-			statusString = "Not connected";
+			statusString = _Tr("NetClient", "Not connected");
 			
 			savedPackets.clear();
 			
@@ -463,7 +464,7 @@ namespace spades {
 						
 						mapSize = reader.ReadInt();
 						status = NetClientStatusReceivingMap;
-						statusString = "Loading snapshot";
+						statusString = _Tr("NetClient", "Loading snapshot");
 						timeToTryMapLoad = 30;
 						tryMapLoadOnPacketType = true;
 					}
@@ -479,14 +480,12 @@ namespace spades {
 							
 							timeToTryMapLoad = 200;
 							
-							char buf[256];
-							sprintf(buf, "Loading snapshot (%d/%d)",
-									(int)mapData.size(), (int)mapSize);
-							statusString = buf;
+							statusString = _Tr("NetClient", "Loading snapshot ({0}/{1})",
+											   mapData.size(), mapSize);
 							
 							if(mapSize == mapData.size()){
 								status = NetClientStatusConnected;
-								statusString = "Connected";
+								statusString = _Tr("NetClient", "Connected");
 								
 								try{
 									MapLoaded();
@@ -497,16 +496,16 @@ namespace spades {
 											  ex.what());
 										// hack: more data to load...
 										status = NetClientStatusReceivingMap;
-										statusString = "Still loading...";
+										statusString = _Tr("NetClient", "Still loading...");
 									}else{
 										Disconnect();
-										statusString = "Error";
+										statusString = _Tr("NetClient", "Error");
 										throw;
 									}
 									
 								}catch(...){
 									Disconnect();
-									statusString = "Error";
+									statusString = _Tr("NetClient", "Error");
 									throw;
 								}
 								
@@ -520,7 +519,7 @@ namespace spades {
 							   reader.GetType() != PacketTypeCreatePlayer &&
 							   tryMapLoadOnPacketType){
 								status = NetClientStatusConnected;
-								statusString = "Connected";
+								statusString = _Tr("NetClient", "Connected");
 								
 								try{
 									MapLoaded();
@@ -532,16 +531,16 @@ namespace spades {
 											  ex.what());
 										// hack: more data to load...
 										status = NetClientStatusReceivingMap;
-										statusString = "Still loading...";
+										statusString = _Tr("NetClient", "Still loading...");
 										goto stillLoading;
 									}else{
 										Disconnect();
-										statusString = "Error";
+										statusString = _Tr("NetClient", "Error");
 										throw;
 									}
 								}catch(...){
 									Disconnect();
-									statusString = "Error";
+									statusString = _Tr("NetClient", "Error");
 									throw;
 								}
 								Handle(reader);
@@ -585,16 +584,16 @@ namespace spades {
 								SPLog("Map decoder returned error. Maybe we will get more data...:\n%s",
 									  ex.what());
 								status = NetClientStatusReceivingMap;
-								statusString = "Still loading...";
+								statusString = _Tr("NetClient", "Still loading...");
 								timeToTryMapLoad = 200;
 							}else{
 								Disconnect();
-								statusString = "Error";
+								statusString = _Tr("NetClient", "Error");
 								throw;
 							}
 						}catch(...){
 							Disconnect();
-							statusString = "Error";
+							statusString = _Tr("NetClient", "Error");
 							throw;
 						}
 					}
@@ -663,17 +662,19 @@ namespace spades {
 		std::string NetClient::DisconnectReasonString(enet_uint32 num){
 			switch(num){
 				case 1:
-					return "You are banned from this server.";
+					return _Tr("NetClient", "You are banned from this server.");
 				case 2:
-					return "You were kicked from this server.";
+					// FIXME: this number seems to be used when per-IP connection limit was exceeded.
+					//        we need to check other usages
+					return _Tr("NetClient", "You were kicked from this server.");
 				case 3:
-					return "Incompatible client protocol version.";
+					return _Tr("NetClient", "Incompatible client protocol version.");
 				case 4:
-					return "Server full";
+					return _Tr("NetClient", "Server full");
 				case 10:
-					return "You were kicked from this server. (2)";
+					return _Tr("NetClient", "You were kicked from this server.");
 				default:
-					return "Unknown Reason";
+					return _Tr("NetClient", "Unknown Reason");
 			}
 		}
 		
@@ -1285,7 +1286,7 @@ namespace spades {
 					client->SetWorld(NULL);
 					mapSize = reader.ReadInt();
 					status = NetClientStatusReceivingMap;
-					statusString = "Loading snapshot";
+					statusString = _Tr("NetClient", "Loading snapshot");
 				}
 					break;
 				case PacketTypeMapChunk:

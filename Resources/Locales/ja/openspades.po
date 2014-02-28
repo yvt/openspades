@@ -20,7 +20,7 @@ msgstr ""
 "X-Source-Language: C\n"
 
 #: ../../../Sources/Gui/Main.cpp:344 ../../../Sources/Gui/Main.cpp:369
-#: ../../../Sources/Gui/Main.cpp:368
+#: ../../../Sources/Gui/Main.cpp:368 ../../../Sources/Gui/Main.cpp:355
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr "ローカライゼーションシステムが読み込まれました"
@@ -146,268 +146,296 @@ msgctxt "Preferences"
 msgid "Back"
 msgstr "戻る"
 
-#: ../../Scripts/Gui/Preferences.as:399
+#: ../../Scripts/Gui/Preferences.as:399 ../../Scripts/Gui/Preferences.as:406
 msgctxt "Preferences"
 msgid "Press Key to Bind or [Escape] to Cancel..."
 msgstr "割り当てるキーを押下して下さい。[Esc]でキャンセルします..."
 
-#: ../../Scripts/Gui/Preferences.as:410
+#: ../../Scripts/Gui/Preferences.as:410 ../../Scripts/Gui/Preferences.as:417
 msgctxt "Preferences"
 msgid "Space"
 msgstr "スペース"
 
-#: ../../Scripts/Gui/Preferences.as:412
+#: ../../Scripts/Gui/Preferences.as:412 ../../Scripts/Gui/Preferences.as:419
 msgctxt "Preferences"
 msgid "Unbound"
 msgstr "未割り当て"
 
 #: ../../Scripts/Gui/Preferences.as:574 ../../Scripts/Gui/Preferences.as:598
+#: ../../Scripts/Gui/Preferences.as:602 ../../Scripts/Gui/Preferences.as:626
 msgctxt "Preferences"
 msgid "ON"
 msgstr "ON"
 
 #: ../../Scripts/Gui/Preferences.as:580 ../../Scripts/Gui/Preferences.as:610
+#: ../../Scripts/Gui/Preferences.as:608 ../../Scripts/Gui/Preferences.as:638
 msgctxt "Preferences"
 msgid "OFF"
 msgstr "OFF"
 
-#: ../../Scripts/Gui/Preferences.as:604
+#: ../../Scripts/Gui/Preferences.as:604 ../../Scripts/Gui/Preferences.as:632
 msgctxt "Preferences"
 msgid "REVERSED"
 msgstr "反転"
 
-#: ../../Scripts/Gui/Preferences.as:632
+#: ../../Scripts/Gui/Preferences.as:632 ../../Scripts/Gui/Preferences.as:660
 msgctxt "Preferences"
 msgid "Player Information"
 msgstr "プレイヤー情報"
 
-#: ../../Scripts/Gui/Preferences.as:633
+#: ../../Scripts/Gui/Preferences.as:633 ../../Scripts/Gui/Preferences.as:661
 msgctxt "Preferences"
 msgid "Player Name"
 msgstr "プレイヤー名"
 
-#: ../../Scripts/Gui/Preferences.as:637
+#: ../../Scripts/Gui/Preferences.as:637 ../../Scripts/Gui/Preferences.as:665
 msgctxt "Preferences"
 msgid "Effects"
 msgstr "エフェクト"
 
-#: ../../Scripts/Gui/Preferences.as:638
+#: ../../Scripts/Gui/Preferences.as:638 ../../Scripts/Gui/Preferences.as:666
 msgctxt "Preferences"
 msgid "Blood"
 msgstr "流血表現"
 
-#: ../../Scripts/Gui/Preferences.as:639
+#: ../../Scripts/Gui/Preferences.as:639 ../../Scripts/Gui/Preferences.as:667
 msgctxt "Preferences"
 msgid "Ejecting Brass"
 msgstr "薬莢"
 
-#: ../../Scripts/Gui/Preferences.as:640
+#: ../../Scripts/Gui/Preferences.as:640 ../../Scripts/Gui/Preferences.as:668
 msgctxt "Preferences"
 msgid "Ragdoll"
 msgstr "ラグドール表現"
 
-#: ../../Scripts/Gui/Preferences.as:642
+#: ../../Scripts/Gui/Preferences.as:642 ../../Scripts/Gui/Preferences.as:670
 msgctxt "Preferences"
 msgid "Feedbacks"
 msgstr "通知"
 
-#: ../../Scripts/Gui/Preferences.as:643
+#: ../../Scripts/Gui/Preferences.as:643 ../../Scripts/Gui/Preferences.as:671
 msgctxt "Preferences"
 msgid "Chat Notify Sounds"
 msgstr "チャット新着通知音"
 
-#: ../../Scripts/Gui/Preferences.as:644
+#: ../../Scripts/Gui/Preferences.as:644 ../../Scripts/Gui/Preferences.as:672
 msgctxt "Preferences"
 msgid "Hit Indicator"
 msgstr "命中表示"
 
-#: ../../Scripts/Gui/Preferences.as:646
+#: ../../Scripts/Gui/Preferences.as:646 ../../Scripts/Gui/Preferences.as:674
 msgctxt "Preferences"
 msgid "AoS 0.75/0.76 Compatibility"
 msgstr "AoS 0.75/0.76 互換性"
 
-#: ../../Scripts/Gui/Preferences.as:647
+#: ../../Scripts/Gui/Preferences.as:647 ../../Scripts/Gui/Preferences.as:675
 msgctxt "Preferences"
 msgid "Allow Unicode"
 msgstr "Unicodeの送信を許可する"
 
 #: ../../Scripts/Gui/Preferences.as:649 ../../Scripts/Gui/Preferences.as:694
-#: ../../Scripts/Gui/Preferences.as:693
+#: ../../Scripts/Gui/Preferences.as:693 ../../Scripts/Gui/Preferences.as:677
+#: ../../Scripts/Gui/Preferences.as:722
 msgctxt "Preferences"
 msgid "Misc"
 msgstr "その他"
 
-#: ../../Scripts/Gui/Preferences.as:650
+#: ../../Scripts/Gui/Preferences.as:650 ../../Scripts/Gui/Preferences.as:678
 msgctxt "Preferences"
 msgid "Field of View"
 msgstr "視界"
 
-#: ../../Scripts/Gui/Preferences.as:652
+#: ../../Scripts/Gui/Preferences.as:652 ../../Scripts/Gui/Preferences.as:680
 msgctxt "Preferences"
 msgid "Minimap size"
 msgstr "ミニマップのサイズ"
 
-#: ../../Scripts/Gui/Preferences.as:654
+#: ../../Scripts/Gui/Preferences.as:654 ../../Scripts/Gui/Preferences.as:682
 msgctxt "Preferences"
 msgid "Weapon Spread Guide"
 msgstr "武器バラつき表示"
 
-#: ../../Scripts/Gui/Preferences.as:665
+#: ../../Scripts/Gui/Preferences.as:665 ../../Scripts/Gui/Preferences.as:693
 msgctxt "Preferences"
 msgid "Weapons/Tools"
 msgstr "武器/道具"
 
-#: ../../Scripts/Gui/Preferences.as:666
+#: ../../Scripts/Gui/Preferences.as:666 ../../Scripts/Gui/Preferences.as:694
 msgctxt "Preferences"
 msgid "Attack"
 msgstr "攻撃"
 
-#: ../../Scripts/Gui/Preferences.as:667
+#: ../../Scripts/Gui/Preferences.as:667 ../../Scripts/Gui/Preferences.as:695
 msgctxt "Preferences"
 msgid "Alt. Attack"
 msgstr "副攻撃"
 
-#: ../../Scripts/Gui/Preferences.as:668
+#: ../../Scripts/Gui/Preferences.as:668 ../../Scripts/Gui/Preferences.as:696
 msgctxt "Preferences"
 msgid "Hold Aim Down Sight"
 msgstr "ホールドしてADS"
 
-#: ../../Scripts/Gui/Preferences.as:669
+#: ../../Scripts/Gui/Preferences.as:669 ../../Scripts/Gui/Preferences.as:697
 msgctxt "Preferences"
 msgid "Mouse Sensitivity"
 msgstr "マウス速度"
 
-#: ../../Scripts/Gui/Preferences.as:671
+#: ../../Scripts/Gui/Preferences.as:671 ../../Scripts/Gui/Preferences.as:699
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
 msgstr "ADS時マウス速度"
 
-#: ../../Scripts/Gui/Preferences.as:673
+#: ../../Scripts/Gui/Preferences.as:673 ../../Scripts/Gui/Preferences.as:701
 msgctxt "Preferences"
 msgid "Exponential Power"
 msgstr "マウス加速指数"
 
 #: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:676
+#: ../../Scripts/Gui/Preferences.as:704
 msgctxt "Preferences"
 msgid "Reload"
 msgstr "リロード"
 
 #: ../../Scripts/Gui/Preferences.as:676 ../../Scripts/Gui/Preferences.as:677
+#: ../../Scripts/Gui/Preferences.as:705
 msgctxt "Preferences"
 msgid "Capture Color"
 msgstr "色をコピー"
 
 #: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:678
+#: ../../Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Equip Spade"
 msgstr "スペードを装備"
 
 #: ../../Scripts/Gui/Preferences.as:678 ../../Scripts/Gui/Preferences.as:679
+#: ../../Scripts/Gui/Preferences.as:707
 msgctxt "Preferences"
 msgid "Equip Block"
 msgstr "ブロックを装備"
 
 #: ../../Scripts/Gui/Preferences.as:679 ../../Scripts/Gui/Preferences.as:680
+#: ../../Scripts/Gui/Preferences.as:708
 msgctxt "Preferences"
 msgid "Equip Weapon"
 msgstr "銃を装備"
 
 #: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:681
+#: ../../Scripts/Gui/Preferences.as:709
 msgctxt "Preferences"
 msgid "Equip Grenade"
 msgstr "手榴弾を装備"
 
 #: ../../Scripts/Gui/Preferences.as:681 ../../Scripts/Gui/Preferences.as:682
+#: ../../Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
 msgstr "ホイールで装備切替"
 
 #: ../../Scripts/Gui/Preferences.as:684 ../../Scripts/Gui/Preferences.as:683
+#: ../../Scripts/Gui/Preferences.as:712
 msgctxt "Preferences"
 msgid "Movement"
 msgstr "移動"
 
 #: ../../Scripts/Gui/Preferences.as:685 ../../Scripts/Gui/Preferences.as:684
+#: ../../Scripts/Gui/Preferences.as:713
 msgctxt "Preferences"
 msgid "Walk Forward"
 msgstr "前方に移動"
 
 #: ../../Scripts/Gui/Preferences.as:686 ../../Scripts/Gui/Preferences.as:685
+#: ../../Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Backpedal"
 msgstr "後方に移動"
 
 #: ../../Scripts/Gui/Preferences.as:687 ../../Scripts/Gui/Preferences.as:686
+#: ../../Scripts/Gui/Preferences.as:715
 msgctxt "Preferences"
 msgid "Move Left"
 msgstr "左に移動"
 
 #: ../../Scripts/Gui/Preferences.as:688 ../../Scripts/Gui/Preferences.as:687
+#: ../../Scripts/Gui/Preferences.as:716
 msgctxt "Preferences"
 msgid "Move Right"
 msgstr "右に移動"
 
 #: ../../Scripts/Gui/Preferences.as:689 ../../Scripts/Gui/Preferences.as:688
+#: ../../Scripts/Gui/Preferences.as:717
 msgctxt "Preferences"
 msgid "Crouch"
 msgstr "しゃがむ"
 
 #: ../../Scripts/Gui/Preferences.as:690 ../../Scripts/Gui/Preferences.as:689
+#: ../../Scripts/Gui/Preferences.as:718
 msgctxt "Preferences"
 msgid "Sneak"
 msgstr "忍び足"
 
 #: ../../Scripts/Gui/Preferences.as:691 ../../Scripts/Gui/Preferences.as:690
+#: ../../Scripts/Gui/Preferences.as:719
 msgctxt "Preferences"
 msgid "Jump"
 msgstr "ジャンプ"
 
 #: ../../Scripts/Gui/Preferences.as:692 ../../Scripts/Gui/Preferences.as:691
+#: ../../Scripts/Gui/Preferences.as:720
 msgctxt "Preferences"
 msgid "Sprint"
 msgstr "全力疾走"
 
 #: ../../Scripts/Gui/Preferences.as:695 ../../Scripts/Gui/Preferences.as:694
+#: ../../Scripts/Gui/Preferences.as:723
 msgctxt "Preferences"
 msgid "Minimap Scale"
 msgstr "ミニマップ縮尺切替"
 
 #: ../../Scripts/Gui/Preferences.as:696 ../../Scripts/Gui/Preferences.as:695
+#: ../../Scripts/Gui/Preferences.as:724
 msgctxt "Preferences"
 msgid "Toggle Map"
 msgstr "マップ拡大"
 
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:696
+#: ../../Scripts/Gui/Preferences.as:725
 msgctxt "Preferences"
 msgid "Flashlight"
 msgstr "ヘッドライト"
 
 #: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:697
+#: ../../Scripts/Gui/Preferences.as:726
 msgctxt "Preferences"
 msgid "Global Chat"
 msgstr "全体チャット"
 
 #: ../../Scripts/Gui/Preferences.as:699 ../../Scripts/Gui/Preferences.as:698
+#: ../../Scripts/Gui/Preferences.as:727
 msgctxt "Preferences"
 msgid "Team Chat"
 msgstr "チームチャット"
 
 #: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:699
+#: ../../Scripts/Gui/Preferences.as:728
 msgctxt "Preferences"
 msgid "Limbo Menu"
 msgstr "武器・チーム切替"
 
 #: ../../Scripts/Gui/Preferences.as:701 ../../Scripts/Gui/Preferences.as:700
+#: ../../Scripts/Gui/Preferences.as:729
 msgctxt "Preferences"
 msgid "Save Map"
 msgstr "マップを保存"
 
 #: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:701
+#: ../../Scripts/Gui/Preferences.as:730
 msgctxt "Preferences"
 msgid "Save Sceneshot"
 msgstr "シーンショット"
 
 #: ../../Scripts/Gui/Preferences.as:703 ../../Scripts/Gui/Preferences.as:702
+#: ../../Scripts/Gui/Preferences.as:731
 msgctxt "Preferences"
 msgid "Save Screenshot"
 msgstr "スクリーンショット"
@@ -971,7 +999,7 @@ msgctxt "StartupScreen"
 msgid "Custom"
 msgstr "カスタム"
 
-#: ../../Scripts/Gui/Preferences.as:675
+#: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:703
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
 msgstr "Y軸の入力を反転"
@@ -1091,7 +1119,8 @@ msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr "{0} に殺害されました"
 
-#: ../../../Sources/Gui/Main.cpp:401
+#: ../../../Sources/Gui/Main.cpp:401 ../../../Sources/Gui/Main.cpp:388
+#: ../../../Sources/Gui/Runner.cpp:62
 msgctxt "Main"
 msgid ""
 "A serious error caused OpenSpades to stop working:\n"
@@ -1106,7 +1135,123 @@ msgstr ""
 "\n"
 "詳細については SystemMessages.log をご覧下さい。"
 
-#: ../../../Sources/Gui/Main.cpp:406
+#: ../../../Sources/Gui/Main.cpp:406 ../../../Sources/Gui/Main.cpp:393
+#: ../../../Sources/Gui/Runner.cpp:66
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr "OpenSpades 重大なエラー"
+
+#: ../../../Sources/Client/NetClient.cpp:392
+msgctxt "NetClient"
+msgid "Connecting to the server"
+msgstr "サーバーに接続中"
+
+#: ../../../Sources/Client/NetClient.cpp:404
+msgctxt "NetClient"
+msgid "Not connected"
+msgstr "接続されていません"
+
+#: ../../../Sources/Client/NetClient.cpp:467
+#: ../../../Sources/Client/NetClient.cpp:1289
+msgctxt "NetClient"
+msgid "Loading snapshot"
+msgstr "スナップショットを読込中"
+
+#: ../../../Sources/Client/NetClient.cpp:483
+msgctxt "NetClient"
+msgid "Loading snapshot ({0}/{1})"
+msgstr "スナップショットを読込中 ({0} / {1})"
+
+#: ../../../Sources/Client/NetClient.cpp:488
+#: ../../../Sources/Client/NetClient.cpp:522
+msgctxt "NetClient"
+msgid "Connected"
+msgstr "接続されました"
+
+#: ../../../Sources/Client/NetClient.cpp:499
+#: ../../../Sources/Client/NetClient.cpp:534
+#: ../../../Sources/Client/NetClient.cpp:587
+msgctxt "NetClient"
+msgid "Still loading..."
+msgstr "引き続き読み込み中..."
+
+#: ../../../Sources/Client/NetClient.cpp:502
+#: ../../../Sources/Client/NetClient.cpp:508
+#: ../../../Sources/Client/NetClient.cpp:538
+#: ../../../Sources/Client/NetClient.cpp:543
+#: ../../../Sources/Client/NetClient.cpp:591
+#: ../../../Sources/Client/NetClient.cpp:596
+msgctxt "NetClient"
+msgid "Error"
+msgstr "エラー"
+
+#: ../../../Sources/Client/NetClient.cpp:665
+msgctxt "NetClient"
+msgid "You are banned from this server."
+msgstr "このサーバーへの接続は禁止されています。"
+
+#: ../../../Sources/Client/NetClient.cpp:669
+#: ../../../Sources/Client/NetClient.cpp:675
+msgctxt "NetClient"
+msgid "You were kicked from this server."
+msgstr "サーバーから追放されました。"
+
+#: ../../../Sources/Client/NetClient.cpp:671
+msgctxt "NetClient"
+msgid "Incompatible client protocol version."
+msgstr "クライアントのプロトコルバージョンが違います。"
+
+#: ../../../Sources/Client/NetClient.cpp:673
+msgctxt "NetClient"
+msgid "Server full"
+msgstr "サーバーが満員です"
+
+#: ../../../Sources/Client/NetClient.cpp:677
+msgctxt "NetClient"
+msgid "Unknown Reason"
+msgstr "不明な理由"
+
+#: ../../Scripts/Gui/Preferences.as:422
+msgctxt "Preferences"
+msgid "Shift"
+msgstr "Shiftキー"
+
+#: ../../Scripts/Gui/Preferences.as:424
+msgctxt "Preferences"
+msgid "Control"
+msgstr "Controlキー"
+
+#: ../../Scripts/Gui/Preferences.as:426
+msgctxt "Preferences"
+msgid "Meta"
+msgstr "メタキー"
+
+#: ../../Scripts/Gui/Preferences.as:428
+msgctxt "Preferences"
+msgid "Alt"
+msgstr "Altキー"
+
+#: ../../Scripts/Gui/Preferences.as:430
+msgctxt "Preferences"
+msgid "Left Mouse Button"
+msgstr "左マウスボタン"
+
+#: ../../Scripts/Gui/Preferences.as:432
+msgctxt "Preferences"
+msgid "Right Mouse Button"
+msgstr "右マウスボタン"
+
+#: ../../Scripts/Gui/Preferences.as:434
+msgctxt "Preferences"
+msgid "Middle Mouse Button"
+msgstr "中央マウスボタン"
+
+#: ../../Scripts/Gui/Preferences.as:436
+msgctxt "Preferences"
+msgid "Mouse Button 4"
+msgstr "マウスボタン4"
+
+#: ../../Scripts/Gui/Preferences.as:438
+msgctxt "Preferences"
+msgid "Mouse Button 5"
+msgstr "マウスボタン5"

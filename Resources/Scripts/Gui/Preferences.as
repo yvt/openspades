@@ -309,6 +309,13 @@ namespace spades {
 		}
 	}
 	
+	uint8 ToUpper(uint8 c) {
+		if(c >= uint8(0x61) and c <= uint8(0x7a)) {
+			return uint8(c - 0x61 + 0x41);
+		} else {
+			return c;
+		}
+	}
 	class ConfigHotKeyField: spades::ui::UIElement {
 		ConfigItem@ config;
 		private bool hover;
@@ -406,11 +413,32 @@ namespace spades {
 				AcceptsFocus = false;
 			}
 			
-			if(text == " ") {
+			if(text == " " or text == "Space") {
 				text = _Tr("Preferences", "Space");
 			}else if(text.length == 0) {
 				text = _Tr("Preferences", "Unbound");
 				color.w *= 0.3f;
+			}else if(text == "Shift") {
+				text = _Tr("Preferences", "Shift");
+			}else if(text == "Control") {
+				text = _Tr("Preferences", "Control");
+			}else if(text == "Meta") {
+				text = _Tr("Preferences", "Meta");
+			}else if(text == "Alt") {
+				text = _Tr("Preferences", "Alt");
+			}else if(text == "LeftMouseButton") {
+				text = _Tr("Preferences", "Left Mouse Button");
+			}else if(text == "RightMouseButton") {
+				text = _Tr("Preferences", "Right Mouse Button");
+			}else if(text == "MiddleMouseButton") {
+				text = _Tr("Preferences", "Middle Mouse Button");
+			}else if(text == "MouseButton4") {
+				text = _Tr("Preferences", "Mouse Button 4");
+			}else if(text == "MouseButton5") {
+				text = _Tr("Preferences", "Mouse Button 5");
+			}else{
+				for(uint i = 0, len = text.length; i < len; i++)
+					text[i] = ToUpper(text[i]);
 			}
 			
 			Vector2 txtSize = font.Measure(text);
