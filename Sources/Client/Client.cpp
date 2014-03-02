@@ -872,8 +872,9 @@ namespace spades {
 				if(world->GetLocalPlayer() &&
 				   world->GetLocalPlayer()->GetTeamId() >= 2 &&
 				   followingPlayerId == world->GetLocalPlayerIndex()){
-					// invert dir
-					x = -x; y = -y;
+					x = -x;
+					if (!cg_invertMouseY)
+						y = -y;
 				}
 				followYaw -= x * 0.003f;
 				followPitch -= y * 0.003f;
