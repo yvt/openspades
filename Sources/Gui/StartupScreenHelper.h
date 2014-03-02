@@ -26,6 +26,7 @@
 #include <ScriptBindings/ScriptManager.h>
 #include <AngelScript/addons/scriptarray.h>
 #include <Core/Math.h>
+#include <functional>
 #include <map>
 
 namespace spades {
@@ -44,7 +45,7 @@ namespace spades {
 			std::string report;
 			void AddReport(const std::string& text = std::string(), Vector4 color = Vector4::Make(1.f, 1.f, 1.f, 1.f));
 			
-			std::multimap<std::string, std::function<std::string(std::string)>> incapableConfigs;
+			std::multimap<std::string, std::function<std::string(std::string)> > incapableConfigs;
 			
 			bool shaderHighCapable;
 			bool postFilterHighCapable;
