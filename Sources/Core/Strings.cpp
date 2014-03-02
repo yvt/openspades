@@ -18,9 +18,11 @@
  
  */
 
-#include "Strings.h"
-#include <unordered_map>
+//lm: both unordered_set and unordered_map have a _Tr typedef that conflicts with the define from String.h
+//	so on msvc they need to be included before Strings.h
 #include <unordered_set>
+#include <unordered_map>
+#include "Strings.h"
 #include <memory>
 #include <cstdint>
 #include "Settings.h"
@@ -744,11 +746,11 @@ namespace spades {
 				   (c >= 'A' && c <= 'Z') ||
 				   (c >= '0' && c <= '9') ||
 				   c == '_') {
-					return {TokenType::Symbol, ReadSymbol()};
+					return std::make_pair(TokenType::Symbol, ReadSymbol());
 				}else if(c == '"') {
-					return {TokenType::String, ReadString()};
+					return std::make_pair(TokenType::String, ReadString());
 				}else if(c == '[') {
-					return {TokenType::Indexer, ReadIndexer()};
+					return std::make_pair(TokenType::Indexer, ReadIndexer());
 				}else{
 					SPRaise("Unexpected character 0x%02x at line %d",
 							c, line);
@@ -898,7 +900,7 @@ namespace spades {
 		std::pair<std::string, bool> Find(const std::string& key, int num) {
 			SPADES_MARK_FUNCTION();
 			if(entries.empty())
-				return {std::string(), false};
+				return std::make_pair(std::string(), false);
 			int pl = selector != nullptr ? selector->Execute(num) : 0;
 			CatalogEntryKey k = {key, pl};
 			auto it = entries.find(k);
@@ -907,9 +909,9 @@ namespace spades {
 				it = entries.find(k);
 			}
 			if(it == entries.end()) {
-				return {std::string(), false};
+				return std::make_pair(std::string(), false);
 			}else{
-				return {it->second, true};
+				return std::make_pair(it->second, true);
 			}
 		}
 		

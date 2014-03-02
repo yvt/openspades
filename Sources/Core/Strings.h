@@ -158,7 +158,7 @@ namespace spades {
 					}
 					if(str[endIndex] == ':') {
 						index = endIndex + 1;
-						endptr = std::strchr(str + index, '}');
+						endptr = const_cast<char*>(std::strchr(str + index, '}'));
 						if(!endptr)
 							SPRaise("Malformed format string (placeholder is not closed): %s", str);
 						endIndex = endptr - str;
