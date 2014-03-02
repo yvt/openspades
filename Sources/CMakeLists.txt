@@ -117,6 +117,3 @@ endif()
 
 
 install(TARGETS OpenSpades DESTINATION bin)
-if(OPENSPADES_BUILD_DRAWTEST)
-  add_subdirectory(Tests)
-endif()
