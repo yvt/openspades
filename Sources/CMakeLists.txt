@@ -102,18 +102,4 @@ else()
 	target_link_libraries(OpenSpades Xext)
 endif()
 
-if(FLTK_FLUID_EXECUTABLE)
-	file(GLOB_RECURSE FLTK_FORMS Gui/*.fl)
-	set(FRM_ALLFILES)
-	foreach(FRM ${FLTK_FORMS})
-		get_filename_component(FRM_FILE ${FRM} NAME_WE)
-		list(APPEND FRM_ALLFILES ${FRM_FILE}.cpp ${FRM_FILE}.h)
-		add_custom_command(OUTPUT ${FRM_FILE}.cpp ${FRM_FILE}.h COMMAND ${FLTK_FLUID_EXECUTABLE} -c ${FRM} COMMENT "Compiling ${FRM_FILE}" WORKING_DIRECTORY ${OS_SRC_DIR}/Gui)
-	endforeach()
-	add_custom_target(GenerateForms DEPENDS ${FRM_ALLFILES})
-else()
-	message(STATUS "FLTK binary not found, unable to add convenience target.")
-endif()
-
-
 install(TARGETS OpenSpades DESTINATION bin)
