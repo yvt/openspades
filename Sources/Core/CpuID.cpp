@@ -2,9 +2,11 @@
 
 #include "CpuID.h"
 
+#include <string.h>
+
 namespace spades {
 	
-#if defined(__i386__) || defined(_M_IX86)
+#if defined(__i386__) || defined(_M_IX86) || defined(__amd64__)
 	
 	static std::array<uint32_t, 4> cpuid(uint32_t a) {
 		std::array<uint32_t, 4> regs;
