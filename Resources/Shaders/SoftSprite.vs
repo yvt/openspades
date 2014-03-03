@@ -86,6 +86,7 @@ void main() {
 	// fog.
 	// FIXME: cannot gamma correct because sprite may be
 	// alpha-blended.
+	vec4 viewPos = viewMatrix * vec4(pos,1.);
 	float distance = dot(viewPos.xyz, viewPos.xyz);
 	fogDensity = FogDensity(distance);
 	
