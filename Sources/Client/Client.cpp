@@ -869,13 +869,19 @@ namespace spades {
 			
 			if(IsFollowing()){
 				SPAssert(world != NULL);
+				/*
 				if(world->GetLocalPlayer() &&
 				   world->GetLocalPlayer()->GetTeamId() >= 2 &&
 				   followingPlayerId == world->GetLocalPlayerIndex()){
-					x = -x;
-					if (!cg_invertMouseY)
-						y = -y;
+					// invert dir
+					x = -x; y = -y;
 				}
+				*/
+				
+				x = -x; y = -y;
+				if (!cg_invertMouseY)
+					y = y;
+				
 				followYaw -= x * 0.003f;
 				followPitch -= y * 0.003f;
 				if(followPitch < -M_PI*.45f) followPitch = -static_cast<float>(M_PI)*.45f;
