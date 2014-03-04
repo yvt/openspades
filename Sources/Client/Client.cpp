@@ -878,9 +878,9 @@ namespace spades {
 				}
 				*/
 				
-				x = -x; y = -y;
+				x = -x;
 				if (!cg_invertMouseY)
-					y = y;
+					y = -y;
 				
 				followYaw -= x * 0.003f;
 				followPitch -= y * 0.003f;
