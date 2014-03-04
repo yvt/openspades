@@ -653,8 +653,7 @@ namespace spades {
 				light.minX = 0; light.minY = 0;
 				light.maxX = fb->GetWidth();
 				light.maxY = fb->GetHeight();
-			}else if(Vector3::Dot(diff,
-								  sceneDef.viewAxis[2]) < 0.f){
+			}else if(Vector3::Dot(diff,sceneDef.viewAxis[2]) < 0.f){
 				// view plane cull
 				return;
 			}else{
@@ -668,7 +667,7 @@ namespace spades {
 					};
 					auto dist = cx * cx + cy * cy - 1.f;
 					if(dist <= 0.f) {
-						return {0, static_cast<int>(screenSize)};
+						return std::array<int,2>{{0, static_cast<int>(screenSize)}};
 					}
 					
 					auto denom = cx * cx - 1.f;
@@ -681,21 +680,21 @@ namespace spades {
 					
 					if(cx <= 1.f) {
 						if(cy > 0.f) {
-							return {
+							return std::array<int,2>{{
 								trans(cx * cy - dist),
 								static_cast<int>(screenSize)
-							};
+							}};
 						}else{
-							return {
+							return std::array<int,2>{{
 								0,
 								trans(cx * cy + dist)
-							};
+							}};
 						}
 					}else{
-						return {
+						return std::array<int,2>{{
 							trans(cx * cy - dist),
 							trans(cx * cy + dist)
-						};
+						}};
 					}
 				};
 				auto invRad = 1.f / param.radius;
