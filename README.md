@@ -20,7 +20,7 @@ Installation
    *On Debian-derived distributions*: 
     ```sudo apt-get install pkg-config libfltk1.3-dev
    libglew-dev libcurl3-openssl-dev``` (because of a bug in some distributions, you might also
-   have to install more packages by ```sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev```)
+   have to install more packages by ```sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev libalut-dev```)
 
 
    *On other distributions*: 
