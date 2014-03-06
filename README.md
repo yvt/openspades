@@ -44,11 +44,15 @@ Installation
    ```
    Additional dependencies may be required.
 
-4. Create directory `openspades.mk` in cloned/downloaded openspades repo and compile:
+4. Clone OpenSpades repository:
+
+   ```git clone https://github.com/yvt/openspades.git && cd openspades```
+
+5. Create directory `openspades.mk` in cloned/downloaded openspades repo and compile:
 
    ```mkdir openspades.mk && cd openspades.mk && cmake .. && make OpenSpades```
 
-5. Install openspades: 
+6. Install openspades: 
 
    ```sudo make install```
    
@@ -56,7 +60,7 @@ Installation
    some linux guru / expert (or really, just anyone that used linux more than once) should either fix the
    cmake script, or explain to someone how the build should be installed (what files go where)
 
-6. Get shared files: 
+7. Get shared files: 
    * If you compiling certain release (0.0.10 for example): 
 
       Download windows binary of OpenSpades from
@@ -69,7 +73,7 @@ Installation
       Download, extract, and place them into `/usr/local/share/openspades/Resources` or
       `~/.openspades/Resources`
 
-7. Launch:
+8. Launch:
 
    `openspades` or `cd $REPO_DIRECTORY; ./openspades.mk/bin/OpenSpades` and enjoy
 
