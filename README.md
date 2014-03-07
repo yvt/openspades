@@ -15,21 +15,67 @@ Installation
 
 ### On Linux
 
-1. *On Debian-derived distributions*: ```sudo apt-get install pkg-config libfltk1.3-dev
+1. Install dependencies:
+
+   *On Debian-derived distributions*: 
+    ```sudo apt-get install pkg-config libfltk1.3-dev
    libglew-dev libcurl3-openssl-dev``` (because of a bug in some distributions, you might also
    have to install more packages by ```sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev```)
-2. Download & install SDL2 ```wget http://www.libsdl.org/release/SDL2-2.0.1.tar.gz && tar xvf SDL2-2.0.1.tar.gz && cd SDL2-2.0.1/ && ./configure && make && sudo make install```
-3. For the people that do not understand it, this is the part where you cd to your openspades directory...
+
+
+   *On other distributions*: 
+   Install corresponding packages from your repository (or compile from source).
+   
+2. Download & install SDL2 
+   ```
+   wget http://www.libsdl.org/release/SDL2-2.0.1.tar.gz
+   tar xvf SDL2-2.0.1.tar.gz
+   cd SDL2-2.0.1/
+   ./configure && make && sudo make install
+   ```
+   Additional dependencies may be required.
+
+3. Download & install SDL2_image 
+   ```
+   wget https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.0.tar.gz
+   tar xvf SDL2_image-2.0.0.tar.gz
+   cd SDL2_image-2.0.0
+   ./configure && make && sudo make install
+   ```
+   Additional dependencies may be required.
+
+4. Clone OpenSpades repository:
+
+   ```git clone https://github.com/yvt/openspades.git && cd openspades```
+
+5. Create directory `openspades.mk` in cloned/downloaded openspades repo and compile:
+
    ```mkdir openspades.mk && cd openspades.mk && cmake .. && make OpenSpades```
-4. ~~```sudo make install```~~
-   -- note: the make install seems broken atm (it puts all files in /urs/local/bin)
+
+6. Install openspades: 
+
+   ```sudo make install```
+   
+   **note**: the make install seems broken atm (it puts all files in /urs/local/bin)
    some linux guru / expert (or really, just anyone that used linux more than once) should either fix the
    cmake script, or explain to someone how the build should be installed (what files go where)
-5. Download windows binary of OpenSpades from
-   https://sites.google.com/a/yvt.jp/openspades/downloads, extract it, and copy the .pak files
-   inside Resources directory into `/usr/local/share/openspades/Resources` or
-   `~/.openspades/Resources`
-6. ```openspades``` and enjoy
+
+7. Get shared files: 
+   * If you compiling certain release (0.0.10 for example): 
+
+      Download windows binary of OpenSpades from
+      https://sites.google.com/a/yvt.jp/openspades/downloads, extract it, and copy the .pak files
+      inside Resources directory into `/usr/local/share/openspades/Resources` or
+      `~/.openspades/Resources`
+   * If you compiling straight from source (git clone):
+
+      See `Resources/PakLocation.txt` to find out where get latest shared files.
+      Download, extract, and place them into `/usr/local/share/openspades/Resources` or
+      `~/.openspades/Resources`
+
+8. Launch:
+
+   `openspades` or `cd $REPO_DIRECTORY; ./openspades.mk/bin/OpenSpades` and enjoy
 
 
 ### On Windows (with visual studio)
