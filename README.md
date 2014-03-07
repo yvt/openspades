@@ -26,11 +26,10 @@ Installation
    *On other distributions*: 
    Install corresponding packages from your repository (or compile from source).
    
-2. Download & install SDL2 
+2. Download & install SDL-2.0.2 from trunk 
    ```
-   wget http://www.libsdl.org/release/SDL2-2.0.1.tar.gz
-   tar xvf SDL2-2.0.1.tar.gz
-   cd SDL2-2.0.1/
+   hg clone http://hg.libsdl.org/SDL
+   cd SDL/
    ./configure && make && sudo make install
    ```
    Additional dependencies may be required.
