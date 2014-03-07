@@ -2587,7 +2587,7 @@ namespace spades {
 					}
 					
 					// draw health
-					if(p->GetTeamId() < 2){
+					if(p->GetTeamId() < 2 && (time < lastAliveTime + 1.4f || followingPlayerId == p->GetId())){
 						char buf[64];
 						sprintf(buf, "%d", p->GetHealth());
 						
