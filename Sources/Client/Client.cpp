@@ -1041,13 +1041,17 @@ namespace spades {
 						if(down){
 							if(world->GetLocalPlayer()->GetTeamId() >= 2 ||
 							   time > lastAliveTime + 1.3f)
-								FollowNextPlayer();
+								FollowNextPlayer(false);
 						}
 						return;
 					}else if(CheckKey(cg_keyAltAttack, name)){
 						if(down){
-							if(world->GetLocalPlayer()){
+							if(world->GetLocalPlayer()->GetTeamId() >= 2) {
+								// spectating
 								followingPlayerId = world->GetLocalPlayerIndex();
+							}else if(time > lastAliveTime + 1.3f){
+								// dead
+								FollowNextPlayer(true);
 							}
 						}
 						return;
@@ -1571,7 +1575,7 @@ namespace spades {
 					// choose next player.
 					while(!world->GetPlayer(followingPlayerId) ||
 						  world->GetPlayer(followingPlayerId)->GetFront().GetPoweredLength() < .01f){
-						FollowNextPlayer();
+						FollowNextPlayer(false);
 						if((limit--) <= 0){
 							break;
 						}
@@ -2731,7 +2735,7 @@ namespace spades {
 		
 #pragma mark - Follow / Spectate
 		
-		void Client::FollowNextPlayer() {
+		void Client::FollowNextPlayer(bool reverse) {
 			int myTeam = 2;
 			if(world->GetLocalPlayer()){
 				myTeam = world->GetLocalPlayer()->GetTeamId();
@@ -2739,9 +2743,11 @@ namespace spades {
 			
 			int nextId = followingPlayerId;
 			do{
-				nextId++;
+				reverse ? --nextId : ++nextId;
 				if(nextId >= world->GetNumPlayerSlots())
 					nextId = 0;
+				if(nextId < 0)
+					nextId = world->GetNumPlayerSlots() - 1;
 				
 				Player *p = world->GetPlayer(nextId);
 				if(p == NULL)

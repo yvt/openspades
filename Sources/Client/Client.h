@@ -161,7 +161,7 @@ namespace spades {
 			Vector3 followPos;
 			/** only for when spectating */
 			Vector3 followVel;
-			void FollowNextPlayer();
+			void FollowNextPlayer(bool reverse);
 			/** @return true following is activated (and followingPlayerId should be used) */
 			bool IsFollowing();
 			
