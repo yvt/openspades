@@ -579,6 +579,10 @@ namespace spades {
 					PlayerInput inp = playerInput;
 					WeaponInput winp = weapInput;
 					
+					if(GetSprintState() > 0.001f) {
+						winp.primary = false;
+						winp.secondary = false;
+					}
 					if(inp.crouch == false){
 						if(player->GetInput().crouch){
 							if(!player->TryUncrouch(false)){
