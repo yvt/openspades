@@ -2749,7 +2749,7 @@ namespace spades {
 			int nextId = followingPlayerId;
 			do{
 				reverse ? --nextId : ++nextId;
-				if(nextId >= world->GetNumPlayerSlots())
+				if(nextId >= static_cast<int>(world->GetNumPlayerSlots()))
 					nextId = 0;
 				if(nextId < 0)
 					nextId = world->GetNumPlayerSlots() - 1;
