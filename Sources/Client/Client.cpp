@@ -119,6 +119,7 @@ SPADES_SETTING(cg_switchToolByWheel, "1");
 
 SPADES_SETTING(cg_fov, "68");
 
+SPADES_SETTING(cg_reduceSmoke, "0");
 
 SPADES_SETTING(cg_debugAim, "0");
 SPADES_SETTING(cg_debugCorpse, "0");
@@ -3054,7 +3055,10 @@ namespace spades {
 				ent->SetRadius(1.4f + GetRandom()*GetRandom()*0.8f,
 							   0.2f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(4.f + GetRandom() * 5.f, 0.1f, 8.f);
+				if(cg_reduceSmoke)
+					ent->SetLifeTime(1.f + GetRandom() * 2.f, 0.1f, 8.f);
+				else
+					ent->SetLifeTime(4.f + GetRandom() * 5.f, 0.1f, 8.f);
 				localEntities.push_back(ent);
 			}
 			
@@ -3113,6 +3117,7 @@ namespace spades {
 			color = MakeVector4( .95f, .95f, .95f, .6f);
 			// water1
 			Handle<IImage> img = renderer->RegisterImage("Textures/WaterExpl.png");
+			if(cg_reduceSmoke) color.w = .3f;
 			for(int i = 0; i < 7; i++){
 				ParticleSpriteEntity *ent =
 				new ParticleSpriteEntity(this, img, color);
@@ -3132,6 +3137,7 @@ namespace spades {
 			// water2
 			img = renderer->RegisterImage("Textures/Fluid.png");
 			color.w = .9f;
+			if(cg_reduceSmoke) color.w = .4f;
 			for(int i = 0; i < 16; i++){
 				ParticleSpriteEntity *ent =
 				new ParticleSpriteEntity(this, img, color);
@@ -3150,6 +3156,7 @@ namespace spades {
 			
 			// slow smoke
 			color.w = .4f;
+			if(cg_reduceSmoke) color.w = .2f;
 			for(int i = 0; i < 8; i++){
 				ParticleSpriteEntity *ent =
 				new SmokeSpriteEntity(this, color, 20.f);
@@ -3162,7 +3169,7 @@ namespace spades {
 				ent->SetRadius(1.4f + GetRandom()*GetRandom()*0.8f,
 							   0.2f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(6.f + GetRandom() * 5.f, 0.1f, 8.f);
+				ent->SetLifeTime((cg_reduceSmoke ? 3.f : 6.f) + GetRandom() * 5.f, 0.1f, 8.f);
 				localEntities.push_back(ent);
 			}
 			
