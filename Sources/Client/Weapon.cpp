@@ -225,7 +225,7 @@ namespace spades {
 					case HitTypeHead: return 75;
 					case HitTypeArms: return 18;
 					case HitTypeLegs: return 18;
-					case HitTypeBlock: return 25;
+					case HitTypeBlock: return 35;
 					default: SPAssert(false); return 0;
 				}
 			}
