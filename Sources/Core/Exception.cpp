@@ -22,6 +22,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <Core/Strings.h>
 
 namespace spades {
 	static char buf[65536];
@@ -31,6 +32,7 @@ namespace spades {
 		vsprintf(buf, format, va);
 		va_end(va);
 		message = buf;
+		shortMessage = message;
 	}
 	Exception::Exception(const char *file, int line, const char *format, ...) {
 		reflection::Backtrace& trace =
@@ -43,12 +45,8 @@ namespace spades {
 		message = buf;
 		shortMessage = message;
 		
-		sprintf(buf, "[%s:%d] %s", file, line, message.c_str());
-		message = buf;
-		
-		
-		message += "\nCollected backtrace:\n";
-		message += trace.ToString();
+		message = Format("{0}\nat {1}:{2}\n{3}", message,
+						 file, line, trace);
 	}
 	Exception::~Exception() throw(){}
 	const char *Exception::what() const throw() {
