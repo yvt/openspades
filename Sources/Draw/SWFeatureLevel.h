@@ -24,8 +24,20 @@
 
 #if defined(__i386__) || defined(_M_IX86)
 #define ENABLE_MMX	0 // FIXME: move this to the proper place
+#ifdef __SSE__
 #define ENABLE_SSE	1 // FIXME: move this to the proper place
+#endif
+#ifdef __SSE2__
 #define ENABLE_SSE2	1 // FIXME: move this to the proper place
+#endif
+#endif
+
+#ifndef ENABLE_SSE
+#define ENABLE_SSE 0
+#endif
+
+#ifndef ENABLE_SSE2
+#define ENABLE_SSE2 0
 #endif
 
 #if ENABLE_SSE
