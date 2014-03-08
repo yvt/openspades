@@ -863,6 +863,11 @@ namespace spades {
 					auto v2 = projectionViewMatrix * l.v2;
 					if(v1.z < 0.001f || v2.z < 0.001f) continue;
 					
+					// SWRenderer's depth value is based on view Z coord
+					float d1 = Vector3::Dot(l.v1 - sceneDef.viewOrigin, sceneDef.viewAxis[2]);
+					float d2 = Vector3::Dot(l.v2 - sceneDef.viewOrigin, sceneDef.viewAxis[2]);
+					d1 = fastRcp(d1); d2 = fastRcp(d2);
+					
 					v1 *= fastRcp(v1.w);
 					v2 *= fastRcp(v2.w);
 					
@@ -872,6 +877,7 @@ namespace spades {
 					int y2 = static_cast<int>(ch - v2.y * ch);
 					
 					auto *fb = this->fb->GetPixels();
+					auto *db = this->depthBuffer.data();
 					int fw = this->fb->GetWidth();
 					int fh = this->fb->GetHeight();
 					
@@ -882,8 +888,12 @@ namespace spades {
 					
 					if(x1 == x2 && y1 == y2){
 						if(x1 >= 0 && y1 >= 0 &&
-						   x1 < fw && y1 < fh)
-							fb[x1 + y1 * fw] = col;
+						   x1 < fw && y1 < fh) {
+							d1 = fastRcp(d1);
+							if(d1 < db[x1 + y1 * fw]) {
+								fb[x1 + y1 * fw] = col;
+							}
+						}
 						continue;
 					}
 					
@@ -891,6 +901,7 @@ namespace spades {
 						if(x1 >= x2){
 							std::swap(x1, x2);
 							std::swap(y1, y2);
+							std::swap(d1, d2);
 						}
 						int sgn = (y2 > y1) ? 1 : -1;
 						int cy = y1;
@@ -899,28 +910,35 @@ namespace spades {
 						int divisor = x2 - x1;
 						int minX = std::max(x1, 0);
 						int maxX = std::min(x2, fw - 1);
+						float depth = d1, ddepth = (d2 - d1) * fastRcp(x2-x1 + 1);
 						if(x1 < 0){
 							long long v = dy;
 							v *= -x1;
 							cy += sgn * (v / divisor);
 							fract = v % divisor;
+							depth -= x1 * ddepth;
 						}
-						fb += minX;
+						fb += minX; db += minX;
 						for(int x = minX; x <= maxX; x++){
 							if(cy >= 0 && cy < fh) {
-								fb[fw * cy] = col;
+								float d = fastRcp(depth);
+								if(d < db[fw * cy]) {
+									fb[fw * cy] = col;
+								}
 							}
 							fract += dy;
 							if(fract >= divisor) {
 								cy += sgn;
 								fract -= divisor;
 							}
-							fb++;
+							depth += ddepth;
+							fb++; db++;
 						}
 					}else{
 						if(y1 >= y2){
 							std::swap(x1, x2);
 							std::swap(y1, y2);
+							std::swap(d1, d2);
 						}
 						int sgn = (x2 > x1) ? 1 : -1;
 						int cx = x1;
@@ -929,23 +947,29 @@ namespace spades {
 						int divisor = y2 - y1;
 						int minY = std::max(y1, 0);
 						int maxY = std::min(y2, fh - 1);
+						float depth = d1, ddepth = (d2 - d1) * fastRcp(y2-y1 + 1);
 						if(y1 < 0){
 							long long v = dx;
 							v *= -y1;
 							cx += sgn * (v / divisor);
 							fract = v % divisor;
+							depth -= x1 * ddepth;
 						}
-						fb += minY * fw;
+						fb += minY * fw; db += minY * fw;
 						for(int y = minY; y <= maxY; y++){
 							if(cx >= 0 && cx < fw) {
-								fb[cx] = col;
+								float d = fastRcp(depth);
+								if(d < db[cx]) {
+									fb[cx] = col;
+								}
 							}
 							fract += dx;
 							if(fract >= divisor) {
 								cx += sgn;
 								fract -= divisor;
 							}
-							fb += fw;
+							depth += ddepth;
+							fb += fw; db += fw;
 						}
 					}
 					
