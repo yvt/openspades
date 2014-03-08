@@ -488,8 +488,8 @@ namespace spades {
 				Vector3 shoulders[] = {{0.4f, 0.0f, 0.25f},
 					{-0.4f, 0.0f, 0.25f}};
 				Vector3 hands[] = {leftHand, rightHand};
-				Vector3 benddirs[] = {0.5f, 0.2f, 0.f,
-					-0.5f, 0.2f, 0.f};
+				Vector3 benddirs[] = {{0.5f, 0.2f, 0.f},
+					{-0.5f, 0.2f, 0.f}};
 				for(int i = 0; i < 2; i++){
 					Vector3 shoulder = shoulders[i];
 					Vector3 hand = hands[i];

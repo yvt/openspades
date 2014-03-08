@@ -40,6 +40,11 @@ namespace spades {
 	public:
 		int x, y, z;
 		
+		IntVector3() = default;
+		IntVector3(const IntVector3&) = default;
+		IntVector3(int x, int y, int z):
+		x(x), y(y), z(z) { }
+		
 		static IntVector3 Make(int x, int y, int z) {
 			IntVector3 v = {x, y, z};
 			return v;
@@ -137,6 +142,11 @@ namespace spades {
 	class Vector2 {
 	public:
 		float x, y;
+		
+		Vector2() = default;
+		Vector2(const Vector2&) = default;
+		Vector2(float x, float y):
+		x(x), y(y) {}
 		
 		static Vector2 Make(float x, float y) {
 			Vector2 v = {x, y};
@@ -238,6 +248,11 @@ namespace spades {
 	class Vector3 {
 	public:
 		float x, y, z;
+		
+		Vector3() = default;
+		Vector3(const Vector3&) = default;
+		Vector3(float x, float y, float z):
+		x(x), y(y), z(z) {}
 		
 		static Vector3 Make(float x, float y, float z) {
 			Vector3 v = {x, y, z};
@@ -367,6 +382,12 @@ namespace spades {
 	class Vector4 {
 	public:
 		float x, y, z, w;
+		
+		Vector4() = default;
+		Vector4(const Vector4&) = default;
+		Vector4(float x, float y, float z, float w):
+		x(x), y(y), z(z), w(w) {}
+		
 		static Vector4 Make(float x, float y, float z, float w) {
 			Vector4 v = {x, y, z, w};
 			return v;
@@ -525,7 +546,8 @@ namespace spades {
 		Vector3 n;
 		float w;
 		
-		Plane3() {}
+		Plane3() = default;
+		Plane3(const Plane3&) = default;
 		Plane3(float x, float y, float z, float ww):
 		n(MakeVector3(x, y, z)), w(ww) { }
 		Plane3(const Vector3& v1,
@@ -568,7 +590,8 @@ namespace spades {
 		Vector2 n;
 		float w;
 		
-		Plane2() {}
+		Plane2() = default;
+		Plane2(const Plane2&) = default;
 		Plane2(float x, float y, float ww):
 		n(Vector2::Make(x, y)), w(ww) { }
 		Plane2(const Vector2& v1,
@@ -605,7 +628,8 @@ namespace spades {
 	struct Matrix4 {
 		// column major matrix
 		float m[16];
-		Matrix4() {}
+		Matrix4() = default;
+		Matrix4(const Matrix4&) = default;
 		explicit Matrix4(float *elms);
 		Matrix4(float m00, float m10, float m20, float m30,
 				float m01, float m11, float m21, float m31,
