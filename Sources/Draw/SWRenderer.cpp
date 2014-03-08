@@ -168,6 +168,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			if(map)
 				EnsureInitialized();
+			if(map == this->map)
+				return;
 			
 			flatMapRenderer.reset();
 			mapRenderer.reset();
