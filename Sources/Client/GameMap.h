@@ -27,6 +27,9 @@
 
 #include "IGameMapListener.h"
 #include <Core/RefCountedObject.h>
+#include <list>
+#include <Core/Mutex.h>
+#include <Core/AutoLocker.h>
 
 namespace spades{
 	class IStream;
@@ -83,7 +86,7 @@ namespace spades{
 							   [z & (Depth() - 1)];
 			}
 			
-			inline void Set(int x, int y, int z, bool solid, uint32_t color){
+			inline void Set(int x, int y, int z, bool solid, uint32_t color, bool unsafe = false){
 				SPAssert(x >= 0); SPAssert(x < Width());
 				SPAssert(y >= 0); SPAssert(y < Height());
 				SPAssert(z >= 0); SPAssert(z < Depth());
@@ -103,8 +106,17 @@ namespace spades{
 						colorMap[x][y][z] = color;
 					}
 				}
-				if(changed && listener){
-					listener->GameMapChanged(x, y, z, this);
+				if(!unsafe) {
+					if(changed){
+						if(listener)
+							listener->GameMapChanged(x, y, z, this);
+						{
+							AutoLocker guard(&listenersMutex);
+							for(auto*l:listeners) {
+								l->GameMapChanged(x, y, z, this);
+							}
+						}
+					}
 				}
 			}
 			
@@ -114,6 +126,8 @@ namespace spades{
 			IGameMapListener *GetListener() {
 				return listener;
 			}
+			void AddListener(IGameMapListener *);
+			void RemoveListener(IGameMapListener *);
 			
 			bool ClipBox(int x, int y, int z);
 			bool ClipWorld(int x, int y, int z);
@@ -139,6 +153,8 @@ namespace spades{
 			uint64_t solidMap[DefaultWidth][DefaultHeight];
 			uint32_t colorMap[DefaultWidth][DefaultHeight][DefaultDepth];
 			IGameMapListener *listener;
+			std::list<IGameMapListener *> listeners;
+			Mutex listenersMutex;
 			
 			bool IsSurface(int x, int y, int z);
 		};

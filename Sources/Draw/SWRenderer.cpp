@@ -173,10 +173,10 @@ namespace spades {
 			mapRenderer.reset();
 			
 			if(this->map)
-				this->map->SetListener(nullptr);
+				this->map->RemoveListener(this);
 			this->map = map;
 			if(this->map) {
-				this->map->SetListener(this);
+				this->map->AddListener(this);
 				flatMapRenderer = std::make_shared<SWFlatMapRenderer>(this, map);
 				mapRenderer = std::make_shared<SWMapRenderer>(this, map, featureLevel);
 			}

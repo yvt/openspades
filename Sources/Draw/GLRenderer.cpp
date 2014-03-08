@@ -205,6 +205,7 @@ namespace spades {
 			// FIXME: remove itself from map's listener
 			
 			SPLog("GLRender finalizing");
+			SetGameMap(nullptr);
 			delete lensDustFilter;
 			lensDustFilter = NULL;
 			delete radiosityRenderer;
@@ -326,7 +327,7 @@ namespace spades {
 					SPLog("Radiosity is disabled");
 				}
 				
-				mp->SetListener(this);
+				mp->AddListener(this);
 				mp->AddRef();
 				SPLog("Created");
 			}else{
@@ -334,6 +335,7 @@ namespace spades {
 			}
             this->map = mp;
 			if(oldMap) {
+				oldMap->RemoveListener(this);
 				oldMap->Release();
 			}
 		}

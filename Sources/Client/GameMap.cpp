@@ -27,6 +27,8 @@
 #include <Core/Exception.h>
 #include <Core/Debug.h>
 #include <Core/FileManager.h>
+#include <algorithm>
+#include <Core/AutoLocker.h>
 
 // silly VOXLAP function
 static inline void ftol(float f, long *a)
@@ -58,6 +60,19 @@ namespace spades {
 		GameMap::~GameMap(){
 			SPADES_MARK_FUNCTION();
 			
+		}
+		
+		void GameMap::AddListener(spades::client::IGameMapListener *l) {
+			AutoLocker guard(&listenersMutex);
+			listeners.push_back(l);
+		}
+		
+		void GameMap::RemoveListener(spades::client::IGameMapListener *l) {
+			AutoLocker guard(&listenersMutex);
+			auto it = std::find(listeners.begin(), listeners.end(), l);
+			if(it != listeners.end()) {
+				listeners.erase(it);
+			}
 		}
 		
 		bool GameMap::IsSurface(int x, int y, int z) {
@@ -524,7 +539,7 @@ namespace spades {
 							int len_bottom;
 							
 							for(i = z; i < top_color_start; i++)
-								map->Set(x, y, i, false, 0);
+								map->Set(x, y, i, false, 0, true);
 							
 							if(pos + 4 + top_color_end - top_color_start + 3 >= len){
 								SPRaise("File truncated");
@@ -532,10 +547,10 @@ namespace spades {
 							
 							color = (uint32_t *)(bytes.data() + pos + 4);
 							for(z = top_color_start; z <= top_color_end; z++)
-								map->Set(x, y, z, true, swapColor(*(color++)));
+								map->Set(x, y, z, true, swapColor(*(color++)), true);
 							
 							if(top_color_end == 62) {
-								map->Set(x, y, 63, true, map->GetColor(x, y, 62));
+								map->Set(x, y, 63, true, map->GetColor(x, y, 62), true);
 							}
 							
 							len_bottom = top_color_end - top_color_start + 1;
@@ -558,10 +573,10 @@ namespace spades {
 							
 							for(z = bottom_color_start; z < bottom_color_end; z++){
 								uint32_t col = swapColor(*(color++));
-								map->Set(x, y, z, true, col);
+								map->Set(x, y, z, true, col, true);
 							}
 							if(bottom_color_end == 63) {
-								map->Set(x, y, 63, true, map->GetColor(x, y, 62));
+								map->Set(x, y, 63, true, map->GetColor(x, y, 62), true);
 							}
 						}
 						
