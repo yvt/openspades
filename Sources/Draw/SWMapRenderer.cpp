@@ -1123,7 +1123,7 @@ namespace spades {
 				
 				if(numLines < 8) numLines = 8;
 				if(numLines > 65536) {
-					SPRaise("Too many lines emit: %d", static_cast<int>(numLines));
+					numLines = 65536; // SPRaise("Too many lines emit: %d", static_cast<int>(numLines));
 				}
 				lines.resize(std::max(numLines, lines.size()));
 				/*
