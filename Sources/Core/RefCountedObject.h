@@ -88,7 +88,6 @@ namespace spades {
 			Set(h.ptr, true);
 		}
 		operator T *() {
-			SPAssert(ptr != NULL);
 			return ptr;
 		}
 		T *Unmanage() {
