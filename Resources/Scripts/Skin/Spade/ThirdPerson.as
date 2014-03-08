@@ -87,8 +87,9 @@
 			Matrix4 mat = CreateScaleMatrix(0.05f);
 			
 			
-			
+			mat = CreateRotateMatrix(Vector3(0.f,0.f,1.f), Pi) * mat;
 			mat = CreateTranslateMatrix(0.35f, -1.f, 0.f) * mat;
+			
 			
 			ModelRenderParam param;
 			param.matrix = originMatrix * mat;
