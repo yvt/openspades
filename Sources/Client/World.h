@@ -26,6 +26,7 @@
 #include <Core/Debug.h>
 #include <vector>
 #include <list>
+#include <memory>
 
 namespace spades {
 	namespace client {
@@ -36,6 +37,7 @@ namespace spades {
 		class Grenade;
 		class IGameMode;
 		class Client; // FIXME: for debug
+		class HitTestDebugger;
 		class World {
 			friend class Client; // FIXME: for debug
 		public:
@@ -64,6 +66,7 @@ namespace spades {
 			int localPlayerIndex;
 			
 			std::list<Grenade *> grenades;
+			std::unique_ptr<HitTestDebugger> hitTestDebugger;
 			
 		public:
 			World();
@@ -134,6 +137,8 @@ namespace spades {
 					return NULL;
 				return GetPlayer(GetLocalPlayerIndex());
 			}
+			
+			HitTestDebugger *GetHitTestDebugger();
 			
 			void SetListener(IWorldListener *l){
 				listener = l;

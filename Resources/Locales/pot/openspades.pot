@@ -230,7 +230,7 @@ msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:649 ../../Scripts/Gui/Preferences.as:694
 #: ../../Scripts/Gui/Preferences.as:693 ../../Scripts/Gui/Preferences.as:677
-#: ../../Scripts/Gui/Preferences.as:722
+#: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
 msgctxt "Preferences"
 msgid "Misc"
 msgstr ""
@@ -246,191 +246,199 @@ msgid "Minimap size"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:654 ../../Scripts/Gui/Preferences.as:682
+#: ../../Scripts/Gui/Preferences.as:683
 msgctxt "Preferences"
 msgid "Weapon Spread Guide"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:665 ../../Scripts/Gui/Preferences.as:693
+#: ../../Scripts/Gui/Preferences.as:694
 msgctxt "Preferences"
 msgid "Weapons/Tools"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:666 ../../Scripts/Gui/Preferences.as:694
+#: ../../Scripts/Gui/Preferences.as:695
 msgctxt "Preferences"
 msgid "Attack"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:667 ../../Scripts/Gui/Preferences.as:695
+#: ../../Scripts/Gui/Preferences.as:696
 msgctxt "Preferences"
 msgid "Alt. Attack"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:668 ../../Scripts/Gui/Preferences.as:696
+#: ../../Scripts/Gui/Preferences.as:697
 msgctxt "Preferences"
 msgid "Hold Aim Down Sight"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:669 ../../Scripts/Gui/Preferences.as:697
+#: ../../Scripts/Gui/Preferences.as:698
 msgctxt "Preferences"
 msgid "Mouse Sensitivity"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:671 ../../Scripts/Gui/Preferences.as:699
+#: ../../Scripts/Gui/Preferences.as:700
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:673 ../../Scripts/Gui/Preferences.as:701
+#: ../../Scripts/Gui/Preferences.as:702
 msgctxt "Preferences"
 msgid "Exponential Power"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:676
-#: ../../Scripts/Gui/Preferences.as:704
+#: ../../Scripts/Gui/Preferences.as:704 ../../Scripts/Gui/Preferences.as:705
 msgctxt "Preferences"
 msgid "Reload"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:676 ../../Scripts/Gui/Preferences.as:677
-#: ../../Scripts/Gui/Preferences.as:705
+#: ../../Scripts/Gui/Preferences.as:705 ../../Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Capture Color"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:678
-#: ../../Scripts/Gui/Preferences.as:706
+#: ../../Scripts/Gui/Preferences.as:706 ../../Scripts/Gui/Preferences.as:707
 msgctxt "Preferences"
 msgid "Equip Spade"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:678 ../../Scripts/Gui/Preferences.as:679
-#: ../../Scripts/Gui/Preferences.as:707
+#: ../../Scripts/Gui/Preferences.as:707 ../../Scripts/Gui/Preferences.as:708
 msgctxt "Preferences"
 msgid "Equip Block"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:679 ../../Scripts/Gui/Preferences.as:680
-#: ../../Scripts/Gui/Preferences.as:708
+#: ../../Scripts/Gui/Preferences.as:708 ../../Scripts/Gui/Preferences.as:709
 msgctxt "Preferences"
 msgid "Equip Weapon"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:681
-#: ../../Scripts/Gui/Preferences.as:709
+#: ../../Scripts/Gui/Preferences.as:709 ../../Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Equip Grenade"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:681 ../../Scripts/Gui/Preferences.as:682
-#: ../../Scripts/Gui/Preferences.as:710
+#: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:711
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:684 ../../Scripts/Gui/Preferences.as:683
-#: ../../Scripts/Gui/Preferences.as:712
+#: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
 msgctxt "Preferences"
 msgid "Movement"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:685 ../../Scripts/Gui/Preferences.as:684
-#: ../../Scripts/Gui/Preferences.as:713
+#: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Walk Forward"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:686 ../../Scripts/Gui/Preferences.as:685
-#: ../../Scripts/Gui/Preferences.as:714
+#: ../../Scripts/Gui/Preferences.as:714 ../../Scripts/Gui/Preferences.as:715
 msgctxt "Preferences"
 msgid "Backpedal"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:687 ../../Scripts/Gui/Preferences.as:686
-#: ../../Scripts/Gui/Preferences.as:715
+#: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
 msgctxt "Preferences"
 msgid "Move Left"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:688 ../../Scripts/Gui/Preferences.as:687
-#: ../../Scripts/Gui/Preferences.as:716
+#: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
 msgctxt "Preferences"
 msgid "Move Right"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:689 ../../Scripts/Gui/Preferences.as:688
-#: ../../Scripts/Gui/Preferences.as:717
+#: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
 msgctxt "Preferences"
 msgid "Crouch"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:690 ../../Scripts/Gui/Preferences.as:689
-#: ../../Scripts/Gui/Preferences.as:718
+#: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
 msgctxt "Preferences"
 msgid "Sneak"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:691 ../../Scripts/Gui/Preferences.as:690
-#: ../../Scripts/Gui/Preferences.as:719
+#: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
 msgctxt "Preferences"
 msgid "Jump"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:692 ../../Scripts/Gui/Preferences.as:691
-#: ../../Scripts/Gui/Preferences.as:720
+#: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
 msgctxt "Preferences"
 msgid "Sprint"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:695 ../../Scripts/Gui/Preferences.as:694
-#: ../../Scripts/Gui/Preferences.as:723
+#: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
 msgctxt "Preferences"
 msgid "Minimap Scale"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:696 ../../Scripts/Gui/Preferences.as:695
-#: ../../Scripts/Gui/Preferences.as:724
+#: ../../Scripts/Gui/Preferences.as:724 ../../Scripts/Gui/Preferences.as:725
 msgctxt "Preferences"
 msgid "Toggle Map"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:696
-#: ../../Scripts/Gui/Preferences.as:725
+#: ../../Scripts/Gui/Preferences.as:725 ../../Scripts/Gui/Preferences.as:726
 msgctxt "Preferences"
 msgid "Flashlight"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:697
-#: ../../Scripts/Gui/Preferences.as:726
+#: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
 msgctxt "Preferences"
 msgid "Global Chat"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:699 ../../Scripts/Gui/Preferences.as:698
-#: ../../Scripts/Gui/Preferences.as:727
+#: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
 msgctxt "Preferences"
 msgid "Team Chat"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:699
-#: ../../Scripts/Gui/Preferences.as:728
+#: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
 msgctxt "Preferences"
 msgid "Limbo Menu"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:701 ../../Scripts/Gui/Preferences.as:700
-#: ../../Scripts/Gui/Preferences.as:729
+#: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
 msgctxt "Preferences"
 msgid "Save Map"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:701
-#: ../../Scripts/Gui/Preferences.as:730
+#: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
 msgctxt "Preferences"
 msgid "Save Sceneshot"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:703 ../../Scripts/Gui/Preferences.as:702
-#: ../../Scripts/Gui/Preferences.as:731
+#: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
 msgctxt "Preferences"
 msgid "Save Screenshot"
 msgstr ""
@@ -497,48 +505,56 @@ msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2219
 #: ../../../Sources/Client/Client.cpp:2218
+#: ../../../Sources/Client/Client.cpp:2234
 msgctxt "Client"
 msgid "NOW LOADING"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2545
 #: ../../../Sources/Client/Client.cpp:2513
+#: ../../../Sources/Client/Client.cpp:2529
 msgctxt "Client"
 msgid "Out of Block"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2550
 #: ../../../Sources/Client/Client.cpp:2518
+#: ../../../Sources/Client/Client.cpp:2534
 msgctxt "Client"
 msgid "Out of Grenade"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2558
 #: ../../../Sources/Client/Client.cpp:2526
+#: ../../../Sources/Client/Client.cpp:2542
 msgctxt "Client"
 msgid "Reloading"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2561
 #: ../../../Sources/Client/Client.cpp:2529
+#: ../../../Sources/Client/Client.cpp:2545
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2564
 #: ../../../Sources/Client/Client.cpp:2532
+#: ../../../Sources/Client/Client.cpp:2548
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2600
 #: ../../../Sources/Client/Client.cpp:2568
+#: ../../../Sources/Client/Client.cpp:2584
 msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2643
 #: ../../../Sources/Client/Client.cpp:2611
+#: ../../../Sources/Client/Client.cpp:2627
 msgctxt "Client"
 msgid "Following {0}"
 msgstr ""
@@ -591,6 +607,7 @@ msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2598
 #: ../../../Sources/Client/Client.cpp:2566
+#: ../../../Sources/Client/Client.cpp:2582
 msgctxt "Client"
 msgid "You will respawn in: {0}"
 msgstr ""
@@ -980,121 +997,146 @@ msgid "Custom"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:703
+#: ../../Scripts/Gui/Preferences.as:704
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:1418
+#: ../../../Sources/Client/Client.cpp:1434
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:1423
+#: ../../../Sources/Client/Client.cpp:1439
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:1477
+#: ../../../Sources/Client/Client.cpp:1493
 msgctxt "Client"
 msgid "Sceneshot saved: {0}"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:1479
+#: ../../../Sources/Client/Client.cpp:1495
 msgctxt "Client"
 msgid "Screenshot saved: {0}"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:1484
+#: ../../../Sources/Client/Client.cpp:1500
 msgctxt "Client"
 msgid "Screenshot failed: "
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:2684
+#: ../../../Sources/Client/Client.cpp:2700
 msgctxt "Client"
 msgid "[Global] "
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3229
+#: ../../../Sources/Client/Client.cpp:3253
 msgctxt "Client"
 msgid "{0} captured {1}'s territory"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3231
+#: ../../../Sources/Client/Client.cpp:3255
 msgctxt "Client"
 msgid "{0} captured an neutral territory"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3238
+#: ../../../Sources/Client/Client.cpp:3262
 msgctxt "Client"
 msgid "{0} captured {1}'s Territory"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3240
+#: ../../../Sources/Client/Client.cpp:3264
 msgctxt "Client"
 msgid "{0} captured an Neutral Territory"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3264
+#: ../../../Sources/Client/Client.cpp:3288
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3271
+#: ../../../Sources/Client/Client.cpp:3295
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3293
+#: ../../../Sources/Client/Client.cpp:3317
 msgctxt "Client"
 msgid "{0} picked up {1}'s intel"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3300
+#: ../../../Sources/Client/Client.cpp:3324
 msgctxt "Client"
 msgid "{0} picked up {1}'s Intel."
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3317
+#: ../../../Sources/Client/Client.cpp:3341
 msgctxt "Client"
 msgid "{0} dropped {1}'s intel"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3324
+#: ../../../Sources/Client/Client.cpp:3348
 msgctxt "Client"
 msgid "{0} dropped {1}'s Intel"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3374
 #: ../../../Sources/Client/Client.cpp:3379
+#: ../../../Sources/Client/Client.cpp:3398
+#: ../../../Sources/Client/Client.cpp:3403
 msgctxt "Client"
 msgid "Player {0} has left"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3395
 #: ../../../Sources/Client/Client.cpp:3402
+#: ../../../Sources/Client/Client.cpp:3419
+#: ../../../Sources/Client/Client.cpp:3426
 msgctxt "Client"
 msgid "{0} joined {1} team"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3438
+#: ../../../Sources/Client/Client.cpp:3462
 msgctxt "Client"
 msgid "{0} wins!"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3443
 #: ../../../Sources/Client/Client.cpp:3442
+#: ../../../Sources/Client/Client.cpp:3466
 msgctxt "Client"
 msgid "{0} Wins!"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3834
 #: ../../../Sources/Client/Client.cpp:3833
+#: ../../../Sources/Client/Client.cpp:3857
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3836
 #: ../../../Sources/Client/Client.cpp:3835
+#: ../../../Sources/Client/Client.cpp:3859
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr ""
@@ -1229,4 +1271,9 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:438
 msgctxt "Preferences"
 msgid "Mouse Button 5"
+msgstr ""
+
+#: ../../Scripts/Gui/Preferences.as:682
+msgctxt "Preferences"
+msgid "Debug Hit Detection"
 msgstr ""

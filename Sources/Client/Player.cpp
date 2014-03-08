@@ -30,6 +30,7 @@
 #include "Grenade.h"
 #include "../Core/Debug.h"
 #include "../Core/Settings.h"
+#include "HitTestDebugger.h"
 
 namespace spades {
 	namespace client {
@@ -87,6 +88,12 @@ namespace spades {
 		Player::~Player() {
 			SPADES_MARK_FUNCTION();
 			delete weapon;
+		}
+		
+		bool Player::IsLocalPlayer(){
+			if(!world)
+				return false;
+			return world->GetLocalPlayer() == this;
 		}
 		
 		void Player::SetInput(PlayerInput newInput) {
@@ -435,16 +442,26 @@ namespace spades {
 			// |P-A| * sin(theta)
 			float dist = sqrtf(sq - c * c);
 			
-			return dist < 4.f;
+			return dist < 8.f;
 		}
+		
+		enum class HitBodyPart {
+			None,
+			Head,
+			Torso,
+			Limb1, Limb2,
+			Arms
+		};
 		
 		void Player::FireWeapon() {
 			SPADES_MARK_FUNCTION();
 			
 			Vector3 muzzle = GetEye();
-			muzzle += GetFront() * 0.01f;/*
-			muzzle += GetRight() * 0.4f;
-			muzzle -= GetUp() * 0.3f;*/
+			muzzle += GetFront() * 0.01f;
+			
+			// for hit-test debugging
+			std::map<int, HitTestDebugger::PlayerHit> playerHits;
+			std::vector<Vector3> bulletVectors;
 			
 			Vector3 right = GetRight();
 			Vector3 up = GetUp();
@@ -459,11 +476,14 @@ namespace spades {
 			
 			Vector3 dir2 = GetFront();
 			for(int i =0 ; i < pellets; i++){
+				
 				// AoS 0.75's way (dir2 shouldn't be normalized!)
 				dir2.x += (GetRandom() - GetRandom()) * spread;
 				dir2.y += (GetRandom() - GetRandom()) * spread;
 				dir2.z += (GetRandom() - GetRandom()) * spread;
 				Vector3 dir = dir2.Normalize();
+				
+				bulletVectors.push_back(dir);
 				
 				// first do map raycast
 				GameMap::RayCastResult mapResult;
@@ -473,7 +493,7 @@ namespace spades {
 				
 				Player *hitPlayer = NULL;
 				float hitPlayerDistance = 0.f;
-				int hitFlag = 0;
+				HitBodyPart hitPart = HitBodyPart::None;
 				
 				for(int i = 0; i < world->GetNumPlayerSlots(); i++){
 					Player *other = world->GetPlayer(i);
@@ -482,6 +502,7 @@ namespace spades {
 					if(other == this || !other->IsAlive() ||
 					   other->GetTeamId() >= 2)
 						continue;
+					// quickly reject players unlikely to be hit
 					if(!other->RayCastApprox(muzzle, dir))
 						continue;
 					
@@ -492,24 +513,18 @@ namespace spades {
 						float dist = (hitPos - muzzle).GetLength();
 						if(hitPlayer == NULL ||
 						   dist < hitPlayerDistance){
-							if(hitPlayer != other){
-								hitPlayer = other;
-								hitFlag = 0;
-							}
+							hitPlayer = other;
 							hitPlayerDistance = dist;
-							hitFlag = 1; // head
+							hitPart = HitBodyPart::Head;
 						}
 					}
 					if(hb.torso.RayCast(muzzle, dir, &hitPos)) {
 						float dist = (hitPos - muzzle).GetLength();
 						if(hitPlayer == NULL ||
 						   dist < hitPlayerDistance){
-							if(hitPlayer != other){
-								hitPlayer = other;
-								hitFlag = 0;
-							}
+							hitPlayer = other;
 							hitPlayerDistance = dist;
-							hitFlag = 2; // torso
+							hitPart = HitBodyPart::Torso;
 						}
 					}
 					for(int j = 0; j < 3 ;j++){
@@ -517,15 +532,13 @@ namespace spades {
 							float dist = (hitPos - muzzle).GetLength();
 							if(hitPlayer == NULL ||
 							   dist < hitPlayerDistance){
-								if(hitPlayer != other){
-									hitPlayer = other;
-									hitFlag = 0;
-								}
+								hitPlayer = other;
 								hitPlayerDistance = dist;
-								if(j == 2)
-									hitFlag = 8; // arms
-								else
-									hitFlag = 4; // leg
+								switch(j) {
+									case 0: hitPart = HitBodyPart::Limb1; break;
+									case 1: hitPart = HitBodyPart::Limb2; break;
+									case 2: hitPart = HitBodyPart::Arms;  break;
+								}
 							}
 						}
 					}
@@ -582,27 +595,58 @@ namespace spades {
 						
 						finalHitPos = muzzle + dir * hitPlayerDistance;
 						
+						switch(hitPart) {
+							case HitBodyPart::Head:
+								playerHits[hitPlayer->GetId()].numHeadHits++;
+								break;
+							case HitBodyPart::Torso:
+								playerHits[hitPlayer->GetId()].numTorsoHits++;
+								break;
+							case HitBodyPart::Limb1:
+								playerHits[hitPlayer->GetId()].numLimbHits[0]++;
+								break;
+							case HitBodyPart::Limb2:
+								playerHits[hitPlayer->GetId()].numLimbHits[1]++;
+								break;
+							case HitBodyPart::Arms:
+								playerHits[hitPlayer->GetId()].numLimbHits[2]++;
+								break;
+							case HitBodyPart::None:
+								SPAssert(false);
+								break;
+						}
+						
 						if(world->GetListener()){
-							if(hitFlag & 1)
-								world->GetListener()->BulletHitPlayer(hitPlayer,
-																	  HitTypeHead,
-																	  muzzle + dir * hitPlayerDistance,
-																	  this);
-							if(hitFlag & 2)
-								world->GetListener()->BulletHitPlayer(hitPlayer,
-																	  HitTypeTorso,
-																	  muzzle + dir * hitPlayerDistance,
-																	  this);
-							if(hitFlag & 4)
-								world->GetListener()->BulletHitPlayer(hitPlayer,
-																	  HitTypeLegs,
-																	  muzzle + dir * hitPlayerDistance,
-																	  this);
-							if(hitFlag & 8)
-								world->GetListener()->BulletHitPlayer(hitPlayer,
-																	  HitTypeArms,
-																	  muzzle + dir * hitPlayerDistance,
-																	  this);
+							switch(hitPart) {
+								case HitBodyPart::Head:
+									world->GetListener()->BulletHitPlayer(hitPlayer,
+																		  HitTypeHead,
+																		  muzzle + dir * hitPlayerDistance,
+																		  this);
+									break;
+								case HitBodyPart::Torso:
+									world->GetListener()->BulletHitPlayer(hitPlayer,
+																		  HitTypeTorso,
+																		  muzzle + dir * hitPlayerDistance,
+																		  this);
+									break;
+								case HitBodyPart::Limb1:
+								case HitBodyPart::Limb2:
+									world->GetListener()->BulletHitPlayer(hitPlayer,
+																		  HitTypeLegs,
+																		  muzzle + dir * hitPlayerDistance,
+																		  this);
+									break;
+								case HitBodyPart::Arms:
+									world->GetListener()->BulletHitPlayer(hitPlayer,
+																		  HitTypeArms,
+																		  muzzle + dir * hitPlayerDistance,
+																		  this);
+									break;
+								case HitBodyPart::None:
+									SPAssert(false);
+									break;
+							}
 						}
 					}
 				}
@@ -612,6 +656,12 @@ namespace spades {
 														  muzzle, finalHitPos);
 				
 				// one pellet done
+			}
+			
+			// do hit test debugging
+			auto *debugger = world->GetHitTestDebugger();
+			if(debugger && IsLocalPlayer()) {
+				debugger->SaveImage(playerHits, bulletVectors);
 			}
 			
 			// in AoS 0.75's way

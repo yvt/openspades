@@ -33,6 +33,10 @@
 #include <math.h>
 #include <stdlib.h>
 #include "IWorldListener.h"
+#include <Core/Settings.h>
+#include "HitTestDebugger.h"
+
+SPADES_SETTING(cg_debugHitTest, "0");
 
 namespace spades {
 	namespace client {
@@ -44,28 +48,12 @@ namespace spades {
 			
 			map = NULL;
 			mapWrapper = NULL;
-			/*
-			IStream *stream = FileManager::OpenForReading("Maps/burbs.vxl");
-			map = GameMap::Load(stream);
-			delete stream;
-			
-			mapWrapper = new GameMapWrapper(map);
-			mapWrapper->Rebuild();*/
 			
 			localPlayerIndex = -1;
 			for(int i = 0; i < 32; i++){
 				players.push_back((Player *)NULL);
 				playerPersistents.push_back(PlayerPersistent());
 			}
-			/*
-			Player *pl = new Player(this, 0, WeaponType::SMG_WEAPON,
-									0, MakeVector3(256,256,5),
-									"Deuce", IntVector3::Make(0,255,0));
-		
-			pl->SetOrientation(MakeVector3(0, 1, 0));
-			
-			
-			players[0] = pl;*/
 			
 			localPlayerIndex = 0;
 			
@@ -115,6 +103,8 @@ namespace spades {
 		void World::SetMap(spades::client::GameMap *newMap){
 			if(map == newMap)
 				return;
+			
+			hitTestDebugger.reset();
 			
 			if(map){
 				map->Release();
@@ -394,6 +384,16 @@ namespace spades {
 			}
 			
 			return result;
+		}
+		
+		HitTestDebugger *World::GetHitTestDebugger() {
+			if(cg_debugHitTest) {
+				if(hitTestDebugger == nullptr) {
+					hitTestDebugger.reset(new HitTestDebugger(this));
+				}
+				return hitTestDebugger.get();
+			}
+			return nullptr;
 		}
 		
 	}

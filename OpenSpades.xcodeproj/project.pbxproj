@@ -258,6 +258,7 @@
 		E8F74CFB1845C64B0085AA54 /* ClientUIHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF91845C64B0085AA54 /* ClientUIHelper.cpp */; };
 		E8F74CFD1845D4D00085AA54 /* ClientUIHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */; };
 		E8F74CFF184C7D7C0085AA54 /* Clipboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CFE184C753F0085AA54 /* Clipboard.cpp */; };
+		E8FE748A18CB329C00291338 /* HitTestDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8FE748818CB329C00291338 /* HitTestDebugger.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -812,6 +813,8 @@
 		E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ClientUIHelper.cpp; sourceTree = "<group>"; };
 		E8F74CFE184C753F0085AA54 /* Clipboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Clipboard.cpp; sourceTree = "<group>"; };
 		E8FC02D8186829BC00F84A0D /* SWUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWUtils.h; sourceTree = "<group>"; };
+		E8FE748818CB329C00291338 /* HitTestDebugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HitTestDebugger.cpp; sourceTree = "<group>"; };
+		E8FE748918CB329C00291338 /* HitTestDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitTestDebugger.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1517,6 +1520,8 @@
 				E8567E6A1792F398009D83E0 /* IWorldListener.cpp */,
 				E8567E6B1792F399009D83E0 /* IWorldListener.h */,
 				E88318E517928EAC002ABE6D /* PhysicsConstants.h */,
+				E8FE748818CB329C00291338 /* HitTestDebugger.cpp */,
+				E8FE748918CB329C00291338 /* HitTestDebugger.h */,
 			);
 			name = World;
 			sourceTree = "<group>";
@@ -1848,6 +1853,7 @@
 				E88318DB179256E5002ABE6D /* Player.cpp in Sources */,
 				E88318DE179257F1002ABE6D /* GameMapWrapper.cpp in Sources */,
 				E88318E117925F2E002ABE6D /* Deque.cpp in Sources */,
+				E8FE748A18CB329C00291338 /* HitTestDebugger.cpp in Sources */,
 				E81A7C7A18642BCA00BF3FCE /* SWFlatMapRenderer.cpp in Sources */,
 				E88318E41792698D002ABE6D /* Stopwatch.cpp in Sources */,
 				E88318E817928F86002ABE6D /* World.cpp in Sources */,

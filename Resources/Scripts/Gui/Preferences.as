@@ -679,6 +679,7 @@ namespace spades {
 				ConfigNumberFormatter(0, " deg"));
 			layouter.AddSliderField(_Tr("Preferences", "Minimap size"), "cg_minimapSize", 128, 256, 8,
 				ConfigNumberFormatter(0, " px"));
+			layouter.AddToggleField(_Tr("Preferences", "Debug Hit Detection"), "cg_debugHitTest");
 			layouter.AddToggleField(_Tr("Preferences", "Weapon Spread Guide"), "cg_debugAim");
 			layouter.FinishLayout();
 			// cg_fov, cg_minimapSize

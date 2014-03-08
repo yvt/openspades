@@ -155,6 +155,7 @@ namespace spades {
 			IntVector3 GetColor();
 			IntVector3 GetBlockColor() { return blockColor; }
 			ToolType GetTool() { return tool; }
+			bool IsLocalPlayer();
 			
 			PlayerInput GetInput() { return input; }
 			WeaponInput GetWeaponInput() { return weapInput; }
