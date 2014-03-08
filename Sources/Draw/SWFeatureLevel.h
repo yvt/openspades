@@ -118,7 +118,10 @@ namespace spades {
 			return 1.f / sqrtf(b);
 		}
 #endif
-		
+		static inline float fastSqrt(float s) {
+            if(s == 0.f) return 0.f;
+            return s * fastRSqrt(s);
+        }
 		
 	}
 }

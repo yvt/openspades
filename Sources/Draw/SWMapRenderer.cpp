@@ -279,14 +279,19 @@ namespace spades {
 						float cs = Vector3::Dot(prj, horz);
 						
 						float ang = zv * zv * (1.f - cs * cs) / (cs * cs);
-						ang = -cs * sqrtf(1.f + ang);
+						ang = -cs * fastSqrt(1.f + ang);
 						ang = zv / ang;
+                        if(isnan(ang) || isinf(ang) || ang == 0.f)
+                            return;
 						
 						// convert to tan
-						ang = sqrtf(1.f - ang * ang) / ang;
+						ang = fastSqrt(1.f - ang * ang) / ang;
 						
 						// convert to angle
 						ang = atanf(ang);
+                        
+                        if(isnan(ang) || isinf(ang))
+                            return;
 						
 						if(plane.z > 0.f) {
 							minPitch = std::max(minPitch, ang - 0.01f);
@@ -305,6 +310,14 @@ namespace spades {
 			
 			float minTan = SpecialTan(minPitch);
 			float maxTan = SpecialTan(maxPitch);
+            
+            {
+                float minDiff = lineResolution / 10000.f;
+                if(maxTan < minTan + minDiff) {
+                    // too little difference; scale value might overflow.
+                    maxTan = minTan + minDiff;
+                }
+            }
 			
 			line.pitchTanMin = minTan;
 			line.pitchScale = lineResolution / (maxTan - minTan);
