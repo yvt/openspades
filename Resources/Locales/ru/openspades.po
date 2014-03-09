@@ -563,7 +563,7 @@ msgstr "Ожидание респавна"
 #: ../../../Sources/Client/Client.cpp:2627
 msgctxt "Client"
 msgid "Following {0}"
-msgstr "Наблюдаем за"
+msgstr "Наблюдаем за {0}"
 
 #: ../../../Sources/Client/LimboView.cpp:61
 msgctxt "Client"
