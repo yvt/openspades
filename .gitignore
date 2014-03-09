@@ -53,6 +53,9 @@ Thumbs.db
 # MSVC related (preferred build path)
 OpenSpades.msvc/
 
+# Linux build path
+openspades.mk/
+
 # fltk / fluid output leftovers
 Sources/Gui/DetailConfigWindow.txt
 Sources/Gui/MainWindow.txt
