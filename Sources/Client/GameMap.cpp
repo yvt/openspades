@@ -463,6 +463,9 @@ namespace spades {
 					fv.z -= fabsf(dir.z) * nextBlockTime;
 				}
 				
+				result.hitBlock = nextBlock;
+				result.normal = iv - nextBlock;
+				
 				if(IsSolidWrapped(nextBlock.x, nextBlock.y, nextBlock.z)){
 					// hit.
 					Vector3 hitPos;
@@ -485,8 +488,6 @@ namespace spades {
 					result.hit = true;
 					result.startSolid = false;
 					result.hitPos = hitPos;
-					result.hitBlock = nextBlock;
-					result.normal = iv - nextBlock;
 					return result;
 				}else{
 					iv = nextBlock;
