@@ -376,17 +376,28 @@ namespace spades {
 														GetFront(),
 														12);
 				canPending = false;
-				if(result.hit && (result.hitBlock + result.normal).z < 62 &&
+				
+				if(result.hit &&
+				   (result.hitBlock + result.normal).z < 62 &&
 				   (!OverlapsWithOneBlock(result.hitBlock + result.normal)) &&
 				   BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f &&
 				   !pendingPlaceBlock){
+					
+					// Building is possible, and there's no delayed block placement.
 					blockCursorActive = true;
 					blockCursorPos = result.hitBlock + result.normal;
+					
 				}else if(pendingPlaceBlock){
+					
+					// Delayed Block Placement: When player attempts to place a block while jumping and
+					// placing block is currently impossible, building will be delayed until it becomes
+					// possible, as long as player is airborne.
 					if(airborne == false || blockStocks <= 0){
+						// player is no longer airborne, or doesn't have a block to place.
 						pendingPlaceBlock = false;
 					}else if((!OverlapsWithOneBlock(pendingPlaceBlockPos)) &&
 							 BoxDistanceToBlock(pendingPlaceBlockPos) < 3.f){
+						// now building became possible.
 						SPAssert(this == world->GetLocalPlayer());
 						
 						if(GetWorld()->GetListener())
@@ -397,12 +408,17 @@ namespace spades {
 						
 						nextBlockTime = world->GetTime() + GetToolPrimaryDelay();
 					}
+					
 				}else{
-					canPending = result.hit && (result.hitBlock + result.normal).z < 62 &&
-					BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f;
+					// Delayed Block Placement can be activated only when the only reason making placement
+					// impossible is that block to be placed overlaps with the player's hitbox.
+					canPending = result.hit &&
+								 (result.hitBlock + result.normal).z < 62 &&
+								 BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f;
 					blockCursorActive = false;
 					blockCursorPos = result.hitBlock + result.normal;
 				}
+				
 			}else if(tool == ToolWeapon){
 			}else if(tool == ToolGrenade){
 				if(holdingGrenade){

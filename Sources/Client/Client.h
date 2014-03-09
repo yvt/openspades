@@ -29,6 +29,7 @@
 #include "IRenderer.h"
 #include <list>
 #include <Gui/View.h>
+#include <memory>
 
 namespace spades {
 	class IStream;
@@ -70,7 +71,7 @@ namespace spades {
 			friend class ClientUI;
 			
 			/** used to keep the input state of keypad so that
-			 * after user user pressed left and right, and 
+			 * after user pressed left and right, and then
 			 * released right, left is internally pressed. */
 			struct KeypadInput {
 				bool left, right, forward, backward;
@@ -80,19 +81,19 @@ namespace spades {
 				}
 			};
 			
-			NetClient *net;
+			std::unique_ptr<NetClient> net;
 			std::string playerName;
-			IStream *logStream;
+			std::unique_ptr<IStream> logStream;
 			
 			Handle<ClientUI> scriptedUI;
 			
 			ServerAddress hostname;
 			
-			World *world;
-			GameMap *map;
-			GameMapWrapper *mapWrapper;
-			IRenderer *renderer;
-			IAudioDevice *audioDevice;
+			std::unique_ptr<World> world;
+			Handle<GameMap> map;
+			std::unique_ptr<GameMapWrapper> mapWrapper;
+			Handle<IRenderer> renderer;
+			Handle<IAudioDevice> audioDevice;
 			float time;
 			bool readyToClose;
 			float worldSubFrame;
@@ -101,21 +102,21 @@ namespace spades {
 			float timeSinceInit;
 			
 			// view/drawing state for some world objects
-			std::vector<ClientPlayer *> clientPlayers;
+			std::vector<Handle<ClientPlayer>> clientPlayers;
 			
 			// other windows
-			CenterMessageView *centerMessageView;
-			HurtRingView * hurtRingView;
-			MapView *mapView;
-			MapView *largeMapView;
-			ScoreboardView *scoreboard;
-			LimboView *limbo;
-			PaletteView *paletteView;
-			TCProgressView *tcView;
+			std::unique_ptr<CenterMessageView> centerMessageView;
+			std::unique_ptr<HurtRingView> hurtRingView;
+			std::unique_ptr<MapView> mapView;
+			std::unique_ptr<MapView> largeMapView;
+			std::unique_ptr<ScoreboardView> scoreboard;
+			std::unique_ptr<LimboView> limbo;
+			std::unique_ptr<PaletteView> paletteView;
+			std::unique_ptr<TCProgressView> tcView;
 			
 			// chat
-			ChatWindow *chatWindow;
-			ChatWindow *killfeedWindow;
+			std::unique_ptr<ChatWindow> chatWindow;
+			std::unique_ptr<ChatWindow> killfeedWindow;
 			
 			// player state
 			PlayerInput playerInput;
@@ -185,41 +186,58 @@ namespace spades {
 			void MuzzleFire(Vector3, Vector3 dir, bool local);
 			
 			// drawings
-			IFont *designFont;
-			IFont *textFont;
-			IFont *bigTextFont;
+			Handle<IFont> designFont;
+			Handle<IFont> textFont;
+			Handle<IFont> bigTextFont;
 			
-			std::list<ILocalEntity *> localEntities;
-			std::list<Corpse *> corpses;
+			std::list<std::unique_ptr<ILocalEntity>> localEntities;
+			std::list<std::unique_ptr<Corpse>> corpses;
 			Corpse *lastMyCorpse;
 			float corpseSoftTimeLimit;
 			unsigned int corpseSoftLimit;
 			unsigned int corpseHardLimit;
+			void RemoveAllCorpses();
+			void RemoveInvisibleCorpses();
+			void RemoveAllLocalEntities();
 			
 			int nextScreenShotIndex;
 			int nextMapShotIndex;
 			
-			std::string GetWeaponPrefix(std::string fold, WeaponType);
-			void AddGrenadeToScene(Grenade *);
-			void AddDebugObjectToScene(const OBB3&,
-									   const Vector4& col = MakeVector4(1,1,1,1));
-			void DrawCTFObjects();
-			void DrawTCObjects();
-			SceneDefinition SceneDef();
-			bool ShouldRenderInThirdPersonView();
-			void RemoveAllCorpses();
-			void RemoveInvisibleCorpses();
-			float GetAimDownZoomScale();
-			void RemoveAllLocalEntities();
 			Vector3 Project(Vector3);
 			
 			void DrawSplash();
 			void DrawStartupScreen();
 			void DoInit();
 			
-			void DrawScene();
+			void UpdateWorld(float dt);
+			void UpdateLocalSpectator(float dt);
+			void UpdateLocalPlayer(float dt);
+			
 			void Draw2D();
+			
+			void Draw2DWithoutWorld();
+			void Draw2DWithWorld();
+			
+			void DrawJoinedAlivePlayerHUD();
+			void DrawDeadPlayerHUD();
+			void DrawSpectateHUD();
+			
+			void DrawHottrackedPlayerName();
+			void DrawHurtScreenEffect();
 			void DrawHurtSprites();
+			void DrawHealth();
+			void DrawDebugAim();
+			
+			void DrawScene();
+			void AddGrenadeToScene(Grenade *);
+			void AddDebugObjectToScene(const OBB3&,
+									   const Vector4& col = MakeVector4(1,1,1,1));
+			void DrawCTFObjects();
+			void DrawTCObjects();
+			
+			float GetAimDownZoomScale();
+			bool ShouldRenderInThirdPersonView();
+			SceneDefinition CreateSceneDefinition();
 			
 			std::string ScreenShotPath();
 			void TakeScreenShot(bool sceneOnly);
@@ -250,14 +268,14 @@ namespace spades {
 			virtual bool NeedsAbsoluteMouseCoordinate();
 			
 			void SetWorld(World *);
-			World *GetWorld() const { return world; }
+			World *GetWorld() const { return world.get(); }
 			void AddLocalEntity(ILocalEntity *ent){
-				localEntities.push_back(ent);
+				localEntities.emplace_back(ent);
 			}
 			
-			IRenderer *GetRenderer() const {return renderer;}
-			SceneDefinition GetLastSceneDef() const { return lastSceneDef; }
-			IAudioDevice *GetAudioDevice() const {return audioDevice; }
+			IRenderer *GetRenderer() {return renderer;}
+			SceneDefinition GetLastSceneDef() { return lastSceneDef; }
+			IAudioDevice *GetAudioDevice() {return audioDevice; }
 			
 			virtual bool WantsToBeClosed();
 			bool IsMuted();

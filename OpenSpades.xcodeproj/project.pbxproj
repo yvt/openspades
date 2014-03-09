@@ -259,6 +259,12 @@
 		E8F74CFD1845D4D00085AA54 /* ClientUIHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */; };
 		E8F74CFF184C7D7C0085AA54 /* Clipboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CFE184C753F0085AA54 /* Clipboard.cpp */; };
 		E8FE748A18CB329C00291338 /* HitTestDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8FE748818CB329C00291338 /* HitTestDebugger.cpp */; };
+		E8FE748C18CC6AB800291338 /* Client_Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8FE748B18CC6AA100291338 /* Client_Input.cpp */; };
+		E8FE748E18CC6C2B00291338 /* Client_Update.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8FE748D18CC6C2B00291338 /* Client_Update.cpp */; };
+		E8FE749018CC6CE000291338 /* Client_NetHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8FE748F18CC6CE000291338 /* Client_NetHandler.cpp */; };
+		E8FE749218CC6E4900291338 /* Client_LocalEnts.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8FE749118CC6E4900291338 /* Client_LocalEnts.cpp */; };
+		E8FE749418CC6EB500291338 /* Client_Draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8FE749318CC6EB500291338 /* Client_Draw.cpp */; };
+		E8FE749618CC6F2900291338 /* Client_Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8FE749518CC6F2900291338 /* Client_Scene.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -815,6 +821,12 @@
 		E8FC02D8186829BC00F84A0D /* SWUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWUtils.h; sourceTree = "<group>"; };
 		E8FE748818CB329C00291338 /* HitTestDebugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HitTestDebugger.cpp; sourceTree = "<group>"; };
 		E8FE748918CB329C00291338 /* HitTestDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitTestDebugger.h; sourceTree = "<group>"; };
+		E8FE748B18CC6AA100291338 /* Client_Input.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Client_Input.cpp; sourceTree = "<group>"; };
+		E8FE748D18CC6C2B00291338 /* Client_Update.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_Update.cpp; sourceTree = "<group>"; };
+		E8FE748F18CC6CE000291338 /* Client_NetHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_NetHandler.cpp; sourceTree = "<group>"; };
+		E8FE749118CC6E4900291338 /* Client_LocalEnts.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_LocalEnts.cpp; sourceTree = "<group>"; };
+		E8FE749318CC6EB500291338 /* Client_Draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_Draw.cpp; sourceTree = "<group>"; };
+		E8FE749518CC6F2900291338 /* Client_Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_Scene.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1477,6 +1489,12 @@
 			children = (
 				E844886317D0C404005105D0 /* Local Entities */,
 				E8CF03C1178EE6D8000683D4 /* Client.cpp */,
+				E8FE748B18CC6AA100291338 /* Client_Input.cpp */,
+				E8FE748D18CC6C2B00291338 /* Client_Update.cpp */,
+				E8FE748F18CC6CE000291338 /* Client_NetHandler.cpp */,
+				E8FE749118CC6E4900291338 /* Client_LocalEnts.cpp */,
+				E8FE749318CC6EB500291338 /* Client_Draw.cpp */,
+				E8FE749518CC6F2900291338 /* Client_Scene.cpp */,
 				E8CF03C2178EE6D8000683D4 /* Client.h */,
 				E834F56D1797D92F004EBE88 /* ChatWindow.cpp */,
 				E834F56E1797D932004EBE88 /* ChatWindow.h */,
@@ -1829,6 +1847,7 @@
 				E8CF03F6178FAA8B000683D4 /* IImage.cpp in Sources */,
 				E8CF03F9178FABA4000683D4 /* SceneDefinition.cpp in Sources */,
 				E8C92A0C18695EA500740C9F /* SWModelRenderer.cpp in Sources */,
+				E8FE749618CC6F2900291338 /* Client_Scene.cpp in Sources */,
 				E8CF03FC178FACFF000683D4 /* GameMap.cpp in Sources */,
 				E8CF03FF178FB1E1000683D4 /* IGameMapListener.cpp in Sources */,
 				E8CF0402178FB52F000683D4 /* GLImage.cpp in Sources */,
@@ -1857,6 +1876,7 @@
 				E81A7C7A18642BCA00BF3FCE /* SWFlatMapRenderer.cpp in Sources */,
 				E88318E41792698D002ABE6D /* Stopwatch.cpp in Sources */,
 				E88318E817928F86002ABE6D /* World.cpp in Sources */,
+				E8FE749418CC6EB500291338 /* Client_Draw.cpp in Sources */,
 				E88319181792A7CC002ABE6D /* callbacks.c in Sources */,
 				E88319191792A7CC002ABE6D /* compress.c in Sources */,
 				E883191A1792A7CC002ABE6D /* host.c in Sources */,
@@ -1916,6 +1936,7 @@
 				E8D88AB1179C3004004C2451 /* GLQuadRenderer.cpp in Sources */,
 				E8D88AB4179C45B7004C2451 /* GLLensFilter.cpp in Sources */,
 				E8E44686179CC4FF00BE8855 /* IBitmapCodec.cpp in Sources */,
+				E8FE748E18CC6C2B00291338 /* Client_Update.cpp in Sources */,
 				E8F74CFD1845D4D00085AA54 /* ClientUIHelper.cpp in Sources */,
 				E8E44689179CC65900BE8855 /* TargaReader.cpp in Sources */,
 				E8E44698179D2CA100BE8855 /* IGLSpriteRenderer.cpp in Sources */,
@@ -1963,6 +1984,7 @@
 				E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */,
 				E859510C17C5DA060012810C /* GLFogFilter.cpp in Sources */,
 				E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */,
+				E8FE749018CC6CE000291338 /* Client_NetHandler.cpp in Sources */,
 				E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */,
 				E859511517C96B270012810C /* GLProfiler.cpp in Sources */,
 				E81A7C6718610BE400BF3FCE /* SWPort.cpp in Sources */,
@@ -1998,10 +2020,12 @@
 				E8B6B6B117DE27B500E35523 /* as_scriptnode.cpp in Sources */,
 				E8B6B6B217DE27B500E35523 /* as_scriptobject.cpp in Sources */,
 				E8B6B6B317DE27B500E35523 /* as_string.cpp in Sources */,
+				E8FE748C18CC6AB800291338 /* Client_Input.cpp in Sources */,
 				E8B6B6B417DE27B500E35523 /* as_string_util.cpp in Sources */,
 				E81A7C6E186152A400BF3FCE /* SWModel.cpp in Sources */,
 				E8B6B6B517DE27B500E35523 /* as_thread.cpp in Sources */,
 				E8B6B6B617DE27B500E35523 /* as_tokenizer.cpp in Sources */,
+				E8FE749218CC6E4900291338 /* Client_LocalEnts.cpp in Sources */,
 				E852337B1839B28C00F40541 /* VersionInfo.cpp in Sources */,
 				E8B6B6B717DE27B500E35523 /* as_typeinfo.cpp in Sources */,
 				E84E221918BB4BA0001282B0 /* Credits.inc in Sources */,
