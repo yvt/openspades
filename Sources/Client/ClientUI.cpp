@@ -277,7 +277,15 @@ namespace spades {
 			c->SetObject(&*ui);
 			c.ExecuteChecked();
 		}
-		
+
+		bool ClientUI::isIgnored(const std::string& key)
+		{
+			return !ignoreInput.empty() && ignoreInput == key;
+		}
+		void ClientUI::setIgnored(const std::string& key)
+		{
+			ignoreInput = key;
+		}
 	}
 }
 

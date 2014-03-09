@@ -259,7 +259,7 @@ namespace spades {
 			
 			float y = firstY;
 			
-			Vector4 shadowColor = {0, 0, 0, 0.8};
+			Vector4 shadowColor = {0, 0, 0, 0.8f};
 			
 			for(it = entries.begin(); it != entries.end(); ++it){
 				ChatEntry& ent = *it;

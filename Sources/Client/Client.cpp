@@ -351,7 +351,7 @@ namespace spades {
 				frameToRendererInit--;
 				if(frameToRendererInit == 0){
 					DoInit();
-
+					
 				}else{
 					return;
 				}
@@ -403,7 +403,7 @@ namespace spades {
 				SPLog("Audio subsystem returned error (ignored):\n%s",
 					  ex.what());
 			}
-					
+			
 			// render scene
 			DrawScene();
 			
@@ -424,7 +424,7 @@ namespace spades {
 			
 			time += dt;
 		}
-				
+		
 		bool Client::IsLimboViewActive(){
 			if(world){
 				if(!world->GetLocalPlayer()){
@@ -446,7 +446,7 @@ namespace spades {
 			if(!world->GetLocalPlayer()){
 				// join
 				net->SendJoin(team, weap,
-							 playerName, lastKills);
+							  playerName, lastKills);
 			}else{
 				Player *p = world->GetLocalPlayer();
 				if(p->GetTeamId() != team){
@@ -639,6 +639,6 @@ namespace spades {
 				return false;
 			else return true;
 		}
-				
+		
 	}
 }
