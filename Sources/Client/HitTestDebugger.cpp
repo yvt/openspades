@@ -30,6 +30,7 @@
 #include "GameMap.h"
 #include <Core/Strings.h>
 #include <Core/FileManager.h>
+#include <time.h>	//windows needs this.
 
 SPADES_SETTING(cg_smp, "");
 

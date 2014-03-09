@@ -956,7 +956,7 @@ namespace spades {
 		void Client::TextInputEvent(const std::string &ch){
 			SPADES_MARK_FUNCTION();
 			
-			if(scriptedUI->NeedsInput()) {
+			if (scriptedUI->NeedsInput() && !scriptedUI->isIgnored(ch)) {
 				scriptedUI->TextInputEvent(ch);
 				return;
 			}
@@ -968,7 +968,7 @@ namespace spades {
 									  int start, int len) {
 			SPADES_MARK_FUNCTION();
 			
-			if(scriptedUI->NeedsInput()) {
+			if (scriptedUI->NeedsInput() && !scriptedUI->isIgnored(ch)) {
 				scriptedUI->TextEditingEvent(ch, start, len);
 				return;
 			}
@@ -1021,7 +1021,14 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			if(scriptedUI->NeedsInput()) {
-				scriptedUI->KeyEvent(name, down);
+				if (!scriptedUI->isIgnored(name)) {
+					scriptedUI->KeyEvent(name, down);
+				}
+				else {
+					if (!down) {
+						scriptedUI->setIgnored("");
+					}
+				}
 				return;
 			}
 			
@@ -1195,12 +1202,15 @@ namespace spades {
 					}else if(CheckKey(cg_keyGlobalChat, name) && down){
 						// global chat
 						scriptedUI->EnterGlobalChatWindow();
+						scriptedUI->setIgnored(name);
 					}else if(CheckKey(cg_keyTeamChat, name) && down){
 						// team chat
 						scriptedUI->EnterTeamChatWindow();
+						scriptedUI->setIgnored(name);
 					}else if(name == "/" && down){
 						// command
 						scriptedUI->EnterCommandWindow();
+						scriptedUI->setIgnored(name);
 					}else if(CheckKey(cg_keyCaptureColor, name) && down){
 						CaptureColor();
 					}else if(CheckKey(cg_keyChangeMapScale, name) && down){

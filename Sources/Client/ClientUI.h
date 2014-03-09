@@ -43,6 +43,7 @@ namespace spades {
 			
 			// weak reference
 			Client *client;
+			std::string ignoreInput;
 			
 			void SendChat(const std::string&, bool isGlobal);
 			
@@ -80,6 +81,10 @@ namespace spades {
 			void EnterTeamChatWindow();
 			void EnterCommandWindow();
 			void CloseUI();
+
+			//lm: so the chat does not have the initial chat key
+			bool isIgnored(const std::string& key);
+			void setIgnored(const std::string& key);
 		};;
 	}
 }
