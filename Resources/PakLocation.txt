@@ -18,6 +18,14 @@ You can get the Unicode font pak from:
 http://yvt.jp/files/programs/osppaks/font-unifont.pak
 
 
+CMU Sans Serif: Cyrillic
+------------------------
+
+You can get the Cyrillic font pak (provided by noway) from:
+
+http://yvt.jp/files/programs/osppaks/CMUSansUnifontRu.pak
+
+
 
 M+ BITMAP FONTS (Japanese Font)
 -------------------------------
@@ -33,4 +41,7 @@ This was converted from the M+ BDF font like this:
 
 Note that you need to install a input method editor, or use Google Translator 
 or whatever to type Japanese characters.
+
+
+
 
