@@ -80,7 +80,7 @@ namespace spades {
 				uint16_t x, y;
 				uint8_t w, h;
 				uint16_t advance;
-				uint16_t offX, offY;
+				int16_t offX, offY;
 			};
 			std::string imagePath;
 			std::unordered_map<uint32_t, GlyphInfo> glyphs;
@@ -235,10 +235,7 @@ namespace spades {
 			
 			float scale = size * glyph.sizeInverse;
 			if(roundSize) {
-				// some fallback fonts is stored with 2x scaled
-				// so it looks pixellated
-				float newScale = scale <= .8f ?
-				0.5f : std::max(1.f, floorf(scale));
+				float newScale = std::max(1.f, floorf(scale));
 				// vertical-align: baseline
 				offset.y += (scale - newScale) * glyph.size;
 				scale = newScale;
@@ -278,8 +275,7 @@ namespace spades {
 			
 			float scale = size * glyph.sizeInverse;
 			if(roundSize) {
-				float newScale = scale <= .8f ?
-				0.5f : std::max(1.f, floorf(scale));
+				float newScale = std::max(1.f, floorf(scale));
 				scale = newScale;
 			}
 			return glyph.advance * scale;

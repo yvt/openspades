@@ -1809,6 +1809,21 @@ void ApplyThickenFilter(Bitmap& bmp) {
 	}
 }
 
+static std::vector<std::string> Split(const std::string& str, const std::string& sep){
+	std::vector<std::string> strs;
+	size_t pos = 0;
+	while(pos < str.size()){
+		size_t newPos = str.find(sep, pos);
+		if(newPos == std::string::npos) {
+			strs.push_back(str.substr(pos));
+			break;
+		}
+		strs.push_back(str.substr(pos, newPos - pos));
+		pos = newPos + sep.size();
+	}
+	return std::move(strs);
+}
+
 int main(int argc, char **argv) {
 	
 	if(argc <= 1){
@@ -1841,6 +1856,8 @@ int main(int argc, char **argv) {
 	char32_t currentChar = 0;
 	int dwidth;
 	int size = 16;
+	int bbxX = 0, bbxY = 0, bbxW = 16, bbxH = 16;
+	int scaling = applyDoubleFilter ? 2 : 1;
 	
 	std::string lineBuffer;
 	while(!std::cin.eof()) {
@@ -1863,6 +1880,16 @@ int main(int argc, char **argv) {
 			//std::cerr << hexCode << " -> UTF " << currentChar << std::endl;
 		}else if(cmd == "DWIDTH") {
 			dwidth = std::stoi(lineBuffer.substr(firstPartIndex + 1));
+		}else if(cmd == "BBX") {
+			auto parts = std::move(Split(lineBuffer.substr(firstPartIndex + 1), " "));
+			if(parts.size() < 4) {
+				std::cerr << "unexpected EOF while reading BBX" << std::endl;
+				return 1;
+			}
+			bbxX = std::stoi(parts[2]);
+			bbxY = std::stoi(parts[3]);
+			bbxW = std::stoi(parts[0]);
+			bbxH = std::stoi(parts[1]);
 		}else if(cmd == "PIXEL_SIZE") {
 			size = std::stoi(lineBuffer.substr(firstPartIndex + 1));
 			if(applyDoubleFilter) size *= 2;
@@ -1910,8 +1937,14 @@ int main(int argc, char **argv) {
 			if(applySoftFilter)
 				ApplySoftFilter(bmp2);
 			
+			int origHeight = bmp2.GetHeight();
+			
 			int srcX, srcY;
 			bmp2.Trim(*bmp, srcX, srcY);
+			
+			srcX += bbxX * scaling;
+			srcY += size - origHeight + bbxY;
+			
 			Glyph g;
 			g.index = currentChar;
 			g.bitmap = bmp;
@@ -2008,7 +2041,7 @@ int main(int argc, char **argv) {
 			uint16_t x, y;
 			uint8_t w, h;
 			uint16_t advance;
-			uint16_t offX, offY;
+			int16_t offX, offY;
 		};
 		
 		std::vector<GlyphInfo> infos;
@@ -2023,7 +2056,7 @@ int main(int argc, char **argv) {
 				inf.unicode = static_cast<uint32_t>(item.index);
 				inf.x = static_cast<uint16_t>(0xffff);
 				inf.y = static_cast<uint16_t>(0xffff);
-				inf.w = 0; inf. h= 0;
+				inf.w = 0; inf.h = 0;
 				inf.offX = 0; inf.offY = 0;
 				inf.advance = static_cast<uint16_t>(item.advance);
 				
@@ -2040,8 +2073,8 @@ int main(int argc, char **argv) {
 			inf.y = static_cast<uint16_t>(info.y);
 			inf.w = static_cast<uint8_t>(item.bitmap->GetWidth());
 			inf.h = static_cast<uint8_t>(item.bitmap->GetHeight());
-			inf.offX = static_cast<uint16_t>(item.x);
-			inf.offY = static_cast<uint16_t>(item.y);
+			inf.offX = static_cast<int16_t>(item.x);
+			inf.offY = static_cast<int16_t>(item.y);
 			inf.advance = static_cast<uint16_t>(item.advance);
 			
 			infos.push_back(inf);
