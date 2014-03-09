@@ -23,6 +23,7 @@
 #include <Core/Settings.h>
 #include <Core/Strings.h>
 #include <cstdlib>
+#include <cstdarg>
 #include "Fonts.h"
 #include <Core/FileManager.h>
 #include <Core/IStream.h>
