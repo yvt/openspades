@@ -10,16 +10,19 @@ non-opensource materials and they seem too large to include in the git tree.
 
 
 
-unifont (Generic Unicode Font)
+GNU Unifont (Generic Unicode Font)
 ------------------------------
 
 You can get the Unicode font pak from:
 
 http://yvt.jp/files/programs/osppaks/font-unifont.pak
 
+Note: this contains all 65536 characters of Unicode BMP, so
+expect large memory consumption.
 
-CMU Sans Serif: Cyrillic
-------------------------
+
+GNU Unifont: Cyrillic Only
+--------------------------
 
 You can get the Cyrillic font pak (provided by noway) from:
 
@@ -32,7 +35,7 @@ M+ BITMAP FONTS (Japanese Font)
 
 You can get the Japanese font pak from:
 
-http://yvt.jp/files/programs/osppaks/font-mplus-ja.pak
+http://yvt.jp/files/programs/osppaks/font-mplus-ja-12.pak
 
 This was converted from the M+ BDF font like this:
 
