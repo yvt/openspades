@@ -1,0 +1,1340 @@
+# OpenSpades translation
+# Copyright (C) 2014 yvt
+# This file is distributed under the same license as the OpenSpades package.
+# yvt <i@yvt.jp>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSpades\n"
+"Report-Msgid-Bugs-To: i at yvt.jp\n"
+"POT-Creation-Date: 2014-02-14 15:34+0900\n"
+"PO-Revision-Date: 2014-03-04 19:16+1100\n"
+"Last-Translator: Way <noway@2ch.hk>\n"
+"Language-Team: Russian\n"
+"Language: ru_ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Language: ru_RU\n"
+"X-Source-Language: C\n"
+
+#: ../../../Sources/Gui/Main.cpp:344 ../../../Sources/Gui/Main.cpp:369
+#: ../../../Sources/Gui/Main.cpp:368 ../../../Sources/Gui/Main.cpp:355
+msgctxt "Main"
+msgid "Localization System Loaded"
+msgstr "Система локализации загружена"
+
+#: ../../Scripts/Gui/MainScreen.as:340
+msgctxt "MainScreen"
+msgid "Connect"
+msgstr "Подключиться"
+
+#: ../../Scripts/Gui/MainScreen.as:348
+msgctxt "MainScreen"
+msgid "Quick Connect"
+msgstr "Быстрое подключение"
+
+#: ../../Scripts/Gui/MainScreen.as:357 ../../Scripts/Gui/MainScreen.as:411
+msgctxt "MainScreen"
+msgid "0.75"
+msgstr "0.75"
+
+#: ../../Scripts/Gui/MainScreen.as:367 ../../Scripts/Gui/MainScreen.as:420
+msgctxt "MainScreen"
+msgid "0.76"
+msgstr "0.76"
+
+#: ../../Scripts/Gui/MainScreen.as:375
+msgctxt "MainScreen"
+msgid "Quit"
+msgstr "Выйти"
+
+#: ../../Scripts/Gui/MainScreen.as:382
+msgctxt "MainScreen"
+msgid "Credits"
+msgstr "Авторы"
+
+#: ../../Scripts/Gui/MainScreen.as:389
+msgctxt "MainScreen"
+msgid "Setup"
+msgstr "Настройки"
+
+#: ../../Scripts/Gui/MainScreen.as:402 ../../Scripts/Gui/MainScreen.as:446
+msgctxt "MainScreen"
+msgid "Filter"
+msgstr "Фильтр"
+
+#: ../../Scripts/Gui/MainScreen.as:429
+msgctxt "MainScreen"
+msgid "Empty"
+msgstr "Пусто"
+
+#: ../../Scripts/Gui/MainScreen.as:438
+msgctxt "MainScreen"
+msgid "Not Full"
+msgstr "Не полные"
+
+#: ../../Scripts/Gui/MainScreen.as:458
+msgctxt "MainScreen"
+msgid "Server Name"
+msgstr "Название сервера"
+
+#: ../../Scripts/Gui/MainScreen.as:465
+msgctxt "MainScreen"
+msgid "Players"
+msgstr "Игроки"
+
+#: ../../Scripts/Gui/MainScreen.as:472
+msgctxt "MainScreen"
+msgid "Map Name"
+msgstr "Название карты"
+
+#: ../../Scripts/Gui/MainScreen.as:479
+msgctxt "MainScreen"
+msgid "Game Mode"
+msgstr "Гейм-мод"
+
+#: ../../Scripts/Gui/MainScreen.as:486
+msgctxt "MainScreen"
+msgid "Ver."
+msgstr "Версия"
+
+#: ../../Scripts/Gui/MainScreen.as:493
+msgctxt "MainScreen"
+msgid "Loc."
+msgstr "Страна"
+
+#: ../../Scripts/Gui/MainScreen.as:737
+msgctxt "MainScreen"
+msgid ""
+"You were disconnected from the server because of the following reason:\n"
+"\n"
+"{0}"
+msgstr ""
+"Вы были отключены от сервера по следующей причине:\n"
+"\n"
+"{0}"
+
+#: ../../Scripts/Gui/MainScreen.as:757
+msgctxt "MainScreen"
+msgid "Loading..."
+msgstr "Загрузка..."
+
+#: ../../Scripts/Gui/MainScreen.as:775
+msgctxt "MainScreen"
+msgid "Failed to fetch the server list."
+msgstr "Не удалось загрузить список серверов"
+
+#: ../../Scripts/Gui/MessageBox.as:53
+msgctxt "MessageBox"
+msgid "OK"
+msgstr "ОК"
+
+#: ../../Scripts/Gui/Preferences.as:60
+msgctxt "Preferences"
+msgid "Game Options"
+msgstr "Опции игры"
+
+#: ../../Scripts/Gui/Preferences.as:61
+msgctxt "Preferences"
+msgid "Controls"
+msgstr "Управление"
+
+#: ../../Scripts/Gui/Preferences.as:65
+msgctxt "Preferences"
+msgid "Back"
+msgstr "Назад"
+
+#: ../../Scripts/Gui/Preferences.as:399 ../../Scripts/Gui/Preferences.as:406
+msgctxt "Preferences"
+msgid "Press Key to Bind or [Escape] to Cancel..."
+msgstr "Нажмите клавишу, которую вы хотите установить или [Escape] для Отмены"
+
+#: ../../Scripts/Gui/Preferences.as:410 ../../Scripts/Gui/Preferences.as:417
+msgctxt "Preferences"
+msgid "Space"
+msgstr "Пробел"
+
+#: ../../Scripts/Gui/Preferences.as:412 ../../Scripts/Gui/Preferences.as:419
+msgctxt "Preferences"
+msgid "Unbound"
+msgstr "Освободить"
+
+#: ../../Scripts/Gui/Preferences.as:574 ../../Scripts/Gui/Preferences.as:598
+#: ../../Scripts/Gui/Preferences.as:602 ../../Scripts/Gui/Preferences.as:626
+msgctxt "Preferences"
+msgid "ON"
+msgstr "ВКЛ."
+
+#: ../../Scripts/Gui/Preferences.as:580 ../../Scripts/Gui/Preferences.as:610
+#: ../../Scripts/Gui/Preferences.as:608 ../../Scripts/Gui/Preferences.as:638
+msgctxt "Preferences"
+msgid "OFF"
+msgstr "ВЫКЛ."
+
+#: ../../Scripts/Gui/Preferences.as:604 ../../Scripts/Gui/Preferences.as:632
+msgctxt "Preferences"
+msgid "REVERSED"
+msgstr "ОБРАТНЫЙ"
+
+#: ../../Scripts/Gui/Preferences.as:632 ../../Scripts/Gui/Preferences.as:660
+msgctxt "Preferences"
+msgid "Player Information"
+msgstr "Информация о игроке"
+
+#: ../../Scripts/Gui/Preferences.as:633 ../../Scripts/Gui/Preferences.as:661
+msgctxt "Preferences"
+msgid "Player Name"
+msgstr "Имя игрока"
+
+#: ../../Scripts/Gui/Preferences.as:637 ../../Scripts/Gui/Preferences.as:665
+msgctxt "Preferences"
+msgid "Effects"
+msgstr "Эффекты"
+
+#: ../../Scripts/Gui/Preferences.as:638 ../../Scripts/Gui/Preferences.as:666
+msgctxt "Preferences"
+msgid "Blood"
+msgstr "Кровь"
+
+#: ../../Scripts/Gui/Preferences.as:639 ../../Scripts/Gui/Preferences.as:667
+msgctxt "Preferences"
+msgid "Ejecting Brass"
+msgstr "Отстреленные гильзы"
+
+#: ../../Scripts/Gui/Preferences.as:640 ../../Scripts/Gui/Preferences.as:668
+msgctxt "Preferences"
+msgid "Ragdoll"
+msgstr "Рэгдолл"
+
+#: ../../Scripts/Gui/Preferences.as:642 ../../Scripts/Gui/Preferences.as:670
+msgctxt "Preferences"
+msgid "Feedbacks"
+msgstr "Обратная связь"
+
+#: ../../Scripts/Gui/Preferences.as:643 ../../Scripts/Gui/Preferences.as:671
+msgctxt "Preferences"
+msgid "Chat Notify Sounds"
+msgstr "Звуки уведомления чата"
+
+#: ../../Scripts/Gui/Preferences.as:644 ../../Scripts/Gui/Preferences.as:672
+msgctxt "Preferences"
+msgid "Hit Indicator"
+msgstr "Индикатор попадания"
+
+#: ../../Scripts/Gui/Preferences.as:646 ../../Scripts/Gui/Preferences.as:674
+msgctxt "Preferences"
+msgid "AoS 0.75/0.76 Compatibility"
+msgstr "Совместимость с AoS 0.75/0.76"
+
+#: ../../Scripts/Gui/Preferences.as:647 ../../Scripts/Gui/Preferences.as:675
+msgctxt "Preferences"
+msgid "Allow Unicode"
+msgstr "Разрешить юникод"
+
+#: ../../Scripts/Gui/Preferences.as:649 ../../Scripts/Gui/Preferences.as:694
+#: ../../Scripts/Gui/Preferences.as:693 ../../Scripts/Gui/Preferences.as:677
+#: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
+msgctxt "Preferences"
+msgid "Misc"
+msgstr "Разное"
+
+#: ../../Scripts/Gui/Preferences.as:650 ../../Scripts/Gui/Preferences.as:678
+msgctxt "Preferences"
+msgid "Field of View"
+msgstr "Поле зрения"
+
+#: ../../Scripts/Gui/Preferences.as:652 ../../Scripts/Gui/Preferences.as:680
+msgctxt "Preferences"
+msgid "Minimap size"
+msgstr "Размер миникарты"
+
+#: ../../Scripts/Gui/Preferences.as:654 ../../Scripts/Gui/Preferences.as:682
+#: ../../Scripts/Gui/Preferences.as:683
+msgctxt "Preferences"
+msgid "Weapon Spread Guide"
+msgstr "Ведение разброса пуль"
+
+#: ../../Scripts/Gui/Preferences.as:665 ../../Scripts/Gui/Preferences.as:693
+#: ../../Scripts/Gui/Preferences.as:694
+msgctxt "Preferences"
+msgid "Weapons/Tools"
+msgstr "Оружие/Инструменты"
+
+#: ../../Scripts/Gui/Preferences.as:666 ../../Scripts/Gui/Preferences.as:694
+#: ../../Scripts/Gui/Preferences.as:695
+msgctxt "Preferences"
+msgid "Attack"
+msgstr "Атака"
+
+#: ../../Scripts/Gui/Preferences.as:667 ../../Scripts/Gui/Preferences.as:695
+#: ../../Scripts/Gui/Preferences.as:696
+msgctxt "Preferences"
+msgid "Alt. Attack"
+msgstr "Альтернативная атака"
+
+#: ../../Scripts/Gui/Preferences.as:668 ../../Scripts/Gui/Preferences.as:696
+#: ../../Scripts/Gui/Preferences.as:697
+msgctxt "Preferences"
+msgid "Hold Aim Down Sight"
+msgstr "Зажимать целиться для прицела"
+
+#: ../../Scripts/Gui/Preferences.as:669 ../../Scripts/Gui/Preferences.as:697
+#: ../../Scripts/Gui/Preferences.as:698
+msgctxt "Preferences"
+msgid "Mouse Sensitivity"
+msgstr "Чувствительность мыши"
+
+#: ../../Scripts/Gui/Preferences.as:671 ../../Scripts/Gui/Preferences.as:699
+#: ../../Scripts/Gui/Preferences.as:700
+msgctxt "Preferences"
+msgid "ADS Mouse Sens. Scale"
+msgstr "ADS Шкала чувствительности мыши"
+
+#: ../../Scripts/Gui/Preferences.as:673 ../../Scripts/Gui/Preferences.as:701
+#: ../../Scripts/Gui/Preferences.as:702
+msgctxt "Preferences"
+msgid "Exponential Power"
+msgstr "Мощность по экспоненте"
+
+#: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:676
+#: ../../Scripts/Gui/Preferences.as:704 ../../Scripts/Gui/Preferences.as:705
+msgctxt "Preferences"
+msgid "Reload"
+msgstr "Перезарядка"
+
+#: ../../Scripts/Gui/Preferences.as:676 ../../Scripts/Gui/Preferences.as:677
+#: ../../Scripts/Gui/Preferences.as:705 ../../Scripts/Gui/Preferences.as:706
+msgctxt "Preferences"
+msgid "Capture Color"
+msgstr "Проба цвета"
+
+#: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:678
+#: ../../Scripts/Gui/Preferences.as:706 ../../Scripts/Gui/Preferences.as:707
+msgctxt "Preferences"
+msgid "Equip Spade"
+msgstr "Переключиться на лопату"
+
+#: ../../Scripts/Gui/Preferences.as:678 ../../Scripts/Gui/Preferences.as:679
+#: ../../Scripts/Gui/Preferences.as:707 ../../Scripts/Gui/Preferences.as:708
+msgctxt "Preferences"
+msgid "Equip Block"
+msgstr "Переключиться на блок"
+
+#: ../../Scripts/Gui/Preferences.as:679 ../../Scripts/Gui/Preferences.as:680
+#: ../../Scripts/Gui/Preferences.as:708 ../../Scripts/Gui/Preferences.as:709
+msgctxt "Preferences"
+msgid "Equip Weapon"
+msgstr "Переключиться на оружие"
+
+#: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:681
+#: ../../Scripts/Gui/Preferences.as:709 ../../Scripts/Gui/Preferences.as:710
+msgctxt "Preferences"
+msgid "Equip Grenade"
+msgstr "Переключиться на гранату"
+
+#: ../../Scripts/Gui/Preferences.as:681 ../../Scripts/Gui/Preferences.as:682
+#: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:711
+msgctxt "Preferences"
+msgid "Switch Tools by Wheel"
+msgstr "Переключение инструментов колесом мыши"
+
+#: ../../Scripts/Gui/Preferences.as:684 ../../Scripts/Gui/Preferences.as:683
+#: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
+msgctxt "Preferences"
+msgid "Movement"
+msgstr "Движение"
+
+#: ../../Scripts/Gui/Preferences.as:685 ../../Scripts/Gui/Preferences.as:684
+#: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
+msgctxt "Preferences"
+msgid "Walk Forward"
+msgstr "Идти вперед"
+
+#: ../../Scripts/Gui/Preferences.as:686 ../../Scripts/Gui/Preferences.as:685
+#: ../../Scripts/Gui/Preferences.as:714 ../../Scripts/Gui/Preferences.as:715
+msgctxt "Preferences"
+msgid "Backpedal"
+msgstr "Идти назад"
+
+#: ../../Scripts/Gui/Preferences.as:687 ../../Scripts/Gui/Preferences.as:686
+#: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
+msgctxt "Preferences"
+msgid "Move Left"
+msgstr "Идти влево"
+
+#: ../../Scripts/Gui/Preferences.as:688 ../../Scripts/Gui/Preferences.as:687
+#: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
+msgctxt "Preferences"
+msgid "Move Right"
+msgstr "Идти вправо"
+
+#: ../../Scripts/Gui/Preferences.as:689 ../../Scripts/Gui/Preferences.as:688
+#: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
+msgctxt "Preferences"
+msgid "Crouch"
+msgstr "Приседать"
+
+#: ../../Scripts/Gui/Preferences.as:690 ../../Scripts/Gui/Preferences.as:689
+#: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
+msgctxt "Preferences"
+msgid "Sneak"
+msgstr "Красться"
+
+#: ../../Scripts/Gui/Preferences.as:691 ../../Scripts/Gui/Preferences.as:690
+#: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
+msgctxt "Preferences"
+msgid "Jump"
+msgstr "Прыгать"
+
+#: ../../Scripts/Gui/Preferences.as:692 ../../Scripts/Gui/Preferences.as:691
+#: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
+msgctxt "Preferences"
+msgid "Sprint"
+msgstr "Бежать"
+
+#: ../../Scripts/Gui/Preferences.as:695 ../../Scripts/Gui/Preferences.as:694
+#: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
+msgctxt "Preferences"
+msgid "Minimap Scale"
+msgstr "Масштаб миникарты"
+
+#: ../../Scripts/Gui/Preferences.as:696 ../../Scripts/Gui/Preferences.as:695
+#: ../../Scripts/Gui/Preferences.as:724 ../../Scripts/Gui/Preferences.as:725
+msgctxt "Preferences"
+msgid "Toggle Map"
+msgstr "Вкл./выкл. карту"
+
+#: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:696
+#: ../../Scripts/Gui/Preferences.as:725 ../../Scripts/Gui/Preferences.as:726
+msgctxt "Preferences"
+msgid "Flashlight"
+msgstr "Фонарик"
+
+#: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:697
+#: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
+msgctxt "Preferences"
+msgid "Global Chat"
+msgstr "Глобальный чат"
+
+#: ../../Scripts/Gui/Preferences.as:699 ../../Scripts/Gui/Preferences.as:698
+#: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
+msgctxt "Preferences"
+msgid "Team Chat"
+msgstr "Командный чат"
+
+#: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:699
+#: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
+msgctxt "Preferences"
+msgid "Limbo Menu"
+msgstr "Меню выбора"
+
+#: ../../Scripts/Gui/Preferences.as:701 ../../Scripts/Gui/Preferences.as:700
+#: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
+msgctxt "Preferences"
+msgid "Save Map"
+msgstr "Сохранить карту"
+
+#: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:701
+#: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
+msgctxt "Preferences"
+msgid "Save Sceneshot"
+msgstr "Сохранить сценшот"
+
+#: ../../Scripts/Gui/Preferences.as:703 ../../Scripts/Gui/Preferences.as:702
+#: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
+msgctxt "Preferences"
+msgid "Save Screenshot"
+msgstr "Сохранить скриншот"
+
+#: ../../Scripts/Gui/ClientUI.as:184
+msgctxt "Client"
+msgid "Back to Game"
+msgstr "Обратно в игру"
+
+#: ../../Scripts/Gui/ClientUI.as:191
+msgctxt "Client"
+msgid "Chat Log"
+msgstr "История чата"
+
+#: ../../Scripts/Gui/ClientUI.as:198
+msgctxt "Client"
+msgid "Setup"
+msgstr "Настройка"
+
+#: ../../Scripts/Gui/ClientUI.as:205
+msgctxt "Client"
+msgid "Disconnect"
+msgstr "Отключиться"
+
+#: ../../Scripts/Gui/ClientUI.as:275
+msgctxt "Client"
+msgid "Say"
+msgstr "Сказать"
+
+#: ../../Scripts/Gui/ClientUI.as:283
+msgctxt "Client"
+msgid "Cancel"
+msgstr "Отмена"
+
+#: ../../Scripts/Gui/ClientUI.as:291
+msgctxt "Client"
+msgid "Chat Text"
+msgstr "Текст чата"
+
+#: ../../Scripts/Gui/ClientUI.as:299
+msgctxt "Client"
+msgid "Global"
+msgstr "Глобальный"
+
+#: ../../Scripts/Gui/ClientUI.as:308
+msgctxt "Client"
+msgid "Team"
+msgstr "Командный"
+
+#: ../../Scripts/Gui/ClientUI.as:424
+msgctxt "Client"
+msgid "Close"
+msgstr "Закрыть"
+
+#: ../../Scripts/Gui/ClientUI.as:434
+msgctxt "Client"
+msgid "Say Global"
+msgstr "Сказать в глобальный"
+
+#: ../../Scripts/Gui/ClientUI.as:445
+msgctxt "Client"
+msgid "Say Team"
+msgstr "Сказать в командный"
+
+#: ../../../Sources/Client/Client.cpp:2219
+#: ../../../Sources/Client/Client.cpp:2218
+#: ../../../Sources/Client/Client.cpp:2234
+msgctxt "Client"
+msgid "NOW LOADING"
+msgstr "ЗАГРУЖАЕТСЯ"
+
+#: ../../../Sources/Client/Client.cpp:2545
+#: ../../../Sources/Client/Client.cpp:2513
+#: ../../../Sources/Client/Client.cpp:2529
+msgctxt "Client"
+msgid "Out of Block"
+msgstr "Кончились блоки"
+
+#: ../../../Sources/Client/Client.cpp:2550
+#: ../../../Sources/Client/Client.cpp:2518
+#: ../../../Sources/Client/Client.cpp:2534
+msgctxt "Client"
+msgid "Out of Grenade"
+msgstr "Кончились гранаты"
+
+#: ../../../Sources/Client/Client.cpp:2558
+#: ../../../Sources/Client/Client.cpp:2526
+#: ../../../Sources/Client/Client.cpp:2542
+msgctxt "Client"
+msgid "Reloading"
+msgstr "Перезарядка"
+
+#: ../../../Sources/Client/Client.cpp:2561
+#: ../../../Sources/Client/Client.cpp:2529
+#: ../../../Sources/Client/Client.cpp:2545
+msgctxt "Client"
+msgid "Out of Ammo"
+msgstr "Кончились патроны"
+
+#: ../../../Sources/Client/Client.cpp:2564
+#: ../../../Sources/Client/Client.cpp:2532
+#: ../../../Sources/Client/Client.cpp:2548
+msgctxt "Client"
+msgid "Press [{0}] to Reload"
+msgstr "Нажмите [{0}] для перезарядки"
+
+#: ../../../Sources/Client/Client.cpp:2600
+#: ../../../Sources/Client/Client.cpp:2568
+#: ../../../Sources/Client/Client.cpp:2584
+msgctxt "Client"
+msgid "Waiting for respawn"
+msgstr "Ожидание респавна"
+
+#: ../../../Sources/Client/Client.cpp:2643
+#: ../../../Sources/Client/Client.cpp:2611
+#: ../../../Sources/Client/Client.cpp:2627
+msgctxt "Client"
+msgid "Following {0}"
+msgstr "Наблюдаем за"
+
+#: ../../../Sources/Client/LimboView.cpp:61
+msgctxt "Client"
+msgid "Rifle"
+msgstr "Винтовка"
+
+#: ../../../Sources/Client/LimboView.cpp:62
+msgctxt "Client"
+msgid "SMG"
+msgstr "СМГ"
+
+#: ../../../Sources/Client/LimboView.cpp:63
+msgctxt "Client"
+msgid "Shotgun"
+msgstr "ШОТГАН"
+
+#: ../../../Sources/Client/LimboView.cpp:65
+msgctxt "Client"
+msgid "Spawn"
+msgstr "Спавн"
+
+#: ../../../Sources/Client/LimboView.cpp:184
+msgctxt "Client"
+msgid "Select Team:"
+msgstr "Выберите команду:"
+
+#: ../../../Sources/Client/LimboView.cpp:191
+msgctxt "Client"
+msgid "Select Weapon:"
+msgstr "Выберите оружие:"
+
+#: ../../../Sources/Client/TCProgressView.cpp:156
+msgctxt "Client"
+msgid "Neutral Territory"
+msgstr "Нейтральная территория"
+
+#: ../../../Sources/Client/TCProgressView.cpp:159
+msgctxt "Client"
+msgid "{0}'s Territory"
+msgstr "Территория {0}"
+
+#: ../../../Sources/Gui/MainScreen.cpp:230
+#: ../../../Sources/Gui/MainScreen.cpp:223
+msgctxt "MainScreen"
+msgid "NOW LOADING"
+msgstr "ЗАГРУЖАЕТСЯ"
+
+#: ../../../Sources/Client/Client.cpp:2598
+#: ../../../Sources/Client/Client.cpp:2566
+#: ../../../Sources/Client/Client.cpp:2582
+msgctxt "Client"
+msgid "You will respawn in: {0}"
+msgstr "Респавн через: {0}"
+
+#: ../../Scripts/Gui/StartupScreen.as:142
+msgctxt "StartupScreen"
+msgid "Start"
+msgstr "Начать"
+
+#: ../../Scripts/Gui/StartupScreen.as:149
+msgctxt "StartupScreen"
+msgid "Skip this screen next time"
+msgstr "Не показывать этот экран в след. раз"
+
+#: ../../Scripts/Gui/StartupScreen.as:181
+msgctxt "StartupScreen"
+msgid "Graphics"
+msgstr "Графика"
+
+#: ../../Scripts/Gui/StartupScreen.as:182
+msgctxt "StartupScreen"
+msgid "Audio"
+msgstr "Аудио"
+
+#: ../../Scripts/Gui/StartupScreen.as:183
+msgctxt "StartupScreen"
+msgid "System Info"
+msgstr "Систем. инфо"
+
+#: ../../Scripts/Gui/StartupScreen.as:184
+msgctxt "StartupScreen"
+msgid "Advanced"
+msgstr "Продвинутые"
+
+#: ../../Scripts/Gui/StartupScreen.as:907
+msgctxt "StartupScreen"
+msgid "Close"
+msgstr "Закрыть"
+
+#: ../../Scripts/Gui/StartupScreen.as:1013
+msgctxt "StartupScreen"
+msgid "Graphics Settings"
+msgstr "Графические настройки"
+
+#: ../../Scripts/Gui/StartupScreen.as:1018
+msgctxt "StartupScreen"
+msgid "Resolution"
+msgstr "Разрешение"
+
+#: ../../Scripts/Gui/StartupScreen.as:1028
+msgctxt "StartupScreen"
+msgid "Fullscreen Mode"
+msgstr "Полноэкранный режим"
+
+#: ../../Scripts/Gui/StartupScreen.as:1031
+msgctxt "StartupScreen"
+msgid ""
+"By running in fullscreen mode OpenSpades occupies the screen, making it "
+"easier for you to concentrate on playing the game."
+msgstr ""
+"При запуске из полноэкранного режима OpenSpades занимает весь экран, делая "
+"проще концентрацию на игре."
+
+#: ../../Scripts/Gui/StartupScreen.as:1038
+#: ../../Scripts/Gui/StartupScreen.as:1404
+msgctxt "StartupScreen"
+msgid "Backend"
+msgstr "Бэкенд"
+
+#: ../../Scripts/Gui/StartupScreen.as:1041
+msgctxt "StartupScreen"
+msgid "OpenGL"
+msgstr "OpenGL"
+
+#: ../../Scripts/Gui/StartupScreen.as:1045
+msgctxt "StartupScreen"
+msgid ""
+"OpenGL renderer uses your computer's graphics accelerator to generate the "
+"game screen."
+msgstr ""
+"OpenGL рендер использует графический ускоритель вашего компьютера для "
+"генерации изображения."
+
+#: ../../Scripts/Gui/StartupScreen.as:1053
+msgctxt "StartupScreen"
+msgid "Software"
+msgstr "Программный"
+
+#: ../../Scripts/Gui/StartupScreen.as:1057
+msgctxt "StartupScreen"
+msgid ""
+"Software renderer uses CPU to generate the game screen. Its quality and "
+"performance might be inferior to OpenGL renderer, but it works even with an "
+"unsupported GPU."
+msgstr ""
+"Программный рендер использует ЦП для генерации изображения. Качество и "
+"производительность могут быть ниже OpenGL рендера, но он работает даже с не "
+"поддерживаемыми видеокартами."
+
+#: ../../Scripts/Gui/StartupScreen.as:1078
+msgctxt "StartupScreen"
+msgid "Global Illumination"
+msgstr "Глобальное освещение"
+
+#: ../../Scripts/Gui/StartupScreen.as:1080
+msgctxt "StartupScreen"
+msgid ""
+"Enables a physically based simulation of light path for more realistic "
+"lighting."
+msgstr ""
+"Включает моделирование световых лучей на физической основе для более "
+"реалистичного освещения."
+
+#: ../../Scripts/Gui/StartupScreen.as:1085
+msgctxt "StartupScreen"
+msgid "Camera Blur"
+msgstr "Размытие камеры"
+
+#: ../../Scripts/Gui/StartupScreen.as:1086
+msgctxt "StartupScreen"
+msgid "Blurs the screen when you turns quickly."
+msgstr "Размывает экран когда вы быстро поворачиваетесь"
+
+#: ../../Scripts/Gui/StartupScreen.as:1088
+msgctxt "StartupScreen"
+msgid "Lens Scattering Filter"
+msgstr "Фильтр рассеяния объектива"
+
+#: ../../Scripts/Gui/StartupScreen.as:1089
+msgctxt "StartupScreen"
+msgid "Simulates light being scattered by dust on the camera lens."
+msgstr "Моделирует рассеяние света пылью на линзе камеры."
+
+#: ../../Scripts/Gui/StartupScreen.as:1092
+msgctxt "StartupScreen"
+msgid "Lens Flare"
+msgstr "Сияние линзы"
+
+#: ../../Scripts/Gui/StartupScreen.as:1093
+msgctxt "StartupScreen"
+msgid "The Sun causes lens flare."
+msgstr "Солнце вызывает сияние лизы"
+
+#: ../../Scripts/Gui/StartupScreen.as:1095
+msgctxt "StartupScreen"
+msgid "Flares for Dynamic Lights"
+msgstr "Сияние для динамического света"
+
+#: ../../Scripts/Gui/StartupScreen.as:1096
+msgctxt "StartupScreen"
+msgid "Enables lens flare for light sources other than the Sun."
+msgstr "Включает сияние света для других источников света, кроме солнца."
+
+#: ../../Scripts/Gui/StartupScreen.as:1098
+msgctxt "StartupScreen"
+msgid "Color Correction"
+msgstr "Коррекция цвета"
+
+#: ../../Scripts/Gui/StartupScreen.as:1099
+msgctxt "StartupScreen"
+msgid "Applies cinematic color correction to make the image look better."
+msgstr ""
+"Применяет кинематографичную коррекцию цвета чтобы картинка выглядела лучше."
+
+#: ../../Scripts/Gui/StartupScreen.as:1101
+msgctxt "StartupScreen"
+msgid "Depth of Field"
+msgstr "Глубина резкости"
+
+#: ../../Scripts/Gui/StartupScreen.as:1102
+msgctxt "StartupScreen"
+msgid "Blurs out-of-focus objects."
+msgstr "Размывать объекты вне фокуса"
+
+#: ../../Scripts/Gui/StartupScreen.as:1104
+#: ../../Scripts/Gui/StartupScreen.as:1142
+#: ../../Scripts/Gui/StartupScreen.as:1164
+msgctxt "StartupScreen"
+msgid "Low"
+msgstr "Низко"
+
+#: ../../Scripts/Gui/StartupScreen.as:1105
+#: ../../Scripts/Gui/StartupScreen.as:1143
+#: ../../Scripts/Gui/StartupScreen.as:1165
+msgctxt "StartupScreen"
+msgid "Medium"
+msgstr "Средне"
+
+#: ../../Scripts/Gui/StartupScreen.as:1106
+#: ../../Scripts/Gui/StartupScreen.as:1144
+#: ../../Scripts/Gui/StartupScreen.as:1166
+msgctxt "StartupScreen"
+msgid "High"
+msgstr "Высоко"
+
+#: ../../Scripts/Gui/StartupScreen.as:1109
+msgctxt "StartupScreen"
+msgid "Post-process"
+msgstr "Пост-процессинг"
+
+#: ../../Scripts/Gui/StartupScreen.as:1110
+msgctxt "StartupScreen"
+msgid ""
+"Post-process modifies the image to make it look better and more realistic."
+msgstr ""
+"Пост-процессинг изменяет картинку чтобы сделать её лучше и более реалистичной"
+
+#: ../../Scripts/Gui/StartupScreen.as:1117
+msgctxt "StartupScreen"
+msgid ""
+"Particles|Low:Artifact occurs when a particle intersects other objects.|"
+"Medium:Particle intersects objects smoothly.|High:Particle intersects "
+"objects smoothly, and some objects casts their shadow to particles."
+msgstr ""
+"Частицы|Низко:Артефакты появляются когда частица пересекает объект.|Средне:"
+"Частица пересекает объект плавно.|Высоко:Частица пересекает объект плавно, "
+"некоторые объекты бросают свою тень на частицы"
+
+#: ../../Scripts/Gui/StartupScreen.as:1127
+msgctxt "StartupScreen"
+msgid "Dynamic Lights"
+msgstr "Динамическое освещение"
+
+#: ../../Scripts/Gui/StartupScreen.as:1129
+msgctxt "StartupScreen"
+msgid ""
+"Gives some objects an ability to emit light to give them an energy-emitting "
+"impression."
+msgstr ""
+"Дает некоторым объектам возможность испускать свет для придания им эффекта "
+"испускания энергии."
+
+#: ../../Scripts/Gui/StartupScreen.as:1132
+msgctxt "StartupScreen"
+msgid "Shadows"
+msgstr "Тени"
+
+#: ../../Scripts/Gui/StartupScreen.as:1133
+msgctxt "StartupScreen"
+msgid "Non-static object casts a shadow."
+msgstr "Не статичные объекты отбрасывают тень"
+
+#: ../../Scripts/Gui/StartupScreen.as:1135
+msgctxt "StartupScreen"
+msgid "Volumetric Fog"
+msgstr "Объемный туман"
+
+#: ../../Scripts/Gui/StartupScreen.as:1136
+msgctxt "StartupScreen"
+msgid ""
+"Simulates shadow being casted to the fog particles using a super highly "
+"computationally demanding algorithm. "
+msgstr ""
+"Моделирует отбрасывание тени частицами тумана используя очень высоко "
+"ресурсоемкий алгоритм. "
+
+#: ../../Scripts/Gui/StartupScreen.as:1139
+msgctxt "StartupScreen"
+msgid "Physically Based Lighting"
+msgstr "Освещение на физической основе"
+
+#: ../../Scripts/Gui/StartupScreen.as:1140
+msgctxt "StartupScreen"
+msgid ""
+"Uses more accurate approximation techniques to decide the brightness of "
+"objects."
+msgstr ""
+"Использует более точные приближенные методы чтобы решить, какая у объектов "
+"яркость"
+
+#: ../../Scripts/Gui/StartupScreen.as:1145
+msgctxt "StartupScreen"
+msgid "Ultra"
+msgstr "Ультра"
+
+#: ../../Scripts/Gui/StartupScreen.as:1148
+msgctxt "StartupScreen"
+msgid "Direct Lights"
+msgstr "Прямой свет"
+
+#: ../../Scripts/Gui/StartupScreen.as:1149
+msgctxt "StartupScreen"
+msgid ""
+"Controls how light encounting a material and atmosphere directly affects its "
+"appearance."
+msgstr ""
+"Управляет тем, как столкновение света с материалами и атмосферой напрямую "
+"влияет на внешний вид"
+
+#: ../../Scripts/Gui/StartupScreen.as:1159
+msgctxt "StartupScreen"
+msgid ""
+"Water Shader|None:Water is rendered in the same way that normal blocks are "
+"done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving "
+"water is simulated as well as reflection and refraction."
+msgstr ""
+"Шейдеры воды|Нет:Вода рендерится таким же образом как нормальные блоки. |"
+"Уровень 1:Моделируется преломление и отраженное солнце.|Уровень 2:Волны на "
+"воде также моделируются, на ряду с отражением и преломлением."
+
+#: ../../Scripts/Gui/StartupScreen.as:1169
+msgctxt "StartupScreen"
+msgid "Shader Effects"
+msgstr "Эффекты шейдеров"
+
+#: ../../Scripts/Gui/StartupScreen.as:1169
+msgctxt "StartupScreen"
+msgid "Special effects."
+msgstr "Специальные эффекты"
+
+#: ../../Scripts/Gui/StartupScreen.as:1186
+msgctxt "StartupScreen"
+msgid ""
+"Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
+"4x"
+msgstr ""
+"Быстрый режим:Уменьшает разрешение картинки чтобы сделать рендеринг быстрее.|"
+"Выкл.|2x|4x"
+
+#: ../../Scripts/Gui/StartupScreen.as:1398
+msgctxt "StartupScreen"
+msgid "Audio Settings"
+msgstr "Настройки аудио"
+
+#: ../../Scripts/Gui/StartupScreen.as:1407
+msgctxt "StartupScreen"
+msgid "OpenAL"
+msgstr "OpenAL"
+
+#: ../../Scripts/Gui/StartupScreen.as:1411
+msgctxt "StartupScreen"
+msgid ""
+"Uses an OpenAL-capable sound card to process sound. In most cases where "
+"there isn't such a sound card, software emulation is used."
+msgstr ""
+"Использует OpenAL-совместимую звуковую карту для обработки звука. В "
+"большинстве случаев, где нет такой звуковой карты, используется программная "
+"эмуляция."
+
+#: ../../Scripts/Gui/StartupScreen.as:1420
+msgctxt "StartupScreen"
+msgid "YSR"
+msgstr "YSR"
+
+#: ../../Scripts/Gui/StartupScreen.as:1424
+msgctxt "StartupScreen"
+msgid ""
+"YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
+"features several enhanced features including automatic load control, "
+"dynamics compressor, HRTF-based 3D audio, and high quality reverb."
+msgstr ""
+"YSR - Это экспериментальный 3D HDR звуковой движок оптимизированный для "
+"OpenSpades. Он включает в себя некоторые улучшенные особенности, такие как "
+"автоматическое управление загрузкой, динамический компрессор, HRTF-based 3D "
+"аудио и реверберации высокого качества."
+
+#: ../../Scripts/Gui/StartupScreen.as:1438
+#: ../../Scripts/Gui/StartupScreen.as:1462
+msgctxt "StartupScreen"
+msgid "Polyphonics"
+msgstr "Polyphonics"
+
+#: ../../Scripts/Gui/StartupScreen.as:1439
+msgctxt "StartupScreen"
+msgid ""
+"Specifies how many sounds can be played simultaneously. Higher value needs "
+"more processing power, so setting this too high might cause an overload "
+"(especially with a software emulation)."
+msgstr ""
+"Определяет как много звуков может проигрываться одновременно. Высокие "
+"значения требуют большой вычислительной мощности, так что установка на "
+"слишком большие значение может привести к перегрузке "
+
+#: ../../Scripts/Gui/StartupScreen.as:1446
+msgctxt "StartupScreen"
+msgid "EAX"
+msgstr "EAX"
+
+#: ../../Scripts/Gui/StartupScreen.as:1447
+msgctxt "StartupScreen"
+msgid ""
+"Enables extended features provided by the OpenAL driver to create more "
+"ambience."
+msgstr ""
+"Включает расширенные особенности предусмотренные драйвером OpenAL для "
+"создания лучшей атмосферы."
+
+#: ../../Scripts/Gui/StartupScreen.as:1463
+msgctxt "StartupScreen"
+msgid ""
+"Specifies how many sounds can be played simultaneously. No matter what value "
+"is set, YSR might reduce the number of sounds when an overload is detected."
+msgstr ""
+"Определяет сколько звуков может проигрываться одновременно. Не важно, какое "
+"значение установлено, YSR может уменьшить количество звуков когда обнаружена "
+"перегрузка."
+
+#: ../../Scripts/Gui/StartupScreen.as:1533
+msgctxt "StartupScreen"
+msgid "Copy to Clipboard"
+msgstr "Скопировать в буфер обм."
+
+#: ../../Scripts/Gui/StartupScreen.as:1569
+msgctxt "StartupScreen"
+msgid "Advanced Settings"
+msgstr "Продвинутые настройки"
+
+#: ../../Scripts/Gui/StartupScreen.as:1578
+msgctxt "StartupScreen"
+msgid "Filter"
+msgstr "Фильтр"
+
+#: ../../Scripts/Gui/StartupScreen.as:1071
+msgctxt "StartupScreen"
+msgid ""
+"Antialias:Enables a technique to improve the appearance of high-constrast "
+"edges.\n"
+"\n"
+"MSAA: Performs antialiasing by generating an intermediate high-resolution "
+"image. Looks best, but doesn't cope with some settings.\n"
+"\n"
+"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
+"Off|MSAA 2x|4x|FXAA"
+msgstr ""
+"Антиалиасинг:Включает метод улучшения внешнего вида высоко-контрастных "
+"граней.\n"
+"\n"
+"MSAA: выполняет антиалиасинг с помощью генерации промежуточной картинки "
+"высокого разрешения. Выглядит лучше всего, но не справляется с некоторыми "
+"настройками.\n"
+"\n"
+"FXAA: выполняет антиалиасинг с помощью размытия артефактов в пост-"
+"процессинге.|Выкл|MSAA 2x|4x|FXAA"
+
+#: ../../Scripts/Gui/StartupScreen.as:781
+msgctxt "StartupScreen"
+msgid "Custom"
+msgstr "Другой"
+
+#: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:703
+#: ../../Scripts/Gui/Preferences.as:704
+msgctxt "Preferences"
+msgid "Invert Y-axis Mouse Input"
+msgstr "Инвертировать Y-ось ввода мыши"
+
+#: ../../../Sources/Client/Client.cpp:1418
+#: ../../../Sources/Client/Client.cpp:1434
+msgctxt "Client"
+msgid "Map saved: {0}"
+msgstr "Карта сохранена: {0}"
+
+#: ../../../Sources/Client/Client.cpp:1423
+#: ../../../Sources/Client/Client.cpp:1439
+msgctxt "Client"
+msgid "Saving map failed: "
+msgstr "Сохранение карты не удалось: "
+
+#: ../../../Sources/Client/Client.cpp:1477
+#: ../../../Sources/Client/Client.cpp:1493
+msgctxt "Client"
+msgid "Sceneshot saved: {0}"
+msgstr "Сценшот сохранен: {0}"
+
+#: ../../../Sources/Client/Client.cpp:1479
+#: ../../../Sources/Client/Client.cpp:1495
+msgctxt "Client"
+msgid "Screenshot saved: {0}"
+msgstr "Скриншот сохранен: {0}"
+
+#: ../../../Sources/Client/Client.cpp:1484
+#: ../../../Sources/Client/Client.cpp:1500
+msgctxt "Client"
+msgid "Screenshot failed: "
+msgstr "Скриншот не удался: "
+
+#: ../../../Sources/Client/Client.cpp:2684
+#: ../../../Sources/Client/Client.cpp:2700
+msgctxt "Client"
+msgid "[Global] "
+msgstr "[Глобальн.] "
+
+#: ../../../Sources/Client/Client.cpp:3229
+#: ../../../Sources/Client/Client.cpp:3253
+msgctxt "Client"
+msgid "{0} captured {1}'s territory"
+msgstr "{0} захватил территорию команды {1}"
+
+#: ../../../Sources/Client/Client.cpp:3231
+#: ../../../Sources/Client/Client.cpp:3255
+msgctxt "Client"
+msgid "{0} captured an neutral territory"
+msgstr "{0} захватил нейтральную территорию"
+
+#: ../../../Sources/Client/Client.cpp:3238
+#: ../../../Sources/Client/Client.cpp:3262
+msgctxt "Client"
+msgid "{0} captured {1}'s Territory"
+msgstr "{0} захватил территорию команды {1}"
+
+#: ../../../Sources/Client/Client.cpp:3240
+#: ../../../Sources/Client/Client.cpp:3264
+msgctxt "Client"
+msgid "{0} captured an Neutral Territory"
+msgstr "{0} захватил нейтральную территорию"
+
+#: ../../../Sources/Client/Client.cpp:3264
+#: ../../../Sources/Client/Client.cpp:3288
+msgctxt "Client"
+msgid "{0} captured {1}'s intel"
+msgstr "{0} захватил интел команды {1}"
+
+#: ../../../Sources/Client/Client.cpp:3271
+#: ../../../Sources/Client/Client.cpp:3295
+msgctxt "Client"
+msgid "{0} captured {1}'s Intel."
+msgstr "{0} захватил интел команды {1}"
+
+#: ../../../Sources/Client/Client.cpp:3293
+#: ../../../Sources/Client/Client.cpp:3317
+msgctxt "Client"
+msgid "{0} picked up {1}'s intel"
+msgstr "{0} подобрал интел команды {1}"
+
+#: ../../../Sources/Client/Client.cpp:3300
+#: ../../../Sources/Client/Client.cpp:3324
+msgctxt "Client"
+msgid "{0} picked up {1}'s Intel."
+msgstr "{0} подобрал интел команды {1}"
+
+#: ../../../Sources/Client/Client.cpp:3317
+#: ../../../Sources/Client/Client.cpp:3341
+msgctxt "Client"
+msgid "{0} dropped {1}'s intel"
+msgstr "{0} уронил интел команды {1}"
+
+#: ../../../Sources/Client/Client.cpp:3324
+#: ../../../Sources/Client/Client.cpp:3348
+msgctxt "Client"
+msgid "{0} dropped {1}'s Intel"
+msgstr "{0} уронил интел команды {1}"
+
+#: ../../../Sources/Client/Client.cpp:3374
+#: ../../../Sources/Client/Client.cpp:3379
+#: ../../../Sources/Client/Client.cpp:3398
+#: ../../../Sources/Client/Client.cpp:3403
+msgctxt "Client"
+msgid "Player {0} has left"
+msgstr "Игрок {0} вышел"
+
+#: ../../../Sources/Client/Client.cpp:3395
+#: ../../../Sources/Client/Client.cpp:3402
+#: ../../../Sources/Client/Client.cpp:3419
+#: ../../../Sources/Client/Client.cpp:3426
+msgctxt "Client"
+msgid "{0} joined {1} team"
+msgstr "{0} присоединился к команде {1}"
+
+#: ../../../Sources/Client/Client.cpp:3438
+#: ../../../Sources/Client/Client.cpp:3462
+msgctxt "Client"
+msgid "{0} wins!"
+msgstr "Команда {0} выиграла!"
+
+#: ../../../Sources/Client/Client.cpp:3443
+#: ../../../Sources/Client/Client.cpp:3442
+#: ../../../Sources/Client/Client.cpp:3466
+msgctxt "Client"
+msgid "{0} Wins!"
+msgstr "Команда {0} выиграла!"
+
+#: ../../../Sources/Client/Client.cpp:3834
+#: ../../../Sources/Client/Client.cpp:3833
+#: ../../../Sources/Client/Client.cpp:3857
+msgctxt "Client"
+msgid "You have killed {0}"
+msgstr "Вы убили игрока {0}"
+
+#: ../../../Sources/Client/Client.cpp:3836
+#: ../../../Sources/Client/Client.cpp:3835
+#: ../../../Sources/Client/Client.cpp:3859
+msgctxt "Client"
+msgid "You were killed by {0}"
+msgstr "Вы были убиты игроком {0}"
+
+#: ../../../Sources/Gui/Main.cpp:401 ../../../Sources/Gui/Main.cpp:388
+#: ../../../Sources/Gui/Runner.cpp:62
+msgctxt "Main"
+msgid ""
+"A serious error caused OpenSpades to stop working:\n"
+"\n"
+"{0}\n"
+"\n"
+"See SystemMessages.log for more details."
+msgstr ""
+"Серьезная ошибка заставила OpenSpades прекратить работу:\n"
+"{0}\n"
+"\n"
+"Смотрите SystemMessages.log для более подробной информации."
+
+#: ../../../Sources/Gui/Main.cpp:406 ../../../Sources/Gui/Main.cpp:393
+#: ../../../Sources/Gui/Runner.cpp:66
+msgctxt "Main"
+msgid "OpenSpades Fatal Error"
+msgstr "Фатальная ошибка OpenSpades"
+
+#: ../../../Sources/Client/NetClient.cpp:392
+msgctxt "NetClient"
+msgid "Connecting to the server"
+msgstr "Подключение к серверу"
+
+#: ../../../Sources/Client/NetClient.cpp:404
+msgctxt "NetClient"
+msgid "Not connected"
+msgstr "Не подключен"
+
+#: ../../../Sources/Client/NetClient.cpp:467
+#: ../../../Sources/Client/NetClient.cpp:1289
+msgctxt "NetClient"
+msgid "Loading snapshot"
+msgstr "Загрузка снапшота"
+
+#: ../../../Sources/Client/NetClient.cpp:483
+msgctxt "NetClient"
+msgid "Loading snapshot ({0}/{1})"
+msgstr "Загрузка снапшота ({0}/{1})"
+
+#: ../../../Sources/Client/NetClient.cpp:488
+#: ../../../Sources/Client/NetClient.cpp:522
+msgctxt "NetClient"
+msgid "Connected"
+msgstr "Подключено"
+
+#: ../../../Sources/Client/NetClient.cpp:499
+#: ../../../Sources/Client/NetClient.cpp:534
+#: ../../../Sources/Client/NetClient.cpp:587
+msgctxt "NetClient"
+msgid "Still loading..."
+msgstr "До сих пор загружается..."
+
+#: ../../../Sources/Client/NetClient.cpp:502
+#: ../../../Sources/Client/NetClient.cpp:508
+#: ../../../Sources/Client/NetClient.cpp:538
+#: ../../../Sources/Client/NetClient.cpp:543
+#: ../../../Sources/Client/NetClient.cpp:591
+#: ../../../Sources/Client/NetClient.cpp:596
+msgctxt "NetClient"
+msgid "Error"
+msgstr "Ошибка"
+
+#: ../../../Sources/Client/NetClient.cpp:665
+msgctxt "NetClient"
+msgid "You are banned from this server."
+msgstr "Вы забанены на этом сервере"
+
+#: ../../../Sources/Client/NetClient.cpp:669
+#: ../../../Sources/Client/NetClient.cpp:675
+msgctxt "NetClient"
+msgid "You were kicked from this server."
+msgstr "Вы были кикнуты с этого сервера"
+
+#: ../../../Sources/Client/NetClient.cpp:671
+msgctxt "NetClient"
+msgid "Incompatible client protocol version."
+msgstr "Несовместимая версия протокола клиента"
+
+#: ../../../Sources/Client/NetClient.cpp:673
+msgctxt "NetClient"
+msgid "Server full"
+msgstr "Сервер полон"
+
+#: ../../../Sources/Client/NetClient.cpp:677
+msgctxt "NetClient"
+msgid "Unknown Reason"
+msgstr "Неизвестная причина"
+
+#: ../../Scripts/Gui/Preferences.as:422
+msgctxt "Preferences"
+msgid "Shift"
+msgstr "Shift"
+
+#: ../../Scripts/Gui/Preferences.as:424
+msgctxt "Preferences"
+msgid "Control"
+msgstr "Control"
+
+#: ../../Scripts/Gui/Preferences.as:426
+msgctxt "Preferences"
+msgid "Meta"
+msgstr "Meta"
+
+#: ../../Scripts/Gui/Preferences.as:428
+msgctxt "Preferences"
+msgid "Alt"
+msgstr "Alt"
+
+#: ../../Scripts/Gui/Preferences.as:430
+msgctxt "Preferences"
+msgid "Left Mouse Button"
+msgstr "Левая кнопка мыши"
+
+#: ../../Scripts/Gui/Preferences.as:432
+msgctxt "Preferences"
+msgid "Right Mouse Button"
+msgstr "Правая кнопка мыши"
+
+#: ../../Scripts/Gui/Preferences.as:434
+msgctxt "Preferences"
+msgid "Middle Mouse Button"
+msgstr "Средняя кнопка мыши"
+
+#: ../../Scripts/Gui/Preferences.as:436
+msgctxt "Preferences"
+msgid "Mouse Button 4"
+msgstr "Кнопка мыши 4"
+
+#: ../../Scripts/Gui/Preferences.as:438
+msgctxt "Preferences"
+msgid "Mouse Button 5"
+msgstr "Кнопка мыши 5"
+
+#: ../../Scripts/Gui/Preferences.as:682
+msgctxt "Preferences"
+msgid "Debug Hit Detection"
+msgstr "Отладка определения попаданий"
