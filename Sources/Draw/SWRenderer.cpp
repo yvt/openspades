@@ -1096,11 +1096,13 @@ namespace spades {
 										  1.f, 1.f);
 			vtx[3].position = MakeVector4(outBottomRight.x, outBottomRight.y,
 										  1.f, 1.f);
-			Vector2 scl = {img->GetInvWidth(), img->GetInvHeight()};
-			vtx[0].uv = MakeVector2(inRect.min.x, inRect.min.y) * scl;
-			vtx[1].uv = MakeVector2(inRect.max.x, inRect.min.y) * scl;
-			vtx[2].uv = MakeVector2(inRect.min.x, inRect.max.y) * scl;
-			vtx[3].uv = MakeVector2(inRect.max.x, inRect.max.y) * scl;
+			if(img) {
+				Vector2 scl = {img->GetInvWidth(), img->GetInvHeight()};
+				vtx[0].uv = MakeVector2(inRect.min.x, inRect.min.y) * scl;
+				vtx[1].uv = MakeVector2(inRect.max.x, inRect.min.y) * scl;
+				vtx[2].uv = MakeVector2(inRect.min.x, inRect.max.y) * scl;
+				vtx[3].uv = MakeVector2(inRect.max.x, inRect.max.y) * scl;
+			}
 			
 			imageRenderer->DrawPolygon(img, vtx[0], vtx[1], vtx[2]);
 			imageRenderer->DrawPolygon(img, vtx[1], vtx[3], vtx[2]);
