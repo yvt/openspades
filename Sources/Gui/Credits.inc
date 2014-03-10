@@ -11,6 +11,7 @@ Credits
 "iamgreaser" - AoS 0.76 protocol support
 "Ericson2314" - Better installation guide
 "JoJoe_Stinky" - Win32 Icon, Killfeed icons
+"theunknownxy" - Fixes for the Linux support
 
 
 Portions of program is based on following softwares

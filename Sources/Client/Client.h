@@ -24,6 +24,7 @@
 #include <string>
 #include "Player.h"
 #include "IWorldListener.h"
+#include "ILocalEntity.h"
 #include <Core/Math.h>
 #include <Core/ServerAddress.h>
 #include "IRenderer.h"
@@ -52,7 +53,6 @@ namespace spades {
 		class MapView;
 		class ScoreboardView;
 		class LimboView;
-		class ILocalEntity;
 		class Player;
 		class PaletteView;
 		class TCProgressView;
