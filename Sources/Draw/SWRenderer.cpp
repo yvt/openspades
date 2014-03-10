@@ -1004,6 +1004,10 @@ namespace spades {
 								   const spades::Vector2 &outTopLeft) {
 			SPADES_MARK_FUNCTION();
 			
+			if(image == nullptr) {
+				SPRaise("Size must be specified when null image is provided");
+			}
+			
 			DrawImage(image,
 					  AABB2(outTopLeft.x, outTopLeft.y,
 							image->GetWidth(),
@@ -1019,8 +1023,8 @@ namespace spades {
 			DrawImage(image,
 					  outRect,
 					  AABB2(0, 0,
-							image->GetWidth(),
-							image->GetHeight()));
+							image ? image->GetWidth() : 0,
+							image ? image->GetHeight() : 0));
 		}
 		
 		void SWRenderer::DrawImage(client::IImage *image,
