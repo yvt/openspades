@@ -30,13 +30,17 @@
 namespace spades {
 	namespace draw {
 		GLImageManager::GLImageManager(IGLDevice *dev):
-		device(dev) {
+		device(dev),
+		whiteImage(nullptr) {
 			SPADES_MARK_FUNCTION();
 		}
 		
 		GLImageManager::~GLImageManager() {
 			SPADES_MARK_FUNCTION();
-			
+			if(whiteImage) {
+				whiteImage->Release();
+				whiteImage = nullptr;
+			}
 			for(std::map<std::string, GLImage *>::iterator it = images.begin(); it != images.end(); it++){
 				it->second->Invalidate();
 				it->second->Release();
@@ -56,6 +60,13 @@ namespace spades {
 			}
 			it->second->AddRef();
 			return it->second;
+		}
+		
+		GLImage *GLImageManager::GetWhiteImage() {
+			if(!whiteImage) {
+				whiteImage = RegisterImage("Gfx/White.tga");
+			}
+			return whiteImage;
 		}
 		
 		GLImage *GLImageManager::CreateImage(const std::string &name) {

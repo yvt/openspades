@@ -1109,7 +1109,12 @@ namespace spades {
 			Vector2 outBottomRight = outTopRight + outBottomLeft - outTopLeft;
 			GLImage *img = dynamic_cast<GLImage *>(image);
 			if(!img){
-				SPInvalidArgument("image");
+				if(!image) {
+					img = imageManager->GetWhiteImage();
+				}else{
+					// invalid type: not GLImage.
+					SPInvalidArgument("image");
+				}
 			}
 			
 			imageRenderer->SetImage(img);

@@ -1430,7 +1430,7 @@ namespace spades {
 											const Vertex& v2,
 											const Vertex& v3,
 											SWImageRenderer& r) {
-				if(img->IsWhiteImage()) {
+				if(img == nullptr || img->IsWhiteImage()) {
 					PolygonRenderer<level, needTransform, ndc, depthTest, true>::DrawPolygonInternal(img,
 																									  v1, v2, v3, r);
 					return;

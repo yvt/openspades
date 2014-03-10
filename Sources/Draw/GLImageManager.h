@@ -33,6 +33,7 @@ namespace spades {
 		class GLImageManager {
 			IGLDevice *device;
 			std::map<std::string, GLImage *> images;
+			GLImage *whiteImage;
 			
 			GLImage *CreateImage(const std::string&);
 		public:
@@ -40,6 +41,7 @@ namespace spades {
 			~GLImageManager();
 			
 			GLImage *RegisterImage(const std::string&);
+			GLImage *GetWhiteImage();
 			
 			void DrawAllImages(GLRenderer *);
 		};

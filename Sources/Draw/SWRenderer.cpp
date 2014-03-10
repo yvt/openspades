@@ -1062,7 +1062,8 @@ namespace spades {
 			Vector2 outBottomRight = outTopRight + outBottomLeft - outTopLeft;
 			
 			SWImage *img = dynamic_cast<SWImage *>(image);
-			if(!img){
+			if(img == nullptr && image != nullptr){
+				// not SWImage
 				SPInvalidArgument("image");
 			}
 			
