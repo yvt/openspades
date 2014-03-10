@@ -92,17 +92,17 @@ namespace spades {
 			if(!p->IsAlive()) return;
 			
 			IntVector3 outBlockCoord;
+			uint32_t col;
 			if(!world->GetMap()->CastRay(p->GetEye(),
 										 p->GetFront(),
 										 256.f, outBlockCoord)){
-				
-				
-				return;
+				auto c = world->GetFogColor();
+				col = c.x | c.y<<8 | c.z<<16;
+			}else{
+				col = world->GetMap()->GetColorWrapped(outBlockCoord.x,
+																outBlockCoord.y,
+																outBlockCoord.z);
 			}
-			
-			uint32_t col = world->GetMap()->GetColorWrapped(outBlockCoord.x,
-															outBlockCoord.y,
-															outBlockCoord.z);
 			
 			IntVector3 colV;
 			colV.x = (uint8_t)(col);
