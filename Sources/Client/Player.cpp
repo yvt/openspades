@@ -113,6 +113,7 @@ namespace spades {
 		
 		void Player::SetWeaponInput(WeaponInput newInput){
 			SPADES_MARK_FUNCTION();
+			auto *listener = GetWorld()->GetListener();
 			
 			if(!IsAlive())
 				return;
@@ -151,11 +152,11 @@ namespace spades {
 					}else{
 						holdingGrenade = true;
 						grenadeTime = world->GetTime();
-						if(world->GetListener() &&
+						if(listener &&
 						   this == world->GetLocalPlayer())
 							// playing other's grenade sound
 							// is cheating
-							world->GetListener()->LocalPlayerPulledGrenadePin();
+							listener->LocalPlayerPulledGrenadePin();
 					}
 				}
 			}else if(tool == ToolBlock){
@@ -180,34 +181,58 @@ namespace spades {
 						if(IsBlockCursorActive()){
 							blockCursorDragging = true;
 							blockCursorDragPos = blockCursorPos;
+						}else{
+							// cannot build; invalid position.
+							if(listener &&
+							   this == world->GetLocalPlayer()) {
+								listener->
+								LocalPlayerBuildError(BuildFailureReason::InvalidPosition);
+							}
 						}
 					}else {
-						if(IsBlockCursorActive() &&
-						   IsBlockCursorDragging()){
-							std::vector<IntVector3> blocks = GetWorld()->CubeLine(blockCursorDragPos,
-																				  blockCursorPos, 256);
-							if((int)blocks.size() <= blockStocks){
-								if(GetWorld()->GetListener() &&
-								   this == world->GetLocalPlayer())
-									GetWorld()->GetListener()->LocalPlayerCreatedLineBlock(blockCursorDragPos, blockCursorPos);
-								//blockStocks -= blocks.size(); decrease when created
-							}
-							if(blockCursorActive){
+						if(IsBlockCursorDragging()) {
+							if(IsBlockCursorActive()){
+								std::vector<IntVector3> blocks = GetWorld()->CubeLine(blockCursorDragPos,
+																					  blockCursorPos, 256);
+								if((int)blocks.size() <= blockStocks){
+									if(listener &&
+									   this == world->GetLocalPlayer())
+										listener->LocalPlayerCreatedLineBlock(blockCursorDragPos, blockCursorPos);
+									//blockStocks -= blocks.size(); decrease when created
+								}else{
+									// cannot build; insufficient blocks.
+									if(listener &&
+									   this == world->GetLocalPlayer()) {
+										listener->
+										LocalPlayerBuildError(BuildFailureReason::InsufficientBlocks);
+									}
+								}
 								nextBlockTime = world->GetTime() + GetToolSecondaryDelay();
+							} else {
+								// cannot build; invalid position.
+								if(listener &&
+								   this == world->GetLocalPlayer()) {
+									listener->
+									LocalPlayerBuildError(BuildFailureReason::InvalidPosition);
+								}
 							}
 						}
+						
 						blockCursorDragging = false;
 						blockCursorActive = false;
 					}
 				}
-				if(newInput.primary != weapInput.primary){
+				if(newInput.primary != weapInput.primary ||
+				   (newInput.primary && weapInput.primary &&
+					canPending)){
 					if(newInput.primary){
+						
 						if(IsBlockCursorActive() && blockStocks > 0){
-							if(GetWorld()->GetListener() &&
+							if(listener &&
 							   this == world->GetLocalPlayer())
-								GetWorld()->GetListener()->LocalPlayerBlockAction(blockCursorPos, BlockActionCreate);
+								listener->LocalPlayerBlockAction(blockCursorPos, BlockActionCreate);
 							
-							
+							lastSingleBlockBuildSeqDone = true;
 							// blockStocks--; decrease when created
 							
 							nextBlockTime = world->GetTime() + GetToolPrimaryDelay();
@@ -215,13 +240,34 @@ namespace spades {
 								 this == world->GetLocalPlayer()) {
 							pendingPlaceBlock = true;
 							pendingPlaceBlockPos = blockCursorPos;
-						}
-						if(!blockCursorActive) {
-							newInput.primary = false;
+							lastSingleBlockBuildSeqDone = false;
+						}else if(!IsBlockCursorActive()) {
+							lastSingleBlockBuildSeqDone = false;
+							if(canPending) {
+								// Delayed block placement can be activated,
+								// so don't show alert
+							}else{
+								lastSingleBlockBuildSeqDone = true;
+								// cannot build; invalid position.
+								if(listener &&
+								   this == world->GetLocalPlayer()) {
+									listener->
+									LocalPlayerBuildError(BuildFailureReason::InvalidPosition);
+								}
+							}
 						}
 						
 						blockCursorDragging = false;
 						blockCursorActive = false;
+					}else{
+						if(!lastSingleBlockBuildSeqDone) {
+							// cannot build; invalid position.
+							if(listener &&
+							   this == world->GetLocalPlayer()) {
+								listener->
+								LocalPlayerBuildError(BuildFailureReason::InvalidPosition);
+							}
+						}
 					}
 				}
 			}else if(IsToolWeapon()){
@@ -355,6 +401,7 @@ namespace spades {
 		
 		void Player::Update(float dt) {
 			SPADES_MARK_FUNCTION();
+			auto* listener = world->GetListener();
 			
 			MovePlayer(dt);
 			if(tool == ToolSpade){
@@ -370,12 +417,14 @@ namespace spades {
 						firstDig = false;
 					}
 				}
-			}else if(tool == ToolBlock){
+			}else if(tool == ToolBlock && IsLocalPlayer()){
 				GameMap::RayCastResult result;
 				result = GetWorld()->GetMap()->CastRay2(GetEye(),
 														GetFront(),
 														12);
 				canPending = false;
+				
+				
 				
 				if(result.hit &&
 				   (result.hitBlock + result.normal).z < 62 &&
@@ -395,6 +444,15 @@ namespace spades {
 					if(airborne == false || blockStocks <= 0){
 						// player is no longer airborne, or doesn't have a block to place.
 						pendingPlaceBlock = false;
+						lastSingleBlockBuildSeqDone = true;
+						if(blockStocks > 0) {
+							// cannot build; invalid position.
+							if(listener &&
+							   this == world->GetLocalPlayer()) {
+								listener->
+								LocalPlayerBuildError(BuildFailureReason::InvalidPosition);
+							}
+						}
 					}else if((!OverlapsWithOneBlock(pendingPlaceBlockPos)) &&
 							 BoxDistanceToBlock(pendingPlaceBlockPos) < 3.f){
 						// now building became possible.
@@ -404,6 +462,7 @@ namespace spades {
 							GetWorld()->GetListener()->LocalPlayerBlockAction(pendingPlaceBlockPos, BlockActionCreate);
 						
 						pendingPlaceBlock = false;
+						lastSingleBlockBuildSeqDone = true;
 						// blockStocks--; decrease when created
 						
 						nextBlockTime = world->GetTime() + GetToolPrimaryDelay();
@@ -416,6 +475,13 @@ namespace spades {
 								 (result.hitBlock + result.normal).z < 62 &&
 								 BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f;
 					blockCursorActive = false;
+					for(int dist = 11; dist >= 1 &&
+						BoxDistanceToBlock(result.hitBlock + result.normal) > 3.f ; dist--) {
+						result = GetWorld()->GetMap()->CastRay2(GetEye(),
+																GetFront(),
+																dist);
+					}
+					
 					blockCursorPos = result.hitBlock + result.normal;
 				}
 				

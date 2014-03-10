@@ -119,6 +119,7 @@ namespace spades {
 			bool blockCursorDragging;
 			IntVector3 blockCursorPos;
 			IntVector3 blockCursorDragPos;
+			bool lastSingleBlockBuildSeqDone;
 			float lastReloadingTime;
 			
 			bool pendingPlaceBlock;
@@ -167,6 +168,7 @@ namespace spades {
 			bool IsBlockCursorDragging();
 			IntVector3 GetBlockCursorPos(){return blockCursorPos;}
 			IntVector3 GetBlockCursorDragPos(){return blockCursorDragPos;}
+			bool CanActivateDelayedBlockPlacement() { return canPending; }
 			bool IsReadyToUseTool();
 			
 			// ammo counts

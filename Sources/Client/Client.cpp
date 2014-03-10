@@ -60,6 +60,8 @@ static float nextRandom() {
 SPADES_SETTING(cg_chatBeep, "1");
 
 
+SPADES_SETTING(cg_serverAlert, "1");
+
 
 
 
@@ -97,6 +99,8 @@ namespace spades {
 		
 		nextScreenShotIndex(0),
 		nextMapShotIndex(0),
+		
+		alertDisappearTime(-10000.f),
 		
 		// FIXME: preferences?
 		corpseSoftTimeLimit(30.f), // FIXME: this is not used
@@ -458,6 +462,43 @@ namespace spades {
 			}
 		}
 		
+		
+		void Client::ShowAlert(const std::string &contents,
+							   AlertType type) {
+			float timeout;
+			switch(type) {
+				case AlertType::Notice:
+					timeout = 2.5f;
+					break;
+				case AlertType::Warning:
+					timeout = 3.f;
+					break;
+				case AlertType::Error:
+					timeout = 3.f;
+					break;
+			}
+			ShowAlert(contents, type, timeout);
+		}
+		
+		void Client::ShowAlert(const std::string &contents,
+							   AlertType type,
+							   float timeout,
+							   bool quiet) {
+			alertType = type;
+			alertContents = contents;
+			alertDisappearTime = time + timeout;
+			alertAppearTime = time;
+			
+			if(type != AlertType::Notice && !quiet) {
+				PlayAlertSound();
+			}
+		}
+		
+		void Client::PlayAlertSound() {
+			Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Alert.wav");
+			audioDevice->PlayLocal(chunk, AudioParam());
+		}
+		
 		/** Records chat message/game events to the log file. */
 		void Client::NetLog(const char *format, ...) {
 			char buf[4096];
@@ -512,15 +553,19 @@ namespace spades {
 				
 				std::string msg;
 				msg = _Tr("Client", "Map saved: {0}", name);
-				msg = ChatWindow::ColoredMessage(msg, MsgColorSysInfo);
-				chatWindow->AddMessage(msg);
+				ShowAlert(msg, AlertType::Notice);
+			}catch(const Exception& ex){
+				std::string msg;
+				msg = _Tr("Client", "Saving map failed: ");
+				msg += ex.GetShortMessage();
+				ShowAlert(msg, AlertType::Error);
+				SPLog("Saving map failed: %s", ex.what());
 			}catch(const std::exception& ex){
 				std::string msg;
 				msg = _Tr("Client", "Saving map failed: ");
-				std::vector<std::string> lines = SplitIntoLines(ex.what());
-				msg += lines[0];
-				msg = ChatWindow::ColoredMessage(msg, MsgColorRed);
-				chatWindow->AddMessage(msg);
+				msg += ex.what();
+				ShowAlert(msg, AlertType::Error);
+				SPLog("Saving map failed: %s", ex.what());
 			}
 		}
 		
@@ -593,9 +638,25 @@ namespace spades {
 		}
 		
 		void Client::ServerSentMessage(const std::string &msg) {
-			chatWindow->AddMessage(msg);
 			NetLog("%s", msg.c_str());
 			scriptedUI->RecordChatLog(msg, Vector4::Make(1.f, 1.f, 1.f, 0.8f));
+			
+			if(cg_serverAlert) {
+				if(msg.substr(0, 3) == "N% ") {
+					ShowAlert(msg.substr(3), AlertType::Notice);
+					return;
+				}
+				if(msg.substr(0, 3) == "!% ") {
+					ShowAlert(msg.substr(3), AlertType::Error);
+					return;
+				}
+				if(msg.substr(0, 3) == "%% ") {
+					ShowAlert(msg.substr(3), AlertType::Warning);
+					return;
+				}
+			}
+			
+			chatWindow->AddMessage(msg);
 		}
 		
 #pragma mark - Follow / Spectate

@@ -97,13 +97,18 @@ namespace spades {
 					msg = _Tr("Client", "Screenshot saved: {0}", name);
 				msg = ChatWindow::ColoredMessage(msg, MsgColorSysInfo);
 				chatWindow->AddMessage(msg);
+			}catch(const Exception& ex){
+				std::string msg;
+				msg = _Tr("Client", "Screenshot failed: ");
+				msg += ex.GetShortMessage();
+				ShowAlert(msg, AlertType::Error);
+				SPLog("Screenshot failed: %s", ex.what());
 			}catch(const std::exception& ex){
 				std::string msg;
 				msg = _Tr("Client", "Screenshot failed: ");
-				std::vector<std::string> lines = SplitIntoLines(ex.what());
-				msg += lines[0];
-				msg = ChatWindow::ColoredMessage(msg, MsgColorRed);
-				chatWindow->AddMessage(msg);
+				msg += ex.what();
+				ShowAlert(msg, AlertType::Error);
+				SPLog("Screenshot failed: %s", ex.what());
 			}
 		}
 		
@@ -123,7 +128,6 @@ namespace spades {
 			
 			SPRaise("No free file name");
 		}
-		
 		
 #pragma mark - 2D Drawings
 		
@@ -549,6 +553,108 @@ namespace spades {
 			mapView->Draw();
 		}
 		
+		void Client::DrawAlert() {
+			SPADES_MARK_FUNCTION();
+			
+			IFont *font = textFont;
+			float scrWidth = renderer->ScreenWidth();
+			float scrHeight = renderer->ScreenHeight();
+			auto& r = renderer;
+			
+			const float fadeOutTime = 1.f;
+			
+			float fade = 1.f - (time - alertDisappearTime) / fadeOutTime;
+			fade = std::min(fade, 1.f);
+			if(fade <= 0.f) {
+				return;
+			}
+			
+			float borderFade = 1.f - (time - alertAppearTime) * 1.5f;
+			borderFade = std::max(std::min(borderFade, 1.f), 0.f);
+			borderFade *= fade;
+			
+			Handle<IImage> alertIcon(renderer->RegisterImage("Gfx/AlertIcon.png"), false);
+			
+			Vector2 textSize = font->Measure(alertContents);
+			Vector2 contentsSize = textSize;
+			contentsSize.y = std::max(contentsSize.y, 16.f);
+			if(alertType != AlertType::Notice) {
+				contentsSize.x += 22.f;
+			}
+			
+			// add margin
+			const float margin = 8.f;
+			contentsSize.x += margin * 2.f;
+			contentsSize.y += margin * 2.f;
+			
+			contentsSize.x = floorf(contentsSize.x);
+			contentsSize.y = floorf(contentsSize.y);
+			
+			Vector2 pos = (Vector2(scrWidth, scrHeight) - contentsSize) * Vector2(0.5f, 0.7f);
+			pos.y += 40.f;
+			
+			pos.x = floorf(pos.x);
+			pos.y = floorf(pos.y);
+			
+			Vector4 color;
+			
+			// draw border
+			switch(alertType) {
+				case AlertType::Notice:
+					color = Vector4(0.f, 0.f, 0.f, 0.f);
+					break;
+				case AlertType::Warning:
+					color = Vector4(1.f, 1.f, 0.f, .7f);
+					break;
+				case AlertType::Error:
+					color = Vector4(1.f, 0.f, 0.f, .7f);
+					break;
+			}
+			color *= borderFade;
+			r->SetColorAlphaPremultiplied(color);
+			
+			const float border = 1.f;
+			r->DrawImage(nullptr, AABB2(pos.x-border, pos.y-border, contentsSize.x+border*2.f, border));
+			r->DrawImage(nullptr, AABB2(pos.x-border, pos.y+contentsSize.y, contentsSize.x+border*2.f, border));
+			
+			r->DrawImage(nullptr, AABB2(pos.x-border, pos.y, border, contentsSize.y));
+			r->DrawImage(nullptr, AABB2(pos.x+contentsSize.x, pos.y, border, contentsSize.y));
+			
+			// fill background
+			color = Vector4(0.f, 0.f, 0.f, fade * 0.5f);
+			r->SetColorAlphaPremultiplied(color);
+			r->DrawImage(nullptr, AABB2(pos.x, pos.y, contentsSize.x, contentsSize.y));
+			
+			// draw icon
+			switch(alertType) {
+				case AlertType::Notice:
+					color = Vector4(0.f, 0.f, 0.f, 0.f);
+					break;
+				case AlertType::Warning:
+					color = Vector4(1.f, 1.f, 0.f, 1.f);
+					break;
+				case AlertType::Error:
+					color = Vector4(1.f, 0.f, 0.f, 1.f);
+					break;
+			}
+			color *= fade;
+			r->SetColorAlphaPremultiplied(color);
+			
+			r->DrawImage(alertIcon, Vector2(pos.x + margin, pos.y + (contentsSize.y - 16.f) * 0.5f));
+			
+			// draw text
+			color = Vector4(1.f, 1.f, 1.f, 1.f);
+			color *= fade;
+			
+			font->DrawShadow(alertContents,
+							 Vector2(pos.x + contentsSize.x - textSize.x - margin,
+									 pos.y + (contentsSize.y - textSize.y) * 0.5f),
+							 1.f, color,
+							 Vector4(0.f, 0.f, 0.f, fade * 0.5f));
+			
+			
+		}
+		
 		void Client::DrawHealth() {
 			SPADES_MARK_FUNCTION();
 			
@@ -618,11 +724,15 @@ namespace spades {
 					}
 				}
 				
+				DrawAlert();
+				
 				chatWindow->Draw();
 				killfeedWindow->Draw();
 				
+				
 				// large map view should come in front
 				largeMapView->Draw();
+				
 				
 				if(scoreboardVisible)
 					scoreboard->Draw();
@@ -632,6 +742,8 @@ namespace spades {
 				// world exists, but no local player: not joined
 				
 				scoreboard->Draw();
+				
+				DrawAlert();
 			}
 			
 			if(IsLimboViewActive())
@@ -669,6 +781,8 @@ namespace spades {
 				renderer->SetColorAlphaPremultiplied(MakeVector4(op, op, op, op));
 				renderer->DrawImage(img, AABB2(scrWidth - 236.f + p * 234.f, scrHeight - 18.f, 4.f, 4.f));
 			}
+			
+			DrawAlert();
 		}
 		
 		void Client::Draw2D(){

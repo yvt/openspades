@@ -53,6 +53,8 @@ SPADES_SETTING(cg_ragdoll, "1");
 SPADES_SETTING(cg_blood, "1");
 SPADES_SETTING(cg_ejectBrass, "1");
 
+SPADES_SETTING(cg_alerts, "");
+
 
 namespace spades {
 	namespace client {
@@ -93,6 +95,8 @@ namespace spades {
 			if(!world->GetMap()->CastRay(p->GetEye(),
 										 p->GetFront(),
 										 256.f, outBlockCoord)){
+				
+				
 				return;
 			}
 			
@@ -438,6 +442,31 @@ namespace spades {
 			}
 			
 			lastKills = world->GetPlayerPersistent(player->GetId()).kills;
+			
+			// show block count when building block lines.
+			if(player->IsAlive() &&
+			   player->GetTool() == Player::ToolBlock &&
+			   player->GetWeaponInput().secondary &&
+			   player->IsBlockCursorDragging()) {
+				if(player->IsBlockCursorActive()) {
+					auto blocks = std::move
+					(world->CubeLine(player->GetBlockCursorDragPos(),
+									 player->GetBlockCursorPos(),
+									 256));
+					auto msg = _TrN("Client",
+									"{0} block", "{0} blocks",
+									blocks.size());
+					AlertType type =
+					static_cast<int>(blocks.size()) > player->GetNumBlocks() ?
+					AlertType::Warning : AlertType::Notice;
+					ShowAlert(msg, type, 0.f, true);
+				}else{
+					// invalid
+					auto msg = _Tr("Client", "-- blocks");
+					AlertType type = AlertType::Warning;
+					ShowAlert(msg, type, 0.f, true);
+				}
+			}
 			
 			if(player->IsAlive())
 				lastAliveTime = time;
@@ -975,6 +1004,8 @@ namespace spades {
 		void Client::AddBulletTracer(spades::client::Player *player,
 									 spades::Vector3 muzzlePos,
 									 spades::Vector3 hitPos) {
+			SPADES_MARK_FUNCTION();
+			
 			Tracer *t;
 			float vel;
 			switch(player->GetWeapon()->GetWeaponType()) {
@@ -992,6 +1023,8 @@ namespace spades {
 		}
 		
 		void Client::BlocksFell(std::vector<IntVector3> blocks) {
+			SPADES_MARK_FUNCTION();
+			
 			if(blocks.empty())
 				return;
 			FallingBlock *b = new FallingBlock(this, blocks);
@@ -1129,9 +1162,11 @@ namespace spades {
 		}
 		
 		void Client::LocalPlayerBlockAction(spades::IntVector3 v, BlockActionType type){
+			SPADES_MARK_FUNCTION();
 			net->SendBlockAction(v, type);
 		}
 		void Client::LocalPlayerCreatedLineBlock(spades::IntVector3 v1, spades::IntVector3 v2) {
+			SPADES_MARK_FUNCTION();
 			net->SendBlockLine(v1, v2);
 		}
 		
@@ -1139,6 +1174,7 @@ namespace spades {
 									 bool sourceGiven,
 									 spades::Vector3 source) {
 			SPADES_MARK_FUNCTION();
+			
 			if(sourceGiven){
 				Player * p = world->GetLocalPlayer();
 				if(!p)
@@ -1149,5 +1185,24 @@ namespace spades {
 			}
 		}
 		
+		void Client::LocalPlayerBuildError(BuildFailureReason reason) {
+			SPADES_MARK_FUNCTION();
+			
+			if(!cg_alerts) {
+				PlayAlertSound();
+				return;
+			}
+			
+			switch(reason) {
+				case BuildFailureReason::InsufficientBlocks:
+					ShowAlert(_Tr("Client", "Insufficient Blocks."),
+							  AlertType::Error);
+					break;
+				case BuildFailureReason::InvalidPosition:
+					ShowAlert(_Tr("Client", "You cannot place a block there."),
+							  AlertType::Error);
+					break;
+			}
+		}
 	}
 }

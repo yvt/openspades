@@ -22,6 +22,7 @@
 #include "Client.h"
 
 #include <Core/Settings.h>
+#include <Core/Strings.h>
 
 #include "IAudioChunk.h"
 #include "IAudioDevice.h"
@@ -79,6 +80,9 @@ SPADES_SETTING(cg_keySaveMap, "8");
 SPADES_SETTING(cg_switchToolByWheel, "1");
 
 SPADES_SETTING(cg_debugCorpse, "0");
+
+SPADES_SETTING(cg_alerts, "1");
+
 
 namespace spades {
 	namespace client {
@@ -422,21 +426,40 @@ namespace spades {
 						}
 					}else if(CheckKey(cg_keyToolBlock, name) && down){
 						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
-						   world->GetLocalPlayer()->IsAlive() &&
-						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolBlock)){
-							SetSelectedTool(Player::ToolBlock);
+						   world->GetLocalPlayer()->IsAlive()
+						   ){
+							if(world->GetLocalPlayer()->IsToolSelectable(Player::ToolBlock)) {
+								SetSelectedTool(Player::ToolBlock);
+							}else{
+								if(cg_alerts)
+									ShowAlert(_Tr("Client", "Out of Blocks"), AlertType::Error);
+								else
+									PlayAlertSound();
+							}
 						}
 					}else if(CheckKey(cg_keyToolWeapon, name) && down){
 						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
-						   world->GetLocalPlayer()->IsAlive() &&
-						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolWeapon)){
-							SetSelectedTool(Player::ToolWeapon);
+						   world->GetLocalPlayer()->IsAlive()){
+							if(world->GetLocalPlayer()->IsToolSelectable(Player::ToolWeapon)) {
+								SetSelectedTool(Player::ToolWeapon);
+							}else{
+								if(cg_alerts)
+									ShowAlert(_Tr("Client", "Out of Ammo"), AlertType::Error);
+								else
+									PlayAlertSound();
+							}
 						}
 					}else if(CheckKey(cg_keyToolGrenade, name) && down){
 						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
-						   world->GetLocalPlayer()->IsAlive() &&
-						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolGrenade)){
-							SetSelectedTool(Player::ToolGrenade);
+						   world->GetLocalPlayer()->IsAlive()){
+							if(world->GetLocalPlayer()->IsToolSelectable(Player::ToolGrenade)) {
+								SetSelectedTool(Player::ToolGrenade);
+							}else{
+								if(cg_alerts)
+									ShowAlert(_Tr("Client", "Out of Grenades"), AlertType::Error);
+								else
+									PlayAlertSound();
+							}
 						}
 					}else if(CheckKey(cg_keyGlobalChat, name) && down){
 						// global chat

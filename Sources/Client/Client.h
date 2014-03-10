@@ -190,6 +190,16 @@ namespace spades {
 			Handle<IFont> textFont;
 			Handle<IFont> bigTextFont;
 			
+			enum class AlertType {
+				Notice,
+				Warning,
+				Error
+			};
+			AlertType alertType;
+			std::string alertContents;
+			float alertDisappearTime;
+			float alertAppearTime;
+			
 			std::list<std::unique_ptr<ILocalEntity>> localEntities;
 			std::list<std::unique_ptr<Corpse>> corpses;
 			Corpse *lastMyCorpse;
@@ -209,6 +219,14 @@ namespace spades {
 			void DrawStartupScreen();
 			void DoInit();
 			
+			void ShowAlert(const std::string& contents,
+						   AlertType type);
+			void ShowAlert(const std::string& contents,
+						   AlertType type,
+						   float timeout,
+						   bool quiet = false);
+			void PlayAlertSound();
+			
 			void UpdateWorld(float dt);
 			void UpdateLocalSpectator(float dt);
 			void UpdateLocalPlayer(float dt);
@@ -226,6 +244,7 @@ namespace spades {
 			void DrawHurtScreenEffect();
 			void DrawHurtSprites();
 			void DrawHealth();
+			void DrawAlert();
 			void DrawDebugAim();
 			
 			void DrawScene();
@@ -340,6 +359,7 @@ namespace spades {
 			virtual void LocalPlayerCreatedLineBlock(IntVector3, IntVector3);
 			virtual void LocalPlayerHurt(HurtType type, bool sourceGiven,
 										 Vector3 source);
+			virtual void LocalPlayerBuildError(BuildFailureReason reason);
 		};
 	}
 }

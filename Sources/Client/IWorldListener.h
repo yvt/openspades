@@ -27,6 +27,12 @@ namespace spades {
 	namespace client {
 		class Player;
 		class Grenade;
+		
+		enum class BuildFailureReason {
+			InsufficientBlocks,
+			InvalidPosition
+		};
+		
 		class IWorldListener{
 		public:
 			virtual void PlayerObjectSet(int playerId) = 0;
@@ -70,6 +76,7 @@ namespace spades {
 			virtual void LocalPlayerCreatedLineBlock(IntVector3, IntVector3) = 0;
 			virtual void LocalPlayerHurt(HurtType type, bool sourceGiven,
 										 Vector3 source) = 0;
+			virtual void LocalPlayerBuildError(BuildFailureReason reason) = 0;
 		};
 	}
 }
