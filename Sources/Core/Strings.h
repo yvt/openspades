@@ -249,6 +249,13 @@ namespace spades {
 		return Format(s, args...);
 	}
 	
+	template<class ...T>
+	std::string GetTextPlural(const std::string& domain, const std::string& context, const std::string& text, const std::string& textPl, T... args) {
+		int plural = CheckPlural(args...);
+		auto s = GetTextRawPlural(domain, context, text, textPl, plural);
+		return Format(s, args...);
+	}
+	
 	class CatalogDomainHandle {
 		std::string domain;
 	public:
@@ -259,7 +266,7 @@ namespace spades {
 		}
 		template<class ...T>
 		std::string GetPlural(const std::string& context, const std::string& text, const std::string& textPl, T... args) {
-			return GetText(domain, context, text, textPl, args...);
+			return GetTextPlural(domain, context, text, textPl, args...);
 		}
 	};
 	
