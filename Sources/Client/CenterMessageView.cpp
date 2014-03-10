@@ -31,7 +31,7 @@ namespace spades {
 		{
 			SPADES_MARK_FUNCTION();
 			
-			for(int i = 0; i < 5; i++)
+			for(int i = 0; i < 2; i++)
 				lineUsing.push_back(false);
 			
 		}
