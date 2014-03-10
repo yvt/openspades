@@ -742,6 +742,10 @@ namespace spades {
 			
 			EmitBlockFragments(shiftedHitPos, colV);
 			
+			if(p == world->GetLocalPlayer()){
+				localFireVibrationTime = time;
+			}
+			
 			if(!IsMuted()){
 				bool isLocal = p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/Spade/HitBlock.wav");

@@ -245,12 +245,17 @@ namespace spades {
 						float localFireVibration = GetLocalFireVibration();
 						localFireVibration *= localFireVibration;
 						
+						if(player->GetTool() == Player::ToolSpade) {
+							localFireVibration *= 0.3f;
+						}
+						
 						roll += (nextRandom() - nextRandom()) * 0.03f * localFireVibration;
 						scale += nextRandom() * 0.04f * localFireVibration;
 						
 						vibPitch += localFireVibration * (1.f - localFireVibration) * 0.01f;
 						vibYaw += sinf(localFireVibration * (float)M_PI * 2.f) * 0.001f;
-						def.radialBlur += localFireVibration * 0.2f;
+						
+						
 						
 						// sprint bob
 						{
