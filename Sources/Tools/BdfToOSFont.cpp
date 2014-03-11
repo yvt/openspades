@@ -1943,7 +1943,7 @@ int main(int argc, char **argv) {
 			bmp2.Trim(*bmp, srcX, srcY);
 			
 			srcX += bbxX * scaling;
-			srcY += size - origHeight + bbxY;
+			srcY += size - origHeight - bbxY;
 			
 			Glyph g;
 			g.index = currentChar;
