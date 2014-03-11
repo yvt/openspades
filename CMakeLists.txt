@@ -126,6 +126,9 @@ if(HAS_SOCKLEN_T)
     add_definitions(-DHAS_SOCKLEN_T=1)
 endif()
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+    list( APPEND CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+endif()
 
 set(OPENSPADES_RESDIR "" CACHE STRING "Resource dir to use while developing")
 set(OPENSPADES_EXTRATITLE "" CACHE STRING "Extra info to add to the package name")
