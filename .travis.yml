@@ -1,0 +1,7 @@
+language: cpp
+compiler:
+  # gcc 4.6 is not supported!
+  - clang
+script cmake CMakeList.txt && make
+
+
