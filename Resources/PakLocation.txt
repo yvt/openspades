@@ -26,7 +26,7 @@ GNU Unifont: Cyrillic Only
 
 You can get the Cyrillic font pak (provided by noway) from:
 
-http://yvt.jp/files/programs/osppaks/CMUSansUnifontRu.pak
+http://yvt.jp/files/programs/osppaks/font-unifont-ru.pak
 
 
 
