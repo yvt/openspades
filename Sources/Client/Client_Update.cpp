@@ -576,10 +576,14 @@ namespace spades {
 					"Sounds/Player/Wade1.wav",
 					"Sounds/Player/Wade2.wav",
 					"Sounds/Player/Wade3.wav",
-					"Sounds/Player/Wade4.wav"
+					"Sounds/Player/Wade4.wav",
+					"Sounds/Player/Wade5.wav",
+					"Sounds/Player/Wade6.wav",
+					"Sounds/Player/Wade7.wav",
+					"Sounds/Player/Wade8.wav"
 				};
 				Handle<IAudioChunk> c = p->GetWade() ?
-				audioDevice->RegisterSound(wsnds[(rand() >> 8) % 4]):
+				audioDevice->RegisterSound(wsnds[(rand() >> 8) % 8]):
 				audioDevice->RegisterSound(snds[(rand() >> 8) % 8]);
 				audioDevice->Play(c, p->GetOrigin(),
 								  AudioParam());
