@@ -7,6 +7,7 @@ compiler:
 cache: apt
 
 before_install:
+  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
   - sudo apt-get update
   - sudo apt-get install g++-4.8 pkg-config libfltk1.3-dev libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev
   - hg clone http://hg.libsdl.org/SDL && cd SDL && ./configure && make && sudo make install && cd ..
