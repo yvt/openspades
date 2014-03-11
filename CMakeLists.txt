@@ -72,6 +72,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 		-Wno-unknown-pragmas #learn_more: output is spammed like shit by all those #pragma mark items
 	)
 
+elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+	# Clang C++11 support
+	add_definitions("-std=gnu++11")
+	
 elseif(MSVC)
 	add_definitions(
 		/D_CRT_SECURE_NO_WARNINGS
@@ -124,10 +128,6 @@ if(HAS_MSGHDR_FLAGS)
 endif()
 if(HAS_SOCKLEN_T)
     add_definitions(-DHAS_SOCKLEN_T=1)
-endif()
-
-if(CMAKE_COMPILER_IS_GNUCXX)
-    list( APPEND CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 endif()
 
 set(OPENSPADES_RESDIR "" CACHE STRING "Resource dir to use while developing")
