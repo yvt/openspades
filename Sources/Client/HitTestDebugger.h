@@ -33,7 +33,7 @@ namespace spades {
 		class World;
 		
 		/** HitTestDebugger is used to debug hit detection issues. */
-		class HitTestDebugger final {
+		class HitTestDebugger {
 			class Port;
 			
 			Handle<IRenderer> renderer;

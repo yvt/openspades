@@ -36,7 +36,7 @@ SPADES_SETTING(cg_smp, "");
 
 namespace spades {
 	namespace client {
-		class HitTestDebugger::Port final : public draw::SWPort {
+		class HitTestDebugger::Port : public draw::SWPort {
 			Handle<Bitmap> bmp;
 		public:
 			Port() {
