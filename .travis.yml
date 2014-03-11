@@ -10,7 +10,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install pkg-config libfltk1.3-dev libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev
   - hg clone http://hg.libsdl.org/SDL && cd SDL && ./configure && make && sudo make install
-  - curl https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.0.tar.gz | tar -x && cd SDL2_image-2.0.0 && ./configure && make && sudo make install
+  - curl https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.0.tar.gz | tar -xz && cd SDL2_image-2.0.0 && ./configure && make && sudo make install
 
 script: cmake CMakeLists.txt && make
 
