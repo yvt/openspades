@@ -234,7 +234,7 @@ namespace spades {
 			}
 			
 			float scale = size * glyph.sizeInverse;
-			if(roundSize) {
+			if(roundSize || scale < 1.f) {
 				float newScale = std::max(1.f, floorf(scale));
 				// vertical-align: baseline
 				offset.y += (scale - newScale) * glyph.size;
@@ -274,7 +274,7 @@ namespace spades {
 			}
 			
 			float scale = size * glyph.sizeInverse;
-			if(roundSize) {
+			if(roundSize || scale < 1.f) {
 				float newScale = std::max(1.f, floorf(scale));
 				scale = newScale;
 			}
