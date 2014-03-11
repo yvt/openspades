@@ -184,6 +184,7 @@ namespace spades {
 			void GrenadeExplosion(Vector3);
 			void GrenadeExplosionUnderwater(Vector3);
 			void MuzzleFire(Vector3, Vector3 dir, bool local);
+			void BulletHitWaterSurface(Vector3);
 			
 			// drawings
 			Handle<IFont> designFont;

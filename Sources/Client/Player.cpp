@@ -629,6 +629,11 @@ namespace spades {
 				Vector3 finalHitPos;
 				finalHitPos = muzzle + dir * 128.f;
 				
+				if(hitPlayer == nullptr && !mapResult.hit) {
+					// might hit water surface.
+					
+				}
+				
 				if(mapResult.hit && (mapResult.hitPos - muzzle).GetLength() < 128.f &&
 				   (hitPlayer == NULL || (mapResult.hitPos - muzzle).GetLength() < hitPlayerDistance)){
 					IntVector3 outBlockCoord = mapResult.hitBlock;
@@ -640,7 +645,12 @@ namespace spades {
 					if(outBlockCoord.x >= 0 && outBlockCoord.y >= 0 && outBlockCoord.z >= 0 &&
 					   outBlockCoord.x < map->Width() && outBlockCoord.y < map->Height() &&
 					   outBlockCoord.z < map->Depth()){
-						if(outBlockCoord.z < 62){
+						if(outBlockCoord.z == 63) {
+							if(world->GetListener())
+								world->GetListener()->BulletHitBlock(mapResult.hitPos,
+																	 mapResult.hitBlock,
+																	 mapResult.normal);
+						}else if(outBlockCoord.z < 62){
 							int x = outBlockCoord.x;
 							int y = outBlockCoord.y;
 							int z = outBlockCoord.z;

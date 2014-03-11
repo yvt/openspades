@@ -53,6 +53,7 @@
 
 SPADES_SETTING(cg_blood, "0");
 SPADES_SETTING(cg_reduceSmoke, "0");
+SPADES_SETTING(cg_waterImpact, "1");
 
 namespace spades {
 	namespace client {
@@ -522,6 +523,79 @@ namespace spades {
 		}
 		
 		
+		void Client::BulletHitWaterSurface(spades::Vector3 origin){
+			float dist = (origin - lastSceneDef.viewOrigin).GetLength();
+			if(dist > 150.f)
+				return;
+			if(!cg_waterImpact)
+				return;
+			
+			Vector4 color;
+			color = MakeVector4( .95f, .95f, .95f, .3f);
+			// water1
+			Handle<IImage> img = renderer->RegisterImage("Textures/WaterExpl.png");
+			if(cg_reduceSmoke) color.w = .2f;
+			for(int i = 0; i < 2; i++){
+				ParticleSpriteEntity *ent =
+				new ParticleSpriteEntity(this, img, color);
+				ent->SetTrajectory(origin,
+								   (MakeVector3(GetRandom()-GetRandom(),
+												GetRandom()-GetRandom(),
+												-GetRandom()*7.f)) * 1.f,
+								   .3f, .6f);
+				ent->SetRotation(0.f);
+				ent->SetRadius(0.6f + GetRandom()*GetRandom()*0.4f,
+							   .7f);
+				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetLifeTime(3.f + GetRandom()*0.3f, 0.1f, .60f);
+				localEntities.emplace_back(ent);
+			}
+			
+			// water2
+			img = renderer->RegisterImage("Textures/Fluid.png");
+			color.w = .9f;
+			if(cg_reduceSmoke) color.w = .4f;
+			for(int i = 0; i < 6; i++){
+				ParticleSpriteEntity *ent =
+				new ParticleSpriteEntity(this, img, color);
+				ent->SetTrajectory(origin,
+								   (MakeVector3(GetRandom()-GetRandom(),
+												GetRandom()-GetRandom(),
+												-GetRandom()*10.f)) * 2.f,
+								   1.f, 1.f);
+				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
+				ent->SetRadius(0.6f + GetRandom()*GetRandom()*0.6f,
+							   0.6f);
+				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetLifeTime(3.f + GetRandom()*0.3f, GetRandom() * 0.3f, .60f);
+				localEntities.emplace_back(ent);
+			}
+			
+			
+			// fragments
+			img = renderer->RegisterImage("Gfx/White.tga");
+			color = MakeVector4(1,1,1, 0.7f);
+			for(int i = 0; i < 10; i++){
+				ParticleSpriteEntity *ent =
+				new ParticleSpriteEntity(this, img, color);
+				Vector3 dir = MakeVector3(GetRandom()-GetRandom(),
+										  GetRandom()-GetRandom(),
+										  -GetRandom() * 3.f);
+				float radius = 0.03f + GetRandom()*GetRandom()*0.05f;
+				ent->SetTrajectory(origin + dir * .2f +
+								   MakeVector3(0, 0, -1.2f),
+								   dir * 5.f,
+								   .1f + radius * 3.f, 1.f);
+				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
+				ent->SetRadius(radius);
+				ent->SetLifeTime(3.5f + GetRandom() * 2.f, 0.f, 1.f);
+				ent->SetBlockHitAction(ParticleSpriteEntity::Delete);
+				localEntities.emplace_back(ent);
+			}
+			
+			
+			// TODO: wave?
+		}
 
 	}
 }
