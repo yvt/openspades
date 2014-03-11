@@ -1368,7 +1368,7 @@ msgstr ""
 
 #: ../../../Sources/Client/Client_Update.cpp:1202
 msgctxt "Client"
-msgid "Insufficient Blocks."
+msgid "Insufficient blocks."
 msgstr ""
 
 #: ../../../Sources/Client/Client_Update.cpp:1206

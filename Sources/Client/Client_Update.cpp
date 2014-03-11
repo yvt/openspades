@@ -1199,7 +1199,7 @@ namespace spades {
 			
 			switch(reason) {
 				case BuildFailureReason::InsufficientBlocks:
-					ShowAlert(_Tr("Client", "Insufficient Blocks."),
+					ShowAlert(_Tr("Client", "Insufficient blocks."),
 							  AlertType::Error);
 					break;
 				case BuildFailureReason::InvalidPosition:
