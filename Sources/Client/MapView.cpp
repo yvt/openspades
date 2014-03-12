@@ -161,9 +161,6 @@ namespace spades {
 			if(!player)
 				return;
 			
-			if(!player->IsAlive())
-				return;
-			
 			if(largeMap)
 				if(zoomState < .0001f)
 					return;
