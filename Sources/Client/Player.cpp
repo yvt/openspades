@@ -223,10 +223,11 @@ namespace spades {
 					}
 				}
 				if(newInput.primary != weapInput.primary ||
-				   (newInput.primary && weapInput.primary &&
-					canPending)){
+				   newInput.primary){
 					if(newInput.primary){
 						
+						if(!weapInput.primary)
+							lastSingleBlockBuildSeqDone = false;
 						if(IsBlockCursorActive() && blockStocks > 0){
 							if(listener &&
 							   this == world->GetLocalPlayer())
@@ -240,21 +241,8 @@ namespace spades {
 								 this == world->GetLocalPlayer()) {
 							pendingPlaceBlock = true;
 							pendingPlaceBlockPos = blockCursorPos;
-							lastSingleBlockBuildSeqDone = false;
 						}else if(!IsBlockCursorActive()) {
-							lastSingleBlockBuildSeqDone = false;
-							if(canPending) {
-								// Delayed block placement can be activated,
-								// so don't show alert
-							}else{
-								lastSingleBlockBuildSeqDone = true;
-								// cannot build; invalid position.
-								if(listener &&
-								   this == world->GetLocalPlayer()) {
-									listener->
-									LocalPlayerBuildError(BuildFailureReason::InvalidPosition);
-								}
-							}
+							// wait for building becoming possible
 						}
 						
 						blockCursorDragging = false;
@@ -474,9 +462,17 @@ namespace spades {
 					canPending = result.hit &&
 								 (result.hitBlock + result.normal).z < 62 &&
 								 BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f;
+					
 					blockCursorActive = false;
-					for(int dist = 11; dist >= 1 &&
+					int dist = 11;
+					for(; dist >= 1 &&
 						BoxDistanceToBlock(result.hitBlock + result.normal) > 3.f ; dist--) {
+						result = GetWorld()->GetMap()->CastRay2(GetEye(),
+																GetFront(),
+																dist);
+					}
+					for(; dist < 12 &&
+						BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f ; dist++) {
 						result = GetWorld()->GetMap()->CastRay2(GetEye(),
 																GetFront(),
 																dist);
