@@ -24,6 +24,8 @@
 #include <Core/Settings.h>
 #include <algorithm>
 #include <cctype>
+#include <Audio/YsrDevice.h>
+#include <Audio/ALDevice.h>
 
 #include "../Imports/OpenGL.h" //for gpu info
 #include "../Imports/SDL.h"
@@ -83,6 +85,39 @@ namespace spades {
 		
 		void StartupScreenHelper::ExamineSystem() {
 			SPADES_MARK_FUNCTION();
+			
+			// check audio device availability
+			// Note: this only checks whether these libraries can be loaded.
+			
+			SPLog("Checking YSR availability");
+			if(!audio::YsrDevice::TryLoadYsr()) {
+				incapableConfigs.insert
+				(std::make_pair
+				 ("s_audioDriver",
+				  [](std::string value) -> std::string {
+					  if(EqualsIgnoringCase(value, "ysr")) {
+						  return "YSR library couldn't be loaded.";
+					  }else{
+						  return std::string();
+					  }
+				  }));
+			}
+			
+			SPLog("Checking OpenAL availability");
+			if(!audio::ALDevice::TryLoad()) {
+				incapableConfigs.insert
+				(std::make_pair
+				 ("s_audioDriver",
+				  [](std::string value) -> std::string {
+					  if(EqualsIgnoringCase(value, "openal")) {
+						  return "OpenAL library couldn't be loaded.";
+					  }else{
+						  return std::string();
+					  }
+				  }));
+			}
+			
+			// FIXME: check OpenAL availability somehow
 			
 			// check GL capabilities
 			

@@ -39,6 +39,8 @@ namespace spades {
 			ALDevice();
 			virtual ~ALDevice();
 			
+			static bool TryLoad();
+			
 			virtual client::IAudioChunk *RegisterSound(const char *name);
 			
 			virtual void SetGameMap(client::GameMap *);

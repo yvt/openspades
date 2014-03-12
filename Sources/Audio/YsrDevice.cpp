@@ -218,6 +218,18 @@ namespace spades {
 			}
 		}
 		
+		bool YsrDevice::TryLoadYsr() {
+			try {
+				if(!library){
+					library = new spades::DynamicLibrary(s_ysrDriver.CString());
+					SPLog("'%s' loaded", s_ysrDriver.CString());
+				}
+				return true;
+			}catch(...){
+				return false;
+			}
+		}
+		
 		YsrDriver::~YsrDriver() {
 			ctx.Destroy();
 		}

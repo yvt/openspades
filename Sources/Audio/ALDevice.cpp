@@ -692,6 +692,16 @@ namespace spades {
 			
 		}
 		
+		
+		bool ALDevice::TryLoad() {
+			try {
+				al::Link();
+				return true;
+			}catch(...){
+				return false;
+			}
+		}
+		
 		ALDevice::~ALDevice() {
 			SPADES_MARK_FUNCTION();
 			

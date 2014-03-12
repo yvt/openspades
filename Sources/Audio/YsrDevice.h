@@ -56,6 +56,8 @@ namespace spades {
 		public:
 			YsrDevice();
 			
+			static bool TryLoadYsr();
+			
 			virtual client::IAudioChunk *RegisterSound(const char *name);
 			
 			virtual void SetGameMap(client::GameMap *);
