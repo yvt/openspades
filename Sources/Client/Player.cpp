@@ -650,7 +650,13 @@ namespace spades {
 								world->GetListener()->BulletHitBlock(mapResult.hitPos,
 																	 mapResult.hitBlock,
 																	 mapResult.normal);
-						}else if(outBlockCoord.z < 62){
+						}else if(outBlockCoord.z == 62) {
+							// blocks at this level cannot be damaged
+							if(world->GetListener())
+								world->GetListener()->BulletHitBlock(mapResult.hitPos,
+																	 mapResult.hitBlock,
+																	 mapResult.normal);
+						}else{
 							int x = outBlockCoord.x;
 							int y = outBlockCoord.y;
 							int z = outBlockCoord.z;
