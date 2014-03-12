@@ -407,12 +407,30 @@ namespace spades {
 				}
 			}else if(tool == ToolBlock && IsLocalPlayer()){
 				GameMap::RayCastResult result;
-				result = GetWorld()->GetMap()->CastRay2(GetEye(),
-														GetFront(),
-														12);
+				auto *map = GetWorld()->GetMap();
+				result = map->CastRay2(GetEye(), GetFront(), 12);
 				canPending = false;
 				
-				
+				if(blockCursorDragging) {
+					// check the starting point is not floating
+					auto start = blockCursorDragPos;
+					if(map->IsSolidWrapped(start.x-1, start.y, start.z) ||
+					   map->IsSolidWrapped(start.x, start.y-1, start.z) ||
+					   map->IsSolidWrapped(start.x, start.y, start.z-1) ||
+					   map->IsSolidWrapped(start.x+1, start.y, start.z) ||
+					   map->IsSolidWrapped(start.x, start.y+1, start.z) ||
+					   map->IsSolidWrapped(start.x, start.y, start.z+1)) {
+						// still okay
+					}else{
+						// cannot build; floating
+						if(listener &&
+						   this == world->GetLocalPlayer()) {
+							listener->
+							LocalPlayerBuildError(BuildFailureReason::InvalidPosition);
+						}
+						blockCursorDragging = false;
+					}
+				}
 				
 				if(result.hit &&
 				   (result.hitBlock + result.normal).z < 62 &&
