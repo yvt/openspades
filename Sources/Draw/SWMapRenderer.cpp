@@ -633,7 +633,7 @@ namespace spades {
 								int p1 = transform(invDist, z + 1);
 								int p2 = transform(oldInvDist, z + 1);
 								LinePixel pix = BuildLinePixel(oirx, oiry, z, Face::PosZ,
-															   medDist + heightScaleVal[z]);
+															   medDist + heightScaleVal[z+1]);
 								
 								for(int j = p2; j < p1; j++) {
 									auto& p = pixels[j];
