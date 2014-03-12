@@ -122,6 +122,8 @@ namespace spades {
 			PlayerInput playerInput;
 			WeaponInput weapInput;
 			KeypadInput keypadInput;
+			Player::ToolType lastTool;
+			bool hasLastTool;
 			Vector3 lastFront;
 			float lastPosSentTime;
 			int lastHealth;

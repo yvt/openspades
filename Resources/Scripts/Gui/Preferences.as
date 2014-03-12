@@ -710,6 +710,7 @@ namespace spades {
 			layouter.AddControl(_Tr("Preferences", "Equip Block"), "cg_keyToolBlock");
 			layouter.AddControl(_Tr("Preferences", "Equip Weapon"), "cg_keyToolWeapon");
 			layouter.AddControl(_Tr("Preferences", "Equip Grenade"), "cg_keyToolGrenade");
+			layouter.AddControl(_Tr("Preferences", "Last Used Tool"), "cg_keyLastTool");
 			layouter.AddPlusMinusField(_Tr("Preferences", "Switch Tools by Wheel"), "cg_switchToolByWheel");
 			
 			layouter.AddHeading(_Tr("Preferences", "Movement"));

@@ -55,6 +55,7 @@ SPADES_SETTING(cg_keyToolWeapon, "3");
 SPADES_SETTING(cg_keyToolGrenade, "4");
 SPADES_SETTING(cg_keyReloadWeapon, "r");
 SPADES_SETTING(cg_keyFlashlight, "f");
+SPADES_SETTING(cg_keyLastTool, "");
 
 SPADES_SETTING(cg_keyMoveLeft, "a");
 SPADES_SETTING(cg_keyMoveRight, "d");
@@ -460,6 +461,14 @@ namespace spades {
 								else
 									PlayAlertSound();
 							}
+						}
+					}else if(CheckKey(cg_keyLastTool, name) && down){
+						if(hasLastTool &&
+						   world->GetLocalPlayer()->GetTeamId() < 2 &&
+						   world->GetLocalPlayer()->IsAlive() &&
+						   world->GetLocalPlayer()->IsToolSelectable(lastTool)){
+							hasLastTool = false;
+							SetSelectedTool(lastTool);
 						}
 					}else if(CheckKey(cg_keyGlobalChat, name) && down){
 						// global chat

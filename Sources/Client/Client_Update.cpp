@@ -116,6 +116,9 @@ namespace spades {
 		void Client::SetSelectedTool(Player::ToolType type, bool quiet) {
 			if(type == world->GetLocalPlayer()->GetTool())
 				return;
+			lastTool = world->GetLocalPlayer()->GetTool();
+			hasLastTool = true;
+			
 			world->GetLocalPlayer()->SetTool(type);
 			net->SendTool();
 			

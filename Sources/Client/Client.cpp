@@ -97,6 +97,7 @@ namespace spades {
 		worldSubFrame(0.f),
 		grenadeVibration(0.f),
 		lastMyCorpse(nullptr),
+		hasLastTool(false),
 		
 		nextScreenShotIndex(0),
 		nextMapShotIndex(0),
