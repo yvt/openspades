@@ -392,6 +392,12 @@ namespace spades {
 			auto* listener = world->GetListener();
 			
 			MovePlayer(dt);
+			
+			if(!IsAlive()) {
+				// do death cleanup
+				blockCursorDragging = false;
+			}
+			
 			if(tool == ToolSpade){
 				if(weapInput.primary){
 					if(world->GetTime() > nextSpadeTime){
