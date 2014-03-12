@@ -140,6 +140,7 @@ namespace spades {
 			
 			FallbackFontManager() {
 				auto files = FileManager::EnumFiles("Gfx/Fonts");
+				std::sort(files.begin(), files.end());
 				for(auto file = files.begin(); file != files.end(); ++file) {
 					if(file->rfind(".ospfont") != file->size() - 8) {
 						continue;
