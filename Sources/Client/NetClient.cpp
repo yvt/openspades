@@ -1052,12 +1052,15 @@ namespace spades {
 					
 					std::vector<IntVector3> cells;
 					if(action == 0){
+						bool replace = GetWorld()->GetMap()->IsSolidWrapped(pos.x, pos.y, pos.z);
 						if(!p){
 							GetWorld()->CreateBlock(pos, temporaryPlayerBlockColor);
 						}else{
 							GetWorld()->CreateBlock(pos, p->GetBlockColor());
 							client->PlayerCreatedBlock(p);
-							p->UsedBlocks(1);
+							if(!replace) {
+								p->UsedBlocks(1);
+							}
 						}
 					}else if(action == 1){
 						cells.push_back(pos);
