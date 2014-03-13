@@ -59,6 +59,7 @@ namespace spades {
 			
 			AddTab(GameOptionsPanel(Manager, options), _Tr("Preferences", "Game Options"));
 			AddTab(ControlOptionsPanel(Manager, options), _Tr("Preferences", "Controls"));
+			AddTab(MiscOptionsPanel(Manager, options), _Tr("Preferences", "Misc"));
 			
 			{
 				PreferenceTabButton button(Manager);
@@ -451,7 +452,7 @@ namespace spades {
 		}
 	}
 	
-	class ConfigSimpleToggleButton: spades::ui::SimpleButton {
+	class ConfigSimpleToggleButton: spades::ui::RadioButton {
 		ConfigItem@ config;
 		int value;
 		ConfigSimpleToggleButton(spades::ui::UIManager manager, string caption, string configName, int value) {
@@ -464,14 +465,14 @@ namespace spades {
 		}
 		
 		void OnActivated() {
-			SimpleButton::OnActivated();
+			RadioButton::OnActivated();
 			this.Toggled = true;
 			config = value;
 		}
 		
 		void Render() {
 			this.Toggled = config.IntValue == value;
-			SimpleButton::Render();
+			RadioButton::Render();
 		}
 	}
 	
@@ -491,8 +492,8 @@ namespace spades {
 	}
 	class StandardPreferenceLayouter {
 		spades::ui::UIElement@ Parent;
-		private float FieldX = 190.f;
-		private float FieldWidth = 370.f;
+		private float FieldX = 250.f;
+		private float FieldWidth = 310.f;
 		private spades::ui::UIElement@[] items;
 		private ConfigHotKeyField@[] hotkeyItems;
 		
@@ -738,4 +739,49 @@ namespace spades {
 		}
 	}
 	
+	
+	class MiscOptionsPanel: spades::ui::UIElement {
+		spades::ui::Label@ msgLabel;
+		spades::ui::Button@ enableButton;
+		
+		private ConfigItem cl_showStartupWindow("cl_showStartupWindow");
+	
+		MiscOptionsPanel(spades::ui::UIManager@ manager, PreferenceViewOptions@ options) {
+			super(manager);
+			
+			{
+				spades::ui::Button e(Manager);
+				e.Bounds = AABB2(10.f, 10.f, 400.f, 30.f);
+				e.Caption = _Tr("Preferences", "Enable Startup Window");
+				@e.Activated = spades::ui::EventHandler(this.OnEnableClicked);
+				AddChild(e);
+				@enableButton = e;
+			}
+			
+			{
+				spades::ui::Label label(Manager);
+				label.Bounds = AABB2(10.f, 50.f, 0.f, 0.f);
+				label.Text = "Hoge";
+				AddChild(label);
+				@msgLabel = label;
+			}
+			
+			UpdateState();
+		}
+		
+		void UpdateState() {
+			bool enabled = cl_showStartupWindow.IntValue != 0;
+			
+			msgLabel.Text = enabled ?
+				_Tr("Preferences", "Quit and restart OpenSpades to access the startup window."):
+				_Tr("Preferences", "Some settings only can be changed in the startup window.");
+			enableButton.Enable = not enabled;
+		}
+		
+		private void OnEnableClicked(spades::ui::UIElement@) {
+			cl_showStartupWindow.IntValue = 1;
+			UpdateState();
+		}
+		
+	}
 }
