@@ -239,6 +239,7 @@ msgstr "Unicodeの送信を許可する"
 #: ../../Scripts/Gui/Preferences.as:693 ../../Scripts/Gui/Preferences.as:677
 #: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
 #: ../../Scripts/Gui/Preferences.as:679 ../../Scripts/Gui/Preferences.as:725
+#: ../../Scripts/Gui/Preferences.as:726
 msgctxt "Preferences"
 msgid "Misc"
 msgstr "その他"
@@ -347,133 +348,133 @@ msgstr "手榴弾を装備"
 
 #: ../../Scripts/Gui/Preferences.as:681 ../../Scripts/Gui/Preferences.as:682
 #: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:711
-#: ../../Scripts/Gui/Preferences.as:713
+#: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
 msgstr "ホイールで装備切替"
 
 #: ../../Scripts/Gui/Preferences.as:684 ../../Scripts/Gui/Preferences.as:683
 #: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
-#: ../../Scripts/Gui/Preferences.as:715
+#: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
 msgctxt "Preferences"
 msgid "Movement"
 msgstr "移動"
 
 #: ../../Scripts/Gui/Preferences.as:685 ../../Scripts/Gui/Preferences.as:684
 #: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
-#: ../../Scripts/Gui/Preferences.as:716
+#: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
 msgctxt "Preferences"
 msgid "Walk Forward"
 msgstr "前方に移動"
 
 #: ../../Scripts/Gui/Preferences.as:686 ../../Scripts/Gui/Preferences.as:685
 #: ../../Scripts/Gui/Preferences.as:714 ../../Scripts/Gui/Preferences.as:715
-#: ../../Scripts/Gui/Preferences.as:717
+#: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
 msgctxt "Preferences"
 msgid "Backpedal"
 msgstr "後方に移動"
 
 #: ../../Scripts/Gui/Preferences.as:687 ../../Scripts/Gui/Preferences.as:686
 #: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
-#: ../../Scripts/Gui/Preferences.as:718
+#: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
 msgctxt "Preferences"
 msgid "Move Left"
 msgstr "左に移動"
 
 #: ../../Scripts/Gui/Preferences.as:688 ../../Scripts/Gui/Preferences.as:687
 #: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
-#: ../../Scripts/Gui/Preferences.as:719
+#: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
 msgctxt "Preferences"
 msgid "Move Right"
 msgstr "右に移動"
 
 #: ../../Scripts/Gui/Preferences.as:689 ../../Scripts/Gui/Preferences.as:688
 #: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
-#: ../../Scripts/Gui/Preferences.as:720
+#: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
 msgctxt "Preferences"
 msgid "Crouch"
 msgstr "しゃがむ"
 
 #: ../../Scripts/Gui/Preferences.as:690 ../../Scripts/Gui/Preferences.as:689
 #: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
-#: ../../Scripts/Gui/Preferences.as:721
+#: ../../Scripts/Gui/Preferences.as:721 ../../Scripts/Gui/Preferences.as:722
 msgctxt "Preferences"
 msgid "Sneak"
 msgstr "忍び足"
 
 #: ../../Scripts/Gui/Preferences.as:691 ../../Scripts/Gui/Preferences.as:690
 #: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
-#: ../../Scripts/Gui/Preferences.as:722
+#: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
 msgctxt "Preferences"
 msgid "Jump"
 msgstr "ジャンプ"
 
 #: ../../Scripts/Gui/Preferences.as:692 ../../Scripts/Gui/Preferences.as:691
 #: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
-#: ../../Scripts/Gui/Preferences.as:723
+#: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
 msgctxt "Preferences"
 msgid "Sprint"
 msgstr "全力疾走"
 
 #: ../../Scripts/Gui/Preferences.as:695 ../../Scripts/Gui/Preferences.as:694
 #: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
-#: ../../Scripts/Gui/Preferences.as:726
+#: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
 msgctxt "Preferences"
 msgid "Minimap Scale"
 msgstr "ミニマップ縮尺切替"
 
 #: ../../Scripts/Gui/Preferences.as:696 ../../Scripts/Gui/Preferences.as:695
 #: ../../Scripts/Gui/Preferences.as:724 ../../Scripts/Gui/Preferences.as:725
-#: ../../Scripts/Gui/Preferences.as:727
+#: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
 msgctxt "Preferences"
 msgid "Toggle Map"
 msgstr "マップ拡大"
 
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:696
 #: ../../Scripts/Gui/Preferences.as:725 ../../Scripts/Gui/Preferences.as:726
-#: ../../Scripts/Gui/Preferences.as:728
+#: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
 msgctxt "Preferences"
 msgid "Flashlight"
 msgstr "ヘッドライト"
 
 #: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:697
 #: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
-#: ../../Scripts/Gui/Preferences.as:729
+#: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
 msgctxt "Preferences"
 msgid "Global Chat"
 msgstr "全体チャット"
 
 #: ../../Scripts/Gui/Preferences.as:699 ../../Scripts/Gui/Preferences.as:698
 #: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
-#: ../../Scripts/Gui/Preferences.as:730
+#: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
 msgctxt "Preferences"
 msgid "Team Chat"
 msgstr "チームチャット"
 
 #: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:699
 #: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
-#: ../../Scripts/Gui/Preferences.as:731
+#: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
 msgctxt "Preferences"
 msgid "Limbo Menu"
 msgstr "武器・チーム切替"
 
 #: ../../Scripts/Gui/Preferences.as:701 ../../Scripts/Gui/Preferences.as:700
 #: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
-#: ../../Scripts/Gui/Preferences.as:732
+#: ../../Scripts/Gui/Preferences.as:732 ../../Scripts/Gui/Preferences.as:733
 msgctxt "Preferences"
 msgid "Save Map"
 msgstr "マップを保存"
 
 #: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:701
 #: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
-#: ../../Scripts/Gui/Preferences.as:733
+#: ../../Scripts/Gui/Preferences.as:733 ../../Scripts/Gui/Preferences.as:734
 msgctxt "Preferences"
 msgid "Save Sceneshot"
 msgstr "シーンショット"
 
 #: ../../Scripts/Gui/Preferences.as:703 ../../Scripts/Gui/Preferences.as:702
 #: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
-#: ../../Scripts/Gui/Preferences.as:734
+#: ../../Scripts/Gui/Preferences.as:734 ../../Scripts/Gui/Preferences.as:735
 msgctxt "Preferences"
 msgid "Save Screenshot"
 msgstr "スクリーンショット"
@@ -575,6 +576,7 @@ msgstr "リロード中"
 #: ../../../Sources/Client/Client.cpp:2545
 #: ../../../Sources/Client/Client_Draw.cpp:493
 #: ../../../Sources/Client/Client_Input.cpp:447
+#: ../../../Sources/Client/Client_Input.cpp:448
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr "弾切れです"
@@ -716,6 +718,7 @@ msgstr "フルスクリーンモードを使用すると画面全体を占領し
 
 #: ../../Scripts/Gui/StartupScreen.as:1038
 #: ../../Scripts/Gui/StartupScreen.as:1404
+#: ../../Scripts/Gui/StartupScreen.as:1405
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr "バックエンド"
@@ -951,16 +954,19 @@ msgid ""
 msgstr "高速モード:画面解像度を低下させ、描画を高速化します。|オフ|2x|4x"
 
 #: ../../Scripts/Gui/StartupScreen.as:1398
+#: ../../Scripts/Gui/StartupScreen.as:1399
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr "音声の設定"
 
 #: ../../Scripts/Gui/StartupScreen.as:1407
+#: ../../Scripts/Gui/StartupScreen.as:1408
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr "OpenAL"
 
 #: ../../Scripts/Gui/StartupScreen.as:1411
+#: ../../Scripts/Gui/StartupScreen.as:1412
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
@@ -969,11 +975,13 @@ msgstr ""
 "OpenALに対応したサウンドカードを使用して音声を処理します。ほとんどの場合このようなサウンドカードがありませんので、ソフトウェアエミュレーションが使用されます。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1420
+#: ../../Scripts/Gui/StartupScreen.as:1421
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr "YSR"
 
 #: ../../Scripts/Gui/StartupScreen.as:1424
+#: ../../Scripts/Gui/StartupScreen.as:1425
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -985,11 +993,14 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1438
 #: ../../Scripts/Gui/StartupScreen.as:1462
+#: ../../Scripts/Gui/StartupScreen.as:1450
+#: ../../Scripts/Gui/StartupScreen.as:1474
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "最大同時発音数"
 
 #: ../../Scripts/Gui/StartupScreen.as:1439
+#: ../../Scripts/Gui/StartupScreen.as:1451
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
@@ -999,11 +1010,13 @@ msgstr ""
 "同時に発音可能な音声の個数を指定します。この値が大きいと必要な処理能力も増大するため、特にソフトウェアエミュレーションにおいて過負荷状態を生じることがあります。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1446
+#: ../../Scripts/Gui/StartupScreen.as:1458
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
 
 #: ../../Scripts/Gui/StartupScreen.as:1447
+#: ../../Scripts/Gui/StartupScreen.as:1459
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1011,6 +1024,7 @@ msgid ""
 msgstr "OpenALドライバが提供する拡張機能を利用して臨場感を高めます。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1463
+#: ../../Scripts/Gui/StartupScreen.as:1475
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1018,16 +1032,19 @@ msgid ""
 msgstr "同時に発音可能な音声の個数を指定します。この値によらず、YSRは過負荷を防ぐために同時発音数を減らすことがあります。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1533
+#: ../../Scripts/Gui/StartupScreen.as:1551
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "クリップボードにコピー"
 
 #: ../../Scripts/Gui/StartupScreen.as:1569
+#: ../../Scripts/Gui/StartupScreen.as:1587
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "高度な設定"
 
 #: ../../Scripts/Gui/StartupScreen.as:1578
+#: ../../Scripts/Gui/StartupScreen.as:1596
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "フィルタ"
@@ -1064,14 +1081,16 @@ msgstr "Y軸の入力を反転"
 
 #: ../../../Sources/Client/Client.cpp:1418
 #: ../../../Sources/Client/Client.cpp:1434
-#: ../../../Sources/Client/Client.cpp:555
+#: ../../../Sources/Client/Client.cpp:555 ../../../Sources/Client/Client.cpp:577
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr "マップデータを保存しました: {0}"
 
 #: ../../../Sources/Client/Client.cpp:1423
 #: ../../../Sources/Client/Client.cpp:1439
-#: ../../../Sources/Client/Client.cpp:559 ../../../Sources/Client/Client.cpp:565
+#: ../../../Sources/Client/Client.cpp:559
+#: ../../../Sources/Client/Client.cpp:565
+#: ../../../Sources/Client/Client.cpp:581 ../../../Sources/Client/Client.cpp:587
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr "マップの保存に失敗しました:"
@@ -1100,7 +1119,7 @@ msgstr "スクリーンショットに失敗しました:"
 
 #: ../../../Sources/Client/Client.cpp:2684
 #: ../../../Sources/Client/Client.cpp:2700
-#: ../../../Sources/Client/Client.cpp:599
+#: ../../../Sources/Client/Client.cpp:599 ../../../Sources/Client/Client.cpp:621
 msgctxt "Client"
 msgid "[Global] "
 msgstr "[全体] "
@@ -1214,6 +1233,7 @@ msgstr "{0} の勝ち!"
 #: ../../../Sources/Client/Client.cpp:3833
 #: ../../../Sources/Client/Client.cpp:3857
 #: ../../../Sources/Client/Client_Update.cpp:893
+#: ../../../Sources/Client/Client_Update.cpp:900
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr "{0} を殺害しました"
@@ -1222,6 +1242,7 @@ msgstr "{0} を殺害しました"
 #: ../../../Sources/Client/Client.cpp:3835
 #: ../../../Sources/Client/Client.cpp:3859
 #: ../../../Sources/Client/Client_Update.cpp:895
+#: ../../../Sources/Client/Client_Update.cpp:902
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr "{0} に殺害されました"
@@ -1260,6 +1281,7 @@ msgstr "接続されていません"
 
 #: ../../../Sources/Client/NetClient.cpp:467
 #: ../../../Sources/Client/NetClient.cpp:1289
+#: ../../../Sources/Client/NetClient.cpp:1292
 msgctxt "NetClient"
 msgid "Loading snapshot"
 msgstr "スナップショットを読込中"
@@ -1369,32 +1391,38 @@ msgid "Debug Hit Detection"
 msgstr "当たり判定デバッガを有効化"
 
 #: ../../../Sources/Client/Client_Input.cpp:435
+#: ../../../Sources/Client/Client_Input.cpp:436
 msgctxt "Client"
 msgid "Out of Blocks"
 msgstr "ブロックがありません"
 
 #: ../../../Sources/Client/Client_Input.cpp:459
+#: ../../../Sources/Client/Client_Input.cpp:460
 msgctxt "Client"
 msgid "Out of Grenades"
 msgstr "手榴弾がありません"
 
 #: ../../../Sources/Client/Client_Update.cpp:457
+#: ../../../Sources/Client/Client_Update.cpp:460
 msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
 msgstr[0] "{0} ブロック"
 
 #: ../../../Sources/Client/Client_Update.cpp:465
+#: ../../../Sources/Client/Client_Update.cpp:468
 msgctxt "Client"
 msgid "-- blocks"
 msgstr "-- ブロック"
 
 #: ../../../Sources/Client/Client_Update.cpp:1202
+#: ../../../Sources/Client/Client_Update.cpp:1236
 msgctxt "Client"
 msgid "Insufficient blocks."
 msgstr "ブロックが不足しています。"
 
 #: ../../../Sources/Client/Client_Update.cpp:1206
+#: ../../../Sources/Client/Client_Update.cpp:1240
 msgctxt "Client"
 msgid "You cannot place a block there."
 msgstr "そこにブロックを置くことはできません。"
@@ -1408,3 +1436,18 @@ msgstr "アラートを表示"
 msgctxt "Preferences"
 msgid "Server Alert"
 msgstr "サーバーアラート"
+
+#: ../../Scripts/Gui/Preferences.as:713
+msgctxt "Preferences"
+msgid "Last Used Tool"
+msgstr "最後に使用したツール"
+
+#: ../../Scripts/Gui/StartupScreen.as:1435
+msgctxt "StartupScreen"
+msgid "Null"
+msgstr "ヌル"
+
+#: ../../Scripts/Gui/StartupScreen.as:1439
+msgctxt "StartupScreen"
+msgid "Disables audio output."
+msgstr "オーディオ出力を無効にします。"

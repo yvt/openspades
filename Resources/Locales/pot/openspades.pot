@@ -234,6 +234,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:693 ../../Scripts/Gui/Preferences.as:677
 #: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
 #: ../../Scripts/Gui/Preferences.as:679 ../../Scripts/Gui/Preferences.as:725
+#: ../../Scripts/Gui/Preferences.as:726
 msgctxt "Preferences"
 msgid "Misc"
 msgstr ""
@@ -342,133 +343,133 @@ msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:681 ../../Scripts/Gui/Preferences.as:682
 #: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:711
-#: ../../Scripts/Gui/Preferences.as:713
+#: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:684 ../../Scripts/Gui/Preferences.as:683
 #: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
-#: ../../Scripts/Gui/Preferences.as:715
+#: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
 msgctxt "Preferences"
 msgid "Movement"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:685 ../../Scripts/Gui/Preferences.as:684
 #: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
-#: ../../Scripts/Gui/Preferences.as:716
+#: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
 msgctxt "Preferences"
 msgid "Walk Forward"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:686 ../../Scripts/Gui/Preferences.as:685
 #: ../../Scripts/Gui/Preferences.as:714 ../../Scripts/Gui/Preferences.as:715
-#: ../../Scripts/Gui/Preferences.as:717
+#: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
 msgctxt "Preferences"
 msgid "Backpedal"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:687 ../../Scripts/Gui/Preferences.as:686
 #: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
-#: ../../Scripts/Gui/Preferences.as:718
+#: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
 msgctxt "Preferences"
 msgid "Move Left"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:688 ../../Scripts/Gui/Preferences.as:687
 #: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
-#: ../../Scripts/Gui/Preferences.as:719
+#: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
 msgctxt "Preferences"
 msgid "Move Right"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:689 ../../Scripts/Gui/Preferences.as:688
 #: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
-#: ../../Scripts/Gui/Preferences.as:720
+#: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
 msgctxt "Preferences"
 msgid "Crouch"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:690 ../../Scripts/Gui/Preferences.as:689
 #: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
-#: ../../Scripts/Gui/Preferences.as:721
+#: ../../Scripts/Gui/Preferences.as:721 ../../Scripts/Gui/Preferences.as:722
 msgctxt "Preferences"
 msgid "Sneak"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:691 ../../Scripts/Gui/Preferences.as:690
 #: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
-#: ../../Scripts/Gui/Preferences.as:722
+#: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
 msgctxt "Preferences"
 msgid "Jump"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:692 ../../Scripts/Gui/Preferences.as:691
 #: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
-#: ../../Scripts/Gui/Preferences.as:723
+#: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
 msgctxt "Preferences"
 msgid "Sprint"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:695 ../../Scripts/Gui/Preferences.as:694
 #: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
-#: ../../Scripts/Gui/Preferences.as:726
+#: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
 msgctxt "Preferences"
 msgid "Minimap Scale"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:696 ../../Scripts/Gui/Preferences.as:695
 #: ../../Scripts/Gui/Preferences.as:724 ../../Scripts/Gui/Preferences.as:725
-#: ../../Scripts/Gui/Preferences.as:727
+#: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
 msgctxt "Preferences"
 msgid "Toggle Map"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:696
 #: ../../Scripts/Gui/Preferences.as:725 ../../Scripts/Gui/Preferences.as:726
-#: ../../Scripts/Gui/Preferences.as:728
+#: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
 msgctxt "Preferences"
 msgid "Flashlight"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:697
 #: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
-#: ../../Scripts/Gui/Preferences.as:729
+#: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
 msgctxt "Preferences"
 msgid "Global Chat"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:699 ../../Scripts/Gui/Preferences.as:698
 #: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
-#: ../../Scripts/Gui/Preferences.as:730
+#: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
 msgctxt "Preferences"
 msgid "Team Chat"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:699
 #: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
-#: ../../Scripts/Gui/Preferences.as:731
+#: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
 msgctxt "Preferences"
 msgid "Limbo Menu"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:701 ../../Scripts/Gui/Preferences.as:700
 #: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
-#: ../../Scripts/Gui/Preferences.as:732
+#: ../../Scripts/Gui/Preferences.as:732 ../../Scripts/Gui/Preferences.as:733
 msgctxt "Preferences"
 msgid "Save Map"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:701
 #: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
-#: ../../Scripts/Gui/Preferences.as:733
+#: ../../Scripts/Gui/Preferences.as:733 ../../Scripts/Gui/Preferences.as:734
 msgctxt "Preferences"
 msgid "Save Sceneshot"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:703 ../../Scripts/Gui/Preferences.as:702
 #: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
-#: ../../Scripts/Gui/Preferences.as:734
+#: ../../Scripts/Gui/Preferences.as:734 ../../Scripts/Gui/Preferences.as:735
 msgctxt "Preferences"
 msgid "Save Screenshot"
 msgstr ""
@@ -570,6 +571,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:2545
 #: ../../../Sources/Client/Client_Draw.cpp:493
 #: ../../../Sources/Client/Client_Input.cpp:447
+#: ../../../Sources/Client/Client_Input.cpp:448
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr ""
@@ -711,6 +713,7 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1038
 #: ../../Scripts/Gui/StartupScreen.as:1404
+#: ../../Scripts/Gui/StartupScreen.as:1405
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr ""
@@ -941,16 +944,19 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1398
+#: ../../Scripts/Gui/StartupScreen.as:1399
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1407
+#: ../../Scripts/Gui/StartupScreen.as:1408
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1411
+#: ../../Scripts/Gui/StartupScreen.as:1412
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
@@ -958,11 +964,13 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1420
+#: ../../Scripts/Gui/StartupScreen.as:1421
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1424
+#: ../../Scripts/Gui/StartupScreen.as:1425
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -972,11 +980,14 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1438
 #: ../../Scripts/Gui/StartupScreen.as:1462
+#: ../../Scripts/Gui/StartupScreen.as:1450
+#: ../../Scripts/Gui/StartupScreen.as:1474
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1439
+#: ../../Scripts/Gui/StartupScreen.as:1451
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
@@ -985,11 +996,13 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1446
+#: ../../Scripts/Gui/StartupScreen.as:1458
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1447
+#: ../../Scripts/Gui/StartupScreen.as:1459
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -997,6 +1010,7 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1463
+#: ../../Scripts/Gui/StartupScreen.as:1475
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1004,16 +1018,19 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1533
+#: ../../Scripts/Gui/StartupScreen.as:1551
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1569
+#: ../../Scripts/Gui/StartupScreen.as:1587
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1578
+#: ../../Scripts/Gui/StartupScreen.as:1596
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr ""
@@ -1045,6 +1062,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:1418
 #: ../../../Sources/Client/Client.cpp:1434
 #: ../../../Sources/Client/Client.cpp:555
+#: ../../../Sources/Client/Client.cpp:577
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr ""
@@ -1053,6 +1071,8 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:1439
 #: ../../../Sources/Client/Client.cpp:559
 #: ../../../Sources/Client/Client.cpp:565
+#: ../../../Sources/Client/Client.cpp:581
+#: ../../../Sources/Client/Client.cpp:587
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr ""
@@ -1082,6 +1102,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:2684
 #: ../../../Sources/Client/Client.cpp:2700
 #: ../../../Sources/Client/Client.cpp:599
+#: ../../../Sources/Client/Client.cpp:621
 msgctxt "Client"
 msgid "[Global] "
 msgstr ""
@@ -1195,6 +1216,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3833
 #: ../../../Sources/Client/Client.cpp:3857
 #: ../../../Sources/Client/Client_Update.cpp:893
+#: ../../../Sources/Client/Client_Update.cpp:900
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr ""
@@ -1203,6 +1225,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3835
 #: ../../../Sources/Client/Client.cpp:3859
 #: ../../../Sources/Client/Client_Update.cpp:895
+#: ../../../Sources/Client/Client_Update.cpp:902
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr ""
@@ -1236,6 +1259,7 @@ msgstr ""
 
 #: ../../../Sources/Client/NetClient.cpp:467
 #: ../../../Sources/Client/NetClient.cpp:1289
+#: ../../../Sources/Client/NetClient.cpp:1292
 msgctxt "NetClient"
 msgid "Loading snapshot"
 msgstr ""
@@ -1345,16 +1369,19 @@ msgid "Debug Hit Detection"
 msgstr ""
 
 #: ../../../Sources/Client/Client_Input.cpp:435
+#: ../../../Sources/Client/Client_Input.cpp:436
 msgctxt "Client"
 msgid "Out of Blocks"
 msgstr ""
 
 #: ../../../Sources/Client/Client_Input.cpp:459
+#: ../../../Sources/Client/Client_Input.cpp:460
 msgctxt "Client"
 msgid "Out of Grenades"
 msgstr ""
 
 #: ../../../Sources/Client/Client_Update.cpp:457
+#: ../../../Sources/Client/Client_Update.cpp:460
 msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
@@ -1362,16 +1389,19 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../../../Sources/Client/Client_Update.cpp:465
+#: ../../../Sources/Client/Client_Update.cpp:468
 msgctxt "Client"
 msgid "-- blocks"
 msgstr ""
 
 #: ../../../Sources/Client/Client_Update.cpp:1202
+#: ../../../Sources/Client/Client_Update.cpp:1236
 msgctxt "Client"
 msgid "Insufficient blocks."
 msgstr ""
 
 #: ../../../Sources/Client/Client_Update.cpp:1206
+#: ../../../Sources/Client/Client_Update.cpp:1240
 msgctxt "Client"
 msgid "You cannot place a block there."
 msgstr ""
@@ -1384,4 +1414,19 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:677
 msgctxt "Preferences"
 msgid "Server Alert"
+msgstr ""
+
+#: ../../Scripts/Gui/Preferences.as:713
+msgctxt "Preferences"
+msgid "Last Used Tool"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1435
+msgctxt "StartupScreen"
+msgid "Null"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1439
+msgctxt "StartupScreen"
+msgid "Disables audio output."
 msgstr ""

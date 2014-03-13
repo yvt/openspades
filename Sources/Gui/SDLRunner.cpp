@@ -30,6 +30,7 @@
 #include <Client/Client.h>
 #include <Audio/ALDevice.h>
 #include <Audio/YsrDevice.h>
+#include <Audio/NullDevice.h>
 #include <ctype.h>
 #include <Core/Debug.h>
 #include <Core/Settings.h>
@@ -64,6 +65,8 @@ namespace spades {
 				return new audio::ALDevice();
 			}else if(EqualsIgnoringCase(s_audioDriver, "ysr")) {
 				return new audio::YsrDevice();
+			}else if(EqualsIgnoringCase(s_audioDriver, "null")) {
+				return new audio::NullDevice();
 			}else{
 				SPRaise("Unknown audio driver name: %s (openal or ysr expected)", s_audioDriver.CString());
 			}

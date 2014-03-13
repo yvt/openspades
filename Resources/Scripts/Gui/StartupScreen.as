@@ -1376,6 +1376,7 @@ namespace spades {
 		
 		spades::ui::RadioButton@ driverOpenAL;
 		spades::ui::RadioButton@ driverYSR;
+		spades::ui::RadioButton@ driverNull;
 		
 		spades::ui::TextViewer@ helpView;
 		StartupScreenConfigView@ configViewOpenAL;
@@ -1429,6 +1430,17 @@ namespace spades {
 				AddChild(e);
 				@driverYSR = e;
 			}
+			{
+				spades::ui::RadioButton e(Manager);
+				e.Caption = _Tr("StartupScreen", "Null");
+				e.Bounds = AABB2(320.f, 0.f, 100.f, 24.f);
+				e.GroupName = "driver";
+				HelpHandler(helpView, 
+					_Tr("StartupScreen", "Disables audio output.")).Watch(e);
+				@e.Activated = EventHandler(this.OnDriverNull);
+				AddChild(e);
+				@driverNull = e;
+			}
 			
 			{
 				StartupScreenConfigView cfg(Manager);
@@ -1481,19 +1493,25 @@ namespace spades {
 		
 		private void OnDriverOpenAL(spades::ui::UIElement@){ s_audioDriver.StringValue = "openal"; LoadConfig(); }
 		private void OnDriverYSR(spades::ui::UIElement@){ s_audioDriver.StringValue = "ysr"; LoadConfig(); }
+		private void OnDriverNull(spades::ui::UIElement@){ s_audioDriver.StringValue = "null"; LoadConfig(); }
 		
 		void LoadConfig() {
 			if(s_audioDriver.StringValue == "ysr") {
 				driverYSR.Check();
 				configViewOpenAL.Visible = false;
 				configViewYSR.Visible = true;
-			}else{
+			}else if(s_audioDriver.StringValue == "openal"){
 				driverOpenAL.Check();
 				configViewOpenAL.Visible = true;
+				configViewYSR.Visible = false;
+			}else if(s_audioDriver.StringValue == "null"){
+				driverNull.Check();
+				configViewOpenAL.Visible = false;
 				configViewYSR.Visible = false;
 			}
 			driverOpenAL.Enable = ui.helper.CheckConfigCapability("s_audioDriver", "openal").length == 0;
 			driverYSR.Enable = ui.helper.CheckConfigCapability("s_audioDriver", "ysr").length == 0;
+			driverNull.Enable = ui.helper.CheckConfigCapability("s_audioDriver", "null").length == 0;
 			configViewOpenAL.LoadConfig();
 			configViewYSR.LoadConfig();
 			
