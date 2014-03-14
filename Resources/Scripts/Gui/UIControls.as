@@ -588,6 +588,19 @@ namespace spades {
 				OnChanged();
 			}
 			
+			void Delete() {
+				if(SelectionLength > 0) {
+					SelectedText = "";
+				} else if(CursorPosition < Text.length) {
+					int pos = CursorPosition;
+					int cIdx = GetCharIndexForString(Text, CursorPosition);
+					int bIdx = GetByteIndexForString(Text, cIdx + 1);
+					Select(bIdx, pos - bIdx);
+					SelectedText = "";
+				}
+				OnChanged();
+			}
+			
 			void Insert(string text) {
 				if(!CheckCharType(text)) {
 					return;
@@ -608,6 +621,8 @@ namespace spades {
 			void KeyDown(string key) {
 				if(key == "BackSpace") {
 					BackSpace();
+				}else if(key == "Delete") {
+					Delete();
 				}else if(key == "Left") {
 					if(Manager.IsShiftPressed) {
 						int cIdx = GetCharIndexForString(Text, CursorPosition);

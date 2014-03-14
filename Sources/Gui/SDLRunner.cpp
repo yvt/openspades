@@ -104,8 +104,9 @@ namespace spades {
 				case SDLK_TAB:
 					return "Tab";
 				case SDLK_BACKSPACE:
-				case 127:
 					return "BackSpace";
+				case SDLK_DELETE:
+					return "Delete";
 				case SDLK_RETURN:
 					return "Enter";
                 case SDLK_SLASH:
