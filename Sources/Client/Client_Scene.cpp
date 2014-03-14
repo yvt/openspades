@@ -551,7 +551,8 @@ namespace spades {
 				// FIXME: don't use debug line
 				if(p){
 					if(p->IsReadyToUseTool() &&
-					   p->GetTool() == Player::ToolBlock){
+					   p->GetTool() == Player::ToolBlock &&
+					   p->IsAlive()){
 						std::vector<IntVector3> blocks;
 						if(p->IsBlockCursorDragging()){
 							blocks = std::move
