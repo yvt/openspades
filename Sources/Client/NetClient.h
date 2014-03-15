@@ -111,6 +111,8 @@ namespace spades {
 			void Connect(const ServerAddress& hostname);
 			void Disconnect();
 			
+			int GetPing();
+			
 			void DoEvents(int timeout = 0);
 		
 			void SendJoin(int team, WeaponType,

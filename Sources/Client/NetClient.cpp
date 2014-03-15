@@ -430,6 +430,17 @@ namespace spades {
 			peer = NULL;
 		}
 		
+		int NetClient::GetPing() {
+			SPADES_MARK_FUNCTION();
+			
+			if(status == NetClientStatusNotConnected)
+				return -1;
+			
+			auto rtt = peer->roundTripTime;
+			if(rtt == 0) return -1;
+			return static_cast<int>(rtt);
+		}
+		
 		void NetClient::DoEvents(int timeout) {
 			SPADES_MARK_FUNCTION();
 			

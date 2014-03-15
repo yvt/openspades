@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "TCGameMode.h"
+#include "NetClient.h"
 
 namespace spades {
 	namespace client {
@@ -153,12 +154,23 @@ namespace spades {
 					   MakeVector4(0, 0, 0, 0.3f));
 			font->Draw(buf, pos, 1.f, whiteColor);
 			
+			font = client->textFont;
 			if(ctf) {
-				font = client->textFont;
 				// draw caplimit
 				sprintf(buf, "LIMIT %d", ctf->GetCaptureLimit());
 				size = font->Measure(buf);
 				pos.x = scrWidth - 16.f - size.x;
+				font->Draw(buf, pos + MakeVector2(0, 1), 1.f,
+						   MakeVector4(0, 0, 0, 0.3f));
+				font->Draw(buf, pos, 1.f, whiteColor);
+			}
+			
+			// draw ping
+			auto ping = client->net ? client->net->GetPing() : -1;
+			if(ping != -1) {
+				sprintf(buf, "PING %dms", ping);
+				size = font->Measure(buf);
+				pos.x = 16.f;
 				font->Draw(buf, pos + MakeVector2(0, 1), 1.f,
 						   MakeVector4(0, 0, 0, 0.3f));
 				font->Draw(buf, pos, 1.f, whiteColor);
