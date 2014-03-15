@@ -21,5 +21,5 @@ endif()
 
 install(DIRECTORY "Scripts" DESTINATION bin/Resources)
 install(DIRECTORY "Shaders" DESTINATION bin/Resources)
-install(DIRECTORY "Killfeed" DESTINATION bin/Resources)
+install(DIRECTORY "Gfx/Killfeed" DESTINATION bin/Resources/Gfx)
 install(DIRECTORY "Icons" DESTINATION bin/Resources)
