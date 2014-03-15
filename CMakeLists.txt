@@ -19,6 +19,8 @@ if(NOT SDL2_IMAGE_FOUND)
 	message(FATAL_ERROR "SDL_image 2.0 not found, set ENV{SDL2DIR} to point to SDL 2.0, and optionally set the cmake var SDL2_LIBRARY_TEMP to the lib dir")
 endif()
 
+find_package(PNG)
+
 include(FindOpenGL)
 if(NOT OPENGL_FOUND AND NOT OPENGL_XMESA_FOUND AND NOT OPENGL_GLU_FOUND)
 	message(FATAL_ERROR "OpenGL not found, please install it")
@@ -154,6 +156,9 @@ configure_file("${PROJECT_SOURCE_DIR}/OpenSpades.rc.in" "${PROJECT_BINARY_DIR}/O
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories("${SDL2_INCLUDE_DIR}")
 include_directories("${SDL2_IMAGE_INCLUDE_DIR}")
+if(PNG_FOUND)
+	include_directories("${PNG_INCLUDE_DIRS}")
+endif()
 if(OPENGL_INCLUDE_DIR)
 	include_directories("${OPENGL_INCLUDE_DIR}")
 endif()
