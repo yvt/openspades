@@ -33,6 +33,8 @@ namespace spades {
 		static IStream *OpenForWriting(const char *);
 		static bool FileExists(const char *);
 		static void AddFileSystem(IFileSystem *);
+		static void AppendFileSystem(IFileSystem *);
+		static void PrependFileSystem(IFileSystem *);
 		static std::vector<std::string> EnumFiles(const char *);
 		static std::string ReadAllBytes(const char *);
 	};

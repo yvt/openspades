@@ -308,6 +308,7 @@ int main(int argc, char ** argv)
 		// add all zip files
 		{
 			std::vector<spades::IFileSystem*> fss;
+			std::vector<spades::IFileSystem*> fssImportant;
 			
 			std::vector<std::string> files = spades::FileManager::EnumFiles("");
 			
@@ -347,12 +348,20 @@ int main(int argc, char ** argv)
 				if(spades::FileManager::FileExists(name.c_str())) {
 					spades::IStream *stream = spades::FileManager::OpenForReading(name.c_str());
 					spades::ZipFileSystem *fs = new spades::ZipFileSystem(stream);
-					SPLog("Pak Registered: %s\n", name.c_str());
-					fss.push_back(fs);
+					if(name[0] == '_' && false) { // last resort for #198
+						SPLog("Pak Registered: %s (marked as 'important')\n", name.c_str());
+						fssImportant.push_back(fs);
+					}else{
+						SPLog("Pak Registered: %s\n", name.c_str());
+						fss.push_back(fs);
+					}
 				}
 			}
 			for(size_t i = fss.size(); i > 0; i--){
-				spades::FileManager::AddFileSystem(fss[i - 1]);
+				spades::FileManager::AppendFileSystem(fss[i - 1]);
+			}
+			for(size_t i = 0; i < fssImportant.size(); i++){
+				spades::FileManager::PrependFileSystem(fssImportant[i]);
 			}
 		}
 		
