@@ -153,6 +153,17 @@ namespace spades {
 					   MakeVector4(0, 0, 0, 0.3f));
 			font->Draw(buf, pos, 1.f, whiteColor);
 			
+			if(ctf) {
+				font = client->textFont;
+				// draw caplimit
+				sprintf(buf, "LIMIT %d", ctf->GetCaptureLimit());
+				size = font->Measure(buf);
+				pos.x = scrWidth - 16.f - size.x;
+				font->Draw(buf, pos + MakeVector2(0, 1), 1.f,
+						   MakeVector4(0, 0, 0, 0.3f));
+				font->Draw(buf, pos, 1.f, whiteColor);
+			}
+			
 			// draw team bar
 			image = whiteImage;
 			renderer->SetColorAlphaPremultiplied(AdjustColor(GetTeamColor(0), 0.8f, 0.3f));
