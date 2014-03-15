@@ -65,7 +65,7 @@ namespace spades {
 	namespace client {
 		
 		enum class ScreenshotFormat {
-			Jpeg, Targa
+			Jpeg, Targa, Png
 		};
 		
 		namespace {
@@ -74,6 +74,8 @@ namespace spades {
 					return ScreenshotFormat::Jpeg;
 				}else if(EqualsIgnoringCase(cg_screenshotFormat, "targa")) {
 					return ScreenshotFormat::Targa;
+				}else if(EqualsIgnoringCase(cg_screenshotFormat, "png")) {
+					return ScreenshotFormat::Png;
 				}else{
 					SPRaise("Invalid screenshot format: %s", cg_screenshotFormat.CString());
 				}
@@ -131,11 +133,14 @@ namespace spades {
 		std::string Client::ScreenShotPath() {
 			char bufJpeg[256];
 			char bufTarga[256];
+			char bufPng[256];
 			for(int i = 0; i < 10000;i++){
 				sprintf(bufJpeg,  "Screenshots/shot%04d.jpg", nextScreenShotIndex);
 				sprintf(bufTarga, "Screenshots/shot%04d.tga", nextScreenShotIndex);
+				sprintf(bufPng,   "Screenshots/shot%04d.png", nextScreenShotIndex);
 				if(FileManager::FileExists(bufJpeg) ||
-				   FileManager::FileExists(bufTarga)){
+				   FileManager::FileExists(bufTarga) ||
+				   FileManager::FileExists(bufPng)){
 					nextScreenShotIndex++;
 					if(nextScreenShotIndex >= 10000)
 						nextScreenShotIndex = 0;
@@ -147,6 +152,8 @@ namespace spades {
 						return bufJpeg;
 					case ScreenshotFormat::Targa:
 						return bufTarga;
+					case ScreenshotFormat::Png:
+						return bufPng;
 				}
 				SPAssert(false);
 			}
