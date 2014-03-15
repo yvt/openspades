@@ -111,6 +111,8 @@
 		E88319201792A7CC002ABE6D /* win32.c in Sources */ = {isa = PBXBuildFile; fileRef = E88319171792A7CC002ABE6D /* win32.c */; };
 		E88EB02F185D9DC500565D07 /* YsrDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88EB02D185D9DC500565D07 /* YsrDevice.cpp */; };
 		E890F310187046990090AAB8 /* CP437.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E890F30E187046990090AAB8 /* CP437.cpp */; };
+		E895D65D18D4A10E00F5B9CA /* jpge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E895D65B18D4A10E00F5B9CA /* jpge.cpp */; };
+		E895D66018D4A15900F5B9CA /* JpegWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E895D65E18D4A15900F5B9CA /* JpegWriter.cpp */; };
 		E89A648E17A11B4F00FDA893 /* GLModelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A648C17A11B4E00FDA893 /* GLModelRenderer.cpp */; };
 		E89A649117A12FF900FDA893 /* GLDynamicLightShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A648F17A12FF800FDA893 /* GLDynamicLightShader.cpp */; };
 		E89A649417A1677F00FDA893 /* FallingBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A649217A1677F00FDA893 /* FallingBlock.cpp */; };
@@ -512,6 +514,9 @@
 		E88EB02E185D9DC500565D07 /* YsrDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YsrDevice.h; sourceTree = "<group>"; };
 		E890F30E187046990090AAB8 /* CP437.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CP437.cpp; sourceTree = "<group>"; };
 		E890F30F187046990090AAB8 /* CP437.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CP437.h; sourceTree = "<group>"; };
+		E895D65B18D4A10E00F5B9CA /* jpge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jpge.cpp; sourceTree = "<group>"; };
+		E895D65C18D4A10E00F5B9CA /* jpge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jpge.h; sourceTree = "<group>"; };
+		E895D65E18D4A15900F5B9CA /* JpegWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JpegWriter.cpp; sourceTree = "<group>"; };
 		E89A648C17A11B4E00FDA893 /* GLModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLModelRenderer.cpp; sourceTree = "<group>"; };
 		E89A648D17A11B4E00FDA893 /* GLModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLModelRenderer.h; sourceTree = "<group>"; };
 		E89A648F17A12FF800FDA893 /* GLDynamicLightShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLDynamicLightShader.cpp; sourceTree = "<group>"; };
@@ -1751,11 +1756,14 @@
 		E8E44683179CC4DE00BE8855 /* Bitmap Codecs */ = {
 			isa = PBXGroup;
 			children = (
+				E895D65B18D4A10E00F5B9CA /* jpge.cpp */,
+				E895D65C18D4A10E00F5B9CA /* jpge.h */,
 				E8E44684179CC4FF00BE8855 /* IBitmapCodec.cpp */,
 				E8E44685179CC4FF00BE8855 /* IBitmapCodec.h */,
 				E8E44687179CC65900BE8855 /* TargaReader.cpp */,
 				E8E446A8179F822D00BE8855 /* TargaWriter.cpp */,
 				E87AB82118BB3957006B7D73 /* SdlImageReader.cpp */,
+				E895D65E18D4A15900F5B9CA /* JpegWriter.cpp */,
 			);
 			name = "Bitmap Codecs";
 			sourceTree = "<group>";
@@ -1891,6 +1899,7 @@
 				E8567E5D1792C089009D83E0 /* ALFuncs.cpp in Sources */,
 				E8567E601792C0FF009D83E0 /* DynamicLibrary.cpp in Sources */,
 				E8567E631792CA12009D83E0 /* IAudioStream.cpp in Sources */,
+				E895D66018D4A15900F5B9CA /* JpegWriter.cpp in Sources */,
 				E8567E661792CCE5009D83E0 /* WavAudioStream.cpp in Sources */,
 				E8567E6C1792F399009D83E0 /* IWorldListener.cpp in Sources */,
 				E8567E701793AA46009D83E0 /* Weapon.cpp in Sources */,
@@ -1990,6 +1999,7 @@
 				E81A7C6718610BE400BF3FCE /* SWPort.cpp in Sources */,
 				E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */,
 				E844886617D0C43B005105D0 /* Tracer.cpp in Sources */,
+				E895D65D18D4A10E00F5B9CA /* jpge.cpp in Sources */,
 				E844888217D2633C005105D0 /* json_reader.cpp in Sources */,
 				E844888317D2633C005105D0 /* json_value.cpp in Sources */,
 				E844888417D2633C005105D0 /* json_writer.cpp in Sources */,

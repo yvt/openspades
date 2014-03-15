@@ -59,9 +59,26 @@
 SPADES_SETTING(cg_hitIndicator, "1");
 SPADES_SETTING(cg_debugAim, "0");
 SPADES_SETTING(cg_keyReloadWeapon, "");
+SPADES_SETTING(cg_screenshotFormat, "jpeg");
 
 namespace spades {
 	namespace client {
+		
+		enum class ScreenshotFormat {
+			Jpeg, Targa
+		};
+		
+		namespace {
+			ScreenshotFormat GetScreenshotFormat() {
+				if(EqualsIgnoringCase(cg_screenshotFormat, "jpeg")) {
+					return ScreenshotFormat::Jpeg;
+				}else if(EqualsIgnoringCase(cg_screenshotFormat, "targa")) {
+					return ScreenshotFormat::Targa;
+				}else{
+					SPRaise("Invalid screenshot format: %s", cg_screenshotFormat.CString());
+				}
+			}
+		}
 		
 		void Client::TakeScreenShot(bool sceneOnly){
 			SceneDefinition sceneDef = CreateSceneDefinition();
@@ -112,17 +129,26 @@ namespace spades {
 		}
 		
 		std::string Client::ScreenShotPath() {
-			char buf[256];
+			char bufJpeg[256];
+			char bufTarga[256];
 			for(int i = 0; i < 10000;i++){
-				sprintf(buf, "Screenshots/shot%04d.tga", nextScreenShotIndex);
-				if(FileManager::FileExists(buf)){
+				sprintf(bufJpeg,  "Screenshots/shot%04d.jpg", nextScreenShotIndex);
+				sprintf(bufTarga, "Screenshots/shot%04d.tga", nextScreenShotIndex);
+				if(FileManager::FileExists(bufJpeg) ||
+				   FileManager::FileExists(bufTarga)){
 					nextScreenShotIndex++;
 					if(nextScreenShotIndex >= 10000)
 						nextScreenShotIndex = 0;
 					continue;
 				}
 				
-				return buf;
+				switch(GetScreenshotFormat()) {
+					case ScreenshotFormat::Jpeg:
+						return bufJpeg;
+					case ScreenshotFormat::Targa:
+						return bufTarga;
+				}
+				SPAssert(false);
 			}
 			
 			SPRaise("No free file name");
