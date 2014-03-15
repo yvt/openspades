@@ -1205,6 +1205,11 @@ namespace spades {
 			if(!frame) SPInvalidArgument("frame");
 			if(!depthBuffer) SPInvalidArgument("depthBuffer");
 			
+			auto p = def.viewOrigin.Floor();
+			if(map->IsSolidWrapped(p.x, p.y, p.z)) {
+				return;
+			}
+			
 #if ENABLE_SSE2
 			if(static_cast<int>(level) >= static_cast<int>(SWFeatureLevel::SSE2)) {
 				RenderInner<SWFeatureLevel::SSE2>(def, frame, depthBuffer);
