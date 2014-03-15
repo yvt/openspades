@@ -95,8 +95,7 @@ namespace spades {
 					msg = _Tr("Client", "Sceneshot saved: {0}", name);
 				else
 					msg = _Tr("Client", "Screenshot saved: {0}", name);
-				msg = ChatWindow::ColoredMessage(msg, MsgColorSysInfo);
-				chatWindow->AddMessage(msg);
+				ShowAlert(msg, AlertType::Notice);
 			}catch(const Exception& ex){
 				std::string msg;
 				msg = _Tr("Client", "Screenshot failed: ");
