@@ -243,6 +243,7 @@ namespace spades {
 						return;
 					}
 				}catch(const std::exception& ex) {
+					SPLog("[!] Error while running a game client: %s", ex.what());
 					subview->Closing();
 					subview = NULL;
 					RestoreRenderer();
@@ -309,6 +310,7 @@ namespace spades {
 				subview.Set(new client::Client(&*renderer, &*audioDevice,
 											 host, cg_playerName), false);
 			}catch(const std::exception& ex) {
+				SPLog("[!] Error while initializing a game client: %s", ex.what());
 				return ex.what();
 			}
 			return "";
