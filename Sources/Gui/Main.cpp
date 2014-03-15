@@ -139,8 +139,6 @@ class ThreadQuantumSetter {
 #include <xmmintrin.h>
 #endif
 
-#include <FL/fl_ask.H>
-
 SPADES_SETTING(cg_lastQuickConnectHost, "");
 SPADES_SETTING(cg_protocolVersion, "");
 SPADES_SETTING(cg_playerName, "");
@@ -263,8 +261,16 @@ int main(int argc, char ** argv)
 		try{
 			spades::StartLog();
 		}catch(const std::exception& ex){
-			fl_alert("Failed to start recording log because of the following error:\n%s\n\n"
-					 "OpenSpades will continue to run, but any critical events are not logged.", ex.what());
+			
+			SDL_InitSubSystem(SDL_INIT_VIDEO);
+			auto msg = spades::Format("Failed to start recording log because of the following error:\n{0}\n\n"
+									  "OpenSpades will continue to run, but any critical events are not logged.", ex.what());
+			if(SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,
+										"OpenSpades Log System Failure",
+										msg.c_str(), nullptr)) {
+				// showing dialog failed.
+				// TODO: do appropriate action?
+			}
 		}
 		SPLog("Log Started.");
 		
