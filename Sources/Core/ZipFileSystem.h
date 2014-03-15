@@ -22,11 +22,14 @@
 
 #include "IFileSystem.h"
 #include <stdint.h>
+#include <map>
+#include <string>
 
 extern "C"{
 	typedef void *unzFile;
 	struct zlib_filefunc_def_s;
 	typedef struct zlib_filefunc_def_s zlib_filefunc_def;
+	struct unz_file_pos_s;
 }
 	
 namespace spades {
@@ -37,6 +40,8 @@ namespace spades {
 		IStream *baseStream;
 		bool autoClose;
 		unzFile zip;
+		
+		std::map<std::string, unz_file_pos_s> files;
 		
 		ZipFileInputStream *currentStream;
 		
@@ -63,6 +68,7 @@ namespace spades {
 								 ZipFileHandle *h);
 		
 		zlib_filefunc_def CreateZLibFileFunc();
+		bool MoveToFile(const char *);
 	public:
 		ZipFileSystem(IStream *, bool autoClose = true);
 		virtual ~ZipFileSystem();

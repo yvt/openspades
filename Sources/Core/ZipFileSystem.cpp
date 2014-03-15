@@ -304,6 +304,31 @@ namespace spades {
 		}
 		
 		currentStream = NULL;
+		
+		if(unzGoToFirstFile(zip) != UNZ_OK) {
+			SPRaise("There was a problem while seeking the zip file to the first file.");
+		}
+		
+		// create list of files
+		do{
+			char buf[513];
+			buf[512] = 0;
+			unzGetCurrentFileInfo(zip, nullptr,
+								  buf, 512, nullptr, 0, nullptr, 0);
+			
+			for(char *ptr = buf; *ptr; ptr++) {
+				if(*ptr == '\\') *ptr = '/';
+				else
+					*ptr = tolower(*ptr);
+			}
+			
+			unz_file_pos pos;
+			if(unzGetFilePos(zip, &pos) != UNZ_OK) {
+				SPRaise("unzGetFilePos failed");
+			}
+			files.insert(std::make_pair(buf, pos));
+		}while(unzGoToNextFile(zip) == UNZ_OK);
+		
 	}
 	
 	ZipFileSystem::~ZipFileSystem() {
@@ -322,7 +347,7 @@ namespace spades {
 			currentStream->ForceCloseUnzipFile();
 		}
 		
-		if(unzLocateFile(zip, fn, 2) != UNZ_OK){
+		if(!MoveToFile(fn)) {
 			SPFileNotFound(fn);
 		}
 		
@@ -389,6 +414,7 @@ namespace spades {
 			SPRaise("There was a problem while seeking the zip file to the first file.");
 		}
 		
+		// FIXME: use `files` for faster search?
 		std::vector<std::string> lst;
 		size_t ln = strlen(path);
 		do{
@@ -419,17 +445,36 @@ namespace spades {
 		return lst;
 	}
 	
+	bool ZipFileSystem::MoveToFile(const char *fn) {
+		SPADES_MARK_FUNCTION();
+		
+		std::string f = fn;
+		for(std::size_t i = 0; i < f.size(); i++) {
+			if(f[i] == '\\') f[i] = '/';
+			else f[i] = tolower(f[i]);
+		}
+		
+		auto it = files.find(f);
+		if(it == files.end()) {
+			return false;
+		}
+		
+		if(unzGoToFilePos(zip, &it->second) != UNZ_OK) {
+			SPRaise("Failed to seek to the requested file.");
+		}
+		return true;
+	}
+	
 	bool ZipFileSystem::FileExists(const char *fn) {
 		SPADES_MARK_FUNCTION();
 		
-		if(currentStream){
-			currentStream->ForceCloseUnzipFile();
+		std::string f = fn;
+		for(std::size_t i = 0; i < f.size(); i++) {
+			if(f[i] == '\\') f[i] = '/';
+			else f[i] = tolower(f[i]);
 		}
 		
-		if(unzLocateFile(zip, fn, 2) != UNZ_OK){
-			return false;
-		}
-		return true;
+		return files.find(f) != files.end();
 	}
 }
 
