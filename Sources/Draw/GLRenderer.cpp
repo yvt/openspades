@@ -930,12 +930,12 @@ namespace spades {
 					Vector3 tint = smoothedFogColor + MakeVector3(1.f, 1.f, 1.f);
 					tint = MakeVector3(1.f, 1.f, 1.f) / tint;
 					tint = Mix(tint, MakeVector3(1.f, 1.f, 1.f),
-							   0.4f);
+							   0.2f);
 					tint *= 1.f / std::min(std::min(tint.x, tint.y), tint.z);
 					handle = GLColorCorrectionFilter(this).Filter(handle, tint);
 					
 					// update smoothed fog color
-					smoothedFogColor = Mix(smoothedFogColor, fogColor, 0.02f);
+					smoothedFogColor = Mix(smoothedFogColor, fogColor, 0.002f);
 				}
 				
 				if(r_fxaa){
