@@ -20,6 +20,10 @@ file(GLOB POLY2TRI_SWEEP_FILES poly2tri/sweep/*.cc poly2tri/sweep/*.h)
 file(GLOB SCRIPTBINDING_FILES ScriptBindings/*.cpp ScriptBindings/*.h)
 file(GLOB UNZIP_FILES unzip/*.c unzip/*.h)
 
+if(PNG_FOUND)
+	file(GLOB CORE_PNG_FILES Core/PNG/*.cpp Core/PNG/*.h)
+endif()
+
 add_subdirectory(AngelScript/projects/cmake)
 add_subdirectory(AngelScript/projects/cmake_addons)
 set(ANGELSCRIPT_LIBS Angelscript Angelscript_addons)
@@ -38,7 +42,7 @@ if(WIN32)
 	endif()
 endif()
 
-add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${GUI_FILES}
+add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${CORE_PNG_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${GUI_FILES}
 	${IMPORTS_FILES} ${KISS_FILES} ${JSON_FILES} ${JSON_INCLUDE} ${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES} ${UNZIP_FILES} ${SCRIPTBINDING_FILES} ${RESOURCE_FILES})
 set_target_properties(OpenSpades PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -88,6 +92,10 @@ source_group("libs\\unzip" FILES ${UNZIP_FILES})
 
 
 target_link_libraries(OpenSpades ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${FLTK_OS_LIBS} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS})
+
+if(PNG_FOUND)
+	target_link_libraries(OpenSpades ${PNG_LIBRARIES})
+endif()
 
 #todo: MACOSX_BUNDLE_ICON_FILE ?
 
