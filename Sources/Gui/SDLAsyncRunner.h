@@ -23,6 +23,7 @@
 #include "SDLRunner.h"
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Mutex.h>
+#include <atomic>
 
 namespace spades {
 	namespace client{
