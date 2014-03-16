@@ -137,6 +137,9 @@ namespace spades {
 		}
 		
 		std::string Backtrace::ToString() const {
+			return BacktraceRecordToString(entries);
+		}
+		std::string BacktraceRecordToString(const BacktraceRecord& entries) {
 			std::string message;
 			char buf[1024];
 			if(entries.empty()){

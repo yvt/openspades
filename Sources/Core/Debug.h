@@ -58,6 +58,8 @@ namespace spades {
 			
 		};
 		
+		typedef std::vector<BacktraceEntry> BacktraceRecord;
+		
 		class Backtrace {
 			std::vector<BacktraceEntry> entries;
 		public:
@@ -68,10 +70,13 @@ namespace spades {
 			void Push(const BacktraceEntry&);
 			void Pop();
 			
-			std::vector<BacktraceEntry> GetAllEntries();
+			BacktraceRecord GetAllEntries();
+			BacktraceRecord GetRecord() { return GetAllEntries(); }
 			
 			std::string ToString() const;
 		};
+		
+		std::string BacktraceRecordToString(const BacktraceRecord&);
 	}
 	void StartLog();
 	void LogMessage(const char *file, int line,

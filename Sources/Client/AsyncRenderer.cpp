@@ -46,12 +46,14 @@ namespace spades {
 			class Init: public Command {
 			public:
 				virtual void Execute(IRenderer *r) {
+					SPADES_MARK_FUNCTION();
 					r->Init();
 				}
 			};
 			class Shutdown: public Command {
 			public:
 				virtual void Execute(IRenderer *r) {
+					SPADES_MARK_FUNCTION();
 					r->Shutdown();
 				}
 			};
@@ -59,6 +61,7 @@ namespace spades {
 			public:
 				GameMap *map;
 				virtual void Execute(IRenderer *r) {
+					SPADES_MARK_FUNCTION();
 					r->SetGameMap(map);
 				}
 			};
@@ -66,6 +69,7 @@ namespace spades {
 			public:
 				float v;
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					r->SetFogDistance(v);
 				}
 			};
@@ -73,6 +77,7 @@ namespace spades {
 			public:
 				Vector3 v;
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					r->SetFogColor(v);
 				}
 			};
@@ -80,6 +85,7 @@ namespace spades {
 			public:
 				SceneDefinition def;
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					r->StartScene(def);
 				}
 			};
@@ -88,10 +94,16 @@ namespace spades {
 				IImage *img;
 				DynamicLightParam def;
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					if(img){
 						def.image = img; img = NULL;
 					}
-					r->AddLight(def);
+					try{
+						r->AddLight(def);
+					}catch(...){
+						if(img) img->Release();
+						throw;
+					}
 					if(img){
 						img->Release();
 					}
@@ -102,7 +114,12 @@ namespace spades {
 				IModel *model;
 				ModelRenderParam param;
 				virtual void Execute(IRenderer *r){
-					r->RenderModel(model, param);
+					try {
+						r->RenderModel(model, param);
+					}catch(...){
+						model->Release(); model = NULL;
+						throw;
+					}
 					model->Release(); model = NULL;
 				}
 			};
@@ -111,6 +128,7 @@ namespace spades {
 				Vector3 a, b;
 				Vector4 color;
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					r->AddDebugLine(a, b, color);
 				}
 			};
@@ -120,7 +138,13 @@ namespace spades {
 				Vector3 center;
 				float radius, rotation;
 				virtual void Execute(IRenderer *r){
-					r->AddSprite(img, center, radius, rotation);
+					SPADES_MARK_FUNCTION();
+					try {
+						r->AddSprite(img, center, radius, rotation);
+					}catch(...){
+						img->Release(); img = NULL;
+						throw;
+					}
 					img->Release(); img = NULL;
 				}
 			};
@@ -130,13 +154,20 @@ namespace spades {
 				Vector3 p1, p2;
 				float radius;
 				virtual void Execute(IRenderer *r){
-					r->AddLongSprite(img, p1, p2, radius);
+					SPADES_MARK_FUNCTION();
+					try {
+						r->AddLongSprite(img, p1, p2, radius);
+					}catch(...){
+						img->Release(); img = NULL;
+						throw;
+					}
 					img->Release(); img = NULL;
 				}
 			};
 			class EndScene: public Command {
 			public:
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					r->EndScene();
 				}
 			};
@@ -144,6 +175,7 @@ namespace spades {
 			public:
 				Vector3 v;
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					r->MultiplyScreenColor(v);
 				}
 			};
@@ -151,6 +183,7 @@ namespace spades {
 			public:
 				Vector4 v;
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					r->SetColor(v);
 				}
 			};
@@ -158,6 +191,7 @@ namespace spades {
 			public:
 				Vector4 v;
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					r->SetColorAlphaPremultiplied(v);
 				}
 			};
@@ -169,15 +203,22 @@ namespace spades {
 				Vector2 outBottomLeft;
 				AABB2 inRect;
 				virtual void Execute(IRenderer *r){
-					r->DrawImage(img, outTopLeft, outTopRight, outBottomLeft,
-								 inRect);
-					img->Release(); img = NULL;
+					SPADES_MARK_FUNCTION();
+					try{
+						r->DrawImage(img, outTopLeft, outTopRight, outBottomLeft,
+									 inRect);
+					}catch(...){
+						if(img) img->Release(); img = NULL;
+						throw;
+					}
+					if(img) img->Release(); img = NULL;
 				}
 			};
 			class DrawFlatGameMap: public Command {
 			public:
 				AABB2 outRect, inRect;
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					r->DrawFlatGameMap(outRect, inRect);
 				}
 			};
@@ -185,13 +226,14 @@ namespace spades {
 			public:
 				AsyncRenderer *arenderer;
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					r->FrameDone();
-					
 				}
 			};
 			class Flip: public Command {
 			public:
 				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
 					r->Flip();
 				}
 			};
@@ -209,6 +251,8 @@ namespace spades {
 			
 			template<typename T>
 			T *AllocCommand() {
+				SPADES_MARK_FUNCTION();
+				
 				size_t size = sizeof(T);
 				size_t pos = buffer.size();
 				buffer.resize(buffer.size() + size);
@@ -228,6 +272,8 @@ namespace spades {
 			buffer(buf), pos(0){
 			}
 			Command *NextCommand() {
+				SPADES_MARK_FUNCTION();
+				
 				if(pos >= buffer.size()){
 					return NULL;
 				}
@@ -251,6 +297,8 @@ namespace spades {
 				
 			}
 			virtual void Run() {
+				SPADES_MARK_FUNCTION();
+				
 				CmdBufferReader reader(buffer);
 				Command *cmd;
 				while((cmd = reader.NextCommand()) != NULL){
@@ -278,7 +326,7 @@ namespace spades {
 				return;
 			
 			dispatch->Join();
-			dispatch->buffer = generator->buffer;
+			dispatch->buffer = std::move(generator->buffer);
 			generator->Clear();
 			dispatch->StartOn(queue);
 		}
@@ -329,6 +377,7 @@ namespace spades {
 				img->AddRef();
 				return img;
 			}
+			it->second->AddRef();
 			return it->second;
 		}
 		
@@ -415,6 +464,7 @@ namespace spades {
 				img->AddRef();
 				return img;
 			}
+			it->second->AddRef();
 			return it->second;
 		}
 		
@@ -555,11 +605,11 @@ namespace spades {
 			
 			DrawImage(image,
 					  AABB2(outTopLeft.x, outTopLeft.y,
-							image->GetWidth(),
-							image->GetHeight()),
+							image?image->GetWidth():0,
+							image?image->GetHeight():0),
 					  AABB2(0, 0,
-							image->GetWidth(),
-							image->GetHeight()));
+							image?image->GetWidth():0,
+							image?image->GetHeight():0));
 		}
 		
 		void AsyncRenderer::DrawImage(client::IImage *image, const spades::AABB2 &outRect) {
@@ -568,8 +618,8 @@ namespace spades {
 			DrawImage(image,
 					  outRect,
 					  AABB2(0, 0,
-							image->GetWidth(),
-							image->GetHeight()));
+							image ? image->GetWidth() : 0,
+							image ? image->GetHeight(): 0));
 		}
 		
 		void AsyncRenderer::DrawImage(client::IImage *image,
@@ -603,13 +653,9 @@ namespace spades {
 								   const spades::AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 			
-			if(!image){
-				SPInvalidArgument("image");
-			}
-			
 			rcmds::DrawImage *cmd = generator->AllocCommand<rcmds::DrawImage>();
 			cmd->img = image;
-			image->AddRef();
+			if(image) image->AddRef();
 			cmd->outTopLeft = outTopLeft;
 			cmd->outTopRight = outTopRight;
 			cmd->outBottomLeft = outBottomLeft;

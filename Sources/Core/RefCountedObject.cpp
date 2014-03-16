@@ -21,6 +21,7 @@
 #include "RefCountedObject.h"
 #include "../ScriptBindings/ScriptManager.h"
 #include "Exception.h"
+#include "AutoLocker.h"
 
 namespace spades {
 	RefCountedObject::RefCountedObject() {
@@ -36,10 +37,28 @@ namespace spades {
 	}
 	
 	void RefCountedObject::Release() {
+#if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
+		AutoLocker guard(&releaseInfoMutex);
+#endif
 		int cnt = asAtomicDec(refCount);
-		if(cnt == 0)
+		if(cnt == 0){
+#if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
+			
+#else
 			delete this;
-		else if(cnt < 0)
+#endif
+		}else if(cnt < 0)
+#if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
+			SPRaise("Attempted to release already destroyed object\n===== LAST RELEASE BACKTRACE =====\n%s\n===== SECOND LAST RELEASE BACKTRACE =====\n%s\n===== LAST RELEASE BACKTRACE ENDS =====",
+					reflection::BacktraceRecordToString(lastRelease).c_str(),
+					reflection::BacktraceRecordToString(secondLastRelease).c_str());
+#else
 			SPRaise("Attempted to release already destroyed object");
+#endif
+		
+#if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
+		secondLastRelease = std::move(lastRelease);
+		lastRelease = std::move(reflection::Backtrace::GetGlobalBacktrace()->GetRecord());
+#endif
 	}
 }

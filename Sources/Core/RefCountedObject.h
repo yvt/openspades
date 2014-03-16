@@ -21,11 +21,19 @@
 #pragma once
 
 #include "Debug.h"
+#include "Mutex.h"
+
+#define DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE 0
 
 namespace spades {
 	
 	class RefCountedObject {
 		int refCount;
+#if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
+		reflection::BacktraceRecord lastRelease;
+		reflection::BacktraceRecord secondLastRelease;
+		Mutex releaseInfoMutex;
+#endif
 	protected:
 		virtual ~RefCountedObject();
 	public:
