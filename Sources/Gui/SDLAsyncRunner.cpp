@@ -23,12 +23,18 @@
 #include "../Client/Client.h"
 #include "../Client/AsyncRenderer.h"
 #include "../Core/ConcurrentDispatch.h"
+#include <Core/AutoLocker.h>
 
 namespace spades {
 	namespace gui {
 		SDLAsyncRunner::SDLAsyncRunner():
 		rendererErrorOccured(false){
 			currentView = NULL;
+			
+			PulledState state;
+			state.acceptsTextInput = false;
+			state.needsAbsoluteMouseCoord = true;
+			this->state = state;
 		}
 		
 		SDLAsyncRunner::~SDLAsyncRunner(){
@@ -60,6 +66,9 @@ namespace spades {
 			cliThread->renderer = asyncRenderer;
 			cliThread->audio = audio;
 			cliThread->Start();
+			
+			bool editing = false;
+			bool absoluteMouseCoord = true;
 			
 			SPLog("Main event loop started");
 			try{
@@ -125,6 +134,29 @@ namespace spades {
 						if(event.type == SDL_QUIT){
 							break;
 						}
+					}
+					
+					PulledState state;
+					{
+						AutoLocker guard(&stateMutex);
+						state = this->state;
+					}
+					
+					bool ed = state.acceptsTextInput;
+					if(ed && !editing) {
+						SDL_StartTextInput();
+					}else if(!ed && editing){
+						SDL_StopTextInput();
+					}
+					editing = ed;
+					if(editing){
+						SDL_SetTextInputRect(&state.textInputRect);
+					}
+					
+					bool ab = state.needsAbsoluteMouseCoord;
+					if(ab != absoluteMouseCoord) {
+						absoluteMouseCoord = ab;
+						SDL_SetRelativeMouseMode(absoluteMouseCoord?SDL_FALSE:SDL_TRUE);
 					}
 					
 					DispatchQueue::GetThreadQueue()->ProcessQueue();
@@ -223,9 +255,24 @@ namespace spades {
 						}
 					}
 					
+					PulledState state;
+					state.acceptsTextInput = view->AcceptsTextInput();
 					
-					// TODO: support text inputing for cg_smp runner.
-					//       see SDLRunner.cpp and grep SDL_StartTextInput
+					if(state.acceptsTextInput) {
+						AABB2 rt = view->GetTextInputRect();
+						SDL_Rect& srt = state.textInputRect;
+						srt.x = (int)rt.GetMinX();
+						srt.y = (int)rt.GetMinY();
+						srt.w = (int)rt.GetWidth();
+						srt.h = (int)rt.GetHeight();
+					}
+					
+					state.needsAbsoluteMouseCoord = view->NeedsAbsoluteMouseCoordinate();
+					
+					{
+						AutoLocker guard(&stateMutex);
+						this->state = state;
+					}
 					
 				}
 				

@@ -22,6 +22,7 @@
 
 #include "SDLRunner.h"
 #include <Core/ConcurrentDispatch.h>
+#include <Core/Mutex.h>
 
 namespace spades {
 	namespace client{
@@ -35,7 +36,16 @@ namespace spades {
 			DispatchQueue *cliQueue;
 			int modState;
 			std::string clientError;
-			bool volatile rendererErrorOccured;
+			
+			struct PulledState {
+				bool acceptsTextInput;
+				SDL_Rect textInputRect;
+				bool needsAbsoluteMouseCoord;
+			};
+			
+			std::atomic<bool> rendererErrorOccured;
+			PulledState state;
+			Mutex stateMutex;
 		protected:
 			virtual int GetModState() { return modState; }
 			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
