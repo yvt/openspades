@@ -81,7 +81,7 @@ namespace spades {
 				auto rowLengthBytes = width * sizeof(std::uint8_t) * 4;
 
 				for(long y = bmp->GetHeight() - 1; y >= 0; --y) {
-					std::memcpy(&buf[y*rowLength], pixels, rowLengthBytes);
+					std::memcpy(&buf[y*rowLengthBytes], pixels, rowLengthBytes);
 					pixels += width;
 				}
 			}

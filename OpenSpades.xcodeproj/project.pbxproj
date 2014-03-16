@@ -113,6 +113,8 @@
 		E890F310187046990090AAB8 /* CP437.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E890F30E187046990090AAB8 /* CP437.cpp */; };
 		E895D65D18D4A10E00F5B9CA /* jpge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E895D65B18D4A10E00F5B9CA /* jpge.cpp */; };
 		E895D66018D4A15900F5B9CA /* JpegWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E895D65E18D4A15900F5B9CA /* JpegWriter.cpp */; };
+		E895D66418D614DE00F5B9CA /* pnglite.c in Sources */ = {isa = PBXBuildFile; fileRef = E895D66118D614DE00F5B9CA /* pnglite.c */; };
+		E895D66518D614DE00F5B9CA /* PngWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E895D66318D614DE00F5B9CA /* PngWriter.cpp */; };
 		E89A648E17A11B4F00FDA893 /* GLModelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A648C17A11B4E00FDA893 /* GLModelRenderer.cpp */; };
 		E89A649117A12FF900FDA893 /* GLDynamicLightShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A648F17A12FF800FDA893 /* GLDynamicLightShader.cpp */; };
 		E89A649417A1677F00FDA893 /* FallingBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A649217A1677F00FDA893 /* FallingBlock.cpp */; };
@@ -517,6 +519,9 @@
 		E895D65B18D4A10E00F5B9CA /* jpge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jpge.cpp; sourceTree = "<group>"; };
 		E895D65C18D4A10E00F5B9CA /* jpge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jpge.h; sourceTree = "<group>"; };
 		E895D65E18D4A15900F5B9CA /* JpegWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JpegWriter.cpp; sourceTree = "<group>"; };
+		E895D66118D614DE00F5B9CA /* pnglite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pnglite.c; sourceTree = "<group>"; };
+		E895D66218D614DE00F5B9CA /* pnglite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglite.h; sourceTree = "<group>"; };
+		E895D66318D614DE00F5B9CA /* PngWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PngWriter.cpp; sourceTree = "<group>"; };
 		E89A648C17A11B4E00FDA893 /* GLModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLModelRenderer.cpp; sourceTree = "<group>"; };
 		E89A648D17A11B4E00FDA893 /* GLModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLModelRenderer.h; sourceTree = "<group>"; };
 		E89A648F17A12FF800FDA893 /* GLDynamicLightShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLDynamicLightShader.cpp; sourceTree = "<group>"; };
@@ -1756,6 +1761,9 @@
 		E8E44683179CC4DE00BE8855 /* Bitmap Codecs */ = {
 			isa = PBXGroup;
 			children = (
+				E895D66118D614DE00F5B9CA /* pnglite.c */,
+				E895D66218D614DE00F5B9CA /* pnglite.h */,
+				E895D66318D614DE00F5B9CA /* PngWriter.cpp */,
 				E895D65B18D4A10E00F5B9CA /* jpge.cpp */,
 				E895D65C18D4A10E00F5B9CA /* jpge.h */,
 				E8E44684179CC4FF00BE8855 /* IBitmapCodec.cpp */,
@@ -1933,6 +1941,7 @@
 				E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */,
 				E842888E18A3D1520060743D /* StartupScreenHelper.cpp in Sources */,
 				E8E0AFA6179AA31C00C6B5A9 /* LimboView.cpp in Sources */,
+				E895D66518D614DE00F5B9CA /* PngWriter.cpp in Sources */,
 				E8E0AFA9179ACDDE00C6B5A9 /* GLSpriteRenderer.cpp in Sources */,
 				E81A7C771864171100BF3FCE /* SWMapRenderer.cpp in Sources */,
 				E8E0AFAC179ADC2200C6B5A9 /* ILocalEntity.cpp in Sources */,
@@ -2000,6 +2009,7 @@
 				E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */,
 				E844886617D0C43B005105D0 /* Tracer.cpp in Sources */,
 				E895D65D18D4A10E00F5B9CA /* jpge.cpp in Sources */,
+				E895D66418D614DE00F5B9CA /* pnglite.c in Sources */,
 				E844888217D2633C005105D0 /* json_reader.cpp in Sources */,
 				E844888317D2633C005105D0 /* json_value.cpp in Sources */,
 				E844888417D2633C005105D0 /* json_writer.cpp in Sources */,
