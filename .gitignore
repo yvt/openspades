@@ -48,6 +48,11 @@ xcuserdata
 #*.xcuserstate
 UserInterfaceState.xcuserstate
 
+# Vim & Sublime Text
+*~
+*.sublime-workspace
+*.sublime-project
+
 # Windows related
 Thumbs.db
 
