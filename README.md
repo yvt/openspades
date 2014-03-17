@@ -33,6 +33,7 @@ Installation
    hg clone http://hg.libsdl.org/SDL
    cd SDL/
    ./configure && make && sudo make install
+   cd ../
    ```
    Additional dependencies may be required.
 
@@ -42,6 +43,7 @@ Installation
    tar xvf SDL2_image-2.0.0.tar.gz
    cd SDL2_image-2.0.0
    ./configure && make && sudo make install
+   cd ../
    ```
    Additional dependencies may be required.
 
