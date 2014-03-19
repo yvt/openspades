@@ -142,96 +142,111 @@ msgctxt "Preferences"
 msgid "Controls"
 msgstr "Управление"
 
-#: ../../Scripts/Gui/Preferences.as:65
+#: ../../Scripts/Gui/Preferences.as:65 ../../Scripts/Gui/Preferences.as:66
 msgctxt "Preferences"
 msgid "Back"
 msgstr "Назад"
 
 #: ../../Scripts/Gui/Preferences.as:399 ../../Scripts/Gui/Preferences.as:406
+#: ../../Scripts/Gui/Preferences.as:407
 msgctxt "Preferences"
 msgid "Press Key to Bind or [Escape] to Cancel..."
 msgstr "Нажмите клавишу, которую вы хотите установить или [Escape] для Отмены"
 
 #: ../../Scripts/Gui/Preferences.as:410 ../../Scripts/Gui/Preferences.as:417
+#: ../../Scripts/Gui/Preferences.as:418
 msgctxt "Preferences"
 msgid "Space"
 msgstr "Пробел"
 
 #: ../../Scripts/Gui/Preferences.as:412 ../../Scripts/Gui/Preferences.as:419
+#: ../../Scripts/Gui/Preferences.as:420
 msgctxt "Preferences"
 msgid "Unbound"
 msgstr "Освободить"
 
 #: ../../Scripts/Gui/Preferences.as:574 ../../Scripts/Gui/Preferences.as:598
 #: ../../Scripts/Gui/Preferences.as:602 ../../Scripts/Gui/Preferences.as:626
+#: ../../Scripts/Gui/Preferences.as:603 ../../Scripts/Gui/Preferences.as:627
 msgctxt "Preferences"
 msgid "ON"
 msgstr "ВКЛ."
 
 #: ../../Scripts/Gui/Preferences.as:580 ../../Scripts/Gui/Preferences.as:610
 #: ../../Scripts/Gui/Preferences.as:608 ../../Scripts/Gui/Preferences.as:638
+#: ../../Scripts/Gui/Preferences.as:609 ../../Scripts/Gui/Preferences.as:639
 msgctxt "Preferences"
 msgid "OFF"
 msgstr "ВЫКЛ."
 
 #: ../../Scripts/Gui/Preferences.as:604 ../../Scripts/Gui/Preferences.as:632
+#: ../../Scripts/Gui/Preferences.as:633
 msgctxt "Preferences"
 msgid "REVERSED"
 msgstr "ОБРАТНЫЙ"
 
 #: ../../Scripts/Gui/Preferences.as:632 ../../Scripts/Gui/Preferences.as:660
+#: ../../Scripts/Gui/Preferences.as:661
 msgctxt "Preferences"
 msgid "Player Information"
 msgstr "Информация о игроке"
 
 #: ../../Scripts/Gui/Preferences.as:633 ../../Scripts/Gui/Preferences.as:661
+#: ../../Scripts/Gui/Preferences.as:662
 msgctxt "Preferences"
 msgid "Player Name"
 msgstr "Имя игрока"
 
 #: ../../Scripts/Gui/Preferences.as:637 ../../Scripts/Gui/Preferences.as:665
+#: ../../Scripts/Gui/Preferences.as:666
 msgctxt "Preferences"
 msgid "Effects"
 msgstr "Эффекты"
 
 #: ../../Scripts/Gui/Preferences.as:638 ../../Scripts/Gui/Preferences.as:666
+#: ../../Scripts/Gui/Preferences.as:667
 msgctxt "Preferences"
 msgid "Blood"
 msgstr "Кровь"
 
 #: ../../Scripts/Gui/Preferences.as:639 ../../Scripts/Gui/Preferences.as:667
+#: ../../Scripts/Gui/Preferences.as:668
 msgctxt "Preferences"
 msgid "Ejecting Brass"
 msgstr "Отстреленные гильзы"
 
 #: ../../Scripts/Gui/Preferences.as:640 ../../Scripts/Gui/Preferences.as:668
+#: ../../Scripts/Gui/Preferences.as:669
 msgctxt "Preferences"
 msgid "Ragdoll"
 msgstr "Рэгдолл"
 
 #: ../../Scripts/Gui/Preferences.as:642 ../../Scripts/Gui/Preferences.as:670
+#: ../../Scripts/Gui/Preferences.as:671
 msgctxt "Preferences"
 msgid "Feedbacks"
 msgstr "Обратная связь"
 
 #: ../../Scripts/Gui/Preferences.as:643 ../../Scripts/Gui/Preferences.as:671
+#: ../../Scripts/Gui/Preferences.as:672
 msgctxt "Preferences"
 msgid "Chat Notify Sounds"
 msgstr "Звуки уведомления чата"
 
 #: ../../Scripts/Gui/Preferences.as:644 ../../Scripts/Gui/Preferences.as:672
+#: ../../Scripts/Gui/Preferences.as:673
 msgctxt "Preferences"
 msgid "Hit Indicator"
 msgstr "Индикатор попадания"
 
 #: ../../Scripts/Gui/Preferences.as:646 ../../Scripts/Gui/Preferences.as:674
-#: ../../Scripts/Gui/Preferences.as:675
+#: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:676
 msgctxt "Preferences"
 msgid "AoS 0.75/0.76 Compatibility"
 msgstr "Совместимость с AoS 0.75/0.76"
 
 #: ../../Scripts/Gui/Preferences.as:647 ../../Scripts/Gui/Preferences.as:675
-#: ../../Scripts/Gui/Preferences.as:676
+#: ../../Scripts/Gui/Preferences.as:676 ../../Scripts/Gui/Preferences.as:677
 msgctxt "Preferences"
 msgid "Allow Unicode"
 msgstr "Разрешить юникод"
@@ -240,241 +255,270 @@ msgstr "Разрешить юникод"
 #: ../../Scripts/Gui/Preferences.as:693 ../../Scripts/Gui/Preferences.as:677
 #: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
 #: ../../Scripts/Gui/Preferences.as:679 ../../Scripts/Gui/Preferences.as:725
+#: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:62
+#: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:727
 msgctxt "Preferences"
 msgid "Misc"
 msgstr "Разное"
 
 #: ../../Scripts/Gui/Preferences.as:650 ../../Scripts/Gui/Preferences.as:678
-#: ../../Scripts/Gui/Preferences.as:680
+#: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:681
 msgctxt "Preferences"
 msgid "Field of View"
 msgstr "Поле зрения"
 
 #: ../../Scripts/Gui/Preferences.as:652 ../../Scripts/Gui/Preferences.as:680
-#: ../../Scripts/Gui/Preferences.as:682
+#: ../../Scripts/Gui/Preferences.as:682 ../../Scripts/Gui/Preferences.as:683
 msgctxt "Preferences"
 msgid "Minimap size"
 msgstr "Размер миникарты"
 
 #: ../../Scripts/Gui/Preferences.as:654 ../../Scripts/Gui/Preferences.as:682
 #: ../../Scripts/Gui/Preferences.as:683 ../../Scripts/Gui/Preferences.as:685
+#: ../../Scripts/Gui/Preferences.as:686
 msgctxt "Preferences"
 msgid "Weapon Spread Guide"
 msgstr "Ведение разброса пуль"
 
 #: ../../Scripts/Gui/Preferences.as:665 ../../Scripts/Gui/Preferences.as:693
 #: ../../Scripts/Gui/Preferences.as:694 ../../Scripts/Gui/Preferences.as:696
+#: ../../Scripts/Gui/Preferences.as:697
 msgctxt "Preferences"
 msgid "Weapons/Tools"
 msgstr "Оружие/Инструменты"
 
 #: ../../Scripts/Gui/Preferences.as:666 ../../Scripts/Gui/Preferences.as:694
 #: ../../Scripts/Gui/Preferences.as:695 ../../Scripts/Gui/Preferences.as:697
+#: ../../Scripts/Gui/Preferences.as:698
 msgctxt "Preferences"
 msgid "Attack"
 msgstr "Атака"
 
 #: ../../Scripts/Gui/Preferences.as:667 ../../Scripts/Gui/Preferences.as:695
 #: ../../Scripts/Gui/Preferences.as:696 ../../Scripts/Gui/Preferences.as:698
+#: ../../Scripts/Gui/Preferences.as:699
 msgctxt "Preferences"
 msgid "Alt. Attack"
 msgstr "Альтернативная атака"
 
 #: ../../Scripts/Gui/Preferences.as:668 ../../Scripts/Gui/Preferences.as:696
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:699
+#: ../../Scripts/Gui/Preferences.as:700
 msgctxt "Preferences"
 msgid "Hold Aim Down Sight"
 msgstr "Зажимать целиться для прицела"
 
 #: ../../Scripts/Gui/Preferences.as:669 ../../Scripts/Gui/Preferences.as:697
 #: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:700
+#: ../../Scripts/Gui/Preferences.as:701
 msgctxt "Preferences"
 msgid "Mouse Sensitivity"
 msgstr "Чувствительность мыши"
 
 #: ../../Scripts/Gui/Preferences.as:671 ../../Scripts/Gui/Preferences.as:699
 #: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:702
+#: ../../Scripts/Gui/Preferences.as:703
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
 msgstr "ADS Шкала чувствительности мыши"
 
 #: ../../Scripts/Gui/Preferences.as:673 ../../Scripts/Gui/Preferences.as:701
 #: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:704
+#: ../../Scripts/Gui/Preferences.as:705
 msgctxt "Preferences"
 msgid "Exponential Power"
 msgstr "Мощность по экспоненте"
 
 #: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:676
 #: ../../Scripts/Gui/Preferences.as:704 ../../Scripts/Gui/Preferences.as:705
-#: ../../Scripts/Gui/Preferences.as:707
+#: ../../Scripts/Gui/Preferences.as:707 ../../Scripts/Gui/Preferences.as:708
 msgctxt "Preferences"
 msgid "Reload"
 msgstr "Перезарядка"
 
 #: ../../Scripts/Gui/Preferences.as:676 ../../Scripts/Gui/Preferences.as:677
 #: ../../Scripts/Gui/Preferences.as:705 ../../Scripts/Gui/Preferences.as:706
-#: ../../Scripts/Gui/Preferences.as:708
+#: ../../Scripts/Gui/Preferences.as:708 ../../Scripts/Gui/Preferences.as:709
 msgctxt "Preferences"
 msgid "Capture Color"
 msgstr "Проба цвета"
 
 #: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:678
 #: ../../Scripts/Gui/Preferences.as:706 ../../Scripts/Gui/Preferences.as:707
-#: ../../Scripts/Gui/Preferences.as:709
+#: ../../Scripts/Gui/Preferences.as:709 ../../Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Equip Spade"
 msgstr "Переключиться на лопату"
 
 #: ../../Scripts/Gui/Preferences.as:678 ../../Scripts/Gui/Preferences.as:679
 #: ../../Scripts/Gui/Preferences.as:707 ../../Scripts/Gui/Preferences.as:708
-#: ../../Scripts/Gui/Preferences.as:710
+#: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:711
 msgctxt "Preferences"
 msgid "Equip Block"
 msgstr "Переключиться на блок"
 
 #: ../../Scripts/Gui/Preferences.as:679 ../../Scripts/Gui/Preferences.as:680
 #: ../../Scripts/Gui/Preferences.as:708 ../../Scripts/Gui/Preferences.as:709
-#: ../../Scripts/Gui/Preferences.as:711
+#: ../../Scripts/Gui/Preferences.as:711 ../../Scripts/Gui/Preferences.as:712
 msgctxt "Preferences"
 msgid "Equip Weapon"
 msgstr "Переключиться на оружие"
 
 #: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:681
 #: ../../Scripts/Gui/Preferences.as:709 ../../Scripts/Gui/Preferences.as:710
-#: ../../Scripts/Gui/Preferences.as:712
+#: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
 msgctxt "Preferences"
 msgid "Equip Grenade"
 msgstr "Переключиться на гранату"
 
 #: ../../Scripts/Gui/Preferences.as:681 ../../Scripts/Gui/Preferences.as:682
 #: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:711
-#: ../../Scripts/Gui/Preferences.as:713
+#: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
+#: ../../Scripts/Gui/Preferences.as:715
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
-msgstr "Переключение инструментов колесом мыши"
+msgstr "Перекл. инструмент колесом мыши"
 
 #: ../../Scripts/Gui/Preferences.as:684 ../../Scripts/Gui/Preferences.as:683
 #: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
-#: ../../Scripts/Gui/Preferences.as:715
+#: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
+#: ../../Scripts/Gui/Preferences.as:717
 msgctxt "Preferences"
 msgid "Movement"
 msgstr "Движение"
 
 #: ../../Scripts/Gui/Preferences.as:685 ../../Scripts/Gui/Preferences.as:684
 #: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
-#: ../../Scripts/Gui/Preferences.as:716
+#: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
+#: ../../Scripts/Gui/Preferences.as:718
 msgctxt "Preferences"
 msgid "Walk Forward"
 msgstr "Идти вперед"
 
 #: ../../Scripts/Gui/Preferences.as:686 ../../Scripts/Gui/Preferences.as:685
 #: ../../Scripts/Gui/Preferences.as:714 ../../Scripts/Gui/Preferences.as:715
-#: ../../Scripts/Gui/Preferences.as:717
+#: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
+#: ../../Scripts/Gui/Preferences.as:719
 msgctxt "Preferences"
 msgid "Backpedal"
 msgstr "Идти назад"
 
 #: ../../Scripts/Gui/Preferences.as:687 ../../Scripts/Gui/Preferences.as:686
 #: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
-#: ../../Scripts/Gui/Preferences.as:718
+#: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
+#: ../../Scripts/Gui/Preferences.as:720
 msgctxt "Preferences"
 msgid "Move Left"
 msgstr "Идти влево"
 
 #: ../../Scripts/Gui/Preferences.as:688 ../../Scripts/Gui/Preferences.as:687
 #: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
-#: ../../Scripts/Gui/Preferences.as:719
+#: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
+#: ../../Scripts/Gui/Preferences.as:721
 msgctxt "Preferences"
 msgid "Move Right"
 msgstr "Идти вправо"
 
 #: ../../Scripts/Gui/Preferences.as:689 ../../Scripts/Gui/Preferences.as:688
 #: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
-#: ../../Scripts/Gui/Preferences.as:720
+#: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
+#: ../../Scripts/Gui/Preferences.as:722
 msgctxt "Preferences"
 msgid "Crouch"
 msgstr "Приседать"
 
 #: ../../Scripts/Gui/Preferences.as:690 ../../Scripts/Gui/Preferences.as:689
 #: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
-#: ../../Scripts/Gui/Preferences.as:721
+#: ../../Scripts/Gui/Preferences.as:721 ../../Scripts/Gui/Preferences.as:722
+#: ../../Scripts/Gui/Preferences.as:723
 msgctxt "Preferences"
 msgid "Sneak"
 msgstr "Красться"
 
 #: ../../Scripts/Gui/Preferences.as:691 ../../Scripts/Gui/Preferences.as:690
 #: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
-#: ../../Scripts/Gui/Preferences.as:722
+#: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
+#: ../../Scripts/Gui/Preferences.as:724
 msgctxt "Preferences"
 msgid "Jump"
 msgstr "Прыгать"
 
 #: ../../Scripts/Gui/Preferences.as:692 ../../Scripts/Gui/Preferences.as:691
 #: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
-#: ../../Scripts/Gui/Preferences.as:723
+#: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
+#: ../../Scripts/Gui/Preferences.as:725
 msgctxt "Preferences"
 msgid "Sprint"
 msgstr "Бежать"
 
 #: ../../Scripts/Gui/Preferences.as:695 ../../Scripts/Gui/Preferences.as:694
 #: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
-#: ../../Scripts/Gui/Preferences.as:726
+#: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
+#: ../../Scripts/Gui/Preferences.as:728
 msgctxt "Preferences"
 msgid "Minimap Scale"
 msgstr "Масштаб миникарты"
 
 #: ../../Scripts/Gui/Preferences.as:696 ../../Scripts/Gui/Preferences.as:695
 #: ../../Scripts/Gui/Preferences.as:724 ../../Scripts/Gui/Preferences.as:725
-#: ../../Scripts/Gui/Preferences.as:727
+#: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
+#: ../../Scripts/Gui/Preferences.as:729
 msgctxt "Preferences"
 msgid "Toggle Map"
 msgstr "Вкл./выкл. карту"
 
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:696
 #: ../../Scripts/Gui/Preferences.as:725 ../../Scripts/Gui/Preferences.as:726
-#: ../../Scripts/Gui/Preferences.as:728
+#: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
+#: ../../Scripts/Gui/Preferences.as:730
 msgctxt "Preferences"
 msgid "Flashlight"
 msgstr "Фонарик"
 
 #: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:697
 #: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
-#: ../../Scripts/Gui/Preferences.as:729
+#: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
+#: ../../Scripts/Gui/Preferences.as:731
 msgctxt "Preferences"
 msgid "Global Chat"
 msgstr "Глобальный чат"
 
 #: ../../Scripts/Gui/Preferences.as:699 ../../Scripts/Gui/Preferences.as:698
 #: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
-#: ../../Scripts/Gui/Preferences.as:730
+#: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
+#: ../../Scripts/Gui/Preferences.as:732
 msgctxt "Preferences"
 msgid "Team Chat"
 msgstr "Командный чат"
 
 #: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:699
 #: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
-#: ../../Scripts/Gui/Preferences.as:731
+#: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
+#: ../../Scripts/Gui/Preferences.as:733
 msgctxt "Preferences"
 msgid "Limbo Menu"
 msgstr "Меню выбора"
 
 #: ../../Scripts/Gui/Preferences.as:701 ../../Scripts/Gui/Preferences.as:700
 #: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
-#: ../../Scripts/Gui/Preferences.as:732
+#: ../../Scripts/Gui/Preferences.as:732 ../../Scripts/Gui/Preferences.as:733
+#: ../../Scripts/Gui/Preferences.as:734
 msgctxt "Preferences"
 msgid "Save Map"
 msgstr "Сохранить карту"
 
 #: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:701
 #: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
-#: ../../Scripts/Gui/Preferences.as:733
+#: ../../Scripts/Gui/Preferences.as:733 ../../Scripts/Gui/Preferences.as:734
+#: ../../Scripts/Gui/Preferences.as:735
 msgctxt "Preferences"
 msgid "Save Sceneshot"
 msgstr "Сохранить сценшот"
 
 #: ../../Scripts/Gui/Preferences.as:703 ../../Scripts/Gui/Preferences.as:702
 #: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
-#: ../../Scripts/Gui/Preferences.as:734
+#: ../../Scripts/Gui/Preferences.as:734 ../../Scripts/Gui/Preferences.as:735
+#: ../../Scripts/Gui/Preferences.as:736
 msgctxt "Preferences"
 msgid "Save Screenshot"
 msgstr "Сохранить скриншот"
@@ -576,6 +620,7 @@ msgstr "Перезарядка"
 #: ../../../Sources/Client/Client.cpp:2545
 #: ../../../Sources/Client/Client_Draw.cpp:493
 #: ../../../Sources/Client/Client_Input.cpp:447
+#: ../../../Sources/Client/Client_Input.cpp:448
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr "Кончились патроны"
@@ -719,6 +764,7 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1038
 #: ../../Scripts/Gui/StartupScreen.as:1404
+#: ../../Scripts/Gui/StartupScreen.as:1405
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr "Бэкенд"
@@ -974,16 +1020,19 @@ msgstr ""
 "Выкл.|2x|4x"
 
 #: ../../Scripts/Gui/StartupScreen.as:1398
+#: ../../Scripts/Gui/StartupScreen.as:1399
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr "Настройки аудио"
 
 #: ../../Scripts/Gui/StartupScreen.as:1407
+#: ../../Scripts/Gui/StartupScreen.as:1408
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr "OpenAL"
 
 #: ../../Scripts/Gui/StartupScreen.as:1411
+#: ../../Scripts/Gui/StartupScreen.as:1412
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
@@ -994,11 +1043,13 @@ msgstr ""
 "эмуляция."
 
 #: ../../Scripts/Gui/StartupScreen.as:1420
+#: ../../Scripts/Gui/StartupScreen.as:1421
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr "YSR"
 
 #: ../../Scripts/Gui/StartupScreen.as:1424
+#: ../../Scripts/Gui/StartupScreen.as:1425
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -1012,11 +1063,14 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1438
 #: ../../Scripts/Gui/StartupScreen.as:1462
+#: ../../Scripts/Gui/StartupScreen.as:1450
+#: ../../Scripts/Gui/StartupScreen.as:1474
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "Polyphonics"
 
 #: ../../Scripts/Gui/StartupScreen.as:1439
+#: ../../Scripts/Gui/StartupScreen.as:1451
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
@@ -1028,11 +1082,13 @@ msgstr ""
 "слишком большие значение может привести к перегрузке "
 
 #: ../../Scripts/Gui/StartupScreen.as:1446
+#: ../../Scripts/Gui/StartupScreen.as:1458
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
 
 #: ../../Scripts/Gui/StartupScreen.as:1447
+#: ../../Scripts/Gui/StartupScreen.as:1459
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1042,6 +1098,7 @@ msgstr ""
 "создания лучшей атмосферы."
 
 #: ../../Scripts/Gui/StartupScreen.as:1463
+#: ../../Scripts/Gui/StartupScreen.as:1475
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1052,16 +1109,19 @@ msgstr ""
 "перегрузка."
 
 #: ../../Scripts/Gui/StartupScreen.as:1533
+#: ../../Scripts/Gui/StartupScreen.as:1551
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "Скопировать в буфер обм."
 
 #: ../../Scripts/Gui/StartupScreen.as:1569
+#: ../../Scripts/Gui/StartupScreen.as:1587
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "Продвинутые настройки"
 
 #: ../../Scripts/Gui/StartupScreen.as:1578
+#: ../../Scripts/Gui/StartupScreen.as:1596
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "Фильтр"
@@ -1095,6 +1155,7 @@ msgstr "Другой"
 
 #: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:703
 #: ../../Scripts/Gui/Preferences.as:704 ../../Scripts/Gui/Preferences.as:706
+#: ../../Scripts/Gui/Preferences.as:707
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
 msgstr "Инвертировать Y-ось ввода мыши"
@@ -1102,6 +1163,7 @@ msgstr "Инвертировать Y-ось ввода мыши"
 #: ../../../Sources/Client/Client.cpp:1418
 #: ../../../Sources/Client/Client.cpp:1434
 #: ../../../Sources/Client/Client.cpp:555
+#: ../../../Sources/Client/Client.cpp:577
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr "Карта сохранена: {0}"
@@ -1110,6 +1172,8 @@ msgstr "Карта сохранена: {0}"
 #: ../../../Sources/Client/Client.cpp:1439
 #: ../../../Sources/Client/Client.cpp:559
 #: ../../../Sources/Client/Client.cpp:565
+#: ../../../Sources/Client/Client.cpp:581
+#: ../../../Sources/Client/Client.cpp:587
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr "Сохранение карты не удалось: "
@@ -1139,6 +1203,7 @@ msgstr "Скриншот не удался: "
 #: ../../../Sources/Client/Client.cpp:2684
 #: ../../../Sources/Client/Client.cpp:2700
 #: ../../../Sources/Client/Client.cpp:599
+#: ../../../Sources/Client/Client.cpp:621
 msgctxt "Client"
 msgid "[Global] "
 msgstr "[Глобал.] "
@@ -1252,6 +1317,7 @@ msgstr "Команда {0} выиграла!"
 #: ../../../Sources/Client/Client.cpp:3833
 #: ../../../Sources/Client/Client.cpp:3857
 #: ../../../Sources/Client/Client_Update.cpp:893
+#: ../../../Sources/Client/Client_Update.cpp:900
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr "Вы убили игрока {0}"
@@ -1260,6 +1326,7 @@ msgstr "Вы убили игрока {0}"
 #: ../../../Sources/Client/Client.cpp:3835
 #: ../../../Sources/Client/Client.cpp:3859
 #: ../../../Sources/Client/Client_Update.cpp:895
+#: ../../../Sources/Client/Client_Update.cpp:902
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr "Вы были убиты игроком {0}"
@@ -1297,6 +1364,7 @@ msgstr "Не подключен"
 
 #: ../../../Sources/Client/NetClient.cpp:467
 #: ../../../Sources/Client/NetClient.cpp:1289
+#: ../../../Sources/Client/NetClient.cpp:1292
 msgctxt "NetClient"
 msgid "Loading snapshot"
 msgstr "Загрузка снапшота"
@@ -1355,69 +1423,73 @@ msgctxt "NetClient"
 msgid "Unknown Reason"
 msgstr "Неизвестная причина"
 
-#: ../../Scripts/Gui/Preferences.as:422
+#: ../../Scripts/Gui/Preferences.as:422 ../../Scripts/Gui/Preferences.as:423
 msgctxt "Preferences"
 msgid "Shift"
 msgstr "Shift"
 
-#: ../../Scripts/Gui/Preferences.as:424
+#: ../../Scripts/Gui/Preferences.as:424 ../../Scripts/Gui/Preferences.as:425
 msgctxt "Preferences"
 msgid "Control"
 msgstr "Control"
 
-#: ../../Scripts/Gui/Preferences.as:426
+#: ../../Scripts/Gui/Preferences.as:426 ../../Scripts/Gui/Preferences.as:427
 msgctxt "Preferences"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../../Scripts/Gui/Preferences.as:428
+#: ../../Scripts/Gui/Preferences.as:428 ../../Scripts/Gui/Preferences.as:429
 msgctxt "Preferences"
 msgid "Alt"
 msgstr "Alt"
 
-#: ../../Scripts/Gui/Preferences.as:430
+#: ../../Scripts/Gui/Preferences.as:430 ../../Scripts/Gui/Preferences.as:431
 msgctxt "Preferences"
 msgid "Left Mouse Button"
 msgstr "Левая кнопка мыши"
 
-#: ../../Scripts/Gui/Preferences.as:432
+#: ../../Scripts/Gui/Preferences.as:432 ../../Scripts/Gui/Preferences.as:433
 msgctxt "Preferences"
 msgid "Right Mouse Button"
 msgstr "Правая кнопка мыши"
 
-#: ../../Scripts/Gui/Preferences.as:434
+#: ../../Scripts/Gui/Preferences.as:434 ../../Scripts/Gui/Preferences.as:435
 msgctxt "Preferences"
 msgid "Middle Mouse Button"
 msgstr "Средняя кнопка мыши"
 
-#: ../../Scripts/Gui/Preferences.as:436
+#: ../../Scripts/Gui/Preferences.as:436 ../../Scripts/Gui/Preferences.as:437
 msgctxt "Preferences"
 msgid "Mouse Button 4"
 msgstr "Кнопка мыши 4"
 
-#: ../../Scripts/Gui/Preferences.as:438
+#: ../../Scripts/Gui/Preferences.as:438 ../../Scripts/Gui/Preferences.as:439
 msgctxt "Preferences"
 msgid "Mouse Button 5"
 msgstr "Кнопка мыши 5"
 
 #: ../../Scripts/Gui/Preferences.as:682 ../../Scripts/Gui/Preferences.as:684
+#: ../../Scripts/Gui/Preferences.as:685
 msgctxt "Preferences"
 msgid "Debug Hit Detection"
 msgstr "Отладка определения попаданий"
 
 #: ../../../Sources/Client/Client_Input.cpp:435
+#: ../../../Sources/Client/Client_Input.cpp:436
 #, fuzzy
 msgctxt "Client"
 msgid "Out of Blocks"
 msgstr "Кончились блоки"
 
 #: ../../../Sources/Client/Client_Input.cpp:459
+#: ../../../Sources/Client/Client_Input.cpp:460
 #, fuzzy
 msgctxt "Client"
 msgid "Out of Grenades"
 msgstr "Кончились гранаты"
 
 #: ../../../Sources/Client/Client_Update.cpp:457
+#: ../../../Sources/Client/Client_Update.cpp:460
 msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
@@ -1426,27 +1498,60 @@ msgstr[1] "{0} блока"
 msgstr[2] "{0} блоков"
 
 #: ../../../Sources/Client/Client_Update.cpp:465
+#: ../../../Sources/Client/Client_Update.cpp:468
 msgctxt "Client"
 msgid "-- blocks"
 msgstr "-- блоков"
 
 #: ../../../Sources/Client/Client_Update.cpp:1202
+#: ../../../Sources/Client/Client_Update.cpp:1236
 msgctxt "Client"
 msgid "Insufficient blocks."
 msgstr "Недостаточно блоков."
 
 #: ../../../Sources/Client/Client_Update.cpp:1206
+#: ../../../Sources/Client/Client_Update.cpp:1240
 msgctxt "Client"
 msgid "You cannot place a block there."
 msgstr "Вы не можете поставить блок здесь."
 
-#: ../../Scripts/Gui/Preferences.as:673
+#: ../../Scripts/Gui/Preferences.as:673 ../../Scripts/Gui/Preferences.as:674
 msgctxt "Preferences"
 msgid "Show Alerts"
 msgstr "Показывать предупреждения"
 
-#: ../../Scripts/Gui/Preferences.as:677
+#: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:678
 #, fuzzy
 msgctxt "Preferences"
 msgid "Server Alert"
 msgstr "Название сервера"
+
+#: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
+msgctxt "Preferences"
+msgid "Last Used Tool"
+msgstr "Посл. использован. инструмент"
+
+#: ../../Scripts/Gui/StartupScreen.as:1435
+msgctxt "StartupScreen"
+msgid "Null"
+msgstr "Нуль"
+
+#: ../../Scripts/Gui/StartupScreen.as:1439
+msgctxt "StartupScreen"
+msgid "Disables audio output."
+msgstr "Отключить аудио выход."
+
+#: ../../Scripts/Gui/Preferences.as:755
+msgctxt "Preferences"
+msgid "Enable Startup Window"
+msgstr "Включить стартовое окно"
+
+#: ../../Scripts/Gui/Preferences.as:776
+msgctxt "Preferences"
+msgid "Quit and restart OpenSpades to access the startup window."
+msgstr "Выйти и перезапустить OpenSpades для доступа к стартовому окну"
+
+#: ../../Scripts/Gui/Preferences.as:777
+msgctxt "Preferences"
+msgid "Some settings only can be changed in the startup window."
+msgstr "Некоторые настройки могут быть изменены только в стартовом окне"
