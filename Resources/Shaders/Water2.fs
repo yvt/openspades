@@ -108,8 +108,7 @@ void main() {
 			//discard; done by early-Z test
 		}
 	}else{
-		depth = planeDistance / dot(waterPlane, vec4(0.,0.,1.,0.));
-		depth = abs(depth);
+		depth = planeDistance / abs(waterPlane.z /* == dot(waterPlane, vec4(0.,0.,1.,0.)) */);
 		depth -= viewPosition.z;
 	}
 	
