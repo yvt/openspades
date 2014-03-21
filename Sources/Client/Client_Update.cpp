@@ -575,6 +575,20 @@ namespace spades {
 					"Sounds/Player/Footstep7.wav",
 					"Sounds/Player/Footstep8.wav"
 				};
+				const char *rsnds[] = {
+					"Sounds/Player/Run1.wav",
+					"Sounds/Player/Run2.wav",
+					"Sounds/Player/Run3.wav",
+					"Sounds/Player/Run4.wav",
+					"Sounds/Player/Run5.wav",
+					"Sounds/Player/Run6.wav",
+					"Sounds/Player/Run7.wav",
+					"Sounds/Player/Run8.wav",
+					"Sounds/Player/Run9.wav",
+					"Sounds/Player/Run10.wav",
+					"Sounds/Player/Run11.wav",
+					"Sounds/Player/Run12.wav",
+				};
 				const char *wsnds[] = {
 					"Sounds/Player/Wade1.wav",
 					"Sounds/Player/Wade2.wav",
@@ -585,11 +599,19 @@ namespace spades {
 					"Sounds/Player/Wade7.wav",
 					"Sounds/Player/Wade8.wav"
 				};
+				bool sprinting = clientPlayers[p->GetId()] ? clientPlayers[p->GetId()]->GetSprintState() > 0.5f : false;
 				Handle<IAudioChunk> c = p->GetWade() ?
 				audioDevice->RegisterSound(wsnds[(rand() >> 8) % 8]):
 				audioDevice->RegisterSound(snds[(rand() >> 8) % 8]);
 				audioDevice->Play(c, p->GetOrigin(),
 								  AudioParam());
+				if(sprinting) {
+					AudioParam param;
+					param.volume *= clientPlayers[p->GetId()]->GetSprintState();
+					c = audioDevice->RegisterSound(rsnds[(rand() >> 8) % 12]);
+					audioDevice->Play(c, p->GetOrigin(),
+									  param);
+				}
 			}
 		}
 		
@@ -639,31 +661,8 @@ namespace spades {
 				bool isLocal = p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c;
 				if(isLocal){
-					switch(p->GetTool()) {
-						case Player::ToolSpade:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Spade/RaiseLocal.wav");
-							break;
-						case Player::ToolBlock:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Block/RaiseLocal.wav");
-							break;
-						case Player::ToolWeapon:
-							switch(p->GetWeapon()->GetWeaponType()){
-								case RIFLE_WEAPON:
-									c = audioDevice->RegisterSound("Sounds/Weapons/Rifle/RaiseLocal.wav");
-									break;
-								case SMG_WEAPON:
-									c = audioDevice->RegisterSound("Sounds/Weapons/SMG/RaiseLocal.wav");
-									break;
-								case SHOTGUN_WEAPON:
-									c = audioDevice->RegisterSound("Sounds/Weapons/Shotgun/RaiseLocal.wav");
-									break;
-							}
-							
-							break;
-						case Player::ToolGrenade:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/RaiseLocal.wav");
-							break;
-					}
+					// played by ClientPlayer::Update
+					return;
 				}else{
 					c = audioDevice->RegisterSound("Sounds/Weapons/Switch.wav");
 				}
@@ -682,8 +681,8 @@ namespace spades {
 			if(!IsMuted()){
 				bool isLocal = p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c = isLocal ?
-				audioDevice->RegisterSound("Sounds/Weapons/SwitchLocal.wav"):
-				audioDevice->RegisterSound("Sounds/Weapons/Switch.wav");
+				audioDevice->RegisterSound("Sounds/Weapons/RestockLocal.wav"):
+				audioDevice->RegisterSound("Sounds/Weapons/Restock.wav");
 				if(isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f),
 										   AudioParam());
@@ -935,7 +934,7 @@ namespace spades {
 									  AudioParam());
 				}else{
 					Handle<IAudioChunk> c;
-					switch(rand()%3){
+					switch((rand()>>6)%3){
 						case 0:
 							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.wav");
 							break;
@@ -988,17 +987,21 @@ namespace spades {
 					AudioParam param;
 					param.volume = 2.f;
 					
-					Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Block.wav");
-					audioDevice->Play(c, shiftedHitPos,
-									  param);
+					Handle<IAudioChunk> c;
 					
 					param.pitch = .9f + GetRandom() * 0.2f;
 					switch((rand() >> 6) & 3){
 						case 0:
-						case 1:
-						case 2:
-						case 3:
 							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water1.wav");
+							break;
+						case 1:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water2.wav");
+							break;
+						case 2:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water3.wav");
+							break;
+						case 3:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water4.wav");
 							break;
 					}
 					audioDevice->Play(c, shiftedHitPos,
@@ -1009,13 +1012,23 @@ namespace spades {
 				
 				if(!IsMuted()){
 					AudioParam param;
-					param.volume = 4.f;
+					param.volume = 2.f;
 					
-					Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Block.wav");
+					Handle<IAudioChunk> c;
+					
+					switch((rand() >> 6) & 3) {
+						case 0:
+						case 1:
+						case 2:
+						case 3:
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Block.wav");
+							break;
+					}
 					audioDevice->Play(c, shiftedHitPos,
 									  param);
 					
 					param.pitch = .9f + GetRandom() * 0.2f;
+					param.volume = 2.f;
 					switch((rand() >> 6) & 3){
 						case 0:
 							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet1.wav");

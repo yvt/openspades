@@ -388,6 +388,7 @@ namespace spades {
 					}else if(CheckKey(cg_keyAttack, name)){
 						weapInput.primary = down;
 					}else if(CheckKey(cg_keyAltAttack, name)){
+						auto lastVal = weapInput.secondary;
 						if(world->GetLocalPlayer()->IsToolWeapon() && (!cg_holdAimDownSight)){
 							if(down && !playerInput.sprint && !world->GetLocalPlayer()->GetWeapon()->IsReloading()){
 								weapInput.secondary = !weapInput.secondary;
@@ -398,6 +399,14 @@ namespace spades {
 							}else{
 								weapInput.secondary = down;
 							}
+						}
+						if(world->GetLocalPlayer()->IsToolWeapon() && weapInput.secondary && !lastVal &&
+						   world->GetLocalPlayer()->IsReadyToUseTool() &&
+						   !world->GetLocalPlayer()->GetWeapon()->IsReloading()) {
+							AudioParam params;
+							params.volume = 0.08f;
+							Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Weapons/AimDownSightLocal.wav");
+							audioDevice->PlayLocal(chunk, MakeVector3(.4f, -.3f, .5f), params);
 						}
 					}else if(CheckKey(cg_keyReloadWeapon, name) && down){
 						Weapon *w = world->GetLocalPlayer()->GetWeapon();

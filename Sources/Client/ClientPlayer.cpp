@@ -190,8 +190,38 @@ namespace spades {
 					toolRaiseState = 0.f;
 					currentTool = player->GetTool();
 					
-					// TODO: play tool change sound here,
-					// instead of Clinet's ToolChange(?)
+					// play tool change sound
+					if(player->IsLocalPlayer()) {
+						auto *audioDevice = client->GetAudioDevice();
+						Handle<IAudioChunk> c;
+						switch(player->GetTool()) {
+							case Player::ToolSpade:
+								c = audioDevice->RegisterSound("Sounds/Weapons/Spade/RaiseLocal.wav");
+								break;
+							case Player::ToolBlock:
+								c = audioDevice->RegisterSound("Sounds/Weapons/Block/RaiseLocal.wav");
+								break;
+							case Player::ToolWeapon:
+								switch(player->GetWeapon()->GetWeaponType()){
+									case RIFLE_WEAPON:
+										c = audioDevice->RegisterSound("Sounds/Weapons/Rifle/RaiseLocal.wav");
+										break;
+									case SMG_WEAPON:
+										c = audioDevice->RegisterSound("Sounds/Weapons/SMG/RaiseLocal.wav");
+										break;
+									case SHOTGUN_WEAPON:
+										c = audioDevice->RegisterSound("Sounds/Weapons/Shotgun/RaiseLocal.wav");
+										break;
+								}
+								
+								break;
+							case Player::ToolGrenade:
+								c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/RaiseLocal.wav");
+								break;
+						}
+						audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f),
+											   AudioParam());
+					}
 				}else if(toolRaiseState > 1.f){
 					toolRaiseState = 1.f;
 				}
