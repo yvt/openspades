@@ -605,7 +605,7 @@ namespace spades {
 				audioDevice->RegisterSound(snds[(rand() >> 8) % 8]);
 				audioDevice->Play(c, p->GetOrigin(),
 								  AudioParam());
-				if(sprinting) {
+				if(sprinting && !p->GetWade()) {
 					AudioParam param;
 					param.volume *= clientPlayers[p->GetId()]->GetSprintState();
 					c = audioDevice->RegisterSound(rsnds[(rand() >> 8) % 12]);
