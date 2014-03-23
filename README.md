@@ -17,6 +17,8 @@ Installation
 
 ### On Linux
 
+GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
+
 1. Install dependencies:
 
    *On Debian-derived distributions*: 
@@ -82,7 +84,8 @@ Installation
 
 
 ### On Windows (with visual studio)
-1. Get CMake, Visual studio, and the OpenSpades source.
+
+1. Get CMake, Visual Studio 2013 (Express), and the OpenSpades source.
    Official: https://github.com/yvt/openspades
    Unofficial: https://github.com/learn-more/openspades
 2. Extract or checkout the source (all examples will assume ```E:/Projects/openspades```, update paths in the examples to reflect yours)
