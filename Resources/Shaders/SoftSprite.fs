@@ -59,7 +59,7 @@ void main() {
 	
 	//float soft = (depth - depthRange.x) / (depthRange.y - depthRange.w);
 	float soft = depth * depthRange.z + depthRange.x;
-	soft = clamp(soft, 0., 1.);
+	soft = smoothstep(0., 1., soft);
 	gl_FragColor *= soft;
 	
 	if(dot(gl_FragColor, vec4(1.)) < .002)
