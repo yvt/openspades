@@ -154,8 +154,9 @@ namespace spades {
 					view->WheelEvent(-event.wheel.x, -event.wheel.y);
 					break;
 				case SDL_KEYDOWN:
-					view->KeyEvent(TranslateKey(event.key.keysym),
-									true);
+					if(!event.key.repeat)
+						view->KeyEvent(TranslateKey(event.key.keysym),
+										true);
 					break;
 				case SDL_KEYUP:
 					view->KeyEvent(TranslateKey(event.key.keysym),
