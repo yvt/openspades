@@ -27,6 +27,7 @@
 #include "Fonts.h"
 #include <Core/FileManager.h>
 #include <Core/IStream.h>
+#include <ctime>
 
 #include "IAudioChunk.h"
 #include "IAudioDevice.h"
@@ -52,6 +53,7 @@
 #include "GameMapWrapper.h"
 
 #include "NetClient.h"
+
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;

@@ -18,6 +18,7 @@
  
  */
 #include <cstring>
+#include <cstdint>
 
 #include "IBitmapCodec.h"
 #include "Bitmap.h"
