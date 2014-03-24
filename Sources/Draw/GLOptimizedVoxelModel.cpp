@@ -29,7 +29,7 @@
 #include "GLDynamicLightShader.h"
 #include "IGLShadowMapRenderer.h"
 #include "GLShadowMapShader.h"
-#include "../poly2tri/poly2tri.h"
+#include "CellToTriangle.h"
 #include "../Core/Exception.h"
 #include <set>
 #include "../Core/Bitmap.h"
@@ -185,19 +185,21 @@ namespace spades {
 			int usize, vsize;
 			int minU, maxU, minV, maxV;
 			
-			struct Point {
-				int x;
-				int y;
-				int sx, sy;
-				Point(){}
-				Point(int x, int y):x(x),y(y){}
-				Point(int x, int y, int sx, int sy):x(x),y(y),sx(x),sy(y){}
+			class Model {
+				const uint8_t *slice;
+				int usize, vsize;
+			public:
+				Model(const uint8_t *slice, int usize, int vsize):
+				slice(slice), usize(usize), vsize(vsize) {}
+				inline int GetWidth() { return usize; }
+				inline int GetHeight() { return vsize; }
+				inline bool operator()(int x, int y) const {
+					if(x < 0 || y < 0 || x >= usize || y >= vsize) return false;
+					return slice[x * vsize + y] != 0;
+				}
 			};
 			
-			// poly2tri point pool
-			std::vector<p2t::Point> gPoints;
-			typedef p2t::Point *PointIndex;
-			
+			std::unique_ptr<c2t::Trianglulator<Model>> triangulator;
 			
 			uint8_t& Slice(int u, int v){
 				SPAssert(u >= 0); SPAssert(v >= 0);
@@ -210,310 +212,17 @@ namespace spades {
 				return Slice(u, v);
 			}
 			
-			PointIndex EmitPoint(int x, int y){
-				gPoints.push_back(p2t::Point(x, y));
-				return (PointIndex)(gPoints.size() - 1);
+			std::vector<c2t::Point> ProcessArea() {
+				if(triangulator == nullptr) {
+					triangulator = decltype(triangulator){new c2t::Trianglulator<Model>(Model(slice, usize, vsize))};
+				}
+				
+				return std::move(triangulator->Triangulate());
 			}
-			
-			PointIndex EmitPoint(const Point& p){
-				// exact coordinate causes error on p2t library...
-				gPoints.push_back(p2t::Point(p.x + p.sx * 0.001 + (GetRandom() - GetRandom()) * 0.0005,
-											 p.y + p.sy * 0.001 + (GetRandom() - GetRandom()) * 0.0005));
-				return (PointIndex)(gPoints.size() - 1);
-			}
-			
-			void ResolvePoints(std::vector<PointIndex>& points){
-				SPADES_MARK_FUNCTION_DEBUG();
-				for(size_t i = 0; i < points.size(); i++){
-					points[i] = &(gPoints[(size_t)points[i]]);
-				}
-			}
-			
-			class PolygonFillIterator {
-				int top, height;
-				struct Span {
-					std::set<int> xs;
-				};
-				Span *spans;
-				int curX, curY;
-				std::set<int>::iterator nextIt;
-			public:
-				PolygonFillIterator(const std::vector<Point>& points) {
-					SPADES_MARK_FUNCTION_DEBUG();
-					int minY = -1, maxY = -1;
-					for(size_t i = 0; i < points.size(); i++){
-						const Point& p = points[i];
-						if(minY == -1 || p.y < minY) minY = p.y;
-						if(maxY == -1 || p.y > maxY) maxY = p.y;
-					}
-					top = minY;
-					height = maxY - minY;
-					if(height == 0){
-						spans = NULL;
-					}else{
-						spans = new Span[height];
-						Point last = points[points.size() - 1];
-						for(size_t i = 0; i < points.size(); i++){
-							Point p = points[i];
-							if(p.y != last.y){
-								SPAssert(p.x == last.x);
-								minY = std::min(p.y, last.y);
-								maxY = std::max(p.y, last.y);
-								for(int y = minY; y < maxY; y++){
-									SPAssert(spans[y-top].xs.find(p.x) ==
-											 spans[y-top].xs.end());
-									SPAssert(y - top < height);
-									spans[y - top].xs.insert(p.x);
-								}
-							}
-							last = p;
-						}
-					}
-					curY = -1;
-				}
-				~PolygonFillIterator() {
-					if(spans)
-						delete[] spans;
-				}
-				
-				bool Next(Point& outPoint) {
-					if(curY >= height)
-						return false;
-					SPADES_MARK_FUNCTION_DEBUG();
-					
-					// check current span
-					if(curY != -1){
-						Span& span = spans[curY];
-						if(nextIt != span.xs.end()){
-							// emit
-							outPoint.x = curX;
-							outPoint.y = curY + top;
-							curX++;
-							SPAssert(curX <= *nextIt);
-							if(curX == *nextIt){
-								nextIt++;
-								// move to next solid
-								if(nextIt == span.xs.end()){
-									// span end
-								}else{
-									// next solid
-									curX = *nextIt;
-									nextIt++;
-									SPAssert(nextIt != span.xs.end());
-								}
-							}
-							return true;
-						}
-					}
-					
-					// move to next span
-					curY++;
-					while(curY < height){
-						if(!spans[curY].xs.empty()){
-							break;
-						}
-						curY++;
-					}
-					
-					if(curY >= height){
-						return false;
-					}
-					
-					Span& span = spans[curY];
-					SPAssert(!span.xs.empty());
-					nextIt = span.xs.begin();
-					outPoint.x = *nextIt;
-					outPoint.y = curY + top;
-					
-					curX = outPoint.x + 1;
-					nextIt++;
-					SPAssert(curX <= *nextIt);
-					if(curX == *nextIt){
-						nextIt++;
-						// move to next solid
-						if(nextIt == span.xs.end()){
-							// span end
-						}else{
-							// next solid
-							curX = *nextIt;
-							nextIt++;
-							SPAssert(nextIt != span.xs.end());
-						}
-					}
-					
-					return true;
-				}
-			};
-			
-			// given a top-side point, makes path
-			std::vector<Point> MakePolyline(int su, int sv, uint8_t inner) {
-				std::vector<Point> poly;
-				SPADES_MARK_FUNCTION_DEBUG();
-				SPAssert(GetSlice(su, sv) == inner);
-				SPAssert(GetSlice(su, sv - 1) != inner);
-				
-				// go as backward as possible
-				while(GetSlice(su, sv) == inner){
-					su--;
-				}
-				su++;
-				
-				// we support only the case (su, sv) is a corner
-				SPAssert(GetSlice(su, sv - 1) != inner);
-				
-				int u = su, v = sv;
-				int du = 1, dv = 0;
-				bool corner = true;
-				bool first = true;
-				// coord. system: u = right, v = down
-				if(u == 3 && v == 3){
-					first = true;
-				}
-				
-				while(u != su || v != sv || du != 1 || dv != 0 || first) {
-					int outU, outV; // vector to outside (polygon normal)
-					if(dv == 0) { outU = 0; outV = -du; }
-					else { outU = dv; outV = 0; }
-					
-					SPAssert(GetSlice(u, v) == inner);
-					SPAssert(GetSlice(u + outU, v + outV) != inner);
-					
-					if(corner){
-						if(du == 1)
-							poly.push_back(Point(u, v,1,1));
-						else if(du == -1)
-							poly.push_back(Point(u+1, v+1, -1,-1));
-						else if(dv == 1)
-							poly.push_back(Point(u+1, v, -1,1));
-						else if(dv == -1)
-							poly.push_back(Point(u, v+1, 1,-1));
-						else
-							SPAssert(false);
-						corner = false;
-					}
-					
-					// go forward
-					u += du; v += dv;
-					
-					if(GetSlice(u, v) != inner){
-						// go back, and turn right
-						u -= du; v -= dv;
-						int odu = du, odv = dv;
-						du = -odv; dv = odu;
-						corner = true;
-					}else if(GetSlice(u + outU, v + outV) == inner){
-						// turn left, and go forward
-						int odu = du, odv = dv;
-						du = odv; dv = -odu;
-						u += du; v += dv;
-						corner = true;
-					}
-				
-					first = false;
-				}
-				
-				SPAssert(corner);
-				SPAssert(!first);
-				SPAssert(poly.size() >= 4);
-				
-				return poly;
-			}
-			
-			/** start scanning area from (su, sv) */
-			p2t::CDT *ProcessArea(int su, int sv) {
-				SPADES_MARK_FUNCTION_DEBUG();
-				gPoints.clear();
-				
-				std::vector<Point> exteria;
-				std::vector<std::vector<Point> > holes;
-				exteria = MakePolyline(su, sv, 1);
-				
-				{
-					// find holes
-					PolygonFillIterator filler(exteria);
-					Point pt;
-					while(filler.Next(pt)){
-						int type = GetSlice(pt.x, pt.y);
-						if(type == 0){
-							// hole
-							std::vector<Point> hole;
-							hole = MakePolyline(pt.x, pt.y, 0);
-							holes.push_back(hole);
-							
-							// exclude areas inside the hole
-							PolygonFillIterator filler2(hole);
-							while(filler2.Next(pt)){
-								type = GetSlice(pt.x, pt.y);
-								if(type == 1){
-									Slice(pt.x, pt.y) = 2;
-								}else if(type == 0){
-									Slice(pt.x, pt.y) = 3;
-								}else{
-									SPAssert(false);
-								}
-							}
-						}
-					}
-				}
-				
-				{
-					// remove this area
-					PolygonFillIterator filler(exteria);
-					Point pt;
-					while(filler.Next(pt)){
-						int type = GetSlice(pt.x, pt.y);
-						if(type == 0){
-							SPAssert(false);
-						}else if(type == 1){ // this area
-							Slice(pt.x, pt.y) = 0;
-						}else if(type == 2){ // not this area, but inside
-							Slice(pt.x, pt.y) = 1;
-						}else if(type == 3){ // hole of this area
-							Slice(pt.x, pt.y) = 0;
-						}else{
-							SPAssert(false);
-						}
-					}
-				}
-				
-				std::vector<std::vector<PointIndex> > pts2;
-				p2t::CDT *cdt;
-				{
-					std::vector<PointIndex> poly;
-					for(size_t i = 0; i < exteria.size(); i++){
-						Point pt = exteria[i];
-						poly.push_back(EmitPoint(pt));
-					}
-					pts2.push_back(poly);
-				}
-				for(size_t j = 0; j < holes.size(); j++){
-					std::vector<PointIndex> poly;
-					const std::vector<Point>& ipoly = holes[j];
-					for(size_t i = 0; i < ipoly.size(); i++){
-						Point pt = ipoly[i];
-						poly.push_back(EmitPoint(pt));
-					}
-					pts2.push_back(poly);
-				}
-				
-				for(size_t i = 0; i < pts2.size(); i++){
-					ResolvePoints(pts2[i]);
-				}
-				
-				cdt = new p2t::CDT(pts2[0]);
-				
-				for(size_t i = 1; i < pts2.size(); i++)
-					cdt->AddHole(pts2[i]);
-				
-				cdt->Triangulate();
-				
-				return cdt;
-			}
-			
 		};
 		
-		static IntVector3 ExactPoint(const p2t::Point *pt){
-			return IntVector3::Make(lround(pt->x), lround(pt->y),0);
+		static IntVector3 ExactPoint(c2t::Point pt){
+			return IntVector3::Make(pt.x, pt.y, 0);
 		}
 		
 		static int64_t DoubledTriangleArea(IntVector3 v1, IntVector3 v2, IntVector3 v3) {
@@ -647,65 +356,54 @@ namespace spades {
 			}
 			
 			// TODO: optimize scan range
-			for(int v = 0; v < vsize; v++){
-				for(int u = 0; u < usize; u++){
-					if(slice[u * vsize + v]){
-						p2t::CDT *cdt = generator.ProcessArea(u, v);
-						std::vector<p2t::Triangle *> triangles = cdt->GetTriangles();
-						
-						for(size_t i = 0; i < triangles.size(); i++){
-							p2t::Triangle& tri = *triangles[i];
-							uint32_t idx = (uint32_t)vertices.size();
-							IntVector3 pt1 = ExactPoint(tri.GetPoint(0));
-							IntVector3 pt2 = ExactPoint(tri.GetPoint(1));
-							IntVector3 pt3 = ExactPoint(tri.GetPoint(2));
-							
-							// degenerate triangle
-							if(DoubledTriangleArea(pt1, pt2, pt3) == 0)
-								continue;
-							
-							Vertex vtx;
-							vtx.nx = nx; vtx.ny = ny; vtx.nz = nz;
-							
-							vtx.x = sx + (int)pt1.x * ux + (int)pt1.y * vx;
-							vtx.y = sy + (int)pt1.x * uy + (int)pt1.y * vy;
-							vtx.z = sz + (int)pt1.x * uz + (int)pt1.y * vz;
-							vtx.u = (int)pt1.x - tu;
-							vtx.v = (int)pt1.y - tv;
-							vertices.push_back(vtx);
-							
-							vtx.x = sx + (int)pt2.x * ux + (int)pt2.y * vx;
-							vtx.y = sy + (int)pt2.x * uy + (int)pt2.y * vy;
-							vtx.z = sz + (int)pt2.x * uz + (int)pt2.y * vz;
-							vtx.u = (int)pt2.x - tu;
-							vtx.v = (int)pt2.y - tv;
-							vertices.push_back(vtx);
-							
-							vtx.x = sx + (int)pt3.x * ux + (int)pt3.y * vx;
-							vtx.y = sy + (int)pt3.x * uy + (int)pt3.y * vy;
-							vtx.z = sz + (int)pt3.x * uz + (int)pt3.y * vz;
-							vtx.u = (int)pt3.x - tu;
-							vtx.v = (int)pt3.y - tv;
-							vertices.push_back(vtx);
-							
-							if(flip){
-								indices.push_back(idx+2);
-								indices.push_back(idx+1);
-								indices.push_back(idx);
-								
-							}else{
-								indices.push_back(idx);
-								indices.push_back(idx+1);
-								indices.push_back(idx+2);
-							}
-							bmpIndex.push_back(bId);
-							bmpIndex.push_back(bId);
-							bmpIndex.push_back(bId);
-						}
-						
-						delete cdt;
-					}
+			auto polys = std::move(generator.ProcessArea());
+			for(std::size_t i = 0; i < polys.size(); i += 3) {
+				uint32_t idx = (uint32_t)vertices.size();
+				IntVector3 pt1 = ExactPoint(polys[i + 0]);
+				IntVector3 pt2 = ExactPoint(polys[i + 1]);
+				IntVector3 pt3 = ExactPoint(polys[i + 2]);
+				
+				// degenerate triangle
+				if(DoubledTriangleArea(pt1, pt2, pt3) == 0)
+					continue;
+				
+				Vertex vtx;
+				vtx.nx = nx; vtx.ny = ny; vtx.nz = nz;
+				
+				vtx.x = sx + (int)pt1.x * ux + (int)pt1.y * vx;
+				vtx.y = sy + (int)pt1.x * uy + (int)pt1.y * vy;
+				vtx.z = sz + (int)pt1.x * uz + (int)pt1.y * vz;
+				vtx.u = (int)pt1.x - tu;
+				vtx.v = (int)pt1.y - tv;
+				vertices.push_back(vtx);
+				
+				vtx.x = sx + (int)pt2.x * ux + (int)pt2.y * vx;
+				vtx.y = sy + (int)pt2.x * uy + (int)pt2.y * vy;
+				vtx.z = sz + (int)pt2.x * uz + (int)pt2.y * vz;
+				vtx.u = (int)pt2.x - tu;
+				vtx.v = (int)pt2.y - tv;
+				vertices.push_back(vtx);
+				
+				vtx.x = sx + (int)pt3.x * ux + (int)pt3.y * vx;
+				vtx.y = sy + (int)pt3.x * uy + (int)pt3.y * vy;
+				vtx.z = sz + (int)pt3.x * uz + (int)pt3.y * vz;
+				vtx.u = (int)pt3.x - tu;
+				vtx.v = (int)pt3.y - tv;
+				vertices.push_back(vtx);
+				
+				if(!flip){
+					indices.push_back(idx+2);
+					indices.push_back(idx+1);
+					indices.push_back(idx);
+					
+				}else{
+					indices.push_back(idx);
+					indices.push_back(idx+1);
+					indices.push_back(idx+2);
 				}
+				bmpIndex.push_back(bId);
+				bmpIndex.push_back(bId);
+				bmpIndex.push_back(bId);
 			}
 			
 		}

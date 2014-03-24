@@ -677,6 +677,7 @@
 		E8B6B74517EA0F1E00E35523 /* IGrenadeSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGrenadeSkin.h; sourceTree = "<group>"; };
 		E8B6B74717EA12E100E35523 /* IWeaponSkin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IWeaponSkin.cpp; sourceTree = "<group>"; };
 		E8B6B74817EA12E500E35523 /* IWeaponSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWeaponSkin.h; sourceTree = "<group>"; };
+		E8B8082718E05B920001013E /* CellToTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellToTriangle.h; sourceTree = "<group>"; };
 		E8B93AD418559EC600BD01E1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModelRenderer.cpp; sourceTree = "<group>"; };
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
@@ -1678,6 +1679,7 @@
 				E844886117CFB32B005105D0 /* GLLongSpriteRenderer.h */,
 				E8B6B72C17E68B1B00E35523 /* GLSoftLitSpriteRenderer.cpp */,
 				E8B6B72D17E68B1B00E35523 /* GLSoftLitSpriteRenderer.h */,
+				E8B8082718E05B920001013E /* CellToTriangle.h */,
 			);
 			name = "Client Object";
 			sourceTree = "<group>";
