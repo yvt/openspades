@@ -161,7 +161,7 @@ namespace spades {
 			SPRaise("No free file name");
 		}
 		
-#pragma mark - 2D Drawings
+#pragma mark - HUD Drawings
 		
 		void Client::DrawSplash() {
 			Handle<IImage> img;
