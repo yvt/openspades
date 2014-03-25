@@ -137,6 +137,16 @@ namespace spades {
 			Player* player = world->GetLocalPlayer();
 			
 			if(player){
+				
+				// disable input when UI is open
+				if(scriptedUI->NeedsInput()) {
+					weapInput.primary = false;
+					if(player->GetTeamId() >= 2 || player->GetTool() != Player::ToolWeapon) {
+						weapInput.secondary = false;
+					}
+					playerInput = PlayerInput();
+				}
+				
 				if(player->GetTeamId() >= 2) {
 					UpdateLocalSpectator(dt);
 				}else{
