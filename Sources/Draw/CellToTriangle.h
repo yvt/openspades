@@ -90,41 +90,35 @@ namespace c2t {
 			lastProcessedY.resize(w + 1);
 		}
 		
+		std::vector<std::size_t> edgeStack;
+		
 		template<bool flipped>
 		void EmitEdge(Edge *edge) {
 			const auto& points = edge->points;
-			int len = static_cast<int>(points.size());
-			int a = 1, b = 0;
-			while(a != b) {
-				int aa = a + 1;
-				if(aa == len) aa = 0;
-				if(aa == b) break;
-				int bb = b == 0 ? len - 1 : b - 1;
-				
-				if(TriangleSide<flipped>(points[b], points[aa], points[a])) {
-					if(flipped) {
-						polys.push_back(points[aa]);
-						polys.push_back(points[b]);
-					}else{
-						polys.push_back(points[b]);
-						polys.push_back(points[aa]);
+			edgeStack.clear();
+			edgeStack.push_back(0);
+			edgeStack.push_back(1);
+			
+			for(std::size_t i = 2; i < points.size(); i++) {
+				while(edgeStack.size() > 1) {
+					auto j = edgeStack.back(); edgeStack.pop_back();
+					auto k = edgeStack.back();
+					if(TriangleSide<flipped>(points[j], points[k], points[i])) {
+						if(flipped) {
+							polys.push_back(points[k]);
+							polys.push_back(points[j]);
+						} else {
+							polys.push_back(points[j]);
+							polys.push_back(points[k]);
+						}
+						polys.push_back(points[i]);
+					} else {
+						edgeStack.push_back(j);
+						break;
 					}
-					polys.push_back(points[a]);
-					a = aa;
-				}else if(TriangleSide<flipped>(points[b], points[bb], points[a])) {
-					if(flipped) {
-						polys.push_back(points[bb]);
-						polys.push_back(points[b]);
-					}else{
-						polys.push_back(points[b]);
-						polys.push_back(points[bb]);
-					}
-					polys.push_back(points[a]);
-					b = bb;
-				}else{
-					// shouldn't reach here...
-					break;
 				}
+				
+				edgeStack.push_back(i);
 			}
 		}
 		
