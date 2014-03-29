@@ -29,7 +29,7 @@ namespace spades {
 		
 		struct CellPos {
 			short x, y, z;
-			CellPos(){}
+			CellPos() = default;
 			CellPos(int xx, int yy, int zz):
 			x(xx), y(yy), z(zz){}
 			
@@ -50,6 +50,22 @@ namespace spades {
 				return x == p.x && y == p.y && z == p.z;
 			}
 			
+		};
+		
+		struct CellPosHash {
+			inline std::size_t operator () (const CellPos& pos) const {
+				std::size_t ret;
+				if(sizeof(std::size_t) > 4) {
+					ret = pos.x; ret <<= 16;
+					ret |= pos.y; ret <<= 16;
+					ret |= pos.z;
+				}else{
+					ret = pos.x; ret <<= 16;
+					ret |= pos.y;
+					ret ^= pos.z;
+				}
+				return ret;
+			}
 		};
 		
 		/** Wraps GameMap and provides floating-block detection.*/
@@ -99,3 +115,5 @@ namespace spades {
 		};
 	}
 }
+
+

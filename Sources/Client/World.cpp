@@ -35,6 +35,7 @@
 #include "IWorldListener.h"
 #include <Core/Settings.h>
 #include "HitTestDebugger.h"
+#include <deque>
 
 SPADES_SETTING(cg_debugHitTest, "0");
 
@@ -81,6 +82,8 @@ namespace spades {
 		
 		void World::Advance(float dt) {
 			SPADES_MARK_FUNCTION();
+			
+			ApplyBlockActions();
 			
 			for(size_t i = 0; i < players.size(); i++)
 				if(players[i])
@@ -158,15 +161,123 @@ namespace spades {
 			mode = m;
 		}
 		
+		static std::vector<std::vector<CellPos>> ClusterizeBlocks(const std::vector<CellPos>& blocks) {
+			std::unordered_map<CellPos, bool, CellPosHash> blockMap;
+			for(const auto& block: blocks) {
+				blockMap[block] = true;
+			}
+			
+			std::vector<std::vector<CellPos>> ret;
+			std::deque<decltype(blockMap)::iterator> queue;
+	
+			ret.reserve(64);
+			// wish I could `reserve()` queue...
+			
+			std::size_t addedCount = 0;
+			
+			for(auto it = blockMap.begin(); it != blockMap.end(); it++) {
+				SPAssert(queue.empty());
+				
+				if(!it->second) continue;
+				queue.emplace_back(it);
+				
+				std::vector<CellPos> outBlocks;
+				
+				while(!queue.empty()) {
+					auto blockitem = queue.front();
+					queue.pop_front();
+					
+					if(!blockitem->second) continue;
+					
+					auto pos = blockitem->first;
+					outBlocks.emplace_back(pos);
+					blockitem->second = false;
+					
+					decltype(blockMap)::iterator nextIt;
+					
+					nextIt = blockMap.find(CellPos(pos.x - 1, pos.y, pos.z));
+					if(nextIt != blockMap.end() && nextIt->second) {
+						queue.emplace_back(nextIt);
+					}
+					nextIt = blockMap.find(CellPos(pos.x + 1, pos.y, pos.z));
+					if(nextIt != blockMap.end() && nextIt->second) {
+						queue.emplace_back(nextIt);
+					}
+					nextIt = blockMap.find(CellPos(pos.x, pos.y - 1, pos.z));
+					if(nextIt != blockMap.end() && nextIt->second) {
+						queue.emplace_back(nextIt);
+					}
+					nextIt = blockMap.find(CellPos(pos.x, pos.y + 1, pos.z));
+					if(nextIt != blockMap.end() && nextIt->second) {
+						queue.emplace_back(nextIt);
+					}
+					nextIt = blockMap.find(CellPos(pos.x, pos.y, pos.z - 1));
+					if(nextIt != blockMap.end() && nextIt->second) {
+						queue.emplace_back(nextIt);
+					}
+					nextIt = blockMap.find(CellPos(pos.x, pos.y, pos.z + 1));
+					if(nextIt != blockMap.end() && nextIt->second) {
+						queue.emplace_back(nextIt);
+					}
+				}
+				
+				SPAssert(!outBlocks.empty());
+				addedCount += outBlocks.size();
+				ret.emplace_back(std::move(outBlocks));
+			}
+			
+			SPAssert(addedCount == blocks.size());
+			
+			return std::move(ret);
+		}
+		
+		void World::ApplyBlockActions() {
+			for(const auto& creation: createdBlocks) {
+				const auto& pos = creation.first;
+				const auto& color = creation.second;
+				if(map->IsSolid(pos.x, pos.y, pos.z))
+					continue;
+				mapWrapper->AddBlock(pos.x, pos.y, pos.z,
+									 color.x |
+									 (color.y << 8) |
+									 (color.z << 16) |
+									 (100UL << 24));
+			}
+			
+			std::vector<CellPos> cells;
+			for(const auto& cell: destroyedBlocks) {
+				if(!map->IsSolid(cell.x, cell.y, cell.z))
+					continue;
+				cells.emplace_back(cell);
+			}
+			
+			cells = mapWrapper->RemoveBlocks(cells);
+			
+			auto clusters = ClusterizeBlocks(cells);
+			std::vector<IntVector3> cells2;
+			
+			for(const auto& cluster: clusters) {
+				cells2.resize(cluster.size());
+				for(std::size_t i = 0; i < cluster.size(); i++) {
+					auto p = cluster[i];
+					cells2[i] = IntVector3(p.x, p.y, p.z);
+					map->Set(p.x, p.y, p.z, false, 0);
+				}
+				if(listener)
+					listener->BlocksFell(cells2);
+			}
+			
+			createdBlocks.clear();
+			destroyedBlocks.clear();
+		}
+		
 		void World::CreateBlock(spades::IntVector3 pos,
 								spades::IntVector3 color) {
-			if(map->IsSolid(pos.x, pos.y, pos.z))
-				return;
-			mapWrapper->AddBlock(pos.x, pos.y, pos.z,
-								 color.x |
-								 (color.y << 8) |
-								 (color.z << 16) |
-								 (100UL << 24));
+			auto it = destroyedBlocks.find(CellPos(pos.x, pos.y, pos.z));
+			if(it != destroyedBlocks.end())
+				destroyedBlocks.erase(it);
+			
+			createdBlocks[CellPos(pos.x, pos.y, pos.z)] = color;
 		}
 		void World::DestroyBlock(std::vector<spades::IntVector3>& pos){
 			std::vector<CellPos> cells;
@@ -176,27 +287,14 @@ namespace spades {
 				if(p.z >= (allowToDestroyLand ? 63 : 62) || p.z < 0 || p.x < 0 || p.y < 0 ||
 				   p.x >= map->Width() || p.y >= map->Height())
 					continue;
-				if(!map->IsSolid(p.x, p.y, p.z))
-					continue;
-				cells.push_back(CellPos(p.x,p.y,p.z));
+				
+				CellPos cellp(p.x, p.y, p.z);
+				auto it = createdBlocks.find(cellp);
+				if(it != createdBlocks.end())
+					createdBlocks.erase(it);
+				destroyedBlocks.insert(cellp);
 			}
 			
-			cells = mapWrapper->RemoveBlocks(cells);
-			
-			for(size_t i =0 ; i < cells.size(); i++){
-				CellPos& p = cells[i];
-				map->Set(p.x, p.y, p.z, false, 0);
-			}
-			
-			std::vector<IntVector3> cells2;
-			for(size_t i =0 ; i < cells.size(); i++){
-				cells2.push_back(IntVector3::Make(cells[i].x,
-												  cells[i].y,
-												  cells[i].z));
-			}
-			
-			if(listener)
-				listener->BlocksFell(cells2);
 		}
 		
 		World::PlayerPersistent& World::GetPlayerPersistent(int index) {

@@ -27,6 +27,9 @@
 #include <vector>
 #include <list>
 #include <memory>
+#include "GameMapWrapper.h"
+#include <unordered_set>
+#include <unordered_map>
 
 namespace spades {
 	namespace client {
@@ -67,6 +70,11 @@ namespace spades {
 			
 			std::list<Grenade *> grenades;
 			std::unique_ptr<HitTestDebugger> hitTestDebugger;
+			
+			std::unordered_map<CellPos, spades::IntVector3, CellPosHash> createdBlocks;
+			std::unordered_set<CellPos, CellPosHash> destroyedBlocks;
+			
+			void ApplyBlockActions();
 			
 		public:
 			World();
