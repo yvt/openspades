@@ -795,8 +795,13 @@ namespace spades {
 					
 					PlayerInput inp = ParsePlayerInput(reader.ReadByte());
 					
-					if(GetWorld()->GetLocalPlayer() == p)
+					if(GetWorld()->GetLocalPlayer() == p) {
+						// handle "/fly" jump
+						if(inp.jump) {
+							p->ForceJump();
+						}
 						break;
+					}
 					
 					p->SetInput(inp);
 				}

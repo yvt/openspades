@@ -164,6 +164,7 @@ namespace spades {
 			void SetWeaponInput(WeaponInput);
 			void SetTool(ToolType);
 			void SetHeldBlockColor(IntVector3);
+			void ForceJump();
 			bool IsBlockCursorActive();
 			bool IsBlockCursorDragging();
 			IntVector3 GetBlockCursorPos(){return blockCursorPos;}

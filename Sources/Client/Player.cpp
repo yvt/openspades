@@ -1143,6 +1143,15 @@ namespace spades {
 			return ((velocity.z >= 0.f && velocity.z < .017f) && !airborne);
 		}
 		
+		void Player::ForceJump() {
+			velocity.z = -0.36f;
+			lastJump = true;
+			if(world->GetListener() && world->GetTime() > lastJumpTime + .1f){
+				world->GetListener()->PlayerJumped(this);
+				lastJumpTime = world->GetTime();
+			}
+		}
+		
 		void Player::MovePlayer(float fsynctics) {
 			if(input.jump && (!lastJump) &&
 			   IsOnGroundOrWade()) {
