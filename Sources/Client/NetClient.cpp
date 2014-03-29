@@ -465,7 +465,7 @@ namespace spades {
 				}
 				if(status == NetClientStatusConnecting){
 					if(event.type == ENET_EVENT_TYPE_CONNECT){
-						statusString = "Awaiting for state";
+						statusString = _Tr("NetClient", "Awaiting for state");
 					}else if(event.type == ENET_EVENT_TYPE_RECEIVE){
 						NetPacketReader reader(event.packet);
 						reader.DumpDebug();
