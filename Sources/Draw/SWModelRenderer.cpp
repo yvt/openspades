@@ -59,7 +59,7 @@ namespace spades {
 			auto axis3 = mat.GetAxis(2);
 			auto *rawModel = model->GetRawModel();
 			auto rawModelOrigin = rawModel->GetOrigin();
-			rawModelOrigin += 0.1f;
+			rawModelOrigin += 0.25f;
 			origin += axis1 * rawModelOrigin.x;
 			origin += axis2 * rawModelOrigin.y;
 			origin += axis3 * rawModelOrigin.z;
