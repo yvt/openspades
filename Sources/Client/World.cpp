@@ -235,8 +235,6 @@ namespace spades {
 			for(const auto& creation: createdBlocks) {
 				const auto& pos = creation.first;
 				const auto& color = creation.second;
-				if(map->IsSolid(pos.x, pos.y, pos.z))
-					continue;
 				mapWrapper->AddBlock(pos.x, pos.y, pos.z,
 									 color.x |
 									 (color.y << 8) |
