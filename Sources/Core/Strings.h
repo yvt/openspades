@@ -209,7 +209,19 @@ namespace spades {
 		}
 	};
 	
-	
+	template<>
+	class Formatter<0> {
+		const char *fmt;
+	public:
+		Formatter(const char *fmt):fmt(fmt) {
+			if(strchr(fmt, '{')) {
+				SPRaise("Malformed format string (using non-existent parameter. no parameter provided): %s", fmt);
+			}
+		}
+		std::string Format() {
+			return fmt;
+		}
+	};
 	
 	template<class ...T>
 	std::string Format(const char *str, T... args) {
