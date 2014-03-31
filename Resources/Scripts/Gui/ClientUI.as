@@ -320,7 +320,7 @@ namespace spades {
 	
 	uint StringCommonPrefixLength(string a, string b) {
 		for(uint i = 0, ln = Min(a.length, b.length); i < ln; i++) {
-			if(a[i] != b[i]) return i;
+			if(ToLower(a[i]) != ToLower(b[i])) return i;
 		}	
 		return Min(a.length, b.length);
 	}
@@ -434,7 +434,7 @@ namespace spades {
 					}
 					
 					if(commonPart.length > input.length) {
-						Text = Text + commonPart.substr(input.length);
+						Text = "/" + commonPart;
 						Select(Text.length, 0);
 					}
 					
@@ -567,10 +567,11 @@ namespace spades {
 			string[] vars = GetAllConfigNames();
 			
 			for(uint i = 0, len = vars.length; i < len; i++) {
-				if(vars[i] == varname) {
+				if(vars[i].length == varname.length &&
+				   StringCommonPrefixLength(vars[i], varname) == vars[i].length) {
 					// match
 					string val = text.substr(idx + 1);
-					ConfigItem item(varname);
+					ConfigItem item(vars[i]);
 					item.StringValue = val;
 				}
 			}
