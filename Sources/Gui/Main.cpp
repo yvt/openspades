@@ -456,6 +456,15 @@ int main(int argc, char ** argv)
 		_Tr("Main", "Localization System Loaded");
 		pumpEvents();
 		
+		// parse args
+		for(int i = 1; i < argc;) {
+			int ret = argsHandler(argc, argv, i);
+			if(!ret) {
+				// ignore unknown arg
+				i++;
+			}
+		}
+		
 		// initialize AngelScript
 		SPLog("Initializing script engine");
 		spades::ScriptManager::GetInstance();
