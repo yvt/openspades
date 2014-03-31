@@ -27,7 +27,10 @@
 #include <Core/Exception.h>
 #include <ctype.h>
 #include <Core/Math.h>
+#include <Core/Settings.h>
 
+SPADES_SETTING(cg_chatHeight, "30");
+SPADES_SETTING(cg_killfeedHeight, "26");
 
 namespace spades {
 	namespace client{
@@ -58,7 +61,11 @@ namespace spades {
 		}
 		
 		float ChatWindow::GetHeight() {
-			return renderer->ScreenHeight() / 3;
+			float prop = killfeed ?
+			(float)cg_killfeedHeight :
+			(float)cg_chatHeight;
+			
+			return renderer->ScreenHeight() * prop * 0.01f;
 		}
 		
 		float ChatWindow::GetLineHeight() {
@@ -252,7 +259,7 @@ namespace spades {
 			
 			float winX = 4.f;
 			float winY = killfeed ? 8.f :
-			(float)renderer->ScreenHeight() * .5f;
+			renderer->ScreenHeight() - GetHeight() - 60.f;
 			std::list<ChatEntry>::iterator it;
 			
 			float lHeight = GetLineHeight();
