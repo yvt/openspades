@@ -19,7 +19,8 @@
  */
 
 #include "DirectoryFileSystem.h"
-#include "StdStream.h"
+//#include "StdStream.h"
+#include "SdlFileStream.h"
 #include "Exception.h"
 #include <sys/stat.h>
 #include "Debug.h"
@@ -131,11 +132,11 @@ namespace spades {
 		SPADES_MARK_FUNCTION();
 		
 		std::string path = physicalPath(fn);
-		FILE *f = fopen(path.c_str(), "rb");
+		SDL_RWops *f = SDL_RWFromFile(path.c_str(), "rb");
 		if(f == NULL) {
 			SPRaise("I/O error while opening %s for reading", fn);
 		}
-		return new StdStream(f, true);
+		return new SdlFileStream(f, true);
 	}
 	
 	IStream *DirectoryFileSystem::OpenForWriting(const char *fn) {
@@ -166,12 +167,14 @@ namespace spades {
 			}
 		}
 		
-		FILE *f = fopen(path.c_str(), "wb+");
+		SDL_RWops *f = SDL_RWFromFile(path.c_str(), "wb+");
 		if(f == NULL) {
 			SPRaise("I/O error while opening %s for writing", fn);
 		}
-		return new StdStream(f, true);
+		return new SdlFileStream(f, true);
 	}
+	
+	// TODO: open for appending?
 	
 	bool DirectoryFileSystem::FileExists(const char *fn) {
 		SPADES_MARK_FUNCTION();
