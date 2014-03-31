@@ -9,7 +9,7 @@ cache: apt
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
   - sudo apt-get update
-  - sudo apt-get install pkg-config libfltk1.3-dev libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev
+  - sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev
   
   - if [ "$CC" == "gcc" ]; then sudo apt-get install g++-4.8; fi
   
