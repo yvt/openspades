@@ -38,6 +38,7 @@ namespace spades {
 		Bitmap(uint32_t *pixels, int w, int h);
 		
 		static Bitmap *Load(const std::string&);
+		static Bitmap *Load(IStream *); // must be seekable
 		void Save(const std::string&);
 		
 		uint32_t *GetPixels() { return pixels; }

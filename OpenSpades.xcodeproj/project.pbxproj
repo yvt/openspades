@@ -69,7 +69,6 @@
 		E849654D18E9487300B9706D /* FltkPreferenceImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E849654B18E9487300B9706D /* FltkPreferenceImporter.cpp */; };
 		E849655018E94F1200B9706D /* SdlFileStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E849654E18E94F1200B9706D /* SdlFileStream.cpp */; };
 		E84E221618BB4601001282B0 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF039B178EDAC9000683D4 /* libz.dylib */; };
-		E84E221718BB4B41001282B0 /* libfltk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03E4178EF5FF000683D4 /* libfltk.a */; };
 		E84E221918BB4BA0001282B0 /* Credits.inc in Sources */ = {isa = PBXBuildFile; fileRef = E84E221818BB4BA0001282B0 /* Credits.inc */; };
 		E852337B1839B28C00F40541 /* VersionInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E85233791839B28C00F40541 /* VersionInfo.cpp */; };
 		E8567E571792B24D009D83E0 /* IAudioChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E551792B24D009D83E0 /* IAudioChunk.cpp */; };
@@ -851,7 +850,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E84E221718BB4B41001282B0 /* libfltk.a in Frameworks */,
 				E84E221618BB4601001282B0 /* libz.dylib in Frameworks */,
 				E87AB82518BB3A04006B7D73 /* SDL2_image.framework in Frameworks */,
 				E844888717D2669C005105D0 /* libcurl.dylib in Frameworks */,

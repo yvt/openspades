@@ -29,17 +29,6 @@ if(NOT GLEW_FOUND)
 	message(FATAL_ERROR "GLEW not found, please install it and make sure CMake can find it (add it to the PATH)")
 endif()
 
-set(FLTK_SKIP_OPENGL TRUE)
-set(FLTK_SKIP_FORMS TRUE)
-set(FLTK_SKIP_FLUID TRUE)
-set(FLTK_SKIP_IMAGES TRUE)
-include(FindFLTK)
-if(NOT FLTK_FOUND)
-	message(FATAL_ERROR "FLTK not found, manually set FLTK_INCLUDE_DIR in CMake")
-endif()
-
-set(FLTK_OS_LIBS ${FLTK_BASE_LIBRARY})
-
 
 include(FindZLIB)
 if(NOT ZLIB_FOUND)
@@ -158,7 +147,6 @@ if(OPENGL_INCLUDE_DIR)
 	include_directories("${OPENGL_INCLUDE_DIR}")
 endif()
 include_directories("${GLEW_INCLUDE_DIR}")
-include_directories("${FLTK_INCLUDE_DIR}")
 include_directories("${ZLIB_INCLUDE_DIR}")
 include_directories("${CURL_INCLUDE_DIRS}")
 

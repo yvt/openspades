@@ -43,7 +43,14 @@
 #include <ScriptBindings/ScriptManager.h>
 
 #include <algorithm>	//std::sort
-#include <FL/Fl.H>
+#include <memory>
+
+#include <Core/MemoryStream.h>
+#include <Core/Bitmap.h>
+
+static const unsigned char splashImage[] = {
+	#include "SplashImage.inc"
+};
 
 SPADES_SETTING(cl_showStartupWindow, "");
 
@@ -135,10 +142,6 @@ class ThreadQuantumSetter {
 
 #endif
 
-#ifdef __APPLE__
-#include <xmmintrin.h>
-#endif
-
 SPADES_SETTING(cg_lastQuickConnectHost, "");
 SPADES_SETTING(cg_protocolVersion, "");
 SPADES_SETTING(cg_playerName, "");
@@ -197,32 +200,111 @@ namespace spades {
 	}
 }
 
+/** Thrown when user wants to exit the program while its initialization. */
+class ExitRequestException: public std::exception {
+public:
+	ExitRequestException() throw() {}
+};
+
+class SplashWindow {
+	SDL_Window *window;
+	SDL_Surface *surface;
+	spades::Handle<spades::Bitmap> bmp;
+	bool startupScreenRequested;
+public:
+	SplashWindow():
+	window(nullptr),
+	surface(nullptr),
+	startupScreenRequested(false){
+		
+		spades::MemoryStream stream(reinterpret_cast<const char*>(splashImage), sizeof(splashImage));
+		bmp.Set(spades::Bitmap::Load(&stream), false);
+		
+		SDL_InitSubSystem(SDL_INIT_VIDEO|SDL_INIT_TIMER);
+		window = SDL_CreateWindow("OpenSpades Splash Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+								  bmp->GetWidth(), bmp->GetHeight(), SDL_WINDOW_BORDERLESS);
+		if(window == nullptr) {
+			SPLog("Creation of splash window failed.");
+			return;
+		}
+		
+		surface = SDL_GetWindowSurface(window);
+		if(surface == nullptr) {
+			SPLog("Creation of splash window surface failed.");
+			SDL_DestroyWindow(window);
+			return;
+		}
+		
+		// put splash image
+		auto *s = SDL_CreateRGBSurfaceFrom(bmp->GetPixels(), bmp->GetWidth(), bmp->GetHeight(),
+										   32, bmp->GetWidth() * 4,
+										   0xff, 0xff00, 0xff0000, 0);
+		SDL_BlitSurface(s, nullptr, surface, nullptr);
+		SDL_FreeSurface(s);
+		
+		SDL_UpdateWindowSurface(window);
+	}
+	
+	SDL_Window *GetWindow() {
+		return window;
+	}
+	
+	void PumpEvents() {
+		SDL_PumpEvents();
+		SDL_Event e;
+		while(SDL_PollEvent(&e)) {
+			switch(e.type) {
+				case SDL_KEYDOWN:
+					switch(e.key.keysym.sym) {
+						case SDLK_ESCAPE: throw ExitRequestException();
+						case SDLK_SPACE:
+							startupScreenRequested = true;
+							break;
+					}
+					break;
+				case SDL_QUIT:
+					throw ExitRequestException();
+			}
+		}
+	}
+	
+	bool IsStartupScreenRequested() {
+		return startupScreenRequested;
+	}
+	
+	~SplashWindow() {
+		if(window) SDL_DestroyWindow(window);
+	}
+};
+
+
 int main(int argc, char ** argv)
 {
 #ifdef WIN32
 	SetUnhandledExceptionFilter( UnhandledExceptionProc );
 #endif
-	// Enable FPE
-#if 0
-#ifdef __APPLE__
-	short fpflags = 0x1332; // Default FP flags, change this however you want.
-	__asm__("fnclex\n\tfldcw %0\n\t": "=m"(fpflags));
 	
-	_MM_SET_EXCEPTION_MASK(_MM_GET_EXCEPTION_MASK() & ~_MM_MASK_INVALID);
-#endif
+	std::unique_ptr<SplashWindow> splashWindow;
 	
-#endif
 	try{
 		
+		// start recording backtrace
 		spades::reflection::Backtrace::StartBacktrace();
-		
 		SPADES_MARK_FUNCTION();
+		
+		// show splash window
+		// NOTE: splash window uses image loader, which assumes backtrace is already initialized.
+		splashWindow.reset(new SplashWindow());
+		auto showSplashWindowTime = SDL_GetTicks();
+		auto pumpEvents = [&splashWindow] { splashWindow->PumpEvents(); };
+		
+		// initialize threads
 		spades::Thread::InitThreadSystem();
 		spades::DispatchQueue::GetThreadQueue()->MarkSDLVideoThread();
 		
 		SPLog("Package: " PACKAGE_STRING);
 		
-		// default resource directories
+		// setup user-specific default resource directories
 #ifdef WIN32
 		static char buf[4096];
 		GetModuleFileName(NULL, buf, 4096);
@@ -258,6 +340,7 @@ int main(int argc, char ** argv)
 		(new spades::DirectoryFileSystem(home+"/.openspades/Resources", true));
 #endif
 		
+		// start log output to SystemMessages.log
 		try{
 			spades::StartLog();
 		}catch(const std::exception& ex){
@@ -267,15 +350,17 @@ int main(int argc, char ** argv)
 									  "OpenSpades will continue to run, but any critical events are not logged.", ex.what());
 			if(SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING,
 										"OpenSpades Log System Failure",
-										msg.c_str(), nullptr)) {
+										msg.c_str(), splashWindow->GetWindow())) {
 				// showing dialog failed.
-				// TODO: do appropriate action?
 			}
 		}
 		SPLog("Log Started.");
 		
+		// load preferences.
 		spades::Settings::GetInstance()->Load();
+		pumpEvents();
 		
+		// dump CPU info (for debugging?)
 		{
 			spades::CpuID cpuid;
 			SPLog("---- CPU Information ----");
@@ -299,15 +384,12 @@ int main(int argc, char ** argv)
 			SPLog("-------------------------");
 		}
 		
+		// register resource directory specified by Makefile (or something)
 #if defined(RESDIR_DEFINED) && !NDEBUG
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(RESDIR, false));
 #endif
 		
-		/*
-		 spades::FileManager::AddFileSystem
-		 (new spades::DirectoryFileSystem("/Users/tcpp/Programs/MacPrograms2/OpenSpades/Resources", false));
-		 */
-		// add all zip files
+		// search current file system for .pak files
 		{
 			std::vector<spades::IFileSystem*> fss;
 			std::vector<spades::IFileSystem*> fssImportant;
@@ -366,40 +448,63 @@ int main(int argc, char ** argv)
 				spades::FileManager::PrependFileSystem(fssImportant[i]);
 			}
 		}
+		pumpEvents();
 		
+		// initialize localization system
 		SPLog("Initializing localization system");
 		spades::LoadCurrentLocale();
 		_Tr("Main", "Localization System Loaded");
+		pumpEvents();
 		
+		// initialize AngelScript
 		SPLog("Initializing script engine");
 		spades::ScriptManager::GetInstance();
+		pumpEvents();
 		
-		SPLog("Initializing window system");
-		int dum = 0;
-		Fl::args( argc, argv, dum, argsHandler );
-
 		ThreadQuantumSetter quantumSetter;
 		(void)quantumSetter; // suppress "unused variable" warning
 		
+		SDL_InitSubSystem(SDL_INIT_VIDEO);
+		
+		// we want to show splash window at least for some time...
+		pumpEvents();
+		auto ticks = SDL_GetTicks();
+		if(ticks < showSplashWindowTime + 1500) {
+			SDL_Delay(showSplashWindowTime + 1500 - ticks);
+		}
+		pumpEvents();
+		
+		// everything is now ready!
 		if( !cg_autoConnect ) {
 			if(!((int)cl_showStartupWindow != 0 ||
-				 Fl::get_key(FL_Shift_L) || Fl::get_key(FL_Shift_R))) {
-				// TODO: always show main window for first run
+				 splashWindow->IsStartupScreenRequested())) {
+				splashWindow.reset();
 				
 				SPLog("Starting main screen");
 				spades::StartMainScreen();
 			}else{
+				splashWindow.reset();
+				
 				SPLog("Starting startup window");
 				::spades::gui::StartupScreen::Run();
 			}
 		} else {
+			splashWindow.reset();
+			
 			spades::ServerAddress host(cg_lastQuickConnectHost.CString(), (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076 );
 			spades::StartClient(host, cg_playerName);
 		}
 		
 		spades::Settings::GetInstance()->Flush();
 
+	}catch(const ExitRequestException&){
+		// user changed his mind.
 	}catch(const std::exception& ex) {
+		
+		try {
+			splashWindow.reset(nullptr);
+		}catch(...){
+		}
 		
 		std::string msg = ex.what();
 		msg = _Tr("Main", "A serious error caused OpenSpades to stop working:\n\n{0}\n\nSee SystemMessages.log for more details.", msg);

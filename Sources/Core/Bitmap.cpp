@@ -88,6 +88,35 @@ namespace spades {
 		}
 	}
 	
+	Bitmap *Bitmap::Load(IStream *stream) {
+		std::vector<IBitmapCodec *>codecs = IBitmapCodec::GetAllCodecs();
+		auto pos = stream->GetPosition();
+		std::string errMsg;
+		for(size_t i = 0; i < codecs.size(); i++){
+			IBitmapCodec *codec = codecs[i];
+			if(codec->CanLoad()){
+				// give it a try.
+				// open error shouldn't be handled here
+				try{
+					stream->SetPosition(pos);
+					return codec->Load(stream);
+				}catch(const std::exception& ex){
+					errMsg += codec->GetName();
+					errMsg += ":\n";
+					errMsg += ex.what();
+					errMsg += "\n\n";
+				}
+			}
+		}
+		
+		if(errMsg.empty()){
+			SPRaise("Bitmap codec not found for stream");
+		}else{
+			SPRaise("No bitmap codec could load file successfully: [stream]\n%s\n",
+					errMsg.c_str());
+		}
+	}
+	
 	void Bitmap::Save(const std::string &filename) {
 		std::vector<IBitmapCodec *>codecs = IBitmapCodec::GetAllCodecs();
 		for(size_t i = 0; i < codecs.size(); i++){
