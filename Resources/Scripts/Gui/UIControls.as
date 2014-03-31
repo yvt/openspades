@@ -793,7 +793,7 @@ namespace spades {
 					}
 				}
 				
-				
+				UIElement::Render();
 			}
 		}
 		

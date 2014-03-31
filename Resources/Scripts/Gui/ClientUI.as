@@ -318,11 +318,138 @@ namespace spades {
 		}
 	};
 	
+	uint StringCommonPrefixLength(string a, string b) {
+		for(uint i = 0, ln = Min(a.length, b.length); i < ln; i++) {
+			if(a[i] != b[i]) return i;
+		}	
+		return Min(a.length, b.length);
+	}
+	
+	/** Shows cvar's current value when user types something like "/cg_foobar" */
+	class CommandFieldConfigValueView: spades::ui::UIElement {
+		string[]@ configNames;
+		string[] configValues;
+		CommandFieldConfigValueView(spades::ui::UIManager@ manager, string[] configNames) {
+			super(manager);
+			for(uint i = 0, len = configNames.length; i < len; i++) {
+				configValues.insertLast(ConfigItem(configNames[i]).StringValue);
+			}
+			@this.configNames = configNames;
+		}
+		void Render() {
+			float maxNameLen = 0.f;
+			float maxValueLen = 20.f;
+			Font@ font = this.Font;
+			Renderer@ renderer = this.Manager.Renderer;
+			float rowHeight = 25.f;
+			
+			for(uint i = 0, len = configNames.length; i < len; i++) {
+				maxNameLen = Max(maxNameLen, font.Measure(configNames[i]).x);
+				maxValueLen = Max(maxValueLen, font.Measure(configValues[i]).x);
+			}
+			Vector2 pos = this.ScreenPosition;
+			pos.y -= float(configNames.length) * rowHeight + 10.f;
+			
+			renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 0.5f);
+			renderer.DrawImage(null, 
+				AABB2(pos.x, pos.y, maxNameLen + maxValueLen + 20.f,
+				      float(configNames.length) * rowHeight + 10.f));
+			
+			for(uint i = 0, len = configNames.length; i < len; i++) {
+				font.DrawShadow(configNames[i], 
+					pos + Vector2(5.f, 8.f + float(i) * rowHeight), 
+					1.f, Vector4(1,1,1,0.7), Vector4(0,0,0,0.3f));
+				font.DrawShadow(configValues[i], 
+					pos + Vector2(15.f + maxNameLen, 8.f + float(i) * rowHeight), 
+					1.f, Vector4(1,1,1,1), Vector4(0,0,0,0.4f));
+			}
+			
+		}
+	}
+	
+	class CommandField: FieldWithHistory {
+		CommandFieldConfigValueView@ valueView;
+		
+		CommandField(spades::ui::UIManager@ manager, array<spades::ui::CommandHistoryItem@>@ history) {
+			super(manager, history);
+			
+		}
+		
+		void OnChanged() {
+			FieldWithHistory::OnChanged();
+			
+			if(valueView !is null) {
+				@valueView.Parent = null;
+			}
+			if(Text.substr(0, 1) == "/" &&
+			   Text.substr(1, 1) != " ") {
+				int whitespace = Text.findFirst(" ");
+				if(whitespace < 0) {
+					whitespace = int(Text.length);
+				}
+				
+				string input = Text.substr(1, whitespace - 1);
+				if(input.length >= 2) {
+					string[]@ names = GetAllConfigNames();
+					string[] filteredNames;
+					for(uint i = 0, len = names.length; i < len; i++) {
+						if(StringCommonPrefixLength(input, names[i]) == input.length) {
+							filteredNames.insertLast(names[i]);
+							if(filteredNames.length >= 8) {
+								// too many
+								break;
+							}
+						}
+					}
+					if(filteredNames.length > 0) {
+						@valueView = CommandFieldConfigValueView(this.Manager, filteredNames);
+						valueView.Bounds = AABB2(0.f, -15.f, 0.f, 0.f);
+						@valueView.Parent = this;
+					}
+				}
+			}
+		}	
+		
+		void KeyDown(string key) {
+			if(key == "Tab") {
+				if(SelectionLength == 0 &&
+				   SelectionStart == int(Text.length) &&
+				   Text.substr(0, 1) == "/" &&
+				   Text.findFirst(" ") < 0) {
+					// config variable auto completion
+					string input = Text.substr(1);
+					string[]@ names = GetAllConfigNames();
+					string commonPart;
+					bool foundOne = false;
+					for(uint i = 0, len = names.length; i < len; i++) {
+						if(StringCommonPrefixLength(input, names[i]) == input.length) {
+							if(!foundOne) {
+								commonPart = names[i];
+								foundOne = true;
+							}
+							
+							uint commonLen = StringCommonPrefixLength(commonPart, names[i]);
+							commonPart = commonPart.substr(0, commonLen);
+						}
+					}
+					
+					if(commonPart.length > input.length) {
+						Text = Text + commonPart.substr(input.length);
+						Select(Text.length, 0);
+					}
+					
+				}
+			}else{
+				FieldWithHistory::KeyDown(key);
+			}
+		}
+	}
+	
 	class ClientChatWindow: spades::ui::UIElement {
 		private ClientUI@ ui;
 		private ClientUIHelper@ helper;
 		
-		FieldWithHistory@ field;
+		CommandField@ field;
 		spades::ui::Button@ sayButton;
 		spades::ui::SimpleButton@ teamButton;
 		spades::ui::SimpleButton@ globalButton;
@@ -368,7 +495,7 @@ namespace spades {
 				AddChild(button);
 			}
 			{
-				@field = FieldWithHistory(Manager, ui.chatHistory);
+				@field = CommandField(Manager, ui.chatHistory);
 				field.Bounds = AABB2(winX, winY, winW, 30.f);
 				field.Placeholder = _Tr("Client", "Chat Text");
 				field.Changed = spades::ui::EventHandler(this.OnFieldChanged);
@@ -428,12 +555,37 @@ namespace spades {
 			field.Cancelled();
 			Close();
 		}
+		
+		private bool CheckConfigVariableSet() {
+			string text = field.Text;
+			if(text.substr(0, 1) != "/") return false;
+			int idx = text.findFirst(" ");
+			if(idx < 2) return false;
+			
+			// find variable
+			string varname = text.substr(1, idx - 1);
+			string[] vars = GetAllConfigNames();
+			
+			for(uint i = 0, len = vars.length; i < len; i++) {
+				if(vars[i] == varname) {
+					// match
+					string val = text.substr(idx + 1);
+					ConfigItem item(varname);
+					item.StringValue = val;
+				}
+			}
+			
+			return false;
+		}	
+	
 		private void OnSay(spades::ui::UIElement@ sender) {
 			field.CommandSent();
-			if(isTeamChat)
-				ui.helper.SayTeam(field.Text);
-			else
-				ui.helper.SayGlobal(field.Text);
+			if(!CheckConfigVariableSet()) {
+				if(isTeamChat)
+					ui.helper.SayTeam(field.Text);
+				else
+					ui.helper.SayGlobal(field.Text);
+			}
 			Close();
 		}
 		
