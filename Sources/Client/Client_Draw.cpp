@@ -61,6 +61,7 @@ SPADES_SETTING(cg_debugAim, "0");
 SPADES_SETTING(cg_keyReloadWeapon, "");
 SPADES_SETTING(cg_screenshotFormat, "jpeg");
 SPADES_SETTING(cg_stats, "0");
+SPADES_SETTING(cg_hideHud, "0");
 
 namespace spades {
 	namespace client {
@@ -381,13 +382,15 @@ namespace spades {
 			Player *p = GetWorld()->GetLocalPlayer();
 			IFont *font;
 			
-			// draw damage ring
-			hurtRingView->Draw();
-			
 			// draw local weapon's 2d things
 			clientPlayers[p->GetId()]->Draw2D();
 			
-			if(cg_hitIndicator && hitFeedbackIconState > 0.f) {
+			// draw damage ring
+			if(!cg_hideHud)
+				hurtRingView->Draw();
+			
+			if(cg_hitIndicator && hitFeedbackIconState > 0.f &&
+			   !cg_hideHud) {
 				Handle<IImage> img(renderer->RegisterImage("Gfx/HitFeedback.png"), false);
 				Vector2 pos = {scrWidth * .5f, scrHeight * .5f};
 				pos.x -= img->GetWidth() * .5f;
@@ -411,146 +414,151 @@ namespace spades {
 				DrawDebugAim();
 			}
 			
-			// draw ammo
-			Weapon *weap = p->GetWeapon();
-			Handle<IImage> ammoIcon;
-			float iconWidth, iconHeight;
-			float spacing = 2.f;
-			int stockNum;
-			int warnLevel;
-			
-			if(p->IsToolWeapon()){
-				switch(weap->GetWeaponType()){
-					case RIFLE_WEAPON:
-						ammoIcon = renderer->RegisterImage("Gfx/Bullet/7.62mm.tga");
-						iconWidth = 6.f;
-						iconHeight = iconWidth * 4.f;
-						break;
-					case SMG_WEAPON:
-						ammoIcon = renderer->RegisterImage("Gfx/Bullet/9mm.tga");
-						iconWidth = 4.f;
-						iconHeight = iconWidth * 4.f;
-						break;
-					case SHOTGUN_WEAPON:
-						ammoIcon = renderer->RegisterImage("Gfx/Bullet/12gauge.tga");
-						iconWidth = 30.f;
-						iconHeight = iconWidth / 4.f;
-						spacing = -6.f;
-						break;
-					default:
-						SPInvalidEnum("weap->GetWeaponType()", weap->GetWeaponType());
-				}
-				
-				int clipSize = weap->GetClipSize();
-				int clip = weap->GetAmmo();
-				
-				clipSize = std::max(clipSize, clip);
-				
-				for(int i = 0; i < clipSize; i++){
-					float x = scrWidth - 16.f - (float)(i+1) *
-					(iconWidth + spacing);
-					float y = scrHeight - 16.f - iconHeight;
+			if(!cg_hideHud) {
 					
-					if(clip >= i + 1){
-						renderer->SetColorAlphaPremultiplied(MakeVector4(1,1,1,1));
-					}else{
-						renderer->SetColorAlphaPremultiplied(MakeVector4(0.4,0.4,0.4,1));
+				// draw ammo
+				Weapon *weap = p->GetWeapon();
+				Handle<IImage> ammoIcon;
+				float iconWidth, iconHeight;
+				float spacing = 2.f;
+				int stockNum;
+				int warnLevel;
+				
+				if(p->IsToolWeapon()){
+					switch(weap->GetWeaponType()){
+						case RIFLE_WEAPON:
+							ammoIcon = renderer->RegisterImage("Gfx/Bullet/7.62mm.tga");
+							iconWidth = 6.f;
+							iconHeight = iconWidth * 4.f;
+							break;
+						case SMG_WEAPON:
+							ammoIcon = renderer->RegisterImage("Gfx/Bullet/9mm.tga");
+							iconWidth = 4.f;
+							iconHeight = iconWidth * 4.f;
+							break;
+						case SHOTGUN_WEAPON:
+							ammoIcon = renderer->RegisterImage("Gfx/Bullet/12gauge.tga");
+							iconWidth = 30.f;
+							iconHeight = iconWidth / 4.f;
+							spacing = -6.f;
+							break;
+						default:
+							SPInvalidEnum("weap->GetWeaponType()", weap->GetWeaponType());
 					}
 					
-					renderer->DrawImage(ammoIcon,
-										AABB2(x,y,iconWidth,iconHeight));
-				}
-				
-				stockNum = weap->GetStock();
-				warnLevel = weap->GetMaxStock() / 3;
-			}else{
-				iconHeight = 0.f;
-				warnLevel = 0;
-				
-				switch(p->GetTool()){
-					case Player::ToolSpade:
-					case Player::ToolBlock:
-						stockNum = p->GetNumBlocks();
-						break;
-					case Player::ToolGrenade:
-						stockNum = p->GetNumGrenades();
-						break;
-					default:
-						SPInvalidEnum("p->GetTool()", p->GetTool());
-				}
-				
-			}
-			
-			Vector4 numberColor = {1, 1, 1, 1};
-			
-			if(stockNum == 0){
-				numberColor.y = 0.3f;
-				numberColor.z = 0.3f;
-			}else if(stockNum <= warnLevel){
-				numberColor.z = 0.3f;
-			}
-			
-			char buf[64];
-			sprintf(buf, "%d", stockNum);
-			font = designFont;
-			std::string stockStr = buf;
-			Vector2 size = font->Measure(stockStr);
-			Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f - iconHeight);
-			pos -= size;
-			font->DrawShadow(stockStr, pos, 1.f, numberColor, MakeVector4(0,0,0,0.5));
-			
-			
-			// draw "press ... to reload"
-			{
-				std::string msg = "";
-				
-				switch(p->GetTool()){
-					case Player::ToolBlock:
-						if(p->GetNumBlocks() == 0){
-							msg = _Tr("Client", "Out of Block");
+					int clipSize = weap->GetClipSize();
+					int clip = weap->GetAmmo();
+					
+					clipSize = std::max(clipSize, clip);
+					
+					for(int i = 0; i < clipSize; i++){
+						float x = scrWidth - 16.f - (float)(i+1) *
+						(iconWidth + spacing);
+						float y = scrHeight - 16.f - iconHeight;
+						
+						if(clip >= i + 1){
+							renderer->SetColorAlphaPremultiplied(MakeVector4(1,1,1,1));
+						}else{
+							renderer->SetColorAlphaPremultiplied(MakeVector4(0.4,0.4,0.4,1));
 						}
-						break;
-					case Player::ToolGrenade:
-						if(p->GetNumGrenades() == 0){
-							msg = _Tr("Client", "Out of Grenade");
-						}
-						break;
-					case Player::ToolWeapon:
-					{
-						Weapon *weap = p->GetWeapon();
-						if(weap->IsReloading() ||
-						   p->IsAwaitingReloadCompletion()){
-							msg = _Tr("Client", "Reloading");
-						}else if(weap->GetAmmo() == 0 &&
-								 weap->GetStock() == 0){
-							msg = _Tr("Client", "Out of Ammo");
-						}else if(weap->GetStock() > 0 &&
-								 weap->GetAmmo() < weap->GetClipSize() / 4){
-							msg = _Tr("Client", "Press [{0}] to Reload", (std::string)cg_keyReloadWeapon);
-						}
+						
+						renderer->DrawImage(ammoIcon,
+											AABB2(x,y,iconWidth,iconHeight));
 					}
-						break;
-					default:;
-						// no message
+					
+					stockNum = weap->GetStock();
+					warnLevel = weap->GetMaxStock() / 3;
+				}else{
+					iconHeight = 0.f;
+					warnLevel = 0;
+					
+					switch(p->GetTool()){
+						case Player::ToolSpade:
+						case Player::ToolBlock:
+							stockNum = p->GetNumBlocks();
+							break;
+						case Player::ToolGrenade:
+							stockNum = p->GetNumGrenades();
+							break;
+						default:
+							SPInvalidEnum("p->GetTool()", p->GetTool());
+					}
+					
 				}
 				
-				if(!msg.empty()){
-					font = textFont;
-					Vector2 size = font->Measure(msg);
-					Vector2 pos = MakeVector2((scrWidth - size.x) * .5f,
-											  scrHeight * 2.f / 3.f);
-					font->DrawShadow(msg, pos, 1.f, MakeVector4(1,1,1,1), MakeVector4(0,0,0,0.5));
+				Vector4 numberColor = {1, 1, 1, 1};
+				
+				if(stockNum == 0){
+					numberColor.y = 0.3f;
+					numberColor.z = 0.3f;
+				}else if(stockNum <= warnLevel){
+					numberColor.z = 0.3f;
 				}
+				
+				char buf[64];
+				sprintf(buf, "%d", stockNum);
+				font = designFont;
+				std::string stockStr = buf;
+				Vector2 size = font->Measure(stockStr);
+				Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f - iconHeight);
+				pos -= size;
+				font->DrawShadow(stockStr, pos, 1.f, numberColor, MakeVector4(0,0,0,0.5));
+				
+				
+				// draw "press ... to reload"
+				{
+					std::string msg = "";
+					
+					switch(p->GetTool()){
+						case Player::ToolBlock:
+							if(p->GetNumBlocks() == 0){
+								msg = _Tr("Client", "Out of Block");
+							}
+							break;
+						case Player::ToolGrenade:
+							if(p->GetNumGrenades() == 0){
+								msg = _Tr("Client", "Out of Grenade");
+							}
+							break;
+						case Player::ToolWeapon:
+						{
+							Weapon *weap = p->GetWeapon();
+							if(weap->IsReloading() ||
+							   p->IsAwaitingReloadCompletion()){
+								msg = _Tr("Client", "Reloading");
+							}else if(weap->GetAmmo() == 0 &&
+									 weap->GetStock() == 0){
+								msg = _Tr("Client", "Out of Ammo");
+							}else if(weap->GetStock() > 0 &&
+									 weap->GetAmmo() < weap->GetClipSize() / 4){
+								msg = _Tr("Client", "Press [{0}] to Reload", (std::string)cg_keyReloadWeapon);
+							}
+						}
+							break;
+						default:;
+							// no message
+					}
+					
+					if(!msg.empty()){
+						font = textFont;
+						Vector2 size = font->Measure(msg);
+						Vector2 pos = MakeVector2((scrWidth - size.x) * .5f,
+												  scrHeight * 2.f / 3.f);
+						font->DrawShadow(msg, pos, 1.f, MakeVector4(1,1,1,1), MakeVector4(0,0,0,0.5));
+					}
+				}
+				
+				if(p->GetTool() == Player::ToolBlock) {
+					paletteView->Draw();
+				}
+				
+				// draw map
+				mapView->Draw();
+				
+				DrawHealth();
+					
+					
 			}
-			
-			if(p->GetTool() == Player::ToolBlock) {
-				paletteView->Draw();
-			}
-			
-			// draw map
-			mapView->Draw();
-			
-			DrawHealth();
 			
 		}
 		
@@ -562,28 +570,32 @@ namespace spades {
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 			
-			// draw respawn tme
-			if(!p->IsAlive()){
-				std::string msg;
+			if(!cg_hideHud) {
 				
-				float secs = p->GetRespawnTime() - world->GetTime();
-				
-				if(secs > 0.f)
-					msg = _Tr("Client", "You will respawn in: {0}", (int)ceilf(secs));
-				else
-					msg = _Tr("Client", "Waiting for respawn");
-				
-				if(!msg.empty()){
-					font = textFont;
-					Vector2 size = font->Measure(msg);
-					Vector2 pos = MakeVector2((scrWidth - size.x) * .5f, scrHeight / 3.f);
+				// draw respawn tme
+				if(!p->IsAlive()){
+					std::string msg;
 					
-					font->DrawShadow(msg, pos, 1.f, MakeVector4(1,1,1,1), MakeVector4(0,0,0,0.5));
+					float secs = p->GetRespawnTime() - world->GetTime();
+					
+					if(secs > 0.f)
+						msg = _Tr("Client", "You will respawn in: {0}", (int)ceilf(secs));
+					else
+						msg = _Tr("Client", "Waiting for respawn");
+					
+					if(!msg.empty()){
+						font = textFont;
+						Vector2 size = font->Measure(msg);
+						Vector2 pos = MakeVector2((scrWidth - size.x) * .5f, scrHeight / 3.f);
+						
+						font->DrawShadow(msg, pos, 1.f, MakeVector4(1,1,1,1), MakeVector4(0,0,0,0.5));
+					}
 				}
+				
+				// draw map
+				mapView->Draw();
+					
 			}
-			
-			// draw map
-			mapView->Draw();
 		}
 		
 		void Client::DrawAlert() {
@@ -728,12 +740,12 @@ namespace spades {
 			
 			Player *p = GetWorld()->GetLocalPlayer();
 			if(p){
-				
 				DrawHurtSprites();
 				DrawHurtScreenEffect();
 				DrawHottrackedPlayerName();
 				
-				tcView->Draw();
+				if(!cg_hideHud)
+					tcView->Draw();
 				
 				if(p->GetTeamId() < 2) {
 					// player is not spectator
@@ -744,7 +756,7 @@ namespace spades {
 					}
 				}
 				
-				if(IsFollowing()){
+				if(IsFollowing() && !cg_hideHud){
 					if(followingPlayerId == p->GetId()){
 						// just spectating
 					}else{
@@ -757,15 +769,15 @@ namespace spades {
 					}
 				}
 				
-				DrawAlert();
+				if(!cg_hideHud) {
+					DrawAlert();
 				
-				chatWindow->Draw();
-				killfeedWindow->Draw();
-				
+					chatWindow->Draw();
+					killfeedWindow->Draw();
+				}
 				
 				// large map view should come in front
 				largeMapView->Draw();
-				
 				
 				if(scoreboardVisible)
 					scoreboard->Draw();
