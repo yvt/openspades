@@ -274,6 +274,8 @@ int main(int argc, char ** argv)
 		}
 		SPLog("Log Started.");
 		
+		spades::Settings::GetInstance()->Load();
+		
 		{
 			spades::CpuID cpuid;
 			SPLog("---- CPU Information ----");

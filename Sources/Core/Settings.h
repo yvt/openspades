@@ -31,11 +31,10 @@ namespace spades {
 			std::string string;
 			float value;
 			int intValue;
-		
-			bool loaded;
 			
 			std::string defaultValue;
 			std::string desc;
+			bool defaults;
 			
 			void Load();
 			void Set(const std::string&);
@@ -43,11 +42,14 @@ namespace spades {
 			void Set(float);
 		};
 		std::map<std::string, Item *> items;
+		bool loaded;
 		Settings();
 		
 		Item *GetItem(const std::string& name,
-					  const std::string& def,
-					  const std::string& desc);
+					  const std::string& def = std::string(),
+					  const std::string& desc = std::string());
+		
+		void Save();
 		
 	public:
 		static Settings *GetInstance();
@@ -71,6 +73,7 @@ namespace spades {
 			std::string GetDescription();
 		};
 		
+		void Load();
 		void Flush();
 		std::vector<std::string> GetAllItemNames();
 		

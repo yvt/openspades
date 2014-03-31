@@ -66,6 +66,8 @@
 		E844888317D2633C005105D0 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887C17D2633C005105D0 /* json_value.cpp */; };
 		E844888417D2633C005105D0 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E844887E17D2633C005105D0 /* json_writer.cpp */; };
 		E844888717D2669C005105D0 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.dylib */; };
+		E849654D18E9487300B9706D /* FltkPreferenceImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E849654B18E9487300B9706D /* FltkPreferenceImporter.cpp */; };
+		E849655018E94F1200B9706D /* SdlFileStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E849654E18E94F1200B9706D /* SdlFileStream.cpp */; };
 		E84E221618BB4601001282B0 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF039B178EDAC9000683D4 /* libz.dylib */; };
 		E84E221718BB4B41001282B0 /* libfltk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03E4178EF5FF000683D4 /* libfltk.a */; };
 		E84E221918BB4BA0001282B0 /* Credits.inc in Sources */ = {isa = PBXBuildFile; fileRef = E84E221818BB4BA0001282B0 /* Credits.inc */; };
@@ -427,6 +429,10 @@
 		E844888517D26411005105D0 /* OpenSpades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenSpades.h; sourceTree = SOURCE_ROOT; };
 		E844888617D26699005105D0 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
 		E844888B17D3A059005105D0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		E849654B18E9487300B9706D /* FltkPreferenceImporter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FltkPreferenceImporter.cpp; sourceTree = "<group>"; };
+		E849654C18E9487300B9706D /* FltkPreferenceImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FltkPreferenceImporter.h; sourceTree = "<group>"; };
+		E849654E18E94F1200B9706D /* SdlFileStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SdlFileStream.cpp; sourceTree = "<group>"; };
+		E849654F18E94F1200B9706D /* SdlFileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdlFileStream.h; sourceTree = "<group>"; };
 		E84E221318BB449A001282B0 /* FindGLEW2.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindGLEW2.cmake; sourceTree = "<group>"; };
 		E84E221418BB449A001282B0 /* FindSDL2.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindSDL2.cmake; sourceTree = "<group>"; };
 		E84E221818BB4BA0001282B0 /* Credits.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = Credits.inc; sourceTree = "<group>"; };
@@ -1474,6 +1480,8 @@
 				E834F5551794BBD4004EBE88 /* Debug.h */,
 				E8E0AFB3179BF25B00C6B5A9 /* Settings.cpp */,
 				E8E0AFB4179BF25B00C6B5A9 /* Settings.h */,
+				E849654B18E9487300B9706D /* FltkPreferenceImporter.cpp */,
+				E849654C18E9487300B9706D /* FltkPreferenceImporter.h */,
 				E8B6B6EF17E40DA700E35523 /* RefCountedObject.cpp */,
 				E8B6B6F017E40DAA00E35523 /* RefCountedObject.h */,
 				E81A7C7B1865A2E900BF3FCE /* MiniHeap.cpp */,
@@ -1728,6 +1736,8 @@
 				E8CF041017904ABC000683D4 /* IStream.h */,
 				E8CF041217904E8B000683D4 /* StdStream.cpp */,
 				E8CF041317904E8C000683D4 /* StdStream.h */,
+				E849654E18E94F1200B9706D /* SdlFileStream.cpp */,
+				E849654F18E94F1200B9706D /* SdlFileStream.h */,
 				E8CF0415179052F6000683D4 /* DirectoryFileSystem.cpp */,
 				E8CF0416179052F7000683D4 /* DirectoryFileSystem.h */,
 				E834F55D17950E41004EBE88 /* DeflateStream.cpp */,
@@ -1940,6 +1950,7 @@
 				E8E0AFA0179A698800C6B5A9 /* MapView.cpp in Sources */,
 				E8E0AFA3179A8F1100C6B5A9 /* ScoreboardView.cpp in Sources */,
 				E8F74CF2183FBB070085AA54 /* MainScreenHelper.cpp in Sources */,
+				E849655018E94F1200B9706D /* SdlFileStream.cpp in Sources */,
 				E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */,
 				E842888E18A3D1520060743D /* StartupScreenHelper.cpp in Sources */,
 				E8E0AFA6179AA31C00C6B5A9 /* LimboView.cpp in Sources */,
@@ -2011,6 +2022,7 @@
 				E844886217CFB32C005105D0 /* GLLongSpriteRenderer.cpp in Sources */,
 				E844886617D0C43B005105D0 /* Tracer.cpp in Sources */,
 				E895D65D18D4A10E00F5B9CA /* jpge.cpp in Sources */,
+				E849654D18E9487300B9706D /* FltkPreferenceImporter.cpp in Sources */,
 				E895D66418D614DE00F5B9CA /* pnglite.c in Sources */,
 				E844888217D2633C005105D0 /* json_reader.cpp in Sources */,
 				E844888317D2633C005105D0 /* json_value.cpp in Sources */,

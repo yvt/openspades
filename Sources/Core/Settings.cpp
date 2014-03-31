@@ -20,16 +20,18 @@
 
 #include <stdio.h>
 #include "Settings.h"
-#include <FL/Fl_Preferences.H>
+#include <Core/FileManager.h>
+#include <Core/IStream.h>
 #include "../Core/Debug.h"
 #include <stdlib.h>
+#include <memory>
+#include <Core/Math.h>
+#include "FltkPreferenceImporter.h"
 
 namespace spades {
 	
-	// FIXME: provide application local preference mechanism?
-	
+#define CONFIGFILE "SPConfig.cfg"
 	static Settings *instance = NULL;
-	static Fl_Preferences *pref = NULL;
 	
 	Settings *Settings::GetInstance() {
 		if(!instance)
@@ -38,16 +40,238 @@ namespace spades {
 	}
 	
 	Settings::Settings() {
-		pref = new Fl_Preferences(Fl_Preferences::USER,
-								  "yvt.jp",
-								  "OpenSpades");
+		SPADES_MARK_FUNCTION();
+		loaded = false;
+	}
+	
+	void Settings::Load() {
+		SPADES_MARK_FUNCTION();
+		
+		// import Fltk preferences
+		bool importedPref = false;
+		{
+			auto prefs = ImportFltkPreference();
+			for(const auto& item: prefs) {
+				auto *it = GetItem(item.first);
+				it->Set(item.second);
+			}
+			importedPref = true;
+			// FIXME: remove legacy preference?
+		}
+		
+		
+		SPLog("Loading preferences from " CONFIGFILE);
+		loaded = false;
+		try {
+			if(FileManager::FileExists(CONFIGFILE)) {
+				SPLog(CONFIGFILE " found.");
+				
+				std::string text = FileManager::ReadAllBytes(CONFIGFILE);
+				auto lines = SplitIntoLines(text);
+				
+				std::size_t line = 0;
+				
+				while(line < lines.size()) {
+					auto& l = lines[line];
+					{
+						// remove comments
+						auto pos = l.find('#');
+						if(pos != std::string::npos) {
+							l.resize(pos);
+						}
+					}
+					
+					std::size_t startPos = l.find_first_not_of(' ');
+					if(startPos == std::string::npos) {
+						// no contents in this line
+						line++; continue;
+					}
+					
+					auto lineBuf = l;
+					std::size_t linePos = 0;
+					
+					auto tryDecodeHexDigit = [](char c, int& digit) -> bool {
+						if(c >= '0' && c <= '9') {
+							digit = c - '0'; return true;
+						}else if(c >= 'a' && c <= 'f') {
+							digit = c - 'a' + 10; return true;
+						}else if(c >= 'A' && c <= 'F') {
+							digit = c - 'A' + 10; return true;
+						}else{
+							return false;
+						}
+					};
+					
+					auto readString = [&](bool stopAtColon) {
+						std::string buffer;
+						int digit1, digit2;
+						while(linePos < lineBuf.size() &&
+							  lineBuf[linePos] == ' ') {
+							linePos++;
+						}
+						while(linePos < lineBuf.size()) {
+							if(lineBuf[linePos] == '\\' &&
+							   linePos + 1 == lineBuf.size() &&
+							   line < lines.size() - 1) {
+								// line continuation
+								line++;
+								lineBuf = lines[line];
+								linePos = 0;
+							}else if(lineBuf[linePos] == '\\' &&
+									 linePos + 3 < lineBuf.size() &&
+									 lineBuf[linePos + 1] == 'x' &&
+									 tryDecodeHexDigit(lineBuf[linePos + 2], digit1) &&
+									 tryDecodeHexDigit(lineBuf[linePos + 3], digit2)) {
+								// hex
+								char c = (digit1 << 4) | digit2;
+								buffer += c;
+								linePos += 3;
+							}else if(lineBuf[linePos] == '\\' &&
+									 linePos + 1 < lineBuf.size()) {
+								// escape
+								switch(lineBuf[linePos + 1]) {
+									case 'n': buffer += '\n'; break;
+									case 'r': buffer += '\r'; break;
+									case 't': buffer += '\t'; break;
+									default: buffer += lineBuf[linePos + 1]; break;
+								}
+								linePos += 2;
+							}else if(lineBuf[linePos] == ':' && stopAtColon) {
+								break;
+							}else{
+								// normal chars
+								buffer += lineBuf[linePos];
+								linePos++;
+							}
+						}
+						return buffer;
+					};
+					
+					std::string key = readString(true);
+					if(linePos >= lineBuf.size()) {
+						SPLog("Warning: no value provided for \"%s\"", key.c_str());
+					}
+					linePos++;
+					
+					std::string val = readString(false);
+					auto *item = GetItem(key);
+					item->Set(val);
+					
+					line++;
+				}
+				
+				
+			}else{
+				SPLog(CONFIGFILE " doesn't exist.");
+			}
+			
+			if(importedPref) {
+				SPLog("Legacy preference was imported. Removing the legacy pref file.");
+				DeleteFltkPreference();
+				Save();
+			}
+			
+			loaded = true;
+		}catch(const std::exception& ex) {
+			SPLog("Failed to load preference: %s", ex.what());
+			SPLog("Disabling saving preference.");
+		}
+	}
+	
+	void Settings::Save() {
+		SPLog("Saving preferences to " CONFIGFILE);
+		try {
+			std::string buffer;
+			buffer = "# OpenSpades config file\n"
+			"#\n"
+			"\n";
+			
+			int column = 0;
+			
+			auto emitContinuation = [&] {
+				buffer += "\\\n";
+				column = 0;
+			};
+			
+			auto emitString = [&](const std::string& val, bool escapeColon) {
+				std::size_t i = 0;
+				while(i < val.size() && val[i] == ' ') {
+					if(column > 78) {
+						emitContinuation();
+					}
+					buffer += "\\ ";
+					column += 2;
+					i++;
+				}
+				while(i < val.size()) {
+					if(column > 78) {
+						emitContinuation();
+					}
+					unsigned char uc = static_cast<unsigned char>(val[i]);
+					switch(val[i]) {
+						case '\n':
+							buffer += "\\n"; column += 2; i++;
+							break;
+						case '\r':
+							buffer += "\\r"; column += 2; i++;
+							break;
+						case '\t':
+							buffer += "\\t"; column += 2; i++;
+							break;
+						default:
+							std::size_t utf8charsize;
+							GetCodePointFromUTF8String(val, i, &utf8charsize);
+							
+							if(val[i] == '#' ||						// comment marker
+							   (escapeColon && val[i] == ':') ||						// key/value split
+							   uc < 0x20 ||							// control char
+							   (uc >= 0x80 && utf8charsize == 0) ||	// invalid UTF8
+							   utf8charsize >= 5) {					// valid UTF-8 but codepoint beyond BMP/SMP range
+								static const char *s = "0123456789abcdef";
+								buffer += "\\x";
+								buffer += s[uc>>4];
+								buffer += s[uc&15];
+							    column += 3; i++;
+							}else{
+								buffer.append(val, i, utf8charsize); column += utf8charsize;
+								i += utf8charsize;
+							}
+							break;
+					}
+				}
+			};
+			
+			for(const auto& item: items) {
+				Item *itm = item.second;
+				
+				emitString(itm->name, true);
+				buffer += ": "; column += 2;
+				
+				emitString(itm->string, false);
+				
+				buffer += "\n";
+				column = 0;
+			}
+			
+			std::unique_ptr<IStream> s(FileManager::OpenForWriting(CONFIGFILE));
+			s->Write(buffer);
+			
+		} catch (const std::exception& ex) {
+			SPLog("Failed to save preference: %s", ex.what());
+		}
 	}
 	
 	void Settings::Flush() {
-		pref->flush();
+		if(loaded) {
+			SPLog("Saving preference to " CONFIGFILE);
+			Save();
+		}else{
+			SPLog("Not saving preferences because loading preferences has failed.");
+		}
 	}
 	
 	std::vector<std::string> Settings::GetAllItemNames() {
+		SPADES_MARK_FUNCTION();
 		std::vector<std::string> names;
 		std::map<std::string, Item *>::iterator it;
 		for(it = items.begin(); it != items.end(); it++){
@@ -59,15 +283,19 @@ namespace spades {
 	Settings::Item *Settings::GetItem(const std::string &name,
 									  const std::string& def,
 									  const std::string& desc){
+		SPADES_MARK_FUNCTION();
 		std::map<std::string, Item *>::iterator it;
 		it = items.find(name);
 		if(it == items.end()){
 			Item *item = new Item();
 			item->name = name;
-			item->loaded = false;
 			
 			item->desc = desc;
 			item->defaultValue = def;
+			item->value = static_cast<float>(atof(def.c_str()));
+			item->intValue = atoi(def.c_str());
+			item->string = def;
+			item->defaults = true;
 			
 			items[name] = item;
 			return item;
@@ -76,63 +304,49 @@ namespace spades {
 	}
 	
 	void Settings::Item::Load() {
-		if(this->loaded){
-			return;
-		}
-		
-		char buf[2048];
-		buf[2047] = 0;
-		SPAssert(pref != NULL);
-		pref->get(name.c_str(), buf, defaultValue.c_str(), 2047);
-		SPAssert(buf);
-		
-		this->string = buf;
-		
-		this->value = static_cast<float>(atof(this->string.c_str()));
-		this->intValue = atoi(this->string.c_str());
-		
-		this->loaded = true;
+		// no longer need to Load
 	}
 	
 	void Settings::Item::Set(const std::string &str) {
 		string = str;
 		value = static_cast<float>(atof(str.c_str()));
 		intValue = atoi(str.c_str());
-		
-		pref->set(name.c_str(), string.c_str());
-		loaded = true;
+		defaults = false;
 	}
 	
 	
 	void Settings::Item::Set(int v) {
+		SPADES_MARK_FUNCTION_DEBUG();
 		char buf[256];
 		sprintf(buf, "%d", v);
 		string = buf;
 		intValue = v;
 		value = (float)v;
-		
-		pref->set(name.c_str(), string.c_str());
-		loaded = true;
+		defaults = false;
 	}
 	
 	void Settings::Item::Set(float v){
+		SPADES_MARK_FUNCTION_DEBUG();
 		char buf[256];
 		sprintf(buf, "%f", v);
 		string = buf;
 		intValue = (int)v;
 		value = v;
-		
-		pref->set(name.c_str(), string.c_str());
-		
-		loaded = true;
+		defaults = false;
 	}
 	
 	Settings::ItemHandle::ItemHandle(const std::string& name,
 									 const std::string& def,
 									 const std::string& desc){
+		SPADES_MARK_FUNCTION();
+		
 		item = Settings::GetInstance()->GetItem(name, def, desc);
 		if( !def.empty() && item->defaultValue.empty() ){
 			item->defaultValue = def;
+			if(item->defaults) {
+				item->Set(def);
+				item->defaults = true;
+			}
 		}
 		if( !desc.empty() && item->desc.empty() ){
 			item->desc = desc;
