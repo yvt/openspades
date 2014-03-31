@@ -21,6 +21,18 @@
 
 namespace spades {
 	
+	class CommandHistoryItem {
+		string text;
+		int selStart;
+		int selEnd;
+		CommandHistoryItem() {}
+		CommandHistoryItem(string text, int selStart, int selEnd) {
+			this.text = text;
+			this.selStart = selStart;
+			this.selEnd = selEnd;
+		}
+	}
+	
 	class ClientUI {
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
@@ -33,6 +45,8 @@ namespace spades {
 		ChatLogWindow@ chatLogWindow;
 		
 		ClientMenu@ clientMenu;
+		
+		array<spades::ui::CommandHistoryItem@> chatHistory;
 		
 		bool shouldExit = false;
 		
@@ -236,11 +250,79 @@ namespace spades {
 		}
 	}
 	
+	// Field with bash-like history support
+	class FieldWithHistory: spades::ui::Field {
+		array<spades::ui::CommandHistoryItem@>@ cmdhistory;
+		CommandHistoryItem@ temporalLastHistory;
+		uint currentHistoryIndex;
+		
+		FieldWithHistory(spades::ui::UIManager@ manager, array<spades::ui::CommandHistoryItem@>@ history) {
+			super(manager);
+			
+			@this.cmdhistory = history;
+			currentHistoryIndex = history.length;
+			@temporalLastHistory = this.CommandHistoryItemRep;
+		}
+		
+		private CommandHistoryItem@ CommandHistoryItemRep {
+			get {
+				return CommandHistoryItem(this.Text, this.SelectionStart, this.SelectionEnd);
+			}
+			set {
+				this.Text = value.text;
+				this.Select(value.selStart, value.selEnd - value.selStart);
+			}
+		}
+		
+		private void OverwriteItem() {
+			if(currentHistoryIndex < cmdhistory.length) {
+				@cmdhistory[currentHistoryIndex] = this.CommandHistoryItemRep;
+			}else if(currentHistoryIndex == cmdhistory.length) {
+				@temporalLastHistory = this.CommandHistoryItemRep;
+			}
+		}
+		
+		private void LoadItem() {
+			if(currentHistoryIndex < cmdhistory.length) {
+				@this.CommandHistoryItemRep = cmdhistory[currentHistoryIndex];
+			}else if(currentHistoryIndex == cmdhistory.length) {
+				@this.CommandHistoryItemRep = temporalLastHistory;
+			}
+		}
+		
+		void KeyDown(string key) {
+			if(key == "Up") {
+				if(currentHistoryIndex > 0) {
+					OverwriteItem();
+					currentHistoryIndex--;
+					LoadItem();
+				}
+			}else if(key == "Down") {
+				if(currentHistoryIndex < cmdhistory.length) {
+					OverwriteItem();
+					currentHistoryIndex++;
+					LoadItem();
+				}
+			}else{
+				Field::KeyDown(key);
+			}
+		}
+		
+		void CommandSent() {
+			cmdhistory.insertLast(this.CommandHistoryItemRep);
+			currentHistoryIndex = cmdhistory.length - 1;
+		}
+		
+		void Cancelled() {
+			OverwriteItem();
+		}
+	};
+	
 	class ClientChatWindow: spades::ui::UIElement {
 		private ClientUI@ ui;
 		private ClientUIHelper@ helper;
 		
-		spades::ui::Field@ field;
+		FieldWithHistory@ field;
 		spades::ui::Button@ sayButton;
 		spades::ui::SimpleButton@ teamButton;
 		spades::ui::SimpleButton@ globalButton;
@@ -286,7 +368,7 @@ namespace spades {
 				AddChild(button);
 			}
 			{
-				@field = spades::ui::Field(Manager);
+				@field = FieldWithHistory(Manager, ui.chatHistory);
 				field.Bounds = AABB2(winX, winY, winW, 30.f);
 				field.Placeholder = _Tr("Client", "Chat Text");
 				field.Changed = spades::ui::EventHandler(this.OnFieldChanged);
@@ -343,9 +425,11 @@ namespace spades {
 		}
 		
 		private void OnCancel(spades::ui::UIElement@ sender) {
+			field.Cancelled();
 			Close();
 		}
 		private void OnSay(spades::ui::UIElement@ sender) {
+			field.CommandSent();
 			if(isTeamChat)
 				ui.helper.SayTeam(field.Text);
 			else

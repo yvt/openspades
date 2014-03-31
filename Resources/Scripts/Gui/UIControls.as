@@ -591,7 +591,7 @@ namespace spades {
 			void Delete() {
 				if(SelectionLength > 0) {
 					SelectedText = "";
-				} else if(CursorPosition < Text.length) {
+				} else if(CursorPosition < int(Text.length)) {
 					int pos = CursorPosition;
 					int cIdx = GetCharIndexForString(Text, CursorPosition);
 					int bIdx = GetByteIndexForString(Text, cIdx + 1);
