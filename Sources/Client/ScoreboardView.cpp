@@ -33,6 +33,7 @@
 #include <string.h>
 #include "TCGameMode.h"
 #include "NetClient.h"
+#include <Core/Strings.h>
 
 namespace spades {
 	namespace client {
@@ -122,48 +123,6 @@ namespace spades {
 			renderer->DrawImage(image, AABB2(0, playersBottom + size.y,
 											 scrWidth, -size.y));
 			
-			// draw scores
-			image = renderer->RegisterImage("Gfx/Scoreboard/ScoresBg.tga");
-			size = MakeVector2(180.f, 32.f);
-			pos = MakeVector2((scrWidth - size.x) * .5f,
-							  teamBarTop - size.y);
-			renderer->SetColorAlphaPremultiplied(MakeVector4(1.f, .45f, .2f, 1.f));
-			renderer->DrawImage(image, AABB2(pos.x,pos.y,size.x,size.y));
-			
-			pos.y = pos.y + 5.f;
-			font = client->designFont;
-			
-			sprintf(buf, "%d", GetTeamScore(0));
-			size = font->Measure(buf);
-			pos.x = scrWidth * .5f - size.x - 16.f;
-			font->Draw(buf, pos + MakeVector2(0, 1), 1.f,
-					   MakeVector4(0, 0, 0, 0.3f));
-			font->Draw(buf, pos, 1.f, whiteColor);
-			
-			sprintf(buf, "%d", GetTeamScore(1));
-			size = font->Measure(buf);
-			pos.x = scrWidth * .5f + 16.f;
-			font->Draw(buf, pos + MakeVector2(0, 1), 1.f,
-					   MakeVector4(0, 0, 0, 0.3f));
-			font->Draw(buf, pos, 1.f, whiteColor);
-			
-			sprintf(buf, "-");
-			size = font->Measure(buf);
-			pos.x = scrWidth * .5f  - size.x * .5f;
-			font->Draw(buf, pos + MakeVector2(0, 1), 1.f,
-					   MakeVector4(0, 0, 0, 0.3f));
-			font->Draw(buf, pos, 1.f, whiteColor);
-			
-			font = client->textFont;
-			if(ctf) {
-				// draw caplimit
-				sprintf(buf, "LIMIT %d", ctf->GetCaptureLimit());
-				size = font->Measure(buf);
-				pos.x = scrWidth - 16.f - size.x;
-				font->Draw(buf, pos + MakeVector2(0, 1), 1.f,
-						   MakeVector4(0, 0, 0, 0.3f));
-				font->Draw(buf, pos, 1.f, whiteColor);
-			}
 			
 			// draw team bar
 			image = whiteImage;
@@ -200,6 +159,27 @@ namespace spades {
 			font->Draw(str, pos + MakeVector2(0, 2), 1.f,
 					   MakeVector4(0, 0, 0, 0.5));
 			font->Draw(str, pos, 1.f, whiteColor);
+			
+			// draw scores
+			int capLimit;
+			if(ctf) {
+				capLimit = ctf->GetCaptureLimit();
+			}else if(tc) {
+				capLimit = tc->GetNumTerritories();
+			}else{
+				capLimit = -1;
+			}
+			if(capLimit != -1) {
+				str = Format("{0}-{1}", GetTeamScore(0), capLimit);
+				pos.x = scrWidth * .5f - font->Measure(str).x - 15.f;
+				pos.y = teamBarTop + 5.f;
+				font->Draw(str, pos, 1.f, Vector4(1.f, 1.f, 1.f, 0.5f));
+				
+				str = Format("{0}-{1}", GetTeamScore(1), capLimit);
+				pos.x = scrWidth * .5f + 15.f;
+				pos.y = teamBarTop + 5.f;
+				font->Draw(str, pos, 1.f, Vector4(1.f, 1.f, 1.f, 0.5f));
+			}
 			
 			// players background
 			image = renderer->RegisterImage("Gfx/Scoreboard/PlayersBg.tga");
