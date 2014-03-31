@@ -41,6 +41,19 @@ namespace spades {
 			if(!ui) return;
 			ui->SendChat(text, false);
 		}
+		
+		void ClientUIHelper::AlertNotice(const std::string &text) {
+			if(!ui) return;
+			ui->AlertNotice(text);
+		}
+		void ClientUIHelper::AlertWarning(const std::string &text) {
+			if(!ui) return;
+			ui->AlertWarning(text);
+		}
+		void ClientUIHelper::AlertError(const std::string &text) {
+			if(!ui) return;
+			ui->AlertError(text);
+		}
 	}
 }
 

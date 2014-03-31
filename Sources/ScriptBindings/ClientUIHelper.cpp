@@ -63,6 +63,21 @@ namespace spades {
 													  asMETHOD(ClientUIHelper, SayTeam),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("ClientUIHelper",
+													  "void AlertNotice(const string& in)",
+													  asMETHOD(ClientUIHelper, AlertNotice),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("ClientUIHelper",
+													  "void AlertWarning(const string& in)",
+													  asMETHOD(ClientUIHelper, AlertWarning),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("ClientUIHelper",
+													  "void AlertError(const string& in)",
+													  asMETHOD(ClientUIHelper, AlertError),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
 						break;
 					default:
 						break;

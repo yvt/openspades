@@ -47,6 +47,10 @@ namespace spades {
 			
 			void SendChat(const std::string&, bool isGlobal);
 			
+			void AlertNotice(const std::string&);
+			void AlertWarning(const std::string&);
+			void AlertError(const std::string&);
+			
 		protected:
 			virtual ~ClientUI();
 		public:

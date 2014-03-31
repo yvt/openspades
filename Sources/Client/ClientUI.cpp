@@ -69,6 +69,21 @@ namespace spades {
 			client->net->SendChat(msg, isGlobal);
 		}
 		
+		void ClientUI::AlertNotice(const std::string &msg) {
+			if(!client) return;
+			client->ShowAlert(msg, Client::AlertType::Notice);
+		}
+		
+		void ClientUI::AlertWarning(const std::string &msg) {
+			if(!client) return;
+			client->ShowAlert(msg, Client::AlertType::Warning);
+		}
+		
+		void ClientUI::AlertError(const std::string &msg) {
+			if(!client) return;
+			client->ShowAlert(msg, Client::AlertType::Error);
+		}
+		
 		void ClientUI::ClientDestroyed() {
 			client = NULL;
 		}
