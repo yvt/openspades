@@ -387,6 +387,8 @@ namespace spades {
 		void Client::RunFrame(float dt) {
 			SPADES_MARK_FUNCTION();
 			
+			fpsCounter.MarkFrame();
+			
 			if(frameToRendererInit > 0){
 				// waiting for renderer initialization
 				

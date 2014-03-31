@@ -29,6 +29,7 @@
 #include <Core/VersionInfo.h>
 #include "PhysicsConstants.h"
 #include "Player.h"
+#include <Core/Stopwatch.h>
 
 struct _ENetHost;
 struct _ENetPeer;
@@ -60,6 +61,20 @@ namespace spades {
 			std::string statusString;
 			unsigned int mapSize;
 			std::vector<char> mapData;
+			
+			class BandwidthMonitor {
+				ENetHost *host;
+				Stopwatch sw;
+				double lastDown;
+				double lastUp;
+			public:
+				BandwidthMonitor(ENetHost *);
+				double GetDownlinkBps() { return lastDown * 8.; }
+				double GetUplinkBps() { return lastUp * 8.; }
+				void Update();
+			};
+			
+			std::unique_ptr<BandwidthMonitor> bandwidthMonitor;
 			
 			std::vector<Vector3> savedPlayerPos;
 			std::vector<Vector3> savedPlayerFront;
@@ -134,6 +149,9 @@ namespace spades {
 			void SendTeamChange(int team);
 			void SendHandShakeValid(int challenge);
 			void SendVersion();
+			
+			double GetDownlinkBps() { return bandwidthMonitor->GetDownlinkBps(); }
+			double GetUplinkBps() { return bandwidthMonitor->GetUplinkBps(); }
 		};
 	}
 }

@@ -313,10 +313,11 @@ namespace spades {
 			}
 		};
 		
-		NetClient::NetClient(Client *c){
+		NetClient::NetClient(Client *c):
+		client(c),
+		host(nullptr),
+		peer(nullptr){
 			SPADES_MARK_FUNCTION();
-			
-			client = c;
 			
 			enet_initialize();
 			SPLog("ENet initialized");
@@ -347,12 +348,16 @@ namespace spades {
 			
 			std::fill(savedPlayerTeam.begin(),
 					  savedPlayerTeam.end(), -1);
+			
+			bandwidthMonitor.reset(new BandwidthMonitor(host));
 		}
 		NetClient::~NetClient(){
 			SPADES_MARK_FUNCTION();
 			
 			Disconnect();
-			enet_host_destroy(host);
+			if(host)
+				enet_host_destroy(host);
+			bandwidthMonitor.reset();
 			SPLog("ENet host destroyed");
 		}
 				
@@ -446,6 +451,9 @@ namespace spades {
 			
 			if(status == NetClientStatusNotConnected)
 				return;
+			
+			if(bandwidthMonitor)
+				bandwidthMonitor->Update();
 			
 			ENetEvent event;
 			while(enet_host_service(host, &event, timeout) > 0){
@@ -1829,6 +1837,24 @@ namespace spades {
 				throw;
 			}
 		}
+		
+		NetClient::BandwidthMonitor::BandwidthMonitor(ENetHost *host):
+		host(host),
+		lastDown(0.0),
+		lastUp(0.0){
+			sw.Reset();
+		}
+		
+		void NetClient::BandwidthMonitor::Update() {
+			if(sw.GetTime() > 0.5) {
+				lastUp = host->totalSentData / sw.GetTime();
+				lastDown = host->totalReceivedData / sw.GetTime();
+				host->totalSentData = 0;
+				host->totalReceivedData = 0;
+				sw.Reset();
+			}
+		}
+		
 		
 	}
 }

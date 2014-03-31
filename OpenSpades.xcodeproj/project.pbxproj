@@ -42,6 +42,7 @@
 		E81A7C7D1865A2E900BF3FCE /* MiniHeap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C7B1865A2E900BF3FCE /* MiniHeap.cpp */; };
 		E81CE4A6183F7A3000F22685 /* IFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A4183F7A3000F22685 /* IFont.cpp */; };
 		E81CE4A9183F7F2000F22685 /* MainScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A7183F7F2000F22685 /* MainScreen.cpp */; };
+		E82E66B318E9A35C004DBA18 /* Client_FPSCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E82E66B218E9A35C004DBA18 /* Client_FPSCounter.cpp */; };
 		E834F55017942C43004EBE88 /* Grenade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F54E17942C43004EBE88 /* Grenade.cpp */; };
 		E834F55317944779004EBE88 /* NetClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F55117944778004EBE88 /* NetClient.cpp */; };
 		E834F5561794BBD4004EBE88 /* Debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F5541794BBD4004EBE88 /* Debug.cpp */; };
@@ -366,6 +367,7 @@
 		E81CE4A4183F7A3000F22685 /* IFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IFont.cpp; sourceTree = "<group>"; };
 		E81CE4A7183F7F2000F22685 /* MainScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScreen.cpp; sourceTree = "<group>"; };
 		E81CE4A8183F7F2000F22685 /* MainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScreen.h; sourceTree = "<group>"; };
+		E82E66B218E9A35C004DBA18 /* Client_FPSCounter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_FPSCounter.cpp; sourceTree = "<group>"; };
 		E834F54E17942C43004EBE88 /* Grenade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grenade.cpp; sourceTree = "<group>"; };
 		E834F54F17942C43004EBE88 /* Grenade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grenade.h; sourceTree = "<group>"; };
 		E834F55117944778004EBE88 /* NetClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetClient.cpp; sourceTree = "<group>"; };
@@ -1512,6 +1514,7 @@
 				E8FE749118CC6E4900291338 /* Client_LocalEnts.cpp */,
 				E8FE749318CC6EB500291338 /* Client_Draw.cpp */,
 				E8FE749518CC6F2900291338 /* Client_Scene.cpp */,
+				E82E66B218E9A35C004DBA18 /* Client_FPSCounter.cpp */,
 				E8CF03C2178EE6D8000683D4 /* Client.h */,
 				E834F56D1797D92F004EBE88 /* ChatWindow.cpp */,
 				E834F56E1797D932004EBE88 /* ChatWindow.h */,
@@ -1928,6 +1931,7 @@
 				E8567E7F1793E1B3009D83E0 /* GLVoxelModel.cpp in Sources */,
 				E834F55017942C43004EBE88 /* Grenade.cpp in Sources */,
 				E88EB02F185D9DC500565D07 /* YsrDevice.cpp in Sources */,
+				E82E66B318E9A35C004DBA18 /* Client_FPSCounter.cpp in Sources */,
 				E834F55317944779004EBE88 /* NetClient.cpp in Sources */,
 				E834F5561794BBD4004EBE88 /* Debug.cpp in Sources */,
 				E834F5591794DCFD004EBE88 /* IGameMode.cpp in Sources */,

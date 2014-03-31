@@ -60,6 +60,7 @@ SPADES_SETTING(cg_hitIndicator, "1");
 SPADES_SETTING(cg_debugAim, "0");
 SPADES_SETTING(cg_keyReloadWeapon, "");
 SPADES_SETTING(cg_screenshotFormat, "jpeg");
+SPADES_SETTING(cg_stats, "0");
 
 namespace spades {
 	namespace client {
@@ -817,6 +818,52 @@ namespace spades {
 			DrawAlert();
 		}
 		
+		void Client::DrawStats() {
+			SPADES_MARK_FUNCTION();
+			
+			if(!cg_stats) return;
+			
+			char buf[256];
+			std::string str;
+			
+			{
+				auto fps = fpsCounter.GetFps();
+				if(fps == 0.0)
+					str += "--.-- fps";
+				else {
+					sprintf(buf, "%.02f fps", fps);
+					str += buf;
+				}
+			}
+			
+			if(net) {
+				auto ping = net->GetPing();
+				auto upbps = net->GetUplinkBps();
+				auto downbps = net->GetDownlinkBps();
+				sprintf(buf, ", ping: %dms, up/down: %.02f/%.02fkbps",
+						ping, upbps / 1000.0, downbps / 1000.0);
+				str += buf;
+			}
+			
+			float scrWidth = renderer->ScreenWidth();
+			float scrHeight = renderer->ScreenHeight();
+			IFont *font = textFont;
+			float margin = 5.f;
+			
+			IRenderer *r = renderer;
+			auto size = font->Measure(str);
+			size += Vector2(margin * 2.f, margin * 2.f);
+			
+			auto pos =
+			(Vector2(scrWidth, scrHeight) - size) * Vector2(0.5f, 1.f);
+			
+			r->SetColorAlphaPremultiplied(Vector4(0.f, 0.f, 0.f, 0.5f));
+			r->DrawImage(nullptr, AABB2(pos.x, pos.y, size.x, size.y));
+			font->DrawShadow(str, pos + Vector2(margin, margin), 1.f,
+							 Vector4(1.f, 1.f, 1.f, 1.f),
+							 Vector4(0.f, 0.f, 0.f, 0.5f));
+		}
+		
 		void Client::Draw2D(){
 			SPADES_MARK_FUNCTION();
 			
@@ -827,6 +874,8 @@ namespace spades {
 			}
 			
 			centerMessageView->Draw();
+			
+			DrawStats();
 		}
 		
 	}

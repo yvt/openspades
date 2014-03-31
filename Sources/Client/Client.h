@@ -31,9 +31,11 @@
 #include <list>
 #include <Gui/View.h>
 #include <memory>
+#include <Core/Stopwatch.h>
 
 namespace spades {
 	class IStream;
+	class Stopwatch;
 	namespace client {
 		class IRenderer;
 		struct SceneDefinition;
@@ -80,6 +82,18 @@ namespace spades {
 				forward(false),backward(false){
 				}
 			};
+			
+			class FPSCounter {
+				Stopwatch sw;
+				int numFrames;
+				double lastFps;
+			public:
+				FPSCounter();
+				void MarkFrame();
+				double GetFps() { return lastFps; }
+			};
+			
+			FPSCounter fpsCounter;
 			
 			std::unique_ptr<NetClient> net;
 			std::string playerName;
@@ -249,6 +263,7 @@ namespace spades {
 			void DrawHealth();
 			void DrawAlert();
 			void DrawDebugAim();
+			void DrawStats();
 			
 			void DrawScene();
 			void AddGrenadeToScene(Grenade *);
