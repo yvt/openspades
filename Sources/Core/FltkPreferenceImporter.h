@@ -21,6 +21,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 namespace spades {
 	std::vector<std::pair<std::string, std::string>> ImportFltkPreference();
