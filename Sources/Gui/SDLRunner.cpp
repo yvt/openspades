@@ -25,7 +25,6 @@
 
 #include "SDLRunner.h"
 
-#include <FL/Fl.H> // for FLTK message pumping
 #include <Draw/GLRenderer.h>
 #include <Client/Client.h>
 #include <Audio/ALDevice.h>
