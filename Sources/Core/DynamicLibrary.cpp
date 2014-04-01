@@ -18,6 +18,8 @@
  
  */
 
+#include <Imports/SDL.h>
+
 #ifdef WIN32
 
 #include "DynamicLibrary.h"
@@ -86,9 +88,22 @@ namespace spades {
 	DynamicLibrary::DynamicLibrary(const char *fn){
 		SPADES_MARK_FUNCTION();
 		
+		if(fn == nullptr) {
+			SPInvalidArgument("fn");
+		}
+		
 		name = fn;
 		handle = dlopen(fn, RTLD_LAZY);
-		if(handle == NULL){
+		if(handle == nullptr &&
+		   strchr(fn, '/') == nullptr &&
+		   strchr(fn, '\\') == nullptr) {
+			char *baseDir = SDL_GetBasePath();
+			std::string newPath = baseDir;
+			newPath += "/";
+			newPath += fn;
+			handle = dlopen(newPath.c_str(), RTLD_LAZY);
+		}
+		if(handle == nullptr){
 			std::string err = dlerror();
 			SPRaise("Failed to dlload '%s': %s", fn, err.c_str());
 		}

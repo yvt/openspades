@@ -329,6 +329,16 @@ int main(int argc, char ** argv)
 		spades::FileManager::AddFileSystem
 		(new spades::DirectoryFileSystem("./Resources", false));
 		
+		// OS X application is made of Bundle, which contains its own Resources directory.
+		{
+			char *baseDir = SDL_GetBasePath();
+			if(baseDir) {
+				spades::FileManager::AddFileSystem
+				(new spades::DirectoryFileSystem(baseDir, false));
+				SDL_free(baseDir);
+			}
+		}
+		
 		spades::FileManager::AddFileSystem
 		(new spades::DirectoryFileSystem(home+"/Library/Application Support/OpenSpades/Resources", true));
 #else
