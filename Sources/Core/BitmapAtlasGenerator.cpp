@@ -49,6 +49,7 @@ namespace spades {
 				return s;
 		}
 		SPAssert(false);
+		return 0;
 	}
 	
 	int BitmapAtlasGenerator::MinWidth() {
@@ -64,6 +65,7 @@ namespace spades {
 				return s;
 		}
 		SPAssert(false);
+		return 0;
 	}
 	
 	int BitmapAtlasGenerator::MinHeight() {
@@ -79,6 +81,7 @@ namespace spades {
 				return s;
 		}
 		SPAssert(false);
+		return 0;
 	}
 	
 	BitmapAtlasGenerator::Result BitmapAtlasGenerator::Pack() {

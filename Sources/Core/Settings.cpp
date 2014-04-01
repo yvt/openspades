@@ -53,9 +53,11 @@ namespace spades {
 			auto prefs = ImportFltkPreference();
 			for(const auto& item: prefs) {
 				auto *it = GetItem(item.first);
+			
 				it->Set(item.second);
 			}
-			importedPref = true;
+			if(prefs.size() > 0)
+				importedPref = true;
 			// FIXME: remove legacy preference?
 		}
 		

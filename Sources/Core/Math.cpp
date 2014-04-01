@@ -113,10 +113,10 @@ namespace spades {
 				return MakeVector3(m[0], m[1], m[2]);
 			case 1:
 				return MakeVector3(m[4], m[5], m[6]);
-			case 2:
-				return MakeVector3(m[8], m[9], m[10]);
 			default:
 				SPAssert(false);
+			case 2:
+				return MakeVector3(m[8], m[9], m[10]);
 		}
 	}
 	
