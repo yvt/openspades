@@ -359,6 +359,7 @@
 		E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859510D17C61F850012810C /* GLLensFlareFilter.cpp */; };
 		E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511017C645000012810C /* GLFXAAFilter.cpp */; };
 		E859511517C96B270012810C /* GLProfiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511317C96B260012810C /* GLProfiler.cpp */; };
+		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
 		E87AB82318BB3958006B7D73 /* SdlImageReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E87AB82118BB3957006B7D73 /* SdlImageReader.cpp */; };
 		E87AB82518BB3A04006B7D73 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E88318AB1790EBAA002ABE6D /* GLProgramUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88318A91790EBAA002ABE6D /* GLProgramUniform.cpp */; };
@@ -638,7 +639,7 @@
 		E81CE4A7183F7F2000F22685 /* MainScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScreen.cpp; sourceTree = "<group>"; };
 		E81CE4A8183F7F2000F22685 /* MainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScreen.h; sourceTree = "<group>"; };
 		E82E66B218E9A35C004DBA18 /* Client_FPSCounter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_FPSCounter.cpp; sourceTree = "<group>"; };
-		E82E66B918EA78F5004DBA18 /* XSpades.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XSpades.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E82E66B918EA78F5004DBA18 /* OpenSpades.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenSpades.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E82E66BB18EA78F5004DBA18 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		E82E66BE18EA78F5004DBA18 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		E82E66BF18EA78F5004DBA18 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -761,6 +762,7 @@
 		E859511117C645000012810C /* GLFXAAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFXAAFilter.h; sourceTree = "<group>"; };
 		E859511317C96B260012810C /* GLProfiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProfiler.cpp; sourceTree = "<group>"; };
 		E859511417C96B270012810C /* GLProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProfiler.h; sourceTree = "<group>"; };
+		E874834618EACF0300C29033 /* OpenSpades.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = OpenSpades.icns; path = Resources/Icons/OpenSpades.icns; sourceTree = "<group>"; };
 		E87AB82118BB3957006B7D73 /* SdlImageReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SdlImageReader.cpp; sourceTree = "<group>"; };
 		E87AB82418BB3A04006B7D73 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		E88318A91790EBAA002ABE6D /* GLProgramUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgramUniform.cpp; sourceTree = "<group>"; };
@@ -977,7 +979,7 @@
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
 		E8C92A0E186A902500740C9F /* CpuID.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CpuID.cpp; sourceTree = "<group>"; };
-		E8CF0385178ED9D2000683D4 /* OpenSpades */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OpenSpades; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8CF0385178ED9D2000683D4 /* OpenSpades-CmdLine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "OpenSpades-CmdLine"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CF0399178EDABD000683D4 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		E8CF039B178EDAC9000683D4 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		E8CF03A6178EDF6A000683D4 /* IRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IRenderer.cpp; path = Sources/Client/IRenderer.cpp; sourceTree = SOURCE_ROOT; };
@@ -1666,6 +1668,7 @@
 		E8CF037C178ED9D2000683D4 = {
 			isa = PBXGroup;
 			children = (
+				E874834618EACF0300C29033 /* OpenSpades.icns */,
 				E82E680618EA9502004DBA18 /* XSpades.entitlements */,
 				E82E680318EA7F60004DBA18 /* libysrspades.dylib */,
 				E82E680118EA7F2E004DBA18 /* pak012-Locales.pak */,
@@ -1704,8 +1707,8 @@
 		E8CF0386178ED9D2000683D4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E8CF0385178ED9D2000683D4 /* OpenSpades */,
-				E82E66B918EA78F5004DBA18 /* XSpades.app */,
+				E8CF0385178ED9D2000683D4 /* OpenSpades-CmdLine */,
+				E82E66B918EA78F5004DBA18 /* OpenSpades.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2139,9 +2142,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E82E66B818EA78F5004DBA18 /* XSpades */ = {
+		E82E66B818EA78F5004DBA18 /* OpenSpades */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E82E66E718EA78F5004DBA18 /* Build configuration list for PBXNativeTarget "XSpades" */;
+			buildConfigurationList = E82E66E718EA78F5004DBA18 /* Build configuration list for PBXNativeTarget "OpenSpades" */;
 			buildPhases = (
 				E82E66B518EA78F5004DBA18 /* Sources */,
 				E82E66B618EA78F5004DBA18 /* Frameworks */,
@@ -2152,14 +2155,14 @@
 			);
 			dependencies = (
 			);
-			name = XSpades;
+			name = OpenSpades;
 			productName = XSpades;
-			productReference = E82E66B918EA78F5004DBA18 /* XSpades.app */;
+			productReference = E82E66B918EA78F5004DBA18 /* OpenSpades.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E8CF0384178ED9D2000683D4 /* OpenSpades */ = {
+		E8CF0384178ED9D2000683D4 /* OpenSpades-CmdLine */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E8CF038E178ED9D2000683D4 /* Build configuration list for PBXNativeTarget "OpenSpades" */;
+			buildConfigurationList = E8CF038E178ED9D2000683D4 /* Build configuration list for PBXNativeTarget "OpenSpades-CmdLine" */;
 			buildPhases = (
 				E8CF0381178ED9D2000683D4 /* Sources */,
 				E8CF0382178ED9D2000683D4 /* Frameworks */,
@@ -2169,9 +2172,9 @@
 			);
 			dependencies = (
 			);
-			name = OpenSpades;
+			name = "OpenSpades-CmdLine";
 			productName = OpenSpades;
-			productReference = E8CF0385178ED9D2000683D4 /* OpenSpades */;
+			productReference = E8CF0385178ED9D2000683D4 /* OpenSpades-CmdLine */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -2205,8 +2208,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E8CF0384178ED9D2000683D4 /* OpenSpades */,
-				E82E66B818EA78F5004DBA18 /* XSpades */,
+				E8CF0384178ED9D2000683D4 /* OpenSpades-CmdLine */,
+				E82E66B818EA78F5004DBA18 /* OpenSpades */,
 			);
 		};
 /* End PBXProject section */
@@ -2216,6 +2219,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E874834718EACF0300C29033 /* OpenSpades.icns in Resources */,
 				E82E680418EA7F60004DBA18 /* libysrspades.dylib in Resources */,
 				E82E680218EA7F2E004DBA18 /* pak012-Locales.pak in Resources */,
 				E82E67FA18EA7EAB004DBA18 /* font-unifont.pak in Resources */,
@@ -2965,13 +2969,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E82E66E718EA78F5004DBA18 /* Build configuration list for PBXNativeTarget "XSpades" */ = {
+		E82E66E718EA78F5004DBA18 /* Build configuration list for PBXNativeTarget "OpenSpades" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E82E66E818EA78F5004DBA18 /* Debug */,
 				E82E66E918EA78F5004DBA18 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E8CF0380178ED9D2000683D4 /* Build configuration list for PBXProject "OpenSpades" */ = {
 			isa = XCConfigurationList;
@@ -2982,7 +2987,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E8CF038E178ED9D2000683D4 /* Build configuration list for PBXNativeTarget "OpenSpades" */ = {
+		E8CF038E178ED9D2000683D4 /* Build configuration list for PBXNativeTarget "OpenSpades-CmdLine" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E8CF038F178ED9D2000683D4 /* Debug */,
