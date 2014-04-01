@@ -30,6 +30,7 @@
 #include "PhysicsConstants.h"
 #include "Player.h"
 #include <Core/Stopwatch.h>
+#include <memory>
 
 struct _ENetHost;
 struct _ENetPeer;
