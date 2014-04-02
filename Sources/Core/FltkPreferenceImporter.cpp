@@ -46,7 +46,7 @@ namespace spades {
 #ifdef WIN32
 	static std::wstring Utf8ToWString(const char *s) {
 		auto *ws = (WCHAR*)SDL_iconv_string("UCS-2-INTERNAL", "UTF-8", (char *)(s), SDL_strlen(s)+1);
-		if(ws) return ""L;
+		if(!ws) return L"";
 		std::wstring wss(ws);
 		SDL_free(ws);
 		return wss;
@@ -141,7 +141,7 @@ namespace spades {
 		SPLog("Moving %s to %s", path.c_str(), (path + "-old").c_str());
 #ifdef WIN32
 		auto s = Utf8ToWString(path.c_str());
-		Move(s.c_str(), (s + "-old"L).c_str());
+		MoveFileW(s.c_str(), (s + L"-old").c_str());
 #else
 		rename(path.c_str(), (path + "-old").c_str());
 #endif
