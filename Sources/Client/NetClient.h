@@ -63,6 +63,8 @@ namespace spades {
 			unsigned int mapSize;
 			std::vector<char> mapData;
 			
+			int protocolVersion;
+			
 			class BandwidthMonitor {
 				ENetHost *host;
 				Stopwatch sw;
