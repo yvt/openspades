@@ -24,7 +24,7 @@
 #include <Core/Settings.h>
 
 #if defined(__APPLE__)
-SPADES_SETTING(s_alDriver, "/Library/Frameworks/OpenAL-Soft.framework/OpenAL-Soft");
+SPADES_SETTING(s_alDriver, "/System/Library/Frameworks/OpenAL.framework/OpenAL");
 #elif defined(WIN32)
 SPADES_SETTING(s_alDriver, "OpenAL32.dll");
 #else
