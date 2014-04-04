@@ -654,7 +654,7 @@
 		E82E67F818EA7EAB004DBA18 /* pak011-Gui.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak011-Gui.pak"; path = "Resources/pak011-Gui.pak"; sourceTree = "<group>"; };
 		E82E67F918EA7EAB004DBA18 /* pak999-References.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak999-References.pak"; path = "Resources/pak999-References.pak"; sourceTree = "<group>"; };
 		E82E680118EA7F2E004DBA18 /* pak012-Locales.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak012-Locales.pak"; path = "Resources/pak012-Locales.pak"; sourceTree = "<group>"; };
-		E82E680318EA7F60004DBA18 /* libysrspades.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libysrspades.dylib; path = ../../MacPrograms2/Ysr/DerivedData/Ysr/Build/Products/Release/libysrspades.dylib; sourceTree = "<group>"; };
+		E82E680318EA7F60004DBA18 /* libysrspades.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libysrspades.dylib; sourceTree = SOURCE_ROOT; };
 		E82E680618EA9502004DBA18 /* XSpades.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = XSpades.entitlements; path = XSpades/XSpades.entitlements; sourceTree = "<group>"; };
 		E834F54E17942C43004EBE88 /* Grenade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grenade.cpp; sourceTree = "<group>"; };
 		E834F54F17942C43004EBE88 /* Grenade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grenade.h; sourceTree = "<group>"; };
