@@ -360,6 +360,8 @@
 		E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511017C645000012810C /* GLFXAAFilter.cpp */; };
 		E859511517C96B270012810C /* GLProfiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511317C96B260012810C /* GLProfiler.cpp */; };
 		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
+		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
+		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
 		E87AB82318BB3958006B7D73 /* SdlImageReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E87AB82118BB3957006B7D73 /* SdlImageReader.cpp */; };
 		E87AB82518BB3A04006B7D73 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E88318AB1790EBAA002ABE6D /* GLProgramUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88318A91790EBAA002ABE6D /* GLProgramUniform.cpp */; };
@@ -545,6 +547,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		E874834818ED1BDD00C29033 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */,
+				E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E8CF0383178ED9D2000683D4 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2150,6 +2163,7 @@
 				E82E66B618EA78F5004DBA18 /* Frameworks */,
 				E82E67F218EA7E35004DBA18 /* ShellScript */,
 				E82E66B718EA78F5004DBA18 /* Resources */,
+				E874834818ED1BDD00C29033 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -2802,11 +2816,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/tcpp/Programs/MacPrograms2/Ysr/DerivedData/Ysr/Build/Products/Release,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2835,11 +2850,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/tcpp/Programs/MacPrograms2/Ysr/DerivedData/Ysr/Build/Products/Release,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

@@ -35,7 +35,7 @@ vec3 filter(vec3 col){
 void main() {
 	vec3 sum = vec3(0.), val;
 	
-#if 0
+#if 1
 	val = vec3(0.0, 0.2, 1.0);
 	sum += val;
 	val *= filter(texture2D(texture, texCoord1.xy).xyz);
@@ -78,7 +78,7 @@ void main() {
 	float tanValue = length(angleTan.xy);
 	float brightness = 1. / (1. + tanValue * tanValue);
 	brightness *= angleTan.z;
-	brightness = mix(brightness, 1., 0.4); // weaken
+	brightness = mix(brightness, 1., 0.8); // weaken
 	
 	gl_FragColor.xyz *= brightness;
 	

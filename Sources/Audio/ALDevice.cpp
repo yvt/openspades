@@ -444,6 +444,12 @@ namespace spades {
 					useEAX = false;
 				}
 				
+				// somehow Apple OpenAL reports an error whose source is unknown...
+				// so we clear that now
+				while(al::qalGetError() != AL_NO_ERROR);
+				
+				al::CheckError();
+				
 				for(int i = 0; i < (int)s_maxPolyphonics; i++){
 					srcs.push_back(new ALSrc(this));
 				}

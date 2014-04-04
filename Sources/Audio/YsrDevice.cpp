@@ -33,7 +33,7 @@
 #if defined(__APPLE__)
 SPADES_SETTING(s_ysrDriver, "libysrspades.dylib");
 #elif defined(WIN32)
-SPADES_SETTING(s_ysrDriver, "YSR for OpenSpades.dll");
+SPADES_SETTING(s_ysrDriver, "YSRSpades.dll");
 #else
 SPADES_SETTING(s_ysrDriver, "libysrspades.so");
 #endif

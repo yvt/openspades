@@ -278,6 +278,16 @@ public:
 };
 
 
+#ifdef WIN32
+static std::string Utf8FromWString(const wchar_t *ws) {
+	auto *s = (char*)SDL_iconv_string("UTF-8", "UCS-2-INTERNAL", (char *)(ws), wcslen(ws)*2+2);
+	if(!s) return "";
+	std::string ss(s);
+	SDL_free(s);
+	return ss;
+}
+#endif
+
 int main(int argc, char ** argv)
 {
 #ifdef WIN32
@@ -306,18 +316,18 @@ int main(int argc, char ** argv)
 		
 		// setup user-specific default resource directories
 #ifdef WIN32
-		static char buf[4096];
-		GetModuleFileName(NULL, buf, 4096);
-		std::string appdir = buf;
-		appdir = appdir.substr(0, appdir.find_last_of('\\')+1);
+		static wchar_t buf[4096];
+		GetModuleFileNameW(NULL, buf, 4096);
+		std::wstring appdir = buf;
+		appdir = appdir.substr(0, appdir.find_last_of(L'\\')+1);
 		
-		if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, buf))){
-			std::string datadir = buf;
-			datadir += "\\OpenSpades\\Resources";
-			spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(datadir, true));
+		if(SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, buf))){
+			std::wstring datadir = buf;
+			datadir += L"\\OpenSpades\\Resources";
+			spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(Utf8FromWString(datadir.c_str()), true));
 		}
 		
-		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(appdir + "Resources", false));
+		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(Utf8FromWString((appdir + "Resources").c_str()), false));
 		//fltk has a console window on windows (can disable while building, maybe use a builtin console for a later release?)
 		HWND hCon = GetConsoleWindow();
 		if( NULL != hCon ) {

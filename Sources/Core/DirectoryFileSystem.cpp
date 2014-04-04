@@ -55,16 +55,34 @@ namespace spades {
 		return rootPath + '/' + lg;
 	}
 	
-	std::vector<std::string> DirectoryFileSystem::EnumFiles(const char *p){
 #ifdef WIN32
-		WIN32_FIND_DATA fd;
+	static std::wstring Utf8ToWString(const char *s) {
+		auto *ws = (WCHAR*)SDL_iconv_string("UCS-2-INTERNAL", "UTF-8", (char *)(s), SDL_strlen(s)+1);
+		if(!ws) return L"";
+		std::wstring wss(ws);
+		SDL_free(ws);
+		return wss;
+	}
+	static std::string Utf8FromWString(const wchar_t *ws) {
+		auto *s = (char*)SDL_iconv_string("UTF-8", "UCS-2-INTERNAL", (char *)(ws), wcslen(ws)*2+2);
+		if(!s) return "";
+		std::string ss(s);
+		SDL_free(s);
+		return ss;
+	}
+#endif
+	
+	std::vector<std::string> DirectoryFileSystem::EnumFiles(const char *p){
+		SPADES_MARK_FUNCTION();
+#ifdef WIN32
+		WIN32_FIND_DATAW fd;
 		HANDLE h;
 		std::vector<std::string>  ret;
-		std::string filePath;
+		std::wstring filePath;
 		
-		std::string path = physicalPath(p);
+		std::wstring path = Utf8ToWString(physicalPath(p).c_str());
 		// open the Win32 find handle.
-		h=FindFirstFileEx((path+"\\*").c_str(),
+		h=FindFirstFileExW((path+L"\\*").c_str(),
 						   FindExInfoStandard, &fd,
 						   FindExSearchNameMatch,
 						   NULL, 0);
@@ -78,14 +96,14 @@ namespace spades {
 			// is it a directory?
 			if(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY){
 				// "." and ".." mustn't be included.
-				if(strcmp(fd.cFileName, ".") && strcmp(fd.cFileName, "..")){
+				if(wcscmp(fd.cFileName, ".") && wcscmp(fd.cFileName, "..")){
 					filePath=fd.cFileName;
-					ret.push_back(filePath);
+					ret.push_back(Utf8FromWString(filePath.c_str()));
 				}
 			}else{
 				// usual file.
 				filePath=fd.cFileName;
-				ret.push_back(filePath);
+				ret.push_back(Utf8FromWString(filePath.c_str()));
 			}
 			
 			// iterate!
@@ -134,7 +152,7 @@ namespace spades {
 		std::string path = physicalPath(fn);
 		SDL_RWops *f = SDL_RWFromFile(path.c_str(), "rb");
 		if(f == NULL) {
-			SPRaise("I/O error while opening %s for reading", fn);
+			SPRaise("I/O error while opening %s for reading: %s", fn, SDL_GetError());
 		}
 		return new SdlFileStream(f, true);
 	}
@@ -178,15 +196,13 @@ namespace spades {
 	
 	bool DirectoryFileSystem::FileExists(const char *fn) {
 		SPADES_MARK_FUNCTION();
-		
-		
 		std::string path = physicalPath(fn);
-		struct stat s;
-		if(stat(path.c_str(), &s)){
-			return false;
-		}else{
+		SDL_RWops *f = SDL_RWFromFile(path.c_str(), "rb");
+		if(f) {
+			SDL_RWclose(f);
 			return true;
 		}
+		return false;
 	}
 	
 }

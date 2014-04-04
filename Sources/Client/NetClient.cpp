@@ -396,6 +396,8 @@ namespace spades {
 			status = NetClientStatusConnecting;
 			statusString = _Tr("NetClient", "Connecting to the server");
 			timeToTryMapLoad = 0;
+			
+			protocolVersion = cg_protocolVersion;
 		}
 		
 		void NetClient::Disconnect() {
@@ -451,6 +453,11 @@ namespace spades {
 			
 			if(status == NetClientStatusNotConnected)
 				return;
+			
+			// don't allow changin cg_protocolVersion
+			if((int)cg_protocolVersion != protocolVersion) {
+				cg_protocolVersion = protocolVersion;
+			}
 			
 			if(bandwidthMonitor)
 				bandwidthMonitor->Update();
