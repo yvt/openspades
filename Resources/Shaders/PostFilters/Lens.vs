@@ -58,6 +58,6 @@ void main() {
 	// angleTan.z = brightness scale
 	//            = 1 / cos(fovDiag)
 	angleTan.z = length(fov) * length(fov) + 1.;
-	angleTan.z = mix(angleTan.z, 1., 1.); // weaken the brightness adjust
+	angleTan.z = mix(angleTan.z, 1., 0.9); // weaken the brightness adjust
 }
 

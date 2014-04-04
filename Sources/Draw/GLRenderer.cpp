@@ -871,7 +871,7 @@ namespace spades {
 					handle = lensDustFilter->Filter(handle);
 				}
 				
-				if(r_lens && false){
+				if(r_lens){
 					GLProfiler profiler(device, "Lens Filter");
 					handle = GLLensFilter(this).Filter(handle);
 				}

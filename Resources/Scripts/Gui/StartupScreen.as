@@ -1085,6 +1085,9 @@ namespace spades {
 					StartupScreenConfig(ui, "r_cameraBlur"), "0", "1", _Tr("StartupScreen", "Camera Blur"),
 					_Tr("StartupScreen", "Blurs the screen when you turns quickly.")));
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					StartupScreenConfig(ui, "r_lens"), "0", "1", _Tr("StartupScreen", "Lens Effect"),
+					_Tr("StartupScreen", "Simulates distortion caused by a real camera lens.")));
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
 					StartupScreenConfig(ui, "r_bloom"), "0", "1", _Tr("StartupScreen", "Lens Scattering Filter"),
 					_Tr("StartupScreen", "Simulates light being scattered by dust on the camera lens.")));
 					// r_lens is currently no-op
@@ -1101,9 +1104,9 @@ namespace spades {
 					StartupScreenConfig(ui, "r_depthOfField"), "0", "1", _Tr("StartupScreen", "Depth of Field"),
 					_Tr("StartupScreen", "Blurs out-of-focus objects.")));
 					
-					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "0|0|0|0|0|0"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1|0|1|0|1|0"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|1|1|1|1"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "0|0|0|0|0|0|0"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1|0|0|1|0|1|0"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|0|1|1|1|1|1"));
 					
 					cfg.AddRow(StartupScreenConfigComplexItemEditor(ui, cplx,
 						_Tr("StartupScreen", "Post-process"), 
