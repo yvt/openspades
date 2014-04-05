@@ -885,7 +885,8 @@ namespace spades {
 				Draw2DWithoutWorld();
 			}
 			
-			centerMessageView->Draw();
+			if(!cg_hideHud)
+				centerMessageView->Draw();
 			
 			DrawStats();
 		}
