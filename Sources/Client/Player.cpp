@@ -102,7 +102,7 @@ namespace spades {
 			if(!IsAlive())
 				return;
 			
-			if(newInput.crouch != input.crouch) {
+			if(newInput.crouch != input.crouch && !airborne) {
 				if(newInput.crouch)
 					position.z += 0.9f;
 				else
