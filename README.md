@@ -97,6 +97,14 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    set ```OPENSPADES_RESDIR``` to point to this directory. (Run CMake again, now when running debug builds openspades will also read resources from this dir)
 5. Open ```E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln``` in visual studio.
 
+### On Mac OS X (with Xcode)
+
+1. Get the latest version of Xcode and OpenSpades source.
+2. Download and install [SDL2 development libraries for OS X](http://www.libsdl.org/download-2.0.php) to `/Library/Frameworks`.
+3. Download and install [SDL2_image development libraries for OS X](https://www.libsdl.org/projects/SDL_image/) to `/Library/Frameworks`.
+4. Download [OS X release of OpenSpades](https://github.com/yvt/openspades/releases), show the package contents, and copy `libysrspades.dylib` to the root of OpenSpades source tree.
+5. Open `OpenSpades.xcodeproj` and build.
+
 Licensing
 ----------------------------------------------------------------------------------------------------
 Please see the file named LICENSE.
