@@ -17,9 +17,6 @@ Externals
 |   +---curl/
 |   |   \---(All curl headers)
 |   |       
-|   +---FL/
-|   |   \---(All FLTK headers)
-|   |       
 |   +---GL/
 |   |   \---(All GL headers)
 |   |       
@@ -30,4 +27,4 @@ Externals
         (All libs here)
 
 A set of precompiled libraries (packed with the correct layout, built with Visual Studio 2010):
-http://ge.tt/71D5rQC1/v/0?c
+https://dl.dropboxusercontent.com/u/37804131/OpenSpades-Externals-Windows.zip
