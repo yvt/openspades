@@ -327,7 +327,7 @@ int main(int argc, char ** argv)
 			spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(Utf8FromWString(datadir.c_str()), true));
 		}
 		
-		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(Utf8FromWString((appdir + "Resources").c_str()), false));
+		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(Utf8FromWString((appdir + L"Resources").c_str()), false));
 		//fltk has a console window on windows (can disable while building, maybe use a builtin console for a later release?)
 		HWND hCon = GetConsoleWindow();
 		if( NULL != hCon ) {

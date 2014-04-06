@@ -96,7 +96,7 @@ namespace spades {
 			// is it a directory?
 			if(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY){
 				// "." and ".." mustn't be included.
-				if(wcscmp(fd.cFileName, ".") && wcscmp(fd.cFileName, "..")){
+				if(wcscmp(fd.cFileName, L".") && wcscmp(fd.cFileName, L"..")){
 					filePath=fd.cFileName;
 					ret.push_back(Utf8FromWString(filePath.c_str()));
 				}
@@ -107,7 +107,7 @@ namespace spades {
 			}
 			
 			// iterate!
-		}while(FindNextFile(h, &fd));
+		}while(FindNextFileW(h, &fd));
 		
 		// close the handle.
 		FindClose(h);
