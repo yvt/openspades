@@ -243,6 +243,7 @@ namespace spades {
 						manager->CheckError(r);
 						
 						break;
+					default: break;
 				}
 			}
 		};

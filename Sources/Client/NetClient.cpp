@@ -858,7 +858,7 @@ namespace spades {
 						break;
 				{
 					//reader.ReadByte(); // skip player Id
-					Player *p = GetPlayerOrNull(reader.ReadByte());
+					//Player *p = GetPlayerOrNull(reader.ReadByte());
 					float fuseLen = reader.ReadFloat();
 					Vector3 pos, vel;
 					pos.x = reader.ReadFloat();
@@ -1495,7 +1495,7 @@ namespace spades {
 				}
 				case PacketTypeChangeWeapon:
 				{
-					Player * p = GetPlayerOrNull(reader.ReadByte());
+					//Player * p = GetPlayerOrNull(reader.ReadByte());
 					WeaponType wType;
 					int weapon = reader.ReadByte();
 					switch(weapon){

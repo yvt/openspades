@@ -30,12 +30,6 @@
 #include <algorithm>
 #include <Core/AutoLocker.h>
 
-// silly VOXLAP function
-static inline void ftol(float f, long *a)
-{
-    *a = (long)floor(f+0.5f);
-}
-
 namespace spades {
 	namespace client {
 		GameMap::GameMap():
@@ -413,7 +407,7 @@ namespace spades {
 			for(int i = 0; i < maxSteps; i++){
 				IntVector3 nextBlock;
 				int hasNextBlock = 0;
-				float nextBlockTime;
+				float nextBlockTime = 0.f;
 				
 				if(invX != 0.f){
 					nextBlock = iv;

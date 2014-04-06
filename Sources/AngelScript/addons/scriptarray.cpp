@@ -170,7 +170,9 @@ void RegisterScriptArray(asIScriptEngine *engine, bool defaultArray)
 
 	if( defaultArray )
 	{
+#ifndef NDEBUG
 		int r = engine->RegisterDefaultArrayType("array<T>"); assert( r >= 0 );
+#endif
 	}
 }
 
@@ -863,8 +865,9 @@ bool CScriptArray::operator==(const CScriptArray &other) const
 			if( state == asEXECUTION_ABORTED )
 				cmpContext->Abort();
 		}
-		else
+		else{
 			cmpContext->Release();
+		}
 
 	return isEqual;
 }
@@ -1045,8 +1048,9 @@ int CScriptArray::Find(asUINT index, void *value) const
 			if( state == asEXECUTION_ABORTED )
 				cmpContext->Abort();
 		}
-		else
+		else{
 			cmpContext->Release();
+		}
 
 	return ret;
 }
@@ -1218,8 +1222,9 @@ void CScriptArray::Sort(asUINT index, asUINT count, bool asc)
 			if( state == asEXECUTION_ABORTED )
 				cmpContext->Abort();
 		}
-		else
+		else{
 			cmpContext->Release();
+		}
 }
 
 // internal
@@ -1346,7 +1351,7 @@ void CScriptArray::Precache()
 
 				if( (flags & asTM_INREF) )
 				{
-					if( (paramTypeId & asTYPEID_OBJHANDLE) || mustBeConst && !(flags & asTM_CONST) )
+					if( (paramTypeId & asTYPEID_OBJHANDLE) || (mustBeConst && !(flags & asTM_CONST)) )
 						continue;
 				}
 				else if( paramTypeId & asTYPEID_OBJHANDLE )

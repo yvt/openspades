@@ -565,8 +565,8 @@ namespace spades {
 			std::map<int, HitTestDebugger::PlayerHit> playerHits;
 			std::vector<Vector3> bulletVectors;
 			
-			Vector3 right = GetRight();
-			Vector3 up = GetUp();
+			//Vector3 right = GetRight();
+			//Vector3 up = GetUp();
 			
 			int pellets = weapon->GetPelletSize();
 			float spread = weapon->GetSpread();
@@ -850,10 +850,7 @@ namespace spades {
 			   outBlockCoord.x < map->Width() && outBlockCoord.y < map->Height() &&
 			   outBlockCoord.z < map->Depth()){
 				if(outBlockCoord.z < 62){
-					int x = outBlockCoord.x;
-					int y = outBlockCoord.y;
-					int z = outBlockCoord.z;
-					SPAssert(map->IsSolid(x, y, z));
+					SPAssert(map->IsSolid(outBlockCoord.x, outBlockCoord.y, outBlockCoord.z));
 					
 					// send destroy command only for local cmd
 					if(this == world->GetLocalPlayer()) {
@@ -894,7 +891,6 @@ namespace spades {
 									  256);
 			
 			Player *hitPlayer = NULL;
-			float hitPlayerDistance = 3.f;
 			int hitFlag = 0;
 			
 			for(int i = 0; i < world->GetNumPlayerSlots(); i++){

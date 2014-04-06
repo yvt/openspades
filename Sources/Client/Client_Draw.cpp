@@ -300,11 +300,11 @@ namespace spades {
 		void Client::DrawDebugAim() {
 			SPADES_MARK_FUNCTION();
 			
-			float scrWidth = renderer->ScreenWidth();
-			float scrHeight = renderer->ScreenHeight();
-			float wTime = world->GetTime();
+			//float scrWidth = renderer->ScreenWidth();
+			//float scrHeight = renderer->ScreenHeight();
+			//float wTime = world->GetTime();
 			Player *p = GetWorld()->GetLocalPlayer();
-			IFont *font;
+			//IFont *font;
 			
 			Weapon *w = p->GetWeapon();
 			float spread = w->GetSpread();
@@ -378,7 +378,7 @@ namespace spades {
 			
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
-			float wTime = world->GetTime();
+			//float wTime = world->GetTime();
 			Player *p = GetWorld()->GetLocalPlayer();
 			IFont *font;
 			
@@ -705,7 +705,7 @@ namespace spades {
 			
 			Player *p = GetWorld()->GetLocalPlayer();
 			IFont *font;
-			float scrWidth = renderer->ScreenWidth();
+			//float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 			
 			std::string str = std::to_string(p->GetHealth());
@@ -730,9 +730,9 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			float scrWidth = renderer->ScreenWidth();
-			float scrHeight = renderer->ScreenHeight();
+			//float scrHeight = renderer->ScreenHeight();
 			IFont *font;
-			float wTime = world->GetTime();
+			//float wTime = world->GetTime();
 			
 			for(auto& ent: localEntities){
 				ent->Render2D();

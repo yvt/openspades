@@ -76,8 +76,8 @@ namespace spades {
 				float dot2 = Vector3::Dot(axis2, lightVec) * fastRSqrt(axis2.GetPoweredLength());
 				float dot3 = Vector3::Dot(axis3, lightVec) * fastRSqrt(axis3.GetPoweredLength());
 				for(int x = 0; x < 3; x++){
-					float d;
-					int cnt;
+					float d = 0.0;
+					int cnt = 0;
 					switch(x){
 						case 0: d = -dot1; cnt = 1; break;
 						case 1: d = 0.f; cnt = 0; break;

@@ -477,7 +477,7 @@ void PrintException(asIScriptContext *ctx, bool printStack)
 {
 	if( ctx->GetState() != asEXECUTION_EXCEPTION ) return;
 
-	asIScriptEngine *engine = ctx->GetEngine();
+	//asIScriptEngine *engine = ctx->GetEngine();
 	const asIScriptFunction *function = ctx->GetExceptionFunction();
 	printf("func: %s\n", function->GetDeclaration());
 	printf("modl: %s\n", function->GetModuleName());

@@ -98,10 +98,9 @@ namespace spades {
 			Handle<IImage>image;
 			IFont *font;
 			Vector2 pos, size;
-			char buf[256];
 			std::string str;
 			float scrWidth = renderer->ScreenWidth();
-			float scrHeight = renderer->ScreenHeight();
+			//float scrHeight = renderer->ScreenHeight();
 			const Vector4 whiteColor = {1,1,1,1};
 			Handle<IImage> whiteImage = renderer->RegisterImage("Gfx/White.tga");
 			

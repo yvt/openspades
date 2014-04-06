@@ -230,7 +230,7 @@ static void ScriptWeakRefRelease_Generic(asIScriptGeneric *gen)
 
 void CScriptWeakRef_Get_Generic(asIScriptGeneric *gen)
 {
-	int typeId = gen->GetArgTypeId(0);
+	//int typeId = gen->GetArgTypeId(0);
 	CScriptWeakRef *self = reinterpret_cast<CScriptWeakRef*>(gen->GetObject());
 	gen->SetReturnAddress(self->Get());
 }

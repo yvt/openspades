@@ -86,7 +86,7 @@ namespace spades {
 		}
 	};*/
 	
-	static bool operator ==(const std::string& str, Settings::ItemHandle& handle) {
+	static inline bool operator ==(const std::string& str, Settings::ItemHandle& handle) {
 		return str == (std::string)handle;
 	}
 	

@@ -435,10 +435,10 @@ static asINT64 parseInt(const string &val, asUINT base, asUINT *byteCount)
 	if( *end == '-' )
 	{
 		sign = true;
-		*end++;
+		end++;
 	}
 	else if( *end == '+' )
-		*end++;
+		end++;
 
 	asINT64 res = 0;
 	if( base == 10 )

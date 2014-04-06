@@ -1065,6 +1065,7 @@ namespace spades {
 					
 					
 					break;
+				default: break;
 			}
 			
 			

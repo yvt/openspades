@@ -108,7 +108,7 @@ namespace spades {
 			float x = 0.f, maxW = GetWidth();
 			float lh = GetLineHeight(), h = lh;
 			size_t wordStart = std::string::npos;
-			size_t wordStartOutPos;
+			size_t wordStartOutPos = 0;
 			
 			for(size_t i = 0; i < msg.size(); i++){
 				if(msg[i] > MsgColorMax &&

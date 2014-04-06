@@ -34,6 +34,8 @@
 
 namespace spades {
 	
+	
+#ifdef WIN32
 	static std::string SdlReceiveString(char *ptr) {
 		if(!ptr) {
 			return "";
@@ -42,8 +44,6 @@ namespace spades {
 		SDL_free(ptr);
 		return s;
 	}
-	
-#ifdef WIN32
 	static std::wstring Utf8ToWString(const char *s) {
 		auto *ws = (WCHAR*)SDL_iconv_string("UCS-2-INTERNAL", "UTF-8", (char *)(s), SDL_strlen(s)+1);
 		if(!ws) return L"";

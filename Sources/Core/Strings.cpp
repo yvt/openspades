@@ -808,7 +808,7 @@ namespace spades {
 				
 				SkipWhitespace();
 				std::string directive;
-				int directiveIdx;
+				int directiveIdx = 0;
 				while(pos < po.size()) {
 					auto tk = ReadToken();
 					if(tk.first == TokenType::Symbol) {

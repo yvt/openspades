@@ -55,11 +55,6 @@
 #include "NetClient.h"
 
 
-static float nextRandom() {
-	return (float)rand() / (float)RAND_MAX;
-}
-
-
 SPADES_SETTING(cg_chatBeep, "1");
 
 

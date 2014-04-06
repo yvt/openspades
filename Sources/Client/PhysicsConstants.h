@@ -86,7 +86,7 @@ enum hitTag_t {
 	hit_Arms = 8
 };
 
-static hitTag_t& operator |= ( hitTag_t& left, const hitTag_t& right )
+static inline hitTag_t& operator |= ( hitTag_t& left, const hitTag_t& right )
 {
 	left = static_cast<hitTag_t>( static_cast<int>(left) | static_cast<int>(right) );
 	return left;

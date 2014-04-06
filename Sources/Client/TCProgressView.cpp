@@ -85,7 +85,7 @@ namespace spades {
 			if(p && p->GetTeamId() < 2 && p->IsAlive()){
 				// show approaching territory
 				TCGameMode::Territory *nearTerritory = NULL;
-				int nearTerId;
+				int nearTerId = 0;
 				float distance = 0.f;
 				int myTeam = p->GetTeamId();
 				

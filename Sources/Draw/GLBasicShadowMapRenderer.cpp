@@ -266,7 +266,7 @@ namespace spades {
 				GLProfiler profiler(device, "Slice %d / %d", i + 1,
 									(int)NumSlices);
 				
-				float farDist;
+				float farDist = 0.0;
 				// TODO: variable far distance according to the scene definition
 				//       (note that this needs uniform shader variable)
 				switch(i){

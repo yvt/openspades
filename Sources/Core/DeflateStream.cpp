@@ -184,7 +184,9 @@ namespace spades {
 		SPAssert(mode == CompressModeDecompress);
 		char inputBuffer[chunkSize];
 		char outputBuffer[chunkSize];
+#ifndef NDEBUG
 		uLong oval = zstream.total_out;
+#endif
 		
 		if(reachedEOF)
 			return;

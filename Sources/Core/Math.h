@@ -836,7 +836,7 @@ namespace spades {
 		AABB3 GetBoundingAABB() const;
 	};
 	
-	static OBB3 operator *(const Matrix4&m, const OBB3& b) {
+	static inline OBB3 operator *(const Matrix4&m, const OBB3& b) {
 		return OBB3(m * b.m);
 	}
 	

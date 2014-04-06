@@ -224,57 +224,7 @@ namespace spades {
 			query = new ServerListQuery(this);
 			query->Start();
 		}
-		
-		static std::string TextifyHTML(const std::string& html) {
-			std::string out;
-			int blankLineLength = 0;
-			bool inTag = false;
-			bool inTagName = false;
-			bool hasLetter = false;
-			std::string tagName;
-			for(size_t i = 0; i < html.size(); i++){
-				if(html[i] == '<') {
-					inTag = true;
-					inTagName = true;
-					tagName.clear();
-				}
-				if(inTag) {
-					if(inTagName) {
-						if(html[i] == '/')
-							i++;
-						if(html[i] < 'a' || html[i] > 'z') {
-							inTagName = false;
-							if(html[i] == '>') {
-								inTag = false;
-							}
-							if(tagName == "br" ||
-							   tagName == "h3" ||
-							   tagName == "h2") {
-								if(blankLineLength < 1) {
-									out += "\n";
-									hasLetter = false;
-									blankLineLength++;
-								}
-							}
-						}else{
-							tagName += html[i];
-						}
-					}else if(html[i] == '>') {
-						inTag = false;
-					}
-					continue;
-				}
 				
-				bool isLetter = !isspace(html[i]);
-				if(hasLetter == false && isLetter == false)
-					continue;
-				hasLetter = true;
-				blankLineLength = 0;
-				out += html[i];
-			}
-			return out;
-		}
-		
 #include "Credits.inc" // C++11 raw string literal makes some tools (ex. xgettext, Xcode) misbehave
 		
 		std::string MainScreenHelper::GetCredits() {

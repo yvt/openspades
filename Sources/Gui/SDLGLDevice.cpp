@@ -39,7 +39,7 @@ SPADES_SETTING(r_ignoreGLErrors, "1");
 
 static uint32_t vertCount = 0;
 static uint32_t drawOps = 0;
-static Uint32 lastFrame = 0;
+// static Uint32 lastFrame = 0;
 
 namespace spades {
 	namespace gui {
@@ -118,10 +118,12 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 						func, __FILE__, line);
 			}
 		}
+#ifdef GLEW
 		static void ReportMissingFunc(const char *func){
 			SPRaise("GL function %s missing",
 					func);
 		}
+#endif
 		
 		SDLGLDevice::SDLGLDevice(SDL_Window *s):
 		window(s) {
@@ -160,7 +162,7 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 				SPLog("Shading Language Version: %s", ret);
 			}
 			SPLog("--- Extensions ---");
-			if(glGetStringi) {
+			if(&glGetStringi) {
 				GLint cnt = 0;
 				glGetIntegerv(GL_NUM_EXTENSIONS, &cnt);
 				if(cnt <= 0) goto retrvFail;

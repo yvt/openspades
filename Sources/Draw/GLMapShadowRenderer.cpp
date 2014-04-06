@@ -163,7 +163,7 @@ namespace spades{
 				int bx = 0, by = 0;
 				for(size_t i = 0; i < coarseUpdateBitmap.size(); i++) {
 					if(coarseUpdateBitmap[i]){
-						int minValue = -1, maxValue;
+						int minValue = -1, maxValue = 0;
 						
 						uint32_t *bmp = bitmap.data();
 						bmp += bx + by * w;
