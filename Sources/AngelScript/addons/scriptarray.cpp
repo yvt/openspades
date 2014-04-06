@@ -171,8 +171,9 @@ void RegisterScriptArray(asIScriptEngine *engine, bool defaultArray)
 	if( defaultArray )
 	{
 #ifndef NDEBUG
-		int r = engine->RegisterDefaultArrayType("array<T>"); assert( r >= 0 );
+		int r =
 #endif
+		engine->RegisterDefaultArrayType("array<T>"); assert( r >= 0 );
 	}
 }
 
