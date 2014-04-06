@@ -46,7 +46,11 @@ SPADES_SETTING(r_depthBits, "16");
 SPADES_SETTING(r_vsync, "1");
 SPADES_SETTING(r_allowSoftwareRendering, "0");
 SPADES_SETTING(r_renderer, "gl");
+#ifdef __APPLE__
+SPADES_SETTING(s_audioDriver, "ysr");
+#else
 SPADES_SETTING(s_audioDriver, "openal");
+#endif
 
 namespace spades {
 	namespace gui {
