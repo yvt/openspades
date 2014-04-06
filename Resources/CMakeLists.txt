@@ -8,7 +8,7 @@ if(RESDIR_DEFINED)
 		${RESDIR}/pak002-Models.pak
 		${RESDIR}/pak010-BaseSkin.pak
 		${RESDIR}pak999-References.pak
-			DESTINATION bin/Resources)
+			DESTINATION share/games/openspades/Resources)
 
 	file(GLOB_RECURSE RESOURCES Shaders/* Scripts/* Icons/* Killfeed/*)
 	foreach(FILE ${RESOURCES})
@@ -18,8 +18,3 @@ if(RESDIR_DEFINED)
 		add_custom_command(TARGET copy_resources COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FILE}" "${TARGETFILE}")
 	endforeach()
 endif()
-
-install(DIRECTORY "Scripts" DESTINATION bin/Resources)
-install(DIRECTORY "Shaders" DESTINATION bin/Resources)
-install(DIRECTORY "Gfx/Killfeed" DESTINATION bin/Resources/Gfx)
-install(DIRECTORY "Icons" DESTINATION bin/Resources)

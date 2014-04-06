@@ -153,10 +153,67 @@ include_directories("${CURL_INCLUDE_DIRS}")
 add_subdirectory(Resources)
 add_subdirectory(Sources)
 
-install(FILES AUTHORS ChangeLog LICENSE README.md DESTINATION bin)
+
+if(UNIX)
+	set(CMAKE_INSTALL_PREFIX "/usr/local")
+
+	# various texts
+	INSTALL(FILES AUTHORS ChangeLog LICENSE README.md DESTINATION share/doc/openspades/)
+
+	# resources
+	install(DIRECTORY Resources/Gfx     DESTINATION share/games/openspades/Resources)
+	install(DIRECTORY Resources/Icons   DESTINATION share/games/openspades/Resources)
+	install(DIRECTORY Resources/Locales DESTINATION share/games/openspades/Resources)
+	install(DIRECTORY Resources/Maps    DESTINATION share/games/openspades/Resources)
+	install(DIRECTORY Resources/Scripts DESTINATION share/games/openspades/Resources)
+	install(DIRECTORY Resources/Shaders DESTINATION share/games/openspades/Resources)
+
+	# download and install devpaks
+	INSTALL(CODE "
+		EXECUTE_PROCESS (
+			COMMAND sh -c \"wget $(grep DevPaks PakLocation.txt); unzip -o DevPaks*.zip -d DevPak/\"
+			WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Resources/
+		)
+	")
+
+	install(DIRECTORY Resources/DevPak/ DESTINATION share/games/openspades/Resources)
+
+	# install icons
+	INSTALL(CODE "
+		EXECUTE_PROCESS (
+			COMMAND ./make.sh
+			WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Resources/Icons/
+		)
+	")
+
+	INSTALL(DIRECTORY Resources/Icons/hicolor/ DESTINATION share/icons/hicolor)
+
+	INSTALL(FILES Resources/Icons/openspades.xpm DESTINATION share/pixmaps/)
+
+
+	# binary file
+	INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/bin/OpenSpades DESTINATION lib/openspades/bin/)
+
+	# make symlink in /usr(/local)?/games/
+	INSTALL(CODE "
+		file(MAKE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/games)
+	")
+
+	INSTALL(CODE "
+		EXECUTE_PROCESS (
+			COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/lib/openspades/bin/OpenSpades ${CMAKE_INSTALL_PREFIX}/games/openspades
+			WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
+		)
+	")
+
+	# desktop file
+	INSTALL(FILES Resources/Desktop/openspades.desktop DESTINATION share/applications/)
+
+endif(UNIX)
+
 
 #see http://www.cmake.org/cmake/help/v2.8.11/cpack.html
-
+set(CPACK_PACKAGE_NAME "OpenSpades")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenSpades")
 set(CPACK_PACKAGE_VENDOR "yvt, assorted")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
