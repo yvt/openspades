@@ -32,7 +32,7 @@
 #include "../Core/Stopwatch.h"
 #include <Core/Settings.h>
 
-SPADES_SETTING(r_highPrec, "");
+SPADES_SETTING(r_hdr, "");
 
 namespace spades {
 	namespace draw {
@@ -149,7 +149,7 @@ namespace spades {
 			
 			std::string finalSource;
 			
-			if((int)r_highPrec >= 2) {
+			if(r_hdr) {
 				finalSource += "#define USE_HDR 1\n";
 			}else{
 				finalSource += "#define USE_HDR 0\n";

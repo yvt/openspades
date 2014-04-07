@@ -30,6 +30,7 @@ SPADES_SETTING(r_depthBits, ""); // TODO: use this value
 SPADES_SETTING(r_colorBits, "");  // TOOD: use this value
 SPADES_SETTING(r_srgb, "0");
 SPADES_SETTING(r_highPrec, "1");
+SPADES_SETTING(r_hdr, "0");
 SPADES_SETTING(r_blitFramebuffer, "1");
 SPADES_SETTING(r_water, "2");
 
@@ -82,7 +83,7 @@ namespace spades {
 			
 			useMultisample = (int)r_multisamples > 0;
 			useHighPrec = r_highPrec ? 1 : 0;
-			useHdr = (int)r_highPrec >= 2;
+			useHdr = r_hdr;
 			
 			if(useMultisample){
 				SPLog("Multi-sample Antialiasing Enabled");
@@ -136,8 +137,8 @@ namespace spades {
 					SPLog("MSAA Framebuffer Allocated");
 				}else{
 					try{
-						if(!useHighPrec){
-							SPLog("RGB10A2 disabled");
+						if(!useHighPrec && !useHdr){
+							SPLog("RGB10A2/HDR disabled");
 							SPRaise("jump to catch(...)");
 						}
 						dev->RenderbufferStorage(IGLDevice::Renderbuffer,
@@ -161,6 +162,8 @@ namespace spades {
 					}catch(...){
 						SPLog("Renderbuffer creation failed: trying with RGB8A8");
 						useHighPrec = false;
+						useHdr = false;
+						r_hdr = 0;
 						dev->RenderbufferStorage(IGLDevice::Renderbuffer,
 												 (int)r_multisamples,
 												 IGLDevice::RGBA8,
@@ -267,8 +270,8 @@ namespace spades {
 				SPLog("Framebuffer Created");
 			}else{
 				try{
-					if(!useHighPrec){
-						SPLog("RGB10A2 disabled");
+					if(!useHighPrec && !useHdr){
+						SPLog("RGB10A2/HDR disabled");
 						SPRaise("jump to catch(...)");
 					}
 					dev->TexImage2D(IGLDevice::Texture2D,
@@ -307,6 +310,8 @@ namespace spades {
 				}catch(...){
 					SPLog("Texture creation failed: trying with RGB8A8");
 					useHighPrec = false;
+					useHdr = false;
+					r_hdr = 0;
 					dev->TexImage2D(IGLDevice::Texture2D,
 									0,
 									IGLDevice::RGBA8,
