@@ -82,6 +82,7 @@ namespace spades {
 			
 			useMultisample = (int)r_multisamples > 0;
 			useHighPrec = r_highPrec ? 1 : 0;
+			useHdr = (int)r_highPrec >= 2;
 			
 			if(useMultisample){
 				SPLog("Multi-sample Antialiasing Enabled");
@@ -141,7 +142,7 @@ namespace spades {
 						}
 						dev->RenderbufferStorage(IGLDevice::Renderbuffer,
 												 (int)r_multisamples,
-												 IGLDevice::RGB10A2,
+												 useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2,
 												 dev->ScreenWidth(),
 												 dev->ScreenHeight());
 						SPLog("MSAA Color Buffer Allocated");
@@ -154,7 +155,7 @@ namespace spades {
 						if(status != IGLDevice::FramebufferComplete) {
 							RaiseFBStatusError(status);
 						}
-						fbInternalFormat = IGLDevice::RGB10A2;
+						fbInternalFormat = useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2;
 						SPLog("MSAA Framebuffer Allocated");
 						
 					}catch(...){
@@ -272,7 +273,7 @@ namespace spades {
 					}
 					dev->TexImage2D(IGLDevice::Texture2D,
 									0,
-									IGLDevice::RGB10A2,
+									useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2,
 									dev->ScreenWidth(),
 									dev->ScreenHeight(),
 									0,
@@ -301,7 +302,7 @@ namespace spades {
 					if(status != IGLDevice::FramebufferComplete) {
 						RaiseFBStatusError(status);
 					}
-					fbInternalFormat = IGLDevice::RGB10A2;
+					fbInternalFormat = useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2;
 					SPLog("Framebuffer Created");
 				}catch(...){
 					SPLog("Texture creation failed: trying with RGB8A8");
