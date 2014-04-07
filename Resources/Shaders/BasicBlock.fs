@@ -50,7 +50,9 @@ void main() {
 	// apply fog
 	gl_FragColor.xyz = mix(gl_FragColor.xyz, fogColor, fogDensity);
 	
+#if !LINEAR_FRAMEBUFFER
 	// gamma correct
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
+#endif
 }
 

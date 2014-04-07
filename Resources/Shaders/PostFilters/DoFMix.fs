@@ -27,7 +27,9 @@ uniform sampler2D cocTexture;
 varying vec2 texCoord;
 
 vec4 doGamma(vec4 col) {
+#if !LINEAR_FRAMEBUFFER
 	col.xyz *= col.xyz;
+#endif
 	return col;
 }
 
@@ -42,7 +44,10 @@ void main() {
 
 	float per = min(1., coc * 5.);
 	vec4 v = mix(a, b, per);
+	
+#if !LINEAR_FRAMEBUFFER
 	v.xyz = sqrt(v.xyz);
+#endif
 	
 	gl_FragColor = v;
 }

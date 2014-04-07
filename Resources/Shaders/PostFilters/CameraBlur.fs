@@ -33,7 +33,9 @@ vec3 filter(vec3 col){
 
 vec4 getSample(vec2 coord){
 	vec3 color = texture2D(texture, coord).xyz;
+#if !LINEAR_FRAMEBUFFER
 	color *= color; // linearize
+#endif
 	
 	float depth = texture2D(depthTexture, coord).x;
 	float weight = depth*depth; // [0,0.1] is for view weapon
@@ -74,7 +76,9 @@ void main() {
 	
 	gl_FragColor.xyz = sum.xyz / sum.w;
 	
+#if !LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
+#endif
 	
 	gl_FragColor.w = 1.;
 }

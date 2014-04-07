@@ -68,7 +68,9 @@ void main() {
 	gl_FragColor.xyz *= shading;
 	
 	gl_FragColor.xyz = mix(gl_FragColor.xyz, fogColor, fogDensity);
-	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
 	
+#if !LINEAR_FRAMEBUFFER
+	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
+#endif
 }
 

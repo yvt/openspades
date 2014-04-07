@@ -359,11 +359,14 @@ void main() {
 	total *= bright + 1.;
 	
 	gl_FragColor = texture2D(colorTexture, texCoord);
+#if !LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz *= gl_FragColor.xyz; // linearize
+#endif
 	
 	gl_FragColor.xyz += total * fogColor;
 	
+#if !LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
-	
+#endif
 }
 

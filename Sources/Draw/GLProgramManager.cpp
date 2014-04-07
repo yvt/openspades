@@ -151,8 +151,10 @@ namespace spades {
 			
 			if(r_hdr) {
 				finalSource += "#define USE_HDR 1\n";
+				finalSource += "#define LINEAR_FRAMEBUFFER 1\n";
 			}else{
 				finalSource += "#define USE_HDR 0\n";
+				finalSource += "#define LINEAR_FRAMEBUFFER 0\n";
 			}
 			
 			finalSource += text;

@@ -49,6 +49,9 @@ void main() {
 	}
 	
 	gl_FragColor = texture2D(texture, texCoord.xy);
+#if LINEAR_FRAMEBUFFER
+	gl_FragColor.xyz *= gl_FragColor.xyz;
+#endif
 	gl_FragColor.xyz *= gl_FragColor.w; // premultiplied alpha
 	gl_FragColor *= color;
 	

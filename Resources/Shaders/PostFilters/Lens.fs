@@ -37,6 +37,7 @@ void main() {
 	
 #if 0
 	// accurate color abberation
+	// FIXME: handle LINEAR_FRAMEBUFFER case
 	val = vec3(0.0, 0.2, 1.0);
 	sum += val;
 	val *= filter(texture2D(texture, texCoord1.xy).xyz);

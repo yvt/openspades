@@ -24,6 +24,10 @@
 #include "../Core/Debug.h"
 #include "GLProgram.h"
 #include "GLImage.h"
+#include "SWFeatureLevel.h"
+#include <Core/Settings.h>
+
+SPADES_SETTING(r_hdr, "");
 
 namespace spades {
 	namespace draw {
@@ -60,6 +64,21 @@ namespace spades {
 			spr.center = center;
 			spr.radius = rad;
 			spr.angle = ang;
+			if(r_hdr) {
+				// linearize color
+				if(color.x > color.w || color.y > color.w || color.z > color.w) {
+					// emissive material
+					color.x *= color.x;
+					color.y *= color.y;
+					color.z *= color.z;
+				}else{
+					// scattering/absorptive material
+					float rcp = fastRcp(color.w + .01);
+					color.x *= color.x * rcp;
+					color.y *= color.y * rcp;
+					color.z *= color.z * rcp;
+				}
+			}
 			spr.color = color;
 			sprites.push_back(spr);
 		}

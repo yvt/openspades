@@ -72,6 +72,9 @@ void main() {
 	computedColor.xyz += emission;
 	
 	gl_FragColor = texture2D(texture, texCoord.xy);
+#if LINEAR_FRAMEBUFFER
+	gl_FragColor.xyz *= gl_FragColor.xyz;
+#endif
 	gl_FragColor.xyz *= gl_FragColor.w; // premultiplied alpha
 	gl_FragColor *= computedColor;
 	
@@ -84,6 +87,8 @@ void main() {
 	float soft = depth * depthRange.z + depthRange.x;
 	soft = smoothstep(0., 1., soft);
 	gl_FragColor *= soft;
+	
+	gl_FragColor = max(gl_FragColor, 0.);
 	
 	if(dot(gl_FragColor, vec4(1.)) < .002)
 		discard;

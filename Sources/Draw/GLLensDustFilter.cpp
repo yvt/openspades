@@ -30,6 +30,9 @@
 #include "../Core/Debug.h"
 #include "GLImage.h"
 #include <stdlib.h>
+#include <Core/Settings.h>
+
+SPADES_SETTING(r_hdr, "");
 
 namespace spades {
 	namespace draw {
@@ -158,7 +161,7 @@ namespace spades {
 			thruTexture(thru);
 			thruTexCoordRange(thru);
 						
-			GLColorBuffer downSampled = DownSample(input, true);
+			GLColorBuffer downSampled = DownSample(input, r_hdr ? false : true);
 			downSampled = DownSample(downSampled);
 			downSampled = DownSample(downSampled);
 			

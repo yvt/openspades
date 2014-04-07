@@ -54,6 +54,7 @@
 #include "GLFXAAFilter.h"
 #include "../Core/Stopwatch.h"
 #include "GLLongSpriteRenderer.h"
+#include "GLNonlinearizeFilter.h"
 #include <stdarg.h>
 #include <stdlib.h>
 #include "GLProfiler.h"
@@ -78,6 +79,7 @@ SPADES_SETTING(r_fxaa, "1");
 SPADES_SETTING(r_srgb, "");
 SPADES_SETTING(r_srgb2D, "1");
 SPADES_SETTING(r_colorCorrection, "1");
+SPADES_SETTING(r_hdr, "");
 
 SPADES_SETTING(r_debugTiming, "0");
 
@@ -745,6 +747,7 @@ namespace spades {
 					}
 					
 					bgCol = GetFogColorForSolidPass();
+					if(r_hdr) { bgCol *= bgCol; } // linearlize
 					device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
 					device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
 					
@@ -784,7 +787,8 @@ namespace spades {
 			}
 			
 			bgCol = GetFogColorForSolidPass();
-			device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
+			if(r_hdr) { bgCol *= bgCol; } // linearlize
+ 			device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
 			device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
 			
 			device->FrontFace(IGLDevice::CW);
@@ -929,6 +933,10 @@ namespace spades {
 						lensFlareRenderer.Draw(prm.origin - sceneDef.viewOrigin,
 											   true, color, false);
 					}
+				}
+				
+				if(r_hdr) {
+					handle = GLNonlinearlizeFilter(this).Filter(handle);
 				}
 				
 				if(r_colorCorrection){

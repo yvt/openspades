@@ -40,7 +40,9 @@ void main() {
 	//gl_FragColor.xyz *= texture2D(detailTexture, detailCoord).xyz * 2.;
 
 	gl_FragColor.xyz = mix(gl_FragColor.xyz, vec3(0.), fogDensity);
-	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
 	
+#if !LINEAR_FRAMEBUFFER
+	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
+#endif
 }
 

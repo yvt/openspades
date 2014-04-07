@@ -502,6 +502,8 @@
 		E8CF0417179052F7000683D4 /* DirectoryFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF0415179052F6000683D4 /* DirectoryFileSystem.cpp */; };
 		E8CF041B1790CCAB000683D4 /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF04191790CCAB000683D4 /* GLShader.cpp */; };
 		E8CF041E1790D6D6000683D4 /* GLProgramManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF041C1790D6D5000683D4 /* GLProgramManager.cpp */; };
+		E8D0E5D218F3215000DE3BDB /* GLNonlinearizeFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5D018F3215000DE3BDB /* GLNonlinearizeFilter.cpp */; };
+		E8D0E5D318F321E300DE3BDB /* GLNonlinearizeFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5D018F3215000DE3BDB /* GLNonlinearizeFilter.cpp */; };
 		E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */; };
 		E8D88AB1179C3004004C2451 /* GLQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */; };
 		E8D88AB4179C45B7004C2451 /* GLLensFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AB2179C45B7004C2451 /* GLLensFilter.cpp */; };
@@ -1064,6 +1066,8 @@
 		E8CF041A1790CCAB000683D4 /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShader.h; sourceTree = "<group>"; };
 		E8CF041C1790D6D5000683D4 /* GLProgramManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgramManager.cpp; sourceTree = "<group>"; };
 		E8CF041D1790D6D5000683D4 /* GLProgramManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgramManager.h; sourceTree = "<group>"; };
+		E8D0E5D018F3215000DE3BDB /* GLNonlinearizeFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLNonlinearizeFilter.cpp; sourceTree = "<group>"; };
+		E8D0E5D118F3215000DE3BDB /* GLNonlinearizeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLNonlinearizeFilter.h; sourceTree = "<group>"; };
 		E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLColorCorrectionFilter.cpp; sourceTree = "<group>"; };
 		E8D2ACE217D704E600BE5490 /* GLColorCorrectionFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLColorCorrectionFilter.h; sourceTree = "<group>"; };
 		E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLQuadRenderer.cpp; sourceTree = "<group>"; };
@@ -1483,6 +1487,8 @@
 				E8B6B6E417E165A500E35523 /* GLDepthOfFieldFilter.h */,
 				E8B6B72917E6095800E35523 /* GLLensDustFilter.cpp */,
 				E8B6B72A17E6095800E35523 /* GLLensDustFilter.h */,
+				E8D0E5D018F3215000DE3BDB /* GLNonlinearizeFilter.cpp */,
+				E8D0E5D118F3215000DE3BDB /* GLNonlinearizeFilter.h */,
 			);
 			name = "Post Filters";
 			sourceTree = "<group>";
@@ -2381,6 +2387,7 @@
 				E82E679318EA7972004DBA18 /* IWeaponSkin.cpp in Sources */,
 				E82E679418EA7972004DBA18 /* IFont.cpp in Sources */,
 				E82E679518EA7972004DBA18 /* MainScreenHelper.cpp in Sources */,
+				E8D0E5D318F321E300DE3BDB /* GLNonlinearizeFilter.cpp in Sources */,
 				E82E679618EA7972004DBA18 /* StartupScreenHelper.cpp in Sources */,
 				E82E679718EA7972004DBA18 /* Config.cpp in Sources */,
 				E82E679818EA7972004DBA18 /* ClientUIHelper.cpp in Sources */,
@@ -2565,6 +2572,7 @@
 				E8CF040E17904971000683D4 /* FileManager.cpp in Sources */,
 				E8CF041117904ABC000683D4 /* IStream.cpp in Sources */,
 				E8CF041417904E8D000683D4 /* StdStream.cpp in Sources */,
+				E8D0E5D218F3215000DE3BDB /* GLNonlinearizeFilter.cpp in Sources */,
 				E8CF0417179052F7000683D4 /* DirectoryFileSystem.cpp in Sources */,
 				E8CF041B1790CCAB000683D4 /* GLShader.cpp in Sources */,
 				E8CF041E1790D6D6000683D4 /* GLProgramManager.cpp in Sources */,

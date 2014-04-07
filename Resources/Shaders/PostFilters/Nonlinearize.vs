@@ -19,27 +19,19 @@
  */
 
 
-uniform sampler2D texture;
 
-uniform vec3 fogColor;
+attribute vec2 positionAttribute;
 
-varying vec4 color;
 varying vec2 texCoord;
-varying vec4 fogDensity;
 
 void main() {
-	gl_FragColor = texture2D(texture, texCoord);
-#if LINEAR_FRAMEBUFFER
-	gl_FragColor.xyz *= gl_FragColor.xyz;
-#endif
-	gl_FragColor.xyz *= gl_FragColor.w; // premultiplied alpha
-	gl_FragColor *= color;
 	
-	vec4 fogColorPremuld = vec4(fogColor, 1.);
-	fogColorPremuld *= gl_FragColor.w;
-	gl_FragColor = mix(gl_FragColor, fogColorPremuld, fogDensity);
+	vec2 pos = positionAttribute;
 	
-	if(dot(gl_FragColor, vec4(1.)) < .002)
-		discard;
+	vec2 scrPos = pos * 2. - 1.;
+	
+	gl_Position = vec4(scrPos, 0.5, 1.);
+	
+	texCoord = pos;
 }
 

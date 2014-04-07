@@ -26,7 +26,9 @@ varying vec2 texCoord;
 uniform vec2 offset;
 
 vec4 doGamma(vec4 col) {
+#if !LINEAR_FRAMEBUFFER
 	col.xyz *= col.xyz;
+#endif
 	return col;
 }
 
@@ -51,7 +53,9 @@ void main() {
 #else
     v *= 0.25;
 #endif
+#if !LINEAR_FRAMEBUFFER
 	v.xyz = sqrt(v.xyz);
+#endif
 	
 	gl_FragColor = v;
 }
