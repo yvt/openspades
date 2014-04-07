@@ -459,11 +459,6 @@ namespace spades {
 						lastSingleBlockBuildSeqDone = true;
 						if(blockStocks > 0) {
 							// cannot build; invalid position.
-							if(listener &&
-							   this == world->GetLocalPlayer()) {
-								listener->
-								LocalPlayerBuildError(BuildFailureReason::InvalidPosition);
-							}
 						}
 					}else if((!OverlapsWithOneBlock(pendingPlaceBlockPos)) &&
 							 BoxDistanceToBlock(pendingPlaceBlockPos) < 3.f){
