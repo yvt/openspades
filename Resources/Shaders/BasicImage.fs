@@ -25,8 +25,9 @@ varying vec4 color;
 varying vec2 texCoord;
 
 void main() {
-	gl_FragColor = texture2D(texture, texCoord);
-	gl_FragColor.xyz *= gl_FragColor.w; // alpha premultiply
-	gl_FragColor *= color;
+	vec4 col = texture2D(texture, texCoord);
+	col.xyz *= col.w; // alpha premultiply
+	col *= color;
+	gl_FragColor = col;
 }
 
