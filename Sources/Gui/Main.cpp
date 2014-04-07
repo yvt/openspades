@@ -48,6 +48,15 @@
 #include <Core/MemoryStream.h>
 #include <Core/Bitmap.h>
 
+#ifdef __APPLE__
+#elif __unix
+
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#endif
+
+
 static const unsigned char splashImage[] = {
 	#include "SplashImage.inc"
 };
@@ -363,18 +372,43 @@ int main(int argc, char ** argv)
 		spades::FileManager::AddFileSystem
 		(new spades::DirectoryFileSystem("/usr/share/games/openspades/Resources", false));
 
-		if (getenv("XDG_DATA_HOME") == NULL) {
-			SPLog("XDG_DATA_HOME not defined. Falling back to ~/.local/share");
 
-			spades::FileManager::AddFileSystem
-			(new spades::DirectoryFileSystem(home+"/.local/share/openspades/Resources", true));
-		} else {
+		std::string xdg_data_home = home+"/.local/share";
+
+		if (getenv("XDG_DATA_HOME") == NULL) {
+			SPLog("XDG_DATA_HOME not defined. Assuming that XDG_DATA_HOME is ~/.local/share");
+		}
+		else {
 			std::string xdg_data_home = getenv("XDG_DATA_HOME");
 			SPLog("XDG_DATA_HOME is %s", xdg_data_home.c_str());
-
-			spades::FileManager::AddFileSystem
-			(new spades::DirectoryFileSystem(xdg_data_home+"/openspades/Resources", true));
 		}
+
+		struct stat info;
+
+		if ( stat((xdg_data_home+"/openspades").c_str(), &info ) != 0 ) {
+			if ( stat((home+"/.openspades").c_str(), &info ) != 0) { }
+			else if( info.st_mode & S_IFDIR ) {
+				SPLog("Openspades directory in XDG_DATA_HOME not found, though old directory exists. Trying to resolve compatibility problem.");
+
+				if (rename( (home+"/.openspades").c_str() , (xdg_data_home+"/openspades").c_str() ) != 0) {
+					SPLog("Failed to move old directory to new.");
+				} else {
+					SPLog("Successfully moved old directory.");
+
+					if (mkdir((home+"/.openspades").c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0) {
+						SDL_RWops *io = SDL_RWFromFile((home+"/.openspades/CONTENT_MOVED_TO_NEW_DIR").c_str(), "wb");
+						if (io != NULL) {
+							const char* text = ("Content of this directory moved to "+xdg_data_home+"/openspades").c_str();
+							io->write(io, text, strlen(text), 1);
+							io->close(io);
+						}
+					}
+				}
+			}
+		}
+
+		spades::FileManager::AddFileSystem
+		(new spades::DirectoryFileSystem(xdg_data_home+"/openspades/Resources", true));
 
 #endif
 
