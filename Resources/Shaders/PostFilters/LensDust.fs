@@ -69,7 +69,7 @@ void main() {
 	final += grain * 0.003;
 	
 	// non-linearize
-	final = sqrt(final);
+	final = sqrt(max(final, 0.));
 	
 	gl_FragColor = vec4(final, 1.);
 }
