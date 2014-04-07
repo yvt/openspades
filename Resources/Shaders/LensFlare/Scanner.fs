@@ -36,6 +36,10 @@ void main() {
 	rad = max(radius - 1. - rad, 0.);
 	val *= rad;
 	
+#if USE_HDR
+	val = clamp(val, 0., 1.);
+#endif
+	
 	gl_FragColor = vec4(vec3(val), 1.);
 }
 
