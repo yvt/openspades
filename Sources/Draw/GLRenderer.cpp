@@ -871,6 +871,12 @@ namespace spades {
 					handle = lensDustFilter->Filter(handle);
 				}
 				
+				// do r_fxaa before lens filter so that color aberration looks nice
+				if(r_fxaa){
+					GLProfiler profiler(device, "FXAA");
+					handle = GLFXAAFilter(this).Filter(handle);
+				}
+				
 				if(r_lens){
 					GLProfiler profiler(device, "Lens Filter");
 					handle = GLLensFilter(this).Filter(handle);
@@ -938,10 +944,6 @@ namespace spades {
 					smoothedFogColor = Mix(smoothedFogColor, fogColor, 0.002f);
 				}
 				
-				if(r_fxaa){
-					GLProfiler profiler(device, "FXAA");
-					handle = GLFXAAFilter(this).Filter(handle);
-				}
 			}
 			
 			if(r_srgb && r_srgb2D){

@@ -107,7 +107,7 @@ namespace spades {
 				
 				Player *player = world->GetLocalPlayer();
 				
-				def.blurVignette = .4f;
+				def.blurVignette = .0f;
 				
 				if(IsFollowing()){
 					int limit = 100;
@@ -289,7 +289,7 @@ namespace spades {
 						per *= per * per;
 						def.depthOfFieldNearRange = per * 13.f + .054f;
 						
-						def.blurVignette = .4f;
+						def.blurVignette = .0f;
 						
 						
 						

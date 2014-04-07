@@ -35,7 +35,8 @@ vec3 filter(vec3 col){
 void main() {
 	vec3 sum = vec3(0.), val;
 	
-#if 1
+#if 0
+	// accurate color abberation
 	val = vec3(0.0, 0.2, 1.0);
 	sum += val;
 	val *= filter(texture2D(texture, texCoord1.xy).xyz);
@@ -68,7 +69,13 @@ void main() {
 	
 	gl_FragColor.xyz *= 1. / sum;
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
+#elif 1
+	// faster!
+	gl_FragColor.x = texture2D(texture, texCoord2.xy).x;
+	gl_FragColor.y = texture2D(texture, texCoord3.xy).y;
+	gl_FragColor.z = texture2D(texture, texCoord4.xy).z;
 #else
+	// no color abberation effect
 	gl_FragColor = texture2D(texture, texCoord4);
 	gl_FragColor.w = 1.;
 #endif
@@ -78,7 +85,7 @@ void main() {
 	float tanValue = length(angleTan.xy);
 	float brightness = 1. / (1. + tanValue * tanValue);
 	brightness *= angleTan.z;
-	brightness = mix(brightness, 1., 0.8); // weaken
+	brightness = mix(brightness, 1., 0.5); // weaken
 	
 	gl_FragColor.xyz *= brightness;
 	
