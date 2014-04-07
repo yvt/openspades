@@ -33,7 +33,7 @@ float CockTorrance(vec3 eyeVec, vec3 lightVec, vec3 normal) {
 	if(LN <= 0.) return 0.;
 	
 	vec3 halfVec = lightVec + eyeVec;
-	halfVec = halfVec == vec3(0.) ? vec3(1., 0., 0.) : normalize(halfVec);
+	halfVec = dot(halfVec, halfVec) < .00000000001 ? vec3(1., 0., 0.) : normalize(halfVec);
 	
 	// distribution term
 	float distribution = dot(halfVec, normal);

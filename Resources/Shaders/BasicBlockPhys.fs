@@ -66,7 +66,16 @@ void main() {
 	// apply fog
 	gl_FragColor.xyz = mix(gl_FragColor.xyz, fogColor, fogDensity);
 	
+	gl_FragColor.xyz = max(gl_FragColor.xyz, 0.);
+	
 	// gamma correct
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
+	
+#if USE_HDR
+	// somehow denormal occurs, so detect it here and remove
+	// (denormal destroys screen)
+	if(gl_FragColor.xyz != gl_FragColor.xyz)
+		gl_FragColor.xyz = vec3(0.);
+#endif
 }
 
