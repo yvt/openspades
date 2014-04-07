@@ -30,6 +30,9 @@
 #include "IGLShadowMapRenderer.h"
 #include "GLShadowMapShader.h"
 #include "../Core/Stopwatch.h"
+#include <Core/Settings.h>
+
+SPADES_SETTING(r_highPrec, "");
 
 namespace spades {
 	namespace draw {
@@ -143,7 +146,18 @@ namespace spades {
 						name.c_str());
 			
 			GLShader *s = new GLShader(device, type);
-			s->AddSource(text);
+			
+			std::string finalSource;
+			
+			if((int)r_highPrec >= 2) {
+				finalSource += "#define USE_HDR 1\n";
+			}else{
+				finalSource += "#define USE_HDR 0\n";
+			}
+			
+			finalSource += text;
+			
+			s->AddSource(finalSource);
 			
 			Stopwatch sw;
 			s->Compile();

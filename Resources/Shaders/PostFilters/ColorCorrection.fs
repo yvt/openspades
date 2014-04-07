@@ -33,9 +33,20 @@ void main() {
 	
 	gl_FragColor.xyz *= tint;
 	
+#if USE_HDR
+	
+	vec3 filtered = smoothstep(0., 1., gl_FragColor.xyz);
+	vec3 temporal = gl_FragColor.xyz - 0.8;
+	filtered -= exp2(-7. * temporal * temporal) * 0.2;
+	
+	gl_FragColor.xyz = mix(gl_FragColor.xyz,
+						   max(filtered, vec3(0.)),
+						   enhancement);
+#else
 	gl_FragColor.xyz = mix(gl_FragColor.xyz,
 						   smoothstep(0., 1., gl_FragColor.xyz),
 						   enhancement);
+#endif
 	
 	vec3 gray = vec3(dot(gl_FragColor.xyz, vec3(1. / 3.)));
 	gl_FragColor.xyz = mix(gray, gl_FragColor.xyz, saturation);
