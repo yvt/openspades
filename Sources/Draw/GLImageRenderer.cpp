@@ -30,7 +30,10 @@ namespace spades{
 	namespace draw {
 		GLImageRenderer::GLImageRenderer(GLRenderer *r):
 		renderer(r),
-		device(r->GetGLDevice()){
+		device(r->GetGLDevice()),
+		invScreenWidthFactored(2.f / device->ScreenWidth()),
+		invScreenHeightFactored(-2.f / device->ScreenHeight()){
+			
 			SPADES_MARK_FUNCTION();
 			image = NULL;
 			
@@ -45,9 +48,9 @@ namespace spades{
 			textureCoordAttribute = new GLProgramAttribute
 			("textureCoordAttribute");
 			screenSize = new GLProgramUniform
-			("screenSize");
+			("invScreenSizeFactored");
 			textureSize = new GLProgramUniform
-			("textureSize");
+			("invTextureSize");
 			texture = new GLProgramUniform
 			("texture");
 			
@@ -104,10 +107,10 @@ namespace spades{
 			device->EnableVertexAttribArray((*colorAttribute)(), true);
 			device->EnableVertexAttribArray((*textureCoordAttribute)(), true);
 			
-			screenSize->SetValue((float)device->ScreenWidth(),
-								(float)device->ScreenHeight());
-			textureSize->SetValue(image->GetWidth(),
-								 image->GetHeight());
+			screenSize->SetValue(invScreenWidthFactored,
+								 invScreenHeightFactored);
+			textureSize->SetValue(image->GetInvWidth(),
+								  image->GetInvHeight());
 			texture->SetValue(0);
 			
 			device->DrawElements(IGLDevice::Triangles,

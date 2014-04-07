@@ -29,7 +29,9 @@ namespace spades {
 						 bool autoDelete): tex(texObj),
 		device(dev),
 		width(w), height(h),
-		autoDelete(autoDelete){
+		autoDelete(autoDelete),
+		invWidth(1.f / w),
+		invHeight(1.f / h){
 			SPADES_MARK_FUNCTION();
 			valid = true;
 		}

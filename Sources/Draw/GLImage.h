@@ -31,6 +31,7 @@ namespace spades {
 			IGLDevice *device;
 			IGLDevice::UInteger tex;
 			float width, height;
+			float invWidth, invHeight;
 			bool autoDelete;
 			bool valid;
 			void MakeSureValid();
@@ -45,6 +46,9 @@ namespace spades {
 			
 			virtual float GetWidth() { return width; }
 			virtual float GetHeight() { return height; }
+			
+			float GetInvWidth() { return invWidth; }
+			float GetInvHeight() { return invHeight; }
 			
 			void SubImage(Bitmap *bmp, int x, int y);
 			void Invalidate();
