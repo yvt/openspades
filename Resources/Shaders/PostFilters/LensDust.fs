@@ -73,6 +73,8 @@ void main() {
 	// non-linearize
 #if !LINEAR_FRAMEBUFFER
 	final = sqrt(max(final, 0.));
+#else
+	final = max(final, 0.);
 #endif
 	
 	gl_FragColor = vec4(final, 1.);

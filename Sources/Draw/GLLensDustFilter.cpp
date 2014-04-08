@@ -209,8 +209,8 @@ namespace spades {
 				
 				GLColorBuffer curLevel = levels[i].buffer;
 				
-				float sx = 1.f / curLevel.GetWidth();
-				float sy = 1.f / curLevel.GetHeight();
+				float sx = .7f / curLevel.GetWidth();
+				float sy = .7f / curLevel.GetHeight();
 				
 				for(int j = 0; j < 4; j++) {
 					if(i < (int)levels.size() - 1) {
