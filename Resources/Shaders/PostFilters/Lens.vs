@@ -55,9 +55,16 @@ void main() {
 	// view angle
 	angleTan.xy = scrPos * fov;
 	
-	// angleTan.z = brightness scale
+	// angleTan.z = brightness scale (to make brightness gain at corner (most darkest) become 1)
 	//            = 1 / cos(fovDiag)
 	angleTan.z = length(fov) * length(fov) + 1.;
-	angleTan.z = mix(angleTan.z, 1., 0.5); // weaken the brightness adjust
+	
+	// weaken the brightness adjust so that saturation doesn't occur
+#if USE_HDR
+	angleTan.z = mix(angleTan.z, 1., 0.6);
+#else
+	// saturation is likely to occur in LDR, so weaken more
+	angleTan.z = mix(angleTan.z, 1., 0.9);
+#endif
 }
 

@@ -29,13 +29,17 @@ varying vec2 texCoord4;
 
 // linearize gamma
 vec3 filter(vec3 col){
+#if !LINEAR_FRAMEBUFFER
 	return col * col;
+#else
+	return col;
+#endif
 }
 
 void main() {
 	vec3 sum = vec3(0.), val;
 	
-#if 0
+#if 1
 	// accurate color abberation
 	// FIXME: handle LINEAR_FRAMEBUFFER case
 	val = vec3(0.0, 0.2, 1.0);
@@ -69,12 +73,15 @@ void main() {
 	gl_FragColor.xyz += val;
 	
 	gl_FragColor.xyz *= 1. / sum;
+#if !LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
+#endif
+	
 #elif 1
 	// faster!
-	gl_FragColor.x = texture2D(texture, texCoord2.xy).x;
-	gl_FragColor.y = texture2D(texture, texCoord3.xy).y;
-	gl_FragColor.z = texture2D(texture, texCoord4.xy).z;
+	gl_FragColor.x = texture2D(texture, texCoord4.xy).x;
+	gl_FragColor.y = texture2D(texture, texCoord2.xy).y;
+	gl_FragColor.z = texture2D(texture, texCoord1.xy).z;
 #else
 	// no color abberation effect
 	gl_FragColor = texture2D(texture, texCoord4);
@@ -86,7 +93,14 @@ void main() {
 	float tanValue = length(angleTan.xy);
 	float brightness = 1. / (1. + tanValue * tanValue);
 	brightness *= angleTan.z;
-	brightness = mix(brightness, 1., 0.5); // weaken
+#if LINEAR_FRAMEBUFFER
+	brightness *= brightness;
+#endif
+#if USE_HDR
+	brightness = mix(brightness, 1., 0.7); // weaken
+#else
+	brightness = mix(brightness, 1., 0.9); // weaken
+#endif
 	
 	gl_FragColor.xyz *= brightness;
 	
