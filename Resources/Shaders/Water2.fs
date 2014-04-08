@@ -179,10 +179,14 @@ void main() {
         clamp(lodBias * .13 - .13, 0., 1.));
 	//reflective += .03;
 	
-	// fresnel refrection to sky
+	// reflection
+#if USE_VOLUMETRIC_FOG
+	// it's actually impossible for water reflection to cope with volumetric fog.
+	// fade the water reflection so that we don't see sharp boundary of water
+	refl *= att;
+#endif
 	gl_FragColor.xyz = mix(gl_FragColor.xyz,
-						   mix(refl * reflective,
-							   fogColor, fogDensity),
+						   refl,
 						   reflective);
 	
 	

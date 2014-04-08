@@ -33,6 +33,7 @@
 #include <Core/Settings.h>
 
 SPADES_SETTING(r_hdr, "");
+SPADES_SETTING(r_fogShadow, "");
 
 namespace spades {
 	namespace draw {
@@ -155,6 +156,11 @@ namespace spades {
 			}else{
 				finalSource += "#define USE_HDR 0\n";
 				finalSource += "#define LINEAR_FRAMEBUFFER 0\n";
+			}
+			if(r_fogShadow) {
+				finalSource += "#define USE_VOLUMETRIC_FOG 1\n";
+			}else{
+				finalSource += "#define USE_VOLUMETRIC_FOG 0\n";
 			}
 			
 			finalSource += text;
