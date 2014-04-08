@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include <OpenSpades.h>
@@ -47,6 +47,15 @@
 
 #include <Core/MemoryStream.h>
 #include <Core/Bitmap.h>
+
+#ifdef __APPLE__
+#elif __unix
+
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#endif
+
 
 static const unsigned char splashImage[] = {
 	#include "SplashImage.inc"
@@ -114,7 +123,7 @@ LONG WINAPI UnhandledExceptionProc( LPEXCEPTION_POINTERS lpEx )
 			buf[0] = 0;	//empty it, the file will now end up in the working directory :(
 		}
 		sprintf( fullBuf, "%sOpenSpadesCrash%d.dmp", buf, GetTickCount() );		//some sort of randomization.
-		HANDLE hFile = CreateFile( fullBuf, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ); 
+		HANDLE hFile = CreateFile( fullBuf, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
 		if( hFile != INVALID_HANDLE_VALUE ) {
 			MINIDUMP_EXCEPTION_INFORMATION mdei = {0};
 			mdei.ThreadId = GetCurrentThreadId();
@@ -137,7 +146,7 @@ LONG WINAPI UnhandledExceptionProc( LPEXCEPTION_POINTERS lpEx )
 #else
 
 class ThreadQuantumSetter {
-	
+
 };
 
 #endif
@@ -216,10 +225,10 @@ public:
 	window(nullptr),
 	surface(nullptr),
 	startupScreenRequested(false){
-		
+
 		spades::MemoryStream stream(reinterpret_cast<const char*>(splashImage), sizeof(splashImage));
 		bmp.Set(spades::Bitmap::Load(&stream), false);
-		
+
 		SDL_InitSubSystem(SDL_INIT_VIDEO|SDL_INIT_TIMER);
 		window = SDL_CreateWindow("OpenSpades Splash Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 								  bmp->GetWidth(), bmp->GetHeight(), SDL_WINDOW_BORDERLESS);
@@ -227,28 +236,28 @@ public:
 			SPLog("Creation of splash window failed.");
 			return;
 		}
-		
+
 		surface = SDL_GetWindowSurface(window);
 		if(surface == nullptr) {
 			SPLog("Creation of splash window surface failed.");
 			SDL_DestroyWindow(window);
 			return;
 		}
-		
+
 		// put splash image
 		auto *s = SDL_CreateRGBSurfaceFrom(bmp->GetPixels(), bmp->GetWidth(), bmp->GetHeight(),
 										   32, bmp->GetWidth() * 4,
 										   0xff, 0xff00, 0xff0000, 0);
 		SDL_BlitSurface(s, nullptr, surface, nullptr);
 		SDL_FreeSurface(s);
-		
+
 		SDL_UpdateWindowSurface(window);
 	}
-	
+
 	SDL_Window *GetWindow() {
 		return window;
 	}
-	
+
 	void PumpEvents() {
 		SDL_PumpEvents();
 		SDL_Event e;
@@ -267,11 +276,11 @@ public:
 			}
 		}
 	}
-	
+
 	bool IsStartupScreenRequested() {
 		return startupScreenRequested;
 	}
-	
+
 	~SplashWindow() {
 		if(window) SDL_DestroyWindow(window);
 	}
@@ -293,34 +302,34 @@ int main(int argc, char ** argv)
 #ifdef WIN32
 	SetUnhandledExceptionFilter( UnhandledExceptionProc );
 #endif
-	
+
 	std::unique_ptr<SplashWindow> splashWindow;
-	
+
 	try{
-		
+
 		// start recording backtrace
 		spades::reflection::Backtrace::StartBacktrace();
 		SPADES_MARK_FUNCTION();
-		
+
 		// show splash window
 		// NOTE: splash window uses image loader, which assumes backtrace is already initialized.
 		splashWindow.reset(new SplashWindow());
 		auto showSplashWindowTime = SDL_GetTicks();
 		auto pumpEvents = [&splashWindow] { splashWindow->PumpEvents(); };
-		
+
 		// initialize threads
 		spades::Thread::InitThreadSystem();
 		spades::DispatchQueue::GetThreadQueue()->MarkSDLVideoThread();
-		
+
 		SPLog("Package: " PACKAGE_STRING);
-		
+
 		// setup user-specific default resource directories
 #ifdef WIN32
 		static wchar_t buf[4096];
 		GetModuleFileNameW(NULL, buf, 4096);
 		std::wstring appdir = buf;
 		appdir = appdir.substr(0, appdir.find_last_of(L'\\')+1);
-		
+
 		if(SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, buf))){
 			std::wstring datadir = buf;
 			datadir += L"\\OpenSpades\\Resources";
@@ -328,6 +337,7 @@ int main(int argc, char ** argv)
 		}
 		
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(Utf8FromWString((appdir + L"Resources").c_str()), false));
+		
 		//fltk has a console window on windows (can disable while building, maybe use a builtin console for a later release?)
 		HWND hCon = GetConsoleWindow();
 		if( NULL != hCon ) {
@@ -338,7 +348,7 @@ int main(int argc, char ** argv)
 		std::string home = getenv("HOME");
 		spades::FileManager::AddFileSystem
 		(new spades::DirectoryFileSystem("./Resources", false));
-		
+
 		// OS X application is made of Bundle, which contains its own Resources directory.
 		{
 			char *baseDir = SDL_GetBasePath();
@@ -348,23 +358,66 @@ int main(int argc, char ** argv)
 				SDL_free(baseDir);
 			}
 		}
-		
+
 		spades::FileManager::AddFileSystem
 		(new spades::DirectoryFileSystem(home+"/Library/Application Support/OpenSpades/Resources", true));
 #else
 		std::string home = getenv("HOME");
+
 		spades::FileManager::AddFileSystem
 		(new spades::DirectoryFileSystem("./Resources", false));
-		
+
 		spades::FileManager::AddFileSystem
-		(new spades::DirectoryFileSystem(home+"/.openspades/Resources", true));
+		(new spades::DirectoryFileSystem("/usr/local/share/games/openspades/Resources", false));
+
+		spades::FileManager::AddFileSystem
+		(new spades::DirectoryFileSystem("/usr/share/games/openspades/Resources", false));
+
+
+		std::string xdg_data_home = home+"/.local/share";
+
+		if (getenv("XDG_DATA_HOME") == NULL) {
+			SPLog("XDG_DATA_HOME not defined. Assuming that XDG_DATA_HOME is ~/.local/share");
+		}
+		else {
+			std::string xdg_data_home = getenv("XDG_DATA_HOME");
+			SPLog("XDG_DATA_HOME is %s", xdg_data_home.c_str());
+		}
+
+		struct stat info;
+
+		if ( stat((xdg_data_home+"/openspades").c_str(), &info ) != 0 ) {
+			if ( stat((home+"/.openspades").c_str(), &info ) != 0) { }
+			else if( info.st_mode & S_IFDIR ) {
+				SPLog("Openspades directory in XDG_DATA_HOME not found, though old directory exists. Trying to resolve compatibility problem.");
+
+				if (rename( (home+"/.openspades").c_str() , (xdg_data_home+"/openspades").c_str() ) != 0) {
+					SPLog("Failed to move old directory to new.");
+				} else {
+					SPLog("Successfully moved old directory.");
+
+					if (mkdir((home+"/.openspades").c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0) {
+						SDL_RWops *io = SDL_RWFromFile((home+"/.openspades/CONTENT_MOVED_TO_NEW_DIR").c_str(), "wb");
+						if (io != NULL) {
+							const char* text = ("Content of this directory moved to "+xdg_data_home+"/openspades").c_str();
+							io->write(io, text, strlen(text), 1);
+							io->close(io);
+						}
+					}
+				}
+			}
+		}
+
+		spades::FileManager::AddFileSystem
+		(new spades::DirectoryFileSystem(xdg_data_home+"/openspades/Resources", true));
+
 #endif
-		
+
 		// start log output to SystemMessages.log
 		try{
 			spades::StartLog();
 		}catch(const std::exception& ex){
-			
+
 			SDL_InitSubSystem(SDL_INIT_VIDEO);
 			auto msg = spades::Format("Failed to start recording log because of the following error:\n{0}\n\n"
 									  "OpenSpades will continue to run, but any critical events are not logged.", ex.what());
@@ -375,11 +428,11 @@ int main(int argc, char ** argv)
 			}
 		}
 		SPLog("Log Started.");
-		
+
 		// load preferences.
 		spades::Settings::GetInstance()->Load();
 		pumpEvents();
-		
+
 		// dump CPU info (for debugging?)
 		{
 			spades::CpuID cpuid;
@@ -403,19 +456,19 @@ int main(int argc, char ** argv)
 			SPLog("%s", cpuid.GetMiscInfo().c_str());
 			SPLog("-------------------------");
 		}
-		
+
 		// register resource directory specified by Makefile (or something)
 #if defined(RESDIR_DEFINED) && !NDEBUG
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(RESDIR, false));
 #endif
-		
+
 		// search current file system for .pak files
 		{
 			std::vector<spades::IFileSystem*> fss;
 			std::vector<spades::IFileSystem*> fssImportant;
-			
+
 			std::vector<std::string> files = spades::FileManager::EnumFiles("");
-			
+
 			struct Comparator {
 				static int GetPakId(const std::string& str) {
 					if(str.size() >= 4 && str[0] == 'p' &&
@@ -437,18 +490,18 @@ int main(int argc, char ** argv)
 					}
 				}
 			};
-			
+
 			std::sort(files.begin(), files.end(), Comparator::Compare);
-			
+
 			for(size_t i = 0; i < files.size(); i++){
 				std::string name = files[i];
-				
+
 				// check extension
 				if(name.size() < 4 ||
 				   name.rfind(".pak") != name.size() - 4){
 					continue;
 				}
-				
+
 				if(spades::FileManager::FileExists(name.c_str())) {
 					spades::IStream *stream = spades::FileManager::OpenForReading(name.c_str());
 					spades::ZipFileSystem *fs = new spades::ZipFileSystem(stream);
@@ -469,13 +522,13 @@ int main(int argc, char ** argv)
 			}
 		}
 		pumpEvents();
-		
+
 		// initialize localization system
 		SPLog("Initializing localization system");
 		spades::LoadCurrentLocale();
 		_Tr("Main", "Localization System Loaded");
 		pumpEvents();
-		
+
 		// parse args
 		for(int i = 1; i < argc;) {
 			int ret = argsHandler(argc, argv, i);
@@ -484,17 +537,17 @@ int main(int argc, char ** argv)
 				i++;
 			}
 		}
-		
+
 		// initialize AngelScript
 		SPLog("Initializing script engine");
 		spades::ScriptManager::GetInstance();
 		pumpEvents();
-		
+
 		ThreadQuantumSetter quantumSetter;
 		(void)quantumSetter; // suppress "unused variable" warning
-		
+
 		SDL_InitSubSystem(SDL_INIT_VIDEO);
-		
+
 		// we want to show splash window at least for some time...
 		pumpEvents();
 		auto ticks = SDL_GetTicks();
@@ -502,52 +555,52 @@ int main(int argc, char ** argv)
 			SDL_Delay(showSplashWindowTime + 1500 - ticks);
 		}
 		pumpEvents();
-		
+
 		// everything is now ready!
 		if( !cg_autoConnect ) {
 			if(!((int)cl_showStartupWindow != 0 ||
 				 splashWindow->IsStartupScreenRequested())) {
 				splashWindow.reset();
-				
+
 				SPLog("Starting main screen");
 				spades::StartMainScreen();
 			}else{
 				splashWindow.reset();
-				
+
 				SPLog("Starting startup window");
 				::spades::gui::StartupScreen::Run();
 			}
 		} else {
 			splashWindow.reset();
-			
+
 			spades::ServerAddress host(cg_lastQuickConnectHost.CString(), (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076 );
 			spades::StartClient(host, cg_playerName);
 		}
-		
+
 		spades::Settings::GetInstance()->Flush();
 
 	}catch(const ExitRequestException&){
 		// user changed his mind.
 	}catch(const std::exception& ex) {
-		
+
 		try {
 			splashWindow.reset(nullptr);
 		}catch(...){
 		}
-		
+
 		std::string msg = ex.what();
 		msg = _Tr("Main", "A serious error caused OpenSpades to stop working:\n\n{0}\n\nSee SystemMessages.log for more details.", msg);
-		
+
 		SPLog("[!] Terminating due to the fatal error: %s", ex.what());
-		
+
 		SDL_InitSubSystem(SDL_INIT_VIDEO);
 		if(SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, _Tr("Main", "OpenSpades Fatal Error").c_str(), msg.c_str(), nullptr)) {
 			// showing dialog failed.
 			// TODO: do appropriate action
 		}
-		
+
 	}
-	
+
     return 0;
 }
 

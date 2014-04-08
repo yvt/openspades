@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=openspades %U
+Name=OpenSpades
+GenericName=Sandbox building and FPS videogame
+Comment=Open-source clone of Ace of Spades
+Icon=openspades.png
+Categories=Application;Network;Game;
+MimeType=x-scheme-handler/aos
