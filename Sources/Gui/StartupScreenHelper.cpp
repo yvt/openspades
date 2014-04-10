@@ -62,6 +62,7 @@ SPADES_SETTING(r_depthOfField, "");
 SPADES_SETTING(r_vsync, "");
 SPADES_SETTING(r_renderer, "");
 SPADES_SETTING(r_swUndersampling, "");
+SPADES_SETTING(r_hdr, "");
 
 namespace spades {
 	namespace gui {
@@ -399,6 +400,29 @@ namespace spades {
 					AddReport("GL_NV_conditional_render is NOT SUPPORTED",
 							  MakeVector4(1.f, 1.f, 0.5f, 1.f));
 					AddReport("  r_occlusionQuery is disabled.",
+							  MakeVector4(1.f, 1.f, 1.f, 0.7f));
+				}
+				
+				
+				if(extensions.find("GL_ARB_color_buffer_float") ==
+				   std::string::npos) {
+					if(r_hdr) {
+						r_hdr = 0;
+						SPLog("Disabling r_hdr: no GL_ARB_color_buffer_float");
+					}
+					incapableConfigs.insert
+					(std::make_pair
+					 ("r_hdr",
+					  [](std::string value) -> std::string {
+						  if(std::stoi(value)) {
+							  return "HDR Rendering is disabled because your video card doesn't support GL_ARB_color_buffer_float.";
+						  }else{
+							  return std::string();
+						  }
+					  }));
+					AddReport("GL_ARB_color_buffer_float is NOT SUPPORTED",
+							  MakeVector4(1.f, 1.f, 0.5f, 1.f));
+					AddReport("  r_hdr is disabled.",
 							  MakeVector4(1.f, 1.f, 1.f, 0.7f));
 				}
 				

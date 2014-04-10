@@ -20,6 +20,7 @@ msgstr ""
 #: ../../../Sources/Gui/Main.cpp:344 ../../../Sources/Gui/Main.cpp:369
 #: ../../../Sources/Gui/Main.cpp:368 ../../../Sources/Gui/Main.cpp:355
 #: ../../../Sources/Gui/Main.cpp:370 ../../../Sources/Gui/Main.cpp:466
+#: ../../../Sources/Gui/Main.cpp:529
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr ""
@@ -784,6 +785,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1038
 #: ../../Scripts/Gui/StartupScreen.as:1404
 #: ../../Scripts/Gui/StartupScreen.as:1405
+#: ../../Scripts/Gui/StartupScreen.as:1415
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr ""
@@ -826,61 +828,73 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1085
+#: ../../Scripts/Gui/StartupScreen.as:1092
 msgctxt "StartupScreen"
 msgid "Camera Blur"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1086
+#: ../../Scripts/Gui/StartupScreen.as:1093
 msgctxt "StartupScreen"
 msgid "Blurs the screen when you turns quickly."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1088
+#: ../../Scripts/Gui/StartupScreen.as:1098
 msgctxt "StartupScreen"
 msgid "Lens Scattering Filter"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1089
+#: ../../Scripts/Gui/StartupScreen.as:1099
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1092
+#: ../../Scripts/Gui/StartupScreen.as:1102
 msgctxt "StartupScreen"
 msgid "Lens Flare"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1093
+#: ../../Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
 msgid "The Sun causes lens flare."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1095
+#: ../../Scripts/Gui/StartupScreen.as:1105
 msgctxt "StartupScreen"
 msgid "Flares for Dynamic Lights"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1096
+#: ../../Scripts/Gui/StartupScreen.as:1106
 msgctxt "StartupScreen"
 msgid "Enables lens flare for light sources other than the Sun."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1098
+#: ../../Scripts/Gui/StartupScreen.as:1108
 msgctxt "StartupScreen"
 msgid "Color Correction"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1099
+#: ../../Scripts/Gui/StartupScreen.as:1109
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1101
+#: ../../Scripts/Gui/StartupScreen.as:1111
 msgctxt "StartupScreen"
 msgid "Depth of Field"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1102
+#: ../../Scripts/Gui/StartupScreen.as:1112
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
 msgstr ""
@@ -888,6 +902,9 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1104
 #: ../../Scripts/Gui/StartupScreen.as:1142
 #: ../../Scripts/Gui/StartupScreen.as:1164
+#: ../../Scripts/Gui/StartupScreen.as:1114
+#: ../../Scripts/Gui/StartupScreen.as:1152
+#: ../../Scripts/Gui/StartupScreen.as:1174
 msgctxt "StartupScreen"
 msgid "Low"
 msgstr ""
@@ -895,6 +912,9 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1105
 #: ../../Scripts/Gui/StartupScreen.as:1143
 #: ../../Scripts/Gui/StartupScreen.as:1165
+#: ../../Scripts/Gui/StartupScreen.as:1115
+#: ../../Scripts/Gui/StartupScreen.as:1153
+#: ../../Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid "Medium"
 msgstr ""
@@ -902,22 +922,28 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1106
 #: ../../Scripts/Gui/StartupScreen.as:1144
 #: ../../Scripts/Gui/StartupScreen.as:1166
+#: ../../Scripts/Gui/StartupScreen.as:1116
+#: ../../Scripts/Gui/StartupScreen.as:1154
+#: ../../Scripts/Gui/StartupScreen.as:1176
 msgctxt "StartupScreen"
 msgid "High"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1109
+#: ../../Scripts/Gui/StartupScreen.as:1119
 msgctxt "StartupScreen"
 msgid "Post-process"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1110
+#: ../../Scripts/Gui/StartupScreen.as:1120
 msgctxt "StartupScreen"
 msgid ""
 "Post-process modifies the image to make it look better and more realistic."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1117
+#: ../../Scripts/Gui/StartupScreen.as:1127
 msgctxt "StartupScreen"
 msgid ""
 "Particles|Low:Artifact occurs when a particle intersects other objects.|"
@@ -926,11 +952,13 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1127
+#: ../../Scripts/Gui/StartupScreen.as:1137
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1129
+#: ../../Scripts/Gui/StartupScreen.as:1139
 msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
@@ -938,21 +966,25 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1132
+#: ../../Scripts/Gui/StartupScreen.as:1142
 msgctxt "StartupScreen"
 msgid "Shadows"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1133
+#: ../../Scripts/Gui/StartupScreen.as:1143
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1135
+#: ../../Scripts/Gui/StartupScreen.as:1145
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1136
+#: ../../Scripts/Gui/StartupScreen.as:1146
 msgctxt "StartupScreen"
 msgid ""
 "Simulates shadow being casted to the fog particles using a super highly "
@@ -960,11 +992,13 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1139
+#: ../../Scripts/Gui/StartupScreen.as:1149
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1140
+#: ../../Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
 msgid ""
 "Uses more accurate approximation techniques to decide the brightness of "
@@ -972,16 +1006,19 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1145
+#: ../../Scripts/Gui/StartupScreen.as:1155
 msgctxt "StartupScreen"
 msgid "Ultra"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1148
+#: ../../Scripts/Gui/StartupScreen.as:1158
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1149
+#: ../../Scripts/Gui/StartupScreen.as:1159
 msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
@@ -989,6 +1026,7 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1159
+#: ../../Scripts/Gui/StartupScreen.as:1169
 msgctxt "StartupScreen"
 msgid ""
 "Water Shader|None:Water is rendered in the same way that normal blocks are "
@@ -997,16 +1035,19 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1169
+#: ../../Scripts/Gui/StartupScreen.as:1179
 msgctxt "StartupScreen"
 msgid "Shader Effects"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1169
+#: ../../Scripts/Gui/StartupScreen.as:1179
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1186
+#: ../../Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
 msgid ""
 "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
@@ -1015,18 +1056,21 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1398
 #: ../../Scripts/Gui/StartupScreen.as:1399
+#: ../../Scripts/Gui/StartupScreen.as:1409
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1407
 #: ../../Scripts/Gui/StartupScreen.as:1408
+#: ../../Scripts/Gui/StartupScreen.as:1418
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1411
 #: ../../Scripts/Gui/StartupScreen.as:1412
+#: ../../Scripts/Gui/StartupScreen.as:1422
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
@@ -1035,12 +1079,14 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1420
 #: ../../Scripts/Gui/StartupScreen.as:1421
+#: ../../Scripts/Gui/StartupScreen.as:1431
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1424
 #: ../../Scripts/Gui/StartupScreen.as:1425
+#: ../../Scripts/Gui/StartupScreen.as:1435
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -1052,12 +1098,15 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1462
 #: ../../Scripts/Gui/StartupScreen.as:1450
 #: ../../Scripts/Gui/StartupScreen.as:1474
+#: ../../Scripts/Gui/StartupScreen.as:1460
+#: ../../Scripts/Gui/StartupScreen.as:1484
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1439
 #: ../../Scripts/Gui/StartupScreen.as:1451
+#: ../../Scripts/Gui/StartupScreen.as:1461
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
@@ -1067,12 +1116,14 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1446
 #: ../../Scripts/Gui/StartupScreen.as:1458
+#: ../../Scripts/Gui/StartupScreen.as:1468
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1447
 #: ../../Scripts/Gui/StartupScreen.as:1459
+#: ../../Scripts/Gui/StartupScreen.as:1469
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1081,6 +1132,7 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1463
 #: ../../Scripts/Gui/StartupScreen.as:1475
+#: ../../Scripts/Gui/StartupScreen.as:1485
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1089,18 +1141,21 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1533
 #: ../../Scripts/Gui/StartupScreen.as:1551
+#: ../../Scripts/Gui/StartupScreen.as:1561
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1569
 #: ../../Scripts/Gui/StartupScreen.as:1587
+#: ../../Scripts/Gui/StartupScreen.as:1597
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1578
 #: ../../Scripts/Gui/StartupScreen.as:1596
+#: ../../Scripts/Gui/StartupScreen.as:1606
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr ""
@@ -1136,6 +1191,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:577
 #: ../../../Sources/Client/Client.cpp:595
 #: ../../../Sources/Client/Client.cpp:597
+#: ../../../Sources/Client/Client.cpp:592
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr ""
@@ -1150,6 +1206,8 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:605
 #: ../../../Sources/Client/Client.cpp:601
 #: ../../../Sources/Client/Client.cpp:607
+#: ../../../Sources/Client/Client.cpp:596
+#: ../../../Sources/Client/Client.cpp:602
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr ""
@@ -1190,6 +1248,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:621
 #: ../../../Sources/Client/Client.cpp:639
 #: ../../../Sources/Client/Client.cpp:641
+#: ../../../Sources/Client/Client.cpp:636
 msgctxt "Client"
 msgid "[Global] "
 msgstr ""
@@ -1321,7 +1380,7 @@ msgstr ""
 
 #: ../../../Sources/Gui/Main.cpp:401 ../../../Sources/Gui/Main.cpp:388
 #: ../../../Sources/Gui/Runner.cpp:62 ../../../Sources/Gui/Main.cpp:403
-#: ../../../Sources/Gui/Main.cpp:529
+#: ../../../Sources/Gui/Main.cpp:529 ../../../Sources/Gui/Main.cpp:592
 msgctxt "Main"
 msgid ""
 "A serious error caused OpenSpades to stop working:\n"
@@ -1333,7 +1392,7 @@ msgstr ""
 
 #: ../../../Sources/Gui/Main.cpp:406 ../../../Sources/Gui/Main.cpp:393
 #: ../../../Sources/Gui/Runner.cpp:66 ../../../Sources/Gui/Main.cpp:408
-#: ../../../Sources/Gui/Main.cpp:534
+#: ../../../Sources/Gui/Main.cpp:534 ../../../Sources/Gui/Main.cpp:597
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr ""
@@ -1346,6 +1405,7 @@ msgstr ""
 
 #: ../../../Sources/Client/NetClient.cpp:404
 #: ../../../Sources/Client/NetClient.cpp:409
+#: ../../../Sources/Client/NetClient.cpp:411
 msgctxt "NetClient"
 msgid "Not connected"
 msgstr ""
@@ -1357,6 +1417,8 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:1308
 #: ../../../Sources/Client/NetClient.cpp:486
 #: ../../../Sources/Client/NetClient.cpp:1316
+#: ../../../Sources/Client/NetClient.cpp:493
+#: ../../../Sources/Client/NetClient.cpp:1323
 msgctxt "NetClient"
 msgid "Loading snapshot"
 msgstr ""
@@ -1364,6 +1426,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:483
 #: ../../../Sources/Client/NetClient.cpp:494
 #: ../../../Sources/Client/NetClient.cpp:502
+#: ../../../Sources/Client/NetClient.cpp:509
 msgctxt "NetClient"
 msgid "Loading snapshot ({0}/{1})"
 msgstr ""
@@ -1374,6 +1437,8 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:533
 #: ../../../Sources/Client/NetClient.cpp:507
 #: ../../../Sources/Client/NetClient.cpp:541
+#: ../../../Sources/Client/NetClient.cpp:514
+#: ../../../Sources/Client/NetClient.cpp:548
 msgctxt "NetClient"
 msgid "Connected"
 msgstr ""
@@ -1387,6 +1452,9 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:518
 #: ../../../Sources/Client/NetClient.cpp:553
 #: ../../../Sources/Client/NetClient.cpp:606
+#: ../../../Sources/Client/NetClient.cpp:525
+#: ../../../Sources/Client/NetClient.cpp:560
+#: ../../../Sources/Client/NetClient.cpp:613
 msgctxt "NetClient"
 msgid "Still loading..."
 msgstr ""
@@ -1409,6 +1477,12 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:562
 #: ../../../Sources/Client/NetClient.cpp:610
 #: ../../../Sources/Client/NetClient.cpp:615
+#: ../../../Sources/Client/NetClient.cpp:528
+#: ../../../Sources/Client/NetClient.cpp:534
+#: ../../../Sources/Client/NetClient.cpp:564
+#: ../../../Sources/Client/NetClient.cpp:569
+#: ../../../Sources/Client/NetClient.cpp:617
+#: ../../../Sources/Client/NetClient.cpp:622
 msgctxt "NetClient"
 msgid "Error"
 msgstr ""
@@ -1416,6 +1490,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:665
 #: ../../../Sources/Client/NetClient.cpp:676
 #: ../../../Sources/Client/NetClient.cpp:684
+#: ../../../Sources/Client/NetClient.cpp:691
 msgctxt "NetClient"
 msgid "You are banned from this server."
 msgstr ""
@@ -1426,6 +1501,8 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:686
 #: ../../../Sources/Client/NetClient.cpp:688
 #: ../../../Sources/Client/NetClient.cpp:694
+#: ../../../Sources/Client/NetClient.cpp:695
+#: ../../../Sources/Client/NetClient.cpp:701
 msgctxt "NetClient"
 msgid "You were kicked from this server."
 msgstr ""
@@ -1433,6 +1510,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:671
 #: ../../../Sources/Client/NetClient.cpp:682
 #: ../../../Sources/Client/NetClient.cpp:690
+#: ../../../Sources/Client/NetClient.cpp:697
 msgctxt "NetClient"
 msgid "Incompatible client protocol version."
 msgstr ""
@@ -1440,6 +1518,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:673
 #: ../../../Sources/Client/NetClient.cpp:684
 #: ../../../Sources/Client/NetClient.cpp:692
+#: ../../../Sources/Client/NetClient.cpp:699
 msgctxt "NetClient"
 msgid "Server full"
 msgstr ""
@@ -1447,6 +1526,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:677
 #: ../../../Sources/Client/NetClient.cpp:688
 #: ../../../Sources/Client/NetClient.cpp:696
+#: ../../../Sources/Client/NetClient.cpp:703
 msgctxt "NetClient"
 msgid "Unknown Reason"
 msgstr ""
@@ -1563,11 +1643,13 @@ msgid "Last Used Tool"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1435
+#: ../../Scripts/Gui/StartupScreen.as:1445
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1439
+#: ../../Scripts/Gui/StartupScreen.as:1449
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr ""
@@ -1589,6 +1671,7 @@ msgstr ""
 
 #: ../../../Sources/Client/NetClient.cpp:468
 #: ../../../Sources/Client/NetClient.cpp:476
+#: ../../../Sources/Client/NetClient.cpp:483
 msgctxt "NetClient"
 msgid "Awaiting for state"
 msgstr ""
@@ -1596,4 +1679,28 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:685
 msgctxt "Preferences"
 msgid "Show Statistics"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1083
+msgctxt "StartupScreen"
+msgid "Linear HDR Rendering"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1085
+msgctxt "StartupScreen"
+msgid ""
+"Uses a number representation which allows wider dynamic range during "
+"rendering process. Additionally, this allows color calculation whose value "
+"is in linear correspondence with actual energy, that is, physically accurate "
+"blending can be achieved."
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1095
+msgctxt "StartupScreen"
+msgid "Lens Effect"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1096
+msgctxt "StartupScreen"
+msgid "Simulates distortion caused by a real camera lens."
 msgstr ""

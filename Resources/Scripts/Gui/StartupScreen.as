@@ -1078,6 +1078,13 @@ namespace spades {
 					StartupScreenConfig(ui, "r_radiosity"), "0", "1", _Tr("StartupScreen", "Global Illumination"),
 					_Tr("StartupScreen", 
 					"Enables a physically based simulation of light path for more realistic lighting.")));
+					
+				cfg.AddRow(StartupScreenConfigCheckItemEditor(ui, 
+					StartupScreenConfig(ui, "r_hdr"), "0", "1", _Tr("StartupScreen", "Linear HDR Rendering"),
+					_Tr("StartupScreen", 
+					"Uses a number representation which allows wider dynamic range during rendering process. "
+					"Additionally, this allows color calculation whose value is in linear correspondence with actual energy, "
+					"that is, physically accurate blending can be achieved.")));
 				
 				{
 					StartupScreenComplexConfig cplx;
