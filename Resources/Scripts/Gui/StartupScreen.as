@@ -1152,7 +1152,6 @@ namespace spades {
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "1|0|0|0"));
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1|1|0|0"));
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|0|1"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Ultra"), "1|1|1|1"));
 					
 					cfg.AddRow(StartupScreenConfigComplexItemEditor(ui, cplx,
 						_Tr("StartupScreen", "Direct Lights"), 
