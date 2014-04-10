@@ -38,6 +38,9 @@ attribute vec4 colorAttribute;
 // [nx, ny, nz]
 attribute vec3 normalAttribute;
 
+// [sx, sy, sz]
+attribute vec3 fixedPositionAttribute;
+
 varying vec2 ambientOcclusionCoord;
 varying vec4 color;
 varying vec3 fogDensity;
@@ -45,7 +48,7 @@ varying vec3 fogDensity;
 varying vec3 viewSpaceCoord;
 varying vec3 viewSpaceNormal;
 
-void PrepareForShadow(vec3 worldOrigin, vec3 normal);
+void PrepareForShadowForMap(vec3 vertexCoord, vec3 fixedVertexCoord, vec3 normal);
 vec4 FogDensity(float poweredLength);
 
 void main() {
@@ -70,13 +73,14 @@ void main() {
 	vec4 viewPos = viewMatrix * vertexPos;
 	float distance = dot(viewPos.xyz, viewPos.xyz);
 	fogDensity = FogDensity(distance).xyz;
+	
+	vec3 fixedPosition = chunkPosition;
+	fixedPosition += fixedPositionAttribute * 0.5;
+	fixedPosition += normalAttribute * 0.1;
 
 	vec3 normal = normalAttribute;
 	vec3 shadowVertexPos = vertexPos.xyz;
-	if(abs(normal.x) > .1) // avoid self shadowing
-		shadowVertexPos += normal * 0.01;
-	PrepareForShadow(shadowVertexPos, normal);
-	
+	PrepareForShadowForMap(shadowVertexPos, fixedPosition, normal);
 	
 	// used for diffuse lighting
 	viewSpaceCoord = viewPos.xyz;

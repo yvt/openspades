@@ -45,6 +45,9 @@ namespace spades {
 				
 				int8_t nx, ny, nz;
 				uint8_t pad2;
+				
+				int8_t sx, sy, sz;
+				uint8_t pad3;
 			};
 			
 			GLMapRenderer *renderer;

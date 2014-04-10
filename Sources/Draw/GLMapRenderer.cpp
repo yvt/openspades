@@ -213,11 +213,13 @@ namespace spades {
 			static GLProgramAttribute ambientOcclusionCoordAttribute("ambientOcclusionCoordAttribute");
 			static GLProgramAttribute colorAttribute("colorAttribute");
 			static GLProgramAttribute normalAttribute("normalAttribute");
+			static GLProgramAttribute fixedPositionAttribute("fixedPositionAttribute");
 			
 			positionAttribute(basicProgram);
 			ambientOcclusionCoordAttribute(basicProgram);
 			colorAttribute(basicProgram);
 			normalAttribute(basicProgram);
+			fixedPositionAttribute(basicProgram);
 			
 			device->EnableVertexAttribArray(positionAttribute(), true);
 			if(ambientOcclusionCoordAttribute() != -1)
@@ -225,6 +227,7 @@ namespace spades {
 			device->EnableVertexAttribArray(colorAttribute(), true);
 			if(normalAttribute() != -1)
 				device->EnableVertexAttribArray(normalAttribute(), true);
+			device->EnableVertexAttribArray(fixedPositionAttribute(), true);
 			
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(basicProgram);
@@ -259,6 +262,7 @@ namespace spades {
 			device->EnableVertexAttribArray(colorAttribute(), false);
 			if(normalAttribute() != -1)
 				device->EnableVertexAttribArray(normalAttribute(), false);
+			device->EnableVertexAttribArray(fixedPositionAttribute(), false);
 			
 			device->ActiveTexture(1);
 			device->BindTexture(IGLDevice::Texture2D, 0);

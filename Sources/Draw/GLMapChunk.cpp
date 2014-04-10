@@ -156,6 +156,11 @@ namespace spades {
 			inst.ny = ny;
 			inst.nz = nz;
 			
+			// fixed position to avoid self-shadow glitch
+			inst.sx = (x << 1) + ux + vx;
+			inst.sy = (y << 1) + uy + vy;
+			inst.sz = (z << 1) + uz + vz;
+			
 			unsigned int aoTexX = aoID & 15;
 			unsigned int aoTexY = aoID >> 4;
 			aoTexX *= 16; aoTexY *= 16;
@@ -347,27 +352,33 @@ namespace spades {
 			static GLProgramAttribute ambientOcclusionCoordAttribute("ambientOcclusionCoordAttribute");
 			static GLProgramAttribute colorAttribute("colorAttribute");
 			static GLProgramAttribute normalAttribute("normalAttribute");
+			static GLProgramAttribute fixedPositionAttribute("fixedPositionAttribute");
 			
 			positionAttribute(basicProgram);
 			ambientOcclusionCoordAttribute(basicProgram);
 			colorAttribute(basicProgram);
 			normalAttribute(basicProgram);
+			fixedPositionAttribute(basicProgram);
 			
 			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			device->VertexAttribPointer(positionAttribute(), 3,
 										IGLDevice::UnsignedByte, false,
-										sizeof(Vertex), (void *)0);
+										sizeof(Vertex), (void *)offsetof(Vertex, x));
 			if(ambientOcclusionCoordAttribute() != -1)
 				device->VertexAttribPointer(ambientOcclusionCoordAttribute(), 2,
 										IGLDevice::UnsignedShort, false,
-										sizeof(Vertex), (void *)4);
+										sizeof(Vertex), (void *)offsetof(Vertex, aoX));
 			device->VertexAttribPointer(colorAttribute(), 4,
 										IGLDevice::UnsignedByte, true,
-										sizeof(Vertex), (void *)8);
+										sizeof(Vertex), (void *)offsetof(Vertex, colorRed));
 			if(normalAttribute() != -1)
 				device->VertexAttribPointer(normalAttribute(), 3,
 											IGLDevice::Byte, false,
-											sizeof(Vertex), (void *)12);
+											sizeof(Vertex), (void *)offsetof(Vertex, nx));
+			
+			device->VertexAttribPointer(fixedPositionAttribute(), 3,
+										IGLDevice::Byte, false,
+										sizeof(Vertex), (void *)offsetof(Vertex, sx));
 			
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device->BindBuffer(IGLDevice::ElementArrayBuffer,
@@ -431,13 +442,13 @@ namespace spades {
 			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			device->VertexAttribPointer(positionAttribute(), 3,
 										IGLDevice::UnsignedByte, false,
-										sizeof(Vertex), (void *)0);
+										sizeof(Vertex), (void *)offsetof(Vertex, x));
 			device->VertexAttribPointer(colorAttribute(), 4,
 										IGLDevice::UnsignedByte, true,
-										sizeof(Vertex), (void *)8);
+										sizeof(Vertex), (void *)offsetof(Vertex, colorRed));
 			device->VertexAttribPointer(normalAttribute(), 3,
 										IGLDevice::Byte, false,
-										sizeof(Vertex), (void *)12);
+										sizeof(Vertex), (void *)offsetof(Vertex, nx));
 			
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device->BindBuffer(IGLDevice::ElementArrayBuffer,
