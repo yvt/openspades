@@ -80,6 +80,7 @@ SPADES_SETTING(r_srgb, "");
 SPADES_SETTING(r_srgb2D, "1");
 SPADES_SETTING(r_colorCorrection, "1");
 SPADES_SETTING(r_hdr, "");
+SPADES_SETTING(r_exposureValue, "0");
 
 SPADES_SETTING(r_debugTiming, "0");
 
@@ -946,7 +947,9 @@ namespace spades {
 					tint = Mix(tint, MakeVector3(1.f, 1.f, 1.f),
 							   0.2f);
 					tint *= 1.f / std::min(std::min(tint.x, tint.y), tint.z);
-					handle = GLColorCorrectionFilter(this).Filter(handle, tint);
+					
+					float exposure = powf(2.f, (float)r_exposureValue * 0.5f);
+					handle = GLColorCorrectionFilter(this).Filter(handle, tint * exposure);
 					
 					// update smoothed fog color
 					smoothedFogColor = Mix(smoothedFogColor, fogColor, 0.002f);
