@@ -504,6 +504,10 @@
 		E8CF041E1790D6D6000683D4 /* GLProgramManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF041C1790D6D5000683D4 /* GLProgramManager.cpp */; };
 		E8D0E5D218F3215000DE3BDB /* GLNonlinearizeFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5D018F3215000DE3BDB /* GLNonlinearizeFilter.cpp */; };
 		E8D0E5D318F321E300DE3BDB /* GLNonlinearizeFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5D018F3215000DE3BDB /* GLNonlinearizeFilter.cpp */; };
+		E8D0E5D818F9A57200DE3BDB /* Server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5D618F9A57200DE3BDB /* Server.cpp */; };
+		E8D0E5DB18F9A64400DE3BDB /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5D918F9A64400DE3BDB /* World.cpp */; };
+		E8D0E5DC18F9A64400DE3BDB /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5D918F9A64400DE3BDB /* World.cpp */; };
+		E8D0E5DD18F9A64A00DE3BDB /* Server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5D618F9A57200DE3BDB /* Server.cpp */; };
 		E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */; };
 		E8D88AB1179C3004004C2451 /* GLQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */; };
 		E8D88AB4179C45B7004C2451 /* GLLensFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AB2179C45B7004C2451 /* GLLensFilter.cpp */; };
@@ -1068,6 +1072,10 @@
 		E8CF041D1790D6D5000683D4 /* GLProgramManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgramManager.h; sourceTree = "<group>"; };
 		E8D0E5D018F3215000DE3BDB /* GLNonlinearizeFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLNonlinearizeFilter.cpp; sourceTree = "<group>"; };
 		E8D0E5D118F3215000DE3BDB /* GLNonlinearizeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLNonlinearizeFilter.h; sourceTree = "<group>"; };
+		E8D0E5D618F9A57200DE3BDB /* Server.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Server.cpp; sourceTree = "<group>"; };
+		E8D0E5D718F9A57200DE3BDB /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
+		E8D0E5D918F9A64400DE3BDB /* World.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
+		E8D0E5DA18F9A64400DE3BDB /* World.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = World.h; sourceTree = "<group>"; };
 		E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLColorCorrectionFilter.cpp; sourceTree = "<group>"; };
 		E8D2ACE217D704E600BE5490 /* GLColorCorrectionFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLColorCorrectionFilter.h; sourceTree = "<group>"; };
 		E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLQuadRenderer.cpp; sourceTree = "<group>"; };
@@ -1747,6 +1755,8 @@
 				E8CF03B3178EE38C000683D4 /* Imports */,
 				E8567E541792B119009D83E0 /* Audio */,
 				E8CF03AF178EE2CD000683D4 /* Core */,
+				E8D0E5D418F9A38200DE3BDB /* Game */,
+				E8D0E5D518F9A55A00DE3BDB /* Server */,
 				E8CF03A2178EDE56000683D4 /* Client */,
 				E8CF039E178EDDCF000683D4 /* Draw */,
 				E8CF039D178EDDBF000683D4 /* Gui */,
@@ -1856,6 +1866,24 @@
 				E8CF03C0178EE5B6000683D4 /* OpenGL.h */,
 			);
 			path = Imports;
+			sourceTree = "<group>";
+		};
+		E8D0E5D418F9A38200DE3BDB /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				E8D0E5D918F9A64400DE3BDB /* World.cpp */,
+				E8D0E5DA18F9A64400DE3BDB /* World.h */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		E8D0E5D518F9A55A00DE3BDB /* Server */ = {
+			isa = PBXGroup;
+			children = (
+				E8D0E5D618F9A57200DE3BDB /* Server.cpp */,
+				E8D0E5D718F9A57200DE3BDB /* Server.h */,
+			);
+			path = Server;
 			sourceTree = "<group>";
 		};
 		E8E0AF8B17993C2300C6B5A9 /* Client Main */ = {
@@ -2291,6 +2319,7 @@
 				E82E673318EA7972004DBA18 /* as_atomic.cpp in Sources */,
 				E82E673418EA7972004DBA18 /* as_builder.cpp in Sources */,
 				E82E673518EA7972004DBA18 /* as_bytecode.cpp in Sources */,
+				E8D0E5DD18F9A64A00DE3BDB /* Server.cpp in Sources */,
 				E82E673618EA7972004DBA18 /* as_callfunc.cpp in Sources */,
 				E82E673718EA7972004DBA18 /* as_callfunc_arm.cpp in Sources */,
 				E82E673818EA7972004DBA18 /* as_callfunc_mips.cpp in Sources */,
@@ -2439,6 +2468,7 @@
 				E82E67C618EA7972004DBA18 /* ClientUIHelper.cpp in Sources */,
 				E82E67C718EA7972004DBA18 /* Quake3Font.cpp in Sources */,
 				E82E67C818EA7972004DBA18 /* IFont.cpp in Sources */,
+				E8D0E5DC18F9A64400DE3BDB /* World.cpp in Sources */,
 				E82E67C918EA7972004DBA18 /* Fonts.cpp in Sources */,
 				E82E67CA18EA7972004DBA18 /* IGameMode.cpp in Sources */,
 				E82E67CB18EA7972004DBA18 /* CTFGameMode.cpp in Sources */,
@@ -2668,6 +2698,7 @@
 				E89A649417A1677F00FDA893 /* FallingBlock.cpp in Sources */,
 				E89A649717A1835A00FDA893 /* GunCasing.cpp in Sources */,
 				E89A649A17A2402900FDA893 /* IGLShadowMapRenderer.cpp in Sources */,
+				E8D0E5DB18F9A64400DE3BDB /* World.cpp in Sources */,
 				E80B286217A2462D0056179E /* GLShadowMapShader.cpp in Sources */,
 				E80B286517A24AEE0056179E /* GLBasicShadowMapRenderer.cpp in Sources */,
 				E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */,
@@ -2695,6 +2726,7 @@
 				E838D41F18AC726B00EE3C53 /* Strings.cpp in Sources */,
 				E87AB82318BB3958006B7D73 /* SdlImageReader.cpp in Sources */,
 				E80B28D317AFF7810056179E /* TCProgressView.cpp in Sources */,
+				E8D0E5D818F9A57200DE3BDB /* Server.cpp in Sources */,
 				E80B28DA17B39D160056179E /* ioapi.c in Sources */,
 				E80B28DB17B39D160056179E /* unzip.c in Sources */,
 				E80B28DE17B39EEF0056179E /* ZipFileSystem.cpp in Sources */,
