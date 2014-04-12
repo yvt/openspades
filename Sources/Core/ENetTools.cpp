@@ -35,7 +35,7 @@ namespace spades {
 		pos = 1;
 	}
 	
-	NetPacketReader::NetPacketReader(const std::vector<char> inData){
+	NetPacketReader::NetPacketReader(const std::vector<char>& inData){
 		data = inData;
 		pos = 1;
 	}
@@ -173,5 +173,9 @@ namespace spades {
 		data.insert(data.end(),
 					str.begin(),
 					str.end());
+	}
+	std::vector<char> NetPacketWriter::ToArray(bool move) {
+		if(move) return std::move(data);
+		return data;
 	}
 }

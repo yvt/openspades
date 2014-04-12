@@ -33,7 +33,7 @@ namespace spades {
 	public:
 		NetPacketReader(ENetPacket *packet);
 		
-		NetPacketReader(const std::vector<char> inData);
+		NetPacketReader(const std::vector<char>& inData);
 		unsigned int GetTypeRaw() {
 			return static_cast<unsigned int>(data[0]);
 		}
@@ -71,12 +71,16 @@ namespace spades {
 		
 		void Write(const std::string& str);
 		
+		std::vector<char> ToArray(bool move = true);
+		std::vector<char>& GetArray() { return data; }
+		
 		ENetPacket *CreatePacket(int flag = ENET_PACKET_FLAG_RELIABLE) {
 			return enet_packet_create(data.data(),
 									  data.size(),
 									  flag);
 		}
 	};
+	
 	
 	
 }

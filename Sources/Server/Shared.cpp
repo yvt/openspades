@@ -20,7 +20,32 @@
  */
 
 #include "Shared.h"
+#include <Core/ENetTools.h>
+#include <Core/Debug.h>
 
 namespace spades { namespace protocol {
+	
+	Packet *Packet::Decode() {
+		// TODO: implement!
+		return nullptr;
+	}
+	
+	ConnectRequestPacket *ConnectRequestPacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<ConnectRequestPacket> p(new ConnectRequestPacket());
+		NetPacketReader reader(data);
+		
+		return p.release();
+	}
+	
+	std::vector<char> ConnectRequestPacket::Generate() {
+		SPADES_MARK_FUNCTION();
+		
+		NetPacketWriter writer(TypeId);
+		SPNotImplemented();
+		
+		return std::move(writer.ToArray());
+	}
 	
 } }
