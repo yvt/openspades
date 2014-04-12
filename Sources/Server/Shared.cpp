@@ -1,5 +1,6 @@
 /*
  Copyright (c) 2013 yvt
+ based on code of pysnip (c) Mathias Kaerlev 2011-2012.
  
  This file is part of OpenSpades.
  
@@ -18,24 +19,8 @@
  
  */
 
-#pragma once
+#include "Shared.h"
 
-#include "Host.h"
-#include <memory>
-
-namespace spades { namespace server {
+namespace spades { namespace protocol {
 	
-	class Server: public HostListener {
-		std::unique_ptr<Host> host;
-	public:
-		Server();
-		virtual ~Server();
-		
-		
-		virtual void *ClientConnected(unsigned int uniqueId);
-		
-		virtual void ClientDisconnected(void *);
-	};
-
 } }
-

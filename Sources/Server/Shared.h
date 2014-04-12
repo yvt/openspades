@@ -1,5 +1,6 @@
 /*
  Copyright (c) 2013 yvt
+ based on code of pysnip (c) Mathias Kaerlev 2011-2012.
  
  This file is part of OpenSpades.
  
@@ -20,22 +21,18 @@
 
 #pragma once
 
-#include "Host.h"
-#include <memory>
-
-namespace spades { namespace server {
+namespace spades { namespace protocol {
 	
-	class Server: public HostListener {
-		std::unique_ptr<Host> host;
-	public:
-		Server();
-		virtual ~Server();
-		
-		
-		virtual void *ClientConnected(unsigned int uniqueId);
-		
-		virtual void ClientDisconnected(void *);
+	// disconnect reason code.
+	// when possible, server sends the reason text, and
+	// use DisconnectReason::Misc to disconnect the peer.
+	enum class DisconnectReason {
+		Unknown = 0,
+		InternalServerError = 1,
+		ServerFull = 2,
+		Misc = 3 // reason is already sent
 	};
-
+	
+	
 } }
 

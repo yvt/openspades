@@ -512,6 +512,8 @@
 		E8D0E5E118F9AA0B00DE3BDB /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5DE18F9AA0B00DE3BDB /* Host.cpp */; };
 		E8D0E5E518F9ABC300DE3BDB /* ENetTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5E318F9ABC300DE3BDB /* ENetTools.cpp */; };
 		E8D0E5E618F9ABC300DE3BDB /* ENetTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5E318F9ABC300DE3BDB /* ENetTools.cpp */; };
+		E8D0E5E918F9B6BB00DE3BDB /* Shared.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5E718F9B6BB00DE3BDB /* Shared.cpp */; };
+		E8D0E5EA18F9B6BB00DE3BDB /* Shared.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5E718F9B6BB00DE3BDB /* Shared.cpp */; };
 		E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */; };
 		E8D88AB1179C3004004C2451 /* GLQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */; };
 		E8D88AB4179C45B7004C2451 /* GLLensFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AB2179C45B7004C2451 /* GLLensFilter.cpp */; };
@@ -1084,6 +1086,8 @@
 		E8D0E5DF18F9AA0B00DE3BDB /* Host.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Host.h; sourceTree = "<group>"; };
 		E8D0E5E318F9ABC300DE3BDB /* ENetTools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ENetTools.cpp; sourceTree = "<group>"; };
 		E8D0E5E418F9ABC300DE3BDB /* ENetTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ENetTools.h; sourceTree = "<group>"; };
+		E8D0E5E718F9B6BB00DE3BDB /* Shared.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shared.cpp; sourceTree = "<group>"; };
+		E8D0E5E818F9B6BB00DE3BDB /* Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shared.h; sourceTree = "<group>"; };
 		E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLColorCorrectionFilter.cpp; sourceTree = "<group>"; };
 		E8D2ACE217D704E600BE5490 /* GLColorCorrectionFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLColorCorrectionFilter.h; sourceTree = "<group>"; };
 		E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLQuadRenderer.cpp; sourceTree = "<group>"; };
@@ -1893,6 +1897,8 @@
 				E8D0E5D718F9A57200DE3BDB /* Server.h */,
 				E8D0E5DE18F9AA0B00DE3BDB /* Host.cpp */,
 				E8D0E5DF18F9AA0B00DE3BDB /* Host.h */,
+				E8D0E5E718F9B6BB00DE3BDB /* Shared.cpp */,
+				E8D0E5E818F9B6BB00DE3BDB /* Shared.h */,
 			);
 			path = Server;
 			sourceTree = "<group>";
@@ -2398,6 +2404,7 @@
 				E82E676D18EA7972004DBA18 /* StdStream.cpp in Sources */,
 				E82E676E18EA7972004DBA18 /* SdlFileStream.cpp in Sources */,
 				E82E676F18EA7972004DBA18 /* DirectoryFileSystem.cpp in Sources */,
+				E8D0E5EA18F9B6BB00DE3BDB /* Shared.cpp in Sources */,
 				E82E677018EA7972004DBA18 /* DeflateStream.cpp in Sources */,
 				E82E677118EA7972004DBA18 /* MemoryStream.cpp in Sources */,
 				E82E677218EA7972004DBA18 /* ZipFileSystem.cpp in Sources */,
@@ -2671,6 +2678,7 @@
 				E82E66B318E9A35C004DBA18 /* Client_FPSCounter.cpp in Sources */,
 				E834F55317944779004EBE88 /* NetClient.cpp in Sources */,
 				E834F5561794BBD4004EBE88 /* Debug.cpp in Sources */,
+				E8D0E5E918F9B6BB00DE3BDB /* Shared.cpp in Sources */,
 				E834F5591794DCFD004EBE88 /* IGameMode.cpp in Sources */,
 				E834F55C1794DDA6004EBE88 /* CTFGameMode.cpp in Sources */,
 				E834F55F17950E44004EBE88 /* DeflateStream.cpp in Sources */,

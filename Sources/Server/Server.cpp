@@ -19,10 +19,29 @@
  */
 
 #include "Server.h"
+#include <Core/Debug.h>
+#include <Core/Settings.h>
+#include <Core/Exception.h>
 
 namespace spades { namespace server {
 	
-	// nothing here yet
+	Server::Server() {
+		SPNotImplemented();
+		
+		host.reset(new Host(this));
+	}
+	
+	Server::~Server() {
+		host.reset();
+	}
+	
+	void *Server::ClientConnected(unsigned int uniqueId) {
+		SPNotImplemented();
+	}
+	
+	void Server::ClientDisconnected(void *) {
+		
+	}
 	
 } }
 

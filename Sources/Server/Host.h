@@ -23,12 +23,27 @@
 
 namespace spades { namespace server {
 	
+	class HostListener {
+	public:
+		virtual ~HostListener() {}
+		
+		/** Called when an new client connected to the server.
+		 * Do not throw exception to reject the client because
+		 * the client cannot know the reason. */
+		virtual void *ClientConnected(unsigned int uniqueId) = 0;
+		
+		/** Called when a client has disconnected from the server. */
+		virtual void ClientDisconnected(void *) = 0;
+	};
 	
 	class Host {
 		ENetHost *host;
+		int numPeers;
+		HostListener *listener;
 	public:
-		Host();
+		Host(HostListener *);
 		~Host();
+		void DoEvents();
 	};
 	
 } }
