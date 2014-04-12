@@ -20,6 +20,7 @@
 
 #include "GLMapChunk.h"
 #include <algorithm>
+#include <cstddef>
 #include "GLMapRenderer.h"
 #include "IGLDevice.h"
 #include "GLProgramAttribute.h"
