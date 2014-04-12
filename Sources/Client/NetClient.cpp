@@ -41,6 +41,7 @@
 #include <enet/enet.h>
 #include <Core/CP437.h>
 #include <Core/Strings.h>
+#include <Core/ENetTools.h>
 
 SPADES_SETTING(cg_protocolVersion, "3");
 SPADES_SETTING(cg_unicode, "1");
@@ -118,104 +119,19 @@ namespace spades {
 			return CP437::Decode(s);
 		}
 		
-		class NetPacketReader {
+		class NetPacketReader : public spades::NetPacketReader {
 			std::vector<char> data;
 			size_t pos;
 		public:
-			NetPacketReader(ENetPacket *packet){
-				SPADES_MARK_FUNCTION();
-				
-				data.resize(packet->dataLength);
-				memcpy(data.data(), packet->data, packet->dataLength);
-				enet_packet_destroy(packet);
-				pos = 1;
-			}
+			NetPacketReader(ENetPacket *packet): spades::NetPacketReader(packet){}
+			NetPacketReader(const std::vector<char> inData): spades::NetPacketReader(inData){}
 			
-			NetPacketReader(const std::vector<char> inData){
-				data = inData;
-				pos = 1;
-			}
 			PacketType GetType() {
-				return (PacketType)data[0];
-			}
-			uint32_t ReadInt() {
-				SPADES_MARK_FUNCTION();
-				
-				uint32_t value = 0;
-				if(pos + 4 > data.size()){
-					SPRaise("Received packet truncated");
-				}
-				value |= ((uint32_t)(uint8_t)data[pos++]);
-				value |= ((uint32_t)(uint8_t)data[pos++]) << 8;
-				value |= ((uint32_t)(uint8_t)data[pos++]) << 16;
-				value |= ((uint32_t)(uint8_t)data[pos++]) << 24;
-				return value;
-			}
-			uint16_t ReadShort() {
-				SPADES_MARK_FUNCTION();
-				
-				uint32_t value = 0;
-				if(pos + 2 > data.size()){
-					SPRaise("Received packet truncated");
-				}
-				value |= ((uint32_t)(uint8_t)data[pos++]);
-				value |= ((uint32_t)(uint8_t)data[pos++]) << 8;
-				return (uint16_t)value;
-			}
-			uint8_t ReadByte() {
-				SPADES_MARK_FUNCTION();
-				
-				if(pos >= data.size()){
-					SPRaise("Received packet truncated");
-				}
-				return (uint8_t)data[pos++];
-			}
-			float ReadFloat() {
-				SPADES_MARK_FUNCTION();
-				union {
-					float f;
-					uint32_t v;
-				};
-				v = ReadInt();
-				return f;
-			}
-			
-			IntVector3 ReadIntColor() {
-				SPADES_MARK_FUNCTION();
-				IntVector3 col;
-				col.z = ReadByte();
-				col.y = ReadByte();
-				col.x = ReadByte();
-				return col;
-			}
-			
-			Vector3 ReadFloatColor() {
-				SPADES_MARK_FUNCTION();
-				Vector3 col;
-				col.z = ReadByte() / 255.f;
-				col.y = ReadByte() / 255.f;
-				col.x = ReadByte() / 255.f;
-				return col;
-			}
-			
-			std::vector<char> GetData() {
-				return data;
-			}
-			
-			std::string ReadData(size_t siz) {
-				if(pos + siz > data.size()){
-					SPRaise("Received packet truncated");
-				}
-				std::string s = std::string(data.data() + pos, siz);
-				pos += siz;
-				return s;
-			}
-			std::string ReadRemainingData() {
-				return std::string(data.data() + pos,
-								   data.size() - pos);
+				return static_cast<PacketType>(GetTypeRaw());
 			}
 			
 			std::string ReadString(size_t siz){
+				SPADES_MARK_FUNCTION_DEBUG();
 				// convert to C string once so that
 				// null-chars are removed
 				std::string s = ReadData(siz).c_str();
@@ -223,6 +139,7 @@ namespace spades {
 				return s;
 			}
 			std::string ReadRemainingString() {
+				SPADES_MARK_FUNCTION_DEBUG();
 				// convert to C string once so that
 				// null-chars are removed
 				std::string s = ReadRemainingData().c_str();
@@ -230,73 +147,21 @@ namespace spades {
 				return s;
 			}
 			
-			void DumpDebug() {
-#if 1
-				char buf[1024];
-				std::string str;
-				sprintf(buf, "Packet 0x%02x [len=%d]", (int)GetType(),
-					   (int)data.size());
-				str = buf;
-				int bytes = (int)data.size();
-				if(bytes > 64){
-					bytes = 64;
-				}
-				for(int i = 0; i < bytes; i++){
-					sprintf(buf, " %02x", (unsigned int)(unsigned char)data[i]);
-					str += buf;
-				}
-			
-				
-				SPLog("%s", str.c_str());
-#endif
-			}
 		};
 		
-		class NetPacketWriter {
-			std::vector<char> data;
+		class NetPacketWriter: public spades::NetPacketWriter {
 		public:
-			NetPacketWriter(PacketType type){
-				data.push_back(type);
-			}
+			NetPacketWriter(PacketType type):
+			spades::NetPacketWriter(static_cast<unsigned int>(type)){}
 			
-			void Write(uint8_t v){
-				SPADES_MARK_FUNCTION_DEBUG();
-				data.push_back(v);
-			}
-			void Write(uint16_t v){
-				SPADES_MARK_FUNCTION_DEBUG();
-				data.push_back((char)(v));
-				data.push_back((char)(v >> 8));
-			}
-			void Write(uint32_t v){
-				SPADES_MARK_FUNCTION_DEBUG();
-				data.push_back((char)(v));
-				data.push_back((char)(v >> 8));
-				data.push_back((char)(v >> 16));
-				data.push_back((char)(v >> 24));
-			}
-			void Write(float v){
-				SPADES_MARK_FUNCTION_DEBUG();
-				union {
-					float f; uint32_t i;
-				};
-				f = v;
-				Write(i);
-			}
-			void WriteColor(IntVector3 v){
-				Write((uint8_t)v.z);
-				Write((uint8_t)v.y);
-				Write((uint8_t)v.x);
-			}
-			
-			void Write(std::string str){
+			void WriteString(std::string str){
 				str = EncodeString(str);
 				data.insert(data.end(),
 							str.begin(),
 							str.end());
 			}
 			
-			void Write(std::string str, size_t fillLen){
+			void WriteString(std::string str, size_t fillLen){
 				str = EncodeString(str);
 				Write(str.substr(0, fillLen));
 				size_t sz = str.size();
@@ -304,12 +169,6 @@ namespace spades {
 					Write((uint8_t)0);
 					sz++;
 				}
-			}
-			
-			ENetPacket *CreatePacket(int flag = ENET_PACKET_FLAG_RELIABLE) {
-				return enet_packet_create(data.data(),
-										  data.size(),
-										  flag);
 			}
 		};
 		
@@ -1545,7 +1404,7 @@ namespace spades {
 			wri.Write((uint8_t)2); // TODO: change tool
 			wri.Write((uint32_t)kills);
 			wri.WriteColor(GetWorld()->GetTeam(team).color);
-			wri.Write(name, 16);
+			wri.WriteString(name, 16);
 			enet_peer_send(peer, 0, wri.CreatePacket());
 		}
 		
@@ -1747,7 +1606,7 @@ namespace spades {
 			NetPacketWriter wri(PacketTypeChatMessage);
 			wri.Write((uint8_t)GetLocalPlayer()->GetId());
 			wri.Write((uint8_t)(global?0:1));
-			wri.Write(text);
+			wri.WriteString(text);
 			wri.Write((uint8_t)0);
 			enet_peer_send(peer, 0, wri.CreatePacket());
 		}
@@ -1795,7 +1654,7 @@ namespace spades {
 			wri.Write((uint8_t)OpenSpades_VERSION_MAJOR);
 			wri.Write((uint8_t)OpenSpades_VERSION_MINOR);
 			wri.Write((uint8_t)OpenSpades_VERSION_REVISION);
-			wri.Write(VersionInfo::GetVersionInfo());
+			wri.WriteString(VersionInfo::GetVersionInfo());
 			SPLog("Sending version back.");
 			enet_peer_send(peer, 0, wri.CreatePacket());
 		}

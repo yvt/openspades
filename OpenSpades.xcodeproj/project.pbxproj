@@ -510,6 +510,8 @@
 		E8D0E5DD18F9A64A00DE3BDB /* Server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5D618F9A57200DE3BDB /* Server.cpp */; };
 		E8D0E5E018F9AA0B00DE3BDB /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5DE18F9AA0B00DE3BDB /* Host.cpp */; };
 		E8D0E5E118F9AA0B00DE3BDB /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5DE18F9AA0B00DE3BDB /* Host.cpp */; };
+		E8D0E5E518F9ABC300DE3BDB /* ENetTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5E318F9ABC300DE3BDB /* ENetTools.cpp */; };
+		E8D0E5E618F9ABC300DE3BDB /* ENetTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5E318F9ABC300DE3BDB /* ENetTools.cpp */; };
 		E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */; };
 		E8D88AB1179C3004004C2451 /* GLQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */; };
 		E8D88AB4179C45B7004C2451 /* GLLensFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AB2179C45B7004C2451 /* GLLensFilter.cpp */; };
@@ -1080,6 +1082,8 @@
 		E8D0E5DA18F9A64400DE3BDB /* World.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = World.h; sourceTree = "<group>"; };
 		E8D0E5DE18F9AA0B00DE3BDB /* Host.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Host.cpp; sourceTree = "<group>"; };
 		E8D0E5DF18F9AA0B00DE3BDB /* Host.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Host.h; sourceTree = "<group>"; };
+		E8D0E5E318F9ABC300DE3BDB /* ENetTools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ENetTools.cpp; sourceTree = "<group>"; };
+		E8D0E5E418F9ABC300DE3BDB /* ENetTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ENetTools.h; sourceTree = "<group>"; };
 		E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLColorCorrectionFilter.cpp; sourceTree = "<group>"; };
 		E8D2ACE217D704E600BE5490 /* GLColorCorrectionFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLColorCorrectionFilter.h; sourceTree = "<group>"; };
 		E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLQuadRenderer.cpp; sourceTree = "<group>"; };
@@ -1835,6 +1839,7 @@
 		E8CF03AF178EE2CD000683D4 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E8D0E5E218F9ABBB00DE3BDB /* Net */,
 				E8E44682179CC4A400BE8855 /* Media */,
 				E8E44681179CC49C00BE8855 /* I/O */,
 				E8E44680179CC48B00BE8855 /* System */,
@@ -1890,6 +1895,15 @@
 				E8D0E5DF18F9AA0B00DE3BDB /* Host.h */,
 			);
 			path = Server;
+			sourceTree = "<group>";
+		};
+		E8D0E5E218F9ABBB00DE3BDB /* Net */ = {
+			isa = PBXGroup;
+			children = (
+				E8D0E5E318F9ABC300DE3BDB /* ENetTools.cpp */,
+				E8D0E5E418F9ABC300DE3BDB /* ENetTools.h */,
+			);
+			name = Net;
 			sourceTree = "<group>";
 		};
 		E8E0AF8B17993C2300C6B5A9 /* Client Main */ = {
@@ -2452,6 +2466,7 @@
 				E82E67B018EA7972004DBA18 /* FallingBlock.cpp in Sources */,
 				E82E67B118EA7972004DBA18 /* GunCasing.cpp in Sources */,
 				E82E67B218EA7972004DBA18 /* Tracer.cpp in Sources */,
+				E8D0E5E618F9ABC300DE3BDB /* ENetTools.cpp in Sources */,
 				E82E67B318EA7972004DBA18 /* ClientPlayer.cpp in Sources */,
 				E82E67B418EA7972004DBA18 /* Client.cpp in Sources */,
 				E82E67B518EA7972004DBA18 /* Client_Input.cpp in Sources */,
@@ -2778,6 +2793,7 @@
 				E8B6B6AF17DE27B500E35523 /* as_scriptengine.cpp in Sources */,
 				E8B6B6B017DE27B500E35523 /* as_scriptfunction.cpp in Sources */,
 				E8B6B6B117DE27B500E35523 /* as_scriptnode.cpp in Sources */,
+				E8D0E5E518F9ABC300DE3BDB /* ENetTools.cpp in Sources */,
 				E8B6B6B217DE27B500E35523 /* as_scriptobject.cpp in Sources */,
 				E8B6B6B317DE27B500E35523 /* as_string.cpp in Sources */,
 				E8FE748C18CC6AB800291338 /* Client_Input.cpp in Sources */,
