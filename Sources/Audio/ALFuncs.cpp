@@ -32,6 +32,8 @@ SPADES_SETTING(s_alDriver, "OpenAL32.dll");
 SPADES_SETTING(s_alDriver, "libopenal.so");
 #endif
 
+SPADES_SETTING(s_alErrorFatal, "1");
+
 namespace al{
 
 	LPALENABLE qalEnable;
@@ -329,7 +331,21 @@ namespace al{
 		ALenum e;
 		e = qalGetError();
 		if(e != AL_NO_ERROR) {
-			SPRaise("OpenAL error %d: %s", (int)e, DescribeError(e));
+			if(s_alErrorFatal)
+				SPRaise("OpenAL error %d: %s", (int)e, DescribeError(e));
+			else
+				SPLog("OpenAL error %d: %s", (int)e, DescribeError(e));
+		}
+	}
+	
+	void CheckError(const char *source, const char *fun, int line){
+		ALenum e;
+		e = qalGetError();
+		if(e != AL_NO_ERROR) {
+			if(s_alErrorFatal)
+				SPRaise("[%s:%d] : %s : OpenAL error %d: %s", source, line, fun, (int)e, DescribeError(e));
+			else
+				SPLog("[%s:%d] : %s : OpenAL error %d: %s", source, line, fun, (int)e, DescribeError(e));
 		}
 	}
 }
