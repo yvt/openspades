@@ -24,6 +24,7 @@
 #include <vector>
 #include <Core/Debug.h>
 #include <Core/TMPUtils.h>
+#include <memory>
 
 namespace spades { namespace protocol {
 	

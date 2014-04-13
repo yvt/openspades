@@ -31,12 +31,12 @@ namespace spades { namespace protocol {
 		PacketType type;
 	public:
 		constexpr PacketTypeFinder(PacketType type): type(type) {}
-		template<class T> constexpr bool evaluate() const { return type == T::Type; }
+		template<class T> inline constexpr bool evaluate() const { return type == T::Type; }
 	};
 	class PacketTypeToDecoder {
 	public:
-		template<class T> constexpr PacketDecodeFuncType evaluate() const { return &T::Decode; }
-		constexpr PacketDecodeFuncType not_found() const { return nullptr; }
+		template<class T> inline constexpr PacketDecodeFuncType evaluate() const { return &T::Decode; }
+		inline constexpr PacketDecodeFuncType not_found() const { return nullptr; }
 	};
 	
 	

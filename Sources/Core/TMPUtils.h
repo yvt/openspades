@@ -8,6 +8,17 @@
 #include <iostream>
 #include <iterator>
 
+#define HAS_CONSTEXPR 1
+
+#ifdef _MSC_VER
+#undef HAS_CONSTEXPR
+#define HAS_CONSTEXPR 0
+#endif
+
+#if !HAS_CONSTEXPR
+#define constexpr
+#endif
+
 namespace stmp {
 	
 	
@@ -81,9 +92,9 @@ namespace stmp {
 		Predicate pred;
 		ResultMap func;
 	public:
-		constexpr find_type_list(const Predicate& pred, const ResultMap& func):
+		inline constexpr find_type_list(const Predicate& pred, const ResultMap& func):
 		pred(pred), func(func) {}
-		constexpr auto evaluate() const -> decltype(func.template evaluate<typename List::hd>()) {
+		inline constexpr auto evaluate() const -> decltype(func.template evaluate<typename List::hd>()) {
 			return pred.template evaluate<typename List::hd>() ?
 			func.template evaluate<typename List::hd>() :
 			find_type_list<Predicate, ResultMap, typename List::tl>(pred, func).evaluate();
@@ -94,9 +105,9 @@ namespace stmp {
 	class find_type_list<Predicate, ResultMap, type_list_null> {
 		ResultMap func;
 	public:
-		constexpr find_type_list(const Predicate&, const ResultMap& func):
+		inline constexpr find_type_list(const Predicate&, const ResultMap& func):
 		func(func) {}
-		constexpr auto evaluate() const -> decltype(func.not_found()) {
+		inline constexpr auto evaluate() const -> decltype(func.not_found()) {
 			return func.not_found();
 		}
 	};
@@ -114,10 +125,10 @@ namespace stmp {
 			static const int half = len >> 1;
 			part<begin, half> first;
 			part<begin + half, len - half> second;
-			constexpr part(const TGen& gen):
+			inline constexpr part(const TGen& gen):
 			first(gen), second(gen) { }
 			
-			constexpr const T& get(std::size_t index) const {
+			inline constexpr const T& get(std::size_t index) const {
 				return index < begin + len ? first.get(index) : second.get(index);
 			}
 		};
@@ -125,20 +136,20 @@ namespace stmp {
 		template<std::size_t index>
 		struct part<index, 1>{
 			T e0;
-			constexpr part(const TGen& gen):
+			inline constexpr part(const TGen& gen):
 			e0(gen[index])
 			{ }
-			constexpr const T& get(std::size_t) const { return e0; }
+			inline constexpr const T& get(std::size_t) const { return e0; }
 		};
 		
 		template<std::size_t index>
 		struct part<index, 2>{
 			T e0, e1;
-			constexpr part(const TGen& gen):
+			inline constexpr part(const TGen& gen):
 			e0(gen[index]), e1(gen[index + 1])
 			{ }
 			
-			constexpr const T& get(std::size_t i) const {
+			inline constexpr const T& get(std::size_t i) const {
 				return i <= index ? e0 : e1 ;
 			}
 		};
@@ -146,14 +157,14 @@ namespace stmp {
 		template<std::size_t index>
 		struct part<index, 0>{
 			static_assert(tableLen == 0, "len of a part became zero");
-			constexpr part(const TGen&) { }
+			inline constexpr part(const TGen&) { }
 		};
 		
 		
 		part<0, tableLen> parts;
 		
 	public:
-		constexpr static_table(const TGen& gen):
+		inline constexpr static_table(const TGen& gen):
 		parts(gen)
 		{ }
 		
@@ -183,11 +194,11 @@ namespace stmp {
 	}
 	
 	class example_static_table_generator {
-		constexpr float smoothstep(float v) const {
+		inline constexpr float smoothstep(float v) const {
 			return v * v * (3.f - 2.f * v);
 		}
 	public:
-		constexpr float operator [](std::size_t index) const {
+		inline constexpr float operator [](std::size_t index) const {
 			return smoothstep( static_cast<float>(index) / 15.f );
 		}
 	};
