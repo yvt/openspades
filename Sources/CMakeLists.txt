@@ -21,6 +21,7 @@ file(GLOB POLY2TRI_COMMON_FILES poly2tri/common/*.cc poly2tri/common/*.h)
 file(GLOB POLY2TRI_SWEEP_FILES poly2tri/sweep/*.cc poly2tri/sweep/*.h)
 file(GLOB SCRIPTBINDING_FILES ScriptBindings/*.cpp ScriptBindings/*.h)
 file(GLOB UNZIP_FILES unzip/*.c unzip/*.h)
+file(GLOB CRYPTOPP_FILES CryptoPP/*.c CryptoPP/*.h)
 
 add_subdirectory(AngelScript/projects/cmake)
 add_subdirectory(AngelScript/projects/cmake_addons)
@@ -41,7 +42,7 @@ if(WIN32)
 endif()
 
 add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${SERVER_FILES} ${GAME_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${GUI_FILES}
-	${IMPORTS_FILES} ${KISS_FILES} ${JSON_FILES} ${JSON_INCLUDE} ${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES} ${UNZIP_FILES} ${SCRIPTBINDING_FILES} ${RESOURCE_FILES})
+	${IMPORTS_FILES} ${KISS_FILES} ${JSON_FILES} ${JSON_INCLUDE} ${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES} ${UNZIP_FILES} ${CRYPTOPP_FILES} ${SCRIPTBINDING_FILES} ${RESOURCE_FILES})
 set_target_properties(OpenSpades PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -89,6 +90,7 @@ source_group("libs\\poly2tri\\common" FILES ${POLY2TRI_COMMON_FILES})
 source_group("libs\\poly2tri\\sweep" FILES ${POLY2TRI_SWEEP_FILES})
 source_group("ScriptBindings" FILES ${SCRIPTBINDING_FILES})
 source_group("libs\\unzip" FILES ${UNZIP_FILES})
+source_group("libs\\cryptopp" FILES ${CRYPTOPP_FILES})
 
 
 target_link_libraries(OpenSpades ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS})
