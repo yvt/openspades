@@ -1088,6 +1088,7 @@
 		E8D0E5E418F9ABC300DE3BDB /* ENetTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ENetTools.h; sourceTree = "<group>"; };
 		E8D0E5E718F9B6BB00DE3BDB /* Shared.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shared.cpp; sourceTree = "<group>"; };
 		E8D0E5E818F9B6BB00DE3BDB /* Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shared.h; sourceTree = "<group>"; };
+		E8D0E5EB18FA630100DE3BDB /* TMPUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TMPUtils.h; sourceTree = "<group>"; };
 		E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLColorCorrectionFilter.cpp; sourceTree = "<group>"; };
 		E8D2ACE217D704E600BE5490 /* GLColorCorrectionFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLColorCorrectionFilter.h; sourceTree = "<group>"; };
 		E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLQuadRenderer.cpp; sourceTree = "<group>"; };
@@ -1868,6 +1869,7 @@
 				E890F30F187046990090AAB8 /* CP437.h */,
 				E838D41D18AC726B00EE3C53 /* Strings.cpp */,
 				E838D41E18AC726B00EE3C53 /* Strings.h */,
+				E8D0E5EB18FA630100DE3BDB /* TMPUtils.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";

@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <Core/Debug.h>
+#include <Core/TMPUtils.h>
 
 namespace spades { namespace protocol {
 	
@@ -48,14 +49,17 @@ namespace spades { namespace protocol {
 	
 	class ConnectRequestPacket;
 	
-	class PacketVisitor {
+	using PacketClassList = stmp::make_type_list
+	<
+	ConnectRequestPacket
+	>::list;
+	
+	class PacketVisitor : public stmp::visitor_generator<PacketClassList> {
 	public:
-		virtual void Visit(ConnectRequestPacket&) = 0;
 	};
 	
-	class ConstPacketVisitor {
+	class ConstPacketVisitor : public stmp::const_visitor_generator<PacketClassList> {
 	public:
-		virtual void Visit(const ConnectRequestPacket&) = 0;
 	};
 	
 	class Packet {
@@ -68,7 +72,7 @@ namespace spades { namespace protocol {
 		bool CanServerSend() { return GetUsage() != PacketUsage::ClientOnly; }
 		bool CanClientSend() { return GetUsage() != PacketUsage::ServerOnly; }
 		virtual PacketType GetType() = 0;
-		static Packet *Decode();
+		static Packet *Decode(const std::vector<char>&);
 	};
 	
 	template<class T, PacketUsage usage, PacketType type>
@@ -81,19 +85,19 @@ namespace spades { namespace protocol {
 	public:
 		
 		// compile-time constants
-		const bool IsServerPacket = usage != PacketUsage::ClientOnly;
-		const bool IsClientPacket = usage != PacketUsage::ServerOnly;
-		const PacketUsage Usage = usage;
-		const PacketType Type = type;
-		const unsigned int TypeId = static_cast<unsigned int>(type);
+		static const bool IsServerPacket = usage != PacketUsage::ClientOnly;
+		static const bool IsClientPacket = usage != PacketUsage::ServerOnly;
+		static const PacketUsage Usage = usage;
+		static const PacketType Type = type;
+		static const unsigned int TypeId = static_cast<unsigned int>(type);
 		
 		virtual void Accept(PacketVisitor& visitor) {
 			SPADES_MARK_FUNCTION();
-			visitor.Visit(static_cast<T&>(*this));
+			visitor.visit(static_cast<T&>(*this));
 		}
 		virtual void Accept(ConstPacketVisitor& visitor) const {
 			SPADES_MARK_FUNCTION();
-			visitor.Visit(static_cast<const T&>(*this));
+			visitor.visit(static_cast<const T&>(*this));
 		}
 		virtual PacketUsage GetUsage() { return usage; }
 		virtual PacketType GetType() { return type; }
@@ -103,7 +107,7 @@ namespace spades { namespace protocol {
 	class ConnectRequestPacket : public BasePacket
 	<ConnectRequestPacket, PacketUsage::ClientOnly, PacketType::ConnectRequest> {
 	public:
-		static ConnectRequestPacket *Decode(const std::vector<char>&);
+		static Packet *Decode(const std::vector<char>&);
 		virtual ~ConnectRequestPacket() {}
 		virtual std::vector<char> Generate();
 		
