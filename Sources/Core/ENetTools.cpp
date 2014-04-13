@@ -21,6 +21,7 @@
 #include "ENetTools.h"
 #include <Core/Debug.h>
 #include <Core/Exception.h>
+#include <string.h>
 
 namespace spades {
 	
