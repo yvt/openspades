@@ -74,6 +74,7 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
       **note**: use `~/.openspades/Resources` in old releases.
 
    * If you compiling straight from source (git clone):
+
       All needed resources would be downloaded while `make install`, so no need to worry.
 
       If you didn't launched `make install`, you can install resources manually. 
