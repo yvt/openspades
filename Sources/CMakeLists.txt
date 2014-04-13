@@ -21,7 +21,7 @@ file(GLOB POLY2TRI_COMMON_FILES poly2tri/common/*.cc poly2tri/common/*.h)
 file(GLOB POLY2TRI_SWEEP_FILES poly2tri/sweep/*.cc poly2tri/sweep/*.h)
 file(GLOB SCRIPTBINDING_FILES ScriptBindings/*.cpp ScriptBindings/*.h)
 file(GLOB UNZIP_FILES unzip/*.c unzip/*.h)
-file(GLOB CRYPTOPP_FILES CryptoPP/*.c CryptoPP/*.h)
+file(GLOB CRYPTOPP_FILES CryptoPP/*.cpp CryptoPP/*.h)
 
 add_subdirectory(AngelScript/projects/cmake)
 add_subdirectory(AngelScript/projects/cmake_addons)
