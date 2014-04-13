@@ -36,12 +36,14 @@
 
 SPADES_SETTING(s_maxPolyphonics, "96");
 SPADES_SETTING(s_eax, "1");
+SPADES_SETTING(s_alPreciseErrorCheck, "1");
 
 //lm: seems to be missing for me..
 #ifndef ALC_ALL_DEVICES_SPECIFIER
 #define ALC_ALL_DEVICES_SPECIFIER      0x1013
 #endif
 
+#define ALCheckErrorPrecise() if(s_alPreciseErrorCheck)ALCheckError()
 
 namespace spades {
 	namespace audio {
@@ -66,6 +68,7 @@ namespace spades {
 				SPADES_MARK_FUNCTION();
 				
 				al::qalDeleteBuffers(1, &handle);
+				ALCheckErrorPrecise();
 			}
 		public:
 			ALuint GetHandle() {
@@ -119,11 +122,11 @@ namespace spades {
 				format = alFormat;
 				
 				al::qalGenBuffers(1, &handle);
-				al::CheckError();
+				ALCheckError();
 				al::qalBufferData(handle, alFormat,
 								  bytes.data(), bytes.size(),
 								  audioStream->GetSamplingFrequency());
-				al::CheckError();
+				ALCheckError();
 				
 				
 			}
@@ -160,20 +163,23 @@ namespace spades {
 					SPADES_MARK_FUNCTION();
 					
 					al::qalGenSources(1, &handle);
-					al::CheckError();
+					ALCheckError();
 				}
 				
 				~ALSrc(){
 					SPADES_MARK_FUNCTION();
 					
 					al::qalDeleteSources(1, &handle);
+					ALCheckErrorPrecise();
 				}
 				
 				void Terminate() {
 					SPADES_MARK_FUNCTION();
 					
 					al::qalSourceStop(handle);
+					ALCheckErrorPrecise();
 					al::qalSourcei(handle, AL_BUFFER, 0);
+					ALCheckError();
 				}
 				
 				bool IsPlaying() {
@@ -181,10 +187,12 @@ namespace spades {
 					
 					ALint value;
 					al::qalGetSourcei(handle, AL_BUFFER, &value);
+					ALCheckError();
 					if(value == 0)
 						return false;
 					
 					al::qalGetSourcei(handle, AL_SOURCE_STATE, &value);
+					ALCheckError();
 					if(value == AL_STOPPED)
 						return false;
 					return true;
@@ -192,12 +200,15 @@ namespace spades {
 				
 				// must be called
 				void SetParam(const client::AudioParam& param){
-					SPADES_MARK_FUNCTION_DEBUG();
+					SPADES_MARK_FUNCTION();
 					
 					al::qalSourcef(handle, AL_PITCH, param.pitch);
+					ALCheckErrorPrecise();
 					al::qalSourcef(handle, AL_GAIN, param.volume);
+					ALCheckErrorPrecise();
 					al::qalSourcef(handle, AL_REFERENCE_DISTANCE, param.referenceDistance);
 					
+					ALCheckError();
 					this->param = param;
 				}
 				
@@ -208,15 +219,21 @@ namespace spades {
 					ALfloat pos[] = {v.x, v.y, v.z};
 					ALfloat vel[] = {0, 0, 0};
 					al::qalSourcefv(handle, AL_POSITION, pos);
+					ALCheckErrorPrecise();
 					al::qalSourcefv(handle, AL_VELOCITY, vel);
+					ALCheckErrorPrecise();
 					al::qalSourcei(handle, AL_SOURCE_RELATIVE, local ? AL_TRUE:AL_FALSE);
+					ALCheckErrorPrecise();
 					al::qalSourcef(handle, AL_ROLLOFF_FACTOR, (local || stereo) ? 0.f : 1.f);
+					ALCheckErrorPrecise();
 					if(internal->useEAX){
 						al::qalSource3i(handle, AL_AUXILIARY_SEND_FILTER,
 										internal->reverbFXSlot, 0, AL_FILTER_NULL);
+						ALCheckErrorPrecise();
 					}
 					eaxSource = true;
 					this->local = local;
+					ALCheckError();
 				}
 				
 				void Set2D() {
@@ -225,15 +242,22 @@ namespace spades {
 					ALfloat pos[] = {0, 0, 0};
 					ALfloat vel[] = {0, 0, 0};
 					al::qalSourcefv(handle, AL_POSITION, pos);
+					ALCheckErrorPrecise();
 					al::qalSourcefv(handle, AL_VELOCITY, vel);
+					ALCheckErrorPrecise();
 					al::qalSourcei(handle, AL_SOURCE_RELATIVE, AL_TRUE);
+					ALCheckErrorPrecise();
 					al::qalSourcef(handle, AL_ROLLOFF_FACTOR, 0.f);
+					ALCheckErrorPrecise();
 					if(internal->useEAX){
 						al::qalSource3i(handle, AL_AUXILIARY_SEND_FILTER,
 										AL_EFFECTSLOT_NULL, 0, AL_FILTER_NULL);
+						ALCheckErrorPrecise();
 						al::qalSourcei(handle, AL_DIRECT_FILTER,
 									   0);
+						ALCheckErrorPrecise();
 					}
+					ALCheckError();
 					eaxSource = false;
 					local = true;
 				}
@@ -248,8 +272,10 @@ namespace spades {
 						ALfloat v3[3];
 						al::qalGetListenerfv(AL_POSITION, v3);
 						Vector3 eye = {v3[0], v3[1], v3[2]};
+						ALCheckErrorPrecise();
 						al::qalGetSourcefv(handle, AL_POSITION, v3);
 						Vector3 pos = {v3[0], v3[1], v3[2]};
+						ALCheckErrorPrecise();
 						
 						float dist = (pos - eye).GetLength();
 						dist /= param.referenceDistance;
@@ -257,6 +283,7 @@ namespace spades {
 							dist = 1.f;
 						dist = 1.f / dist;
 						al::qalSourcef(handle, AL_GAIN, param.volume * dist);
+						ALCheckError();
 					}
 					
 					if(!internal->useEAX)
@@ -265,6 +292,7 @@ namespace spades {
 					ALint value;
 					
 					al::qalGetSourcei(handle, AL_SOURCE_RELATIVE, &value);
+					ALCheckErrorPrecise();
 					
 					bool enableObstruction = true;
 					if(value)
@@ -276,8 +304,10 @@ namespace spades {
 						ALfloat v3[3];
 						al::qalGetListenerfv(AL_POSITION, v3);
 						Vector3 eye = {v3[0], v3[1], v3[2]};
+						ALCheckErrorPrecise();
 						al::qalGetSourcefv(handle, AL_POSITION, v3);
 						Vector3 pos = {v3[0], v3[1], v3[2]};
+						ALCheckErrorPrecise();
 						Vector3 checkPos;
 						eye = TransformVectorFromAL(eye);
 						pos = TransformVectorFromAL(pos);
@@ -308,8 +338,10 @@ namespace spades {
 					
 					al::qalSource3i(handle, AL_AUXILIARY_SEND_FILTER,
 									fx, 0, flt);
+					ALCheckErrorPrecise();
 					al::qalSourcei(handle, AL_DIRECT_FILTER,
 								   flt);
+					ALCheckError();
 					
 				}
 				
@@ -317,10 +349,13 @@ namespace spades {
 					SPADES_MARK_FUNCTION();
 					
 					al::qalSourcei(handle, AL_LOOPING, AL_FALSE);
+					ALCheckErrorPrecise();
 					al::qalSourcei(handle, AL_BUFFER, buffer);
+					ALCheckErrorPrecise();
 					al::qalSourcei(handle, AL_SAMPLE_OFFSET, 0);
+					ALCheckErrorPrecise();
 					al::qalSourcePlay(handle);
-					al::CheckError();
+					ALCheckError();
 				}
 			};
 		
@@ -336,28 +371,51 @@ namespace spades {
 				SPADES_MARK_FUNCTION_DEBUG();
 				
 				al::qalEffectf(reverbFX, AL_EAXREVERB_DENSITY, reverb->flDensity);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_DIFFUSION, reverb->flDiffusion);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_GAIN, reverb->flGain);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_GAINHF, reverb->flGainHF);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_GAINLF, reverb->flGainLF);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_DECAY_TIME, reverb->flDecayTime);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_DECAY_HFRATIO, reverb->flDecayHFRatio);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_DECAY_LFRATIO, reverb->flDecayLFRatio);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_REFLECTIONS_GAIN, reverb->flReflectionsGain);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_REFLECTIONS_DELAY, reverb->flReflectionsDelay);
+				ALCheckErrorPrecise();
 				al::qalEffectfv(reverbFX, AL_EAXREVERB_REFLECTIONS_PAN, reverb->flReflectionsPan);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_LATE_REVERB_GAIN, reverb->flLateReverbGain);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_LATE_REVERB_DELAY, reverb->flLateReverbDelay);
+				ALCheckErrorPrecise();
 				al::qalEffectfv(reverbFX, AL_EAXREVERB_LATE_REVERB_PAN, reverb->flLateReverbPan);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_ECHO_TIME, reverb->flEchoTime);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_ECHO_DEPTH, reverb->flEchoDepth);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_MODULATION_TIME, reverb->flModulationTime);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_MODULATION_DEPTH, reverb->flModulationDepth);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_AIR_ABSORPTION_GAINHF, reverb->flAirAbsorptionGainHF);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_HFREFERENCE, reverb->flHFReference);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_LFREFERENCE, reverb->flLFReference);
+				ALCheckErrorPrecise();
 				al::qalEffectf(reverbFX, AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, reverb->flRoomRolloffFactor);
+				ALCheckErrorPrecise();
 				al::qalEffecti(reverbFX, AL_EAXREVERB_DECAY_HFLIMIT, reverb->iDecayHFLimit);
+				ALCheckErrorPrecise();
 			}
 
 			
@@ -448,7 +506,7 @@ namespace spades {
 				// so we clear that now
 				while(al::qalGetError() != AL_NO_ERROR);
 				
-				al::CheckError();
+				ALCheckError();
 				
 				for(int i = 0; i < (int)s_maxPolyphonics; i++){
 					srcs.push_back(new ALSrc(this));
@@ -457,29 +515,34 @@ namespace spades {
 				SPLog("%d source(s) initialized", (int)s_maxPolyphonics);
 				
 				al::qalDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
+				ALCheckErrorPrecise();
 				
 				// initialize EAX
 				if(useEAX){
 					al::qalGenAuxiliaryEffectSlots(1, &reverbFXSlot);
-					al::CheckError();
+					ALCheckError();
 					al::qalGenEffects(1, &reverbFX);
-					al::CheckError();
+					ALCheckError();
 					
 					al::qalEffecti(reverbFX, AL_EFFECT_TYPE, AL_EFFECT_EAXREVERB);
-					al::CheckError();
+					ALCheckError();
 					
 					EFXEAXREVERBPROPERTIES prop = EFX_REVERB_PRESET_MOUNTAINS;
 					updateEFXReverb(&prop);
 					
 					al::qalAuxiliaryEffectSloti(reverbFXSlot, AL_EFFECTSLOT_EFFECT,
 												reverbFX);
-					al::CheckError();
+					ALCheckError();
 					
 					al::qalGenFilters(1, &obstructionFilter);
+					ALCheckErrorPrecise();
 					al::qalFilteri(obstructionFilter, AL_FILTER_TYPE,
 								   AL_FILTER_LOWPASS);
+					ALCheckErrorPrecise();
 					al::qalFilterf(obstructionFilter, AL_LOWPASS_GAIN, 1.f);
+					ALCheckErrorPrecise();
 					al::qalFilterf(obstructionFilter, AL_LOWPASS_GAINHF, 0.1f);
+					ALCheckErrorPrecise();
 					
 					for(int i = 0; i < 128; i++){
 						roomHistory.push_back(20000.f);
@@ -558,11 +621,11 @@ namespace spades {
 				up.x, up.y, up.z};
 				
 				al::qalListenerfv(AL_POSITION, pos);
-				al::CheckError();
+				ALCheckError();
 				al::qalListenerfv(AL_VELOCITY, vel);
-				al::CheckError();
+				ALCheckError();
 				al::qalListenerfv(AL_ORIENTATION, orient);
-				al::CheckError();
+				ALCheckError();
 			
 				// do reverb simulation
 				if(useEAX){
@@ -672,7 +735,7 @@ namespace spades {
 					
 					al::qalAuxiliaryEffectSloti(reverbFXSlot, AL_EFFECTSLOT_EFFECT,
 												reverbFX);
-					al::CheckError();
+					ALCheckError();
 				}
 				
 				for(size_t i = 0; i < srcs.size(); i++){

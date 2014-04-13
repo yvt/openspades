@@ -20,6 +20,7 @@
 
 #include "GLMapChunk.h"
 #include <algorithm>
+#include <cstddef>
 #include "GLMapRenderer.h"
 #include "IGLDevice.h"
 #include "GLProgramAttribute.h"
@@ -31,6 +32,8 @@
 #include "GLDynamicLightShader.h"
 
 SPADES_SETTING(r_water, "2");
+
+#include <AngelScript/include/angelscript.h> // for asOFFSET. somehow `offsetof` fails on gcc-4.8
 
 namespace spades {
 	namespace draw {
@@ -363,22 +366,22 @@ namespace spades {
 			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			device->VertexAttribPointer(positionAttribute(), 3,
 										IGLDevice::UnsignedByte, false,
-										sizeof(Vertex), (void *)offsetof(Vertex, x));
+										sizeof(Vertex), (void *)asOFFSET(Vertex, x));
 			if(ambientOcclusionCoordAttribute() != -1)
 				device->VertexAttribPointer(ambientOcclusionCoordAttribute(), 2,
 										IGLDevice::UnsignedShort, false,
-										sizeof(Vertex), (void *)offsetof(Vertex, aoX));
+										sizeof(Vertex), (void *)asOFFSET(Vertex, aoX));
 			device->VertexAttribPointer(colorAttribute(), 4,
 										IGLDevice::UnsignedByte, true,
-										sizeof(Vertex), (void *)offsetof(Vertex, colorRed));
+										sizeof(Vertex), (void *)asOFFSET(Vertex, colorRed));
 			if(normalAttribute() != -1)
 				device->VertexAttribPointer(normalAttribute(), 3,
 											IGLDevice::Byte, false,
-											sizeof(Vertex), (void *)offsetof(Vertex, nx));
+											sizeof(Vertex), (void *)asOFFSET(Vertex, nx));
 			
 			device->VertexAttribPointer(fixedPositionAttribute(), 3,
 										IGLDevice::Byte, false,
-										sizeof(Vertex), (void *)offsetof(Vertex, sx));
+										sizeof(Vertex), (void *)asOFFSET(Vertex, sx));
 			
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device->BindBuffer(IGLDevice::ElementArrayBuffer,
@@ -442,13 +445,13 @@ namespace spades {
 			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			device->VertexAttribPointer(positionAttribute(), 3,
 										IGLDevice::UnsignedByte, false,
-										sizeof(Vertex), (void *)offsetof(Vertex, x));
+										sizeof(Vertex), (void *)asOFFSET(Vertex, x));
 			device->VertexAttribPointer(colorAttribute(), 4,
 										IGLDevice::UnsignedByte, true,
-										sizeof(Vertex), (void *)offsetof(Vertex, colorRed));
+										sizeof(Vertex), (void *)asOFFSET(Vertex, colorRed));
 			device->VertexAttribPointer(normalAttribute(), 3,
 										IGLDevice::Byte, false,
-										sizeof(Vertex), (void *)offsetof(Vertex, nx));
+										sizeof(Vertex), (void *)asOFFSET(Vertex, nx));
 			
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device->BindBuffer(IGLDevice::ElementArrayBuffer,

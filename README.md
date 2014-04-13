@@ -69,13 +69,13 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
       Download windows binary of OpenSpades from
       https://sites.google.com/a/yvt.jp/openspades/downloads, extract it, and copy the .pak files
-      inside Resources directory into `/usr/local/share/openspades/Resources` or
-      `~/.openspades/Resources`
+      inside Resources directory into `/usr/local/share/games/openspades/Resources` or
+      `$XDG_DATA_HOME/openspades/Resources`
    * If you compiling straight from source (git clone):
 
       See `Resources/PakLocation.txt` to find out where get latest shared files.
-      Download, extract, and place them into `/usr/local/share/openspades/Resources` or
-      `~/.openspades/Resources`
+      Download, extract, and place them into `/usr/local/share/games/openspades/Resources` or
+      `$XDG_DATA_HOME/openspades/Resources`
 
 8. Launch:
 

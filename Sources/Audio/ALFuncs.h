@@ -180,4 +180,8 @@ namespace al {
 	
 	const char *DescribeError(ALenum);
 	void CheckError(void);
+	void CheckError(const char *source, const char *fun, int line);
 }
+
+#define ALCheckError() ::al::CheckError(__FILE__, __PRETTY_FUNCTION__, __LINE__)
+
