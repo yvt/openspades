@@ -19,7 +19,7 @@
  */
 
 #pragma once
-#include <ENet/enet.h>
+#include <enet/enet.h>
 
 namespace spades { namespace server {
 	

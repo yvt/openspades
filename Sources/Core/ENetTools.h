@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ENet/enet.h>
+#include <enet/enet.h>
 #include <vector>
 #include <Core/Math.h>
 
