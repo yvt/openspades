@@ -22,6 +22,8 @@
 #include "Shared.h"
 #include <Core/ENetTools.h>
 #include <Core/Debug.h>
+#include <Core/VersionInfo.h>
+#include <OpenSpades.h>
 
 namespace spades { namespace protocol {
 	
@@ -55,14 +57,71 @@ namespace spades { namespace protocol {
 		PacketReader(const std::vector<char>& bytes):
 		NetPacketReader(bytes) {}
 		
+		uint64_t ReadVariableInteger() {
+			SPADES_MARK_FUNCTION();
+			
+			uint32_t v = 0;
+			int shift = 0;
+			while(true) {
+				uint8_t b = ReadByte();
+				v |= static_cast<uint32_t>(b & 0x7f) << shift;
+				if(b & 0x80) {
+					shift += 7;
+				}else{
+					break;
+				}
+			}
+			return v;
+		}
+		
+		std::string ReadString(){
+			SPADES_MARK_FUNCTION();
+			
+			auto len = ReadVariableInteger();
+			if(len > 1024 * 1024) {
+				SPRaise("String too long.: %llu",
+						static_cast<unsigned long long>(len));
+			}
+			
+			// convert to C string once so that
+			// null-chars are removed
+			std::string s = ReadData(static_cast<std::size_t>(len)).c_str();
+			return s;
+		}
+		
 	};
 	class PacketWriter: public NetPacketWriter {
 	public:
 		PacketWriter(PacketType type):
 		NetPacketWriter(static_cast<unsigned int>(type)) {}
+		
+		void WriteVariableInteger(uint64_t i) {
+			SPADES_MARK_FUNCTION();
+			
+			while(true) {
+				uint8_t b = static_cast<uint8_t>(i & 0x7f);
+				i >>= 7;
+				if(i) {
+					b |= 0x80;
+					Write(b);
+				}else{
+					Write(b);
+					break;
+				}
+			}
+		}
+		
+		void WriteString(std::string str){
+			SPADES_MARK_FUNCTION();
+			
+			WriteVariableInteger(str.size());
+			Write(str);
+		}
 	};
 	
 	Packet *Packet::Decode(const std::vector<char>& data) {
+		SPADES_MARK_FUNCTION();
+		
 		if(data.size() == 0) {
 			SPRaise("Packet truncated");
 		}
@@ -80,22 +139,46 @@ namespace spades { namespace protocol {
 		return ptr(data);
 	}
 	
-	Packet *ConnectRequestPacket::Decode(const std::vector<char> &data) {
+	InitiateConnectionPacket InitiateConnectionPacket::CreateDefault() {
 		SPADES_MARK_FUNCTION();
 		
-		std::unique_ptr<ConnectRequestPacket> p(new ConnectRequestPacket());
+		InitiateConnectionPacket ret;
+		ret.protocolName = ProtocolName;
+		ret.majorVersion = OpenSpades_VERSION_MAJOR;
+		ret.minorVersion = OpenSpades_VERSION_MINOR;
+		ret.revision = OpenSpades_VERSION_REVISION;
+		ret.packageString = PACKAGE_STRING;
+		ret.environmentString = VersionInfo::GetVersionInfo();
+		return ret;
+	}
+	
+	Packet *InitiateConnectionPacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<InitiateConnectionPacket> p(new InitiateConnectionPacket());
 		PacketReader reader(data);
 		
-		SPNotImplemented();
+		p->protocolName = reader.ReadString();
+		p->majorVersion = reader.ReadShort();
+		p->minorVersion = reader.ReadShort();
+		p->revision = reader.ReadShort();
+		p->packageString = reader.ReadShort();
+		p->environmentString = reader.ReadShort();
 		
 		return p.release();
 	}
 	
-	std::vector<char> ConnectRequestPacket::Generate() {
+	std::vector<char> InitiateConnectionPacket::Generate() {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
-		SPNotImplemented();
+		
+		writer.WriteString(protocolName);
+		writer.Write(majorVersion);
+		writer.Write(minorVersion);
+		writer.Write(revision);
+		writer.WriteString(packageString);
+		writer.WriteString(environmentString);
 		
 		return std::move(writer.ToArray());
 	}

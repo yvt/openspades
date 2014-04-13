@@ -39,7 +39,7 @@ namespace spades { namespace protocol {
 	};
 	
 	enum class PacketType {
-		ConnectRequest = 1
+		InitiateConnection = 1
 	};
 	
 	enum class PacketUsage {
@@ -48,11 +48,13 @@ namespace spades { namespace protocol {
 		ServerAndClient
 	};
 	
-	class ConnectRequestPacket;
+	class InitiateConnectionPacket;
+	
+	static const char *ProtocolName = "WorldOfSpades 0.1";
 	
 	using PacketClassList = stmp::make_type_list
 	<
-	ConnectRequestPacket
+	InitiateConnectionPacket
 	>::list;
 	
 	class PacketVisitor : public stmp::visitor_generator<PacketClassList> {
@@ -105,15 +107,29 @@ namespace spades { namespace protocol {
 		
 	};
 	
-	class ConnectRequestPacket : public BasePacket
-	<ConnectRequestPacket, PacketUsage::ClientOnly, PacketType::ConnectRequest> {
+	/** InitiateConnectionPacket is sent by client to initiate the conenction.
+	 * When server receives this packet, verifies protocol name and rejects
+	 * the client when protocol name doesn't match. */
+	class InitiateConnectionPacket : public BasePacket
+	<InitiateConnectionPacket,
+	PacketUsage::ClientOnly, PacketType::InitiateConnection> {
 	public:
 		static Packet *Decode(const std::vector<char>&);
-		virtual ~ConnectRequestPacket() {}
+		virtual ~InitiateConnectionPacket() {}
+		
+		static InitiateConnectionPacket CreateDefault();
+		
 		virtual std::vector<char> Generate();
 		
-		// TODO: members
+		std::string protocolName;
+		uint16_t majorVersion;
+		uint16_t minorVersion;
+		uint16_t revision;
+		std::string packageString;
+		std::string environmentString;
 	};
+	
+	
 	
 } }
 
