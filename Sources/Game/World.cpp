@@ -18,7 +18,7 @@
  
  */
 
-#include "Server.h"
+#include "World.h"
 
 namespace spades { namespace game {
 	
