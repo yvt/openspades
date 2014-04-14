@@ -127,6 +127,7 @@ namespace spades { namespace protocol {
 		uint16_t revision;
 		std::string packageString;
 		std::string environmentString;
+		std::string locale;
 	};
 	
 	

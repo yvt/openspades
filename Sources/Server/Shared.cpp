@@ -24,6 +24,9 @@
 #include <Core/Debug.h>
 #include <Core/VersionInfo.h>
 #include <OpenSpades.h>
+#include <Core//Settings.h>
+
+SPADES_SETTING(core_locale, "");
 
 namespace spades { namespace protocol {
 	
@@ -144,11 +147,17 @@ namespace spades { namespace protocol {
 		
 		InitiateConnectionPacket ret;
 		ret.protocolName = ProtocolName;
+		if(ret.protocolName.size() > 256) ret.protocolName.resize(256);
 		ret.majorVersion = OpenSpades_VERSION_MAJOR;
 		ret.minorVersion = OpenSpades_VERSION_MINOR;
 		ret.revision = OpenSpades_VERSION_REVISION;
 		ret.packageString = PACKAGE_STRING;
+		if(ret.packageString.size() > 256) ret.packageString.resize(256);
 		ret.environmentString = VersionInfo::GetVersionInfo();
+		if(ret.environmentString.size() > 1024) ret.environmentString.resize(1024);
+		ret.locale = static_cast<std::string>(core_locale);
+		if(ret.locale.size() > 256) ret.locale.resize(256);
+		
 		return ret;
 	}
 	
@@ -162,8 +171,9 @@ namespace spades { namespace protocol {
 		p->majorVersion = reader.ReadShort();
 		p->minorVersion = reader.ReadShort();
 		p->revision = reader.ReadShort();
-		p->packageString = reader.ReadShort();
-		p->environmentString = reader.ReadShort();
+		p->packageString = reader.ReadString();
+		p->environmentString = reader.ReadString();
+		p->locale = reader.ReadString();
 		
 		return p.release();
 	}
@@ -179,6 +189,7 @@ namespace spades { namespace protocol {
 		writer.Write(revision);
 		writer.WriteString(packageString);
 		writer.WriteString(environmentString);
+		writer.WriteString(locale);
 		
 		return std::move(writer.ToArray());
 	}
