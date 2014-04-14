@@ -53,7 +53,13 @@ namespace stmp {
 	template<class L>
 	class visitor_generator : public visitor_generator<typename L::tl> {
 	public:
+		using visitor_generator<typename L::tl>::visit;
 		virtual void visit(typename L::hd&) = 0;
+	};
+	template<class T>
+	class visitor_generator<type_list<T, type_list_null>> {
+	public:
+		virtual void visit(T&) = 0;
 	};
 	template<> class visitor_generator<type_list_null> {};
 	
@@ -61,7 +67,13 @@ namespace stmp {
 	template<class L>
 	class const_visitor_generator : public const_visitor_generator<typename L::tl> {
 	public:
+		using const_visitor_generator<typename L::tl>::visit;
 		virtual void visit(const typename L::hd&) = 0;
+	};
+	template<class T>
+	class const_visitor_generator<type_list<T, type_list_null>> {
+	public:
+		virtual void visit(const T&) = 0;
 	};
 	template<> class const_visitor_generator<type_list_null> {};
 	
