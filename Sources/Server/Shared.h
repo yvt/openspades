@@ -39,7 +39,10 @@ namespace spades { namespace protocol {
 	};
 	
 	enum class PacketType {
-		InitiateConnection = 1
+		Greeting = 1,
+		InitiateConnection = 2,
+		ServerCertificate = 3,
+		ClientCertificate = 4
 	};
 	
 	enum class PacketUsage {
@@ -48,13 +51,19 @@ namespace spades { namespace protocol {
 		ServerAndClient
 	};
 	
+	class GreetingPacket;
 	class InitiateConnectionPacket;
+	class ServerCertificatePacket;
+	class ClientCertificatePacket;
 	
 	static const char *ProtocolName = "WorldOfSpades 0.1";
 	
 	using PacketClassList = stmp::make_type_list
 	<
-	InitiateConnectionPacket
+	GreetingPacket,
+	InitiateConnectionPacket,
+	ServerCertificatePacket,
+	ClientCertificatePacket
 	>::list;
 	
 	class PacketVisitor : public stmp::visitor_generator<PacketClassList> {
@@ -107,6 +116,21 @@ namespace spades { namespace protocol {
 		
 	};
 	
+	/** GreetingPacket is sent by server when a client connects the server,
+	 * before any other packets. */
+	class GreetingPacket : public BasePacket
+	<GreetingPacket,
+	PacketUsage::ServerOnly, PacketType::Greeting> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~GreetingPacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		std::string nonce; // used in authentication
+		
+	};
+	
 	/** InitiateConnectionPacket is sent by client to initiate the conenction.
 	 * When server receives this packet, verifies protocol name and rejects
 	 * the client when protocol name doesn't match. */
@@ -128,8 +152,42 @@ namespace spades { namespace protocol {
 		std::string packageString;
 		std::string environmentString;
 		std::string locale;
+		std::string nonce; // used in authentication
 	};
 	
+	/** After server receives InitiateConnectionPacket,
+	 * sends ServerCertificatePacket. */
+	class ServerCertificatePacket : public BasePacket
+	<ServerCertificatePacket,
+	PacketUsage::ServerOnly, PacketType::ServerCertificate> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~ServerCertificatePacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		bool isValid; /** some servers don't use certificate */
+		std::string certificate;
+		std::string signature; /** session nonce signed with the server private key */
+	};
+	
+	/** After client receive ServerCertificatePacket and authenticates the server,
+	 * sends ClientCertificatePacket.
+	 * Client might send right after InitiateConnectionPacket if client have no
+	 * credentials. */
+	class ClientCertificatePacket : public BasePacket
+	<ClientCertificatePacket,
+	PacketUsage::ClientOnly, PacketType::ClientCertificate> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~ClientCertificatePacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		bool isValid; /** some clients don't use certificate */
+		std::string certificate;
+		std::string signature; /** session nonce signed with the client private key */
+	};
 	
 	
 } }

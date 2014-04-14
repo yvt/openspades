@@ -77,7 +77,7 @@ namespace spades { namespace protocol {
 			return v;
 		}
 		
-		std::string ReadString(){
+		std::string ReadBytes(){
 			SPADES_MARK_FUNCTION();
 			
 			auto len = ReadVariableInteger();
@@ -91,6 +91,11 @@ namespace spades { namespace protocol {
 			std::string s = ReadData(static_cast<std::size_t>(len)).c_str();
 			return s;
 		}
+		
+		std::string ReadString(){
+			return ReadBytes();
+		}
+		
 		
 	};
 	class PacketWriter: public NetPacketWriter {
@@ -114,11 +119,14 @@ namespace spades { namespace protocol {
 			}
 		}
 		
-		void WriteString(std::string str){
+		void WriteBytes(std::string str){
 			SPADES_MARK_FUNCTION();
 			
 			WriteVariableInteger(str.size());
 			Write(str);
+		}
+		void WriteString(std::string str){
+			WriteBytes(str);
 		}
 	};
 	
@@ -141,6 +149,34 @@ namespace spades { namespace protocol {
 		
 		return ptr(data);
 	}
+	
+	
+	Packet *GreetingPacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<GreetingPacket> p(new GreetingPacket());
+		PacketReader reader(data);
+		
+		auto magic = reader.ReadString();
+		if(magic != "Hello") {
+			SPRaise("Invalid magic.");
+		}
+		p->nonce = reader.ReadBytes();
+		
+		return p.release();
+	}
+	
+	std::vector<char> GreetingPacket::Generate() {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		writer.WriteString("Hello");
+		writer.WriteBytes(nonce);
+		
+		return std::move(writer.ToArray());
+	}
+	
 	
 	InitiateConnectionPacket InitiateConnectionPacket::CreateDefault() {
 		SPADES_MARK_FUNCTION();
@@ -174,6 +210,7 @@ namespace spades { namespace protocol {
 		p->packageString = reader.ReadString();
 		p->environmentString = reader.ReadString();
 		p->locale = reader.ReadString();
+		p->nonce = reader.ReadBytes();
 		
 		return p.release();
 	}
@@ -190,8 +227,71 @@ namespace spades { namespace protocol {
 		writer.WriteString(packageString);
 		writer.WriteString(environmentString);
 		writer.WriteString(locale);
+		writer.WriteBytes(nonce);
 		
 		return std::move(writer.ToArray());
 	}
 	
+	
+	Packet *ServerCertificatePacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<ServerCertificatePacket> p(new ServerCertificatePacket());
+		PacketReader reader(data);
+		
+		p->isValid = reader.ReadByte() != 0;
+		
+		if(p->isValid) {
+			p->certificate = reader.ReadBytes();
+			p->signature = reader.ReadBytes();
+		}
+		
+		return p.release();
+	}
+	
+	std::vector<char> ServerCertificatePacket::Generate() {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		writer.Write(static_cast<uint8_t>(isValid ? 1 : 0));
+		if(isValid) {
+			writer.WriteBytes(certificate);
+			writer.WriteBytes(signature);
+		}
+			
+		return std::move(writer.ToArray());
+	}
+	
+	
+	Packet *ClientCertificatePacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<ClientCertificatePacket> p(new ClientCertificatePacket());
+		PacketReader reader(data);
+		
+		p->isValid = reader.ReadByte() != 0;
+		
+		if(p->isValid) {
+			p->certificate = reader.ReadBytes();
+			p->signature = reader.ReadBytes();
+		}
+		
+		return p.release();
+	}
+	
+	std::vector<char> ClientCertificatePacket::Generate() {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		writer.Write(static_cast<uint8_t>(isValid ? 1 : 0));
+		if(isValid) {
+			writer.WriteBytes(certificate);
+			writer.WriteBytes(signature);
+		}
+		
+		return std::move(writer.ToArray());
+	}
+
 } }
