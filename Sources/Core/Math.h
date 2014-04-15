@@ -840,6 +840,29 @@ namespace spades {
 		return OBB3(m * b.m);
 	}
 	
+#pragma mark - Quaternion for Rotations
+	
+	struct Quaternion {
+		Vector4 v; // i, j, k, (real)
+	public:
+		Quaternion() = default;
+		Quaternion(float i, float j, float k, float real):
+		v(i, j, k, real){}
+		
+		// TODO: computations
+		
+		/** Stores rotation quaternion into compact format for
+		 * transmission. */
+		Vector3 EncodeRotation() const {
+			return Vector3(v.x, v.y, v.z);
+		}
+		static Quaternion DecodeRotation(Vector3 v) {
+			auto s = v.x * v.x + v.y * v.y + v.z * v.z;
+			return Quaternion(v.x, v.y, v.z, sqrtf(1.f - s));
+		}
+		
+	};
+	
 #pragma mark - Utilities
 
 	template <typename T>

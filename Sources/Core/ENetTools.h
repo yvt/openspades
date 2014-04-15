@@ -45,6 +45,9 @@ namespace spades {
 		IntVector3 ReadIntColor();
 		
 		Vector3 ReadFloatColor();
+		Vector2 ReadVector2();
+		Vector3 ReadVector3();
+		Vector4 ReadVector4();
 		
 		std::vector<char> GetData() {
 			return data;
@@ -52,6 +55,8 @@ namespace spades {
 		
 		std::string ReadData(size_t siz);
 		std::string ReadRemainingData();
+		
+		bool IsEndOfPacket() { return pos == data.size(); }
 		
 		void DumpDebug();
 	};
@@ -67,6 +72,9 @@ namespace spades {
 		void Write(uint16_t v);
 		void Write(uint32_t v);
 		void Write(float v);
+		void Write(const Vector2&);
+		void Write(const Vector3&);
+		void Write(const Vector4&);
 		void WriteColor(IntVector3 v);
 		
 		void Write(const std::string& str);

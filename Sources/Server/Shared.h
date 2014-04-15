@@ -25,6 +25,10 @@
 #include <Core/Debug.h>
 #include <Core/TMPUtils.h>
 #include <memory>
+#include <string>
+#include <map>
+#include <Game/Constants.h>
+#include <cstdint>
 
 namespace spades { namespace protocol {
 	
@@ -42,7 +46,15 @@ namespace spades { namespace protocol {
 		Greeting = 1,
 		InitiateConnection = 2,
 		ServerCertificate = 3,
-		ClientCertificate = 4
+		ClientCertificate = 4,
+		Kick = 5,
+		GameStateHeader = 6,
+		MapData = 7,
+		GameStateFinal = 8,
+		EntityUpdate = 20,
+		ClientSideEntityUpdate = 21,
+		JumpAction = 30,
+		ReloadWeapon = 31
 	};
 	
 	enum class PacketUsage {
@@ -51,10 +63,27 @@ namespace spades { namespace protocol {
 		ServerAndClient
 	};
 	
+	using game::EntityType;
+	using game::EntityFlags;
+	using game::TrajectoryType;
+	using game::Trajectory;
+	using game::PlayerInput;
+	using game::ToolSlot;
+	using game::SkinId;
+	using TimeStampType = std::uint64_t;
+	
 	class GreetingPacket;
 	class InitiateConnectionPacket;
 	class ServerCertificatePacket;
 	class ClientCertificatePacket;
+	class KickPacket;
+	class GameStateHeaderPacket;
+	class MapDataPacket;
+	class GameStateFinalPacket;
+	class EntityUpdatePacket;
+	class ClientSideEntityUpdatePacket;
+	class JumpActionPacket;
+	class ReloadWeaponPacket;
 	
 	static const char *ProtocolName = "WorldOfSpades 0.1";
 	
@@ -63,15 +92,25 @@ namespace spades { namespace protocol {
 	GreetingPacket,
 	InitiateConnectionPacket,
 	ServerCertificatePacket,
-	ClientCertificatePacket
+	ClientCertificatePacket,
+	KickPacket,
+	GameStateHeaderPacket,
+	MapDataPacket,
+	GameStateFinalPacket,
+	EntityUpdatePacket,
+	ClientSideEntityUpdatePacket,
+	JumpActionPacket,
+	ReloadWeaponPacket
 	>::list;
 	
 	class PacketVisitor : public stmp::visitor_generator<PacketClassList> {
 	public:
+		virtual ~PacketVisitor() {}
 	};
 	
 	class ConstPacketVisitor : public stmp::const_visitor_generator<PacketClassList> {
 	public:
+		virtual ~ConstPacketVisitor() {}
 	};
 	
 	class Packet {
@@ -152,6 +191,7 @@ namespace spades { namespace protocol {
 		std::string packageString;
 		std::string environmentString;
 		std::string locale;
+		std::string playerName;
 		std::string nonce; // used in authentication
 	};
 	
@@ -189,6 +229,155 @@ namespace spades { namespace protocol {
 		std::string signature; /** session nonce signed with the client private key */
 	};
 	
+	/** Sent when server kicks a client. */
+	class KickPacket : public BasePacket
+	<KickPacket,
+	PacketUsage::ServerOnly, PacketType::Kick> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~KickPacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		std::string reason;
+	};
+	
+	/** During gamestate transfer procedure, the server sends 
+	 * StatePacket before sending the GameMap data.
+	 * Gamestate transfer procedure occurs right after server sends
+	 * ClientCertificatePacket, new round starts, or world is reseted.
+	 * */
+	class GameStateHeaderPacket : public BasePacket
+	<GameStateHeaderPacket,
+	PacketUsage::ServerOnly, PacketType::GameStateHeader> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~GameStateHeaderPacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		std::map<std::string, std::string> properties;
+	};
+	
+	/** Fragment of map data. */
+	class MapDataPacket : public BasePacket
+	<MapDataPacket,
+	PacketUsage::ServerOnly, PacketType::MapData> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~MapDataPacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		std::string fragment;
+	};
+	
+	/** Sent by server after all of game states were sent. */
+	class GameStateFinalPacket : public BasePacket
+	<GameStateFinalPacket,
+	PacketUsage::ServerOnly, PacketType::GameStateFinal> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~GameStateFinalPacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		std::map<std::string, std::string> properties;
+	};
+	
+	struct EntityUpdateItem {
+		bool create;
+		
+		uint32_t entityId;
+		
+		// type is sent only for new entities
+		EntityType type;
+		
+		bool includeFlags;
+		EntityFlags flags;
+		
+		bool includeTrajectory;
+		Trajectory trajectory;
+		
+		bool includePlayerInput;
+		PlayerInput playerInput;
+		
+		bool includeTool;
+		ToolSlot tool;
+		
+		bool includeBlockColor;
+		IntVector3 blockColor;
+		
+		bool includeHealth;
+		uint8_t health;
+		
+		bool includeSkin;
+		std::string weaponSkin1;
+		std::string weaponSkin2;
+		std::string weaponSkin3;
+		std::string bodySkin;
+		
+		
+	};
+	
+	/** Sent by server to notify the latest state of entity.
+	 * Only updated parts are sent.
+	 */
+	class EntityUpdatePacket : public BasePacket
+	<EntityUpdatePacket,
+	PacketUsage::ServerOnly, PacketType::EntityUpdate> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~EntityUpdatePacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		std::vector<EntityUpdateItem> items;
+	};
+	
+	/** Sent by client to update the latest client-side state of entity.
+	 * Only updated parts are sent. Updated entity must be relevant to the
+	 * client's player.
+	 * No new entities can be created.
+	 */
+	class ClientSideEntityUpdatePacket : public BasePacket
+	<ClientSideEntityUpdatePacket,
+	PacketUsage::ClientOnly, PacketType::ClientSideEntityUpdate> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~ClientSideEntityUpdatePacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		TimeStampType timestamp;
+		std::vector<EntityUpdateItem> items;
+	};
+	
+	class JumpActionPacket : public BasePacket
+	<JumpActionPacket,
+	PacketUsage::ClientOnly, PacketType::JumpAction> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~JumpActionPacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		TimeStampType timestamp;
+	};
+	
+	class ReloadWeaponPacket : public BasePacket
+	<ReloadWeaponPacket,
+	PacketUsage::ClientOnly, PacketType::ReloadWeapon> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~ReloadWeaponPacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		TimeStampType timestamp;
+	};
+	
+	// TODO: player state
 	
 } }
 

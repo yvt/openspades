@@ -101,6 +101,30 @@ namespace spades {
 		return col;
 	}
 	
+	Vector2 NetPacketReader::ReadVector2() {
+		Vector2 v;
+		v.x = ReadFloat();
+		v.y = ReadFloat();
+		return v;
+	}
+	
+	Vector3 NetPacketReader::ReadVector3() {
+		Vector3 v;
+		v.x = ReadFloat();
+		v.y = ReadFloat();
+		v.z = ReadFloat();
+		return v;
+	}
+	
+	Vector4 NetPacketReader::ReadVector4() {
+		Vector4 v;
+		v.x = ReadFloat();
+		v.y = ReadFloat();
+		v.z = ReadFloat();
+		v.w = ReadFloat();
+		return v;
+	}
+	
 	std::string NetPacketReader::ReadData(size_t siz) {
 		if(pos + siz > data.size()){
 			SPRaise("Received packet truncated");
@@ -169,6 +193,21 @@ namespace spades {
 		Write((uint8_t)v.z);
 		Write((uint8_t)v.y);
 		Write((uint8_t)v.x);
+	}
+	void NetPacketWriter::Write(const Vector2& v) {
+		Write(v.x);
+		Write(v.y);
+	}
+	void NetPacketWriter::Write(const Vector3& v) {
+		Write(v.x);
+		Write(v.y);
+		Write(v.z);
+	}
+	void NetPacketWriter::Write(const Vector4& v) {
+		Write(v.x);
+		Write(v.y);
+		Write(v.z);
+		Write(v.w);
 	}
 	void NetPacketWriter::Write(const std::string& str){
 		data.insert(data.end(),
