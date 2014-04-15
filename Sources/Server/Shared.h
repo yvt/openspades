@@ -293,29 +293,18 @@ namespace spades { namespace protocol {
 		// type is sent only for new entities
 		EntityType type;
 		
-		bool includeFlags;
-		EntityFlags flags;
+		stmp::optional<EntityFlags> flags;
+		stmp::optional<Trajectory> trajectory;
 		
-		bool includeTrajectory;
-		Trajectory trajectory;
+		stmp::optional<PlayerInput> playerInput;
+		stmp::optional<ToolSlot> tool;
+		stmp::optional<IntVector3> blockColor;
+		stmp::optional<uint8_t> health;
 		
-		bool includePlayerInput;
-		PlayerInput playerInput;
-		
-		bool includeTool;
-		ToolSlot tool;
-		
-		bool includeBlockColor;
-		IntVector3 blockColor;
-		
-		bool includeHealth;
-		uint8_t health;
-		
-		bool includeSkin;
-		std::string weaponSkin1;
-		std::string weaponSkin2;
-		std::string weaponSkin3;
-		std::string bodySkin;
+		stmp::optional<std::string> weaponSkin1;
+		stmp::optional<std::string> weaponSkin2;
+		stmp::optional<std::string> weaponSkin3;
+		stmp::optional<std::string> bodySkin;
 		
 		
 	};

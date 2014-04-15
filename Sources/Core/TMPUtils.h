@@ -7,6 +7,9 @@
  */
 #include <iostream>
 #include <iterator>
+#include <type_traits>
+#include <memory>
+#include <cassert>
 
 #define HAS_CONSTEXPR 1
 
@@ -19,15 +22,72 @@
 #define constexpr
 #endif
 
+
 namespace stmp {
 	
+	// creating our own version because boost is overweighted
+	// (preproecssing optional.hpp emits 50000 lines of C++ code!)
+	// `optional` can be defined in SML as following:
+	// datatype optional 'T = None | Some of 'T
+	// and corresponding type in .Net Framework is System.Nullable<T>.
+	template<class T>
+	class optional {
+		std::aligned_storage<sizeof(T), alignof(T)> storage;
+		bool has_some;
+		using Allocator = std::allocator<T>;
+	public:
+		optional():has_some(false){}
+		optional(optional& o):has_some(o.has_some) {
+			if(has_some) { Allocator().construct(get_pointer(), o.get()); }
+		}
+		optional(const optional& o):has_some(o.has_some) {
+			if(has_some) { Allocator().construct(get_pointer(), o.get()); }
+		}
+		optional(optional&& o):has_some(o.has_some) {
+			if(has_some) {
+				Allocator().construct(get_pointer(), std::move(o.get()));
+				o.has_some = false;
+			}
+		}
+		~optional() {reset();}
+		void reset() {
+			if(has_some) {
+				Allocator().destroy(get_pointer());
+				has_some = false;
+			}
+		}
+		template<class... Args>
+		void reset(Args&&... args) {
+			reset();
+			Allocator().construct(get_pointer(), std::forward<Args>(args)...);
+			has_some = true;
+		}
+		template<class U>
+		void operator =(U&& o) {
+			reset(std::forward<U>(o));
+		}
+		
+		T *get_pointer() { return has_some ? reinterpret_cast<T *>(&storage) : nullptr; }
+		const T *get_pointer() const { return has_some ? reinterpret_cast<const T *>(&storage) : nullptr; }
+		T& get() { assert(has_some); return *get_pointer(); }
+		const T& get() const { assert(has_some); return *get_pointer(); }
+		T& operator ->() { assert(has_some); return get(); }
+		const T& operator ->() const { assert(has_some); return get(); }
+		
+		T& operator *() { assert(has_some); return get(); }
+		const T& operator *() const { assert(has_some); return get(); }
+		
+		explicit operator bool() const { return has_some; }
+	};
 	
+	/** Empty singly-linked list of types. */
 	class type_list_null {
 	public:
 		static const bool is_type_list = true;
 		static const bool is_type_list_empty = true;
 	};
 	
+	/** Singly-linked list of types, having at least one type. */
 	template<class T, class Next>
 	class type_list {
 	public:
@@ -38,6 +98,7 @@ namespace stmp {
 		typedef Next tl;
 	};
 	
+	/** creates type_list using variadic template arguments. */
 	template<class Head, class ...Tail>
 	class make_type_list {
 	public:
@@ -77,6 +138,7 @@ namespace stmp {
 	};
 	template<> class const_visitor_generator<type_list_null> {};
 	
+	/** static_find_type_list returns not_found_type when no matching type was found. */
 	class not_found_type { };
 	
 	template<template<class> class Predicate, class List>
@@ -126,8 +188,9 @@ namespace stmp {
 	
 	
 	
-	// constant look-up table generated in compile-time.
-	// see also: http://e.yvt.jp/#!20c6ce2d9c4b9f0f4937c8cfdad02ea4390f745c
+	/** constant look-up table generated in compile-time.
+	 * generated table might be stored in the program image when assigned to constexpr variable.
+	 * see also: http://e.yvt.jp/#!20c6ce2d9c4b9f0f4937c8cfdad02ea4390f745c */
 	template <class TGen, std::size_t tableLen>
 	class static_table {
 		using T = decltype((*(TGen*)nullptr)[0]);

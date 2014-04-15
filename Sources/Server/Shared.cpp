@@ -578,38 +578,33 @@ namespace spades { namespace protocol {
 			item.type = static_cast<EntityType>(reader.ReadByte());
 		}
 		
-		item.includeFlags = updates & EntityUpdateFlags::Flags;
-		if(item.includeFlags) {
+		if(updates & EntityUpdateFlags::Flags) {
 			item.flags = FromEntityFlagsValue
 			(static_cast<EntityFlagsValue>(reader.ReadByte()));
 		}
 		
-		item.includeTrajectory = updates & EntityUpdateFlags::Trajectory;
-		if(item.includeTrajectory) {
+		if(updates & EntityUpdateFlags::Trajectory) {
 			item.trajectory = DecodeTrajectory(reader);
 		}
 		
-		item.includePlayerInput = updates & EntityUpdateFlags::PlayerInput;
-		if(item.includePlayerInput) {
+		if(updates & EntityUpdateFlags::PlayerInput) {
 			item.playerInput = DecodePlayerInput(reader);
 		}
 		
-		item.includeBlockColor = updates & EntityUpdateFlags::BlockColor;
-		if(item.includeBlockColor) {
+		if(updates & EntityUpdateFlags::BlockColor) {
 			item.blockColor = reader.ReadIntColor();
 		}
 		
-		item.includeHealth = updates & EntityUpdateFlags::Health;
-		if(item.includeHealth) {
+		if(updates & EntityUpdateFlags::Health) {
 			item.health = reader.ReadByte();
 		}
 		
-		item.includeSkin = updates & EntityUpdateFlags::Skins;
-		if(item.includeSkin) {
-			item.bodySkin = reader.ReadBytes();
-			item.weaponSkin1 = reader.ReadBytes();
-			item.weaponSkin2 = reader.ReadBytes();
-			item.weaponSkin3 = reader.ReadBytes();
+		if(updates & EntityUpdateFlags::Skins) {
+			uint8_t mask = reader.ReadByte();
+			if(mask & 1) item.bodySkin = reader.ReadBytes();
+			if(mask & 2) item.weaponSkin1 = reader.ReadBytes();
+			if(mask & 4) item.weaponSkin2 = reader.ReadBytes();
+			if(mask & 8) item.weaponSkin3 = reader.ReadBytes();
 		}
 		
 		return item;
@@ -620,13 +615,16 @@ namespace spades { namespace protocol {
 		
 		auto flags = EntityUpdateFlags::None;
 		
-		if(item.includeFlags) flags |= EntityUpdateFlags::Flags;
-		if(item.includeTrajectory) flags |= EntityUpdateFlags::Trajectory;
-		if(item.includePlayerInput) flags |= EntityUpdateFlags::PlayerInput;
-		if(item.includeTool) flags |= EntityUpdateFlags::Trajectory;
-		if(item.includeBlockColor) flags |= EntityUpdateFlags::BlockColor;
-		if(item.includeHealth) flags |= EntityUpdateFlags::Health;
-		if(item.includeSkin) flags |= EntityUpdateFlags::Skins;
+		if(item.flags) flags |= EntityUpdateFlags::Flags;
+		if(item.trajectory) flags |= EntityUpdateFlags::Trajectory;
+		if(item.playerInput) flags |= EntityUpdateFlags::PlayerInput;
+		if(item.tool) flags |= EntityUpdateFlags::Trajectory;
+		if(item.blockColor) flags |= EntityUpdateFlags::BlockColor;
+		if(item.health) flags |= EntityUpdateFlags::Health;
+		if(item.weaponSkin1 ||
+		   item.weaponSkin2 ||
+		   item.weaponSkin3 ||
+		   item.bodySkin) flags |= EntityUpdateFlags::Skins;
 		
 		writer.Write(static_cast<uint8_t>(flags));
 		
@@ -634,35 +632,43 @@ namespace spades { namespace protocol {
 			writer.Write(static_cast<uint8_t>(item.type));
 		}
 		
-		if(item.includeFlags) {
-			writer.Write(static_cast<uint8_t>(ToEntityFlagsValue(item.flags)));
+		if(item.flags) {
+			writer.Write(static_cast<uint8_t>(ToEntityFlagsValue(*item.flags)));
 		}
 		
-		if(item.includeTrajectory) {
-			WriteTrajectory(writer, item.trajectory);
+		if(item.trajectory) {
+			WriteTrajectory(writer, *item.trajectory);
 		}
 		
-		if(item.includePlayerInput) {
-			WritePlayerInput(writer, item.playerInput);
+		if(item.playerInput) {
+			WritePlayerInput(writer, *item.playerInput);
 		}
 		
-		if(item.includeTool) {
-			writer.Write(static_cast<uint8_t>(item.tool));
+		if(item.tool) {
+			writer.Write(static_cast<uint8_t>(*item.tool));
 		}
 		
-		if(item.includeBlockColor) {
-			writer.WriteColor(item.blockColor);
+		if(item.blockColor) {
+			writer.WriteColor(*item.blockColor);
 		}
 		
-		if(item.includeHealth) {
-			writer.Write(static_cast<uint8_t>(item.health));
+		if(item.health) {
+			writer.Write(static_cast<uint8_t>(*item.health));
 		}
 		
-		if(item.includeSkin) {
-			writer.WriteBytes(item.bodySkin);
-			writer.WriteBytes(item.weaponSkin1);
-			writer.WriteBytes(item.weaponSkin2);
-			writer.WriteBytes(item.weaponSkin3);
+		if(item.weaponSkin1 ||
+		   item.weaponSkin2 ||
+		   item.weaponSkin3 ||
+		   item.bodySkin) {
+			uint8_t mask = 0;
+			if(item.bodySkin) mask |= 1;
+			if(item.weaponSkin1) mask |= 2;
+			if(item.weaponSkin2) mask |= 4;
+			if(item.weaponSkin3) mask |= 8;
+			if(item.bodySkin) writer.WriteBytes(*item.bodySkin);
+			if(item.weaponSkin1) writer.WriteBytes(*item.weaponSkin1);
+			if(item.weaponSkin2) writer.WriteBytes(*item.weaponSkin2);
+			if(item.weaponSkin3) writer.WriteBytes(*item.weaponSkin3);
 		}
 		
 	}
