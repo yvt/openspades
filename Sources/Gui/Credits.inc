@@ -12,7 +12,9 @@ Credits
 "Ericson2314" - Better installation guide
 "JoJoe_Stinky" - Win32 Icon, Killfeed icons
 "theunknownxy" - Fixes for the Linux support
-"noway421" - Russian locale, various testing, ideas.
+"noway421" - Russian translation, various testing, ideas.
+"kmsi" - Korean translation
+"tungdil" - German translation
 
 
 Portions of program is based on following softwares
