@@ -23,6 +23,7 @@
 #include <Core/Math.h>
 #include <cstdint>
 #include <array>
+#include <Core/TMPUtils.h>
 
 namespace spades { namespace game {
 	
@@ -31,8 +32,25 @@ namespace spades { namespace game {
 		Grenade,
 		Rocket,
 		CommandPost,
+		Flag,
 		Checkpoint,
 		Vehicle
+	};
+	
+	enum class EntityEventType {
+		// player
+		Jump,
+		ReloadWeapon,
+		Suicide,
+		
+		// common
+		Explode
+	};
+	
+	enum class EntityDeathType {
+		Unspecified = 0,
+		PlayerDeath,
+		Explode
 	};
 	
 	struct EntityFlags {
@@ -80,6 +98,42 @@ namespace spades { namespace game {
 		bool toolSecondary : 1;
 		bool chat : 1;
 		bool sprint : 1;
+	};
+	
+	enum class HitType {
+		Unspecified = 0,
+		Torso,
+		Head,
+		Limb
+	};
+	
+	enum class DamageType {
+		Unknown,
+		Suicide,
+		Fall,
+		Poison,
+		
+		Melee,
+		Dig,
+		Block,
+		Weapon1,
+		Weapon2,
+		Weapon3,
+		
+		Grenade,
+		
+		VehicleExplosion,
+		Vehicle
+	};
+	
+	struct DamageInfo {
+		stmp::optional<uint32_t> fromEntity;
+		uint32_t toEntity;
+		
+		DamageType damageType;
+		
+		Vector3 firePosition;
+		Vector3 hitPosition;
 	};
 	
 	using SkinId = std::array<char, 20>;

@@ -77,6 +77,15 @@ namespace spades { namespace protocol {
 			return v;
 		}
 		
+		int64_t ReadVariableSignedInteger() {
+			auto i = ReadVariableInteger();
+			if(i & 1) {
+				return -1 - static_cast<int64_t>(i>>1);
+			}else{
+				return static_cast<int64_t>(i >> 1);
+			}
+		}
+		
 		std::string ReadBytes(){
 			SPADES_MARK_FUNCTION();
 			
@@ -112,6 +121,13 @@ namespace spades { namespace protocol {
 			return static_cast<TimeStampType>(ReadVariableInteger());
 		}
 		
+		IntVector3 ReadBlockCoord() {
+			auto x = static_cast<int>(ReadVariableSignedInteger());
+			auto y = static_cast<int>(ReadVariableSignedInteger());
+			auto z = static_cast<int>(ReadVariableSignedInteger());
+			return IntVector3(x, y, z);
+		}
+		
 	};
 	class PacketWriter: public NetPacketWriter {
 	public:
@@ -132,6 +148,11 @@ namespace spades { namespace protocol {
 					break;
 				}
 			}
+		}
+		
+		void WriteVariableSignedInteger(int64_t i) {
+			if(i < 0) WriteVariableInteger((static_cast<uint64_t>(-1 - i) << 1) | 1);
+			else WriteVariableInteger(static_cast<uint64_t>(i) << 1);
 		}
 		
 		void WriteBytes(std::string str){
@@ -156,6 +177,12 @@ namespace spades { namespace protocol {
 		using NetPacketWriter::Write;
 		void Write(TimeStampType t) {
 			WriteVariableInteger(static_cast<uint64_t>(t));
+		}
+		
+		void WriteBlockCoord(IntVector3 v) {
+			WriteVariableSignedInteger(static_cast<uint64_t>(v.x));
+			WriteVariableSignedInteger(static_cast<uint64_t>(v.y));
+			WriteVariableSignedInteger(static_cast<uint64_t>(v.z));
 		}
 	};
 	
@@ -409,6 +436,32 @@ namespace spades { namespace protocol {
 		PacketWriter writer(Type);
 		
 		writer.WriteMap(properties);
+		
+		return std::move(writer.ToArray());
+	}
+	
+	
+	Packet *GenericCommandPacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<GenericCommandPacket> p(new GenericCommandPacket());
+		PacketReader reader(data);
+		
+		while(!reader.IsEndOfPacket()) {
+			p->parts.push_back(reader.ReadBytes());
+		}
+		
+		return p.release();
+	}
+	
+	std::vector<char> GenericCommandPacket::Generate() {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		for(const auto& part: parts) {
+			writer.WriteBytes(part);
+		}
 		
 		return std::move(writer.ToArray());
 	}
@@ -731,45 +784,216 @@ namespace spades { namespace protocol {
 	
 	
 	
-	Packet *JumpActionPacket::Decode(const std::vector<char> &data) {
+	Packet *TerrainUpdatePacket::Decode(const std::vector<char> &data) {
 		SPADES_MARK_FUNCTION();
 		
-		std::unique_ptr<JumpActionPacket> p(new JumpActionPacket());
+		std::unique_ptr<TerrainUpdatePacket> p(new TerrainUpdatePacket());
 		PacketReader reader(data);
 		
-		p->timestamp = reader.ReadTimeStamp();
+		IntVector3 cursor(0, 0, 0);
+		while(!reader.IsEndOfPacket()) {
+			TerrainEdit edit;
+			IntVector3 ps;
+			ps.x = static_cast<int8_t>(reader.ReadByte());
+			if(ps.x == -128) {
+				// move cursor value
+				cursor.x = static_cast<int>(reader.ReadVariableInteger());
+				cursor.y = static_cast<int>(reader.ReadVariableInteger());
+				cursor.z = static_cast<int>(reader.ReadVariableInteger());
+				ps.x = static_cast<int8_t>(reader.ReadByte());
+			}
+			ps.y = static_cast<int8_t>(reader.ReadByte());
+			ps.z = static_cast<int8_t>(reader.ReadByte());
+			ps += cursor;
+			edit.position = ps;
+			
+			uint8_t health = reader.ReadByte();
+			if(health != 0) {
+				uint32_t color = reader.ReadByte();
+				color |= static_cast<uint32_t>(reader.ReadByte()) << 8;
+				color |= static_cast<uint32_t>(reader.ReadByte()) << 16;
+				color |= static_cast<uint32_t>(health) << 24;
+				edit.color = color;
+			}
+			p->edits.push_back(edit);
+		}
 		
 		return p.release();
 	}
 	
-	std::vector<char> JumpActionPacket::Generate() {
+	std::vector<char> TerrainUpdatePacket::Generate() {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
 		
-		writer.Write(timestamp);
+		IntVector3 cursor(0, 0, 0);
+		for(const auto& edit: edits) {
+			IntVector3 diff = edit.position - cursor;
+			if(diff.x < -127 || diff.x > 127 ||
+			   diff.y < -127 || diff.y > 127 ||
+			   diff.z < -127 || diff.z > 127) {
+				// move cursor
+				cursor = edit.position;
+				writer.Write(static_cast<uint8_t>(-128));
+				writer.WriteVariableInteger(static_cast<uint64_t>(cursor.x));
+				writer.WriteVariableInteger(static_cast<uint64_t>(cursor.y));
+				writer.WriteVariableInteger(static_cast<uint64_t>(cursor.z));
+				diff = IntVector3(0, 0, 0);
+			}
+			writer.Write(static_cast<uint8_t>(diff.x));
+			writer.Write(static_cast<uint8_t>(diff.y));
+			writer.Write(static_cast<uint8_t>(diff.z));
+			if(edit.color) {
+				auto col = *edit.color;
+				writer.Write(static_cast<uint8_t>(col >> 24));
+				writer.Write(static_cast<uint8_t>(col));
+				writer.Write(static_cast<uint8_t>(col >> 8));
+				writer.Write(static_cast<uint8_t>(col >> 16));
+			}else{
+				writer.Write(static_cast<uint8_t>(0));
+			}
+		}
+		
+		return std::move(writer.ToArray());
+	}
+	
+	Packet *EntityEventPacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<EntityEventPacket> p(new EntityEventPacket());
+		PacketReader reader(data);
+		
+		p->entityId = static_cast<uint32_t>(reader.ReadVariableInteger());
+		p->type = static_cast<EntityEventType>(reader.ReadByte());
+		p->param = reader.ReadVariableInteger();
+		
+		return p.release();
+	}
+	
+	std::vector<char> EntityEventPacket::Generate() {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		writer.WriteVariableInteger(entityId);
+		writer.Write(static_cast<uint8_t>(type));
+		writer.WriteVariableInteger(param);
 		
 		return std::move(writer.ToArray());
 	}
 	
 	
-	Packet *ReloadWeaponPacket::Decode(const std::vector<char> &data) {
+	Packet *EntityDiePacket::Decode(const std::vector<char> &data) {
 		SPADES_MARK_FUNCTION();
 		
-		std::unique_ptr<ReloadWeaponPacket> p(new ReloadWeaponPacket());
+		std::unique_ptr<EntityDiePacket> p(new EntityDiePacket());
 		PacketReader reader(data);
 		
-		p->timestamp = reader.ReadTimeStamp();
+		p->entityId = static_cast<uint32_t>(reader.ReadVariableInteger());
+		p->type = static_cast<EntityDeathType>(reader.ReadByte());
+		p->param = reader.ReadVariableInteger();
 		
 		return p.release();
 	}
 	
-	std::vector<char> ReloadWeaponPacket::Generate() {
+	std::vector<char> EntityDiePacket::Generate() {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		writer.WriteVariableInteger(entityId);
+		writer.Write(static_cast<uint8_t>(type));
+		writer.WriteVariableInteger(param);
+		
+		return std::move(writer.ToArray());
+	}
+	
+	
+	
+	Packet *PlayerActionPacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<PlayerActionPacket> p(new PlayerActionPacket());
+		PacketReader reader(data);
+		
+		p->timestamp = reader.ReadTimeStamp();
+		p->type = static_cast<EntityEventType>(reader.ReadByte());
+		p->param = reader.ReadVariableInteger();
+		
+		return p.release();
+	}
+	
+	std::vector<char> PlayerActionPacket::Generate() {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
 		
 		writer.Write(timestamp);
+		writer.Write(static_cast<uint8_t>(type));
+		writer.WriteVariableInteger(param);
+		
+		return std::move(writer.ToArray());
+	}
+	
+	
+	Packet *HitEntityPacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<HitEntityPacket> p(new HitEntityPacket());
+		PacketReader reader(data);
+		
+		p->timestamp = reader.ReadTimeStamp();
+		p->entityId = static_cast<uint32_t>(reader.ReadVariableInteger());
+		p->type = static_cast<HitType>(reader.ReadByte());
+		p->damageType = static_cast<DamageType>(reader.ReadByte());
+		p->firePosition = reader.ReadVector3();
+		p->hitPosition = reader.ReadVector3();
+		
+		return p.release();
+	}
+	
+	std::vector<char> HitEntityPacket::Generate() {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		writer.Write(timestamp);
+		writer.WriteVariableInteger(entityId);
+		writer.Write(static_cast<uint8_t>(type));
+		writer.Write(static_cast<uint8_t>(damageType));
+		writer.Write(firePosition);
+		writer.Write(hitPosition);
+		
+		return std::move(writer.ToArray());
+	}
+	
+	
+	
+	Packet *HitTerrainPacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<HitTerrainPacket> p(new HitTerrainPacket());
+		PacketReader reader(data);
+		
+		p->timestamp = reader.ReadTimeStamp();
+		p->blockPosition = reader.ReadBlockCoord();
+		p->damageType = static_cast<DamageType>(reader.ReadByte());
+		p->firePosition = reader.ReadVector3();
+		p->hitPosition = reader.ReadVector3();
+		
+		return p.release();
+	}
+	
+	std::vector<char> HitTerrainPacket::Generate() {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		writer.Write(timestamp);
+		writer.WriteBlockCoord(blockPosition);
+		writer.Write(static_cast<uint8_t>(damageType));
+		writer.Write(firePosition);
+		writer.Write(hitPosition);
 		
 		return std::move(writer.ToArray());
 	}

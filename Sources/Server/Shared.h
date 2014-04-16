@@ -43,18 +43,39 @@ namespace spades { namespace protocol {
 	};
 	
 	enum class PacketType {
+		// session
 		Greeting = 1,
 		InitiateConnection = 2,
 		ServerCertificate = 3,
 		ClientCertificate = 4,
 		Kick = 5,
+		
+		// game state loader
 		GameStateHeader = 6,
 		MapData = 7,
 		GameStateFinal = 8,
-		EntityUpdate = 20,
-		ClientSideEntityUpdate = 21,
-		JumpAction = 30,
-		ReloadWeapon = 31
+		
+		// generic
+		GenericCommand = 9,
+		
+		// updates
+		EntityUpdate = 30,
+		EntityEvent = 31,
+		EntityDie = 32,
+		ClientSideEntityUpdate = 35,
+		
+		TerrainUpdate = 40,
+		
+		// actions
+		PlayerAction = 60,
+		// TODO: ride weapon, use deployed weapon
+		
+		// interractions
+		HitEntity = 90,
+		HitTerrain = 91
+		// TODO: playerstate
+		// TODO: damage notify
+		// TODO: chat
 	};
 	
 	enum class PacketUsage {
@@ -65,11 +86,16 @@ namespace spades { namespace protocol {
 	
 	using game::EntityType;
 	using game::EntityFlags;
+	using game::EntityDeathType;
+	using game::EntityEventType;
 	using game::TrajectoryType;
 	using game::Trajectory;
 	using game::PlayerInput;
 	using game::ToolSlot;
+	using game::DamageType;
+	using game::HitType;
 	using game::SkinId;
+	using game::DamageInfo;
 	using TimeStampType = std::uint64_t;
 	
 	class GreetingPacket;
@@ -80,10 +106,15 @@ namespace spades { namespace protocol {
 	class GameStateHeaderPacket;
 	class MapDataPacket;
 	class GameStateFinalPacket;
+	class GenericCommandPacket;
 	class EntityUpdatePacket;
+	class EntityDiePacket;
 	class ClientSideEntityUpdatePacket;
-	class JumpActionPacket;
-	class ReloadWeaponPacket;
+	class TerrainUpdatePacket;
+	class EntityEventPacket;
+	class PlayerActionPacket;
+	class HitEntityPacket;
+	class HitTerrainPacket;
 	
 	static const char *ProtocolName = "WorldOfSpades 0.1";
 	
@@ -94,13 +125,23 @@ namespace spades { namespace protocol {
 	ServerCertificatePacket,
 	ClientCertificatePacket,
 	KickPacket,
+	
 	GameStateHeaderPacket,
 	MapDataPacket,
 	GameStateFinalPacket,
+	
+	GenericCommandPacket,
+	
 	EntityUpdatePacket,
 	ClientSideEntityUpdatePacket,
-	JumpActionPacket,
-	ReloadWeaponPacket
+	TerrainUpdatePacket,
+	EntityEventPacket,
+	EntityDiePacket,
+	
+	PlayerActionPacket,
+	
+	HitEntityPacket,
+	HitTerrainPacket
 	>::list;
 	
 	class PacketVisitor : public stmp::visitor_generator<PacketClassList> {
@@ -285,6 +326,18 @@ namespace spades { namespace protocol {
 		std::map<std::string, std::string> properties;
 	};
 	
+	class GenericCommandPacket : public BasePacket
+	<GenericCommandPacket,
+	PacketUsage::ServerAndClient, PacketType::GenericCommand> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~GenericCommandPacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		std::vector<std::string> parts;
+	};
+	
 	struct EntityUpdateItem {
 		bool create;
 		
@@ -342,28 +395,103 @@ namespace spades { namespace protocol {
 		std::vector<EntityUpdateItem> items;
 	};
 	
-	class JumpActionPacket : public BasePacket
-	<JumpActionPacket,
-	PacketUsage::ClientOnly, PacketType::JumpAction> {
-	public:
-		static Packet *Decode(const std::vector<char>&);
-		virtual ~JumpActionPacket() {}
-		
-		virtual std::vector<char> Generate();
-		
-		TimeStampType timestamp;
+	struct TerrainEdit {
+		IntVector3 position;
+		stmp::optional<uint32_t> color; // create color | destroy
 	};
 	
-	class ReloadWeaponPacket : public BasePacket
-	<ReloadWeaponPacket,
-	PacketUsage::ClientOnly, PacketType::ReloadWeapon> {
+	class TerrainUpdatePacket : public BasePacket
+	<TerrainUpdatePacket,
+	PacketUsage::ServerOnly, PacketType::TerrainUpdate> {
 	public:
 		static Packet *Decode(const std::vector<char>&);
-		virtual ~ReloadWeaponPacket() {}
+		virtual ~TerrainUpdatePacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		std::vector<TerrainEdit> edits;
+	};
+	
+	class EntityEventPacket : public BasePacket
+	<EntityEventPacket,
+	PacketUsage::ClientOnly, PacketType::EntityEvent> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~EntityEventPacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		uint32_t entityId;
+		EntityEventType type;
+		uint64_t param;
+	};
+	
+	class EntityDiePacket : public BasePacket
+	<EntityDiePacket,
+	PacketUsage::ClientOnly, PacketType::EntityDie> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~EntityDiePacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		uint32_t entityId;
+		EntityDeathType type;
+		uint64_t param;
+		
+		stmp::optional<DamageInfo> damage;
+	};
+	
+	class PlayerActionPacket : public BasePacket
+	<PlayerActionPacket,
+	PacketUsage::ClientOnly, PacketType::PlayerAction> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~PlayerActionPacket() {}
 		
 		virtual std::vector<char> Generate();
 		
 		TimeStampType timestamp;
+		EntityEventType type;
+		uint64_t param;
+	};
+	
+	
+	class HitEntityPacket : public BasePacket
+	<HitEntityPacket,
+	PacketUsage::ClientOnly, PacketType::HitEntity> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~HitEntityPacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		TimeStampType timestamp;
+		uint32_t entityId;
+		
+		HitType type;
+		DamageType damageType;
+		
+		Vector3 firePosition;
+		Vector3 hitPosition;
+	};
+	
+	class HitTerrainPacket : public BasePacket
+	<HitTerrainPacket,
+	PacketUsage::ClientOnly, PacketType::HitTerrain> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~HitTerrainPacket() {}
+		
+		virtual std::vector<char> Generate();
+		
+		TimeStampType timestamp;
+		IntVector3 blockPosition;
+		
+		DamageType damageType;
+		
+		Vector3 firePosition;
+		Vector3 hitPosition;
 	};
 	
 	// TODO: player state

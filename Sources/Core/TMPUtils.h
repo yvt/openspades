@@ -5,6 +5,9 @@
  
  Licensed with MIT license.
  */
+
+#pragma once
+
 #include <iostream>
 #include <iterator>
 #include <type_traits>
