@@ -39,7 +39,8 @@ namespace spades { namespace protocol {
 		Unknown = 0,
 		InternalServerError = 1,
 		ServerFull = 2,
-		Misc = 3 // reason is already sent
+		Misc = 3, // reason is already sent
+		ServerStopped = 4
 	};
 	
 	enum class PacketType {
@@ -72,7 +73,8 @@ namespace spades { namespace protocol {
 		
 		// interractions
 		HitEntity = 90,
-		HitTerrain = 91
+		HitTerrain = 91,
+		Damage = 92,
 		// TODO: playerstate
 		// TODO: damage notify
 		// TODO: chat
@@ -115,6 +117,7 @@ namespace spades { namespace protocol {
 	class PlayerActionPacket;
 	class HitEntityPacket;
 	class HitTerrainPacket;
+	class DamagePacket;
 	
 	static const char *ProtocolName = "WorldOfSpades 0.1";
 	
@@ -141,7 +144,8 @@ namespace spades { namespace protocol {
 	PlayerActionPacket,
 	
 	HitEntityPacket,
-	HitTerrainPacket
+	HitTerrainPacket,
+	DamagePacket
 	>::list;
 	
 	class PacketVisitor : public stmp::visitor_generator<PacketClassList> {
@@ -159,7 +163,7 @@ namespace spades { namespace protocol {
 		virtual ~Packet() {}
 		virtual void Accept(PacketVisitor&) = 0;
 		virtual void Accept(ConstPacketVisitor& visitor) const = 0;
-		virtual std::vector<char> Generate() = 0;
+		virtual std::vector<char> Generate() const = 0;
 		virtual PacketUsage GetUsage() = 0;
 		bool CanServerSend() { return GetUsage() != PacketUsage::ClientOnly; }
 		bool CanClientSend() { return GetUsage() != PacketUsage::ServerOnly; }
@@ -205,7 +209,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~GreetingPacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		std::string nonce; // used in authentication
 		
@@ -223,7 +227,7 @@ namespace spades { namespace protocol {
 		
 		static InitiateConnectionPacket CreateDefault();
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		std::string protocolName;
 		uint16_t majorVersion;
@@ -245,7 +249,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~ServerCertificatePacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		bool isValid; /** some servers don't use certificate */
 		std::string certificate;
@@ -263,7 +267,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~ClientCertificatePacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		bool isValid; /** some clients don't use certificate */
 		std::string certificate;
@@ -278,7 +282,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~KickPacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		std::string reason;
 	};
@@ -295,7 +299,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~GameStateHeaderPacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		std::map<std::string, std::string> properties;
 	};
@@ -308,7 +312,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~MapDataPacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		std::string fragment;
 	};
@@ -321,7 +325,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~GameStateFinalPacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		std::map<std::string, std::string> properties;
 	};
@@ -333,7 +337,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~GenericCommandPacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		std::vector<std::string> parts;
 	};
@@ -372,7 +376,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~EntityUpdatePacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		std::vector<EntityUpdateItem> items;
 	};
@@ -389,7 +393,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~ClientSideEntityUpdatePacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		TimeStampType timestamp;
 		std::vector<EntityUpdateItem> items;
@@ -407,19 +411,19 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~TerrainUpdatePacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		std::vector<TerrainEdit> edits;
 	};
 	
 	class EntityEventPacket : public BasePacket
 	<EntityEventPacket,
-	PacketUsage::ClientOnly, PacketType::EntityEvent> {
+	PacketUsage::ServerOnly, PacketType::EntityEvent> {
 	public:
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~EntityEventPacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		uint32_t entityId;
 		EntityEventType type;
@@ -428,12 +432,12 @@ namespace spades { namespace protocol {
 	
 	class EntityDiePacket : public BasePacket
 	<EntityDiePacket,
-	PacketUsage::ClientOnly, PacketType::EntityDie> {
+	PacketUsage::ServerOnly, PacketType::EntityDie> {
 	public:
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~EntityDiePacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		uint32_t entityId;
 		EntityDeathType type;
@@ -449,7 +453,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~PlayerActionPacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		TimeStampType timestamp;
 		EntityEventType type;
@@ -464,7 +468,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~HitEntityPacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		TimeStampType timestamp;
 		uint32_t entityId;
@@ -483,7 +487,7 @@ namespace spades { namespace protocol {
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~HitTerrainPacket() {}
 		
-		virtual std::vector<char> Generate();
+		virtual std::vector<char> Generate() const;
 		
 		TimeStampType timestamp;
 		IntVector3 blockPosition;
@@ -492,6 +496,18 @@ namespace spades { namespace protocol {
 		
 		Vector3 firePosition;
 		Vector3 hitPosition;
+	};
+	
+	class DamagePacket : public BasePacket
+	<DamagePacket,
+	PacketUsage::ServerOnly, PacketType::Damage> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~DamagePacket() {}
+		
+		virtual std::vector<char> Generate() const;
+		
+		DamageInfo damage;
 	};
 	
 	// TODO: player state

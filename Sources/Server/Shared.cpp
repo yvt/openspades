@@ -222,7 +222,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> GreetingPacket::Generate() {
+	std::vector<char> GreetingPacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -272,7 +272,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> InitiateConnectionPacket::Generate() {
+	std::vector<char> InitiateConnectionPacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -307,7 +307,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> ServerCertificatePacket::Generate() {
+	std::vector<char> ServerCertificatePacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -338,7 +338,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> ClientCertificatePacket::Generate() {
+	std::vector<char> ClientCertificatePacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -364,7 +364,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> KickPacket::Generate() {
+	std::vector<char> KickPacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -385,7 +385,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> GameStateHeaderPacket::Generate() {
+	std::vector<char> GameStateHeaderPacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -408,7 +408,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> MapDataPacket::Generate() {
+	std::vector<char> MapDataPacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -430,7 +430,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> GameStateFinalPacket::Generate() {
+	std::vector<char> GameStateFinalPacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -454,7 +454,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> GenericCommandPacket::Generate() {
+	std::vector<char> GenericCommandPacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -739,7 +739,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> EntityUpdatePacket::Generate() {
+	std::vector<char> EntityUpdatePacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -768,7 +768,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> ClientSideEntityUpdatePacket::Generate() {
+	std::vector<char> ClientSideEntityUpdatePacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -821,7 +821,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> TerrainUpdatePacket::Generate() {
+	std::vector<char> TerrainUpdatePacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -870,7 +870,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> EntityEventPacket::Generate() {
+	std::vector<char> EntityEventPacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -893,10 +893,23 @@ namespace spades { namespace protocol {
 		p->type = static_cast<EntityDeathType>(reader.ReadByte());
 		p->param = reader.ReadVariableInteger();
 		
+		auto damageType = reader.ReadByte();
+		if(!reader.IsEndOfPacket()) {
+			DamageInfo info;
+			info.toEntity = p->entityId;
+			info.damageType = static_cast<DamageType>(damageType & 0x7f);
+			info.firePosition = reader.ReadVector3();
+			info.hitPosition = reader.ReadVector3();
+			if(damageType & 0x80) {
+				info.fromEntity = static_cast<uint32_t>(reader.ReadVariableInteger());
+			}
+			p->damage = info;
+		}
+		
 		return p.release();
 	}
 	
-	std::vector<char> EntityDiePacket::Generate() {
+	std::vector<char> EntityDiePacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -904,6 +917,17 @@ namespace spades { namespace protocol {
 		writer.WriteVariableInteger(entityId);
 		writer.Write(static_cast<uint8_t>(type));
 		writer.WriteVariableInteger(param);
+		
+		if(damage) {
+			const auto& info = *damage;
+			auto damageType = static_cast<uint8_t>(info.damageType);
+			if(info.fromEntity) damageType |= 0x80;
+			writer.Write(damageType);
+			writer.Write(info.firePosition);
+			writer.Write(info.hitPosition);
+			if(info.fromEntity)
+				writer.WriteVariableInteger(*info.fromEntity);
+		}
 		
 		return std::move(writer.ToArray());
 	}
@@ -923,7 +947,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> PlayerActionPacket::Generate() {
+	std::vector<char> PlayerActionPacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -952,7 +976,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> HitEntityPacket::Generate() {
+	std::vector<char> HitEntityPacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -984,7 +1008,7 @@ namespace spades { namespace protocol {
 		return p.release();
 	}
 	
-	std::vector<char> HitTerrainPacket::Generate() {
+	std::vector<char> HitTerrainPacket::Generate() const {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
@@ -998,6 +1022,40 @@ namespace spades { namespace protocol {
 		return std::move(writer.ToArray());
 	}
 	
+	
+	Packet *DamagePacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<DamagePacket> p(new DamagePacket());
+		PacketReader reader(data);
+		
+		auto& info = p->damage;
+		auto type = reader.ReadByte();
+		info.damageType = static_cast<DamageType>(type & 0x7f);
+		if(type & 0x80)
+			info.fromEntity = static_cast<uint32_t>(reader.ReadVariableInteger());
+		info.toEntity = static_cast<uint32_t>(reader.ReadVariableInteger());
+		info.firePosition = reader.ReadVector3();
+		info.hitPosition = reader.ReadVector3();
+		
+		return p.release();
+	}
+	
+	std::vector<char> DamagePacket::Generate() const {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		const auto& info = damage;
+		writer.Write(static_cast<uint8_t>
+					 (static_cast<int>(info.damageType)|
+					  (info.fromEntity?0x80:0)));
+		writer.WriteVariableInteger(info.toEntity);
+		writer.Write(info.firePosition);
+		writer.Write(info.hitPosition);
+		
+		return std::move(writer.ToArray());
+	}
 	
 	
 	
