@@ -21,27 +21,28 @@
 #pragma once
 
 #include "Host.h"
-#include <memory>
-#include <unordered_set>
 
 namespace spades { namespace server {
 	
-	class Connection;
+	class Server;
 	
-	class Server: public HostListener {
-		friend class Connection;
+	class Connection: public HostPeerListener {
+		friend class Server;
 		
-		std::unique_ptr<Host> host;
-		std::unordered_set<Connection *> connections;
-		
-		
+		Server *server;
+		HostPeer *peer;
+	protected:
+		// RefCountedObject should only be destroyed by
+		// RefCountedObject::Release().
+		// (not delete expr nor std::shared_ptr)
+		virtual ~Connection();
+	private:
+		void Initialize(HostPeer *);
 	public:
-		Server();
-		virtual ~Server();
+		Connection(Server *);
 		
-		
-		virtual void ClientConnected(HostPeer *peer) = 0;
+		virtual void PacketReceived(const protocol::Packet&);
+		virtual void Disconnected();
 	};
-
+	
 } }
-

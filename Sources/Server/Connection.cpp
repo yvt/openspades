@@ -18,30 +18,39 @@
  
  */
 
-#pragma once
-
-#include "Host.h"
-#include <memory>
-#include <unordered_set>
+#include "Connection.h"
+#include "Server.h"
 
 namespace spades { namespace server {
-	
-	class Connection;
-	
-	class Server: public HostListener {
-		friend class Connection;
-		
-		std::unique_ptr<Host> host;
-		std::unordered_set<Connection *> connections;
-		
-		
-	public:
-		Server();
-		virtual ~Server();
-		
-		
-		virtual void ClientConnected(HostPeer *peer) = 0;
-	};
 
+	Connection::Connection(Server *server):
+	server(server),
+	peer(nullptr) {
+		
+	}
+	
+	void Connection::Initialize(HostPeer *peer) {
+		// TODO: do something
+		
+		peer->SetListener(static_cast<HostPeerListener *>(this));
+		this->peer = peer;
+	}
+	
+	Connection::~Connection() {
+		auto& conns = server->connections;
+		auto it = conns.find(this);
+		if(it != conns.end())
+			conns.erase(it);
+	}
+	
+	void Connection::Disconnected() {
+		peer = nullptr;
+		// HostPeer will release the reference to this
+		// instance after calling this function.
+	}
+	
+	void Connection::PacketReceived(const protocol::Packet &packet) {
+		SPNotImplemented();
+	}
+	
 } }
-

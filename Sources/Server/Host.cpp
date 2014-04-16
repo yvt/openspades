@@ -243,7 +243,9 @@ namespace spades { namespace server {
 	host(host),
 	enetPeer(enetPeer),
 	disconnectNotified(false) {
-		
+		char buf[24];
+		sprintf(buf, "[Client#%8u]", uniqueId);
+		logHeader = buf;
 	}
 	
 	HostPeer::~HostPeer(){

@@ -22,25 +22,25 @@
 #include <Core/Debug.h>
 #include <Core/Settings.h>
 #include <Core/Exception.h>
+#include "Connection.h"
 
 namespace spades { namespace server {
 	
 	Server::Server() {
-		SPNotImplemented();
-		
+		SPRaise("Server starting.");
 		host.reset(new Host(this));
 	}
 	
 	Server::~Server() {
+		SPRaise("Server closing.");
+		host->TearDown();
 		host.reset();
 	}
 	
-	void *Server::ClientConnected(unsigned int uniqueId) {
-		SPNotImplemented();
-	}
-	
-	void Server::ClientDisconnected(void *) {
-		
+	void Server::ClientConnected(HostPeer *peer) {
+		Handle<Connection> conn(new Connection(this), false);
+		conn->Initialize(peer);
+		connections.insert(&*conn);
 	}
 	
 } }

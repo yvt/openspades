@@ -30,12 +30,16 @@ namespace spades { namespace server {
 	class Host;
 	
 	class HostPeerListener: public RefCountedObject {
+	protected:
+		virtual ~HostPeerListener() {}
 	public:
 		virtual void PacketReceived(const protocol::Packet&) = 0;
 		
 		/** Called when a client has disconnected from the server.
 		 * After this being called, associated HostPeer is no longer
-		 * available. */
+		 * available.
+		 * HostPeer will be destroyed and release reference to
+		 * the HostPeerListener. */
 		virtual void Disconnected() = 0;
 	};
 	
@@ -45,6 +49,8 @@ namespace spades { namespace server {
 		Host *host;
 		Handle<HostPeerListener> listener;
 		ENetPeer *enetPeer;
+		std::string logHeader;
+		
 		HostPeer(Host *host, ENetPeer *enetPeer);
 		bool disconnectNotified;
 		
@@ -60,6 +66,7 @@ namespace spades { namespace server {
 		void Send(const protocol::Packet&);
 		void Disconnect(protocol::DisconnectReason);
 		
+		const std::string& GetLogHeader() { return logHeader; }
 	};
 	
 	class HostListener {
