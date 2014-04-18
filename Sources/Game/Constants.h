@@ -82,6 +82,10 @@ namespace spades { namespace game {
 		Quaternion angle; // used except for player
 		Vector3 angularVelocity; // used except for player
 		Vector3 eulerAngle; // used only for player
+		
+		/** When parentEntityId is set, the entity is locked in the 
+		 * local coordinate space of the parent entity. */
+		stmp::optional<std::uint32_t> parentEntityId;
 	};
 	
 	enum class PlayerStance {

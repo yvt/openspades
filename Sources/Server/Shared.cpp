@@ -529,7 +529,8 @@ namespace spades { namespace protocol {
 	
 	static Trajectory DecodeTrajectory(PacketReader& reader) {
 		Trajectory traj;
-		traj.type = static_cast<TrajectoryType>(reader.ReadByte());
+		auto type = reader.ReadByte();
+		traj.type = static_cast<TrajectoryType>(type & 0x7f);
 		traj.origin = reader.ReadVector3();
 		traj.velocity = reader.ReadVector3();
 		
@@ -548,11 +549,21 @@ namespace spades { namespace protocol {
 				SPRaise("Unknown trajectory type: %d",
 						static_cast<int>(traj.type));
 		}
+		
+		if(type & 0x80) {
+			// has parent entity
+			traj.parentEntityId = static_cast<uint32_t>(reader.ReadVariableInteger());
+		}
+		
 		return traj;
 	}
 	
 	static void WriteTrajectory(PacketWriter& writer, const Trajectory& traj) {
-		writer.Write(static_cast<uint8_t>(traj.type));
+		auto type = static_cast<uint8_t>(traj.type);
+		if(traj.parentEntityId) {
+			type |= 0x80;
+		}
+		writer.Write(type);
 		writer.Write(traj.origin);
 		writer.Write(traj.velocity);
 		switch(traj.type) {
@@ -569,6 +580,9 @@ namespace spades { namespace protocol {
 			default:
 				SPRaise("Unknown trajectory type: %d",
 						static_cast<int>(traj.type));
+		}
+		if(traj.parentEntityId) {
+			writer.WriteVariableInteger(*traj.parentEntityId);
 		}
 	}
 	
