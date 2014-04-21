@@ -112,17 +112,10 @@ namespace spades {
 					return "Delete";
 				case SDLK_RETURN:
 					return "Enter";
-                case SDLK_SLASH:
-                    return "/";
+                		case SDLK_SLASH:
+                    			return "/";
 				default:
-					if((k.sym >= 0 && k.sym < 128 && isalnum(k.sym))){
-						static std::string charKeys[128];
-						int ind = k.sym;
-						if(charKeys[ind].empty())
-							charKeys[ind] += (char)k.sym;
-						return charKeys[ind];
-					}
-					return std::string();
+					return std::string( SDL_GetScancodeName( k.scancode ) );
 			}
 		}
 		
