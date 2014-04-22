@@ -475,6 +475,22 @@ namespace spades {
 					SPRaise("Failed to create graphics window: %s", msg.c_str());
 				}
 				
+#ifdef __APPLE__
+#elif __unix
+				SDL_Surface *surface;
+				surface = IMG_Load("Icons/hicolor/16x16/apps/openspades.png");
+				if(!surface) {
+					surface = IMG_Load("Resources/Icons/hicolor/16x16/apps/openspades.png");
+				}
+				if(!surface) {
+					std::string msg = SDL_GetError();
+					SPLog("Failed to load icon: %s", msg.c_str());
+				}
+				if(surface != 0) {
+					SDL_SetWindowIcon(window, surface);
+				}
+				SDL_FreeSurface(surface);
+#endif
 				SDL_SetRelativeMouseMode(SDL_FALSE);
 				SDL_ShowCursor(0);
 				mActive = true;
