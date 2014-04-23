@@ -31,6 +31,8 @@
 #include <Audio/YsrDevice.h>
 #include <Audio/NullDevice.h>
 #include <ctype.h>
+#include <Core/FileManager.h>
+#include <Core/IStream.h>
 #include <Core/Debug.h>
 #include <Core/Settings.h>
 #include <Core/ConcurrentDispatch.h>
