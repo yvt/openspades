@@ -18,19 +18,23 @@ if(RESDIR_DEFINED)
 	endforeach()
 endif()
 
-add_custom_target(OpenSpades_Resources ALL COMMENT "Preparing resources")
 
-add_custom_command(
-	TARGET OpenSpades_Resources
-	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/downloadpak.sh ${CMAKE_CURRENT_SOURCE_DIR}
-	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-
-if(UNIX)
-	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Icons)
+if(OPENSPADES_RESOURCES)
+	add_custom_target(OpenSpades_Resources ALL COMMENT "Preparing resources")
 
 	add_custom_command(
 		TARGET OpenSpades_Resources
-		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/Icons/converticons.sh ${CMAKE_CURRENT_SOURCE_DIR}/Icons
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Icons)
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/downloadpak.sh ${CMAKE_CURRENT_SOURCE_DIR}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
-endif(UNIX)
+	if(UNIX)
+		file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Icons)
+
+		add_custom_command(
+			TARGET OpenSpades_Resources
+			COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/Icons/converticons.sh ${CMAKE_CURRENT_SOURCE_DIR}/Icons
+			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Icons)
+
+	endif(UNIX)
+
+endif()
