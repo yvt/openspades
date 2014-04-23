@@ -21,6 +21,8 @@ before_install:
   - hg clone http://hg.libsdl.org/SDL && cd SDL && ./configure && make && sudo make install && cd ..
   - curl https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.0.tar.gz | tar -xz && cd SDL2_image-2.0.0 && ./configure && make && sudo make install && cd ..
 
-script: cmake CMakeLists.txt && make
+script: 
+  - mkdir openspades.mk && cd openspades.mk
+  - cmake -DOPENSPADES_RESOURCES=off .. && make
 
 
