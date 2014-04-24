@@ -20,21 +20,43 @@ endif()
 
 
 if(OPENSPADES_RESOURCES)
-	add_custom_target(OpenSpades_Resources ALL COMMENT "Preparing resources")
+	add_custom_target(OpenSpades_Resources ALL COMMENT "Downloading external resources")
 
 	add_custom_command(
 		TARGET OpenSpades_Resources
 		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/downloadpak.sh ${CMAKE_CURRENT_SOURCE_DIR}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
-	if(UNIX)
-		file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Icons)
-
-		add_custom_command(
-			TARGET OpenSpades_Resources
-			COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/Icons/converticons.sh ${CMAKE_CURRENT_SOURCE_DIR}/Icons
-			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Icons)
-
-	endif(UNIX)
-
 endif()
+
+if(UNIX)
+	add_custom_target(OpenSpades_Icons ALL COMMENT "Generating icons")
+	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Icons)
+	add_custom_command(
+		TARGET OpenSpades_Icons
+		COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/Icons/converticons.sh ${CMAKE_CURRENT_SOURCE_DIR}/Icons
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Icons)
+
+	set(ICON_DIR ${CMAKE_CURRENT_BINARY_DIR}/Icons/hicolor/16x16/apps)
+	add_library(OpenSpades_BinaryExecutableIcon
+		STATIC
+		${ICON_DIR}/icon.o
+	)
+	set_target_properties(
+		OpenSpades_BinaryExecutableIcon
+		PROPERTIES
+		LINKER_LANGUAGE CXX
+	)
+	set_source_files_properties(
+		${ICON_DIR}/icon.o
+		PROPERTIES
+		EXTERNAL_OBJECT true
+		GENERATED true
+	)
+	add_custom_command(
+		OUTPUT ${ICON_DIR}/icon.o
+		COMMAND cd ${ICON_DIR} && ld -r -b binary -o icon.o openspades.png
+		COMMAND objcopy --rename-section .data=.rodata,alloc,load,readonly,data,contents ${ICON_DIR}/icon.o ${ICON_DIR}/icon.o
+		DEPENDS OpenSpades_Icons
+	)
+endif(UNIX)
