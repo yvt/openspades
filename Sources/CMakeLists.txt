@@ -86,6 +86,29 @@ source_group("libs\\poly2tri\\sweep" FILES ${POLY2TRI_SWEEP_FILES})
 source_group("ScriptBindings" FILES ${SCRIPTBINDING_FILES})
 source_group("libs\\unzip" FILES ${UNZIP_FILES})
 
+if(UNIX AND NOT APPLE)
+	set(ICON_DIR ${CMAKE_BINARY_DIR}/Resources/Icons/hicolor/16x16/apps)
+	add_library(Icon
+		STATIC
+		${ICON_DIR}/icon.o
+	)
+	set_target_properties(
+		Icon
+		PROPERTIES
+		LINKER_LANGUAGE CXX
+	)
+	add_custom_command(OUTPUT ${ICON_DIR}/icon.o
+		COMMAND cd ${ICON_DIR} && ld -r -b binary -o icon.o openspades.png
+		COMMAND objcopy --rename-section .data=.rodata,alloc,load,readonly,data,contents ${ICON_DIR}/icon.o ${ICON_DIR}/icon.o
+	)
+	SET_SOURCE_FILES_PROPERTIES(
+		${ICON_DIR}/icon.o
+		PROPERTIES
+		EXTERNAL_OBJECT true
+		GENERATED true
+	)
+	target_link_libraries(OpenSpades Icon)
+endif(UNIX AND NOT APPLE)
 
 target_link_libraries(OpenSpades ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS})
 

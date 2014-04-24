@@ -479,25 +479,19 @@ namespace spades {
 				
 #ifdef __APPLE__
 #elif __unix
-				SDL_Surface *surface = nullptr;
-				char filename[] = "Icons/hicolor/16x16/apps/openspades.png";
-				if(FileManager::FileExists(filename)) {
-					std::unique_ptr<IStream> s(FileManager::OpenForReading(filename));
-					char buffer[1024]; // 1 kbyte is enough
-					s->Read(buffer, sizeof(buffer));
-					SDL_RWops *rwops = nullptr;
-					rwops = SDL_RWFromConstMem(buffer, sizeof(buffer));
-					if (rwops != nullptr) {
-						surface = IMG_LoadPNG_RW(rwops);
-						SDL_FreeRW(rwops);
-					}
+				SDL_Surface *icon = nullptr;
+				SDL_RWops *icon_rw = nullptr;
+				icon_rw = SDL_RWFromConstMem(LDVAR(openspades_png), LDLEN(openspades_png));
+				if (icon_rw != nullptr) {
+					icon = IMG_LoadPNG_RW(icon_rw);
+					SDL_FreeRW(icon_rw);
 				}
-				if(surface == nullptr) {
+				if(icon == nullptr) {
 					std::string msg = SDL_GetError();
 					SPLog("Failed to load icon: %s", msg.c_str());
 				} else {
-					SDL_SetWindowIcon(window, surface);
-					SDL_FreeSurface(surface);
+					SDL_SetWindowIcon(window, icon);
+					SDL_FreeSurface(icon);
 				}
 #endif
 				SDL_SetRelativeMouseMode(SDL_FALSE);
