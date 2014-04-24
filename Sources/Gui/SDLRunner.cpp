@@ -31,6 +31,8 @@
 #include <Audio/YsrDevice.h>
 #include <Audio/NullDevice.h>
 #include <ctype.h>
+#include <Core/FileManager.h>
+#include <Core/IStream.h>
 #include <Core/Debug.h>
 #include <Core/Settings.h>
 #include <Core/ConcurrentDispatch.h>
@@ -475,6 +477,23 @@ namespace spades {
 					SPRaise("Failed to create graphics window: %s", msg.c_str());
 				}
 				
+#ifdef __APPLE__
+#elif __unix
+				SDL_Surface *icon = nullptr;
+				SDL_RWops *icon_rw = nullptr;
+				icon_rw = SDL_RWFromConstMem(LDVAR(openspades_png), LDLEN(openspades_png));
+				if (icon_rw != nullptr) {
+					icon = IMG_LoadPNG_RW(icon_rw);
+					SDL_FreeRW(icon_rw);
+				}
+				if(icon == nullptr) {
+					std::string msg = SDL_GetError();
+					SPLog("Failed to load icon: %s", msg.c_str());
+				} else {
+					SDL_SetWindowIcon(window, icon);
+					SDL_FreeSurface(icon);
+				}
+#endif
 				SDL_SetRelativeMouseMode(SDL_FALSE);
 				SDL_ShowCursor(0);
 				mActive = true;
