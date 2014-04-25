@@ -41,6 +41,7 @@ endif()
 add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${GUI_FILES}
 	${IMPORTS_FILES} ${KISS_FILES} ${JSON_FILES} ${JSON_INCLUDE} ${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES} ${UNZIP_FILES} ${SCRIPTBINDING_FILES} ${RESOURCE_FILES})
 set_target_properties(OpenSpades PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(OpenSpades PROPERTIES OUTPUT_NAME openspades)
 set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -105,4 +106,4 @@ else()
 	target_link_libraries(OpenSpades Xext)
 endif()
 
-install(TARGETS OpenSpades DESTINATION bin)
+#install(TARGETS OpenSpades DESTINATION bin)

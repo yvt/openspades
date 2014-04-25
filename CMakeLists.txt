@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+set(CMAKE_INSTALL_PREFIX "/usr/local")
 project(OpenSpades)
 
 set(OpenSpades_VERSION_MAJOR 0)
@@ -159,51 +160,37 @@ add_subdirectory(Sources)
 
 
 if(UNIX)
-	set(CMAKE_INSTALL_PREFIX "/usr/local")
-
 	# various texts
 	INSTALL(FILES AUTHORS ChangeLog LICENSE README.md DESTINATION share/doc/openspades/)
 
 	# install devpak
-
 	install(
-		DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Resources/DevPak/
+		DIRECTORY ${CMAKE_BINARY_DIR}/Resources/DevPak/
 		DESTINATION share/games/openspades/Resources)
 
 	# install other resources, that not packed to devpak
-
 	install(DIRECTORY Resources/Gfx     DESTINATION share/games/openspades/Resources)
-	install(DIRECTORY Resources/Icons   DESTINATION share/games/openspades/Resources)
 	install(DIRECTORY Resources/Locales DESTINATION share/games/openspades/Resources)
 	install(DIRECTORY Resources/Maps    DESTINATION share/games/openspades/Resources)
 	install(DIRECTORY Resources/Scripts DESTINATION share/games/openspades/Resources)
 	install(DIRECTORY Resources/Shaders DESTINATION share/games/openspades/Resources)
 
 	# install icons
-
 	INSTALL(
-		DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Resources/Icons/hicolor/
-		DESTINATION share/icons/hicolor)
+		DIRECTORY ${CMAKE_BINARY_DIR}/Resources/Icons/hicolor/
+		DESTINATION share/icons/hicolor
+		FILES_MATCHING PATTERN "*.png")
 
 	INSTALL(FILES Resources/Icons/openspades.xpm DESTINATION share/pixmaps/)
 
 	# binary file
-	INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/bin/OpenSpades DESTINATION lib/openspades/bin/)
-
-	# make symlink in /usr(/local)?/games/
-	INSTALL(CODE "
-		file(MAKE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/games)
-	")
-
-	INSTALL(CODE "
-		EXECUTE_PROCESS (
-			COMMAND ln -sf ${CMAKE_INSTALL_PREFIX}/lib/openspades/bin/OpenSpades ${CMAKE_INSTALL_PREFIX}/games/openspades
-			WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
-		)
-	")
+	INSTALL(PROGRAMS ${CMAKE_BINARY_DIR}/bin/openspades DESTINATION games)
 
 	# desktop file
 	INSTALL(FILES Resources/Desktop/openspades.desktop DESTINATION share/applications/)
+
+	# Currently there is no files in lib/openspades. But if you reading this message in future and want to
+	# place somewhere libs, binaries or other non-media stuff, place them in lib/openspades. Thank you.
 
 endif(UNIX)
 
@@ -212,7 +199,9 @@ endif(UNIX)
 #see http://www.cmake.org/cmake/help/v2.8.11/cpack.html
 set(CPACK_PACKAGE_NAME "OpenSpades")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Open-source clone of Ace of Spades")
+set(CPACK_PACKAGE_DESCRIPTION "Open-source clone of Ace of Spades - free FPS sandbox game")
 set(CPACK_PACKAGE_VENDOR "yvt, assorted")
+set(CPACK_PACKAGE_CONTACT "yvt <i@yvt.jp>") 
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 SET(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
@@ -226,22 +215,33 @@ if(WIN32 AND NOT UNIX)
 	set(CPACK_NSIS_DISPLAY_NAME "OpenSpades ${OPENSPADES_FULL_VERSION}")
 	# There is a bug in NSIS that does not handle full unix paths properly. Make
 	# sure there is at least one set of four (4) backlasshes.
-	set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\OpenSpades.exe")
+	set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\openspades.exe")
 	# TODO: set(CPACK_PACKAGE_ICON  "")
 	set(CPACK_NSIS_HELP_LINK "https://sites.google.com/a/yvt.jp/openspades/")
 	set(CPACK_NSIS_URL_INFO_ABOUT "http://buildandshoot.com/viewforum.php?f=57")
-	#SET(CPACK_NSIS_CONTACT "me@my-personal-home-page.com")
+	SET(CPACK_NSIS_CONTACT "i@yvt.jp")
 	# TODO: SET(CPACK_NSIS_CREATE_ICONS_EXTRA "")
 	# TODO: SET(CPACK_NSIS_DELETE_ICONS_EXTRA "")
-	# TODO: SET(CPACK_NSIS_MUI_FINISHPAGE_RUN "OpenSpades.exe")
+	# TODO: SET(CPACK_NSIS_MUI_FINISHPAGE_RUN "openspades.exe")
 	set(CPACK_NSIS_MODIFY_PATH ON)
-	set(CPACK_PACKAGING_INSTALL_PREFIX "/")
 else()
-	set(CPACK_STRIP_FILES "bin/OpenSpades")
-	set(CPACK_SOURCE_STRIP_FILES "")
+	# usage: `cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .. ; make package`
+	INCLUDE(InstallRequiredSystemLibraries)
+	set(CPACK_PACKAGING_INSTALL_PREFIX "/usr") 
+	SET(CPACK_STRIP_FILES "bin/openspades")
+	SET(CPACK_SET_DESTDIR "on")
+	SET(CPACK_GENERATOR "DEB;TGZ")
+	SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.19), libgcc1 (>= 1:4.9), libstdc++6 (>= 4.8.2), zlib1g (>= 1:1.2.8), libsdl2 (>= 2.0.0), libsdl2-image (>= 2.0.0)")
+	SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+	SET(CPACK_DEBIAN_PACKAGE_SECTION "games")
+	SET(CPACK_DEBIAN_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
+
+	set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "")
+	set(CPACK_DEBIAN_PACKAGE_SUGGESTS "")
+	SET(CPACK_COMPONENTS_ALL ALL)
 endif(WIN32 AND NOT UNIX)
 
-set(CPACK_PACKAGE_EXECUTABLES "OpenSpades" "Launch OpenSpades")
+set(CPACK_PACKAGE_EXECUTABLES "openspades" "Launch OpenSpades")
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY FALSE)		#everyone hates a dir inside a zip named exactly like the zip
 include(CPack)
 
