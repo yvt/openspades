@@ -449,7 +449,7 @@ namespace spades {
 						  MakeVector4(1.f, 1.f, 1.f, 0.7f));
 				if(maxTextureSize < 1024) {
 					capable = false;
-					AddReport("  TOO SMALL (1024 requred)",
+					AddReport("  TOO SMALL (1024 required)",
 							  MakeVector4(1.f, 0.5f, 0.5f, 1.f));
 				}
 				if((int)r_shadowMapSize > maxTextureSize) {
