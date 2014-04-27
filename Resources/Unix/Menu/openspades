@@ -1,0 +1,2 @@
+?package(openspades):needs="X11" section="Games/Action"\
+  title="OpenSpades" command="/usr/games/openspades" icon="/usr/share/pixmaps/openspades.xpm"
