@@ -134,6 +134,17 @@ endif()
 
 option(OPENSPADES_RESOURCES "NO_OPENSPADES_RESOURCES" ON)
 
+# note that all paths are without trailing slash
+set(OPENSPADES_INSTALL_DOC       "share/doc/openspades" CACHE STRING "Directory for installing documentation. ")
+set(OPENSPADES_INSTALL_MENU      "share/menu"           CACHE STRING "Directory for installing menu file. " )
+set(OPENSPADES_INSTALL_MAN       "share/man/man6"       CACHE STRING "Directory for installing man file. " )
+set(OPENSPADES_INSTALL_RESOURCES "share/games/openspades/Resources" CACHE STRING "Directory for installing Resources. ")
+set(OPENSPADES_INSTALL_ICONS     "share/icons/hicolor"  CACHE STRING "Directory for installing icons. ")
+set(OPENSPADES_INSTALL_PIXMAP    "share/pixmaps"        CACHE STRING "Directory for installing .xpm icon. ")
+set(OPENSPADES_INSTALL_BINARY    "games"                CACHE STRING "Directory for installing result binary executable. ")
+set(OPENSPADES_INSTALL_DESKTOP   "share/applications"   CACHE STRING "Directory for installing .desktop file. ")
+set(OPENSPADES_INSTALL_LIBS      "lib/openspades"       CACHE STRING "Directory for installing various non-media stuff. Currently not used")
+
 set(OPENSPADES_RESDIR "" CACHE STRING "Resource dir to use while developing")
 set(OPENSPADES_EXTRATITLE "" CACHE STRING "Extra info to add to the package name")
 if(OPENSPADES_RESDIR)
@@ -177,45 +188,45 @@ add_subdirectory(Sources)
 
 if(UNIX AND NOT APPLE)
 	# various texts
-	INSTALL(FILES AUTHORS ChangeLog LICENSE README.md DESTINATION share/doc/openspades/)
+	INSTALL(FILES AUTHORS ChangeLog LICENSE README.md DESTINATION ${OPENSPADES_INSTALL_DOC}/)
 
 	# menu file
-	INSTALL(FILES Resources/Unix/Menu/openspades DESTINATION share/menu/)
+	INSTALL(FILES Resources/Unix/Menu/openspades DESTINATION ${OPENSPADES_INSTALL_MENU}/)
 
 	# man file
-	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Man/openspades.6.gz DESTINATION share/man/man6/)
+	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Man/openspades.6.gz DESTINATION ${OPENSPADES_INSTALL_MAN}/)
 
 	# changelog file
-	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Debian/changelog.gz DESTINATION share/doc/openspades/)
+	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Debian/changelog.gz DESTINATION ${OPENSPADES_INSTALL_DOC}/)
 
 	# copyright file
-	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Debian/copyright DESTINATION share/doc/openspades/)
+	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Debian/copyright DESTINATION ${OPENSPADES_INSTALL_DOC}/)
 
 	# install devpak
 	install(
 		DIRECTORY ${CMAKE_BINARY_DIR}/Resources/DevPak/
-		DESTINATION share/games/openspades/Resources)
+		DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
 
 	# install other resources, that not packed to devpak
-	install(DIRECTORY Resources/Gfx     DESTINATION share/games/openspades/Resources)
-	install(DIRECTORY Resources/Locales DESTINATION share/games/openspades/Resources)
-	install(DIRECTORY Resources/Maps    DESTINATION share/games/openspades/Resources)
-	install(DIRECTORY Resources/Scripts DESTINATION share/games/openspades/Resources)
-	install(DIRECTORY Resources/Shaders DESTINATION share/games/openspades/Resources)
+	install(DIRECTORY Resources/Gfx     DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
+	install(DIRECTORY Resources/Locales DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
+	install(DIRECTORY Resources/Maps    DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
+	install(DIRECTORY Resources/Scripts DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
+	install(DIRECTORY Resources/Shaders DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
 
 	# install icons
 	INSTALL(
 		DIRECTORY ${CMAKE_BINARY_DIR}/Resources/Icons/hicolor/
-		DESTINATION share/icons/hicolor
+		DESTINATION ${OPENSPADES_INSTALL_ICONS}
 		FILES_MATCHING PATTERN "*.png")
 
-	INSTALL(FILES Resources/Icons/openspades.xpm DESTINATION share/pixmaps/)
+	INSTALL(FILES Resources/Icons/openspades.xpm DESTINATION ${OPENSPADES_INSTALL_PIXMAP}/)
 
 	# binary file
-	INSTALL(PROGRAMS ${CMAKE_BINARY_DIR}/bin/openspades DESTINATION games)
+	INSTALL(PROGRAMS ${CMAKE_BINARY_DIR}/bin/openspades DESTINATION ${OPENSPADES_INSTALL_BINARY})
 
 	# desktop file
-	INSTALL(FILES Resources/Unix/Desktop/openspades.desktop DESTINATION share/applications/)
+	INSTALL(FILES Resources/Unix/Desktop/openspades.desktop DESTINATION ${OPENSPADES_INSTALL_DESKTOP}/)
 
 	# Currently there is no files in lib/openspades. But if you reading this message in future and want to
 	# place somewhere libs, binaries or other non-media stuff, place them in lib/openspades. Thank you.
