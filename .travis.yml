@@ -9,11 +9,10 @@ cache: apt
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
   - sudo apt-get update
-  - export PACKAGES_TO_INSTALL="pkg-config libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev"
-  - if [ "$CC" == "gcc" ]; then export PACKAGES_TO_INSTALL="$PACKAGES_TO_INSTALL g++-4.8"; fi
+  - if [ "$CC" == "gcc" ]; then export APT_INSTALL_GPP=g++-4.8; fi
 
 install:
-  - sudo apt-get install $PACKAGES_TO_INSTALL
+  - sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev $APT_INSTALL_GPP
   - curl http://www.libsdl.org/release/SDL2-2.0.3.tar.gz | tar -xz
   - cd SDL2-2.0.3 && ./configure && make && sudo make install && cd ..
   - curl https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.0.tar.gz | tar -xz
