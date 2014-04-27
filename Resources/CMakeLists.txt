@@ -29,7 +29,7 @@ if(OPENSPADES_RESOURCES)
 
 endif()
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
 	add_custom_target(OpenSpades_Icons ALL COMMENT "Generating icons")
 	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Icons)
 	add_custom_command(
@@ -59,4 +59,25 @@ if(UNIX)
 		COMMAND objcopy --rename-section .data=.rodata,alloc,load,readonly,data,contents ${ICON_DIR}/icon.o ${ICON_DIR}/icon.o
 		DEPENDS OpenSpades_Icons
 	)
-endif(UNIX)
+
+
+	add_custom_target(OpenSpades_Packaging ALL COMMENT "Process unix stuff")
+
+	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Unix)
+	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Unix/Debian)
+	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Unix/Man)
+
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Unix/Debian/copyright.in" "${CMAKE_CURRENT_BINARY_DIR}/Unix/Debian/copyright")
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Unix/Man/openspades.6.in" "${CMAKE_CURRENT_BINARY_DIR}/Unix/Debian/openspades.6")
+
+	add_custom_command(
+		TARGET OpenSpades_Unix
+		COMMAND sh -c \"gzip -9 -c ${CMAKE_CURRENT_SOURCE_DIR}/Unix/Debian/changelog > changelog.gz\"
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Unix/Debian
+	)
+	add_custom_command(
+		TARGET OpenSpades_Unix
+		COMMAND sh -c \"gzip -9 -c ${CMAKE_CURRENT_BINARY_DIR}/Unix/Man/openspades.6 > openspades.6.gz\"
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Unix/Man
+	)
+endif(UNIX AND NOT APPLE)

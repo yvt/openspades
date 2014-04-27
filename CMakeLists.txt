@@ -64,9 +64,20 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 		-Wno-unknown-pragmas #learn_more: output is spammed like shit by all those #pragma mark items
 	)
 
+	if(CMAKE_BUILD_TYPE MATCHES "Release")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+		set(CMAKE_EXE_LINKER_FLAGS "-s")
+	endif()
+
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
 	# Clang C++11 support
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+
+	if(CMAKE_BUILD_TYPE MATCHES "Release")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+		set(CMAKE_EXE_LINKER_FLAGS "-s")
+	endif()
+
 elseif(MSVC)
 	add_definitions(
 		/D_CRT_SECURE_NO_WARNINGS
@@ -133,6 +144,9 @@ if(OPENSPADES_RESDIR)
 endif()
 
 
+string(TIMESTAMP CMAKE_CURRENT_YEAR "%Y")
+mark_as_advanced(CMAKE_CURRENT_YEAR)
+
 if(CMAKE_CXX_COMPILER_ID)
 	if(CMAKE_CXX_COMPILER_VERSION)
 		set(_version " ${CMAKE_CXX_COMPILER_VERSION}")
@@ -159,9 +173,21 @@ add_subdirectory(Resources)
 add_subdirectory(Sources)
 
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
 	# various texts
 	INSTALL(FILES AUTHORS ChangeLog LICENSE README.md DESTINATION share/doc/openspades/)
+
+	# menu file
+	INSTALL(FILES Resources/Unix/Menu/openspades DESTINATION share/menu/)
+
+	# man file
+	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Man/openspades.6.gz DESTINATION share/man/man6/)
+
+	# changelog file
+	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Debian/changelog.gz DESTINATION share/doc/openspades/)
+
+	# copyright file
+	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Debian/copyright DESTINATION share/doc/openspades/)
 
 	# install devpak
 	install(
@@ -187,12 +213,12 @@ if(UNIX)
 	INSTALL(PROGRAMS ${CMAKE_BINARY_DIR}/bin/openspades DESTINATION games)
 
 	# desktop file
-	INSTALL(FILES Resources/Desktop/openspades.desktop DESTINATION share/applications/)
+	INSTALL(FILES Resources/Unix/Desktop/openspades.desktop DESTINATION share/applications/)
 
 	# Currently there is no files in lib/openspades. But if you reading this message in future and want to
 	# place somewhere libs, binaries or other non-media stuff, place them in lib/openspades. Thank you.
 
-endif(UNIX)
+endif(UNIX AND NOT APPLE)
 
 
 
@@ -206,12 +232,16 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 SET(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set(CPACK_SOURCE_PACKAGE_FILE_NAME "openspades-${OPENSPADES_FULL_VERSION}")
+SET(CPACK_PACKAGE_FILE_NAME "openspades-${OPENSPADES_FULL_VERSION}-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "OpenSpades ${OPENSPADES_FULL_VERSION}")
 set(CPACK_PACKAGE_VERSION_MAJOR ${OpenSpades_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${OpenSpades_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${OpenSpades_VERSION_REVISION})
+SET(CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
+SET(CPACK_TOPLEVEL_TAG "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 
 if(WIN32 AND NOT UNIX)
+
 	set(CPACK_NSIS_DISPLAY_NAME "OpenSpades ${OPENSPADES_FULL_VERSION}")
 	# There is a bug in NSIS that does not handle full unix paths properly. Make
 	# sure there is at least one set of four (4) backlasshes.
@@ -224,14 +254,19 @@ if(WIN32 AND NOT UNIX)
 	# TODO: SET(CPACK_NSIS_DELETE_ICONS_EXTRA "")
 	# TODO: SET(CPACK_NSIS_MUI_FINISHPAGE_RUN "openspades.exe")
 	set(CPACK_NSIS_MODIFY_PATH ON)
-else()
-	# usage: `cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .. ; make; make package`
+
+elseif(UNIX AND NOT APPLE)
+
+	# usage: `cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .. ; make package`
 	INCLUDE(InstallRequiredSystemLibraries)
+	set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Open-source clone of Ace of Spades - free FPS sandbox game\n OpenSpades is a clone of Voxlap Ace of Spades 0.75, which is a free \n multiplayer game created by Ben Aksoy.\n .\n Here are some features:\n .\n   - Ability to connect to vanilla/pyspades server\n   - Better performance on some modern computers/netbooks\n   - Sophisticated graphics\n   - Fully open source (GPLv3 compliant)\n   - Cross-platform")
+	set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_SOURCE_DIR}/Resources/Unix/Control/postinst)
 	set(CPACK_PACKAGING_INSTALL_PREFIX "/usr") 
 	SET(CPACK_STRIP_FILES "bin/openspades")
 	SET(CPACK_SET_DESTDIR "on")
 	SET(CPACK_GENERATOR "DEB;TGZ")
-	SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.19), libgcc1 (>= 1:4.9), libstdc++6 (>= 4.8.2), zlib1g (>= 1:1.2.8), libsdl2-2.0-0 (>= 2.0.2), libsdl2-image-2.0-0 (>= 2.0.0)")
+	SET(CPACK_DEBIAN_PACKAGE_DEPENDS
+		"libc6 (>= 2.19), libgcc1 (>= 1:4.9), libstdc++6 (>= 4.8.2), zlib1g (>= 1:1.2.8), libcurl3 (>= 7.35.0), libglew1.10 (>= 1.10.0), libsdl2-2.0-0 (>= 2.0.2), libsdl2-image-2.0-0 (>= 2.0.0)")
 	SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 	SET(CPACK_DEBIAN_PACKAGE_SECTION "games")
 	SET(CPACK_DEBIAN_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
@@ -239,6 +274,7 @@ else()
 	set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "")
 	set(CPACK_DEBIAN_PACKAGE_SUGGESTS "")
 	SET(CPACK_COMPONENTS_ALL ALL)
+
 endif(WIN32 AND NOT UNIX)
 
 set(CPACK_PACKAGE_EXECUTABLES "openspades" "Launch OpenSpades")
