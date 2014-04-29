@@ -1022,7 +1022,7 @@ namespace spades {
 			
 			ColorBlockEmitter(std::vector<uint8_t>& out,
 							  const NGMapOptions& opt):out(out),opt(opt) {
-				diversityLimit = 50 - opt.quality / 2;
+				diversityLimit = 34 - opt.quality / 3;
 				diversityLimit *= diversityLimit;
 			}
 			
