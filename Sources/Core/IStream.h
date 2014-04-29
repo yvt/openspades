@@ -59,6 +59,8 @@ namespace spades {
 		
 		uint16_t ReadLittleShort();
 		uint32_t ReadLittleInt();
+		void WriteLittleShort(uint16_t);
+		void WriteLittleInt(uint32_t);
 		
 		// utilities
 		virtual std::string ReadAllBytes();

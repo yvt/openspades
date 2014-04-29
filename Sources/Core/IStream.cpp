@@ -123,6 +123,14 @@ namespace  spades {
 		return data;
 	}
 	
+	void IStream::WriteLittleShort(uint16_t s) {
+		Write(&s, 2);
+	}
+	
+	void IStream::WriteLittleInt(uint32_t s) {
+		Write(&s, 4);
+	}
+	
 	StreamHandle::StreamHandle():
 	o(NULL){
 		
