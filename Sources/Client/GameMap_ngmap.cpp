@@ -645,6 +645,10 @@ namespace spades {
 			}
 		}
 		
+#pragma mark - Tools
+		
+		
+		
 #pragma mark - Decoder
 		
 		static void DecodeConstant(uint8_t, ColorBlock& block, IStream& stream) {
@@ -930,7 +934,7 @@ namespace spades {
 			for(int y = 0; y < h; y += 8) {
 				for(int x = 0; x < w; x += 8) {
 					for(int zz = 0; zz < d; zz += 8) {
-						int z = (x & 8) ? (((d+7)&~7) - zz) : zz;
+						int z = (x & 8) ? (((d+7)&~7) - 8 - zz) : zz;
 						ColorBlock block;
 						mp->ComputeNeedsColor(x, y, z, block.needscolor);
 						
@@ -1262,7 +1266,7 @@ namespace spades {
 			for(int y = 0; y < h; y += 8) {
 				for(int x = 0; x < w; x += 8) {
 					for(int zz = 0; zz < d; zz += 8) {
-						int z = (x & 8) ? (((d+7)&~7) - zz) : zz;
+						int z = (x & 8) ? (((d+7)&~7) - 8 - zz) : zz;
 						
 						ColorBlock block;
 						ComputeNeedsColor(x, y, z, block.needscolor);
