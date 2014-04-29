@@ -30,6 +30,7 @@
 #include <list>
 #include <Core/Mutex.h>
 #include <Core/AutoLocker.h>
+#include <functional>
 
 namespace spades{
 	class IStream;
@@ -45,10 +46,15 @@ namespace spades{
 				DefaultDepth = 64 // should be <= 64
 			};
 			GameMap();
+			GameMap(int w, int h, int d);
 			
 			static GameMap *Load(IStream *);
+			static GameMap *LoadNGMap(IStream *,
+									  std::function<void(float)> progressListener);
+			static GameMap *LoadNGMap(IStream *);
 			
 			void Save(IStream *);
+			void SaveNGMap(IStream *);
 			
 			int Width() { return DefaultWidth; }
 			int Height() { return DefaultHeight; }

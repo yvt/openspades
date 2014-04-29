@@ -395,6 +395,8 @@
 		E89A649417A1677F00FDA893 /* FallingBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A649217A1677F00FDA893 /* FallingBlock.cpp */; };
 		E89A649717A1835A00FDA893 /* GunCasing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A649517A1835900FDA893 /* GunCasing.cpp */; };
 		E89A649A17A2402900FDA893 /* IGLShadowMapRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A649817A2402500FDA893 /* IGLShadowMapRenderer.cpp */; };
+		E89D2A27190F742800DD0A9C /* GameMap_ngmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89D2A25190F742800DD0A9C /* GameMap_ngmap.cpp */; };
+		E89D2A28190F742800DD0A9C /* GameMap_ngmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89D2A25190F742800DD0A9C /* GameMap_ngmap.cpp */; };
 		E89E8121179C2C800059C649 /* GLBloomFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89E811F179C2C800059C649 /* GLBloomFilter.cpp */; };
 		E8B6B68F17DE27B500E35523 /* as_atomic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B64217DE27B500E35523 /* as_atomic.cpp */; };
 		E8B6B69017DE27B500E35523 /* as_builder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B64417DE27B500E35523 /* as_builder.cpp */; };
@@ -1105,6 +1107,7 @@
 		E89A649617A1835900FDA893 /* GunCasing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GunCasing.h; sourceTree = "<group>"; };
 		E89A649817A2402500FDA893 /* IGLShadowMapRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IGLShadowMapRenderer.cpp; sourceTree = "<group>"; };
 		E89A649917A2402700FDA893 /* IGLShadowMapRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGLShadowMapRenderer.h; sourceTree = "<group>"; };
+		E89D2A25190F742800DD0A9C /* GameMap_ngmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMap_ngmap.cpp; sourceTree = "<group>"; };
 		E89E811F179C2C800059C649 /* GLBloomFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLBloomFilter.cpp; sourceTree = "<group>"; };
 		E89E8120179C2C800059C649 /* GLBloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLBloomFilter.h; sourceTree = "<group>"; };
 		E8B6B63F17DE27B500E35523 /* angelscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = angelscript.h; sourceTree = "<group>"; };
@@ -2746,6 +2749,7 @@
 				E8E0AF8F17993CEB00C6B5A9 /* Elements */,
 				E8CF03FA178FACFF000683D4 /* GameMap.cpp */,
 				E8CF03FB178FACFF000683D4 /* GameMap.h */,
+				E89D2A25190F742800DD0A9C /* GameMap_ngmap.cpp */,
 				E8CF03FD178FB1E1000683D4 /* IGameMapListener.cpp */,
 				E8CF03FE178FB1E1000683D4 /* IGameMapListener.h */,
 				E88318DC179257F0002ABE6D /* GameMapWrapper.cpp */,
@@ -3323,6 +3327,7 @@
 				E8D0E7E618FABC3600DE3BDB /* tigertab.cpp in Sources */,
 				E8D0E79F18FABC3600DE3BDB /* pubkey.cpp in Sources */,
 				E82E67A818EA7972004DBA18 /* IInputInterface.cpp in Sources */,
+				E89D2A28190F742800DD0A9C /* GameMap_ngmap.cpp in Sources */,
 				E82E67A918EA7972004DBA18 /* IImage.cpp in Sources */,
 				E82E67AA18EA7972004DBA18 /* IModel.cpp in Sources */,
 				E82E67AB18EA7972004DBA18 /* AsyncRenderer.cpp in Sources */,
@@ -3775,6 +3780,7 @@
 				E844886617D0C43B005105D0 /* Tracer.cpp in Sources */,
 				E895D65D18D4A10E00F5B9CA /* jpge.cpp in Sources */,
 				E8D0E7B118FABC3600DE3BDB /* rijndael.cpp in Sources */,
+				E89D2A27190F742800DD0A9C /* GameMap_ngmap.cpp in Sources */,
 				E849654D18E9487300B9706D /* FltkPreferenceImporter.cpp in Sources */,
 				E895D66418D614DE00F5B9CA /* pnglite.c in Sources */,
 				E844888217D2633C005105D0 /* json_reader.cpp in Sources */,

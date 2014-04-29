@@ -32,9 +32,15 @@
 
 namespace spades {
 	namespace client {
-		GameMap::GameMap():
+		GameMap::GameMap(int w, int h, int d):
 		listener(NULL){
 			SPADES_MARK_FUNCTION();
+			
+			if(w != DefaultWidth ||
+			   h != DefaultHeight ||
+			   d != DefaultDepth) {
+				SPRaise("Unsupported map size: %dx%dx%d", w, h, d);
+			}
 			
 			uint32_t rnd = (uint32_t)rand() ^ ((uint32_t)rand() << 16);
 			rnd ^= 0x7abd4513;
@@ -51,6 +57,11 @@ namespace spades {
 					}
 				}
 		}
+		
+		GameMap::GameMap():
+		GameMap(DefaultWidth, DefaultHeight, DefaultDepth) {
+		}
+		
 		GameMap::~GameMap(){
 			SPADES_MARK_FUNCTION();
 			
