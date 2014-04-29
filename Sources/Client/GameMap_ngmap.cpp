@@ -408,11 +408,11 @@ namespace spades {
 								auto c = ColorAsIntVector(x, y, z);
 								if(has) {
 									max.x = std::max(max.x, c.x);
-									max.y = std::max(max.y, c.x);
-									max.z = std::max(max.z, c.x);
+									max.y = std::max(max.y, c.y);
+									max.z = std::max(max.z, c.z);
 									min.x = std::min(min.x, c.x);
-									min.y = std::min(min.x, c.y);
-									min.z = std::min(min.x, c.z);
+									min.y = std::min(min.y, c.y);
+									min.z = std::min(min.z, c.z);
 								}else{
 									max = min = c;
 									has = true;
@@ -442,11 +442,11 @@ namespace spades {
 								auto c = ColorAsIntVector(x, y, z);
 								if(has) {
 									max.x = std::max(max.x, c.x);
-									max.y = std::max(max.y, c.x);
-									max.z = std::max(max.z, c.x);
+									max.y = std::max(max.y, c.y);
+									max.z = std::max(max.z, c.z);
 									min.x = std::min(min.x, c.x);
-									min.y = std::min(min.x, c.y);
-									min.z = std::min(min.x, c.z);
+									min.y = std::min(min.y, c.y);
+									min.z = std::min(min.z, c.z);
 								}else{
 									max = min = c;
 									has = true;
@@ -475,11 +475,11 @@ namespace spades {
 								auto c = ColorAsIntVector(x, y, z);
 								if(has) {
 									max.x = std::max(max.x, c.x);
-									max.y = std::max(max.y, c.x);
-									max.z = std::max(max.z, c.x);
+									max.y = std::max(max.y, c.y);
+									max.z = std::max(max.z, c.z);
 									min.x = std::min(min.x, c.x);
-									min.y = std::min(min.x, c.y);
-									min.z = std::min(min.x, c.z);
+									min.y = std::min(min.y, c.y);
+									min.z = std::min(min.z, c.z);
 								}else{
 									max = min = c;
 									has = true;
@@ -508,11 +508,11 @@ namespace spades {
 								auto c = ColorAsIntVector(x, y, z);
 								if(has&(1<<z)) {
 									max[z].x = std::max(max[z].x, c.x);
-									max[z].y = std::max(max[z].y, c.x);
-									max[z].z = std::max(max[z].z, c.x);
+									max[z].y = std::max(max[z].y, c.y);
+									max[z].z = std::max(max[z].z, c.z);
 									min[z].x = std::min(min[z].x, c.x);
-									min[z].y = std::min(min[z].x, c.y);
-									min[z].z = std::min(min[z].x, c.z);
+									min[z].y = std::min(min[z].y, c.y);
+									min[z].z = std::min(min[z].z, c.z);
 								}else{
 									max[z] = min[z] = c;
 									has |= 1<<z;
@@ -545,11 +545,11 @@ namespace spades {
 								auto c = ColorAsIntVector(x, y, z);
 								if(has&(1<<z)) {
 									max[z].x = std::max(max[z].x, c.x);
-									max[z].y = std::max(max[z].y, c.x);
-									max[z].z = std::max(max[z].z, c.x);
+									max[z].y = std::max(max[z].y, c.y);
+									max[z].z = std::max(max[z].z, c.z);
 									min[z].x = std::min(min[z].x, c.x);
-									min[z].y = std::min(min[z].x, c.y);
-									min[z].z = std::min(min[z].x, c.z);
+									min[z].y = std::min(min[z].y, c.y);
+									min[z].z = std::min(min[z].z, c.z);
 								}else{
 									max[z] = min[z] = c;
 									has |= 1<<z;
@@ -581,11 +581,11 @@ namespace spades {
 								auto c = ColorAsIntVector(x, y, z);
 								if(has&(1<<z)) {
 									max[z].x = std::max(max[z].x, c.x);
-									max[z].y = std::max(max[z].y, c.x);
-									max[z].z = std::max(max[z].z, c.x);
+									max[z].y = std::max(max[z].y, c.y);
+									max[z].z = std::max(max[z].z, c.z);
 									min[z].x = std::min(min[z].x, c.x);
-									min[z].y = std::min(min[z].x, c.y);
-									min[z].z = std::min(min[z].x, c.z);
+									min[z].y = std::min(min[z].y, c.y);
+									min[z].z = std::min(min[z].z, c.z);
 								}else{
 									max[z] = min[z] = c;
 									has |= 1<<z;
@@ -617,11 +617,11 @@ namespace spades {
 								auto c = ColorAsIntVector(x, y, z);
 								if(has) {
 									max.x = std::max(max.x, c.x);
-									max.y = std::max(max.y, c.x);
-									max.z = std::max(max.z, c.x);
+									max.y = std::max(max.y, c.y);
+									max.z = std::max(max.z, c.z);
 									min.x = std::min(min.x, c.x);
-									min.y = std::min(min.x, c.y);
-									min.z = std::min(min.x, c.z);
+									min.y = std::min(min.y, c.y);
+									min.z = std::min(min.z, c.z);
 								}else{
 									max = min = c;
 									has = true;
@@ -659,6 +659,23 @@ namespace spades {
 			block.FromConstant(c);
 		}
 		
+		static void DecodeLinearLinear(const IntVector3& c1,
+									   const IntVector3& c2,
+									   LinearColorBlock& sub) {
+			int v1 = c1.x * 7, d1 = c2.x - c1.x;
+			int v2 = c1.y * 7, d2 = c2.y - c1.y;
+			int v3 = c1.z * 7, d3 = c2.z - c1.z;
+			for(int i = 0; i < 8; i++) {
+				IntVector4& c = sub.colors[i];
+				// good compile can do this without division
+				c.x = v1 / 7;
+				c.y = v2 / 7;
+				c.z = v3 / 7;
+				v1 += d1; v2 += d2; v3 += d3;
+			}
+			
+		}
+		
 		static void DecodeLinear(uint8_t fmtcode, ColorBlock& block, IStream& stream) {
 			auto fmt = static_cast<BlockFormat>(fmtcode & 0xf);
 			auto subfmt = static_cast<LinearBlockSubFormat>(fmtcode & 0xf0);
@@ -690,17 +707,7 @@ namespace spades {
 					c2.x = stream.ReadByte();
 					c2.y = stream.ReadByte();
 					c2.z = stream.ReadByte();
-					int v1 = c1.x * 7, d1 = c2.x - c1.x;
-					int v2 = c1.y * 7, d2 = c2.y - c1.y;
-					int v3 = c1.z * 7, d3 = c2.z - c1.z;
-					for(int i = 0; i < 8; i++) {
-						IntVector4& c = sub.colors[i];
-						// good compile can do this without division
-						c.x = v1 / 7;
-						c.y = v2 / 7;
-						c.z = v3 / 7;
-						v1 += d1; v2 += d2; v3 += d3;
-					}
+					DecodeLinearLinear(c1, c2, sub);
 					break;
 				}
 				case LinearBlockSubFormat::Raw:
@@ -729,6 +736,32 @@ namespace spades {
 				default:
 					// shouldn't happen...
 					break;
+			}
+		}
+		
+		static void DecodePlanarLinear(const IntVector3& c1,
+									   const IntVector3& c2,
+									   const IntVector3& c3,
+									   const IntVector3& c4,
+									   PlanarColorBlock& sub) {
+			int a1 = c1.x * 7, ad1 = c2.x - c1.x;
+			int a2 = c1.y * 7, ad2 = c2.y - c1.y;
+			int a3 = c1.z * 7, ad3 = c2.z - c1.z;
+			int b1 = c3.x * 7, bd1 = c4.x - c3.x;
+			int b2 = c3.y * 7, bd2 = c4.y - c3.y;
+			int b3 = c3.z * 7, bd3 = c4.z - c3.z;
+			for(int x = 0; x < 8; x++) {
+				int c1 = a1 * 7, c2 = a2 * 7, c3 = a3 * 7;
+				int cd1 = b1 - a1, cd2 = b2 - a2, cd3 = b3 - a3;
+				for(int y = 0; y < 8; y++) {
+					IntVector4& c = sub.colors[x][y];
+					c.x = c1 / 49;
+					c.y = c2 / 49;
+					c.z = c3 / 49;
+					c1 += cd1; c2 += cd2; c3 += cd3;
+				}
+				a1 += ad1; a2 += ad2; a3 += ad3;
+				b1 += bd1; b2 += bd2; b3 += bd3;
 			}
 		}
 		
@@ -773,25 +806,7 @@ namespace spades {
 					c4.x = stream.ReadByte();
 					c4.y = stream.ReadByte();
 					c4.z = stream.ReadByte();
-					int a1 = c1.x * 7, ad1 = c2.x - c1.x;
-					int a2 = c1.y * 7, ad2 = c2.y - c1.y;
-					int a3 = c1.z * 7, ad3 = c2.z - c1.z;
-					int b1 = c3.x * 7, bd1 = c4.x - c3.x;
-					int b2 = c3.y * 7, bd2 = c4.y - c3.y;
-					int b3 = c3.z * 7, bd3 = c4.z - c3.z;
-					for(int x = 0; x < 8; x++) {
-						int c1 = a1 * 7, c2 = a2 * 7, c3 = a3 * 7;
-						int cd1 = b1 - a1, cd2 = b2 - a2, cd3 = b3 - a3;
-						for(int y = 0; y < 8; y++) {
-							IntVector4& c = sub.colors[x][y];
-							c.x = c1 / 49;
-							c.y = c2 / 49;
-							c.z = c3 / 49;
-							c1 += cd1; c2 += cd2; c3 += cd3;
-						}
-						a1 += ad1; a2 += ad2; a3 += ad3;
-						b1 += bd1; b2 += bd2; b3 += bd3;
-					}
+					DecodePlanarLinear(c1, c2, c3, c4, sub);
 					break;
 				}
 				case PlanarBlockSubFormat::Raw:
@@ -1092,6 +1107,67 @@ namespace spades {
 				
 			}
 			
+			struct LinearLinearEncoded {
+				IntVector3 col1, col2;
+				int error;
+			};
+			
+			LinearLinearEncoded TryEncodeLinearLinear(LinearColorBlock& sub, uint8_t needscolor) {
+				LinearLinearEncoded encoded;
+				IntVector3 avg(0, 0, 0);
+				int numcolors = 0;
+				for(int i = 0; i < 8; i++) {
+					if(needscolor & (1 << i)) {
+						avg += sub.colors[i];
+						numcolors++;
+					}
+				}
+				if(numcolors > 1) avg /= numcolors;
+				
+				IntVector3 coef(0, 0, 0);
+				static const int8_t weights[8] = {-7, -5, -3, -1, 1, 3, 5, 7};
+				int factor = 0;
+				for(int i = 0; i < 8; i++) {
+					if(needscolor & (1 << i)) {
+						coef += (sub.colors[i] - avg) * weights[i];
+						factor += weights[i] * weights[i];
+					}
+				}
+				coef *= 7;
+				coef /= factor;
+			
+				encoded.col1 = avg - coef;
+				encoded.col2 = avg + coef;
+				
+				encoded.col1.x = std::max(0, encoded.col1.x);
+				encoded.col1.y = std::max(0, encoded.col1.y);
+				encoded.col1.z = std::max(0, encoded.col1.z);
+				encoded.col1.x = std::min(255, encoded.col1.x);
+				encoded.col1.y = std::min(255, encoded.col1.y);
+				encoded.col1.z = std::min(255, encoded.col1.z);
+				
+				encoded.col2.x = std::max(0, encoded.col2.x);
+				encoded.col2.y = std::max(0, encoded.col2.y);
+				encoded.col2.z = std::max(0, encoded.col2.z);
+				encoded.col2.x = std::min(255, encoded.col2.x);
+				encoded.col2.y = std::min(255, encoded.col2.y);
+				encoded.col2.z = std::min(255, encoded.col2.z);
+
+				// try encoding to predict error
+				LinearColorBlock pred;
+				DecodeLinearLinear(encoded.col1, encoded.col2, pred);
+				
+				encoded.error = 0;
+				for(int i = 0; i < 8; i++) {
+					if(needscolor & (1 << i)) {
+						auto diff = sub.colors[i] - pred.colors[i];
+						encoded.error = std::max(encoded.error, IntVector3::Dot(diff, diff));
+					}
+				}
+
+				return encoded;
+			}
+			
 			void EncodeLinear(LinearColorBlock& sub, ColorBlock& block, BlockFormat fmt) {
 				
 				uint8_t needscolor = 0;
@@ -1110,15 +1186,33 @@ namespace spades {
 						break;
 				}
 				
-				out.push_back(MakeFormat(fmt,
-										 LinearBlockSubFormat::Raw));
-				for(int x = 0; x < 8; x++){
-					if(!(needscolor&(1<<x))) continue;
-					auto b = sub.colors[x];
-					out.push_back(static_cast<uint8_t>(b.x));
-					out.push_back(static_cast<uint8_t>(b.y));
-					out.push_back(static_cast<uint8_t>(b.z));
+				LinearLinearEncoded lin = TryEncodeLinearLinear(sub, needscolor);
+				
+				if(lin.error < diversityLimit) {
+					out.push_back(MakeFormat(fmt,
+											 LinearBlockSubFormat::Linear));
+					
+					out.push_back(static_cast<uint8_t>(lin.col1.x));
+					out.push_back(static_cast<uint8_t>(lin.col1.y));
+					out.push_back(static_cast<uint8_t>(lin.col1.z));
+					
+					out.push_back(static_cast<uint8_t>(lin.col2.x));
+					out.push_back(static_cast<uint8_t>(lin.col2.y));
+					out.push_back(static_cast<uint8_t>(lin.col2.z));
+					
+				} else{
+					out.push_back(MakeFormat(fmt,
+											 LinearBlockSubFormat::Raw));
+					for(int x = 0; x < 8; x++){
+						if(!(needscolor&(1<<x))) continue;
+						auto b = sub.colors[x];
+						out.push_back(static_cast<uint8_t>(b.x));
+						out.push_back(static_cast<uint8_t>(b.y));
+						out.push_back(static_cast<uint8_t>(b.z));
+					}
 				}
+				
+				
 			}
 			
 			void TryEmitLinear(ColorBlock& block) {
@@ -1146,7 +1240,8 @@ namespace spades {
 		public:
 			
 			void TryEmitConstant(ColorBlock& block) {
-				if(block.ComputeDiversity() <= diversityLimit) {
+				// constant mode looks super bad, so raise the threshold
+				if(block.ComputeDiversity() * 5 <= diversityLimit) {
 					auto cst = block.ToConstant();
 					out.push_back(MakeFormat(BlockFormat::Constant,
 											 ConstantBlockSubFormat::Constant));
