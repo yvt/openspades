@@ -764,6 +764,8 @@
 		E8D0E80A18FAC1A400DE3BDB /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E80718FAC1A400DE3BDB /* dll.cpp */; };
 		E8D0E81018FE764B00DE3BDB /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E80E18FE764B00DE3BDB /* Connection.cpp */; };
 		E8D0E81118FE764B00DE3BDB /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E80E18FE764B00DE3BDB /* Connection.cpp */; };
+		E8D0E8141901926000DE3BDB /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E8121901926000DE3BDB /* Entity.cpp */; };
+		E8D0E8151901926000DE3BDB /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E8121901926000DE3BDB /* Entity.cpp */; };
 		E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */; };
 		E8D88AB1179C3004004C2451 /* GLQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */; };
 		E8D88AB4179C45B7004C2451 /* GLLensFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AB2179C45B7004C2451 /* GLLensFilter.cpp */; };
@@ -1600,6 +1602,8 @@
 		E8D0E80B18FC344C00DE3BDB /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		E8D0E80E18FE764B00DE3BDB /* Connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Connection.cpp; sourceTree = "<group>"; };
 		E8D0E80F18FE764B00DE3BDB /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
+		E8D0E8121901926000DE3BDB /* Entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
+		E8D0E8131901926000DE3BDB /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLColorCorrectionFilter.cpp; sourceTree = "<group>"; };
 		E8D2ACE217D704E600BE5490 /* GLColorCorrectionFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLColorCorrectionFilter.h; sourceTree = "<group>"; };
 		E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLQuadRenderer.cpp; sourceTree = "<group>"; };
@@ -2401,6 +2405,8 @@
 				E8D0E5D918F9A64400DE3BDB /* World.cpp */,
 				E8D0E5DA18F9A64400DE3BDB /* World.h */,
 				E8D0E80B18FC344C00DE3BDB /* Constants.h */,
+				E8D0E8121901926000DE3BDB /* Entity.cpp */,
+				E8D0E8131901926000DE3BDB /* Entity.h */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -3335,6 +3341,7 @@
 				E8D0E7DE18FABC3600DE3BDB /* tea.cpp in Sources */,
 				E82E67B418EA7972004DBA18 /* Client.cpp in Sources */,
 				E82E67B518EA7972004DBA18 /* Client_Input.cpp in Sources */,
+				E8D0E8151901926000DE3BDB /* Entity.cpp in Sources */,
 				E82E67B618EA7972004DBA18 /* Client_Update.cpp in Sources */,
 				E82E67B718EA7972004DBA18 /* Client_NetHandler.cpp in Sources */,
 				E82E67B818EA7972004DBA18 /* Client_LocalEnts.cpp in Sources */,
@@ -3881,6 +3888,7 @@
 				E8B6B74017EA061400E35523 /* IViewToolSkin.cpp in Sources */,
 				E8D0E78218FABC3600DE3BDB /* marss.cpp in Sources */,
 				E8B6B74317EA0B2000E35523 /* IThirdPersonToolSkin.cpp in Sources */,
+				E8D0E8141901926000DE3BDB /* Entity.cpp in Sources */,
 				E8D0E78418FABC3600DE3BDB /* md2.cpp in Sources */,
 				E8B6B74617EA0F2600E35523 /* IGrenadeSkin.cpp in Sources */,
 				E81CE4A9183F7F2000F22685 /* MainScreen.cpp in Sources */,
