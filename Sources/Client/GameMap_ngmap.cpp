@@ -792,7 +792,8 @@ namespace spades {
 				}
 				case PlanarBlockSubFormat::Raw:
 					for(int x = 0; x < 8; x++) {
-						for(int y = 0; y < 8; y++) {
+						for(int yy = 0; yy < 8; yy++) {
+							int y = (x & 1) ? (7 - yy) : yy;
 							if(!(needscolor[x]&(1<<y))) continue;
 							IntVector4& c = sub.colors[x][y];
 							c.x = stream.ReadByte();
@@ -827,10 +828,12 @@ namespace spades {
 			switch(subfmt) {
 				case VolumetricBlockSubFormat::Raw:
 					for(int x = 0; x < 8; x++) {
-						for(int y = 0; y < 8; y++) {
+						for(int yy = 0; yy < 8; yy++) {
+							int y = (x & 1) ? (7 - yy) : yy;
 							auto b = block.needscolor[x][y];
 							if(!b) continue;
-							for(int z = 0; z < 8; z++) {
+							for(int zz = 0; zz < 8; zz++) {
+								int z = (yy & 1) ? (7 - zz) : zz;
 								if(!(b&(1<<z))) continue;
 								IntVector4 c;
 								c.x = stream.ReadByte();
@@ -926,7 +929,8 @@ namespace spades {
 			// read colors
 			for(int y = 0; y < h; y += 8) {
 				for(int x = 0; x < w; x += 8) {
-					for(int z = 0; z < d; z += 8) {
+					for(int zz = 0; zz < d; zz += 8) {
+						int z = (x & 8) ? (((d+7)&~7) - zz) : zz;
 						ColorBlock block;
 						mp->ComputeNeedsColor(x, y, z, block.needscolor);
 						
@@ -1009,11 +1013,15 @@ namespace spades {
 				out.push_back(MakeFormat(BlockFormat::Volumetric,
 										 VolumetricBlockSubFormat::Raw));
 				for(int x = 0; x < 8; x++)
-					for(int y = 0; y < 8; y++) {
+					for(int yy = 0; yy < 8; yy++) {
+						int y = (x & 1) ? (7 - yy) : yy;
 						auto b = block.needscolor[x][y];
 						if(!b) continue;
-						for(int z = 0; z < 8; z++) {
+						
+						for(int zz = 0; zz < 8; zz++) {
+							int z = (yy & 1) ? (7 - zz) : zz;
 							if(!(b&(1<<z))) continue;
+							
 							auto c = block.colors[x][y][z];
 							auto b = IntVectorFromColor(c);
 							out.push_back(static_cast<uint8_t>(b.x));
@@ -1047,7 +1055,8 @@ namespace spades {
 				out.push_back(MakeFormat(fmt,
 										 PlanarBlockSubFormat::Raw));
 				for(int x = 0; x < 8; x++)
-					for(int y = 0; y < 8; y++) {
+					for(int yy = 0; yy < 8; yy++) {
+						int y = (x & 1) ? (7 - yy) : yy;
 						if(!(needscolor[x] & (1 << y))) continue;
 						auto b = sub.colors[x][y];
 						out.push_back(static_cast<uint8_t>(b.x));
@@ -1252,7 +1261,9 @@ namespace spades {
 			
 			for(int y = 0; y < h; y += 8) {
 				for(int x = 0; x < w; x += 8) {
-					for(int z = 0; z < d; z += 8) {
+					for(int zz = 0; zz < d; zz += 8) {
+						int z = (x & 8) ? (((d+7)&~7) - zz) : zz;
+						
 						ColorBlock block;
 						ComputeNeedsColor(x, y, z, block.needscolor);
 						
@@ -1287,7 +1298,7 @@ namespace spades {
 			
 		}
 		
-		/** Computes which blocks are visible and therefore need be colored, in
+		/** Computes which blocks are visible and therefore needs to be colored, in
 		 * x <= bx < x + 8, y <= by < y + 8, z <= bz < z + 8. */
 		void GameMap::ComputeNeedsColor(int x, int y, int z, uint8_t needscolor[8][8]) {
 			uint16_t subsolidmap[10][10]; // part of solid map
