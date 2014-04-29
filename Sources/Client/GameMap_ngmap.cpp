@@ -1306,17 +1306,26 @@ namespace spades {
 		 * x <= bx < x + 8, y <= by < y + 8, z <= bz < z + 8. */
 		void GameMap::ComputeNeedsColor(int x, int y, int z, uint8_t needscolor[8][8]) {
 			uint16_t subsolidmap[10][10]; // part of solid map
+			uint16_t earth = 0;
+			if(z + 8 >= Depth()) {
+				int b = Depth() - z;
+				if(b <= 0) earth = 0xffff;
+				else if(b < 16) {
+					earth = static_cast<uint16_t>(~((1<<b)-1));
+				}
+			}
 			for(int cx = 0; cx < 10; cx++) {
 				for(int cy = 0; cy < 10; cy++) {
 					int xx = cx + x - 1, yy = cy + y - 1;
 					auto m = (xx >= 0 && yy >= 0 && xx < Width() && yy < Height()) ?
 					solidMap[xx][yy] : 0;
+					m |= earth;
 					if(z == 0) {
 						m <<= 1;
 					}else{
 						m >>= z - 1;
 					}
-					subsolidmap[cx][cy] = static_cast<uint16_t>(m & 0x3ff);
+					subsolidmap[cx][cy] = static_cast<uint16_t>(m & 0x3ff) | earth;
 				}
 			}
 			
