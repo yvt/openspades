@@ -35,6 +35,13 @@
 namespace spades{
 	class IStream;
 	namespace client {
+		struct NGMapOptions {
+			int quality;
+			NGMapOptions():
+			quality(50) {}
+			void Validate() const;
+		};
+		
 		class GameMap: public RefCountedObject {
 		protected:
 			~GameMap();
@@ -54,7 +61,7 @@ namespace spades{
 			static GameMap *LoadNGMap(IStream *);
 			
 			void Save(IStream *);
-			void SaveNGMap(IStream *);
+			void SaveNGMap(IStream *, const NGMapOptions& options);
 			
 			int Width() { return DefaultWidth; }
 			int Height() { return DefaultHeight; }
@@ -163,6 +170,9 @@ namespace spades{
 			Mutex listenersMutex;
 			
 			bool IsSurface(int x, int y, int z);
+			
+			// helper for ngmap encoder/decoder
+			void ComputeNeedsColor(int x, int y, int z, uint8_t needscolor[8][8]);
 		};
 	}
 }
