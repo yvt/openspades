@@ -268,7 +268,7 @@ namespace spades {
 		while(bytes > 0){
 			if(bufferPos >= buffer.size()){
 				FillBuffer();
-				if(reachedEOF)
+				if(reachedEOF && bufferPos >= buffer.size())
 					break;
 			}
 			

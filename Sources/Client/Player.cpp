@@ -1170,9 +1170,16 @@ namespace spades {
 			   (input.moveRight || input.moveLeft))
 				f /= sqrtf(2.f);
 			
-			Vector3 front = GetFront();
+			// looking up or down should alter speed
+			const float maxVertLookSlowdown = 0.9f;
+			const float vertLookSlowdownStart = 0.65f; // about 40 degrees
+			float slowdownByVertLook =
+				std::max(std::abs(GetFront().z) - vertLookSlowdownStart, 0.0f) /
+				(1.0f - vertLookSlowdownStart) * maxVertLookSlowdown;
+
+			Vector3 front = GetFront2D() * (1.0f - slowdownByVertLook);
 			Vector3 left = GetLeft();
-			
+
 			if(input.moveForward){
 				velocity.x += front.x * f;
 				velocity.y += front.y * f;

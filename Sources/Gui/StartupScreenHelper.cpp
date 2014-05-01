@@ -162,6 +162,25 @@ namespace spades {
 			if(window != nullptr && context == nullptr) {
 				SPLog("Failed to create OpenGL context: %s", SDL_GetError());
 			}
+
+#ifdef __APPLE__
+#elif __unix
+			SDL_Surface *icon = nullptr;
+			SDL_RWops *icon_rw = nullptr;
+			icon_rw = SDL_RWFromConstMem(LDVAR(openspades_png), LDLEN(openspades_png));
+			if (icon_rw != nullptr) {
+				icon = IMG_LoadPNG_RW(icon_rw);
+				SDL_FreeRW(icon_rw);
+			}
+			if(icon == nullptr) {
+				std::string msg = SDL_GetError();
+				SPLog("Failed to load icon: %s", msg.c_str());
+			} else {
+				SDL_SetWindowIcon(window, icon);
+				SDL_FreeSurface(icon);
+			}
+#endif
+
 			if(!context){
 				// OpenGL initialization failed!
 				

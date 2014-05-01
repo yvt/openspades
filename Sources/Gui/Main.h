@@ -20,6 +20,7 @@
 #pragma once
 
 #include <string>
+#include "Icon.inc"
 
 namespace spades {
 	class ServerAddress;
