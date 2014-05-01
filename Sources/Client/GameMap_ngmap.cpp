@@ -23,7 +23,7 @@
 #include <Core/DeflateStream.h>
 #include <Core/IStream.h>
 #include <memory>
-
+#include <unordered_map>
 
 namespace spades {
 	namespace client {
@@ -145,8 +145,9 @@ namespace spades {
 				}
 			}
 			void WriteBit(int b) {
+				if(b) buf |= 1 << pos;
+				pos++;
 				if(pos == 8) Flush();
-				if(b) buf |= 1 << (pos++);
 			}
 		};
 		class BitReader {
@@ -178,12 +179,14 @@ namespace spades {
 			uint8_t ReadBit() {
 				if(pos == 8) FillBuffer();
 				auto ret = buf & 1;
-				buf >>= 1;
+				buf >>= 1; pos++;
 				return ret;
 			}
 		};
 		
 		namespace ct {
+			
+//#define USE_HUFFMAN
 			
 			template<int bits>
 			struct Block {
@@ -200,16 +203,42 @@ namespace spades {
 			protected:
 				// bit depths for each wavelet level
 				int bitdepths[4];
+				bool huffmanBitShift;
 				CodecBase(const NGMapOptions& opt) {
 					bitdepths[0] = 8;
 					bitdepths[1] = 3 + (opt.quality >> 5);
 					bitdepths[2] = 2 + (opt.quality >> 5);
 					bitdepths[3] = 1 + (opt.quality >> 4);
+					huffmanBitShift = opt.quality > 70;
 				}
 			};;
 			
 			class Decoder: CodecBase {
 				BitReader& reader;
+				
+				/*
+				 inline void WriteHuffmanInt(int i) {
+				 if(i == 0) {
+				 writer.WriteBit(0);
+				 }else{
+				 int abs = i < 0 ? -i : i;
+				 writer.WriteBit(1);
+				 for(int k = 1; k < abs; k++) writer.WriteBit(1);
+				 writer.WriteBit(0);
+				 writer.WriteBit(i < 0 ? 1 : 0);
+				 }
+				 }*/
+				
+				inline int ReadHuffmanInt() {
+					if(reader.ReadBit()) {
+						int i = 1;
+						while(reader.ReadBit() == 1) i++;
+						if(reader.ReadBit()) i = -i;
+						return i;
+					}else{
+						return 0;
+					}
+				}
 				
 				template<int level>
 				inline void Pass(Block<level>&);
@@ -231,8 +260,18 @@ namespace spades {
 				int bitdepth = bitdepths[level];
 				
 				int shiftLeft = 32 - bitdepth;
+		
+				int bits = 0;
+				if(huffmanBitShift){
+					while(reader.ReadBit() == 0) bits++;
+				}else{
+#ifdef USE_HUFFMAN
+					bits = ReadHuffmanInt();
+#else
+					bits = reader.Read(3); // effective bits: bitdepth - bitdepth + 7
+#endif
+				}
 				
-				int bits = reader.Read(3); // effective bits: bitdepth - bitdepth + 7
 				int shift = shiftLeft - bits;
 				
 				// to fill LSBs
@@ -242,21 +281,33 @@ namespace spades {
 				// read HL
 				for(int x = 0; x < Block<level - 1>::size; x++)
 					for(int y = 0; y < Block<level - 1>::size; y++) {
+#ifndef USE_HUFFMAN
 						int v = static_cast<int32_t>(reader.Read(bitdepth) << shiftLeft) >> shift;
+#else
+						int v = ReadHuffmanInt() << bits;
+#endif
 						//v |= (v & mask2) >> shift2;
 						b.pixels[(x << 1) + 1][y << 1] = v;
 					}
 				// read LH
 				for(int x = 0; x < Block<level - 1>::size; x++)
 					for(int y = 0; y < Block<level - 1>::size; y++) {
+#ifndef USE_HUFFMAN
 						int v = static_cast<int32_t>(reader.Read(bitdepth) << shiftLeft) >> shift;
+#else
+						int v = ReadHuffmanInt() << bits;
+#endif
 						//v |= (v & mask2) >> shift2;
 						b.pixels[x << 1][(y << 1) + 1] = v;
 					}
 				// read HH
 				for(int x = 0; x < Block<level - 1>::size; x++)
 					for(int y = 0; y < Block<level - 1>::size; y++) {
+#ifndef USE_HUFFMAN
 						int v = static_cast<int32_t>(reader.Read(bitdepth) << shiftLeft) >> shift;
+#else
+						int v = ReadHuffmanInt() << bits;
+#endif
 						//v |= (v & mask2) >> shift2;
 						b.pixels[(x << 1)][(y << 1)] = v;
 					}
@@ -323,8 +374,47 @@ namespace spades {
 				}
 			}
 			
+			/** for algorithm design */
+			class Histogram {
+				std::unordered_map<int, int> hist;
+				const char *n;
+			public:
+				Histogram(const char *name):n(name){}
+				~Histogram() {
+					fprintf(stderr, "==== HISTOGRAM: %s ====\n", n);
+					std::vector<std::pair<int, int>> lst;
+					for(const auto& e: hist) {
+						lst.emplace_back(e);
+					}
+					std::sort(lst.begin(), lst.end());
+					for(const auto& e: lst) {
+						fprintf(stderr, "%d,%d\n", e.first, e.second);
+					}
+					fprintf(stderr, "==== END: %s ====\n", n);
+					
+				}
+				
+				void operator ()(int v) {
+					hist[v] ++;
+				}
+			};
+			
+			static Histogram histogram_coded("Mantissa");
+			
 			class Encoder: CodecBase {
 				BitWriter& writer;
+				
+				inline void WriteHuffmanInt(int i) {
+					if(i == 0) {
+						writer.WriteBit(0);
+					}else{
+						int abs = i < 0 ? -i : i;
+						writer.WriteBit(1);
+						for(int k = 1; k < abs; k++) writer.WriteBit(1);
+						writer.WriteBit(0);
+						writer.WriteBit(i < 0 ? 1 : 0);
+					}
+				}
 				
 				template<int level>
 				inline void Pass(Block<level>& block);
@@ -374,8 +464,17 @@ namespace spades {
 					}
 				bits++;
 				
-				if(bits > bitdepth + 7) bits = bitdepth + 7;
-				writer.Write(bits - bitdepth, 3);
+				if(huffmanBitShift) {
+					if(bits > bitdepth + 7) bits = bitdepth + 7;
+					for(int i = bits - bitdepth; i > 0; i--) writer.WriteBit(0);
+					writer.WriteBit(1);
+				}else{
+#ifdef USE_HUFFMAN
+					WriteHuffmanInt(bits - bitdepth);
+#else
+					writer.Write(bits - bitdepth, 3);
+#endif
+				}
 				
 				int shift = bits - bitdepth;
 				int round = (1 << shift) >> 1;
@@ -388,7 +487,11 @@ namespace spades {
 						int k = b.pixels[(x << 1) + 1][y << 1];
 						k = (k + round) >> shift;
 						k = std::max(std::min(k, maxValue), minValue);
+#ifdef USE_HUFFMAN
+						WriteHuffmanInt(k);
+#else
 						writer.Write(k, bitdepth);
+#endif
 					}
 				// write LH
 				for(int x = 0; x < Block<level - 1>::size; x++)
@@ -396,7 +499,11 @@ namespace spades {
 						int k = b.pixels[x << 1][(y << 1) + 1];
 						k = (k + round) >> shift;
 						k = std::max(std::min(k, maxValue), minValue);
+#ifdef USE_HUFFMAN
+						WriteHuffmanInt(k);
+#else
 						writer.Write(k, bitdepth);
+#endif
 					}
 				// write HH
 				for(int x = 0; x < Block<level - 1>::size; x++)
@@ -404,7 +511,11 @@ namespace spades {
 						int k = b.pixels[(x << 1)][(y << 1)];
 						k = (k + round) >> shift;
 						k = std::max(std::min(k, maxValue), minValue);
+#ifdef USE_HUFFMAN
+						WriteHuffmanInt(k);
+#else
 						writer.Write(k, bitdepth);
+#endif
 					}
 				
 				// write LL
