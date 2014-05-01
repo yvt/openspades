@@ -214,8 +214,8 @@ namespace spades {
 					huffmanBitShift = opt.quality > 70;
 					roundZeroLimits[0] = 0;
 					roundZeroLimits[1] = 1;
-					roundZeroLimits[2] = 7 - (opt.quality >> 5);
-					roundZeroLimits[3] = 12 - (opt.quality >> 4);
+					roundZeroLimits[2] = 6 - (opt.quality >> 5);
+					roundZeroLimits[3] = 10 - (opt.quality >> 4);
 				}
 			};;
 			
@@ -605,6 +605,13 @@ namespace spades {
 			IntVector4 ColorAsIntVector(int x, int y, int z) {
 				auto c = colors[x][y][z];
 				return IntVectorFromColor(c);
+			}
+			
+			bool GetNeedsColor() {
+				for(int x = 0; x < 8; x++)
+					for(int y = 0; y < 8; y++)
+						if(needscolor[x][y]) return true;
+				return false;
 			}
 			
 			uint8_t GetNeedsColorMapLinearX() {
@@ -1472,6 +1479,10 @@ namespace spades {
 							ColorBlock block;
 							mp->ComputeNeedsColor(x, y, z, block.needscolor);
 							
+							// reject uncolored block
+							if(!block.GetNeedsColor())
+								continue;
+							
 							auto fmtcode = stream.ReadByte();
 							auto fmt = static_cast<BlockFormat>(fmtcode & 0xf);
 							
@@ -2067,6 +2078,10 @@ namespace spades {
 						
 						ColorBlock block;
 						ComputeNeedsColor(x, y, z, block.needscolor);
+						
+						// reject uncolored block
+						if(!block.GetNeedsColor())
+							continue;
 						
 						// acquire colors
 						for(int xx = 0; xx < 8; xx++) {
