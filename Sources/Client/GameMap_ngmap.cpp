@@ -24,6 +24,7 @@
 #include <Core/IStream.h>
 #include <memory>
 #include <unordered_map>
+#include <array>
 
 namespace spades {
 	namespace client {
@@ -208,8 +209,8 @@ namespace spades {
 				
 				CodecBase(const NGMapOptions& opt) {
 					bitdepths[0] = 8;
-					bitdepths[1] = 3 + (opt.quality >> 5);
-					bitdepths[2] = 2 + (opt.quality >> 5);
+					bitdepths[1] = 4 + (opt.quality >> 5);
+					bitdepths[2] = 3 + (opt.quality >> 5);
 					bitdepths[3] = 1 + (opt.quality >> 4);
 					huffmanBitShift = opt.quality > 70;
 					roundZeroLimits[0] = 0;
@@ -262,6 +263,7 @@ namespace spades {
 			};
 			
 			template <int level> inline void Decoder::Pass(Block<level> &b) {
+				SPADES_MARK_FUNCTION();
 				
 				int bitdepth = bitdepths[level];
 				
@@ -356,6 +358,7 @@ namespace spades {
 			}
 			
 			template <> void Decoder::Pass<0>(Block<0> &b) {
+				SPADES_MARK_FUNCTION();
 				b.pixels[0][0] = static_cast<int>(reader.Read(9) << 23) >> 22;
 			}
 			
@@ -445,6 +448,7 @@ namespace spades {
 			};
 			
 			template<int level> inline void Encoder::Pass(Block<level>& b) {
+				SPADES_MARK_FUNCTION();
 				
 				// do filtering
 				int tmp[Block<level>::size + 8];
@@ -565,6 +569,7 @@ namespace spades {
 			}
 			
 			template<> inline void Encoder::Pass<0>(Block<0>& b) {
+				SPADES_MARK_FUNCTION();
 				writer.Write((b.pixels[0][0] + 1) >> 1, 9);
 			}
 			
@@ -1123,6 +1128,7 @@ namespace spades {
 		
 		
 		void NGMapOptions::Validate() const {
+			SPADES_MARK_FUNCTION();
 			if(quality < 0 || quality > 100) {
 				SPRaise("Invalid map quality value: %d", quality);
 			}
@@ -1140,6 +1146,7 @@ namespace spades {
 			NGMapOptions options;
 			
 			void DecodeConstant(uint8_t, ColorBlock& block) {
+				SPADES_MARK_FUNCTION();
 				IntVector4 c;
 				c.x = stream.ReadByte();
 				c.y = stream.ReadByte();
@@ -1165,6 +1172,7 @@ namespace spades {
 			}
 			
 			void DecodeLinear(uint8_t fmtcode, ColorBlock& block) {
+				SPADES_MARK_FUNCTION();
 				auto fmt = static_cast<BlockFormat>(fmtcode & 0xf);
 				auto subfmt = static_cast<LinearBlockSubFormat>(fmtcode & 0xf0);
 				LinearColorBlock sub;
@@ -1254,6 +1262,7 @@ namespace spades {
 			}
 			
 			void DecodePlanarCT(PlanarColorBlock& sub) {
+				SPADES_MARK_FUNCTION();
 				BitReader reader(stream);
 				
 				ct::MacroBlock blockY, blockU, blockV;
@@ -1283,6 +1292,7 @@ namespace spades {
 			}
 			
 			void DecodePlanar(uint8_t fmtcode, ColorBlock& block) {
+				SPADES_MARK_FUNCTION();
 				auto fmt = static_cast<BlockFormat>(fmtcode & 0xf);
 				auto subfmt = static_cast<PlanarBlockSubFormat>(fmtcode & 0xf0);
 				PlanarColorBlock sub;
@@ -1362,6 +1372,7 @@ namespace spades {
 			}
 			
 			void DecodeVolumetric(uint8_t fmtcode, ColorBlock& block) {
+				SPADES_MARK_FUNCTION();
 				auto subfmt = static_cast<VolumetricBlockSubFormat>(fmtcode & 0xf0);
 				
 				switch(subfmt) {
@@ -1396,6 +1407,7 @@ namespace spades {
 			
 			
 			GameMap *Decode(std::function<void(float)> progressListener) {
+				SPADES_MARK_FUNCTION();
 				progressListener(0.f);
 				
 				auto sig = stream.ReadLittleInt();
@@ -1543,10 +1555,12 @@ namespace spades {
 		
 		GameMap *GameMap::LoadNGMap(IStream *zstream,
 									std::function<void(float)> progressListener) {
+			SPADES_MARK_FUNCTION();
 			DeflateStream stream(zstream, CompressModeDecompress);
 			return NGMapDecoder(stream).Decode(progressListener);
 		}
 		GameMap *GameMap::LoadNGMap(IStream *stream) {
+			SPADES_MARK_FUNCTION();
 			return LoadNGMap(stream, [](float){});
 		}
 		
@@ -1560,6 +1574,7 @@ namespace spades {
 			
 			ColorBlockEmitter(std::vector<uint8_t>& out,
 							  const NGMapOptions& opt):out(out),opt(opt) {
+				SPADES_MARK_FUNCTION();
 				diversityLimit = 34 - opt.quality / 3;
 				diversityLimit *= diversityLimit;
 			}
@@ -1567,6 +1582,7 @@ namespace spades {
 		private:
 			
 			void EncodeVolumetricRaw(ColorBlock& block) {
+				SPADES_MARK_FUNCTION();
 				out.push_back(MakeFormat(BlockFormat::Volumetric,
 										 VolumetricBlockSubFormat::Raw));
 				for(int x = 0; x < 8; x++)
@@ -1589,11 +1605,14 @@ namespace spades {
 			}
 			
 			void TryEmitVolumetric(ColorBlock& block) {
+				SPADES_MARK_FUNCTION();
 				EncodeVolumetricRaw(block);
 			}
 			
 			// fills holes for better compression
 			void FillGap(PlanarColorBlock& sub, uint8_t needscolor[8]) {
+				SPADES_MARK_FUNCTION_DEBUG();
+				
 				if(needscolor[0] == 0xff &&
 				   needscolor[1] == 0xff &&
 				   needscolor[2] == 0xff &&
@@ -1720,6 +1739,8 @@ namespace spades {
 			}
 			
 			void EmitCT(PlanarColorBlock& sub, ColorBlock& block, BlockFormat fmt) {
+				SPADES_MARK_FUNCTION();
+				
 				out.push_back(MakeFormat(fmt,
 										 PlanarBlockSubFormat::Lossy));
 				
@@ -1760,7 +1781,61 @@ namespace spades {
 				return cnt;
 			}
 			
+			static int CountColors(PlanarColorBlock& sub, int limit, uint8_t *needscolor) {
+				int count = 0;
+				std::array<uint8_t, 64> hashtable;
+				std::fill(hashtable.begin(), hashtable.end(), 255);
+				
+				std::array<uint8_t, 64> nextpos;
+				
+				auto hashColor = [](const IntVector3& v) {
+					return v.x ^ (v.y >> 1) ^ (v.z >> 2);
+				};
+				
+				for(int x = 0; x < 8; x++)
+					for(int y = 0; y < 8; y++) {
+						const auto& c = sub.colors[x][y];
+						if(!(needscolor[x] & (1 << y))) continue;
+						auto hash = hashColor(c) & static_cast<int>(hashtable.size() - 1);
+						if(hashtable[hash] == 255) {
+							// new color. no hash collision.
+							hashtable[hash] = (x | (y << 3));
+							nextpos[x | (y << 3)] = 255;
+							count++;
+							if(count >= limit)
+								return count;
+						}else{
+							// check through list
+							uint8_t p = hashtable[hash];
+							while(p != 255) {
+								auto col = sub.colors[p & 7][p >> 3];
+								if(col == c) {
+									// exact match.
+									goto exactMatch;
+								}else{
+									// go next...
+									p = nextpos[p];
+								}
+							}
+							
+							// new color with hash collision.
+							nextpos[x | (y << 3)] = hashtable[hash];
+							hashtable[hash] = x | (y << 3);
+							count++;
+							if(count >= limit)
+								return count;
+							
+						exactMatch:;
+						}
+					}
+				
+				
+				return count;
+			}
+			
 			void EncodePlanar(PlanarColorBlock& sub, ColorBlock& block, BlockFormat fmt) {
+				SPADES_MARK_FUNCTION();
+				
 				uint8_t needscolor[8];
 				switch(fmt) {
 					case BlockFormat::PlanarX:
@@ -1777,7 +1852,11 @@ namespace spades {
 						break;
 				}
 				
-				if(opt.quality < 100 && CountNeedsColor(needscolor, 8) > 5) {
+				// 2D image with few colors is better to be compressed
+				// using only gzip
+				if(opt.quality < 100 &&
+				   CountNeedsColor(needscolor, 8) > 5 &&
+				   CountColors(sub, 16, needscolor) >= 14) {
 					FillGap(sub, needscolor);
 					EmitCT(sub, block, fmt);
 				} else {
@@ -1796,6 +1875,8 @@ namespace spades {
 			}
 			
 			void TryEmitPlanar(ColorBlock& block) {
+				SPADES_MARK_FUNCTION();
+				
 				int xx = block.ComputeDiversity2D_X();
 				int yy = block.ComputeDiversity2D_Y();
 				int zz = block.ComputeDiversity2D_Z();
@@ -1824,6 +1905,8 @@ namespace spades {
 			};
 			
 			LinearLinearEncoded TryEncodeLinearLinear(LinearColorBlock& sub, uint8_t needscolor) {
+				SPADES_MARK_FUNCTION();
+				
 				LinearLinearEncoded encoded;
 				IntVector3 avg(0, 0, 0);
 				int numcolors = 0;
@@ -1880,6 +1963,7 @@ namespace spades {
 			}
 			
 			void EncodeLinear(LinearColorBlock& sub, ColorBlock& block, BlockFormat fmt) {
+				SPADES_MARK_FUNCTION();
 				
 				uint8_t needscolor = 0;
 				switch(fmt) {
@@ -1927,11 +2011,12 @@ namespace spades {
 			}
 			
 			void TryEmitLinear(ColorBlock& block) {
+				SPADES_MARK_FUNCTION();
 				int xx = block.ComputeDiversity1D_X();
 				int yy = block.ComputeDiversity1D_Y();
 				int zz = block.ComputeDiversity1D_Z();
 				int mn = std::min(xx, std::min(yy, zz));
-				if(mn * 3 <= diversityLimit) {
+				if(mn * 5 <= diversityLimit) {
 					LinearColorBlock sub;
 					if(xx == mn) {
 						block.ToLinearX(sub);
@@ -1951,8 +2036,9 @@ namespace spades {
 		public:
 			
 			void TryEmitConstant(ColorBlock& block) {
+				SPADES_MARK_FUNCTION();
 				// constant mode looks super bad, so raise the threshold
-				if(block.ComputeDiversity() * 5 <= diversityLimit) {
+				if(block.ComputeDiversity() * 6 <= diversityLimit) {
 					auto cst = block.ToConstant();
 					out.push_back(MakeFormat(BlockFormat::Constant,
 											 ConstantBlockSubFormat::Constant));
@@ -1969,6 +2055,7 @@ namespace spades {
 		
 		
 		void GameMap::SaveNGMap(IStream *zstream, const NGMapOptions& opt) {
+			SPADES_MARK_FUNCTION();
 			opt.Validate();
 			
 			DeflateStream stream(zstream, CompressModeCompress);
@@ -2117,6 +2204,8 @@ namespace spades {
 		/** Computes which blocks are visible and therefore needs to be colored, in
 		 * x <= bx < x + 8, y <= by < y + 8, z <= bz < z + 8. */
 		void GameMap::ComputeNeedsColor(int x, int y, int z, uint8_t needscolor[8][8]) {
+			SPADES_MARK_FUNCTION();
+			
 			uint16_t subsolidmap[10][10]; // part of solid map
 			uint16_t earth = 0;
 			if(z + 8 >= Depth()) {
