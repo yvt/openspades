@@ -52,20 +52,18 @@ namespace spades {
 		
 		enum class LinearBlockSubFormat {
 			Linear = 0x00, // 1D image is gradient.
-			DCT =    0x10,
 			Raw =    0x20
 		};
 		
 		enum class PlanarBlockSubFormat {
 			Linear = 0x00, // 2D image is made by interpolating 4 colors.
-			DCT =    0x10,
+			Lossy =  0x10, // 2D image is compressed using a lossy algorithm.
 			Raw =    0x20
 		};
 		
 		enum class VolumetricBlockSubFormat {
 			Linear = 0x00, // 3D image is made by interpolating 8 colors.
-			DCT =    0x10,
-			Raw =    0x20
+			Raw =    0x10
 		};
 		
 		static uint8_t MakeFormat(BlockFormat f, ConstantBlockSubFormat c) {
@@ -121,6 +119,368 @@ namespace spades {
 			return IntVector4(c & 0xff, (c >> 8) & 0xff, (c >> 16) & 0xff);
 		}
 		
+		class BitWriter {
+			std::vector<uint8_t>& stream;
+			uint8_t buf;
+			int pos;
+			void Flush() {
+				stream.push_back(buf);
+				pos = 0;
+				buf = 0;
+			}
+		public:
+			BitWriter(std::vector<uint8_t>& stream):stream(stream),
+			pos(0), buf(0){}
+			~BitWriter() { if(pos > 0) Flush(); }
+			void Write(uint32_t d, int size) {
+				while(size > 0) {
+					int w = std::min(size, 8 - pos);
+					buf |= (d & ((1 << w) - 1)) << pos;
+					pos += w;
+					size -= w;
+					d >>= w;
+					if(pos == 8) {
+						Flush();
+					}
+				}
+			}
+			void WriteBit(int b) {
+				if(pos == 8) Flush();
+				if(b) buf |= 1 << (pos++);
+			}
+		};
+		class BitReader {
+			IStream& stream;
+			uint8_t buf;
+			int pos;
+			void FillBuffer() {
+				if(pos == 8) {
+					buf = static_cast<uint8_t>(stream.ReadByte());
+					pos = 0;
+				}
+			}
+		public:
+			BitReader(IStream& stream):stream(stream), pos(8), buf(0) {}
+			uint32_t Read(int size) {
+				uint32_t ret = 0;
+				int shift = 0;
+				while(shift < size) {
+					if(pos == 8) {
+						FillBuffer();
+					}
+					int w = std::min(size - shift, 8 - pos);
+					ret |= static_cast<uint32_t>(buf & ((1 << w) - 1)) << shift;
+					buf >>= w; shift += w;
+					pos += w;
+				}
+				return ret;
+			}
+			uint8_t ReadBit() {
+				if(pos == 8) FillBuffer();
+				auto ret = buf & 1;
+				buf >>= 1;
+				return ret;
+			}
+		};
+		
+		namespace ct {
+			
+			template<int bits>
+			struct Block {
+				enum { size = 1 << bits };
+				int pixels[size][size];
+			};
+			
+			typedef Block<3> MacroBlock;
+			
+			namespace {
+			}
+			
+			class CodecBase {
+			protected:
+				// bit depths for each wavelet level
+				int bitdepths[4];
+				CodecBase(const NGMapOptions& opt) {
+					bitdepths[0] = 8;
+					bitdepths[1] = 3 + (opt.quality >> 5);
+					bitdepths[2] = 2 + (opt.quality >> 5);
+					bitdepths[3] = 1 + (opt.quality >> 4);
+				}
+			};;
+			
+			class Decoder: CodecBase {
+				BitReader& reader;
+				
+				template<int level>
+				inline void Pass(Block<level>&);
+				
+				template<int level>
+				inline void Filter(int a[(1 << level) + 8],
+								   int b[(1 << level) + 8]);
+			public:
+				Decoder(BitReader& f, const NGMapOptions& opt):reader(f),CodecBase(opt) {}
+				
+				
+				void Decode(MacroBlock& mb) {
+					Pass<3>(mb);
+				}
+			};
+			
+			template <int level> inline void Decoder::Pass(Block<level> &b) {
+				
+				int bitdepth = bitdepths[level];
+				
+				int shiftLeft = 32 - bitdepth;
+				
+				int bits = reader.Read(3); // effective bits: bitdepth - bitdepth + 7
+				int shift = shiftLeft - bits;
+				
+				// to fill LSBs
+				int mask2 = (1 << (bits + bitdepth)) - 1;
+				int shift2 = bitdepth;
+				
+				// read HL
+				for(int x = 0; x < Block<level - 1>::size; x++)
+					for(int y = 0; y < Block<level - 1>::size; y++) {
+						int v = static_cast<int32_t>(reader.Read(bitdepth) << shiftLeft) >> shift;
+						//v |= (v & mask2) >> shift2;
+						b.pixels[(x << 1) + 1][y << 1] = v;
+					}
+				// read LH
+				for(int x = 0; x < Block<level - 1>::size; x++)
+					for(int y = 0; y < Block<level - 1>::size; y++) {
+						int v = static_cast<int32_t>(reader.Read(bitdepth) << shiftLeft) >> shift;
+						//v |= (v & mask2) >> shift2;
+						b.pixels[x << 1][(y << 1) + 1] = v;
+					}
+				// read HH
+				for(int x = 0; x < Block<level - 1>::size; x++)
+					for(int y = 0; y < Block<level - 1>::size; y++) {
+						int v = static_cast<int32_t>(reader.Read(bitdepth) << shiftLeft) >> shift;
+						//v |= (v & mask2) >> shift2;
+						b.pixels[(x << 1)][(y << 1)] = v;
+					}
+				
+				// get LL
+				Block<level - 1> lower;
+				Pass(lower);
+				
+				for(int x = 0; x < Block<level - 1>::size; x++)
+					for(int y = 0; y < Block<level - 1>::size; y++)
+						b.pixels[(x << 1) + 1][(y << 1) + 1] = lower.pixels[x][y];
+				
+				// do filtering
+				int tmp[Block<level>::size + 8];
+				int tmp2[Block<level>::size + 8];
+				for(int x = 0; x < Block<level>::size; x++) {
+					for(int y = 0; y < Block<level>::size; y++)
+						tmp[y + 4] = b.pixels[x][y];
+					Filter<level>(tmp, tmp2);
+					for(int y = 0; y < Block<level>::size; y++)
+						b.pixels[x][y] = tmp2[y + 4];
+				}
+				for(int y = 0; y < Block<level>::size; y++) {
+					for(int x = 0; x < Block<level>::size; x++)
+						tmp[x + 4] = b.pixels[x][y];
+					Filter<level>(tmp, tmp2);
+					for(int x = 0; x < Block<level>::size; x++)
+						b.pixels[x][y] = tmp2[x + 4];
+				}
+				
+				
+			}
+			
+			template <> void Decoder::Pass<0>(Block<0> &b) {
+				b.pixels[0][0] = static_cast<int>(reader.Read(9) << 23) >> 22;
+			}
+			
+			
+			template<int level> inline void Decoder::Filter(int arr[(1 << level) + 8],
+															int ret[(1 << level) + 8]) {
+				static const int size = 1 << level;
+				
+				if(level == 3) {
+					arr[3] = arr[5]; arr[2] = arr[6];
+					arr[1] = arr[7]; arr[0] = arr[8];
+					arr[12] = arr[10]; arr[13] = arr[9];
+					arr[14] = arr[8]; arr[15] = arr[7];
+				} else if(level == 2) {
+					arr[3] = arr[5]; arr[2] = arr[6];
+					arr[1] = arr[7]; arr[0] = arr[6];
+					arr[8] = arr[6]; arr[9] = arr[5];
+					arr[10] = arr[4]; arr[11] = arr[5];
+				} else if(level == 1) {
+					arr[3] = arr[5]; arr[2] = arr[6];
+					arr[1] = arr[5]; arr[0] = arr[6];
+					arr[6] = arr[4]; arr[7] = arr[5];
+					arr[8] = arr[4]; arr[9] = arr[5];
+				}
+				for(int i = 3; i < size + 4; i+=2) {
+					ret[i] = arr[i] - ((arr[i - 1] + arr[i + 1] + 2) >> 2);
+				}
+				for(int i = 4; i < size + 4; i+=2) {
+					ret[i] = arr[i] + ((ret[i - 1] + ret[i + 1]) >> 1);
+				}
+			}
+			
+			class Encoder: CodecBase {
+				BitWriter& writer;
+				
+				template<int level>
+				inline void Pass(Block<level>& block);
+				
+				template<int level>
+				inline void Filter(int arr[(1 << level) + 8],
+								   int ret[(1 << level) + 8]);
+			public:
+				Encoder(BitWriter& f, const NGMapOptions& opt):writer(f),CodecBase(opt) {}
+				
+				void Encode(MacroBlock& mb) {
+					Pass(mb);
+				}
+			};
+			
+			template<int level> inline void Encoder::Pass(Block<level>& b) {
+				
+				// do filtering
+				/*
+				for(int y = 0; y < Block<level>::size; y++) {
+					for(int x = 0; x < Block<level>::size; x++) {
+						printf("%5d ", b.pixels[((x << 1) & 7) | (x >> 2)][((y << 1) & 7) | (y >> 2)]);
+					}
+					puts("");
+				}
+				puts("----");*/
+				int tmp[Block<level>::size + 8];
+				int tmp2[Block<level>::size + 8];
+				for(int y = 0; y < Block<level>::size; y++) {
+					for(int x = 0; x < Block<level>::size; x++)
+						tmp[x + 4] = b.pixels[x][y];
+					Filter<level>(tmp, tmp2);
+					for(int x = 0; x < Block<level>::size; x++)
+						b.pixels[x][y] = tmp2[x + 4];
+				}
+				/*
+				for(int y = 0; y < Block<level>::size; y++) {
+					for(int x = 0; x < Block<level>::size; x++) {
+						printf("%5d ", b.pixels[((x << 1) & 7) | (x >> 2)][((y << 1) & 7) | (y >> 2)]);
+					}
+					puts("");
+				}
+				*/
+				for(int x = 0; x < Block<level>::size; x++) {
+					for(int y = 0; y < Block<level>::size; y++)
+						tmp[y + 4] = b.pixels[x][y];
+					Filter<level>(tmp, tmp2);
+					for(int y = 0; y < Block<level>::size; y++)
+						b.pixels[x][y] = tmp2[y + 4];
+				}
+				/*
+				for(int y = 0; y < Block<level>::size; y++) {
+					for(int x = 0; x < Block<level>::size; x++) {
+						printf("%5d ", b.pixels[((x << 1) & 7) | (x >> 2)][((y << 1) & 7) | (y >> 2)]);
+					}
+					puts("");
+				}
+				puts("----");*/
+				
+				// calc effective bits
+				int bitdepth = bitdepths[level];
+				int bits = bitdepth - 1;
+				for(int x = 0; x < Block<level - 1>::size; x++)
+					for(int y = 0; y < Block<level - 1>::size; y++) {
+						int k = b.pixels[(x << 1) + 1][y << 1];
+						if(k < 0) k = ~k; while((unsigned int)k >> bits) bits++;
+						k = b.pixels[(x << 1)][(y << 1)];
+						if(k < 0) k = ~k; while((unsigned int)k >> bits) bits++;
+						k = b.pixels[x << 1][(y << 1) +  1];
+						if(k < 0) k = ~k; while((unsigned int)k >> bits) bits++;
+					}
+				bits++;
+				
+				if(bits > bitdepth + 7) bits = bitdepth + 7;
+				writer.Write(bits - bitdepth, 3);
+				
+				int shift = bits - bitdepth;
+				int round = (1 << shift) >> 1;
+				int maxValue = ((1 << bitdepth) >> 1) - 1;
+				int minValue = ~maxValue;
+				
+				// write HL
+				for(int x = 0; x < Block<level - 1>::size; x++)
+					for(int y = 0; y < Block<level - 1>::size; y++) {
+						int k = b.pixels[(x << 1) + 1][y << 1];
+						k = (k + round) >> shift;
+						k = std::max(std::min(k, maxValue), minValue);
+						writer.Write(k, bitdepth);
+					}
+				// write LH
+				for(int x = 0; x < Block<level - 1>::size; x++)
+					for(int y = 0; y < Block<level - 1>::size; y++) {
+						int k = b.pixels[x << 1][(y << 1) + 1];
+						k = (k + round) >> shift;
+						k = std::max(std::min(k, maxValue), minValue);
+						writer.Write(k, bitdepth);
+					}
+				// write HH
+				for(int x = 0; x < Block<level - 1>::size; x++)
+					for(int y = 0; y < Block<level - 1>::size; y++) {
+						int k = b.pixels[(x << 1)][(y << 1)];
+						k = (k + round) >> shift;
+						k = std::max(std::min(k, maxValue), minValue);
+						writer.Write(k, bitdepth);
+					}
+				
+				// write LL
+				Block<level - 1> lower;
+				for(int x = 0; x < Block<level - 1>::size; x++)
+					for(int y = 0; y < Block<level - 1>::size; y++)
+						lower.pixels[x][y] = b.pixels[(x << 1) + 1][(y << 1) + 1];
+				/*
+				for(int y = 0; y < Block<level>::size; y++) {
+					for(int x = 0; x < Block<level>::size; x++) {
+						printf("%5d ", b.pixels[((x << 1) & 7) | (x >> 2)][((y << 1) & 7) | (y >> 2)]);
+					}
+					puts("");
+				}//*/
+				
+				Pass(lower);
+			}
+			
+			template<> inline void Encoder::Pass<0>(Block<0>& b) {
+				writer.Write((b.pixels[0][0] + 1) >> 1, 9);
+			}
+			
+			template<int level> inline void Encoder::Filter(int arr[(1 << level) + 8],
+															int ret[(1 << level) + 8]) {
+				static const int size = 1 << level;
+				
+				if(level == 3) {
+					arr[3] = arr[5]; arr[2] = arr[6];
+					arr[1] = arr[7]; arr[0] = arr[8];
+					arr[12] = arr[10]; arr[13] = arr[9];
+					arr[14] = arr[8]; arr[15] = arr[7];
+				} else if(level == 2) {
+					arr[3] = arr[5]; arr[2] = arr[6];
+					arr[1] = arr[7]; arr[0] = arr[6];
+					arr[8] = arr[6]; arr[9] = arr[5];
+					arr[10] = arr[4]; arr[11] = arr[5];
+				} else if(level == 1) {
+					arr[3] = arr[5]; arr[2] = arr[6];
+					arr[1] = arr[5]; arr[0] = arr[6];
+					arr[6] = arr[4]; arr[7] = arr[5];
+					arr[8] = arr[4]; arr[9] = arr[5];
+				}
+				std::fill(ret, ret + (1 << level) + 8, 100000);
+				
+				for(int i = 4; i <= size + 4; i+=2) {
+					ret[i] = arr[i] - ((arr[i - 1] + arr[i + 1]) >> 1);
+				}
+				for(int i = 5; i < size + 4; i+=2) {
+					ret[i] = arr[i] + ((ret[i - 1] + ret[i + 1] + 2) >> 2);
+				}
+			}
+		}
 		
 		struct ColorBlock {
 			uint8_t needscolor[8][8];
@@ -651,362 +1011,413 @@ namespace spades {
 		
 #pragma mark - Decoder
 		
-		static void DecodeConstant(uint8_t, ColorBlock& block, IStream& stream) {
-			IntVector4 c;
-			c.x = stream.ReadByte();
-			c.y = stream.ReadByte();
-			c.z = stream.ReadByte();
-			block.FromConstant(c);
-		}
-		
-		static void DecodeLinearLinear(const IntVector3& c1,
-									   const IntVector3& c2,
-									   LinearColorBlock& sub) {
-			int v1 = c1.x * 7, d1 = c2.x - c1.x;
-			int v2 = c1.y * 7, d2 = c2.y - c1.y;
-			int v3 = c1.z * 7, d3 = c2.z - c1.z;
-			for(int i = 0; i < 8; i++) {
-				IntVector4& c = sub.colors[i];
-				// good compile can do this without division
-				c.x = v1 / 7;
-				c.y = v2 / 7;
-				c.z = v3 / 7;
-				v1 += d1; v2 += d2; v3 += d3;
+		class GameMap::NGMapDecoder {
+			friend class ColorBlockEmitter;
+			IStream& stream;
+			NGMapOptions options;
+			
+			void DecodeConstant(uint8_t, ColorBlock& block) {
+				IntVector4 c;
+				c.x = stream.ReadByte();
+				c.y = stream.ReadByte();
+				c.z = stream.ReadByte();
+				block.FromConstant(c);
 			}
 			
-		}
-		
-		static void DecodeLinear(uint8_t fmtcode, ColorBlock& block, IStream& stream) {
-			auto fmt = static_cast<BlockFormat>(fmtcode & 0xf);
-			auto subfmt = static_cast<LinearBlockSubFormat>(fmtcode & 0xf0);
-			LinearColorBlock sub;
-			uint8_t needscolor = 0;
-			switch(fmt) {
-				case BlockFormat::LinearX:
-					needscolor = block.GetNeedsColorMapLinearX();
-					break;
-				case BlockFormat::LinearY:
-					needscolor = block.GetNeedsColorMapLinearY();
-					break;
-				case BlockFormat::LinearZ:
-					needscolor = block.GetNeedsColorMapLinearZ();
-					break;
-				default:
-					// shouldn't happen...
-					break;
-			}
-			
-			switch(subfmt) {
-				case LinearBlockSubFormat::Linear:
-				{
-					IntVector4 c1;
-					c1.x = stream.ReadByte();
-					c1.y = stream.ReadByte();
-					c1.z = stream.ReadByte();
-					IntVector4 c2;
-					c2.x = stream.ReadByte();
-					c2.y = stream.ReadByte();
-					c2.z = stream.ReadByte();
-					DecodeLinearLinear(c1, c2, sub);
-					break;
+			static void DecodeLinearLinear(const IntVector3& c1,
+										   const IntVector3& c2,
+										   LinearColorBlock& sub) {
+				int v1 = c1.x * 7, d1 = c2.x - c1.x;
+				int v2 = c1.y * 7, d2 = c2.y - c1.y;
+				int v3 = c1.z * 7, d3 = c2.z - c1.z;
+				for(int i = 0; i < 8; i++) {
+					IntVector4& c = sub.colors[i];
+					// good compile can do this without division
+					c.x = v1 / 7;
+					c.y = v2 / 7;
+					c.z = v3 / 7;
+					v1 += d1; v2 += d2; v3 += d3;
 				}
-				case LinearBlockSubFormat::Raw:
-					for(int i = 0; i < 8; i++) {
-						if(!(needscolor & (1 << i))) continue;
-						IntVector4& c = sub.colors[i];
-						c.x = stream.ReadByte();
-						c.y = stream.ReadByte();
-						c.z = stream.ReadByte();
+				
+			}
+			
+			void DecodeLinear(uint8_t fmtcode, ColorBlock& block) {
+				auto fmt = static_cast<BlockFormat>(fmtcode & 0xf);
+				auto subfmt = static_cast<LinearBlockSubFormat>(fmtcode & 0xf0);
+				LinearColorBlock sub;
+				uint8_t needscolor = 0;
+				switch(fmt) {
+					case BlockFormat::LinearX:
+						needscolor = block.GetNeedsColorMapLinearX();
+						break;
+					case BlockFormat::LinearY:
+						needscolor = block.GetNeedsColorMapLinearY();
+						break;
+					case BlockFormat::LinearZ:
+						needscolor = block.GetNeedsColorMapLinearZ();
+						break;
+					default:
+						// shouldn't happen...
+						break;
+				}
+				
+				switch(subfmt) {
+					case LinearBlockSubFormat::Linear:
+					{
+						IntVector4 c1;
+						c1.x = stream.ReadByte();
+						c1.y = stream.ReadByte();
+						c1.z = stream.ReadByte();
+						IntVector4 c2;
+						c2.x = stream.ReadByte();
+						c2.y = stream.ReadByte();
+						c2.z = stream.ReadByte();
+						DecodeLinearLinear(c1, c2, sub);
+						break;
 					}
-					break;
-				default:
-					SPRaise("Invalid format: 0x%02x", static_cast<int>(fmtcode));
-			}
-			
-			switch(fmt) {
-				case BlockFormat::LinearX:
-					block.FromLinearX(sub);
-					break;
-				case BlockFormat::LinearY:
-					block.FromLinearY(sub);
-					break;
-				case BlockFormat::LinearZ:
-					block.FromLinearZ(sub);
-					break;
-				default:
-					// shouldn't happen...
-					break;
-			}
-		}
-		
-		static void DecodePlanarLinear(const IntVector3& c1,
-									   const IntVector3& c2,
-									   const IntVector3& c3,
-									   const IntVector3& c4,
-									   PlanarColorBlock& sub) {
-			int a1 = c1.x * 7, ad1 = c2.x - c1.x;
-			int a2 = c1.y * 7, ad2 = c2.y - c1.y;
-			int a3 = c1.z * 7, ad3 = c2.z - c1.z;
-			int b1 = c3.x * 7, bd1 = c4.x - c3.x;
-			int b2 = c3.y * 7, bd2 = c4.y - c3.y;
-			int b3 = c3.z * 7, bd3 = c4.z - c3.z;
-			for(int x = 0; x < 8; x++) {
-				int c1 = a1 * 7, c2 = a2 * 7, c3 = a3 * 7;
-				int cd1 = b1 - a1, cd2 = b2 - a2, cd3 = b3 - a3;
-				for(int y = 0; y < 8; y++) {
-					IntVector4& c = sub.colors[x][y];
-					c.x = c1 / 49;
-					c.y = c2 / 49;
-					c.z = c3 / 49;
-					c1 += cd1; c2 += cd2; c3 += cd3;
-				}
-				a1 += ad1; a2 += ad2; a3 += ad3;
-				b1 += bd1; b2 += bd2; b3 += bd3;
-			}
-		}
-		
-		static void DecodePlanar(uint8_t fmtcode, ColorBlock& block, IStream& stream) {
-			auto fmt = static_cast<BlockFormat>(fmtcode & 0xf);
-			auto subfmt = static_cast<PlanarBlockSubFormat>(fmtcode & 0xf0);
-			PlanarColorBlock sub;
-			uint8_t needscolor[8];
-			
-			switch(fmt) {
-				case BlockFormat::PlanarX:
-					block.GetNeedsColorMapPlanarX(needscolor);
-					break;
-				case BlockFormat::PlanarY:
-					block.GetNeedsColorMapPlanarY(needscolor);
-					break;
-				case BlockFormat::PlanarZ:
-					block.GetNeedsColorMapPlanarZ(needscolor);
-					break;
-				default:
-					// shouldn't happen...
-					std::fill(needscolor, needscolor + 8, 0);
-					break;
-			}
-			
-			switch(subfmt) {
-				case PlanarBlockSubFormat::Linear:
-				{
-					IntVector4 c1;
-					c1.x = stream.ReadByte();
-					c1.y = stream.ReadByte();
-					c1.z = stream.ReadByte();
-					IntVector4 c2;
-					c2.x = stream.ReadByte();
-					c2.y = stream.ReadByte();
-					c2.z = stream.ReadByte();
-					IntVector4 c3;
-					c3.x = stream.ReadByte();
-					c3.y = stream.ReadByte();
-					c3.z = stream.ReadByte();
-					IntVector4 c4;
-					c4.x = stream.ReadByte();
-					c4.y = stream.ReadByte();
-					c4.z = stream.ReadByte();
-					DecodePlanarLinear(c1, c2, c3, c4, sub);
-					break;
-				}
-				case PlanarBlockSubFormat::Raw:
-					for(int x = 0; x < 8; x++) {
-						for(int yy = 0; yy < 8; yy++) {
-							int y = (x & 1) ? (7 - yy) : yy;
-							if(!(needscolor[x]&(1<<y))) continue;
-							IntVector4& c = sub.colors[x][y];
+					case LinearBlockSubFormat::Raw:
+						for(int i = 0; i < 8; i++) {
+							if(!(needscolor & (1 << i))) continue;
+							IntVector4& c = sub.colors[i];
 							c.x = stream.ReadByte();
 							c.y = stream.ReadByte();
 							c.z = stream.ReadByte();
 						}
+						break;
+					default:
+						SPRaise("Invalid format: 0x%02x", static_cast<int>(fmtcode));
+				}
+				
+				switch(fmt) {
+					case BlockFormat::LinearX:
+						block.FromLinearX(sub);
+						break;
+					case BlockFormat::LinearY:
+						block.FromLinearY(sub);
+						break;
+					case BlockFormat::LinearZ:
+						block.FromLinearZ(sub);
+						break;
+					default:
+						// shouldn't happen...
+						break;
+				}
+			}
+			
+			static void DecodePlanarLinear(const IntVector3& c1,
+										   const IntVector3& c2,
+										   const IntVector3& c3,
+										   const IntVector3& c4,
+										   PlanarColorBlock& sub) {
+				int a1 = c1.x * 7, ad1 = c2.x - c1.x;
+				int a2 = c1.y * 7, ad2 = c2.y - c1.y;
+				int a3 = c1.z * 7, ad3 = c2.z - c1.z;
+				int b1 = c3.x * 7, bd1 = c4.x - c3.x;
+				int b2 = c3.y * 7, bd2 = c4.y - c3.y;
+				int b3 = c3.z * 7, bd3 = c4.z - c3.z;
+				for(int x = 0; x < 8; x++) {
+					int c1 = a1 * 7, c2 = a2 * 7, c3 = a3 * 7;
+					int cd1 = b1 - a1, cd2 = b2 - a2, cd3 = b3 - a3;
+					for(int y = 0; y < 8; y++) {
+						IntVector4& c = sub.colors[x][y];
+						c.x = c1 / 49;
+						c.y = c2 / 49;
+						c.z = c3 / 49;
+						c1 += cd1; c2 += cd2; c3 += cd3;
 					}
-					break;
-				default:
-					SPRaise("Invalid format: 0x%02x", static_cast<int>(fmtcode));
+					a1 += ad1; a2 += ad2; a3 += ad3;
+					b1 += bd1; b2 += bd2; b3 += bd3;
+				}
 			}
 			
-			switch(fmt) {
-				case BlockFormat::PlanarX:
-					block.FromPlanarX(sub);
-					break;
-				case BlockFormat::PlanarY:
-					block.FromPlanarY(sub);
-					break;
-				case BlockFormat::PlanarZ:
-					block.FromPlanarZ(sub);
-					break;
-				default:
-					// shouldn't happen...
-					break;
+			void DecodePlanarCT(PlanarColorBlock& sub) {
+				BitReader reader(stream);
+				
+				ct::MacroBlock blockY, blockU, blockV;
+				
+				auto doBlock = [&](ct::MacroBlock& block) {
+					ct::Decoder decoder(reader, options);
+					decoder.Decode(block);
+				};
+				
+				doBlock(blockY);
+				doBlock(blockU);
+				doBlock(blockV);
+				
+				for(int x = 0; x < 8; x++) {
+					for(int y = 0; y < 8; y++) {
+						auto t = -blockU.pixels[x][y];
+						auto& c = sub.colors[x][y];
+						c.y = blockY.pixels[x][y] - (t >> 1);
+						c.x = t + c.y - ((blockV.pixels[x][y] + 1) >> 1);
+						c.z = blockV.pixels[x][y] + c.x;
+						c.x = std::max(std::min(c.x, 255), 0);
+						c.y = std::max(std::min(c.y, 255), 0);
+						c.z = std::max(std::min(c.z, 255), 0);
+						std::swap(c.z, c.x);
+					}
+				}
 			}
-		}
-		
-		static void DecodeVolumetric(uint8_t fmtcode, ColorBlock& block, IStream& stream) {
-			auto subfmt = static_cast<VolumetricBlockSubFormat>(fmtcode & 0xf0);
 			
-			switch(subfmt) {
-				case VolumetricBlockSubFormat::Raw:
-					for(int x = 0; x < 8; x++) {
-						for(int yy = 0; yy < 8; yy++) {
-							int y = (x & 1) ? (7 - yy) : yy;
-							auto b = block.needscolor[x][y];
-							if(!b) continue;
-							for(int zz = 0; zz < 8; zz++) {
-								int z = (yy & 1) ? (7 - zz) : zz;
-								if(!(b&(1<<z))) continue;
-								IntVector4 c;
+			void DecodePlanar(uint8_t fmtcode, ColorBlock& block) {
+				auto fmt = static_cast<BlockFormat>(fmtcode & 0xf);
+				auto subfmt = static_cast<PlanarBlockSubFormat>(fmtcode & 0xf0);
+				PlanarColorBlock sub;
+				uint8_t needscolor[8];
+				
+				switch(fmt) {
+					case BlockFormat::PlanarX:
+						block.GetNeedsColorMapPlanarX(needscolor);
+						break;
+					case BlockFormat::PlanarY:
+						block.GetNeedsColorMapPlanarY(needscolor);
+						break;
+					case BlockFormat::PlanarZ:
+						block.GetNeedsColorMapPlanarZ(needscolor);
+						break;
+					default:
+						// shouldn't happen...
+						std::fill(needscolor, needscolor + 8, 0);
+						break;
+				}
+				
+				switch(subfmt) {
+					case PlanarBlockSubFormat::Linear:
+					{
+						IntVector4 c1;
+						c1.x = stream.ReadByte();
+						c1.y = stream.ReadByte();
+						c1.z = stream.ReadByte();
+						IntVector4 c2;
+						c2.x = stream.ReadByte();
+						c2.y = stream.ReadByte();
+						c2.z = stream.ReadByte();
+						IntVector4 c3;
+						c3.x = stream.ReadByte();
+						c3.y = stream.ReadByte();
+						c3.z = stream.ReadByte();
+						IntVector4 c4;
+						c4.x = stream.ReadByte();
+						c4.y = stream.ReadByte();
+						c4.z = stream.ReadByte();
+						DecodePlanarLinear(c1, c2, c3, c4, sub);
+						break;
+					}
+					case PlanarBlockSubFormat::Lossy:
+						DecodePlanarCT(sub);
+						break;
+					case PlanarBlockSubFormat::Raw:
+						for(int x = 0; x < 8; x++) {
+							for(int yy = 0; yy < 8; yy++) {
+								int y = (x & 1) ? (7 - yy) : yy;
+								if(!(needscolor[x]&(1<<y))) continue;
+								IntVector4& c = sub.colors[x][y];
 								c.x = stream.ReadByte();
 								c.y = stream.ReadByte();
 								c.z = stream.ReadByte();
-								block.colors[x][y][z] = IntVectorToColor(c);
 							}
 						}
-					}
-					break;
-				default:
-					SPRaise("Invalid format: 0x%02x", static_cast<int>(fmtcode));
+						break;
+					default:
+						SPRaise("Invalid format: 0x%02x", static_cast<int>(fmtcode));
+				}
+				
+				switch(fmt) {
+					case BlockFormat::PlanarX:
+						block.FromPlanarX(sub);
+						break;
+					case BlockFormat::PlanarY:
+						block.FromPlanarY(sub);
+						break;
+					case BlockFormat::PlanarZ:
+						block.FromPlanarZ(sub);
+						break;
+					default:
+						// shouldn't happen...
+						break;
+				}
 			}
 			
-		}
+			void DecodeVolumetric(uint8_t fmtcode, ColorBlock& block) {
+				auto subfmt = static_cast<VolumetricBlockSubFormat>(fmtcode & 0xf0);
+				
+				switch(subfmt) {
+					case VolumetricBlockSubFormat::Raw:
+						for(int x = 0; x < 8; x++) {
+							for(int yy = 0; yy < 8; yy++) {
+								int y = (x & 1) ? (7 - yy) : yy;
+								auto b = block.needscolor[x][y];
+								if(!b) continue;
+								for(int zz = 0; zz < 8; zz++) {
+									int z = (yy & 1) ? (7 - zz) : zz;
+									if(!(b&(1<<z))) continue;
+									IntVector4 c;
+									c.x = stream.ReadByte();
+									c.y = stream.ReadByte();
+									c.z = stream.ReadByte();
+									block.colors[x][y][z] = IntVectorToColor(c);
+								}
+							}
+						}
+						break;
+					default:
+						SPRaise("Invalid format: 0x%02x", static_cast<int>(fmtcode));
+				}
+				
+			}
+				
+		public:
+			NGMapDecoder(IStream& stream): stream(stream) {
+				
+			}
+			
+			
+			GameMap *Decode(std::function<void(float)> progressListener) {
+				progressListener(0.f);
+				
+				auto sig = stream.ReadLittleInt();
+				if(sig != signature) {
+					SPRaise("Invalid signature: 0x%08x (expected 0x%08x)", sig, signature);
+				}
+				
+				int w = stream.ReadLittleShort();
+				int h = stream.ReadLittleShort();
+				int d = stream.ReadLittleShort();
+				if(w < 1 || h < 1 || d < 1 ||
+				   w > 8192 || h > 8192 || d > 128) {
+					SPRaise("Invalid map dimension: %dx%dx%d", w, h, d);
+				}
+				
+				if(d > 64) {
+					// due to bit width of solidMap
+					SPRaise("Depth over 64 is not supported: %d", d);
+				}
+				
+				options.quality = stream.ReadByte();
+				options.Validate();
+				
+				Handle<GameMap> mp(new GameMap(w, h, d), false);
+				
+				// read geometry
+				for(int y = 0; y < h; y++) {
+					bool odd = y & 1;
+					for(int i = 0, x = odd ? w - 1 : 0, s = odd ? -1 : 1; i < w; i++, x += s) {
+						int fmt = stream.ReadByte();
+						ColumnFormat fmtType = static_cast<ColumnFormat>(fmt & 1);
+						uint64_t solidMap = 0;
+						
+						if(fmtType == ColumnFormat::Rle) {
+							// RLE format
+							int z = 0;
+							bool fill = false;
+							while(z < d) {
+								auto inb = stream.ReadByte();
+								if(inb & 0x80) {
+									fill = true;
+									inb &= 0x7f;
+								}
+								
+								if(inb <= z || inb > d) {
+									SPRaise("Data corrupted: invalid Z coordinate: %d", inb);
+								}
+								
+								if(fill) {
+									while(z < inb) {
+										solidMap |= 1ULL << z;
+										z++;
+									}
+								} else {
+									z = inb;
+								}
+								
+								fill = !fill;
+							}
+						} else if(fmtType == ColumnFormat::Bitmap) {
+							for(int z = 0; z < d; z += 16) {
+								if((fmt >> (1 + (z >> 4))) & 1) {
+									auto b = stream.ReadLittleShort();
+									solidMap |= static_cast<uint64_t>(b) << z;
+								}
+							}
+						}
+						
+						mp->solidMap[x][y] = solidMap;
+					}
+					
+					progressListener(0.5f * static_cast<float>(y) / static_cast<float>(h));
+				}
+				
+				
+				// read colors
+				for(int y = 0; y < h; y += 8) {
+					for(int x = 0; x < w; x += 8) {
+						for(int zz = 0; zz < d; zz += 8) {
+							int z = (x & 8) ? (((d+7)&~7) - 8 - zz) : zz;
+							ColorBlock block;
+							mp->ComputeNeedsColor(x, y, z, block.needscolor);
+							
+							auto fmtcode = stream.ReadByte();
+							auto fmt = static_cast<BlockFormat>(fmtcode & 0xf);
+							
+							switch(fmt) {
+								case BlockFormat::Constant:
+									DecodeConstant(fmtcode, block);
+									break;
+								case BlockFormat::LinearX:
+									DecodeLinear(fmtcode, block);
+									break;
+								case BlockFormat::LinearY:
+									DecodeLinear(fmtcode, block);
+									break;
+								case BlockFormat::LinearZ:
+									DecodeLinear(fmtcode, block);
+									break;
+								case BlockFormat::PlanarX:
+									DecodePlanar(fmtcode, block);
+									break;
+								case BlockFormat::PlanarY:
+									DecodePlanar(fmtcode, block);
+									break;
+								case BlockFormat::PlanarZ:
+									DecodePlanar(fmtcode, block);
+									break;
+								case BlockFormat::Volumetric:
+									DecodeVolumetric(fmtcode, block);
+									break;
+								default:
+									SPRaise("Unsupported block format: 0x%02x",
+											static_cast<int>(fmtcode));
+							}
+							
+							// put color
+							for(int xx = 0; xx < 8; xx++) {
+								for(int yy = 0; yy < 8; yy++) {
+									auto b = block.needscolor[xx][yy];
+									if(!b) continue;
+									for(int zz = 0; zz < 8; zz++) {
+										if(!(b & (1<<zz))) continue;
+										auto c = block.colors[xx][yy][zz];
+										c &= 0xffffff;
+										c |= 100 << 24; // health
+										mp->colorMap[xx + x][yy + y][zz + z] = c;
+									}
+								}
+							}
+							
+							// block done
+						} // z
+					} // x
+				} // y
+				
+				return mp.Unmanage();
+			}
+			
+		};
 		
 		GameMap *GameMap::LoadNGMap(IStream *zstream,
 									std::function<void(float)> progressListener) {
 			DeflateStream stream(zstream, CompressModeDecompress);
-			
-			progressListener(0.f);
-			
-			auto sig = stream.ReadLittleInt();
-			if(sig != signature) {
-				SPRaise("Invalid signature: 0x%08x (expected 0x%08x)", sig, signature);
-			}
-			
-			int w = stream.ReadLittleShort();
-			int h = stream.ReadLittleShort();
-			int d = stream.ReadLittleShort();
-			if(w < 1 || h < 1 || d < 1 ||
-			   w > 8192 || h > 8192 || d > 128) {
-				SPRaise("Invalid map dimension: %dx%dx%d", w, h, d);
-			}
-			
-			if(d > 64) {
-				// due to bit width of solidMap
-				SPRaise("Depth over 64 is not supported: %d", d);
-			}
-			
-			Handle<GameMap> mp(new GameMap(w, h, d), false);
-			
-			// read geometry
-			for(int y = 0; y < h; y++) {
-				bool odd = y & 1;
-				for(int i = 0, x = odd ? w - 1 : 0, s = odd ? -1 : 1; i < w; i++, x += s) {
-					int fmt = stream.ReadByte();
-					ColumnFormat fmtType = static_cast<ColumnFormat>(fmt & 1);
-					uint64_t solidMap = 0;
-					
-					if(fmtType == ColumnFormat::Rle) {
-						// RLE format
-						int z = 0;
-						bool fill = false;
-						while(z < d) {
-							auto inb = stream.ReadByte();
-							if(inb & 0x80) {
-								fill = true;
-								inb &= 0x7f;
-							}
-							
-							if(inb <= z || inb > d) {
-								SPRaise("Data corrupted: invalid Z coordinate: %d", inb);
-							}
-							
-							if(fill) {
-								while(z < inb) {
-									solidMap |= 1ULL << z;
-									z++;
-								}
-							} else {
-								z = inb;
-							}
-							
-							fill = !fill;
-						}
-					} else if(fmtType == ColumnFormat::Bitmap) {
-						for(int z = 0; z < d; z += 16) {
-							if((fmt >> (1 + (z >> 4))) & 1) {
-								auto b = stream.ReadLittleShort();
-								solidMap |= static_cast<uint64_t>(b) << z;
-							}
-						}
-					}
-					
-					mp->solidMap[x][y] = solidMap;
-				}
-				
-				progressListener(0.5f * static_cast<float>(y) / static_cast<float>(h));
-			}
-			
-			
-			// read colors
-			for(int y = 0; y < h; y += 8) {
-				for(int x = 0; x < w; x += 8) {
-					for(int zz = 0; zz < d; zz += 8) {
-						int z = (x & 8) ? (((d+7)&~7) - 8 - zz) : zz;
-						ColorBlock block;
-						mp->ComputeNeedsColor(x, y, z, block.needscolor);
-						
-						auto fmtcode = stream.ReadByte();
-						auto fmt = static_cast<BlockFormat>(fmtcode & 0xf);
-						
-						switch(fmt) {
-							case BlockFormat::Constant:
-								DecodeConstant(fmtcode, block, stream);
-								break;
-							case BlockFormat::LinearX:
-								DecodeLinear(fmtcode, block, stream);
-								break;
-							case BlockFormat::LinearY:
-								DecodeLinear(fmtcode, block, stream);
-								break;
-							case BlockFormat::LinearZ:
-								DecodeLinear(fmtcode, block, stream);
-								break;
-							case BlockFormat::PlanarX:
-								DecodePlanar(fmtcode, block, stream);
-								break;
-							case BlockFormat::PlanarY:
-								DecodePlanar(fmtcode, block, stream);
-								break;
-							case BlockFormat::PlanarZ:
-								DecodePlanar(fmtcode, block, stream);
-								break;
-							case BlockFormat::Volumetric:
-								DecodeVolumetric(fmtcode, block, stream);
-								break;
-							default:
-								SPRaise("Unsupported block format: 0x%02x",
-										static_cast<int>(fmtcode));
-						}
-						
-						// put color
-						for(int xx = 0; xx < 8; xx++) {
-							for(int yy = 0; yy < 8; yy++) {
-								auto b = block.needscolor[xx][yy];
-								if(!b) continue;
-								for(int zz = 0; zz < 8; zz++) {
-									if(!(b & (1<<zz))) continue;
-									auto c = block.colors[xx][yy][zz];
-									c &= 0xffffff;
-									c |= 100 << 24; // health
-									mp->colorMap[xx + x][yy + y][zz + z] = c;
-								}
-							}
-						}
-						
-						// block done
-					} // z
-				} // x
-			} // y
-			
-			return mp.Unmanage();
+			return NGMapDecoder(stream).Decode(progressListener);
 		}
 		GameMap *GameMap::LoadNGMap(IStream *stream) {
 			return LoadNGMap(stream, [](float){});
@@ -1014,7 +1425,7 @@ namespace spades {
 		
 #pragma mark - Encoder
 		
-		struct ColorBlockEmitter {
+		struct GameMap::ColorBlockEmitter {
 			std::vector<uint8_t>& out;
 			const NGMapOptions& opt;
 			
@@ -1054,6 +1465,174 @@ namespace spades {
 				EncodeVolumetricRaw(block);
 			}
 			
+			// fills holes for better compression
+			void FillGap(PlanarColorBlock& sub, uint8_t needscolor[8]) {
+				if(needscolor[0] == 0xff &&
+				   needscolor[1] == 0xff &&
+				   needscolor[2] == 0xff &&
+				   needscolor[3] == 0xff &&
+				   needscolor[4] == 0xff &&
+				   needscolor[5] == 0xff &&
+				   needscolor[6] == 0xff &&
+				   needscolor[7] == 0xff) {
+					// no gap to fill
+					return;
+				}
+				
+				struct Point {
+					int8_t x, y;
+					Point() = default;
+					Point(int x, int y):x(x), y(y) {}
+					static Point Bad() { return Point {-1, -1}; }
+					bool IsBad() const { return x == -1; }
+					inline int DistanceTo(Point o) const {
+						int xx = x, yy = y;
+						xx -= o.x; yy -= o.y;
+						if(xx < 0) xx = -yy;
+						if(yy < 0) yy = -yy;
+						return xx + yy;
+					}
+					static Point Nearer(Point here, Point a, Point b) {
+						if(a.IsBad()) return b;
+						if(b.IsBad()) return a;
+						auto d1 = here.DistanceTo(a);
+						auto d2 = here.DistanceTo(b);
+						return d1 < d2 ? a : b;
+					}
+				};
+				
+				Point nearest[8][8];
+				
+				Point tmpnear[8];
+				Point oldnear[8];
+				std::fill(tmpnear, tmpnear + 8, Point::Bad());
+				for(auto*n:nearest) std::fill(n, n + 8, Point::Bad());
+				for(int x = 0; x < 8; x++) {
+					auto b = needscolor[x];
+					std::copy(tmpnear, tmpnear + 8, oldnear);
+					for(int y = 0; y < 8; y++) {
+						if(b & (1 << y)) {
+							tmpnear[y] = Point {x, y};
+						} else {
+							Point here {x, y};
+							if(y == 0)
+								tmpnear[y] = Point::Nearer(here, oldnear[y+1], oldnear[y]);
+							else if(y == 7)
+								tmpnear[y] = Point::Nearer(here, oldnear[y-1], oldnear[y]);
+							else
+								tmpnear[y] = Point::Nearer(here, Point::Nearer(here, oldnear[y-1], oldnear[y+1]), oldnear[y]);
+						}
+						nearest[x][y] = tmpnear[y];
+					}
+				}
+				std::fill(tmpnear, tmpnear + 8, Point::Bad());
+				for(int x = 7; x >= 0; x--) {
+					auto b = needscolor[x];
+					std::copy(tmpnear, tmpnear + 8, oldnear);
+					for(int y = 0; y < 8; y++) {
+						if(b & (1 << y)) {
+							tmpnear[y] = Point {x, y};
+						} else {
+							Point here {x, y};
+							if(y == 0)
+								tmpnear[y] = Point::Nearer(here, oldnear[y+1], oldnear[y]);
+							else if(y == 7)
+								tmpnear[y] = Point::Nearer(here, oldnear[y-1], oldnear[y]);
+							else
+								tmpnear[y] = Point::Nearer(here, Point::Nearer(here, oldnear[y-1], oldnear[y+1]), oldnear[y]);
+						}
+						nearest[x][y] = Point::Nearer(Point{x,y}, tmpnear[y], nearest[x][y]);
+					}
+				}
+				std::fill(tmpnear, tmpnear + 8, Point::Bad());
+				for(int y = 0; y < 8; y++) {
+					std::copy(tmpnear, tmpnear + 8, oldnear);
+					for(int x = 0; x < 8; x++) {
+						if(needscolor[x] & (1 << y)) {
+							tmpnear[x] = Point {x, y};
+						} else {
+							Point here {x, y};
+							if(x == 0)
+								tmpnear[x] = Point::Nearer(here, oldnear[x+1], oldnear[x]);
+							else if(x == 7)
+								tmpnear[x] = Point::Nearer(here, oldnear[x-1], oldnear[x]);
+							else
+								tmpnear[x] = Point::Nearer(here, Point::Nearer(here, oldnear[x-1], oldnear[x+1]), oldnear[x]);
+						}
+						nearest[x][y] = Point::Nearer(Point{x,y}, tmpnear[x], nearest[x][y]);
+					}
+				}
+				std::fill(tmpnear, tmpnear + 8, Point::Bad());
+				for(int y = 7; y >= 0; y--) {
+					std::copy(tmpnear, tmpnear + 8, oldnear);
+					for(int x = 0; x < 8; x++) {
+						if(needscolor[x] & (1 << y)) {
+							tmpnear[x] = Point {x, y};
+						} else {
+							Point here {x, y};
+							if(x == 0)
+								tmpnear[x] = Point::Nearer(here, oldnear[x+1], oldnear[x]);
+							else if(x == 7)
+								tmpnear[x] = Point::Nearer(here, oldnear[x-1], oldnear[x]);
+							else
+								tmpnear[x] = Point::Nearer(here, Point::Nearer(here, oldnear[x-1], oldnear[x+1]), oldnear[x]);
+						}
+						nearest[x][y] = Point::Nearer(Point{x,y}, tmpnear[x], nearest[x][y]);
+					}
+				}
+				for(int x = 0; x < 8; x++) {
+					auto b = needscolor[x];
+					for(int y = 0; y < 8; y++) {
+						if(b & (1 << y)) continue;
+						auto p = nearest[x][y];
+						if(!p.IsBad()) {
+							sub.colors[x][y] = sub.colors[p.x][p.y];
+						}
+					}
+				}
+			}
+			
+			void EmitCT(PlanarColorBlock& sub, ColorBlock& block, BlockFormat fmt) {
+				out.push_back(MakeFormat(fmt,
+										 PlanarBlockSubFormat::Lossy));
+				
+				ct::MacroBlock blockY, blockU, blockV;
+				
+				for(int x = 0; x < 8; x++)
+					for(int y = 0; y < 8; y++){
+						auto c = sub.colors[x][y];
+						std::swap(c.z, c.x);
+						int vv = c.z - c.x;
+						int t = c.x - c.y + ((vv + 1) >> 1);
+						int yy = c.y + (t >> 1);
+						int uu = -t;
+						blockY.pixels[x][y] = yy;
+						blockU.pixels[x][y] = uu;
+						blockV.pixels[x][y] = vv;
+					}
+				
+				BitWriter writer(out);
+				
+				auto doBlock = [&](ct::MacroBlock& block) {
+					ct::Encoder encoder(writer, opt);
+					encoder.Encode(block);
+				};
+				
+				doBlock(blockY);
+				doBlock(blockU);
+				doBlock(blockV);
+				
+			}
+			
+			static int CountNeedsColor(uint8_t *bits, std::size_t numRows) {
+				int cnt = 0;
+				static const uint8_t pc[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
+				for(std::size_t i = 0; i < numRows; i++) {
+					cnt += pc[bits[i] & 15] + pc[bits[i] >> 4];
+				}
+				return cnt;
+			}
+			
 			void EncodePlanar(PlanarColorBlock& sub, ColorBlock& block, BlockFormat fmt) {
 				uint8_t needscolor[8];
 				switch(fmt) {
@@ -1071,17 +1650,22 @@ namespace spades {
 						break;
 				}
 				
-				out.push_back(MakeFormat(fmt,
-										 PlanarBlockSubFormat::Raw));
-				for(int x = 0; x < 8; x++)
-					for(int yy = 0; yy < 8; yy++) {
-						int y = (x & 1) ? (7 - yy) : yy;
-						if(!(needscolor[x] & (1 << y))) continue;
-						auto b = sub.colors[x][y];
-						out.push_back(static_cast<uint8_t>(b.x));
-						out.push_back(static_cast<uint8_t>(b.y));
-						out.push_back(static_cast<uint8_t>(b.z));
-					}
+				if(opt.quality < 100 && CountNeedsColor(needscolor, 8) > 5) {
+					FillGap(sub, needscolor);
+					EmitCT(sub, block, fmt);
+				} else {
+					out.push_back(MakeFormat(fmt,
+											 PlanarBlockSubFormat::Raw));
+					for(int x = 0; x < 8; x++)
+						for(int yy = 0; yy < 8; yy++) {
+							int y = (x & 1) ? (7 - yy) : yy;
+							if(!(needscolor[x] & (1 << y))) continue;
+							auto b = sub.colors[x][y];
+							out.push_back(static_cast<uint8_t>(b.x));
+							out.push_back(static_cast<uint8_t>(b.y));
+							out.push_back(static_cast<uint8_t>(b.z));
+						}
+				}
 			}
 			
 			void TryEmitPlanar(ColorBlock& block) {
@@ -1155,7 +1739,7 @@ namespace spades {
 
 				// try encoding to predict error
 				LinearColorBlock pred;
-				DecodeLinearLinear(encoded.col1, encoded.col2, pred);
+				NGMapDecoder::DecodeLinearLinear(encoded.col1, encoded.col2, pred);
 				
 				encoded.error = 0;
 				for(int i = 0; i < 8; i++) {
@@ -1220,7 +1804,7 @@ namespace spades {
 				int yy = block.ComputeDiversity1D_Y();
 				int zz = block.ComputeDiversity1D_Z();
 				int mn = std::min(xx, std::min(yy, zz));
-				if(mn <= diversityLimit) {
+				if(mn * 3 <= diversityLimit) {
 					LinearColorBlock sub;
 					if(xx == mn) {
 						block.ToLinearX(sub);
@@ -1276,6 +1860,8 @@ namespace spades {
 				// due to bit width of solidMap
 				SPRaise("Depth over 64 is not supported: %d", d);
 			}
+			
+			stream.WriteByte(opt.quality);
 			
 			// write geometry
 			std::vector<uint8_t> columnbuf;

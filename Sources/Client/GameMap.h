@@ -173,6 +173,9 @@ namespace spades{
 			
 			// helper for ngmap encoder/decoder
 			void ComputeNeedsColor(int x, int y, int z, uint8_t needscolor[8][8]);
+			
+			class NGMapDecoder;
+			struct ColorBlockEmitter;
 		};
 	}
 }
