@@ -245,29 +245,27 @@ namespace spades {
 			return AABB2();
 		}
 		
-		// TODO: this might not be a fast way
-		//lm: ideally we should normalize the key when reading the config.
 		static bool CheckKey(const std::string& cfg,
 							 const std::string& input) {
 			if(cfg.empty())
 				return false;
-			std::vector<std::string> keys = Split(cfg,",");
+
 			static const std::string space1("space");
 			static const std::string space2("spacebar");
 			static const std::string space3("spacekey");
-			for(size_t i = 0; i < keys.size(); i++) {
-				std::string key = keys[i];
-				if(EqualsIgnoringCase(key, space1) ||
-				   EqualsIgnoringCase(key, space2) ||
-				   EqualsIgnoringCase(key, space3)) {
+
+			if(EqualsIgnoringCase(cfg, space1) ||
+				 EqualsIgnoringCase(cfg, space2) ||
+				 EqualsIgnoringCase(cfg, space3)) {
+
 					if(input == " ")
 						return true;
-				}else{
-					if(EqualsIgnoringCase(key, input))
-						return true;
-				}
-			}
-			
+					}
+					else
+					{
+						if(EqualsIgnoringCase(cfg, input))
+								return true;
+					}
 			return false;
 		}
 		

@@ -29,8 +29,8 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    *On other distributions*: 
    Install corresponding packages from your repository (or compile from source).
    
-2. Download & install SDL-2.0.2 from trunk 
-   ```
+2. Download & install `SDL-2.0.2` from trunk 
+   ```bash
    hg clone http://hg.libsdl.org/SDL
    cd SDL/
    ./configure && make && sudo make install
@@ -38,8 +38,8 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    ```
    Additional dependencies may be required.
 
-3. Download & install SDL2_image 
-   ```
+3. Download & install `SDL2_image` 
+   ```bash
    wget https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.0.tar.gz
    tar xvf SDL2_image-2.0.0.tar.gz
    cd SDL2_image-2.0.0
@@ -54,15 +54,13 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
 5. Create directory `openspades.mk` in cloned/downloaded openspades repo and compile:
 
-   ```mkdir openspades.mk && cd openspades.mk && cmake .. && make OpenSpades```
+   ```mkdir openspades.mk && cd openspades.mk && cmake .. && make```
 
 6. Install openspades: 
 
    ```sudo make install```
    
-   **note**: the make install seems broken atm (it puts all files in /urs/local/bin)
-   some linux guru / expert (or really, just anyone that used linux more than once) should either fix the
-   cmake script, or explain to someone how the build should be installed (what files go where)
+   **note**: `make install` broken in old releases
 
 7. Get shared files: 
    * If you compiling certain release (0.0.10 for example): 
@@ -70,9 +68,16 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
       Download windows binary of OpenSpades from
       https://sites.google.com/a/yvt.jp/openspades/downloads, extract it, and copy the .pak files
       inside Resources directory into `/usr/local/share/games/openspades/Resources` or
-      `$XDG_DATA_HOME/openspades/Resources`
+      `$XDG_DATA_HOME/openspades/Resources`. If there were some files in these directories, you probably
+      should remove them.
+
+      **note**: use `~/.openspades/Resources` in old releases.
+
    * If you compiling straight from source (git clone):
 
+      All needed resources would be downloaded while `make install`, so no need to worry.
+
+      If you didn't launched `make install`, you can install resources manually. 
       See `Resources/PakLocation.txt` to find out where get latest shared files.
       Download, extract, and place them into `/usr/local/share/games/openspades/Resources` or
       `$XDG_DATA_HOME/openspades/Resources`
