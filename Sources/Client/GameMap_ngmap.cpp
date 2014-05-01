@@ -204,12 +204,18 @@ namespace spades {
 				// bit depths for each wavelet level
 				int bitdepths[4];
 				bool huffmanBitShift;
+				int roundZeroLimits[4];
+				
 				CodecBase(const NGMapOptions& opt) {
 					bitdepths[0] = 8;
 					bitdepths[1] = 3 + (opt.quality >> 5);
 					bitdepths[2] = 2 + (opt.quality >> 5);
 					bitdepths[3] = 1 + (opt.quality >> 4);
 					huffmanBitShift = opt.quality > 70;
+					roundZeroLimits[0] = 0;
+					roundZeroLimits[1] = 1;
+					roundZeroLimits[2] = 7 - (opt.quality >> 5);
+					roundZeroLimits[3] = 12 - (opt.quality >> 4);
 				}
 			};;
 			
@@ -259,7 +265,6 @@ namespace spades {
 				
 				int bitdepth = bitdepths[level];
 				
-				int shiftLeft = 32 - bitdepth;
 		
 				int bits = 0;
 				if(huffmanBitShift){
@@ -272,6 +277,12 @@ namespace spades {
 #endif
 				}
 				
+				int redundantBits = 0;
+				while(reader.ReadBit() == 0) redundantBits++;
+				
+				int writtenBits = bitdepth - redundantBits;
+				
+				int shiftLeft = 32 - writtenBits;
 				int shift = shiftLeft - bits;
 				
 				// to fill LSBs
@@ -280,9 +291,10 @@ namespace spades {
 				
 				// read HL
 				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int y = 0; y < Block<level - 1>::size; y++) {
+					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
+						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
 #ifndef USE_HUFFMAN
-						int v = static_cast<int32_t>(reader.Read(bitdepth) << shiftLeft) >> shift;
+						int v = static_cast<int32_t>(reader.Read(writtenBits) << shiftLeft) >> shift;
 #else
 						int v = ReadHuffmanInt() << bits;
 #endif
@@ -291,9 +303,10 @@ namespace spades {
 					}
 				// read LH
 				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int y = 0; y < Block<level - 1>::size; y++) {
+					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
+						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
 #ifndef USE_HUFFMAN
-						int v = static_cast<int32_t>(reader.Read(bitdepth) << shiftLeft) >> shift;
+						int v = static_cast<int32_t>(reader.Read(writtenBits) << shiftLeft) >> shift;
 #else
 						int v = ReadHuffmanInt() << bits;
 #endif
@@ -302,9 +315,10 @@ namespace spades {
 					}
 				// read HH
 				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int y = 0; y < Block<level - 1>::size; y++) {
+					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
+						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
 #ifndef USE_HUFFMAN
-						int v = static_cast<int32_t>(reader.Read(bitdepth) << shiftLeft) >> shift;
+						int v = static_cast<int32_t>(reader.Read(writtenBits) << shiftLeft) >> shift;
 #else
 						int v = ReadHuffmanInt() << bits;
 #endif
@@ -452,7 +466,7 @@ namespace spades {
 				
 				// calc effective bits
 				int bitdepth = bitdepths[level];
-				int bits = bitdepth - 1;
+				int bits = 1; //bitdepth - 1;
 				for(int x = 0; x < Block<level - 1>::size; x++)
 					for(int y = 0; y < Block<level - 1>::size; y++) {
 						int k = b.pixels[(x << 1) + 1][y << 1];
@@ -464,57 +478,73 @@ namespace spades {
 					}
 				bits++;
 				
+				int redundantBits = std::max(bitdepth - bits, 0);
+				int writtenBits = std::min(bits, bitdepth);
+				
 				if(huffmanBitShift) {
 					if(bits > bitdepth + 7) bits = bitdepth + 7;
 					for(int i = bits - bitdepth; i > 0; i--) writer.WriteBit(0);
 					writer.WriteBit(1);
 				}else{
 #ifdef USE_HUFFMAN
-					WriteHuffmanInt(bits - bitdepth);
+					WriteHuffmanInt(std::max(bits - bitdepth, 0));
 #else
-					writer.Write(bits - bitdepth, 3);
+					writer.Write(std::max(bits - bitdepth, 0), 3);
 #endif
 				}
 				
-				int shift = bits - bitdepth;
+				//histogram_coded(bits);
+				for(int i = redundantBits; i > 0; i--) writer.WriteBit(0);
+				writer.WriteBit(1);
+				
+				int shift = std::max(bits - bitdepth, 0);
 				int round = (1 << shift) >> 1;
-				int maxValue = ((1 << bitdepth) >> 1) - 1;
-				int minValue = ~maxValue;
+				int8_t maxValue = ((1 << writtenBits) >> 1) - 1;
+				int8_t minValue = ~maxValue;
+				
+				int8_t roundZeroMin = -roundZeroLimits[level];
+				int8_t roundZeroMax = roundZeroLimits[level];
 				
 				// write HL
 				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int y = 0; y < Block<level - 1>::size; y++) {
+					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
+						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
 						int k = b.pixels[(x << 1) + 1][y << 1];
+						if(k >= roundZeroMin && k <= roundZeroMax) k = 0;
 						k = (k + round) >> shift;
-						k = std::max(std::min(k, maxValue), minValue);
+						k = std::max<int>(std::min<int>(k, maxValue), minValue);
 #ifdef USE_HUFFMAN
 						WriteHuffmanInt(k);
 #else
-						writer.Write(k, bitdepth);
+						writer.Write(k, writtenBits);
 #endif
 					}
 				// write LH
 				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int y = 0; y < Block<level - 1>::size; y++) {
+					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
+						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
 						int k = b.pixels[x << 1][(y << 1) + 1];
+						if(k >= roundZeroMin && k <= roundZeroMax) k = 0;
 						k = (k + round) >> shift;
-						k = std::max(std::min(k, maxValue), minValue);
+						k = std::max<int>(std::min<int>(k, maxValue), minValue);
 #ifdef USE_HUFFMAN
 						WriteHuffmanInt(k);
 #else
-						writer.Write(k, bitdepth);
+						writer.Write(k, writtenBits);
 #endif
 					}
 				// write HH
 				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int y = 0; y < Block<level - 1>::size; y++) {
+					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
+						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
 						int k = b.pixels[(x << 1)][(y << 1)];
+						if(k >= roundZeroMin && k <= roundZeroMax) k = 0;
 						k = (k + round) >> shift;
-						k = std::max(std::min(k, maxValue), minValue);
+						k = std::max<int>(std::min<int>(k, maxValue), minValue);
 #ifdef USE_HUFFMAN
 						WriteHuffmanInt(k);
 #else
-						writer.Write(k, bitdepth);
+						writer.Write(k, writtenBits);
 #endif
 					}
 				
