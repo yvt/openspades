@@ -343,14 +343,6 @@ namespace spades {
 			template<int level> inline void Encoder::Pass(Block<level>& b) {
 				
 				// do filtering
-				/*
-				for(int y = 0; y < Block<level>::size; y++) {
-					for(int x = 0; x < Block<level>::size; x++) {
-						printf("%5d ", b.pixels[((x << 1) & 7) | (x >> 2)][((y << 1) & 7) | (y >> 2)]);
-					}
-					puts("");
-				}
-				puts("----");*/
 				int tmp[Block<level>::size + 8];
 				int tmp2[Block<level>::size + 8];
 				for(int y = 0; y < Block<level>::size; y++) {
@@ -360,14 +352,6 @@ namespace spades {
 					for(int x = 0; x < Block<level>::size; x++)
 						b.pixels[x][y] = tmp2[x + 4];
 				}
-				/*
-				for(int y = 0; y < Block<level>::size; y++) {
-					for(int x = 0; x < Block<level>::size; x++) {
-						printf("%5d ", b.pixels[((x << 1) & 7) | (x >> 2)][((y << 1) & 7) | (y >> 2)]);
-					}
-					puts("");
-				}
-				*/
 				for(int x = 0; x < Block<level>::size; x++) {
 					for(int y = 0; y < Block<level>::size; y++)
 						tmp[y + 4] = b.pixels[x][y];
@@ -375,14 +359,6 @@ namespace spades {
 					for(int y = 0; y < Block<level>::size; y++)
 						b.pixels[x][y] = tmp2[y + 4];
 				}
-				/*
-				for(int y = 0; y < Block<level>::size; y++) {
-					for(int x = 0; x < Block<level>::size; x++) {
-						printf("%5d ", b.pixels[((x << 1) & 7) | (x >> 2)][((y << 1) & 7) | (y >> 2)]);
-					}
-					puts("");
-				}
-				puts("----");*/
 				
 				// calc effective bits
 				int bitdepth = bitdepths[level];
@@ -471,7 +447,6 @@ namespace spades {
 					arr[6] = arr[4]; arr[7] = arr[5];
 					arr[8] = arr[4]; arr[9] = arr[5];
 				}
-				std::fill(ret, ret + (1 << level) + 8, 100000);
 				
 				for(int i = 4; i <= size + 4; i+=2) {
 					ret[i] = arr[i] - ((arr[i - 1] + arr[i + 1]) >> 1);
