@@ -24,6 +24,7 @@
 #include <Imports/SDL.h>
 #include <string>
 #include <Core/ServerAddress.h>
+#include "Icon.inc"
 
 namespace spades {
 	namespace client{

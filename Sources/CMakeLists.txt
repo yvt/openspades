@@ -86,6 +86,9 @@ source_group("libs\\poly2tri\\sweep" FILES ${POLY2TRI_SWEEP_FILES})
 source_group("ScriptBindings" FILES ${SCRIPTBINDING_FILES})
 source_group("libs\\unzip" FILES ${UNZIP_FILES})
 
+if(UNIX)
+	target_link_libraries(OpenSpades OpenSpades_BinaryExecutableIcon)
+endif(UNIX)
 
 target_link_libraries(OpenSpades ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS})
 

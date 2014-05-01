@@ -28,6 +28,7 @@
 #include <Core/Math.h>
 #include <functional>
 #include <map>
+#include "Icon.inc"
 
 namespace spades {
 	class Serveritem;
