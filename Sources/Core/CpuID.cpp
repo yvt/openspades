@@ -6,7 +6,7 @@
 
 namespace spades {
 	
-#if defined(__i386__) || defined(_M_IX86) || defined(__amd64__)
+#if defined(__i386__) || defined(_M_IX86) || defined(__amd64__) || defined(__x86_64__)
 	
 	static std::array<uint32_t, 4> cpuid(uint32_t a) {
 		std::array<uint32_t, 4> regs;

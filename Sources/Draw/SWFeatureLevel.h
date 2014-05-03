@@ -22,7 +22,7 @@
 
 #include <Core/CpuID.h>
 
-#if defined(__i386__) || defined(_M_IX86)
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__)
 #define ENABLE_MMX	0 // FIXME: move this to the proper place
 #ifdef __SSE__
 #define ENABLE_SSE	1 // FIXME: move this to the proper place

@@ -28,7 +28,7 @@ namespace spades {
 		SimultaneousMT
 	};
 	
-#if defined(__i386__) || defined(_M_IX86) || defined(__amd64__)
+#if defined(__i386__) || defined(_M_IX86) || defined(__amd64__) || defined(__x86_64__)
 	
 	class CpuID {
 		std::string vendor;
