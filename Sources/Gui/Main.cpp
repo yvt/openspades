@@ -61,7 +61,7 @@ static const unsigned char splashImage[] = {
 	#include "SplashImage.inc"
 };
 
-SPADES_SETTING(cl_showStartupWindow, "");
+SPADES_SETTING(cl_showStartupWindow, "1");
 
 #ifdef WIN32
 #include <windows.h>
