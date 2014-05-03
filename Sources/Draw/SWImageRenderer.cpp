@@ -796,14 +796,14 @@ namespace spades {
 						auto vr = vary.GetCurrent();
 						union {
 							__m128i uv;
-							struct { unsigned int ui, dummy1, vi, dummy2; };
+							struct { unsigned int ui, dummy1, vi, dummy2; } iuv;
 						};
 						uv = vr.uv_m128;
 						uv = _mm_and_si128(uv, uvMask); // repeat
 						uv = _mm_mul_epu32(uv, uvScale); // now [u*tw, v*th]
 						uv = _mm_srli_epi64(uv, texUVScaleBits);
 						
-						uint32_t tex = tpixels[ui + vi * tw];
+						uint32_t tex = tpixels[iuv.ui + iuv.vi * tw];
 						// FIXME: Z interpolation
 						// FIXME: perspective correction
 						drawPixel(*out, *depthOut, tex, z1);
@@ -826,7 +826,7 @@ namespace spades {
 						auto vr2 = vary.GetCurrent();
 						union {
 							__m128i uv;
-							struct { unsigned int ui, dummy1, vi, dummy2; };
+							struct { unsigned int ui, dummy1, vi, dummy2; } iuv;
 						};
 						//static_assert(texUVScaleBits == 16, "texUVScaleBits must be 16");
 						uv = _mm_castps_si128
@@ -838,12 +838,12 @@ namespace spades {
 						auto tm = uv;
 						uv = _mm_mul_epu32(uv, uvScale);
 						uv = _mm_srli_epi64(uv, texUVScaleBits);
-						uint32_t tex1 = tpixels[ui + vi * tw];
+						uint32_t tex1 = tpixels[iuv.ui + iuv.vi * tw];
 						
 						uv = _mm_shuffle_epi32(tm, 0xb1); // [u2,u1,v2,v1]
 						uv = _mm_mul_epu32(uv, uvScale);
 						uv = _mm_srli_epi64(uv, texUVScaleBits);
-						uint32_t tex2 = tpixels[ui + vi * tw];
+						uint32_t tex2 = tpixels[iuv.ui + iuv.vi * tw];
 						// FIXME: Z interpolation
 						// FIXME: perspective correction
 						//drawPixel(out[0], depthOut[0], tex1, z1);
