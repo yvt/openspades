@@ -885,6 +885,7 @@ namespace spades {
 								yawIndex = (yawIndex * yawScale2) >> 16;
 								yawIndex = (yawIndex * numLines) >> 16;
 								auto& line = lineList[yawIndex];
+								auto *pixels = line.pixels.data();
 								
 								// solve pitch
 								int pitchIndex;
@@ -897,11 +898,12 @@ namespace spades {
 									  static_cast<int64_t>(line.pitchScaleI)) >> 32);
 									//pitch = (pitch - line.pitchTanMin) * line.pitchScale;
 									//pitchIndex = static_cast<int>(pitch);
-									pitchIndex = std::max(pitchIndex, 0);
-									pitchIndex = std::min(pitchIndex, lineResolution - 1);
+									pitchIndex &= lineResolution - 1;
+									//pitchIndex = std::max(pitchIndex, 0);
+									//pitchIndex = std::min(pitchIndex, lineResolution - 1);
 								}
 								
-								auto& pix = line.pixels[pitchIndex];
+								auto& pix = pixels[pitchIndex];
 								
 								// write color.
 								// NOTE: combined contains both color and other information,
@@ -989,6 +991,7 @@ namespace spades {
 								yawIndex = (yawIndex * numLines) >> 16;
 								
 								auto& line = lineList[yawIndex];
+								auto *pixels = line.pixels.data();
 								
 								// solve pitch
 								int pitchIndex;
@@ -999,11 +1002,12 @@ namespace spades {
 									pitch = ToSpecialTan(pitch);
 									pitch = (pitch - line.pitchTanMin) * line.pitchScale;
 									pitchIndex = static_cast<int>(pitch);
-									pitchIndex = std::max(pitchIndex, 0);
-									pitchIndex = std::min(pitchIndex, lineResolution - 1);
+									pitchIndex &= lineResolution - 1;
+									//pitchIndex = std::max(pitchIndex, 0);
+									//pitchIndex = std::min(pitchIndex, lineResolution - 1);
 								}
 								
-								auto& pix = line.pixels[pitchIndex];
+								auto& pix = pixels[pitchIndex];
 								
 								// write color.
 								// NOTE: combined contains both color and other information,
@@ -1122,6 +1126,11 @@ namespace spades {
 				interval = fovY * 2.f / interval;
 				lineResolution = static_cast<int>((pitchMax - pitchMin) / interval * 1.5f);
 				lineResolution = frame->GetHeight();
+				
+				for(int i = lineResolution, j = 1; j <= i; j<<=1) {
+					lineResolution = j;
+				}
+				
 				if(pitchMin > 0.f) {
 					//interval /= cosf(pitchMin);
 				}else if(pitchMax < 0.f){
