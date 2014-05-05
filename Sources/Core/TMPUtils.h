@@ -62,7 +62,8 @@ namespace stmp {
 		template<class... Args>
 		void reset(Args&&... args) {
 			reset();
-			Allocator().construct(get_pointer(), std::forward<Args>(args)...);
+			Allocator().construct(reinterpret_cast<T *>(&storage),
+								  std::forward<Args>(args)...);
 			has_some = true;
 		}
 		template<class U>
