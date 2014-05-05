@@ -302,7 +302,7 @@ namespace spades {
 		if(mode == CompressModeCompress){
 			return position;
 		}else{
-			SPRaise("Cannot retreive uncompressed data length");
+			SPRaise("Cannot retrieve uncompressed data length");
 		}
 	}
 	
