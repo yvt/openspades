@@ -35,7 +35,7 @@ namespace stmp {
 	// and corresponding type in .Net Framework is System.Nullable<T>.
 	template<class T>
 	class optional {
-		std::aligned_storage<sizeof(T), std::alignment_of<T>::value> storage;
+		typename std::aligned_storage<sizeof(T), std::alignment_of<T>::value>::type storage;
 		bool has_some;
 		using Allocator = std::allocator<T>;
 	public:
