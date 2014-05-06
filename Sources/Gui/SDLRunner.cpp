@@ -40,6 +40,11 @@
 #include <Draw/SWRenderer.h>
 #include <Draw/SWPort.h>
 
+
+static const unsigned char Icon[] = {
+	#include "Icon.inc"
+};
+
 SPADES_SETTING(r_videoWidth, "1024");
 SPADES_SETTING(r_videoHeight, "640");
 SPADES_SETTING(r_fullscreen, "0");
@@ -481,7 +486,7 @@ namespace spades {
 #elif __unix
 				SDL_Surface *icon = nullptr;
 				SDL_RWops *icon_rw = nullptr;
-				icon_rw = SDL_RWFromConstMem(LDVAR(openspades_png), LDLEN(openspades_png));
+				icon_rw = SDL_RWFromConstMem(Icon, sizeof(Icon));
 				if (icon_rw != nullptr) {
 					icon = IMG_LoadPNG_RW(icon_rw);
 					SDL_FreeRW(icon_rw);

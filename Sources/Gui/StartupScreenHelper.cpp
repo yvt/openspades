@@ -30,6 +30,11 @@
 #include "../Imports/OpenGL.h" //for gpu info
 #include "../Imports/SDL.h"
 
+
+static const unsigned char Icon[] = {
+	#include "Icon.inc"
+};
+
 SPADES_SETTING(r_bloom, "");
 SPADES_SETTING(r_lens, "");
 SPADES_SETTING(r_cameraBlur, "");
@@ -167,7 +172,7 @@ namespace spades {
 #elif __unix
 			SDL_Surface *icon = nullptr;
 			SDL_RWops *icon_rw = nullptr;
-			icon_rw = SDL_RWFromConstMem(LDVAR(openspades_png), LDLEN(openspades_png));
+			icon_rw = SDL_RWFromConstMem(Icon, sizeof(Icon));
 			if (icon_rw != nullptr) {
 				icon = IMG_LoadPNG_RW(icon_rw);
 				SDL_FreeRW(icon_rw);
