@@ -162,7 +162,8 @@ namespace spades {
 			color = MakeVector4(.7f, .35f, .37f, .6f);
 			for(int i = 0; i < 2; i++){
 				ParticleSpriteEntity *ent =
-				new SmokeSpriteEntity(this, color, 100.f);
+				new SmokeSpriteEntity(this, color, 100.f,
+									  SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(v,
 								   MakeVector3(GetRandom()-GetRandom(),
 											   GetRandom()-GetRandom(),
@@ -173,6 +174,26 @@ namespace spades {
 							   2.f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
 				ent->SetLifeTime(.20f + GetRandom() * .2f, 0.06f, .20f);
+				localEntities.emplace_back(ent);
+			}
+			
+			if(cg_reduceSmoke)
+				return;
+			color.w *= .3f;
+			for(int i = 0; i < 1; i++){
+				ParticleSpriteEntity *ent =
+				new SmokeSpriteEntity(this, color, 40.f,
+									  SmokeSpriteEntity::Type::Steady);
+				ent->SetTrajectory(v,
+								   MakeVector3(GetRandom()-GetRandom(),
+											   GetRandom()-GetRandom(),
+											   GetRandom()-GetRandom()) * .7f,
+								   .8f, 0.f);
+				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
+				ent->SetRadius(.7f + GetRandom()*GetRandom()*0.2f,
+							   1.f, 0.5f);
+				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetLifeTime(.80f + GetRandom() * 0.4f, 0.06f, 1.0f);
 				localEntities.emplace_back(ent);
 			}
 		}
@@ -292,15 +313,16 @@ namespace spades {
 			// rapid smoke
 			for(int i = 0; i < 2; i++){
 				ParticleSpriteEntity *ent =
-				new SmokeSpriteEntity(this, color, 120.f);
+				new SmokeSpriteEntity(this, color, 120.f,
+									  SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(origin,
 								   (MakeVector3(GetRandom()-GetRandom(),
 												GetRandom()-GetRandom(),
 												GetRandom()-GetRandom())+velBias*.5f) * 0.3f,
 								   1.f, 0.f);
 				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(.2f,
-							   7.f, 0.0000005f);
+				ent->SetRadius(.4f,
+							   3.f, 0.0000005f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
 				ent->SetLifeTime(0.2f + GetRandom()*0.1f, 0.f, .30f);
 				localEntities.emplace_back(ent);
@@ -346,26 +368,27 @@ namespace spades {
 			}
 			
 			Vector4 color;
-			color = MakeVector4( .8f, .8f, .8f, .6f);
+			color = MakeVector4( .6f, .6f, .6f, 1.f);
 			// rapid smoke
 			for(int i = 0; i < 4; i++){
 				ParticleSpriteEntity *ent =
-				new SmokeSpriteEntity(this, color, 60.f);
+				new SmokeSpriteEntity(this, color, 60.f,
+									  SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(origin,
 								   (MakeVector3(GetRandom()-GetRandom(),
 												GetRandom()-GetRandom(),
-												GetRandom()-GetRandom())+velBias*.5f) * 4.f,
+												GetRandom()-GetRandom())+velBias*.5f) * 2.f,
 								   1.f, 0.f);
 				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(1.f + GetRandom()*GetRandom()*0.4f,
-							   10.f);
+				ent->SetRadius(.6f + GetRandom()*GetRandom()*0.4f,
+							   2.f, .2f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(.1f + GetRandom()*0.02f, 0.f, .10f);
+				ent->SetLifeTime(1.8f + GetRandom()*0.1f, 0.f, .20f);
 				localEntities.emplace_back(ent);
 			}
 			
 			// slow smoke
-			color.w = .15f;
+			color.w = .25f;
 			for(int i = 0; i < 8; i++){
 				ParticleSpriteEntity *ent =
 				new SmokeSpriteEntity(this, color, 20.f);
@@ -375,13 +398,13 @@ namespace spades {
 												(GetRandom()-GetRandom()) * .2f)) * 2.f,
 								   1.f, 0.f);
 				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(1.4f + GetRandom()*GetRandom()*0.8f,
+				ent->SetRadius(1.5f + GetRandom()*GetRandom()*0.8f,
 							   0.2f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
 				if(cg_reduceSmoke)
 					ent->SetLifeTime(1.f + GetRandom() * 2.f, 0.1f, 8.f);
 				else
-					ent->SetLifeTime(4.f + GetRandom() * 5.f, 0.1f, 8.f);
+					ent->SetLifeTime(2.f + GetRandom() * 5.f, 0.1f, 8.f);
 				localEntities.emplace_back(ent);
 			}
 			
@@ -407,21 +430,22 @@ namespace spades {
 			}
 			
 			// fire smoke
-			color= MakeVector4(1.f, .6f, .2f, 1.f);
+			color= MakeVector4(1.f, .7f, .4f, .2f) * 5.f;
 			for(int i = 0; i < 4; i++){
 				ParticleSpriteEntity *ent =
-				new SmokeSpriteEntity(this, color, 60.f);
+				new SmokeSpriteEntity(this, color, 120.f,
+									  SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(origin,
 								   (MakeVector3(GetRandom()-GetRandom(),
 												GetRandom()-GetRandom(),
-												GetRandom()-GetRandom())+velBias) * 12.f,
+												GetRandom()-GetRandom())+velBias) * 6.f,
 								   1.f, 0.f);
 				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(1.f + GetRandom()*GetRandom()*0.4f,
-							   6.f);
+				ent->SetRadius(.3f + GetRandom()*GetRandom()*0.4f,
+							   3.f, .1f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(.08f + GetRandom()*0.03f, 0.f, .10f);
-				ent->SetAdditive(true);
+				ent->SetLifeTime(.18f + GetRandom()*0.03f, 0.f, .10f);
+				//ent->SetAdditive(true);
 				localEntities.emplace_back(ent);
 			}
 		}
