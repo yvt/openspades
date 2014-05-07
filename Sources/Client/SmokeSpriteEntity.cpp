@@ -53,10 +53,10 @@ namespace spades{
 											   Type type){
 			Load(r);
 			if(type == Type::Steady) {
-				SPAssert(fId >= 0 && fId < 180);
+				SPAssert(i >= 0 && i < 180);
 				return lastSeq[i];
 			} else {
-				SPAssert(fId >= 0 && fId < 48);
+				SPAssert(i >= 0 && i < 48);
 				return lastSeq2[i];
 			}
 		}
