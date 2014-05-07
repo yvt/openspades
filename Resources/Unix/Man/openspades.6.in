@@ -1,0 +1,36 @@
+.TH "openspades" "6" "" "openspades" ""
+.SH "NAME"
+OpenSpades \- Open-source clone of Ace of Spades
+.SH "SYNOPSIS"
+.
+.B openspades
+[\fIOPTIONS\fR]
+[SERVER URI]
+.
+.SH "DESCRIPTION"
+OpenSpades is a clone of Voxlap Ace of Spades 0.75, which is a free multiplayer game created by Ben Aksoy. 
+
+Here are some features:	
+
+ - ability to connect to vanilla/pyspades server
+ - better performance on some modern computers/netbooks
+ - sophisticated graphics
+ - fully open source (GPLv3 compliant)
+ - cross-platform
+.SH "OPTIONS"
+.
+.TP 
+.BI \-v \ version
+Specify protocol version. Possible values: 0.75, 0.76
+.TP
+SERVER URI
+Should be string like 'aos://address:port'. Address could be regular IP address or specified Ace of Spades address.
+Port is just regular port.
+.
+.SH "COPYRIGHT"
+.
+Copyright \(co 2013\-${CMAKE_CURRENT_YEAR} yvt <i@yvt.jp>
+.br 
+License GPLv3: GNU GPL version 3 <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.  There is NO WARRANTY, to the extent permitted by law.
+.
