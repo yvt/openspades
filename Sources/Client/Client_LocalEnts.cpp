@@ -179,7 +179,7 @@ namespace spades {
 			
 			if(cg_reduceSmoke)
 				return;
-			color.w *= .3f;
+			color.w *= .1f;
 			for(int i = 0; i < 1; i++){
 				ParticleSpriteEntity *ent =
 				new SmokeSpriteEntity(this, color, 40.f,
@@ -191,7 +191,7 @@ namespace spades {
 								   .8f, 0.f);
 				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
 				ent->SetRadius(.7f + GetRandom()*GetRandom()*0.2f,
-							   1.f, 0.5f);
+							   2.f, 0.1f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
 				ent->SetLifeTime(.80f + GetRandom() * 0.4f, 0.06f, 1.0f);
 				localEntities.emplace_back(ent);
