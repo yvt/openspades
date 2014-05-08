@@ -295,7 +295,8 @@ namespace spades {
 
 		bool ClientUI::isIgnored(const std::string& key)
 		{
-			return !ignoreInput.empty() && ignoreInput == key;
+
+			return !ignoreInput.empty() && EqualsIgnoringCase(ignoreInput, key );
 		}
 		void ClientUI::setIgnored(const std::string& key)
 		{
