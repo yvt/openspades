@@ -423,12 +423,7 @@ int main(int argc, char ** argv)
 		spades::FileManager::AddFileSystem
 		(new spades::DirectoryFileSystem("./Resources", false));
 
-		spades::FileManager::AddFileSystem
-		(new spades::DirectoryFileSystem("/usr/local/share/games/openspades/Resources", false));
-
-		spades::FileManager::AddFileSystem
-		(new spades::DirectoryFileSystem("/usr/share/games/openspades/Resources", false));
-
+		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(CMAKE_INSTALL_PREFIX "/" OPENSPADES_INSTALL_RESOURCES, false));
 
 		std::string xdg_data_home = home+"/.local/share";
 
@@ -513,7 +508,7 @@ int main(int argc, char ** argv)
 		}
 
 		// register resource directory specified by Makefile (or something)
-#if defined(RESDIR_DEFINED) && !NDEBUG
+#if defined(RESDIR_DEFINED)
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(RESDIR, false));
 #endif
 
