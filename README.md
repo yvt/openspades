@@ -58,7 +58,7 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    ```bash
    mkdir openspades.mk
    cd openspades.mk
-   cmake .. -DCMAKE_BUILD_TYPE:STRING=Release && make
+   cmake .. -DCMAKE_BUILD_TYPE=Release && make
    ```
 
 6. Install openspades: 
