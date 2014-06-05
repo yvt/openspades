@@ -43,8 +43,20 @@ namespace spades {
 			fogCoefficient(program);
 			useExponentalFog(program);
 			
-			fogCoefficient.SetValue(1.f / 128.f / 128.f);
-			useExponentalFog.SetValue(0);
+			float dist = renderer->GetFogDistance();
+			auto type = renderer->GetFogType();
+			fogCoefficient.SetValue(1.f / dist / dist);
+			switch (type) {
+				case client::FogType::Classical:
+					useExponentalFog.SetValue(0);
+					break;
+				case client::FogType::Exponential:
+					useExponentalFog.SetValue(1);
+					break;
+				default:
+					SPAssert(false);
+					break;
+			}
 			
 			dev->ActiveTexture(texStage);
 			

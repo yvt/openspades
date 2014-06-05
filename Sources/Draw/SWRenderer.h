@@ -111,6 +111,7 @@ namespace spades {
 			
 			float fogDistance;
 			Vector3 fogColor;
+			client::FogType fogType = client::FogType::Classical;
 			
 			Matrix4 projectionMatrix;
 			Matrix4 viewMatrix;
@@ -167,6 +168,7 @@ namespace spades {
 			virtual void SetGameMap(client::GameMap *);
 			virtual void SetFogColor(Vector3 v);
 			virtual void SetFogDistance(float f){fogDistance = f;}
+			virtual void SetFogType(client::FogType t) { fogType = t; }
 			
 			Vector3 GetFogColor() { return fogColor; }
 			float GetFogDistance() { return fogDistance; }

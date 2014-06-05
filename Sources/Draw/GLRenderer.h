@@ -100,6 +100,7 @@ namespace spades {
 			
 			float fogDistance;
 			Vector3 fogColor;
+			client::FogType fogType = client::FogType::Classical;
 			
 			// used for color correction
 			Vector3 smoothedFogColor;
@@ -149,11 +150,13 @@ namespace spades {
 			
 			virtual void SetGameMap(client::GameMap *);
 			virtual void SetFogColor(Vector3 v);
-			virtual void SetFogDistance(float f){fogDistance = f;}
+			virtual void SetFogDistance(float f) {fogDistance = f;}
+			virtual void SetFogType(client::FogType t) {fogType = t; }
 			
 			Vector3 GetFogColor() { return fogColor; }
 			float GetFogDistance() { return fogDistance; }
 			Vector3 GetFogColorForSolidPass();
+			client::FogType GetFogType() { return fogType; }
 			
 			virtual void StartScene(const client::SceneDefinition&);
 			
