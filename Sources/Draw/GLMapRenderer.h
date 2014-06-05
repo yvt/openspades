@@ -90,6 +90,8 @@ namespace spades {
 			int GetVisibleDistance();
 			int GetFastRenderDistance();
 			
+			float GetPointSizeFactor();
+			
 			void DrawColumnSunlight(int cx, int cy, int cz, Vector3 eye, bool fast);
 			void DrawColumnDLight(int cx, int cy, int cz, Vector3 eye, const std::vector<GLDynamicLight>& lights, bool fast);
 			

@@ -309,6 +309,7 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 				case Texture2D: type = GL_TEXTURE_2D; break;
 				case Multisample: type = GL_MULTISAMPLE; break;
 				case FramebufferSRGB: type = GL_FRAMEBUFFER_SRGB; break;
+				case VertexProgramPointSize: type = GL_VERTEX_PROGRAM_POINT_SIZE; break;
 				default: SPInvalidEnum("state", state);
 			}
 			if(b)

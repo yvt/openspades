@@ -519,7 +519,6 @@ namespace spades {
 						 Size, Size, map->Depth());
 			
 			buffer = 0;
-			iBuffer = 0;
 			
 		}
 		
@@ -538,15 +537,8 @@ namespace spades {
 					device->DeleteBuffer(buffer);
 					buffer = 0;
 				}
-				if(iBuffer){
-					device->DeleteBuffer(iBuffer);
-					iBuffer = 0;
-				}
 				std::vector<Vertex> i;
 				i.swap(vertices);
-				
-				std::vector<uint16_t> i2;
-				i2.swap(indices);
 			}else{
 				needsUpdate = true;
 			}
@@ -566,22 +558,7 @@ namespace spades {
 			inst.colorGreen = (uint8_t)(color >> 8);
 			inst.colorBlue = (uint8_t)(color >> 16);
 			
-			uint16_t idx = (uint16_t)vertices.size();
-			inst.u = 0; inst.v = 0;
 			vertices.push_back(inst);
-			inst.u = 1; inst.v = 0;
-			vertices.push_back(inst);
-			inst.u = 0; inst.v = 255;
-			vertices.push_back(inst);
-			inst.u = 1; inst.v = 255;
-			vertices.push_back(inst);
-			
-			indices.push_back(idx);
-			indices.push_back(idx+1);
-			indices.push_back(idx+2);
-			indices.push_back(idx+1);
-			indices.push_back(idx+3);
-			indices.push_back(idx+2);
 			
 		}
 		
@@ -608,14 +585,9 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			vertices.clear();
-			indices.clear();
 			if(buffer){
 				device->DeleteBuffer(buffer);
 				buffer = 0;
-			}
-			if(iBuffer){
-				device->DeleteBuffer(iBuffer);
-				iBuffer = 0;
 			}
 			
 			int rchunkX = chunkX * Size;
@@ -664,14 +636,6 @@ namespace spades {
 			device->BufferData(IGLDevice::ArrayBuffer, vertices.size() * sizeof(Vertex),
 							   vertices.data(), IGLDevice::DynamicDraw);
 			
-			if(!indices.empty()){
-				iBuffer = device->GenBuffer();
-				device->BindBuffer(IGLDevice::ArrayBuffer, iBuffer);
-				
-				device->BufferData(IGLDevice::ArrayBuffer, indices.size() * sizeof(uint16_t),
-								   indices.data(), IGLDevice::DynamicDraw);
-				
-			}
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			
 		}
@@ -729,14 +693,7 @@ namespace spades {
 										IGLDevice::UnsignedByte, true,
 										sizeof(Vertex), (void *)asOFFSET(Vertex, colorRed));
 			
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
-			device->BindBuffer(IGLDevice::ElementArrayBuffer,
-							   iBuffer);
-			device->DrawElements(IGLDevice::Triangles,
-								 indices.size(),
-								 IGLDevice::UnsignedShort, NULL);
-			device->BindBuffer(IGLDevice::ElementArrayBuffer,
-							   0);
+			device->DrawArrays(IGLDevice::Points, 0, vertices.size());
 			
 		}
 		
@@ -795,8 +752,6 @@ namespace spades {
 										sizeof(Vertex), (void *)asOFFSET(Vertex, colorRed));
 			
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
-			device->BindBuffer(IGLDevice::ElementArrayBuffer,
-							   iBuffer);
 			for(size_t i = 0; i < lights.size(); i++){
 				
 				static GLDynamicLightShader lightShader;
@@ -805,9 +760,7 @@ namespace spades {
 				if(!GLDynamicLightShader::Cull(lights[i], bx))
 					continue;
 				
-				device->DrawElements(IGLDevice::Triangles,
-									 indices.size(),
-									 IGLDevice::UnsignedShort, NULL);
+				device->DrawArrays(IGLDevice::Points, 0, vertices.size());
 			}
 			
 			device->BindBuffer(IGLDevice::ElementArrayBuffer,

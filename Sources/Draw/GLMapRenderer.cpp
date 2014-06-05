@@ -37,7 +37,7 @@
 #include "GLFogShader.h"
 
 SPADES_SETTING(r_physicalLighting, "0");
-SPADES_SETTING(r_mapFastDistance, "128");
+SPADES_SETTING(r_mapFastDistance, "160");
 SPADES_SETTING(r_maxVisibleRange, "1024");
 
 namespace spades {
@@ -192,18 +192,28 @@ namespace spades {
 			float dist = renderer->GetVisibleDistance();
 			dist = std::min(dist, (float)r_maxVisibleRange);
 			int maxDist = static_cast<int>(ceilf(dist / GLMapChunk::Size));
-			maxDist = std::min(maxDist, gameMap->Width() / GLMapChunk::Size - 1);
-			maxDist = std::min(maxDist, gameMap->Height() / GLMapChunk::Size - 1);
+			maxDist = std::min(maxDist, gameMap->Width() / GLMapChunk::Size / 2 - 1);
+			maxDist = std::min(maxDist, gameMap->Height() / GLMapChunk::Size / 2 - 1);
 			return maxDist;
 		}
 		
 		int GLMapRenderer::GetFastRenderDistance() {
 			float dist = renderer->GetVisibleDistance();
 			dist = std::min(dist, (float)r_mapFastDistance);
+			dist = std::max(dist, 64.f);
 			int maxDist = static_cast<int>(ceilf(dist / GLMapChunk::Size));
-			maxDist = std::min(maxDist, gameMap->Width() / GLMapChunk::Size - 1);
-			maxDist = std::min(maxDist, gameMap->Height() / GLMapChunk::Size - 1);
+			maxDist = std::min(maxDist, gameMap->Width() / GLMapChunk::Size / 2 - 1);
+			maxDist = std::min(maxDist, gameMap->Height() / GLMapChunk::Size / 2 - 1);
 			return std::min(maxDist + 1, GetVisibleDistance() + 1);
+		}
+		
+		float GLMapRenderer::GetPointSizeFactor() {
+			const auto& sceneDef = renderer->GetSceneDef();
+			float v = std::max(renderer->GetGLDevice()->ScreenWidth()/
+							   tanf(sceneDef.fovX*.5f),
+							   renderer->GetGLDevice()->ScreenHeight()/
+							   tanf(sceneDef.fovY*.5f));
+			return -v;
 		}
 		
 		void GLMapRenderer::RenderSunlightPass() {
@@ -339,6 +349,10 @@ namespace spades {
 				fogDistance(fastBasicProgram);
 				fogDistance.SetValue(renderer->GetFogDistance());
 				
+				static GLProgramUniform pointSizeFactor("pointSizeFactor");
+				pointSizeFactor(fastBasicProgram);
+				pointSizeFactor.SetValue(GetPointSizeFactor());
+				
 				static GLProgramUniform viewSpaceLight("viewSpaceLight");
 				viewSpaceLight(fastBasicProgram);
 				Vector3 vspLight = (renderer->GetViewMatrix() * MakeVector4(0, -1, -1, 0)).GetXYZ();
@@ -373,6 +387,8 @@ namespace spades {
 				viewPos(fastBasicProgram);
 				viewPos.SetValue(renderer->GetSceneDef().viewOrigin);
 				
+				device->Enable(IGLDevice::VertexProgramPointSize, true);
+				
 				RealizeFastChunks(eye);
 				
 				for(int dist = fastDist; dist <= maxDist; dist++) {
@@ -386,6 +402,7 @@ namespace spades {
 					}
 				}
 				
+				device->Enable(IGLDevice::VertexProgramPointSize, false);
 				device->EnableVertexAttribArray(positionAttribute(), false);
 				device->EnableVertexAttribArray(colorAttribute(), false);
 			}
@@ -457,6 +474,8 @@ namespace spades {
 				viewMatrix(dlightProgram);
 				viewMatrix.SetValue(renderer->GetViewMatrix());
 				
+				device->Enable(IGLDevice::VertexProgramPointSize, true);
+				
 				RealizeChunks(eye);
 				
 				// draw from nearest to farthest
@@ -477,7 +496,7 @@ namespace spades {
 					}
 				}
 				
-				
+				device->Enable(IGLDevice::VertexProgramPointSize, false);
 				device->EnableVertexAttribArray(positionAttribute(), false);
 				device->EnableVertexAttribArray(colorAttribute(), false);
 				device->EnableVertexAttribArray(normalAttribute(), false);
@@ -494,6 +513,10 @@ namespace spades {
 				static GLProgramUniform fogDistance("fogDistance");
 				fogDistance(fastDlightProgram);
 				fogDistance.SetValue(renderer->GetFogDistance());
+				
+				static GLProgramUniform pointSizeFactor("pointSizeFactor");
+				pointSizeFactor(fastDlightProgram);
+				pointSizeFactor.SetValue(GetPointSizeFactor());
 				
 				device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 				

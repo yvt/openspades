@@ -56,6 +56,7 @@ namespace spades {
 				Blend,
 				Multisample,
 				FramebufferSRGB,
+				VertexProgramPointSize,
 				
 				// Parameters
 				FramebufferBinding,

@@ -120,9 +120,7 @@ namespace spades {
 			float radius;
 			
 			std::vector<Vertex> vertices;
-			std::vector<uint16_t> indices;
 			IGLDevice::UInteger buffer;
-			IGLDevice::UInteger iBuffer;
 			
 			bool needsUpdate;
 			bool realized;
