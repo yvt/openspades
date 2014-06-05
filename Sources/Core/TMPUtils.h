@@ -70,6 +70,9 @@ namespace stmp {
 		void operator =(U&& o) {
 			reset(std::forward<U>(o));
 		}
+		void operator =(const optional& o) {
+			if (o) reset(*o); else reset();
+		}
 		
 		T *get_pointer() { return has_some ? reinterpret_cast<T *>(&storage) : nullptr; }
 		const T *get_pointer() const { return has_some ? reinterpret_cast<const T *>(&storage) : nullptr; }
