@@ -26,6 +26,7 @@
 #include "GLImage.h"
 #include "SWFeatureLevel.h"
 #include <Core/Settings.h>
+#include "GLFogShader.h"
 
 SPADES_SETTING(r_hdr, "");
 
@@ -112,6 +113,9 @@ namespace spades {
 			
 			Vector3 fogCol = renderer->GetFogColor();
 			fogColor.SetValue(fogCol.x,fogCol.y,fogCol.z);
+			
+			static GLFogShader fogShader;
+			fogShader(renderer, program, 1);
 			
 			const client::SceneDefinition& def = renderer->GetSceneDef();
 			rightVector.SetValue(def.viewAxis[0].x,

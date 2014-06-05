@@ -359,6 +359,8 @@
 		E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859510D17C61F850012810C /* GLLensFlareFilter.cpp */; };
 		E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511017C645000012810C /* GLFXAAFilter.cpp */; };
 		E859511517C96B270012810C /* GLProfiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511317C96B260012810C /* GLProfiler.cpp */; };
+		E8710E6E1940633A00C2EE62 /* GLFogShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8710E6C1940633A00C2EE62 /* GLFogShader.cpp */; };
+		E8710E6F1940633A00C2EE62 /* GLFogShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8710E6C1940633A00C2EE62 /* GLFogShader.cpp */; };
 		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
 		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
@@ -1039,6 +1041,8 @@
 		E859511117C645000012810C /* GLFXAAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFXAAFilter.h; sourceTree = "<group>"; };
 		E859511317C96B260012810C /* GLProfiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProfiler.cpp; sourceTree = "<group>"; };
 		E859511417C96B270012810C /* GLProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProfiler.h; sourceTree = "<group>"; };
+		E8710E6C1940633A00C2EE62 /* GLFogShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFogShader.cpp; sourceTree = "<group>"; };
+		E8710E6D1940633A00C2EE62 /* GLFogShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFogShader.h; sourceTree = "<group>"; };
 		E874834618EACF0300C29033 /* OpenSpades.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = OpenSpades.icns; path = Resources/Icons/OpenSpades.icns; sourceTree = "<group>"; };
 		E87AB82118BB3957006B7D73 /* SdlImageReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SdlImageReader.cpp; sourceTree = "<group>"; };
 		E87AB82418BB3A04006B7D73 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
@@ -1996,6 +2000,8 @@
 				E8EE08A017B8F4B000631987 /* GLRadiosityRenderer.h */,
 				E8B6B6BD17DF456E00E35523 /* GLSparseShadowMapRenderer.cpp */,
 				E8B6B6BE17DF456F00E35523 /* GLSparseShadowMapRenderer.h */,
+				E8710E6C1940633A00C2EE62 /* GLFogShader.cpp */,
+				E8710E6D1940633A00C2EE62 /* GLFogShader.h */,
 			);
 			name = Lighting;
 			sourceTree = "<group>";
@@ -3271,6 +3277,7 @@
 				E82E678918EA7972004DBA18 /* IAudioDevice.cpp in Sources */,
 				E82E678A18EA7972004DBA18 /* IAudioChunk.cpp in Sources */,
 				E82E678B18EA7972004DBA18 /* PrimitiveArray.cpp in Sources */,
+				E8710E6F1940633A00C2EE62 /* GLFogShader.cpp in Sources */,
 				E8D0E76718FABC3600DE3BDB /* gf2n.cpp in Sources */,
 				E82E678C18EA7972004DBA18 /* IToolSkin.cpp in Sources */,
 				E8D0E79918FABC3600DE3BDB /* pkcspad.cpp in Sources */,
@@ -3707,6 +3714,7 @@
 				E8E446A4179EA60900BE8855 /* GLMapShadowRenderer.cpp in Sources */,
 				E8E446A7179EAC7900BE8855 /* GLShadowShader.cpp in Sources */,
 				E8E446AA179F822D00BE8855 /* TargaWriter.cpp in Sources */,
+				E8710E6E1940633A00C2EE62 /* GLFogShader.cpp in Sources */,
 				E89A648E17A11B4F00FDA893 /* GLModelRenderer.cpp in Sources */,
 				E89A649117A12FF900FDA893 /* GLDynamicLightShader.cpp in Sources */,
 				E89A649417A1677F00FDA893 /* FallingBlock.cpp in Sources */,
@@ -3911,7 +3919,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3948,7 +3956,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (

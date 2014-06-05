@@ -29,6 +29,7 @@
 #include "GLProfiler.h"
 #include <Core/Settings.h>
 #include "SWFeatureLevel.h"
+#include "GLFogShader.h"
 
 SPADES_SETTING(r_hdr, "");
 
@@ -111,6 +112,9 @@ namespace spades {
 			
 			device->Enable(IGLDevice::Blend, true);
 			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
+			
+			static GLFogShader fogShader;
+			fogShader(renderer, program, 2);
 			
 			projectionViewMatrix(program);
 			rightVector(program);

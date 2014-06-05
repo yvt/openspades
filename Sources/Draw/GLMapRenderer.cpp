@@ -34,6 +34,7 @@
 #include "../Core/Settings.h"
 #include "GLDynamicLightShader.h"
 #include "GLProfiler.h"
+#include "GLFogShader.h"
 
 SPADES_SETTING(r_physicalLighting, "0");
 
@@ -182,7 +183,10 @@ namespace spades {
 			basicProgram->Use();
 			
 			static GLShadowShader shadowShader;
-			shadowShader(renderer, basicProgram, 2);
+			int ts = shadowShader(renderer, basicProgram, 2);
+			
+			static GLFogShader fogShader;
+			ts = fogShader(renderer, basicProgram, ts);
 			
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(basicProgram);
@@ -290,6 +294,9 @@ namespace spades {
 			device->Enable(IGLDevice::DepthTest, true);
 			
 			dlightProgram->Use();
+			
+			static GLFogShader fogShader;
+			fogShader(renderer, dlightProgram, 1);
 			
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(dlightProgram);

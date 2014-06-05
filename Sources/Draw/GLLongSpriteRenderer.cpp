@@ -26,6 +26,7 @@
 #include "GLImage.h"
 #include <Core/Settings.h>
 #include "SWFeatureLevel.h"
+#include "GLFogShader.h"
 
 SPADES_SETTING(r_hdr, "");
 
@@ -92,6 +93,9 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			lastImage = NULL;
 			program->Use();
+			
+			static GLFogShader fogShader;
+			fogShader(renderer, program, 1);
 			
 			projectionViewMatrix(program);
 			rightVector(program);
