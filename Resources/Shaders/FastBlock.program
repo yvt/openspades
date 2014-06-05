@@ -1,0 +1,4 @@
+Shaders/FastBlock.fs
+Shaders/FastBlock.vs
+*shadow-variance*
+Shaders/Fog.vs

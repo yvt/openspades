@@ -1,0 +1,4 @@
+Shaders/FastBlockDynamicLit.fs
+Shaders/FastBlockDynamicLit.vs
+*dlight*
+Shaders/Fog.vs
