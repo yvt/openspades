@@ -97,5 +97,57 @@ namespace spades {
 			void RenderSunlightPass();
 			void RenderDLightPass(std::vector<GLDynamicLight> lights);
 		};
+		
+		class GLMapFastChunk {
+			struct Vertex {
+				uint8_t x, y;
+				uint8_t z;
+				uint8_t u;
+				
+				uint8_t colorRed;
+				uint8_t colorGreen;
+				uint8_t colorBlue;
+				uint8_t v;
+			};
+			
+			GLMapRenderer *renderer;
+			IGLDevice *device;
+			client::GameMap *map;
+			int chunkX, chunkY;
+			AABB3 aabb;
+			
+			Vector3 centerPos;
+			float radius;
+			
+			std::vector<Vertex> vertices;
+			std::vector<uint16_t> indices;
+			IGLDevice::UInteger buffer;
+			IGLDevice::UInteger iBuffer;
+			
+			bool needsUpdate;
+			bool realized;
+			
+			void EmitVertex(int x, int y, int z,
+							uint32_t color);
+			
+			bool IsSolid(int x, int y, int z);
+			
+			void Update();
+		public:
+			enum { SizeBits = 4, Size = 1 << SizeBits };
+			GLMapFastChunk(GLMapRenderer *,
+					   client::GameMap *mp,
+					   int cx, int cy);
+			~GLMapFastChunk();
+			
+			void SetNeedsUpdate() {needsUpdate = true;}
+			
+			void SetRealized(bool);
+			
+			float DistanceFromEye(const Vector3& eye);
+			
+			void RenderSunlightPass();
+			void RenderDLightPass(std::vector<GLDynamicLight> lights);
+		};
 	}
 }

@@ -45,6 +45,15 @@ namespace spades {
 						  IGLDevice::Float,
 						  IGLDevice::Float,
 						  IGLDevice::Float);
+			void SetValue(const Vector2& v) {
+				SetValue(v.x, v.y);
+			}
+			void SetValue(const Vector3& v) {
+				SetValue(v.x, v.y, v.z);
+			}
+			void SetValue(const Vector4& v) {
+				SetValue(v.x, v.y, v.z, v.w);
+			}
 			void SetValue(IGLDevice::Integer);
 			void SetValue(IGLDevice::Integer,
 						  IGLDevice::Integer);

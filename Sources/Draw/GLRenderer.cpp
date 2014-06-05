@@ -83,6 +83,7 @@ SPADES_SETTING(r_hdr, "");
 SPADES_SETTING(r_exposureValue, "0");
 
 SPADES_SETTING(r_debugTiming, "0");
+SPADES_SETTING(r_maxVisibleRange, "1024");
 
 namespace spades {
 	namespace draw {
@@ -372,9 +373,7 @@ namespace spades {
 			} else {
 				// when exponental fog is being used,
 				// fog density never becomes zero.
-				// so we chose the point where density becomes
-				// 1/256.
-				return fogDistance * 8.f;
+				return fogDistance * 2.f;
 			}
 		}
 
@@ -491,6 +490,12 @@ namespace spades {
 				SPRaise("Invalid value of radialBlur.");
 			sceneDef = def;
 			sceneDef.zFar = GetVisibleDistance();
+			{
+				float t = tanf(std::max(def.fovX, def.fovY) * .5f);
+				sceneDef.zFar = std::min((float)r_maxVisibleRange
+										 / sqrtf(1.f + t * t),
+										 sceneDef.zFar);
+			}
 			
 			sceneUsedInThisFrame = true;
 			duringSceneRendering = true;
