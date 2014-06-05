@@ -34,6 +34,7 @@
 #include <set>
 #include "../Core/Bitmap.h"
 #include "../Core/BitmapAtlasGenerator.h"
+#include "GLFogShader.h"
 
 namespace spades {
 	namespace draw {
@@ -665,7 +666,10 @@ namespace spades {
 			program->Use();
 			
 			static GLShadowShader shadowShader;
-			shadowShader(renderer, program, 2);
+			int nt = shadowShader(renderer, program, 2);
+			
+			static GLFogShader fogShader;
+			fogShader(renderer, program, nt);
 			
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(program);
@@ -824,6 +828,9 @@ namespace spades {
 			
 			static GLDynamicLightShader dlightShader;
 			
+			static GLFogShader fogShader;
+			int nt = fogShader(renderer, dlightProgram, 2);
+			
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(dlightProgram);
 			fogDistance.SetValue(renderer->GetFogDistance());
@@ -920,7 +927,7 @@ namespace spades {
 														 param.matrix.GetOrigin(), rad))
 						continue;
 					
-					dlightShader(renderer, dlightProgram, lights[i], 2);
+					dlightShader(renderer, dlightProgram, lights[i], nt);
 					
 					device->DrawElements(IGLDevice::Triangles,
 										 numIndices,

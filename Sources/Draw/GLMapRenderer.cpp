@@ -138,8 +138,8 @@ namespace spades {
 		void GLMapRenderer::RealizeChunks(spades::Vector3 eye) {
 			SPADES_MARK_FUNCTION();
 			
-			float cullDistance = 128.f;
-			float releaseDistance = 160.f;
+			float cullDistance = renderer->GetVisibleDistance();
+			float releaseDistance = cullDistance + 40.f;
 			for(int i = 0; i < numChunks; i++){
 				float dist = chunks[i]->DistanceFromEye(eye);
 				chunkInfos[i].distance = dist;
@@ -248,7 +248,12 @@ namespace spades {
 			int cy = (int)floorf(eye.y) / GLMapChunk::Size;
 			int cz = (int)floorf(eye.z) / GLMapChunk::Size;
 			DrawColumnSunlight(cx, cy, cz, eye);
-			for(int dist = 1; dist <= 128 / GLMapChunk::Size; dist++) {
+			
+			int maxDist = static_cast<int>(ceilf(renderer->GetVisibleDistance() / GLMapChunk::Size));
+			maxDist = std::min(maxDist, gameMap->Width() / GLMapChunk::Size - 1);
+			maxDist = std::min(maxDist, gameMap->Height() / GLMapChunk::Size - 1);
+			
+			for(int dist = 1; dist <= maxDist; dist++) {
 				for(int x = cx - dist; x <= cx + dist; x++){
 					DrawColumnSunlight(x, cy + dist, cz, eye);
 					DrawColumnSunlight(x, cy - dist, cz, eye);
@@ -335,10 +340,15 @@ namespace spades {
 			int cy = (int)floorf(eye.y) / GLMapChunk::Size;
 			int cz = (int)floorf(eye.z) / GLMapChunk::Size;
 			DrawColumnDLight(cx, cy, cz, eye, lights);
+			
+			int maxDist = static_cast<int>(ceilf(renderer->GetVisibleDistance() / GLMapChunk::Size));
+			maxDist = std::min(maxDist, gameMap->Width() / GLMapChunk::Size - 1);
+			maxDist = std::min(maxDist, gameMap->Height() / GLMapChunk::Size - 1);
+			
 			// TODO: optimize call
 			//       ex. don't call a chunk'r render method if
 			//           no dlight lights it
-			for(int dist = 1; dist <= 128 / GLMapChunk::Size; dist++) {
+			for(int dist = 1; dist <= maxDist; dist++) {
 				for(int x = cx - dist; x <= cx + dist; x++){
 					DrawColumnDLight(x, cy + dist, cz, eye, lights);
 					DrawColumnDLight(x, cy - dist, cz, eye, lights);

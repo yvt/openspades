@@ -29,6 +29,7 @@
 #include "GLDynamicLightShader.h"
 #include "IGLShadowMapRenderer.h"
 #include "GLShadowMapShader.h"
+#include "GLFogShader.h"
 
 namespace spades {
 	namespace draw {
@@ -369,7 +370,10 @@ namespace spades {
 			program->Use();
 			
 			static GLShadowShader shadowShader;
-			shadowShader(renderer, program, 1);
+			int nextTex = shadowShader(renderer, program, 1);
+			
+			static GLFogShader fogShader;
+			fogShader(renderer, program, nextTex);
 			
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(program);
@@ -507,6 +511,9 @@ namespace spades {
 			
 			static GLDynamicLightShader dlightShader;
 			
+			static GLFogShader fogShader;
+			int nt = fogShader(renderer, dlightProgram, 0);
+			
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(dlightProgram);
 			fogDistance.SetValue(renderer->GetFogDistance());
@@ -596,7 +603,7 @@ namespace spades {
 														 param.matrix.GetOrigin(), rad))
 						continue;
 					
-					dlightShader(renderer, dlightProgram, lights[i], 0);
+					dlightShader(renderer, dlightProgram, lights[i], nt);
 					
 					device->DrawElements(IGLDevice::Triangles,
 										 numIndices,

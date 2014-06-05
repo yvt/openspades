@@ -364,6 +364,19 @@ namespace spades {
 				return GetFogColor();
 			}
 		}
+		
+		float GLRenderer::GetVisibleDistance()
+		{
+			if (fogType == client::FogType::Classical) {
+				return fogDistance;
+			} else {
+				// when exponental fog is being used,
+				// fog density never becomes zero.
+				// so we chose the point where density becomes
+				// 1/256.
+				return fogDistance * 8.f;
+			}
+		}
 
 #pragma mark - Resource Manager
 		
@@ -477,6 +490,7 @@ namespace spades {
 			if(def.radialBlur < 0.f || def.radialBlur > 1.f)
 				SPRaise("Invalid value of radialBlur.");
 			sceneDef = def;
+			sceneDef.zFar = GetVisibleDistance();
 			
 			sceneUsedInThisFrame = true;
 			duringSceneRendering = true;

@@ -45,13 +45,14 @@ namespace spades {
 			
 			float dist = renderer->GetFogDistance();
 			auto type = renderer->GetFogType();
-			fogCoefficient.SetValue(1.f / dist / dist);
 			switch (type) {
 				case client::FogType::Classical:
 					useExponentalFog.SetValue(0);
+					fogCoefficient.SetValue(1.f / dist / dist);
 					break;
 				case client::FogType::Exponential:
 					useExponentalFog.SetValue(1);
+					fogCoefficient.SetValue(-1.f / dist / dist);
 					break;
 				default:
 					SPAssert(false);
