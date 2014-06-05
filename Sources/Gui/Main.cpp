@@ -61,7 +61,12 @@ static const unsigned char splashImage[] = {
 	#include "SplashImage.inc"
 };
 
-SPADES_SETTING(cl_showStartupWindow, "");
+static const unsigned char Icon[] = {
+	#include "Icon.inc"
+};
+
+
+SPADES_SETTING(cl_showStartupWindow, "1");
 
 #ifdef WIN32
 #include <windows.h>
@@ -248,7 +253,7 @@ public:
 #elif __unix
 		SDL_Surface *icon = nullptr;
 		SDL_RWops *icon_rw = nullptr;
-		icon_rw = SDL_RWFromConstMem(LDVAR(openspades_png), LDLEN(openspades_png));
+		icon_rw = SDL_RWFromConstMem(Icon, sizeof(Icon));
 		if (icon_rw != nullptr) {
 			icon = IMG_LoadPNG_RW(icon_rw);
 			SDL_FreeRW(icon_rw);

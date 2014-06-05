@@ -250,8 +250,7 @@ namespace spades {
 		/** Initiate an initialization which likely to take some time */
 		void Client::DoInit() {
 			renderer->Init();
-			// preload
-			SmokeSpriteEntity(this, Vector4(), 20.f);
+			SmokeSpriteEntity::Preload(renderer);
 			
 			renderer->RegisterImage("Textures/Fluid.png");
 			renderer->RegisterImage("Textures/WaterExpl.png");

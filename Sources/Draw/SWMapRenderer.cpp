@@ -333,8 +333,8 @@ namespace spades {
 			if(fabsf(dirX) < 1.e-4f) dirX = 1.e-4f;
 			float invDirX = 1.f / dirX;
 			float invDirY = 1.f / dirY;
-			int signX = dirX > 0.f ? 1 : -1;
-			int signY = dirY > 0.f ? 1 : -1;
+			std::int_fast8_t signX = dirX > 0.f ? 1 : -1;
+			std::int_fast8_t signY = dirY > 0.f ? 1 : -1;
 			int invDirXI = static_cast<int>(invDirX * 256.f);
 			int invDirYI = static_cast<int>(invDirY * 256.f);
 			int dirXI = static_cast<int>(dirX * 512.f);
@@ -357,8 +357,8 @@ namespace spades {
 			int ry = static_cast<int>(cy * 512.f);
 			
 			// ray position in integer
-			int irx = rx >> 9; //static_cast<int>(floorf(rx));
-			int iry = ry >> 9; //static_cast<int>(floorf(ry));
+			std::int_fast16_t irx = rx >> 9; //static_cast<int>(floorf(rx));
+			std::int_fast16_t iry = ry >> 9; //static_cast<int>(floorf(ry));
 			
 			float fogDist = 128.f;
 			float distance = 1.e-20f; // traveled path
@@ -412,7 +412,7 @@ namespace spades {
 				float p = ToSpecialTan(invDist * zval[z]) * transScale + transOffset;
 				p = std::max(p, 0.f);
 				p = std::min(p, vmax);
-				return static_cast<int>(p);
+				return static_cast<std::uint_fast16_t>(p);
 			};
 			
 			float zscale; // travel distance -> view Z value factor
@@ -434,12 +434,12 @@ namespace spades {
 				lastRle = rleHeap.Dereference<RleData>(ref);
 			}
 			
-			int count = 1;
-			int cnt2 = static_cast<int>(fogDist * 8.f);
+			std::uint_fast16_t count = 1;
+			std::uint_fast16_t cnt2 = static_cast<int>(fogDist * 8.f);
 			
 			while(distance < fogDist && (--cnt2) > 0) {
-				int nextIRX, nextIRY;
-				int oirx = irx, oiry = iry;
+				std::int_fast16_t nextIRX, nextIRY;
+				auto oirx = irx, oiry = iry;
 				
 				// DDE
 				Face wallFace;
@@ -449,8 +449,8 @@ namespace spades {
 					if(signY > 0) {
 						nextIRY = iry + 1;
 						
-						int timeToNextX = (512 - (rx & 511)) * invDirXI;
-						int timeToNextY = (512 - (ry & 511)) * invDirYI;
+						unsigned int timeToNextX = (512 - (rx & 511)) * invDirXI;
+						unsigned int timeToNextY = (512 - (ry & 511)) * invDirYI;
 						
 						if(timeToNextX < timeToNextY) {
 							// go across x plane
@@ -470,8 +470,8 @@ namespace spades {
 					}else /* (signY < 0) */{
 						nextIRY = iry - 1;
 						
-						int timeToNextX = (512 - (rx & 511)) * invDirXI;
-						int timeToNextY = (ry & 511) * invDirYI;
+						unsigned int timeToNextX = (512 - (rx & 511)) * invDirXI;
+						unsigned int timeToNextY = (ry & 511) * invDirYI;
 						
 						if(timeToNextX < timeToNextY) {
 							// go across x plane
@@ -494,8 +494,8 @@ namespace spades {
 					if(signY > 0) {
 						nextIRY = iry + 1;
 						
-						int timeToNextX = (rx & 511) * invDirXI;
-						int timeToNextY = (512 - (ry & 511)) * invDirYI;
+						unsigned int timeToNextX = (rx & 511) * invDirXI;
+						unsigned int timeToNextY = (512 - (ry & 511)) * invDirYI;
 						
 						if(timeToNextX < timeToNextY) {
 							// go across x plane
@@ -515,8 +515,8 @@ namespace spades {
 					}else /* (signY < 0) */{
 						nextIRY = iry - 1;
 						
-						int timeToNextX = (rx & 511) * invDirXI;
-						int timeToNextY = (ry & 511) * invDirYI;
+						unsigned int timeToNextX = (rx & 511) * invDirXI;
+						unsigned int timeToNextY = (ry & 511) * invDirYI;
 						
 						if(timeToNextX < timeToNextY) {
 							// go across x plane
@@ -611,14 +611,14 @@ namespace spades {
 					{
 						RleData *ptr = rle + 10;
 						while(*ptr != -1) {
-							int z = *ptr;
+							std::int_fast8_t z = *ptr;
 							if(z > icz) {
-								int p1 = transform(invDist, z);
-								int p2 = transform(oldInvDist, z);
+								std::uint_fast16_t p1 = transform(invDist, z);
+								std::uint_fast16_t p2 = transform(oldInvDist, z);
 								LinePixel pix = BuildLinePixel(oirx, oiry, z, Face::NegZ,
 															   medDist + heightScaleVal[z]);
 								
-								for(int j = p1; j < p2; j++) {
+								for(std::uint_fast16_t j = p1; j < p2; j++) {
 									auto& p = pixels[j];
 									if(!p.IsEmpty()) continue;
 									p.Set(pix);
@@ -628,14 +628,14 @@ namespace spades {
 						}
 						ptr++;
 						while(*ptr != -1) {
-							int z = *ptr;
+							std::int_fast8_t z = *ptr;
 							if(z < icz) {
-								int p1 = transform(invDist, z + 1);
-								int p2 = transform(oldInvDist, z + 1);
+								std::uint_fast16_t p1 = transform(invDist, z + 1);
+								std::uint_fast16_t p2 = transform(oldInvDist, z + 1);
 								LinePixel pix = BuildLinePixel(oirx, oiry, z, Face::PosZ,
 															   medDist + heightScaleVal[z+1]);
 								
-								for(int j = p2; j < p1; j++) {
+								for(std::uint_fast16_t j = p2; j < p1; j++) {
 									auto& p = pixels[j];
 									if(!p.IsEmpty()) continue;
 									p.Set(pix);
@@ -650,23 +650,30 @@ namespace spades {
 				// add walls
 				{
 					// by RLE map
-					auto ref = rle[(irx & w-1) + ((iry & h-1) * w)];
+					auto ref = rle[static_cast<std::uint_fast32_t>(irx & w-1) +
+								   static_cast<std::uint_fast32_t>(iry & h-1) * w];
 					RleData *rle = rleHeap.Dereference<RleData>(ref);
 					lastRle = rle;
 					auto *ptr = rle;
 					ptr += reinterpret_cast<unsigned short *>(rle)
 					[1 + static_cast<int>(wallFace)];
 					
+					std::uint_fast16_t savedP = 0;
+					std::int_fast8_t savedZ = 127;
+					
 					while(*ptr != -1) {
-						int z = *(ptr++);
+						std::int_fast8_t z = *(ptr++);
 						
-						int p1 = transform(invDist, z);
-						int p2 = transform(invDist, z + 1);
+						std::uint_fast16_t p1 = savedZ == z ? savedP : transform(invDist, z);
+						std::uint_fast16_t p2 = transform(invDist, z + 1);
+						
+						savedZ = z + 1;
+						savedP = p2;
 						
 						LinePixel pix = BuildLinePixel(irx, iry, z, wallFace,
 													   medDist + heightScaleVal[z]);
 						
-						for(int j = p1; j < p2; j++) {
+						for(std::uint_fast16_t j = p1; j < p2; j++) {
 							auto& p = pixels[j];
 							if(!p.IsEmpty()) continue;
 							p.Set(pix);
@@ -680,7 +687,7 @@ namespace spades {
 					if((transform(invDist, 0) >= lineResolution - 1 && icz >= 0) ||
 					   transform(invDist, 63) <= 0)
 						break;
-					count = 2;
+					count = 4;
 				}
 				
 				// let's go to next voxel!
@@ -784,8 +791,8 @@ namespace spades {
 			
 			static const float pi = M_PI;
 			float yawScale = 65536.f / (pi * 2.f);
-			int yawScale2 = static_cast<int>(pi * 2.f / (yawMax - yawMin) * 65536.f);
-			int yawMin2 = static_cast<int>(yawMin * yawScale);
+			std::int32_t yawScale2 = static_cast<std::int32_t>(pi * 2.f / (yawMax - yawMin) * 65536.f);
+			std::int32_t yawMin2 = static_cast<std::int32_t>(yawMin * yawScale);
 			auto& lineList = this->lines;
 			
 			enum {
@@ -832,7 +839,7 @@ namespace spades {
 						// computation.
 						
 						auto calcYawindex = [yawScale2, numLines, yawMin2](Vector3 v) {
-							int yawIndex;
+							std::int32_t yawIndex;
 							{
 								float x = v.x, y = v.y;
 								int yaw;
@@ -850,44 +857,45 @@ namespace spades {
 							pitch = ToSpecialTan(pitch);
 							return static_cast<int>(pitch * (65536.f * 8192.f));
 						};
-						int yawIndex1 = calcYawindex(v2);
-						int pitch1 = calcPitch(v2);
-						int yawIndex2 = calcYawindex(v2 + deltaRightLarge);
-						int pitch2 = calcPitch(v2 + deltaRightLarge);
-						int yawIndex3 = calcYawindex(v2 + deltaDownLarge);
-						int pitch3 = calcPitch(v2 + deltaDownLarge);
-						int yawIndex4 = calcYawindex(v2 + deltaRightLarge + deltaDownLarge);
-						int pitch4 = calcPitch(v2 + deltaRightLarge + deltaDownLarge);
+						std::int32_t yawIndex1 = calcYawindex(v2);
+						std::int32_t pitch1 = calcPitch(v2);
+						std::int32_t yawIndex2 = calcYawindex(v2 + deltaRightLarge);
+						std::int32_t pitch2 = calcPitch(v2 + deltaRightLarge);
+						std::int32_t yawIndex3 = calcYawindex(v2 + deltaDownLarge);
+						std::int32_t pitch3 = calcPitch(v2 + deltaDownLarge);
+						std::int32_t yawIndex4 = calcYawindex(v2 + deltaRightLarge + deltaDownLarge);
+						std::int32_t pitch4 = calcPitch(v2 + deltaRightLarge + deltaDownLarge);
 						
 						// note: `<<8>>8` is phase unwrapping
-						int yawDiff1 = ((yawIndex2 - yawIndex1)<<8>>8) / hBlock;
-						int yawDiff2 = ((yawIndex4 - yawIndex3)<<8>>8) / hBlock;
-						int pitchDiff1 = (pitch2 - pitch1) / hBlock;
-						int pitchDiff2 = (pitch4 - pitch3) / hBlock;
+						std::int32_t yawDiff1 = ((yawIndex2 - yawIndex1)<<8>>8) / hBlock;
+						std::int32_t yawDiff2 = ((yawIndex4 - yawIndex3)<<8>>8) / hBlock;
+						std::int32_t pitchDiff1 = (pitch2 - pitch1) / hBlock;
+						std::int32_t pitchDiff2 = (pitch4 - pitch3) / hBlock;
 						
-						int yawIndexA = yawIndex1;
-						int yawIndexB = yawIndex3;
-						int pitchA = pitch1;
-						int pitchB = pitch3;
+						std::int32_t yawIndexA = yawIndex1;
+						std::int32_t yawIndexB = yawIndex3;
+						std::int32_t pitchA = pitch1;
+						std::int32_t pitchB = pitch3;
 						
 						for(unsigned int x = 0; x < blockSize; x+=under) {
 							uint32_t *fb3 = fb2 + x;
 							auto *db3 = db2 + x;
 							
-							int yawIndexC = yawIndexA;
-							int yawDelta = ((yawIndexB - yawIndexA)<<8>>8) / blockSize;
-							int pitchC = pitchA;
-							int pitchDelta = (pitchB - pitchA) / blockSize;
+							std::int32_t yawIndexC = yawIndexA;
+							std::int32_t yawDelta = ((yawIndexB - yawIndexA)<<8>>8) / blockSize;
+							std::int32_t pitchC = pitchA;
+							std::int32_t pitchDelta = (pitchB - pitchA) / blockSize;
 							
 							for(unsigned int y = 0; y < blockSize; y++) {
 								
-								unsigned int yawIndex = static_cast<unsigned int>(yawIndexC<<8>>16);
+								std::uint32_t yawIndex = static_cast<unsigned int>(yawIndexC<<8>>16);
 								yawIndex = (yawIndex * yawScale2) >> 16;
 								yawIndex = (yawIndex * numLines) >> 16;
 								auto& line = lineList[yawIndex];
+								auto *pixels = line.pixels.data();
 								
 								// solve pitch
-								int pitchIndex;
+								std::int32_t pitchIndex;
 								
 								{
 									pitchIndex = pitchC >> 13;
@@ -897,11 +905,12 @@ namespace spades {
 									  static_cast<int64_t>(line.pitchScaleI)) >> 32);
 									//pitch = (pitch - line.pitchTanMin) * line.pitchScale;
 									//pitchIndex = static_cast<int>(pitch);
-									pitchIndex = std::max(pitchIndex, 0);
-									pitchIndex = std::min(pitchIndex, lineResolution - 1);
+									pitchIndex &= lineResolution - 1;
+									//pitchIndex = std::max(pitchIndex, 0);
+									//pitchIndex = std::min(pitchIndex, lineResolution - 1);
 								}
 								
-								auto& pix = line.pixels[pitchIndex];
+								auto& pix = pixels[pitchIndex];
 								
 								// write color.
 								// NOTE: combined contains both color and other information,
@@ -912,12 +921,8 @@ namespace spades {
 									__m128i m;
 									
 									if(under == 1) {
-										_mm_stream_si32(reinterpret_cast<int *>(fb3),
-														static_cast<int>(pix.combined));
-										*db3 = pix.depth; // FIXME: stream
-										/*
-										_mm_stream_si32(reinterpret_cast<int *>(db3),
-														reinterpret_cast<int>(pix.depth * distScale));*/
+										*fb3 = pix.combined;
+										*db3 = pix.depth;
 									}else if(under == 2){
 										m = _mm_castpd_si128(_mm_load_sd(reinterpret_cast<const double *>(&pix)));
 										_mm_store_sd(reinterpret_cast<double *>(fb3),
@@ -976,7 +981,7 @@ namespace spades {
 								Vector3 vv = v4;
 								
 								// solve yaw
-								unsigned int yawIndex;
+								std::uint32_t yawIndex;
 								{
 									float x = vv.x, y = vv.y;
 									int yaw;
@@ -989,9 +994,10 @@ namespace spades {
 								yawIndex = (yawIndex * numLines) >> 16;
 								
 								auto& line = lineList[yawIndex];
+								auto *pixels = line.pixels.data();
 								
 								// solve pitch
-								int pitchIndex;
+								std::int32_t pitchIndex;
 								
 								{
 									float pitch;
@@ -999,11 +1005,12 @@ namespace spades {
 									pitch = ToSpecialTan(pitch);
 									pitch = (pitch - line.pitchTanMin) * line.pitchScale;
 									pitchIndex = static_cast<int>(pitch);
-									pitchIndex = std::max(pitchIndex, 0);
-									pitchIndex = std::min(pitchIndex, lineResolution - 1);
+									pitchIndex &= lineResolution - 1;
+									//pitchIndex = std::max(pitchIndex, 0);
+									//pitchIndex = std::min(pitchIndex, lineResolution - 1);
 								}
 								
-								auto& pix = line.pixels[pitchIndex];
+								auto& pix = pixels[pitchIndex];
 								
 								// write color.
 								// NOTE: combined contains both color and other information,
@@ -1014,12 +1021,8 @@ namespace spades {
 									__m128i m;
 									
 									if(under == 1) {
-										_mm_stream_si32(reinterpret_cast<int *>(fb3),
-														static_cast<int>(pix.combined));
-										*db3 = pix.depth; // FIXME: stream
-										/*
-										 _mm_stream_si32(reinterpret_cast<int *>(db3),
-										 reinterpret_cast<int>(pix.depth * distScale));*/
+										*fb3 = pix.combined;
+										*db3 = pix.depth;
 									}else if(under == 2){
 										m = _mm_castpd_si128(_mm_load_sd(reinterpret_cast<const double *>(&pix)));
 										_mm_store_sd(reinterpret_cast<double *>(fb3),
@@ -1122,6 +1125,11 @@ namespace spades {
 				interval = fovY * 2.f / interval;
 				lineResolution = static_cast<int>((pitchMax - pitchMin) / interval * 1.5f);
 				lineResolution = frame->GetHeight();
+				
+				for(int i = lineResolution, j = 1; j <= i; j<<=1) {
+					lineResolution = j;
+				}
+				
 				if(pitchMin > 0.f) {
 					//interval /= cosf(pitchMin);
 				}else if(pitchMax < 0.f){

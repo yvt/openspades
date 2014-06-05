@@ -297,7 +297,8 @@ namespace spades {
 		bool needTransform,
 		bool ndc, // normalized device coordinate
 		bool depthTest,
-		bool solidFill
+		bool solidFill,
+		bool linearInterpolate
 		>
 		struct SWImageRenderer::PolygonRenderer {
 			
@@ -309,7 +310,7 @@ namespace spades {
 											const Vertex& v2,
 											const Vertex& v3,
 											SWImageRenderer& r) {
-				
+				// TODO: support null image
 				
 				Bitmap *const fb = r.frame;
 				SPAssert(fb != nullptr);
@@ -361,6 +362,16 @@ namespace spades {
 				if(mulA == 0 && mulR == 0 && mulG == 0 && mulB == 0)
 					return;
 				
+				// unreal-ish linear interpolation by using dither
+				int16_t ditherBaseX = static_cast<int16_t>((1 << (texUVScaleBits - 2)) * img->GetInvWidth());
+				int16_t ditherBaseY = static_cast<int16_t>((1 << (texUVScaleBits - 2)) * img->GetInvHeight());
+				int16_t ditherMap[] = {
+					static_cast<int16_t>(-ditherBaseX), static_cast<int16_t>(-ditherBaseY << 1),
+					0, static_cast<int16_t>(ditherBaseY),
+					static_cast<int16_t>(ditherBaseX), 0,
+					static_cast<int16_t>(-ditherBaseX << 1), static_cast<int16_t>(-ditherBaseY),
+				};
+				
 				auto drawPixel = [mulR, mulG, mulB, mulA](uint32_t& dest, float& destDepth,
 														  uint32_t texture, float inDepth) {
 					if(depthTest) {
@@ -408,7 +419,8 @@ namespace spades {
 					dest = outR | (outG << 8) | (outB << 16);
 				};
 				
-				auto drawScanline = [tw, th, tpixels, bmp, fbW, fbH, depthBuffer, &drawPixel, &r]
+				auto drawScanline = [tw, th, tpixels, bmp, fbW, fbH, depthBuffer, &drawPixel, &r,
+									 &ditherMap]
 				(int y, int x1, int x2,
 				 const SWImageVarying& vary1,
 				 const SWImageVarying& vary2,
@@ -429,10 +441,18 @@ namespace spades {
 						depthOut += minX;
 					}
 					r.pixelsDrawn += maxX - minX;
+					auto *ditherMap2 = ditherMap + ((y & 1) << 2);
 					for(int x = minX; x < maxX; x++) {
 						auto vr = vary.GetCurrent();
-						unsigned int u = static_cast<unsigned int>(vr.u & (texUVScaleInt-1));
-						unsigned int v = static_cast<unsigned int>(vr.v & (texUVScaleInt-1));
+						unsigned int u = static_cast<unsigned int>(vr.u);
+						unsigned int v = static_cast<unsigned int>(vr.v);
+						if(linearInterpolate) {
+							uint8_t idx = static_cast<uint8_t>(x & 1);
+							u += ditherMap2[idx * 2];
+							v += ditherMap2[idx * 2 + 1];
+						}
+						u &= texUVScaleInt-1;
+						v &= texUVScaleInt-1;
 						u = (u * tw) >> texUVScaleBits;
 						v = (v * th) >> texUVScaleBits;
 						uint32_t tex = tpixels[u + v * tw];
@@ -540,10 +560,11 @@ namespace spades {
 		
 #pragma mark General
 		template<
-		bool depthTest
+		bool depthTest,
+		bool linearInterpolate
 		>
 		struct SWImageRenderer::PolygonRenderer
-		<SWFeatureLevel::SSE2, false, false, depthTest, false> {
+		<SWFeatureLevel::SSE2, false, false, depthTest, false, linearInterpolate> {
 			
 			
 			static void DrawPolygonInternalInner(SWImage *img,
@@ -602,6 +623,21 @@ namespace spades {
 				
 				if(mulA == 0 && mulR == 0 && mulG == 0 && mulB == 0)
 					return;
+				
+				// unreal-ish linear interpolation by using dither
+				int16_t ditherBaseX = static_cast<int16_t>((1 << (texUVScaleBits - 2)) * img->GetInvWidth());
+				int16_t ditherBaseY = static_cast<int16_t>((1 << (texUVScaleBits - 2)) * img->GetInvHeight());
+				int16_t ditherMap[] = {
+					static_cast<int16_t>(-ditherBaseX), static_cast<int16_t>(-ditherBaseY << 1),
+					0, static_cast<int16_t>(ditherBaseY),
+					static_cast<int16_t>(ditherBaseX), 0,
+					static_cast<int16_t>(-ditherBaseX << 1), static_cast<int16_t>(-ditherBaseY),
+				};
+				
+				__m128i ditherMap2[] = {
+					_mm_setr_epi32(ditherMap[0], ditherMap[1], ditherMap[2], ditherMap[3]),
+					_mm_setr_epi32(ditherMap[4], ditherMap[5], ditherMap[6], ditherMap[7])
+				};
 				
 				__m128i mulCol = _mm_setr_epi16(mulB, mulG, mulR, mulA,
 												mulB, mulG, mulR, mulA);
@@ -768,7 +804,8 @@ namespace spades {
 								 _mm_castsi128_pd(dcol));
 				};
 				
-				auto drawScanline = [tw, th, tpixels, bmp, fbW, fbH, depthBuffer, &drawPixel, &drawPixel2, &r]
+				auto drawScanline = [tw, th, tpixels, bmp, fbW, fbH, depthBuffer, &drawPixel, &drawPixel2, &r,
+									 &ditherMap, &ditherMap2]
 				(int y, int x1, int x2,
 				 const SWImageVarying& vary1,
 				 const SWImageVarying& vary2,
@@ -792,18 +829,27 @@ namespace spades {
 					auto uvMask = _mm_set1_epi32(texUVScaleInt - 1);
 					auto uvScale = _mm_setr_epi32(tw, tw, th, th);
 					
+					uint8_t ditherIndex = static_cast<uint8_t>(y & 1) << 1;
+					
 					auto unalignedPixel = [&]() {
 						auto vr = vary.GetCurrent();
 						union {
 							__m128i uv;
-							struct { unsigned int ui, dummy1, vi, dummy2; };
+							struct { unsigned int ui, dummy1, vi, dummy2; } iuv;
 						};
 						uv = vr.uv_m128;
+						
+						if(linearInterpolate) {
+							uint8_t idx = static_cast<uint8_t>(minX & 1) | ditherIndex;
+							auto m = _mm_setr_epi32(ditherMap[idx * 2], 0, ditherMap[idx * 2 + 1], 0);
+							uv = _mm_add_epi32(uv, m);
+						}
+						
 						uv = _mm_and_si128(uv, uvMask); // repeat
 						uv = _mm_mul_epu32(uv, uvScale); // now [u*tw, v*th]
 						uv = _mm_srli_epi64(uv, texUVScaleBits);
 						
-						uint32_t tex = tpixels[ui + vi * tw];
+						uint32_t tex = tpixels[iuv.ui + iuv.vi * tw];
 						// FIXME: Z interpolation
 						// FIXME: perspective correction
 						drawPixel(*out, *depthOut, tex, z1);
@@ -820,30 +866,36 @@ namespace spades {
 					}
 					int reminders = maxX & 1;
 					maxX -= reminders;
+					auto dither = ditherMap2[y & 1];
 					for(int x = minX; x < maxX; x+=2) {
 						auto vr1 = vary.GetCurrent();
 						vary.MoveNext();
 						auto vr2 = vary.GetCurrent();
 						union {
 							__m128i uv;
-							struct { unsigned int ui, dummy1, vi, dummy2; };
+							struct { unsigned int ui, dummy1, vi, dummy2; } iuv;
 						};
 						//static_assert(texUVScaleBits == 16, "texUVScaleBits must be 16");
 						uv = _mm_castps_si128
 						(_mm_shuffle_ps(_mm_castsi128_ps(vr1.uv_m128),
 											_mm_castsi128_ps(vr2.uv_m128), 0x88)); // [u1,v1,u2,v2]
+						
+						if(linearInterpolate) {
+							uv =_mm_add_epi32(uv, dither);
+						}
+						
 						uv = _mm_shuffle_epi32(uv, 0xd8); // [u1,u2,v1,v2]
 						uv = _mm_and_si128(uv, uvMask); // repeat
 						
 						auto tm = uv;
 						uv = _mm_mul_epu32(uv, uvScale);
 						uv = _mm_srli_epi64(uv, texUVScaleBits);
-						uint32_t tex1 = tpixels[ui + vi * tw];
+						uint32_t tex1 = tpixels[iuv.ui + iuv.vi * tw];
 						
 						uv = _mm_shuffle_epi32(tm, 0xb1); // [u2,u1,v2,v1]
 						uv = _mm_mul_epu32(uv, uvScale);
 						uv = _mm_srli_epi64(uv, texUVScaleBits);
-						uint32_t tex2 = tpixels[ui + vi * tw];
+						uint32_t tex2 = tpixels[iuv.ui + iuv.vi * tw];
 						// FIXME: Z interpolation
 						// FIXME: perspective correction
 						//drawPixel(out[0], depthOut[0], tex1, z1);
@@ -949,10 +1001,11 @@ namespace spades {
 		
 #pragma mark Solid
 		template<
-		bool depthTest
+		bool depthTest,
+		bool lerp
 		>
 		struct SWImageRenderer::PolygonRenderer
-		<SWFeatureLevel::SSE2, false, false, depthTest, true> {
+		<SWFeatureLevel::SSE2, false, false, depthTest, true, lerp> {
 			
 			
 			static void DrawPolygonInternalInner(SWImage *img,
@@ -1235,9 +1288,10 @@ namespace spades {
 		template<
 		SWFeatureLevel featureLvl,
 		bool depthTest,
-		bool solidFill
+		bool solidFill,
+		bool lerp
 		>
-		struct SWImageRenderer::PolygonRenderer<featureLvl, false, true, depthTest, solidFill> {
+		struct SWImageRenderer::PolygonRenderer<featureLvl, false, true, depthTest, solidFill, lerp> {
 			static void DrawPolygonInternal(SWImage *img,
 											const Vertex& v1,
 											const Vertex& v2,
@@ -1249,7 +1303,7 @@ namespace spades {
 				vv1.position = (vv1.position * r.fbSize4) + r.fbCenter4;
 				vv2.position = (vv2.position * r.fbSize4) + r.fbCenter4;
 				vv3.position = (vv3.position * r.fbSize4) + r.fbCenter4;
-				PolygonRenderer<featureLvl, false, false, depthTest, solidFill>::DrawPolygonInternal(img,
+				PolygonRenderer<featureLvl, false, false, depthTest, solidFill, lerp>::DrawPolygonInternal(img,
 																   vv1, vv2, vv3, r);
 			}
 		};
@@ -1258,9 +1312,10 @@ namespace spades {
 		SWFeatureLevel featureLvl,
 		bool ndc, // normalized device coordinate
 		bool depthTest,
-		bool solidFill
+		bool solidFill,
+		bool lerp
 		>
-		struct SWImageRenderer::PolygonRenderer<featureLvl, true, ndc, depthTest, solidFill> {
+		struct SWImageRenderer::PolygonRenderer<featureLvl, true, ndc, depthTest, solidFill, lerp> {
 			template<class F>
 			static void Clip(Vertex& v1, Vertex& v2, Vertex& v3,
 							 Vector4 plane, F continuation) {
@@ -1403,14 +1458,14 @@ namespace spades {
 					 vv2.position.z = orig2;
 					 vv3.position.z = orig3;
 					 
-					 PolygonRenderer<featureLvl, false, true, depthTest, solidFill>::DrawPolygonInternal
+					 PolygonRenderer<featureLvl, false, true, depthTest, solidFill, lerp>::DrawPolygonInternal
 					 (img, vv1, vv2, vv3, r);
 					 return;
 					 Clip
 					 (v1, v2, v3,
 					  MakeVector4(0.f, 0.f, -1.f, 1.f),
 					  [img,&r](Vertex& v1, Vertex& v2, Vertex& v3) {
-						  PolygonRenderer<featureLvl, false, true, depthTest, solidFill>::DrawPolygonInternal
+						  PolygonRenderer<featureLvl, false, true, depthTest, solidFill, lerp>::DrawPolygonInternal
 						  (img, v1, v2, v3, r);
 					  });
 				 });
@@ -1422,7 +1477,8 @@ namespace spades {
 		SWFeatureLevel level,
 		bool needTransform,
 		bool ndc, // normalized device coordinate
-		bool depthTest
+		bool depthTest,
+		bool lerp
 		>
 		struct SWImageRenderer::PolygonRenderer3 {
 			static void DrawPolygonInternal(SWImage *img,
@@ -1431,11 +1487,11 @@ namespace spades {
 											const Vertex& v3,
 											SWImageRenderer& r) {
 				if(img == nullptr || img->IsWhiteImage()) {
-					PolygonRenderer<level, needTransform, ndc, depthTest, true>::DrawPolygonInternal(img,
+					PolygonRenderer<level, needTransform, ndc, depthTest, true, lerp>::DrawPolygonInternal(img,
 																									  v1, v2, v3, r);
 					return;
 				}
-				PolygonRenderer<level, needTransform, ndc, depthTest, false>::DrawPolygonInternal(img,
+				PolygonRenderer<level, needTransform, ndc, depthTest, false, lerp>::DrawPolygonInternal(img,
 																										  v1, v2, v3, r);
 			}
 		};
@@ -1444,7 +1500,8 @@ namespace spades {
 		template<
 		bool needTransform,
 		bool ndc, // normalized device coordinate
-		bool depthTest
+		bool depthTest,
+		bool lerp
 		>
 		struct SWImageRenderer::PolygonRenderer2 {
 			static void DrawPolygonInternal(SWImage *img,
@@ -1455,12 +1512,12 @@ namespace spades {
 											SWFeatureLevel lvl) {
 #if ENABLE_SSE2
 				if(static_cast<int>(lvl) >= static_cast<int>(SWFeatureLevel::SSE2)) {
-					PolygonRenderer3<SWFeatureLevel::SSE2, needTransform, ndc, depthTest>::DrawPolygonInternal(img,
+					PolygonRenderer3<SWFeatureLevel::SSE2, needTransform, ndc, depthTest, lerp>::DrawPolygonInternal(img,
 																											  v1, v2, v3, r);
 					return;
 				}
 #endif
-				PolygonRenderer3<SWFeatureLevel::None, needTransform, ndc, depthTest>::DrawPolygonInternal(img,
+				PolygonRenderer3<SWFeatureLevel::None, needTransform, ndc, depthTest, lerp>::DrawPolygonInternal(img,
 																										  v1, v2, v3, r);
 			}
 		};
@@ -1476,14 +1533,16 @@ namespace spades {
 					PolygonRenderer2<
 					true,	// needs transform
 					true,	// in NDC
-					true	// depth tested
+					true,	// depth tested
+					true	// linear interpolation
 					>::DrawPolygonInternal(img, v1, v2, v3, *this, featureLevel);
 					break;
 				case ShaderType::Image:
 					PolygonRenderer2<
 					false,	// don't need transform
 					false,	// not NDC
-					false	// no depth test
+					false,	// no depth test
+					false   // point sampling
 					>::DrawPolygonInternal(img, v1, v2, v3, *this, featureLevel);
 					break;
 			}

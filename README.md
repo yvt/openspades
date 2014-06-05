@@ -29,20 +29,21 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    *On other distributions*: 
    Install corresponding packages from your repository (or compile from source).
    
-2. Download & install `SDL-2.0.2` from trunk 
+2. Download & install `SDL-2.0.2`
    ```bash
-   hg clone http://hg.libsdl.org/SDL
-   cd SDL/
+   wget http://www.libsdl.org/release/SDL2-2.0.2.tar.gz
+   tar -zxvf SDL2-2.0.2.tar.gz
+   cd SDL2-2.0.2/
    ./configure && make && sudo make install
    cd ../
    ```
    Additional dependencies may be required.
 
-3. Download & install `SDL2_image` 
+3. Download & install `SDL2_image-2.0.0` 
    ```bash
    wget https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.0.tar.gz
-   tar xvf SDL2_image-2.0.0.tar.gz
-   cd SDL2_image-2.0.0
+   tar-zxvf SDL2_image-2.0.0.tar.gz
+   cd SDL2_image-2.0.0/
    ./configure && make && sudo make install
    cd ../
    ```

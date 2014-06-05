@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+if command -v update-menus >/dev/null 2>&1 ; then
+	update-menus
+fi
