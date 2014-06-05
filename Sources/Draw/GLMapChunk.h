@@ -82,7 +82,7 @@ namespace spades {
 			
 			void Update();
 		public:
-			enum { Size = 16, SizeBits = 4 };
+			enum { SizeBits = 5, Size = 1 << SizeBits };
 			GLMapChunk(GLMapRenderer *,
 					   client::GameMap *mp,
 					   int cx, int cy, int cz);
@@ -132,7 +132,7 @@ namespace spades {
 			
 			void Update();
 		public:
-			enum { SizeBits = 4, Size = 1 << SizeBits };
+			enum { SizeBits = 5, Size = 1 << SizeBits };
 			GLMapFastChunk(GLMapRenderer *,
 					   client::GameMap *mp,
 					   int cx, int cy);
