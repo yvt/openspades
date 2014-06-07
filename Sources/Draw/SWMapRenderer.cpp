@@ -360,7 +360,7 @@ namespace spades {
 			std::int_fast16_t irx = rx >> 9; //static_cast<int>(floorf(rx));
 			std::int_fast16_t iry = ry >> 9; //static_cast<int>(floorf(ry));
 			
-			float fogDist = 128.f;
+			float fogDist = renderer->GetFogDistance();
 			float distance = 1.e-20f; // traveled path
 			float invDist = 1.f / distance;
 			
