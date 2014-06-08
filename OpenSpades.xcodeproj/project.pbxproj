@@ -793,6 +793,8 @@
 		E8E446A4179EA60900BE8855 /* GLMapShadowRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E446A2179EA60900BE8855 /* GLMapShadowRenderer.cpp */; };
 		E8E446A7179EAC7900BE8855 /* GLShadowShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E446A5179EAC7800BE8855 /* GLShadowShader.cpp */; };
 		E8E446AA179F822D00BE8855 /* TargaWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E446A8179F822D00BE8855 /* TargaWriter.cpp */; };
+		E8E977961944701300579D9A /* PlayerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977941944701300579D9A /* PlayerEntity.cpp */; };
+		E8E977971944701300579D9A /* PlayerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977941944701300579D9A /* PlayerEntity.cpp */; };
 		E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */; };
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
@@ -1659,6 +1661,8 @@
 		E8E446A5179EAC7800BE8855 /* GLShadowShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLShadowShader.cpp; sourceTree = "<group>"; };
 		E8E446A6179EAC7800BE8855 /* GLShadowShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShadowShader.h; sourceTree = "<group>"; };
 		E8E446A8179F822D00BE8855 /* TargaWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TargaWriter.cpp; sourceTree = "<group>"; };
+		E8E977941944701300579D9A /* PlayerEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerEntity.cpp; sourceTree = "<group>"; };
+		E8E977951944701300579D9A /* PlayerEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerEntity.h; sourceTree = "<group>"; };
 		E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRadiosityRenderer.cpp; sourceTree = "<group>"; };
 		E8EE08A017B8F4B000631987 /* GLRadiosityRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRadiosityRenderer.h; sourceTree = "<group>"; };
 		E8EE08A217BA016F00631987 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
@@ -2413,6 +2417,8 @@
 				E8D0E80B18FC344C00DE3BDB /* Constants.h */,
 				E8D0E8121901926000DE3BDB /* Entity.cpp */,
 				E8D0E8131901926000DE3BDB /* Entity.h */,
+				E8E977941944701300579D9A /* PlayerEntity.cpp */,
+				E8E977951944701300579D9A /* PlayerEntity.h */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -3436,6 +3442,7 @@
 				E8D0E7C818FABC3600DE3BDB /* sha3.cpp in Sources */,
 				E82E66F118EA7954004DBA18 /* GLCameraBlurFilter.cpp in Sources */,
 				E82E66F218EA7954004DBA18 /* GLFogFilter.cpp in Sources */,
+				E8E977971944701300579D9A /* PlayerEntity.cpp in Sources */,
 				E82E66F318EA7954004DBA18 /* GLLensFlareFilter.cpp in Sources */,
 				E82E66F418EA7954004DBA18 /* GLFXAAFilter.cpp in Sources */,
 				E8D0E78D18FABC3600DE3BDB /* mqueue.cpp in Sources */,
@@ -3652,6 +3659,7 @@
 				E834F55F17950E44004EBE88 /* DeflateStream.cpp in Sources */,
 				E834F56517951B1C004EBE88 /* MemoryStream.cpp in Sources */,
 				E8D0E75A18FABC3600DE3BDB /* esign.cpp in Sources */,
+				E8E977961944701300579D9A /* PlayerEntity.cpp in Sources */,
 				E834F56817979F5A004EBE88 /* Quake3Font.cpp in Sources */,
 				E8F74CFF184C7D7C0085AA54 /* Clipboard.cpp in Sources */,
 				E8D0E7CD18FABC3600DE3BDB /* sharkbox.cpp in Sources */,
