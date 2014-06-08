@@ -19,10 +19,56 @@
  */
 
 #include "Entity.h"
+#include "World.h"
 
 namespace spades { namespace game {
 	
+	Entity::Entity(World& world, EntityType type):
+	world(world),
+	type(type),
+	health(100) {
+		
+	}
 	
+	Entity::~Entity() {
+		
+	}
+	
+	void Entity::SetId(uint32_t entityId) {
+		this->entityId = entityId;
+	}
+	
+	void Entity::Advance(Duration dt) {
+		EvaluateTrajectory(dt);
+	}
+	
+	void Entity::EvaluateTrajectory(Duration dt) {
+		switch (trajectory.type) {
+			case TrajectoryType::Constant:
+				// nothing to do
+				break;
+			case TrajectoryType::Linear:
+				trajectory.origin += trajectory.velocity * dt;
+				trajectory.angle *= Quaternion::MakeRotation
+				(trajectory.angularVelocity * dt);
+				break;
+			case TrajectoryType::Gravity:
+				trajectory.origin += trajectory.velocity * dt;
+				trajectory.origin += world.GetGravity() * (dt * dt * 0.5f);
+				trajectory.velocity += world.GetGravity() * dt;
+				trajectory.angle *= Quaternion::MakeRotation
+				(trajectory.angularVelocity * dt);
+				break;
+			case TrajectoryType::Player:
+				// non-player entity shouldn't have this trajectory type.
+				SPAssert(false);
+				break;
+			case TrajectoryType::RigidBody:
+				// we need a physics engine...
+				SPNotImplemented();
+				break;
+		}
+	}
 	
 } }
 

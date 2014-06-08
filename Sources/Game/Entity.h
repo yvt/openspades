@@ -21,11 +21,40 @@
 #pragma once
 
 #include <Core/RefCountedObject.h>
+#include "Constants.h"
+#include <Core/TMPUtils.h>
 
 namespace spades { namespace game {
 	
+	class World;
+	
 	class Entity: public RefCountedObject {
+		World& world;
+		stmp::optional<uint32_t> entityId;
+		
+		EntityType const type;
+		EntityFlags flags;
+		Trajectory trajectory;
+		uint8_t health;
+		
+		virtual void EvaluateTrajectory(Duration);
+		
 	public:
+		Entity(World& world, EntityType type);
+		~Entity();
+		
+		World& GetWorld() const { return world; }
+		
+		stmp::optional<uint32_t> GetId() const { return entityId; }
+		void SetId(uint32_t entityId);
+		
+		EntityType GetType() const { return type; }
+		
+		EntityFlags& GetFlags() { return flags; }
+		
+		Trajectory& GetTrajectory() { return trajectory; }
+		
+		void Advance(Duration);
 		
 	};
 	
