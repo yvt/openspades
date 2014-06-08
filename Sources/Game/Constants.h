@@ -54,16 +54,47 @@ namespace spades { namespace game {
 	};
 	
 	struct EntityFlags {
+		/** Entity can be hit by a player. */
 		bool playerClip : 1;
+		
+		/** Entity can be hit by a bullet or other projectile. */
 		bool weaponClip : 1;
+		
+		// FIXME: physicsClip
+		
+		/** Player flies. */
 		bool fly : 1;
 	};
 	
 	enum class TrajectoryType {
+		/** Entity's position is specified with `origin`.
+		 *  and its orientation is specified with `angle`. */
 		Constant,
+		
+		/** Entity's position is `origin` + time * `velocity`,
+		 * and its orientation is `angle` * f(`angularVelocity` * time),
+		 * where f is a function to convert rotation axis into quaternion and
+		 * f([x,y,z]) = exp((xi+yj+zk)/2). */
 		Linear,
+		
+		/** Entity's position is `origin` + time * `velocity` - 1/2G * time^2,
+		 * and its orientation is `angle` * f(`angularVelocity` ^ time),
+		 * where f is a function to convert rotation axis into quaternion and
+		 * f([x,y,z]) = exp((xi+yj+zk)/2). */
 		Gravity,
+		
+		/** Entity's position is `origin` + time * `velocity`,
+		 * and its orientation is `eulerAngle`.
+		 * Entity is controlled by player's input.
+		 *
+		 * FIXME: interpolation? */
 		Player,
+		
+		/** Entity's position is `origin` + time * `velocity`,
+		 * and its orientation is `angle` * f(`angularVelocity` ^ time),
+		 * where f is a function to convert rotation axis into quaternion and
+		 * f([x,y,z]) = exp((xi+yj+zk)/2).
+		 * Motion varies by collision. */
 		RigidBody
 	};
 	
@@ -141,6 +172,11 @@ namespace spades { namespace game {
 	};
 	
 	using SkinId = std::array<char, 20>;
+	
+	/** in-game timepoint representation. Measured in seconds. */
+	using Timepoint = double;
+	
+	using Duration = Timepoint;
 	
 } }
 
