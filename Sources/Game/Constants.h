@@ -36,6 +36,7 @@ namespace spades { namespace game {
 		Checkpoint,
 		Vehicle
 	};
+	std::string GetEntityTypeName(EntityType);
 	
 	enum class EntityEventType {
 		// player
@@ -46,12 +47,14 @@ namespace spades { namespace game {
 		// common
 		Explode
 	};
+	std::string GetEntityEventTypeName(EntityEventType);
 	
 	enum class EntityDeathType {
 		Unspecified = 0,
 		PlayerDeath,
 		Explode
 	};
+	std::string GetEntityDeathTypeName(EntityDeathType);
 	
 	struct EntityFlags {
 		/** Entity can be hit by a player. */
@@ -178,6 +181,8 @@ namespace spades { namespace game {
 	using Timepoint = double;
 	
 	using Duration = Timepoint;
+	
+	
 	
 } }
 

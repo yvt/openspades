@@ -22,6 +22,9 @@
 
 namespace spades { namespace game {
 	
+	WorldParameters::WorldParameters():
+	playerJumpVelocity(0.36f) { }
+	
 	World::World():
 	currentTime(0) {
 		SPNotImplemented();

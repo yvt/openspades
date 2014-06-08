@@ -20,6 +20,7 @@
 
 #include "Entity.h"
 #include "World.h"
+#include <Core/Strings.h>
 
 namespace spades { namespace game {
 	
@@ -34,12 +35,25 @@ namespace spades { namespace game {
 		
 	}
 	
+	void Entity::AddListener(EntityListener *l) {
+		listeners.insert(l);
+	}
+	void Entity::RemoveListener(EntityListener *l) {
+		listeners.erase(l);
+	}
+	
 	void Entity::SetId(uint32_t entityId) {
+		// FIXME: should do some checking
 		this->entityId = entityId;
 	}
 	
 	void Entity::Advance(Duration dt) {
 		EvaluateTrajectory(dt);
+	}
+	
+	std::string Entity::GetName() {
+		std::string typeName = GetEntityTypeName(type);
+		return Format("#{0} {1}", entityId, typeName);
 	}
 	
 	void Entity::EvaluateTrajectory(Duration dt) {
@@ -93,6 +107,17 @@ namespace spades { namespace game {
 		m *= Matrix4::Translate(trajectory.origin);
 		return m;
 	}
+	
+	void Entity::PerformAction(EntityEventType type, uint64_t param) {
+		for (auto *listener: listeners) listener->ActionPerformed(*this, type, param);
+		EventTriggered(type, param);
+	}
+	
+	void Entity::EventTriggered(EntityEventType type, uint64_t param) {
+		SPLog("Unsupported event {0} (param = {1}) for entity {2}",
+			  GetEntityEventTypeName(type).c_str(), param, GetName().c_str());
+	}
+	
 } }
 
 

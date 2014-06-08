@@ -25,9 +25,12 @@
 
 namespace spades { namespace game {
 	
+	struct WorldParameters;
+	
 	class World: public RefCountedObject
 	{
 		Timepoint currentTime;
+		WorldParameters params;
 	public:
 		World();
 		~World();
@@ -39,6 +42,18 @@ namespace spades { namespace game {
 		/** Returns global gravity vector.
 		 * @return Gravity in units/sec^2. */
 		Vector3 GetGravity();
+		
+		const WorldParameters& GetParameters() const
+		{ return params; }
+		
+	};
+	
+	/** World-global parameters. */
+	struct WorldParameters {
+		
+		float playerJumpVelocity;
+		
+		WorldParameters();
 		
 	};
 	

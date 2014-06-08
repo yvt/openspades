@@ -15,14 +15,28 @@
 #include <cassert>
 
 #define HAS_CONSTEXPR 1
+#define HAS_OVERRIDE 1
+#define HAS_FINAL 1
 
 #ifdef _MSC_VER
 #undef HAS_CONSTEXPR
 #define HAS_CONSTEXPR 0
+#undef HAS_OVERRIDE
+#define HAS_OVERRIDE 0
+#undef HAS_FINAL
+#define HAS_FINAL 0
 #endif
 
 #if !HAS_CONSTEXPR
 #define constexpr
+#endif
+
+#if !HAS_OVERRIDE
+#define override
+#endif
+
+#if !HAS_FINAL
+#define final
 #endif
 
 

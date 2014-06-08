@@ -20,23 +20,69 @@
 #pragma once
 
 #include <array>
+#include <set>
 #include "Entity.h"
+#include <Core/TMPUtils.h>
 
 namespace spades { namespace game {
+	
+	class PlayerEntityListener;
 	
 	class PlayerEntity: public Entity {
 		PlayerInput playerInput;
 		ToolSlot tool;
 		IntVector3 blockColor;
 		
+		std::set<PlayerEntityListener *> listeners;
+		
 		std::array<std::string, 3> weaponSkins;
 		std::string bodySkin;
+		
+		
+		
+		virtual void EvaluateTrajectory(Duration);
 		
 	public:
 		PlayerEntity(World&);
 		~PlayerEntity();
 		
-		void Accept(EntityVisitor& v) { v.Visit(*this); }
+		using Entity::AddListener;
+		using Entity::RemoveListener;
+		void AddListener(PlayerEntityListener *l);
+		void RemoveListener(PlayerEntityListener *l);
+		
+		float GetHeight(bool crouch);
+		float GetBoxSize();
+		
+		std::string GetName() override;
+		
+		/** Updates the local state of the player. */
+		void SetPlayerInput(const PlayerInput&);
+		/** Updates the local and remote state of the player. */
+		void UpdatePlayerInput(const PlayerInput&);
+		const PlayerInput& GetPlayerInput() const { return playerInput; }
+		
+		float GetJumpVelocity();
+		bool IsOnGroundOrWade();
+		
+		
+		void EventTriggered(EntityEventType,
+							uint64_t param) override;
+		
+		void Accept(EntityVisitor& v) override { v.Visit(*this); }
+	};
+	
+	class PlayerEntityListener {
+	public:
+		virtual ~PlayerEntityListener() { }
+		
+		/** Called when a player jumped. Intended to be handled by
+		 * client routine. */
+		virtual void Jumped(PlayerEntity&) { }
+		
+		/** Called when player state was modified, and should be
+		 * sent to the remote peer. */
+		virtual void PlayerInputUpdated(PlayerEntity&) { }
 	};
 	
 } }

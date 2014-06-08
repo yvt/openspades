@@ -807,6 +807,8 @@
 		E8E977AB1944819600579D9A /* CheckpointEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A81944819600579D9A /* CheckpointEntity.cpp */; };
 		E8E977AE194481C400579D9A /* VehicleEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977AC194481C400579D9A /* VehicleEntity.cpp */; };
 		E8E977AF194481C400579D9A /* VehicleEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977AC194481C400579D9A /* VehicleEntity.cpp */; };
+		E8E977B11944955500579D9A /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977B01944955500579D9A /* Constants.cpp */; };
+		E8E977B21944955500579D9A /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977B01944955500579D9A /* Constants.cpp */; };
 		E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */; };
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
@@ -1687,6 +1689,7 @@
 		E8E977A91944819600579D9A /* CheckpointEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckpointEntity.h; sourceTree = "<group>"; };
 		E8E977AC194481C400579D9A /* VehicleEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VehicleEntity.cpp; sourceTree = "<group>"; };
 		E8E977AD194481C400579D9A /* VehicleEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VehicleEntity.h; sourceTree = "<group>"; };
+		E8E977B01944955500579D9A /* Constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRadiosityRenderer.cpp; sourceTree = "<group>"; };
 		E8EE08A017B8F4B000631987 /* GLRadiosityRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRadiosityRenderer.h; sourceTree = "<group>"; };
 		E8EE08A217BA016F00631987 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
@@ -2439,6 +2442,7 @@
 				E8D0E5D918F9A64400DE3BDB /* World.cpp */,
 				E8D0E5DA18F9A64400DE3BDB /* World.h */,
 				E8D0E80B18FC344C00DE3BDB /* Constants.h */,
+				E8E977B01944955500579D9A /* Constants.cpp */,
 				E8D0E8121901926000DE3BDB /* Entity.cpp */,
 				E8D0E8131901926000DE3BDB /* Entity.h */,
 				E8E977941944701300579D9A /* PlayerEntity.cpp */,
@@ -3209,6 +3213,7 @@
 				E82E673F18EA7972004DBA18 /* as_callfunc_x86.cpp in Sources */,
 				E82E674018EA7972004DBA18 /* as_callfunc_xenon.cpp in Sources */,
 				E82E674118EA7972004DBA18 /* as_compiler.cpp in Sources */,
+				E8E977B21944955500579D9A /* Constants.cpp in Sources */,
 				E8D0E7BA18FABC3600DE3BDB /* rw.cpp in Sources */,
 				E82E674218EA7972004DBA18 /* as_configgroup.cpp in Sources */,
 				E8D0E7B418FABC3600DE3BDB /* ripemd.cpp in Sources */,
@@ -3617,6 +3622,7 @@
 				E8D0E7C318FABC3600DE3BDB /* serpent.cpp in Sources */,
 				E8CF040E17904971000683D4 /* FileManager.cpp in Sources */,
 				E8D0E7FF18FABC3600DE3BDB /* xtrcrypt.cpp in Sources */,
+				E8E977B11944955500579D9A /* Constants.cpp in Sources */,
 				E8D0E7CF18FABC3600DE3BDB /* simple.cpp in Sources */,
 				E8CF041117904ABC000683D4 /* IStream.cpp in Sources */,
 				E8CF041417904E8D000683D4 /* StdStream.cpp in Sources */,

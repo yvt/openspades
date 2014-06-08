@@ -23,6 +23,7 @@
 #include <Core/RefCountedObject.h>
 #include "Constants.h"
 #include <Core/TMPUtils.h>
+#include <set>
 
 namespace spades { namespace game {
 	
@@ -36,6 +37,7 @@ namespace spades { namespace game {
 	class CheckpointEntity;
 	class VehicleEntity;
 	
+	class EntityListener;
 	class EntityVisitor;
 	
 	class Entity: public RefCountedObject {
@@ -49,6 +51,8 @@ namespace spades { namespace game {
 		
 		World& world;
 		stmp::optional<uint32_t> entityId;
+		
+		std::set<EntityListener *> listeners;
 		
 		EntityType const type;
 		EntityFlags flags;
@@ -64,6 +68,9 @@ namespace spades { namespace game {
 		
 		World& GetWorld() const { return world; }
 		
+		void AddListener(EntityListener *l);
+		void RemoveListener(EntityListener *l);
+		
 		stmp::optional<uint32_t> GetId() const { return entityId; }
 		void SetId(uint32_t entityId);
 		
@@ -74,13 +81,40 @@ namespace spades { namespace game {
 		Trajectory& GetTrajectory() { return trajectory; }
 		Matrix4 GetMatrix() const;
 		
+		/** Returns a name for debugging. */
+		virtual std::string GetName();
+		
 		void Advance(Duration);
+		
+		/** Causes this entity to do the specific action,
+		 * and triggers the corresponding event (thus 
+		 * EventTriggered will be called). */
+		void PerformAction(EntityEventType,
+						   uint64_t param);
+		
+		/** Called when a certain event is triggered.
+		 * Calling this function solely doesn't cause any states
+		 * transmitted over network. */
+		virtual void EventTriggered(EntityEventType,
+									uint64_t param);
 		
 		virtual void Accept(EntityVisitor&) = 0;
 	};
 	
+	class EntityListener {
+	public:
+		virtual ~EntityListener() { }
+		
+		/** Called when entity performs an action, and
+		 * it should be notified to the remote peer. */
+		virtual void ActionPerformed(Entity&,
+									 EntityEventType,
+									 uint64_t param) { }
+	};
+	
 	class EntityVisitor {
 	public:
+		virtual ~EntityVisitor() { }
 		virtual void Visit(PlayerEntity&) = 0;
 		virtual void Visit(GrenadeEntity&) = 0;
 		virtual void Visit(RocketEntity&) = 0;
