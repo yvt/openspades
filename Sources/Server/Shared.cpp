@@ -732,6 +732,7 @@ namespace spades { namespace protocol {
 			if(item.weaponSkin1) mask |= 2;
 			if(item.weaponSkin2) mask |= 4;
 			if(item.weaponSkin3) mask |= 8;
+			writer.Write(mask);
 			if(item.bodySkin) writer.WriteBytes(*item.bodySkin);
 			if(item.weaponSkin1) writer.WriteBytes(*item.weaponSkin1);
 			if(item.weaponSkin2) writer.WriteBytes(*item.weaponSkin2);
