@@ -20,9 +20,27 @@
 
 #pragma once
 
+#include <Core/RefCountedObject.h>
+#include "Constants.h"
+
 namespace spades { namespace game {
 	
-	// nothing here yet
+	class World: public RefCountedObject
+	{
+		Timepoint currentTime;
+	public:
+		World();
+		~World();
+		
+		Timepoint GetCurrentTime() const { return currentTime; }
+		
+		void Advance(Duration);
+		
+		/** Returns global gravity vector.
+		 * @return Gravity in units/sec^2. */
+		Vector3 GetGravity();
+		
+	};
 	
 } }
 

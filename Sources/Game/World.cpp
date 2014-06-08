@@ -22,9 +22,22 @@
 
 namespace spades { namespace game {
 	
-	// nothing here yet
+	World::World():
+	currentTime(0) {
+		SPNotImplemented();
+	}
 	
+	World::~World() {
+		
+	}
 	
+	void World::Advance(Duration) {
+		SPNotImplemented();
+	}
+	
+	Vector3 World::GetGravity()	{
+		return Vector3(0.f, 0.f, 10.f); // FIXME: correct value
+	}
 	
 } }
 
