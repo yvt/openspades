@@ -849,16 +849,49 @@ namespace spades {
 		Quaternion(float i, float j, float k, float real):
 		v(i, j, k, real){}
 		
-		// TODO: computations
+		inline Quaternion Conjugate() const {
+			return Quaternion(-v.x, -v.y, -v.z, v.w);
+		}
+		
+		inline Quaternion operator * (const Quaternion& o) const {
+			const auto& a = v;
+			const auto& b = o.v;
+			return Quaternion (
+				a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y,
+				a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x,
+				a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w,
+				a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z
+			);
+		}
+		
+		inline Quaternion& operator *= (const Quaternion& o) {
+			*this = *this * o;
+			return *this;
+		}
+		
+		inline Vector3 Apply(const Vector3& v) const {
+			auto q = *this * Quaternion(v.x, v.y, v.z, 0.f) * Conjugate();
+			return Vector3(q.v.x, q.v.y, q.v.z);
+		}
 		
 		/** Stores rotation quaternion into compact format for
 		 * transmission. */
 		Vector3 EncodeRotation() const {
 			return Vector3(v.x, v.y, v.z);
 		}
-		static Quaternion DecodeRotation(Vector3 v) {
+		static inline Quaternion DecodeRotation(Vector3 v) {
 			auto s = v.x * v.x + v.y * v.y + v.z * v.z;
 			return Quaternion(v.x, v.y, v.z, sqrtf(1.f - s));
+		}
+		
+		/** Creates quaternion from rotation axis vector.
+		 * @param axis Rotation axis vector of which length is radians. */
+		static inline Quaternion MakeRotation(const Vector3& axis) {
+			auto ln = axis.GetLength();
+			auto norm = axis.Normalize();
+			auto c = cosf(ln * 0.5f), s = -sinf(ln * 0.5f);
+			norm *= s;
+			return Quaternion(norm.x, norm.y, norm.z, c);
 		}
 		
 	};
