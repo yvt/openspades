@@ -72,6 +72,7 @@ namespace spades { namespace game {
 		EntityFlags& GetFlags() { return flags; }
 		
 		Trajectory& GetTrajectory() { return trajectory; }
+		Matrix4 GetMatrix() const;
 		
 		void Advance(Duration);
 		

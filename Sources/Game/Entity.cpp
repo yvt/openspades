@@ -67,9 +67,32 @@ namespace spades { namespace game {
 				// we need a physics engine...
 				SPNotImplemented();
 				break;
+			default:
+				SPAssert(false);
 		}
 	}
 	
+	Matrix4 Entity::GetMatrix() const {
+		Matrix4 m;
+		switch (trajectory.type) {
+			default:
+				SPAssert(false);
+			case TrajectoryType::Constant:
+			case TrajectoryType::Gravity:
+			case TrajectoryType::Linear:
+			case TrajectoryType::RigidBody:
+				m = trajectory.angle.ToRotationMatrix();
+				break;
+			case TrajectoryType::Player:
+				auto ang = trajectory.eulerAngle;
+				m = Matrix4::Rotate(Vector3(0.f, 0.f, 1.f), ang.z);
+				m = Matrix4::Rotate(Vector3(1.f, 0.f, 0.f), ang.x) * m;
+				m = Matrix4::Rotate(Vector3(0.f, 1.f, 0.f), ang.y) * m;
+				break;
+		}
+		m *= Matrix4::Translate(trajectory.origin);
+		return m;
+	}
 } }
 
 

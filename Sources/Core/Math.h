@@ -894,6 +894,26 @@ namespace spades {
 			return Quaternion(norm.x, norm.y, norm.z, c);
 		}
 		
+		inline Matrix4 ToRotationMatrix() const {
+			auto a = v.w, b = v.x, c = v.y, d = v.z;
+			auto aa = a*a, bb = b*b, cc = c*c, dd = d*d;
+			return Matrix4(aa+bb-cc-dd,
+						   2.f*(b*c+a*d),
+						   2.f*(b*d-a*c),
+						   0.f,
+						   
+						   2.f*(b*c-a*d),
+						   aa-bb+cc-dd,
+						   2.f*(c*d+a*b),
+						   0.f,
+						   
+						   2.f*(b*d+a*c),
+						   2.f*(c*d-a*b),
+						   aa-bb-cc+dd,
+						   0.f,
+						   
+						   0.f, 0.f, 0.f, 1.f);
+		}
 	};
 	
 #pragma mark - Utilities
