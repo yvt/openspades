@@ -257,7 +257,11 @@ namespace spades { namespace server {
 	}
 	
 	void HostPeer::Send(const protocol::Packet &packet) {
-		
+		auto data = packet.Generate();
+		auto *p = enet_packet_create(data.data(), data.size(),
+										  ENET_PACKET_FLAG_NO_ALLOCATE);
+		enet_peer_send(enetPeer, 0, p);
+		enet_packet_destroy(p);
 	}
 	
 	void HostPeer::Disconnect(protocol::DisconnectReason reason) {
