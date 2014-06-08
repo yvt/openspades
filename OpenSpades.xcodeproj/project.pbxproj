@@ -795,6 +795,8 @@
 		E8E446AA179F822D00BE8855 /* TargaWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E446A8179F822D00BE8855 /* TargaWriter.cpp */; };
 		E8E977961944701300579D9A /* PlayerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977941944701300579D9A /* PlayerEntity.cpp */; };
 		E8E977971944701300579D9A /* PlayerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977941944701300579D9A /* PlayerEntity.cpp */; };
+		E8E9779A19447C6700579D9A /* GrenadeEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E9779819447C6700579D9A /* GrenadeEntity.cpp */; };
+		E8E9779B19447C6700579D9A /* GrenadeEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E9779819447C6700579D9A /* GrenadeEntity.cpp */; };
 		E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */; };
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
@@ -1663,6 +1665,8 @@
 		E8E446A8179F822D00BE8855 /* TargaWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TargaWriter.cpp; sourceTree = "<group>"; };
 		E8E977941944701300579D9A /* PlayerEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerEntity.cpp; sourceTree = "<group>"; };
 		E8E977951944701300579D9A /* PlayerEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerEntity.h; sourceTree = "<group>"; };
+		E8E9779819447C6700579D9A /* GrenadeEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GrenadeEntity.cpp; sourceTree = "<group>"; };
+		E8E9779919447C6700579D9A /* GrenadeEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrenadeEntity.h; sourceTree = "<group>"; };
 		E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRadiosityRenderer.cpp; sourceTree = "<group>"; };
 		E8EE08A017B8F4B000631987 /* GLRadiosityRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRadiosityRenderer.h; sourceTree = "<group>"; };
 		E8EE08A217BA016F00631987 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
@@ -2419,6 +2423,8 @@
 				E8D0E8131901926000DE3BDB /* Entity.h */,
 				E8E977941944701300579D9A /* PlayerEntity.cpp */,
 				E8E977951944701300579D9A /* PlayerEntity.h */,
+				E8E9779819447C6700579D9A /* GrenadeEntity.cpp */,
+				E8E9779919447C6700579D9A /* GrenadeEntity.h */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -3299,6 +3305,7 @@
 				E82E679218EA7972004DBA18 /* IGrenadeSkin.cpp in Sources */,
 				E8D0E7D218FABC3600DE3BDB /* skipjack.cpp in Sources */,
 				E82E679318EA7972004DBA18 /* IWeaponSkin.cpp in Sources */,
+				E8E9779B19447C6700579D9A /* GrenadeEntity.cpp in Sources */,
 				E82E679418EA7972004DBA18 /* IFont.cpp in Sources */,
 				E82E679518EA7972004DBA18 /* MainScreenHelper.cpp in Sources */,
 				E8D0E5D318F321E300DE3BDB /* GLNonlinearizeFilter.cpp in Sources */,
@@ -3745,6 +3752,7 @@
 				E80B288317A516D70056179E /* cdt.cc in Sources */,
 				E80B288417A516D70056179E /* sweep.cc in Sources */,
 				E8F74CF51840D4CC0085AA54 /* Config.cpp in Sources */,
+				E8E9779A19447C6700579D9A /* GrenadeEntity.cpp in Sources */,
 				E8D0E7AA18FABC3600DE3BDB /* rc6.cpp in Sources */,
 				E8D0E78E18FABC3600DE3BDB /* mqv.cpp in Sources */,
 				E80B288517A516D70056179E /* sweep_context.cc in Sources */,
