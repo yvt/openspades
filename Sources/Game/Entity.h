@@ -28,7 +28,25 @@ namespace spades { namespace game {
 	
 	class World;
 	
+	class PlayerEntity;
+	class GrenadeEntity;
+	class RocketEntity;
+	class CommandPostEntity;
+	class FlagEntity;
+	class CheckpointEntity;
+	class VehicleEntity;
+	
+	class EntityVisitor;
+	
 	class Entity: public RefCountedObject {
+		friend class PlayerEntity;
+		friend class GrenadeEntity;
+		friend class RocketEntity;
+		friend class CommandPostEntity;
+		friend class FlagEntity;
+		friend class CheckpointEntity;
+		friend class VehicleEntity;
+		
 		World& world;
 		stmp::optional<uint32_t> entityId;
 		
@@ -39,8 +57,9 @@ namespace spades { namespace game {
 		
 		virtual void EvaluateTrajectory(Duration);
 		
-	public:
+		// private constructor pattern
 		Entity(World& world, EntityType type);
+	public:
 		~Entity();
 		
 		World& GetWorld() const { return world; }
@@ -56,6 +75,18 @@ namespace spades { namespace game {
 		
 		void Advance(Duration);
 		
+		virtual void Accept(EntityVisitor&) = 0;
+	};
+	
+	class EntityVisitor {
+	public:
+		virtual void Visit(PlayerEntity&) = 0;
+		virtual void Visit(GrenadeEntity&) = 0;
+		virtual void Visit(RocketEntity&) = 0;
+		virtual void Visit(CommandPostEntity&) = 0;
+		virtual void Visit(FlagEntity&) = 0;
+		virtual void Visit(CheckpointEntity&) = 0;
+		virtual void Visit(VehicleEntity&) = 0;
 	};
 	
 } }

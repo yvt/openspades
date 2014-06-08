@@ -35,6 +35,8 @@ namespace spades { namespace game {
 	public:
 		PlayerEntity(World&);
 		~PlayerEntity();
+		
+		void Accept(EntityVisitor& v) { v.Visit(*this); }
 	};
 	
 } }

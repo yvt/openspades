@@ -24,10 +24,10 @@
 
 namespace spades { namespace game {
 	
-	class GrenadeEntity: public Entity {
+	class FlagEntity: public Entity {
 	public:
-		GrenadeEntity(World&);
-		~GrenadeEntity();
+		FlagEntity(World&);
+		~FlagEntity();
 		
 		void Accept(EntityVisitor& v) { v.Visit(*this); }
 	};

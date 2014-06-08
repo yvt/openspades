@@ -17,20 +17,15 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
-#pragma once
 
-#include <array>
-#include "Entity.h"
+#include "FlagEntity.h"
 
 namespace spades { namespace game {
-	
-	class GrenadeEntity: public Entity {
-	public:
-		GrenadeEntity(World&);
-		~GrenadeEntity();
+	FlagEntity::FlagEntity(World& world):
+	Entity(world, EntityType::Flag) {
+		GetTrajectory().type = TrajectoryType::Constant;
+	}
+	FlagEntity::~FlagEntity() {
 		
-		void Accept(EntityVisitor& v) { v.Visit(*this); }
-	};
-	
+	}
 } }
-

@@ -85,7 +85,8 @@ namespace spades { namespace game {
 		
 		/** Entity's position is `origin` + time * `velocity`,
 		 * and its orientation is `eulerAngle`.
-		 * Entity is controlled by player's input.
+		 * Entity is controlled by player's input, and uses player-specific
+		 * physics.
 		 *
 		 * FIXME: interpolation? */
 		Player,

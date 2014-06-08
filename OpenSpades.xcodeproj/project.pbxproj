@@ -797,6 +797,16 @@
 		E8E977971944701300579D9A /* PlayerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977941944701300579D9A /* PlayerEntity.cpp */; };
 		E8E9779A19447C6700579D9A /* GrenadeEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E9779819447C6700579D9A /* GrenadeEntity.cpp */; };
 		E8E9779B19447C6700579D9A /* GrenadeEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E9779819447C6700579D9A /* GrenadeEntity.cpp */; };
+		E8E9779E194480CA00579D9A /* RocketEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E9779C194480CA00579D9A /* RocketEntity.cpp */; };
+		E8E9779F194480CA00579D9A /* RocketEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E9779C194480CA00579D9A /* RocketEntity.cpp */; };
+		E8E977A21944813000579D9A /* CommandPostEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A01944813000579D9A /* CommandPostEntity.cpp */; };
+		E8E977A31944813000579D9A /* CommandPostEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A01944813000579D9A /* CommandPostEntity.cpp */; };
+		E8E977A61944816200579D9A /* FlagEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A41944816200579D9A /* FlagEntity.cpp */; };
+		E8E977A71944816200579D9A /* FlagEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A41944816200579D9A /* FlagEntity.cpp */; };
+		E8E977AA1944819600579D9A /* CheckpointEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A81944819600579D9A /* CheckpointEntity.cpp */; };
+		E8E977AB1944819600579D9A /* CheckpointEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A81944819600579D9A /* CheckpointEntity.cpp */; };
+		E8E977AE194481C400579D9A /* VehicleEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977AC194481C400579D9A /* VehicleEntity.cpp */; };
+		E8E977AF194481C400579D9A /* VehicleEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977AC194481C400579D9A /* VehicleEntity.cpp */; };
 		E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */; };
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
@@ -1667,6 +1677,16 @@
 		E8E977951944701300579D9A /* PlayerEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerEntity.h; sourceTree = "<group>"; };
 		E8E9779819447C6700579D9A /* GrenadeEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GrenadeEntity.cpp; sourceTree = "<group>"; };
 		E8E9779919447C6700579D9A /* GrenadeEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrenadeEntity.h; sourceTree = "<group>"; };
+		E8E9779C194480CA00579D9A /* RocketEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RocketEntity.cpp; sourceTree = "<group>"; };
+		E8E9779D194480CA00579D9A /* RocketEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RocketEntity.h; sourceTree = "<group>"; };
+		E8E977A01944813000579D9A /* CommandPostEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CommandPostEntity.cpp; sourceTree = "<group>"; };
+		E8E977A11944813000579D9A /* CommandPostEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandPostEntity.h; sourceTree = "<group>"; };
+		E8E977A41944816200579D9A /* FlagEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlagEntity.cpp; sourceTree = "<group>"; };
+		E8E977A51944816200579D9A /* FlagEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlagEntity.h; sourceTree = "<group>"; };
+		E8E977A81944819600579D9A /* CheckpointEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CheckpointEntity.cpp; sourceTree = "<group>"; };
+		E8E977A91944819600579D9A /* CheckpointEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckpointEntity.h; sourceTree = "<group>"; };
+		E8E977AC194481C400579D9A /* VehicleEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VehicleEntity.cpp; sourceTree = "<group>"; };
+		E8E977AD194481C400579D9A /* VehicleEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VehicleEntity.h; sourceTree = "<group>"; };
 		E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRadiosityRenderer.cpp; sourceTree = "<group>"; };
 		E8EE08A017B8F4B000631987 /* GLRadiosityRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRadiosityRenderer.h; sourceTree = "<group>"; };
 		E8EE08A217BA016F00631987 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
@@ -2425,6 +2445,16 @@
 				E8E977951944701300579D9A /* PlayerEntity.h */,
 				E8E9779819447C6700579D9A /* GrenadeEntity.cpp */,
 				E8E9779919447C6700579D9A /* GrenadeEntity.h */,
+				E8E9779C194480CA00579D9A /* RocketEntity.cpp */,
+				E8E9779D194480CA00579D9A /* RocketEntity.h */,
+				E8E977A01944813000579D9A /* CommandPostEntity.cpp */,
+				E8E977A11944813000579D9A /* CommandPostEntity.h */,
+				E8E977A41944816200579D9A /* FlagEntity.cpp */,
+				E8E977A51944816200579D9A /* FlagEntity.h */,
+				E8E977A81944819600579D9A /* CheckpointEntity.cpp */,
+				E8E977A91944819600579D9A /* CheckpointEntity.h */,
+				E8E977AC194481C400579D9A /* VehicleEntity.cpp */,
+				E8E977AD194481C400579D9A /* VehicleEntity.h */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -3309,6 +3339,7 @@
 				E82E679418EA7972004DBA18 /* IFont.cpp in Sources */,
 				E82E679518EA7972004DBA18 /* MainScreenHelper.cpp in Sources */,
 				E8D0E5D318F321E300DE3BDB /* GLNonlinearizeFilter.cpp in Sources */,
+				E8E977A31944813000579D9A /* CommandPostEntity.cpp in Sources */,
 				E82E679618EA7972004DBA18 /* StartupScreenHelper.cpp in Sources */,
 				E82E679718EA7972004DBA18 /* Config.cpp in Sources */,
 				E82E679818EA7972004DBA18 /* ClientUIHelper.cpp in Sources */,
@@ -3398,6 +3429,7 @@
 				E82E67CB18EA7972004DBA18 /* CTFGameMode.cpp in Sources */,
 				E8D0E76918FABC3600DE3BDB /* gf256.cpp in Sources */,
 				E82E67CC18EA7972004DBA18 /* TCGameMode.cpp in Sources */,
+				E8E977A71944816200579D9A /* FlagEntity.cpp in Sources */,
 				E8D0E7E418FABC3600DE3BDB /* tiger.cpp in Sources */,
 				E82E67CD18EA7972004DBA18 /* Player.cpp in Sources */,
 				E82E67CE18EA7972004DBA18 /* Grenade.cpp in Sources */,
@@ -3444,6 +3476,7 @@
 				E82E673218EA7967004DBA18 /* weakref.cpp in Sources */,
 				E8D0E78F18FABC3600DE3BDB /* mqv.cpp in Sources */,
 				E82E66EE18EA7954004DBA18 /* GLBloomFilter.cpp in Sources */,
+				E8E977AF194481C400579D9A /* VehicleEntity.cpp in Sources */,
 				E82E66EF18EA7954004DBA18 /* GLQuadRenderer.cpp in Sources */,
 				E82E66F018EA7954004DBA18 /* GLLensFilter.cpp in Sources */,
 				E8D0E7C818FABC3600DE3BDB /* sha3.cpp in Sources */,
@@ -3465,6 +3498,7 @@
 				E82E66FB18EA7954004DBA18 /* GLSpriteRenderer.cpp in Sources */,
 				E82E66FC18EA7954004DBA18 /* GLSoftSpriteRenderer.cpp in Sources */,
 				E8D0E79118FABC3600DE3BDB /* nbtheory.cpp in Sources */,
+				E8E9779F194480CA00579D9A /* RocketEntity.cpp in Sources */,
 				E8D0E71118FABC3600DE3BDB /* arc4.cpp in Sources */,
 				E8D0E5E118F9AA0B00DE3BDB /* Host.cpp in Sources */,
 				E8D0E77918FABC3600DE3BDB /* idea.cpp in Sources */,
@@ -3494,6 +3528,7 @@
 				E82E670E18EA7954004DBA18 /* GLShadowShader.cpp in Sources */,
 				E82E670F18EA7954004DBA18 /* GLDynamicLightShader.cpp in Sources */,
 				E8D0E7DA18FABC3600DE3BDB /* squaretb.cpp in Sources */,
+				E8E977AB1944819600579D9A /* CheckpointEntity.cpp in Sources */,
 				E82E671018EA7954004DBA18 /* IGLShadowMapRenderer.cpp in Sources */,
 				E82E671118EA7954004DBA18 /* GLShadowMapShader.cpp in Sources */,
 				E82E671218EA7954004DBA18 /* GLBasicShadowMapRenderer.cpp in Sources */,
@@ -3604,6 +3639,7 @@
 				E8D0E7A218FABC3600DE3BDB /* rabin.cpp in Sources */,
 				E8D0E79218FABC3600DE3BDB /* network.cpp in Sources */,
 				E8D0E74E18FABC3600DE3BDB /* ec2n.cpp in Sources */,
+				E8E977AE194481C400579D9A /* VehicleEntity.cpp in Sources */,
 				E88318D8179176F4002ABE6D /* GLImageManager.cpp in Sources */,
 				E8D0E7E318FABC3600DE3BDB /* tiger.cpp in Sources */,
 				E88318DB179256E5002ABE6D /* Player.cpp in Sources */,
@@ -3637,6 +3673,7 @@
 				E8567E5D1792C089009D83E0 /* ALFuncs.cpp in Sources */,
 				E8567E601792C0FF009D83E0 /* DynamicLibrary.cpp in Sources */,
 				E8567E631792CA12009D83E0 /* IAudioStream.cpp in Sources */,
+				E8E977A61944816200579D9A /* FlagEntity.cpp in Sources */,
 				E895D66018D4A15900F5B9CA /* JpegWriter.cpp in Sources */,
 				E8567E661792CCE5009D83E0 /* WavAudioStream.cpp in Sources */,
 				E8D0E7E118FABC3600DE3BDB /* tftables.cpp in Sources */,
@@ -3751,6 +3788,7 @@
 				E80B288217A516D70056179E /* advancing_front.cc in Sources */,
 				E80B288317A516D70056179E /* cdt.cc in Sources */,
 				E80B288417A516D70056179E /* sweep.cc in Sources */,
+				E8E9779E194480CA00579D9A /* RocketEntity.cpp in Sources */,
 				E8F74CF51840D4CC0085AA54 /* Config.cpp in Sources */,
 				E8E9779A19447C6700579D9A /* GrenadeEntity.cpp in Sources */,
 				E8D0E7AA18FABC3600DE3BDB /* rc6.cpp in Sources */,
@@ -3788,6 +3826,7 @@
 				E859510C17C5DA060012810C /* GLFogFilter.cpp in Sources */,
 				E8D0E7A018FABC3600DE3BDB /* queue.cpp in Sources */,
 				E8D0E73218FABC3600DE3BDB /* cmac.cpp in Sources */,
+				E8E977AA1944819600579D9A /* CheckpointEntity.cpp in Sources */,
 				E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */,
 				E8FE749018CC6CE000291338 /* Client_NetHandler.cpp in Sources */,
 				E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */,
@@ -3806,6 +3845,7 @@
 				E844888417D2633C005105D0 /* json_writer.cpp in Sources */,
 				E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */,
 				E8B6B68F17DE27B500E35523 /* as_atomic.cpp in Sources */,
+				E8E977A21944813000579D9A /* CommandPostEntity.cpp in Sources */,
 				E8B6B69017DE27B500E35523 /* as_builder.cpp in Sources */,
 				E8B6B69117DE27B500E35523 /* as_bytecode.cpp in Sources */,
 				E8D0E7B718FABC3600DE3BDB /* rsa.cpp in Sources */,
