@@ -22,15 +22,27 @@
 
 #include <Core/RefCountedObject.h>
 #include "Constants.h"
+#include <Client/GameMap.h>
+#include <Core/TMPUtils.h>
 
 namespace spades { namespace game {
 	
-	struct WorldParameters;
+	/** World-global parameters. */
+	struct WorldParameters {
+		
+		float playerJumpVelocity;
+		float fallDamageVelocity;
+		float fatalFallDamageVelocity;
+		
+		WorldParameters();
+		
+	};
 	
 	class World: public RefCountedObject
 	{
 		Timepoint currentTime;
 		WorldParameters params;
+		Handle<client::GameMap> gameMap;
 	public:
 		World();
 		~World();
@@ -43,19 +55,18 @@ namespace spades { namespace game {
 		 * @return Gravity in units/sec^2. */
 		Vector3 GetGravity();
 		
+		bool IsWaterAt(const Vector3&);
+		
+		bool IsLocalHostServer();
+		stmp::optional<uint32_t> GetLocalPlayerId();
+		
+		client::GameMap *GetGameMap() { return gameMap; }
+		
 		const WorldParameters& GetParameters() const
 		{ return params; }
 		
 	};
 	
-	/** World-global parameters. */
-	struct WorldParameters {
-		
-		float playerJumpVelocity;
-		
-		WorldParameters();
-		
-	};
 	
 } }
 

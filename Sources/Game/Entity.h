@@ -86,6 +86,11 @@ namespace spades { namespace game {
 		
 		void Advance(Duration);
 		
+		virtual bool IsLocallyControlled();
+		
+		void InflictDamage(const DamageInfo&, int amount);
+		virtual void Damaged(const DamageInfo&, int amount);
+		
 		/** Causes this entity to do the specific action,
 		 * and triggers the corresponding event (thus 
 		 * EventTriggered will be called). */
@@ -110,6 +115,10 @@ namespace spades { namespace game {
 		virtual void ActionPerformed(Entity&,
 									 EntityEventType,
 									 uint64_t param) { }
+		
+		virtual void InflictDamage(Entity&, const DamageInfo&) { }
+		
+		virtual void Damaged(Entity&, const DamageInfo&) { }
 	};
 	
 	class EntityVisitor {

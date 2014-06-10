@@ -33,14 +33,23 @@ namespace spades { namespace game {
 		ToolSlot tool;
 		IntVector3 blockColor;
 		
+		float moveDistance = 0.f;
+		int moveSteps = 0;
+		bool airborne = false;
+		
 		std::set<PlayerEntityListener *> listeners;
 		
 		std::array<std::string, 3> weaponSkins;
 		std::string bodySkin;
 		
-		
-		
 		virtual void EvaluateTrajectory(Duration);
+		
+		bool FixInput(PlayerInput&);
+		
+		void BoxClipMove(Duration);
+		void WalkMove(Duration);
+		
+		void FlyMove(Duration);
 		
 	public:
 		PlayerEntity(World&);
@@ -51,10 +60,12 @@ namespace spades { namespace game {
 		void AddListener(PlayerEntityListener *l);
 		void RemoveListener(PlayerEntityListener *l);
 		
-		float GetHeight(bool crouch);
+		float GetHeight(PlayerStance);
+		float GetCurrentHeight();
 		float GetBoxSize();
 		
 		std::string GetName() override;
+		bool IsLocallyControlled() override;
 		
 		/** Updates the local state of the player. */
 		void SetPlayerInput(const PlayerInput&);
@@ -64,7 +75,8 @@ namespace spades { namespace game {
 		
 		float GetJumpVelocity();
 		bool IsOnGroundOrWade();
-		
+		bool IsWading();
+		bool IsCurrentToolWeapon();
 		
 		void EventTriggered(EntityEventType,
 							uint64_t param) override;
@@ -83,6 +95,10 @@ namespace spades { namespace game {
 		/** Called when player state was modified, and should be
 		 * sent to the remote peer. */
 		virtual void PlayerInputUpdated(PlayerEntity&) { }
+		
+		virtual void Footstep(PlayerEntity&) { }
+		
+		virtual void Fell(bool hurt) { }
 	};
 	
 } }

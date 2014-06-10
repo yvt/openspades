@@ -53,7 +53,9 @@ namespace spades { namespace game {
 	
 	std::string Entity::GetName() {
 		std::string typeName = GetEntityTypeName(type);
-		return Format("#{0} {1}", entityId, typeName);
+		return Format("#{0} {1}",
+					  entityId ? std::to_string(*entityId) : "(null)",
+					  typeName);
 	}
 	
 	void Entity::EvaluateTrajectory(Duration dt) {
@@ -109,13 +111,32 @@ namespace spades { namespace game {
 	}
 	
 	void Entity::PerformAction(EntityEventType type, uint64_t param) {
-		for (auto *listener: listeners) listener->ActionPerformed(*this, type, param);
+		for (auto *listener: listeners)
+			listener->ActionPerformed(*this, type, param);
 		EventTriggered(type, param);
 	}
 	
 	void Entity::EventTriggered(EntityEventType type, uint64_t param) {
 		SPLog("Unsupported event {0} (param = {1}) for entity {2}",
 			  GetEntityEventTypeName(type).c_str(), param, GetName().c_str());
+	}
+	
+	void Entity::InflictDamage(const DamageInfo& info,
+							   int amount) {
+		SPAssert(info.toEntity == *entityId);
+		
+		for (auto *listener: listeners)
+			listener->InflictDamage(*this, info);
+		Damaged(info, amount);
+	}
+	
+	void Entity::Damaged(const DamageInfo& info,
+						 int amount) {
+		health = std::max(0, health - amount);
+	}
+	
+	bool Entity::IsLocallyControlled() {
+		return false;
 	}
 	
 } }

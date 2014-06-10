@@ -23,7 +23,9 @@
 namespace spades { namespace game {
 	
 	WorldParameters::WorldParameters():
-	playerJumpVelocity(0.36f) { }
+	playerJumpVelocity(0.36f),
+	fallDamageVelocity(0.58f),
+	fatalFallDamageVelocity(1.f) { }
 	
 	World::World():
 	currentTime(0) {
@@ -40,6 +42,18 @@ namespace spades { namespace game {
 	
 	Vector3 World::GetGravity()	{
 		return Vector3(0.f, 0.f, 10.f); // FIXME: correct value
+	}
+	
+	bool World::IsLocalHostServer() {
+		return false; // TODO: IsLocalHostServer
+	}
+	
+	bool World::IsWaterAt(const Vector3& v) {
+		return v.z > 63.f;
+	}
+	
+	stmp::optional<uint32_t> World::GetLocalPlayerId() {
+		return stmp::optional<uint32_t>();
 	}
 	
 } }
