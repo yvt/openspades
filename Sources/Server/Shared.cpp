@@ -829,6 +829,9 @@ namespace spades { namespace protocol {
 				color |= static_cast<uint32_t>(reader.ReadByte()) << 16;
 				color |= static_cast<uint32_t>(health) << 24;
 				edit.color = color;
+				edit.createType = static_cast<BlockCreateType>(reader.ReadByte());
+			} else {
+				edit.destroyType = static_cast<BlockDestroyType>(reader.ReadByte());
 			}
 			p->edits.push_back(edit);
 		}
@@ -860,12 +863,17 @@ namespace spades { namespace protocol {
 			writer.Write(static_cast<uint8_t>(diff.z));
 			if(edit.color) {
 				auto col = *edit.color;
+				if ((col >> 24) == 0) {
+					SPRaise("Cannot encode: block health is zero.");
+				}
 				writer.Write(static_cast<uint8_t>(col >> 24));
 				writer.Write(static_cast<uint8_t>(col));
 				writer.Write(static_cast<uint8_t>(col >> 8));
 				writer.Write(static_cast<uint8_t>(col >> 16));
+				writer.Write(static_cast<uint8_t>(edit.createType));
 			}else{
 				writer.Write(static_cast<uint8_t>(0));
+				writer.Write(static_cast<uint8_t>(edit.destroyType));
 			}
 		}
 		

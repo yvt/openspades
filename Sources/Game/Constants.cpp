@@ -72,4 +72,25 @@ namespace spades { namespace game {
 					  static_cast<int>(t));
 	}
 	
+	std::string GetBlockCreateTypeName(BlockCreateType t) {
+		switch (t) {
+			case BlockCreateType::Unspecified:
+				return "Unspecified";
+			case BlockCreateType::Player:
+				return "Player";
+		}
+		return Format("Unknown ({0})",
+					  static_cast<int>(t));
+	}
+	
+	std::string GetBlockDestroyTypeName(BlockDestroyType t) {
+		switch (t) {
+			case BlockDestroyType::Unspecified:
+				return "Unspecified";
+			case BlockDestroyType::Damage:
+				return "Damage";
+		}
+		return Format("Unknown ({0})",
+					  static_cast<int>(t));
+	}
 } }

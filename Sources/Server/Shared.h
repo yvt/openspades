@@ -90,6 +90,8 @@ namespace spades { namespace protocol {
 	using game::EntityFlags;
 	using game::EntityDeathType;
 	using game::EntityEventType;
+	using game::BlockCreateType;
+	using game::BlockDestroyType;
 	using game::TrajectoryType;
 	using game::Trajectory;
 	using game::PlayerInput;
@@ -402,6 +404,8 @@ namespace spades { namespace protocol {
 	struct TerrainEdit {
 		IntVector3 position;
 		stmp::optional<uint32_t> color; // create color | destroy
+		BlockCreateType createType;
+		BlockDestroyType destroyType;
 	};
 	
 	class TerrainUpdatePacket : public BasePacket
