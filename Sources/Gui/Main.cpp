@@ -48,6 +48,8 @@
 #include <Core/MemoryStream.h>
 #include <Core/Bitmap.h>
 
+#include <NGClient/Client.h>
+
 #ifdef __APPLE__
 #elif __unix
 
@@ -159,7 +161,11 @@ class ThreadQuantumSetter {
 SPADES_SETTING(cg_lastQuickConnectHost, "");
 SPADES_SETTING(cg_protocolVersion, "");
 SPADES_SETTING(cg_playerName, "");
-int cg_autoConnect = 0;
+
+namespace {
+	int cg_autoConnect = 0;
+	bool g_debugNextGenServer = false;
+}
 
 int argsHandler(int argc, char **argv, int &i)
 {
@@ -167,6 +173,10 @@ int argsHandler(int argc, char **argv, int &i)
 		if( !strncasecmp( a, "aos://", 6 ) ) {
 			cg_lastQuickConnectHost = a;
 			cg_autoConnect = 1;
+			return ++i;
+		}
+		if( !strcasecmp( a, "-n" ) ) {
+			g_debugNextGenServer = true;
 			return ++i;
 		}
 		//lm: we attempt to detect protocol version, allowing with or without a prefix 'v='
@@ -201,6 +211,24 @@ namespace spades {
 		ConcreteRunner runner(addr, playerName);
 		runner.RunProtected();
 	}
+	
+	void StartNextGenClient() {
+		class ConcreteRunner: public spades::gui::Runner {
+			ngclient::ClientParams params;
+		protected:
+			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer, spades::client::IAudioDevice *audio) {
+				return new ngclient::Client(renderer, audio, params);
+			}
+		public:
+			ConcreteRunner(const ngclient::ClientParams& params):
+			params(params){ }
+		};
+		ngclient::ClientParams params;
+		params.hostLocalServer = true;
+		ConcreteRunner runner(params);
+		runner.RunProtected();
+	}
+	
 	void StartMainScreen(){
 		class ConcreteRunner: public spades::gui::Runner {
 		protected:
@@ -579,7 +607,9 @@ int main(int argc, char ** argv)
 		pumpEvents();
 
 		// everything is now ready!
-		if( !cg_autoConnect ) {
+		if (g_debugNextGenServer) {
+			spades::StartNextGenClient();
+		} else if( !cg_autoConnect ) {
 			if(!((int)cl_showStartupWindow != 0 ||
 				 splashWindow->IsStartupScreenRequested())) {
 				splashWindow.reset();

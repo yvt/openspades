@@ -19,6 +19,8 @@
  */
 
 #include "World.h"
+#include <Core/FileManager.h>
+#include <Core/IStream.h>
 
 namespace spades { namespace game {
 	
@@ -29,15 +31,18 @@ namespace spades { namespace game {
 	
 	World::World():
 	currentTime(0) {
-		SPNotImplemented();
+		// TODO: provide correct map
+		std::unique_ptr<IStream> stream(FileManager::OpenForReading("Maps/Title.vxl"));
+		gameMap.Set(client::GameMap::Load(stream.get()), false);
 	}
 	
 	World::~World() {
 		
 	}
 	
-	void World::Advance(Duration) {
-		SPNotImplemented();
+	void World::Advance(Duration dt) {
+		//SPNotImplemented();
+		currentTime += dt;
 	}
 	
 	Vector3 World::GetGravity()	{
@@ -45,7 +50,11 @@ namespace spades { namespace game {
 	}
 	
 	bool World::IsLocalHostServer() {
-		return false; // TODO: IsLocalHostServer
+		return true; // TODO: IsLocalHostServer
+	}
+	
+	bool World::IsLocalHostClient() {
+		return true; // TODO: IsLocalHostServer
 	}
 	
 	bool World::IsWaterAt(const Vector3& v) {

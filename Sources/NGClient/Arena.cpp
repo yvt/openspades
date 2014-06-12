@@ -1,0 +1,61 @@
+/*
+ Copyright (c) 2013 yvt
+ 
+ This file is part of OpenSpades.
+ 
+ OpenSpades is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ OpenSpades is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ */
+
+#include "Arena.h"
+#include "Client.h"
+#include <Core/Debug.h>
+#include <GAme/World.h>
+
+namespace spades { namespace ngclient {
+	
+	Arena::Arena(Client *client):
+	client(client),
+	renderer(client->renderer),
+	audio(client->audio) {
+		SPADES_MARK_FUNCTION();
+		
+		SPAssert(renderer);
+		SPAssert(audio);
+		
+		world.Set(new game::World(), false);
+		
+	}
+	
+	Arena::~Arena() {
+		SPADES_MARK_FUNCTION();
+		
+	}
+	
+	void Arena::RunFrame(float dt) {
+		SPADES_MARK_FUNCTION();
+		
+		world->Advance(dt);
+		
+		Render();
+	}
+	
+	bool Arena::WantsToBeClosed() {
+		SPADES_MARK_FUNCTION();
+		return false;
+	}
+	
+	
+} }
+

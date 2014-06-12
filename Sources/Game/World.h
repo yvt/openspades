@@ -58,6 +58,7 @@ namespace spades { namespace game {
 		bool IsWaterAt(const Vector3&);
 		
 		bool IsLocalHostServer();
+		bool IsLocalHostClient();
 		stmp::optional<uint32_t> GetLocalPlayerId();
 		
 		client::GameMap *GetGameMap() { return gameMap; }

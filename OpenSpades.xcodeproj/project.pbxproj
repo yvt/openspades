@@ -31,6 +31,18 @@
 		E80B28DB17B39D160056179E /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = E80B28D817B39D160056179E /* unzip.c */; };
 		E80B28DE17B39EEF0056179E /* ZipFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28DC17B39EEE0056179E /* ZipFileSystem.cpp */; };
 		E80B28E117B4FDDA0056179E /* DynamicMemoryStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28DF17B4FDD40056179E /* DynamicMemoryStream.cpp */; };
+		E818AEC41946BAAB004500C7 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEC21946BAAB004500C7 /* Client.cpp */; };
+		E818AEC51946BAAB004500C7 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEC21946BAAB004500C7 /* Client.cpp */; };
+		E818AEC81946F448004500C7 /* Client_Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEC61946F448004500C7 /* Client_Input.cpp */; };
+		E818AEC91946F448004500C7 /* Client_Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEC61946F448004500C7 /* Client_Input.cpp */; };
+		E818AECC194954BD004500C7 /* Arena.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AECA194954BD004500C7 /* Arena.cpp */; };
+		E818AECD194954BD004500C7 /* Arena.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AECA194954BD004500C7 /* Arena.cpp */; };
+		E818AED0194954EC004500C7 /* Arena_Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AECE194954EC004500C7 /* Arena_Input.cpp */; };
+		E818AED1194954EC004500C7 /* Arena_Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AECE194954EC004500C7 /* Arena_Input.cpp */; };
+		E818AED31949BDF5004500C7 /* Arena_Draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED21949BDF5004500C7 /* Arena_Draw.cpp */; };
+		E818AED41949BDF5004500C7 /* Arena_Draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED21949BDF5004500C7 /* Arena_Draw.cpp */; };
+		E818AED71949D814004500C7 /* NetworkClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED51949D814004500C7 /* NetworkClient.cpp */; };
+		E818AED81949D814004500C7 /* NetworkClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED51949D814004500C7 /* NetworkClient.cpp */; };
 		E81A7C6418610AA900BF3FCE /* SWRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */; };
 		E81A7C6718610BE400BF3FCE /* SWPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6518610BE400BF3FCE /* SWPort.cpp */; };
 		E81A7C6B1861525D00BF3FCE /* SWImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C691861525D00BF3FCE /* SWImage.cpp */; };
@@ -912,6 +924,15 @@
 		E80B28DD17B39EEF0056179E /* ZipFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipFileSystem.h; sourceTree = "<group>"; };
 		E80B28DF17B4FDD40056179E /* DynamicMemoryStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicMemoryStream.cpp; sourceTree = "<group>"; };
 		E80B28E017B4FDD70056179E /* DynamicMemoryStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicMemoryStream.h; sourceTree = "<group>"; };
+		E818AEC21946BAAB004500C7 /* Client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client.cpp; sourceTree = "<group>"; };
+		E818AEC31946BAAB004500C7 /* Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Client.h; sourceTree = "<group>"; };
+		E818AEC61946F448004500C7 /* Client_Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_Input.cpp; sourceTree = "<group>"; };
+		E818AECA194954BD004500C7 /* Arena.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arena.cpp; sourceTree = "<group>"; };
+		E818AECB194954BD004500C7 /* Arena.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Arena.h; sourceTree = "<group>"; };
+		E818AECE194954EC004500C7 /* Arena_Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arena_Input.cpp; sourceTree = "<group>"; };
+		E818AED21949BDF5004500C7 /* Arena_Draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arena_Draw.cpp; sourceTree = "<group>"; };
+		E818AED51949D814004500C7 /* NetworkClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkClient.cpp; sourceTree = "<group>"; };
+		E818AED61949D814004500C7 /* NetworkClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkClient.h; sourceTree = "<group>"; };
 		E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWRenderer.cpp; sourceTree = "<group>"; };
 		E81A7C6318610AA900BF3FCE /* SWRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRenderer.h; sourceTree = "<group>"; };
 		E81A7C6518610BE400BF3FCE /* SWPort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWPort.cpp; sourceTree = "<group>"; };
@@ -1831,6 +1852,22 @@
 			path = unzip;
 			sourceTree = "<group>";
 		};
+		E818AEC119469EBC004500C7 /* NGClient */ = {
+			isa = PBXGroup;
+			children = (
+				E818AEC21946BAAB004500C7 /* Client.cpp */,
+				E818AEC31946BAAB004500C7 /* Client.h */,
+				E818AEC61946F448004500C7 /* Client_Input.cpp */,
+				E818AECA194954BD004500C7 /* Arena.cpp */,
+				E818AECB194954BD004500C7 /* Arena.h */,
+				E818AECE194954EC004500C7 /* Arena_Input.cpp */,
+				E818AED21949BDF5004500C7 /* Arena_Draw.cpp */,
+				E818AED51949D814004500C7 /* NetworkClient.cpp */,
+				E818AED61949D814004500C7 /* NetworkClient.h */,
+			);
+			path = NGClient;
+			sourceTree = "<group>";
+		};
 		E81A7C68186140B000BF3FCE /* Software Renderer */ = {
 			isa = PBXGroup;
 			children = (
@@ -2323,6 +2360,7 @@
 				E8CF03AF178EE2CD000683D4 /* Core */,
 				E8D0E5D418F9A38200DE3BDB /* Game */,
 				E8D0E5D518F9A55A00DE3BDB /* Server */,
+				E818AEC119469EBC004500C7 /* NGClient */,
 				E8CF03A2178EDE56000683D4 /* Client */,
 				E8CF039E178EDDCF000683D4 /* Draw */,
 				E8CF039D178EDDBF000683D4 /* Gui */,
@@ -3288,6 +3326,7 @@
 				E82E677118EA7972004DBA18 /* MemoryStream.cpp in Sources */,
 				E8D0E72118FABC3600DE3BDB /* bfinit.cpp in Sources */,
 				E8D0E7D418FABC3600DE3BDB /* socketft.cpp in Sources */,
+				E818AECD194954BD004500C7 /* Arena.cpp in Sources */,
 				E82E677218EA7972004DBA18 /* ZipFileSystem.cpp in Sources */,
 				E82E677318EA7972004DBA18 /* DynamicMemoryStream.cpp in Sources */,
 				E8D0E7FA18FABC3600DE3BDB /* whrlpool.cpp in Sources */,
@@ -3377,6 +3416,7 @@
 				E8D0E79718FABC3600DE3BDB /* panama.cpp in Sources */,
 				E8D0E73718FABC3600DE3BDB /* crc.cpp in Sources */,
 				E8D0E7E618FABC3600DE3BDB /* tigertab.cpp in Sources */,
+				E818AEC51946BAAB004500C7 /* Client.cpp in Sources */,
 				E8D0E79F18FABC3600DE3BDB /* pubkey.cpp in Sources */,
 				E82E67A818EA7972004DBA18 /* IInputInterface.cpp in Sources */,
 				E82E67A918EA7972004DBA18 /* IImage.cpp in Sources */,
@@ -3397,6 +3437,7 @@
 				E8D0E7DE18FABC3600DE3BDB /* tea.cpp in Sources */,
 				E82E67B418EA7972004DBA18 /* Client.cpp in Sources */,
 				E82E67B518EA7972004DBA18 /* Client_Input.cpp in Sources */,
+				E818AED1194954EC004500C7 /* Arena_Input.cpp in Sources */,
 				E8D0E8151901926000DE3BDB /* Entity.cpp in Sources */,
 				E82E67B618EA7972004DBA18 /* Client_Update.cpp in Sources */,
 				E82E67B718EA7972004DBA18 /* Client_NetHandler.cpp in Sources */,
@@ -3443,6 +3484,7 @@
 				E82E67D018EA7972004DBA18 /* GameMap.cpp in Sources */,
 				E82E67D118EA7972004DBA18 /* IGameMapListener.cpp in Sources */,
 				E8D0E71B18FABC3600DE3BDB /* basecode.cpp in Sources */,
+				E818AED41949BDF5004500C7 /* Arena_Draw.cpp in Sources */,
 				E8D0E76F18FABC3600DE3BDB /* gzip.cpp in Sources */,
 				E82E67D218EA7972004DBA18 /* GameMapWrapper.cpp in Sources */,
 				E82E67D318EA7972004DBA18 /* World.cpp in Sources */,
@@ -3458,6 +3500,7 @@
 				E82E67DA18EA7972004DBA18 /* SWImageRenderer.cpp in Sources */,
 				E8D0E7CC18FABC3600DE3BDB /* shark.cpp in Sources */,
 				E82E67DB18EA7972004DBA18 /* SWFeatureLevel.cpp in Sources */,
+				E818AED81949D814004500C7 /* NetworkClient.cpp in Sources */,
 				E82E67DC18EA7972004DBA18 /* SWMapRenderer.cpp in Sources */,
 				E82E67DD18EA7972004DBA18 /* SWFlatMapRenderer.cpp in Sources */,
 				E82E67DE18EA7972004DBA18 /* SWModelRenderer.cpp in Sources */,
@@ -3497,6 +3540,7 @@
 				E8D0E76B18FABC3600DE3BDB /* gfpcrypt.cpp in Sources */,
 				E82E66F718EA7954004DBA18 /* GLLensDustFilter.cpp in Sources */,
 				E8D0E75118FABC3600DE3BDB /* eccrypto.cpp in Sources */,
+				E818AEC91946F448004500C7 /* Client_Input.cpp in Sources */,
 				E82E66F818EA7954004DBA18 /* GLImage.cpp in Sources */,
 				E82E66F918EA7954004DBA18 /* GLFlatMapRenderer.cpp in Sources */,
 				E82E66FA18EA7954004DBA18 /* IGLSpriteRenderer.cpp in Sources */,
@@ -3746,6 +3790,7 @@
 				E8D0E77A18FABC3600DE3BDB /* integer.cpp in Sources */,
 				E8D0E75818FABC3600DE3BDB /* eprecomp.cpp in Sources */,
 				E8E0AFAF179ADDCC00C6B5A9 /* ParticleSpriteEntity.cpp in Sources */,
+				E818AECC194954BD004500C7 /* Arena.cpp in Sources */,
 				E81A7C741863566200BF3FCE /* SWFeatureLevel.cpp in Sources */,
 				E8E0AFB2179AF4E700C6B5A9 /* SmokeSpriteEntity.cpp in Sources */,
 				E8E0AFB5179BF25B00C6B5A9 /* Settings.cpp in Sources */,
@@ -3771,6 +3816,7 @@
 				E8D0E73018FABC3600DE3BDB /* channels.cpp in Sources */,
 				E8E446A4179EA60900BE8855 /* GLMapShadowRenderer.cpp in Sources */,
 				E8E446A7179EAC7900BE8855 /* GLShadowShader.cpp in Sources */,
+				E818AED31949BDF5004500C7 /* Arena_Draw.cpp in Sources */,
 				E8E446AA179F822D00BE8855 /* TargaWriter.cpp in Sources */,
 				E8710E6E1940633A00C2EE62 /* GLFogShader.cpp in Sources */,
 				E89A648E17A11B4F00FDA893 /* GLModelRenderer.cpp in Sources */,
@@ -3818,6 +3864,7 @@
 				E8D0E7F318FABC3600DE3BDB /* vmac.cpp in Sources */,
 				E81A7C6B1861525D00BF3FCE /* SWImage.cpp in Sources */,
 				E80B28D017AFE68A0056179E /* TCGameMode.cpp in Sources */,
+				E818AED71949D814004500C7 /* NetworkClient.cpp in Sources */,
 				E838D41F18AC726B00EE3C53 /* Strings.cpp in Sources */,
 				E87AB82318BB3958006B7D73 /* SdlImageReader.cpp in Sources */,
 				E80B28D317AFF7810056179E /* TCProgressView.cpp in Sources */,
@@ -3882,6 +3929,7 @@
 				E8B6B6AC17DE27B500E35523 /* as_parser.cpp in Sources */,
 				E8B6B6AD17DE27B500E35523 /* as_restore.cpp in Sources */,
 				E8B6B6AE17DE27B500E35523 /* as_scriptcode.cpp in Sources */,
+				E818AEC81946F448004500C7 /* Client_Input.cpp in Sources */,
 				E8D0E7F518FABC3600DE3BDB /* wait.cpp in Sources */,
 				E8B6B6AF17DE27B500E35523 /* as_scriptengine.cpp in Sources */,
 				E8B6B6B017DE27B500E35523 /* as_scriptfunction.cpp in Sources */,
@@ -3911,6 +3959,7 @@
 				E8B6B6EB17E40AF500E35523 /* ScriptManager.cpp in Sources */,
 				E8B6B6EE17E40B5900E35523 /* IImage.cpp in Sources */,
 				E8D0E75018FABC3600DE3BDB /* eccrypto.cpp in Sources */,
+				E818AEC41946BAAB004500C7 /* Client.cpp in Sources */,
 				E8D0E7C118FABC3600DE3BDB /* seed.cpp in Sources */,
 				E8B6B6F117E40DAC00E35523 /* RefCountedObject.cpp in Sources */,
 				E8B6B6F417E40E8300E35523 /* IModel.cpp in Sources */,
@@ -3948,6 +3997,7 @@
 				E8B6B72B17E6095900E35523 /* GLLensDustFilter.cpp in Sources */,
 				E8D0E77E18FABC3600DE3BDB /* luc.cpp in Sources */,
 				E8428888189FE1710060743D /* Fog.vs in Sources */,
+				E818AED0194954EC004500C7 /* Arena_Input.cpp in Sources */,
 				E8B6B72E17E68B1C00E35523 /* GLSoftLitSpriteRenderer.cpp in Sources */,
 				E8B6B73017E8C4F000E35523 /* IToolSkin.cpp in Sources */,
 				E8B6B73417E8CE1C00E35523 /* ScriptFunction.cpp in Sources */,
