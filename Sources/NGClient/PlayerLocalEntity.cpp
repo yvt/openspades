@@ -103,7 +103,7 @@ namespace spades { namespace ngclient {
 		SPAssert(&e == entity);
 	}
 	
-	void PlayerLocalEntity::Fell(game::PlayerEntity &ee,
+	void PlayerLocalEntity::Fell(game::PlayerEntity &e,
 								 bool hurt) {
 		SPADES_MARK_FUNCTION();
 		
