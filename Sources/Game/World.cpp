@@ -23,6 +23,10 @@
 #include <Core/IStream.h>
 #include "Entity.h"
 #include "PlayerEntity.h"
+#include <Client/GameMapWrapper.h>
+#include <deque>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace spades { namespace game {
 	
@@ -36,10 +40,12 @@ namespace spades { namespace game {
 		// TODO: provide correct map
 		std::unique_ptr<IStream> stream(FileManager::OpenForReading("Maps/Title.vxl"));
 		gameMap.Set(client::GameMap::Load(stream.get()), false);
+		
+		gameMapWrapper.reset(new client::GameMapWrapper(gameMap));
 	}
 	
 	World::~World() {
-		
+		gameMapWrapper.release();
 	}
 	
 	void World::AddListener(WorldListener *l) {
@@ -162,5 +168,201 @@ namespace spades { namespace game {
 		return pe;
 	}
 	
+#pragma mark - Map Edits
+	
+	bool World::IsValidMapCoord(const IntVector3 &pos) {
+		return pos.x >= 0 && pos.y >= 0 && pos.z >= 0 &&
+		pos.x < gameMap->Width() && pos.y < gameMap->Height() &&
+		pos.z < gameMap->Depth();
+	}
+	
+	void World::CreateBlock(const spades::IntVector3& pos, uint32_t color) {
+		SPAssert(IsLocalHostServer());
+		SPAssert(IsValidMapCoord(pos));
+		
+		MapEdit edit;
+		edit.position = pos;
+		edit.color = color;
+		
+		auto it = mapEdits.find(pos);
+		if (it == mapEdits.end()) {
+			mapEdits.emplace(pos, edit);
+		} else {
+			it->second = edit;
+		}
+	}
+	
+	void World::DestroyBlock(const spades::IntVector3 &pos) {
+		SPAssert(IsLocalHostServer());
+		SPAssert(IsValidMapCoord(pos));
+		
+		MapEdit edit;
+		edit.position = pos;
+		
+		auto it = mapEdits.find(pos);
+		if (it == mapEdits.end()) {
+			mapEdits.emplace(pos, edit);
+		} else {
+			it->second = edit;
+		}
+	}
+	
+	// FIXME: duplicate code with Client/World.cpp
+	static std::vector<std::vector<client::CellPos>> ClusterizeBlocks(const std::vector<client::CellPos>& blocks) {
+		using namespace client;
+		
+		std::unordered_map<CellPos, bool, CellPosHash> blockMap;
+		for(const auto& block: blocks) {
+			blockMap[block] = true;
+		}
+		
+		std::vector<std::vector<CellPos>> ret;
+		std::deque<decltype(blockMap)::iterator> queue;
+		
+		ret.reserve(64);
+		// wish I could `reserve()` queue...
+		
+		std::size_t addedCount = 0;
+		
+		for(auto it = blockMap.begin(); it != blockMap.end(); it++) {
+			SPAssert(queue.empty());
+			
+			if(!it->second) continue;
+			queue.emplace_back(it);
+			
+			std::vector<client::CellPos> outBlocks;
+			
+			while(!queue.empty()) {
+				auto blockitem = queue.front();
+				queue.pop_front();
+				
+				if(!blockitem->second) continue;
+				
+				auto pos = blockitem->first;
+				outBlocks.emplace_back(pos);
+				blockitem->second = false;
+				
+				decltype(blockMap)::iterator nextIt;
+				
+				nextIt = blockMap.find(CellPos(pos.x - 1, pos.y, pos.z));
+				if(nextIt != blockMap.end() && nextIt->second) {
+					queue.emplace_back(nextIt);
+				}
+				nextIt = blockMap.find(CellPos(pos.x + 1, pos.y, pos.z));
+				if(nextIt != blockMap.end() && nextIt->second) {
+					queue.emplace_back(nextIt);
+				}
+				nextIt = blockMap.find(CellPos(pos.x, pos.y - 1, pos.z));
+				if(nextIt != blockMap.end() && nextIt->second) {
+					queue.emplace_back(nextIt);
+				}
+				nextIt = blockMap.find(CellPos(pos.x, pos.y + 1, pos.z));
+				if(nextIt != blockMap.end() && nextIt->second) {
+					queue.emplace_back(nextIt);
+				}
+				nextIt = blockMap.find(CellPos(pos.x, pos.y, pos.z - 1));
+				if(nextIt != blockMap.end() && nextIt->second) {
+					queue.emplace_back(nextIt);
+				}
+				nextIt = blockMap.find(CellPos(pos.x, pos.y, pos.z + 1));
+				if(nextIt != blockMap.end() && nextIt->second) {
+					queue.emplace_back(nextIt);
+				}
+			}
+			
+			SPAssert(!outBlocks.empty());
+			addedCount += outBlocks.size();
+			ret.emplace_back(std::move(outBlocks));
+		}
+		
+		SPAssert(addedCount == blocks.size());
+		
+		return std::move(ret);
+	}
+
+	
+	void World::FlushMapEdits() {
+		// ReceivedMapEdits, which is called by client, uses
+		// this function, so don't assert IsLocalHostServer().
+		using namespace client;
+		
+		if (mapEdits.empty()) return;
+		
+		// add blocks
+		std::vector<CellPos> removedBlocks;
+		std::unordered_set<CellPos, CellPosHash> removedBlocksSet;
+		for (const auto& pair: mapEdits) {
+			const auto& edit = pair.second;
+			const auto& p = edit.position;
+			if (edit.color) {
+				if (gameMap->IsSolid(p.x, p.y, p.z)) {
+					gameMap->Set(p.x, p.y, p.z, true, *edit.color);
+					for (auto *listen: listeners)
+						listen->BlockUpdated(IntVector3(p.x, p.y, p.z),
+											 edit.createType);
+				} else {
+					gameMapWrapper->AddBlock(p.x, p.y, p.z,
+											 *edit.color);
+					for (auto *listen: listeners)
+						listen->BlockCreated(IntVector3(p.x, p.y, p.z),
+											 edit.createType);
+				}
+				
+			} else {
+				removedBlocks.emplace_back(p.x, p.y, p.z);
+				removedBlocksSet.emplace(p.x, p.y, p.z);
+				
+				for (auto *listen: listeners)
+					listen->BlockDestroyed(IntVector3(p.x, p.y, p.z),
+										   edit.destroyType);
+			}
+		}
+		
+		// remove blocks
+		auto fallen = gameMapWrapper->RemoveBlocks(removedBlocks);
+		if (fallen.size() > 0) {
+			auto clusters = ClusterizeBlocks(fallen);
+			std::vector<IntVector3> blocks;
+			
+			for (const auto& cluster: clusters) {
+				blocks.clear();
+				for (const auto& p: cluster) {
+					if (removedBlocksSet.find(p) != removedBlocksSet.end()) {
+						blocks.emplace_back(p.x, p.y, p.z);
+					}
+				}
+				if (!blocks.empty()) {
+					for (auto *l: listeners)
+						l->BlocksFalling(blocks);
+				}
+			}
+			
+			for (const auto& cluster: clusters) {
+				for (const auto& p: cluster) {
+					gameMap->Set(p.x, p.y, p.z, false, 0);
+				}
+			}
+			
+		} else {
+			SPAssert(removedBlocks.empty());
+		}
+		
+		std::vector<MapEdit> mapEditList;
+		for (const auto& pair: mapEdits) {
+			mapEditList.emplace_back(std::move(pair.second));
+		}
+		mapEdits.clear();
+		
+		for (auto *l: listeners)
+			l->FlushMapEdits(mapEditList);
+	}
+	
+	void World::ReceivedMapEdits(const std::vector<MapEdit> &edits) {
+		for (const auto& edit: edits) {
+			SPAssert(IsValidMapCoord(edit.position));
+			mapEdits[edit.position] = edit;
+		}
+		FlushMapEdits();
+	}
 } }
 

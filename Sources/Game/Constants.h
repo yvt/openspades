@@ -56,6 +56,31 @@ namespace spades { namespace game {
 	};
 	std::string GetEntityDeathTypeName(EntityDeathType);
 	
+	enum class BlockCreateType {
+		/** It's unknown how was the block created. */
+		Unspecified = 0,
+		
+		/** The block was created by a player. */
+		Player
+	};
+	std::string GetBlockCreateTypeName(BlockCreateType);
+	
+	enum class BlockDestroyType {
+		/** It's unknown how was the block destroyed. */
+		Unspecified = 0,
+		
+		/** Block was destroyed because its health became zero. */
+		Damage
+	};
+	std::string GetBlockDestroyTypeName(BlockDestroyType);
+	
+	struct MapEdit {
+		IntVector3 position;
+		stmp::optional<uint32_t> color; // create color | destroy
+		BlockCreateType createType;
+		BlockDestroyType destroyType;
+	};
+	
 	struct EntityFlags {
 		/** Entity can be hit by a player. */
 		bool playerClip : 1;

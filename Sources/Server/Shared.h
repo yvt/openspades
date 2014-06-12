@@ -100,6 +100,7 @@ namespace spades { namespace protocol {
 	using game::HitType;
 	using game::SkinId;
 	using game::DamageInfo;
+	using game::MapEdit;
 	using TimeStampType = std::uint64_t;
 	
 	class GreetingPacket;
@@ -401,13 +402,6 @@ namespace spades { namespace protocol {
 		std::vector<EntityUpdateItem> items;
 	};
 	
-	struct TerrainEdit {
-		IntVector3 position;
-		stmp::optional<uint32_t> color; // create color | destroy
-		BlockCreateType createType;
-		BlockDestroyType destroyType;
-	};
-	
 	class TerrainUpdatePacket : public BasePacket
 	<TerrainUpdatePacket,
 	PacketUsage::ServerOnly, PacketType::TerrainUpdate> {
@@ -417,7 +411,7 @@ namespace spades { namespace protocol {
 		
 		virtual std::vector<char> Generate() const;
 		
-		std::vector<TerrainEdit> edits;
+		std::vector<MapEdit> edits;
 	};
 	
 	class EntityEventPacket : public BasePacket

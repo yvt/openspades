@@ -27,6 +27,10 @@
 #include <map>
 #include <set>
 
+namespace spades { namespace client {
+	class GameMapWrapper;
+} }
+
 namespace spades { namespace game {
 	
 	/** World-global parameters. */
@@ -46,13 +50,30 @@ namespace spades { namespace game {
 	
 	class PlayerEntity;
 	
+	
 	class World: public RefCountedObject
 	{
 		Timepoint currentTime;
 		WorldParameters params;
 		Handle<client::GameMap> gameMap;
+		std::unique_ptr<client::GameMapWrapper> gameMapWrapper;
 		std::map<uint32_t, Handle<Entity>> entities;
 		std::set<WorldListener *> listeners;
+		
+		struct IntVectorComparator {
+			inline bool operator ()
+			(const IntVector3& a,
+			 const IntVector3& b) const {
+				if (a.x < b.x) return true;
+				if (a.x > b.x) return false;
+				if (a.y < b.y) return true;
+				if (a.y > b.y) return false;
+				return a.z < b.z;
+			}
+		};
+		std::map<IntVector3, MapEdit,
+		IntVectorComparator> mapEdits;
+		
 	public:
 		World();
 		~World();
@@ -61,10 +82,26 @@ namespace spades { namespace game {
 		void RemoveListener(WorldListener *);
 		
 		Entity *FindEntity(uint32_t);
+		/** adds an entity to the world.
+		 * server only. client networking code might call this. */
 		void LinkEntity(Entity *,
 						stmp::optional<uint32_t> entityId = stmp::optional<uint32_t>());
+		/** removes an entity from the world.
+		 * server only. client networking code might call this. */
 		void UnlinkEntity(Entity *);
 		std::vector<Entity *> GetAllEntities();
+		
+		/** server only. */
+		void CreateBlock(const IntVector3&,
+						 uint32_t color);
+		/** server only. */
+		void DestroyBlock(const IntVector3&);
+		/** intended to be called only by server.
+		 * */
+		void FlushMapEdits();
+		bool IsValidMapCoord(const IntVector3&);
+		
+		void ReceivedMapEdits(const std::vector<MapEdit>&);
 		
 		Timepoint GetCurrentTime() const { return currentTime; }
 		
@@ -82,6 +119,10 @@ namespace spades { namespace game {
 		PlayerEntity *GetLocalPlayerEntity();
 		// TODO: Player *GetLocalPlayer()
 		
+		/** Returns game map.
+		 * Be aware that modifying this map directly
+		 * does result in a serious inconsistency problem.
+		 * Always use map edit APIs. */
 		client::GameMap *GetGameMap() { return gameMap; }
 		
 		const WorldParameters& GetParameters() const
@@ -96,6 +137,18 @@ namespace spades { namespace game {
 		
 		virtual void EntityLinked(World&, Entity *) { }
 		virtual void EntityUnlinked(World&, Entity *) { }
+		
+		virtual void BlockCreated(const IntVector3&,
+								  BlockCreateType) { }
+		virtual void BlockUpdated(const IntVector3&,
+								  BlockCreateType) { }
+		virtual void BlockDestroyed(const IntVector3&,
+									BlockDestroyType) { }
+		
+		virtual void BlocksFalling(const std::vector<IntVector3>&) { }
+		
+		virtual void FlushMapEdits(const std::vector<MapEdit>&) { }
+		
 	};
 	
 } }

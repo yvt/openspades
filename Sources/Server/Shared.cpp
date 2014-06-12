@@ -807,7 +807,7 @@ namespace spades { namespace protocol {
 		
 		IntVector3 cursor(0, 0, 0);
 		while(!reader.IsEndOfPacket()) {
-			TerrainEdit edit;
+			MapEdit edit;
 			IntVector3 ps;
 			ps.x = static_cast<int8_t>(reader.ReadByte());
 			if(ps.x == -128) {
