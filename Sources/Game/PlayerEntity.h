@@ -98,7 +98,7 @@ namespace spades { namespace game {
 		
 		virtual void Footstep(PlayerEntity&) { }
 		
-		virtual void Fell(bool hurt) { }
+		virtual void Fell(PlayerEntity&, bool hurt) { }
 	};
 	
 } }

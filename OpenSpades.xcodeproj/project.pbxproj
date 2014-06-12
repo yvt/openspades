@@ -43,6 +43,12 @@
 		E818AED41949BDF5004500C7 /* Arena_Draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED21949BDF5004500C7 /* Arena_Draw.cpp */; };
 		E818AED71949D814004500C7 /* NetworkClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED51949D814004500C7 /* NetworkClient.cpp */; };
 		E818AED81949D814004500C7 /* NetworkClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED51949D814004500C7 /* NetworkClient.cpp */; };
+		E818AEDA1949E0D1004500C7 /* Arena_World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED91949E0D1004500C7 /* Arena_World.cpp */; };
+		E818AEDB1949E0D1004500C7 /* Arena_World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED91949E0D1004500C7 /* Arena_World.cpp */; };
+		E818AEDE1949E30D004500C7 /* LocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEDC1949E30D004500C7 /* LocalEntity.cpp */; };
+		E818AEDF1949E30D004500C7 /* LocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEDC1949E30D004500C7 /* LocalEntity.cpp */; };
+		E818AEE21949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */; };
+		E818AEE31949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */; };
 		E81A7C6418610AA900BF3FCE /* SWRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */; };
 		E81A7C6718610BE400BF3FCE /* SWPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6518610BE400BF3FCE /* SWPort.cpp */; };
 		E81A7C6B1861525D00BF3FCE /* SWImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C691861525D00BF3FCE /* SWImage.cpp */; };
@@ -933,6 +939,11 @@
 		E818AED21949BDF5004500C7 /* Arena_Draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arena_Draw.cpp; sourceTree = "<group>"; };
 		E818AED51949D814004500C7 /* NetworkClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkClient.cpp; sourceTree = "<group>"; };
 		E818AED61949D814004500C7 /* NetworkClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkClient.h; sourceTree = "<group>"; };
+		E818AED91949E0D1004500C7 /* Arena_World.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arena_World.cpp; sourceTree = "<group>"; };
+		E818AEDC1949E30D004500C7 /* LocalEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalEntity.cpp; sourceTree = "<group>"; };
+		E818AEDD1949E30D004500C7 /* LocalEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalEntity.h; sourceTree = "<group>"; };
+		E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerLocalEntity.cpp; sourceTree = "<group>"; };
+		E818AEE11949EA08004500C7 /* PlayerLocalEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerLocalEntity.h; sourceTree = "<group>"; };
 		E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWRenderer.cpp; sourceTree = "<group>"; };
 		E81A7C6318610AA900BF3FCE /* SWRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRenderer.h; sourceTree = "<group>"; };
 		E81A7C6518610BE400BF3FCE /* SWPort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWPort.cpp; sourceTree = "<group>"; };
@@ -1862,8 +1873,13 @@
 				E818AECB194954BD004500C7 /* Arena.h */,
 				E818AECE194954EC004500C7 /* Arena_Input.cpp */,
 				E818AED21949BDF5004500C7 /* Arena_Draw.cpp */,
+				E818AED91949E0D1004500C7 /* Arena_World.cpp */,
 				E818AED51949D814004500C7 /* NetworkClient.cpp */,
 				E818AED61949D814004500C7 /* NetworkClient.h */,
+				E818AEDC1949E30D004500C7 /* LocalEntity.cpp */,
+				E818AEDD1949E30D004500C7 /* LocalEntity.h */,
+				E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */,
+				E818AEE11949EA08004500C7 /* PlayerLocalEntity.h */,
 			);
 			path = NGClient;
 			sourceTree = "<group>";
@@ -3243,6 +3259,7 @@
 				E82E673B18EA7972004DBA18 /* as_callfunc_sh4.cpp in Sources */,
 				E8D0E7BE18FABC3600DE3BDB /* salsa.cpp in Sources */,
 				E82E673C18EA7972004DBA18 /* as_callfunc_x64_gcc.cpp in Sources */,
+				E818AEDF1949E30D004500C7 /* LocalEntity.cpp in Sources */,
 				E8D0E60B18FABBB000DE3BDB /* algparam.cpp in Sources */,
 				E82E673D18EA7972004DBA18 /* as_callfunc_x64_mingw.cpp in Sources */,
 				E8D0E7AD18FABC3600DE3BDB /* rdtables.cpp in Sources */,
@@ -3271,6 +3288,7 @@
 				E82E674C18EA7972004DBA18 /* as_parser.cpp in Sources */,
 				E82E674D18EA7972004DBA18 /* as_restore.cpp in Sources */,
 				E8D0E73518FABC3600DE3BDB /* cpu.cpp in Sources */,
+				E818AEDB1949E0D1004500C7 /* Arena_World.cpp in Sources */,
 				E82E674E18EA7972004DBA18 /* as_scriptcode.cpp in Sources */,
 				E82E674F18EA7972004DBA18 /* as_scriptengine.cpp in Sources */,
 				E82E675018EA7972004DBA18 /* as_scriptfunction.cpp in Sources */,
@@ -3466,6 +3484,7 @@
 				E82E67C618EA7972004DBA18 /* ClientUIHelper.cpp in Sources */,
 				E8D0E60D18FABBB000DE3BDB /* filters.cpp in Sources */,
 				E8D0E7BC18FABC3600DE3BDB /* safer.cpp in Sources */,
+				E818AEE31949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */,
 				E82E67C718EA7972004DBA18 /* Quake3Font.cpp in Sources */,
 				E82E67C818EA7972004DBA18 /* IFont.cpp in Sources */,
 				E8D0E5DC18F9A64400DE3BDB /* World.cpp in Sources */,
@@ -3671,6 +3690,7 @@
 				E8CF041117904ABC000683D4 /* IStream.cpp in Sources */,
 				E8CF041417904E8D000683D4 /* StdStream.cpp in Sources */,
 				E8D0E5D218F3215000DE3BDB /* GLNonlinearizeFilter.cpp in Sources */,
+				E818AEDE1949E30D004500C7 /* LocalEntity.cpp in Sources */,
 				E8D0E72218FABC3600DE3BDB /* blowfish.cpp in Sources */,
 				E8D0E73C18FABC3600DE3BDB /* default.cpp in Sources */,
 				E8CF0417179052F7000683D4 /* DirectoryFileSystem.cpp in Sources */,
@@ -3741,6 +3761,7 @@
 				E8D0E79018FABC3600DE3BDB /* nbtheory.cpp in Sources */,
 				E8D0E80518FABC3600DE3BDB /* zlib.cpp in Sources */,
 				E82E66B318E9A35C004DBA18 /* Client_FPSCounter.cpp in Sources */,
+				E818AEE21949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */,
 				E834F55317944779004EBE88 /* NetClient.cpp in Sources */,
 				E8D0E71018FABC3600DE3BDB /* arc4.cpp in Sources */,
 				E834F5561794BBD4004EBE88 /* Debug.cpp in Sources */,
@@ -3759,6 +3780,7 @@
 				E8D0E7CD18FABC3600DE3BDB /* sharkbox.cpp in Sources */,
 				E834F56B17979FD7004EBE88 /* IFont.cpp in Sources */,
 				E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */,
+				E818AEDA1949E0D1004500C7 /* Arena_World.cpp in Sources */,
 				E8D0E7C718FABC3600DE3BDB /* sha3.cpp in Sources */,
 				E834F56F1797D934004EBE88 /* ChatWindow.cpp in Sources */,
 				E8E0AF8A1798278000C6B5A9 /* GLImageRenderer.cpp in Sources */,

@@ -72,7 +72,7 @@ namespace spades { namespace game {
 		void RemoveListener(EntityListener *l);
 		
 		stmp::optional<uint32_t> GetId() const { return entityId; }
-		void SetId(uint32_t entityId);
+		void SetId(stmp::optional<uint32_t> entityId);
 		
 		EntityType GetType() const { return type; }
 		
@@ -119,6 +119,8 @@ namespace spades { namespace game {
 		virtual void InflictDamage(Entity&, const DamageInfo&) { }
 		
 		virtual void Damaged(Entity&, const DamageInfo&) { }
+		
+		virtual void Unlinked(Entity&) { }
 	};
 	
 	class EntityVisitor {

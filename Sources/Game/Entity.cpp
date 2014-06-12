@@ -42,9 +42,12 @@ namespace spades { namespace game {
 		listeners.erase(l);
 	}
 	
-	void Entity::SetId(uint32_t entityId) {
-		// FIXME: should do some checking
+	void Entity::SetId(stmp::optional<uint32_t> entityId) {
 		this->entityId = entityId;
+		if (!entityId) {
+			for (auto *listener: listeners)
+				listener->Unlinked(*this);
+		}
 	}
 	
 	void Entity::Advance(Duration dt) {

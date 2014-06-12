@@ -329,10 +329,10 @@ namespace spades { namespace game {
 					InflictDamage(info, amt);
 				}
 				for (auto *listener: listeners)
-					listener->Fell(true);
+					listener->Fell(*this, true);
 			} else if (vel.z > slowdownFallVelocity) {
 				for (auto *listener: listeners)
-					listener->Fell(false);
+					listener->Fell(*this, false);
 				vel *= .5f;
 			}
 			

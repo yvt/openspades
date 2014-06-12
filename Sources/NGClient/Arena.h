@@ -22,6 +22,9 @@
 #include <Gui/View.h>
 #include <Client/IRenderer.h>
 #include <Client/IAudioDevice.h>
+#include <Game/World.h>
+#include <list>
+#include <unordered_map>
 
 namespace spades { namespace game {
 	class World;
@@ -31,10 +34,6 @@ namespace spades { namespace ngclient {
 	
 	class Client;
 	
-	enum class CameraMode {
-		
-	};
-	
 	class ArenaCamera {
 	public:
 		virtual ~ArenaCamera() { }
@@ -42,7 +41,12 @@ namespace spades { namespace ngclient {
 		(client::IRenderer&) = 0;
 	};
 	
-	class Arena: public RefCountedObject
+	class LocalEntity;
+	class PlayerLocalEntity;
+	class PlayerLocalEntityFactory;
+	
+	class Arena:
+	public RefCountedObject, public game::WorldListener
 	{
 		Handle<Client> client;
 		Handle<client::IRenderer> renderer;
@@ -61,8 +65,25 @@ namespace spades { namespace ngclient {
 		};
 		DefaultCamera defaultCamera { *this };
 		
+		std::list<std::unique_ptr<LocalEntity>>
+		localEntities;
+		std::unordered_map<game::Entity *,
+		std::list<std::unique_ptr<LocalEntity>>::iterator>
+		entityToLocalEntity;
+		std::unique_ptr<PlayerLocalEntityFactory>
+		playerLocalEntityFactory;
+		void AddLocalEntity(LocalEntity *);
+		void AddLocalEntityForEntity(LocalEntity *,
+									 game::Entity&);
+		void LoadEntities();
+		LocalEntity *GetLocalEntityForEntity(game::Entity *);
+		PlayerLocalEntity *GetLocalPlayerLocalEntity();
+		
+		void Initialize();
+		
 		void Render();
 		client::SceneDefinition CreateSceneDefinition();
+		
 		
 	public:
 		
@@ -70,7 +91,7 @@ namespace spades { namespace ngclient {
 		
 		~Arena();
 		
-		/*---- implementations of gui::View ---- */
+		/*---- interface like gui::View ---- */
 		void MouseEvent(float x, float y);
 		void KeyEvent(const std::string&,
 					  bool down);
@@ -89,8 +110,10 @@ namespace spades { namespace ngclient {
 		
 		bool WantsToBeClosed(); // Arena.cpp
 		
-	
-		
+		/*---- implementations of game::WorldListener ----*/
+		// Arena_world.cpp
+		virtual void EntityLinked(game::World&, game::Entity *);
+		virtual void EntityUnlinked(game::World&, game::Entity *);
 		
 	};
 	

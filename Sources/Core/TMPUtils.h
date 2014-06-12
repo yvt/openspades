@@ -54,6 +54,12 @@ namespace stmp {
 		using Allocator = std::allocator<T>;
 	public:
 		optional():has_some(false){}
+		optional(const T& v):has_some(false){
+			reset(v);
+		}
+		optional(T&& v):has_some(false){
+			reset(std::forward<T>(v));
+		}
 		optional(optional& o):has_some(o.has_some) {
 			if(has_some) { Allocator().construct(get_pointer(), o.get()); }
 		}
@@ -80,9 +86,11 @@ namespace stmp {
 								  std::forward<Args>(args)...);
 			has_some = true;
 		}
-		template<class U>
-		void operator =(U&& o) {
-			reset(std::forward<U>(o));
+		void operator =(const T& o) {
+			reset(o);
+		}
+		void operator =(T&& o) {
+			reset(std::move(o));
 		}
 		void operator =(const optional& o) {
 			if (o) reset(*o); else reset();

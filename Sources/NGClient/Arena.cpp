@@ -21,7 +21,10 @@
 #include "Arena.h"
 #include "Client.h"
 #include <Core/Debug.h>
-#include <GAme/World.h>
+#include <Game/World.h>
+
+#include "LocalEntity.h"
+#include "PlayerLocalEntity.h"
 
 namespace spades { namespace ngclient {
 	
@@ -34,19 +37,46 @@ namespace spades { namespace ngclient {
 		SPAssert(renderer);
 		SPAssert(audio);
 		
+		// FIXME: world must be suplied from NetworkClient
 		world.Set(new game::World(), false);
+		world->AddListener(this);
 		
+		LoadEntities();
 	}
 	
 	Arena::~Arena() {
 		SPADES_MARK_FUNCTION();
 		
+		localEntities.clear();
+		
+		world->RemoveListener(this);
+		world.Set(nullptr);
 	}
 	
-	void Arena::RunFrame(float dt) {
+	void Arena::Initialize() {
+		renderer->Init();
+		
+		playerLocalEntityFactory.reset
+		(new PlayerLocalEntityFactory(*this));
+	}
+	
+	void Arena::RunFrame(float _dt) {
 		SPADES_MARK_FUNCTION();
+		game::Duration dt = _dt;
 		
 		world->Advance(dt);
+		
+		{
+			auto it = localEntities.begin();
+			while (it != localEntities.end()) {
+				auto cur = it++;
+				const auto& lEnt = *cur;
+				if (!lEnt->Update(dt)) {
+					localEntities.erase(cur);
+				}
+				it = cur;
+			}
+		}
 		
 		Render();
 	}

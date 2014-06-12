@@ -22,12 +22,15 @@
 #include <Core/Debug.h>
 #include <Game/World.h>
 #include <Core/Settings.h>
+#include "LocalEntity.h"
 
 SPADES_SETTING(cg_fov, "");
 
 namespace spades { namespace ngclient {
 	
 	ArenaCamera& Arena::GetCamera() {
+		SPADES_MARK_FUNCTION();
+		
 		// TODO: GetCamera
 		return defaultCamera;
 	}
@@ -36,7 +39,8 @@ namespace spades { namespace ngclient {
 		SPADES_MARK_FUNCTION();
 		
 		SPAssert(world->GetGameMap());
-		renderer->Init();
+		// FIXME: delay the call to Initialize
+		Initialize();
 		
 		renderer->SetFogDistance(160.f);
 		renderer->SetFogColor(Vector3(.9f, .9f, .9f) * .3f);
@@ -103,6 +107,10 @@ namespace spades { namespace ngclient {
 		auto def = CreateSceneDefinition();
 		
 		renderer->StartScene(def);
+		
+		for (const auto& ent: localEntities) {
+			ent->AddToScene();
+		}
 		
 		renderer->EndScene();
 		

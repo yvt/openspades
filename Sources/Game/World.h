@@ -24,6 +24,8 @@
 #include "Constants.h"
 #include <Client/GameMap.h>
 #include <Core/TMPUtils.h>
+#include <map>
+#include <set>
 
 namespace spades { namespace game {
 	
@@ -38,14 +40,31 @@ namespace spades { namespace game {
 		
 	};
 	
+	
+	class Entity;
+	class WorldListener;
+	
+	class PlayerEntity;
+	
 	class World: public RefCountedObject
 	{
 		Timepoint currentTime;
 		WorldParameters params;
 		Handle<client::GameMap> gameMap;
+		std::map<uint32_t, Handle<Entity>> entities;
+		std::set<WorldListener *> listeners;
 	public:
 		World();
 		~World();
+		
+		void AddListener(WorldListener *);
+		void RemoveListener(WorldListener *);
+		
+		Entity *FindEntity(uint32_t);
+		void LinkEntity(Entity *,
+						stmp::optional<uint32_t> entityId = stmp::optional<uint32_t>());
+		void UnlinkEntity(Entity *);
+		std::vector<Entity *> GetAllEntities();
 		
 		Timepoint GetCurrentTime() const { return currentTime; }
 		
@@ -60,6 +79,8 @@ namespace spades { namespace game {
 		bool IsLocalHostServer();
 		bool IsLocalHostClient();
 		stmp::optional<uint32_t> GetLocalPlayerId();
+		PlayerEntity *GetLocalPlayerEntity();
+		// TODO: Player *GetLocalPlayer()
 		
 		client::GameMap *GetGameMap() { return gameMap; }
 		
@@ -68,6 +89,14 @@ namespace spades { namespace game {
 		
 	};
 	
+	class WorldListener
+	{
+	public:
+		virtual ~WorldListener() { }
+		
+		virtual void EntityLinked(World&, Entity *) { }
+		virtual void EntityUnlinked(World&, Entity *) { }
+	};
 	
 } }
 
