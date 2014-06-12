@@ -652,23 +652,23 @@ namespace spades {
 				}
 				if(manager.IsControlPressed or
 				   manager.IsMetaPressed /* for OSX; Cmd + [a-z] */) {
-					if(key == "a") {
+					if(key == "A") {
 						SelectAll();
 						return;
-					}else if(key == "v") {
+					}else if(key == "V") {
 						manager.Paste(PasteClipboardEventHandler(this.Insert));
-					}else if(key == "c") {
+					}else if(key == "C") {
 						manager.Copy(this.SelectedText);
-					}else if(key == "x") {
+					}else if(key == "X") {
 						manager.Copy(this.SelectedText);
 						this.SelectedText = "";
-					}else if(key == "z") {
+					}else if(key == "Z") {
 						if(manager.IsShiftPressed){
 							if(Redo()) OnChanged();
 						}else{
 							if(Undo()) OnChanged();
 						}
-					}else if(key == "w") {
+					}else if(key == "W") {
 						if(Redo()) {
 							OnChanged();
 						}

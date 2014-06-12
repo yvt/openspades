@@ -190,7 +190,16 @@ int argsHandler(int argc, char **argv, int &i)
 			cg_protocolVersion = 4;
 			return ++i;
 		}
-	}
+		if ( !strcasecmp( a, "--version" ) || !strcasecmp( a, "-v" ) ) {
+			cg_printVersion = true;
+			return ++i;
+		}
+		if ( !strcasecmp( a, "--help" ) || !strcasecmp( a, "-h" ) ) {
+			cg_printHelp = true;
+			return ++i;
+		}
+		}
+
 	return 0;
 }
 
@@ -353,6 +362,25 @@ int main(int argc, char ** argv)
 	SetUnhandledExceptionFilter( UnhandledExceptionProc );
 #endif
 
+	for(int i = 1; i < argc;) {
+			int ret = argsHandler(argc, argv, i);
+			if(!ret) {
+				// ignore unknown arg
+				i++;
+			}
+		}
+
+		if ( cg_printVersion ) {
+			printf( "%s\n", PACKAGE_STRING );
+			return 0;
+		}
+
+		if ( cg_printHelp ) {
+			printHelp( argv[0] );
+			return 0;
+		}
+
+
 	std::unique_ptr<SplashWindow> splashWindow;
 
 	try{
@@ -372,7 +400,6 @@ int main(int argc, char ** argv)
 		spades::DispatchQueue::GetThreadQueue()->MarkSDLVideoThread();
 
 		SPLog("Package: " PACKAGE_STRING);
-
 		// setup user-specific default resource directories
 #ifdef WIN32
 		static wchar_t buf[4096];
@@ -417,12 +444,7 @@ int main(int argc, char ** argv)
 		spades::FileManager::AddFileSystem
 		(new spades::DirectoryFileSystem("./Resources", false));
 
-		spades::FileManager::AddFileSystem
-		(new spades::DirectoryFileSystem("/usr/local/share/games/openspades/Resources", false));
-
-		spades::FileManager::AddFileSystem
-		(new spades::DirectoryFileSystem("/usr/share/games/openspades/Resources", false));
-
+		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(CMAKE_INSTALL_PREFIX "/" OPENSPADES_INSTALL_RESOURCES, false));
 
 		std::string xdg_data_home = home+"/.local/share";
 
@@ -467,7 +489,6 @@ int main(int argc, char ** argv)
 		try{
 			spades::StartLog();
 		}catch(const std::exception& ex){
-
 			SDL_InitSubSystem(SDL_INIT_VIDEO);
 			auto msg = spades::Format("Failed to start recording log because of the following error:\n{0}\n\n"
 									  "OpenSpades will continue to run, but any critical events are not logged.", ex.what());
@@ -508,7 +529,7 @@ int main(int argc, char ** argv)
 		}
 
 		// register resource directory specified by Makefile (or something)
-#if defined(RESDIR_DEFINED) && !NDEBUG
+#if defined(RESDIR_DEFINED)
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(RESDIR, false));
 #endif
 
@@ -580,13 +601,6 @@ int main(int argc, char ** argv)
 		pumpEvents();
 
 		// parse args
-		for(int i = 1; i < argc;) {
-			int ret = argsHandler(argc, argv, i);
-			if(!ret) {
-				// ignore unknown arg
-				i++;
-			}
-		}
 
 		// initialize AngelScript
 		SPLog("Initializing script engine");
