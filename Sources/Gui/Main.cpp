@@ -164,7 +164,13 @@ SPADES_SETTING(cg_playerName, "");
 
 namespace {
 	int cg_autoConnect = 0;
+	bool cg_printVersion = false;
+	bool cg_printHelp = false;
 	bool g_debugNextGenServer = false;
+	void printHelp( const char * binaryName )
+	{
+		printf( "usage: %s [server_address] [protocol_version] [-h|--help] [-v|--version] \n", binaryName );
+	}
 }
 
 int argsHandler(int argc, char **argv, int &i)
