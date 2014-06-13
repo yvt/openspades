@@ -120,6 +120,13 @@ namespace spades { namespace server {
 		
 	}
 	
+	void Host::Broadcast(const protocol::Packet &packet) {
+		auto data = packet.Generate();
+		auto *p = enet_packet_create(data.data(), data.size(),
+									 ENET_PACKET_FLAG_NO_ALLOCATE);
+		enet_host_broadcast(host, 0, p);
+		enet_packet_destroy(p);	}
+	
 	void Host::DoEvents() {
 		SPADES_MARK_FUNCTION();
 		ENetEvent event;

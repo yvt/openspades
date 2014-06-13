@@ -40,7 +40,8 @@ namespace spades { namespace protocol {
 		InternalServerError = 1,
 		ServerFull = 2,
 		Misc = 3, // reason is already sent
-		ServerStopped = 4
+		ServerStopped = 4,
+		Timeout = 5
 	};
 	
 	enum class PacketType {
@@ -63,6 +64,7 @@ namespace spades { namespace protocol {
 		EntityUpdate = 30,
 		EntityEvent = 31,
 		EntityDie = 32,
+		EntityRemove = 33,
 		ClientSideEntityUpdate = 35,
 		
 		TerrainUpdate = 40,
@@ -120,6 +122,7 @@ namespace spades { namespace protocol {
 	class PlayerActionPacket;
 	class HitEntityPacket;
 	class HitTerrainPacket;
+	class EntityRemovePacket;
 	class DamagePacket;
 	
 	static const char *ProtocolName = "WorldOfSpades 0.1";
@@ -143,6 +146,7 @@ namespace spades { namespace protocol {
 	TerrainUpdatePacket,
 	EntityEventPacket,
 	EntityDiePacket,
+	EntityRemovePacket,
 	
 	PlayerActionPacket,
 	
@@ -355,11 +359,11 @@ namespace spades { namespace protocol {
 		
 		stmp::optional<EntityFlags> flags;
 		stmp::optional<Trajectory> trajectory;
+		stmp::optional<uint8_t> health;
 		
 		stmp::optional<PlayerInput> playerInput;
 		stmp::optional<ToolSlot> tool;
 		stmp::optional<IntVector3> blockColor;
-		stmp::optional<uint8_t> health;
 		
 		stmp::optional<std::string> weaponSkin1;
 		stmp::optional<std::string> weaponSkin2;
@@ -442,6 +446,18 @@ namespace spades { namespace protocol {
 		uint64_t param;
 		
 		stmp::optional<DamageInfo> damage;
+	};
+	
+	class EntityRemovePacket : public BasePacket
+	<EntityRemovePacket,
+	PacketUsage::ServerOnly, PacketType::EntityRemove> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~EntityRemovePacket() {}
+		
+		virtual std::vector<char> Generate() const;
+		
+		uint32_t entityId;
 	};
 	
 	class PlayerActionPacket : public BasePacket

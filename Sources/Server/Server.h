@@ -23,24 +23,56 @@
 #include "Host.h"
 #include <memory>
 #include <unordered_set>
+#include <unordered_map>
+#include <list>
+#include <Core/RefCountedObject.h>
+#include <Game/World.h>
+
+namespace spades { namespace game {
+	class World;
+	class Entity;
+} }
 
 namespace spades { namespace server {
 	
 	class Connection;
+	class ServerEntity;
 	
-	class Server: public HostListener {
+	class Server:
+	public HostListener,
+	public game::WorldListener {
 		friend class Connection;
 		
 		std::unique_ptr<Host> host;
 		std::unordered_set<Connection *> connections;
 		
+		Handle<game::World> world;
+		std::list<std::unique_ptr<ServerEntity>>
+		serverEntities;
+		std::unordered_map<game::Entity *,
+		std::list<std::unique_ptr<ServerEntity>>::iterator>
+		entityToServerEntity;
+		void AddServerEntity(ServerEntity *);
+		ServerEntity *GetServerEntityForEntity(game::Entity*);
+		
+		void SetWorld(game::World *);
 		
 	public:
 		Server();
 		virtual ~Server();
 		
+		void Update(double dt);
 		
-		virtual void ClientConnected(HostPeer *peer) = 0;
+		game::World& GetWorld() { return *world; }
+		
+		void ClientConnected(HostPeer *peer) override;
+		
+		/* ---- WorldListener ---- */
+		void EntityLinked(game::World&, game::Entity *) override;
+		void EntityUnlinked(game::World&, game::Entity *) override;
+		
+		void FlushMapEdits(const std::vector<game::MapEdit>&) override;
+		
 	};
 
 } }

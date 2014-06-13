@@ -43,6 +43,26 @@ namespace spades { namespace server {
 			conns.erase(it);
 	}
 	
+	void Connection::OnWorldChanged() {
+		if (!peer) return;
+		
+	}
+	
+	void Connection::Update(double dt) {
+		if (!peer) return;
+		
+		if (state != State::Active) {
+			stateTimeout -= dt;
+			if (stateTimeout < 0.0) {
+				// client should have responded earlier.
+				peer->Disconnect(protocol::DisconnectReason::Timeout);
+				peer = nullptr;
+			}
+			return;
+		}
+		
+	}
+	
 	void Connection::Disconnected() {
 		peer = nullptr;
 		// HostPeer will release the reference to this
@@ -52,5 +72,6 @@ namespace spades { namespace server {
 	void Connection::PacketReceived(const protocol::Packet &packet) {
 		SPNotImplemented();
 	}
+	
 	
 } }

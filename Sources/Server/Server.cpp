@@ -23,12 +23,23 @@
 #include <Core/Settings.h>
 #include <Core/Exception.h>
 #include "Connection.h"
+#include <Game/World.h>
+#include "ServerEntity.h"
+#include "PlayerServerEntity.h"
+#include "Shared.h"
+
+#include <Game/AllEntities.h>
 
 namespace spades { namespace server {
 	
 	Server::Server() {
 		SPRaise("Server starting.");
 		host.reset(new Host(this));
+		
+		// create initial world
+		// TODO: world parameters
+		Handle<game::World> w(new game::World(), false);
+		SetWorld(w);
 	}
 	
 	Server::~Server() {
@@ -43,5 +54,109 @@ namespace spades { namespace server {
 		connections.insert(&*conn);
 	}
 	
+	void Server::SetWorld(game::World *world) {
+		if (this->world) {
+			this->world->RemoveListener(this);
+		}
+		serverEntities.clear();
+		entityToServerEntity.clear();
+		this->world.Set(world, true);
+		if (world)
+			world->AddListener(this);
+		for (auto *conn: connections) {
+			conn->OnWorldChanged();
+		}
+	}
+	
+	void Server::Update(double dt) {
+		// network event handling
+		host->DoEvents();
+		
+		// process every connections
+		for (auto *conn: connections)
+			conn->Update(dt);
+		
+		// update world
+		world->Advance(dt);
+		for (const auto& e: serverEntities) {
+			e->Update(dt);
+		}
+		
+		// send entity update
+		protocol::EntityUpdatePacket packet;
+		for (const auto& e: serverEntities) {
+			auto delta = e->DeltaSerialize();
+			if (delta) {
+				packet.items.push_back(*delta);
+			}
+		}
+		if (!packet.items.empty()) {
+			host->Broadcast(packet);
+		}
+		
+	}
+	
+	void Server::AddServerEntity(ServerEntity *e) {
+		SPAssert(e);
+		SPAssert(&e->GetServer() == this);
+		serverEntities.emplace_front(e);
+		entityToServerEntity[&e->GetEntity()] = serverEntities.begin();
+ 	}
+	
+	ServerEntity *Server::GetServerEntityForEntity(game::Entity *e) {
+		auto it = entityToServerEntity.find(e);
+		if (it == entityToServerEntity.end()) return nullptr;
+		return it->second->get();
+	}
+	
+#pragma mark - WorldListener
+	void Server::EntityLinked(game::World &, game::Entity *e) {
+		struct Factory: public game::EntityVisitor {
+			Server& server;
+			Factory(Server& server): server(server) { }
+			
+			void Visit(game::PlayerEntity& e) override {
+				server.AddServerEntity(new PlayerServerEntity(e, server));
+			}
+			void Visit(game::GrenadeEntity& e) override {
+				server.AddServerEntity(new ServerEntity(e, server));
+			}
+			void Visit(game::RocketEntity& e) override {
+				server.AddServerEntity(new ServerEntity(e, server));
+			}
+			void Visit(game::CommandPostEntity& e) override {
+				server.AddServerEntity(new ServerEntity(e, server));
+			}
+			void Visit(game::FlagEntity& e) override {
+				server.AddServerEntity(new ServerEntity(e, server));
+			}
+			void Visit(game::CheckpointEntity& e) override {
+				server.AddServerEntity(new ServerEntity(e, server));
+			}
+			void Visit(game::VehicleEntity& e) override {
+				server.AddServerEntity(new ServerEntity(e, server));
+			}
+		};
+		Factory f(*this);
+		e->Accept(f);
+	}
+	
+	void Server::EntityUnlinked(game::World &, game::Entity *e) {
+		protocol::EntityRemovePacket packet;
+		packet.entityId = *e->GetId();
+		host->Broadcast(packet);
+		
+		auto it = entityToServerEntity.find(e);
+		SPAssert(it != entityToServerEntity.end());
+		auto it2 = it->second;
+		entityToServerEntity.erase(it);
+		serverEntities.erase(it2);
+	}
+	
+	void Server::FlushMapEdits(const std::vector<game::MapEdit> &edits) {
+		protocol::TerrainUpdatePacket packet;
+		packet.edits = edits;
+		host->Broadcast(packet);
+	}
 } }
 

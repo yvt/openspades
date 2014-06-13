@@ -956,6 +956,29 @@ namespace spades { namespace protocol {
 	}
 	
 	
+	Packet *EntityRemovePacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<EntityDiePacket> p(new EntityDiePacket());
+		PacketReader reader(data);
+		
+		p->entityId = static_cast<uint32_t>(reader.ReadVariableInteger());
+		
+		return p.release();
+	}
+	
+	std::vector<char> EntityRemovePacket::Generate() const {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		writer.WriteVariableInteger(entityId);
+		
+		return std::move(writer.ToArray());
+	}
+	
+	
+
 	
 	Packet *PlayerActionPacket::Decode(const std::vector<char> &data) {
 		SPADES_MARK_FUNCTION();

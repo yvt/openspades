@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <array>
 #include <Core/TMPUtils.h>
+#include <Core/Debug.h>
 
 namespace spades { namespace game {
 	
@@ -92,6 +93,13 @@ namespace spades { namespace game {
 		
 		/** Player flies. */
 		bool fly : 1;
+		
+		bool operator != (const EntityFlags& o) const {
+			return
+			playerClip != o.playerClip ||
+			weaponClip != o.weaponClip ||
+			fly != o.fly;
+		}
 	};
 	
 	enum class TrajectoryType {
@@ -146,6 +154,29 @@ namespace spades { namespace game {
 		/** When parentEntityId is set, the entity is locked in the 
 		 * local coordinate space of the parent entity. */
 		stmp::optional<std::uint32_t> parentEntityId;
+		
+		bool operator != (const Trajectory& o) const {
+			if (type != o.type) return true;
+			switch (type) {
+				case TrajectoryType::Constant:
+					return origin != o.origin ||
+					angle != o.angle;
+				case TrajectoryType::Linear:
+				case TrajectoryType::Gravity:
+				case TrajectoryType::RigidBody:
+					return origin != o.origin ||
+					velocity != o.velocity ||
+					angle != o.angle ||
+					angularVelocity != o.angularVelocity;
+					
+				case TrajectoryType::Player:
+					return origin != o.origin ||
+					velocity != o.velocity ||
+					eulerAngle != o.eulerAngle;
+			}
+			SPAssert(false);
+			return false;
+		}
 	};
 	
 	enum class PlayerStance {
@@ -162,6 +193,16 @@ namespace spades { namespace game {
 		bool toolSecondary : 1;
 		bool chat : 1;
 		bool sprint : 1;
+		
+		bool operator != (const PlayerInput& o) const {
+			return xmove != o.xmove ||
+			ymove != o.ymove ||
+			stance != o.stance ||
+			toolPrimary != o.toolPrimary ||
+			toolSecondary != o.toolSecondary ||
+			chat != o.chat ||
+			sprint != o.sprint;
+		}
 	};
 	
 	enum class HitType {

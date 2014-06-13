@@ -75,7 +75,7 @@ namespace spades { namespace game {
 		void SetId(stmp::optional<uint32_t> entityId);
 		
 		EntityType GetType() const { return type; }
-		
+		uint8_t GetHealth() const { return health; }
 		EntityFlags& GetFlags() { return flags; }
 		
 		Trajectory& GetTrajectory() { return trajectory; }
@@ -87,6 +87,7 @@ namespace spades { namespace game {
 		void Advance(Duration);
 		
 		virtual bool IsLocallyControlled();
+		virtual stmp::optional<uint32_t> GetOwnerPlayerId();
 		
 		void InflictDamage(const DamageInfo&, int amount);
 		virtual void Damaged(const DamageInfo&, int amount);

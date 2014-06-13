@@ -21,6 +21,8 @@
 #pragma once
 
 #include "Host.h"
+#include <list>
+#include "Shared.h"
 
 namespace spades { namespace server {
 	
@@ -29,8 +31,21 @@ namespace spades { namespace server {
 	class Connection: public HostPeerListener {
 		friend class Server;
 		
+		enum class State {
+			/** Waiting for InitiateConnectionPacket. */
+			NotInitiated,
+			
+			/** Waiting for ClientCertificatePacket. */
+			WaitingForCertificate,
+			StateTransfer,
+			Active
+		};
+		
 		Server *server;
 		HostPeer *peer;
+		State state = State::NotInitiated;
+		double stateTimeout = 10.0;
+		
 	protected:
 		// RefCountedObject should only be destroyed by
 		// RefCountedObject::Release().
@@ -41,8 +56,16 @@ namespace spades { namespace server {
 	public:
 		Connection(Server *);
 		
-		virtual void PacketReceived(const protocol::Packet&);
-		virtual void Disconnected();
+		
+		
+		void Update(double dt);
+		
+		/** Responds to the world change. */
+		void OnWorldChanged();
+		
+		/* ---- HostPeerListener ----*/
+		void PacketReceived(const protocol::Packet&) override;
+		void Disconnected() override;
 	};
 	
 } }

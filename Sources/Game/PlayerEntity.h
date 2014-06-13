@@ -72,6 +72,8 @@ namespace spades { namespace game {
 		/** Updates the local and remote state of the player. */
 		void UpdatePlayerInput(const PlayerInput&);
 		const PlayerInput& GetPlayerInput() const { return playerInput; }
+		ToolSlot GetTool() const { return tool; }
+		IntVector3 GetBlockColor() const { return blockColor; }
 		
 		float GetJumpVelocity();
 		bool IsOnGroundOrWade();

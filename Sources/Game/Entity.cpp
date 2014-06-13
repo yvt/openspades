@@ -139,7 +139,19 @@ namespace spades { namespace game {
 	}
 	
 	bool Entity::IsLocallyControlled() {
-		return false;
+		auto owner = GetOwnerPlayerId();
+		auto local = GetWorld().GetLocalPlayerId();
+		if (owner && local) {
+			return *owner == *local;
+		} else if (!owner && !local) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	stmp::optional<uint32_t> Entity::GetOwnerPlayerId() {
+		return stmp::optional<uint32_t>();
 	}
 	
 } }

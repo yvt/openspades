@@ -49,6 +49,10 @@
 		E818AEDF1949E30D004500C7 /* LocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEDC1949E30D004500C7 /* LocalEntity.cpp */; };
 		E818AEE21949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */; };
 		E818AEE31949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */; };
+		E818AEE6194AAAD0004500C7 /* ServerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE4194AAAD0004500C7 /* ServerEntity.cpp */; };
+		E818AEE7194AAAD0004500C7 /* ServerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE4194AAAD0004500C7 /* ServerEntity.cpp */; };
+		E818AEEA194ACCA6004500C7 /* PlayerServerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE8194ACCA6004500C7 /* PlayerServerEntity.cpp */; };
+		E818AEEB194ACCA6004500C7 /* PlayerServerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE8194ACCA6004500C7 /* PlayerServerEntity.cpp */; };
 		E81A7C6418610AA900BF3FCE /* SWRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */; };
 		E81A7C6718610BE400BF3FCE /* SWPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6518610BE400BF3FCE /* SWPort.cpp */; };
 		E81A7C6B1861525D00BF3FCE /* SWImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C691861525D00BF3FCE /* SWImage.cpp */; };
@@ -944,6 +948,11 @@
 		E818AEDD1949E30D004500C7 /* LocalEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalEntity.h; sourceTree = "<group>"; };
 		E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerLocalEntity.cpp; sourceTree = "<group>"; };
 		E818AEE11949EA08004500C7 /* PlayerLocalEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerLocalEntity.h; sourceTree = "<group>"; };
+		E818AEE4194AAAD0004500C7 /* ServerEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ServerEntity.cpp; sourceTree = "<group>"; };
+		E818AEE5194AAAD0004500C7 /* ServerEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerEntity.h; sourceTree = "<group>"; };
+		E818AEE8194ACCA6004500C7 /* PlayerServerEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerServerEntity.cpp; sourceTree = "<group>"; };
+		E818AEE9194ACCA6004500C7 /* PlayerServerEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerServerEntity.h; sourceTree = "<group>"; };
+		E818AEEC194ACFCE004500C7 /* AllEntities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AllEntities.h; sourceTree = "<group>"; };
 		E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWRenderer.cpp; sourceTree = "<group>"; };
 		E81A7C6318610AA900BF3FCE /* SWRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRenderer.h; sourceTree = "<group>"; };
 		E81A7C6518610BE400BF3FCE /* SWPort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWPort.cpp; sourceTree = "<group>"; };
@@ -2499,6 +2508,7 @@
 				E8E977B01944955500579D9A /* Constants.cpp */,
 				E8D0E8121901926000DE3BDB /* Entity.cpp */,
 				E8D0E8131901926000DE3BDB /* Entity.h */,
+				E818AEEC194ACFCE004500C7 /* AllEntities.h */,
 				E8E977941944701300579D9A /* PlayerEntity.cpp */,
 				E8E977951944701300579D9A /* PlayerEntity.h */,
 				E8E9779819447C6700579D9A /* GrenadeEntity.cpp */,
@@ -2528,6 +2538,10 @@
 				E8D0E5DF18F9AA0B00DE3BDB /* Host.h */,
 				E8D0E5E718F9B6BB00DE3BDB /* Shared.cpp */,
 				E8D0E5E818F9B6BB00DE3BDB /* Shared.h */,
+				E818AEE4194AAAD0004500C7 /* ServerEntity.cpp */,
+				E818AEE5194AAAD0004500C7 /* ServerEntity.h */,
+				E818AEE8194ACCA6004500C7 /* PlayerServerEntity.cpp */,
+				E818AEE9194ACCA6004500C7 /* PlayerServerEntity.h */,
 			);
 			path = Server;
 			sourceTree = "<group>";
@@ -3237,6 +3251,7 @@
 				E8D0E60F18FABBB000DE3BDB /* fips140.cpp in Sources */,
 				E82E67E818EA7A51004DBA18 /* host.c in Sources */,
 				E82E67E918EA7A51004DBA18 /* list.c in Sources */,
+				E818AEEB194ACCA6004500C7 /* PlayerServerEntity.cpp in Sources */,
 				E82E67EA18EA7A51004DBA18 /* packet.c in Sources */,
 				E82E67EB18EA7A51004DBA18 /* peer.c in Sources */,
 				E82E67EC18EA7A51004DBA18 /* protocol.c in Sources */,
@@ -3400,6 +3415,7 @@
 				E8E9779B19447C6700579D9A /* GrenadeEntity.cpp in Sources */,
 				E82E679418EA7972004DBA18 /* IFont.cpp in Sources */,
 				E82E679518EA7972004DBA18 /* MainScreenHelper.cpp in Sources */,
+				E818AEE7194AAAD0004500C7 /* ServerEntity.cpp in Sources */,
 				E8D0E5D318F321E300DE3BDB /* GLNonlinearizeFilter.cpp in Sources */,
 				E8E977A31944813000579D9A /* CommandPostEntity.cpp in Sources */,
 				E82E679618EA7972004DBA18 /* StartupScreenHelper.cpp in Sources */,
@@ -3797,6 +3813,7 @@
 				E8F74CF2183FBB070085AA54 /* MainScreenHelper.cpp in Sources */,
 				E8D0E7AC18FABC3600DE3BDB /* rdtables.cpp in Sources */,
 				E8D0E7D718FABC3600DE3BDB /* square.cpp in Sources */,
+				E818AEE6194AAAD0004500C7 /* ServerEntity.cpp in Sources */,
 				E849655018E94F1200B9706D /* SdlFileStream.cpp in Sources */,
 				E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */,
 				E842888E18A3D1520060743D /* StartupScreenHelper.cpp in Sources */,
@@ -3863,6 +3880,7 @@
 				E80B288317A516D70056179E /* cdt.cc in Sources */,
 				E80B288417A516D70056179E /* sweep.cc in Sources */,
 				E8E9779E194480CA00579D9A /* RocketEntity.cpp in Sources */,
+				E818AEEA194ACCA6004500C7 /* PlayerServerEntity.cpp in Sources */,
 				E8F74CF51840D4CC0085AA54 /* Config.cpp in Sources */,
 				E8E9779A19447C6700579D9A /* GrenadeEntity.cpp in Sources */,
 				E8D0E7AA18FABC3600DE3BDB /* rc6.cpp in Sources */,

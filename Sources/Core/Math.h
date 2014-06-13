@@ -89,6 +89,10 @@ namespace spades {
 			return x == v.x && y == v.y && z == v.z;
 		}
 		
+		bool operator != (const IntVector3& v) const {
+			return x != v.x || y != v.y || z != v.z;
+		}
+		
 		int GetManhattanLength() const {
 			return std::max(x, -x) + std::max(y, -y)
 			 + std::max(z, -z);
@@ -291,6 +295,9 @@ namespace spades {
 		bool operator == (const Vector3& v) const {
 			return x == v.x && y == v.y && z == v.z;
 		}
+		bool operator != (const Vector3& v) const {
+			return x != v.x || y != v.y || z != v.z;
+		}
 		
 		Vector3& operator +=(const Vector3& v) {
 			x += v.x; y += v.y; z += v.z;
@@ -422,11 +429,16 @@ namespace spades {
 		Vector4 operator - () const {
 			return Make(-x, -y, -z, -w);
 		}
+		
 		bool operator == (const Vector4& v) const {
 			return x == v.x && y == v.y && z == v.z &&
 			w == v.w;
 		}
 		
+		bool operator != (const Vector4& v) const {
+			return x != v.x || y != v.y || z != v.z ||
+			w != v.w;
+		}
 		
 		Vector4& operator +=(const Vector4& v) {
 			x += v.x; y += v.y; z += v.z; w += v.w;
@@ -867,6 +879,10 @@ namespace spades {
 		inline Quaternion& operator *= (const Quaternion& o) {
 			*this = *this * o;
 			return *this;
+		}
+		
+		inline bool operator != (const Quaternion& o) const {
+			return v != o.v;
 		}
 		
 		inline Vector3 Apply(const Vector3& v) const {
