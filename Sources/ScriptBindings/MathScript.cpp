@@ -84,6 +84,8 @@ namespace spades {
 		virtual void Register(ScriptManager *manager, Phase phase) {
 			asIScriptEngine *eng = manager->GetEngine();
 			int r;
+			static float PiF = (float)M_PI;
+			static double Pi = (double)M_PI;
 			eng->SetDefaultNamespace("spades");
 			switch(phase){
 				case PhaseObjectType:
@@ -113,8 +115,6 @@ namespace spades {
 					manager->CheckError(r);
 					break;
 				case PhaseObjectMember:
-					static float PiF = (float)M_PI;
-					static double Pi = (double)M_PI;
 					r = eng->RegisterGlobalProperty("const float PiF", &PiF);
 					manager->CheckError(r);
 					r = eng->RegisterGlobalProperty("const double Pi", &Pi);
