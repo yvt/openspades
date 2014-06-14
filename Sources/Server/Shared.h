@@ -32,6 +32,8 @@
 
 namespace spades { namespace protocol {
 	
+	static const uint32_t connectMagic = 0x8101919;
+	
 	// disconnect reason code.
 	// when possible, server sends the reason text, and
 	// use DisconnectReason::Misc to disconnect the peer.
@@ -41,7 +43,8 @@ namespace spades { namespace protocol {
 		ServerFull = 2,
 		Misc = 3, // reason is already sent
 		ServerStopped = 4,
-		Timeout = 5
+		Timeout = 5,
+		MalformedPacket = 6
 	};
 	
 	enum class PacketType {

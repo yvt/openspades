@@ -160,6 +160,10 @@ namespace spades { namespace server {
 			return;
 		}
 		
+		if (event.data != protocol::connectMagic) {
+			enet_peer_disconnect(peer, static_cast<uint32_t>(protocol::DisconnectReason::MalformedPacket));
+			return;
+		}
 		
 		unsigned int uniqueId;
 		uniqueId = 0;

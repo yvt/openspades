@@ -158,6 +158,26 @@ namespace spades { namespace ngclient {
 			l->PacketReceived(p);
 	}
 	
+	void Host::Connect(const ServerAddress& hostname) {
+		SPADES_MARK_FUNCTION();
+		if (peer) SPRaise("Host already have an active peer");
+		if (!host) SPRaise("Host is already torn down.");
+		AutoLocker lock(&mutex);
+		
+		ENetAddress addr = hostname.asAddress();
+		SPLog("Connecting to %u:%u", (unsigned int)addr.host, (unsigned int)addr.port);
+		
+		peer = enet_host_connect(host, &addr, 1,
+								 protocol::connectMagic);
+		if(peer == NULL){
+			SPRaise("Failed to create ENet peer");
+		}
+	}
+	
+	void Host::Disconnect() {
+		TearDown();
+	}
+	
 	bool Host::Send(protocol::Packet &packet) {
 		SPADES_MARK_FUNCTION();
 		

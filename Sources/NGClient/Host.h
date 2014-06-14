@@ -30,6 +30,7 @@
 #include <set>
 #include <functional>
 #include <list>
+#include <Core/ServerAddress.h>
 
 namespace spades { namespace ngclient {
 	
@@ -70,6 +71,8 @@ namespace spades { namespace ngclient {
 		
 		void TearDown();
 		
+		void Connect(const ServerAddress&);
+		void Disconnect();
 		void DoEvents();
 		bool Send(protocol::Packet&);
 		
