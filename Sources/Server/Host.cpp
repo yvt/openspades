@@ -98,6 +98,7 @@ namespace spades { namespace server {
 			
 			enet_host_destroy(host);
 			SPLog("ENet host destroyed");
+			host = nullptr;
 		}
 	}
 	

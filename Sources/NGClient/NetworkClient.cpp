@@ -21,5 +21,12 @@
 
 namespace spades { namespace ngclient {
 	
+	NetworkClient::NetworkClient() {
+		
+	}
+	
+	NetworkClient::~NetworkClient() {
+		
+	}
 	
 } }

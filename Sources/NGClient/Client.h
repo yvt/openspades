@@ -23,6 +23,11 @@
 #include <Client/IRenderer.h>
 #include <Client/IAudioDevice.h>
 
+
+namespace spades { namespace server {
+	class Server;
+} }
+
 namespace spades { namespace ngclient {
 	
 	struct ClientParams {
@@ -37,6 +42,7 @@ namespace spades { namespace ngclient {
 		friend class Arena;
 		Handle<client::IRenderer> renderer;
 		Handle<client::IAudioDevice> audio;
+		std::unique_ptr<server::Server> server;
 		ClientParams const params;
 		
 		Handle<Arena> arena;

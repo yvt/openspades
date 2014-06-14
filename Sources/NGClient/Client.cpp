@@ -23,6 +23,8 @@
 #include "Arena.h"
 #include <Game/World.h>
 
+#include <Server/Server.h>
+
 namespace spades { namespace ngclient {
 	
 	Client::Client(client::IRenderer *renderer,
@@ -36,12 +38,17 @@ namespace spades { namespace ngclient {
 		
 		renderer->SetGameMap(nullptr);
 		
+		if (params.hostLocalServer) {
+			server.reset(new server::Server());
+		}
+		
 		arena.Set(new Arena(this), false);
 		arena->SetupRenderer();
 	}
 	
 	Client::~Client() {
-		arena->UnsetupRenderer();
+		if(arena)
+		   arena->UnsetupRenderer();
 		arena.Set(nullptr);
 	}
 	

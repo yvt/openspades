@@ -25,6 +25,11 @@ namespace spades { namespace ngclient {
 	class NetworkClient
 	{
 		// TODO: nothing here yet...
+	public:
+		NetworkClient();
+		~NetworkClient();
+		
+		
 	};
 	
 } }

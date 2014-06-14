@@ -420,6 +420,8 @@
 		E89A649717A1835A00FDA893 /* GunCasing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A649517A1835900FDA893 /* GunCasing.cpp */; };
 		E89A649A17A2402900FDA893 /* IGLShadowMapRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A649817A2402500FDA893 /* IGLShadowMapRenderer.cpp */; };
 		E89E8121179C2C800059C649 /* GLBloomFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89E811F179C2C800059C649 /* GLBloomFilter.cpp */; };
+		E8ACFA61194B5E240093C79C /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8ACFA5F194B5E240093C79C /* Host.cpp */; };
+		E8ACFA62194B5E240093C79C /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8ACFA5F194B5E240093C79C /* Host.cpp */; };
 		E8B6B68F17DE27B500E35523 /* as_atomic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B64217DE27B500E35523 /* as_atomic.cpp */; };
 		E8B6B69017DE27B500E35523 /* as_builder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B64417DE27B500E35523 /* as_builder.cpp */; };
 		E8B6B69117DE27B500E35523 /* as_bytecode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B64617DE27B500E35523 /* as_bytecode.cpp */; };
@@ -1168,6 +1170,8 @@
 		E89A649917A2402700FDA893 /* IGLShadowMapRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGLShadowMapRenderer.h; sourceTree = "<group>"; };
 		E89E811F179C2C800059C649 /* GLBloomFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLBloomFilter.cpp; sourceTree = "<group>"; };
 		E89E8120179C2C800059C649 /* GLBloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLBloomFilter.h; sourceTree = "<group>"; };
+		E8ACFA5F194B5E240093C79C /* Host.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Host.cpp; sourceTree = "<group>"; };
+		E8ACFA60194B5E240093C79C /* Host.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Host.h; sourceTree = "<group>"; };
 		E8B6B63F17DE27B500E35523 /* angelscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = angelscript.h; sourceTree = "<group>"; };
 		E8B6B64117DE27B500E35523 /* as_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = as_array.h; sourceTree = "<group>"; };
 		E8B6B64217DE27B500E35523 /* as_atomic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = as_atomic.cpp; sourceTree = "<group>"; };
@@ -1885,6 +1889,8 @@
 				E818AED91949E0D1004500C7 /* Arena_World.cpp */,
 				E818AED51949D814004500C7 /* NetworkClient.cpp */,
 				E818AED61949D814004500C7 /* NetworkClient.h */,
+				E8ACFA5F194B5E240093C79C /* Host.cpp */,
+				E8ACFA60194B5E240093C79C /* Host.h */,
 				E818AEDC1949E30D004500C7 /* LocalEntity.cpp */,
 				E818AEDD1949E30D004500C7 /* LocalEntity.h */,
 				E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */,
@@ -3456,6 +3462,7 @@
 				E82E67A918EA7972004DBA18 /* IImage.cpp in Sources */,
 				E82E67AA18EA7972004DBA18 /* IModel.cpp in Sources */,
 				E82E67AB18EA7972004DBA18 /* AsyncRenderer.cpp in Sources */,
+				E8ACFA62194B5E240093C79C /* Host.cpp in Sources */,
 				E8D0E79318FABC3600DE3BDB /* network.cpp in Sources */,
 				E82E67AC18EA7972004DBA18 /* NetClient.cpp in Sources */,
 				E82E67AD18EA7972004DBA18 /* ILocalEntity.cpp in Sources */,
@@ -3841,6 +3848,7 @@
 				E89E8121179C2C800059C649 /* GLBloomFilter.cpp in Sources */,
 				E8D88AB1179C3004004C2451 /* GLQuadRenderer.cpp in Sources */,
 				E8D0E7FB18FABC3600DE3BDB /* winpipes.cpp in Sources */,
+				E8ACFA61194B5E240093C79C /* Host.cpp in Sources */,
 				E8D88AB4179C45B7004C2451 /* GLLensFilter.cpp in Sources */,
 				E8E44686179CC4FF00BE8855 /* IBitmapCodec.cpp in Sources */,
 				E8D0E7DD18FABC3600DE3BDB /* tea.cpp in Sources */,
