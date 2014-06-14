@@ -59,6 +59,8 @@ namespace spades { namespace protocol {
 		GameStateHeader = 6,
 		MapData = 7,
 		GameStateFinal = 8,
+		MapDataAcknowledge = 10,
+		MapDataFinal = 11,
 		
 		// generic
 		GenericCommand = 9,
@@ -127,6 +129,8 @@ namespace spades { namespace protocol {
 	class HitTerrainPacket;
 	class EntityRemovePacket;
 	class DamagePacket;
+	class MapDataAcknowledgePacket;
+	class MapDataFinalPacket;
 	
 	static const char *ProtocolName = "WorldOfSpades 0.1";
 	
@@ -141,6 +145,8 @@ namespace spades { namespace protocol {
 	GameStateHeaderPacket,
 	MapDataPacket,
 	GameStateFinalPacket,
+	MapDataAcknowledgePacket,
+	MapDataFinalPacket,
 	
 	GenericCommandPacket,
 	
@@ -327,7 +333,20 @@ namespace spades { namespace protocol {
 		std::string fragment;
 	};
 	
-	/** Sent by server after all of game states were sent. */
+	/** Sent by server after all of map data were sent. */
+	class MapDataFinalPacket : public BasePacket
+	<MapDataFinalPacket,
+	PacketUsage::ServerOnly, PacketType::MapDataFinal> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~MapDataFinalPacket() {}
+		
+		virtual std::vector<char> Generate() const;
+	};
+	
+	
+	struct EntityUpdateItem;
+	/** Sent by server after all of game state were sent. */
 	class GameStateFinalPacket : public BasePacket
 	<GameStateFinalPacket,
 	PacketUsage::ServerOnly, PacketType::GameStateFinal> {
@@ -338,6 +357,19 @@ namespace spades { namespace protocol {
 		virtual std::vector<char> Generate() const;
 		
 		std::map<std::string, std::string> properties;
+		std::vector<EntityUpdateItem> items;
+		
+	};
+	
+	/** Sent by client to acknoledge decoding of map data. */
+	class MapDataAcknowledgePacket : public BasePacket
+	<MapDataAcknowledgePacket,
+	PacketUsage::ServerAndClient, PacketType::MapDataAcknowledge> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~MapDataAcknowledgePacket() {}
+		
+		virtual std::vector<char> Generate() const;
 	};
 	
 	class GenericCommandPacket : public BasePacket
@@ -389,6 +421,9 @@ namespace spades { namespace protocol {
 		virtual std::vector<char> Generate() const;
 		
 		std::vector<EntityUpdateItem> items;
+		
+		/** Updates even if client owns the entities. */
+		bool forced;
 	};
 	
 	/** Sent by client to update the latest client-side state of entity.
@@ -524,7 +559,9 @@ namespace spades { namespace protocol {
 		
 		virtual std::vector<char> Generate() const;
 		
+		uint32_t entityId;
 		DamageInfo damage;
+		uint8_t amount;
 	};
 	
 	// TODO: player state

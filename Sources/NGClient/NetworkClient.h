@@ -20,16 +20,91 @@
 
 #pragma once
 
+#include <memory>
+#include "Host.h"
+#include <set>
+#include <Core/RefCountedObject.h>
+#include <Core/ServerAddress.h>
+#include <vector>
+#include <list>
+
+namespace spades { namespace game {
+	class World;
+} }
+	
 namespace spades { namespace ngclient {
 	
-	class NetworkClient
+	class Host;
+	
+	struct NetworkClientParams {
+		std::string playerName;
+		ServerAddress address;
+	};
+	
+	class NetworkClientListener;
+	
+	class NetworkClient: HostListener
 	{
-		// TODO: nothing here yet...
+		class PacketVisitor;
+		class MapLoader;
+		class EntityUpdater;
+		
+		enum class State {
+			NotConnected,
+			WaitingForGreeting,
+			WaitingForServerCertificate,
+			WaitingForGameState,
+			LoadingMap,
+			LoadingGameState,
+			Game
+		};
+		
+		std::set<NetworkClientListener *> listeners;
+		
+		std::unique_ptr<Host> host;
+		State state = State::NotConnected;
+		std::string nonce;
+		
+		std::unique_ptr<MapLoader> mapLoader;
+		std::list<std::vector<game::MapEdit>> savedMapEdits;
+		
+		Handle<game::World> world;
+		
+		NetworkClientParams params;
+		
+		void SendInitiateConnection(const std::string& serverNonce);
+		void SendClientCertificate();
+		void Kicked(const std::string&);
+		void HandleGenericCommand(const std::vector<std::string>&);
+		
+		void SetWorld(game::World *);
+		
+		/* ---- HostListener ---- */
+		void ConnectedToServer() override;
+		
+		void DisconnectedFromServer(protocol::DisconnectReason) override;
+		
+		void PacketReceived(protocol::Packet&) override;
+		
 	public:
-		NetworkClient();
+		NetworkClient(const NetworkClientParams&);
 		~NetworkClient();
 		
+		void AddListener(NetworkClientListener *);
+		void RemoveListener(NetworkClientListener *);
 		
+		void Connect();
+		
+		void Update();
+	};
+	
+	class NetworkClientListener {
+		friend class NetworkClient;
+	protected:
+		virtual void WorldChanged(game::World *) { }
+		virtual void Disconnected(const std::string& reason) { }
+	public:
+		virtual ~NetworkClientListener() { }
 	};
 	
 } }

@@ -27,6 +27,7 @@
 #include <deque>
 #include <unordered_map>
 #include <unordered_set>
+#include <Core/Strings.h>
 
 namespace spades { namespace game {
 	
@@ -35,11 +36,34 @@ namespace spades { namespace game {
 	fallDamageVelocity(0.58f),
 	fatalFallDamageVelocity(1.f) { }
 	
-	World::World():
-	currentTime(0) {
-		// TODO: provide correct map
-		std::unique_ptr<IStream> stream(FileManager::OpenForReading("Maps/Title.vxl"));
-		gameMap.Set(client::GameMap::Load(stream.get()), false);
+	std::map<std::string, std::string> WorldParameters::Serialize() const {
+		std::map<std::string, std::string> ret;
+		ret["player-jump-vel"] = ToString(playerJumpVelocity);
+		ret["fall-damage-vel"] = ToString(fallDamageVelocity);
+		ret["fall-damage-fatal-vel"] = ToString(fatalFallDamageVelocity);
+		return ret;
+	}
+	
+	void WorldParameters::Update(const std::string &key, const std::string &value) {
+		if (key == "player-jump-vel") {
+			playerJumpVelocity = std::stof(value);
+		} else if (key == "fall-damage-vel") {
+			fallDamageVelocity = std::stof(value);
+		} else if (key == "fall-damage-fatal-vel") {
+			fatalFallDamageVelocity = std::stof(value);
+		} else {
+			SPLog("Unknown property '%s' (value = '%s')",
+				  key.c_str(), value.c_str());
+		}
+	}
+	
+	World::World(const WorldParameters& params,
+				 client::GameMap *map):
+	currentTime(0),
+	params(params) {
+		
+		SPAssert(map);
+		gameMap.Set(map, true);
 		
 		gameMapWrapper.reset(new client::GameMapWrapper(gameMap));
 	}

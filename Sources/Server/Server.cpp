@@ -27,23 +27,29 @@
 #include "ServerEntity.h"
 #include "PlayerServerEntity.h"
 #include "Shared.h"
+#include <Core/IStream.h>
+#include <Core/FileManager.h>
 
 #include <Game/AllEntities.h>
 
 namespace spades { namespace server {
 	
 	Server::Server() {
-		SPRaise("Server starting.");
+		SPLog("Server starting.");
 		host.reset(new Host(this));
 		
 		// create initial world
-		// TODO: world parameters
-		Handle<game::World> w(new game::World(), false);
+		game::WorldParameters params;
+		
+		// TODO: provide correct map
+		std::unique_ptr<IStream> stream(FileManager::OpenForReading("Maps/Title.vxl"));
+		Handle<client::GameMap> map(client::GameMap::Load(stream.get()), false);
+		Handle<game::World> w(new game::World(params, map), false);
 		SetWorld(w);
 	}
 	
 	Server::~Server() {
-		SPRaise("Server closing.");
+		SPLog("Server closing.");
 		host->TearDown();
 		host.reset();
 	}

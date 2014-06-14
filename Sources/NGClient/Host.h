@@ -79,15 +79,15 @@ namespace spades { namespace ngclient {
 	};
 	
 	class HostListener {
-		
-	public:
-		virtual ~HostListener() { }
-		
+		friend class Host;
+	protected:
 		virtual void ConnectedToServer() { }
 		
 		virtual void DisconnectedFromServer(protocol::DisconnectReason) { }
 		
 		virtual void PacketReceived(protocol::Packet&) { }
+	public:
+		virtual ~HostListener() { }
 	};
 	
 } }

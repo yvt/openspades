@@ -419,6 +419,28 @@ namespace spades { namespace protocol {
 	}
 	
 	
+	Packet *MapDataFinalPacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<MapDataFinalPacket> p(new MapDataFinalPacket());
+		PacketReader reader(data);
+		
+		return p.release();
+	}
+	
+	std::vector<char> MapDataFinalPacket::Generate() const {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		return std::move(writer.ToArray());
+	}
+	
+	
+	static EntityUpdateItem DecodeEntityUpdateItem(PacketReader& reader);
+	static void WriteEntityUpdateItem(PacketWriter& writer, const EntityUpdateItem& item);
+	
+	
 	Packet *GameStateFinalPacket::Decode(const std::vector<char> &data) {
 		SPADES_MARK_FUNCTION();
 		
@@ -426,6 +448,10 @@ namespace spades { namespace protocol {
 		PacketReader reader(data);
 		
 		p->properties = reader.ReadMap<std::map<std::string, std::string>>();
+		
+		while(!reader.IsEndOfPacket()) {
+			p->items.emplace_back(DecodeEntityUpdateItem(reader));
+		}
 		
 		return p.release();
 	}
@@ -437,9 +463,32 @@ namespace spades { namespace protocol {
 		
 		writer.WriteMap(properties);
 		
+		for (const auto& item: items) {
+			WriteEntityUpdateItem(writer, item);
+		}
+		
 		return std::move(writer.ToArray());
 	}
 	
+	Packet *MapDataAcknowledgePacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<MapDataAcknowledgePacket> p(new MapDataAcknowledgePacket());
+		PacketReader reader(data);
+		
+		
+		return p.release();
+	}
+	
+	std::vector<char> MapDataAcknowledgePacket::Generate() const {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		return std::move(writer.ToArray());
+	}
+	
+
 	
 	Packet *GenericCommandPacket::Decode(const std::vector<char> &data) {
 		SPADES_MARK_FUNCTION();
@@ -751,6 +800,8 @@ namespace spades { namespace protocol {
 			p->items.emplace_back(DecodeEntityUpdateItem(reader));
 		}
 		
+		p->forced = reader.ReadByte() != 0;
+		
 		return p.release();
 	}
 	
@@ -762,6 +813,8 @@ namespace spades { namespace protocol {
 		for(const auto& item: items) {
 			WriteEntityUpdateItem(writer, item);
 		}
+		
+		writer.Write((uint8_t)(forced ? 1 : 0));
 		
 		return std::move(writer.ToArray());
 	}
@@ -1075,6 +1128,8 @@ namespace spades { namespace protocol {
 		std::unique_ptr<DamagePacket> p(new DamagePacket());
 		PacketReader reader(data);
 		
+		p->entityId = static_cast<uint32_t>(reader.ReadVariableInteger());
+		
 		auto& info = p->damage;
 		auto type = reader.ReadByte();
 		info.damageType = static_cast<DamageType>(type & 0x7f);
@@ -1084,6 +1139,8 @@ namespace spades { namespace protocol {
 		info.firePosition = reader.ReadVector3();
 		info.hitPosition = reader.ReadVector3();
 		
+		p->amount = reader.ReadByte();
+		
 		return p.release();
 	}
 	
@@ -1092,6 +1149,8 @@ namespace spades { namespace protocol {
 		
 		PacketWriter writer(Type);
 		
+		writer.WriteVariableInteger(entityId);
+		
 		const auto& info = damage;
 		writer.Write(static_cast<uint8_t>
 					 (static_cast<int>(info.damageType)|
@@ -1099,6 +1158,8 @@ namespace spades { namespace protocol {
 		writer.WriteVariableInteger(info.toEntity);
 		writer.Write(info.firePosition);
 		writer.Write(info.hitPosition);
+		
+		writer.Write(amount);
 		
 		return std::move(writer.ToArray());
 	}

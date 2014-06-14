@@ -22,6 +22,8 @@
 #include "Client.h"
 #include <Core/Debug.h>
 #include <Game/World.h>
+#include <Core/IStream.h>
+#include <Core/FileManager.h>
 
 #include "LocalEntity.h"
 #include "PlayerLocalEntity.h"
@@ -38,7 +40,14 @@ namespace spades { namespace ngclient {
 		SPAssert(audio);
 		
 		// FIXME: world must be suplied from NetworkClient
-		world.Set(new game::World(), false);
+		
+		// TODO: provide correct map
+		std::unique_ptr<IStream> stream(FileManager::OpenForReading("Maps/Title.vxl"));
+		Handle<client::GameMap> map(client::GameMap::Load(stream.get()), false);
+		
+		game::WorldParameters param;
+		
+		world.Set(new game::World(param, map), false);
 		world->AddListener(this);
 		
 		LoadEntities();

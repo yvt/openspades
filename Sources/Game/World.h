@@ -42,6 +42,9 @@ namespace spades { namespace game {
 		
 		WorldParameters();
 		
+		std::map<std::string, std::string> Serialize() const;
+		void Update(const std::string& key,
+					const std::string& value);
 	};
 	
 	
@@ -75,7 +78,8 @@ namespace spades { namespace game {
 		IntVectorComparator> mapEdits;
 		
 	public:
-		World();
+		World(const WorldParameters& params,
+			  client::GameMap *);
 		~World();
 		
 		void AddListener(WorldListener *);
