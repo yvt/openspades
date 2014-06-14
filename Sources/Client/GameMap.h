@@ -30,6 +30,7 @@
 #include <list>
 #include <Core/Mutex.h>
 #include <Core/AutoLocker.h>
+#include <memory>
 
 namespace spades{
 	class IStream;
@@ -40,24 +41,31 @@ namespace spades{
 		public:
 			// fixed for now
 			enum {
-				DefaultWidth = 512,
-				DefaultHeight = 512,
+				ChunkSizeBits = 5,
+				ChunkSize = 1 << ChunkSizeBits,
 				DefaultDepth = 64 // should be <= 64
 			};
-			GameMap();
+			struct Chunk {
+				uint64_t solidMap[ChunkSize][ChunkSize];
+				uint32_t colorMap[ChunkSize][ChunkSize][DefaultDepth];
+			};
+			GameMap(int width = 512, int height = 512, int depth = 64);
 			
-			static GameMap *Load(IStream *);
+			/** Copy-on-write copy constructor. */
+			GameMap(const GameMap&);
+			
+			static GameMap *Load(IStream *, int width = 512, int height = 512);
 			
 			void Save(IStream *);
 			
-			int Width() { return DefaultWidth; }
-			int Height() { return DefaultHeight; }
+			int Width() { return width; }
+			int Height() { return height; }
 			int Depth() { return DefaultDepth; }
 			inline bool IsSolid(int x, int y, int z) {
 				SPAssert(x >= 0); SPAssert(x < Width());
 				SPAssert(y >= 0); SPAssert(y < Height());
 				SPAssert(z >= 0); SPAssert(z < Depth());
-				return ((solidMap[x][y] >> (uint64_t)z) & 1ULL) != 0;
+				return ((GetSolidMapUnsafe(x, y) >> (uint64_t)z) & 1ULL) != 0;
 			}
 			
 			/** @return 0xHHBBGGRR where HH is health (up to 100) */
@@ -65,11 +73,35 @@ namespace spades{
 				SPAssert(x >= 0); SPAssert(x < Width());
 				SPAssert(y >= 0); SPAssert(y < Height());
 				SPAssert(z >= 0); SPAssert(z < Depth());
-				return colorMap[x][y][z];
+				auto& c = chunks[(x >> ChunkSizeBits) +
+								 (y >> ChunkSizeBits) * chunkCols];
+				return c->colorMap[x&(ChunkSize-1)][y&(ChunkSize-1)][z];
 			}
 			
+			inline uint64_t GetSolidMapUnsafe(int x, int y) {
+				auto& c = chunks[(x >> ChunkSizeBits) +
+								 (y >> ChunkSizeBits) * chunkCols];
+				
+				return c->solidMap[x&(ChunkSize-1)][y&(ChunkSize-1)];
+			}
 			inline uint64_t GetSolidMapWrapped(int x, int y) {
-				return solidMap[x & (Width() - 1)][y & (Height() - 1)];
+				return GetSolidMapUnsafe(x & (Width() - 1), y & (Height() - 1));
+			}
+			
+			inline void SetSolidMapUnsafe(int x, int y, uint64_t map) {
+				SPAssert(x >= 0); SPAssert(x < Width());
+				SPAssert(y >= 0); SPAssert(y < Height());
+				auto& c = chunks[(x >> ChunkSizeBits) +
+								 (y >> ChunkSizeBits) * chunkCols];
+				x &= ChunkSize - 1;
+				y &= ChunkSize - 1;
+				
+				if (!c.unique()) {
+					// copy-on-write
+					c.reset(new Chunk(*c));
+				}
+				
+				c->solidMap[x][y] = map;
 			}
 			
 			inline bool IsSolidWrapped(int x, int y, int z){
@@ -77,33 +109,46 @@ namespace spades{
 					return false;
 				if(z >= Depth())
 					return true;
-				return ((solidMap[x & (Width() - 1)][y & (Height() - 1)] >> (uint64_t)z) & 1ULL) != 0;
+				return ((GetSolidMapWrapped(x, y) >> (uint64_t)z) & 1ULL) != 0;
 			}
 			
 			inline uint32_t GetColorWrapped(int x, int y, int z){
-				return colorMap[x & (Width() - 1)]
-							   [y & (Height() - 1)]
-							   [z & (Depth() - 1)];
+				auto& c = chunks[((x & Width() - 1) >> ChunkSizeBits) +
+								 ((y & Height() - 1) >> ChunkSizeBits) * chunkCols];
+				return c->colorMap[x & (ChunkSize - 1)]
+								  [y & (ChunkSize - 1)]
+							      [z & (Depth() - 1)];
 			}
 			
 			inline void Set(int x, int y, int z, bool solid, uint32_t color, bool unsafe = false){
 				SPAssert(x >= 0); SPAssert(x < Width());
 				SPAssert(y >= 0); SPAssert(y < Height());
 				SPAssert(z >= 0); SPAssert(z < Depth());
+				auto& c = chunks[(x >> ChunkSizeBits) +
+								 (y >> ChunkSizeBits) * chunkCols];
+				
+				int cx = x & ChunkSize - 1;
+				int cy = y & ChunkSize - 1;
+				
+				if (!c.unique()) {
+					// copy-on-write
+					c.reset(new Chunk(*c));
+				}
+				
 				uint64_t mask = 1ULL << z;
-				uint64_t value = solidMap[x][y];
+				uint64_t value = c->solidMap[cx][cy];
 				bool changed = false;
 				if((value & mask) != (solid ? mask : 0ULL)){
 					changed = true;
 					value &= ~mask;
 					if(solid)
 						value |= mask;
-					solidMap[x][y] = value;
+					c->solidMap[cx][cy] = value;
 				}
 				if(solid){
-					if(color != colorMap[x][y][z]){
+					if(color != c->colorMap[cx][cy][z]){
 						changed = true;
-						colorMap[x][y][z] = color;
+						c->colorMap[cx][cy][z] = color;
 					}
 				}
 				if(!unsafe) {
@@ -150,11 +195,13 @@ namespace spades{
 			RayCastResult CastRay2(Vector3 v0, Vector3 dir,
 								   int maxSteps);
 		private:
-			uint64_t solidMap[DefaultWidth][DefaultHeight];
-			uint32_t colorMap[DefaultWidth][DefaultHeight][DefaultDepth];
+			std::vector<std::shared_ptr<Chunk>> chunks;
 			IGameMapListener *listener;
 			std::list<IGameMapListener *> listeners;
 			Mutex listenersMutex;
+			
+			int width, height;
+			int chunkCols, chunkRows;
 			
 			bool IsSurface(int x, int y, int z);
 		};
