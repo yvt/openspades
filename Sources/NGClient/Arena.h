@@ -53,6 +53,8 @@ namespace spades { namespace ngclient {
 		Handle<client::IAudioDevice> audio;
 		Handle<game::World> world;
 		
+		game::Timepoint time = 0.0;
+		
 		bool setupped = false;
 		
 		ArenaCamera& GetCamera();

@@ -27,6 +27,8 @@
 #include "NetworkClient.h"
 #include <Core/Settings.h>
 
+#include <Client/Fonts.h>
+
 SPADES_SETTING(cg_playerName, "");
 
 namespace spades { namespace ngclient {
@@ -46,6 +48,8 @@ namespace spades { namespace ngclient {
 			server.reset(new server::Server());
 		}
 		
+		font.Set(CreateGuiFont(renderer), false);
+		
 		NetworkClientParams netParams;
 		netParams.address = ServerAddress
 		(params.host, ProtocolVersion::Ngspades);
@@ -58,6 +62,9 @@ namespace spades { namespace ngclient {
 		net->AddListener(this);
 		
 		net->Connect();
+		
+		// TODO: move this to appropriate place?
+		renderer->Init();
 		
 		//arena.Set(new Arena(this), false);
 		//arena->SetupRenderer();
@@ -80,9 +87,13 @@ namespace spades { namespace ngclient {
 		
 		if (arena) {
 			arena->RunFrame(dt);
+		} else {
+			RenderLoadingScreen(dt);
 		}
 		
+		renderer->FrameDone();
 		renderer->Flip();
+		time += dt;
 	}
 	
 	void Client::Closing() {

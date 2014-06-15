@@ -27,6 +27,7 @@
 #include <Core/ServerAddress.h>
 #include <vector>
 #include <list>
+#include <Core/TMPUtils.h>
 
 namespace spades { namespace game {
 	class World;
@@ -65,6 +66,9 @@ namespace spades { namespace ngclient {
 		State state = State::NotConnected;
 		std::string nonce;
 		
+		std::string progressMessage;
+		stmp::optional<float> progress;
+		
 		std::unique_ptr<MapLoader> mapLoader;
 		std::list<std::vector<game::MapEdit>> savedMapEdits;
 		
@@ -94,6 +98,9 @@ namespace spades { namespace ngclient {
 		void RemoveListener(NetworkClientListener *);
 		
 		void Connect();
+		
+		stmp::optional<float> GetProgress() { return progress; }
+		std::string GetProgressMessage() { return progressMessage; }
 		
 		void Update();
 	};

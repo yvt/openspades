@@ -24,6 +24,9 @@
 #include <Client/IAudioDevice.h>
 #include "NetworkClient.h"
 
+namespace spades { namespace client {
+	class IFont;
+} }
 namespace spades { namespace server {
 	class Server;
 } }
@@ -44,11 +47,14 @@ namespace spades { namespace ngclient {
 	NetworkClientListener
 	{
 		friend class Arena;
+		double time = 0.0;
 		Handle<client::IRenderer> renderer;
 		Handle<client::IAudioDevice> audio;
 		std::unique_ptr<server::Server> server;
 		std::unique_ptr<NetworkClient> net;
 		ClientParams const params;
+		
+		Handle<client::IFont> font;
 		
 		Handle<Arena> arena;
 		enum class InputRoute
@@ -61,6 +67,8 @@ namespace spades { namespace ngclient {
 		
 		void WorldChanged(game::World *) override;
 		void Disconnected(const std::string& reason) override;
+		
+		void RenderLoadingScreen(float dt);
 		
 	public:
 		

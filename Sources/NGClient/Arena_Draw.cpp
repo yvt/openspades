@@ -93,8 +93,8 @@ namespace spades { namespace ngclient {
 		def.viewAxis[2] = def.viewAxis[2].Normalize();
 		def.zNear = .01f;
 		def.skipWorld = false;
-		def.depthOfFieldNearRange = 50.f;
-		def.globalBlur = .0f;
+		def.depthOfFieldNearRange = 60.f;
+		def.globalBlur = .2f;
 		
 		return def;
 	}
@@ -114,6 +114,15 @@ namespace spades { namespace ngclient {
 		
 		renderer->EndScene();
 		
+		// black fade
+		if (time < 1.0) {
+			auto w = renderer->ScreenWidth();
+			auto h = renderer->ScreenHeight();
+			renderer->SetColorAlphaPremultiplied
+			(Vector4(0,0,0,1) * static_cast<float>(1. - time));
+			renderer->DrawImage(nullptr,
+								AABB2(0, 0, w, h));
+		}
 	}
 } }
 

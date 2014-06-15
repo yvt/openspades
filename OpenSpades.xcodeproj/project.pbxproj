@@ -836,6 +836,8 @@
 		E8E977B11944955500579D9A /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977B01944955500579D9A /* Constants.cpp */; };
 		E8E977B21944955500579D9A /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977B01944955500579D9A /* Constants.cpp */; };
 		E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */; };
+		E8F30C17194DD1BF00A9DD84 /* Client_Draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C15194DD1BF00A9DD84 /* Client_Draw.cpp */; };
+		E8F30C18194DD1BF00A9DD84 /* Client_Draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C15194DD1BF00A9DD84 /* Client_Draw.cpp */; };
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
 		E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */; };
@@ -1744,6 +1746,7 @@
 		E8EE08A317BA016F00631987 /* ChangeLog */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
 		E8EE08A417BA016F00631987 /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		E8EE08A517BA016F00631987 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		E8F30C15194DD1BF00A9DD84 /* Client_Draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_Draw.cpp; sourceTree = "<group>"; };
 		E8F74CE3183F86AE0085AA54 /* View.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = View.cpp; sourceTree = "<group>"; };
 		E8F74CE4183F86AE0085AA54 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
 		E8F74CE6183F8A110085AA54 /* Main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Main.h; sourceTree = "<group>"; };
@@ -1885,6 +1888,7 @@
 				E818AEC21946BAAB004500C7 /* Client.cpp */,
 				E818AEC31946BAAB004500C7 /* Client.h */,
 				E818AEC61946F448004500C7 /* Client_Input.cpp */,
+				E8F30C15194DD1BF00A9DD84 /* Client_Draw.cpp */,
 				E818AECA194954BD004500C7 /* Arena.cpp */,
 				E818AECB194954BD004500C7 /* Arena.h */,
 				E818AECE194954EC004500C7 /* Arena_Input.cpp */,
@@ -3401,6 +3405,7 @@
 				E8D0E7C018FABC3600DE3BDB /* seal.cpp in Sources */,
 				E82E678518EA7972004DBA18 /* IRenderer.cpp in Sources */,
 				E82E678618EA7972004DBA18 /* GameMap.cpp in Sources */,
+				E8F30C18194DD1BF00A9DD84 /* Client_Draw.cpp in Sources */,
 				E82E678718EA7972004DBA18 /* Bitmap.cpp in Sources */,
 				E82E678818EA7972004DBA18 /* VoxelModel.cpp in Sources */,
 				E82E678918EA7972004DBA18 /* IAudioDevice.cpp in Sources */,
@@ -3706,6 +3711,7 @@
 				E8CF0402178FB52F000683D4 /* GLImage.cpp in Sources */,
 				E890F310187046990090AAB8 /* CP437.cpp in Sources */,
 				E842889318A3D9C50060743D /* NullDevice.cpp in Sources */,
+				E8F30C17194DD1BF00A9DD84 /* Client_Draw.cpp in Sources */,
 				E8CF0405178FF776000683D4 /* Exception.cpp in Sources */,
 				E8CF04081790455B000683D4 /* GLProgram.cpp in Sources */,
 				E8CF040B1790471E000683D4 /* IFileSystem.cpp in Sources */,

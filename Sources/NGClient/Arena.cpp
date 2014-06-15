@@ -80,6 +80,8 @@ namespace spades { namespace ngclient {
 		}
 		
 		Render();
+		
+		time += std::min(dt, .1);
 	}
 	
 	bool Arena::WantsToBeClosed() {

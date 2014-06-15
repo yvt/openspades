@@ -128,14 +128,15 @@ namespace spades { namespace ngclient {
 		
 		std::exception_ptr exptr;
 		client::GameMap * volatile map = nullptr;
+		float volatile progress = 0.f;
 		Mutex mapMutex;
 		
 		void Run() override {
 			try {
 				Stream stream(*this);
 				// TODO: progress notify
-				auto *mp = client::GameMap::LoadNGMap(&stream, [](float per) {
-					SPLog("Map Load: %d%c", (int)(per * 100.f), '%');
+				auto *mp = client::GameMap::LoadNGMap(&stream, [&](float per) {
+					progress = per;
 				});
 				if (!mp) {
 					SPRaise("Null map loaded.");
@@ -168,6 +169,11 @@ namespace spades { namespace ngclient {
 				std::rethrow_exception(exptr);
 			}
 			return map;
+		}
+		
+		float GetProgress() {
+			AutoLocker lock(&mapMutex);
+			return progress;
 		}
 		
 		void Start() {
@@ -216,6 +222,10 @@ namespace spades { namespace ngclient {
 					
 					protocol::MapDataAcknowledgePacket re;
 					host->Send(re);
+					
+					progress = stmp::optional<float>();
+				} else {
+					progress = mapLoader->GetProgress();
 				}
 			} catch (const std::exception& ex) {
 				SPLog("Error while decoding map: %s", ex.what());
@@ -227,6 +237,11 @@ namespace spades { namespace ngclient {
 	
 	void NetworkClient::Connect() {
 		SPLog("Connecting to %s", params.address.asString().c_str());
+		
+		progress = stmp::optional<float>();
+		progressMessage = _Tr("NetworkClient",
+							  "Connecting to Server");
+		
 		try {
 			host->Connect(params.address);
 		} catch (const std::exception& ex) {
@@ -250,6 +265,9 @@ namespace spades { namespace ngclient {
 	void NetworkClient::ConnectedToServer() {
 		SPLog("Connected to server. Waiting for GreetingPacket...");
 		state = State::WaitingForGreeting;
+		progress = stmp::optional<float>();
+		progressMessage = _Tr("NetworkClient",
+							  "Waiting for Reply");
 	}
 	
 	void NetworkClient::DisconnectedFromServer(protocol::DisconnectReason reason) {
@@ -373,6 +391,10 @@ namespace spades { namespace ngclient {
 			SPLog("Received GreetingPacket with %d byte(s) of nonce.",
 				  (int)p.nonce.size());
 			if (c.state == State::WaitingForGreeting) {
+				c.progress = stmp::optional<float>();
+				c.progressMessage = _Tr("NetworkClient",
+										"Authenticating");
+				
 				// TODO: reject too short nonce
 				c.SendInitiateConnection(p.nonce);
 				c.state = State::WaitingForServerCertificate;
@@ -414,6 +436,10 @@ namespace spades { namespace ngclient {
 				
 				c.state = State::LoadingMap;
 				c.savedMapEdits.clear();
+				
+				c.progress = 0.f;
+				c.progressMessage = _Tr("NetworkClient",
+										"Loading Game State");
 				
 				c.SetWorld(nullptr);
 				
