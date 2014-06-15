@@ -145,7 +145,7 @@ namespace spades { namespace server {
 		bool SendAvailableBlock(Connection& c)
 		{
 			AutoLocker lock(&blocksMutex);
-			std::array<char, 16384> fragment;
+			std::array<char, 4096> fragment;
 			if (queuedBytes - frontBlockPos >= fragment.size() ||
 				done) {
 				std::size_t outPos = 0;
@@ -155,6 +155,7 @@ namespace spades { namespace server {
 					}
 					const auto& front = blocks.front();
 					if (frontBlockPos == front.size()) {
+						queuedBytes -= front.size();
 						blocks.pop_front();
 						frontBlockPos = 0;
 					} else {

@@ -283,7 +283,11 @@ namespace spades { namespace server {
 	}
 	
 	void HostPeer::Disconnect(protocol::DisconnectReason reason) {
-		enet_peer_disconnect_later(enetPeer, static_cast<uint32_t>(reason));
+		if (reason == protocol::DisconnectReason::Misc) {
+			enet_peer_disconnect_later(enetPeer, static_cast<uint32_t>(reason));
+		} else {
+			enet_peer_disconnect(enetPeer, static_cast<uint32_t>(reason));
+		}
 	}
 	
 	void HostPeer::OnDisconnected() {
