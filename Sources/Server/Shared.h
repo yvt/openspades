@@ -256,6 +256,7 @@ namespace spades { namespace protocol {
 		std::string locale;
 		std::string playerName;
 		std::string nonce; // used in authentication
+		uint8_t mapQuality;
 	};
 	
 	/** After server receives InitiateConnectionPacket,

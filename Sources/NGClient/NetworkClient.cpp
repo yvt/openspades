@@ -34,6 +34,9 @@
 #include <exception>
 #include <Game/Entity.h>
 #include <Game/AllEntities.h>
+#include <Core/Settings.h>
+
+SPADES_SETTING(cg_mapQuality, "80");
 
 namespace spades { namespace ngclient {
 	
@@ -131,7 +134,9 @@ namespace spades { namespace ngclient {
 			try {
 				Stream stream(*this);
 				// TODO: progress notify
-				auto *mp = client::GameMap::LoadNGMap(&stream);
+				auto *mp = client::GameMap::LoadNGMap(&stream, [](float per) {
+					SPLog("Map Load: %d%c", (int)(per * 100.f), '%');
+				});
 				if (!mp) {
 					SPRaise("Null map loaded.");
 				}
@@ -600,6 +605,7 @@ namespace spades { namespace ngclient {
 		auto re = protocol::InitiateConnectionPacket::CreateDefault();
 		re.nonce = GenerateNonce(256);
 		re.playerName = params.playerName;
+		re.mapQuality = (int)cg_mapQuality;
 		this->nonce = serverNonce + re.nonce;
 		host->Send(re);
 		

@@ -57,6 +57,7 @@ namespace spades { namespace server {
 		std::string serverNonce;
 		std::string clientNonce;
 		std::string nonce;
+		int mapQuality;
 		
 		MapGenerator *mapGenerator;
 		

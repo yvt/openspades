@@ -268,6 +268,7 @@ namespace spades { namespace protocol {
 		p->locale = reader.ReadString();
 		p->playerName = reader.ReadString();
 		p->nonce = reader.ReadBytes();
+		p->mapQuality = reader.ReadByte();
 		
 		return p.release();
 	}
@@ -286,6 +287,7 @@ namespace spades { namespace protocol {
 		writer.WriteString(locale);
 		writer.WriteString(playerName);
 		writer.WriteBytes(nonce);
+		writer.Write(mapQuality);
 		
 		return std::move(writer.ToArray());
 	}

@@ -106,13 +106,14 @@ namespace spades { namespace server {
 		std::size_t queuedBytes = 0;
 		bool volatile done = false;
 		bool volatile shouldAbort = false;
+		int quality;
 		
 		void Run() override {
 			try {
 				Stream outputStream(*this);
 				{
 					client::NGMapOptions opt;
-					opt.quality = 100;
+					opt.quality = quality;
 					map->SaveNGMap(&outputStream, opt);
 				}
 			} catch (const AbortException&) {
@@ -123,9 +124,11 @@ namespace spades { namespace server {
 			done = true;
 		}
 	public:
-		MapGenerator(const client::GameMap& map):
+		MapGenerator(const client::GameMap& map,
+					 int quality):
 		// copy-on-write copy
-		map(new client::GameMap(map), false) {
+		map(new client::GameMap(map), false),
+		quality(quality) {
 		}
 		
 		using Thread::MarkForAutoDeletion;
@@ -307,8 +310,12 @@ namespace spades { namespace server {
 				SPLog("%s nonce = %d byte(s)",
 					  c.peer->GetLogHeader().c_str(),
 					  (int)p.nonce.size());
+				SPLog("%s map quality = %d",
+					  c.peer->GetLogHeader().c_str(),
+					  (int)p.mapQuality);
 				c.clientNonce = p.nonce;
 				c.nonce = c.serverNonce + c.clientNonce;
+				c.mapQuality = p.mapQuality;
 				c.SendServerCertificate();
 			} else {
 				SPRaise("Unexpected InitiateConnectionPacket.");
@@ -442,7 +449,10 @@ namespace spades { namespace server {
 			mapGenerator = nullptr;
 		}
 		
-		mapGenerator = new MapGenerator(*GetWorld().GetGameMap());
+		int mapQuality = this->mapQuality;
+		mapQuality = std::max(std::min(mapQuality, 100), 20);
+		mapGenerator = new MapGenerator(*GetWorld().GetGameMap(),
+										mapQuality);
 		mapGenerator->Start();
 	}
 	
