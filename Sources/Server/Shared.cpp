@@ -95,14 +95,14 @@ namespace spades { namespace protocol {
 						static_cast<unsigned long long>(len));
 			}
 			
-			// convert to C string once so that
-			// null-chars are removed
-			std::string s = ReadData(static_cast<std::size_t>(len)).c_str();
+			std::string s = ReadData(static_cast<std::size_t>(len));
 			return s;
 		}
 		
 		std::string ReadString(){
-			return ReadBytes();
+			// convert to C string once so that
+			// null-chars are removed
+			return ReadBytes().c_str();
 		}
 		
 		template<class T>

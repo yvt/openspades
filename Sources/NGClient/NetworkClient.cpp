@@ -115,6 +115,7 @@ namespace spades { namespace ngclient {
 									currentBlockPos, copied);
 						bytes -= copied;
 						currentBlockPos += copied;
+						bufout += copied;
 					}
 				}
 			
@@ -193,10 +194,11 @@ namespace spades { namespace ngclient {
 	NetworkClient::NetworkClient(const NetworkClientParams& params):
 	params(params){
 		host.reset(new Host());
+		host->AddListener(this);
 	}
 	
 	NetworkClient::~NetworkClient() {
-		
+		host->RemoveListener(this);
 	}
 	
 	void NetworkClient::Update() {
@@ -219,6 +221,7 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::Connect() {
+		SPLog("Connecting to %s", params.address.asString().c_str());
 		try {
 			host->Connect(params.address);
 		} catch (const std::exception& ex) {
@@ -240,11 +243,13 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::ConnectedToServer() {
+		SPLog("Connected to server. Waiting for GreetingPacket...");
 		state = State::WaitingForGreeting;
 	}
 	
 	void NetworkClient::DisconnectedFromServer(protocol::DisconnectReason reason) {
 		std::string str;
+		SPLog("ENet-level disconnection.");
 		if (state == State::NotConnected) {
 			return;
 		}
@@ -272,6 +277,7 @@ namespace spades { namespace ngclient {
 				str = _Tr("NetworkClient", "Protocol version mismatch.");
 				break;
 		}
+		SPLog("Reason: %s", str.c_str());
 		
 		for (auto *l: listeners)
 			l->Disconnected(str);
@@ -359,7 +365,10 @@ namespace spades { namespace ngclient {
 	public:
 		PacketVisitor(NetworkClient& c): c(c) { }
 		void visit(protocol::GreetingPacket& p) override {
+			SPLog("Received GreetingPacket with %d byte(s) of nonce.",
+				  (int)p.nonce.size());
 			if (c.state == State::WaitingForGreeting) {
+				// TODO: reject too short nonce
 				c.SendInitiateConnection(p.nonce);
 				c.state = State::WaitingForServerCertificate;
 			} else {
@@ -370,6 +379,15 @@ namespace spades { namespace ngclient {
 			SPRaise("Unexpected InitiateConnectionPacket.");
 		}
 		void visit(protocol::ServerCertificatePacket& p) override {
+			SPLog("Received ServerCertificatePacket.");
+			if (p.isValid) {
+				SPLog("ServerCertificatePacket contains %d byte(s) of"
+					  " digital cert and %d byte(s) of signature.",
+					  (int)p.certificate.size(),
+					  (int)p.signature.size());
+			} else {
+				SPLog("ServerCertificatePacket didn't have a digital cert.");
+			}
 			// TODO: handle and validate server certificate
 			c.SendClientCertificate();
 		}
@@ -377,9 +395,12 @@ namespace spades { namespace ngclient {
 			SPRaise("Unexpected ClientCertificatePacket.");
 		}
 		void visit(protocol::KickPacket& p) override {
+			SPLog("Received KickPacket: %s", p.reason.c_str());
 			c.Kicked(p.reason);
 		}
 		void visit(protocol::GameStateHeaderPacket& p) override {
+			SPLog("Received GameStateHeaderPacket.");
+			
 			// this packet might be sent during game to
 			// start another round.
 			if (c.state != State::WaitingForGreeting &&
@@ -393,6 +414,7 @@ namespace spades { namespace ngclient {
 				
 				// start loading map.
 				c.mapLoader.reset(new MapLoader());
+				c.mapLoader->Start();
 			} else {
 				SPRaise("Unexpected GameStateHeaderPacket.");
 			}
@@ -407,6 +429,7 @@ namespace spades { namespace ngclient {
 			}
 		}
 		void visit(protocol::MapDataFinalPacket& p) override {
+			SPLog("Received MapDataFinalPacket.");
 			if (c.state == State::LoadingMap) {
 				SPAssert(c.mapLoader);
 				c.mapLoader->LoadEOF();
@@ -418,10 +441,16 @@ namespace spades { namespace ngclient {
 			SPRaise("Unexpected MapDataAcknowledgePacket.");
 		}
 		void visit(protocol::GameStateFinalPacket& p) override {
+			SPLog("Received GameStateFinalPacket.");
+			SPLog("GameStateFinalPacket contains %d entity(ies).",
+				  (int)p.items.size());
 			if (c.state == State::LoadingGameState) {
 				SPAssert(c.mapLoader);
 				game::WorldParameters params;
 				for (const auto& pair: p.properties) {
+					SPLog("World property '%s' = '%s'",
+						  pair.first.c_str(),
+						  pair.second.c_str());
 					params.Update(pair.first, pair.second);
 				}
 				Handle<game::World> world(new game::World(params,
@@ -439,6 +468,8 @@ namespace spades { namespace ngclient {
 				}
 				
 				// apply saved map edits
+				SPLog("Applying saved %d map edit(s)",
+					  (int)c.savedMapEdits.size());
 				for (const auto& seq: c.savedMapEdits) {
 					ApplyMapEdit(seq);
 				}

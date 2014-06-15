@@ -79,6 +79,7 @@ namespace spades { namespace server {
 			}
 			
 			AutoLocker lock(&blocksMutex);
+			queuedBytes += block.size();
 			blocks.emplace_back(std::move(block));
 		}
 		
@@ -203,6 +204,9 @@ namespace spades { namespace server {
 		p.nonce = serverNonce;
 		peer->Send(p);
 		
+		SPLog("%s sent GreetingPacket",
+			  peer->GetLogHeader().c_str());
+		
 		state = State::NotInitiated;
 		stateTimeout = 10.0;
 		
@@ -231,13 +235,15 @@ namespace spades { namespace server {
 		if (!peer) return;
 		
 		if (state == State::MapTransfer) {
-			SPAssert(MapGenerator);
+			SPAssert(mapGenerator);
 			if (peer->GetPendingBytes() < 64 * 1024 &&
 				mapGenerator->SendAvailableBlock(*this)) {
 				// complete.
 				state = State::CompletingMapTransfer;
 				protocol::MapDataFinalPacket p;
 				peer->Send(p);
+				SPLog("%s sent CompletingMapTransfer",
+					  peer->GetLogHeader().c_str());
 			}
 		}
 		
@@ -245,6 +251,8 @@ namespace spades { namespace server {
 			stateTimeout -= dt;
 			if (stateTimeout < 0.0) {
 				// client should have responded earlier.
+				SPLog("%s timed out",
+					  peer->GetLogHeader().c_str());
 				peer->Disconnect(protocol::DisconnectReason::Timeout);
 				peer = nullptr;
 			}
@@ -269,6 +277,8 @@ namespace spades { namespace server {
 			SPRaise("Unexpected GreetingPacket.");
 		}
 		void visit(const protocol::InitiateConnectionPacket& p) override {
+			SPLog("%s [InitiateConnectionPacket]",
+				  c.peer->GetLogHeader().c_str());
 			if (c.state == State::NotInitiated) {
 				if (p.protocolName != protocol::ProtocolName) {
 					c.peer->Disconnect(protocol::DisconnectReason::ProtocolMismatch);
@@ -295,6 +305,9 @@ namespace spades { namespace server {
 				SPLog("%s name = '%s'",
 					  c.peer->GetLogHeader().c_str(),
 					  p.playerName.c_str());
+				SPLog("%s nonce = %d byte(s)",
+					  c.peer->GetLogHeader().c_str(),
+					  (int)p.nonce.size());
 				c.clientNonce = p.nonce;
 				c.nonce = c.serverNonce + c.clientNonce;
 				c.SendServerCertificate();
@@ -306,8 +319,19 @@ namespace spades { namespace server {
 			SPRaise("Unexpected ServerCertificatePacket.");
 		}
 		void visit(const protocol::ClientCertificatePacket& p) override {
+			SPLog("%s [ClientCertificatePacket]",
+				  c.peer->GetLogHeader().c_str());
 			if (c.state == State::WaitingForCertificate) {
 				// TODO: validate certificate
+				if (p.isValid) {
+					SPLog("%s %d byte(s) of cert and %d byte(s) of sig",
+						  c.peer->GetLogHeader().c_str(),
+						  (int)p.certificate.size(),
+						  (int)p.signature.size());
+				} else {
+					SPLog("%s no certificate.",
+						  c.peer->GetLogHeader().c_str());
+				}
 				c.StartStateTransfer();
 			} else {
 				SPRaise("Unexpected ClientCertificatePacket.");
@@ -326,6 +350,8 @@ namespace spades { namespace server {
 			SPRaise("Unexpected MapDataFinalPacket.");
 		}
 		void visit(const protocol::MapDataAcknowledgePacket& p) override {
+			SPLog("%s [MapDataAcknowledgePacket]",
+				  c.peer->GetLogHeader().c_str());
 			if (c.state == State::CompletingMapTransfer) {
 				c.FinalStateTransfer();
 			} else {
@@ -392,6 +418,9 @@ namespace spades { namespace server {
 		re.isValid = false;
 		peer->Send(re);
 		
+		SPLog("%s sent ServerCertificatePacket",
+			  peer->GetLogHeader().c_str());
+		
 		state = State::WaitingForCertificate;
 		stateTimeout = 60.0;
 	}
@@ -404,6 +433,9 @@ namespace spades { namespace server {
 		
 		protocol::GameStateHeaderPacket re;
 		peer->Send(re);
+		
+		SPLog("%s sent GameStateHeaderPacket",
+			  peer->GetLogHeader().c_str());
 		
 		if (mapGenerator) {
 			mapGenerator->Abort();
@@ -426,6 +458,9 @@ namespace spades { namespace server {
 			re.items.push_back(e->Serialize());
 		}
 		peer->Send(re);
+		
+		SPLog("%s sent GameStateFinalPacket",
+			  peer->GetLogHeader().c_str());
 		
 		// welcome to the server!
 		state = State::Game;

@@ -25,6 +25,8 @@ namespace spades { namespace ngclient {
 	
 	void Client::MouseEvent(float x, float y) {
 		switch (GetInputRoute()) {
+			case InputRoute::None:
+				return;
 			case InputRoute::Arena:
 				arena->MouseEvent(x, y);
 				break;
@@ -35,6 +37,8 @@ namespace spades { namespace ngclient {
 	
 	void Client::KeyEvent(const std::string &key, bool down) {
 		switch (GetInputRoute()) {
+			case InputRoute::None:
+				return;
 			case InputRoute::Arena:
 				arena->KeyEvent(key, down);
 				break;
@@ -45,6 +49,8 @@ namespace spades { namespace ngclient {
 	
 	void Client::TextInputEvent(const std::string &key) {
 		switch (GetInputRoute()) {
+			case InputRoute::None:
+				return;
 			case InputRoute::Arena:
 				arena->TextInputEvent(key);
 				break;
@@ -56,6 +62,8 @@ namespace spades { namespace ngclient {
 	void Client::TextEditingEvent(const std::string &key,
 								  int start, int len) {
 		switch (GetInputRoute()) {
+			case InputRoute::None:
+				return;
 			case InputRoute::Arena:
 				arena->TextEditingEvent(key, start, len);
 				break;
@@ -66,6 +74,8 @@ namespace spades { namespace ngclient {
 	
 	bool Client::AcceptsTextInput() {
 		switch (GetInputRoute()) {
+			case InputRoute::None:
+				return false;
 			case InputRoute::Arena:
 				return arena->AcceptsTextInput();
 			default:
@@ -75,6 +85,8 @@ namespace spades { namespace ngclient {
 	}
 	AABB2 Client::GetTextInputRect() {
 		switch (GetInputRoute()) {
+			case InputRoute::None:
+				return AABB2();
 			case InputRoute::Arena:
 				return arena->GetTextInputRect();
 			default:
@@ -85,6 +97,8 @@ namespace spades { namespace ngclient {
 	
 	bool Client::NeedsAbsoluteMouseCoordinate() {
 		switch (GetInputRoute()) {
+			case InputRoute::None:
+				return true;
 			case InputRoute::Arena:
 				return arena->NeedsAbsoluteMouseCoordinate();
 			default:
@@ -95,6 +109,8 @@ namespace spades { namespace ngclient {
 	
 	void Client::WheelEvent(float x, float y) {
 		switch (GetInputRoute()) {
+			case InputRoute::None:
+				return;
 			case InputRoute::Arena:
 				arena->WheelEvent(x, y);
 				break;

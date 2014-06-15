@@ -87,7 +87,7 @@ namespace spades { namespace ngclient {
 		
 	public:
 		
-		Arena(Client *);
+		Arena(Client *, game::World *);
 		
 		~Arena();
 		

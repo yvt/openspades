@@ -24,6 +24,10 @@
 #include <Game/World.h>
 
 #include <Server/Server.h>
+#include "NetworkClient.h"
+#include <Core/Settings.h>
+
+SPADES_SETTING(cg_playerName, "");
 
 namespace spades { namespace ngclient {
 	
@@ -42,17 +46,38 @@ namespace spades { namespace ngclient {
 			server.reset(new server::Server());
 		}
 		
-		arena.Set(new Arena(this), false);
-		arena->SetupRenderer();
+		NetworkClientParams netParams;
+		netParams.address = ServerAddress
+		(params.host, ProtocolVersion::Ngspades);
+		if (params.hostLocalServer) {
+			netParams.address = ServerAddress
+			("127.0.0.1:2064", ProtocolVersion::Ngspades);
+		}
+		netParams.playerName = (std::string)cg_playerName;
+		net.reset(new NetworkClient(netParams));
+		net->AddListener(this);
+		
+		net->Connect();
+		
+		//arena.Set(new Arena(this), false);
+		//arena->SetupRenderer();
 	}
 	
 	Client::~Client() {
 		if(arena)
 		   arena->UnsetupRenderer();
 		arena.Set(nullptr);
+		net->RemoveListener(this);
 	}
 	
 	void Client::RunFrame(float dt) {
+		if (net) {
+			net->Update();
+		}
+		if (server) {
+			server->Update(dt);
+		}
+		
 		if (arena) {
 			arena->RunFrame(dt);
 		}
@@ -69,9 +94,25 @@ namespace spades { namespace ngclient {
 	}
 	
 	Client::InputRoute Client::GetInputRoute() {
-		return InputRoute::Arena;
+		return arena ? InputRoute::Arena : InputRoute::None;
 	}
 	
+#pragma mark - NetworkClientListener
+	
+	void Client::WorldChanged(game::World *w) {
+		if (w) {
+			arena.Set(new Arena(this, w), false);
+			arena->SetupRenderer();
+		} else {
+			if(arena)
+				arena->UnsetupRenderer();
+			arena.Set(nullptr);
+		}
+	}
+	
+	void Client::Disconnected(const std::string &reason) {
+		SPLog("Disconnected: %s", reason.c_str());
+	}
 	
 } }
 

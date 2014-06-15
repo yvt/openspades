@@ -22,7 +22,7 @@
 #include <Gui/View.h>
 #include <Client/IRenderer.h>
 #include <Client/IAudioDevice.h>
-
+#include "NetworkClient.h"
 
 namespace spades { namespace server {
 	class Server;
@@ -37,21 +37,30 @@ namespace spades { namespace ngclient {
 	
 	class Arena;
 	
-	class Client: public gui::View
+	class NetworkClient;
+	
+	class Client:
+	public gui::View,
+	NetworkClientListener
 	{
 		friend class Arena;
 		Handle<client::IRenderer> renderer;
 		Handle<client::IAudioDevice> audio;
 		std::unique_ptr<server::Server> server;
+		std::unique_ptr<NetworkClient> net;
 		ClientParams const params;
 		
 		Handle<Arena> arena;
 		enum class InputRoute
 		{
+			None,
 			Arena,
 			ClientUI
 		};
 		InputRoute GetInputRoute();
+		
+		void WorldChanged(game::World *) override;
+		void Disconnected(const std::string& reason) override;
 		
 	public:
 		

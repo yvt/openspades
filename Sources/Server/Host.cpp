@@ -43,7 +43,7 @@ namespace spades { namespace server {
 		
 		ENetAddress addr;
 		addr.host = ENET_HOST_ANY;
-		addr.port = 0x810;
+		addr.port = 0x810; // TODO: make this configurable
 		host = enet_host_create(&addr,
 								256, 1,
 								(int)sv_bandwidth,
@@ -127,9 +127,9 @@ namespace spades { namespace server {
 	void Host::Broadcast(const protocol::Packet &packet) {
 		auto data = packet.Generate();
 		auto *p = enet_packet_create(data.data(), data.size(),
-									 ENET_PACKET_FLAG_NO_ALLOCATE);
+									 ENET_PACKET_FLAG_RELIABLE);
 		enet_host_broadcast(host, 0, p);
-		enet_packet_destroy(p);	}
+	}
 	
 	void Host::DoEvents() {
 		SPADES_MARK_FUNCTION();
@@ -274,9 +274,8 @@ namespace spades { namespace server {
 	void HostPeer::Send(const protocol::Packet &packet) {
 		auto data = packet.Generate();
 		auto *p = enet_packet_create(data.data(), data.size(),
-										  ENET_PACKET_FLAG_NO_ALLOCATE);
+								     ENET_PACKET_FLAG_RELIABLE);
 		enet_peer_send(enetPeer, 0, p);
-		enet_packet_destroy(p);
 	}
 	
 	int HostPeer::GetPendingBytes() {

@@ -186,9 +186,8 @@ namespace spades { namespace ngclient {
 		
 		auto data = packet.Generate();
 		auto *p = enet_packet_create(data.data(), data.size(),
-									 ENET_PACKET_FLAG_NO_ALLOCATE);
+									 ENET_PACKET_FLAG_RELIABLE);
 		enet_peer_send(peer, 0, p);
-		enet_packet_destroy(p);
 		
 		return true;
 	}

@@ -30,24 +30,16 @@
 
 namespace spades { namespace ngclient {
 	
-	Arena::Arena(Client *client):
+	Arena::Arena(Client *client, game::World *world):
 	client(client),
 	renderer(client->renderer),
-	audio(client->audio) {
+	audio(client->audio),
+	world(world){
 		SPADES_MARK_FUNCTION();
 		
 		SPAssert(renderer);
 		SPAssert(audio);
 		
-		// FIXME: world must be suplied from NetworkClient
-		
-		// TODO: provide correct map
-		std::unique_ptr<IStream> stream(FileManager::OpenForReading("Maps/Title.vxl"));
-		Handle<client::GameMap> map(client::GameMap::Load(stream.get()), false);
-		
-		game::WorldParameters param;
-		
-		world.Set(new game::World(param, map), false);
 		world->AddListener(this);
 		
 		LoadEntities();
