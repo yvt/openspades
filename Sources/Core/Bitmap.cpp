@@ -117,14 +117,29 @@ namespace spades {
 		}
 	}
 	
-	void Bitmap::Save(const std::string &filename) {
+	void Bitmap::Save(const std::string &filename,
+					  int quality) {
 		std::vector<IBitmapCodec *>codecs = IBitmapCodec::GetAllCodecs();
 		for(size_t i = 0; i < codecs.size(); i++){
 			IBitmapCodec *codec = codecs[i];
 			if(codec->CanSave() && codec->CheckExtension(filename)){
 				StreamHandle str = FileManager::OpenForWriting(filename.c_str());
 				
-				codec->Save(str, this);
+				codec->Save(str, this, quality);
+				return;
+			}
+		}
+		
+		SPRaise("Bitmap codec not found for filename: %s", filename.c_str());
+		
+	}
+	void Bitmap::Save(const std::string &filename,
+					  IStream *stream, int quality) {
+		std::vector<IBitmapCodec *>codecs = IBitmapCodec::GetAllCodecs();
+		for(size_t i = 0; i < codecs.size(); i++){
+			IBitmapCodec *codec = codecs[i];
+			if(codec->CanSave() && codec->CheckExtension(filename)){
+				codec->Save(stream, this, quality);
 				return;
 			}
 		}

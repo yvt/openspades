@@ -87,7 +87,7 @@ namespace spades {
 			}
 		}
 		
-		virtual void Save(IStream *, Bitmap *) {
+		virtual void Save(IStream *, Bitmap *, int) {
 			SPADES_MARK_FUNCTION();
 			SPNotImplemented();
 		}

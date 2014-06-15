@@ -25,6 +25,8 @@
 #include <memory>
 #include <unordered_map>
 #include <array>
+#include <Core/Bitmap.h>
+#include <Core/DynamicMemoryStream.h>
 
 namespace spades {
 	namespace client {
@@ -184,424 +186,6 @@ namespace spades {
 				return ret;
 			}
 		};
-		
-		namespace ct {
-			
-//#define USE_HUFFMAN
-			
-			template<int bits>
-			struct Block {
-				enum { size = 1 << bits };
-				int pixels[size][size];
-			};
-			
-			typedef Block<3> MacroBlock;
-			
-			namespace {
-			}
-			
-			class CodecBase {
-			protected:
-				// bit depths for each wavelet level
-				int bitdepths[4];
-				bool huffmanBitShift;
-				int roundZeroLimits[4];
-				
-				CodecBase(const NGMapOptions& opt) {
-					bitdepths[0] = 8;
-					bitdepths[1] = 4 + (opt.quality >> 5);
-					bitdepths[2] = 3 + (opt.quality >> 5);
-					bitdepths[3] = 1 + (opt.quality >> 4);
-					huffmanBitShift = opt.quality > 70;
-					roundZeroLimits[0] = 0;
-					roundZeroLimits[1] = 1;
-					roundZeroLimits[2] = 6 - (opt.quality >> 5);
-					roundZeroLimits[3] = 10 - (opt.quality >> 4);
-				}
-			};;
-			
-			class Decoder: CodecBase {
-				BitReader& reader;
-				
-				/*
-				 inline void WriteHuffmanInt(int i) {
-				 if(i == 0) {
-				 writer.WriteBit(0);
-				 }else{
-				 int abs = i < 0 ? -i : i;
-				 writer.WriteBit(1);
-				 for(int k = 1; k < abs; k++) writer.WriteBit(1);
-				 writer.WriteBit(0);
-				 writer.WriteBit(i < 0 ? 1 : 0);
-				 }
-				 }*/
-				
-				inline int ReadHuffmanInt() {
-					if(reader.ReadBit()) {
-						int i = 1;
-						while(reader.ReadBit() == 1) i++;
-						if(reader.ReadBit()) i = -i;
-						return i;
-					}else{
-						return 0;
-					}
-				}
-				
-				template<int level>
-				inline void Pass(Block<level>&);
-				
-				template<int level>
-				inline void Filter(int a[(1 << level) + 8],
-								   int b[(1 << level) + 8]);
-			public:
-				Decoder(BitReader& f, const NGMapOptions& opt):reader(f),CodecBase(opt) {}
-				
-				
-				void Decode(MacroBlock& mb) {
-					Pass<3>(mb);
-				}
-			};
-			
-			template <int level> inline void Decoder::Pass(Block<level> &b) {
-				SPADES_MARK_FUNCTION();
-				
-				int bitdepth = bitdepths[level];
-				
-		
-				int bits = 0;
-				if(huffmanBitShift){
-					while(reader.ReadBit() == 0) bits++;
-				}else{
-#ifdef USE_HUFFMAN
-					bits = ReadHuffmanInt();
-#else
-					bits = reader.Read(3); // effective bits: bitdepth - bitdepth + 7
-#endif
-				}
-				
-				int redundantBits = 0;
-				while(reader.ReadBit() == 0) redundantBits++;
-				
-				int writtenBits = bitdepth - redundantBits;
-				
-				int shiftLeft = 32 - writtenBits;
-				int shift = shiftLeft - bits;
-				
-				// to fill LSBs
-				int mask2 = (1 << (bits + bitdepth)) - 1;
-				int shift2 = bitdepth;
-				
-				// read HL
-				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
-						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
-#ifndef USE_HUFFMAN
-						int v = static_cast<int32_t>(reader.Read(writtenBits) << shiftLeft) >> shift;
-#else
-						int v = ReadHuffmanInt() << bits;
-#endif
-						//v |= (v & mask2) >> shift2;
-						b.pixels[(x << 1) + 1][y << 1] = v;
-					}
-				// read LH
-				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
-						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
-#ifndef USE_HUFFMAN
-						int v = static_cast<int32_t>(reader.Read(writtenBits) << shiftLeft) >> shift;
-#else
-						int v = ReadHuffmanInt() << bits;
-#endif
-						//v |= (v & mask2) >> shift2;
-						b.pixels[x << 1][(y << 1) + 1] = v;
-					}
-				// read HH
-				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
-						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
-#ifndef USE_HUFFMAN
-						int v = static_cast<int32_t>(reader.Read(writtenBits) << shiftLeft) >> shift;
-#else
-						int v = ReadHuffmanInt() << bits;
-#endif
-						//v |= (v & mask2) >> shift2;
-						b.pixels[(x << 1)][(y << 1)] = v;
-					}
-				
-				// get LL
-				Block<level - 1> lower;
-				Pass(lower);
-				
-				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int y = 0; y < Block<level - 1>::size; y++)
-						b.pixels[(x << 1) + 1][(y << 1) + 1] = lower.pixels[x][y];
-				
-				// do filtering
-				int tmp[Block<level>::size + 8];
-				int tmp2[Block<level>::size + 8];
-				for(int x = 0; x < Block<level>::size; x++) {
-					for(int y = 0; y < Block<level>::size; y++)
-						tmp[y + 4] = b.pixels[x][y];
-					Filter<level>(tmp, tmp2);
-					for(int y = 0; y < Block<level>::size; y++)
-						b.pixels[x][y] = tmp2[y + 4];
-				}
-				for(int y = 0; y < Block<level>::size; y++) {
-					for(int x = 0; x < Block<level>::size; x++)
-						tmp[x + 4] = b.pixels[x][y];
-					Filter<level>(tmp, tmp2);
-					for(int x = 0; x < Block<level>::size; x++)
-						b.pixels[x][y] = tmp2[x + 4];
-				}
-				
-				
-			}
-			
-			template <> void Decoder::Pass<0>(Block<0> &b) {
-				SPADES_MARK_FUNCTION();
-				b.pixels[0][0] = static_cast<int>(reader.Read(9) << 23) >> 22;
-			}
-			
-			
-			template<int level> inline void Decoder::Filter(int arr[(1 << level) + 8],
-															int ret[(1 << level) + 8]) {
-				static const int size = 1 << level;
-				
-				if(level == 3) {
-					arr[3] = arr[5]; arr[2] = arr[6];
-					arr[1] = arr[7]; arr[0] = arr[8];
-					arr[12] = arr[10]; arr[13] = arr[9];
-					arr[14] = arr[8]; arr[15] = arr[7];
-				} else if(level == 2) {
-					arr[3] = arr[5]; arr[2] = arr[6];
-					arr[1] = arr[7]; arr[0] = arr[6];
-					arr[8] = arr[6]; arr[9] = arr[5];
-					arr[10] = arr[4]; arr[11] = arr[5];
-				} else if(level == 1) {
-					arr[3] = arr[5]; arr[2] = arr[6];
-					arr[1] = arr[5]; arr[0] = arr[6];
-					arr[6] = arr[4]; arr[7] = arr[5];
-					arr[8] = arr[4]; arr[9] = arr[5];
-				}
-				for(int i = 3; i < size + 4; i+=2) {
-					ret[i] = arr[i] - ((arr[i - 1] + arr[i + 1] + 2) >> 2);
-				}
-				for(int i = 4; i < size + 4; i+=2) {
-					ret[i] = arr[i] + ((ret[i - 1] + ret[i + 1]) >> 1);
-				}
-			}
-			
-			/** for algorithm design */
-			class Histogram {
-				std::unordered_map<int, int> hist;
-				const char *n;
-			public:
-				Histogram(const char *name):n(name){}
-				~Histogram() {
-					fprintf(stderr, "==== HISTOGRAM: %s ====\n", n);
-					std::vector<std::pair<int, int>> lst;
-					for(const auto& e: hist) {
-						lst.emplace_back(e);
-					}
-					std::sort(lst.begin(), lst.end());
-					for(const auto& e: lst) {
-						fprintf(stderr, "%d,%d\n", e.first, e.second);
-					}
-					fprintf(stderr, "==== END: %s ====\n", n);
-					
-				}
-				
-				void operator ()(int v) {
-					hist[v] ++;
-				}
-			};
-			
-			static Histogram histogram_coded("Mantissa");
-			
-			class Encoder: CodecBase {
-				BitWriter& writer;
-				
-				inline void WriteHuffmanInt(int i) {
-					if(i == 0) {
-						writer.WriteBit(0);
-					}else{
-						int abs = i < 0 ? -i : i;
-						writer.WriteBit(1);
-						for(int k = 1; k < abs; k++) writer.WriteBit(1);
-						writer.WriteBit(0);
-						writer.WriteBit(i < 0 ? 1 : 0);
-					}
-				}
-				
-				template<int level>
-				inline void Pass(Block<level>& block);
-				
-				template<int level>
-				inline void Filter(int arr[(1 << level) + 8],
-								   int ret[(1 << level) + 8]);
-			public:
-				Encoder(BitWriter& f, const NGMapOptions& opt):writer(f),CodecBase(opt) {}
-				
-				void Encode(MacroBlock& mb) {
-					Pass(mb);
-				}
-			};
-			
-			template<int level> inline void Encoder::Pass(Block<level>& b) {
-				SPADES_MARK_FUNCTION();
-				
-				// do filtering
-				int tmp[Block<level>::size + 8];
-				int tmp2[Block<level>::size + 8];
-				for(int y = 0; y < Block<level>::size; y++) {
-					for(int x = 0; x < Block<level>::size; x++)
-						tmp[x + 4] = b.pixels[x][y];
-					Filter<level>(tmp, tmp2);
-					for(int x = 0; x < Block<level>::size; x++)
-						b.pixels[x][y] = tmp2[x + 4];
-				}
-				for(int x = 0; x < Block<level>::size; x++) {
-					for(int y = 0; y < Block<level>::size; y++)
-						tmp[y + 4] = b.pixels[x][y];
-					Filter<level>(tmp, tmp2);
-					for(int y = 0; y < Block<level>::size; y++)
-						b.pixels[x][y] = tmp2[y + 4];
-				}
-				
-				// calc effective bits
-				int bitdepth = bitdepths[level];
-				int bits = 1; //bitdepth - 1;
-				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int y = 0; y < Block<level - 1>::size; y++) {
-						int k = b.pixels[(x << 1) + 1][y << 1];
-						if(k < 0) k = ~k; while((unsigned int)k >> bits) bits++;
-						k = b.pixels[(x << 1)][(y << 1)];
-						if(k < 0) k = ~k; while((unsigned int)k >> bits) bits++;
-						k = b.pixels[x << 1][(y << 1) +  1];
-						if(k < 0) k = ~k; while((unsigned int)k >> bits) bits++;
-					}
-				bits++;
-				
-				int redundantBits = std::max(bitdepth - bits, 0);
-				int writtenBits = std::min(bits, bitdepth);
-				
-				if(huffmanBitShift) {
-					if(bits > bitdepth + 7) bits = bitdepth + 7;
-					for(int i = bits - bitdepth; i > 0; i--) writer.WriteBit(0);
-					writer.WriteBit(1);
-				}else{
-#ifdef USE_HUFFMAN
-					WriteHuffmanInt(std::max(bits - bitdepth, 0));
-#else
-					writer.Write(std::max(bits - bitdepth, 0), 3);
-#endif
-				}
-				
-				//histogram_coded(bits);
-				for(int i = redundantBits; i > 0; i--) writer.WriteBit(0);
-				writer.WriteBit(1);
-				
-				int shift = std::max(bits - bitdepth, 0);
-				int round = (1 << shift) >> 1;
-				int8_t maxValue = ((1 << writtenBits) >> 1) - 1;
-				int8_t minValue = ~maxValue;
-				
-				int8_t roundZeroMin = -roundZeroLimits[level];
-				int8_t roundZeroMax = roundZeroLimits[level];
-				
-				// write HL
-				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
-						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
-						int k = b.pixels[(x << 1) + 1][y << 1];
-						if(k >= roundZeroMin && k <= roundZeroMax) k = 0;
-						k = (k + round) >> shift;
-						k = std::max<int>(std::min<int>(k, maxValue), minValue);
-#ifdef USE_HUFFMAN
-						WriteHuffmanInt(k);
-#else
-						writer.Write(k, writtenBits);
-#endif
-					}
-				// write LH
-				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
-						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
-						int k = b.pixels[x << 1][(y << 1) + 1];
-						if(k >= roundZeroMin && k <= roundZeroMax) k = 0;
-						k = (k + round) >> shift;
-						k = std::max<int>(std::min<int>(k, maxValue), minValue);
-#ifdef USE_HUFFMAN
-						WriteHuffmanInt(k);
-#else
-						writer.Write(k, writtenBits);
-#endif
-					}
-				// write HH
-				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int yy = 0; yy < Block<level - 1>::size; yy++) {
-						int y = (x&1) ? (Block<level - 1>::size - 1 - yy) : yy;
-						int k = b.pixels[(x << 1)][(y << 1)];
-						if(k >= roundZeroMin && k <= roundZeroMax) k = 0;
-						k = (k + round) >> shift;
-						k = std::max<int>(std::min<int>(k, maxValue), minValue);
-#ifdef USE_HUFFMAN
-						WriteHuffmanInt(k);
-#else
-						writer.Write(k, writtenBits);
-#endif
-					}
-				
-				// write LL
-				Block<level - 1> lower;
-				for(int x = 0; x < Block<level - 1>::size; x++)
-					for(int y = 0; y < Block<level - 1>::size; y++)
-						lower.pixels[x][y] = b.pixels[(x << 1) + 1][(y << 1) + 1];
-				/*
-				for(int y = 0; y < Block<level>::size; y++) {
-					for(int x = 0; x < Block<level>::size; x++) {
-						printf("%5d ", b.pixels[((x << 1) & 7) | (x >> 2)][((y << 1) & 7) | (y >> 2)]);
-					}
-					puts("");
-				}//*/
-				
-				Pass(lower);
-			}
-			
-			template<> inline void Encoder::Pass<0>(Block<0>& b) {
-				SPADES_MARK_FUNCTION();
-				writer.Write((b.pixels[0][0] + 1) >> 1, 9);
-			}
-			
-			template<int level> inline void Encoder::Filter(int arr[(1 << level) + 8],
-															int ret[(1 << level) + 8]) {
-				static const int size = 1 << level;
-				
-				if(level == 3) {
-					arr[3] = arr[5]; arr[2] = arr[6];
-					arr[1] = arr[7]; arr[0] = arr[8];
-					arr[12] = arr[10]; arr[13] = arr[9];
-					arr[14] = arr[8]; arr[15] = arr[7];
-				} else if(level == 2) {
-					arr[3] = arr[5]; arr[2] = arr[6];
-					arr[1] = arr[7]; arr[0] = arr[6];
-					arr[8] = arr[6]; arr[9] = arr[5];
-					arr[10] = arr[4]; arr[11] = arr[5];
-				} else if(level == 1) {
-					arr[3] = arr[5]; arr[2] = arr[6];
-					arr[1] = arr[5]; arr[0] = arr[6];
-					arr[6] = arr[4]; arr[7] = arr[5];
-					arr[8] = arr[4]; arr[9] = arr[5];
-				}
-				
-				for(int i = 4; i <= size + 4; i+=2) {
-					ret[i] = arr[i] - ((arr[i - 1] + arr[i + 1]) >> 1);
-				}
-				for(int i = 5; i < size + 4; i+=2) {
-					ret[i] = arr[i] + ((ret[i - 1] + ret[i + 1] + 2) >> 2);
-				}
-			}
-		}
 		
 		struct ColorBlock {
 			uint8_t needscolor[8][8];
@@ -1129,7 +713,7 @@ namespace spades {
 		
 		void NGMapOptions::Validate() const {
 			SPADES_MARK_FUNCTION();
-			if(quality < 0 || quality > 100) {
+			if(quality < 1 || quality > 100) {
 				SPRaise("Invalid map quality value: %d", quality);
 			}
 		}
@@ -1144,6 +728,8 @@ namespace spades {
 			friend class ColorBlockEmitter;
 			IStream& stream;
 			NGMapOptions options;
+			Handle<Bitmap> lossyImage;
+			uint32_t lossyIndex = 0;
 			
 			void DecodeConstant(uint8_t, ColorBlock& block) {
 				SPADES_MARK_FUNCTION();
@@ -1263,32 +849,36 @@ namespace spades {
 			
 			void DecodePlanarCT(PlanarColorBlock& sub) {
 				SPADES_MARK_FUNCTION();
-				BitReader reader(stream);
 				
-				ct::MacroBlock blockY, blockU, blockV;
+				uint32_t index = lossyIndex++;
+				uint32_t cols = lossyImage->GetWidth() / 8;
+				uint32_t rows = lossyImage->GetHeight() / 8;
+				uint32_t col = index % cols;
+				uint32_t row = index / cols;
 				
-				auto doBlock = [&](ct::MacroBlock& block) {
-					ct::Decoder decoder(reader, options);
-					decoder.Decode(block);
-				};
+				if (row >= rows) {
+					SPRaise("Invalid lossy tile index");
+				}
 				
-				doBlock(blockY);
-				doBlock(blockU);
-				doBlock(blockV);
+				// Y invert
+				row = rows - 1 - row;
 				
-				for(int x = 0; x < 8; x++) {
-					for(int y = 0; y < 8; y++) {
-						auto t = -blockU.pixels[x][y];
-						auto& c = sub.colors[x][y];
-						c.y = blockY.pixels[x][y] - (t >> 1);
-						c.x = t + c.y - ((blockV.pixels[x][y] + 1) >> 1);
-						c.z = blockV.pixels[x][y] + c.x;
-						c.x = std::max(std::min(c.x, 255), 0);
-						c.y = std::max(std::min(c.y, 255), 0);
-						c.z = std::max(std::min(c.z, 255), 0);
-						std::swap(c.z, c.x);
+				const auto *pixels = lossyImage->GetPixels();
+				pixels += col * 8;
+				pixels += (cols * 8) * (row * 8);
+				
+				for (int y = 0; y < 8; y++) {
+					const auto *pixels2 = pixels + y * (cols * 8);
+					for (int x = 0; x < 8; x++) {
+						auto pix = pixels2[x];
+						// Y-invert
+						auto& c = sub.colors[x][7 - y];
+						c.x = 0xff & (pix);
+						c.y = 0xff & (pix >> 8);
+						c.z = 0xff & (pix >> 16);
 					}
 				}
+				
 			}
 			
 			void DecodePlanar(uint8_t fmtcode, ColorBlock& block) {
@@ -1479,12 +1069,36 @@ namespace spades {
 						mp->SetSolidMapUnsafe(x, y, solidMap);
 					}
 					
-					progressListener(0.5f * static_cast<float>(y) / static_cast<float>(h));
+					progressListener(0.4f * static_cast<float>(y) / static_cast<float>(h));
 				}
 				
+				// read lossy image
+				uint32_t lossyImageSize = stream.ReadLittleInt();
+				DynamicMemoryStream memstr;
+				std::array<char, 4096> buf;
+				if (lossyImageSize > 128 * 1024 * 1024) {
+					SPRaise("Malformated");
+				}
+				for (uint32_t i = 0; i < lossyImageSize; i += 4096) {
+					progressListener(0.4f + 0.4f * static_cast<float>(i) / static_cast<float>(lossyImageSize));
+					
+					auto readSize = std::min<uint32_t>(lossyImageSize - i, 4096);
+					if (stream.Read(buf.data(), readSize) < readSize) {
+						SPRaise("File truncated");
+					}
+					memstr.Write(buf.data(), readSize);
+				}
+				memstr.SetPosition(0);
+				lossyImage.Set(Bitmap::Load(&memstr), false);
+				
+				if ((lossyImage->GetWidth() & 7) ||
+					(lossyImage->GetHeight() & 7)) {
+					SPRaise("Malformated: invalid lossy image dimension");
+				}
 				
 				// read colors
 				for(int y = 0; y < h; y += 8) {
+					progressListener(0.8f + 0.2f * static_cast<float>(y) / static_cast<float>(h));
 					for(int x = 0; x < w; x += 8) {
 						for(int zz = 0; zz < d; zz += 8) {
 							int z = (x & 8) ? (((d+7)&~7) - 8 - zz) : zz;
@@ -1579,7 +1193,13 @@ namespace spades {
 				diversityLimit *= diversityLimit;
 			}
 			
+			
 		private:
+			
+			struct JpegBlock {
+				IntVector4 colors[8][8];
+			};
+			std::vector<JpegBlock> jpegBlocks;
 			
 			void EncodeVolumetricRaw(ColorBlock& block) {
 				SPADES_MARK_FUNCTION();
@@ -1744,32 +1364,13 @@ namespace spades {
 				out.push_back(MakeFormat(fmt,
 										 PlanarBlockSubFormat::Lossy));
 				
-				ct::MacroBlock blockY, blockU, blockV;
+				
+				JpegBlock jb;
 				
 				for(int x = 0; x < 8; x++)
-					for(int y = 0; y < 8; y++){
-						auto c = sub.colors[x][y];
-						std::swap(c.z, c.x);
-						int vv = c.z - c.x;
-						int t = c.x - c.y + ((vv + 1) >> 1);
-						int yy = c.y + (t >> 1);
-						int uu = -t;
-						blockY.pixels[x][y] = yy;
-						blockU.pixels[x][y] = uu;
-						blockV.pixels[x][y] = vv;
-					}
-				
-				BitWriter writer(out);
-				
-				auto doBlock = [&](ct::MacroBlock& block) {
-					ct::Encoder encoder(writer, opt);
-					encoder.Encode(block);
-				};
-				
-				doBlock(blockY);
-				doBlock(blockU);
-				doBlock(blockV);
-				
+					for(int y = 0; y < 8; y++)
+						jb.colors[x][y] = sub.colors[x][y];
+				jpegBlocks.push_back(jb);
 			}
 			
 			static int CountNeedsColor(uint8_t *bits, std::size_t numRows) {
@@ -2050,6 +1651,35 @@ namespace spades {
 				}
 			}
 			
+			
+			Handle<Bitmap> JpegBlockToBitmap() {
+				unsigned int numBlocks = static_cast<unsigned int>(jpegBlocks.size());
+				if (numBlocks == 0) ++numBlocks;
+				unsigned int cols = static_cast<unsigned int>(ceil(sqrt(numBlocks)));
+				unsigned int rows = (numBlocks + cols - 1) / cols;
+				Handle<Bitmap> bmp(new Bitmap(cols * 8, rows * 8), false);
+				
+				unsigned int col = 0, row = 0;
+				auto *pixels = bmp->GetPixels();
+				for (const auto& block: jpegBlocks) {
+					for (unsigned int y = 0; y < 8; y++) {
+						auto *pixels2 = pixels + (y + row * 8) * (cols * 8) + (col * 8);
+						for (unsigned int x = 0; x < 8; x++) {
+							const auto& c = block.colors[x][y];
+							*pixels2 = c.x | (c.y << 8) | (c.z << 16) | 0xff000000;
+							++pixels2;
+						}
+					}
+					
+					++col;
+					if (col == cols) {
+						col = 0; ++row;
+					}
+				}
+				
+				return bmp;
+			}
+			
 		};
 		
 		
@@ -2154,7 +1784,7 @@ namespace spades {
 			
 			// write colors
 			std::vector<uint8_t> blockbuf;
-			blockbuf.reserve(1024);
+			blockbuf.reserve(16 * 1024 * 1024);
 			
 			ColorBlockEmitter emitter(blockbuf, opt);
 			
@@ -2185,17 +1815,23 @@ namespace spades {
 						}
 						
 						// decide format
-						blockbuf.clear();
 						emitter.TryEmitConstant(block);
 						
-						
-						stream.Write(blockbuf.data(), blockbuf.size());
 						
 						
 						// block done
 					} // z
 				} // x
 			} // y
+			
+			auto img = emitter.JpegBlockToBitmap();
+			DynamicMemoryStream memstr;
+			img->Save("map.jpg", &memstr, opt.quality);
+			stream.WriteLittleInt(static_cast<uint32_t>(memstr.GetLength()));
+			stream.IStream::Write(memstr.GetData(),
+								  static_cast<std::size_t>(memstr.GetLength()));
+			stream.Write(blockbuf.data(), blockbuf.size());
+			
 			
 			stream.DeflateEnd();
 			

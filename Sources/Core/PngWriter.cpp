@@ -64,9 +64,13 @@ namespace spades {
 			SPNotImplemented();
 		}
 
-		virtual void Save(IStream *stream, Bitmap *bmp){
+		virtual void Save(IStream *stream, Bitmap *bmp,
+						  int quality){
 			SPADES_MARK_FUNCTION();
-
+			
+			// quality is ignored.
+			(void) quality;
+			
 			int err;
 
 			png_t png_s;

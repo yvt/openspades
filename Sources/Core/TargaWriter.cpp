@@ -1310,8 +1310,12 @@ namespace spades {
 			
 			SPNotImplemented();
 		}
-		virtual void Save(IStream *stream, Bitmap *bmp){
+		virtual void Save(IStream *stream, Bitmap *bmp,
+						  int quality){
 			SPADES_MARK_FUNCTION();
+			
+			// quality is ignored.
+			(void) quality;
 			
 			tga_image img;
 			std::vector<uint8_t> data;

@@ -75,14 +75,16 @@ namespace spades {
 			
 			SPNotImplemented();
 		}
-		virtual void Save(IStream *stream, Bitmap *bmp){
+		virtual void Save(IStream *stream, Bitmap *bmp,
+						  int quality){
 			SPADES_MARK_FUNCTION();
 			
 			jpge::params params;
-			params.m_quality = core_jpegQuality;
+			params.m_quality = quality == -1 ? core_jpegQuality :
+			quality;
 			if(params.m_quality < 1 ||
 			   params.m_quality > 100) {
-				SPRaise("Invalid core_jpegQuality");
+				SPRaise("Invalid jpeg quality");
 			}
 			
 			OutputStream outStream(stream);

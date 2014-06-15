@@ -44,7 +44,7 @@ namespace spades {
 		virtual bool CheckExtension(const std::string&) = 0;
 		
 		virtual Bitmap *Load(IStream *) = 0;
-		virtual void Save(IStream *, Bitmap *) = 0;
+		virtual void Save(IStream *, Bitmap *, int quality) = 0;
 	};
 	
 	

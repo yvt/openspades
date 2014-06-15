@@ -44,5 +44,7 @@ namespace spades {
 		virtual uint64_t GetLength();
 		/** prohibited */
 		virtual void SetLength(uint64_t);
+		
+		void *GetData() { return memory.data(); }
 	};
 }
