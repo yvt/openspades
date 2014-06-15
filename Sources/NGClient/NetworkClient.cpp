@@ -130,8 +130,8 @@ namespace spades { namespace ngclient {
 		void Run() override {
 			try {
 				Stream stream(*this);
-				DeflateStream deflate(&stream, CompressModeDecompress);
-				auto *mp = client::GameMap::Load(&deflate);
+				// TODO: progress notify
+				auto *mp = client::GameMap::LoadNGMap(&stream);
 				if (!mp) {
 					SPRaise("Null map loaded.");
 				}

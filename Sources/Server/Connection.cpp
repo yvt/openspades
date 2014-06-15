@@ -111,10 +111,9 @@ namespace spades { namespace server {
 			try {
 				Stream outputStream(*this);
 				{
-					DeflateStream deflate(&outputStream,
-										  CompressModeCompress);
-					map->Save(&deflate);
-					deflate.DeflateEnd();
+					client::NGMapOptions opt;
+					opt.quality = 100;
+					map->SaveNGMap(&outputStream, opt);
 				}
 			} catch (const AbortException&) {
 				// aborted.

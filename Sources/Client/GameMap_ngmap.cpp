@@ -1538,7 +1538,7 @@ namespace spades {
 										auto c = block.colors[xx][yy][zz];
 										c &= 0xffffff;
 										c |= 100 << 24; // health
-										mp->Set(xx + x, yy + y, zz + z, true, c, true);
+										mp->SetColorUnsafe(xx + x, yy + y, zz + z, c);
 									}
 								}
 							}

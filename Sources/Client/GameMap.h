@@ -132,6 +132,25 @@ namespace spades{
 							      [z & (Depth() - 1)];
 			}
 			
+			inline void SetColorUnsafe(int x, int y, int z,
+									   uint32_t color) {
+				SPAssert(x >= 0); SPAssert(x < Width());
+				SPAssert(y >= 0); SPAssert(y < Height());
+				SPAssert(z >= 0); SPAssert(z < Depth());
+				auto& c = chunks[(x >> ChunkSizeBits) +
+								 (y >> ChunkSizeBits) * chunkCols];
+				
+				int cx = x & ChunkSize - 1;
+				int cy = y & ChunkSize - 1;
+				
+				if (!c.unique()) {
+					// copy-on-write
+					c.reset(new Chunk(*c));
+				}
+				
+				c->colorMap[cx][cy][z] = color;
+			}
+			
 			inline void Set(int x, int y, int z, bool solid, uint32_t color, bool unsafe = false){
 				SPAssert(x >= 0); SPAssert(x < Width());
 				SPAssert(y >= 0); SPAssert(y < Height());
