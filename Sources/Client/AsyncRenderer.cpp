@@ -81,6 +81,14 @@ namespace spades {
 					r->SetFogColor(v);
 				}
 			};
+			class SetFogType: public Command {
+			public:
+				client::FogType v;
+				virtual void Execute(IRenderer *r){
+					SPADES_MARK_FUNCTION();
+					r->SetFogType(v);
+				}
+			};
 			class StartScene: public Command {
 			public:
 				SceneDefinition def;
@@ -518,6 +526,11 @@ namespace spades {
 		void AsyncRenderer::SetFogColor(Vector3 v) {
 			SPADES_MARK_FUNCTION();
 			rcmds::SetFogColor *cmd = generator->AllocCommand<rcmds::SetFogColor>();
+			cmd->v = v;
+		}
+		void AsyncRenderer::SetFogType(client::FogType v) {
+			SPADES_MARK_FUNCTION();
+			rcmds::SetFogType *cmd = generator->AllocCommand<rcmds::SetFogType>();
 			cmd->v = v;
 		}
 		

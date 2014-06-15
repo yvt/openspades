@@ -28,14 +28,8 @@ namespace spades {
 		
 		class GameMapRegistrar: public ScriptObjectRegistrar {
 			static GameMap *Factory(int w, int h, int d){
-				if(w != GameMap::DefaultWidth ||
-				   h != GameMap::DefaultHeight ||
-				   d != GameMap::DefaultDepth) {
-					asGetActiveContext()->SetException("Currently, non-default GameMap dimensions aren't supported.");
-					return NULL;
-				}
 				try{
-					return new GameMap();
+					return new GameMap(w, h, d);
 				}catch(const std::exception& ex){
 					ScriptContextUtils().SetNativeException(ex);
 					return NULL;

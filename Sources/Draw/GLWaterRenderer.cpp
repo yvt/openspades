@@ -35,6 +35,7 @@
 #include "../kiss_fft130/kiss_fft.h"
 #include "GLProfiler.h"
 #include "../Core/Settings.h"
+#include "GLFogShader.h"
 
 SPADES_SETTING(r_water, "2");
 SPADES_SETTING(r_maxAnisotropy, "8");
@@ -717,7 +718,7 @@ namespace spades {
 			
 			const client::SceneDefinition& def = renderer->GetSceneDef();
 			float waterLevel = 63.f;
-			float waterRange = 128.f;
+			float waterRange = std::min(renderer->GetVisibleDistance(), 4096.f);
 			
 			Matrix4 mat = Matrix4::Translate(def.viewOrigin.x,
 											 def.viewOrigin.y,
@@ -796,6 +797,7 @@ namespace spades {
 				static GLProgramUniform waveTextureUnif3("waveTexture3");
 				static GLProgramUniform mirrorTexture("mirrorTexture");
 				
+				
 				screenTexture(prg);
 				depthTexture(prg);
 				textureUnif(prg);
@@ -825,13 +827,14 @@ namespace spades {
 				textureUnif.SetValue(2);
 				
 				static GLShadowShader shadowShader;
+				int nextTexState;
 				
 				if(waveTextures.size() == 1){
 					device->ActiveTexture(3);
 					device->BindTexture(IGLDevice::Texture2D, waveTextures[0]);
 					waveTextureUnif.SetValue(3);
 					
-					shadowShader(renderer, prg, 4);
+					nextTexState = shadowShader(renderer, prg, 4);
 				}else if(waveTextures.size() == 3) {
 					device->ActiveTexture(3);
 					device->BindTexture(IGLDevice::Texture2D, waveTextures[0]);
@@ -855,11 +858,13 @@ namespace spades {
 					}
 					mirrorTexture.SetValue(6);
 					
-					shadowShader(renderer, prg, 7);
+					nextTexState = shadowShader(renderer, prg, 7);
 				}else{
 					SPAssert(false);
 				}
 				
+				static GLFogShader fogShader;
+				fogShader(renderer, prg, nextTexState);
 				
 				static GLProgramAttribute positionAttribute("positionAttribute");
 				

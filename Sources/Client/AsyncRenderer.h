@@ -64,6 +64,7 @@ namespace spades {
 			
 			virtual void SetFogDistance(float);
 			virtual void SetFogColor(Vector3);
+			virtual void SetFogType(client::FogType);
 			
 			/** Starts rendering a scene and waits for additional objects. */
 			virtual void StartScene(const SceneDefinition&);

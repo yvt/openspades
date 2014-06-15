@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <array>
 #include <Core/TMPUtils.h>
+#include <Core/Debug.h>
 
 namespace spades { namespace game {
 	
@@ -36,6 +37,7 @@ namespace spades { namespace game {
 		Checkpoint,
 		Vehicle
 	};
+	std::string GetEntityTypeName(EntityType);
 	
 	enum class EntityEventType {
 		// player
@@ -46,24 +48,90 @@ namespace spades { namespace game {
 		// common
 		Explode
 	};
+	std::string GetEntityEventTypeName(EntityEventType);
 	
 	enum class EntityDeathType {
 		Unspecified = 0,
 		PlayerDeath,
 		Explode
 	};
+	std::string GetEntityDeathTypeName(EntityDeathType);
+	
+	enum class BlockCreateType {
+		/** It's unknown how was the block created. */
+		Unspecified = 0,
+		
+		/** The block was created by a player. */
+		Player
+	};
+	std::string GetBlockCreateTypeName(BlockCreateType);
+	
+	enum class BlockDestroyType {
+		/** It's unknown how was the block destroyed. */
+		Unspecified = 0,
+		
+		/** Block was destroyed because its health became zero. */
+		Damage
+	};
+	std::string GetBlockDestroyTypeName(BlockDestroyType);
+	
+	struct MapEdit {
+		IntVector3 position;
+		stmp::optional<uint32_t> color; // create color | destroy
+		BlockCreateType createType;
+		BlockDestroyType destroyType;
+	};
 	
 	struct EntityFlags {
+		/** Entity can be hit by a player. */
 		bool playerClip : 1;
+		
+		/** Entity can be hit by a bullet or other projectile. */
 		bool weaponClip : 1;
+		
+		// FIXME: physicsClip
+		
+		/** Player flies. */
 		bool fly : 1;
+		
+		bool operator != (const EntityFlags& o) const {
+			return
+			playerClip != o.playerClip ||
+			weaponClip != o.weaponClip ||
+			fly != o.fly;
+		}
 	};
 	
 	enum class TrajectoryType {
+		/** Entity's position is specified with `origin`.
+		 *  and its orientation is specified with `angle`. */
 		Constant,
+		
+		/** Entity's position is `origin` + time * `velocity`,
+		 * and its orientation is `angle` * f(`angularVelocity` * time),
+		 * where f is a function to convert rotation axis into quaternion and
+		 * f([x,y,z]) = exp((xi+yj+zk)/2). */
 		Linear,
+		
+		/** Entity's position is `origin` + time * `velocity` - 1/2G * time^2,
+		 * and its orientation is `angle` * f(`angularVelocity` ^ time),
+		 * where f is a function to convert rotation axis into quaternion and
+		 * f([x,y,z]) = exp((xi+yj+zk)/2). */
 		Gravity,
+		
+		/** Entity's position is `origin` + time * `velocity`,
+		 * and its orientation is `eulerAngle`.
+		 * Entity is controlled by player's input, and uses player-specific
+		 * physics.
+		 *
+		 * FIXME: interpolation? */
 		Player,
+		
+		/** Entity's position is `origin` + time * `velocity`,
+		 * and its orientation is `angle` * f(`angularVelocity` ^ time),
+		 * where f is a function to convert rotation axis into quaternion and
+		 * f([x,y,z]) = exp((xi+yj+zk)/2).
+		 * Motion varies by collision. */
 		RigidBody
 	};
 	
@@ -86,6 +154,29 @@ namespace spades { namespace game {
 		/** When parentEntityId is set, the entity is locked in the 
 		 * local coordinate space of the parent entity. */
 		stmp::optional<std::uint32_t> parentEntityId;
+		
+		bool operator != (const Trajectory& o) const {
+			if (type != o.type) return true;
+			switch (type) {
+				case TrajectoryType::Constant:
+					return origin != o.origin ||
+					angle != o.angle;
+				case TrajectoryType::Linear:
+				case TrajectoryType::Gravity:
+				case TrajectoryType::RigidBody:
+					return origin != o.origin ||
+					velocity != o.velocity ||
+					angle != o.angle ||
+					angularVelocity != o.angularVelocity;
+					
+				case TrajectoryType::Player:
+					return origin != o.origin ||
+					velocity != o.velocity ||
+					eulerAngle != o.eulerAngle;
+			}
+			SPAssert(false);
+			return false;
+		}
 	};
 	
 	enum class PlayerStance {
@@ -102,6 +193,16 @@ namespace spades { namespace game {
 		bool toolSecondary : 1;
 		bool chat : 1;
 		bool sprint : 1;
+		
+		bool operator != (const PlayerInput& o) const {
+			return xmove != o.xmove ||
+			ymove != o.ymove ||
+			stance != o.stance ||
+			toolPrimary != o.toolPrimary ||
+			toolSecondary != o.toolSecondary ||
+			chat != o.chat ||
+			sprint != o.sprint;
+		}
 	};
 	
 	enum class HitType {
@@ -141,6 +242,13 @@ namespace spades { namespace game {
 	};
 	
 	using SkinId = std::array<char, 20>;
+	
+	/** in-game timepoint representation. Measured in seconds. */
+	using Timepoint = double;
+	
+	using Duration = Timepoint;
+	
+	
 	
 } }
 

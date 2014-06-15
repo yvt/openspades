@@ -191,6 +191,8 @@ namespace spades {
 						manager->CheckError(r);
 						r = eng->RegisterEnum("DynamicLightType");
 						manager->CheckError(r);
+						r = eng->RegisterEnum("FogType");
+						manager->CheckError(r);
 						
 						
 						break;
@@ -200,6 +202,12 @@ namespace spades {
 						manager->CheckError(r);
 						r = eng->RegisterEnumValue("DynamicLightType", "Spotlight",
 												   DynamicLightTypeSpotlight);
+						manager->CheckError(r);
+						r = eng->RegisterEnumValue("FogType", "Classical",
+												   static_cast<int>(FogType::Classical));
+						manager->CheckError(r);
+						r = eng->RegisterEnumValue("FogType", "Exponential",
+												   static_cast<int>(FogType::Exponential));
 						manager->CheckError(r);
 						
 						r = eng->RegisterObjectBehaviour("ModelRenderParam",
@@ -408,6 +416,11 @@ namespace spades {
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void set_FogDistance(float)",
 													  asMETHOD(IRenderer, SetFogDistance),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void set_FogType(FogType)",
+													  asMETHOD(IRenderer, SetFogType),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",

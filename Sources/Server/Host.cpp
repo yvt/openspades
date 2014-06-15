@@ -41,7 +41,10 @@ namespace spades { namespace server {
 		enet_initialize();
 		SPLog("ENet initialized");
 		
-		host = enet_host_create(NULL,
+		ENetAddress addr;
+		addr.host = ENET_HOST_ANY;
+		addr.port = 0x810; // TODO: make this configurable
+		host = enet_host_create(&addr,
 								256, 1,
 								(int)sv_bandwidth,
 								(int)sv_bandwidth);
@@ -98,6 +101,7 @@ namespace spades { namespace server {
 			
 			enet_host_destroy(host);
 			SPLog("ENet host destroyed");
+			host = nullptr;
 		}
 	}
 	
@@ -118,6 +122,13 @@ namespace spades { namespace server {
 			SPLog("[Client????????] New client connected from %s",
 				  buf);
 		
+	}
+	
+	void Host::Broadcast(const protocol::Packet &packet) {
+		auto data = packet.Generate();
+		auto *p = enet_packet_create(data.data(), data.size(),
+									 ENET_PACKET_FLAG_RELIABLE);
+		enet_host_broadcast(host, 0, p);
 	}
 	
 	void Host::DoEvents() {
@@ -152,6 +163,10 @@ namespace spades { namespace server {
 			return;
 		}
 		
+		if (event.data != protocol::connectMagic) {
+			enet_peer_disconnect(peer, static_cast<uint32_t>(protocol::DisconnectReason::MalformedPacket));
+			return;
+		}
 		
 		unsigned int uniqueId;
 		uniqueId = 0;
@@ -257,7 +272,14 @@ namespace spades { namespace server {
 	}
 	
 	void HostPeer::Send(const protocol::Packet &packet) {
-		
+		auto data = packet.Generate();
+		auto *p = enet_packet_create(data.data(), data.size(),
+								     ENET_PACKET_FLAG_RELIABLE);
+		enet_peer_send(enetPeer, 0, p);
+	}
+	
+	int HostPeer::GetPendingBytes() {
+		return 0; // TODO: GetPendingBytes
 	}
 	
 	void HostPeer::Disconnect(protocol::DisconnectReason reason) {

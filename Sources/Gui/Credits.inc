@@ -17,7 +17,7 @@ Credits
 "tungdil" - German translation
 
 
-Portions of program is based on following softwares
+Portions of program is based on following software
 ---------------------------------------------------
 
 pyspades

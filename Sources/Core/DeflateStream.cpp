@@ -26,7 +26,7 @@
 
 namespace spades {
 	static const size_t chunkSize = 16384;
-	static const size_t bufferSize = 65536;
+	static const size_t bufferSize = 16384;
 	DeflateStream::DeflateStream(IStream *stream,
 								 CompressMode mode,
 								 bool ac) {
@@ -304,7 +304,7 @@ namespace spades {
 		if(mode == CompressModeCompress){
 			return position;
 		}else{
-			SPRaise("Cannot retreive uncompressed data length");
+			SPRaise("Cannot retrieve uncompressed data length");
 		}
 	}
 	

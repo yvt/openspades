@@ -32,6 +32,8 @@
 
 namespace spades { namespace protocol {
 	
+	static const uint32_t connectMagic = 0x8101919;
+	
 	// disconnect reason code.
 	// when possible, server sends the reason text, and
 	// use DisconnectReason::Misc to disconnect the peer.
@@ -40,7 +42,10 @@ namespace spades { namespace protocol {
 		InternalServerError = 1,
 		ServerFull = 2,
 		Misc = 3, // reason is already sent
-		ServerStopped = 4
+		ServerStopped = 4,
+		Timeout = 5,
+		MalformedPacket = 6,
+		ProtocolMismatch = 7
 	};
 	
 	enum class PacketType {
@@ -55,6 +60,8 @@ namespace spades { namespace protocol {
 		GameStateHeader = 6,
 		MapData = 7,
 		GameStateFinal = 8,
+		MapDataAcknowledge = 10,
+		MapDataFinal = 11,
 		
 		// generic
 		GenericCommand = 9,
@@ -63,6 +70,7 @@ namespace spades { namespace protocol {
 		EntityUpdate = 30,
 		EntityEvent = 31,
 		EntityDie = 32,
+		EntityRemove = 33,
 		ClientSideEntityUpdate = 35,
 		
 		TerrainUpdate = 40,
@@ -78,6 +86,7 @@ namespace spades { namespace protocol {
 		// TODO: playerstate
 		// TODO: damage notify
 		// TODO: chat
+		// TODO: construction
 	};
 	
 	enum class PacketUsage {
@@ -90,6 +99,8 @@ namespace spades { namespace protocol {
 	using game::EntityFlags;
 	using game::EntityDeathType;
 	using game::EntityEventType;
+	using game::BlockCreateType;
+	using game::BlockDestroyType;
 	using game::TrajectoryType;
 	using game::Trajectory;
 	using game::PlayerInput;
@@ -98,6 +109,7 @@ namespace spades { namespace protocol {
 	using game::HitType;
 	using game::SkinId;
 	using game::DamageInfo;
+	using game::MapEdit;
 	using TimeStampType = std::uint64_t;
 	
 	class GreetingPacket;
@@ -117,7 +129,10 @@ namespace spades { namespace protocol {
 	class PlayerActionPacket;
 	class HitEntityPacket;
 	class HitTerrainPacket;
+	class EntityRemovePacket;
 	class DamagePacket;
+	class MapDataAcknowledgePacket;
+	class MapDataFinalPacket;
 	
 	static const char *ProtocolName = "WorldOfSpades 0.1";
 	
@@ -132,6 +147,8 @@ namespace spades { namespace protocol {
 	GameStateHeaderPacket,
 	MapDataPacket,
 	GameStateFinalPacket,
+	MapDataAcknowledgePacket,
+	MapDataFinalPacket,
 	
 	GenericCommandPacket,
 	
@@ -140,6 +157,7 @@ namespace spades { namespace protocol {
 	TerrainUpdatePacket,
 	EntityEventPacket,
 	EntityDiePacket,
+	EntityRemovePacket,
 	
 	PlayerActionPacket,
 	
@@ -317,7 +335,20 @@ namespace spades { namespace protocol {
 		std::string fragment;
 	};
 	
-	/** Sent by server after all of game states were sent. */
+	/** Sent by server after all of map data were sent. */
+	class MapDataFinalPacket : public BasePacket
+	<MapDataFinalPacket,
+	PacketUsage::ServerOnly, PacketType::MapDataFinal> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~MapDataFinalPacket() {}
+		
+		virtual std::vector<char> Generate() const;
+	};
+	
+	
+	struct EntityUpdateItem;
+	/** Sent by server after all of game state were sent. */
 	class GameStateFinalPacket : public BasePacket
 	<GameStateFinalPacket,
 	PacketUsage::ServerOnly, PacketType::GameStateFinal> {
@@ -328,6 +359,19 @@ namespace spades { namespace protocol {
 		virtual std::vector<char> Generate() const;
 		
 		std::map<std::string, std::string> properties;
+		std::vector<EntityUpdateItem> items;
+		
+	};
+	
+	/** Sent by client to acknoledge decoding of map data. */
+	class MapDataAcknowledgePacket : public BasePacket
+	<MapDataAcknowledgePacket,
+	PacketUsage::ClientOnly, PacketType::MapDataAcknowledge> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~MapDataAcknowledgePacket() {}
+		
+		virtual std::vector<char> Generate() const;
 	};
 	
 	class GenericCommandPacket : public BasePacket
@@ -352,11 +396,11 @@ namespace spades { namespace protocol {
 		
 		stmp::optional<EntityFlags> flags;
 		stmp::optional<Trajectory> trajectory;
+		stmp::optional<uint8_t> health;
 		
 		stmp::optional<PlayerInput> playerInput;
 		stmp::optional<ToolSlot> tool;
 		stmp::optional<IntVector3> blockColor;
-		stmp::optional<uint8_t> health;
 		
 		stmp::optional<std::string> weaponSkin1;
 		stmp::optional<std::string> weaponSkin2;
@@ -379,6 +423,9 @@ namespace spades { namespace protocol {
 		virtual std::vector<char> Generate() const;
 		
 		std::vector<EntityUpdateItem> items;
+		
+		/** Updates even if client owns the entities. */
+		bool forced;
 	};
 	
 	/** Sent by client to update the latest client-side state of entity.
@@ -399,11 +446,6 @@ namespace spades { namespace protocol {
 		std::vector<EntityUpdateItem> items;
 	};
 	
-	struct TerrainEdit {
-		IntVector3 position;
-		stmp::optional<uint32_t> color; // create color | destroy
-	};
-	
 	class TerrainUpdatePacket : public BasePacket
 	<TerrainUpdatePacket,
 	PacketUsage::ServerOnly, PacketType::TerrainUpdate> {
@@ -413,7 +455,7 @@ namespace spades { namespace protocol {
 		
 		virtual std::vector<char> Generate() const;
 		
-		std::vector<TerrainEdit> edits;
+		std::vector<MapEdit> edits;
 	};
 	
 	class EntityEventPacket : public BasePacket
@@ -444,6 +486,18 @@ namespace spades { namespace protocol {
 		uint64_t param;
 		
 		stmp::optional<DamageInfo> damage;
+	};
+	
+	class EntityRemovePacket : public BasePacket
+	<EntityRemovePacket,
+	PacketUsage::ServerOnly, PacketType::EntityRemove> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~EntityRemovePacket() {}
+		
+		virtual std::vector<char> Generate() const;
+		
+		uint32_t entityId;
 	};
 	
 	class PlayerActionPacket : public BasePacket
@@ -507,7 +561,9 @@ namespace spades { namespace protocol {
 		
 		virtual std::vector<char> Generate() const;
 		
+		uint32_t entityId;
 		DamageInfo damage;
+		uint8_t amount;
 	};
 	
 	// TODO: player state

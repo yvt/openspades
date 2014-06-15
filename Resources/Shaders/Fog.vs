@@ -18,9 +18,28 @@
  
  */
 
+// (for range-based fog)
+//   fogCoefficient = 1 / dist^2
+//     where "dist" is the distance where objects disappear completely
+//   useExponentalFog = false
+//
+// (for exponental (realistic) fog)
+//   fogCoefficient = -1 / dist^2
+//     where "dist" is the distance where fog density becomes 50%
+//   useExponentalFog = true
+uniform float fogCoefficient;
+uniform bool useExponentalFog;
+
 vec4 FogDensity(float poweredLength) {
 	float distance = poweredLength;
-	distance = min(distance * (1. / 128. / 128.), 1.);
+	// FIMXE: use static branch for better performance
+	if (useExponentalFog) {
+		distance = 1. - exp2(distance * fogCoefficient);
+	} else {
+		distance = min(distance * fogCoefficient, 1.);
+	}
+	
+	// tinted fog
 	float weakenedDensity = 1. - distance;
 	weakenedDensity *= weakenedDensity;
 	return mix(vec4(distance), vec4(1. - weakenedDensity),

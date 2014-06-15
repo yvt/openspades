@@ -1476,7 +1476,7 @@ namespace spades {
 							}
 						}
 						
-						mp->solidMap[x][y] = solidMap;
+						mp->SetSolidMapUnsafe(x, y, solidMap);
 					}
 					
 					progressListener(0.5f * static_cast<float>(y) / static_cast<float>(h));
@@ -1538,7 +1538,7 @@ namespace spades {
 										auto c = block.colors[xx][yy][zz];
 										c &= 0xffffff;
 										c |= 100 << 24; // health
-										mp->colorMap[xx + x][yy + y][zz + z] = c;
+										mp->Set(xx + x, yy + y, zz + z, true, c, true);
 									}
 								}
 							}
@@ -2219,7 +2219,7 @@ namespace spades {
 				for(int cy = 0; cy < 10; cy++) {
 					int xx = cx + x - 1, yy = cy + y - 1;
 					auto m = (xx >= 0 && yy >= 0 && xx < Width() && yy < Height()) ?
-					solidMap[xx][yy] : 0;
+					GetSolidMapUnsafe(xx, yy) : 0;
 					m |= earth;
 					if(z == 0) {
 						m <<= 1;

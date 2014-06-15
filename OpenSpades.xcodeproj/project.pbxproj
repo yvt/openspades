@@ -31,6 +31,28 @@
 		E80B28DB17B39D160056179E /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = E80B28D817B39D160056179E /* unzip.c */; };
 		E80B28DE17B39EEF0056179E /* ZipFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28DC17B39EEE0056179E /* ZipFileSystem.cpp */; };
 		E80B28E117B4FDDA0056179E /* DynamicMemoryStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28DF17B4FDD40056179E /* DynamicMemoryStream.cpp */; };
+		E818AEC41946BAAB004500C7 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEC21946BAAB004500C7 /* Client.cpp */; };
+		E818AEC51946BAAB004500C7 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEC21946BAAB004500C7 /* Client.cpp */; };
+		E818AEC81946F448004500C7 /* Client_Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEC61946F448004500C7 /* Client_Input.cpp */; };
+		E818AEC91946F448004500C7 /* Client_Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEC61946F448004500C7 /* Client_Input.cpp */; };
+		E818AECC194954BD004500C7 /* Arena.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AECA194954BD004500C7 /* Arena.cpp */; };
+		E818AECD194954BD004500C7 /* Arena.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AECA194954BD004500C7 /* Arena.cpp */; };
+		E818AED0194954EC004500C7 /* Arena_Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AECE194954EC004500C7 /* Arena_Input.cpp */; };
+		E818AED1194954EC004500C7 /* Arena_Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AECE194954EC004500C7 /* Arena_Input.cpp */; };
+		E818AED31949BDF5004500C7 /* Arena_Draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED21949BDF5004500C7 /* Arena_Draw.cpp */; };
+		E818AED41949BDF5004500C7 /* Arena_Draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED21949BDF5004500C7 /* Arena_Draw.cpp */; };
+		E818AED71949D814004500C7 /* NetworkClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED51949D814004500C7 /* NetworkClient.cpp */; };
+		E818AED81949D814004500C7 /* NetworkClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED51949D814004500C7 /* NetworkClient.cpp */; };
+		E818AEDA1949E0D1004500C7 /* Arena_World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED91949E0D1004500C7 /* Arena_World.cpp */; };
+		E818AEDB1949E0D1004500C7 /* Arena_World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AED91949E0D1004500C7 /* Arena_World.cpp */; };
+		E818AEDE1949E30D004500C7 /* LocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEDC1949E30D004500C7 /* LocalEntity.cpp */; };
+		E818AEDF1949E30D004500C7 /* LocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEDC1949E30D004500C7 /* LocalEntity.cpp */; };
+		E818AEE21949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */; };
+		E818AEE31949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */; };
+		E818AEE6194AAAD0004500C7 /* ServerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE4194AAAD0004500C7 /* ServerEntity.cpp */; };
+		E818AEE7194AAAD0004500C7 /* ServerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE4194AAAD0004500C7 /* ServerEntity.cpp */; };
+		E818AEEA194ACCA6004500C7 /* PlayerServerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE8194ACCA6004500C7 /* PlayerServerEntity.cpp */; };
+		E818AEEB194ACCA6004500C7 /* PlayerServerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE8194ACCA6004500C7 /* PlayerServerEntity.cpp */; };
 		E81A7C6418610AA900BF3FCE /* SWRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */; };
 		E81A7C6718610BE400BF3FCE /* SWPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C6518610BE400BF3FCE /* SWPort.cpp */; };
 		E81A7C6B1861525D00BF3FCE /* SWImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C691861525D00BF3FCE /* SWImage.cpp */; };
@@ -359,6 +381,8 @@
 		E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859510D17C61F850012810C /* GLLensFlareFilter.cpp */; };
 		E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511017C645000012810C /* GLFXAAFilter.cpp */; };
 		E859511517C96B270012810C /* GLProfiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511317C96B260012810C /* GLProfiler.cpp */; };
+		E8710E6E1940633A00C2EE62 /* GLFogShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8710E6C1940633A00C2EE62 /* GLFogShader.cpp */; };
+		E8710E6F1940633A00C2EE62 /* GLFogShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8710E6C1940633A00C2EE62 /* GLFogShader.cpp */; };
 		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
 		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
@@ -398,6 +422,8 @@
 		E89D2A27190F742800DD0A9C /* GameMap_ngmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89D2A25190F742800DD0A9C /* GameMap_ngmap.cpp */; };
 		E89D2A28190F742800DD0A9C /* GameMap_ngmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89D2A25190F742800DD0A9C /* GameMap_ngmap.cpp */; };
 		E89E8121179C2C800059C649 /* GLBloomFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89E811F179C2C800059C649 /* GLBloomFilter.cpp */; };
+		E8ACFA61194B5E240093C79C /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8ACFA5F194B5E240093C79C /* Host.cpp */; };
+		E8ACFA62194B5E240093C79C /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8ACFA5F194B5E240093C79C /* Host.cpp */; };
 		E8B6B68F17DE27B500E35523 /* as_atomic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B64217DE27B500E35523 /* as_atomic.cpp */; };
 		E8B6B69017DE27B500E35523 /* as_builder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B64417DE27B500E35523 /* as_builder.cpp */; };
 		E8B6B69117DE27B500E35523 /* as_bytecode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B64617DE27B500E35523 /* as_bytecode.cpp */; };
@@ -793,6 +819,22 @@
 		E8E446A4179EA60900BE8855 /* GLMapShadowRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E446A2179EA60900BE8855 /* GLMapShadowRenderer.cpp */; };
 		E8E446A7179EAC7900BE8855 /* GLShadowShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E446A5179EAC7800BE8855 /* GLShadowShader.cpp */; };
 		E8E446AA179F822D00BE8855 /* TargaWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E446A8179F822D00BE8855 /* TargaWriter.cpp */; };
+		E8E977961944701300579D9A /* PlayerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977941944701300579D9A /* PlayerEntity.cpp */; };
+		E8E977971944701300579D9A /* PlayerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977941944701300579D9A /* PlayerEntity.cpp */; };
+		E8E9779A19447C6700579D9A /* GrenadeEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E9779819447C6700579D9A /* GrenadeEntity.cpp */; };
+		E8E9779B19447C6700579D9A /* GrenadeEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E9779819447C6700579D9A /* GrenadeEntity.cpp */; };
+		E8E9779E194480CA00579D9A /* RocketEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E9779C194480CA00579D9A /* RocketEntity.cpp */; };
+		E8E9779F194480CA00579D9A /* RocketEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E9779C194480CA00579D9A /* RocketEntity.cpp */; };
+		E8E977A21944813000579D9A /* CommandPostEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A01944813000579D9A /* CommandPostEntity.cpp */; };
+		E8E977A31944813000579D9A /* CommandPostEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A01944813000579D9A /* CommandPostEntity.cpp */; };
+		E8E977A61944816200579D9A /* FlagEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A41944816200579D9A /* FlagEntity.cpp */; };
+		E8E977A71944816200579D9A /* FlagEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A41944816200579D9A /* FlagEntity.cpp */; };
+		E8E977AA1944819600579D9A /* CheckpointEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A81944819600579D9A /* CheckpointEntity.cpp */; };
+		E8E977AB1944819600579D9A /* CheckpointEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977A81944819600579D9A /* CheckpointEntity.cpp */; };
+		E8E977AE194481C400579D9A /* VehicleEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977AC194481C400579D9A /* VehicleEntity.cpp */; };
+		E8E977AF194481C400579D9A /* VehicleEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977AC194481C400579D9A /* VehicleEntity.cpp */; };
+		E8E977B11944955500579D9A /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977B01944955500579D9A /* Constants.cpp */; };
+		E8E977B21944955500579D9A /* Constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E977B01944955500579D9A /* Constants.cpp */; };
 		E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */; };
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
@@ -896,6 +938,25 @@
 		E80B28DD17B39EEF0056179E /* ZipFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipFileSystem.h; sourceTree = "<group>"; };
 		E80B28DF17B4FDD40056179E /* DynamicMemoryStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicMemoryStream.cpp; sourceTree = "<group>"; };
 		E80B28E017B4FDD70056179E /* DynamicMemoryStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicMemoryStream.h; sourceTree = "<group>"; };
+		E818AEC21946BAAB004500C7 /* Client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client.cpp; sourceTree = "<group>"; };
+		E818AEC31946BAAB004500C7 /* Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Client.h; sourceTree = "<group>"; };
+		E818AEC61946F448004500C7 /* Client_Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_Input.cpp; sourceTree = "<group>"; };
+		E818AECA194954BD004500C7 /* Arena.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arena.cpp; sourceTree = "<group>"; };
+		E818AECB194954BD004500C7 /* Arena.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Arena.h; sourceTree = "<group>"; };
+		E818AECE194954EC004500C7 /* Arena_Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arena_Input.cpp; sourceTree = "<group>"; };
+		E818AED21949BDF5004500C7 /* Arena_Draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arena_Draw.cpp; sourceTree = "<group>"; };
+		E818AED51949D814004500C7 /* NetworkClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkClient.cpp; sourceTree = "<group>"; };
+		E818AED61949D814004500C7 /* NetworkClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkClient.h; sourceTree = "<group>"; };
+		E818AED91949E0D1004500C7 /* Arena_World.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arena_World.cpp; sourceTree = "<group>"; };
+		E818AEDC1949E30D004500C7 /* LocalEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalEntity.cpp; sourceTree = "<group>"; };
+		E818AEDD1949E30D004500C7 /* LocalEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalEntity.h; sourceTree = "<group>"; };
+		E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerLocalEntity.cpp; sourceTree = "<group>"; };
+		E818AEE11949EA08004500C7 /* PlayerLocalEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerLocalEntity.h; sourceTree = "<group>"; };
+		E818AEE4194AAAD0004500C7 /* ServerEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ServerEntity.cpp; sourceTree = "<group>"; };
+		E818AEE5194AAAD0004500C7 /* ServerEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerEntity.h; sourceTree = "<group>"; };
+		E818AEE8194ACCA6004500C7 /* PlayerServerEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerServerEntity.cpp; sourceTree = "<group>"; };
+		E818AEE9194ACCA6004500C7 /* PlayerServerEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerServerEntity.h; sourceTree = "<group>"; };
+		E818AEEC194ACFCE004500C7 /* AllEntities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AllEntities.h; sourceTree = "<group>"; };
 		E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWRenderer.cpp; sourceTree = "<group>"; };
 		E81A7C6318610AA900BF3FCE /* SWRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRenderer.h; sourceTree = "<group>"; };
 		E81A7C6518610BE400BF3FCE /* SWPort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWPort.cpp; sourceTree = "<group>"; };
@@ -1041,6 +1102,8 @@
 		E859511117C645000012810C /* GLFXAAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFXAAFilter.h; sourceTree = "<group>"; };
 		E859511317C96B260012810C /* GLProfiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProfiler.cpp; sourceTree = "<group>"; };
 		E859511417C96B270012810C /* GLProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProfiler.h; sourceTree = "<group>"; };
+		E8710E6C1940633A00C2EE62 /* GLFogShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFogShader.cpp; sourceTree = "<group>"; };
+		E8710E6D1940633A00C2EE62 /* GLFogShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFogShader.h; sourceTree = "<group>"; };
 		E874834618EACF0300C29033 /* OpenSpades.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = OpenSpades.icns; path = Resources/Icons/OpenSpades.icns; sourceTree = "<group>"; };
 		E87AB82118BB3957006B7D73 /* SdlImageReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SdlImageReader.cpp; sourceTree = "<group>"; };
 		E87AB82418BB3A04006B7D73 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
@@ -1110,6 +1173,8 @@
 		E89D2A25190F742800DD0A9C /* GameMap_ngmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMap_ngmap.cpp; sourceTree = "<group>"; };
 		E89E811F179C2C800059C649 /* GLBloomFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLBloomFilter.cpp; sourceTree = "<group>"; };
 		E89E8120179C2C800059C649 /* GLBloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLBloomFilter.h; sourceTree = "<group>"; };
+		E8ACFA5F194B5E240093C79C /* Host.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Host.cpp; sourceTree = "<group>"; };
+		E8ACFA60194B5E240093C79C /* Host.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Host.h; sourceTree = "<group>"; };
 		E8B6B63F17DE27B500E35523 /* angelscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = angelscript.h; sourceTree = "<group>"; };
 		E8B6B64117DE27B500E35523 /* as_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = as_array.h; sourceTree = "<group>"; };
 		E8B6B64217DE27B500E35523 /* as_atomic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = as_atomic.cpp; sourceTree = "<group>"; };
@@ -1658,6 +1723,21 @@
 		E8E446A5179EAC7800BE8855 /* GLShadowShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLShadowShader.cpp; sourceTree = "<group>"; };
 		E8E446A6179EAC7800BE8855 /* GLShadowShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShadowShader.h; sourceTree = "<group>"; };
 		E8E446A8179F822D00BE8855 /* TargaWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TargaWriter.cpp; sourceTree = "<group>"; };
+		E8E977941944701300579D9A /* PlayerEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerEntity.cpp; sourceTree = "<group>"; };
+		E8E977951944701300579D9A /* PlayerEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerEntity.h; sourceTree = "<group>"; };
+		E8E9779819447C6700579D9A /* GrenadeEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GrenadeEntity.cpp; sourceTree = "<group>"; };
+		E8E9779919447C6700579D9A /* GrenadeEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrenadeEntity.h; sourceTree = "<group>"; };
+		E8E9779C194480CA00579D9A /* RocketEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RocketEntity.cpp; sourceTree = "<group>"; };
+		E8E9779D194480CA00579D9A /* RocketEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RocketEntity.h; sourceTree = "<group>"; };
+		E8E977A01944813000579D9A /* CommandPostEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CommandPostEntity.cpp; sourceTree = "<group>"; };
+		E8E977A11944813000579D9A /* CommandPostEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandPostEntity.h; sourceTree = "<group>"; };
+		E8E977A41944816200579D9A /* FlagEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FlagEntity.cpp; sourceTree = "<group>"; };
+		E8E977A51944816200579D9A /* FlagEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlagEntity.h; sourceTree = "<group>"; };
+		E8E977A81944819600579D9A /* CheckpointEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CheckpointEntity.cpp; sourceTree = "<group>"; };
+		E8E977A91944819600579D9A /* CheckpointEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckpointEntity.h; sourceTree = "<group>"; };
+		E8E977AC194481C400579D9A /* VehicleEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VehicleEntity.cpp; sourceTree = "<group>"; };
+		E8E977AD194481C400579D9A /* VehicleEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VehicleEntity.h; sourceTree = "<group>"; };
+		E8E977B01944955500579D9A /* Constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Constants.cpp; sourceTree = "<group>"; };
 		E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRadiosityRenderer.cpp; sourceTree = "<group>"; };
 		E8EE08A017B8F4B000631987 /* GLRadiosityRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRadiosityRenderer.h; sourceTree = "<group>"; };
 		E8EE08A217BA016F00631987 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
@@ -1797,6 +1877,29 @@
 				E80B28D917B39D160056179E /* unzip.h */,
 			);
 			path = unzip;
+			sourceTree = "<group>";
+		};
+		E818AEC119469EBC004500C7 /* NGClient */ = {
+			isa = PBXGroup;
+			children = (
+				E818AEC21946BAAB004500C7 /* Client.cpp */,
+				E818AEC31946BAAB004500C7 /* Client.h */,
+				E818AEC61946F448004500C7 /* Client_Input.cpp */,
+				E818AECA194954BD004500C7 /* Arena.cpp */,
+				E818AECB194954BD004500C7 /* Arena.h */,
+				E818AECE194954EC004500C7 /* Arena_Input.cpp */,
+				E818AED21949BDF5004500C7 /* Arena_Draw.cpp */,
+				E818AED91949E0D1004500C7 /* Arena_World.cpp */,
+				E818AED51949D814004500C7 /* NetworkClient.cpp */,
+				E818AED61949D814004500C7 /* NetworkClient.h */,
+				E8ACFA5F194B5E240093C79C /* Host.cpp */,
+				E8ACFA60194B5E240093C79C /* Host.h */,
+				E818AEDC1949E30D004500C7 /* LocalEntity.cpp */,
+				E818AEDD1949E30D004500C7 /* LocalEntity.h */,
+				E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */,
+				E818AEE11949EA08004500C7 /* PlayerLocalEntity.h */,
+			);
+			path = NGClient;
 			sourceTree = "<group>";
 		};
 		E81A7C68186140B000BF3FCE /* Software Renderer */ = {
@@ -1999,6 +2102,8 @@
 				E8EE08A017B8F4B000631987 /* GLRadiosityRenderer.h */,
 				E8B6B6BD17DF456E00E35523 /* GLSparseShadowMapRenderer.cpp */,
 				E8B6B6BE17DF456F00E35523 /* GLSparseShadowMapRenderer.h */,
+				E8710E6C1940633A00C2EE62 /* GLFogShader.cpp */,
+				E8710E6D1940633A00C2EE62 /* GLFogShader.h */,
 			);
 			name = Lighting;
 			sourceTree = "<group>";
@@ -2289,6 +2394,7 @@
 				E8CF03AF178EE2CD000683D4 /* Core */,
 				E8D0E5D418F9A38200DE3BDB /* Game */,
 				E8D0E5D518F9A55A00DE3BDB /* Server */,
+				E818AEC119469EBC004500C7 /* NGClient */,
 				E8CF03A2178EDE56000683D4 /* Client */,
 				E8CF039E178EDDCF000683D4 /* Draw */,
 				E8CF039D178EDDBF000683D4 /* Gui */,
@@ -2408,8 +2514,24 @@
 				E8D0E5D918F9A64400DE3BDB /* World.cpp */,
 				E8D0E5DA18F9A64400DE3BDB /* World.h */,
 				E8D0E80B18FC344C00DE3BDB /* Constants.h */,
+				E8E977B01944955500579D9A /* Constants.cpp */,
 				E8D0E8121901926000DE3BDB /* Entity.cpp */,
 				E8D0E8131901926000DE3BDB /* Entity.h */,
+				E818AEEC194ACFCE004500C7 /* AllEntities.h */,
+				E8E977941944701300579D9A /* PlayerEntity.cpp */,
+				E8E977951944701300579D9A /* PlayerEntity.h */,
+				E8E9779819447C6700579D9A /* GrenadeEntity.cpp */,
+				E8E9779919447C6700579D9A /* GrenadeEntity.h */,
+				E8E9779C194480CA00579D9A /* RocketEntity.cpp */,
+				E8E9779D194480CA00579D9A /* RocketEntity.h */,
+				E8E977A01944813000579D9A /* CommandPostEntity.cpp */,
+				E8E977A11944813000579D9A /* CommandPostEntity.h */,
+				E8E977A41944816200579D9A /* FlagEntity.cpp */,
+				E8E977A51944816200579D9A /* FlagEntity.h */,
+				E8E977A81944819600579D9A /* CheckpointEntity.cpp */,
+				E8E977A91944819600579D9A /* CheckpointEntity.h */,
+				E8E977AC194481C400579D9A /* VehicleEntity.cpp */,
+				E8E977AD194481C400579D9A /* VehicleEntity.h */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -2425,6 +2547,10 @@
 				E8D0E5DF18F9AA0B00DE3BDB /* Host.h */,
 				E8D0E5E718F9B6BB00DE3BDB /* Shared.cpp */,
 				E8D0E5E818F9B6BB00DE3BDB /* Shared.h */,
+				E818AEE4194AAAD0004500C7 /* ServerEntity.cpp */,
+				E818AEE5194AAAD0004500C7 /* ServerEntity.h */,
+				E818AEE8194ACCA6004500C7 /* PlayerServerEntity.cpp */,
+				E818AEE9194ACCA6004500C7 /* PlayerServerEntity.h */,
 			);
 			path = Server;
 			sourceTree = "<group>";
@@ -3135,6 +3261,7 @@
 				E8D0E60F18FABBB000DE3BDB /* fips140.cpp in Sources */,
 				E82E67E818EA7A51004DBA18 /* host.c in Sources */,
 				E82E67E918EA7A51004DBA18 /* list.c in Sources */,
+				E818AEEB194ACCA6004500C7 /* PlayerServerEntity.cpp in Sources */,
 				E82E67EA18EA7A51004DBA18 /* packet.c in Sources */,
 				E82E67EB18EA7A51004DBA18 /* peer.c in Sources */,
 				E82E67EC18EA7A51004DBA18 /* protocol.c in Sources */,
@@ -3157,6 +3284,7 @@
 				E82E673B18EA7972004DBA18 /* as_callfunc_sh4.cpp in Sources */,
 				E8D0E7BE18FABC3600DE3BDB /* salsa.cpp in Sources */,
 				E82E673C18EA7972004DBA18 /* as_callfunc_x64_gcc.cpp in Sources */,
+				E818AEDF1949E30D004500C7 /* LocalEntity.cpp in Sources */,
 				E8D0E60B18FABBB000DE3BDB /* algparam.cpp in Sources */,
 				E82E673D18EA7972004DBA18 /* as_callfunc_x64_mingw.cpp in Sources */,
 				E8D0E7AD18FABC3600DE3BDB /* rdtables.cpp in Sources */,
@@ -3165,6 +3293,7 @@
 				E82E673F18EA7972004DBA18 /* as_callfunc_x86.cpp in Sources */,
 				E82E674018EA7972004DBA18 /* as_callfunc_xenon.cpp in Sources */,
 				E82E674118EA7972004DBA18 /* as_compiler.cpp in Sources */,
+				E8E977B21944955500579D9A /* Constants.cpp in Sources */,
 				E8D0E7BA18FABC3600DE3BDB /* rw.cpp in Sources */,
 				E82E674218EA7972004DBA18 /* as_configgroup.cpp in Sources */,
 				E8D0E7B418FABC3600DE3BDB /* ripemd.cpp in Sources */,
@@ -3184,6 +3313,7 @@
 				E82E674C18EA7972004DBA18 /* as_parser.cpp in Sources */,
 				E82E674D18EA7972004DBA18 /* as_restore.cpp in Sources */,
 				E8D0E73518FABC3600DE3BDB /* cpu.cpp in Sources */,
+				E818AEDB1949E0D1004500C7 /* Arena_World.cpp in Sources */,
 				E82E674E18EA7972004DBA18 /* as_scriptcode.cpp in Sources */,
 				E82E674F18EA7972004DBA18 /* as_scriptengine.cpp in Sources */,
 				E82E675018EA7972004DBA18 /* as_scriptfunction.cpp in Sources */,
@@ -3239,6 +3369,7 @@
 				E82E677118EA7972004DBA18 /* MemoryStream.cpp in Sources */,
 				E8D0E72118FABC3600DE3BDB /* bfinit.cpp in Sources */,
 				E8D0E7D418FABC3600DE3BDB /* socketft.cpp in Sources */,
+				E818AECD194954BD004500C7 /* Arena.cpp in Sources */,
 				E82E677218EA7972004DBA18 /* ZipFileSystem.cpp in Sources */,
 				E82E677318EA7972004DBA18 /* DynamicMemoryStream.cpp in Sources */,
 				E8D0E7FA18FABC3600DE3BDB /* whrlpool.cpp in Sources */,
@@ -3275,6 +3406,7 @@
 				E82E678918EA7972004DBA18 /* IAudioDevice.cpp in Sources */,
 				E82E678A18EA7972004DBA18 /* IAudioChunk.cpp in Sources */,
 				E82E678B18EA7972004DBA18 /* PrimitiveArray.cpp in Sources */,
+				E8710E6F1940633A00C2EE62 /* GLFogShader.cpp in Sources */,
 				E8D0E76718FABC3600DE3BDB /* gf2n.cpp in Sources */,
 				E82E678C18EA7972004DBA18 /* IToolSkin.cpp in Sources */,
 				E8D0E79918FABC3600DE3BDB /* pkcspad.cpp in Sources */,
@@ -3290,9 +3422,12 @@
 				E82E679218EA7972004DBA18 /* IGrenadeSkin.cpp in Sources */,
 				E8D0E7D218FABC3600DE3BDB /* skipjack.cpp in Sources */,
 				E82E679318EA7972004DBA18 /* IWeaponSkin.cpp in Sources */,
+				E8E9779B19447C6700579D9A /* GrenadeEntity.cpp in Sources */,
 				E82E679418EA7972004DBA18 /* IFont.cpp in Sources */,
 				E82E679518EA7972004DBA18 /* MainScreenHelper.cpp in Sources */,
+				E818AEE7194AAAD0004500C7 /* ServerEntity.cpp in Sources */,
 				E8D0E5D318F321E300DE3BDB /* GLNonlinearizeFilter.cpp in Sources */,
+				E8E977A31944813000579D9A /* CommandPostEntity.cpp in Sources */,
 				E82E679618EA7972004DBA18 /* StartupScreenHelper.cpp in Sources */,
 				E82E679718EA7972004DBA18 /* Config.cpp in Sources */,
 				E82E679818EA7972004DBA18 /* ClientUIHelper.cpp in Sources */,
@@ -3325,12 +3460,14 @@
 				E8D0E79718FABC3600DE3BDB /* panama.cpp in Sources */,
 				E8D0E73718FABC3600DE3BDB /* crc.cpp in Sources */,
 				E8D0E7E618FABC3600DE3BDB /* tigertab.cpp in Sources */,
+				E818AEC51946BAAB004500C7 /* Client.cpp in Sources */,
 				E8D0E79F18FABC3600DE3BDB /* pubkey.cpp in Sources */,
 				E82E67A818EA7972004DBA18 /* IInputInterface.cpp in Sources */,
 				E89D2A28190F742800DD0A9C /* GameMap_ngmap.cpp in Sources */,
 				E82E67A918EA7972004DBA18 /* IImage.cpp in Sources */,
 				E82E67AA18EA7972004DBA18 /* IModel.cpp in Sources */,
 				E82E67AB18EA7972004DBA18 /* AsyncRenderer.cpp in Sources */,
+				E8ACFA62194B5E240093C79C /* Host.cpp in Sources */,
 				E8D0E79318FABC3600DE3BDB /* network.cpp in Sources */,
 				E82E67AC18EA7972004DBA18 /* NetClient.cpp in Sources */,
 				E82E67AD18EA7972004DBA18 /* ILocalEntity.cpp in Sources */,
@@ -3346,6 +3483,7 @@
 				E8D0E7DE18FABC3600DE3BDB /* tea.cpp in Sources */,
 				E82E67B418EA7972004DBA18 /* Client.cpp in Sources */,
 				E82E67B518EA7972004DBA18 /* Client_Input.cpp in Sources */,
+				E818AED1194954EC004500C7 /* Arena_Input.cpp in Sources */,
 				E8D0E8151901926000DE3BDB /* Entity.cpp in Sources */,
 				E82E67B618EA7972004DBA18 /* Client_Update.cpp in Sources */,
 				E82E67B718EA7972004DBA18 /* Client_NetHandler.cpp in Sources */,
@@ -3374,6 +3512,7 @@
 				E82E67C618EA7972004DBA18 /* ClientUIHelper.cpp in Sources */,
 				E8D0E60D18FABBB000DE3BDB /* filters.cpp in Sources */,
 				E8D0E7BC18FABC3600DE3BDB /* safer.cpp in Sources */,
+				E818AEE31949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */,
 				E82E67C718EA7972004DBA18 /* Quake3Font.cpp in Sources */,
 				E82E67C818EA7972004DBA18 /* IFont.cpp in Sources */,
 				E8D0E5DC18F9A64400DE3BDB /* World.cpp in Sources */,
@@ -3383,6 +3522,7 @@
 				E82E67CB18EA7972004DBA18 /* CTFGameMode.cpp in Sources */,
 				E8D0E76918FABC3600DE3BDB /* gf256.cpp in Sources */,
 				E82E67CC18EA7972004DBA18 /* TCGameMode.cpp in Sources */,
+				E8E977A71944816200579D9A /* FlagEntity.cpp in Sources */,
 				E8D0E7E418FABC3600DE3BDB /* tiger.cpp in Sources */,
 				E82E67CD18EA7972004DBA18 /* Player.cpp in Sources */,
 				E82E67CE18EA7972004DBA18 /* Grenade.cpp in Sources */,
@@ -3391,6 +3531,7 @@
 				E82E67D018EA7972004DBA18 /* GameMap.cpp in Sources */,
 				E82E67D118EA7972004DBA18 /* IGameMapListener.cpp in Sources */,
 				E8D0E71B18FABC3600DE3BDB /* basecode.cpp in Sources */,
+				E818AED41949BDF5004500C7 /* Arena_Draw.cpp in Sources */,
 				E8D0E76F18FABC3600DE3BDB /* gzip.cpp in Sources */,
 				E82E67D218EA7972004DBA18 /* GameMapWrapper.cpp in Sources */,
 				E82E67D318EA7972004DBA18 /* World.cpp in Sources */,
@@ -3406,6 +3547,7 @@
 				E82E67DA18EA7972004DBA18 /* SWImageRenderer.cpp in Sources */,
 				E8D0E7CC18FABC3600DE3BDB /* shark.cpp in Sources */,
 				E82E67DB18EA7972004DBA18 /* SWFeatureLevel.cpp in Sources */,
+				E818AED81949D814004500C7 /* NetworkClient.cpp in Sources */,
 				E82E67DC18EA7972004DBA18 /* SWMapRenderer.cpp in Sources */,
 				E82E67DD18EA7972004DBA18 /* SWFlatMapRenderer.cpp in Sources */,
 				E82E67DE18EA7972004DBA18 /* SWModelRenderer.cpp in Sources */,
@@ -3429,11 +3571,13 @@
 				E82E673218EA7967004DBA18 /* weakref.cpp in Sources */,
 				E8D0E78F18FABC3600DE3BDB /* mqv.cpp in Sources */,
 				E82E66EE18EA7954004DBA18 /* GLBloomFilter.cpp in Sources */,
+				E8E977AF194481C400579D9A /* VehicleEntity.cpp in Sources */,
 				E82E66EF18EA7954004DBA18 /* GLQuadRenderer.cpp in Sources */,
 				E82E66F018EA7954004DBA18 /* GLLensFilter.cpp in Sources */,
 				E8D0E7C818FABC3600DE3BDB /* sha3.cpp in Sources */,
 				E82E66F118EA7954004DBA18 /* GLCameraBlurFilter.cpp in Sources */,
 				E82E66F218EA7954004DBA18 /* GLFogFilter.cpp in Sources */,
+				E8E977971944701300579D9A /* PlayerEntity.cpp in Sources */,
 				E82E66F318EA7954004DBA18 /* GLLensFlareFilter.cpp in Sources */,
 				E82E66F418EA7954004DBA18 /* GLFXAAFilter.cpp in Sources */,
 				E8D0E78D18FABC3600DE3BDB /* mqueue.cpp in Sources */,
@@ -3443,12 +3587,14 @@
 				E8D0E76B18FABC3600DE3BDB /* gfpcrypt.cpp in Sources */,
 				E82E66F718EA7954004DBA18 /* GLLensDustFilter.cpp in Sources */,
 				E8D0E75118FABC3600DE3BDB /* eccrypto.cpp in Sources */,
+				E818AEC91946F448004500C7 /* Client_Input.cpp in Sources */,
 				E82E66F818EA7954004DBA18 /* GLImage.cpp in Sources */,
 				E82E66F918EA7954004DBA18 /* GLFlatMapRenderer.cpp in Sources */,
 				E82E66FA18EA7954004DBA18 /* IGLSpriteRenderer.cpp in Sources */,
 				E82E66FB18EA7954004DBA18 /* GLSpriteRenderer.cpp in Sources */,
 				E82E66FC18EA7954004DBA18 /* GLSoftSpriteRenderer.cpp in Sources */,
 				E8D0E79118FABC3600DE3BDB /* nbtheory.cpp in Sources */,
+				E8E9779F194480CA00579D9A /* RocketEntity.cpp in Sources */,
 				E8D0E71118FABC3600DE3BDB /* arc4.cpp in Sources */,
 				E8D0E5E118F9AA0B00DE3BDB /* Host.cpp in Sources */,
 				E8D0E77918FABC3600DE3BDB /* idea.cpp in Sources */,
@@ -3478,6 +3624,7 @@
 				E82E670E18EA7954004DBA18 /* GLShadowShader.cpp in Sources */,
 				E82E670F18EA7954004DBA18 /* GLDynamicLightShader.cpp in Sources */,
 				E8D0E7DA18FABC3600DE3BDB /* squaretb.cpp in Sources */,
+				E8E977AB1944819600579D9A /* CheckpointEntity.cpp in Sources */,
 				E82E671018EA7954004DBA18 /* IGLShadowMapRenderer.cpp in Sources */,
 				E82E671118EA7954004DBA18 /* GLShadowMapShader.cpp in Sources */,
 				E82E671218EA7954004DBA18 /* GLBasicShadowMapRenderer.cpp in Sources */,
@@ -3566,10 +3713,12 @@
 				E8D0E7C318FABC3600DE3BDB /* serpent.cpp in Sources */,
 				E8CF040E17904971000683D4 /* FileManager.cpp in Sources */,
 				E8D0E7FF18FABC3600DE3BDB /* xtrcrypt.cpp in Sources */,
+				E8E977B11944955500579D9A /* Constants.cpp in Sources */,
 				E8D0E7CF18FABC3600DE3BDB /* simple.cpp in Sources */,
 				E8CF041117904ABC000683D4 /* IStream.cpp in Sources */,
 				E8CF041417904E8D000683D4 /* StdStream.cpp in Sources */,
 				E8D0E5D218F3215000DE3BDB /* GLNonlinearizeFilter.cpp in Sources */,
+				E818AEDE1949E30D004500C7 /* LocalEntity.cpp in Sources */,
 				E8D0E72218FABC3600DE3BDB /* blowfish.cpp in Sources */,
 				E8D0E73C18FABC3600DE3BDB /* default.cpp in Sources */,
 				E8CF0417179052F7000683D4 /* DirectoryFileSystem.cpp in Sources */,
@@ -3588,6 +3737,7 @@
 				E8D0E7A218FABC3600DE3BDB /* rabin.cpp in Sources */,
 				E8D0E79218FABC3600DE3BDB /* network.cpp in Sources */,
 				E8D0E74E18FABC3600DE3BDB /* ec2n.cpp in Sources */,
+				E8E977AE194481C400579D9A /* VehicleEntity.cpp in Sources */,
 				E88318D8179176F4002ABE6D /* GLImageManager.cpp in Sources */,
 				E8D0E7E318FABC3600DE3BDB /* tiger.cpp in Sources */,
 				E88318DB179256E5002ABE6D /* Player.cpp in Sources */,
@@ -3621,6 +3771,7 @@
 				E8567E5D1792C089009D83E0 /* ALFuncs.cpp in Sources */,
 				E8567E601792C0FF009D83E0 /* DynamicLibrary.cpp in Sources */,
 				E8567E631792CA12009D83E0 /* IAudioStream.cpp in Sources */,
+				E8E977A61944816200579D9A /* FlagEntity.cpp in Sources */,
 				E895D66018D4A15900F5B9CA /* JpegWriter.cpp in Sources */,
 				E8567E661792CCE5009D83E0 /* WavAudioStream.cpp in Sources */,
 				E8D0E7E118FABC3600DE3BDB /* tftables.cpp in Sources */,
@@ -3638,6 +3789,7 @@
 				E8D0E79018FABC3600DE3BDB /* nbtheory.cpp in Sources */,
 				E8D0E80518FABC3600DE3BDB /* zlib.cpp in Sources */,
 				E82E66B318E9A35C004DBA18 /* Client_FPSCounter.cpp in Sources */,
+				E818AEE21949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */,
 				E834F55317944779004EBE88 /* NetClient.cpp in Sources */,
 				E8D0E71018FABC3600DE3BDB /* arc4.cpp in Sources */,
 				E834F5561794BBD4004EBE88 /* Debug.cpp in Sources */,
@@ -3650,11 +3802,13 @@
 				E834F55F17950E44004EBE88 /* DeflateStream.cpp in Sources */,
 				E834F56517951B1C004EBE88 /* MemoryStream.cpp in Sources */,
 				E8D0E75A18FABC3600DE3BDB /* esign.cpp in Sources */,
+				E8E977961944701300579D9A /* PlayerEntity.cpp in Sources */,
 				E834F56817979F5A004EBE88 /* Quake3Font.cpp in Sources */,
 				E8F74CFF184C7D7C0085AA54 /* Clipboard.cpp in Sources */,
 				E8D0E7CD18FABC3600DE3BDB /* sharkbox.cpp in Sources */,
 				E834F56B17979FD7004EBE88 /* IFont.cpp in Sources */,
 				E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */,
+				E818AEDA1949E0D1004500C7 /* Arena_World.cpp in Sources */,
 				E8D0E7C718FABC3600DE3BDB /* sha3.cpp in Sources */,
 				E834F56F1797D934004EBE88 /* ChatWindow.cpp in Sources */,
 				E8E0AF8A1798278000C6B5A9 /* GLImageRenderer.cpp in Sources */,
@@ -3671,6 +3825,7 @@
 				E8F74CF2183FBB070085AA54 /* MainScreenHelper.cpp in Sources */,
 				E8D0E7AC18FABC3600DE3BDB /* rdtables.cpp in Sources */,
 				E8D0E7D718FABC3600DE3BDB /* square.cpp in Sources */,
+				E818AEE6194AAAD0004500C7 /* ServerEntity.cpp in Sources */,
 				E849655018E94F1200B9706D /* SdlFileStream.cpp in Sources */,
 				E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */,
 				E842888E18A3D1520060743D /* StartupScreenHelper.cpp in Sources */,
@@ -3686,6 +3841,7 @@
 				E8D0E77A18FABC3600DE3BDB /* integer.cpp in Sources */,
 				E8D0E75818FABC3600DE3BDB /* eprecomp.cpp in Sources */,
 				E8E0AFAF179ADDCC00C6B5A9 /* ParticleSpriteEntity.cpp in Sources */,
+				E818AECC194954BD004500C7 /* Arena.cpp in Sources */,
 				E81A7C741863566200BF3FCE /* SWFeatureLevel.cpp in Sources */,
 				E8E0AFB2179AF4E700C6B5A9 /* SmokeSpriteEntity.cpp in Sources */,
 				E8E0AFB5179BF25B00C6B5A9 /* Settings.cpp in Sources */,
@@ -3697,6 +3853,7 @@
 				E89E8121179C2C800059C649 /* GLBloomFilter.cpp in Sources */,
 				E8D88AB1179C3004004C2451 /* GLQuadRenderer.cpp in Sources */,
 				E8D0E7FB18FABC3600DE3BDB /* winpipes.cpp in Sources */,
+				E8ACFA61194B5E240093C79C /* Host.cpp in Sources */,
 				E8D88AB4179C45B7004C2451 /* GLLensFilter.cpp in Sources */,
 				E8E44686179CC4FF00BE8855 /* IBitmapCodec.cpp in Sources */,
 				E8D0E7DD18FABC3600DE3BDB /* tea.cpp in Sources */,
@@ -3711,7 +3868,9 @@
 				E8D0E73018FABC3600DE3BDB /* channels.cpp in Sources */,
 				E8E446A4179EA60900BE8855 /* GLMapShadowRenderer.cpp in Sources */,
 				E8E446A7179EAC7900BE8855 /* GLShadowShader.cpp in Sources */,
+				E818AED31949BDF5004500C7 /* Arena_Draw.cpp in Sources */,
 				E8E446AA179F822D00BE8855 /* TargaWriter.cpp in Sources */,
+				E8710E6E1940633A00C2EE62 /* GLFogShader.cpp in Sources */,
 				E89A648E17A11B4F00FDA893 /* GLModelRenderer.cpp in Sources */,
 				E89A649117A12FF900FDA893 /* GLDynamicLightShader.cpp in Sources */,
 				E89A649417A1677F00FDA893 /* FallingBlock.cpp in Sources */,
@@ -3733,7 +3892,10 @@
 				E80B288217A516D70056179E /* advancing_front.cc in Sources */,
 				E80B288317A516D70056179E /* cdt.cc in Sources */,
 				E80B288417A516D70056179E /* sweep.cc in Sources */,
+				E8E9779E194480CA00579D9A /* RocketEntity.cpp in Sources */,
+				E818AEEA194ACCA6004500C7 /* PlayerServerEntity.cpp in Sources */,
 				E8F74CF51840D4CC0085AA54 /* Config.cpp in Sources */,
+				E8E9779A19447C6700579D9A /* GrenadeEntity.cpp in Sources */,
 				E8D0E7AA18FABC3600DE3BDB /* rc6.cpp in Sources */,
 				E8D0E78E18FABC3600DE3BDB /* mqv.cpp in Sources */,
 				E80B288517A516D70056179E /* sweep_context.cc in Sources */,
@@ -3755,6 +3917,7 @@
 				E8D0E7F318FABC3600DE3BDB /* vmac.cpp in Sources */,
 				E81A7C6B1861525D00BF3FCE /* SWImage.cpp in Sources */,
 				E80B28D017AFE68A0056179E /* TCGameMode.cpp in Sources */,
+				E818AED71949D814004500C7 /* NetworkClient.cpp in Sources */,
 				E838D41F18AC726B00EE3C53 /* Strings.cpp in Sources */,
 				E87AB82318BB3958006B7D73 /* SdlImageReader.cpp in Sources */,
 				E80B28D317AFF7810056179E /* TCProgressView.cpp in Sources */,
@@ -3769,6 +3932,7 @@
 				E859510C17C5DA060012810C /* GLFogFilter.cpp in Sources */,
 				E8D0E7A018FABC3600DE3BDB /* queue.cpp in Sources */,
 				E8D0E73218FABC3600DE3BDB /* cmac.cpp in Sources */,
+				E8E977AA1944819600579D9A /* CheckpointEntity.cpp in Sources */,
 				E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */,
 				E8FE749018CC6CE000291338 /* Client_NetHandler.cpp in Sources */,
 				E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */,
@@ -3788,6 +3952,7 @@
 				E844888417D2633C005105D0 /* json_writer.cpp in Sources */,
 				E8D2ACE317D704E600BE5490 /* GLColorCorrectionFilter.cpp in Sources */,
 				E8B6B68F17DE27B500E35523 /* as_atomic.cpp in Sources */,
+				E8E977A21944813000579D9A /* CommandPostEntity.cpp in Sources */,
 				E8B6B69017DE27B500E35523 /* as_builder.cpp in Sources */,
 				E8B6B69117DE27B500E35523 /* as_bytecode.cpp in Sources */,
 				E8D0E7B718FABC3600DE3BDB /* rsa.cpp in Sources */,
@@ -3818,6 +3983,7 @@
 				E8B6B6AC17DE27B500E35523 /* as_parser.cpp in Sources */,
 				E8B6B6AD17DE27B500E35523 /* as_restore.cpp in Sources */,
 				E8B6B6AE17DE27B500E35523 /* as_scriptcode.cpp in Sources */,
+				E818AEC81946F448004500C7 /* Client_Input.cpp in Sources */,
 				E8D0E7F518FABC3600DE3BDB /* wait.cpp in Sources */,
 				E8B6B6AF17DE27B500E35523 /* as_scriptengine.cpp in Sources */,
 				E8B6B6B017DE27B500E35523 /* as_scriptfunction.cpp in Sources */,
@@ -3847,6 +4013,7 @@
 				E8B6B6EB17E40AF500E35523 /* ScriptManager.cpp in Sources */,
 				E8B6B6EE17E40B5900E35523 /* IImage.cpp in Sources */,
 				E8D0E75018FABC3600DE3BDB /* eccrypto.cpp in Sources */,
+				E818AEC41946BAAB004500C7 /* Client.cpp in Sources */,
 				E8D0E7C118FABC3600DE3BDB /* seed.cpp in Sources */,
 				E8B6B6F117E40DAC00E35523 /* RefCountedObject.cpp in Sources */,
 				E8B6B6F417E40E8300E35523 /* IModel.cpp in Sources */,
@@ -3884,6 +4051,7 @@
 				E8B6B72B17E6095900E35523 /* GLLensDustFilter.cpp in Sources */,
 				E8D0E77E18FABC3600DE3BDB /* luc.cpp in Sources */,
 				E8428888189FE1710060743D /* Fog.vs in Sources */,
+				E818AED0194954EC004500C7 /* Arena_Input.cpp in Sources */,
 				E8B6B72E17E68B1C00E35523 /* GLSoftLitSpriteRenderer.cpp in Sources */,
 				E8B6B73017E8C4F000E35523 /* IToolSkin.cpp in Sources */,
 				E8B6B73417E8CE1C00E35523 /* ScriptFunction.cpp in Sources */,
@@ -3917,7 +4085,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3954,7 +4122,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (

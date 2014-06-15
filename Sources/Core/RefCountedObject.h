@@ -69,6 +69,8 @@ namespace spades {
 			return ptr;
 		}
 		T& operator *() {
+			// existence of null reference result in
+			// an undefined behavior (8.3.2/1).
 			SPAssert(ptr != NULL);
 			return *ptr;
 		}

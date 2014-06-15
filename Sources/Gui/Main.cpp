@@ -48,6 +48,8 @@
 #include <Core/MemoryStream.h>
 #include <Core/Bitmap.h>
 
+#include <NGClient/Client.h>
+
 #ifdef __APPLE__
 #elif __unix
 
@@ -61,7 +63,12 @@ static const unsigned char splashImage[] = {
 	#include "SplashImage.inc"
 };
 
-SPADES_SETTING(cl_showStartupWindow, "");
+static const unsigned char Icon[] = {
+	#include "Icon.inc"
+};
+
+
+SPADES_SETTING(cl_showStartupWindow, "1");
 
 #ifdef WIN32
 #include <windows.h>
@@ -154,7 +161,17 @@ class ThreadQuantumSetter {
 SPADES_SETTING(cg_lastQuickConnectHost, "");
 SPADES_SETTING(cg_protocolVersion, "");
 SPADES_SETTING(cg_playerName, "");
-int cg_autoConnect = 0;
+
+namespace {
+	int cg_autoConnect = 0;
+	bool cg_printVersion = false;
+	bool cg_printHelp = false;
+	bool g_debugNextGenServer = false;
+	void printHelp( const char * binaryName )
+	{
+		printf( "usage: %s [server_address] [protocol_version] [-h|--help] [-v|--version] \n", binaryName );
+	}
+}
 
 int argsHandler(int argc, char **argv, int &i)
 {
@@ -162,6 +179,10 @@ int argsHandler(int argc, char **argv, int &i)
 		if( !strncasecmp( a, "aos://", 6 ) ) {
 			cg_lastQuickConnectHost = a;
 			cg_autoConnect = 1;
+			return ++i;
+		}
+		if( !strcasecmp( a, "-n" ) ) {
+			g_debugNextGenServer = true;
 			return ++i;
 		}
 		//lm: we attempt to detect protocol version, allowing with or without a prefix 'v='
@@ -175,7 +196,16 @@ int argsHandler(int argc, char **argv, int &i)
 			cg_protocolVersion = 4;
 			return ++i;
 		}
-	}
+		if ( !strcasecmp( a, "--version" ) || !strcasecmp( a, "-v" ) ) {
+			cg_printVersion = true;
+			return ++i;
+		}
+		if ( !strcasecmp( a, "--help" ) || !strcasecmp( a, "-h" ) ) {
+			cg_printHelp = true;
+			return ++i;
+		}
+		}
+
 	return 0;
 }
 
@@ -196,6 +226,24 @@ namespace spades {
 		ConcreteRunner runner(addr, playerName);
 		runner.RunProtected();
 	}
+	
+	void StartNextGenClient() {
+		class ConcreteRunner: public spades::gui::Runner {
+			ngclient::ClientParams params;
+		protected:
+			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer, spades::client::IAudioDevice *audio) {
+				return new ngclient::Client(renderer, audio, params);
+			}
+		public:
+			ConcreteRunner(const ngclient::ClientParams& params):
+			params(params){ }
+		};
+		ngclient::ClientParams params;
+		params.hostLocalServer = true;
+		ConcreteRunner runner(params);
+		runner.RunProtected();
+	}
+	
 	void StartMainScreen(){
 		class ConcreteRunner: public spades::gui::Runner {
 		protected:
@@ -248,7 +296,7 @@ public:
 #elif __unix
 		SDL_Surface *icon = nullptr;
 		SDL_RWops *icon_rw = nullptr;
-		icon_rw = SDL_RWFromConstMem(LDVAR(openspades_png), LDLEN(openspades_png));
+		icon_rw = SDL_RWFromConstMem(Icon, sizeof(Icon));
 		if (icon_rw != nullptr) {
 			icon = IMG_LoadPNG_RW(icon_rw);
 			SDL_FreeRW(icon_rw);
@@ -320,6 +368,25 @@ int main(int argc, char ** argv)
 	SetUnhandledExceptionFilter( UnhandledExceptionProc );
 #endif
 
+	for(int i = 1; i < argc;) {
+			int ret = argsHandler(argc, argv, i);
+			if(!ret) {
+				// ignore unknown arg
+				i++;
+			}
+		}
+
+		if ( cg_printVersion ) {
+			printf( "%s\n", PACKAGE_STRING );
+			return 0;
+		}
+
+		if ( cg_printHelp ) {
+			printHelp( argv[0] );
+			return 0;
+		}
+
+
 	std::unique_ptr<SplashWindow> splashWindow;
 
 	try{
@@ -339,7 +406,6 @@ int main(int argc, char ** argv)
 		spades::DispatchQueue::GetThreadQueue()->MarkSDLVideoThread();
 
 		SPLog("Package: " PACKAGE_STRING);
-
 		// setup user-specific default resource directories
 #ifdef WIN32
 		static wchar_t buf[4096];
@@ -384,12 +450,7 @@ int main(int argc, char ** argv)
 		spades::FileManager::AddFileSystem
 		(new spades::DirectoryFileSystem("./Resources", false));
 
-		spades::FileManager::AddFileSystem
-		(new spades::DirectoryFileSystem("/usr/local/share/games/openspades/Resources", false));
-
-		spades::FileManager::AddFileSystem
-		(new spades::DirectoryFileSystem("/usr/share/games/openspades/Resources", false));
-
+		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(CMAKE_INSTALL_PREFIX "/" OPENSPADES_INSTALL_RESOURCES, false));
 
 		std::string xdg_data_home = home+"/.local/share";
 
@@ -434,7 +495,6 @@ int main(int argc, char ** argv)
 		try{
 			spades::StartLog();
 		}catch(const std::exception& ex){
-
 			SDL_InitSubSystem(SDL_INIT_VIDEO);
 			auto msg = spades::Format("Failed to start recording log because of the following error:\n{0}\n\n"
 									  "OpenSpades will continue to run, but any critical events are not logged.", ex.what());
@@ -475,7 +535,7 @@ int main(int argc, char ** argv)
 		}
 
 		// register resource directory specified by Makefile (or something)
-#if defined(RESDIR_DEFINED) && !NDEBUG
+#if defined(RESDIR_DEFINED)
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(RESDIR, false));
 #endif
 
@@ -547,13 +607,6 @@ int main(int argc, char ** argv)
 		pumpEvents();
 
 		// parse args
-		for(int i = 1; i < argc;) {
-			int ret = argsHandler(argc, argv, i);
-			if(!ret) {
-				// ignore unknown arg
-				i++;
-			}
-		}
 
 		// initialize AngelScript
 		SPLog("Initializing script engine");
@@ -574,7 +627,9 @@ int main(int argc, char ** argv)
 		pumpEvents();
 
 		// everything is now ready!
-		if( !cg_autoConnect ) {
+		if (g_debugNextGenServer) {
+			spades::StartNextGenClient();
+		} else if( !cg_autoConnect ) {
 			if(!((int)cl_showStartupWindow != 0 ||
 				 splashWindow->IsStartupScreenRequested())) {
 				splashWindow.reset();

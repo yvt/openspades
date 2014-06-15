@@ -381,6 +381,9 @@ namespace spades {
 		
 		template<SWFeatureLevel level>
 		void SWRenderer::ApplyFog() {
+			SPAssert(fogType == client::FogType::Classical);
+			// TODO: support exponential fog
+			
 			int fw = this->fb->GetWidth();
 			int fh = this->fb->GetHeight();
 			
@@ -465,6 +468,9 @@ namespace spades {
 		
 		template<>
 		void SWRenderer::ApplyFog<SWFeatureLevel::SSE2>() {
+			SPAssert(fogType == client::FogType::Classical);
+			// TODO: support exponential fog
+			
 			int fw = this->fb->GetWidth();
 			int fh = this->fb->GetHeight();
 			

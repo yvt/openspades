@@ -51,13 +51,13 @@ namespace spades {
 			SWFeatureLevel featureLevel;
 			unsigned long long pixelsDrawn;
 			
-			template<SWFeatureLevel, bool, bool, bool, bool>
+			template<SWFeatureLevel, bool, bool, bool, bool, bool>
 			struct PolygonRenderer;
 			
-			template<SWFeatureLevel, bool, bool, bool>
+			template<SWFeatureLevel, bool, bool, bool, bool>
 			struct PolygonRenderer3;
 			
-			template<bool, bool, bool>
+			template<bool, bool, bool, bool>
 			struct PolygonRenderer2;
 			
 			

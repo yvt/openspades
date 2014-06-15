@@ -32,9 +32,11 @@ namespace spades {
 		class GLMapChunk;
 		class GLProgram;
 		class GLImage;
+		class GLMapFastChunk;
 		class GLMapRenderer{
 			
 			friend class GLMapChunk;
+			friend class GLMapFastChunk;
 			
 		protected:
 			GLRenderer *renderer;
@@ -42,6 +44,8 @@ namespace spades {
 			
 			GLProgram *basicProgram;
 			GLProgram *dlightProgram;
+			GLProgram *fastBasicProgram;
+			GLProgram *fastDlightProgram;
 			GLProgram *backfaceProgram;
 			GLImage *aoImage;
 			GLImage *detailImage;
@@ -52,26 +56,44 @@ namespace spades {
 				bool rendered;
 				float distance;
 			};
-			GLMapChunk **chunks;
-			ChunkRenderInfo *chunkInfos;
+			std::vector<GLMapChunk *> chunks;
+			std::vector<GLMapFastChunk *> fastChunks;
+			std::vector<ChunkRenderInfo> chunkInfos;
 			
 			client::GameMap *gameMap;
 			
 			int numChunkWidth, numChunkHeight;
 			int numChunkDepth, numChunks;
+			int numFastChunkWidth;
+			int numFastChunkHeight;
+			int numFastChunks;
 			
 			inline int GetChunkIndex(int x, int y, int z){
 				return (x * numChunkHeight + y) * numChunkDepth + z;
 			}
+			inline int GetFastChunkIndex(int x, int y){
+				return x * numFastChunkHeight + y;
+			}
 			
-			inline GLMapChunk *GetChunk(int x, int y, int z) {
-				return chunks[GetChunkIndex(x, y, z)];
+			inline GLMapChunk& GetChunk(int x, int y, int z) {
+				return *chunks[GetChunkIndex(x, y, z)];
+			}
+			
+			inline GLMapFastChunk& GetFastChunk(int x, int y)
+			{
+				return *fastChunks[GetFastChunkIndex(x, y)];
 			}
 			
 			void RealizeChunks(Vector3 eye);
+			void RealizeFastChunks(Vector3 eye);
 			
-			void DrawColumnSunlight(int cx, int cy, int cz, Vector3 eye);
-			void DrawColumnDLight(int cx, int cy, int cz, Vector3 eye, const std::vector<GLDynamicLight>& lights);
+			int GetVisibleDistance();
+			int GetFastRenderDistance();
+			
+			float GetPointSizeFactor();
+			
+			void DrawColumnSunlight(int cx, int cy, int cz, Vector3 eye, bool fast);
+			void DrawColumnDLight(int cx, int cy, int cz, Vector3 eye, const std::vector<GLDynamicLight>& lights, bool fast);
 			
 			void RenderBackface();
 			

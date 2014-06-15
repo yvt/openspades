@@ -32,35 +32,70 @@
 
 namespace spades {
 	namespace client {
-		GameMap::GameMap(int w, int h, int d):
-		listener(NULL){
+		class Xorshift {
+			uint32_t x = 0x1145140a;
+			uint32_t y = 0x8101919f;
+			uint32_t z = 0x12345678;
+			uint32_t w = 88675123;
+		public:
+			uint32_t operator () () {
+				uint32_t t = x ^ (x << 11);
+				x = y; y = z; z = w;
+				return w = (w ^ (w >> 19)) ^ (t ^ (t >> 8));
+			}
+		};
+		
+		GameMap::GameMap(int width, int height, int depth):
+		listener(NULL),
+		chunkCols(width >> ChunkSizeBits),
+		chunkRows(height >> ChunkSizeBits) {
 			SPADES_MARK_FUNCTION();
 			
-			if(w != DefaultWidth ||
-			   h != DefaultHeight ||
-			   d != DefaultDepth) {
-				SPRaise("Unsupported map size: %dx%dx%d", w, h, d);
+			if (depth != 64) {
+				SPRaise("Depth other than 64 is not supported.");
 			}
 			
-			uint32_t rnd = (uint32_t)rand() ^ ((uint32_t)rand() << 16);
-			rnd ^= 0x7abd4513;
-			for(int x = 0; x < DefaultWidth; x++)
-				for(int y = 0; y < DefaultHeight; y++){
-					solidMap[x][y] = 1; // ground only
-					for(int z = 0; z < DefaultDepth; z++){
-						uint32_t col = 0x00284067;
-						col ^= 0x070707 & rnd;
-						colorMap[x][y][z] = col + (100UL * 0x1000000UL);
-						rnd = (rnd * 0x71931) + 0x981f311;
-						if(rnd == 0xffffffff) // mod 2^32-1
-							rnd = 0;
+			this->width = chunkCols << ChunkSizeBits;
+			this->height = chunkRows << ChunkSizeBits;
+			
+			if (this->width != width) {
+				SPRaise("Currently, GameMap only supports width "
+						"which is multiple of %d.",
+						(int)ChunkSize);
+			}
+			if (this->height != height) {
+				SPRaise("Currently, GameMap only supports height "
+						"which is multiple of %d.",
+						(int)ChunkSize);
+			}
+			
+			chunks.resize(chunkCols * chunkRows);
+			
+			Xorshift random;
+			for (auto& chunk: chunks) {
+				chunk.reset(new Chunk());
+				
+				auto& c = *chunk;
+				for (int x = 0; x < ChunkSize; ++x)
+					for (int y = 0; y < ChunkSize; ++y) {
+						c.solidMap[x][y] = 1; // ground only
+						for(int z = 0; z < DefaultDepth; z++){
+							uint32_t col = 0x00284067;
+							col ^= 0x070707 & random();
+							c.colorMap[x][y][z] = col + (100UL * 0x1000000UL);
+						}
 					}
-				}
+			}
+			
 		}
 		
-		GameMap::GameMap():
-		GameMap(DefaultWidth, DefaultHeight, DefaultDepth) {
-		}
+		GameMap::GameMap(const GameMap& map):
+		width(map.width),
+		height(map.height),
+		chunkCols(map.chunkCols),
+		chunkRows(map.chunkRows),
+		listener(nullptr),
+		chunks(map.chunks) { }
 		
 		GameMap::~GameMap(){
 			SPADES_MARK_FUNCTION();
@@ -186,14 +221,14 @@ namespace spades {
 		bool GameMap::ClipBox(int x, int y, int z) {
 			int sz;
 			
-			if (x < 0 || x >= 512 || y < 0 || y >= 512)
+			if (x < 0 || x >= Width() || y < 0 || y >= Height())
 				return true;
 			else if (z < 0)
 				return false;
 			sz = (int)z;
-			if(sz == 63)
+			if(sz == Depth() - 1)
 				sz=62;
-			else if (sz >= 64)
+			else if (sz >= Depth())
 				return true;
 			return IsSolid((int)x, (int)y, sz);
 		}
@@ -201,14 +236,14 @@ namespace spades {
 		bool GameMap::ClipWorld(int x, int y, int z){
 			int sz;
 			
-			if (x < 0 || x >= 512 || y < 0 || y >= 512)
+			if (x < 0 || x >= Width() || y < 0 || y >= Height())
 				return 0;
 			if (z < 0)
 				return 0;
 			sz = (int)z;
-			if(sz == 63)
-				sz=62;
-			else if (sz >= 63)
+			if(sz == Depth() - 1)
+				sz = Depth() - 2;
+			else if (sz >= Depth() - 1)
 				return 1;
 			else if (sz < 0)
 				return 0;
@@ -295,8 +330,7 @@ namespace spades {
 			
 #if 1 
 			// faster version
-			uint64_t lastSolidMap = solidMap[a.x&(DefaultWidth-1)]
-			[a.y&(DefaultHeight-1)];
+			uint64_t lastSolidMap = GetSolidMapWrapped(a.x, a.y);
 			if(a.z < 0 && d.z < 0){
 				return false;
 			}else if(a.z < 0){
@@ -328,13 +362,11 @@ namespace spades {
 				}
 				else if ((p.z >= 0) && (a.x != c.x)) {
 					a.x += d.x; p.x += i.z; p.z -= i.y;
-					lastSolidMap = solidMap[a.x&(DefaultWidth-1)]
-					[a.y&(DefaultHeight-1)];
+					lastSolidMap = GetSolidMapWrapped(a.x, a.y);
 				}
 				else {
 					a.y += d.y; p.y += i.z; p.z += i.x;
-					lastSolidMap = solidMap[a.x&(DefaultWidth-1)]
-					[a.y&(DefaultHeight-1)];
+					lastSolidMap = GetSolidMapWrapped(a.x, a.y);
 				}
 				
 				if ((lastSolidMap >> (uint64_t)a.z) & 1ULL) {
@@ -515,18 +547,19 @@ namespace spades {
 			return (u.c & 0xffffff) | (100UL * 0x1000000);
 		}
 		
-		GameMap *GameMap::Load(spades::IStream *stream) {
+		GameMap *GameMap::Load(spades::IStream *stream,
+							   int width, int height) {
 			SPADES_MARK_FUNCTION();
 			
 			std::string bytes = stream->ReadAllBytes();
 			size_t len = bytes.size();
 			size_t pos = 0;
 			
-			GameMap *map = new GameMap();
+			GameMap *map = new GameMap(width, height, 64);
 			try{
-				for(int y = 0; y < 512; y++){
-					for(int x = 0; x < 512; x++){
-						map->solidMap[x][y] = 0xffffffffffffffffULL;
+				for(int y = 0; y < height; y++){
+					for(int x = 0; x < width; x++){
+						map->SetSolidMapUnsafe(x, y, 0xffffffffffffffffULL);
 						
 						if(pos + 2 >= len){
 							SPRaise("File truncated");

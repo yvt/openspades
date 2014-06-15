@@ -15,14 +15,28 @@
 #include <cassert>
 
 #define HAS_CONSTEXPR 1
+#define HAS_OVERRIDE 1
+#define HAS_FINAL 1
 
 #ifdef _MSC_VER
 #undef HAS_CONSTEXPR
 #define HAS_CONSTEXPR 0
+#undef HAS_OVERRIDE
+#define HAS_OVERRIDE 0
+#undef HAS_FINAL
+#define HAS_FINAL 0
 #endif
 
 #if !HAS_CONSTEXPR
 #define constexpr
+#endif
+
+#if !HAS_OVERRIDE
+#define override
+#endif
+
+#if !HAS_FINAL
+#define final
 #endif
 
 
@@ -35,11 +49,17 @@ namespace stmp {
 	// and corresponding type in .Net Framework is System.Nullable<T>.
 	template<class T>
 	class optional {
-		std::aligned_storage<sizeof(T), std::alignment_of<T>::value> storage;
+		typename std::aligned_storage<sizeof(T), std::alignment_of<T>::value>::type storage;
 		bool has_some;
 		using Allocator = std::allocator<T>;
 	public:
 		optional():has_some(false){}
+		optional(const T& v):has_some(false){
+			reset(v);
+		}
+		optional(T&& v):has_some(false){
+			reset(std::forward<T>(v));
+		}
 		optional(optional& o):has_some(o.has_some) {
 			if(has_some) { Allocator().construct(get_pointer(), o.get()); }
 		}
@@ -62,12 +82,18 @@ namespace stmp {
 		template<class... Args>
 		void reset(Args&&... args) {
 			reset();
-			Allocator().construct(get_pointer(), std::forward<Args>(args)...);
+			Allocator().construct(reinterpret_cast<T *>(&storage),
+								  std::forward<Args>(args)...);
 			has_some = true;
 		}
-		template<class U>
-		void operator =(U&& o) {
-			reset(std::forward<U>(o));
+		void operator =(const T& o) {
+			reset(o);
+		}
+		void operator =(T&& o) {
+			reset(std::move(o));
+		}
+		void operator =(const optional& o) {
+			if (o) reset(*o); else reset();
 		}
 		
 		T *get_pointer() { return has_some ? reinterpret_cast<T *>(&storage) : nullptr; }

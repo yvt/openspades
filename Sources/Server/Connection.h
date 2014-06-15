@@ -21,6 +21,13 @@
 #pragma once
 
 #include "Host.h"
+#include <list>
+#include "Shared.h"
+#include <memory>
+
+namespace spades { namespace game {
+	class World;
+} }
 
 namespace spades { namespace server {
 	
@@ -29,8 +36,36 @@ namespace spades { namespace server {
 	class Connection: public HostPeerListener {
 		friend class Server;
 		
+		class PacketVisitor;
+		class MapGenerator;
+		
+		enum class State {
+			/** Waiting for InitiateConnectionPacket. */
+			NotInitiated,
+			
+			/** Waiting for ClientCertificatePacket. */
+			WaitingForCertificate,
+			MapTransfer,
+			CompletingMapTransfer,
+			Game
+		};
+		
 		Server *server;
 		HostPeer *peer;
+		State state = State::NotInitiated;
+		double stateTimeout = 10.0;
+		std::string serverNonce;
+		std::string clientNonce;
+		std::string nonce;
+		
+		MapGenerator *mapGenerator;
+		
+		game::World& GetWorld();
+		
+		void SendServerCertificate();
+		void StartStateTransfer();
+		void FinalStateTransfer();
+		
 	protected:
 		// RefCountedObject should only be destroyed by
 		// RefCountedObject::Release().
@@ -41,8 +76,16 @@ namespace spades { namespace server {
 	public:
 		Connection(Server *);
 		
-		virtual void PacketReceived(const protocol::Packet&);
-		virtual void Disconnected();
+		
+		
+		void Update(double dt);
+		
+		/** Responds to the world change. */
+		void OnWorldChanged();
+		
+		/* ---- HostPeerListener ----*/
+		void PacketReceived(const protocol::Packet&) override;
+		void Disconnected() override;
 	};
 	
 } }

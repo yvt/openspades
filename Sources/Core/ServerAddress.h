@@ -34,6 +34,7 @@ namespace spades
 			Unknown = 0,
 			v075 = 3,
 			v076 = 4,
+			Ngspades = 42
 		};
 	};
 	class ServerAddress

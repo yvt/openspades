@@ -37,6 +37,9 @@ SPADES_SETTING(r_water, "2");
 
 namespace spades {
 	namespace draw {
+		
+#pragma mark - GLMapChunk
+		
 		GLMapChunk::GLMapChunk(spades::draw::GLMapRenderer *r, client::GameMap *mp,
 							   int cx, int cy, int cz){
 			SPADES_MARK_FUNCTION();
@@ -476,6 +479,297 @@ namespace spades {
 
 		
 		float GLMapChunk::DistanceFromEye(const Vector3 &eye) {
+			Vector3 diff = eye - centerPos;
+			
+			// FIXME: variable map size
+			if(diff.x < -256.f) diff.x += 512.f;
+			if(diff.y < -256.f) diff.y += 512.f;
+			
+			if(diff.x > 256.f) diff.x -= 512.f;
+			if(diff.y > 256.f) diff.y -= 512.f;
+			
+			float dist = fabsf(diff.x);
+			dist = std::max(dist, fabsf(diff.y));
+			dist = std::max(dist, fabsf(diff.z));
+			
+			//return std::max(diff.GetLength() - radius, 0.f);
+			return std::max(dist - ((float)Size * .5f), 0.f);
+		}
+		
+		
+#pragma mark - GLMapFastChunk
+		
+		GLMapFastChunk::GLMapFastChunk(spades::draw::GLMapRenderer *r, client::GameMap *mp,
+							   int cx, int cy){
+			SPADES_MARK_FUNCTION();
+			
+			renderer = r;
+			device = r->device;
+			map = mp;
+			chunkX = cx;
+			chunkY = cy;
+			needsUpdate = true;
+			realized = false;
+			
+			centerPos = MakeVector3(cx * Size + Size / 2,
+									cy * Size + Size / 2,
+									map->Depth() / 2);
+			radius = (float)Size * 0.5f * sqrtf(3.f);
+			aabb = AABB3(cx * Size, cy * Size, 0,
+						 Size, Size, map->Depth());
+			
+			buffer = 0;
+			
+		}
+		
+		GLMapFastChunk::~GLMapFastChunk() {
+			SetRealized(false);
+		}
+		
+		void GLMapFastChunk::SetRealized(bool b){
+			SPADES_MARK_FUNCTION_DEBUG();
+			
+			if(realized == b)
+				return;
+			
+			if(!b){
+				if(buffer){
+					device->DeleteBuffer(buffer);
+					buffer = 0;
+				}
+				std::vector<Vertex> i;
+				i.swap(vertices);
+			}else{
+				needsUpdate = true;
+			}
+			
+			realized = b;
+		}
+		void GLMapFastChunk::EmitVertex(int x, int y, int z,
+									uint32_t color) {
+			SPADES_MARK_FUNCTION_DEBUG();
+			
+			Vertex inst;
+			
+			inst.x = x;
+			inst.y = y;
+			inst.z = z;
+			inst.colorRed = (uint8_t)(color);
+			inst.colorGreen = (uint8_t)(color >> 8);
+			inst.colorBlue = (uint8_t)(color >> 16);
+			
+			vertices.push_back(inst);
+			
+		}
+		
+		bool GLMapFastChunk::IsSolid(int x, int y, int z) {
+			if(z < 0) return false;
+			if(z >= 64) return true;
+			
+			// FIXME: variable map size
+			x &= 511;
+			y &= 511;
+			
+			if(z == 63){
+				if(r_water){
+					return map->IsSolid(x, y, 62);
+				}else{
+					return map->IsSolid(x, y, 63);
+				}
+			}else{
+				return map->IsSolid(x, y, z);
+			}
+		}
+		
+		void GLMapFastChunk::Update() {
+			SPADES_MARK_FUNCTION();
+			
+			vertices.clear();
+			if(buffer){
+				device->DeleteBuffer(buffer);
+				buffer = 0;
+			}
+			
+			int rchunkX = chunkX * Size;
+			int rchunkY = chunkY * Size;
+			int rchunkZ = 0;
+			
+			int x, y, z;
+			int d = map->Depth();
+			for(x = 0; x < Size; x++){
+				for(y = 0; y < Size; y++){
+					for(z = 0; z < d; z++){
+						int xx = x + rchunkX;
+						int yy = y + rchunkY;
+						int zz = z + rchunkZ;
+						
+						if(!IsSolid(xx, yy, zz))
+							continue;
+						
+						uint32_t col = map->GetColor(xx, yy, zz);
+						
+						// damaged block?
+						int health = col >> 24;
+						if(health < 100){
+							col &= 0xfefefe;
+							col >>= 1;
+						}
+						
+						if(!IsSolid(xx, yy, zz + 1) ||
+						   !IsSolid(xx, yy, zz - 1) ||
+						   !IsSolid(xx - 1, yy, zz) ||
+						   !IsSolid(xx + 1, yy, zz) ||
+						   !IsSolid(xx, yy - 1, zz) ||
+						   !IsSolid(xx, yy + 1, zz)){
+							EmitVertex(x, y, z, col);
+						}
+					}
+				}
+			}
+			
+			if(vertices.size() == 0)
+				return;
+			
+			buffer = device->GenBuffer();
+			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			
+			device->BufferData(IGLDevice::ArrayBuffer, vertices.size() * sizeof(Vertex),
+							   vertices.data(), IGLDevice::DynamicDraw);
+			
+			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			
+		}
+		
+		void GLMapFastChunk::RenderSunlightPass() {
+			SPADES_MARK_FUNCTION();
+			Vector3 eye = renderer->renderer->GetSceneDef().viewOrigin;
+			
+			if(!realized)
+				return;
+			if(needsUpdate){
+				Update();
+				needsUpdate = false;
+			}
+			if(!buffer){
+				// empty chunk
+				return;
+			}
+			AABB3 bx = aabb;
+			
+			Vector3 diff = eye - centerPos;
+			float sx = 0.f, sy = 0.f;
+			// FIXME: variable map size?
+			if(diff.x > 256.f) sx += 512.f;
+			if(diff.y > 256.f) sy += 512.f;
+			if(diff.x < -256.f) sx -= 512.f;
+			if(diff.y < -256.f) sy -= 512.f;
+			
+			bx.min.x += sx; bx.min.y += sy;
+			bx.max.x += sx; bx.max.y += sy;
+			
+			if(!renderer->renderer->BoxFrustrumCull(bx))
+				return;
+			
+			GLProgram *basicProgram = renderer->fastBasicProgram;
+			
+			static GLProgramUniform chunkPosition("chunkPosition");
+			
+			chunkPosition(basicProgram);
+			chunkPosition.SetValue((float)(chunkX * Size) + sx,
+								   (float)(chunkY * Size) + sy,
+								   0.f);
+			
+			static GLProgramAttribute positionAttribute("positionAttribute");
+			static GLProgramAttribute colorAttribute("colorAttribute");
+			
+			positionAttribute(basicProgram);
+			colorAttribute(basicProgram);
+			
+			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			device->VertexAttribPointer(positionAttribute(), 4,
+										IGLDevice::UnsignedByte, false,
+										sizeof(Vertex), (void *)asOFFSET(Vertex, x));
+			device->VertexAttribPointer(colorAttribute(), 4,
+										IGLDevice::UnsignedByte, true,
+										sizeof(Vertex), (void *)asOFFSET(Vertex, colorRed));
+			
+			device->DrawArrays(IGLDevice::Points, 0, vertices.size());
+			
+		}
+		
+		void GLMapFastChunk::RenderDLightPass(std::vector<GLDynamicLight> lights) {
+			SPADES_MARK_FUNCTION();
+			Vector3 eye = renderer->renderer->GetSceneDef().viewOrigin;
+			
+			if(!realized)
+				return;
+			if(needsUpdate){
+				Update();
+				needsUpdate = false;
+			}
+			if(!buffer){
+				// empty chunk
+				return;
+			}
+			AABB3 bx = aabb;
+			
+			
+			Vector3 diff = eye - centerPos;
+			float sx = 0.f, sy = 0.f;
+			// FIXME: variable map size?
+			if(diff.x > 256.f) sx += 512.f;
+			if(diff.y > 256.f) sy += 512.f;
+			if(diff.x < -256.f) sx -= 512.f;
+			if(diff.y < -256.f) sy -= 512.f;
+			
+			bx.min.x += sx; bx.min.y += sy;
+			bx.max.x += sx; bx.max.y += sy;
+			
+			if(!renderer->renderer->BoxFrustrumCull(bx))
+				return;
+			
+			GLProgram *program = renderer->fastDlightProgram;
+			
+			static GLProgramUniform chunkPosition("chunkPosition");
+			
+			chunkPosition(program);
+			chunkPosition.SetValue((float)(chunkX * Size) + sx,
+								   (float)(chunkY * Size) + sy,
+								   0.f);
+			
+			static GLProgramAttribute positionAttribute("positionAttribute");
+			static GLProgramAttribute colorAttribute("colorAttribute");
+			
+			positionAttribute(program);
+			colorAttribute(program);
+			
+			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			device->VertexAttribPointer(positionAttribute(), 4,
+										IGLDevice::UnsignedByte, false,
+										sizeof(Vertex), (void *)asOFFSET(Vertex, x));
+			device->VertexAttribPointer(colorAttribute(), 4,
+										IGLDevice::UnsignedByte, true,
+										sizeof(Vertex), (void *)asOFFSET(Vertex, colorRed));
+			
+			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			for(size_t i = 0; i < lights.size(); i++){
+				
+				static GLDynamicLightShader lightShader;
+				lightShader(renderer->renderer, program,lights[i], 1);
+				
+				if(!GLDynamicLightShader::Cull(lights[i], bx))
+					continue;
+				
+				device->DrawArrays(IGLDevice::Points, 0, vertices.size());
+			}
+			
+			device->BindBuffer(IGLDevice::ElementArrayBuffer,
+							   0);
+			
+		}
+		
+		
+		float GLMapFastChunk::DistanceFromEye(const Vector3 &eye) {
 			Vector3 diff = eye - centerPos;
 			
 			// FIXME: variable map size

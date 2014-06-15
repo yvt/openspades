@@ -95,14 +95,14 @@ namespace spades { namespace protocol {
 						static_cast<unsigned long long>(len));
 			}
 			
-			// convert to C string once so that
-			// null-chars are removed
-			std::string s = ReadData(static_cast<std::size_t>(len)).c_str();
+			std::string s = ReadData(static_cast<std::size_t>(len));
 			return s;
 		}
 		
 		std::string ReadString(){
-			return ReadBytes();
+			// convert to C string once so that
+			// null-chars are removed
+			return ReadBytes().c_str();
 		}
 		
 		template<class T>
@@ -419,6 +419,28 @@ namespace spades { namespace protocol {
 	}
 	
 	
+	Packet *MapDataFinalPacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<MapDataFinalPacket> p(new MapDataFinalPacket());
+		PacketReader reader(data);
+		
+		return p.release();
+	}
+	
+	std::vector<char> MapDataFinalPacket::Generate() const {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		return std::move(writer.ToArray());
+	}
+	
+	
+	static EntityUpdateItem DecodeEntityUpdateItem(PacketReader& reader);
+	static void WriteEntityUpdateItem(PacketWriter& writer, const EntityUpdateItem& item);
+	
+	
 	Packet *GameStateFinalPacket::Decode(const std::vector<char> &data) {
 		SPADES_MARK_FUNCTION();
 		
@@ -426,6 +448,10 @@ namespace spades { namespace protocol {
 		PacketReader reader(data);
 		
 		p->properties = reader.ReadMap<std::map<std::string, std::string>>();
+		
+		while(!reader.IsEndOfPacket()) {
+			p->items.emplace_back(DecodeEntityUpdateItem(reader));
+		}
 		
 		return p.release();
 	}
@@ -437,9 +463,32 @@ namespace spades { namespace protocol {
 		
 		writer.WriteMap(properties);
 		
+		for (const auto& item: items) {
+			WriteEntityUpdateItem(writer, item);
+		}
+		
 		return std::move(writer.ToArray());
 	}
 	
+	Packet *MapDataAcknowledgePacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<MapDataAcknowledgePacket> p(new MapDataAcknowledgePacket());
+		PacketReader reader(data);
+		
+		
+		return p.release();
+	}
+	
+	std::vector<char> MapDataAcknowledgePacket::Generate() const {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		return std::move(writer.ToArray());
+	}
+	
+
 	
 	Packet *GenericCommandPacket::Decode(const std::vector<char> &data) {
 		SPADES_MARK_FUNCTION();
@@ -732,6 +781,7 @@ namespace spades { namespace protocol {
 			if(item.weaponSkin1) mask |= 2;
 			if(item.weaponSkin2) mask |= 4;
 			if(item.weaponSkin3) mask |= 8;
+			writer.Write(mask);
 			if(item.bodySkin) writer.WriteBytes(*item.bodySkin);
 			if(item.weaponSkin1) writer.WriteBytes(*item.weaponSkin1);
 			if(item.weaponSkin2) writer.WriteBytes(*item.weaponSkin2);
@@ -750,6 +800,8 @@ namespace spades { namespace protocol {
 			p->items.emplace_back(DecodeEntityUpdateItem(reader));
 		}
 		
+		p->forced = reader.ReadByte() != 0;
+		
 		return p.release();
 	}
 	
@@ -761,6 +813,8 @@ namespace spades { namespace protocol {
 		for(const auto& item: items) {
 			WriteEntityUpdateItem(writer, item);
 		}
+		
+		writer.Write((uint8_t)(forced ? 1 : 0));
 		
 		return std::move(writer.ToArray());
 	}
@@ -806,7 +860,7 @@ namespace spades { namespace protocol {
 		
 		IntVector3 cursor(0, 0, 0);
 		while(!reader.IsEndOfPacket()) {
-			TerrainEdit edit;
+			MapEdit edit;
 			IntVector3 ps;
 			ps.x = static_cast<int8_t>(reader.ReadByte());
 			if(ps.x == -128) {
@@ -828,6 +882,9 @@ namespace spades { namespace protocol {
 				color |= static_cast<uint32_t>(reader.ReadByte()) << 16;
 				color |= static_cast<uint32_t>(health) << 24;
 				edit.color = color;
+				edit.createType = static_cast<BlockCreateType>(reader.ReadByte());
+			} else {
+				edit.destroyType = static_cast<BlockDestroyType>(reader.ReadByte());
 			}
 			p->edits.push_back(edit);
 		}
@@ -859,12 +916,17 @@ namespace spades { namespace protocol {
 			writer.Write(static_cast<uint8_t>(diff.z));
 			if(edit.color) {
 				auto col = *edit.color;
+				if ((col >> 24) == 0) {
+					SPRaise("Cannot encode: block health is zero.");
+				}
 				writer.Write(static_cast<uint8_t>(col >> 24));
 				writer.Write(static_cast<uint8_t>(col));
 				writer.Write(static_cast<uint8_t>(col >> 8));
 				writer.Write(static_cast<uint8_t>(col >> 16));
+				writer.Write(static_cast<uint8_t>(edit.createType));
 			}else{
 				writer.Write(static_cast<uint8_t>(0));
+				writer.Write(static_cast<uint8_t>(edit.destroyType));
 			}
 		}
 		
@@ -947,6 +1009,29 @@ namespace spades { namespace protocol {
 	}
 	
 	
+	Packet *EntityRemovePacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<EntityDiePacket> p(new EntityDiePacket());
+		PacketReader reader(data);
+		
+		p->entityId = static_cast<uint32_t>(reader.ReadVariableInteger());
+		
+		return p.release();
+	}
+	
+	std::vector<char> EntityRemovePacket::Generate() const {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		writer.WriteVariableInteger(entityId);
+		
+		return std::move(writer.ToArray());
+	}
+	
+	
+
 	
 	Packet *PlayerActionPacket::Decode(const std::vector<char> &data) {
 		SPADES_MARK_FUNCTION();
@@ -1043,6 +1128,8 @@ namespace spades { namespace protocol {
 		std::unique_ptr<DamagePacket> p(new DamagePacket());
 		PacketReader reader(data);
 		
+		p->entityId = static_cast<uint32_t>(reader.ReadVariableInteger());
+		
 		auto& info = p->damage;
 		auto type = reader.ReadByte();
 		info.damageType = static_cast<DamageType>(type & 0x7f);
@@ -1052,6 +1139,8 @@ namespace spades { namespace protocol {
 		info.firePosition = reader.ReadVector3();
 		info.hitPosition = reader.ReadVector3();
 		
+		p->amount = reader.ReadByte();
+		
 		return p.release();
 	}
 	
@@ -1060,6 +1149,8 @@ namespace spades { namespace protocol {
 		
 		PacketWriter writer(Type);
 		
+		writer.WriteVariableInteger(entityId);
+		
 		const auto& info = damage;
 		writer.Write(static_cast<uint8_t>
 					 (static_cast<int>(info.damageType)|
@@ -1067,6 +1158,8 @@ namespace spades { namespace protocol {
 		writer.WriteVariableInteger(info.toEntity);
 		writer.Write(info.firePosition);
 		writer.Write(info.hitPosition);
+		
+		writer.Write(amount);
 		
 		return std::move(writer.ToArray());
 	}

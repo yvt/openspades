@@ -4,7 +4,7 @@ set(OS_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 file(GLOB AUDIO_FILES Audio/*.cpp Audio/*.h)
 file(GLOB AUDIO_AL_FILES Audio/AL/*.cpp Audio/AL/*.h)
 set(BINPACK_FILES binpack2d/binpack2d.hpp)
-file(GLOB CLIENT_FILES Client/*.cpp Client/*.h)
+file(GLOB CLIENT_FILES Client/*.cpp Client/*.h NGClient/*.cpp NGClient/*.h)
 file(GLOB SERVER_FILES Server/*.cpp Server/*.h)
 file(GLOB GAME_FILES Game/*.cpp Game/*.h)
 file(GLOB CORE_FILES Core/*.c Core/*.cpp Core/*.h)
@@ -44,6 +44,7 @@ endif()
 add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${SERVER_FILES} ${GAME_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${GUI_FILES}
 	${IMPORTS_FILES} ${KISS_FILES} ${JSON_FILES} ${JSON_INCLUDE} ${POLY2TRI_COMMON_FILES} ${POLY2TRI_SWEEP_FILES} ${UNZIP_FILES} ${CRYPTOPP_FILES} ${SCRIPTBINDING_FILES} ${RESOURCE_FILES})
 set_target_properties(OpenSpades PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(OpenSpades PROPERTIES OUTPUT_NAME openspades)
 set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -92,10 +93,6 @@ source_group("ScriptBindings" FILES ${SCRIPTBINDING_FILES})
 source_group("libs\\unzip" FILES ${UNZIP_FILES})
 source_group("libs\\cryptopp" FILES ${CRYPTOPP_FILES})
 
-if(UNIX)
-	target_link_libraries(OpenSpades OpenSpades_BinaryExecutableIcon)
-endif(UNIX)
-
 target_link_libraries(OpenSpades ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS})
 
 #todo: MACOSX_BUNDLE_ICON_FILE ?
@@ -111,4 +108,4 @@ else()
 	target_link_libraries(OpenSpades Xext)
 endif()
 
-install(TARGETS OpenSpades DESTINATION bin)
+#install(TARGETS OpenSpades DESTINATION bin)
