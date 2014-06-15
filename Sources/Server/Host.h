@@ -66,6 +66,8 @@ namespace spades { namespace server {
 		void Send(const protocol::Packet&);
 		void Disconnect(protocol::DisconnectReason);
 		
+		int GetPendingBytes();
+		
 		const std::string& GetLogHeader() { return logHeader; }
 	};
 	

@@ -27,6 +27,7 @@
 #include <Core/AutoLocker.h>
 #include <Core/IStream.h>
 #include <Core/Math.h>
+#include <Core/DeflateStream.h>
 #include <list>
 #include <thread>
 #include <stdexcept>
@@ -128,7 +129,8 @@ namespace spades { namespace ngclient {
 		void Run() override {
 			try {
 				Stream stream(*this);
-				auto *mp = client::GameMap::Load(&stream);
+				DeflateStream deflate(&stream, CompressModeDecompress);
+				auto *mp = client::GameMap::Load(&deflate);
 				if (!mp) {
 					SPRaise("Null map loaded.");
 				}
@@ -265,6 +267,9 @@ namespace spades { namespace ngclient {
 				break;
 			case protocol::DisconnectReason::Timeout:
 				str = _Tr("NetworkClient", "Connection timed out.");
+				break;
+			case protocol::DisconnectReason::ProtocolMismatch:
+				str = _Tr("NetworkClient", "Protocol version mismatch.");
 				break;
 		}
 		

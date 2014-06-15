@@ -44,7 +44,8 @@ namespace spades { namespace protocol {
 		Misc = 3, // reason is already sent
 		ServerStopped = 4,
 		Timeout = 5,
-		MalformedPacket = 6
+		MalformedPacket = 6,
+		ProtocolMismatch = 7
 	};
 	
 	enum class PacketType {
@@ -85,6 +86,7 @@ namespace spades { namespace protocol {
 		// TODO: playerstate
 		// TODO: damage notify
 		// TODO: chat
+		// TODO: construction
 	};
 	
 	enum class PacketUsage {
@@ -364,7 +366,7 @@ namespace spades { namespace protocol {
 	/** Sent by client to acknoledge decoding of map data. */
 	class MapDataAcknowledgePacket : public BasePacket
 	<MapDataAcknowledgePacket,
-	PacketUsage::ServerAndClient, PacketType::MapDataAcknowledge> {
+	PacketUsage::ClientOnly, PacketType::MapDataAcknowledge> {
 	public:
 		static Packet *Decode(const std::vector<char>&);
 		virtual ~MapDataAcknowledgePacket() {}

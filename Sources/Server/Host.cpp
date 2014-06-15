@@ -41,7 +41,10 @@ namespace spades { namespace server {
 		enet_initialize();
 		SPLog("ENet initialized");
 		
-		host = enet_host_create(NULL,
+		ENetAddress addr;
+		addr.host = ENET_HOST_ANY;
+		addr.port = 0x810;
+		host = enet_host_create(&addr,
 								256, 1,
 								(int)sv_bandwidth,
 								(int)sv_bandwidth);
@@ -274,6 +277,10 @@ namespace spades { namespace server {
 										  ENET_PACKET_FLAG_NO_ALLOCATE);
 		enet_peer_send(enetPeer, 0, p);
 		enet_packet_destroy(p);
+	}
+	
+	int HostPeer::GetPendingBytes() {
+		return 0; // TODO: GetPendingBytes
 	}
 	
 	void HostPeer::Disconnect(protocol::DisconnectReason reason) {
