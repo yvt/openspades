@@ -94,7 +94,7 @@ namespace spades { namespace ngclient {
 		def.zNear = .01f;
 		def.skipWorld = false;
 		def.depthOfFieldNearRange = 50.f;
-		def.globalBlur = .3f;
+		def.globalBlur = .0f;
 		
 		return def;
 	}
