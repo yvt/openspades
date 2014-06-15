@@ -50,6 +50,7 @@ namespace spades { namespace game {
 	
 	class Entity;
 	class WorldListener;
+	class Player;
 	
 	class PlayerEntity;
 	
@@ -61,6 +62,7 @@ namespace spades { namespace game {
 		Handle<client::GameMap> gameMap;
 		std::unique_ptr<client::GameMapWrapper> gameMapWrapper;
 		std::map<uint32_t, Handle<Entity>> entities;
+		std::map<uint32_t, Handle<Player>> players;
 		std::set<WorldListener *> listeners;
 		
 		struct IntVectorComparator {
@@ -94,6 +96,12 @@ namespace spades { namespace game {
 		 * server only. client networking code might call this. */
 		void UnlinkEntity(Entity *);
 		std::vector<Entity *> GetAllEntities();
+		
+		Player *FindPlayer(uint32_t);
+		void CreatePlayer(Player *,
+						  stmp::optional<uint32_t> playerId = stmp::optional<uint32_t>());
+		void RemovePlayer(Player *);
+		std::vector<Player *> GetAllPlayers();
 		
 		/** server only. */
 		void CreateBlock(const IntVector3&,
@@ -141,6 +149,9 @@ namespace spades { namespace game {
 		
 		virtual void EntityLinked(World&, Entity *) { }
 		virtual void EntityUnlinked(World&, Entity *) { }
+		
+		virtual void PlayerCreated(World&, Player *) { }
+		virtual void PlayerRemoved(World&, Player *) { }
 		
 		virtual void BlockCreated(const IntVector3&,
 								  BlockCreateType) { }

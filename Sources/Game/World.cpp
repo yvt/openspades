@@ -28,6 +28,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <Core/Strings.h>
+#include "Player.h"
 
 namespace spades { namespace game {
 	
@@ -115,8 +116,12 @@ namespace spades { namespace game {
 				if (it->first > last) {
 					// found
 					entityId = last;
+					break;
 				}
 				last = std::max(last, it->first + 1);
+			}
+			if (entities.empty()) {
+				entityId = 1024;
 			}
 			
 			// note: allocation failure is almost unlikely because
@@ -152,6 +157,73 @@ namespace spades { namespace game {
 		
 		for (auto *l: listeners)
 			l->EntityUnlinked(*this, e);
+	}
+	
+	Player *World::FindPlayer(uint32_t id) {
+		auto it = players.find(id);
+		return it == players.end() ? nullptr : it->second;
+	}
+	
+	void World::CreatePlayer(Player *p,
+							 stmp::optional<uint32_t> pId) {
+		SPAssert(p);
+		if (p->GetId()) {
+			SPRaise("Player is already added to the world.");
+		}
+		if (!pId && !IsLocalHostServer()) {
+			SPAssert(false);
+		}
+		if (!pId) {
+			// allocate player id.
+			uint32_t last = 0;
+			for (auto it = players.begin(); it != players.end(); ++it) {
+				if (it->first > last) {
+					// found
+					pId = last;
+					break;
+				}
+				last = std::max(last, it->first + 1);
+			}
+			if (players.empty()) {
+				pId = 0;
+			}
+			if (*pId >= 1024) {
+				// entity Ids >= 1024 are not reserved to
+				// players...
+				SPRaise("No free player slots");
+			}
+			// TODO: we should put a limit on player count...
+		}
+		SPAssert(pId);
+		SPAssert(!FindPlayer(*pId));
+		
+		players.emplace(*pId, Handle<Player>(p, true));
+		p->SetId(pId);
+		
+		for (auto *l: listeners)
+			l->PlayerCreated(*this, p);
+	}
+	
+	void World::RemovePlayer(Player *p) {
+		SPAssert(p);
+		if (!p->GetId()) {
+			SPRaise("Player is not linked to the world.");
+		}
+		if (&p->GetWorld() != this) {
+			SPRaise("Player is linked to another world.");
+		}
+		
+		Handle<Player> ee(p);
+		
+		auto it = players.find(*p->GetId());
+		SPAssert(it != players.end());
+		SPAssert(it->second == p);
+		players.erase(it);
+		
+		p->SetId(stmp::optional<uint32_t>());
+		
+		for (auto *l: listeners)
+			l->PlayerRemoved(*this, p);
 	}
 	
 	void World::Advance(Duration dt) {

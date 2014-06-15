@@ -123,6 +123,7 @@ namespace spades { namespace ngclient {
 	
 	void Client::Disconnected(const std::string &reason) {
 		SPLog("Disconnected: %s", reason.c_str());
+		arena.Set(nullptr);
 	}
 	
 } }

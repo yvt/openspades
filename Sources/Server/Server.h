@@ -37,16 +37,18 @@ namespace spades { namespace server {
 	
 	class Connection;
 	class ServerEntity;
+	class ServerPlayer;
 	
 	class Server:
 	public HostListener,
-	public game::WorldListener {
+	game::WorldListener {
 		friend class Connection;
 		
 		std::unique_ptr<Host> host;
 		std::unordered_set<Connection *> connections;
 		
 		Handle<game::World> world;
+		
 		std::list<std::unique_ptr<ServerEntity>>
 		serverEntities;
 		std::unordered_map<game::Entity *,
@@ -55,7 +57,24 @@ namespace spades { namespace server {
 		void AddServerEntity(ServerEntity *);
 		ServerEntity *GetServerEntityForEntity(game::Entity*);
 		
+		std::list<std::unique_ptr<ServerPlayer>>
+		serverPlayers;
+		std::unordered_map<game::Player *,
+		std::list<std::unique_ptr<ServerPlayer>>::iterator>
+		playerToServerPlayer;
+		void AddServerPlayer(ServerPlayer *);
+		ServerPlayer *GetServerPlayerForPlayer(game::Player*);
+		
 		void SetWorld(game::World *);
+		
+		/* ---- WorldListener ---- */
+		void EntityLinked(game::World&, game::Entity *) override;
+		void EntityUnlinked(game::World&, game::Entity *) override;
+		
+		void PlayerCreated(game::World&, game::Player *) override;
+		void PlayerRemoved(game::World&, game::Player *) override;
+		
+		void FlushMapEdits(const std::vector<game::MapEdit>&) override;
 		
 	public:
 		Server();
@@ -67,11 +86,6 @@ namespace spades { namespace server {
 		
 		void ClientConnected(HostPeer *peer) override;
 		
-		/* ---- WorldListener ---- */
-		void EntityLinked(game::World&, game::Entity *) override;
-		void EntityUnlinked(game::World&, game::Entity *) override;
-		
-		void FlushMapEdits(const std::vector<game::MapEdit>&) override;
 		
 	};
 

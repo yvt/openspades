@@ -27,6 +27,7 @@
 
 namespace spades { namespace game {
 	class World;
+	class Player;
 } }
 
 namespace spades { namespace server {
@@ -58,14 +59,21 @@ namespace spades { namespace server {
 		std::string clientNonce;
 		std::string nonce;
 		int mapQuality;
+		std::string playerName;
 		
 		MapGenerator *mapGenerator;
+		
+		Handle<game::Player> player;
+		bool localPlayerNotified = false;
 		
 		game::World& GetWorld();
 		
 		void SendServerCertificate();
 		void StartStateTransfer();
 		void FinalStateTransfer();
+		void Join();
+		void Leave();
+		void HandleGenericCommand(const std::vector<std::string>&);
 		
 	protected:
 		// RefCountedObject should only be destroyed by

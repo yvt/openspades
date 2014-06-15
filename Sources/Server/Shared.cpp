@@ -206,6 +206,392 @@ namespace spades { namespace protocol {
 		return ptr(data);
 	}
 	
+#pragma mark - Entity Update
+	
+	enum class EntityUpdateFlags {
+		None = 0,
+		Create = 1 << 0,
+		Flags = 1 << 1,
+		Trajectory = 1 << 2,
+		PlayerInput = 1 << 3,
+		Tool = 1 << 4,
+		BlockColor = 1 << 5,
+		Health = 1 << 6,
+		Skins = 1 << 7
+	};
+	
+	inline EntityUpdateFlags operator|(EntityUpdateFlags a, EntityUpdateFlags b)
+	{
+		return static_cast<EntityUpdateFlags>(static_cast<int>(a) | static_cast<int>(b));
+	}
+	inline EntityUpdateFlags& operator |=(EntityUpdateFlags& a, EntityUpdateFlags b) {
+		a = a | b;
+		return a;
+	}
+	inline bool operator&(EntityUpdateFlags a, EntityUpdateFlags b)
+	{
+		return static_cast<int>(a) & static_cast<int>(b);
+	}
+	
+	enum class EntityFlagsValue {
+		None = 0,
+		PlayerClip = 1 << 0,
+		WeaponClip = 1 << 1,
+		Fly = 1 << 2
+	};
+	
+	inline EntityFlagsValue operator|(EntityFlagsValue a, EntityFlagsValue b)
+	{
+		return static_cast<EntityFlagsValue>(static_cast<int>(a) | static_cast<int>(b));
+	}
+	inline EntityFlagsValue& operator |=(EntityFlagsValue& a, EntityFlagsValue b) {
+		a = a | b;
+		return a;
+	}
+	inline bool operator&(EntityFlagsValue a, EntityFlagsValue b)
+	{
+		return static_cast<int>(a) & static_cast<int>(b);
+	}
+	
+	inline EntityFlagsValue ToEntityFlagsValue(EntityFlags flags) {
+		auto ret = EntityFlagsValue::None;
+		if(flags.playerClip) ret |= EntityFlagsValue::PlayerClip;
+		if(flags.weaponClip) ret |= EntityFlagsValue::WeaponClip;
+		if(flags.fly) ret |= EntityFlagsValue::Fly;
+		return ret;
+	}
+	
+	inline EntityFlags FromEntityFlagsValue(EntityFlagsValue val) {
+		EntityFlags ret;
+		ret.playerClip = val & EntityFlagsValue::PlayerClip;
+		ret.weaponClip = val & EntityFlagsValue::WeaponClip;
+		ret.fly = val & EntityFlagsValue::Fly;
+		return ret;
+	}
+	
+	static Trajectory DecodeTrajectory(PacketReader& reader) {
+		Trajectory traj;
+		auto type = reader.ReadByte();
+		traj.type = static_cast<TrajectoryType>(type & 0x7f);
+		traj.origin = reader.ReadVector3();
+		traj.velocity = reader.ReadVector3();
+		
+		switch(traj.type) {
+			case game::TrajectoryType::Linear:
+			case game::TrajectoryType::Gravity:
+			case game::TrajectoryType::Constant:
+			case game::TrajectoryType::RigidBody:
+				traj.angle = Quaternion::DecodeRotation(reader.ReadVector3());
+				traj.angularVelocity = reader.ReadVector3();
+				break;
+			case game::TrajectoryType::Player:
+				traj.eulerAngle = reader.ReadVector3();
+				break;
+			default:
+				SPRaise("Unknown trajectory type: %d",
+						static_cast<int>(traj.type));
+		}
+		
+		if(type & 0x80) {
+			// has parent entity
+			traj.parentEntityId = static_cast<uint32_t>(reader.ReadVariableInteger());
+		}
+		
+		return traj;
+	}
+	
+	static void WriteTrajectory(PacketWriter& writer, const Trajectory& traj) {
+		auto type = static_cast<uint8_t>(traj.type);
+		if(traj.parentEntityId) {
+			type |= 0x80;
+		}
+		writer.Write(type);
+		writer.Write(traj.origin);
+		writer.Write(traj.velocity);
+		switch(traj.type) {
+			case game::TrajectoryType::Linear:
+			case game::TrajectoryType::Gravity:
+			case game::TrajectoryType::Constant:
+			case game::TrajectoryType::RigidBody:
+				writer.Write(traj.angle.EncodeRotation());
+				writer.Write(traj.angularVelocity);
+				break;
+			case game::TrajectoryType::Player:
+				writer.Write(traj.eulerAngle);
+				break;
+			default:
+				SPRaise("Unknown trajectory type: %d",
+						static_cast<int>(traj.type));
+		}
+		if(traj.parentEntityId) {
+			writer.WriteVariableInteger(*traj.parentEntityId);
+		}
+	}
+	
+	enum class PlayerInputFlags {
+		None = 0,
+		ToolPrimary = 1 << 0,
+		ToolSecondary = 1 << 1,
+		Chat = 1 << 2,
+		Sprint = 1 << 3,
+		
+		StanceMask = 3 << 6
+	};
+	
+	inline PlayerInputFlags operator|(PlayerInputFlags a, PlayerInputFlags b)
+	{
+		return static_cast<PlayerInputFlags>(static_cast<int>(a) | static_cast<int>(b));
+	}
+	inline PlayerInputFlags& operator |=(PlayerInputFlags& a, PlayerInputFlags b) {
+		a = a | b;
+		return a;
+	}
+	inline int operator&(PlayerInputFlags a, PlayerInputFlags b)
+	{
+		return static_cast<int>(a) & static_cast<int>(b);
+	}
+	
+	static PlayerInput DecodePlayerInput(PacketReader& reader) {
+		PlayerInput inp;
+		auto flags = static_cast<PlayerInputFlags>(reader.ReadByte());
+		inp.toolPrimary = flags & PlayerInputFlags::ToolPrimary;
+		inp.toolSecondary = flags & PlayerInputFlags::ToolSecondary;
+		inp.chat = flags & PlayerInputFlags::Chat;
+		inp.sprint = flags & PlayerInputFlags::Sprint;
+		inp.stance = static_cast<game::PlayerStance>((flags & PlayerInputFlags::StanceMask) >> 6);
+		inp.xmove = static_cast<int8_t>(reader.ReadByte());
+		inp.ymove = static_cast<int8_t>(reader.ReadByte());
+		return inp;
+	}
+	
+	static void WritePlayerInput(PacketWriter& writer, const PlayerInput& input) {
+		auto flags = PlayerInputFlags::None;
+		if(input.toolPrimary) flags |= PlayerInputFlags::ToolPrimary;
+		if(input.toolSecondary) flags |= PlayerInputFlags::ToolSecondary;
+		if(input.chat) flags |= PlayerInputFlags::Chat;
+		if(input.sprint) flags |= PlayerInputFlags::Sprint;
+		flags |= static_cast<PlayerInputFlags>(static_cast<int>(input.stance) << 6);
+		writer.Write(static_cast<uint8_t>(flags));
+		writer.Write(static_cast<uint8_t>(input.xmove));
+		writer.Write(static_cast<uint8_t>(input.ymove));
+	}
+	
+	static EntityUpdateItem DecodeEntityUpdateItem(PacketReader& reader) {
+		EntityUpdateItem item;
+		item.entityId = static_cast<uint32_t>(reader.ReadVariableInteger());
+		
+		auto updates = static_cast<EntityUpdateFlags>(reader.ReadByte());
+		
+		item.create = updates & EntityUpdateFlags::Create;
+		if(item.create) {
+			item.type = static_cast<EntityType>(reader.ReadByte());
+		}
+		
+		if(updates & EntityUpdateFlags::Flags) {
+			item.flags = FromEntityFlagsValue
+			(static_cast<EntityFlagsValue>(reader.ReadByte()));
+		}
+		
+		if(updates & EntityUpdateFlags::Trajectory) {
+			item.trajectory = DecodeTrajectory(reader);
+		}
+		
+		if(updates & EntityUpdateFlags::PlayerInput) {
+			item.playerInput = DecodePlayerInput(reader);
+		}
+		
+		if(updates & EntityUpdateFlags::Tool) {
+			item.tool = static_cast<ToolSlot>(reader.ReadByte());
+		}
+		
+		if(updates & EntityUpdateFlags::BlockColor) {
+			item.blockColor = reader.ReadIntColor();
+		}
+		
+		if(updates & EntityUpdateFlags::Health) {
+			item.health = reader.ReadByte();
+		}
+		
+		if(updates & EntityUpdateFlags::Skins) {
+			uint8_t mask = reader.ReadByte();
+			if(mask & 1) item.bodySkin = reader.ReadBytes();
+			if(mask & 2) item.weaponSkin1 = reader.ReadBytes();
+			if(mask & 4) item.weaponSkin2 = reader.ReadBytes();
+			if(mask & 8) item.weaponSkin3 = reader.ReadBytes();
+		}
+		
+		return item;
+	}
+	
+	static void WriteEntityUpdateItem(PacketWriter& writer, const EntityUpdateItem& item) {
+		writer.WriteVariableInteger(item.entityId);
+		
+		auto flags = EntityUpdateFlags::None;
+		
+		if(item.create) flags |= EntityUpdateFlags::Create;
+		if(item.flags) flags |= EntityUpdateFlags::Flags;
+		if(item.trajectory) flags |= EntityUpdateFlags::Trajectory;
+		if(item.playerInput) flags |= EntityUpdateFlags::PlayerInput;
+		if(item.tool) flags |= EntityUpdateFlags::Tool;
+		if(item.blockColor) flags |= EntityUpdateFlags::BlockColor;
+		if(item.health) flags |= EntityUpdateFlags::Health;
+		if(item.weaponSkin1 ||
+		   item.weaponSkin2 ||
+		   item.weaponSkin3 ||
+		   item.bodySkin) flags |= EntityUpdateFlags::Skins;
+		
+		writer.Write(static_cast<uint8_t>(flags));
+		
+		if(item.create) {
+			writer.Write(static_cast<uint8_t>(item.type));
+		}
+		
+		if(item.flags) {
+			writer.Write(static_cast<uint8_t>(ToEntityFlagsValue(*item.flags)));
+		}
+		
+		if(item.trajectory) {
+			WriteTrajectory(writer, *item.trajectory);
+		}
+		
+		if(item.playerInput) {
+			WritePlayerInput(writer, *item.playerInput);
+		}
+		
+		if(item.tool) {
+			writer.Write(static_cast<uint8_t>(*item.tool));
+		}
+		
+		if(item.blockColor) {
+			writer.WriteColor(*item.blockColor);
+		}
+		
+		if(item.health) {
+			writer.Write(static_cast<uint8_t>(*item.health));
+		}
+		
+		if(item.weaponSkin1 ||
+		   item.weaponSkin2 ||
+		   item.weaponSkin3 ||
+		   item.bodySkin) {
+			uint8_t mask = 0;
+			if(item.bodySkin) mask |= 1;
+			if(item.weaponSkin1) mask |= 2;
+			if(item.weaponSkin2) mask |= 4;
+			if(item.weaponSkin3) mask |= 8;
+			writer.Write(mask);
+			if(item.bodySkin) writer.WriteBytes(*item.bodySkin);
+			if(item.weaponSkin1) writer.WriteBytes(*item.weaponSkin1);
+			if(item.weaponSkin2) writer.WriteBytes(*item.weaponSkin2);
+			if(item.weaponSkin3) writer.WriteBytes(*item.weaponSkin3);
+		}
+		
+	}
+	
+#pragma mark - Player Update
+	
+	enum class PlayerUpdateFlags {
+		None = 0,
+		Immutables = 1 << 0, // name, ...
+		Score = 1 << 1,
+		Flags = 1 << 2
+	};
+	
+	inline PlayerUpdateFlags operator|(PlayerUpdateFlags a, PlayerUpdateFlags b)
+	{
+		return static_cast<PlayerUpdateFlags>(static_cast<int>(a) | static_cast<int>(b));
+	}
+	inline PlayerUpdateFlags& operator |=(PlayerUpdateFlags& a, PlayerUpdateFlags b) {
+		a = a | b;
+		return a;
+	}
+	inline bool operator&(PlayerUpdateFlags a, PlayerUpdateFlags b)
+	{
+		return static_cast<int>(a) & static_cast<int>(b);
+	}
+	
+
+	
+	enum class PlayerFlagsValue {
+		None = 0,
+		IsAdmin = 1 << 0
+	};
+	
+	inline PlayerFlagsValue operator|(PlayerFlagsValue a, PlayerFlagsValue b)
+	{
+		return static_cast<PlayerFlagsValue>(static_cast<int>(a) | static_cast<int>(b));
+	}
+	inline PlayerFlagsValue& operator |=(PlayerFlagsValue& a, PlayerFlagsValue b) {
+		a = a | b;
+		return a;
+	}
+	inline bool operator&(PlayerFlagsValue a, PlayerFlagsValue b)
+	{
+		return static_cast<int>(a) & static_cast<int>(b);
+	}
+	
+	inline PlayerFlagsValue ToPlayerFlagsValue(PlayerFlags flags) {
+		auto ret = PlayerFlagsValue::None;
+		if(flags.isAdmin) ret |= PlayerFlagsValue::IsAdmin;
+		return ret;
+	}
+	
+	inline PlayerFlags FromPlayerFlagsValue(PlayerFlagsValue val) {
+		PlayerFlags ret;
+		ret.isAdmin = val & PlayerFlagsValue::IsAdmin;
+		return ret;
+	}
+	
+	
+	static PlayerUpdateItem DecodePlayerUpdateItem(PacketReader& reader) {
+		PlayerUpdateItem item;
+		item.playerId = static_cast<uint32_t>(reader.ReadVariableInteger());
+		
+		auto updates = static_cast<PlayerUpdateFlags>(reader.ReadByte());
+		
+		if(updates & PlayerUpdateFlags::Immutables) {
+			item.name = reader.ReadString();
+		}
+		
+		if(updates & PlayerUpdateFlags::Flags) {
+			item.flags = FromPlayerFlagsValue
+			(static_cast<PlayerFlagsValue>(reader.ReadByte()));
+		}
+		
+		if(updates & PlayerUpdateFlags::Score) {
+			item.score = static_cast<uint32_t>(reader.ReadVariableInteger());
+		}
+		
+		
+		return item;
+	}
+	
+	static void WritePlayerUpdateItem(PacketWriter& writer, const PlayerUpdateItem& item) {
+		writer.WriteVariableInteger(item.playerId);
+		
+		auto flags = PlayerUpdateFlags::None;
+		
+		if(item.name) flags |= PlayerUpdateFlags::Immutables;
+		if(item.flags) flags |= PlayerUpdateFlags::Flags;
+		if(item.score) flags |= PlayerUpdateFlags::Score;
+		
+		writer.Write(static_cast<uint8_t>(flags));
+		
+		if(flags & PlayerUpdateFlags::Immutables) {
+			writer.WriteString(*item.name);
+		}
+		
+		if(item.flags) {
+			writer.Write(static_cast<uint8_t>(ToPlayerFlagsValue(*item.flags)));
+		}
+		
+		if (item.score) {
+			writer.WriteVariableInteger(*item.score);
+		}
+		
+	}
+	
+#pragma mark - Packet Encoder/Decoders
 	
 	Packet *GreetingPacket::Decode(const std::vector<char> &data) {
 		SPADES_MARK_FUNCTION();
@@ -451,8 +837,16 @@ namespace spades { namespace protocol {
 		
 		p->properties = reader.ReadMap<std::map<std::string, std::string>>();
 		
-		while(!reader.IsEndOfPacket()) {
+		auto numEntities = reader.ReadVariableInteger();
+		
+		while(numEntities--) {
 			p->items.emplace_back(DecodeEntityUpdateItem(reader));
+		}
+		
+		auto numPlayers = reader.ReadVariableInteger();
+		
+		while (numPlayers--) {
+			p->players.emplace_back(DecodePlayerUpdateItem(reader));
 		}
 		
 		return p.release();
@@ -465,8 +859,14 @@ namespace spades { namespace protocol {
 		
 		writer.WriteMap(properties);
 		
+		writer.WriteVariableInteger(items.size());
 		for (const auto& item: items) {
 			WriteEntityUpdateItem(writer, item);
+		}
+		
+		writer.WriteVariableInteger(players.size());
+		for (const auto& p: players) {
+			WritePlayerUpdateItem(writer, p);
 		}
 		
 		return std::move(writer.ToArray());
@@ -516,293 +916,19 @@ namespace spades { namespace protocol {
 		
 		return std::move(writer.ToArray());
 	}
-	
-	enum class EntityUpdateFlags {
-		None = 0,
-		Create = 1 << 0,
-		Flags = 1 << 1,
-		Trajectory = 1 << 2,
-		PlayerInput = 1 << 3,
-		Tool = 1 << 4,
-		BlockColor = 1 << 5,
-		Health = 1 << 6,
-		Skins = 1 << 7
-	};
-	
-	inline EntityUpdateFlags operator|(EntityUpdateFlags a, EntityUpdateFlags b)
-	{
-		return static_cast<EntityUpdateFlags>(static_cast<int>(a) | static_cast<int>(b));
-	}
-	inline EntityUpdateFlags& operator |=(EntityUpdateFlags& a, EntityUpdateFlags b) {
-		a = a | b;
-		return a;
-	}
-	inline bool operator&(EntityUpdateFlags a, EntityUpdateFlags b)
-	{
-		return static_cast<int>(a) & static_cast<int>(b);
-	}
-	
-	enum class EntityFlagsValue {
-		None = 0,
-		PlayerClip = 1 << 0,
-		WeaponClip = 1 << 1,
-		Fly = 1 << 2
-	};
-	
-	inline EntityFlagsValue operator|(EntityFlagsValue a, EntityFlagsValue b)
-	{
-		return static_cast<EntityFlagsValue>(static_cast<int>(a) | static_cast<int>(b));
-	}
-	inline EntityFlagsValue& operator |=(EntityFlagsValue& a, EntityFlagsValue b) {
-		a = a | b;
-		return a;
-	}
-	inline bool operator&(EntityFlagsValue a, EntityFlagsValue b)
-	{
-		return static_cast<int>(a) & static_cast<int>(b);
-	}
-	
-	inline EntityFlagsValue ToEntityFlagsValue(EntityFlags flags) {
-		auto ret = EntityFlagsValue::None;
-		if(flags.playerClip) ret |= EntityFlagsValue::PlayerClip;
-		if(flags.weaponClip) ret |= EntityFlagsValue::WeaponClip;
-		if(flags.fly) ret |= EntityFlagsValue::Fly;
-		return ret;
-	}
-	
-	inline EntityFlags FromEntityFlagsValue(EntityFlagsValue val) {
-		EntityFlags ret;
-		ret.playerClip = val & EntityFlagsValue::PlayerClip;
-		ret.weaponClip = val & EntityFlagsValue::WeaponClip;
-		ret.fly = val & EntityFlagsValue::Fly;
-		return ret;
-	}
-	
-	static Trajectory DecodeTrajectory(PacketReader& reader) {
-		Trajectory traj;
-		auto type = reader.ReadByte();
-		traj.type = static_cast<TrajectoryType>(type & 0x7f);
-		traj.origin = reader.ReadVector3();
-		traj.velocity = reader.ReadVector3();
 		
-		switch(traj.type) {
-			case game::TrajectoryType::Linear:
-			case game::TrajectoryType::Gravity:
-			case game::TrajectoryType::Constant:
-			case game::TrajectoryType::RigidBody:
-				traj.angle = Quaternion::DecodeRotation(reader.ReadVector3());
-				traj.angularVelocity = reader.ReadVector3();
-				break;
-			case game::TrajectoryType::Player:
-				traj.eulerAngle = reader.ReadVector3();
-				break;
-			default:
-				SPRaise("Unknown trajectory type: %d",
-						static_cast<int>(traj.type));
-		}
-		
-		if(type & 0x80) {
-			// has parent entity
-			traj.parentEntityId = static_cast<uint32_t>(reader.ReadVariableInteger());
-		}
-		
-		return traj;
-	}
-	
-	static void WriteTrajectory(PacketWriter& writer, const Trajectory& traj) {
-		auto type = static_cast<uint8_t>(traj.type);
-		if(traj.parentEntityId) {
-			type |= 0x80;
-		}
-		writer.Write(type);
-		writer.Write(traj.origin);
-		writer.Write(traj.velocity);
-		switch(traj.type) {
-			case game::TrajectoryType::Linear:
-			case game::TrajectoryType::Gravity:
-			case game::TrajectoryType::Constant:
-			case game::TrajectoryType::RigidBody:
-				writer.Write(traj.angle.EncodeRotation());
-				writer.Write(traj.angularVelocity);
-				break;
-			case game::TrajectoryType::Player:
-				writer.Write(traj.eulerAngle);
-				break;
-			default:
-				SPRaise("Unknown trajectory type: %d",
-						static_cast<int>(traj.type));
-		}
-		if(traj.parentEntityId) {
-			writer.WriteVariableInteger(*traj.parentEntityId);
-		}
-	}
-	
-	enum class PlayerInputFlags {
-		None = 0,
-		ToolPrimary = 1 << 0,
-		ToolSecondary = 1 << 1,
-		Chat = 1 << 2,
-		Sprint = 1 << 3,
-		
-		StanceMask = 3 << 6
-	};
-	
-	inline PlayerInputFlags operator|(PlayerInputFlags a, PlayerInputFlags b)
-	{
-		return static_cast<PlayerInputFlags>(static_cast<int>(a) | static_cast<int>(b));
-	}
-	inline PlayerInputFlags& operator |=(PlayerInputFlags& a, PlayerInputFlags b) {
-		a = a | b;
-		return a;
-	}
-	inline int operator&(PlayerInputFlags a, PlayerInputFlags b)
-	{
-		return static_cast<int>(a) & static_cast<int>(b);
-	}
-	
-	static PlayerInput DecodePlayerInput(PacketReader& reader) {
-		PlayerInput inp;
-		auto flags = static_cast<PlayerInputFlags>(reader.ReadByte());
-		inp.toolPrimary = flags & PlayerInputFlags::ToolPrimary;
-		inp.toolSecondary = flags & PlayerInputFlags::ToolSecondary;
-		inp.chat = flags & PlayerInputFlags::Chat;
-		inp.sprint = flags & PlayerInputFlags::Sprint;
-		inp.stance = static_cast<game::PlayerStance>((flags & PlayerInputFlags::StanceMask) >> 6);
-		inp.xmove = static_cast<int8_t>(reader.ReadByte());
-		inp.ymove = static_cast<int8_t>(reader.ReadByte());
-		return inp;
-	}
-	
-	static void WritePlayerInput(PacketWriter& writer, const PlayerInput& input) {
-		auto flags = PlayerInputFlags::None;
-		if(input.toolPrimary) flags |= PlayerInputFlags::ToolPrimary;
-		if(input.toolSecondary) flags |= PlayerInputFlags::ToolSecondary;
-		if(input.chat) flags |= PlayerInputFlags::Chat;
-		if(input.sprint) flags |= PlayerInputFlags::Sprint;
-		flags |= static_cast<PlayerInputFlags>(static_cast<int>(input.stance) << 6);
-		writer.Write(static_cast<uint8_t>(flags));
-		writer.Write(static_cast<uint8_t>(input.xmove));
-		writer.Write(static_cast<uint8_t>(input.ymove));
-	}
-	
-	static EntityUpdateItem DecodeEntityUpdateItem(PacketReader& reader) {
-		EntityUpdateItem item;
-		item.entityId = static_cast<uint32_t>(reader.ReadVariableInteger());
-		
-		auto updates = static_cast<EntityUpdateFlags>(reader.ReadByte());
-		
-		item.create = updates & EntityUpdateFlags::Create;
-		if(item.create) {
-			item.type = static_cast<EntityType>(reader.ReadByte());
-		}
-		
-		if(updates & EntityUpdateFlags::Flags) {
-			item.flags = FromEntityFlagsValue
-			(static_cast<EntityFlagsValue>(reader.ReadByte()));
-		}
-		
-		if(updates & EntityUpdateFlags::Trajectory) {
-			item.trajectory = DecodeTrajectory(reader);
-		}
-		
-		if(updates & EntityUpdateFlags::PlayerInput) {
-			item.playerInput = DecodePlayerInput(reader);
-		}
-		
-		if(updates & EntityUpdateFlags::BlockColor) {
-			item.blockColor = reader.ReadIntColor();
-		}
-		
-		if(updates & EntityUpdateFlags::Health) {
-			item.health = reader.ReadByte();
-		}
-		
-		if(updates & EntityUpdateFlags::Skins) {
-			uint8_t mask = reader.ReadByte();
-			if(mask & 1) item.bodySkin = reader.ReadBytes();
-			if(mask & 2) item.weaponSkin1 = reader.ReadBytes();
-			if(mask & 4) item.weaponSkin2 = reader.ReadBytes();
-			if(mask & 8) item.weaponSkin3 = reader.ReadBytes();
-		}
-		
-		return item;
-	}
-	
-	static void WriteEntityUpdateItem(PacketWriter& writer, const EntityUpdateItem& item) {
-		writer.WriteVariableInteger(item.entityId);
-		
-		auto flags = EntityUpdateFlags::None;
-		
-		if(item.flags) flags |= EntityUpdateFlags::Flags;
-		if(item.trajectory) flags |= EntityUpdateFlags::Trajectory;
-		if(item.playerInput) flags |= EntityUpdateFlags::PlayerInput;
-		if(item.tool) flags |= EntityUpdateFlags::Trajectory;
-		if(item.blockColor) flags |= EntityUpdateFlags::BlockColor;
-		if(item.health) flags |= EntityUpdateFlags::Health;
-		if(item.weaponSkin1 ||
-		   item.weaponSkin2 ||
-		   item.weaponSkin3 ||
-		   item.bodySkin) flags |= EntityUpdateFlags::Skins;
-		
-		writer.Write(static_cast<uint8_t>(flags));
-		
-		if(item.create) {
-			writer.Write(static_cast<uint8_t>(item.type));
-		}
-		
-		if(item.flags) {
-			writer.Write(static_cast<uint8_t>(ToEntityFlagsValue(*item.flags)));
-		}
-		
-		if(item.trajectory) {
-			WriteTrajectory(writer, *item.trajectory);
-		}
-		
-		if(item.playerInput) {
-			WritePlayerInput(writer, *item.playerInput);
-		}
-		
-		if(item.tool) {
-			writer.Write(static_cast<uint8_t>(*item.tool));
-		}
-		
-		if(item.blockColor) {
-			writer.WriteColor(*item.blockColor);
-		}
-		
-		if(item.health) {
-			writer.Write(static_cast<uint8_t>(*item.health));
-		}
-		
-		if(item.weaponSkin1 ||
-		   item.weaponSkin2 ||
-		   item.weaponSkin3 ||
-		   item.bodySkin) {
-			uint8_t mask = 0;
-			if(item.bodySkin) mask |= 1;
-			if(item.weaponSkin1) mask |= 2;
-			if(item.weaponSkin2) mask |= 4;
-			if(item.weaponSkin3) mask |= 8;
-			writer.Write(mask);
-			if(item.bodySkin) writer.WriteBytes(*item.bodySkin);
-			if(item.weaponSkin1) writer.WriteBytes(*item.weaponSkin1);
-			if(item.weaponSkin2) writer.WriteBytes(*item.weaponSkin2);
-			if(item.weaponSkin3) writer.WriteBytes(*item.weaponSkin3);
-		}
-		
-	}
-	
 	Packet *EntityUpdatePacket::Decode(const std::vector<char> &data) {
 		SPADES_MARK_FUNCTION();
 		
 		std::unique_ptr<EntityUpdatePacket> p(new EntityUpdatePacket());
 		PacketReader reader(data);
 		
+		p->forced = reader.ReadByte() != 0;
+		
 		while(!reader.IsEndOfPacket()) {
 			p->items.emplace_back(DecodeEntityUpdateItem(reader));
 		}
 		
-		p->forced = reader.ReadByte() != 0;
 		
 		return p.release();
 	}
@@ -812,11 +938,12 @@ namespace spades { namespace protocol {
 		
 		PacketWriter writer(Type);
 		
+		writer.Write((uint8_t)(forced ? 1 : 0));
+		
 		for(const auto& item: items) {
 			WriteEntityUpdateItem(writer, item);
 		}
 		
-		writer.Write((uint8_t)(forced ? 1 : 0));
 		
 		return std::move(writer.ToArray());
 	}
@@ -1033,6 +1160,58 @@ namespace spades { namespace protocol {
 	}
 	
 	
+	
+	Packet *PlayerUpdatePacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<PlayerUpdatePacket> p(new PlayerUpdatePacket());
+		PacketReader reader(data);
+		
+		while(!reader.IsEndOfPacket()) {
+			p->items.emplace_back(DecodePlayerUpdateItem(reader));
+		}
+		
+		return p.release();
+	}
+	
+	std::vector<char> PlayerUpdatePacket::Generate() const {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		for(const auto& item: items) {
+			WritePlayerUpdateItem(writer, item);
+		}
+		
+		return std::move(writer.ToArray());
+	}
+	
+	Packet *PlayerRemovePacket::Decode(const std::vector<char> &data) {
+		SPADES_MARK_FUNCTION();
+		
+		std::unique_ptr<PlayerRemovePacket> p(new PlayerRemovePacket());
+		PacketReader reader(data);
+		
+		while(!reader.IsEndOfPacket()) {
+			p->players.emplace_back(static_cast<uint32_t>(reader.ReadVariableInteger()));
+		}
+		
+		return p.release();
+	}
+	
+	std::vector<char> PlayerRemovePacket::Generate() const {
+		SPADES_MARK_FUNCTION();
+		
+		PacketWriter writer(Type);
+		
+		for(const auto& item: players) {
+			writer.WriteVariableInteger(item);
+		}
+		
+		return std::move(writer.ToArray());
+	}
+	
+
 
 	
 	Packet *PlayerActionPacket::Decode(const std::vector<char> &data) {

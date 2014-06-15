@@ -20,6 +20,8 @@
 
 #include "Arena.h"
 #include <Core/Debug.h>
+#include "NetworkClient.h"
+#include "Client.h"
 
 namespace spades { namespace ngclient {
 	
@@ -30,7 +32,9 @@ namespace spades { namespace ngclient {
 	
 	void Arena::KeyEvent(const std::string &key, bool down) {
 		SPADES_MARK_FUNCTION();
-		
+		if (key == "J") {
+			client->net->SendGenericCommand({"join"});
+		}
 	}
 	
 	void Arena::TextInputEvent(const std::string &key) {

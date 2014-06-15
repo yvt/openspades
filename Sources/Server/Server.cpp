@@ -29,6 +29,7 @@
 #include "Shared.h"
 #include <Core/IStream.h>
 #include <Core/FileManager.h>
+#include "ServerPlayer.h"
 
 #include <Game/AllEntities.h>
 
@@ -66,6 +67,8 @@ namespace spades { namespace server {
 		}
 		serverEntities.clear();
 		entityToServerEntity.clear();
+		serverPlayers.clear();
+		playerToServerPlayer.clear();
 		this->world.Set(world, true);
 		if (world)
 			world->AddListener(this);
@@ -87,18 +90,36 @@ namespace spades { namespace server {
 		for (const auto& e: serverEntities) {
 			e->Update(dt);
 		}
+		for (const auto& e: serverPlayers) {
+			e->Update(dt);
+		}
 		
 		// send entity update
-		protocol::EntityUpdatePacket packet;
-		for (const auto& e: serverEntities) {
-			auto delta = e->DeltaSerialize();
-			if (delta) {
-				packet.items.push_back(*delta);
+		{
+			protocol::PlayerUpdatePacket packet;
+			for (const auto& e: serverPlayers) {
+				auto delta = e->DeltaSerialize();
+				if (delta) {
+					packet.items.push_back(*delta);
+				}
+			}
+			if (!packet.items.empty()) {
+				host->Broadcast(packet);
 			}
 		}
-		if (!packet.items.empty()) {
-			host->Broadcast(packet);
+		{
+			protocol::EntityUpdatePacket packet;
+			for (const auto& e: serverEntities) {
+				auto delta = e->DeltaSerialize();
+				if (delta) {
+					packet.items.push_back(*delta);
+				}
+			}
+			if (!packet.items.empty()) {
+				host->Broadcast(packet);
+			}
 		}
+		
 		
 	}
 	
@@ -114,6 +135,21 @@ namespace spades { namespace server {
 		if (it == entityToServerEntity.end()) return nullptr;
 		return it->second->get();
 	}
+	
+	
+	void Server::AddServerPlayer(ServerPlayer *e) {
+		SPAssert(e);
+		SPAssert(&e->GetServer() == this);
+		serverPlayers.emplace_front(e);
+		playerToServerPlayer[&e->GetPlayer()] = serverPlayers.begin();
+ 	}
+	
+	ServerPlayer *Server::GetServerPlayerForPlayer(game::Player *e) {
+		auto it = playerToServerPlayer.find(e);
+		if (it == playerToServerPlayer.end()) return nullptr;
+		return it->second->get();
+	}
+
 	
 #pragma mark - WorldListener
 	void Server::EntityLinked(game::World &, game::Entity *e) {
@@ -157,6 +193,22 @@ namespace spades { namespace server {
 		auto it2 = it->second;
 		entityToServerEntity.erase(it);
 		serverEntities.erase(it2);
+	}
+	
+	void Server::PlayerCreated(game::World&, game::Player *p) {
+		AddServerPlayer(new ServerPlayer(*p, *this));
+	}
+	
+	void Server::PlayerRemoved(game::World&, game::Player *p) {
+		protocol::PlayerRemovePacket packet;
+		packet.players.push_back(*p->GetId());
+		host->Broadcast(packet);
+		
+		auto it = playerToServerPlayer.find(p);
+		SPAssert(it != playerToServerPlayer.end());
+		auto it2 = it->second;
+		playerToServerPlayer.erase(it);
+		serverPlayers.erase(it2);
 	}
 	
 	void Server::FlushMapEdits(const std::vector<game::MapEdit> &edits) {

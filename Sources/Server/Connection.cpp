@@ -29,6 +29,7 @@
 #include <Core/IStream.h>
 #include <Core/DeflateStream.h>
 #include <thread>
+#include <Game/Player.h>
 
 namespace spades { namespace server {
 	
@@ -231,6 +232,7 @@ namespace spades { namespace server {
 	
 	void Connection::OnWorldChanged() {
 		if (!peer) return;
+		player.Set(nullptr);
 		StartStateTransfer();
 	}
 	
@@ -260,6 +262,17 @@ namespace spades { namespace server {
 				peer = nullptr;
 			}
 			return;
+		}
+		
+		if (state == State::Game) {
+			if (player && !localPlayerNotified) {
+				// notify that the client owns the player.
+				protocol::GenericCommandPacket p;
+				p.parts.push_back("local-player");
+				p.parts.push_back(std::to_string(*player->GetId()));
+				peer->Send(p);
+				localPlayerNotified = true;
+			}
 		}
 		
 	}
@@ -317,6 +330,7 @@ namespace spades { namespace server {
 				c.clientNonce = p.nonce;
 				c.nonce = c.serverNonce + c.clientNonce;
 				c.mapQuality = p.mapQuality;
+				c.playerName = p.playerName;
 				c.SendServerCertificate();
 			} else {
 				SPRaise("Unexpected InitiateConnectionPacket.");
@@ -369,10 +383,16 @@ namespace spades { namespace server {
 			SPRaise("Unexpected GameStateFinalPacket.");
 		}
 		void visit(const protocol::GenericCommandPacket& p) override {
-			SPNotImplemented();
+			c.HandleGenericCommand(p.parts);
 		}
 		void visit(const protocol::EntityUpdatePacket& p) override {
 			SPRaise("Unexpected EntityUpdatePacket.");
+		}
+		void visit(const protocol::PlayerUpdatePacket& p) override {
+			SPRaise("Unexpected PlayerUpdatePacket.");
+		}
+		void visit(const protocol::PlayerRemovePacket& p) override {
+			SPRaise("Unexpected PlayerRemovePacket.");
 		}
 		void visit(const protocol::ClientSideEntityUpdatePacket& p) override {
 			SPNotImplemented();
@@ -476,5 +496,57 @@ namespace spades { namespace server {
 		state = State::Game;
 	}
 	
+	void Connection::Join() {
+		if (player) {
+			return;
+		}
+		player.Set(new game::Player(GetWorld(),
+									playerName), false);
+		GetWorld().CreatePlayer(player);
+		localPlayerNotified = false;
+		SPLog("%s joined as player ID %d",
+			  peer->GetLogHeader().c_str(),
+			  !player->GetId());
+		
+		// TODO: timed spawn
+		player->Spawn();
+	}
+	
+	void Connection::Leave() {
+		if (!player) {
+			return;
+		}
+		GetWorld().RemovePlayer(player);
+		player.Set(nullptr);
+		SPLog("%s leaves",
+			  peer->GetLogHeader().c_str());
+	}
+	
+	void Connection::HandleGenericCommand(const std::vector<std::string> &parts) {
+		
+		if (parts.size() >= 1) {
+			if (parts[0] == "join" && state == State::Game) {
+				// TODO: team / weapons
+				Join();
+				return;
+			} else if (parts[0] == "leave" && state == State::Game) {
+				Leave();
+				return;
+			}
+		}
+		
+		std::vector<char> str;
+		for (const auto& s: parts) {
+			if (!str.empty())
+				str.push_back(' ');
+			str.insert(str.end(),
+					   s.begin(), s.end());
+		}
+		str.push_back(0);
+		
+		SPLog("%s Unhandled generic command: '%s'",
+			  peer->GetLogHeader().c_str(),
+			  str.data());
+	}
 	
 } }

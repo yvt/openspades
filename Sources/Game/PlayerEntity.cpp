@@ -27,7 +27,7 @@ namespace spades { namespace game {
 	Entity(world, EntityType::Player),
 	tool(ToolSlot::Weapon1),
 	blockColor(192, 192, 192) {
-		
+		GetTrajectory().type = TrajectoryType::Player;
 	}
 	PlayerEntity::~PlayerEntity() {
 		

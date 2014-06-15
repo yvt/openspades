@@ -102,6 +102,8 @@ namespace spades { namespace ngclient {
 		stmp::optional<float> GetProgress() { return progress; }
 		std::string GetProgressMessage() { return progressMessage; }
 		
+		void SendGenericCommand(const std::vector<std::string>&);
+		
 		void Update();
 	};
 	

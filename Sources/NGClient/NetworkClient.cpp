@@ -35,6 +35,7 @@
 #include <Game/Entity.h>
 #include <Game/AllEntities.h>
 #include <Core/Settings.h>
+#include <Game/Player.h>
 
 SPADES_SETTING(cg_mapQuality, "80");
 
@@ -312,7 +313,7 @@ namespace spades { namespace ngclient {
 		const protocol::EntityUpdateItem& item;
 		bool forced;
 		void VisitCommon(game::Entity& e) {
-			
+			SPNotImplemented();
 		}
 		
 	public:
@@ -381,8 +382,18 @@ namespace spades { namespace ngclient {
 			return e;
 		}
 		
+		void UpdatePlayer(game::Player& p,
+						  const protocol::PlayerUpdateItem& u) {
+			if (u.flags) {
+				p.GetFlags() = *u.flags;
+			}
+			if (u.score) {
+				p.SetScore(*u.score);
+			}
+		}
+		
 		void ApplyMapEdit(const std::vector<game::MapEdit>& edits) {
-			
+			SPNotImplemented();
 		}
 		
 	public:
@@ -546,6 +557,52 @@ namespace spades { namespace ngclient {
 				// ignore
 			}
 		}
+		void visit(protocol::PlayerUpdatePacket& p) override {
+			if (c.state == State::Game) {
+				game::World *w = c.world;
+				SPAssert(w);
+				for (const auto& item: p.items) {
+					Handle<game::Player> e(c.world->FindPlayer(item.playerId));
+					if (!e) {
+						// create one
+						if (item.name) {
+							e.Set(new game::Player(*w, *item.name),
+								  false);
+						} else {
+							SPLog("player ID %u doesn't exist. ignored",
+								  (unsigned int)item.playerId);
+							continue;
+						}
+					}
+					
+					SPAssert(e);
+					
+					UpdatePlayer(*e, item);
+					
+					if (!e->GetId()) {
+						w->CreatePlayer(e, item.playerId);
+					}
+				}
+			} else {
+				// ignore
+			}
+		}
+		
+		void visit(protocol::PlayerRemovePacket& p) override {
+			if (c.state == State::Game) {
+				for (auto id: p.players) {
+					auto *e = c.world->FindPlayer(id);
+					if (e) {
+						c.world->RemovePlayer(e);
+					} else {
+						SPLog("player %u doesn't exist. ignored",
+							  (unsigned int)id);
+					}
+				}
+			} else {
+				// ignore
+			}
+		}
 		void visit(protocol::ClientSideEntityUpdatePacket& p) override {
 			SPRaise("Unexpected ClientSideEntityUpdatePacket.");
 		}
@@ -656,6 +713,13 @@ namespace spades { namespace ngclient {
 	
 	void NetworkClient::HandleGenericCommand(const std::vector<std::string> &parts) {
 		
+		if (!parts.empty()) {
+			if (parts[0] == "local-player" &&
+				state == State::Game) {
+				// TODO: handle local-player
+			}
+		}
+		
 		std::vector<char> str;
 		for (const auto& s: parts) {
 			if (!str.empty())
@@ -674,6 +738,14 @@ namespace spades { namespace ngclient {
 		
 		for (auto *l: listeners)
 			l->WorldChanged(world);
+	}
+	
+	void NetworkClient::SendGenericCommand(const std::vector<std::string> &parts) {
+		if (host) {
+			protocol::GenericCommandPacket p;
+			p.parts = parts;
+			host->Send(p);
+		}
 	}
 	
 } }

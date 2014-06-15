@@ -75,6 +75,9 @@ namespace spades { namespace protocol {
 		
 		TerrainUpdate = 40,
 		
+		PlayerUpdate = 50,
+		PlayerRemove = 51,
+		
 		// actions
 		PlayerAction = 60,
 		// TODO: ride weapon, use deployed weapon
@@ -97,6 +100,7 @@ namespace spades { namespace protocol {
 	
 	using game::EntityType;
 	using game::EntityFlags;
+	using game::PlayerFlags;
 	using game::EntityDeathType;
 	using game::EntityEventType;
 	using game::BlockCreateType;
@@ -126,6 +130,8 @@ namespace spades { namespace protocol {
 	class ClientSideEntityUpdatePacket;
 	class TerrainUpdatePacket;
 	class EntityEventPacket;
+	class PlayerRemovePacket;
+	class PlayerUpdatePacket;
 	class PlayerActionPacket;
 	class HitEntityPacket;
 	class HitTerrainPacket;
@@ -158,6 +164,8 @@ namespace spades { namespace protocol {
 	EntityEventPacket,
 	EntityDiePacket,
 	EntityRemovePacket,
+	PlayerRemovePacket,
+	PlayerUpdatePacket,
 	
 	PlayerActionPacket,
 	
@@ -217,6 +225,37 @@ namespace spades { namespace protocol {
 		virtual PacketType GetType() { return type; }
 		
 	};
+	
+	struct EntityUpdateItem {
+		bool create;
+		
+		uint32_t entityId;
+		
+		// type is sent only for new entities
+		EntityType type;
+		
+		stmp::optional<EntityFlags> flags;
+		stmp::optional<Trajectory> trajectory;
+		stmp::optional<uint8_t> health;
+		
+		stmp::optional<PlayerInput> playerInput;
+		stmp::optional<ToolSlot> tool;
+		stmp::optional<IntVector3> blockColor;
+		
+		stmp::optional<std::string> weaponSkin1;
+		stmp::optional<std::string> weaponSkin2;
+		stmp::optional<std::string> weaponSkin3;
+		stmp::optional<std::string> bodySkin;
+	};
+	
+	struct PlayerUpdateItem {
+		uint32_t playerId;
+		
+		stmp::optional<std::string> name;
+		stmp::optional<PlayerFlags> flags;
+		stmp::optional<uint32_t> score;
+	};
+	
 	
 	/** GreetingPacket is sent by server when a client connects the server,
 	 * before any other packets. */
@@ -361,7 +400,7 @@ namespace spades { namespace protocol {
 		
 		std::map<std::string, std::string> properties;
 		std::vector<EntityUpdateItem> items;
-		
+		std::vector<PlayerUpdateItem> players;
 	};
 	
 	/** Sent by client to acknoledge decoding of map data. */
@@ -387,29 +426,6 @@ namespace spades { namespace protocol {
 		std::vector<std::string> parts;
 	};
 	
-	struct EntityUpdateItem {
-		bool create;
-		
-		uint32_t entityId;
-		
-		// type is sent only for new entities
-		EntityType type;
-		
-		stmp::optional<EntityFlags> flags;
-		stmp::optional<Trajectory> trajectory;
-		stmp::optional<uint8_t> health;
-		
-		stmp::optional<PlayerInput> playerInput;
-		stmp::optional<ToolSlot> tool;
-		stmp::optional<IntVector3> blockColor;
-		
-		stmp::optional<std::string> weaponSkin1;
-		stmp::optional<std::string> weaponSkin2;
-		stmp::optional<std::string> weaponSkin3;
-		stmp::optional<std::string> bodySkin;
-		
-		
-	};
 	
 	/** Sent by server to notify the latest state of entity.
 	 * Only updated parts are sent.
@@ -500,6 +516,39 @@ namespace spades { namespace protocol {
 		
 		uint32_t entityId;
 	};
+	
+	
+	/** Sent by server to notify the latest state of player.
+	 * Only updated parts are sent.
+	 */
+	class PlayerUpdatePacket : public BasePacket
+	<PlayerUpdatePacket,
+	PacketUsage::ServerOnly, PacketType::PlayerUpdate> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~PlayerUpdatePacket() {}
+		
+		virtual std::vector<char> Generate() const;
+		
+		std::vector<PlayerUpdateItem> items;
+	};
+	
+	
+	/** Sent by server to notify some players have left.
+	 * Only updated parts are sent.
+	 */
+	class PlayerRemovePacket : public BasePacket
+	<PlayerRemovePacket,
+	PacketUsage::ServerOnly, PacketType::PlayerRemove> {
+	public:
+		static Packet *Decode(const std::vector<char>&);
+		virtual ~PlayerRemovePacket() {}
+		
+		virtual std::vector<char> Generate() const;
+		
+		std::vector<uint32_t> players;
+	};
+	
 	
 	class PlayerActionPacket : public BasePacket
 	<PlayerActionPacket,

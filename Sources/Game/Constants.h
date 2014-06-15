@@ -102,6 +102,14 @@ namespace spades { namespace game {
 		}
 	};
 	
+	struct PlayerFlags {
+		bool isAdmin : 1;
+		bool operator != (const PlayerFlags& o) const {
+			return
+			isAdmin != o.isAdmin;
+		}
+	};
+	
 	enum class TrajectoryType {
 		/** Entity's position is specified with `origin`.
 		 *  and its orientation is specified with `angle`. */

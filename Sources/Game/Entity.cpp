@@ -28,7 +28,9 @@ namespace spades { namespace game {
 	world(world),
 	type(type),
 	health(100) {
-		
+		trajectory.type = TrajectoryType::Constant;
+		trajectory.origin = Vector3(0, 0, 0);
+		trajectory.angle = Quaternion(0.f, 0.f, 0.f, 1.f);
 	}
 	
 	Entity::~Entity() {

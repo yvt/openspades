@@ -838,6 +838,10 @@
 		E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */; };
 		E8F30C17194DD1BF00A9DD84 /* Client_Draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C15194DD1BF00A9DD84 /* Client_Draw.cpp */; };
 		E8F30C18194DD1BF00A9DD84 /* Client_Draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C15194DD1BF00A9DD84 /* Client_Draw.cpp */; };
+		E8F30C1B194DEC8100A9DD84 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C19194DEC8100A9DD84 /* Player.cpp */; };
+		E8F30C1C194DEC8100A9DD84 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C19194DEC8100A9DD84 /* Player.cpp */; };
+		E8F30C2E194E051D00A9DD84 /* ServerPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C2C194E051D00A9DD84 /* ServerPlayer.cpp */; };
+		E8F30C2F194E051D00A9DD84 /* ServerPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C2C194E051D00A9DD84 /* ServerPlayer.cpp */; };
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
 		E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */; };
@@ -1747,6 +1751,10 @@
 		E8EE08A417BA016F00631987 /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		E8EE08A517BA016F00631987 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		E8F30C15194DD1BF00A9DD84 /* Client_Draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_Draw.cpp; sourceTree = "<group>"; };
+		E8F30C19194DEC8100A9DD84 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		E8F30C1A194DEC8100A9DD84 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		E8F30C2C194E051D00A9DD84 /* ServerPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ServerPlayer.cpp; sourceTree = "<group>"; };
+		E8F30C2D194E051D00A9DD84 /* ServerPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerPlayer.h; sourceTree = "<group>"; };
 		E8F74CE3183F86AE0085AA54 /* View.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = View.cpp; sourceTree = "<group>"; };
 		E8F74CE4183F86AE0085AA54 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
 		E8F74CE6183F8A110085AA54 /* Main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Main.h; sourceTree = "<group>"; };
@@ -2536,6 +2544,8 @@
 				E8E977A91944819600579D9A /* CheckpointEntity.h */,
 				E8E977AC194481C400579D9A /* VehicleEntity.cpp */,
 				E8E977AD194481C400579D9A /* VehicleEntity.h */,
+				E8F30C19194DEC8100A9DD84 /* Player.cpp */,
+				E8F30C1A194DEC8100A9DD84 /* Player.h */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -2555,6 +2565,8 @@
 				E818AEE5194AAAD0004500C7 /* ServerEntity.h */,
 				E818AEE8194ACCA6004500C7 /* PlayerServerEntity.cpp */,
 				E818AEE9194ACCA6004500C7 /* PlayerServerEntity.h */,
+				E8F30C2C194E051D00A9DD84 /* ServerPlayer.cpp */,
+				E8F30C2D194E051D00A9DD84 /* ServerPlayer.h */,
 			);
 			path = Server;
 			sourceTree = "<group>";
@@ -3277,6 +3289,7 @@
 				E82E673318EA7972004DBA18 /* as_atomic.cpp in Sources */,
 				E8D0E70D18FABC3600DE3BDB /* adler32.cpp in Sources */,
 				E82E673418EA7972004DBA18 /* as_builder.cpp in Sources */,
+				E8F30C1C194DEC8100A9DD84 /* Player.cpp in Sources */,
 				E8D0E75D18FABC3600DE3BDB /* files.cpp in Sources */,
 				E82E673518EA7972004DBA18 /* as_bytecode.cpp in Sources */,
 				E8D0E5DD18F9A64A00DE3BDB /* Server.cpp in Sources */,
@@ -3569,6 +3582,7 @@
 				E8D0E80418FABC3600DE3BDB /* zinflate.cpp in Sources */,
 				E82E672C18EA7967004DBA18 /* scripthandle.cpp in Sources */,
 				E82E672D18EA7967004DBA18 /* scripthelper.cpp in Sources */,
+				E8F30C2F194E051D00A9DD84 /* ServerPlayer.cpp in Sources */,
 				E82E672E18EA7967004DBA18 /* scriptmath.cpp in Sources */,
 				E82E672F18EA7967004DBA18 /* scriptmathcomplex.cpp in Sources */,
 				E82E673018EA7967004DBA18 /* scriptstdstring.cpp in Sources */,
@@ -3893,6 +3907,7 @@
 				E80B287117A4CA2D0056179E /* GLOptimizedVoxelModel.cpp in Sources */,
 				E8D0E7D118FABC3600DE3BDB /* skipjack.cpp in Sources */,
 				E8D0E74C18FABC3600DE3BDB /* eax.cpp in Sources */,
+				E8F30C1B194DEC8100A9DD84 /* Player.cpp in Sources */,
 				E8F74CF81845C5000085AA54 /* ClientUI.cpp in Sources */,
 				E80B288117A516D70056179E /* shapes.cc in Sources */,
 				E80B288217A516D70056179E /* advancing_front.cc in Sources */,
@@ -3966,6 +3981,7 @@
 				E81A7C711861F4E200BF3FCE /* SWImageRenderer.cpp in Sources */,
 				E8D0E77C18FABC3600DE3BDB /* iterhash.cpp in Sources */,
 				E8B6B6A117DE27B500E35523 /* as_compiler.cpp in Sources */,
+				E8F30C2E194E051D00A9DD84 /* ServerPlayer.cpp in Sources */,
 				E8B6B6A217DE27B500E35523 /* as_configgroup.cpp in Sources */,
 				E81CE4A6183F7A3000F22685 /* IFont.cpp in Sources */,
 				E8D0E76418FABC3600DE3BDB /* gf2_32.cpp in Sources */,
