@@ -263,7 +263,7 @@ namespace spades { namespace game {
 	}
 	
 	Vector3 World::GetGravity()	{
-		return Vector3(0.f, 0.f, 10.f); // FIXME: correct value
+		return Vector3(0.f, 0.f, 32.f);
 	}
 	
 	bool World::IsLocalHostServer() {

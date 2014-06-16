@@ -209,7 +209,7 @@ namespace spades { namespace game {
 		
 		if (!IsOnGroundOrWade()) {
 			// airborne
-			planeMove *= 0.1f;
+			planeMove *= 0.01f;
 		} else if (inp.stance == PlayerStance::Crouch) {
 			planeMove *= 0.3f;
 		} else if (inp.stance == PlayerStance::Prone) {
@@ -228,6 +228,8 @@ namespace spades { namespace game {
 			planeMove *= .33f;
 		}
 		
+		planeMove *= 50.f * dt;
+		
 		auto m = GetMatrix();
 		auto front = (m * Vector4(0.f, 1.f, 0.f, 0)).GetXYZ();
 		auto side  = (m * Vector4(1.f, 0.f, 0.f, 0)).GetXYZ();
@@ -243,13 +245,13 @@ namespace spades { namespace game {
 		}
 		
 		// frictions
-		traj.velocity.z *= powf(.5f, dt);
+		traj.velocity.z *= powf(.9f, dt);
 		
 		float groundFriction = .9f;
 		if (IsWading()) {
-			groundFriction = .5f;
-		} else if (IsOnGroundOrWade()) {
 			groundFriction = .1f;
+		} else if (IsOnGroundOrWade()) {
+			groundFriction = .002f;
 		}
 		groundFriction = powf(groundFriction, dt);
 		traj.velocity.x *= groundFriction;
@@ -301,7 +303,7 @@ namespace spades { namespace game {
 		
 		auto VerticalRayCast = [&](float x, float y, float z1, float z2) -> float {
 			int xx = static_cast<int>(floorf(x));
-			int yy = static_cast<int>(floorf(x));
+			int yy = static_cast<int>(floorf(y));
 			int zz = static_cast<int>(floorf(z1));
 			int zz2 = static_cast<int>(floorf(z2));
 			if (map->ClipBox(xx, yy, zz)) return z1;
@@ -321,9 +323,9 @@ namespace spades { namespace game {
 			pos.x = nx;
 		} else {
 			if (vel.x > 0.f) {
-				pos.x = floorf(bx) - size;
+				pos.x = floorf(bx) - size - .0001f;
 			} else {
-				pos.x = floorf(bx) + 1.f + size;
+				pos.x = floorf(bx) + 1.f + size + .0001f;
 			}
 			vel.x = 0.f;
 		}
@@ -337,9 +339,9 @@ namespace spades { namespace game {
 			pos.y = ny;
 		} else {
 			if (vel.y > 0.f) {
-				pos.y = floorf(by) - size;
+				pos.y = floorf(by) - size - .0001f;
 			} else {
-				pos.y = floorf(by) + 1.f + size;
+				pos.y = floorf(by) + 1.f + size + .0001f;
 			}
 			vel.y = 0.f;
 		}
@@ -361,7 +363,8 @@ namespace spades { namespace game {
 			airborne = true;
 		} else if (rz < pos.z - 0.01f) {
 			// climb
-			pos.z = std::max<float>(rz, pos.z - 1.f * dt);
+			pos.z = std::max<float>(rz, pos.z - 5.f * dt);
+			vel *= powf(.03f, dt);
 		} else {
 			// hit ground
 			pos.z = rz;
@@ -386,10 +389,11 @@ namespace spades { namespace game {
 				}
 				for (auto *listener: listeners)
 					listener->Fell(*this, true);
+				vel *= .05f;
 			} else if (vel.z > slowdownFallVelocity) {
 				for (auto *listener: listeners)
 					listener->Fell(*this, false);
-				vel *= .5f;
+				vel *= .4f;
 			}
 			
 			vel.z = 0.f;

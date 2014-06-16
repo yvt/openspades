@@ -145,7 +145,7 @@ namespace spades { namespace ngclient {
 		def.viewAxis[2] = def.viewAxis[2].Normalize();
 		def.zNear = .01f;
 		def.skipWorld = false;
-		def.depthOfFieldNearRange = 10.f;
+		def.depthOfFieldNearRange = 0.f;
 		def.globalBlur = .0f;
 		
 		return def;
