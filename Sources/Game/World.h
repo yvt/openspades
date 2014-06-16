@@ -39,6 +39,8 @@ namespace spades { namespace game {
 		float playerJumpVelocity;
 		float fallDamageVelocity;
 		float fatalFallDamageVelocity;
+		float fogDistance;
+		Vector3 fogColor;
 		
 		WorldParameters();
 		

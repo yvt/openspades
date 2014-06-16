@@ -36,7 +36,9 @@ namespace spades { namespace game {
 	WorldParameters::WorldParameters():
 	playerJumpVelocity(0.36f),
 	fallDamageVelocity(0.58f),
-	fatalFallDamageVelocity(1.f) { }
+	fatalFallDamageVelocity(1.f),
+	fogDistance(96.f),
+	fogColor(.6f, .7f, .9f){ }
 	
 	std::map<std::string, std::string> WorldParameters::Serialize() const {
 		SPADES_MARK_FUNCTION();
@@ -45,6 +47,9 @@ namespace spades { namespace game {
 		ret["player-jump-vel"] = ToString(playerJumpVelocity);
 		ret["fall-damage-vel"] = ToString(fallDamageVelocity);
 		ret["fall-damage-fatal-vel"] = ToString(fatalFallDamageVelocity);
+		ret["fog-distance"] = ToString(fogDistance);
+		ret["fog-color"] = Format("{0},{1},{2}",
+								  fogColor.x, fogColor.y, fogColor.z);
 		return ret;
 	}
 	
@@ -57,8 +62,20 @@ namespace spades { namespace game {
 			fallDamageVelocity = std::stof(value);
 		} else if (key == "fall-damage-fatal-vel") {
 			fatalFallDamageVelocity = std::stof(value);
+		} else if (key == "fog-distance") {
+			fogDistance = std::stof(value);
+		} else if (key == "fog-color") {
+			auto parts = Split(value, ",");
+			if (parts.size() == 3) {
+				fogColor.x = std::stof(parts[0]);
+				fogColor.y = std::stof(parts[1]);
+				fogColor.z = std::stof(parts[2]);
+			} else {
+				SPRaise("Value for for-color is invalid: '%s'",
+					  value.c_str());
+			}
 		} else {
-			SPLog("Unknown property '%s' (value = '%s')",
+			SPRaise("Unknown property '%s' (value = '%s')",
 				  key.c_str(), value.c_str());
 		}
 	}

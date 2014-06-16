@@ -92,6 +92,7 @@ namespace spades { namespace game {
 		}
 		
 		auto *pe = new PlayerEntity(GetWorld());
+		pe->GetTrajectory().origin = Vector3(256, 256, 0);
 		GetWorld().LinkEntity(pe, *GetId());
 		pe->Release();
 		SPAssert(GetEntity());

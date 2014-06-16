@@ -121,6 +121,15 @@ namespace spades { namespace ngclient {
 		
 		auto def = CreateSceneDefinition();
 		
+		auto& w = *world;
+		const auto& wparam = w.GetParameters();
+		
+		renderer->SetFogType(client::FogType::Exponential);
+		renderer->SetFogDistance(wparam.fogDistance);
+		renderer->SetFogColor(wparam.fogColor);
+		
+		def.time = static_cast<unsigned int>(time * 1000.0);
+		
 		renderer->StartScene(def);
 		
 		for (const auto& ent: localEntities) {
