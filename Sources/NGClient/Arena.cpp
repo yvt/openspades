@@ -77,7 +77,6 @@ namespace spades { namespace ngclient {
 				if (!lEnt->Update(dt)) {
 					localEntities.erase(cur);
 				}
-				it = cur;
 			}
 		}
 		
