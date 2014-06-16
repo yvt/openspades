@@ -85,7 +85,7 @@ namespace spades { namespace server {
 	public:
 		Connection(Server *);
 		
-		
+		void Kick(const std::string& reason);
 		
 		void Update(double dt);
 		

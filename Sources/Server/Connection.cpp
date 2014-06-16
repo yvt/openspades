@@ -488,6 +488,22 @@ namespace spades { namespace server {
 		}
 	}
 	
+	void Connection::Kick(const std::string &reason) {
+		SPADES_MARK_FUNCTION();
+		if (!peer) return;
+		
+		SPLog("%s peer was kicked: %s",
+			  peer->GetLogHeader().c_str(),
+			  reason.c_str());
+		
+		protocol::KickPacket p;
+		p.reason = reason;
+		peer->Send(p);
+		
+		peer->Disconnect(protocol::DisconnectReason::Misc);
+		peer = nullptr;
+	}
+	
 	void Connection::SendServerCertificate() {
 		SPADES_MARK_FUNCTION();
 		
