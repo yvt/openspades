@@ -31,6 +31,10 @@ namespace spades { namespace game {
 	health(100) {
 		SPADES_MARK_FUNCTION();
 		
+		flags.weaponClip = false;
+		flags.playerClip = false;
+		flags.fly = false;
+		
 		trajectory.type = TrajectoryType::Constant;
 		trajectory.origin = Vector3(0, 0, 0);
 		trajectory.angle = Quaternion(0.f, 0.f, 0.f, 1.f);

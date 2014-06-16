@@ -30,7 +30,18 @@ namespace spades { namespace game {
 	blockColor(192, 192, 192) {
 		SPADES_MARK_FUNCTION();
 		
-		GetTrajectory().type = TrajectoryType::Player;
+		auto& t = GetTrajectory();
+		t.type = TrajectoryType::Player;
+		t.eulerAngle = Vector3(0.f, 0.f, 0.f);
+		t.velocity = Vector3(0.f, 0.f, 0.f);
+		
+		playerInput.toolPrimary = false;
+		playerInput.toolSecondary = false;
+		playerInput.xmove = 0;
+		playerInput.ymove = 0;
+		playerInput.sprint = false;
+		playerInput.chat = false;
+		playerInput.stance = PlayerStance::Standing;
 	}
 	PlayerEntity::~PlayerEntity() {
 		

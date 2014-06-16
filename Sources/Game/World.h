@@ -64,6 +64,7 @@ namespace spades { namespace game {
 		std::map<uint32_t, Handle<Entity>> entities;
 		std::map<uint32_t, Handle<Player>> players;
 		std::set<WorldListener *> listeners;
+		stmp::optional<uint32_t> localPlayerId;
 		
 		struct IntVectorComparator {
 			inline bool operator ()
@@ -130,6 +131,7 @@ namespace spades { namespace game {
 		stmp::optional<uint32_t> GetLocalPlayerId();
 		PlayerEntity *GetLocalPlayerEntity();
 		// TODO: Player *GetLocalPlayer()
+		void SetLocalPlayerId(stmp::optional<uint32_t>);
 		
 		/** Returns game map.
 		 * Be aware that modifying this map directly

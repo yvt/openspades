@@ -21,6 +21,7 @@
 
 #include "LocalEntity.h"
 #include <Game/PlayerEntity.h>
+#include "Arena.h"
 
 namespace spades { namespace ngclient {
 	
@@ -43,7 +44,8 @@ namespace spades { namespace ngclient {
 	class PlayerLocalEntity final:
 	public LocalEntity,
 	game::EntityListener,
-	game::PlayerEntityListener
+	game::PlayerEntityListener,
+	public ArenaCamera
 	{
 		friend class PlayerLocalEntityFactory;
 		
@@ -62,6 +64,9 @@ namespace spades { namespace ngclient {
 		virtual ~PlayerLocalEntity();
 		virtual bool Update(game::Duration);
 		virtual void AddToScene();
+		
+		client::SceneDefinition CreateSceneDefinition
+		(client::IRenderer&) override;
 		
 	};
 	

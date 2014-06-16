@@ -162,6 +162,11 @@ namespace spades { namespace game {
 			SPRaise("Entity is linked to another world.");
 		}
 		
+		if (localPlayerId &&
+			*e->GetId() == *localPlayerId) {
+			localPlayerId.reset();
+		}
+		
 		Handle<Entity> ee(e);
 		
 		auto it = entities.find(*e->GetId());
@@ -249,7 +254,11 @@ namespace spades { namespace game {
 	void World::Advance(Duration dt) {
 		SPADES_MARK_FUNCTION();
 		
-		//SPNotImplemented();
+		for (auto it = entities.begin(); it != entities.end();) {
+			auto cur = it++;
+			cur->second->Advance(dt);
+		}
+		
 		currentTime += dt;
 	}
 	
@@ -270,8 +279,7 @@ namespace spades { namespace game {
 	}
 	
 	stmp::optional<uint32_t> World::GetLocalPlayerId() {
-		// TODO: GetLocalPlayerId
-		return stmp::optional<uint32_t>();
+		return localPlayerId;
 	}
 	
 	PlayerEntity *World::GetLocalPlayerEntity() {
@@ -286,6 +294,10 @@ namespace spades { namespace game {
 		auto *pe = dynamic_cast<PlayerEntity *>(e);
 		SPAssert(pe);
 		return pe;
+	}
+	
+	void World::SetLocalPlayerId(stmp::optional<uint32_t> i) {
+		localPlayerId = i;
 	}
 	
 #pragma mark - Map Edits

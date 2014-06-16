@@ -836,7 +836,14 @@ namespace spades { namespace ngclient {
 		if (!parts.empty()) {
 			if (parts[0] == "local-player" &&
 				state == State::Game) {
-				// TODO: handle local-player
+				if (parts.size() >= 2) {
+					int pId = std::stoi(parts[1]);
+					
+					world->SetLocalPlayerId((uint32_t)pId);
+				} else {
+					world->SetLocalPlayerId(stmp::optional<uint32_t>());
+				}
+				return;
 			}
 		}
 		

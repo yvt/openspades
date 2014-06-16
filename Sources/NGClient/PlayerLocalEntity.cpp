@@ -20,6 +20,9 @@
 
 #include "PlayerLocalEntity.h"
 #include <Core/Debug.h>
+#include <Core/Settings.h>
+
+SPADES_SETTING(cg_fov, "");
 
 namespace spades { namespace ngclient {
 	
@@ -112,6 +115,40 @@ namespace spades { namespace ngclient {
 		
 	}
 	
-	
+	client::SceneDefinition PlayerLocalEntity::CreateSceneDefinition(client::IRenderer &renderer) {
+		SPADES_MARK_FUNCTION();
+		
+		client::SceneDefinition def;
+		
+		float sw = renderer.ScreenWidth();
+		float sh = renderer.ScreenHeight();
+		
+		float fov = (float)cg_fov * (M_PI / 180.f);
+		
+		def.fovY = fov;
+		def.fovX = 2.f * atanf(tanf(fov * .5f) * sw / sh);
+		
+		def.viewOrigin = entity->GetTrajectory().origin;
+		def.viewOrigin.z -= entity->GetCurrentHeight() - 0.2f;
+		
+		auto m = entity->GetMatrix();
+		
+		def.viewAxis[2] = (m * Vector4(0,1,0,0)).GetXYZ();
+		def.viewAxis[1] = Vector3(0, 0, -1);
+		def.viewAxis[0] = Vector3(1, 0, 0);
+		/*
+		def.viewAxis[2] += def.viewAxis[1] * sinf(arena.world->GetCurrentTime() * .3) * .02f;
+		def.viewAxis[2] += def.viewAxis[0] * cosf(arena.world->GetCurrentTime() * .3) * .02f;*/
+		
+		def.viewAxis[0] = Vector3::Cross(def.viewAxis[2], def.viewAxis[1]).Normalize();
+		def.viewAxis[1] = Vector3::Cross(def.viewAxis[0], def.viewAxis[2]).Normalize();
+		def.viewAxis[2] = def.viewAxis[2].Normalize();
+		def.zNear = .01f;
+		def.skipWorld = false;
+		def.depthOfFieldNearRange = 60.f;
+		def.globalBlur = .0f;
+		
+		return def;
+	}
 	
 } }

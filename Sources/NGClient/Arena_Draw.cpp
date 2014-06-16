@@ -23,6 +23,8 @@
 #include <Game/World.h>
 #include <Core/Settings.h>
 #include "LocalEntity.h"
+#include <Game/PlayerEntity.h>
+#include "PlayerLocalEntity.h"
 
 SPADES_SETTING(cg_fov, "");
 
@@ -32,6 +34,15 @@ namespace spades { namespace ngclient {
 		SPADES_MARK_FUNCTION();
 		
 		// TODO: GetCamera
+		
+		auto *pe = world->GetLocalPlayerEntity();
+		if (pe) {
+			auto *le = GetLocalEntityForEntity(pe);
+			auto *ple = dynamic_cast<PlayerLocalEntity*>(le);
+			SPAssert(ple);
+			return *ple;
+		}
+		
 		return defaultCamera;
 	}
 	
@@ -86,7 +97,7 @@ namespace spades { namespace ngclient {
 								 map->Height() / 2 - 30,
 								 -2);
 		def.viewAxis[2] = Vector3(0, .4, 1);
-		def.viewAxis[1] = Vector3(0, 1, 0);
+		def.viewAxis[1] = Vector3(0, 0, -1);
 		def.viewAxis[0] = Vector3(1, 0, 0);
 		
 		def.viewAxis[2] += def.viewAxis[1] * sinf(arena.world->GetCurrentTime() * .3) * .02f;
