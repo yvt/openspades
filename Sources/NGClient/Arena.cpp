@@ -55,6 +55,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void Arena::Initialize() {
+		SPADES_MARK_FUNCTION();
+		
 		renderer->Init();
 		
 		playerLocalEntityFactory.reset

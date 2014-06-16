@@ -30,6 +30,7 @@
 namespace spades { namespace ngclient {
 	
 	void Client::RenderLoadingScreen(float dt) {
+		SPADES_MARK_FUNCTION();
 	
 		auto msg = net->GetProgressMessage();
 		auto prg = net->GetProgress();

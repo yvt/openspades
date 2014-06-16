@@ -30,14 +30,19 @@ namespace spades { namespace server {
 	}
 	
 	ServerEntity::~ServerEntity() {
+		SPADES_MARK_FUNCTION();
 		
 	}
 	
 	void ServerEntity::Update(double) {
+		SPADES_MARK_FUNCTION();
+		
 		// maybe nothing to do here...
 	}
 	
 	void ServerEntity::SaveForDeltaEncoding() {
+		SPADES_MARK_FUNCTION();
+		
 		lastState = Serialize();
 		lastState.create = false;
 	}
@@ -57,6 +62,8 @@ namespace spades { namespace server {
 	
 	stmp::optional<protocol::EntityUpdateItem>
 	ServerEntity::DeltaSerialize() {
+		SPADES_MARK_FUNCTION();
+		
 		auto current = Serialize();
 		protocol::EntityUpdateItem ret;
 		ret.create = lastState.create;
@@ -84,6 +91,8 @@ namespace spades { namespace server {
 	
 	protocol::EntityUpdateItem
 	ServerEntity::Serialize() {
+		SPADES_MARK_FUNCTION();
+		
 		protocol::EntityUpdateItem r;
 		r.create = true;
 		r.entityId = *entity.GetId();

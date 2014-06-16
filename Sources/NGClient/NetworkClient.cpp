@@ -44,6 +44,8 @@ namespace spades { namespace ngclient {
 	namespace {
 		std::random_device randomDevice;
 		std::string GenerateNonce(std::size_t len) {
+			SPADES_MARK_FUNCTION();
+			
 			std::string s;
 			s.resize(len);
 			
@@ -68,6 +70,8 @@ namespace spades { namespace ngclient {
 		class Stream: public IStream {
 			MapLoader& loader;
 			void WaitForData() {
+				SPADES_MARK_FUNCTION();
+				
 				while (true) {
 					{
 						AutoLocker lock(&loader.mutex);
@@ -89,11 +93,15 @@ namespace spades { namespace ngclient {
 			Stream(MapLoader& loader):
 			loader(loader) { }
 			int ReadByte() override {
+				SPADES_MARK_FUNCTION();
+				
 				unsigned char c;
 				if (Read(&c, 1) == 0) return -1;
 				return c;
 			}
 			size_t Read(void *d, size_t bytes) override {
+				SPADES_MARK_FUNCTION();
+				
 				char *bufout = reinterpret_cast<char *>(d);
 				
 				std::size_t requiredBytes = bytes;
@@ -133,6 +141,8 @@ namespace spades { namespace ngclient {
 		Mutex mapMutex;
 		
 		void Run() override {
+			SPADES_MARK_FUNCTION();
+			
 			try {
 				Stream stream(*this);
 				// TODO: progress notify
@@ -155,6 +165,8 @@ namespace spades { namespace ngclient {
 		MapLoader() { }
 		
 		~MapLoader() {
+			SPADES_MARK_FUNCTION();
+			
 			// aborts loading process
 			completed = true;
 			Join();
@@ -165,6 +177,8 @@ namespace spades { namespace ngclient {
 		
 		/** Returns loaded map, or null if it's still being loaded. */
 		client::GameMap *GetMap() {
+			SPADES_MARK_FUNCTION();
+			
 			AutoLocker lock(&mapMutex);
 			if (exptr) {
 				std::rethrow_exception(exptr);
@@ -173,15 +187,21 @@ namespace spades { namespace ngclient {
 		}
 		
 		float GetProgress() {
+			SPADES_MARK_FUNCTION();
+			
 			AutoLocker lock(&mapMutex);
 			return progress;
 		}
 		
 		void Start() {
+			SPADES_MARK_FUNCTION();
+			
 			Thread::Start();
 		}
 		
 		void Load(const char *buffer, std::size_t length) {
+			SPADES_MARK_FUNCTION();
+			
 			totalInputBytes += length;
 			if (totalInputBytes > 128 * 1024 * 1024) {
 				// too big!
@@ -205,15 +225,21 @@ namespace spades { namespace ngclient {
 	
 	NetworkClient::NetworkClient(const NetworkClientParams& params):
 	params(params){
+		SPADES_MARK_FUNCTION();
+		
 		host.reset(new Host());
 		host->AddListener(this);
 	}
 	
 	NetworkClient::~NetworkClient() {
+		SPADES_MARK_FUNCTION();
+		
 		host->RemoveListener(this);
 	}
 	
 	void NetworkClient::Update() {
+		SPADES_MARK_FUNCTION();
+		
 		host->DoEvents();
 		if (state == State::LoadingMap) {
 			try {
@@ -237,6 +263,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::Connect() {
+		SPADES_MARK_FUNCTION();
+		
 		SPLog("Connecting to %s", params.address.asString().c_str());
 		
 		progress = stmp::optional<float>();
@@ -255,6 +283,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::AddListener(NetworkClientListener *l) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(l);
 		listeners.insert(l);
 	}
@@ -264,6 +294,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::ConnectedToServer() {
+		SPADES_MARK_FUNCTION();
+		
 		SPLog("Connected to server. Waiting for GreetingPacket...");
 		state = State::WaitingForGreeting;
 		progress = stmp::optional<float>();
@@ -272,6 +304,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::DisconnectedFromServer(protocol::DisconnectReason reason) {
+		SPADES_MARK_FUNCTION();
+		
 		std::string str;
 		SPLog("ENet-level disconnection.");
 		if (state == State::NotConnected) {
@@ -313,6 +347,8 @@ namespace spades { namespace ngclient {
 		const protocol::EntityUpdateItem& item;
 		bool forced;
 		void VisitCommon(game::Entity& e) {
+			SPADES_MARK_FUNCTION();
+			
 			SPNotImplemented();
 		}
 		
@@ -323,24 +359,31 @@ namespace spades { namespace ngclient {
 		
 		
 		void Visit(game::PlayerEntity& e) override {
+			SPADES_MARK_FUNCTION();
 			VisitCommon(e);
 		}
 		void Visit(game::GrenadeEntity& e) override {
+			SPADES_MARK_FUNCTION();
 			VisitCommon(e);
 		}
 		void Visit(game::RocketEntity& e) override {
+			SPADES_MARK_FUNCTION();
 			VisitCommon(e);
 		}
 		void Visit(game::CommandPostEntity& e) override {
+			SPADES_MARK_FUNCTION();
 			VisitCommon(e);
 		}
 		void Visit(game::FlagEntity& e) override {
+			SPADES_MARK_FUNCTION();
 			VisitCommon(e);
 		}
 		void Visit(game::CheckpointEntity& e) override {
+			SPADES_MARK_FUNCTION();
 			VisitCommon(e);
 		}
 		void Visit(game::VehicleEntity& e) override {
+			SPADES_MARK_FUNCTION();
 			VisitCommon(e);
 		}
 	};
@@ -351,6 +394,8 @@ namespace spades { namespace ngclient {
 		NetworkClient& c;
 		static game::Entity *CreateEntity(game::EntityType type,
 										  game::World& w) {
+			SPADES_MARK_FUNCTION();
+			
 			game::Entity *e = nullptr;
 			switch (type) {
 				case game::EntityType::Player:
@@ -384,6 +429,8 @@ namespace spades { namespace ngclient {
 		
 		void UpdatePlayer(game::Player& p,
 						  const protocol::PlayerUpdateItem& u) {
+			SPADES_MARK_FUNCTION();
+			
 			if (u.flags) {
 				p.GetFlags() = *u.flags;
 			}
@@ -393,12 +440,14 @@ namespace spades { namespace ngclient {
 		}
 		
 		void ApplyMapEdit(const std::vector<game::MapEdit>& edits) {
+			SPADES_MARK_FUNCTION();
 			SPNotImplemented();
 		}
 		
 	public:
 		PacketVisitor(NetworkClient& c): c(c) { }
 		void visit(protocol::GreetingPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPLog("Received GreetingPacket with %d byte(s) of nonce.",
 				  (int)p.nonce.size());
 			if (c.state == State::WaitingForGreeting) {
@@ -414,9 +463,11 @@ namespace spades { namespace ngclient {
 			}
 		}
 		void visit(protocol::InitiateConnectionPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected InitiateConnectionPacket.");
 		}
 		void visit(protocol::ServerCertificatePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPLog("Received ServerCertificatePacket.");
 			if (p.isValid) {
 				SPLog("ServerCertificatePacket contains %d byte(s) of"
@@ -430,13 +481,16 @@ namespace spades { namespace ngclient {
 			c.SendClientCertificate();
 		}
 		void visit(protocol::ClientCertificatePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected ClientCertificatePacket.");
 		}
 		void visit(protocol::KickPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPLog("Received KickPacket: %s", p.reason.c_str());
 			c.Kicked(p.reason);
 		}
 		void visit(protocol::GameStateHeaderPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPLog("Received GameStateHeaderPacket.");
 			
 			// this packet might be sent during game to
@@ -462,6 +516,7 @@ namespace spades { namespace ngclient {
 			}
 		}
 		void visit(protocol::MapDataPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			if (c.state == State::LoadingMap) {
 				SPAssert(c.mapLoader);
 				c.mapLoader->Load(p.fragment.data(),
@@ -471,6 +526,7 @@ namespace spades { namespace ngclient {
 			}
 		}
 		void visit(protocol::MapDataFinalPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPLog("Received MapDataFinalPacket.");
 			if (c.state == State::LoadingMap) {
 				SPAssert(c.mapLoader);
@@ -480,9 +536,11 @@ namespace spades { namespace ngclient {
 			}
 		}
 		void visit(protocol::MapDataAcknowledgePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected MapDataAcknowledgePacket.");
 		}
 		void visit(protocol::GameStateFinalPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPLog("Received GameStateFinalPacket.");
 			SPLog("GameStateFinalPacket contains %d entity(ies).",
 				  (int)p.items.size());
@@ -525,9 +583,11 @@ namespace spades { namespace ngclient {
 			}
 		}
 		void visit(protocol::GenericCommandPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			c.HandleGenericCommand(p.parts);
 		}
 		void visit(protocol::EntityUpdatePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			if (c.state == State::Game) {
 				game::World *w = c.world;
 				SPAssert(w);
@@ -558,6 +618,7 @@ namespace spades { namespace ngclient {
 			}
 		}
 		void visit(protocol::PlayerUpdatePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			if (c.state == State::Game) {
 				game::World *w = c.world;
 				SPAssert(w);
@@ -589,6 +650,7 @@ namespace spades { namespace ngclient {
 		}
 		
 		void visit(protocol::PlayerRemovePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			if (c.state == State::Game) {
 				for (auto id: p.players) {
 					auto *e = c.world->FindPlayer(id);
@@ -604,9 +666,11 @@ namespace spades { namespace ngclient {
 			}
 		}
 		void visit(protocol::ClientSideEntityUpdatePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected ClientSideEntityUpdatePacket.");
 		}
 		void visit(protocol::TerrainUpdatePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			if (c.state == State::Game) {
 				ApplyMapEdit(p.edits);
 			} else if (c.state == State::LoadingMap ||
@@ -621,6 +685,7 @@ namespace spades { namespace ngclient {
 			}
 		}
 		void visit(protocol::EntityEventPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			if (c.state == State::Game) {
 				auto *e = c.world->FindEntity(p.entityId);
 				if (e) {
@@ -634,9 +699,11 @@ namespace spades { namespace ngclient {
 			}
 		}
 		void visit(protocol::EntityDiePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPNotImplemented();
 		}
 		void visit(protocol::EntityRemovePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			if (c.state == State::Game) {
 				auto *e = c.world->FindEntity(p.entityId);
 				if (e) {
@@ -650,15 +717,19 @@ namespace spades { namespace ngclient {
 			}
 		}
 		void visit(protocol::PlayerActionPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected PlayerActionPacket.");
 		}
 		void visit(protocol::HitEntityPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected HitEntityPacket.");
 		}
 		void visit(protocol::HitTerrainPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected HitTerrainPacket.");
 		}
 		void visit(protocol::DamagePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			if (c.state == State::Game) {
 				auto *e = c.world->FindEntity(p.entityId);
 				if (e) {
@@ -674,6 +745,7 @@ namespace spades { namespace ngclient {
 	};
 	
 	void NetworkClient::PacketReceived(protocol::Packet &p) {
+		SPADES_MARK_FUNCTION();
 		try {
 			PacketVisitor visitor(*this);
 			p.Accept(visitor);
@@ -685,6 +757,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::SendInitiateConnection(const std::string& serverNonce) {
+		SPADES_MARK_FUNCTION();
+		
 		auto re = protocol::InitiateConnectionPacket::CreateDefault();
 		re.nonce = GenerateNonce(256);
 		re.playerName = params.playerName;
@@ -696,6 +770,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::SendClientCertificate() {
+		SPADES_MARK_FUNCTION();
+		
 		// TODO: use certificate
 		protocol::ClientCertificatePacket re;
 		re.isValid = false;
@@ -705,6 +781,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::Kicked(const std::string &reason) {
+		SPADES_MARK_FUNCTION();
+		
 		state = State::NotConnected;
 		host->Disconnect();
 		for (auto *l: listeners)
@@ -712,6 +790,7 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::HandleGenericCommand(const std::vector<std::string> &parts) {
+		SPADES_MARK_FUNCTION();
 		
 		if (!parts.empty()) {
 			if (parts[0] == "local-player" &&
@@ -734,6 +813,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::SetWorld(game::World *w) {
+		SPADES_MARK_FUNCTION();
+		
 		world.Set(w, true);
 		
 		for (auto *l: listeners)
@@ -741,6 +822,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void NetworkClient::SendGenericCommand(const std::vector<std::string> &parts) {
+		SPADES_MARK_FUNCTION();
+		
 		if (host) {
 			protocol::GenericCommandPacket p;
 			p.parts = parts;

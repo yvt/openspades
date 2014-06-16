@@ -21,6 +21,7 @@
 #include "Entity.h"
 #include "World.h"
 #include <Core/Strings.h>
+#include <Core/Debug.h>
 
 namespace spades { namespace game {
 	
@@ -28,6 +29,8 @@ namespace spades { namespace game {
 	world(world),
 	type(type),
 	health(100) {
+		SPADES_MARK_FUNCTION();
+		
 		trajectory.type = TrajectoryType::Constant;
 		trajectory.origin = Vector3(0, 0, 0);
 		trajectory.angle = Quaternion(0.f, 0.f, 0.f, 1.f);
@@ -38,13 +41,20 @@ namespace spades { namespace game {
 	}
 	
 	void Entity::AddListener(EntityListener *l) {
+		SPADES_MARK_FUNCTION();
+		
+		SPAssert(l);
 		listeners.insert(l);
 	}
 	void Entity::RemoveListener(EntityListener *l) {
+		SPADES_MARK_FUNCTION();
+		
 		listeners.erase(l);
 	}
 	
 	void Entity::SetId(stmp::optional<uint32_t> entityId) {
+		SPADES_MARK_FUNCTION();
+		
 		this->entityId = entityId;
 		if (!entityId) {
 			for (auto *listener: listeners)
@@ -53,10 +63,14 @@ namespace spades { namespace game {
 	}
 	
 	void Entity::Advance(Duration dt) {
+		SPADES_MARK_FUNCTION();
+		
 		EvaluateTrajectory(dt);
 	}
 	
 	std::string Entity::GetName() {
+		SPADES_MARK_FUNCTION();
+		
 		std::string typeName = GetEntityTypeName(type);
 		return Format("#{0} {1}",
 					  entityId ? std::to_string(*entityId) : "(null)",
@@ -64,6 +78,8 @@ namespace spades { namespace game {
 	}
 	
 	void Entity::EvaluateTrajectory(Duration dt) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (trajectory.type) {
 			case TrajectoryType::Constant:
 				// nothing to do
@@ -89,15 +105,19 @@ namespace spades { namespace game {
 				SPNotImplemented();
 				break;
 			default:
-				SPAssert(false);
+				SPRaise("Unknown trajectory: %d",
+						(int)trajectory.type);
 		}
 	}
 	
 	Matrix4 Entity::GetMatrix() const {
+		SPADES_MARK_FUNCTION();
+		
 		Matrix4 m;
 		switch (trajectory.type) {
 			default:
-				SPAssert(false);
+				SPRaise("Unknown trajectory: %d",
+						(int)trajectory.type);
 			case TrajectoryType::Constant:
 			case TrajectoryType::Gravity:
 			case TrajectoryType::Linear:
@@ -116,18 +136,24 @@ namespace spades { namespace game {
 	}
 	
 	void Entity::PerformAction(EntityEventType type, uint64_t param) {
+		SPADES_MARK_FUNCTION();
+		
 		for (auto *listener: listeners)
 			listener->ActionPerformed(*this, type, param);
 		EventTriggered(type, param);
 	}
 	
 	void Entity::EventTriggered(EntityEventType type, uint64_t param) {
+		SPADES_MARK_FUNCTION();
+		
 		SPLog("Unsupported event {0} (param = {1}) for entity {2}",
 			  GetEntityEventTypeName(type).c_str(), param, GetName().c_str());
 	}
 	
 	void Entity::InflictDamage(const DamageInfo& info,
 							   int amount) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(info.toEntity == *entityId);
 		
 		for (auto *listener: listeners)
@@ -137,6 +163,8 @@ namespace spades { namespace game {
 	
 	void Entity::Damaged(const DamageInfo& info,
 						 int amount) {
+		SPADES_MARK_FUNCTION();
+		
 		health = std::max(0, health - amount);
 	}
 	

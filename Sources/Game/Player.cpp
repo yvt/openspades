@@ -29,14 +29,19 @@ namespace spades { namespace game {
 				   const std::string& name):
 	world(world),
 	name(name) {
+		SPADES_MARK_FUNCTION();
+		
 		flags.isAdmin = false;
 	}
 	
 	Player::~Player() {
-		
+		SPADES_MARK_FUNCTION();
 	}
 	
 	void Player::AddListener(PlayerListener *l) {
+		SPADES_MARK_FUNCTION();
+		
+		SPAssert(l);
 		listeners.insert(l);
 	}
 	
@@ -45,6 +50,8 @@ namespace spades { namespace game {
 	}
 	
 	void Player::SetId(stmp::optional<uint32_t> id) {
+		SPADES_MARK_FUNCTION();
+		
 		if (playerId && id) {
 			// reassignment is not allowed
 			SPAssert(false);
@@ -66,6 +73,8 @@ namespace spades { namespace game {
 	}
 	
 	PlayerEntity *Player::GetEntity() {
+		SPADES_MARK_FUNCTION();
+		
 		auto *e = world.FindEntity(*playerId);
 		if (!e) return nullptr;
 		auto *pe = dynamic_cast<PlayerEntity *>(e);
@@ -74,6 +83,8 @@ namespace spades { namespace game {
 	}
 	
 	void Player::Spawn() {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(GetWorld().IsLocalHostServer());
 		
 		if (GetEntity()) {

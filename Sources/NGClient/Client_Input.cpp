@@ -24,6 +24,8 @@
 namespace spades { namespace ngclient {
 	
 	void Client::MouseEvent(float x, float y) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (GetInputRoute()) {
 			case InputRoute::None:
 				return;
@@ -36,6 +38,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void Client::KeyEvent(const std::string &key, bool down) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (GetInputRoute()) {
 			case InputRoute::None:
 				return;
@@ -48,6 +52,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void Client::TextInputEvent(const std::string &key) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (GetInputRoute()) {
 			case InputRoute::None:
 				return;
@@ -61,6 +67,8 @@ namespace spades { namespace ngclient {
 	
 	void Client::TextEditingEvent(const std::string &key,
 								  int start, int len) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (GetInputRoute()) {
 			case InputRoute::None:
 				return;
@@ -73,6 +81,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	bool Client::AcceptsTextInput() {
+		SPADES_MARK_FUNCTION();
+		
 		switch (GetInputRoute()) {
 			case InputRoute::None:
 				return false;
@@ -84,6 +94,8 @@ namespace spades { namespace ngclient {
 		return false;
 	}
 	AABB2 Client::GetTextInputRect() {
+		SPADES_MARK_FUNCTION();
+		
 		switch (GetInputRoute()) {
 			case InputRoute::None:
 				return AABB2();
@@ -96,6 +108,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	bool Client::NeedsAbsoluteMouseCoordinate() {
+		SPADES_MARK_FUNCTION();
+		
 		switch (GetInputRoute()) {
 			case InputRoute::None:
 				return true;
@@ -108,6 +122,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void Client::WheelEvent(float x, float y) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (GetInputRoute()) {
 			case InputRoute::None:
 				return;

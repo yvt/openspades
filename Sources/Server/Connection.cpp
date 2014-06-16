@@ -36,6 +36,8 @@ namespace spades { namespace server {
 	namespace {
 		std::random_device randomDevice;
 		std::string GenerateNonce(std::size_t len) {
+			SPADES_MARK_FUNCTION();
+			
 			std::string s;
 			s.resize(len);
 			
@@ -63,6 +65,8 @@ namespace spades { namespace server {
 		}
 		
 		void Push(Block&& block) {
+			SPADES_MARK_FUNCTION();
+			
 			while (true) {
 				std::size_t queueLen;
 				{
@@ -89,10 +93,13 @@ namespace spades { namespace server {
 		public:
 			Stream(MapGenerator& gen): gen(gen) { }
 			void WriteByte(int b) override {
+				SPADES_MARK_FUNCTION_DEBUG();
+				
 				auto c = static_cast<uint8_t>(b);
 				Write(&c, 1);
 			}
 			void Write(const void *d, size_t bytes) override {
+				SPADES_MARK_FUNCTION();
 				
 				Block block;
 				block.resize(bytes);
@@ -110,6 +117,7 @@ namespace spades { namespace server {
 		int quality;
 		
 		void Run() override {
+			SPADES_MARK_FUNCTION();
 			try {
 				Stream outputStream(*this);
 				{
@@ -130,21 +138,28 @@ namespace spades { namespace server {
 		// copy-on-write copy
 		map(new client::GameMap(map), false),
 		quality(quality) {
+			SPADES_MARK_FUNCTION();
 		}
 		
 		using Thread::MarkForAutoDeletion;
 		
 		void Start() {
+			SPADES_MARK_FUNCTION();
+			
 			Thread::Start();
 		}
 		
 		void Abort() {
+			SPADES_MARK_FUNCTION();
+			
 			AutoLocker lock(&blocksMutex);
 			shouldAbort = true;
 		}
 		
 		bool SendAvailableBlock(Connection& c)
 		{
+			SPADES_MARK_FUNCTION();
+			
 			AutoLocker lock(&blocksMutex);
 			std::array<char, 4096> fragment;
 			if (queuedBytes - frontBlockPos >= fragment.size() ||
@@ -196,6 +211,8 @@ namespace spades { namespace server {
 	}
 	
 	void Connection::Initialize(HostPeer *peer) {
+		SPADES_MARK_FUNCTION();
+		
 		// TODO: do something
 		
 		peer->SetListener(static_cast<HostPeerListener *>(this));
@@ -218,6 +235,8 @@ namespace spades { namespace server {
 	}
 	
 	Connection::~Connection() {
+		SPADES_MARK_FUNCTION();
+		
 		if (mapGenerator) {
 			mapGenerator->Abort();
 			mapGenerator->MarkForAutoDeletion();
@@ -231,12 +250,16 @@ namespace spades { namespace server {
 	}
 	
 	void Connection::OnWorldChanged() {
+		SPADES_MARK_FUNCTION();
+		
 		if (!peer) return;
 		player.Set(nullptr);
 		StartStateTransfer();
 	}
 	
 	void Connection::Update(double dt) {
+		SPADES_MARK_FUNCTION();
+		
 		if (!peer) return;
 		
 		if (state == State::MapTransfer) {
@@ -278,6 +301,8 @@ namespace spades { namespace server {
 	}
 	
 	void Connection::Disconnected() {
+		SPADES_MARK_FUNCTION();
+		
 		peer = nullptr;
 		// HostPeer will release the reference to this
 		// instance after calling this function.
@@ -290,9 +315,11 @@ namespace spades { namespace server {
 		
 		PacketVisitor(Connection& c): c(c) { }
 		void visit(const protocol::GreetingPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected GreetingPacket.");
 		}
 		void visit(const protocol::InitiateConnectionPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPLog("%s [InitiateConnectionPacket]",
 				  c.peer->GetLogHeader().c_str());
 			if (c.state == State::NotInitiated) {
@@ -337,6 +364,7 @@ namespace spades { namespace server {
 			}
 		}
 		void visit(const protocol::ServerCertificatePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected ServerCertificatePacket.");
 		}
 		void visit(const protocol::ClientCertificatePacket& p) override {
@@ -359,18 +387,23 @@ namespace spades { namespace server {
 			}
 		}
 		void visit(const protocol::KickPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected KickPacket.");
 		}
 		void visit(const protocol::GameStateHeaderPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected GameStateHeaderPacket.");
 		}
 		void visit(const protocol::MapDataPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected MapDataPacket.");
 		}
 		void visit(const protocol::MapDataFinalPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected MapDataFinalPacket.");
 		}
 		void visit(const protocol::MapDataAcknowledgePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPLog("%s [MapDataAcknowledgePacket]",
 				  c.peer->GetLogHeader().c_str());
 			if (c.state == State::CompletingMapTransfer) {
@@ -380,51 +413,67 @@ namespace spades { namespace server {
 			}
 		}
 		void visit(const protocol::GameStateFinalPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected GameStateFinalPacket.");
 		}
 		void visit(const protocol::GenericCommandPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			c.HandleGenericCommand(p.parts);
 		}
 		void visit(const protocol::EntityUpdatePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected EntityUpdatePacket.");
 		}
 		void visit(const protocol::PlayerUpdatePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected PlayerUpdatePacket.");
 		}
 		void visit(const protocol::PlayerRemovePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected PlayerRemovePacket.");
 		}
 		void visit(const protocol::ClientSideEntityUpdatePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPNotImplemented();
 		}
 		void visit(const protocol::TerrainUpdatePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected TerrainUpdatePacket.");
 		}
 		void visit(const protocol::EntityEventPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected EntityEventPacket.");
 		}
 		void visit(const protocol::EntityDiePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPNotImplemented();
 		}
 		void visit(const protocol::EntityRemovePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected EntityRemovePacket.");
 		}
 		void visit(const protocol::PlayerActionPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPNotImplemented();
 		}
 		void visit(const protocol::HitEntityPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPNotImplemented();
 		}
 		void visit(const protocol::HitTerrainPacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPNotImplemented();
 		}
 		void visit(const protocol::DamagePacket& p) override {
+			SPADES_MARK_FUNCTION();
 			SPRaise("Unexpected DamagePacket.");
 		}
 		
 	};
 	
 	void Connection::PacketReceived(const protocol::Packet &packet) {
+		SPADES_MARK_FUNCTION();
+		
 		if (!peer) return;
 		
 		try {
@@ -440,6 +489,8 @@ namespace spades { namespace server {
 	}
 	
 	void Connection::SendServerCertificate() {
+		SPADES_MARK_FUNCTION();
+		
 		protocol::ServerCertificatePacket re;
 		// TOOD: server certificate
 		re.isValid = false;
@@ -453,6 +504,8 @@ namespace spades { namespace server {
 	}
 	
 	void Connection::StartStateTransfer() {
+		SPADES_MARK_FUNCTION();
+		
 		if (!peer) return;
 		
 		state = State::MapTransfer;
@@ -478,6 +531,8 @@ namespace spades { namespace server {
 	}
 	
 	void Connection::FinalStateTransfer() {
+		SPADES_MARK_FUNCTION();
+		
 		if (!peer) return;
 		
 		protocol::GameStateFinalPacket re;
@@ -497,6 +552,8 @@ namespace spades { namespace server {
 	}
 	
 	void Connection::Join() {
+		SPADES_MARK_FUNCTION();
+		
 		if (player) {
 			return;
 		}
@@ -513,6 +570,8 @@ namespace spades { namespace server {
 	}
 	
 	void Connection::Leave() {
+		SPADES_MARK_FUNCTION();
+		
 		if (!player) {
 			return;
 		}
@@ -523,6 +582,7 @@ namespace spades { namespace server {
 	}
 	
 	void Connection::HandleGenericCommand(const std::vector<std::string> &parts) {
+		SPADES_MARK_FUNCTION();
 		
 		if (parts.size() >= 1) {
 			if (parts[0] == "join" && state == State::Game) {

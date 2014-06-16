@@ -23,6 +23,8 @@
 namespace spades { namespace game {
 	CommandPostEntity::CommandPostEntity(World& world):
 	Entity(world, EntityType::CommandPost) {
+		SPADES_MARK_FUNCTION();
+		
 		GetTrajectory().type = TrajectoryType::Constant;
 	}
 	CommandPostEntity::~CommandPostEntity() {

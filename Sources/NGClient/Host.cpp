@@ -21,6 +21,7 @@
 #include "Host.h"
 #include <Core/Settings.h>
 #include <thread>
+#include <Core/Debug.h>
 
 SPADES_SETTING(cl_bandwidth, "0");
 
@@ -35,6 +36,7 @@ namespace spades { namespace ngclient {
 		AntiTimeoutTimer(Host& host): host(host) { }
 		void Run() override {
 			SPADES_MARK_FUNCTION();
+			
 			while (!stopNow) {
 				{
 					AutoLocker lock(&host.mutex);
@@ -47,6 +49,8 @@ namespace spades { namespace ngclient {
 		}
 		
 		void Stop() {
+			SPADES_MARK_FUNCTION();
+			
 			stopNow = true;
 			Join();
 		}
@@ -91,6 +95,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void Host::DoEvents() {
+		SPADES_MARK_FUNCTION();
+		
 		{
 			AutoLocker lock(&mutex);
 			antiTimeoutStopwatch.Reset();
@@ -113,6 +119,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void Host::Service() {
+		SPADES_MARK_FUNCTION();
+		
 		AutoLocker lock(&mutex);
 		
 		if(!host) return;
@@ -144,16 +152,22 @@ namespace spades { namespace ngclient {
 	}
 	
 	void Host::HandleConnect() {
+		SPADES_MARK_FUNCTION();
+		
 		for (auto *l: listeners)
 			l->ConnectedToServer();
 	}
 	
 	void Host::HandleDisconnect(protocol::DisconnectReason reason) {
+		SPADES_MARK_FUNCTION();
+		
 		for (auto *l: listeners)
 			l->DisconnectedFromServer(reason);
 	}
 	
 	void Host::HandlePacket(protocol::Packet &p) {
+		SPADES_MARK_FUNCTION();
+		
 		for (auto *l: listeners)
 			l->PacketReceived(p);
 	}
@@ -175,6 +189,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void Host::Disconnect() {
+		SPADES_MARK_FUNCTION();
+		
 		TearDown();
 	}
 	

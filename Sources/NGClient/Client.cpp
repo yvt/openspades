@@ -29,6 +29,8 @@
 
 #include <Client/Fonts.h>
 
+#include <Core/Debug.h>
+
 SPADES_SETTING(cg_playerName, "");
 
 namespace spades { namespace ngclient {
@@ -39,6 +41,8 @@ namespace spades { namespace ngclient {
 	renderer(renderer),
 	audio(audio),
 	params(params) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(renderer);
 		SPAssert(audio);
 		
@@ -71,6 +75,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	Client::~Client() {
+		SPADES_MARK_FUNCTION();
+		
 		if(arena)
 		   arena->UnsetupRenderer();
 		arena.Set(nullptr);
@@ -78,6 +84,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void Client::RunFrame(float dt) {
+		SPADES_MARK_FUNCTION();
+		
 		if (net) {
 			net->Update();
 		}
@@ -97,6 +105,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void Client::Closing() {
+		SPADES_MARK_FUNCTION();
+		
 		arena.Set(nullptr);
 	}
 	
@@ -111,6 +121,8 @@ namespace spades { namespace ngclient {
 #pragma mark - NetworkClientListener
 	
 	void Client::WorldChanged(game::World *w) {
+		SPADES_MARK_FUNCTION();
+		
 		if (w) {
 			arena.Set(new Arena(this, w), false);
 			arena->SetupRenderer();
@@ -122,6 +134,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	void Client::Disconnected(const std::string &reason) {
+		SPADES_MARK_FUNCTION();
+		
 		SPLog("Disconnected: %s", reason.c_str());
 		arena.Set(nullptr);
 	}

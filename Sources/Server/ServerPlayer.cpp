@@ -33,10 +33,13 @@ namespace spades { namespace server {
 	}
 	
 	void ServerPlayer::Update(double) {
+		SPADES_MARK_FUNCTION();
 		// maybe nothing to do here...
 	}
 	
 	void ServerPlayer::SaveForDeltaEncoding() {
+		SPADES_MARK_FUNCTION();
+		
 		lastState = Serialize();
 	}
 	
@@ -55,6 +58,8 @@ namespace spades { namespace server {
 	
 	stmp::optional<protocol::PlayerUpdateItem>
 	ServerPlayer::DeltaSerialize() {
+		SPADES_MARK_FUNCTION();
+		
 		auto current = Serialize();
 		protocol::PlayerUpdateItem ret;
 		ret.playerId = current.playerId;
@@ -74,6 +79,8 @@ namespace spades { namespace server {
 	
 	protocol::PlayerUpdateItem
 	ServerPlayer::Serialize() {
+		SPADES_MARK_FUNCTION();
+		
 		protocol::PlayerUpdateItem r;
 		r.playerId = *player.GetId();
 		r.name = player.GetName();

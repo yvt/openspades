@@ -21,12 +21,15 @@
 #include "PlayerEntity.h"
 #include <Core/Strings.h>
 #include "World.h"
+#include <Core/Debug.h>
 
 namespace spades { namespace game {
 	PlayerEntity::PlayerEntity(World& world):
 	Entity(world, EntityType::Player),
 	tool(ToolSlot::Weapon1),
 	blockColor(192, 192, 192) {
+		SPADES_MARK_FUNCTION();
+		
 		GetTrajectory().type = TrajectoryType::Player;
 	}
 	PlayerEntity::~PlayerEntity() {
@@ -34,6 +37,9 @@ namespace spades { namespace game {
 	}
 	
 	void PlayerEntity::AddListener(PlayerEntityListener *l) {
+		SPADES_MARK_FUNCTION();
+		
+		SPAssert(l);
 		listeners.insert(l);
 	}
 	void PlayerEntity::RemoveListener(PlayerEntityListener *l) {
@@ -45,6 +51,8 @@ namespace spades { namespace game {
 	}
 	
 	float PlayerEntity::GetHeight(PlayerStance stance) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (stance) {
 			case PlayerStance::Standing: return 2.72f;
 			case PlayerStance::Crouch: return 1.72f;
@@ -59,6 +67,8 @@ namespace spades { namespace game {
 	}
 	
 	std::string PlayerEntity::GetName() {
+		SPADES_MARK_FUNCTION();
+		
 		// TODO: PlayerEntity::GetName
 		return Format("{0} \"{1}\"", Entity::GetName(), "[player name here]");
 	}
@@ -76,6 +86,8 @@ namespace spades { namespace game {
 	}
 	
 	void PlayerEntity::UpdatePlayerInput(const PlayerInput& input) {
+		SPADES_MARK_FUNCTION();
+		
 		SetPlayerInput(input);
 		FixInput(playerInput);
 		for (auto *listener: listeners) listener->PlayerInputUpdated(*this);
@@ -108,6 +120,8 @@ namespace spades { namespace game {
 	}
 	
 	bool PlayerEntity::FixInput(PlayerInput& inp) {
+		SPADES_MARK_FUNCTION_DEBUG();
+		
 		bool fixed = false;
 		if (inp.sprint && (inp.toolSecondary || inp.toolPrimary)) {
 			// no tool can be used while sprinting
@@ -126,6 +140,8 @@ namespace spades { namespace game {
 	}
 	
 	void PlayerEntity::EvaluateTrajectory(Duration dt) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(GetTrajectory().type == TrajectoryType::Player);
 		
 		if (FixInput(playerInput)) {
@@ -140,6 +156,8 @@ namespace spades { namespace game {
 	}
 	
 	void PlayerEntity::WalkMove(Duration dt) {
+		SPADES_MARK_FUNCTION();
+		
 		const auto& inp = playerInput;
 		auto& traj = GetTrajectory();
 		
@@ -229,6 +247,8 @@ namespace spades { namespace game {
 	}
 	
 	void PlayerEntity::BoxClipMove(Duration dt) {
+		SPADES_MARK_FUNCTION();
+		
 		auto& traj = GetTrajectory();
 		auto& pos = traj.origin;
 		auto& vel = traj.velocity;
@@ -342,10 +362,14 @@ namespace spades { namespace game {
 	}
 	
 	void PlayerEntity::FlyMove(Duration dt) {
+		SPADES_MARK_FUNCTION();
+		
 		SPNotImplemented();
 	}
 	
 	void PlayerEntity::EventTriggered(EntityEventType type, uint64_t param) {
+		SPADES_MARK_FUNCTION();
+		
 		if (type == EntityEventType::Jump) {
 			for (auto *listener: listeners) listener->Jumped(*this);
 			if (IsOnGroundOrWade()) {

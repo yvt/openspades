@@ -25,6 +25,7 @@
 #include <Core/VersionInfo.h>
 #include <OpenSpades.h>
 #include <Core//Settings.h>
+#include <Core/Debug.h>
 
 SPADES_SETTING(core_locale, "");
 
@@ -270,6 +271,8 @@ namespace spades { namespace protocol {
 	}
 	
 	static Trajectory DecodeTrajectory(PacketReader& reader) {
+		SPADES_MARK_FUNCTION();
+		
 		Trajectory traj;
 		auto type = reader.ReadByte();
 		traj.type = static_cast<TrajectoryType>(type & 0x7f);
@@ -301,6 +304,8 @@ namespace spades { namespace protocol {
 	}
 	
 	static void WriteTrajectory(PacketWriter& writer, const Trajectory& traj) {
+		SPADES_MARK_FUNCTION();
+		
 		auto type = static_cast<uint8_t>(traj.type);
 		if(traj.parentEntityId) {
 			type |= 0x80;
@@ -352,6 +357,8 @@ namespace spades { namespace protocol {
 	}
 	
 	static PlayerInput DecodePlayerInput(PacketReader& reader) {
+		SPADES_MARK_FUNCTION();
+		
 		PlayerInput inp;
 		auto flags = static_cast<PlayerInputFlags>(reader.ReadByte());
 		inp.toolPrimary = flags & PlayerInputFlags::ToolPrimary;
@@ -365,6 +372,8 @@ namespace spades { namespace protocol {
 	}
 	
 	static void WritePlayerInput(PacketWriter& writer, const PlayerInput& input) {
+		SPADES_MARK_FUNCTION();
+		
 		auto flags = PlayerInputFlags::None;
 		if(input.toolPrimary) flags |= PlayerInputFlags::ToolPrimary;
 		if(input.toolSecondary) flags |= PlayerInputFlags::ToolSecondary;
@@ -377,6 +386,8 @@ namespace spades { namespace protocol {
 	}
 	
 	static EntityUpdateItem DecodeEntityUpdateItem(PacketReader& reader) {
+		SPADES_MARK_FUNCTION();
+		
 		EntityUpdateItem item;
 		item.entityId = static_cast<uint32_t>(reader.ReadVariableInteger());
 		
@@ -424,6 +435,8 @@ namespace spades { namespace protocol {
 	}
 	
 	static void WriteEntityUpdateItem(PacketWriter& writer, const EntityUpdateItem& item) {
+		SPADES_MARK_FUNCTION();
+		
 		writer.WriteVariableInteger(item.entityId);
 		
 		auto flags = EntityUpdateFlags::None;
@@ -544,6 +557,8 @@ namespace spades { namespace protocol {
 	
 	
 	static PlayerUpdateItem DecodePlayerUpdateItem(PacketReader& reader) {
+		SPADES_MARK_FUNCTION();
+		
 		PlayerUpdateItem item;
 		item.playerId = static_cast<uint32_t>(reader.ReadVariableInteger());
 		
@@ -567,6 +582,8 @@ namespace spades { namespace protocol {
 	}
 	
 	static void WritePlayerUpdateItem(PacketWriter& writer, const PlayerUpdateItem& item) {
+		SPADES_MARK_FUNCTION();
+		
 		writer.WriteVariableInteger(item.playerId);
 		
 		auto flags = PlayerUpdateFlags::None;

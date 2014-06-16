@@ -29,6 +29,7 @@
 #include <unordered_set>
 #include <Core/Strings.h>
 #include "Player.h"
+#include <Core/Debug.h>
 
 namespace spades { namespace game {
 	
@@ -38,6 +39,8 @@ namespace spades { namespace game {
 	fatalFallDamageVelocity(1.f) { }
 	
 	std::map<std::string, std::string> WorldParameters::Serialize() const {
+		SPADES_MARK_FUNCTION();
+		
 		std::map<std::string, std::string> ret;
 		ret["player-jump-vel"] = ToString(playerJumpVelocity);
 		ret["fall-damage-vel"] = ToString(fallDamageVelocity);
@@ -46,6 +49,8 @@ namespace spades { namespace game {
 	}
 	
 	void WorldParameters::Update(const std::string &key, const std::string &value) {
+		SPADES_MARK_FUNCTION();
+		
 		if (key == "player-jump-vel") {
 			playerJumpVelocity = std::stof(value);
 		} else if (key == "fall-damage-vel") {
@@ -62,6 +67,7 @@ namespace spades { namespace game {
 				 client::GameMap *map):
 	currentTime(0),
 	params(params) {
+		SPADES_MARK_FUNCTION();
 		
 		SPAssert(map);
 		gameMap.Set(map, true);
@@ -70,14 +76,20 @@ namespace spades { namespace game {
 	}
 	
 	World::~World() {
+		SPADES_MARK_FUNCTION();
+		
 		gameMapWrapper.release();
 	}
 	
 	void World::AddListener(WorldListener *l) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(l);
 		listeners.insert(l);
 	}
 	void World::RemoveListener(WorldListener *l) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(l);
 		listeners.erase(l);
 	}
@@ -97,6 +109,8 @@ namespace spades { namespace game {
 	
 	void World::LinkEntity(Entity *e,
 						   stmp::optional<uint32_t> entityId) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(e);
 		if (e->GetId()) {
 			SPRaise("Entity is already linked to the world.");
@@ -138,6 +152,8 @@ namespace spades { namespace game {
 	}
 	
 	void World::UnlinkEntity(Entity *e) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(e);
 		if (!e->GetId()) {
 			SPRaise("Entity is not linked to the world.");
@@ -166,6 +182,8 @@ namespace spades { namespace game {
 	
 	void World::CreatePlayer(Player *p,
 							 stmp::optional<uint32_t> pId) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(p);
 		if (p->GetId()) {
 			SPRaise("Player is already added to the world.");
@@ -205,6 +223,8 @@ namespace spades { namespace game {
 	}
 	
 	void World::RemovePlayer(Player *p) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(p);
 		if (!p->GetId()) {
 			SPRaise("Player is not linked to the world.");
@@ -227,6 +247,8 @@ namespace spades { namespace game {
 	}
 	
 	void World::Advance(Duration dt) {
+		SPADES_MARK_FUNCTION();
+		
 		//SPNotImplemented();
 		currentTime += dt;
 	}
@@ -253,6 +275,8 @@ namespace spades { namespace game {
 	}
 	
 	PlayerEntity *World::GetLocalPlayerEntity() {
+		SPADES_MARK_FUNCTION();
+		
 		auto id = GetLocalPlayerId();
 		if (!id) return nullptr;
 		
@@ -273,6 +297,8 @@ namespace spades { namespace game {
 	}
 	
 	void World::CreateBlock(const spades::IntVector3& pos, uint32_t color) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(IsLocalHostServer());
 		SPAssert(IsValidMapCoord(pos));
 		
@@ -289,6 +315,8 @@ namespace spades { namespace game {
 	}
 	
 	void World::DestroyBlock(const spades::IntVector3 &pos) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(IsLocalHostServer());
 		SPAssert(IsValidMapCoord(pos));
 		
@@ -378,6 +406,8 @@ namespace spades { namespace game {
 
 	
 	void World::FlushMapEdits() {
+		SPADES_MARK_FUNCTION();
+		
 		// ReceivedMapEdits, which is called by client, uses
 		// this function, so don't assert IsLocalHostServer().
 		using namespace client;
@@ -454,6 +484,8 @@ namespace spades { namespace game {
 	}
 	
 	void World::ReceivedMapEdits(const std::vector<MapEdit> &edits) {
+		SPADES_MARK_FUNCTION();
+		
 		for (const auto& edit: edits) {
 			SPAssert(IsValidMapCoord(edit.position));
 			mapEdits[edit.position] = edit;

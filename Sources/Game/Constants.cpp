@@ -20,10 +20,13 @@
 
 #include "Constants.h"
 #include <Core/Strings.h>
+#include <Core/Debug.h>
 
 namespace spades { namespace game {
 	
 	std::string GetEntityTypeName(EntityType t) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (t) {
 			case EntityType::Player:
 				return "Player";
@@ -45,6 +48,8 @@ namespace spades { namespace game {
 	}
 	
 	std::string GetEntityEventTypeName(EntityEventType t) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (t) {
 			case EntityEventType::Jump:
 				return "Jump";
@@ -60,6 +65,8 @@ namespace spades { namespace game {
 	}
 	
 	std::string GetEntityDeathTypeName(EntityDeathType t) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (t) {
 			case EntityDeathType::Unspecified:
 				return "Unspecified";
@@ -73,6 +80,8 @@ namespace spades { namespace game {
 	}
 	
 	std::string GetBlockCreateTypeName(BlockCreateType t) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (t) {
 			case BlockCreateType::Unspecified:
 				return "Unspecified";
@@ -84,6 +93,8 @@ namespace spades { namespace game {
 	}
 	
 	std::string GetBlockDestroyTypeName(BlockDestroyType t) {
+		SPADES_MARK_FUNCTION();
+		
 		switch (t) {
 			case BlockDestroyType::Unspecified:
 				return "Unspecified";

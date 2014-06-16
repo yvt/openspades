@@ -125,6 +125,8 @@ namespace spades { namespace server {
 	}
 	
 	void Host::Broadcast(const protocol::Packet &packet) {
+		SPADES_MARK_FUNCTION();
+		
 		auto data = packet.Generate();
 		auto *p = enet_packet_create(data.data(), data.size(),
 									 ENET_PACKET_FLAG_RELIABLE);
@@ -258,12 +260,16 @@ namespace spades { namespace server {
 	host(host),
 	enetPeer(enetPeer),
 	disconnectNotified(false) {
+		SPADES_MARK_FUNCTION();
+		
 		char buf[24];
 		sprintf(buf, "[Client#%8u]", uniqueId);
 		logHeader = buf;
 	}
 	
 	HostPeer::~HostPeer(){
+		SPADES_MARK_FUNCTION();
+		
 		OnDisconnected();
 	}
 	
@@ -272,6 +278,8 @@ namespace spades { namespace server {
 	}
 	
 	void HostPeer::Send(const protocol::Packet &packet) {
+		SPADES_MARK_FUNCTION();
+		
 		auto data = packet.Generate();
 		auto *p = enet_packet_create(data.data(), data.size(),
 								     ENET_PACKET_FLAG_RELIABLE);
@@ -279,10 +287,12 @@ namespace spades { namespace server {
 	}
 	
 	int HostPeer::GetPendingBytes() {
-		return 0; // TODO: GetPendingBytes
+		return 0; // TODO: GetPendingBytes (requires latest ENet)
 	}
 	
 	void HostPeer::Disconnect(protocol::DisconnectReason reason) {
+		SPADES_MARK_FUNCTION();
+		
 		if (reason == protocol::DisconnectReason::Misc) {
 			enet_peer_disconnect_later(enetPeer, static_cast<uint32_t>(reason));
 		} else {
@@ -291,6 +301,8 @@ namespace spades { namespace server {
 	}
 	
 	void HostPeer::OnDisconnected() {
+		SPADES_MARK_FUNCTION();
+		
 		if(!disconnectNotified) {
 			auto listener = this->listener;
 			if(listener) listener->Disconnected();
@@ -299,6 +311,8 @@ namespace spades { namespace server {
 	}
 	
 	void HostPeer::OnReceived(const protocol::Packet &packet) {
+		SPADES_MARK_FUNCTION();
+		
 		auto listener = this->listener;
 		if(listener) listener->PacketReceived(packet);
 	}

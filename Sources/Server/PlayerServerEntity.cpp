@@ -35,6 +35,8 @@ namespace spades { namespace server {
 	
 	protocol::EntityUpdateItem
 	PlayerServerEntity::Serialize() {
+		SPADES_MARK_FUNCTION();
+		
 		protocol::EntityUpdateItem r =
 		ServerEntity::Serialize();
 		r.playerInput = entity.GetPlayerInput();

@@ -23,6 +23,8 @@
 namespace spades { namespace game {
 	VehicleEntity::VehicleEntity(World& world):
 	Entity(world, EntityType::Vehicle) {
+		SPADES_MARK_FUNCTION();
+		
 		GetTrajectory().type = TrajectoryType::RigidBody;
 	}
 	VehicleEntity::~VehicleEntity() {

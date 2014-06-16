@@ -23,6 +23,8 @@
 namespace spades { namespace game {
 	CheckpointEntity::CheckpointEntity(World& world):
 	Entity(world, EntityType::Checkpoint) {
+		SPADES_MARK_FUNCTION();
+		
 		GetTrajectory().type = TrajectoryType::Constant;
 	}
 	CheckpointEntity::~CheckpointEntity() {

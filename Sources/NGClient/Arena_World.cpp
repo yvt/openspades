@@ -93,6 +93,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	LocalEntity *Arena::GetLocalEntityForEntity(game::Entity*e) {
+		SPADES_MARK_FUNCTION();
+		
 		if (!e) return nullptr;
 		auto it = entityToLocalEntity.find(e);
 		if (it == entityToLocalEntity.end())
@@ -101,6 +103,8 @@ namespace spades { namespace ngclient {
 	}
 	
 	PlayerLocalEntity *Arena::GetLocalPlayerLocalEntity() {
+		SPADES_MARK_FUNCTION();
+		
 		if (!world) return nullptr;
 		auto *e = world->GetLocalPlayerEntity();
 		if (!e) return nullptr;

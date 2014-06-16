@@ -60,12 +60,16 @@ namespace spades { namespace ngclient {
 	}
 	
 	client::SceneDefinition Arena::CreateSceneDefinition() {
+		SPADES_MARK_FUNCTION();
+		
 		return GetCamera().CreateSceneDefinition(*renderer);
 	}
 	
 	
 	client::SceneDefinition Arena::DefaultCamera::CreateSceneDefinition
 	(client::IRenderer& renderer) {
+		SPADES_MARK_FUNCTION();
+		
 		client::SceneDefinition def;
 		
 		float sw = renderer.ScreenWidth();

@@ -23,6 +23,8 @@
 namespace spades { namespace game {
 	FlagEntity::FlagEntity(World& world):
 	Entity(world, EntityType::Flag) {
+		SPADES_MARK_FUNCTION();
+		
 		GetTrajectory().type = TrajectoryType::Constant;
 	}
 	FlagEntity::~FlagEntity() {

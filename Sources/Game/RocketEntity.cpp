@@ -23,6 +23,8 @@
 namespace spades { namespace game {
 	RocketEntity::RocketEntity(World& world):
 	Entity(world, EntityType::Rocket) {
+		SPADES_MARK_FUNCTION();
+		
 		GetTrajectory().type = TrajectoryType::Linear;
 	}
 	RocketEntity::~RocketEntity() {

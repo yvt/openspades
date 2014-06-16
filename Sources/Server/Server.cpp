@@ -36,6 +36,8 @@
 namespace spades { namespace server {
 	
 	Server::Server() {
+		SPADES_MARK_FUNCTION();
+		
 		SPLog("Server starting.");
 		host.reset(new Host(this));
 		
@@ -50,18 +52,24 @@ namespace spades { namespace server {
 	}
 	
 	Server::~Server() {
+		SPADES_MARK_FUNCTION();
+		
 		SPLog("Server closing.");
 		host->TearDown();
 		host.reset();
 	}
 	
 	void Server::ClientConnected(HostPeer *peer) {
+		SPADES_MARK_FUNCTION();
+		
 		Handle<Connection> conn(new Connection(this), false);
 		conn->Initialize(peer);
 		connections.insert(&*conn);
 	}
 	
 	void Server::SetWorld(game::World *world) {
+		SPADES_MARK_FUNCTION();
+		
 		if (this->world) {
 			this->world->RemoveListener(this);
 		}
@@ -78,6 +86,8 @@ namespace spades { namespace server {
 	}
 	
 	void Server::Update(double dt) {
+		SPADES_MARK_FUNCTION();
+		
 		// network event handling
 		host->DoEvents();
 		
@@ -124,6 +134,8 @@ namespace spades { namespace server {
 	}
 	
 	void Server::AddServerEntity(ServerEntity *e) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(e);
 		SPAssert(&e->GetServer() == this);
 		serverEntities.emplace_front(e);
@@ -138,6 +150,8 @@ namespace spades { namespace server {
 	
 	
 	void Server::AddServerPlayer(ServerPlayer *e) {
+		SPADES_MARK_FUNCTION();
+		
 		SPAssert(e);
 		SPAssert(&e->GetServer() == this);
 		serverPlayers.emplace_front(e);
@@ -153,29 +167,38 @@ namespace spades { namespace server {
 	
 #pragma mark - WorldListener
 	void Server::EntityLinked(game::World &, game::Entity *e) {
+		SPADES_MARK_FUNCTION();
+		
 		struct Factory: public game::EntityVisitor {
 			Server& server;
 			Factory(Server& server): server(server) { }
 			
 			void Visit(game::PlayerEntity& e) override {
+				SPADES_MARK_FUNCTION();
 				server.AddServerEntity(new PlayerServerEntity(e, server));
 			}
 			void Visit(game::GrenadeEntity& e) override {
+				SPADES_MARK_FUNCTION();
 				server.AddServerEntity(new ServerEntity(e, server));
 			}
 			void Visit(game::RocketEntity& e) override {
+				SPADES_MARK_FUNCTION();
 				server.AddServerEntity(new ServerEntity(e, server));
 			}
 			void Visit(game::CommandPostEntity& e) override {
+				SPADES_MARK_FUNCTION();
 				server.AddServerEntity(new ServerEntity(e, server));
 			}
 			void Visit(game::FlagEntity& e) override {
+				SPADES_MARK_FUNCTION();
 				server.AddServerEntity(new ServerEntity(e, server));
 			}
 			void Visit(game::CheckpointEntity& e) override {
+				SPADES_MARK_FUNCTION();
 				server.AddServerEntity(new ServerEntity(e, server));
 			}
 			void Visit(game::VehicleEntity& e) override {
+				SPADES_MARK_FUNCTION();
 				server.AddServerEntity(new ServerEntity(e, server));
 			}
 		};
@@ -184,6 +207,8 @@ namespace spades { namespace server {
 	}
 	
 	void Server::EntityUnlinked(game::World &, game::Entity *e) {
+		SPADES_MARK_FUNCTION();
+		
 		protocol::EntityRemovePacket packet;
 		packet.entityId = *e->GetId();
 		host->Broadcast(packet);
@@ -196,10 +221,14 @@ namespace spades { namespace server {
 	}
 	
 	void Server::PlayerCreated(game::World&, game::Player *p) {
+		SPADES_MARK_FUNCTION();
+		
 		AddServerPlayer(new ServerPlayer(*p, *this));
 	}
 	
 	void Server::PlayerRemoved(game::World&, game::Player *p) {
+		SPADES_MARK_FUNCTION();
+		
 		protocol::PlayerRemovePacket packet;
 		packet.players.push_back(*p->GetId());
 		host->Broadcast(packet);
@@ -212,6 +241,8 @@ namespace spades { namespace server {
 	}
 	
 	void Server::FlushMapEdits(const std::vector<game::MapEdit> &edits) {
+		SPADES_MARK_FUNCTION();
+		
 		protocol::TerrainUpdatePacket packet;
 		packet.edits = edits;
 		host->Broadcast(packet);

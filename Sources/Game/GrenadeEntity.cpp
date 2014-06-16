@@ -23,6 +23,8 @@
 namespace spades { namespace game {
 	GrenadeEntity::GrenadeEntity(World& world):
 	Entity(world, EntityType::Grenade) {
+		SPADES_MARK_FUNCTION();
+		
 		GetTrajectory().type = TrajectoryType::RigidBody;
 	}
 	GrenadeEntity::~GrenadeEntity() {
