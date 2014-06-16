@@ -24,6 +24,7 @@
 #include <Core/Debug.h>
 #include "LocalEntity.h"
 #include "PlayerLocalEntity.h"
+#include <Game/PlayerEntity.h>
 
 namespace spades { namespace ngclient {
 	void Arena::AddLocalEntity(LocalEntity *le) {
@@ -112,6 +113,10 @@ namespace spades { namespace ngclient {
 		auto *ple = dynamic_cast<PlayerLocalEntity *>(le);
 		SPAssert(ple);
 		return ple;
+	}
+	
+	game::PlayerEntity *Arena::GetLocalPlayerEntity() {
+		return world->GetLocalPlayerEntity();
 	}
 	
 } }

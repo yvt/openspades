@@ -28,6 +28,8 @@
 
 namespace spades { namespace game {
 	class World;
+	class Entity;
+	class PlayerEntity;
 } }
 
 namespace spades { namespace ngclient {
@@ -80,6 +82,7 @@ namespace spades { namespace ngclient {
 		void LoadEntities();
 		LocalEntity *GetLocalEntityForEntity(game::Entity *);
 		PlayerLocalEntity *GetLocalPlayerLocalEntity();
+		game::PlayerEntity *GetLocalPlayerEntity();
 		
 		void Initialize();
 		

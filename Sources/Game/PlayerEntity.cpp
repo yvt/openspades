@@ -229,8 +229,8 @@ namespace spades { namespace game {
 		}
 		
 		auto m = GetMatrix();
-		auto front = (m * Vector3(0.f, 1.f, 0.f)).GetXYZ();
-		auto side  = (m * Vector3(1.f, 0.f, 0.f)).GetXYZ();
+		auto front = (m * Vector4(0.f, 1.f, 0.f, 0)).GetXYZ();
+		auto side  = (m * Vector4(1.f, 0.f, 0.f, 0)).GetXYZ();
 		
 		front.z = 0.f; side.z = 0.f;
 		if (front.GetPoweredLength() != 0.f &&

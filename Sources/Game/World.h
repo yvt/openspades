@@ -130,7 +130,7 @@ namespace spades { namespace game {
 		bool IsLocalHostClient();
 		stmp::optional<uint32_t> GetLocalPlayerId();
 		PlayerEntity *GetLocalPlayerEntity();
-		// TODO: Player *GetLocalPlayer()
+		Player *GetLocalPlayer();
 		void SetLocalPlayerId(stmp::optional<uint32_t>);
 		
 		/** Returns game map.

@@ -43,9 +43,12 @@ namespace spades { namespace ngclient {
 	};
 	
 	class NetworkClientListener;
+	class NetworkPlayer;
 	
 	class NetworkClient: HostListener
 	{
+		friend class NetworkPlayer;
+		
 		class PacketVisitor;
 		class MapLoader;
 		class EntityUpdater;
@@ -73,6 +76,7 @@ namespace spades { namespace ngclient {
 		std::list<std::vector<game::MapEdit>> savedMapEdits;
 		
 		Handle<game::World> world;
+		std::unique_ptr<NetworkPlayer> player;
 		
 		NetworkClientParams params;
 		

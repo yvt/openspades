@@ -296,6 +296,15 @@ namespace spades { namespace game {
 		return pe;
 	}
 	
+	Player *World::GetLocalPlayer() {
+		SPADES_MARK_FUNCTION();
+		
+		auto id = GetLocalPlayerId();
+		if (!id) return nullptr;
+		
+		return FindPlayer(*id);
+	}
+	
 	void World::SetLocalPlayerId(stmp::optional<uint32_t> i) {
 		localPlayerId = i;
 	}

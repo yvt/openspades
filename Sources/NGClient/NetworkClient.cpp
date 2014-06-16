@@ -36,6 +36,7 @@
 #include <Game/AllEntities.h>
 #include <Core/Settings.h>
 #include <Game/Player.h>
+#include "NetworkPlayer.h"
 
 SPADES_SETTING(cg_mapQuality, "80");
 
@@ -259,6 +260,10 @@ namespace spades { namespace ngclient {
 				Kicked(_Tr("NetworkClient", "Error occured while processing a received "
 						   "map data.\n\n{0}", ex.what()));
 			}
+		}
+		
+		if (player) {
+			player->Update();
 		}
 	}
 	
@@ -598,7 +603,6 @@ namespace spades { namespace ngclient {
 					if (!item.createItem) {
 						SPRaise("no creation info");
 					}
-					const auto& c = *item.createItem;
 					e.Set(CreateEntity(*world, item), false);
 					SPAssert(e);
 					
@@ -843,6 +847,12 @@ namespace spades { namespace ngclient {
 				} else {
 					world->SetLocalPlayerId(stmp::optional<uint32_t>());
 				}
+				
+				auto *p = world->GetLocalPlayer();
+				if (p)
+					player.reset(new NetworkPlayer(*this, *p));
+				else
+					player.reset();
 				return;
 			}
 		}
@@ -862,6 +872,8 @@ namespace spades { namespace ngclient {
 	
 	void NetworkClient::SetWorld(game::World *w) {
 		SPADES_MARK_FUNCTION();
+		
+		player.reset();
 		
 		world.Set(w, true);
 		

@@ -22,18 +22,56 @@
 #include <Core/Debug.h>
 #include "NetworkClient.h"
 #include "Client.h"
+#include <Game/PlayerEntity.h>
 
 namespace spades { namespace ngclient {
 	
 	void Arena::MouseEvent(float x, float y) {
 		SPADES_MARK_FUNCTION();
-		
+		auto *lp = GetLocalPlayerEntity();
+		// TODO: mouse sens, alive check, ...
+		if (lp) {
+			lp->GetTrajectory().eulerAngle.z += x * .005f;
+			lp->GetTrajectory().eulerAngle.x =
+			std::max<float>(std::min<float>(lp->GetTrajectory().eulerAngle.x + y * .005f,
+							  M_PI * .499f), M_PI * -.499f);
+		}
 	}
 	
 	void Arena::KeyEvent(const std::string &key, bool down) {
 		SPADES_MARK_FUNCTION();
-		if (key == "J") {
+		// TODO: key mapper
+		// TODO: better movement
+		if (key == "J" && down) {
 			client->net->SendGenericCommand({"join"});
+		} else if (key == "W") {
+			auto *lp = GetLocalPlayerEntity();
+			if (lp){
+				auto pi = lp->GetPlayerInput();
+				pi.ymove = down ? 127 : 0;
+				lp->UpdatePlayerInput(pi);
+			}
+		} else if (key == "S") {
+			auto *lp = GetLocalPlayerEntity();
+			if (lp){
+				auto pi = lp->GetPlayerInput();
+				pi.ymove = down ? -127 : 0;
+				lp->UpdatePlayerInput(pi);
+			}
+		} else if (key == "A") {
+			auto *lp = GetLocalPlayerEntity();
+			if (lp){
+				auto pi = lp->GetPlayerInput();
+				pi.xmove = down ? 127 : 0;
+				lp->UpdatePlayerInput(pi);
+			}
+		} else if (key == "D") {
+			auto *lp = GetLocalPlayerEntity();
+			if (lp){
+				auto pi = lp->GetPlayerInput();
+				pi.xmove = down ? -127 : 0;
+				lp->UpdatePlayerInput(pi);
+			}
 		}
 	}
 	
@@ -59,7 +97,8 @@ namespace spades { namespace ngclient {
 	
 	bool Arena::NeedsAbsoluteMouseCoordinate() {
 		SPADES_MARK_FUNCTION();
-		return true;
+		// TODO
+		return GetLocalPlayerEntity() ? false :  true;
 	}
 	
 	void Arena::WheelEvent(float x, float y) {

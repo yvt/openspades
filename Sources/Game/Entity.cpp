@@ -131,8 +131,8 @@ namespace spades { namespace game {
 			case TrajectoryType::Player:
 				auto ang = trajectory.eulerAngle;
 				m = Matrix4::Rotate(Vector3(0.f, 0.f, 1.f), ang.z);
-				m = Matrix4::Rotate(Vector3(1.f, 0.f, 0.f), ang.x) * m;
-				m = Matrix4::Rotate(Vector3(0.f, 1.f, 0.f), ang.y) * m;
+				m = m * Matrix4::Rotate(Vector3(1.f, 0.f, 0.f), ang.x);
+				m = m * Matrix4::Rotate(Vector3(0.f, 1.f, 0.f), ang.y);
 				break;
 		}
 		m *= Matrix4::Translate(trajectory.origin);

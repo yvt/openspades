@@ -842,6 +842,8 @@
 		E8F30C1C194DEC8100A9DD84 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C19194DEC8100A9DD84 /* Player.cpp */; };
 		E8F30C2E194E051D00A9DD84 /* ServerPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C2C194E051D00A9DD84 /* ServerPlayer.cpp */; };
 		E8F30C2F194E051D00A9DD84 /* ServerPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C2C194E051D00A9DD84 /* ServerPlayer.cpp */; };
+		E8F30C32194F068800A9DD84 /* NetworkPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C30194F068800A9DD84 /* NetworkPlayer.cpp */; };
+		E8F30C33194F068800A9DD84 /* NetworkPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C30194F068800A9DD84 /* NetworkPlayer.cpp */; };
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
 		E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */; };
@@ -1755,6 +1757,8 @@
 		E8F30C1A194DEC8100A9DD84 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		E8F30C2C194E051D00A9DD84 /* ServerPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ServerPlayer.cpp; sourceTree = "<group>"; };
 		E8F30C2D194E051D00A9DD84 /* ServerPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerPlayer.h; sourceTree = "<group>"; };
+		E8F30C30194F068800A9DD84 /* NetworkPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkPlayer.cpp; sourceTree = "<group>"; };
+		E8F30C31194F068800A9DD84 /* NetworkPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkPlayer.h; sourceTree = "<group>"; };
 		E8F74CE3183F86AE0085AA54 /* View.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = View.cpp; sourceTree = "<group>"; };
 		E8F74CE4183F86AE0085AA54 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
 		E8F74CE6183F8A110085AA54 /* Main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Main.h; sourceTree = "<group>"; };
@@ -1904,6 +1908,8 @@
 				E818AED91949E0D1004500C7 /* Arena_World.cpp */,
 				E818AED51949D814004500C7 /* NetworkClient.cpp */,
 				E818AED61949D814004500C7 /* NetworkClient.h */,
+				E8F30C30194F068800A9DD84 /* NetworkPlayer.cpp */,
+				E8F30C31194F068800A9DD84 /* NetworkPlayer.h */,
 				E8ACFA5F194B5E240093C79C /* Host.cpp */,
 				E8ACFA60194B5E240093C79C /* Host.h */,
 				E818AEDC1949E30D004500C7 /* LocalEntity.cpp */,
@@ -3529,6 +3535,7 @@
 				E8D0E7CA18FABC3600DE3BDB /* shacal2.cpp in Sources */,
 				E82E67C618EA7972004DBA18 /* ClientUIHelper.cpp in Sources */,
 				E8D0E60D18FABBB000DE3BDB /* filters.cpp in Sources */,
+				E8F30C33194F068800A9DD84 /* NetworkPlayer.cpp in Sources */,
 				E8D0E7BC18FABC3600DE3BDB /* safer.cpp in Sources */,
 				E818AEE31949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */,
 				E82E67C718EA7972004DBA18 /* Quake3Font.cpp in Sources */,
@@ -3693,6 +3700,7 @@
 				E8D0E78A18FABC3600DE3BDB /* modes.cpp in Sources */,
 				E8CF03B2178EE300000683D4 /* Thread.cpp in Sources */,
 				E8D0E77818FABC3600DE3BDB /* idea.cpp in Sources */,
+				E8F30C32194F068800A9DD84 /* NetworkPlayer.cpp in Sources */,
 				E8F74CFB1845C64B0085AA54 /* ClientUIHelper.cpp in Sources */,
 				E842889018A3D6470060743D /* StartupScreenHelper.cpp in Sources */,
 				E8D0E7A818FABC3600DE3BDB /* rc5.cpp in Sources */,
