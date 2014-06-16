@@ -42,7 +42,15 @@ namespace spades { namespace server {
 		r.playerInput = entity.GetPlayerInput();
 		r.tool = entity.GetTool();
 		r.blockColor = entity.GetBlockColor();
-		// TODO: skin
+		
+		auto& cItem = *r.createItem;
+		for (int i = 0; i < 3; i++) {
+			const auto& w = entity.GetWeapon(i);
+			cItem.weaponSkins[i] = w.skin;
+			cItem.weaponParams[i] = w.param;
+		}
+		cItem.bodySkin = entity.GetBodySkin();
+		
 		return r;
 	}
 	

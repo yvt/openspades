@@ -112,6 +112,7 @@ namespace spades { namespace server {
 				if (delta) {
 					packet.items.push_back(*delta);
 				}
+				e->SaveForDeltaEncoding();
 			}
 			if (!packet.items.empty()) {
 				host->Broadcast(packet);
@@ -124,6 +125,7 @@ namespace spades { namespace server {
 				if (delta) {
 					packet.items.push_back(*delta);
 				}
+				e->SaveForDeltaEncoding();
 			}
 			if (!packet.items.empty()) {
 				host->Broadcast(packet);

@@ -26,7 +26,7 @@ namespace spades { namespace server {
 							   Server& server):
 	entity(entity),
 	server(server) {
-		lastState.create = true;
+		lastState.createItem = protocol::EntityCreateItem();
 	}
 	
 	ServerEntity::~ServerEntity() {
@@ -44,7 +44,7 @@ namespace spades { namespace server {
 		SPADES_MARK_FUNCTION();
 		
 		lastState = Serialize();
-		lastState.create = false;
+		lastState.createItem.reset();
 	}
 	
 	namespace {
@@ -66,9 +66,9 @@ namespace spades { namespace server {
 		
 		auto current = Serialize();
 		protocol::EntityUpdateItem ret;
-		ret.create = lastState.create;
+		if (lastState.createItem)
+			ret.createItem = current.createItem;
 		ret.entityId = current.entityId;
-		ret.type = current.type;
 		ret.flags = ComputeDelta(lastState.flags, current.flags);
 		ret.trajectory = ComputeDelta(lastState.trajectory, current.trajectory);
 		ret.health = ComputeDelta(lastState.health, current.health);
@@ -76,7 +76,7 @@ namespace spades { namespace server {
 		ret.tool = ComputeDelta(lastState.tool, current.tool);
 		ret.blockColor = ComputeDelta(lastState.blockColor, current.blockColor);
 		
-		if (!ret.create &&
+		if (!ret.createItem &&
 			!ret.flags &&
 			!ret.trajectory &&
 			!ret.health &&
@@ -94,9 +94,12 @@ namespace spades { namespace server {
 		SPADES_MARK_FUNCTION();
 		
 		protocol::EntityUpdateItem r;
-		r.create = true;
+		
+		protocol::EntityCreateItem c;
+		c.type = entity.GetType();
+		r.createItem = c;
+		
 		r.entityId = *entity.GetId();
-		r.type = entity.GetType();
 		r.flags = entity.GetFlags();
 		r.trajectory = entity.GetTrajectory();
 		r.health = entity.GetHealth();

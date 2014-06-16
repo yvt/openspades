@@ -78,6 +78,9 @@ namespace spades { namespace game {
 		uint8_t GetHealth() const { return health; }
 		EntityFlags& GetFlags() { return flags; }
 		
+		void SetHealth(uint8_t h) { health = h; }
+		void SetFlags(const EntityFlags& f) { flags = f;}
+		
 		Trajectory& GetTrajectory() { return trajectory; }
 		Matrix4 GetMatrix() const;
 		

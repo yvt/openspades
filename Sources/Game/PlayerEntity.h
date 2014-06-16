@@ -28,6 +28,11 @@ namespace spades { namespace game {
 	
 	class PlayerEntityListener;
 	
+	struct PlayerWeapon {
+		std::string skin;
+		WeaponParameters param;
+	};
+	
 	class PlayerEntity: public Entity {
 		PlayerInput playerInput;
 		ToolSlot tool;
@@ -39,8 +44,9 @@ namespace spades { namespace game {
 		
 		std::set<PlayerEntityListener *> listeners;
 		
-		std::array<std::string, 3> weaponSkins;
+		std::array<PlayerWeapon, 3> weapons;
 		std::string bodySkin;
+		
 		
 		virtual void EvaluateTrajectory(Duration);
 		
@@ -64,6 +70,12 @@ namespace spades { namespace game {
 		float GetCurrentHeight();
 		float GetBoxSize();
 		
+		const PlayerWeapon& GetWeapon(int);
+		void SetWeapon(int, const PlayerWeapon&);
+		
+		std::string GetBodySkin() { return bodySkin; }
+		void SetBodySkin(const std::string&);
+		
 		std::string GetName() override;
 		bool IsLocallyControlled() override;
 		
@@ -74,6 +86,9 @@ namespace spades { namespace game {
 		const PlayerInput& GetPlayerInput() const { return playerInput; }
 		ToolSlot GetTool() const { return tool; }
 		IntVector3 GetBlockColor() const { return blockColor; }
+		
+		void SetTool(ToolSlot s) { tool = s;}
+		void SetBlockColor(const IntVector3& c) { blockColor = c; }
 		
 		float GetJumpVelocity();
 		bool IsOnGroundOrWade();

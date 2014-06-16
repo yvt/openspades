@@ -114,6 +114,8 @@ namespace spades { namespace protocol {
 	using game::SkinId;
 	using game::DamageInfo;
 	using game::MapEdit;
+	using game::WeaponParameters;
+	using game::WeaponType;
 	using TimeStampType = std::uint64_t;
 	
 	class GreetingPacket;
@@ -226,13 +228,19 @@ namespace spades { namespace protocol {
 		
 	};
 	
-	struct EntityUpdateItem {
-		bool create;
+	struct EntityCreateItem {
+		EntityType type;
 		
+		std::array<std::string, 3> weaponSkins;
+		std::array<WeaponParameters, 3> weaponParams;
+		std::string bodySkin;
+		
+	};
+	
+	struct EntityUpdateItem {
 		uint32_t entityId;
 		
-		// type is sent only for new entities
-		EntityType type;
+		stmp::optional<EntityCreateItem> createItem;
 		
 		stmp::optional<EntityFlags> flags;
 		stmp::optional<Trajectory> trajectory;
@@ -241,17 +249,17 @@ namespace spades { namespace protocol {
 		stmp::optional<PlayerInput> playerInput;
 		stmp::optional<ToolSlot> tool;
 		stmp::optional<IntVector3> blockColor;
-		
-		stmp::optional<std::string> weaponSkin1;
-		stmp::optional<std::string> weaponSkin2;
-		stmp::optional<std::string> weaponSkin3;
-		stmp::optional<std::string> bodySkin;
+	};
+	
+	struct PlayerCreateItem {
+		std::string name;
 	};
 	
 	struct PlayerUpdateItem {
 		uint32_t playerId;
 		
-		stmp::optional<std::string> name;
+		stmp::optional<PlayerCreateItem> createItem;
+		
 		stmp::optional<PlayerFlags> flags;
 		stmp::optional<uint32_t> score;
 	};

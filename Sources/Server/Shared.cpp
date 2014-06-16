@@ -217,8 +217,7 @@ namespace spades { namespace protocol {
 		PlayerInput = 1 << 3,
 		Tool = 1 << 4,
 		BlockColor = 1 << 5,
-		Health = 1 << 6,
-		Skins = 1 << 7
+		Health = 1 << 6
 	};
 	
 	inline EntityUpdateFlags operator|(EntityUpdateFlags a, EntityUpdateFlags b)
@@ -385,6 +384,37 @@ namespace spades { namespace protocol {
 		writer.Write(static_cast<uint8_t>(input.ymove));
 	}
 	
+	static WeaponParameters DecodeWeaponParameter(PacketReader& reader) {
+		SPADES_MARK_FUNCTION();
+		WeaponParameters p;
+		uint8_t flags = reader.ReadByte();
+		p.isFullAutomatic = flags & 1;
+		p.doesReloadsSlow = (flags >> 1) & 1;
+		p.penetrative = (flags >> 2) & 1;
+		p.type = static_cast<WeaponType>((flags >> 3) & 3);
+		p.fireInterval = reader.ReadShort();
+		p.reloadTime = reader.ReadShort();
+		p.raiseTime = reader.ReadShort();
+		p.maxDamage = reader.ReadByte();
+		p.magazineSize = reader.ReadByte();
+		return p;
+	}
+	
+	static void WriteWeaponParameter(PacketWriter& writer, const WeaponParameters& p) {
+		SPADES_MARK_FUNCTION();
+		uint8_t flags = 0;
+		if (p.isFullAutomatic) flags |= 1;
+		if (p.doesReloadsSlow) flags |= 1 << 1;
+		if (p.penetrative) flags |= 1 << 2;
+		flags |= static_cast<uint8_t>(p.type) << 3;
+		writer.Write(flags);
+		writer.Write(p.fireInterval);
+		writer.Write(p.reloadTime);
+		writer.Write(p.raiseTime);
+		writer.Write(p.maxDamage);
+		writer.Write(p.magazineSize);
+	}
+	
 	static EntityUpdateItem DecodeEntityUpdateItem(PacketReader& reader) {
 		SPADES_MARK_FUNCTION();
 		
@@ -393,9 +423,19 @@ namespace spades { namespace protocol {
 		
 		auto updates = static_cast<EntityUpdateFlags>(reader.ReadByte());
 		
-		item.create = updates & EntityUpdateFlags::Create;
-		if(item.create) {
-			item.type = static_cast<EntityType>(reader.ReadByte());
+		if(updates & EntityUpdateFlags::Create) {
+			EntityCreateItem citem;
+			citem.type = static_cast<EntityType>(reader.ReadByte());
+			if (citem.type == EntityType::Player) {
+				citem.bodySkin = reader.ReadBytes();
+				for (auto& s: citem.weaponSkins) {
+					s = reader.ReadBytes();
+				}
+				for (auto& s: citem.weaponParams) {
+					s = DecodeWeaponParameter(reader);
+				}
+			}
+			item.createItem = citem;
 		}
 		
 		if(updates & EntityUpdateFlags::Flags) {
@@ -423,14 +463,6 @@ namespace spades { namespace protocol {
 			item.health = reader.ReadByte();
 		}
 		
-		if(updates & EntityUpdateFlags::Skins) {
-			uint8_t mask = reader.ReadByte();
-			if(mask & 1) item.bodySkin = reader.ReadBytes();
-			if(mask & 2) item.weaponSkin1 = reader.ReadBytes();
-			if(mask & 4) item.weaponSkin2 = reader.ReadBytes();
-			if(mask & 8) item.weaponSkin3 = reader.ReadBytes();
-		}
-		
 		return item;
 	}
 	
@@ -441,22 +473,26 @@ namespace spades { namespace protocol {
 		
 		auto flags = EntityUpdateFlags::None;
 		
-		if(item.create) flags |= EntityUpdateFlags::Create;
+		if(item.createItem) flags |= EntityUpdateFlags::Create;
 		if(item.flags) flags |= EntityUpdateFlags::Flags;
 		if(item.trajectory) flags |= EntityUpdateFlags::Trajectory;
 		if(item.playerInput) flags |= EntityUpdateFlags::PlayerInput;
 		if(item.tool) flags |= EntityUpdateFlags::Tool;
 		if(item.blockColor) flags |= EntityUpdateFlags::BlockColor;
 		if(item.health) flags |= EntityUpdateFlags::Health;
-		if(item.weaponSkin1 ||
-		   item.weaponSkin2 ||
-		   item.weaponSkin3 ||
-		   item.bodySkin) flags |= EntityUpdateFlags::Skins;
 		
 		writer.Write(static_cast<uint8_t>(flags));
 		
-		if(item.create) {
-			writer.Write(static_cast<uint8_t>(item.type));
+		if(item.createItem) {
+			const auto& cItem = *item.createItem;
+			writer.Write(static_cast<uint8_t>(cItem.type));
+			if (cItem.type == EntityType::Player) {
+				writer.WriteBytes(cItem.bodySkin);
+				for (const auto& s: cItem.weaponSkins)
+					writer.WriteBytes(s);
+				for (const auto& s: cItem.weaponParams)
+					WriteWeaponParameter(writer, s);
+			}
 		}
 		
 		if(item.flags) {
@@ -483,29 +519,13 @@ namespace spades { namespace protocol {
 			writer.Write(static_cast<uint8_t>(*item.health));
 		}
 		
-		if(item.weaponSkin1 ||
-		   item.weaponSkin2 ||
-		   item.weaponSkin3 ||
-		   item.bodySkin) {
-			uint8_t mask = 0;
-			if(item.bodySkin) mask |= 1;
-			if(item.weaponSkin1) mask |= 2;
-			if(item.weaponSkin2) mask |= 4;
-			if(item.weaponSkin3) mask |= 8;
-			writer.Write(mask);
-			if(item.bodySkin) writer.WriteBytes(*item.bodySkin);
-			if(item.weaponSkin1) writer.WriteBytes(*item.weaponSkin1);
-			if(item.weaponSkin2) writer.WriteBytes(*item.weaponSkin2);
-			if(item.weaponSkin3) writer.WriteBytes(*item.weaponSkin3);
-		}
-		
 	}
 	
 #pragma mark - Player Update
 	
 	enum class PlayerUpdateFlags {
 		None = 0,
-		Immutables = 1 << 0, // name, ...
+		Create = 1 << 0,
 		Score = 1 << 1,
 		Flags = 1 << 2
 	};
@@ -564,8 +584,10 @@ namespace spades { namespace protocol {
 		
 		auto updates = static_cast<PlayerUpdateFlags>(reader.ReadByte());
 		
-		if(updates & PlayerUpdateFlags::Immutables) {
-			item.name = reader.ReadString();
+		if(updates & PlayerUpdateFlags::Create) {
+			PlayerCreateItem c;
+			c.name = reader.ReadString();
+			item.createItem = c;
 		}
 		
 		if(updates & PlayerUpdateFlags::Flags) {
@@ -588,14 +610,15 @@ namespace spades { namespace protocol {
 		
 		auto flags = PlayerUpdateFlags::None;
 		
-		if(item.name) flags |= PlayerUpdateFlags::Immutables;
+		if(item.createItem) flags |= PlayerUpdateFlags::Create;
 		if(item.flags) flags |= PlayerUpdateFlags::Flags;
 		if(item.score) flags |= PlayerUpdateFlags::Score;
 		
 		writer.Write(static_cast<uint8_t>(flags));
 		
-		if(flags & PlayerUpdateFlags::Immutables) {
-			writer.WriteString(*item.name);
+		if(item.createItem) {
+			const auto& c = *item.createItem;
+			writer.WriteString(c.name);
 		}
 		
 		if(item.flags) {

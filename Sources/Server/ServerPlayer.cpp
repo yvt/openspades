@@ -26,6 +26,7 @@ namespace spades { namespace server {
 							   Server& server):
 	player(player),
 	server(server) {
+		lastState.createItem = protocol::PlayerCreateItem();
 	}
 	
 	ServerPlayer::~ServerPlayer() {
@@ -41,6 +42,7 @@ namespace spades { namespace server {
 		SPADES_MARK_FUNCTION();
 		
 		lastState = Serialize();
+		lastState.createItem.reset();
 	}
 	
 	namespace {
@@ -63,8 +65,8 @@ namespace spades { namespace server {
 		auto current = Serialize();
 		protocol::PlayerUpdateItem ret;
 		ret.playerId = current.playerId;
-		if (!lastState.name) {
-			ret.name = current.name;
+		if (lastState.createItem) {
+			ret.createItem = current.createItem;
 		}
 		ret.flags = ComputeDelta(lastState.flags, current.flags);
 		ret.score = ComputeDelta(lastState.score, current.score);
@@ -82,8 +84,12 @@ namespace spades { namespace server {
 		SPADES_MARK_FUNCTION();
 		
 		protocol::PlayerUpdateItem r;
+		
+		protocol::PlayerCreateItem c;
+		c.name =  player.GetName();
+		
+		r.createItem = c;
 		r.playerId = *player.GetId();
-		r.name = player.GetName();
 		r.flags = player.GetFlags();
 		r.score = player.GetScore();
 		return r;

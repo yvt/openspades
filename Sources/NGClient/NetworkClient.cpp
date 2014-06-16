@@ -346,10 +346,24 @@ namespace spades { namespace ngclient {
 	public game::EntityVisitor {
 		const protocol::EntityUpdateItem& item;
 		bool forced;
+		
+		bool ShouldUpdateOwnedProperty(game::Entity& e) {
+			return forced || !e.IsLocallyControlled();
+		}
+		
 		void VisitCommon(game::Entity& e) {
 			SPADES_MARK_FUNCTION();
 			
-			SPNotImplemented();
+			if (item.flags) {
+				e.SetFlags(*item.flags);
+			}
+			if (item.trajectory && ShouldUpdateOwnedProperty(e)) {
+				e.GetTrajectory() = *item.trajectory;
+			}
+			if (item.health) {
+				e.SetHealth(*item.health);
+			}
+			
 		}
 		
 	public:
@@ -361,6 +375,15 @@ namespace spades { namespace ngclient {
 		void Visit(game::PlayerEntity& e) override {
 			SPADES_MARK_FUNCTION();
 			VisitCommon(e);
+			if (item.blockColor) {
+				e.SetBlockColor(*item.blockColor);
+			}
+			if (item.tool) {
+				e.SetTool(*item.tool);
+			}
+			if (item.playerInput && ShouldUpdateOwnedProperty(e)) {
+				e.SetPlayerInput(*item.playerInput);
+			}
 		}
 		void Visit(game::GrenadeEntity& e) override {
 			SPADES_MARK_FUNCTION();
@@ -392,14 +415,27 @@ namespace spades { namespace ngclient {
 	class NetworkClient::PacketVisitor:
 	public protocol::PacketVisitor {
 		NetworkClient& c;
-		static game::Entity *CreateEntity(game::EntityType type,
-										  game::World& w) {
+		static game::Entity *CreateEntity(game::World& w,
+										  const protocol::EntityUpdateItem& upd) {
 			SPADES_MARK_FUNCTION();
+			
+			const auto& cItem = *upd.createItem;
+			auto type = cItem.type;
 			
 			game::Entity *e = nullptr;
 			switch (type) {
 				case game::EntityType::Player:
-					e = new game::PlayerEntity(w);
+					{
+						auto *pe = new game::PlayerEntity(w);
+						e = pe;
+						pe->SetBodySkin(cItem.bodySkin);
+						for (int i = 0; i < 3; i++) {
+							game::PlayerWeapon w;
+							w.skin = cItem.weaponSkins[i];
+							w.param = cItem.weaponParams[i];
+							pe->SetWeapon(i, w);
+						}
+					}
 					break;
 				case game::EntityType::Checkpoint:
 					e = new game::CheckpointEntity(w);
@@ -559,7 +595,11 @@ namespace spades { namespace ngclient {
 				
 				for (const auto& item: p.items) {
 					Handle<game::Entity> e;
-					e.Set(CreateEntity(item.type, *world), false);
+					if (!item.createItem) {
+						SPRaise("no creation info");
+					}
+					const auto& c = *item.createItem;
+					e.Set(CreateEntity(*world, item), false);
 					SPAssert(e);
 					
 					EntityUpdater update(item, true);
@@ -595,8 +635,8 @@ namespace spades { namespace ngclient {
 					Handle<game::Entity> e(c.world->FindEntity(item.entityId));
 					if (!e) {
 						// create one
-						if (item.create) {
-							e.Set(CreateEntity(item.type, *w), false);
+						if (item.createItem) {
+							e.Set(CreateEntity(*w, item), false);
 						} else {
 							SPLog("entity %u doesn't exist. ignored",
 								  (unsigned int)item.entityId);
@@ -606,7 +646,7 @@ namespace spades { namespace ngclient {
 					
 					SPAssert(e);
 					
-					EntityUpdater update(item, p.forced);
+					EntityUpdater update(item, p.forced || item.createItem);
 					e->Accept(update);
 					
 					if (!e->GetId()) {
@@ -626,8 +666,9 @@ namespace spades { namespace ngclient {
 					Handle<game::Player> e(c.world->FindPlayer(item.playerId));
 					if (!e) {
 						// create one
-						if (item.name) {
-							e.Set(new game::Player(*w, *item.name),
+						if (item.createItem) {
+							const auto& cItem = *item.createItem;
+							e.Set(new game::Player(*w, cItem.name),
 								  false);
 						} else {
 							SPLog("player ID %u doesn't exist. ignored",

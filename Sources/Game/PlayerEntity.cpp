@@ -93,6 +93,31 @@ namespace spades { namespace game {
 		for (auto *listener: listeners) listener->PlayerInputUpdated(*this);
 	}
 	
+	const PlayerWeapon& PlayerEntity::GetWeapon(int slot) {
+		SPADES_MARK_FUNCTION();
+		SPAssert(slot >= 0);
+		SPAssert(slot < 3);
+		return weapons[slot];
+	}
+	
+	void PlayerEntity::SetWeapon(int slot, const PlayerWeapon& w) {
+		SPADES_MARK_FUNCTION();
+		SPAssert(slot >= 0);
+		SPAssert(slot < 3);
+		if (GetId()) {
+			SPRaise("Cannot change weapon of player while linked to world");
+		}
+		weapons[slot] = w;
+	}
+	
+	void PlayerEntity::SetBodySkin(const std::string &s) {
+		SPADES_MARK_FUNCTION();
+		if (GetId()) {
+			SPRaise("Cannot change weapon of player while linked to world");
+		}
+		bodySkin = s;
+	}
+	
 #pragma mark - Player Movement
 	
 	float PlayerEntity::GetJumpVelocity() {

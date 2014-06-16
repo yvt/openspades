@@ -104,4 +104,37 @@ namespace spades { namespace game {
 		return Format("Unknown ({0})",
 					  static_cast<int>(t));
 	}
+	
+	std::string GetWeaponTypeName(WeaponType t) {
+		SPADES_MARK_FUNCTION();
+		
+		switch (t) {
+			case WeaponType::Bullet:
+				return "Bullet";
+			case WeaponType::Shotgun:
+				return "Shotgun";
+			case WeaponType::Rocket:
+				return "Rocket";
+		}
+		return Format("Unknown ({0})",
+					  static_cast<int>(t));
+	}
+	
+	std::string WeaponParameters::ToString() {
+		return Format("{0}, {1}, {2}, {3}, "
+					  "interval = {4} [ms], "
+					  "damage = {5} [%], "
+					  "reload time = {6} [ms], "
+					  "magazine size = {7} [rounds],"
+					  "raise time = {8} [ms]",
+					  isFullAutomatic ? "Full-auto" : "Semi-auto",
+					  doesReloadsSlow ? "Slow Reload" : "Magazine",
+					  penetrative ? "Penetrative" : "Not Penetrative",
+					  GetWeaponTypeName(type),
+					  fireInterval,
+					  maxDamage,
+					  reloadTime,
+					  magazineSize,
+					  raiseTime);
+	}
 } }

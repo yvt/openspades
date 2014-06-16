@@ -213,6 +213,28 @@ namespace spades { namespace game {
 		}
 	};
 	
+	enum class WeaponType {
+		Bullet,
+		Shotgun,
+		Rocket
+	};
+	
+	struct WeaponParameters {
+		bool isFullAutomatic: 1;
+		bool doesReloadsSlow: 1;
+		bool penetrative: 1;
+		WeaponType type;
+		uint16_t fireInterval;    // milliseconds
+		uint8_t maxDamage;		  // percents
+		uint16_t reloadTime;		  // milliseconds
+		uint8_t magazineSize;	  // rounds
+		uint16_t raiseTime;		  // milliseconds
+		
+		std::string ToString();
+	};
+	
+	std::string GetWeaponTypeName(WeaponType);
+	
 	enum class HitType {
 		Unspecified = 0,
 		Torso,
