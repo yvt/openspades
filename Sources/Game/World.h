@@ -67,6 +67,7 @@ namespace spades { namespace game {
 		std::map<uint32_t, Handle<Player>> players;
 		std::set<WorldListener *> listeners;
 		stmp::optional<uint32_t> localPlayerId;
+		bool isServer;
 		
 		struct IntVectorComparator {
 			inline bool operator ()
@@ -84,7 +85,8 @@ namespace spades { namespace game {
 		
 	public:
 		World(const WorldParameters& params,
-			  client::GameMap *);
+			  client::GameMap *,
+			  bool isServer);
 		~World();
 		
 		void AddListener(WorldListener *);

@@ -595,7 +595,8 @@ namespace spades { namespace ngclient {
 					params.Update(pair.first, pair.second);
 				}
 				Handle<game::World> world(new game::World(params,
-														  c.mapLoader->GetMap()), false);
+														  c.mapLoader->GetMap(),
+														  false), false);
 				c.mapLoader.reset();
 				
 				for (const auto& item: p.items) {

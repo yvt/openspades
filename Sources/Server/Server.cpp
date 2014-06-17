@@ -47,7 +47,7 @@ namespace spades { namespace server {
 		// TODO: provide correct map
 		std::unique_ptr<IStream> stream(FileManager::OpenForReading("Maps/isle7.vxl"));
 		Handle<client::GameMap> map(client::GameMap::Load(stream.get()), false);
-		Handle<game::World> w(new game::World(params, map), false);
+		Handle<game::World> w(new game::World(params, map, true), false);
 		SetWorld(w);
 	}
 	

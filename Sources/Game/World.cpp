@@ -81,9 +81,11 @@ namespace spades { namespace game {
 	}
 	
 	World::World(const WorldParameters& params,
-				 client::GameMap *map):
+				 client::GameMap *map,
+				 bool isServer):
 	currentTime(0),
-	params(params) {
+	params(params),
+	isServer(isServer) {
 		SPADES_MARK_FUNCTION();
 		
 		SPAssert(map);
@@ -284,11 +286,11 @@ namespace spades { namespace game {
 	}
 	
 	bool World::IsLocalHostServer() {
-		return true; // TODO: IsLocalHostServer
+		return isServer;
 	}
 	
 	bool World::IsLocalHostClient() {
-		return true; // TODO: IsLocalHostServer
+		return !isServer;
 	}
 	
 	bool World::IsWaterAt(const Vector3& v) {
