@@ -50,7 +50,6 @@ namespace spades { namespace game {
 		
 		virtual void EvaluateTrajectory(Duration);
 		
-		bool FixInput(PlayerInput&);
 		
 		void BoxClipMove(Duration);
 		void WalkMove(Duration);
@@ -83,6 +82,7 @@ namespace spades { namespace game {
 		void SetPlayerInput(const PlayerInput&);
 		/** Updates the local and remote state of the player. */
 		void UpdatePlayerInput(const PlayerInput&);
+		bool FixInput(PlayerInput&);
 		const PlayerInput& GetPlayerInput() const { return playerInput; }
 		ToolSlot GetTool() const { return tool; }
 		IntVector3 GetBlockColor() const { return blockColor; }

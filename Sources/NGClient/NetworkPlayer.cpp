@@ -44,6 +44,7 @@ namespace spades { namespace ngclient {
 		auto *e = GetEntity();
 		if (!e) return;
 		
+		// TODO: reduce send interval?
 		protocol::ClientSideEntityUpdatePacket p;
 		protocol::EntityUpdateItem item;
 		item.entityId = !e->GetId();
@@ -52,6 +53,13 @@ namespace spades { namespace ngclient {
 			item.playerInput = e->GetPlayerInput();
 		}
 		
+		// TODO: delta encoding
+		item.blockColor = e->GetBlockColor();
+		item.tool = e->GetTool();
+		
+		p.items.push_back(std::move(item));
+		
+		net.host->Send(p);
 	}
 	
 	game::PlayerEntity *NetworkPlayer::GetEntity() {

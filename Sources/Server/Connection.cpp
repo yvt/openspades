@@ -30,6 +30,7 @@
 #include <Core/DeflateStream.h>
 #include <thread>
 #include <Game/Player.h>
+#include <Game/AllEntities.h>
 
 namespace spades { namespace server {
 	
@@ -308,6 +309,78 @@ namespace spades { namespace server {
 		// instance after calling this function.
 	}
 	
+	class Connection::EntityUpdater:
+	public game::EntityVisitor {
+		const protocol::EntityUpdateItem& item;
+		
+		/** used to fix client state */
+		protocol::EntityUpdateItem fixItem;
+		
+		Connection& c;
+		void UpdateCommon(game::Entity& e) {
+			if (item.trajectory) {
+				if ((*item.trajectory).type !=
+					e.GetTrajectory().type) {
+					SPLog("%s changing trajectory type of entity %u "
+						  "is not allowed",
+						  c.peer->GetLogHeader().c_str(),
+						  (unsigned int)*e.GetId());
+					fixItem.trajectory = e.GetTrajectory();
+				} else {
+					auto *se = c.server->GetServerEntityForEntity(&e);
+					if (se) {
+						if (se->TryUpdateTrajectory(*item.trajectory)) {
+							fixItem.trajectory = e.GetTrajectory();
+						}
+					}
+				}
+			}
+			
+			if (fixItem.trajectory ||
+				fixItem.playerInput) {
+				// send fix state
+				protocol::EntityUpdatePacket p;
+				fixItem.entityId = item.entityId;
+				p.items.push_back(fixItem);
+				p.forced = true;
+				c.peer->Send(p);
+			}
+		}
+	public:
+		EntityUpdater(Connection& c,
+					  const protocol::EntityUpdateItem& i):
+		c(c), item(i) {}
+		
+		void Visit(game::PlayerEntity& e) override {
+			if (item.playerInput) {
+				auto pe = *item.playerInput;
+				if(e.FixInput(pe)) {
+					fixItem.playerInput = pe;
+				}
+				e.SetPlayerInput(pe);
+			}
+			UpdateCommon(e);
+		}
+		void Visit(game::GrenadeEntity& e) override {
+			UpdateCommon(e);
+		}
+		void Visit(game::RocketEntity& e) override {
+			UpdateCommon(e);
+		}
+		void Visit(game::CommandPostEntity& e) override {
+			UpdateCommon(e);
+		}
+		void Visit(game::FlagEntity& e) override {
+			UpdateCommon(e);
+		}
+		void Visit(game::CheckpointEntity& e) override {
+			UpdateCommon(e);
+		}
+		void Visit(game::VehicleEntity& e) override {
+			UpdateCommon(e);
+		}
+	};
+	
 	class Connection::PacketVisitor:
 	public protocol::ConstPacketVisitor {
 		Connection& c;
@@ -434,6 +507,36 @@ namespace spades { namespace server {
 		}
 		void visit(const protocol::ClientSideEntityUpdatePacket& p) override {
 			SPADES_MARK_FUNCTION();
+			
+			for (const auto& item: p.items) {
+				auto *e = c.GetWorld().FindEntity(item.entityId);
+				if (!e) {
+					SPLog("%s attempted to update non-existent "
+						  "entity %u",
+						  c.peer->GetLogHeader().c_str(),
+						  (unsigned int)item.entityId);
+					continue;
+				}
+				
+				auto owner = e->GetOwnerPlayerId();
+				if (!owner || !c.player ||
+					*owner != *c.player->GetId()) {
+					if (owner) {
+						SPLog("%s atempted to update the entity that"
+							  "the player doesn't own (actual "
+							  "owner = %u)", (unsigned int)*owner);
+					} else {
+						SPLog("%s atempted to update the entity that"
+							  "the player doesn't own (actual "
+							  "owner = none)");
+					}
+					continue;
+				}
+				
+				EntityUpdater updater(c, item);
+				e->Accept(updater);
+			}
+			
 			SPNotImplemented();
 		}
 		void visit(const protocol::TerrainUpdatePacket& p) override {
@@ -624,5 +727,6 @@ namespace spades { namespace server {
 			  peer->GetLogHeader().c_str(),
 			  str.data());
 	}
+	
 	
 } }

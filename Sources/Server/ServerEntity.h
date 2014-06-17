@@ -30,6 +30,7 @@ namespace spades { namespace server {
 		Server& server;
 		game::Entity& entity;
 		protocol::EntityUpdateItem lastState;
+		
 	public:
 		ServerEntity(game::Entity&, Server&);
 		virtual ~ServerEntity();
@@ -38,6 +39,8 @@ namespace spades { namespace server {
 		
 		Server& GetServer() { return server; }
 		game::Entity& GetEntity() { return entity; }
+		
+		bool TryUpdateTrajectory(game::Trajectory);
 		
 		/** Saves the current state for the delta encoding. */
 		void SaveForDeltaEncoding();

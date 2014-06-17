@@ -105,6 +105,7 @@ namespace spades { namespace server {
 		}
 		
 		// send entity update
+		// TODO: reduce send interval
 		{
 			protocol::PlayerUpdatePacket packet;
 			for (const auto& e: serverPlayers) {

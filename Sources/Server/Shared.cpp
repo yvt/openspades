@@ -26,6 +26,7 @@
 #include <OpenSpades.h>
 #include <Core//Settings.h>
 #include <Core/Debug.h>
+#include <chrono>
 
 SPADES_SETTING(core_locale, "");
 
@@ -118,10 +119,6 @@ namespace spades { namespace protocol {
 			return std::move(dict);
 		}
 		
-		TimeStampType ReadTimeStamp() {
-			return static_cast<TimeStampType>(ReadVariableInteger());
-		}
-		
 		IntVector3 ReadBlockCoord() {
 			auto x = static_cast<int>(ReadVariableSignedInteger());
 			auto y = static_cast<int>(ReadVariableSignedInteger());
@@ -173,11 +170,6 @@ namespace spades { namespace protocol {
 				WriteString(item.second);
 			}
 			WriteString(std::string());
-		}
-		
-		using NetPacketWriter::Write;
-		void Write(TimeStampType t) {
-			WriteVariableInteger(static_cast<uint64_t>(t));
 		}
 		
 		void WriteBlockCoord(IntVector3 v) {
@@ -996,8 +988,6 @@ namespace spades { namespace protocol {
 		std::unique_ptr<ClientSideEntityUpdatePacket> p(new ClientSideEntityUpdatePacket());
 		PacketReader reader(data);
 		
-		p->timestamp = reader.ReadTimeStamp();
-		
 		while(!reader.IsEndOfPacket()) {
 			p->items.emplace_back(DecodeEntityUpdateItem(reader));
 		}
@@ -1009,8 +999,6 @@ namespace spades { namespace protocol {
 		SPADES_MARK_FUNCTION();
 		
 		PacketWriter writer(Type);
-		
-		writer.Write(timestamp);
 		
 		for(const auto& item: items) {
 			WriteEntityUpdateItem(writer, item);
@@ -1260,7 +1248,6 @@ namespace spades { namespace protocol {
 		std::unique_ptr<PlayerActionPacket> p(new PlayerActionPacket());
 		PacketReader reader(data);
 		
-		p->timestamp = reader.ReadTimeStamp();
 		p->type = static_cast<EntityEventType>(reader.ReadByte());
 		p->param = reader.ReadVariableInteger();
 		
@@ -1272,7 +1259,6 @@ namespace spades { namespace protocol {
 		
 		PacketWriter writer(Type);
 		
-		writer.Write(timestamp);
 		writer.Write(static_cast<uint8_t>(type));
 		writer.WriteVariableInteger(param);
 		
@@ -1286,7 +1272,6 @@ namespace spades { namespace protocol {
 		std::unique_ptr<HitEntityPacket> p(new HitEntityPacket());
 		PacketReader reader(data);
 		
-		p->timestamp = reader.ReadTimeStamp();
 		p->entityId = static_cast<uint32_t>(reader.ReadVariableInteger());
 		p->type = static_cast<HitType>(reader.ReadByte());
 		p->damageType = static_cast<DamageType>(reader.ReadByte());
@@ -1301,7 +1286,6 @@ namespace spades { namespace protocol {
 		
 		PacketWriter writer(Type);
 		
-		writer.Write(timestamp);
 		writer.WriteVariableInteger(entityId);
 		writer.Write(static_cast<uint8_t>(type));
 		writer.Write(static_cast<uint8_t>(damageType));
@@ -1319,7 +1303,6 @@ namespace spades { namespace protocol {
 		std::unique_ptr<HitTerrainPacket> p(new HitTerrainPacket());
 		PacketReader reader(data);
 		
-		p->timestamp = reader.ReadTimeStamp();
 		p->blockPosition = reader.ReadBlockCoord();
 		p->damageType = static_cast<DamageType>(reader.ReadByte());
 		p->firePosition = reader.ReadVector3();
@@ -1333,7 +1316,6 @@ namespace spades { namespace protocol {
 		
 		PacketWriter writer(Type);
 		
-		writer.Write(timestamp);
 		writer.WriteBlockCoord(blockPosition);
 		writer.Write(static_cast<uint8_t>(damageType));
 		writer.Write(firePosition);
@@ -1385,6 +1367,12 @@ namespace spades { namespace protocol {
 		return std::move(writer.ToArray());
 	}
 	
-	
+	game::Timepoint GetSteadyTime() {
+		using namespace std::chrono;
+		static const auto startTime = steady_clock::now();
+		auto t = steady_clock::now() - startTime;
+		auto tt = duration_cast<microseconds>(t);
+		return static_cast<double>(tt.count()) / 1000000.0;
+	}
 	
 } }

@@ -106,5 +106,30 @@ namespace spades { namespace server {
 		return r;
 	}
 	
+	bool ServerEntity::TryUpdateTrajectory
+	(game::Trajectory traj) {
+		auto& old = entity.GetTrajectory();
+		if (old.type == game::TrajectoryType::Constant) {
+			old.velocity = Vector3(0, 0, 0);
+		}
+		
+		auto v = old.origin;
+		if (old.velocity.GetPoweredLength()> .00001f) {
+			auto norm = old.velocity.Normalize();
+			auto s = Vector3::Dot(norm, traj.origin - old.origin);
+			s = std::max(std::min(s, .1f), -.1f);
+			v += norm * s;
+		}
+		if ((traj.origin - v).GetLength() > .1f) {
+			return true;
+		}
+		
+		if ((traj.velocity - old.velocity).GetLength() > .1f) {
+			return true;
+		}
+		
+		old = traj;
+		return false;
+	}
 } }
 

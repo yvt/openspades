@@ -39,6 +39,7 @@ namespace spades { namespace server {
 		
 		class PacketVisitor;
 		class MapGenerator;
+		class EntityUpdater;
 		
 		enum class State {
 			/** Waiting for InitiateConnectionPacket. */

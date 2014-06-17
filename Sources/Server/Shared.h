@@ -116,7 +116,6 @@ namespace spades { namespace protocol {
 	using game::MapEdit;
 	using game::WeaponParameters;
 	using game::WeaponType;
-	using TimeStampType = std::uint64_t;
 	
 	class GreetingPacket;
 	class InitiateConnectionPacket;
@@ -467,7 +466,6 @@ namespace spades { namespace protocol {
 		
 		virtual std::vector<char> Generate() const;
 		
-		TimeStampType timestamp;
 		std::vector<EntityUpdateItem> items;
 	};
 	
@@ -567,7 +565,6 @@ namespace spades { namespace protocol {
 		
 		virtual std::vector<char> Generate() const;
 		
-		TimeStampType timestamp;
 		EntityEventType type;
 		uint64_t param;
 	};
@@ -582,7 +579,6 @@ namespace spades { namespace protocol {
 		
 		virtual std::vector<char> Generate() const;
 		
-		TimeStampType timestamp;
 		uint32_t entityId;
 		
 		HitType type;
@@ -601,7 +597,6 @@ namespace spades { namespace protocol {
 		
 		virtual std::vector<char> Generate() const;
 		
-		TimeStampType timestamp;
 		IntVector3 blockPosition;
 		
 		DamageType damageType;
@@ -624,7 +619,7 @@ namespace spades { namespace protocol {
 		uint8_t amount;
 	};
 	
-	// TODO: player state
+	game::Timepoint GetSteadyTime();
 	
 } }
 
