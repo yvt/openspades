@@ -78,6 +78,10 @@ namespace spades { namespace ngclient {
 		
 		~Client();
 		
+		bool IsHostingServer() { return server != nullptr; }
+		
+		client::IRenderer *GetRenderer() { return renderer; }
+		
 		/*---- implementations of gui::View ----
 		 * most of them are implemented in Client_Input.cpp. */
 		void MouseEvent(float x, float y) override;

@@ -52,6 +52,9 @@ namespace spades { namespace ngclient {
 		Arena& arena;
 		game::PlayerEntity *entity;
 		
+		class WalkAnimator;
+		std::unique_ptr<WalkAnimator> walkAnim;
+		
 		void Damaged(game::Entity&, const game::DamageInfo&) override;
 		void Unlinked(game::Entity&) override;
 		void Jumped(game::PlayerEntity&) override;

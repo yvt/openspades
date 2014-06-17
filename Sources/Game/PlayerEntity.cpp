@@ -228,7 +228,7 @@ namespace spades { namespace game {
 			planeMove *= .33f;
 		}
 		
-		planeMove *= 50.f * dt;
+		planeMove *= 40.f * dt;
 		
 		auto m = GetMatrix();
 		auto front = (m * Vector4(0.f, 1.f, 0.f, 0)).GetXYZ();
