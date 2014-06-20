@@ -637,4 +637,8 @@ namespace spades {
 	Vector3 Mix(const Vector3& a, const Vector3& b, float frac) {
 		return a + (b - a) * frac;
 	}
+	
+	Quaternion Mix(const Quaternion& a, const Quaternion& b, float frac) {
+		return ((b * a.Conjugate()) ^ frac) * a;
+	}
 }

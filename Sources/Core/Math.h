@@ -25,6 +25,7 @@
 #include <string>
 #include <stdint.h>		// uint32_t --> msvc
 #include <algorithm>	// std::max / std::min
+#include <cassert>
 
 #ifdef _MSC_VER
 #define isnan _isnan
@@ -665,6 +666,17 @@ namespace spades {
 		Vector3 GetAxis(int) const;
 		Vector3 GetOrigin() const;
 		
+		float& operator () (int row, int column) {
+			assert(row >= 0); assert(row < 4);
+			assert(column >= 0); assert(column < 4);
+			return m[row + column * 4];
+		}
+		const float& operator () (int row, int column) const {
+			assert(row >= 0); assert(row < 4);
+			assert(column >= 0); assert(column < 4);
+			return m[row + column * 4];
+		}
+		
 		static Matrix4 FromAxis(Vector3 a1, Vector3 a2, Vector3 a3,
 								Vector3 origin);
 		
@@ -852,10 +864,11 @@ namespace spades {
 		return OBB3(m * b.m);
 	}
 	
-#pragma mark - Quaternion for Rotations
+#pragma mark - Quaternion for Spatial Rotations
 	
 	struct Quaternion {
 		Vector4 v; // i, j, k, (real)
+		explicit Quaternion(const Vector4& v):v(v) { }
 	public:
 		Quaternion() = default;
 		Quaternion(float i, float j, float k, float real):
@@ -879,6 +892,18 @@ namespace spades {
 		inline Quaternion& operator *= (const Quaternion& o) {
 			*this = *this * o;
 			return *this;
+		}
+		
+		/** Real power of quaternion |Q| = 1. */
+		inline Quaternion operator ^ (float r) const {
+			float theta = acosf(v.w) * r;
+			auto vv = v; vv.w = 1.e-30f;
+			vv = vv.Normalize();
+			float newCos = cosf(theta);
+			float newSin = sinf(theta);
+			vv *= newSin;
+			vv.w = newCos;
+			return Quaternion(vv);
 		}
 		
 		inline bool operator != (const Quaternion& o) const {
@@ -930,6 +955,28 @@ namespace spades {
 						   
 						   0.f, 0.f, 0.f, 1.f);
 		}
+		
+		static inline Quaternion FromRotationMatrix(const Matrix4& m){
+			auto trace = m.m[0] + m.m[5] + m.m[10] + 1.f;
+			auto trace2 = m.m[0] - m.m[5] - m.m[10] + 1.f;
+			if (trace > trace2) {
+				auto w = 0.5f * sqrtf(trace);
+				auto s = 0.25f / w;
+				return Quaternion
+				(s * (m(2, 1) - m(1, 2)),
+				 s * (m(0, 2) - m(2, 0)),
+				 s * (m(1, 0) - m(0, 1)),
+				 w);
+			} else {
+				auto w = 0.5f * sqrtf(trace2);
+				auto s = 0.25f / w;
+				return Quaternion
+				(s * (m(0, 1) + m(1, 0)),
+				 s * (m(0, 2) + m(2, 0)),
+				 s * (m(2, 1) - m(1, 2)),
+				 w);
+			}
+		}
 	};
 	
 #pragma mark - Utilities
@@ -946,6 +993,8 @@ namespace spades {
 	float Mix(float a, float b, float frac);
 	Vector2 Mix(const Vector2& a, const Vector2& b, float frac);
 	Vector3 Mix(const Vector3& a, const Vector3& b, float frac);
+	
+	Quaternion Mix(const Quaternion& a, const Quaternion& b, float frac);
 	
 	/** @return true if any portion of the box is in the positive side of plane. */
 	bool PlaneCullTest(const Plane3&, const AABB3&);
