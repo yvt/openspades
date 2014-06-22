@@ -878,6 +878,10 @@ namespace spades {
 			return Quaternion(-v.x, -v.y, -v.z, v.w);
 		}
 		
+		inline Quaternion Normalize() const {
+			return Quaternion(v.Normalize());
+		}
+		
 		inline Quaternion operator * (const Quaternion& o) const {
 			const auto& a = v;
 			const auto& b = o.v;

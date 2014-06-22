@@ -844,6 +844,8 @@
 		E8F30C2F194E051D00A9DD84 /* ServerPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C2C194E051D00A9DD84 /* ServerPlayer.cpp */; };
 		E8F30C32194F068800A9DD84 /* NetworkPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C30194F068800A9DD84 /* NetworkPlayer.cpp */; };
 		E8F30C33194F068800A9DD84 /* NetworkPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C30194F068800A9DD84 /* NetworkPlayer.cpp */; };
+		E8F30C36195288B000A9DD84 /* ModelTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C34195288B000A9DD84 /* ModelTree.cpp */; };
+		E8F30C37195288B000A9DD84 /* ModelTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C34195288B000A9DD84 /* ModelTree.cpp */; };
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
 		E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */; };
@@ -1332,6 +1334,7 @@
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
 		E8C92A0E186A902500740C9F /* CpuID.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CpuID.cpp; sourceTree = "<group>"; };
+		E8CEAB9B1955C949004AB350 /* YSpline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YSpline.h; sourceTree = "<group>"; };
 		E8CF0385178ED9D2000683D4 /* OpenSpades-CmdLine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "OpenSpades-CmdLine"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CF0399178EDABD000683D4 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		E8CF039B178EDAC9000683D4 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -1759,6 +1762,8 @@
 		E8F30C2D194E051D00A9DD84 /* ServerPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerPlayer.h; sourceTree = "<group>"; };
 		E8F30C30194F068800A9DD84 /* NetworkPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkPlayer.cpp; sourceTree = "<group>"; };
 		E8F30C31194F068800A9DD84 /* NetworkPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkPlayer.h; sourceTree = "<group>"; };
+		E8F30C34195288B000A9DD84 /* ModelTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModelTree.cpp; sourceTree = "<group>"; };
+		E8F30C35195288B000A9DD84 /* ModelTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelTree.h; sourceTree = "<group>"; };
 		E8F74CE3183F86AE0085AA54 /* View.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = View.cpp; sourceTree = "<group>"; };
 		E8F74CE4183F86AE0085AA54 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
 		E8F74CE6183F8A110085AA54 /* Main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Main.h; sourceTree = "<group>"; };
@@ -2346,6 +2351,25 @@
 			path = addons;
 			sourceTree = "<group>";
 		};
+		E8CEAB981954ADFF004AB350 /* OSObj */ = {
+			isa = PBXGroup;
+			children = (
+				E8F30C34195288B000A9DD84 /* ModelTree.cpp */,
+				E8F30C35195288B000A9DD84 /* ModelTree.h */,
+			);
+			name = OSObj;
+			sourceTree = "<group>";
+		};
+		E8CEAB991955C8EF004AB350 /* Math */ = {
+			isa = PBXGroup;
+			children = (
+				E8CF03CC178EE95F000683D4 /* Math.cpp */,
+				E8CF03CD178EE95F000683D4 /* Math.h */,
+				E8CEAB9B1955C949004AB350 /* YSpline.h */,
+			);
+			name = Math;
+			sourceTree = "<group>";
+		};
 		E8CF037C178ED9D2000683D4 = {
 			isa = PBXGroup;
 			children = (
@@ -2487,13 +2511,13 @@
 		E8CF03AF178EE2CD000683D4 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E8CEAB991955C8EF004AB350 /* Math */,
 				E8D0E5E218F9ABBB00DE3BDB /* Net */,
 				E8E44682179CC4A400BE8855 /* Media */,
 				E8E44681179CC49C00BE8855 /* I/O */,
 				E8E44680179CC48B00BE8855 /* System */,
 				E8B6B6E617E40AF300E35523 /* ScriptBindings */,
-				E8CF03CC178EE95F000683D4 /* Math.cpp */,
-				E8CF03CD178EE95F000683D4 /* Math.h */,
+				E8CEAB981954ADFF004AB350 /* OSObj */,
 				E88318DF17925F2E002ABE6D /* Deque.cpp */,
 				E88318E017925F2E002ABE6D /* Deque.h */,
 				E88318E21792698D002ABE6D /* Stopwatch.cpp */,
@@ -3336,6 +3360,7 @@
 				E82E674C18EA7972004DBA18 /* as_parser.cpp in Sources */,
 				E82E674D18EA7972004DBA18 /* as_restore.cpp in Sources */,
 				E8D0E73518FABC3600DE3BDB /* cpu.cpp in Sources */,
+				E8F30C37195288B000A9DD84 /* ModelTree.cpp in Sources */,
 				E818AEDB1949E0D1004500C7 /* Arena_World.cpp in Sources */,
 				E82E674E18EA7972004DBA18 /* as_scriptcode.cpp in Sources */,
 				E82E674F18EA7972004DBA18 /* as_scriptengine.cpp in Sources */,
@@ -4008,6 +4033,7 @@
 				E8B6B6A917DE27B500E35523 /* as_module.cpp in Sources */,
 				E8D0E75618FABC3600DE3BDB /* emsa2.cpp in Sources */,
 				E8B6B6AA17DE27B500E35523 /* as_objecttype.cpp in Sources */,
+				E8F30C36195288B000A9DD84 /* ModelTree.cpp in Sources */,
 				E8D0E70C18FABC3600DE3BDB /* adler32.cpp in Sources */,
 				E8B6B6AB17DE27B500E35523 /* as_outputbuffer.cpp in Sources */,
 				E8B6B6AC17DE27B500E35523 /* as_parser.cpp in Sources */,

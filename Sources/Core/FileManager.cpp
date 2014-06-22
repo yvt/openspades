@@ -25,6 +25,7 @@
 #include "IStream.h"
 #include "Debug.h"
 #include <set>
+#include <Core/Strings.h>
 
 namespace spades {
 	static std::list<IFileSystem *> g_fileSystems;
@@ -102,6 +103,8 @@ namespace spades {
 	}
 	
 	std::vector<std::string> FileManager::EnumFiles(const char *path) {
+		SPADES_MARK_FUNCTION();
+		
 		std::vector<std::string> list;
 		std::set<std::string> set;
 		if(!path) SPInvalidArgument("path");
@@ -116,6 +119,98 @@ namespace spades {
 			list.push_back(s);
 		
 		return list;
+	}
+	
+	std::string FileManager::ResolvePath(const std::string &path,
+										 const std::string &basePath,
+										 bool secure) {
+		SPADES_MARK_FUNCTION();
+		if (basePath.empty() || basePath[basePath.size() - 1] != '/') {
+			SPRaise("Base path should end with '/'");
+		}
+		
+		if (secure) {
+			// validate characters
+			if (path.size() > 256) {
+				SPRaise("Insecure path (too long)");
+			}
+			for (auto c: path) {
+				if (c >= 'a' && c <= 'z') continue;
+				if (c >= 'A' && c <= 'Z') continue;
+				if (c >= '0' && c <= '9') continue;
+				if (c == '/' || c == '_' || c == '.') continue;
+				SPRaise("Insecure path (disallowed character): %s", path.c_str());
+			}
+			if (path[0] == '/') {
+				SPRaise("Insecure path (absolute path): %s", path.c_str());
+			}
+			
+		}
+		
+		auto parts = Split(basePath, "/");
+		auto exParts = Split(path, "/");
+		parts.pop_back();
+		
+		auto initSize = parts.size();
+		
+		for (auto it = exParts.begin(); it != exParts.end(); ++it) {
+			const auto& s = *it;
+			if (s.empty() && it == exParts.begin()) {
+				if (secure) {
+					SPRaise("Insecure path (absolute path): %s", path.c_str());
+				} else {
+					parts.clear(); parts.push_back("");
+				}
+			} else if (s == ".") {
+				continue;
+			} else if (s == "..") {
+				parts.pop_back();
+				if (secure && parts.size() < initSize) {
+					SPRaise("Insecure path (escaping from the base directory): %s", path.c_str());
+				}
+				if (parts.empty()) {
+					SPRaise("Cannot go outside the root directory: %s "
+							"(basepath = '%s')", path.c_str(), basePath.c_str());
+				}
+			} else {
+				if (s.empty() && parts.back().empty()) {
+					continue;
+				}
+				if (!s.empty() && s[0] == '.' && secure) {
+					SPRaise("Insecure path (dotfile): %s", path.c_str());
+				}
+				parts.push_back(s);
+			}
+		}
+		
+		// make path
+		std::string s;
+		SPAssert(!parts.empty());
+		SPAssert(parts[0].empty());
+		for (std::size_t i = 1; i < parts.size(); ++i)
+			s += "/" + parts[i];
+		return s;
+	}
+	
+	std::string FileManager::CombinePath(const std::string &path1,
+										 const std::string &path2) {
+		if (path2.empty()) return path1;
+		if (path2[0] == '/') return path2;
+		if (path1.empty()) return path2;
+		if (path1.back() == '/') {
+			return path1 + path2;
+		} else {
+			return path1 + "/" + path2;
+		}
+	}
+	
+	std::string FileManager::GetPathWithoutFileName(const std::string &path) {
+		auto idx = path.rfind('/');
+		if (idx == std::string::npos) {
+			return "";
+		} else {
+			return path.substr(0, idx + 1);
+		}
 	}
 	
 }

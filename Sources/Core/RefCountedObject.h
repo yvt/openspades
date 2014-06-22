@@ -60,21 +60,13 @@ namespace spades {
 			if(ptr)
 				ptr->Release();
 		}
-		T *operator ->() {
+		T *operator ->() const {
 			SPAssert(ptr != NULL);
 			return ptr;
 		}
-		const T *operator ->() const {
-			SPAssert(ptr != NULL);
-			return ptr;
-		}
-		T& operator *() {
+		T& operator *() const {
 			// existence of null reference result in
 			// an undefined behavior (8.3.2/1).
-			SPAssert(ptr != NULL);
-			return *ptr;
-		}
-		const T& operator *() const {
 			SPAssert(ptr != NULL);
 			return *ptr;
 		}
@@ -97,7 +89,7 @@ namespace spades {
 		void operator =(const Handle<T>& h){
 			Set(h.ptr, true);
 		}
-		operator T *() {
+		operator T *() const {
 			return ptr;
 		}
 		T *Unmanage() {

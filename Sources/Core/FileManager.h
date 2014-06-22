@@ -37,5 +37,11 @@ namespace spades {
 		static void PrependFileSystem(IFileSystem *);
 		static std::vector<std::string> EnumFiles(const char *);
 		static std::string ReadAllBytes(const char *);
+		static std::string ResolvePath(const std::string& path,
+									   const std::string& basePath = "/",
+									   bool secure = false);
+		static std::string CombinePath(const std::string& path1,
+									   const std::string& path2);
+		static std::string GetPathWithoutFileName(const std::string&);
 	};
 };
