@@ -22,7 +22,7 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 1. Install dependencies:
 
    *On Debian-derived distributions*: 
-    ```sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev``` (because of a bug in some distributions, you might also
+    ```sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libode-dev``` (because of a bug in some distributions, you might also
    have to install more packages by ```sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev```)
 
 
@@ -94,6 +94,8 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
 ### On Windows (with visual studio)
 
+TODO: add installation of Open Dynamics Engine
+
 1. Get CMake, Visual Studio 2013 (Express), and the OpenSpades source.
    Official: https://github.com/yvt/openspades
    Unofficial: https://github.com/learn-more/openspades
@@ -108,6 +110,8 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 5. Open ```E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln``` in visual studio.
 
 ### On Mac OS X (with Xcode)
+
+TODO: add installation of Open Dynamics Engine
 
 1. Get the latest version of Xcode and OpenSpades source.
 2. Download and install [SDL2 development libraries for OS X](http://www.libsdl.org/download-2.0.php) to `/Library/Frameworks`.
