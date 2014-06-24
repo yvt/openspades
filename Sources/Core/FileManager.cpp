@@ -138,8 +138,9 @@ namespace spades {
 				if (c >= 'a' && c <= 'z') continue;
 				if (c >= 'A' && c <= 'Z') continue;
 				if (c >= '0' && c <= '9') continue;
-				if (c == '/' || c == '_' || c == '.') continue;
-				SPRaise("Insecure path (disallowed character): %s", path.c_str());
+				if (c == '/' || c == '_' || c == '.' ||
+					c == ' ') continue;
+				SPRaise("Insecure path (disallowed character 0x%02x): %s", c, path.c_str());
 			}
 			if (path[0] == '/') {
 				SPRaise("Insecure path (absolute path): %s", path.c_str());
@@ -149,7 +150,7 @@ namespace spades {
 		
 		auto parts = Split(basePath, "/");
 		auto exParts = Split(path, "/");
-		parts.pop_back();
+		//parts.pop_back();
 		
 		auto initSize = parts.size();
 		
@@ -184,9 +185,8 @@ namespace spades {
 		}
 		
 		// make path
-		std::string s;
+		std::string s = parts[0];
 		SPAssert(!parts.empty());
-		SPAssert(parts[0].empty());
 		for (std::size_t i = 1; i < parts.size(); ++i)
 			s += "/" + parts[i];
 		return s;
