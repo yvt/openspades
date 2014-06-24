@@ -284,7 +284,7 @@ elseif(UNIX AND NOT APPLE)
 	SET(CPACK_SET_DESTDIR "on")
 	SET(CPACK_GENERATOR "DEB;TGZ")
 	SET(CPACK_DEBIAN_PACKAGE_DEPENDS
-		"libc6 (>= 2.19), libgcc1 (>= 1:4.9), libstdc++6 (>= 4.8.2), zlib1g (>= 1:1.2.8), libcurl3 (>= 7.35.0), libglew1.10 (>= 1.10.0), libsdl2-2.0-0 (>= 2.0.2), libsdl2-image-2.0-0 (>= 2.0.0), libode1 (>= 0.11.0)")
+		"libc6 (>= 2.19), libgcc1 (>= 1:4.9), libstdc++6 (>= 4.8.2), zlib1g (>= 1:1.2.8), libcurl3 (>= 7.35.0), libglew1.10 (>= 1.10.0), libsdl2-2.0-0 (>= 2.0.2), libsdl2-image-2.0-0 (>= 2.0.0), libode1sp (>= 0.11.0)")
 	SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 	SET(CPACK_DEBIAN_PACKAGE_SECTION "games")
 	SET(CPACK_DEBIAN_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})

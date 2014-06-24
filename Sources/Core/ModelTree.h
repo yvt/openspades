@@ -87,6 +87,11 @@ namespace spades { namespace osobj {
 	public:
 		virtual ~ConstraintVisitor() {}
 	};
+	class ConstConstraintVisitor:
+	public stmp::const_visitor_generator<ConstraintClassList> {
+	public:
+		virtual ~ConstConstraintVisitor() {}
+	};
 	
 	class Constraint: public RefCountedObject {
 	protected:
@@ -95,6 +100,7 @@ namespace spades { namespace osobj {
 		Constraint();
 		virtual ConstraintType GetType() = 0;
 		virtual void Accept(ConstraintVisitor&) = 0;
+		virtual void Accept(ConstConstraintVisitor&) const = 0;
 	};
 	
 	class BallConstratint: public Constraint {
@@ -106,6 +112,9 @@ namespace spades { namespace osobj {
 			return ConstraintType::Ball;
 		}
 		void Accept(ConstraintVisitor& visitor) override {
+			visitor.visit(*this);
+		}
+		void Accept(ConstConstraintVisitor& visitor) const override {
 			visitor.visit(*this);
 		}
 		
@@ -121,6 +130,9 @@ namespace spades { namespace osobj {
 			return ConstraintType::Hinge;
 		}
 		void Accept(ConstraintVisitor& visitor) override {
+			visitor.visit(*this);
+		}
+		void Accept(ConstConstraintVisitor& visitor) const override {
 			visitor.visit(*this);
 		}
 		
@@ -139,6 +151,9 @@ namespace spades { namespace osobj {
 			return ConstraintType::Hinge;
 		}
 		void Accept(ConstraintVisitor& visitor) override {
+			visitor.visit(*this);
+		}
+		void Accept(ConstConstraintVisitor& visitor) const override {
 			visitor.visit(*this);
 		}
 		
@@ -198,6 +213,8 @@ namespace spades { namespace osobj {
 		
 		Frame *GetParent() const { return parent; }
 		const decltype(children)& GetChildren() const { return children; }
+		
+		const decltype(objects)& GetObjects() const { return objects; }
 		
 		const decltype(constraints)& GetConstraints() const { return constraints; }
 		

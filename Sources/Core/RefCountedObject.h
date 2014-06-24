@@ -22,6 +22,7 @@
 
 #include "Debug.h"
 #include "Mutex.h"
+#include <functional>
 
 #define DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE 0
 
@@ -103,4 +104,13 @@ namespace spades {
 		}
 	};
 	
+}
+
+namespace std {
+	template <class T>
+	struct hash<spades::Handle<T>> {
+		size_t operator () (const spades::Handle<T>& h) const {
+			return std::hash<T*>()(h);
+		}
+	};
 }
