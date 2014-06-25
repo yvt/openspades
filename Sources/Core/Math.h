@@ -960,24 +960,34 @@ namespace spades {
 						   0.f, 0.f, 0.f, 1.f);
 		}
 		
-		static inline Quaternion FromRotationMatrix(const Matrix4& m){
-			auto trace = m.m[0] + m.m[5] + m.m[10] + 1.f;
-			auto trace2 = m.m[0] - m.m[5] - m.m[10] + 1.f;
+		static inline Quaternion FromRotationMatrix(const Matrix4& m, bool normalize = true){
+			auto axis1 = m.GetAxis(0);
+			auto axis2 = m.GetAxis(1);
+			auto axis3 = m.GetAxis(2);
+			
+			if (normalize) {
+				axis1 = axis1.Normalize();
+				axis2 = axis2.Normalize();
+				axis3 = axis3.Normalize();
+			}
+			
+			auto trace = axis1.x + axis2.y + axis3.z + 1.f;
+			auto trace2 = axis1.x - axis2.y - axis3.z + 1.f;
 			if (trace > trace2) {
 				auto w = 0.5f * sqrtf(trace);
 				auto s = 0.25f / w;
 				return Quaternion
-				(s * (m(2, 1) - m(1, 2)),
-				 s * (m(0, 2) - m(2, 0)),
-				 s * (m(1, 0) - m(0, 1)),
+				(s * (axis2.z - axis3.y),
+				 s * (axis3.x - axis1.z),
+				 s * (axis1.y - axis2.x),
 				 w);
 			} else {
 				auto w = 0.5f * sqrtf(trace2);
 				auto s = 0.25f / w;
 				return Quaternion
-				(s * (m(0, 1) + m(1, 0)),
-				 s * (m(0, 2) + m(2, 0)),
-				 s * (m(2, 1) - m(1, 2)),
+				(s * (axis2.x + axis1.y),
+				 s * (axis3.x + axis1.z),
+				 s * (axis2.z - axis3.y),
 				 w);
 			}
 		}
