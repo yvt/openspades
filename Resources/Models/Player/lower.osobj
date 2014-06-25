@@ -1,0 +1,102 @@
+{
+	"scene": {
+		"id": "abdomen",
+		"objects": [ { "object": "abdomen" } ],
+		"constraints": [
+			{
+				"type": "hinge",
+				"origin": [ 0, 0, 0 ],
+				"axis": [ 0, 0, 1 ],
+				"range": [ -30, 30 ]
+			}
+		],
+		"scale": 0.08, 
+		"children": [
+			{
+				"id": "thighLeft1",
+				"constraints": [
+					{
+						"type": "universal",
+						"origin": [ 0, 0, 0 ],
+						"axis1": [ 0, 1, 0 ],
+						"axis2": [ 1, 0, 0 ],
+						"range1": [ 0, 10 ],
+						"range2": [ -90, 5 ]
+					}
+				],
+				"objects": [ { "object": "thigh" } ],
+				"position": [ 2.6, 0, -2 ],
+				"children": [
+					{
+						"id": "legLeft",
+						"objects": [ { "object": "leg" } ],
+						"constraints": {
+							"type": "hinge",
+							"origin": [ 0, 0, 0 ],
+							"axis": [ 1, 0, 0 ],
+							"range": [ 5, 180 ]
+						},
+						"position": [ 0.0, 0, 7 ],
+							"children": {
+							"id": "footLeft",
+							"position": [ 0.0, 0, 8 ],
+							"constraints": {
+								"type": "hinge",
+								"origin": [ 0, 0, 0 ],
+								"axis": [ 0, 0, 0 ],
+								"range": [ -5, 5 ]
+							}
+						}
+					}
+				]
+			}, 
+			{
+				"id": "thighRight1",
+				"constraints": [
+					{
+						"type": "universal",
+						"origin": [ 0, 0, 0 ],
+						"axis1": [ 0, 1, 0 ],
+						"axis2": [ 1, 0, 0 ],
+						"range1": [ -10, 0 ],
+						"range2": [ -90, 5 ]
+					}
+				],
+				"objects": [ { "object": "thigh" } ],
+				"position": [ -2.6, 0, -2 ],
+				"children": [
+					{
+						"id": "legRight",
+						"objects": [ { "object": "leg" } ],
+						"constraints": {
+							"type": "hinge",
+							"origin": [ 0, 0, 0 ],
+							"axis": [ 1, 0, 0 ],
+							"range": [ 5, 180 ]
+						},
+						"position": [ 0.0, 0, 7 ],
+							"children": {
+							"id": "footRight",
+							"position": [ 0.0, 0, 8 ],
+							"constraints": {
+								"type": "hinge",
+								"origin": [ 0, 0, 0 ],
+								"axis": [ 0, 0, 0 ],
+								"range": [ -5, 5 ]
+							}
+						}
+					}
+				]
+			}
+		]
+	},
+	"objects": {
+		"arm": { "path": "Arm.kv6" },
+		"upper-arm": { "path": "UpperArm.kv6" },
+		"head": { "path": "Head.kv6"},
+		"leg": { "path": "bodyLeg.kv6" },
+		"thigh": { "path": "bodyThigh.kv6" },
+		"torso": { "path": "Torso.kv6" },
+		"abdomen": { "path": "bodyAbdomen.kv6" } /* TODO */
+	}
+}

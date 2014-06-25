@@ -32,7 +32,12 @@ namespace spades { namespace ngclient {
 	
 	
 	PlayerLocalEntityFactory::PlayerLocalEntityFactory(Arena& arena):
-	arena(arena) { }
+	arena(arena) {
+		Handle<osobj::Loader> loader
+		(new osobj::Loader("Models/Player/"), false);
+		lower.Set(loader->LoadFrame("lower.osobj"), false);
+		lowerRenderer.Set(new ModelTreeRenderer(arena.GetRenderer(), lower), false);
+	}
 	PlayerLocalEntityFactory::~PlayerLocalEntityFactory()
 	{ }
 	
@@ -44,8 +49,8 @@ namespace spades { namespace ngclient {
 		static const int RightFoot = 0;
 		static const int LeftFoot = 1;
 		
-		const float footSidePos = .4f;
-		const float footDistanceLimit = .8f;
+		const float footSidePos = .2f;
+		const float footDistanceLimit = .7f;
 		
 		std::array<bool, 2> footContactingGround { true, true };
 		std::array<Vector3, 2> footPos;
@@ -124,6 +129,19 @@ namespace spades { namespace ngclient {
 		
 		std::array<Vector3, 2> GetFootPos() {
 			return footPos;
+		}
+		
+		float GetDistanceFromNaturalState() {
+			auto awayL = footPos[LeftFoot] - GetNaturalPos(LeftFoot);
+			auto awayR = footPos[RightFoot] - GetNaturalPos(RightFoot);
+			return awayL.GetLength() + awayR.GetLength();
+		}
+		
+		float GetRotation() {
+			auto awayL = footPos[LeftFoot] - GetNaturalPos(LeftFoot);
+			auto awayR = footPos[RightFoot] - GetNaturalPos(RightFoot);
+			auto front = GetFront();
+			return Vector3::Dot(awayL - awayR, front);
 		}
 		
 		void Update(float dt, int level = 0) {
@@ -258,7 +276,7 @@ namespace spades { namespace ngclient {
 					floatPos += offset;
 					
 					float p = groundFootAwayness * (1.f - groundFootAwayness);
-					floatPos.z -= p * 2.f;
+					floatPos.z -= p * 1.f;
 					
 					float speed = .5f;
 					if (isStopping) {
@@ -306,18 +324,32 @@ namespace spades { namespace ngclient {
 	 PlayerLocalEntityFactory& factory):
 	arena(arena),
 	entity(&entity),
-	walkAnim(new WalkAnimator())
+	walkAnim(new WalkAnimator()),
+	factory(factory)
 	{
 		SPADES_MARK_FUNCTION();
 		
 		entity.AddListener(static_cast<game::EntityListener *>(this));
 		entity.AddListener(static_cast<game::PlayerEntityListener *>(this));
 		
+		lowerPose.Set
+		(new osobj::Pose(factory.lower), false);
+		world.reset(new dWorld());
+		lowerPhys.Set
+		(new osobj::PhysicsObject(factory.lower,
+								  world->id()),
+		 false);
+		world->setGravity(0, 0, 0);
+		world->setERP(0.8);
 		walkAnim->Reset();
 	}
 	
 	PlayerLocalEntity::~PlayerLocalEntity() {
 		SPADES_MARK_FUNCTION();
+		
+		lowerPhys.Set(nullptr);
+		lowerPose.Set(nullptr);
+		world.reset();
 		
 		if (entity) {
 			entity->RemoveListener(static_cast<game::EntityListener *>(this));
@@ -332,6 +364,74 @@ namespace spades { namespace ngclient {
 			auto& traj = entity->GetTrajectory();
 			walkAnim->SetPosition(traj.origin, traj.velocity, -traj.eulerAngle.z);
 			walkAnim->Update(static_cast<float>(dt));
+			
+			for (int i = 0; i < 2; ++i) {
+				
+				auto Move = [&](dBody& b, const Vector3& v, bool force = false) {
+					
+					if (force) {
+						b.setPosition(v.x, v.y, v.z);
+						b.setAngularVel(0, 0, 0);
+						b.setLinearVel(0, 0, 0);
+					} else {
+						auto f = v;
+						auto *pos = b.getPosition();
+						f.x -= pos[0]; f.y -= pos[1]; f.z -= pos[2];
+						f *= 80.f;
+						b.addForce(f.x, f.y, f.z);
+					}
+				};
+				
+				auto footPos = walkAnim->GetFootPos();
+				
+				float hop = walkAnim->GetDistanceFromNaturalState();
+				hop = std::min(0.3f, hop * 0.05f);
+				
+				auto& frame = *factory.lower;
+				auto *abd = frame.GetFrameById("abdomen");
+				auto abdBody = lowerPhys->GetBody(abd);
+				if (abdBody) {
+					auto p = traj.origin;
+					auto vel = traj.velocity; vel.z = 0;
+					if (vel.GetLength() > 9.5f) vel = vel.Normalize() * 9.5f;
+					p += vel * 0.05f;
+					Move(*abdBody, Vector3(p.x, p.y, p.z - 1.3f + hop), true);
+					
+					auto wrot = walkAnim->GetRotation();
+					auto q = Quaternion::MakeRotation(Vector3(0,0,-traj.eulerAngle.z + wrot * 0.1f));
+					abdBody->setQuaternion(std::array<float, 4>{q.v.w, q.v.x, q.v.y, q.v.z}.data());
+					
+					abdBody->setKinematic();
+					
+				}
+				
+				auto *ftL = frame.GetFrameById("footLeft");
+				auto ftLBody = lowerPhys->GetBody(ftL);
+				if (ftLBody) {
+					auto p = traj.origin;
+					auto pp = footPos[0];
+					Move(*ftLBody, Vector3(pp.x, pp.y, p.z + pp.z), false);
+					//abdBody->setKinematic();
+				}
+				
+				auto *ftR = frame.GetFrameById("footRight");
+				auto ftRBody = lowerPhys->GetBody(ftR);
+				if (ftRBody) {
+					auto p = traj.origin;
+					auto pp = footPos[1];
+					Move(*ftRBody, Vector3(pp.x, pp.y, p.z + pp.z), false);
+					//abdBody->setKinematic();
+				}
+				
+				world->quickStep(0.1);
+			}
+			
+			auto bods = lowerPhys->GetAllBodies();
+			for (const auto& b: bods) {
+				b->setDamping(.2, .2);/*
+				b->setAngularVel(0, 0, 0);
+				b->setLinearVel(0, 0, 0);*/
+			}
 		}
 			
 		// TODO: Update
@@ -342,33 +442,14 @@ namespace spades { namespace ngclient {
 		SPADES_MARK_FUNCTION();
 		
 		if (entity) {
-			// dummy drawing routine to test
-			// walking anim
-			auto& traj = entity->GetTrajectory();
-			auto& r = *arena.GetClient()->GetRenderer();
-			auto *model = r.RegisterModel("Models/Player/Leg.kv6");
+			lowerPhys->UpdatePose(*lowerPose);
 			
-			auto feet = walkAnim->GetFootPos();
-			
-			
-			
-			client::ModelRenderParam param;
+			ModelTreeRenderParam param;
 			param.customColor = Vector3(.2f, .6f, .2f);
 			param.depthHack = false;
 			
-			param.matrix = Matrix4::Translate(feet[0] + Vector3(0, 0, traj.origin.z));
-			param.matrix *= Matrix4::Scale(.1f);
-			param.matrix *= Matrix4::Translate(0.f, 0.f, -10.f);
-			param.matrix *= Matrix4::Rotate(Vector3(0,0,1), traj.eulerAngle.z);
+			factory.lowerRenderer->AddToScene(*lowerPose, param);
 			
-			r.RenderModel(model, param);
-			
-			param.matrix = Matrix4::Translate(feet[1] + Vector3(0, 0, traj.origin.z));
-			param.matrix *= Matrix4::Scale(.1f);
-			param.matrix *= Matrix4::Translate(0.f, 0.f, -10.f);
-			param.matrix *= Matrix4::Rotate(Vector3(0,0,1), traj.eulerAngle.z);
-			
-			r.RenderModel(model, param);
 			
 		}
 			
@@ -438,9 +519,9 @@ namespace spades { namespace ngclient {
 		if (cg_thirdperson && arena.GetClient()->IsHostingServer()) {
 			
 			auto head = entity->GetTrajectory().origin;
-			head.z -= entity->GetCurrentHeight() - 0.2f;
+			head.z -= 1.f; //entity->GetCurrentHeight() - 0.2f;
 			
-			def.viewOrigin = head + Vector3(0.f, 6.f, -2.f);
+			def.viewOrigin = head + Vector3(0.f, 3.f, -1.f);
 			
 			def.viewAxis[2] = head - def.viewOrigin;
 			def.viewAxis[1] = Vector3(0, 0, -1);

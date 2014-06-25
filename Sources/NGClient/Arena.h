@@ -97,6 +97,7 @@ namespace spades { namespace ngclient {
 		~Arena();
 		
 		Client *GetClient() { return client; }
+		client::IRenderer *GetRenderer() { return renderer; }
 		
 		/*---- interface like gui::View ---- */
 		void MouseEvent(float x, float y);

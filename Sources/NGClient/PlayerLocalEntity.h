@@ -22,6 +22,8 @@
 #include "LocalEntity.h"
 #include <Game/PlayerEntity.h>
 #include "Arena.h"
+#include "ModelTreeRenderer.h"
+#include <Core/ModelPhysics.h>
 
 namespace spades { namespace ngclient {
 	
@@ -29,7 +31,10 @@ namespace spades { namespace ngclient {
 	class PlayerLocalEntity;
 	
 	class PlayerLocalEntityFactory final {
+		friend class PlayerLocalEntity;
 		Arena& arena;
+		Handle<osobj::Frame> lower;
+		Handle<ModelTreeRenderer> lowerRenderer;
 	public:
 		PlayerLocalEntityFactory(Arena&);
 		~PlayerLocalEntityFactory();
@@ -51,6 +56,12 @@ namespace spades { namespace ngclient {
 		
 		Arena& arena;
 		game::PlayerEntity *entity;
+		PlayerLocalEntityFactory& factory;
+		
+		// used for inverse kinematics
+		std::shared_ptr<dWorld> world;
+		Handle<osobj::Pose> lowerPose;
+		Handle<osobj::PhysicsObject> lowerPhys;
 		
 		class WalkAnimator;
 		std::unique_ptr<WalkAnimator> walkAnim;
