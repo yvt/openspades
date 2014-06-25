@@ -38,6 +38,7 @@
 
 SPADES_SETTING(r_swStatistics, "0");
 SPADES_SETTING(r_swNumThreads, "4");
+SPADES_SETTING(r_swExpFogRange, "4");
 
 namespace spades {
 	namespace draw {
@@ -382,7 +383,6 @@ namespace spades {
 		template<SWFeatureLevel level>
 		void SWRenderer::ApplyFog() {
 			SPAssert(fogType == client::FogType::Classical);
-			// TODO: support exponential fog
 			
 			int fw = this->fb->GetWidth();
 			int fh = this->fb->GetHeight();
@@ -464,12 +464,99 @@ namespace spades {
 			
 		} // ApplyFog()
 		
+		template<SWFeatureLevel level>
+		void SWRenderer::ApplyExponentialFog() {
+			SPAssert(fogType == client::FogType::Exponential);
+			
+			int fw = this->fb->GetWidth();
+			int fh = this->fb->GetHeight();
+			
+			float fovX = tanf(sceneDef.fovX * 0.5f);
+			float fovY = tanf(sceneDef.fovY * 0.5f);
+			
+			float dvx = -fovX * 2.f / static_cast<float>(fw / 4);
+			float dvy = -fovY * 2.f / static_cast<float>(fh / 4);
+			
+			int fogR = ToFixed8(fogColor.x);
+			int fogG = ToFixed8(fogColor.y);
+			int fogB = ToFixed8(fogColor.z);
+			uint32_t fog1 = static_cast<uint32_t>(fogB + fogR * 0x10000);
+			uint32_t fog2 = static_cast<uint32_t>(fogG * 0x100);
+			
+			float scale = 256.f / fogDistance;
+			
+			InvokeParallel2([&](unsigned int threadId, unsigned int numThreads) {
+				int startY = fh * threadId / numThreads;
+				int endY = fh * (threadId + 1) / numThreads;
+				startY &= ~3;
+				endY &= ~3;
+				
+				float vy = fovY;
+				auto *fb = this->fb->GetPixels();
+				float *db = depthBuffer.data();
+				
+				vy += dvy * (startY >> 2);
+				fb += fw * startY;
+				db += fw * startY;
+				
+				for(int y = startY; y < endY; y += 4) {
+					float vx = fovX;
+					
+					for(int x = 0; x < fw; x += 4) {
+						float depthScale = (1.f + vx*vx+vy*vy);
+						depthScale *= fastRSqrt(depthScale) * scale;
+						auto *fb2 = fb + x;
+						auto *db2 = db + x;
+						for(int by = 0; by < 4; by++) {
+							auto *fb3 = fb2;
+							auto *db3 = db2;
+							
+							for(int bx = 0; bx < 4; bx++) {
+								
+								float dist = *db3 * depthScale;
+								int intDist = std::min(static_cast<int>(dist),
+													  256 * 31 - 1);
+								intDist = std::max(intDist, 0);
+								int factorR1 = 256 >> (intDist >> 8);
+								int factorR2 = factorR1 >> 1;
+								int factor = factorR1 - (factorR2*(intDist&0xff) >> 8);
+								int factor1 = 256 - factor;
+								int factor2 = factor;
+								
+								uint32_t color = *fb3;
+								uint32_t v1 = (color & 0xff00ff) * factor2;
+								uint32_t v2 = (color & 0x00ff00) * factor2;
+								v1 += fog1 * factor1;
+								v2 += fog2 * factor1;
+								v1 &= 0xff00ff00;
+								v2 &= 0xff0000;
+								*fb3 = (v1 | v2) >> 8;
+								
+								fb3++;
+								db3++;
+							}
+							
+							fb2 += fw;
+							db2 += fw;
+						}
+						
+						vx += dvx;
+					}
+					
+					vy += dvy;
+					fb += fw * 4;
+					db += fw * 4;
+				}
+			});
+			
+			
+		} // ApplyFog()
+		
 #if ENABLE_SSE2
 		
 		template<>
 		void SWRenderer::ApplyFog<SWFeatureLevel::SSE2>() {
 			SPAssert(fogType == client::FogType::Classical);
-			// TODO: support exponential fog
 			
 			int fw = this->fb->GetWidth();
 			int fh = this->fb->GetHeight();
@@ -570,6 +657,115 @@ namespace spades {
 			
 		} // ApplyFog()
 		
+		template<>
+		void SWRenderer::ApplyExponentialFog<SWFeatureLevel::SSE2>() {
+			SPAssert(fogType == client::FogType::Exponential);
+			
+			int fw = this->fb->GetWidth();
+			int fh = this->fb->GetHeight();
+			
+			float fovX = tanf(sceneDef.fovX * 0.5f);
+			float fovY = tanf(sceneDef.fovY * 0.5f);
+			
+			float dvx = -fovX * 2.f / static_cast<float>(fw / 4);
+			float dvy = -fovY * 2.f / static_cast<float>(fh / 4);
+			
+			int fogR = ToFixed8(fogColor.x);
+			int fogG = ToFixed8(fogColor.y);
+			int fogB = ToFixed8(fogColor.z);
+			__m128i fog = _mm_setr_epi16(fogB, fogG, fogR, 0, fogB, fogG, fogR, 0);
+			
+			float scale = -(float)(1 << 23) / fogDistance;
+			
+			InvokeParallel2([&](unsigned int threadId, unsigned int numThreads) {
+				int startY = fh * threadId / numThreads;
+				int endY = fh * (threadId + 1) / numThreads;
+				startY &= ~3;
+				endY &= ~3;
+				
+				float vy = fovY;
+				auto *fb = this->fb->GetPixels();
+				float *db = depthBuffer.data();
+				
+				vy += dvy * (startY >> 2);
+				fb += fw * startY;
+				db += fw * startY;
+				
+				auto baseDist = _mm_set1_ps((float)((127 + 8) << 23));
+				auto minDist = _mm_set1_ps((float)(1 << 23));
+				
+				for(int y = startY; y < endY; y += 4) {
+					float vx = fovX;
+					
+					for(int x = 0; x < fw; x += 4) {
+						float depthScale = (1.f + vx*vx+vy*vy);
+						depthScale *= fastRSqrt(depthScale) * scale;
+						auto depthScale4 = _mm_set1_ps(depthScale);
+						
+						auto *fb2 = fb + x;
+						auto *db2 = db + x;
+						for(int by = 0; by < 4; by++) {
+							auto *fb3 = fb2;
+							auto *db3 = db2;
+							
+							auto dist = _mm_load_ps(db3);
+							auto color = _mm_load_si128(reinterpret_cast<__m128i*>(fb3));
+							
+							dist = _mm_mul_ps(dist, depthScale4);
+							dist = _mm_add_ps(baseDist, dist);
+							dist = _mm_max_ps(dist, minDist);
+							
+							// 2^x
+							dist = _mm_castsi128_ps(_mm_cvtps_epi32(dist));
+							
+							auto factorY = _mm_cvtps_epi32(dist);
+							
+							auto factorX = _mm_sub_epi32(_mm_set1_epi32(0x100),
+														 factorY);
+							
+							factorX = _mm_shufflelo_epi16(factorX, 0xa0);
+							factorX = _mm_shufflehi_epi16(factorX, 0xa0);
+							factorY = _mm_shufflelo_epi16(factorY, 0xa0);
+							factorY = _mm_shufflehi_epi16(factorY, 0xa0);
+							
+							// first 2px
+							auto color1 = _mm_unpacklo_epi8(color, _mm_setzero_si128());
+							auto factor1X = _mm_shuffle_epi32(factorY, 0x50);
+							auto factor1Y = _mm_shuffle_epi32(factorX, 0x50);
+							color1 = _mm_mullo_epi16(color1, factor1X);
+							auto fog1 = _mm_mullo_epi16(fog, factor1Y);
+							fog1 = _mm_adds_epu16(fog1, color1);
+							fog1 = _mm_srli_epi16(fog1, 8);
+							
+							// next 2px
+							auto color2 = _mm_unpackhi_epi8(color, _mm_setzero_si128());
+							auto factor2X = _mm_shuffle_epi32(factorY, 0xfa);
+							auto factor2Y = _mm_shuffle_epi32(factorX, 0xfa);
+							color2 = _mm_mullo_epi16(color2, factor2X);
+							auto fog2 = _mm_mullo_epi16(fog, factor2Y);
+							fog2 = _mm_adds_epu16(fog2, color2);
+							fog2 = _mm_srli_epi16(fog2, 8);
+							
+							auto pack = _mm_packus_epi16(fog1, fog2);
+							_mm_store_si128(reinterpret_cast<__m128i*>(fb3), pack);
+							
+							fb2 += fw;
+							db2 += fw;
+						}
+						
+						vx += dvx;
+					}
+					
+					vy += dvy;
+					fb += fw * 4;
+					db += fw * 4;
+				}
+			});
+			
+			
+		} // ApplyFog()
+		
+
 #endif
 		
 		
@@ -611,6 +807,11 @@ namespace spades {
 			
 			sceneDef = def;
 			duringSceneRendering = true;
+			if (fogType == client::FogType::Classical)
+				sceneDef.zFar = std::min(fogDistance, 2048.f);
+			else
+				sceneDef.zFar = std::min
+				(fogDistance * (float)r_swExpFogRange, 2048.f);
 			
 			BuildProjectionMatrix();
 			BuildView();
@@ -810,12 +1011,21 @@ namespace spades {
 			}
 			lights.clear();
 			
+			if (fogType == client::FogType::Classical) {
 #if ENABLE_SSE2
-			if(static_cast<int>(featureLevel) >= static_cast<int>(SWFeatureLevel::SSE2))
-				ApplyFog<SWFeatureLevel::SSE2>();
-			else
+				if(static_cast<int>(featureLevel) >= static_cast<int>(SWFeatureLevel::SSE2))
+					ApplyFog<SWFeatureLevel::SSE2>();
+				else
 #endif
-			ApplyFog<SWFeatureLevel::None>();
+					ApplyFog<SWFeatureLevel::None>();
+			} else if (fogType == client::FogType::Exponential) {
+#if ENABLE_SSE2
+				if(static_cast<int>(featureLevel) >= static_cast<int>(SWFeatureLevel::SSE2))
+					ApplyExponentialFog<SWFeatureLevel::SSE2>();
+				else
+#endif
+					ApplyExponentialFog<SWFeatureLevel::None>();
+			}
 			
 			// render sprites
 			{

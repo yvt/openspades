@@ -143,6 +143,8 @@ namespace spades {
 			
 			template<SWFeatureLevel>
 			void ApplyFog();
+			template<SWFeatureLevel>
+			void ApplyExponentialFog();
 			
 			template<SWFeatureLevel>
 			void ApplyDynamicLight(const DynamicLight&);
