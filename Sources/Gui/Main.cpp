@@ -48,6 +48,8 @@
 #include <Core/MemoryStream.h>
 #include <Core/Bitmap.h>
 
+#include <ode/ode.h>
+
 #include <NGClient/Client.h>
 
 #ifdef __APPLE__
@@ -605,6 +607,9 @@ int main(int argc, char ** argv)
 		spades::LoadCurrentLocale();
 		_Tr("Main", "Localization System Loaded");
 		pumpEvents();
+		
+		SPLog("Initializing physics engine");
+		dInitODE();
 
 		// parse args
 
