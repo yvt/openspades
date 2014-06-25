@@ -67,15 +67,18 @@ namespace spades { namespace osobj {
 		inertia[0] *= scale * scale;
 		inertia[1] *= scale * scale;
 		inertia[2] *= scale * scale;
-		center *= scale;
 		
 		dMass dmass;
 		dMassSetParameters(&dmass, mass,
-						   center.x, center.y, center.z,
+						   0, 0, 0, // center of mass must be at origin (ODE's restriction)
 						   inertia[0].x, inertia[1].y, inertia[2].z,
-						   inertia[0].x, inertia[0].y, inertia[1].z);
+						   inertia[0].y, inertia[0].z, inertia[1].z);
 		
 		item.body->setMass(&dmass);
+		
+		item.frameCenterOfMass = center;
+		item.originLocalPos = -center * scale;
+		item.scale = scale;
 		
 		// setup geom
 		if (!objs.empty()) {
@@ -86,14 +89,10 @@ namespace spades { namespace osobj {
 									 bounds.GetWidth(),
 									 bounds.GetHeight(),
 									 bounds.GetDepth()));
-			dGeomSetOffsetPosition(item.geom->id(),
-								   bounds.GetMinX() - bounds.GetWidth() * .5f,
-								   bounds.GetMinY() - bounds.GetHeight() * .5f,
-								   bounds.GetMinZ() - bounds.GetDepth() * .5f);
 		}
 		
 		// transform body
-		auto pos = m.GetOrigin();
+		auto pos = (m * center).GetXYZ();
 		item.body->setPosition(pos.x, pos.y, pos.z);
 		
 		auto q = Quaternion::FromRotationMatrix(m);
@@ -102,6 +101,14 @@ namespace spades { namespace osobj {
 		// bind geom to body
 		if (item.geom) {
 			item.geom->setBody(item.body->id());
+			
+			// TODO: support more than two objects
+			const auto& obj = objs.front();
+			auto bounds = obj->GetBounds();
+			dGeomSetOffsetPosition(item.geom->id(),
+								   bounds.GetMinX() + bounds.GetWidth() * .5f - center.x,
+								   bounds.GetMinY() + bounds.GetHeight() * .5f - center.y,
+								   bounds.GetMinZ() + bounds.GetDepth() * .5f - center.z);
 		}
 		
 		// add joints
@@ -127,7 +134,7 @@ namespace spades { namespace osobj {
 					j->setAnchor(origin.x, origin.y, origin.z);
 					
 					auto lAxis = c.axis;
-					auto axis = (m * Vector4(lAxis.x, lAxis.y, lAxis.z, 0.f)).GetXYZ();
+					auto axis = (m * Vector4(lAxis.x, lAxis.y, lAxis.z, 0.f)).GetXYZ().Normalize();
 					j->setAxis(axis.x, axis.y, axis.z);
 					
 					j->setParam(dParamLoStop, c.minAngle);
@@ -142,17 +149,17 @@ namespace spades { namespace osobj {
 					j->setAnchor(origin.x, origin.y, origin.z);
 					
 					auto lAxis1 = c.axis1;
-					auto axis1 = (m * Vector4(lAxis1.x, lAxis1.y, lAxis1.z, 0.f)).GetXYZ();
+					auto axis1 = (m * Vector4(lAxis1.x, lAxis1.y, lAxis1.z, 0.f)).GetXYZ().Normalize();
 					j->setAxis1(axis1.x, axis1.y, axis1.z);
 					
 					auto lAxis2 = c.axis2;
-					auto axis2 = (m * Vector4(lAxis2.x, lAxis2.y, lAxis2.z, 0.f)).GetXYZ();
+					auto axis2 = (m * Vector4(lAxis2.x, lAxis2.y, lAxis2.z, 0.f)).GetXYZ().Normalize();
 					j->setAxis2(axis2.x, axis2.y, axis2.z);
 					
-					j->setParam(dParamLoStop1, c.minAngle1);
-					j->setParam(dParamHiStop1, c.maxAngle1);
-					j->setParam(dParamLoStop2, c.minAngle2);
-					j->setParam(dParamHiStop2, c.maxAngle2);
+					j->setParam(dParamLoStop, c.minAngle1);
+					j->setParam(dParamHiStop, c.maxAngle1);
+					j->setParam(dParamLoStop1, c.minAngle2);
+					j->setParam(dParamHiStop1, c.maxAngle2);
 					
 					j->attach(item.body->id(), target);
 					p.joints.emplace_back(std::move(j));
@@ -168,6 +175,8 @@ namespace spades { namespace osobj {
 			if (parent == 0) continue;
 			ConstraintBuilder(*this, *c, item, parent, m);
 		}
+		
+		items[f] = item;
 		
 		for (const auto& e: f->GetChildren()) {
 			GenerateItem(e, m, item.body->id());
@@ -185,7 +194,7 @@ namespace spades { namespace osobj {
 		auto t = pose.GetTransform(frame);
 		
 		const auto& item = items[frame];
-		auto pos = t.GetOrigin();
+		auto pos = m * item.frameCenterOfMass;
 		item.body->setPosition(pos.x, pos.y, pos.z);
 		
 		auto q = Quaternion::FromRotationMatrix(t);
@@ -212,8 +221,10 @@ namespace spades { namespace osobj {
 		const auto *rot = item.body->getQuaternion();
 		
 		auto mat = Matrix4::Translate(pos[0], pos[1], pos[2]);
+		mat *= Matrix4::Scale(item.scale);
 		mat *= Quaternion(rot[1], rot[2], rot[3], rot[0]).ToRotationMatrix();
-		
+		mat *= Matrix4::Translate(item.originLocalPos);
+				
 		auto mInv = m.InversedFast();
 		pose.SetTransform(frame, mInv * mat);
 		
@@ -227,5 +238,32 @@ namespace spades { namespace osobj {
 	void PhysicsObject::UpdatePose(Pose& pose) {
 		UpdatePose(root, pose, Matrix4::Identity());
 	}
+	
+	std::shared_ptr<dBody> PhysicsObject::GetBody(Frame *f) {
+		auto it = items.find(f);
+		if (it != items.end()) return it->second.body;
+		return nullptr;
+	}
+	std::shared_ptr<dGeom> PhysicsObject::GetGeom(Frame *f) {
+		auto it = items.find(f);
+		if (it != items.end()) return it->second.geom;
+		return nullptr;
+	}
+	
+	std::list<std::shared_ptr<dBody>> PhysicsObject::GetAllBodies() {
+		std::list<std::shared_ptr<dBody>> lst;
+		for (const auto& pair: items) {
+			if (pair.second.body) lst.emplace_back(pair.second.body);
+		}
+		return lst;
+	}
+	std::list<std::shared_ptr<dGeom>> PhysicsObject::GetAllGeoms() {
+		std::list<std::shared_ptr<dGeom>> lst;
+		for (const auto& pair: items) {
+			if (pair.second.geom) lst.emplace_back(pair.second.geom);
+		}
+		return lst;
+	}
+	
 } }
 

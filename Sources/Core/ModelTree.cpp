@@ -787,6 +787,7 @@ namespace spades { namespace osobj {
 				auto range = ReadVector2(json.get("range", Json::nullValue),
 										 "range");
 				Handle<HingeConstratint> c(new HingeConstratint(), false);
+				range *= M_PI / 180.0;
 				c->origin = origin;
 				c->axis = axis;
 				c->minAngle = range.x;
@@ -804,6 +805,8 @@ namespace spades { namespace osobj {
 				auto range2 = ReadVector2(json.get("range2", Json::nullValue),
 										 "range2");
 				Handle<UniversalJointConstratint> c(new UniversalJointConstratint(), false);
+				range1 *= M_PI / 180.0;
+				range2 *= M_PI / 180.0;
 				c->origin = origin;
 				c->axis1 = axis1;
 				c->axis2 = axis2;
@@ -816,6 +819,22 @@ namespace spades { namespace osobj {
 				SPRaise("%s: unknown constraint type: %s",
 						fullPath.c_str(), type.c_str());
 			}
+		}
+		
+		Object *ReadObject(const Json::Value& json) {
+			if (!json.isObject()) {
+				SPRaise("%s: object must be object", fullPath.c_str());
+			}
+			auto name = json.get("object", Json::nullValue);
+			if (!name.isString()) {
+				SPRaise("%s: identifier of object must be string", fullPath.c_str());
+			}
+			auto nameStr = name.asString();
+			auto it = rootLoader.objects.find(nameStr);
+			if (it == rootLoader.objects.end()) {
+				SPRaise("%s: unknown object: '%s'", nameStr.c_str());
+			}
+			return it->second;
 		}
 		
 	public:
@@ -916,7 +935,8 @@ namespace spades { namespace osobj {
 			frame->SetTransform(mat);
 			
 			auto constraints = json.get("constraints", Json::nullValue);
-			if (constraints.isObject()) {
+			if (constraints.isNull()) {
+			} else if (constraints.isObject()) {
 				auto *c = ReadConstraint(constraints);
 				frame->AddConstraint(c);
 				c->Release();
@@ -928,6 +948,21 @@ namespace spades { namespace osobj {
 				}
 			} else {
 				SPRaise("%s: constraints should be array, object, or null",
+						frame->GetFullPath().c_str());
+			}
+			
+			auto objs = json.get("objects", Json::nullValue);
+			if (objs.isNull()) {
+			} else if (objs.isObject()) {
+				auto *obj = ReadObject(objs);
+				frame->AddObject(obj);
+			} else if (objs.isArray()) {
+				for (const auto& v: objs) {
+					auto *obj = ReadObject(v);
+					frame->AddObject(obj);
+				}
+			} else {
+				SPRaise("%s: objects should be array, object, or null",
 						frame->GetFullPath().c_str());
 			}
 			

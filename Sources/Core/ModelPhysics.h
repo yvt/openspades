@@ -35,7 +35,11 @@ namespace spades { namespace osobj {
 		dSpaceID space;
 		
 		struct Item {
-			
+			/** local position in the body that corresponds to
+			 * the origin of the original frame */
+			Vector3 originLocalPos;
+			Vector3 frameCenterOfMass;
+			float scale;
 			std::shared_ptr<dBody> body;
 			std::shared_ptr<dGeom> geom;
 		};
@@ -59,6 +63,12 @@ namespace spades { namespace osobj {
 					  dBodyID parent = 0);
 		void CopyPose(Pose&);
 		void UpdatePose(Pose&);
+		
+		std::shared_ptr<dBody> GetBody(Frame *);
+		std::shared_ptr<dGeom> GetGeom(Frame *);
+		
+		std::list<std::shared_ptr<dBody>> GetAllBodies();
+		std::list<std::shared_ptr<dGeom>> GetAllGeoms();
 	};
 	
 } }

@@ -24,7 +24,7 @@
 #include "Mutex.h"
 #include <functional>
 
-#define DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE 0
+#define DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE 1
 
 namespace spades {
 	

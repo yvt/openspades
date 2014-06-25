@@ -47,15 +47,14 @@ namespace spades {
 #else
 			delete this;
 #endif
-		}else if(cnt < 0)
+		}else if(cnt < 0) {
 #if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
-			SPRaise("Attempted to release already destroyed object\n===== LAST RELEASE BACKTRACE =====\n%s\n===== SECOND LAST RELEASE BACKTRACE =====\n%s\n===== LAST RELEASE BACKTRACE ENDS =====",
+			SPLog("Attempted to release already destroyed object\n===== LAST RELEASE BACKTRACE =====\n%s\n===== SECOND LAST RELEASE BACKTRACE =====\n%s\n===== LAST RELEASE BACKTRACE ENDS =====",
 					reflection::BacktraceRecordToString(lastRelease).c_str(),
-					reflection::BacktraceRecordToString(secondLastRelease).c_str());
-#else
-			SPRaise("Attempted to release already destroyed object");
+				  reflection::BacktraceRecordToString(secondLastRelease).c_str());
 #endif
-		
+			SPRaise("Attempted to release already destroyed object");
+		}
 #if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
 		secondLastRelease = std::move(lastRelease);
 		lastRelease = std::move(reflection::Backtrace::GetGlobalBacktrace()->GetRecord());
