@@ -922,7 +922,10 @@ namespace spades {
 		/** Stores rotation quaternion into compact format for
 		 * transmission. */
 		Vector3 EncodeRotation() const {
-			return Vector3(v.x, v.y, v.z);
+			if (v.w > 0.f)
+				return Vector3(v.x, v.y, v.z);
+			else
+				return -Vector3(v.x, v.y, v.z);
 		}
 		static inline Quaternion DecodeRotation(Vector3 v) {
 			auto s = v.x * v.x + v.y * v.y + v.z * v.z;
@@ -971,7 +974,7 @@ namespace spades {
 				axis3 = axis3.Normalize();
 			}
 			
-			auto trace = axis1.x + axis2.y + axis3.z + 1.f;
+			auto trace =  axis1.x + axis2.y + axis3.z + 1.f;
 			auto trace2 = axis1.x - axis2.y - axis3.z + 1.f;
 			if (trace > trace2) {
 				auto w = 0.5f * sqrtf(trace);
@@ -985,10 +988,10 @@ namespace spades {
 				auto w = 0.5f * sqrtf(trace2);
 				auto s = 0.25f / w;
 				return Quaternion
-				(s * (axis2.x + axis1.y),
+				(w,
+				 s * (axis1.y + axis2.x),
 				 s * (axis3.x + axis1.z),
-				 s * (axis2.z - axis3.y),
-				 w);
+				 s * (axis2.z - axis3.y));
 			}
 		}
 	};
