@@ -29,6 +29,7 @@
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Stopwatch.h>
 #include "SWUtils.h"
+#include <cstdint>
 
 SPADES_SETTING(r_swUndersampling, "0");
 

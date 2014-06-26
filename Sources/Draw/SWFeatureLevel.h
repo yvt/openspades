@@ -23,12 +23,19 @@
 #include <Core/CpuID.h>
 
 #if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__)
+#if defined(_MSC_VER)
+// MSVC 2013 doesn't define __SSE__?
+#define ENABLE_MMX	0
+#define ENABLE_SSE	1
+#define ENABLE_SSE2	1
+#else
 #define ENABLE_MMX	0 // FIXME: move this to the proper place
 #ifdef __SSE__
 #define ENABLE_SSE	1 // FIXME: move this to the proper place
 #endif
 #ifdef __SSE2__
 #define ENABLE_SSE2	1 // FIXME: move this to the proper place
+#endif
 #endif
 #endif
 
