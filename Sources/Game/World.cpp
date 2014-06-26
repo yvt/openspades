@@ -226,8 +226,8 @@ namespace spades { namespace game {
 				}
 				last = std::max(last, it->first + 1);
 			}
-			if (players.empty()) {
-				pId = 0;
+			if (!pId) {
+				pId = last;
 			}
 			if (*pId >= 1024) {
 				// entity Ids >= 1024 are not reserved to
