@@ -41,8 +41,6 @@ namespace spades { namespace ngclient {
 		SPAssert(audio);
 		
 		world->AddListener(this);
-		
-		LoadEntities();
 	}
 	
 	Arena::~Arena() {
@@ -61,6 +59,8 @@ namespace spades { namespace ngclient {
 		
 		playerLocalEntityFactory.reset
 		(new PlayerLocalEntityFactory(*this));
+		
+		LoadEntities();
 	}
 	
 	void Arena::RunFrame(float _dt) {
