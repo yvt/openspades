@@ -30,16 +30,23 @@ namespace spades { namespace ngclient {
 	class Arena;
 	class PlayerLocalEntity;
 	
+	// FIXME: rename
 	class PlayerLocalEntityFactory final {
 		friend class PlayerLocalEntity;
 		Arena& arena;
 		Handle<osobj::Frame> lower;
 		Handle<ModelTreeRenderer> lowerRenderer;
+		
+		// this is shared by PlayerLocalEntity for
+		// faster physics
+		std::shared_ptr<dWorld> world;
 	public:
 		PlayerLocalEntityFactory(Arena&);
 		~PlayerLocalEntityFactory();
 		
 		PlayerLocalEntity *Create(game::PlayerEntity&);
+		
+		void Update(game::Duration);
 	};
 	
 	/** Local entity for player entity.
@@ -59,7 +66,6 @@ namespace spades { namespace ngclient {
 		PlayerLocalEntityFactory& factory;
 		
 		// used for inverse kinematics
-		std::shared_ptr<dWorld> world;
 		Handle<osobj::Pose> lowerPose;
 		Handle<osobj::PhysicsObject> lowerPhys;
 		

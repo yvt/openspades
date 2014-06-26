@@ -37,9 +37,20 @@ namespace spades { namespace ngclient {
 		(new osobj::Loader("Models/Player/"), false);
 		lower.Set(loader->LoadFrame("lower.osobj"), false);
 		lowerRenderer.Set(new ModelTreeRenderer(arena.GetRenderer(), lower), false);
+		
+		world.reset(new dWorld());
+		world->setGravity(0, 0, 0);
+		world->setERP(1.0);
+		world->setMaxAngularSpeed(10.f);
 	}
 	PlayerLocalEntityFactory::~PlayerLocalEntityFactory()
 	{ }
+	
+	void PlayerLocalEntityFactory::Update(game::Duration dt) {
+		// step doesn't has to be real time because
+		// this is used just for inverse kinematics...
+		world->quickStep(0.1);
+	}
 	
 	PlayerLocalEntity *PlayerLocalEntityFactory::Create(game::PlayerEntity& e) {
 		return new PlayerLocalEntity(arena, e, *this);
@@ -361,13 +372,21 @@ namespace spades { namespace ngclient {
 		
 		lowerPose.Set
 		(new osobj::Pose(factory.lower), false);
-		world.reset(new dWorld());
+		
+		osobj::PhysicsObjectParameters params;
+		params.skipGeoms = true;
+		
 		lowerPhys.Set
 		(new osobj::PhysicsObject(factory.lower,
-								  world->id()),
+								  factory.world->id(),
+								  params),
 		 false);
-		world->setGravity(0, 0, 0);
-		world->setERP(0.8);
+		
+		auto bods = lowerPhys->GetAllBodies();
+		for (const auto& b: bods) {
+			b->setDamping(.2, .2);
+		}
+		
 		walkAnim->Reset();
 	}
 	
@@ -376,7 +395,6 @@ namespace spades { namespace ngclient {
 		
 		lowerPhys.Set(nullptr);
 		lowerPose.Set(nullptr);
-		world.reset();
 		
 		if (entity) {
 			entity->RemoveListener(static_cast<game::EntityListener *>(this));
@@ -392,7 +410,7 @@ namespace spades { namespace ngclient {
 			walkAnim->SetPosition(traj.origin, traj.velocity, -traj.eulerAngle.z);
 			walkAnim->Update(static_cast<float>(dt));
 			
-			for (int i = 0; i < 2; ++i) {
+			for (int i = 0; i < 1; ++i) {
 				
 				auto Move = [&](dBody& b, const Vector3& v, bool force = false) {
 					
@@ -450,15 +468,8 @@ namespace spades { namespace ngclient {
 					//abdBody->setKinematic();
 				}
 				
-				world->quickStep(0.1);
 			}
 			
-			auto bods = lowerPhys->GetAllBodies();
-			for (const auto& b: bods) {
-				b->setDamping(.2, .2);/*
-				b->setAngularVel(0, 0, 0);
-				b->setLinearVel(0, 0, 0);*/
-			}
 		}
 			
 		// TODO: Update

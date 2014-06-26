@@ -29,10 +29,16 @@
 
 namespace spades { namespace osobj {
 	
+	struct PhysicsObjectParameters {
+		bool skipGeoms = false;
+		dSpaceID space = 0;
+		dBodyID parent = 0;
+	};
+	
 	class PhysicsObject: public RefCountedObject {
 		Handle<Frame> root;
 		dWorldID world;
-		dSpaceID space;
+		PhysicsObjectParameters params;
 		
 		struct Item {
 			/** local position in the body that corresponds to
@@ -59,8 +65,7 @@ namespace spades { namespace osobj {
 	public:
 		PhysicsObject(Frame *,
 					  dWorldID world,
-					  dSpaceID space = 0,
-					  dBodyID parent = 0);
+					  PhysicsObjectParameters params = PhysicsObjectParameters());
 		void CopyPose(Pose&);
 		void UpdatePose(Pose&);
 		

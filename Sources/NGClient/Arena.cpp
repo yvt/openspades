@@ -79,6 +79,7 @@ namespace spades { namespace ngclient {
 				}
 			}
 		}
+		playerLocalEntityFactory->Update(dt);
 		
 		Render();
 		

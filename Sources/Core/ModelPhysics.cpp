@@ -24,12 +24,11 @@ namespace spades { namespace osobj {
 	
 	PhysicsObject::PhysicsObject(Frame *f,
 								 dWorldID world,
-								 dSpaceID space,
-								 dBodyID parent):
-	world(world), space(space),
+								 PhysicsObjectParameters params):
+	world(world), params(params),
 	root(f) {
 		SPAssert(f);
-		GenerateItem(f, Matrix4::Identity(), parent);
+		GenerateItem(f, Matrix4::Identity(), params.parent);
 	}
 	
 	void PhysicsObject::GenerateItem(Frame *f,
@@ -81,11 +80,11 @@ namespace spades { namespace osobj {
 		item.scale = scale;
 		
 		// setup geom
-		if (!objs.empty()) {
+		if (!params.skipGeoms && !objs.empty()) {
 			// TODO: support more than two objects
 			const auto& obj = objs.front();
 			auto bounds = obj->GetBounds();
-			item.geom.reset(new dBox(space,
+			item.geom.reset(new dBox(params.space,
 									 bounds.GetWidth(),
 									 bounds.GetHeight(),
 									 bounds.GetDepth()));
