@@ -184,21 +184,24 @@ namespace spades { namespace ngclient {
 			
 			// keep distance between legs
 			{
-				auto right = GetRight();
-				auto awayL = footPos[LeftFoot] - GetNaturalPos(LeftFoot);
-				auto dotL = Vector3::Dot(awayL, right);
-				footPos[LeftFoot] -= right * (dotL * .5f);
-				auto awayR = footPos[RightFoot] - GetNaturalPos(RightFoot);
-				auto dotR = Vector3::Dot(awayR, right);
-				footPos[RightFoot] -= right * (dotR * .5f);
+				auto right = (velocity + GetFront() * .01f).Normalize();
+				right = Vector3(right.y, -right.x, 0);
+				{
+					auto awayL = footPos[LeftFoot] - GetNaturalPos(LeftFoot);
+					auto dotL = Vector3::Dot(awayL, right);
+					footPos[LeftFoot] -= right * (dotL * .5f);
+					auto awayR = footPos[RightFoot] - GetNaturalPos(RightFoot);
+					auto dotR = Vector3::Dot(awayR, right);
+					footPos[RightFoot] -= right * (dotR * .5f);
+				}
 			}
 			
 			if (IsBothFootOnGround()) {
 				auto natR = GetNaturalPos(RightFoot);
 				auto natL = GetNaturalPos(LeftFoot);
-				bool awayR = (natR - footPos[RightFoot]).GetPoweredLength() > .08f;
-				bool awayL = (natL - footPos[LeftFoot]).GetPoweredLength() > .08f;
-				auto front = GetFront();
+				bool awayR = (natR - footPos[RightFoot]).GetPoweredLength() > .03f;
+				bool awayL = (natL - footPos[LeftFoot]).GetPoweredLength() > .03f;
+				auto front = (velocity + GetFront() * .01f).Normalize(); //GetFront();
 				
 				int precedes = -1;
 				
@@ -206,12 +209,12 @@ namespace spades { namespace ngclient {
 				
 				if (precedes == -1 &&
 					Vector3::Dot(footPos[LeftFoot] - natL,
-								 front) * dir < -footDistanceLimit * .5f) {
+								 front) < -footDistanceLimit * .5f) {
 					precedes = LeftFoot;
 				}
 				if (precedes == -1 &&
 					Vector3::Dot(footPos[RightFoot] - natR,
-								 front) * dir < -footDistanceLimit * .5f) {
+								 front) < -footDistanceLimit * .5f) {
 					precedes = RightFoot;
 				}
 				if (precedes == -1) {
@@ -254,13 +257,18 @@ namespace spades { namespace ngclient {
 				}
 				Vector3 groundAway = GetNaturalPos(groundFoot) -
 									 footPos[groundFoot];
-				groundFootAwayness = Vector3::Dot(groundAway, GetFront()) /
+				groundFootAwayness = Vector3::Dot(groundAway, velocity.Normalize()) /
 									 footDistanceLimit;
 				groundFootAwayness = groundFootAwayness * .5f + .5f;
 				groundFootAwayness = std::min(std::max(groundFootAwayness, 0.f), 1.f);
 				
+				Vector3 walkFront = velocity.Normalize();
+				if (Vector3::Dot(walkFront, GetFront()) < 0.f) {
+					walkFront -= GetFront() * (Vector3::Dot(walkFront, GetFront()) * 2.f);
+				}
+				/*
 				if (backpedal)
-					groundFootAwayness = 1.f - groundFootAwayness;
+					groundFootAwayness = 1.f - groundFootAwayness;*/
 				
 				bool isStopping = velocity.GetPoweredLength() < .1f;
 				
@@ -269,7 +277,7 @@ namespace spades { namespace ngclient {
 					Vector3 offset = groundAway;
 					offset -= offset * Vector3::Dot(offset, GetRight()) * .6f;
 					
-					float front = Vector3::Dot(offset, GetFront());
+					float front = Vector3::Dot(offset, walkFront);
 					offset = offset * 1.5f -
 						offset * (0.5f * front * front / footDistanceLimit);
 					
