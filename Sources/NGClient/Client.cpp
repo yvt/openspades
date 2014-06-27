@@ -30,6 +30,7 @@
 #include <Client/Fonts.h>
 
 #include <Core/Debug.h>
+#include "FTFont.h"
 
 SPADES_SETTING(cg_playerName, "");
 
@@ -52,7 +53,11 @@ namespace spades { namespace ngclient {
 			server.reset(new server::Server());
 		}
 		
-		font.Set(CreateGuiFont(renderer), false);
+		Handle<FTFontSet> fontSet(new FTFontSet(), false);
+		fontSet->AddFace("Gfx/Fonts/cmunssdc.ttf");
+		fontSet->AddFace("Gfx/Fonts/mplus-2m-medium.ttf");
+		font.Set(new FTFont(renderer, fontSet,
+							16.f, 18.f), false);
 		
 		NetworkClientParams netParams;
 		netParams.address = ServerAddress

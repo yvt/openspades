@@ -44,14 +44,18 @@ namespace spades {
 			static GLImage *FromBitmap(Bitmap *, IGLDevice *);
 			void Bind(IGLDevice::Enum target);
 			
-			virtual float GetWidth() { return width; }
-			virtual float GetHeight() { return height; }
+			float GetWidth() override { return width; }
+			float GetHeight() override { return height; }
 			
 			float GetInvWidth() { return invWidth; }
 			float GetInvHeight() { return invHeight; }
 			
 			void SubImage(Bitmap *bmp, int x, int y);
 			void Invalidate();
+	
+			void Update(Bitmap& bmp, int x, int y) override {
+				SubImage(&bmp, x, y);
+			}
 		};
 	}
 }

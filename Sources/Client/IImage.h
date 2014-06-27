@@ -21,15 +21,18 @@
 #pragma once
 
 #include <Core/RefCountedObject.h>
+#include <Core/Bitmap.h>
 
 namespace spades{
 	namespace client {
-		class LowLevelNativeImage;
 		class IImage: public RefCountedObject {
 		protected:
 			virtual ~IImage(){}
 		public:
 			IImage(){}
+			
+			virtual void Update(Bitmap&,
+								int x, int y) = 0;
 			
 			virtual float GetWidth() = 0;
 			virtual float GetHeight() = 0;

@@ -498,6 +498,10 @@
 		E8CEAD081958823F004AB350 /* ModelPhysics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CEAD051958823F004AB350 /* ModelPhysics.cpp */; };
 		E8CEAD0B195989C5004AB350 /* ModelTreeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CEAD09195989C5004AB350 /* ModelTreeRenderer.cpp */; };
 		E8CEAD0C195989C5004AB350 /* ModelTreeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CEAD09195989C5004AB350 /* ModelTreeRenderer.cpp */; };
+		E8CEAD0E195D13E0004AB350 /* FreeType.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CEAD0D195D13E0004AB350 /* FreeType.framework */; };
+		E8CEAD0F195D14B2004AB350 /* FreeType.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8CEAD0D195D13E0004AB350 /* FreeType.framework */; };
+		E8CEAD12195D1ACC004AB350 /* FTFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CEAD10195D1ACC004AB350 /* FTFont.cpp */; };
+		E8CEAD13195D1ACC004AB350 /* FTFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CEAD10195D1ACC004AB350 /* FTFont.cpp */; };
 		E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0399178EDABD000683D4 /* OpenAL.framework */; };
 		E8CF03A8178EDF6A000683D4 /* IRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03A6178EDF6A000683D4 /* IRenderer.cpp */; };
 		E8CF03AB178EDF74000683D4 /* GLRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03A9178EDF74000683D4 /* GLRenderer.cpp */; };
@@ -876,6 +880,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E8CEAD0F195D14B2004AB350 /* FreeType.framework in CopyFiles */,
 				E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */,
 				E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */,
 			);
@@ -1345,6 +1350,9 @@
 		E8CEAD061958823F004AB350 /* ModelPhysics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelPhysics.h; sourceTree = "<group>"; };
 		E8CEAD09195989C5004AB350 /* ModelTreeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModelTreeRenderer.cpp; sourceTree = "<group>"; };
 		E8CEAD0A195989C5004AB350 /* ModelTreeRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelTreeRenderer.h; sourceTree = "<group>"; };
+		E8CEAD0D195D13E0004AB350 /* FreeType.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FreeType.framework; path = ../../../../../Library/Frameworks/SDL_ttf.framework/Versions/A/Frameworks/FreeType.framework; sourceTree = "<group>"; };
+		E8CEAD10195D1ACC004AB350 /* FTFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FTFont.cpp; sourceTree = "<group>"; };
+		E8CEAD11195D1ACC004AB350 /* FTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTFont.h; sourceTree = "<group>"; };
 		E8CF0385178ED9D2000683D4 /* OpenSpades-CmdLine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "OpenSpades-CmdLine"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CF0399178EDABD000683D4 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		E8CF039B178EDAC9000683D4 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -1807,6 +1815,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8CEAD0E195D13E0004AB350 /* FreeType.framework in Frameworks */,
 				E8CEAD0419587B65004AB350 /* libode.a in Frameworks */,
 				E82E67F018EA7A60004DBA18 /* OpenGL.framework in Frameworks */,
 				E82E67E218EA7A1E004DBA18 /* libz.dylib in Frameworks */,
@@ -1934,6 +1943,8 @@
 				E818AEE11949EA08004500C7 /* PlayerLocalEntity.h */,
 				E8CEAD09195989C5004AB350 /* ModelTreeRenderer.cpp */,
 				E8CEAD0A195989C5004AB350 /* ModelTreeRenderer.h */,
+				E8CEAD10195D1ACC004AB350 /* FTFont.cpp */,
+				E8CEAD11195D1ACC004AB350 /* FTFont.h */,
 			);
 			path = NGClient;
 			sourceTree = "<group>";
@@ -1967,6 +1978,7 @@
 		E82E66BA18EA78F5004DBA18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E8CEAD0D195D13E0004AB350 /* FreeType.framework */,
 				E8CEAD0319587B65004AB350 /* libode.a */,
 				E82E66BB18EA78F5004DBA18 /* Cocoa.framework */,
 				E82E66DA18EA78F5004DBA18 /* XCTest.framework */,
@@ -3611,6 +3623,7 @@
 				E82E67D818EA7972004DBA18 /* SWImage.cpp in Sources */,
 				E82E67D918EA7972004DBA18 /* SWModel.cpp in Sources */,
 				E8D0E78318FABC3600DE3BDB /* marss.cpp in Sources */,
+				E8CEAD13195D1ACC004AB350 /* FTFont.cpp in Sources */,
 				E82E67DA18EA7972004DBA18 /* SWImageRenderer.cpp in Sources */,
 				E8D0E7CC18FABC3600DE3BDB /* shark.cpp in Sources */,
 				E82E67DB18EA7972004DBA18 /* SWFeatureLevel.cpp in Sources */,
@@ -3865,6 +3878,7 @@
 				E834F55317944779004EBE88 /* NetClient.cpp in Sources */,
 				E8D0E71018FABC3600DE3BDB /* arc4.cpp in Sources */,
 				E834F5561794BBD4004EBE88 /* Debug.cpp in Sources */,
+				E8CEAD12195D1ACC004AB350 /* FTFont.cpp in Sources */,
 				E8D0E5E918F9B6BB00DE3BDB /* Shared.cpp in Sources */,
 				E8D0E78618FABC3600DE3BDB /* md4.cpp in Sources */,
 				E834F5591794DCFD004EBE88 /* IGameMode.cpp in Sources */,
@@ -4166,6 +4180,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/SDL_ttf.framework/Versions/A/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -4204,6 +4219,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks/SDL_ttf.framework/Versions/A/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -4261,6 +4277,7 @@
 					"$(SRCROOT)",
 					Sources,
 					Sources/json/include,
+					/Library/Frameworks/SDL2_ttf.framework/Frameworks/FreeType.framework/Headers,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
@@ -4306,6 +4323,7 @@
 					"$(SRCROOT)",
 					Sources,
 					Sources/json/include,
+					/Library/Frameworks/SDL2_ttf.framework/Frameworks/FreeType.framework/Headers,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;

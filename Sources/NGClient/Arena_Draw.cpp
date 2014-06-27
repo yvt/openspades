@@ -25,6 +25,8 @@
 #include "LocalEntity.h"
 #include <Game/PlayerEntity.h>
 #include "PlayerLocalEntity.h"
+#include "Client.h"
+#include "FTFont.h"
 
 SPADES_SETTING(cg_fov, "");
 
@@ -147,6 +149,10 @@ namespace spades { namespace ngclient {
 			renderer->DrawImage(nullptr,
 								AABB2(0, 0, w, h));
 		}
+		
+		client->font->DrawShadow("FreeTypeを使用した文字の描画処理", Vector2(20, 20),
+						   1.f, Vector4(1.f, 1.f, 1.f, 1.f),
+								 Vector4(0,0,0,1));
 	}
 } }
 
