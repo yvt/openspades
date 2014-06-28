@@ -261,7 +261,7 @@ namespace spades { namespace ngclient {
 					g.face = *face;
 					g.charIndex = cId;
 					FT_Load_Glyph(*face, cId,
-								  FT_LOAD_NO_AUTOHINT);
+								  FT_LOAD_NO_HINTING);
 					const auto& adv = g.face->glyph->advance;
 					g.advance = Vector2(adv.x, adv.y) /
 					(64.f);
@@ -334,7 +334,7 @@ namespace spades { namespace ngclient {
 		if (g.image) return;
 		
 		FT_Load_Glyph(g.face, g.charIndex,
-					  FT_LOAD_NO_AUTOHINT);
+					  FT_LOAD_NO_HINTING);
 		FT_Set_Char_Size(g.face, 0,
 						 static_cast<FT_F26Dot6>(height * 64.f),
 						 72, 72);

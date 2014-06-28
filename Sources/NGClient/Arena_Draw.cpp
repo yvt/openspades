@@ -150,7 +150,9 @@ namespace spades { namespace ngclient {
 								AABB2(0, 0, w, h));
 		}
 		
-		client->font->DrawShadow("FreeTypeを使用した文字の描画処理", Vector2(20, 20),
+		client->font->DrawShadow("FreeTypeを使用した文字の描画処理\n"
+								 "The quick brown fox jumps over the lazy dog's back.\n"
+								 "☆☆☆☆", Vector2(20, 20),
 						   1.f, Vector4(1.f, 1.f, 1.f, 1.f),
 								 Vector4(0,0,0,1));
 	}

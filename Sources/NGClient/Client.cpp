@@ -54,10 +54,11 @@ namespace spades { namespace ngclient {
 		}
 		
 		Handle<FTFontSet> fontSet(new FTFontSet(), false);
-		fontSet->AddFace("Gfx/Fonts/cmunssdc.ttf");
+		fontSet->AddFace("Gfx/Fonts/accid___.ttf");
+		// fontSet->AddFace("Gfx/Fonts/SourceSansPro-Semibold.ttf");
 		fontSet->AddFace("Gfx/Fonts/mplus-2m-medium.ttf");
 		font.Set(new FTFont(renderer, fontSet,
-							16.f, 18.f), false);
+							18.f, 22.f), false);
 		
 		NetworkClientParams netParams;
 		netParams.address = ServerAddress
