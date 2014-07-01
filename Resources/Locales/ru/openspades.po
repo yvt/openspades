@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2014-02-14 15:34+0900\n"
-"PO-Revision-Date: 2014-07-01 18:15+0200\n"
+"PO-Revision-Date: 2014-07-01 18:26+0200\n"
 "Last-Translator: ArionWT <arionwhiteac@gmail.com>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
@@ -470,7 +470,7 @@ msgstr "Масштаб миникарты"
 #: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
 msgctxt "Preferences"
 msgid "Toggle Map"
-msgstr ""
+msgstr "Вкл./выкл. карту"
 
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:696
 #: ../../Scripts/Gui/Preferences.as:725 ../../Scripts/Gui/Preferences.as:726
@@ -848,7 +848,7 @@ msgstr "Размытие камеры"
 #: ../../Scripts/Gui/StartupScreen.as:1093
 msgctxt "StartupScreen"
 msgid "Blurs the screen when you turns quickly."
-msgstr ""
+msgstr "Размывает экран когда вы быстро поворачиваетесь."
 
 #: ../../Scripts/Gui/StartupScreen.as:1088
 #: ../../Scripts/Gui/StartupScreen.as:1098
@@ -872,7 +872,7 @@ msgstr "Сияние линзы"
 #: ../../Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
 msgid "The Sun causes lens flare."
-msgstr "Солнце вызывает сияние линзы"
+msgstr "Солнце вызывает сияние линзы."
 
 #: ../../Scripts/Gui/StartupScreen.as:1095
 #: ../../Scripts/Gui/StartupScreen.as:1105
@@ -890,7 +890,7 @@ msgstr "Включает сияние света для других источ�
 #: ../../Scripts/Gui/StartupScreen.as:1108
 msgctxt "StartupScreen"
 msgid "Color Correction"
-msgstr ""
+msgstr "Коррекция цвета"
 
 #: ../../Scripts/Gui/StartupScreen.as:1099
 #: ../../Scripts/Gui/StartupScreen.as:1109
@@ -1292,7 +1292,7 @@ msgstr "Скриншот сохранен: {0}"
 #: ../../../Sources/Client/Client_Draw.cpp:128
 msgctxt "Client"
 msgid "Screenshot failed: "
-msgstr ""
+msgstr "Скриншот не удался: "
 
 #: ../../../Sources/Client/Client.cpp:2684
 #: ../../../Sources/Client/Client.cpp:2700
@@ -1428,7 +1428,7 @@ msgstr "Вы убили игрока {0}"
 #: ../../../Sources/Client/Client_Update.cpp:911
 msgctxt "Client"
 msgid "You were killed by {0}"
-msgstr ""
+msgstr "Вы были убиты игроком {0}"
 
 #: ../../../Sources/Gui/Main.cpp:401 ../../../Sources/Gui/Main.cpp:388
 #: ../../../Sources/Gui/Runner.cpp:62 ../../../Sources/Gui/Main.cpp:403
@@ -1485,7 +1485,7 @@ msgstr "Загрузка снапшота"
 #: ../../../Sources/Client/NetClient.cpp:509
 msgctxt "NetClient"
 msgid "Loading snapshot ({0}/{1})"
-msgstr ""
+msgstr "Загрузка снапшота ({0}/{1})"
 
 #: ../../../Sources/Client/NetClient.cpp:488
 #: ../../../Sources/Client/NetClient.cpp:522
@@ -1541,7 +1541,7 @@ msgstr "В загрузке..."
 #: ../../../Sources/Client/NetClient.cpp:622
 msgctxt "NetClient"
 msgid "Error"
-gstr "Ошибка"
+msgstr "Ошибка"
 
 #: ../../../Sources/Client/NetClient.cpp:665
 #: ../../../Sources/Client/NetClient.cpp:676
@@ -1560,8 +1560,8 @@ msgstr "Вы забанены на этом сервере"
 #: ../../../Sources/Client/NetClient.cpp:695
 #: ../../../Sources/Client/NetClient.cpp:701
 msgctxt "NetClient"
+msgid "You were kicked from this server."
 msgstr "Вы были кикнуты с этого сервера"
-msgstr ""
 
 #: ../../../Sources/Client/NetClient.cpp:671
 #: ../../../Sources/Client/NetClient.cpp:682
