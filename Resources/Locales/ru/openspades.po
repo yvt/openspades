@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2014-02-14 15:34+0900\n"
-"PO-Revision-Date: 2014-07-01 18:26+0200\n"
+"PO-Revision-Date: 2014-07-01 19:15+0200\n"
 "Last-Translator: ArionWT <arionwhiteac@gmail.com>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
@@ -326,7 +326,7 @@ msgstr "Чувств. приближения"
 #: ../../Scripts/Gui/Preferences.as:705 ../../Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Exponential Power"
-msgstr "Сила ускорения"
+msgstr "Сила по экспоненте"
 
 #: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:676
 #: ../../Scripts/Gui/Preferences.as:704 ../../Scripts/Gui/Preferences.as:705
@@ -382,7 +382,7 @@ msgstr "Взять гранату"
 #: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
-msgstr "Перекл. вооружения колесом мыши"
+msgstr "Перекл. инструмент колесом мыши"
 
 #: ../../Scripts/Gui/Preferences.as:684 ../../Scripts/Gui/Preferences.as:683
 #: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
@@ -659,7 +659,7 @@ msgstr "Нажмите [{0}] для перезарядки"
 #: ../../../Sources/Client/Client_Draw.cpp:584
 msgctxt "Client"
 msgid "Waiting for respawn"
-msgstr "Ожидание возрождения"
+msgstr "Ожидание респавна"
 
 #: ../../../Sources/Client/Client.cpp:2643
 #: ../../../Sources/Client/Client.cpp:2611
@@ -679,7 +679,7 @@ msgstr "Винтовка"
 #: ../../../Sources/Client/LimboView.cpp:62
 msgctxt "Client"
 msgid "SMG"
-msgstr "ПП"
+msgstr "SMG"
 
 #: ../../../Sources/Client/LimboView.cpp:63
 msgctxt "Client"
@@ -689,7 +689,7 @@ msgstr "Дробовик"
 #: ../../../Sources/Client/LimboView.cpp:65
 msgctxt "Client"
 msgid "Spawn"
-msgstr "Возродиться"
+msgstr "Спавн"
 
 #: ../../../Sources/Client/LimboView.cpp:184
 msgctxt "Client"
@@ -725,7 +725,7 @@ msgstr "ЗАГРУЖАЕТСЯ"
 #: ../../../Sources/Client/Client_Draw.cpp:582
 msgctxt "Client"
 msgid "You will respawn in: {0}"
-msgstr "Возрождение через: {0}"
+msgstr "Респавн через: {0}"
 
 #: ../../Scripts/Gui/StartupScreen.as:142
 msgctxt "StartupScreen"
@@ -1338,42 +1338,42 @@ msgstr "{0} захватил нейтральную территорию"
 #: ../../../Sources/Client/Client_NetHandler.cpp:119
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
-msgstr "{0} захватил кейс команды {1}"
+msgstr "{0} захватил интел команды {1}"
 
 #: ../../../Sources/Client/Client.cpp:3271
 #: ../../../Sources/Client/Client.cpp:3295
 #: ../../../Sources/Client/Client_NetHandler.cpp:126
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
-msgstr "{0} захватил кейс команды {1}"
+msgstr "{0} захватил интел команды {1}"
 
 #: ../../../Sources/Client/Client.cpp:3293
 #: ../../../Sources/Client/Client.cpp:3317
 #: ../../../Sources/Client/Client_NetHandler.cpp:148
 msgctxt "Client"
 msgid "{0} picked up {1}'s intel"
-msgstr "{0} подобрал кейс команды {1}"
+msgstr "{0} подобрал интел команды {1}"
 
 #: ../../../Sources/Client/Client.cpp:3300
 #: ../../../Sources/Client/Client.cpp:3324
 #: ../../../Sources/Client/Client_NetHandler.cpp:155
 msgctxt "Client"
 msgid "{0} picked up {1}'s Intel."
-msgstr "{0} подобрал кейс команды {1}"
+msgstr "{0} подобрал интел команды {1}"
 
 #: ../../../Sources/Client/Client.cpp:3317
 #: ../../../Sources/Client/Client.cpp:3341
 #: ../../../Sources/Client/Client_NetHandler.cpp:172
 msgctxt "Client"
 msgid "{0} dropped {1}'s intel"
-msgstr "{0} уронил кейс команды {1}"
+msgstr "{0} уронил интел команды {1}"
 
 #: ../../../Sources/Client/Client.cpp:3324
 #: ../../../Sources/Client/Client.cpp:3348
 #: ../../../Sources/Client/Client_NetHandler.cpp:179
 msgctxt "Client"
 msgid "{0} dropped {1}'s Intel"
-msgstr "{0} уронил кейс команды {1}"
+msgstr "{0} уронил интел команды {1}"
 
 #: ../../../Sources/Client/Client.cpp:3374
 #: ../../../Sources/Client/Client.cpp:3379
@@ -1513,7 +1513,7 @@ msgstr "Подключено"
 #: ../../../Sources/Client/NetClient.cpp:613
 msgctxt "NetClient"
 msgid "Still loading..."
-msgstr "В загрузке..."
+msgstr "До сих пор загрузке..."
 
 #: ../../../Sources/Client/NetClient.cpp:502
 #: ../../../Sources/Client/NetClient.cpp:508
@@ -1659,7 +1659,8 @@ msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
 msgstr[0] "{0} блок"
-msgstr[1] "{0} блоков"
+msgstr[1] "{0} блока"
+msgstr[2] "{0} блоков"
 
 #: ../../../Sources/Client/Client_Update.cpp:465
 #: ../../../Sources/Client/Client_Update.cpp:468
