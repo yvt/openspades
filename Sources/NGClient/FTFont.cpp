@@ -23,6 +23,7 @@
 #include <Core/FileManager.h>
 #include <Client/IImage.h>
 #include <Client/IRenderer.h>
+#include <Draw/SWRenderer.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -231,6 +232,8 @@ namespace spades { namespace ngclient {
 		}
 		
 		baselineY = std::floorf(height * 1.f);
+		
+		rendererIsLowQuality = dynamic_cast<draw::SWRenderer *>(renderer);
 		
 		bins.emplace_back(binSize, binSize, *renderer);
 	}
@@ -507,8 +510,10 @@ namespace spades { namespace ngclient {
 							 srcBounds.GetWidth() * scale,
 							 srcBounds.GetHeight() * scale);
 			
-			srcBounds = srcBounds.Inflate(.5f);
-			destBounds = destBounds.Inflate(.5f * scale);
+			if (!rendererIsLowQuality) {
+				srcBounds = srcBounds.Inflate(.5f);
+				destBounds = destBounds.Inflate(.5f * scale);
+			}
 			
 			renderer->DrawImage(&img.img, destBounds, srcBounds);
 			
@@ -552,12 +557,15 @@ namespace spades { namespace ngclient {
 			auto& img = *g.blurImage;
 			auto srcBounds = img.bounds;
 			auto target = offset + (Vector2(x, y) + img.offset) * scale;
+			target = (target + .5f).Floor(); // for sharper rendering
 			AABB2 destBounds(target.x, target.y,
-							 srcBounds.GetWidth(),
-							 srcBounds.GetHeight());
+							 srcBounds.GetWidth() * scale,
+							 srcBounds.GetHeight() * scale);
 			
-			srcBounds = srcBounds.Inflate(.5f);
-			destBounds = destBounds.Inflate(.5f);
+			if (!rendererIsLowQuality) {
+				srcBounds = srcBounds.Inflate(.5f);
+				destBounds = destBounds.Inflate(.5f * scale);
+			}
 			
 			renderer->DrawImage(&img.img, destBounds, srcBounds);
 			

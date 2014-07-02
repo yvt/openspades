@@ -83,6 +83,8 @@ namespace spades { namespace ngclient {
 		float height;
 		float baselineY;
 		
+		bool rendererIsLowQuality;
+		
 		Handle<FTFontSet> fontSet;
 		
 		struct Bin;
