@@ -51,6 +51,7 @@
 #include <ode/ode.h>
 
 #include <NGClient/Client.h>
+#include <Editor/Editor.h>
 
 #ifdef __APPLE__
 #elif __unix
@@ -169,6 +170,7 @@ namespace {
 	bool cg_printVersion = false;
 	bool cg_printHelp = false;
 	bool g_debugNextGenServer = false;
+	bool g_debugEditor = false;
 	void printHelp( const char * binaryName )
 	{
 		printf( "usage: %s [server_address] [protocol_version] [-h|--help] [-v|--version] \n", binaryName );
@@ -185,6 +187,10 @@ int argsHandler(int argc, char **argv, int &i)
 		}
 		if( !strcasecmp( a, "-n" ) ) {
 			g_debugNextGenServer = true;
+			return ++i;
+		}
+		if( !strcasecmp( a, "-e" ) ) {
+			g_debugEditor = true;
 			return ++i;
 		}
 		//lm: we attempt to detect protocol version, allowing with or without a prefix 'v='
@@ -243,6 +249,19 @@ namespace spades {
 		ngclient::ClientParams params;
 		params.hostLocalServer = true;
 		ConcreteRunner runner(params);
+		runner.RunProtected();
+	}
+	
+	void StartEditor() {
+		class ConcreteRunner: public spades::gui::Runner {
+		protected:
+			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer, spades::client::IAudioDevice *audio) {
+				return new editor::Editor(renderer, audio);
+			}
+		public:
+			ConcreteRunner() { }
+		};
+		ConcreteRunner runner;
 		runner.RunProtected();
 	}
 	
@@ -634,6 +653,8 @@ int main(int argc, char ** argv)
 		// everything is now ready!
 		if (g_debugNextGenServer) {
 			spades::StartNextGenClient();
+		} else if (g_debugEditor) {
+			spades::StartEditor();
 		} else if( !cg_autoConnect ) {
 			if(!((int)cl_showStartupWindow != 0 ||
 				 splashWindow->IsStartupScreenRequested())) {

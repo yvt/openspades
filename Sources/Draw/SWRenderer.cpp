@@ -986,9 +986,8 @@ namespace spades {
 			std::fill(fb->GetPixels(), fb->GetPixels() +
 					  fb->GetWidth() * fb->GetHeight(),
 					  ConvertColor32(MakeVector4(fogColor.x, fogColor.y, fogColor.z, 1.f)));
-			std::fill(fb->GetPixels(), fb->GetPixels() +
-					  fb->GetWidth() * fb->GetHeight(),
-					  0x7f7f7f);
+			std::fill(depthBuffer.begin(), depthBuffer.end(),
+					  100000.f);
 			
 			// draw map
 			if(mapRenderer){
@@ -1077,7 +1076,23 @@ namespace spades {
 					auto& l = debugLines[i];
 					auto v1 = projectionViewMatrix * l.v1;
 					auto v2 = projectionViewMatrix * l.v2;
-					if(v1.z < 0.001f || v2.z < 0.001f) continue;
+					// depth cull
+					{
+						auto b1 = v1.z < .01f;
+						auto b2 = v2.z < .01f;
+						if (b1 && b2) continue;
+						if (!b1 || !b2) {
+							if (b1) {
+								float per = (.01f - v1.z) / (v2.z - v1.z);
+								v1 += (v2 - v1) * per;
+								l.v1 += (l.v2 - l.v1) * per;
+							} else if (b2) {
+								float per = (.01f - v2.z) / (v1.z - v2.z);
+								v2 += (v1 - v2) * per;
+								l.v2 += (l.v1 - l.v2) * per;
+							}
+						}
+					}
 					
 					// SWRenderer's depth value is based on view Z coord
 					float d1 = Vector3::Dot(l.v1 - sceneDef.viewOrigin, sceneDef.viewAxis[2]);
@@ -1087,10 +1102,10 @@ namespace spades {
 					v1 *= fastRcp(v1.w);
 					v2 *= fastRcp(v2.w);
 					
-					int x1 = static_cast<int>(v1.x * cw + cw);
-					int y1 = static_cast<int>(ch - v1.y * ch);
-					int x2 = static_cast<int>(v2.x * cw + cw);
-					int y2 = static_cast<int>(ch - v2.y * ch);
+					int x1 = static_cast<int>(v1.x * cw + cw + .5f);
+					int y1 = static_cast<int>(ch - v1.y * ch + .5f);
+					int x2 = static_cast<int>(v2.x * cw + cw + .5f);
+					int y2 = static_cast<int>(ch - v2.y * ch + .5f);
 					
 					auto *fb = this->fb->GetPixels();
 					auto *db = this->depthBuffer.data();

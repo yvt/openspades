@@ -57,6 +57,9 @@ namespace spades {
 			if(ptr)
 				ptr->AddRef();
 		}
+		Handle(Handle<T>&& h): ptr(h.ptr) {
+			h.ptr = nullptr;
+		}
 		~Handle() {
 			if(ptr)
 				ptr->Release();
@@ -90,6 +93,12 @@ namespace spades {
 		void operator =(const Handle<T>& h){
 			Set(h.ptr, true);
 		}
+		void operator =(Handle<T>&& h) {
+			if (ptr) {
+				ptr->Release(); ptr = nullptr;
+			}
+			std::swap(ptr, h.ptr);
+		}
 		operator T *() const {
 			return ptr;
 		}
@@ -103,6 +112,16 @@ namespace spades {
 			return ptr != NULL;
 		}
 	};
+	
+	template<class T, class... Args>
+	Handle<T> MakeHandle(Args&&... args) {
+		return Handle<T>(new T(std::forward<Args>(args)...), false);
+	}
+	
+	template <class T>
+	Handle<T> ToHandle(T *ptr, bool addRef = true) {
+		return Handle<T>(ptr, addRef);
+	}
 	
 }
 

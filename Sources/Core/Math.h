@@ -248,6 +248,10 @@ namespace spades {
 			float scale = 1.f / GetLength();
 			return Make(x * scale, y * scale);
 		}
+		
+		Vector2 Floor() const {
+			return Vector2(floorf(x), floorf(y));
+		}
 	};
 	
 	class Vector3 {
@@ -728,6 +732,10 @@ namespace spades {
 		float GetMaxY() const { return max.y; }
 		float GetWidth() const { return GetMaxX() - GetMinX(); }
 		float GetHeight() const { return GetMaxY() - GetMinY(); }
+		Vector2 GetMin() const { return min; }
+		Vector2 GetMax() const { return max; }
+		Vector2 GetMid() const { return (min + max) * .5f; }
+		Vector2 GetSize() const { return max - min; }
 		
 		bool operator &&(const Vector2& v) const {
 			return v.x >= min.x && v.y >= min.y &&
@@ -794,6 +802,10 @@ namespace spades {
 		float GetWidth() const { return GetMaxX() - GetMinX(); }
 		float GetHeight() const { return GetMaxY() - GetMinY(); }
 		float GetDepth() const { return GetMaxZ() - GetMinZ(); }
+		Vector3 GetMin() const { return min; }
+		Vector3 GetMax() const { return max; }
+		Vector3 GetMid() const { return (min + max) * .5f; }
+		Vector3 GetSize() const { return max - min; }
 		
 		operator OBB3 () const;
 
