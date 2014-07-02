@@ -8,20 +8,20 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2014-02-14 15:34+0900\n"
-"PO-Revision-Date: 2014-03-04 19:16+1100\n"
-"Last-Translator: Way <noway@2ch.hk>\n"
-"Language-Team: Russian\n"
-"Language: ru_ru\n"
+"PO-Revision-Date: 2014-07-01 19:15+0200\n"
+"Last-Translator: ArionWT <arionwhiteac@gmail.com>\n"
+"Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Language: ru_RU\n"
-"X-Source-Language: C\n"
+
 
 #: ../../../Sources/Gui/Main.cpp:344 ../../../Sources/Gui/Main.cpp:369
 #: ../../../Sources/Gui/Main.cpp:368 ../../../Sources/Gui/Main.cpp:355
+#: ../../../Sources/Gui/Main.cpp:370 ../../../Sources/Gui/Main.cpp:466
+#: ../../../Sources/Gui/Main.cpp:529
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr "Система локализации загружена"
@@ -74,7 +74,7 @@ msgstr "Пустые"
 #: ../../Scripts/Gui/MainScreen.as:438
 msgctxt "MainScreen"
 msgid "Not Full"
-msgstr "Не полные"
+msgstr "Неполные"
 
 #: ../../Scripts/Gui/MainScreen.as:458
 msgctxt "MainScreen"
@@ -94,7 +94,7 @@ msgstr "Название карты"
 #: ../../Scripts/Gui/MainScreen.as:479
 msgctxt "MainScreen"
 msgid "Game Mode"
-msgstr "Гейм-мод"
+msgstr "Режим"
 
 #: ../../Scripts/Gui/MainScreen.as:486
 msgctxt "MainScreen"
@@ -104,7 +104,7 @@ msgstr "Верс."
 #: ../../Scripts/Gui/MainScreen.as:493
 msgctxt "MainScreen"
 msgid "Loc."
-msgstr "Стрн."
+msgstr "Стр."
 
 #: ../../Scripts/Gui/MainScreen.as:737
 msgctxt "MainScreen"
@@ -135,7 +135,7 @@ msgstr "ОК"
 #: ../../Scripts/Gui/Preferences.as:60
 msgctxt "Preferences"
 msgid "Game Options"
-msgstr "Опции игры"
+msgstr "Игровые настройки"
 
 #: ../../Scripts/Gui/Preferences.as:61
 msgctxt "Preferences"
@@ -151,7 +151,7 @@ msgstr "Назад"
 #: ../../Scripts/Gui/Preferences.as:407
 msgctxt "Preferences"
 msgid "Press Key to Bind or [Escape] to Cancel..."
-msgstr "Нажмите клавишу, которую вы хотите установить или [Escape] для Отмены"
+msgstr "Нажмите клавишу или [Escape] для Отмены..."
 
 #: ../../Scripts/Gui/Preferences.as:410 ../../Scripts/Gui/Preferences.as:417
 #: ../../Scripts/Gui/Preferences.as:418
@@ -163,7 +163,7 @@ msgstr "Пробел"
 #: ../../Scripts/Gui/Preferences.as:420
 msgctxt "Preferences"
 msgid "Unbound"
-msgstr "Освободить"
+msgstr "Не назначено"
 
 #: ../../Scripts/Gui/Preferences.as:574 ../../Scripts/Gui/Preferences.as:598
 #: ../../Scripts/Gui/Preferences.as:602 ../../Scripts/Gui/Preferences.as:626
@@ -183,7 +183,7 @@ msgstr "ВЫКЛ."
 #: ../../Scripts/Gui/Preferences.as:633
 msgctxt "Preferences"
 msgid "REVERSED"
-msgstr "ОБРАТНЫЙ"
+msgstr "РЕВЕРСИЯ"
 
 #: ../../Scripts/Gui/Preferences.as:632 ../../Scripts/Gui/Preferences.as:660
 #: ../../Scripts/Gui/Preferences.as:661
@@ -213,7 +213,7 @@ msgstr "Кровь"
 #: ../../Scripts/Gui/Preferences.as:668
 msgctxt "Preferences"
 msgid "Ejecting Brass"
-msgstr "Отстреленные гильзы"
+msgstr "Гильзы"
 
 #: ../../Scripts/Gui/Preferences.as:640 ../../Scripts/Gui/Preferences.as:668
 #: ../../Scripts/Gui/Preferences.as:669
@@ -257,6 +257,7 @@ msgstr "Разрешить юникод"
 #: ../../Scripts/Gui/Preferences.as:679 ../../Scripts/Gui/Preferences.as:725
 #: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:62
 #: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:727
+#: ../../Scripts/Gui/Preferences.as:728
 msgctxt "Preferences"
 msgid "Misc"
 msgstr "Разное"
@@ -275,63 +276,64 @@ msgstr "Размер миникарты"
 
 #: ../../Scripts/Gui/Preferences.as:654 ../../Scripts/Gui/Preferences.as:682
 #: ../../Scripts/Gui/Preferences.as:683 ../../Scripts/Gui/Preferences.as:685
-#: ../../Scripts/Gui/Preferences.as:686
+#: ../../Scripts/Gui/Preferences.as:686 ../../Scripts/Gui/Preferences.as:687
 msgctxt "Preferences"
 msgid "Weapon Spread Guide"
 msgstr "Ведение разброса пуль"
 
 #: ../../Scripts/Gui/Preferences.as:665 ../../Scripts/Gui/Preferences.as:693
 #: ../../Scripts/Gui/Preferences.as:694 ../../Scripts/Gui/Preferences.as:696
-#: ../../Scripts/Gui/Preferences.as:697
+#: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:698
 msgctxt "Preferences"
 msgid "Weapons/Tools"
 msgstr "Оружие/Инструменты"
 
 #: ../../Scripts/Gui/Preferences.as:666 ../../Scripts/Gui/Preferences.as:694
 #: ../../Scripts/Gui/Preferences.as:695 ../../Scripts/Gui/Preferences.as:697
-#: ../../Scripts/Gui/Preferences.as:698
+#: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:699
 msgctxt "Preferences"
 msgid "Attack"
 msgstr "Атака"
 
 #: ../../Scripts/Gui/Preferences.as:667 ../../Scripts/Gui/Preferences.as:695
 #: ../../Scripts/Gui/Preferences.as:696 ../../Scripts/Gui/Preferences.as:698
-#: ../../Scripts/Gui/Preferences.as:699
+#: ../../Scripts/Gui/Preferences.as:699 ../../Scripts/Gui/Preferences.as:700
 msgctxt "Preferences"
 msgid "Alt. Attack"
-msgstr "Альтернативная атака"
+msgstr "Альт. атака"
 
 #: ../../Scripts/Gui/Preferences.as:668 ../../Scripts/Gui/Preferences.as:696
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:699
-#: ../../Scripts/Gui/Preferences.as:700
+#: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:701
 msgctxt "Preferences"
 msgid "Hold Aim Down Sight"
-msgstr "Зажимать целиться для прицела"
+msgstr "Зажимать для прицела"
 
 #: ../../Scripts/Gui/Preferences.as:669 ../../Scripts/Gui/Preferences.as:697
 #: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:700
-#: ../../Scripts/Gui/Preferences.as:701
+#: ../../Scripts/Gui/Preferences.as:701 ../../Scripts/Gui/Preferences.as:702
 msgctxt "Preferences"
 msgid "Mouse Sensitivity"
 msgstr "Чувствительность мыши"
 
 #: ../../Scripts/Gui/Preferences.as:671 ../../Scripts/Gui/Preferences.as:699
 #: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:702
-#: ../../Scripts/Gui/Preferences.as:703
+#: ../../Scripts/Gui/Preferences.as:703 ../../Scripts/Gui/Preferences.as:704
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
-msgstr "ADS Шкала чувствительности мыши"
+msgstr "Чувств. приближения"
 
 #: ../../Scripts/Gui/Preferences.as:673 ../../Scripts/Gui/Preferences.as:701
 #: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:704
-#: ../../Scripts/Gui/Preferences.as:705
+#: ../../Scripts/Gui/Preferences.as:705 ../../Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Exponential Power"
-msgstr "Мощность по экспоненте"
+msgstr "Сила по экспоненте"
 
 #: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:676
 #: ../../Scripts/Gui/Preferences.as:704 ../../Scripts/Gui/Preferences.as:705
 #: ../../Scripts/Gui/Preferences.as:707 ../../Scripts/Gui/Preferences.as:708
+#: ../../Scripts/Gui/Preferences.as:709
 msgctxt "Preferences"
 msgid "Reload"
 msgstr "Перезарядка"
@@ -339,42 +341,47 @@ msgstr "Перезарядка"
 #: ../../Scripts/Gui/Preferences.as:676 ../../Scripts/Gui/Preferences.as:677
 #: ../../Scripts/Gui/Preferences.as:705 ../../Scripts/Gui/Preferences.as:706
 #: ../../Scripts/Gui/Preferences.as:708 ../../Scripts/Gui/Preferences.as:709
+#: ../../Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Capture Color"
-msgstr "Проба цвета"
+msgstr "Захват цвета"
 
 #: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:678
 #: ../../Scripts/Gui/Preferences.as:706 ../../Scripts/Gui/Preferences.as:707
 #: ../../Scripts/Gui/Preferences.as:709 ../../Scripts/Gui/Preferences.as:710
+#: ../../Scripts/Gui/Preferences.as:711
 msgctxt "Preferences"
 msgid "Equip Spade"
-msgstr "Переключиться на лопату"
+msgstr "Взять лопату"
 
 #: ../../Scripts/Gui/Preferences.as:678 ../../Scripts/Gui/Preferences.as:679
 #: ../../Scripts/Gui/Preferences.as:707 ../../Scripts/Gui/Preferences.as:708
 #: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:711
+#: ../../Scripts/Gui/Preferences.as:712
 msgctxt "Preferences"
 msgid "Equip Block"
-msgstr "Переключиться на блок"
+msgstr "Взять блок"
 
 #: ../../Scripts/Gui/Preferences.as:679 ../../Scripts/Gui/Preferences.as:680
 #: ../../Scripts/Gui/Preferences.as:708 ../../Scripts/Gui/Preferences.as:709
 #: ../../Scripts/Gui/Preferences.as:711 ../../Scripts/Gui/Preferences.as:712
+#: ../../Scripts/Gui/Preferences.as:713
 msgctxt "Preferences"
 msgid "Equip Weapon"
-msgstr "Переключиться на оружие"
+msgstr "Взять оружие"
 
 #: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:681
 #: ../../Scripts/Gui/Preferences.as:709 ../../Scripts/Gui/Preferences.as:710
 #: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
+#: ../../Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Equip Grenade"
-msgstr "Переключиться на гранату"
+msgstr "Взять гранату"
 
 #: ../../Scripts/Gui/Preferences.as:681 ../../Scripts/Gui/Preferences.as:682
 #: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:711
 #: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
-#: ../../Scripts/Gui/Preferences.as:715
+#: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
 msgstr "Перекл. инструмент колесом мыши"
@@ -382,15 +389,15 @@ msgstr "Перекл. инструмент колесом мыши"
 #: ../../Scripts/Gui/Preferences.as:684 ../../Scripts/Gui/Preferences.as:683
 #: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
 #: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
-#: ../../Scripts/Gui/Preferences.as:717
+#: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
 msgctxt "Preferences"
 msgid "Movement"
-msgstr "Движение"
+msgstr "Перемещение"
 
 #: ../../Scripts/Gui/Preferences.as:685 ../../Scripts/Gui/Preferences.as:684
 #: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
 #: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
-#: ../../Scripts/Gui/Preferences.as:718
+#: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
 msgctxt "Preferences"
 msgid "Walk Forward"
 msgstr "Идти вперед"
@@ -398,7 +405,7 @@ msgstr "Идти вперед"
 #: ../../Scripts/Gui/Preferences.as:686 ../../Scripts/Gui/Preferences.as:685
 #: ../../Scripts/Gui/Preferences.as:714 ../../Scripts/Gui/Preferences.as:715
 #: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
-#: ../../Scripts/Gui/Preferences.as:719
+#: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
 msgctxt "Preferences"
 msgid "Backpedal"
 msgstr "Идти назад"
@@ -406,7 +413,7 @@ msgstr "Идти назад"
 #: ../../Scripts/Gui/Preferences.as:687 ../../Scripts/Gui/Preferences.as:686
 #: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
 #: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
-#: ../../Scripts/Gui/Preferences.as:720
+#: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
 msgctxt "Preferences"
 msgid "Move Left"
 msgstr "Идти влево"
@@ -414,7 +421,7 @@ msgstr "Идти влево"
 #: ../../Scripts/Gui/Preferences.as:688 ../../Scripts/Gui/Preferences.as:687
 #: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
 #: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
-#: ../../Scripts/Gui/Preferences.as:721
+#: ../../Scripts/Gui/Preferences.as:721 ../../Scripts/Gui/Preferences.as:722
 msgctxt "Preferences"
 msgid "Move Right"
 msgstr "Идти вправо"
@@ -422,15 +429,15 @@ msgstr "Идти вправо"
 #: ../../Scripts/Gui/Preferences.as:689 ../../Scripts/Gui/Preferences.as:688
 #: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
 #: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
-#: ../../Scripts/Gui/Preferences.as:722
+#: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
 msgctxt "Preferences"
 msgid "Crouch"
-msgstr "Приседать"
+msgstr "Присесть"
 
 #: ../../Scripts/Gui/Preferences.as:690 ../../Scripts/Gui/Preferences.as:689
 #: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
 #: ../../Scripts/Gui/Preferences.as:721 ../../Scripts/Gui/Preferences.as:722
-#: ../../Scripts/Gui/Preferences.as:723
+#: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
 msgctxt "Preferences"
 msgid "Sneak"
 msgstr "Красться"
@@ -438,7 +445,7 @@ msgstr "Красться"
 #: ../../Scripts/Gui/Preferences.as:691 ../../Scripts/Gui/Preferences.as:690
 #: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
 #: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
-#: ../../Scripts/Gui/Preferences.as:724
+#: ../../Scripts/Gui/Preferences.as:724 ../../Scripts/Gui/Preferences.as:725
 msgctxt "Preferences"
 msgid "Jump"
 msgstr "Прыгать"
@@ -446,7 +453,7 @@ msgstr "Прыгать"
 #: ../../Scripts/Gui/Preferences.as:692 ../../Scripts/Gui/Preferences.as:691
 #: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
 #: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
-#: ../../Scripts/Gui/Preferences.as:725
+#: ../../Scripts/Gui/Preferences.as:725 ../../Scripts/Gui/Preferences.as:726
 msgctxt "Preferences"
 msgid "Sprint"
 msgstr "Бежать"
@@ -454,7 +461,7 @@ msgstr "Бежать"
 #: ../../Scripts/Gui/Preferences.as:695 ../../Scripts/Gui/Preferences.as:694
 #: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
 #: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
-#: ../../Scripts/Gui/Preferences.as:728
+#: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
 msgctxt "Preferences"
 msgid "Minimap Scale"
 msgstr "Масштаб миникарты"
@@ -462,7 +469,7 @@ msgstr "Масштаб миникарты"
 #: ../../Scripts/Gui/Preferences.as:696 ../../Scripts/Gui/Preferences.as:695
 #: ../../Scripts/Gui/Preferences.as:724 ../../Scripts/Gui/Preferences.as:725
 #: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
-#: ../../Scripts/Gui/Preferences.as:729
+#: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
 msgctxt "Preferences"
 msgid "Toggle Map"
 msgstr "Вкл./выкл. карту"
@@ -470,7 +477,7 @@ msgstr "Вкл./выкл. карту"
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:696
 #: ../../Scripts/Gui/Preferences.as:725 ../../Scripts/Gui/Preferences.as:726
 #: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
-#: ../../Scripts/Gui/Preferences.as:730
+#: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
 msgctxt "Preferences"
 msgid "Flashlight"
 msgstr "Фонарик"
@@ -478,15 +485,15 @@ msgstr "Фонарик"
 #: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:697
 #: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
 #: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
-#: ../../Scripts/Gui/Preferences.as:731
+#: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
 msgctxt "Preferences"
 msgid "Global Chat"
-msgstr "Глобальный чат"
+msgstr "Общий чат"
 
 #: ../../Scripts/Gui/Preferences.as:699 ../../Scripts/Gui/Preferences.as:698
 #: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
 #: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
-#: ../../Scripts/Gui/Preferences.as:732
+#: ../../Scripts/Gui/Preferences.as:732 ../../Scripts/Gui/Preferences.as:733
 msgctxt "Preferences"
 msgid "Team Chat"
 msgstr "Командный чат"
@@ -494,7 +501,7 @@ msgstr "Командный чат"
 #: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:699
 #: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
 #: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
-#: ../../Scripts/Gui/Preferences.as:733
+#: ../../Scripts/Gui/Preferences.as:733 ../../Scripts/Gui/Preferences.as:734
 msgctxt "Preferences"
 msgid "Limbo Menu"
 msgstr "Меню выбора"
@@ -502,7 +509,7 @@ msgstr "Меню выбора"
 #: ../../Scripts/Gui/Preferences.as:701 ../../Scripts/Gui/Preferences.as:700
 #: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
 #: ../../Scripts/Gui/Preferences.as:732 ../../Scripts/Gui/Preferences.as:733
-#: ../../Scripts/Gui/Preferences.as:734
+#: ../../Scripts/Gui/Preferences.as:734 ../../Scripts/Gui/Preferences.as:735
 msgctxt "Preferences"
 msgid "Save Map"
 msgstr "Сохранить карту"
@@ -510,7 +517,7 @@ msgstr "Сохранить карту"
 #: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:701
 #: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
 #: ../../Scripts/Gui/Preferences.as:733 ../../Scripts/Gui/Preferences.as:734
-#: ../../Scripts/Gui/Preferences.as:735
+#: ../../Scripts/Gui/Preferences.as:735 ../../Scripts/Gui/Preferences.as:736
 msgctxt "Preferences"
 msgid "Save Sceneshot"
 msgstr "Сохранить сценшот"
@@ -518,67 +525,67 @@ msgstr "Сохранить сценшот"
 #: ../../Scripts/Gui/Preferences.as:703 ../../Scripts/Gui/Preferences.as:702
 #: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
 #: ../../Scripts/Gui/Preferences.as:734 ../../Scripts/Gui/Preferences.as:735
-#: ../../Scripts/Gui/Preferences.as:736
+#: ../../Scripts/Gui/Preferences.as:736 ../../Scripts/Gui/Preferences.as:737
 msgctxt "Preferences"
 msgid "Save Screenshot"
 msgstr "Сохранить скриншот"
 
-#: ../../Scripts/Gui/ClientUI.as:184
+#: ../../Scripts/Gui/ClientUI.as:184 ../../Scripts/Gui/ClientUI.as:198
 msgctxt "Client"
 msgid "Back to Game"
 msgstr "Обратно в игру"
 
-#: ../../Scripts/Gui/ClientUI.as:191
+#: ../../Scripts/Gui/ClientUI.as:191 ../../Scripts/Gui/ClientUI.as:205
 msgctxt "Client"
 msgid "Chat Log"
 msgstr "История чата"
 
-#: ../../Scripts/Gui/ClientUI.as:198
+#: ../../Scripts/Gui/ClientUI.as:198 ../../Scripts/Gui/ClientUI.as:212
 msgctxt "Client"
 msgid "Setup"
 msgstr "Настройка"
 
-#: ../../Scripts/Gui/ClientUI.as:205
+#: ../../Scripts/Gui/ClientUI.as:205 ../../Scripts/Gui/ClientUI.as:219
 msgctxt "Client"
 msgid "Disconnect"
 msgstr "Отключиться"
 
-#: ../../Scripts/Gui/ClientUI.as:275
+#: ../../Scripts/Gui/ClientUI.as:275 ../../Scripts/Gui/ClientUI.as:484
 msgctxt "Client"
 msgid "Say"
 msgstr "Сказать"
 
-#: ../../Scripts/Gui/ClientUI.as:283
+#: ../../Scripts/Gui/ClientUI.as:283 ../../Scripts/Gui/ClientUI.as:492
 msgctxt "Client"
 msgid "Cancel"
 msgstr "Отмена"
 
-#: ../../Scripts/Gui/ClientUI.as:291
+#: ../../Scripts/Gui/ClientUI.as:291 ../../Scripts/Gui/ClientUI.as:500
 msgctxt "Client"
 msgid "Chat Text"
 msgstr "Текст чата"
 
-#: ../../Scripts/Gui/ClientUI.as:299
+#: ../../Scripts/Gui/ClientUI.as:299 ../../Scripts/Gui/ClientUI.as:508
 msgctxt "Client"
 msgid "Global"
-msgstr "Глобал."
+msgstr "Общий"
 
-#: ../../Scripts/Gui/ClientUI.as:308
+#: ../../Scripts/Gui/ClientUI.as:308 ../../Scripts/Gui/ClientUI.as:517
 msgctxt "Client"
 msgid "Team"
 msgstr "Команд."
 
-#: ../../Scripts/Gui/ClientUI.as:424
+#: ../../Scripts/Gui/ClientUI.as:424 ../../Scripts/Gui/ClientUI.as:661
 msgctxt "Client"
 msgid "Close"
 msgstr "Закрыть"
 
-#: ../../Scripts/Gui/ClientUI.as:434
+#: ../../Scripts/Gui/ClientUI.as:434 ../../Scripts/Gui/ClientUI.as:671
 msgctxt "Client"
 msgid "Say Global"
-msgstr "Сказать в глобал."
+msgstr "Сказать в общий"
 
-#: ../../Scripts/Gui/ClientUI.as:445
+#: ../../Scripts/Gui/ClientUI.as:445 ../../Scripts/Gui/ClientUI.as:682
 msgctxt "Client"
 msgid "Say Team"
 msgstr "Сказать в команд."
@@ -587,6 +594,8 @@ msgstr "Сказать в команд."
 #: ../../../Sources/Client/Client.cpp:2218
 #: ../../../Sources/Client/Client.cpp:2234
 #: ../../../Sources/Client/Client_Draw.cpp:172
+#: ../../../Sources/Client/Client_Draw.cpp:204
+#: ../../../Sources/Client/Client_Draw.cpp:206
 msgctxt "Client"
 msgid "NOW LOADING"
 msgstr "ЗАГРУЖАЕТСЯ"
@@ -595,6 +604,8 @@ msgstr "ЗАГРУЖАЕТСЯ"
 #: ../../../Sources/Client/Client.cpp:2513
 #: ../../../Sources/Client/Client.cpp:2529
 #: ../../../Sources/Client/Client_Draw.cpp:477
+#: ../../../Sources/Client/Client_Draw.cpp:509
+#: ../../../Sources/Client/Client_Draw.cpp:515
 msgctxt "Client"
 msgid "Out of Block"
 msgstr "Кончились блоки"
@@ -603,6 +614,8 @@ msgstr "Кончились блоки"
 #: ../../../Sources/Client/Client.cpp:2518
 #: ../../../Sources/Client/Client.cpp:2534
 #: ../../../Sources/Client/Client_Draw.cpp:482
+#: ../../../Sources/Client/Client_Draw.cpp:514
+#: ../../../Sources/Client/Client_Draw.cpp:520
 msgctxt "Client"
 msgid "Out of Grenade"
 msgstr "Кончились гранаты"
@@ -611,6 +624,8 @@ msgstr "Кончились гранаты"
 #: ../../../Sources/Client/Client.cpp:2526
 #: ../../../Sources/Client/Client.cpp:2542
 #: ../../../Sources/Client/Client_Draw.cpp:490
+#: ../../../Sources/Client/Client_Draw.cpp:522
+#: ../../../Sources/Client/Client_Draw.cpp:528
 msgctxt "Client"
 msgid "Reloading"
 msgstr "Перезарядка"
@@ -621,14 +636,19 @@ msgstr "Перезарядка"
 #: ../../../Sources/Client/Client_Draw.cpp:493
 #: ../../../Sources/Client/Client_Input.cpp:447
 #: ../../../Sources/Client/Client_Input.cpp:448
+#: ../../../Sources/Client/Client_Draw.cpp:525
+#: ../../../Sources/Client/Client_Input.cpp:457
+#: ../../../Sources/Client/Client_Draw.cpp:531
 msgctxt "Client"
 msgid "Out of Ammo"
-msgstr "Кончились патроны"
+msgstr "Патроны закончились"
 
 #: ../../../Sources/Client/Client.cpp:2564
 #: ../../../Sources/Client/Client.cpp:2532
 #: ../../../Sources/Client/Client.cpp:2548
 #: ../../../Sources/Client/Client_Draw.cpp:496
+#: ../../../Sources/Client/Client_Draw.cpp:528
+#: ../../../Sources/Client/Client_Draw.cpp:534
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
 msgstr "Нажмите [{0}] для перезарядки"
@@ -637,6 +657,8 @@ msgstr "Нажмите [{0}] для перезарядки"
 #: ../../../Sources/Client/Client.cpp:2568
 #: ../../../Sources/Client/Client.cpp:2584
 #: ../../../Sources/Client/Client_Draw.cpp:541
+#: ../../../Sources/Client/Client_Draw.cpp:573
+#: ../../../Sources/Client/Client_Draw.cpp:584
 msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr "Ожидание респавна"
@@ -645,9 +667,11 @@ msgstr "Ожидание респавна"
 #: ../../../Sources/Client/Client.cpp:2611
 #: ../../../Sources/Client/Client.cpp:2627
 #: ../../../Sources/Client/Client_Draw.cpp:719
+#: ../../../Sources/Client/Client_Draw.cpp:751
+#: ../../../Sources/Client/Client_Draw.cpp:764
 msgctxt "Client"
 msgid "Following {0}"
-msgstr "Наблюдаем за {0}"
+msgstr "Наблюдение за {0}"
 
 #: ../../../Sources/Client/LimboView.cpp:61
 msgctxt "Client"
@@ -657,12 +681,12 @@ msgstr "Винтовка"
 #: ../../../Sources/Client/LimboView.cpp:62
 msgctxt "Client"
 msgid "SMG"
-msgstr "СМГ"
+msgstr "SMG"
 
 #: ../../../Sources/Client/LimboView.cpp:63
 msgctxt "Client"
 msgid "Shotgun"
-msgstr "ШОТГАН"
+msgstr "Дробовик"
 
 #: ../../../Sources/Client/LimboView.cpp:65
 msgctxt "Client"
@@ -699,6 +723,8 @@ msgstr "ЗАГРУЖАЕТСЯ"
 #: ../../../Sources/Client/Client.cpp:2566
 #: ../../../Sources/Client/Client.cpp:2582
 #: ../../../Sources/Client/Client_Draw.cpp:539
+#: ../../../Sources/Client/Client_Draw.cpp:571
+#: ../../../Sources/Client/Client_Draw.cpp:582
 msgctxt "Client"
 msgid "You will respawn in: {0}"
 msgstr "Респавн через: {0}"
@@ -706,12 +732,12 @@ msgstr "Респавн через: {0}"
 #: ../../Scripts/Gui/StartupScreen.as:142
 msgctxt "StartupScreen"
 msgid "Start"
-msgstr "Начать"
+msgstr "Запуск"
 
 #: ../../Scripts/Gui/StartupScreen.as:149
 msgctxt "StartupScreen"
 msgid "Skip this screen next time"
-msgstr "Не показывать этот экран в след. раз"
+msgstr "Не показывать в след. раз"
 
 #: ../../Scripts/Gui/StartupScreen.as:181
 msgctxt "StartupScreen"
@@ -731,7 +757,7 @@ msgstr "Систем. инфо"
 #: ../../Scripts/Gui/StartupScreen.as:184
 msgctxt "StartupScreen"
 msgid "Advanced"
-msgstr "Продвинутые"
+msgstr "Расширенные"
 
 #: ../../Scripts/Gui/StartupScreen.as:907
 msgctxt "StartupScreen"
@@ -759,12 +785,13 @@ msgid ""
 "By running in fullscreen mode OpenSpades occupies the screen, making it "
 "easier for you to concentrate on playing the game."
 msgstr ""
-"При запуске из полноэкранного режима OpenSpades занимает весь экран, делая "
-"проще концентрацию на игре."
+"При запуске в полноэкранном режиме OpenSpades занимает весь экран, "
+"облегчая вашу концентрацию в игре."
 
 #: ../../Scripts/Gui/StartupScreen.as:1038
 #: ../../Scripts/Gui/StartupScreen.as:1404
 #: ../../Scripts/Gui/StartupScreen.as:1405
+#: ../../Scripts/Gui/StartupScreen.as:1415
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr "Бэкенд"
@@ -796,8 +823,8 @@ msgid ""
 "unsupported GPU."
 msgstr ""
 "Программный рендер использует ЦП для генерации изображения. Качество и "
-"производительность могут быть ниже OpenGL рендера, но он работает даже с не "
-"поддерживаемыми видеокартами."
+"производительность могут быть ниже OpenGL рендера, но он работает даже с "
+"неподдерживаемыми видеокартами."
 
 #: ../../Scripts/Gui/StartupScreen.as:1078
 msgctxt "StartupScreen"
@@ -814,62 +841,73 @@ msgstr ""
 "реалистичного освещения."
 
 #: ../../Scripts/Gui/StartupScreen.as:1085
+#: ../../Scripts/Gui/StartupScreen.as:1092
 msgctxt "StartupScreen"
 msgid "Camera Blur"
 msgstr "Размытие камеры"
 
 #: ../../Scripts/Gui/StartupScreen.as:1086
+#: ../../Scripts/Gui/StartupScreen.as:1093
 msgctxt "StartupScreen"
 msgid "Blurs the screen when you turns quickly."
-msgstr "Размывает экран когда вы быстро поворачиваетесь"
+msgstr "Размывает экран когда вы быстро поворачиваетесь."
 
 #: ../../Scripts/Gui/StartupScreen.as:1088
+#: ../../Scripts/Gui/StartupScreen.as:1098
 msgctxt "StartupScreen"
 msgid "Lens Scattering Filter"
 msgstr "Фильтр рассеяния объектива"
 
 #: ../../Scripts/Gui/StartupScreen.as:1089
+#: ../../Scripts/Gui/StartupScreen.as:1099
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
 msgstr "Моделирует рассеяние света пылью на линзе камеры."
 
 #: ../../Scripts/Gui/StartupScreen.as:1092
+#: ../../Scripts/Gui/StartupScreen.as:1102
 msgctxt "StartupScreen"
 msgid "Lens Flare"
 msgstr "Сияние линзы"
 
 #: ../../Scripts/Gui/StartupScreen.as:1093
+#: ../../Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
 msgid "The Sun causes lens flare."
-msgstr "Солнце вызывает сияние лизы"
+msgstr "Солнце вызывает сияние линзы."
 
 #: ../../Scripts/Gui/StartupScreen.as:1095
+#: ../../Scripts/Gui/StartupScreen.as:1105
 msgctxt "StartupScreen"
 msgid "Flares for Dynamic Lights"
 msgstr "Сияние для динамического света"
 
 #: ../../Scripts/Gui/StartupScreen.as:1096
+#: ../../Scripts/Gui/StartupScreen.as:1106
 msgctxt "StartupScreen"
 msgid "Enables lens flare for light sources other than the Sun."
 msgstr "Включает сияние света для других источников света, кроме солнца."
 
 #: ../../Scripts/Gui/StartupScreen.as:1098
+#: ../../Scripts/Gui/StartupScreen.as:1108
 msgctxt "StartupScreen"
 msgid "Color Correction"
 msgstr "Коррекция цвета"
 
 #: ../../Scripts/Gui/StartupScreen.as:1099
+#: ../../Scripts/Gui/StartupScreen.as:1109
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
-msgstr ""
-"Применяет кинематографичную коррекцию цвета чтобы картинка выглядела лучше."
+msgstr "Применяет кинематографичную коррекцию цвета чтобы картинка выглядела лучше."
 
 #: ../../Scripts/Gui/StartupScreen.as:1101
+#: ../../Scripts/Gui/StartupScreen.as:1111
 msgctxt "StartupScreen"
 msgid "Depth of Field"
 msgstr "Глубина резкости"
 
 #: ../../Scripts/Gui/StartupScreen.as:1102
+#: ../../Scripts/Gui/StartupScreen.as:1112
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
 msgstr "Размывать объекты вне фокуса"
@@ -877,6 +915,9 @@ msgstr "Размывать объекты вне фокуса"
 #: ../../Scripts/Gui/StartupScreen.as:1104
 #: ../../Scripts/Gui/StartupScreen.as:1142
 #: ../../Scripts/Gui/StartupScreen.as:1164
+#: ../../Scripts/Gui/StartupScreen.as:1114
+#: ../../Scripts/Gui/StartupScreen.as:1152
+#: ../../Scripts/Gui/StartupScreen.as:1174
 msgctxt "StartupScreen"
 msgid "Low"
 msgstr "Низко"
@@ -884,6 +925,9 @@ msgstr "Низко"
 #: ../../Scripts/Gui/StartupScreen.as:1105
 #: ../../Scripts/Gui/StartupScreen.as:1143
 #: ../../Scripts/Gui/StartupScreen.as:1165
+#: ../../Scripts/Gui/StartupScreen.as:1115
+#: ../../Scripts/Gui/StartupScreen.as:1153
+#: ../../Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid "Medium"
 msgstr "Средне"
@@ -891,23 +935,29 @@ msgstr "Средне"
 #: ../../Scripts/Gui/StartupScreen.as:1106
 #: ../../Scripts/Gui/StartupScreen.as:1144
 #: ../../Scripts/Gui/StartupScreen.as:1166
+#: ../../Scripts/Gui/StartupScreen.as:1116
+#: ../../Scripts/Gui/StartupScreen.as:1154
+#: ../../Scripts/Gui/StartupScreen.as:1176
 msgctxt "StartupScreen"
 msgid "High"
 msgstr "Высоко"
 
 #: ../../Scripts/Gui/StartupScreen.as:1109
+#: ../../Scripts/Gui/StartupScreen.as:1119
 msgctxt "StartupScreen"
 msgid "Post-process"
-msgstr "Пост-процессинг"
+msgstr "Постобработка"
 
 #: ../../Scripts/Gui/StartupScreen.as:1110
+#: ../../Scripts/Gui/StartupScreen.as:1120
 msgctxt "StartupScreen"
 msgid ""
 "Post-process modifies the image to make it look better and more realistic."
 msgstr ""
-"Пост-процессинг изменяет картинку чтобы сделать её лучше и более реалистичной"
+"Постобработка изменяет картинку чтобы сделать её лучше и более реалистичной"
 
 #: ../../Scripts/Gui/StartupScreen.as:1117
+#: ../../Scripts/Gui/StartupScreen.as:1127
 msgctxt "StartupScreen"
 msgid ""
 "Particles|Low:Artifact occurs when a particle intersects other objects.|"
@@ -916,80 +966,92 @@ msgid ""
 msgstr ""
 "Частицы|Низко:Артефакты появляются когда частица пересекает объект.|Средне:"
 "Частица пересекает объект плавно.|Высоко:Частица пересекает объект плавно, "
-"некоторые объекты бросают свою тень на частицы"
+"некоторые объекты бросают свою тень на частицы."
 
 #: ../../Scripts/Gui/StartupScreen.as:1127
+#: ../../Scripts/Gui/StartupScreen.as:1137
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
 msgstr "Динамическое освещение"
 
 #: ../../Scripts/Gui/StartupScreen.as:1129
+#: ../../Scripts/Gui/StartupScreen.as:1139
 msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
 "impression."
 msgstr ""
-"Дает некоторым объектам возможность испускать свет для придания им эффекта "
-"испускания энергии."
+"Дает некоторым объектам возможность излучать свет для придания им "
+"эффекта свечения."
 
 #: ../../Scripts/Gui/StartupScreen.as:1132
+#: ../../Scripts/Gui/StartupScreen.as:1142
 msgctxt "StartupScreen"
 msgid "Shadows"
 msgstr "Тени"
 
 #: ../../Scripts/Gui/StartupScreen.as:1133
+#: ../../Scripts/Gui/StartupScreen.as:1143
 msgctxt "StartupScreen"
-msgid "Non-static object casts a shadow."
-msgstr "Не статичные объекты отбрасывают тень"
+msgstr "Нестатичные объекты отбрасывают тень"
+msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1135
+#: ../../Scripts/Gui/StartupScreen.as:1145
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
 msgstr "Объемный туман"
 
 #: ../../Scripts/Gui/StartupScreen.as:1136
+#: ../../Scripts/Gui/StartupScreen.as:1146
 msgctxt "StartupScreen"
 msgid ""
 "Simulates shadow being casted to the fog particles using a super highly "
 "computationally demanding algorithm. "
 msgstr ""
-"Моделирует отбрасывание тени частицами тумана используя очень высоко "
+"Моделирует отбрасывание тени частицами тумана используя супер сильный "
 "ресурсоемкий алгоритм. "
 
 #: ../../Scripts/Gui/StartupScreen.as:1139
+#: ../../Scripts/Gui/StartupScreen.as:1149
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
 msgstr "Освещение на физической основе"
 
 #: ../../Scripts/Gui/StartupScreen.as:1140
+#: ../../Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
 msgid ""
 "Uses more accurate approximation techniques to decide the brightness of "
 "objects."
 msgstr ""
-"Использует более точные приближенные методы чтобы решить, какая у объектов "
-"яркость"
+"Использует более точные приближенные методы для определения яркости "
+"объектов."
 
 #: ../../Scripts/Gui/StartupScreen.as:1145
+#: ../../Scripts/Gui/StartupScreen.as:1155
 msgctxt "StartupScreen"
 msgid "Ultra"
 msgstr "Ультра"
 
 #: ../../Scripts/Gui/StartupScreen.as:1148
+#: ../../Scripts/Gui/StartupScreen.as:1158
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr "Прямой свет"
 
 #: ../../Scripts/Gui/StartupScreen.as:1149
+#: ../../Scripts/Gui/StartupScreen.as:1159
 msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
 "appearance."
 msgstr ""
 "Управляет тем, как столкновение света с материалами и атмосферой напрямую "
-"влияет на внешний вид"
+"влияет на внешний вид."
 
 #: ../../Scripts/Gui/StartupScreen.as:1159
+#: ../../Scripts/Gui/StartupScreen.as:1169
 msgctxt "StartupScreen"
 msgid ""
 "Water Shader|None:Water is rendered in the same way that normal blocks are "
@@ -1001,16 +1063,19 @@ msgstr ""
 "воде также моделируются, на ряду с отражением и преломлением."
 
 #: ../../Scripts/Gui/StartupScreen.as:1169
+#: ../../Scripts/Gui/StartupScreen.as:1179
 msgctxt "StartupScreen"
 msgid "Shader Effects"
 msgstr "Эффекты шейдеров"
 
 #: ../../Scripts/Gui/StartupScreen.as:1169
+#: ../../Scripts/Gui/StartupScreen.as:1179
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr "Специальные эффекты"
 
 #: ../../Scripts/Gui/StartupScreen.as:1186
+#: ../../Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
 msgid ""
 "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
@@ -1021,35 +1086,40 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1398
 #: ../../Scripts/Gui/StartupScreen.as:1399
+#: ../../Scripts/Gui/StartupScreen.as:1409
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr "Настройки аудио"
 
 #: ../../Scripts/Gui/StartupScreen.as:1407
 #: ../../Scripts/Gui/StartupScreen.as:1408
+#: ../../Scripts/Gui/StartupScreen.as:1418
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr "OpenAL"
 
 #: ../../Scripts/Gui/StartupScreen.as:1411
 #: ../../Scripts/Gui/StartupScreen.as:1412
+#: ../../Scripts/Gui/StartupScreen.as:1422
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
 "there isn't such a sound card, software emulation is used."
 msgstr ""
-"Использует OpenAL-совместимую звуковую карту для обработки звука. В "
-"большинстве случаев, где нет такой звуковой карты, используется программная "
-"эмуляция."
+"Использует OpenAL-совместимую звуковую карту для обработки звука. "
+"В большинстве случаев, где нет такой звуковой карты, "
+"используется программная эмуляция."
 
 #: ../../Scripts/Gui/StartupScreen.as:1420
 #: ../../Scripts/Gui/StartupScreen.as:1421
+#: ../../Scripts/Gui/StartupScreen.as:1431
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr "YSR"
 
 #: ../../Scripts/Gui/StartupScreen.as:1424
 #: ../../Scripts/Gui/StartupScreen.as:1425
+#: ../../Scripts/Gui/StartupScreen.as:1435
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -1065,12 +1135,15 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1462
 #: ../../Scripts/Gui/StartupScreen.as:1450
 #: ../../Scripts/Gui/StartupScreen.as:1474
+#: ../../Scripts/Gui/StartupScreen.as:1460
+#: ../../Scripts/Gui/StartupScreen.as:1484
 msgctxt "StartupScreen"
 msgid "Polyphonics"
-msgstr "Polyphonics"
+msgstr "Полифоника"
 
 #: ../../Scripts/Gui/StartupScreen.as:1439
 #: ../../Scripts/Gui/StartupScreen.as:1451
+#: ../../Scripts/Gui/StartupScreen.as:1461
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
@@ -1079,16 +1152,18 @@ msgid ""
 msgstr ""
 "Определяет как много звуков может проигрываться одновременно. Высокие "
 "значения требуют большой вычислительной мощности, так что установка на "
-"слишком большие значение может привести к перегрузке "
+"слишком большие значение может привести к перегрузке."
 
 #: ../../Scripts/Gui/StartupScreen.as:1446
 #: ../../Scripts/Gui/StartupScreen.as:1458
+#: ../../Scripts/Gui/StartupScreen.as:1468
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
 
 #: ../../Scripts/Gui/StartupScreen.as:1447
 #: ../../Scripts/Gui/StartupScreen.as:1459
+#: ../../Scripts/Gui/StartupScreen.as:1469
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1099,6 +1174,7 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1463
 #: ../../Scripts/Gui/StartupScreen.as:1475
+#: ../../Scripts/Gui/StartupScreen.as:1485
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1110,18 +1186,21 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1533
 #: ../../Scripts/Gui/StartupScreen.as:1551
+#: ../../Scripts/Gui/StartupScreen.as:1561
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "Скопировать в буфер обм."
 
 #: ../../Scripts/Gui/StartupScreen.as:1569
 #: ../../Scripts/Gui/StartupScreen.as:1587
+#: ../../Scripts/Gui/StartupScreen.as:1597
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
-msgstr "Продвинутые настройки"
+msgstr "Расширенные настройки"
 
 #: ../../Scripts/Gui/StartupScreen.as:1578
 #: ../../Scripts/Gui/StartupScreen.as:1596
+#: ../../Scripts/Gui/StartupScreen.as:1606
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "Фильтр"
@@ -1142,7 +1221,7 @@ msgstr ""
 "граней.\n"
 "\n"
 "MSAA: выполняет антиалиасинг с помощью генерации промежуточной картинки "
-"высокого разрешения. Выглядит лучше всего, но не справляется с некоторыми "
+"высокого разрешения. Выглядит наилучше, но не справляется с некоторыми "
 "настройками.\n"
 "\n"
 "FXAA: выполняет антиалиасинг с помощью размытия артефактов в пост-"
@@ -1155,15 +1234,18 @@ msgstr "Другой"
 
 #: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:703
 #: ../../Scripts/Gui/Preferences.as:704 ../../Scripts/Gui/Preferences.as:706
-#: ../../Scripts/Gui/Preferences.as:707
+#: ../../Scripts/Gui/Preferences.as:707 ../../Scripts/Gui/Preferences.as:708
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
-msgstr "Инвертировать Y-ось ввода мыши"
+msgstr "Инвертировать Y-ось мыши"
 
 #: ../../../Sources/Client/Client.cpp:1418
 #: ../../../Sources/Client/Client.cpp:1434
 #: ../../../Sources/Client/Client.cpp:555
 #: ../../../Sources/Client/Client.cpp:577
+#: ../../../Sources/Client/Client.cpp:595
+#: ../../../Sources/Client/Client.cpp:597
+#: ../../../Sources/Client/Client.cpp:592
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr "Карта сохранена: {0}"
@@ -1174,6 +1256,12 @@ msgstr "Карта сохранена: {0}"
 #: ../../../Sources/Client/Client.cpp:565
 #: ../../../Sources/Client/Client.cpp:581
 #: ../../../Sources/Client/Client.cpp:587
+#: ../../../Sources/Client/Client.cpp:599
+#: ../../../Sources/Client/Client.cpp:605
+#: ../../../Sources/Client/Client.cpp:601
+#: ../../../Sources/Client/Client.cpp:607
+#: ../../../Sources/Client/Client.cpp:596
+#: ../../../Sources/Client/Client.cpp:602
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr "Сохранение карты не удалось: "
@@ -1181,6 +1269,8 @@ msgstr "Сохранение карты не удалось: "
 #: ../../../Sources/Client/Client.cpp:1477
 #: ../../../Sources/Client/Client.cpp:1493
 #: ../../../Sources/Client/Client_Draw.cpp:95
+#: ../../../Sources/Client/Client_Draw.cpp:114
+#: ../../../Sources/Client/Client_Draw.cpp:116
 msgctxt "Client"
 msgid "Sceneshot saved: {0}"
 msgstr "Сценшот сохранен: {0}"
@@ -1188,6 +1278,8 @@ msgstr "Сценшот сохранен: {0}"
 #: ../../../Sources/Client/Client.cpp:1479
 #: ../../../Sources/Client/Client.cpp:1495
 #: ../../../Sources/Client/Client_Draw.cpp:97
+#: ../../../Sources/Client/Client_Draw.cpp:116
+#: ../../../Sources/Client/Client_Draw.cpp:118
 msgctxt "Client"
 msgid "Screenshot saved: {0}"
 msgstr "Скриншот сохранен: {0}"
@@ -1196,6 +1288,10 @@ msgstr "Скриншот сохранен: {0}"
 #: ../../../Sources/Client/Client.cpp:1500
 #: ../../../Sources/Client/Client_Draw.cpp:102
 #: ../../../Sources/Client/Client_Draw.cpp:108
+#: ../../../Sources/Client/Client_Draw.cpp:120
+#: ../../../Sources/Client/Client_Draw.cpp:126
+#: ../../../Sources/Client/Client_Draw.cpp:122
+#: ../../../Sources/Client/Client_Draw.cpp:128
 msgctxt "Client"
 msgid "Screenshot failed: "
 msgstr "Скриншот не удался: "
@@ -1204,16 +1300,19 @@ msgstr "Скриншот не удался: "
 #: ../../../Sources/Client/Client.cpp:2700
 #: ../../../Sources/Client/Client.cpp:599
 #: ../../../Sources/Client/Client.cpp:621
+#: ../../../Sources/Client/Client.cpp:639
+#: ../../../Sources/Client/Client.cpp:641
+#: ../../../Sources/Client/Client.cpp:636
 msgctxt "Client"
 msgid "[Global] "
-msgstr "[Глобал.] "
+msgstr "[Общий] "
 
 #: ../../../Sources/Client/Client.cpp:3229
 #: ../../../Sources/Client/Client.cpp:3253
 #: ../../../Sources/Client/Client_NetHandler.cpp:84
 msgctxt "Client"
-msgid "{0} captured {1}'s territory"
 msgstr "{0} захватил территорию команды {1}"
+msgstr ""
 
 #: ../../../Sources/Client/Client.cpp:3231
 #: ../../../Sources/Client/Client.cpp:3255
@@ -1318,6 +1417,7 @@ msgstr "Команда {0} выиграла!"
 #: ../../../Sources/Client/Client.cpp:3857
 #: ../../../Sources/Client/Client_Update.cpp:893
 #: ../../../Sources/Client/Client_Update.cpp:900
+#: ../../../Sources/Client/Client_Update.cpp:909
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr "Вы убили игрока {0}"
@@ -1327,12 +1427,14 @@ msgstr "Вы убили игрока {0}"
 #: ../../../Sources/Client/Client.cpp:3859
 #: ../../../Sources/Client/Client_Update.cpp:895
 #: ../../../Sources/Client/Client_Update.cpp:902
+#: ../../../Sources/Client/Client_Update.cpp:911
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr "Вы были убиты игроком {0}"
 
 #: ../../../Sources/Gui/Main.cpp:401 ../../../Sources/Gui/Main.cpp:388
-#: ../../../Sources/Gui/Runner.cpp:62
+#: ../../../Sources/Gui/Runner.cpp:62 ../../../Sources/Gui/Main.cpp:403
+#: ../../../Sources/Gui/Main.cpp:529 ../../../Sources/Gui/Main.cpp:592
 msgctxt "Main"
 msgid ""
 "A serious error caused OpenSpades to stop working:\n"
@@ -1347,17 +1449,21 @@ msgstr ""
 "Смотрите SystemMessages.log для более подробной информации."
 
 #: ../../../Sources/Gui/Main.cpp:406 ../../../Sources/Gui/Main.cpp:393
-#: ../../../Sources/Gui/Runner.cpp:66
+#: ../../../Sources/Gui/Runner.cpp:66 ../../../Sources/Gui/Main.cpp:408
+#: ../../../Sources/Gui/Main.cpp:534 ../../../Sources/Gui/Main.cpp:597
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr "Фатальная ошибка OpenSpades"
 
 #: ../../../Sources/Client/NetClient.cpp:392
+#: ../../../Sources/Client/NetClient.cpp:397
 msgctxt "NetClient"
 msgid "Connecting to the server"
 msgstr "Подключение к серверу"
 
 #: ../../../Sources/Client/NetClient.cpp:404
+#: ../../../Sources/Client/NetClient.cpp:409
+#: ../../../Sources/Client/NetClient.cpp:411
 msgctxt "NetClient"
 msgid "Not connected"
 msgstr "Не подключен"
@@ -1365,17 +1471,32 @@ msgstr "Не подключен"
 #: ../../../Sources/Client/NetClient.cpp:467
 #: ../../../Sources/Client/NetClient.cpp:1289
 #: ../../../Sources/Client/NetClient.cpp:1292
+#: ../../../Sources/Client/NetClient.cpp:478
+#: ../../../Sources/Client/NetClient.cpp:1308
+#: ../../../Sources/Client/NetClient.cpp:486
+#: ../../../Sources/Client/NetClient.cpp:1316
+#: ../../../Sources/Client/NetClient.cpp:493
+#: ../../../Sources/Client/NetClient.cpp:1323
 msgctxt "NetClient"
 msgid "Loading snapshot"
 msgstr "Загрузка снапшота"
 
 #: ../../../Sources/Client/NetClient.cpp:483
+#: ../../../Sources/Client/NetClient.cpp:494
+#: ../../../Sources/Client/NetClient.cpp:502
+#: ../../../Sources/Client/NetClient.cpp:509
 msgctxt "NetClient"
 msgid "Loading snapshot ({0}/{1})"
 msgstr "Загрузка снапшота ({0}/{1})"
 
 #: ../../../Sources/Client/NetClient.cpp:488
 #: ../../../Sources/Client/NetClient.cpp:522
+#: ../../../Sources/Client/NetClient.cpp:499
+#: ../../../Sources/Client/NetClient.cpp:533
+#: ../../../Sources/Client/NetClient.cpp:507
+#: ../../../Sources/Client/NetClient.cpp:541
+#: ../../../Sources/Client/NetClient.cpp:514
+#: ../../../Sources/Client/NetClient.cpp:548
 msgctxt "NetClient"
 msgid "Connected"
 msgstr "Подключено"
@@ -1383,9 +1504,18 @@ msgstr "Подключено"
 #: ../../../Sources/Client/NetClient.cpp:499
 #: ../../../Sources/Client/NetClient.cpp:534
 #: ../../../Sources/Client/NetClient.cpp:587
+#: ../../../Sources/Client/NetClient.cpp:510
+#: ../../../Sources/Client/NetClient.cpp:545
+#: ../../../Sources/Client/NetClient.cpp:598
+#: ../../../Sources/Client/NetClient.cpp:518
+#: ../../../Sources/Client/NetClient.cpp:553
+#: ../../../Sources/Client/NetClient.cpp:606
+#: ../../../Sources/Client/NetClient.cpp:525
+#: ../../../Sources/Client/NetClient.cpp:560
+#: ../../../Sources/Client/NetClient.cpp:613
 msgctxt "NetClient"
 msgid "Still loading..."
-msgstr "До сих пор загружается..."
+msgstr "До сих пор загрузке..."
 
 #: ../../../Sources/Client/NetClient.cpp:502
 #: ../../../Sources/Client/NetClient.cpp:508
@@ -1393,32 +1523,68 @@ msgstr "До сих пор загружается..."
 #: ../../../Sources/Client/NetClient.cpp:543
 #: ../../../Sources/Client/NetClient.cpp:591
 #: ../../../Sources/Client/NetClient.cpp:596
+#: ../../../Sources/Client/NetClient.cpp:513
+#: ../../../Sources/Client/NetClient.cpp:519
+#: ../../../Sources/Client/NetClient.cpp:549
+#: ../../../Sources/Client/NetClient.cpp:554
+#: ../../../Sources/Client/NetClient.cpp:602
+#: ../../../Sources/Client/NetClient.cpp:607
+#: ../../../Sources/Client/NetClient.cpp:521
+#: ../../../Sources/Client/NetClient.cpp:527
+#: ../../../Sources/Client/NetClient.cpp:557
+#: ../../../Sources/Client/NetClient.cpp:562
+#: ../../../Sources/Client/NetClient.cpp:610
+#: ../../../Sources/Client/NetClient.cpp:615
+#: ../../../Sources/Client/NetClient.cpp:528
+#: ../../../Sources/Client/NetClient.cpp:534
+#: ../../../Sources/Client/NetClient.cpp:564
+#: ../../../Sources/Client/NetClient.cpp:569
+#: ../../../Sources/Client/NetClient.cpp:617
+#: ../../../Sources/Client/NetClient.cpp:622
 msgctxt "NetClient"
 msgid "Error"
 msgstr "Ошибка"
 
 #: ../../../Sources/Client/NetClient.cpp:665
+#: ../../../Sources/Client/NetClient.cpp:676
+#: ../../../Sources/Client/NetClient.cpp:684
+#: ../../../Sources/Client/NetClient.cpp:691
 msgctxt "NetClient"
 msgid "You are banned from this server."
 msgstr "Вы забанены на этом сервере"
 
 #: ../../../Sources/Client/NetClient.cpp:669
 #: ../../../Sources/Client/NetClient.cpp:675
+#: ../../../Sources/Client/NetClient.cpp:680
+#: ../../../Sources/Client/NetClient.cpp:686
+#: ../../../Sources/Client/NetClient.cpp:688
+#: ../../../Sources/Client/NetClient.cpp:694
+#: ../../../Sources/Client/NetClient.cpp:695
+#: ../../../Sources/Client/NetClient.cpp:701
 msgctxt "NetClient"
 msgid "You were kicked from this server."
 msgstr "Вы были кикнуты с этого сервера"
 
 #: ../../../Sources/Client/NetClient.cpp:671
+#: ../../../Sources/Client/NetClient.cpp:682
+#: ../../../Sources/Client/NetClient.cpp:690
+#: ../../../Sources/Client/NetClient.cpp:697
 msgctxt "NetClient"
 msgid "Incompatible client protocol version."
 msgstr "Несовместимая версия протокола клиента"
 
 #: ../../../Sources/Client/NetClient.cpp:673
+#: ../../../Sources/Client/NetClient.cpp:684
+#: ../../../Sources/Client/NetClient.cpp:692
+#: ../../../Sources/Client/NetClient.cpp:699
 msgctxt "NetClient"
 msgid "Server full"
-msgstr "Сервер полон"
+msgstr "Сервер заполнен"
 
 #: ../../../Sources/Client/NetClient.cpp:677
+#: ../../../Sources/Client/NetClient.cpp:688
+#: ../../../Sources/Client/NetClient.cpp:696
+#: ../../../Sources/Client/NetClient.cpp:703
 msgctxt "NetClient"
 msgid "Unknown Reason"
 msgstr "Неизвестная причина"
@@ -1469,27 +1635,28 @@ msgid "Mouse Button 5"
 msgstr "Кнопка мыши 5"
 
 #: ../../Scripts/Gui/Preferences.as:682 ../../Scripts/Gui/Preferences.as:684
-#: ../../Scripts/Gui/Preferences.as:685
+#: ../../Scripts/Gui/Preferences.as:685 ../../Scripts/Gui/Preferences.as:686
 msgctxt "Preferences"
 msgid "Debug Hit Detection"
 msgstr "Отладка определения попаданий"
 
 #: ../../../Sources/Client/Client_Input.cpp:435
 #: ../../../Sources/Client/Client_Input.cpp:436
-#, fuzzy
+#: ../../../Sources/Client/Client_Input.cpp:445
 msgctxt "Client"
 msgid "Out of Blocks"
-msgstr "Кончились блоки"
+msgstr "Блоки закончились"
 
 #: ../../../Sources/Client/Client_Input.cpp:459
 #: ../../../Sources/Client/Client_Input.cpp:460
-#, fuzzy
+#: ../../../Sources/Client/Client_Input.cpp:469
 msgctxt "Client"
 msgid "Out of Grenades"
-msgstr "Кончились гранаты"
+msgstr "Гранаты закончились"
 
 #: ../../../Sources/Client/Client_Update.cpp:457
 #: ../../../Sources/Client/Client_Update.cpp:460
+#: ../../../Sources/Client/Client_Update.cpp:470
 msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
@@ -1499,18 +1666,21 @@ msgstr[2] "{0} блоков"
 
 #: ../../../Sources/Client/Client_Update.cpp:465
 #: ../../../Sources/Client/Client_Update.cpp:468
+#: ../../../Sources/Client/Client_Update.cpp:478
 msgctxt "Client"
 msgid "-- blocks"
 msgstr "-- блоков"
 
 #: ../../../Sources/Client/Client_Update.cpp:1202
 #: ../../../Sources/Client/Client_Update.cpp:1236
+#: ../../../Sources/Client/Client_Update.cpp:1259
 msgctxt "Client"
 msgid "Insufficient blocks."
 msgstr "Недостаточно блоков."
 
 #: ../../../Sources/Client/Client_Update.cpp:1206
 #: ../../../Sources/Client/Client_Update.cpp:1240
+#: ../../../Sources/Client/Client_Update.cpp:1263
 msgctxt "Client"
 msgid "You cannot place a block there."
 msgstr "Вы не можете поставить блок здесь."
@@ -1521,37 +1691,79 @@ msgid "Show Alerts"
 msgstr "Показывать предупреждения"
 
 #: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:678
-#, fuzzy
 msgctxt "Preferences"
 msgid "Server Alert"
 msgstr "Название сервера"
 
 #: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
+#: ../../Scripts/Gui/Preferences.as:715
 msgctxt "Preferences"
 msgid "Last Used Tool"
 msgstr "Посл. использован. инструмент"
 
 #: ../../Scripts/Gui/StartupScreen.as:1435
+#: ../../Scripts/Gui/StartupScreen.as:1445
 msgctxt "StartupScreen"
 msgid "Null"
-msgstr "Нуль"
+msgstr "Ноль"
 
 #: ../../Scripts/Gui/StartupScreen.as:1439
+#: ../../Scripts/Gui/StartupScreen.as:1449
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr "Отключить аудио выход."
 
-#: ../../Scripts/Gui/Preferences.as:755
+#: ../../Scripts/Gui/Preferences.as:755 ../../Scripts/Gui/Preferences.as:756
 msgctxt "Preferences"
 msgid "Enable Startup Window"
 msgstr "Включить стартовое окно"
 
-#: ../../Scripts/Gui/Preferences.as:776
+#: ../../Scripts/Gui/Preferences.as:776 ../../Scripts/Gui/Preferences.as:777
 msgctxt "Preferences"
 msgid "Quit and restart OpenSpades to access the startup window."
 msgstr "Выйти и перезапустить OpenSpades для доступа к стартовому окну"
 
-#: ../../Scripts/Gui/Preferences.as:777
+#: ../../Scripts/Gui/Preferences.as:777 ../../Scripts/Gui/Preferences.as:778
 msgctxt "Preferences"
 msgid "Some settings only can be changed in the startup window."
 msgstr "Некоторые настройки могут быть изменены только в стартовом окне"
+
+#: ../../../Sources/Client/NetClient.cpp:468
+#: ../../../Sources/Client/NetClient.cpp:476
+#: ../../../Sources/Client/NetClient.cpp:483
+msgctxt "NetClient"
+msgid "Awaiting for state"
+msgstr "В ожидании состояния"
+
+#: ../../Scripts/Gui/Preferences.as:685
+msgctxt "Preferences"
+msgid "Show Statistics"
+msgstr "Показывать статистику"
+
+#: ../../Scripts/Gui/StartupScreen.as:1083
+msgctxt "StartupScreen"
+msgid "Linear HDR Rendering"
+msgstr "Линейный HDR рендеринг"
+
+#: ../../Scripts/Gui/StartupScreen.as:1085
+msgctxt "StartupScreen"
+msgid ""
+"Uses a number representation which allows wider dynamic range during "
+"rendering process. Additionally, this allows color calculation whose value "
+"is in linear correspondence with actual energy, that is, physically accurate "
+"blending can be achieved."
+msgstr ""
+"Использует ряд представлений, которые позволяют использовать более широкий "
+"динамический диапазон во время процесса рендеринга. Кроме того, позволяет "
+"вычислить цвета, значения которых находится в линейном соответствии с фактической "
+"энергией, то есть, физически может быть достигнуто точное смешивание."
+
+#: ../../Scripts/Gui/StartupScreen.as:1095
+msgctxt "StartupScreen"
+msgid "Lens Effect"
+msgstr "Эффекты линзы"
+
+#: ../../Scripts/Gui/StartupScreen.as:1096
+msgctxt "StartupScreen"
+msgid "Simulates distortion caused by a real camera lens."
+msgstr "Симулирует искажения, вызванные линзами реальной камеры."
