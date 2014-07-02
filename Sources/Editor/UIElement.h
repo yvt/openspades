@@ -77,6 +77,8 @@ namespace spades { namespace editor {
 		void SetMouseFocus(UIElement *);
 		void SetKeyboardFocus(UIElement *);
 		
+		Vector2 GetMousePosition() const { return mousePos; }
+		
 		void SetRootElement(UIElement *);
 		
 		void MouseEvent(float x, float y);

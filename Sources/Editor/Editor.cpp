@@ -24,6 +24,7 @@
 #include <NGClient/FTFont.h>
 #include "Buttons.h"
 #include "Fields.h"
+#include "ScrollBar.h"
 
 namespace spades { namespace editor {
 
@@ -59,10 +60,17 @@ namespace spades { namespace editor {
 		b->SetBounds(AABB2(120, 120, 100, 25));
 		mainView->AddChildToFront(b);
 		
-		auto ed = MakeHandle<Field>(ui);
-		ed->SetBounds(AABB2(20, 20, 150, 20));
-		ed->SetText("hoge");
-		mainView->AddChildToBack(ed);
+		{
+			auto ed = MakeHandle<Field>(ui);
+			ed->SetBounds(AABB2(20, 20, 150, 20));
+			ed->SetText("hoge");
+			mainView->AddChildToBack(ed);
+		}
+		{
+			auto ed = MakeHandle<ScrollBar>(ui);
+			ed->SetBounds(AABB2(20, 60, 16, 100));
+			mainView->AddChildToBack(ed);
+		}
 	}
 	
 	Editor::~Editor() {
