@@ -58,7 +58,12 @@ namespace spades { namespace editor {
 		std::set<MouseButton> pressed;
 		bool shiftPressed;
 		
+		std::string keyRepeatKey;
+		double keyRepeatTime = 0.;
+		
 		std::set<KeyModifier> modifiers;
+		
+		UIElement *GetKeyHandler();
 		
 	public:
 		UIManager(client::IRenderer *);
@@ -118,10 +123,14 @@ namespace spades { namespace editor {
 		virtual bool HitTestLocal(const Vector2&);
 		virtual void OnMouseEnter();
 		virtual void OnMouseLeave();
+		virtual void OnEnter() { }
+		virtual void OnLeave() { }
 		virtual void OnMouseDown(MouseButton, const Vector2&);
 		virtual void OnMouseUp(MouseButton, const Vector2&);
 		virtual void OnMouseMove(const Vector2&);
 		virtual void OnMouseWheel(const Vector2&) { }
+		virtual void OnKeyDown(const std::string&) { }
+		virtual void OnKeyUp(const std::string&) { }
 		virtual void OnTextInputEvent(const std::string&);
 		virtual void OnTextEditingEvent(const std::string&,
 							  int start, int len);
@@ -132,6 +141,8 @@ namespace spades { namespace editor {
 		void AddChildToBack(UIElement *);
 		
 		UIManager& GetManager() const { return *manager; }
+		
+		client::IFont *GetFont();
 		
 		void RemoveFromParent();
 		
@@ -157,6 +168,9 @@ namespace spades { namespace editor {
 		virtual bool AcceptsKeyboardFocus() { return false; }
 		virtual AABB2 GetTextInputRect();
 		virtual Cursor GetCursor() { return Cursor(); }
+		
+		bool HasMouseFocus();
+		bool HasKeyboardFocus();
 		
 		void Render();
 	};

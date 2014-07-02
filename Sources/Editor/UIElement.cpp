@@ -39,6 +39,14 @@ namespace spades { namespace editor {
 	
 	void UIManager::Update(double dt) {
 		time += dt;
+		
+		if (!keyRepeatKey.empty() && time >= keyRepeatTime) {
+			auto *e = GetKeyHandler();
+			if (e) {
+				e->OnKeyDown(keyRepeatKey);
+			}
+			keyRepeatTime = time + 0.05;
+		}
 	}
 	
 	void UIManager::Render() {
@@ -86,11 +94,15 @@ namespace spades { namespace editor {
 	}
 	
 	void UIManager::SetKeyboardFocus(UIElement *e) {
-		if (e == mouseFocus) return;
-		auto *last = mouseFocus;
-		mouseFocus = e;
-		if (last) last->OnMouseLeave();
-		if (mouseFocus) mouseFocus->OnMouseEnter();
+		if (e == keyboardFocus) return;
+		auto *last = keyboardFocus;
+		keyboardFocus = e;
+		if (last) last->OnLeave();
+		if (keyboardFocus) keyboardFocus->OnEnter();
+	}
+	
+	UIElement *UIManager::GetKeyHandler() {
+		return keyboardFocus;
 	}
 	
 	void UIManager::MouseEvent(float x, float y) {
@@ -155,6 +167,21 @@ namespace spades { namespace editor {
 			}
 			if (pressed.empty()) {
 				SetMouseFocus(root->HitTest(mousePos));
+			}
+			return;
+		}
+		
+		auto *e = GetKeyHandler();
+		if (e) {
+			if (down) {
+				e->OnKeyDown(key);
+				keyRepeatKey = key;
+				keyRepeatTime = time + .3;
+			} else {
+				e->OnKeyUp(key);
+				if (key == keyRepeatKey) {
+					keyRepeatKey.clear();
+				}
 			}
 		}
 	}
@@ -327,6 +354,18 @@ namespace spades { namespace editor {
 			return parent->IsEnabled();
 		else
 			return true;
+	}
+	
+	bool UIElement::HasMouseFocus() {
+		return manager->mouseFocus == this;
+	}
+	
+	bool UIElement::HasKeyboardFocus() {
+		return manager->keyboardFocus == this;
+	}
+	
+	client::IFont *UIElement::GetFont() {
+		return manager->GetFont();
 	}
 	
 	

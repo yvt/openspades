@@ -23,6 +23,7 @@
 #include "UIElement.h"
 #include <NGClient/FTFont.h>
 #include "Buttons.h"
+#include "Fields.h"
 
 namespace spades { namespace editor {
 
@@ -57,6 +58,11 @@ namespace spades { namespace editor {
 		b->SetText("Hello World!");
 		b->SetBounds(AABB2(120, 120, 100, 25));
 		mainView->AddChildToFront(b);
+		
+		auto ed = MakeHandle<Field>(ui);
+		ed->SetBounds(AABB2(20, 20, 150, 20));
+		ed->SetText("hoge");
+		mainView->AddChildToBack(ed);
 	}
 	
 	Editor::~Editor() {
@@ -184,7 +190,7 @@ namespace spades { namespace editor {
 		
 		renderer->EndScene();
 		
-		
+		ui->Update(dt);
 		ui->Render();
 		renderer->FrameDone();
 		renderer->Flip();

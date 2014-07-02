@@ -502,12 +502,13 @@ namespace spades { namespace ngclient {
 			auto& img = *g.image;
 			auto srcBounds = img.bounds;
 			auto target = offset + (Vector2(x, y) + img.offset) * scale;
+			target = (target + .5f).Floor(); // for sharper rendering
 			AABB2 destBounds(target.x, target.y,
-							 srcBounds.GetWidth(),
-							 srcBounds.GetHeight());
+							 srcBounds.GetWidth() * scale,
+							 srcBounds.GetHeight() * scale);
 			
 			srcBounds = srcBounds.Inflate(.5f);
-			destBounds = destBounds.Inflate(.5f);
+			destBounds = destBounds.Inflate(.5f * scale);
 			
 			renderer->DrawImage(&img.img, destBounds, srcBounds);
 			

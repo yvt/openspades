@@ -50,6 +50,7 @@ namespace spades { namespace editor {
 				nextRepeat = GetManager().GetTime() + .3;
 			}
 		}
+		UIElement::OnMouseDown(b, p);
 	}
 	
 	void ButtonBase::OnMouseMove(const Vector2& p) {
@@ -75,7 +76,7 @@ namespace spades { namespace editor {
 	void ButtonBase::RenderClient() {
 		if (hover && pressed && IsAutoRepeat() &&
 			GetManager().GetTime() > nextRepeat) {
-			nextRepeat = GetManager().GetTime() + .1;
+			nextRepeat = GetManager().GetTime() + .05;
 			Activate();
 		}
 	}
@@ -120,7 +121,7 @@ namespace spades { namespace editor {
 		r->SetColorAlphaPremultiplied(color);
 		r->DrawImage(nullptr, rt.Inflate(-1.f));
 		
-		auto f = ToHandle(GetManager().GetFont());
+		auto f = ToHandle(GetFont());
 		auto sz = f->Measure(text);
 		
 		f->Draw(text, (rt.min + (rt.GetSize() - sz) * .5f).Floor(),
