@@ -98,7 +98,7 @@ namespace spades {
 				for (int yy = 0; yy < bh; ++yy) {
 					uint32_t *inpix = inBmp.GetPixels();
 					uint32_t *outpix = bmp.data();
-					outpix += x + y * ew;
+					outpix += x + (y + yy) * ew;
 					inpix += yy * bw;
 					for (unsigned int j = bw; j; --j) {
 						*(outpix++) = ProcessPixel(*(inpix++));
