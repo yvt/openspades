@@ -291,6 +291,7 @@
 		E860D0D11963EFC7008497C3 /* Buttons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E860D0CF1963EFC7008497C3 /* Buttons.cpp */; };
 		E860D0D4196403B3008497C3 /* Fields.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E860D0D2196403B3008497C3 /* Fields.cpp */; };
 		E860D0D719642EA1008497C3 /* ScrollBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E860D0D519642EA1008497C3 /* ScrollBar.cpp */; };
+		E860D0DA1964526C008497C3 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E860D0D81964526C008497C3 /* Window.cpp */; };
 		E8710E6F1940633A00C2EE62 /* GLFogShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8710E6C1940633A00C2EE62 /* GLFogShader.cpp */; };
 		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
 		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
@@ -300,6 +301,7 @@
 		E89985D21961254400686DF2 /* MainView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89985D01961254400686DF2 /* MainView.cpp */; };
 		E89D2A28190F742800DD0A9C /* GameMap_ngmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89D2A25190F742800DD0A9C /* GameMap_ngmap.cpp */; };
 		E8ACFA62194B5E240093C79C /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8ACFA5F194B5E240093C79C /* Host.cpp */; };
+		E8B72C821964565900C62AFF /* OutlinerWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B72C801964565900C62AFF /* OutlinerWindow.cpp */; };
 		E8CEAD0419587B65004AB350 /* libode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CEAD0319587B65004AB350 /* libode.a */; };
 		E8CEAD081958823F004AB350 /* ModelPhysics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CEAD051958823F004AB350 /* ModelPhysics.cpp */; };
 		E8CEAD0C195989C5004AB350 /* ModelTreeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CEAD09195989C5004AB350 /* ModelTreeRenderer.cpp */; };
@@ -700,6 +702,8 @@
 		E860D0D3196403B3008497C3 /* Fields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fields.h; sourceTree = "<group>"; };
 		E860D0D519642EA1008497C3 /* ScrollBar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScrollBar.cpp; sourceTree = "<group>"; };
 		E860D0D619642EA1008497C3 /* ScrollBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollBar.h; sourceTree = "<group>"; };
+		E860D0D81964526C008497C3 /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
+		E860D0D91964526C008497C3 /* Window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Window.h; sourceTree = "<group>"; };
 		E8710E6C1940633A00C2EE62 /* GLFogShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFogShader.cpp; sourceTree = "<group>"; };
 		E8710E6D1940633A00C2EE62 /* GLFogShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFogShader.h; sourceTree = "<group>"; };
 		E874834618EACF0300C29033 /* OpenSpades.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = OpenSpades.icns; path = Resources/Icons/OpenSpades.icns; sourceTree = "<group>"; };
@@ -922,6 +926,8 @@
 		E8B6B74517EA0F1E00E35523 /* IGrenadeSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGrenadeSkin.h; sourceTree = "<group>"; };
 		E8B6B74717EA12E100E35523 /* IWeaponSkin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IWeaponSkin.cpp; sourceTree = "<group>"; };
 		E8B6B74817EA12E500E35523 /* IWeaponSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWeaponSkin.h; sourceTree = "<group>"; };
+		E8B72C801964565900C62AFF /* OutlinerWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OutlinerWindow.cpp; sourceTree = "<group>"; };
+		E8B72C811964565900C62AFF /* OutlinerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutlinerWindow.h; sourceTree = "<group>"; };
 		E8B8082718E05B920001013E /* CellToTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellToTriangle.h; sourceTree = "<group>"; };
 		E8B93AD418559EC600BD01E1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModelRenderer.cpp; sourceTree = "<group>"; };
@@ -1665,6 +1671,10 @@
 				E860D0D3196403B3008497C3 /* Fields.h */,
 				E860D0D519642EA1008497C3 /* ScrollBar.cpp */,
 				E860D0D619642EA1008497C3 /* ScrollBar.h */,
+				E860D0D81964526C008497C3 /* Window.cpp */,
+				E860D0D91964526C008497C3 /* Window.h */,
+				E8B72C801964565900C62AFF /* OutlinerWindow.cpp */,
+				E8B72C811964565900C62AFF /* OutlinerWindow.h */,
 			);
 			path = Editor;
 			sourceTree = "<group>";
@@ -2938,6 +2948,7 @@
 				E82E674118EA7972004DBA18 /* as_compiler.cpp in Sources */,
 				E8E977B21944955500579D9A /* Constants.cpp in Sources */,
 				E8D0E7BA18FABC3600DE3BDB /* rw.cpp in Sources */,
+				E860D0DA1964526C008497C3 /* Window.cpp in Sources */,
 				E82E674218EA7972004DBA18 /* as_configgroup.cpp in Sources */,
 				E8D0E7B418FABC3600DE3BDB /* ripemd.cpp in Sources */,
 				E82E674318EA7972004DBA18 /* as_context.cpp in Sources */,
@@ -3277,6 +3288,7 @@
 				E82E670D18EA7954004DBA18 /* GLMapShadowRenderer.cpp in Sources */,
 				E82E670E18EA7954004DBA18 /* GLShadowShader.cpp in Sources */,
 				E82E670F18EA7954004DBA18 /* GLDynamicLightShader.cpp in Sources */,
+				E8B72C821964565900C62AFF /* OutlinerWindow.cpp in Sources */,
 				E8D0E7DA18FABC3600DE3BDB /* squaretb.cpp in Sources */,
 				E8E977AB1944819600579D9A /* CheckpointEntity.cpp in Sources */,
 				E82E671018EA7954004DBA18 /* IGLShadowMapRenderer.cpp in Sources */,

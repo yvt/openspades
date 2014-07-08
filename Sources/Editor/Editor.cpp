@@ -25,6 +25,7 @@
 #include "Buttons.h"
 #include "Fields.h"
 #include "ScrollBar.h"
+#include "OutlinerWindow.h"
 
 namespace spades { namespace editor {
 
@@ -55,6 +56,13 @@ namespace spades { namespace editor {
 												 12.f, 12.f * 1.25f);
 		ui->SetFont(font);
 		
+		auto fontSet2 = MakeHandle<ngclient::FTFontSet>();
+		fontSet2->AddFace("Gfx/Fonts/SourceSansPro-Bold.ttf");
+		fontSet2->AddFace("Gfx/Fonts/mplus-2m-bold.ttf");
+		
+		titleFont = MakeHandle<ngclient::FTFont>(renderer, fontSet2,
+												11.f, 11.f * 1.25f);
+		
 		auto b = MakeHandle<Button>(ui);
 		b->SetText("Hello World!");
 		b->SetBounds(AABB2(120, 120, 100, 25));
@@ -69,6 +77,12 @@ namespace spades { namespace editor {
 		{
 			auto ed = MakeHandle<ScrollBar>(ui);
 			ed->SetBounds(AABB2(20, 60, 16, 100));
+			mainView->AddChildToBack(ed);
+		}
+		{
+			auto ed = MakeHandle<OutlinerWindow>(ui,
+												 *this);
+			ed->SetBounds(AABB2(20, 200, 120, 150));
 			mainView->AddChildToBack(ed);
 		}
 	}

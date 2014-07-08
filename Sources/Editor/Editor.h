@@ -24,6 +24,7 @@
 #include <Client/IRenderer.h>
 #include <Client/IAudioDevice.h>
 #include <Gui/View.h>
+#include <Client/IFont.h>
 
 namespace spades { namespace editor {
 	
@@ -37,6 +38,8 @@ namespace spades { namespace editor {
 		
 		Handle<UIManager> ui;
 		Handle<MainView> mainView;
+		
+		Handle<client::IFont> titleFont;
 		
 		Vector3 viewCenter;
 		Vector3 viewAngle;
@@ -54,6 +57,8 @@ namespace spades { namespace editor {
 		
 		client::IRenderer *GetRenderer() { return renderer; }
 		client::IAudioDevice *GetAudioDevice() { return audio; }
+		
+		client::IFont *GetTitleFont() const { return titleFont; }
 		
 		void Turn(const Vector2&);
 		void Strafe(const Vector2&);
