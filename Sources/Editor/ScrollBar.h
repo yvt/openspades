@@ -70,6 +70,11 @@ namespace spades { namespace editor {
 		void SetValue(double);
 		double GetValue() const { return value; }
 		
+		void SetLargeChange(double v) { largeChange = v; }
+		double GetLargeChange() const { return largeChange; }
+		void SetSmallChange(double v) { smallChange = v; }
+		double GetSmallChange() const { return smallChange; }
+		
 		void SetChangeHandler(const std::function<void()>&);
 		
 	};

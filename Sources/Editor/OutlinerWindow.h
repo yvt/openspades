@@ -26,11 +26,14 @@
 namespace spades { namespace editor {
 	
 	class Editor;
+	class ListView;
 	
 	class OutlinerWindow: public Window {
 		Editor& editor;
+		Handle<ListView> listView;
 	protected:
 		~OutlinerWindow();
+		void RenderClient() override;
 		
 		client::IFont *GetTitleFont() override;
 		std::string GetTitle() override;
@@ -38,6 +41,7 @@ namespace spades { namespace editor {
 		OutlinerWindow(UIManager *,
 					   Editor&);
 		
+		Vector2 AdjustClientSize(const Vector2&) override;
 	};
 	
 } }

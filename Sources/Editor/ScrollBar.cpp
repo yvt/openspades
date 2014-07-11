@@ -108,8 +108,8 @@ namespace spades { namespace editor {
 			} else {
 				r->SetColorAlphaPremultiplied(Vector4(0,0,0,1)*.3f);
 			}
-			r->DrawImage(nullptr, AABB2(rt.GetMid().x - 5.f, rt.GetMinY(),
-										10.f, rt.GetHeight()));
+			r->DrawImage(nullptr, AABB2(rt.GetMid().x - 4.f, rt.GetMinY(),
+										8.f, rt.GetHeight()));
 		}
 		void OnMouseEnter() override {
 			hover = true;
@@ -224,6 +224,13 @@ namespace spades { namespace editor {
 		value = v;
 		if (onChange)
 			onChange();
+	}
+	
+	void ScrollBar::SetRange(double minValue, double maxValue) {
+		this->minValue = minValue;
+		this->maxValue = maxValue;
+		
+		SetValue(value);
 	}
 	
 	void ScrollBar::SetChangeHandler(const std::function<void ()> &h) {

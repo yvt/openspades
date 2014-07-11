@@ -18,6 +18,8 @@
 		E818AEE31949EA08004500C7 /* PlayerLocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE01949EA08004500C7 /* PlayerLocalEntity.cpp */; };
 		E818AEE7194AAAD0004500C7 /* ServerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE4194AAAD0004500C7 /* ServerEntity.cpp */; };
 		E818AEEB194ACCA6004500C7 /* PlayerServerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE8194ACCA6004500C7 /* PlayerServerEntity.cpp */; };
+		E826C934196C054600D6C962 /* ListView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E826C932196C054600D6C962 /* ListView.cpp */; };
+		E826C937196EAF3A00D6C962 /* TreeView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E826C935196EAF3A00D6C962 /* TreeView.cpp */; };
 		E82E66BC18EA78F5004DBA18 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E82E66BB18EA78F5004DBA18 /* Cocoa.framework */; };
 		E82E66ED18EA7914004DBA18 /* StartupScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842888C18A3D1520060743D /* StartupScreenHelper.cpp */; };
 		E82E66EE18EA7954004DBA18 /* GLBloomFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89E811F179C2C800059C649 /* GLBloomFilter.cpp */; };
@@ -572,6 +574,10 @@
 		E81CE4A4183F7A3000F22685 /* IFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IFont.cpp; sourceTree = "<group>"; };
 		E81CE4A7183F7F2000F22685 /* MainScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScreen.cpp; sourceTree = "<group>"; };
 		E81CE4A8183F7F2000F22685 /* MainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScreen.h; sourceTree = "<group>"; };
+		E826C932196C054600D6C962 /* ListView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ListView.cpp; sourceTree = "<group>"; };
+		E826C933196C054600D6C962 /* ListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListView.h; sourceTree = "<group>"; };
+		E826C935196EAF3A00D6C962 /* TreeView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TreeView.cpp; sourceTree = "<group>"; };
+		E826C936196EAF3A00D6C962 /* TreeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreeView.h; sourceTree = "<group>"; };
 		E82E66B218E9A35C004DBA18 /* Client_FPSCounter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_FPSCounter.cpp; sourceTree = "<group>"; };
 		E82E66B918EA78F5004DBA18 /* OpenSpades.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenSpades.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E82E66BB18EA78F5004DBA18 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -1675,6 +1681,10 @@
 				E860D0D91964526C008497C3 /* Window.h */,
 				E8B72C801964565900C62AFF /* OutlinerWindow.cpp */,
 				E8B72C811964565900C62AFF /* OutlinerWindow.h */,
+				E826C932196C054600D6C962 /* ListView.cpp */,
+				E826C933196C054600D6C962 /* ListView.h */,
+				E826C935196EAF3A00D6C962 /* TreeView.cpp */,
+				E826C936196EAF3A00D6C962 /* TreeView.h */,
 			);
 			path = Editor;
 			sourceTree = "<group>";
@@ -3021,6 +3031,7 @@
 				E82E676F18EA7972004DBA18 /* DirectoryFileSystem.cpp in Sources */,
 				E8D0E7FE18FABC3600DE3BDB /* xtr.cpp in Sources */,
 				E8D0E5EA18F9B6BB00DE3BDB /* Shared.cpp in Sources */,
+				E826C934196C054600D6C962 /* ListView.cpp in Sources */,
 				E82E677018EA7972004DBA18 /* DeflateStream.cpp in Sources */,
 				E82E677118EA7972004DBA18 /* MemoryStream.cpp in Sources */,
 				E8D0E72118FABC3600DE3BDB /* bfinit.cpp in Sources */,
@@ -3050,6 +3061,7 @@
 				E8D0E79518FABC3600DE3BDB /* oaep.cpp in Sources */,
 				E82E678018EA7972004DBA18 /* MathScript.cpp in Sources */,
 				E89985CF1960E44800686DF2 /* UIElement.cpp in Sources */,
+				E826C937196EAF3A00D6C962 /* TreeView.cpp in Sources */,
 				E82E678118EA7972004DBA18 /* StringsScript.cpp in Sources */,
 				E82E678218EA7972004DBA18 /* ScriptManager.cpp in Sources */,
 				E82E678318EA7972004DBA18 /* IImage.cpp in Sources */,

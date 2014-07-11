@@ -20,14 +20,49 @@
 
 #include "OutlinerWindow.h"
 #include "Editor.h"
+#include "ListView.h"
+#include "TreeView.h"
+#include "Buttons.h"
 
 namespace spades { namespace editor {
 	
+	class TestTreeItem: public TreeViewItem {
+		std::vector<Handle<TestTreeItem>> children;
+	protected:
+		~TestTreeItem() { }
+	public:
+		virtual std::size_t GetNumChildren() {
+			return children.size();
+		}
+		virtual TreeViewItem *CreateChild(std::size_t index) {
+			if (!children[index]) {
+				children[index] = MakeHandle<TestTreeItem>();
+			}
+			return children[index];
+		}
+		virtual UIElement *CreateView(UIManager *m) {
+			auto b = MakeHandle<Button>(m);
+			char bf[256];
+			sprintf(bf, "0x%08x", (int)this);
+			b->SetText(bf);
+			return b.Unmanage();
+		}
+		TestTreeItem() {
+			children.resize((rand() & 7));
+		}
+	};
 	
 	OutlinerWindow::OutlinerWindow
 	(UIManager *m, Editor&e):
 	Window(m),
-	editor(e) { }
+	editor(e) {
+		listView = MakeHandle<ListView>(m);
+		AddChildToFront(listView);
+		
+		auto model = MakeHandle<TreeViewModel>
+		(m, MakeHandle<TestTreeItem>());
+		listView->SetModel(model);
+	}
 	
 	OutlinerWindow::~OutlinerWindow() { }
 	
@@ -37,6 +72,17 @@ namespace spades { namespace editor {
 	
 	std::string OutlinerWindow::GetTitle() {
 		return "Outline";
+	}
+	
+	void OutlinerWindow::RenderClient() {
+		Window::RenderClient();
+		listView->SetBounds(GetClientBounds());
+	}
+	
+	Vector2 OutlinerWindow::AdjustClientSize(const Vector2& sz) {
+		auto rh = listView->GetRowHeight();
+		auto sz2 = Vector2(sz.x, std::max(floorf(sz.y / rh + .5f), 3.f) * rh);
+		return Window::AdjustClientSize(sz2);
 	}
 	
 	
