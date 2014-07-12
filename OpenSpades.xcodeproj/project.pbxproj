@@ -298,6 +298,7 @@
 		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
 		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
+		E876A32E19719E8200C5A5D0 /* Commands.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E876A32D19719E8200C5A5D0 /* Commands.cpp */; };
 		E87B7B3319605B9E0051FF90 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E87B7B3019605B9E0051FF90 /* Editor.cpp */; };
 		E89985CF1960E44800686DF2 /* UIElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89985CC1960E44800686DF2 /* UIElement.cpp */; };
 		E89985D21961254400686DF2 /* MainView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89985D01961254400686DF2 /* MainView.cpp */; };
@@ -713,6 +714,8 @@
 		E8710E6C1940633A00C2EE62 /* GLFogShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFogShader.cpp; sourceTree = "<group>"; };
 		E8710E6D1940633A00C2EE62 /* GLFogShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFogShader.h; sourceTree = "<group>"; };
 		E874834618EACF0300C29033 /* OpenSpades.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = OpenSpades.icns; path = Resources/Icons/OpenSpades.icns; sourceTree = "<group>"; };
+		E876A32D19719E8200C5A5D0 /* Commands.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Commands.cpp; sourceTree = "<group>"; };
+		E876A32F19719E9A00C5A5D0 /* Commands.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Commands.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		E87AB82118BB3957006B7D73 /* SdlImageReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SdlImageReader.cpp; sourceTree = "<group>"; };
 		E87AB82418BB3A04006B7D73 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		E87B7B3019605B9E0051FF90 /* Editor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Editor.cpp; sourceTree = "<group>"; };
@@ -1667,6 +1670,8 @@
 			children = (
 				E87B7B3019605B9E0051FF90 /* Editor.cpp */,
 				E87B7B3119605B9E0051FF90 /* Editor.h */,
+				E876A32D19719E8200C5A5D0 /* Commands.cpp */,
+				E876A32F19719E9A00C5A5D0 /* Commands.h */,
 				E89985CC1960E44800686DF2 /* UIElement.cpp */,
 				E89985CD1960E44800686DF2 /* UIElement.h */,
 				E89985D01961254400686DF2 /* MainView.cpp */,
@@ -3139,6 +3144,7 @@
 				E87B7B3319605B9E0051FF90 /* Editor.cpp in Sources */,
 				E82E67AA18EA7972004DBA18 /* IModel.cpp in Sources */,
 				E82E67AB18EA7972004DBA18 /* AsyncRenderer.cpp in Sources */,
+				E876A32E19719E8200C5A5D0 /* Commands.cpp in Sources */,
 				E8ACFA62194B5E240093C79C /* Host.cpp in Sources */,
 				E8D0E79318FABC3600DE3BDB /* network.cpp in Sources */,
 				E82E67AC18EA7972004DBA18 /* NetClient.cpp in Sources */,

@@ -26,6 +26,7 @@
 #include "Fields.h"
 #include "ScrollBar.h"
 #include "OutlinerWindow.h"
+#include "Commands.h"
 
 namespace spades { namespace editor {
 
@@ -37,7 +38,8 @@ namespace spades { namespace editor {
 	ui(new UIManager(renderer), false),
 	viewCenter(0, 0, 0),
 	viewAngle(0, M_PI * 0.2f, 0),
-	viewDistance(10.f) {
+	viewDistance(10.f),
+	commandManager(MakeHandle<CommandManager>()) {
 		SPADES_MARK_FUNCTION();
 		
 		SPAssert(renderer);

@@ -31,6 +31,7 @@ namespace spades { namespace editor {
 	class UIElement;
 	class UIManager;
 	class MainView;
+	class CommandManager;
 	
 	class Editor: public gui::View {
 		Handle<client::IRenderer> renderer;
@@ -40,6 +41,8 @@ namespace spades { namespace editor {
 		Handle<MainView> mainView;
 		
 		Handle<client::IFont> titleFont;
+		
+		Handle<CommandManager> commandManager;
 		
 		Vector3 viewCenter;
 		Vector3 viewAngle;
@@ -59,6 +62,8 @@ namespace spades { namespace editor {
 		client::IAudioDevice *GetAudioDevice() { return audio; }
 		
 		client::IFont *GetTitleFont() const { return titleFont; }
+		
+		CommandManager& GetCommandManager() const { return *commandManager; }
 		
 		void Turn(const Vector2&);
 		void Strafe(const Vector2&);
