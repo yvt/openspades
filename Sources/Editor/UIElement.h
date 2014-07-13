@@ -177,4 +177,25 @@ namespace spades { namespace editor {
 		void Render();
 	};
 	
+	class Label: public UIElement {
+		std::string text;
+		Vector2 alignment {0, 0};
+		Vector4 color { 0, 0, 0, 1 };
+		Vector4 shadowColor { 0, 0, 0, 0 };
+	protected:
+		~Label();
+		void RenderClient() override;
+	public:
+		Label(UIManager *);
+		
+		void SetText(const std::string& s) { text = s; }
+		std::string GetText() const { return text; }
+		void SetAlignment(const Vector2& v) { alignment = v; }
+		Vector2 GetAlignment() const { return alignment; }
+		void SetColor(const Vector4& c) { color = c; }
+		Vector4 GetColor() const { return color; }
+		void SetShadowColor(const Vector4& c) { shadowColor = c; }
+		Vector4 GetShadowColor() const { return shadowColor; }
+	};
+	
 } }

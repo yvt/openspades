@@ -29,6 +29,9 @@ namespace spades { namespace editor {
 	class ListView;
 	
 	class OutlinerWindow: public Window {
+		class Internal;
+		std::unique_ptr<Internal> internal;
+		
 		Editor& editor;
 		Handle<ListView> listView;
 	protected:

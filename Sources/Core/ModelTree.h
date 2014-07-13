@@ -199,6 +199,7 @@ namespace spades { namespace osobj {
 		void AddTag(const std::string&);
 		void RemoveTag(const std::string&);
 		bool HasTag(const std::string&);
+		const decltype(tags)& GetTags() const { return tags; }
 		
 		void SetId(const std::string& s) { id = s; }
 		std::string GetId() const { return id; }

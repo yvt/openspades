@@ -28,6 +28,7 @@
 #include "OutlinerWindow.h"
 #include "Commands.h"
 #include "Scene.h"
+#include <Core/ModelTree.h>
 
 namespace spades { namespace editor {
 
@@ -88,6 +89,16 @@ namespace spades { namespace editor {
 			ed->SetBounds(AABB2(20, 200, 120, 150));
 			mainView->AddChildToBack(ed);
 		}
+		
+		// for testing
+		auto scene = MakeHandle<Scene>();
+		auto loader = MakeHandle<osobj::Loader>("Models/Player/");
+		auto obj = ToHandle(loader->LoadFrame("lower.osobj"));
+		auto rf = MakeHandle<RootFrame>();
+		rf->frame = obj;
+		rf->name = "lower.osobj";
+		scene->AddRootFrame(rf);
+		SetScene(scene);
 	}
 	
 	Editor::~Editor() {

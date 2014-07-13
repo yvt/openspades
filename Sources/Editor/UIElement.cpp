@@ -368,6 +368,22 @@ namespace spades { namespace editor {
 		return manager->GetFont();
 	}
 	
+#pragma mark - Label
+	
+	Label::Label(UIManager *m):
+	UIElement(m) { }
+	
+	Label::~Label() { }
+	
+	void Label::RenderClient() {
+		auto *f = GetFont();
+		auto sz = f->Measure(GetText());
+		auto rt = GetScreenBounds();
+		auto p = rt.min + (rt.GetSize() - sz) * alignment;
+		f->DrawShadow(GetText(), p, 1.f,
+					  color, shadowColor);
+	}
+	
 	
 } }
 
