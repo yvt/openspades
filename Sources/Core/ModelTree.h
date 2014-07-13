@@ -167,6 +167,7 @@ namespace spades { namespace osobj {
 	};
 	
 	class Pose;
+	class FrameListener;
 	
 	class Frame: public RefCountedObject {
 		Frame *parent = nullptr;
@@ -176,12 +177,15 @@ namespace spades { namespace osobj {
 		std::vector<Handle<Constraint>> constraints;
 		std::string id;
 		Matrix4 mat;
-		
+		std::set<FrameListener *> listeners;
 		
 	protected:
 		~Frame();
 	public:
 		Frame();
+		
+		void AddListener(FrameListener *);
+		void RemoveListener(FrameListener *);
 		
 		void AddChild(Frame *);
 		void RemoveFromParent();
@@ -218,6 +222,17 @@ namespace spades { namespace osobj {
 		
 		const decltype(constraints)& GetConstraints() const { return constraints; }
 		
+	};
+	
+	class FrameListener {
+	public:
+		virtual ~FrameListener() { }
+		virtual void ChildFrameAdded(Frame *me, Frame *child) { }
+		virtual void ChildFrameRemoved(Frame *me, Frame *child) { }
+		virtual void ConstraintAdded(Frame *me, Constraint *) { }
+		virtual void ConstraintRemoved(Frame *me, Constraint *) { }
+		virtual void ObjectAdded(Frame *me, Object *) { }
+		virtual void ObjectRemoved(Frame *me, Object *) { }
 	};
 	
 	class Pose: public RefCountedObject {

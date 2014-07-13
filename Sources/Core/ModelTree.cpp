@@ -169,6 +169,15 @@ namespace spades { namespace osobj {
 		SPAssert(!parent);
 	}
 	
+	void Frame::AddListener(FrameListener *l) {
+		SPAssert(l);
+		listeners.insert(l);
+	}
+	
+	void Frame::RemoveListener(FrameListener *l) {
+		listeners.erase(l);
+	}
+	
 	void Frame::AddChild(Frame *f) {
 		SPADES_MARK_FUNCTION();
 		
@@ -176,6 +185,8 @@ namespace spades { namespace osobj {
 		f->RemoveFromParent();
 		children.push_back(f);
 		f->parent = this;
+		
+		for (auto *l: listeners) l->ChildFrameAdded(this, f);
 	}
 	
 	void Frame::RemoveFromParent() {
@@ -183,10 +194,13 @@ namespace spades { namespace osobj {
 		
 		if (!parent) return;
 		auto& ch = parent->children;
+		auto *p = parent;
 		parent = nullptr;
 		auto it = std::find(ch.begin(), ch.end(), this);
 		SPAssert(it != ch.end());
 		ch.erase(it);
+		
+		for (auto *l: p->listeners) l->ChildFrameRemoved(p, this);
 	}
 	
 	void Frame::AddObject(Object *obj) {
@@ -194,6 +208,8 @@ namespace spades { namespace osobj {
 		
 		SPAssert(obj);
 		objects.push_back(obj);
+		
+		for (auto *l: listeners) l->ObjectAdded(this, obj);
 	}
 	
 	void Frame::RemoveObject(Object *obj) {
@@ -201,8 +217,12 @@ namespace spades { namespace osobj {
 		
 		if (!obj) return;
 		auto it = std::find(objects.begin(), objects.end(), obj);
-		if (it != objects.end())
+		if (it != objects.end()) {
+			auto h = std::move(*it);
 			objects.erase(it);
+			for (auto *l: listeners) l->ObjectRemoved(this, obj);
+		}
+		
 	}
 	
 	void Frame::AddConstraint(Constraint *obj) {
@@ -210,6 +230,8 @@ namespace spades { namespace osobj {
 		
 		SPAssert(obj);
 		constraints.push_back(obj);
+		
+		for (auto *l: listeners) l->ConstraintAdded(this, obj);
 	}
 	
 	void Frame::RemoveConstraint(Constraint *obj) {
@@ -217,8 +239,11 @@ namespace spades { namespace osobj {
 		
 		if (!obj) return;
 		auto it = std::find(constraints.begin(), constraints.end(), obj);
-		if (it != constraints.end())
+		if (it != constraints.end()) {
+			auto h = std::move(*it);
 			constraints.erase(it);
+			for (auto *l: listeners) l->ConstraintRemoved(this, obj);
+		}
 	}
 	
 	void Frame::AddTag(const std::string & tag) {
