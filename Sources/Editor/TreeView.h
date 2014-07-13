@@ -69,6 +69,7 @@ namespace spades { namespace editor {
 		virtual std::size_t GetNumChildren() { return 0; }
 		virtual TreeViewItem *CreateChild(std::size_t) { return nullptr; };
 		virtual UIElement *CreateView(UIManager *) = 0;
+		virtual void RecycleView(UIElement *) { }
 		
 		TreeViewItem *GetParent() const { return parent; }
 	};

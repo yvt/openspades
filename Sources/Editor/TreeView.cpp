@@ -71,6 +71,7 @@ namespace spades { namespace editor {
 	class TreeViewItemElement: public UIElement {
 		Handle<TreeViewItemExpander> ex;
 		Handle<UIElement> inner;
+		Handle<TreeViewItem> item;
 		float indent;
 		void Layout() {
 			auto sz = GetBounds().GetSize();
@@ -92,7 +93,8 @@ namespace spades { namespace editor {
 							int level):
 		UIElement(m),
 		inner(e, true),
-		indent(level * 16.f) {
+		indent(level * 16.f),
+		item(item) {
 			SPAssert(e);
 			SPAssert(item);
 			SPAssert(m);
@@ -103,7 +105,9 @@ namespace spades { namespace editor {
 			AddChildToFront(inner);
 		}
 		
-		
+		void Recycle() {
+			item->RecycleView(this);
+		}
 		
 	};
 	
@@ -357,7 +361,11 @@ namespace spades { namespace editor {
 		return elm.Unmanage();
 	}
 	
-	void TreeViewModel::RecycleItem(UIElement *) { }
+	void TreeViewModel::RecycleItem(UIElement *item) {
+		auto *e = dynamic_cast<TreeViewItemElement *>(item);
+		SPAssert(e);
+		e->Recycle();
+	}
 	
 	
 } }
