@@ -25,6 +25,7 @@
 #include <Client/IAudioDevice.h>
 #include <Gui/View.h>
 #include <Client/IFont.h>
+#include <set>
 
 namespace spades { namespace editor {
 	
@@ -32,15 +33,20 @@ namespace spades { namespace editor {
 	class UIManager;
 	class MainView;
 	class CommandManager;
+	class Scene;
+	class EditorListener;
 	
 	class Editor: public gui::View {
 		Handle<client::IRenderer> renderer;
 		Handle<client::IAudioDevice> audio;
+		std::set<EditorListener *> listeners;
 		
 		Handle<UIManager> ui;
 		Handle<MainView> mainView;
 		
 		Handle<client::IFont> titleFont;
+		
+		Handle<Scene> scene;
 		
 		Handle<CommandManager> commandManager;
 		
@@ -64,6 +70,11 @@ namespace spades { namespace editor {
 		client::IFont *GetTitleFont() const { return titleFont; }
 		
 		CommandManager& GetCommandManager() const { return *commandManager; }
+		Scene *GetScene() const { return scene; }
+		void SetScene(Scene *);
+		
+		void AddListener(EditorListener *);
+		void RemoveListener(EditorListener *);
 		
 		void Turn(const Vector2&);
 		void Strafe(const Vector2&);
@@ -90,6 +101,12 @@ namespace spades { namespace editor {
 		
 		
 		
+	};
+	
+	class EditorListener {
+	public:
+		virtual ~EditorListener() { }
+		virtual void SceneChanged(Scene *) { }
 	};
 	
 } }

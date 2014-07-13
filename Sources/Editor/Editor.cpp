@@ -27,6 +27,7 @@
 #include "ScrollBar.h"
 #include "OutlinerWindow.h"
 #include "Commands.h"
+#include "Scene.h"
 
 namespace spades { namespace editor {
 
@@ -91,6 +92,22 @@ namespace spades { namespace editor {
 	
 	Editor::~Editor() {
 		
+	}
+	
+	void Editor::AddListener(EditorListener *l) {
+		SPAssert(l);
+		listeners.insert(l);
+	}
+	
+	void Editor::RemoveListener(EditorListener *l) {
+		listeners.erase(l);
+	}
+	
+	void Editor::SetScene(Scene *s) {
+		if (scene == s) return;
+		scene = s;
+		for (auto *l: listeners)
+			l->SceneChanged(s);
 	}
 	
 	void Editor::MouseEvent(float x, float y) {
