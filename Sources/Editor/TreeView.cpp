@@ -79,6 +79,13 @@ namespace spades { namespace editor {
 			inner->SetBounds(AABB2(indent + 16.f, 0,
 								   sz.x - indent - 16.f,
 								   sz.y));
+			
+			bool hasChild = item->GetNumChildren() > 0;
+			if (hasChild && ex->GetParent() == nullptr) {
+				AddChildToFront(ex);
+			} else if (!hasChild && ex->GetParent()) {
+				ex->RemoveFromParent();
+			}
 		}
 	protected:
 		~TreeViewItemElement() { }
