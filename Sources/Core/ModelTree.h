@@ -228,6 +228,8 @@ namespace spades { namespace osobj {
 	class FrameListener {
 	public:
 		virtual ~FrameListener() { }
+		virtual void FrameAddedToParent(Frame *, Frame *parent) { }
+		virtual void FrameRemovedFromParent(Frame *, Frame *parent) { }
 		virtual void ChildFrameAdded(Frame *me, Frame *child) { }
 		virtual void ChildFrameRemoved(Frame *me, Frame *child) { }
 		virtual void ConstraintAdded(Frame *me, Constraint *) { }

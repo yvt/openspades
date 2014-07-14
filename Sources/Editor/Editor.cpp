@@ -32,6 +32,18 @@
 
 namespace spades { namespace editor {
 
+	class Editor::Internal:
+	public SceneListener {
+		Editor& e;
+	public:
+		Internal(Editor& e): e(e) {
+		}
+		void RootFrameAdded(RootFrame *) override { }
+		void RootFrameRemoved(RootFrame *)  override { }
+		
+		void TimelineAdded(TimelineItem *) override { }
+		void TimelineRemoved(TimelineItem *t) override { }
+	};
 	
 	Editor::Editor(client::IRenderer *renderer,
 				   client::IAudioDevice *audio):
@@ -41,7 +53,8 @@ namespace spades { namespace editor {
 	viewCenter(0, 0, 0),
 	viewAngle(0, M_PI * 0.2f, 0),
 	viewDistance(10.f),
-	commandManager(MakeHandle<CommandManager>()) {
+	commandManager(MakeHandle<CommandManager>()),
+	internal(new Internal(*this)) {
 		SPADES_MARK_FUNCTION();
 		
 		SPAssert(renderer);
@@ -119,6 +132,55 @@ namespace spades { namespace editor {
 		scene = s;
 		for (auto *l: listeners)
 			l->SceneChanged(s);
+	}
+	
+	void Editor::SetActiveTimeline(TimelineItem *s) {
+		if (activeTimeline == s) return;
+		
+		// exit object editing mode
+		if (s) SetActiveObject(nullptr);
+		
+		activeTimeline = s;
+		for (auto *l: listeners)
+			l->ActiveTimelineChanged(s);
+	}
+	
+	void Editor::SetActiveObject(osobj::Object *s) {
+		if (activeObject == s) return;
+		
+		// exit animation mode
+		if (s) SetActiveTimeline(nullptr);
+		
+		activeObject = s;
+		for (auto *l: listeners)
+			l->ActiveObjectChanged(s);
+	}
+	
+	void Editor::SetSelectedFrames(const decltype(selectedFrames) &f) {
+		selectedFrames = f;
+		for (auto *l: listeners)
+			l->SelectedFramesChanged();
+	}
+	
+	void Editor::Select(osobj::Frame *f,
+						bool append) {
+		auto sel = GetSelectedFrames();
+		if (!append) sel.clear();
+		auto it = std::find(sel.begin(), sel.end(), f);
+		if (it != sel.end()) {
+			sel.erase(it);
+		}
+		sel.push_front(f);
+		SetSelectedFrames(sel);
+	}
+	
+	void Editor::Deselect(osobj::Frame *f) {
+		auto sel = GetSelectedFrames();
+		auto it = std::find(sel.begin(), sel.end(), f);
+		if (it != sel.end()) {
+			sel.erase(it);
+			SetSelectedFrames(sel);
+		}
 	}
 	
 	void Editor::MouseEvent(float x, float y) {

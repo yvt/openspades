@@ -26,6 +26,9 @@
 #include <Gui/View.h>
 #include <Client/IFont.h>
 #include <set>
+#include <Core/ModelTree.h>
+#include <vector>
+#include <deque>
 
 namespace spades { namespace editor {
 	
@@ -35,8 +38,12 @@ namespace spades { namespace editor {
 	class CommandManager;
 	class Scene;
 	class EditorListener;
+	class TimelineItem;
 	
 	class Editor: public gui::View {
+		class Internal;
+		std::unique_ptr<Internal> internal;
+		
 		Handle<client::IRenderer> renderer;
 		Handle<client::IAudioDevice> audio;
 		std::set<EditorListener *> listeners;
@@ -49,6 +56,9 @@ namespace spades { namespace editor {
 		Handle<Scene> scene;
 		
 		Handle<CommandManager> commandManager;
+		Handle<TimelineItem> activeTimeline;
+		Handle<osobj::Object> activeObject;
+		std::deque<Handle<osobj::Frame>> selectedFrames;
 		
 		Vector3 viewCenter;
 		Vector3 viewAngle;
@@ -67,11 +77,25 @@ namespace spades { namespace editor {
 		client::IRenderer *GetRenderer() { return renderer; }
 		client::IAudioDevice *GetAudioDevice() { return audio; }
 		
+		UIManager *GetUI() const { return ui; }
+		
 		client::IFont *GetTitleFont() const { return titleFont; }
 		
 		CommandManager& GetCommandManager() const { return *commandManager; }
 		Scene *GetScene() const { return scene; }
 		void SetScene(Scene *);
+		
+		TimelineItem *GetActiveTimeline() const { return activeTimeline; }
+		void SetActiveTimeline(TimelineItem *);
+		
+		osobj::Object *GetActiveObject() const { return activeObject; }
+		void SetActiveObject(osobj::Object *);
+		
+		const decltype(selectedFrames)& GetSelectedFrames() const
+		{ return selectedFrames; }
+		void SetSelectedFrames(const decltype(selectedFrames)& f);
+		void Select(osobj::Frame *, bool append);
+		void Deselect(osobj::Frame *);
 		
 		void AddListener(EditorListener *);
 		void RemoveListener(EditorListener *);
@@ -107,6 +131,9 @@ namespace spades { namespace editor {
 	public:
 		virtual ~EditorListener() { }
 		virtual void SceneChanged(Scene *) { }
+		virtual void ActiveObjectChanged(osobj::Object *) { }
+		virtual void ActiveTimelineChanged(TimelineItem *) { }
+		virtual void SelectedFramesChanged() { }
 	};
 	
 } }

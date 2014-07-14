@@ -35,6 +35,7 @@ namespace spades { namespace editor {
 		bool hover = false;
 		bool pressed = false;
 		bool autoRepeat = false;
+		bool activateOnPress = false;
 		double nextRepeat = 0.;
 		
 		std::function<void()> onActivated;
@@ -55,6 +56,9 @@ namespace spades { namespace editor {
 		
 		void SetAutoRepeat(bool b) { autoRepeat = b; }
 		bool IsAutoRepeat() const { return autoRepeat; }
+		
+		void SetActivatedOnPress(bool b) { activateOnPress = b; }
+		bool IsActivatedOnPress() const { return activateOnPress; }
 		
 		void SetActivateHandler(const std::function<void()>& f) {
 			onActivated = f;

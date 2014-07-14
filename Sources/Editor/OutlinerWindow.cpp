@@ -25,10 +25,11 @@
 #include "Buttons.h"
 #include "Scene.h"
 #include <Core/Strings.h>
+#include "UIElement.h"
 
 namespace spades { namespace editor {
 	
-	class OutlinerTreeItemView: public UIElement {
+	class OutlinerTreeItemView: public ButtonBase {
 		Handle<client::IImage> img;
 	protected:
 		virtual std::string GetText() = 0;
@@ -41,18 +42,23 @@ namespace spades { namespace editor {
 			auto *r = GetManager().GetRenderer();
 			auto sz = f->Measure(GetText());
 			auto rt = GetScreenBounds();
+			
+			float alpha = 1.f;
+			if (!IsActive()) alpha *= 0.6f;
+			if (IsGrayedOut()) alpha *= 0.7f;
+			
 			auto p = rt.min;
 			p.y += (rt.GetHeight() - sz.y) * .5f - 1.f;
 			p.x += 19.f;
 			f->Draw(GetText(), p, 1.f,
-						  Vector4(0, 0, 0, 1));
+					Vector4(0, 0, 0, alpha));
 			
 			if (!img) {
 				img = ToHandle(r->RegisterImage("Gfx/UI/EditorItems.png"));
 			}
 			
 			if (IsActive()) {
-				r->SetColorAlphaPremultiplied(Vector4(0, 0, 0, 0.3));
+				r->SetColorAlphaPremultiplied(Vector4(0, 0, 0, 0.5));
 				r->DrawImage(img, Vector2(rt.min.x, rt.min.y + (rt.GetHeight() - 16.f) * .5f),
 							 AABB2(0, 0, 16.f, 16.f));
 			}
@@ -61,20 +67,25 @@ namespace spades { namespace editor {
 										  (IsGrayedOut() ? .5f : 1.f));
 			r->DrawImage(img, Vector2(rt.min.x, rt.min.y + (rt.GetHeight() - 16.f) * .5f),
 						 AABB2(16.f * GetImageIndex(), 0, 16.f, 16.f));
+			
+			ButtonBase::RenderClient();
 		}
 		
 	public:
 		OutlinerTreeItemView(UIManager *m):
-		UIElement(m) {
+		ButtonBase(m) {
+			SetActivatedOnPress(true);
 		}
 	};
 	
 	class ObjectTreeItem: public TreeViewItem {
+		Editor& editor;
 		Handle<osobj::Object> rf;
 	protected:
 		~ObjectTreeItem() { }
 	public:
-		ObjectTreeItem(osobj::Object *rf): rf(rf) {
+		ObjectTreeItem(osobj::Object *rf,
+					   Editor& e): rf(rf), editor(e) {
 			SPAssert(rf);
 		}
 		virtual std::size_t GetNumChildren() {
@@ -87,20 +98,32 @@ namespace spades { namespace editor {
 		virtual UIElement *CreateView(UIManager *m) {
 			class ConcreteView: public OutlinerTreeItemView {
 				Handle<osobj::Object> f;
+				Editor& e;
 			protected:
 				std::string GetText() {
 					return _Tr("Editor", "Object");
 				}
 				int GetImageIndex() { return 5; }
-				bool IsActive() { return false; }
+				bool IsActive() {
+					return e.GetActiveObject() == f;
+				}
 				bool IsGrayedOut() { return false; }
 			public:
-				ConcreteView(osobj::Object *f,
-							 UIManager *m):
-				OutlinerTreeItemView(m), f(f) { }
+				ConcreteView(osobj::Object *ff,
+							 UIManager *m,
+							 Editor& ed):
+				OutlinerTreeItemView(m), f(ff), e(ed) {
+					SetActivateHandler([=] {
+						if (e.GetActiveObject() == f) {
+							e.SetActiveObject(nullptr);
+						} else {
+							e.SetActiveObject(f);
+						}
+					});
+				}
 			};
 			
-			return new ConcreteView(rf, m);
+			return new ConcreteView(rf, m, editor);
 		}
 	};
 	
@@ -150,6 +173,7 @@ namespace spades { namespace editor {
 	};
 	class FrameTreeItem: public TreeViewItem,
 	osobj::FrameListener {
+		Editor& editor;
 		Handle<osobj::Frame> rf;
 		std::vector<osobj::Object *> objects;
 		std::vector<osobj::Constraint *> constraints;
@@ -204,7 +228,9 @@ namespace spades { namespace editor {
 			rf->RemoveListener(this);
 		}
 	public:
-		FrameTreeItem(osobj::Frame *rf): rf(rf) {
+		FrameTreeItem(osobj::Frame *rf,
+					  Editor& editor):
+		rf(rf), editor(editor) {
 			SPAssert(rf);
 			for (const auto& e: rf->GetChildren())
 				children.push_back(e);
@@ -221,7 +247,8 @@ namespace spades { namespace editor {
 			if (index >= GetStartIndexForChildFrames()) {
 				return new FrameTreeItem
 				(children.at
-				 (index - GetStartIndexForChildFrames()));
+				 (index - GetStartIndexForChildFrames()),
+				editor);
 			} else if (index >= GetStartIndexForConstraints()) {
 				return new ConstraintTreeItem
 				(constraints.at
@@ -229,7 +256,7 @@ namespace spades { namespace editor {
 			} else if (index >= GetStartIndexForObjects()) {
 				return new ObjectTreeItem
 				(objects.at
-				 (index - GetStartIndexForObjects()));
+				 (index - GetStartIndexForObjects()), editor);
 			} else {
 				return nullptr;
 			}
@@ -237,6 +264,7 @@ namespace spades { namespace editor {
 		UIElement *CreateView(UIManager *m) override {
 			class ConcreteView: public OutlinerTreeItemView {
 				Handle<osobj::Frame> f;
+				Editor& e;
 			protected:
 				std::string GetText() {
 					std::string text = f->GetId();
@@ -253,33 +281,50 @@ namespace spades { namespace editor {
 					return text;
 				}
 				int GetImageIndex() { return 2; }
-				bool IsActive() { return false; }
+				bool IsActive() {
+					// object editing mode?
+					if (e.GetActiveObject()) return false;
+					
+					const auto& sel = e.GetSelectedFrames();
+					return std::find(sel.begin(), sel.end(), f)
+					!= sel.end();
+				}
 				bool IsGrayedOut() { return false; }
 			public:
-				ConcreteView(osobj::Frame *f,
-							 UIManager *m):
-				OutlinerTreeItemView(m), f(f) { }
+				ConcreteView(osobj::Frame *ff,
+							 UIManager *m,
+							 Editor& ed):
+				OutlinerTreeItemView(m), f(ff), e(ed){
+					SetActivateHandler([=] {
+						e.SetActiveObject(nullptr);
+						auto sh = e.GetUI()->GetKeyModifierState(KeyModifier::Shift);
+						e.Select(f, sh);
+					});
+				}
 			};
 			
-			return new ConcreteView(rf, m);
+			return new ConcreteView(rf, m, editor);
 		}
 		void RecycleView(UIElement *) override {
 		}
 	};
 	
 	class RootFrameTreeItem: public TreeViewItem {
+		Editor& editor;
 		Handle<RootFrame> rf;
 	protected:
 		~RootFrameTreeItem() { }
 	public:
-		RootFrameTreeItem(RootFrame *rf): rf(rf) {
+		RootFrameTreeItem(RootFrame *rf,
+						  Editor& editor):
+		rf(rf), editor(editor) {
 			SPAssert(rf);
 		}
 		virtual std::size_t GetNumChildren() {
 			return 1;
 		}
 		virtual TreeViewItem *CreateChild(std::size_t index) {
-			return new FrameTreeItem(rf->frame);
+			return new FrameTreeItem(rf->frame, editor);
 		}
 		virtual UIElement *CreateView(UIManager *m) {
 			class ConcreteView: public OutlinerTreeItemView {
@@ -302,11 +347,14 @@ namespace spades { namespace editor {
 	};
 	
 	class TimelineTreeItem: public TreeViewItem {
+		Editor& editor;
 		Handle<TimelineItem> tl;
 	protected:
 		~TimelineTreeItem() { }
 	public:
-		TimelineTreeItem(TimelineItem *tl): tl(tl) {
+		TimelineTreeItem(TimelineItem *tl,
+						 Editor& editor):
+		tl(tl), editor(editor) {
 			SPAssert(tl);
 		}
 		virtual std::size_t GetNumChildren() {
@@ -317,26 +365,39 @@ namespace spades { namespace editor {
 		}
 		virtual UIElement *CreateView(UIManager *m) {
 			class ConcreteView: public OutlinerTreeItemView {
+				Editor& e;
 				Handle<TimelineItem> f;
 			protected:
 				std::string GetText() {
 					return f->name;
 				}
 				int GetImageIndex() { return 3; }
-				bool IsActive() { return false; }
+				bool IsActive() {
+					return e.GetActiveTimeline() == f;
+				}
 				bool IsGrayedOut() { return false; }
 			public:
-				ConcreteView(TimelineItem *f,
-							 UIManager *m):
-				OutlinerTreeItemView(m), f(f) { }
+				ConcreteView(TimelineItem *ff,
+							 UIManager *m,
+							 Editor& ed):
+				OutlinerTreeItemView(m), f(ff), e(ed) {
+					SetActivateHandler([=] {
+						if (e.GetActiveTimeline() == f) {
+							e.SetActiveTimeline(nullptr);
+						} else {
+							e.SetActiveTimeline(f);
+						}
+					});
+				}
 			};
 			
-			return new ConcreteView(tl, m);
+			return new ConcreteView(tl, m, editor);
 		}
 	};
 	
 	class SceneTreeItem: public TreeViewItem,
 	SceneListener {
+		Editor& editor;
 		Handle<Scene> scene;
 		std::vector<RootFrame *> rootFrames;
 		std::vector<TimelineItem *> timelines;
@@ -374,7 +435,9 @@ namespace spades { namespace editor {
 			scene->RemoveListener(this);
 		}
 	public:
-		SceneTreeItem(Scene *s): scene(s) {
+		SceneTreeItem(Scene *s,
+					  Editor& editor): scene(s),
+		editor(editor) {
 			SPAssert(s);
 			
 			for (const auto& rf: s->GetRootFrames())
@@ -392,10 +455,10 @@ namespace spades { namespace editor {
 		TreeViewItem *CreateChild(std::size_t index) {
 			if (index < scene->GetRootFrames().size()) {
 				return new RootFrameTreeItem
-				(scene->GetRootFrames().at(index));
+				(scene->GetRootFrames().at(index), editor);
 			} else {
 				return new TimelineTreeItem
-				(scene->GetTimelines().at(index - scene->GetRootFrames().size()));
+				(scene->GetTimelines().at(index - scene->GetRootFrames().size()), editor);
 			}
 		}
 		UIElement *CreateView(UIManager *m) {
@@ -427,7 +490,7 @@ namespace spades { namespace editor {
 		void SceneChanged(Scene *sc) override {
 			if (sc) {
 				auto model = MakeHandle<TreeViewModel>
-				(&w.GetManager(), MakeHandle<SceneTreeItem>(sc));
+				(&w.GetManager(), MakeHandle<SceneTreeItem>(sc, w.editor));
 				w.listView->SetModel(model);
 			} else {
 				w.listView->SetModel(nullptr);
@@ -446,7 +509,7 @@ namespace spades { namespace editor {
 		auto *sc = e.GetScene();
 		if (sc) {
 			auto model = MakeHandle<TreeViewModel>
-			(m, MakeHandle<SceneTreeItem>(sc));
+			(m, MakeHandle<SceneTreeItem>(sc, e));
 			listView->SetModel(model);
 		}
 		

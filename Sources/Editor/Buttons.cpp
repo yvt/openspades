@@ -45,7 +45,7 @@ namespace spades { namespace editor {
 	void ButtonBase::OnMouseDown(MouseButton b, const Vector2& p) {
 		if (b == MouseButton::Left) {
 			pressed = true;
-			if (IsAutoRepeat()) {
+			if (IsAutoRepeat() || activateOnPress) {
 				Activate();
 				nextRepeat = GetManager().GetTime() + .3;
 			}
@@ -67,7 +67,7 @@ namespace spades { namespace editor {
 	void ButtonBase::OnMouseUp(MouseButton b, const Vector2& p) {
 		if (b == MouseButton::Left && pressed) {
 			pressed = false;
-			if (hover && !IsAutoRepeat()) {
+			if (hover && !IsAutoRepeat() && !activateOnPress) {
 				Activate();
 			}
 		}

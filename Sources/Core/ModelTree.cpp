@@ -165,6 +165,8 @@ namespace spades { namespace osobj {
 		
 		for (auto c: children) {
 			c->parent = nullptr;
+			for (auto *l: listeners) l->ChildFrameRemoved(this, c);
+			for (auto *l: c->listeners) l->FrameRemovedFromParent(c, this);
 		}
 		SPAssert(!parent);
 	}
@@ -187,6 +189,7 @@ namespace spades { namespace osobj {
 		f->parent = this;
 		
 		for (auto *l: listeners) l->ChildFrameAdded(this, f);
+		for (auto *l: f->listeners) l->FrameAddedToParent(f, this);
 	}
 	
 	void Frame::RemoveFromParent() {
@@ -201,6 +204,7 @@ namespace spades { namespace osobj {
 		ch.erase(it);
 		
 		for (auto *l: p->listeners) l->ChildFrameRemoved(p, this);
+		for (auto *l: listeners) l->FrameRemovedFromParent(this, p);
 	}
 	
 	void Frame::AddObject(Object *obj) {
