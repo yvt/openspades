@@ -458,6 +458,7 @@
 		E8F30C2F194E051D00A9DD84 /* ServerPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C2C194E051D00A9DD84 /* ServerPlayer.cpp */; };
 		E8F30C33194F068800A9DD84 /* NetworkPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C30194F068800A9DD84 /* NetworkPlayer.cpp */; };
 		E8F30C37195288B000A9DD84 /* ModelTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F30C34195288B000A9DD84 /* ModelTree.cpp */; };
+		E8FCA9EA1973DBB80058BD2C /* SceneRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8FCA9E91973DBB80058BD2C /* SceneRenderer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1401,6 +1402,8 @@
 		E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ClientUIHelper.cpp; sourceTree = "<group>"; };
 		E8F74CFE184C753F0085AA54 /* Clipboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Clipboard.cpp; sourceTree = "<group>"; };
 		E8FC02D8186829BC00F84A0D /* SWUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWUtils.h; sourceTree = "<group>"; };
+		E8FCA9E91973DBB80058BD2C /* SceneRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneRenderer.cpp; sourceTree = "<group>"; };
+		E8FCA9EB1973DBC20058BD2C /* SceneRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneRenderer.h; sourceTree = "<group>"; };
 		E8FE748818CB329C00291338 /* HitTestDebugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HitTestDebugger.cpp; sourceTree = "<group>"; };
 		E8FE748918CB329C00291338 /* HitTestDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitTestDebugger.h; sourceTree = "<group>"; };
 		E8FE748B18CC6AA100291338 /* Client_Input.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Client_Input.cpp; sourceTree = "<group>"; };
@@ -1673,6 +1676,8 @@
 			children = (
 				E87B7B3019605B9E0051FF90 /* Editor.cpp */,
 				E87B7B3119605B9E0051FF90 /* Editor.h */,
+				E8FCA9E91973DBB80058BD2C /* SceneRenderer.cpp */,
+				E8FCA9EB1973DBC20058BD2C /* SceneRenderer.h */,
 				E876A32D19719E8200C5A5D0 /* Commands.cpp */,
 				E876A32F19719E9A00C5A5D0 /* Commands.h */,
 				E89985CC1960E44800686DF2 /* UIElement.cpp */,
@@ -3057,6 +3062,7 @@
 				E8D0E7C418FABC3600DE3BDB /* serpent.cpp in Sources */,
 				E82E677518EA7972004DBA18 /* Thread.cpp in Sources */,
 				E82E677618EA7972004DBA18 /* Semaphore.cpp in Sources */,
+				E8FCA9EA1973DBB80058BD2C /* SceneRenderer.cpp in Sources */,
 				E82E677718EA7972004DBA18 /* Mutex.cpp in Sources */,
 				E82E677818EA7972004DBA18 /* ILockable.cpp in Sources */,
 				E82E677918EA7972004DBA18 /* AutoLocker.cpp in Sources */,

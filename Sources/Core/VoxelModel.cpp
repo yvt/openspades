@@ -55,6 +55,20 @@ namespace spades {
 		delete[] colors;
 	}
 	
+	void VoxelModel::AddListener(VoxelModelListener *l) {
+		auto it = std::find(listeners.begin(), listeners.end(), l);
+		if (it == listeners.end()) {
+			listeners.push_back(l);
+		}
+	}
+	
+	void VoxelModel::RemoveListener(VoxelModelListener *l) {
+		auto it = std::find(listeners.begin(), listeners.end(), l);
+		if (it != listeners.end()) {
+			listeners.erase(it);
+		}
+	}
+	
 	struct KV6Block {
 		uint32_t color;
 		uint16_t zPos;

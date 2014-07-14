@@ -29,6 +29,7 @@
 #include "Commands.h"
 #include "Scene.h"
 #include <Core/ModelTree.h>
+#include "SceneRenderer.h"
 
 namespace spades { namespace editor {
 
@@ -132,6 +133,9 @@ namespace spades { namespace editor {
 		scene = s;
 		for (auto *l: listeners)
 			l->SceneChanged(s);
+		
+		sceneRenderer = s ? MakeHandle<SceneRenderer>(s, renderer) :
+		ToHandle<SceneRenderer>(nullptr);
 	}
 	
 	void Editor::SetActiveTimeline(TimelineItem *s) {
@@ -224,7 +228,7 @@ namespace spades { namespace editor {
 	}
 	
 	void Editor::Turn(const spades::Vector2 &v) {
-		viewAngle.x -= v.x;
+		viewAngle.x += v.x;
 		viewAngle.y += v.y;
 		if (viewAngle.y > M_PI * .49f)
 			viewAngle.y = M_PI * .49f;
@@ -256,8 +260,8 @@ namespace spades { namespace editor {
 		Vector3 dir = (viewCenter - eye).Normalize();
 		Vector3 up {0, 0, -1};
 		
-		Vector3 right = Vector3::Cross(dir, up).Normalize();
-		up = Vector3::Cross(right, dir).Normalize();
+		Vector3 right = Vector3::Cross(up, dir).Normalize();
+		up = Vector3::Cross(dir, right).Normalize();
 		
 		def.viewOrigin = eye;
 		def.viewAxis[0] = -right;
@@ -289,6 +293,12 @@ namespace spades { namespace editor {
 		renderer->SetFogType(client::FogType::Classical);
 		renderer->StartScene(sceneDef);
 		
+		if (sceneRenderer) {
+			osobj::Pose *pose = nullptr;
+			// TODO: pose for animation mode
+			sceneRenderer->AddToScene(pose);
+		}
+		
 		// draw grid
 		for(int i = -10; i <= 10; ++i) {
 			renderer->AddDebugLine(Vector3(i, -10, 0), Vector3(i, 10, 0),
@@ -309,9 +319,6 @@ namespace spades { namespace editor {
 		renderer->FrameDone();
 		renderer->Flip();
 	}
-	
-	
-	
 	
 	
 	

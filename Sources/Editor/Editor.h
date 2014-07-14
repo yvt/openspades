@@ -39,6 +39,7 @@ namespace spades { namespace editor {
 	class Scene;
 	class EditorListener;
 	class TimelineItem;
+	class SceneRenderer;
 	
 	class Editor: public gui::View {
 		class Internal;
@@ -54,6 +55,7 @@ namespace spades { namespace editor {
 		Handle<client::IFont> titleFont;
 		
 		Handle<Scene> scene;
+		Handle<SceneRenderer> sceneRenderer;
 		
 		Handle<CommandManager> commandManager;
 		Handle<TimelineItem> activeTimeline;

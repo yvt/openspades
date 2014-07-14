@@ -33,6 +33,7 @@ namespace spades { namespace editor {
 		Handle<osobj::Frame> frame;
 		std::string name;
 		bool isForeignObject;
+		Matrix4 matrix = Matrix4::Identity();
 	protected:
 		~RootFrame() { }
 	};

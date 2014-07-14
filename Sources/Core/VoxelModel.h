@@ -25,17 +25,30 @@
 #include "IStream.h"
 #include "Math.h"
 #include <Core/RefCountedObject.h>
+#include <vector>
 
 namespace spades {
+	class VoxelModel;
+	
+	class VoxelModelListener {
+	public:
+		virtual ~VoxelModelListener() { }
+		virtual void VoxelModelUpdated(VoxelModel *) { }
+	};
+	
 	class VoxelModel: public RefCountedObject {
 		Vector3 origin;
 		int width, height, depth;
 		uint64_t *solidBits;
 		uint32_t *colors;
+		std::vector<VoxelModelListener *> listeners;
 	protected:
 		virtual ~VoxelModel();
 	public:
 		VoxelModel(int width, int height, int depth);
+		
+		void AddListener(VoxelModelListener *);
+		void RemoveListener(VoxelModelListener *);
 		
 		void HollowFill();
 		
@@ -79,12 +92,16 @@ namespace spades {
 			SPAssert(z >= 0); SPAssert(z < depth);
 			uint64_t mask = 1ULL << z;
 			GetSolidBitsAt(x, y) &= ~mask;
+			
+			for (auto *l: listeners) l->VoxelModelUpdated(this);
 		}
 		
 		void SetSolid(int x, int y, int z, uint32_t color) {
 			uint64_t mask = 1ULL << z;
 			GetSolidBitsAt(x, y) |= mask;
 			GetColor(x, y, z) = color;
+			
+			for (auto *l: listeners) l->VoxelModelUpdated(this);
 		}
 		
 		Vector3 GetOrigin() {
