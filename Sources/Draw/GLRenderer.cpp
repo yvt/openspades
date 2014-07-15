@@ -1138,11 +1138,29 @@ namespace spades {
 								   const spades::AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 			
+			DrawImage(image,
+					  outTopLeft, outTopRight, outBottomLeft,
+					  Vector2(inRect.GetMinX(), inRect.GetMinY()),
+					  Vector2(inRect.GetMaxX(), inRect.GetMinY()),
+					  Vector2(inRect.GetMinX(), inRect.GetMaxY()));
+			
+		}
+		
+		void GLRenderer::DrawImage(client::IImage *image,
+								   const spades::Vector2 &outTopLeft,
+								   const spades::Vector2 &outTopRight,
+								   const spades::Vector2 &outBottomLeft,
+								   const spades::Vector2 &inTopLeft,
+								   const spades::Vector2 &inTopRight,
+								   const spades::Vector2 &inBottomLeft) {
+			SPADES_MARK_FUNCTION();
+			
 			void EnsureSceneNotStarted();
 			
 			// d = a + (b - a) + (c - a)
 			//   = b + c - a
 			Vector2 outBottomRight = outTopRight + outBottomLeft - outTopLeft;
+			Vector2 inBottomRight = inTopRight + inBottomLeft - inTopLeft;
 			GLImage *img = dynamic_cast<GLImage *>(image);
 			if(!img){
 				if(!image) {
@@ -1168,10 +1186,10 @@ namespace spades {
 							   outTopRight.x, outTopRight.y,
 							   outBottomRight.x, outBottomRight.y,
 							   outBottomLeft.x, outBottomLeft.y,
-							   inRect.GetMinX(), inRect.GetMinY(),
-							   inRect.GetMaxX(), inRect.GetMinY(),
-							   inRect.GetMaxX(), inRect.GetMaxY(),
-							   inRect.GetMinX(), inRect.GetMaxY(),
+							   inTopLeft.x, inTopLeft.y,
+							   inTopRight.x, inTopRight.y,
+							   inBottomRight.x, inBottomRight.y,
+							   inBottomLeft.x, inBottomLeft.y,
 							   col.x, col.y,
 							   col.z, col.w);
 			

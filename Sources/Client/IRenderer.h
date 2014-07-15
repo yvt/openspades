@@ -128,6 +128,9 @@ namespace spades {
 			virtual void DrawImage(IImage *, const Vector2& outTopLeft, const AABB2& inRect) = 0;
 			virtual void DrawImage(IImage *, const AABB2& outRect, const AABB2& inRect) = 0;
 			virtual void DrawImage(IImage *, const Vector2& outTopLeft, const Vector2& outTopRight, const Vector2& outBottomLeft, const AABB2& inRect) = 0;
+			virtual void DrawImage(IImage *,
+								   const Vector2& outTopLeft, const Vector2& outTopRight, const Vector2& outBottomLeft,
+								   const Vector2& inTopLeft, const Vector2& inTopRight, const Vector2& inBottomLeft) = 0;
 			
 			virtual void DrawFlatGameMap(const AABB2& outRect, const AABB2& inRect) = 0;
 			

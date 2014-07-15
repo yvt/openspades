@@ -40,6 +40,7 @@ namespace spades { namespace editor {
 	class EditorListener;
 	class TimelineItem;
 	class SceneRenderer;
+	class SelectionRenderer;
 	
 	class Editor: public gui::View {
 		class Internal;
@@ -56,6 +57,7 @@ namespace spades { namespace editor {
 		
 		Handle<Scene> scene;
 		Handle<SceneRenderer> sceneRenderer;
+		std::unique_ptr<SelectionRenderer> selRenderer;
 		
 		Handle<CommandManager> commandManager;
 		Handle<TimelineItem> activeTimeline;

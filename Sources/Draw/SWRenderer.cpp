@@ -1282,11 +1282,29 @@ namespace spades {
 					  inRect);
 		}
 		
+		
 		void SWRenderer::DrawImage(client::IImage *image,
 								   const spades::Vector2 &outTopLeft,
 								   const spades::Vector2 &outTopRight,
 								   const spades::Vector2 &outBottomLeft,
 								   const spades::AABB2 &inRect) {
+			SPADES_MARK_FUNCTION();
+			
+			DrawImage(image,
+					  outTopLeft, outTopRight, outBottomLeft,
+					  Vector2(inRect.GetMinX(), inRect.GetMinY()),
+					  Vector2(inRect.GetMaxX(), inRect.GetMinY()),
+					  Vector2(inRect.GetMinX(), inRect.GetMaxY()));
+			
+		}
+		
+		void SWRenderer::DrawImage(client::IImage *image,
+								   const spades::Vector2 &outTopLeft,
+								   const spades::Vector2 &outTopRight,
+								   const spades::Vector2 &outBottomLeft,
+								   const spades::Vector2 &inTopLeft,
+								   const spades::Vector2 &inTopRight,
+								   const spades::Vector2 &inBottomLeft) {
 			SPADES_MARK_FUNCTION();
 			
 			EnsureValid();
@@ -1295,6 +1313,7 @@ namespace spades {
 			// d = a + (b - a) + (c - a)
 			//   = b + c - a
 			Vector2 outBottomRight = outTopRight + outBottomLeft - outTopLeft;
+			Vector2 inBottomRight = inTopRight + inBottomLeft - inTopLeft;
 			
 			SWImage *img = dynamic_cast<SWImage *>(image);
 			if(img == nullptr && image != nullptr){
@@ -1329,10 +1348,10 @@ namespace spades {
 										  1.f, 1.f);
 			if(img) {
 				Vector2 scl = {img->GetInvWidth(), img->GetInvHeight()};
-				vtx[0].uv = MakeVector2(inRect.min.x, inRect.min.y) * scl;
-				vtx[1].uv = MakeVector2(inRect.max.x, inRect.min.y) * scl;
-				vtx[2].uv = MakeVector2(inRect.min.x, inRect.max.y) * scl;
-				vtx[3].uv = MakeVector2(inRect.max.x, inRect.max.y) * scl;
+				vtx[0].uv = inTopLeft * scl;
+				vtx[1].uv = inTopRight * scl;
+				vtx[2].uv = inBottomLeft * scl;
+				vtx[3].uv = inBottomRight * scl;
 			}
 			
 			imageRenderer->DrawPolygon(img, vtx[0], vtx[1], vtx[2]);

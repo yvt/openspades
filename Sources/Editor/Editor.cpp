@@ -63,6 +63,8 @@ namespace spades { namespace editor {
 		
 		renderer->Init();
 		
+		selRenderer.reset(new SelectionRenderer(renderer));
+		
 		mainView.Set(new MainView(ui, *this), false);
 		ui->SetRootElement(mainView);
 		
@@ -314,6 +316,56 @@ namespace spades { namespace editor {
 		
 		renderer->EndScene();
 		
+		// render selection
+		// FIXME: maybe split this to another function?
+		selRenderer->SetSceneDefiniton(sceneDef);
+		if (activeObject) {
+			renderer->SetColorAlphaPremultiplied(Vector4(1, 0.5, 0.5, 0.5));
+			
+			std::function<void(osobj::Frame *, const Matrix4&)> recurse;
+			recurse = [&](osobj::Frame *f, const Matrix4& m) {
+				auto mm = m * f->GetTransform();
+				
+				for (const auto& obj: f->GetObjects()) {
+					if (obj == activeObject) {
+						auto& vm = dynamic_cast<osobj::VoxelModelObject&>(*obj);
+						selRenderer->RenderSelection(vm.GetModel(), mm);
+					}
+				}
+				
+				for (const auto& child: f->GetChildren()) {
+					recurse(child, mm);
+				}
+			};
+			for (const auto& rf: scene->GetRootFrames()) {
+				recurse(rf->frame, rf->matrix);
+			}
+		} else {
+			renderer->SetColorAlphaPremultiplied(Vector4(1, 1, 0.5, 0.5));
+			for (const auto& sel: selectedFrames) {
+				auto trans = sel->GetTransform();
+				auto *f = sel->GetParent();
+				while (f) {
+					trans = f->GetTransform() * trans;
+					if (f->GetParent() == nullptr) {
+						for (const auto& rf: scene->GetRootFrames()) {
+							if (rf->frame == f) {
+								trans = rf->matrix * trans;
+								break;
+							}
+						}
+					}
+					f = f->GetParent();
+				}
+				
+				for (const auto& obj: sel->GetObjects()) {
+					auto& vm = dynamic_cast<osobj::VoxelModelObject&>(*obj);
+					selRenderer->RenderSelection(vm.GetModel(), trans);
+				}
+			}
+		}
+		
+		// render UIs
 		ui->Update(dt);
 		ui->Render();
 		renderer->FrameDone();

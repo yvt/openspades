@@ -209,12 +209,15 @@ namespace spades {
 				Vector2 outTopLeft;
 				Vector2 outTopRight;
 				Vector2 outBottomLeft;
+				Vector2 inTopLeft;
+				Vector2 inTopRight;
+				Vector2 inBottomLeft;
 				AABB2 inRect;
 				virtual void Execute(IRenderer *r){
 					SPADES_MARK_FUNCTION();
 					try{
 						r->DrawImage(img, outTopLeft, outTopRight, outBottomLeft,
-									 inRect);
+									 inTopLeft, inTopRight, inBottomLeft);
 					}catch(...){
 						if(img) img->Release(); img = NULL;
 						throw;
@@ -666,13 +669,31 @@ namespace spades {
 								   const spades::AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 			
+			DrawImage(image,
+					  outTopLeft, outTopRight, outBottomLeft,
+					  Vector2(inRect.GetMinX(), inRect.GetMinY()),
+					  Vector2(inRect.GetMaxX(), inRect.GetMinY()),
+					  Vector2(inRect.GetMinX(), inRect.GetMaxY()));
+		}
+		
+		void AsyncRenderer::DrawImage(client::IImage *image,
+								   const spades::Vector2 &outTopLeft,
+								   const spades::Vector2 &outTopRight,
+								   const spades::Vector2 &outBottomLeft,
+								   const spades::Vector2 &inTopLeft,
+								   const spades::Vector2 &inTopRight,
+								   const spades::Vector2 &inBottomLeft) {
+			SPADES_MARK_FUNCTION();
+			
 			rcmds::DrawImage *cmd = generator->AllocCommand<rcmds::DrawImage>();
 			cmd->img = image;
 			if(image) image->AddRef();
 			cmd->outTopLeft = outTopLeft;
 			cmd->outTopRight = outTopRight;
 			cmd->outBottomLeft = outBottomLeft;
-			cmd->inRect = inRect;
+			cmd->inTopLeft = inTopLeft;
+			cmd->inTopRight = inTopRight;
+			cmd->inBottomLeft = inBottomLeft;
 		}
 		
 		void AsyncRenderer::DrawFlatGameMap(const spades::AABB2 &outRect,

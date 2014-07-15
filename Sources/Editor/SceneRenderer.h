@@ -93,4 +93,19 @@ namespace spades { namespace editor {
 						const Vector3& customColor) override;
 	};
 	
+	class SelectionRenderer {
+		struct EdgeDetector;
+		Handle<client::IRenderer> renderer;
+		Handle<client::IImage> img;
+		client::SceneDefinition sceneDef;
+		Vector3 viewScale;
+		Vector3 viewOffset;
+	public:
+		SelectionRenderer(client::IRenderer *);
+		~SelectionRenderer();
+		void SetSceneDefiniton(const client::SceneDefinition&);
+		void RenderSelection(VoxelModel& vm,
+							 const Matrix4&);
+	};
+	
 } }
