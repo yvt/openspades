@@ -146,6 +146,12 @@ namespace spades{
 								  float sx4, float sy4,
 								  float r, float g, float b,
 								  float a){
+			if (vertices.size() >= 65536) {
+				Handle<GLImage> oldImg(image);
+				Flush();
+				SetImage(oldImg);
+			}
+			
 			ImageVertex v;
 			v.r = r; v.g = g;
 			v.b = b; v.a = a;

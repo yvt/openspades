@@ -572,9 +572,9 @@ namespace spades { namespace editor {
 			currentEdge = startEdge;
 			AddPoint();
 			
-			int steps = 3000;
+			int steps = 30000;
 			
-			while ((steps--) > 0 && edgeBuffer.size() < 2000) {
+			while ((steps--) > 0 && edgeBuffer.size() < 20000) {
 				//SPAssert(steps > 0);
 				switch (currentFace) {
 					case FaceDir::NegX: CheckFace<FaceDir::NegX>(); break;
@@ -584,6 +584,8 @@ namespace spades { namespace editor {
 					case FaceDir::NegZ: CheckFace<FaceDir::NegZ>(); break;
 					case FaceDir::PosZ: CheckFace<FaceDir::PosZ>(); break;
 				}
+				
+				HasVisited(currentVoxel, currentFace, currentEdge) = true;
 				
 				if (currentVoxel == startVoxel &&
 					FaceEdgeToCubeEdge(startFace, startEdge) ==
