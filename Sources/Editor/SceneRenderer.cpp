@@ -574,7 +574,7 @@ namespace spades { namespace editor {
 			
 			int steps = 30000;
 			
-			while ((steps--) > 0 && edgeBuffer.size() < 20000) {
+			while (true) {
 				//SPAssert(steps > 0);
 				switch (currentFace) {
 					case FaceDir::NegX: CheckFace<FaceDir::NegX>(); break;

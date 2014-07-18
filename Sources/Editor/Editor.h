@@ -41,6 +41,7 @@ namespace spades { namespace editor {
 	class TimelineItem;
 	class SceneRenderer;
 	class SelectionRenderer;
+	class EditorMode;
 	
 	class Editor: public gui::View {
 		class Internal;
@@ -64,6 +65,8 @@ namespace spades { namespace editor {
 		Handle<osobj::Object> activeObject;
 		std::deque<Handle<osobj::Frame>> selectedFrames;
 		
+		Handle<EditorMode> mode;
+		
 		Vector3 viewCenter;
 		Vector3 viewAngle;
 		float viewDistance;
@@ -81,7 +84,11 @@ namespace spades { namespace editor {
 		client::IRenderer *GetRenderer() { return renderer; }
 		client::IAudioDevice *GetAudioDevice() { return audio; }
 		
+		const client::SceneDefinition& GetLastSceneDefinition() const
+		{ return sceneDef; }
+		
 		UIManager *GetUI() const { return ui; }
+		MainView *GetMainView() const { return mainView; }
 		
 		client::IFont *GetTitleFont() const { return titleFont; }
 		
@@ -89,17 +96,23 @@ namespace spades { namespace editor {
 		Scene *GetScene() const { return scene; }
 		void SetScene(Scene *);
 		
+		osobj::Pose *GetPose() const { return nullptr; }
+		
 		TimelineItem *GetActiveTimeline() const { return activeTimeline; }
 		void SetActiveTimeline(TimelineItem *);
 		
 		osobj::Object *GetActiveObject() const { return activeObject; }
 		void SetActiveObject(osobj::Object *);
 		
+		EditorMode *GetMode() const { return mode; }
+		void SetMode(EditorMode *);
+		
 		const decltype(selectedFrames)& GetSelectedFrames() const
 		{ return selectedFrames; }
 		void SetSelectedFrames(const decltype(selectedFrames)& f);
 		void Select(osobj::Frame *, bool append);
 		void Deselect(osobj::Frame *);
+		bool IsSelected(osobj::Frame *);
 		
 		void AddListener(EditorListener *);
 		void RemoveListener(EditorListener *);
@@ -107,6 +120,8 @@ namespace spades { namespace editor {
 		void Turn(const Vector2&);
 		void Strafe(const Vector2&);
 		void SideMove(const Vector2&);
+		
+		Vector3 Unproject(const Vector2&);
 		
 		/*---- implementations of gui::View ----*/
 		void MouseEvent(float x, float y) override;
@@ -129,6 +144,17 @@ namespace spades { namespace editor {
 		
 		
 		
+		
+		
+	};
+	
+	class EditorMode: public RefCountedObject {
+	protected:
+		virtual ~EditorMode() { }
+	public:
+		virtual void Leave(Editor *) = 0;
+		virtual void Enter(Editor *) = 0;
+		virtual UIElement *CreateView(UIManager *, Editor *) = 0;
 	};
 	
 	class EditorListener {
@@ -138,6 +164,9 @@ namespace spades { namespace editor {
 		virtual void ActiveObjectChanged(osobj::Object *) { }
 		virtual void ActiveTimelineChanged(TimelineItem *) { }
 		virtual void SelectedFramesChanged() { }
+		virtual void EditorModeChanged(EditorMode *) { }
 	};
+	
+	
 	
 } }

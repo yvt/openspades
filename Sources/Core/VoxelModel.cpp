@@ -280,5 +280,403 @@ namespace spades {
 			throw;
 		}
 	}
+	
+	auto VoxelModel::CastRay(Vector3 v0, Vector3 dir)
+	-> RayCastResult {
+		RayCastResult result;
+		result.hit = false;
+		
+		SPAssert(dir.x != 0.f || dir.y != 0.f || dir.z != 0.f);
+		
+		// filter out invalid value
+		if (!isfinite(v0.x) || !isfinite(v0.y) || !isfinite(v0.z)) {
+			return result;
+		}
+		if (!isfinite(dir.x) || !isfinite(dir.y) || !isfinite(dir.z)) {
+			return result;
+		}
+		
+		Vector3 orig = GetOrigin() - .5f;
+		
+		// transform ray into local space
+		v0 -= orig;
+		
+		// find intersection
+		const float fw = width, fh = height, fd = depth;
+		if (v0.y < 0.f && dir.y <= 0.f) return result;
+		if (v0.z < 0.f && dir.z <= 0.f) return result;
+		if (v0.y >= fh && dir.y >= 0.f) return result;
+		if (v0.z >= fd && dir.z >= 0.f) return result;
+		
+		if (v0.x >= 0.f && v0.y >= 0.f && v0.z >= 0.f &&
+			v0.x < fw && v0.y < fh && v0.z < fd) {
+			// start point is in boundary
+			if (IsSolid(static_cast<int>(v0.x),
+						static_cast<int>(v0.y),
+						static_cast<int>(v0.z))) {
+				result.hit = true;
+				result.startSolid = true;
+				result.hitBlock = v0.Floor();
+				result.hitPos = v0 + orig;
+				result.normal = IntVector3(0, 0, 0);
+				return result;
+			}
+		} else {
+			// start point is outside
+			if (v0.x < 0.f) {
+				if (dir.x <= 0.f) {
+					return result;
+				}
+				float per = -v0.x / dir.x;
+				v0 += dir * per; v0.x = 0.f;
+				
+				if (v0.y >= 0.f && v0.z >= 0.f &&
+					v0.y < fh && v0.z < fd &&
+					IsSolid(static_cast<int>(0),
+							static_cast<int>(v0.y),
+							static_cast<int>(v0.z)))
+				{
+					result.hit = true;
+					result.startSolid = false;
+					result.hitBlock = IntVector3
+					(0,
+					 static_cast<int>(v0.y),
+					 static_cast<int>(v0.z));
+					result.hitPos = v0 + orig;
+					result.normal = IntVector3(-1, 0, 0);
+					return result;
+				}
+			} else if (v0.x > fw) {
+				if (dir.x >= 0.f) {
+					return result;
+				}
+				float per = (fw - v0.x) / dir.x;
+				v0 += dir * per; v0.x = fw;
+				
+				if (v0.y >= 0.f && v0.z >= 0.f &&
+					v0.y < fh && v0.z < fd &&
+					IsSolid(static_cast<int>(width - 1),
+							static_cast<int>(v0.y),
+							static_cast<int>(v0.z)))
+				{
+					result.hit = true;
+					result.startSolid = false;
+					result.hitBlock = IntVector3
+					(width - 1,
+					 static_cast<int>(v0.y),
+					 static_cast<int>(v0.z));
+					result.hitPos = v0 + orig;
+					result.normal = IntVector3(1, 0, 0);
+					return result;
+				}
+			}
+			
+			if (v0.y < 0.f) {
+				if (dir.y <= 0.f) {
+					return result;
+				}
+				float per = -v0.y / dir.y;
+				v0 += dir * per; v0.y = 0.f;
+				
+				if (v0.x >= 0.f && v0.z >= 0.f &&
+					v0.x < fw && v0.z < fd &&
+					IsSolid(static_cast<int>(v0.x),
+							0,
+							static_cast<int>(v0.z)))
+				{
+					result.hit = true;
+					result.startSolid = false;
+					result.hitBlock = IntVector3
+					(static_cast<int>(v0.x),
+					 0,
+					 static_cast<int>(v0.z));
+					result.hitPos = v0 + orig;
+					result.normal = IntVector3(0, -1, 0);
+					return result;
+				}
+			} else if (v0.y > fh) {
+				if (dir.y >= 0.f) {
+					return result;
+				}
+				float per = (fh - v0.y) / dir.y;
+				v0 += dir * per; v0.y = fh;
+				
+				if (v0.x >= 0.f && v0.z >= 0.f &&
+					v0.x < fw && v0.z < fd &&
+					IsSolid(static_cast<int>(v0.x),
+							height - 1,
+							static_cast<int>(v0.z)))
+				{
+					result.hit = true;
+					result.startSolid = false;
+					result.hitBlock = IntVector3
+					(static_cast<int>(v0.x),
+					 height - 1,
+					 static_cast<int>(v0.z));
+					result.hitPos = v0 + orig;
+					result.normal = IntVector3(0, 1, 0);
+					return result;
+				}
+			}
+			if (v0.z < 0.f) {
+				if (dir.z <= 0.f) {
+					return result;
+				}
+				float per = -v0.z / dir.z;
+				v0 += dir * per; v0.y = 0.f;
+				
+				if (v0.x >= 0.f && v0.y >= 0.f &&
+					v0.x < fw && v0.y < fh &&
+					IsSolid(static_cast<int>(v0.x),
+							static_cast<int>(v0.y),
+							0))
+				{
+					result.hit = true;
+					result.startSolid = false;
+					result.hitBlock = IntVector3
+					(static_cast<int>(v0.x),
+					 static_cast<int>(v0.y),
+					 0);
+					result.hitPos = v0 + orig;
+					result.normal = IntVector3(0, 0, -1);
+					return result;
+				}
+			} else if (v0.z > fd) {
+				if (dir.z >= 0.f) {
+					return result;
+				}
+				float per = (fd - v0.z) / dir.z;
+				v0 += dir * per; v0.z = fd;
+				
+				if (v0.x >= 0.f && v0.y >= 0.f &&
+					v0.x < fw && v0.y < fh &&
+					IsSolid(static_cast<int>(v0.x),
+							static_cast<int>(v0.y),
+							depth - 1))
+				{
+					result.hit = true;
+					result.startSolid = false;
+					result.hitBlock = IntVector3
+					(static_cast<int>(v0.x),
+					 static_cast<int>(v0.y),
+					 depth - 1);
+					result.hitPos = v0 + orig;
+					result.normal = IntVector3(0, 0, 1);
+					return result;
+				}
+			}
+			if (v0.x < 0.f || v0.y < 0.f ||
+				v0.x > fw || v0.y > fh) {
+				// doesn' intersect
+				return result;
+			}
+			
+		}
+		
+		SPAssert(v0.x >= 0.f);
+		SPAssert(v0.y >= 0.f);
+		SPAssert(v0.z >= 0.f);
+		SPAssert(v0.x <= fw);
+		SPAssert(v0.y <= fh);
+		SPAssert(v0.z <= fd);
+		
+		// check special pattern
+		if (dir.x == 0.f && dir.y == 0.f) {
+			SPAssert(v0.x < fw);
+			SPAssert(v0.y < fh);
+			auto mp = GetSolidBitsAt(static_cast<int>(v0.x),
+									 static_cast<int>(v0.y));
+			int z = static_cast<int>(v0.z);
+			if (dir.z > 0.f) {
+				++z;
+				if (z >= 64) return result;
+				mp >>= z;
+				while (mp) {
+					if (mp & 1) {
+						result.hit = true;
+						result.startSolid = false;
+						v0.z = z;
+						result.hitBlock = IntVector3
+						(static_cast<int>(v0.x),
+						 static_cast<int>(v0.y),
+						 z);
+						result.hitPos = v0 + orig;
+						result.normal = IntVector3(0, 0, -1);
+						return result;
+					}
+					mp >>= 1; ++z;
+				}
+			} else {
+				--z;
+				if (z < 0) return result;
+				z = std::min(z, 63);
+				mp = mp << (63 - z);
+				while (mp) {
+					if (mp & 0x8000000000000000ULL) {
+						result.hit = true;
+						result.startSolid = false;
+						v0.z = z + 1;
+						result.hitBlock = IntVector3
+						(static_cast<int>(v0.x),
+						 static_cast<int>(v0.y),
+						 z);
+						result.hitPos = v0 + orig;
+						result.normal = IntVector3(0, 0, 1);
+						return result;
+					}
+					mp = mp << 1; --z;
+				}
+			}
+			return result;
+		}
+		
+		const int signX = dir.x > 0.f ? 1 : dir.x < 0.f ? -1 : 0;
+		const int signY = dir.y > 0.f ? 1 : dir.y < 0.f ? -1 : 0;
+		const int signZ = dir.z > 0.f ? 1 : dir.z < 0.f ? -1 : 0;
+		
+		SPAssert(signX != 0 || signY != 0);
+		
+		int ix = signX >= 0 ?
+		static_cast<int>(v0.x) :
+		std::max(static_cast<int>(ceilf(v0.x)) - 1, 0);
+		int iy = signY >= 0 ?
+		static_cast<int>(v0.y) :
+		std::max(static_cast<int>(ceilf(v0.y)) - 1, 0);
+		int iz = signZ >= 0 ?
+		static_cast<int>(v0.z) :
+		std::max(static_cast<int>(ceilf(v0.z)) - 1, 0);
+		
+		float fx = signX >= 0 ?
+		(ix + 1) - v0.x : v0.x - ix;
+		float fy = signX >= 0 ?
+		(iy + 1) - v0.y : v0.y - iy;
+		
+		float zz = v0.z;
+		
+		const float invDirX = dir.x != 0.f ? 1.f / dir.x : 0.f;
+		const float invDirY = dir.y != 0.f ? 1.f / dir.y : 0.f;
+		const float invDirZ = dir.z != 0.f ? 1.f / dir.z : 0.f;
+		
+		const float invDirXAbs = fabsf(invDirX);
+		const float invDirYAbs = fabsf(invDirY);
+		
+		auto getCurrentPos = [&]() {
+			Vector3 v;
+			v.z = zz;
+			v.x = signX >= 0 ?
+			(ix + 1) - fx : ix + fx;
+			v.y = signY >= 0 ?
+			(iy + 1) - fy : iy + fy;
+			return v;
+		};
+		
+		while (ix >= 0 && iy >= 0 && ix < width && iy < height) {
+			int nextX = ix, nextY = iy;
+			float newFx = fx, newFy = fy;
+			float nextZf; int nextZ;
+			float dt;
+			int side = 0;
+			if (signX == 0) {
+				nextX = ix; nextY = iy + signY;
+				dt = fy * invDirYAbs;
+				newFy = 1.f;
+			} else if (signY == 0) {
+				nextX = ix + signX; nextY = iy;
+				dt = fx * invDirXAbs;
+				newFx = 1.f;
+				side = 1;
+			} else {
+				float dtX = fx * invDirXAbs;
+				float dtY = fy * invDirYAbs;
+				if (dtX < dtY) {
+					dt = dtX;
+					nextX = ix + signX; nextY = iy;
+					newFx = 1.f;
+					newFy -= dt * fabsf(dir.y);
+				} else {
+					dt = dtY;
+					nextX = ix; nextY = iy + signY;
+					newFx -= dt * fabsf(dir.x);
+					newFy = 1.f;
+					side = 1;
+				}
+			}
+			
+			if (signZ == 0) {
+				nextZ = iz; nextZf = zz;
+			} else {
+				nextZf = zz + dt * dir.z;
+				nextZ = signZ >= 0 ?
+				static_cast<int>(v0.z) :
+				static_cast<int>(ceilf(v0.z)) - 1;
+			}
+			
+			// move in the current (x, y)
+			if (nextZ != iz) {
+				auto map = GetSolidBitsAt(ix, iy);
+				if (nextZ < iz) {
+					while (iz > nextZ) {
+						--iz;
+						if (iz < 0) return result;
+						if (map & (1ULL << iz)) {
+							result.hit = true;
+							result.startSolid = false;
+							result.hitBlock = IntVector3
+							(ix, iy, iz);
+							fx -= fabsf(dir.x) * ((iz + 1) - zz) * invDirZ;
+							fy -= fabsf(dir.y) * ((iz + 1) - zz) * invDirZ;
+							result.hitPos = getCurrentPos();
+							result.hitPos.z = iz + 1;
+							result.hitPos += orig;
+							result.normal = IntVector3(0, 0, 1);
+							return result;
+						}
+					}
+				} else {
+					while (iz < nextZ) {
+						++iz;
+						if (iz >= depth) return result;
+						if (map & (1ULL << iz)) {
+							result.hit = true;
+							result.startSolid = false;
+							result.hitBlock = IntVector3
+							(ix, iy, iz);
+							fx -= fabsf(dir.x) * (iz - zz) * invDirZ;
+							fy -= fabsf(dir.y) * (iz - zz) * invDirZ;
+							result.hitPos = getCurrentPos();
+							result.hitPos.z = iz;
+							result.hitPos += orig;
+							result.normal = IntVector3(0, 0, -1);
+							return result;
+						}
+					}
+				}
+			}
+			
+			// move to next (x, y)
+			ix = nextX; iy = nextY; iz = nextZ;
+			fx = newFx; fy = newFy; zz = nextZf;
+			if (ix >= 0 && iy >= 0 && ix < width && iy < height
+				&& iz >= 0 && iz < depth) {
+				auto map = GetSolidBitsAt(ix, iy);
+				if (map & (1ULL << iz)) {
+					result.hit = true;
+					result.startSolid = false;
+					result.hitBlock = IntVector3
+					(ix, iy, iz);
+					result.hitPos = getCurrentPos();
+					result.hitPos += orig;
+					result.normal = IntVector3
+					(side == 0 ? -signX : 0,
+					 side != 0 ? -signY : 0, 0);
+					return result;
+				}
+			}
+			
+		}
+		
+		
+		return result;
+	}
 		
 }

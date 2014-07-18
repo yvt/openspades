@@ -30,6 +30,7 @@
 #include "Scene.h"
 #include <Core/ModelTree.h>
 #include "SceneRenderer.h"
+#include "ObjectMode.h"
 
 namespace spades { namespace editor {
 
@@ -83,22 +84,6 @@ namespace spades { namespace editor {
 		titleFont = MakeHandle<ngclient::FTFont>(renderer, fontSet2,
 												11.f, 11.f * 1.25f);
 		
-		auto b = MakeHandle<Button>(ui);
-		b->SetText("Hello World!");
-		b->SetBounds(AABB2(120, 120, 100, 25));
-		mainView->AddChildToFront(b);
-		
-		{
-			auto ed = MakeHandle<Field>(ui);
-			ed->SetBounds(AABB2(20, 20, 150, 20));
-			ed->SetText("hoge");
-			mainView->AddChildToBack(ed);
-		}
-		{
-			auto ed = MakeHandle<ScrollBar>(ui);
-			ed->SetBounds(AABB2(20, 60, 16, 100));
-			mainView->AddChildToBack(ed);
-		}
 		{
 			auto ed = MakeHandle<OutlinerWindow>(ui,
 												 *this);
@@ -115,6 +100,8 @@ namespace spades { namespace editor {
 		rf->name = "lower.osobj";
 		scene->AddRootFrame(rf);
 		SetScene(scene);
+		
+		SetMode(MakeHandle<ObjectSelectionMode>());
 	}
 	
 	Editor::~Editor() {
@@ -166,6 +153,27 @@ namespace spades { namespace editor {
 		selectedFrames = f;
 		for (auto *l: listeners)
 			l->SelectedFramesChanged();
+	}
+	
+	bool Editor::IsSelected(osobj::Frame *f) {
+		return std::find(selectedFrames.begin(),
+						 selectedFrames.end(), f) !=
+		selectedFrames.end();
+	}
+	
+	void Editor::SetMode(EditorMode *mode) {
+		if (this->mode == mode) return;
+		
+		if (this->mode) {
+			this->mode->Leave(this);
+			this->mode = nullptr;
+		}
+		
+		this->mode = mode;
+		this->mode->Enter(this);
+		
+		for (auto *l: listeners)
+			l->EditorModeChanged(mode);
 	}
 	
 	void Editor::Select(osobj::Frame *f,
@@ -285,6 +293,16 @@ namespace spades { namespace editor {
 		def.zFar = 100.f;
 		
 		return def;
+	}
+	
+	Vector3 Editor::Unproject(const Vector2& v) {
+		auto sh = Vector2(renderer->ScreenWidth(),
+						  renderer->ScreenHeight()) * .5f;
+		float fovX = tanf(sceneDef.fovX * .5f) / sh.x;
+		float fovY = tanf(sceneDef.fovY * .5f) / sh.y;
+		auto v2 = (v - sh) * Vector2(fovX, fovY);
+		return sceneDef.viewAxis[0] * v2.x - sceneDef.viewAxis[1] * v2.y
+		+ sceneDef.viewAxis[2];
 	}
 	
 	void Editor::RunFrame(float dt) {

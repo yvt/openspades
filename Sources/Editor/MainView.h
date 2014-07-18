@@ -27,20 +27,37 @@ namespace spades { namespace editor {
 	class Editor;
 	
 	class MainView: public UIElement {
+		class Internal;
+		std::unique_ptr<Internal> internal;
 		Editor& editor;
 		
 		bool dragMove;
 		Vector2 dragLastPos;
 	protected:
 		~MainView();
-		void OnMouseDown(MouseButton, const Vector2&) override;
-		void OnMouseUp(MouseButton, const Vector2&) override;
-		void OnMouseMove(const Vector2&) override;
-		void OnMouseWheel(const Vector2&) override;
 	public:
 		MainView(UIManager *,
 				 Editor&);
 		
+		void OnMouseDown(MouseButton, const Vector2&) override;
+		void OnMouseUp(MouseButton, const Vector2&) override;
+		void OnMouseMove(const Vector2&) override;
+		void OnMouseWheel(const Vector2&) override;
 	};
+	
+	class ModeView: public UIElement {
+		MainView& mainView;
+	protected:
+		~ModeView();
+	public:
+		ModeView(UIManager *,
+				 Editor *);
+		
+		void OnMouseDown(MouseButton, const Vector2&) override;
+		void OnMouseUp(MouseButton, const Vector2&) override;
+		void OnMouseMove(const Vector2&) override;
+		void OnMouseWheel(const Vector2&) override;
+	};
+	
 	
 } }

@@ -76,4 +76,69 @@ namespace spades { namespace editor {
 		}
 	}
 	
+	auto Scene::CastRay
+	(const Vector3& v0,
+	const Vector3& dir,
+	osobj::Pose *pose) -> stmp::optional<RayCastResult> {
+		class Scanner {
+			const Vector3 &v0, &dir;
+			osobj::Pose *pose;
+			
+			void Scan(RootFrame *rootFrame,
+					  osobj::Frame *frame,
+					  const Matrix4& m) {
+				auto mm = m * frame->GetTransform();
+				
+				for (const auto& ch: frame->GetChildren()) {
+					Scan(rootFrame, ch, mm);
+				}
+				
+				for (const auto& obj: frame->GetObjects()) {
+					auto& vmobj = dynamic_cast<osobj::VoxelModelObject&>(*obj);
+					auto invM = mm.InversedFast();
+					auto localV0 = (invM * v0).GetXYZ();
+					auto localDir = (invM * Vector4(dir.x, dir.y, dir.z, 0.f)).GetXYZ();
+					auto res = vmobj.GetModel().CastRay
+					(localV0, localDir);
+					if (res.hit) {
+						auto hitPos = (mm * res.hitPos).GetXYZ();
+						if (!result ||
+							Vector3::Dot(hitPos, dir) <
+							Vector3::Dot((*result).hitPos, dir)) {
+							if (!result) result = RayCastResult();
+							auto& r = *result;
+							r.rootFrame = rootFrame;
+							r.frame = frame;
+							r.object = &vmobj;
+							r.hitPos = hitPos;
+							r.objectTransform = mm;
+							r.rayCastResult = res;
+						}
+					}
+				}
+			}
+			
+		public:
+			stmp::optional<RayCastResult> result;
+			Scanner(const Vector3& v0,
+					const Vector3& dir,
+					osobj::Pose *pose):
+			v0(v0), dir(dir), pose(pose) { }
+			
+			void Scan(RootFrame *rootFrame) {
+				Scan(rootFrame, rootFrame->frame,
+					 rootFrame->matrix);
+			}
+		};
+		
+		Scanner scanner(v0, dir, pose);
+		
+		for (const auto& rf: rootFrames) {
+			scanner.Scan(rf);
+		}
+		
+		return scanner.result;
+	}
+	
+	
 } }

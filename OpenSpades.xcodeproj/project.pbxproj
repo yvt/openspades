@@ -20,6 +20,7 @@
 		E818AEEB194ACCA6004500C7 /* PlayerServerEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E818AEE8194ACCA6004500C7 /* PlayerServerEntity.cpp */; };
 		E826C934196C054600D6C962 /* ListView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E826C932196C054600D6C962 /* ListView.cpp */; };
 		E826C937196EAF3A00D6C962 /* TreeView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E826C935196EAF3A00D6C962 /* TreeView.cpp */; };
+		E829A4211976E270007DAC14 /* ObjectMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E829A4201976E270007DAC14 /* ObjectMode.cpp */; };
 		E82E66BC18EA78F5004DBA18 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E82E66BB18EA78F5004DBA18 /* Cocoa.framework */; };
 		E82E66ED18EA7914004DBA18 /* StartupScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842888C18A3D1520060743D /* StartupScreenHelper.cpp */; };
 		E82E66EE18EA7954004DBA18 /* GLBloomFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89E811F179C2C800059C649 /* GLBloomFilter.cpp */; };
@@ -581,6 +582,8 @@
 		E826C933196C054600D6C962 /* ListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListView.h; sourceTree = "<group>"; };
 		E826C935196EAF3A00D6C962 /* TreeView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TreeView.cpp; sourceTree = "<group>"; };
 		E826C936196EAF3A00D6C962 /* TreeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreeView.h; sourceTree = "<group>"; };
+		E829A4201976E270007DAC14 /* ObjectMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectMode.cpp; sourceTree = "<group>"; };
+		E829A4221976E278007DAC14 /* ObjectMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectMode.h; sourceTree = "<group>"; };
 		E82E66B218E9A35C004DBA18 /* Client_FPSCounter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_FPSCounter.cpp; sourceTree = "<group>"; };
 		E82E66B918EA78F5004DBA18 /* OpenSpades.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenSpades.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E82E66BB18EA78F5004DBA18 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -1561,6 +1564,55 @@
 			name = "Software Renderer";
 			sourceTree = "<group>";
 		};
+		E829A41D1976E0DD007DAC14 /* UI Framework */ = {
+			isa = PBXGroup;
+			children = (
+				E89985CC1960E44800686DF2 /* UIElement.cpp */,
+				E89985CD1960E44800686DF2 /* UIElement.h */,
+				E860D0CF1963EFC7008497C3 /* Buttons.cpp */,
+				E860D0D01963EFC7008497C3 /* Buttons.h */,
+				E860D0D2196403B3008497C3 /* Fields.cpp */,
+				E860D0D3196403B3008497C3 /* Fields.h */,
+				E860D0D519642EA1008497C3 /* ScrollBar.cpp */,
+				E860D0D619642EA1008497C3 /* ScrollBar.h */,
+				E860D0D81964526C008497C3 /* Window.cpp */,
+				E860D0D91964526C008497C3 /* Window.h */,
+				E826C932196C054600D6C962 /* ListView.cpp */,
+				E826C933196C054600D6C962 /* ListView.h */,
+				E826C935196EAF3A00D6C962 /* TreeView.cpp */,
+				E826C936196EAF3A00D6C962 /* TreeView.h */,
+			);
+			name = "UI Framework";
+			sourceTree = "<group>";
+		};
+		E829A41E1976E118007DAC14 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				E87B7B3019605B9E0051FF90 /* Editor.cpp */,
+				E87B7B3119605B9E0051FF90 /* Editor.h */,
+				E8FCA9E91973DBB80058BD2C /* SceneRenderer.cpp */,
+				E8FCA9EB1973DBC20058BD2C /* SceneRenderer.h */,
+				E876A32D19719E8200C5A5D0 /* Commands.cpp */,
+				E876A32F19719E9A00C5A5D0 /* Commands.h */,
+				E876A3301972782200C5A5D0 /* Scene.cpp */,
+				E876A3321972782900C5A5D0 /* Scene.h */,
+				E829A4201976E270007DAC14 /* ObjectMode.cpp */,
+				E829A4221976E278007DAC14 /* ObjectMode.h */,
+			);
+			name = Editor;
+			sourceTree = "<group>";
+		};
+		E829A41F1976E120007DAC14 /* GUI */ = {
+			isa = PBXGroup;
+			children = (
+				E89985D01961254400686DF2 /* MainView.cpp */,
+				E89985D11961254400686DF2 /* MainView.h */,
+				E8B72C801964565900C62AFF /* OutlinerWindow.cpp */,
+				E8B72C811964565900C62AFF /* OutlinerWindow.h */,
+			);
+			name = GUI;
+			sourceTree = "<group>";
+		};
 		E82E66BA18EA78F5004DBA18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1674,32 +1726,9 @@
 		E87B7B2F19604FC30051FF90 /* Editor */ = {
 			isa = PBXGroup;
 			children = (
-				E87B7B3019605B9E0051FF90 /* Editor.cpp */,
-				E87B7B3119605B9E0051FF90 /* Editor.h */,
-				E8FCA9E91973DBB80058BD2C /* SceneRenderer.cpp */,
-				E8FCA9EB1973DBC20058BD2C /* SceneRenderer.h */,
-				E876A32D19719E8200C5A5D0 /* Commands.cpp */,
-				E876A32F19719E9A00C5A5D0 /* Commands.h */,
-				E89985CC1960E44800686DF2 /* UIElement.cpp */,
-				E89985CD1960E44800686DF2 /* UIElement.h */,
-				E89985D01961254400686DF2 /* MainView.cpp */,
-				E89985D11961254400686DF2 /* MainView.h */,
-				E860D0CF1963EFC7008497C3 /* Buttons.cpp */,
-				E860D0D01963EFC7008497C3 /* Buttons.h */,
-				E860D0D2196403B3008497C3 /* Fields.cpp */,
-				E860D0D3196403B3008497C3 /* Fields.h */,
-				E860D0D519642EA1008497C3 /* ScrollBar.cpp */,
-				E860D0D619642EA1008497C3 /* ScrollBar.h */,
-				E860D0D81964526C008497C3 /* Window.cpp */,
-				E860D0D91964526C008497C3 /* Window.h */,
-				E8B72C801964565900C62AFF /* OutlinerWindow.cpp */,
-				E8B72C811964565900C62AFF /* OutlinerWindow.h */,
-				E826C932196C054600D6C962 /* ListView.cpp */,
-				E826C933196C054600D6C962 /* ListView.h */,
-				E826C935196EAF3A00D6C962 /* TreeView.cpp */,
-				E826C936196EAF3A00D6C962 /* TreeView.h */,
-				E876A3301972782200C5A5D0 /* Scene.cpp */,
-				E876A3321972782900C5A5D0 /* Scene.h */,
+				E829A41F1976E120007DAC14 /* GUI */,
+				E829A41E1976E118007DAC14 /* Editor */,
+				E829A41D1976E0DD007DAC14 /* UI Framework */,
 			);
 			path = Editor;
 			sourceTree = "<group>";
@@ -3271,6 +3300,7 @@
 				E82E66F018EA7954004DBA18 /* GLLensFilter.cpp in Sources */,
 				E8D0E7C818FABC3600DE3BDB /* sha3.cpp in Sources */,
 				E82E66F118EA7954004DBA18 /* GLCameraBlurFilter.cpp in Sources */,
+				E829A4211976E270007DAC14 /* ObjectMode.cpp in Sources */,
 				E82E66F218EA7954004DBA18 /* GLFogFilter.cpp in Sources */,
 				E8E977971944701300579D9A /* PlayerEntity.cpp in Sources */,
 				E82E66F318EA7954004DBA18 /* GLLensFlareFilter.cpp in Sources */,

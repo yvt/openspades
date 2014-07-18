@@ -24,6 +24,7 @@
 #include <Core/ModelTree.h>
 #include <vector>
 #include <set>
+#include <Core/VoxelModel.h>
 
 namespace spades { namespace editor {
 	
@@ -49,6 +50,7 @@ namespace spades { namespace editor {
 		std::set<SceneListener *> listeners;
 		std::vector<Handle<RootFrame>> rootFrames;
 		std::vector<Handle<TimelineItem>> timelines;
+		
 	protected:
 		~Scene();
 	public:
@@ -66,6 +68,19 @@ namespace spades { namespace editor {
 		{ return timelines; }
 		void AddTimeline(TimelineItem *);
 		void RemoveTimeline(TimelineItem *);
+		
+		struct RayCastResult {
+			RootFrame *rootFrame;
+			osobj::Frame *frame;
+			osobj::VoxelModelObject *object;
+			Vector3 hitPos;
+			Matrix4 objectTransform;
+			VoxelModel::RayCastResult rayCastResult;
+		};
+		
+		stmp::optional<RayCastResult> CastRay(const Vector3& v0,
+											  const Vector3& dir,
+											  osobj::Pose *);
 	};
 	
 	class SceneListener {

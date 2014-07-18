@@ -116,5 +116,14 @@ namespace spades {
 		int GetHeight() const { return height; }
 		int GetDepth() const { return depth; }
 		
+		struct RayCastResult {
+			bool hit;
+			bool startSolid;
+			Vector3 hitPos;
+			IntVector3 hitBlock;
+			IntVector3 normal;
+		};
+		
+		RayCastResult CastRay(Vector3 v0, Vector3 dir);
 	};
 }
