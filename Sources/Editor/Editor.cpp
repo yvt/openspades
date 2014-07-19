@@ -324,6 +324,30 @@ namespace spades { namespace editor {
 		auto v2 = v * Vector2(fovX, fovY);
 		return sceneDef.viewAxis[0] * v2.x - sceneDef.viewAxis[1] * v2.y;
 	}
+	Vector3 Editor::Project(const Vector3& v) {
+		Vector3 viewScale;
+		Vector3 viewOffset;
+		
+		viewScale.x = renderer->ScreenWidth() * .5f / tanf(sceneDef.fovX * .5f);
+		viewScale.y = -renderer->ScreenHeight() * .5f  / tanf(sceneDef.fovY * .5f);
+		viewScale.z = 1.f;
+		
+		viewOffset.x = renderer->ScreenWidth() * .5f;
+		viewOffset.y = renderer->ScreenHeight() * .5f;
+		viewOffset.z = 0.f;
+		
+		auto vv = v - sceneDef.viewOrigin;
+		Vector3 tv;
+		tv.x = Vector3::Dot(vv, sceneDef.viewAxis[0]);
+		tv.y = Vector3::Dot(vv, sceneDef.viewAxis[1]);
+		tv.z = Vector3::Dot(vv, sceneDef.viewAxis[2]);
+		
+		tv.x /= tv.z;
+		tv.y /= tv.z;
+		
+		tv = tv * viewScale + viewOffset;
+		return tv;
+	}
 	
 	void Editor::RunFrame(float dt) {
 		sceneDef = CreateSceneDefinition();

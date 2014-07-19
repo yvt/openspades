@@ -124,6 +124,7 @@ namespace spades { namespace editor {
 		void Strafe(const Vector2&);
 		void SideMove(const Vector2&);
 		
+		Vector3 Project(const Vector3&);
 		Vector3 Unproject(const Vector2&);
 		Vector3 UnprojectDelta(const Vector2&);
 		

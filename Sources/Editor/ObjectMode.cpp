@@ -69,9 +69,14 @@ namespace spades { namespace editor {
 			ModeView::OnMouseDown(mb, v);
 		}
 		void OnKeyDown(const std::string& key) override {
-			if (key == "G") {
+			if (key == "G" &&
+				!editor.GetSelectedFrames().empty()) {
 				editor.SetMode(MakeHandle<TranslateFrameMode>());
+			} else if (key == "R" &&
+					   !editor.GetSelectedFrames().empty()) {
+				editor.SetMode(MakeHandle<RotateFrameMode>());
 			}
+			ModeView::OnKeyDown(key);
 		}
 	public:
 		ObjectSelectionView(UIManager *m, Editor *e):
@@ -317,9 +322,15 @@ namespace spades { namespace editor {
 				lastPos = v;
 			}
 		}
+		void OnKeyDown(const std::string& key) override {
+			if (key == "Escape") {
+				mode->Cancel();
+			}
+			ModeView::OnKeyDown(key);
+		}
 	public:
 		View(UIManager *m, Editor *e,
-						   TranslateFrameMode *mode):
+			 TranslateFrameMode *mode):
 		ModeView(m, e), editor(*e), mode(mode) {
 			
 			center = Vector3(0, 0, 0);
@@ -343,6 +354,121 @@ namespace spades { namespace editor {
 	
 	
 	UIElement *TranslateFrameMode::CreateView
+	(UIManager *m, Editor *e) {
+		return new View(m, e, this);
+	}
+	
+	
+	
+#pragma mark - RotateFrameMode
+	
+	RotateFrameMode::RotateFrameMode() { }
+	RotateFrameMode::~RotateFrameMode() { }
+	
+	class RotateFrameMode::View: public ModeView {
+		Handle<RotateFrameMode> mode;
+		Editor& editor;
+		float lastAngle;
+		bool first = true;
+		
+		struct Target {
+			osobj::Frame *frame;
+			Matrix4 m;
+		};
+		std::list<Target> targets;
+		Vector2 origin;
+		Vector2 lastPoint;
+	protected:
+		void OnMouseDown(MouseButton mb, const Vector2& v) override {
+			if (mb == MouseButton::Left) {
+				mode->Apply();
+				return;
+			} else if (mb == MouseButton::Right) {
+				mode->Cancel();
+				return;
+			}
+			ModeView::OnMouseDown(mb, v);
+		}
+		void OnMouseMove(const Vector2& v) override {
+			if ((v - origin).GetPoweredLength() < 2.f) {
+				// cannot compute angle
+				return;
+			}
+			
+			lastPoint = v;
+			
+			float angle = atan2f(v.y - origin.y, v.x - origin.x);
+			if (!first) {
+				angle -= lastAngle;
+				const auto& sceneDef = editor.GetLastSceneDefinition();
+				
+				auto *pose = editor.GetPose();
+				SPAssert(pose);
+				
+				for (const auto& target: targets) {
+					auto *f = target.frame;
+					auto m = mode->GetOriginalTransform(f);
+					auto axis = (target.m * Vector4(sceneDef.viewAxis[2], 0)).GetXYZ();
+					
+					// TODO: rotate
+					pose->SetTransform(f, m * Matrix4::Rotate(axis, angle));
+				}
+			} else {
+				first = false;
+				lastAngle = angle;
+			}
+		}
+		void OnKeyDown(const std::string& key) override {
+			if (key == "Escape") {
+				mode->Cancel();
+			}
+			ModeView::OnKeyDown(key);
+		}
+		void RenderClient() override {
+			auto *r = GetManager().GetRenderer();
+			auto img = ToHandle(r->RegisterImage("Gfx/DashLine.tga"));
+			if (first) {
+				return;
+			}
+			auto v1 = origin;
+			auto v2 = lastPoint;
+			auto dir = (v2 - v1).Normalize();
+			Vector2 side(dir.y, -dir.x);
+			
+			r->SetColorAlphaPremultiplied(Vector4(1, 1, 1, 1));
+			r->DrawImage(img, v1 + side, v2 + side, v1 - side
+						 , AABB2(0, img->GetHeight() * .25f, (v2 - v1).GetLength(), 0));
+		}
+	public:
+		View(UIManager *m, Editor *e,
+			 RotateFrameMode *mode):
+		ModeView(m, e), editor(*e), mode(mode) {
+			
+			Vector3 center = Vector3(0, 0, 0);
+			int count = 0;
+			for (auto *f: mode->GetTargetFrames()) {
+				Target target;
+				target.frame = f;
+				
+				Matrix4 m = mode->GetGlobalOriginalTransform(f);
+				center += m.GetOrigin(); ++ count;
+				m = m.InversedFast();
+				target.m = m;
+				
+				targets.emplace_back(target);
+			}
+			center /= count;
+			
+			center = editor.Project(center);
+			origin = Vector2(center.x, center.y);
+			lastPoint = origin;
+		}
+		
+		
+	};
+	
+	
+	UIElement *RotateFrameMode::CreateView
 	(UIManager *m, Editor *e) {
 		return new View(m, e, this);
 	}

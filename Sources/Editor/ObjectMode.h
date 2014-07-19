@@ -74,4 +74,14 @@ namespace spades { namespace editor {
 		UIElement *CreateView(UIManager *, Editor *) override;
 	};
 	
+	
+	class RotateFrameMode: public FrameTransformAbstractMode {
+		class View;
+	protected:
+		~RotateFrameMode();
+	public:
+		RotateFrameMode();
+		UIElement *CreateView(UIManager *, Editor *) override;
+	};
+	
 } }
