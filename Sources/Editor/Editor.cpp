@@ -316,10 +316,25 @@ namespace spades { namespace editor {
 	void Editor::RunFrame(float dt) {
 		sceneDef = CreateSceneDefinition();
 		
-		renderer->SetFogColor(Vector3(.5f, .5f, .5f));
+		renderer->SetFogColor(Vector3(.3f, .3f, .3f));
 		renderer->SetFogDistance(128.f);
 		renderer->SetFogType(client::FogType::Classical);
 		renderer->StartScene(sceneDef);
+		
+		// add lights
+		client::DynamicLightParam light;
+		light.type = client::DynamicLightTypePoint;
+		light.radius = 100.f;
+		light.color = Vector3(1, 1, 1) * .1f;
+		light.useLensFlare = false;
+		
+		light.origin = sceneDef.viewOrigin
+		- sceneDef.viewAxis[0] * 10.f + sceneDef.viewAxis[1] * 10.f;
+		renderer->AddLight(light);
+		
+		light.origin = sceneDef.viewOrigin
+		- sceneDef.viewAxis[1] * 20.f;
+		renderer->AddLight(light);
 		
 		if (sceneRenderer) {
 			osobj::Pose *pose = GetPose();
