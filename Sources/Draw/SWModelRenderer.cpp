@@ -59,7 +59,7 @@ namespace spades {
 			auto axis3 = mat.GetAxis(2);
 			auto *rawModel = model->GetRawModel();
 			auto rawModelOrigin = rawModel->GetOrigin();
-			rawModelOrigin += 0.25f;
+			//rawModelOrigin += 0.25f;
 			origin += axis1 * rawModelOrigin.x;
 			origin += axis2 * rawModelOrigin.y;
 			origin += axis3 * rawModelOrigin.z;
@@ -200,8 +200,8 @@ namespace spades {
 						int iy = static_cast<int>(vv.y) + ndc2scroffY;
 						int idm = static_cast<int>(vv.z + .99f);
 						idm = std::max(1, idm);
-						int minX = ix - (idm >> 1);
-						int minY = iy - (idm >> 1);
+						int minX = ix - idm;
+						int minY = iy - idm;
 						if(minX >= fw || minY >= fh) continue;
 						int maxX = ix + idm;
 						int maxY = iy + idm;
