@@ -134,8 +134,12 @@ namespace spades { namespace editor {
 		if (s) SetActiveObject(nullptr);
 		
 		activeTimeline = s;
-		for (auto *l: listeners)
+		auto it = listeners.begin();
+		while (it != listeners.end()) {
+			auto cur = it++;
+			auto *l = *cur;
 			l->ActiveTimelineChanged(s);
+		}
 	}
 	
 	void Editor::SetActiveObject(osobj::Object *s) {
@@ -145,14 +149,22 @@ namespace spades { namespace editor {
 		if (s) SetActiveTimeline(nullptr);
 		
 		activeObject = s;
-		for (auto *l: listeners)
+		auto it = listeners.begin();
+		while (it != listeners.end()) {
+			auto cur = it++;
+			auto *l = *cur;
 			l->ActiveObjectChanged(s);
+		}
 	}
 	
 	void Editor::SetSelectedFrames(const decltype(selectedFrames) &f) {
 		selectedFrames = f;
-		for (auto *l: listeners)
+		auto it = listeners.begin();
+		while (it != listeners.end()) {
+			auto cur = it++;
+			auto *l = *cur;
 			l->SelectedFramesChanged();
+		}
 	}
 	
 	bool Editor::IsSelected(osobj::Frame *f) {
