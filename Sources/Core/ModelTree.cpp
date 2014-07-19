@@ -333,6 +333,9 @@ namespace spades { namespace osobj {
 		Init(root);
 	}
 	
+	Pose::Pose():
+	root(nullptr) { }
+	
 	Pose::~Pose() {
 		
 	}
@@ -402,7 +405,7 @@ namespace spades { namespace osobj {
 		
 		auto it = elements.find(f);
 		if (it == elements.end()) {
-			SPRaise("Specified frame is not a part of this pose.");
+			return f->GetTransform();
 		}
 		it->second.UpdateTransformIfNeeded();
 		return it->second.transform;
@@ -413,7 +416,10 @@ namespace spades { namespace osobj {
 		
 		auto it = elements.find(f);
 		if (it == elements.end()) {
-			SPRaise("Specified frame is not a part of this pose.");
+			Element e;
+			e.SetTransform(m);
+			elements.emplace(f, std::move(e));
+			return;
 		}
 		it->second.SetTransform(m);
 	}
@@ -423,7 +429,9 @@ namespace spades { namespace osobj {
 		
 		auto it = elements.find(f);
 		if (it == elements.end()) {
-			SPRaise("Specified frame is not a part of this pose.");
+			Element e;
+			e.SetTransform(f->GetTransform());
+			it = elements.emplace(f, std::move(e)).first;
 		}
 		it->second.SetPosition(m);
 	}
@@ -433,7 +441,9 @@ namespace spades { namespace osobj {
 		
 		auto it = elements.find(f);
 		if (it == elements.end()) {
-			SPRaise("Specified frame is not a part of this pose.");
+			Element e;
+			e.SetTransform(f->GetTransform());
+			it = elements.emplace(f, std::move(e)).first;
 		}
 		it->second.SetRotation(m);
 	}
@@ -443,7 +453,9 @@ namespace spades { namespace osobj {
 		
 		auto it = elements.find(f);
 		if (it == elements.end()) {
-			SPRaise("Specified frame is not a part of this pose.");
+			Element e;
+			e.SetTransform(f->GetTransform());
+			it = elements.emplace(f, std::move(e)).first;
 		}
 		it->second.SetScale(m);
 	}
@@ -453,7 +465,9 @@ namespace spades { namespace osobj {
 		
 		auto it = elements.find(f);
 		if (it == elements.end()) {
-			SPRaise("Specified frame is not a part of this pose.");
+			Element e;
+			e.SetTransform(f->GetTransform());
+			it = elements.emplace(f, std::move(e)).first;
 		}
 		return it->second.position;
 	}
@@ -463,7 +477,9 @@ namespace spades { namespace osobj {
 		
 		auto it = elements.find(f);
 		if (it == elements.end()) {
-			SPRaise("Specified frame is not a part of this pose.");
+			Element e;
+			e.SetTransform(f->GetTransform());
+			it = elements.emplace(f, std::move(e)).first;
 		}
 		return it->second.rotation;
 	}
@@ -473,7 +489,9 @@ namespace spades { namespace osobj {
 		
 		auto it = elements.find(f);
 		if (it == elements.end()) {
-			SPRaise("Specified frame is not a part of this pose.");
+			Element e;
+			e.SetTransform(f->GetTransform());
+			it = elements.emplace(f, std::move(e)).first;
 		}
 		return it->second.scale;
 	}

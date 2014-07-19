@@ -65,6 +65,8 @@ namespace spades { namespace editor {
 		Handle<osobj::Object> activeObject;
 		std::deque<Handle<osobj::Frame>> selectedFrames;
 		
+		Handle<osobj::Pose> workingPose;
+		
 		Handle<EditorMode> mode;
 		
 		Vector3 viewCenter;
@@ -96,7 +98,8 @@ namespace spades { namespace editor {
 		Scene *GetScene() const { return scene; }
 		void SetScene(Scene *);
 		
-		osobj::Pose *GetPose() const { return nullptr; }
+		osobj::Pose *GetPose();
+		void ClearWorkingPose();
 		
 		TimelineItem *GetActiveTimeline() const { return activeTimeline; }
 		void SetActiveTimeline(TimelineItem *);
@@ -122,6 +125,7 @@ namespace spades { namespace editor {
 		void SideMove(const Vector2&);
 		
 		Vector3 Unproject(const Vector2&);
+		Vector3 UnprojectDelta(const Vector2&);
 		
 		/*---- implementations of gui::View ----*/
 		void MouseEvent(float x, float y) override;
@@ -148,14 +152,7 @@ namespace spades { namespace editor {
 		
 	};
 	
-	class EditorMode: public RefCountedObject {
-	protected:
-		virtual ~EditorMode() { }
-	public:
-		virtual void Leave(Editor *) = 0;
-		virtual void Enter(Editor *) = 0;
-		virtual UIElement *CreateView(UIManager *, Editor *) = 0;
-	};
+	class EditorMode;
 	
 	class EditorListener {
 	public:
@@ -167,6 +164,14 @@ namespace spades { namespace editor {
 		virtual void EditorModeChanged(EditorMode *) { }
 	};
 	
-	
+	class EditorMode: public RefCountedObject,
+	protected EditorListener {
+	protected:
+		virtual ~EditorMode() { }
+	public:
+		virtual void Leave(Editor *);
+		virtual void Enter(Editor *);
+		virtual UIElement *CreateView(UIManager *, Editor *) = 0;
+	};
 	
 } }

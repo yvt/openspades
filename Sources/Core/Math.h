@@ -399,6 +399,8 @@ namespace spades {
 		Vector4(const Vector4&) = default;
 		Vector4(float x, float y, float z, float w):
 		x(x), y(y), z(z), w(w) {}
+		Vector4(const Vector3& v, float w):
+		x(v.x), y(v.y), z(v.z), w(w) { }
 		
 		static Vector4 Make(float x, float y, float z, float w) {
 			Vector4 v = {x, y, z, w};

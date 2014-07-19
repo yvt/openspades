@@ -263,6 +263,7 @@ namespace spades { namespace osobj {
 		~Pose();
 	public:
 		void SetInitialState();
+		Pose();
 		Pose(Frame *);
 		Matrix4 GetTransform(Frame *);
 		void SetPosition(Frame *, const Vector3&);

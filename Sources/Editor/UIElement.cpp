@@ -102,6 +102,9 @@ namespace spades { namespace editor {
 	}
 	
 	UIElement *UIManager::GetKeyHandler() {
+		if (!keyboardFocus) {
+			return mouseFocus;
+		}
 		return keyboardFocus;
 	}
 	

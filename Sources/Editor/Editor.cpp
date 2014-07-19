@@ -304,6 +304,14 @@ namespace spades { namespace editor {
 		return sceneDef.viewAxis[0] * v2.x - sceneDef.viewAxis[1] * v2.y
 		+ sceneDef.viewAxis[2];
 	}
+	Vector3 Editor::UnprojectDelta(const Vector2& v) {
+		auto sh = Vector2(renderer->ScreenWidth(),
+						  renderer->ScreenHeight()) * .5f;
+		float fovX = tanf(sceneDef.fovX * .5f) / sh.x;
+		float fovY = tanf(sceneDef.fovY * .5f) / sh.y;
+		auto v2 = v * Vector2(fovX, fovY);
+		return sceneDef.viewAxis[0] * v2.x - sceneDef.viewAxis[1] * v2.y;
+	}
 	
 	void Editor::RunFrame(float dt) {
 		sceneDef = CreateSceneDefinition();
@@ -314,8 +322,7 @@ namespace spades { namespace editor {
 		renderer->StartScene(sceneDef);
 		
 		if (sceneRenderer) {
-			osobj::Pose *pose = nullptr;
-			// TODO: pose for animation mode
+			osobj::Pose *pose = GetPose();
 			sceneRenderer->AddToScene(pose);
 		}
 		
@@ -342,7 +349,7 @@ namespace spades { namespace editor {
 			
 			std::function<void(osobj::Frame *, const Matrix4&)> recurse;
 			recurse = [&](osobj::Frame *f, const Matrix4& m) {
-				auto mm = m * f->GetTransform();
+				auto mm = m * GetPose()->GetTransform(f);
 				
 				for (const auto& obj: f->GetObjects()) {
 					if (obj == activeObject) {
@@ -361,10 +368,10 @@ namespace spades { namespace editor {
 		} else {
 			renderer->SetColorAlphaPremultiplied(Vector4(1, 1, 0.5, 0.5));
 			for (const auto& sel: selectedFrames) {
-				auto trans = sel->GetTransform();
+				auto trans = GetPose()->GetTransform(sel);
 				auto *f = sel->GetParent();
 				while (f) {
-					trans = f->GetTransform() * trans;
+					trans = GetPose()->GetTransform(f) * trans;
 					if (f->GetParent() == nullptr) {
 						for (const auto& rf: scene->GetRootFrames()) {
 							if (rf->frame == f) {
@@ -390,6 +397,28 @@ namespace spades { namespace editor {
 		renderer->Flip();
 	}
 	
+	osobj::Pose *Editor::GetPose() {
+		if (!workingPose) {
+			workingPose = MakeHandle<osobj::Pose>();
+			if (activeTimeline) {
+				// TODO: apply animation
+				activeTimeline->timeline->Move(0.f, *workingPose);
+			}
+		}
+		return workingPose;
+	}
+	
+	void Editor::ClearWorkingPose() {
+		workingPose = nullptr;
+	}
+	
+	void EditorMode::Enter(Editor *e) {
+		e->AddListener(this);
+	}
+	
+	void EditorMode::Leave(Editor *e) {
+		e->RemoveListener(this);
+	}
 	
 	
 } }
