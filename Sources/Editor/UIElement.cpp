@@ -182,9 +182,11 @@ namespace spades { namespace editor {
 				keyRepeatTime = time + .3;
 			} else {
 				e->OnKeyUp(key);
-				if (key == keyRepeatKey) {
-					keyRepeatKey.clear();
-				}
+			}
+		}
+		if (!down) {
+			if (key == keyRepeatKey) {
+				keyRepeatKey.clear();
 			}
 		}
 	}
