@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 2.8)
-set(CMAKE_INSTALL_PREFIX "/usr/local")
 project(OpenSpades)
 
 set(OpenSpades_VERSION_MAJOR 0)
