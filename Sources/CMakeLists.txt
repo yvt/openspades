@@ -24,9 +24,9 @@ add_subdirectory(AngelScript/projects/cmake)
 add_subdirectory(AngelScript/projects/cmake_addons)
 set(ANGELSCRIPT_LIBS Angelscript Angelscript_addons)
 
-include_directories(".")
-include_directories("json/include")
-include_directories("ENet/include")
+include_directories(BEFORE ".")
+include_directories(BEFORE "json/include")
+include_directories(BEFORE "ENet/include")
 
 if(WIN32)
 	if(MINGW)	# = gcc, can someone confirm that this works?

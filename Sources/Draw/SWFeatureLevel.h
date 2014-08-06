@@ -55,6 +55,7 @@
 #endif
 
 #include <algorithm>
+#include <cmath>
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Debug.h>
 

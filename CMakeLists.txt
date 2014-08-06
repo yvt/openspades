@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 2.8)
-set(CMAKE_INSTALL_PREFIX "/usr/local")
 project(OpenSpades)
 
 set(OpenSpades_VERSION_MAJOR 0)
@@ -72,6 +71,12 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
 	# Clang C++11 support
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+
+	add_definitions(
+		-Wall
+		-Wextra
+		-Wno-unused-parameter
+	)
 
 	if(CMAKE_BUILD_TYPE MATCHES "Release")
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
@@ -172,7 +177,7 @@ endif()
 
 configure_file("${PROJECT_SOURCE_DIR}/OpenSpades.h.in" "${PROJECT_BINARY_DIR}/OpenSpades.h")
 configure_file("${PROJECT_SOURCE_DIR}/OpenSpades.rc.in" "${PROJECT_BINARY_DIR}/OpenSpades.rc")
-include_directories("${PROJECT_BINARY_DIR}")
+include_directories(BEFORE "${PROJECT_BINARY_DIR}")
 include_directories("${SDL2_INCLUDE_DIR}")
 include_directories("${SDL2_IMAGE_INCLUDE_DIR}")
 if(OPENGL_INCLUDE_DIR)
