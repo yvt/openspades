@@ -8,5 +8,5 @@ GenericName=Sandbox building and FPS videogame
 Comment=Open-source clone of Ace of Spades
 Keywords=game;fps;sandbox;voxel;aos;
 Icon=openspades.png
-Categories=Application;Network;Game;
+Categories=Application;Game;ActionGame;Network
 MimeType=x-scheme-handler/aos
