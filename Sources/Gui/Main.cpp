@@ -165,7 +165,7 @@ bool cg_printHelp = false;
 
 void printHelp( char * binaryName )
 {
-	printf( "usage: %s [server_address] [protocol_version] [-h|--help] [-v|--version] \n", binaryName );
+	printf( "usage: %s [server_address] [v=protocol_version] [-h|--help] [-v|--version] \n", binaryName );
 }
 
 int argsHandler(int argc, char **argv, int &i)
