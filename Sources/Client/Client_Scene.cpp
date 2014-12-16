@@ -196,11 +196,17 @@ namespace spades {
 						Vector3 front = center - eye;
 						front = front.Normalize();
 						
-						def.viewOrigin = eye;
-						def.viewAxis[0] = -Vector3::Cross(up, front).Normalize();
-						def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
-						def.viewAxis[2] = front;
-						
+						if(FirstPersonSpectate == false){
+							def.viewOrigin = eye;
+							def.viewAxis[0] = -Vector3::Cross(up, front).Normalize();
+							def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
+							def.viewAxis[2] = front;
+						}else{
+							def.viewOrigin = player->GetEye();
+							def.viewAxis[0] = player->GetRight();
+							def.viewAxis[1] = player->GetUp();
+							def.viewAxis[2] = player->GetFront();
+						}
 						
 						def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) *

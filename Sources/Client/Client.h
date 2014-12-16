@@ -138,6 +138,7 @@ namespace spades {
 			KeypadInput keypadInput;
 			Player::ToolType lastTool;
 			bool hasLastTool;
+			bool FirstPersonSpectate;
 			Vector3 lastFront;
 			float lastPosSentTime;
 			int lastHealth;
