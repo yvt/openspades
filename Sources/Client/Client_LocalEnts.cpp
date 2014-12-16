@@ -51,7 +51,7 @@
 
 #include "NetClient.h"
 
-SPADES_SETTING(cg_blood, "0");
+SPADES_SETTING(cg_blood, "1");
 SPADES_SETTING(cg_reduceSmoke, "0");
 SPADES_SETTING(cg_waterImpact, "1");
 
