@@ -184,8 +184,8 @@ namespace spades {
 			}
 		}
 	private:
-		template<std::size_t index = 0, class ...T>
-		void SetParameterValue(T... args) {
+		template<std::size_t index = 0
+		void SetParameterValue() {
 			static_assert(index <= numArgs, "index <= numArgs");
 		}
 		template<std::size_t index = 0, class Head, class ...T>
