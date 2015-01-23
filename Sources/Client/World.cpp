@@ -80,6 +80,14 @@ namespace spades {
 			}
 		}
 		
+		size_t World::GetNumPlayers() {
+			size_t numPlayers = 0;
+			for (auto *p: players) {
+				if (p) ++numPlayers;
+			}
+			return numPlayers;
+		}
+		
 		void World::Advance(float dt) {
 			SPADES_MARK_FUNCTION();
 			

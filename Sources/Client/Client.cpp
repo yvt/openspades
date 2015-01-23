@@ -104,7 +104,10 @@ namespace spades {
 		// FIXME: preferences?
 		corpseSoftTimeLimit(30.f), // FIXME: this is not used
 		corpseSoftLimit(6),
-		corpseHardLimit(16)
+		corpseHardLimit(16),
+		
+		followYaw(0.f),
+		followPitch(0.f)
 		{
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");

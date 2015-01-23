@@ -47,6 +47,8 @@ namespace spades {
 			float GetRadius() { return radius; }
 			Vector3 GetCenter() { return center; }
 			VoxelModel *GetRawModel() { return rawModel; }
+			
+			AABB3 GetBoundingBox();
 		};
 		
 		class SWModelManager {

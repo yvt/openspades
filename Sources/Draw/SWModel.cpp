@@ -91,6 +91,28 @@ namespace spades {
 		SWModel::~SWModel() {
 		}
 		
+		AABB3 SWModel::GetBoundingBox()
+		{
+			VoxelModel *m = rawModel;
+			Vector3 minPos = {0, 0, 0};
+			Vector3 maxPos = {
+				(float)m->GetWidth(), (float)m->GetHeight(), (float)m->GetDepth()
+			};
+			auto origin = rawModel->GetOrigin() - .5f;
+			minPos += origin; maxPos += origin;
+			Vector3 maxDiff = {
+				std::max(fabsf(minPos.x), fabsf(maxPos.x)),
+				std::max(fabsf(minPos.y), fabsf(maxPos.y)),
+				std::max(fabsf(minPos.z), fabsf(maxPos.z))
+			};
+			radius = maxDiff.GetLength();
+			
+			AABB3 boundingBox;
+			boundingBox.min = minPos;
+			boundingBox.max = maxPos;
+			return boundingBox;
+		}
+		
 		SWModelManager::~SWModelManager() {
 			for(auto it = models.begin(); it != models.end(); it++)
 				it->second->Release();

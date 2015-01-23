@@ -42,6 +42,7 @@
 #include "NetClient.h"
 
 SPADES_SETTING(cg_fov, "68");
+SPADES_SETTING(cg_thirdperson, "0");
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;
@@ -57,6 +58,9 @@ namespace spades {
 			if(world && world->GetLocalPlayer()){
 				if(!world->GetLocalPlayer()->IsAlive())
 					return true;
+			}
+			if ((int)cg_thirdperson != 0 && world->GetNumPlayers() <= 1) {
+				return true;
 			}
 			return false;
 		}

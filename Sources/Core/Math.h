@@ -716,13 +716,13 @@ namespace spades {
 			   max.x > o.min.x &&
 			   max.y > o.min.y;
 		}
-		
-			bool Contains(const Vector2& v) const {
-				return *this && v;
-			}
-			bool Intersects(const AABB2& v) const {
-				return *this && v;
-			}
+	
+		bool Contains(const Vector2& v) const {
+			return *this && v;
+		}
+		bool Intersects(const AABB2& v) const {
+			return *this && v;
+		}
 			
 		void operator += (const Vector2& vec) {
 			if(vec.x < min.x) min.x = vec.x;
@@ -791,6 +791,10 @@ namespace spades {
 		}
 		bool Intersects(const AABB3& v) const {
 			return *this && v;
+		}
+		bool Contains(const AABB3& v) const {
+			return v.min.x >= min.x && v.min.y >= min.y && v.min.z >= min.z &&
+			v.max.x <= max.x && v.max.y <= max.y && v.max.z <= max.z;
 		}
 		
 		void operator += (const Vector3& vec) {

@@ -21,6 +21,7 @@
 #pragma once
 
 #include <Core/RefCountedObject.h>
+#include <Core/Math.h>
 
 namespace spades {
 	namespace client {
@@ -29,6 +30,8 @@ namespace spades {
 			virtual ~IModel(){}
 		public:
 			IModel(){}
+			
+			virtual AABB3 GetBoundingBox() = 0;
 		};
 	}
 }

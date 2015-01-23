@@ -46,7 +46,6 @@ namespace spades {
 			/** Adds dynamic light */
 			virtual void RenderDynamicLightPass(std::vector<client::ModelRenderParam> params, std::vector<GLDynamicLight> lights) = 0;
 			
-			virtual AABB3 GetBoundingBox() = 0;
 		private:
 			// members used when rendering by GLModelRenderer
 			int renderId;

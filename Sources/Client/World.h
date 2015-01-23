@@ -132,6 +132,8 @@ namespace spades {
 				return players.size();
 			}
 			
+			size_t GetNumPlayers();
+			
 			int GetLocalPlayerIndex() {
 				return localPlayerIndex;
 			}

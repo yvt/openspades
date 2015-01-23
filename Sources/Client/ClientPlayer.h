@@ -35,6 +35,8 @@ namespace spades {
 		class IRenderer;
 		class IAudioDevice;
 		
+		class SandboxedRenderer;
+		
 		/** Representation of player which is used by
 		 * drawing/view layer of game client. */
 		class ClientPlayer: public RefCountedObject {
@@ -59,6 +61,8 @@ namespace spades {
 			asIScriptObject *blockViewSkin;
 			asIScriptObject *weaponViewSkin;
 			asIScriptObject *grenadeViewSkin;
+			
+			Handle<SandboxedRenderer> sandboxedRenderer;
 			
 			Matrix4 GetEyeMatrix();
 			void AddToSceneThirdPersonView();

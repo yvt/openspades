@@ -48,6 +48,146 @@ SPADES_SETTING(cg_ejectBrass, "");
 
 namespace spades {
 	namespace client {
+		
+		class SandboxedRenderer : public IRenderer {
+			Handle<IRenderer> base;
+			AABB3 clipBox;
+			bool allowDepthHack;
+			
+			void OnProhibitedAction() {
+			}
+			
+			bool CheckVisibility(const AABB3 &box) {
+				if (!clipBox.Contains(box) ||
+					!isfinite(box.min.x) || !isfinite(box.min.y) || !isfinite(box.min.z) ||
+					!isfinite(box.max.x) || !isfinite(box.max.y) || !isfinite(box.max.z)) {
+					OnProhibitedAction();
+					return false;
+				}
+				return true;
+			}
+		protected:
+			~SandboxedRenderer(){}
+		public:
+			
+			SandboxedRenderer(IRenderer *base) :
+			base(base) {}
+			
+			void SetClipBox(const AABB3 &b)
+			{ clipBox = b; }
+			void SetAllowDepthHack(bool h)
+			{ allowDepthHack = h; }
+			
+			void Init() { OnProhibitedAction(); }
+			void Shutdown() { OnProhibitedAction(); }
+			
+			IImage *RegisterImage(const char *filename)
+			{ return base->RegisterImage(filename); }
+			IModel *RegisterModel(const char *filename)
+			{ return base->RegisterModel(filename); }
+			
+			IImage *CreateImage(Bitmap *bmp)
+			{ return base->CreateImage(bmp); }
+			IModel *CreateModel(VoxelModel *m)
+			{ return base->CreateModel(m); }
+			
+			void SetGameMap(GameMap *)
+			{ OnProhibitedAction(); }
+			
+			void SetFogDistance(float)
+			{ OnProhibitedAction(); }
+			void SetFogColor(Vector3)
+			{ OnProhibitedAction(); }
+			
+			void StartScene(const SceneDefinition&)
+			{ OnProhibitedAction(); }
+			
+			void AddLight(const client::DynamicLightParam& light) {
+				Vector3 rad(light.radius, light.radius, light.radius);
+				if (CheckVisibility(AABB3(light.origin - rad, light.origin + rad))) {
+					base->AddLight(light);
+				}
+			}
+			
+			void RenderModel(IModel *model, const ModelRenderParam& p) {
+				if (!model) {
+					SPInvalidArgument("model");
+					return;
+				}
+				if (p.depthHack && !allowDepthHack) {
+					OnProhibitedAction();
+					return;
+				}
+				auto bounds = (p.matrix * OBB3(model->GetBoundingBox())).GetBoundingAABB();
+				if (CheckVisibility(bounds)) {
+					base->RenderModel(model, p);
+				}
+			}
+			void AddDebugLine(Vector3 a, Vector3 b, Vector4 color) {
+				OnProhibitedAction();
+			}
+			
+			void AddSprite(IImage *image, Vector3 center, float radius, float rotation) {
+				Vector3 rad(radius * 1.5f, radius * 1.5f, radius * 1.5f);
+				if (CheckVisibility(AABB3(center - rad, center + rad))) {
+					base->AddSprite(image, center, radius, rotation);
+				}
+			}
+			void AddLongSprite(IImage *image, Vector3 p1, Vector3 p2, float radius)
+			{
+				Vector3 rad(radius * 1.5f, radius * 1.5f, radius * 1.5f);
+				AABB3 bounds1(p1 - rad, p1 + rad);
+				AABB3 bounds2(p2 - rad, p2 + rad);
+				bounds1 += bounds2;
+				if (CheckVisibility(bounds1)) {
+					base->AddLongSprite(image, p1, p2, radius);
+				}
+			}
+			
+			void EndScene() { OnProhibitedAction(); }
+			
+			void MultiplyScreenColor(Vector3) { OnProhibitedAction(); }
+			
+			/** Sets color for image drawing. Deprecated because
+			 * some methods treats this as an alpha premultiplied, while
+			 * others treats this as an alpha non-premultiplied.
+			 * @deprecated */
+			void SetColor(Vector4 col) {
+				base->SetColor(col);
+			}
+			
+			/** Sets color for image drawing. Always alpha premultiplied. */
+			void SetColorAlphaPremultiplied(Vector4 col) {
+				base->SetColorAlphaPremultiplied(col);
+			}
+			
+			void DrawImage(IImage *, const Vector2& outTopLeft)
+			{ OnProhibitedAction(); }
+			void DrawImage(IImage *, const AABB2& outRect)
+			{ OnProhibitedAction(); }
+			void DrawImage(IImage *, const Vector2& outTopLeft, const AABB2& inRect)
+			{ OnProhibitedAction(); }
+			void DrawImage(IImage *, const AABB2& outRect, const AABB2& inRect)
+			{ OnProhibitedAction(); }
+			void DrawImage(IImage *, const Vector2& outTopLeft, const Vector2& outTopRight, const Vector2& outBottomLeft, const AABB2& inRect)
+			{ OnProhibitedAction(); }
+			
+			void DrawFlatGameMap(const AABB2& outRect, const AABB2& inRect)
+			{ OnProhibitedAction(); }
+			
+			void FrameDone()
+			{ OnProhibitedAction(); }
+			
+			void Flip()
+			{ OnProhibitedAction(); }
+			
+			Bitmap *ReadBitmap()
+			{ OnProhibitedAction(); return nullptr; }
+			
+			float ScreenWidth() { return base->ScreenWidth(); }
+			float ScreenHeight() { return base->ScreenHeight(); }
+		};
+		
 		ClientPlayer::ClientPlayer(Player *p,
 								   Client *c):
 		player(p), client(c){
@@ -64,6 +204,9 @@ namespace spades {
 			ScriptContextHandle ctx;
 			IRenderer *renderer = client->GetRenderer();
 			IAudioDevice *audio = client->GetAudioDevice();
+			
+			sandboxedRenderer.Set(new SandboxedRenderer(renderer), false);
+			renderer = sandboxedRenderer;
 			
 			static ScriptFunction spadeFactory("ISpadeSkin@ CreateThirdPersonSpadeSkin(Renderer@, AudioDevice@)");
 			spadeSkin = initScriptFactory( spadeFactory, renderer, audio );
@@ -407,6 +550,10 @@ namespace spades {
 			World *world = client->GetWorld();
 			Matrix4 eyeMatrix = GetEyeMatrix();
 			
+			sandboxedRenderer->SetClipBox(AABB3(eyeMatrix.GetOrigin() - Vector3(20.f, 20.f, 20.f),
+												eyeMatrix.GetOrigin() + Vector3(20.f, 20.f, 20.f)));
+			sandboxedRenderer->SetAllowDepthHack(true);
+			
 			if(client->flashlightOn){
 				float brightness;
 				brightness = client->time - client->flashlightOnTime;
@@ -596,6 +743,11 @@ namespace spades {
 				}
 				return;
 			}
+			
+			auto origin = p->GetOrigin();
+			sandboxedRenderer->SetClipBox(AABB3(origin - Vector3(2.f, 2.f, 4.f),
+												origin + Vector3(2.f, 2.f, 2.f)));
+			sandboxedRenderer->SetAllowDepthHack(false);
 			
 			// ready for tool rendering
 			asIScriptObject *skin;
