@@ -59,8 +59,8 @@ namespace spades {
 			
 			bool CheckVisibility(const AABB3 &box) {
 				if (!clipBox.Contains(box) ||
-					!isfinite(box.min.x) || !isfinite(box.min.y) || !isfinite(box.min.z) ||
-					!isfinite(box.max.x) || !isfinite(box.max.y) || !isfinite(box.max.z)) {
+					!std::isfinite(box.min.x) || !std::isfinite(box.min.y) || !std::isfinite(box.min.z) ||
+					!std::isfinite(box.max.x) || !std::isfinite(box.max.y) || !std::isfinite(box.max.z)) {
 					OnProhibitedAction();
 					return false;
 				}
