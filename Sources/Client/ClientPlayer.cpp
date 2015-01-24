@@ -161,16 +161,41 @@ namespace spades {
 				base->SetColorAlphaPremultiplied(col);
 			}
 			
-			void DrawImage(IImage *, const Vector2& outTopLeft)
-			{ OnProhibitedAction(); }
-			void DrawImage(IImage *, const AABB2& outRect)
-			{ OnProhibitedAction(); }
-			void DrawImage(IImage *, const Vector2& outTopLeft, const AABB2& inRect)
-			{ OnProhibitedAction(); }
-			void DrawImage(IImage *, const AABB2& outRect, const AABB2& inRect)
-			{ OnProhibitedAction(); }
-			void DrawImage(IImage *, const Vector2& outTopLeft, const Vector2& outTopRight, const Vector2& outBottomLeft, const AABB2& inRect)
-			{ OnProhibitedAction(); }
+			void DrawImage(IImage *img, const Vector2& outTopLeft)
+			{
+				if (allowDepthHack)
+					base->DrawImage(img, outTopLeft);
+				else
+					OnProhibitedAction();
+			}
+			void DrawImage(IImage *img, const AABB2& outRect)
+			{
+				if (allowDepthHack)
+					base->DrawImage(img, outRect);
+				else
+					OnProhibitedAction();
+			}
+			void DrawImage(IImage *img, const Vector2& outTopLeft, const AABB2& inRect)
+			{
+				if (allowDepthHack)
+					base->DrawImage(img, outTopLeft, inRect);
+				else
+					OnProhibitedAction();
+			}
+			void DrawImage(IImage *img, const AABB2& outRect, const AABB2& inRect)
+			{
+				if (allowDepthHack)
+					base->DrawImage(img, outRect, inRect);
+				else
+					OnProhibitedAction();
+			}
+			void DrawImage(IImage *img, const Vector2& outTopLeft, const Vector2& outTopRight, const Vector2& outBottomLeft, const AABB2& inRect)
+			{
+				if (allowDepthHack)
+					base->DrawImage(img, outTopLeft, outTopRight, outBottomLeft, inRect);
+				else
+					OnProhibitedAction();
+			}
 			
 			void DrawFlatGameMap(const AABB2& outRect, const AABB2& inRect)
 			{ OnProhibitedAction(); }

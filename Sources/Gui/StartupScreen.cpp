@@ -29,6 +29,7 @@
 #include <Gui/Main.h>
 #include <Audio/NullDevice.h>
 #include <Client/Fonts.h>
+#include <ScriptBindings/Config.h>
 
 namespace spades {
 	namespace gui {
@@ -59,6 +60,7 @@ namespace spades {
 		// Restores renderer's state (game map, fog color)
 		// after returning from the game client.
 		void StartupScreen::RestoreRenderer() {
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("StartupScreenUI", "void SetupRenderer()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -76,6 +78,7 @@ namespace spades {
 				return;
 			}
 			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("StartupScreenUI", "void MouseEvent(float, float)");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -91,6 +94,7 @@ namespace spades {
 				return;
 			}
 			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("StartupScreenUI", "void WheelEvent(float, float)");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -104,6 +108,7 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("StartupScreenUI", "void KeyEvent(string, bool)");
 			ScriptContextHandle c = func.Prepare();
 			std::string k = key;
@@ -118,6 +123,7 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("StartupScreenUI", "void TextInputEvent(string)");
 			ScriptContextHandle c = func.Prepare();
 			std::string k = ch;
@@ -132,6 +138,7 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("StartupScreenUI", "void TextEditingEvent(string, int, int)");
 			ScriptContextHandle c = func.Prepare();
 			std::string k = ch;
@@ -147,6 +154,7 @@ namespace spades {
 			if(!ui){
 				return false;
 			}
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("StartupScreenUI", "bool AcceptsTextInput()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -159,6 +167,7 @@ namespace spades {
 			if(!ui){
 				return AABB2();
 			}
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("StartupScreenUI", "AABB2 GetTextInputRect()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -171,6 +180,7 @@ namespace spades {
 			if(!ui){
 				return false;
 			}
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("StartupScreenUI", "bool WantsToBeClosed()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -204,6 +214,7 @@ namespace spades {
 		void StartupScreen::RunFrame(float dt) {
 			SPADES_MARK_FUNCTION();
 			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("StartupScreenUI", "void RunFrame(float)");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -214,6 +225,7 @@ namespace spades {
 		void StartupScreen::DoInit() {
 			SPADES_MARK_FUNCTION();
 			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction uiFactory("StartupScreenUI@ CreateStartupScreenUI(Renderer@, AudioDevice@, Font@, StartupScreenHelper@)");
 			{
 				ScriptContextHandle ctx = uiFactory.Prepare();
@@ -234,6 +246,7 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("StartupScreenUI", "void Closing()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);

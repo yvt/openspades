@@ -21,9 +21,20 @@
 #include "ScriptManager.h"
 #include <Core/Settings.h>
 #include <Core/RefCountedObject.h>
-
+#include <Core/ThreadLocalStorage.h>
 
 namespace spades {
+	
+	static ThreadLocalStorage<bool> writeAllowed;
+	
+	void MaskConfigUpdateByScript(bool disabled)
+	{
+		if (!writeAllowed) {
+			writeAllowed = new bool;
+		}
+		*writeAllowed = !disabled;
+	}
+	
 	class ConfigRegistrar: public ScriptObjectRegistrar {
 		
 		
@@ -46,16 +57,27 @@ namespace spades {
 			}
 			
 			ConfigItem *operator =(float fv) {
+				if (!writeAllowed || !*writeAllowed) {
+					return this;
+				}
 				handle = fv;
 				AddRef();
 				return this;
 			}
 			ConfigItem *operator =(int v) {
+				if (!writeAllowed || !*writeAllowed) {
+					return this;
+				}
+				
 				handle = v;
 				AddRef();
 				return this;
 			}
 			ConfigItem *operator =(const std::string& v) {
+				if (!writeAllowed || !*writeAllowed) {
+					return this;
+				}
+				
 				handle = v;
 				AddRef();
 				return this;
@@ -189,5 +211,6 @@ namespace spades {
 	};
 	
 	static ConfigRegistrar registrar;
+	
 }
 

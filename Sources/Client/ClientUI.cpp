@@ -29,6 +29,7 @@
 #include <Client/Client.h>
 #include <Core/Settings.h>
 #include "NetClient.h"
+#include <ScriptBindings/Config.h>
 
 namespace spades {
 	namespace client {
@@ -44,6 +45,7 @@ namespace spades {
 			
 			helper.Set(new ClientUIHelper(this), false);
 			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction uiFactory("ClientUI@ CreateClientUI(Renderer@, AudioDevice@, Font@, ClientUIHelper@)");
 			{
 				ScriptContextHandle ctx = uiFactory.Prepare();
@@ -94,6 +96,7 @@ namespace spades {
 				return;
 			}
 			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void MouseEvent(float, float)");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -108,6 +111,7 @@ namespace spades {
 				return;
 			}
 			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void WheelEvent(float, float)");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -121,6 +125,8 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void KeyEvent(string, bool)");
 			ScriptContextHandle c = func.Prepare();
 			std::string k = key;
@@ -135,6 +141,8 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void TextInputEvent(string)");
 			ScriptContextHandle c = func.Prepare();
 			std::string k = ch;
@@ -149,6 +157,8 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void TextEditingEvent(string,int,int)");
 			ScriptContextHandle c = func.Prepare();
 			std::string k = ch;
@@ -164,6 +174,8 @@ namespace spades {
 			if(!ui){
 				return false;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "bool AcceptsTextInput()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -176,6 +188,8 @@ namespace spades {
 			if(!ui){
 				return AABB2();
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "AABB2 GetTextInputRect()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -188,6 +202,8 @@ namespace spades {
 			if(!ui){
 				return false;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "bool WantsClientToBeClosed()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -200,6 +216,8 @@ namespace spades {
 			if(!ui){
 				return false;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "bool NeedsInput()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -209,6 +227,8 @@ namespace spades {
 				
 		void ClientUI::RunFrame(float dt) {
 			SPADES_MARK_FUNCTION();
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void RunFrame(float)");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -221,6 +241,8 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void Closing()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -233,6 +255,8 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void RecordChatLog(string, Vector4)");
 			ScriptContextHandle c = func.Prepare();
 			std::string k = msg;
@@ -247,6 +271,8 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void EnterClientMenu()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -257,6 +283,8 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void EnterGlobalChatWindow()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -267,6 +295,8 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void EnterTeamChatWindow()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -277,6 +307,8 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void EnterCommandWindow()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -287,6 +319,8 @@ namespace spades {
 			if(!ui){
 				return;
 			}
+			
+			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void CloseUI()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
@@ -295,7 +329,6 @@ namespace spades {
 
 		bool ClientUI::isIgnored(const std::string& key)
 		{
-
 			return !ignoreInput.empty() && EqualsIgnoringCase(ignoreInput, key );
 		}
 		void ClientUI::setIgnored(const std::string& key)

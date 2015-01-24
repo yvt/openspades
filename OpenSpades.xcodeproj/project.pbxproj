@@ -733,6 +733,7 @@
 		E844888517D26411005105D0 /* OpenSpades.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenSpades.h; sourceTree = SOURCE_ROOT; };
 		E844888617D26699005105D0 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
 		E844888B17D3A059005105D0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		E8493DB61A7349030055731A /* Config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		E849654B18E9487300B9706D /* FltkPreferenceImporter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FltkPreferenceImporter.cpp; sourceTree = "<group>"; };
 		E849654C18E9487300B9706D /* FltkPreferenceImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FltkPreferenceImporter.h; sourceTree = "<group>"; };
 		E849654E18E94F1200B9706D /* SdlFileStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SdlFileStream.cpp; sourceTree = "<group>"; };
@@ -1649,6 +1650,7 @@
 				E8F74CF0183FBB070085AA54 /* MainScreenHelper.cpp */,
 				E842888F18A3D6470060743D /* StartupScreenHelper.cpp */,
 				E8F74CF31840D4CC0085AA54 /* Config.cpp */,
+				E8493DB61A7349030055731A /* Config.h */,
 				E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */,
 				E8F74CFE184C753F0085AA54 /* Clipboard.cpp */,
 			);
