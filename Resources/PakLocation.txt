@@ -3,7 +3,7 @@
 All paks for development vesion
 -------------------------------
 
-http://yvt.jp/files/programs/osppaks/DevPaks27.zip
+https://www.dropbox.com/s/aprb9aufqk2abe1/DevPaks28.zip?dl=1
 
 These paks are not included in the source tree because they contains some 
 non-opensource materials and they seem too large to include in the git tree.

@@ -34,6 +34,9 @@
 #include "TCGameMode.h"
 #include "NetClient.h"
 #include <Core/Strings.h>
+#include "../Core/Settings.h"
+
+SPADES_SETTING(cg_Minimap_Player_Color,"1");
 
 namespace spades {
 	namespace client {
@@ -241,6 +244,50 @@ namespace spades {
 			int row = 0, col = 0;
 			float colWidth = (float)width / (float)cols;
 			
+			//definite a palette of 32 color in RGB code
+			int palette[32][3]={
+						{0,0,0},//0 black
+						{255,255,255},//1 white
+						{128,128,128},//2 grey
+						{255,255,0},//3 yellow
+						{0,255,255},//4 cyan-acqua
+						{255,0,255},//5 fuchsia						
+						{255,0,0},//6 red
+						{0,255,0},//7 lime
+						{0,0,255},//8 blue
+						
+						{128,0,0},//9 maroon
+						{0,128,0},//10 green
+						{0,0,128},//11 navy
+						{128,128,0},//12 olive
+						{128,0,128},//13 purple
+						{0,128,128},//14 teal
+						
+						{255,128,0},//15 orange
+						{255,0,128},//16 deep pink
+						{128,0,255},//17 violet
+						{0,128,255},//18 bluette
+						{128,255,0},//19 lime 2
+						{0,255,128},//20 spring green
+						
+						{255,128,128},//21 light pink
+						{128,255,128},//22 light spring
+						{128,128,255},//23 light blue			
+						{128,255,255},//24 light azure
+						{255,255,128},//25 light yellow
+						{255,128,255},//26 light pink2
+						
+						{165,42,42},//27 brown
+						{255,69,0},//28 orange	red
+						{255,165,0},//29  orange
+						
+						{139,69,19},//30 maroon medium
+						{210,105,30},//31 choccolate
+						
+			};
+
+			std::string colormode = cg_Minimap_Player_Color;
+			
 			for(int i = 0; i < numPlayers; i++){
 				ScoreboardEntry& ent = entries[i];
 				
@@ -251,10 +298,16 @@ namespace spades {
 					color = GetTeamColor(team);
 				
 				sprintf(buf, "#%d", ent.id); // FIXME: 1-base?
-				size = font->Measure(buf);
-				font->Draw(buf, MakeVector2(colX + 35.f - size.x,
-											rowY),
-						   1.f, color);
+				size = font->Measure(buf);				
+				if ( colormode=="1"){
+					IntVector3 Colorplayer=IntVector3::Make(palette[i][0],palette[i][1],palette[i][2]);
+					Vector4 ColorplayerF = ModifyColor(Colorplayer);
+					ColorplayerF *=1.0f;
+					font->Draw(buf, MakeVector2(colX + 35.f - size.x,rowY),1.f, changeF);
+				}	
+				else {
+						font->Draw(buf, MakeVector2(colX + 35.f - size.x,rowY),1.f, color);
+				}
 				
 				font->Draw(ent.name, MakeVector2(colX + 45.f,
 											rowY),
