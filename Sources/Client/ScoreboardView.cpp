@@ -303,7 +303,7 @@ namespace spades {
 					IntVector3 Colorplayer=IntVector3::Make(palette[i][0],palette[i][1],palette[i][2]);
 					Vector4 ColorplayerF = ModifyColor(Colorplayer);
 					ColorplayerF *=1.0f;
-					font->Draw(buf, MakeVector2(colX + 35.f - size.x,rowY),1.f, changeF);
+					font->Draw(buf, MakeVector2(colX + 35.f - size.x,rowY),1.f, ColorplayerF);
 				}	
 				else {
 						font->Draw(buf, MakeVector2(colX + 35.f - size.x,rowY),1.f, color);
