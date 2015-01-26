@@ -271,7 +271,7 @@ namespace spades {
 				sprintf(buf, "#%d", ent.id); // FIXME: 1-base?
 				size = font->Measure(buf);				
 				if ( colormode=="1"){
-					IntVector3 Colorplayer=IntVector3::Make(palette[i][0],palette[i][1],palette[i][2]);
+					IntVector3 Colorplayer=IntVector3::Make(palette[ent.id][0],palette[ent.id][1],palette[ent.id][2]);
 					Vector4 ColorplayerF = ModifyColor(Colorplayer);
 					ColorplayerF *=1.0f;
 					font->Draw(buf, MakeVector2(colX + 35.f - size.x,rowY),1.f, ColorplayerF);
