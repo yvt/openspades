@@ -92,6 +92,7 @@ namespace spades {
 			return readyToClose;
 		}
 		
+		bool FirstPersonSpectate = false;
 		
 		void Client::Closing() {
 			SPADES_MARK_FUNCTION();
@@ -382,6 +383,9 @@ namespace spades {
 					}else if(CheckKey(cg_keySneak, name)){
 						playerInput.sneak = down;
 					}else if(CheckKey(cg_keyJump, name)){
+						if(down){
+							FirstPersonSpectate = !FirstPersonSpectate;
+						}
 						playerInput.jump = down;
 					}else if(CheckKey(cg_keyAttack, name)){
 						weapInput.primary = down;
