@@ -1,5 +1,5 @@
 /*  pnglite.h - Interface for pnglite library
-	Copyright (c) 2007 Daniel Karling
+	Copyright (c) 2007 OpenSpades Developers
 
 	This software is provided 'as-is', without any express or implied
 	warranty. In no event will the authors be held liable for any damages

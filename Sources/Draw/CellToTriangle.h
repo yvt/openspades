@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2013 OpenSpades Developers
  
  Triangulates arbitary polygons represented by cells.
  Algorithm's time complexity is roughly O(W*H).

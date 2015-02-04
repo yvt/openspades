@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 yvt
+ * Copyright (c) 2013 OpenSpades Developers
  * WTFPL
 */
 
