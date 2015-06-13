@@ -393,7 +393,7 @@ namespace spades {
 			//send player input
 			// FIXME: send only there are any changed?
 			net->SendPlayerInput(inp);
-			net->SendWeaponInput(weapInput);
+			net->SendWeaponInput(winp);
 			
 			if(hasDelayedReload) {
 				world->GetLocalPlayer()->Reload();
