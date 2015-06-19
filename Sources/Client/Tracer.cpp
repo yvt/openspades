@@ -3,7 +3,7 @@
 //  OpenSpades
 //
 //  Created by Tomoaki Kawada on 8/30/13.
-//  Copyright (c) 2013 yvt.jp. All rights reserved.
+//  Copyright (c) 2013 OpenSpades Developers
 //
 
 #include "Tracer.h"

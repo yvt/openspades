@@ -1,7 +1,7 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2013 OpenSpades Developers
  
- Portion of the code is based on Serverbrowser.cpp (Copyright (c) 2013 learn_more).
+ Portion of the code is based on Serverbrowser.cpp (Copyright (c) 2013 OpenSpades Developers
  
  This file is part of OpenSpades.
  

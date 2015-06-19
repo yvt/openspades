@@ -10,7 +10,7 @@
 /*
  * BDF to OpenSpades font converter.
  *
- * Copyright (c) 2013 yvt
+ * Copyright (c) 2013 OpenSpades Developers
  * WTFPL except for the targa reader/writer part.
  *
  * This source code is based on:

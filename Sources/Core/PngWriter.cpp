@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2014 Marco Schlumpp <marco.schlumpp@gmail.com>
+ Copyright (c) 2014 OpenSpades Developers
  
  This file is part of OpenSpades.
  

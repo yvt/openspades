@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt, learn_more
+ Copyright (c) 2013 OpenSpades Developers
  
  This file is part of OpenSpades.
  
