@@ -648,7 +648,7 @@ namespace spades {
 						
 						dist *= lenScale;
 						
-						if (isfinite(dist) && dist > 0.8f) {
+						if (std::isfinite(dist) && dist > 0.8f) {
 							distances[numValidDistances++] = dist;
 						}
 						
