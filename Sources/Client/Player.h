@@ -88,6 +88,7 @@ namespace spades {
 			bool wade;
 			ToolType tool;
 			
+			WeaponType weaponType;
 			Weapon *weapon;
 			int playerId;
 			int teamId;
@@ -151,6 +152,7 @@ namespace spades {
 			
 			int GetId() {return playerId; }
 			Weapon *GetWeapon() { return weapon; }
+			WeaponType GetWeaponType() { return weaponType; }
 			int GetTeamId() { return teamId;}
 			std::string GetName();
 			IntVector3 GetColor();

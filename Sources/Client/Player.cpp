@@ -59,6 +59,7 @@ namespace spades {
 			
 			this->playerId = playerId;
 			this->weapon = Weapon::CreateWeapon(wType, this);
+			this->weaponType = wType;
 			this->teamId = teamId;
 			this->weapon->Reset();
 			this->color = color;
@@ -1465,6 +1466,7 @@ namespace spades {
 				return;
 			delete this->weapon;
 			this->weapon = Weapon::CreateWeapon(weap, this);
+			this->weaponType = weap;
 		}
 		
 		void Player::SetTeam(int tId){

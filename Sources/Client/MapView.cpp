@@ -490,20 +490,20 @@ namespace spades {
 					
 					//use a different icon in minimap according to weapon of player
 					if( iconmode=="1"){
-						std::string weapon=world->GetPlayer(i)->GetWeapon()->GetName();
-						if (weapon=="SMG"){							
+						WeaponType weapon=world->GetPlayer(i)->GetWeaponType();
+						if (weapon == WeaponType::SMG_WEAPON){
 							DrawIcon(player->GetTeamId() >= 2 ?
 									client->followPos :
 									p->GetPosition(),playerSMG , ang);
 						}
 						
-						else if (weapon=="Rifle"){
+						else if (weapon == WeaponType::RIFLE_WEAPON){
 							DrawIcon(player->GetTeamId() >= 2 ?
 									client->followPos :
 									p->GetPosition(), playerRifle, ang);
 						}
 						
-						else if (weapon=="Shotgun"){
+						else if (weapon == WeaponType::SHOTGUN_WEAPON){
 							DrawIcon(player->GetTeamId() >= 2 ?
 									client->followPos :
 									p->GetPosition(), playerShotgun, ang);
