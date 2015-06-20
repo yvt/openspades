@@ -31,6 +31,8 @@
 #include "../Core/Debug.h"
 #include <Core/Settings.h>
 
+SPADES_SETTING(r_hdrGamma, "2.2");
+
 namespace spades {
 	namespace draw {
 		GLNonlinearlizeFilter::GLNonlinearlizeFilter(GLRenderer *renderer):
@@ -45,15 +47,18 @@ namespace spades {
 			
 			static GLProgramAttribute lensPosition("positionAttribute");
 			static GLProgramUniform lensTexture("texture");
+			static GLProgramUniform lensGamma("gamma");
 			
 			dev->Enable(IGLDevice::Blend, false);
 			
 			lensPosition(lens);
 			lensTexture(lens);
+			lensGamma(lens);
 			
 			lens->Use();
 			
 			lensTexture.SetValue(0);
+			lensGamma.SetValue(1.f / (float)r_hdrGamma);
 			
 			// composite to the final image
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
