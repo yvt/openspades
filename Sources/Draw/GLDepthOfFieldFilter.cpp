@@ -37,6 +37,11 @@ SPADES_SETTING(r_depthOfFieldMaxCoc, "0.01");
 
 namespace spades {
 	namespace draw {
+		static bool HighQualityDoFEnabled()
+		{
+			return (int)r_depthOfField >= 2;
+		}
+		
 		GLDepthOfFieldFilter::GLDepthOfFieldFilter(GLRenderer *renderer):
 		renderer(renderer){
 			gaussProgram = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
@@ -309,6 +314,7 @@ namespace spades {
 			static GLProgramUniform blur_textureUniform2("blurTexture1");
 			static GLProgramUniform blur_textureUniform3("blurTexture2");
 			static GLProgramUniform blur_textureUniform4("cocTexture");
+			static GLProgramUniform blur_blurredOnlyUniform("blurredOnly");
 			program->Use();
 			blur_positionAttribute(program);
 			
@@ -332,6 +338,8 @@ namespace spades {
 			dev->ActiveTexture(0);
 			dev->BindTexture(IGLDevice::Texture2D, coc.GetTexture());
 			
+			blur_blurredOnlyUniform(program);
+			blur_blurredOnlyUniform.SetValue(HighQualityDoFEnabled() ? 1 : 0);
 			
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
 			dev->Enable(IGLDevice::Blend, false);
@@ -411,12 +419,14 @@ namespace spades {
 			int divide = 1;
 			int siz = std::max(w, h);
 			GLColorBuffer lowbuf = input;
-			while(siz >= 768) {
-				divide <<= 1;
-				siz >>= 1;
-				lowbuf = UnderSample(lowbuf);
+			if (!HighQualityDoFEnabled()) {
+				while(siz >= 768) {
+					divide <<= 1;
+					siz >>= 1;
+					lowbuf = UnderSample(lowbuf);
+				}
+				maxCoc /= (float)divide;
 			}
-			maxCoc /= (float)divide;
 			
 			dev->Viewport(0, 0, w / divide, h / divide);
 			

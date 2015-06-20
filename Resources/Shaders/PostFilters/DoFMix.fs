@@ -23,6 +23,7 @@ uniform sampler2D texture;
 uniform sampler2D blurTexture1;
 uniform sampler2D blurTexture2;
 uniform sampler2D cocTexture;
+uniform bool blurredOnly;
 
 varying vec2 texCoord;
 
@@ -43,7 +44,7 @@ void main() {
 	b *= (1. / 3.);
 
 	float per = min(1., coc * 5.);
-	vec4 v = mix(a, b, per);
+	vec4 v = blurredOnly ? b : mix(a, b, per);
 	
 #if !LINEAR_FRAMEBUFFER
 	v.xyz = sqrt(v.xyz);
