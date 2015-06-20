@@ -44,6 +44,7 @@
 SPADES_SETTING(cg_fov, "68");
 SPADES_SETTING(cg_thirdperson, "0");
 SPADES_SETTING(cg_manualFocus, "0");
+SPADES_SETTING(cg_depthOfFieldAmount, "1");
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;
@@ -411,8 +412,12 @@ namespace spades {
 			
 			if ((int)cg_manualFocus) {
 				// Depth of field is manually controlled
-				def.depthOfFieldFarBlurStrength = 1.f;
+				def.depthOfFieldNearBlurStrength = def.depthOfFieldFarBlurStrength =
+					0.5f * (float)cg_depthOfFieldAmount;
 				def.depthOfFieldFocalLength = focalLength;
+			} else {
+				def.depthOfFieldNearBlurStrength = cg_depthOfFieldAmount;
+				def.depthOfFieldFarBlurStrength = 0.f;
 			}
 			
 			return def;

@@ -33,6 +33,7 @@
 #include "../Core/Settings.h"
 
 SPADES_SETTING(r_depthOfField, "");
+SPADES_SETTING(r_depthOfFieldMaxCoc, "0.01");
 
 namespace spades {
 	namespace draw {
@@ -399,7 +400,7 @@ namespace spades {
                 coc = GenerateCoC(blurDepthRange, vignetteBlur, globalBlur, nearBlur, farBlur);
             }
 			
-			float maxCoc = (float)std::max(w, h) / 100.f;
+			float maxCoc = (float)std::max(w, h) * std::max(std::min((float)r_depthOfFieldMaxCoc, 0.2f), 0.001f);
 			float cos60 = cosf(static_cast<float>(M_PI) / 3.f);
 			float sin60 = sinf(static_cast<float>(M_PI) / 3.f);
 			
