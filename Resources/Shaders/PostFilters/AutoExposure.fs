@@ -25,20 +25,14 @@ uniform sampler2D texture;
 varying vec4 color;
 
 void main() {
-	float brightness = texture2D(texture, vec2(0., 0.)).x;
+	float brightness = texture2D(texture, vec2(0.5, 0.5)).x;
 
-	// makes sure we have no NaN and Infinity (where's isfinite?)
-	if (!(brightness >= 0. && brightness <= 16.)) {
-		gl_FragColor = vec4(0.);
-		return;
-	}
-
-	// reverse "raise to the 2nd power"
+	// reverse "raise to the n-th power"
 	brightness = sqrt(brightness);
 	brightness = sqrt(brightness);
 
 	// weaken the effect
-	brightness = mix(brightness, 1., 0.2);
+	// brightness = mix(brightness, 1., 0.05);
 
 	gl_FragColor.xyz = vec3(.8 / brightness);
 	gl_FragColor.w = color.w;

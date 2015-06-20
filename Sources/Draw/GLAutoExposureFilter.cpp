@@ -136,10 +136,18 @@ namespace spades {
 			computeGainTexCoordRange(computeGain);
 			
 			
+			preprocess->Use();
+			preprocessColor.SetValue(1.f, 1.f, 1.f, 1.f);
+			preprocessTexture.SetValue(0);
+			preprocessTexCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
+			
 			thru->Use();
 			thruColor.SetValue(1.f, 1.f, 1.f, 1.f);
 			thruTexture.SetValue(0);
+			thruTexCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
+			
 			dev->Enable(IGLDevice::Blend, false);
+			dev->ActiveTexture(0);
 			
 			// downsample until it becomes 1x1x
 			GLColorBuffer buffer = input;
@@ -157,14 +165,14 @@ namespace spades {
 				if (firstLevel) {
 					preprocess->Use();
 					qr.SetCoordAttributeIndex(preprocessPosition());
-					preprocessTexCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
 					firstLevel = false;
 				} else {
 					thru->Use();
 					qr.SetCoordAttributeIndex(thruPosition());
-					thruTexCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
 				}
 				dev->Viewport(0, 0, newLevel.GetWidth(), newLevel.GetHeight());
+				dev->ClearColor(1.f, 1.f, 1.f, 1.f);
+				dev->Clear(IGLDevice::ColorBufferBit);
 				qr.Draw();
 				dev->BindTexture(IGLDevice::Texture2D, 0);
 				
@@ -178,19 +186,21 @@ namespace spades {
 			
 			computeGain->Use();
 			computeGainTexCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
-			qr.SetCoordAttributeIndex(computeGainPosition());
 			computeGainTexture.SetValue(0);
-			dev->BindTexture(IGLDevice::Texture2D, buffer.GetTexture());
-			dev->BindFramebuffer(IGLDevice::Framebuffer, exposureFramebuffer);
-			dev->Viewport(0, 0, 1, 1);
 			computeGainColor.SetValue(1.f, 1.f, 1.f, 0.1f);
+			qr.SetCoordAttributeIndex(computeGainPosition());
+			dev->BindFramebuffer(IGLDevice::Framebuffer, exposureFramebuffer);
+			dev->BindTexture(IGLDevice::Texture2D, buffer.GetTexture());
+			dev->Viewport(0, 0, 1, 1);
 			qr.Draw();
 			dev->BindTexture(IGLDevice::Texture2D, 0);
 			
 			// apply exposure adjustment
 			thru->Use();
+			thruColor.SetValue(1.f, 1.f, 1.f, 1.f);
 			thruTexCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
 			thruTexture.SetValue(0);
+			dev->Enable(IGLDevice::Blend, true);
 			dev->BlendFunc(IGLDevice::DestColor, IGLDevice::Zero); // multiply
 			qr.SetCoordAttributeIndex(thruPosition());
 			dev->BindTexture(IGLDevice::Texture2D, exposureTexture);

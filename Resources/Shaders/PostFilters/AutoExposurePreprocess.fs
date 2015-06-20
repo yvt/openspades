@@ -41,7 +41,7 @@ void main() {
 	// uppr bound
 	brightness = min(1.3, brightness);
 
-	// raise to the 2nd power to reduce overbright
+	// raise to the n-th power to reduce overbright
 	brightness *= brightness;
 	brightness *= brightness;
 
