@@ -628,7 +628,7 @@ namespace spades {
 		void Client::UpdateAutoFocus(float dt) {
 			if (autoFocusEnabled && world && (int)cg_manualFocus) {
 				// Compute focal length
-				float measureRange = std::tanf(lastSceneDef.fovY * .5f) * .4f;
+				float measureRange = std::tanf(lastSceneDef.fovY * .5f) * .2f;
 				const Vector3 camOrigin = lastSceneDef.viewOrigin;
 				const float lenScale = 1.f / lastSceneDef.viewAxis[2].GetLength();
 				const Vector3 camDir = lastSceneDef.viewAxis[2].Normalize();

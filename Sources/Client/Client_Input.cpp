@@ -536,7 +536,7 @@ namespace spades {
 								// When DoF control is enabled,
 								// tool switch is overrided by focal length control.
 								float dist = 1.f / targetFocalLength;
-								dist = std::min(dist + 0.03f, 1.f);
+								dist = std::min(dist + 0.01f, 1.f);
 								targetFocalLength = 1.f / dist;
 								autoFocusEnabled = false;
 							} else if(cg_switchToolByWheel &&
@@ -566,7 +566,7 @@ namespace spades {
 								// When DoF control is enabled,
 								// tool switch is overrided by focal length control.
 								float dist = 1.f / targetFocalLength;
-								dist = std::max(dist - 0.03f, 1.f / 128.f); // limit to fog max distance
+								dist = std::max(dist - 0.01f, 1.f / 128.f); // limit to fog max distance
 								targetFocalLength = 1.f / dist;
 								autoFocusEnabled = false;
 							} else if(cg_switchToolByWheel &&
