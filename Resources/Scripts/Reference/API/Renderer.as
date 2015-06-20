@@ -175,7 +175,9 @@ namespace spades {
 		bool skipWorld;
 		uint time;
 		
-		float depthOfFieldNearRange;
+		float depthOfFieldFocalLength;
+		float depthOfFieldNearBlurStrength;
+		float depthOfFieldFarBlurStrength;
 		bool denyCameraBlur;
 		float blurVignette;
 	}

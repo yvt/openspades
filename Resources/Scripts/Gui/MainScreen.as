@@ -129,7 +129,7 @@ namespace spades {
 			sceneDef.viewportWidth = int(renderer.ScreenWidth);
 			sceneDef.viewportHeight = int(renderer.ScreenHeight);
 			sceneDef.denyCameraBlur = true;
-			sceneDef.depthOfFieldNearRange = 100.f;
+			sceneDef.depthOfFieldFocalLength = 100.f;
 			sceneDef.skipWorld = false;
 			
 			// fade the map

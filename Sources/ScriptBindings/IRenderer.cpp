@@ -344,8 +344,8 @@ namespace spades {
 														asOFFSET(SceneDefinition, skipWorld));
 						manager->CheckError(r);
 						r = eng->RegisterObjectProperty("SceneDefinition",
-														"float depthOfFieldNearRange",
-														asOFFSET(SceneDefinition, depthOfFieldNearRange));
+														"float depthOfFieldFocalLength",
+														asOFFSET(SceneDefinition, depthOfFieldFocalLength));
 						manager->CheckError(r);
 						r = eng->RegisterObjectProperty("SceneDefinition",
 														"uint time",

@@ -54,6 +54,7 @@
 SPADES_SETTING(cg_blood, "1");
 SPADES_SETTING(cg_reduceSmoke, "0");
 SPADES_SETTING(cg_waterImpact, "1");
+SPADES_SETTING(cg_manualFocus, "0");
 
 namespace spades {
 	namespace client {
@@ -619,6 +620,85 @@ namespace spades {
 			
 			
 			// TODO: wave?
+		}
+		
+#pragma mark - Camera Control
+		
+		enum { AutoFocusPoints = 4 };
+		void Client::UpdateAutoFocus(float dt) {
+			if (autoFocusEnabled && world && (int)cg_manualFocus) {
+				// Compute focal length
+				float measureRange = std::tanf(lastSceneDef.fovY * .5f) * .4f;
+				const Vector3 camOrigin = lastSceneDef.viewOrigin;
+				const float lenScale = 1.f / lastSceneDef.viewAxis[2].GetLength();
+				const Vector3 camDir = lastSceneDef.viewAxis[2].Normalize();
+				const Vector3 camX = lastSceneDef.viewAxis[0].Normalize() * measureRange;
+				const Vector3 camY = lastSceneDef.viewAxis[1].Normalize() * measureRange;
+				
+				float distances[AutoFocusPoints * AutoFocusPoints];
+				std::size_t numValidDistances = 0;
+				Vector3 camDir1 = camDir - camX - camY;
+				const Vector3 camDX = camX * (2.f / (AutoFocusPoints - 1));
+				const Vector3 camDY = camY * (2.f / (AutoFocusPoints - 1));
+				for (int x = 0; x < AutoFocusPoints; ++x) {
+					Vector3 camDir2 = camDir1;
+					for (int y = 0; y < AutoFocusPoints; ++y) {
+						float dist = RayCastForAutoFocus(camOrigin, camDir2);
+						
+						dist *= lenScale;
+						
+						if (isfinite(dist) && dist > 0.8f) {
+							distances[numValidDistances++] = dist;
+						}
+						
+						camDir2 += camDY;
+					}
+					camDir1 += camDX;
+				}
+				
+				if (numValidDistances > 0) {
+					// Take median
+					std::sort(distances, distances + numValidDistances);
+					
+					float dist = (numValidDistances & 1) ?
+						distances[numValidDistances >> 1] :
+						(distances[numValidDistances >> 1] + distances[(numValidDistances >> 1) - 1]) * 0.5f;
+					
+					targetFocalLength = dist;
+					
+				}
+			}
+			
+			// Change the actual focal length slowly
+			{
+				float dist = 1.f / targetFocalLength;
+				float curDist = 1.f / focalLength;
+				const float maxSpeed = .2f;
+				
+				if (dist > curDist) {
+					curDist = std::min(dist, curDist + maxSpeed * dt);
+				} else {
+					curDist = std::max(dist, curDist - maxSpeed * dt);
+				}
+				
+				focalLength = 1.f / curDist;
+			}
+		}
+		float Client::RayCastForAutoFocus(const Vector3 &origin,
+								  const Vector3 &direction)
+		{
+			SPAssert(world);
+			
+			const auto &lastSceneDef = this->lastSceneDef;
+			World::WeaponRayCastResult result =
+				world->WeaponRayCast(origin,
+									 direction,
+									 nullptr);
+			if (result.hit) {
+				return Vector3::Dot(result.hitPos - origin, lastSceneDef.viewAxis[2]);
+			}
+			
+			return std::nan(nullptr);
 		}
 
 	}

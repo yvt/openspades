@@ -87,6 +87,10 @@ namespace spades {
 		lastAliveTime(0.f),
 		lastKills(0),
 		
+		focalLength(20.f),
+		targetFocalLength(20.f),
+		autoFocusEnabled(true),
+		
 		hitFeedbackIconState(0.f),
 		hitFeedbackFriendly(false),
 		localFireVibrationTime(-1.f),
@@ -422,6 +426,8 @@ namespace spades {
 			centerMessageView->Update(dt);
 			mapView->Update(dt);
 			largeMapView->Update(dt);
+			
+			UpdateAutoFocus(dt);
 			
 			if(world){
 				UpdateWorld(dt);

@@ -171,6 +171,11 @@ namespace spades {
 			float hitFeedbackIconState;
 			bool hitFeedbackFriendly;
 			
+			// manual focus
+			float focalLength;
+			float targetFocalLength;
+			bool autoFocusEnabled;
+			
 			// when dead...
 			/** Following player ID, which may be local player itself */
 			int followingPlayerId;
@@ -248,6 +253,9 @@ namespace spades {
 			void UpdateWorld(float dt);
 			void UpdateLocalSpectator(float dt);
 			void UpdateLocalPlayer(float dt);
+			void UpdateAutoFocus(float dt);
+			float RayCastForAutoFocus(const Vector3 &origin,
+									  const Vector3 &direction);
 			
 			void Draw2D();
 			

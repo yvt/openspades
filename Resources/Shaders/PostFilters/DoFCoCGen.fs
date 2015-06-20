@@ -27,6 +27,8 @@ uniform float depthScale;
 uniform float maxVignetteBlur;
 uniform vec2 vignetteScale;
 uniform float globalBlur;
+uniform float nearBlur;
+uniform float farBlur;
 
 varying vec2 texCoord;
 
@@ -42,7 +44,8 @@ float depthAt(vec2 pt){
 
 float CoCAt(vec2 pt) {
 	float depth = depthAt(pt);
-	return max(0., 1. - depth * depthScale);
+	float blur = 1. - depth * depthScale;
+	return blur * (blur > 0. ? nearBlur : farBlur);
 }
 
 void main() {

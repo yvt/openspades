@@ -43,6 +43,7 @@
 
 SPADES_SETTING(cg_fov, "68");
 SPADES_SETTING(cg_thirdperson, "0");
+SPADES_SETTING(cg_manualFocus, "0");
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;
@@ -50,7 +51,6 @@ static float nextRandom() {
 
 namespace spades {
 	namespace client {
-		
 		
 #pragma mark - Drawing
 		
@@ -297,7 +297,7 @@ namespace spades {
 						float aimDownState = GetAimDownState();
 						float per = aimDownState;
 						per *= per * per;
-						def.depthOfFieldNearRange = per * 13.f + .054f;
+						def.depthOfFieldFocalLength = per * 13.f + .054f;
 						
 						def.blurVignette = .0f;
 						
@@ -408,6 +408,12 @@ namespace spades {
 			SPAssert(!isnan(def.viewOrigin.z));
 			
 			def.radialBlur = std::min(def.radialBlur, 1.f);
+			
+			if ((int)cg_manualFocus) {
+				// Depth of field is manually controlled
+				def.depthOfFieldFarBlurStrength = 1.f;
+				def.depthOfFieldFocalLength = focalLength;
+			}
 			
 			return def;
 		}

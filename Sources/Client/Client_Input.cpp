@@ -84,6 +84,8 @@ SPADES_SETTING(cg_debugCorpse, "0");
 
 SPADES_SETTING(cg_alerts, "1");
 
+SPADES_SETTING(cg_manualFocus, "0");
+SPADES_SETTING(cg_keyAutoFocus, "MiddleMouseButton");
 
 namespace spades {
 	namespace client {
@@ -524,10 +526,21 @@ namespace spades {
 						flashlightOnTime = time;
 						Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Player/Flashlight.wav");
 						audioDevice->PlayLocal(chunk, AudioParam());
-					}else if(cg_switchToolByWheel && down) {
+					}else if(CheckKey(cg_keyAutoFocus, name) && down &&
+							 (int)cg_manualFocus){
+						autoFocusEnabled = true;
+					}else if(down) {
 						bool rev = (int)cg_switchToolByWheel > 0;
 						if(name == (rev ? "WheelDown":"WheelUp")) {
-							if(world->GetLocalPlayer()->GetTeamId() < 2 &&
+							if ((int)cg_manualFocus) {
+								// When DoF control is enabled,
+								// tool switch is overrided by focal length control.
+								float dist = 1.f / targetFocalLength;
+								dist = std::min(dist + 0.03f, 1.f);
+								targetFocalLength = 1.f / dist;
+								autoFocusEnabled = false;
+							} else if(cg_switchToolByWheel &&
+									  world->GetLocalPlayer()->GetTeamId() < 2 &&
 							   world->GetLocalPlayer()->IsAlive()){
 								Player::ToolType t = world->GetLocalPlayer()->GetTool();
 								do{
@@ -549,7 +562,15 @@ namespace spades {
 								SetSelectedTool(t);
 							}
 						}else if(name == (rev ? "WheelUp":"WheelDown")) {
-							if(world->GetLocalPlayer()->GetTeamId() < 2 &&
+							if ((int)cg_manualFocus) {
+								// When DoF control is enabled,
+								// tool switch is overrided by focal length control.
+								float dist = 1.f / targetFocalLength;
+								dist = std::max(dist - 0.03f, 1.f / 128.f); // limit to fog max distance
+								targetFocalLength = 1.f / dist;
+								autoFocusEnabled = false;
+							} else if(cg_switchToolByWheel &&
+									  world->GetLocalPlayer()->GetTeamId() < 2 &&
 							   world->GetLocalPlayer()->IsAlive()){
 								Player::ToolType t = world->GetLocalPlayer()->GetTool();
 								do{

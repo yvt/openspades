@@ -32,7 +32,9 @@ namespace spades {
 			float zNear, zFar;
 			bool skipWorld;
 			
-			float depthOfFieldNearRange;
+			float depthOfFieldFocalLength;
+			float depthOfFieldNearBlurStrength;
+			float depthOfFieldFarBlurStrength;
 			
 			unsigned int time;
 			
@@ -44,7 +46,9 @@ namespace spades {
 			float radialBlur;
 			
 			SceneDefinition() {
-				depthOfFieldNearRange = 0.f;
+				depthOfFieldFocalLength = 0.f;
+				depthOfFieldNearBlurStrength = 1.f;
+				depthOfFieldFarBlurStrength = 0.f;
 				denyCameraBlur = true;
 				time = 0;
 				blurVignette = 0.f;

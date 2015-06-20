@@ -89,7 +89,7 @@ namespace spades {
 			return buf3;
 		}
 		
-		GLColorBuffer GLDepthOfFieldFilter::GenerateCoC(float blurDepthRange, float vignetteBlur, float globalBlur) {
+		GLColorBuffer GLDepthOfFieldFilter::GenerateCoC(float blurDepthRange, float vignetteBlur, float globalBlur, float nearBlur, float farBlur) {
 			SPADES_MARK_FUNCTION();
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
@@ -111,6 +111,8 @@ namespace spades {
 				static GLProgramUniform maxVignetteBlur("maxVignetteBlur");
 				static GLProgramUniform vignetteScale("vignetteScale");
 				static GLProgramUniform globalBlurUniform("globalBlur");
+				static GLProgramUniform nearBlurUniform("nearBlur");
+				static GLProgramUniform farBlurUniform("farBlur");
 				
 				positionAttribute(cocGen);
 				depthTexture(cocGen);
@@ -120,6 +122,8 @@ namespace spades {
 				maxVignetteBlur(cocGen);
 				vignetteScale(cocGen);
 				globalBlurUniform(cocGen);
+				nearBlurUniform(cocGen);
+				farBlurUniform(cocGen);
 				
 				cocGen->Use();
 				
@@ -142,6 +146,8 @@ namespace spades {
 				}
 				maxVignetteBlur.SetValue(sinf(std::max(def.fovX, def.fovY) * .5f) * vignetteBlur);
 				globalBlurUniform.SetValue(globalBlur);
+				nearBlurUniform.SetValue(nearBlur);
+				farBlurUniform.SetValue(-farBlur);
 				
 				qr.SetCoordAttributeIndex(positionAttribute());
 				dev->BindTexture(IGLDevice::Texture2D, renderer->GetFramebufferManager()->GetDepthTexture());
@@ -374,7 +380,7 @@ namespace spades {
 		}
 		
 		
-		GLColorBuffer GLDepthOfFieldFilter::Filter(GLColorBuffer input, float blurDepthRange, float vignetteBlur, float globalBlur) {
+		GLColorBuffer GLDepthOfFieldFilter::Filter(GLColorBuffer input, float blurDepthRange, float vignetteBlur, float globalBlur, float nearBlur, float farBlur) {
 			SPADES_MARK_FUNCTION();
 			
 			IGLDevice *dev = renderer->GetGLDevice();
@@ -390,7 +396,7 @@ namespace spades {
 			globalBlur = std::min(globalBlur * 3.f, 1.f);
             {
                 GLProfiler p(dev, "CoC Computation");
-                coc = GenerateCoC(blurDepthRange, vignetteBlur, globalBlur);
+                coc = GenerateCoC(blurDepthRange, vignetteBlur, globalBlur, nearBlur, farBlur);
             }
 			
 			float maxCoc = (float)std::max(w, h) / 100.f;
