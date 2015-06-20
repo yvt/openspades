@@ -62,6 +62,7 @@
 #include "GLDepthOfFieldFilter.h"
 #include "GLLensDustFilter.h"
 #include "GLSoftLitSpriteRenderer.h"
+#include "GLAutoExposureFilter.h"
 
 SPADES_SETTING(r_water, "2");
 SPADES_SETTING(r_bloom, "1");
@@ -80,6 +81,7 @@ SPADES_SETTING(r_srgb, "");
 SPADES_SETTING(r_srgb2D, "1");
 SPADES_SETTING(r_colorCorrection, "1");
 SPADES_SETTING(r_hdr, "");
+SPADES_SETTING(r_hdrAutoExposure, "1");
 SPADES_SETTING(r_exposureValue, "0");
 
 SPADES_SETTING(r_debugTiming, "0");
@@ -110,6 +112,7 @@ namespace spades {
 		radiosityRenderer(NULL),
 		cameraBlur(NULL),
 		lensDustFilter(NULL),
+		autoExposureFilter(NULL),
 		lastColorBufferTexture(0),
 		fogDistance(128.f),
 		renderingMirror(false),
@@ -180,6 +183,10 @@ namespace spades {
 				lensDustFilter = new GLLensDustFilter(this);
 			}
 			
+			if (r_hdr) {
+				autoExposureFilter = new GLAutoExposureFilter(this);
+			}
+			
 			if(r_lens){
 				GLLensFilter(this);
 			}
@@ -209,6 +216,8 @@ namespace spades {
 			
 			SPLog("GLRender finalizing");
 			SetGameMap(nullptr);
+			delete autoExposureFilter;
+			autoExposureFilter = NULL;
 			delete lensDustFilter;
 			lensDustFilter = NULL;
 			delete radiosityRenderer;
@@ -936,6 +945,10 @@ namespace spades {
 						lensFlareRenderer.Draw(prm.origin - sceneDef.viewOrigin,
 											   true, color, false);
 					}
+				}
+				
+				if (r_hdr && r_hdrAutoExposure) {
+					handle = autoExposureFilter->Filter(handle);
 				}
 				
 				if(r_hdr) {

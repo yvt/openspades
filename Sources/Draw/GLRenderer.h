@@ -51,6 +51,7 @@ namespace spades {
 		class GLRadiosityRenderer;
 		class GLLensDustFilter;
 		class GLSoftLitSpriteRenderer;
+		class GLAutoExposureFilter;
 		
 		class GLRenderer: public client::IRenderer, public client::IGameMapListener  {
 			friend class GLShadowShader;
@@ -94,6 +95,7 @@ namespace spades {
 			
 			GLCameraBlurFilter *cameraBlur;
 			GLLensDustFilter *lensDustFilter;
+			GLAutoExposureFilter *autoExposureFilter;
 			
 			// used when r_srgb = 1
 			IGLDevice::UInteger lastColorBufferTexture;

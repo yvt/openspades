@@ -395,6 +395,8 @@
 		E89A649417A1677F00FDA893 /* FallingBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A649217A1677F00FDA893 /* FallingBlock.cpp */; };
 		E89A649717A1835A00FDA893 /* GunCasing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A649517A1835900FDA893 /* GunCasing.cpp */; };
 		E89A649A17A2402900FDA893 /* IGLShadowMapRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A649817A2402500FDA893 /* IGLShadowMapRenderer.cpp */; };
+		E89BBDC21B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */; };
+		E89BBDC31B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */; };
 		E89E8121179C2C800059C649 /* GLBloomFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89E811F179C2C800059C649 /* GLBloomFilter.cpp */; };
 		E8B6B68F17DE27B500E35523 /* as_atomic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B64217DE27B500E35523 /* as_atomic.cpp */; };
 		E8B6B69017DE27B500E35523 /* as_builder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B64417DE27B500E35523 /* as_builder.cpp */; };
@@ -844,6 +846,8 @@
 		E89A649617A1835900FDA893 /* GunCasing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GunCasing.h; sourceTree = "<group>"; };
 		E89A649817A2402500FDA893 /* IGLShadowMapRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IGLShadowMapRenderer.cpp; sourceTree = "<group>"; };
 		E89A649917A2402700FDA893 /* IGLShadowMapRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGLShadowMapRenderer.h; sourceTree = "<group>"; };
+		E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLAutoExposureFilter.cpp; sourceTree = "<group>"; };
+		E89BBDC11B3559CD00F53EE9 /* GLAutoExposureFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLAutoExposureFilter.h; sourceTree = "<group>"; };
 		E89E811F179C2C800059C649 /* GLBloomFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLBloomFilter.cpp; sourceTree = "<group>"; };
 		E89E8120179C2C800059C649 /* GLBloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLBloomFilter.h; sourceTree = "<group>"; };
 		E8B6B63F17DE27B500E35523 /* angelscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = angelscript.h; sourceTree = "<group>"; };
@@ -1468,6 +1472,8 @@
 		E89E811E179C2BDC0059C649 /* Post Filters */ = {
 			isa = PBXGroup;
 			children = (
+				E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */,
+				E89BBDC11B3559CD00F53EE9 /* GLAutoExposureFilter.h */,
 				E89E811F179C2C800059C649 /* GLBloomFilter.cpp */,
 				E89E8120179C2C800059C649 /* GLBloomFilter.h */,
 				E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */,
@@ -2372,6 +2378,7 @@
 				E82E678218EA7972004DBA18 /* ScriptManager.cpp in Sources */,
 				E82E678318EA7972004DBA18 /* IImage.cpp in Sources */,
 				E82E678418EA7972004DBA18 /* IModel.cpp in Sources */,
+				E89BBDC31B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */,
 				E82E678518EA7972004DBA18 /* IRenderer.cpp in Sources */,
 				E82E678618EA7972004DBA18 /* GameMap.cpp in Sources */,
 				E82E678718EA7972004DBA18 /* Bitmap.cpp in Sources */,
@@ -2776,6 +2783,7 @@
 				E81A7C7D1865A2E900BF3FCE /* MiniHeap.cpp in Sources */,
 				E8B6B71D17E4193A00E35523 /* scriptstdstring.cpp in Sources */,
 				E8B6B71E17E4193A00E35523 /* scriptstdstring_utils.cpp in Sources */,
+				E89BBDC21B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */,
 				E8B6B71F17E4193A00E35523 /* weakref.cpp in Sources */,
 				E8B6B72117E4508C00E35523 /* IAudioDevice.cpp in Sources */,
 				E8B6B72317E452ED00E35523 /* IAudioChunk.cpp in Sources */,
