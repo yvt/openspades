@@ -21,6 +21,7 @@
 
 #include "Client.h"
 #include <cstdlib>
+#include <cmath>
 
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Settings.h>
