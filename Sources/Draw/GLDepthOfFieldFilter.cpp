@@ -45,7 +45,10 @@ namespace spades {
 		GLDepthOfFieldFilter::GLDepthOfFieldFilter(GLRenderer *renderer):
 		renderer(renderer){
 			gaussProgram = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
-			blurProgram = renderer->RegisterProgram("Shaders/PostFilters/DoFBlur.program");
+			if (HighQualityDoFEnabled())
+				blurProgram = renderer->RegisterProgram("Shaders/PostFilters/DoFBlur2.program");
+			else
+				blurProgram = renderer->RegisterProgram("Shaders/PostFilters/DoFBlur.program");
 			cocGen = renderer->RegisterProgram("Shaders/PostFilters/DoFCoCGen.program");
 			cocMix = renderer->RegisterProgram("Shaders/PostFilters/DoFCoCMix.program");
 			gammaMix = renderer->RegisterProgram("Shaders/PostFilters/GammaMix.program");
@@ -102,8 +105,8 @@ namespace spades {
 			
 			int w = dev->ScreenWidth();
 			int h = dev->ScreenHeight();
-			int w2 = (w + 3) / 4;
-			int h2 = (h + 3) / 4;
+			int w2 = HighQualityDoFEnabled() ? w : (w + 3) / 4;
+			int h2 = HighQualityDoFEnabled() ? h : (h + 3) / 4;
 			
 			
 			GLColorBuffer coc = renderer->GetFramebufferManager()->CreateBufferHandle(w2, h2, 1);
@@ -162,6 +165,12 @@ namespace spades {
 				qr.Draw();
 				dev->BindTexture(IGLDevice::Texture2D, 0);
 			}
+			
+			if (HighQualityDoFEnabled()) {
+				// no blur done
+				return coc;
+			}
+			
 			// make blurred CoC radius bitmap
 			GLColorBuffer cocBlur = BlurCoC(coc, 1.f);
 			
