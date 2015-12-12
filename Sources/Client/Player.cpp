@@ -118,11 +118,7 @@ namespace spades {
 			
 			if(!IsAlive())
 				return;
-			
-			if(input.sprint){
-				newInput.primary = false;
-				newInput.secondary = false;
-			}
+						
 			if(tool == ToolSpade){
 				if(newInput.secondary)
 					newInput.primary = false;
