@@ -44,7 +44,7 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    wget https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.0.tar.gz
    tar -zxvf SDL2_image-2.0.0.tar.gz
    cd SDL2_image-2.0.0/
-   ./configure && make && sudo make install
+   ./configure --disable-png-shared && make && sudo make install
    cd ../
    ```
    Additional dependencies may be required.
