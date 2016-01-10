@@ -213,6 +213,29 @@ namespace spades {
 			renderer->Flip();
 		}
 		
+		void Client::DrawDisconnectScreen() {
+			Handle<client::IImage> img;
+			Vector2 scrSize = { renderer->ScreenWidth(),
+				renderer->ScreenHeight() };
+
+			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 1.));
+			img = renderer->RegisterImage("Gfx/White.tga");
+			renderer->DrawImage(img, AABB2(0, 0,
+				scrSize.x, scrSize.y));
+
+			DrawSplash();
+
+			IFont *font = textFont;
+			std::string str = _Tr("Client", "Disconnecting...");
+			Vector2 size = font->Measure(str);
+			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
+			pos -= size;
+			font->DrawShadow(str, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.5));
+
+			renderer->FrameDone();
+			renderer->Flip();
+		}
+		
 		void Client::DrawHurtSprites() {
 			float per = (world->GetTime() - lastHurtTime) / 1.5f;
 			if(per > 1.f) return;

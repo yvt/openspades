@@ -240,6 +240,7 @@ namespace spades {
 			
 			void DrawSplash();
 			void DrawStartupScreen();
+			void DrawDisconnectScreen();
 			void DoInit();
 			
 			void ShowAlert(const std::string& contents,

@@ -1767,3 +1767,8 @@ msgstr "Эффекты линзы"
 msgctxt "StartupScreen"
 msgid "Simulates distortion caused by a real camera lens."
 msgstr "Симулирует искажения, вызванные линзами реальной камеры."
+
+#: ../../../Sources/Client/Client_Draw.cpp:232
+msgctxt "Client"
+msgid "Disconnecting..."
+msgstr "Отключение..."

@@ -210,6 +210,9 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			NetLog("Disconnecting");
+
+			DrawDisconnectScreen();
+
 			if(logStream) {
 				SPLog("Closing netlog");
 				logStream.reset();
