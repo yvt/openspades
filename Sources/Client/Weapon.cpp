@@ -51,7 +51,6 @@ namespace spades {
 		
 		void Weapon::Restock() {
 			stock = GetMaxStock();
-			ammo = GetClipSize();
 		}
 		
 		void Weapon::Reset() {
