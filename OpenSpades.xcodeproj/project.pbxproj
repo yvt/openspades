@@ -465,6 +465,8 @@
 		E8B6B74617EA0F2600E35523 /* IGrenadeSkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B74417EA0F1B00E35523 /* IGrenadeSkin.cpp */; };
 		E8B6B74917EA12EC00E35523 /* IWeaponSkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B74717EA12E100E35523 /* IWeaponSkin.cpp */; };
 		E8B93AD518559EC700BD01E1 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
+		E8C68A511C5BD8E200C52C3F /* Palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C68A501C5BD8E200C52C3F /* Palette.cpp */; };
+		E8C68A521C5BD8F200C52C3F /* Palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C68A501C5BD8E200C52C3F /* Palette.cpp */; };
 		E8C92A0C18695EA500740C9F /* SWModelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */; };
 		E8C92A0F186A902500740C9F /* CpuID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C92A0E186A902500740C9F /* CpuID.cpp */; };
 		E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0399178EDABD000683D4 /* OpenAL.framework */; };
@@ -995,6 +997,7 @@
 		E8B6B74817EA12E500E35523 /* IWeaponSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWeaponSkin.h; sourceTree = "<group>"; };
 		E8B8082718E05B920001013E /* CellToTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellToTriangle.h; sourceTree = "<group>"; };
 		E8B93AD418559EC600BD01E1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		E8C68A501C5BD8E200C52C3F /* Palette.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Palette.cpp; sourceTree = "<group>"; };
 		E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModelRenderer.cpp; sourceTree = "<group>"; };
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
@@ -1869,6 +1872,7 @@
 		E8E0AF8B17993C2300C6B5A9 /* Client Main */ = {
 			isa = PBXGroup;
 			children = (
+				E8C68A501C5BD8E200C52C3F /* Palette.cpp */,
 				E844886317D0C404005105D0 /* Local Entities */,
 				E8CF03C1178EE6D8000683D4 /* Client.cpp */,
 				E8FE748B18CC6AA100291338 /* Client_Input.cpp */,
@@ -2302,6 +2306,7 @@
 				E82E673618EA7972004DBA18 /* as_callfunc.cpp in Sources */,
 				E82E673718EA7972004DBA18 /* as_callfunc_arm.cpp in Sources */,
 				E82E673818EA7972004DBA18 /* as_callfunc_mips.cpp in Sources */,
+				E8C68A521C5BD8F200C52C3F /* Palette.cpp in Sources */,
 				E82E673918EA7972004DBA18 /* as_callfunc_ppc.cpp in Sources */,
 				E82E673A18EA7972004DBA18 /* as_callfunc_ppc_64.cpp in Sources */,
 				E82E673B18EA7972004DBA18 /* as_callfunc_sh4.cpp in Sources */,
@@ -2622,6 +2627,7 @@
 				E8567E761793D60E009D83E0 /* GLModelManager.cpp in Sources */,
 				E8567E791793DC37009D83E0 /* VoxelModel.cpp in Sources */,
 				E8567E7C1793E105009D83E0 /* GLModel.cpp in Sources */,
+				E8C68A511C5BD8E200C52C3F /* Palette.cpp in Sources */,
 				E8567E7F1793E1B3009D83E0 /* GLVoxelModel.cpp in Sources */,
 				E834F55017942C43004EBE88 /* Grenade.cpp in Sources */,
 				E88EB02F185D9DC500565D07 /* YsrDevice.cpp in Sources */,
