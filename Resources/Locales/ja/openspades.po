@@ -1761,4 +1761,4 @@ msgstr "現実世界のレンズの歪みをシミュレートします。"
 #: ../../../Sources/Client/Client_Draw.cpp:232
 msgctxt "Client"
 msgid "Disconnecting..."
-msgstr "サーバーから切断"
+msgstr "切断中です..."
