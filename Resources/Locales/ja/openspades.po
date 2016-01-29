@@ -1757,3 +1757,8 @@ msgstr "レンズ効果"
 msgctxt "StartupScreen"
 msgid "Simulates distortion caused by a real camera lens."
 msgstr "現実世界のレンズの歪みをシミュレートします。"
+
+#: ../../../Sources/Client/Client_Draw.cpp:232
+msgctxt "Client"
+msgid "Disconnecting..."
+msgstr "サーバーから切断"

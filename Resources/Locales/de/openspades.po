@@ -1649,3 +1649,8 @@ msgstr "Warte auf Status"
 msgctxt "Preferences"
 msgid "Show Statistics"
 msgstr "Zeige Statistiken"
+
+#: ../../../Sources/Client/Client_Draw.cpp:232
+msgctxt "Client"
+msgid "Disconnecting..."
+msgstr "Trennen gerade vom server..."

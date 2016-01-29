@@ -1704,3 +1704,8 @@ msgstr ""
 msgctxt "StartupScreen"
 msgid "Simulates distortion caused by a real camera lens."
 msgstr ""
+
+#: ../../../Sources/Client/Client_Draw.cpp:232
+msgctxt "Client"
+msgid "Disconnecting..."
+msgstr ""

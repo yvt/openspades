@@ -1766,3 +1766,8 @@ msgstr "상태 기다리는 중"
 msgctxt "Preferences"
 msgid "Show Statistics"
 msgstr "통계 보이기"
+
+#: ../../../Sources/Client/Client_Draw.cpp:232
+msgctxt "Client"
+msgid "Disconnecting..."
+msgstr "서버에서 분리"
