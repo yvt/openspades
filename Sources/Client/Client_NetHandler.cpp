@@ -22,6 +22,8 @@
 #include "Client.h"
 #include <cstdlib>
 #include <Core/Strings.h>
+#include <Core/Settings.h>
+#include <Core/Strings.h>
 
 #include "IAudioDevice.h"
 #include "IAudioChunk.h"
@@ -37,6 +39,8 @@
 #include "CenterMessageView.h"
 
 #include "NetClient.h"
+
+SPADES_SETTING(cg_centerMessage, "1");
 
 namespace spades {
 	namespace client {
@@ -87,16 +91,19 @@ namespace spades {
 			}
 			chatWindow->AddMessage(msg);
 			
-			teamName = world->GetTeam(teamId).name;
-			if(old < 2){
-				std::string otherTeam = world->GetTeam(old).name;
-				msg = _Tr("Client", "{0} captured {1}'s Territory", teamName, otherTeam);
-			}else{
-				msg = _Tr("Client", "{0} captured an Neutral Territory", teamName);
+			if ((int)cg_centerMessage != 0){
+				teamName = world->GetTeam(teamId).name;
+				if (old < 2){
+					std::string otherTeam = world->GetTeam(old).name;
+					msg = _Tr("Client", "{0} captured {1}'s Territory", teamName, otherTeam);
+				}
+				else{
+					msg = _Tr("Client", "{0} captured an Neutral Territory", teamName);
+				}
+				NetLog("%s", msg.c_str());
+				centerMessageView->AddMessage(msg);
 			}
-			NetLog("%s", msg.c_str());
-			centerMessageView->AddMessage(msg);
-			
+
 			if(world->GetLocalPlayer() && !IsMuted()){
 				if(teamId == world->GetLocalPlayer()->GetTeamId()){
 					Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/TC/YourTeamCaptured.wav");
@@ -120,7 +127,7 @@ namespace spades {
 				chatWindow->AddMessage(msg);
 			}
 			
-			{
+			if ((int)cg_centerMessage != 0){
 				std::string holderName = p->GetName();
 				std::string otherTeamName = world->GetTeam(1 - p->GetTeamId()).name;
 				msg = _Tr("Client", "{0} captured {1}'s Intel.", holderName, otherTeamName);
@@ -149,7 +156,7 @@ namespace spades {
 				chatWindow->AddMessage(msg);
 			}
 			
-			{
+			if ((int)cg_centerMessage != 0){
 				std::string holderName = p->GetName();
 				std::string otherTeamName = world->GetTeam(1 - p->GetTeamId()).name;
 				msg = _Tr("Client", "{0} picked up {1}'s Intel.", holderName, otherTeamName);
@@ -173,7 +180,7 @@ namespace spades {
 				chatWindow->AddMessage(msg);
 			}
 			
-			{
+			if ((int)cg_centerMessage != 0){
 				std::string holderName = p->GetName();
 				std::string otherTeamName = world->GetTeam(1 - p->GetTeamId()).name;
 				msg = _Tr("Client", "{0} dropped {1}'s Intel", holderName, otherTeamName);
