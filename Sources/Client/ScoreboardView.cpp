@@ -221,7 +221,7 @@ namespace spades {
 				return score > ent.score;
 			}
 		};
-		
+
 		void ScoreboardView::DrawPlayers(int team, float left, float top,
 										 float width, float height){
 			IFont *font = client->textFont;
@@ -257,7 +257,8 @@ namespace spades {
 			
 			int row = 0, col = 0;
 			float colWidth = (float)width / (float)cols;
-			extern int palette[32][3];
+			//Chameleon: ignore this - I just couldn't compile with "extern" in front. Palette doesn't work for player list
+			int palette[32][3];
 			std::string colormode = cg_Minimap_Player_Color;
 			for(int i = 0; i < numPlayers; i++){
 				ScoreboardEntry& ent = entries[i];
