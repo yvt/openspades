@@ -877,6 +877,8 @@ namespace spades {
 			
 			if(ff)
 				s += ChatWindow::ColoredMessage(cause, MsgColorRed);
+			else if (killer == world->GetLocalPlayer() || victim == world->GetLocalPlayer())
+				s += ChatWindow::ColoredMessage(cause, MsgColorBlack);
 			else
 				s += cause;
 			

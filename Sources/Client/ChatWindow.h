@@ -40,6 +40,7 @@ namespace spades {
 		static const char MsgColorSysInfo = MsgColorGreen;
 		static const char MsgColorRestore = 6;
 		static const char MsgImage = 7;
+		static const char MsgColorBlack = 8;
 		static const char MsgColorMax = 9;
 		
 		class ChatWindow {
