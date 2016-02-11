@@ -119,7 +119,7 @@ namespace spades {
 			if(!IsAlive())
 				return;
 			
-			if(input.sprint){
+			if(input.sprint && !input.crouch && (input.moveBackward || input.moveForward || input.moveLeft || input.moveRight)){
 				newInput.primary = false;
 				newInput.secondary = false;
 			}

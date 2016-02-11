@@ -377,11 +377,6 @@ namespace spades {
 						playerInput.crouch = down;
 					}else if(CheckKey(cg_keySprint, name)){
 						playerInput.sprint = down;
-						if(down){
-							if(world->GetLocalPlayer()->IsToolWeapon()){
-								weapInput.secondary = false;
-							}
-						}
 					}else if(CheckKey(cg_keySneak, name)){
 						playerInput.sneak = down;
 					}else if(CheckKey(cg_keyJump, name)){
@@ -394,15 +389,11 @@ namespace spades {
 					}else if(CheckKey(cg_keyAltAttack, name)){
 						auto lastVal = weapInput.secondary;
 						if(world->GetLocalPlayer()->IsToolWeapon() && (!cg_holdAimDownSight)){
-							if(down && !playerInput.sprint && !world->GetLocalPlayer()->GetWeapon()->IsReloading()){
+							if(down && !world->GetLocalPlayer()->GetWeapon()->IsReloading()){
 								weapInput.secondary = !weapInput.secondary;
 							}
 						}else{
-							if(!playerInput.sprint){
-								weapInput.secondary = down;
-							}else{
-								weapInput.secondary = down;
-							}
+							weapInput.secondary = down;
 						}
 						if(world->GetLocalPlayer()->IsToolWeapon() && weapInput.secondary && !lastVal &&
 						   world->GetLocalPlayer()->IsReadyToUseTool() &&
