@@ -57,10 +57,13 @@
 #endif
 
 
+#ifdef _MSC_VER>=1900	// Visual Studio 2015 or higher
+extern "C" { FILE __iob_func[3] = { *stdin,*stdout,*stderr }; }
+#endif
+
 static const unsigned char splashImage[] = {
 	#include "SplashImage.inc"
 };
-
 static const unsigned char Icon[] = {
 	#include "Icon.inc"
 };

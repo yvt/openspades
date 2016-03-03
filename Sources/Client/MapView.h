@@ -24,6 +24,7 @@
 
 namespace spades {
 	namespace client {
+		extern int palette[32][3];
 		class Client;
 		class IRenderer;
 		class IImage;
