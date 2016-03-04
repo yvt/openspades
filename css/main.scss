@@ -65,6 +65,15 @@ h2 {
 	}
 }
 
+h3 {
+	margin: 24px 0 16px;
+	font-size: 24px;
+	font-weight: normal;
+	&:first-of-type {
+		margin-top: 0;
+	}
+}
+
 ul.gallery {
 	margin: 20px 0;
 	padding: 0;
@@ -77,6 +86,19 @@ ul.gallery {
 		img {
 			max-width: calc(33% - 20px);
 			margin: 0 5px;
+		}
+	}
+}
+
+div.row {
+	overflow: hidden;
+	> .col-6 {
+		width: 50%;
+		float: left;
+		&:last-of-type {
+			float: none;
+			width: auto;
+			overflow: hidden;
 		}
 	}
 }
