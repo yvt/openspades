@@ -9,7 +9,8 @@
 title: OpenSpades
 email: i@yvt.jp
 description: > # this means to ignore newlines until "baseurl:"
-  OpenSpades is a ...
+  Official OpenSpades website. OpenSpades is an online first-person shooter 
+  that combines fast-paced gunfights and the creative building of Minecraft.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://openspades.yvt.jp" # the base hostname & protocol for your site
 twitter_username: yvt
