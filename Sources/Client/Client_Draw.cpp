@@ -62,6 +62,9 @@ SPADES_SETTING(cg_keyReloadWeapon, "");
 SPADES_SETTING(cg_screenshotFormat, "jpeg");
 SPADES_SETTING(cg_stats, "0");
 SPADES_SETTING(cg_hideHud, "0");
+SPADES_SETTING(cg_playerNames, "2");
+SPADES_SETTING(cg_playerNameX, "0");
+SPADES_SETTING(cg_playerNameY, "0");
 
 namespace spades {
 	namespace client {
@@ -300,6 +303,9 @@ namespace spades {
 		void Client::DrawHottrackedPlayerName() {
 			SPADES_MARK_FUNCTION();
 			
+			if ((int)cg_playerNames == 0)
+				return;
+
 			Player *p = GetWorld()->GetLocalPlayer();
 			
 			hitTag_t tag = hit_None;
@@ -307,10 +313,17 @@ namespace spades {
 			if(hottracked){
 				Vector3 posxyz = Project(hottracked->GetEye());
 				Vector2 pos = {posxyz.x, posxyz.y};
-				float dist = (hottracked->GetEye() - p->GetEye()).GetLength();
-				int idist = (int)floorf(dist + .5f);
 				char buf[64];
-				sprintf(buf, "%s [%d%s]", hottracked->GetName().c_str(), idist, (idist == 1) ? "block":"blocks");
+				if ((int)cg_playerNames == 1){
+					float dist = (hottracked->GetEye() - p->GetEye()).GetLength();
+					int idist = (int)floorf(dist + .5f);
+					sprintf(buf, "%s [%d%s]", hottracked->GetName().c_str(), idist, (idist == 1) ? "block" : "blocks");
+				}
+				else
+					sprintf(buf, "%s", hottracked->GetName().c_str());
+
+				pos.y += (int)cg_playerNameY;
+				pos.x += (int)cg_playerNameX;
 				
 				IFont *font = textFont;
 				Vector2 size = font->Measure(buf);

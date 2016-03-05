@@ -54,6 +54,7 @@ SPADES_SETTING(cg_blood, "1");
 SPADES_SETTING(cg_ejectBrass, "1");
 
 SPADES_SETTING(cg_alerts, "");
+SPADES_SETTING(cg_centerMessage, "");
 
 
 namespace spades {
@@ -876,6 +877,8 @@ namespace spades {
 			
 			if(ff)
 				s += ChatWindow::ColoredMessage(cause, MsgColorRed);
+			else if (killer == world->GetLocalPlayer() || victim == world->GetLocalPlayer())
+				s += ChatWindow::ColoredMessage(cause, MsgColorBlack);
 			else
 				s += cause;
 			
@@ -906,7 +909,7 @@ namespace spades {
 				if(killer == local || victim == local){
 					std::string msg;
 					if( killer == local ) {
-						msg = _Tr("Client", "You have killed {0}", victim->GetName());
+						if ((int)cg_centerMessage == 2) msg = _Tr("Client", "You have killed {0}", victim->GetName());
 					} else {
 						msg = _Tr("Client", "You were killed by {0}", killer->GetName());
 					}

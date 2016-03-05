@@ -197,6 +197,8 @@ namespace spades {
 					return w ? ConvertColor(w->GetTeam(2).color) : MakeVector4( 1, 1, 0, 1 );
 				case MsgColorRed:
 					return MakeVector4(1,0,0,1);
+				case MsgColorBlack:
+					return MakeVector4(0,0,0,1);
 				case MsgColorSysInfo:
 					return MakeVector4(0,1,0,1);
 				default:
