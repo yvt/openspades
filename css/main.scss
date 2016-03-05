@@ -30,9 +30,18 @@ a {
 	}
 }
 
-h1 {
-	text-align: center;
-	margin: 60px 0;
+header {
+	> h1 {
+		text-align: center;
+		margin: 60px 0 20px;
+	}
+	> div {
+		text-align: center;
+		margin: 20px 0;
+		> div.fb-share-button {
+			top: -7px;
+		}
+	}
 }
 
 div.page-content {
