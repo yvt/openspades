@@ -139,7 +139,10 @@ aside {
 
 .big-button {
 	display: block;
-	@include big-button-color(#ED6806);
+	&, & > span {
+		@include big-button-color(#ED6806);
+	}
+	position: relative;
 	color: white;
 	margin-top: 20px;
 	padding: 0;
@@ -149,11 +152,18 @@ aside {
 	text-decoration: none;
 	font-family: 'SquareFont';
 	font-weight: normal;
-	transition: background-color 0.1s;
 	&:first-of-type {
 		margin-top: 0;
 	}
-	&.blue {
+	> span {
+		display: block;
+		transform: translate(0, 0);
+		transition: transform 100ms linear, background-color 100ms linear;
+	}
+	&:hover > span {
+		transform: translate(-3px, -3px);
+	}
+	&.blue, &.blue > span {
 		@include big-button-color(#0668ED);
 	}
 }
