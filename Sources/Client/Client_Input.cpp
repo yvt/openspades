@@ -38,6 +38,7 @@
 
 #include "NetClient.h"
 
+using namespace std;
 
 SPADES_SETTING(cg_mouseSensitivity, "1");
 SPADES_SETTING(cg_zoomedMouseSensScale, "0.6");

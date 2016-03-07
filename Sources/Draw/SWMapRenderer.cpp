@@ -31,6 +31,8 @@
 #include "SWUtils.h"
 #include <cstdint>
 
+using namespace std;
+
 SPADES_SETTING(r_swUndersampling, "0");
 
 namespace spades {

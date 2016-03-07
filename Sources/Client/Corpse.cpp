@@ -27,6 +27,8 @@
 #include "../Core/Debug.h"
 #include "../Core/Settings.h"
 
+using namespace std;
+
 SPADES_SETTING(r_corpseLineCollision, "1");
 
 namespace spades {
