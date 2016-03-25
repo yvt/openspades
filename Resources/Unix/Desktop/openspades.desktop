@@ -9,4 +9,4 @@ Comment=Open-source clone of Ace of Spades
 Keywords=game;fps;sandbox;voxel;aos;
 Icon=openspades
 Categories=Game;ActionGame;
-MimeType=x-scheme-handler/aos
+MimeType=x-scheme-handler/aos;
