@@ -129,17 +129,17 @@ namespace spades {
 					player = world->GetPlayer(followingPlayerId);
 				}
 				if(player){
-					
 					float roll = 0.f;
 					float scale = 1.f;
 					float vibPitch = 0.f;
 					float vibYaw = 0.f;
+					// if we're dead, or if we're following a player other than ourself AND we're not in free mode, then
 					if(ShouldRenderInThirdPersonView() ||
-					   (IsFollowing() && player != world->GetLocalPlayer())){
+					   (IsFollowing() && spectateMode != 0 && player != world->GetLocalPlayer())){
 						Vector3 center = player->GetEye();
 						Vector3 playerFront = player->GetFront2D();
 						Vector3 up = MakeVector3(0,0,-1);
-						
+
 						if((!player->IsAlive()) && lastMyCorpse &&
 						   player == world->GetLocalPlayer()){
 							center = lastMyCorpse->GetCenter();
@@ -201,12 +201,12 @@ namespace spades {
 						Vector3 front = center - eye;
 						front = front.Normalize();
 						
-						if(FirstPersonSpectate == false){
+						if(spectateMode != 2){ // if we're NOT in first person
 							def.viewOrigin = eye;
 							def.viewAxis[0] = -Vector3::Cross(up, front).Normalize();
 							def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
 							def.viewAxis[2] = front;
-						}else{
+						}else{ // otherwise, dispose of all the calculations we did and set it to the view of the player we're watching
 							def.viewOrigin = player->GetEye();
 							def.viewAxis[0] = player->GetRight();
 							def.viewAxis[1] = player->GetUp();
@@ -224,8 +224,9 @@ namespace spades {
 						// longer following
 						followPos = def.viewOrigin;
 						followVel = MakeVector3(0, 0, 0);
-						
-					}else if(player->GetTeamId() >= 2){
+					
+					// else, if we are currently watching a spectator or we are a spectator ourself then
+					}else if(player->GetTeamId() >= 2 || world->GetLocalPlayer()->GetTeamId() >= 2){
 						// spectator view (noclip view)
 						Vector3 center = followPos;
 						Vector3 front;
