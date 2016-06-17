@@ -95,7 +95,7 @@ namespace spades {
 			return readyToClose;
 		}
 		
-		bool FirstPersonSpectate = false;
+		bool spectateMode = 1;
 		
 		void Client::Closing() {
 			SPADES_MARK_FUNCTION();
@@ -319,11 +319,8 @@ namespace spades {
 						return;
 					}else if(CheckKey(cg_keyAltAttack, name)){
 						if(down){
-							if(world->GetLocalPlayer()->GetTeamId() >= 2) {
-								// spectating
-								followingPlayerId = world->GetLocalPlayerIndex();
-							}else if(time > lastAliveTime + 1.3f){
-								// dead
+							if(world->GetLocalPlayer()->GetTeamId() >= 2 || time > lastAliveTime + 1.3f) {
+								// spectating or dead
 								FollowNextPlayer(true);
 							}
 						}
@@ -381,8 +378,24 @@ namespace spades {
 					}else if(CheckKey(cg_keySneak, name)){
 						playerInput.sneak = down;
 					}else if(CheckKey(cg_keyJump, name)){
-						if(down){
-							FirstPersonSpectate = !FirstPersonSpectate;
+						if(down){ // cycle through spectate modes: 0 (free), 1 (follow), and 2 (first person)
+							if(world && world->GetLocalPlayer()) {
+								if(world->GetLocalPlayer()->GetTeamId() < 2) { // if we're NOT spectator, flip flop between 1 and 2 (follow, and first)
+									if(spectateMode <= 1) {
+										spectateMode = 2;
+									} else {
+										spectateMode =1;
+									}
+								} else { // otherwise, cycle through the three modes as usual
+									if (spectateMode <= 0) {
+										spectateMode = 1;
+									} else if (spectateMode == 1) {
+										spectateMode = 2;
+									} else {
+										spectateMode = 0;
+									} 
+								}
+							}
 						}
 						playerInput.jump = down;
 					}else if(CheckKey(cg_keyAttack, name)){

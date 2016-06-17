@@ -797,10 +797,10 @@ namespace spades {
 						// just spectating
 					}else{
 						font = textFont;
-						std::string msg = _Tr("Client", "Following {0}", world->GetPlayerPersistent(followingPlayerId).name);
+						std::string msg = _Tr("Client", "Following {0} | ID: #{1}", world->GetPlayerPersistent(followingPlayerId).name, followingPlayerId);
 						Vector2 size = font->Measure(msg);
-						Vector2 pos = MakeVector2(scrWidth - 8.f, 256.f + 32.f);
-						pos.x -= size.x;
+						Vector2 pos = MakeVector2(scrWidth/2.f, 16.f);
+						pos.x -= size.x/2.f;
 						font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0,0,0,0.5));
 					}
 				}
