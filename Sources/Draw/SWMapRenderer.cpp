@@ -284,7 +284,7 @@ namespace spades {
 						float ang = zv * zv * (1.f - cs * cs) / (cs * cs);
 						ang = -cs * fastSqrt(1.f + ang);
 						ang = zv / ang;
-                        if(isnan(ang) || isinf(ang) || ang == 0.f)
+                        if(std::isnan(ang) || std::isinf(ang) || ang == 0.f)
                             return;
 						
 						// convert to tan
@@ -293,7 +293,7 @@ namespace spades {
 						// convert to angle
 						ang = atanf(ang);
                         
-                        if(isnan(ang) || isinf(ang))
+                        if(std::isnan(ang) || std::isinf(ang))
                             return;
 						
 						if(plane.z > 0.f) {
