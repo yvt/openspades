@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-07-11 06:08-0300\n"
-"PO-Revision-Date: 2016-07-13 00:36-0300\n"
+"PO-Revision-Date: 2016-07-13 01:21-0300\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -231,7 +231,7 @@ msgstr "Feedbacks"
 #: ../../Scripts/Gui/Preferences.as:672
 msgctxt "Preferences"
 msgid "Chat Notify Sounds"
-msgstr "Sosn de Notificação do Chat"
+msgstr "Sons de Notificação do Chat"
 
 #: ../../Scripts/Gui/Preferences.as:644 ../../Scripts/Gui/Preferences.as:672
 #: ../../Scripts/Gui/Preferences.as:673
@@ -701,7 +701,7 @@ msgstr "Selecione a Equipe:"
 #: ../../../Sources/Client/LimboView.cpp:191
 msgctxt "Client"
 msgid "Select Weapon:"
-msgstr "Seleciona a Arma:"
+msgstr "Selecione a Arma:"
 
 #: ../../../Sources/Client/TCProgressView.cpp:156
 msgctxt "Client"
@@ -880,7 +880,7 @@ msgstr "O sol causa lens flare."
 #: ../../Scripts/Gui/StartupScreen.as:1105
 msgctxt "StartupScreen"
 msgid "Flares for Dynamic Lights"
-msgstr "Flares para L0uzes Dinâmicas"
+msgstr "Flares para Luzes Dinâmicas"
 
 #: ../../Scripts/Gui/StartupScreen.as:1096
 #: ../../Scripts/Gui/StartupScreen.as:1106
@@ -910,7 +910,7 @@ msgstr "Profundidade do Campo de Visão"
 #: ../../Scripts/Gui/StartupScreen.as:1112
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
-msgstr "Desfoca objetos fora de foco."
+msgstr "Borra objetos fora de foco."
 
 #: ../../Scripts/Gui/StartupScreen.as:1104
 #: ../../Scripts/Gui/StartupScreen.as:1142
@@ -930,7 +930,7 @@ msgstr "Baixa"
 #: ../../Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid "Medium"
-msgstr "Médio"
+msgstr "Média"
 
 #: ../../Scripts/Gui/StartupScreen.as:1106
 #: ../../Scripts/Gui/StartupScreen.as:1144
@@ -1587,7 +1587,7 @@ msgstr "Servidor lotado"
 #: ../../../Sources/Client/NetClient.cpp:703
 msgctxt "NetClient"
 msgid "Unknown Reason"
-msgstr "Motivo desconhecido"
+msgstr "Motivo Desconhecido"
 
 #: ../../Scripts/Gui/Preferences.as:422 ../../Scripts/Gui/Preferences.as:423
 msgctxt "Preferences"
