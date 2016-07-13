@@ -20,7 +20,7 @@ msgstr ""
 #: ../../../Sources/Gui/Main.cpp:344 ../../../Sources/Gui/Main.cpp:369
 #: ../../../Sources/Gui/Main.cpp:368 ../../../Sources/Gui/Main.cpp:355
 #: ../../../Sources/Gui/Main.cpp:370 ../../../Sources/Gui/Main.cpp:466
-#: ../../../Sources/Gui/Main.cpp:529
+#: ../../../Sources/Gui/Main.cpp:529 ../../../Sources/Gui/Main.cpp:582
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr ""
@@ -592,6 +592,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:172
 #: ../../../Sources/Client/Client_Draw.cpp:204
 #: ../../../Sources/Client/Client_Draw.cpp:206
+#: ../../../Sources/Client/Client_Draw.cpp:209
 msgctxt "Client"
 msgid "NOW LOADING"
 msgstr ""
@@ -602,6 +603,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:477
 #: ../../../Sources/Client/Client_Draw.cpp:509
 #: ../../../Sources/Client/Client_Draw.cpp:515
+#: ../../../Sources/Client/Client_Draw.cpp:551
 msgctxt "Client"
 msgid "Out of Block"
 msgstr ""
@@ -612,6 +614,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:482
 #: ../../../Sources/Client/Client_Draw.cpp:514
 #: ../../../Sources/Client/Client_Draw.cpp:520
+#: ../../../Sources/Client/Client_Draw.cpp:556
 msgctxt "Client"
 msgid "Out of Grenade"
 msgstr ""
@@ -622,6 +625,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:490
 #: ../../../Sources/Client/Client_Draw.cpp:522
 #: ../../../Sources/Client/Client_Draw.cpp:528
+#: ../../../Sources/Client/Client_Draw.cpp:564
 msgctxt "Client"
 msgid "Reloading"
 msgstr ""
@@ -635,6 +639,8 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:525
 #: ../../../Sources/Client/Client_Input.cpp:457
 #: ../../../Sources/Client/Client_Draw.cpp:531
+#: ../../../Sources/Client/Client_Draw.cpp:567
+#: ../../../Sources/Client/Client_Input.cpp:453
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr ""
@@ -645,6 +651,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:496
 #: ../../../Sources/Client/Client_Draw.cpp:528
 #: ../../../Sources/Client/Client_Draw.cpp:534
+#: ../../../Sources/Client/Client_Draw.cpp:570
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
 msgstr ""
@@ -655,6 +662,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:541
 #: ../../../Sources/Client/Client_Draw.cpp:573
 #: ../../../Sources/Client/Client_Draw.cpp:584
+#: ../../../Sources/Client/Client_Draw.cpp:620
 msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr ""
@@ -665,6 +673,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:719
 #: ../../../Sources/Client/Client_Draw.cpp:751
 #: ../../../Sources/Client/Client_Draw.cpp:764
+#: ../../../Sources/Client/Client_Draw.cpp:800
 msgctxt "Client"
 msgid "Following {0}"
 msgstr ""
@@ -711,6 +720,7 @@ msgstr ""
 
 #: ../../../Sources/Gui/MainScreen.cpp:230
 #: ../../../Sources/Gui/MainScreen.cpp:223
+#: ../../../Sources/Gui/MainScreen.cpp:233
 msgctxt "MainScreen"
 msgid "NOW LOADING"
 msgstr ""
@@ -721,6 +731,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:539
 #: ../../../Sources/Client/Client_Draw.cpp:571
 #: ../../../Sources/Client/Client_Draw.cpp:582
+#: ../../../Sources/Client/Client_Draw.cpp:618
 msgctxt "Client"
 msgid "You will respawn in: {0}"
 msgstr ""
@@ -1192,6 +1203,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:595
 #: ../../../Sources/Client/Client.cpp:597
 #: ../../../Sources/Client/Client.cpp:592
+#: ../../../Sources/Client/Client.cpp:603
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr ""
@@ -1208,6 +1220,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:607
 #: ../../../Sources/Client/Client.cpp:596
 #: ../../../Sources/Client/Client.cpp:602
+#: ../../../Sources/Client/Client.cpp:613
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr ""
@@ -1217,6 +1230,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:95
 #: ../../../Sources/Client/Client_Draw.cpp:114
 #: ../../../Sources/Client/Client_Draw.cpp:116
+#: ../../../Sources/Client/Client_Draw.cpp:119
 msgctxt "Client"
 msgid "Sceneshot saved: {0}"
 msgstr ""
@@ -1226,6 +1240,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:97
 #: ../../../Sources/Client/Client_Draw.cpp:116
 #: ../../../Sources/Client/Client_Draw.cpp:118
+#: ../../../Sources/Client/Client_Draw.cpp:121
 msgctxt "Client"
 msgid "Screenshot saved: {0}"
 msgstr ""
@@ -1238,6 +1253,8 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:126
 #: ../../../Sources/Client/Client_Draw.cpp:122
 #: ../../../Sources/Client/Client_Draw.cpp:128
+#: ../../../Sources/Client/Client_Draw.cpp:125
+#: ../../../Sources/Client/Client_Draw.cpp:131
 msgctxt "Client"
 msgid "Screenshot failed: "
 msgstr ""
@@ -1249,6 +1266,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:639
 #: ../../../Sources/Client/Client.cpp:641
 #: ../../../Sources/Client/Client.cpp:636
+#: ../../../Sources/Client/Client.cpp:647
 msgctxt "Client"
 msgid "[Global] "
 msgstr ""
@@ -1256,6 +1274,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3229
 #: ../../../Sources/Client/Client.cpp:3253
 #: ../../../Sources/Client/Client_NetHandler.cpp:84
+#: ../../../Sources/Client/Client_NetHandler.cpp:88
 msgctxt "Client"
 msgid "{0} captured {1}'s territory"
 msgstr ""
@@ -1263,6 +1282,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3231
 #: ../../../Sources/Client/Client.cpp:3255
 #: ../../../Sources/Client/Client_NetHandler.cpp:86
+#: ../../../Sources/Client/Client_NetHandler.cpp:90
 msgctxt "Client"
 msgid "{0} captured an neutral territory"
 msgstr ""
@@ -1270,6 +1290,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3238
 #: ../../../Sources/Client/Client.cpp:3262
 #: ../../../Sources/Client/Client_NetHandler.cpp:93
+#: ../../../Sources/Client/Client_NetHandler.cpp:98
 msgctxt "Client"
 msgid "{0} captured {1}'s Territory"
 msgstr ""
@@ -1277,6 +1298,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3240
 #: ../../../Sources/Client/Client.cpp:3264
 #: ../../../Sources/Client/Client_NetHandler.cpp:95
+#: ../../../Sources/Client/Client_NetHandler.cpp:101
 msgctxt "Client"
 msgid "{0} captured an Neutral Territory"
 msgstr ""
@@ -1284,6 +1306,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3264
 #: ../../../Sources/Client/Client.cpp:3288
 #: ../../../Sources/Client/Client_NetHandler.cpp:119
+#: ../../../Sources/Client/Client_NetHandler.cpp:126
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
 msgstr ""
@@ -1291,6 +1314,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3271
 #: ../../../Sources/Client/Client.cpp:3295
 #: ../../../Sources/Client/Client_NetHandler.cpp:126
+#: ../../../Sources/Client/Client_NetHandler.cpp:133
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
 msgstr ""
@@ -1298,6 +1322,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3293
 #: ../../../Sources/Client/Client.cpp:3317
 #: ../../../Sources/Client/Client_NetHandler.cpp:148
+#: ../../../Sources/Client/Client_NetHandler.cpp:155
 msgctxt "Client"
 msgid "{0} picked up {1}'s intel"
 msgstr ""
@@ -1305,6 +1330,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3300
 #: ../../../Sources/Client/Client.cpp:3324
 #: ../../../Sources/Client/Client_NetHandler.cpp:155
+#: ../../../Sources/Client/Client_NetHandler.cpp:162
 msgctxt "Client"
 msgid "{0} picked up {1}'s Intel."
 msgstr ""
@@ -1312,6 +1338,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3317
 #: ../../../Sources/Client/Client.cpp:3341
 #: ../../../Sources/Client/Client_NetHandler.cpp:172
+#: ../../../Sources/Client/Client_NetHandler.cpp:179
 msgctxt "Client"
 msgid "{0} dropped {1}'s intel"
 msgstr ""
@@ -1319,6 +1346,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3324
 #: ../../../Sources/Client/Client.cpp:3348
 #: ../../../Sources/Client/Client_NetHandler.cpp:179
+#: ../../../Sources/Client/Client_NetHandler.cpp:186
 msgctxt "Client"
 msgid "{0} dropped {1}'s Intel"
 msgstr ""
@@ -1329,6 +1357,8 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3403
 #: ../../../Sources/Client/Client_NetHandler.cpp:229
 #: ../../../Sources/Client/Client_NetHandler.cpp:234
+#: ../../../Sources/Client/Client_NetHandler.cpp:236
+#: ../../../Sources/Client/Client_NetHandler.cpp:241
 msgctxt "Client"
 msgid "Player {0} has left"
 msgstr ""
@@ -1339,6 +1369,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3426
 #: ../../../Sources/Client/Client_NetHandler.cpp:250
 #: ../../../Sources/Client/Client_NetHandler.cpp:257
+#: ../../../Sources/Client/Client_NetHandler.cpp:264
 msgctxt "Client"
 msgid "{0} joined {1} team"
 msgstr ""
@@ -1346,6 +1377,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3438
 #: ../../../Sources/Client/Client.cpp:3462
 #: ../../../Sources/Client/Client_NetHandler.cpp:293
+#: ../../../Sources/Client/Client_NetHandler.cpp:300
 msgctxt "Client"
 msgid "{0} wins!"
 msgstr ""
@@ -1354,6 +1386,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3442
 #: ../../../Sources/Client/Client.cpp:3466
 #: ../../../Sources/Client/Client_NetHandler.cpp:297
+#: ../../../Sources/Client/Client_NetHandler.cpp:304
 msgctxt "Client"
 msgid "{0} Wins!"
 msgstr ""
@@ -1364,6 +1397,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:893
 #: ../../../Sources/Client/Client_Update.cpp:900
 #: ../../../Sources/Client/Client_Update.cpp:909
+#: ../../../Sources/Client/Client_Update.cpp:912
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr ""
@@ -1374,6 +1408,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:895
 #: ../../../Sources/Client/Client_Update.cpp:902
 #: ../../../Sources/Client/Client_Update.cpp:911
+#: ../../../Sources/Client/Client_Update.cpp:914
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr ""
@@ -1381,6 +1416,7 @@ msgstr ""
 #: ../../../Sources/Gui/Main.cpp:401 ../../../Sources/Gui/Main.cpp:388
 #: ../../../Sources/Gui/Runner.cpp:62 ../../../Sources/Gui/Main.cpp:403
 #: ../../../Sources/Gui/Main.cpp:529 ../../../Sources/Gui/Main.cpp:592
+#: ../../../Sources/Gui/Main.cpp:638
 msgctxt "Main"
 msgid ""
 "A serious error caused OpenSpades to stop working:\n"
@@ -1393,6 +1429,7 @@ msgstr ""
 #: ../../../Sources/Gui/Main.cpp:406 ../../../Sources/Gui/Main.cpp:393
 #: ../../../Sources/Gui/Runner.cpp:66 ../../../Sources/Gui/Main.cpp:408
 #: ../../../Sources/Gui/Main.cpp:534 ../../../Sources/Gui/Main.cpp:597
+#: ../../../Sources/Gui/Main.cpp:643
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr ""
@@ -1585,6 +1622,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Input.cpp:435
 #: ../../../Sources/Client/Client_Input.cpp:436
 #: ../../../Sources/Client/Client_Input.cpp:445
+#: ../../../Sources/Client/Client_Input.cpp:441
 msgctxt "Client"
 msgid "Out of Blocks"
 msgstr ""
@@ -1592,6 +1630,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Input.cpp:459
 #: ../../../Sources/Client/Client_Input.cpp:460
 #: ../../../Sources/Client/Client_Input.cpp:469
+#: ../../../Sources/Client/Client_Input.cpp:465
 msgctxt "Client"
 msgid "Out of Grenades"
 msgstr ""
@@ -1599,6 +1638,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:457
 #: ../../../Sources/Client/Client_Update.cpp:460
 #: ../../../Sources/Client/Client_Update.cpp:470
+#: ../../../Sources/Client/Client_Update.cpp:471
 msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
@@ -1608,6 +1648,7 @@ msgstr[1] ""
 #: ../../../Sources/Client/Client_Update.cpp:465
 #: ../../../Sources/Client/Client_Update.cpp:468
 #: ../../../Sources/Client/Client_Update.cpp:478
+#: ../../../Sources/Client/Client_Update.cpp:479
 msgctxt "Client"
 msgid "-- blocks"
 msgstr ""
@@ -1615,6 +1656,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:1202
 #: ../../../Sources/Client/Client_Update.cpp:1236
 #: ../../../Sources/Client/Client_Update.cpp:1259
+#: ../../../Sources/Client/Client_Update.cpp:1262
 msgctxt "Client"
 msgid "Insufficient blocks."
 msgstr ""
@@ -1622,6 +1664,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:1206
 #: ../../../Sources/Client/Client_Update.cpp:1240
 #: ../../../Sources/Client/Client_Update.cpp:1263
+#: ../../../Sources/Client/Client_Update.cpp:1266
 msgctxt "Client"
 msgid "You cannot place a block there."
 msgstr ""
