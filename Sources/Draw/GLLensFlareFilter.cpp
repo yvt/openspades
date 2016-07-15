@@ -40,12 +40,12 @@ namespace spades {
 			scannerProgram = renderer->RegisterProgram("Shaders/LensFlare/Scanner.program");
 			drawProgram = renderer->RegisterProgram("Shaders/LensFlare/Draw.program");
 			dustImg = (GLImage *)renderer->RegisterImage("Textures/RealLens.jpg");
-			flare1 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/1.tga");
-			flare2 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/2.tga");
-			flare3 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/3.tga");
+			flare1 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/1.png");
+			flare2 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/2.png");
+			flare3 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/3.png");
 			flare4 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/4.jpg");
-			mask1 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/mask1.tga");
-			mask2 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/mask2.tga");
+			mask1 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/mask1.png");
+			mask2 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/mask2.png");
 			mask3 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/mask3.png");
 			white = (GLImage *)renderer->RegisterImage("Gfx/White.tga");
 		}

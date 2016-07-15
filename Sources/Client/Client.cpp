@@ -313,8 +313,8 @@ namespace spades {
 			audioDevice->RegisterSound("Sounds/Weapons/AimDownSightLocal.wav");
 			renderer->RegisterImage("Gfx/Ball.png");
 			renderer->RegisterModel("Models/Player/Dead.kv6");
-			renderer->RegisterImage("Gfx/Spotlight.tga");
-			renderer->RegisterImage("Gfx/Glare.tga");
+			renderer->RegisterImage("Gfx/Spotlight.png");
+			renderer->RegisterImage("Gfx/Glare.png");
 			renderer->RegisterModel("Models/Weapons/Spade/Spade.kv6");
 			renderer->RegisterModel("Models/Weapons/Block/Block2.kv6");
 			renderer->RegisterModel("Models/Weapons/Grenade/Grenade.kv6");
@@ -337,10 +337,9 @@ namespace spades {
 			renderer->RegisterModel("Models/Player/Head.kv6");
 			renderer->RegisterModel("Models/MapObjects/Intel.kv6");
 			renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
-			renderer->RegisterImage("Gfx/Sight.tga");
-			renderer->RegisterImage("Gfx/Bullet/7.62mm.tga");
-			renderer->RegisterImage("Gfx/Bullet/9mm.tga");
-			renderer->RegisterImage("Gfx/Bullet/12gauge.tga");
+			renderer->RegisterImage("Gfx/Bullet/7.62mm.png");
+			renderer->RegisterImage("Gfx/Bullet/9mm.png");
+			renderer->RegisterImage("Gfx/Bullet/12gauge.png");
 			renderer->RegisterImage("Gfx/CircleGradient.png");
 			renderer->RegisterImage("Gfx/HurtSprite.png");
 			renderer->RegisterImage("Gfx/HurtRing2.png");

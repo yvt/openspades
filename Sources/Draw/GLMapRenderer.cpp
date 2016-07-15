@@ -46,8 +46,7 @@ namespace spades {
 				renderer->RegisterProgram("Shaders/BasicBlock.program");
 			renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
 			renderer->RegisterProgram("Shaders/BackFaceBlock.program");
-			renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
-			renderer->RegisterImage("Textures/detail.jpg");
+			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 		}
 		
 		GLMapRenderer::GLMapRenderer(client::GameMap *m, GLRenderer *r):
@@ -78,8 +77,7 @@ namespace spades {
 				basicProgram = renderer->RegisterProgram("Shaders/BasicBlock.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
 			backfaceProgram = renderer->RegisterProgram("Shaders/BackFaceBlock.program");
-			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
-			detailImage = (GLImage *)renderer->RegisterImage("Textures/detail.jpg");
+			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 			
 			static const uint8_t squareVertices[] = {
 				0,0, 1,0, 0,1,
@@ -172,8 +170,8 @@ namespace spades {
 								 IGLDevice::TextureMinFilter,
 								 IGLDevice::Linear);
 			
-			device->ActiveTexture(1);
-			detailImage->Bind(IGLDevice::Texture2D);
+            device->ActiveTexture(1);
+            device->BindTexture(IGLDevice::Texture2D, 0);
 			
 			
 			device->Enable(IGLDevice::CullFace, true);
@@ -283,8 +281,8 @@ namespace spades {
 			
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
 			
-			device->ActiveTexture(0);
-			detailImage->Bind(IGLDevice::Texture2D);
+            device->ActiveTexture(0);
+            device->BindTexture(IGLDevice::Texture2D, 0);
 			
 			device->Enable(IGLDevice::CullFace, true);
 			device->Enable(IGLDevice::DepthTest, true);

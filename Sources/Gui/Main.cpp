@@ -19,6 +19,7 @@
  */
 
 #include <OpenSpades.h>
+#include <zlib.h>
 #include <Imports/SDL.h>
 #include "Main.h"
 #include "MainScreen.h"
@@ -330,6 +331,20 @@ public:
 	}
 };
 
+static uLong computeCrc32ForStream(spades::IStream *s)
+{
+    uLong crc = crc32(0L, Z_NULL, 0);
+    
+    char buf[16384];
+    size_t sz;
+    
+    while ((sz = s->Read(buf, 16384)) != 0) {
+        crc = crc32(crc, reinterpret_cast<const Bytef *> (buf),
+                    static_cast<uInt> (sz));
+    }
+    
+    return crc;
+}
 
 #ifdef WIN32
 static std::string Utf8FromWString(const wchar_t *ws) {
@@ -555,17 +570,24 @@ int main(int argc, char ** argv)
 				// check extension
 				if(name.size() < 4 ||
 				   name.rfind(".pak") != name.size() - 4){
+                    SPLog("Ignored loose file: %s\n", name.c_str());
 					continue;
 				}
 
 				if(spades::FileManager::FileExists(name.c_str())) {
 					spades::IStream *stream = spades::FileManager::OpenForReading(name.c_str());
+                    uLong crc = computeCrc32ForStream(stream);
+                    
+                    stream->SetPosition(0);
+                    
 					spades::ZipFileSystem *fs = new spades::ZipFileSystem(stream);
 					if(name[0] == '_' && false) { // last resort for #198
-						SPLog("Pak Registered: %s (marked as 'important')\n", name.c_str());
+						SPLog("Pak registered: %s: %08lx (marked as 'important')", name.c_str(),
+                              static_cast<unsigned long> (crc));
 						fssImportant.push_back(fs);
 					}else{
-						SPLog("Pak Registered: %s\n", name.c_str());
+                        SPLog("Pak registered: %s: %08lx", name.c_str(),
+                              static_cast<unsigned long> (crc));
 						fss.push_back(fs);
 					}
 				}

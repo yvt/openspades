@@ -32,10 +32,20 @@ namespace spades {
 		SPADES_MARK_FUNCTION();
 		if(!fn) SPInvalidArgument("fn");
 		if(fn[0] == 0) SPFileNotFound(fn);
+        
+        // check each file systems
 		for(auto *fs: g_fileSystems){
 			if(fs->FileExists(fn))
 				return fs->OpenForReading(fn);
 		}
+        
+        // check weak files, too
+        auto weak_fn = std::string(fn) + ".weak";
+        for(auto *fs: g_fileSystems){
+            if(fs->FileExists(weak_fn.c_str()))
+                return fs->OpenForReading(weak_fn.c_str());
+        }
+        
 		SPFileNotFound(fn);
 	}
 	IStream *FileManager::OpenForWriting(const char *fn) {
@@ -47,6 +57,8 @@ namespace spades {
 				return fs->OpenForWriting(fn);
 		}
 		
+        // FIXME: handling of weak files
+        
 		// create file
 		for(auto *fs: g_fileSystems){
 			try{
@@ -64,7 +76,15 @@ namespace spades {
 		for(auto *fs: g_fileSystems){
 			if(fs->FileExists(fn))
 				return true;
-		}
+        }
+        
+        // check weak files, too
+        auto weak_fn = std::string(fn) + ".weak";
+        for(auto *fs: g_fileSystems){
+            if(fs->FileExists(weak_fn.c_str()))
+                return true;
+        }
+        
 		return false;
 	}
 	

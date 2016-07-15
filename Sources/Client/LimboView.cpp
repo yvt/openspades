@@ -173,9 +173,8 @@ namespace spades{
 		}
 		
 		void LimboView::Draw() {
-			Handle<IImage> menuItemImage = renderer->RegisterImage("Gfx/Limbo/MenuItem.tga");
-			Handle<IImage> menuItemBigImage = renderer->RegisterImage("Gfx/Limbo/BigMenuItem.tga");
-			//Handle<IImage> menuItemRingImage = renderer->RegisterImage("Gfx/Limbo/MenuItemRing.tga");
+			Handle<IImage> menuItemImage = renderer->RegisterImage("Gfx/Limbo/MenuItem.png");
+			Handle<IImage> menuItemBigImage = renderer->RegisterImage("Gfx/Limbo/BigMenuItem.png");
 			IFont *font = client->textFont;
 			
 			float left = (renderer->ScreenWidth() - contentsWidth) * .5f;
@@ -264,7 +263,7 @@ namespace spades{
 				}
 			}
 			
-			Handle<IImage> cursor = renderer->RegisterImage("Gfx/Limbo/Cursor.tga");
+			Handle<IImage> cursor = renderer->RegisterImage("Gfx/Limbo/Cursor.png");
 			
 			renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
 			renderer->DrawImage(cursor, AABB2(cursorPos.x - 8,

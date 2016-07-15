@@ -151,7 +151,7 @@ namespace spades {
 								AABB2(scrWidth * .5f, teamBarTop,
 									  scrWidth * .5f, teamBarHeight));
 			
-			image = renderer->RegisterImage("Gfx/Scoreboard/Grunt.tga");
+			image = renderer->RegisterImage("Gfx/Scoreboard/Grunt.png");
 			size.x = 120.f; size.y = 60.f;
 			renderer->DrawImage(image,
 								AABB2(contentsLeft, teamBarTop + teamBarHeight - size.y,
@@ -198,7 +198,7 @@ namespace spades {
 			}
 			
 			// players background
-			image = renderer->RegisterImage("Gfx/Scoreboard/PlayersBg.tga");
+			image = renderer->RegisterImage("Gfx/Scoreboard/PlayersBg.png");
 			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 1.f));
 			renderer->DrawImage(image,
 								AABB2(0, playersTop,

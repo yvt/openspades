@@ -36,7 +36,7 @@ namespace spades {
 			renderer->RegisterProgram("Shaders/VoxelModel.program");
 			renderer->RegisterProgram("Shaders/VoxelModelDynamicLit.program");
 			renderer->RegisterProgram("Shaders/VoxelModelShadowMap.program");
-			renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
+			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 		}
 		GLVoxelModel::GLVoxelModel(VoxelModel *m,
 								   GLRenderer *r){
@@ -48,7 +48,7 @@ namespace spades {
 			program = renderer->RegisterProgram("Shaders/VoxelModel.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/VoxelModelDynamicLit.program");
 			shadowMapProgram = renderer->RegisterProgram("Shaders/VoxelModelShadowMap.program");
-			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
+			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 			
 			BuildVertices(m);
 			

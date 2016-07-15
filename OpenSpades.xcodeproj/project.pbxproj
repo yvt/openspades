@@ -305,13 +305,6 @@
 		E82E67EF18EA7A51004DBA18 /* pnglite.c in Sources */ = {isa = PBXBuildFile; fileRef = E895D66118D614DE00F5B9CA /* pnglite.c */; };
 		E82E67F018EA7A60004DBA18 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03C4178EE78C000683D4 /* OpenGL.framework */; };
 		E82E67FA18EA7EAB004DBA18 /* font-unifont.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F318EA7EAB004DBA18 /* font-unifont.pak */; };
-		E82E67FB18EA7EAB004DBA18 /* pak000-Base.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F418EA7EAB004DBA18 /* pak000-Base.pak */; };
-		E82E67FC18EA7EAB004DBA18 /* pak001-Sounds.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F518EA7EAB004DBA18 /* pak001-Sounds.pak */; };
-		E82E67FD18EA7EAB004DBA18 /* pak002-Models.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F618EA7EAB004DBA18 /* pak002-Models.pak */; };
-		E82E67FE18EA7EAB004DBA18 /* pak010-BaseSkin.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F718EA7EAB004DBA18 /* pak010-BaseSkin.pak */; };
-		E82E67FF18EA7EAB004DBA18 /* pak011-Gui.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F818EA7EAB004DBA18 /* pak011-Gui.pak */; };
-		E82E680018EA7EAB004DBA18 /* pak999-References.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F918EA7EAB004DBA18 /* pak999-References.pak */; };
-		E82E680218EA7F2E004DBA18 /* pak012-Locales.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E680118EA7F2E004DBA18 /* pak012-Locales.pak */; };
 		E82E680418EA7F60004DBA18 /* libysrspades.dylib in Resources */ = {isa = PBXBuildFile; fileRef = E82E680318EA7F60004DBA18 /* libysrspades.dylib */; };
 		E834F55017942C43004EBE88 /* Grenade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F54E17942C43004EBE88 /* Grenade.cpp */; };
 		E834F55317944779004EBE88 /* NetClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F55117944778004EBE88 /* NetClient.cpp */; };
@@ -359,6 +352,12 @@
 		E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859510D17C61F850012810C /* GLLensFlareFilter.cpp */; };
 		E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511017C645000012810C /* GLFXAAFilter.cpp */; };
 		E859511517C96B270012810C /* GLProfiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511317C96B260012810C /* GLProfiler.cpp */; };
+		E8690AEC1D3920C800DBC331 /* pak000-Nonfree.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */; };
+		E8690AED1D3920C800DBC331 /* pak002-Base.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE71D3920C800DBC331 /* pak002-Base.pak */; };
+		E8690AEE1D3920C800DBC331 /* pak005-Models.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE81D3920C800DBC331 /* pak005-Models.pak */; };
+		E8690AEF1D3920C800DBC331 /* pak010-BaseSkin.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE91D3920C800DBC331 /* pak010-BaseSkin.pak */; };
+		E8690AF01D3920C800DBC331 /* pak050-Locales.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AEA1D3920C800DBC331 /* pak050-Locales.pak */; };
+		E8690AF11D3920C800DBC331 /* pak999-References.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AEB1D3920C800DBC331 /* pak999-References.pak */; };
 		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
 		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
@@ -662,15 +661,9 @@
 		E82E66BF18EA78F5004DBA18 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		E82E66C018EA78F5004DBA18 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E82E66DA18EA78F5004DBA18 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		E82E67F118EA7D8F004DBA18 /* updatepak.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = updatepak.sh; path = Resources/updatepak.sh; sourceTree = "<group>"; };
 		E82E67F318EA7EAB004DBA18 /* font-unifont.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "font-unifont.pak"; path = "Resources/font-unifont.pak"; sourceTree = "<group>"; };
-		E82E67F418EA7EAB004DBA18 /* pak000-Base.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak000-Base.pak"; path = "Resources/pak000-Base.pak"; sourceTree = "<group>"; };
-		E82E67F518EA7EAB004DBA18 /* pak001-Sounds.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak001-Sounds.pak"; path = "Resources/pak001-Sounds.pak"; sourceTree = "<group>"; };
-		E82E67F618EA7EAB004DBA18 /* pak002-Models.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak002-Models.pak"; path = "Resources/pak002-Models.pak"; sourceTree = "<group>"; };
 		E82E67F718EA7EAB004DBA18 /* pak010-BaseSkin.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak010-BaseSkin.pak"; path = "Resources/pak010-BaseSkin.pak"; sourceTree = "<group>"; };
-		E82E67F818EA7EAB004DBA18 /* pak011-Gui.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak011-Gui.pak"; path = "Resources/pak011-Gui.pak"; sourceTree = "<group>"; };
 		E82E67F918EA7EAB004DBA18 /* pak999-References.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak999-References.pak"; path = "Resources/pak999-References.pak"; sourceTree = "<group>"; };
-		E82E680118EA7F2E004DBA18 /* pak012-Locales.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak012-Locales.pak"; path = "Resources/pak012-Locales.pak"; sourceTree = "<group>"; };
 		E82E680318EA7F60004DBA18 /* libysrspades.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libysrspades.dylib; sourceTree = SOURCE_ROOT; };
 		E82E680618EA9502004DBA18 /* XSpades.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = XSpades.entitlements; path = XSpades/XSpades.entitlements; sourceTree = "<group>"; };
 		E834F54E17942C43004EBE88 /* Grenade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grenade.cpp; sourceTree = "<group>"; };
@@ -780,6 +773,12 @@
 		E859511117C645000012810C /* GLFXAAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFXAAFilter.h; sourceTree = "<group>"; };
 		E859511317C96B260012810C /* GLProfiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProfiler.cpp; sourceTree = "<group>"; };
 		E859511417C96B270012810C /* GLProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProfiler.h; sourceTree = "<group>"; };
+		E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak000-Nonfree.pak"; path = "../openspades-nonfree/Resources/pak000-Nonfree.pak"; sourceTree = "<group>"; };
+		E8690AE71D3920C800DBC331 /* pak002-Base.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak002-Base.pak"; path = "Resources/pak002-Base.pak"; sourceTree = "<group>"; };
+		E8690AE81D3920C800DBC331 /* pak005-Models.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak005-Models.pak"; path = "Resources/pak005-Models.pak"; sourceTree = "<group>"; };
+		E8690AE91D3920C800DBC331 /* pak010-BaseSkin.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak010-BaseSkin.pak"; path = "Resources/pak010-BaseSkin.pak"; sourceTree = "<group>"; };
+		E8690AEA1D3920C800DBC331 /* pak050-Locales.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak050-Locales.pak"; path = "Resources/pak050-Locales.pak"; sourceTree = "<group>"; };
+		E8690AEB1D3920C800DBC331 /* pak999-References.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak999-References.pak"; path = "Resources/pak999-References.pak"; sourceTree = "<group>"; };
 		E874834618EACF0300C29033 /* OpenSpades.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = OpenSpades.icns; path = Resources/Icons/OpenSpades.icns; sourceTree = "<group>"; };
 		E87AB82118BB3957006B7D73 /* SdlImageReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SdlImageReader.cpp; sourceTree = "<group>"; };
 		E87AB82418BB3A04006B7D73 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
@@ -1692,18 +1691,18 @@
 		E8CF037C178ED9D2000683D4 = {
 			isa = PBXGroup;
 			children = (
+				E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */,
+				E8690AE71D3920C800DBC331 /* pak002-Base.pak */,
+				E8690AE81D3920C800DBC331 /* pak005-Models.pak */,
+				E8690AE91D3920C800DBC331 /* pak010-BaseSkin.pak */,
+				E8690AEA1D3920C800DBC331 /* pak050-Locales.pak */,
+				E8690AEB1D3920C800DBC331 /* pak999-References.pak */,
 				E874834618EACF0300C29033 /* OpenSpades.icns */,
 				E82E680618EA9502004DBA18 /* XSpades.entitlements */,
 				E82E680318EA7F60004DBA18 /* libysrspades.dylib */,
-				E82E680118EA7F2E004DBA18 /* pak012-Locales.pak */,
 				E82E67F318EA7EAB004DBA18 /* font-unifont.pak */,
-				E82E67F418EA7EAB004DBA18 /* pak000-Base.pak */,
-				E82E67F518EA7EAB004DBA18 /* pak001-Sounds.pak */,
-				E82E67F618EA7EAB004DBA18 /* pak002-Models.pak */,
 				E82E67F718EA7EAB004DBA18 /* pak010-BaseSkin.pak */,
-				E82E67F818EA7EAB004DBA18 /* pak011-Gui.pak */,
 				E82E67F918EA7EAB004DBA18 /* pak999-References.pak */,
-				E82E67F118EA7D8F004DBA18 /* updatepak.sh */,
 				E87AB82418BB3A04006B7D73 /* SDL2_image.framework */,
 				E8428887189FE1710060743D /* Fog.vs */,
 				E8B93AD418559EC600BD01E1 /* SDL2.framework */,
@@ -2241,16 +2240,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8690AEC1D3920C800DBC331 /* pak000-Nonfree.pak in Resources */,
+				E8690AED1D3920C800DBC331 /* pak002-Base.pak in Resources */,
+				E8690AEE1D3920C800DBC331 /* pak005-Models.pak in Resources */,
+				E8690AEF1D3920C800DBC331 /* pak010-BaseSkin.pak in Resources */,
+				E8690AF01D3920C800DBC331 /* pak050-Locales.pak in Resources */,
+				E8690AF11D3920C800DBC331 /* pak999-References.pak in Resources */,
 				E874834718EACF0300C29033 /* OpenSpades.icns in Resources */,
 				E82E680418EA7F60004DBA18 /* libysrspades.dylib in Resources */,
-				E82E680218EA7F2E004DBA18 /* pak012-Locales.pak in Resources */,
 				E82E67FA18EA7EAB004DBA18 /* font-unifont.pak in Resources */,
-				E82E67FB18EA7EAB004DBA18 /* pak000-Base.pak in Resources */,
-				E82E67FC18EA7EAB004DBA18 /* pak001-Sounds.pak in Resources */,
-				E82E67FD18EA7EAB004DBA18 /* pak002-Models.pak in Resources */,
-				E82E67FE18EA7EAB004DBA18 /* pak010-BaseSkin.pak in Resources */,
-				E82E67FF18EA7EAB004DBA18 /* pak011-Gui.pak in Resources */,
-				E82E680018EA7EAB004DBA18 /* pak999-References.pak in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2268,7 +2266,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Resources\n./updatepak.sh";
+			shellScript = "cd Resources\n./mkpak.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2829,9 +2827,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)"
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -2862,9 +2858,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)"
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

@@ -41,7 +41,7 @@ namespace spades {
 			renderer->RegisterProgram("Shaders/OptimizedVoxelModel.program");
 			renderer->RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
 			renderer->RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
-			renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
+			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 		}
 		GLOptimizedVoxelModel::GLOptimizedVoxelModel(VoxelModel *m,
 								   GLRenderer *r){
@@ -56,7 +56,7 @@ namespace spades {
 			program = renderer->RegisterProgram("Shaders/OptimizedVoxelModel.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
 			shadowMapProgram = renderer->RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
-			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
+			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 			
 			
 			buffer = device->GenBuffer();
