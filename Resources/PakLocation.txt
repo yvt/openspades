@@ -1,13 +1,14 @@
 
 
-All paks for development vesion
--------------------------------
+Non-GPL-compatible data pak
+---------------------------
 
 https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip
 
-These paks are not included in the source tree because they contains some 
-non-opensource materials and they seem too large to include in the git tree.
+`pak000-Nonfree.pak` in this zip file contains game data that is not compatible
+with GPLv3. Please do not redistribute it.
 
+Note: this no longer contains all pak files.
 
 
 GNU Unifont (Generic Unicode Font)
