@@ -942,7 +942,7 @@ public:
 
    uint get_size() const
    {
-      return m_pFile ? ftell(m_pFile) : 0;
+      return m_pFile ? (uint) ftell(m_pFile) : 0;
    }
 };
 

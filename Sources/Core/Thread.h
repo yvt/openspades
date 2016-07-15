@@ -22,6 +22,7 @@
 
 #include "Mutex.h"
 #include "IRunnable.h"
+#include "../Imports/SDL.h"
 
 namespace spades {
 	
@@ -30,7 +31,7 @@ namespace spades {
 		Mutex lock;
 		IRunnable *runnable;
 		bool volatile autoDelete;
-		unsigned int volatile threadId;
+		SDL_threadID volatile threadId;
 		
 		static int InternalRunner(void *);
 		void Quited();

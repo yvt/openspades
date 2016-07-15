@@ -829,7 +829,7 @@ namespace spades {
 							tk = ReadToken();
 							if(tk.first == TokenType::Indexer) {
 								try {
-									directiveIdx = std::stol(tk.second);
+									directiveIdx = static_cast<int> (std::stol(tk.second));
 									currentMsgText[directiveIdx] = std::string();
 								}catch(...){
 									SPRaise("Integer parse error of '%s' at line %d", tk.second.c_str(), line);

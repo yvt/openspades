@@ -627,7 +627,8 @@ namespace spades {
 			projectionViewMatrix(program);
 			projectionViewMatrix.SetValue(GetProjectionViewMatrix());
 			
-			device->DrawArrays(IGLDevice::Lines, 0, vertices.size());
+			device->DrawArrays(IGLDevice::Lines, 0,
+                               static_cast<IGLDevice::Sizei> (vertices.size()));
 			
 			device->EnableVertexAttribArray(positionAttribute(), false);
 			device->EnableVertexAttribArray(colorAttribute(), false);

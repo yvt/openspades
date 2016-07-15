@@ -55,13 +55,13 @@ namespace spades {
 			buffer = device->GenBuffer();
 			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			device->BufferData(IGLDevice::ArrayBuffer,
-							   vertices.size() * sizeof(Vertex),
+							   static_cast<IGLDevice::Sizei> (vertices.size() * sizeof(Vertex)),
 							   vertices.data(), IGLDevice::StaticDraw);
 			
 			idxBuffer = device->GenBuffer();
 			device->BindBuffer(IGLDevice::ArrayBuffer, idxBuffer);
 			device->BufferData(IGLDevice::ArrayBuffer,
-							   indices.size() * sizeof(uint32_t),
+							   static_cast<IGLDevice::Sizei> (indices.size() * sizeof(uint32_t)),
 							   indices.data(), IGLDevice::StaticDraw);
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			

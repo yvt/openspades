@@ -166,7 +166,7 @@ int CScriptBuilder::LoadScriptSection(const char *filename)
 
 	// Determine size of the file
 	fseek(f, 0, SEEK_END);
-	int len = ftell(f);
+	int len = static_cast<int> (ftell(f));
 	fseek(f, 0, SEEK_SET);
 
 	// On Win32 it is possible to do the following instead

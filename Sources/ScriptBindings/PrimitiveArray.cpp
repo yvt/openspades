@@ -180,14 +180,14 @@ namespace spades {
 		int Find(const T& val) const {
 			typename std::vector<T>::const_iterator it = std::find(inner.begin(), inner.end(), val);
 			if(it == inner.end()) return -1;
-			return it - inner.begin();
+			return static_cast<int> (it - inner.begin());
 		}
 		
 		int Find(asUINT ind, const T& val) const {
 			if(ind >= GetSize()) return -1;
 			typename std::vector<T>::const_iterator it = std::find(inner.begin() + ind, inner.end(), val);
 			if(it == inner.end()) return -1;
-			return it - inner.begin();
+			return static_cast<int> (it - inner.begin());
 		}
 		
 		bool operator ==(const ArrayType& array) const {

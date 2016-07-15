@@ -315,7 +315,7 @@ namespace spades {
 			asIScriptEngine *eng = ScriptManager::GetInstance()->GetEngine();
 			asIObjectType* t = eng->GetObjectTypeById(eng->GetTypeIdByDecl("array<spades::MainScreenServerItem@>"));
 			SPAssert(t != NULL);
-			CScriptArray *arr = new CScriptArray(lst.size(), t);
+			CScriptArray *arr = new CScriptArray(static_cast<asUINT>(lst.size()), t);
 			for(size_t i = 0; i < lst.size(); i++){
 				arr->SetValue((asUINT)i, &(lst[i]));
 			}

@@ -166,8 +166,8 @@ namespace spades {
 					if((sel == i) != (phase == 1))
 						continue;
 					
-					int row = i / 8;
-					int col = i % 8;
+					int row = static_cast<int> (i / 8);
+					int col = static_cast<int> (i % 8);
 					
 					bool selected = sel == i;
 					

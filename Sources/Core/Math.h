@@ -373,9 +373,9 @@ namespace spades {
 		}
 		
 		IntVector3 Floor() const{
-			return IntVector3::Make((long)floorf(x),
-									(long)floorf(y),
-									(long)floorf(z));
+			return IntVector3::Make((int) floorf(x),
+									(int) floorf(y),
+									(int) floorf(z));
 		}
 	};
 	

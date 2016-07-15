@@ -57,17 +57,20 @@
 #endif
 
 
-#ifdef _MSC_VER>=1900	// Visual Studio 2015 or higher
+#if _MSC_VER >= 1900	// Visual Studio 2015 or higher
 extern "C" { FILE __iob_func[3] = { *stdin,*stdout,*stderr }; }
 #endif
 
 static const unsigned char splashImage[] = {
 	#include "SplashImage.inc"
 };
+
+#ifdef __APPLE__
+#elif __unix
 static const unsigned char Icon[] = {
 	#include "Icon.inc"
 };
-
+#endif
 
 SPADES_SETTING(cl_showStartupWindow, "1");
 

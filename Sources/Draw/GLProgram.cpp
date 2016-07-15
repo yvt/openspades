@@ -55,7 +55,10 @@ namespace  spades {
 			errMsg.resize(device->GetProgramInteger(handle, IGLDevice::InfoLogLength) + 1);
 			
 			IGLDevice::Sizei outLen;
-			device->GetProgramInfoLog(handle, errMsg.size(), &outLen, errMsg.data());
+			device->GetProgramInfoLog(handle,
+                                      static_cast<IGLDevice::Sizei> (errMsg.size()),
+                                      &outLen,
+                                      errMsg.data());
 			errMsg[outLen] = 0;
 			
 			std::string err = errMsg.data();
@@ -84,7 +87,10 @@ namespace  spades {
 				errMsg.resize(device->GetProgramInteger(handle, IGLDevice::InfoLogLength) + 1);
 				
 				IGLDevice::Sizei outLen;
-				device->GetShaderInfoLog(handle, errMsg.size(), &outLen, errMsg.data());
+				device->GetShaderInfoLog(handle,
+                                         static_cast<IGLDevice::Sizei> (errMsg.size()),
+                                         &outLen,
+                                         errMsg.data());
 				errMsg[outLen] = 0;
 				
 				

@@ -241,11 +241,13 @@ namespace spades {
 	template<> std::string ToString<Vector4>(const Vector4& v);
 	template<> std::string ToString<IntVector3>(const IntVector3& v);
 	
+    // `CheckPlural` converts the given value to an integer for plural form identification.
+    // Let's ignore huge numbers for now...
 	template<class ...T> int CheckPlural(T... args) { return 1; }
 	template<class ...T> int CheckPlural(int v, T... args) { return v; }
-	template<class ...T> int CheckPlural(long v, T... args) { return v; }
+	template<class ...T> int CheckPlural(long v, T... args) { return static_cast<int> (v); }
 	template<class ...T> int CheckPlural(unsigned int v, T... args) { return v; }
-	template<class ...T> int CheckPlural(unsigned long v, T... args) { return v; }
+	template<class ...T> int CheckPlural(unsigned long v, T... args) { return static_cast<int> (v); }
 	template<class ...T> int CheckPlural(short v, T... args) { return v; }
 	template<class ...T> int CheckPlural(unsigned short v, T... args) { return v; }
 	template<class ...T> int CheckPlural(char v, T... args) { return v; }

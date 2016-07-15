@@ -88,7 +88,7 @@ namespace spades {
 			SPRaise("State is invalid");
 		}
 		
-		zstream.avail_in = buffer.size();
+		zstream.avail_in = (uint) buffer.size();
 		zstream.next_in = (Bytef*)buffer.data();
 		
 		do{
@@ -203,7 +203,7 @@ namespace spades {
 				inputBuffer[i] = nextbuffer[i];
 			readSize = baseStream->Read(inputBuffer + nextbuffer.size(), readSize);
 			readSize += nextbuffer.size();
-			zstream.avail_in = readSize;
+			zstream.avail_in = (uint) readSize;
 			zstream.next_in = (Bytef*)inputBuffer;
 			
 			do{

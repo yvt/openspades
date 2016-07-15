@@ -179,7 +179,7 @@ namespace spades {
 				// initialize player view objects
 				clientPlayers.resize(world->GetNumPlayerSlots());
 				for(size_t i = 0; i < world->GetNumPlayerSlots(); i++) {
-					Player *p = world->GetPlayer(i);
+					Player *p = world->GetPlayer(static_cast<unsigned int> (i));
 					if(p){
 						clientPlayers[i] = new ClientPlayer(p, this);
 					}else{
@@ -721,7 +721,7 @@ namespace spades {
 				if(nextId >= static_cast<int>(world->GetNumPlayerSlots()))
 					nextId = 0;
 				if(nextId < 0)
-					nextId = world->GetNumPlayerSlots() - 1;
+					nextId = static_cast<int> (world->GetNumPlayerSlots() - 1);
 				
 				Player *p = world->GetPlayer(nextId);
 				if(p == nullptr)

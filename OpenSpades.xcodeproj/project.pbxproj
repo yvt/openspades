@@ -2830,8 +2830,7 @@
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/tcpp/Programs/MacPrograms2/Ysr/DerivedData/Ysr/Build/Products/Release,
+					"$(inherited)"
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2864,8 +2863,7 @@
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/tcpp/Programs/MacPrograms2/Ysr/DerivedData/Ysr/Build/Products/Release,
+					"$(inherited)"
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2905,7 +2903,6 @@
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/SDL2.framework/Headers,
 					/Library/Frameworks/SDL2_image.framework/Headers,
-					/usr/local/include/FL/images,
 					/usr/local/include,
 					Sources/ENet/include,
 					"$(SRCROOT)",
@@ -2950,7 +2947,6 @@
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/SDL2.framework/Headers,
 					/Library/Frameworks/SDL2_image.framework/Headers,
-					/usr/local/include/FL/images,
 					/usr/local/include,
 					Sources/ENet/include,
 					"$(SRCROOT)",

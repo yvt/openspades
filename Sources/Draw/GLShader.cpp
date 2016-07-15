@@ -60,10 +60,11 @@ namespace spades {
 			
 			for(size_t i = 0; i < sources.size(); i++){
 				srcs.push_back(sources[i].c_str());
-				lens.push_back(sources[i].size());
+				lens.push_back(static_cast<int> (sources[i].size()));
 			}
 			
-			device->ShaderSource(handle, srcs.size(),
+			device->ShaderSource(handle,
+                                 static_cast<IGLDevice::Sizei> (srcs.size()),
 								 srcs.data(), lens.data());
 			
 			device->CompileShader(handle);
@@ -74,7 +75,10 @@ namespace spades {
 				errMsg.resize(device->GetShaderInteger(handle, IGLDevice::InfoLogLength) + 1);
 				
 				IGLDevice::Sizei outLen;
-				device->GetShaderInfoLog(handle, errMsg.size(), &outLen, errMsg.data());
+				device->GetShaderInfoLog(handle,
+                                         static_cast<IGLDevice::Sizei> (errMsg.size()),
+                                         &outLen,
+                                         errMsg.data());
 				errMsg[outLen] = 0;
 				
 				std::string src;

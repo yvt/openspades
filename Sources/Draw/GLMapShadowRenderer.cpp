@@ -112,8 +112,8 @@ namespace spades{
 			
 			device->BindTexture(IGLDevice::Texture2D, texture);
 			for(size_t i = 0; i < updateBitmap.size(); i++){
-				int y = i / updateBitmapPitch;
-				int x = (i - y * updateBitmapPitch) * 32;
+				int y = static_cast<int> (i / updateBitmapPitch);
+				int x = static_cast<int> ((i - y * updateBitmapPitch) * 32);
 				if(updateBitmap[i] == 0)
 					continue;
 				

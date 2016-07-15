@@ -484,7 +484,8 @@ namespace spades {
 			device->EnableVertexAttribArray(positionAttribute(), true);
 			
 			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
-			device->DrawElements(IGLDevice::Triangles, indices.size(),
+			device->DrawElements(IGLDevice::Triangles,
+                                 static_cast<IGLDevice::Sizei> (indices.size()),
 								 IGLDevice::UnsignedShort, indices.data());
 			
 			device->EnableVertexAttribArray(positionAttribute(), false);

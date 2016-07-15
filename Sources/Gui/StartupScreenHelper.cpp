@@ -30,10 +30,12 @@
 #include "../Imports/OpenGL.h" //for gpu info
 #include "../Imports/SDL.h"
 
-
+#ifdef __APPLE__
+#elif __unix
 static const unsigned char Icon[] = {
 	#include "Icon.inc"
 };
+#endif
 
 SPADES_SETTING(r_bloom, "");
 SPADES_SETTING(r_lens, "");

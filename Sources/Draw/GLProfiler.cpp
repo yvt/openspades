@@ -75,7 +75,7 @@ namespace spades {
 		}
 		std::string GLProfiler::GetProfileMessage() {
 			char buf[4096];
-			int indent = levels.size() * 2;
+			int indent = static_cast<int> (levels.size() * 2);
 			for(int i = 0; i < indent; i++)
 				buf[i] = ' ';
 			sprintf(buf + indent, "%s - %.3fms (%.3fms w/o glFinish)\n",	name.c_str(),

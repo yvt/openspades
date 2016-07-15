@@ -30,7 +30,7 @@ namespace {
 	unsigned WriteCallback(void* input, std::size_t size, std::size_t numel, void* user_ptr) {
 		auto stream = static_cast<spades::IStream*>(user_ptr);
 		stream->Write(input, size * numel);
-		return size * numel;
+		return static_cast<unsigned> (size * numel);
 	}
 }
 
