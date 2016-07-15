@@ -465,8 +465,6 @@
 		E8B6B74617EA0F2600E35523 /* IGrenadeSkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B74417EA0F1B00E35523 /* IGrenadeSkin.cpp */; };
 		E8B6B74917EA12EC00E35523 /* IWeaponSkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B74717EA12E100E35523 /* IWeaponSkin.cpp */; };
 		E8B93AD518559EC700BD01E1 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
-		E8C68A511C5BD8E200C52C3F /* Palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C68A501C5BD8E200C52C3F /* Palette.cpp */; };
-		E8C68A521C5BD8F200C52C3F /* Palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C68A501C5BD8E200C52C3F /* Palette.cpp */; };
 		E8C92A0C18695EA500740C9F /* SWModelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */; };
 		E8C92A0F186A902500740C9F /* CpuID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C92A0E186A902500740C9F /* CpuID.cpp */; };
 		E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0399178EDABD000683D4 /* OpenAL.framework */; };
@@ -997,7 +995,6 @@
 		E8B6B74817EA12E500E35523 /* IWeaponSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWeaponSkin.h; sourceTree = "<group>"; };
 		E8B8082718E05B920001013E /* CellToTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellToTriangle.h; sourceTree = "<group>"; };
 		E8B93AD418559EC600BD01E1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
-		E8C68A501C5BD8E200C52C3F /* Palette.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Palette.cpp; sourceTree = "<group>"; };
 		E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModelRenderer.cpp; sourceTree = "<group>"; };
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
@@ -1039,7 +1036,6 @@
 		E8CF03DF178EF4E9000683D4 /* IRunnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRunnable.h; sourceTree = "<group>"; };
 		E8CF03E1178EF57E000683D4 /* SDLRunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDLRunner.cpp; sourceTree = "<group>"; };
 		E8CF03E2178EF57E000683D4 /* SDLRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLRunner.h; sourceTree = "<group>"; };
-		E8CF03E4178EF5FF000683D4 /* libfltk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfltk.a; path = ../../../../../usr/local/lib/libfltk.a; sourceTree = "<group>"; };
 		E8CF03EA178EF8FE000683D4 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		E8CF03EC178EF904000683D4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		E8CF03EE178EF909000683D4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -1113,8 +1109,6 @@
 		E8E44684179CC4FF00BE8855 /* IBitmapCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IBitmapCodec.cpp; sourceTree = "<group>"; };
 		E8E44685179CC4FF00BE8855 /* IBitmapCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBitmapCodec.h; sourceTree = "<group>"; };
 		E8E44687179CC65900BE8855 /* TargaReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TargaReader.cpp; sourceTree = "<group>"; };
-		E8E4468D179CE7A200BE8855 /* libfltk_images.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfltk_images.a; path = ../../../../../usr/local/lib/libfltk_images.a; sourceTree = "<group>"; };
-		E8E4468E179CE7A200BE8855 /* libfltk_jpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfltk_jpeg.a; path = ../../../../../usr/local/lib/libfltk_jpeg.a; sourceTree = "<group>"; };
 		E8E44691179CE7B800BE8855 /* libpng15.15.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng15.15.dylib; path = ../../../../../opt/X11/lib/libpng15.15.dylib; sourceTree = "<group>"; };
 		E8E44696179D2CA100BE8855 /* IGLSpriteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IGLSpriteRenderer.cpp; sourceTree = "<group>"; };
 		E8E44697179D2CA100BE8855 /* IGLSpriteRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGLSpriteRenderer.h; sourceTree = "<group>"; };
@@ -1716,14 +1710,11 @@
 				E844888617D26699005105D0 /* libcurl.dylib */,
 				E8E446AB17A02EC700BE8855 /* Supporting Files */,
 				E8E44691179CE7B800BE8855 /* libpng15.15.dylib */,
-				E8E4468D179CE7A200BE8855 /* libfltk_images.a */,
-				E8E4468E179CE7A200BE8855 /* libfltk_jpeg.a */,
 				E8CF03F2178EF916000683D4 /* Cocoa.framework */,
 				E8CF03F0178EF910000683D4 /* Foundation.framework */,
 				E8CF03EE178EF909000683D4 /* CoreText.framework */,
 				E8CF03EC178EF904000683D4 /* CoreGraphics.framework */,
 				E8CF03EA178EF8FE000683D4 /* CoreFoundation.framework */,
-				E8CF03E4178EF5FF000683D4 /* libfltk.a */,
 				E8CF03C4178EE78C000683D4 /* OpenGL.framework */,
 				E8CF039B178EDAC9000683D4 /* libz.dylib */,
 				E8CF0399178EDABD000683D4 /* OpenAL.framework */,
@@ -1872,7 +1863,6 @@
 		E8E0AF8B17993C2300C6B5A9 /* Client Main */ = {
 			isa = PBXGroup;
 			children = (
-				E8C68A501C5BD8E200C52C3F /* Palette.cpp */,
 				E844886317D0C404005105D0 /* Local Entities */,
 				E8CF03C1178EE6D8000683D4 /* Client.cpp */,
 				E8FE748B18CC6AA100291338 /* Client_Input.cpp */,
@@ -2306,7 +2296,6 @@
 				E82E673618EA7972004DBA18 /* as_callfunc.cpp in Sources */,
 				E82E673718EA7972004DBA18 /* as_callfunc_arm.cpp in Sources */,
 				E82E673818EA7972004DBA18 /* as_callfunc_mips.cpp in Sources */,
-				E8C68A521C5BD8F200C52C3F /* Palette.cpp in Sources */,
 				E82E673918EA7972004DBA18 /* as_callfunc_ppc.cpp in Sources */,
 				E82E673A18EA7972004DBA18 /* as_callfunc_ppc_64.cpp in Sources */,
 				E82E673B18EA7972004DBA18 /* as_callfunc_sh4.cpp in Sources */,
@@ -2627,7 +2616,6 @@
 				E8567E761793D60E009D83E0 /* GLModelManager.cpp in Sources */,
 				E8567E791793DC37009D83E0 /* VoxelModel.cpp in Sources */,
 				E8567E7C1793E105009D83E0 /* GLModel.cpp in Sources */,
-				E8C68A511C5BD8E200C52C3F /* Palette.cpp in Sources */,
 				E8567E7F1793E1B3009D83E0 /* GLVoxelModel.cpp in Sources */,
 				E834F55017942C43004EBE88 /* Grenade.cpp in Sources */,
 				E88EB02F185D9DC500565D07 /* YsrDevice.cpp in Sources */,
@@ -2889,7 +2877,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -2936,7 +2924,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = NO;
