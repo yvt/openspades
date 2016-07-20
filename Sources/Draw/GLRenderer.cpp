@@ -256,6 +256,9 @@ namespace spades {
 			imageManager = NULL;
 			delete fbManager;
 			fbManager = NULL;
+			
+			delete device;
+			
 			SPLog("GLRenderer finalized");
 		}
 		
