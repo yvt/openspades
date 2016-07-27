@@ -568,8 +568,9 @@ int main(int argc, char ** argv)
 				std::string name = files[i];
 
 				// check extension
-				if(name.size() < 4 ||
-				   name.rfind(".pak") != name.size() - 4){
+				if (name.size() < 4 ||
+				    (name.rfind(".pak") != name.size() - 4 &&
+                     name.rfind(".zip") != name.size() - 4)) {
                     SPLog("Ignored loose file: %s", name.c_str());
 					continue;
 				}
