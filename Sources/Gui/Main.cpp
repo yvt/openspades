@@ -570,7 +570,7 @@ int main(int argc, char ** argv)
 				// check extension
 				if(name.size() < 4 ||
 				   name.rfind(".pak") != name.size() - 4){
-                    SPLog("Ignored loose file: %s\n", name.c_str());
+                    SPLog("Ignored loose file: %s", name.c_str());
 					continue;
 				}
 
