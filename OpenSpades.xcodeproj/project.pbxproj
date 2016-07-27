@@ -773,7 +773,7 @@
 		E859511117C645000012810C /* GLFXAAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFXAAFilter.h; sourceTree = "<group>"; };
 		E859511317C96B260012810C /* GLProfiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProfiler.cpp; sourceTree = "<group>"; };
 		E859511417C96B270012810C /* GLProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProfiler.h; sourceTree = "<group>"; };
-		E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak000-Nonfree.pak"; path = "../openspades-nonfree/Resources/pak000-Nonfree.pak"; sourceTree = "<group>"; };
+		E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak000-Nonfree.pak"; path = "Resources/pak000-Nonfree.pak"; sourceTree = "<group>"; };
 		E8690AE71D3920C800DBC331 /* pak002-Base.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak002-Base.pak"; path = "Resources/pak002-Base.pak"; sourceTree = "<group>"; };
 		E8690AE81D3920C800DBC331 /* pak005-Models.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak005-Models.pak"; path = "Resources/pak005-Models.pak"; sourceTree = "<group>"; };
 		E8690AE91D3920C800DBC331 /* pak010-BaseSkin.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak010-BaseSkin.pak"; path = "Resources/pak010-BaseSkin.pak"; sourceTree = "<group>"; };
