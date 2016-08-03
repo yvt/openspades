@@ -101,46 +101,20 @@ void MumbleLink::update(spades::client::Player *player) {
   //
   // 1 unit = 1 meter
 
-  // spades::Vector3 playerFront(player->GetFront());
-  // spades::Vector3 playerTop(player->GetUp());
-  // spades::Vector3 playerPosition(player->GetPosition() * metre_per_block);
-
   // Unit vector pointing out of the avatar's eyes aka "At"-vector.
-  // mumbleLinkedMemory->fAvatarFront[0] = playerFront.x;
-  // mumbleLinkedMemory->fAvatarFront[1] = playerFront.z;
-  // mumbleLinkedMemory->fAvatarFront[2] = playerFront.y;
   set_mumble_vector3(mumbleLinkedMemory->fAvatarFront, player->GetFront());
 
   // Unit vector pointing out of the top of the avatar's head aka "Up"-vector
   // (here Top points straight up).
-  // mumbleLinkedMemory->fAvatarTop[0] = playerTop.x;
-  // mumbleLinkedMemory->fAvatarTop[1] = playerTop.z;
-  // mumbleLinkedMemory->fAvatarTop[2] = playerTop.y;
   set_mumble_vector3(mumbleLinkedMemory->fAvatarTop, player->GetUp());
 
   // Position of the avatar (here standing slightly off the origin)
-  // mumbleLinkedMemory->fAvatarPosition[0] = playerPosition.x;
-  // mumbleLinkedMemory->fAvatarPosition[1] = playerPosition.z;
-  // mumbleLinkedMemory->fAvatarPosition[2] = playerPosition.y;
   set_mumble_vector3(mumbleLinkedMemory->fAvatarPosition,
                      player->GetPosition() * metre_per_block);
 
   // Same as avatar but for the camera.
-  // mumbleLinkedMemory->fCameraPosition[0] =
-  //     mumbleLinkedMemory->fAvatarPosition[0];
-  // mumbleLinkedMemory->fCameraPosition[1] =
-  //     mumbleLinkedMemory->fAvatarPosition[1];
-  // mumbleLinkedMemory->fCameraPosition[2] =
-  //     mumbleLinkedMemory->fAvatarPosition[2];
   set_mumble_vector3(mumbleLinkedMemory->fCameraPosition,
                      player->GetPosition() * metre_per_block);
   set_mumble_vector3(mumbleLinkedMemory->fCameraFront, player->GetFront());
   set_mumble_vector3(mumbleLinkedMemory->fCameraTop, player->GetUp());
-  // mumbleLinkedMemory->fCameraFront[0] = mumbleLinkedMemory->fAvatarFront[0];
-  // mumbleLinkedMemory->fCameraFront[1] = mumbleLinkedMemory->fAvatarFront[1];
-  // mumbleLinkedMemory->fCameraFront[2] = mumbleLinkedMemory->fAvatarFront[2];
-
-  // mumbleLinkedMemory->fCameraTop[0] = mumbleLinkedMemory->fAvatarTop[0];
-  // mumbleLinkedMemory->fCameraTop[1] = mumbleLinkedMemory->fAvatarTop[1];
-  // mumbleLinkedMemory->fCameraTop[2] = mumbleLinkedMemory->fAvatarTop[2];
 }
