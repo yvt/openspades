@@ -102,4 +102,8 @@ else()
 	target_link_libraries(OpenSpades Xext)
 endif()
 
+if(UNIX)
+	target_link_libraries(OpenSpades rt)
+endif()
+
 #install(TARGETS OpenSpades DESTINATION bin)

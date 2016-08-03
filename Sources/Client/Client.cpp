@@ -346,6 +346,14 @@ namespace spades {
 			renderer->RegisterImage("Gfx/HurtRing2.png");
 			audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
 			
+			if (mumbleLink.init())
+				SPLog("Mumble linked");
+			else
+				SPLog("Mumble link failed");
+			
+			mumbleLink.setContext(hostname.asString(false));
+			mumbleLink.setIdentity(playerName);
+			
 			SPLog("Started connecting to '%s'", hostname.asString(true).c_str());
 			net.reset(new NetClient(this));
 			net->Connect(hostname);
@@ -434,6 +442,7 @@ namespace spades {
 			
 			if(world){
 				UpdateWorld(dt);
+				mumbleLink.update(world->GetLocalPlayer());
 			}else{
 				renderer->SetFogColor(MakeVector3(0.f, 0.f, 0.f));
 			}
