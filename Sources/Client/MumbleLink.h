@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Player.h"
 #ifdef WIN32
 #include <windef.h>
