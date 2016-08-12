@@ -32,6 +32,7 @@
 #include <Gui/View.h>
 #include <memory>
 #include <Core/Stopwatch.h>
+#include "MumbleLink.h"
 
 namespace spades {
 	class IStream;
@@ -114,6 +115,8 @@ namespace spades {
 			
 			int frameToRendererInit;
 			float timeSinceInit;
+			
+			MumbleLink mumbleLink;
 			
 			// view/drawing state for some world objects
 			std::vector<Handle<ClientPlayer>> clientPlayers;
