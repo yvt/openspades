@@ -3,6 +3,7 @@
 
 # paks
 *.pak
+DevPaks*.zip
 
 # Proprietary resource files
 Resources/Nonfree
@@ -45,6 +46,7 @@ xcuserdata
 *.perspectivev2
 #!xcuserdata/
 #*.xcuserstate
+xcshareddata
 UserInterfaceState.xcuserstate
 
 # Vim & Sublime Text
