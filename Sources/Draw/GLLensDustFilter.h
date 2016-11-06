@@ -32,13 +32,15 @@ namespace spades {
 		class GLProgram;
 		class GLImage;
 		class GLLensDustFilter {
-			GLProgram *thru;
-			GLProgram *dust;
+            GLProgram *thru;
+            GLProgram *dust;
+            GLProgram *gauss1d;
 			GLImage *dustImg;
 			GLRenderer *renderer;
 			IGLDevice::UInteger noiseTex;
-			std::vector<uint32_t> noise;
-			GLColorBuffer DownSample(GLColorBuffer, bool linearize = false);
+            std::vector<uint32_t> noise;
+            GLColorBuffer DownSample(GLColorBuffer, bool linearize = false);
+            GLColorBuffer GaussianBlur(GLColorBuffer, bool vertical);
 			void UpdateNoise();
 		public:
 			GLLensDustFilter(GLRenderer *);

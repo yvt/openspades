@@ -37,8 +37,9 @@ SPADES_SETTING(r_hdr, "");
 namespace spades {
 	namespace draw {
 		GLLensDustFilter::GLLensDustFilter(GLRenderer *renderer):
-		renderer(renderer){
-			thru = renderer->RegisterProgram("Shaders/PostFilters/PassThroughConstAlpha.program");
+        renderer(renderer){
+            thru = renderer->RegisterProgram("Shaders/PostFilters/PassThroughConstAlpha.program");
+            gauss1d = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 			dust = renderer->RegisterProgram("Shaders/PostFilters/LensDust.program");
 			dustImg = (GLImage *)renderer->RegisterImage("Textures/RealLens.jpg");
 			
@@ -81,8 +82,9 @@ namespace spades {
 			
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
 			static GLProgramUniform blur_textureUniform("texture");
-			static GLProgramUniform blur_colorUniform("colorUniform");
-			static GLProgramUniform blur_texCoordRangeUniform("texCoordRange");
+            static GLProgramUniform blur_colorUniform("colorUniform");
+            static GLProgramUniform blur_texCoordRangeUniform("texCoordRange");
+            static GLProgramUniform blur_texCoordOffsetUniform("texCoordOffset");
 			program->Use();
 			blur_positionAttribute(program);
 			
@@ -90,12 +92,17 @@ namespace spades {
 			blur_textureUniform.SetValue(0);
 			dev->ActiveTexture(0);
 			dev->BindTexture(IGLDevice::Texture2D, tex.GetTexture());
+            
+            blur_texCoordOffsetUniform(program);
+            blur_texCoordOffsetUniform.SetValue(1.f / w, 1.f / h, -1.f / w, -1.f / h);
 			
 			blur_colorUniform(program);
 			blur_colorUniform.SetValue(1.f,1.f,1.f,1.f);
 			
 			blur_texCoordRangeUniform(program);
-			blur_texCoordRangeUniform.SetValue(0.f, 0.f, 1.f, 1.f);
+			blur_texCoordRangeUniform.SetValue(0.f, 0.f,
+                                               (float)((w + 1) & ~1) / w,
+                                               (float)((h + 1) & ~1) / h);
 			
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
 			if(linearize){
@@ -112,6 +119,39 @@ namespace spades {
 			qr.Draw();
 			return buf2;
 		}
+        
+        GLColorBuffer GLLensDustFilter::GaussianBlur(GLColorBuffer tex, bool vertical) {
+            SPADES_MARK_FUNCTION();
+            GLProgram *program = gauss1d;
+            IGLDevice *dev = renderer->GetGLDevice();
+            GLQuadRenderer qr(dev);
+            int w = tex.GetWidth();
+            int h = tex.GetHeight();
+            
+            static GLProgramAttribute blur_positionAttribute("positionAttribute");
+            static GLProgramUniform blur_textureUniform("texture");
+            static GLProgramUniform blur_unitShift("unitShift");
+            program->Use();
+            blur_positionAttribute(program);
+            
+            blur_textureUniform(program);
+            blur_textureUniform.SetValue(0);
+            dev->ActiveTexture(0);
+            dev->BindTexture(IGLDevice::Texture2D, tex.GetTexture());
+            
+            blur_unitShift(program);
+            blur_unitShift.SetValue(vertical ? 0.f : 1.f / w,
+                                    vertical ? 1.f / h : 0.f);
+            
+            qr.SetCoordAttributeIndex(blur_positionAttribute());
+            dev->Enable(IGLDevice::Blend, false);
+            
+            GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
+            dev->Viewport(0, 0, buf2.GetWidth(), buf2.GetHeight());
+            dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
+            qr.Draw();
+            return buf2;
+        }
 		
 		void GLLensDustFilter::UpdateNoise() {
 			SPADES_MARK_FUNCTION();
@@ -162,18 +202,18 @@ namespace spades {
 			thruTexCoordRange(thru);
 						
 			GLColorBuffer downSampled = DownSample(input, r_hdr ? false : true);
-			downSampled = DownSample(downSampled);
-			downSampled = DownSample(downSampled);
+            downSampled = GaussianBlur(downSampled, false);
+            downSampled = GaussianBlur(downSampled, true);
 			
 			thru->Use();
 			thruColor.SetValue(1.f, 1.f, 1.f, 1.f);
 			thruTexture.SetValue(0);
 			dev->Enable(IGLDevice::Blend, false);
 			
-			levels.reserve(8);
+			levels.reserve(10);
 			
 			// create downsample levels
-			for(int i = 0; i < 8; i++){
+			for(int i = 0; i < 10; i++){
 				GLColorBuffer prevLevel;
 				if(i == 0){
 					prevLevel = downSampled;
@@ -187,7 +227,9 @@ namespace spades {
 				int newH = (prevH + 1) / 2;
 				if(newW <= 1 || newH <= 1)
 					break;
-				GLColorBuffer newLevel = DownSample(prevLevel);
+                GLColorBuffer newLevel = DownSample(prevLevel);
+                newLevel = GaussianBlur(newLevel, false);
+                newLevel = GaussianBlur(newLevel, true);
 				
 				Level lv;
 				lv.w = newW; lv.h = newH;
@@ -205,12 +247,12 @@ namespace spades {
 			for(int i = (int)levels.size() - 1; i >= 1; i--){
 				int cnt = (int)levels.size() - i;
 				float alpha = (float)cnt / (float)(cnt + 1);
-				alpha = sqrtf(alpha);
+                alpha = alpha;
 				
 				GLColorBuffer curLevel = levels[i].buffer;
 				
-				float sx = .7f / curLevel.GetWidth();
-				float sy = .7f / curLevel.GetHeight();
+				float sx = .25f / curLevel.GetWidth();
+				float sy = .25f / curLevel.GetHeight();
 				
 				for(int j = 0; j < 4; j++) {
 					if(i < (int)levels.size() - 1) {
