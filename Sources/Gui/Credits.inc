@@ -17,6 +17,12 @@ Credits
 "kmsi" - Korean translation
 "tungdil" - German translation
 "feikname" - Brazilian portuguese translation, improvements
+"VelocityRa" - Repository maintenance/organization, VS2015 support
+"Mailaender" - FreeDesktop definitions fixes
+"Chameleonhider" - Configure-able player name drawing
+"CenturionFox" - Server Disconnect Screen
+
+And many others which weren't mentioned here.
 
 
 Portions of program is based on following software
