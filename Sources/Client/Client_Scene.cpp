@@ -538,7 +538,7 @@ namespace spades {
 				Player *p = world->GetLocalPlayer();
 				
 				for(size_t i = 0; i < world->GetNumPlayerSlots(); i++)
-					if(world->GetPlayer(i)){
+					if(world->GetPlayer(static_cast<unsigned int>(i))){
 						SPAssert(clientPlayers[i]);
 						clientPlayers[i]->AddToScene();
 					}

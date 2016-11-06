@@ -740,7 +740,7 @@ namespace spades {
 					if((int)cg_protocolVersion == 4)
 						bytesPerEntry++;
 
-					int entries = reader.GetData().size() / bytesPerEntry;
+					int entries = static_cast<int> (reader.GetData().size() / bytesPerEntry);
 					for(int i = 0; i < entries; i++){
 						int idx = i;
 						if((int)cg_protocolVersion == 4)
@@ -1143,7 +1143,7 @@ namespace spades {
 					
 					
 					if(p){
-						p->UsedBlocks(cells.size());
+						p->UsedBlocks(static_cast<int> (cells.size()));
 						client->PlayerCreatedBlock(p);
 					}
 				}

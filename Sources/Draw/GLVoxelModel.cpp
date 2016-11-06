@@ -36,7 +36,7 @@ namespace spades {
 			renderer->RegisterProgram("Shaders/VoxelModel.program");
 			renderer->RegisterProgram("Shaders/VoxelModelDynamicLit.program");
 			renderer->RegisterProgram("Shaders/VoxelModelShadowMap.program");
-			renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
+			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 		}
 		GLVoxelModel::GLVoxelModel(VoxelModel *m,
 								   GLRenderer *r){
@@ -48,20 +48,20 @@ namespace spades {
 			program = renderer->RegisterProgram("Shaders/VoxelModel.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/VoxelModelDynamicLit.program");
 			shadowMapProgram = renderer->RegisterProgram("Shaders/VoxelModelShadowMap.program");
-			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
+			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 			
 			BuildVertices(m);
 			
 			buffer = device->GenBuffer();
 			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			device->BufferData(IGLDevice::ArrayBuffer,
-							   vertices.size() * sizeof(Vertex),
+							   static_cast<IGLDevice::Sizei> (vertices.size() * sizeof(Vertex)),
 							   vertices.data(), IGLDevice::StaticDraw);
 			
 			idxBuffer = device->GenBuffer();
 			device->BindBuffer(IGLDevice::ArrayBuffer, idxBuffer);
 			device->BufferData(IGLDevice::ArrayBuffer,
-							   indices.size() * sizeof(uint32_t),
+							   static_cast<IGLDevice::Sizei> (indices.size() * sizeof(uint32_t)),
 							   indices.data(), IGLDevice::StaticDraw);
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			

@@ -296,14 +296,16 @@ namespace spades {
 			buffer = device->GenBuffer();
 			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			
-			device->BufferData(IGLDevice::ArrayBuffer, vertices.size() * sizeof(Vertex),
+			device->BufferData(IGLDevice::ArrayBuffer,
+                               static_cast<IGLDevice::Sizei> (vertices.size() * sizeof(Vertex)),
 							   vertices.data(), IGLDevice::DynamicDraw);
 			
 			if(!indices.empty()){
 				iBuffer = device->GenBuffer();
 				device->BindBuffer(IGLDevice::ArrayBuffer, iBuffer);
 				
-				device->BufferData(IGLDevice::ArrayBuffer, indices.size() * sizeof(uint16_t),
+				device->BufferData(IGLDevice::ArrayBuffer,
+                                   static_cast<IGLDevice::Sizei> (indices.size() * sizeof(uint16_t)),
 								   indices.data(), IGLDevice::DynamicDraw);
 				
 			}
@@ -387,7 +389,7 @@ namespace spades {
 			device->BindBuffer(IGLDevice::ElementArrayBuffer,
 							   iBuffer);
 			device->DrawElements(IGLDevice::Triangles,
-								 indices.size(),
+								 static_cast<IGLDevice::Sizei> (indices.size()),
 								 IGLDevice::UnsignedShort, NULL);
 			device->BindBuffer(IGLDevice::ElementArrayBuffer,
 							   0);
@@ -465,7 +467,7 @@ namespace spades {
 					continue;
 				
 				device->DrawElements(IGLDevice::Triangles,
-									 indices.size(),
+									 static_cast<IGLDevice::Sizei> (indices.size()),
 									 IGLDevice::UnsignedShort, NULL);
 			}
 			

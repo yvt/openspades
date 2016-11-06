@@ -145,7 +145,6 @@ namespace spades {
 			   150.f * 150.f)
 				return;
 			
-			//Handle<IImage> img = renderer->RegisterImage("Textures/SoftBall.tga");
 			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {0.5f, 0.02f, 0.04f, 1.f};
 			for(int i = 0; i < 10; i++){

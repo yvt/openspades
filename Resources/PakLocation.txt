@@ -1,13 +1,16 @@
 
 
-All paks for development vesion
--------------------------------
+Non GPL-compatible data pak
+---------------------------
 
-https://www.dropbox.com/s/aprb9aufqk2abe1/DevPaks28.zip?dl=1
+https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip
 
-These paks are not included in the source tree because they contains some 
-non-opensource materials and they seem too large to include in the git tree.
+`pak000-Nonfree.pak` in this zip file contains game data that is not compatible
+with GPLv3. Please do not redistribute it separately from OpenSpades releases or
+compiled binaries.
 
+Note: DevPaks previously included all pak files, but now don't, because it
+seemed to overcomplicate things.
 
 
 GNU Unifont (Generic Unicode Font)
@@ -42,7 +45,7 @@ This was converted from the M+ BDF font like this:
 	./BdfToOSFont ../../Resources/Gfx/Fonts/MPlus10Font double < \
 	~/Downloads/mplus_bitmap_fonts-2.2.4/fonts_j/mplus_j10r.bdf
 
-Note that you need to install a input method editor, or use Google Translator 
+Note that you need to install a input method editor, or use Google Translator
 or whatever to type Japanese characters.
 
 

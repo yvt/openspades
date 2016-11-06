@@ -463,17 +463,17 @@ namespace spades {
 				if(p->IsToolWeapon()){
 					switch(weap->GetWeaponType()){
 						case RIFLE_WEAPON:
-							ammoIcon = renderer->RegisterImage("Gfx/Bullet/7.62mm.tga");
+							ammoIcon = renderer->RegisterImage("Gfx/Bullet/7.62mm.png");
 							iconWidth = 6.f;
 							iconHeight = iconWidth * 4.f;
 							break;
 						case SMG_WEAPON:
-							ammoIcon = renderer->RegisterImage("Gfx/Bullet/9mm.tga");
+							ammoIcon = renderer->RegisterImage("Gfx/Bullet/9mm.png");
 							iconWidth = 4.f;
 							iconHeight = iconWidth * 4.f;
 							break;
 						case SHOTGUN_WEAPON:
-							ammoIcon = renderer->RegisterImage("Gfx/Bullet/12gauge.tga");
+							ammoIcon = renderer->RegisterImage("Gfx/Bullet/12gauge.png");
 							iconWidth = 30.f;
 							iconHeight = iconWidth / 4.f;
 							spacing = -6.f;

@@ -661,11 +661,13 @@ namespace spades {
 			
 			buffer = device->GenBuffer();
 			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
-			device->BufferData(IGLDevice::ArrayBuffer, sizeof(Vertex)*vertices.size(),
+			device->BufferData(IGLDevice::ArrayBuffer,
+                               static_cast<IGLDevice::Sizei> (sizeof(Vertex) * vertices.size()),
 							   vertices.data(), IGLDevice::StaticDraw);
 			idxBuffer = device->GenBuffer();
 			device->BindBuffer(IGLDevice::ArrayBuffer, idxBuffer);
-			device->BufferData(IGLDevice::ArrayBuffer, sizeof(uint32_t)*indices.size(),
+			device->BufferData(IGLDevice::ArrayBuffer,
+                               static_cast<IGLDevice::Sizei> (sizeof(uint32_t) * indices.size()),
 							   indices.data(), IGLDevice::StaticDraw);
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			
@@ -879,7 +881,8 @@ namespace spades {
                     device->BeginQuery(IGLDevice::SamplesPassed,
                                        occlusionQuery);
 				
-				device->DrawElements(IGLDevice::Triangles, numIndices,
+				device->DrawElements(IGLDevice::Triangles,
+                                     static_cast<IGLDevice::Sizei> (numIndices),
 									 IGLDevice::UnsignedInt, NULL);
 				
                 if(occlusionQuery)
@@ -1005,8 +1008,8 @@ namespace spades {
 				}else{
 					// partial update
 					for(size_t i = 0; i < updateBitmap.size(); i++){
-						int y = i / updateBitmapPitch;
-						int x = (i - y * updateBitmapPitch) * 32;
+						int y = static_cast<int> (i / updateBitmapPitch);
+						int x = static_cast<int> ((i - y * updateBitmapPitch) * 32);
 						if(updateBitmap[i] == 0)
 							continue;
 						

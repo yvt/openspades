@@ -101,7 +101,7 @@ namespace spades {
 			// fit FoV to include all possibly hit players
 			float range = 0.2f;
 			for(std::size_t i = 0; i < world->GetNumPlayerSlots(); i++) {
-				auto *p = world->GetPlayer(i);
+				auto *p = world->GetPlayer(static_cast<unsigned int> (i));
 				if(!p) continue;
 				if(p == localPlayer) continue;
 				if(p->GetTeamId() == localPlayer->GetTeamId()) continue;
@@ -203,7 +203,7 @@ namespace spades {
 			};
 			
 			for(std::size_t i = 0; i < numPlayers; i++) {
-				auto *p = world->GetPlayer(i);
+				auto *p = world->GetPlayer(static_cast<unsigned int> (i));
 				if(!p) continue;
 				if(p == localPlayer) continue;
 				if(!p->IsAlive()) continue;
@@ -214,7 +214,7 @@ namespace spades {
 				auto hitboxes = p->GetHitBoxes();
 				PlayerHit hit;
 				{
-					auto it = hits.find(i);
+					auto it = hits.find(static_cast<int> (i));
 					if(it != hits.end()) {
 						hit = it->second;
 					}

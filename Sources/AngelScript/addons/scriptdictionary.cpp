@@ -307,7 +307,7 @@ CScriptArray* CScriptDictionary::GetKeys() const
 	for( it = dict.begin(); it != dict.end(); it++ )
 	{
 		current++;
-		*(string*)array->At(current) = it->first;
+		*(string*)array->At(static_cast<asUINT> (current)) = it->first;
 	}
 
 	return array;

@@ -124,7 +124,7 @@ namespace spades {
 				al::qalGenBuffers(1, &handle);
 				ALCheckError();
 				al::qalBufferData(handle, alFormat,
-								  bytes.data(), bytes.size(),
+								  bytes.data(), (ALuint) bytes.size(),
 								  audioStream->GetSamplingFrequency());
 				ALCheckError();
 				

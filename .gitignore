@@ -1,12 +1,12 @@
 # Assets
 *_Assets_*
 
-# Non-GPLv3 assets
-Resources/Gfx
-Resources/Models
-Resources/Sounds
-Resources/Textures
-Resources/Icons/hicolor
+# paks
+*.pak
+DevPaks*.zip
+
+# Proprietary resource files
+Resources/Nonfree
 
 # Compiled Object files
 *.slo
@@ -46,6 +46,7 @@ xcuserdata
 *.perspectivev2
 #!xcuserdata/
 #*.xcuserstate
+xcshareddata
 UserInterfaceState.xcuserstate
 
 # Vim & Sublime Text

@@ -351,7 +351,7 @@ namespace spades {
 			lastImage->Bind(IGLDevice::Texture2D);
 			
 			device->DrawElements(IGLDevice::Triangles,
-								 indices.size(),
+								 static_cast<IGLDevice::Sizei> (indices.size()),
 								 IGLDevice::UnsignedInt,
 								 indices.data());
 			

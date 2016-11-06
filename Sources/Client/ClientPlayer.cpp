@@ -594,7 +594,7 @@ namespace spades {
 				light.spotAxis[0] = p->GetRight();
 				light.spotAxis[1] = p->GetUp();
 				light.spotAxis[2] = p->GetFront();
-				light.image = renderer->RegisterImage("Gfx/Spotlight.tga");
+				light.image = renderer->RegisterImage("Gfx/Spotlight.png");
 				renderer->AddLight(light);
 				
 				light.color *= .3f;
@@ -605,7 +605,7 @@ namespace spades {
 				
 				// add glare
 				renderer->SetColorAlphaPremultiplied(MakeVector4(1, .7f, .5f, 0) * brightness * .3f);
-				renderer->AddSprite(renderer->RegisterImage("Gfx/Glare.tga"), (eyeMatrix * MakeVector3(0, 0.3f, -0.3f)).GetXYZ(), .8f, 0.f);
+				renderer->AddSprite(renderer->RegisterImage("Gfx/Glare.png"), (eyeMatrix * MakeVector3(0, 0.3f, -0.3f)).GetXYZ(), .8f, 0.f);
 			}
 			
 			Vector3 leftHand, rightHand;

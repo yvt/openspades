@@ -40,10 +40,12 @@
 #include <Draw/SWRenderer.h>
 #include <Draw/SWPort.h>
 
-
+#ifdef __APPLE__
+#elif __unix
 static const unsigned char Icon[] = {
 	#include "Icon.inc"
 };
+#endif
 
 SPADES_SETTING(r_videoWidth, "1024");
 SPADES_SETTING(r_videoHeight, "640");

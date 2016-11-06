@@ -305,13 +305,6 @@
 		E82E67EF18EA7A51004DBA18 /* pnglite.c in Sources */ = {isa = PBXBuildFile; fileRef = E895D66118D614DE00F5B9CA /* pnglite.c */; };
 		E82E67F018EA7A60004DBA18 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03C4178EE78C000683D4 /* OpenGL.framework */; };
 		E82E67FA18EA7EAB004DBA18 /* font-unifont.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F318EA7EAB004DBA18 /* font-unifont.pak */; };
-		E82E67FB18EA7EAB004DBA18 /* pak000-Base.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F418EA7EAB004DBA18 /* pak000-Base.pak */; };
-		E82E67FC18EA7EAB004DBA18 /* pak001-Sounds.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F518EA7EAB004DBA18 /* pak001-Sounds.pak */; };
-		E82E67FD18EA7EAB004DBA18 /* pak002-Models.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F618EA7EAB004DBA18 /* pak002-Models.pak */; };
-		E82E67FE18EA7EAB004DBA18 /* pak010-BaseSkin.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F718EA7EAB004DBA18 /* pak010-BaseSkin.pak */; };
-		E82E67FF18EA7EAB004DBA18 /* pak011-Gui.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F818EA7EAB004DBA18 /* pak011-Gui.pak */; };
-		E82E680018EA7EAB004DBA18 /* pak999-References.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F918EA7EAB004DBA18 /* pak999-References.pak */; };
-		E82E680218EA7F2E004DBA18 /* pak012-Locales.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E680118EA7F2E004DBA18 /* pak012-Locales.pak */; };
 		E82E680418EA7F60004DBA18 /* libysrspades.dylib in Resources */ = {isa = PBXBuildFile; fileRef = E82E680318EA7F60004DBA18 /* libysrspades.dylib */; };
 		E834F55017942C43004EBE88 /* Grenade.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F54E17942C43004EBE88 /* Grenade.cpp */; };
 		E834F55317944779004EBE88 /* NetClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F55117944778004EBE88 /* NetClient.cpp */; };
@@ -359,6 +352,12 @@
 		E859510F17C61F850012810C /* GLLensFlareFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859510D17C61F850012810C /* GLLensFlareFilter.cpp */; };
 		E859511217C645000012810C /* GLFXAAFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511017C645000012810C /* GLFXAAFilter.cpp */; };
 		E859511517C96B270012810C /* GLProfiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E859511317C96B260012810C /* GLProfiler.cpp */; };
+		E8690AEC1D3920C800DBC331 /* pak000-Nonfree.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */; };
+		E8690AED1D3920C800DBC331 /* pak002-Base.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE71D3920C800DBC331 /* pak002-Base.pak */; };
+		E8690AEE1D3920C800DBC331 /* pak005-Models.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE81D3920C800DBC331 /* pak005-Models.pak */; };
+		E8690AEF1D3920C800DBC331 /* pak010-BaseSkin.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE91D3920C800DBC331 /* pak010-BaseSkin.pak */; };
+		E8690AF01D3920C800DBC331 /* pak050-Locales.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AEA1D3920C800DBC331 /* pak050-Locales.pak */; };
+		E8690AF11D3920C800DBC331 /* pak999-References.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AEB1D3920C800DBC331 /* pak999-References.pak */; };
 		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
 		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
@@ -465,8 +464,6 @@
 		E8B6B74617EA0F2600E35523 /* IGrenadeSkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B74417EA0F1B00E35523 /* IGrenadeSkin.cpp */; };
 		E8B6B74917EA12EC00E35523 /* IWeaponSkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B74717EA12E100E35523 /* IWeaponSkin.cpp */; };
 		E8B93AD518559EC700BD01E1 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
-		E8C68A511C5BD8E200C52C3F /* Palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C68A501C5BD8E200C52C3F /* Palette.cpp */; };
-		E8C68A521C5BD8F200C52C3F /* Palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C68A501C5BD8E200C52C3F /* Palette.cpp */; };
 		E8C92A0C18695EA500740C9F /* SWModelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */; };
 		E8C92A0F186A902500740C9F /* CpuID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C92A0E186A902500740C9F /* CpuID.cpp */; };
 		E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0399178EDABD000683D4 /* OpenAL.framework */; };
@@ -664,15 +661,9 @@
 		E82E66BF18EA78F5004DBA18 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		E82E66C018EA78F5004DBA18 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E82E66DA18EA78F5004DBA18 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		E82E67F118EA7D8F004DBA18 /* updatepak.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = updatepak.sh; path = Resources/updatepak.sh; sourceTree = "<group>"; };
 		E82E67F318EA7EAB004DBA18 /* font-unifont.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "font-unifont.pak"; path = "Resources/font-unifont.pak"; sourceTree = "<group>"; };
-		E82E67F418EA7EAB004DBA18 /* pak000-Base.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak000-Base.pak"; path = "Resources/pak000-Base.pak"; sourceTree = "<group>"; };
-		E82E67F518EA7EAB004DBA18 /* pak001-Sounds.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak001-Sounds.pak"; path = "Resources/pak001-Sounds.pak"; sourceTree = "<group>"; };
-		E82E67F618EA7EAB004DBA18 /* pak002-Models.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak002-Models.pak"; path = "Resources/pak002-Models.pak"; sourceTree = "<group>"; };
 		E82E67F718EA7EAB004DBA18 /* pak010-BaseSkin.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak010-BaseSkin.pak"; path = "Resources/pak010-BaseSkin.pak"; sourceTree = "<group>"; };
-		E82E67F818EA7EAB004DBA18 /* pak011-Gui.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak011-Gui.pak"; path = "Resources/pak011-Gui.pak"; sourceTree = "<group>"; };
 		E82E67F918EA7EAB004DBA18 /* pak999-References.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak999-References.pak"; path = "Resources/pak999-References.pak"; sourceTree = "<group>"; };
-		E82E680118EA7F2E004DBA18 /* pak012-Locales.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak012-Locales.pak"; path = "Resources/pak012-Locales.pak"; sourceTree = "<group>"; };
 		E82E680318EA7F60004DBA18 /* libysrspades.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libysrspades.dylib; sourceTree = SOURCE_ROOT; };
 		E82E680618EA9502004DBA18 /* XSpades.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = XSpades.entitlements; path = XSpades/XSpades.entitlements; sourceTree = "<group>"; };
 		E834F54E17942C43004EBE88 /* Grenade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grenade.cpp; sourceTree = "<group>"; };
@@ -782,6 +773,12 @@
 		E859511117C645000012810C /* GLFXAAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFXAAFilter.h; sourceTree = "<group>"; };
 		E859511317C96B260012810C /* GLProfiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProfiler.cpp; sourceTree = "<group>"; };
 		E859511417C96B270012810C /* GLProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProfiler.h; sourceTree = "<group>"; };
+		E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak000-Nonfree.pak"; path = "Resources/pak000-Nonfree.pak"; sourceTree = "<group>"; };
+		E8690AE71D3920C800DBC331 /* pak002-Base.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak002-Base.pak"; path = "Resources/pak002-Base.pak"; sourceTree = "<group>"; };
+		E8690AE81D3920C800DBC331 /* pak005-Models.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak005-Models.pak"; path = "Resources/pak005-Models.pak"; sourceTree = "<group>"; };
+		E8690AE91D3920C800DBC331 /* pak010-BaseSkin.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak010-BaseSkin.pak"; path = "Resources/pak010-BaseSkin.pak"; sourceTree = "<group>"; };
+		E8690AEA1D3920C800DBC331 /* pak050-Locales.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak050-Locales.pak"; path = "Resources/pak050-Locales.pak"; sourceTree = "<group>"; };
+		E8690AEB1D3920C800DBC331 /* pak999-References.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak999-References.pak"; path = "Resources/pak999-References.pak"; sourceTree = "<group>"; };
 		E874834618EACF0300C29033 /* OpenSpades.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = OpenSpades.icns; path = Resources/Icons/OpenSpades.icns; sourceTree = "<group>"; };
 		E87AB82118BB3957006B7D73 /* SdlImageReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SdlImageReader.cpp; sourceTree = "<group>"; };
 		E87AB82418BB3A04006B7D73 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
@@ -997,7 +994,6 @@
 		E8B6B74817EA12E500E35523 /* IWeaponSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWeaponSkin.h; sourceTree = "<group>"; };
 		E8B8082718E05B920001013E /* CellToTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellToTriangle.h; sourceTree = "<group>"; };
 		E8B93AD418559EC600BD01E1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
-		E8C68A501C5BD8E200C52C3F /* Palette.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Palette.cpp; sourceTree = "<group>"; };
 		E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModelRenderer.cpp; sourceTree = "<group>"; };
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
@@ -1039,7 +1035,6 @@
 		E8CF03DF178EF4E9000683D4 /* IRunnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRunnable.h; sourceTree = "<group>"; };
 		E8CF03E1178EF57E000683D4 /* SDLRunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDLRunner.cpp; sourceTree = "<group>"; };
 		E8CF03E2178EF57E000683D4 /* SDLRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLRunner.h; sourceTree = "<group>"; };
-		E8CF03E4178EF5FF000683D4 /* libfltk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfltk.a; path = ../../../../../usr/local/lib/libfltk.a; sourceTree = "<group>"; };
 		E8CF03EA178EF8FE000683D4 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		E8CF03EC178EF904000683D4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		E8CF03EE178EF909000683D4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -1113,8 +1108,6 @@
 		E8E44684179CC4FF00BE8855 /* IBitmapCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IBitmapCodec.cpp; sourceTree = "<group>"; };
 		E8E44685179CC4FF00BE8855 /* IBitmapCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBitmapCodec.h; sourceTree = "<group>"; };
 		E8E44687179CC65900BE8855 /* TargaReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TargaReader.cpp; sourceTree = "<group>"; };
-		E8E4468D179CE7A200BE8855 /* libfltk_images.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfltk_images.a; path = ../../../../../usr/local/lib/libfltk_images.a; sourceTree = "<group>"; };
-		E8E4468E179CE7A200BE8855 /* libfltk_jpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfltk_jpeg.a; path = ../../../../../usr/local/lib/libfltk_jpeg.a; sourceTree = "<group>"; };
 		E8E44691179CE7B800BE8855 /* libpng15.15.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng15.15.dylib; path = ../../../../../opt/X11/lib/libpng15.15.dylib; sourceTree = "<group>"; };
 		E8E44696179D2CA100BE8855 /* IGLSpriteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IGLSpriteRenderer.cpp; sourceTree = "<group>"; };
 		E8E44697179D2CA100BE8855 /* IGLSpriteRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGLSpriteRenderer.h; sourceTree = "<group>"; };
@@ -1698,32 +1691,29 @@
 		E8CF037C178ED9D2000683D4 = {
 			isa = PBXGroup;
 			children = (
+				E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */,
+				E8690AE71D3920C800DBC331 /* pak002-Base.pak */,
+				E8690AE81D3920C800DBC331 /* pak005-Models.pak */,
+				E8690AE91D3920C800DBC331 /* pak010-BaseSkin.pak */,
+				E8690AEA1D3920C800DBC331 /* pak050-Locales.pak */,
+				E8690AEB1D3920C800DBC331 /* pak999-References.pak */,
 				E874834618EACF0300C29033 /* OpenSpades.icns */,
 				E82E680618EA9502004DBA18 /* XSpades.entitlements */,
 				E82E680318EA7F60004DBA18 /* libysrspades.dylib */,
-				E82E680118EA7F2E004DBA18 /* pak012-Locales.pak */,
 				E82E67F318EA7EAB004DBA18 /* font-unifont.pak */,
-				E82E67F418EA7EAB004DBA18 /* pak000-Base.pak */,
-				E82E67F518EA7EAB004DBA18 /* pak001-Sounds.pak */,
-				E82E67F618EA7EAB004DBA18 /* pak002-Models.pak */,
 				E82E67F718EA7EAB004DBA18 /* pak010-BaseSkin.pak */,
-				E82E67F818EA7EAB004DBA18 /* pak011-Gui.pak */,
 				E82E67F918EA7EAB004DBA18 /* pak999-References.pak */,
-				E82E67F118EA7D8F004DBA18 /* updatepak.sh */,
 				E87AB82418BB3A04006B7D73 /* SDL2_image.framework */,
 				E8428887189FE1710060743D /* Fog.vs */,
 				E8B93AD418559EC600BD01E1 /* SDL2.framework */,
 				E844888617D26699005105D0 /* libcurl.dylib */,
 				E8E446AB17A02EC700BE8855 /* Supporting Files */,
 				E8E44691179CE7B800BE8855 /* libpng15.15.dylib */,
-				E8E4468D179CE7A200BE8855 /* libfltk_images.a */,
-				E8E4468E179CE7A200BE8855 /* libfltk_jpeg.a */,
 				E8CF03F2178EF916000683D4 /* Cocoa.framework */,
 				E8CF03F0178EF910000683D4 /* Foundation.framework */,
 				E8CF03EE178EF909000683D4 /* CoreText.framework */,
 				E8CF03EC178EF904000683D4 /* CoreGraphics.framework */,
 				E8CF03EA178EF8FE000683D4 /* CoreFoundation.framework */,
-				E8CF03E4178EF5FF000683D4 /* libfltk.a */,
 				E8CF03C4178EE78C000683D4 /* OpenGL.framework */,
 				E8CF039B178EDAC9000683D4 /* libz.dylib */,
 				E8CF0399178EDABD000683D4 /* OpenAL.framework */,
@@ -1872,7 +1862,6 @@
 		E8E0AF8B17993C2300C6B5A9 /* Client Main */ = {
 			isa = PBXGroup;
 			children = (
-				E8C68A501C5BD8E200C52C3F /* Palette.cpp */,
 				E844886317D0C404005105D0 /* Local Entities */,
 				E8CF03C1178EE6D8000683D4 /* Client.cpp */,
 				E8FE748B18CC6AA100291338 /* Client_Input.cpp */,
@@ -2251,16 +2240,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8690AEC1D3920C800DBC331 /* pak000-Nonfree.pak in Resources */,
+				E8690AED1D3920C800DBC331 /* pak002-Base.pak in Resources */,
+				E8690AEE1D3920C800DBC331 /* pak005-Models.pak in Resources */,
+				E8690AEF1D3920C800DBC331 /* pak010-BaseSkin.pak in Resources */,
+				E8690AF01D3920C800DBC331 /* pak050-Locales.pak in Resources */,
+				E8690AF11D3920C800DBC331 /* pak999-References.pak in Resources */,
 				E874834718EACF0300C29033 /* OpenSpades.icns in Resources */,
 				E82E680418EA7F60004DBA18 /* libysrspades.dylib in Resources */,
-				E82E680218EA7F2E004DBA18 /* pak012-Locales.pak in Resources */,
 				E82E67FA18EA7EAB004DBA18 /* font-unifont.pak in Resources */,
-				E82E67FB18EA7EAB004DBA18 /* pak000-Base.pak in Resources */,
-				E82E67FC18EA7EAB004DBA18 /* pak001-Sounds.pak in Resources */,
-				E82E67FD18EA7EAB004DBA18 /* pak002-Models.pak in Resources */,
-				E82E67FE18EA7EAB004DBA18 /* pak010-BaseSkin.pak in Resources */,
-				E82E67FF18EA7EAB004DBA18 /* pak011-Gui.pak in Resources */,
-				E82E680018EA7EAB004DBA18 /* pak999-References.pak in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2278,7 +2266,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Resources\n./updatepak.sh";
+			shellScript = "cd Resources\n./mkpak.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2306,7 +2294,6 @@
 				E82E673618EA7972004DBA18 /* as_callfunc.cpp in Sources */,
 				E82E673718EA7972004DBA18 /* as_callfunc_arm.cpp in Sources */,
 				E82E673818EA7972004DBA18 /* as_callfunc_mips.cpp in Sources */,
-				E8C68A521C5BD8F200C52C3F /* Palette.cpp in Sources */,
 				E82E673918EA7972004DBA18 /* as_callfunc_ppc.cpp in Sources */,
 				E82E673A18EA7972004DBA18 /* as_callfunc_ppc_64.cpp in Sources */,
 				E82E673B18EA7972004DBA18 /* as_callfunc_sh4.cpp in Sources */,
@@ -2627,7 +2614,6 @@
 				E8567E761793D60E009D83E0 /* GLModelManager.cpp in Sources */,
 				E8567E791793DC37009D83E0 /* VoxelModel.cpp in Sources */,
 				E8567E7C1793E105009D83E0 /* GLModel.cpp in Sources */,
-				E8C68A511C5BD8E200C52C3F /* Palette.cpp in Sources */,
 				E8567E7F1793E1B3009D83E0 /* GLVoxelModel.cpp in Sources */,
 				E834F55017942C43004EBE88 /* Grenade.cpp in Sources */,
 				E88EB02F185D9DC500565D07 /* YsrDevice.cpp in Sources */,
@@ -2841,10 +2827,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/tcpp/Programs/MacPrograms2/Ysr/DerivedData/Ysr/Build/Products/Release,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -2875,10 +2858,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/tcpp/Programs/MacPrograms2/Ysr/DerivedData/Ysr/Build/Products/Release,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -2889,7 +2869,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -2917,7 +2897,6 @@
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/SDL2.framework/Headers,
 					/Library/Frameworks/SDL2_image.framework/Headers,
-					/usr/local/include/FL/images,
 					/usr/local/include,
 					Sources/ENet/include,
 					"$(SRCROOT)",
@@ -2936,7 +2915,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -2962,7 +2941,6 @@
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/SDL2.framework/Headers,
 					/Library/Frameworks/SDL2_image.framework/Headers,
-					/usr/local/include/FL/images,
 					/usr/local/include,
 					Sources/ENet/include,
 					"$(SRCROOT)",

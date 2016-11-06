@@ -98,7 +98,7 @@ namespace spades {
 		std::string str;
 	public:
 		StringSdlRWops(std::string s):str(s) {
-			op = SDL_RWFromConstMem(str.data(), str.size());
+			op = SDL_RWFromConstMem(str.data(), (int) str.size());
 		}
 		~StringSdlRWops() {
 			SDL_RWclose(op);

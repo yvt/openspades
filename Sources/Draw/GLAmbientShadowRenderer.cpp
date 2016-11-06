@@ -358,7 +358,7 @@ namespace spades {
 				if(dz >= 6 || dz <= -6)
 					continue;
 				if(c.dirty){
-					dirtyChunkIds[numDirtyChunks++] = i;
+					dirtyChunkIds[numDirtyChunks++] = static_cast<int> (i);
 					nearDirtyChunks++;
 					if(numDirtyChunks >= 256)
 						break;
@@ -370,7 +370,7 @@ namespace spades {
 				for(size_t i = 0; i < chunks.size(); i++){
 					Chunk& c = chunks[i];
 					if(c.dirty){
-						dirtyChunkIds[numDirtyChunks++] = i;
+						dirtyChunkIds[numDirtyChunks++] = static_cast<int> (i);
 						if(numDirtyChunks >= 256)
 							break;
 					}

@@ -300,7 +300,7 @@ int asCReader::ReadInner()
 		engine->WriteMessage("", 0, 0, asMSGTYPE_ERROR, TXT_GLOBAL_VARS_NOT_ALLOWED);
 		error = true;
 	}
-	module->scriptGlobals.Allocate(count, 0);
+	module->scriptGlobals.Allocate((unsigned int) count, 0);
 	for( i = 0; i < count && !error; ++i ) 
 	{
 		ReadGlobalProperty();

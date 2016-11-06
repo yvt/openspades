@@ -58,7 +58,7 @@ enet_time_get (void)
 
     gettimeofday (& timeVal, NULL);
 
-    return timeVal.tv_sec * 1000 + timeVal.tv_usec / 1000 - timeBase;
+    return (enet_uint32) (timeVal.tv_sec * 1000 + timeVal.tv_usec / 1000 - timeBase);
 }
 
 void
@@ -68,7 +68,7 @@ enet_time_set (enet_uint32 newTimeBase)
 
     gettimeofday (& timeVal, NULL);
     
-    timeBase = timeVal.tv_sec * 1000 + timeVal.tv_usec / 1000 - newTimeBase;
+    timeBase = (enet_uint32) (timeVal.tv_sec * 1000 + timeVal.tv_usec / 1000 - newTimeBase);
 }
 
 int
@@ -293,9 +293,9 @@ enet_socket_send (ENetSocket socket,
     }
 
     msgHdr.msg_iov = (struct iovec *) buffers;
-    msgHdr.msg_iovlen = bufferCount;
+    msgHdr.msg_iovlen = (int) bufferCount;
 
-    sentLength = sendmsg (socket, & msgHdr, MSG_NOSIGNAL);
+    sentLength = (int) sendmsg (socket, & msgHdr, MSG_NOSIGNAL);
     
     if (sentLength == -1)
     {
@@ -327,9 +327,9 @@ enet_socket_receive (ENetSocket socket,
     }
 
     msgHdr.msg_iov = (struct iovec *) buffers;
-    msgHdr.msg_iovlen = bufferCount;
+    msgHdr.msg_iovlen = (int) bufferCount;
 
-    recvLength = recvmsg (socket, & msgHdr, MSG_NOSIGNAL);
+    recvLength = (int) recvmsg (socket, & msgHdr, MSG_NOSIGNAL);
 
     if (recvLength == -1)
     {

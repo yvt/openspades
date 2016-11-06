@@ -167,8 +167,8 @@ static int png_read_ihdr(png_t* png)
 #if DO_CRC_CHECKS
 	file_read_ul(png, &orig_crc);
 
-	calc_crc = crc32(0L, 0, 0);
-	calc_crc = crc32(calc_crc, ihdr, 13+4);
+	calc_crc = (unsigned) crc32(0L, 0, 0);
+	calc_crc = (unsigned) crc32(calc_crc, ihdr, 13+4);
 
 	if(orig_crc != calc_crc)
 		return PNG_CRC_ERROR;
@@ -220,8 +220,8 @@ static int png_write_ihdr(png_t* png)
 
 	file_write(png, ihdr, 1, 13+4);
 
-	crc = crc32(0L, 0, 0);
-	crc = crc32(crc, ihdr, 13+4);
+	crc = (unsigned) crc32(0L, 0, 0);
+	crc = (unsigned) crc32(crc, ihdr, 13+4);
 
 	file_write_ul(png, crc);
 
@@ -481,7 +481,7 @@ static int png_write_idats(png_t* png, unsigned char* data)
 	unsigned long written;
 	unsigned long crc;
 	unsigned size = png->width * png->height * png->bpp + png->height;
-	unsigned chunk_size = compressBound(size);
+	unsigned chunk_size = (unsigned) compressBound(size);
 
 	(void)png_init_deflate;
 	(void)png_end_deflate;
@@ -494,16 +494,16 @@ static int png_write_idats(png_t* png, unsigned char* data)
 	compress(chunk+4, &written, data, size);
 
 	crc = crc32(0L, Z_NULL, 0);
-	crc = crc32(crc, chunk, written+4);
-	set_ul(chunk+written+4, crc);
-	file_write_ul(png, written);
+	crc = crc32(crc, chunk, (unsigned) written + 4);
+	set_ul(chunk + written + 4, (unsigned) crc);
+	file_write_ul(png, (unsigned) written);
 	file_write(png, chunk, 1, written+8);
 	png_free(chunk);
 
 	file_write_ul(png, 0);
 	file_write(png, "IEND", 1, 4);
 	crc = crc32(0L, (const unsigned char *)"IEND", 4);
-	file_write_ul(png, crc);
+	file_write_ul(png, (unsigned) crc);
 
 	return PNG_NO_ERROR;
 }
@@ -536,9 +536,9 @@ static int png_read_idat(png_t* png, unsigned length)
 	}
 
 #if DO_CRC_CHECKS
-	calc_crc = crc32(0L, Z_NULL, 0);
-	calc_crc = crc32(calc_crc, (unsigned char*)"IDAT", 4);
-	calc_crc = crc32(calc_crc, (unsigned char*)png->readbuf, length);
+	calc_crc = (unsigned) crc32(0L, Z_NULL, 0);
+	calc_crc = (unsigned) crc32(calc_crc, (unsigned char*)"IDAT", 4);
+	calc_crc = (unsigned) crc32(calc_crc, (unsigned char*)png->readbuf, length);
 
 	file_read_ul(png, &orig_crc);
 

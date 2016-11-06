@@ -41,7 +41,7 @@ namespace spades {
 			renderer->RegisterProgram("Shaders/OptimizedVoxelModel.program");
 			renderer->RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
 			renderer->RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
-			renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
+			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 		}
 		GLOptimizedVoxelModel::GLOptimizedVoxelModel(VoxelModel *m,
 								   GLRenderer *r){
@@ -56,19 +56,19 @@ namespace spades {
 			program = renderer->RegisterProgram("Shaders/OptimizedVoxelModel.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
 			shadowMapProgram = renderer->RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
-			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.tga");
+			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 			
 			
 			buffer = device->GenBuffer();
 			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			device->BufferData(IGLDevice::ArrayBuffer,
-							   vertices.size() * sizeof(Vertex),
+							   static_cast<IGLDevice::Sizei> (vertices.size() * sizeof(Vertex)),
 							   vertices.data(), IGLDevice::StaticDraw);
 			
 			idxBuffer = device->GenBuffer();
 			device->BindBuffer(IGLDevice::ArrayBuffer, idxBuffer);
 			device->BufferData(IGLDevice::ArrayBuffer,
-							   indices.size() * sizeof(uint32_t),
+							   static_cast<IGLDevice::Sizei> (indices.size() * sizeof(uint32_t)),
 							   indices.data(), IGLDevice::StaticDraw);
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			
@@ -108,7 +108,7 @@ namespace spades {
 			std::map<Bitmap *, int> idx;
 			std::vector<IntVector3> poss;
 			for(size_t i = 0; i < bmps.size(); i++){
-				idx[bmps[i]] = i;
+				idx[bmps[i]] = static_cast<int> (i);
 				atlasGen.AddBitmap(bmps[i]);
 			}
 			
@@ -281,7 +281,7 @@ namespace spades {
 			
 			int tu = minU - 1, tv = minV - 1;
 			int bw = (maxU - minU) + 3, bh = (maxV - minV) + 3;
-			int bId = bmps.size();
+			int bId = static_cast<int> (bmps.size());
 			Bitmap *bmp = new Bitmap(bw, bh);
 			bmps.push_back(bmp);
 			{
