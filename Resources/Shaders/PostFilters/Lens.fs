@@ -28,7 +28,7 @@ varying vec4 texCoord3;
 varying vec2 texCoord4;
 
 // linearize gamma
-vec3 filter(vec3 col){
+vec3 linearlize(vec3 col){
 #if !LINEAR_FRAMEBUFFER
 	return col * col;
 #else
@@ -44,32 +44,32 @@ void main() {
 	// FIXME: handle LINEAR_FRAMEBUFFER case
 	val = vec3(0.0, 0.2, 1.0);
 	sum += val;
-	val *= filter(texture2D(texture, texCoord1.xy).xyz);
+	val *= linearlize(texture2D(texture, texCoord1.xy).xyz);
 	gl_FragColor.xyz = val;
 	
 	val = vec3(0.0, 0.5, 1.0);
 	sum += val;
-	val *= filter(texture2D(texture, texCoord1.zw).xyz);
+	val *= linearlize(texture2D(texture, texCoord1.zw).xyz);
 	gl_FragColor.xyz += val;
 	
 	val = vec3(0.0, 1.0, 0.0);
 	sum += val;
-	val *= filter(texture2D(texture, texCoord2.xy).xyz);
+	val *= linearlize(texture2D(texture, texCoord2.xy).xyz);
 	gl_FragColor.xyz += val;
 	
 	val = vec3(1.0, 0.5, 0.0);
 	sum += val;
-	val *= filter(texture2D(texture, texCoord2.zw).xyz);
+	val *= linearlize(texture2D(texture, texCoord2.zw).xyz);
 	gl_FragColor.xyz += val;
 	
 	val = vec3(1.0, 0.4, 0.0);
 	sum += val;
-	val *= filter(texture2D(texture, texCoord3.xy).xyz);
+	val *= linearlize(texture2D(texture, texCoord3.xy).xyz);
 	gl_FragColor.xyz += val;
 	
 	val = vec3(1.0, 0.3, 1.0);
 	sum += val;
-	val *= filter(texture2D(texture, texCoord3.zw).xyz);
+	val *= linearlize(texture2D(texture, texCoord3.zw).xyz);
 	gl_FragColor.xyz += val;
 	
 	gl_FragColor.xyz *= 1. / sum;
