@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-07-11 06:08-0300\n"
-"PO-Revision-Date: 2016-07-13 01:24-0300\n"
+"PO-Revision-Date: 2016-09-02 11:40-0300\n"
 "Language-Team: Portuguese Brazilian <flaviomonteiro2013@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.9\n"
 "Last-Translator: \n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Language: pt_BR\n"
@@ -89,12 +89,12 @@ msgstr "Jogadores"
 #: ../../Scripts/Gui/MainScreen.as:472
 msgctxt "MainScreen"
 msgid "Map Name"
-msgstr "Nome do Mapa"
+msgstr "Mapa"
 
 #: ../../Scripts/Gui/MainScreen.as:479
 msgctxt "MainScreen"
 msgid "Game Mode"
-msgstr "Modo de Jogo"
+msgstr "Modo"
 
 #: ../../Scripts/Gui/MainScreen.as:486
 msgctxt "MainScreen"
@@ -177,7 +177,7 @@ msgstr "ON"
 #: ../../Scripts/Gui/Preferences.as:609 ../../Scripts/Gui/Preferences.as:639
 msgctxt "Preferences"
 msgid "OFF"
-msgstr "OK"
+msgstr "OFF"
 
 #: ../../Scripts/Gui/Preferences.as:604 ../../Scripts/Gui/Preferences.as:632
 #: ../../Scripts/Gui/Preferences.as:633
@@ -965,9 +965,9 @@ msgid ""
 "Medium:Particle intersects objects smoothly.|High:Particle intersects "
 "objects smoothly, and some objects casts their shadow to particles."
 msgstr ""
-"Partículas|Baixas:Artefato ocorre quando uma partícula cruza outros objetos.|"
-"Médias:Partícula cruza sem problemas.|Altas:Partícula cruza se, problemas, e "
-"alguns objetos lançam sombrams para suas partículas."
+"Partículas|Poucas:Artefato ocorre quando uma partícula cruza outros objetos.|"
+"Médias:Partículas cruzam objetos sem problemas.|Elevadas:Partícula cruza sem "
+"problemas, e alguns objetos lançam sombras para suas partículas."
 
 #: ../../Scripts/Gui/StartupScreen.as:1127
 #: ../../Scripts/Gui/StartupScreen.as:1137
@@ -1169,8 +1169,8 @@ msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
 "ambience."
 msgstr ""
-"Habilita recursos adicionais disponibilizados pelo driver OpenAL para criar "
-"atmosfera."
+"Habilita recursos adicionais disponibilizados pelo driver OpenAL para "
+"aumentar o realismo"
 
 #: ../../Scripts/Gui/StartupScreen.as:1463
 #: ../../Scripts/Gui/StartupScreen.as:1475

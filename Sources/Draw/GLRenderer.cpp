@@ -81,7 +81,7 @@ SPADES_SETTING(r_srgb, "");
 SPADES_SETTING(r_srgb2D, "1");
 SPADES_SETTING(r_colorCorrection, "1");
 SPADES_SETTING(r_hdr, "");
-SPADES_SETTING(r_hdrAutoExposure, "1");
+SPADES_SETTING(r_hdrAutoExposure, "0");
 SPADES_SETTING(r_exposureValue, "0");
 
 SPADES_SETTING(r_debugTiming, "0");
