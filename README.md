@@ -3,13 +3,15 @@ openspades
 
 [![Build Status](https://travis-ci.org/yvt/openspades.png?branch=master)](https://travis-ci.org/yvt/openspades)
 
+![](https://dl.dropboxusercontent.com/u/37804131/github/OpenSpadesBanner.jpg)
+
 What is it?
 ----------------------------------------------------------------------------------------------------
 
 OpenSpades is a compatible client of Ace of Spades 0.75.
 
 * Can connect to a vanilla/pyspades/pysnip server.
-* Uses OpenGL/AL for better visuals.
+* Uses OpenGL/AL for better experience.
 * Open source, and cross platform.
 
 Installation
@@ -22,9 +24,11 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 1. Install dependencies:
 
    *On Debian-derived distributions*: 
-    ```sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev libsdl2-image-dev libalut-dev``` (because of a bug in some distributions, you might also
-   have to install more packages by ```sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev```)
-
+   ```
+   sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev libsdl2-image-dev libalut-dev
+   ```
+   (because of a bug in some distributions, you might also
+   have to install more packages by `sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev`)
 
    *On other distributions*: 
    Install corresponding packages from your repository (or compile from source).
@@ -51,7 +55,9 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
 4. Clone OpenSpades repository:
 
-   ```git clone https://github.com/yvt/openspades.git && cd openspades```
+   ```bash
+   git clone https://github.com/yvt/openspades.git && cd openspades
+   ```
 
 5. Create directory `openspades.mk` in cloned/downloaded openspades repo and compile:
 
@@ -63,7 +69,7 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
 6. Install openspades: 
 
-   ```sudo make install```
+   `sudo make install`
    
    **note**: `make install` broken in old releases
 
@@ -97,15 +103,17 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 1. Get CMake, Visual Studio 2013 (Express) or Visual Studio 2015 (not very supported), and the OpenSpades source.
    Official: https://github.com/yvt/openspades
    Unofficial: https://github.com/learn-more/openspades
-2. Extract or checkout the source (all examples will assume ```E:/Projects/openspades```, update paths in the examples to reflect yours)
-3. Get (pre-compiled) copies of fltk, glew, curl, sdl2 and zlib, and place them in ```E:/Projects/openspades/Sources/Externals```.
-   See the file ```E:/Projects/openspades/Sources/Externals/readme.txt``` for details (and a pre-compiled set of libraries, make sure to pick the right one for your version of VS).
+2. Extract or checkout the source (all examples will assume `E:/Projects/openspades`, update paths in the examples to reflect yours)
+3. Get (pre-compiled) copies of fltk, glew, curl, sdl2 and zlib, and place them in `E:/Projects/openspades/Sources/Externals`.
+   See the file `E:/Projects/openspades/Sources/Externals/readme.txt` for details (and a pre-compiled set of libraries, make sure to pick the right one for your version of VS).
 4. Run CMake, using the paths:
-   ```Source:   E:/Projects/openspades```
-   ```Binaries: E:/Projects/openspades/OpenSpades.msvc```
-   For your convenience, create the directory: ```E:/Projects/openspades/OpenSpades.msvc/os.Resources```, extract the resources (.pak files) to this dir,
-   set ```OPENSPADES_RESDIR``` to point to this directory. (Run CMake again, now when running debug builds openspades will also read resources from this dir)
-5. Open ```E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln``` in Visual Studio.
+   
+   Source: `E:/Projects/openspades`,
+   Binaries: `E:/Projects/openspades/OpenSpades.msvc`
+   
+   For your convenience, create the directory: `E:/Projects/openspades/OpenSpades.msvc/os.Resources`, extract the resources (.pak files) to this dir,
+   set `OPENSPADES_RESDIR` to point to this directory. (Run CMake again, now when running debug builds openspades will also read resources from this dir)
+5. Open `E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln` in Visual Studio.
 
 ### On Mac OS X (with Xcode)
 
@@ -119,4 +127,3 @@ Licensing
 ----------------------------------------------------------------------------------------------------
 Please see the file named LICENSE.
 
-Note that other assets including sounds and models are not open source.
