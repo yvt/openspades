@@ -33,6 +33,7 @@ varying vec3 fogDensity;
 varying vec3 screenPosition;
 varying vec3 viewPosition;
 varying vec3 worldPosition;
+varying vec2 worldPositionOriginal;
 
 uniform sampler2D waveTexture1;
 uniform sampler2D waveTexture2;
@@ -41,24 +42,28 @@ uniform sampler2D waveTexture3;
 void PrepareForShadow(vec3 worldOrigin, vec3 normal);
 vec4 FogDensity(float poweredLength);
 
-float DisplaceWater(vec2 worldPos){
+vec3 DisplaceWater(vec2 worldPos){
 
 	vec4 waveCoord = worldPos.xyxy * vec4(vec2(0.08), vec2(0.15704))
 	+ vec4(0., 0., 0.754, 0.1315);
 
 	vec2 waveCoord2 = worldPos.xy * 0.02344 + vec2(.154, .7315);
 
+	float wave = texture2DLod(waveTexture1, waveCoord.xy, 0.).w;
+	float disp = mix(-0.1, 0.1, wave) * 0.4;
 
-	vec4 wave = texture2DLod(waveTexture1, waveCoord.xy, 0.).xyzw;
-	float disp = mix(-0.1, 0.1, wave.w) * 1.;
+	float wave2 = texture2DLod(waveTexture2, waveCoord.zw, 0.).w;
+	disp += mix(-0.1, 0.1, wave2) * 0.2;
 
-	vec4 wave2 = texture2DLod(waveTexture2, waveCoord.zw, 0.).xyzw;
-	disp += mix(-0.1, 0.1, wave2.w) * 0.5;
+	float wave3 = texture2DLod(waveTexture3, waveCoord2.xy, 0.).w;
+	disp += mix(-0.1, 0.1, wave3) * 2.5;
 
-	wave2 = texture2DLod(waveTexture3, waveCoord2.xy, 0.).xyzw;
-	disp += mix(-0.1, 0.1, wave2.w) * 2.5;
+	float waveSmoothed1 = texture2DLod(waveTexture3, waveCoord2.xy, 4.).w;
+	float waveSmoothed2 = texture2DLod(waveTexture3, waveCoord2.xy + vec2(1.0 / 16.0, 0.0), 3.).w;
+	float waveSmoothed3 = texture2DLod(waveTexture3, waveCoord2.xy + vec2(0.0, 1.0 / 16.0), 3.).w;
+	vec2 dispHorz = vec2(waveSmoothed2 - waveSmoothed1, waveSmoothed3 - waveSmoothed1) * -16.;
 
-	return disp * 4.;
+	return vec3(dispHorz, disp * 4.);
 }
 
 void main() {
@@ -67,7 +72,8 @@ void main() {
 
 	worldPosition = (modelMatrix * vertexPos).xyz;
 
-	worldPosition.z += DisplaceWater(worldPosition.xy);
+	worldPositionOriginal = worldPosition.xy;
+	worldPosition += DisplaceWater(worldPosition.xy);
 
 	gl_Position = projectionViewMatrix * vec4(worldPosition, 1.);
 	screenPosition = gl_Position.xyw;
@@ -81,6 +87,6 @@ void main() {
 	viewPosition = viewPos.xyz;
 
 
-	PrepareForShadow((modelMatrix * vertexPos).xyz, vec3(0., 0., -1.));
+	PrepareForShadow(worldPosition, vec3(0., 0., -1.));
 }
 

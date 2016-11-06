@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 
@@ -42,19 +42,19 @@ float CockTorrance(vec3 eyeVec, vec3 lightVec, vec3 normal);
 void main() {
 	// color is linear
 	gl_FragColor = vec4(color.xyz, 1.);
-	
+
 	vec3 shading = vec3(OrenNayar(.8, color.w,
 							 -dot(viewSpaceNormal, normalize(viewSpaceCoord))));
 	vec3 sunLight = EvaluateSunLight();
 	shading *= sunLight;
-	
+
 	float ao = texture2D(ambientOcclusionTexture, ambientOcclusionCoord).x;
-	
+
 	shading += EvaluateAmbientLight(ao);
-	
+
 	// apply diffuse shading
 	gl_FragColor.xyz *= shading;
-	
+
 	// specular shading
 	if(color.w > .1 && dot(sunLight, vec3(1.)) > 0.001){
 		vec3 specularColor = sunLight;
@@ -62,17 +62,17 @@ void main() {
 													viewSpaceLight,
 													viewSpaceNormal);
 	}
-	
+
 	// apply fog
 	gl_FragColor.xyz = mix(gl_FragColor.xyz, fogColor, fogDensity);
-	
+
 	gl_FragColor.xyz = max(gl_FragColor.xyz, 0.);
-	
+
 	// gamma correct
 #if !LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
 #endif
-	
+
 #if USE_HDR
 	// somehow denormal occurs, so detect it here and remove
 	// (denormal destroys screen)
