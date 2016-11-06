@@ -5,6 +5,8 @@ openspades
 
 ![](https://dl.dropboxusercontent.com/u/37804131/github/OpenSpadesBanner.jpg)
 
+[Download](https://github.com/yvt/openspades/releases) — [Community](http://buildandshoot.com) — [Official Website](http://openspades.yvt.jp)
+
 What is it?
 ----------------------------------------------------------------------------------------------------
 
