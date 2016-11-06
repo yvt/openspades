@@ -531,6 +531,8 @@
 		E8E446A7179EAC7900BE8855 /* GLShadowShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E446A5179EAC7800BE8855 /* GLShadowShader.cpp */; };
 		E8E446AA179F822D00BE8855 /* TargaWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E446A8179F822D00BE8855 /* TargaWriter.cpp */; };
 		E8EE08A117B8F4B000631987 /* GLRadiosityRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */; };
+		E8F6E6E61DCF503200FE76BB /* MumbleLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F6E6E41DCF503200FE76BB /* MumbleLink.cpp */; };
+		E8F6E6E71DCF503500FE76BB /* MumbleLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F6E6E41DCF503200FE76BB /* MumbleLink.cpp */; };
 		E8F74CE5183F86AE0085AA54 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
 		E8F74CE9183F8B9D0085AA54 /* Runner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE7183F8B9D0085AA54 /* Runner.cpp */; };
 		E8F74CEF183FBA9C0085AA54 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */; };
@@ -1126,6 +1128,8 @@
 		E8EE08A317BA016F00631987 /* ChangeLog */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
 		E8EE08A417BA016F00631987 /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		E8EE08A517BA016F00631987 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		E8F6E6E41DCF503200FE76BB /* MumbleLink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MumbleLink.cpp; sourceTree = "<group>"; };
+		E8F6E6E51DCF503200FE76BB /* MumbleLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MumbleLink.h; sourceTree = "<group>"; };
 		E8F74CE3183F86AE0085AA54 /* View.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = View.cpp; sourceTree = "<group>"; };
 		E8F74CE4183F86AE0085AA54 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
 		E8F74CE6183F8A110085AA54 /* Main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Main.h; sourceTree = "<group>"; };
@@ -1973,6 +1977,8 @@
 		E8E0AF9017993D1800C6B5A9 /* Net */ = {
 			isa = PBXGroup;
 			children = (
+				E8F6E6E41DCF503200FE76BB /* MumbleLink.cpp */,
+				E8F6E6E51DCF503200FE76BB /* MumbleLink.h */,
 				E834F55117944778004EBE88 /* NetClient.cpp */,
 				E834F55217944779004EBE88 /* NetClient.h */,
 			);
@@ -2422,6 +2428,7 @@
 				E82E67B418EA7972004DBA18 /* Client.cpp in Sources */,
 				E82E67B518EA7972004DBA18 /* Client_Input.cpp in Sources */,
 				E82E67B618EA7972004DBA18 /* Client_Update.cpp in Sources */,
+				E8F6E6E71DCF503500FE76BB /* MumbleLink.cpp in Sources */,
 				E82E67B718EA7972004DBA18 /* Client_NetHandler.cpp in Sources */,
 				E82E67B818EA7972004DBA18 /* Client_LocalEnts.cpp in Sources */,
 				E82E67B918EA7972004DBA18 /* Client_Draw.cpp in Sources */,
@@ -2650,6 +2657,7 @@
 				E81A7C741863566200BF3FCE /* SWFeatureLevel.cpp in Sources */,
 				E8E0AFB2179AF4E700C6B5A9 /* SmokeSpriteEntity.cpp in Sources */,
 				E8E0AFB5179BF25B00C6B5A9 /* Settings.cpp in Sources */,
+				E8F6E6E61DCF503200FE76BB /* MumbleLink.cpp in Sources */,
 				E8E0AFB8179C0F2900C6B5A9 /* GLFramebufferManager.cpp in Sources */,
 				E89E8121179C2C800059C649 /* GLBloomFilter.cpp in Sources */,
 				E8D88AB1179C3004004C2451 /* GLQuadRenderer.cpp in Sources */,
