@@ -40,7 +40,7 @@
 
 #include "NetClient.h"
 
-SPADES_SETTING(cg_centerMessage, "1");
+SPADES_SETTING(cg_centerMessage, "2");
 
 namespace spades {
 	namespace client {
