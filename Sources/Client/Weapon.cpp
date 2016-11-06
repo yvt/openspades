@@ -203,7 +203,7 @@ namespace spades {
 				}
 			}
 			virtual Vector3 GetRecoil () {
-				return MakeVector3(0.0001f, 0.05f, 0.f);
+				return MakeVector3(0.01f, 0.05f, 0.f); // measured
 			}
 			virtual float GetSpread() { return 0.006f; }
 			virtual int GetPelletSize() { return 1; }
@@ -230,7 +230,7 @@ namespace spades {
 				}
 			}
 			virtual Vector3 GetRecoil () {
-				return MakeVector3(0.00005f, 0.0125f, 0.f);
+				return MakeVector3(0.005f, 0.0125f, 0.f); // measured
 			}
 			virtual float GetSpread() { return 0.012f; }
 			virtual int GetPelletSize() { return 1; }
@@ -259,7 +259,7 @@ namespace spades {
 				}
 			}
 			virtual Vector3 GetRecoil () {
-				return MakeVector3(0.0002f, 0.1f, 0.f);
+				return MakeVector3(0.02f, 0.1f, 0.f); // measured
 			}
 			virtual float GetSpread() { return 0.024f; }
 			virtual int GetPelletSize() { return 8; }
@@ -290,6 +290,7 @@ namespace spades {
 				}
 			}
 			virtual Vector3 GetRecoil () {
+                // FIXME: needs to measured
 				return MakeVector3(0.0001f, 0.075f, 0.f);
 			}
 			virtual float GetSpread() { return 0.004f; }
@@ -316,7 +317,8 @@ namespace spades {
 					default: SPAssert(false); return 0;
 				}
 			}
-			virtual Vector3 GetRecoil () {
+            virtual Vector3 GetRecoil () {
+                // FIXME: needs to measured
 				return MakeVector3(0.00005f, 0.0125f, 0.f);
 			}
 			virtual float GetSpread() { return 0.012f; }
@@ -344,7 +346,8 @@ namespace spades {
 					default: SPAssert(false); return 0;
 				}
 			}
-			virtual Vector3 GetRecoil () {
+            virtual Vector3 GetRecoil () {
+                // FIXME: needs to measured
 				return MakeVector3(0.0002f, 0.075f, 0.f);
 			}
 			virtual float GetSpread() { return 0.036f; }
