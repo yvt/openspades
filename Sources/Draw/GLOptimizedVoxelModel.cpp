@@ -699,7 +699,12 @@ namespace spades {
 			Vector3 sunPos = MakeVector3(0, -1, -1);
 			sunPos = sunPos.Normalize();
 			sunLightDirection.SetValue(sunPos.x, sunPos.y, sunPos.z);
-			
+            
+            static GLProgramUniform viewOriginVector("viewOriginVector");
+            viewOriginVector(program);
+            const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+            viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
+            
 			// setup attributes
 			static GLProgramAttribute positionAttribute("positionAttribute");
 			static GLProgramAttribute textureCoordAttribute("textureCoordAttribute");
@@ -841,7 +846,12 @@ namespace spades {
 			static GLProgramUniform modelTexture("modelTexture");
 			modelTexture(dlightProgram);
 			modelTexture.SetValue(1);
-			
+            
+            static GLProgramUniform viewOriginVector("viewOriginVector");
+            viewOriginVector(dlightProgram);
+            const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+            viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
+            
 			// setup attributes
 			static GLProgramAttribute positionAttribute("positionAttribute");
 			static GLProgramAttribute textureCoordAttribute("textureCoordAttribute");

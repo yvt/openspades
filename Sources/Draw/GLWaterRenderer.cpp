@@ -737,7 +737,7 @@ namespace spades {
 				prg->Use();
 				
 				static GLProgramUniform projectionViewModelMatrix("projectionViewModelMatrix");
-				static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
+                static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 				static GLProgramUniform modelMatrix("modelMatrix");
 				static GLProgramUniform viewModelMatrix("viewModelMatrix");
 				static GLProgramUniform viewMatrix("viewMatrix");
@@ -763,7 +763,7 @@ namespace spades {
 				displaceScale(prg);
 				fovTan(prg);
 				waterPlane(prg);
-				
+                
 				projectionViewModelMatrix.SetValue(renderer->GetProjectionViewMatrix() * mat);
 				projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
 				modelMatrix.SetValue(mat);

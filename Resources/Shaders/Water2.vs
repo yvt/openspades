@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 
@@ -42,44 +42,45 @@ void PrepareForShadow(vec3 worldOrigin, vec3 normal);
 vec4 FogDensity(float poweredLength);
 
 float DisplaceWater(vec2 worldPos){
-	
+
 	vec4 waveCoord = worldPos.xyxy * vec4(vec2(0.08), vec2(0.15704))
 	+ vec4(0., 0., 0.754, 0.1315);
-	
+
 	vec2 waveCoord2 = worldPos.xy * 0.02344 + vec2(.154, .7315);
-	
-	
+
+
 	vec4 wave = texture2DLod(waveTexture1, waveCoord.xy, 0.).xyzw;
 	float disp = mix(-0.1, 0.1, wave.w) * 1.;
-	
+
 	vec4 wave2 = texture2DLod(waveTexture2, waveCoord.zw, 0.).xyzw;
 	disp += mix(-0.1, 0.1, wave2.w) * 0.5;
-	
+
 	wave2 = texture2DLod(waveTexture3, waveCoord2.xy, 0.).xyzw;
 	disp += mix(-0.1, 0.1, wave2.w) * 2.5;
-	
+
 	return disp * 4.;
 }
 
 void main() {
-	
+
 	vec4 vertexPos = vec4(positionAttribute.xy, 0., 1.);
-	
+
 	worldPosition = (modelMatrix * vertexPos).xyz;
 
 	worldPosition.z += DisplaceWater(worldPosition.xy);
-	
+
 	gl_Position = projectionViewMatrix * vec4(worldPosition, 1.);
 	screenPosition = gl_Position.xyw;
 	screenPosition.xy = (screenPosition.xy + screenPosition.z) * .5;
-		
+
 	vec4 viewPos = viewModelMatrix * vertexPos;
-	float distance = dot(viewPos.xyz, viewPos.xyz);
-	fogDensity = FogDensity(distance).xyz;
-	
+	vec2 horzRelativePos = (modelMatrix * vertexPos).xy - viewOrigin.xy;
+	float horzDistance = dot(horzRelativePos, horzRelativePos);
+	fogDensity = FogDensity(horzDistance).xyz;
+
 	viewPosition = viewPos.xyz;
-	
-	
+
+
 	PrepareForShadow((modelMatrix * vertexPos).xyz, vec3(0., 0., -1.));
 }
 

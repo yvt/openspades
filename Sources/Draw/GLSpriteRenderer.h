@@ -69,8 +69,9 @@ namespace spades {
 			GLProgramUniform upVector;
 			GLProgramUniform texture;
 			GLProgramUniform viewMatrix;
-			GLProgramUniform fogDistance;
-			GLProgramUniform fogColor;
+            GLProgramUniform fogDistance;
+            GLProgramUniform fogColor;
+            GLProgramUniform viewOriginVector;
 			
 			GLProgramAttribute positionAttribute;
 			GLProgramAttribute spritePosAttribute;

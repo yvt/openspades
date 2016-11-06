@@ -56,7 +56,8 @@ namespace spades {
 		dlRAttribute("dlRAttribute"),
 		dlGAttribute("dlGAttribute"),
 		dlBAttribute("dlBAttribute"),
-		emissionAttribute("emissionAttribute")
+		emissionAttribute("emissionAttribute"),
+        cameraPosition("cameraPosition")
 		{
 			SPADES_MARK_FUNCTION();
 			

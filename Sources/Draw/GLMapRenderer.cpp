@@ -233,7 +233,12 @@ namespace spades {
 			
 			static GLProgramUniform viewMatrix("viewMatrix");
 			viewMatrix(basicProgram);
-			viewMatrix.SetValue(renderer->GetViewMatrix());
+            viewMatrix.SetValue(renderer->GetViewMatrix());
+            
+            static GLProgramUniform viewOriginVector("viewOriginVector");
+            viewOriginVector(basicProgram);
+            const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+            viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 			
 			RealizeChunks(eye);
 			
@@ -317,7 +322,12 @@ namespace spades {
 			
 			static GLProgramUniform viewMatrix("viewMatrix");
 			viewMatrix(dlightProgram);
-			viewMatrix.SetValue(renderer->GetViewMatrix());
+            viewMatrix.SetValue(renderer->GetViewMatrix());
+            
+            static GLProgramUniform viewOriginVector("viewOriginVector");
+            viewOriginVector(dlightProgram);
+            const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+            viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 			
 			RealizeChunks(eye);
 			

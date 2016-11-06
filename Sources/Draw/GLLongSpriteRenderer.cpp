@@ -43,7 +43,8 @@ namespace spades {
 		texture("texture"),
 		viewMatrix("viewMatrix"),
 		fogDistance("fogDistance"),
-		fogColor("fogColor")
+		fogColor("fogColor"),
+        viewOriginVector("viewOriginVector")
 		{
 			SPADES_MARK_FUNCTION();
 			
@@ -100,6 +101,7 @@ namespace spades {
 			viewMatrix(program);
 			fogDistance(program);
 			fogColor(program);
+            viewOriginVector(program);
 			
 			positionAttribute(program);
 			texCoordAttribute(program);
@@ -109,7 +111,10 @@ namespace spades {
 			viewMatrix.SetValue(renderer->GetViewMatrix());
 			
 			fogDistance.SetValue(renderer->GetFogDistance());
-			
+            
+            const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+            viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
+            
 			Vector3 fogCol = renderer->GetFogColor();
 			fogColor.SetValue(fogCol.x,fogCol.y,fogCol.z);
 			

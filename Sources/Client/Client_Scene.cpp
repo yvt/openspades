@@ -102,7 +102,8 @@ namespace spades {
 			
 			SceneDefinition def;
 			def.time = (unsigned int)(time * 1000.f);
-			def.denyCameraBlur = true;
+            def.denyCameraBlur = true;
+            def.zFar = 200.f;
 			
 			if(world){
 				IntVector3 fogColor = world->GetFogColor();
@@ -365,7 +366,6 @@ namespace spades {
 					}
 					
 					def.zNear = 0.05f;
-					def.zFar = 130.f;
 					
 					def.skipWorld = false;
 				}else{
@@ -380,7 +380,6 @@ namespace spades {
 									 renderer->ScreenHeight()) * 2.f;
 					
 					def.zNear = 0.05f;
-					def.zFar = 130.f;
 					
 					def.skipWorld = false;
 				}
@@ -397,13 +396,17 @@ namespace spades {
 								 renderer->ScreenHeight()) * 2.f;
 				
 				def.zNear = 0.05f;
-				def.zFar = 130.f;
 				
 				def.skipWorld = true;
 				
 				renderer->SetFogColor(MakeVector3(0,0,0));
 			}
 			
+            if (def.viewOrigin.z < 0.f) {
+                // Need to move the far plane because there's no vertical fog
+                def.zFar -= def.viewOrigin.z;
+            }
+            
 			SPAssert(!isnan(def.viewOrigin.x));
 			SPAssert(!isnan(def.viewOrigin.y));
 			SPAssert(!isnan(def.viewOrigin.z));

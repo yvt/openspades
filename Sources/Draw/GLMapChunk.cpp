@@ -489,7 +489,7 @@ namespace spades {
 			
 			float dist = fabsf(diff.x);
 			dist = std::max(dist, fabsf(diff.y));
-			dist = std::max(dist, fabsf(diff.z));
+            // note: there's no vertical fog
 			
 			//return std::max(diff.GetLength() - radius, 0.f);
 			return std::max(dist - ((float)Size * .5f), 0.f);
