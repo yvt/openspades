@@ -1,147 +1,147 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include "DropDownList.as"
 
 namespace spades {
-	
+
 
 	class StartupScreenUI {
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		Font@ font;
 		StartupScreenHelper@ helper;
-		
+
 		spades::ui::UIManager@ manager;
-		
+
 		StartupScreenMainMenu@ mainMenu;
-		
-		
+
+
 		bool shouldExit = false;
 		StartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, Font@ font, StartupScreenHelper@ helper) {
 			@this.renderer = renderer;
 			@this.audioDevice = audioDevice;
 			@this.font = font;
 			@this.helper = helper;
-			
+
 			SetupRenderer();
-			
+
 			@manager = spades::ui::UIManager(renderer, audioDevice);
 			@manager.RootElement.Font = font;
-			
+
 			@mainMenu = StartupScreenMainMenu(this);
 			mainMenu.Bounds = manager.RootElement.Bounds;
 			manager.RootElement.AddChild(mainMenu);
-			
+
 		}
-		
+
 		void SetupRenderer() {
-			if(manager !is null)	
+			if(manager !is null)
 				manager.KeyPanic();
 		}
-		
+
 		void MouseEvent(float x, float y) {
 			manager.MouseEvent(x, y);
 		}
-		
+
 		void WheelEvent(float x, float y) {
 			manager.WheelEvent(x, y);
 		}
-		
+
 		void KeyEvent(string key, bool down) {
 			manager.KeyEvent(key, down);
 		}
-		
+
 		void TextInputEvent(string text) {
 			manager.TextInputEvent(text);
 		}
-		
+
 		void TextEditingEvent(string text, int start, int len) {
 			manager.TextEditingEvent(text, start, len);
 		}
-		
+
 		bool AcceptsTextInput() {
 			return manager.AcceptsTextInput;
 		}
-		
+
 		AABB2 GetTextInputRect() {
 			return manager.TextInputRect;
 		}
-		
+
 		void RunFrame(float dt) {
 			renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 1.f);
 			renderer.DrawImage(renderer.RegisterImage("Gfx/White.tga"),
 				AABB2(0.f, 0.f, renderer.ScreenWidth, renderer.ScreenHeight));
-		
+
 			// draw title logo
 			Image@ img = renderer.RegisterImage("Gfx/Title/LogoSmall.png");
 			renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.f);
 			renderer.DrawImage(img, AABB2(10.f, 10.f, img.Width, img.Height));
-				
+
 			manager.RunFrame(dt);
 			manager.Render();
-			
+
 			renderer.FrameDone();
 			renderer.Flip();
 		}
-		
+
 		void Closing() {
 			shouldExit = true;
 		}
-		
+
 		bool WantsToBeClosed() {
 			return shouldExit;
 		}
 	}
-	
-	
-	
+
+
+
 	class StartupScreenMainMenu: spades::ui::UIElement {
-		
+
 		StartupScreenUI@ ui;
 		StartupScreenHelper@ helper;
-		
+
 		spades::ui::ListView@ serverList;
 		spades::ui::CheckBox@ bypassStartupWindowCheck;
-		
+
 		StartupScreenGraphicsTab@ graphicsTab;
 		StartupScreenAudioTab@ audioTab;
 		StartupScreenAdvancedTab@ advancedTab;
-		
+
 		private ConfigItem cl_showStartupWindow("cl_showStartupWindow", "-1");
 		private bool advancedTabVisible = false;
-		
+
 		StartupScreenMainMenu(StartupScreenUI@ ui) {
 			super(ui.manager);
 			@this.ui = ui;
 			@this.helper = ui.helper;
-			
+
 			@this.Font = ui.font;
-			
+
 			float width = Manager.Renderer.ScreenWidth;
 			float height = Manager.Renderer.ScreenHeight;
 			{
 				spades::ui::Button button(Manager);
 				button.Caption = _Tr("StartupScreen", "Start");
 				button.Bounds = AABB2(width - 170.f, 20.f, 150.f, 30.f);
-				button.Activated = EventHandler(this.OnStartPressed);
+				@button.Activated = spades::ui::EventHandler(this.OnStartPressed);
 				AddChild(button);
 			}
 			{
@@ -150,9 +150,9 @@ namespace spades {
 				button.Bounds = AABB2(360.f, 62.f, width - 380.f, 20.f);
 				AddChild(button);
 				@bypassStartupWindowCheck = button;
-				button.Activated = EventHandler(this.OnBypassStartupWindowCheckChanged);
+				@button.Activated = spades::ui::EventHandler(this.OnBypassStartupWindowCheckChanged);
 			}
-			
+
 			AABB2 clientArea(10.f, 100.f, width - 20.f, height - 110.f);
 			StartupScreenGraphicsTab graphicsTab(ui, clientArea.max - clientArea.min);
 			StartupScreenAudioTab audioTab(ui, clientArea.max - clientArea.min);
@@ -169,11 +169,11 @@ namespace spades {
 			audioTab.Visible = false;
 			profileTab.Visible = false;
 			advancedTab.Visible = false;
-			
+
 			@this.graphicsTab = graphicsTab;
 			@this.audioTab = audioTab;
 			@this.advancedTab = advancedTab;
-			
+
 			{
 				spades::ui::SimpleTabStrip tabStrip(Manager);
 				AddChild(tabStrip);
@@ -182,12 +182,12 @@ namespace spades {
 				tabStrip.AddItem(_Tr("StartupScreen", "Audio"), audioTab);
 				tabStrip.AddItem(_Tr("StartupScreen", "System Info"), profileTab);
 				tabStrip.AddItem(_Tr("StartupScreen", "Advanced"), advancedTab);
-				@tabStrip.Changed = EventHandler(this.OnTabChanged);
+				@tabStrip.Changed = spades::ui::EventHandler(this.OnTabChanged);
 			}
-			
+
 			LoadConfig();
 		}
-		
+
 		private void OnTabChanged(spades::ui::UIElement@) {
 			bool v = advancedTab.Visible;
 			if(advancedTabVisible and not v) {
@@ -195,7 +195,7 @@ namespace spades {
 			}
 			advancedTabVisible = v;
 		}
-		
+
 		void LoadConfig() {
 			switch(cl_showStartupWindow.IntValue) {
 			case -1:
@@ -208,35 +208,35 @@ namespace spades {
 				bypassStartupWindowCheck.Toggled = false;
 				break;
 			}
-				
+
 			this.graphicsTab.LoadConfig();
 			this.audioTab.LoadConfig();
 			this.advancedTab.LoadConfig();
 		}
-		
+
 		private void OnBypassStartupWindowCheckChanged(spades::ui::UIElement@ sender) {
 			cl_showStartupWindow.IntValue = (bypassStartupWindowCheck.Toggled ? 0 : 1);
 		}
-		
-		
+
+
 		private void OnQuitPressed(spades::ui::UIElement@ sender) {
 			ui.shouldExit = true;
 		}
-		
+
 		private void OnSetupPressed(spades::ui::UIElement@ sender) {
 			PreferenceView al(this, PreferenceViewOptions());
 			al.Run();
 		}
-		
+
 		private void Start() {
 			helper.Start();
 			ui.shouldExit = true; // we have to exit from the startup screen to start the game
 		}
-		
+
 		private void OnStartPressed(spades::ui::UIElement@ sender) {
 			Start();
 		}
-		
+
 		void HotKey(string key) {
 			if(IsEnabled and key == "Enter") {
 				Start();
@@ -246,18 +246,18 @@ namespace spades {
 				UIElement::HotKey(key);
 			}
 		}
-		
+
 		void Render() {
 			UIElement::Render();
-			
+
 		}
 	}
-	
+
 	funcdef void HelpTextHandler(string text);
 	class ChainedEventHandler {
-		EventHandler@ h;
-		EventHandler@ h2;
-		ChainedEventHandler(EventHandler@ h, EventHandler@ h2) {
+		spades::ui::EventHandler@ h;
+		spades::ui::EventHandler@ h2;
+		ChainedEventHandler(spades::ui::EventHandler@ h, spades::ui::EventHandler@ h2) {
 			@this.h = h;
 			@this.h2 = h2;
 		}
@@ -286,12 +286,12 @@ namespace spades {
 			}
 		}
 		void Watch(spades::ui::UIElement@ elm) {
-			@elm.MouseEntered = EventHandler(this.OnMouseHover);
+			@elm.MouseEntered = spades::ui::EventHandler(this.OnMouseHover);
 		}
 		void WatchDeep(spades::ui::UIElement@ elm) {
 			if(elm.MouseEntered !is null) {
-				ChainedEventHandler chain(elm.MouseEntered, EventHandler(this.OnMouseHover));
-				@elm.MouseEntered = EventHandler(chain.Handler);
+				ChainedEventHandler chain(elm.MouseEntered, spades::ui::EventHandler(this.OnMouseHover));
+				@elm.MouseEntered = spades::ui::EventHandler(chain.Handler);
 			}else{
 				Watch(elm);
 			}
@@ -301,9 +301,9 @@ namespace spades {
 			}
 		}
 	}
-	
+
 	mixin class LabelAddable {
-	
+
 		private void AddLabel(float x, float y, float h, string text) {
 			spades::ui::Label label(Manager);
 			Font@ font = ui.font;
@@ -313,22 +313,22 @@ namespace spades {
 			label.Bounds = AABB2(x, y, siz.x, h);
 			AddChild(label);
 		}
-		
+
 	}
-	
+
 	class StartupScreenConfigViewModel: spades::ui::ListViewModel {
 		spades::ui::UIElement@[] items;
 		spades::ui::UIElement@[]@ items2;
 		StartupScreenConfigViewModel() {
 		}
-		int NumRows { 
-			get { 
+		int NumRows {
+			get {
 				if(items2 !is null)
 					return int(items2.length);
-				return int(items.length); 
+				return int(items.length);
 			}
 		}
-		
+
 		void Filter(string text) {
 			if(text.length == 0) {
 				@items2 = null;
@@ -354,14 +354,14 @@ namespace spades {
 		void RecycleElement(spades::ui::UIElement@ elem) {
 		}
 	}
-	
+
 	interface StartupScreenGenericConfig {
 		string GetValue();
 		void SetValue(string);
 		/** Returns an empty string when there's no problem. */
 		string CheckValueCapability(string);
 	}
-	
+
 	class StartupScreenConfig: StartupScreenGenericConfig {
 		private StartupScreenUI@ ui;
 		private ConfigItem@ cfg;
@@ -381,7 +381,7 @@ namespace spades {
 			return ui.helper.CheckConfigCapability(cfgName, v);
 		}
 	}
-	
+
 	class StartupScreenConfigSetter {
 		StartupScreenGenericConfig@ c;
 		string value;
@@ -393,24 +393,24 @@ namespace spades {
 			c.SetValue(this.value);
 		}
 	}
-	
+
 	interface StartupScreenConfigItemEditor {
 		void LoadConfig();
 		StartupScreenGenericConfig@ GetConfig();
 		void SetHelpTextHandler(HelpTextHandler@);
 		string GetLabel();
 	}
-	
-	
+
+
 	class StartupScreenConfigSelectItemEditor: spades::ui::UIElement, LabelAddable, StartupScreenConfigItemEditor, StartupScreenConfigItemEditor {
-		
-		private StartupScreenUI@ ui;
+
+		protected StartupScreenUI@ ui;
 		private string[]@ descs;
 		private string[]@ values;
-		private StartupScreenGenericConfig@ config;
-		private spades::ui::RadioButton@[] buttons;
+		protected StartupScreenGenericConfig@ config;
+		protected spades::ui::RadioButton@[] buttons;
 		private string label;
-		
+
 		StartupScreenConfigSelectItemEditor(StartupScreenUI@ ui,
 			StartupScreenGenericConfig@ cfg,
 			string values, string descs) {
@@ -419,7 +419,7 @@ namespace spades {
 			@this.descs = descs.split("|");
 			@config = cfg;
 			@this.values = values.split("|");
-			
+
 			{
 				string desc = this.descs[0];
 				int idx = desc.findFirst(":");
@@ -429,8 +429,8 @@ namespace spades {
 				AddLabel(0, 0, 24.f, desc);
 				this.label = desc;
 			}
-			
-			
+
+
 			for(uint i = 0; i < this.values.length; i++) {
 				spades::ui::RadioButton b(Manager);
 				string desc = this.descs[i + 1];
@@ -439,19 +439,19 @@ namespace spades {
 					desc = desc.substr(0, idx);
 				}
 				b.Caption = desc;
-				
+
 				b.GroupName = "hoge";
 				StartupScreenConfigSetter setter(config, this.values[i]);
-				@b.Activated = EventHandler(setter.Set);
+				@b.Activated = spades::ui::EventHandler(setter.Set);
 				buttons.insertLast(b);
 				this.AddChild(b);
 			}
 		}
-		
+
 		string GetLabel() {
 			return label;
 		}
-		
+
 		void LoadConfig() {
 			string val = config.GetValue();
 			for(uint i = 0, count = values.length; i < count; i++) {
@@ -477,7 +477,7 @@ namespace spades {
 				HelpHandler(handler, desc).Watch(buttons[i]);
 			}
 		}
-		
+
 		void set_Bounds(AABB2 v) {
 			UIElement::set_Bounds(v);
 			Vector2 size = this.Size;
@@ -491,17 +491,17 @@ namespace spades {
 			}
 		}
 	}
-	
+
 	class StartupScreenConfigCheckItemEditor: spades::ui::UIElement, StartupScreenConfigItemEditor {
-		
-		private StartupScreenUI@ ui;
+
+		protected StartupScreenUI@ ui;
 		private string desc;
 		private string valueOff;
 		private string valueOn;
 		private StartupScreenGenericConfig@ config;
 		private spades::ui::CheckBox@ button;
 		private string label;
-		
+
 		StartupScreenConfigCheckItemEditor(StartupScreenUI@ ui,
 			StartupScreenGenericConfig@ cfg,
 			string valueOff, string valueOn, string label, string desc) {
@@ -511,19 +511,19 @@ namespace spades {
 			this.valueOff = valueOff;
 			this.valueOn = valueOn;
 			this.desc = desc;
-			
+
 			spades::ui::CheckBox b(Manager);
 			b.Caption = label;
 			this.label = label;
-			@b.Activated = EventHandler(this.StateChanged);
+			@b.Activated = spades::ui::EventHandler(this.StateChanged);
 			@button = b;
 			this.AddChild(b);
 		}
-		
+
 		string GetLabel() {
 			return label;
 		}
-		
+
 		void LoadConfig() {
 			string val = config.GetValue();
 			button.Toggled = (val != valueOff);
@@ -541,7 +541,7 @@ namespace spades {
 		void SetHelpTextHandler(HelpTextHandler@ handler) {
 			HelpHandler(handler, desc).Watch(button);
 		}
-		
+
 		void set_Bounds(AABB2 v) {
 			UIElement::set_Bounds(v);
 			Vector2 size = this.Size;
@@ -549,9 +549,9 @@ namespace spades {
 			button.Bounds = AABB2(0.f, 0.f, size.x, h);
 		}
 	}
-	
+
 	class StartupScreenConfigSliderItemEditor: spades::ui::UIElement, StartupScreenConfigItemEditor, LabelAddable {
-		
+
 		private StartupScreenUI@ ui;
 		private string desc;
 		private double stepSize;
@@ -560,7 +560,7 @@ namespace spades {
 		private spades::ui::Label@ valueLabel;
 		private ConfigNumberFormatter@ formatter;
 		private string label;
-		
+
 		StartupScreenConfigSliderItemEditor(StartupScreenUI@ ui,
 			StartupScreenGenericConfig@ cfg,
 			double minValue, double maxValue, double stepSize, string label, string desc,
@@ -571,41 +571,41 @@ namespace spades {
 			this.desc = desc;
 			this.stepSize = stepSize;
 			this.label = label;
-			
+
 			AddLabel(0, 0, 24.f, label);
-			
+
 			spades::ui::Slider b(Manager);
 			b.MinValue = minValue;
 			b.MaxValue = maxValue;
-			
+
 			// compute large change
 			int steps = int((maxValue - minValue) / stepSize);
 			steps = (steps + 9) / 10;
 			b.LargeChange = float(steps) * stepSize;
 			b.SmallChange = stepSize;
-			
-			@b.Changed = EventHandler(this.StateChanged);
+
+			@b.Changed = spades::ui::EventHandler(this.StateChanged);
 			@slider = b;
 			this.AddChild(b);
-			
+
 			spades::ui::Label l(Manager);
 			@valueLabel = l;
 			l.Alignment = Vector2(1.f, 0.5f);
 			this.AddChild(l);
-			
+
 			@this.formatter = formatter;
 		}
-		
+
 		private void UpdateLabel() {
 			double v = slider.Value;
 			string s = formatter.Format(v);
 			valueLabel.Text = s;
 		}
-		
+
 		string GetLabel() {
 			return label;
 		}
-		
+
 		void LoadConfig() {
 			string val = config.GetValue();
 			double v = ParseDouble(val);
@@ -621,7 +621,7 @@ namespace spades {
 		StartupScreenGenericConfig@ GetConfig() {
 			return config;
 		}
-		
+
 		void DoRounding() {
 			double v = double(slider.Value - slider.MinValue);
 			v = floor((v / stepSize) + 0.5) * stepSize;
@@ -636,7 +636,7 @@ namespace spades {
 		void SetHelpTextHandler(HelpTextHandler@ handler) {
 			HelpHandler(handler, desc).WatchDeep(slider);
 		}
-		
+
 		void set_Bounds(AABB2 v) {
 			UIElement::set_Bounds(v);
 			Vector2 size = this.Size;
@@ -645,17 +645,17 @@ namespace spades {
 			valueLabel.Bounds = AABB2(size.x - 80.f, 0.f, 80.f, h);
 		}
 	}
-	
-	
+
+
 	class StartupScreenConfigFieldItemEditor: spades::ui::UIElement, StartupScreenConfigItemEditor, LabelAddable {
-		
+
 		private StartupScreenUI@ ui;
 		private string desc;
 		private double stepSize;
 		private StartupScreenGenericConfig@ config;
 		private spades::ui::Field@ field;
 		private string label;
-		
+
 		StartupScreenConfigFieldItemEditor(StartupScreenUI@ ui,
 			StartupScreenGenericConfig@ cfg,
 			string label, string desc) {
@@ -664,21 +664,21 @@ namespace spades {
 			@config = cfg;
 			this.desc = desc;
 			this.label = label;
-			
+
 			AddLabel(0, 0, 24.f, label);
-			
+
 			spades::ui::Field b(Manager);
-			
-			@b.Changed = EventHandler(this.StateChanged);
+
+			@b.Changed = spades::ui::EventHandler(this.StateChanged);
 			@field = b;
 			this.AddChild(b);
-			
+
 		}
-		
+
 		string GetLabel() {
 			return label;
 		}
-		
+
 		void LoadConfig() {
 			string val = config.GetValue();
 			field.Text = val;
@@ -689,14 +689,14 @@ namespace spades {
 		StartupScreenGenericConfig@ GetConfig() {
 			return config;
 		}
-		
+
 		private void StateChanged(spades::ui::UIElement@) {
 			config.SetValue(field.Text);
 		}
 		void SetHelpTextHandler(HelpTextHandler@ handler) {
 			HelpHandler(handler, desc).WatchDeep(field);
 		}
-		
+
 		void set_Bounds(AABB2 v) {
 			UIElement::set_Bounds(v);
 			Vector2 size = this.Size;
@@ -704,12 +704,12 @@ namespace spades {
 			field.Bounds = AABB2(240.f, 0.f, size.x - 240.f, h);
 		}
 	}
-	
+
 	// Maps multiple configs to {"0", "1", ...} or "custom"
 	class StartupScreenComplexConfig: StartupScreenGenericConfig {
 		StartupScreenConfigItemEditor@[] editors;
 		StartupScreenComplexConfigPreset@[] presets;
-		
+
 		void AddEditor(StartupScreenConfigItemEditor@ editor) {
 			Assert(presets.length == 0);
 			editors.insertLast(editor);
@@ -718,10 +718,10 @@ namespace spades {
 			Assert(preset.Values.length == editors.length);
 			presets.insertLast(preset);
 		}
-		
+
 		string GetValue() {
 			string[] values;
-			
+
 			for(uint i = 0; i < editors.length; i++) {
 				values.insertLast(editors[i].GetConfig().GetValue());
 			}
@@ -762,7 +762,7 @@ namespace spades {
 			}
 			return ret;
 		}
-		
+
 		// used for StartupScreenConfigSelectItemEditor's ctor param
 		string GetValuesString() {
 			string[] lst;
@@ -782,7 +782,7 @@ namespace spades {
 			return join(lst, "|");
 		}
 	}
-	
+
 	class StartupScreenComplexConfigPreset {
 		string Name;
 		string[] Values;
@@ -791,38 +791,38 @@ namespace spades {
 			Values = values.split("|");
 		}
 	}
-	
+
 	class StartupScreenConfigComplexItemEditor: StartupScreenConfigSelectItemEditor {
 		private string dlgTitle;
-		
+
 		StartupScreenConfigComplexItemEditor(StartupScreenUI@ ui,
 			StartupScreenComplexConfig@ cfg,
 			string label, string desc) {
-			super(ui, cfg, cfg.GetValuesString(), 
+			super(ui, cfg, cfg.GetValuesString(),
 				label + ":" + desc + "|" + cfg.GetDescriptionsString());
 			dlgTitle = label;
-			@buttons[buttons.length - 1].Activated = EventHandler(this.CustomClicked);
+			@buttons[buttons.length - 1].Activated = spades::ui::EventHandler(this.CustomClicked);
 		}
-		
+
 		private void CustomClicked(spades::ui::UIElement@) {
 			RunDialog();
 		}
-		
+
 		private void DialogDone(spades::ui::UIElement@) {
 			LoadConfig();
 		}
-		
+
 		private void RunDialog() {
 			StartupScreenComplexConfigDialog dlg(ui.manager, cast<StartupScreenComplexConfig>(config));
-			dlg.DialogDone = EventHandler(this.DialogDone);
+			@dlg.DialogDone = spades::ui::EventHandler(this.DialogDone);
 			dlg.Title = dlgTitle;
 			dlg.RunDialog();
 		}
 	}
-	
+
 	class StartupScreenConfigView: spades::ui::ListViewBase {
 		private StartupScreenConfigViewModel vmodel;
-		
+
 		StartupScreenConfigView(spades::ui::UIManager@ manager) {
 			super(manager);
 			this.RowHeight = 30.f;
@@ -833,12 +833,12 @@ namespace spades {
 		void AddRow(spades::ui::UIElement@ elm) {
 			vmodel.items.insertLast(elm);
 		}
-		
+
 		void Filter(string text) {
 			vmodel.Filter(text);
 			Reload();
 		}
-		
+
 		void SetHelpTextHandler(HelpTextHandler@ handler) {
 			spades::ui::UIElement@[]@ elms = vmodel.items;
 			for(uint i = 0; i < elms.length; i++) {
@@ -858,27 +858,27 @@ namespace spades {
 			}
 		}
 	}
-	
+
 	class StartupScreenComplexConfigDialog: spades::ui::UIElement {
 		StartupScreenComplexConfig@ config;
 		float ContentsTop = 50.f;
 		float ContentsHeight;
 		string Title;
-		
+
 		spades::ui::TextViewer@ helpView;
 		StartupScreenConfigView@ configView;
-		
+
 		spades::ui::EventHandler@ DialogDone;
-		
+
 		private spades::ui::UIElement@ oldRoot;
-		
+
 		StartupScreenComplexConfigDialog(spades::ui::UIManager@ manager,
 			StartupScreenComplexConfig@ config) {
 			super(manager);
 			@this.config = config;
 			Vector2 size = manager.RootElement.Size;
 			ContentsHeight = size.y - ContentsTop * 2.f;
-			
+
 			float mainWidth = size.x - 250.f;
 			{
 				spades::ui::TextViewer e(Manager);
@@ -886,32 +886,32 @@ namespace spades {
 				AddChild(e);
 				@helpView = e;
 			}
-			
+
 			{
 				StartupScreenConfigView cfg(Manager);
-				
+
 				StartupScreenConfigItemEditor@[]@ editors = config.editors;
-				
+
 				for(uint i = 0; i < editors.length; i++)
 					cfg.AddRow(cast<spades::ui::UIElement>(editors[i]));
-				
+
 				cfg.Finalize();
 				cfg.SetHelpTextHandler(HelpTextHandler(this.HandleHelpText));
 				cfg.Bounds = AABB2(10.f, ContentsTop + 30.f, mainWidth - 20.f, ContentsHeight - 60.f);
 				AddChild(cfg);
 				@configView = cfg;
 			}
-			
+
 			{
 				spades::ui::Button button(Manager);
 				button.Caption = _Tr("StartupScreen", "Close");
 				button.Bounds = AABB2(size.x - 160.f, ContentsTop + ContentsHeight - 30.f, 150.f, 30.f);
-				button.Activated = EventHandler(this.CloseActivated);
+				@button.Activated = spades::ui::EventHandler(this.CloseActivated);
 				AddChild(button);
 			}
-			
+
 		}
-		
+
 		private void CloseActivated(spades::ui::UIElement@) {
 			if(oldRoot !is null) {
 				oldRoot.Enable = true;
@@ -920,14 +920,14 @@ namespace spades {
 			@this.Parent = null;
 			DialogDone(this);
 		}
-		
+
 		private void HandleHelpText(string s) {
 			helpView.Text = s;
 		}
-		
+
 		void RunDialog() {
 			spades::ui::UIElement@ root = Manager.RootElement;
-			
+
 			spades::ui::UIElementIterator iterator(root);
 			while(iterator.MoveNext()) {
 				spades::ui::UIElement@ e = iterator.Current;
@@ -937,75 +937,75 @@ namespace spades {
 					break;
 				}
 			}
-			
+
 			this.Bounds = root.Bounds;
 			root.AddChild(this);
-			
+
 			configView.LoadConfig();
 		}
-		
+
 		void Render() {
 			Vector2 pos = ScreenPosition;
 			Vector2 size = Size;
 			Renderer@ r = Manager.Renderer;
 			Image@ img = r.RegisterImage("Gfx/White.tga");
-			
+
 			r.ColorNP = Vector4(0, 0, 0, 0.8f);
-			r.DrawImage(img, 
+			r.DrawImage(img,
 				AABB2(pos.x, pos.y, size.x, ContentsTop - 15.f));
-			r.DrawImage(img, 
+			r.DrawImage(img,
 				AABB2(pos.x, ContentsTop + ContentsHeight + 15.f, size.x, ContentsTop - 15.f));
-				
+
 			r.ColorNP = Vector4(0, 0, 0, 0.95f);
-			r.DrawImage(img, 
+			r.DrawImage(img,
 				AABB2(pos.x, ContentsTop - 15.f, size.x, ContentsHeight + 30.f));
-				
+
 			r.ColorNP = Vector4(1, 1, 1, 0.08f);
-			r.DrawImage(img, 
+			r.DrawImage(img,
 				AABB2(pos.x, pos.y + ContentsTop - 15.f, size.x, 1.f));
-			r.DrawImage(img, 
+			r.DrawImage(img,
 				AABB2(pos.x, pos.y + ContentsTop + ContentsHeight + 15.f, size.x, 1.f));
 			r.ColorNP = Vector4(1, 1, 1, 0.2f);
-			r.DrawImage(img, 
+			r.DrawImage(img,
 				AABB2(pos.x, pos.y + ContentsTop - 14.f, size.x, 1.f));
-			r.DrawImage(img, 
+			r.DrawImage(img,
 				AABB2(pos.x, pos.y + ContentsTop + ContentsHeight + 14.f, size.x, 1.f));
-				
+
 			Font@ font = Font;
 			r.ColorNP = Vector4(0.8f, 0.8f, 0.8f, 1.f);
-			r.DrawImage(img, 
+			r.DrawImage(img,
 				AABB2(pos.x, pos.y + ContentsTop, size.x, 20.f));
 			font.Draw(Title, Vector2(pos.x + 10.f, pos.y + ContentsTop), 1.f, Vector4(0.f, 0.f, 0.f, 1.f));
-				
+
 			UIElement::Render();
 		}
-		
+
 	}
-	
+
 	class StartupScreenGraphicsTab: spades::ui::UIElement, LabelAddable {
 		StartupScreenUI@ ui;
 		StartupScreenHelper@ helper;
-		
+
 		StartupScreenGraphicsDisplayResolutionEditor@ resEdit;
-		
+
 		spades::ui::CheckBox@ fullscreenCheck;
 		spades::ui::RadioButton@ driverOpenGL;
 		spades::ui::RadioButton@ driverSoftware;
-		
+
 		spades::ui::TextViewer@ helpView;
 		StartupScreenConfigView@ configViewGL;
 		StartupScreenConfigView@ configViewSoftware;
-		
+
 		private ConfigItem r_renderer("r_renderer");
 		private ConfigItem r_fullscreen("r_fullscreen");
-		
+
 		StartupScreenGraphicsTab(StartupScreenUI@ ui, Vector2 size) {
 			super(ui.manager);
 			@this.ui = ui;
 			@helper = ui.helper;
-			
+
 			float mainWidth = size.x - 250.f;
-			
+
 			{
 				spades::ui::TextViewer e(Manager);
 				e.Bounds = AABB2(mainWidth + 10.f, 0.f, size.x - mainWidth - 10.f, size.y);
@@ -1014,7 +1014,7 @@ namespace spades {
 				AddChild(e);
 				@helpView = e;
 			}
-			
+
 			AddLabel(0.f, 0.f, 24.f, _Tr("StartupScreen", "Resolution"));
 			{
 				StartupScreenGraphicsDisplayResolutionEditor e(ui);
@@ -1022,29 +1022,29 @@ namespace spades {
 				AddChild(e);
 				@resEdit = e;
 			}
-			
+
 			{
 				spades::ui::CheckBox e(Manager);
 				e.Caption = _Tr("StartupScreen", "Fullscreen Mode");
 				e.Bounds = AABB2(230.f, 0.f, 200.f, 24.f);
-				HelpHandler(helpView, 
+				HelpHandler(helpView,
 					_Tr("StartupScreen", "By running in fullscreen mode OpenSpades occupies the "
 					"screen, making it easier for you to concentrate on playing the game.")).Watch(e);
-				@e.Activated = EventHandler(this.OnFullscreenCheck);
+				@e.Activated = spades::ui::EventHandler(this.OnFullscreenCheck);
 				AddChild(e);
 				@fullscreenCheck = e;
 			}
-			
+
 			AddLabel(0.f, 30.f, 24.f, _Tr("StartupScreen", "Backend"));
 			{
 				spades::ui::RadioButton e(Manager);
 				e.Caption = _Tr("StartupScreen", "OpenGL");
 				e.Bounds = AABB2(100.f, 30.f, 140.f, 24.f);
 				e.GroupName = "driver";
-				HelpHandler(helpView, 
+				HelpHandler(helpView,
 					_Tr("StartupScreen", "OpenGL renderer uses your computer's graphics "
 						"accelerator to generate the game screen.")).Watch(e);
-				@e.Activated = EventHandler(this.OnDriverOpenGL);
+				@e.Activated = spades::ui::EventHandler(this.OnDriverOpenGL);
 				AddChild(e);
 				@driverOpenGL = e;
 			}
@@ -1053,168 +1053,168 @@ namespace spades {
 				e.Caption = _Tr("StartupScreen", "Software");
 				e.Bounds = AABB2(250.f, 30.f, 140.f, 24.f);
 				e.GroupName = "driver";
-				HelpHandler(helpView, 
+				HelpHandler(helpView,
 				_Tr("StartupScreen", "Software renderer uses CPU to generate the game "
 					"screen. Its quality and performance might be inferior to OpenGL "
 					"renderer, but it works even with an unsupported GPU.")).Watch(e);
-				@e.Activated = EventHandler(this.OnDriverSoftware);
+				@e.Activated = spades::ui::EventHandler(this.OnDriverSoftware);
 				AddChild(e);
 				@driverSoftware = e;
 			}
-			
+
 			{
 				StartupScreenConfigView cfg(Manager);
-				
-				cfg.AddRow(StartupScreenConfigSelectItemEditor(ui, 
+
+				cfg.AddRow(StartupScreenConfigSelectItemEditor(ui,
 					StartupScreenGraphicsAntialiasConfig(ui), "0|2|4|fxaa",
-					_Tr("StartupScreen", 
+					_Tr("StartupScreen",
 					"Antialias:Enables a technique to improve the appearance of high-constrast edges.\n\n"
 					"MSAA: Performs antialiasing by generating an intermediate high-resolution image. "
 					"Looks best, but doesn't cope with some settings.\n\n"
 					"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
 					"Off|MSAA 2x|4x|FXAA")));
-				
-				cfg.AddRow(StartupScreenConfigCheckItemEditor(ui, 
+
+				cfg.AddRow(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_radiosity"), "0", "1", _Tr("StartupScreen", "Global Illumination"),
-					_Tr("StartupScreen", 
+					_Tr("StartupScreen",
 					"Enables a physically based simulation of light path for more realistic lighting.")));
-					
-				cfg.AddRow(StartupScreenConfigCheckItemEditor(ui, 
+
+				cfg.AddRow(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_hdr"), "0", "1", _Tr("StartupScreen", "Linear HDR Rendering"),
-					_Tr("StartupScreen", 
+					_Tr("StartupScreen",
 					"Uses a number representation which allows wider dynamic range during rendering process. "
 					"Additionally, this allows color calculation whose value is in linear correspondence with actual energy, "
 					"that is, physically accurate blending can be achieved.")));
-				
+
 				{
 					StartupScreenComplexConfig cplx;
-					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_cameraBlur"), "0", "1", _Tr("StartupScreen", "Camera Blur"),
 					_Tr("StartupScreen", "Blurs the screen when you turns quickly.")));
-					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_lens"), "0", "1", _Tr("StartupScreen", "Lens Effect"),
 					_Tr("StartupScreen", "Simulates distortion caused by a real camera lens.")));
-					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_bloom"), "0", "1", _Tr("StartupScreen", "Lens Scattering Filter"),
 					_Tr("StartupScreen", "Simulates light being scattered by dust on the camera lens.")));
 					// r_lens is currently no-op
-					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_lensFlare"), "0", "1", _Tr("StartupScreen", "Lens Flare"),
 					_Tr("StartupScreen", "The Sun causes lens flare.")));
-					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_lensFlareDynamic"), "0", "1", _Tr("StartupScreen", "Flares for Dynamic Lights"),
 					_Tr("StartupScreen", "Enables lens flare for light sources other than the Sun.")));
-					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_colorCorrection"), "0", "1", _Tr("StartupScreen", "Color Correction"),
 					_Tr("StartupScreen", "Applies cinematic color correction to make the image look better.")));
-					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_depthOfField"), "0", "1", _Tr("StartupScreen", "Depth of Field"),
 					_Tr("StartupScreen", "Blurs out-of-focus objects.")));
-					
+
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "0|0|0|0|0|0|0"));
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1|0|0|1|0|1|0"));
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|1|1|1|1|1"));
-					
+
 					cfg.AddRow(StartupScreenConfigComplexItemEditor(ui, cplx,
-						_Tr("StartupScreen", "Post-process"), 
+						_Tr("StartupScreen", "Post-process"),
 						_Tr("StartupScreen", "Post-process modifies the image to make it look better and "
 							"more realistic.")));
 				}
-				
-				cfg.AddRow(StartupScreenConfigSelectItemEditor(ui, 
+
+				cfg.AddRow(StartupScreenConfigSelectItemEditor(ui,
 					StartupScreenConfig(ui, "r_softParticles"), "0|1|2",
-					_Tr("StartupScreen", 
+					_Tr("StartupScreen",
 					"Particles|"
 					"Low:Artifact occurs when a particle intersects other objects.|"
 					"Medium:Particle intersects objects smoothly.|"
 					"High:Particle intersects objects smoothly, and some objects casts "
 					"their shadow to particles.")));
-					
+
 				{
 					StartupScreenComplexConfig cplx;
 					// r_mapSoftShadow is currently no-op
-					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_dlights"), "0", "1", _Tr("StartupScreen", "Dynamic Lights"),
-					_Tr("StartupScreen", 
+					_Tr("StartupScreen",
 					"Gives some objects an ability to emit light to give them "
 					"an energy-emitting impression.")));
-					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_modelShadows"), "0", "1", _Tr("StartupScreen", "Shadows"),
 					_Tr("StartupScreen", "Non-static object casts a shadow.")));
-					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_fogShadow"), "0", "1", _Tr("StartupScreen", "Volumetric Fog"),
 					_Tr("StartupScreen", "Simulates shadow being casted to the fog particles using a "
 					"super highly computationally demanding algorithm. ")));
-					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui, 
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_physicalLighting"), "0", "1", _Tr("StartupScreen", "Physically Based Lighting"),
 					_Tr("StartupScreen", "Uses more accurate approximation techniques to decide the brightness of objects.")));
-					
+
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "1|0|0|0"));
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1|1|0|0"));
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|0|1"));
-					
+
 					cfg.AddRow(StartupScreenConfigComplexItemEditor(ui, cplx,
-						_Tr("StartupScreen", "Direct Lights"), 
+						_Tr("StartupScreen", "Direct Lights"),
 						_Tr("StartupScreen", "Controls how light encounting a material and atmosphere directly "
 										   "affects its appearance.")));
 				}
-				
+
 				{
 					StartupScreenComplexConfig cplx;
-					
-					cplx.AddEditor(StartupScreenConfigSelectItemEditor(ui, 
+
+					cplx.AddEditor(StartupScreenConfigSelectItemEditor(ui,
 						StartupScreenConfig(ui, "r_water"), "0|1|2",
-						_Tr("StartupScreen", 
+						_Tr("StartupScreen",
 						"Water Shader|"
 						"None:Water is rendered in the same way that normal blocks are done.|"
 						"Level 1:Refraction and the reflected Sun are simulated.|"
 						"Level 2:Waving water is simulated as well as reflection and refraction.")));
-					
+
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "0"));
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1"));
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "2"));
-					
+
 					cfg.AddRow(StartupScreenConfigComplexItemEditor(ui, cplx,
 						_Tr("StartupScreen", "Shader Effects"), _Tr("StartupScreen", "Special effects.")));
 				}
-				
-				
+
+
 				cfg.Finalize();
 				cfg.SetHelpTextHandler(HelpTextHandler(this.HandleHelpText));
 				cfg.Bounds = AABB2(0.f, 60.f, mainWidth, size.y - 60.f);
 				AddChild(cfg);
 				@configViewGL = cfg;
 			}
-			
+
 			{
 				StartupScreenConfigView cfg(Manager);
-				
-				cfg.AddRow(StartupScreenConfigSelectItemEditor(ui, 
+
+				cfg.AddRow(StartupScreenConfigSelectItemEditor(ui,
 					StartupScreenConfig(ui, "r_swUndersampling"), "0|1|2",
-					_Tr("StartupScreen", 
+					_Tr("StartupScreen",
 					"Fast Mode:Reduces the image resolution to make the rendering faster.|"
 					"Off|2x|4x")));
-				
-				
+
+
 				cfg.Finalize();
 				cfg.SetHelpTextHandler(HelpTextHandler(this.HandleHelpText));
 				cfg.Bounds = AABB2(0.f, 60.f, mainWidth, size.y - 60.f);
 				AddChild(cfg);
 				@configViewSoftware = cfg;
 			}
-			
+
 		}
-		
+
 		private void HandleHelpText(string text) {
 			helpView.Text = text;
 		}
-		
+
 		private void OnDriverOpenGL(spades::ui::UIElement@){ r_renderer.StringValue = "gl"; LoadConfig(); }
 		private void OnDriverSoftware(spades::ui::UIElement@){ r_renderer.StringValue = "sw"; LoadConfig(); }
-		
+
 		private void OnFullscreenCheck(spades::ui::UIElement@)
 			{ r_fullscreen.IntValue = fullscreenCheck.Toggled ? 1 : 0; }
-		
+
 		void LoadConfig() {
 			resEdit.LoadConfig();
 			if(r_renderer.StringValue == "sw") {
@@ -1231,20 +1231,20 @@ namespace spades {
 			driverSoftware.Enable = ui.helper.CheckConfigCapability("r_renderer", "sw").length == 0;
 			configViewGL.LoadConfig();
 			configViewSoftware.LoadConfig();
-			
+
 		}
-		
-		
-		
+
+
+
 	}
-	
+
 	class StartupScreenGraphicsDisplayResolutionEditorDropdownButton: spades::ui::SimpleButton {
 		StartupScreenGraphicsDisplayResolutionEditorDropdownButton(spades::ui::UIManager@ manager) {
 			super(manager);
 		}
 		void Render() {
 			SimpleButton::Render();
-			
+
 			Renderer@ renderer = Manager.Renderer;
 			Image@ image = renderer.RegisterImage("Gfx/UI/ScrollArrow.png");
 			AABB2 bnd = ScreenBounds;
@@ -1252,7 +1252,7 @@ namespace spades {
 			renderer.DrawImage(image, AABB2(p.x, p.y, 16.f, -16.f));
 		}
 	}
-	
+
 	class StartupScreenGraphicsDisplayResolutionEditor: spades::ui::UIElement {
 		spades::ui::Field@ widthField;
 		spades::ui::Field@ heightField;
@@ -1260,40 +1260,40 @@ namespace spades {
 		private ConfigItem r_videoWidth("r_videoWidth");
 		private ConfigItem r_videoHeight("r_videoHeight");
 		StartupScreenHelper@ helper;
-		
+
 		StartupScreenGraphicsDisplayResolutionEditor(StartupScreenUI@ ui) {
 			super(ui.manager);
 			@helper = ui.helper;
 			{
-				spades::ui::Field e(manager);
+				spades::ui::Field e(Manager);
 				AddChild(e);
 				e.Bounds = AABB2(0, 0, 45.f, 24.f);
 				e.DenyNonAscii = true;
-				e.Changed = EventHandler(this.ValueEditHandler);
+				@e.Changed = spades::ui::EventHandler(this.ValueEditHandler);
 				@widthField = e;
 			}
 			{
-				spades::ui::Field e(manager);
+				spades::ui::Field e(Manager);
 				AddChild(e);
 				e.Bounds = AABB2(53, 0, 45.f, 24.f);
 				e.DenyNonAscii = true;
-				e.Changed = EventHandler(this.ValueEditHandler);
+				@e.Changed = spades::ui::EventHandler(this.ValueEditHandler);
 				@heightField = e;
 			}
 			{
-				StartupScreenGraphicsDisplayResolutionEditorDropdownButton e(manager);
+				StartupScreenGraphicsDisplayResolutionEditorDropdownButton e(Manager);
 				AddChild(e);
 				e.Bounds = AABB2(100, 0, 24.f, 24.f);
-				@e.Activated = EventHandler(this.ShowDropdown);
+				@e.Activated = spades::ui::EventHandler(this.ShowDropdown);
 				@dropdownButton = e;
 			}
 		}
-		
+
 		void LoadConfig() {
 			widthField.Text = ToString(r_videoWidth.IntValue);
 			heightField.Text = ToString(r_videoHeight.IntValue);
 		}
-		
+
 		void SaveConfig() {
 			int w = ParseInt(widthField.Text);
 			int h = ParseInt(heightField.Text);
@@ -1301,20 +1301,20 @@ namespace spades {
 			r_videoWidth.IntValue = w;
 			r_videoHeight.IntValue = h;
 		}
-		
+
 		private void ValueEditHandler(spades::ui::UIElement@) {
 			SaveConfig();
 		}
-		
+
 		private void DropdownHandler(int index) {
 			if(index >= 0) {
 				widthField.Text = ToString(helper.GetVideoModeWidth(index));
 				heightField.Text = ToString(helper.GetVideoModeHeight(index));
-				
+
 				SaveConfig();
 			}
 		}
-		
+
 		private void ShowDropdown(spades::ui::UIElement@) {
 			string[] items = {};
 			int cnt = helper.GetNumVideoModes();
@@ -1324,7 +1324,7 @@ namespace spades {
 				string s = ToString(w) + "x" + ToString(h);
 				items.insertLast(s);
 			}
-			spades::ui::ShowDropDownList(this, items, DropDownListHandler(this.DropdownHandler));
+			spades::ui::ShowDropDownList(this, items, spades::ui::DropDownListHandler(this.DropdownHandler));
 		}
 		void Render() {
 			Font@ font = this.Font;
@@ -1332,7 +1332,7 @@ namespace spades {
 			UIElement::Render();
 		}
 	}
-	
+
 	class StartupScreenGraphicsAntialiasConfig: StartupScreenGenericConfig {
 		private StartupScreenUI@ ui;
 		private ConfigItem@ msaaConfig;
@@ -1374,33 +1374,33 @@ namespace spades {
 				return ui.helper.CheckConfigCapability("r_multisamples", v) +
 					   ui.helper.CheckConfigCapability("r_fxaa", "0");
 			}
-			
+
 		}
 	}
-	
-	
+
+
 	class StartupScreenAudioTab: spades::ui::UIElement, LabelAddable {
 		StartupScreenUI@ ui;
 		StartupScreenHelper@ helper;
-		
+
 		spades::ui::RadioButton@ driverOpenAL;
 		spades::ui::RadioButton@ driverYSR;
 		spades::ui::RadioButton@ driverNull;
-		
+
 		spades::ui::TextViewer@ helpView;
 		StartupScreenConfigView@ configViewOpenAL;
 		StartupScreenConfigView@ configViewYSR;
-		
+
 		private ConfigItem s_audioDriver("s_audioDriver");
 		private ConfigItem s_eax("s_eax");
-		
+
 		StartupScreenAudioTab(StartupScreenUI@ ui, Vector2 size) {
 			super(ui.manager);
 			@this.ui = ui;
 			@helper = ui.helper;
-			
+
 			float mainWidth = size.x - 250.f;
-			
+
 			{
 				spades::ui::TextViewer e(Manager);
 				e.Bounds = AABB2(mainWidth + 10.f, 0.f, size.x - mainWidth - 10.f, size.y);
@@ -1409,19 +1409,19 @@ namespace spades {
 				AddChild(e);
 				@helpView = e;
 			}
-			
-			
+
+
 			AddLabel(0.f, 0.f, 24.f, _Tr("StartupScreen", "Backend"));
 			{
 				spades::ui::RadioButton e(Manager);
 				e.Caption = _Tr("StartupScreen", "OpenAL");
 				e.Bounds = AABB2(100.f, 0.f, 100.f, 24.f);
 				e.GroupName = "driver";
-				HelpHandler(helpView, 
+				HelpHandler(helpView,
 					_Tr("StartupScreen", "Uses an OpenAL-capable sound card to process sound. "
 					"In most cases where there isn't such a sound card, software emulation is "
 					"used.")).Watch(e);
-				@e.Activated = EventHandler(this.OnDriverOpenAL);
+				@e.Activated = spades::ui::EventHandler(this.OnDriverOpenAL);
 				AddChild(e);
 				@driverOpenAL = e;
 			}
@@ -1430,12 +1430,12 @@ namespace spades {
 				e.Caption = _Tr("StartupScreen", "YSR");
 				e.Bounds = AABB2(210.f, 0.f, 100.f, 24.f);
 				e.GroupName = "driver";
-				HelpHandler(helpView, 
+				HelpHandler(helpView,
 					_Tr("StartupScreen", "YSR is an experimental 3D HDR sound engine optimized "
 					"for OpenSpades. It features several enhanced features including "
 					"automatic load control, dynamics compressor, HRTF-based "
 					"3D audio, and high quality reverb.")).Watch(e);
-				@e.Activated = EventHandler(this.OnDriverYSR);
+				@e.Activated = spades::ui::EventHandler(this.OnDriverYSR);
 				AddChild(e);
 				@driverYSR = e;
 			}
@@ -1444,66 +1444,66 @@ namespace spades {
 				e.Caption = _Tr("StartupScreen", "Null");
 				e.Bounds = AABB2(320.f, 0.f, 100.f, 24.f);
 				e.GroupName = "driver";
-				HelpHandler(helpView, 
+				HelpHandler(helpView,
 					_Tr("StartupScreen", "Disables audio output.")).Watch(e);
-				@e.Activated = EventHandler(this.OnDriverNull);
+				@e.Activated = spades::ui::EventHandler(this.OnDriverNull);
 				AddChild(e);
 				@driverNull = e;
 			}
-			
+
 			{
 				StartupScreenConfigView cfg(Manager);
-				
-				cfg.AddRow(StartupScreenConfigSliderItemEditor(ui, 
+
+				cfg.AddRow(StartupScreenConfigSliderItemEditor(ui,
 					StartupScreenConfig(ui, "s_maxPolyphonics"), 16.0, 256.0, 8.0,
-					_Tr("StartupScreen", "Polyphonics"), _Tr("StartupScreen", 
+					_Tr("StartupScreen", "Polyphonics"), _Tr("StartupScreen",
 					"Specifies how many sounds can be played simultaneously. "
 					"Higher value needs more processing power, so setting this too high might "
 					"cause an overload (especially with a software emulation)."),
 					ConfigNumberFormatter(0, " poly")));
-					
-				cfg.AddRow(StartupScreenConfigCheckItemEditor(ui, 
+
+				cfg.AddRow(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "s_eax"), "0", "1",
-					_Tr("StartupScreen", "EAX"), _Tr("StartupScreen", 
+					_Tr("StartupScreen", "EAX"), _Tr("StartupScreen",
 					"Enables extended features provided by the OpenAL driver to create "
 					"more ambience.")));
-				
+
 				cfg.Finalize();
 				cfg.SetHelpTextHandler(HelpTextHandler(this.HandleHelpText));
 				cfg.Bounds = AABB2(0.f, 30.f, mainWidth, size.y - 30.f);
 				AddChild(cfg);
 				@configViewOpenAL = cfg;
 			}
-			
+
 			{
 				StartupScreenConfigView cfg(Manager);
-				
-				cfg.AddRow(StartupScreenConfigSliderItemEditor(ui, 
+
+				cfg.AddRow(StartupScreenConfigSliderItemEditor(ui,
 					StartupScreenConfig(ui, "s_maxPolyphonics"), 16.0, 256.0, 8.0,
-					_Tr("StartupScreen", "Polyphonics"), _Tr("StartupScreen", 
+					_Tr("StartupScreen", "Polyphonics"), _Tr("StartupScreen",
 					"Specifies how many sounds can be played simultaneously. "
 					"No matter what value is set, YSR might reduce the number of sounds "
 					"when an overload is detected."),
 					ConfigNumberFormatter(0, " poly")));
-				
-				
+
+
 				cfg.Finalize();
 				cfg.SetHelpTextHandler(HelpTextHandler(this.HandleHelpText));
 				cfg.Bounds = AABB2(0.f, 30.f, mainWidth, size.y - 30.f);
 				AddChild(cfg);
 				@configViewYSR = cfg;
 			}
-			
+
 		}
-		
+
 		private void HandleHelpText(string text) {
 			helpView.Text = text;
 		}
-		
+
 		private void OnDriverOpenAL(spades::ui::UIElement@){ s_audioDriver.StringValue = "openal"; LoadConfig(); }
 		private void OnDriverYSR(spades::ui::UIElement@){ s_audioDriver.StringValue = "ysr"; LoadConfig(); }
 		private void OnDriverNull(spades::ui::UIElement@){ s_audioDriver.StringValue = "null"; LoadConfig(); }
-		
+
 		void LoadConfig() {
 			if(s_audioDriver.StringValue == "ysr") {
 				driverYSR.Check();
@@ -1523,25 +1523,25 @@ namespace spades {
 			driverNull.Enable = ui.helper.CheckConfigCapability("s_audioDriver", "null").length == 0;
 			configViewOpenAL.LoadConfig();
 			configViewYSR.LoadConfig();
-			
+
 		}
-		
-		
-		
+
+
+
 	}
-	
-	
+
+
 	class StartupScreenSystemInfoTab: spades::ui::UIElement, LabelAddable {
 		StartupScreenUI@ ui;
 		StartupScreenHelper@ helper;
-		
+
 		spades::ui::TextViewer@ helpView;
-		
+
 		StartupScreenSystemInfoTab(StartupScreenUI@ ui, Vector2 size) {
 			super(ui.manager);
 			@this.ui = ui;
 			@helper = ui.helper;
-			
+
 			{
 				spades::ui::TextViewer e(Manager);
 				e.Bounds = AABB2(0.f, 0.f, size.x, size.y - 30.f);
@@ -1554,41 +1554,41 @@ namespace spades {
 				}
 				@helpView = e;
 			}
-			
+
 			{
 				spades::ui::Button button(Manager);
 				button.Caption = _Tr("StartupScreen", "Copy to Clipboard");
 				button.Bounds = AABB2(size.x - 180.f, size.y - 30.f, 180.f, 30.f);
-				button.Activated = EventHandler(this.OnCopyReport);
+				@button.Activated = spades::ui::EventHandler(this.OnCopyReport);
 				AddChild(button);
 			}
-			
+
 		}
-		private void OnCopyReport(spades::ui::UIElement@){ 
+		private void OnCopyReport(spades::ui::UIElement@){
 			 Manager.Copy(helper.GetReport());
 		}
-		
-		
-		
+
+
+
 	}
-	
-	
+
+
 	class StartupScreenAdvancedTab: spades::ui::UIElement, LabelAddable {
 		StartupScreenUI@ ui;
 		StartupScreenHelper@ helper;
-		
+
 		spades::ui::Field@ filter;
-		
+
 		spades::ui::TextViewer@ helpView;
 		StartupScreenConfigView@ configView;
-		
+
 		StartupScreenAdvancedTab(StartupScreenUI@ ui, Vector2 size) {
 			super(ui.manager);
 			@this.ui = ui;
 			@helper = ui.helper;
-			
+
 			float mainWidth = size.x - 250.f;
-			
+
 			{
 				spades::ui::TextViewer e(Manager);
 				e.Bounds = AABB2(mainWidth + 10.f, 0.f, size.x - mainWidth - 10.f, size.y);
@@ -1598,28 +1598,28 @@ namespace spades {
 				AddChild(e);
 				@helpView = e;
 			}
-			
-			
+
+
 			{
 				spades::ui::Field e(Manager);
 				e.Placeholder = _Tr("StartupScreen", "Filter");
 				e.Bounds = AABB2(0.f, 0.f, size.x, 24.f);
-				@e.Changed = EventHandler(this.OnFilterChanged);
+				@e.Changed = spades::ui::EventHandler(this.OnFilterChanged);
 				AddChild(e);
 				@filter = e;
 			}
-			
+
 			{
 				StartupScreenConfigView cfg(Manager);
-				
+
 				string[]@ names = GetAllConfigNames();
-				
+
 				for(uint i = 0, count = names.length; i < count; i++) {
-					
-					cfg.AddRow(StartupScreenConfigFieldItemEditor(ui, 
+
+					cfg.AddRow(StartupScreenConfigFieldItemEditor(ui,
 						StartupScreenConfig(ui, names[i]), names[i], ""));
 				}
-				
+
 				cfg.Finalize();
 				cfg.SetHelpTextHandler(HelpTextHandler(this.HandleHelpText));
 				cfg.Bounds = AABB2(0.f, 30.f, size.x, size.y - 30.f);
@@ -1627,26 +1627,26 @@ namespace spades {
 				@configView = cfg;
 			}
 		}
-		
+
 		private void HandleHelpText(string text) {
 			helpView.Text = text;
 		}
-		
-		private void OnFilterChanged(spades::ui::UIElement@){ 
+
+		private void OnFilterChanged(spades::ui::UIElement@){
 			configView.Filter(filter.Text);
 		}
-		
+
 		void LoadConfig() {
 			configView.LoadConfig();
-			
+
 		}
-		
-		
-		
+
+
+
 	}
-	
-	
-	StartupScreenUI@ CreateStartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, 
+
+
+	StartupScreenUI@ CreateStartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice,
 		Font@ font, StartupScreenHelper@ helper) {
 		return StartupScreenUI(renderer, audioDevice, font, helper);
 	}

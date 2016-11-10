@@ -1,6 +1,6 @@
 /*
    AngelCode Scripting Library
-   Copyright (c) 2003-2013 Andreas Jonsson
+   Copyright (c) 2003-2014 Andreas Jonsson
 
    This software is provided 'as-is', without any express or implied
    warranty. In no event will the authors be held liable for any
@@ -76,14 +76,15 @@ public:
 	int SetObject(void *obj);
 
 	// Arguments
-	int SetArgByte(asUINT arg, asBYTE value);
-	int SetArgWord(asUINT arg, asWORD value);
-	int SetArgDWord(asUINT arg, asDWORD value);
-	int SetArgQWord(asUINT arg, asQWORD value);
-	int SetArgFloat(asUINT arg, float value);
-	int SetArgDouble(asUINT arg, double value);
-	int SetArgAddress(asUINT arg, void *addr);
-	int SetArgObject(asUINT arg, void *obj);
+	int   SetArgByte(asUINT arg, asBYTE value);
+	int   SetArgWord(asUINT arg, asWORD value);
+	int   SetArgDWord(asUINT arg, asDWORD value);
+	int   SetArgQWord(asUINT arg, asQWORD value);
+	int   SetArgFloat(asUINT arg, float value);
+	int   SetArgDouble(asUINT arg, double value);
+	int   SetArgAddress(asUINT arg, void *addr);
+	int   SetArgObject(asUINT arg, void *obj);
+	int   SetArgVarType(asUINT arg, void *ptr, int typeId);
 	void *GetAddressOfArg(asUINT arg);
 
 	// Return value
@@ -113,7 +114,7 @@ public:
 	int                GetLineNumber(asUINT stackLevel, int *column, const char **sectionName);
 	int                GetVarCount(asUINT stackLevel);
 	const char        *GetVarName(asUINT varIndex, asUINT stackLevel);
-	const char        *GetVarDeclaration(asUINT varIndex, asUINT stackLevel);
+	const char        *GetVarDeclaration(asUINT varIndex, asUINT stackLevel, bool includeNamespace);
 	int                GetVarTypeId(asUINT varIndex, asUINT stackLevel);
 	void              *GetAddressOfVar(asUINT varIndex, asUINT stackLevel);
 	bool               IsVarInScope(asUINT varIndex, asUINT stackLevel);
@@ -122,8 +123,8 @@ public:
 	asIScriptFunction *GetSystemFunction();
 
 	// User data
-	void *SetUserData(void *data);
-	void *GetUserData() const;
+	void *SetUserData(void *data, asPWORD type);
+	void *GetUserData(asPWORD type) const;
 
 public:
 	// Internal public functions
@@ -136,7 +137,7 @@ public:
 	void CallLineCallback();
 	void CallExceptionCallback();
 
-	int  CallGeneric(int funcID, void *objectPointer);
+	int  CallGeneric(asCScriptFunction *func);
 
 	void DetachEngine();
 
@@ -204,11 +205,40 @@ public:
 	asSSystemFunctionInterface m_exceptionCallbackFunc;
 	void *                     m_exceptionCallbackObj;
 
-	void *m_userData;
+	asCArray<asPWORD> m_userData;
 
 	// Registers available to JIT compiler functions
 	asSVMRegisters m_regs;
 };
+
+// TODO: Move these to as_utils.h
+int     as_powi(int base, int exponent, bool& isOverflow);
+asDWORD as_powu(asDWORD base, asDWORD exponent, bool& isOverflow);
+asINT64 as_powi64(asINT64 base, asINT64 exponent, bool& isOverflow);
+asQWORD as_powu64(asQWORD base, asQWORD exponent, bool& isOverflow);
+
+// Optional template version of powi if overflow detection is not used.
+#if 0
+template <class T>
+T as_powi(T base, T exponent)
+{
+	// Test for sign bit (huge number is OK)
+	if( exponent & (T(1)<<(sizeof(T)*8-1)) )
+		return 0;
+	else
+	{
+		int result = 1;
+		while( exponent )
+		{
+			if( exponent & 1 )
+				result *= base;
+			exponent >>= 1;
+			base *= base;
+		}
+		return result;
+	}
+}
+#endif
 
 END_AS_NAMESPACE
 

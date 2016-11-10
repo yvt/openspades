@@ -1,6 +1,6 @@
 /*
    AngelCode Scripting Library
-   Copyright (c) 2003-2013 Andreas Jonsson
+   Copyright (c) 2003-2014 Andreas Jonsson
 
    This software is provided 'as-is', without any express or implied
    warranty. In no event will the authors be held liable for any
@@ -45,21 +45,37 @@ asCAtomic::asCAtomic()
 
 asDWORD asCAtomic::get() const
 {
+	// A very high ref count is highly unlikely. It most likely a problem with
+	// memory that has been overwritten or is being accessed after it was deleted.
+	asASSERT(value < 1000000);
+
 	return value;
 }
 
 void asCAtomic::set(asDWORD val)
 {
+	// A very high ref count is highly unlikely. It most likely a problem with
+	// memory that has been overwritten or is being accessed after it was deleted.
+	asASSERT(value < 1000000);
+
 	value = val;
 }
 
 asDWORD asCAtomic::atomicInc()
 {
+	// A very high ref count is highly unlikely. It most likely a problem with
+	// memory that has been overwritten or is being accessed after it was deleted.
+	asASSERT(value < 1000000);
+
 	return asAtomicInc((int&)value);
 }
 
 asDWORD asCAtomic::atomicDec()
 {
+	// A very high ref count is highly unlikely. It most likely a problem with
+	// memory that has been overwritten or is being accessed after it was deleted.
+	asASSERT(value < 1000000);
+
 	return asAtomicDec((int&)value);
 }
 
@@ -112,7 +128,7 @@ int asAtomicDec(int &value)
 	return InterlockedDecrement((LONG*)&value);
 }
 
-#elif defined(AS_LINUX) || defined(AS_BSD) || defined(AS_ILLUMOS)
+#elif defined(AS_LINUX) || defined(AS_BSD) || defined(AS_ILLUMOS) || defined(AS_ANDROID)
 
 //
 // atomic_inc_and_test() and atomic_dec_and_test() from asm/atomic.h is not meant 

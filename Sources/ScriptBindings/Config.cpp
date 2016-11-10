@@ -108,8 +108,8 @@ namespace spades {
 		static CScriptArray *GetAllConfigNames() {
 			auto *ctx = asGetActiveContext();
 			auto *engine = ctx->GetEngine();
-			auto *arrayType = engine->GetObjectTypeById(engine->GetTypeIdByDecl("array<string>"));
-			auto *array = new CScriptArray(0, arrayType);
+			auto *arrayType = engine->GetTypeInfoByDecl("array<string>");
+            auto *array = CScriptArray::Create(arrayType);
 			auto names = Settings::GetInstance()->GetAllItemNames();
 			array->Resize(static_cast<asUINT>(names.size()));
 			for(std::size_t i = 0; i < names.size(); i++) {

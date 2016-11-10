@@ -1,6 +1,6 @@
 /*
    AngelCode Scripting Library
-   Copyright (c) 2003-2013 Andreas Jonsson
+   Copyright (c) 2003-2016 Andreas Jonsson
 
    This software is provided 'as-is', without any express or implied
    warranty. In no event will the authors be held liable for any
@@ -32,128 +32,451 @@
 //
 // as_typeinfo.cpp
 //
-// This class holds extra type info for the compiler
-//
+
 
 #include "as_config.h"
-
-#ifndef AS_NO_COMPILER
-
 #include "as_typeinfo.h"
+#include "as_scriptengine.h"
 
 BEGIN_AS_NAMESPACE
 
 asCTypeInfo::asCTypeInfo()
 {
-	isTemporary           = false;
-	stackOffset           = 0;
-	isConstant            = false;
-	isVariable            = false;
-	isExplicitHandle      = false;
-	qwordValue            = 0;
-	isLValue              = false;
-	isVoidExpression      = false;
+	externalRefCount.set(0);
+	internalRefCount.set(1); // start with one internal ref-count
+	engine = 0;
+	module = 0;
+	size = 0;
+	flags = 0;
+	typeId = -1; // start as -1 to signal that it hasn't been defined
+
+	scriptSectionIdx = -1;
+	declaredAt = 0;
+
+	accessMask = 0xFFFFFFFF;
+	nameSpace = 0;
 }
 
-void asCTypeInfo::Set(const asCDataType &dt)
+asCTypeInfo::asCTypeInfo(asCScriptEngine *in_engine)
 {
-	dataType         = dt;
+	externalRefCount.set(0);
+	internalRefCount.set(1); // start with one internal ref count
+	engine = in_engine;
+	module = 0;
+	size = 0;
+	flags = 0;
+	typeId = -1; // start as -1 to signal that it hasn't been defined
 
-	isTemporary      = false;
-	stackOffset      = 0;
-	isConstant       = false;
-	isVariable       = false;
-	isExplicitHandle = false;
-	qwordValue       = 0;
-	isLValue         = false;
-	isVoidExpression = false;
+	scriptSectionIdx = -1;
+	declaredAt = 0;
+
+	accessMask = 0xFFFFFFFF;
+	nameSpace = engine->nameSpaces[0];
 }
 
-void asCTypeInfo::SetVariable(const asCDataType &dt, int stackOffset, bool isTemporary)
+asCTypeInfo::~asCTypeInfo()
 {
-	Set(dt);
-
-	this->isVariable  = true;
-	this->isTemporary = isTemporary;
-	this->stackOffset = (short)stackOffset;
 }
 
-void asCTypeInfo::SetConstantQW(const asCDataType &dt, asQWORD value)
+// interface
+int asCTypeInfo::AddRef() const
 {
-	Set(dt);
-
-	isConstant = true;
-	qwordValue = value;
+	return externalRefCount.atomicInc();
 }
 
-void asCTypeInfo::SetConstantDW(const asCDataType &dt, asDWORD value)
+// interface
+int asCTypeInfo::Release() const
 {
-	Set(dt);
+	int r = externalRefCount.atomicDec();
 
-	isConstant = true;
-	dwordValue = value;
+	if (r == 0)
+	{
+		// There are no more external references, if there are also no
+		// internal references then it is time to delete the object type
+		if (internalRefCount.get() == 0)
+		{
+			// If the engine is no longer set, then it has already been 
+			// released and we must take care of the deletion ourselves
+			asDELETE(const_cast<asCTypeInfo*>(this), asCTypeInfo);
+		}
+	}
+
+	return r;
 }
 
-void asCTypeInfo::SetConstantB(const asCDataType &dt, asBYTE value)
+int asCTypeInfo::AddRefInternal()
 {
-	Set(dt);
-
-	isConstant = true;
-	byteValue = value;
+	return internalRefCount.atomicInc();
 }
 
-void asCTypeInfo::SetConstantF(const asCDataType &dt, float value)
+int asCTypeInfo::ReleaseInternal()
 {
-	Set(dt);
+	int r = internalRefCount.atomicDec();
 
-	isConstant = true;
-	floatValue = value;
+	if (r == 0)
+	{
+		// There are no more internal references, if there are also no
+		// external references then it is time to delete the object type
+		if (externalRefCount.get() == 0)
+		{
+			// If the engine is no longer set, then it has already been 
+			// released and we must take care of the deletion ourselves
+			asDELETE(const_cast<asCTypeInfo*>(this), asCTypeInfo);
+		}
+	}
+
+	return r;
 }
 
-void asCTypeInfo::SetConstantD(const asCDataType &dt, double value)
+// interface
+asIScriptModule *asCTypeInfo::GetModule() const
 {
-	Set(dt);
-
-	isConstant = true;
-	doubleValue = value;
+	return module;
 }
 
-void asCTypeInfo::SetNullConstant()
+void *asCTypeInfo::SetUserData(void *data, asPWORD type)
 {
-	Set(asCDataType::CreateNullHandle());
-	isConstant       = true;
-	isExplicitHandle = false;
-	qwordValue       = 0;
-	isLValue         = false;
+	// As a thread might add a new new user data at the same time as another
+	// it is necessary to protect both read and write access to the userData member
+	ACQUIREEXCLUSIVE(engine->engineRWLock);
+
+	// It is not intended to store a lot of different types of userdata,
+	// so a more complex structure like a associative map would just have
+	// more overhead than a simple array.
+	for (asUINT n = 0; n < userData.GetLength(); n += 2)
+	{
+		if (userData[n] == type)
+		{
+			void *oldData = reinterpret_cast<void*>(userData[n + 1]);
+			userData[n + 1] = reinterpret_cast<asPWORD>(data);
+
+			RELEASEEXCLUSIVE(engine->engineRWLock);
+
+			return oldData;
+		}
+	}
+
+	userData.PushLast(type);
+	userData.PushLast(reinterpret_cast<asPWORD>(data));
+
+	RELEASEEXCLUSIVE(engine->engineRWLock);
+
+	return 0;
 }
 
-bool asCTypeInfo::IsNullConstant() const
+void *asCTypeInfo::GetUserData(asPWORD type) const
 {
-	if( isConstant && dataType.IsObjectHandle() )
-		return true;
+	// There may be multiple threads reading, but when  
+	// setting the user data nobody must be reading.
+	ACQUIRESHARED(engine->engineRWLock);
 
-	return false;
+	for (asUINT n = 0; n < userData.GetLength(); n += 2)
+	{
+		if (userData[n] == type)
+		{
+			RELEASESHARED(engine->engineRWLock);
+			return reinterpret_cast<void*>(userData[n + 1]);
+		}
+	}
+
+	RELEASESHARED(engine->engineRWLock);
+
+	return 0;
 }
 
-void asCTypeInfo::SetVoidExpression()
+// interface
+const char *asCTypeInfo::GetName() const
 {
-	Set(asCDataType::CreatePrimitive(ttVoid, false));
-	isLValue = false;
-	isConstant = false;
-	isVoidExpression = true;
+	return name.AddressOf();
 }
 
-bool asCTypeInfo::IsVoidExpression() const
+// interface
+const char *asCTypeInfo::GetNamespace() const
 {
-	return isVoidExpression;
+	if( nameSpace )
+		return nameSpace->name.AddressOf();
+
+	return 0;
 }
 
-void asCTypeInfo::SetDummy()
+// interface
+asDWORD asCTypeInfo::GetFlags() const
 {
-	SetConstantQW(asCDataType::CreatePrimitive(ttInt, true), 0);
+	return flags;
 }
 
+// interface
+asUINT asCTypeInfo::GetSize() const
+{
+	return size;
+}
+
+// interface
+int asCTypeInfo::GetTypeId() const
+{
+	if (typeId == -1)
+	{
+		// We need a non const pointer to create the asCDataType object.
+		// We're not breaking anything here because this function is not
+		// modifying the object, so this const cast is safe.
+		asCTypeInfo *ot = const_cast<asCTypeInfo*>(this);
+
+		// The engine will define the typeId for this object type
+		engine->GetTypeIdFromDataType(asCDataType::CreateType(ot, false));
+	}
+
+	return typeId;
+}
+
+// interface
+asIScriptEngine *asCTypeInfo::GetEngine() const
+{
+	return engine;
+}
+
+// interface
+const char *asCTypeInfo::GetConfigGroup() const
+{
+	asCConfigGroup *group = engine->FindConfigGroupForTypeInfo(this);
+	if (group == 0)
+		return 0;
+
+	return group->groupName.AddressOf();
+}
+
+// interface
+asDWORD asCTypeInfo::GetAccessMask() const
+{
+	return accessMask;
+}
+
+// interface
+int asCTypeInfo::GetProperty(asUINT index, const char **out_name, int *out_typeId, bool *out_isPrivate, bool *out_isProtected, int *out_offset, bool *out_isReference, asDWORD *out_accessMask) const
+{
+	UNUSED_VAR(index);
+	if (out_name) *out_name = 0;
+	if (out_typeId) *out_typeId = 0;
+	if (out_isPrivate) *out_isPrivate = false;
+	if (out_isProtected) *out_isProtected = false;
+	if (out_offset) *out_offset = 0;
+	if (out_isReference) *out_isReference = false;
+	if (out_accessMask) *out_accessMask = 0;
+	return -1;
+}
+
+// yvt: prevents "error: 'this' pointer cannot be null in well-defined C++ code" compiler
+// warning.
+// Compilers are still allowed to do optimization based on the assumption that 'this'
+// pointer cannot be null in well-defined C++ code. If they do, we've got a problem.
+static bool isNullPointer(asCTypeInfo *ti)
+{
+    return !ti;
+}
+
+// internal
+asCObjectType *asCTypeInfo::CastToObjectType()
+{
+	// Allow call on null pointer
+	if (isNullPointer(this)) return 0;
+
+	// TODO: type: Should List pattern have its own type class?
+	if ((flags & (asOBJ_VALUE | asOBJ_REF | asOBJ_LIST_PATTERN)) && !(flags & asOBJ_FUNCDEF))
+		return reinterpret_cast<asCObjectType*>(this);
+
+	return 0;
+}
+
+// internal
+asCEnumType *asCTypeInfo::CastToEnumType()
+{
+    // Allow call on null pointer
+    if (isNullPointer(this)) return 0;
+
+	if (flags & (asOBJ_ENUM))
+		return reinterpret_cast<asCEnumType*>(this);
+
+	return 0;
+}
+
+// internal
+asCTypedefType *asCTypeInfo::CastToTypedefType()
+{
+    // Allow call on null pointer
+    if (isNullPointer(this)) return 0;
+
+	if (flags & (asOBJ_TYPEDEF))
+		return reinterpret_cast<asCTypedefType*>(this);
+
+	return 0;
+}
+
+// internal
+asCFuncdefType *asCTypeInfo::CastToFuncdefType()
+{
+    // Allow call on null pointer
+    if (isNullPointer(this)) return 0;
+
+	if (flags & (asOBJ_FUNCDEF))
+		return reinterpret_cast<asCFuncdefType*>(this);
+
+	return 0;
+}
+
+// internal
+void asCTypeInfo::CleanUserData()
+{
+	asASSERT(engine);
+	for (asUINT n = 0; n < userData.GetLength(); n += 2)
+	{
+		if (userData[n + 1])
+		{
+			for (asUINT c = 0; c < engine->cleanTypeInfoFuncs.GetLength(); c++)
+				if (engine->cleanTypeInfoFuncs[c].type == userData[n])
+					engine->cleanTypeInfoFuncs[c].cleanFunc(this);
+		}
+	}
+	userData.SetLength(0);
+}
+
+// internal
+bool asCTypeInfo::IsShared() const
+{
+	// Types that can be declared by scripts need to have the explicit flag asOBJ_SHARED
+	if (flags & (asOBJ_SCRIPT_OBJECT | asOBJ_ENUM)) return flags & asOBJ_SHARED ? true : false;
+
+	// Otherwise we assume the type to be shared
+	return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+asCEnumType::~asCEnumType()
+{
+	asUINT n;
+	for (n = 0; n < enumValues.GetLength(); n++)
+	{
+		if (enumValues[n])
+			asDELETE(enumValues[n], asSEnumValue);
+	}
+	enumValues.SetLength(0);
+}
+
+// interface
+asUINT asCEnumType::GetEnumValueCount() const
+{ 
+	return enumValues.GetLength(); 
+}
+
+// interface
+const char *asCEnumType::GetEnumValueByIndex(asUINT index, int *outValue) const
+{ 
+	if (outValue)
+		*outValue = 0;
+
+	if (index >= enumValues.GetLength())
+		return 0;
+
+	if (outValue)
+		*outValue = enumValues[index]->value;
+
+	return enumValues[index]->name.AddressOf();
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+asCTypedefType::~asCTypedefType()
+{
+	DestroyInternal();
+}
+
+void asCTypedefType::DestroyInternal()
+{
+	if (engine == 0) return;
+
+	// Release the object types held by the alias
+	if (aliasForType.GetTypeInfo())
+			aliasForType.GetTypeInfo()->ReleaseInternal();
+	
+	aliasForType = asCDataType::CreatePrimitive(ttVoid, false);
+
+	CleanUserData();
+
+	// Remove the type from the engine
+	if (typeId != -1)
+		engine->RemoveFromTypeIdMap(this);
+
+	// Clear the engine pointer to mark the object type as invalid
+	engine = 0;
+}
+
+// interface
+int asCTypedefType::GetTypedefTypeId() const
+{ 
+	return engine->GetTypeIdFromDataType(aliasForType); 
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+asCFuncdefType::asCFuncdefType(asCScriptEngine *en, asCScriptFunction *func) : asCTypeInfo(en)
+{
+	asASSERT(func->funcType == asFUNC_FUNCDEF);
+	asASSERT(func->funcdefType == 0);
+
+	// A function pointer is special kind of reference type
+	flags       = asOBJ_REF | asOBJ_FUNCDEF | (func->isShared ? asOBJ_SHARED : 0);
+	name        = func->name;
+	nameSpace   = func->nameSpace;
+	module      = func->module;
+	accessMask  = func->accessMask;
+	funcdef     = func; // reference already counted by the asCScriptFunction constructor
+	parentClass = 0;
+
+	func->funcdefType = this;
+}
+
+asCFuncdefType::~asCFuncdefType()
+{
+	DestroyInternal();
+}
+
+void asCFuncdefType::DestroyInternal()
+{
+	if (engine == 0) return;
+
+	// Release the funcdef
+	if( funcdef )
+		funcdef->ReleaseInternal();
+	funcdef = 0;
+
+	// Detach from parent class
+	if (parentClass)
+	{
+		parentClass->childFuncDefs.RemoveValue(this);
+		parentClass = 0;
+	}
+
+	CleanUserData();
+
+	// Remove the type from the engine
+	if (typeId != -1)
+		engine->RemoveFromTypeIdMap(this);
+
+	// Clear the engine pointer to mark the object type as invalid
+	engine = 0;
+}
+
+// interface
+asIScriptFunction *asCFuncdefType::GetFuncdefSignature() const
+{ 
+	return funcdef; 
+}
+
+// interface
+asITypeInfo *asCFuncdefType::GetParentType() const
+{
+	return parentClass;
+}
 
 END_AS_NAMESPACE
 
-#endif // AS_NO_COMPILER
+

@@ -51,7 +51,7 @@ namespace spades {
 			
 		}
 	protected:
-		virtual int  LoadScriptSection(const char *filename) {
+		int  LoadScriptSection(const char *filename) override {
 			if(filename[0] != '/') {
 				SPLog("Invalid script path detected: not starting with '/'");
 				return -1;
@@ -69,7 +69,7 @@ namespace spades {
 			}
 			
 			SPLog("Loading script '%s'", filename);
-			return ProcessScriptSection(data.c_str(), (unsigned int)(data.length()), filename);
+			return ProcessScriptSection(data.c_str(), (unsigned int)(data.length()), filename, 0);
 		}
 	};
 	

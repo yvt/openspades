@@ -495,8 +495,10 @@ namespace spades {
 		
 #pragma mark - Water Renderer
 		
-		void GLWaterRenderer::PreloadShaders(spades::draw::GLRenderer *renderer) {
-			if((int)r_water >= 2)
+        void GLWaterRenderer::PreloadShaders(spades::draw::GLRenderer *renderer) {
+            if((int)r_water >= 3)
+                renderer->RegisterProgram("Shaders/Water3.program");
+			else if((int)r_water >= 2)
 				renderer->RegisterProgram("Shaders/Water2.program");
 			else
 				renderer->RegisterProgram("Shaders/Water.program");
@@ -507,9 +509,11 @@ namespace spades {
 		renderer(renderer),
 		device(renderer->GetGLDevice()),
 		map(map){
-			SPADES_MARK_FUNCTION();
-			if((int)r_water >= 2)
-				program = renderer->RegisterProgram("Shaders/Water2.program");
+            SPADES_MARK_FUNCTION();
+            if((int)r_water >= 3)
+                program = renderer->RegisterProgram("Shaders/Water3.program");
+            else if((int)r_water >= 2)
+                program = renderer->RegisterProgram("Shaders/Water2.program");
 			else
 				program = renderer->RegisterProgram("Shaders/Water.program");
 			BuildVertices();

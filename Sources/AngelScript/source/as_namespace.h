@@ -1,6 +1,6 @@
 /*
    AngelCode Scripting Library
-   Copyright (c) 2003-2015 Andreas Jonsson
+   Copyright (c) 2013-2014 Andreas Jonsson
 
    This software is provided 'as-is', without any express or implied 
    warranty. In no event will the authors be held liable for any 
@@ -29,56 +29,49 @@
 */
 
 
-//
-// as_configgroup.h
-//
-// This class holds configuration groups for the engine
-//
+#ifndef AS_NAMESPACE_H
+#define AS_NAMESPACE_H
 
-
-
-#ifndef AS_CONFIGGROUP_H
-#define AS_CONFIGGROUP_H
-
-#include "as_config.h"
 #include "as_string.h"
-#include "as_array.h"
-#include "as_objecttype.h"
 
 BEGIN_AS_NAMESPACE
 
-class asCConfigGroup
+struct asSNameSpace
 {
-public:
-	asCConfigGroup();
-	~asCConfigGroup();
+	asCString name;
 
-	// Memory management
-	int AddRef();
-	int Release();
+	// TODO: namespace: A namespace should have access masks. The application should be
+	//                  able to restrict specific namespaces from access to specific modules
+};
 
-	asCTypeInfo *FindType(const char *name);
-	void RefConfigGroup(asCConfigGroup *group);
 
-	bool HasLiveObjects();
-	void RemoveConfiguration(asCScriptEngine *engine, bool notUsed = false);
+struct asSNameSpaceNamePair
+{
+	const asSNameSpace *ns;
+	asCString           name;
 
-	void AddReferencesForFunc(asCScriptEngine *engine, asCScriptFunction *func);
-	void AddReferencesForType(asCScriptEngine *engine, asCTypeInfo *type);
+	asSNameSpaceNamePair() : ns(0) {}
+	asSNameSpaceNamePair(const asSNameSpace *_ns, const asCString &_name) : ns(_ns), name(_name) {}
 
-	asCString groupName;
-	int refCount;
+	asSNameSpaceNamePair &operator=(const asSNameSpaceNamePair &other)
+	{
+		ns   = other.ns;
+		name = other.name;
+		return *this;
+	}
 
-	asCArray<asCTypeInfo*>       types;
-	asCArray<asCScriptFunction*> scriptFunctions;
-	asCArray<asCGlobalProperty*> globalProps;
-	asCArray<asCConfigGroup*>    referencedConfigGroups;
+	bool operator==(const asSNameSpaceNamePair &other) const
+	{
+		return (ns == other.ns && name == other.name);
+	}
 
-	// This array holds the generated template instances that are used 
-	// by the config group as part of function signature or property
-	asCArray<asCObjectType*>     generatedTemplateInstances;
+	bool operator<(const asSNameSpaceNamePair &other) const
+	{
+		return (ns < other.ns || (ns == other.ns && name < other.name));
+	}
 };
 
 END_AS_NAMESPACE
 
 #endif
+

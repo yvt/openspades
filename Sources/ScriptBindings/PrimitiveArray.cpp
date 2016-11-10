@@ -31,7 +31,7 @@ namespace spades {
 		std::vector<T> inner;
 		int refCount;
 	public:
-		static asIObjectType *scrType;
+		static asITypeInfo *scrType;
 		typedef PrimitiveArray<T> ArrayType;
 		static ArrayType *Factory1() {
 			ArrayType *obj = new ArrayType();
@@ -39,30 +39,44 @@ namespace spades {
 			return obj;
 		}
 		static ArrayType *Factory2(asUINT initialSize) {
-			if(initialSize > 1024 * 1024 * 1024) {
+			if(initialSize > 1024 * 1024 * 256) {
 				asGetActiveContext()->SetException("Too many array elements");
 				return NULL;
 			}
 			ArrayType *obj = new ArrayType(initialSize);
 			asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
 			return obj;
-		}
-		static ArrayType *Factory3(asUINT initialSize, T initialValue) {
-			if(initialSize > 1024 * 1024 * 1024) {
-				asGetActiveContext()->SetException("Too many array elements");
-				return NULL;
-			}
-			ArrayType *obj = new ArrayType(initialSize, initialValue);
-			asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
-			return obj;
-		}
+        }
+        static ArrayType *Factory3(asUINT initialSize, T initialValue) {
+            if(initialSize > 1024 * 1024 * 256) {
+                asGetActiveContext()->SetException("Too many array elements");
+                return NULL;
+            }
+            ArrayType *obj = new ArrayType(initialSize, initialValue);
+            asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
+            return obj;
+        }
+        static ArrayType *Factory4(void *initList) {
+            asUINT length = *reinterpret_cast<const asUINT *>(initList);
+            if(length > 1024 * 1024 * 256) {
+                asGetActiveContext()->SetException("Too many array elements");
+            }
+            ArrayType *obj = new ArrayType(initList);
+            asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
+            return obj;
+        }
 		
 		PrimitiveArray(asUINT initialSize = 0) {
 			inner.resize(initialSize);
-		}
-		PrimitiveArray(asUINT initialSize, T initialValue) {
-			inner.resize(initialSize, initialValue);
-		}
+        }
+        PrimitiveArray(asUINT initialSize, T initialValue) {
+            inner.resize(initialSize, initialValue);
+        }
+        PrimitiveArray(void *initList) {
+            asUINT length = *reinterpret_cast<const asUINT *>(initList);
+            inner.resize(length);
+            memcpy(inner.data(), reinterpret_cast<const asUINT *>(initList) + 1, inner.size() * sizeof(T));
+        }
 		
 		void AddRef() {
 			refCount &= 0x7fffffff;
@@ -242,7 +256,7 @@ namespace spades {
 					r = eng->RegisterObjectType(ATN(),
 											0,
 											asOBJ_REF | asOBJ_GC);
-					ArrayType::scrType = eng->GetObjectTypeByName(ATN());
+					ArrayType::scrType = eng->GetTypeInfoByName(ATN());
 					manager->CheckError(r);
 					break;
 				case PhaseObjectMember:
@@ -259,8 +273,8 @@ namespace spades {
 													 asFUNCTION(ArrayType::Factory3), asCALL_CDECL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectBehaviour(ATN(), asBEHAVE_LIST_FACTORY,
-													 F("array<%s>@ f(uint)"),
-													 asFUNCTION(ArrayType::Factory2), asCALL_CDECL);
+													 F("array<%s>@ f(int&in list) {repeat %s}"),
+													 asFUNCTION(ArrayType::Factory4), asCALL_CDECL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectBehaviour(ATN(), asBEHAVE_ADDREF,
 													 F("void f()"),
@@ -449,7 +463,7 @@ namespace spades {
 			}
 		}
 	};
-	template<typename T> asIObjectType *PrimitiveArray<T>::scrType;
+	template<typename T> asITypeInfo *PrimitiveArray<T>::scrType;
 	static PrimitiveArrayRegistrar<int8_t> int8ArrayRegistrar("int8");
 	static PrimitiveArrayRegistrar<uint8_t> uint8ArrayRegistrar("uint8");
 	static PrimitiveArrayRegistrar<int16_t> int16ArrayRegistrar("int16");

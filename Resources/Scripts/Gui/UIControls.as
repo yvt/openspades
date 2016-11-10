@@ -1,33 +1,33 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 namespace spades {
 	namespace ui {
-		
+
 		class Label: UIElement {
 			string Text;
 			Vector4 BackgroundColor = Vector4(0, 0, 0, 0);
 			Vector4 TextColor = Vector4(1, 1, 1, 1);
 			Vector2 Alignment = Vector2(0.f, 0.0f);
 			float TextScale = 1.f;
-			
+
 			Label(UIManager@ manager) {
 				super(manager);
 			}
@@ -35,66 +35,66 @@ namespace spades {
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
-				
+
 				if(BackgroundColor.w > 0.f) {
 					Image@ img = renderer.RegisterImage("Gfx/White.tga");
 					renderer.ColorNP = BackgroundColor;
 					renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 				}
-				
+
 				if(Text.length > 0) {
 					Font@ font = this.Font;
 					string text = this.Text;
 					Vector2 txtSize = font.Measure(text) * TextScale;
 					Vector2 txtPos;
 					txtPos = pos + (size - txtSize) * Alignment;
-					
+
 					font.Draw(text, txtPos, TextScale, TextColor);
 				}
 			}
 		}
-		
+
 		class ButtonBase: UIElement {
 			bool Pressed = false;
 			bool Hover = false;
 			bool Toggled = false;
-			
+
 			bool Toggle = false;
 			bool Repeat = false;
 			bool ActivateOnMouseDown = false;
-			
+
 			EventHandler@ Activated;
 			string Caption;
 			string ActivateHotKey;
-			
+
 			private Timer@ repeatTimer;
-			
+
 			ButtonBase(UIManager@ manager) {
 				super(manager);
 				IsMouseInteractive = true;
 				@repeatTimer = Timer(Manager);
 				@repeatTimer.Tick = TimerTickEventHandler(this.RepeatTimerFired);
 			}
-			
+
 			void PlayMouseEnterSound() {
 				Manager.PlaySound("Sounds/Feedback/Limbo/Hover.wav");
 			}
-			
+
 			void PlayActivateSound() {
 				Manager.PlaySound("Sounds/Feedback/Limbo/Select.wav");
 			}
-			
+
 			void OnActivated() {
 				if(Activated !is null) {
 					Activated(this);
 				}
 			}
-			
+
 			private void RepeatTimerFired(Timer@ timer) {
 				OnActivated();
 				timer.Interval = 0.1f;
 			}
-			
+
 			void MouseDown(MouseButton button, Vector2 clientPosition) {
 				if(button != spades::ui::MouseButton::LeftMouseButton) {
 					return;
@@ -102,7 +102,7 @@ namespace spades {
 				Pressed = true;
 				Hover = true;
 				PlayActivateSound();
-				
+
 				if(Repeat or ActivateOnMouseDown) {
 					OnActivated();
 					if(Repeat) {
@@ -140,7 +140,7 @@ namespace spades {
 						}
 						OnActivated();
 					}
-					
+
 					if(Repeat and Hover){
 						repeatTimer.Stop();
 					}
@@ -157,7 +157,7 @@ namespace spades {
 				Hover = false;
 				UIElement::MouseLeave();
 			}
-			
+
 			void KeyDown(string key) {
 				if(key == " ") {
 					OnActivated();
@@ -167,15 +167,15 @@ namespace spades {
 			void KeyUp(string key) {
 				UIElement::KeyUp(key);
 			}
-			
+
 			void HotKey(string key) {
 				if(key == ActivateHotKey) {
 					OnActivated();
 				}
 			}
-			
+
 		}
-		
+
 		class SimpleButton: spades::ui::Button {
 			SimpleButton(spades::ui::UIManager@ manager){
 				super(manager);
@@ -208,8 +208,8 @@ namespace spades {
 				Font.DrawShadow(Caption, pos + (size - txtSize) * 0.5f, 1.f, Vector4(1,1,1,1), Vector4(0,0,0,0.4f));
 			}
 		}
-		
-		
+
+
 		class CheckBox: spades::ui::Button {
 			CheckBox(spades::ui::UIManager@ manager){
 				super(manager);
@@ -229,29 +229,29 @@ namespace spades {
 				}
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 				Vector2 txtSize = Font.Measure(Caption);
-				Font.DrawShadow(Caption, pos + (size - txtSize) * Vector2(0.f, 0.5f) + Vector2(16.f, 0.f), 
+				Font.DrawShadow(Caption, pos + (size - txtSize) * Vector2(0.f, 0.5f) + Vector2(16.f, 0.f),
 					1.f, Vector4(1,1,1,1), Vector4(0,0,0,0.2f));
-				
+
 				@img = renderer.RegisterImage("Gfx/UI/CheckBox.png");
-				
+
 				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, Toggled ? .9f : 0.6f);
 				renderer.DrawImage(img, AABB2(pos.x, pos.y + (size.y - 16.f) * 0.5f, 16.f, 16.f),
 					AABB2(Toggled ? 16.f : 0.f, 0.f, 16.f, 16.f));
-					
+
 			}
 		}
-		
-		
+
+
 		class RadioButton: spades::ui::Button {
 			string GroupName;
-			
+
 			RadioButton(spades::ui::UIManager@ manager){
 				super(manager);
 				this.Toggle = true;
 			}
 			void Check() {
 				this.Toggled = true;
-					
+
 				// uncheck others
 				if(GroupName.length > 0) {
 					UIElement@[]@ children = this.Parent.GetChildren();
@@ -268,7 +268,7 @@ namespace spades {
 			}
 			void OnActivated() {
 				Check();
-				
+
 				Button::OnActivated();
 			}
 			void Render() {
@@ -300,34 +300,34 @@ namespace spades {
 				renderer.DrawImage(img, AABB2(pos.x+size.x-1.f, pos.y, 1.f, size.y));
 				renderer.DrawImage(img, AABB2(pos.x, pos.y+size.y-1.f, size.x, 1.f));
 				Vector2 txtSize = Font.Measure(Caption);
-				Font.DrawShadow(Caption, pos + (size - txtSize) * 0.5f + Vector2(8.f, 0.f), 1.f, 
+				Font.DrawShadow(Caption, pos + (size - txtSize) * 0.5f + Vector2(8.f, 0.f), 1.f,
 					Vector4(1,1,1,this.Enable ? 1.f : 0.4f), Vector4(0,0,0,0.4f));
-				
+
 				if(Toggled) {
 					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.6f);
 					renderer.DrawImage(img, AABB2(pos.x + 4.f, pos.y + (size.y - 8.f) * 0.5f, 8.f, 8.f));
 				}
-				
-					
+
+
 			}
 		}
-		
+
 		class Button: ButtonBase {
 			private Image@ image;
 			Vector2 Alignment = Vector2(0.5f, 0.5f);
-			
+
 			Button(UIManager@ manager) {
 				super(manager);
-				
+
 				Renderer@ renderer = Manager.Renderer;
 				@image = renderer.RegisterImage("Gfx/UI/Button.png");
 			}
-			
+
 			void Render() {
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
-				
+
 				Vector4 color = Vector4(0.2f, 0.2f, 0.2f, 0.5f);
 				if(Toggled or (Pressed and Hover)) {
 					color = Vector4(0.7f, 0.7f, 0.7f, 0.9f);
@@ -338,9 +338,9 @@ namespace spades {
 					color.w *= 0.5f;
 				}
 				renderer.ColorNP = color;
-				
+
 				DrawSliceImage(renderer, image, pos.x, pos.y, size.x, size.y, 12.f);
-				
+
 				Font@ font = this.Font;
 				string text = this.Caption;
 				Vector2 txtSize = font.Measure(text);
@@ -348,24 +348,24 @@ namespace spades {
 				pos += Vector2(8.f, 8.f);
 				size -= Vector2(16.f, 16.f);
 				txtPos = pos + (size - txtSize) * Alignment;
-				
+
 				if(IsEnabled){
-					font.DrawShadow(text, txtPos, 1.f, 
+					font.DrawShadow(text, txtPos, 1.f,
 						Vector4(1.f, 1.f, 1.f, 1.f), Vector4(0.f, 0.f, 0.f, 0.4f));
 				}else{
-					font.DrawShadow(text, txtPos, 1.f, 
+					font.DrawShadow(text, txtPos, 1.f,
 						Vector4(1.f, 1.f, 1.f, 0.5f), Vector4(0.f, 0.f, 0.f, 0.1f));
 				}
 			}
-			
+
 		}
-		
+
 		class FieldCommand {
 			int index;
 			string oldString;
 			string newString;
 		}
-		
+
 		class FieldBase: UIElement {
 			bool Dragging = false;
 			EventHandler@ Changed;
@@ -374,39 +374,39 @@ namespace spades {
 			int CursorPosition = 0;
 			int MaxLength = 255;
 			bool DenyNonAscii = false;
-			
+
 			private string text;
 			private FieldCommand@[] history;
 			private int historyPos = 0; // index to insert next command
-			
+
 			Vector4 TextColor = Vector4(1.f, 1.f, 1.f, 1.f);
 			Vector4 DisabledTextColor = Vector4(1.f, 1.f, 1.f, 0.3f);
 			Vector4 PlaceholderColor = Vector4(1.f, 1.f, 1.f, 0.5f);
 			Vector4 HighlightColor = Vector4(1.f, 1.f, 1.f, 0.3f);
-			
+
 			Vector2 TextOrigin = Vector2(0.f, 0.f);
 			float TextScale = 1.f;
-			
+
 			FieldBase(UIManager@ manager) {
 				super(manager);
 				IsMouseInteractive = true;
 				AcceptsFocus = true;
 				@this.Cursor = Cursor(Manager, manager.Renderer.RegisterImage("Gfx/UI/IBeam.png"), Vector2(16.f, 16.f));
 			}
-			
+
 			string Text {
 				get { return text; }
-				set { 
+				set {
 					text = value;
 					EraseUndoHistory();
 				 }
 			}
-			
+
 			private void EraseUndoHistory() {
 				history.length = 0;
 				historyPos = 0;
 			}
-			
+
 			private bool CheckCharType(string s) {
 				if(DenyNonAscii) {
 					for(uint i = 0, len = s.length; i < len; i++) {
@@ -418,20 +418,20 @@ namespace spades {
 				}
 				return true;
 			}
-			
+
 			void OnChanged() {
 				if(Changed !is null) {
 					Changed(this);
 				}
 			}
-			
+
 			int SelectionStart {
 				get final { return Min(MarkPosition, CursorPosition); }
 				set {
 					Select(value, SelectionEnd - value);
 				}
 			}
-			
+
 			int SelectionEnd {
 				get final {
 					return Max(MarkPosition, CursorPosition);
@@ -440,7 +440,7 @@ namespace spades {
 					Select(SelectionStart, value - SelectionStart);
 				}
 			}
-			
+
 			int SelectionLength {
 				get final {
 					return SelectionEnd - SelectionStart;
@@ -449,7 +449,7 @@ namespace spades {
 					Select(SelectionStart, value);
 				}
 			}
-			
+
 			string SelectedText {
 				get final {
 					return Text.substr(SelectionStart, SelectionLength);
@@ -466,30 +466,30 @@ namespace spades {
 					RunFieldCommand(cmd, true, true);
 				}
 			}
-			
+
 			private void RunFieldCommand(FieldCommand@ cmd, bool autoSelect, bool addHistory) {
-				text = text.substr(0, cmd.index) + cmd.newString + 
+				text = text.substr(0, cmd.index) + cmd.newString +
 					text.substr(cmd.index + cmd.oldString.length);
 				if(autoSelect)
 					Select(cmd.index, cmd.newString.length);
-				
+
 				if(addHistory) {
 					history.length = historyPos;
 					history.insertLast(cmd);
 					historyPos += 1;
 					// limit history length
 				}
-				
+
 			}
-			
+
 			private void UndoFieldCommand(FieldCommand@ cmd, bool autoSelect) {
-				text = text.substr(0, cmd.index) + cmd.oldString + 
+				text = text.substr(0, cmd.index) + cmd.oldString +
 					text.substr(cmd.index + cmd.newString.length);
 				if(autoSelect)
 					Select(cmd.index, cmd.oldString.length);
-				
+
 			}
-			
+
 			private void SetHistoryPos(int index) {
 				int p = historyPos;
 				FieldCommand@[]@ h = history;
@@ -503,19 +503,19 @@ namespace spades {
 				}
 				historyPos = p;
 			}
-			
+
 			bool Undo() {
 				if(historyPos == 0) return false;
 				SetHistoryPos(historyPos - 1);
 				return true;
 			}
-			
+
 			bool Redo() {
 				if(historyPos >= int(history.length)) return false;
 				SetHistoryPos(historyPos + 1);
 				return true;
 			}
-			
+
 			AABB2 TextInputRect {
 				get {
 					Vector2 textPos = TextOrigin;
@@ -529,7 +529,7 @@ namespace spades {
 								 siz.x - textPos.x - width, fontHeight);
 				}
 			}
-			
+
 			private int PointToCharIndex(float x) {
 				x -= TextOrigin.x;
 				if(x < 0.f) return 0;
@@ -561,20 +561,20 @@ namespace spades {
 			int PointToCharIndex(Vector2 pt) {
 				return PointToCharIndex(pt.x);
 			}
-			
+
 			int ClampCursorPosition(int pos) {
 				return Clamp(pos, 0, Text.length);
 			}
-			
+
 			void Select(int start, int length = 0) {
 				MarkPosition = ClampCursorPosition(start);
 				CursorPosition = ClampCursorPosition(start + length);
 			}
-			
+
 			void SelectAll() {
 				Select(0, Text.length);
 			}
-			
+
 			void BackSpace() {
 				if(SelectionLength > 0) {
 					SelectedText = "";
@@ -587,7 +587,7 @@ namespace spades {
 				}
 				OnChanged();
 			}
-			
+
 			void Delete() {
 				if(SelectionLength > 0) {
 					SelectedText = "";
@@ -600,24 +600,24 @@ namespace spades {
 				}
 				OnChanged();
 			}
-			
+
 			void Insert(string text) {
 				if(!CheckCharType(text)) {
 					return;
 				}
 				string oldText = SelectedText;
 				SelectedText = text;
-				
+
 				// if text overflows, deny the insertion
 				if((not FitsInBox(Text)) or (int(Text.length) > MaxLength)) {
 					SelectedText = oldText;
 					return;
 				}
-				
+
 				Select(SelectionEnd);
 				OnChanged();
 			}
-			
+
 			void KeyDown(string key) {
 				if(key == "BackSpace") {
 					BackSpace();
@@ -650,20 +650,20 @@ namespace spades {
 					}
 					return;
 				}
-				if(manager.IsControlPressed or
-				   manager.IsMetaPressed /* for OSX; Cmd + [a-z] */) {
+				if(Manager.IsControlPressed or
+				   Manager.IsMetaPressed /* for OSX; Cmd + [a-z] */) {
 					if(key == "A") {
 						SelectAll();
 						return;
 					}else if(key == "V") {
-						manager.Paste(PasteClipboardEventHandler(this.Insert));
+						Manager.Paste(PasteClipboardEventHandler(this.Insert));
 					}else if(key == "C") {
-						manager.Copy(this.SelectedText);
+						Manager.Copy(this.SelectedText);
 					}else if(key == "X") {
-						manager.Copy(this.SelectedText);
+						Manager.Copy(this.SelectedText);
 						this.SelectedText = "";
 					}else if(key == "Z") {
-						if(manager.IsShiftPressed){
+						if(Manager.IsShiftPressed){
 							if(Redo()) OnChanged();
 						}else{
 							if(Undo()) OnChanged();
@@ -674,14 +674,14 @@ namespace spades {
 						}
 					}
 				}
-				manager.ProcessHotKey(key);
+				Manager.ProcessHotKey(key);
 			}
 			void KeyUp(string key) {
 			}
-			
+
 			void KeyPress(string text) {
-				if(!(manager.IsControlPressed or
-				     manager.IsMetaPressed)) {
+				if(!(Manager.IsControlPressed or
+				     Manager.IsMetaPressed)) {
 					Insert(text);
 				}
 			}
@@ -689,7 +689,7 @@ namespace spades {
 				if(button != spades::ui::MouseButton::LeftMouseButton) {
 					return;
 				}
-				Dragging = true; 
+				Dragging = true;
 				if(Manager.IsShiftPressed) {
 					MouseMove(clientPosition);
 				} else {
@@ -707,37 +707,37 @@ namespace spades {
 				}
 				Dragging = false;
 			}
-			
+
 			bool FitsInBox(string text) {
 				return Font.Measure(text).x * TextScale < Size.x - TextOrigin.x;
 			}
-			
+
 			void DrawHighlight(float x, float y, float w, float h) {
 				Renderer@ renderer = Manager.Renderer;
 				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
-				
+
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				renderer.DrawImage(img, AABB2(x, y, w, h));
 			}
-			
+
 			void DrawBeam(float x, float y, float h) {
 				Renderer@ renderer = Manager.Renderer;
 				float pulse = sin(Manager.Time * 5.f);
 				pulse = abs(pulse);
 				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, pulse);
-				
+
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				renderer.DrawImage(img, AABB2(x - 1.f, y, 2, h));
 			}
-			
+
 			void DrawEditingLine(float x, float y, float w, float h) {
 				Renderer@ renderer = Manager.Renderer;
 				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, .3f);
-				
+
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				renderer.DrawImage(img, AABB2(x, y + h, w, 2.f));
 			}
-			
+
 			void Render() {
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
@@ -745,21 +745,21 @@ namespace spades {
 				Font@ font = this.Font;
 				Vector2 textPos = TextOrigin + pos;
 				string text = Text;
-				
+
 				string composition = this.EditingText;
 				int editStart = this.TextEditingRangeStart;
 				int editLen = this.TextEditingRangeLength;
-				
+
 				int markStart = SelectionStart;
 				int markEnd = SelectionEnd;
-				
+
 				if(composition.length > 0){
 					this.SelectedText = "";
 					markStart = SelectionStart + editStart;
 					markEnd = markStart + editLen;
 					text = text.substr(0, SelectionStart) + composition + text.substr(SelectionStart);
 				}
-				
+
 				if(text.length == 0){
 					if(IsEnabled) {
 						font.Draw(Placeholder, textPos, TextScale, PlaceholderColor);
@@ -767,10 +767,10 @@ namespace spades {
 				}else{
 					font.Draw(text, textPos, TextScale, IsEnabled ? TextColor : DisabledTextColor);
 				}
-				
+
 				if(IsFocused){
 					float fontHeight = font.Measure("A").y;
-					
+
 					// draw selection
 					int start = markStart;
 					int end = markEnd;
@@ -782,7 +782,7 @@ namespace spades {
 						float x2 = font.Measure(text.substr(0, end)).x;
 						DrawHighlight(textPos.x + x1, textPos.y, x2 - x1, fontHeight);
 					}
-					
+
 					// draw composition underline
 					if(composition.length > 0) {
 						start = SelectionStart;
@@ -792,11 +792,11 @@ namespace spades {
 						DrawEditingLine(textPos.x + x1, textPos.y, x2 - x1, fontHeight);
 					}
 				}
-				
+
 				UIElement::Render();
 			}
 		}
-		
+
 		class Field: FieldBase {
 			private bool hover;
 			Field(UIManager@ manager) {
@@ -819,7 +819,7 @@ namespace spades {
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, IsFocused ? 0.3f : 0.1f);
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
-				
+
 				if(IsFocused) {
 					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
 				}else if(hover) {
@@ -831,16 +831,16 @@ namespace spades {
 				renderer.DrawImage(img, AABB2(pos.x, pos.y + size.y - 1.f, size.x, 1.f));
 				renderer.DrawImage(img, AABB2(pos.x, pos.y + 1.f, 1.f, size.y - 2.f));
 				renderer.DrawImage(img, AABB2(pos.x + size.x - 1.f, pos.y + 1.f, 1.f, size.y - 2.f));
-				
+
 				FieldBase::Render();
 			}
 		}
-		
+
 		enum ScrollBarOrientation {
 			Horizontal,
 			Vertical
 		}
-		
+
 		class ScrollBarBase: UIElement {
 			double MinValue = 0.0;
 			double MaxValue = 100.0;
@@ -848,15 +848,15 @@ namespace spades {
 			double SmallChange = 1.0;
 			double LargeChange = 20.0;
 			EventHandler@ Changed;
-			
+
 			ScrollBarBase(UIManager@ manager) {
 				super(manager);
 			}
-			
+
 			void ScrollBy(double delta) {
 				ScrollTo(Value + delta);
 			}
-			
+
 			void ScrollTo(double val) {
 				val = Clamp(val, MinValue, MaxValue);
 				if(val == Value) {
@@ -865,13 +865,13 @@ namespace spades {
 				Value = val;
 				OnChanged();
 			}
-			
+
 			void OnChanged() {
 				if(Changed !is null) {
 					Changed(this);
 				}
 			}
-			
+
 			ScrollBarOrientation Orientation {
 				get {
 					if(Size.x > Size.y) {
@@ -881,23 +881,23 @@ namespace spades {
 					}
 				}
 			}
-			
-			
+
+
 		}
-		
+
 		class ScrollBarTrackBar: UIElement {
 			private ScrollBar@ scrollBar;
 			private bool dragging = false;
 			private double startValue;
 			private float startCursorPos;
 			private bool hover = false;
-			
+
 			ScrollBarTrackBar(ScrollBar@ scrollBar) {
 				super(scrollBar.Manager);
 				@this.scrollBar = scrollBar;
 				IsMouseInteractive = true;
 			}
-			
+
 			private float GetCursorPos(Vector2 pos) {
 				if(scrollBar.Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
 					return pos.x + Position.x;
@@ -905,7 +905,7 @@ namespace spades {
 					return pos.y + Position.y;
 				}
 			}
-			
+
 			void MouseDown(MouseButton button, Vector2 clientPosition) {
 				if(button != spades::ui::MouseButton::LeftMouseButton) {
 					return;
@@ -922,7 +922,7 @@ namespace spades {
 				if(dragging) {
 					double val = startValue;
 					float delta = GetCursorPos(clientPosition) - startCursorPos;
-					val += delta * (scrollBar.MaxValue - scrollBar.MinValue) / 
+					val += delta * (scrollBar.MaxValue - scrollBar.MinValue) /
 						double(scrollBar.TrackBarMovementRange);
 					scrollBar.ScrollTo(val);
 				}
@@ -941,19 +941,19 @@ namespace spades {
 				hover = false;
 				UIElement::MouseLeave();
 			}
-			
+
 			void Render() {
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
-				
+
 				if(scrollBar.Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
 					pos.y += 4.f; size.y -= 8.f;
 				} else {
 					pos.x += 4.f; size.x -= 8.f;
 				}
-				
+
 				if(dragging) {
 					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.4f);
 				} else if (hover) {
@@ -964,11 +964,11 @@ namespace spades {
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 			}
 		}
-		
+
 		class ScrollBarFill: ButtonBase {
 			private ScrollBarBase@ scrollBar;
 			private bool up;
-			
+
 			ScrollBarFill(ScrollBarBase@ scrollBar, bool up) {
 				super(scrollBar.Manager);
 				@this.scrollBar = scrollBar;
@@ -976,25 +976,25 @@ namespace spades {
 				Repeat = true;
 				this.up = up;
 			}
-			
+
 			void PlayMouseEnterSound() {
 				// suppress
 			}
-			
+
 			void PlayActivateSound() {
 				// suppress
 			}
-			
+
 			void Render() {
 				// nothing to draw
 			}
 		}
-		
+
 		class ScrollBarButton: ButtonBase {
 			private ScrollBar@ scrollBar;
 			private bool up;
 			private Image@ image;
-			
+
 			ScrollBarButton(ScrollBar@ scrollBar, bool up) {
 				super(scrollBar.Manager);
 				@this.scrollBar = scrollBar;
@@ -1003,15 +1003,15 @@ namespace spades {
 				this.up = up;
 				@image = Manager.Renderer.RegisterImage("Gfx/UI/ScrollArrow.png");
 			}
-			
+
 			void PlayMouseEnterSound() {
 				// suppress
 			}
-			
+
 			void PlayActivateSound() {
 				// suppress
 			}
-			
+
 			void Render() {
 				Renderer@ r = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
@@ -1019,7 +1019,7 @@ namespace spades {
 				pos += size * 0.5f;
 				float siz = image.Width * 0.5f;
 				AABB2 srcRect(0.f, 0.f, image.Width, image.Height);
-				
+
 				if(Pressed and Hover) {
 					r.ColorNP = Vector4(1.f, 1.f, 1.f, 0.6f);
 				} else if (Hover) {
@@ -1027,54 +1027,54 @@ namespace spades {
 				} else {
 					r.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
 				}
-				
+
 				if(scrollBar.Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
 					if(up) {
-						r.DrawImage(image, 
+						r.DrawImage(image,
 							Vector2(pos.x + siz, pos.y - siz), Vector2(pos.x + siz, pos.y + siz), Vector2(pos.x - siz, pos.y - siz),
 							srcRect);
 					} else {
-						r.DrawImage(image, 
+						r.DrawImage(image,
 							Vector2(pos.x - siz, pos.y + siz), Vector2(pos.x - siz, pos.y - siz), Vector2(pos.x + siz, pos.y + siz),
 							srcRect);
 					}
 				} else {
 					if(up) {
-						r.DrawImage(image, 
+						r.DrawImage(image,
 							Vector2(pos.x + siz, pos.y + siz), Vector2(pos.x - siz, pos.y + siz), Vector2(pos.x + siz, pos.y - siz),
 							srcRect);
 					} else {
-						r.DrawImage(image, 
+						r.DrawImage(image,
 							Vector2(pos.x - siz, pos.y - siz), Vector2(pos.x + siz, pos.y - siz), Vector2(pos.x - siz, pos.y + siz),
 							srcRect);
 					}
 				}
 			}
 		}
-		
+
 		class ScrollBar: ScrollBarBase {
-			
+
 			private ScrollBarTrackBar@ trackBar;
 			private ScrollBarFill@ fill1;
 			private ScrollBarFill@ fill2;
 			private ScrollBarButton@ button1;
 			private ScrollBarButton@ button2;
-			
+
 			private float ButtonSize = 16.f;
-			
+
 			ScrollBar(UIManager@ manager) {
 				super(manager);
-				
+
 				@trackBar = ScrollBarTrackBar(this);
 				AddChild(trackBar);
-				
+
 				@fill1 = ScrollBarFill(this, false);
 				@fill1.Activated = EventHandler(this.LargeDown);
 				AddChild(fill1);
 				@fill2 = ScrollBarFill(this, true);
 				@fill2.Activated = EventHandler(this.LargeUp);
 				AddChild(fill2);
-				
+
 				@button1 = ScrollBarButton(this, false);
 				@button1.Activated = EventHandler(this.SmallDown);
 				AddChild(button1);
@@ -1082,7 +1082,7 @@ namespace spades {
 				@button2.Activated = EventHandler(this.SmallUp);
 				AddChild(button2);
 			}
-			
+
 			private void LargeDown(UIElement@ e) {
 				ScrollBy(-LargeChange);
 			}
@@ -1095,13 +1095,13 @@ namespace spades {
 			private void SmallUp(UIElement@ e) {
 				ScrollBy(SmallChange);
 			}
-			
+
 			void OnChanged() {
 				Layout();
 				ScrollBarBase::OnChanged();
 				Layout();
 			}
-			
+
 			void Layout() {
 				Vector2 size = Size;
 				float tPos = TrackBarPosition;
@@ -1120,12 +1120,12 @@ namespace spades {
 					trackBar.Bounds = AABB2(0.f, tPos, size.x, tLen);
 				}
 			}
-			
+
 			void OnResized() {
 				Layout();
 				UIElement::OnResized();
 			}
-			
+
 			float Length {
 				get {
 					if(Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
@@ -1135,27 +1135,27 @@ namespace spades {
 					}
 				}
 			}
-			
+
 			float TrackBarAreaLength {
 				get {
 					return Length - ButtonSize - ButtonSize;
 				}
 			}
-			
+
 			float TrackBarLength {
 				get {
 					return Max(TrackBarAreaLength *
 						(LargeChange / (MaxValue - MinValue + LargeChange)), 40.f);
 				}
 			}
-			
+
 			float TrackBarMovementRange {
 				get {
 					return TrackBarAreaLength - TrackBarLength;
 				}
 			}
-			
-			float TrackBarPosition { 
+
+			float TrackBarPosition {
 				get {
 					if(MaxValue == MinValue) {
 						return ButtonSize;
@@ -1163,32 +1163,32 @@ namespace spades {
 					return float((Value - MinValue) / (MaxValue - MinValue) * TrackBarMovementRange) + ButtonSize;
 				}
 			}
-			
+
 			void Render() {
 				Layout();
-				
+
 				ScrollBarBase::Render();
 			}
 		}
-		
-		
+
+
 		class SliderKnob: UIElement {
 			private Slider@ slider;
 			private bool dragging = false;
 			private double startValue;
 			private float startCursorPos;
 			private bool hover = false;
-			
+
 			SliderKnob(Slider@ slider) {
 				super(slider.Manager);
 				@this.slider = slider;
 				IsMouseInteractive = true;
 			}
-			
+
 			private float GetCursorPos(Vector2 pos) {
 				return pos.x + Position.x;
 			}
-			
+
 			void MouseDown(MouseButton button, Vector2 clientPosition) {
 				if(button != spades::ui::MouseButton::LeftMouseButton) {
 					return;
@@ -1201,7 +1201,7 @@ namespace spades {
 				if(dragging) {
 					double val = startValue;
 					float delta = GetCursorPos(clientPosition) - startCursorPos;
-					val += delta * (slider.MaxValue - slider.MinValue) / 
+					val += delta * (slider.MaxValue - slider.MinValue) /
 						double(slider.TrackBarMovementRange);
 					slider.ScrollTo(val);
 				}
@@ -1220,50 +1220,50 @@ namespace spades {
 				hover = false;
 				UIElement::MouseLeave();
 			}
-			
+
 			void Render() {
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
-				
+
 				if (hover) {
 					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.5f);
 				} else {
 					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.3f);
 				}
-				renderer.DrawImage(img, 
-					AABB2(pos.x + size.x * 0.5f - 3.f, pos.y, 
+				renderer.DrawImage(img,
+					AABB2(pos.x + size.x * 0.5f - 3.f, pos.y,
 					6.f, size.y));
-				
+
 				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 0.6f);
-				renderer.DrawImage(img, 
-					AABB2(pos.x + size.x * 0.5f - 2.f, pos.y + 1.f, 
+				renderer.DrawImage(img,
+					AABB2(pos.x + size.x * 0.5f - 2.f, pos.y + 1.f,
 					4.f, size.y - 2.f));
 			}
 		}
-		
+
 		class Slider: ScrollBarBase {
-			
+
 			private SliderKnob@ knob;
 			private ScrollBarFill@ fill1;
 			private ScrollBarFill@ fill2;
-			
+
 			Slider(UIManager@ manager) {
 				super(manager);
-				
+
 				@knob = SliderKnob(this);
 				AddChild(knob);
-				
+
 				@fill1 = ScrollBarFill(this, false);
 				@fill1.Activated = EventHandler(this.LargeDown);
 				AddChild(fill1);
 				@fill2 = ScrollBarFill(this, true);
 				@fill2.Activated = EventHandler(this.LargeUp);
 				AddChild(fill2);
-				
+
 			}
-			
+
 			private void LargeDown(UIElement@ e) {
 				ScrollBy(-LargeChange);
 			}
@@ -1276,13 +1276,13 @@ namespace spades {
 			private void SmallUp(UIElement@ e) {
 				ScrollBy(SmallChange);
 			}*/
-			
+
 			void OnChanged() {
 				Layout();
 				ScrollBarBase::OnChanged();
 				Layout();
 			}
-			
+
 			void Layout() {
 				Vector2 size = Size;
 				float tPos = TrackBarPosition;
@@ -1291,12 +1291,12 @@ namespace spades {
 				fill2.Bounds = AABB2(tPos + tLen, 0.f, size.x - tPos - tLen, size.y);
 				knob.Bounds = AABB2(tPos, 0.f, tLen, size.y);
 			}
-			
+
 			void OnResized() {
 				Layout();
 				UIElement::OnResized();
 			}
-			
+
 			float Length {
 				get {
 					if(Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
@@ -1306,59 +1306,59 @@ namespace spades {
 					}
 				}
 			}
-			
+
 			float TrackBarAreaLength {
 				get {
 					return Length;
 				}
 			}
-			
+
 			float TrackBarLength {
 				get {
 					return 16.f;
 				}
 			}
-			
+
 			float TrackBarMovementRange {
 				get {
 					return TrackBarAreaLength - TrackBarLength;
 				}
 			}
-			
-			float TrackBarPosition { 
+
+			float TrackBarPosition {
 				get {
 					return float((Value - MinValue) / (MaxValue - MinValue) * TrackBarMovementRange);
 				}
 			}
-			
+
 			void Render() {
 				Layout();
-				
+
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
-				
+
 				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.1f);
-				renderer.DrawImage(img, 
-					AABB2(pos.x, pos.y + size.y * 0.5f - 3.f, 
+				renderer.DrawImage(img,
+					AABB2(pos.x, pos.y + size.y * 0.5f - 3.f,
 					size.x, 6.f));
-				
+
 				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 0.2f);
-				renderer.DrawImage(img, 
+				renderer.DrawImage(img,
 					AABB2(pos.x + 1.f, pos.y + size.y * 0.5f - 2.f,
 					size.x - 2.f, 4.f));
-				
+
 				ScrollBarBase::Render();
 			}
 		}
-		
+
 		class ListViewModel {
 			int NumRows { get { return 0; } }
 			UIElement@ CreateElement(int row) { return null; }
 			void RecycleElement(UIElement@ elem) {}
 		}
-		
+
 		/** Simple virtual stack panel implementation. */
 		class ListViewBase: UIElement {
 			private ScrollBar@ scrollBar;
@@ -1367,59 +1367,59 @@ namespace spades {
 			float ScrollBarWidth = 16.f;
 			private UIElementDeque items;
 			private int loadedStartIndex = 0;
-			
+
 			ListViewBase(UIManager@ manager) {
 				super(manager);
 				@scrollBar = ScrollBar(Manager);
 				scrollBar.Bounds = AABB2();
 				AddChild(scrollBar);
 				IsMouseInteractive = true;
-				
-				scrollBar.Changed = EventHandler(this.OnScrolled);
+
+				@scrollBar.Changed = EventHandler(this.OnScrolled);
 				@model = ListViewModel();
 			}
-			
+
 			private void OnScrolled(UIElement@ sender) {
 				Layout();
 			}
-			
+
 			int NumVisibleRows {
 				get final {
 					return int(floor(Size.y / RowHeight));
 				}
 			}
-			
+
 			int MaxTopRowIndex {
 				get final {
 					return Max(0, model.NumRows - NumVisibleRows);
 				}
 			}
-			
+
 			int TopRowIndex {
 				get final {
 					int idx = int(floor(scrollBar.Value + 0.5));
 					return Clamp(idx, 0, MaxTopRowIndex);
 				}
 			}
-			
+
 			void OnResized() {
 				Layout();
 				UIElement::OnResized();
 			}
-			
+
 			void Layout() {
 				scrollBar.MaxValue = double(MaxTopRowIndex);
 				scrollBar.ScrollTo(scrollBar.Value); // ensures value is in range
 				scrollBar.LargeChange = double(NumVisibleRows);
-				
+
 				int numRows = model.NumRows;
-				
+
 				// load items
 				int visibleStart = TopRowIndex;
 				int visibleEnd = Min(visibleStart + NumVisibleRows, numRows);
 				int loadedStart = loadedStartIndex;
 				int loadedEnd = loadedStartIndex + items.Count;
-				
+
 				if(items.Count == 0 or visibleStart >= loadedEnd or visibleEnd <= loadedStart) {
 					// full reload
 					UnloadAll();
@@ -1453,7 +1453,7 @@ namespace spades {
 					}
 					loadedStartIndex = loadedStart;
 				}
-				
+
 				// relayout items
 				UIElementDeque@ items = this.items;
 				int count = items.Count;
@@ -1463,26 +1463,26 @@ namespace spades {
 					items[i].Bounds = AABB2(0.f, y, w, RowHeight);
 					y += RowHeight;
 				}
-				
+
 				// move scroll bar
 				scrollBar.Bounds = AABB2(Size.x - ScrollBarWidth, 0.f, ScrollBarWidth, Size.y);
 			}
-			
+
 			float ItemWidth {
 				get {
 					return Size.x - ScrollBarWidth;
 				}
 			}
-			
+
 			void MouseWheel(float delta) {
 				scrollBar.ScrollBy(delta);
 			}
-			
+
 			void Reload() {
 				UnloadAll();
 				Layout();
 			}
-			
+
 			private void UnloadAll() {
 				UIElementDeque@ items = this.items;
 				int count = items.Count;
@@ -1492,7 +1492,7 @@ namespace spades {
 				}
 				items.Clear();
 			}
-			
+
 			ListViewModel@ Model {
 				get final { return model; }
 				set {
@@ -1504,16 +1504,16 @@ namespace spades {
 					Layout();
 				}
 			}
-			
+
 			void ScrollToTop() {
 				scrollBar.ScrollTo(0.0);
 			}
-			
+
 			void ScrollToEnd() {
 				scrollBar.ScrollTo(scrollBar.MaxValue);
 			}
 		}
-		
+
 		class TextViewerModel: ListViewModel {
 			UIManager@ manager;
 			string[]@ lines = array<string>();
@@ -1527,7 +1527,7 @@ namespace spades {
 					colors.insertLast(color);
 					return;
 				}
-				
+
 				int pos = 0;
 				int len = int(text.length);
 				bool charMode = false;
@@ -1535,7 +1535,7 @@ namespace spades {
 					int nextPos = pos + 1;
 					if(charMode) {
 						// skip to the next UTF-8 character boundary
-						while(nextPos < len && ((text[nextPos] & 0x80) != 0) && 
+						while(nextPos < len && ((text[nextPos] & 0x80) != 0) &&
 							  ((text[nextPos] & 0xc0) != 0xc0))
 							nextPos++;
 					} else {
@@ -1569,7 +1569,7 @@ namespace spades {
 						}
 					}
 				}
-				
+
 			}
 			TextViewerModel(UIManager@ manager, string text, Font@ font, float width) {
 				@this.manager = manager;
@@ -1588,7 +1588,7 @@ namespace spades {
 			}
 			void RecycleElement(UIElement@ elem) {}
 		}
-		
+
 		class ListView: ListViewBase {
 			ListView(UIManager@ manager) {
 				super(manager);
@@ -1601,25 +1601,25 @@ namespace spades {
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 0.2f);
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
-				
+
 				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.06f);
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
 				renderer.DrawImage(img, AABB2(pos.x, pos.y + size.y - 1.f, size.x, 1.f));
 				renderer.DrawImage(img, AABB2(pos.x, pos.y + 1.f, 1.f, size.y - 2.f));
 				renderer.DrawImage(img, AABB2(pos.x + size.x - 1.f, pos.y + 1.f, 1.f, size.y - 2.f));
-				
+
 				ListViewBase::Render();
 			}
 		}
-		
+
 		class TextViewer: ListViewBase {
 			private string text;
 			private TextViewerModel@ textmodel;
-			
+
 			TextViewer(UIManager@ manager) {
 				super(manager);
 			}
-			
+
 			/** Sets the displayed text. Ensure TextViewer.Font is not null before setting this proeprty. */
 			string Text {
 				get final { return text; }
@@ -1629,7 +1629,7 @@ namespace spades {
 					@Model = textmodel;
 				}
 			}
-			
+
 			void AddLine(string line, bool autoscroll = false, Vector4 color = Vector4(1.f, 1.f, 1.f, 1.f)) {
 				if(textmodel is null) {
 					this.Text = "";
@@ -1647,23 +1647,23 @@ namespace spades {
 				}
 			}
 		}
-		
+
 		class SimpleTabStripItem: ButtonBase {
 			UIElement@ linkedElement;
-			
+
 			SimpleTabStripItem(UIManager@ manager, UIElement@ linkedElement) {
 				super(manager);
 				@this.linkedElement = linkedElement;
 			}
-			
+
 			void MouseDown(MouseButton button, Vector2 clientPosition) {
 				PlayActivateSound();
 				OnActivated();
 			}
-			
+
 			void Render() {
 				this.Toggled = linkedElement.Visible;
-				
+
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
@@ -1678,27 +1678,27 @@ namespace spades {
 					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.0f);
 				}
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
-				
+
 				Vector2 txtSize = Font.Measure(Caption);
 				Font.Draw(Caption, pos + (size - txtSize) * 0.5f, 1.f, textColor);
 			}
 		}
-		
+
 		class SimpleTabStrip: UIElement {
 			private float nextX = 0.f;
-			
+
 			EventHandler@ Changed;
-			
+
 			SimpleTabStrip(UIManager@ manager) {
 				super(manager);
 			}
-			
+
 			private void OnChanged() {
 				if(Changed !is null) {
 					Changed(this);
 				}
 			}
-			
+
 			private void OnItemActivated(UIElement@ sender) {
 				SimpleTabStripItem@ item = cast<SimpleTabStripItem>(sender);
 				UIElement@ linked = item.linkedElement;
@@ -1709,23 +1709,23 @@ namespace spades {
 				}
 				OnChanged();
 			}
-			
+
 			void AddItem(string title, UIElement@ linkedElement) {
 				SimpleTabStripItem item(this.Manager, linkedElement);
 				item.Caption = title;
 				float w = this.Font.Measure(title).x + 18.f;
 				item.Bounds = AABB2(nextX, 0.f, w, 24.f);
 				nextX += w + 4.f;
-				
-				item.Activated = EventHandler(this.OnItemActivated);
-				
+
+				@item.Activated = EventHandler(this.OnItemActivated);
+
 				this.AddChild(item);
-				
+
 			}
-			
+
 			void Render() {
 				UIElement::Render();
-				
+
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
@@ -1733,8 +1733,8 @@ namespace spades {
 				renderer.ColorNP = Vector4(0.9f, 0.9f, 0.9f, 1.0f);
 				renderer.DrawImage(img, AABB2(pos.x, pos.y + 24.f, size.x, 1.f));
 			}
-			
+
 		}
-		
+
 	}
 }

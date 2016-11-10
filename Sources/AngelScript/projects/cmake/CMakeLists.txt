@@ -73,6 +73,7 @@ set(ANGELSCRIPT_HEADERS
         ../../source/as_map.h
         ../../source/as_memory.h
         ../../source/as_module.h
+        ../../source/as_namespace.h
         ../../source/as_objecttype.h
         ../../source/as_outputbuffer.h
         ../../source/as_parser.h

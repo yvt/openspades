@@ -1,6 +1,6 @@
 /*
    AngelCode Scripting Library
-   Copyright (c) 2003-2013 Andreas Jonsson
+   Copyright (c) 2003-2015 Andreas Jonsson
 
    This software is provided 'as-is', without any express or implied 
    warranty. In no event will the authors be held liable for any 
@@ -66,11 +66,11 @@ int asCConfigGroup::Release()
 	return refCount;
 }
 
-asCObjectType *asCConfigGroup::FindType(const char *obj)
+asCTypeInfo *asCConfigGroup::FindType(const char *obj)
 {
-	for( asUINT n = 0; n < objTypes.GetLength(); n++ )
-		if( objTypes[n]->name == obj )
-			return objTypes[n];
+	for( asUINT n = 0; n < types.GetLength(); n++ )
+		if( types[n]->name == obj )
+			return types[n];
 
 	return 0;
 }
@@ -88,10 +88,29 @@ void asCConfigGroup::RefConfigGroup(asCConfigGroup *group)
 	group->AddRef();
 }
 
+void asCConfigGroup::AddReferencesForFunc(asCScriptEngine *engine, asCScriptFunction *func)
+{
+	AddReferencesForType(engine, func->returnType.GetTypeInfo());
+	for( asUINT n = 0; n < func->parameterTypes.GetLength(); n++ )
+		AddReferencesForType(engine, func->parameterTypes[n].GetTypeInfo());
+}
+
+void asCConfigGroup::AddReferencesForType(asCScriptEngine *engine, asCTypeInfo *type)
+{
+	if( type == 0 ) return;
+
+	// Keep reference to other groups
+	RefConfigGroup(engine->FindConfigGroupForTypeInfo(type));
+
+	// Keep track of which generated template instances the config group uses
+	if( type->flags & asOBJ_TEMPLATE && engine->generatedTemplateTypes.Exists(type->CastToObjectType()) && !generatedTemplateInstances.Exists(type->CastToObjectType()) )
+		generatedTemplateInstances.PushLast(type->CastToObjectType());
+}
+
 bool asCConfigGroup::HasLiveObjects()
 {
-	for( asUINT n = 0; n < objTypes.GetLength(); n++ )
-		if( objTypes[n]->GetRefCount() != 0 )
+	for( asUINT n = 0; n < types.GetLength(); n++ )
+		if( types[n]->externalRefCount.get() != 0 )
 			return true;
 
 	return false;
@@ -120,57 +139,68 @@ void asCConfigGroup::RemoveConfiguration(asCScriptEngine *engine, bool notUsed)
 	// Remove global functions
 	for( n = 0; n < scriptFunctions.GetLength(); n++ )
 	{
-		scriptFunctions[n]->Release();
-		engine->registeredGlobalFuncs.RemoveValue(scriptFunctions[n]);
+		int index = engine->registeredGlobalFuncs.GetIndex(scriptFunctions[n]);
+		if( index >= 0 )
+			engine->registeredGlobalFuncs.Erase(index);
+		scriptFunctions[n]->ReleaseInternal();
 		if( engine->stringFactory == scriptFunctions[n] )
 			engine->stringFactory = 0;
 	}
 	scriptFunctions.SetLength(0);
 
 	// Remove behaviours and members of object types
-	for( n = 0; n < objTypes.GetLength(); n++ )
+	for( n = 0; n < types.GetLength(); n++ )
 	{
-		asCObjectType *obj = objTypes[n];
-
-		obj->ReleaseAllFunctions();
+		asCObjectType *obj = types[n]->CastToObjectType();
+		if( obj )
+			obj->ReleaseAllFunctions();
 	}
-
-	// Remove function definitions
-	for( n = 0; n < funcDefs.GetLength(); n++ )
-	{
-		engine->registeredFuncDefs.RemoveValue(funcDefs[n]);
-		funcDefs[n]->Release();
-	}
-	funcDefs.SetLength(0);
 
 	// Remove object types (skip this if it is possible other groups are still using the types)
 	if( !notUsed )
 	{
-		for( n = 0; n < objTypes.GetLength(); n++ )
+		for( n = asUINT(types.GetLength()); n-- > 0; )
 		{
-			asCObjectType *t = objTypes[n];
-			int idx = engine->objectTypes.IndexOf(t);
-			if( idx >= 0 )
+			asCTypeInfo *t = types[n];
+			asSMapNode<asSNameSpaceNamePair, asCTypeInfo*> *cursor;
+			if( engine->allRegisteredTypes.MoveTo(&cursor, asSNameSpaceNamePair(t->nameSpace, t->name)) &&
+				cursor->value == t )
 			{
-#ifdef AS_DEBUG
-				ValidateNoUsage(engine, t);
-#endif
+				engine->allRegisteredTypes.Erase(cursor);
 
-				engine->objectTypes.RemoveIndex(idx);
 				if( engine->defaultArrayObjectType == t )
 					engine->defaultArrayObjectType = 0;
 
 				if( t->flags & asOBJ_TYPEDEF )
-					engine->registeredTypeDefs.RemoveValue(t);
+					engine->registeredTypeDefs.RemoveValue(t->CastToTypedefType());
 				else if( t->flags & asOBJ_ENUM )
-					engine->registeredEnums.RemoveValue(t);
+					engine->registeredEnums.RemoveValue(t->CastToEnumType());
+				else if (t->flags & asOBJ_TEMPLATE)
+					engine->registeredTemplateTypes.RemoveValue(t->CastToObjectType());
+				else if (t->flags & asOBJ_FUNCDEF)
+				{
+					engine->registeredFuncDefs.RemoveValue(t->CastToFuncdefType());
+					engine->RemoveFuncdef(t->CastToFuncdefType());
+				}
 				else
-					engine->registeredObjTypes.RemoveValue(t);
+					engine->registeredObjTypes.RemoveValue(t->CastToObjectType());
 
-				asDELETE(t, asCObjectType);
+				t->DestroyInternal();
+				t->ReleaseInternal();
+			}
+			else
+			{
+				int idx = engine->templateInstanceTypes.IndexOf(t->CastToObjectType());
+				if( idx >= 0 )
+				{
+					engine->templateInstanceTypes.RemoveIndexUnordered(idx);
+					asCObjectType *ot = t->CastToObjectType();
+					ot->DestroyInternal();
+					ot->ReleaseInternal();
+				}
 			}
 		}
-		objTypes.SetLength(0);
+		types.SetLength(0);
 	}
 
 	// Release other config groups
@@ -178,54 +208,5 @@ void asCConfigGroup::RemoveConfiguration(asCScriptEngine *engine, bool notUsed)
 		referencedConfigGroups[n]->refCount--;
 	referencedConfigGroups.SetLength(0);
 }
-
-#ifdef AS_DEBUG
-void asCConfigGroup::ValidateNoUsage(asCScriptEngine *engine, asCObjectType *type)
-{
-	for( asUINT n = 0; n < engine->scriptFunctions.GetLength(); n++ )
-	{
-		asCScriptFunction *func = engine->scriptFunctions[n];
-		if( func == 0 ) continue;
-
-		// Ignore factory, list factory, and members
-		if( func->name == "_beh_2_" || func->name == "_beh_3_" || func->objectType == type )
-			continue;
-
-		// Ignore function definitions too, as they aren't released until the engine is destroyed
-		if( func->funcType == asFUNC_FUNCDEF )
-			continue;
-
-		if( func->returnType.GetObjectType() == type )
-		{
-			asCString msg;
-			// We can only use the function name here, because the types used by the function may have been deleted already
-			msg.Format(TXT_TYPE_s_IS_STILL_USED_BY_FUNC_s, type->name.AddressOf(), func->GetName());
-			engine->WriteMessage("", 0, 0, asMSGTYPE_ERROR, msg.AddressOf());
-		}
-		else
-		{
-			for( asUINT p = 0; p < func->parameterTypes.GetLength(); p++ )
-			{
-				if( func->parameterTypes[p].GetObjectType() == type )
-				{
-					asCString msg;
-					// We can only use the function name here, because the types used by the function may have been deleted already
-					msg.Format(TXT_TYPE_s_IS_STILL_USED_BY_FUNC_s, type->name.AddressOf(), func->GetName());
-					engine->WriteMessage("", 0, 0, asMSGTYPE_ERROR, msg.AddressOf());
-					break;
-				}
-			}
-		}	
-	}
-
-	// TODO: Check also usage of the type in global variables 
-
-	// TODO: Check also usage of the type in local variables in script functions
-
-	// TODO: Check also usage of the type as members of classes
-
-	// TODO: Check also usage of the type as sub types in other types
-}
-#endif
 
 END_AS_NAMESPACE

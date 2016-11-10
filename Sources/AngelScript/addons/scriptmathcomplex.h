@@ -14,11 +14,6 @@ BEGIN_AS_NAMESPACE
 //
 // Ref: http://mathworld.wolfram.com/ComplexNumber.html
 
-//lm: thanks gcc...
-#ifdef Complex
-#undef Complex
-#endif
-
 struct Complex
 {
 	Complex();

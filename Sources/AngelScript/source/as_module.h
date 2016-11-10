@@ -1,6 +1,6 @@
 /*
    AngelCode Scripting Library
-   Copyright (c) 2003-2013 Andreas Jonsson
+   Copyright (c) 2003-2015 Andreas Jonsson
 
    This software is provided 'as-is', without any express or implied 
    warranty. In no event will the authors be held liable for any 
@@ -58,6 +58,8 @@ class asCCompiler;
 class asCBuilder;
 class asCContext;
 class asCConfigGroup;
+class asCTypedefType;
+class asCFuncdefType;
 struct asSNameSpace;
 
 struct sBindInfo
@@ -84,7 +86,7 @@ struct sObjectTypePair
 //       With this separation it will be possible to compile the library without
 //       the compiler, thus giving a much smaller binary executable.
 
-// TODO: There should be an special compile option that will let the application
+// TODO: There should be a special compile option that will let the application
 //       recompile an already compiled script. The compiler should check if no
 //       destructive changes have been made (changing function signatures, etc)
 //       then it should simply replace the bytecode within the functions without
@@ -130,19 +132,28 @@ public:
 
 	// Type identification
 	virtual asUINT         GetObjectTypeCount() const;
-	virtual asIObjectType *GetObjectTypeByIndex(asUINT index) const;
-	virtual asIObjectType *GetObjectTypeByName(const char *name) const;
+	virtual asITypeInfo   *GetObjectTypeByIndex(asUINT index) const;
+#ifdef AS_DEPRECATED
+	// Deprecated since 2.31.0, 2015-12-06
+	virtual asITypeInfo   *GetObjectTypeByName(const char *name) const;
+	virtual asITypeInfo   *GetObjectTypeByDecl(const char *decl) const;
+#endif
 	virtual int            GetTypeIdByDecl(const char *decl) const;
+	virtual asITypeInfo   *GetTypeInfoByName(const char *name) const;
+	virtual asITypeInfo   *GetTypeInfoByDecl(const char *decl) const;
 
 	// Enums
-	virtual asUINT      GetEnumCount() const;
-	virtual const char *GetEnumByIndex(asUINT index, int *enumTypeId, const char **nameSpace) const;
-	virtual int         GetEnumValueCount(int enumTypeId) const;
-	virtual const char *GetEnumValueByIndex(int enumTypeId, asUINT index, int *outValue) const;
+	virtual asUINT       GetEnumCount() const;
+	virtual asITypeInfo *GetEnumByIndex(asUINT index) const;
+#ifdef AS_DEPRECATED
+	// Deprecated since 2.31.0, 2015-12-06
+	virtual int          GetEnumValueCount(int enumTypeId) const;
+	virtual const char * GetEnumValueByIndex(int enumTypeId, asUINT index, int *outValue) const;
+#endif
 
 	// Typedefs
-	virtual asUINT      GetTypedefCount() const;
-	virtual const char *GetTypedefByIndex(asUINT index, int *typeId, const char **nameSpace) const;
+	virtual asUINT       GetTypedefCount() const;
+	virtual asITypeInfo *GetTypedefByIndex(asUINT index) const;
 
 	// Dynamic binding between modules
 	virtual asUINT      GetImportedFunctionCount() const;
@@ -159,8 +170,8 @@ public:
 	virtual int LoadByteCode(asIBinaryStream *in, bool *wasDebugInfoStripped);
 
 	// User data
-	virtual void *SetUserData(void *data);
-	virtual void *GetUserData() const;
+	virtual void *SetUserData(void *data, asPWORD type);
+	virtual void *GetUserData(asPWORD type) const;
 
 //-----------------------------------------------
 // Internal
@@ -176,6 +187,8 @@ public:
 	friend class asCRestore;
 
 	void InternalReset();
+	bool IsEmpty() const;
+	bool HasExternalReferences(bool shuttingDown);
 
 	int  CallInit(asIScriptContext *ctx);
 	void CallExit();
@@ -183,44 +196,49 @@ public:
 	void JITCompile();
 
 #ifndef AS_NO_COMPILER
-	int  AddScriptFunction(int sectionIdx, int id, const asCString &name, const asCDataType &returnType, const asCArray<asCDataType> &params, const asCArray<asETypeModifiers> &inOutFlags, const asCArray<asCString *> &defaultArgs, bool isInterface, asCObjectType *objType = 0, bool isConstMethod = false, bool isGlobalFunction = false, bool isPrivate = false, bool isFinal = false, bool isOverride = false, bool isShared = false, asSNameSpace *ns = 0);
+	int  AddScriptFunction(int sectionIdx, int declaredAt, int id, const asCString &name, const asCDataType &returnType, const asCArray<asCDataType> &params, const asCArray<asCString> &paramNames, const asCArray<asETypeModifiers> &inOutFlags, const asCArray<asCString *> &defaultArgs, bool isInterface, asCObjectType *objType = 0, bool isConstMethod = false, bool isGlobalFunction = false, bool isPrivate = false, bool isProtected = false, bool isFinal = false, bool isOverride = false, bool isShared = false, asSNameSpace *ns = 0);
 	int  AddScriptFunction(asCScriptFunction *func);
 	int  AddImportedFunction(int id, const asCString &name, const asCDataType &returnType, const asCArray<asCDataType> &params, const asCArray<asETypeModifiers> &inOutFlags, const asCArray<asCString *> &defaultArgs, asSNameSpace *ns, const asCString &moduleName);
-	int  AddFuncDef(const asCString &name, asSNameSpace *ns);
+	int  AddFuncDef(const asCString &name, asSNameSpace *ns, asCObjectType *parent);
 #endif
 
 	int                GetNextImportedFunctionId();
 	asCScriptFunction *GetImportedFunction(int funcId) const;
+	asCTypeInfo       *GetType(const char *type, asSNameSpace *ns);
 	asCObjectType     *GetObjectType(const char *type, asSNameSpace *ns);
 	asCGlobalProperty *AllocateGlobalProperty(const char *name, const asCDataType &dt, asSNameSpace *ns);
 
 	asCString name;
 
-	asCScriptEngine *engine;
-	asCBuilder      *builder;
-	void            *userData;
-	asDWORD          accessMask;
-	asSNameSpace    *defaultNamespace;
+	asCScriptEngine  *engine;
+	asCBuilder       *builder;
+	asCArray<asPWORD> userData;
+	asDWORD           accessMask;
+	asSNameSpace     *defaultNamespace;
 
-	// This array holds all functions, class members, factories, etc that were compiled with the module
-	asCArray<asCScriptFunction *>     scriptFunctions;
-	// This array holds global functions declared in the module
-	asCSymbolTable<asCScriptFunction> globalFunctions;
-	// This array holds imported functions in the module
-	asCArray<sBindInfo *>             bindInformations;
+	// This array holds all functions, class members, factories, etc that were compiled with the module.
+	// These references hold an internal reference to the function object.
+	asCArray<asCScriptFunction *>     scriptFunctions; // increases ref count
+	// This array holds global functions declared in the module. These references are not counted, 
+	// as the same pointer is always present in the scriptFunctions array too.
+	asCSymbolTable<asCScriptFunction> globalFunctions; // doesn't increase ref count
+	// This array holds imported functions in the module.
+	asCArray<sBindInfo *>             bindInformations; // increases ref count
+	// This array holds template instance types created for the module's object types
+	asCArray<asCObjectType*>          templateInstances; // increases ref count
 
 	// This array holds the global variables declared in the script
-	asCSymbolTable<asCGlobalProperty> scriptGlobals;
+	asCSymbolTable<asCGlobalProperty> scriptGlobals; // increases ref count
 	bool                              isGlobalVarInitialized;
 
 	// This array holds class and interface types
-	asCArray<asCObjectType*>       classTypes;
+	asCArray<asCObjectType*>       classTypes; // increases ref count
 	// This array holds enum types
-	asCArray<asCObjectType*>       enumTypes;
+	asCArray<asCEnumType*>         enumTypes; // increases ref count
 	// This array holds typedefs
-	asCArray<asCObjectType*>       typeDefs;
+	asCArray<asCTypedefType*>      typeDefs; // increases ref count
 	// This array holds the funcdefs declared in the module
-	asCArray<asCScriptFunction*>   funcDefs;
+	asCArray<asCFuncdefType*>      funcDefs; // increases ref count
 };
 
 END_AS_NAMESPACE

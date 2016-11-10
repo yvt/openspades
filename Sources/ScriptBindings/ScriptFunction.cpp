@@ -41,9 +41,9 @@ namespace spades {
 					SPRaise("Script function with signature '%s' not found.", decl.c_str());
 				}
 			}else{
-				asIObjectType *typ = eng->GetObjectTypeByName(type.c_str());
+				asITypeInfo *typ = eng->GetTypeInfoByName(type.c_str());
 				if(!typ){
-					typ = module->GetObjectTypeByName(type.c_str());
+					typ = module->GetTypeInfoByName(type.c_str());
 				}
 				if(!typ){
 					SPRaise("Script type '%s' not found.", type.c_str());
