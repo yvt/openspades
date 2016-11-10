@@ -14,7 +14,7 @@ SRC_DIR="`dirname "$0"`"
 PAK_URL=$(grep --max-count=1 --no-filename --context=0 --color=never \
 	"DevPaks" "$SRC_DIR/PakLocation.txt")
 PAK_NAME=$(basename "$PAK_URL")
-OUTPUT_DIR="DevPak"
+OUTPUT_DIR="."
 
 if [ -f "$PAK_NAME" ]; then
 	exit 0
