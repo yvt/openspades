@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # This script updates GPL part of official .paks to match the latest git version.
 
@@ -8,7 +8,7 @@ OUTPUT_DIR="`pwd`"
 SRC_DIR="`dirname "$0"`"
 LOG_FILE="/dev/null"
 
-if [ ! "$MKPAK_LOG_FILE" == "" ]; then
+if [ ! "$MKPAK_LOG_FILE" = "" ]; then
 	LOG_FILE="$MKPAK_LOG_FILE"
 fi
 
