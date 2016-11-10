@@ -206,18 +206,16 @@ if(UNIX AND NOT APPLE)
 
 	# copyright file
 	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Debian/copyright DESTINATION ${OPENSPADES_INSTALL_DOC}/)
-
-	# install devpak
-	install(
-		DIRECTORY ${CMAKE_BINARY_DIR}/Resources/DevPak/
+	
+	# install asset paks (including non-GPL one)
+	install(FILES 
+		${CMAKE_BINARY_DIR}/Resources/pak000-Nonfree.pak
+		${CMAKE_BINARY_DIR}/Resources/pak002-Base.pak
+		${CMAKE_BINARY_DIR}/Resources/pak005-Models.pak
+		${CMAKE_BINARY_DIR}/Resources/pak010-BaseSkin.pak
+		${CMAKE_BINARY_DIR}/Resources/pak050-Locales.pak
+		${CMAKE_BINARY_DIR}/Resources/pak999-References.pak
 		DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
-
-	# install other resources, that not packed to devpak
-	install(DIRECTORY Resources/Gfx     DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
-	install(DIRECTORY Resources/Locales DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
-	install(DIRECTORY Resources/Maps    DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
-	install(DIRECTORY Resources/Scripts DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
-	install(DIRECTORY Resources/Shaders DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
 
 	# install icons
 	INSTALL(

@@ -26,11 +26,6 @@ uniform float shutterTimeScale;
 varying vec2 newCoord;
 varying vec3 oldCoord;
 
-// linearize gamma
-vec3 filter(vec3 col){
-	return col * col;
-}
-
 vec4 getSample(vec2 coord){
 	vec3 color = texture2D(texture, coord).xyz;
 #if !LINEAR_FRAMEBUFFER

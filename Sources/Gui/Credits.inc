@@ -7,14 +7,22 @@ Credits
 
 "yvt" - Most of the code
 "Dany0" - System profiler, ideas, etc.
-"learn_more" - CMake support, server browser, ideas
+"learn_more" - CMake support, server browser, ideas, Win32 build guide
 "iamgreaser" - AoS 0.76 protocol support
 "Ericson2314" - Better installation guide
 "JoJoe_Stinky" - Win32 Icon, Killfeed icons
 "theunknownxy" - Fixes for the Linux support
-"noway421" - Russian translation, various testing, ideas.
+"noway421" - Russian translation, various testing, ideas
+"pandaro" - Improvements to the Minimap
 "kmsi" - Korean translation
 "tungdil" - German translation
+"feikname" - Brazilian portuguese translation, improvements
+"VelocityRa" - Repository maintenance/organization, VS2015 support
+"Mailaender" - FreeDesktop definitions fixes
+"Chameleonhider" - Configure-able player name drawing
+"CenturionFox" - Server Disconnect Screen
+
+And many others which weren't mentioned here.
 
 
 Portions of program is based on following software
