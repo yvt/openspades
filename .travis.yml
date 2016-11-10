@@ -2,7 +2,7 @@ language: cpp
 
 compiler:
   - gcc-4.8
-  - clang
+#  - clang
 
 cache: apt
 
@@ -19,11 +19,11 @@ before_script:
   # Travis defaults to plain gcc if unknown
   # http://github.com/travis-ci/travis-ci/issues/979
   - if [ "$CC" == "gcc" ]; then export CC=gcc-4.8; fi
-  - if [ "$CXX" == "g++" ]; then export CXX=g++-4.8; fi 
+  - if [ "$CXX" == "g++" ]; then export CXX=g++-4.8; fi
 
   - mkdir openspades.mk
   - cd openspades.mk
 
-script: 
+script:
   - cmake -DOPENSPADES_RESOURCES=off ..
   - make
