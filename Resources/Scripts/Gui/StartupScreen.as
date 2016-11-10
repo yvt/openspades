@@ -1163,16 +1163,18 @@ namespace spades {
 					StartupScreenComplexConfig cplx;
 
 					cplx.AddEditor(StartupScreenConfigSelectItemEditor(ui,
-						StartupScreenConfig(ui, "r_water"), "0|1|2",
+						StartupScreenConfig(ui, "r_water"), "0|1|2|3",
 						_Tr("StartupScreen",
 						"Water Shader|"
 						"None:Water is rendered in the same way that normal blocks are done.|"
 						"Level 1:Refraction and the reflected Sun are simulated.|"
-						"Level 2:Waving water is simulated as well as reflection and refraction.")));
+						"Level 2:Waving water is simulated as well as reflection and refraction.|"
+						"Level 3:Reflections and refractions are rendered at the highest quality using screen-space techniques.")));
 
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "0"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Med"), "1"));
 					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "2"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Ultra"), "3"));
 
 					cfg.AddRow(StartupScreenConfigComplexItemEditor(ui, cplx,
 						_Tr("StartupScreen", "Shader Effects"), _Tr("StartupScreen", "Special effects.")));

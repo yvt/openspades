@@ -216,7 +216,7 @@ namespace spades {
 			renderer->Flip();
 		}
 		
-		void Client::DrawDisconnectScreen() {
+        void Client::DrawDisconnectScreen() { return;
 			Handle<client::IImage> img;
 			Vector2 scrSize = { renderer->ScreenWidth(),
 				renderer->ScreenHeight() };

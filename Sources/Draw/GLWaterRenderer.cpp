@@ -179,9 +179,9 @@ namespace spades {
 		
 		static SinCosTable sinCosTable;
 		
+        template <int SizeBits>
 		class GLWaterRenderer::FFTWaveTank: public IWaveTank {
 			enum {
-				SizeBits = 7,
 				Size = 1 << SizeBits,
 				SizeHalf = Size / 2
 			};
@@ -227,12 +227,12 @@ namespace spades {
 							
 							float scal = dist / (float)SizeHalf;
 							scal *= scal;
-							mag *= expf(-scal * 4.f);
+							mag *= expf(-scal * 3.f);
 							
 							
 							cell.magnitude = mag;
 							cell.phase = rand() | ((uint32_t)rand() << 16);
-							cell.phasePerSecond = dist * 1.e+9f;
+							cell.phasePerSecond = dist * 1.e+9f * 128 / Size;
 						}
 						
 						cell.m00 = GetRandom() - GetRandom();
@@ -591,7 +591,11 @@ namespace spades {
 			// create wave tank simlation
 			size_t numLayers = ((int)r_water >= 2) ? 3 : 1;
 			for(size_t i = 0; i < numLayers; i++){
-				waveTanks.push_back(new FFTWaveTank());//new StandardWaveTank(256);
+                if ((int)r_water >= 3) {
+                    waveTanks.push_back(new FFTWaveTank<8>());
+                } else {
+                    waveTanks.push_back(new FFTWaveTank<7>());
+                }
 			
 				waveTextures.push_back(device->GenTexture());
 				device->BindTexture(IGLDevice::Texture2D, waveTextures[i]);
@@ -742,8 +746,8 @@ namespace spades {
 				
 				static GLProgramUniform projectionViewModelMatrix("projectionViewModelMatrix");
                 static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
-				static GLProgramUniform modelMatrix("modelMatrix");
-				static GLProgramUniform viewModelMatrix("viewModelMatrix");
+                static GLProgramUniform modelMatrix("modelMatrix");
+                static GLProgramUniform viewModelMatrix("viewModelMatrix");
 				static GLProgramUniform viewMatrix("viewMatrix");
 				static GLProgramUniform fogDistance("fogDistance");
 				static GLProgramUniform fogColor("fogColor");
@@ -799,8 +803,9 @@ namespace spades {
 				static GLProgramUniform waveTextureUnif("waveTexture");
 				static GLProgramUniform waveTextureUnif1("waveTexture1");
 				static GLProgramUniform waveTextureUnif2("waveTexture2");
-				static GLProgramUniform waveTextureUnif3("waveTexture3");
-				static GLProgramUniform mirrorTexture("mirrorTexture");
+                static GLProgramUniform waveTextureUnif3("waveTexture3");
+                static GLProgramUniform mirrorTexture("mirrorTexture");
+                static GLProgramUniform mirrorDepthTexture("mirrorDepthTexture");
 				
 				screenTexture(prg);
 				depthTexture(prg);
@@ -810,6 +815,7 @@ namespace spades {
 				waveTextureUnif2(prg);
 				waveTextureUnif3(prg);
 				mirrorTexture(prg);
+                mirrorDepthTexture(prg);
 				
 				device->ActiveTexture(0);
 				device->BindTexture(IGLDevice::Texture2D, colorBuffer.GetTexture());
@@ -843,23 +849,33 @@ namespace spades {
 					device->BindTexture(IGLDevice::Texture2D, waveTextures[0]);
 					waveTextureUnif1.SetValue(3);
 					
+                    // FIXME: out of texture stages; only 8 texture stages are available
+                    //        (with macOS's OpenGL compatibility profile!)
 					device->ActiveTexture(4);
 					device->BindTexture(IGLDevice::Texture2D, waveTextures[1]);
-					waveTextureUnif2.SetValue(4);
+					// waveTextureUnif2.SetValue(4);
+                    waveTextureUnif2.SetValue(3);
+
 					
 					device->ActiveTexture(5);
 					device->BindTexture(IGLDevice::Texture2D, waveTextures[2]);
-					waveTextureUnif3.SetValue(5);
-					
-					// mirror
-					device->ActiveTexture(6);
-					device->BindTexture(IGLDevice::Texture2D, renderer->GetFramebufferManager()->GetMirrorTexture());
-					if((float)r_maxAnisotropy > 1.1f) {
-						device->TexParamater(IGLDevice::Texture2D,
-											 IGLDevice::TextureMaxAnisotropy,
-											 (float)r_maxAnisotropy);
-					}
-					mirrorTexture.SetValue(6);
+                    waveTextureUnif3.SetValue(5);
+                    
+                    // mirror
+                    device->ActiveTexture(6);
+                    device->BindTexture(IGLDevice::Texture2D, renderer->GetFramebufferManager()->GetMirrorTexture());
+                    if((float)r_maxAnisotropy > 1.1f) {
+                        device->TexParamater(IGLDevice::Texture2D,
+                                             IGLDevice::TextureMaxAnisotropy,
+                                             (float)r_maxAnisotropy);
+                    }
+                    mirrorTexture.SetValue(6);
+                    
+                    if ((int)r_water >= 3) {
+                        device->ActiveTexture(4);
+                        device->BindTexture(IGLDevice::Texture2D, renderer->GetFramebufferManager()->GetMirrorDepthTexture());
+                        mirrorDepthTexture.SetValue(4);
+                    }
 					
 					shadowShader(renderer, prg, 7);
 				}else{

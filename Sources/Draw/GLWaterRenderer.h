@@ -35,6 +35,7 @@ namespace spades {
 		class GLWaterRenderer{
 			class IWaveTank;
 			class StandardWaveTank;
+            template <int SizeBits>
 			class FFTWaveTank;
 			
 			GLRenderer *renderer;

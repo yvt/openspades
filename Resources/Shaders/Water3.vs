@@ -44,24 +44,22 @@ vec4 FogDensity(float poweredLength);
 
 vec3 DisplaceWater(vec2 worldPos){
 
-	vec4 waveCoord = worldPos.xyxy * vec4(vec2(0.08), vec2(0.15704))
+	vec4 waveCoord = worldPos.xyxy * vec4(vec2(0.04), vec2(0.08704))
 	+ vec4(0., 0., 0.754, 0.1315);
 
-	vec2 waveCoord2 = worldPos.xy * 0.02344 + vec2(.154, .7315);
+	vec2 waveCoord2 = worldPos.xy * 0.01344 + vec2(.154, .7315);
 
 	float wave = texture2DLod(waveTexture1, waveCoord.xy, 0.).w;
-	float disp = mix(-0.1, 0.1, wave) * 0.4;
+	float disp = mix(-0.1, 0.1, wave) * 1.8;
 
 	float wave2 = texture2DLod(waveTexture2, waveCoord.zw, 0.).w;
-	disp += mix(-0.1, 0.1, wave2) * 0.2;
+	disp += mix(-0.1, 0.1, wave2) * 1.2;
 
 	float wave3 = texture2DLod(waveTexture3, waveCoord2.xy, 0.).w;
 	disp += mix(-0.1, 0.1, wave3) * 2.5;
 
-	float waveSmoothed1 = texture2DLod(waveTexture3, waveCoord2.xy, 4.).w;
-	float waveSmoothed2 = texture2DLod(waveTexture3, waveCoord2.xy + vec2(1.0 / 16.0, 0.0), 3.).w;
-	float waveSmoothed3 = texture2DLod(waveTexture3, waveCoord2.xy + vec2(0.0, 1.0 / 16.0), 3.).w;
-	vec2 dispHorz = vec2(waveSmoothed2 - waveSmoothed1, waveSmoothed3 - waveSmoothed1) * -16.;
+	vec2 waveDerivatives = texture2DLod(waveTexture3, waveCoord2.xy, 3.).xy;
+	vec2 dispHorz = (waveDerivatives - 0.5) * -2.;
 
 	return vec3(dispHorz, disp * 4.);
 }

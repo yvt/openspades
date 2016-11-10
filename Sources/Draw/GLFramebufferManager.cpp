@@ -366,25 +366,58 @@ namespace spades {
 								dev->ScreenHeight(),
 								0,
 								IGLDevice::RGBA,
-								IGLDevice::UnsignedByte, NULL);
-				SPLog("Color Buffer Allocated");
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureMagFilter,
-								  IGLDevice::Linear);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureMinFilter,
-								  IGLDevice::Linear);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureWrapS,
-								  IGLDevice::ClampToEdge);
-				dev->TexParamater(IGLDevice::Texture2D,
-								  IGLDevice::TextureWrapT,
-								  IGLDevice::ClampToEdge);
-				
-				dev->FramebufferTexture2D(IGLDevice::Framebuffer,
-										  IGLDevice::ColorAttachment0,
-										  IGLDevice::Texture2D,
-										  mirrorColorTexture, 0);
+                                IGLDevice::UnsignedByte, NULL);
+                
+                SPLog("Color Buffer Allocated");
+                dev->TexParamater(IGLDevice::Texture2D,
+                                  IGLDevice::TextureMagFilter,
+                                  IGLDevice::Linear);
+                dev->TexParamater(IGLDevice::Texture2D,
+                                  IGLDevice::TextureMinFilter,
+                                  IGLDevice::Linear);
+                dev->TexParamater(IGLDevice::Texture2D,
+                                  IGLDevice::TextureWrapS,
+                                  IGLDevice::ClampToEdge);
+                dev->TexParamater(IGLDevice::Texture2D,
+                                  IGLDevice::TextureWrapT,
+                                  IGLDevice::ClampToEdge);
+                
+                dev->FramebufferTexture2D(IGLDevice::Framebuffer,
+                                          IGLDevice::ColorAttachment0,
+                                          IGLDevice::Texture2D,
+                                          mirrorColorTexture, 0);
+                
+                SPLog("Creating Mirror depth texture");
+                mirrorDepthTexture = dev->GenTexture();
+                dev->BindTexture(IGLDevice::Texture2D,
+                                 mirrorDepthTexture);
+                dev->TexImage2D(IGLDevice::Texture2D,
+                                0,
+                                IGLDevice::DepthComponent24,
+                                dev->ScreenWidth(),
+                                dev->ScreenHeight(),
+                                0,
+                                IGLDevice::DepthComponent,
+                                IGLDevice::UnsignedInt, NULL);
+                
+                SPLog("Depth Buffer Allocated");
+                dev->TexParamater(IGLDevice::Texture2D,
+                                  IGLDevice::TextureMagFilter,
+                                  IGLDevice::Nearest);
+                dev->TexParamater(IGLDevice::Texture2D,
+                                  IGLDevice::TextureMinFilter,
+                                  IGLDevice::Nearest);
+                dev->TexParamater(IGLDevice::Texture2D,
+                                  IGLDevice::TextureWrapS,
+                                  IGLDevice::ClampToEdge);
+                dev->TexParamater(IGLDevice::Texture2D,
+                                  IGLDevice::TextureWrapT,
+                                  IGLDevice::ClampToEdge);
+                
+                dev->FramebufferTexture2D(IGLDevice::Framebuffer,
+                                          IGLDevice::DepthAttachment,
+                                          IGLDevice::Texture2D,
+                                          mirrorDepthTexture, 0);
 				
 				IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
 				if(status != IGLDevice::FramebufferComplete) {
@@ -543,6 +576,9 @@ namespace spades {
 				multisampledFramebuffer :
 				renderFramebuffer;
 			}
+            
+            bool needsDepth = (int)r_water >= 3;
+            
 			if(useMultisample){
 				// downsample
 				if(r_blitFramebuffer){
@@ -552,7 +588,7 @@ namespace spades {
 											mirrorFramebuffer);
 					device->BlitFramebuffer(0, 0, w, h,
 											0, 0, w, h,
-											IGLDevice::ColorBufferBit,
+                                            IGLDevice::ColorBufferBit | (needsDepth ? IGLDevice::DepthBufferBit : 0),
 											IGLDevice::Nearest);
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
 											0);
@@ -564,7 +600,13 @@ namespace spades {
 					device->BindTexture(IGLDevice::Texture2D, mirrorColorTexture);
 					device->CopyTexSubImage2D(IGLDevice::Texture2D,
 											  0, 0, 0, 0, 0,
-											  w, h);
+                                              w, h);
+                    if (needsDepth) {
+                        device->BindTexture(IGLDevice::Texture2D, mirrorDepthTexture);
+                        device->CopyTexSubImage2D(IGLDevice::Texture2D,
+                                                  0, 0, 0, 0, 0,
+                                                  w, h);
+                    }
 				}
 			}else{
 				// copy
@@ -575,7 +617,7 @@ namespace spades {
 											mirrorFramebuffer);
 					device->BlitFramebuffer(0, 0, w, h,
 											0, 0, w, h,
-											IGLDevice::ColorBufferBit,
+                                            IGLDevice::ColorBufferBit | (needsDepth ? IGLDevice::DepthBufferBit : 0),
 											IGLDevice::Nearest);
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
 											0);
@@ -583,11 +625,17 @@ namespace spades {
 											0);
 				}else{
 					device->BindFramebuffer(IGLDevice::Framebuffer,
-											fb);
-					device->BindTexture(IGLDevice::Texture2D, mirrorColorTexture);
-					device->CopyTexSubImage2D(IGLDevice::Texture2D,
-											  0, 0, 0, 0, 0,
-											  w, h);
+                                            fb);
+                    device->BindTexture(IGLDevice::Texture2D, mirrorColorTexture);
+                    device->CopyTexSubImage2D(IGLDevice::Texture2D,
+                                              0, 0, 0, 0, 0,
+                                              w, h);
+                    if (needsDepth) {
+                        device->BindTexture(IGLDevice::Texture2D, mirrorDepthTexture);
+                        device->CopyTexSubImage2D(IGLDevice::Texture2D,
+                                                  0, 0, 0, 0, 0,
+                                                  w, h);
+                    }
 				}
 			}
             

@@ -79,8 +79,9 @@ namespace spades {
 			
 			IGLDevice::Enum fbInternalFormat;
 			
-			IGLDevice::UInteger mirrorFramebuffer;
-			IGLDevice::UInteger mirrorColorTexture;
+            IGLDevice::UInteger mirrorFramebuffer;
+            IGLDevice::UInteger mirrorColorTexture;
+            IGLDevice::UInteger mirrorDepthTexture;
 			
 			std::vector<Buffer> buffers;
 			
@@ -104,10 +105,13 @@ namespace spades {
 			BufferHandle CreateBufferHandle(int w, int h, IGLDevice::Enum internalFormat);
 			
 			void CopyToMirrorTexture(IGLDevice::UInteger fb = 0);
-			void ClearMirrorTexture(Vector3);
-			IGLDevice::UInteger GetMirrorTexture(){
-				return mirrorColorTexture;
-			}
+            void ClearMirrorTexture(Vector3);
+            IGLDevice::UInteger GetMirrorTexture(){
+                return mirrorColorTexture;
+            }
+            IGLDevice::UInteger GetMirrorDepthTexture(){
+                return mirrorDepthTexture;
+            }
 		};
 		
 		
