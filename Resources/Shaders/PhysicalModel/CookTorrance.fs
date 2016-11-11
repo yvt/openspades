@@ -44,16 +44,15 @@ float CockTorrance(vec3 eyeVec, vec3 lightVec, vec3 normal) {
 
 	// distribution term
 	float distribution = dot(halfVec, normal);
-	float m = .6; // roughness
+	float m = .3; // roughness
 	distribution = GGXDistribution(m, distribution);
 
 	// fresnel term
 	// FIXME: use split-sum approximation from UE4
 	float fresnel2 = 1. - dot(halfVec, eyeVec);
 	float fresnel = fresnel2 * fresnel2;
-	fresnel *= fresnel * fresnel2;
 
-	fresnel = .03 + fresnel * 0.5;
+	fresnel = .03 + fresnel * 0.1;
 
 	// visibility term
 	float a = m * 0.7978, ia = 1. - a;

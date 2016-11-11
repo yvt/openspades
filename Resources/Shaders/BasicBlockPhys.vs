@@ -49,6 +49,8 @@ varying vec3 fogDensity;
 varying vec3 viewSpaceCoord;
 varying vec3 viewSpaceNormal;
 
+varying vec3 reflectionDir;
+
 void PrepareForShadowForMap(vec3 vertexCoord, vec3 fixedVertexCoord, vec3 normal);
 vec4 FogDensity(float poweredLength);
 
@@ -83,6 +85,9 @@ void main() {
 	vec3 normal = normalAttribute;
 	vec3 shadowVertexPos = vertexPos.xyz;
 	PrepareForShadowForMap(shadowVertexPos, fixedPosition, normal);
+
+	// reflection vector (used for specular lighting)
+	reflectionDir = reflect(vertexPos.xyz - viewOriginVector, normal);
 
 	// used for diffuse lighting
 	viewSpaceCoord = viewPos.xyz;
