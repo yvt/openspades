@@ -933,16 +933,21 @@ namespace spades {
 			auto it = langs.find(s);
 			if(it == langs.end()) {
 				std::shared_ptr<CatalogOfLanguage> c;
-				std::string path = "Locales/" + s + "/" + domainName + ".po";
-				SPLog("Fetching catalog file (locale='%s', domain='%s')",
-					  s.c_str(), domainName.c_str());
-				try {
-					c.reset(new CatalogOfLanguage(FileManager::ReadAllBytes(path.c_str())));
-					SPLog("Catalog file '%s' loaded", path.c_str());
-				}catch(const std::exception& ex){
-					// c will be left unset
-					SPLog("Catalog file '%s' not loaded: %s", path.c_str(), ex.what());
-				}
+                if (!s.empty()) {
+                    std::string path = "Locales/" + s + "/" + domainName + ".po";
+                    if (FileManager::FileExists(path.c_str())) {
+                        try {
+                            c.reset(new CatalogOfLanguage(FileManager::ReadAllBytes(path.c_str())));
+                            SPLog("Catalog file '%s' loaded", path.c_str());
+                        }catch(const std::exception& ex){
+                            // c will be left unset
+                            SPLog("Failed to load the catalog file '%s': %s", path.c_str(), ex.what());
+                        }
+                    } else {
+                        SPLog("Catalog file '%s' not found (locale='%s', domain='%s')",
+                              path.c_str(), s.c_str(), domainName.c_str());
+                    }
+                }
 				langs[s] = c;
 				return c;
 			}
@@ -964,6 +969,8 @@ namespace spades {
 		
 		std::string locale = core_locale;
 		if(locale == lastLocale) return;
+        
+        // Locale was changed; reload catalogs
 		lastLocale = locale;
 		langCatalogCache.clear();
 		
@@ -975,8 +982,17 @@ namespace spades {
 				locale = locale.substr(0, p);
 		}
 		
-		for(auto& c: locale)
+        // Normalize
+        for(auto& c: locale) {
 			c = tolower(c);
+            if (c == '-') {
+                c = '_';
+            }
+        }
+        
+        if (locale == "en_us") {
+            locale.clear();
+        }
 		
 		currentLocaleRegion = locale;
 		
@@ -998,17 +1014,24 @@ namespace spades {
 		return it->second;
 	}
 	
-	static std::shared_ptr<CatalogOfLanguage> GetCatalogOfLanguage(const std::string& s) {
+	static std::shared_ptr<CatalogOfLanguage> GetCatalogOfLanguage(const std::string& domainName) {
 		SPADES_MARK_FUNCTION();
 		
-		auto it = langCatalogCache.find(s);
+		auto it = langCatalogCache.find(domainName);
 		if(it == langCatalogCache.end()) {
-			auto domain = GetDomain(s);
+			auto domain = GetDomain(domainName);
 			auto cat = (*domain)[currentLocaleRegion];
-			if(cat == nullptr) {
+			if (cat == nullptr) {
 				cat = (*domain)[currentLocale];
 			}
-			langCatalogCache[s] = cat;
+            if (cat == nullptr) {
+                if (!currentLocaleRegion.empty()) {
+                    SPLog("Catalog file for the locale '%s' was not found. (domain='%s')", domainName.c_str());
+                }
+                SPLog("Using the default locale. (domain='%s')",
+                      domainName.c_str());
+            }
+			langCatalogCache[domainName] = cat;
 			return cat;
 		}
 		return it->second;
