@@ -19,6 +19,7 @@
  */
 
 #include "Flags.as"
+#include "CreateProfileScreen.as"
 
 namespace spades {
 
@@ -37,6 +38,9 @@ namespace spades {
 
 		private float time = -1.f;
 
+        private ConfigItem cg_playerName("cg_playerName");
+        private ConfigItem cg_playerNameIsSet("cg_playerNameIsSet", "0");
+
 		MainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, Font@ font, MainScreenHelper@ helper) {
 			@this.renderer = renderer;
 			@this.audioDevice = audioDevice;
@@ -51,6 +55,16 @@ namespace spades {
 			@mainMenu = MainScreenMainMenu(this);
 			mainMenu.Bounds = manager.RootElement.Bounds;
 			manager.RootElement.AddChild(mainMenu);
+
+			// Let the new player choose their IGN
+			if (cg_playerName.StringValue != "" &&
+				cg_playerName.StringValue != "Deuce") {
+				cg_playerNameIsSet.IntValue = 1;
+			}
+			if (cg_playerNameIsSet.IntValue == 0) {
+				CreateProfileScreen al(mainMenu);
+				al.Run();
+			}
 
 		}
 
