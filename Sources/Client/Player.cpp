@@ -542,6 +542,11 @@ namespace spades {
 			
 			return dist < 8.f;
 		}
+        
+        static float GetHorizontalLength(const Vector3 &v)
+        {
+            return std::sqrt(v.x * v.x + v.y * v.y);
+        }
 		
 		enum class HitBodyPart {
 			None,
@@ -608,7 +613,7 @@ namespace spades {
 					Vector3 hitPos;
 					
 					if(hb.head.RayCast(muzzle, dir, &hitPos)) {
-						float dist = (hitPos - muzzle).GetLength();
+						float dist = GetHorizontalLength(hitPos - muzzle);
 						if(hitPlayer == NULL ||
 						   dist < hitPlayerDistance){
 							hitPlayer = other;
@@ -617,7 +622,7 @@ namespace spades {
 						}
 					}
 					if(hb.torso.RayCast(muzzle, dir, &hitPos)) {
-						float dist = (hitPos - muzzle).GetLength();
+                        float dist = GetHorizontalLength(hitPos - muzzle);
 						if(hitPlayer == NULL ||
 						   dist < hitPlayerDistance){
 							hitPlayer = other;
@@ -627,7 +632,7 @@ namespace spades {
 					}
 					for(int j = 0; j < 3 ;j++){
 						if(hb.limbs[j].RayCast(muzzle, dir, &hitPos)) {
-							float dist = (hitPos - muzzle).GetLength();
+							float dist = GetHorizontalLength(hitPos - muzzle);
 							if(hitPlayer == NULL ||
 							   dist < hitPlayerDistance){
 								hitPlayer = other;
@@ -650,8 +655,8 @@ namespace spades {
 					
 				}
 				
-				if(mapResult.hit && (mapResult.hitPos - muzzle).GetLength() < 128.f &&
-				   (hitPlayer == NULL || (mapResult.hitPos - muzzle).GetLength() < hitPlayerDistance)){
+				if(mapResult.hit && GetHorizontalLength(mapResult.hitPos - muzzle) < 128.f &&
+				   (hitPlayer == NULL || GetHorizontalLength(mapResult.hitPos - muzzle) < hitPlayerDistance)){
 					IntVector3 outBlockCoord = mapResult.hitBlock;
 					// TODO: set correct ray distance
 					// FIXME: why ray casting twice?
@@ -679,7 +684,7 @@ namespace spades {
 							SPAssert(map->IsSolid(x, y, z));
 							
 							Vector3 blockF = {x + .5f, y + .5f, z + .5f};
-							float distance = (blockF - muzzle).GetLength();
+							float distance = GetHorizontalLength(blockF - muzzle);
 							
 							uint32_t color = map->GetColor(x, y, z);
 							int health = color >> 24;
