@@ -21,91 +21,95 @@ msgstr ""
 #: ../../../Sources/Gui/Main.cpp:368 ../../../Sources/Gui/Main.cpp:355
 #: ../../../Sources/Gui/Main.cpp:370 ../../../Sources/Gui/Main.cpp:466
 #: ../../../Sources/Gui/Main.cpp:529 ../../../Sources/Gui/Main.cpp:582
+#: ../../../Sources/Gui/Main.cpp:608
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:340
+#: ../../Scripts/Gui/MainScreen.as:340 ../../Scripts/Gui/MainScreen.as:354
 msgctxt "MainScreen"
 msgid "Connect"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:348
+#: ../../Scripts/Gui/MainScreen.as:348 ../../Scripts/Gui/MainScreen.as:362
 msgctxt "MainScreen"
 msgid "Quick Connect"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:357 ../../Scripts/Gui/MainScreen.as:411
+#: ../../Scripts/Gui/MainScreen.as:371 ../../Scripts/Gui/MainScreen.as:425
 msgctxt "MainScreen"
 msgid "0.75"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:367 ../../Scripts/Gui/MainScreen.as:420
+#: ../../Scripts/Gui/MainScreen.as:381 ../../Scripts/Gui/MainScreen.as:434
 msgctxt "MainScreen"
 msgid "0.76"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:375
+#: ../../Scripts/Gui/MainScreen.as:375 ../../Scripts/Gui/MainScreen.as:389
 msgctxt "MainScreen"
 msgid "Quit"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:382
+#: ../../Scripts/Gui/MainScreen.as:382 ../../Scripts/Gui/MainScreen.as:396
 msgctxt "MainScreen"
 msgid "Credits"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:389
+#: ../../Scripts/Gui/MainScreen.as:389 ../../Scripts/Gui/MainScreen.as:403
 msgctxt "MainScreen"
 msgid "Setup"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:402 ../../Scripts/Gui/MainScreen.as:446
+#: ../../Scripts/Gui/MainScreen.as:416 ../../Scripts/Gui/MainScreen.as:460
 msgctxt "MainScreen"
 msgid "Filter"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:429
+#: ../../Scripts/Gui/MainScreen.as:429 ../../Scripts/Gui/MainScreen.as:443
 msgctxt "MainScreen"
 msgid "Empty"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:438
+#: ../../Scripts/Gui/MainScreen.as:438 ../../Scripts/Gui/MainScreen.as:452
 msgctxt "MainScreen"
 msgid "Not Full"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:458
+#: ../../Scripts/Gui/MainScreen.as:458 ../../Scripts/Gui/MainScreen.as:472
 msgctxt "MainScreen"
 msgid "Server Name"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:465
+#: ../../Scripts/Gui/MainScreen.as:465 ../../Scripts/Gui/MainScreen.as:479
 msgctxt "MainScreen"
 msgid "Players"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:472
+#: ../../Scripts/Gui/MainScreen.as:472 ../../Scripts/Gui/MainScreen.as:486
 msgctxt "MainScreen"
 msgid "Map Name"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:479
+#: ../../Scripts/Gui/MainScreen.as:479 ../../Scripts/Gui/MainScreen.as:493
 msgctxt "MainScreen"
 msgid "Game Mode"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:486
+#: ../../Scripts/Gui/MainScreen.as:486 ../../Scripts/Gui/MainScreen.as:500
 msgctxt "MainScreen"
 msgid "Ver."
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:493
+#: ../../Scripts/Gui/MainScreen.as:493 ../../Scripts/Gui/MainScreen.as:507
 msgctxt "MainScreen"
 msgid "Loc."
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:737
+#: ../../Scripts/Gui/MainScreen.as:737 ../../Scripts/Gui/MainScreen.as:751
 msgctxt "MainScreen"
 msgid ""
 "You were disconnected from the server because of the following reason:\n"
@@ -113,12 +117,12 @@ msgid ""
 "{0}"
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:757
+#: ../../Scripts/Gui/MainScreen.as:757 ../../Scripts/Gui/MainScreen.as:771
 msgctxt "MainScreen"
 msgid "Loading..."
 msgstr ""
 
-#: ../../Scripts/Gui/MainScreen.as:775
+#: ../../Scripts/Gui/MainScreen.as:775 ../../Scripts/Gui/MainScreen.as:789
 msgctxt "MainScreen"
 msgid "Failed to fetch the server list."
 msgstr ""
@@ -699,11 +703,13 @@ msgid "Spawn"
 msgstr ""
 
 #: ../../../Sources/Client/LimboView.cpp:184
+#: ../../../Sources/Client/LimboView.cpp:183
 msgctxt "Client"
 msgid "Select Team:"
 msgstr ""
 
 #: ../../../Sources/Client/LimboView.cpp:191
+#: ../../../Sources/Client/LimboView.cpp:190
 msgctxt "Client"
 msgid "Select Weapon:"
 msgstr ""
@@ -797,6 +803,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1404
 #: ../../Scripts/Gui/StartupScreen.as:1405
 #: ../../Scripts/Gui/StartupScreen.as:1415
+#: ../../Scripts/Gui/StartupScreen.as:1416
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr ""
@@ -1018,18 +1025,21 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1145
 #: ../../Scripts/Gui/StartupScreen.as:1155
+#: ../../Scripts/Gui/StartupScreen.as:1177
 msgctxt "StartupScreen"
 msgid "Ultra"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1148
 #: ../../Scripts/Gui/StartupScreen.as:1158
+#: ../../Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1149
 #: ../../Scripts/Gui/StartupScreen.as:1159
+#: ../../Scripts/Gui/StartupScreen.as:1158
 msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
@@ -1047,18 +1057,21 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1169
 #: ../../Scripts/Gui/StartupScreen.as:1179
+#: ../../Scripts/Gui/StartupScreen.as:1180
 msgctxt "StartupScreen"
 msgid "Shader Effects"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1169
 #: ../../Scripts/Gui/StartupScreen.as:1179
+#: ../../Scripts/Gui/StartupScreen.as:1180
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1186
 #: ../../Scripts/Gui/StartupScreen.as:1196
+#: ../../Scripts/Gui/StartupScreen.as:1197
 msgctxt "StartupScreen"
 msgid ""
 "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
@@ -1068,6 +1081,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1398
 #: ../../Scripts/Gui/StartupScreen.as:1399
 #: ../../Scripts/Gui/StartupScreen.as:1409
+#: ../../Scripts/Gui/StartupScreen.as:1410
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr ""
@@ -1075,6 +1089,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1407
 #: ../../Scripts/Gui/StartupScreen.as:1408
 #: ../../Scripts/Gui/StartupScreen.as:1418
+#: ../../Scripts/Gui/StartupScreen.as:1419
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr ""
@@ -1082,6 +1097,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1411
 #: ../../Scripts/Gui/StartupScreen.as:1412
 #: ../../Scripts/Gui/StartupScreen.as:1422
+#: ../../Scripts/Gui/StartupScreen.as:1423
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
@@ -1091,6 +1107,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1420
 #: ../../Scripts/Gui/StartupScreen.as:1421
 #: ../../Scripts/Gui/StartupScreen.as:1431
+#: ../../Scripts/Gui/StartupScreen.as:1432
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr ""
@@ -1098,6 +1115,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1424
 #: ../../Scripts/Gui/StartupScreen.as:1425
 #: ../../Scripts/Gui/StartupScreen.as:1435
+#: ../../Scripts/Gui/StartupScreen.as:1436
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -1111,6 +1129,8 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1474
 #: ../../Scripts/Gui/StartupScreen.as:1460
 #: ../../Scripts/Gui/StartupScreen.as:1484
+#: ../../Scripts/Gui/StartupScreen.as:1461
+#: ../../Scripts/Gui/StartupScreen.as:1485
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr ""
@@ -1118,6 +1138,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1439
 #: ../../Scripts/Gui/StartupScreen.as:1451
 #: ../../Scripts/Gui/StartupScreen.as:1461
+#: ../../Scripts/Gui/StartupScreen.as:1462
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
@@ -1128,6 +1149,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1446
 #: ../../Scripts/Gui/StartupScreen.as:1458
 #: ../../Scripts/Gui/StartupScreen.as:1468
+#: ../../Scripts/Gui/StartupScreen.as:1469
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr ""
@@ -1135,6 +1157,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1447
 #: ../../Scripts/Gui/StartupScreen.as:1459
 #: ../../Scripts/Gui/StartupScreen.as:1469
+#: ../../Scripts/Gui/StartupScreen.as:1470
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1144,6 +1167,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1463
 #: ../../Scripts/Gui/StartupScreen.as:1475
 #: ../../Scripts/Gui/StartupScreen.as:1485
+#: ../../Scripts/Gui/StartupScreen.as:1486
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1153,6 +1177,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1533
 #: ../../Scripts/Gui/StartupScreen.as:1551
 #: ../../Scripts/Gui/StartupScreen.as:1561
+#: ../../Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr ""
@@ -1160,6 +1185,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1569
 #: ../../Scripts/Gui/StartupScreen.as:1587
 #: ../../Scripts/Gui/StartupScreen.as:1597
+#: ../../Scripts/Gui/StartupScreen.as:1598
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr ""
@@ -1167,6 +1193,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1578
 #: ../../Scripts/Gui/StartupScreen.as:1596
 #: ../../Scripts/Gui/StartupScreen.as:1606
+#: ../../Scripts/Gui/StartupScreen.as:1607
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr ""
@@ -1204,6 +1231,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:597
 #: ../../../Sources/Client/Client.cpp:592
 #: ../../../Sources/Client/Client.cpp:612
+#: ../../../Sources/Client/Client.cpp:611
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr ""
@@ -1222,6 +1250,8 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:602
 #: ../../../Sources/Client/Client.cpp:616
 #: ../../../Sources/Client/Client.cpp:622
+#: ../../../Sources/Client/Client.cpp:615
+#: ../../../Sources/Client/Client.cpp:621
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr ""
@@ -1268,6 +1298,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:641
 #: ../../../Sources/Client/Client.cpp:636
 #: ../../../Sources/Client/Client.cpp:656
+#: ../../../Sources/Client/Client.cpp:655
 msgctxt "Client"
 msgid "[Global] "
 msgstr ""
@@ -1417,7 +1448,7 @@ msgstr ""
 #: ../../../Sources/Gui/Main.cpp:401 ../../../Sources/Gui/Main.cpp:388
 #: ../../../Sources/Gui/Runner.cpp:62 ../../../Sources/Gui/Main.cpp:403
 #: ../../../Sources/Gui/Main.cpp:529 ../../../Sources/Gui/Main.cpp:592
-#: ../../../Sources/Gui/Main.cpp:638
+#: ../../../Sources/Gui/Main.cpp:638 ../../../Sources/Gui/Main.cpp:664
 msgctxt "Main"
 msgid ""
 "A serious error caused OpenSpades to stop working:\n"
@@ -1430,7 +1461,7 @@ msgstr ""
 #: ../../../Sources/Gui/Main.cpp:406 ../../../Sources/Gui/Main.cpp:393
 #: ../../../Sources/Gui/Runner.cpp:66 ../../../Sources/Gui/Main.cpp:408
 #: ../../../Sources/Gui/Main.cpp:534 ../../../Sources/Gui/Main.cpp:597
-#: ../../../Sources/Gui/Main.cpp:643
+#: ../../../Sources/Gui/Main.cpp:643 ../../../Sources/Gui/Main.cpp:669
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr ""
@@ -1688,12 +1719,14 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1435
 #: ../../Scripts/Gui/StartupScreen.as:1445
+#: ../../Scripts/Gui/StartupScreen.as:1446
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1439
 #: ../../Scripts/Gui/StartupScreen.as:1449
+#: ../../Scripts/Gui/StartupScreen.as:1450
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr ""
@@ -1752,4 +1785,49 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:232
 msgctxt "Client"
 msgid "Disconnecting..."
+msgstr ""
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:58
+msgctxt "CreateProfileScreen"
+msgid "OK"
+msgstr ""
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:70
+msgctxt "CreateProfileScreen"
+msgid "Decide later"
+msgstr ""
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:80
+msgctxt "CreateProfileScreen"
+msgid "Welcome to OpenSpades"
+msgstr ""
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:88
+msgctxt "CreateProfileScreen"
+msgid "Choose a player name:"
+msgstr ""
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:96
+msgctxt "CreateProfileScreen"
+msgid "Player name"
+msgstr ""
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:104
+msgctxt "CreateProfileScreen"
+msgid "You can change it later in the Setup dialog."
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1168
+msgctxt "StartupScreen"
+msgid ""
+"Water Shader|None:Water is rendered in the same way that normal blocks are "
+"done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving "
+"water is simulated as well as reflection and refraction.|Level 3:Reflections "
+"and refractions are rendered at the highest quality using screen-space "
+"techniques."
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1175
+msgctxt "StartupScreen"
+msgid "Med"
 msgstr ""
