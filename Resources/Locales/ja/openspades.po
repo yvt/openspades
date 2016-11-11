@@ -23,92 +23,96 @@ msgstr ""
 #: ../../../Sources/Gui/Main.cpp:344 ../../../Sources/Gui/Main.cpp:369
 #: ../../../Sources/Gui/Main.cpp:368 ../../../Sources/Gui/Main.cpp:355
 #: ../../../Sources/Gui/Main.cpp:370 ../../../Sources/Gui/Main.cpp:466
-#: ../../../Sources/Gui/Main.cpp:529
+#: ../../../Sources/Gui/Main.cpp:529 ../../../Sources/Gui/Main.cpp:582
+#: ../../../Sources/Gui/Main.cpp:608
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr "ローカライゼーションシステムが読み込まれました"
 
-#: ../../Scripts/Gui/MainScreen.as:340
+#: ../../Scripts/Gui/MainScreen.as:340 ../../Scripts/Gui/MainScreen.as:354
 msgctxt "MainScreen"
 msgid "Connect"
 msgstr "接続"
 
-#: ../../Scripts/Gui/MainScreen.as:348
+#: ../../Scripts/Gui/MainScreen.as:348 ../../Scripts/Gui/MainScreen.as:362
 msgctxt "MainScreen"
 msgid "Quick Connect"
 msgstr "クイック接続"
 
 #: ../../Scripts/Gui/MainScreen.as:357 ../../Scripts/Gui/MainScreen.as:411
+#: ../../Scripts/Gui/MainScreen.as:371 ../../Scripts/Gui/MainScreen.as:425
 msgctxt "MainScreen"
 msgid "0.75"
 msgstr "0.75"
 
 #: ../../Scripts/Gui/MainScreen.as:367 ../../Scripts/Gui/MainScreen.as:420
+#: ../../Scripts/Gui/MainScreen.as:381 ../../Scripts/Gui/MainScreen.as:434
 msgctxt "MainScreen"
 msgid "0.76"
 msgstr "0.76"
 
-#: ../../Scripts/Gui/MainScreen.as:375
+#: ../../Scripts/Gui/MainScreen.as:375 ../../Scripts/Gui/MainScreen.as:389
 msgctxt "MainScreen"
 msgid "Quit"
 msgstr "終了"
 
-#: ../../Scripts/Gui/MainScreen.as:382
+#: ../../Scripts/Gui/MainScreen.as:382 ../../Scripts/Gui/MainScreen.as:396
 msgctxt "MainScreen"
 msgid "Credits"
 msgstr "クレジット"
 
-#: ../../Scripts/Gui/MainScreen.as:389
+#: ../../Scripts/Gui/MainScreen.as:389 ../../Scripts/Gui/MainScreen.as:403
 msgctxt "MainScreen"
 msgid "Setup"
 msgstr "オプション"
 
 #: ../../Scripts/Gui/MainScreen.as:402 ../../Scripts/Gui/MainScreen.as:446
+#: ../../Scripts/Gui/MainScreen.as:416 ../../Scripts/Gui/MainScreen.as:460
 msgctxt "MainScreen"
 msgid "Filter"
 msgstr "フィルタ"
 
-#: ../../Scripts/Gui/MainScreen.as:429
+#: ../../Scripts/Gui/MainScreen.as:429 ../../Scripts/Gui/MainScreen.as:443
 msgctxt "MainScreen"
 msgid "Empty"
 msgstr "無人"
 
-#: ../../Scripts/Gui/MainScreen.as:438
+#: ../../Scripts/Gui/MainScreen.as:438 ../../Scripts/Gui/MainScreen.as:452
 msgctxt "MainScreen"
 msgid "Not Full"
 msgstr "空有り"
 
-#: ../../Scripts/Gui/MainScreen.as:458
+#: ../../Scripts/Gui/MainScreen.as:458 ../../Scripts/Gui/MainScreen.as:472
 msgctxt "MainScreen"
 msgid "Server Name"
 msgstr "サーバー名"
 
-#: ../../Scripts/Gui/MainScreen.as:465
+#: ../../Scripts/Gui/MainScreen.as:465 ../../Scripts/Gui/MainScreen.as:479
 msgctxt "MainScreen"
 msgid "Players"
 msgstr "プレイヤー数"
 
-#: ../../Scripts/Gui/MainScreen.as:472
+#: ../../Scripts/Gui/MainScreen.as:472 ../../Scripts/Gui/MainScreen.as:486
 msgctxt "MainScreen"
 msgid "Map Name"
 msgstr "マップ名"
 
-#: ../../Scripts/Gui/MainScreen.as:479
+#: ../../Scripts/Gui/MainScreen.as:479 ../../Scripts/Gui/MainScreen.as:493
 msgctxt "MainScreen"
 msgid "Game Mode"
 msgstr "ゲームモード"
 
-#: ../../Scripts/Gui/MainScreen.as:486
+#: ../../Scripts/Gui/MainScreen.as:486 ../../Scripts/Gui/MainScreen.as:500
 msgctxt "MainScreen"
 msgid "Ver."
 msgstr "Ver."
 
-#: ../../Scripts/Gui/MainScreen.as:493
+#: ../../Scripts/Gui/MainScreen.as:493 ../../Scripts/Gui/MainScreen.as:507
 msgctxt "MainScreen"
 msgid "Loc."
 msgstr "国"
 
-#: ../../Scripts/Gui/MainScreen.as:737
+#: ../../Scripts/Gui/MainScreen.as:737 ../../Scripts/Gui/MainScreen.as:751
 msgctxt "MainScreen"
 msgid ""
 "You were disconnected from the server because of the following reason:\n"
@@ -119,12 +123,12 @@ msgstr ""
 "\n"
 "{0}"
 
-#: ../../Scripts/Gui/MainScreen.as:757
+#: ../../Scripts/Gui/MainScreen.as:757 ../../Scripts/Gui/MainScreen.as:771
 msgctxt "MainScreen"
 msgid "Loading..."
 msgstr "読み込み中..."
 
-#: ../../Scripts/Gui/MainScreen.as:775
+#: ../../Scripts/Gui/MainScreen.as:775 ../../Scripts/Gui/MainScreen.as:789
 msgctxt "MainScreen"
 msgid "Failed to fetch the server list."
 msgstr "サーバー一覧のダウンロード中にエラーが発生しました。"
@@ -598,6 +602,7 @@ msgstr "チームチャット"
 #: ../../../Sources/Client/Client_Draw.cpp:172
 #: ../../../Sources/Client/Client_Draw.cpp:204
 #: ../../../Sources/Client/Client_Draw.cpp:206
+#: ../../../Sources/Client/Client_Draw.cpp:209
 msgctxt "Client"
 msgid "NOW LOADING"
 msgstr "読み込み中"
@@ -608,6 +613,7 @@ msgstr "読み込み中"
 #: ../../../Sources/Client/Client_Draw.cpp:477
 #: ../../../Sources/Client/Client_Draw.cpp:509
 #: ../../../Sources/Client/Client_Draw.cpp:515
+#: ../../../Sources/Client/Client_Draw.cpp:551
 msgctxt "Client"
 msgid "Out of Block"
 msgstr "ブロックがありません"
@@ -618,6 +624,7 @@ msgstr "ブロックがありません"
 #: ../../../Sources/Client/Client_Draw.cpp:482
 #: ../../../Sources/Client/Client_Draw.cpp:514
 #: ../../../Sources/Client/Client_Draw.cpp:520
+#: ../../../Sources/Client/Client_Draw.cpp:556
 msgctxt "Client"
 msgid "Out of Grenade"
 msgstr "手榴弾がありません"
@@ -628,6 +635,7 @@ msgstr "手榴弾がありません"
 #: ../../../Sources/Client/Client_Draw.cpp:490
 #: ../../../Sources/Client/Client_Draw.cpp:522
 #: ../../../Sources/Client/Client_Draw.cpp:528
+#: ../../../Sources/Client/Client_Draw.cpp:564
 msgctxt "Client"
 msgid "Reloading"
 msgstr "リロード中"
@@ -641,6 +649,8 @@ msgstr "リロード中"
 #: ../../../Sources/Client/Client_Draw.cpp:525
 #: ../../../Sources/Client/Client_Input.cpp:457
 #: ../../../Sources/Client/Client_Draw.cpp:531
+#: ../../../Sources/Client/Client_Input.cpp:453
+#: ../../../Sources/Client/Client_Draw.cpp:567
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr "弾切れです"
@@ -651,6 +661,7 @@ msgstr "弾切れです"
 #: ../../../Sources/Client/Client_Draw.cpp:496
 #: ../../../Sources/Client/Client_Draw.cpp:528
 #: ../../../Sources/Client/Client_Draw.cpp:534
+#: ../../../Sources/Client/Client_Draw.cpp:570
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
 msgstr "[{0}] を押すとリロードします"
@@ -661,6 +672,7 @@ msgstr "[{0}] を押すとリロードします"
 #: ../../../Sources/Client/Client_Draw.cpp:541
 #: ../../../Sources/Client/Client_Draw.cpp:573
 #: ../../../Sources/Client/Client_Draw.cpp:584
+#: ../../../Sources/Client/Client_Draw.cpp:620
 msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr "リスポーンを待機中"
@@ -671,6 +683,7 @@ msgstr "リスポーンを待機中"
 #: ../../../Sources/Client/Client_Draw.cpp:719
 #: ../../../Sources/Client/Client_Draw.cpp:751
 #: ../../../Sources/Client/Client_Draw.cpp:764
+#: ../../../Sources/Client/Client_Draw.cpp:800
 msgctxt "Client"
 msgid "Following {0}"
 msgstr "{0} を追跡中"
@@ -696,11 +709,13 @@ msgid "Spawn"
 msgstr "スポーン"
 
 #: ../../../Sources/Client/LimboView.cpp:184
+#: ../../../Sources/Client/LimboView.cpp:183
 msgctxt "Client"
 msgid "Select Team:"
 msgstr "チームを選択:"
 
 #: ../../../Sources/Client/LimboView.cpp:191
+#: ../../../Sources/Client/LimboView.cpp:190
 msgctxt "Client"
 msgid "Select Weapon:"
 msgstr "武器を選択:"
@@ -717,6 +732,7 @@ msgstr "{0}のテリトリー"
 
 #: ../../../Sources/Gui/MainScreen.cpp:230
 #: ../../../Sources/Gui/MainScreen.cpp:223
+#: ../../../Sources/Gui/MainScreen.cpp:233
 msgctxt "MainScreen"
 msgid "NOW LOADING"
 msgstr "読み込み中"
@@ -727,6 +743,7 @@ msgstr "読み込み中"
 #: ../../../Sources/Client/Client_Draw.cpp:539
 #: ../../../Sources/Client/Client_Draw.cpp:571
 #: ../../../Sources/Client/Client_Draw.cpp:582
+#: ../../../Sources/Client/Client_Draw.cpp:618
 msgctxt "Client"
 msgid "You will respawn in: {0}"
 msgstr "リスポーンまであと: {0}秒"
@@ -786,14 +803,13 @@ msgctxt "StartupScreen"
 msgid ""
 "By running in fullscreen mode OpenSpades occupies the screen, making it "
 "easier for you to concentrate on playing the game."
-msgstr ""
-"フルスクリーンモードを使用すると画面全体を占領してプレイできるため、ゲームに"
-"集中しやすくなります。"
+msgstr "フルスクリーンモードを使用すると画面全体を占領してプレイできるため、ゲームに集中しやすくなります。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1038
 #: ../../Scripts/Gui/StartupScreen.as:1404
 #: ../../Scripts/Gui/StartupScreen.as:1405
 #: ../../Scripts/Gui/StartupScreen.as:1415
+#: ../../Scripts/Gui/StartupScreen.as:1416
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr "バックエンド"
@@ -808,9 +824,7 @@ msgctxt "StartupScreen"
 msgid ""
 "OpenGL renderer uses your computer's graphics accelerator to generate the "
 "game screen."
-msgstr ""
-"OpenGLレンダラーはコンピュータに内蔵されたGPUを使用してゲーム画面を描画しま"
-"す。"
+msgstr "OpenGLレンダラーはコンピュータに内蔵されたGPUを使用してゲーム画面を描画します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1053
 msgctxt "StartupScreen"
@@ -824,8 +838,7 @@ msgid ""
 "performance might be inferior to OpenGL renderer, but it works even with an "
 "unsupported GPU."
 msgstr ""
-"ソフトウェアレンダラーはCPUを使用してゲーム画面を描画します。画質やパフォーマ"
-"ンスはOpenGLには劣りますが、対応していないGPUでも常に動作します。"
+"ソフトウェアレンダラーはCPUを使用してゲーム画面を描画します。画質やパフォーマンスはOpenGLには劣りますが、対応していないGPUでも常に動作します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1078
 msgctxt "StartupScreen"
@@ -837,9 +850,7 @@ msgctxt "StartupScreen"
 msgid ""
 "Enables a physically based simulation of light path for more realistic "
 "lighting."
-msgstr ""
-"物理的に比較的正確な計算手法を使用することにより、より写実的な光表現を行いま"
-"す。"
+msgstr "物理的に比較的正確な計算手法を使用することにより、より写実的な光表現を行います。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1085
 #: ../../Scripts/Gui/StartupScreen.as:1092
@@ -960,14 +971,12 @@ msgstr "後処理により描画された画面を加工しより良く見せま
 #: ../../Scripts/Gui/StartupScreen.as:1127
 msgctxt "StartupScreen"
 msgid ""
-"Particles|Low:Artifact occurs when a particle intersects other objects.|"
-"Medium:Particle intersects objects smoothly.|High:Particle intersects "
-"objects smoothly, and some objects casts their shadow to particles."
+"Particles|Low:Artifact occurs when a particle intersects other "
+"objects.|Medium:Particle intersects objects smoothly.|High:Particle "
+"intersects objects smoothly, and some objects casts their shadow to "
+"particles."
 msgstr ""
-"パーティクル|低:パーティクルが他のオブジェクトと交差すると鋭い境界が現れま"
-"す。|中:パーティクルは他のオブジェクトと滑らかに交わります。|高:パーティクル"
-"は他のオブジェクトと滑らかに交わります。また一部のオブジェクトがパーティクル"
-"に影を落とします。"
+"パーティクル|低:パーティクルが他のオブジェクトと交差すると鋭い境界が現れます。|中:パーティクルは他のオブジェクトと滑らかに交わります。|高:パーティクルは他のオブジェクトと滑らかに交わります。また一部のオブジェクトがパーティクルに影を落とします。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1127
 #: ../../Scripts/Gui/StartupScreen.as:1137
@@ -981,9 +990,7 @@ msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
 "impression."
-msgstr ""
-"一部のオブジェクトが発光するようにし、エネルギーを発しているような印象を与え"
-"ます。"
+msgstr "一部のオブジェクトが発光するようにし、エネルギーを発しているような印象を与えます。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1132
 #: ../../Scripts/Gui/StartupScreen.as:1142
@@ -1009,9 +1016,7 @@ msgctxt "StartupScreen"
 msgid ""
 "Simulates shadow being casted to the fog particles using a super highly "
 "computationally demanding algorithm. "
-msgstr ""
-"極めて計算量が膨大なアルゴリズムを使用することにより、大気中の霧の粒子に影が"
-"落とされる様子をシミュレーションします。"
+msgstr "極めて計算量が膨大なアルゴリズムを使用することにより、大気中の霧の粒子に影が落とされる様子をシミュレーションします。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1139
 #: ../../Scripts/Gui/StartupScreen.as:1149
@@ -1029,24 +1034,26 @@ msgstr "直接反射光の明るさを物理的により正確な手法を用い
 
 #: ../../Scripts/Gui/StartupScreen.as:1145
 #: ../../Scripts/Gui/StartupScreen.as:1155
+#: ../../Scripts/Gui/StartupScreen.as:1177
 msgctxt "StartupScreen"
 msgid "Ultra"
 msgstr "最高"
 
 #: ../../Scripts/Gui/StartupScreen.as:1148
 #: ../../Scripts/Gui/StartupScreen.as:1158
+#: ../../Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr "直接光"
 
 #: ../../Scripts/Gui/StartupScreen.as:1149
 #: ../../Scripts/Gui/StartupScreen.as:1159
+#: ../../Scripts/Gui/StartupScreen.as:1158
 msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
 "appearance."
-msgstr ""
-"物体(大気含む)に直接当たった光がどのようにその外観に影響するかを制御します。"
+msgstr "物体(大気含む)に直接当たった光がどのようにその外観に影響するかを制御します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1159
 #: ../../Scripts/Gui/StartupScreen.as:1169
@@ -1056,33 +1063,36 @@ msgid ""
 "done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving "
 "water is simulated as well as reflection and refraction."
 msgstr ""
-"水シェーダー|オフ:水は通常のブロックと同じように描画されます。|レベル 1:屈折"
-"と太陽光の反射が描画されます。|レベル 2:屈折・太陽光の反射に加え、波やその他"
-"の反射も描画されます。"
+"水シェーダー|オフ:水は通常のブロックと同じように描画されます。|レベル 1:屈折と太陽光の反射が描画されます。|レベル "
+"2:屈折・太陽光の反射に加え、波やその他の反射も描画されます。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1169
 #: ../../Scripts/Gui/StartupScreen.as:1179
+#: ../../Scripts/Gui/StartupScreen.as:1180
 msgctxt "StartupScreen"
 msgid "Shader Effects"
 msgstr "シェーダー効果"
 
 #: ../../Scripts/Gui/StartupScreen.as:1169
 #: ../../Scripts/Gui/StartupScreen.as:1179
+#: ../../Scripts/Gui/StartupScreen.as:1180
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr "特殊効果。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1186
 #: ../../Scripts/Gui/StartupScreen.as:1196
+#: ../../Scripts/Gui/StartupScreen.as:1197
 msgctxt "StartupScreen"
 msgid ""
-"Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
-"4x"
+"Fast Mode:Reduces the image resolution to make the rendering "
+"faster.|Off|2x|4x"
 msgstr "高速モード:画面解像度を低下させ、描画を高速化します。|オフ|2x|4x"
 
 #: ../../Scripts/Gui/StartupScreen.as:1398
 #: ../../Scripts/Gui/StartupScreen.as:1399
 #: ../../Scripts/Gui/StartupScreen.as:1409
+#: ../../Scripts/Gui/StartupScreen.as:1410
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr "音声の設定"
@@ -1090,6 +1100,7 @@ msgstr "音声の設定"
 #: ../../Scripts/Gui/StartupScreen.as:1407
 #: ../../Scripts/Gui/StartupScreen.as:1408
 #: ../../Scripts/Gui/StartupScreen.as:1418
+#: ../../Scripts/Gui/StartupScreen.as:1419
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr "OpenAL"
@@ -1097,18 +1108,18 @@ msgstr "OpenAL"
 #: ../../Scripts/Gui/StartupScreen.as:1411
 #: ../../Scripts/Gui/StartupScreen.as:1412
 #: ../../Scripts/Gui/StartupScreen.as:1422
+#: ../../Scripts/Gui/StartupScreen.as:1423
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
 "there isn't such a sound card, software emulation is used."
 msgstr ""
-"OpenALに対応したサウンドカードを使用して音声を処理します。ほとんどの場合この"
-"ようなサウンドカードがありませんので、ソフトウェアエミュレーションが使用され"
-"ます。"
+"OpenALに対応したサウンドカードを使用して音声を処理します。ほとんどの場合このようなサウンドカードがありませんので、ソフトウェアエミュレーションが使用されます。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1420
 #: ../../Scripts/Gui/StartupScreen.as:1421
 #: ../../Scripts/Gui/StartupScreen.as:1431
+#: ../../Scripts/Gui/StartupScreen.as:1432
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr "YSR"
@@ -1116,15 +1127,15 @@ msgstr "YSR"
 #: ../../Scripts/Gui/StartupScreen.as:1424
 #: ../../Scripts/Gui/StartupScreen.as:1425
 #: ../../Scripts/Gui/StartupScreen.as:1435
+#: ../../Scripts/Gui/StartupScreen.as:1436
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
 "features several enhanced features including automatic load control, "
 "dynamics compressor, HRTF-based 3D audio, and high quality reverb."
 msgstr ""
-"YSRはOpenSpadesに最適化された、実験的な3D HDRサウンドエンジンです。自動負荷制"
-"御やダイナミクスコンプレッサー、HRTFベースの立体音響や高音質リバーブエフェク"
-"タを備えています。"
+"YSRはOpenSpadesに最適化された、実験的な3D "
+"HDRサウンドエンジンです。自動負荷制御やダイナミクスコンプレッサー、HRTFベースの立体音響や高音質リバーブエフェクタを備えています。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1438
 #: ../../Scripts/Gui/StartupScreen.as:1462
@@ -1132,6 +1143,8 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1474
 #: ../../Scripts/Gui/StartupScreen.as:1460
 #: ../../Scripts/Gui/StartupScreen.as:1484
+#: ../../Scripts/Gui/StartupScreen.as:1461
+#: ../../Scripts/Gui/StartupScreen.as:1485
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "最大同時発音数"
@@ -1139,19 +1152,19 @@ msgstr "最大同時発音数"
 #: ../../Scripts/Gui/StartupScreen.as:1439
 #: ../../Scripts/Gui/StartupScreen.as:1451
 #: ../../Scripts/Gui/StartupScreen.as:1461
+#: ../../Scripts/Gui/StartupScreen.as:1462
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
 "more processing power, so setting this too high might cause an overload "
 "(especially with a software emulation)."
 msgstr ""
-"同時に発音可能な音声の個数を指定します。この値が大きいと必要な処理能力も増大"
-"するため、特にソフトウェアエミュレーションにおいて過負荷状態を生じることがあ"
-"ります。"
+"同時に発音可能な音声の個数を指定します。この値が大きいと必要な処理能力も増大するため、特にソフトウェアエミュレーションにおいて過負荷状態を生じることがあります。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1446
 #: ../../Scripts/Gui/StartupScreen.as:1458
 #: ../../Scripts/Gui/StartupScreen.as:1468
+#: ../../Scripts/Gui/StartupScreen.as:1469
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
@@ -1159,6 +1172,7 @@ msgstr "EAX"
 #: ../../Scripts/Gui/StartupScreen.as:1447
 #: ../../Scripts/Gui/StartupScreen.as:1459
 #: ../../Scripts/Gui/StartupScreen.as:1469
+#: ../../Scripts/Gui/StartupScreen.as:1470
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1168,17 +1182,17 @@ msgstr "OpenALドライバが提供する拡張機能を利用して臨場感を
 #: ../../Scripts/Gui/StartupScreen.as:1463
 #: ../../Scripts/Gui/StartupScreen.as:1475
 #: ../../Scripts/Gui/StartupScreen.as:1485
+#: ../../Scripts/Gui/StartupScreen.as:1486
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
 "is set, YSR might reduce the number of sounds when an overload is detected."
-msgstr ""
-"同時に発音可能な音声の個数を指定します。この値によらず、YSRは過負荷を防ぐため"
-"に同時発音数を減らすことがあります。"
+msgstr "同時に発音可能な音声の個数を指定します。この値によらず、YSRは過負荷を防ぐために同時発音数を減らすことがあります。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1533
 #: ../../Scripts/Gui/StartupScreen.as:1551
 #: ../../Scripts/Gui/StartupScreen.as:1561
+#: ../../Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "クリップボードにコピー"
@@ -1186,6 +1200,7 @@ msgstr "クリップボードにコピー"
 #: ../../Scripts/Gui/StartupScreen.as:1569
 #: ../../Scripts/Gui/StartupScreen.as:1587
 #: ../../Scripts/Gui/StartupScreen.as:1597
+#: ../../Scripts/Gui/StartupScreen.as:1598
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "高度な設定"
@@ -1193,6 +1208,7 @@ msgstr "高度な設定"
 #: ../../Scripts/Gui/StartupScreen.as:1578
 #: ../../Scripts/Gui/StartupScreen.as:1596
 #: ../../Scripts/Gui/StartupScreen.as:1606
+#: ../../Scripts/Gui/StartupScreen.as:1607
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "フィルタ"
@@ -1206,18 +1222,15 @@ msgid ""
 "MSAA: Performs antialiasing by generating an intermediate high-resolution "
 "image. Looks best, but doesn't cope with some settings.\n"
 "\n"
-"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
-"Off|MSAA 2x|4x|FXAA"
+"FXAA: Performs antialiasing by smoothing artifacts out as a "
+"post-process.|Off|MSAA 2x|4x|FXAA"
 msgstr ""
-"アンチエイリアシング:オブジェクトの輪郭に発生する階段上のギザギザ(ジャギー)を"
-"除去する手法を有効にします。\n"
+"アンチエイリアシング:オブジェクトの輪郭に発生する階段上のギザギザ(ジャギー)を除去する手法を有効にします。\n"
 "\n"
-"MSAA: 中間的に画面より数倍程度の高解像度な画像を生成しアンチエイリアシングを"
-"行います。見た目は最も良くなりますが、一部の設定と相性が悪い場合がありま"
-"す。\n"
+"MSAA: "
+"中間的に画面より数倍程度の高解像度な画像を生成しアンチエイリアシングを行います。見た目は最も良くなりますが、一部の設定と相性が悪い場合があります。\n"
 "\n"
-"FXAA: 描画された画像からジャギーを検出してぼかすことによりアンチエイリアシン"
-"グを行います。|オフ|MSAA 2x|4x|FXAA"
+"FXAA: 描画された画像からジャギーを検出してぼかすことによりアンチエイリアシングを行います。|オフ|MSAA 2x|4x|FXAA"
 
 #: ../../Scripts/Gui/StartupScreen.as:781
 msgctxt "StartupScreen"
@@ -1238,6 +1251,8 @@ msgstr "Y軸の入力を反転"
 #: ../../../Sources/Client/Client.cpp:595
 #: ../../../Sources/Client/Client.cpp:597
 #: ../../../Sources/Client/Client.cpp:592
+#: ../../../Sources/Client/Client.cpp:612
+#: ../../../Sources/Client/Client.cpp:611
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr "マップデータを保存しました: {0}"
@@ -1254,6 +1269,10 @@ msgstr "マップデータを保存しました: {0}"
 #: ../../../Sources/Client/Client.cpp:607
 #: ../../../Sources/Client/Client.cpp:596
 #: ../../../Sources/Client/Client.cpp:602
+#: ../../../Sources/Client/Client.cpp:616
+#: ../../../Sources/Client/Client.cpp:622
+#: ../../../Sources/Client/Client.cpp:615
+#: ../../../Sources/Client/Client.cpp:621
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr "マップの保存に失敗しました:"
@@ -1263,6 +1282,7 @@ msgstr "マップの保存に失敗しました:"
 #: ../../../Sources/Client/Client_Draw.cpp:95
 #: ../../../Sources/Client/Client_Draw.cpp:114
 #: ../../../Sources/Client/Client_Draw.cpp:116
+#: ../../../Sources/Client/Client_Draw.cpp:119
 msgctxt "Client"
 msgid "Sceneshot saved: {0}"
 msgstr "シーンショットを保存しました: {0}"
@@ -1272,6 +1292,7 @@ msgstr "シーンショットを保存しました: {0}"
 #: ../../../Sources/Client/Client_Draw.cpp:97
 #: ../../../Sources/Client/Client_Draw.cpp:116
 #: ../../../Sources/Client/Client_Draw.cpp:118
+#: ../../../Sources/Client/Client_Draw.cpp:121
 msgctxt "Client"
 msgid "Screenshot saved: {0}"
 msgstr "スクリーンショットを保存しました: {0}"
@@ -1284,6 +1305,8 @@ msgstr "スクリーンショットを保存しました: {0}"
 #: ../../../Sources/Client/Client_Draw.cpp:126
 #: ../../../Sources/Client/Client_Draw.cpp:122
 #: ../../../Sources/Client/Client_Draw.cpp:128
+#: ../../../Sources/Client/Client_Draw.cpp:125
+#: ../../../Sources/Client/Client_Draw.cpp:131
 msgctxt "Client"
 msgid "Screenshot failed: "
 msgstr "スクリーンショットに失敗しました:"
@@ -1295,6 +1318,8 @@ msgstr "スクリーンショットに失敗しました:"
 #: ../../../Sources/Client/Client.cpp:639
 #: ../../../Sources/Client/Client.cpp:641
 #: ../../../Sources/Client/Client.cpp:636
+#: ../../../Sources/Client/Client.cpp:656
+#: ../../../Sources/Client/Client.cpp:655
 msgctxt "Client"
 msgid "[Global] "
 msgstr "[全体] "
@@ -1302,6 +1327,7 @@ msgstr "[全体] "
 #: ../../../Sources/Client/Client.cpp:3229
 #: ../../../Sources/Client/Client.cpp:3253
 #: ../../../Sources/Client/Client_NetHandler.cpp:84
+#: ../../../Sources/Client/Client_NetHandler.cpp:88
 msgctxt "Client"
 msgid "{0} captured {1}'s territory"
 msgstr "{0} が {1} の陣地を占領しました"
@@ -1309,6 +1335,7 @@ msgstr "{0} が {1} の陣地を占領しました"
 #: ../../../Sources/Client/Client.cpp:3231
 #: ../../../Sources/Client/Client.cpp:3255
 #: ../../../Sources/Client/Client_NetHandler.cpp:86
+#: ../../../Sources/Client/Client_NetHandler.cpp:90
 msgctxt "Client"
 msgid "{0} captured an neutral territory"
 msgstr "{0} が未占領の陣地を占領しました"
@@ -1316,6 +1343,7 @@ msgstr "{0} が未占領の陣地を占領しました"
 #: ../../../Sources/Client/Client.cpp:3238
 #: ../../../Sources/Client/Client.cpp:3262
 #: ../../../Sources/Client/Client_NetHandler.cpp:93
+#: ../../../Sources/Client/Client_NetHandler.cpp:98
 msgctxt "Client"
 msgid "{0} captured {1}'s Territory"
 msgstr "{0} が {1} の陣地を占領しました"
@@ -1323,6 +1351,7 @@ msgstr "{0} が {1} の陣地を占領しました"
 #: ../../../Sources/Client/Client.cpp:3240
 #: ../../../Sources/Client/Client.cpp:3264
 #: ../../../Sources/Client/Client_NetHandler.cpp:95
+#: ../../../Sources/Client/Client_NetHandler.cpp:101
 msgctxt "Client"
 msgid "{0} captured an Neutral Territory"
 msgstr "{0} が未占領の陣地を占領しました"
@@ -1330,6 +1359,7 @@ msgstr "{0} が未占領の陣地を占領しました"
 #: ../../../Sources/Client/Client.cpp:3264
 #: ../../../Sources/Client/Client.cpp:3288
 #: ../../../Sources/Client/Client_NetHandler.cpp:119
+#: ../../../Sources/Client/Client_NetHandler.cpp:126
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
 msgstr "{0} が {1} のIntelをキャプチャーしました"
@@ -1337,6 +1367,7 @@ msgstr "{0} が {1} のIntelをキャプチャーしました"
 #: ../../../Sources/Client/Client.cpp:3271
 #: ../../../Sources/Client/Client.cpp:3295
 #: ../../../Sources/Client/Client_NetHandler.cpp:126
+#: ../../../Sources/Client/Client_NetHandler.cpp:133
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
 msgstr "{0} が {1} のIntelをキャプチャーしました"
@@ -1344,6 +1375,7 @@ msgstr "{0} が {1} のIntelをキャプチャーしました"
 #: ../../../Sources/Client/Client.cpp:3293
 #: ../../../Sources/Client/Client.cpp:3317
 #: ../../../Sources/Client/Client_NetHandler.cpp:148
+#: ../../../Sources/Client/Client_NetHandler.cpp:155
 msgctxt "Client"
 msgid "{0} picked up {1}'s intel"
 msgstr "{0} が {1} のIntelを入手しました"
@@ -1351,6 +1383,7 @@ msgstr "{0} が {1} のIntelを入手しました"
 #: ../../../Sources/Client/Client.cpp:3300
 #: ../../../Sources/Client/Client.cpp:3324
 #: ../../../Sources/Client/Client_NetHandler.cpp:155
+#: ../../../Sources/Client/Client_NetHandler.cpp:162
 msgctxt "Client"
 msgid "{0} picked up {1}'s Intel."
 msgstr "{0} が {1} のIntelを入手しました"
@@ -1358,6 +1391,7 @@ msgstr "{0} が {1} のIntelを入手しました"
 #: ../../../Sources/Client/Client.cpp:3317
 #: ../../../Sources/Client/Client.cpp:3341
 #: ../../../Sources/Client/Client_NetHandler.cpp:172
+#: ../../../Sources/Client/Client_NetHandler.cpp:179
 msgctxt "Client"
 msgid "{0} dropped {1}'s intel"
 msgstr "{0} が {1} のIntelを落としました"
@@ -1365,6 +1399,7 @@ msgstr "{0} が {1} のIntelを落としました"
 #: ../../../Sources/Client/Client.cpp:3324
 #: ../../../Sources/Client/Client.cpp:3348
 #: ../../../Sources/Client/Client_NetHandler.cpp:179
+#: ../../../Sources/Client/Client_NetHandler.cpp:186
 msgctxt "Client"
 msgid "{0} dropped {1}'s Intel"
 msgstr "{0} が {1} のIntelを落としました"
@@ -1375,6 +1410,8 @@ msgstr "{0} が {1} のIntelを落としました"
 #: ../../../Sources/Client/Client.cpp:3403
 #: ../../../Sources/Client/Client_NetHandler.cpp:229
 #: ../../../Sources/Client/Client_NetHandler.cpp:234
+#: ../../../Sources/Client/Client_NetHandler.cpp:236
+#: ../../../Sources/Client/Client_NetHandler.cpp:241
 msgctxt "Client"
 msgid "Player {0} has left"
 msgstr "プレイヤー {0} が退場しました"
@@ -1385,6 +1422,7 @@ msgstr "プレイヤー {0} が退場しました"
 #: ../../../Sources/Client/Client.cpp:3426
 #: ../../../Sources/Client/Client_NetHandler.cpp:250
 #: ../../../Sources/Client/Client_NetHandler.cpp:257
+#: ../../../Sources/Client/Client_NetHandler.cpp:264
 msgctxt "Client"
 msgid "{0} joined {1} team"
 msgstr "プレイヤー {0} が {1} に加わりました"
@@ -1392,6 +1430,7 @@ msgstr "プレイヤー {0} が {1} に加わりました"
 #: ../../../Sources/Client/Client.cpp:3438
 #: ../../../Sources/Client/Client.cpp:3462
 #: ../../../Sources/Client/Client_NetHandler.cpp:293
+#: ../../../Sources/Client/Client_NetHandler.cpp:300
 msgctxt "Client"
 msgid "{0} wins!"
 msgstr "{0} の勝ち!"
@@ -1400,6 +1439,7 @@ msgstr "{0} の勝ち!"
 #: ../../../Sources/Client/Client.cpp:3442
 #: ../../../Sources/Client/Client.cpp:3466
 #: ../../../Sources/Client/Client_NetHandler.cpp:297
+#: ../../../Sources/Client/Client_NetHandler.cpp:304
 msgctxt "Client"
 msgid "{0} Wins!"
 msgstr "{0} の勝ち!"
@@ -1410,6 +1450,7 @@ msgstr "{0} の勝ち!"
 #: ../../../Sources/Client/Client_Update.cpp:893
 #: ../../../Sources/Client/Client_Update.cpp:900
 #: ../../../Sources/Client/Client_Update.cpp:909
+#: ../../../Sources/Client/Client_Update.cpp:912
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr "{0} を殺害しました"
@@ -1420,6 +1461,7 @@ msgstr "{0} を殺害しました"
 #: ../../../Sources/Client/Client_Update.cpp:895
 #: ../../../Sources/Client/Client_Update.cpp:902
 #: ../../../Sources/Client/Client_Update.cpp:911
+#: ../../../Sources/Client/Client_Update.cpp:914
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr "{0} に殺害されました"
@@ -1427,6 +1469,7 @@ msgstr "{0} に殺害されました"
 #: ../../../Sources/Gui/Main.cpp:401 ../../../Sources/Gui/Main.cpp:388
 #: ../../../Sources/Gui/Runner.cpp:62 ../../../Sources/Gui/Main.cpp:403
 #: ../../../Sources/Gui/Main.cpp:529 ../../../Sources/Gui/Main.cpp:592
+#: ../../../Sources/Gui/Main.cpp:638 ../../../Sources/Gui/Main.cpp:664
 msgctxt "Main"
 msgid ""
 "A serious error caused OpenSpades to stop working:\n"
@@ -1444,6 +1487,7 @@ msgstr ""
 #: ../../../Sources/Gui/Main.cpp:406 ../../../Sources/Gui/Main.cpp:393
 #: ../../../Sources/Gui/Runner.cpp:66 ../../../Sources/Gui/Main.cpp:408
 #: ../../../Sources/Gui/Main.cpp:534 ../../../Sources/Gui/Main.cpp:597
+#: ../../../Sources/Gui/Main.cpp:643 ../../../Sources/Gui/Main.cpp:669
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr "OpenSpades 重大なエラー"
@@ -1636,6 +1680,7 @@ msgstr "当たり判定デバッガを有効化"
 #: ../../../Sources/Client/Client_Input.cpp:435
 #: ../../../Sources/Client/Client_Input.cpp:436
 #: ../../../Sources/Client/Client_Input.cpp:445
+#: ../../../Sources/Client/Client_Input.cpp:441
 msgctxt "Client"
 msgid "Out of Blocks"
 msgstr "ブロックがありません"
@@ -1643,6 +1688,7 @@ msgstr "ブロックがありません"
 #: ../../../Sources/Client/Client_Input.cpp:459
 #: ../../../Sources/Client/Client_Input.cpp:460
 #: ../../../Sources/Client/Client_Input.cpp:469
+#: ../../../Sources/Client/Client_Input.cpp:465
 msgctxt "Client"
 msgid "Out of Grenades"
 msgstr "手榴弾がありません"
@@ -1650,6 +1696,7 @@ msgstr "手榴弾がありません"
 #: ../../../Sources/Client/Client_Update.cpp:457
 #: ../../../Sources/Client/Client_Update.cpp:460
 #: ../../../Sources/Client/Client_Update.cpp:470
+#: ../../../Sources/Client/Client_Update.cpp:471
 msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
@@ -1658,6 +1705,7 @@ msgstr[0] "{0} ブロック"
 #: ../../../Sources/Client/Client_Update.cpp:465
 #: ../../../Sources/Client/Client_Update.cpp:468
 #: ../../../Sources/Client/Client_Update.cpp:478
+#: ../../../Sources/Client/Client_Update.cpp:479
 msgctxt "Client"
 msgid "-- blocks"
 msgstr "-- ブロック"
@@ -1665,6 +1713,7 @@ msgstr "-- ブロック"
 #: ../../../Sources/Client/Client_Update.cpp:1202
 #: ../../../Sources/Client/Client_Update.cpp:1236
 #: ../../../Sources/Client/Client_Update.cpp:1259
+#: ../../../Sources/Client/Client_Update.cpp:1262
 msgctxt "Client"
 msgid "Insufficient blocks."
 msgstr "ブロックが不足しています。"
@@ -1672,6 +1721,7 @@ msgstr "ブロックが不足しています。"
 #: ../../../Sources/Client/Client_Update.cpp:1206
 #: ../../../Sources/Client/Client_Update.cpp:1240
 #: ../../../Sources/Client/Client_Update.cpp:1263
+#: ../../../Sources/Client/Client_Update.cpp:1266
 msgctxt "Client"
 msgid "You cannot place a block there."
 msgstr "そこにブロックを置くことはできません。"
@@ -1694,12 +1744,14 @@ msgstr "最後に使用したツール"
 
 #: ../../Scripts/Gui/StartupScreen.as:1435
 #: ../../Scripts/Gui/StartupScreen.as:1445
+#: ../../Scripts/Gui/StartupScreen.as:1446
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr "ヌル"
 
 #: ../../Scripts/Gui/StartupScreen.as:1439
 #: ../../Scripts/Gui/StartupScreen.as:1449
+#: ../../Scripts/Gui/StartupScreen.as:1450
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr "オーディオ出力を無効にします。"
@@ -1744,9 +1796,7 @@ msgid ""
 "is in linear correspondence with actual energy, that is, physically accurate "
 "blending can be achieved."
 msgstr ""
-"より幅広いダイナミックレンジを表現可能な数値の表現方法をレンダリング処理に使"
-"用します。これにより実際のエネルギー量と線形関係のある値を使用して色を表現で"
-"きるため物理的に正確なブレンディングを行うことができます。"
+"より幅広いダイナミックレンジを表現可能な数値の表現方法をレンダリング処理に使用します。これにより実際のエネルギー量と線形関係のある値を使用して色を表現できるため物理的に正確なブレンディングを行うことができます。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1095
 msgctxt "StartupScreen"
@@ -1762,3 +1812,50 @@ msgstr "現実世界のレンズの歪みをシミュレートします。"
 msgctxt "Client"
 msgid "Disconnecting..."
 msgstr "切断中です..."
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:58
+msgctxt "CreateProfileScreen"
+msgid "OK"
+msgstr "OK"
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:70
+msgctxt "CreateProfileScreen"
+msgid "Decide later"
+msgstr "後で入力する"
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:80
+msgctxt "CreateProfileScreen"
+msgid "Welcome to OpenSpades"
+msgstr "OpenSpades 初回起動時設定"
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:88
+msgctxt "CreateProfileScreen"
+msgid "Choose a player name:"
+msgstr "プレイヤー名を入力してください:"
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:96
+msgctxt "CreateProfileScreen"
+msgid "Player name"
+msgstr "プレイヤー名"
+
+#: ../../Scripts/Gui/CreateProfileScreen.as:104
+msgctxt "CreateProfileScreen"
+msgid "You can change it later in the Setup dialog."
+msgstr "プレイヤー名は「オプション」からいつでも変更できます。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1168
+msgctxt "StartupScreen"
+msgid ""
+"Water Shader|None:Water is rendered in the same way that normal blocks are "
+"done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving "
+"water is simulated as well as reflection and refraction.|Level 3:Reflections "
+"and refractions are rendered at the highest quality using screen-space "
+"techniques."
+msgstr ""
+"水シェーダー|オフ:水は通常のブロックと同じように描画されます。|レベル 1:屈折と太陽光の反射が描画されます。|レベル "
+"2:屈折・太陽光の反射に加え、波やその他の反射も描画されます。|レベル 3:スクリーンスペース手法を用いることにより、屈折と反射を最高品質で描画します。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1175
+msgctxt "StartupScreen"
+msgid "Med"
+msgstr "中"
