@@ -662,6 +662,7 @@ namespace spades {
 					}else if(key == "X") {
 						Manager.Copy(this.SelectedText);
 						this.SelectedText = "";
+						OnChanged();
 					}else if(key == "Z") {
 						if(Manager.IsShiftPressed){
 							if(Redo()) OnChanged();
