@@ -646,7 +646,7 @@ int main(int argc, char ** argv)
 			splashWindow.reset();
 
 			spades::ServerAddress host(cg_lastQuickConnectHost.CString(), (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076 );
-			spades::StartClient(host, cg_playerName);
+            spades::StartClient(host, std::string(cg_playerName).substr(0, 15));
 		}
 
 		spades::Settings::GetInstance()->Flush();

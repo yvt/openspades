@@ -321,7 +321,7 @@ namespace spades {
 			spades::ServerAddress host(cg_lastQuickConnectHost, (int)cg_protocolVersion == 3 ? spades::ProtocolVersion::v075 : spades::ProtocolVersion::v076);
 			try {
 				subview.Set(new client::Client(&*renderer, &*audioDevice,
-											 host, cg_playerName), false);
+                                               host, std::string(cg_playerName).substr(0, 15)), false);
 			}catch(const std::exception& ex) {
 				SPLog("[!] Error while initializing a game client: %s", ex.what());
 				return ex.what();
