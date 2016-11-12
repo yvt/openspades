@@ -66,3 +66,6 @@ openspades.mk/
 # fltk / fluid output leftovers
 Sources/Gui/DetailConfigWindow.txt
 Sources/Gui/MainWindow.txt
+
+# Compiled .mo files (translation)
+*.mo
