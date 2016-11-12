@@ -73,7 +73,7 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
    `sudo make install`
    
-   **note**: `make install` broken in old releases
+   **note**: If you have a previous installation of OpenSpades, you have to uninstall it manually by `sudo rm -rf /usr/local/share/games/openspades` before installing a new one.
 
 7. Get shared files: 
    * If you compiling certain release (0.0.10 for example): 
