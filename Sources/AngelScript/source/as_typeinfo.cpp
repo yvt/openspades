@@ -267,11 +267,12 @@ int asCTypeInfo::GetProperty(asUINT index, const char **out_name, int *out_typeI
 // yvt: prevents "error: 'this' pointer cannot be null in well-defined C++ code" compiler
 // warning.
 // Compilers are still allowed to do optimization based on the assumption that 'this'
-// pointer cannot be null in well-defined C++ code. If they do, we've got a problem.
-static bool isNullPointer(asCTypeInfo *ti)
+// pointer cannot be null in well-defined C++ code. This function is defined like this
+// to prevent them from doing that. (What a ugly hack!)
+bool (*volatile isNullPointer)(asCTypeInfo *) = [] (asCTypeInfo *ti)
 {
-    return !ti;
-}
+	return !ti;
+};
 
 // internal
 asCObjectType *asCTypeInfo::CastToObjectType()
