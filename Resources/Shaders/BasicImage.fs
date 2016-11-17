@@ -19,13 +19,13 @@
  */
 
 
-uniform sampler2D texture;
+uniform sampler2D texture_;
 
 varying vec4 color;
 varying vec2 texCoord;
 
 void main() {
-	vec4 col = texture2D(texture, texCoord);
+	vec4 col = texture2D(texture_, texCoord);
 	col.xyz *= col.w; // alpha premultiply
 	col *= color;
 	gl_FragColor = col;

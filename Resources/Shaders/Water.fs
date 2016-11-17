@@ -28,7 +28,7 @@ varying vec3 worldPosition;
 
 uniform sampler2D screenTexture;
 uniform sampler2D depthTexture;
-uniform sampler2D texture;
+uniform sampler2D texture_;
 uniform sampler2D waveTexture;
 uniform vec3 fogColor;
 uniform vec3 skyColor;
@@ -123,7 +123,7 @@ void main() {
 	vec2 subCoord = 1. - clamp((vec2(0.5) - startPos) / diffPos,
 						  0., 1.);
 	vec2 sampCoord = integralCoord + subCoord * blurDirSign;
-	vec3 waterColor = texture2D(texture, sampCoord / 512.).xyz;
+	vec3 waterColor = texture2D(texture_, sampCoord / 512.).xyz;
 	
 	// underwater object color
 	gl_FragColor = texture2D(screenTexture, scrPos);

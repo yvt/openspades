@@ -19,7 +19,7 @@
  */
 
 
-uniform sampler2D texture;
+uniform sampler2D texture_;
 
 uniform vec3 fogColor;
 
@@ -28,7 +28,7 @@ varying vec2 texCoord;
 varying vec4 fogDensity;
 
 void main() {
-	gl_FragColor = texture2D(texture, texCoord);
+	gl_FragColor = texture2D(texture_, texCoord);
 #if LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz *= gl_FragColor.xyz;
 #endif

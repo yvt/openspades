@@ -19,7 +19,7 @@
  */
 
 
-uniform sampler2D texture;
+uniform sampler2D texture_;
 uniform vec2 inverseVP;
 
 varying vec2 texCoord;
@@ -86,5 +86,5 @@ vec4 applyFXAA(vec2 fragCoord, sampler2D tex)
 }
 
 void main() {
-	gl_FragColor = applyFXAA(texCoord, texture);
+	gl_FragColor = applyFXAA(texCoord, texture_);
 }

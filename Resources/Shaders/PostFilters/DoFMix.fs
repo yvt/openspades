@@ -19,7 +19,7 @@
  */
 
 
-uniform sampler2D texture;
+uniform sampler2D texture_;
 uniform sampler2D blurTexture1;
 uniform sampler2D blurTexture2;
 uniform sampler2D cocTexture;
@@ -38,7 +38,7 @@ void main() {
 	
 	float coc = texture2D(cocTexture, texCoord).x;
 	
-	vec4 a = doGamma(texture2D(texture, texCoord));
+	vec4 a = doGamma(texture2D(texture_, texCoord));
 	vec4 b = doGamma(texture2D(blurTexture1, texCoord));
 	b += doGamma(texture2D(blurTexture2, texCoord)) * 2.;
 	b *= (1. / 3.);

@@ -20,12 +20,12 @@
 
 // This shader computes the gain of the auto exposure.
 
-uniform sampler2D texture;
+uniform sampler2D texture_;
 
 varying vec4 color;
 
 void main() {
-	float brightness = texture2D(texture, vec2(0.5, 0.5)).x;
+	float brightness = texture2D(texture_, vec2(0.5, 0.5)).x;
 
 	// reverse "raise to the n-th power"
 	brightness = sqrt(brightness);

@@ -19,13 +19,13 @@
  */
 
 
-uniform sampler2D texture;
+uniform sampler2D texture_;
 
 varying vec2 texCoord;
 
 void main() {
 	// linear RGB
-	vec3 color = texture2D(texture, texCoord).xyz;
+	vec3 color = texture2D(texture_, texCoord).xyz;
 
 	// desaturate
 	float brightness = max(max(color.x, color.y), color.z);

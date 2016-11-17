@@ -19,7 +19,7 @@
  */
 
 
-uniform sampler2D texture;
+uniform sampler2D texture_;
 
 varying vec2 texCoord;
 
@@ -27,7 +27,7 @@ uniform float gamma;
 
 void main() {
 	vec3 color;
-	color = texture2D(texture, texCoord).xyz;
+	color = texture2D(texture_, texCoord).xyz;
 	color = pow(color, vec3(gamma));
 	gl_FragColor = vec4(color, 1.);
 }
