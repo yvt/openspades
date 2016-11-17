@@ -22,3 +22,7 @@ For example:
 ## Create an issue
 
 If your problem hasn't been solved or reported, then create an issue detailing your problem in as much detail as possible.
+
+---
+
+### For more information about OpenSpades, check out the **[Wiki](https://github.com/yvt/openspades/wiki)**.
