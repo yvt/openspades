@@ -112,6 +112,7 @@ GCC 4.8 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    
    Source: `E:/Projects/openspades`,
    Binaries: `E:/Projects/openspades/OpenSpades.msvc`
+   Generator: Visual Studio 12 (2013) or 14 (2015) (not Win64!)
    
    For your convenience, create the directory: `E:/Projects/openspades/OpenSpades.msvc/os.Resources`, extract the resources (.pak files) to this dir,
    set `OPENSPADES_RESDIR` to point to this directory. (Run CMake again, now when running debug builds openspades will also read resources from this dir)
