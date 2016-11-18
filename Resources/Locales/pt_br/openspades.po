@@ -867,7 +867,7 @@ msgstr "Desfoque de Câmera"
 #: ../../Scripts/Gui/StartupScreen.as:1086
 #: ../../Scripts/Gui/StartupScreen.as:1093
 msgctxt "StartupScreen"
-msgid "Blurs the screen when you turns quickly."
+msgid "Blurs the screen when you turn quickly."
 msgstr "Causa desfoque quando você se move rapidamente."
 
 #: ../../Scripts/Gui/StartupScreen.as:1088
