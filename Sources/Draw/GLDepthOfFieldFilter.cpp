@@ -67,7 +67,7 @@ namespace spades {
 			int h = buffer.GetHeight();
 			
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
-			static GLProgramUniform blur_textureUniform("texture");
+			static GLProgramUniform blur_textureUniform("mainTexture");
 			static GLProgramUniform blur_unitShift("unitShift");
 			program->Use();
 			blur_positionAttribute(program);
@@ -226,7 +226,7 @@ namespace spades {
 			int h2 = h / divide;
 			
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
-			static GLProgramUniform blur_textureUniform("texture");
+			static GLProgramUniform blur_textureUniform("mainTexture");
 			static GLProgramUniform blur_cocUniform("cocTexture");
 			static GLProgramUniform blur_offset("offset");
 			program->Use();
@@ -319,7 +319,7 @@ namespace spades {
 			int h = tex.GetHeight();
 			
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
-			static GLProgramUniform blur_textureUniform1("texture");
+			static GLProgramUniform blur_textureUniform1("mainTexture");
 			static GLProgramUniform blur_textureUniform2("blurTexture1");
 			static GLProgramUniform blur_textureUniform3("blurTexture2");
 			static GLProgramUniform blur_textureUniform4("cocTexture");
@@ -370,7 +370,7 @@ namespace spades {
 			int h = tex.GetHeight();
 			
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
-			static GLProgramUniform blur_textureUniform("texture");
+			static GLProgramUniform blur_textureUniform("mainTexture");
 			static GLProgramUniform blur_colorUniform("colorUniform");
 			static GLProgramUniform blur_texCoordRangeUniform("texCoordRange");
 			program->Use();

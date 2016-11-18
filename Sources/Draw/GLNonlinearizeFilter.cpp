@@ -46,7 +46,7 @@ namespace spades {
 			GLQuadRenderer qr(dev);
 			
 			static GLProgramAttribute lensPosition("positionAttribute");
-			static GLProgramUniform lensTexture("texture");
+			static GLProgramUniform lensTexture("mainTexture");
 			static GLProgramUniform lensGamma("gamma");
 			
 			dev->Enable(IGLDevice::Blend, false);

@@ -60,7 +60,7 @@ namespace spades {
 			int h = buffer.GetHeight();
 			
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
-			static GLProgramUniform blur_textureUniform("texture");
+			static GLProgramUniform blur_textureUniform("mainTexture");
 			static GLProgramUniform blur_unitShift("unitShift");
 			program->Use();
 			blur_positionAttribute(program);

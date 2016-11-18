@@ -81,7 +81,7 @@ namespace spades {
 			int h = tex.GetHeight();
 			
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
-			static GLProgramUniform blur_textureUniform("texture");
+			static GLProgramUniform blur_textureUniform("mainTexture");
             static GLProgramUniform blur_colorUniform("colorUniform");
             static GLProgramUniform blur_texCoordRangeUniform("texCoordRange");
             static GLProgramUniform blur_texCoordOffsetUniform("texCoordOffset");
@@ -129,7 +129,7 @@ namespace spades {
             int h = tex.GetHeight();
             
             static GLProgramAttribute blur_positionAttribute("positionAttribute");
-            static GLProgramUniform blur_textureUniform("texture");
+            static GLProgramUniform blur_textureUniform("mainTexture");
             static GLProgramUniform blur_unitShift("unitShift");
             program->Use();
             blur_positionAttribute(program);
@@ -193,7 +193,7 @@ namespace spades {
 			
 			static GLProgramAttribute thruPosition("positionAttribute");
 			static GLProgramUniform thruColor("colorUniform");
-			static GLProgramUniform thruTexture("texture");
+			static GLProgramUniform thruTexture("mainTexture");
 			static GLProgramUniform thruTexCoordRange("texCoordRange");
 			
 			thruPosition(thru);

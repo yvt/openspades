@@ -799,7 +799,7 @@ namespace spades {
 				
 				static GLProgramUniform screenTexture("screenTexture");
 				static GLProgramUniform depthTexture("depthTexture");
-				static GLProgramUniform textureUnif("texture");
+				static GLProgramUniform textureUnif("mainTexture");
 				static GLProgramUniform waveTextureUnif("waveTexture");
 				static GLProgramUniform waveTextureUnif1("waveTexture1");
 				static GLProgramUniform waveTextureUnif2("waveTexture2");

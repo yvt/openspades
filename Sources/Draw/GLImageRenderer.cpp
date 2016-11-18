@@ -52,7 +52,7 @@ namespace spades{
 			textureSize = new GLProgramUniform
 			("invTextureSize");
 			texture = new GLProgramUniform
-			("texture");
+			("mainTexture");
 			
 			
 			(*positionAttribute)(program);
