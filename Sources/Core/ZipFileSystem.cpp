@@ -109,7 +109,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			size_t outBytes;
 			if(streaming){
-				int out = unzReadCurrentFile(zip, buf, (uint) bytes);
+				int out = unzReadCurrentFile(zip, buf, (unsigned int) bytes);
 				if(out < 0){
 					SPRaise("Unzip error: 0x%08x", bytes);
 				}

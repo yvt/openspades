@@ -12,17 +12,46 @@
 #endif
 
 namespace spades {
-    MumbleLink::MumbleLink() : metre_per_block(0.63), mumbleLinkedMemory(nullptr) {}
+	struct MumbleLinkedMemory {
+		uint32_t uiVersion;
+		uint32_t uiTick;
+		float fAvatarPosition[3];
+		float fAvatarFront[3];
+		float fAvatarTop[3];
+		wchar_t name[256];
+		float fCameraPosition[3];
+		float fCameraFront[3];
+		float fCameraTop[3];
+		wchar_t identity[256];
+		uint32_t context_len;
+		unsigned char context[256];
+		wchar_t description[2048];
+	};
+
+	struct MumbleLinkPrivate
+	{
+#ifdef _WIN32
+		HANDLE obj;
+#else
+		int fd;
+#endif
+	};
+
+    MumbleLink::MumbleLink() : 
+		metre_per_block(0.63), 
+		mumbleLinkedMemory(nullptr),
+		priv(new MumbleLinkPrivate())
+	{}
 
     MumbleLink::~MumbleLink() {
     #ifdef WIN32
       UnmapViewOfFile(mumbleLinkedMemory);
-      if (obj != nullptr)
-        CloseHandle(obj);
+      if (priv->obj != nullptr)
+        CloseHandle(priv->obj);
     #else
       munmap(mumbleLinkedMemory, sizeof(*mumbleLinkedMemory));
-      if (fd > 0)
-        close(fd);
+      if (priv->fd > 0)
+        close(priv->fd);
     #endif
     }
 
@@ -36,30 +65,30 @@ namespace spades {
     bool MumbleLink::init() {
       assert(mumbleLinkedMemory == nullptr);
     #ifdef WIN32
-      obj = OpenFileMappingW(FILE_MAP_ALL_ACCESS, FALSE, L"MumbleLink");
-      if (obj == nullptr)
+      priv->obj = OpenFileMappingW(FILE_MAP_ALL_ACCESS, FALSE, L"MumbleLink");
+      if (priv->obj == nullptr)
         return false;
 
       mumbleLinkedMemory = static_cast<MumbleLinkedMemory *>(MapViewOfFile(
-          obj, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(*mumbleLinkedMemory)));
+		  priv->obj, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(*mumbleLinkedMemory)));
 
       if (mumbleLinkedMemory == nullptr) {
-        CloseHandle(obj);
-        obj = nullptr;
+        CloseHandle(priv->obj);
+		priv->obj = nullptr;
         return false;
       }
     #else
       std::string name = "/MumbleLink." + std::to_string(getuid());
 
-      fd = shm_open(name.c_str(), O_RDWR, S_IRUSR | S_IWUSR);
+	  priv->fd = shm_open(name.c_str(), O_RDWR, S_IRUSR | S_IWUSR);
 
-      if (fd < 0) {
+      if (priv->fd < 0) {
         return false;
       }
 
       mumbleLinkedMemory = static_cast<MumbleLinkedMemory *>(
           (mmap(nullptr, sizeof(*mumbleLinkedMemory), PROT_READ | PROT_WRITE,
-                MAP_SHARED, fd, 0)));
+                MAP_SHARED, priv->fd, 0)));
 
       if (mumbleLinkedMemory == MAP_FAILED) {
         mumbleLinkedMemory = nullptr;
@@ -85,7 +114,7 @@ namespace spades {
     }
 
     void MumbleLink::update(spades::client::Player *player) {
-      if (mumbleLinkedMemory == nullptr or player == nullptr)
+      if (mumbleLinkedMemory == nullptr || player == nullptr)
         return;
 
       if (mumbleLinkedMemory->uiVersion != 2) {
