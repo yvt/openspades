@@ -19,7 +19,7 @@
  */
 
 
-uniform sampler2D texture_;
+uniform sampler2D mainTexture;
 
 varying vec3 angleTan;
 varying vec4 texCoord1;
@@ -44,32 +44,32 @@ void main() {
 	// FIXME: handle LINEAR_FRAMEBUFFER case
 	val = vec3(0.0, 0.2, 1.0);
 	sum += val;
-	val *= linearlize(texture2D(texture_, texCoord1.xy).xyz);
+	val *= linearlize(texture2D(mainTexture, texCoord1.xy).xyz);
 	gl_FragColor.xyz = val;
 	
 	val = vec3(0.0, 0.5, 1.0);
 	sum += val;
-	val *= linearlize(texture2D(texture_, texCoord1.zw).xyz);
+	val *= linearlize(texture2D(mainTexture, texCoord1.zw).xyz);
 	gl_FragColor.xyz += val;
 	
 	val = vec3(0.0, 1.0, 0.0);
 	sum += val;
-	val *= linearlize(texture2D(texture_, texCoord2.xy).xyz);
+	val *= linearlize(texture2D(mainTexture, texCoord2.xy).xyz);
 	gl_FragColor.xyz += val;
 	
 	val = vec3(1.0, 0.5, 0.0);
 	sum += val;
-	val *= linearlize(texture2D(texture_, texCoord2.zw).xyz);
+	val *= linearlize(texture2D(mainTexture, texCoord2.zw).xyz);
 	gl_FragColor.xyz += val;
 	
 	val = vec3(1.0, 0.4, 0.0);
 	sum += val;
-	val *= linearlize(texture2D(texture_, texCoord3.xy).xyz);
+	val *= linearlize(texture2D(mainTexture, texCoord3.xy).xyz);
 	gl_FragColor.xyz += val;
 	
 	val = vec3(1.0, 0.3, 1.0);
 	sum += val;
-	val *= linearlize(texture2D(texture_, texCoord3.zw).xyz);
+	val *= linearlize(texture2D(mainTexture, texCoord3.zw).xyz);
 	gl_FragColor.xyz += val;
 	
 	gl_FragColor.xyz *= 1. / sum;
@@ -79,12 +79,12 @@ void main() {
 	
 #elif 1
 	// faster!
-	gl_FragColor.x = texture2D(texture_, texCoord4.xy).x;
-	gl_FragColor.y = texture2D(texture_, texCoord2.xy).y;
-	gl_FragColor.z = texture2D(texture_, texCoord1.xy).z;
+	gl_FragColor.x = texture2D(mainTexture, texCoord4.xy).x;
+	gl_FragColor.y = texture2D(mainTexture, texCoord2.xy).y;
+	gl_FragColor.z = texture2D(mainTexture, texCoord1.xy).z;
 #else
 	// no color abberation effect
-	gl_FragColor = texture2D(texture_, texCoord4);
+	gl_FragColor = texture2D(mainTexture, texCoord4);
 	gl_FragColor.w = 1.;
 #endif
 	

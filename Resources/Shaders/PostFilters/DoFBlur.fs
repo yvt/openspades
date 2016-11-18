@@ -19,7 +19,7 @@
  */
 
 
-uniform sampler2D texture_;
+uniform sampler2D mainTexture;
 uniform sampler2D cocTexture;
 
 varying vec2 texCoord;
@@ -40,15 +40,15 @@ void main() {
 	vec4 offsets = vec4(0., 0.25, 0.5, 0.75) * coc;
 	vec4 offsets2 = offsets + coc * 0.125;
 	
-	v += doGamma(texture2D(texture_, texCoord));
-	v += doGamma(texture2D(texture_, texCoord + offset * offsets.y));
-	v += doGamma(texture2D(texture_, texCoord + offset * offsets.z));
-	v += doGamma(texture2D(texture_, texCoord + offset * offsets.w));
+	v += doGamma(texture2D(mainTexture, texCoord));
+	v += doGamma(texture2D(mainTexture, texCoord + offset * offsets.y));
+	v += doGamma(texture2D(mainTexture, texCoord + offset * offsets.z));
+	v += doGamma(texture2D(mainTexture, texCoord + offset * offsets.w));
 #if 1
-	v += doGamma(texture2D(texture_, texCoord + offset * offsets2.x));
-	v += doGamma(texture2D(texture_, texCoord + offset * offsets2.y));
-	v += doGamma(texture2D(texture_, texCoord + offset * offsets2.z));
-	v += doGamma(texture2D(texture_, texCoord + offset * offsets2.w));
+	v += doGamma(texture2D(mainTexture, texCoord + offset * offsets2.x));
+	v += doGamma(texture2D(mainTexture, texCoord + offset * offsets2.y));
+	v += doGamma(texture2D(mainTexture, texCoord + offset * offsets2.z));
+	v += doGamma(texture2D(mainTexture, texCoord + offset * offsets2.w));
 	v *= 0.125;
 #else
     v *= 0.25;

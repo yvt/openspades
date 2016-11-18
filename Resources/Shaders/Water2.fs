@@ -29,7 +29,7 @@ varying vec2 worldPositionOriginal;
 
 uniform sampler2D screenTexture;
 uniform sampler2D depthTexture;
-uniform sampler2D texture_;
+uniform sampler2D mainTexture;
 uniform sampler2D waveTexture1;
 uniform sampler2D waveTexture2;
 uniform sampler2D waveTexture3;
@@ -129,7 +129,7 @@ void main() {
 	vec2 subCoord = 1. - clamp((vec2(0.5) - startPos) / diffPos,
 						  0., 1.);
 	vec2 sampCoord = integralCoord + subCoord * blurDirSign;
-	vec3 waterColor = texture2D(texture_, sampCoord / 512.).xyz;
+	vec3 waterColor = texture2D(mainTexture, sampCoord / 512.).xyz;
 	waterColor *= EvaluateSunLight() + EvaluateAmbientLight(1.);
 
 	// underwater object color

@@ -19,7 +19,7 @@
  */
 
 
-uniform sampler2D texture_;
+uniform sampler2D mainTexture;
 uniform sampler2D cocTexture;
 
 varying vec2 texCoord;
@@ -33,7 +33,7 @@ vec4 doGamma(vec4 col) {
 }
 
 vec4 sampleDoF(vec2 at) {
-	vec4 color = doGamma(texture2D(texture_, at));
+	vec4 color = doGamma(texture2D(mainTexture, at));
 	color.w = texture2D(cocTexture, at).x + 0.001;
 	color.xyz *= color.w;
 	return color;

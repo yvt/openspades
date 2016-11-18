@@ -56,7 +56,7 @@ vec3 Radiosity_Map(float detailAmbientOcclusion) {
 
 	// ambient occlusion
 	float amb = texture3D(ambientShadowTexture, ambientShadowTextureCoord).x;
-	amb = max(amb, 0.); // for some reason, texture_ value becomes negative
+	amb = max(amb, 0.); // for some reason, mainTexture value becomes negative
 
 	// method1:
 	amb = sqrt(amb * detailAmbientOcclusion);
@@ -92,7 +92,7 @@ vec3 BlurredReflection_Map(float detailAmbientOcclusion, vec3 direction)
 
 	// ambient occlusion
 	float amb = texture3D(ambientShadowTexture, ambientShadowTextureCoord).x;
-	amb = max(amb, 0.); // for some reason, texture_ value becomes negative
+	amb = max(amb, 0.); // for some reason, mainTexture value becomes negative
 	amb *= amb; // darken
 
 	// method1:
