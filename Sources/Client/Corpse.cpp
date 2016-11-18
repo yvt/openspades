@@ -189,14 +189,14 @@ namespace spades {
 		}
 		
 		static float MyACos(float v){
-			SPAssert(!std::isnan(v));
+			SPAssert(!isnan(v));
 			if(v >= 1.f) return 0.f;
 			if(v <= -1.f) return static_cast<float>(M_PI);
 			float vv = acosf(v);
-			if(std::isnan(vv)){
+			if(isnan(vv)){
 				vv = acosf(v * .9999f);
 			}
-			SPAssert(!std::isnan(vv));
+			SPAssert(!isnan(vv));
 			return vv;
 		}
 
@@ -237,7 +237,7 @@ namespace spades {
 				strength = MyACos(dot) - MyACos(minDot);
 			}
 			
-			SPAssert(!std::isnan(strength));
+			SPAssert(!isnan(strength));
 			
 			strength *= 20.f;
 			strength *= dt;
@@ -298,7 +298,7 @@ namespace spades {
 				strength = MyACos(dot) - MyACos(minDot);
 			}
 			
-			SPAssert(!std::isnan(strength));
+			SPAssert(!isnan(strength));
 			
 			strength *= 100.f;
 			strength *= dt;
@@ -629,9 +629,9 @@ namespace spades {
 				Vector3 oldPos = node.lastPos;
 				node.pos += node.vel * dt;
 				
-				SPAssert(!std::isnan(node.pos.x));
-				SPAssert(!std::isnan(node.pos.y));
-				SPAssert(!std::isnan(node.pos.z));
+				SPAssert(!isnan(node.pos.x));
+				SPAssert(!isnan(node.pos.y));
+				SPAssert(!isnan(node.pos.z));
 				
 				if(node.pos.z > 63.f){
 					node.vel.z -= dt * 6.f; // buoyancy
