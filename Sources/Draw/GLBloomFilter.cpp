@@ -55,7 +55,7 @@ namespace spades {
 			
 			static GLProgramAttribute thruPosition("positionAttribute");
 			static GLProgramUniform thruColor("colorUniform");
-			static GLProgramUniform thruTexture("texture");
+			static GLProgramUniform thruTexture("mainTexture");
 			static GLProgramUniform thruTexCoordRange("texCoordRange");
 			
 			thruPosition(thru);

@@ -107,7 +107,7 @@ namespace spades {
 			
 			static GLProgramAttribute thruPosition("positionAttribute");
 			static GLProgramUniform thruColor("colorUniform");
-			static GLProgramUniform thruTexture("texture");
+			static GLProgramUniform thruTexture("mainTexture");
 			static GLProgramUniform thruTexCoordRange("texCoordRange");
 			
 			thruPosition(thru);
@@ -117,7 +117,7 @@ namespace spades {
 			
 			static GLProgramAttribute preprocessPosition("positionAttribute");
 			static GLProgramUniform preprocessColor("colorUniform");
-			static GLProgramUniform preprocessTexture("texture");
+			static GLProgramUniform preprocessTexture("mainTexture");
 			static GLProgramUniform preprocessTexCoordRange("texCoordRange");
 			
 			preprocessPosition(preprocess);
@@ -127,7 +127,7 @@ namespace spades {
 			
 			static GLProgramAttribute computeGainPosition("positionAttribute");
 			static GLProgramUniform computeGainColor("colorUniform");
-			static GLProgramUniform computeGainTexture("texture");
+			static GLProgramUniform computeGainTexture("mainTexture");
 			static GLProgramUniform computeGainTexCoordRange("texCoordRange");
 			
 			computeGainPosition(computeGain);

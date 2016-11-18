@@ -40,7 +40,7 @@ namespace spades {
 		positionAttribute("positionAttribute"),
 		spritePosAttribute("spritePosAttribute"),
 		colorAttribute("colorAttribute"),
-		texture("texture"),
+		texture("mainTexture"),
 		viewMatrix("viewMatrix"),
 		fogDistance("fogDistance"),
 		fogColor("fogColor"),

@@ -45,7 +45,7 @@ namespace spades {
 		positionAttribute("positionAttribute"),
 		spritePosAttribute("spritePosAttribute"),
 		colorAttribute("colorAttribute"),
-		texture("texture"),
+		texture("mainTexture"),
 		viewMatrix("viewMatrix"),
 		fogDistance("fogDistance"),
 		fogColor("sRGBFogColor"),
@@ -418,7 +418,7 @@ namespace spades {
 				// do gaussian blur
 				GLProgram *program = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 				static GLProgramAttribute blur_positionAttribute("positionAttribute");
-				static GLProgramUniform blur_textureUniform("texture");
+				static GLProgramUniform blur_textureUniform("mainTexture");
 				static GLProgramUniform blur_unitShift("unitShift");
 				program->Use();
 				blur_positionAttribute(program);
@@ -453,7 +453,7 @@ namespace spades {
 				program = renderer->RegisterProgram("Shaders/PostFilters/PassThrough.program");
 				static GLProgramAttribute positionAttribute("positionAttribute");
 				static GLProgramUniform colorUniform("colorUniform");
-				static GLProgramUniform textureUniform("texture");
+				static GLProgramUniform textureUniform("mainTexture");
 				static GLProgramUniform texCoordRange("texCoordRange");
 				
 				positionAttribute(program);

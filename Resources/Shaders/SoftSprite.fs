@@ -20,7 +20,7 @@
 
 
 uniform sampler2D depthTexture;
-uniform sampler2D texture;
+uniform sampler2D mainTexture;
 
 uniform vec3 fogColor;
 uniform vec2 zNearFar;
@@ -48,7 +48,7 @@ void main() {
 		discard;
 	}
 	
-	gl_FragColor = texture2D(texture, texCoord.xy);
+	gl_FragColor = texture2D(mainTexture, texCoord.xy);
 #if LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz *= gl_FragColor.xyz;
 #endif

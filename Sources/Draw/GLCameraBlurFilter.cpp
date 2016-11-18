@@ -82,7 +82,7 @@ namespace spades {
 			dev->Enable(IGLDevice::Blend, false);
 			
 			static GLProgramAttribute programPosition("positionAttribute");
-			static GLProgramUniform programTexture("texture");
+			static GLProgramUniform programTexture("mainTexture");
 			static GLProgramUniform programDepthTexture("depthTexture");
 			static GLProgramUniform programReverseMatrix("reverseMatrix");
 			static GLProgramUniform programShutterTimeScale("shutterTimeScale");

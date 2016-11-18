@@ -19,7 +19,7 @@
  */
 
 
-uniform sampler2D texture;
+uniform sampler2D mainTexture;
 
 varying vec2 texCoord;
 
@@ -29,7 +29,7 @@ uniform vec3 tint;
 
 void main() {
 	
-	gl_FragColor = texture2D(texture, texCoord);
+	gl_FragColor = texture2D(mainTexture, texCoord);
 	
 	gl_FragColor.xyz *= tint;
 	

@@ -19,7 +19,7 @@
  */
 
 
-uniform sampler2D texture;
+uniform sampler2D mainTexture;
 uniform sampler2D depthTexture;
 uniform float shutterTimeScale;
 
@@ -27,7 +27,7 @@ varying vec2 newCoord;
 varying vec3 oldCoord;
 
 vec4 getSample(vec2 coord){
-	vec3 color = texture2D(texture, coord).xyz;
+	vec3 color = texture2D(mainTexture, coord).xyz;
 #if !LINEAR_FRAMEBUFFER
 	color *= color; // linearize
 #endif

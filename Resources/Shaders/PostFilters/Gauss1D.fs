@@ -19,7 +19,7 @@
  */
 
 
-uniform sampler2D texture;
+uniform sampler2D mainTexture;
 
 varying vec4 texCoord1;
 varying vec4 texCoord2;
@@ -37,9 +37,9 @@ void main() {
 	const float shift4 = pixelShift * 2.30654399138844;
 	const float scale4 = 0.178704407070903;
 	
-	gl_FragColor = texture2D(texture, texCoord1.xy) * scale1;
-	gl_FragColor += texture2D(texture, texCoord1.zw) * scale2;
-	gl_FragColor += texture2D(texture, texCoord2.xy) * scale3;
-	gl_FragColor += texture2D(texture, texCoord2.zw) * scale4;
+	gl_FragColor = texture2D(mainTexture, texCoord1.xy) * scale1;
+	gl_FragColor += texture2D(mainTexture, texCoord1.zw) * scale2;
+	gl_FragColor += texture2D(mainTexture, texCoord2.xy) * scale3;
+	gl_FragColor += texture2D(mainTexture, texCoord2.zw) * scale4;
 }
 
