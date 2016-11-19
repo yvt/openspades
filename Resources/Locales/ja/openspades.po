@@ -1,4 +1,4 @@
-# OpenSpades translation
+﻿# OpenSpades translation
 # Copyright (C) 2014 yvt
 # This file is distributed under the same license as the OpenSpades package.
 # yvt <i@yvt.jp>, 2014.
@@ -861,7 +861,7 @@ msgstr "カメラブラー"
 #: ../../Scripts/Gui/StartupScreen.as:1086
 #: ../../Scripts/Gui/StartupScreen.as:1093
 msgctxt "StartupScreen"
-msgid "Blurs the screen when you turns quickly."
+msgid "Blurs the screen when you turn quickly."
 msgstr "急速な方向転換時のブレを再現します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1088

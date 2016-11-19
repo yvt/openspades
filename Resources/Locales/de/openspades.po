@@ -840,7 +840,7 @@ msgstr "Unschärfe Effekt"
 
 #: ../../Scripts/Gui/StartupScreen.as:1086
 msgctxt "StartupScreen"
-msgid "Blurs the screen when you turns quickly."
+msgid "Blurs the screen when you turn quickly."
 msgstr "Der Bildschirm wird unscharf wenn du dich schnell umdrehst."
 
 #: ../../Scripts/Gui/StartupScreen.as:1088

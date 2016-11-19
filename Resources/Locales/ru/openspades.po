@@ -849,7 +849,7 @@ msgstr "Размытие камеры"
 #: ../../Scripts/Gui/StartupScreen.as:1086
 #: ../../Scripts/Gui/StartupScreen.as:1093
 msgctxt "StartupScreen"
-msgid "Blurs the screen when you turns quickly."
+msgid "Blurs the screen when you turn quickly."
 msgstr "Размывает экран когда вы быстро поворачиваетесь."
 
 #: ../../Scripts/Gui/StartupScreen.as:1088

@@ -1000,7 +1000,7 @@ msgstr "모션 블러"
 
 #: ../../Scripts/Gui/StartupScreen.as:1086
 msgctxt "StartupScreen"
-msgid "Blurs the screen when you turns quickly."
+msgid "Blurs the screen when you turn quickly."
 msgstr "빠르게 화면을 움직일 때 화면을 흐리게 합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1088
