@@ -1090,7 +1090,7 @@ namespace spades {
 					StartupScreenComplexConfig cplx;
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_cameraBlur"), "0", "1", _Tr("StartupScreen", "Camera Blur"),
-					_Tr("StartupScreen", "Blurs the screen when you turns quickly.")));
+					_Tr("StartupScreen", "Blurs the screen when you turn quickly.")));
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_lens"), "0", "1", _Tr("StartupScreen", "Lens Effect"),
 					_Tr("StartupScreen", "Simulates distortion caused by a real camera lens.")));
