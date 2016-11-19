@@ -27,7 +27,7 @@
 #include "../Core/Debug.h"
 #include "IGLDevice.h"
 
-SPADES_SETTING(r_debugTiming, "0");
+SPADES_SETTING(r_debugTiming);
 
 namespace spades {
 	namespace draw {

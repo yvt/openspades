@@ -35,7 +35,7 @@ using namespace spades::draw;
 #define __PRETTY_FUNCTION__	__FUNCDNAME__
 #endif
 
-SPADES_SETTING(r_ignoreGLErrors, "1");
+DEFINE_SPADES_SETTING(r_ignoreGLErrors, "1");
 
 static uint32_t vertCount = 0;
 static uint32_t drawOps = 0;

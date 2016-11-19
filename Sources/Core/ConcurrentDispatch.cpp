@@ -46,7 +46,7 @@
 
 #include "ThreadLocalStorage.h"
 
-SPADES_SETTING(core_numDispatchQueueThreads, "auto");
+DEFINE_SPADES_SETTING(core_numDispatchQueueThreads, "auto");
 
 static int GetNumCores() {
 #ifdef WIN32

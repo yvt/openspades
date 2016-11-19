@@ -31,7 +31,7 @@
 #include "../Core/Debug.h"
 #include <Core/Settings.h>
 
-SPADES_SETTING(r_hdrGamma, "2.2");
+DEFINE_SPADES_SETTING(r_hdrGamma, "2.2");
 
 namespace spades {
 	namespace draw {

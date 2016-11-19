@@ -49,12 +49,12 @@
 
 #include "NetClient.h"
 
-SPADES_SETTING(cg_ragdoll, "1");
-SPADES_SETTING(cg_blood, "1");
-SPADES_SETTING(cg_ejectBrass, "1");
+DEFINE_SPADES_SETTING(cg_ragdoll, "1");
+SPADES_SETTING(cg_blood);
+DEFINE_SPADES_SETTING(cg_ejectBrass, "1");
 
-SPADES_SETTING(cg_alerts, "");
-SPADES_SETTING(cg_centerMessage, "");
+SPADES_SETTING(cg_alerts);
+SPADES_SETTING(cg_centerMessage);
 
 
 namespace spades {

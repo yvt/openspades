@@ -56,15 +56,15 @@
 
 #include "NetClient.h"
 
-SPADES_SETTING(cg_hitIndicator, "1");
-SPADES_SETTING(cg_debugAim, "0");
-SPADES_SETTING(cg_keyReloadWeapon, "");
-SPADES_SETTING(cg_screenshotFormat, "jpeg");
-SPADES_SETTING(cg_stats, "0");
-SPADES_SETTING(cg_hideHud, "0");
-SPADES_SETTING(cg_playerNames, "2");
-SPADES_SETTING(cg_playerNameX, "0");
-SPADES_SETTING(cg_playerNameY, "0");
+DEFINE_SPADES_SETTING(cg_hitIndicator, "1");
+DEFINE_SPADES_SETTING(cg_debugAim, "0");
+SPADES_SETTING(cg_keyReloadWeapon);
+DEFINE_SPADES_SETTING(cg_screenshotFormat, "jpeg");
+DEFINE_SPADES_SETTING(cg_stats, "0");
+DEFINE_SPADES_SETTING(cg_hideHud, "0");
+DEFINE_SPADES_SETTING(cg_playerNames, "2");
+DEFINE_SPADES_SETTING(cg_playerNameX, "0");
+DEFINE_SPADES_SETTING(cg_playerNameY, "0");
 
 namespace spades {
 	namespace client {

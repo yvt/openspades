@@ -52,7 +52,7 @@ namespace spades {
 		{
 			auto prefs = ImportFltkPreference();
 			for(const auto& item: prefs) {
-				auto *it = GetItem(item.first);
+				auto *it = GetItem(item.first, nullptr);
 			
 				it->Set(item.second);
 			}
@@ -156,7 +156,7 @@ namespace spades {
 					linePos++;
 					
 					std::string val = readString(false);
-					auto *item = GetItem(key);
+					auto *item = GetItem(key, nullptr);
 					item->Set(val);
 					
 					line++;
@@ -283,26 +283,39 @@ namespace spades {
 	}
 
 	Settings::Item *Settings::GetItem(const std::string &name,
-									  const std::string& def,
-									  const std::string& desc){
+									  const SettingItemDescriptor *descriptor){
 		SPADES_MARK_FUNCTION();
 		std::map<std::string, Item *>::iterator it;
+        Item *item;
 		it = items.find(name);
 		if(it == items.end()){
-			Item *item = new Item();
+			item = new Item();
 			item->name = name;
-			
-			item->desc = desc;
-			item->defaultValue = def;
-			item->value = static_cast<float>(atof(def.c_str()));
-			item->intValue = atoi(def.c_str());
-			item->string = def;
-			item->defaults = true;
+            item->descriptor = descriptor;
+            item->defaults = true;
 			
 			items[name] = item;
-			return item;
-		}
-		return it->second;
+        } else {
+            item = it->second;
+        }
+        
+        if (descriptor) {
+            if (item->descriptor) {
+                if (*item->descriptor != *descriptor) {
+                    SPLog("WARNING: setting '%s' has multiple descriptors", name.c_str());
+                }
+            } else {
+                item->descriptor = descriptor;
+                const std::string &defaultValue = descriptor->defaultValue;
+                if (item->defaults) {
+                    item->value = static_cast<float>(atof(defaultValue.c_str()));
+                    item->intValue = atoi(defaultValue.c_str());
+                    item->string = defaultValue;
+                }
+            }
+        }
+        
+		return item;
 	}
 	
 	void Settings::Item::Load() {
@@ -314,6 +327,8 @@ namespace spades {
 		value = static_cast<float>(atof(str.c_str()));
 		intValue = atoi(str.c_str());
 		defaults = false;
+        
+        NotifyChange();
 	}
 	
 	
@@ -325,6 +340,8 @@ namespace spades {
 		intValue = v;
 		value = (float)v;
 		defaults = false;
+        
+        NotifyChange();
 	}
 	
 	void Settings::Item::Set(float v){
@@ -335,28 +352,21 @@ namespace spades {
 		intValue = (int)v;
 		value = v;
 		defaults = false;
+        
+        NotifyChange();
 	}
+    
+    void Settings::Item::NotifyChange() {
+        for (ISettingItemListener *listener: listeners) {
+            listener->SettingChanged(name);
+        }
+    }
 	
 	Settings::ItemHandle::ItemHandle(const std::string& name,
-									 const std::string& def,
-									 const std::string& desc){
+									 const SettingItemDescriptor *descriptor){
 		SPADES_MARK_FUNCTION();
 		
-		item = Settings::GetInstance()->GetItem(name, def, desc);
-		if( !def.empty() && item->defaultValue.empty() ){
-			item->defaultValue = def;
-			if(item->defaults) {
-				item->Set(def);
-				item->defaults = true;
-			}
-		}
-		if( !desc.empty() && item->desc.empty() ){
-			item->desc = desc;
-		}
-		if( item->defaultValue != def && !def.empty() ){
-			fprintf(stderr, "WARNING: setting '%s' has multiple default values ('%s', '%s')\n",
-					name.c_str(), def.c_str(), item->defaultValue.c_str());
-		}
+		item = Settings::GetInstance()->GetItem(name, descriptor);
 	}
 	
 	void Settings::ItemHandle::operator =(const std::string& value){
@@ -387,9 +397,27 @@ namespace spades {
 	const char *Settings::ItemHandle::CString() {
 		item->Load();
 		return item->string.c_str();
-	}
-	std::string Settings::ItemHandle::GetDescription() {
-		return item->desc;
+    }
+    void Settings::ItemHandle::AddListener(ISettingItemListener *listener) {
+        auto &listeners = item->listeners;
+        listeners.push_back(listener);
+    }
+    void Settings::ItemHandle::RemoveListener(ISettingItemListener *listener) {
+        auto &listeners = item->listeners;
+        auto it = std::find(listeners.begin(), listeners.end(), listener);
+        if (it != listeners.end()) {
+            listeners.erase(it);
+        }
+    }
+    
+    namespace
+    {
+        const SettingItemDescriptor defaultDescriptor {
+            std::string(), SettingItemFlags::None};
+    }
+    
+	const SettingItemDescriptor &Settings::ItemHandle::GetDescriptor() {
+        return item->descriptor ? *item->descriptor : defaultDescriptor;
 	}
 	
 	

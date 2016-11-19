@@ -73,7 +73,7 @@ static const unsigned char Icon[] = {
 };
 #endif
 
-SPADES_SETTING(cl_showStartupWindow, "1");
+DEFINE_SPADES_SETTING(cl_showStartupWindow, "1");
 
 #ifdef WIN32
 #include <windows.h>
@@ -81,7 +81,7 @@ SPADES_SETTING(cl_showStartupWindow, "1");
 #define strncasecmp(x,y,z)	_strnicmp(x,y,z)
 #define strcasecmp(x,y)		_stricmp(x,y)
 
-SPADES_SETTING(core_win32BeginPeriod, "1");
+DEFINE_SPADES_SETTING(core_win32BeginPeriod, "1");
 
 class ThreadQuantumSetter {
 public:
@@ -163,9 +163,9 @@ class ThreadQuantumSetter {
 
 #endif
 
-SPADES_SETTING(cg_lastQuickConnectHost, "");
-SPADES_SETTING(cg_protocolVersion, "");
-SPADES_SETTING(cg_playerName, "");
+SPADES_SETTING(cg_lastQuickConnectHost);
+SPADES_SETTING(cg_protocolVersion);
+SPADES_SETTING(cg_playerName);
 int cg_autoConnect = 0;
 bool cg_printVersion = false;
 bool cg_printHelp = false;

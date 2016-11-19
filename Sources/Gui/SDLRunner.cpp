@@ -47,18 +47,18 @@ static const unsigned char Icon[] = {
 };
 #endif
 
-SPADES_SETTING(r_videoWidth, "1024");
-SPADES_SETTING(r_videoHeight, "640");
-SPADES_SETTING(r_fullscreen, "0");
-SPADES_SETTING(r_colorBits, "32");
-SPADES_SETTING(r_depthBits, "16");
-SPADES_SETTING(r_vsync, "1");
-SPADES_SETTING(r_allowSoftwareRendering, "0");
-SPADES_SETTING(r_renderer, "gl");
+SPADES_SETTING(r_videoWidth);
+SPADES_SETTING(r_videoHeight);
+DEFINE_SPADES_SETTING(r_fullscreen, "0");
+DEFINE_SPADES_SETTING(r_colorBits, "32");
+DEFINE_SPADES_SETTING(r_depthBits, "16");
+DEFINE_SPADES_SETTING(r_vsync, "1");
+DEFINE_SPADES_SETTING(r_allowSoftwareRendering, "0");
+DEFINE_SPADES_SETTING(r_renderer, "gl");
 #ifdef __APPLE__
-SPADES_SETTING(s_audioDriver, "ysr");
+DEFINE_SPADES_SETTING(s_audioDriver, "ysr");
 #else
-SPADES_SETTING(s_audioDriver, "openal");
+DEFINE_SPADES_SETTING(s_audioDriver, "openal");
 #endif
 
 namespace spades {

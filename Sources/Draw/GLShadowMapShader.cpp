@@ -27,8 +27,8 @@
 #include "GLSparseShadowMapRenderer.h"
 #include "../Core/Debug.h"
 
-SPADES_SETTING(r_modelShadows, "1");
-SPADES_SETTING(r_sparseShadowMaps, "1");
+DEFINE_SPADES_SETTING(r_modelShadows, "1");
+DEFINE_SPADES_SETTING(r_sparseShadowMaps, "1");
 
 namespace spades {
 	namespace draw {

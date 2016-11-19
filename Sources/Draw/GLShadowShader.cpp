@@ -31,11 +31,11 @@
 #include "GLSparseShadowMapRenderer.h"
 #include "GLImage.h"
 
-SPADES_SETTING(r_mapSoftShadow, "0");
-SPADES_SETTING(r_radiosity, "0");
+DEFINE_SPADES_SETTING(r_mapSoftShadow, "0");
+SPADES_SETTING(r_radiosity);
 
-SPADES_SETTING(r_modelShadows, "1");
-SPADES_SETTING(r_sparseShadowMaps, "1");
+SPADES_SETTING(r_modelShadows);
+SPADES_SETTING(r_sparseShadowMaps);
 
 namespace spades {
 	namespace draw {

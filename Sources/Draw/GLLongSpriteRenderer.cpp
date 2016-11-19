@@ -27,7 +27,7 @@
 #include <Core/Settings.h>
 #include "SWFeatureLevel.h"
 
-SPADES_SETTING(r_hdr, "");
+SPADES_SETTING(r_hdr);
 
 namespace spades {
 	namespace draw {

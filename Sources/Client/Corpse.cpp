@@ -29,7 +29,7 @@
 
 using namespace std;
 
-SPADES_SETTING(r_corpseLineCollision, "1");
+DEFINE_SPADES_SETTING(r_corpseLineCollision, "1");
 
 namespace spades {
 	namespace client {

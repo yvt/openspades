@@ -31,7 +31,7 @@
 #include "FileManager.h"
 #include "IStream.h"
 #include <Core/Debug.h>
-SPADES_SETTING(core_locale, "");
+DEFINE_SPADES_SETTING(core_locale, "");
 
 #ifdef WIN32
 // FIMXE: not tested

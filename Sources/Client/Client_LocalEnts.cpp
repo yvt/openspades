@@ -52,11 +52,11 @@
 
 #include "NetClient.h"
 
-SPADES_SETTING(cg_blood, "1");
-SPADES_SETTING(cg_reduceSmoke, "0");
-SPADES_SETTING(cg_waterImpact, "1");
-SPADES_SETTING(cg_manualFocus, "0");
-SPADES_SETTING(cg_autoFocusSpeed, "0.4");
+DEFINE_SPADES_SETTING(cg_blood, "1");
+DEFINE_SPADES_SETTING(cg_reduceSmoke, "0");
+DEFINE_SPADES_SETTING(cg_waterImpact, "1");
+SPADES_SETTING(cg_manualFocus);
+DEFINE_SPADES_SETTING(cg_autoFocusSpeed, "0.4");
 
 namespace spades {
 	namespace client {

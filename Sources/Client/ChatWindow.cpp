@@ -29,8 +29,8 @@
 #include <Core/Math.h>
 #include <Core/Settings.h>
 
-SPADES_SETTING(cg_chatHeight, "30");
-SPADES_SETTING(cg_killfeedHeight, "26");
+DEFINE_SPADES_SETTING(cg_chatHeight, "30");
+DEFINE_SPADES_SETTING(cg_killfeedHeight, "26");
 
 namespace spades {
 	namespace client{

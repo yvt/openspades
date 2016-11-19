@@ -22,10 +22,30 @@
 #include <Core/Settings.h>
 #include <Core/RefCountedObject.h>
 #include <Core/ThreadLocalStorage.h>
+#include <unordered_map>
 
 namespace spades {
 	
-	static ThreadLocalStorage<bool> writeAllowed;
+    namespace
+    {
+        ThreadLocalStorage<bool> writeAllowed;
+        
+        // SettingItemDescriptor supplied to ItemHandle must have the static storage duration
+        std::unordered_map<std::string, const SettingItemDescriptor *>
+        settingItemDescriptors;
+        
+        const SettingItemDescriptor *MakeSettingItemDescriptor
+        (const std::string &name, const std::string &defaultValue)
+        {
+            auto it = settingItemDescriptors.find(name);
+            if (it != settingItemDescriptors.end()) {
+                return it->second;
+            }
+            auto *descriptor = new SettingItemDescriptor(defaultValue, SettingItemFlags::None);
+            settingItemDescriptors.insert(make_pair(name, descriptor));
+            return descriptor;
+        }
+    }
 	
 	void MaskConfigUpdateByScript(bool disabled)
 	{
@@ -34,6 +54,7 @@ namespace spades {
 		}
 		*writeAllowed = !disabled;
 	}
+    
 	
 	class ConfigRegistrar: public ScriptObjectRegistrar {
 		
@@ -44,16 +65,19 @@ namespace spades {
 		
 		class ConfigItem: public RefCountedObject {
 			Settings::ItemHandle handle;
-		public:
-			ConfigItem(const std::string& name, const std::string& defaultValue):
-			handle(name, defaultValue){
-			}
+        public:
+            ConfigItem(const std::string& name, const std::string& defaultValue):
+            handle(name, MakeSettingItemDescriptor(name, defaultValue)){
+            }
+            ConfigItem(const std::string& name):
+            handle(name, nullptr){
+            }
 			
 			static ConfigItem *Construct(const std::string& name, const std::string& defaultValue) {
 				return new ConfigItem(name, defaultValue);
 			}
 			static ConfigItem *Construct(const std::string& name) {
-				return new ConfigItem(name, std::string());
+				return new ConfigItem(name);
 			}
 			
 			ConfigItem *operator =(float fv) {

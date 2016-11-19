@@ -37,7 +37,7 @@
 #include "HitTestDebugger.h"
 #include <deque>
 
-SPADES_SETTING(cg_debugHitTest, "0");
+DEFINE_SPADES_SETTING(cg_debugHitTest, "0");
 
 namespace spades {
 	namespace client {

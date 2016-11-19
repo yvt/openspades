@@ -31,7 +31,7 @@
 #include "../Core/Debug.h"
 #include <Core/Settings.h>
 
-SPADES_SETTING(r_bloom, "");
+SPADES_SETTING(r_bloom);
 
 namespace spades {
 	namespace draw {

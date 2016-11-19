@@ -36,8 +36,8 @@
 
 #include "SWUtils.h"
 
-SPADES_SETTING(r_swStatistics, "0");
-SPADES_SETTING(r_swNumThreads, "4");
+DEFINE_SPADES_SETTING(r_swStatistics, "0");
+DEFINE_SPADES_SETTING(r_swNumThreads, "4");
 
 namespace spades {
 	namespace draw {

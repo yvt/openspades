@@ -25,14 +25,12 @@
 #include <algorithm>
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Debug.h>
-#include <Core/Settings.h>
 #include <array>
 #include <memory>
 
 namespace spades {
-	namespace draw {
-		
-		SPADES_SETTING(r_swNumThreads, "");
+    namespace draw {
+        int GetNumSWRendererThreads();
 		
 		template <class F>
 		static void InvokeParallel(F f, unsigned int numThreads) {
@@ -55,7 +53,7 @@ namespace spades {
 		template <class F>
 		static void InvokeParallel2(F f) {
 			
-			unsigned int numThreads = static_cast<unsigned int>((int)r_swNumThreads);
+			unsigned int numThreads = static_cast<unsigned int>(GetNumSWRendererThreads());
 			numThreads = std::max(numThreads, 1U);
 			numThreads = std::min(numThreads, 32U);
 			

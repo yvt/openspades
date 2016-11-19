@@ -35,7 +35,7 @@
 #include "GLDynamicLightShader.h"
 #include "GLProfiler.h"
 
-SPADES_SETTING(r_physicalLighting, "0");
+DEFINE_SPADES_SETTING(r_physicalLighting, "0");
 
 namespace spades {
 	namespace draw {

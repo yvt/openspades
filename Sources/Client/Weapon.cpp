@@ -26,7 +26,7 @@
 #include "../Core/Debug.h"
 #include "../Core/Settings.h"
 
-SPADES_SETTING(cg_protocolVersion, "3");
+SPADES_SETTING(cg_protocolVersion);
 
 namespace spades {
 	namespace client {

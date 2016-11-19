@@ -43,8 +43,8 @@
 #include "GunCasing.h"
 #include "IAudioChunk.h"
 
-SPADES_SETTING(cg_ragdoll, "");
-SPADES_SETTING(cg_ejectBrass, "");
+SPADES_SETTING(cg_ragdoll);
+SPADES_SETTING(cg_ejectBrass);
 
 namespace spades {
 	namespace client {

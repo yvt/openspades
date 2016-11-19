@@ -26,9 +26,9 @@
 #include <Core/Exception.h>
 #include <Core/Strings.h>
 
-SPADES_SETTING(cg_smp, "0");
-SPADES_SETTING(r_videoWidth, "1024");
-SPADES_SETTING(r_videoHeight, "640");
+DEFINE_SPADES_SETTING(cg_smp, "0");
+DEFINE_SPADES_SETTING(r_videoWidth, "1024");
+DEFINE_SPADES_SETTING(r_videoHeight, "640");
 
 namespace spades {
 	namespace gui {

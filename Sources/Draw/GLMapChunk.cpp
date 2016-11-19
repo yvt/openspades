@@ -31,7 +31,7 @@
 #include "../Core/Settings.h"
 #include "GLDynamicLightShader.h"
 
-SPADES_SETTING(r_water, "2");
+SPADES_SETTING(r_water);
 
 #include <AngelScript/include/angelscript.h> // for asOFFSET. somehow `offsetof` fails on gcc-4.8
 

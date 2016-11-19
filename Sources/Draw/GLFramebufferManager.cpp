@@ -25,14 +25,12 @@
 #include "../Core/Debug.h"
 #include "../Core/Exception.h"
 
-SPADES_SETTING(r_multisamples, "0");
-SPADES_SETTING(r_depthBits, ""); // TODO: use this value
-SPADES_SETTING(r_colorBits, "");  // TOOD: use this value
-SPADES_SETTING(r_srgb, "0");
-SPADES_SETTING(r_highPrec, "1");
-SPADES_SETTING(r_hdr, "0");
-SPADES_SETTING(r_blitFramebuffer, "1");
-SPADES_SETTING(r_water, "2");
+DEFINE_SPADES_SETTING(r_multisamples, "0");
+SPADES_SETTING(r_srgb);
+DEFINE_SPADES_SETTING(r_highPrec, "1");
+DEFINE_SPADES_SETTING(r_hdr, "0");
+DEFINE_SPADES_SETTING(r_blitFramebuffer, "1");
+SPADES_SETTING(r_water);
 
 namespace spades {
 	namespace draw {

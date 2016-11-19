@@ -42,8 +42,8 @@
 #include <Core/CP437.h>
 #include <Core/Strings.h>
 
-SPADES_SETTING(cg_protocolVersion, "3");
-SPADES_SETTING(cg_unicode, "1");
+DEFINE_SPADES_SETTING(cg_protocolVersion, "3");
+DEFINE_SPADES_SETTING(cg_unicode, "1");
 
 namespace spades {
 	namespace client {

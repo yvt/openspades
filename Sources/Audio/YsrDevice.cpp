@@ -31,17 +31,17 @@
 #include <Core/IStream.h>
 
 #if defined(__APPLE__)
-SPADES_SETTING(s_ysrDriver, "libysrspades.dylib");
+DEFINE_SPADES_SETTING(s_ysrDriver, "libysrspades.dylib");
 #elif defined(WIN32)
-SPADES_SETTING(s_ysrDriver, "YSRSpades.dll");
+DEFINE_SPADES_SETTING(s_ysrDriver, "YSRSpades.dll");
 #else
-SPADES_SETTING(s_ysrDriver, "libysrspades.so");
+DEFINE_SPADES_SETTING(s_ysrDriver, "libysrspades.so");
 #endif
 
-SPADES_SETTING(s_ysrNumThreads, "2");
-SPADES_SETTING(s_maxPolyphonics, "");
-SPADES_SETTING(s_ysrBufferSize, "1024");
-SPADES_SETTING(s_ysrDebug, "0");
+DEFINE_SPADES_SETTING(s_ysrNumThreads, "2");
+SPADES_SETTING(s_maxPolyphonics);
+DEFINE_SPADES_SETTING(s_ysrBufferSize, "1024");
+DEFINE_SPADES_SETTING(s_ysrDebug, "0");
 
 namespace spades {
 	namespace audio {

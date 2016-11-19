@@ -41,10 +41,10 @@
 
 #include "NetClient.h"
 
-SPADES_SETTING(cg_fov, "68");
-SPADES_SETTING(cg_thirdperson, "0");
-SPADES_SETTING(cg_manualFocus, "0");
-SPADES_SETTING(cg_depthOfFieldAmount, "1");
+DEFINE_SPADES_SETTING(cg_fov, "68");
+DEFINE_SPADES_SETTING(cg_thirdperson, "0");
+DEFINE_SPADES_SETTING(cg_manualFocus, "0");
+DEFINE_SPADES_SETTING(cg_depthOfFieldAmount, "1");
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;

@@ -33,7 +33,7 @@
 
 #include "GLProfiler.h"
 
-SPADES_SETTING(r_radiosity, "0");
+SPADES_SETTING(r_radiosity);
 
 namespace spades {
 	namespace draw {

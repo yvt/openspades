@@ -34,9 +34,9 @@
 #include <stdlib.h>
 #include <cstring>
 
-SPADES_SETTING(s_maxPolyphonics, "96");
-SPADES_SETTING(s_eax, "1");
-SPADES_SETTING(s_alPreciseErrorCheck, "1");
+DEFINE_SPADES_SETTING(s_maxPolyphonics, "96");
+DEFINE_SPADES_SETTING(s_eax, "1");
+DEFINE_SPADES_SETTING(s_alPreciseErrorCheck, "1");
 
 //lm: seems to be missing for me..
 #ifndef ALC_ALL_DEVICES_SPECIFIER

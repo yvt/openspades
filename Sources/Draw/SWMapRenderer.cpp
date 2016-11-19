@@ -33,7 +33,7 @@
 
 using namespace std;
 
-SPADES_SETTING(r_swUndersampling, "0");
+DEFINE_SPADES_SETTING(r_swUndersampling, "0");
 
 namespace spades {
 	namespace draw {

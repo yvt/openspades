@@ -30,7 +30,7 @@
 #include <algorithm>
 #include <cctype>
 
-SPADES_SETTING(cl_serverListUrl, "http://services.buildandshoot.com/serverlist.json");
+DEFINE_SPADES_SETTING(cl_serverListUrl, "http://services.buildandshoot.com/serverlist.json");
 
 namespace spades {
 	

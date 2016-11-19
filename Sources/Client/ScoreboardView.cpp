@@ -37,7 +37,7 @@
 #include <Core/Strings.h>
 #include "../Core/Settings.h"
 
-SPADES_SETTING(cg_Minimap_Player_Color,"1");
+SPADES_SETTING(cg_Minimap_Player_Color);
 
 namespace spades {
 	namespace client {

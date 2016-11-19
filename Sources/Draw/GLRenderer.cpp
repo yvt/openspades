@@ -64,27 +64,27 @@
 #include "GLSoftLitSpriteRenderer.h"
 #include "GLAutoExposureFilter.h"
 
-SPADES_SETTING(r_water, "2");
-SPADES_SETTING(r_bloom, "1");
-SPADES_SETTING(r_lens, "1");
-SPADES_SETTING(r_depthOfField, "0");
-SPADES_SETTING(r_lensFlare, "1");
-SPADES_SETTING(r_lensFlareDynamic, "1");
-SPADES_SETTING(r_softParticles, "1");
-SPADES_SETTING(r_cameraBlur, "1");
-SPADES_SETTING(r_dlights, "1");
-SPADES_SETTING(r_optimizedVoxelModel, "1");
-SPADES_SETTING(r_radiosity, "0");
-SPADES_SETTING(r_fogShadow, "0");
-SPADES_SETTING(r_fxaa, "1");
-SPADES_SETTING(r_srgb, "");
-SPADES_SETTING(r_srgb2D, "1");
-SPADES_SETTING(r_colorCorrection, "1");
-SPADES_SETTING(r_hdr, "");
-SPADES_SETTING(r_hdrAutoExposure, "0");
-SPADES_SETTING(r_exposureValue, "0");
+DEFINE_SPADES_SETTING(r_water, "2");
+DEFINE_SPADES_SETTING(r_bloom, "1");
+DEFINE_SPADES_SETTING(r_lens, "1");
+DEFINE_SPADES_SETTING(r_depthOfField, "0");
+DEFINE_SPADES_SETTING(r_lensFlare, "1");
+DEFINE_SPADES_SETTING(r_lensFlareDynamic, "1");
+DEFINE_SPADES_SETTING(r_softParticles, "1");
+DEFINE_SPADES_SETTING(r_cameraBlur, "1");
+DEFINE_SPADES_SETTING(r_dlights, "1");
+DEFINE_SPADES_SETTING(r_optimizedVoxelModel, "1");
+DEFINE_SPADES_SETTING(r_radiosity, "0");
+DEFINE_SPADES_SETTING(r_fogShadow, "0");
+DEFINE_SPADES_SETTING(r_fxaa, "1");
+DEFINE_SPADES_SETTING(r_srgb, "0");
+DEFINE_SPADES_SETTING(r_srgb2D, "1");
+DEFINE_SPADES_SETTING(r_colorCorrection, "1");
+SPADES_SETTING(r_hdr);
+DEFINE_SPADES_SETTING(r_hdrAutoExposure, "0");
+DEFINE_SPADES_SETTING(r_exposureValue, "0");
 
-SPADES_SETTING(r_debugTiming, "0");
+DEFINE_SPADES_SETTING(r_debugTiming, "0");
 
 namespace spades {
 	namespace draw {

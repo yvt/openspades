@@ -25,14 +25,14 @@
 #include <Core/Math.h>
 
 #if defined(__APPLE__)
-SPADES_SETTING(s_alDriver, "/System/Library/Frameworks/OpenAL.framework/OpenAL");
+DEFINE_SPADES_SETTING(s_alDriver, "/System/Library/Frameworks/OpenAL.framework/OpenAL");
 #elif defined(WIN32)
-SPADES_SETTING(s_alDriver, "OpenAL32.dll");
+DEFINE_SPADES_SETTING(s_alDriver, "OpenAL32.dll");
 #else
-SPADES_SETTING(s_alDriver, "libopenal.so.1;libopenal.so.0;libopenal.so");
+DEFINE_SPADES_SETTING(s_alDriver, "libopenal.so.1;libopenal.so.0;libopenal.so");
 #endif
 
-SPADES_SETTING(s_alErrorFatal, "1");
+DEFINE_SPADES_SETTING(s_alErrorFatal, "1");
 
 namespace al{
 

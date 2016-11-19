@@ -29,7 +29,7 @@
 #include "GLRenderer.h"
 #include "GLModel.h"
 
-SPADES_SETTING(r_shadowMapSize, "2048");
+SPADES_SETTING(r_shadowMapSize);
 
 namespace spades {
 	namespace draw {

@@ -32,8 +32,8 @@
 #include "GLProfiler.h"
 #include "../Core/Settings.h"
 
-SPADES_SETTING(r_depthOfField, "");
-SPADES_SETTING(r_depthOfFieldMaxCoc, "0.01");
+SPADES_SETTING(r_depthOfField);
+DEFINE_SPADES_SETTING(r_depthOfFieldMaxCoc, "0.01");
 
 namespace spades {
 	namespace draw {

@@ -32,8 +32,8 @@
 #include "../Core/Stopwatch.h"
 #include <Core/Settings.h>
 
-SPADES_SETTING(r_hdr, "");
-SPADES_SETTING(r_fogShadow, "");
+SPADES_SETTING(r_hdr);
+SPADES_SETTING(r_fogShadow);
 
 namespace spades {
 	namespace draw {

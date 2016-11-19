@@ -40,53 +40,53 @@
 
 using namespace std;
 
-SPADES_SETTING(cg_mouseSensitivity, "1");
-SPADES_SETTING(cg_zoomedMouseSensScale, "0.6");
-SPADES_SETTING(cg_mouseExpPower, "1");
-SPADES_SETTING(cg_invertMouseY, "0");
+DEFINE_SPADES_SETTING(cg_mouseSensitivity, "1");
+DEFINE_SPADES_SETTING(cg_zoomedMouseSensScale, "0.6");
+DEFINE_SPADES_SETTING(cg_mouseExpPower, "1");
+DEFINE_SPADES_SETTING(cg_invertMouseY, "0");
 
 
-SPADES_SETTING(cg_holdAimDownSight, "0");
+DEFINE_SPADES_SETTING(cg_holdAimDownSight, "0");
 
-SPADES_SETTING(cg_keyAttack, "LeftMouseButton");
-SPADES_SETTING(cg_keyAltAttack, "RightMouseButton");
-SPADES_SETTING(cg_keyToolSpade, "1");
-SPADES_SETTING(cg_keyToolBlock, "2");
-SPADES_SETTING(cg_keyToolWeapon, "3");
-SPADES_SETTING(cg_keyToolGrenade, "4");
-SPADES_SETTING(cg_keyReloadWeapon, "r");
-SPADES_SETTING(cg_keyFlashlight, "f");
-SPADES_SETTING(cg_keyLastTool, "");
+DEFINE_SPADES_SETTING(cg_keyAttack, "LeftMouseButton");
+DEFINE_SPADES_SETTING(cg_keyAltAttack, "RightMouseButton");
+DEFINE_SPADES_SETTING(cg_keyToolSpade, "1");
+DEFINE_SPADES_SETTING(cg_keyToolBlock, "2");
+DEFINE_SPADES_SETTING(cg_keyToolWeapon, "3");
+DEFINE_SPADES_SETTING(cg_keyToolGrenade, "4");
+DEFINE_SPADES_SETTING(cg_keyReloadWeapon, "r");
+DEFINE_SPADES_SETTING(cg_keyFlashlight, "f");
+DEFINE_SPADES_SETTING(cg_keyLastTool, "");
 
-SPADES_SETTING(cg_keyMoveLeft, "a");
-SPADES_SETTING(cg_keyMoveRight, "d");
-SPADES_SETTING(cg_keyMoveForward, "w");
-SPADES_SETTING(cg_keyMoveBackward, "s");
-SPADES_SETTING(cg_keyJump, "Space");
-SPADES_SETTING(cg_keyCrouch, "Control");
-SPADES_SETTING(cg_keySprint, "Shift");
-SPADES_SETTING(cg_keySneak, "v");
+DEFINE_SPADES_SETTING(cg_keyMoveLeft, "a");
+DEFINE_SPADES_SETTING(cg_keyMoveRight, "d");
+DEFINE_SPADES_SETTING(cg_keyMoveForward, "w");
+DEFINE_SPADES_SETTING(cg_keyMoveBackward, "s");
+DEFINE_SPADES_SETTING(cg_keyJump, "Space");
+DEFINE_SPADES_SETTING(cg_keyCrouch, "Control");
+DEFINE_SPADES_SETTING(cg_keySprint, "Shift");
+DEFINE_SPADES_SETTING(cg_keySneak, "v");
 
-SPADES_SETTING(cg_keyCaptureColor, "e");
-SPADES_SETTING(cg_keyGlobalChat, "t");
-SPADES_SETTING(cg_keyTeamChat, "y");
-SPADES_SETTING(cg_keyChangeMapScale, "m");
-SPADES_SETTING(cg_keyToggleMapZoom, "n");
-SPADES_SETTING(cg_keyScoreboard, "Tab");
-SPADES_SETTING(cg_keyLimbo, "l");
+DEFINE_SPADES_SETTING(cg_keyCaptureColor, "e");
+DEFINE_SPADES_SETTING(cg_keyGlobalChat, "t");
+DEFINE_SPADES_SETTING(cg_keyTeamChat, "y");
+DEFINE_SPADES_SETTING(cg_keyChangeMapScale, "m");
+DEFINE_SPADES_SETTING(cg_keyToggleMapZoom, "n");
+DEFINE_SPADES_SETTING(cg_keyScoreboard, "Tab");
+DEFINE_SPADES_SETTING(cg_keyLimbo, "l");
 
-SPADES_SETTING(cg_keyScreenshot, "0");
-SPADES_SETTING(cg_keySceneshot, "9");
-SPADES_SETTING(cg_keySaveMap, "8");
+DEFINE_SPADES_SETTING(cg_keyScreenshot, "0");
+DEFINE_SPADES_SETTING(cg_keySceneshot, "9");
+DEFINE_SPADES_SETTING(cg_keySaveMap, "8");
 
-SPADES_SETTING(cg_switchToolByWheel, "1");
+DEFINE_SPADES_SETTING(cg_switchToolByWheel, "1");
 
-SPADES_SETTING(cg_debugCorpse, "0");
+DEFINE_SPADES_SETTING(cg_debugCorpse, "0");
 
-SPADES_SETTING(cg_alerts, "1");
+DEFINE_SPADES_SETTING(cg_alerts, "1");
 
-SPADES_SETTING(cg_manualFocus, "0");
-SPADES_SETTING(cg_keyAutoFocus, "MiddleMouseButton");
+SPADES_SETTING(cg_manualFocus);
+DEFINE_SPADES_SETTING(cg_keyAutoFocus, "MiddleMouseButton");
 
 namespace spades {
 	namespace client {

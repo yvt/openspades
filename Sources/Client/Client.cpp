@@ -55,10 +55,10 @@
 #include "NetClient.h"
 
 
-SPADES_SETTING(cg_chatBeep, "1");
+DEFINE_SPADES_SETTING(cg_chatBeep, "1");
 
 
-SPADES_SETTING(cg_serverAlert, "1");
+DEFINE_SPADES_SETTING(cg_serverAlert, "1");
 
 
 

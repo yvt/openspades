@@ -32,7 +32,7 @@
 #include <Core/FileManager.h>
 #include <time.h>	//windows needs this.
 
-SPADES_SETTING(cg_smp, "");
+SPADES_SETTING(cg_smp);
 
 namespace spades {
 	namespace client {
