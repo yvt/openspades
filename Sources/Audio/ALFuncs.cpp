@@ -22,14 +22,14 @@
 #include <Core/DynamicLibrary.h>
 #include <Core/Exception.h>
 #include <Core/Settings.h>
+#include <Core/Math.h>
 
 #if defined(__APPLE__)
 SPADES_SETTING(s_alDriver, "/System/Library/Frameworks/OpenAL.framework/OpenAL");
 #elif defined(WIN32)
 SPADES_SETTING(s_alDriver, "OpenAL32.dll");
 #else
-//SPADES_SETTING(s_alDriver, "/usr/lib/i386-linux-gnu/libopenal.so");
-SPADES_SETTING(s_alDriver, "libopenal.so");
+SPADES_SETTING(s_alDriver, "libopenal.so.1;libopenal.so.0;libopenal.so");
 #endif
 
 SPADES_SETTING(s_alErrorFatal, "1");
@@ -168,8 +168,25 @@ namespace al{
 	static void *GPA(const char *str)
 	{
 		if(!alLibrary){
-			alLibrary = new spades::DynamicLibrary(s_alDriver.CString());
-			SPLog("'%s' loaded", s_alDriver.CString());
+            auto paths = spades::Split(s_alDriver, ";");
+            std::string errors;
+            for (const std::string &path: paths) {
+                auto trimmedPath = spades::TrimSpaces(path);
+                try {
+                    alLibrary = new spades::DynamicLibrary(trimmedPath.c_str());
+                    if (alLibrary) {
+                        SPLog("'%s' loaded", trimmedPath.c_str());
+                        break;
+                    }
+                } catch (const std::exception &ex) {
+                    errors += trimmedPath;
+                    errors += ":\n";
+                    errors += ex.what();
+                }
+            }
+            if (!alLibrary) {
+                SPRaise("Failed to load a OpenAL driver.\n%s", errors.c_str());
+            }
 		}
 		
 		if(qalGetProcAddress){
