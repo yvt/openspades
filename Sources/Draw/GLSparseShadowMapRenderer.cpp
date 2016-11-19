@@ -29,22 +29,20 @@
 #include "GLRenderer.h"
 #include "GLModel.h"
 
-SPADES_SETTING(r_shadowMapSize);
-
 namespace spades {
 	namespace draw {
 		
 		GLSparseShadowMapRenderer::GLSparseShadowMapRenderer(GLRenderer *r):
-		IGLShadowMapRenderer(r){
+		IGLShadowMapRenderer(r),
+        device(r->GetGLDevice()),
+        settings(r->GetSettings()) {
 			SPADES_MARK_FUNCTION();
-			
-			device = r->GetGLDevice();
-			
-			if((int)r_shadowMapSize > 4096) {
+            
+            textureSize = settings.r_shadowMapSize;
+			if((int) textureSize > 4096) {
 				SPLog("r_shadowMapSize is too large; changed to 4096");
-				r_shadowMapSize = 4096;
+				settings.r_shadowMapSize = textureSize = 4096;
 			}
-			textureSize = r_shadowMapSize;
 			
 			for(minLod = 0; (Tiles << minLod) < textureSize; minLod++);
 			//minLod = std::max(0, minLod - 2);
@@ -627,7 +625,7 @@ namespace spades {
 					
 				}
 				
-				mapSize = r_shadowMapSize;
+				mapSize = r->settings.r_shadowMapSize;
 				
 			}
 			

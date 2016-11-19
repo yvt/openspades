@@ -27,16 +27,14 @@
 #include "GLFramebufferManager.h"
 #include "GLQuadRenderer.h"
 #include "GLProfiler.h"
-#include <Core/Settings.h>
-#include "SWFeatureLevel.h"
-
-SPADES_SETTING(r_hdr);
+#include "SWFeatureLevel.h" // for fastRcp
 
 namespace spades {
 	namespace draw {
 		
 		GLSoftSpriteRenderer::GLSoftSpriteRenderer(GLRenderer *renderer):
 		renderer(renderer), device(renderer->GetGLDevice()),
+        settings(renderer->GetSettings()),
 		projectionViewMatrix("projectionViewMatrix"),
 		rightVector("rightVector"),
 		upVector("upVector"),
@@ -72,7 +70,7 @@ namespace spades {
 			spr.center = center;
 			spr.radius = rad;
 			spr.angle = ang;
-			if(r_hdr) {
+			if (settings.r_hdr) {
 				// linearize color
 				if(color.x > color.w || color.y > color.w || color.z > color.w) {
 					// emissive material

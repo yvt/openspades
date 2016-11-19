@@ -26,6 +26,7 @@ namespace spades {
 	namespace draw {
 		class GLRenderer;
 		class GLShadowShader;
+        class GLSettings;
 		class GLSparseShadowMapRenderer: public IGLShadowMapRenderer {
 			friend class GLShadowMapShader;
 			friend class GLShadowShader;
@@ -36,6 +37,7 @@ namespace spades {
 			enum {Tiles = 64};
 			
 			IGLDevice *device;
+            GLSettings &settings;
 			
 			int textureSize;
 			int minLod;

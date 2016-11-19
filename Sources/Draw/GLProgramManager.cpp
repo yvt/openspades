@@ -30,16 +30,14 @@
 #include "IGLShadowMapRenderer.h"
 #include "GLShadowMapShader.h"
 #include "../Core/Stopwatch.h"
-#include <Core/Settings.h>
-
-SPADES_SETTING(r_hdr);
-SPADES_SETTING(r_fogShadow);
+#include "GLSettings.h"
 
 namespace spades {
 	namespace draw {
 		GLProgramManager::GLProgramManager(IGLDevice *d,
-										   IGLShadowMapRenderer *smr):
-		device(d), shadowMapRenderer(smr){
+										   IGLShadowMapRenderer *smr,
+                                           GLSettings &settings):
+		device(d), shadowMapRenderer(smr), settings(settings) {
 			SPADES_MARK_FUNCTION();
 		}
 		
@@ -97,12 +95,12 @@ namespace spades {
 					break;
 				
 				if(text == "*shadow*"){
-					std::vector<GLShader *> shaders = GLShadowShader::RegisterShader(this);
+					std::vector<GLShader *> shaders = GLShadowShader::RegisterShader(this, settings, false);
 					for(size_t i = 0; i < shaders.size(); i++)
 						p->Attach(shaders[i]);
 					continue;
 				}else if(text == "*shadow-variance*"){
-					std::vector<GLShader *> shaders = GLShadowShader::RegisterShader(this, true);
+					std::vector<GLShader *> shaders = GLShadowShader::RegisterShader(this, settings, true);
 					for(size_t i = 0; i < shaders.size(); i++)
 						p->Attach(shaders[i]);
 					continue;
@@ -150,14 +148,14 @@ namespace spades {
 			
 			std::string finalSource;
 			
-			if(r_hdr) {
+			if (settings.r_hdr) {
 				finalSource += "#define USE_HDR 1\n";
 				finalSource += "#define LINEAR_FRAMEBUFFER 1\n";
 			}else{
 				finalSource += "#define USE_HDR 0\n";
 				finalSource += "#define LINEAR_FRAMEBUFFER 0\n";
 			}
-			if(r_fogShadow) {
+			if (settings.r_fogShadow) {
 				finalSource += "#define USE_VOLUMETRIC_FOG 1\n";
 			}else{
 				finalSource += "#define USE_VOLUMETRIC_FOG 0\n";

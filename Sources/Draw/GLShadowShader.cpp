@@ -31,12 +31,6 @@
 #include "GLSparseShadowMapRenderer.h"
 #include "GLImage.h"
 
-DEFINE_SPADES_SETTING(r_mapSoftShadow, "0");
-SPADES_SETTING(r_radiosity);
-
-SPADES_SETTING(r_modelShadows);
-SPADES_SETTING(r_sparseShadowMaps);
-
 namespace spades {
 	namespace draw {
 		GLShadowShader::GLShadowShader():
@@ -63,18 +57,13 @@ namespace spades {
 		shadowMapSizeInv("shadowMapSizeInv")
 		{}
 		
-		std::vector<GLShader *> GLShadowShader::RegisterShader(spades::draw::GLProgramManager *r, bool variance) {
+		std::vector<GLShader *> GLShadowShader::RegisterShader(spades::draw::GLProgramManager *r, GLSettings &settings, bool variance) {
 			std::vector<GLShader *>  shaders;
 			
 			shaders.push_back(r->RegisterShader("Shaders/Shadow/Common.fs"));
 			shaders.push_back(r->RegisterShader("Shaders/Shadow/Common.vs"));
 			
-			if(r_mapSoftShadow && false){
-				
-				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapSoft.fs"));
-				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapSoft.vs"));
-				
-			}else if(variance){
+			if (variance) {
 				
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapVariance.fs"));
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapVariance.vs"));
@@ -86,8 +75,8 @@ namespace spades {
 				
 			}
 			
-			if(r_modelShadows){
-				if(r_sparseShadowMaps){
+			if (settings.r_modelShadows) {
+				if (settings.r_sparseShadowMaps) {
 					shaders.push_back(r->RegisterShader("Shaders/Shadow/ModelSparse.fs"));
 					shaders.push_back(r->RegisterShader("Shaders/Shadow/ModelSparse.vs"));
 				}else{
@@ -99,8 +88,8 @@ namespace spades {
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/ModelNull.vs"));
 			}
 			
-			if(r_radiosity){
-                if((int)r_radiosity >= 2){
+			if (settings.r_radiosity){
+                if ((int) settings.r_radiosity >= 2){
                     shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosity.fs"));
                 }else{
                     shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosityLow.fs"));
@@ -148,10 +137,12 @@ namespace spades {
 			}
 			mapShadowTexture.SetValue(texStage);
 			texStage++;
+            
+            auto &settings = renderer->GetSettings();
 			
-			if(r_modelShadows){
+			if (settings.r_modelShadows){
 				
-				if(r_sparseShadowMaps){
+				if (settings.r_sparseShadowMaps) {
 					shadowMapTexture1(program);
 					shadowMapTexture2(program);
 					shadowMapMatrix1(program);
@@ -248,7 +239,7 @@ namespace spades {
 				
 			}
 			
-			if(r_radiosity) {
+			if (settings.r_radiosity) {
 				
 				
 				Vector3 ac = renderer->GetFogColor(); ac *= ac; // linearize

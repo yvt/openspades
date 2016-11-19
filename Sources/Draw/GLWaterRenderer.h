@@ -32,6 +32,7 @@ namespace spades {
 		class GLRenderer;
 		class IGLDevice;
 		class GLProgram;
+        class GLSettings;
 		class GLWaterRenderer{
 			class IWaveTank;
 			class StandardWaveTank;
@@ -40,6 +41,7 @@ namespace spades {
 			
 			GLRenderer *renderer;
 			IGLDevice *device;
+            GLSettings &settings;
 			client::GameMap *map;
 			
 			std::vector<IWaveTank *> waveTanks;

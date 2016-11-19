@@ -31,12 +31,11 @@
 #include "../Core/Debug.h"
 #include <Core/Settings.h>
 
-SPADES_SETTING(r_bloom);
-
 namespace spades {
 	namespace draw {
 		GLColorCorrectionFilter::GLColorCorrectionFilter(GLRenderer *renderer):
-		renderer(renderer){
+		renderer(renderer),
+        settings(renderer->GetSettings()) {
 			lens = renderer->RegisterProgram("Shaders/PostFilters/ColorCorrection.program");
 		}
 		GLColorBuffer GLColorCorrectionFilter::Filter(GLColorBuffer input, Vector3 tintVal) {
@@ -67,7 +66,7 @@ namespace spades {
 			
 			const client::SceneDefinition& def  = renderer->GetSceneDef();
 			
-			if(r_bloom) {
+			if (settings.r_bloom) {
 				// make image sharper
 				saturation.SetValue(.85f * def.saturation);
 				enhancement.SetValue(0.7f);

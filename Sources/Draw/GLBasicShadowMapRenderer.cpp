@@ -26,8 +26,6 @@
 #include "../Core/Settings.h"
 #include "GLProfiler.h"
 
-DEFINE_SPADES_SETTING(r_shadowMapSize, "2048");
-
 namespace spades {
 	namespace draw {
 		
@@ -36,9 +34,12 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			device = r->GetGLDevice();
-			
-			textureSize = r_shadowMapSize;
-			
+            
+            textureSize = r->GetSettings().r_shadowMapSize;
+            if((int) textureSize > 4096) {
+                SPLog("r_shadowMapSize is too large; changed to 4096");
+                r->GetSettings().r_shadowMapSize = textureSize = 4096;
+            }
 			
 			colorTexture = device->GenTexture();
 			device->BindTexture(IGLDevice::Texture2D,

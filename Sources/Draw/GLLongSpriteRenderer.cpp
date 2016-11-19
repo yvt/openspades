@@ -27,13 +27,12 @@
 #include <Core/Settings.h>
 #include "SWFeatureLevel.h"
 
-SPADES_SETTING(r_hdr);
-
 namespace spades {
 	namespace draw {
 		
 		GLLongSpriteRenderer::GLLongSpriteRenderer(GLRenderer *renderer):
 		renderer(renderer), device(renderer->GetGLDevice()),
+        settings(renderer->GetSettings()),
 		projectionViewMatrix("projectionViewMatrix"),
 		rightVector("rightVector"),
 		upVector("upVector"),
@@ -65,7 +64,7 @@ namespace spades {
 			spr.start = p1;
 			spr.end = p2;
 			spr.radius = rad;
-			if(r_hdr) {
+			if (settings.r_hdr) {
 				// linearize color
 				if(color.x > color.w || color.y > color.w || color.z > color.w) {
 					// emissive material

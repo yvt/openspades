@@ -31,6 +31,7 @@ namespace spades {
 		class GLRenderer;
 		class IGLDevice;
 		class GLImage;
+        class GLSettings;
 		class GLLongSpriteRenderer {
 			struct Sprite {
 				GLImage *image;
@@ -54,6 +55,7 @@ namespace spades {
 			
 			GLRenderer *renderer;
 			IGLDevice *device;
+            GLSettings &settings;
 			std::vector<Sprite> sprites;
 			
 			GLImage *lastImage;

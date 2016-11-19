@@ -20,17 +20,10 @@
 
 #include "GLFramebufferManager.h"
 #include "IGLDevice.h"
-#include "../Core/Settings.h"
 #include "../Core/Debug.h"
 #include "../Core/Debug.h"
 #include "../Core/Exception.h"
-
-DEFINE_SPADES_SETTING(r_multisamples, "0");
-SPADES_SETTING(r_srgb);
-DEFINE_SPADES_SETTING(r_highPrec, "1");
-DEFINE_SPADES_SETTING(r_hdr, "0");
-DEFINE_SPADES_SETTING(r_blitFramebuffer, "1");
-SPADES_SETTING(r_water);
+#include "GLSettings.h"
 
 namespace spades {
 	namespace draw {
@@ -68,20 +61,21 @@ namespace spades {
 					type.c_str());
 		}
 		
-		GLFramebufferManager::GLFramebufferManager(IGLDevice *dev):
-		device(dev){
+		GLFramebufferManager::GLFramebufferManager(IGLDevice *dev, GLSettings &settings) :
+		device(dev),
+        settings(settings) {
 			SPADES_MARK_FUNCTION();
 			
 			SPLog("Initializing framebuffer manager");
 			
-			if((!r_blitFramebuffer) && r_multisamples) {
+			if(!settings.r_blitFramebuffer && settings.r_multisamples) {
 				SPLog("WARNING: Disabling MSAA: no support for MSAA when r_blitFramebuffer = 0");
-				r_multisamples = 0;
+				settings.r_multisamples = 0;
 			}
 			
-			useMultisample = (int)r_multisamples > 0;
-			useHighPrec = r_highPrec ? 1 : 0;
-			useHdr = r_hdr;
+			useMultisample = (int) settings.r_multisamples > 0;
+			useHighPrec = settings.r_highPrec ? 1 : 0;
+			useHdr = settings.r_hdr;
 			
 			if(useMultisample){
 				SPLog("Multi-sample Antialiasing Enabled");
@@ -98,7 +92,7 @@ namespace spades {
 				dev->BindRenderbuffer(IGLDevice::Renderbuffer,
 									  multisampledDepthRenderbuffer);
 				dev->RenderbufferStorage(IGLDevice::Renderbuffer,
-										 (int)r_multisamples,
+										 (int) settings.r_multisamples,
 										 IGLDevice::DepthComponent24,
 										 dev->ScreenWidth(),
 										 dev->ScreenHeight());
@@ -112,11 +106,11 @@ namespace spades {
 				multisampledColorRenderbuffer = dev->GenRenderbuffer();
 				dev->BindRenderbuffer(IGLDevice::Renderbuffer,
 									  multisampledColorRenderbuffer);
-				if(r_srgb){
+				if (settings.r_srgb) {
 					SPLog("Creating MSAA Color Buffer with SRGB8_ALPHA");
 					useHighPrec = false;
 					dev->RenderbufferStorage(IGLDevice::Renderbuffer,
-											 (int)r_multisamples,
+											 (int)settings.r_multisamples,
 											 IGLDevice::SRGB8Alpha,
 											 dev->ScreenWidth(),
 											 dev->ScreenHeight());
@@ -140,7 +134,7 @@ namespace spades {
 							SPRaise("jump to catch(...)");
 						}
 						dev->RenderbufferStorage(IGLDevice::Renderbuffer,
-												 (int)r_multisamples,
+												 (int) settings.r_multisamples,
 												 useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2,
 												 dev->ScreenWidth(),
 												 dev->ScreenHeight());
@@ -161,9 +155,9 @@ namespace spades {
 						SPLog("Renderbuffer creation failed: trying with RGB8A8");
 						useHighPrec = false;
 						useHdr = false;
-						r_hdr = 0;
+						settings.r_hdr = 0;
 						dev->RenderbufferStorage(IGLDevice::Renderbuffer,
-												 (int)r_multisamples,
+												 (int) settings.r_multisamples,
 												 IGLDevice::RGBA8,
 												 dev->ScreenWidth(),
 												 dev->ScreenHeight());
@@ -230,7 +224,7 @@ namespace spades {
 			renderColorTexture = dev->GenTexture();
 			dev->BindTexture(IGLDevice::Texture2D,
 							 renderColorTexture);
-			if(r_srgb){
+			if (settings.r_srgb) {
 				SPLog("Creating Non-MSAA SRGB buffer");
 				useHighPrec = false;
 				dev->TexImage2D(IGLDevice::Texture2D,
@@ -309,7 +303,7 @@ namespace spades {
 					SPLog("Texture creation failed: trying with RGB8A8");
 					useHighPrec = false;
 					useHdr = false;
-					r_hdr = 0;
+					settings.r_hdr = 0;
 					dev->TexImage2D(IGLDevice::Texture2D,
 									0,
 									IGLDevice::RGBA8,
@@ -346,7 +340,7 @@ namespace spades {
 				}
 			}
 			
-			if((int)r_water >= 2) {
+			if((int) settings.r_water >= 2) {
 				SPLog("Creating Mirror framebuffer");
 				mirrorFramebuffer = dev->GenFramebuffer();
 				dev->BindFramebuffer(IGLDevice::Framebuffer,
@@ -490,7 +484,7 @@ namespace spades {
 			int w = device->ScreenWidth();
 			int h = device->ScreenHeight();
 			
-			if(r_blitFramebuffer){
+			if (settings.r_blitFramebuffer) {
 				if(useMultisample){
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
 											multisampledFramebuffer);
@@ -575,11 +569,11 @@ namespace spades {
 				renderFramebuffer;
 			}
             
-            bool needsDepth = (int)r_water >= 3;
+            bool needsDepth = (int) settings.r_water >= 3;
             
 			if(useMultisample){
 				// downsample
-				if(r_blitFramebuffer){
+				if (settings.r_blitFramebuffer) {
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
 											fb);
 					device->BindFramebuffer(IGLDevice::DrawFramebuffer,
@@ -608,7 +602,7 @@ namespace spades {
 				}
 			}else{
 				// copy
-				if(r_blitFramebuffer){
+				if (settings.r_blitFramebuffer) {
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
 											fb);
 					device->BindFramebuffer(IGLDevice::DrawFramebuffer,
@@ -661,7 +655,7 @@ namespace spades {
 				// downsample
 				int w = device->ScreenWidth();
 				int h = device->ScreenHeight();
-				if(r_blitFramebuffer){
+				if (settings.r_blitFramebuffer) {
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer,
 											multisampledFramebuffer);
 					device->BindFramebuffer(IGLDevice::DrawFramebuffer,
@@ -710,7 +704,7 @@ namespace spades {
 		GLFramebufferManager::BufferHandle GLFramebufferManager::CreateBufferHandle(int w, int h, bool alpha){
 			IGLDevice::Enum ifmt;
 			if(alpha){
-				if(r_srgb)
+				if (settings.r_srgb)
 					ifmt = IGLDevice::SRGB8Alpha;
 				else
 					ifmt = IGLDevice::RGBA8;

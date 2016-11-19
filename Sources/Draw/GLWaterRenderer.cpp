@@ -36,10 +36,6 @@
 #include "GLProfiler.h"
 #include "../Core/Settings.h"
 
-SPADES_SETTING(r_water);
-DEFINE_SPADES_SETTING(r_maxAnisotropy, "8");
-DEFINE_SPADES_SETTING(r_occlusionQuery, "0");
-
 namespace spades {
 	namespace draw {
 		
@@ -496,9 +492,10 @@ namespace spades {
 #pragma mark - Water Renderer
 		
         void GLWaterRenderer::PreloadShaders(spades::draw::GLRenderer *renderer) {
-            if((int)r_water >= 3)
+            auto &settings = renderer->GetSettings();
+            if((int) settings.r_water >= 3)
                 renderer->RegisterProgram("Shaders/Water3.program");
-			else if((int)r_water >= 2)
+			else if((int) settings.r_water >= 2)
 				renderer->RegisterProgram("Shaders/Water2.program");
 			else
 				renderer->RegisterProgram("Shaders/Water.program");
@@ -508,11 +505,12 @@ namespace spades {
 		GLWaterRenderer::GLWaterRenderer(GLRenderer *renderer, client::GameMap *map):
 		renderer(renderer),
 		device(renderer->GetGLDevice()),
+        settings(renderer->GetSettings()),
 		map(map){
             SPADES_MARK_FUNCTION();
-            if((int)r_water >= 3)
+            if((int) settings.r_water >= 3)
                 program = renderer->RegisterProgram("Shaders/Water3.program");
-            else if((int)r_water >= 2)
+            else if((int) settings.r_water >= 2)
                 program = renderer->RegisterProgram("Shaders/Water2.program");
 			else
 				program = renderer->RegisterProgram("Shaders/Water.program");
@@ -589,9 +587,9 @@ namespace spades {
 								  bitmap.data());
 			
 			// create wave tank simlation
-			size_t numLayers = ((int)r_water >= 2) ? 3 : 1;
+			size_t numLayers = ((int) settings.r_water >= 2) ? 3 : 1;
 			for(size_t i = 0; i < numLayers; i++){
-                if ((int)r_water >= 3) {
+                if ((int) settings.r_water >= 3) {
                     waveTanks.push_back(new FFTWaveTank<8>());
                 } else {
                     waveTanks.push_back(new FFTWaveTank<7>());
@@ -616,10 +614,10 @@ namespace spades {
 				device->TexParamater(IGLDevice::Texture2D,
 									 IGLDevice::TextureWrapT,
 									 IGLDevice::Repeat);
-				if((float)r_maxAnisotropy > 1.1f) {
+				if((float) settings.r_maxAnisotropy > 1.1f) {
 					device->TexParamater(IGLDevice::Texture2D,
 										 IGLDevice::TextureMaxAnisotropy,
-										 (float)r_maxAnisotropy);
+										 (float) settings.r_maxAnisotropy);
 				}
 					
 			}
@@ -638,7 +636,7 @@ namespace spades {
 			std::vector<uint32_t> indices;
 			
 			int meshSize = 16;
-			if((int)r_water >= 2)
+			if((int) settings.r_water >= 2)
 				meshSize = 128;
 			float meshSizeInv = 1.f / (float)meshSize;
 			for(int y = -meshSize; y <= meshSize; y++) {
@@ -707,7 +705,7 @@ namespace spades {
 			
 			GLProfiler profiler(device, "Render");
 			
-			if(occlusionQuery == 0 && r_occlusionQuery)
+			if(occlusionQuery == 0 && settings.r_occlusionQuery)
 				occlusionQuery = device->GenQuery();
 			
 			GLColorBuffer colorBuffer;
@@ -864,14 +862,14 @@ namespace spades {
                     // mirror
                     device->ActiveTexture(6);
                     device->BindTexture(IGLDevice::Texture2D, renderer->GetFramebufferManager()->GetMirrorTexture());
-                    if((float)r_maxAnisotropy > 1.1f) {
+                    if((float) settings.r_maxAnisotropy > 1.1f) {
                         device->TexParamater(IGLDevice::Texture2D,
                                              IGLDevice::TextureMaxAnisotropy,
-                                             (float)r_maxAnisotropy);
+                                             (float) settings.r_maxAnisotropy);
                     }
                     mirrorTexture.SetValue(6);
                     
-                    if ((int)r_water >= 3) {
+                    if ((int) settings.r_water >= 3) {
                         device->ActiveTexture(4);
                         device->BindTexture(IGLDevice::Texture2D, renderer->GetFramebufferManager()->GetMirrorDepthTexture());
                         mirrorDepthTexture.SetValue(4);

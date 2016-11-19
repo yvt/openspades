@@ -24,6 +24,8 @@
 
 namespace spades {
 	namespace draw {
+        class GLSettings;
+        
 		class GLFramebufferManager {
 		public:
 			class BufferHandle {
@@ -53,6 +55,7 @@ namespace spades {
 			};
 		private:
 			IGLDevice *device;
+            GLSettings &settings;
 			
 			struct Buffer {
 				IGLDevice::UInteger framebuffer;
@@ -86,7 +89,7 @@ namespace spades {
 			std::vector<Buffer> buffers;
 			
 		public:
-			GLFramebufferManager(IGLDevice *);
+			GLFramebufferManager(IGLDevice *, GLSettings &);
 			~GLFramebufferManager();
 			
 			/** setups device for scene rendering. */

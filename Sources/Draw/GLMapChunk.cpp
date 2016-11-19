@@ -30,9 +30,6 @@
 #include "../Client/GameMap.h"
 #include "../Core/Settings.h"
 #include "GLDynamicLightShader.h"
-
-SPADES_SETTING(r_water);
-
 #include <AngelScript/include/angelscript.h> // for asOFFSET. somehow `offsetof` fails on gcc-4.8
 
 namespace spades {
@@ -200,7 +197,7 @@ namespace spades {
 			y &= 511;
 			
 			if(z == 63){
-				if(r_water){
+				if(renderer->renderer->GetSettings().r_water){
 					return map->IsSolid(x, y, 62);
 				}else{
 					return map->IsSolid(x, y, 63);

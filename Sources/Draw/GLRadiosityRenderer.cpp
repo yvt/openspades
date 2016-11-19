@@ -33,8 +33,6 @@
 
 #include "GLProfiler.h"
 
-SPADES_SETTING(r_radiosity);
-
 namespace spades {
 	namespace draw {
 		class GLRadiosityRenderer::UpdateDispatch:
@@ -69,7 +67,7 @@ namespace spades {
 		
 		GLRadiosityRenderer::GLRadiosityRenderer(GLRenderer *r,
 														 client::GameMap *m):
-		renderer(r), device(r->GetGLDevice()), map(m){
+		renderer(r), device(r->GetGLDevice()), settings(r->GetSettings()), map(m){
 			SPADES_MARK_FUNCTION();
 			
 			w = map->Width();
@@ -149,7 +147,7 @@ namespace spades {
 									 IGLDevice::TextureWrapR,
 									 IGLDevice::ClampToEdge);
 				device->TexImage3D(IGLDevice::Texture3D, 0,
-								   ((int)r_radiosity >= 2) ? IGLDevice::RGB10A2 : IGLDevice::RGB5A1,
+								   ((int) settings.r_radiosity >= 2) ? IGLDevice::RGB10A2 : IGLDevice::RGB5A1,
 								   w, h, d, 0,
 								   IGLDevice::BGRA,
 								   IGLDevice::UnsignedInt2101010Rev,
@@ -526,8 +524,8 @@ namespace spades {
 				   GetNumDirtyChunks(), nearDirtyChunks);*/
 		}
 		
-		static float CompressDynamicRange(float v){
-			if((int)r_radiosity >= 2)
+        float GLRadiosityRenderer::CompressDynamicRange(float v){
+			if((int) settings.r_radiosity >= 2)
 				return v;
 			if(v >= 0.f)
 				return sqrtf(v);
@@ -535,7 +533,7 @@ namespace spades {
 				return -sqrtf(-v);
 		}
 		
-		static uint32_t EncodeValue(Vector3 vec) {
+        uint32_t GLRadiosityRenderer::EncodeValue(Vector3 vec) {
 			float v;
 			int iv;
 			unsigned int out = 0xC0000000;

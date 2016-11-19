@@ -33,6 +33,7 @@ namespace spades {
 	namespace draw {
 		class GLRenderer;
 		class IGLDevice;
+        class GLSettings;
 		class GLRadiosityRenderer {
 			
 			typedef uint32_t VoxelType;
@@ -45,6 +46,7 @@ namespace spades {
 			};
 			GLRenderer *renderer;
 			IGLDevice *device;
+            GLSettings &settings;
 			client::GameMap *map;
 			
 			struct Chunk {
@@ -89,6 +91,9 @@ namespace spades {
 			void UpdateChunk(int cx, int cy, int cz);
 			void UpdateDirtyChunks();
 			int GetNumDirtyChunks();
+            
+            uint32_t EncodeValue(Vector3 vec);
+            float CompressDynamicRange(float v);
 			
 			UpdateDispatch *dispatch;
 		public:

@@ -27,6 +27,7 @@
 #include "../Client/IGameMapListener.h"
 #include "GLCameraBlurFilter.h"
 #include "GLDynamicLight.h"
+#include "GLSettings.h"
 
 namespace spades {
 	namespace draw {
@@ -67,6 +68,7 @@ namespace spades {
 			Handle<IGLDevice> device;
 			GLFramebufferManager *fbManager;
 			client::GameMap *map;
+            GLSettings settings;
 			
 			bool inited;
 			bool sceneUsedInThisFrame;
@@ -191,6 +193,7 @@ namespace spades {
 			virtual float ScreenWidth();
 			virtual float ScreenHeight();
 			
+            GLSettings &GetSettings() { return settings; }
 			IGLDevice *GetGLDevice() {return device; }
 			GLFramebufferManager *GetFramebufferManager() { return fbManager; }
 			IGLShadowMapRenderer *GetShadowMapRenderer() { return shadowMapRenderer; }

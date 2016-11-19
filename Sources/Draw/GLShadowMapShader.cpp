@@ -27,9 +27,6 @@
 #include "GLSparseShadowMapRenderer.h"
 #include "../Core/Debug.h"
 
-DEFINE_SPADES_SETTING(r_modelShadows, "1");
-DEFINE_SPADES_SETTING(r_sparseShadowMaps, "1");
-
 namespace spades {
 	namespace draw {
 		GLShadowMapShader::GLShadowMapShader():
@@ -54,9 +51,10 @@ namespace spades {
 		
 		IGLShadowMapRenderer * GLShadowMapShader::CreateShadowMapRenderer(spades::draw::GLRenderer *r){
 			SPADES_MARK_FUNCTION();
-			if(!r_modelShadows)
+            auto &settings = r->GetSettings();
+			if (!settings.r_modelShadows)
 				return NULL;
-			if(r_sparseShadowMaps)
+			if (settings.r_sparseShadowMaps)
 				return new GLSparseShadowMapRenderer(r);
 			return new GLBasicShadowMapRenderer(r);
 		}
@@ -66,8 +64,9 @@ namespace spades {
 			
 			
 			IGLDevice *dev = program->GetDevice();
-			
-			if(r_sparseShadowMaps){
+            auto &settings = renderer->GetSettings();
+            
+			if (settings.r_sparseShadowMaps){
 				GLSparseShadowMapRenderer *r = static_cast<GLSparseShadowMapRenderer *>(renderer->GetShadowMapRenderer());
 				
 				projectionViewMatrix(program);

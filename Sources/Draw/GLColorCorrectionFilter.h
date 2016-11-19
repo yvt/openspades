@@ -27,8 +27,10 @@ namespace spades {
 	namespace draw {
 		class GLRenderer;
 		class GLProgram;
+        class GLSettings;
 		class GLColorCorrectionFilter {
 			GLRenderer *renderer;
+            GLSettings &settings;
 			GLProgram *lens;
 		public:
 			GLColorCorrectionFilter(GLRenderer *);

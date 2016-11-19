@@ -468,6 +468,10 @@
 		E8C92A0F186A902500740C9F /* CpuID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C92A0E186A902500740C9F /* CpuID.cpp */; };
 		E8CB47CD1DE071CA00BF606A /* SWUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */; };
 		E8CB47CE1DE071CA00BF606A /* SWUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */; };
+		E8CB47D11DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
+		E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
+		E8CB47D51DE084AB00BF606A /* GLSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47D41DE084AB00BF606A /* GLSettings.cpp */; };
+		E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47D41DE084AB00BF606A /* GLSettings.cpp */; };
 		E8CF039A178EDABD000683D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF0399178EDABD000683D4 /* OpenAL.framework */; };
 		E8CF03A8178EDF6A000683D4 /* IRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03A6178EDF6A000683D4 /* IRenderer.cpp */; };
 		E8CF03AB178EDF74000683D4 /* GLRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03A9178EDF74000683D4 /* GLRenderer.cpp */; };
@@ -1004,6 +1008,10 @@
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
 		E8C92A0E186A902500740C9F /* CpuID.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CpuID.cpp; sourceTree = "<group>"; };
 		E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWUtils.cpp; sourceTree = "<group>"; };
+		E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingSet.cpp; sourceTree = "<group>"; };
+		E8CB47D01DE07CF000BF606A /* SettingSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingSet.h; sourceTree = "<group>"; };
+		E8CB47D31DE0844400BF606A /* GLSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLSettings.h; sourceTree = "<group>"; };
+		E8CB47D41DE084AB00BF606A /* GLSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSettings.cpp; sourceTree = "<group>"; };
 		E8CF0385178ED9D2000683D4 /* OpenSpades-CmdLine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "OpenSpades-CmdLine"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8CF0399178EDABD000683D4 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		E8CF039B178EDAC9000683D4 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -1813,6 +1821,8 @@
 				E8CF041D1790D6D5000683D4 /* GLProgramManager.h */,
 				E859511317C96B260012810C /* GLProfiler.cpp */,
 				E859511417C96B270012810C /* GLProfiler.h */,
+				E8CB47D31DE0844400BF606A /* GLSettings.h */,
+				E8CB47D41DE084AB00BF606A /* GLSettings.cpp */,
 			);
 			path = Draw;
 			sourceTree = "<group>";
@@ -1856,6 +1866,8 @@
 				E890F30F187046990090AAB8 /* CP437.h */,
 				E838D41D18AC726B00EE3C53 /* Strings.cpp */,
 				E838D41E18AC726B00EE3C53 /* Strings.h */,
+				E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */,
+				E8CB47D01DE07CF000BF606A /* SettingSet.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2336,6 +2348,7 @@
 				E82E675318EA7972004DBA18 /* as_string.cpp in Sources */,
 				E82E675418EA7972004DBA18 /* as_string_util.cpp in Sources */,
 				E82E675518EA7972004DBA18 /* as_thread.cpp in Sources */,
+				E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */,
 				E82E675618EA7972004DBA18 /* as_tokenizer.cpp in Sources */,
 				E82E675718EA7972004DBA18 /* as_typeinfo.cpp in Sources */,
 				E82E675818EA7972004DBA18 /* as_variablescope.cpp in Sources */,
@@ -2497,6 +2510,7 @@
 				E82E66F218EA7954004DBA18 /* GLFogFilter.cpp in Sources */,
 				E82E66F318EA7954004DBA18 /* GLLensFlareFilter.cpp in Sources */,
 				E82E66F418EA7954004DBA18 /* GLFXAAFilter.cpp in Sources */,
+				E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */,
 				E82E66F518EA7954004DBA18 /* GLColorCorrectionFilter.cpp in Sources */,
 				E82E66F618EA7954004DBA18 /* GLDepthOfFieldFilter.cpp in Sources */,
 				E82E66F718EA7954004DBA18 /* GLLensDustFilter.cpp in Sources */,
@@ -2588,6 +2602,7 @@
 				E8CF041117904ABC000683D4 /* IStream.cpp in Sources */,
 				E8CF041417904E8D000683D4 /* StdStream.cpp in Sources */,
 				E8D0E5D218F3215000DE3BDB /* GLNonlinearizeFilter.cpp in Sources */,
+				E8CB47D51DE084AB00BF606A /* GLSettings.cpp in Sources */,
 				E8CF0417179052F7000683D4 /* DirectoryFileSystem.cpp in Sources */,
 				E8CF041B1790CCAB000683D4 /* GLShader.cpp in Sources */,
 				E8CF041E1790D6D6000683D4 /* GLProgramManager.cpp in Sources */,
@@ -2698,6 +2713,7 @@
 				E80B288517A516D70056179E /* sweep_context.cc in Sources */,
 				E80B288817A52AB70056179E /* BitmapAtlasGenerator.cpp in Sources */,
 				E842888B18A3CF6C0060743D /* StartupScreen.cpp in Sources */,
+				E8CB47D11DE07CF000BF606A /* SettingSet.cpp in Sources */,
 				E80B288D17A5FFB50056179E /* ThreadLocalStorage.cpp in Sources */,
 				E80B289017A659F30056179E /* AsyncRenderer.cpp in Sources */,
 				E80B289317A683510056179E /* SDLAsyncRunner.cpp in Sources */,

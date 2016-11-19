@@ -27,6 +27,7 @@ namespace spades {
 	namespace draw {
 		class GLRenderer;
 		class GLProgramManager;
+        class GLSettings;
 		class GLShadowShader{
 			GLProgramUniform eyeOrigin;
 			GLProgramUniform eyeFront;
@@ -53,7 +54,7 @@ namespace spades {
 			GLShadowShader();
 			~GLShadowShader(){}
 			
-			static std::vector<GLShader *> RegisterShader(GLProgramManager *, bool variance = false);
+			static std::vector<GLShader *> RegisterShader(GLProgramManager *, GLSettings&, bool variance = false);
 			
 			/** setups shadow shader.
 			 * note that this function sets the current active texture

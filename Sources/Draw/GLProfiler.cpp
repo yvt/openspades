@@ -27,6 +27,7 @@
 #include "../Core/Debug.h"
 #include "IGLDevice.h"
 
+// FIXME: use GLSettings?
 SPADES_SETTING(r_debugTiming);
 
 namespace spades {

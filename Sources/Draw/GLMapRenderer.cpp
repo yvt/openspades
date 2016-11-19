@@ -35,12 +35,10 @@
 #include "GLDynamicLightShader.h"
 #include "GLProfiler.h"
 
-DEFINE_SPADES_SETTING(r_physicalLighting, "0");
-
 namespace spades {
 	namespace draw {
 		void GLMapRenderer::PreloadShaders(spades::draw::GLRenderer *renderer) {
-			if(r_physicalLighting)
+			if (renderer->GetSettings().r_physicalLighting)
 				renderer->RegisterProgram("Shaders/BasicBlockPhys.program");
 			else
 				renderer->RegisterProgram("Shaders/BasicBlock.program");
@@ -71,7 +69,7 @@ namespace spades {
 										   i % numChunkDepth);
 			
 			
-			if(r_physicalLighting)
+			if (r->GetSettings().r_physicalLighting)
 				basicProgram = renderer->RegisterProgram("Shaders/BasicBlockPhys.program");
 			else
 				basicProgram = renderer->RegisterProgram("Shaders/BasicBlock.program");

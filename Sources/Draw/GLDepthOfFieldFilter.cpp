@@ -30,20 +30,17 @@
 #include "GLRenderer.h"
 #include "../Core/Debug.h"
 #include "GLProfiler.h"
-#include "../Core/Settings.h"
-
-SPADES_SETTING(r_depthOfField);
-DEFINE_SPADES_SETTING(r_depthOfFieldMaxCoc, "0.01");
 
 namespace spades {
 	namespace draw {
-		static bool HighQualityDoFEnabled()
+        bool GLDepthOfFieldFilter::HighQualityDoFEnabled()
 		{
-			return (int)r_depthOfField >= 2;
+			return (int)settings.r_depthOfField >= 2;
 		}
 		
 		GLDepthOfFieldFilter::GLDepthOfFieldFilter(GLRenderer *renderer):
-		renderer(renderer){
+		renderer(renderer),
+        settings(renderer->GetSettings()) {
 			gaussProgram = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 			if (HighQualityDoFEnabled())
 				blurProgram = renderer->RegisterProgram("Shaders/PostFilters/DoFBlur2.program");
@@ -417,7 +414,8 @@ namespace spades {
                 coc = GenerateCoC(blurDepthRange, vignetteBlur, globalBlur, nearBlur, farBlur);
             }
 			
-			float maxCoc = (float)std::max(w, h) * std::max(std::min((float)r_depthOfFieldMaxCoc, 0.2f), 0.001f);
+			float maxCoc = (float)std::max(w, h) *
+                std::max(std::min((float) settings.r_depthOfFieldMaxCoc, 0.2f), 0.001f);
 			float cos60 = cosf(static_cast<float>(M_PI) / 3.f);
 			float sin60 = sinf(static_cast<float>(M_PI) / 3.f);
 			

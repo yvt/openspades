@@ -32,6 +32,7 @@ namespace spades {
 		class GLRenderer;
 		class IGLDevice;
 		class GLImage;
+        class GLSettings;
 		class GLSoftLitSpriteRenderer: public IGLSpriteRenderer {
 			struct Sprite {
 				GLImage *image;
@@ -62,6 +63,7 @@ namespace spades {
 			};
 			
 			GLRenderer *renderer;
+            GLSettings &settings;
 			IGLDevice *device;
 			std::vector<Sprite> sprites;
 			
