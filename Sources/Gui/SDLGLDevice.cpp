@@ -162,7 +162,14 @@ ReportError(err, __LINE__, __PRETTY_FUNCTION__); \
 				SPLog("Shading Language Version: %s", ret);
 			}
 			SPLog("--- Extensions ---");
-			if(&glGetStringi) {
+#ifdef GLEW
+			// function ptr provided by GLEW
+			if(glGetStringi)
+#else
+			// normal function on macOS (always available)
+			if (true)
+#endif
+			{
 				GLint cnt = 0;
 				glGetIntegerv(GL_NUM_EXTENSIONS, &cnt);
 				if(cnt <= 0) goto retrvFail;
