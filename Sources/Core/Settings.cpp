@@ -291,7 +291,6 @@ namespace spades {
 		if(it == items.end()){
 			item = new Item();
 			item->name = name;
-            item->descriptor = descriptor;
             item->defaults = true;
 			
 			items[name] = item;
