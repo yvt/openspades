@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include "ALFuncs.h"
@@ -168,33 +168,33 @@ namespace al{
 	static void *GPA(const char *str)
 	{
 		if(!alLibrary){
-            auto paths = spades::Split(s_alDriver, ";");
-            std::string errors;
-            for (const std::string &path: paths) {
-                auto trimmedPath = spades::TrimSpaces(path);
-                try {
-                    alLibrary = new spades::DynamicLibrary(trimmedPath.c_str());
-                    if (alLibrary) {
-                        SPLog("'%s' loaded", trimmedPath.c_str());
-                        break;
-                    }
-                } catch (const std::exception &ex) {
-                    errors += trimmedPath;
-                    errors += ":\n";
-                    errors += ex.what();
-                }
-            }
-            if (!alLibrary) {
-                SPRaise("Failed to load a OpenAL driver.\n%s", errors.c_str());
-            }
+			auto paths = spades::Split(s_alDriver, ";");
+			std::string errors;
+			for (const std::string &path: paths) {
+				auto trimmedPath = spades::TrimSpaces(path);
+				try {
+					alLibrary = new spades::DynamicLibrary(trimmedPath.c_str());
+					if (alLibrary) {
+						SPLog("'%s' loaded", trimmedPath.c_str());
+						break;
+					}
+				} catch (const std::exception &ex) {
+					errors += trimmedPath;
+					errors += ":\n";
+					errors += ex.what();
+				}
+			}
+			if (!alLibrary) {
+				SPRaise("Failed to load a OpenAL driver.\n%s", errors.c_str());
+			}
 		}
-		
+
 		if(qalGetProcAddress){
 			void *v = qalGetProcAddress(str);
 			if(v)
 				return v;
 		}
-		
+
 		return alLibrary->GetSymbol(str);
 	}
 
@@ -204,7 +204,7 @@ namespace al{
 	void InitEAX(void){
 		ALCdevice *pDevice = NULL;
 		ALCcontext *pContext = NULL;
-		
+
 		pContext = qalcGetCurrentContext();
 		pDevice = qalcGetContextsDevice(pContext);
 
@@ -246,9 +246,9 @@ namespace al{
 			SPRaise("Extension not found: '%s'",
 					ALC_EXT_EFX_NAME);
 		}
-		
+
 	}
-	
+
 	void Link(void) {
 		SPLog("Linking with OpenAL library.");
 		L(alEnable);
@@ -306,7 +306,7 @@ namespace al{
 		L(alDopplerFactor);
 		L(alDopplerVelocity);
 		L(alDistanceModel);
-		
+
 		L(alcCreateContext);
 		L(alcMakeContextCurrent);
 		L(alcProcessContext);
@@ -322,9 +322,9 @@ namespace al{
 		L(alcGetEnumValue);
 		L(alcGetString);
 		L(alcGetIntegerv);
-		
+
 	}
-	
+
 	const char *DescribeError(ALenum e){
 		switch(e){
 			case AL_NO_ERROR:
@@ -343,7 +343,7 @@ namespace al{
 				return "Unknown error";
 		}
 	}
-	
+
 	void CheckError(void){
 		ALenum e;
 		e = qalGetError();
@@ -354,7 +354,7 @@ namespace al{
 				SPLog("OpenAL error %d: %s", (int)e, DescribeError(e));
 		}
 	}
-	
+
 	void CheckError(const char *source, const char *fun, int line){
 		ALenum e;
 		e = qalGetError();

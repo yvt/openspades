@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include "ScriptManager.h"
@@ -25,28 +25,28 @@
 #include <unordered_map>
 
 namespace spades {
-	
-    namespace
-    {
-        ThreadLocalStorage<bool> writeAllowed;
-        
-        // SettingItemDescriptor supplied to ItemHandle must have the static storage duration
-        std::unordered_map<std::string, const SettingItemDescriptor *>
-        settingItemDescriptors;
-        
-        const SettingItemDescriptor *MakeSettingItemDescriptor
-        (const std::string &name, const std::string &defaultValue)
-        {
-            auto it = settingItemDescriptors.find(name);
-            if (it != settingItemDescriptors.end()) {
-                return it->second;
-            }
-            auto *descriptor = new SettingItemDescriptor(defaultValue, SettingItemFlags::None);
-            settingItemDescriptors.insert(make_pair(name, descriptor));
-            return descriptor;
-        }
-    }
-	
+
+	namespace
+	{
+		ThreadLocalStorage<bool> writeAllowed;
+
+		// SettingItemDescriptor supplied to ItemHandle must have the static storage duration
+		std::unordered_map<std::string, const SettingItemDescriptor *>
+		settingItemDescriptors;
+
+		const SettingItemDescriptor *MakeSettingItemDescriptor
+		(const std::string &name, const std::string &defaultValue)
+		{
+			auto it = settingItemDescriptors.find(name);
+			if (it != settingItemDescriptors.end()) {
+				return it->second;
+			}
+			auto *descriptor = new SettingItemDescriptor(defaultValue, SettingItemFlags::None);
+			settingItemDescriptors.insert(make_pair(name, descriptor));
+			return descriptor;
+		}
+	}
+
 	void MaskConfigUpdateByScript(bool disabled)
 	{
 		if (!writeAllowed) {
@@ -54,32 +54,32 @@ namespace spades {
 		}
 		*writeAllowed = !disabled;
 	}
-    
-	
+
+
 	class ConfigRegistrar: public ScriptObjectRegistrar {
-		
-		
+
+
 	public:
 		ConfigRegistrar():
 		ScriptObjectRegistrar("Config") {}
-		
+
 		class ConfigItem: public RefCountedObject {
 			Settings::ItemHandle handle;
-        public:
-            ConfigItem(const std::string& name, const std::string& defaultValue):
-            handle(name, MakeSettingItemDescriptor(name, defaultValue)){
-            }
-            ConfigItem(const std::string& name):
-            handle(name, nullptr){
-            }
-			
+		public:
+			ConfigItem(const std::string& name, const std::string& defaultValue):
+			handle(name, MakeSettingItemDescriptor(name, defaultValue)){
+			}
+			ConfigItem(const std::string& name):
+			handle(name, nullptr){
+			}
+
 			static ConfigItem *Construct(const std::string& name, const std::string& defaultValue) {
 				return new ConfigItem(name, defaultValue);
 			}
 			static ConfigItem *Construct(const std::string& name) {
 				return new ConfigItem(name);
 			}
-			
+
 			ConfigItem *operator =(float fv) {
 				if (!writeAllowed || !*writeAllowed) {
 					return this;
@@ -92,7 +92,7 @@ namespace spades {
 				if (!writeAllowed || !*writeAllowed) {
 					return this;
 				}
-				
+
 				handle = v;
 				AddRef();
 				return this;
@@ -101,7 +101,7 @@ namespace spades {
 				if (!writeAllowed || !*writeAllowed) {
 					return this;
 				}
-				
+
 				handle = v;
 				AddRef();
 				return this;
@@ -128,12 +128,12 @@ namespace spades {
 				return (std::string)handle;
 			}
 		};
-		
+
 		static CScriptArray *GetAllConfigNames() {
 			auto *ctx = asGetActiveContext();
 			auto *engine = ctx->GetEngine();
 			auto *arrayType = engine->GetTypeInfoByDecl("array<string>");
-            auto *array = CScriptArray::Create(arrayType);
+			auto *array = CScriptArray::Create(arrayType);
 			auto names = Settings::GetInstance()->GetAllItemNames();
 			array->Resize(static_cast<asUINT>(names.size()));
 			for(std::size_t i = 0; i < names.size(); i++) {
@@ -141,7 +141,7 @@ namespace spades {
 			}
 			return array;
 		}
-		
+
 		virtual void Register(ScriptManager *manager, Phase phase) {
 			asIScriptEngine *eng = manager->GetEngine();
 			int r;
@@ -222,7 +222,7 @@ namespace spades {
 												  asMETHOD(ConfigItem, GetStringValue),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterGlobalFunction("array<string>@ GetAllConfigNames()",
 												  asFUNCTION(GetAllConfigNames),
 												  asCALL_CDECL);
@@ -233,8 +233,8 @@ namespace spades {
 			}
 		}
 	};
-	
+
 	static ConfigRegistrar registrar;
-	
+
 }
 

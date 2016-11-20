@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include <OpenSpades.h>
@@ -50,39 +50,39 @@ DEFINE_SPADES_SETTING(core_numDispatchQueueThreads, "auto");
 
 static int GetNumCores() {
 #ifdef WIN32
-    SYSTEM_INFO sysinfo;
-    GetSystemInfo(&sysinfo);
-    return sysinfo.dwNumberOfProcessors;
+	SYSTEM_INFO sysinfo;
+	GetSystemInfo(&sysinfo);
+	return sysinfo.dwNumberOfProcessors;
 #elif defined(__APPLE__)
-    int nm[2];
-    size_t len = 4;
-    uint32_t count;
-	
-    nm[0] = CTL_HW; nm[1] = HW_AVAILCPU;
-    sysctl(nm, 2, &count, &len, NULL, 0);
-	
-    if(count < 1) {
-        nm[1] = HW_NCPU;
-        sysctl(nm, 2, &count, &len, NULL, 0);
-        if(count < 1) { count = 1; }
-    }
-    return count;
+	int nm[2];
+	size_t len = 4;
+	uint32_t count;
+
+	nm[0] = CTL_HW; nm[1] = HW_AVAILCPU;
+	sysctl(nm, 2, &count, &len, NULL, 0);
+
+	if(count < 1) {
+		nm[1] = HW_NCPU;
+		sysctl(nm, 2, &count, &len, NULL, 0);
+		if(count < 1) { count = 1; }
+	}
+	return count;
 #elif defined(__linux__)
-    return get_nprocs();
+	return get_nprocs();
 #else
-    return sysconf(_SC_NPROCESSORS_ONLN);
+	return sysconf(_SC_NPROCESSORS_ONLN);
 #endif
 }
 
 namespace spades {
-	
+
 	struct SyncQueueEntry{
 		SDL_cond *doneCond;
 		SDL_mutex *doneMutex;
 		ConcurrentDispatch *dispatch;
 		volatile bool done;
 		volatile bool released;
-		
+
 		SyncQueueEntry(ConcurrentDispatch *disp):
 		doneCond(SDL_CreateCond()),
 		doneMutex(SDL_CreateMutex()),
@@ -98,7 +98,7 @@ namespace spades {
 				delete dispatch;
 			}
 		}
-		
+
 		void Done() {
 			SDL_LockMutex(doneMutex);
 			done = true;
@@ -109,7 +109,7 @@ namespace spades {
 			}
 			SDL_UnlockMutex(doneMutex);
 		}
-		
+
 		void Release() {
 			SDL_LockMutex(doneMutex);
 			released = true;
@@ -119,7 +119,7 @@ namespace spades {
 			}
 			SDL_UnlockMutex(doneMutex);
 		}
-		
+
 		void Join(){
 			SDL_LockMutex(doneMutex);
 			while(!done){
@@ -128,10 +128,10 @@ namespace spades {
 			SDL_UnlockMutex(doneMutex);
 		}
 	};
-	
+
 	class SynchronizedQueue {
 		std::list<SyncQueueEntry *> entries;
-		
+
 		SDL_cond *pushCond;
 		SDL_mutex *pushMutex;
 	public:
@@ -143,7 +143,7 @@ namespace spades {
 			SDL_DestroyMutex(pushMutex);
 			SDL_DestroyCond(pushCond);
 		}
-		
+
 		void Push(SyncQueueEntry * entry) {
 			SDL_LockMutex(pushMutex);
 			try{
@@ -155,20 +155,20 @@ namespace spades {
 			SDL_CondSignal(pushCond);
 			SDL_UnlockMutex(pushMutex);
 		}
-		
+
 		SyncQueueEntry *Wait() {
 			SDL_LockMutex(pushMutex);
 			while(entries.empty()){
 				SDL_CondWait(pushCond, pushMutex);
 			}
-			
+
 			SyncQueueEntry *ent = entries.front();
 			entries.pop_front();
 			SDL_UnlockMutex(pushMutex);
-			
+
 			return ent;
 		}
-		
+
 		SyncQueueEntry *Poll(){
 			SDL_LockMutex(pushMutex);
 			if(!entries.empty()){
@@ -181,11 +181,11 @@ namespace spades {
 			return NULL;
 		}
 	};
-	
+
 	static SynchronizedQueue globalQueue;
 	static AutoDeletedThreadLocalStorage<DispatchQueue> threadQueue("threadDispatchQueue");
 	static DispatchQueue *sdlQueue = NULL;
-	
+
 	DispatchQueue::DispatchQueue(){
 		SPADES_MARK_FUNCTION();
 		internal = new SynchronizedQueue();
@@ -194,7 +194,7 @@ namespace spades {
 		SPADES_MARK_FUNCTION();
 		delete internal;
 	}
-	
+
 	DispatchQueue *DispatchQueue::GetThreadQueue() {
 		SPADES_MARK_FUNCTION();
 		DispatchQueue *q = threadQueue;
@@ -204,7 +204,7 @@ namespace spades {
 		}
 		return q;
 	}
-	
+
 	void DispatchQueue::ProcessQueue() {
 		SPADES_MARK_FUNCTION();
 		SyncQueueEntry *ent;
@@ -213,19 +213,19 @@ namespace spades {
 		}
 		Thread::CleanupExitedThreads();
 	}
-	
+
 	void DispatchQueue::EnterEventLoop() throw() {
 		while(true){
 			SyncQueueEntry *ent = internal->Wait();
 			ent->dispatch->ExecuteProtected();
-			
+
 		}
 	}
-	
+
 	void DispatchQueue::MarkSDLVideoThread() {
 		sdlQueue = this;
 	}
-	
+
 	class DispatchThread: public Thread{
 	public:
 		virtual void Run() throw() {
@@ -236,9 +236,9 @@ namespace spades {
 			}
 		}
 	};
-	
+
 	static std::vector<DispatchThread *> threads;
-	
+
 	ConcurrentDispatch::ConcurrentDispatch():
 	entry(NULL), runnable(NULL){
 		SPADES_MARK_FUNCTION();
@@ -247,12 +247,12 @@ namespace spades {
 	entry(NULL),name(name), runnable(NULL){
 		SPADES_MARK_FUNCTION();
 	}
-	
+
 	ConcurrentDispatch::~ConcurrentDispatch(){
 		SPADES_MARK_FUNCTION();
 		Join();
 	}
-	
+
 	void ConcurrentDispatch::Execute() {
 		SPADES_MARK_FUNCTION();
 		SyncQueueEntry *ent = entry;
@@ -267,7 +267,7 @@ namespace spades {
 		}
 		ent->Done();
 	}
-	
+
 	void ConcurrentDispatch::ExecuteProtected() throw() {
 		try{
 			Execute();
@@ -279,7 +279,7 @@ namespace spades {
 			fprintf(stderr, "(no information provided)\n");
 		}
 	}
-	
+
 	void ConcurrentDispatch::Start() {
 		SPADES_MARK_FUNCTION();
 		if(entry){
@@ -302,7 +302,7 @@ namespace spades {
 			globalQueue.Push(entry);
 		}
 	}
-	
+
 	void ConcurrentDispatch::StartOn(DispatchQueue *queue) {
 		SPADES_MARK_FUNCTION();
 		if(entry){
@@ -310,7 +310,7 @@ namespace spades {
 		}else{
 			entry = new SyncQueueEntry(this);
 			queue->internal->Push(entry);
-			
+
 			if(queue == sdlQueue) {
 				SDL_Event evt;
 				memset(&evt, 0, sizeof(evt));
@@ -319,7 +319,7 @@ namespace spades {
 			}
 		}
 	}
-	
+
 	void ConcurrentDispatch::Join() {
 		SPADES_MARK_FUNCTION();
 		if(!entry){
@@ -329,7 +329,7 @@ namespace spades {
 			entry = NULL;
 		}
 	}
-	
+
 	void ConcurrentDispatch::Release(){
 		SPADES_MARK_FUNCTION();
 		if(entry){
@@ -337,7 +337,7 @@ namespace spades {
 			ent->Release();
 		}
 	}
-	
+
 	void ConcurrentDispatch::Run(){
 		if(runnable)
 			runnable->Run();

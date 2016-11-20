@@ -1,22 +1,22 @@
 /*
  Copyright (c) 2013 yvt
  based on code of pysnip (c) Mathias Kaerlev 2011-2012.
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include "Client.h"
@@ -90,18 +90,18 @@ DEFINE_SPADES_SETTING(cg_keyAutoFocus, "MiddleMouseButton");
 
 namespace spades {
 	namespace client {
-		
+
 		bool Client::WantsToBeClosed() {
 			return readyToClose;
 		}
-		
+
 		bool FirstPersonSpectate = false;
-		
+
 		void Client::Closing() {
 			SPADES_MARK_FUNCTION();
 		}
 
-		
+
 		bool Client::NeedsAbsoluteMouseCoordinate() {
 			SPADES_MARK_FUNCTION();
 			if(scriptedUI->NeedsInput()) {
@@ -116,20 +116,20 @@ namespace spades {
 			}
 			return false;
 		}
-		
+
 		void Client::MouseEvent(float x, float y) {
 			SPADES_MARK_FUNCTION();
-			
+
 			if(scriptedUI->NeedsInput()) {
 				scriptedUI->MouseEvent(x, y);
 				return;
 			}
-			
+
 			if(IsLimboViewActive()){
 				limbo->MouseEvent(x, y);
 				return;
 			}
-			
+
 			if(IsFollowing()){
 				SPAssert(world != nullptr);
 				/*
@@ -140,11 +140,11 @@ namespace spades {
 				 x = -x; y = -y;
 				 }
 				 */
-				
+
 				x = -x;
 				if (!cg_invertMouseY)
 					y = -y;
-				
+
 				followYaw -= x * 0.003f;
 				followPitch -= y * 0.003f;
 				if(followPitch < -M_PI*.45f) followPitch = -static_cast<float>(M_PI)*.45f;
@@ -156,7 +156,7 @@ namespace spades {
 				if(p->IsAlive()){
 					x /= GetAimDownZoomScale();
 					y /= GetAimDownZoomScale();
-					
+
 					float rad = x * x + y * y;
 					if(rad > 0.f) {
 						if((float)cg_mouseExpPower < 0.001f ||
@@ -168,40 +168,40 @@ namespace spades {
 						factor *= factor;
 						rad /= factor;
 						rad = powf(rad, (float)cg_mouseExpPower * 0.5f - 0.5f);
-						
+
 						// shouldn't happen...
 						if(isnan(rad)) rad = 1.f;
-						
+
 						x *= rad;
 						y *= rad;
 					}
-					
+
 					if(aimDownState > 0.f) {
 						float scale = cg_zoomedMouseSensScale;
 						scale = powf(scale, aimDownState);
 						x *= scale;
 						y *= scale;
 					}
-					
+
 					x *= (float)cg_mouseSensitivity;
 					y *= (float)cg_mouseSensitivity;
-					
+
 					if(cg_invertMouseY)
 						y = -y;
-					
+
 					p->Turn(x * 0.003f, y * 0.003f);
 				}
 			}
 		}
-		
+
 		void Client::WheelEvent(float x, float y) {
 			SPADES_MARK_FUNCTION();
-			
+
 			if(scriptedUI->NeedsInput()) {
 				scriptedUI->WheelEvent(x, y);
 				return;
 			}
-			
+
 			if(y > .5f) {
 				KeyEvent("WheelDown", true);
 				KeyEvent("WheelDown", false);
@@ -210,37 +210,37 @@ namespace spades {
 				KeyEvent("WheelUp", false);
 			}
 		}
-		
+
 		void Client::TextInputEvent(const std::string &ch){
 			SPADES_MARK_FUNCTION();
-			
+
 			if (scriptedUI->NeedsInput() && !scriptedUI->isIgnored(ch)) {
 				scriptedUI->TextInputEvent(ch);
 				return;
 			}
-			
+
 			// we don't get "/" here anymore
 		}
-		
+
 		void Client::TextEditingEvent(const std::string &ch,
 									  int start, int len) {
 			SPADES_MARK_FUNCTION();
-			
+
 			if (scriptedUI->NeedsInput() && !scriptedUI->isIgnored(ch)) {
 				scriptedUI->TextEditingEvent(ch, start, len);
 				return;
 			}
 		}
-		
+
 		bool Client::AcceptsTextInput() {
 			SPADES_MARK_FUNCTION();
-			
+
 			if(scriptedUI->NeedsInput()) {
 				return scriptedUI->AcceptsTextInput();
 			}
 			return false;
 		}
-		
+
 		AABB2 Client::GetTextInputRect() {
 			SPADES_MARK_FUNCTION();
 			if(scriptedUI->NeedsInput()) {
@@ -248,7 +248,7 @@ namespace spades {
 			}
 			return AABB2();
 		}
-		
+
 		static bool CheckKey(const std::string& cfg,
 							 const std::string& input) {
 			if(cfg.empty())
@@ -272,10 +272,10 @@ namespace spades {
 					}
 			return false;
 		}
-		
+
 		void Client::KeyEvent(const std::string& name, bool down){
 			SPADES_MARK_FUNCTION();
-			
+
 			if(scriptedUI->NeedsInput()) {
 				if(!scriptedUI->isIgnored(name)) {
 					scriptedUI->KeyEvent(name, down);
@@ -286,7 +286,7 @@ namespace spades {
 				}
 				return;
 			}
-			
+
 			if(name == "Escape"){
 				if(down){
 					if(inGameLimbo){
@@ -332,13 +332,13 @@ namespace spades {
 				}
 				if(world->GetLocalPlayer()){
 					Player *p = world->GetLocalPlayer();
-					
+
 					if(p->IsAlive() && p->GetTool() == Player::ToolBlock && down) {
 						if(paletteView->KeyInput(name)){
 							return;
 						}
 					}
-					
+
 					if(cg_debugCorpse){
 						if(name == "p" && down){
 							Corpse *corp;
@@ -346,7 +346,7 @@ namespace spades {
 							corp = new Corpse(renderer, map, victim);
 							corp->AddImpulse(victim->GetFront() * 32.f);
 							corpses.emplace_back(corp);
-							
+
 							if(corpses.size() > corpseHardLimit){
 								corpses.pop_front();
 							}else if(corpses.size() > corpseSoftLimit){
@@ -412,14 +412,14 @@ namespace spades {
 						   (!w->IsReloading()) &&
 						   world->GetLocalPlayer()->GetTool() == Player::ToolWeapon){
 							if(world->GetLocalPlayer()->IsToolWeapon()){
-                                if(weapInput.secondary) {
-                                    // if we send WeaponInput after sending Reload,
-                                    // server might cancel the reload.
-                                    // https://github.com/infogulch/pyspades/blob/895879ed14ddee47bb278a77be86d62c7580f8b7/pyspades/server.py#343
-                                    hasDelayedReload = true;
-                                    weapInput.secondary = false;
-                                    return;
-                                }
+								if(weapInput.secondary) {
+									// if we send WeaponInput after sending Reload,
+									// server might cancel the reload.
+									// https://github.com/infogulch/pyspades/blob/895879ed14ddee47bb278a77be86d62c7580f8b7/pyspades/server.py#343
+									hasDelayedReload = true;
+									weapInput.secondary = false;
+									return;
+								}
 							}
 							world->GetLocalPlayer()->Reload();
 							net->SendReload();
@@ -590,8 +590,8 @@ namespace spades {
 				}
 			}
 		}
-		
 
-		
+
+
 	}
 }

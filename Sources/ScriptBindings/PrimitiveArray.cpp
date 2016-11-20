@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include "ScriptManager.h"
@@ -46,45 +46,45 @@ namespace spades {
 			ArrayType *obj = new ArrayType(initialSize);
 			asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
 			return obj;
-        }
-        static ArrayType *Factory3(asUINT initialSize, T initialValue) {
-            if(initialSize > 1024 * 1024 * 256) {
-                asGetActiveContext()->SetException("Too many array elements");
-                return NULL;
-            }
-            ArrayType *obj = new ArrayType(initialSize, initialValue);
-            asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
-            return obj;
-        }
-        static ArrayType *Factory4(void *initList) {
-            asUINT length = *reinterpret_cast<const asUINT *>(initList);
-            if(length > 1024 * 1024 * 256) {
-                asGetActiveContext()->SetException("Too many array elements");
-            }
-            ArrayType *obj = new ArrayType(initList);
-            asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
-            return obj;
-        }
-		
+		}
+		static ArrayType *Factory3(asUINT initialSize, T initialValue) {
+			if(initialSize > 1024 * 1024 * 256) {
+				asGetActiveContext()->SetException("Too many array elements");
+				return NULL;
+			}
+			ArrayType *obj = new ArrayType(initialSize, initialValue);
+			asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
+			return obj;
+		}
+		static ArrayType *Factory4(void *initList) {
+			asUINT length = *reinterpret_cast<const asUINT *>(initList);
+			if(length > 1024 * 1024 * 256) {
+				asGetActiveContext()->SetException("Too many array elements");
+			}
+			ArrayType *obj = new ArrayType(initList);
+			asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
+			return obj;
+		}
+
 		PrimitiveArray(asUINT initialSize = 0) {
 			inner.resize(initialSize);
-        }
-        PrimitiveArray(asUINT initialSize, T initialValue) {
-            inner.resize(initialSize, initialValue);
-        }
-        PrimitiveArray(void *initList) {
-            asUINT length = *reinterpret_cast<const asUINT *>(initList);
-            inner.resize(length);
-            memcpy(inner.data(), reinterpret_cast<const asUINT *>(initList) + 1, inner.size() * sizeof(T));
-        }
-		
+		}
+		PrimitiveArray(asUINT initialSize, T initialValue) {
+			inner.resize(initialSize, initialValue);
+		}
+		PrimitiveArray(void *initList) {
+			asUINT length = *reinterpret_cast<const asUINT *>(initList);
+			inner.resize(length);
+			memcpy(inner.data(), reinterpret_cast<const asUINT *>(initList) + 1, inner.size() * sizeof(T));
+		}
+
 		void AddRef() {
 			refCount &= 0x7fffffff;
 			asAtomicInc(refCount);
 		}
 		void Release() {
 			refCount &= 0x7fffffff;
-			
+
 			if(asAtomicDec(refCount) <= 0)
 				delete this;
 		}
@@ -99,7 +99,7 @@ namespace spades {
 		}
 		void EnumReferences(asIScriptEngine *eng) {}
 		void ReleaseAllReferences(asIScriptEngine *eng){}
-		
+
 		T& At(asUINT index) {
 			if(index >= inner.size()){
 				asGetActiveContext()->SetException("Index out of bounds");
@@ -160,7 +160,7 @@ namespace spades {
 				inner.reserve((size_t)siz);
 			}
 		}
-		
+
 		void SortAsc(asUINT index, asUINT count){
 			if(count <= 0) return;
 			if(index + count > inner.size()){
@@ -186,24 +186,24 @@ namespace spades {
 		void SortDesc() {
 			SortDesc(0, GetSize());
 		}
-		
+
 		void Reverse() {
 			std::reverse(inner.begin(), inner.end());
 		}
-		
+
 		int Find(const T& val) const {
 			typename std::vector<T>::const_iterator it = std::find(inner.begin(), inner.end(), val);
 			if(it == inner.end()) return -1;
 			return static_cast<int> (it - inner.begin());
 		}
-		
+
 		int Find(asUINT ind, const T& val) const {
 			if(ind >= GetSize()) return -1;
 			typename std::vector<T>::const_iterator it = std::find(inner.begin() + ind, inner.end(), val);
 			if(it == inner.end()) return -1;
 			return static_cast<int> (it - inner.begin());
 		}
-		
+
 		bool operator ==(const ArrayType& array) const {
 			if(this == &array)
 				return true;
@@ -215,13 +215,13 @@ namespace spades {
 					return false;
 			return true;
 		}
-		
+
 		bool IsEmpty() const {
 			return inner.empty();
 		}
-		
+
 	};
-	
+
 	template<typename T>
 	class PrimitiveArrayRegistrar: public ScriptObjectRegistrar {
 		std::string typeName;
@@ -304,154 +304,154 @@ namespace spades {
 													 F("void f(int& in)"),
 													 asMETHOD(ArrayType, ReleaseAllReferences), asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("%s& opIndex(uint)"),
 												  asMETHODPR(ArrayType, At, (asUINT), T&),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("const %s& opIndex(uint) const"),
 												  asMETHODPR(ArrayType, At, (asUINT) const, const T&),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("array<%s> &opAssign(const array<%s>&)"),
 												  asMETHODPR(ArrayType, operator =, (const ArrayType&), ArrayType&),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void insertAt(uint, const %s& in)"),
 												  asMETHODPR(ArrayType, InsertAt, (asUINT, const T&), void),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void removeAt(uint)"),
 												  asMETHOD(ArrayType, RemoveAt),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void insertLast(const %s& in)"),
 												  asMETHOD(ArrayType, InsertLast),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void removeLast()"),
 												  asMETHOD(ArrayType, RemoveLast),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("uint length()"),
 												  asMETHOD(ArrayType, GetSize),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void resize(uint)"),
 												  asMETHOD(ArrayType, Resize),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void reserve(uint)"),
 												  asMETHOD(ArrayType, Reserve),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void sortAsc()"),
 												  asMETHODPR(ArrayType, SortAsc, (), void),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void sortAsc(uint, uint)"),
 												  asMETHODPR(ArrayType, SortAsc, (asUINT, asUINT), void),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void sortDesc()"),
 												  asMETHODPR(ArrayType, SortDesc, (), void),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void sortDesc(uint, uint)"),
 												  asMETHODPR(ArrayType, SortDesc, (asUINT, asUINT), void),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("int find(const %s& in) const"),
 												  asMETHODPR(ArrayType, Find, (const T&) const, int),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("int find(uint, const %s& in) const"),
 												  asMETHODPR(ArrayType, Find, (asUINT, const T&) const, int),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("bool opEquals(const array<%s>&) const"),
 												  asMETHODPR(ArrayType, operator ==, (const ArrayType&) const, bool),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("uint get_length()"),
 												  asMETHOD(ArrayType, GetSize),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void set_length(uint)"),
 												  asMETHOD(ArrayType, Resize),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("bool isEmpty()"),
 												  asMETHOD(ArrayType, IsEmpty),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					// STL name
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("uint size()"),
 												  asMETHOD(ArrayType, GetSize),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("bool empty()"),
 												  asMETHOD(ArrayType, IsEmpty),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
-					
+
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void push_back(const %s& in)"),
 												  asMETHOD(ArrayType, InsertLast),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void pop_back()"),
 												  asMETHOD(ArrayType, RemoveLast),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
-					
+
 					r = eng->RegisterObjectMethod(ATN(),
 												  F("void erase(uint)"),
 												  asMETHOD(ArrayType, RemoveAt),
@@ -474,5 +474,5 @@ namespace spades {
 	static PrimitiveArrayRegistrar<uint64_t> uint64ArrayRegistrar("uint64");
 	static PrimitiveArrayRegistrar<float> floatArrayRegistrar("float");
 	static PrimitiveArrayRegistrar<double> doubleArrayRegistrar("double");
-	
+
 }
