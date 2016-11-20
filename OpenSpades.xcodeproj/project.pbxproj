@@ -310,18 +310,6 @@
 		E80B286D17A3B0570056179E /* ConcurrentDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConcurrentDispatch.h; sourceTree = "<group>"; };
 		E80B286F17A4CA2B0056179E /* GLOptimizedVoxelModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLOptimizedVoxelModel.cpp; sourceTree = "<group>"; };
 		E80B287017A4CA2C0056179E /* GLOptimizedVoxelModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLOptimizedVoxelModel.h; sourceTree = "<group>"; };
-		E80B287417A516D70056179E /* shapes.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shapes.cc; sourceTree = "<group>"; };
-		E80B287517A516D70056179E /* shapes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shapes.h; sourceTree = "<group>"; };
-		E80B287617A516D70056179E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
-		E80B287717A516D70056179E /* poly2tri.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poly2tri.h; sourceTree = "<group>"; };
-		E80B287917A516D70056179E /* advancing_front.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = advancing_front.cc; sourceTree = "<group>"; };
-		E80B287A17A516D70056179E /* advancing_front.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = advancing_front.h; sourceTree = "<group>"; };
-		E80B287B17A516D70056179E /* cdt.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cdt.cc; sourceTree = "<group>"; };
-		E80B287C17A516D70056179E /* cdt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cdt.h; sourceTree = "<group>"; };
-		E80B287D17A516D70056179E /* sweep.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sweep.cc; sourceTree = "<group>"; };
-		E80B287E17A516D70056179E /* sweep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sweep.h; sourceTree = "<group>"; };
-		E80B287F17A516D70056179E /* sweep_context.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sweep_context.cc; sourceTree = "<group>"; };
-		E80B288017A516D70056179E /* sweep_context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sweep_context.h; sourceTree = "<group>"; };
 		E80B288617A52AB60056179E /* BitmapAtlasGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapAtlasGenerator.cpp; sourceTree = "<group>"; };
 		E80B288717A52AB70056179E /* BitmapAtlasGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitmapAtlasGenerator.h; sourceTree = "<group>"; };
 		E80B288A17A52CBB0056179E /* binpack2d.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = binpack2d.hpp; sourceTree = "<group>"; };
@@ -890,42 +878,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E80B287217A516D30056179E /* poly2tri */ = {
-			isa = PBXGroup;
-			children = (
-				E80B287317A516D70056179E /* common */,
-				E80B287717A516D70056179E /* poly2tri.h */,
-				E80B287817A516D70056179E /* sweep */,
-			);
-			name = poly2tri;
-			path = Sources/poly2tri;
-			sourceTree = "<group>";
-		};
-		E80B287317A516D70056179E /* common */ = {
-			isa = PBXGroup;
-			children = (
-				E80B287417A516D70056179E /* shapes.cc */,
-				E80B287517A516D70056179E /* shapes.h */,
-				E80B287617A516D70056179E /* utils.h */,
-			);
-			path = common;
-			sourceTree = "<group>";
-		};
-		E80B287817A516D70056179E /* sweep */ = {
-			isa = PBXGroup;
-			children = (
-				E80B287917A516D70056179E /* advancing_front.cc */,
-				E80B287A17A516D70056179E /* advancing_front.h */,
-				E80B287B17A516D70056179E /* cdt.cc */,
-				E80B287C17A516D70056179E /* cdt.h */,
-				E80B287D17A516D70056179E /* sweep.cc */,
-				E80B287E17A516D70056179E /* sweep.h */,
-				E80B287F17A516D70056179E /* sweep_context.cc */,
-				E80B288017A516D70056179E /* sweep_context.h */,
-			);
-			path = sweep;
-			sourceTree = "<group>";
-		};
 		E80B288917A52CB70056179E /* binpack2d */ = {
 			isa = PBXGroup;
 			children = (
@@ -1162,7 +1114,6 @@
 				E80B28B117ABAC6C0056179E /* kiss_fft130 */,
 				E80B288917A52CB70056179E /* binpack2d */,
 				E8B6B63D17DE27B200E35523 /* AngelScript */,
-				E80B287217A516D30056179E /* poly2tri */,
 				E88319011792A7C5002ABE6D /* ENet */,
 			);
 			name = Libraries;
