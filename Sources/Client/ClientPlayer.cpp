@@ -45,6 +45,7 @@
 
 SPADES_SETTING(cg_ragdoll);
 SPADES_SETTING(cg_ejectBrass);
+DEFINE_SPADES_SETTING(cg_animations, "1");
 
 namespace spades {
 	namespace client {
@@ -337,13 +338,24 @@ namespace spades {
 			
 			if(actualWeapInput.secondary && player->IsToolWeapon() &&
 			   player->IsAlive()){
-				aimDownState += dt * 6.f;
-				if(aimDownState > 1.f)
-					aimDownState = 1.f;
-			}else{
-				aimDownState -= dt * 3.f;
-				if(aimDownState < 0.f)
-					aimDownState = 0.f;
+                // This is the only animation that can be turned off
+                // here; others affect the gameplay directly and
+                // turning them off would be considered cheating
+                if (cg_animations) {
+                    aimDownState += dt * 8.f;
+                    if(aimDownState > 1.f)
+                        aimDownState = 1.f;
+                } else {
+                    aimDownState = 1.f;
+                }
+            }else{
+                if (cg_animations) {
+                    aimDownState -= dt * 3.f;
+                    if(aimDownState < 0.f)
+                        aimDownState = 0.f;
+                } else {
+                    aimDownState = 0.f;
+                }
 			}
 			
 			if(currentTool == player->GetTool()) {

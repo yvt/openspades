@@ -588,9 +588,7 @@ namespace spades {
 			hotkeyItems.insertLast(field);
 		}
 
-		// FIXME: generalize these (AddToggleField and AddPlusMinusField) fields
-
-		void AddToggleField(string caption, string configName, bool enabled = true) {
+		void AddChoiceField(string caption, string configName, array<string> labels, array<int> values, bool enabled = true) {
 			spades::ui::UIElement@ container = CreateItem();
 
 			spades::ui::Label label(Parent.Manager);
@@ -599,49 +597,25 @@ namespace spades {
 			label.Bounds = AABB2(10.f, 0.f, 300.f, 32.f);
 			container.AddChild(label);
 
-			{
-				ConfigSimpleToggleButton field(Parent.Manager, _Tr("Preferences", "ON"), configName, 1);
-				field.Bounds = AABB2(FieldX, 1.f, FieldWidth * 0.5f, 30.f);
+			for (uint i = 0; i < labels.length; ++i) {
+				ConfigSimpleToggleButton field(Parent.Manager, labels[i], configName, values[i]);
+				field.Bounds = AABB2(FieldX + FieldWidth / labels.length * i,
+					1.f, FieldWidth / labels.length, 30.f);
 				field.Enable = enabled;
 				container.AddChild(field);
 			}
-			{
-				ConfigSimpleToggleButton field(Parent.Manager, _Tr("Preferences", "OFF"), configName, 0);
-				field.Bounds = AABB2(FieldX + FieldWidth * 0.5f, 1.f, FieldWidth * 0.5f, 30.f);
-				field.Enable = enabled;
-				container.AddChild(field);
-			}
+		}
 
+		void AddToggleField(string caption, string configName, bool enabled = true) {
+			AddChoiceField(caption, configName,
+				array<string> = {_Tr("Preferences", "ON"), _Tr("Preferences", "OFF")},
+				array<int> = {1, 0}, enabled);
 		}
 
 		void AddPlusMinusField(string caption, string configName, bool enabled = true) {
-			spades::ui::UIElement@ container = CreateItem();
-
-			spades::ui::Label label(Parent.Manager);
-			label.Text = caption;
-			label.Alignment = Vector2(0.f, 0.5f);
-			label.Bounds = AABB2(10.f, 0.f, 300.f, 32.f);
-			container.AddChild(label);
-
-			{
-				ConfigSimpleToggleButton field(Parent.Manager, _Tr("Preferences", "ON"), configName, 1);
-				field.Bounds = AABB2(FieldX, 1.f, FieldWidth * 0.33f, 30.f);
-				field.Enable = enabled;
-				container.AddChild(field);
-			}
-			{
-				ConfigSimpleToggleButton field(Parent.Manager, _Tr("Preferences", "REVERSED"), configName, -1);
-				field.Bounds = AABB2(FieldX + FieldWidth * 0.33f, 1.f, FieldWidth * 0.34f, 30.f);
-				field.Enable = enabled;
-				container.AddChild(field);
-			}
-			{
-				ConfigSimpleToggleButton field(Parent.Manager, _Tr("Preferences", "OFF"), configName, 0);
-				field.Bounds = AABB2(FieldX + FieldWidth * 0.67f, 1.f, FieldWidth * 0.33f, 30.f);
-				field.Enable = enabled;
-				container.AddChild(field);
-			}
-
+			AddChoiceField(caption, configName,
+				array<string> = {_Tr("Preferences", "ON"), _Tr("Preferences", "REVERSED"), _Tr("Preferences", "OFF")},
+				array<int> = {1, -1, 0}, enabled);
 		}
 
 		void FinishLayout() {
@@ -667,6 +641,11 @@ namespace spades {
 			layouter.AddToggleField(_Tr("Preferences", "Blood"), "cg_blood");
 			layouter.AddToggleField(_Tr("Preferences", "Ejecting Brass"), "cg_ejectBrass");
 			layouter.AddToggleField(_Tr("Preferences", "Ragdoll"), "cg_ragdoll");
+			layouter.AddToggleField(_Tr("Preferences", "Animations"), "cg_animations");
+			layouter.AddToggleField(_Tr("Preferences", "Camera Shake"), "cg_shake");
+			layouter.AddChoiceField(_Tr("Preferences", "Particles"), "cg_particles",
+				array<string> = {_Tr("Preferences", "NORMAL"), _Tr("Preferences", "LESS"), _Tr("Preferences", "OFF")},
+				array<int> = {2, 1, 0});
 
 			layouter.AddHeading(_Tr("Preferences", "Feedbacks"));
 			layouter.AddToggleField(_Tr("Preferences", "Chat Notify Sounds"), "cg_chatBeep");
@@ -683,10 +662,7 @@ namespace spades {
 			layouter.AddSliderField(_Tr("Preferences", "Minimap size"), "cg_minimapSize", 128, 256, 8,
 				ConfigNumberFormatter(0, " px"));
 			layouter.AddToggleField(_Tr("Preferences", "Show Statistics"), "cg_stats");
-			layouter.AddToggleField(_Tr("Preferences", "Debug Hit Detection"), "cg_debugHitTest");
-			layouter.AddToggleField(_Tr("Preferences", "Weapon Spread Guide"), "cg_debugAim");
 			layouter.FinishLayout();
-			// cg_fov, cg_minimapSize
 		}
 	}
 

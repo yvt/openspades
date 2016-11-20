@@ -53,7 +53,7 @@
 #include "NetClient.h"
 
 DEFINE_SPADES_SETTING(cg_blood, "1");
-DEFINE_SPADES_SETTING(cg_reduceSmoke, "0");
+DEFINE_SPADES_SETTING(cg_particles, "2");
 DEFINE_SPADES_SETTING(cg_waterImpact, "1");
 SPADES_SETTING(cg_manualFocus);
 DEFINE_SPADES_SETTING(cg_autoFocusSpeed, "0.4");
@@ -144,6 +144,9 @@ namespace spades {
 			if((v - lastSceneDef.viewOrigin).GetPoweredLength() >
 			   150.f * 150.f)
 				return;
+            
+            if ((int)cg_particles < 1)
+                return;
 			
 			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {0.5f, 0.02f, 0.04f, 1.f};
@@ -159,7 +162,10 @@ namespace spades {
 				ent->SetRadius(0.1f + GetRandom()*GetRandom()*0.2f);
 				ent->SetLifeTime(3.f, 0.f, 1.f);
 				localEntities.emplace_back(ent);
-			}
+            }
+            
+            if((int) cg_particles < 2)
+                return;
 			
 			color = MakeVector4(.7f, .35f, .37f, .6f);
 			for(int i = 0; i < 2; i++){
@@ -178,9 +184,7 @@ namespace spades {
 				ent->SetLifeTime(.20f + GetRandom() * .2f, 0.06f, .20f);
 				localEntities.emplace_back(ent);
 			}
-			
-			if(cg_reduceSmoke)
-				return;
+            
 			color.w *= .1f;
 			for(int i = 0; i < 1; i++){
 				ParticleSpriteEntity *ent =
@@ -209,7 +213,10 @@ namespace spades {
 			if(distPowered >
 			   150.f * 150.f)
 				return;
-			
+            
+            if ((int)cg_particles < 1)
+                return;
+            
 			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {c.x / 255.f,
 				c.y / 255.f, c.z / 255.f, 1.f};
@@ -228,7 +235,10 @@ namespace spades {
 					ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);
 				localEntities.emplace_back(ent);
 			}
-			
+            
+            if ((int)cg_particles < 2)
+                return;
+            
 			if(distPowered <
 			   32.f * 32.f){
 				for(int i = 0; i < 16; i++){
@@ -278,7 +288,10 @@ namespace spades {
 			if((origin - lastSceneDef.viewOrigin).GetPoweredLength() >
 			   150.f * 150.f)
 				return;
-			
+            
+            if ((int)cg_particles < 1)
+                return;
+            
 			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {c.x / 255.f,
 				c.y / 255.f, c.z / 255.f, 1.f};
@@ -307,7 +320,10 @@ namespace spades {
 			l.type = DynamicLightTypePoint;
 			l.color = MakeVector3(3.f, 1.6f, 0.5f);
 			flashDlights.push_back(l);
-			
+            
+            if ((int)cg_particles < 1)
+                return;
+            
 			Vector4 color;
 			Vector3 velBias = {0, 0, -0.5f};
 			color = MakeVector4( .8f, .8f, .8f, .3f);
@@ -346,7 +362,10 @@ namespace spades {
 			l.color = MakeVector3(3.f, 1.6f, 0.5f);
 			l.useLensFlare = true;
 			flashDlights.push_back(l);
-			
+            
+            if ((int)cg_particles < 1)
+                return;
+            
 			Vector3 velBias = {0,0,0};
 			if(!map->ClipBox(origin.x, origin.y, origin.z)){
 				if(map->ClipBox(origin.x + 1.f, origin.y, origin.z)){
@@ -403,10 +422,18 @@ namespace spades {
 				ent->SetRadius(1.5f + GetRandom()*GetRandom()*0.8f,
 							   0.2f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				if(cg_reduceSmoke)
-					ent->SetLifeTime(1.f + GetRandom() * 2.f, 0.1f, 8.f);
-				else
-					ent->SetLifeTime(2.f + GetRandom() * 5.f, 0.1f, 8.f);
+                switch ((int) cg_particles) {
+                    case 1:
+                        ent->SetLifeTime(0.8f + GetRandom() * 1.f, 0.1f, 8.f);
+                        break;
+                    case 2:
+                        ent->SetLifeTime(1.5f + GetRandom() * 2.f, 0.1f, 8.f);
+                        break;
+                    case 3:
+                    default:
+                        ent->SetLifeTime(2.f + GetRandom() * 5.f, 0.1f, 8.f);
+                        break;
+                }
 				localEntities.emplace_back(ent);
 			}
 			
@@ -459,14 +486,18 @@ namespace spades {
 			grenadeVibration += 1.5f / (dist + 5.f);
 			if(grenadeVibration > 1.f)
 				grenadeVibration = 1.f;
-			
+            
+            if((int) cg_particles < 1)
+                return;
+            
 			Vector3 velBias = {0,0,0};
 			
 			Vector4 color;
 			color = MakeVector4( .95f, .95f, .95f, .6f);
 			// water1
-			Handle<IImage> img = renderer->RegisterImage("Textures/WaterExpl.png");
-			if(cg_reduceSmoke) color.w = .3f;
+            Handle<IImage> img = renderer->RegisterImage("Textures/WaterExpl.png");
+            if((int) cg_particles < 2)
+                color.w = .3f;
 			for(int i = 0; i < 7; i++){
 				ParticleSpriteEntity *ent =
 				new ParticleSpriteEntity(this, img, color);
@@ -486,7 +517,8 @@ namespace spades {
 			// water2
 			img = renderer->RegisterImage("Textures/Fluid.png");
 			color.w = .9f;
-			if(cg_reduceSmoke) color.w = .4f;
+			if((int) cg_particles < 2)
+                color.w = .4f;
 			for(int i = 0; i < 16; i++){
 				ParticleSpriteEntity *ent =
 				new ParticleSpriteEntity(this, img, color);
@@ -504,8 +536,9 @@ namespace spades {
 			}
 			
 			// slow smoke
-			color.w = .4f;
-			if(cg_reduceSmoke) color.w = .2f;
+            color.w = .4f;
+            if((int) cg_particles < 2)
+                color.w = .2f;
 			for(int i = 0; i < 8; i++){
 				ParticleSpriteEntity *ent =
 				new SmokeSpriteEntity(this, color, 20.f);
@@ -518,7 +551,17 @@ namespace spades {
 				ent->SetRadius(1.4f + GetRandom()*GetRandom()*0.8f,
 							   0.2f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime((cg_reduceSmoke ? 3.f : 6.f) + GetRandom() * 5.f, 0.1f, 8.f);
+                switch ((int)cg_particles) {
+                    case 1:
+                        ent->SetLifeTime(3.f + GetRandom() * 5.f, 0.1f, 8.f);
+                        break;
+                    case 2:
+                    case 3:
+                    default:
+                        ent->SetLifeTime(6.f + GetRandom() * 5.f, 0.1f, 8.f);
+                        break;
+                        
+                }
 				localEntities.emplace_back(ent);
 			}
 			
@@ -555,12 +598,15 @@ namespace spades {
 				return;
 			if(!cg_waterImpact)
 				return;
-			
+            
+            if((int) cg_particles < 1)
+                return;
+            
 			Vector4 color;
 			color = MakeVector4( .95f, .95f, .95f, .3f);
 			// water1
 			Handle<IImage> img = renderer->RegisterImage("Textures/WaterExpl.png");
-			if(cg_reduceSmoke) color.w = .2f;
+			if((int) cg_particles < 2) color.w = .2f;
 			for(int i = 0; i < 2; i++){
 				ParticleSpriteEntity *ent =
 				new ParticleSpriteEntity(this, img, color);
@@ -580,7 +626,7 @@ namespace spades {
 			// water2
 			img = renderer->RegisterImage("Textures/Fluid.png");
 			color.w = .9f;
-			if(cg_reduceSmoke) color.w = .4f;
+			if((int) cg_particles < 2) color.w = .4f;
 			for(int i = 0; i < 6; i++){
 				ParticleSpriteEntity *ent =
 				new ParticleSpriteEntity(this, img, color);

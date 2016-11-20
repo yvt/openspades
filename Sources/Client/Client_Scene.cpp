@@ -45,6 +45,7 @@ DEFINE_SPADES_SETTING(cg_fov, "68");
 DEFINE_SPADES_SETTING(cg_thirdperson, "0");
 DEFINE_SPADES_SETTING(cg_manualFocus, "0");
 DEFINE_SPADES_SETTING(cg_depthOfFieldAmount, "1");
+DEFINE_SPADES_SETTING(cg_shake, "1");
 
 static float nextRandom() {
 	return (float)rand() / (float)RAND_MAX;
@@ -99,6 +100,8 @@ namespace spades {
 		
 		SceneDefinition Client::CreateSceneDefinition() {
 			SPADES_MARK_FUNCTION();
+            
+            int shakeLevel = cg_shake;
 			
 			SceneDefinition def;
 			def.time = (unsigned int)(time * 1000.f);
@@ -253,33 +256,33 @@ namespace spades {
 						Vector3 front = player->GetFront();
 						Vector3 right = player->GetRight();
 						Vector3 up = player->GetUp();
+                        
+                        if (shakeLevel >= 1) {
+                            float localFireVibration = GetLocalFireVibration();
+                            localFireVibration *= localFireVibration;
+                            
+                            if(player->GetTool() == Player::ToolSpade) {
+                                localFireVibration *= 0.4f;
+                            }
 						
-						float localFireVibration = GetLocalFireVibration();
-						localFireVibration *= localFireVibration;
-						
-						if(player->GetTool() == Player::ToolSpade) {
-							localFireVibration *= 0.4f;
-						}
-						
-						roll += (nextRandom() - nextRandom()) * 0.03f * localFireVibration;
-						scale += nextRandom() * 0.04f * localFireVibration;
-						
-						vibPitch += localFireVibration * (1.f - localFireVibration) * 0.01f;
-						vibYaw += sinf(localFireVibration * (float)M_PI * 2.f) * 0.001f;
-						
-						def.radialBlur += localFireVibration * 0.2f;
-						
-						// sprint bob
-						{
-							float sp = SmoothStep(GetSprintState());
-							vibYaw += sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.01f * sp;
-							roll -= sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.005f * (sp);
-							float p = cosf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f);
-							p = p * p; p *= p; p *= p; p *= p;
-							vibPitch += p * 0.01f * sp;
-						}
-						
-						
+                            roll += (nextRandom() - nextRandom()) * 0.03f * localFireVibration;
+                            scale += nextRandom() * 0.04f * localFireVibration;
+                            
+                            vibPitch += localFireVibration * (1.f - localFireVibration) * 0.01f;
+                            vibYaw += sinf(localFireVibration * (float)M_PI * 2.f) * 0.001f;
+                            
+                            def.radialBlur += localFireVibration * 0.2f;
+                            
+                            // sprint bob
+                            {
+                                float sp = SmoothStep(GetSprintState());
+                                vibYaw += sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.01f * sp;
+                                roll -= sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.005f * (sp);
+                                float p = cosf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f);
+                                p = p * p; p *= p; p *= p; p *= p;
+                                vibPitch += p * 0.01f * sp;
+                            }
+                        }
 						
 						scale /= GetAimDownZoomScale();
 						
@@ -311,7 +314,7 @@ namespace spades {
 					{
 						// add grenade vibration
 						float grenVib = grenadeVibration;
-						if(grenVib > 0.f){
+						if(grenVib > 0.f && shakeLevel >= 1){
 							grenVib *= 10.f;
 							if(grenVib > 1.f)
 								grenVib = 1.f;
