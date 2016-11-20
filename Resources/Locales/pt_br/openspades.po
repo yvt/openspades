@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
-"POT-Creation-Date: 2016-11-20 14:39-0200\n"
-"PO-Revision-Date: 2016-11-20 14:41-0200\n"
+"POT-Creation-Date: 2016-11-20 15:55-0200\n"
+"PO-Revision-Date: 2016-11-20 16:17-0200\n"
 "Last-Translator: Flávio Monteiro <flaviomonteiro2013@gmail.com>\n"
 "Language-Team: Portuguese Brazilian <flaviomonteiro2013@gmail.com>\n"
 "Language: pt_BR\n"
@@ -78,7 +78,7 @@ msgstr "Vazio"
 #: ../../Scripts/Gui/MainScreen.as:438 ../../Scripts/Gui/MainScreen.as:452
 msgctxt "MainScreen"
 msgid "Not Full"
-msgstr "Não Lotado"
+msgstr "Livre"
 
 #: ../../Scripts/Gui/MainScreen.as:458 ../../Scripts/Gui/MainScreen.as:472
 msgctxt "MainScreen"
@@ -226,7 +226,7 @@ msgstr "Ejetar Cápsulas"
 #: ../../Scripts/Gui/Preferences.as:669 ../../Scripts/Gui/Preferences.as:643
 msgctxt "Preferences"
 msgid "Ragdoll"
-msgstr "Boneco de pano"
+msgstr "Boneco de Pano"
 
 #: ../../Scripts/Gui/Preferences.as:642 ../../Scripts/Gui/Preferences.as:670
 #: ../../Scripts/Gui/Preferences.as:671 ../../Scripts/Gui/Preferences.as:650
@@ -339,7 +339,7 @@ msgstr "Sensibilidade do Mouse"
 #: ../../Scripts/Gui/Preferences.as:680
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
-msgstr "Sens. do Mouse durante Mira"
+msgstr "Sens. do Mouse Durante Mira"
 
 #: ../../Scripts/Gui/Preferences.as:673 ../../Scripts/Gui/Preferences.as:701
 #: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:704
@@ -363,7 +363,7 @@ msgstr "Recarregar"
 #: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:686
 msgctxt "Preferences"
 msgid "Capture Color"
-msgstr "Cor de Captura"
+msgstr "Capturar Cor"
 
 #: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:678
 #: ../../Scripts/Gui/Preferences.as:706 ../../Scripts/Gui/Preferences.as:707
@@ -404,7 +404,7 @@ msgstr "Equipar Granada"
 #: ../../Scripts/Gui/Preferences.as:692
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
-msgstr "Alternar ferramentas pela Roda"
+msgstr "Alternar Ferramentas pela Roda"
 
 #: ../../Scripts/Gui/Preferences.as:684 ../../Scripts/Gui/Preferences.as:683
 #: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
@@ -467,7 +467,7 @@ msgstr "Agachar"
 #: ../../Scripts/Gui/Preferences.as:700
 msgctxt "Preferences"
 msgid "Sneak"
-msgstr "Andar furtivamente"
+msgstr "Andar Furtivamente"
 
 #: ../../Scripts/Gui/Preferences.as:691 ../../Scripts/Gui/Preferences.as:690
 #: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
@@ -503,7 +503,7 @@ msgstr "Escala do Minimapa"
 #: ../../Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Toggle Map"
-msgstr "Alternar Mapa"
+msgstr "Alternar entre Mapa/Minimapa"
 
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:696
 #: ../../Scripts/Gui/Preferences.as:725 ../../Scripts/Gui/Preferences.as:726
@@ -539,7 +539,7 @@ msgstr "Chat de Equipe"
 #: ../../Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Limbo Menu"
-msgstr "Menu Limbo"
+msgstr "Limbo Menu"
 
 #: ../../Scripts/Gui/Preferences.as:701 ../../Scripts/Gui/Preferences.as:700
 #: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
@@ -972,7 +972,7 @@ msgstr "Borra objetos fora de foco."
 #: ../../Scripts/Gui/StartupScreen.as:1174
 msgctxt "StartupScreen"
 msgid "Low"
-msgstr "Baixa"
+msgstr "Baixo"
 
 #: ../../Scripts/Gui/StartupScreen.as:1105
 #: ../../Scripts/Gui/StartupScreen.as:1143
@@ -982,7 +982,7 @@ msgstr "Baixa"
 #: ../../Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid "Medium"
-msgstr "Média"
+msgstr "Médio"
 
 #: ../../Scripts/Gui/StartupScreen.as:1106
 #: ../../Scripts/Gui/StartupScreen.as:1144
@@ -992,7 +992,7 @@ msgstr "Média"
 #: ../../Scripts/Gui/StartupScreen.as:1176
 msgctxt "StartupScreen"
 msgid "High"
-msgstr "Alta"
+msgstr "Alto"
 
 #: ../../Scripts/Gui/StartupScreen.as:1109
 #: ../../Scripts/Gui/StartupScreen.as:1119
@@ -1309,7 +1309,7 @@ msgstr "Customizado"
 #: ../../Scripts/Gui/Preferences.as:684
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
-msgstr "Inverter o Eixo-Y do Mouse"
+msgstr "Inverter o Eixo Y do Mouse"
 
 #: ../../../Sources/Client/Client.cpp:1418
 #: ../../../Sources/Client/Client.cpp:1434
@@ -1810,7 +1810,7 @@ msgstr "Alerta do Servidor"
 #: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:691
 msgctxt "Preferences"
 msgid "Last Used Tool"
-msgstr "Última ferramenta utilizada"
+msgstr "Última Ferramenta Utilizada"
 
 #: ../../Scripts/Gui/StartupScreen.as:1435
 #: ../../Scripts/Gui/StartupScreen.as:1445
@@ -1937,7 +1937,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid "Med"
-msgstr "Med"
+msgstr "Médio"
 
 #: ../../Scripts/Gui/Preferences.as:644
 msgctxt "Preferences"
@@ -1947,7 +1947,7 @@ msgstr "Animações"
 #: ../../Scripts/Gui/Preferences.as:645
 msgctxt "Preferences"
 msgid "Camera Shake"
-msgstr "Sacudir de Câmera"
+msgstr "Tremor de Câmera"
 
 #: ../../Scripts/Gui/Preferences.as:646
 msgctxt "Preferences"
@@ -1962,4 +1962,4 @@ msgstr "NORMAL"
 #: ../../Scripts/Gui/Preferences.as:647
 msgctxt "Preferences"
 msgid "LESS"
-msgstr "MENOS"
+msgstr "POUCAS"
