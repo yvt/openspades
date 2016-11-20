@@ -230,6 +230,7 @@ namespace spades {
 		MainScreenServerItem@[]@ list;
 
 		ServerListItemEventHandler@ ItemActivated;
+		ServerListItemEventHandler@ ItemDoubleClicked;
 
 		ServerListModel(spades::ui::UIManager@ manager, MainScreenServerItem@[]@ list) {
 			@this.manager = manager;
@@ -238,15 +239,22 @@ namespace spades {
 		int NumRows {
 			get { return int(list.length); }
 		}
-		private void ItemClicked(spades::ui::UIElement@ sender){
+		private void OnItemClicked(spades::ui::UIElement@ sender){
 			ServerListItem@ item = cast<ServerListItem>(sender);
 			if(ItemActivated !is null) {
 				ItemActivated(this, item.item);
 			}
 		}
+		private void OnItemDoubleClicked(spades::ui::UIElement@ sender){
+			ServerListItem@ item = cast<ServerListItem>(sender);
+			if(ItemDoubleClicked !is null) {
+				ItemDoubleClicked(this, item.item);
+			}
+		}
 		spades::ui::UIElement@ CreateElement(int row) {
 			ServerListItem i(manager, list[row]);
-			@i.Activated = spades::ui::EventHandler(this.ItemClicked);
+			@i.Activated = spades::ui::EventHandler(this.OnItemClicked);
+			@i.DoubleClicked = spades::ui::EventHandler(this.OnItemDoubleClicked);
 			return i;
 		}
 		void RecycleElement(spades::ui::UIElement@ elem) {}
@@ -546,6 +554,13 @@ namespace spades {
 			addressField.SelectAll();
 		}
 
+		void ServerListItemDoubleClicked(ServerListModel@ sender, MainScreenServerItem@ item) {
+			ServerListItemActivated(sender, item);
+
+			// Double-click to connect
+			Connect();
+		}
+
 		private void SortServerListByPing(spades::ui::UIElement@ sender) {
 			SortServerList(0);
 		}
@@ -631,6 +646,7 @@ namespace spades {
 			ServerListModel model(Manager, list2);
 			@serverList.Model = model;
 			@model.ItemActivated = ServerListItemEventHandler(this.ServerListItemActivated);
+			@model.ItemDoubleClicked = ServerListItemEventHandler(this.ServerListItemDoubleClicked);
 			serverList.ScrollToTop();
 		}
 

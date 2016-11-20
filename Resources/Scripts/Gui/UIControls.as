@@ -64,10 +64,15 @@ namespace spades {
 			bool ActivateOnMouseDown = false;
 
 			EventHandler@ Activated;
+			EventHandler@ DoubleClicked;
 			string Caption;
 			string ActivateHotKey;
 
 			private Timer@ repeatTimer;
+
+			// for double click detection
+			private float lastActivate = -1.f;
+			private Vector2 lastActivatePosition = Vector2();
 
 			ButtonBase(UIManager@ manager) {
 				super(manager);
@@ -87,6 +92,12 @@ namespace spades {
 			void OnActivated() {
 				if(Activated !is null) {
 					Activated(this);
+				}
+			}
+
+			void OnDoubleClicked() {
+				if(DoubleClicked !is null) {
+					DoubleClicked(this);
 				}
 			}
 
@@ -139,6 +150,12 @@ namespace spades {
 							Toggled = not Toggled;
 						}
 						OnActivated();
+						if (Manager.Time < lastActivate + 0.35 &&
+							(clientPosition - lastActivatePosition).ManhattanLength < 10.0f) {
+							OnDoubleClicked();
+						}
+						lastActivate = Manager.Time;
+						lastActivatePosition = clientPosition;
 					}
 
 					if(Repeat and Hover){
