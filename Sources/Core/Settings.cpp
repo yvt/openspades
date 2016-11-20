@@ -307,8 +307,16 @@ namespace spades {
                 item->descriptor = descriptor;
                 const std::string &defaultValue = descriptor->defaultValue;
                 if (item->defaults) {
-                    item->value = static_cast<float>(atof(defaultValue.c_str()));
-                    item->intValue = atoi(defaultValue.c_str());
+                    // c_str() returns an null pointer for empty strings
+                    // on stdc++(GCC/clang on linux) and glibc causes a segfault if
+                    // an null pointer is passed.
+                    if (defaultValue.c_str() != nullptr) {
+                        item->value = static_cast<float>(atof(defaultValue.c_str()));
+                        item->intValue = atoi(defaultValue.c_str());
+                    } else {
+                        item->value = 0.0;
+                        item->intValue = 0;
+                    }
                     item->string = defaultValue;
                 }
             }
