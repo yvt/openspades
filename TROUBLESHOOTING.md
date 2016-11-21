@@ -11,13 +11,7 @@ This is a list of commonly encountered problems, known issues, and their solutio
 
 ### Failed to dlload 'libopenal.so'
 
-Make sure libopenal is actually installed.
-
-If it is installed, you need to copy and rename the file to to *libopenal.so*.
-
-For example:
-`sudo cp /usr/lib/x86_64-linux-gnu/libopenal.so.1 /usr/lib/x86_64-linux-gnu/libopenal.so`
-
+Make sure libopenal is installed. You shouldn't need to do anything else.
 
 ## Create an issue
 
