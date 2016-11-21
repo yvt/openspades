@@ -46,6 +46,7 @@
 SPADES_SETTING(cg_ragdoll);
 SPADES_SETTING(cg_ejectBrass);
 DEFINE_SPADES_SETTING(cg_animations, "1");
+SPADES_SETTING(cg_shake);
 
 namespace spades {
 	namespace client {
@@ -226,6 +227,7 @@ namespace spades {
 			localFireVibrationTime = -100.f;
 			time = 0.f;
 			viewWeaponOffset = MakeVector3(0, 0, 0);
+			lastFront = MakeVector3(0, 0, 0);
 
 			ScriptContextHandle ctx;
 			IRenderer *renderer = client->GetRenderer();
@@ -413,12 +415,41 @@ namespace spades {
 				Vector3 front = player->GetFront();
 				Vector3 right = player->GetRight();
 				Vector3 up = player->GetUp();
+
+				// Offset the view weapon according to the player movement
 				viewWeaponOffset.x += Vector3::Dot(vel, right) * scale;
 				viewWeaponOffset.y -= Vector3::Dot(vel, front) * scale;
 				viewWeaponOffset.z += Vector3::Dot(vel, up) * scale;
+
+				// Offset the view weapon according to the camera movement
+				Vector3 diff = front - lastFront;
+				viewWeaponOffset.x += Vector3::Dot(diff, right) * 0.05f;
+				viewWeaponOffset.z += Vector3::Dot(diff, up) * 0.05f;
+
+				lastFront = front;
+
 				if(dt > 0.f)
 					viewWeaponOffset *= powf(.02f, dt);
 
+				// Limit the movement
+				auto softLimitFunc = [&] (float &v, float minLimit, float maxLimit) {
+					float transition = (maxLimit - minLimit) * 0.5f;
+					if (v < minLimit) {
+						float strength = std::min(1.f, (minLimit - v) / transition);
+						v = Mix(v, minLimit, strength);
+					}
+					if (v > maxLimit) {
+						float strength = std::min(1.f, (v - maxLimit) / transition);
+						v = Mix(v, maxLimit, strength);
+					}
+				};
+				softLimitFunc(viewWeaponOffset.x, -0.06f, 0.06f);
+				softLimitFunc(viewWeaponOffset.y, -0.06f, 0.06f);
+				softLimitFunc(viewWeaponOffset.z, -0.06f, 0.06f);
+
+				// When the player is aiming down the sight, the weapon's movement
+				// must be restricted so that other parts of the weapon don't
+				// cover the ironsight.
 				if(currentTool == Player::ToolWeapon &&
 				   player->GetWeaponInput().secondary) {
 
@@ -427,14 +458,8 @@ namespace spades {
 
 					const float limitX = .003f;
 					const float limitY = .003f;
-					if(viewWeaponOffset.x < -limitX)
-						viewWeaponOffset.x = Mix(viewWeaponOffset.x, -limitX, .5f);
-					if(viewWeaponOffset.x > limitX)
-						viewWeaponOffset.x = Mix(viewWeaponOffset.x, limitX, .5f);
-					if(viewWeaponOffset.z < 0.f)
-						viewWeaponOffset.z = Mix(viewWeaponOffset.z, 0.f, .5f);
-					if(viewWeaponOffset.z > limitY)
-						viewWeaponOffset.z = Mix(viewWeaponOffset.z, limitY, .5f);
+					softLimitFunc(viewWeaponOffset.x, -limitX, limitX);
+					softLimitFunc(viewWeaponOffset.z, 0, limitY);
 				}
 			}
 
@@ -472,8 +497,16 @@ namespace spades {
 		}
 
 		Matrix4 ClientPlayer::GetEyeMatrix() {
-			Player *p = player;
-			return Matrix4::FromAxis(-p->GetRight(), p->GetFront(), -p->GetUp(), p->GetEye());
+			Vector3 eye = player->GetEye();
+
+			if ((int) cg_shake >= 2) {
+				float sp = SmoothStep(GetSprintState());
+				float p = cosf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f - 0.8f);
+				p = p * p; p *= p; p *= p; p *= p;
+				eye.z -= p * 0.06f * sp;
+			}
+
+			return Matrix4::FromAxis(-player->GetRight(), player->GetFront(), -player->GetUp(), eye);
 		}
 
 		void ClientPlayer::SetSkinParameterForTool(Player::ToolType type,
@@ -633,10 +666,10 @@ namespace spades {
 				float sp = 1.f - aimDownState;
 				sp *= .3f;
 				sp *= std::min(1.f, p->GetVelocty().GetLength() * 5.f);
-				viewWeaponOffset.x += sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.01f * sp;
+				viewWeaponOffset.x += sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.013f * sp;
 				float vl = cosf(p->GetWalkAnimationProgress() * M_PI * 2.f);
 				vl *= vl;
-				viewWeaponOffset.z += vl * 0.012f * sp;
+				viewWeaponOffset.z += vl * 0.018f * sp;
 			}
 
 			// slow pulse

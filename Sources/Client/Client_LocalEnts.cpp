@@ -347,13 +347,16 @@ namespace spades {
 			}
 		}
 
+		void Client::KickCamera(float strength) {
+			grenadeVibration = std::min(grenadeVibration + strength, 0.4f);
+			grenadeVibrationSlow = std::min(grenadeVibrationSlow + strength * 5.f, 0.4f);
+		}
+
 		void Client::GrenadeExplosion(spades::Vector3 origin){
 			float dist = (origin - lastSceneDef.viewOrigin).GetLength();
 			if(dist > 170.f)
 				return;
-			grenadeVibration += 2.f / (dist + 5.f);
-			if(grenadeVibration > 1.f)
-				grenadeVibration = 1.f;
+			KickCamera(2.f / (dist + 5.f));
 
 			DynamicLightParam l;
 			l.origin = origin;
@@ -483,9 +486,7 @@ namespace spades {
 			float dist = (origin - lastSceneDef.viewOrigin).GetLength();
 			if(dist > 170.f)
 				return;
-			grenadeVibration += 1.5f / (dist + 5.f);
-			if(grenadeVibration > 1.f)
-				grenadeVibration = 1.f;
+			KickCamera(1.5f / (dist + 5.f));
 
 			if((int) cg_particles < 1)
 				return;

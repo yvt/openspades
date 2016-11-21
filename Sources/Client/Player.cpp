@@ -1384,7 +1384,7 @@ namespace spades {
 
 		float Player::GetWalkAnimationProgress() {
 			return moveDistance * .5f +
-			(float)(moveSteps & 1) * .5f;
+			(float)(moveSteps) * .5f;
 		}
 
 		Player::HitBoxes Player::GetHitBoxes()

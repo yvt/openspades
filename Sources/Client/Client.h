@@ -33,6 +33,7 @@
 #include <memory>
 #include <Core/Stopwatch.h>
 #include "MumbleLink.h"
+#include "NoiseSampler.h"
 
 namespace spades {
 	class IStream;
@@ -167,9 +168,12 @@ namespace spades {
 			SceneDefinition lastSceneDef;
 			float localFireVibrationTime;
 			float grenadeVibration;
+			float grenadeVibrationSlow;
 			bool scoreboardVisible;
 			bool flashlightOn;
 			float flashlightOnTime;
+			CoherentNoiseSampler1D coherentNoiseSamplers[3];
+			void KickCamera(float strength);
 			
 			float hitFeedbackIconState;
 			bool hitFeedbackFriendly;

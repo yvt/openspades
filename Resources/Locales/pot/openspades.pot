@@ -27,89 +27,106 @@ msgid "Localization System Loaded"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:340 ../../Scripts/Gui/MainScreen.as:354
+#: ../../Scripts/Gui/MainScreen.as:362
 msgctxt "MainScreen"
 msgid "Connect"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:348 ../../Scripts/Gui/MainScreen.as:362
+#: ../../Scripts/Gui/MainScreen.as:370
 msgctxt "MainScreen"
 msgid "Quick Connect"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:357 ../../Scripts/Gui/MainScreen.as:411
 #: ../../Scripts/Gui/MainScreen.as:371 ../../Scripts/Gui/MainScreen.as:425
+#: ../../Scripts/Gui/MainScreen.as:379 ../../Scripts/Gui/MainScreen.as:433
 msgctxt "MainScreen"
 msgid "0.75"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:367 ../../Scripts/Gui/MainScreen.as:420
 #: ../../Scripts/Gui/MainScreen.as:381 ../../Scripts/Gui/MainScreen.as:434
+#: ../../Scripts/Gui/MainScreen.as:389 ../../Scripts/Gui/MainScreen.as:442
 msgctxt "MainScreen"
 msgid "0.76"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:375 ../../Scripts/Gui/MainScreen.as:389
+#: ../../Scripts/Gui/MainScreen.as:397
 msgctxt "MainScreen"
 msgid "Quit"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:382 ../../Scripts/Gui/MainScreen.as:396
+#: ../../Scripts/Gui/MainScreen.as:404
 msgctxt "MainScreen"
 msgid "Credits"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:389 ../../Scripts/Gui/MainScreen.as:403
+#: ../../Scripts/Gui/MainScreen.as:411
 msgctxt "MainScreen"
 msgid "Setup"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:402 ../../Scripts/Gui/MainScreen.as:446
 #: ../../Scripts/Gui/MainScreen.as:416 ../../Scripts/Gui/MainScreen.as:460
+#: ../../Scripts/Gui/MainScreen.as:424 ../../Scripts/Gui/MainScreen.as:468
 msgctxt "MainScreen"
 msgid "Filter"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:429 ../../Scripts/Gui/MainScreen.as:443
+#: ../../Scripts/Gui/MainScreen.as:451
 msgctxt "MainScreen"
 msgid "Empty"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:438 ../../Scripts/Gui/MainScreen.as:452
+#: ../../Scripts/Gui/MainScreen.as:460
 msgctxt "MainScreen"
 msgid "Not Full"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:458 ../../Scripts/Gui/MainScreen.as:472
+#: ../../Scripts/Gui/MainScreen.as:480
 msgctxt "MainScreen"
 msgid "Server Name"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:465 ../../Scripts/Gui/MainScreen.as:479
+#: ../../Scripts/Gui/MainScreen.as:487
 msgctxt "MainScreen"
 msgid "Players"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:472 ../../Scripts/Gui/MainScreen.as:486
+#: ../../Scripts/Gui/MainScreen.as:494
 msgctxt "MainScreen"
 msgid "Map Name"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:479 ../../Scripts/Gui/MainScreen.as:493
+#: ../../Scripts/Gui/MainScreen.as:501
 msgctxt "MainScreen"
 msgid "Game Mode"
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:486 ../../Scripts/Gui/MainScreen.as:500
+#: ../../Scripts/Gui/MainScreen.as:508
 msgctxt "MainScreen"
 msgid "Ver."
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:493 ../../Scripts/Gui/MainScreen.as:507
+#: ../../Scripts/Gui/MainScreen.as:515
 msgctxt "MainScreen"
 msgid "Loc."
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:737 ../../Scripts/Gui/MainScreen.as:751
+#: ../../Scripts/Gui/MainScreen.as:767
 msgctxt "MainScreen"
 msgid ""
 "You were disconnected from the server because of the following reason:\n"
@@ -118,11 +135,13 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:757 ../../Scripts/Gui/MainScreen.as:771
+#: ../../Scripts/Gui/MainScreen.as:787
 msgctxt "MainScreen"
 msgid "Loading..."
 msgstr ""
 
 #: ../../Scripts/Gui/MainScreen.as:775 ../../Scripts/Gui/MainScreen.as:789
+#: ../../Scripts/Gui/MainScreen.as:805
 msgctxt "MainScreen"
 msgid "Failed to fetch the server list."
 msgstr ""
@@ -177,7 +196,8 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:608 ../../Scripts/Gui/Preferences.as:638
 #: ../../Scripts/Gui/Preferences.as:609 ../../Scripts/Gui/Preferences.as:639
 #: ../../Scripts/Gui/Preferences.as:611 ../../Scripts/Gui/Preferences.as:617
-#: ../../Scripts/Gui/Preferences.as:647
+#: ../../Scripts/Gui/Preferences.as:647 ../../Scripts/Gui/Preferences.as:646
+#: ../../Scripts/Gui/Preferences.as:649
 msgctxt "Preferences"
 msgid "OFF"
 msgstr ""
@@ -226,32 +246,35 @@ msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:642 ../../Scripts/Gui/Preferences.as:670
 #: ../../Scripts/Gui/Preferences.as:671 ../../Scripts/Gui/Preferences.as:650
+#: ../../Scripts/Gui/Preferences.as:652
 msgctxt "Preferences"
 msgid "Feedbacks"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:643 ../../Scripts/Gui/Preferences.as:671
 #: ../../Scripts/Gui/Preferences.as:672 ../../Scripts/Gui/Preferences.as:651
+#: ../../Scripts/Gui/Preferences.as:653
 msgctxt "Preferences"
 msgid "Chat Notify Sounds"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:644 ../../Scripts/Gui/Preferences.as:672
 #: ../../Scripts/Gui/Preferences.as:673 ../../Scripts/Gui/Preferences.as:652
+#: ../../Scripts/Gui/Preferences.as:654
 msgctxt "Preferences"
 msgid "Hit Indicator"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:646 ../../Scripts/Gui/Preferences.as:674
 #: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:676
-#: ../../Scripts/Gui/Preferences.as:655
+#: ../../Scripts/Gui/Preferences.as:655 ../../Scripts/Gui/Preferences.as:657
 msgctxt "Preferences"
 msgid "AoS 0.75/0.76 Compatibility"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:647 ../../Scripts/Gui/Preferences.as:675
 #: ../../Scripts/Gui/Preferences.as:676 ../../Scripts/Gui/Preferences.as:677
-#: ../../Scripts/Gui/Preferences.as:656
+#: ../../Scripts/Gui/Preferences.as:656 ../../Scripts/Gui/Preferences.as:658
 msgctxt "Preferences"
 msgid "Allow Unicode"
 msgstr ""
@@ -263,21 +286,22 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:62
 #: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:727
 #: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:659
-#: ../../Scripts/Gui/Preferences.as:704
+#: ../../Scripts/Gui/Preferences.as:704 ../../Scripts/Gui/Preferences.as:661
+#: ../../Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Misc"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:650 ../../Scripts/Gui/Preferences.as:678
 #: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:681
-#: ../../Scripts/Gui/Preferences.as:660
+#: ../../Scripts/Gui/Preferences.as:660 ../../Scripts/Gui/Preferences.as:662
 msgctxt "Preferences"
 msgid "Field of View"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:652 ../../Scripts/Gui/Preferences.as:680
 #: ../../Scripts/Gui/Preferences.as:682 ../../Scripts/Gui/Preferences.as:683
-#: ../../Scripts/Gui/Preferences.as:662
+#: ../../Scripts/Gui/Preferences.as:662 ../../Scripts/Gui/Preferences.as:664
 msgctxt "Preferences"
 msgid "Minimap size"
 msgstr ""
@@ -292,7 +316,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:665 ../../Scripts/Gui/Preferences.as:693
 #: ../../Scripts/Gui/Preferences.as:694 ../../Scripts/Gui/Preferences.as:696
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:698
-#: ../../Scripts/Gui/Preferences.as:674
+#: ../../Scripts/Gui/Preferences.as:674 ../../Scripts/Gui/Preferences.as:676
 msgctxt "Preferences"
 msgid "Weapons/Tools"
 msgstr ""
@@ -300,7 +324,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:666 ../../Scripts/Gui/Preferences.as:694
 #: ../../Scripts/Gui/Preferences.as:695 ../../Scripts/Gui/Preferences.as:697
 #: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:699
-#: ../../Scripts/Gui/Preferences.as:675
+#: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:677
 msgctxt "Preferences"
 msgid "Attack"
 msgstr ""
@@ -308,7 +332,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:667 ../../Scripts/Gui/Preferences.as:695
 #: ../../Scripts/Gui/Preferences.as:696 ../../Scripts/Gui/Preferences.as:698
 #: ../../Scripts/Gui/Preferences.as:699 ../../Scripts/Gui/Preferences.as:700
-#: ../../Scripts/Gui/Preferences.as:676
+#: ../../Scripts/Gui/Preferences.as:676 ../../Scripts/Gui/Preferences.as:678
 msgctxt "Preferences"
 msgid "Alt. Attack"
 msgstr ""
@@ -316,7 +340,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:668 ../../Scripts/Gui/Preferences.as:696
 #: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:699
 #: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:701
-#: ../../Scripts/Gui/Preferences.as:677
+#: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:679
 msgctxt "Preferences"
 msgid "Hold Aim Down Sight"
 msgstr ""
@@ -324,7 +348,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:669 ../../Scripts/Gui/Preferences.as:697
 #: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:700
 #: ../../Scripts/Gui/Preferences.as:701 ../../Scripts/Gui/Preferences.as:702
-#: ../../Scripts/Gui/Preferences.as:678
+#: ../../Scripts/Gui/Preferences.as:678 ../../Scripts/Gui/Preferences.as:680
 msgctxt "Preferences"
 msgid "Mouse Sensitivity"
 msgstr ""
@@ -332,7 +356,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:671 ../../Scripts/Gui/Preferences.as:699
 #: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:702
 #: ../../Scripts/Gui/Preferences.as:703 ../../Scripts/Gui/Preferences.as:704
-#: ../../Scripts/Gui/Preferences.as:680
+#: ../../Scripts/Gui/Preferences.as:680 ../../Scripts/Gui/Preferences.as:682
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
 msgstr ""
@@ -340,7 +364,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:673 ../../Scripts/Gui/Preferences.as:701
 #: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:704
 #: ../../Scripts/Gui/Preferences.as:705 ../../Scripts/Gui/Preferences.as:706
-#: ../../Scripts/Gui/Preferences.as:682
+#: ../../Scripts/Gui/Preferences.as:682 ../../Scripts/Gui/Preferences.as:684
 msgctxt "Preferences"
 msgid "Exponential Power"
 msgstr ""
@@ -349,6 +373,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:704 ../../Scripts/Gui/Preferences.as:705
 #: ../../Scripts/Gui/Preferences.as:707 ../../Scripts/Gui/Preferences.as:708
 #: ../../Scripts/Gui/Preferences.as:709 ../../Scripts/Gui/Preferences.as:685
+#: ../../Scripts/Gui/Preferences.as:687
 msgctxt "Preferences"
 msgid "Reload"
 msgstr ""
@@ -357,6 +382,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:705 ../../Scripts/Gui/Preferences.as:706
 #: ../../Scripts/Gui/Preferences.as:708 ../../Scripts/Gui/Preferences.as:709
 #: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:686
+#: ../../Scripts/Gui/Preferences.as:688
 msgctxt "Preferences"
 msgid "Capture Color"
 msgstr ""
@@ -365,6 +391,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:706 ../../Scripts/Gui/Preferences.as:707
 #: ../../Scripts/Gui/Preferences.as:709 ../../Scripts/Gui/Preferences.as:710
 #: ../../Scripts/Gui/Preferences.as:711 ../../Scripts/Gui/Preferences.as:687
+#: ../../Scripts/Gui/Preferences.as:689
 msgctxt "Preferences"
 msgid "Equip Spade"
 msgstr ""
@@ -373,6 +400,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:707 ../../Scripts/Gui/Preferences.as:708
 #: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:711
 #: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:688
+#: ../../Scripts/Gui/Preferences.as:690
 msgctxt "Preferences"
 msgid "Equip Block"
 msgstr ""
@@ -381,6 +409,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:708 ../../Scripts/Gui/Preferences.as:709
 #: ../../Scripts/Gui/Preferences.as:711 ../../Scripts/Gui/Preferences.as:712
 #: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:689
+#: ../../Scripts/Gui/Preferences.as:691
 msgctxt "Preferences"
 msgid "Equip Weapon"
 msgstr ""
@@ -389,6 +418,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:709 ../../Scripts/Gui/Preferences.as:710
 #: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
 #: ../../Scripts/Gui/Preferences.as:714 ../../Scripts/Gui/Preferences.as:690
+#: ../../Scripts/Gui/Preferences.as:692
 msgctxt "Preferences"
 msgid "Equip Grenade"
 msgstr ""
@@ -397,7 +427,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:711
 #: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
 #: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
-#: ../../Scripts/Gui/Preferences.as:692
+#: ../../Scripts/Gui/Preferences.as:692 ../../Scripts/Gui/Preferences.as:694
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
 msgstr ""
@@ -406,7 +436,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:713
 #: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
 #: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
-#: ../../Scripts/Gui/Preferences.as:694
+#: ../../Scripts/Gui/Preferences.as:694 ../../Scripts/Gui/Preferences.as:696
 msgctxt "Preferences"
 msgid "Movement"
 msgstr ""
@@ -415,7 +445,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
 #: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
 #: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
-#: ../../Scripts/Gui/Preferences.as:695
+#: ../../Scripts/Gui/Preferences.as:695 ../../Scripts/Gui/Preferences.as:697
 msgctxt "Preferences"
 msgid "Walk Forward"
 msgstr ""
@@ -424,7 +454,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:714 ../../Scripts/Gui/Preferences.as:715
 #: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
 #: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
-#: ../../Scripts/Gui/Preferences.as:696
+#: ../../Scripts/Gui/Preferences.as:696 ../../Scripts/Gui/Preferences.as:698
 msgctxt "Preferences"
 msgid "Backpedal"
 msgstr ""
@@ -433,7 +463,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:716
 #: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
 #: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
-#: ../../Scripts/Gui/Preferences.as:697
+#: ../../Scripts/Gui/Preferences.as:697 ../../Scripts/Gui/Preferences.as:699
 msgctxt "Preferences"
 msgid "Move Left"
 msgstr ""
@@ -442,7 +472,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:716 ../../Scripts/Gui/Preferences.as:717
 #: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
 #: ../../Scripts/Gui/Preferences.as:721 ../../Scripts/Gui/Preferences.as:722
-#: ../../Scripts/Gui/Preferences.as:698
+#: ../../Scripts/Gui/Preferences.as:698 ../../Scripts/Gui/Preferences.as:700
 msgctxt "Preferences"
 msgid "Move Right"
 msgstr ""
@@ -451,7 +481,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:717 ../../Scripts/Gui/Preferences.as:718
 #: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
 #: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
-#: ../../Scripts/Gui/Preferences.as:699
+#: ../../Scripts/Gui/Preferences.as:699 ../../Scripts/Gui/Preferences.as:701
 msgctxt "Preferences"
 msgid "Crouch"
 msgstr ""
@@ -460,7 +490,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:718 ../../Scripts/Gui/Preferences.as:719
 #: ../../Scripts/Gui/Preferences.as:721 ../../Scripts/Gui/Preferences.as:722
 #: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
-#: ../../Scripts/Gui/Preferences.as:700
+#: ../../Scripts/Gui/Preferences.as:700 ../../Scripts/Gui/Preferences.as:702
 msgctxt "Preferences"
 msgid "Sneak"
 msgstr ""
@@ -469,7 +499,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:719 ../../Scripts/Gui/Preferences.as:720
 #: ../../Scripts/Gui/Preferences.as:722 ../../Scripts/Gui/Preferences.as:723
 #: ../../Scripts/Gui/Preferences.as:724 ../../Scripts/Gui/Preferences.as:725
-#: ../../Scripts/Gui/Preferences.as:701
+#: ../../Scripts/Gui/Preferences.as:701 ../../Scripts/Gui/Preferences.as:703
 msgctxt "Preferences"
 msgid "Jump"
 msgstr ""
@@ -478,7 +508,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:720 ../../Scripts/Gui/Preferences.as:721
 #: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
 #: ../../Scripts/Gui/Preferences.as:725 ../../Scripts/Gui/Preferences.as:726
-#: ../../Scripts/Gui/Preferences.as:702
+#: ../../Scripts/Gui/Preferences.as:702 ../../Scripts/Gui/Preferences.as:704
 msgctxt "Preferences"
 msgid "Sprint"
 msgstr ""
@@ -487,7 +517,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:723 ../../Scripts/Gui/Preferences.as:724
 #: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
 #: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
-#: ../../Scripts/Gui/Preferences.as:705
+#: ../../Scripts/Gui/Preferences.as:705 ../../Scripts/Gui/Preferences.as:707
 msgctxt "Preferences"
 msgid "Minimap Scale"
 msgstr ""
@@ -496,7 +526,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:724 ../../Scripts/Gui/Preferences.as:725
 #: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
 #: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
-#: ../../Scripts/Gui/Preferences.as:706
+#: ../../Scripts/Gui/Preferences.as:706 ../../Scripts/Gui/Preferences.as:708
 msgctxt "Preferences"
 msgid "Toggle Map"
 msgstr ""
@@ -505,7 +535,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:725 ../../Scripts/Gui/Preferences.as:726
 #: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
 #: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
-#: ../../Scripts/Gui/Preferences.as:707
+#: ../../Scripts/Gui/Preferences.as:707 ../../Scripts/Gui/Preferences.as:709
 msgctxt "Preferences"
 msgid "Flashlight"
 msgstr ""
@@ -514,7 +544,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:726 ../../Scripts/Gui/Preferences.as:727
 #: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
 #: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
-#: ../../Scripts/Gui/Preferences.as:708
+#: ../../Scripts/Gui/Preferences.as:708 ../../Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Global Chat"
 msgstr ""
@@ -523,7 +553,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:727 ../../Scripts/Gui/Preferences.as:728
 #: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
 #: ../../Scripts/Gui/Preferences.as:732 ../../Scripts/Gui/Preferences.as:733
-#: ../../Scripts/Gui/Preferences.as:709
+#: ../../Scripts/Gui/Preferences.as:709 ../../Scripts/Gui/Preferences.as:711
 msgctxt "Preferences"
 msgid "Team Chat"
 msgstr ""
@@ -532,7 +562,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:728 ../../Scripts/Gui/Preferences.as:729
 #: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
 #: ../../Scripts/Gui/Preferences.as:733 ../../Scripts/Gui/Preferences.as:734
-#: ../../Scripts/Gui/Preferences.as:710
+#: ../../Scripts/Gui/Preferences.as:710 ../../Scripts/Gui/Preferences.as:712
 msgctxt "Preferences"
 msgid "Limbo Menu"
 msgstr ""
@@ -541,7 +571,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:729 ../../Scripts/Gui/Preferences.as:730
 #: ../../Scripts/Gui/Preferences.as:732 ../../Scripts/Gui/Preferences.as:733
 #: ../../Scripts/Gui/Preferences.as:734 ../../Scripts/Gui/Preferences.as:735
-#: ../../Scripts/Gui/Preferences.as:711
+#: ../../Scripts/Gui/Preferences.as:711 ../../Scripts/Gui/Preferences.as:713
 msgctxt "Preferences"
 msgid "Save Map"
 msgstr ""
@@ -550,7 +580,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:730 ../../Scripts/Gui/Preferences.as:731
 #: ../../Scripts/Gui/Preferences.as:733 ../../Scripts/Gui/Preferences.as:734
 #: ../../Scripts/Gui/Preferences.as:735 ../../Scripts/Gui/Preferences.as:736
-#: ../../Scripts/Gui/Preferences.as:712
+#: ../../Scripts/Gui/Preferences.as:712 ../../Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Save Sceneshot"
 msgstr ""
@@ -559,7 +589,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:731 ../../Scripts/Gui/Preferences.as:732
 #: ../../Scripts/Gui/Preferences.as:734 ../../Scripts/Gui/Preferences.as:735
 #: ../../Scripts/Gui/Preferences.as:736 ../../Scripts/Gui/Preferences.as:737
-#: ../../Scripts/Gui/Preferences.as:713
+#: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:715
 msgctxt "Preferences"
 msgid "Save Screenshot"
 msgstr ""
@@ -1253,7 +1283,7 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:675 ../../Scripts/Gui/Preferences.as:703
 #: ../../Scripts/Gui/Preferences.as:704 ../../Scripts/Gui/Preferences.as:706
 #: ../../Scripts/Gui/Preferences.as:707 ../../Scripts/Gui/Preferences.as:708
-#: ../../Scripts/Gui/Preferences.as:684
+#: ../../Scripts/Gui/Preferences.as:684 ../../Scripts/Gui/Preferences.as:686
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
 msgstr ""
@@ -1465,6 +1495,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:900
 #: ../../../Sources/Client/Client_Update.cpp:909
 #: ../../../Sources/Client/Client_Update.cpp:912
+#: ../../../Sources/Client/Client_Update.cpp:919
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr ""
@@ -1476,6 +1507,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:902
 #: ../../../Sources/Client/Client_Update.cpp:911
 #: ../../../Sources/Client/Client_Update.cpp:914
+#: ../../../Sources/Client/Client_Update.cpp:921
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr ""
@@ -1706,6 +1738,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:460
 #: ../../../Sources/Client/Client_Update.cpp:470
 #: ../../../Sources/Client/Client_Update.cpp:471
+#: ../../../Sources/Client/Client_Update.cpp:478
 msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
@@ -1716,6 +1749,7 @@ msgstr[1] ""
 #: ../../../Sources/Client/Client_Update.cpp:468
 #: ../../../Sources/Client/Client_Update.cpp:478
 #: ../../../Sources/Client/Client_Update.cpp:479
+#: ../../../Sources/Client/Client_Update.cpp:486
 msgctxt "Client"
 msgid "-- blocks"
 msgstr ""
@@ -1724,6 +1758,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:1236
 #: ../../../Sources/Client/Client_Update.cpp:1259
 #: ../../../Sources/Client/Client_Update.cpp:1262
+#: ../../../Sources/Client/Client_Update.cpp:1269
 msgctxt "Client"
 msgid "Insufficient blocks."
 msgstr ""
@@ -1732,24 +1767,26 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:1240
 #: ../../../Sources/Client/Client_Update.cpp:1263
 #: ../../../Sources/Client/Client_Update.cpp:1266
+#: ../../../Sources/Client/Client_Update.cpp:1273
 msgctxt "Client"
 msgid "You cannot place a block there."
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:673 ../../Scripts/Gui/Preferences.as:674
-#: ../../Scripts/Gui/Preferences.as:653
+#: ../../Scripts/Gui/Preferences.as:653 ../../Scripts/Gui/Preferences.as:655
 msgctxt "Preferences"
 msgid "Show Alerts"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:677 ../../Scripts/Gui/Preferences.as:678
-#: ../../Scripts/Gui/Preferences.as:657
+#: ../../Scripts/Gui/Preferences.as:657 ../../Scripts/Gui/Preferences.as:659
 msgctxt "Preferences"
 msgid "Server Alert"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:713 ../../Scripts/Gui/Preferences.as:714
 #: ../../Scripts/Gui/Preferences.as:715 ../../Scripts/Gui/Preferences.as:691
+#: ../../Scripts/Gui/Preferences.as:693
 msgctxt "Preferences"
 msgid "Last Used Tool"
 msgstr ""
@@ -1769,19 +1806,19 @@ msgid "Disables audio output."
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:755 ../../Scripts/Gui/Preferences.as:756
-#: ../../Scripts/Gui/Preferences.as:732
+#: ../../Scripts/Gui/Preferences.as:732 ../../Scripts/Gui/Preferences.as:734
 msgctxt "Preferences"
 msgid "Enable Startup Window"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:776 ../../Scripts/Gui/Preferences.as:777
-#: ../../Scripts/Gui/Preferences.as:753
+#: ../../Scripts/Gui/Preferences.as:753 ../../Scripts/Gui/Preferences.as:755
 msgctxt "Preferences"
 msgid "Quit and restart OpenSpades to access the startup window."
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:777 ../../Scripts/Gui/Preferences.as:778
-#: ../../Scripts/Gui/Preferences.as:754
+#: ../../Scripts/Gui/Preferences.as:754 ../../Scripts/Gui/Preferences.as:756
 msgctxt "Preferences"
 msgid "Some settings only can be changed in the startup window."
 msgstr ""
@@ -1794,6 +1831,7 @@ msgid "Awaiting for state"
 msgstr ""
 
 #: ../../Scripts/Gui/Preferences.as:685 ../../Scripts/Gui/Preferences.as:664
+#: ../../Scripts/Gui/Preferences.as:666
 msgctxt "Preferences"
 msgid "Show Statistics"
 msgstr ""
@@ -1882,17 +1920,23 @@ msgctxt "Preferences"
 msgid "Camera Shake"
 msgstr ""
 
-#: ../../Scripts/Gui/Preferences.as:646
+#: ../../Scripts/Gui/Preferences.as:646 ../../Scripts/Gui/Preferences.as:648
 msgctxt "Preferences"
 msgid "Particles"
 msgstr ""
 
-#: ../../Scripts/Gui/Preferences.as:647
+#: ../../Scripts/Gui/Preferences.as:647 ../../Scripts/Gui/Preferences.as:646
+#: ../../Scripts/Gui/Preferences.as:649
 msgctxt "Preferences"
 msgid "NORMAL"
 msgstr ""
 
-#: ../../Scripts/Gui/Preferences.as:647
+#: ../../Scripts/Gui/Preferences.as:647 ../../Scripts/Gui/Preferences.as:649
 msgctxt "Preferences"
 msgid "LESS"
+msgstr ""
+
+#: ../../Scripts/Gui/Preferences.as:646
+msgctxt "Preferences"
+msgid "MORE"
 msgstr ""

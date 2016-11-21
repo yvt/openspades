@@ -275,6 +275,7 @@
 		E8690AEF1D3920C800DBC331 /* pak010-BaseSkin.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE91D3920C800DBC331 /* pak010-BaseSkin.pak */; };
 		E8690AF01D3920C800DBC331 /* pak050-Locales.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AEA1D3920C800DBC331 /* pak050-Locales.pak */; };
 		E8690AF11D3920C800DBC331 /* pak999-References.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AEB1D3920C800DBC331 /* pak999-References.pak */; };
+		E8725DAD1DE33B4D003BC987 /* NoiseSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8725DAB1DE33B4D003BC987 /* NoiseSampler.cpp */; };
 		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
 		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
@@ -489,6 +490,8 @@
 		E8690AE91D3920C800DBC331 /* pak010-BaseSkin.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak010-BaseSkin.pak"; path = "Resources/pak010-BaseSkin.pak"; sourceTree = "<group>"; };
 		E8690AEA1D3920C800DBC331 /* pak050-Locales.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak050-Locales.pak"; path = "Resources/pak050-Locales.pak"; sourceTree = "<group>"; };
 		E8690AEB1D3920C800DBC331 /* pak999-References.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak999-References.pak"; path = "Resources/pak999-References.pak"; sourceTree = "<group>"; };
+		E8725DAB1DE33B4D003BC987 /* NoiseSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NoiseSampler.cpp; sourceTree = "<group>"; };
+		E8725DAC1DE33B4D003BC987 /* NoiseSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoiseSampler.h; sourceTree = "<group>"; };
 		E874834618EACF0300C29033 /* OpenSpades.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = OpenSpades.icns; path = Resources/Icons/OpenSpades.icns; sourceTree = "<group>"; };
 		E87AB82118BB3957006B7D73 /* SdlImageReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SdlImageReader.cpp; sourceTree = "<group>"; };
 		E87AB82418BB3A04006B7D73 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = /Library/Frameworks/SDL2_image.framework; sourceTree = "<absolute>"; };
@@ -1611,6 +1614,8 @@
 				E834F56C1797AA2C004EBE88 /* FontData.h */,
 				E842889418A667930060743D /* Fonts.cpp */,
 				E842889518A667930060743D /* Fonts.h */,
+				E8725DAB1DE33B4D003BC987 /* NoiseSampler.cpp */,
+				E8725DAC1DE33B4D003BC987 /* NoiseSampler.h */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1947,6 +1952,7 @@
 				E82E674318EA7972004DBA18 /* as_context.cpp in Sources */,
 				E82E674418EA7972004DBA18 /* as_datatype.cpp in Sources */,
 				E82E674518EA7972004DBA18 /* as_gc.cpp in Sources */,
+				E8725DAD1DE33B4D003BC987 /* NoiseSampler.cpp in Sources */,
 				E82E674618EA7972004DBA18 /* as_generic.cpp in Sources */,
 				E82E674718EA7972004DBA18 /* as_globalproperty.cpp in Sources */,
 				E82E674818EA7972004DBA18 /* as_memory.cpp in Sources */,

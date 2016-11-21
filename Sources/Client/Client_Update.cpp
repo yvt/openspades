@@ -56,6 +56,7 @@ DEFINE_SPADES_SETTING(cg_ejectBrass, "1");
 SPADES_SETTING(cg_alerts);
 SPADES_SETTING(cg_centerMessage);
 
+SPADES_SETTING(cg_shake);
 
 namespace spades {
 	namespace client {
@@ -211,11 +212,17 @@ namespace spades {
 			}
 			
 			corpseDispatch.Join();
-			
+
 			if(grenadeVibration > 0.f){
 				grenadeVibration -= dt;
 				if(grenadeVibration < 0.f)
 					grenadeVibration = 0.f;
+			}
+
+			if(grenadeVibrationSlow > 0.f){
+				grenadeVibrationSlow -= dt;
+				if(grenadeVibrationSlow < 0.f)
+					grenadeVibrationSlow = 0.f;
 			}
 			
 			if(hitFeedbackIconState > 0.f) {

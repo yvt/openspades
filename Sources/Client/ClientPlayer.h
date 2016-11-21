@@ -51,6 +51,8 @@ namespace spades {
 			float time;
 			
 			Vector3 viewWeaponOffset;
+
+			Vector3 lastFront;
 			
 			asIScriptObject *spadeSkin;
 			asIScriptObject *blockSkin;
@@ -63,8 +65,7 @@ namespace spades {
 			asIScriptObject *grenadeViewSkin;
 			
 			Handle<SandboxedRenderer> sandboxedRenderer;
-			
-			Matrix4 GetEyeMatrix();
+
 			void AddToSceneThirdPersonView();
 			void AddToSceneFirstPersonView();
 			
@@ -96,6 +97,8 @@ namespace spades {
 			
 			float GetAimDownState() { return aimDownState; }
 			float GetSprintState() { return sprintState; }
+
+			Matrix4 GetEyeMatrix();
 		};
 		
 	}

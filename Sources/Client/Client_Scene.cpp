@@ -257,6 +257,12 @@ namespace spades {
 						Vector3 right = player->GetRight();
 						Vector3 up = player->GetUp();
 
+						Matrix4 eyeMatrix = clientPlayers[player->GetId()]->GetEyeMatrix();
+						def.viewOrigin = eyeMatrix.GetOrigin();
+						def.viewAxis[0] = -eyeMatrix.GetAxis(0);
+						def.viewAxis[1] = -eyeMatrix.GetAxis(2);
+						def.viewAxis[2] = eyeMatrix.GetAxis(1);
+
 						if (shakeLevel >= 1) {
 							float localFireVibration = GetLocalFireVibration();
 							localFireVibration *= localFireVibration;
@@ -279,17 +285,20 @@ namespace spades {
 								vibYaw += sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.01f * sp;
 								roll -= sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.005f * (sp);
 								float p = cosf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f);
-								p = p * p; p *= p; p *= p; p *= p;
+								p = p * p; p *= p; p *= p;
 								vibPitch += p * 0.01f * sp;
+
+								if (shakeLevel >= 2) {
+									vibYaw += coherentNoiseSamplers[0].Sample(player->GetWalkAnimationProgress() * 2.5f) * 0.005f * sp;
+									vibPitch += coherentNoiseSamplers[1].Sample(player->GetWalkAnimationProgress() * 2.5f) * 0.01f * sp;
+									roll += coherentNoiseSamplers[2].Sample(player->GetWalkAnimationProgress() * 2.5f) * 0.008f * sp;
+
+									scale += sp * 0.1f;
+								}
 							}
 						}
 
 						scale /= GetAimDownZoomScale();
-
-						def.viewOrigin = player->GetEye();
-						def.viewAxis[0] = right;
-						def.viewAxis[1] = up;
-						def.viewAxis[2] = front;
 
 						def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) *
@@ -306,24 +315,40 @@ namespace spades {
 
 						def.blurVignette = .0f;
 
-
-
 					}
 
 					// add vibration for both 1st/3rd view
 					{
 						// add grenade vibration
 						float grenVib = grenadeVibration;
-						if(grenVib > 0.f && shakeLevel >= 1){
-							grenVib *= 10.f;
-							if(grenVib > 1.f)
-								grenVib = 1.f;
-							roll += (nextRandom() - nextRandom()) * 0.2f * grenVib;
-							vibPitch += (nextRandom() - nextRandom()) * 0.1f * grenVib;
-							vibYaw += (nextRandom() - nextRandom()) * 0.1f * grenVib;
-							scale -= (nextRandom()-nextRandom()) * 0.1f * grenVib;
+						if(grenVib > 0.f){
+							if (shakeLevel >= 1) {
+								grenVib *= 10.f;
+								if(grenVib > 1.f)
+									grenVib = 1.f;
+								roll += (nextRandom() - nextRandom()) * 0.2f * grenVib;
+								vibPitch += (nextRandom() - nextRandom()) * 0.1f * grenVib;
+								vibYaw += (nextRandom() - nextRandom()) * 0.1f * grenVib;
+								scale -= (nextRandom()-nextRandom()) * 0.1f * grenVib;
 
-							def.radialBlur += grenVib * 0.8f;
+								def.radialBlur += grenVib * 0.8f;
+							}
+						}
+					}
+					{
+						// add grenade vibration
+						float grenVib = grenadeVibrationSlow;
+						if(grenVib > 0.f){
+							if (shakeLevel >= 2) {
+								grenVib *= 4.f;
+								if(grenVib > 1.f)
+									grenVib = 1.f;
+								grenVib *= grenVib;
+
+								roll += coherentNoiseSamplers[0].Sample(time * 8.f) * 0.2f * grenVib;
+								vibPitch += coherentNoiseSamplers[1].Sample(time * 12.f) * 0.1f * grenVib;
+								vibYaw += coherentNoiseSamplers[2].Sample(time * 11.f) * 0.1f * grenVib;
+							}
 						}
 					}
 
