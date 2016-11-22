@@ -13,8 +13,10 @@ OpenSpades is a compatible client of Ace of Spades 0.75.
 * Open source, and cross platform.
 
 ## How to Build/Install?
-**Before you start:** In case you're having issues to build OpenSpades, it may be because this README file is outdated.
-Please see the [Building Guide]https://github.com/yvt/openspades/wiki/Building() to get the latest information on how to build or [open an issue](https://github.com/yvt/openspades/issues) if the problem persists.
+**Before you start:** In case you're having issues to build OpenSpades, it may be because this README file is outdated, if so:
+
+ 1. See the [Building Guide](https://github.com/yvt/openspades/wiki/Building), which may be up to date
+ 2. Or [open an issue](https://github.com/yvt/openspades/issues) if the problem persists
 
 ### On Linux
 GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
