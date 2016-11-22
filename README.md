@@ -104,7 +104,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    Unofficial: https://github.com/learn-more/openspades
 2. Extract or checkout the source (all examples will assume `E:/Projects/openspades`, update paths in the examples to reflect yours)
 3. Get (pre-compiled) copies of fltk, glew, curl, sdl2 and zlib, and place them in `E:/Projects/openspades/Sources/Externals`.
-   See the file `E:\Projects\openspades\Sources\Externals\readme.txt` for details (and a pre-compiled set of libraries, make sure to pick the right one for your version of VS).
+   See the file `E:/Projects/openspades/Sources/Externals/readme.txt` for details (and a pre-compiled set of libraries, make sure to pick the right one for your version of VS).
 4. Run CMake, using the paths:
    
    Source: `E:/Projects/openspades`,
