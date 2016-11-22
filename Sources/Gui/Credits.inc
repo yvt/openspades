@@ -2,7 +2,8 @@ static const char *credits = R"**(
 
 ${PACKAGE_STRING}
 
-Credits
+
+CREDITS
 -------
 
 "yvt" - Most of the code
@@ -16,10 +17,10 @@ Credits
 "pandaro" - Improvements to the Minimap
 "kmsi" - Korean translation
 "tungdil" - German translation
-"feikname" - Brazilian portuguese translation, improvements
-"VelocityRa" - Repository maintenance/organization, VS2015 support
+"feikname" - Brazilian portuguese translation, GUI ideas, wiki maintenance
+"VelocityRa" - Repo maintenance, VS2015 support, better random generator
 "Mailaender" - FreeDesktop definitions fixes
-"Chameleonhider" - Configure-able player name drawing
+"Chameleonhider" - Configurable player name drawing
 "CenturionFox" - Server Disconnect Screen
 
 And many others which weren't mentioned here.
