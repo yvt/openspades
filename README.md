@@ -104,22 +104,29 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    Unofficial: https://github.com/learn-more/openspades
 2. Extract or checkout the source (all examples will assume `E:/Projects/openspades`, update paths in the examples to reflect yours)
 3. Get (pre-compiled) copies of fltk, glew, curl, sdl2 and zlib, and place them in `E:/Projects/openspades/Sources/Externals`.
-   See the file `E:/Projects/openspades/Sources/Externals/readme.txt` for details (and a pre-compiled set of libraries, make sure to pick the right one for your version of VS).
+   See the file `E:\Projects\openspades\Sources\Externals\readme.txt` for details (and a pre-compiled set of libraries, make sure to pick the right one for your version of VS).
 4. Run CMake, using the paths:
    
    Source: `E:/Projects/openspades`,
    Binaries: `E:/Projects/openspades/OpenSpades.msvc`
    Generator: Visual Studio 12 (2013) or 14 (2015) (not Win64!)
    
-   For your convenience, create the directory: `E:\Projects\openspades\OpenSpades.msvc\os.Resources`, extract the resources (.pak files) to this dir,
-   set `OPENSPADES_RESDIR` to point to this directory. (Run CMake again, now when running debug builds openspades will also read resources from this dir)
+   For your convenience, create the directory: `E:/Projects/openspades/OpenSpades.msvc/os.Resources`, and extract the [Non-free pak](https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip) (`pak000-Nonfree.pak`) into it. Also, please note you can't distribute this pak separately from OpenSpades releases or binaries, as noted on `Resources/PakLocation.txt`
    
-   **Note:** `OPENSPADES_RESDIR` must be set using slashes instead of backslashes (`E:/OpenSpades/os.Resources` instead of `E:\OpenSpades\os.Resources`)
+   set `OPENSPADES_RESDIR` to point to `os.Resources`. (Run CMake again, now when running debug builds openspades will also read resources from this directory)
    
-5. Open `E:\Projects\openspades\OpenSpades.msvc\OpenSpades.sln` in Visual Studio.
+   **Note:** `OPENSPADES_RESDIR` must be set using slashes instead of backslashes (`E:/Projects/openspades/os.Resources` instead of `E:\Projects\openspades\os.Resources`). Also, no slashes at end.
+   
+5. Open `E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln` in Visual Studio.
 6. Build the solution.
-7. Copy all `.dll` files from `Source\Externals\lib` to the build output directory.
+7. Copy all `.dll` files from `Source/Externals/lib` to the build output directory.
 8. Download [Windows release of OpenSpades](https://github.com/yvt/openspades/releases), extract it, and copy `openal32.dll` and `YSRSpades.dll` to the build output directory.
+
+    **Note:** In case OpenSpades still fails to find some dll, copy the remaing dlls which aren't there yet, it should solve the problem.
+    
+9. In case it's a debug build, copy `E:/Projects/openspades/Resources` folder to your build directory, which is probably `E:/Projects/openspadesd\openspades.msvc/bin/Debug`
+
+    In case you haven't set OPENSPADES_RESDIR and extracted the [Non-free pak](https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip) into it, extract it and merge it inside the `Resources` folder you just copied.
 
 ### On Mac OS X (with Xcode)
 1. Get the latest version of Xcode and OpenSpades source.
