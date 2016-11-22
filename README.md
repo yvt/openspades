@@ -1,4 +1,4 @@
-openspades
+OpenSpades
 ====================================================================================================
 
 [![Build Status](https://travis-ci.org/yvt/openspades.png?branch=master)](https://travis-ci.org/yvt/openspades)
