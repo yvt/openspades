@@ -1060,7 +1060,7 @@ namespace spades {
 					switch(player->GetWeapon()->GetWeaponType()){
 						case RIFLE_WEAPON:
 							model = renderer->RegisterModel("Models/Weapons/Rifle/Casing.kv6");
-							snd = (rand()&0x1000)?
+							snd = (mt_engine_client()&0x1000)?
 							audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.wav"):
 							audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop2.wav");
 							snd2 =
@@ -1073,7 +1073,7 @@ namespace spades {
 							break;
 						case SMG_WEAPON:
 							model = renderer->RegisterModel("Models/Weapons/SMG/Casing.kv6");
-							snd = (rand()&0x1000)?
+							snd = (mt_engine_client()&0x1000)?
 							audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop1.wav"):
 							audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop2.wav");
 							snd2 =

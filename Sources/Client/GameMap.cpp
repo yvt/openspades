@@ -32,11 +32,12 @@
 
 namespace spades {
 	namespace client {
+
 		GameMap::GameMap():
 		listener(NULL){
 			SPADES_MARK_FUNCTION();
 			
-			uint32_t rnd = (uint32_t)rand() ^ ((uint32_t)rand() << 16);
+			uint32_t rnd = mt_engine();
 			rnd ^= 0x7abd4513;
 			for(int x = 0; x < DefaultWidth; x++)
 				for(int y = 0; y < DefaultHeight; y++){

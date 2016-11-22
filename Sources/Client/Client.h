@@ -62,7 +62,9 @@ namespace spades {
 		class ClientPlayer;
 		
 		class ClientUI;
-		
+
+		extern std::mt19937_64 mt_engine_client;    // randomness generator
+
 		class Client: public IWorldListener, public gui::View {
 			friend class ScoreboardView;
 			friend class LimboView;
@@ -117,7 +119,7 @@ namespace spades {
 			float timeSinceInit;
 			
 			MumbleLink mumbleLink;
-			
+
 			// view/drawing state for some world objects
 			std::vector<Handle<ClientPlayer>> clientPlayers;
 			

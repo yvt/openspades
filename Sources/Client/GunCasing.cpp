@@ -24,7 +24,6 @@
 #include "Client.h"
 #include "World.h"
 #include "IAudioDevice.h"
-#include <stdlib.h>
 #include "ParticleSpriteEntity.h"
 #include "IAudioChunk.h"
 
@@ -112,7 +111,7 @@ namespace spades {
 					}
 					
 					if(dist < 40.f * 40.f){
-						int splats = rand() % 3;
+						int splats = mt_engine_client() % 3;
 						
 						Handle<IImage> img = client->GetRenderer()->RegisterImage("Gfx/White.tga");
 						

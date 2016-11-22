@@ -19,9 +19,10 @@
  */
 
 #include <Core/Math.h>
-#include <stdlib.h>
 #include "ScriptManager.h"
 #include <new>
+#include <random>
+
 
 namespace spades {
 
@@ -34,31 +35,24 @@ namespace spades {
 				case 1:
 					return 0;
 				case 2:
-					return rand() & 1;
+					return mt_engine() & 1;
 				case 4:
-					return rand() & 3;
+					return mt_engine() & 3;
 				case 8:
-					return rand() & 7;
+					return mt_engine() & 7;
 				case 16:
-					return rand() & 15;
+					return mt_engine() & 15;
 				case 32:
-					return rand() & 31;
+					return mt_engine() & 31;
 				case 64:
-					return rand() & 63;
+					return mt_engine() & 63;
 			}
-			unsigned int ret;
-			unsigned int mask = range;
-			for(unsigned int i = range - 1; i != 0; i >>= 1) {
-				mask |= i;
-			}
-			do {
-				ret = rand();
-				if(range - 1 > (unsigned int)RAND_MAX) {
-					ret += rand() * ((unsigned int)(RAND_MAX) + 1);
-				}
-				ret &= mask;
-			} while( ret >= range );
-			return ret;
+			// We can't directly use the engine here, we need a distribution
+
+			// range - 1 because it's inclusive and we want exclusive
+			std::uniform_int_distribution<unsigned int> int_dist(0, range - 1);
+
+			return int_dist(mt_engine);
 		}
 		static unsigned int GetRandomUIntRange(unsigned int a,
 											   unsigned int b){

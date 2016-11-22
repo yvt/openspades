@@ -25,6 +25,7 @@
 #include <string>
 #include <stdint.h>		// uint32_t --> msvc
 #include <algorithm>	// std::max / std::min
+#include <random>
 
 #ifdef _MSC_VER
 #define isnan _isnan
@@ -34,6 +35,11 @@ static inline long lround(double num) { return (long)(num > 0 ? num + 0.5 : ceil
 
 namespace spades {
 	
+	// Make mt_engine and a real dist [0,1] accesible everywhere in the spades namespace
+	extern std::mt19937_64 mt_engine;
+	extern std::uniform_real_distribution<float> real_dist;
+
+
 #pragma mark - Integer Vector
 	
 	class IntVector3 {

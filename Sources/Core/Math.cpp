@@ -35,6 +35,12 @@ namespace spades {
 	 
 	 }
 	 */
+
+	std::random_device r_device;
+	std::mt19937_64 mt_engine(r_device());	// Seed Mersenne twister with non-deterministic 32-bit seed
+
+	std::uniform_real_distribution<float> real_dist(0, 1);
+
 	void Matrix4Multiply(const float a[16], const float b[16], float out[16]) {
 		out[ 0] = b[ 0]*a[ 0] + b[ 1]*a[ 4] + b[ 2]*a[ 8] + b[ 3]*a[12];
         out[ 1] = b[ 0]*a[ 1] + b[ 1]*a[ 5] + b[ 2]*a[ 9] + b[ 3]*a[13];
@@ -621,8 +627,7 @@ namespace spades {
 	}
 	
 	float GetRandom() {
-		const double factor = 1.f / ((double)RAND_MAX + 1.);
-		return (float)((double)rand() * factor);
+		return real_dist(mt_engine);
 	}
 	float SmoothStep(float v){
 		return v * v * (3.f - 2.f * v);

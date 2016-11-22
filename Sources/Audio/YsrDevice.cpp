@@ -26,7 +26,6 @@
 #include <Core/FileManager.h>
 #include <Core/IAudioStream.h>
 #include <Core/WavAudioStream.h>
-#include <cstdlib>
 #include "../Imports/SDL.h"
 #include <Core/IStream.h>
 
@@ -45,6 +44,7 @@ DEFINE_SPADES_SETTING(s_ysrDebug, "0");
 
 namespace spades {
 	namespace audio {
+
 		
 		static spades::DynamicLibrary *library = nullptr;
 		
@@ -524,9 +524,9 @@ namespace spades {
 			if(this->gameMap) this->gameMap->AddRef();
 			if(old) old->Release();
 		}
-		
+
 		static float NextRandom() {
-			return (float)std::rand() /(float)RAND_MAX;
+			return real_dist(mt_engine);
 		}
 		
 		void YsrDevice::Respatialize(const spades::Vector3 &eye,

@@ -381,7 +381,7 @@ namespace spades {
 			for(int i = 0; i < 8; i++){
 				if(numDirtyChunks <= 0)
 					break;
-				int idx = rand() % numDirtyChunks;
+				int idx = mt_engine() % numDirtyChunks;
 				Chunk& c = chunks[dirtyChunkIds[idx]];
 				
 				// remove from list (fast)
