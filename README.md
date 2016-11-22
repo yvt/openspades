@@ -1,5 +1,4 @@
 # OpenSpades
-
 [![Build status](https://travis-ci.org/yvt/openspades.png?branch=master)](https://travis-ci.org/yvt/openspades)
 
 ![OpenSpades banner](https://dl.dropboxusercontent.com/u/37804131/github/OpenSpadesBanner.jpg)
@@ -7,7 +6,6 @@
 [Official website](http://openspades.yvt.jp) — [Download](https://github.com/yvt/openspades/releases) — [Community](http://buildandshoot.com) — [Trello board](https://trello.com/b/3rfpvODj/openspades-roadmap)
 
 ## What is it?
-
 OpenSpades is a compatible client of Ace of Spades 0.75.
 
 * Can connect to a vanilla/pyspades/pysnip server.
@@ -15,6 +13,8 @@ OpenSpades is a compatible client of Ace of Spades 0.75.
 * Open source, and cross platform.
 
 ## How to Build/Install?
+**Before you start:** In case you're having issues to build OpenSpades, it may be because this README file is outdated.
+Please see the [Building Guide]https://github.com/yvt/openspades/wiki/Building() to get the latest information on how to build or [open an issue](https://github.com/yvt/openspades/issues) if the problem persists.
 
 ### On Linux
 GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
@@ -111,6 +111,8 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    
    For your convenience, create the directory: `E:/Projects/openspades/OpenSpades.msvc/os.Resources`, extract the resources (.pak files) to this dir,
    set `OPENSPADES_RESDIR` to point to this directory. (Run CMake again, now when running debug builds openspades will also read resources from this dir)
+   
+   **Note:** `OPENSPADES_RESDIR` must be set using slashes instead of backslashes (`E:/OpenSpades/os.Resources` instead of `E:\OpenSpades\os.Resources`)
    
 5. Open `E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln` in Visual Studio.
 6. Build the solution.
