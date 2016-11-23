@@ -1,26 +1,24 @@
-openspades
-====================================================================================================
+# OpenSpades
+[![Build status](https://travis-ci.org/yvt/openspades.png?branch=master)](https://travis-ci.org/yvt/openspades)
 
-[![Build Status](https://travis-ci.org/yvt/openspades.png?branch=master)](https://travis-ci.org/yvt/openspades)
+![OpenSpades banner](https://dl.dropboxusercontent.com/u/37804131/github/OpenSpadesBanner.jpg)
 
-![](https://dl.dropboxusercontent.com/u/37804131/github/OpenSpadesBanner.jpg)
+[Official website](http://openspades.yvt.jp) — [Download](https://github.com/yvt/openspades/releases) — [Community](http://buildandshoot.com) — [Trello board](https://trello.com/b/3rfpvODj/openspades-roadmap)
 
-[Official Website](http://openspades.yvt.jp) — [Download](https://github.com/yvt/openspades/releases) — [Community](http://buildandshoot.com) — [Trello board](https://trello.com/b/3rfpvODj/openspades-roadmap)
-
-What is it?
-----------------------------------------------------------------------------------------------------
-
+## What is it?
 OpenSpades is a compatible client of Ace of Spades 0.75.
 
 * Can connect to a vanilla/pyspades/pysnip server.
 * Uses OpenGL/AL for better experience.
 * Open source, and cross platform.
 
-Installation
-----------------------------------------------------------------------------------------------------
+## How to Build/Install?
+**Before you start:** In case you're having issues to build OpenSpades, it may be because this README file is outdated, if so:
+
+ 1. See the [Building Guide](https://github.com/yvt/openspades/wiki/Building), which may be up to date
+ 2. Or [open an issue](https://github.com/yvt/openspades/issues) if the problem persists
 
 ### On Linux
-
 GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
 
 1. Install dependencies:
@@ -76,7 +74,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    **note**: If you have a previous installation of OpenSpades, you have to uninstall it manually by `sudo rm -rf /usr/local/share/games/openspades` before installing a new one.
 
 7. Get shared files: 
-   * If you compiling certain release (0.0.10 for example): 
+   * If you're compiling certain release (0.0.10 for example): 
 
       Download windows binary of OpenSpades from
       https://sites.google.com/a/yvt.jp/openspades/downloads, extract it, and copy the .pak files
@@ -86,11 +84,11 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
       **note**: use `~/.openspades/Resources` in old releases.
 
-   * If you compiling straight from source (git clone):
+   * If you're compiling straight from source (git clone):
 
       All needed resources would be downloaded while `make install`, so no need to worry.
 
-      If you didn't launched `make install`, you can install resources manually. 
+      If you didn't launch `make install`, you can install resources manually. 
       See `Resources/PakLocation.txt` to find out where get latest shared files.
       Download, extract, and place them into `/usr/local/share/games/openspades/Resources` or
       `$XDG_DATA_HOME/openspades/Resources`
@@ -101,8 +99,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
 
 ### On Windows (with Visual Studio)
-
-1. Get CMake, Visual Studio 2013 (Express) or Visual Studio 2015 (not very supported), and the OpenSpades source.
+1. Get CMake, Visual Studio 2013 (Express) or Visual Studio 2015 (experimental support, should work fine), and the OpenSpades source.
    Official: https://github.com/yvt/openspades
    Unofficial: https://github.com/learn-more/openspades
 2. Extract or checkout the source (all examples will assume `E:/Projects/openspades`, update paths in the examples to reflect yours)
@@ -114,15 +111,24 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    Binaries: `E:/Projects/openspades/OpenSpades.msvc`
    Generator: Visual Studio 12 (2013) or 14 (2015) (not Win64!)
    
-   For your convenience, create the directory: `E:/Projects/openspades/OpenSpades.msvc/os.Resources`, extract the resources (.pak files) to this dir,
-   set `OPENSPADES_RESDIR` to point to this directory. (Run CMake again, now when running debug builds openspades will also read resources from this dir)
+   For your convenience, create the directory: `E:/Projects/openspades/OpenSpades.msvc/os.Resources`, and extract the [Non-free pak](https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip) (`pak000-Nonfree.pak`) into it. Also, please note you can't distribute this pak separately from OpenSpades releases or binaries, as noted on `Resources/PakLocation.txt`
+   
+   set `OPENSPADES_RESDIR` to point to `os.Resources`. (Run CMake again, now when running debug builds openspades will also read resources from this directory)
+   
+   **Note:** `OPENSPADES_RESDIR` must be set using slashes instead of backslashes (`E:/Projects/openspades/os.Resources` instead of `E:\Projects\openspades\os.Resources`). Also, no slashes at end.
+   
 5. Open `E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln` in Visual Studio.
 6. Build the solution.
 7. Copy all `.dll` files from `Source/Externals/lib` to the build output directory.
 8. Download [Windows release of OpenSpades](https://github.com/yvt/openspades/releases), extract it, and copy `openal32.dll` and `YSRSpades.dll` to the build output directory.
 
-### On Mac OS X (with Xcode)
+    **Note:** In case OpenSpades still fails to find any dll, copy all the remaing dlls which aren't there yet, it should solve the problem.
+    
+9. In case it's a debug build, copy `E:/Projects/openspades/Resources` folder to your build directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/Debug`
 
+    In case you haven't set OPENSPADES_RESDIR and extracted the [Non-free pak](https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip) into it, extract it and merge it inside the `Resources` folder you just copied.
+
+### On Mac OS X (with Xcode)
 1. Get the latest version of Xcode and OpenSpades source.
 2. Download and install [SDL2 development libraries for OS X](http://www.libsdl.org/download-2.0.php) to `/Library/Frameworks`.
 3. Download and install [SDL2_image development libraries for OS X](https://www.libsdl.org/projects/SDL_image/) to `/Library/Frameworks`.
@@ -132,7 +138,6 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 ## Troubleshooting
 For troubleshooting and common problems see [TROUBLESHOOTING](TROUBLESHOOTING.md).
 
-Licensing
-----------------------------------------------------------------------------------------------------
+## Licensing
 Please see the file named LICENSE.
 
