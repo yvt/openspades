@@ -11,6 +11,11 @@ set(OS_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(CMAKE_PREFIX_PATH Sources/Externals)
 
+if(POLICY CMP0054)
+	# Escape variables in if
+	cmake_policy(SET CMP0054 OLD)
+endif()
+
 include(cmake/FindSDL2.cmake)
 if(NOT SDL2_FOUND)
 	message(FATAL_ERROR "SDL 2.0 not found, set ENV{SDL2DIR} to point to SDL 2.0, and optionally set the cmake var SDL2_LIBRARY_TEMP to the lib dir")
