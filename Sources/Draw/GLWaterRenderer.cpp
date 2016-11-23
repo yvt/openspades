@@ -227,7 +227,7 @@ namespace spades {
 							
 							
 							cell.magnitude = mag;
-							cell.phase = rand() | ((uint32_t)rand() << 16);
+							cell.phase = mt_engine();
 							cell.phasePerSecond = dist * 1.e+9f * 128 / Size;
 						}
 						
@@ -466,8 +466,8 @@ namespace spades {
 				int count = (int)floorf(dt * 600.f);
 				if(count > 400) count = 400;
 				for(int i = 0; i < count; i++){
-					int ox = rand() % (size - 2);
-					int oy = rand() % (size - 2);
+					int ox = mt_engine() % (size - 2);
+					int oy = mt_engine() % (size - 2);
 					static const float gauss[] = {
 						0.225610111284052f,
 						0.548779777431897f,

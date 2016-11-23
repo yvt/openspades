@@ -1144,7 +1144,7 @@ namespace spades {
 			renderStopwatch.Reset();
 			/*
 			{
-				uint32_t rdb = rand();
+				uint32_t rdb = mt_engine();
 				uint32_t *ptr = fb->GetPixels();
 				for(int pixels = fb->GetWidth() * fb->GetHeight() / 10;
 					pixels > 0; pixels--) {

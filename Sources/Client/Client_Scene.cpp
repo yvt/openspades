@@ -20,7 +20,6 @@
  */
 
 #include "Client.h"
-#include <cstdlib>
 
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Settings.h>
@@ -48,7 +47,7 @@ DEFINE_SPADES_SETTING(cg_depthOfFieldAmount, "1");
 DEFINE_SPADES_SETTING(cg_shake, "1");
 
 static float nextRandom() {
-	return (float)rand() / (float)RAND_MAX;
+	return spades::real_dist(spades::client::mt_engine_client);
 }
 
 namespace spades {

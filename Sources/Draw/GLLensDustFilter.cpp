@@ -29,7 +29,6 @@
 #include "GLRenderer.h"
 #include "../Core/Debug.h"
 #include "GLImage.h"
-#include <stdlib.h>
 #include <Core/Settings.h>
 
 SPADES_SETTING(r_hdr);
@@ -157,7 +156,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			
 			noise.resize(128 * 128);
-			uint32_t rnd = (uint32_t)rand() ^ ((uint32_t)rand() << 16);
+			uint32_t rnd = mt_engine();
 			rnd ^= 0x7abd4513;
 			for(size_t i = 0; i < 128 * 128; i++) {
 				noise[i] = rnd;

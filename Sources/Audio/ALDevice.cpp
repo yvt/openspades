@@ -21,7 +21,6 @@
 #include "ALDevice.h"
 #include "ALFuncs.h"
 #include <exception>
-#include <stdio.h>
 #include <Client/IAudioChunk.h>
 #include <Core/IAudioStream.h>
 #include <Core/FileManager.h>
@@ -48,6 +47,8 @@ DEFINE_SPADES_SETTING(s_alPreciseErrorCheck, "1");
 namespace spades {
 	namespace audio {
 		
+		std::uniform_real_distribution<float> real_dist_audio(0, 1);
+
 		static Vector3 TransformVectorToAL(Vector3 v) {
 			return MakeVector3(v.x, v.y, v.z);
 		}
@@ -56,7 +57,7 @@ namespace spades {
 		}
 		
 		static float NextRandom() {
-			return (float)rand() /(float)RAND_MAX;
+			return real_dist_audio(mt_engine);
 		}
 		
 		class ALAudioChunk: public client::IAudioChunk {
@@ -560,7 +561,7 @@ namespace spades {
 			ALSrc *AllocChunk(){
 				SPADES_MARK_FUNCTION();
 				
-				size_t start = rand() % srcs.size();
+				size_t start = mt_engine() % srcs.size();
 				for(size_t i = 0; i < srcs.size(); i++){
 					ALSrc *src = srcs[(i + start) % srcs.size()];
 					if(src->IsPlaying())
@@ -568,7 +569,7 @@ namespace spades {
 					return src;
 				}
 				
-				ALSrc *src = srcs[rand() % srcs.size()];
+				ALSrc *src = srcs[mt_engine() % srcs.size()];
 				src->Terminate();
 				return src;
 			}
@@ -740,7 +741,7 @@ namespace spades {
 				
 				for(size_t i = 0; i < srcs.size(); i++){
 					ALSrc *s = srcs[i];
-					if((rand() % 8 == 0) && s->IsPlaying())
+					if((mt_engine() % 8 == 0) && s->IsPlaying())
 						s->UpdateObstruction();
 				}
 			}

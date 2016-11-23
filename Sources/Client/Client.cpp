@@ -65,6 +65,9 @@ DEFINE_SPADES_SETTING(cg_serverAlert, "1");
 
 namespace spades {
 	namespace client {
+
+		std::random_device r_device_client;
+		std::mt19937_64 mt_engine_client(r_device_client());	// Seed Mersenne twister with non-deterministic 32-bit seed
 		
 		Client::Client(IRenderer *r, IAudioDevice *audioDev,
 					   const ServerAddress& host, std::string playerName):
@@ -352,7 +355,7 @@ namespace spades {
 			
 			mumbleLink.setContext(hostname.asString(false));
 			mumbleLink.setIdentity(playerName);
-			
+
 			SPLog("Started connecting to '%s'", hostname.asString(true).c_str());
 			net.reset(new NetClient(this));
 			net->Connect(hostname);

@@ -20,7 +20,6 @@
  */
 
 #include "Client.h"
-#include <cstdlib>
 
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Settings.h>
@@ -498,7 +497,7 @@ namespace spades {
 				lastHurtTime = world->GetTime();
 				
 				Handle<IAudioChunk> c;
-				switch((rand() >> 3) & 3){
+				switch((mt_engine_client() >> 3) & 3){
 					case 0:
 						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal1.wav");
 						break;
@@ -619,14 +618,14 @@ namespace spades {
 				};
 				bool sprinting = clientPlayers[p->GetId()] ? clientPlayers[p->GetId()]->GetSprintState() > 0.5f : false;
 				Handle<IAudioChunk> c = p->GetWade() ?
-				audioDevice->RegisterSound(wsnds[(rand() >> 8) % 8]):
-				audioDevice->RegisterSound(snds[(rand() >> 8) % 8]);
+				audioDevice->RegisterSound(wsnds[(mt_engine_client() >> 8) % 8]):
+				audioDevice->RegisterSound(snds[(mt_engine_client() >> 8) % 8]);
 				audioDevice->Play(c, p->GetOrigin(),
 								  AudioParam());
 				if(sprinting && !p->GetWade()) {
 					AudioParam param;
 					param.volume *= clientPlayers[p->GetId()]->GetSprintState();
-					c = audioDevice->RegisterSound(rsnds[(rand() >> 8) % 12]);
+					c = audioDevice->RegisterSound(rsnds[(mt_engine_client() >> 8) % 12]);
 					audioDevice->Play(c, p->GetOrigin(),
 									  param);
 				}
@@ -793,7 +792,7 @@ namespace spades {
 				if(victim != world->GetLocalPlayer()) {
 					if(!IsMuted()){
 						Handle<IAudioChunk> c;
-						switch(rand()%3){
+						switch(mt_engine_client()%3){
 							case 0:
 								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.wav");
 								break;
@@ -954,7 +953,7 @@ namespace spades {
 									  AudioParam());
 				}else{
 					Handle<IAudioChunk> c;
-					switch((rand()>>6)%3){
+					switch((mt_engine_client()>>6)%3){
 						case 0:
 							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.wav");
 							break;
@@ -1010,7 +1009,7 @@ namespace spades {
 					Handle<IAudioChunk> c;
 					
 					param.pitch = .9f + GetRandom() * 0.2f;
-					switch((rand() >> 6) & 3){
+					switch((mt_engine_client() >> 6) & 3){
 						case 0:
 							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water1.wav");
 							break;
@@ -1036,7 +1035,7 @@ namespace spades {
 					
 					Handle<IAudioChunk> c;
 					
-					switch((rand() >> 6) & 3) {
+					switch((mt_engine_client() >> 6) & 3) {
 						case 0:
 						case 1:
 						case 2:
@@ -1049,7 +1048,7 @@ namespace spades {
 					
 					param.pitch = .9f + GetRandom() * 0.2f;
 					param.volume = 2.f;
-					switch((rand() >> 6) & 3){
+					switch((mt_engine_client() >> 6) & 3){
 						case 0:
 							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet1.wav");
 							break;
@@ -1171,7 +1170,7 @@ namespace spades {
 				if(!IsMuted()){
 					Handle<IAudioChunk> c, cs;
 					
-					switch((rand() >> 8) & 1){
+					switch((mt_engine_client() >> 8) & 1){
 						case 0:
 							c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode1.wav");
 							cs = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeStereo1.wav");
