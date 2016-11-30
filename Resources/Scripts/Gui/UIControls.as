@@ -65,6 +65,7 @@ namespace spades {
 
 			EventHandler@ Activated;
 			EventHandler@ DoubleClicked;
+			EventHandler@ RightClicked;
 			string Caption;
 			string ActivateHotKey;
 
@@ -101,18 +102,31 @@ namespace spades {
 				}
 			}
 
+			void OnRightClicked() {
+				if(RightClicked !is null) {
+					RightClicked(this);
+				}
+			}
+
 			private void RepeatTimerFired(Timer@ timer) {
 				OnActivated();
 				timer.Interval = 0.1f;
 			}
 
 			void MouseDown(MouseButton button, Vector2 clientPosition) {
-				if(button != spades::ui::MouseButton::LeftMouseButton) {
+				if(button != spades::ui::MouseButton::LeftMouseButton &&
+				   button != spades::ui::MouseButton::RightMouseButton) {
 					return;
 				}
+
+				PlayActivateSound();
+				if (button == spades::ui::MouseButton::RightMouseButton) {
+					OnRightClicked();
+					return;
+				}
+
 				Pressed = true;
 				Hover = true;
-				PlayActivateSound();
 
 				if(Repeat or ActivateOnMouseDown) {
 					OnActivated();
@@ -140,7 +154,8 @@ namespace spades {
 				}
 			}
 			void MouseUp(MouseButton button, Vector2 clientPosition) {
-				if(button != spades::ui::MouseButton::LeftMouseButton) {
+				if(button != spades::ui::MouseButton::LeftMouseButton &&
+				   button != spades::ui::MouseButton::RightMouseButton) {
 					return;
 				}
 				if(Pressed) {
