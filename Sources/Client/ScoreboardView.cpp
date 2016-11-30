@@ -342,11 +342,9 @@ namespace spades {
 				sprintf(buf, "#%d", ent.id);
 				totalPixelWidth += font->Measure(buf).x + font->Measure(ent.name).x + xPixelSpectatorOffset;
 			}
-			switch (numSpectators) {
-				case 0: return;
-				case 1:	strcpy(buf, "Spectator:");
-				default: strcpy(buf, "Spectators:");
-			}
+			if (numSpectators == 0) { return; }
+
+			strcpy(buf, _TrN("Client", "Spectator{1}", "Spectators{1}", numSpectators, ":").c_str());
 
 			auto sizeSpecString = bigFont->Measure(buf);
 			bigFont->Draw(buf, MakeVector2(centerX - sizeSpecString.x / 2, top), 1.f, spectatorTextColor);
