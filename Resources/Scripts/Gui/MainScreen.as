@@ -198,16 +198,22 @@ namespace spades {
 			Vector2 pos = ScreenPosition;
 			Vector2 size = Size;
 			Image@ img = renderer.RegisterImage("Gfx/White.tga");
-			if(Pressed && Hover) {
-				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.3f);
-			} else if(Hover) {
-				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.15f);
-			} else {
-				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.0f);
+
+			Vector4 bgcolor = Vector4(1.f, 1.f, 1.f, 0.0f);
+			Vector4 fgcolor = Vector4(1.f, 1.f, 1.f, 1.f);
+			if(item.Favorite) {
+				bgcolor = Vector4(0.3f, 0.3f, 1.f, 0.1f);
+				fgcolor = Vector4(220.f/255.f,220.f/255.f,0,1);
 			}
+			if(Pressed && Hover) {
+				bgcolor.w += 0.3;
+			} else if(Hover) {
+				bgcolor.w += 0.15;
+			}
+			renderer.ColorNP = bgcolor;
 			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 
-			Font.Draw(item.Name, ScreenPosition + Vector2(4.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw(item.Name, ScreenPosition + Vector2(4.f, 2.f), 1.f, fgcolor);
 			string playersStr = ToString(item.NumPlayers) + "/" + ToString(item.MaxPlayers);
 			Vector4 col(1,1,1,1);
 			if(item.NumPlayers >= item.MaxPlayers) col = Vector4(1,0.7f,0.7f,1);
@@ -217,11 +223,8 @@ namespace spades {
 			Font.Draw(item.MapName, ScreenPosition + Vector2(400.f, 2.f), 1.f, Vector4(1,1,1,1));
 			Font.Draw(item.GameMode, ScreenPosition + Vector2(550.f, 2.f), 1.f, Vector4(1,1,1,1));
 			Font.Draw(item.Protocol, ScreenPosition + Vector2(630.f, 2.f), 1.f, Vector4(1,1,1,1));
-			if(not flagIconRenderer.DrawIcon(item.Country, ScreenPosition + Vector2(680.f, size.y * 0.5f))) {
-				Font.Draw(item.Country, ScreenPosition + Vector2(665.f, 2.f), 1.f, Vector4(1,1,1,1));
-			}
-			if (item.Favorite) {
-			    Font.Draw("x", ScreenPosition + Vector2(700.f, 2.f), 1.f, Vector4(1,1,1,1));
+			if(not flagIconRenderer.DrawIcon(item.Country, ScreenPosition + Vector2(700.f, size.y * 0.5f))) {
+				Font.Draw(item.Country, ScreenPosition + Vector2(680.f, 2.f), 1.f, Vector4(1,1,1,1));
 			}
 		}
 	}
@@ -515,22 +518,16 @@ namespace spades {
 			}
 			{
 				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 630.f, 240.f, 35.f, 30.f);
+				header.Bounds = AABB2(contentsLeft + 630.f, 240.f, 50.f, 30.f);
 				header.Text = _Tr("MainScreen", "Ver.");
 				@header.Activated = spades::ui::EventHandler(this.SortServerListByProtocol);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 665.f, 240.f, 35.f, 30.f);
+				header.Bounds = AABB2(contentsLeft + 680.f, 240.f, 50.f, 30.f);
 				header.Text = _Tr("MainScreen", "Loc.");
 				@header.Activated = spades::ui::EventHandler(this.SortServerListByCountry);
-				AddChild(header);
-			}
-			{
-				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 700.f, 240.f, 30.f, 30.f);
-				header.Text = _Tr("MainScreen", "Fav.");
 				AddChild(header);
 			}
 			{
