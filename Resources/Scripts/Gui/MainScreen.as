@@ -217,8 +217,11 @@ namespace spades {
 			Font.Draw(item.MapName, ScreenPosition + Vector2(400.f, 2.f), 1.f, Vector4(1,1,1,1));
 			Font.Draw(item.GameMode, ScreenPosition + Vector2(550.f, 2.f), 1.f, Vector4(1,1,1,1));
 			Font.Draw(item.Protocol, ScreenPosition + Vector2(630.f, 2.f), 1.f, Vector4(1,1,1,1));
-			if(not flagIconRenderer.DrawIcon(item.Country, ScreenPosition + Vector2(700.f, size.y * 0.5f))) {
-				Font.Draw(item.Country, ScreenPosition + Vector2(680.f, 2.f), 1.f, Vector4(1,1,1,1));
+			if(not flagIconRenderer.DrawIcon(item.Country, ScreenPosition + Vector2(680.f, size.y * 0.5f))) {
+				Font.Draw(item.Country, ScreenPosition + Vector2(665.f, 2.f), 1.f, Vector4(1,1,1,1));
+			}
+			if (item.Favorite) {
+			    Font.Draw("x", ScreenPosition + Vector2(700.f, 2.f), 1.f, Vector4(1,1,1,1));
 			}
 		}
 	}
@@ -231,6 +234,7 @@ namespace spades {
 
 		ServerListItemEventHandler@ ItemActivated;
 		ServerListItemEventHandler@ ItemDoubleClicked;
+		ServerListItemEventHandler@ ItemRightClicked;
 
 		ServerListModel(spades::ui::UIManager@ manager, MainScreenServerItem@[]@ list) {
 			@this.manager = manager;
@@ -251,10 +255,17 @@ namespace spades {
 				ItemDoubleClicked(this, item.item);
 			}
 		}
+		private void OnItemRightClicked(spades::ui::UIElement@ sender){
+			ServerListItem@ item = cast<ServerListItem>(sender);
+			if(ItemRightClicked !is null) {
+				ItemRightClicked(this, item.item);
+			}
+		}
 		spades::ui::UIElement@ CreateElement(int row) {
 			ServerListItem i(manager, list[row]);
 			@i.Activated = spades::ui::EventHandler(this.OnItemClicked);
 			@i.DoubleClicked = spades::ui::EventHandler(this.OnItemDoubleClicked);
+			@i.RightClicked = spades::ui::EventHandler(this.OnItemRightClicked);
 			return i;
 		}
 		void RecycleElement(spades::ui::UIElement@ elem) {}
@@ -504,16 +515,22 @@ namespace spades {
 			}
 			{
 				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 630.f, 240.f, 50.f, 30.f);
+				header.Bounds = AABB2(contentsLeft + 630.f, 240.f, 35.f, 30.f);
 				header.Text = _Tr("MainScreen", "Ver.");
 				@header.Activated = spades::ui::EventHandler(this.SortServerListByProtocol);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 680.f, 240.f, 50.f, 30.f);
+				header.Bounds = AABB2(contentsLeft + 665.f, 240.f, 35.f, 30.f);
 				header.Text = _Tr("MainScreen", "Loc.");
 				@header.Activated = spades::ui::EventHandler(this.SortServerListByCountry);
+				AddChild(header);
+			}
+			{
+				ServerListHeader header(Manager);
+				header.Bounds = AABB2(contentsLeft + 700.f, 240.f, 30.f, 30.f);
+				header.Text = _Tr("MainScreen", "Fav.");
 				AddChild(header);
 			}
 			{
@@ -559,6 +576,11 @@ namespace spades {
 
 			// Double-click to connect
 			Connect();
+		}
+
+		void ServerListItemRightClicked(ServerListModel@ sender, MainScreenServerItem@ item) {
+			helper.SetServerFavorite(item.Address, !item.Favorite);
+			UpdateServerList();
 		}
 
 		private void SortServerListByPing(spades::ui::UIElement@ sender) {
@@ -647,6 +669,7 @@ namespace spades {
 			@serverList.Model = model;
 			@model.ItemActivated = ServerListItemEventHandler(this.ServerListItemActivated);
 			@model.ItemDoubleClicked = ServerListItemEventHandler(this.ServerListItemDoubleClicked);
+			@model.ItemRightClicked = ServerListItemEventHandler(this.ServerListItemRightClicked);
 			serverList.ScrollToTop();
 		}
 
