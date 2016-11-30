@@ -41,6 +41,12 @@ SPADES_SETTING(cg_Minimap_Player_Color);
 
 namespace spades {
 	namespace client {
+
+		static const Vector4 white = { 1, 1, 1, 1 };
+		static const Vector4 spectatorIdColor = { 210.f / 255, 210.f / 255, 210.f / 255, 1 }; // Grey
+		static const Vector4 spectatorTextColor = { 220.f / 255, 220.f / 255,0,1 };	          // Goldish yellow
+		static const auto spectatorTeamId = 1;		// Spectators have a team id of 255
+
 		ScoreboardView::ScoreboardView(Client *client):
 		client(client), renderer(client->GetRenderer()) {
 			SPADES_MARK_FUNCTION();
@@ -126,6 +132,7 @@ namespace spades {
 			float contentsLeft = scrWidth * .5f - 400.f;
 			float contentsRight = scrWidth * .5f + 400.f;
 			float playersHeight = 300.f;
+			float spectatorsHeight = 78.f;
 			float playersTop = teamBarTop + teamBarHeight;
 			float playersBottom = playersTop + playersHeight;
 			
@@ -196,13 +203,15 @@ namespace spades {
 				pos.y = teamBarTop + 5.f;
 				font->Draw(str, pos, 1.f, Vector4(1.f, 1.f, 1.f, 0.5f));
 			}
-			
+
 			// players background
+			auto areSpectatorsPr = areSpectatorsPresent();
 			image = renderer->RegisterImage("Gfx/Scoreboard/PlayersBg.png");
 			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 1.f));
 			renderer->DrawImage(image,
 								AABB2(0, playersTop,
-									  scrWidth, playersHeight));
+									  scrWidth, playersHeight +
+										(areSpectatorsPr ? spectatorsHeight : 0)));
 			
 			// draw players
 			DrawPlayers(0, contentsLeft, playersTop,
@@ -211,6 +220,8 @@ namespace spades {
 			DrawPlayers(1, scrWidth * .5f, playersTop,
 						(contentsRight - contentsLeft) * .5f,
 						playersHeight);
+			if(areSpectatorsPr)
+				DrawSpectators(playersBottom, scrWidth * .5f);
 		}
 		
 		struct ScoreboardEntry {
@@ -269,15 +280,20 @@ namespace spades {
 					color = GetTeamColor(team);
 				
 				sprintf(buf, "#%d", ent.id); // FIXME: 1-base?
-				size = font->Measure(buf);				
-				if ( colormode=="1"){
-					IntVector3 Colorplayer=IntVector3::Make(palette[ent.id][0],palette[ent.id][1],palette[ent.id][2]);
+				size = font->Measure(buf);
+
+				if (colormode == "1") {
+					IntVector3 Colorplayer = IntVector3::Make(palette[ent.id][0], palette[ent.id][1], palette[ent.id][2]);
 					Vector4 ColorplayerF = ModifyColor(Colorplayer);
-					ColorplayerF *=1.0f;
-					font->Draw(buf, MakeVector2(colX + 35.f - size.x,rowY),1.f, ColorplayerF);
-				}	
+					ColorplayerF *= 1.0f;
+					font->Draw(buf, MakeVector2(colX + 35.f - size.x,
+						rowY),
+						1.f, ColorplayerF);
+				}
 				else {
-						font->Draw(buf, MakeVector2(colX + 35.f - size.x,rowY),1.f, color);
+					font->Draw(buf, MakeVector2(colX + 35.f - size.x,
+						rowY),
+						1.f, white);
 				}
 				
 				font->Draw(ent.name, MakeVector2(colX + 45.f,
@@ -296,6 +312,74 @@ namespace spades {
 					row = 0;
 				}
 			}
+		}
+
+		void ScoreboardView::DrawSpectators(float top,
+			float centerX) {
+			IFont *bigFont = client->bigTextFont;
+			IFont *font = client->textFont;
+			char buf[256];
+			std::vector<ScoreboardEntry> entries;
+
+			static const auto xPixelSpectatorOffset = 20.f;
+
+			int numSpectators = 0;
+			float totalPixelWidth = 0;
+			for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
+				Player *p = world->GetPlayer(i);
+				if (!p) continue;
+				if (p->GetTeamId() != spectatorTeamId)
+					continue;
+
+				ScoreboardEntry ent;
+				ent.name = p->GetName();
+				ent.id = i;
+				entries.push_back(ent);
+
+				numSpectators++;
+
+				// Measure total width in pixels so that we can center align all the spectators
+				sprintf(buf, "#%d", ent.id);
+				totalPixelWidth += font->Measure(buf).x + font->Measure(ent.name).x + xPixelSpectatorOffset;
+			}
+			switch (numSpectators) {
+				case 0: return;
+				case 1:	strcpy(buf, "Spectator:");
+				default: strcpy(buf, "Spectators:");
+			}
+
+			auto sizeSpecString = bigFont->Measure(buf);
+			bigFont->Draw(buf, MakeVector2(centerX - sizeSpecString.x / 2, top), 1.f, spectatorTextColor);
+
+			auto yOffset = top + sizeSpecString.y;
+			auto halfTotalX = totalPixelWidth / 2;
+			auto currentXoffset = centerX - halfTotalX;
+
+			for (int i = 0; i < numSpectators; i++) {
+				ScoreboardEntry& ent = entries[i];
+
+				sprintf(buf, "#%d", ent.id);
+				font->Draw(buf, MakeVector2(currentXoffset,
+					yOffset),
+					1.f, spectatorIdColor);
+
+				auto sizeName = font->Measure(ent.name);
+				auto sizeID = font->Measure(buf);
+				font->Draw(ent.name, MakeVector2(currentXoffset + sizeID.x + 5.f,
+					yOffset),
+					1.f, white);
+
+				currentXoffset += sizeID.x + sizeName.x + xPixelSpectatorOffset;
+			}
+		}
+
+		bool ScoreboardView::areSpectatorsPresent() const {
+			for (auto i = 0; i < client->GetWorld()->GetNumPlayerSlots(); i++) {
+				auto *p = world->GetPlayer(i);
+				if (p && p->GetTeamId() == spectatorTeamId)
+					return true;
+			}
+			return false;
 		}
 	}
 }
