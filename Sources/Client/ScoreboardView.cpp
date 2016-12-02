@@ -45,7 +45,7 @@ namespace spades {
 		static const Vector4 white = { 1, 1, 1, 1 };
 		static const Vector4 spectatorIdColor = { 210.f / 255, 210.f / 255, 210.f / 255, 1 }; // Grey
 		static const Vector4 spectatorTextColor = { 220.f / 255, 220.f / 255,0,1 };	          // Goldish yellow
-		static const auto spectatorTeamId = 1;		// Spectators have a team id of 255
+		static const auto spectatorTeamId = 255;		// Spectators have a team id of 255
 
 		ScoreboardView::ScoreboardView(Client *client):
 		client(client), renderer(client->GetRenderer()) {
