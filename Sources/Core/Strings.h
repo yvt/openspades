@@ -48,13 +48,14 @@ namespace spades {
 		StandardTokenizer(const char *ptr);
 		class Iterator {
 			const char *ptr;
+			StandardTokenizer *tokenizer;
 			std::string token;
 			std::string prevToken;
 			bool nowPrev;
 			void SkipWhitespace();
 			void AnalyzeToken();
 		public:
-			Iterator(const char *ptr);
+			Iterator(const char *ptr, StandardTokenizer *tokenizer);
 			std::string operator *();
 			void operator ++();
 			void operator --();
@@ -64,9 +65,12 @@ namespace spades {
 			bool operator !=(const Iterator& it) const {
 				return ptr != it.ptr || nowPrev != it.nowPrev;
 			}
+			const char *GetPointer() const { return ptr - token.size(); }
+			StandardTokenizer &GetTokenizer() const { return *tokenizer; }
 		};
 		Iterator begin();
 		Iterator end();
+		const char *GetString() { return ptr ; }
 	};
 	
 	template<typename T, int N = 32>

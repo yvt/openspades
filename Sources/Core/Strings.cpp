@@ -93,14 +93,14 @@ namespace spades {
 	
 	
 	StandardTokenizer::Iterator StandardTokenizer::begin() {
-		return Iterator(ptr);
+		return Iterator(ptr, this);
 	}
 	StandardTokenizer::Iterator StandardTokenizer::end() {
-		return Iterator(ptr + std::strlen(ptr));
+		return Iterator(ptr + std::strlen(ptr), this);
 	}
 	
-	StandardTokenizer::Iterator::Iterator(const char *ptr):
-	ptr(ptr), nowPrev(false) {
+	StandardTokenizer::Iterator::Iterator(const char *ptr, StandardTokenizer *tokenizer):
+	ptr(ptr), tokenizer(tokenizer), nowPrev(false) {
 		if(*ptr) {
 			SkipWhitespace();
 			AnalyzeToken();
@@ -118,7 +118,6 @@ namespace spades {
 			return;
 		}
 		prevToken = token;
-		ptr += token.size();
 		SkipWhitespace();
 		AnalyzeToken();
 	}
@@ -197,6 +196,36 @@ namespace spades {
 				SPRaise("Plural selector is too complex (instruction count limit exceeded)");
 			}
 		}
+
+		template <class...T> [[noreturn]]
+		void RaiseSyntaxErrorAtToken(StandardTokenizer::Iterator& it, const std::string &format, T&&...args) {
+			StandardTokenizer &tokenizer = it.GetTokenizer();
+			const char *code = tokenizer.GetString();
+			const char *loc = it.GetPointer();
+			int len = static_cast<int> ((*it).size());
+			int codeLen = static_cast<int>(strlen(code));
+			int index = static_cast<int> (loc - code);
+			int trimStart = std::max(index - 20, 0);
+			int trimEnd = std::min(index + len + 20, codeLen);
+			std::string diagMessage = "  ";
+			if (trimStart > 0) {
+				diagMessage += "... ";
+			}
+			diagMessage += std::string(code).substr(trimStart, trimEnd - trimStart);
+			if (trimEnd < codeLen) {
+				diagMessage += " ...";
+			}
+			diagMessage += "\n  ";
+
+			if (trimStart > 0) {
+				diagMessage += "    ";
+			}
+			diagMessage += std::string(index - trimStart, ' ');
+			diagMessage += std::string(len, '^');
+
+			SPRaise(("Plural selector is invalid: " + format + "\n%s").c_str(),
+					std::forward<T>(args)..., diagMessage.c_str());
+		}
 		
 		void ParseExpression(StandardTokenizer::Iterator& it, int outReg);
 		
@@ -225,11 +254,11 @@ namespace spades {
 				++it;
 				ParseExpression(it, outReg);
 				if(*it != ")") {
-					SPRaise("Plural selector is invalid: open parenthesis");
+					RaiseSyntaxErrorAtToken(it, "open parenthesis");
 				}
 				++it;
 			}else if((*it).size() == 0){
-				SPRaise("Plural selector is invalid: value not found");
+				RaiseSyntaxErrorAtToken(it, "unexpected EOF");
 			}else{
 				try{
 					long v = std::stol(*it);
@@ -237,8 +266,9 @@ namespace spades {
 						 outReg,
 						 static_cast<uint16_t>(v&0xffff),
 						 static_cast<uint16_t>(v>>16));
+					++it;
 				}catch(...){
-					SPRaise("Plural selector is invalid: failed to parse literal '%s' as integer", (*it).c_str());
+					RaiseSyntaxErrorAtToken(it, "failed to parse literal '%s' as integer", (*it).c_str());
 				}
 			}
 		}
@@ -385,8 +415,13 @@ namespace spades {
 				auto s = *it;
 				if(s == "&") {
 					++it;
-					ParseEquality(it, outReg + 1);
-					Emit(OpCode::BitwiseAnd, outReg, outReg + 1);
+					if (*it != "&") {
+						ParseEquality(it, outReg + 1);
+						Emit(OpCode::BitwiseAnd, outReg, outReg + 1);
+					} else {
+						--it;
+						break;
+					}
 				}else{
 					break;
 				}
@@ -415,8 +450,13 @@ namespace spades {
 				auto s = *it;
 				if(s == "|") {
 					++it;
-					ParseBitwiseLogicalXor(it, outReg + 1);
-					Emit(OpCode::BitwiseOr, outReg, outReg + 1);
+					if (*it != "|") {
+						ParseBitwiseLogicalXor(it, outReg + 1);
+						Emit(OpCode::BitwiseOr, outReg, outReg + 1);
+					} else {
+						--it;
+						break;
+					}
 				}else{
 					break;
 				}
@@ -455,7 +495,7 @@ namespace spades {
 					if(*it == "|") {
 						++it;
 						ParseLogicalTerm(it, outReg + 1);
-						Emit(OpCode::And, outReg, outReg + 1);
+						Emit(OpCode::Or, outReg, outReg + 1);
 					}else{
 						--it;
 						break;
@@ -473,25 +513,154 @@ namespace spades {
 			StandardTokenizer tokenizer(expr);
 			auto it = tokenizer.begin();
 			ParseExpression(it, 0);
+			if (it != tokenizer.end()) {
+				RaiseSyntaxErrorAtToken(it, "Plural selector is invalid: unexpected token: '%s'", (*it).c_str());
+			}
 		}
 		
 		int Execute(int value) {
 			SPADES_MARK_FUNCTION();
 			std::vector<int> reg;
 			reg.resize(numRegisters);
-			
+
+#if DEBUG_INTERPRETER
+			SPLog("Evaluating plural selector with n=%d", value);
+#endif
+
 			std::size_t ip = 0;
 			while(ip < ops.size()) {
 				auto& op = ops[ip];
+#if DEBUG_INTERPRETER
 				switch(op.op) {
 					case OpCode::Jump:
-						ip = op.param1;
+						SPLog("  Jump to %d", (int) labels[op.param1]);
+						break;
+					case OpCode::JumpIfZero:
+						SPLog("  Jump to %d if reg[%d] (%d) == 0",
+							  (int)labels[op.param2], (int) op.param1,
+							  reg[op.param1]);
+						break;
+					case OpCode::Add:
+						SPLog("  reg[%d] <- reg[%d] (%d) + reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::Subtract:
+						SPLog("  reg[%d] <- reg[%d] (%d) - reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::Muliply:
+						SPLog("  reg[%d] <- reg[%d] (%d) * reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::Divide:
+						SPLog("  reg[%d] <- reg[%d] (%d) / reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::Modulus:
+						SPLog("  reg[%d] <- reg[%d] (%d) % reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::ShiftLeft:
+						SPLog("  reg[%d] <- reg[%d] (%d) << reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::ShiftRight:
+						SPLog("  reg[%d] <- reg[%d] (%d) >> reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::BitwiseAnd:
+						SPLog("  reg[%d] <- reg[%d] (%d) & reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::BitwiseOr:
+						SPLog("  reg[%d] <- reg[%d] (%d) | reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::BitwiseXor:
+						SPLog("  reg[%d] <- reg[%d] (%d) ^ reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::BitwiseNot:
+						SPLog("  reg[%d] <- ~ reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1]);
+						break;
+					case OpCode::And:
+						SPLog("  reg[%d] <- reg[%d] (%d) && reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::Or:
+						SPLog("  reg[%d] <- reg[%d] (%d) || reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::Not:
+						SPLog("  reg[%d] <- ! reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1]);
+						break;
+					case OpCode::Negate:
+						SPLog("  reg[%d] <- - reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1]);
+						break;
+					case OpCode::Less:
+						SPLog("  reg[%d] <- reg[%d] (%d) < reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::LessOrEqual:
+						SPLog("  reg[%d] <- reg[%d] (%d) <= reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::Greater:
+						SPLog("  reg[%d] <- reg[%d] (%d) > reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::GreaterOrEqual:
+						SPLog("  reg[%d] <- reg[%d] (%d) >= reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::Equality:
+						SPLog("  reg[%d] <- reg[%d] (%d) == reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::Inequality:
+						SPLog("  reg[%d] <- reg[%d] (%d) != reg[%d] (%d)",
+							  (int) op.param1, (int) op.param1, reg[op.param1],
+							  (int) op.param2, reg[op.param2]);
+						break;
+					case OpCode::LoadConstant:
+						SPLog("  reg[%d] <- %d",
+							  (int) op.param1, int(op.param2) | (int(op.param3) << 16));
+						break;
+					case OpCode::LoadParam:
+						SPLog("  reg[%d] <- n (%d)",
+							  (int) op.param1, value);
+						break;
+				}
+#endif
+				switch(op.op) {
+					case OpCode::Jump:
+						ip = labels[op.param1];
 						break;
 					case OpCode::JumpIfZero:
 						if(reg[op.param1]) {
 							ip++;
 						}else{
-							ip = op.param2;
+							ip = labels[op.param2];
 						}
 						break;
 					case OpCode::Add:
@@ -576,7 +745,7 @@ namespace spades {
 	void PluralSelector::ParseExpression(StandardTokenizer::Iterator& it, int outReg) {
 		SPADES_MARK_FUNCTION();
 		UseRegister(outReg);
-		ParseFours(it, outReg);
+		ParseLogical(it, outReg);
 		
 		if(*it == "?") {
 			++it;
@@ -590,7 +759,7 @@ namespace spades {
 			Emit(OpCode::Jump, static_cast<uint16_t>(endLabel));
 			
 			if(*it != ":"){
-				SPRaise("Unexpected token '%s': ':' expected",
+				RaiseSyntaxErrorAtToken(it, "Unexpected token '%s': ':' expected",
 						(*it).c_str());
 			}
 			++it;
@@ -887,7 +1056,7 @@ namespace spades {
 					for(const auto& itm: itms) {
 						pos = itm.find('=');
 						if(pos == std::string::npos) continue;
-						key = itm.substr(0, pos);
+						key = TrimSpaces(itm.substr(0, pos));
 						if(EqualsIgnoringCase(key, "plural")) {
 							val = itm.substr(pos + 1);
 							selector = decltype(selector)(new PluralSelector(val.c_str()));
