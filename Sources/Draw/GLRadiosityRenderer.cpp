@@ -270,7 +270,7 @@ namespace spades {
 					result.y += color * normDiff.y;
 					result.z += color * normDiff.z;
 
-					SPAssert(!isnan(intensity));
+					SPAssert(!std::isnan(intensity));
 					SPAssert(intensity >= 0.f);
 					SPAssert(red >= 0.f && red < 64.f);
 					SPAssert(green >= 0.f && green < 64.f);

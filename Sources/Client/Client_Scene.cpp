@@ -438,9 +438,9 @@ namespace spades {
 				def.zFar -= def.viewOrigin.z;
 			}
 
-			SPAssert(!isnan(def.viewOrigin.x));
-			SPAssert(!isnan(def.viewOrigin.y));
-			SPAssert(!isnan(def.viewOrigin.z));
+			SPAssert(!std::isnan(def.viewOrigin.x));
+			SPAssert(!std::isnan(def.viewOrigin.y));
+			SPAssert(!std::isnan(def.viewOrigin.z));
 
 			def.radialBlur = std::min(def.radialBlur, 1.f);
 
