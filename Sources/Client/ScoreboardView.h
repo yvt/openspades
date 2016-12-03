@@ -47,6 +47,8 @@ namespace spades {
 			void DrawPlayers(int team,
 							 float left, float top,
 							 float width, float height);
+			void DrawSpectators(float top, float width);
+			bool areSpectatorsPresent() const;
 		public:
 			ScoreboardView(Client *);
 			~ScoreboardView();

@@ -106,7 +106,6 @@ namespace spades {
 			IGameMode *GetMode() { return mode; }
 			void SetMode(IGameMode *);
 			
-			// TODO: spectator
 			Team& GetTeam(int t){
 				if(t >= 2) // spectator
 					return teams[2];
