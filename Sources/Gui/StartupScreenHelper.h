@@ -50,6 +50,13 @@ namespace spades {
 			void AddReport(const std::string &text = std::string(),
 			               Vector4 color = Vector4::Make(1.f, 1.f, 1.f, 1.f));
 
+			struct LocaleInfo {
+				std::string name;
+				std::string descriptionNative;
+				std::string descriptionEnglish;
+			};
+			std::vector<LocaleInfo> locales;
+
 			std::multimap<std::string, std::function<std::string(std::string)>> incapableConfigs;
 
 			bool shaderHighCapable;
@@ -75,6 +82,11 @@ namespace spades {
 			std::string GetReport() { return report; }
 			std::string GetReportLineText(int line);
 			Vector4 GetReportLineColor(int line);
+
+			int GetNumLocales();
+			std::string GetLocale(int index);
+			std::string GetLocaleDescriptionNative(int index);
+			std::string GetLocaleDescriptionEnglish(int index);
 
 			std::string CheckConfigCapability(const std::string &cfg, const std::string &value);
 

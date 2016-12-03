@@ -274,7 +274,7 @@ namespace spades {
 			public:
 				ConcreteRunner(StartupScreenHelper *helper) : helper(helper) {}
 				bool RunAndGetStartFlag() {
-					this->Run(720, 480);
+					this->Run(800, 480);
 					return view->startRequested;
 				}
 			};

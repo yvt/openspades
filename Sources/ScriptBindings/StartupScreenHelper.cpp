@@ -93,6 +93,26 @@ namespace spades {
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "int GetNumLocales()",
+												  asMETHOD(gui::StartupScreenHelper, GetNumLocales),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "string GetLocale(int)",
+												  asMETHOD(gui::StartupScreenHelper, GetLocale),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "string GetLocaleDescriptionNative(int)",
+												  asMETHOD(gui::StartupScreenHelper, GetLocaleDescriptionNative),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "string GetLocaleDescriptionEnglish(int)",
+												  asMETHOD(gui::StartupScreenHelper, GetLocaleDescriptionEnglish),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
 												  "string CheckConfigCapability(const string&in, const string&in)",
 												  asMETHOD(gui::StartupScreenHelper, CheckConfigCapability),
 												  asCALL_THISCALL);

@@ -21,7 +21,7 @@ msgstr ""
 #: ../../../Sources/Gui/Main.cpp:368 ../../../Sources/Gui/Main.cpp:355
 #: ../../../Sources/Gui/Main.cpp:370 ../../../Sources/Gui/Main.cpp:466
 #: ../../../Sources/Gui/Main.cpp:529 ../../../Sources/Gui/Main.cpp:582
-#: ../../../Sources/Gui/Main.cpp:608
+#: ../../../Sources/Gui/Main.cpp:608 ../../../Sources/Gui/Main.cpp:622
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr ""
@@ -661,6 +661,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:204
 #: ../../../Sources/Client/Client_Draw.cpp:206
 #: ../../../Sources/Client/Client_Draw.cpp:209
+#: ../../../Sources/Client/Client_Draw.cpp:197
 msgctxt "Client"
 msgid "NOW LOADING"
 msgstr ""
@@ -672,6 +673,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:509
 #: ../../../Sources/Client/Client_Draw.cpp:515
 #: ../../../Sources/Client/Client_Draw.cpp:551
+#: ../../../Sources/Client/Client_Draw.cpp:522
 msgctxt "Client"
 msgid "Out of Block"
 msgstr ""
@@ -683,6 +685,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:514
 #: ../../../Sources/Client/Client_Draw.cpp:520
 #: ../../../Sources/Client/Client_Draw.cpp:556
+#: ../../../Sources/Client/Client_Draw.cpp:527
 msgctxt "Client"
 msgid "Out of Grenade"
 msgstr ""
@@ -694,6 +697,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:522
 #: ../../../Sources/Client/Client_Draw.cpp:528
 #: ../../../Sources/Client/Client_Draw.cpp:564
+#: ../../../Sources/Client/Client_Draw.cpp:533
 msgctxt "Client"
 msgid "Reloading"
 msgstr ""
@@ -709,6 +713,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:531
 #: ../../../Sources/Client/Client_Input.cpp:453
 #: ../../../Sources/Client/Client_Draw.cpp:567
+#: ../../../Sources/Client/Client_Draw.cpp:535
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr ""
@@ -720,6 +725,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:528
 #: ../../../Sources/Client/Client_Draw.cpp:534
 #: ../../../Sources/Client/Client_Draw.cpp:570
+#: ../../../Sources/Client/Client_Draw.cpp:538
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
 msgstr ""
@@ -731,6 +737,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:573
 #: ../../../Sources/Client/Client_Draw.cpp:584
 #: ../../../Sources/Client/Client_Draw.cpp:620
+#: ../../../Sources/Client/Client_Draw.cpp:585
 msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr ""
@@ -742,48 +749,57 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:751
 #: ../../../Sources/Client/Client_Draw.cpp:764
 #: ../../../Sources/Client/Client_Draw.cpp:800
+#: ../../../Sources/Client/Client_Draw.cpp:752
 msgctxt "Client"
 msgid "Following {0}"
 msgstr ""
 
 #: ../../../Sources/Client/LimboView.cpp:61
+#: ../../../Sources/Client/LimboView.cpp:67
 msgctxt "Client"
 msgid "Rifle"
 msgstr ""
 
 #: ../../../Sources/Client/LimboView.cpp:62
+#: ../../../Sources/Client/LimboView.cpp:70
 msgctxt "Client"
 msgid "SMG"
 msgstr ""
 
 #: ../../../Sources/Client/LimboView.cpp:63
+#: ../../../Sources/Client/LimboView.cpp:73
 msgctxt "Client"
 msgid "Shotgun"
 msgstr ""
 
 #: ../../../Sources/Client/LimboView.cpp:65
+#: ../../../Sources/Client/LimboView.cpp:77
 msgctxt "Client"
 msgid "Spawn"
 msgstr ""
 
 #: ../../../Sources/Client/LimboView.cpp:184
 #: ../../../Sources/Client/LimboView.cpp:183
+#: ../../../Sources/Client/LimboView.cpp:181
 msgctxt "Client"
 msgid "Select Team:"
 msgstr ""
 
 #: ../../../Sources/Client/LimboView.cpp:191
 #: ../../../Sources/Client/LimboView.cpp:190
+#: ../../../Sources/Client/LimboView.cpp:189
 msgctxt "Client"
 msgid "Select Weapon:"
 msgstr ""
 
 #: ../../../Sources/Client/TCProgressView.cpp:156
+#: ../../../Sources/Client/TCProgressView.cpp:150
 msgctxt "Client"
 msgid "Neutral Territory"
 msgstr ""
 
 #: ../../../Sources/Client/TCProgressView.cpp:159
+#: ../../../Sources/Client/TCProgressView.cpp:153
 msgctxt "Client"
 msgid "{0}'s Territory"
 msgstr ""
@@ -791,6 +807,7 @@ msgstr ""
 #: ../../../Sources/Gui/MainScreen.cpp:230
 #: ../../../Sources/Gui/MainScreen.cpp:223
 #: ../../../Sources/Gui/MainScreen.cpp:233
+#: ../../../Sources/Gui/MainScreen.cpp:227
 msgctxt "MainScreen"
 msgid "NOW LOADING"
 msgstr ""
@@ -802,61 +819,73 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:571
 #: ../../../Sources/Client/Client_Draw.cpp:582
 #: ../../../Sources/Client/Client_Draw.cpp:618
+#: ../../../Sources/Client/Client_Draw.cpp:583
 msgctxt "Client"
 msgid "You will respawn in: {0}"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:142
+#: ../../Scripts/Gui/StartupScreen.as:158
 msgctxt "StartupScreen"
 msgid "Start"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:149
+#: ../../Scripts/Gui/StartupScreen.as:165
 msgctxt "StartupScreen"
 msgid "Skip this screen next time"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:181
+#: ../../Scripts/Gui/StartupScreen.as:203
 msgctxt "StartupScreen"
 msgid "Graphics"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:182
+#: ../../Scripts/Gui/StartupScreen.as:204
 msgctxt "StartupScreen"
 msgid "Audio"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:183
+#: ../../Scripts/Gui/StartupScreen.as:206
 msgctxt "StartupScreen"
 msgid "System Info"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:184
+#: ../../Scripts/Gui/StartupScreen.as:207
 msgctxt "StartupScreen"
 msgid "Advanced"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:907
+#: ../../Scripts/Gui/StartupScreen.as:961
 msgctxt "StartupScreen"
 msgid "Close"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1013
+#: ../../Scripts/Gui/StartupScreen.as:1067
 msgctxt "StartupScreen"
 msgid "Graphics Settings"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1018
+#: ../../Scripts/Gui/StartupScreen.as:1072
 msgctxt "StartupScreen"
 msgid "Resolution"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1028
+#: ../../Scripts/Gui/StartupScreen.as:1082
 msgctxt "StartupScreen"
 msgid "Fullscreen Mode"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1031
+#: ../../Scripts/Gui/StartupScreen.as:1085
 msgctxt "StartupScreen"
 msgid ""
 "By running in fullscreen mode OpenSpades occupies the screen, making it "
@@ -868,16 +897,20 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1405
 #: ../../Scripts/Gui/StartupScreen.as:1415
 #: ../../Scripts/Gui/StartupScreen.as:1416
+#: ../../Scripts/Gui/StartupScreen.as:1092
+#: ../../Scripts/Gui/StartupScreen.as:1470
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1041
+#: ../../Scripts/Gui/StartupScreen.as:1095
 msgctxt "StartupScreen"
 msgid "OpenGL"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1045
+#: ../../Scripts/Gui/StartupScreen.as:1099
 msgctxt "StartupScreen"
 msgid ""
 "OpenGL renderer uses your computer's graphics accelerator to generate the "
@@ -885,11 +918,13 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1053
+#: ../../Scripts/Gui/StartupScreen.as:1107
 msgctxt "StartupScreen"
 msgid "Software"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1057
+#: ../../Scripts/Gui/StartupScreen.as:1111
 msgctxt "StartupScreen"
 msgid ""
 "Software renderer uses CPU to generate the game screen. Its quality and "
@@ -898,11 +933,13 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1078
+#: ../../Scripts/Gui/StartupScreen.as:1132
 msgctxt "StartupScreen"
 msgid "Global Illumination"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1080
+#: ../../Scripts/Gui/StartupScreen.as:1134
 msgctxt "StartupScreen"
 msgid ""
 "Enables a physically based simulation of light path for more realistic "
@@ -911,72 +948,84 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1085
 #: ../../Scripts/Gui/StartupScreen.as:1092
+#: ../../Scripts/Gui/StartupScreen.as:1146
 msgctxt "StartupScreen"
 msgid "Camera Blur"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1086
 #: ../../Scripts/Gui/StartupScreen.as:1093
+#: ../../Scripts/Gui/StartupScreen.as:1147
 msgctxt "StartupScreen"
 msgid "Blurs the screen when you turn quickly."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1088
 #: ../../Scripts/Gui/StartupScreen.as:1098
+#: ../../Scripts/Gui/StartupScreen.as:1152
 msgctxt "StartupScreen"
 msgid "Lens Scattering Filter"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1089
 #: ../../Scripts/Gui/StartupScreen.as:1099
+#: ../../Scripts/Gui/StartupScreen.as:1153
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1092
 #: ../../Scripts/Gui/StartupScreen.as:1102
+#: ../../Scripts/Gui/StartupScreen.as:1156
 msgctxt "StartupScreen"
 msgid "Lens Flare"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1093
 #: ../../Scripts/Gui/StartupScreen.as:1103
+#: ../../Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
 msgid "The Sun causes lens flare."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1095
 #: ../../Scripts/Gui/StartupScreen.as:1105
+#: ../../Scripts/Gui/StartupScreen.as:1159
 msgctxt "StartupScreen"
 msgid "Flares for Dynamic Lights"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1096
 #: ../../Scripts/Gui/StartupScreen.as:1106
+#: ../../Scripts/Gui/StartupScreen.as:1160
 msgctxt "StartupScreen"
 msgid "Enables lens flare for light sources other than the Sun."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1098
 #: ../../Scripts/Gui/StartupScreen.as:1108
+#: ../../Scripts/Gui/StartupScreen.as:1162
 msgctxt "StartupScreen"
 msgid "Color Correction"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1099
 #: ../../Scripts/Gui/StartupScreen.as:1109
+#: ../../Scripts/Gui/StartupScreen.as:1163
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1101
 #: ../../Scripts/Gui/StartupScreen.as:1111
+#: ../../Scripts/Gui/StartupScreen.as:1165
 msgctxt "StartupScreen"
 msgid "Depth of Field"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1102
 #: ../../Scripts/Gui/StartupScreen.as:1112
+#: ../../Scripts/Gui/StartupScreen.as:1166
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
 msgstr ""
@@ -987,6 +1036,9 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1114
 #: ../../Scripts/Gui/StartupScreen.as:1152
 #: ../../Scripts/Gui/StartupScreen.as:1174
+#: ../../Scripts/Gui/StartupScreen.as:1168
+#: ../../Scripts/Gui/StartupScreen.as:1206
+#: ../../Scripts/Gui/StartupScreen.as:1228
 msgctxt "StartupScreen"
 msgid "Low"
 msgstr ""
@@ -997,6 +1049,8 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1115
 #: ../../Scripts/Gui/StartupScreen.as:1153
 #: ../../Scripts/Gui/StartupScreen.as:1175
+#: ../../Scripts/Gui/StartupScreen.as:1169
+#: ../../Scripts/Gui/StartupScreen.as:1207
 msgctxt "StartupScreen"
 msgid "Medium"
 msgstr ""
@@ -1007,18 +1061,23 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1116
 #: ../../Scripts/Gui/StartupScreen.as:1154
 #: ../../Scripts/Gui/StartupScreen.as:1176
+#: ../../Scripts/Gui/StartupScreen.as:1170
+#: ../../Scripts/Gui/StartupScreen.as:1208
+#: ../../Scripts/Gui/StartupScreen.as:1230
 msgctxt "StartupScreen"
 msgid "High"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1109
 #: ../../Scripts/Gui/StartupScreen.as:1119
+#: ../../Scripts/Gui/StartupScreen.as:1173
 msgctxt "StartupScreen"
 msgid "Post-process"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1110
 #: ../../Scripts/Gui/StartupScreen.as:1120
+#: ../../Scripts/Gui/StartupScreen.as:1174
 msgctxt "StartupScreen"
 msgid ""
 "Post-process modifies the image to make it look better and more realistic."
@@ -1026,6 +1085,7 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1117
 #: ../../Scripts/Gui/StartupScreen.as:1127
+#: ../../Scripts/Gui/StartupScreen.as:1181
 msgctxt "StartupScreen"
 msgid ""
 "Particles|Low:Artifact occurs when a particle intersects other objects.|"
@@ -1035,12 +1095,14 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1127
 #: ../../Scripts/Gui/StartupScreen.as:1137
+#: ../../Scripts/Gui/StartupScreen.as:1191
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1129
 #: ../../Scripts/Gui/StartupScreen.as:1139
+#: ../../Scripts/Gui/StartupScreen.as:1193
 msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
@@ -1049,24 +1111,28 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1132
 #: ../../Scripts/Gui/StartupScreen.as:1142
+#: ../../Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
 msgid "Shadows"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1133
 #: ../../Scripts/Gui/StartupScreen.as:1143
+#: ../../Scripts/Gui/StartupScreen.as:1197
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1135
 #: ../../Scripts/Gui/StartupScreen.as:1145
+#: ../../Scripts/Gui/StartupScreen.as:1199
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1136
 #: ../../Scripts/Gui/StartupScreen.as:1146
+#: ../../Scripts/Gui/StartupScreen.as:1200
 msgctxt "StartupScreen"
 msgid ""
 "Simulates shadow being casted to the fog particles using a super highly "
@@ -1075,12 +1141,14 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1139
 #: ../../Scripts/Gui/StartupScreen.as:1149
+#: ../../Scripts/Gui/StartupScreen.as:1203
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1140
 #: ../../Scripts/Gui/StartupScreen.as:1150
+#: ../../Scripts/Gui/StartupScreen.as:1204
 msgctxt "StartupScreen"
 msgid ""
 "Uses more accurate approximation techniques to decide the brightness of "
@@ -1090,6 +1158,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1145
 #: ../../Scripts/Gui/StartupScreen.as:1155
 #: ../../Scripts/Gui/StartupScreen.as:1177
+#: ../../Scripts/Gui/StartupScreen.as:1231
 msgctxt "StartupScreen"
 msgid "Ultra"
 msgstr ""
@@ -1097,6 +1166,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1148
 #: ../../Scripts/Gui/StartupScreen.as:1158
 #: ../../Scripts/Gui/StartupScreen.as:1157
+#: ../../Scripts/Gui/StartupScreen.as:1211
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr ""
@@ -1104,6 +1174,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1149
 #: ../../Scripts/Gui/StartupScreen.as:1159
 #: ../../Scripts/Gui/StartupScreen.as:1158
+#: ../../Scripts/Gui/StartupScreen.as:1212
 msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
@@ -1122,6 +1193,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1169
 #: ../../Scripts/Gui/StartupScreen.as:1179
 #: ../../Scripts/Gui/StartupScreen.as:1180
+#: ../../Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
 msgid "Shader Effects"
 msgstr ""
@@ -1129,6 +1201,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1169
 #: ../../Scripts/Gui/StartupScreen.as:1179
 #: ../../Scripts/Gui/StartupScreen.as:1180
+#: ../../Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr ""
@@ -1136,6 +1209,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1186
 #: ../../Scripts/Gui/StartupScreen.as:1196
 #: ../../Scripts/Gui/StartupScreen.as:1197
+#: ../../Scripts/Gui/StartupScreen.as:1251
 msgctxt "StartupScreen"
 msgid ""
 "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
@@ -1146,6 +1220,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1399
 #: ../../Scripts/Gui/StartupScreen.as:1409
 #: ../../Scripts/Gui/StartupScreen.as:1410
+#: ../../Scripts/Gui/StartupScreen.as:1464
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr ""
@@ -1154,6 +1229,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1408
 #: ../../Scripts/Gui/StartupScreen.as:1418
 #: ../../Scripts/Gui/StartupScreen.as:1419
+#: ../../Scripts/Gui/StartupScreen.as:1473
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr ""
@@ -1162,6 +1238,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1412
 #: ../../Scripts/Gui/StartupScreen.as:1422
 #: ../../Scripts/Gui/StartupScreen.as:1423
+#: ../../Scripts/Gui/StartupScreen.as:1477
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
@@ -1172,6 +1249,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1421
 #: ../../Scripts/Gui/StartupScreen.as:1431
 #: ../../Scripts/Gui/StartupScreen.as:1432
+#: ../../Scripts/Gui/StartupScreen.as:1486
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr ""
@@ -1180,6 +1258,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1425
 #: ../../Scripts/Gui/StartupScreen.as:1435
 #: ../../Scripts/Gui/StartupScreen.as:1436
+#: ../../Scripts/Gui/StartupScreen.as:1490
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -1195,6 +1274,8 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1484
 #: ../../Scripts/Gui/StartupScreen.as:1461
 #: ../../Scripts/Gui/StartupScreen.as:1485
+#: ../../Scripts/Gui/StartupScreen.as:1515
+#: ../../Scripts/Gui/StartupScreen.as:1539
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr ""
@@ -1203,6 +1284,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1451
 #: ../../Scripts/Gui/StartupScreen.as:1461
 #: ../../Scripts/Gui/StartupScreen.as:1462
+#: ../../Scripts/Gui/StartupScreen.as:1516
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
@@ -1214,6 +1296,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1458
 #: ../../Scripts/Gui/StartupScreen.as:1468
 #: ../../Scripts/Gui/StartupScreen.as:1469
+#: ../../Scripts/Gui/StartupScreen.as:1523
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr ""
@@ -1222,6 +1305,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1459
 #: ../../Scripts/Gui/StartupScreen.as:1469
 #: ../../Scripts/Gui/StartupScreen.as:1470
+#: ../../Scripts/Gui/StartupScreen.as:1524
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1232,6 +1316,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1475
 #: ../../Scripts/Gui/StartupScreen.as:1485
 #: ../../Scripts/Gui/StartupScreen.as:1486
+#: ../../Scripts/Gui/StartupScreen.as:1540
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1242,6 +1327,8 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1551
 #: ../../Scripts/Gui/StartupScreen.as:1561
 #: ../../Scripts/Gui/StartupScreen.as:1562
+#: ../../Scripts/Gui/StartupScreen.as:1718
+#: ../../Scripts/Gui/StartupScreen.as:1722
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr ""
@@ -1250,6 +1337,8 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1587
 #: ../../Scripts/Gui/StartupScreen.as:1597
 #: ../../Scripts/Gui/StartupScreen.as:1598
+#: ../../Scripts/Gui/StartupScreen.as:1754
+#: ../../Scripts/Gui/StartupScreen.as:1758
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr ""
@@ -1258,11 +1347,14 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1596
 #: ../../Scripts/Gui/StartupScreen.as:1606
 #: ../../Scripts/Gui/StartupScreen.as:1607
+#: ../../Scripts/Gui/StartupScreen.as:1763
+#: ../../Scripts/Gui/StartupScreen.as:1767
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1071
+#: ../../Scripts/Gui/StartupScreen.as:1125
 msgctxt "StartupScreen"
 msgid ""
 "Antialias:Enables a technique to improve the appearance of high-constrast "
@@ -1276,6 +1368,7 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:781
+#: ../../Scripts/Gui/StartupScreen.as:835
 msgctxt "StartupScreen"
 msgid "Custom"
 msgstr ""
@@ -1297,6 +1390,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:592
 #: ../../../Sources/Client/Client.cpp:612
 #: ../../../Sources/Client/Client.cpp:611
+#: ../../../Sources/Client/Client.cpp:586
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr ""
@@ -1317,6 +1411,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:622
 #: ../../../Sources/Client/Client.cpp:615
 #: ../../../Sources/Client/Client.cpp:621
+#: ../../../Sources/Client/Client.cpp:590
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr ""
@@ -1327,6 +1422,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:114
 #: ../../../Sources/Client/Client_Draw.cpp:116
 #: ../../../Sources/Client/Client_Draw.cpp:119
+#: ../../../Sources/Client/Client_Draw.cpp:118
 msgctxt "Client"
 msgid "Sceneshot saved: {0}"
 msgstr ""
@@ -1337,6 +1433,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:116
 #: ../../../Sources/Client/Client_Draw.cpp:118
 #: ../../../Sources/Client/Client_Draw.cpp:121
+#: ../../../Sources/Client/Client_Draw.cpp:120
 msgctxt "Client"
 msgid "Screenshot saved: {0}"
 msgstr ""
@@ -1351,6 +1448,8 @@ msgstr ""
 #: ../../../Sources/Client/Client_Draw.cpp:128
 #: ../../../Sources/Client/Client_Draw.cpp:125
 #: ../../../Sources/Client/Client_Draw.cpp:131
+#: ../../../Sources/Client/Client_Draw.cpp:124
+#: ../../../Sources/Client/Client_Draw.cpp:130
 msgctxt "Client"
 msgid "Screenshot failed: "
 msgstr ""
@@ -1364,6 +1463,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:636
 #: ../../../Sources/Client/Client.cpp:656
 #: ../../../Sources/Client/Client.cpp:655
+#: ../../../Sources/Client/Client.cpp:628
 msgctxt "Client"
 msgid "[Global] "
 msgstr ""
@@ -1372,6 +1472,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3253
 #: ../../../Sources/Client/Client_NetHandler.cpp:84
 #: ../../../Sources/Client/Client_NetHandler.cpp:88
+#: ../../../Sources/Client/Client_NetHandler.cpp:89
 msgctxt "Client"
 msgid "{0} captured {1}'s territory"
 msgstr ""
@@ -1380,6 +1481,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3255
 #: ../../../Sources/Client/Client_NetHandler.cpp:86
 #: ../../../Sources/Client/Client_NetHandler.cpp:90
+#: ../../../Sources/Client/Client_NetHandler.cpp:91
 msgctxt "Client"
 msgid "{0} captured an neutral territory"
 msgstr ""
@@ -1388,6 +1490,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3262
 #: ../../../Sources/Client/Client_NetHandler.cpp:93
 #: ../../../Sources/Client/Client_NetHandler.cpp:98
+#: ../../../Sources/Client/Client_NetHandler.cpp:99
 msgctxt "Client"
 msgid "{0} captured {1}'s Territory"
 msgstr ""
@@ -1404,6 +1507,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3288
 #: ../../../Sources/Client/Client_NetHandler.cpp:119
 #: ../../../Sources/Client/Client_NetHandler.cpp:126
+#: ../../../Sources/Client/Client_NetHandler.cpp:127
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
 msgstr ""
@@ -1412,6 +1516,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3295
 #: ../../../Sources/Client/Client_NetHandler.cpp:126
 #: ../../../Sources/Client/Client_NetHandler.cpp:133
+#: ../../../Sources/Client/Client_NetHandler.cpp:134
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
 msgstr ""
@@ -1420,6 +1525,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3317
 #: ../../../Sources/Client/Client_NetHandler.cpp:148
 #: ../../../Sources/Client/Client_NetHandler.cpp:155
+#: ../../../Sources/Client/Client_NetHandler.cpp:158
 msgctxt "Client"
 msgid "{0} picked up {1}'s intel"
 msgstr ""
@@ -1428,6 +1534,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3324
 #: ../../../Sources/Client/Client_NetHandler.cpp:155
 #: ../../../Sources/Client/Client_NetHandler.cpp:162
+#: ../../../Sources/Client/Client_NetHandler.cpp:165
 msgctxt "Client"
 msgid "{0} picked up {1}'s Intel."
 msgstr ""
@@ -1436,6 +1543,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3341
 #: ../../../Sources/Client/Client_NetHandler.cpp:172
 #: ../../../Sources/Client/Client_NetHandler.cpp:179
+#: ../../../Sources/Client/Client_NetHandler.cpp:183
 msgctxt "Client"
 msgid "{0} dropped {1}'s intel"
 msgstr ""
@@ -1444,6 +1552,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3348
 #: ../../../Sources/Client/Client_NetHandler.cpp:179
 #: ../../../Sources/Client/Client_NetHandler.cpp:186
+#: ../../../Sources/Client/Client_NetHandler.cpp:190
 msgctxt "Client"
 msgid "{0} dropped {1}'s Intel"
 msgstr ""
@@ -1456,6 +1565,8 @@ msgstr ""
 #: ../../../Sources/Client/Client_NetHandler.cpp:234
 #: ../../../Sources/Client/Client_NetHandler.cpp:236
 #: ../../../Sources/Client/Client_NetHandler.cpp:241
+#: ../../../Sources/Client/Client_NetHandler.cpp:237
+#: ../../../Sources/Client/Client_NetHandler.cpp:243
 msgctxt "Client"
 msgid "Player {0} has left"
 msgstr ""
@@ -1475,6 +1586,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3462
 #: ../../../Sources/Client/Client_NetHandler.cpp:293
 #: ../../../Sources/Client/Client_NetHandler.cpp:300
+#: ../../../Sources/Client/Client_NetHandler.cpp:294
 msgctxt "Client"
 msgid "{0} wins!"
 msgstr ""
@@ -1484,6 +1596,7 @@ msgstr ""
 #: ../../../Sources/Client/Client.cpp:3466
 #: ../../../Sources/Client/Client_NetHandler.cpp:297
 #: ../../../Sources/Client/Client_NetHandler.cpp:304
+#: ../../../Sources/Client/Client_NetHandler.cpp:298
 msgctxt "Client"
 msgid "{0} Wins!"
 msgstr ""
@@ -1496,6 +1609,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:909
 #: ../../../Sources/Client/Client_Update.cpp:912
 #: ../../../Sources/Client/Client_Update.cpp:919
+#: ../../../Sources/Client/Client_Update.cpp:851
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr ""
@@ -1508,6 +1622,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:911
 #: ../../../Sources/Client/Client_Update.cpp:914
 #: ../../../Sources/Client/Client_Update.cpp:921
+#: ../../../Sources/Client/Client_Update.cpp:853
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr ""
@@ -1516,6 +1631,7 @@ msgstr ""
 #: ../../../Sources/Gui/Runner.cpp:62 ../../../Sources/Gui/Main.cpp:403
 #: ../../../Sources/Gui/Main.cpp:529 ../../../Sources/Gui/Main.cpp:592
 #: ../../../Sources/Gui/Main.cpp:638 ../../../Sources/Gui/Main.cpp:664
+#: ../../../Sources/Gui/Main.cpp:680 ../../../Sources/Gui/Runner.cpp:58
 msgctxt "Main"
 msgid ""
 "A serious error caused OpenSpades to stop working:\n"
@@ -1529,12 +1645,14 @@ msgstr ""
 #: ../../../Sources/Gui/Runner.cpp:66 ../../../Sources/Gui/Main.cpp:408
 #: ../../../Sources/Gui/Main.cpp:534 ../../../Sources/Gui/Main.cpp:597
 #: ../../../Sources/Gui/Main.cpp:643 ../../../Sources/Gui/Main.cpp:669
+#: ../../../Sources/Gui/Main.cpp:688 ../../../Sources/Gui/Runner.cpp:64
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr ""
 
 #: ../../../Sources/Client/NetClient.cpp:392
 #: ../../../Sources/Client/NetClient.cpp:397
+#: ../../../Sources/Client/NetClient.cpp:376
 msgctxt "NetClient"
 msgid "Connecting to the server"
 msgstr ""
@@ -1542,6 +1660,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:404
 #: ../../../Sources/Client/NetClient.cpp:409
 #: ../../../Sources/Client/NetClient.cpp:411
+#: ../../../Sources/Client/NetClient.cpp:390
 msgctxt "NetClient"
 msgid "Not connected"
 msgstr ""
@@ -1555,6 +1674,8 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:1316
 #: ../../../Sources/Client/NetClient.cpp:493
 #: ../../../Sources/Client/NetClient.cpp:1323
+#: ../../../Sources/Client/NetClient.cpp:469
+#: ../../../Sources/Client/NetClient.cpp:1235
 msgctxt "NetClient"
 msgid "Loading snapshot"
 msgstr ""
@@ -1563,6 +1684,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:494
 #: ../../../Sources/Client/NetClient.cpp:502
 #: ../../../Sources/Client/NetClient.cpp:509
+#: ../../../Sources/Client/NetClient.cpp:484
 msgctxt "NetClient"
 msgid "Loading snapshot ({0}/{1})"
 msgstr ""
@@ -1575,6 +1697,8 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:541
 #: ../../../Sources/Client/NetClient.cpp:514
 #: ../../../Sources/Client/NetClient.cpp:548
+#: ../../../Sources/Client/NetClient.cpp:489
+#: ../../../Sources/Client/NetClient.cpp:523
 msgctxt "NetClient"
 msgid "Connected"
 msgstr ""
@@ -1591,6 +1715,9 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:525
 #: ../../../Sources/Client/NetClient.cpp:560
 #: ../../../Sources/Client/NetClient.cpp:613
+#: ../../../Sources/Client/NetClient.cpp:501
+#: ../../../Sources/Client/NetClient.cpp:536
+#: ../../../Sources/Client/NetClient.cpp:588
 msgctxt "NetClient"
 msgid "Still loading..."
 msgstr ""
@@ -1619,6 +1746,12 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:569
 #: ../../../Sources/Client/NetClient.cpp:617
 #: ../../../Sources/Client/NetClient.cpp:622
+#: ../../../Sources/Client/NetClient.cpp:504
+#: ../../../Sources/Client/NetClient.cpp:510
+#: ../../../Sources/Client/NetClient.cpp:540
+#: ../../../Sources/Client/NetClient.cpp:545
+#: ../../../Sources/Client/NetClient.cpp:592
+#: ../../../Sources/Client/NetClient.cpp:597
 msgctxt "NetClient"
 msgid "Error"
 msgstr ""
@@ -1627,6 +1760,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:676
 #: ../../../Sources/Client/NetClient.cpp:684
 #: ../../../Sources/Client/NetClient.cpp:691
+#: ../../../Sources/Client/NetClient.cpp:663
 msgctxt "NetClient"
 msgid "You are banned from this server."
 msgstr ""
@@ -1639,6 +1773,8 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:694
 #: ../../../Sources/Client/NetClient.cpp:695
 #: ../../../Sources/Client/NetClient.cpp:701
+#: ../../../Sources/Client/NetClient.cpp:668
+#: ../../../Sources/Client/NetClient.cpp:671
 msgctxt "NetClient"
 msgid "You were kicked from this server."
 msgstr ""
@@ -1647,6 +1783,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:682
 #: ../../../Sources/Client/NetClient.cpp:690
 #: ../../../Sources/Client/NetClient.cpp:697
+#: ../../../Sources/Client/NetClient.cpp:669
 msgctxt "NetClient"
 msgid "Incompatible client protocol version."
 msgstr ""
@@ -1655,6 +1792,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:684
 #: ../../../Sources/Client/NetClient.cpp:692
 #: ../../../Sources/Client/NetClient.cpp:699
+#: ../../../Sources/Client/NetClient.cpp:670
 msgctxt "NetClient"
 msgid "Server full"
 msgstr ""
@@ -1663,6 +1801,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:688
 #: ../../../Sources/Client/NetClient.cpp:696
 #: ../../../Sources/Client/NetClient.cpp:703
+#: ../../../Sources/Client/NetClient.cpp:672
 msgctxt "NetClient"
 msgid "Unknown Reason"
 msgstr ""
@@ -1750,6 +1889,7 @@ msgstr[1] ""
 #: ../../../Sources/Client/Client_Update.cpp:478
 #: ../../../Sources/Client/Client_Update.cpp:479
 #: ../../../Sources/Client/Client_Update.cpp:486
+#: ../../../Sources/Client/Client_Update.cpp:464
 msgctxt "Client"
 msgid "-- blocks"
 msgstr ""
@@ -1759,6 +1899,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:1259
 #: ../../../Sources/Client/Client_Update.cpp:1262
 #: ../../../Sources/Client/Client_Update.cpp:1269
+#: ../../../Sources/Client/Client_Update.cpp:1166
 msgctxt "Client"
 msgid "Insufficient blocks."
 msgstr ""
@@ -1768,6 +1909,7 @@ msgstr ""
 #: ../../../Sources/Client/Client_Update.cpp:1263
 #: ../../../Sources/Client/Client_Update.cpp:1266
 #: ../../../Sources/Client/Client_Update.cpp:1273
+#: ../../../Sources/Client/Client_Update.cpp:1169
 msgctxt "Client"
 msgid "You cannot place a block there."
 msgstr ""
@@ -1794,6 +1936,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1435
 #: ../../Scripts/Gui/StartupScreen.as:1445
 #: ../../Scripts/Gui/StartupScreen.as:1446
+#: ../../Scripts/Gui/StartupScreen.as:1500
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr ""
@@ -1801,6 +1944,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1439
 #: ../../Scripts/Gui/StartupScreen.as:1449
 #: ../../Scripts/Gui/StartupScreen.as:1450
+#: ../../Scripts/Gui/StartupScreen.as:1504
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr ""
@@ -1826,6 +1970,7 @@ msgstr ""
 #: ../../../Sources/Client/NetClient.cpp:468
 #: ../../../Sources/Client/NetClient.cpp:476
 #: ../../../Sources/Client/NetClient.cpp:483
+#: ../../../Sources/Client/NetClient.cpp:459
 msgctxt "NetClient"
 msgid "Awaiting for state"
 msgstr ""
@@ -1837,11 +1982,13 @@ msgid "Show Statistics"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1083
+#: ../../Scripts/Gui/StartupScreen.as:1137
 msgctxt "StartupScreen"
 msgid "Linear HDR Rendering"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1085
+#: ../../Scripts/Gui/StartupScreen.as:1139
 msgctxt "StartupScreen"
 msgid ""
 "Uses a number representation which allows wider dynamic range during "
@@ -1851,16 +1998,19 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1095
+#: ../../Scripts/Gui/StartupScreen.as:1149
 msgctxt "StartupScreen"
 msgid "Lens Effect"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1096
+#: ../../Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
 msgid "Simulates distortion caused by a real camera lens."
 msgstr ""
 
 #: ../../../Sources/Client/Client_Draw.cpp:232
+#: ../../../Sources/Client/Client_Draw.cpp:219
 msgctxt "Client"
 msgid "Disconnecting..."
 msgstr ""
@@ -1896,6 +2046,7 @@ msgid "You can change it later in the Setup dialog."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1168
+#: ../../Scripts/Gui/StartupScreen.as:1222
 msgctxt "StartupScreen"
 msgid ""
 "Water Shader|None:Water is rendered in the same way that normal blocks are "
@@ -1906,6 +2057,7 @@ msgid ""
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1175
+#: ../../Scripts/Gui/StartupScreen.as:1229
 msgctxt "StartupScreen"
 msgid "Med"
 msgstr ""
@@ -1939,4 +2091,35 @@ msgstr ""
 #: ../../Scripts/Gui/Preferences.as:646
 msgctxt "Preferences"
 msgid "MORE"
+msgstr ""
+
+#: ../../../Sources/Client/ScoreboardView.cpp:330
+msgctxt "Client"
+msgid "Spectator{1}"
+msgid_plural "Spectators{1}"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../../Scripts/Gui/StartupScreen.as:205
+msgctxt "StartupScreen"
+msgid "Generic"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1600
+msgctxt "StartupScreen"
+msgid "Language"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1653
+#: ../../Scripts/Gui/StartupScreen.as:1657
+msgctxt "StartupScreen"
+msgid "Unknown ({0})"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1655
+#: ../../Scripts/Gui/StartupScreen.as:1669
+#: ../../Scripts/Gui/StartupScreen.as:1659
+#: ../../Scripts/Gui/StartupScreen.as:1673
+msgctxt "StartupScreen"
+msgid "System default"
 msgstr ""

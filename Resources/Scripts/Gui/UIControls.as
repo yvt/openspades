@@ -222,7 +222,10 @@ namespace spades {
 				renderer.DrawImage(img, AABB2(pos.x+size.x-1.f, pos.y, 1.f, size.y));
 				renderer.DrawImage(img, AABB2(pos.x, pos.y+size.y-1.f, size.x, 1.f));
 				Vector2 txtSize = Font.Measure(Caption);
-				Font.DrawShadow(Caption, pos + (size - txtSize) * 0.5f, 1.f, Vector4(1,1,1,1), Vector4(0,0,0,0.4f));
+				float margin = 4.f;
+				Font.DrawShadow(Caption, pos + Vector2(margin, margin) +
+					(size - txtSize - Vector2(margin * 2.f, margin * 2.f)) * Alignment,
+					1.f, Vector4(1,1,1,1), Vector4(0,0,0,0.4f));
 			}
 		}
 

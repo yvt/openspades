@@ -21,15 +21,19 @@
 
 #include <algorithm>
 #include <cctype>
+#include <utility>
+#include <regex>
 
 #include <Imports/OpenGL.h> //for gpu info
 #include <Imports/SDL.h>
+#include <json/json.h>
 
 #include "StartupScreenHelper.h"
 
 #include "StartupScreen.h"
 #include <Audio/ALDevice.h>
 #include <Audio/YsrDevice.h>
+#include <Core/FileManager.h>
 #include <Core/Settings.h>
 #include <OpenSpades.h>
 
@@ -95,6 +99,41 @@ namespace spades {
 		void StartupScreenHelper::ExamineSystem() {
 			SPADES_MARK_FUNCTION();
 
+			// check installed locales
+			SPLog("Checking installed locales");
+
+			auto localeDirectories = FileManager::EnumFiles("Locales");
+			for (const std::string &localeInfoName : localeDirectories) {
+				static std::regex localeInfoRegex("[-a-zA-Z0-9_]+\\.json");
+				if (!std::regex_match(localeInfoName, localeInfoRegex)) {
+					continue;
+				}
+				std::string locale = localeInfoName.substr(0, localeInfoName.size() - 5);
+				std::string localeInfoPath = "Locales/" + localeInfoName;
+
+				try {
+					std::string buffer = FileManager::ReadAllBytes(localeInfoPath.c_str());
+					LocaleInfo info;
+					Json::Reader reader;
+					Json::Value root;
+					if (!reader.parse(buffer.c_str(), root, false)) {
+						SPRaise("Failed to parse LocaleInfo.json: %s",
+						        reader.getFormatedErrorMessages().c_str());
+					}
+
+					info.name = locale;
+					info.descriptionEnglish = root["descriptionEnglish"].asString();
+					info.descriptionNative = root["description"].asString();
+
+					locales.push_back(std::move(info));
+
+					SPLog("Locale '%s' found.", locale.c_str());
+				} catch (const std::exception &ex) {
+					SPLog("Error while reading the locale info for '%s': %s", locale.c_str(),
+					      ex.what());
+				}
+			}
+
 			// check audio device availability
 			// Note: this only checks whether these libraries can be loaded.
 
@@ -121,8 +160,6 @@ namespace spades {
 					  }
 				  }));
 			}
-
-			// FIXME: check OpenAL availability somehow
 
 			// check GL capabilities
 
@@ -608,6 +645,23 @@ namespace spades {
 			reportLines.push_back(l);
 			report += text;
 			report += '\n';
+		}
+
+		int StartupScreenHelper::GetNumLocales() { return static_cast<int>(locales.size()); }
+		std::string StartupScreenHelper::GetLocale(int index) {
+			if (index < 0 || index >= GetNumLocales())
+				SPInvalidArgument("index");
+			return locales[index].name;
+		}
+		std::string StartupScreenHelper::GetLocaleDescriptionNative(int index) {
+			if (index < 0 || index >= GetNumLocales())
+				SPInvalidArgument("index");
+			return locales[index].descriptionNative;
+		}
+		std::string StartupScreenHelper::GetLocaleDescriptionEnglish(int index) {
+			if (index < 0 || index >= GetNumLocales())
+				SPInvalidArgument("index");
+			return locales[index].descriptionEnglish;
 		}
 
 		std::string StartupScreenHelper::CheckConfigCapability(const std::string &cfg,

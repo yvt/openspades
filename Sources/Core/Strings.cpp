@@ -1115,15 +1115,31 @@ namespace spades {
 		}
 	};
 
-	std::unordered_map<std::string, std::shared_ptr<CatalogDomain>> domains;
-	std::unordered_map<std::string, std::shared_ptr<CatalogOfLanguage>> langCatalogCache;
+	namespace {
+		std::unordered_map<std::string, std::shared_ptr<CatalogDomain>> domains;
+		std::unordered_map<std::string, std::shared_ptr<CatalogOfLanguage>> langCatalogCache;
 
-	std::string currentLocaleRegion;
-	std::string currentLocale;
-	std::string lastLocale;
+		std::string currentLocaleRegion;
+		std::string currentLocale;
+		std::string lastLocale;
+
+		class CatalogCacheInvalidator : public ISettingItemListener {
+		public:
+			void SettingChanged(const std::string &) override {
+				LoadCurrentLocale();
+			}
+		};
+
+		std::unique_ptr<CatalogCacheInvalidator> invalidator;
+	}
 
 	void LoadCurrentLocale() {
 		SPADES_MARK_FUNCTION();
+
+		if (!invalidator) {
+			invalidator.reset(new CatalogCacheInvalidator());
+			core_locale.AddListener(invalidator.get());
+		}
 
 		std::string locale = core_locale;
 		if (locale == lastLocale)
