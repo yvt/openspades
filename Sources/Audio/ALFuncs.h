@@ -1,30 +1,31 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 #define AL_NO_PROTOTYPES
 #define ALC_NO_PROTOTYPES
 
 #include "AL/al.h"
 #include "AL/alc.h"
-#include "AL/efx.h"
 #include "AL/efx-creative.h"
 #include "AL/efx-presets.h"
+#include "AL/efx.h"
+
 #include "AL/MacOSX_OALExtensions.h"
 
 namespace al {
@@ -153,7 +154,6 @@ namespace al {
 	extern alcASAGetListenerProcPtr qalcASAGetListener;
 	extern alcASASetListenerProcPtr qalcASASetListener;
 
-
 	extern LPALCCREATECONTEXT qalcCreateContext;
 	extern LPALCMAKECONTEXTCURRENT qalcMakeContextCurrent;
 	extern LPALCPROCESSCONTEXT qalcProcessContext;
@@ -177,11 +177,10 @@ namespace al {
 
 	void Link(void);
 	void InitEAX(void);
-	
+
 	const char *DescribeError(ALenum);
 	void CheckError(void);
 	void CheckError(const char *source, const char *fun, int line);
 }
 
 #define ALCheckError() ::al::CheckError(__FILE__, __PRETTY_FUNCTION__, __LINE__)
-

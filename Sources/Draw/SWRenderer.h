@@ -1,39 +1,40 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #pragma once
 
-#include "../Client/IRenderer.h"
-#include "../Core/Math.h"
-#include "../Client/SceneDefinition.h"
+#include <array>
 #include <map>
 #include <memory>
-#include "../Client/IGameMapListener.h"
 #include <vector>
+
+#include <Client/IGameMapListener.h>
+#include <Client/IRenderer.h>
+#include <Client/SceneDefinition.h>
+#include <Core/Math.h>
 #include "SWFeatureLevel.h"
 #include <Core/Stopwatch.h>
-#include <array>
 
 namespace spades {
 	namespace draw {
-		
+
 		class SWPort;
 		class SWImageManager;
 		class SWModelManager;
@@ -43,29 +44,29 @@ namespace spades {
 		class SWMapRenderer;
 		class SWImage;
 		class SWModel;
-		
-		class SWRenderer: public client::IRenderer, public client::IGameMapListener  {
+
+		class SWRenderer : public client::IRenderer, public client::IGameMapListener {
 			friend class SWFlatMapRenderer;
 			friend class SWModelRenderer;
 			friend class SWMapRenderer;
-			
+
 			SWFeatureLevel featureLevel;
-			
+
 			Handle<SWPort> port;
 			Handle<client::GameMap> map;
-			
+
 			Handle<Bitmap> fb;
 			std::vector<float> depthBuffer;
-			
+
 			std::shared_ptr<SWImageManager> imageManager;
 			std::shared_ptr<SWModelManager> modelManager;
-			
+
 			std::shared_ptr<SWImageRenderer> imageRenderer;
 			std::shared_ptr<SWModelRenderer> modelRenderer;
-			
+
 			std::shared_ptr<SWFlatMapRenderer> flatMapRenderer;
 			std::shared_ptr<SWMapRenderer> mapRenderer;
-			
+
 			struct Sprite {
 				Handle<SWImage> img;
 				Vector3 center;
@@ -74,7 +75,7 @@ namespace spades {
 				Vector4 color;
 			};
 			std::vector<Sprite> sprites;
-			
+
 			struct LongSprite {
 				Handle<SWImage> img;
 				Vector3 start;
@@ -83,81 +84,79 @@ namespace spades {
 				Vector4 color;
 			};
 			std::vector<LongSprite> longSprites;
-			
+
 			struct Model {
 				Handle<SWModel> model;
 				client::ModelRenderParam param;
 			};
 			std::vector<Model> models;
-			
+
 			struct DynamicLight {
 				client::DynamicLightParam param;
 				int minX, maxX, minY, maxY;
 			};
 			std::vector<DynamicLight> lights;
-			
+
 			bool inited;
 			bool sceneUsedInThisFrame;
-			
+
 			client::SceneDefinition sceneDef;
 			std::array<Plane3, 6> frustrum;
-			
-			struct DebugLine{
+
+			struct DebugLine {
 				Vector3 v1, v2;
 				Vector4 color;
 			};
-			
+
 			std::vector<DebugLine> debugLines;
-			
+
 			float fogDistance;
 			Vector3 fogColor;
-			
+
 			Matrix4 projectionMatrix;
 			Matrix4 viewMatrix;
 			Matrix4 projectionViewMatrix;
-			
+
 			Vector4 drawColorAlphaPremultiplied;
 			bool legacyColorPremultiply;
-			
+
 			unsigned int lastTime;
-			
+
 			Stopwatch renderStopwatch;
-			
+
 			bool duringSceneRendering;
-			
+
 			void BuildProjectionMatrix();
 			void BuildView();
 			void BuildFrustrum();
-			
+
 			void RenderDebugLines();
-			
+
 			void RenderObjects();
-			
+
 			void EnsureInitialized();
 			void EnsureSceneStarted();
 			void EnsureSceneNotStarted();
 			void EnsureValid();
-			
+
 			void SetFramebuffer(Bitmap *);
-			
-			template<SWFeatureLevel>
-			void ApplyFog();
-			
-			template<SWFeatureLevel>
-			void ApplyDynamicLight(const DynamicLight&);
-			
+
+			template <SWFeatureLevel> void ApplyFog();
+
+			template <SWFeatureLevel> void ApplyDynamicLight(const DynamicLight &);
+
 		protected:
 			virtual ~SWRenderer();
-			
+
 		public:
 			SWRenderer(SWPort *port, SWFeatureLevel featureLevel = DetectFeatureLevel());
-			
+
 			virtual void Init();
 			virtual void Shutdown();
-			
+
 			virtual client::IImage *RegisterImage(const char *filename);
 			virtual client::IModel *RegisterModel(const char *filename);
-			
+
 			virtual client::IImage *CreateImage(Bitmap *);
 			virtual client::IModel *CreateModel(VoxelModel *);
 			/*
@@ -166,61 +165,57 @@ namespace spades {
 			*/
 			virtual void SetGameMap(client::GameMap *);
 			virtual void SetFogColor(Vector3 v);
-			virtual void SetFogDistance(float f){fogDistance = f;}
-			
+			virtual void SetFogDistance(float f) { fogDistance = f; }
+
 			Vector3 GetFogColor() { return fogColor; }
 			float GetFogDistance() { return fogDistance; }
-			
-			virtual void StartScene(const client::SceneDefinition&);
-			
-			virtual void RenderModel(client::IModel *, const client::ModelRenderParam&);
-			
-			virtual void AddLight(const client::DynamicLightParam& light);
-			
+
+			virtual void StartScene(const client::SceneDefinition &);
+
+			virtual void RenderModel(client::IModel *, const client::ModelRenderParam &);
+
+			virtual void AddLight(const client::DynamicLightParam &light);
+
 			virtual void AddDebugLine(Vector3 a, Vector3 b, Vector4 color);
-			
+
 			virtual void AddSprite(client::IImage *, Vector3 center, float radius, float rotation);
 			virtual void AddLongSprite(client::IImage *, Vector3 p1, Vector3 p2, float radius);
-			
+
 			virtual void EndScene();
-			
-			
+
 			virtual void MultiplyScreenColor(Vector3);
-			
+
 			virtual void SetColor(Vector4);
 			virtual void SetColorAlphaPremultiplied(Vector4);
-			
-			virtual void DrawImage(client::IImage *, const Vector2& outTopLeft);
-			virtual void DrawImage(client::IImage *, const AABB2& outRect);
-			virtual void DrawImage(client::IImage *, const Vector2& outTopLeft, const AABB2& inRect);
-			virtual void DrawImage(client::IImage *, const AABB2& outRect, const AABB2& inRect);
-			virtual void DrawImage(client::IImage *, const Vector2& outTopLeft, const Vector2& outTopRight, const Vector2& outBottomLeft, const AABB2& inRect);
-			
-			virtual void DrawFlatGameMap(const AABB2& outRect, const AABB2& inRect);
-			
+
+			virtual void DrawImage(client::IImage *, const Vector2 &outTopLeft);
+			virtual void DrawImage(client::IImage *, const AABB2 &outRect);
+			virtual void DrawImage(client::IImage *, const Vector2 &outTopLeft,
+			                       const AABB2 &inRect);
+			virtual void DrawImage(client::IImage *, const AABB2 &outRect, const AABB2 &inRect);
+			virtual void DrawImage(client::IImage *, const Vector2 &outTopLeft,
+			                       const Vector2 &outTopRight, const Vector2 &outBottomLeft,
+			                       const AABB2 &inRect);
+
+			virtual void DrawFlatGameMap(const AABB2 &outRect, const AABB2 &inRect);
+
 			virtual void FrameDone();
 			virtual void Flip();
 			virtual Bitmap *ReadBitmap();
-			
+
 			virtual float ScreenWidth();
 			virtual float ScreenHeight();
-			
-			
-			const Matrix4& GetProjectionMatrix() const { return projectionMatrix; }
-			const Matrix4& GetProjectionViewMatrix() const { return projectionViewMatrix; }
-			const Matrix4& GetViewMatrix() const { return viewMatrix; }
-			
-			
-			virtual void GameMapChanged(int x, int y, int z, client::GameMap *);
-			
-			const client::SceneDefinition& GetSceneDef() const {
-				return sceneDef;
-			}
-			
-			bool BoxFrustrumCull(const AABB3&);
-			bool SphereFrustrumCull(const Vector3& center, float radius);
-			
-		};
 
+			const Matrix4 &GetProjectionMatrix() const { return projectionMatrix; }
+			const Matrix4 &GetProjectionViewMatrix() const { return projectionViewMatrix; }
+			const Matrix4 &GetViewMatrix() const { return viewMatrix; }
+
+			virtual void GameMapChanged(int x, int y, int z, client::GameMap *);
+
+			const client::SceneDefinition &GetSceneDef() const { return sceneDef; }
+
+			bool BoxFrustrumCull(const AABB3 &);
+			bool SphereFrustrumCull(const Vector3 &center, float radius);
+		};
 	}
 }

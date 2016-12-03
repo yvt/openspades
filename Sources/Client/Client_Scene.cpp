@@ -25,15 +25,15 @@
 #include <Core/Settings.h>
 #include <Core/Strings.h>
 
-#include "World.h"
-#include "Weapon.h"
-#include "GameMap.h"
-#include "Player.h"
+#include "CTFGameMode.h"
 #include "Corpse.h"
+#include "GameMap.h"
 #include "Grenade.h"
 #include "IGameMode.h"
+#include "Player.h"
 #include "TCGameMode.h"
-#include "CTFGameMode.h"
+#include "Weapon.h"
+#include "World.h"
 
 #include "ClientPlayer.h"
 #include "ILocalEntity.h"
@@ -56,8 +56,8 @@ namespace spades {
 #pragma mark - Drawing
 
 		bool Client::ShouldRenderInThirdPersonView() {
-			if(world && world->GetLocalPlayer()){
-				if(!world->GetLocalPlayer()->IsAlive())
+			if (world && world->GetLocalPlayer()) {
+				if (!world->GetLocalPlayer()->IsAlive())
 					return true;
 			}
 			if ((int)cg_thirdperson != 0 && world->GetNumPlayers() <= 1) {
@@ -70,28 +70,21 @@ namespace spades {
 			float localFireVibration = 0.f;
 			localFireVibration = time - localFireVibrationTime;
 			localFireVibration = 1.f - localFireVibration / 0.1f;
-			if(localFireVibration < 0.f)
+			if (localFireVibration < 0.f)
 				localFireVibration = 0.f;
 			return localFireVibration;
 		}
 
-		float Client::GetAimDownZoomScale(){
-			if(world == nullptr ||
-			   world->GetLocalPlayer() == nullptr ||
-			   world->GetLocalPlayer()->IsToolWeapon() == false ||
-			   world->GetLocalPlayer()->IsAlive() == false)
+		float Client::GetAimDownZoomScale() {
+			if (world == nullptr || world->GetLocalPlayer() == nullptr ||
+			    world->GetLocalPlayer()->IsToolWeapon() == false ||
+			    world->GetLocalPlayer()->IsAlive() == false)
 				return 1.f;
 			float delta = .8f;
-			switch(world->GetLocalPlayer()->GetWeapon()->GetWeaponType()) {
-				case SMG_WEAPON:
-					delta = .8f;
-					break;
-				case RIFLE_WEAPON:
-					delta = 1.4f;
-					break;
-				case SHOTGUN_WEAPON:
-					delta = .4f;
-					break;
+			switch (world->GetLocalPlayer()->GetWeapon()->GetWeaponType()) {
+				case SMG_WEAPON: delta = .8f; break;
+				case RIFLE_WEAPON: delta = 1.4f; break;
+				case SHOTGUN_WEAPON: delta = .4f; break;
 			}
 			float aimDownState = GetAimDownState();
 			return 1.f + powf(aimDownState, 5.f) * delta;
@@ -107,95 +100,93 @@ namespace spades {
 			def.denyCameraBlur = true;
 			def.zFar = 200.f;
 
-			if(world){
+			if (world) {
 				IntVector3 fogColor = world->GetFogColor();
-				renderer->SetFogColor(MakeVector3(fogColor.x / 255.f,
-												  fogColor.y / 255.f,
-												  fogColor.z / 255.f));
+				renderer->SetFogColor(
+				  MakeVector3(fogColor.x / 255.f, fogColor.y / 255.f, fogColor.z / 255.f));
 
 				Player *player = world->GetLocalPlayer();
 
 				def.blurVignette = .0f;
 
-				if(IsFollowing()){
+				if (IsFollowing()) {
 					int limit = 100;
 					// if current following player has left,
 					// or removed,
 					// choose next player.
-					while(!world->GetPlayer(followingPlayerId) ||
-						  world->GetPlayer(followingPlayerId)->GetFront().GetPoweredLength() < .01f){
+					while (!world->GetPlayer(followingPlayerId) ||
+					       world->GetPlayer(followingPlayerId)->GetFront().GetPoweredLength() <
+					         .01f) {
 						FollowNextPlayer(false);
-						if((limit--) <= 0){
+						if ((limit--) <= 0) {
 							break;
 						}
 					}
 					player = world->GetPlayer(followingPlayerId);
 				}
-				if(player){
+				if (player) {
 
 					float roll = 0.f;
 					float scale = 1.f;
 					float vibPitch = 0.f;
 					float vibYaw = 0.f;
-					if(ShouldRenderInThirdPersonView() ||
-					   (IsFollowing() && player != world->GetLocalPlayer())){
+					if (ShouldRenderInThirdPersonView() ||
+					    (IsFollowing() && player != world->GetLocalPlayer())) {
 						Vector3 center = player->GetEye();
 						Vector3 playerFront = player->GetFront2D();
-						Vector3 up = MakeVector3(0,0,-1);
+						Vector3 up = MakeVector3(0, 0, -1);
 
-						if((!player->IsAlive()) && lastMyCorpse &&
-						   player == world->GetLocalPlayer()){
+						if ((!player->IsAlive()) && lastMyCorpse &&
+						    player == world->GetLocalPlayer()) {
 							center = lastMyCorpse->GetCenter();
 						}
-						if(map->IsSolidWrapped((int)floorf(center.x),
-											   (int)floorf(center.y),
-											   (int)floorf(center.z))){
+						if (map->IsSolidWrapped((int)floorf(center.x), (int)floorf(center.y),
+						                        (int)floorf(center.z))) {
 							float z = center.z;
-							while(z > center.z - 5.f){
-								if(!map->IsSolidWrapped((int)floorf(center.x),
-														(int)floorf(center.y),
-														(int)floorf(z))){
+							while (z > center.z - 5.f) {
+								if (!map->IsSolidWrapped((int)floorf(center.x),
+								                         (int)floorf(center.y), (int)floorf(z))) {
 									center.z = z;
 									break;
-								}else{
+								} else {
 									z -= 1.f;
 								}
 							}
 						}
 
 						float distance = 5.f;
-						if(player == world->GetLocalPlayer() &&
-						   world->GetLocalPlayer()->GetTeamId() < 2 &&
-						   !world->GetLocalPlayer()->IsAlive()){
+						if (player == world->GetLocalPlayer() &&
+						    world->GetLocalPlayer()->GetTeamId() < 2 &&
+						    !world->GetLocalPlayer()->IsAlive()) {
 							// deathcam.
 							float elapsedTime = time - lastAliveTime;
 							distance -= 3.f * expf(-elapsedTime * 1.f);
 						}
 
 						Vector3 eye = center;
-						//eye -= playerFront * 5.f;
-						//eye += up * 2.0f;
+						// eye -= playerFront * 5.f;
+						// eye += up * 2.0f;
 						eye.x += cosf(followYaw) * cosf(followPitch) * distance;
 						eye.y += sinf(followYaw) * cosf(followPitch) * distance;
 						eye.z -= sinf(followPitch) * distance;
 
-						if(false){
+						if (false) {
 							// settings for making limbo stuff
 							eye = center;
 							eye += playerFront * 3.f;
 							eye += up * -.1f;
-							eye += player->GetRight() *2.f;
+							eye += player->GetRight() * 2.f;
 							scale *= .6f;
 						}
 
 						// try ray casting
 						GameMap::RayCastResult result;
 						result = map->CastRay2(center, (eye - center).Normalize(), 256);
-						if(result.hit) {
+						if (result.hit) {
 							float dist = (result.hitPos - center).GetLength();
 							float curDist = (eye - center).GetLength();
 							dist -= 0.3f; // near clip plane
-							if(curDist > dist){
+							if (curDist > dist) {
 								float diff = curDist - dist;
 								eye += (center - eye).Normalize() * diff;
 							}
@@ -204,22 +195,22 @@ namespace spades {
 						Vector3 front = center - eye;
 						front = front.Normalize();
 
-						if(FirstPersonSpectate == false){
+						if (FirstPersonSpectate == false) {
 							def.viewOrigin = eye;
 							def.viewAxis[0] = -Vector3::Cross(up, front).Normalize();
 							def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
 							def.viewAxis[2] = front;
-						}else{
+						} else {
 							def.viewOrigin = player->GetEye();
 							def.viewAxis[0] = player->GetRight();
 							def.viewAxis[1] = player->GetUp();
 							def.viewAxis[2] = player->GetFront();
 						}
 
-						def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
-						def.fovX = atanf(tanf(def.fovY * .5f) *
-										 renderer->ScreenWidth() /
-										 renderer->ScreenHeight()) * 2.f;
+						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
+						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
+						                 renderer->ScreenHeight()) *
+						           2.f;
 
 						// update initial spectate pos
 						// this is not used now, but if the local player is
@@ -228,7 +219,7 @@ namespace spades {
 						followPos = def.viewOrigin;
 						followVel = MakeVector3(0, 0, 0);
 
-					}else if(player->GetTeamId() >= 2){
+					} else if (player->GetTeamId() >= 2) {
 						// spectator view (noclip view)
 						Vector3 center = followPos;
 						Vector3 front;
@@ -243,15 +234,15 @@ namespace spades {
 						def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
 						def.viewAxis[2] = front;
 
-						def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
-						def.fovX = atanf(tanf(def.fovY * .5f) *
-										 renderer->ScreenWidth() /
-										 renderer->ScreenHeight()) * 2.f;
+						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
+						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
+						                 renderer->ScreenHeight()) *
+						           2.f;
 
 						// for 1st view, camera blur can be used
 						def.denyCameraBlur = false;
 
-					}else{
+					} else {
 						Vector3 front = player->GetFront();
 						Vector3 right = player->GetRight();
 						Vector3 up = player->GetUp();
@@ -266,7 +257,7 @@ namespace spades {
 							float localFireVibration = GetLocalFireVibration();
 							localFireVibration *= localFireVibration;
 
-							if(player->GetTool() == Player::ToolSpade) {
+							if (player->GetTool() == Player::ToolSpade) {
 								localFireVibration *= 0.4f;
 							}
 
@@ -281,16 +272,29 @@ namespace spades {
 							// sprint bob
 							{
 								float sp = SmoothStep(GetSprintState());
-								vibYaw += sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.01f * sp;
-								roll -= sinf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f) * 0.005f * (sp);
-								float p = cosf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f);
-								p = p * p; p *= p; p *= p;
+								vibYaw += sinf(player->GetWalkAnimationProgress() *
+								               static_cast<float>(M_PI) * 2.f) *
+								          0.01f * sp;
+								roll -= sinf(player->GetWalkAnimationProgress() *
+								             static_cast<float>(M_PI) * 2.f) *
+								        0.005f * (sp);
+								float p = cosf(player->GetWalkAnimationProgress() *
+								               static_cast<float>(M_PI) * 2.f);
+								p = p * p;
+								p *= p;
+								p *= p;
 								vibPitch += p * 0.01f * sp;
 
 								if (shakeLevel >= 2) {
-									vibYaw += coherentNoiseSamplers[0].Sample(player->GetWalkAnimationProgress() * 2.5f) * 0.005f * sp;
-									vibPitch += coherentNoiseSamplers[1].Sample(player->GetWalkAnimationProgress() * 2.5f) * 0.01f * sp;
-									roll += coherentNoiseSamplers[2].Sample(player->GetWalkAnimationProgress() * 2.5f) * 0.008f * sp;
+									vibYaw += coherentNoiseSamplers[0].Sample(
+									            player->GetWalkAnimationProgress() * 2.5f) *
+									          0.005f * sp;
+									vibPitch += coherentNoiseSamplers[1].Sample(
+									              player->GetWalkAnimationProgress() * 2.5f) *
+									            0.01f * sp;
+									roll += coherentNoiseSamplers[2].Sample(
+									          player->GetWalkAnimationProgress() * 2.5f) *
+									        0.008f * sp;
 
 									scale += sp * 0.1f;
 								}
@@ -299,10 +303,10 @@ namespace spades {
 
 						scale /= GetAimDownZoomScale();
 
-						def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
-						def.fovX = atanf(tanf(def.fovY * .5f) *
-										 renderer->ScreenWidth() /
-										 renderer->ScreenHeight()) * 2.f;
+						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
+						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
+						                 renderer->ScreenHeight()) *
+						           2.f;
 
 						// for 1st view, camera blur can be used
 						def.denyCameraBlur = false;
@@ -313,22 +317,21 @@ namespace spades {
 						def.depthOfFieldFocalLength = per * 13.f + .054f;
 
 						def.blurVignette = .0f;
-
 					}
 
 					// add vibration for both 1st/3rd view
 					{
 						// add grenade vibration
 						float grenVib = grenadeVibration;
-						if(grenVib > 0.f){
+						if (grenVib > 0.f) {
 							if (shakeLevel >= 1) {
 								grenVib *= 10.f;
-								if(grenVib > 1.f)
+								if (grenVib > 1.f)
 									grenVib = 1.f;
 								roll += (nextRandom() - nextRandom()) * 0.2f * grenVib;
 								vibPitch += (nextRandom() - nextRandom()) * 0.1f * grenVib;
 								vibYaw += (nextRandom() - nextRandom()) * 0.1f * grenVib;
-								scale -= (nextRandom()-nextRandom()) * 0.1f * grenVib;
+								scale -= (nextRandom() - nextRandom()) * 0.1f * grenVib;
 
 								def.radialBlur += grenVib * 0.8f;
 							}
@@ -337,16 +340,19 @@ namespace spades {
 					{
 						// add grenade vibration
 						float grenVib = grenadeVibrationSlow;
-						if(grenVib > 0.f){
+						if (grenVib > 0.f) {
 							if (shakeLevel >= 2) {
 								grenVib *= 4.f;
-								if(grenVib > 1.f)
+								if (grenVib > 1.f)
 									grenVib = 1.f;
 								grenVib *= grenVib;
 
-								roll += coherentNoiseSamplers[0].Sample(time * 8.f) * 0.2f * grenVib;
-								vibPitch += coherentNoiseSamplers[1].Sample(time * 12.f) * 0.1f * grenVib;
-								vibYaw += coherentNoiseSamplers[2].Sample(time * 11.f) * 0.1f * grenVib;
+								roll +=
+								  coherentNoiseSamplers[0].Sample(time * 8.f) * 0.2f * grenVib;
+								vibPitch +=
+								  coherentNoiseSamplers[1].Sample(time * 12.f) * 0.1f * grenVib;
+								vibYaw +=
+								  coherentNoiseSamplers[2].Sample(time * 11.f) * 0.1f * grenVib;
 							}
 						}
 					}
@@ -378,14 +384,12 @@ namespace spades {
 					}
 					{
 						float wTime = world->GetTime();
-						if(wTime < lastHurtTime + .15f &&
-						   wTime >= lastHurtTime){
+						if (wTime < lastHurtTime + .15f && wTime >= lastHurtTime) {
 							float per = 1.f - (wTime - lastHurtTime) / .15f;
 							per *= .5f - player->GetHealth() / 100.f * .3f;
 							def.blurVignette += per * 6.f;
 						}
-						if(wTime < lastHurtTime + .2f &&
-						   wTime >= lastHurtTime){
+						if (wTime < lastHurtTime + .2f && wTime >= lastHurtTime) {
 							float per = 1.f - (wTime - lastHurtTime) / .2f;
 							per *= .5f - player->GetHealth() / 100.f * .3f;
 							def.saturation *= std::max(0.f, 1.f - per * 4.f);
@@ -395,38 +399,38 @@ namespace spades {
 					def.zNear = 0.05f;
 
 					def.skipWorld = false;
-				}else{
+				} else {
 					def.viewOrigin = MakeVector3(256, 256, 4);
 					def.viewAxis[0] = MakeVector3(-1, 0, 0);
 					def.viewAxis[1] = MakeVector3(0, 1, 0);
 					def.viewAxis[2] = MakeVector3(0, 0, 1);
 
-					def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
-					def.fovX = atanf(tanf(def.fovY * .5f) *
-									 renderer->ScreenWidth() /
-									 renderer->ScreenHeight()) * 2.f;
+					def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
+					def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
+					                 renderer->ScreenHeight()) *
+					           2.f;
 
 					def.zNear = 0.05f;
 
 					def.skipWorld = false;
 				}
 
-			}else{
+			} else {
 				def.viewOrigin = MakeVector3(0, 0, 0);
 				def.viewAxis[0] = MakeVector3(1, 0, 0);
 				def.viewAxis[1] = MakeVector3(0, 0, -1);
 				def.viewAxis[2] = MakeVector3(0, 0, 1);
 
-				def.fovY = (float)cg_fov * static_cast<float>(M_PI) /180.f;
-				def.fovX = atanf(tanf(def.fovY * .5f) *
-								 renderer->ScreenWidth() /
-								 renderer->ScreenHeight()) * 2.f;
+				def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
+				def.fovX =
+				  atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() / renderer->ScreenHeight()) *
+				  2.f;
 
 				def.zNear = 0.05f;
 
 				def.skipWorld = true;
 
-				renderer->SetFogColor(MakeVector3(0,0,0));
+				renderer->SetFogColor(MakeVector3(0, 0, 0));
 			}
 
 			if (def.viewOrigin.z < 0.f) {
@@ -443,7 +447,7 @@ namespace spades {
 			if ((int)cg_manualFocus) {
 				// Depth of field is manually controlled
 				def.depthOfFieldNearBlurStrength = def.depthOfFieldFarBlurStrength =
-					0.5f * (float)cg_depthOfFieldAmount;
+				  0.5f * (float)cg_depthOfFieldAmount;
 				def.depthOfFieldFocalLength = focalLength;
 			} else {
 				def.depthOfFieldNearBlurStrength = cg_depthOfFieldAmount;
@@ -459,7 +463,7 @@ namespace spades {
 			IModel *model;
 			model = renderer->RegisterModel("Models/Weapons/Grenade/Grenade.kv6");
 
-			if(g->GetPosition().z > 63.f) {
+			if (g->GetPosition().z > 63.f) {
 				// work-around for water refraction problem
 				return;
 			}
@@ -472,17 +476,17 @@ namespace spades {
 			renderer->RenderModel(model, param);
 		}
 
-		void Client::AddDebugObjectToScene(const spades::OBB3 &obb, const Vector4& color) {
-			const Matrix4& mat = obb.m;
+		void Client::AddDebugObjectToScene(const spades::OBB3 &obb, const Vector4 &color) {
+			const Matrix4 &mat = obb.m;
 			Vector3 v[2][2][2];
-			v[0][0][0] = (mat * MakeVector3(0,0,0)).GetXYZ();
-			v[0][0][1] = (mat * MakeVector3(0,0,1)).GetXYZ();
-			v[0][1][0] = (mat * MakeVector3(0,1,0)).GetXYZ();
-			v[0][1][1] = (mat * MakeVector3(0,1,1)).GetXYZ();
-			v[1][0][0] = (mat * MakeVector3(1,0,0)).GetXYZ();
-			v[1][0][1] = (mat * MakeVector3(1,0,1)).GetXYZ();
-			v[1][1][0] = (mat * MakeVector3(1,1,0)).GetXYZ();
-			v[1][1][1] = (mat * MakeVector3(1,1,1)).GetXYZ();
+			v[0][0][0] = (mat * MakeVector3(0, 0, 0)).GetXYZ();
+			v[0][0][1] = (mat * MakeVector3(0, 0, 1)).GetXYZ();
+			v[0][1][0] = (mat * MakeVector3(0, 1, 0)).GetXYZ();
+			v[0][1][1] = (mat * MakeVector3(0, 1, 1)).GetXYZ();
+			v[1][0][0] = (mat * MakeVector3(1, 0, 0)).GetXYZ();
+			v[1][0][1] = (mat * MakeVector3(1, 0, 1)).GetXYZ();
+			v[1][1][0] = (mat * MakeVector3(1, 1, 0)).GetXYZ();
+			v[1][1][1] = (mat * MakeVector3(1, 1, 1)).GetXYZ();
 
 			renderer->AddDebugLine(v[0][0][0], v[1][0][0], color);
 			renderer->AddDebugLine(v[0][0][1], v[1][0][1], color);
@@ -506,12 +510,10 @@ namespace spades {
 			int tId;
 			IModel *base = renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
 			IModel *intel = renderer->RegisterModel("Models/MapObjects/Intel.kv6");
-			for(tId = 0; tId < 2; tId++){
-				CTFGameMode::Team& team = mode->GetTeam(tId);
+			for (tId = 0; tId < 2; tId++) {
+				CTFGameMode::Team &team = mode->GetTeam(tId);
 				IntVector3 col = world->GetTeam(tId).color;
-				Vector3 color = {
-					col.x / 255.f, col.y / 255.f, col.z / 255.f
-				};
+				Vector3 color = {col.x / 255.f, col.y / 255.f, col.z / 255.f};
 
 				ModelRenderParam param;
 				param.customColor = color;
@@ -522,7 +524,7 @@ namespace spades {
 				renderer->RenderModel(base, param);
 
 				// draw flag
-				if(!mode->GetTeam(1-tId).hasIntel){
+				if (!mode->GetTeam(1 - tId).hasIntel) {
 					param.matrix = Matrix4::Translate(team.flagPos);
 					param.matrix = param.matrix * Matrix4::Scale(.1f);
 					renderer->RenderModel(intel, param);
@@ -536,17 +538,15 @@ namespace spades {
 			int tId;
 			IModel *base = renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
 			int cnt = mode->GetNumTerritories();
-			for(tId = 0; tId < cnt; tId++){
+			for (tId = 0; tId < cnt; tId++) {
 				TCGameMode::Territory *t = mode->GetTerritory(tId);
 				IntVector3 col;
-				if(t->ownerTeamId == 2){
+				if (t->ownerTeamId == 2) {
 					col = IntVector3::Make(255, 255, 255);
-				}else{
+				} else {
 					col = world->GetTeam(t->ownerTeamId).color;
 				}
-				Vector3 color = {
-					col.x / 255.f, col.y / 255.f, col.z / 255.f
-				};
+				Vector3 color = {col.x / 255.f, col.y / 255.f, col.z / 255.f};
 
 				ModelRenderParam param;
 				param.customColor = color;
@@ -555,174 +555,183 @@ namespace spades {
 				param.matrix = Matrix4::Translate(t->pos);
 				param.matrix = param.matrix * Matrix4::Scale(.3f);
 				renderer->RenderModel(base, param);
-
 			}
 		}
 
-		void Client::DrawScene(){
+		void Client::DrawScene() {
 			SPADES_MARK_FUNCTION();
 
 			renderer->StartScene(lastSceneDef);
 
-			if(world){
+			if (world) {
 				Player *p = world->GetLocalPlayer();
 
-				for(size_t i = 0; i < world->GetNumPlayerSlots(); i++)
-					if(world->GetPlayer(static_cast<unsigned int>(i))){
+				for (size_t i = 0; i < world->GetNumPlayerSlots(); i++)
+					if (world->GetPlayer(static_cast<unsigned int>(i))) {
 						SPAssert(clientPlayers[i]);
 						clientPlayers[i]->AddToScene();
 					}
 				std::vector<Grenade *> nades = world->GetAllGrenades();
-				for(size_t i = 0; i < nades.size(); i++){
+				for (size_t i = 0; i < nades.size(); i++) {
 					AddGrenadeToScene(nades[i]);
 				}
 
 				{
-					for(auto& c: corpses){
+					for (auto &c : corpses) {
 						Vector3 center = c->GetCenter();
-						if((center - lastSceneDef.viewOrigin).GetPoweredLength() > 150.f * 150.f)
+						if ((center - lastSceneDef.viewOrigin).GetPoweredLength() > 150.f * 150.f)
 							continue;
 						c->AddToScene();
 					}
 				}
 
-				if( IGameMode::m_CTF == world->GetMode()->ModeType() ){
+				if (IGameMode::m_CTF == world->GetMode()->ModeType()) {
 					DrawCTFObjects();
-				} else if( IGameMode::m_TC == world->GetMode()->ModeType() ){
+				} else if (IGameMode::m_TC == world->GetMode()->ModeType()) {
 					DrawTCObjects();
 				}
 
 				{
-					for(auto& ent: localEntities){
+					for (auto &ent : localEntities) {
 						ent->Render3D();
 					}
 				}
 
 				// draw block cursor
 				// FIXME: don't use debug line
-				if(p){
-					if(p->IsReadyToUseTool() &&
-					   p->GetTool() == Player::ToolBlock &&
-					   p->IsAlive()){
+				if (p) {
+					if (p->IsReadyToUseTool() && p->GetTool() == Player::ToolBlock &&
+					    p->IsAlive()) {
 						std::vector<IntVector3> blocks;
-						if(p->IsBlockCursorDragging()){
-							blocks = std::move
-							(world->CubeLine(p->GetBlockCursorDragPos(),
-											 p->GetBlockCursorPos(),
-											 256));
-						}else{
+						if (p->IsBlockCursorDragging()) {
+							blocks = std::move(world->CubeLine(p->GetBlockCursorDragPos(),
+							                                   p->GetBlockCursorPos(), 256));
+						} else {
 							blocks.push_back(p->GetBlockCursorPos());
 						}
 
 						bool active = p->IsBlockCursorActive();
 
-						Vector4 color = {1,1,1,1};
-						if(!active)
-							color = Vector4(1,1,0,1);
-						if((int)blocks.size() > p->GetNumBlocks())
-							color = MakeVector4(1,0,0,1);
-						if(!active)
+						Vector4 color = {1, 1, 1, 1};
+						if (!active)
+							color = Vector4(1, 1, 0, 1);
+						if ((int)blocks.size() > p->GetNumBlocks())
+							color = MakeVector4(1, 0, 0, 1);
+						if (!active)
 							color.w *= 0.5f;
 
-						for(size_t i = 0; i < blocks.size(); i++){
-							IntVector3& v = blocks[i];
+						for (size_t i = 0; i < blocks.size(); i++) {
+							IntVector3 &v = blocks[i];
 
-							if(active) {
-
-								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z),
-													   MakeVector3(v.x+1, v.y, v.z),
-													   color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y+1, v.z),
-													   MakeVector3(v.x+1, v.y+1, v.z),
-													   color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z+1),
-													   MakeVector3(v.x+1, v.y, v.z+1),
-													   color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y+1, v.z+1),
-													   MakeVector3(v.x+1, v.y+1, v.z+1),
-													   color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z),
-													   MakeVector3(v.x+1, v.y, v.z),
-													   color);
+							if (active) {
 
 								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z),
-													   MakeVector3(v.x, v.y+1, v.z),
-													   color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z+1),
-													   MakeVector3(v.x, v.y+1, v.z+1),
-													   color);
-								renderer->AddDebugLine(MakeVector3(v.x+1, v.y, v.z),
-													   MakeVector3(v.x+1, v.y+1, v.z),
-													   color);
-								renderer->AddDebugLine(MakeVector3(v.x+1, v.y, v.z+1),
-													   MakeVector3(v.x+1, v.y+1, v.z+1),
-													   color);
+								                       MakeVector3(v.x + 1, v.y, v.z), color);
+								renderer->AddDebugLine(MakeVector3(v.x, v.y + 1, v.z),
+								                       MakeVector3(v.x + 1, v.y + 1, v.z), color);
+								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z + 1),
+								                       MakeVector3(v.x + 1, v.y, v.z + 1), color);
+								renderer->AddDebugLine(MakeVector3(v.x, v.y + 1, v.z + 1),
+								                       MakeVector3(v.x + 1, v.y + 1, v.z + 1),
+								                       color);
+								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z),
+								                       MakeVector3(v.x + 1, v.y, v.z), color);
 
 								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z),
-													   MakeVector3(v.x, v.y, v.z+1),
-													   color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y+1, v.z),
-													   MakeVector3(v.x, v.y+1, v.z+1),
-													   color);
-								renderer->AddDebugLine(MakeVector3(v.x+1, v.y, v.z),
-													   MakeVector3(v.x+1, v.y, v.z+1),
-													   color);
-								renderer->AddDebugLine(MakeVector3(v.x+1, v.y+1, v.z),
-													   MakeVector3(v.x+1, v.y+1, v.z+1),
-													   color);
-							}else{
+								                       MakeVector3(v.x, v.y + 1, v.z), color);
+								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z + 1),
+								                       MakeVector3(v.x, v.y + 1, v.z + 1), color);
+								renderer->AddDebugLine(MakeVector3(v.x + 1, v.y, v.z),
+								                       MakeVector3(v.x + 1, v.y + 1, v.z), color);
+								renderer->AddDebugLine(MakeVector3(v.x + 1, v.y, v.z + 1),
+								                       MakeVector3(v.x + 1, v.y + 1, v.z + 1),
+								                       color);
+
+								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z),
+								                       MakeVector3(v.x, v.y, v.z + 1), color);
+								renderer->AddDebugLine(MakeVector3(v.x, v.y + 1, v.z),
+								                       MakeVector3(v.x, v.y + 1, v.z + 1), color);
+								renderer->AddDebugLine(MakeVector3(v.x + 1, v.y, v.z),
+								                       MakeVector3(v.x + 1, v.y, v.z + 1), color);
+								renderer->AddDebugLine(MakeVector3(v.x + 1, v.y + 1, v.z),
+								                       MakeVector3(v.x + 1, v.y + 1, v.z + 1),
+								                       color);
+							} else {
 								// not active
 
 								const float ln = 0.1f;
 								{
 									float xx = v.x, yy = v.y, zz = v.z;
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx+ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy+ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy, zz+ln), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx + ln, yy, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy + ln, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy, zz + ln), color);
 								}
 								{
 									float xx = v.x + 1, yy = v.y, zz = v.z;
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx-ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy+ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy, zz+ln), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx - ln, yy, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy + ln, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy, zz + ln), color);
 								}
 								{
 									float xx = v.x, yy = v.y + 1, zz = v.z;
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx+ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy-ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy, zz+ln), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx + ln, yy, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy - ln, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy, zz + ln), color);
 								}
 								{
 									float xx = v.x + 1, yy = v.y + 1, zz = v.z;
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx-ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy-ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy, zz+ln), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx - ln, yy, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy - ln, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy, zz + ln), color);
 								}
 								{
 									float xx = v.x, yy = v.y, zz = v.z + 1;
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx+ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy+ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy, zz-ln), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx + ln, yy, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy + ln, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy, zz - ln), color);
 								}
 								{
 									float xx = v.x + 1, yy = v.y, zz = v.z + 1;
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx-ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy+ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy, zz-ln), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx - ln, yy, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy + ln, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy, zz - ln), color);
 								}
 								{
 									float xx = v.x, yy = v.y + 1, zz = v.z + 1;
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx+ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy-ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy, zz-ln), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx + ln, yy, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy - ln, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy, zz - ln), color);
 								}
 								{
 									float xx = v.x + 1, yy = v.y + 1, zz = v.z + 1;
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx-ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy-ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz), Vector3(xx, yy, zz-ln), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx - ln, yy, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy - ln, zz), color);
+									renderer->AddDebugLine(Vector3(xx, yy, zz),
+									                       Vector3(xx, yy, zz - ln), color);
 								}
-
 							}
 							// --- one block drawn
 						} // end for
@@ -731,7 +740,7 @@ namespace spades {
 				}
 			}
 
-			for(size_t i = 0; i < flashDlights.size(); i++)
+			for (size_t i = 0; i < flashDlights.size(); i++)
 				renderer->AddLight(flashDlights[i]);
 			flashDlightsOld.clear();
 			flashDlightsOld.swap(flashDlights);
@@ -740,25 +749,25 @@ namespace spades {
 			// FIXME: don't use debug line
 			{
 				hitTag_t tag = hit_None;
-				Player *hottracked = HotTrackedPlayer( &tag );
-				if(hottracked){
+				Player *hottracked = HotTrackedPlayer(&tag);
+				if (hottracked) {
 					IntVector3 col = world->GetTeam(hottracked->GetTeamId()).color;
-					Vector4 color = Vector4::Make( col.x / 255.f, col.y / 255.f, col.z / 255.f, 1.f );
-					Vector4 color2 = Vector4::Make( 1, 1, 1, 1);
+					Vector4 color = Vector4::Make(col.x / 255.f, col.y / 255.f, col.z / 255.f, 1.f);
+					Vector4 color2 = Vector4::Make(1, 1, 1, 1);
 
 					Player::HitBoxes hb = hottracked->GetHitBoxes();
-					AddDebugObjectToScene(hb.head, (tag & hit_Head) ? color2 : color );
-					AddDebugObjectToScene(hb.torso, (tag & hit_Torso) ? color2 : color );
-					AddDebugObjectToScene(hb.limbs[0], (tag & hit_Legs) ? color2 : color );
-					AddDebugObjectToScene(hb.limbs[1], (tag & hit_Legs) ? color2 : color );
-					AddDebugObjectToScene(hb.limbs[2], (tag & hit_Arms) ? color2 : color );
+					AddDebugObjectToScene(hb.head, (tag & hit_Head) ? color2 : color);
+					AddDebugObjectToScene(hb.torso, (tag & hit_Torso) ? color2 : color);
+					AddDebugObjectToScene(hb.limbs[0], (tag & hit_Legs) ? color2 : color);
+					AddDebugObjectToScene(hb.limbs[1], (tag & hit_Legs) ? color2 : color);
+					AddDebugObjectToScene(hb.limbs[2], (tag & hit_Arms) ? color2 : color);
 				}
 			}
 
 			renderer->EndScene();
 		}
 
-		Vector3 Client::Project(spades::Vector3 v){
+		Vector3 Client::Project(spades::Vector3 v) {
 			v -= lastSceneDef.viewOrigin;
 
 			// transform to NDC
@@ -779,6 +788,5 @@ namespace spades {
 
 			return v2;
 		}
-
 	}
 }
