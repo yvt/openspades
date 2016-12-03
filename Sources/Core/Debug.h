@@ -81,7 +81,12 @@ namespace spades {
 		std::string BacktraceRecordToString(const BacktraceRecord &);
 	}
 	void StartLog();
-	void LogMessage(const char *file, int line, const char *format, ...);
+
+	void LogMessage(const char *file, int line, const char *format, ...)
+#ifdef __GNUC__
+	  __attribute__((format(printf, 3, 4)))
+#endif
+	  ;
 }
 
 #ifdef _MSC_VER

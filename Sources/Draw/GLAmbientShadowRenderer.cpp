@@ -89,7 +89,7 @@ namespace spades {
 						c.cz = z;
 					}
 
-			SPLog("Chunk buffer allocated (%d bytes)", sizeof(Chunk) * chunkW * chunkH * chunkD);
+			SPLog("Chunk buffer allocated (%d bytes)", (int) sizeof(Chunk) * chunkW * chunkH * chunkD);
 
 			// make texture
 			texture = device->GenTexture();

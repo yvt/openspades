@@ -1186,7 +1186,7 @@ namespace spades {
 			if (cat == nullptr) {
 				if (!currentLocaleRegion.empty()) {
 					SPLog("Catalog file for the locale '%s' was not found. (domain='%s')",
-					      domainName.c_str());
+					      currentLocaleRegion.c_str(), domainName.c_str());
 				}
 				SPLog("Using the default locale. (domain='%s')", domainName.c_str());
 			}
