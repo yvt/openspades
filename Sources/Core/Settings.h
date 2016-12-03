@@ -45,7 +45,6 @@ namespace spades {
 		const std::string defaultValue;
 		const SettingItemFlags flags;
 
-		SettingItemDescriptor() = default;
 		SettingItemDescriptor(const std::string &defaultValue = std::string(),
 		                      SettingItemFlags flags = SettingItemFlags::None)
 		    : defaultValue(defaultValue), flags(flags) {}

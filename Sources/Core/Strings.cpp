@@ -203,7 +203,7 @@ namespace spades {
 		}
 
 		template <class... T>
-		[[noreturn]] void RaiseSyntaxErrorAtToken(StandardTokenizer::Iterator &it,
+		void RaiseSyntaxErrorAtToken [[noreturn]] (StandardTokenizer::Iterator &it,
 		                                          const std::string &format, T &&... args) {
 			StandardTokenizer &tokenizer = it.GetTokenizer();
 			const char *code = tokenizer.GetString();
