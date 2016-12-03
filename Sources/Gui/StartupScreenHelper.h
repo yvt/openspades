@@ -24,11 +24,12 @@
 #include <map>
 #include <vector>
 
-#include <AngelScript/addons/scriptarray.h>
 #include <Core/Math.h>
 #include <Core/Mutex.h>
 #include <Core/RefCountedObject.h>
 #include <ScriptBindings/ScriptManager.h>
+
+#include <AngelScript/addons/scriptarray.h>
 
 namespace spades {
 	class Serveritem;
