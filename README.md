@@ -100,8 +100,8 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 ### On Windows (with Visual Studio)
 1. Get the required software.
   * CMake 2.8+
-  * *Visual Studio 2013 Express* or *Visual Studio 2015* 
-    * VS2015 in currently in experimental support, but should work fine
+  * *Visual Studio 2015* 
+    * VS2013 is no longer supported, but might work
 2. Grab the source code:
   * From a release: https://github.com/yvt/openspades/releases
   * Latest development version (0.1.0): https://github.com/yvt/openspades/archive/master.zip
