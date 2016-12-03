@@ -97,6 +97,7 @@ namespace spades {
 		      lastPosSentTime(0.f),
 		      worldSubFrame(0.f),
 		      grenadeVibration(0.f),
+			  grenadeVibrationSlow(0.f),
 		      lastMyCorpse(nullptr),
 		      hasLastTool(false),
 
