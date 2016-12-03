@@ -1432,7 +1432,7 @@ msgstr "Idioma"
 #: ../../Scripts/Gui/StartupScreen.as:1657
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
-msgstr "Desconhecido {{0}}"
+msgstr "Desconhecido ({0})"
 
 #: ../../Scripts/Gui/StartupScreen.as:1659
 #: ../../Scripts/Gui/StartupScreen.as:1673
