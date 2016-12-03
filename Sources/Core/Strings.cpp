@@ -1125,9 +1125,7 @@ namespace spades {
 
 		class CatalogCacheInvalidator : public ISettingItemListener {
 		public:
-			void SettingChanged(const std::string &) override {
-				LoadCurrentLocale();
-			}
+			void SettingChanged(const std::string &) override { LoadCurrentLocale(); }
 		};
 
 		std::unique_ptr<CatalogCacheInvalidator> invalidator;
