@@ -19,13 +19,13 @@
  */
 
 #include "Corpse.h"
+#include "../Core/Debug.h"
+#include "../Core/Settings.h"
 #include "GameMap.h"
+#include "IModel.h"
 #include "IRenderer.h"
 #include "Player.h"
 #include "World.h"
-#include "IModel.h"
-#include "../Core/Debug.h"
-#include "../Core/Settings.h"
 
 using namespace std;
 
@@ -33,114 +33,80 @@ DEFINE_SPADES_SETTING(r_corpseLineCollision, "1");
 
 namespace spades {
 	namespace client {
-		Corpse::Corpse(IRenderer *renderer,
-					   GameMap *map,
-					   Player *p):
-		renderer(renderer), map(map) {
+		Corpse::Corpse(IRenderer *renderer, GameMap *map, Player *p)
+		    : renderer(renderer), map(map) {
 			SPADES_MARK_FUNCTION();
 
 			IntVector3 col = p->GetWorld()->GetTeam(p->GetTeamId()).color;
-			color = MakeVector3(col.x / 255.f,
-								col.y / 255.f,
-								col.z / 255.f);
+			color = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 
 			bool crouch = p->GetInput().crouch;
 			Vector3 front = p->GetFront();
 
 			float yaw = atan2(front.y, front.x) + static_cast<float>(M_PI) * .5f;
-			//float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));
+			// float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));
 
 			// lower axis
 			Matrix4 lower = Matrix4::Translate(p->GetOrigin());
-			lower = lower * Matrix4::Rotate(MakeVector3(0,0,1),
-											yaw);
+			lower = lower * Matrix4::Rotate(MakeVector3(0, 0, 1), yaw);
 
 			Matrix4 torso;
 
-			if(crouch){
+			if (crouch) {
 				lower = lower * Matrix4::Translate(0, 0, -0.4f);
 				torso = lower * Matrix4::Translate(0, 0, -0.3f);
 
-				SetNode(Torso1,
-						torso*MakeVector3(0.4f, -.15f, 0.1f));
-				SetNode(Torso2,
-						torso*MakeVector3(-0.4f, -.15f, 0.1f));
-				SetNode(Torso3,
-						torso*MakeVector3(-0.4f, .8f, 0.7f));
-				SetNode(Torso4,
-						torso*MakeVector3(0.4f, .8f, 0.7f));
+				SetNode(Torso1, torso * MakeVector3(0.4f, -.15f, 0.1f));
+				SetNode(Torso2, torso * MakeVector3(-0.4f, -.15f, 0.1f));
+				SetNode(Torso3, torso * MakeVector3(-0.4f, .8f, 0.7f));
+				SetNode(Torso4, torso * MakeVector3(0.4f, .8f, 0.7f));
 
-				SetNode(Leg1,
-						lower*MakeVector3(-0.4f, .1f, 1.f));
-				SetNode(Leg2,
-						lower*MakeVector3(0.4f, .1f, 1.f));
+				SetNode(Leg1, lower * MakeVector3(-0.4f, .1f, 1.f));
+				SetNode(Leg2, lower * MakeVector3(0.4f, .1f, 1.f));
 
-				SetNode(Arm1,
-						torso*MakeVector3(0.2f, -.4f, .2f));
-				SetNode(Arm2,
-						torso*MakeVector3(-0.2f, -.4f, .2f));
+				SetNode(Arm1, torso * MakeVector3(0.2f, -.4f, .2f));
+				SetNode(Arm2, torso * MakeVector3(-0.2f, -.4f, .2f));
 
-			}else{
+			} else {
 				torso = lower * Matrix4::Translate(0, 0, -1.1f);
 
-				SetNode(Torso1,
-						torso*MakeVector3(0.4f, 0.f, 0.1f));
-				SetNode(Torso2,
-						torso*MakeVector3(-0.4f, 0.f, 0.1f));
-				SetNode(Torso3,
-						torso*MakeVector3(-0.4f, .0f, 1.f));
-				SetNode(Torso4,
-						torso*MakeVector3(0.4f, .0f, 1.f));
+				SetNode(Torso1, torso * MakeVector3(0.4f, 0.f, 0.1f));
+				SetNode(Torso2, torso * MakeVector3(-0.4f, 0.f, 0.1f));
+				SetNode(Torso3, torso * MakeVector3(-0.4f, .0f, 1.f));
+				SetNode(Torso4, torso * MakeVector3(0.4f, .0f, 1.f));
 
-				SetNode(Leg1,
-						lower*MakeVector3(-0.4f, .0f, 1.f));
-				SetNode(Leg2,
-						lower*MakeVector3(0.4f, .0f, 1.f));
+				SetNode(Leg1, lower * MakeVector3(-0.4f, .0f, 1.f));
+				SetNode(Leg2, lower * MakeVector3(0.4f, .0f, 1.f));
 
-				SetNode(Arm1,
-						torso*MakeVector3(0.2f, -.4f, .2f));
-				SetNode(Arm2,
-						torso*MakeVector3(-0.2f, -.4f, .2f));
-
+				SetNode(Arm1, torso * MakeVector3(0.2f, -.4f, .2f));
+				SetNode(Arm2, torso * MakeVector3(-0.2f, -.4f, .2f));
 			}
 
-			SetNode(Head, (nodes[Torso1].pos + nodes[Torso2].pos)
-					* .5f + MakeVector3(0,0,-0.6f));
-
-
+			SetNode(Head, (nodes[Torso1].pos + nodes[Torso2].pos) * .5f + MakeVector3(0, 0, -0.6f));
 		}
 
-		static float VelNoise() {
-			return (GetRandom() - GetRandom()) * 2.f;
-		}
+		static float VelNoise() { return (GetRandom() - GetRandom()) * 2.f; }
 
-		void Corpse::SetNode(NodeType n, spades::Vector3 v){
-			SPAssert(n >= 0); SPAssert(n < NodeCount);
+		void Corpse::SetNode(NodeType n, spades::Vector3 v) {
+			SPAssert(n >= 0);
+			SPAssert(n < NodeCount);
 			nodes[n].pos = v;
-			nodes[n].vel = MakeVector3(VelNoise(),
-									   VelNoise(),
-									   0.f);
+			nodes[n].vel = MakeVector3(VelNoise(), VelNoise(), 0.f);
 			nodes[n].lastPos = v;
-			nodes[n].lastForce = MakeVector3(0, 0,0);
-
+			nodes[n].lastForce = MakeVector3(0, 0, 0);
 		}
-		void Corpse::SetNode(NodeType n, spades::Vector4 v){
-			SetNode(n, v.GetXYZ());
-		}
+		void Corpse::SetNode(NodeType n, spades::Vector4 v) { SetNode(n, v.GetXYZ()); }
 
-		Corpse::~Corpse(){
+		Corpse::~Corpse() {}
 
-		}
-
-		void Corpse::Spring(NodeType n1,
-							NodeType n2,
-							float distance,
-							float dt){
+		void Corpse::Spring(NodeType n1, NodeType n2, float distance, float dt) {
 			SPADES_MARK_FUNCTION_DEBUG();
-			SPAssert(n1 >= 0); SPAssert(n1 < NodeCount);
-			SPAssert(n2 >= 0); SPAssert(n2 < NodeCount);
-			Node& a = nodes[n1];
-			Node& b = nodes[n2];
+			SPAssert(n1 >= 0);
+			SPAssert(n1 < NodeCount);
+			SPAssert(n2 >= 0);
+			SPAssert(n2 < NodeCount);
+			Node &a = nodes[n1];
+			Node &b = nodes[n2];
 			Vector3 diff = b.pos - a.pos;
 			float dist = diff.GetLength();
 			Vector3 force = diff.Normalize() * (distance - dist);
@@ -156,20 +122,18 @@ namespace spades {
 			float dump = 1.f - powf(.1f, dt);
 			a.vel += (velMid - a.vel) * dump;
 			b.vel += (velMid - b.vel) * dump;
-
 		}
-		void Corpse::Spring(NodeType n1a,
-							NodeType n1b,
-							 NodeType n2,
-							 float distance,
-							 float dt){
+		void Corpse::Spring(NodeType n1a, NodeType n1b, NodeType n2, float distance, float dt) {
 			SPADES_MARK_FUNCTION_DEBUG();
-			SPAssert(n1a >= 0); SPAssert(n1a < NodeCount);
-			SPAssert(n1b >= 0); SPAssert(n1b < NodeCount);
-			SPAssert(n2 >= 0); SPAssert(n2 < NodeCount);
-			Node& x = nodes[n1a];
-			Node& y = nodes[n1b];
-			Node& b = nodes[n2];
+			SPAssert(n1a >= 0);
+			SPAssert(n1a < NodeCount);
+			SPAssert(n1b >= 0);
+			SPAssert(n1b < NodeCount);
+			SPAssert(n2 >= 0);
+			SPAssert(n2 < NodeCount);
+			Node &x = nodes[n1a];
+			Node &y = nodes[n1b];
+			Node &b = nodes[n2];
 			Vector3 diff = b.pos - (x.pos + y.pos) * .5f;
 			float dist = diff.GetLength();
 			Vector3 force = diff.Normalize() * (distance - dist);
@@ -185,37 +149,34 @@ namespace spades {
 			x.vel += (velMid - x.vel) * dump;
 			y.vel += (velMid - y.vel) * dump;
 			b.vel += (velMid - b.vel) * dump;
-
 		}
 
-		static float MyACos(float v){
+		static float MyACos(float v) {
 			SPAssert(!isnan(v));
-			if(v >= 1.f) return 0.f;
-			if(v <= -1.f) return static_cast<float>(M_PI);
+			if (v >= 1.f)
+				return 0.f;
+			if (v <= -1.f)
+				return static_cast<float>(M_PI);
 			float vv = acosf(v);
-			if(isnan(vv)){
+			if (isnan(vv)) {
 				vv = acosf(v * .9999f);
 			}
 			SPAssert(!isnan(vv));
 			return vv;
 		}
 
-		void Corpse::AngleSpring(NodeType base,
-								 NodeType n1id,
-								 NodeType n2id,
-								 float minDot,
-								 float maxDot,
-								 float dt){
-			Node& nBase = nodes[base];
-			Node& n1 = nodes[n1id];
-			Node& n2 = nodes[n2id];
+		void Corpse::AngleSpring(NodeType base, NodeType n1id, NodeType n2id, float minDot,
+		                         float maxDot, float dt) {
+			Node &nBase = nodes[base];
+			Node &n1 = nodes[n1id];
+			Node &n2 = nodes[n2id];
 			Vector3 d1 = n1.pos - nBase.pos;
 			Vector3 d2 = n2.pos - nBase.pos;
 			float ln1 = d1.GetLength();
 			float ln2 = d2.GetLength();
 			float dot = Vector3::Dot(d1, d2) / (ln1 * ln2 + 0.0000001f);
 
-			if(dot >= minDot && dot <= maxDot)
+			if (dot >= minDot && dot <= maxDot)
 				return;
 
 			Vector3 diff = n2.pos - n1.pos;
@@ -227,13 +188,13 @@ namespace spades {
 			Vector3 a2 = Vector3::Cross(d2, diff);
 			a2 = Vector3::Cross(d2, a2).Normalize();
 
-			//a1=-a1; a2=-a2;
-			//a1 = -a1;
+			// a1=-a1; a2=-a2;
+			// a1 = -a1;
 			a2 = -a2;
 
-			if(dot > maxDot){
+			if (dot > maxDot) {
 				strength = MyACos(dot) - MyACos(maxDot);
-			}else if(dot < minDot){
+			} else if (dot < minDot) {
 				strength = MyACos(dot) - MyACos(minDot);
 			}
 
@@ -257,30 +218,26 @@ namespace spades {
 			float nd = Vector3::Dot(d1, d2) / (d1.GetLength() * d2.GetLength());
 
 			if(dot > maxDot){
-				if(nd < dot)
-					printf("GOOD %f -> %f\n", dot, nd);
-				else
-					printf("BAD %f -> %f\n", dot, nd);
+			    if(nd < dot)
+			        printf("GOOD %f -> %f\n", dot, nd);
+			    else
+			        printf("BAD %f -> %f\n", dot, nd);
 			}else{
-				if(nd > dot)
-					printf("GOOD %f -> %f\n", dot, nd);
-				else
-					printf("BAD %f -> %f\n", dot, nd);
+			    if(nd > dot)
+			        printf("GOOD %f -> %f\n", dot, nd);
+			    else
+			        printf("BAD %f -> %f\n", dot, nd);
 			}*/
 		}
-		void Corpse::AngleSpring(NodeType n1id,
-								 NodeType n2id,
-								 Vector3 dir,
-								 float minDot,
-								 float maxDot,
-								 float dt){
-			Node& n1 = nodes[n1id];
-			Node& n2 = nodes[n2id];
+		void Corpse::AngleSpring(NodeType n1id, NodeType n2id, Vector3 dir, float minDot,
+		                         float maxDot, float dt) {
+			Node &n1 = nodes[n1id];
+			Node &n2 = nodes[n2id];
 			Vector3 diff = n2.pos - n1.pos;
 			float ln1 = diff.GetLength();
 			float dot = Vector3::Dot(diff, dir) / (ln1 + 0.000000001f);
 
-			if(dot >= minDot && dot <= maxDot)
+			if (dot >= minDot && dot <= maxDot)
 				return;
 
 			float strength = 0.f;
@@ -289,12 +246,12 @@ namespace spades {
 			a1 = Vector3::Cross(diff, a1).Normalize();
 
 			Vector3 a2 = -a1;
-			//a1=-a1; a2=-a2;
-			//a1 = -a1;
+			// a1=-a1; a2=-a2;
+			// a1 = -a1;
 
-			if(dot > maxDot){
+			if (dot > maxDot) {
 				strength = MyACos(dot) - MyACos(maxDot);
-			}else if(dot < minDot){
+			} else if (dot < minDot) {
 				strength = MyACos(dot) - MyACos(minDot);
 			}
 
@@ -308,7 +265,7 @@ namespace spades {
 
 			n2.vel += a1;
 			n1.vel += a2;
-			//nBase.vel -= a1 + a2;
+			// nBase.vel -= a1 + a2;
 
 			/*
 			 d1 += a1 * 0.01;
@@ -328,88 +285,82 @@ namespace spades {
 			 }*/
 		}
 
-		static float fractf(float v){
-			return v - floorf(v);
-		}
+		static float fractf(float v) { return v - floorf(v); }
 
-		static void CheckEscape(GameMap *map,
-								IntVector3 hitBlock,
-								IntVector3 a, IntVector3 b,
-								IntVector3 dir,
-								float& bestDist,
-								IntVector3& bestDir) {
+		static void CheckEscape(GameMap *map, IntVector3 hitBlock, IntVector3 a, IntVector3 b,
+		                        IntVector3 dir, float &bestDist, IntVector3 &bestDir) {
 			hitBlock += dir;
 			IntVector3 aa = a + dir;
 			IntVector3 bb = b + dir;
-			if(map->IsSolidWrapped(hitBlock.x, hitBlock.y, hitBlock.z))
+			if (map->IsSolidWrapped(hitBlock.x, hitBlock.y, hitBlock.z))
 				return;
-			if(map->IsSolidWrapped(aa.x, aa.y, aa.z))
+			if (map->IsSolidWrapped(aa.x, aa.y, aa.z))
 				return;
-			if(map->IsSolidWrapped(bb.x, bb.y, bb.z))
+			if (map->IsSolidWrapped(bb.x, bb.y, bb.z))
 				return;
 			float dist;
-			if(dir.x == 1) {
+			if (dir.x == 1) {
 				dist = 1.f - fractf(a.x);
 				dist += 1.f - fractf(b.x);
-			}else if(dir.x == -1) {
+			} else if (dir.x == -1) {
 				dist = fractf(a.x);
 				dist += fractf(b.x);
-			}else if(dir.y == 1) {
+			} else if (dir.y == 1) {
 				dist = 1.f - fractf(a.y);
 				dist += 1.f - fractf(b.y);
-			}else if(dir.y == -1) {
+			} else if (dir.y == -1) {
 				dist = fractf(a.y);
 				dist += fractf(b.y);
-			}else if(dir.z == 1) {
+			} else if (dir.z == 1) {
 				dist = 1.f - fractf(a.z);
 				dist += 1.f - fractf(b.z);
-			}else if(dir.z == -1) {
+			} else if (dir.z == -1) {
 				dist = fractf(a.z);
 				dist += fractf(b.z);
-			}else{
+			} else {
 				SPAssert(false);
 				return;
 			}
 
-			if(dist < bestDist){
+			if (dist < bestDist) {
 				bestDist = dist;
 				bestDir = dir;
 			}
 		}
 
-		void Corpse::LineCollision(NodeType a, NodeType b, float dt){
-			if(!r_corpseLineCollision)
+		void Corpse::LineCollision(NodeType a, NodeType b, float dt) {
+			if (!r_corpseLineCollision)
 				return;
-			Node& n1 = nodes[a];
-			Node& n2 = nodes[b];
+			Node &n1 = nodes[a];
+			Node &n2 = nodes[b];
 
 			IntVector3 hitBlock;
 
-			if(map->CastRay(n1.lastPos, n2.lastPos, 16.f, hitBlock)) {
+			if (map->CastRay(n1.lastPos, n2.lastPos, 16.f, hitBlock)) {
 				GameMap::RayCastResult res1 = map->CastRay2(n1.lastPos, n2.lastPos - n1.lastPos, 8);
 				GameMap::RayCastResult res2 = map->CastRay2(n2.lastPos, n1.lastPos - n2.lastPos, 8);
 
-				if(!res1.hit) return;
-				if(!res2.hit) return;
-				if(res1.startSolid || res2.startSolid){
+				if (!res1.hit)
+					return;
+				if (!res2.hit)
+					return;
+				if (res1.startSolid || res2.startSolid) {
 					return;
 				}
 
 				// really hit?
-				if(Vector3::Dot(res1.hitPos - n1.lastPos, n2.lastPos - n1.lastPos)
-				   > (n2.pos-n1.pos).GetPoweredLength()){
+				if (Vector3::Dot(res1.hitPos - n1.lastPos, n2.lastPos - n1.lastPos) >
+				    (n2.pos - n1.pos).GetPoweredLength()) {
 					return;
 				}
-				if(Vector3::Dot(res1.hitPos - n1.lastPos, n2.lastPos - n1.lastPos)
-				  < 0.f){
+				if (Vector3::Dot(res1.hitPos - n1.lastPos, n2.lastPos - n1.lastPos) < 0.f) {
 					return;
 				}
-				if(Vector3::Dot(res2.hitPos - n2.lastPos, n1.lastPos - n2.lastPos)
-				   > (n2.pos-n1.pos).GetPoweredLength()){
+				if (Vector3::Dot(res2.hitPos - n2.lastPos, n1.lastPos - n2.lastPos) >
+				    (n2.pos - n1.pos).GetPoweredLength()) {
 					return;
 				}
-				if(Vector3::Dot(res2.hitPos - n2.lastPos, n1.lastPos - n2.lastPos)
-				   < 0.f){
+				if (Vector3::Dot(res2.hitPos - n2.lastPos, n1.lastPos - n2.lastPos) < 0.f) {
 					return;
 				}
 
@@ -430,41 +381,23 @@ namespace spades {
 				ivec.z += res2.normal.z;
 
 				Vector3 dir = {0.f, 0.f, 0.f};
-				if(ivec.x == 0 && ivec.y == 0 && ivec.z == 0) {
+				if (ivec.x == 0 && ivec.y == 0 && ivec.z == 0) {
 					// hanging. which direction to escape?
 					float bestDist = 1000.f;
 					IntVector3 bestDir;
-					CheckEscape(map, hitBlock,
-								n1.pos.Floor(),
-								n2.pos.Floor(),
-								IntVector3::Make(1, 0, 0),
-								bestDist, bestDir);
-					CheckEscape(map, hitBlock,
-								n1.pos.Floor(),
-								n2.pos.Floor(),
-								IntVector3::Make(-1, 0, 0),
-								bestDist, bestDir);
-					CheckEscape(map, hitBlock,
-								n1.pos.Floor(),
-								n2.pos.Floor(),
-								IntVector3::Make(0, 1, 0),
-								bestDist, bestDir);
-					CheckEscape(map, hitBlock,
-								n1.pos.Floor(),
-								n2.pos.Floor(),
-								IntVector3::Make(0, -1, 0),
-								bestDist, bestDir);
-					CheckEscape(map, hitBlock,
-								n1.pos.Floor(),
-								n2.pos.Floor(),
-								IntVector3::Make(0, 0, 1),
-								bestDist, bestDir);
-					CheckEscape(map, hitBlock,
-								n1.pos.Floor(),
-								n2.pos.Floor(),
-								IntVector3::Make(0, 0, -1),
-								bestDist, bestDir);
-					if(bestDist > 10.f){
+					CheckEscape(map, hitBlock, n1.pos.Floor(), n2.pos.Floor(),
+					            IntVector3::Make(1, 0, 0), bestDist, bestDir);
+					CheckEscape(map, hitBlock, n1.pos.Floor(), n2.pos.Floor(),
+					            IntVector3::Make(-1, 0, 0), bestDist, bestDir);
+					CheckEscape(map, hitBlock, n1.pos.Floor(), n2.pos.Floor(),
+					            IntVector3::Make(0, 1, 0), bestDist, bestDir);
+					CheckEscape(map, hitBlock, n1.pos.Floor(), n2.pos.Floor(),
+					            IntVector3::Make(0, -1, 0), bestDist, bestDir);
+					CheckEscape(map, hitBlock, n1.pos.Floor(), n2.pos.Floor(),
+					            IntVector3::Make(0, 0, 1), bestDist, bestDir);
+					CheckEscape(map, hitBlock, n1.pos.Floor(), n2.pos.Floor(),
+					            IntVector3::Make(0, 0, -1), bestDist, bestDir);
+					if (bestDist > 10.f) {
 						// failed to find appropriate direction.
 						return;
 					}
@@ -488,19 +421,16 @@ namespace spades {
 				// friction
 				n1.vel -= (n1.vel - normDir * Vector3::Dot(normDir, n1.vel)) * .2f;
 				n2.vel -= (n2.vel - normDir * Vector3::Dot(normDir, n2.vel)) * .2f;
-
 			}
-
 		}
 
-		void Corpse::AngularMomentum(int eId,
-									 NodeType a,
-									 NodeType b){
-			Edge& e = edges[eId];
+		void Corpse::AngularMomentum(int eId, NodeType a, NodeType b) {
+			Edge &e = edges[eId];
 			e.velDiff = nodes[b].vel - nodes[a].vel;
-			if(e.node1 != a || e.node2 != b){
+			if (e.node1 != a || e.node2 != b) {
 				e.lastVelDiff = e.velDiff;
-				e.node1 = a; e.node2 = b;
+				e.node1 = a;
+				e.node2 = b;
 				return;
 			}
 
@@ -515,73 +445,44 @@ namespace spades {
 		void Corpse::ApplyConstraint(float dt) {
 			SPADES_MARK_FUNCTION();
 
+			AngularMomentum(0, Torso1, Torso2);
+			AngularMomentum(1, Torso2, Torso3);
+			AngularMomentum(2, Torso3, Torso4);
+			AngularMomentum(3, Torso4, Torso1);
+			AngularMomentum(4, Torso1, Arm1);
+			AngularMomentum(5, Torso2, Arm2);
+			AngularMomentum(6, Torso3, Leg1);
+			AngularMomentum(7, Torso4, Leg2);
 
-			AngularMomentum(0,
-							Torso1, Torso2);
-			AngularMomentum(1,
-							Torso2, Torso3);
-			AngularMomentum(2,
-							Torso3, Torso4);
-			AngularMomentum(3,
-							Torso4, Torso1);
-			AngularMomentum(4,
-							Torso1, Arm1);
-			AngularMomentum(5,
-							Torso2, Arm2);
-			AngularMomentum(6,
-							Torso3, Leg1);
-			AngularMomentum(7,
-							Torso4, Leg2);
+			Spring(Torso1, Torso2, 0.8f, dt);
+			Spring(Torso3, Torso4, 0.8f, dt);
 
-			Spring(Torso1, Torso2,
-				   0.8f, dt);
-			Spring(Torso3, Torso4,
-				   0.8f, dt);
+			Spring(Torso1, Torso4, 0.9f, dt);
+			Spring(Torso2, Torso3, 0.9f, dt);
 
-			Spring(Torso1, Torso4,
-				   0.9f, dt);
-			Spring(Torso2, Torso3,
-				   0.9f, dt);
+			Spring(Torso1, Torso3, 1.204f, dt);
+			Spring(Torso2, Torso4, 1.204f, dt);
 
-			Spring(Torso1, Torso3,
-				   1.204f, dt);
-			Spring(Torso2, Torso4,
-				   1.204f, dt);
+			Spring(Arm1, Torso1, 1.f, dt);
+			Spring(Arm2, Torso2, 1.f, dt);
+			Spring(Leg1, Torso3, 1.f, dt);
+			Spring(Leg2, Torso4, 1.f, dt);
 
+			AngleSpring(Torso1, Arm1, Torso3, -1.f, 0.6f, dt);
+			AngleSpring(Torso2, Arm2, Torso4, -1.f, 0.6f, dt);
 
-			Spring(Arm1, Torso1,
-				   1.f, dt);
-			Spring(Arm2, Torso2,
-				   1.f, dt);
-			Spring(Leg1, Torso3,
-				   1.f, dt);
-			Spring(Leg2, Torso4,
-				   1.f, dt);
+			AngleSpring(Torso3, Leg1, Torso2, -1.f, -0.2f, dt);
+			AngleSpring(Torso4, Leg2, Torso1, -1.f, -0.2f, dt);
 
-			AngleSpring(Torso1,
-						Arm1, Torso3,
-						-1.f, 0.6f, dt);
-			AngleSpring(Torso2,
-						Arm2, Torso4,
-						-1.f, 0.6f, dt);
-
-			AngleSpring(Torso3,
-						Leg1, Torso2,
-						-1.f, -0.2f, dt);
-			AngleSpring(Torso4,
-						Leg2, Torso1,
-						-1.f, -0.2f, dt);
-
-			Spring(Torso1, Torso2, Head,
-				   .6f, dt);
+			Spring(Torso1, Torso2, Head, .6f, dt);
 			/*
 			AngleSpring(Torso1,
-						Torso2, Head,
-						0.5f, 1.f, dt);
+			            Torso2, Head,
+			            0.5f, 1.f, dt);
 
 			AngleSpring(Torso2,
-						Torso1, Head,
-						0.5f, 1.f, dt);
+			            Torso1, Head,
+			            0.5f, 1.f, dt);
 			 */
 
 			LineCollision(Torso1, Torso2, dt);
@@ -595,37 +496,28 @@ namespace spades {
 			LineCollision(Torso3, Leg1, dt);
 			LineCollision(Torso4, Leg2, dt);
 
-
 			return;
-			AngleSpring(Torso4,
-						Torso1, Head,
-						0.5f, 1.f, dt);
+			AngleSpring(Torso4, Torso1, Head, 0.5f, 1.f, dt);
 
-			AngleSpring(Torso3,
-						Torso2, Head,
-						0.5f, 1.f, dt);
+			AngleSpring(Torso3, Torso2, Head, 0.5f, 1.f, dt);
 
-			AngleSpring(Torso4,
-						Torso2, Head,
-						0.5f, 1.f, dt);
+			AngleSpring(Torso4, Torso2, Head, 0.5f, 1.f, dt);
 
-			AngleSpring(Torso3,
-						Torso1, Head,
-						0.5f, 1.f, dt);
+			AngleSpring(Torso3, Torso1, Head, 0.5f, 1.f, dt);
 		}
 
 		void Corpse::Update(float dt) {
 			SPADES_MARK_FUNCTION();
 			float damp = 1.f;
 			float damp2 = 1.f;
-			if(dt > 0.f){
+			if (dt > 0.f) {
 				damp = powf(.9f, dt);
 				damp2 = powf(.371f, dt);
 			}
-			//dt *= 0.1f;
+			// dt *= 0.1f;
 
-			for(int i = 0; i <NodeCount; i++){
-				Node& node = nodes[i];
+			for (int i = 0; i < NodeCount; i++) {
+				Node &node = nodes[i];
 				Vector3 oldPos = node.lastPos;
 				node.pos += node.vel * dt;
 
@@ -633,23 +525,21 @@ namespace spades {
 				SPAssert(!isnan(node.pos.y));
 				SPAssert(!isnan(node.pos.z));
 
-				if(node.pos.z > 63.f){
+				if (node.pos.z > 63.f) {
 					node.vel.z -= dt * 6.f; // buoyancy
 					node.vel *= damp;
-				}else{
+				} else {
 					node.vel.z += dt * 32.f; // gravity
 					node.vel.z *= damp2;
 				}
 
-				//node.vel *= damp;
+				// node.vel *= damp;
 
-				if(!map->ClipBox(oldPos.x, oldPos.y, oldPos.z)){
+				if (!map->ClipBox(oldPos.x, oldPos.y, oldPos.z)) {
 
-					if(map->ClipBox(node.pos.x,
-									oldPos.y,
-									oldPos.z)){
+					if (map->ClipBox(node.pos.x, oldPos.y, oldPos.z)) {
 						node.vel.x = -node.vel.x * .2f;
-						if(fabsf(node.vel.x) < .3f)
+						if (fabsf(node.vel.x) < .3f)
 							node.vel.x = 0.f;
 						node.pos.x = oldPos.x;
 
@@ -657,11 +547,9 @@ namespace spades {
 						node.vel.z *= .5f;
 					}
 
-					if(map->ClipBox(node.pos.x,
-									node.pos.y,
-									oldPos.z)){
+					if (map->ClipBox(node.pos.x, node.pos.y, oldPos.z)) {
 						node.vel.y = -node.vel.y * .2f;
-						if(fabsf(node.vel.y) < .3f)
+						if (fabsf(node.vel.y) < .3f)
 							node.vel.y = 0.f;
 						node.pos.y = oldPos.y;
 
@@ -669,11 +557,9 @@ namespace spades {
 						node.vel.z *= .5f;
 					}
 
-					if(map->ClipBox(node.pos.x,
-									node.pos.y,
-									node.pos.z)){
+					if (map->ClipBox(node.pos.x, node.pos.y, node.pos.z)) {
 						node.vel.z = -node.vel.z * .2f;
-						if(fabsf(node.vel.z) < .3f)
+						if (fabsf(node.vel.z) < .3f)
 							node.vel.z = 0.f;
 						node.pos.z = oldPos.z;
 
@@ -681,47 +567,47 @@ namespace spades {
 						node.vel.y *= .5f;
 					}
 
-					if(map->ClipBox(node.pos.x, node.pos.y, node.pos.z)){
+					if (map->ClipBox(node.pos.x, node.pos.y, node.pos.z)) {
 						// TODO: getting out block
-						//node.pos = oldPos;
-						//node.vel *= .5f;
+						// node.pos = oldPos;
+						// node.vel *= .5f;
 					}
 				}
 
 				/*
 				if(map->ClipBox(node.pos.x,
-								node.pos.y,
-								node.pos.z)){
-					if(!map->ClipBox(node.pos.x,
-									node.pos.y,
-									oldPos.z)){
-						node.vel.z = -node.vel.z * .2f;
-						if(fabsf(node.vel.z) < .3f)
-							node.vel.z = 0.f;
-						node.pos.z = oldPos.z;
-					}
-					if(!map->ClipBox(node.pos.x,
-									 oldPos.y,
-									 node.pos.z)){
-						node.vel.y = -node.vel.y * .2f;
-						if(fabsf(node.vel.y) < .3f)
-							node.vel.y = 0.f;
-						node.pos.y = oldPos.y;
-					}
-					if(!map->ClipBox(oldPos.x,
-									 node.pos.y,
-									 node.pos.z)){
-						node.vel.x = -node.vel.x * .2f;
-						if(fabsf(node.vel.x) < .3f)
-							node.vel.x = 0.f;
-						node.pos.x = oldPos.x;
-					}
-					node.vel *= .8f;
-					//node.pos = oldPos;
+				                node.pos.y,
+				                node.pos.z)){
+				    if(!map->ClipBox(node.pos.x,
+				                    node.pos.y,
+				                    oldPos.z)){
+				        node.vel.z = -node.vel.z * .2f;
+				        if(fabsf(node.vel.z) < .3f)
+				            node.vel.z = 0.f;
+				        node.pos.z = oldPos.z;
+				    }
+				    if(!map->ClipBox(node.pos.x,
+				                     oldPos.y,
+				                     node.pos.z)){
+				        node.vel.y = -node.vel.y * .2f;
+				        if(fabsf(node.vel.y) < .3f)
+				            node.vel.y = 0.f;
+				        node.pos.y = oldPos.y;
+				    }
+				    if(!map->ClipBox(oldPos.x,
+				                     node.pos.y,
+				                     node.pos.z)){
+				        node.vel.x = -node.vel.x * .2f;
+				        if(fabsf(node.vel.x) < .3f)
+				            node.vel.x = 0.f;
+				        node.pos.x = oldPos.x;
+				    }
+				    node.vel *= .8f;
+				    //node.pos = oldPos;
 
-					if(node.vel.GetLength() < .02f){
-						node.vel *= 0.f;
-					}
+				    if(node.vel.GetLength() < .02f){
+				        node.vel *= 0.f;
+				    }
 				}*/
 
 				node.lastPos = node.pos;
@@ -729,55 +615,31 @@ namespace spades {
 			}
 			ApplyConstraint(dt);
 
-			for(int i = 0; i <NodeCount; i++){
+			for (int i = 0; i < NodeCount; i++) {
 				nodes[i].lastForce = nodes[i].vel - nodes[i].lastForce;
 			}
-
 		}
 
 		void Corpse::AddToScene() {
-			if(false){
+			if (false) {
 				// debug line only
 				Vector4 col = {1, 1, 0, 0};
-				renderer->AddDebugLine(nodes[Torso1].pos,
-									   nodes[Torso2].pos,
-									   col);
-				renderer->AddDebugLine(nodes[Torso2].pos,
-									   nodes[Torso3].pos,
-									   col);
-				renderer->AddDebugLine(nodes[Torso3].pos,
-									   nodes[Torso4].pos,
-									   col);
-				renderer->AddDebugLine(nodes[Torso4].pos,
-									   nodes[Torso1].pos,
-									   col);
+				renderer->AddDebugLine(nodes[Torso1].pos, nodes[Torso2].pos, col);
+				renderer->AddDebugLine(nodes[Torso2].pos, nodes[Torso3].pos, col);
+				renderer->AddDebugLine(nodes[Torso3].pos, nodes[Torso4].pos, col);
+				renderer->AddDebugLine(nodes[Torso4].pos, nodes[Torso1].pos, col);
 
-				renderer->AddDebugLine(nodes[Torso2].pos,
-									   nodes[Torso4].pos,
-									   col);
-				renderer->AddDebugLine(nodes[Torso1].pos,
-									   nodes[Torso3].pos,
-									   col);
+				renderer->AddDebugLine(nodes[Torso2].pos, nodes[Torso4].pos, col);
+				renderer->AddDebugLine(nodes[Torso1].pos, nodes[Torso3].pos, col);
 
+				renderer->AddDebugLine(nodes[Torso1].pos, nodes[Arm1].pos, col);
+				renderer->AddDebugLine(nodes[Torso2].pos, nodes[Arm2].pos, col);
 
-				renderer->AddDebugLine(nodes[Torso1].pos,
-									   nodes[Arm1].pos,
-									   col);
-				renderer->AddDebugLine(nodes[Torso2].pos,
-									   nodes[Arm2].pos,
-									   col);
+				renderer->AddDebugLine(nodes[Torso3].pos, nodes[Leg1].pos, col);
+				renderer->AddDebugLine(nodes[Torso4].pos, nodes[Leg2].pos, col);
 
-				renderer->AddDebugLine(nodes[Torso3].pos,
-									   nodes[Leg1].pos,
-									   col);
-				renderer->AddDebugLine(nodes[Torso4].pos,
-									   nodes[Leg2].pos,
-									   col);
-
-
-				renderer->AddDebugLine((nodes[Torso1].pos+nodes[Torso2].pos)*.5f,
-									   nodes[Head].pos,
-									   col);
+				renderer->AddDebugLine((nodes[Torso1].pos + nodes[Torso2].pos) * .5f,
+				                       nodes[Head].pos, col);
 				return;
 			}
 
@@ -804,17 +666,14 @@ namespace spades {
 
 				param.matrix = torso * scaler;
 
-				model = renderer->RegisterModel
-				("Models/Player/Torso.kv6");
+				model = renderer->RegisterModel("Models/Player/Torso.kv6");
 				renderer->RenderModel(model, param);
 			}
 			// draw Head
 			{
-				Vector3 headBase =
-				(torso * MakeVector3(0.0f, 0.f, 0.f)).GetXYZ();
+				Vector3 headBase = (torso * MakeVector3(0.0f, 0.f, 0.f)).GetXYZ();
 
-				model = renderer->RegisterModel
-				("Models/Player/Head.kv6");
+				model = renderer->RegisterModel("Models/Player/Head.kv6");
 
 				Vector3 aX, aY, aZ;
 				Vector3 center = (nodes[Torso1].pos + nodes[Torso2].pos) * .5f;
@@ -832,13 +691,10 @@ namespace spades {
 
 			// draw Arms
 			{
-				Vector3 arm1Base =
-				(torso * MakeVector3(0.4f, 0.f, 0.2f)).GetXYZ();
-				Vector3 arm2Base =
-				(torso * MakeVector3(-0.4f, 0.f, 0.2f)).GetXYZ();
+				Vector3 arm1Base = (torso * MakeVector3(0.4f, 0.f, 0.2f)).GetXYZ();
+				Vector3 arm2Base = (torso * MakeVector3(-0.4f, 0.f, 0.2f)).GetXYZ();
 
-				model = renderer->RegisterModel
-				("Models/Player/Arm.kv6");
+				model = renderer->RegisterModel("Models/Player/Arm.kv6");
 
 				Vector3 aX, aY, aZ;
 
@@ -863,13 +719,10 @@ namespace spades {
 
 			// draw Leg
 			{
-				Vector3 leg1Base =
-				(torso * MakeVector3(0.25f, 0.f, 0.9f)).GetXYZ();
-				Vector3 leg2Base =
-				(torso * MakeVector3(-0.25f, 0.f, 0.9f)).GetXYZ();
+				Vector3 leg1Base = (torso * MakeVector3(0.25f, 0.f, 0.9f)).GetXYZ();
+				Vector3 leg2Base = (torso * MakeVector3(-0.25f, 0.f, 0.9f)).GetXYZ();
 
-				model = renderer->RegisterModel
-				("Models/Player/Leg.kv6");
+				model = renderer->RegisterModel("Models/Player/Leg.kv6");
 
 				Vector3 aX, aY, aZ;
 
@@ -894,29 +747,28 @@ namespace spades {
 		}
 
 		Vector3 Corpse::GetCenter() {
-			Vector3 v = {0,0,0};
-			for(int i = 0; i < NodeCount; i++)
+			Vector3 v = {0, 0, 0};
+			for (int i = 0; i < NodeCount; i++)
 				v += nodes[i].pos;
 			v *= 1.f / (float)NodeCount;
 			return v;
 		}
 
-		bool Corpse::IsVisibleFrom(spades::Vector3 eye){
+		bool Corpse::IsVisibleFrom(spades::Vector3 eye) {
 			// distance culled?
-			if((eye - GetCenter()).GetLength() > 150.f)
+			if ((eye - GetCenter()).GetLength() > 150.f)
 				return false;
 
-			for(int i = 0; i < NodeCount; i++){
+			for (int i = 0; i < NodeCount; i++) {
 				IntVector3 outBlk;
-				if(map->CastRay(eye, nodes[i].pos,
-								 256.f, outBlk))
+				if (map->CastRay(eye, nodes[i].pos, 256.f, outBlk))
 					return true;
 			}
 			return false;
 		}
 
-		void Corpse::AddImpulse(spades::Vector3 v){
-			for(int i = 0; i < NodeCount; i++)
+		void Corpse::AddImpulse(spades::Vector3 v) {
+			for (int i = 0; i < NodeCount; i++)
 				nodes[i].vel += v;
 		}
 	}

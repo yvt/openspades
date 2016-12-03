@@ -18,17 +18,19 @@
 
  */
 
-#include <OpenSpades.h>
-#include "ConcurrentDispatch.h"
-#include "../Imports/SDL.h"
-#include "Mutex.h"
 #include <list>
+#include <sys/types.h>
+
+#include "../Imports/SDL.h"
+
 #include "AutoLocker.h"
+#include "ConcurrentDispatch.h"
 #include "Debug.h"
 #include "Exception.h"
-#include "Thread.h"
+#include "Mutex.h"
 #include "Settings.h"
-#include <sys/types.h>
+#include "Thread.h"
+#include <OpenSpades.h>
 #if defined(__APPLE__)
 #include <sys/sysctl.h>
 #else
@@ -58,13 +60,16 @@ static int GetNumCores() {
 	size_t len = 4;
 	uint32_t count;
 
-	nm[0] = CTL_HW; nm[1] = HW_AVAILCPU;
+	nm[0] = CTL_HW;
+	nm[1] = HW_AVAILCPU;
 	sysctl(nm, 2, &count, &len, NULL, 0);
 
-	if(count < 1) {
+	if (count < 1) {
 		nm[1] = HW_NCPU;
 		sysctl(nm, 2, &count, &len, NULL, 0);
-		if(count < 1) { count = 1; }
+		if (count < 1) {
+			count = 1;
+		}
 	}
 	return count;
 #elif defined(__linux__)
@@ -76,24 +81,23 @@ static int GetNumCores() {
 
 namespace spades {
 
-	struct SyncQueueEntry{
+	struct SyncQueueEntry {
 		SDL_cond *doneCond;
 		SDL_mutex *doneMutex;
 		ConcurrentDispatch *dispatch;
 		volatile bool done;
 		volatile bool released;
 
-		SyncQueueEntry(ConcurrentDispatch *disp):
-		doneCond(SDL_CreateCond()),
-		doneMutex(SDL_CreateMutex()),
-		dispatch(disp),
-		done(false),
-		released(false){
-		}
+		SyncQueueEntry(ConcurrentDispatch *disp)
+		    : doneCond(SDL_CreateCond()),
+		      doneMutex(SDL_CreateMutex()),
+		      dispatch(disp),
+		      done(false),
+		      released(false) {}
 		~SyncQueueEntry() {
 			SDL_DestroyCond(doneCond);
 			SDL_DestroyMutex(doneMutex);
-			if(released){
+			if (released) {
 				dispatch->entry = NULL;
 				delete dispatch;
 			}
@@ -103,7 +107,7 @@ namespace spades {
 			SDL_LockMutex(doneMutex);
 			done = true;
 			SDL_CondBroadcast(doneCond);
-			if(released){
+			if (released) {
 				delete this;
 				return;
 			}
@@ -113,16 +117,16 @@ namespace spades {
 		void Release() {
 			SDL_LockMutex(doneMutex);
 			released = true;
-			if(done){
+			if (done) {
 				delete this;
 				return;
 			}
 			SDL_UnlockMutex(doneMutex);
 		}
 
-		void Join(){
+		void Join() {
 			SDL_LockMutex(doneMutex);
-			while(!done){
+			while (!done) {
 				SDL_CondWait(doneCond, doneMutex);
 			}
 			SDL_UnlockMutex(doneMutex);
@@ -134,6 +138,7 @@ namespace spades {
 
 		SDL_cond *pushCond;
 		SDL_mutex *pushMutex;
+
 	public:
 		SynchronizedQueue() {
 			pushMutex = SDL_CreateMutex();
@@ -144,11 +149,11 @@ namespace spades {
 			SDL_DestroyCond(pushCond);
 		}
 
-		void Push(SyncQueueEntry * entry) {
+		void Push(SyncQueueEntry *entry) {
 			SDL_LockMutex(pushMutex);
-			try{
+			try {
 				entries.push_back(entry);
-			}catch(...){
+			} catch (...) {
 				SDL_UnlockMutex(pushMutex);
 				throw;
 			}
@@ -158,7 +163,7 @@ namespace spades {
 
 		SyncQueueEntry *Wait() {
 			SDL_LockMutex(pushMutex);
-			while(entries.empty()){
+			while (entries.empty()) {
 				SDL_CondWait(pushCond, pushMutex);
 			}
 
@@ -169,9 +174,9 @@ namespace spades {
 			return ent;
 		}
 
-		SyncQueueEntry *Poll(){
+		SyncQueueEntry *Poll() {
 			SDL_LockMutex(pushMutex);
-			if(!entries.empty()){
+			if (!entries.empty()) {
 				SyncQueueEntry *ent = entries.front();
 				entries.pop_front();
 				SDL_UnlockMutex(pushMutex);
@@ -186,11 +191,11 @@ namespace spades {
 	static AutoDeletedThreadLocalStorage<DispatchQueue> threadQueue("threadDispatchQueue");
 	static DispatchQueue *sdlQueue = NULL;
 
-	DispatchQueue::DispatchQueue(){
+	DispatchQueue::DispatchQueue() {
 		SPADES_MARK_FUNCTION();
 		internal = new SynchronizedQueue();
 	}
-	DispatchQueue::~DispatchQueue(){
+	DispatchQueue::~DispatchQueue() {
 		SPADES_MARK_FUNCTION();
 		delete internal;
 	}
@@ -198,7 +203,7 @@ namespace spades {
 	DispatchQueue *DispatchQueue::GetThreadQueue() {
 		SPADES_MARK_FUNCTION();
 		DispatchQueue *q = threadQueue;
-		if(!q){
+		if (!q) {
 			q = new DispatchQueue();
 			threadQueue = q;
 		}
@@ -208,29 +213,26 @@ namespace spades {
 	void DispatchQueue::ProcessQueue() {
 		SPADES_MARK_FUNCTION();
 		SyncQueueEntry *ent;
-		while((ent = internal->Poll()) != NULL){
+		while ((ent = internal->Poll()) != NULL) {
 			ent->dispatch->Execute();
 		}
 		Thread::CleanupExitedThreads();
 	}
 
 	void DispatchQueue::EnterEventLoop() throw() {
-		while(true){
+		while (true) {
 			SyncQueueEntry *ent = internal->Wait();
 			ent->dispatch->ExecuteProtected();
-
 		}
 	}
 
-	void DispatchQueue::MarkSDLVideoThread() {
-		sdlQueue = this;
-	}
+	void DispatchQueue::MarkSDLVideoThread() { sdlQueue = this; }
 
-	class DispatchThread: public Thread{
+	class DispatchThread : public Thread {
 	public:
 		virtual void Run() throw() {
 			SPADES_MARK_FUNCTION();
-			while(true){
+			while (true) {
 				SyncQueueEntry *ent = globalQueue.Wait();
 				ent->dispatch->ExecuteProtected();
 			}
@@ -239,16 +241,15 @@ namespace spades {
 
 	static std::vector<DispatchThread *> threads;
 
-	ConcurrentDispatch::ConcurrentDispatch():
-	entry(NULL), runnable(NULL){
+	ConcurrentDispatch::ConcurrentDispatch() : entry(NULL), runnable(NULL) {
 		SPADES_MARK_FUNCTION();
 	}
-	ConcurrentDispatch::ConcurrentDispatch(std::string name):
-	entry(NULL),name(name), runnable(NULL){
+	ConcurrentDispatch::ConcurrentDispatch(std::string name)
+	    : entry(NULL), name(name), runnable(NULL) {
 		SPADES_MARK_FUNCTION();
 	}
 
-	ConcurrentDispatch::~ConcurrentDispatch(){
+	ConcurrentDispatch::~ConcurrentDispatch() {
 		SPADES_MARK_FUNCTION();
 		Join();
 	}
@@ -256,12 +257,12 @@ namespace spades {
 	void ConcurrentDispatch::Execute() {
 		SPADES_MARK_FUNCTION();
 		SyncQueueEntry *ent = entry;
-		if(!ent){
+		if (!ent) {
 			SPRaise("Attempted to execute dispatch '%s' without entry", name.c_str());
 		}
-		try{
+		try {
 			Run();
-		}catch(...){
+		} catch (...) {
 			ent->Done();
 			throw;
 		}
@@ -269,12 +270,12 @@ namespace spades {
 	}
 
 	void ConcurrentDispatch::ExecuteProtected() throw() {
-		try{
+		try {
 			Execute();
-		}catch(const std::exception& ex){
+		} catch (const std::exception &ex) {
 			fprintf(stderr, "-- UNHANDLED CONCURRENT DISPATCH EXCEPTION ---\n");
 			fprintf(stderr, "%s\n", ex.what());
-		}catch(...){
+		} catch (...) {
 			fprintf(stderr, "-- UNHANDLED CONCURRENT DISPATCH EXCEPTION ---\n");
 			fprintf(stderr, "(no information provided)\n");
 		}
@@ -282,17 +283,16 @@ namespace spades {
 
 	void ConcurrentDispatch::Start() {
 		SPADES_MARK_FUNCTION();
-		if(entry){
+		if (entry) {
 			SPRaise("Attempted to start dispatch '%s' when it's already started", name.c_str());
-		}else{
-			if(threads.empty()){
+		} else {
+			if (threads.empty()) {
 				int cnt = GetNumCores();
-				if(!("auto" == core_numDispatchQueueThreads)){
+				if (!("auto" == core_numDispatchQueueThreads)) {
 					cnt = core_numDispatchQueueThreads;
 				}
-				SPLog("Creating %d dispatch thread(s)",
-					  cnt);
-				for(int i = 0; i < cnt; i++){
+				SPLog("Creating %d dispatch thread(s)", cnt);
+				for (int i = 0; i < cnt; i++) {
 					DispatchThread *t = new DispatchThread();
 					threads.push_back(t);
 					t->Start();
@@ -305,13 +305,13 @@ namespace spades {
 
 	void ConcurrentDispatch::StartOn(DispatchQueue *queue) {
 		SPADES_MARK_FUNCTION();
-		if(entry){
+		if (entry) {
 			SPRaise("Attempted to start dispatch '%s' when it's already started", name.c_str());
-		}else{
+		} else {
 			entry = new SyncQueueEntry(this);
 			queue->internal->Push(entry);
 
-			if(queue == sdlQueue) {
+			if (queue == sdlQueue) {
 				SDL_Event evt;
 				memset(&evt, 0, sizeof(evt));
 				evt.type = SDL_USEREVENT;
@@ -322,24 +322,24 @@ namespace spades {
 
 	void ConcurrentDispatch::Join() {
 		SPADES_MARK_FUNCTION();
-		if(!entry){
-		}else{
+		if (!entry) {
+		} else {
 			entry->Join();
 			delete entry;
 			entry = NULL;
 		}
 	}
 
-	void ConcurrentDispatch::Release(){
+	void ConcurrentDispatch::Release() {
 		SPADES_MARK_FUNCTION();
-		if(entry){
-			SyncQueueEntry * ent = entry;
+		if (entry) {
+			SyncQueueEntry *ent = entry;
 			ent->Release();
 		}
 	}
 
-	void ConcurrentDispatch::Run(){
-		if(runnable)
+	void ConcurrentDispatch::Run() {
+		if (runnable)
 			runnable->Run();
 	}
 }

@@ -28,13 +28,13 @@
 #include "IAudioDevice.h"
 
 #include "ClientUI.h"
-#include "PaletteView.h"
+#include "Corpse.h"
 #include "LimboView.h"
 #include "MapView.h"
-#include "Corpse.h"
+#include "PaletteView.h"
 
-#include "World.h"
 #include "Weapon.h"
+#include "World.h"
 
 #include "NetClient.h"
 
@@ -44,7 +44,6 @@ DEFINE_SPADES_SETTING(cg_mouseSensitivity, "1");
 DEFINE_SPADES_SETTING(cg_zoomedMouseSensScale, "0.6");
 DEFINE_SPADES_SETTING(cg_mouseExpPower, "1");
 DEFINE_SPADES_SETTING(cg_invertMouseY, "0");
-
 
 DEFINE_SPADES_SETTING(cg_holdAimDownSight, "0");
 
@@ -80,9 +79,7 @@ DEFINE_SPADES_SETTING(cg_keySceneshot, "9");
 DEFINE_SPADES_SETTING(cg_keySaveMap, "8");
 
 DEFINE_SPADES_SETTING(cg_switchToolByWheel, "1");
-
 DEFINE_SPADES_SETTING(cg_debugCorpse, "0");
-
 DEFINE_SPADES_SETTING(cg_alerts, "1");
 
 SPADES_SETTING(cg_manualFocus);
@@ -91,27 +88,22 @@ DEFINE_SPADES_SETTING(cg_keyAutoFocus, "MiddleMouseButton");
 namespace spades {
 	namespace client {
 
-		bool Client::WantsToBeClosed() {
-			return readyToClose;
-		}
+		bool Client::WantsToBeClosed() { return readyToClose; }
 
 		bool FirstPersonSpectate = false;
 
-		void Client::Closing() {
-			SPADES_MARK_FUNCTION();
-		}
-
+		void Client::Closing() { SPADES_MARK_FUNCTION(); }
 
 		bool Client::NeedsAbsoluteMouseCoordinate() {
 			SPADES_MARK_FUNCTION();
-			if(scriptedUI->NeedsInput()) {
+			if (scriptedUI->NeedsInput()) {
 				return true;
 			}
-			if(!world) {
+			if (!world) {
 				// now loading.
 				return true;
 			}
-			if(IsLimboViewActive()) {
+			if (IsLimboViewActive()) {
 				return true;
 			}
 			return false;
@@ -120,17 +112,17 @@ namespace spades {
 		void Client::MouseEvent(float x, float y) {
 			SPADES_MARK_FUNCTION();
 
-			if(scriptedUI->NeedsInput()) {
+			if (scriptedUI->NeedsInput()) {
 				scriptedUI->MouseEvent(x, y);
 				return;
 			}
 
-			if(IsLimboViewActive()){
+			if (IsLimboViewActive()) {
 				limbo->MouseEvent(x, y);
 				return;
 			}
 
-			if(IsFollowing()){
+			if (IsFollowing()) {
 				SPAssert(world != nullptr);
 				/*
 				 if(world->GetLocalPlayer() &&
@@ -147,20 +139,21 @@ namespace spades {
 
 				followYaw -= x * 0.003f;
 				followPitch -= y * 0.003f;
-				if(followPitch < -M_PI*.45f) followPitch = -static_cast<float>(M_PI)*.45f;
-				if(followPitch > M_PI*.45f) followPitch = static_cast<float>(M_PI) * .45f;
-				followYaw = fmodf(followYaw, static_cast<float>(M_PI)*2.f);
-			}else if(world && world->GetLocalPlayer()){
+				if (followPitch < -M_PI * .45f)
+					followPitch = -static_cast<float>(M_PI) * .45f;
+				if (followPitch > M_PI * .45f)
+					followPitch = static_cast<float>(M_PI) * .45f;
+				followYaw = fmodf(followYaw, static_cast<float>(M_PI) * 2.f);
+			} else if (world && world->GetLocalPlayer()) {
 				Player *p = world->GetLocalPlayer();
 				float aimDownState = GetAimDownState();
-				if(p->IsAlive()){
+				if (p->IsAlive()) {
 					x /= GetAimDownZoomScale();
 					y /= GetAimDownZoomScale();
 
 					float rad = x * x + y * y;
-					if(rad > 0.f) {
-						if((float)cg_mouseExpPower < 0.001f ||
-						   isnan((float)cg_mouseExpPower)) {
+					if (rad > 0.f) {
+						if ((float)cg_mouseExpPower < 0.001f || isnan((float)cg_mouseExpPower)) {
 							SPLog("Invalid cg_mouseExpPower value, resetting to 1.0");
 							cg_mouseExpPower = 1.f;
 						}
@@ -170,13 +163,14 @@ namespace spades {
 						rad = powf(rad, (float)cg_mouseExpPower * 0.5f - 0.5f);
 
 						// shouldn't happen...
-						if(isnan(rad)) rad = 1.f;
+						if (isnan(rad))
+							rad = 1.f;
 
 						x *= rad;
 						y *= rad;
 					}
 
-					if(aimDownState > 0.f) {
+					if (aimDownState > 0.f) {
 						float scale = cg_zoomedMouseSensScale;
 						scale = powf(scale, aimDownState);
 						x *= scale;
@@ -186,7 +180,7 @@ namespace spades {
 					x *= (float)cg_mouseSensitivity;
 					y *= (float)cg_mouseSensitivity;
 
-					if(cg_invertMouseY)
+					if (cg_invertMouseY)
 						y = -y;
 
 					p->Turn(x * 0.003f, y * 0.003f);
@@ -197,21 +191,21 @@ namespace spades {
 		void Client::WheelEvent(float x, float y) {
 			SPADES_MARK_FUNCTION();
 
-			if(scriptedUI->NeedsInput()) {
+			if (scriptedUI->NeedsInput()) {
 				scriptedUI->WheelEvent(x, y);
 				return;
 			}
 
-			if(y > .5f) {
+			if (y > .5f) {
 				KeyEvent("WheelDown", true);
 				KeyEvent("WheelDown", false);
-			}else if(y < -.5f){
+			} else if (y < -.5f) {
 				KeyEvent("WheelUp", true);
 				KeyEvent("WheelUp", false);
 			}
 		}
 
-		void Client::TextInputEvent(const std::string &ch){
+		void Client::TextInputEvent(const std::string &ch) {
 			SPADES_MARK_FUNCTION();
 
 			if (scriptedUI->NeedsInput() && !scriptedUI->isIgnored(ch)) {
@@ -222,8 +216,7 @@ namespace spades {
 			// we don't get "/" here anymore
 		}
 
-		void Client::TextEditingEvent(const std::string &ch,
-									  int start, int len) {
+		void Client::TextEditingEvent(const std::string &ch, int start, int len) {
 			SPADES_MARK_FUNCTION();
 
 			if (scriptedUI->NeedsInput() && !scriptedUI->isIgnored(ch)) {
@@ -235,7 +228,7 @@ namespace spades {
 		bool Client::AcceptsTextInput() {
 			SPADES_MARK_FUNCTION();
 
-			if(scriptedUI->NeedsInput()) {
+			if (scriptedUI->NeedsInput()) {
 				return scriptedUI->AcceptsTextInput();
 			}
 			return false;
@@ -243,86 +236,81 @@ namespace spades {
 
 		AABB2 Client::GetTextInputRect() {
 			SPADES_MARK_FUNCTION();
-			if(scriptedUI->NeedsInput()) {
+			if (scriptedUI->NeedsInput()) {
 				return scriptedUI->GetTextInputRect();
 			}
 			return AABB2();
 		}
 
-		static bool CheckKey(const std::string& cfg,
-							 const std::string& input) {
-			if(cfg.empty())
+		static bool CheckKey(const std::string &cfg, const std::string &input) {
+			if (cfg.empty())
 				return false;
 
 			static const std::string space1("space");
 			static const std::string space2("spacebar");
 			static const std::string space3("spacekey");
 
-			if(EqualsIgnoringCase(cfg, space1) ||
-				 EqualsIgnoringCase(cfg, space2) ||
-				 EqualsIgnoringCase(cfg, space3)) {
+			if (EqualsIgnoringCase(cfg, space1) || EqualsIgnoringCase(cfg, space2) ||
+			    EqualsIgnoringCase(cfg, space3)) {
 
-					if(input == " ")
-						return true;
-					}
-					else
-					{
-						if(EqualsIgnoringCase(cfg, input))
-								return true;
-					}
+				if (input == " ")
+					return true;
+			} else {
+				if (EqualsIgnoringCase(cfg, input))
+					return true;
+			}
 			return false;
 		}
 
-		void Client::KeyEvent(const std::string& name, bool down){
+		void Client::KeyEvent(const std::string &name, bool down) {
 			SPADES_MARK_FUNCTION();
 
-			if(scriptedUI->NeedsInput()) {
-				if(!scriptedUI->isIgnored(name)) {
+			if (scriptedUI->NeedsInput()) {
+				if (!scriptedUI->isIgnored(name)) {
 					scriptedUI->KeyEvent(name, down);
-				}else{
-					if(!down) {
+				} else {
+					if (!down) {
 						scriptedUI->setIgnored("");
 					}
 				}
 				return;
 			}
 
-			if(name == "Escape"){
-				if(down){
-					if(inGameLimbo){
+			if (name == "Escape") {
+				if (down) {
+					if (inGameLimbo) {
 						inGameLimbo = false;
-					}else{
-						if(GetWorld() == nullptr){
+					} else {
+						if (GetWorld() == nullptr) {
 							// no world = loading now.
 							// in this case, abort download, and quit the game immediately.
 							readyToClose = true;
-						}
-						else {
+						} else {
 							scriptedUI->EnterClientMenu();
 						}
 					}
 				}
-			}else if(world){
-				if(IsLimboViewActive()){
-					if(down){
+			} else if (world) {
+				if (IsLimboViewActive()) {
+					if (down) {
 						limbo->KeyEvent(name);
 					}
 					return;
 				}
-				if(IsFollowing()){
-					if(CheckKey(cg_keyAttack, name)){
-						if(down){
-							if(world->GetLocalPlayer()->GetTeamId() >= 2 ||
-							   time > lastAliveTime + 1.3f)
+				if (IsFollowing()) {
+					if (CheckKey(cg_keyAttack, name)) {
+						if (down) {
+							if (world->GetLocalPlayer()->GetTeamId() >= 2 ||
+							    time > lastAliveTime + 1.3f)
 								FollowNextPlayer(false);
 						}
 						return;
-					}else if(CheckKey(cg_keyAltAttack, name)){
-						if(down){
-							if(world->GetLocalPlayer()->GetTeamId() >= 2) {
+					} else if (CheckKey(cg_keyAltAttack, name)) {
+						if (down) {
+							if (world->GetLocalPlayer()->GetTeamId() >= 2) {
 								// spectating
 								followingPlayerId = world->GetLocalPlayerIndex();
-							}else if(time > lastAliveTime + 1.3f){
+							} else if (time > lastAliveTime + 1.3f) {
 								// dead
 								FollowNextPlayer(true);
 							}
@@ -330,89 +318,97 @@ namespace spades {
 						return;
 					}
 				}
-				if(world->GetLocalPlayer()){
+				if (world->GetLocalPlayer()) {
 					Player *p = world->GetLocalPlayer();
 
-					if(p->IsAlive() && p->GetTool() == Player::ToolBlock && down) {
-						if(paletteView->KeyInput(name)){
+					if (p->IsAlive() && p->GetTool() == Player::ToolBlock && down) {
+						if (paletteView->KeyInput(name)) {
 							return;
 						}
 					}
 
-					if(cg_debugCorpse){
-						if(name == "p" && down){
+					if (cg_debugCorpse) {
+						if (name == "p" && down) {
 							Corpse *corp;
 							Player *victim = world->GetLocalPlayer();
 							corp = new Corpse(renderer, map, victim);
 							corp->AddImpulse(victim->GetFront() * 32.f);
 							corpses.emplace_back(corp);
 
-							if(corpses.size() > corpseHardLimit){
+							if (corpses.size() > corpseHardLimit) {
 								corpses.pop_front();
-							}else if(corpses.size() > corpseSoftLimit){
+							} else if (corpses.size() > corpseSoftLimit) {
 								RemoveInvisibleCorpses();
 							}
 						}
 					}
-					if(CheckKey(cg_keyMoveLeft, name)){
+					if (CheckKey(cg_keyMoveLeft, name)) {
 						playerInput.moveLeft = down;
 						keypadInput.left = down;
-						if(down) playerInput.moveRight = false;
-						else playerInput.moveRight = keypadInput.right;
-					}else if(CheckKey(cg_keyMoveRight, name)){
+						if (down)
+							playerInput.moveRight = false;
+						else
+							playerInput.moveRight = keypadInput.right;
+					} else if (CheckKey(cg_keyMoveRight, name)) {
 						playerInput.moveRight = down;
 						keypadInput.right = down;
-						if(down) playerInput.moveLeft = false;
-						else playerInput.moveLeft = keypadInput.left;
-					}else if(CheckKey(cg_keyMoveForward, name)){
+						if (down)
+							playerInput.moveLeft = false;
+						else
+							playerInput.moveLeft = keypadInput.left;
+					} else if (CheckKey(cg_keyMoveForward, name)) {
 						playerInput.moveForward = down;
 						keypadInput.forward = down;
-						if(down) playerInput.moveBackward = false;
-						else playerInput.moveBackward = keypadInput.backward;
-					}else if(CheckKey(cg_keyMoveBackward, name)){
+						if (down)
+							playerInput.moveBackward = false;
+						else
+							playerInput.moveBackward = keypadInput.backward;
+					} else if (CheckKey(cg_keyMoveBackward, name)) {
 						playerInput.moveBackward = down;
 						keypadInput.backward = down;
-						if(down) playerInput.moveForward = false;
-						else playerInput.moveForward = keypadInput.forward;
-					}else if(CheckKey(cg_keyCrouch, name)){
+						if (down)
+							playerInput.moveForward = false;
+						else
+							playerInput.moveForward = keypadInput.forward;
+					} else if (CheckKey(cg_keyCrouch, name)) {
 						playerInput.crouch = down;
-					}else if(CheckKey(cg_keySprint, name)){
+					} else if (CheckKey(cg_keySprint, name)) {
 						playerInput.sprint = down;
-					}else if(CheckKey(cg_keySneak, name)){
+					} else if (CheckKey(cg_keySneak, name)) {
 						playerInput.sneak = down;
-					}else if(CheckKey(cg_keyJump, name)){
-						if(down){
+					} else if (CheckKey(cg_keyJump, name)) {
+						if (down) {
 							FirstPersonSpectate = !FirstPersonSpectate;
 						}
 						playerInput.jump = down;
-					}else if(CheckKey(cg_keyAttack, name)){
+					} else if (CheckKey(cg_keyAttack, name)) {
 						weapInput.primary = down;
-					}else if(CheckKey(cg_keyAltAttack, name)){
+					} else if (CheckKey(cg_keyAltAttack, name)) {
 						auto lastVal = weapInput.secondary;
-						if(world->GetLocalPlayer()->IsToolWeapon() && (!cg_holdAimDownSight)){
-							if(down && !world->GetLocalPlayer()->GetWeapon()->IsReloading()){
+						if (world->GetLocalPlayer()->IsToolWeapon() && (!cg_holdAimDownSight)) {
+							if (down && !world->GetLocalPlayer()->GetWeapon()->IsReloading()) {
 								weapInput.secondary = !weapInput.secondary;
 							}
-						}else{
+						} else {
 							weapInput.secondary = down;
 						}
-						if(world->GetLocalPlayer()->IsToolWeapon() && weapInput.secondary && !lastVal &&
-						   world->GetLocalPlayer()->IsReadyToUseTool() &&
-						   !world->GetLocalPlayer()->GetWeapon()->IsReloading()) {
+						if (world->GetLocalPlayer()->IsToolWeapon() && weapInput.secondary &&
+						    !lastVal && world->GetLocalPlayer()->IsReadyToUseTool() &&
+						    !world->GetLocalPlayer()->GetWeapon()->IsReloading()) {
 							AudioParam params;
 							params.volume = 0.08f;
-							Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Weapons/AimDownSightLocal.wav");
+							Handle<IAudioChunk> chunk =
+							  audioDevice->RegisterSound("Sounds/Weapons/AimDownSightLocal.wav");
 							audioDevice->PlayLocal(chunk, MakeVector3(.4f, -.3f, .5f), params);
 						}
-					}else if(CheckKey(cg_keyReloadWeapon, name) && down){
+					} else if (CheckKey(cg_keyReloadWeapon, name) && down) {
 						Weapon *w = world->GetLocalPlayer()->GetWeapon();
-						if(w->GetAmmo() < w->GetClipSize() &&
-						   w->GetStock() > 0 &&
-						   (!world->GetLocalPlayer()->IsAwaitingReloadCompletion()) &&
-						   (!w->IsReloading()) &&
-						   world->GetLocalPlayer()->GetTool() == Player::ToolWeapon){
-							if(world->GetLocalPlayer()->IsToolWeapon()){
-								if(weapInput.secondary) {
+						if (w->GetAmmo() < w->GetClipSize() && w->GetStock() > 0 &&
+						    (!world->GetLocalPlayer()->IsAwaitingReloadCompletion()) &&
+						    (!w->IsReloading()) &&
+						    world->GetLocalPlayer()->GetTool() == Player::ToolWeapon) {
+							if (world->GetLocalPlayer()->IsToolWeapon()) {
+								if (weapInput.secondary) {
 									// if we send WeaponInput after sending Reload,
 									// server might cancel the reload.
 									// https://github.com/infogulch/pyspades/blob/895879ed14ddee47bb278a77be86d62c7580f8b7/pyspades/server.py#343
@@ -424,106 +420,108 @@ namespace spades {
 							world->GetLocalPlayer()->Reload();
 							net->SendReload();
 						}
-					}else if(CheckKey(cg_keyToolSpade, name) && down){
-						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
-						   world->GetLocalPlayer()->IsAlive() &&
-						   world->GetLocalPlayer()->IsToolSelectable(Player::ToolSpade)){
+					} else if (CheckKey(cg_keyToolSpade, name) && down) {
+						if (world->GetLocalPlayer()->GetTeamId() < 2 &&
+						    world->GetLocalPlayer()->IsAlive() &&
+						    world->GetLocalPlayer()->IsToolSelectable(Player::ToolSpade)) {
 							SetSelectedTool(Player::ToolSpade);
 						}
-					}else if(CheckKey(cg_keyToolBlock, name) && down){
-						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
-						   world->GetLocalPlayer()->IsAlive()
-						   ){
-							if(world->GetLocalPlayer()->IsToolSelectable(Player::ToolBlock)) {
+					} else if (CheckKey(cg_keyToolBlock, name) && down) {
+						if (world->GetLocalPlayer()->GetTeamId() < 2 &&
+						    world->GetLocalPlayer()->IsAlive()) {
+							if (world->GetLocalPlayer()->IsToolSelectable(Player::ToolBlock)) {
 								SetSelectedTool(Player::ToolBlock);
-							}else{
-								if(cg_alerts)
+							} else {
+								if (cg_alerts)
 									ShowAlert(_Tr("Client", "Out of Blocks"), AlertType::Error);
 								else
 									PlayAlertSound();
 							}
 						}
-					}else if(CheckKey(cg_keyToolWeapon, name) && down){
-						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
-						   world->GetLocalPlayer()->IsAlive()){
-							if(world->GetLocalPlayer()->IsToolSelectable(Player::ToolWeapon)) {
+					} else if (CheckKey(cg_keyToolWeapon, name) && down) {
+						if (world->GetLocalPlayer()->GetTeamId() < 2 &&
+						    world->GetLocalPlayer()->IsAlive()) {
+							if (world->GetLocalPlayer()->IsToolSelectable(Player::ToolWeapon)) {
 								SetSelectedTool(Player::ToolWeapon);
-							}else{
-								if(cg_alerts)
+							} else {
+								if (cg_alerts)
 									ShowAlert(_Tr("Client", "Out of Ammo"), AlertType::Error);
 								else
 									PlayAlertSound();
 							}
 						}
-					}else if(CheckKey(cg_keyToolGrenade, name) && down){
-						if(world->GetLocalPlayer()->GetTeamId() < 2 &&
-						   world->GetLocalPlayer()->IsAlive()){
-							if(world->GetLocalPlayer()->IsToolSelectable(Player::ToolGrenade)) {
+					} else if (CheckKey(cg_keyToolGrenade, name) && down) {
+						if (world->GetLocalPlayer()->GetTeamId() < 2 &&
+						    world->GetLocalPlayer()->IsAlive()) {
+							if (world->GetLocalPlayer()->IsToolSelectable(Player::ToolGrenade)) {
 								SetSelectedTool(Player::ToolGrenade);
-							}else{
-								if(cg_alerts)
+							} else {
+								if (cg_alerts)
 									ShowAlert(_Tr("Client", "Out of Grenades"), AlertType::Error);
 								else
 									PlayAlertSound();
 							}
 						}
-					}else if(CheckKey(cg_keyLastTool, name) && down){
-						if(hasLastTool &&
-						   world->GetLocalPlayer()->GetTeamId() < 2 &&
-						   world->GetLocalPlayer()->IsAlive() &&
-						   world->GetLocalPlayer()->IsToolSelectable(lastTool)){
+					} else if (CheckKey(cg_keyLastTool, name) && down) {
+						if (hasLastTool && world->GetLocalPlayer()->GetTeamId() < 2 &&
+						    world->GetLocalPlayer()->IsAlive() &&
+						    world->GetLocalPlayer()->IsToolSelectable(lastTool)) {
 							hasLastTool = false;
 							SetSelectedTool(lastTool);
 						}
-					}else if(CheckKey(cg_keyGlobalChat, name) && down){
+					} else if (CheckKey(cg_keyGlobalChat, name) && down) {
 						// global chat
 						scriptedUI->EnterGlobalChatWindow();
 						scriptedUI->setIgnored(name);
-					}else if(CheckKey(cg_keyTeamChat, name) && down){
+					} else if (CheckKey(cg_keyTeamChat, name) && down) {
 						// team chat
 						scriptedUI->EnterTeamChatWindow();
 						scriptedUI->setIgnored(name);
-					}else if(name == "/" && down){
+					} else if (name == "/" && down) {
 						// command
 						scriptedUI->EnterCommandWindow();
 						scriptedUI->setIgnored(name);
-					}else if(CheckKey(cg_keyCaptureColor, name) && down){
+					} else if (CheckKey(cg_keyCaptureColor, name) && down) {
 						CaptureColor();
-					}else if(CheckKey(cg_keyChangeMapScale, name) && down){
+					} else if (CheckKey(cg_keyChangeMapScale, name) && down) {
 						mapView->SwitchScale();
-						Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Misc/SwitchMapZoom.wav");
+						Handle<IAudioChunk> chunk =
+						  audioDevice->RegisterSound("Sounds/Misc/SwitchMapZoom.wav");
 						audioDevice->PlayLocal(chunk, AudioParam());
-					}else if(CheckKey(cg_keyToggleMapZoom, name) && down){
-						if(largeMapView->ToggleZoom()){
-							Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Misc/OpenMap.wav");
+					} else if (CheckKey(cg_keyToggleMapZoom, name) && down) {
+						if (largeMapView->ToggleZoom()) {
+							Handle<IAudioChunk> chunk =
+							  audioDevice->RegisterSound("Sounds/Misc/OpenMap.wav");
 							audioDevice->PlayLocal(chunk, AudioParam());
-						}else{
-							Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Misc/CloseMap.wav");
+						} else {
+							Handle<IAudioChunk> chunk =
+							  audioDevice->RegisterSound("Sounds/Misc/CloseMap.wav");
 							audioDevice->PlayLocal(chunk, AudioParam());
 						}
-					}else if(CheckKey(cg_keyScoreboard, name)){
+					} else if (CheckKey(cg_keyScoreboard, name)) {
 						scoreboardVisible = down;
-					}else if(CheckKey(cg_keyLimbo, name) && down){
+					} else if (CheckKey(cg_keyLimbo, name) && down) {
 						limbo->SetSelectedTeam(world->GetLocalPlayer()->GetTeamId());
-						limbo->SetSelectedWeapon(world->GetLocalPlayer()->GetWeapon()->GetWeaponType());
+						limbo->SetSelectedWeapon(
+						  world->GetLocalPlayer()->GetWeapon()->GetWeaponType());
 						inGameLimbo = true;
-					}else if(CheckKey(cg_keySceneshot, name) && down){
+					} else if (CheckKey(cg_keySceneshot, name) && down) {
 						TakeScreenShot(true);
-					}else if(CheckKey(cg_keyScreenshot, name) && down){
+					} else if (CheckKey(cg_keyScreenshot, name) && down) {
 						TakeScreenShot(false);
-					}else if(CheckKey(cg_keySaveMap, name) && down){
+					} else if (CheckKey(cg_keySaveMap, name) && down) {
 						TakeMapShot();
-					}else if(CheckKey(cg_keyFlashlight, name) && down){
+					} else if (CheckKey(cg_keyFlashlight, name) && down) {
 						flashlightOn = !flashlightOn;
 						flashlightOnTime = time;
-						Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Player/Flashlight.wav");
+						Handle<IAudioChunk> chunk =
+						  audioDevice->RegisterSound("Sounds/Player/Flashlight.wav");
 						audioDevice->PlayLocal(chunk, AudioParam());
-					}else if(CheckKey(cg_keyAutoFocus, name) && down &&
-							 (int)cg_manualFocus){
+					} else if (CheckKey(cg_keyAutoFocus, name) && down && (int)cg_manualFocus) {
 						autoFocusEnabled = true;
-					}else if(down) {
+					} else if (down) {
 						bool rev = (int)cg_switchToolByWheel > 0;
-						if(name == (rev ? "WheelDown":"WheelUp")) {
+						if (name == (rev ? "WheelDown" : "WheelUp")) {
 							if ((int)cg_manualFocus) {
 								// When DoF control is enabled,
 								// tool switch is overrided by focal length control.
@@ -531,67 +529,49 @@ namespace spades {
 								dist = std::min(dist + 0.01f, 1.f);
 								targetFocalLength = 1.f / dist;
 								autoFocusEnabled = false;
-							} else if(cg_switchToolByWheel &&
-									  world->GetLocalPlayer()->GetTeamId() < 2 &&
-							   world->GetLocalPlayer()->IsAlive()){
+							} else if (cg_switchToolByWheel &&
+							           world->GetLocalPlayer()->GetTeamId() < 2 &&
+							           world->GetLocalPlayer()->IsAlive()) {
 								Player::ToolType t = world->GetLocalPlayer()->GetTool();
-								do{
-									switch(t){
-										case Player::ToolSpade:
-											t = Player::ToolGrenade;
-											break;
-										case Player::ToolBlock:
-											t = Player::ToolSpade;
-											break;
-										case Player::ToolWeapon:
-											t = Player::ToolBlock;
-											break;
-										case Player::ToolGrenade:
-											t = Player::ToolWeapon;
-											break;
+								do {
+									switch (t) {
+										case Player::ToolSpade: t = Player::ToolGrenade; break;
+										case Player::ToolBlock: t = Player::ToolSpade; break;
+										case Player::ToolWeapon: t = Player::ToolBlock; break;
+										case Player::ToolGrenade: t = Player::ToolWeapon; break;
 									}
-								}while(!world->GetLocalPlayer()->IsToolSelectable(t));
+								} while (!world->GetLocalPlayer()->IsToolSelectable(t));
 								SetSelectedTool(t);
 							}
-						}else if(name == (rev ? "WheelUp":"WheelDown")) {
+						} else if (name == (rev ? "WheelUp" : "WheelDown")) {
 							if ((int)cg_manualFocus) {
 								// When DoF control is enabled,
 								// tool switch is overrided by focal length control.
 								float dist = 1.f / targetFocalLength;
-								dist = std::max(dist - 0.01f, 1.f / 128.f); // limit to fog max distance
+								dist =
+								  std::max(dist - 0.01f, 1.f / 128.f); // limit to fog max distance
 								targetFocalLength = 1.f / dist;
 								autoFocusEnabled = false;
-							} else if(cg_switchToolByWheel &&
-									  world->GetLocalPlayer()->GetTeamId() < 2 &&
-							   world->GetLocalPlayer()->IsAlive()){
+							} else if (cg_switchToolByWheel &&
+							           world->GetLocalPlayer()->GetTeamId() < 2 &&
+							           world->GetLocalPlayer()->IsAlive()) {
 								Player::ToolType t = world->GetLocalPlayer()->GetTool();
-								do{
-									switch(t){
-										case Player::ToolSpade:
-											t = Player::ToolBlock;
-											break;
-										case Player::ToolBlock:
-											t = Player::ToolWeapon;
-											break;
-										case Player::ToolWeapon:
-											t = Player::ToolGrenade;
-											break;
-										case Player::ToolGrenade:
-											t = Player::ToolSpade;
-											break;
+								do {
+									switch (t) {
+										case Player::ToolSpade: t = Player::ToolBlock; break;
+										case Player::ToolBlock: t = Player::ToolWeapon; break;
+										case Player::ToolWeapon: t = Player::ToolGrenade; break;
+										case Player::ToolGrenade: t = Player::ToolSpade; break;
 									}
-								}while(!world->GetLocalPlayer()->IsToolSelectable(t));
+								} while (!world->GetLocalPlayer()->IsToolSelectable(t));
 								SetSelectedTool(t);
 							}
 						}
 					}
-				}else{
+				} else {
 					// limbo
 				}
 			}
 		}
-
-
-
 	}
 }

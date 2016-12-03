@@ -20,57 +20,50 @@
 
 #pragma once
 
-#include <string>
 #include <map>
-#include <vector>
+#include <string>
 #include <type_traits>
+#include <vector>
 
 namespace spades {
-    enum class SettingItemFlags {
-        None = 0
-    };
+	enum class SettingItemFlags { None = 0 };
 
-    inline SettingItemFlags operator | (SettingItemFlags lhs, SettingItemFlags rhs)
+	inline SettingItemFlags operator|(SettingItemFlags lhs, SettingItemFlags rhs)
 
-    {
-        using T = std::underlying_type<SettingItemFlags>::type;
-        return (SettingItemFlags)(static_cast<T>(lhs) | static_cast<T>(rhs));
-    }
+	{
+		using T = std::underlying_type<SettingItemFlags>::type;
+		return (SettingItemFlags)(static_cast<T>(lhs) | static_cast<T>(rhs));
+	}
 
-    inline SettingItemFlags& operator |= (SettingItemFlags& lhs, SettingItemFlags rhs)
-    {
-        using T = std::underlying_type<SettingItemFlags>::type;
-        lhs = (SettingItemFlags)(static_cast<T>(lhs) | static_cast<T>(rhs));
-        return lhs;
-    }
+	inline SettingItemFlags &operator|=(SettingItemFlags &lhs, SettingItemFlags rhs) {
+		using T = std::underlying_type<SettingItemFlags>::type;
+		lhs = (SettingItemFlags)(static_cast<T>(lhs) | static_cast<T>(rhs));
+		return lhs;
+	}
 
-    struct SettingItemDescriptor {
-        const std::string defaultValue;
-        const SettingItemFlags flags;
+	struct SettingItemDescriptor {
+		const std::string defaultValue;
+		const SettingItemFlags flags;
 
-        SettingItemDescriptor() = default;
-        SettingItemDescriptor(const std::string &defaultValue = std::string(),
-                              SettingItemFlags flags = SettingItemFlags::None) :
-            defaultValue(defaultValue),
-            flags(flags)
-        {}
+		SettingItemDescriptor() = default;
+		SettingItemDescriptor(const std::string &defaultValue = std::string(),
+		                      SettingItemFlags flags = SettingItemFlags::None)
+		    : defaultValue(defaultValue), flags(flags) {}
 
-        bool operator == (const SettingItemDescriptor &o) const {
-            return defaultValue == o.defaultValue &&
-            flags == o.flags;
-        }
-        bool operator != (const SettingItemDescriptor &o) const {
-            return !(*this == o);
-        }
-    };
+		bool operator==(const SettingItemDescriptor &o) const {
+			return defaultValue == o.defaultValue && flags == o.flags;
+		}
+		bool operator!=(const SettingItemDescriptor &o) const { return !(*this == o); }
+	};
 
-    class ISettingItemListener {
-    protected:
-        ISettingItemListener() = default;
-        virtual ~ISettingItemListener() {}
-    public:
-        virtual void SettingChanged(const std::string &name) = 0;
-    };
+	class ISettingItemListener {
+	protected:
+		ISettingItemListener() = default;
+		virtual ~ISettingItemListener() {}
+
+	public:
+		virtual void SettingChanged(const std::string &name) = 0;
+	};
 
 	class Settings {
 		struct Item {
@@ -79,39 +72,37 @@ namespace spades {
 			float value;
 			int intValue;
 
-            const SettingItemDescriptor *descriptor;
+			const SettingItemDescriptor *descriptor;
 			bool defaults;
 
-            std::vector<ISettingItemListener *> listeners;
+			std::vector<ISettingItemListener *> listeners;
 
 			void Load();
-			void Set(const std::string&);
+			void Set(const std::string &);
 			void Set(int);
 			void Set(float);
 
-            void NotifyChange();
+			void NotifyChange();
 		};
 		std::map<std::string, Item *> items;
 		bool loaded;
 		Settings();
 
-		Item *GetItem(const std::string& name,
-					  const SettingItemDescriptor *descriptor);
+		Item *GetItem(const std::string &name, const SettingItemDescriptor *descriptor);
 
 		void Save();
 
 	public:
 		static Settings *GetInstance();
 
-
 		class ItemHandle {
 			Item *item;
+
 		public:
-            ItemHandle(const std::string& name,
-                       const SettingItemDescriptor *descriptor);
-			void operator =(const std::string&);
-			void operator =(int);
-			void operator =(float);
+			ItemHandle(const std::string &name, const SettingItemDescriptor *descriptor);
+			void operator=(const std::string &);
+			void operator=(int);
+			void operator=(float);
 			operator std::string();
 			operator float();
 			operator int();
@@ -120,34 +111,31 @@ namespace spades {
 
 			const SettingItemDescriptor &GetDescriptor();
 
-            void AddListener(ISettingItemListener *);
-            void RemoveListener(ISettingItemListener *);
+			void AddListener(ISettingItemListener *);
+			void RemoveListener(ISettingItemListener *);
 		};
 
 		void Load();
 		void Flush();
 		std::vector<std::string> GetAllItemNames();
-
 	};
 	/*
 	template<const char *name, const char *def>
 	class Setting: public Settings::ItemHandle {
 	public:
-		Setting(): Settings::ItemHandle(name, def, desc){
-		}
+	    Setting(): Settings::ItemHandle(name, def, desc){
+	    }
 	};*/
 
-	static inline bool operator ==(const std::string& str, Settings::ItemHandle& handle) {
+	static inline bool operator==(const std::string &str, Settings::ItemHandle &handle) {
 		return str == (std::string)handle;
 	}
 
 // Define SettingItemDescriptor with external linkage so duplicates are
 // detected as linker errors.
-#define DEFINE_SPADES_SETTING(name, ...) \
-    spades::SettingItemDescriptor name ## _desc { __VA_ARGS__ }; \
-    static spades::Settings::ItemHandle name ( # name , & name ## _desc )
+#define DEFINE_SPADES_SETTING(name, ...)                                                           \
+	spades::SettingItemDescriptor name##_desc{__VA_ARGS__};                                        \
+	static spades::Settings::ItemHandle name(#name, &name##_desc)
 
-#define SPADES_SETTING(name) \
-    static spades::Settings::ItemHandle name ( # name , nullptr )
-
+#define SPADES_SETTING(name) static spades::Settings::ItemHandle name(#name, nullptr)
 }

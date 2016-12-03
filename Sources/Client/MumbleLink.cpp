@@ -28,8 +28,7 @@ namespace spades {
 		wchar_t description[2048];
 	};
 
-	struct MumbleLinkPrivate
-	{
+	struct MumbleLinkPrivate {
 #ifdef _WIN32
 		HANDLE obj;
 #else
@@ -37,11 +36,8 @@ namespace spades {
 #endif
 	};
 
-	MumbleLink::MumbleLink() :
-		metre_per_block(0.63),
-		mumbleLinkedMemory(nullptr),
-		priv(new MumbleLinkPrivate())
-	{}
+	MumbleLink::MumbleLink()
+	    : metre_per_block(0.63), mumbleLinkedMemory(nullptr), priv(new MumbleLinkPrivate()) {}
 
 	MumbleLink::~MumbleLink() {
 #ifdef WIN32
@@ -55,8 +51,7 @@ namespace spades {
 #endif
 	}
 
-	void MumbleLink::set_mumble_vector3(float mumble_vec[3],
-		const spades::Vector3 &vec) {
+	void MumbleLink::set_mumble_vector3(float mumble_vec[3], const spades::Vector3 &vec) {
 		mumble_vec[0] = vec.x;
 		mumble_vec[1] = vec.z;
 		mumble_vec[2] = vec.y;
@@ -69,8 +64,8 @@ namespace spades {
 		if (priv->obj == nullptr)
 			return false;
 
-		mumbleLinkedMemory = static_cast<MumbleLinkedMemory *>(MapViewOfFile(
-			priv->obj, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(*mumbleLinkedMemory)));
+		mumbleLinkedMemory = static_cast<MumbleLinkedMemory *>(
+		  MapViewOfFile(priv->obj, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(*mumbleLinkedMemory)));
 
 		if (mumbleLinkedMemory == nullptr) {
 			CloseHandle(priv->obj);
@@ -86,9 +81,8 @@ namespace spades {
 			return false;
 		}
 
-		mumbleLinkedMemory = static_cast<MumbleLinkedMemory *>(
-			(mmap(nullptr, sizeof(*mumbleLinkedMemory), PROT_READ | PROT_WRITE,
-				MAP_SHARED, priv->fd, 0)));
+		mumbleLinkedMemory = static_cast<MumbleLinkedMemory *>((mmap(
+		  nullptr, sizeof(*mumbleLinkedMemory), PROT_READ | PROT_WRITE, MAP_SHARED, priv->fd, 0)));
 
 		if (mumbleLinkedMemory == MAP_FAILED) {
 			mumbleLinkedMemory = nullptr;
@@ -110,7 +104,7 @@ namespace spades {
 		if (mumbleLinkedMemory == nullptr)
 			return;
 		std::wcsncpy(mumbleLinkedMemory->identity,
-			std::wstring(identity.begin(), identity.end()).c_str(), 256);
+		             std::wstring(identity.begin(), identity.end()).c_str(), 256);
 	}
 
 	void MumbleLink::update(spades::client::Player *player) {
@@ -140,11 +134,11 @@ namespace spades {
 
 		// Position of the avatar (here standing slightly off the origin)
 		set_mumble_vector3(mumbleLinkedMemory->fAvatarPosition,
-			player->GetPosition() * metre_per_block);
+		                   player->GetPosition() * metre_per_block);
 
 		// Same as avatar but for the camera.
 		set_mumble_vector3(mumbleLinkedMemory->fCameraPosition,
-			player->GetPosition() * metre_per_block);
+		                   player->GetPosition() * metre_per_block);
 		set_mumble_vector3(mumbleLinkedMemory->fCameraFront, player->GetFront());
 		set_mumble_vector3(mumbleLinkedMemory->fCameraTop, player->GetUp());
 	}

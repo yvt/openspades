@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include "SWImage.h"
@@ -24,80 +24,78 @@
 
 namespace spades {
 	namespace draw {
-		SWImage::SWImage(Bitmap *m):
-		w(static_cast<float>(m->GetWidth())),
-		h(static_cast<float>(m->GetHeight())),
-		iw(1.f / w), ih(1.f / h),
-		ew(m->GetWidth()),
-		eh(m->GetHeight()),
-		isWhite(false)
-		{
+		SWImage::SWImage(Bitmap *m)
+		    : w(static_cast<float>(m->GetWidth())),
+		      h(static_cast<float>(m->GetHeight())),
+		      iw(1.f / w),
+		      ih(1.f / h),
+		      ew(m->GetWidth()),
+		      eh(m->GetHeight()),
+		      isWhite(false) {
 			bmp.resize(ew * eh);
-			
+
 			// premultiplied alpha
 			{
 				uint32_t *inpix = m->GetPixels();
 				uint32_t *outpix = bmp.data();
 				bool foundNonWhite = false;
-				for(std::size_t i = ew * eh; i; i--) {
+				for (std::size_t i = ew * eh; i; i--) {
 					uint32_t col = *(inpix++);
 					unsigned int alpha = static_cast<unsigned int>(col >> 24);
 					alpha += (alpha >> 7); // [0,255] to [0,256]
-					
+
 					unsigned int r = static_cast<unsigned int>((col >> 0) & 0xff);
 					unsigned int g = static_cast<unsigned int>((col >> 8) & 0xff);
-					unsigned int b = static_cast<unsigned int>((col >>16) & 0xff);
+					unsigned int b = static_cast<unsigned int>((col >> 16) & 0xff);
 					r = (r * alpha) >> 8;
 					g = (g * alpha) >> 8;
 					b = (b * alpha) >> 8;
-					
+
 					col &= 0xff000000;
 					col |= b | (g << 8) | (r << 16); // swap RGB/BGR
 					*(outpix++) = col;
-					
-					if(col != 0xffffffff)
+
+					if (col != 0xffffffff)
 						foundNonWhite = true;
 				}
 				isWhite = !foundNonWhite;
 			}
 		}
-		
-		SWImage::SWImage(int w, int h):
-		ew(w), eh(h),
-		w(static_cast<float>(ew)),
-		h(static_cast<float>(eh)),
-		iw(1.f / w),
-		ih(1.f / h),
-		isWhite(false){
+
+		SWImage::SWImage(int w, int h)
+		    : ew(w),
+		      eh(h),
+		      w(static_cast<float>(ew)),
+		      h(static_cast<float>(eh)),
+		      iw(1.f / w),
+		      ih(1.f / h),
+		      isWhite(false) {
 			bmp.reserve(ew * eh);
 		}
-		
-		SWImage::~SWImage() {
-		}
-		
+
+		SWImage::~SWImage() {}
+
 		SWImageManager::~SWImageManager() {
-			for(auto it = images.begin(); it != images.end(); it++)
+			for (auto it = images.begin(); it != images.end(); it++)
 				it->second->Release();
 		}
-		
+
 		SWImage *SWImageManager::RegisterImage(const std::string &name) {
 			auto it = images.find(name);
-			if(it == images.end()) {
+			if (it == images.end()) {
 				Handle<Bitmap> vm;
 				vm.Set(Bitmap::Load(name), false);
 				auto *m = CreateImage(vm);
 				images.insert(std::make_pair(name, m));
 				m->AddRef();
 				return m;
-			}else{
+			} else {
 				auto *image = it->second;
 				image->AddRef();
 				return image;
 			}
 		}
-		
-		SWImage *SWImageManager::CreateImage(Bitmap *vm) {
-			return new SWImage(vm);
-		}
+
+		SWImage *SWImageManager::CreateImage(Bitmap *vm) { return new SWImage(vm); }
 	}
 }

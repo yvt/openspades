@@ -8,14 +8,14 @@
 
 #pragma once
 
-#include "ILocalEntity.h"
 #include "../Core/Math.h"
+#include "ILocalEntity.h"
 
 namespace spades {
 	namespace client {
 		class Client;
 		class IImage;
-		class Tracer: public ILocalEntity {
+		class Tracer : public ILocalEntity {
 			Client *client;
 			IImage *image;
 			Vector3 startPos, dir;
@@ -24,11 +24,11 @@ namespace spades {
 			float visibleLength;
 			float velocity;
 			bool firstUpdate;
+
 		public:
-			Tracer(Client *, Vector3 p1, Vector3 p2,
-				   float bulletVel);
+			Tracer(Client *, Vector3 p1, Vector3 p2, float bulletVel);
 			virtual ~Tracer();
-			
+
 			virtual bool Update(float dt);
 			virtual void Render3D();
 		};

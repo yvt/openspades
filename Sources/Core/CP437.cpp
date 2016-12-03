@@ -3,22 +3,23 @@
  * WTFPL
  */
 
-#include "CP437.h"
 #include <map>
 #include <iterator>
+
+#include "CP437.h"
 #include <Core/Debug.h>
 
 static const uint16_t cp437map[256] = {
 	/*
 	0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0008, 0x0009, 0x000a, 0x000b, 0x000c, 0x000d, 0x000e, 0x000f,
 	0x0010, 0x0011, 0x0012, 0x0013, 0x0014, 0x0015, 0x0016, 0x0017, 0x0018, 0x0019, 0x001a, 0x001b, 0x001c, 0x001d, 0x001e, 0x001f,*/
-	
+
 	// graphic symbols
 	0x0000, 0x263a, 0x263b, 0x2665, 0x2666, 0x2663, 0x2660, 0x2022,
 	0x25d8, 0x25cb, 0x000a, 0x2642, 0x2640, 0x000d, 0x266b, 0x263c,
 	0x25ba, 0x25c4, 0x2195, 0x203c, 0x00b6, 0x00a7, 0x25ac, 0x21a8,
 	0x2191, 0x2193, 0x2192, 0x2190, 0x221f, 0x2194, 0x25b2, 0x25bc,
-	
+
 	0x0020, 0x0021, 0x0022, 0x0023, 0x0024, 0x0025, 0x0026, 0x0027, 0x0028, 0x0029, 0x002a, 0x002b, 0x002c, 0x002d, 0x002e, 0x002f,
 	0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, 0x0039, 0x003a, 0x003b, 0x003c, 0x003d, 0x003e, 0x003f,
 	0x0040, 0x0041, 0x0042, 0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 0x0048, 0x0049, 0x004a, 0x004b, 0x004c, 0x004d, 0x004e, 0x004f,
@@ -36,42 +37,40 @@ static const uint16_t cp437map[256] = {
 };
 
 namespace spades {
-	
+
 	class CP437::ReverseMap {
 	public:
 		std::map<uint32_t, char> mp;
 		ReverseMap() {
-			for(int i = 0; i < 256; i++) {
+			for (int i = 0; i < 256; i++) {
 				mp[cp437map[i]] = static_cast<char>(i);
 			}
 		}
 	};
-	
+
 	CP437::ReverseMap CP437::reverse;
-	
-	char CP437::EncodeChar(uint32_t unicode,
-						   char fb) {
+
+	char CP437::EncodeChar(uint32_t unicode, char fb) {
 		auto it = reverse.mp.find(unicode);
-		if(it == reverse.mp.end()){
+		if (it == reverse.mp.end()) {
 			return fb;
-		}else{
+		} else {
 			SPAssert(cp437map[static_cast<unsigned char>(it->second)] == unicode);
 			return it->second;
 		}
 	}
-	
+
 	std::uint32_t CP437::DecodeChar(char c) {
 		auto r = cp437map[static_cast<unsigned char>(c)];
 		SPAssert(reverse.mp.find(r)->second == c);
 		return r;
 	}
-	
-	std::string CP437::Encode(const std::string& str,
-							  char fallback) {
+
+	std::string CP437::Encode(const std::string &str, char fallback) {
 		size_t idx = 0;
 		std::string outp;
 		outp.reserve(str.size());
-		while(idx < str.size()){
+		while (idx < str.size()) {
 			size_t outNumBytes;
 			auto cp = GetCodePointFromUTF8String(str, idx, &outNumBytes);
 			idx += outNumBytes;
@@ -79,12 +78,12 @@ namespace spades {
 		}
 		return outp;
 	}
-	
-	std::string CP437::Decode(const std::string& str) {
+
+	std::string CP437::Decode(const std::string &str) {
 		std::string outp;
 		outp.reserve(str.size() * 3);
 		auto it = std::back_inserter(outp);
-		for(size_t i = 0; i < str.size(); i++) {
+		for (size_t i = 0; i < str.size(); i++) {
 			auto cp = DecodeChar(str[i]);
 			CodePointToUTF8(it, cp);
 		}
