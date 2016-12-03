@@ -248,10 +248,12 @@ namespace spades {
 			}
 
 			if (result && !result->list.empty()) {
-				auto needle = std::find_if(
+				auto entry = std::find_if(
 				  result->list.begin(), result->list.end(),
 				  [&](MainScreenServerItem *entry) { return entry->GetAddress() == ip; });
-				(*needle)->SetFavorite(favorite);
+				if (entry != result->list.end()) {
+					(*entry)->SetFavorite(favorite);
+				}
 			}
 		}
 
