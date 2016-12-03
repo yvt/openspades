@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include <Core/Math.h>
 #include <string>
+
+#include <Core/Math.h>
 
 namespace spades {
 	namespace client {

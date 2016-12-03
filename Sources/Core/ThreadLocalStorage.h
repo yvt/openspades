@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include "Exception.h"
 #include <string>
+
+#include "Exception.h"
 
 namespace spades {
 

@@ -19,10 +19,10 @@
 
  */
 
-#include "Client.h"
-
 #include <cmath>
 #include <cstdlib>
+
+#include "Client.h"
 
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Settings.h>

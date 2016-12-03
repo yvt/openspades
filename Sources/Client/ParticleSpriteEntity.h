@@ -23,6 +23,7 @@
 #include <Core/Math.h>
 #include "Client.h"
 #include "ILocalEntity.h"
+
 namespace spades {
 	namespace client {
 		class IImage;

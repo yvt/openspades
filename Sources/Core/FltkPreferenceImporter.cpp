@@ -22,17 +22,17 @@
 
 #include <Imports/SDL.h>
 
-#include "FltkPreferenceImporter.h"
-#include "SdlFileStream.h"
-#include <Core/Debug.h>
-#include <Core/Strings.h>
-
 #ifdef WIN32
 #include <wchar.h>
 #include <windows.h>
 #else
 #include <unistd.h>
 #endif
+
+#include "FltkPreferenceImporter.h"
+#include "SdlFileStream.h"
+#include <Core/Debug.h>
+#include <Core/Strings.h>
 
 namespace spades {
 

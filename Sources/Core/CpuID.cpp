@@ -1,8 +1,9 @@
 // WTFPL
 
-#include "CpuID.h"
 
-#include <string.h>
+#include <cstring>
+
+#include "CpuID.h"
 
 namespace spades {
 

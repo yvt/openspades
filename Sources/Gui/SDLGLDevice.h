@@ -20,9 +20,10 @@
 
 #pragma once
 
-#include <Draw/IGLDevice.h>
 #include <Imports/OpenGL.h>
 #include <Imports/SDL.h>
+
+#include <Draw/IGLDevice.h>
 
 namespace spades {
 	namespace gui {

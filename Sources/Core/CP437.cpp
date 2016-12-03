@@ -7,6 +7,7 @@
 #include <iterator>
 
 #include "CP437.h"
+
 #include <Core/Debug.h>
 
 static const uint16_t cp437map[256] = {

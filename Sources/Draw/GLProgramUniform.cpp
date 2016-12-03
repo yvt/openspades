@@ -18,9 +18,10 @@
 
  */
 
+#include <cstdio>
+
 #include "GLProgramUniform.h"
 #include <Core/Exception.h>
-#include <stdio.h>
 #include <Core/Debug.h>
 
 namespace spades {

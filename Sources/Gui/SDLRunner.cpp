@@ -18,13 +18,13 @@
 
  */
 
-#include "SDLGLDevice.h"
 #include <cctype>
 #include <cstring>
 #include <memory>
 
 #include "SDLRunner.h"
 
+#include "SDLGLDevice.h"
 #include <Audio/ALDevice.h>
 #include <Audio/NullDevice.h>
 #include <Audio/YsrDevice.h>

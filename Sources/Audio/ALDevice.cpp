@@ -18,6 +18,11 @@
 
  */
 
+#include <cstring>
+#include <exception>
+#include <cstdlib>
+#include <vector>
+
 #include "ALDevice.h"
 #include "ALFuncs.h"
 #include <Client/GameMap.h>
@@ -28,10 +33,6 @@
 #include <Core/IAudioStream.h>
 #include <Core/Settings.h>
 #include <Core/WavAudioStream.h>
-#include <cstring>
-#include <exception>
-#include <stdlib.h>
-#include <vector>
 
 DEFINE_SPADES_SETTING(s_maxPolyphonics, "96");
 DEFINE_SPADES_SETTING(s_eax, "1");

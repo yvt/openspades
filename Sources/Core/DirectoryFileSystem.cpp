@@ -18,10 +18,6 @@
 
  */
 
-#include "DirectoryFileSystem.h"
-#include "Debug.h"
-#include "Exception.h"
-#include "SdlFileStream.h"
 #include <sys/stat.h>
 
 #ifdef WIN32
@@ -34,6 +30,12 @@
 #else
 #include <dirent.h>
 #endif
+
+#include "DirectoryFileSystem.h"
+
+#include "Debug.h"
+#include "Exception.h"
+#include "SdlFileStream.h"
 
 namespace spades {
 

@@ -1,4 +1,3 @@
-#include "MumbleLink.h"
 #include <cassert>
 #include <cstring>
 
@@ -10,6 +9,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #endif
+
+#include "MumbleLink.h"
 
 namespace spades {
 	struct MumbleLinkedMemory {

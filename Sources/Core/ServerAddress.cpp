@@ -18,9 +18,9 @@
 
  */
 
-#include "ServerAddress.h"
-
 #include <enet/enet.h>
+
+#include "ServerAddress.h"
 
 namespace spades {
 

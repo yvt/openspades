@@ -18,6 +18,8 @@
 
  */
 
+#include <algorithm>
+
 #include "SWFlatMapRenderer.h"
 #include "SWImage.h"
 #include "SWMapRenderer.h"
@@ -25,7 +27,6 @@
 #include <Client/GameMap.h>
 #include <Core/Debug.h>
 #include <Core/Exception.h>
-#include <algorithm>
 
 namespace spades {
 	namespace draw {

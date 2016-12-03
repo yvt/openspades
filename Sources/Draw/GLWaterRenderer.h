@@ -20,9 +20,10 @@
 
 #pragma once
 
-#include "IGLDevice.h"
 #include <vector>
 #include <cstdint>
+
+#include "IGLDevice.h"
 
 namespace spades {
 	namespace client {

@@ -1,5 +1,3 @@
-#include "VersionInfo.h"
-
 #if __linux__
 #define OS_PLATFORM_LINUX
 #elif TARGET_OS_MAC
@@ -9,6 +7,8 @@
 #include <Windows.h>
 #include <sstream>
 #endif
+
+#include "VersionInfo.h"
 
 std::string VersionInfo::GetVersionInfo() {
 #if defined(OS_PLATFORM_LINUX)

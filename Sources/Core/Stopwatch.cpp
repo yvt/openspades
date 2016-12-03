@@ -18,8 +18,9 @@
 
  */
 
-#include "Stopwatch.h"
 #include <Imports/SDL.h>
+
+#include "Stopwatch.h"
 #include "Debug.h"
 
 #ifdef WIN32

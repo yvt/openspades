@@ -22,7 +22,7 @@
 
 #include <algorithm> // std::max / std::min
 #include <cstdint>   // uint32_t --> msvc
-#include <math.h>
+#include <cmath>
 #include <random>
 #include <string>
 #include <vector>

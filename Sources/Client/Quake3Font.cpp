@@ -19,6 +19,7 @@
  */
 
 #include "Quake3Font.h"
+
 #include "IRenderer.h"
 #include <Core/Debug.h>
 

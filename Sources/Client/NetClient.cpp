@@ -23,6 +23,8 @@
 #include <string.h>
 #include <vector>
 
+#include <enet/enet.h>
+
 #include "CTFGameMode.h"
 #include "Client.h"
 #include "GameMap.h"
@@ -40,7 +42,6 @@
 #include <Core/MemoryStream.h>
 #include <Core/Settings.h>
 #include <Core/Strings.h>
-#include <enet/enet.h>
 
 DEFINE_SPADES_SETTING(cg_protocolVersion, "3");
 DEFINE_SPADES_SETTING(cg_unicode, "1");

@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include <Client/IAudioDevice.h>
 #include <map>
+
+#include <Client/IAudioDevice.h>
 
 namespace spades {
 	namespace audio {

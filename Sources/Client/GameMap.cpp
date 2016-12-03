@@ -19,16 +19,17 @@
 
  */
 
+#include <algorithm>
+#include <cmath>
+#include <cstdlib>
+#include <vector>
+
 #include "GameMap.h"
 #include <Core/AutoLocker.h>
 #include <Core/Debug.h>
 #include <Core/Exception.h>
 #include <Core/FileManager.h>
 #include <Core/IStream.h>
-#include <algorithm>
-#include <math.h>
-#include <stdlib.h>
-#include <vector>
 
 namespace spades {
 	namespace client {

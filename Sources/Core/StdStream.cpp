@@ -18,8 +18,6 @@
 
  */
 
-#include "StdStream.h"
-#include "Exception.h"
 #ifndef _MSC_VER
 #include <unistd.h>
 #else
@@ -27,6 +25,10 @@
 #define ftruncate _chsize
 #define fileno _fileno
 #endif
+
+#include "StdStream.h"
+#include "Exception.h"
+
 #include "Debug.h"
 
 namespace spades {

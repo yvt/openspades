@@ -21,6 +21,11 @@
 #include <algorithm> //std::sort
 #include <memory>
 
+#if !defined(__APPLE__) && __unix
+#include <sys/stat.h>
+#include <sys/types.h>
+#endif
+
 #include <Imports/SDL.h>
 #include <zlib.h>
 
@@ -49,11 +54,6 @@
 
 #include <Core/Bitmap.h>
 #include <Core/MemoryStream.h>
-
-#if !defined(__APPLE__) && __unix
-#include <sys/stat.h>
-#include <sys/types.h>
-#endif
 
 #if _MSC_VER >= 1900 // Visual Studio 2015 or higher
 extern "C" {

@@ -3,9 +3,10 @@
  * WTFPL
 */
 
-#include <Core/Math.h>
 #include <cstdint>
 #include <string>
+
+#include <Core/Math.h>
 
 namespace spades {
 	class CP437 {

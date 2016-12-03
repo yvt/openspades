@@ -21,12 +21,13 @@
 #include <cstring>
 #include <memory>
 
+#include <Imports/SDL.h>
+
 #include "Bitmap.h"
 #include "Debug.h"
 #include "Exception.h"
 #include "IBitmapCodec.h"
 #include "IStream.h"
-#include <Imports/SDL.h>
 
 namespace spades {
 	class SdlImageReader : public IBitmapCodec {

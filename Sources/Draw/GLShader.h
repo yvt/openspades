@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include "IGLDevice.h"
 #include <vector>
+
+#include "IGLDevice.h"
 
 namespace spades {
 	namespace draw {

@@ -26,6 +26,7 @@
 #include <Imports/SDL.h>
 
 #include "StartupScreenHelper.h"
+
 #include "StartupScreen.h"
 #include <Audio/ALDevice.h>
 #include <Audio/YsrDevice.h>

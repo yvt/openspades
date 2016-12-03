@@ -21,6 +21,7 @@
 #pragma once
 
 #include "IFont.h"
+
 #define PROP_SPACE_WIDTH -2
 
 namespace spades {

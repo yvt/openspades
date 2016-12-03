@@ -18,7 +18,6 @@
 
  */
 
-#include "ThreadLocalStorage.h"
 #include <vector>
 
 #ifdef WIN32
@@ -26,6 +25,8 @@
 #else
 #include <pthread.h>
 #endif
+
+#include "ThreadLocalStorage.h"
 
 namespace spades {
 

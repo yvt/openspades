@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include "IStream.h"
 #include <vector>
+
+#include "IStream.h"
 
 namespace spades {
 	class DynamicMemoryStream : public IStream {

@@ -20,12 +20,13 @@
 
 #pragma once
 
+#include <cstdint>
+#include <vector>
+
 #include <Core/Math.h>
 #include "GLProgramAttribute.h"
 #include "GLProgramUniform.h"
 #include "IGLSpriteRenderer.h"
-#include <cstdint>
-#include <vector>
 
 namespace spades {
 	namespace draw {

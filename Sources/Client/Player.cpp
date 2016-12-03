@@ -20,6 +20,7 @@
  */
 
 #include "Player.h"
+
 #include <Core/Debug.h>
 #include <Core/Exception.h>
 #include <Core/Settings.h>

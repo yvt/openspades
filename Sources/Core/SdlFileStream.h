@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include "IStream.h"
 #include <Imports/SDL.h>
+
+#include "IStream.h"
 
 namespace spades {
 	class SdlFileStream : public IStream {

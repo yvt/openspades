@@ -18,10 +18,11 @@
 
  */
 
+#include <cctype>
+
 #include "IBitmapCodec.h"
 #include "Debug.h"
 #include "Exception.h"
-#include <ctype.h>
 
 namespace spades {
 

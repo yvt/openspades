@@ -20,10 +20,11 @@
 
 #pragma once
 
+#include <vector>
+
 #include <Client/IModel.h>
 #include <Client/IRenderer.h>
 #include "GLDynamicLight.h"
-#include <vector>
 
 namespace spades {
 	namespace draw {

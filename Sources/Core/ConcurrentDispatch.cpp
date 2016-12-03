@@ -23,14 +23,6 @@
 
 #include <Imports/SDL.h>
 
-#include "AutoLocker.h"
-#include "ConcurrentDispatch.h"
-#include "Debug.h"
-#include "Exception.h"
-#include "Mutex.h"
-#include "Settings.h"
-#include "Thread.h"
-#include <OpenSpades.h>
 #if defined(__APPLE__)
 #include <sys/sysctl.h>
 #else
@@ -46,6 +38,14 @@
 #endif
 #endif
 
+#include "AutoLocker.h"
+#include "ConcurrentDispatch.h"
+#include "Debug.h"
+#include "Exception.h"
+#include "Mutex.h"
+#include "Settings.h"
+#include "Thread.h"
+#include <OpenSpades.h>
 #include "ThreadLocalStorage.h"
 
 DEFINE_SPADES_SETTING(core_numDispatchQueueThreads, "auto");

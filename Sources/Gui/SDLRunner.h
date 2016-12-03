@@ -22,9 +22,10 @@
 
 #include <string>
 
+#include <Imports/SDL.h>
+
 #include <Core/IRunnable.h>
 #include <Core/ServerAddress.h>
-#include <Imports/SDL.h>
 
 namespace spades {
 	namespace client {

@@ -22,6 +22,7 @@
 
 #include <unzip/unzip.h>
 
+// ioapi.h must be included after unzip.h
 #include <unzip/ioapi.h>
 
 #include <Core/Debug.h>

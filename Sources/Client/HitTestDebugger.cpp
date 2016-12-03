@@ -19,6 +19,8 @@
 
  */
 
+#include <ctime> //windows needs this.
+
 #include "HitTestDebugger.h"
 #include "GameMap.h"
 #include "Player.h"
@@ -30,7 +32,6 @@
 #include <Core/Strings.h>
 #include <Draw/SWPort.h>
 #include <Draw/SWRenderer.h>
-#include <time.h> //windows needs this.
 
 SPADES_SETTING(cg_smp);
 

@@ -18,7 +18,7 @@
 
  */
 
-#include <ctype.h>
+#include <cctype>
 
 #include "ChatWindow.h"
 #include "Client.h"

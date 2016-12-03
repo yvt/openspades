@@ -19,6 +19,7 @@
  */
 
 #include "StartupScreen.h"
+
 #include "StartupScreenHelper.h"
 #include <Audio/NullDevice.h>
 #include <Client/Client.h>

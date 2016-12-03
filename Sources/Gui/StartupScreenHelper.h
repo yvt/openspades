@@ -29,6 +29,8 @@
 #include <Core/RefCountedObject.h>
 #include <ScriptBindings/ScriptManager.h>
 
+// scriptarray.h must be included after ScriptManager.h or it won't be able to
+// find angelscript.h
 #include <AngelScript/addons/scriptarray.h>
 
 namespace spades {

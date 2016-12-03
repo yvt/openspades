@@ -18,12 +18,13 @@
 
  */
 
+#include <Imports/OpenGL.h>
+#include <Imports/SDL.h>
+
 #include "SDLGLDevice.h"
 #include <Core/Debug.h>
 #include <Core/Exception.h>
 #include <Core/Settings.h>
-#include <Imports/OpenGL.h>
-#include <Imports/SDL.h>
 
 using namespace spades::draw;
 
