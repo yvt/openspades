@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "../Imports/SDL.h"
+#include <Imports/SDL.h>
 
 #include "IRunnable.h"
 #include "Mutex.h"

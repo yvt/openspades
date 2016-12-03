@@ -23,10 +23,10 @@
 #include <set>
 #include <vector>
 
-#include "../Core/Debug.h"
-#include "../Core/Debug.h"
-#include "../Core/Deque.h"
-#include "../Core/Stopwatch.h"
+#include <Core/Debug.h>
+#include <Core/Debug.h>
+#include <Core/Deque.h>
+#include <Core/Stopwatch.h>
 #include "GameMap.h"
 #include "GameMapWrapper.h"
 

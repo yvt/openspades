@@ -19,7 +19,7 @@
  */
 
 #include "Semaphore.h"
-#include "../Imports/SDL.h"
+#include <Imports/SDL.h>
 
 namespace spades {
 	Semaphore::Semaphore(int initial) { priv = (void *)SDL_CreateSemaphore(initial); }

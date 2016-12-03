@@ -19,8 +19,8 @@
  */
 
 #include "Corpse.h"
-#include "../Core/Debug.h"
-#include "../Core/Settings.h"
+#include <Core/Debug.h>
+#include <Core/Settings.h>
 #include "GameMap.h"
 #include "IModel.h"
 #include "IRenderer.h"

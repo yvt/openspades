@@ -21,8 +21,8 @@
 #include <cstdio>
 #include <cstring>
 
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 #include "GLProgram.h"
 #include "GLShader.h"
 

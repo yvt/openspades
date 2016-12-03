@@ -22,7 +22,7 @@
 
 #include <cstdint>
 
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "IStream.h"
 #include "Math.h"
 #include <Core/RefCountedObject.h>

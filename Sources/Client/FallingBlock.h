@@ -22,8 +22,8 @@
 
 #include <vector>
 
-#include "../Core/Math.h"
-#include "../Core/VoxelModel.h"
+#include <Core/Math.h>
+#include <Core/VoxelModel.h>
 #include "ILocalEntity.h"
 
 namespace spades {

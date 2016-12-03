@@ -23,7 +23,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	/** Deque implementation. NPOT is not fully supported. */

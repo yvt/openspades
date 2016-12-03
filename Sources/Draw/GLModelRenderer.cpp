@@ -19,7 +19,7 @@
  */
 
 #include "GLModelRenderer.h"
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "GLModel.h"
 #include "GLProfiler.h"
 #include "GLRenderer.h"

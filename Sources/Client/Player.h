@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "../Core/Math.h"
+#include <Core/Math.h>
 #include "PhysicsConstants.h"
 
 namespace spades {

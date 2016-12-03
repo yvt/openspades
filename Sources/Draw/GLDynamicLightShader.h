@@ -22,8 +22,8 @@
 
 #include <vector>
 
-#include "../Client/IRenderer.h"
-#include "../Core/Math.h"
+#include <Client/IRenderer.h>
+#include <Core/Math.h>
 #include "GLDynamicLight.h"
 #include "GLProgramUniform.h"
 

@@ -21,12 +21,12 @@
 #include <cstdlib>
 #include <vector>
 
-#include "../kiss_fft130/kiss_fft.h"
+#include <kiss_fft130/kiss_fft.h>
 
-#include "../Client/GameMap.h"
-#include "../Core/ConcurrentDispatch.h"
-#include "../Core/Debug.h"
-#include "../Core/Settings.h"
+#include <Client/GameMap.h>
+#include <Core/ConcurrentDispatch.h>
+#include <Core/Debug.h>
+#include <Core/Settings.h>
 #include "GLFramebufferManager.h"
 #include "GLImage.h"
 #include "GLProfiler.h"

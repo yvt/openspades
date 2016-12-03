@@ -19,7 +19,7 @@
  */
 
 #include "ParticleSpriteEntity.h"
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "GameMap.h"
 #include "World.h"
 

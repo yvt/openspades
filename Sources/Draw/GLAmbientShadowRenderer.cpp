@@ -20,12 +20,12 @@
 
 #include <cstdlib>
 
-#include "../Client/GameMap.h"
+#include <Client/GameMap.h>
 #include "GLAmbientShadowRenderer.h"
 #include "GLProfiler.h"
 #include "GLRenderer.h"
 
-#include "../Core/ConcurrentDispatch.h"
+#include <Core/ConcurrentDispatch.h>
 
 namespace spades {
 	namespace draw {

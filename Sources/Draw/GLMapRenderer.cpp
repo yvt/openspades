@@ -19,9 +19,9 @@
  */
 
 #include "GLMapRenderer.h"
-#include "../Client/GameMap.h"
-#include "../Core/Debug.h"
-#include "../Core/Settings.h"
+#include <Client/GameMap.h>
+#include <Core/Debug.h>
+#include <Core/Settings.h>
 #include "GLDynamicLightShader.h"
 #include "GLImage.h"
 #include "GLMapChunk.h"

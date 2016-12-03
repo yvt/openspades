@@ -21,8 +21,8 @@
 #include <vector>
 
 #include "GLLensFilter.h"
-#include "../Core/Debug.h"
-#include "../Core/Math.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 #include "GLProgram.h"
 #include "GLProgramAttribute.h"
 #include "GLProgramUniform.h"

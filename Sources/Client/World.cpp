@@ -23,10 +23,10 @@
 #include <cstdlib>
 #include <deque>
 
-#include "../Core/Debug.h"
-#include "../Core/Debug.h"
-#include "../Core/FileManager.h"
-#include "../Core/IStream.h"
+#include <Core/Debug.h>
+#include <Core/Debug.h>
+#include <Core/FileManager.h>
+#include <Core/IStream.h>
 #include "GameMap.h"
 #include "GameMapWrapper.h"
 #include "Grenade.h"

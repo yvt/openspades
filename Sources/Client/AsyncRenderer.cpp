@@ -21,10 +21,10 @@
 #include <cstdint>
 #include <new>
 
-#include "../Core/AutoLocker.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
-#include "../Core/Mutex.h"
+#include <Core/AutoLocker.h>
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Mutex.h>
 #include "AsyncRenderer.h"
 #include "IImage.h"
 #include "IModel.h"

@@ -21,7 +21,7 @@
 #include <cstring>
 #include <vector>
 
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "Bitmap.h"
 #include "Debug.h"
 #include "Exception.h"

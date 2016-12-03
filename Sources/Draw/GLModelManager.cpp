@@ -19,11 +19,11 @@
  */
 
 #include "GLModelManager.h"
-#include "../Core/Debug.h"
-#include "../Core/FileManager.h"
-#include "../Core/IStream.h"
-#include "../Core/Settings.h"
-#include "../Core/VoxelModel.h"
+#include <Core/Debug.h>
+#include <Core/FileManager.h>
+#include <Core/IStream.h>
+#include <Core/Settings.h>
+#include <Core/VoxelModel.h>
 #include "GLRenderer.h"
 #include "GLVoxelModel.h"
 

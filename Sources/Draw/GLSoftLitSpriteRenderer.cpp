@@ -19,7 +19,7 @@
  */
 
 #include "GLSoftLitSpriteRenderer.h"
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "GLDynamicLight.h"
 #include "GLFramebufferManager.h"
 #include "GLImage.h"

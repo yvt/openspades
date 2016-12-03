@@ -19,8 +19,8 @@
  */
 
 #include "GLMapShadowRenderer.h"
-#include "../Client/GameMap.h"
-#include "../Core/Debug.h"
+#include <Client/GameMap.h>
+#include <Core/Debug.h>
 #include "GLProfiler.h"
 #include "GLRadiosityRenderer.h"
 #include "GLRenderer.h"

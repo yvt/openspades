@@ -21,8 +21,8 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 #include "DynamicMemoryStream.h"
 
 namespace spades {

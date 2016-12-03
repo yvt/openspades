@@ -22,9 +22,9 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include "../Core/Debug.h"
-#include "../Core/Settings.h"
-#include "../Core/Stopwatch.h"
+#include <Core/Debug.h>
+#include <Core/Settings.h>
+#include <Core/Stopwatch.h>
 #include "GLProfiler.h"
 #include "IGLDevice.h"
 

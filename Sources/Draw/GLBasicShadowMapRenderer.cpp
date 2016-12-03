@@ -19,9 +19,9 @@
  */
 
 #include "GLBasicShadowMapRenderer.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
-#include "../Core/Settings.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Settings.h>
 #include "GLProfiler.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"

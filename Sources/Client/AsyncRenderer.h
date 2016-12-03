@@ -22,7 +22,7 @@
 
 #include <map>
 
-#include "../Core/ConcurrentDispatch.h"
+#include <Core/ConcurrentDispatch.h>
 #include "IRenderer.h"
 
 namespace spades {

@@ -21,12 +21,12 @@
 #include <cstdarg>
 #include <cstdlib>
 
-#include "../Client/GameMap.h"
-#include "../Core/Bitmap.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
-#include "../Core/Settings.h"
-#include "../Core/Stopwatch.h"
+#include <Client/GameMap.h>
+#include <Core/Bitmap.h>
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Settings.h>
+#include <Core/Stopwatch.h>
 #include "GLAmbientShadowRenderer.h"
 #include "GLAutoExposureFilter.h"
 #include "GLBloomFilter.h"

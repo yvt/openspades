@@ -19,7 +19,7 @@
  */
 
 #include "GLDynamicLightShader.h"
-#include "../Core/Settings.h"
+#include <Core/Settings.h>
 #include "GLImage.h"
 #include "GLProgramManager.h"
 #include "GLRenderer.h"

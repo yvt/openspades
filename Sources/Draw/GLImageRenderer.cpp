@@ -19,9 +19,9 @@
  */
 
 #include "GLImageRenderer.h"
-#include "../Core/Debug.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
+#include <Core/Debug.h>
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 #include "GLImage.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"

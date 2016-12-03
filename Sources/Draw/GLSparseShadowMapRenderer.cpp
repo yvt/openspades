@@ -19,9 +19,9 @@
  */
 
 #include "GLSparseShadowMapRenderer.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
-#include "../Core/Settings.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Settings.h>
 #include "GLModel.h"
 #include "GLModelRenderer.h"
 #include "GLProfiler.h"

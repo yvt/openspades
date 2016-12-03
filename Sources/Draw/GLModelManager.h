@@ -23,7 +23,7 @@
 #include <map>
 #include <string>
 
-#include "../Client/IModel.h"
+#include <Client/IModel.h>
 
 namespace spades {
 	namespace draw {

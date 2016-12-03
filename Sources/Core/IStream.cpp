@@ -20,7 +20,7 @@
 
 #include <algorithm>
 
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "Debug.h"
 #include "Exception.h"
 #include "IStream.h"

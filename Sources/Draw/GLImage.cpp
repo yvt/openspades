@@ -19,8 +19,8 @@
  */
 
 #include "GLImage.h"
-#include "../Core/Bitmap.h"
-#include "../Core/Debug.h"
+#include <Core/Bitmap.h>
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace draw {

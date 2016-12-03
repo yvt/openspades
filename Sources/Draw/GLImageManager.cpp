@@ -19,10 +19,10 @@
  */
 
 #include "GLImageManager.h"
-#include "../Core/Bitmap.h"
-#include "../Core/Debug.h"
-#include "../Core/FileManager.h"
-#include "../Core/IStream.h"
+#include <Core/Bitmap.h>
+#include <Core/Debug.h>
+#include <Core/FileManager.h>
+#include <Core/IStream.h>
 #include "GLImage.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"

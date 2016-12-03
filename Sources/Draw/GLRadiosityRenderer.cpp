@@ -20,13 +20,13 @@
 
 #include <cstdlib>
 
-#include "../Client/GameMap.h"
+#include <Client/GameMap.h>
 #include "GLMapShadowRenderer.h"
 #include "GLRadiosityRenderer.h"
 #include "GLRenderer.h"
 
-#include "../Core/ConcurrentDispatch.h"
-#include "../Core/Settings.h"
+#include <Core/ConcurrentDispatch.h>
+#include <Core/Settings.h>
 #ifdef __APPLE__
 #include <xmmintrin.h>
 #endif

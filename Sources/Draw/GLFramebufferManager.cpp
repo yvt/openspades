@@ -19,9 +19,9 @@
  */
 
 #include "GLFramebufferManager.h"
-#include "../Core/Debug.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
+#include <Core/Debug.h>
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 #include "GLSettings.h"
 #include "IGLDevice.h"
 

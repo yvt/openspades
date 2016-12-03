@@ -23,8 +23,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../Core/Debug.h"
-#include "../Core/Settings.h"
+#include <Core/Debug.h>
+#include <Core/Settings.h>
 #include "CTFGameMode.h"
 #include "Client.h"
 #include "IFont.h"

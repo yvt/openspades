@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "../Core/Math.h"
+#include <Core/Math.h>
 
 namespace spades {
 	class Bitmap;

@@ -22,8 +22,8 @@
 #include <algorithm>
 #include <cctype>
 
-#include "../Imports/OpenGL.h" //for gpu info
-#include "../Imports/SDL.h"
+#include <Imports/OpenGL.h> //for gpu info
+#include <Imports/SDL.h>
 
 #include "StartupScreenHelper.h"
 #include "StartupScreen.h"

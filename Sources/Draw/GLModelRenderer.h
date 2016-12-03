@@ -22,8 +22,8 @@
 
 #include <vector>
 
-#include "../Client/IModel.h"
-#include "../Client/IRenderer.h"
+#include <Client/IModel.h>
+#include <Client/IRenderer.h>
 #include "GLDynamicLight.h"
 #include "IGLDevice.h"
 

@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include "../Client/IModel.h"
-#include "../Client/IRenderer.h"
+#include <Client/IModel.h>
+#include <Client/IRenderer.h>
 #include "GLDynamicLight.h"
 #include <vector>
 

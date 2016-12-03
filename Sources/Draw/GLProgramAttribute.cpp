@@ -19,9 +19,9 @@
  */
 
 #include "GLProgramAttribute.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
-#include "../Core/IStream.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/IStream.h>
 
 namespace spades {
 	namespace draw {

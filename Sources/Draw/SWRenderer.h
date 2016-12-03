@@ -25,10 +25,10 @@
 #include <memory>
 #include <vector>
 
-#include "../Client/IGameMapListener.h"
-#include "../Client/IRenderer.h"
-#include "../Client/SceneDefinition.h"
-#include "../Core/Math.h"
+#include <Client/IGameMapListener.h>
+#include <Client/IRenderer.h>
+#include <Client/SceneDefinition.h>
+#include <Core/Math.h>
 #include "SWFeatureLevel.h"
 #include <Core/Stopwatch.h>
 

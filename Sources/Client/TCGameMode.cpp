@@ -20,7 +20,7 @@
  */
 
 #include "TCGameMode.h"
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "World.h"
 
 namespace spades {

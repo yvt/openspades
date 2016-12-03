@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "../Client/IImage.h"
+#include <Client/IImage.h>
 #include "IGLDevice.h"
 
 namespace spades {

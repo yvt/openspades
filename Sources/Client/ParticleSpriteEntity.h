@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "../Core/Math.h"
+#include <Core/Math.h>
 #include "Client.h"
 #include "ILocalEntity.h"
 namespace spades {

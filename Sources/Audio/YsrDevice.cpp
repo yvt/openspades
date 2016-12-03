@@ -18,7 +18,7 @@
 
  */
 
-#include "../Imports/SDL.h"
+#include <Imports/SDL.h>
 
 #include "YsrDevice.h"
 #include <Client/GameMap.h>

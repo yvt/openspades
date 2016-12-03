@@ -21,7 +21,7 @@
 #include <list>
 #include <sys/types.h>
 
-#include "../Imports/SDL.h"
+#include <Imports/SDL.h>
 
 #include "AutoLocker.h"
 #include "ConcurrentDispatch.h"

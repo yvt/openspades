@@ -19,8 +19,8 @@
  */
 
 #include "GLShadowMapShader.h"
-#include "../Core/Debug.h"
-#include "../Core/Settings.h"
+#include <Core/Debug.h>
+#include <Core/Settings.h>
 #include "GLBasicShadowMapRenderer.h"
 #include "GLMapShadowRenderer.h"
 #include "GLProgramManager.h"

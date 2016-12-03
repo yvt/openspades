@@ -19,7 +19,7 @@
  */
 
 #include "RefCountedObject.h"
-#include "../ScriptBindings/ScriptManager.h"
+#include <ScriptBindings/ScriptManager.h>
 #include "AutoLocker.h"
 #include "Exception.h"
 

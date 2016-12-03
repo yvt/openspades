@@ -22,7 +22,7 @@
 #include <cstdlib>
 #include <memory>
 
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "FltkPreferenceImporter.h"
 #include "Settings.h"
 #include <Core/FileManager.h>

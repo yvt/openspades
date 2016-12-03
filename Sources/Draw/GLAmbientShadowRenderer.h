@@ -22,8 +22,8 @@
 
 #include <vector>
 
-#include "../Core/Debug.h"
-#include "../Core/Math.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 #include "IGLDevice.h"
 
 namespace spades {

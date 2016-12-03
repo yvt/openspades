@@ -20,9 +20,9 @@
  */
 
 #include "Player.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
-#include "../Core/Settings.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Settings.h>
 #include "GameMap.h"
 #include "GameMapWrapper.h"
 #include "Grenade.h"

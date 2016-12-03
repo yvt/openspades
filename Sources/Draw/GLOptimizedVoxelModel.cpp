@@ -20,10 +20,10 @@
 
 #include <set>
 
-#include "../Core/Bitmap.h"
-#include "../Core/BitmapAtlasGenerator.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
+#include <Core/Bitmap.h>
+#include <Core/BitmapAtlasGenerator.h>
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 #include "CellToTriangle.h"
 #include "GLDynamicLightShader.h"
 #include "GLImage.h"

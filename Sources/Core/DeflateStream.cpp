@@ -20,7 +20,7 @@
 
 #include <cstring>
 
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "Debug.h"
 #include "DeflateStream.h"
 #include "Exception.h"

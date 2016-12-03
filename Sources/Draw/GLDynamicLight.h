@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "../Client/IRenderer.h"
+#include <Client/IRenderer.h>
 
 namespace spades {
 	namespace draw {

@@ -19,10 +19,10 @@
  */
 
 #include "SDLAsyncRunner.h"
-#include "../Client/AsyncRenderer.h"
-#include "../Client/Client.h"
-#include "../Core/ConcurrentDispatch.h"
-#include "../Core/Thread.h"
+#include <Client/AsyncRenderer.h>
+#include <Client/Client.h>
+#include <Core/ConcurrentDispatch.h>
+#include <Core/Thread.h>
 #include <Core/AutoLocker.h>
 
 namespace spades {

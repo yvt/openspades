@@ -24,8 +24,8 @@
 #include <cstdint>
 #include <list>
 
-#include "../Core/Debug.h"
-#include "../Core/Math.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 
 #include "IGameMapListener.h"
 #include <Core/AutoLocker.h>

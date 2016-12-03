@@ -19,9 +19,9 @@
  */
 
 #include "GLFlatMapRenderer.h"
-#include "../Client/GameMap.h"
-#include "../Core/Bitmap.h"
-#include "../Core/Debug.h"
+#include <Client/GameMap.h>
+#include <Core/Bitmap.h>
+#include <Core/Debug.h>
 #include "GLImage.h"
 #include "GLRenderer.h"
 

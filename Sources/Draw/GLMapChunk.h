@@ -22,9 +22,9 @@
 
 #include <vector>
 
-#include "../Client/GameMap.h"
-#include "../Client/IRenderer.h"
-#include "../Core/Math.h"
+#include <Client/GameMap.h>
+#include <Client/IRenderer.h>
+#include <Core/Math.h>
 #include "GLDynamicLight.h"
 #include "IGLDevice.h"
 

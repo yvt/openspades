@@ -19,7 +19,7 @@
  */
 
 #include "GLVoxelModel.h"
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "GLDynamicLightShader.h"
 #include "GLImage.h"
 #include "GLProgram.h"

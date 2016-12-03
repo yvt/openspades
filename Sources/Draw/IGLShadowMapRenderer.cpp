@@ -19,7 +19,7 @@
  */
 
 #include "IGLShadowMapRenderer.h"
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "GLModelRenderer.h"
 #include "GLRenderer.h"
 

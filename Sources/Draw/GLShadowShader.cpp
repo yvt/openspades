@@ -19,9 +19,9 @@
  */
 
 #include "GLShadowShader.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
-#include "../Core/Settings.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Settings.h>
 #include "GLAmbientShadowRenderer.h"
 #include "GLBasicShadowMapRenderer.h"
 #include "GLImage.h"

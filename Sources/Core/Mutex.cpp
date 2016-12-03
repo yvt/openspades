@@ -19,7 +19,7 @@
  */
 
 #include "Mutex.h"
-#include "../Imports/SDL.h"
+#include <Imports/SDL.h>
 
 namespace spades {
 	Mutex::Mutex() { priv = (void *)SDL_CreateMutex(); }

@@ -19,7 +19,7 @@
  */
 
 #include "Stopwatch.h"
-#include "../Imports/SDL.h"
+#include <Imports/SDL.h>
 #include "Debug.h"
 
 #ifdef WIN32

@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "../Core/Math.h"
+#include <Core/Math.h>
 #include "IImage.h"
 #include "IModel.h"
 #include "SceneDefinition.h"

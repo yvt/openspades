@@ -19,11 +19,11 @@
  */
 
 #include "GLProgramManager.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
-#include "../Core/FileManager.h"
-#include "../Core/Math.h"
-#include "../Core/Stopwatch.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/FileManager.h>
+#include <Core/Math.h>
+#include <Core/Stopwatch.h>
 #include "GLDynamicLightShader.h"
 #include "GLProgram.h"
 #include "GLSettings.h"

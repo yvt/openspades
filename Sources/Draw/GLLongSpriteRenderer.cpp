@@ -19,7 +19,7 @@
  */
 
 #include "GLLongSpriteRenderer.h"
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "GLImage.h"
 #include "GLProgram.h"
 #include "GLRenderer.h"

@@ -23,8 +23,8 @@
 #include <map>
 #include <string>
 
-#include "../Core/Debug.h"
-#include "../Imports/SDL.h"
+#include <Core/Debug.h>
+#include <Imports/SDL.h>
 #include "Debug.h"
 #include "FileManager.h"
 #include "IStream.h"

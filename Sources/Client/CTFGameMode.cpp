@@ -19,7 +19,7 @@
  */
 
 #include "CTFGameMode.h"
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace client {

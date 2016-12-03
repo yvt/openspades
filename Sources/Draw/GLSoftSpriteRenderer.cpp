@@ -19,7 +19,7 @@
  */
 
 #include "GLSoftSpriteRenderer.h"
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 #include "GLFramebufferManager.h"
 #include "GLImage.h"
 #include "GLProfiler.h"

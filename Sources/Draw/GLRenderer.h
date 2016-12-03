@@ -22,10 +22,10 @@
 
 #include <map>
 
-#include "../Client/IGameMapListener.h"
-#include "../Client/IRenderer.h"
-#include "../Client/SceneDefinition.h"
-#include "../Core/Math.h"
+#include <Client/IGameMapListener.h>
+#include <Client/IRenderer.h>
+#include <Client/SceneDefinition.h>
+#include <Core/Math.h>
 #include "GLCameraBlurFilter.h"
 #include "GLDynamicLight.h"
 #include "GLSettings.h"

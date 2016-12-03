@@ -20,12 +20,12 @@
 
 #include <cstring>
 
-#include "../unzip/unzip.h"
+#include <unzip/unzip.h>
 
-#include "../unzip/ioapi.h"
+#include <unzip/ioapi.h>
 
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 
 #include "DynamicMemoryStream.h"
 #include "IStream.h"

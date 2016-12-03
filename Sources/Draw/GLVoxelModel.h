@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "../Core/VoxelModel.h"
+#include <Core/VoxelModel.h>
 #include "GLModel.h"
 #include "IGLDevice.h"
 

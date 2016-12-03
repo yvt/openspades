@@ -1,27 +1,27 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include "GLProgramUniform.h"
-#include "../Core/Exception.h"
+#include <Core/Exception.h>
 #include <stdio.h>
-#include "../Core/Debug.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace draw {
@@ -29,10 +29,10 @@ namespace spades {
 		name(n){
 			last = NULL;
 		}
-		
+
 		void GLProgramUniform::SetProgram(spades::draw::GLProgram *p){
 			SPADES_MARK_FUNCTION_DEBUG();
-			
+
 			if(p == NULL) {
 				SPInvalidArgument("prog");
 			}
@@ -48,7 +48,7 @@ namespace spades {
 				}
 			}
 		}
-		
+
 		void GLProgramUniform::SetValue(IGLDevice::Float v){
 			SPADES_MARK_FUNCTION_DEBUG();
 			last->GetDevice()->Uniform(loc, v);
@@ -71,7 +71,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION_DEBUG();
 			last->GetDevice()->Uniform(loc, x, y, z, w);
 		}
-		
+
 		void GLProgramUniform::SetValue(IGLDevice::Integer x){
 			SPADES_MARK_FUNCTION_DEBUG();
 			last->GetDevice()->Uniform(loc, x);

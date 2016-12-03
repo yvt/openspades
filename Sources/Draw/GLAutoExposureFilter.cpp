@@ -20,8 +20,8 @@
 
 #include <vector>
 
-#include "../Core/Debug.h"
-#include "../Core/Math.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 #include "GLAutoExposureFilter.h"
 #include "GLProgram.h"
 #include "GLProgramAttribute.h"

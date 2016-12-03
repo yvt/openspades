@@ -19,8 +19,8 @@
  */
 
 #include "FallingBlock.h"
-#include "../Core/Debug.h"
-#include "../Core/Exception.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 #include "Client.h"
 #include "GameMap.h"
 #include "IModel.h"

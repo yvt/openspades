@@ -20,7 +20,7 @@
 
 #include <cstring>
 
-#include "../binpack2d/binpack2d.hpp"
+#include <binpack2d/binpack2d.hpp>
 #include "Bitmap.h"
 #include "BitmapAtlasGenerator.h"
 #include "Debug.h"
