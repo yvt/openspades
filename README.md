@@ -128,9 +128,9 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
     **Note:** In case OpenSpades still fails to find any dll, copy all the remaing dlls which aren't there yet, it should solve the problem.
     
-10. In case it's a debug build, copy `E:/Projects/openspades/Resources` folder to your build directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/Debug`
+10. Copy `E:/Projects/openspades/Resources` folder to your build directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE`
 
-    In case you haven't set OPENSPADES_RESDIR and extracted the [Non-free pak](https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip) into it, extract it and merge it inside the `Resources` folder you just copied.
+    In case you haven't set OPENSPADES_RESDIR and extracted the [Non-free pak](https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip) into it, extract it and merge it inside the `Resources` folder you just copied. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
 
 ### On Mac OS X (with Xcode)
 1. Get the latest version of Xcode and OpenSpades source.
