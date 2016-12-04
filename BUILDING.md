@@ -1,5 +1,5 @@
 ## Warnings
-**Before you start:** In case you're having issues to build OpenSpades, it may be because this README file is outdated, if so:
+**Before you start:** In case you're having issues to build OpenSpades, it may be because this file is outdated, if so:
 
  1. See the [Building Guide](https://github.com/yvt/openspades/wiki/Building), which may be up to date
  2. Or [open an issue](https://github.com/yvt/openspades/issues) if the problem persists
