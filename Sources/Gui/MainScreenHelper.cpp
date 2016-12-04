@@ -29,6 +29,8 @@
 #include "MainScreen.h"
 #include "MainScreenHelper.h"
 #include <Core/AutoLocker.h>
+#include <Core/FileManager.h>
+#include <Core/IStream.h>
 #include <Core/Settings.h>
 #include <Core/Thread.h>
 #include <OpenSpades.h>
@@ -97,6 +99,7 @@ namespace spades {
 	}
 
 	namespace gui {
+		constexpr auto FAVORITE_PATH = "/favorite_servers.json";
 
 		// FIXME: mostly duplicated code with Serverbrowser.cpp
 		class MainScreenHelper::ServerListQuery : public Thread {
@@ -133,7 +136,8 @@ namespace spades {
 							Json::Value &obj = *it;
 							Serveritem *srv = Serveritem::create(obj);
 							if (srv) {
-								resp->list.push_back(new MainScreenServerItem(srv));
+								resp->list.push_back(new MainScreenServerItem(
+								  srv, owner->favorites.count(srv->Ip()) >= 1));
 								delete srv;
 							}
 						}
@@ -188,6 +192,7 @@ namespace spades {
 		MainScreenHelper::MainScreenHelper(MainScreen *scr)
 		    : mainScreen(scr), result(NULL), newResult(NULL), query(NULL) {
 			SPADES_MARK_FUNCTION();
+			LoadFavorites();
 		}
 
 		MainScreenHelper::~MainScreenHelper() {
@@ -201,7 +206,55 @@ namespace spades {
 
 		void MainScreenHelper::MainScreenDestroyed() {
 			SPADES_MARK_FUNCTION();
+			SaveFavorites();
 			mainScreen = NULL;
+		}
+
+		void MainScreenHelper::LoadFavorites() {
+			SPADES_MARK_FUNCTION();
+			Json::Reader reader;
+
+			if (spades::FileManager::FileExists(FAVORITE_PATH)) {
+				std::string favs = spades::FileManager::ReadAllBytes(FAVORITE_PATH);
+				Json::Value favorite_root;
+				if (reader.parse(favs, favorite_root, false)) {
+					for (const auto &fav : favorite_root) {
+						if (fav.isString())
+							favorites.insert(fav.asString());
+					}
+				}
+			}
+		}
+
+		void MainScreenHelper::SaveFavorites() {
+			SPADES_MARK_FUNCTION();
+			Json::StyledWriter writer;
+			Json::Value v(Json::ValueType::arrayValue);
+
+			IStream *fobj = spades::FileManager::OpenForWriting(FAVORITE_PATH);
+			for (const auto &favorite : favorites) {
+				v.append(Json::Value(favorite));
+			}
+
+			fobj->Write(writer.write(v));
+		}
+
+		void MainScreenHelper::SetServerFavorite(std::string ip, bool favorite) {
+			SPADES_MARK_FUNCTION();
+			if (favorite) {
+				favorites.insert(ip);
+			} else {
+				favorites.erase(ip);
+			}
+
+			if (result && !result->list.empty()) {
+				auto entry = std::find_if(
+				  result->list.begin(), result->list.end(),
+				  [&](MainScreenServerItem *entry) { return entry->GetAddress() == ip; });
+				if (entry != result->list.end()) {
+					(*entry)->SetFavorite(favorite);
+				}
+			}
 		}
 
 		bool MainScreenHelper::PollServerListState() {
@@ -242,6 +295,12 @@ namespace spades {
 			bool order;
 			serverSorter(int type_, bool order_) : type(type_), order(order_) { ; }
 			bool operator()(MainScreenServerItem *x, MainScreenServerItem *y) const {
+				if (x->IsFavorite() && !y->IsFavorite()) {
+					return true;
+				} else if (!x->IsFavorite() && y->IsFavorite()) {
+					return false;
+				}
+
 				if (order) {
 					MainScreenServerItem *t = x;
 					x = y;
@@ -345,7 +404,7 @@ namespace spades {
 				list[i]->Release();
 		}
 
-		MainScreenServerItem::MainScreenServerItem(Serveritem *item) {
+		MainScreenServerItem::MainScreenServerItem(Serveritem *item, bool favorite) {
 			SPADES_MARK_FUNCTION();
 			name = item->Name();
 			address = item->Ip();
@@ -356,6 +415,7 @@ namespace spades {
 			ping = item->Ping();
 			numPlayers = item->Players();
 			maxPlayers = item->MaxPlayers();
+			this->favorite = favorite;
 		}
 
 		MainScreenServerItem::~MainScreenServerItem() { SPADES_MARK_FUNCTION(); }

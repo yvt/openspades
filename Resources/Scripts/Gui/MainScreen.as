@@ -198,16 +198,22 @@ namespace spades {
 			Vector2 pos = ScreenPosition;
 			Vector2 size = Size;
 			Image@ img = renderer.RegisterImage("Gfx/White.tga");
-			if(Pressed && Hover) {
-				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.3f);
-			} else if(Hover) {
-				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.15f);
-			} else {
-				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.0f);
+
+			Vector4 bgcolor = Vector4(1.f, 1.f, 1.f, 0.0f);
+			Vector4 fgcolor = Vector4(1.f, 1.f, 1.f, 1.f);
+			if(item.Favorite) {
+				bgcolor = Vector4(0.3f, 0.3f, 1.f, 0.1f);
+				fgcolor = Vector4(220.f/255.f,220.f/255.f,0,1);
 			}
+			if(Pressed && Hover) {
+				bgcolor.w += 0.3;
+			} else if(Hover) {
+				bgcolor.w += 0.15;
+			}
+			renderer.ColorNP = bgcolor;
 			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 
-			Font.Draw(item.Name, ScreenPosition + Vector2(4.f, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw(item.Name, ScreenPosition + Vector2(4.f, 2.f), 1.f, fgcolor);
 			string playersStr = ToString(item.NumPlayers) + "/" + ToString(item.MaxPlayers);
 			Vector4 col(1,1,1,1);
 			if(item.NumPlayers >= item.MaxPlayers) col = Vector4(1,0.7f,0.7f,1);
@@ -231,6 +237,7 @@ namespace spades {
 
 		ServerListItemEventHandler@ ItemActivated;
 		ServerListItemEventHandler@ ItemDoubleClicked;
+		ServerListItemEventHandler@ ItemRightClicked;
 
 		ServerListModel(spades::ui::UIManager@ manager, MainScreenServerItem@[]@ list) {
 			@this.manager = manager;
@@ -251,10 +258,17 @@ namespace spades {
 				ItemDoubleClicked(this, item.item);
 			}
 		}
+		private void OnItemRightClicked(spades::ui::UIElement@ sender){
+			ServerListItem@ item = cast<ServerListItem>(sender);
+			if(ItemRightClicked !is null) {
+				ItemRightClicked(this, item.item);
+			}
+		}
 		spades::ui::UIElement@ CreateElement(int row) {
 			ServerListItem i(manager, list[row]);
 			@i.Activated = spades::ui::EventHandler(this.OnItemClicked);
 			@i.DoubleClicked = spades::ui::EventHandler(this.OnItemDoubleClicked);
+			@i.RightClicked = spades::ui::EventHandler(this.OnItemRightClicked);
 			return i;
 		}
 		void RecycleElement(spades::ui::UIElement@ elem) {}
@@ -561,6 +575,11 @@ namespace spades {
 			Connect();
 		}
 
+		void ServerListItemRightClicked(ServerListModel@ sender, MainScreenServerItem@ item) {
+			helper.SetServerFavorite(item.Address, !item.Favorite);
+			UpdateServerList();
+		}
+
 		private void SortServerListByPing(spades::ui::UIElement@ sender) {
 			SortServerList(0);
 		}
@@ -647,6 +666,7 @@ namespace spades {
 			@serverList.Model = model;
 			@model.ItemActivated = ServerListItemEventHandler(this.ServerListItemActivated);
 			@model.ItemDoubleClicked = ServerListItemEventHandler(this.ServerListItemDoubleClicked);
+			@model.ItemRightClicked = ServerListItemEventHandler(this.ServerListItemRightClicked);
 			serverList.ScrollToTop();
 		}
 

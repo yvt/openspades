@@ -62,6 +62,11 @@ namespace spades {
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("MainScreenHelper",
+												  "bool SetServerFavorite(string, bool)",
+												  asMETHOD(gui::MainScreenHelper, SetServerFavorite),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenHelper",
 												  "bool PollServerListState()",
 												  asMETHOD(gui::MainScreenHelper, PollServerListState),
 												  asCALL_THISCALL);
@@ -148,6 +153,11 @@ namespace spades {
 					r = eng->RegisterObjectMethod("MainScreenServerItem",
 												  "int get_MaxPlayers()",
 												  asMETHOD(gui::MainScreenServerItem, GetMaxPlayers),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenServerItem",
+												  "bool get_Favorite()",
+												  asMETHOD(gui::MainScreenServerItem, IsFavorite),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					break;

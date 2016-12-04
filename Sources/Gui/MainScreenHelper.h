@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <unordered_set>
 #include <vector>
 
 #include <Core/Mutex.h>
@@ -43,12 +44,13 @@ namespace spades {
 			int ping;
 			int numPlayers;
 			int maxPlayers;
+			bool favorite;
 
 		protected:
 			~MainScreenServerItem();
 
 		public:
-			MainScreenServerItem(Serveritem *);
+			MainScreenServerItem(Serveritem *, bool favorite);
 
 			std::string GetName() { return name; }
 			std::string GetAddress() { return address; }
@@ -59,6 +61,8 @@ namespace spades {
 			int GetPing() { return ping; }
 			int GetNumPlayers() { return numPlayers; }
 			int GetMaxPlayers() { return maxPlayers; }
+			bool IsFavorite() { return favorite; }
+			void SetFavorite(bool favorite) { this->favorite = favorite; }
 		};
 
 		struct MainScreenServerList {
@@ -78,6 +82,7 @@ namespace spades {
 			Mutex newResultArrayLock;
 			ServerListQuery *volatile query;
 			std::string errorMessage;
+			std::unordered_set<std::string> favorites;
 
 		protected:
 			virtual ~MainScreenHelper();
@@ -85,6 +90,10 @@ namespace spades {
 		public:
 			MainScreenHelper(MainScreen *scr);
 			void MainScreenDestroyed();
+
+			void LoadFavorites();
+			void SaveFavorites();
+			void SetServerFavorite(std::string ip, bool favorite);
 
 			bool PollServerListState();
 			void StartQuery();
