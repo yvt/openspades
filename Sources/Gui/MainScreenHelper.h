@@ -62,7 +62,7 @@ namespace spades {
 			int GetNumPlayers() { return numPlayers; }
 			int GetMaxPlayers() { return maxPlayers; }
 			bool IsFavorite() { return favorite; }
-			bool SetFavorite(bool favorite) { this->favorite = favorite; }
+			void SetFavorite(bool favorite) { this->favorite = favorite; }
 		};
 
 		struct MainScreenServerList {
