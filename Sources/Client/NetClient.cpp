@@ -726,12 +726,12 @@ namespace spades {
 						if (pos.x != 0.f || pos.y != 0.f || pos.z != 0.f || front.x != 0.f ||
 						    front.y != 0.f || front.z != 0.f) {
 							Player *p;
-							SPAssert(!isnan(pos.x));
-							SPAssert(!isnan(pos.y));
-							SPAssert(!isnan(pos.z));
-							SPAssert(!isnan(front.x));
-							SPAssert(!isnan(front.y));
-							SPAssert(!isnan(front.z));
+							SPAssert(!std::isnan(pos.x));
+							SPAssert(!std::isnan(pos.y));
+							SPAssert(!std::isnan(pos.z));
+							SPAssert(!std::isnan(front.x));
+							SPAssert(!std::isnan(front.y));
+							SPAssert(!std::isnan(front.z));
 							SPAssert(front.GetLength() < 40.f);
 							if (GetWorld()) {
 								p = GetWorld()->GetPlayer(idx);
