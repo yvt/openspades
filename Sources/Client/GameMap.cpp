@@ -197,16 +197,16 @@ namespace spades {
 		}
 
 		bool GameMap::ClipBox(float x, float y, float z) {
-			SPAssert(!isnan(x));
-			SPAssert(!isnan(y));
-			SPAssert(!isnan(z));
+			SPAssert(!std::isnan(x));
+			SPAssert(!std::isnan(y));
+			SPAssert(!std::isnan(z));
 			return ClipBox((int)floorf(x), (int)floorf(y), (int)floorf(z));
 		}
 
 		bool GameMap::ClipWorld(float x, float y, float z) {
-			SPAssert(!isnan(x));
-			SPAssert(!isnan(y));
-			SPAssert(!isnan(z));
+			SPAssert(!std::isnan(x));
+			SPAssert(!std::isnan(y));
+			SPAssert(!std::isnan(z));
 			return ClipWorld((int)floorf(x), (int)floorf(y), (int)floorf(z));
 		}
 
@@ -214,13 +214,13 @@ namespace spades {
 		                      spades::IntVector3 &vOut) {
 			SPADES_MARK_FUNCTION_DEBUG();
 
-			SPAssert(!isnan(v0.x));
-			SPAssert(!isnan(v0.y));
-			SPAssert(!isnan(v0.z));
-			SPAssert(!isnan(v1.x));
-			SPAssert(!isnan(v1.y));
-			SPAssert(!isnan(v1.z));
-			SPAssert(!isnan(length));
+			SPAssert(!std::isnan(v0.x));
+			SPAssert(!std::isnan(v0.y));
+			SPAssert(!std::isnan(v0.z));
+			SPAssert(!std::isnan(v1.x));
+			SPAssert(!std::isnan(v1.y));
+			SPAssert(!std::isnan(v1.z));
+			SPAssert(!std::isnan(length));
 
 			v1 = v0 + v1 * length;
 
@@ -368,12 +368,12 @@ namespace spades {
 			SPADES_MARK_FUNCTION_DEBUG();
 			GameMap::RayCastResult result;
 
-			SPAssert(!isnan(v0.x));
-			SPAssert(!isnan(v0.y));
-			SPAssert(!isnan(v0.z));
-			SPAssert(!isnan(dir.x));
-			SPAssert(!isnan(dir.y));
-			SPAssert(!isnan(dir.z));
+			SPAssert(!std::isnan(v0.x));
+			SPAssert(!std::isnan(v0.y));
+			SPAssert(!std::isnan(v0.z));
+			SPAssert(!std::isnan(dir.x));
+			SPAssert(!std::isnan(dir.y));
+			SPAssert(!std::isnan(dir.z));
 
 			dir = dir.Normalize();
 
