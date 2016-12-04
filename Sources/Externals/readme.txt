@@ -1,14 +1,12 @@
+When building on Windows, external dependencies should be placed in this folder.
 
-When building (on windows) you can put dependencies in this folder.
-Headers go in the include folder (grouped by product, f.e. 'SDL', 'FL', 'curl') except for zlib, this goes directly in the include.
-Libs all go in the lib folder, without subfolders.
+C++ headers go in the 'include' folder, as shown in the file tree below.
+Libraries go in the 'lib' folder, without any subfolders.
 
-this should be the resulting directory structure:
+This should be the resulting directory structure:
 
 Externals
-|   fluid.exe
-|   out.txt
-|   readme.txt
+|   readme.txt (this file)
 |   
 +---include/
 |   +---zconf.h
@@ -20,13 +18,18 @@ Externals
 |   +---GL/
 |   |   \---(All GL headers)
 |   |       
-|   \---SDL/
-|       \---(All SDL headers)
+|   \---SDL2/
+|       \---(All SD2L headers)
 |           
 \---lib/
         (All libs here)
 
-A set of precompiled libraries (packed with the correct layout, built with Visual Studio 2010):
+You may not need to hunt and compile the headers and libraries all by yourself:
+ * There are pre-compiled zip files containing all required files for some versions of Visual Studio
+ * They're already packed in the correct layout. You just need to merge.
+
+Visual Studio 2010:
 https://dl.dropboxusercontent.com/u/37804131/OpenSpades-Externals-Windows.zip
-Libraries for Visual Studio 2015:
+
+Visual Studio 2015:
 https://www.dropbox.com/s/pfvk8tns1qgkxpr/OpenSpades-Externals-Windows-VS2015.rar?dl=1

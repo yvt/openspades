@@ -33,8 +33,8 @@ namespace spades {
 
 		StartupScreenMainMenu@ mainMenu;
 
-
 		bool shouldExit = false;
+
 		StartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, Font@ font, StartupScreenHelper@ helper) {
 			@this.renderer = renderer;
 			@this.audioDevice = audioDevice;
@@ -45,11 +45,23 @@ namespace spades {
 
 			@manager = spades::ui::UIManager(renderer, audioDevice);
 			@manager.RootElement.Font = font;
+			Init();
+		}
 
+		private void Init() {
 			@mainMenu = StartupScreenMainMenu(this);
 			mainMenu.Bounds = manager.RootElement.Bounds;
 			manager.RootElement.AddChild(mainMenu);
+		}
 
+		void Reload() {
+			// Delete StartupScreenMainMenu
+			@manager.RootElement.GetChildren()[0].Parent = null;
+
+			// Reload entire the startup screen while preserving the state as much as possible
+			auto@ state = mainMenu.GetState();
+			Init();
+			mainMenu.SetState(state);
 		}
 
 		void SetupRenderer() {
@@ -111,7 +123,9 @@ namespace spades {
 		}
 	}
 
-
+	class StartupScreenMainMenuState {
+		int ActiveTabIndex;
+	}
 
 	class StartupScreenMainMenu: spades::ui::UIElement {
 
@@ -123,6 +137,8 @@ namespace spades {
 
 		StartupScreenGraphicsTab@ graphicsTab;
 		StartupScreenAudioTab@ audioTab;
+		StartupScreenGenericTab@ genericTab;
+		StartupScreenSystemInfoTab@ systemInfoTab;
 		StartupScreenAdvancedTab@ advancedTab;
 
 		private ConfigItem cl_showStartupWindow("cl_showStartupWindow", "-1");
@@ -147,7 +163,7 @@ namespace spades {
 			{
 				spades::ui::CheckBox button(Manager);
 				button.Caption = _Tr("StartupScreen", "Skip this screen next time");
-				button.Bounds = AABB2(360.f, 62.f, width - 380.f, 20.f);
+				button.Bounds = AABB2(360.f, 62.f, width - 380.f, 20.f); // note: this is updated later soon
 				AddChild(button);
 				@bypassStartupWindowCheck = button;
 				@button.Activated = spades::ui::EventHandler(this.OnBypassStartupWindowCheckChanged);
@@ -156,23 +172,29 @@ namespace spades {
 			AABB2 clientArea(10.f, 100.f, width - 20.f, height - 110.f);
 			StartupScreenGraphicsTab graphicsTab(ui, clientArea.max - clientArea.min);
 			StartupScreenAudioTab audioTab(ui, clientArea.max - clientArea.min);
+			StartupScreenGenericTab genericTab(ui, clientArea.max - clientArea.min);
 			StartupScreenSystemInfoTab profileTab(ui, clientArea.max - clientArea.min);
 			StartupScreenAdvancedTab advancedTab(ui, clientArea.max - clientArea.min);
 			graphicsTab.Bounds = clientArea;
 			audioTab.Bounds = clientArea;
+			genericTab.Bounds = clientArea;
 			profileTab.Bounds = clientArea;
 			advancedTab.Bounds = clientArea;
 			AddChild(graphicsTab);
 			AddChild(audioTab);
+			AddChild(genericTab);
 			AddChild(profileTab);
 			AddChild(advancedTab);
 			audioTab.Visible = false;
 			profileTab.Visible = false;
+			genericTab.Visible = false;
 			advancedTab.Visible = false;
 
 			@this.graphicsTab = graphicsTab;
 			@this.audioTab = audioTab;
 			@this.advancedTab = advancedTab;
+			@this.systemInfoTab = profileTab;
+			@this.genericTab = genericTab;
 
 			{
 				spades::ui::SimpleTabStrip tabStrip(Manager);
@@ -180,9 +202,16 @@ namespace spades {
 				tabStrip.Bounds = AABB2(10.f, 70.f, width - 20.f, 24.f);
 				tabStrip.AddItem(_Tr("StartupScreen", "Graphics"), graphicsTab);
 				tabStrip.AddItem(_Tr("StartupScreen", "Audio"), audioTab);
+				tabStrip.AddItem(_Tr("StartupScreen", "Generic"), genericTab);
 				tabStrip.AddItem(_Tr("StartupScreen", "System Info"), profileTab);
 				tabStrip.AddItem(_Tr("StartupScreen", "Advanced"), advancedTab);
 				@tabStrip.Changed = spades::ui::EventHandler(this.OnTabChanged);
+
+				// Reposition the "Skip this screen next time" check box
+				spades::ui::UIElement@[]@ tabStripItems = tabStrip.GetChildren();
+				float right = tabStripItems[tabStripItems.length - 1].Bounds.max.x +
+					tabStrip.Bounds.min.x + 10.f;
+				bypassStartupWindowCheck.Bounds = AABB2(right, 62.f, width - right - 20.f, 20.f);
 			}
 
 			LoadConfig();
@@ -211,7 +240,32 @@ namespace spades {
 
 			this.graphicsTab.LoadConfig();
 			this.audioTab.LoadConfig();
+			this.genericTab.LoadConfig();
 			this.advancedTab.LoadConfig();
+		}
+
+		StartupScreenMainMenuState@ GetState() {
+			StartupScreenMainMenuState state;
+			if (this.graphicsTab.Visible) {
+				state.ActiveTabIndex = 0;
+			} else if (this.audioTab.Visible) {
+				state.ActiveTabIndex = 1;
+			} else if (this.genericTab.Visible) {
+				state.ActiveTabIndex = 2;
+			} else if (this.systemInfoTab.Visible) {
+				state.ActiveTabIndex = 3;
+			} else if (this.advancedTab.Visible) {
+				state.ActiveTabIndex = 4;
+			}
+			return state;
+		}
+
+		void SetState(StartupScreenMainMenuState@ state) {
+			this.graphicsTab.Visible = state.ActiveTabIndex == 0;
+			this.audioTab.Visible = state.ActiveTabIndex == 1;
+			this.genericTab.Visible = state.ActiveTabIndex == 2;
+			this.systemInfoTab.Visible = state.ActiveTabIndex == 3;
+			this.advancedTab.Visible = state.ActiveTabIndex == 4;
 		}
 
 		private void OnBypassStartupWindowCheckChanged(spades::ui::UIElement@ sender) {
@@ -1240,8 +1294,8 @@ namespace spades {
 
 	}
 
-	class StartupScreenGraphicsDisplayResolutionEditorDropdownButton: spades::ui::SimpleButton {
-		StartupScreenGraphicsDisplayResolutionEditorDropdownButton(spades::ui::UIManager@ manager) {
+	class StartupScreenComboBoxDropdownButton: spades::ui::SimpleButton {
+		StartupScreenComboBoxDropdownButton(spades::ui::UIManager@ manager) {
 			super(manager);
 		}
 		void Render() {
@@ -1283,7 +1337,7 @@ namespace spades {
 				@heightField = e;
 			}
 			{
-				StartupScreenGraphicsDisplayResolutionEditorDropdownButton e(Manager);
+				StartupScreenComboBoxDropdownButton e(Manager);
 				AddChild(e);
 				e.Bounds = AABB2(100, 0, 24.f, 24.f);
 				@e.Activated = spades::ui::EventHandler(this.ShowDropdown);
@@ -1532,6 +1586,112 @@ namespace spades {
 
 	}
 
+	class StartupScreenGenericTab: spades::ui::UIElement, LabelAddable {
+		StartupScreenUI@ ui;
+		StartupScreenHelper@ helper;
+
+		StartupScreenLocaleEditor@ locale;
+
+		StartupScreenGenericTab(StartupScreenUI@ ui, Vector2 size) {
+			super(ui.manager);
+			@this.ui = ui;
+			@helper = ui.helper;
+
+			string label = _Tr("StartupScreen", "Language");
+			if (label != "Language") {
+				label += " (Language)";
+			}
+			AddLabel(0.f, 0.f, 24.f, _Tr("StartupScreen", label));
+			{
+				StartupScreenLocaleEditor e(ui);
+				AddChild(e);
+				e.Bounds = AABB2(160.f, 0.f, 300.f, 24.f);
+				@locale = e;
+			}
+		}
+
+		void LoadConfig() {
+			locale.LoadConfig();
+		}
+
+	}
+
+	class StartupScreenDropdownListDropdownButton: spades::ui::SimpleButton {
+		StartupScreenDropdownListDropdownButton(spades::ui::UIManager@ manager) {
+			super(manager);
+			Alignment = Vector2(0.f, 0.5f);
+		}
+		void Render() {
+			SimpleButton::Render();
+
+			Renderer@ renderer = Manager.Renderer;
+			Image@ arrowImg = renderer.RegisterImage("Gfx/UI/ScrollArrow.png");
+
+			AABB2 bnd = ScreenBounds;
+			Vector2 p = (bnd.min + bnd.max) * 0.5f + Vector2(-8.f, 8.f);
+			renderer.DrawImage(arrowImg, AABB2(bnd.max.x - 16.f, p.y, 16.f, -16.f));
+		}
+	}
+
+	class StartupScreenLocaleEditor: spades::ui::UIElement, LabelAddable {StartupScreenUI@ ui;
+		StartupScreenHelper@ helper;
+		private ConfigItem core_locale("core_locale");
+
+		spades::ui::Button@ dropdownButton;
+
+		StartupScreenLocaleEditor(StartupScreenUI@ ui) {
+			super(ui.manager);
+			@this.ui = ui;
+			@helper = ui.helper;
+			{
+				StartupScreenDropdownListDropdownButton e(Manager);
+				AddChild(e);
+				e.Bounds = AABB2(0.f, 0.f, 300.f, 24.f);
+				@e.Activated = spades::ui::EventHandler(this.ShowDropdown);
+				@dropdownButton = e;
+			}
+		}
+
+		void LoadConfig() {
+			string locale = core_locale.StringValue;
+			string name = _Tr("StartupScreen", "Unknown ({0})", locale);
+			if (locale == "") {
+				name = _Tr("StartupScreen", "System default");
+			}
+
+			int cnt = helper.GetNumLocales();
+			for(int i = 0; i < cnt; i++) {
+				if (locale == helper.GetLocale(i)) {
+					name = helper.GetLocaleDescriptionNative(i) + " / " + helper.GetLocaleDescriptionEnglish(i);
+				}
+			}
+
+			dropdownButton.Caption = name;
+		}
+
+		private void ShowDropdown(spades::ui::UIElement@) {
+			string[] items = {_Tr("StartupScreen", "System default")};
+			int cnt = helper.GetNumLocales();
+			for(int i = 0; i < cnt; i++) {
+				string s = helper.GetLocaleDescriptionNative(i) + " / " + helper.GetLocaleDescriptionEnglish(i);
+				items.insertLast(s);
+			}
+			spades::ui::ShowDropDownList(this, items, spades::ui::DropDownListHandler(this.DropdownHandler));
+		}
+
+		private void DropdownHandler(int index) {
+			if(index >= 0) {
+				if (index == 0) {
+					core_locale = "";
+				} else {
+					core_locale = helper.GetLocale(index - 1);
+				}
+
+				// Reload the startup screen so the language config takes effect
+				ui.Reload();
+			}
+		}
+	}
 
 	class StartupScreenSystemInfoTab: spades::ui::UIElement, LabelAddable {
 		StartupScreenUI@ ui;

@@ -1332,101 +1332,108 @@ namespace spades {
 class Bitmap {
 	std::vector<std::uint8_t> pixels;
 	int w, h;
-public:
 
-	Bitmap(int w=0, int h=0):
-	w(w), h(h){
-		pixels.resize(w * h);
-	}
+public:
+	Bitmap(int w = 0, int h = 0) : w(w), h(h) { pixels.resize(w * h); }
 	int GetWidth() const { return w; }
 	int GetHeight() const { return h; }
-	std::uint8_t& operator()(int x, int y) {
+	std::uint8_t &operator()(int x, int y) {
 		assert(x >= 0);
 		assert(y >= 0);
 		assert(x < w);
 		assert(y < h);
-		return pixels[x+y*w];
+		return pixels[x + y * w];
 	}
-	std::uint8_t const& operator()(int x, int y) const {
+	std::uint8_t const &operator()(int x, int y) const {
 		assert(x >= 0);
 		assert(y >= 0);
 		assert(x < w);
 		assert(y < h);
-		return pixels[x+y*w];
+		return pixels[x + y * w];
 	}
 	void Resize(int neww, int newh) {
 		assert(neww >= 0);
 		assert(newh >= 0);
-		if(neww == w){
+		if (neww == w) {
 			pixels.resize(newh * neww);
-		}else{
+		} else {
 			std::vector<std::uint8_t> newPixels;
 			newPixels.resize(neww * newh);
-			for(int y = 0; y < newh; y++) {
-				if(y < h) {
+			for (int y = 0; y < newh; y++) {
+				if (y < h) {
 					int inIndex = y * w;
 					int outIndex = y * neww;
-					for(int i = std::min(w, neww); i > 0; i--) {
+					for (int i = std::min(w, neww); i > 0; i--) {
 						newPixels[outIndex++] = pixels[inIndex++];
 					}
 				}
 			}
 			newPixels.swap(pixels);
 		}
-		w = neww; h = newh;
+		w = neww;
+		h = newh;
 	}
-	void Draw(const Bitmap& bmp, int dx, int dy) {
+	void Draw(const Bitmap &bmp, int dx, int dy) {
 		int sw = bmp.w, sh = bmp.h;
 		int dw = w, dh = h;
-		for(int x = 0; x < sw; x++)
-			for(int y = 0; y < sh; y++)
+		for (int x = 0; x < sw; x++)
+			for (int y = 0; y < sh; y++)
 				(*this)(x + dx, y + dy) = bmp(x, y);
 	}
-	void Trim(Bitmap& outBitmap, int& srcX, int& srcY) {
+	void Trim(Bitmap &outBitmap, int &srcX, int &srcY) {
 		int w = this->w, h = this->h;
 		int minX;
-		for(minX = 0; minX < w; minX++) {
-			int y; for(y = 0; y < h; y++)
-				if((*this)(minX, y))
+		for (minX = 0; minX < w; minX++) {
+			int y;
+			for (y = 0; y < h; y++)
+				if ((*this)(minX, y))
 					break;
-			if(y < h) break;
+			if (y < h)
+				break;
 		}
-		if(minX == w) {
+		if (minX == w) {
 			// empty
 			outBitmap.Resize(0, 0);
-			srcX = 0; srcY = 0;
+			srcX = 0;
+			srcY = 0;
 			return;
 		}
 		int maxX;
-		for(maxX = w - 1; maxX >= 0; maxX--) {
-			int y; for(y = 0; y < h; y++)
-				if((*this)(maxX, y))
+		for (maxX = w - 1; maxX >= 0; maxX--) {
+			int y;
+			for (y = 0; y < h; y++)
+				if ((*this)(maxX, y))
 					break;
-			if(y < h) break;
+			if (y < h)
+				break;
 		}
 		assert(maxX >= 0);
 		int minY;
-		for(minY = 0; minY < h; minY++) {
-			int x; for(x = 0; x < w; x++)
-				if((*this)(x, minY))
+		for (minY = 0; minY < h; minY++) {
+			int x;
+			for (x = 0; x < w; x++)
+				if ((*this)(x, minY))
 					break;
-			if(x < w) break;
+			if (x < w)
+				break;
 		}
 		assert(minY < h);
 		int maxY;
-		for(maxY = h - 1; maxY >= 0; maxY--) {
-			int x; for(x = 0; x < w; x++)
-				if((*this)(x, maxY))
+		for (maxY = h - 1; maxY >= 0; maxY--) {
+			int x;
+			for (x = 0; x < w; x++)
+				if ((*this)(x, maxY))
 					break;
-			if(x < w) break;
+			if (x < w)
+				break;
 		}
 		assert(maxY >= 0);
 		outBitmap.Resize(maxX - minX + 1, maxY - minY + 1);
 
 		int nw = maxX - minX + 1;
 		int nh = maxY - minY + 1;
-		for(int x = 0; x < nw; x++) {
-			for(int y = 0; y < nh; y++) {
+		for (int x = 0; x < nw; x++) {
+			for (int y = 0; y < nh; y++) {
 				outBitmap(x, y) = (*this)(x + minX, y + minY);
 			}
 		}
@@ -1436,42 +1443,37 @@ public:
 	}
 };
 
-template<typename IndexType>
-class AtlasBuilder {
+template <typename IndexType> class AtlasBuilder {
 public:
 	struct Item {
 		IndexType index;
 		int x, y, w, h;
 		Item() = default;
-		Item(const IndexType& idx, int w, int h):
-		index(idx), w(w), h(h) {
-
-		}
+		Item(const IndexType &idx, int w, int h) : index(idx), w(w), h(h) {}
 	};
+
 private:
 	std::unordered_map<IndexType, Item> items;
 
 public:
-	AtlasBuilder() {
-
-	}
+	AtlasBuilder() {}
 
 	~AtlasBuilder() {}
-	AtlasBuilder(const AtlasBuilder&) = delete;
-	AtlasBuilder& operator =(const AtlasBuilder&) = delete;
+	AtlasBuilder(const AtlasBuilder &) = delete;
+	AtlasBuilder &operator=(const AtlasBuilder &) = delete;
 
 	bool TryPack(int binWidth, int binHeight) {
 		int shelfTop = 0, shelfHeight = 0;
 		int shelfRight = 0;
-		for(auto& it: items) {
-			Item& item = it.second;
-			if(shelfRight + item.w > binWidth) {
+		for (auto &it : items) {
+			Item &item = it.second;
+			if (shelfRight + item.w > binWidth) {
 				// new shelf
 				shelfRight = 0;
 				shelfTop += shelfHeight;
 				shelfHeight = 0;
 			}
-			if(item.w > binWidth) {
+			if (item.w > binWidth) {
 				// impossible to pack
 				return false;
 			}
@@ -1479,7 +1481,7 @@ public:
 			item.x = shelfRight;
 			item.y = shelfTop;
 			shelfRight += item.w;
-			if(shelfTop + shelfHeight > binHeight) {
+			if (shelfTop + shelfHeight > binHeight) {
 				// overflow.
 				return false;
 			}
@@ -1487,39 +1489,32 @@ public:
 		return true;
 	}
 
-	void AddItem(const IndexType& index, int w, int h) {
-		items[index] = Item(index, w, h);
-	}
+	void AddItem(const IndexType &index, int w, int h) { items[index] = Item(index, w, h); }
 
-	const Item& GetItem(const IndexType& index) const {
-		return items.find(index)->second;
-	}
+	const Item &GetItem(const IndexType &index) const { return items.find(index)->second; }
 };
 
 class CharsetDecoder {
 public:
 	virtual ~CharsetDecoder() {}
-	virtual char32_t Decode(const std::string&) = 0;
+	virtual char32_t Decode(const std::string &) = 0;
 };
 
 #include <iconv.h>
 
-class JISDecoder: public CharsetDecoder {
+class JISDecoder : public CharsetDecoder {
 
 	iconv_t cd;
+
 public:
-	JISDecoder() {
-		cd = iconv_open("UTF-32LE", "JIS0208");
-	}
-	~JISDecoder() {
-		iconv_close(cd);
-	}
-	virtual char32_t Decode(const std::string& str) {
+	JISDecoder() { cd = iconv_open("UTF-32LE", "JIS0208"); }
+	~JISDecoder() { iconv_close(cd); }
+	virtual char32_t Decode(const std::string &str) {
 		int index = std::stoi(str.substr(2), 0, 16);
 
 		// non-standard JIS chars (called "機種依存文字")
 		// iconv won't convert them...
-		switch(index) {
+		switch (index) {
 			case 0x2d21: return L'①';
 			case 0x2d22: return L'②';
 			case 0x2d23: return L'③';
@@ -1550,7 +1545,8 @@ public:
 			case 0x2d3c: return L'Ⅷ';
 			case 0x2d3d: return L'Ⅸ';
 			case 0x2d3e: return L'Ⅹ';
-			case 0x2d3f: break; // no code
+			case 0x2d3f:
+				break; // no code
 			case 0x2d40: return L'㍉';
 			case 0x2d41: return L'㌔';
 			case 0x2d42: return L'㌢';
@@ -1574,14 +1570,22 @@ public:
 			case 0x2d54: return L'㎏';
 			case 0x2d55: return L'㏄';
 			case 0x2d56: return L'㎡';
-			case 0x2d57: break; // no code
-			case 0x2d58: break; // no code
-			case 0x2d59: break; // no code
-			case 0x2d5a: break; // no code
-			case 0x2d5b: break; // no code
-			case 0x2d5c: break; // no code
-			case 0x2d5d: break; // no code
-			case 0x2d5e: break; // no code
+			case 0x2d57:
+				break; // no code
+			case 0x2d58:
+				break; // no code
+			case 0x2d59:
+				break; // no code
+			case 0x2d5a:
+				break; // no code
+			case 0x2d5b:
+				break; // no code
+			case 0x2d5c:
+				break; // no code
+			case 0x2d5d:
+				break; // no code
+			case 0x2d5e:
+				break; // no code
 			case 0x2d5f: return L'㍻';
 			case 0x2d60: return L'〝';
 			case 0x2d61: return L'〟';
@@ -1616,7 +1620,7 @@ public:
 			case 0x2d7e: break;
 		}
 
-		char inBuf[2] = {(char)(index+0x00), (char)((index >> 8)+0x00)};
+		char inBuf[2] = {(char)(index + 0x00), (char)((index >> 8) + 0x00)};
 		std::swap(inBuf[0], inBuf[1]);
 		size_t inBufLen = 2;
 		unsigned char outBuf[8];
@@ -1624,8 +1628,9 @@ public:
 		char *inBufPtr = inBuf;
 		char *outBufPtr = reinterpret_cast<char *>(outBuf);
 		iconv(cd, &inBufPtr, &inBufLen, &outBufPtr, &outBufLeft);
-		if(outBufLeft == 8){
-			std::cerr << "failed to convert " << str << " (" << index << ") to Unicode (ignored)" << std::endl;
+		if (outBufLeft == 8) {
+			std::cerr << "failed to convert " << str << " (" << index << ") to Unicode (ignored)"
+			          << std::endl;
 			return 0;
 		}
 
@@ -1639,13 +1644,15 @@ public:
 };
 
 static int DecodeHexDigit(char c) {
-	if(c >= '0' && c <= '9') return c - '0';
-	if(c >= 'A' && c <= 'F') return c - 'A' + 10;
-	if(c >= 'a' && c <= 'f') return c - 'a' + 10;
+	if (c >= '0' && c <= '9')
+		return c - '0';
+	if (c >= 'A' && c <= 'F')
+		return c - 'A' + 10;
+	if (c >= 'a' && c <= 'f')
+		return c - 'a' + 10;
 	std::cerr << "unknown hex digit: " << c << std::endl;
 	abort();
 }
-
 
 struct Glyph {
 	char32_t index;
@@ -1654,80 +1661,85 @@ struct Glyph {
 	int x, y;
 };
 
-void ApplyDoubleFilter(Bitmap& bmp) {
+void ApplyDoubleFilter(Bitmap &bmp) {
 	int w = bmp.GetWidth();
 	int h = bmp.GetHeight();
 	Bitmap tmp = bmp;
-	bmp.Resize(w*2,h*2);
-	for(int x = 0; x < w; x++) {
-		for(int y = 0; y < h; y++) {
-			auto v = tmp(x,y);
-			bmp(x*2, y*2) = v;
-			bmp(x*2+1, y*2) = v;
-			bmp(x*2, y*2+1) = v;
-			bmp(x*2+1, y*2+1) = v;
+	bmp.Resize(w * 2, h * 2);
+	for (int x = 0; x < w; x++) {
+		for (int y = 0; y < h; y++) {
+			auto v = tmp(x, y);
+			bmp(x * 2, y * 2) = v;
+			bmp(x * 2 + 1, y * 2) = v;
+			bmp(x * 2, y * 2 + 1) = v;
+			bmp(x * 2 + 1, y * 2 + 1) = v;
 		}
 	}
 }
 
-void ApplySoftFilter(Bitmap& bmp) {
-	bmp.Resize(bmp.GetWidth() + 1, bmp.GetHeight()+1);
-	for(int y = 0; y < bmp.GetHeight(); y++) {
+void ApplySoftFilter(Bitmap &bmp) {
+	bmp.Resize(bmp.GetWidth() + 1, bmp.GetHeight() + 1);
+	for (int y = 0; y < bmp.GetHeight(); y++) {
 		int last = 0;
-		for(int x = 0; x < bmp.GetWidth(); x++) {
+		for (int x = 0; x < bmp.GetWidth(); x++) {
 			int vl = bmp(x, y);
 			int l = vl;
-			//vl += last >> 1;
+			// vl += last >> 1;
 			vl = (vl + last) >> 1;
-			if(vl > 255) vl = 255;
+			if (vl > 255)
+				vl = 255;
 			last = l;
 			bmp(x, y) = vl;
 		}
 	}
-	for(int x = 0; x < bmp.GetWidth(); x++) {
+	for (int x = 0; x < bmp.GetWidth(); x++) {
 		int last = 0;
-		for(int y = 0; y < bmp.GetHeight(); y++) {
+		for (int y = 0; y < bmp.GetHeight(); y++) {
 			int vl = bmp(x, y);
 			int l = vl;
-			//vl += last >> 1;
+			// vl += last >> 1;
 			vl = (vl + last) >> 1;
-			if(vl > 255) vl = 255;
+			if (vl > 255)
+				vl = 255;
 			last = l;
 			bmp(x, y) = vl;
 		}
 	}
-	for(int y = 0; y < bmp.GetHeight(); y++) {
-		for(int x = 0; x < bmp.GetWidth(); x++) {
+	for (int y = 0; y < bmp.GetHeight(); y++) {
+		for (int x = 0; x < bmp.GetWidth(); x++) {
 			int vl = bmp(x, y);
 			vl += vl;
-			if(vl > 255) vl = 255;
+			if (vl > 255)
+				vl = 255;
 			bmp(x, y) = vl;
 		}
 	}
 }
 
-void ApplyDilationFilter(Bitmap& bmp) {
-	bmp.Resize(bmp.GetWidth() + 1, bmp.GetHeight()+1);
-	for(int y = 0; y < bmp.GetHeight(); y++) {
+void ApplyDilationFilter(Bitmap &bmp) {
+	bmp.Resize(bmp.GetWidth() + 1, bmp.GetHeight() + 1);
+	for (int y = 0; y < bmp.GetHeight(); y++) {
 		int last = 0;
-		for(int x = 0; x < bmp.GetWidth(); x++) {
+		for (int x = 0; x < bmp.GetWidth(); x++) {
 			int vl = bmp(x, y);
 			int l = vl;
-			//vl += last >> 1;
+			// vl += last >> 1;
 			vl = (vl + last);
-			if(vl > 255) vl = 255;
+			if (vl > 255)
+				vl = 255;
 			last = l;
 			bmp(x, y) = vl;
 		}
 	}
-	for(int x = 0; x < bmp.GetWidth(); x++) {
+	for (int x = 0; x < bmp.GetWidth(); x++) {
 		int last = 0;
-		for(int y = 0; y < bmp.GetHeight(); y++) {
+		for (int y = 0; y < bmp.GetHeight(); y++) {
 			int vl = bmp(x, y);
 			int l = vl;
-			//vl += last >> 1;
+			// vl += last >> 1;
 			vl = (vl + last);
-			if(vl > 255) vl = 255;
+			if (vl > 255)
+				vl = 255;
 			last = l;
 			bmp(x, y) = vl;
 		}
@@ -1735,86 +1747,88 @@ void ApplyDilationFilter(Bitmap& bmp) {
 }
 // inversed morphological thinning filter.
 // based on: http://yvt.jp/contour/
-void ApplyThickenFilter(Bitmap& bmp) {
+void ApplyThickenFilter(Bitmap &bmp) {
 	int w = bmp.GetWidth();
 	int h = bmp.GetHeight();
-	Bitmap outBmp(w,h);
-	for(int y = 0; y < h; y++) {
-		for(int x = 0; x < w; x++) {
-			if(bmp(x, y) || x == 0 || y == 0 || x == w - 1 || y == h - 1) {
-				outBmp(x,y) = bmp(x,y);
-			}else{
-				if(bmp(x-1,y) == 0 && bmp(x-1,y-1) == 0 && bmp(x-1,y+1) == 0 &&
-				   bmp(x+1,y) && bmp(x+1,y-1) && bmp(x+1,y+1)) {
-					outBmp(x,y) = 255;
-				}else if(bmp(x+1,y) == 0 && bmp(x+1,y-1) == 0 && bmp(x+1,y+1) == 0 &&
-						 bmp(x-1,y) && bmp(x-1,y-1) && bmp(x-1,y+1)) {
-					outBmp(x,y) = 255;
-				}else{
-					outBmp(x,y) = bmp(x,y);
+	Bitmap outBmp(w, h);
+	for (int y = 0; y < h; y++) {
+		for (int x = 0; x < w; x++) {
+			if (bmp(x, y) || x == 0 || y == 0 || x == w - 1 || y == h - 1) {
+				outBmp(x, y) = bmp(x, y);
+			} else {
+				if (bmp(x - 1, y) == 0 && bmp(x - 1, y - 1) == 0 && bmp(x - 1, y + 1) == 0 &&
+				    bmp(x + 1, y) && bmp(x + 1, y - 1) && bmp(x + 1, y + 1)) {
+					outBmp(x, y) = 255;
+				} else if (bmp(x + 1, y) == 0 && bmp(x + 1, y - 1) == 0 && bmp(x + 1, y + 1) == 0 &&
+				           bmp(x - 1, y) && bmp(x - 1, y - 1) && bmp(x - 1, y + 1)) {
+					outBmp(x, y) = 255;
+				} else {
+					outBmp(x, y) = bmp(x, y);
 				}
 			}
 		}
 	}
-	for(int y = 0; y < h; y++) {
-		for(int x = 0; x < w; x++) {
-			if(outBmp(x, y) || x == 0 || y == 0 || x == w - 1 || y == h - 1) {
-				bmp(x,y) = outBmp(x,y);
-			}else{
-				if(outBmp(x-1,y-1) == 0 && outBmp(x,y-1) == 0 && outBmp(x+1,y-1) == 0 &&
-				   outBmp(x-1,y+1) && outBmp(x,y+1) && outBmp(x+1,y+1)) {
-					bmp(x,y) = 255;
-				}else if(outBmp(x-1,y+1) == 0 && outBmp(x,y+1) == 0 && outBmp(x+1,y+1) == 0 &&
-						 outBmp(x-1,y-1) && outBmp(x,y-1) && outBmp(x+1,y-1)) {
-					bmp(x,y) = 255;
-				}else{
-					bmp(x,y) = outBmp(x,y);
+	for (int y = 0; y < h; y++) {
+		for (int x = 0; x < w; x++) {
+			if (outBmp(x, y) || x == 0 || y == 0 || x == w - 1 || y == h - 1) {
+				bmp(x, y) = outBmp(x, y);
+			} else {
+				if (outBmp(x - 1, y - 1) == 0 && outBmp(x, y - 1) == 0 &&
+				    outBmp(x + 1, y - 1) == 0 && outBmp(x - 1, y + 1) && outBmp(x, y + 1) &&
+				    outBmp(x + 1, y + 1)) {
+					bmp(x, y) = 255;
+				} else if (outBmp(x - 1, y + 1) == 0 && outBmp(x, y + 1) == 0 &&
+				           outBmp(x + 1, y + 1) == 0 && outBmp(x - 1, y - 1) && outBmp(x, y - 1) &&
+				           outBmp(x + 1, y - 1)) {
+					bmp(x, y) = 255;
+				} else {
+					bmp(x, y) = outBmp(x, y);
 				}
 			}
 		}
 	}
-	for(int y = 0; y < h; y++) {
-		for(int x = 0; x < w; x++) {
-			if(bmp(x, y) || x == 0 || y == 0 || x == w - 1 || y == h - 1) {
-				outBmp(x,y) = bmp(x,y);
-			}else{
-				if(bmp(x-1,y) == 0 && bmp(x,y-1) == 0 &&
-				   bmp(x+1,y) && bmp(x,y+1) && bmp(x+1,y+1)) {
-					outBmp(x,y) = 255;
-				}else if(bmp(x+1,y) == 0 && bmp(x,y+1) == 0 &&
-						 bmp(x-1,y) && bmp(x,y-1) && bmp(x-1,y-1)) {
-					outBmp(x,y) = 255;
-				}else{
-					outBmp(x,y) = bmp(x,y);
+	for (int y = 0; y < h; y++) {
+		for (int x = 0; x < w; x++) {
+			if (bmp(x, y) || x == 0 || y == 0 || x == w - 1 || y == h - 1) {
+				outBmp(x, y) = bmp(x, y);
+			} else {
+				if (bmp(x - 1, y) == 0 && bmp(x, y - 1) == 0 && bmp(x + 1, y) && bmp(x, y + 1) &&
+				    bmp(x + 1, y + 1)) {
+					outBmp(x, y) = 255;
+				} else if (bmp(x + 1, y) == 0 && bmp(x, y + 1) == 0 && bmp(x - 1, y) &&
+				           bmp(x, y - 1) && bmp(x - 1, y - 1)) {
+					outBmp(x, y) = 255;
+				} else {
+					outBmp(x, y) = bmp(x, y);
 				}
 			}
 		}
 	}
-	for(int y = 0; y < h; y++) {
-		for(int x = 0; x < w; x++) {
-			if(outBmp(x, y) || x == 0 || y == 0 || x == w - 1 || y == h - 1) {
-				bmp(x,y) = outBmp(x,y);
-			}else{
-				if(outBmp(x+1,y) == 0 && outBmp(x,y-1) == 0 &&
-				   outBmp(x-1,y) && outBmp(x,y+1) && outBmp(x-1,y+1)) {
-					bmp(x,y) = 255;
-				}else if(outBmp(x-1,y) == 0 && outBmp(x,y+1) == 0 &&
-						 outBmp(x+1,y) && outBmp(x,y-1) && outBmp(x+1,y-1)) {
-					bmp(x,y) = 255;
-				}else{
-					bmp(x,y) = outBmp(x,y);
+	for (int y = 0; y < h; y++) {
+		for (int x = 0; x < w; x++) {
+			if (outBmp(x, y) || x == 0 || y == 0 || x == w - 1 || y == h - 1) {
+				bmp(x, y) = outBmp(x, y);
+			} else {
+				if (outBmp(x + 1, y) == 0 && outBmp(x, y - 1) == 0 && outBmp(x - 1, y) &&
+				    outBmp(x, y + 1) && outBmp(x - 1, y + 1)) {
+					bmp(x, y) = 255;
+				} else if (outBmp(x - 1, y) == 0 && outBmp(x, y + 1) == 0 && outBmp(x + 1, y) &&
+				           outBmp(x, y - 1) && outBmp(x + 1, y - 1)) {
+					bmp(x, y) = 255;
+				} else {
+					bmp(x, y) = outBmp(x, y);
 				}
 			}
 		}
 	}
 }
 
-static std::vector<std::string> Split(const std::string& str, const std::string& sep){
+static std::vector<std::string> Split(const std::string &str, const std::string &sep) {
 	std::vector<std::string> strs;
 	size_t pos = 0;
-	while(pos < str.size()){
+	while (pos < str.size()) {
 		size_t newPos = str.find(sep, pos);
-		if(newPos == std::string::npos) {
+		if (newPos == std::string::npos) {
 			strs.push_back(str.substr(pos));
 			break;
 		}
@@ -1826,7 +1840,7 @@ static std::vector<std::string> Split(const std::string& str, const std::string&
 
 int main(int argc, char **argv) {
 
-	if(argc <= 1){
+	if (argc <= 1) {
 		std::cout << "BDF (JIS Code) to OpenSpades font converter" << std::endl;
 		std::cout << "USAGE: BdfToOSFont OUTFILE [FILTERS...] < BDFFONT.bdf" << std::endl;
 		return 0;
@@ -1841,14 +1855,14 @@ int main(int argc, char **argv) {
 	bool applyThickenFilter = false;
 	bool applyDoubleFilter = false;
 	bool applyDilationFilter = false;
-	for(int i = 2; i < argc; i++) {
-		if(!strcmp(argv[i], "soft")) {
+	for (int i = 2; i < argc; i++) {
+		if (!strcmp(argv[i], "soft")) {
 			applySoftFilter = true;
-		}else if(!strcmp(argv[i], "thicken")) {
+		} else if (!strcmp(argv[i], "thicken")) {
 			applyThickenFilter = true;
-		}else if(!strcmp(argv[i], "double")) {
+		} else if (!strcmp(argv[i], "double")) {
 			applyDoubleFilter = true;
-		}else if(!strcmp(argv[i], "dilation")) {
+		} else if (!strcmp(argv[i], "dilation")) {
 			applyDilationFilter = true;
 		}
 	}
@@ -1860,29 +1874,29 @@ int main(int argc, char **argv) {
 	int scaling = applyDoubleFilter ? 2 : 1;
 
 	std::string lineBuffer;
-	while(!std::cin.eof()) {
+	while (!std::cin.eof()) {
 		std::getline(std::cin, lineBuffer);
 
 		auto firstPartIndex = lineBuffer.find(' ');
-		if(firstPartIndex == std::string::npos)
+		if (firstPartIndex == std::string::npos)
 			firstPartIndex = lineBuffer.size();
 
 		auto cmd = lineBuffer.substr(0, firstPartIndex);
 
-		if(cmd == "STARTCHAR") {
+		if (cmd == "STARTCHAR") {
 			auto hexCode = lineBuffer.substr(firstPartIndex + 1);
-			if(hexCode.find("U+") == 0){
+			if (hexCode.find("U+") == 0) {
 				currentChar = std::stoi(hexCode.substr(2), nullptr, 16);
-			}else{
+			} else {
 				currentChar = decoder->Decode(hexCode);
 			}
-			//char buf[32];
-			//std::cerr << hexCode << " -> UTF " << currentChar << std::endl;
-		}else if(cmd == "DWIDTH") {
+			// char buf[32];
+			// std::cerr << hexCode << " -> UTF " << currentChar << std::endl;
+		} else if (cmd == "DWIDTH") {
 			dwidth = std::stoi(lineBuffer.substr(firstPartIndex + 1));
-		}else if(cmd == "BBX") {
+		} else if (cmd == "BBX") {
 			auto parts = std::move(Split(lineBuffer.substr(firstPartIndex + 1), " "));
-			if(parts.size() < 4) {
+			if (parts.size() < 4) {
 				std::cerr << "unexpected EOF while reading BBX" << std::endl;
 				return 1;
 			}
@@ -1890,51 +1904,56 @@ int main(int argc, char **argv) {
 			bbxY = std::stoi(parts[3]);
 			bbxW = std::stoi(parts[0]);
 			bbxH = std::stoi(parts[1]);
-		}else if(cmd == "PIXEL_SIZE") {
+		} else if (cmd == "PIXEL_SIZE") {
 			size = std::stoi(lineBuffer.substr(firstPartIndex + 1));
-			if(applyDoubleFilter) size *= 2;
-		}else if(cmd == "BITMAP") {
+			if (applyDoubleFilter)
+				size *= 2;
+		} else if (cmd == "BITMAP") {
 			std::shared_ptr<Bitmap> bmp(new Bitmap);
 			Bitmap bmp2;
-			while(true){
-				if(std::cin.eof()) {
+			while (true) {
+				if (std::cin.eof()) {
 					std::cerr << "unexpected EOF while reading BITMAP" << std::endl;
 					return 1;
 				}
 				std::getline(std::cin, lineBuffer);
 
-				if(lineBuffer == "ENDCHAR") {
+				if (lineBuffer == "ENDCHAR") {
 					break;
 				}
 
 				int len = lineBuffer.size();
-				int y   = bmp2.GetHeight();
+				int y = bmp2.GetHeight();
 				bmp2.Resize(std::max(bmp2.GetWidth(), len * 4), y + 1);
 				int x = 0;
-				for(char c: lineBuffer) {
+				for (char c : lineBuffer) {
 					int hex = DecodeHexDigit(c);
-					if(hex & 8) bmp2(x, y) = 255;
-					if(hex & 4) bmp2(x+1, y) = 255;
-					if(hex & 2) bmp2(x+2, y) = 255;
-					if(hex & 1) bmp2(x+3, y) = 255;
+					if (hex & 8)
+						bmp2(x, y) = 255;
+					if (hex & 4)
+						bmp2(x + 1, y) = 255;
+					if (hex & 2)
+						bmp2(x + 2, y) = 255;
+					if (hex & 1)
+						bmp2(x + 3, y) = 255;
 					x += 4;
 				}
 			}
 
-			if(currentChar == 0) {
+			if (currentChar == 0) {
 				// no char code.
 				continue;
 			}
 
-			if(applyDoubleFilter){
+			if (applyDoubleFilter) {
 				ApplyDoubleFilter(bmp2);
 				dwidth *= 2;
 			}
-			if(applyThickenFilter)
+			if (applyThickenFilter)
 				ApplyThickenFilter(bmp2);
-			if(applyDilationFilter)
+			if (applyDilationFilter)
 				ApplyDilationFilter(bmp2);
-			if(applySoftFilter)
+			if (applySoftFilter)
 				ApplySoftFilter(bmp2);
 
 			int origHeight = bmp2.GetHeight();
@@ -1954,7 +1973,7 @@ int main(int argc, char **argv) {
 
 			glyphs[currentChar] = g;
 
-			if(bmp->GetWidth() == 0){
+			if (bmp->GetWidth() == 0) {
 				// empty
 				continue;
 			}
@@ -1965,10 +1984,10 @@ int main(int argc, char **argv) {
 	std::cerr << "packing" << std::endl;
 
 	int binWidth = 1, binHeight = 1;
-	while(!builder.TryPack(binWidth, binHeight)) {
-		if(binWidth == binHeight) {
+	while (!builder.TryPack(binWidth, binHeight)) {
+		if (binWidth == binHeight) {
 			binWidth <<= 1;
-		}else{
+		} else {
 			binHeight <<= 1;
 		}
 	}
@@ -1978,14 +1997,14 @@ int main(int argc, char **argv) {
 	{
 		Bitmap bin(binWidth, binHeight);
 
-		for(auto& it: glyphs) {
-			auto& item = it.second;
-			if(item.bitmap->GetWidth() == 0)
+		for (auto &it : glyphs) {
+			auto &item = it.second;
+			if (item.bitmap->GetWidth() == 0)
 				continue; // empty glyph
 
-			const auto& info = builder.GetItem(item.index);
-			//std::cerr <<info.x<<","<<info.y<<" for "<<
-			//item.bitmap->GetWidth()<<"x"<<item.bitmap->GetHeight()<<std::endl;
+			const auto &info = builder.GetItem(item.index);
+			// std::cerr <<info.x<<","<<info.y<<" for "<<
+			// item.bitmap->GetWidth()<<"x"<<item.bitmap->GetHeight()<<std::endl;
 			bin.Draw(*item.bitmap, info.x, info.y);
 		}
 
@@ -1994,8 +2013,8 @@ int main(int argc, char **argv) {
 		std::vector<uint32_t> rgba;
 		rgba.resize(binWidth * binHeight);
 
-		for(int x = 0; x < binWidth; x++)
-			for(int y = 0; y < binHeight; y++){
+		for (int x = 0; x < binWidth; x++)
+			for (int y = 0; y < binHeight; y++) {
 				int alpha = bin(x, y);
 				rgba[x + y * binWidth] = (alpha << 24) | 0xffffff;
 			}
@@ -2003,9 +2022,7 @@ int main(int argc, char **argv) {
 		std::cerr << "saving" << std::endl;
 
 		tga_image img;
-		init_tga_image(&img, reinterpret_cast<uint8_t *>(rgba.data()),
-					   binWidth, binHeight,
-					   32);
+		init_tga_image(&img, reinterpret_cast<uint8_t *>(rgba.data()), binWidth, binHeight, 32);
 		img.image_type = TGA_IMAGE_TYPE_BGR_RLE;
 		(void)tga_swap_red_blue(&img);
 		(void)tga_flip_vert(&img);
@@ -2016,7 +2033,6 @@ int main(int argc, char **argv) {
 		tifPath += ".tga";
 		std::ofstream ofs(tifPath);
 		result = tga_write_to_FILE(ofs, &img);
-
 	}
 
 	{
@@ -2031,10 +2047,10 @@ int main(int argc, char **argv) {
 		static_assert(sizeof(count) == 4, "Oh no");
 
 		// write num of glyphs
-		ofs.write(reinterpret_cast<char*>(&count), 4);
+		ofs.write(reinterpret_cast<char *>(&count), 4);
 
 		// write font size
-		ofs.write(reinterpret_cast<char*>(&size), 4);
+		ofs.write(reinterpret_cast<char *>(&size), 4);
 
 		struct GlyphInfo {
 			uint32_t unicode;
@@ -2046,25 +2062,27 @@ int main(int argc, char **argv) {
 
 		std::vector<GlyphInfo> infos;
 
-		for(auto& it: glyphs) {
-			auto& item = it.second;
+		for (auto &it : glyphs) {
+			auto &item = it.second;
 
-			if(item.bitmap->GetWidth() == 0) {
+			if (item.bitmap->GetWidth() == 0) {
 				// empty glyph
 				GlyphInfo inf;
 
 				inf.unicode = static_cast<uint32_t>(item.index);
 				inf.x = static_cast<uint16_t>(0xffff);
 				inf.y = static_cast<uint16_t>(0xffff);
-				inf.w = 0; inf.h = 0;
-				inf.offX = 0; inf.offY = 0;
+				inf.w = 0;
+				inf.h = 0;
+				inf.offX = 0;
+				inf.offY = 0;
 				inf.advance = static_cast<uint16_t>(item.advance);
 
 				infos.push_back(inf);
 				continue;
 			}
 
-			const auto& info = builder.GetItem(item.index);
+			const auto &info = builder.GetItem(item.index);
 
 			GlyphInfo inf;
 

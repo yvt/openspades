@@ -1,48 +1,48 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #pragma once
 
-#include <string>
 #include <exception>
+#include <string>
+
 #include "Debug.h"
 
 namespace spades {
-	class Exception: public std::exception {
+	class Exception : public std::exception {
 		std::string shortMessage;
 		std::string message;
+
 	public:
 		Exception(const char *format, ...);
 		Exception(const char *file, int line, const char *format, ...);
 		virtual ~Exception() throw();
 		virtual const char *what() const throw();
-		const std::string& GetShortMessage() const throw() {
-			return shortMessage;
-		}
+		const std::string &GetShortMessage() const throw() { return shortMessage; }
 	};
 }
 
 #ifdef _MSC_VER
-#define SPRaise(fmt, ...) throw ::spades::Exception(__FILE__, __LINE__, fmt, __VA_ARGS__ )
+#define SPRaise(fmt, ...) throw ::spades::Exception(__FILE__, __LINE__, fmt, __VA_ARGS__)
 #else
-#define SPRaise(fmt, val...) throw ::spades::Exception(__FILE__, __LINE__, fmt, ##val )
+#define SPRaise(fmt, val...) throw ::spades::Exception(__FILE__, __LINE__, fmt, ##val)
 #endif
 
 #define SPNotImplemented() SPRaise("Not implemented")

@@ -21,8 +21,8 @@
 #include "ALFuncs.h"
 #include <Core/DynamicLibrary.h>
 #include <Core/Exception.h>
-#include <Core/Settings.h>
 #include <Core/Math.h>
+#include <Core/Settings.h>
 
 #if defined(__APPLE__)
 DEFINE_SPADES_SETTING(s_alDriver, "/System/Library/Frameworks/OpenAL.framework/OpenAL");
@@ -34,7 +34,7 @@ DEFINE_SPADES_SETTING(s_alDriver, "libopenal.so.1;libopenal.so.0;libopenal.so");
 
 DEFINE_SPADES_SETTING(s_alErrorFatal, "1");
 
-namespace al{
+namespace al {
 
 	LPALENABLE qalEnable;
 	LPALDISABLE qalDisable;
@@ -165,12 +165,11 @@ namespace al{
 
 	static spades::DynamicLibrary *alLibrary = NULL;
 
-	static void *GPA(const char *str)
-	{
-		if(!alLibrary){
+	static void *GPA(const char *str) {
+		if (!alLibrary) {
 			auto paths = spades::Split(s_alDriver, ";");
 			std::string errors;
-			for (const std::string &path: paths) {
+			for (const std::string &path : paths) {
 				auto trimmedPath = spades::TrimSpaces(path);
 				try {
 					alLibrary = new spades::DynamicLibrary(trimmedPath.c_str());
@@ -189,26 +188,25 @@ namespace al{
 			}
 		}
 
-		if(qalGetProcAddress){
+		if (qalGetProcAddress) {
 			void *v = qalGetProcAddress(str);
-			if(v)
+			if (v)
 				return v;
 		}
 
 		return alLibrary->GetSymbol(str);
 	}
 
-#define L(name) \
-	*(void **)(&(q ## name)) = GPA( #name )
+#define L(name) *(void **)(&(q##name)) = GPA(#name)
 
-	void InitEAX(void){
+	void InitEAX(void) {
 		ALCdevice *pDevice = NULL;
 		ALCcontext *pContext = NULL;
 
 		pContext = qalcGetCurrentContext();
 		pDevice = qalcGetContextsDevice(pContext);
 
-		if (qalcIsExtensionPresent(pDevice, (ALCchar*)ALC_EXT_EFX_NAME)){
+		if (qalcIsExtensionPresent(pDevice, (ALCchar *)ALC_EXT_EFX_NAME)) {
 			L(alGenEffects);
 			L(alDeleteEffects);
 			L(alIsEffect);
@@ -242,11 +240,9 @@ namespace al{
 			L(alGetAuxiliaryEffectSlotiv);
 			L(alGetAuxiliaryEffectSlotf);
 			L(alGetAuxiliaryEffectSlotfv);
-		}else{
-			SPRaise("Extension not found: '%s'",
-					ALC_EXT_EFX_NAME);
+		} else {
+			SPRaise("Extension not found: '%s'", ALC_EXT_EFX_NAME);
 		}
-
 	}
 
 	void Link(void) {
@@ -322,48 +318,41 @@ namespace al{
 		L(alcGetEnumValue);
 		L(alcGetString);
 		L(alcGetIntegerv);
-
 	}
 
-	const char *DescribeError(ALenum e){
-		switch(e){
-			case AL_NO_ERROR:
-				return "No error";
-			case AL_INVALID_NAME:
-				return "Invalid name";
-			case AL_INVALID_ENUM:
-				return "Invalid enumerator";
-			case AL_INVALID_VALUE:
-				return "Invalid value";
-			case AL_INVALID_OPERATION:
-				return "Invalid operation";
-			case AL_OUT_OF_MEMORY:
-				return "Out of memory";
-			default:
-				return "Unknown error";
+	const char *DescribeError(ALenum e) {
+		switch (e) {
+			case AL_NO_ERROR: return "No error";
+			case AL_INVALID_NAME: return "Invalid name";
+			case AL_INVALID_ENUM: return "Invalid enumerator";
+			case AL_INVALID_VALUE: return "Invalid value";
+			case AL_INVALID_OPERATION: return "Invalid operation";
+			case AL_OUT_OF_MEMORY: return "Out of memory";
+			default: return "Unknown error";
 		}
 	}
 
-	void CheckError(void){
+	void CheckError(void) {
 		ALenum e;
 		e = qalGetError();
-		if(e != AL_NO_ERROR) {
-			if(s_alErrorFatal)
+		if (e != AL_NO_ERROR) {
+			if (s_alErrorFatal)
 				SPRaise("OpenAL error %d: %s", (int)e, DescribeError(e));
 			else
 				SPLog("OpenAL error %d: %s", (int)e, DescribeError(e));
 		}
 	}
 
-	void CheckError(const char *source, const char *fun, int line){
+	void CheckError(const char *source, const char *fun, int line) {
 		ALenum e;
 		e = qalGetError();
-		if(e != AL_NO_ERROR) {
-			if(s_alErrorFatal)
-				SPRaise("[%s:%d] : %s : OpenAL error %d: %s", source, line, fun, (int)e, DescribeError(e));
+		if (e != AL_NO_ERROR) {
+			if (s_alErrorFatal)
+				SPRaise("[%s:%d] : %s : OpenAL error %d: %s", source, line, fun, (int)e,
+				        DescribeError(e));
 			else
-				SPLog("[%s:%d] : %s : OpenAL error %d: %s", source, line, fun, (int)e, DescribeError(e));
+				SPLog("[%s:%d] : %s : OpenAL error %d: %s", source, line, fun, (int)e,
+				      DescribeError(e));
 		}
 	}
 }
-

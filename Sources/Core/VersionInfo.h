@@ -1,7 +1,8 @@
+#pragma once
+
 #include <string>
 
-class VersionInfo
-{
+class VersionInfo {
 public:
-	static std::string GetVersionInfo();
+    static std::string GetVersionInfo();
 };

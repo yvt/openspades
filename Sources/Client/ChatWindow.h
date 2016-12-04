@@ -1,27 +1,28 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #pragma once
 
-#include <string>
 #include <list>
+#include <string>
+
 #include <Core/Math.h>
 
 namespace spades {
@@ -30,7 +31,7 @@ namespace spades {
 		class IFont;
 		class IImage;
 		class Client;
-		
+
 		static const char MsgColorTeam1 = 1;
 		static const char MsgColorTeam2 = 2;
 		static const char MsgColorTeam3 = 3;
@@ -42,42 +43,45 @@ namespace spades {
 		static const char MsgImage = 7;
 		static const char MsgColorBlack = 8;
 		static const char MsgColorMax = 9;
-		
+
 		class ChatWindow {
 			Client *client;
 			IRenderer *renderer;
 			IFont *font;
-			
+
 			struct ChatEntry {
 				std::string msg;
 				float height;
-				float fade;		// usual fade opacity
+				float fade;     // usual fade opacity
 				float timeFade; // timeout fade opacity
 
-				ChatEntry( const std::string& Msg, float Height, float Fade, float TimeFade )
-					: msg(Msg), height(Height), fade(Fade), timeFade(TimeFade) {;}
+				ChatEntry(const std::string &Msg, float Height, float Fade, float TimeFade)
+				    : msg(Msg), height(Height), fade(Fade), timeFade(TimeFade) {
+					;
+				}
 			};
-			
+
 			std::list<ChatEntry> entries;
 			float firstY;
 			bool killfeed;
-			
+
 			float GetWidth();
 			float GetHeight();
 			float GetLineHeight();
-			
+
 			Vector4 GetColor(char);
-			std::vector<IImage*> mKillImages;
-			IImage* imageForIndex( char index );
+			std::vector<IImage *> mKillImages;
+			IImage *imageForIndex(char index);
+
 		public:
-			ChatWindow(Client *, IRenderer* rend, IFont *font, bool killfeed);
+			ChatWindow(Client *, IRenderer *rend, IFont *font, bool killfeed);
 			~ChatWindow();
-			
-			void AddMessage(const std::string&);
-			static std::string ColoredMessage(const std::string&, char);
-			static std::string TeamColorMessage(const std::string&, int);
-			static std::string killImage( int killType, int weapon );
-			
+
+			void AddMessage(const std::string &);
+			static std::string ColoredMessage(const std::string &, char);
+			static std::string TeamColorMessage(const std::string &, int);
+			static std::string killImage(int killType, int weapon);
+
 			void Update(float dt);
 			void Draw();
 		};
