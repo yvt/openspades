@@ -27,16 +27,6 @@
 #include <string>
 #include <vector>
 
-#ifdef _MSC_VER
-#define isnan _isnan
-static inline float roundf(float x) {
-	return x >= 0.0f ? floorf(x + 0.5f) : ceilf(x - 0.5f);
-}
-static inline long lround(double num) {
-	return (long)(num > 0 ? num + 0.5 : ceil(num - 0.5));
-}
-#endif
-
 namespace spades {
 
 	// Make mt_engine and a real dist [0,1] accesible everywhere in the spades namespace
