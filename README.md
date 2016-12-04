@@ -15,7 +15,7 @@ OpenSpades is a compatible client of Ace of Spades 0.75.
 Please see the [BUILDING](BUILDING.md) file.
 
 ## Troubleshooting
-Please see the [TROUBLESHOOTING](TROUBLESHOOTING.md)
+Please see the [TROUBLESHOOTING](TROUBLESHOOTING.md) file.
 
 ## Licensing
 Please see the [LICENSE](LICENSE) file.
