@@ -100,6 +100,9 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 ### On Windows (with Visual Studio)
 1. Get the required software.
   * CMake 2.8+
+  * PowerShell 5.0
+    * Integrated with Windows 10.
+    * Older versions are not tested, but might work
   * *Visual Studio 2015* 
     * VS2013 is no longer supported, but might work
 2. Grab the source code:
@@ -113,13 +116,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    
    Source: `E:/Projects/openspades`,
    Binaries: `E:/Projects/openspades/OpenSpades.msvc`
-   Generator: Visual Studio 12 (2013) or 14 (2015) (not Win64!)
-   
-   For your convenience, create the directory: `E:/Projects/openspades/OpenSpades.msvc/os.Resources`, and extract the [Non-free pak](https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip) (`pak000-Nonfree.pak`) into it. Also, please note you can't distribute this pak separately from OpenSpades releases or binaries, as noted on `Resources/PakLocation.txt`
-   
-   set `OPENSPADES_RESDIR` to point to `os.Resources`. (Run CMake again, now when running debug builds openspades will also read resources from this directory)
-   
-   **Note:** `OPENSPADES_RESDIR` must be set using slashes instead of backslashes (`E:/Projects/openspades/os.Resources` instead of `E:\Projects\openspades\os.Resources`). Also, no slashes at end.
+   Generator: Visual Studio 14 (2015) (not Win64!)
    
 6. Open `E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln` in Visual Studio.
 7. Build the solution.
@@ -128,9 +125,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
     **Note:** In case OpenSpades still fails to find any dll, copy all the remaing dlls which aren't there yet, it should solve the problem.
     
-10. Copy `E:/Projects/openspades/Resources` folder to your build directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE`
-
-    In case you haven't set OPENSPADES_RESDIR and extracted the [Non-free pak](https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip) into it, extract it and merge it inside the `Resources` folder you just copied. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
+10. Download the [Non-free pak](https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip) and copy it to the `Resources` folder inside your build directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE/Resources`. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
 
 ### On Mac OS X (with Xcode)
 1. Get the latest version of Xcode and OpenSpades source.

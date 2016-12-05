@@ -43,6 +43,17 @@ set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BIN
 set_target_properties(OpenSpades PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+if(WIN32)
+	# Use a single output directory for all configs
+	# (Without this, the generated binary cannot find pak files created by mkpak.ps1 unless
+	# a user explicitly specifies a search directory)
+	foreach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
+		set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/bin)
+		set_target_properties(OpenSpades PROPERTIES LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/bin)
+		set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/bin)
+	endforeach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
+endif()
+
 add_dependencies(OpenSpades Angelscript Angelscript_addons)
 
 if(WIN32)
