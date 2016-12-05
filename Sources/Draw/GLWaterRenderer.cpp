@@ -361,9 +361,9 @@ namespace spades {
 					height[i] += velocity[i] * dt;
 #ifndef NDEBUG
 				for (int i = 0; i < samples; i++)
-					SPAssert(!isnan(height[i]));
+					SPAssert(!std::isnan(height[i]));
 				for (int i = 0; i < samples; i++)
-					SPAssert(!isnan(velocity[i]));
+					SPAssert(!std::isnan(velocity[i]));
 #endif
 
 				// solve ddz/dtt = c^2 (ddz/dxx + ddz/dyy)

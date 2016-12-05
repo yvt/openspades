@@ -10,9 +10,17 @@
 #
 #       2. kv6 files from the original AoS 0.75.
 
+OS_BASE="`uname`"
 SRC_DIR="`dirname "$0"`"
-PAK_URL=$(grep --max-count=1 --no-filename --context=0 --color=never \
-	"DevPaks" "$SRC_DIR/PakLocation.txt")
+# no color, not -m flag for OpenBSD
+if [[ "$OS_BASE" != 'OpenBSD' ]]; then
+	PAK_URL=$(grep --max-count=1 --no-filename --context=0 --color=never \
+		"DevPaks" "$SRC_DIR/PakLocation.txt")
+else
+	PAK_URL=$(grep --no-filename \
+		"DevPaks" "$SRC_DIR/PakLocation.txt" | head -n1)
+fi
+echo "BASEURL ************ $PAK_URL"
 PAK_NAME=$(basename "$PAK_URL")
 OUTPUT_DIR="."
 
