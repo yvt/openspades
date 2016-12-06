@@ -6,7 +6,7 @@
 #include <string>
 
 #if defined(__i386__) || defined(_M_IX86)
-
+	// FIXME: Why does this preprocessor condition even exists?
 #endif
 
 namespace spades {
