@@ -21,7 +21,7 @@
 #include <algorithm> //std::sort
 #include <memory>
 
-#if !defined(__APPLE__) && __unix
+#if !defined(__APPLE__) && (__unix || __unix__)
 #include <sys/stat.h>
 #include <sys/types.h>
 #endif
