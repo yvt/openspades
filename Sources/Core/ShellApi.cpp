@@ -33,10 +33,10 @@
 
 namespace {
 	static std::wstring WStringFromUtf8(const char *s) {
-		auto *ws = (char *)SDL_iconv_string("UCS-2-INTERNAL", "UTF-8", s, strlen(s));
+		auto *ws = (wchar_t *)SDL_iconv_string("UCS-2-INTERNAL", "UTF-8", s, strlen(s));
 		if (!ws)
 			return L"";
-		std::string wss(ws);
+		std::wstring wss(ws);
 		SDL_free(ws);
 		return wss;
 	}
@@ -50,12 +50,14 @@ namespace spades {
 // macOS version of ShowDirectoryInShell is defined in ShellApi.mm.
 #elif defined(WIN32)
 	bool ShowDirectoryInShell(const std::string &directoryPath) {
-		std::wstring widePath = WStringFromUtf8(directoryPath);
+		std::wstring widePath = WStringFromUtf8(directoryPath.c_str());
 
 		// "The return value is cast as an HINSTANCE for backward compatibility with 16-bit Windows
 		// applications. It is not a true HINSTANCE, however. It can be cast only to an int and
 		// compared to either 32 or the following error codes below." --- MSDN Library
-		int result = static_cast<int>(
+		//
+		// Cast it to INT_PTR instead of int to get rid of "pointer truncation" warning.
+		INT_PTR result = reinterpret_cast<INT_PTR>(
 		  ShellExecuteW(nullptr, L"open", L"explorer", widePath.c_str(), nullptr, SW_SHOWNORMAL));
 
 		// "If the function succeeds, it returns a value greater than 32."
