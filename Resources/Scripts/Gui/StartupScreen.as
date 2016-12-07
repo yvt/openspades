@@ -1622,11 +1622,11 @@ namespace spades {
 				spades::ui::Button button(Manager);
 				string osType = helper.OperatingSystemType;
 				if (osType == "Windows") {
-					button.Caption = _Tr("StartupScreen", "Open Config Directory in Explorer");
+					button.Caption = _Tr("StartupScreen", "Open Config Folder in Explorer");
 				} else if (osType == "Mac") {
-					button.Caption = _Tr("StartupScreen", "Reveal Config Directory in Finder");
+					button.Caption = _Tr("StartupScreen", "Reveal Config Folder in Finder");
 				} else {
-					button.Caption = _Tr("StartupScreen", "Browse Config Directory");
+					button.Caption = _Tr("StartupScreen", "Browse Config Folder");
 				}
 				button.Bounds = AABB2(160.f, 66.f, 350.f, 30.f);
 				@button.Activated = spades::ui::EventHandler(this.OnBrowseUserDirectoryPressed);
