@@ -21,7 +21,6 @@
 #include <cerrno>     // errno
 #include <cstdlib>    // system
 #include <cstring>    // strerror
-#include <sys/wait.h> // WIFSIGNALED, ...
 
 #include "ShellApi.h"
 
@@ -42,6 +41,8 @@ namespace {
 		return wss;
 	}
 }
+#else
+#include <sys/wait.h> // WIFSIGNALED, ...
 #endif
 
 namespace spades {
