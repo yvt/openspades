@@ -280,6 +280,8 @@
 		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
 		E88F46591DE1B192009E85E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03F2178EF916000683D4 /* Cocoa.framework */; };
+		E89A5F1E1DF8732200857F65 /* ShellApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1C1DF8732200857F65 /* ShellApi.cpp */; };
+		E89A5F201DF8759200857F65 /* ShellApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1F1DF8759200857F65 /* ShellApi.mm */; };
 		E89BBDC31B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */; };
 		E8CB47CE1DE071CA00BF606A /* SWUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */; };
 		E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
@@ -548,6 +550,9 @@
 		E895D66118D614DE00F5B9CA /* pnglite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pnglite.c; sourceTree = "<group>"; };
 		E895D66218D614DE00F5B9CA /* pnglite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pnglite.h; sourceTree = "<group>"; };
 		E895D66318D614DE00F5B9CA /* PngWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PngWriter.cpp; sourceTree = "<group>"; };
+		E89A5F1C1DF8732200857F65 /* ShellApi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShellApi.cpp; sourceTree = "<group>"; };
+		E89A5F1D1DF8732200857F65 /* ShellApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShellApi.h; sourceTree = "<group>"; };
+		E89A5F1F1DF8759200857F65 /* ShellApi.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ShellApi.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		E89A648C17A11B4E00FDA893 /* GLModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLModelRenderer.cpp; sourceTree = "<group>"; };
 		E89A648D17A11B4E00FDA893 /* GLModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLModelRenderer.h; sourceTree = "<group>"; };
 		E89A648F17A12FF800FDA893 /* GLDynamicLightShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLDynamicLightShader.cpp; sourceTree = "<group>"; };
@@ -1507,6 +1512,9 @@
 				E838D41E18AC726B00EE3C53 /* Strings.h */,
 				E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */,
 				E8CB47D01DE07CF000BF606A /* SettingSet.h */,
+				E89A5F1C1DF8732200857F65 /* ShellApi.cpp */,
+				E89A5F1D1DF8732200857F65 /* ShellApi.h */,
+				E89A5F1F1DF8759200857F65 /* ShellApi.mm */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2041,6 +2049,7 @@
 				E82E679818EA7972004DBA18 /* ClientUIHelper.cpp in Sources */,
 				E82E679918EA7972004DBA18 /* Clipboard.cpp in Sources */,
 				E82E679A18EA7972004DBA18 /* Math.cpp in Sources */,
+				E89A5F1E1DF8732200857F65 /* ShellApi.cpp in Sources */,
 				E82E679B18EA7972004DBA18 /* Deque.cpp in Sources */,
 				E82E679C18EA7972004DBA18 /* Stopwatch.cpp in Sources */,
 				E82E679D18EA7972004DBA18 /* Debug.cpp in Sources */,
@@ -2053,6 +2062,7 @@
 				E82E67A418EA7972004DBA18 /* IRenderer.cpp in Sources */,
 				E82E67A518EA7972004DBA18 /* SceneDefinition.cpp in Sources */,
 				E82E67A618EA7972004DBA18 /* IAudioDevice.cpp in Sources */,
+				E89A5F201DF8759200857F65 /* ShellApi.mm in Sources */,
 				E82E67A718EA7972004DBA18 /* IAudioChunk.cpp in Sources */,
 				E82E67A818EA7972004DBA18 /* IInputInterface.cpp in Sources */,
 				E82E67A918EA7972004DBA18 /* IImage.cpp in Sources */,

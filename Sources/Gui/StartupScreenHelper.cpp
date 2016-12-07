@@ -36,6 +36,8 @@
 #include <Core/FileManager.h>
 #include <Core/Settings.h>
 #include <OpenSpades.h>
+#include <Core/ShellApi.h>
+#include <Gui/Main.h>
 
 #ifdef __APPLE__
 #elif __unix
@@ -610,6 +612,29 @@ namespace spades {
 		}
 
 		void StartupScreenHelper::FixConfigs() { ExamineSystem(); }
+
+		std::string StartupScreenHelper::GetOperatingSystemType() {
+#if defined(OS_PLATFORM_LINUX)
+			return "Linux";
+#elif defined(TARGET_OS_MAC)
+			return "Mac";
+#elif defined(OS_PLATFORM_WINDOWS)
+			return "Windows";
+#else
+			return std::string{};
+#endif
+		}
+
+		bool StartupScreenHelper::BrowseUserDirectory() {
+			std::string path = g_userResourceDirectory;
+
+			if (path.empty()) {
+				SPLog("Cannot open the user resource directory: g_userResourceDirectory is empty.");
+				return false;
+			}
+
+			return ShowDirectoryInShell(path);
+		}
 
 		void StartupScreenHelper::Start() {
 			if (scr == nullptr) {

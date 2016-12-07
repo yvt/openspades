@@ -340,12 +340,13 @@ msgctxt "Client"
 msgid "{0}'s Territory"
 msgstr ""
 
-#: ../../../Sources/Gui/Main.cpp:622
+#: ../../../Sources/Gui/Main.cpp:622 ../../../Sources/Gui/Main.cpp:634
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr ""
 
 #: ../../../Sources/Gui/Main.cpp:680 ../../../Sources/Gui/Runner.cpp:58
+#: ../../../Sources/Gui/Main.cpp:692
 msgctxt "Main"
 msgid ""
 "A serious error caused OpenSpades to stop working:\n"
@@ -356,6 +357,7 @@ msgid ""
 msgstr ""
 
 #: ../../../Sources/Gui/Main.cpp:688 ../../../Sources/Gui/Runner.cpp:64
+#: ../../../Sources/Gui/Main.cpp:700
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr ""
@@ -994,6 +996,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:208
 #: ../../Scripts/Gui/StartupScreen.as:1634
 #: ../../Scripts/Gui/StartupScreen.as:1633
+#: ../../Scripts/Gui/StartupScreen.as:1657
 msgctxt "StartupScreen"
 msgid "Advanced"
 msgstr ""
@@ -1457,6 +1460,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1657
 #: ../../Scripts/Gui/StartupScreen.as:1703
 #: ../../Scripts/Gui/StartupScreen.as:1702
+#: ../../Scripts/Gui/StartupScreen.as:1726
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
 msgstr ""
@@ -1467,6 +1471,8 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1719
 #: ../../Scripts/Gui/StartupScreen.as:1704
 #: ../../Scripts/Gui/StartupScreen.as:1718
+#: ../../Scripts/Gui/StartupScreen.as:1728
+#: ../../Scripts/Gui/StartupScreen.as:1742
 msgctxt "StartupScreen"
 msgid "System default"
 msgstr ""
@@ -1474,6 +1480,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1722
 #: ../../Scripts/Gui/StartupScreen.as:1768
 #: ../../Scripts/Gui/StartupScreen.as:1767
+#: ../../Scripts/Gui/StartupScreen.as:1791
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr ""
@@ -1481,6 +1488,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1758
 #: ../../Scripts/Gui/StartupScreen.as:1804
 #: ../../Scripts/Gui/StartupScreen.as:1803
+#: ../../Scripts/Gui/StartupScreen.as:1827
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr ""
@@ -1488,6 +1496,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1767
 #: ../../Scripts/Gui/StartupScreen.as:1813
 #: ../../Scripts/Gui/StartupScreen.as:1812
+#: ../../Scripts/Gui/StartupScreen.as:1836
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr ""
@@ -1508,29 +1517,60 @@ msgid "Reset All Settings"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1628
+#: ../../Scripts/Gui/StartupScreen.as:1652
 msgctxt "StartupScreen"
 msgid ""
 "Are you sure to reset all settings? They include (but are not limited to):"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1629
+#: ../../Scripts/Gui/StartupScreen.as:1653
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1630
+#: ../../Scripts/Gui/StartupScreen.as:1654
 msgctxt "StartupScreen"
 msgid "All key bindings"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1631
+#: ../../Scripts/Gui/StartupScreen.as:1655
 msgctxt "StartupScreen"
 msgid "Your player name"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1633
 #: ../../Scripts/Gui/StartupScreen.as:1632
+#: ../../Scripts/Gui/StartupScreen.as:1656
 msgctxt "StartupScreen"
 msgid ""
-"Other advanced settings only accessible through '{0}' tab and in-game commands"
+"Other advanced settings only accessible through '{0}' tab and in-game "
+"commands"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1613
+msgctxt "StartupScreen"
+msgid "Tools"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1625
+msgctxt "StartupScreen"
+msgid "Open Config Directory in Explorer"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1627
+msgctxt "StartupScreen"
+msgid "Reveal Config Directory in Finder"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1629
+msgctxt "StartupScreen"
+msgid "Browse Config Directory"
+msgstr ""
+
+#: ../../Scripts/Gui/StartupScreen.as:1646
+msgctxt "StartupScreen"
+msgid "An unknown error has occured while opening the config directory."
 msgstr ""

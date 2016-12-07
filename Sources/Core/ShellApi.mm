@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2016 yvt
 
  This file is part of OpenSpades.
 
@@ -17,16 +17,20 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-#pragma once
 
-#include <string>
+// This file contains macOS specific code.
+
+#import <Cocoa/Cocoa.h>
+
+#include "ShellApi.h"
+
+#include <Core/Debug.h>
 
 namespace spades {
-    class ServerAddress;
-
-	/** The path to the user resource directory. Can be empty. */
-	extern std::string g_userResourceDirectory;
-
-    void StartClient(const ServerAddress &, const std::string &playerName);
-    void StartMainScreen();
+    bool ShowDirectoryInShell(const std::string &directoryPath) {
+        NSString *path =
+          [NSString stringWithCString:directoryPath.c_str() encoding:NSUTF8StringEncoding];
+        BOOL result = [[NSWorkspace sharedWorkspace] openFile:path];
+        return bool(result);
+    }
 }
