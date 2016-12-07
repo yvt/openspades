@@ -33,7 +33,7 @@
 
 namespace {
 	static std::wstring WStringFromUtf8(const char *s) {
-		auto *ws = (wchar_t *)SDL_iconv_string("UCS-2-INTERNAL", "UTF-8", s, strlen(s));
+		auto *ws = (wchar_t *)SDL_iconv_string("UCS-2-INTERNAL", "UTF-8", s, strlen(s) + 1);
 		if (!ws)
 			return L"";
 		std::wstring wss(ws);
@@ -58,7 +58,7 @@ namespace spades {
 		//
 		// Cast it to INT_PTR instead of int to get rid of "pointer truncation" warning.
 		INT_PTR result = reinterpret_cast<INT_PTR>(
-		  ShellExecuteW(nullptr, L"open", L"explorer", widePath.c_str(), nullptr, SW_SHOWNORMAL));
+		  ShellExecuteW(nullptr, L"explore", widePath.c_str(), nullptr, nullptr, SW_SHOWNORMAL));
 
 		// "If the function succeeds, it returns a value greater than 32."
 		if (result > 32) {
