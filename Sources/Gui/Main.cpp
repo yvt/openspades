@@ -668,7 +668,7 @@ int main(int argc, char **argv) {
 		spades::Settings::GetInstance()->Flush();
 
 	} catch (const ExitRequestException &) {
-		// user changed his mind.
+		// user changed his/her mind.
 	} catch (const std::exception &ex) {
 
 		try {
