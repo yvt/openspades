@@ -1555,22 +1555,22 @@ msgctxt "StartupScreen"
 msgid "Tools"
 msgstr ""
 
+#: ../../Scripts/Gui/StartupScreen.as:1646
+msgctxt "StartupScreen"
+msgid "An unknown error has occured while opening the config directory."
+msgstr ""
+
 #: ../../Scripts/Gui/StartupScreen.as:1625
 msgctxt "StartupScreen"
-msgid "Open Config Directory in Explorer"
+msgid "Open Config Folder in Explorer"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1627
 msgctxt "StartupScreen"
-msgid "Reveal Config Directory in Finder"
+msgid "Reveal Config Folder in Finder"
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1629
 msgctxt "StartupScreen"
-msgid "Browse Config Directory"
-msgstr ""
-
-#: ../../Scripts/Gui/StartupScreen.as:1646
-msgctxt "StartupScreen"
-msgid "An unknown error has occured while opening the config directory."
+msgid "Browse Config Folder"
 msgstr ""
