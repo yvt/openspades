@@ -99,10 +99,16 @@ namespace spades {
 		void StartupScreenHelper::ExamineSystem() {
 			SPADES_MARK_FUNCTION();
 
+			// clear capability report
+			// (this function can be called multiple times via StartupScreenHelper::FixConfig)
+			reportLines.clear();
+			report.clear();
+
 			// check installed locales
 			SPLog("Checking installed locales");
 
 			auto localeDirectories = FileManager::EnumFiles("Locales");
+			locales.clear();
 			for (const std::string &localeInfoName : localeDirectories) {
 				static std::regex localeInfoRegex("[-a-zA-Z0-9_]+\\.json");
 				if (!std::regex_match(localeInfoName, localeInfoRegex)) {
@@ -604,6 +610,8 @@ namespace spades {
 				  }));
 			}
 		}
+
+		void StartupScreenHelper::FixConfigs() { ExamineSystem(); }
 
 		void StartupScreenHelper::Start() {
 			if (scr == nullptr) {

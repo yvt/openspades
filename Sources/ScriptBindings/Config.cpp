@@ -127,6 +127,9 @@ namespace spades {
 			std::string GetStringValue() {
 				return (std::string)handle;
 			}
+			std::string GetDefaultValue() {
+				return handle.GetDescriptor().defaultValue;
+			}
 		};
 
 		static CScriptArray *GetAllConfigNames() {
@@ -220,6 +223,11 @@ namespace spades {
 					r = eng->RegisterObjectMethod("ConfigItem",
 												  "string get_StringValue()",
 												  asMETHOD(ConfigItem, GetStringValue),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("ConfigItem",
+												  "string get_DefaultValue()",
+												  asMETHOD(ConfigItem, GetDefaultValue),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 

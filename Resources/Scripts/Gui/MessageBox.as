@@ -19,14 +19,16 @@
  */
 
 namespace spades {
-	class AlertScreen: spades::ui::UIElement {
+	class MessageBoxScreen: spades::ui::UIElement {
 
-		float contentsTop, contentsHeight;
+		private float contentsTop, contentsHeight;
 
 		spades::ui::EventHandler@ Closed;
-		spades::ui::UIElement@ owner;
+		int ResultIndex = -1;
 
-		AlertScreen(spades::ui::UIElement@ owner, string text, float height = 200.f) {
+		private spades::ui::UIElement@ owner;
+
+		MessageBoxScreen(spades::ui::UIElement@ owner, string text, string[]@ buttons, float height = 200.f) {
 			super(owner.Manager);
 			@this.owner = owner;
 			@Font = Manager.RootElement.Font;
@@ -48,14 +50,18 @@ namespace spades {
 				label.Bounds = AABB2(0.f, contentsTop - 13.f, Size.x, contentsHeight + 27.f);
 				AddChild(label);
 			}
-			{
+			for (uint i = 0; i < buttons.length; ++i) {
 				spades::ui::Button button(Manager);
-				button.Caption = _Tr("MessageBox", "OK");
+				button.Caption = buttons[i];
 				button.Bounds = AABB2(
-					contentsLeft + contentsWidth - 150.f,
+					contentsLeft + contentsWidth - (150.f + 10.f) * (buttons.length - i) + 10.f,
 					contentsTop + contentsHeight - 30.f
 					, 150.f, 30.f);
-				@button.Activated = spades::ui::EventHandler(this.OnOkPressed);
+
+				MessageBoxScreenButtonHandler handler;
+				@handler.screen = this;
+				handler.resultIndex = int(i);
+				@button.Activated = spades::ui::EventHandler(handler.OnPressed);
 				AddChild(button);
 			}
 			{
@@ -72,26 +78,20 @@ namespace spades {
 			}
 		}
 
+		void EndDialog(int result) {
+			ResultIndex = result;
+			Close();
+		}
+
 		void Close() {
 			owner.Enable = true;
 			owner.Parent.RemoveChild(this);
+			OnClosed();
 		}
 
 		void Run() {
 			owner.Enable = false;
 			owner.Parent.AddChild(this);
-		}
-
-		private void OnOkPressed(spades::ui::UIElement@ sender) {
-			Close();
-		}
-
-		void HotKey(string key) {
-			if(IsEnabled and (key == "Enter" or key == "Escape")) {
-				Close();
-			} else {
-				UIElement::HotKey(key);
-			}
 		}
 
 		void Render() {
@@ -114,5 +114,48 @@ namespace spades {
 			UIElement::Render();
 		}
 
+	}
+
+	class MessageBoxScreenButtonHandler {
+		MessageBoxScreen@ screen;
+		int resultIndex;
+
+		void OnPressed(spades::ui::UIElement@) {
+			screen.EndDialog(resultIndex);
+		}
+	}
+
+	class AlertScreen: MessageBoxScreen {
+		AlertScreen(spades::ui::UIElement@ owner, string text, float height = 200.f) {
+			super(owner, text, array<string> = {_Tr("MessageBox", "OK")}, height);
+		}
+
+		void HotKey(string key) {
+			if(IsEnabled and (key == "Enter" or key == "Escape")) {
+				EndDialog(0);
+			} else {
+				UIElement::HotKey(key);
+			}
+		}
+	}
+
+	class ConfirmScreen: MessageBoxScreen {
+		ConfirmScreen(spades::ui::UIElement@ owner, string text, float height = 200.f) {
+			super(owner, text, array<string> = {_Tr("MessageBox", "OK"), _Tr("MessageBox", "Cancel")}, height);
+		}
+
+		bool get_Result() {
+			return ResultIndex == 0;
+		}
+
+		void HotKey(string key) {
+			if(IsEnabled and key == "Enter") {
+				EndDialog(0);
+			} else if(IsEnabled and key == "Escape") {
+				EndDialog(1);
+			} else {
+				UIElement::HotKey(key);
+			}
+		}
 	}
 }

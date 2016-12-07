@@ -19,6 +19,7 @@
  */
 
 #include "DropDownList.as"
+#include "MessageBox.as"
 
 namespace spades {
 
@@ -1608,10 +1609,54 @@ namespace spades {
 				e.Bounds = AABB2(160.f, 0.f, 300.f, 24.f);
 				@locale = e;
 			}
+
+			AddLabel(0.f, 30.f, 30.f, _Tr("StartupScreen", "Reset"));
+			{
+				spades::ui::Button button(Manager);
+				button.Caption = _Tr("StartupScreen", "Reset All Settings");
+				button.Bounds = AABB2(160.f, 30.f, 300.f, 30.f);
+				@button.Activated = spades::ui::EventHandler(this.OnResetSettingsPressed);
+				AddChild(button);
+			}
 		}
 
 		void LoadConfig() {
 			locale.LoadConfig();
+		}
+
+		private void OnResetSettingsPressed(spades::ui::UIElement@) {
+			string msg = _Tr("StartupScreen", "Are you sure to reset all settings? They include (but are not limited to):") + "\n" +
+				"- " + _Tr("StartupScreen", "All graphics/audio settings") + "\n" +
+				"- " + _Tr("StartupScreen", "All key bindings") + "\n" +
+				"- " + _Tr("StartupScreen", "Your player name") + "\n" +
+				"- " + _Tr("StartupScreen", "Other advanced settings only accessible through '{0}' tab and in-game commands",
+					_Tr("StartupScreen", "Advanced"));
+			ConfirmScreen al(Parent, msg, 200.f);
+			@al.Closed = spades::ui::EventHandler(OnResetSettingsConfirmed);
+			al.Run();
+		}
+
+		private void OnResetSettingsConfirmed(spades::ui::UIElement@ sender) {
+			if (!cast<ConfirmScreen>(sender).Result) {
+				return;
+			}
+
+			ResetAllSettings();
+
+			// Reload the startup screen so the language config takes effect
+			ui.Reload();
+		}
+
+		private void ResetAllSettings() {
+			string[]@ names = GetAllConfigNames();
+
+			for(uint i = 0, count = names.length; i < count; i++) {
+				ConfigItem item(names[i]);
+				item.StringValue = item.DefaultValue;
+			}
+
+			// Some of default values may be infeasible for the user's system.
+			helper.FixConfigs();
 		}
 
 	}
