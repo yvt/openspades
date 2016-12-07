@@ -122,6 +122,16 @@ namespace spades {
 												  asMETHOD(gui::StartupScreenHelper, FixConfigs),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "bool BrowseUserDirectory()",
+												  asMETHOD(gui::StartupScreenHelper, BrowseUserDirectory),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "string get_OperatingSystemType()",
+												  asMETHOD(gui::StartupScreenHelper, GetOperatingSystemType),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
 					break;
 				default:
 					break;

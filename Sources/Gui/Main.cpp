@@ -219,6 +219,8 @@ int argsHandler(int argc, char **argv, int &i) {
 }
 
 namespace spades {
+	std::string g_userResourceDirectory;
+
 	void StartClient(const spades::ServerAddress &addr, const std::string &playerName) {
 		class ConcreteRunner : public spades::gui::Runner {
 			spades::ServerAddress addr;
@@ -415,8 +417,13 @@ int main(int argc, char **argv) {
 		if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, buf))) {
 			std::wstring datadir = buf;
 			datadir += L"\\OpenSpades\\Resources";
+
+			spades::g_userResourceDirectory = Utf8FromWString(datadir.c_str());
+
 			spades::FileManager::AddFileSystem(
-			  new spades::DirectoryFileSystem(Utf8FromWString(datadir.c_str()), true));
+			  new spades::DirectoryFileSystem(spades::g_userResourceDirectory, true));
+		} else {
+			SPLog("SHGetFolderPathW failed.");
 		}
 
 		spades::FileManager::AddFileSystem(
@@ -442,8 +449,11 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(
-		  home + "/Library/Application Support/OpenSpades/Resources", true));
+		spades::g_userResourceDirectory =
+		  home + "/Library/Application Support/OpenSpades/Resources";
+
+		spades::FileManager::AddFileSystem(
+		  new spades::DirectoryFileSystem(spades::g_userResourceDirectory, true));
 #else
 		std::string home = getenv("HOME");
 
@@ -491,8 +501,10 @@ int main(int argc, char **argv) {
 			}
 		}
 
+		spades::g_userResourceDirectory = xdg_data_home + "/openspades/Resources";
+
 		spades::FileManager::AddFileSystem(
-		  new spades::DirectoryFileSystem(xdg_data_home + "/openspades/Resources", true));
+		  new spades::DirectoryFileSystem(spades::g_userResourceDirectory, true));
 
 #endif
 

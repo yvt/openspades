@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2016 yvt
 
  This file is part of OpenSpades.
 
@@ -17,16 +17,19 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+
 #pragma once
 
 #include <string>
 
 namespace spades {
-    class ServerAddress;
 
-	/** The path to the user resource directory. Can be empty. */
-	extern std::string g_userResourceDirectory;
-
-    void StartClient(const ServerAddress &, const std::string &playerName);
-    void StartMainScreen();
+    /**
+     * Shows the specified directory with a native file manager like Explorer
+     * or Finder.
+     *
+     * @param directoryPath The path of the directory to show.
+     * @return true if it succeeds. false otherwise.
+     */
+    bool ShowDirectoryInShell(const std::string &directoryPath);
 }

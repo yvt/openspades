@@ -1610,18 +1610,42 @@ namespace spades {
 				@locale = e;
 			}
 
-			AddLabel(0.f, 30.f, 30.f, _Tr("StartupScreen", "Reset"));
+			AddLabel(0.f, 30.f, 30.f, _Tr("StartupScreen", "Tools"));
 			{
 				spades::ui::Button button(Manager);
 				button.Caption = _Tr("StartupScreen", "Reset All Settings");
-				button.Bounds = AABB2(160.f, 30.f, 300.f, 30.f);
+				button.Bounds = AABB2(160.f, 30.f, 350.f, 30.f);
 				@button.Activated = spades::ui::EventHandler(this.OnResetSettingsPressed);
+				AddChild(button);
+			}
+			{
+				spades::ui::Button button(Manager);
+				string osType = helper.OperatingSystemType;
+				if (osType == "Windows") {
+					button.Caption = _Tr("StartupScreen", "Open Config Folder in Explorer");
+				} else if (osType == "Mac") {
+					button.Caption = _Tr("StartupScreen", "Reveal Config Folder in Finder");
+				} else {
+					button.Caption = _Tr("StartupScreen", "Browse Config Folder");
+				}
+				button.Bounds = AABB2(160.f, 66.f, 350.f, 30.f);
+				@button.Activated = spades::ui::EventHandler(this.OnBrowseUserDirectoryPressed);
 				AddChild(button);
 			}
 		}
 
 		void LoadConfig() {
 			locale.LoadConfig();
+		}
+
+		private void OnBrowseUserDirectoryPressed(spades::ui::UIElement@) {
+			if (helper.BrowseUserDirectory()) {
+				return;
+			}
+
+			string msg = _Tr("StartupScreen", "An unknown error has occured while opening the config directory.");
+			AlertScreen al(Parent, msg, 100.f);
+			al.Run();
 		}
 
 		private void OnResetSettingsPressed(spades::ui::UIElement@) {

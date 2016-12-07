@@ -17,6 +17,8 @@ file(GLOB JSON_INCLUDE json/include/json/*.h)
 file(GLOB SCRIPTBINDING_FILES ScriptBindings/*.cpp ScriptBindings/*.h)
 file(GLOB UNZIP_FILES unzip/*.c unzip/*.h)
 
+# TODO: compile ShellApi.mm on macOS
+
 add_subdirectory(AngelScript/projects/cmake)
 add_subdirectory(AngelScript/projects/cmake_addons)
 set(ANGELSCRIPT_LIBS Angelscript Angelscript_addons)

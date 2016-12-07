@@ -93,6 +93,9 @@ namespace spades {
 			/** Checks each config value and modifies it if its value isn't feasible */
 			void FixConfigs();
 
+			std::string GetOperatingSystemType();
+			bool BrowseUserDirectory();
+
 			void Start();
 		};
 	}
