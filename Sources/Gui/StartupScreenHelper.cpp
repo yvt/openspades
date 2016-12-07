@@ -55,8 +55,6 @@ SPADES_SETTING(r_dlights);
 SPADES_SETTING(r_water);
 SPADES_SETTING(r_multisamples);
 SPADES_SETTING(r_fxaa);
-SPADES_SETTING(r_depthBits);
-SPADES_SETTING(r_colorBits);
 SPADES_SETTING(r_videoWidth);
 SPADES_SETTING(r_videoHeight);
 SPADES_SETTING(r_fullscreen);
