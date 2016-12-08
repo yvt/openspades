@@ -1643,7 +1643,7 @@ namespace spades {
 				return;
 			}
 
-			string msg = _Tr("StartupScreen", "An unknown error has occured while opening the config directory.");
+			string msg = _Tr("StartupScreen", "An unknown error has occurred while opening the config directory.");
 			AlertScreen al(Parent, msg, 100.f);
 			al.Run();
 		}

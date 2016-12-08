@@ -1625,7 +1625,7 @@ msgstr "Ferramentas"
 
 #: ../../Scripts/Gui/StartupScreen.as:1646
 msgctxt "StartupScreen"
-msgid "An unknown error has occured while opening the config directory."
+msgid "An unknown error has occurred while opening the config directory."
 msgstr ""
 "Um erro desconhecido ocorreu enquanto o OpenSpades tentave abrir a pasta de "
 "configurações."

@@ -1557,7 +1557,7 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1646
 msgctxt "StartupScreen"
-msgid "An unknown error has occured while opening the config directory."
+msgid "An unknown error has occurred while opening the config directory."
 msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1625
