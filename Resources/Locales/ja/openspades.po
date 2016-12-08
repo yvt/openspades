@@ -21,17 +21,21 @@ msgstr ""
 "X-Generator: Poedit 1.6.4\n"
 
 #: ../../../Sources/Client/Client.cpp:586
+#: ../../../Sources/Client/Client.cpp:587
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr "マップデータを保存しました: {0}"
 
 #: ../../../Sources/Client/Client.cpp:590
 #: ../../../Sources/Client/Client.cpp:596
+#: ../../../Sources/Client/Client.cpp:591
+#: ../../../Sources/Client/Client.cpp:597
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr "マップの保存に失敗しました:"
 
 #: ../../../Sources/Client/Client.cpp:628
+#: ../../../Sources/Client/Client.cpp:629
 msgctxt "Client"
 msgid "[Global] "
 msgstr "[全体] "
@@ -337,12 +341,13 @@ msgctxt "Client"
 msgid "{0}'s Territory"
 msgstr "{0}のテリトリー"
 
-#: ../../../Sources/Gui/Main.cpp:622
+#: ../../../Sources/Gui/Main.cpp:622 ../../../Sources/Gui/Main.cpp:634
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr "ローカライゼーションシステムが読み込まれました"
 
 #: ../../../Sources/Gui/Main.cpp:680 ../../../Sources/Gui/Runner.cpp:58
+#: ../../../Sources/Gui/Main.cpp:692
 msgctxt "Main"
 msgid ""
 "A serious error caused OpenSpades to stop working:\n"
@@ -358,6 +363,7 @@ msgstr ""
 "詳細については SystemMessages.log をご覧下さい。"
 
 #: ../../../Sources/Gui/Main.cpp:688 ../../../Sources/Gui/Runner.cpp:64
+#: ../../../Sources/Gui/Main.cpp:700
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr "OpenSpades 重大なエラー"
@@ -457,87 +463,90 @@ msgctxt "CreateProfileScreen"
 msgid "You can change it later in the Setup dialog."
 msgstr "プレイヤー名は「オプション」からいつでも変更できます。"
 
-#: ../../Scripts/Gui/MainScreen.as:362
+#: ../../Scripts/Gui/MainScreen.as:362 ../../Scripts/Gui/MainScreen.as:376
 msgctxt "MainScreen"
 msgid "Connect"
 msgstr "接続"
 
-#: ../../Scripts/Gui/MainScreen.as:370
+#: ../../Scripts/Gui/MainScreen.as:370 ../../Scripts/Gui/MainScreen.as:384
 msgctxt "MainScreen"
 msgid "Quick Connect"
 msgstr "クイック接続"
 
 #: ../../Scripts/Gui/MainScreen.as:379 ../../Scripts/Gui/MainScreen.as:433
+#: ../../Scripts/Gui/MainScreen.as:393 ../../Scripts/Gui/MainScreen.as:447
 msgctxt "MainScreen"
 msgid "0.75"
 msgstr "0.75"
 
 #: ../../Scripts/Gui/MainScreen.as:389 ../../Scripts/Gui/MainScreen.as:442
+#: ../../Scripts/Gui/MainScreen.as:403 ../../Scripts/Gui/MainScreen.as:456
 msgctxt "MainScreen"
 msgid "0.76"
 msgstr "0.76"
 
-#: ../../Scripts/Gui/MainScreen.as:397
+#: ../../Scripts/Gui/MainScreen.as:397 ../../Scripts/Gui/MainScreen.as:411
 msgctxt "MainScreen"
 msgid "Quit"
 msgstr "終了"
 
-#: ../../Scripts/Gui/MainScreen.as:404
+#: ../../Scripts/Gui/MainScreen.as:404 ../../Scripts/Gui/MainScreen.as:418
 msgctxt "MainScreen"
 msgid "Credits"
 msgstr "クレジット"
 
-#: ../../Scripts/Gui/MainScreen.as:411
+#: ../../Scripts/Gui/MainScreen.as:411 ../../Scripts/Gui/MainScreen.as:425
 msgctxt "MainScreen"
 msgid "Setup"
 msgstr "オプション"
 
 #: ../../Scripts/Gui/MainScreen.as:424 ../../Scripts/Gui/MainScreen.as:468
+#: ../../Scripts/Gui/MainScreen.as:438 ../../Scripts/Gui/MainScreen.as:482
 msgctxt "MainScreen"
 msgid "Filter"
 msgstr "フィルタ"
 
-#: ../../Scripts/Gui/MainScreen.as:451
+#: ../../Scripts/Gui/MainScreen.as:451 ../../Scripts/Gui/MainScreen.as:465
 msgctxt "MainScreen"
 msgid "Empty"
 msgstr "無人"
 
-#: ../../Scripts/Gui/MainScreen.as:460
+#: ../../Scripts/Gui/MainScreen.as:460 ../../Scripts/Gui/MainScreen.as:474
 msgctxt "MainScreen"
 msgid "Not Full"
 msgstr "空有り"
 
-#: ../../Scripts/Gui/MainScreen.as:480
+#: ../../Scripts/Gui/MainScreen.as:480 ../../Scripts/Gui/MainScreen.as:494
 msgctxt "MainScreen"
 msgid "Server Name"
 msgstr "サーバー名"
 
-#: ../../Scripts/Gui/MainScreen.as:487
+#: ../../Scripts/Gui/MainScreen.as:487 ../../Scripts/Gui/MainScreen.as:501
 msgctxt "MainScreen"
 msgid "Players"
 msgstr "プレイヤー数"
 
-#: ../../Scripts/Gui/MainScreen.as:494
+#: ../../Scripts/Gui/MainScreen.as:494 ../../Scripts/Gui/MainScreen.as:508
 msgctxt "MainScreen"
 msgid "Map Name"
 msgstr "マップ名"
 
-#: ../../Scripts/Gui/MainScreen.as:501
+#: ../../Scripts/Gui/MainScreen.as:501 ../../Scripts/Gui/MainScreen.as:515
 msgctxt "MainScreen"
 msgid "Game Mode"
 msgstr "ゲームモード"
 
-#: ../../Scripts/Gui/MainScreen.as:508
+#: ../../Scripts/Gui/MainScreen.as:508 ../../Scripts/Gui/MainScreen.as:522
 msgctxt "MainScreen"
 msgid "Ver."
 msgstr "Ver."
 
-#: ../../Scripts/Gui/MainScreen.as:515
+#: ../../Scripts/Gui/MainScreen.as:515 ../../Scripts/Gui/MainScreen.as:529
 msgctxt "MainScreen"
 msgid "Loc."
 msgstr "国"
 
-#: ../../Scripts/Gui/MainScreen.as:767
+#: ../../Scripts/Gui/MainScreen.as:767 ../../Scripts/Gui/MainScreen.as:787
 msgctxt "MainScreen"
 msgid ""
 "You were disconnected from the server because of the following reason:\n"
@@ -548,17 +557,18 @@ msgstr ""
 "\n"
 "{0}"
 
-#: ../../Scripts/Gui/MainScreen.as:787
+#: ../../Scripts/Gui/MainScreen.as:787 ../../Scripts/Gui/MainScreen.as:807
 msgctxt "MainScreen"
 msgid "Loading..."
 msgstr "読み込み中..."
 
-#: ../../Scripts/Gui/MainScreen.as:805
+#: ../../Scripts/Gui/MainScreen.as:805 ../../Scripts/Gui/MainScreen.as:825
 msgctxt "MainScreen"
 msgid "Failed to fetch the server list."
 msgstr "サーバー一覧のダウンロード中にエラーが発生しました。"
 
-#: ../../Scripts/Gui/MessageBox.as:53
+#: ../../Scripts/Gui/MessageBox.as:53 ../../Scripts/Gui/MessageBox.as:130
+#: ../../Scripts/Gui/MessageBox.as:144
 msgctxt "MessageBox"
 msgid "OK"
 msgstr "OK"
@@ -956,110 +966,128 @@ msgid "Some settings only can be changed in the startup window."
 msgstr "一部の設定はスタートアップウィンドウでのみ変更が可能です。"
 
 #: ../../Scripts/Gui/StartupScreen.as:158
+#: ../../Scripts/Gui/StartupScreen.as:159
 msgctxt "StartupScreen"
 msgid "Start"
 msgstr "スタート"
 
 #: ../../Scripts/Gui/StartupScreen.as:165
+#: ../../Scripts/Gui/StartupScreen.as:166
 msgctxt "StartupScreen"
 msgid "Skip this screen next time"
 msgstr "次回起動時はこの画面を表示しない"
 
 #: ../../Scripts/Gui/StartupScreen.as:203
+#: ../../Scripts/Gui/StartupScreen.as:204
 msgctxt "StartupScreen"
 msgid "Graphics"
 msgstr "映像"
 
 #: ../../Scripts/Gui/StartupScreen.as:204
+#: ../../Scripts/Gui/StartupScreen.as:205
 msgctxt "StartupScreen"
 msgid "Audio"
 msgstr "音声"
 
 #: ../../Scripts/Gui/StartupScreen.as:205
+#: ../../Scripts/Gui/StartupScreen.as:206
 msgctxt "StartupScreen"
 msgid "Generic"
 msgstr "一般"
 
 #: ../../Scripts/Gui/StartupScreen.as:206
+#: ../../Scripts/Gui/StartupScreen.as:207
 msgctxt "StartupScreen"
 msgid "System Info"
 msgstr "システム情報"
 
 #: ../../Scripts/Gui/StartupScreen.as:207
+#: ../../Scripts/Gui/StartupScreen.as:208
+#: ../../Scripts/Gui/StartupScreen.as:1634
+#: ../../Scripts/Gui/StartupScreen.as:1633
+#: ../../Scripts/Gui/StartupScreen.as:1657
 msgctxt "StartupScreen"
 msgid "Advanced"
 msgstr "高度な設定"
 
 #: ../../Scripts/Gui/StartupScreen.as:835
+#: ../../Scripts/Gui/StartupScreen.as:836
 msgctxt "StartupScreen"
 msgid "Custom"
 msgstr "カスタム"
 
 #: ../../Scripts/Gui/StartupScreen.as:961
+#: ../../Scripts/Gui/StartupScreen.as:962
 msgctxt "StartupScreen"
 msgid "Close"
 msgstr "閉じる"
 
 #: ../../Scripts/Gui/StartupScreen.as:1067
+#: ../../Scripts/Gui/StartupScreen.as:1068
 msgctxt "StartupScreen"
 msgid "Graphics Settings"
 msgstr "グラフィックス設定"
 
 #: ../../Scripts/Gui/StartupScreen.as:1072
+#: ../../Scripts/Gui/StartupScreen.as:1073
 msgctxt "StartupScreen"
 msgid "Resolution"
 msgstr "画面解像度"
 
 #: ../../Scripts/Gui/StartupScreen.as:1082
+#: ../../Scripts/Gui/StartupScreen.as:1083
 msgctxt "StartupScreen"
 msgid "Fullscreen Mode"
 msgstr "フルスクリーンモード"
 
 #: ../../Scripts/Gui/StartupScreen.as:1085
+#: ../../Scripts/Gui/StartupScreen.as:1086
 msgctxt "StartupScreen"
 msgid ""
 "By running in fullscreen mode OpenSpades occupies the screen, making it "
 "easier for you to concentrate on playing the game."
-msgstr ""
-"フルスクリーンモードを使用すると画面全体を占領してプレイできるため、ゲームに"
-"集中しやすくなります。"
+msgstr "フルスクリーンモードを使用すると画面全体を占領してプレイできるため、ゲームに集中しやすくなります。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1092
 #: ../../Scripts/Gui/StartupScreen.as:1470
+#: ../../Scripts/Gui/StartupScreen.as:1093
+#: ../../Scripts/Gui/StartupScreen.as:1471
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr "バックエンド"
 
 #: ../../Scripts/Gui/StartupScreen.as:1095
+#: ../../Scripts/Gui/StartupScreen.as:1096
 msgctxt "StartupScreen"
 msgid "OpenGL"
 msgstr "OpenGL"
 
 #: ../../Scripts/Gui/StartupScreen.as:1099
+#: ../../Scripts/Gui/StartupScreen.as:1100
 msgctxt "StartupScreen"
 msgid ""
 "OpenGL renderer uses your computer's graphics accelerator to generate the "
 "game screen."
-msgstr ""
-"OpenGLレンダラーはコンピュータに内蔵されたGPUを使用してゲーム画面を描画しま"
-"す。"
+msgstr "OpenGLレンダラーはコンピュータに内蔵されたGPUを使用してゲーム画面を描画します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1107
+#: ../../Scripts/Gui/StartupScreen.as:1108
 msgctxt "StartupScreen"
 msgid "Software"
 msgstr "ソフトウェア"
 
 #: ../../Scripts/Gui/StartupScreen.as:1111
+#: ../../Scripts/Gui/StartupScreen.as:1112
 msgctxt "StartupScreen"
 msgid ""
 "Software renderer uses CPU to generate the game screen. Its quality and "
 "performance might be inferior to OpenGL renderer, but it works even with an "
 "unsupported GPU."
 msgstr ""
-"ソフトウェアレンダラーはCPUを使用してゲーム画面を描画します。画質やパフォーマ"
-"ンスはOpenGLには劣りますが、未対応GPUでも確実に動作します。"
+"ソフトウェアレンダラーはCPUを使用してゲーム画面を描画します。画質やパフォーマンスはOpenGLには劣りますが、未対応GPUでも確実に動作します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1125
+#: ../../Scripts/Gui/StartupScreen.as:1126
 msgctxt "StartupScreen"
 msgid ""
 "Antialias:Enables a technique to improve the appearance of high-constrast "
@@ -1068,38 +1096,38 @@ msgid ""
 "MSAA: Performs antialiasing by generating an intermediate high-resolution "
 "image. Looks best, but doesn't cope with some settings.\n"
 "\n"
-"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
-"Off|MSAA 2x|4x|FXAA"
+"FXAA: Performs antialiasing by smoothing artifacts out as a "
+"post-process.|Off|MSAA 2x|4x|FXAA"
 msgstr ""
-"アンチエイリアシング:オブジェクトの輪郭に発生する階段上のギザギザ(ジャギー)を"
-"除去する手法を有効にします。\n"
+"アンチエイリアシング:オブジェクトの輪郭に発生する階段上のギザギザ(ジャギー)を除去する手法を有効にします。\n"
 "\n"
-"MSAA: 中間的に画面より数倍程度の高解像度な画像を生成しアンチエイリアシングを"
-"行います。見た目は最も良くなりますが、一部の設定と相性が悪い場合がありま"
-"す。\n"
+"MSAA: "
+"中間的に画面より数倍程度の高解像度な画像を生成しアンチエイリアシングを行います。見た目は最も良くなりますが、一部の設定と相性が悪い場合があります。\n"
 "\n"
-"FXAA: 描画された画像からジャギーを検出してぼかすことによりアンチエイリアシン"
-"グを行います。|オフ|MSAA 2x|4x|FXAA"
+"FXAA: 描画された画像からジャギーを検出してぼかすことによりアンチエイリアシングを行います。|オフ|MSAA 2x|4x|FXAA"
 
 #: ../../Scripts/Gui/StartupScreen.as:1132
+#: ../../Scripts/Gui/StartupScreen.as:1133
 msgctxt "StartupScreen"
 msgid "Global Illumination"
 msgstr "大域照明"
 
 #: ../../Scripts/Gui/StartupScreen.as:1134
+#: ../../Scripts/Gui/StartupScreen.as:1135
 msgctxt "StartupScreen"
 msgid ""
 "Enables a physically based simulation of light path for more realistic "
 "lighting."
-msgstr ""
-"物理的に正確な計算手法を使用することにより、より写実的な光表現を行います。"
+msgstr "物理的に正確な計算手法を使用することにより、より写実的な光表現を行います。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1137
+#: ../../Scripts/Gui/StartupScreen.as:1138
 msgctxt "StartupScreen"
 msgid "Linear HDR Rendering"
 msgstr "線形色空間HDRレンダリング"
 
 #: ../../Scripts/Gui/StartupScreen.as:1139
+#: ../../Scripts/Gui/StartupScreen.as:1140
 msgctxt "StartupScreen"
 msgid ""
 "Uses a number representation which allows wider dynamic range during "
@@ -1107,76 +1135,88 @@ msgid ""
 "is in linear correspondence with actual energy, that is, physically accurate "
 "blending can be achieved."
 msgstr ""
-"より幅広いダイナミックレンジを表現可能な数値の表現方法をレンダリング処理に使"
-"用します。これにより実際のエネルギー量と線形関係のある値を使用して色を表現で"
-"きるため物理的に正確なブレンディングを行うことができます。"
+"より幅広いダイナミックレンジを表現可能な数値の表現方法をレンダリング処理に使用します。これにより実際のエネルギー量と線形関係のある値を使用して色を表現できるため物理的に正確なブレンディングを行うことができます。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1146
+#: ../../Scripts/Gui/StartupScreen.as:1147
 msgctxt "StartupScreen"
 msgid "Camera Blur"
 msgstr "カメラブラー"
 
 #: ../../Scripts/Gui/StartupScreen.as:1147
+#: ../../Scripts/Gui/StartupScreen.as:1148
 msgctxt "StartupScreen"
 msgid "Blurs the screen when you turn quickly."
 msgstr "視点が動いた際のブレを再現します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1149
+#: ../../Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
 msgid "Lens Effect"
 msgstr "レンズ効果"
 
 #: ../../Scripts/Gui/StartupScreen.as:1150
+#: ../../Scripts/Gui/StartupScreen.as:1151
 msgctxt "StartupScreen"
 msgid "Simulates distortion caused by a real camera lens."
 msgstr "現実世界のレンズの歪みをシミュレートします。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1152
+#: ../../Scripts/Gui/StartupScreen.as:1153
 msgctxt "StartupScreen"
 msgid "Lens Scattering Filter"
 msgstr "レンズ散乱フィルタ"
 
 #: ../../Scripts/Gui/StartupScreen.as:1153
+#: ../../Scripts/Gui/StartupScreen.as:1154
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
 msgstr "レンズの汚れによる光の散乱を再現します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1156
+#: ../../Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
 msgid "Lens Flare"
 msgstr "レンズフレア"
 
 #: ../../Scripts/Gui/StartupScreen.as:1157
+#: ../../Scripts/Gui/StartupScreen.as:1158
 msgctxt "StartupScreen"
 msgid "The Sun causes lens flare."
 msgstr "太陽を直視したときにレンズフレアを描画します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1159
+#: ../../Scripts/Gui/StartupScreen.as:1160
 msgctxt "StartupScreen"
 msgid "Flares for Dynamic Lights"
 msgstr "動的ライトにレンズフレア"
 
 #: ../../Scripts/Gui/StartupScreen.as:1160
+#: ../../Scripts/Gui/StartupScreen.as:1161
 msgctxt "StartupScreen"
 msgid "Enables lens flare for light sources other than the Sun."
 msgstr "太陽以外の光源を直視したときにレンズフレアを描画します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1162
+#: ../../Scripts/Gui/StartupScreen.as:1163
 msgctxt "StartupScreen"
 msgid "Color Correction"
 msgstr "色調補正"
 
 #: ../../Scripts/Gui/StartupScreen.as:1163
+#: ../../Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
 msgstr "色調補正を適用することにより見た目を改善します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1165
+#: ../../Scripts/Gui/StartupScreen.as:1166
 msgctxt "StartupScreen"
 msgid "Depth of Field"
 msgstr "被写界深度"
 
 #: ../../Scripts/Gui/StartupScreen.as:1166
+#: ../../Scripts/Gui/StartupScreen.as:1167
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
 msgstr "ピントの合っていない物体をぼかします。"
@@ -1184,12 +1224,17 @@ msgstr "ピントの合っていない物体をぼかします。"
 #: ../../Scripts/Gui/StartupScreen.as:1168
 #: ../../Scripts/Gui/StartupScreen.as:1206
 #: ../../Scripts/Gui/StartupScreen.as:1228
+#: ../../Scripts/Gui/StartupScreen.as:1169
+#: ../../Scripts/Gui/StartupScreen.as:1207
+#: ../../Scripts/Gui/StartupScreen.as:1229
 msgctxt "StartupScreen"
 msgid "Low"
 msgstr "低"
 
 #: ../../Scripts/Gui/StartupScreen.as:1169
 #: ../../Scripts/Gui/StartupScreen.as:1207
+#: ../../Scripts/Gui/StartupScreen.as:1170
+#: ../../Scripts/Gui/StartupScreen.as:1208
 msgctxt "StartupScreen"
 msgid "Medium"
 msgstr "中"
@@ -1197,77 +1242,85 @@ msgstr "中"
 #: ../../Scripts/Gui/StartupScreen.as:1170
 #: ../../Scripts/Gui/StartupScreen.as:1208
 #: ../../Scripts/Gui/StartupScreen.as:1230
+#: ../../Scripts/Gui/StartupScreen.as:1171
+#: ../../Scripts/Gui/StartupScreen.as:1209
+#: ../../Scripts/Gui/StartupScreen.as:1231
 msgctxt "StartupScreen"
 msgid "High"
 msgstr "高"
 
 #: ../../Scripts/Gui/StartupScreen.as:1173
+#: ../../Scripts/Gui/StartupScreen.as:1174
 msgctxt "StartupScreen"
 msgid "Post-process"
 msgstr "後処理"
 
 #: ../../Scripts/Gui/StartupScreen.as:1174
+#: ../../Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid ""
 "Post-process modifies the image to make it look better and more realistic."
 msgstr "後処理により描画された画面を加工しより良く見せます。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1181
+#: ../../Scripts/Gui/StartupScreen.as:1182
 msgctxt "StartupScreen"
 msgid ""
-"Particles|Low:Artifact occurs when a particle intersects other objects.|"
-"Medium:Particle intersects objects smoothly.|High:Particle intersects "
-"objects smoothly, and some objects casts their shadow to particles."
+"Particles|Low:Artifact occurs when a particle intersects other "
+"objects.|Medium:Particle intersects objects smoothly.|High:Particle "
+"intersects objects smoothly, and some objects casts their shadow to "
+"particles."
 msgstr ""
-"パーティクル|低:パーティクルが他のオブジェクトと交差すると鋭い境界が現れま"
-"す。|中:パーティクルは他のオブジェクトと滑らかに交わります。|高:パーティクル"
-"は他のオブジェクトと滑らかに交わります。また一部のオブジェクトがパーティクル"
-"に影を落とします。"
+"パーティクル|低:パーティクルが他のオブジェクトと交差すると鋭い境界が現れます。|中:パーティクルは他のオブジェクトと滑らかに交わります。|高:パーティクルは他のオブジェクトと滑らかに交わります。また一部のオブジェクトがパーティクルに影を落とします。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1191
+#: ../../Scripts/Gui/StartupScreen.as:1192
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
 msgstr "動的ライト"
 
 #: ../../Scripts/Gui/StartupScreen.as:1193
+#: ../../Scripts/Gui/StartupScreen.as:1194
 msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
 "impression."
-msgstr ""
-"一部のオブジェクトが発光するようにし、エネルギーを発しているような印象を与え"
-"ます。"
+msgstr "一部のオブジェクトが発光するようにし、エネルギーを発しているような印象を与えます。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1196
+#: ../../Scripts/Gui/StartupScreen.as:1197
 msgctxt "StartupScreen"
 msgid "Shadows"
 msgstr "影"
 
 #: ../../Scripts/Gui/StartupScreen.as:1197
+#: ../../Scripts/Gui/StartupScreen.as:1198
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
 msgstr "動的なオブジェクトも影が描画されるようにします。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1199
+#: ../../Scripts/Gui/StartupScreen.as:1200
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
 msgstr "ボリューメトリックフォグ"
 
 #: ../../Scripts/Gui/StartupScreen.as:1200
+#: ../../Scripts/Gui/StartupScreen.as:1201
 msgctxt "StartupScreen"
 msgid ""
 "Simulates shadow being casted to the fog particles using a super highly "
 "computationally demanding algorithm. "
-msgstr ""
-"非常に計算量が膨大なアルゴリズムを使用することにより、大気中の霧の粒子に影が"
-"落とされる様子をシミュレーションします。"
+msgstr "非常に計算量が膨大なアルゴリズムを使用することにより、大気中の霧の粒子に影が落とされる様子をシミュレーションします。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1203
+#: ../../Scripts/Gui/StartupScreen.as:1204
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
 msgstr "物理ベースライティング"
 
 #: ../../Scripts/Gui/StartupScreen.as:1204
+#: ../../Scripts/Gui/StartupScreen.as:1205
 msgctxt "StartupScreen"
 msgid ""
 "Uses more accurate approximation techniques to decide the brightness of "
@@ -1275,19 +1328,21 @@ msgid ""
 msgstr "直接反射光の明るさを物理的に正確な手法を用いて計算します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1211
+#: ../../Scripts/Gui/StartupScreen.as:1212
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr "直接光"
 
 #: ../../Scripts/Gui/StartupScreen.as:1212
+#: ../../Scripts/Gui/StartupScreen.as:1213
 msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
 "appearance."
-msgstr ""
-"物体(大気含む)に直接当たった光がどのようにその外観に影響するかを制御します。"
+msgstr "物体(大気含む)に直接当たった光がどのようにその外観に影響するかを制御します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1222
+#: ../../Scripts/Gui/StartupScreen.as:1223
 msgctxt "StartupScreen"
 msgid ""
 "Water Shader|None:Water is rendered in the same way that normal blocks are "
@@ -1296,107 +1351,117 @@ msgid ""
 "and refractions are rendered at the highest quality using screen-space "
 "techniques."
 msgstr ""
-"水シェーダー|オフ:水は通常のブロックと同じように描画されます。|レベル 1:屈折"
-"と太陽光の反射が描画されます。|レベル 2:屈折・太陽光の反射に加え、波やその他"
-"の反射も描画されます。|レベル 3:スクリーンスペース手法を用いることにより、屈"
-"折と反射を最高品質で描画します。"
+"水シェーダー|オフ:水は通常のブロックと同じように描画されます。|レベル 1:屈折と太陽光の反射が描画されます。|レベル "
+"2:屈折・太陽光の反射に加え、波やその他の反射も描画されます。|レベル 3:スクリーンスペース手法を用いることにより、屈折と反射を最高品質で描画します。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1229
+#: ../../Scripts/Gui/StartupScreen.as:1230
 msgctxt "StartupScreen"
 msgid "Med"
 msgstr "中"
 
 #: ../../Scripts/Gui/StartupScreen.as:1231
+#: ../../Scripts/Gui/StartupScreen.as:1232
 msgctxt "StartupScreen"
 msgid "Ultra"
 msgstr "最高"
 
 #: ../../Scripts/Gui/StartupScreen.as:1234
+#: ../../Scripts/Gui/StartupScreen.as:1235
 msgctxt "StartupScreen"
 msgid "Shader Effects"
 msgstr "シェーダー効果"
 
 #: ../../Scripts/Gui/StartupScreen.as:1234
+#: ../../Scripts/Gui/StartupScreen.as:1235
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr "特殊効果。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1251
+#: ../../Scripts/Gui/StartupScreen.as:1252
 msgctxt "StartupScreen"
 msgid ""
-"Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
-"4x"
+"Fast Mode:Reduces the image resolution to make the rendering "
+"faster.|Off|2x|4x"
 msgstr "高速モード:画面解像度を低下させ、描画を高速化します。|オフ|2x|4x"
 
 #: ../../Scripts/Gui/StartupScreen.as:1464
+#: ../../Scripts/Gui/StartupScreen.as:1465
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr "音声の設定"
 
 #: ../../Scripts/Gui/StartupScreen.as:1473
+#: ../../Scripts/Gui/StartupScreen.as:1474
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr "OpenAL"
 
 #: ../../Scripts/Gui/StartupScreen.as:1477
+#: ../../Scripts/Gui/StartupScreen.as:1478
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
 "there isn't such a sound card, software emulation is used."
 msgstr ""
-"OpenALに対応したサウンドカードを使用して音声を処理します。ほとんどの場合この"
-"ようなサウンドカードがありませんので、ソフトウェアエミュレーションが使用され"
-"ます。"
+"OpenALに対応したサウンドカードを使用して音声を処理します。ほとんどの場合このようなサウンドカードがありませんので、ソフトウェアエミュレーションが使用されます。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1486
+#: ../../Scripts/Gui/StartupScreen.as:1487
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr "YSR"
 
 #: ../../Scripts/Gui/StartupScreen.as:1490
+#: ../../Scripts/Gui/StartupScreen.as:1491
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
 "features several enhanced features including automatic load control, "
 "dynamics compressor, HRTF-based 3D audio, and high quality reverb."
 msgstr ""
-"YSRはOpenSpadesに最適化された、実験的な3D HDRサウンドエンジンです。自動負荷制"
-"御やダイナミクスコンプレッサー、HRTFベースの立体音響や高音質リバーブエフェク"
-"タを備えています。"
+"YSRはOpenSpadesに最適化された、実験的な3D "
+"HDRサウンドエンジンです。自動負荷制御やダイナミクスコンプレッサー、HRTFベースの立体音響や高音質リバーブエフェクタを備えています。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1500
+#: ../../Scripts/Gui/StartupScreen.as:1501
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr "ヌル"
 
 #: ../../Scripts/Gui/StartupScreen.as:1504
+#: ../../Scripts/Gui/StartupScreen.as:1505
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr "オーディオ出力を無効にします。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1515
 #: ../../Scripts/Gui/StartupScreen.as:1539
+#: ../../Scripts/Gui/StartupScreen.as:1516
+#: ../../Scripts/Gui/StartupScreen.as:1540
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "最大同時発音数"
 
 #: ../../Scripts/Gui/StartupScreen.as:1516
+#: ../../Scripts/Gui/StartupScreen.as:1517
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
 "more processing power, so setting this too high might cause an overload "
 "(especially with a software emulation)."
 msgstr ""
-"同時に発音可能な音声の個数を指定します。この値が大きいと必要な処理能力も増大"
-"するため、特にソフトウェアエミュレーションにおいて過負荷状態を生じることがあ"
-"ります。"
+"同時に発音可能な音声の個数を指定します。この値が大きいと必要な処理能力も増大するため、特にソフトウェアエミュレーションにおいて過負荷状態を生じることがあります。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1523
+#: ../../Scripts/Gui/StartupScreen.as:1524
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
 
 #: ../../Scripts/Gui/StartupScreen.as:1524
+#: ../../Scripts/Gui/StartupScreen.as:1525
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1404,41 +1469,133 @@ msgid ""
 msgstr "OpenALドライバが提供する拡張機能を利用して臨場感を高めます。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1540
+#: ../../Scripts/Gui/StartupScreen.as:1541
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
 "is set, YSR might reduce the number of sounds when an overload is detected."
-msgstr ""
-"同時に発音可能な音声の個数を指定します。この値によらず、YSRは過負荷を防ぐため"
-"に同時発音数を減らすことがあります。"
+msgstr "同時に発音可能な音声の個数を指定します。この値によらず、YSRは過負荷を防ぐために同時発音数を減らすことがあります。"
 
 #: ../../Scripts/Gui/StartupScreen.as:1600
+#: ../../Scripts/Gui/StartupScreen.as:1601
 msgctxt "StartupScreen"
 msgid "Language"
 msgstr "言語"
 
 #: ../../Scripts/Gui/StartupScreen.as:1657
+#: ../../Scripts/Gui/StartupScreen.as:1703
+#: ../../Scripts/Gui/StartupScreen.as:1702
+#: ../../Scripts/Gui/StartupScreen.as:1726
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
 msgstr "不明 ({0})"
 
 #: ../../Scripts/Gui/StartupScreen.as:1659
 #: ../../Scripts/Gui/StartupScreen.as:1673
+#: ../../Scripts/Gui/StartupScreen.as:1705
+#: ../../Scripts/Gui/StartupScreen.as:1719
+#: ../../Scripts/Gui/StartupScreen.as:1704
+#: ../../Scripts/Gui/StartupScreen.as:1718
+#: ../../Scripts/Gui/StartupScreen.as:1728
+#: ../../Scripts/Gui/StartupScreen.as:1742
 msgctxt "StartupScreen"
 msgid "System default"
 msgstr "システムデフォルト"
 
 #: ../../Scripts/Gui/StartupScreen.as:1722
+#: ../../Scripts/Gui/StartupScreen.as:1768
+#: ../../Scripts/Gui/StartupScreen.as:1767
+#: ../../Scripts/Gui/StartupScreen.as:1791
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "クリップボードにコピー"
 
 #: ../../Scripts/Gui/StartupScreen.as:1758
+#: ../../Scripts/Gui/StartupScreen.as:1804
+#: ../../Scripts/Gui/StartupScreen.as:1803
+#: ../../Scripts/Gui/StartupScreen.as:1827
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "高度な設定"
 
 #: ../../Scripts/Gui/StartupScreen.as:1767
+#: ../../Scripts/Gui/StartupScreen.as:1813
+#: ../../Scripts/Gui/StartupScreen.as:1812
+#: ../../Scripts/Gui/StartupScreen.as:1836
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "フィルタ"
+
+#: ../../Scripts/Gui/MessageBox.as:144
+msgctxt "MessageBox"
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: ../../Scripts/Gui/StartupScreen.as:1613
+msgctxt "StartupScreen"
+msgid "Reset"
+msgstr "リセット"
+
+#: ../../Scripts/Gui/StartupScreen.as:1616
+msgctxt "StartupScreen"
+msgid "Reset All Settings"
+msgstr "設定を全てリセット"
+
+#: ../../Scripts/Gui/StartupScreen.as:1628
+#: ../../Scripts/Gui/StartupScreen.as:1652
+msgctxt "StartupScreen"
+msgid ""
+"Are you sure to reset all settings? They include (but are not limited to):"
+msgstr "設定を全てリセットしますか？対象となる設定には以下のものが含まれます:"
+
+#: ../../Scripts/Gui/StartupScreen.as:1629
+#: ../../Scripts/Gui/StartupScreen.as:1653
+msgctxt "StartupScreen"
+msgid "All graphics/audio settings"
+msgstr "全ての映像・音声設定"
+
+#: ../../Scripts/Gui/StartupScreen.as:1630
+#: ../../Scripts/Gui/StartupScreen.as:1654
+msgctxt "StartupScreen"
+msgid "All key bindings"
+msgstr "全てのキー割り当て"
+
+#: ../../Scripts/Gui/StartupScreen.as:1631
+#: ../../Scripts/Gui/StartupScreen.as:1655
+msgctxt "StartupScreen"
+msgid "Your player name"
+msgstr "プレイヤー名"
+
+#: ../../Scripts/Gui/StartupScreen.as:1633
+#: ../../Scripts/Gui/StartupScreen.as:1632
+#: ../../Scripts/Gui/StartupScreen.as:1656
+msgctxt "StartupScreen"
+msgid ""
+"Other advanced settings only accessible through '{0}' tab and in-game "
+"commands"
+msgstr "その他の高度な設定"
+
+#: ../../Scripts/Gui/StartupScreen.as:1613
+msgctxt "StartupScreen"
+msgid "Tools"
+msgstr "ツール"
+
+#: ../../Scripts/Gui/StartupScreen.as:1646
+msgctxt "StartupScreen"
+msgid "An unknown error has occured while opening the config directory."
+msgstr "設定ディレクトリを開いている最中に不明なエラーが発生しました。"
+
+#: ../../Scripts/Gui/StartupScreen.as:1625
+msgctxt "StartupScreen"
+msgid "Open Config Folder in Explorer"
+msgstr "設定フォルダをエクスプローラで開く"
+
+#: ../../Scripts/Gui/StartupScreen.as:1627
+msgctxt "StartupScreen"
+msgid "Reveal Config Folder in Finder"
+msgstr "設定フォルダをFinderで表示"
+
+#: ../../Scripts/Gui/StartupScreen.as:1629
+msgctxt "StartupScreen"
+msgid "Browse Config Folder"
+msgstr "設定フォルダを開く"
