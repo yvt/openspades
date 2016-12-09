@@ -1,27 +1,17 @@
 
 
-Non GPL-compatible data pak
----------------------------
+External Game Assets
+--------------------
 
-https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip
+https://github.com/yvt/openspades-paks/releases/download/r29/OpenSpadesDevPackage-r29.zip
 
-`pak000-Nonfree.pak` in this zip file contains game data that is not compatible
-with GPLv3. Please do not redistribute it separately from OpenSpades releases or
-compiled binaries.
+This package provides following paks:
 
-Note: DevPaks previously included all pak files, but now don't, because it
-seemed to overcomplicate things.
-
-
-GNU Unifont (Generic Unicode Font)
-------------------------------
-
-You can get the Unicode font pak from:
-
-http://yvt.jp/files/programs/osppaks/font-unifont.pak
-
-Note: this contains all 65536 characters of Unicode BMP, so
-expect large memory consumption.
+- `pak000-Nonfree.pak` contains essential game assets which are incompatible
+  with GPLv3. Please do not redistribute it separately from OpenSpades releases
+  or compiled binaries.
+- `font-unifont.pak` contains a font that covers all 65536 characters of Unicode
+  BMP. Licensed under GPLv2.
 
 
 GNU Unifont: Cyrillic Only

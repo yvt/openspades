@@ -4,6 +4,7 @@
 # paks
 *.pak
 DevPaks*.zip
+OpenSpadesDevPackage-*.zip
 
 # Proprietary resource files
 Resources/Nonfree

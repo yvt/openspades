@@ -129,7 +129,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 10. Build the paks using `mkpak.ps1` in PowerShell 5.0 and copy the generated paks into a new `Resources` folder, inside the build output directory. **If the script is not working for some reason, you can also:**
  * Copy the `E:/Projects/openspades/Resources/` folder to the build directory instead; OR
  * Build the paks using `mkpak.sh` in a external linux system (Dual-boot Ubuntu, Bash on Windows, Cygwin)
-11. Download the [Non-free pak](https://dl.dropboxusercontent.com/u/37804131/openspades/DevPaks29.zip) and copy it to the `Resources` folder inside your build directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE/Resources`. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
+11. Download the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r29/OpenSpadesDevPackage-r29.zip) and copy it to the `Resources` folder inside your build directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE/Resources`. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
 
 ### On Mac OS X (with Xcode)
 1. Get the latest version of Xcode and OpenSpades source.

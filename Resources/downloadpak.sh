@@ -15,10 +15,10 @@ SRC_DIR="`dirname "$0"`"
 # no color, not -m flag for OpenBSD
 if [[ "$OS_BASE" != 'OpenBSD' ]]; then
 	PAK_URL=$(grep --max-count=1 --no-filename --context=0 --color=never \
-		"DevPaks" "$SRC_DIR/PakLocation.txt")
+		"OpenSpadesDevPackage" "$SRC_DIR/PakLocation.txt")
 else
 	PAK_URL=$(grep --no-filename \
-		"DevPaks" "$SRC_DIR/PakLocation.txt" | head -n1)
+		"OpenSpadesDevPackage" "$SRC_DIR/PakLocation.txt" | head -n1)
 fi
 echo "BASEURL ************ $PAK_URL"
 PAK_NAME=$(basename "$PAK_URL")
@@ -30,3 +30,9 @@ fi
 
 wget "$PAK_URL" -O "$PAK_NAME"
 unzip -u  -o "$PAK_NAME" -d "$OUTPUT_DIR"
+
+# relocate paks to the proper location
+mv "$OUTPUT_DIR/Nonfree/pak000-Nonfree.pak" "$OUTPUT_DIR/"
+mv "$OUTPUT_DIR/OfficialMods/font-unifont.pak" "$OUTPUT_DIR/"
+mv "$OUTPUT_DIR/Nonfree/LICENSE.md" "$OUTPUT_DIR/LICENSE.pak000.md"
+mv "$OUTPUT_DIR/OfficialMods/LICENSE" "$OUTPUT_DIR/LICENSE.unifont.txt"
