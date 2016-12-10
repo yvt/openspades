@@ -304,8 +304,8 @@ namespace spades {
 			if (g.image)
 				return;
 
-			FT_Load_Glyph(g.face, g.charIndex, FT_LOAD_NO_HINTING);
 			FT_Set_Char_Size(g.face, 0, static_cast<FT_F26Dot6>(height * 64.f), 72, 72);
+			FT_Load_Glyph(g.face, g.charIndex, FT_LOAD_NO_HINTING);
 			FT_Render_Glyph(g.face->glyph, FT_RENDER_MODE_NORMAL);
 
 			auto &bmp = g.face->glyph->bitmap;

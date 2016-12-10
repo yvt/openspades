@@ -77,7 +77,7 @@ namespace spades {
 			return bigTextFont;
 		}
 		IFont *FontManager::CreateLargeFont(IRenderer *renderer) {
-			auto *font = new ngclient::FTFont(renderer, guiFontSet, 37.f, 40.f);
+			auto *font = new ngclient::FTFont(renderer, guiFontSet, 34.f, 48.f);
 			return font;
 		}
 		IFont *FontManager::CreateGuiFont(IRenderer *renderer) {

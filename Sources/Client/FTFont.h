@@ -54,6 +54,13 @@ namespace spades {
 			void AddFace(const std::string &fileName);
 		};
 
+		/**
+		 * FreeType2 based font renderer.
+		 *
+		 
+		 * Warning: only one thread can access multiple FTFonts sharing the same FTFontSet
+		 *          at the same time.
+		 */
 		class FTFont : public client::IFont {
 			Handle<client::IRenderer> renderer;
 
