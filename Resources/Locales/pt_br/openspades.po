@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-07 17:52-0200\n"
-"PO-Revision-Date: 2016-12-07 18:01-0200\n"
-"Last-Translator: Flávio Monteiro <flaviomonteiro2013@gmail.com>\n"
+"PO-Revision-Date: 2016-12-10 17:55+0000\n"
+"Last-Translator: João Rodrigues <joaoadriano3@gmail.com>\n"
 "Language-Team: Portuguese Brazilian <flaviomonteiro2013@gmail.com>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -57,7 +57,7 @@ msgstr "Screenshot falhou:"
 #: ../../../Sources/Client/Client_Draw.cpp:197
 msgctxt "Client"
 msgid "NOW LOADING"
-msgstr "CARREGANDO AGORA"
+msgstr "CARREGANDO"
 
 #: ../../../Sources/Client/Client_Draw.cpp:219
 msgctxt "Client"
@@ -67,12 +67,12 @@ msgstr "Desconectando..."
 #: ../../../Sources/Client/Client_Draw.cpp:522
 msgctxt "Client"
 msgid "Out of Block"
-msgstr "Bloco acabou"
+msgstr "O bloco acabou"
 
 #: ../../../Sources/Client/Client_Draw.cpp:527
 msgctxt "Client"
 msgid "Out of Grenade"
-msgstr "Granada acabou"
+msgstr "A granada acabou"
 
 #: ../../../Sources/Client/Client_Draw.cpp:533
 msgctxt "Client"
@@ -108,12 +108,12 @@ msgstr "Seguindo {0}"
 #: ../../../Sources/Client/Client_Input.cpp:436
 msgctxt "Client"
 msgid "Out of Blocks"
-msgstr "Blocos Acabaram"
+msgstr "Os blocos acabaram"
 
 #: ../../../Sources/Client/Client_Input.cpp:460
 msgctxt "Client"
 msgid "Out of Grenades"
-msgstr "Granadas Acabaram"
+msgstr "As granadas acabaram"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:89
 msgctxt "Client"
@@ -212,7 +212,7 @@ msgstr "Você foi assassinado por {0}"
 #: ../../../Sources/Client/Client_Update.cpp:1166
 msgctxt "Client"
 msgid "Insufficient blocks."
-msgstr "blocos insuficientes."
+msgstr "Blocos insuficientes."
 
 #: ../../../Sources/Client/Client_Update.cpp:1169
 msgctxt "Client"
@@ -371,7 +371,7 @@ msgstr "Erro Fatal no OpenSpades"
 #: ../../../Sources/Gui/MainScreen.cpp:227
 msgctxt "MainScreen"
 msgid "NOW LOADING"
-msgstr "CARREGANDO AGORA"
+msgstr "CARREGANDO"
 
 #: ../../Scripts/Gui/ClientUI.as:198
 msgctxt "Client"
@@ -597,7 +597,7 @@ msgstr "Voltar"
 #: ../../Scripts/Gui/Preferences.as:407
 msgctxt "Preferences"
 msgid "Press Key to Bind or [Escape] to Cancel..."
-msgstr "Pressione alguma Tecla para Selecionar ou [ESC] para Cancelar..."
+msgstr "Pressione alguma Tecla para Definir ou [ESC] para Cancelar..."
 
 #: ../../Scripts/Gui/Preferences.as:418
 msgctxt "Preferences"
@@ -607,7 +607,7 @@ msgstr "Espaço"
 #: ../../Scripts/Gui/Preferences.as:420
 msgctxt "Preferences"
 msgid "Unbound"
-msgstr "Não Selecionado"
+msgstr "Não Definido"
 
 #: ../../Scripts/Gui/Preferences.as:423
 msgctxt "Preferences"
@@ -647,7 +647,7 @@ msgstr "Botão do Meio do Mouse"
 #: ../../Scripts/Gui/Preferences.as:437
 msgctxt "Preferences"
 msgid "Mouse Button 4"
-msgstr "Mouse Button 4"
+msgstr "Botão do Mouse 4"
 
 #: ../../Scripts/Gui/Preferences.as:439
 msgctxt "Preferences"
@@ -933,7 +933,7 @@ msgstr "Chat de Equipe"
 #: ../../Scripts/Gui/Preferences.as:712
 msgctxt "Preferences"
 msgid "Limbo Menu"
-msgstr "Limbo Menu"
+msgstr "Menu Limbo"
 
 #: ../../Scripts/Gui/Preferences.as:713
 msgctxt "Preferences"
@@ -963,7 +963,7 @@ msgstr "Feche e reinicie o OpenSpades para acessar a janela inicial"
 #: ../../Scripts/Gui/Preferences.as:756
 msgctxt "Preferences"
 msgid "Some settings only can be changed in the startup window."
-msgstr "Algumas configurações só podem ser mudas na janela inicial."
+msgstr "Algumas configurações só podem ser mudadas na janela inicial."
 
 #: ../../Scripts/Gui/StartupScreen.as:158
 #: ../../Scripts/Gui/StartupScreen.as:159
@@ -1293,7 +1293,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1192
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
-msgstr "Luzes Dinâmicas."
+msgstr "Luzes Dinâmicas"
 
 #: ../../Scripts/Gui/StartupScreen.as:1193
 #: ../../Scripts/Gui/StartupScreen.as:1194
