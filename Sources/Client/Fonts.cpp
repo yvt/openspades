@@ -19,12 +19,14 @@
  */
 
 #include <memory>
+#include <regex>
 
 #include "FTFont.h"
 #include "FontData.h"
 #include "Fonts.h"
 #include "IRenderer.h"
 #include "Quake3Font.h"
+#include <Core/FileManager.h>
 
 namespace spades {
 	namespace client {
@@ -36,8 +38,27 @@ namespace spades {
 			SPLog("Loading built-in fonts");
 
 			guiFontSet.Set(new ngclient::FTFontSet(), false);
-			guiFontSet->AddFace("Gfx/Fonts/AlteDIN1451.ttf");
-			SPLog("Font 'Alte DIN 1451' Loaded");
+
+			if (FileManager::FileExists("Gfx/Fonts/AlteDIN1451.ttf")) {
+				guiFontSet->AddFace("Gfx/Fonts/AlteDIN1451.ttf");
+				SPLog("Font 'Alte DIN 1451' loaded");
+			} else {
+				SPLog("Font 'Alte DIN 1451' was not found");
+			}
+
+			// Preliminary custom font support
+			auto files = FileManager::EnumFiles("Fonts");
+			static std::regex re(".*\\.(?:otf|ttf|ttc)",
+								 std::regex::icase);
+			for (const auto &name: files) {
+				if (!std::regex_match(name, re)) {
+					continue;
+				}
+				SPLog("Loading custom font '%s'", name.c_str());
+
+				auto path = "Fonts/" + name;
+				guiFontSet->AddFace(path);
+			}
 		}
 
 		FontManager::~FontManager() {}
