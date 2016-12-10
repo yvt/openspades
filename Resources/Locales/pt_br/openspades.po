@@ -544,7 +544,7 @@ msgstr "Ver."
 #: ../../Scripts/Gui/MainScreen.as:515 ../../Scripts/Gui/MainScreen.as:529
 msgctxt "MainScreen"
 msgid "Loc."
-msgstr "Ling."
+msgstr "Loc."
 
 #: ../../Scripts/Gui/MainScreen.as:767 ../../Scripts/Gui/MainScreen.as:787
 msgctxt "MainScreen"
