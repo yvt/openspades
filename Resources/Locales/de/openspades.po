@@ -1146,7 +1146,7 @@ msgstr ""
 #: ../../Scripts/Gui/StartupScreen.as:1071
 msgctxt "StartupScreen"
 msgid ""
-"Antialias:Enables a technique to improve the appearance of high-constrast "
+"Antialias:Enables a technique to improve the appearance of high-contrast "
 "edges.\n"
 "\n"
 "MSAA: Performs antialiasing by generating an intermediate high-resolution "

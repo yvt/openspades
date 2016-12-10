@@ -1129,7 +1129,7 @@ msgstr "Filtr"
 #: ../../Scripts/Gui/StartupScreen.as:1071
 msgctxt "StartupScreen"
 msgid ""
-"Antialias:Enables a technique to improve the appearance of high-constrast edges.\n"
+"Antialias:Enables a technique to improve the appearance of high-contrast edges.\n"
 "\n"
 "MSAA: Performs antialiasing by generating an intermediate high-resolution image. Looks best, but doesn't cope with some settings.\n"
 "\n"
