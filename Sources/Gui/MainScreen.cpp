@@ -43,7 +43,7 @@ namespace spades {
 			if (a == NULL)
 				SPInvalidArgument("a");
 
-			font = client::CreateGuiFont(renderer);
+			font = client::FontManager::GetInstance().CreateGuiFont(renderer);
 
 			helper = new MainScreenHelper(this);
 
