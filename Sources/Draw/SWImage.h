@@ -51,6 +51,8 @@ namespace spades {
 
 			bool IsWhiteImage() { return isWhite; }
 
+			void Update(Bitmap &, int x, int y) override;
+
 			virtual float GetWidth() { return w; }
 			virtual float GetHeight() { return h; }
 			virtual float GetInvWidth() { return iw; }

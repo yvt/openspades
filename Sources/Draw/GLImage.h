@@ -53,6 +53,8 @@ namespace spades {
 
 			void SubImage(Bitmap *bmp, int x, int y);
 			void Invalidate();
+
+			void Update(Bitmap &bmp, int x, int y) override { SubImage(&bmp, x, y); }
 		};
 	}
 }
