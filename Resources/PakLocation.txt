@@ -3,7 +3,7 @@
 External Game Assets
 --------------------
 
-https://github.com/yvt/openspades-paks/releases/download/r29/OpenSpadesDevPackage-r29.zip
+https://github.com/yvt/openspades-paks/releases/download/r30/OpenSpadesDevPackage-r30.zip
 
 This package provides following paks:
 
@@ -12,32 +12,3 @@ This package provides following paks:
   or compiled binaries.
 - `font-unifont.pak` contains a font that covers all 65536 characters of Unicode
   BMP. Licensed under GPLv2.
-
-
-GNU Unifont: Cyrillic Only
---------------------------
-
-You can get the Cyrillic font pak (provided by noway) from:
-
-http://yvt.jp/files/programs/osppaks/font-unifont-ru.pak
-
-
-
-M+ BITMAP FONTS (Japanese Font)
--------------------------------
-
-You can get the Japanese font pak from:
-
-http://yvt.jp/files/programs/osppaks/font-mplus-ja-12.pak
-
-This was converted from the M+ BDF font like this:
-
-	./BdfToOSFont ../../Resources/Gfx/Fonts/MPlus10Font double < \
-	~/Downloads/mplus_bitmap_fonts-2.2.4/fonts_j/mplus_j10r.bdf
-
-Note that you need to install a input method editor, or use Google Translator
-or whatever to type Japanese characters.
-
-
-
-
