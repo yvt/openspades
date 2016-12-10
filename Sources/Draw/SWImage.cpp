@@ -84,7 +84,7 @@ namespace spades {
 
 		void SWImage::Update(Bitmap &inBmp, int x, int y) {
 			SPADES_MARK_FUNCTION();
-			if (x < 0 || y < 0 || x + inBmp.GetWidth() >= ew || y + inBmp.GetHeight() >= eh) {
+			if (x < 0 || y < 0 || x + inBmp.GetWidth() > ew || y + inBmp.GetHeight() > eh) {
 				SPRaise("Out of range.");
 			}
 
