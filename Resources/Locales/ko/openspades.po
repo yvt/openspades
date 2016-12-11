@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
-"POT-Creation-Date: 2016-12-04 23:15+0900\n"
-"PO-Revision-Date: 2016-12-04 23:18+0900\n"
+"POT-Creation-Date: 2016-12-11 10:56+0900\n"
+"PO-Revision-Date: 2016-12-11 11:05+0900\n"
 "Last-Translator: kmsi <sts06196@naver.com>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
@@ -21,17 +21,21 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 
 #: ../../../Sources/Client/Client.cpp:586
+#: ../../../Sources/Client/Client.cpp:587
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr "{0} 맵이 저장되었습니다."
 
 #: ../../../Sources/Client/Client.cpp:590
 #: ../../../Sources/Client/Client.cpp:596
+#: ../../../Sources/Client/Client.cpp:591
+#: ../../../Sources/Client/Client.cpp:597
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr "맵 저장이 실패했습니다:"
 
 #: ../../../Sources/Client/Client.cpp:628
+#: ../../../Sources/Client/Client.cpp:629
 msgctxt "Client"
 msgid "[Global] "
 msgstr "전체"
@@ -337,12 +341,13 @@ msgctxt "Client"
 msgid "{0}'s Territory"
 msgstr "{0}의 영토"
 
-#: ../../../Sources/Gui/Main.cpp:622
+#: ../../../Sources/Gui/Main.cpp:622 ../../../Sources/Gui/Main.cpp:634
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr "한글화 기능을 불러왔습니다."
 
 #: ../../../Sources/Gui/Main.cpp:680 ../../../Sources/Gui/Runner.cpp:58
+#: ../../../Sources/Gui/Main.cpp:692
 msgctxt "Main"
 msgid ""
 "A serious error caused OpenSpades to stop working:\n"
@@ -358,6 +363,7 @@ msgstr ""
 "자세한 정보를 위해서는 SystemMessages.log을 확인하세요."
 
 #: ../../../Sources/Gui/Main.cpp:688 ../../../Sources/Gui/Runner.cpp:64
+#: ../../../Sources/Gui/Main.cpp:700
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr "OpenSpades의 심각한 오류"
@@ -457,87 +463,90 @@ msgctxt "CreateProfileScreen"
 msgid "You can change it later in the Setup dialog."
 msgstr "나중에 설정에서 변경하실 수 있습니다."
 
-#: ../../Scripts/Gui/MainScreen.as:362
+#: ../../Scripts/Gui/MainScreen.as:362 ../../Scripts/Gui/MainScreen.as:376
 msgctxt "MainScreen"
 msgid "Connect"
 msgstr "연결"
 
-#: ../../Scripts/Gui/MainScreen.as:370
+#: ../../Scripts/Gui/MainScreen.as:370 ../../Scripts/Gui/MainScreen.as:384
 msgctxt "MainScreen"
 msgid "Quick Connect"
 msgstr "빠른 연결"
 
 #: ../../Scripts/Gui/MainScreen.as:379 ../../Scripts/Gui/MainScreen.as:433
+#: ../../Scripts/Gui/MainScreen.as:393 ../../Scripts/Gui/MainScreen.as:447
 msgctxt "MainScreen"
 msgid "0.75"
 msgstr "0.75"
 
 #: ../../Scripts/Gui/MainScreen.as:389 ../../Scripts/Gui/MainScreen.as:442
+#: ../../Scripts/Gui/MainScreen.as:403 ../../Scripts/Gui/MainScreen.as:456
 msgctxt "MainScreen"
 msgid "0.76"
 msgstr "0.76"
 
-#: ../../Scripts/Gui/MainScreen.as:397
+#: ../../Scripts/Gui/MainScreen.as:397 ../../Scripts/Gui/MainScreen.as:411
 msgctxt "MainScreen"
 msgid "Quit"
 msgstr "종료"
 
-#: ../../Scripts/Gui/MainScreen.as:404
+#: ../../Scripts/Gui/MainScreen.as:404 ../../Scripts/Gui/MainScreen.as:418
 msgctxt "MainScreen"
 msgid "Credits"
 msgstr "제작자"
 
-#: ../../Scripts/Gui/MainScreen.as:411
+#: ../../Scripts/Gui/MainScreen.as:411 ../../Scripts/Gui/MainScreen.as:425
 msgctxt "MainScreen"
 msgid "Setup"
 msgstr "설정"
 
 #: ../../Scripts/Gui/MainScreen.as:424 ../../Scripts/Gui/MainScreen.as:468
+#: ../../Scripts/Gui/MainScreen.as:438 ../../Scripts/Gui/MainScreen.as:482
 msgctxt "MainScreen"
 msgid "Filter"
 msgstr "필터"
 
-#: ../../Scripts/Gui/MainScreen.as:451
+#: ../../Scripts/Gui/MainScreen.as:451 ../../Scripts/Gui/MainScreen.as:465
 msgctxt "MainScreen"
 msgid "Empty"
 msgstr "비었음"
 
-#: ../../Scripts/Gui/MainScreen.as:460
+#: ../../Scripts/Gui/MainScreen.as:460 ../../Scripts/Gui/MainScreen.as:474
 msgctxt "MainScreen"
 msgid "Not Full"
 msgstr "자리 있음"
 
-#: ../../Scripts/Gui/MainScreen.as:480
+#: ../../Scripts/Gui/MainScreen.as:480 ../../Scripts/Gui/MainScreen.as:494
 msgctxt "MainScreen"
 msgid "Server Name"
 msgstr "서버 이름"
 
-#: ../../Scripts/Gui/MainScreen.as:487
+#: ../../Scripts/Gui/MainScreen.as:487 ../../Scripts/Gui/MainScreen.as:501
 msgctxt "MainScreen"
 msgid "Players"
 msgstr "플레이어"
 
-#: ../../Scripts/Gui/MainScreen.as:494
+#: ../../Scripts/Gui/MainScreen.as:494 ../../Scripts/Gui/MainScreen.as:508
 msgctxt "MainScreen"
 msgid "Map Name"
 msgstr "맵 이름"
 
-#: ../../Scripts/Gui/MainScreen.as:501
+#: ../../Scripts/Gui/MainScreen.as:501 ../../Scripts/Gui/MainScreen.as:515
 msgctxt "MainScreen"
 msgid "Game Mode"
 msgstr "게임 모드"
 
-#: ../../Scripts/Gui/MainScreen.as:508
+#: ../../Scripts/Gui/MainScreen.as:508 ../../Scripts/Gui/MainScreen.as:522
 msgctxt "MainScreen"
 msgid "Ver."
 msgstr "버전"
 
-#: ../../Scripts/Gui/MainScreen.as:515
+#: ../../Scripts/Gui/MainScreen.as:515 ../../Scripts/Gui/MainScreen.as:529
 msgctxt "MainScreen"
 msgid "Loc."
 msgstr "국가"
 
-#: ../../Scripts/Gui/MainScreen.as:767
+#: ../../Scripts/Gui/MainScreen.as:767 ../../Scripts/Gui/MainScreen.as:787
 msgctxt "MainScreen"
 msgid ""
 "You were disconnected from the server because of the following reason:\n"
@@ -548,17 +557,18 @@ msgstr ""
 "\n"
 "{0}"
 
-#: ../../Scripts/Gui/MainScreen.as:787
+#: ../../Scripts/Gui/MainScreen.as:787 ../../Scripts/Gui/MainScreen.as:807
 msgctxt "MainScreen"
 msgid "Loading..."
 msgstr "불러오는 중..."
 
-#: ../../Scripts/Gui/MainScreen.as:805
+#: ../../Scripts/Gui/MainScreen.as:805 ../../Scripts/Gui/MainScreen.as:825
 msgctxt "MainScreen"
 msgid "Failed to fetch the server list."
 msgstr "서버 목록을 불러오지 못했습니다."
 
-#: ../../Scripts/Gui/MessageBox.as:53
+#: ../../Scripts/Gui/MessageBox.as:53 ../../Scripts/Gui/MessageBox.as:130
+#: ../../Scripts/Gui/MessageBox.as:144
 msgctxt "MessageBox"
 msgid "OK"
 msgstr "확인"
@@ -956,66 +966,82 @@ msgid "Some settings only can be changed in the startup window."
 msgstr "몇몇 설정은 시작 화면에서만 바꿀 수 있습니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:158
+#: ../../Scripts/Gui/StartupScreen.as:159
 msgctxt "StartupScreen"
 msgid "Start"
 msgstr "시작"
 
 #: ../../Scripts/Gui/StartupScreen.as:165
+#: ../../Scripts/Gui/StartupScreen.as:166
 msgctxt "StartupScreen"
 msgid "Skip this screen next time"
 msgstr "다음에는 이 화면을 보지 않음"
 
 #: ../../Scripts/Gui/StartupScreen.as:203
+#: ../../Scripts/Gui/StartupScreen.as:204
 msgctxt "StartupScreen"
 msgid "Graphics"
 msgstr "그래픽"
 
 #: ../../Scripts/Gui/StartupScreen.as:204
+#: ../../Scripts/Gui/StartupScreen.as:205
 msgctxt "StartupScreen"
 msgid "Audio"
 msgstr "오디오"
 
 #: ../../Scripts/Gui/StartupScreen.as:205
+#: ../../Scripts/Gui/StartupScreen.as:206
 msgctxt "StartupScreen"
 msgid "Generic"
 msgstr "일반"
 
 #: ../../Scripts/Gui/StartupScreen.as:206
+#: ../../Scripts/Gui/StartupScreen.as:207
 msgctxt "StartupScreen"
 msgid "System Info"
 msgstr "시스템 정보"
 
 #: ../../Scripts/Gui/StartupScreen.as:207
+#: ../../Scripts/Gui/StartupScreen.as:208
+#: ../../Scripts/Gui/StartupScreen.as:1634
+#: ../../Scripts/Gui/StartupScreen.as:1633
+#: ../../Scripts/Gui/StartupScreen.as:1657
 msgctxt "StartupScreen"
 msgid "Advanced"
 msgstr "고급"
 
 #: ../../Scripts/Gui/StartupScreen.as:835
+#: ../../Scripts/Gui/StartupScreen.as:836
 msgctxt "StartupScreen"
 msgid "Custom"
 msgstr "사용자 지정"
 
 #: ../../Scripts/Gui/StartupScreen.as:961
+#: ../../Scripts/Gui/StartupScreen.as:962
 msgctxt "StartupScreen"
 msgid "Close"
 msgstr "닫기"
 
 #: ../../Scripts/Gui/StartupScreen.as:1067
+#: ../../Scripts/Gui/StartupScreen.as:1068
 msgctxt "StartupScreen"
 msgid "Graphics Settings"
 msgstr "그래픽 설정"
 
 #: ../../Scripts/Gui/StartupScreen.as:1072
+#: ../../Scripts/Gui/StartupScreen.as:1073
 msgctxt "StartupScreen"
 msgid "Resolution"
 msgstr "해상도"
 
 #: ../../Scripts/Gui/StartupScreen.as:1082
+#: ../../Scripts/Gui/StartupScreen.as:1083
 msgctxt "StartupScreen"
 msgid "Fullscreen Mode"
 msgstr "전체 화면"
 
 #: ../../Scripts/Gui/StartupScreen.as:1085
+#: ../../Scripts/Gui/StartupScreen.as:1086
 msgctxt "StartupScreen"
 msgid ""
 "By running in fullscreen mode OpenSpades occupies the screen, making it "
@@ -1026,16 +1052,20 @@ msgstr ""
 
 #: ../../Scripts/Gui/StartupScreen.as:1092
 #: ../../Scripts/Gui/StartupScreen.as:1470
+#: ../../Scripts/Gui/StartupScreen.as:1093
+#: ../../Scripts/Gui/StartupScreen.as:1471
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr "렌더링 모드"
 
 #: ../../Scripts/Gui/StartupScreen.as:1095
+#: ../../Scripts/Gui/StartupScreen.as:1096
 msgctxt "StartupScreen"
 msgid "OpenGL"
 msgstr "OpenGL"
 
 #: ../../Scripts/Gui/StartupScreen.as:1099
+#: ../../Scripts/Gui/StartupScreen.as:1100
 msgctxt "StartupScreen"
 msgid ""
 "OpenGL renderer uses your computer's graphics accelerator to generate the "
@@ -1043,11 +1073,13 @@ msgid ""
 msgstr "OpenGL 렌더러는 컴퓨터에 내장 된 GPU를 사용하여 게임 화면을 그립니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1107
+#: ../../Scripts/Gui/StartupScreen.as:1108
 msgctxt "StartupScreen"
 msgid "Software"
 msgstr "소프트웨어"
 
 #: ../../Scripts/Gui/StartupScreen.as:1111
+#: ../../Scripts/Gui/StartupScreen.as:1112
 msgctxt "StartupScreen"
 msgid ""
 "Software renderer uses CPU to generate the game screen. Its quality and "
@@ -1058,9 +1090,10 @@ msgstr ""
 "OpenGL에 비해 떨어지지만 지원되지 않는 GPU에서도 항상 작동합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1125
+#: ../../Scripts/Gui/StartupScreen.as:1126
 msgctxt "StartupScreen"
 msgid ""
-"Antialias:Enables a technique to improve the appearance of high-contrast "
+"Antialias: Enables a technique to improve the appearance of high-contrast "
 "edges.\n"
 "\n"
 "MSAA: Performs antialiasing by generating an intermediate high-resolution "
@@ -1069,20 +1102,22 @@ msgid ""
 "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
 "Off|MSAA 2x|4x|FXAA"
 msgstr ""
-"앤티앨리어싱 : 오브젝트의 윤곽에 발생하는 계단 현상을 줄여 줍니다..\n"
+"안티앨리어싱: 계단 현상을 줄여 주는 기술을 활성화합니다.\n"
 "\n"
-"MSAA : 보통의 경우보다 고해상도의 이미지를 생성하여 앤티앨리어싱을 수행합니"
-"다. 가장 멋져 보이지만, 몇몇 설정과는 호환되지 않습니다.\n"
+"MSAA: 중간-고해상도의 이미지를 생성함으로써 안티앨리어싱을 수행합니다. 가장 "
+"멋지지만, 몇몇 설정과는 호환되지 않습니다.\n"
 "\n"
-"FXAA : 계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합니"
-"다. | 꺼짐 | MSAA 2x | 4x | FXAA"
+"FXAA: 포스트 프로세싱을 통해 물체를 부드럽게 함으로써 안티앨리어싱을 수행합니"
+"다. |끔|MSAA 2x|4x|FXAA"
 
 #: ../../Scripts/Gui/StartupScreen.as:1132
+#: ../../Scripts/Gui/StartupScreen.as:1133
 msgctxt "StartupScreen"
 msgid "Global Illumination"
 msgstr "전역 조명"
 
 #: ../../Scripts/Gui/StartupScreen.as:1134
+#: ../../Scripts/Gui/StartupScreen.as:1135
 msgctxt "StartupScreen"
 msgid ""
 "Enables a physically based simulation of light path for more realistic "
@@ -1090,11 +1125,13 @@ msgid ""
 msgstr "물리 기반 시뮬레이션을 사용하여 보다 사실적으로 빛을 표현합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1137
+#: ../../Scripts/Gui/StartupScreen.as:1138
 msgctxt "StartupScreen"
 msgid "Linear HDR Rendering"
 msgstr "선형 HDR 렌더리"
 
 #: ../../Scripts/Gui/StartupScreen.as:1139
+#: ../../Scripts/Gui/StartupScreen.as:1140
 msgctxt "StartupScreen"
 msgid ""
 "Uses a number representation which allows wider dynamic range during "
@@ -1107,71 +1144,85 @@ msgstr ""
 "으로 정확한 블렌딩을 얻을 수 있습니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1146
+#: ../../Scripts/Gui/StartupScreen.as:1147
 msgctxt "StartupScreen"
 msgid "Camera Blur"
 msgstr "모션 블러"
 
 #: ../../Scripts/Gui/StartupScreen.as:1147
+#: ../../Scripts/Gui/StartupScreen.as:1148
 msgctxt "StartupScreen"
 msgid "Blurs the screen when you turn quickly."
 msgstr "빠르게 화면을 움직일 때 화면을 흐리게 합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1149
+#: ../../Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
 msgid "Lens Effect"
 msgstr "렌즈 효과"
 
 #: ../../Scripts/Gui/StartupScreen.as:1150
+#: ../../Scripts/Gui/StartupScreen.as:1151
 msgctxt "StartupScreen"
 msgid "Simulates distortion caused by a real camera lens."
 msgstr "카메라 렌즈로 인해 나타나는 왜곡을 표시합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1152
+#: ../../Scripts/Gui/StartupScreen.as:1153
 msgctxt "StartupScreen"
 msgid "Lens Scattering Filter"
 msgstr "렌즈 산란 필터"
 
 #: ../../Scripts/Gui/StartupScreen.as:1153
+#: ../../Scripts/Gui/StartupScreen.as:1154
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
 msgstr "렌즈의 이물질에 의한 빛의 산란을 재현합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1156
+#: ../../Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
 msgid "Lens Flare"
 msgstr "렌즈 플레어"
 
 #: ../../Scripts/Gui/StartupScreen.as:1157
+#: ../../Scripts/Gui/StartupScreen.as:1158
 msgctxt "StartupScreen"
 msgid "The Sun causes lens flare."
 msgstr "태양이 렌즈 플레어를 만듭니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1159
+#: ../../Scripts/Gui/StartupScreen.as:1160
 msgctxt "StartupScreen"
 msgid "Flares for Dynamic Lights"
 msgstr "동적 빛 렌즈 플레어"
 
 #: ../../Scripts/Gui/StartupScreen.as:1160
+#: ../../Scripts/Gui/StartupScreen.as:1161
 msgctxt "StartupScreen"
 msgid "Enables lens flare for light sources other than the Sun."
 msgstr "태양 이외의 광원을 볼 때 렌즈 플레어를 그립니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1162
+#: ../../Scripts/Gui/StartupScreen.as:1163
 msgctxt "StartupScreen"
 msgid "Color Correction"
 msgstr "색깔 보정"
 
 #: ../../Scripts/Gui/StartupScreen.as:1163
+#: ../../Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
 msgstr "색감 보정을 적용하여 더 나아 보이도록 합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1165
+#: ../../Scripts/Gui/StartupScreen.as:1166
 msgctxt "StartupScreen"
 msgid "Depth of Field"
 msgstr "피사계 심도"
 
 #: ../../Scripts/Gui/StartupScreen.as:1166
+#: ../../Scripts/Gui/StartupScreen.as:1167
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
 msgstr "초점 이외의 물체를 흐리게 표시합니다."
@@ -1179,12 +1230,17 @@ msgstr "초점 이외의 물체를 흐리게 표시합니다."
 #: ../../Scripts/Gui/StartupScreen.as:1168
 #: ../../Scripts/Gui/StartupScreen.as:1206
 #: ../../Scripts/Gui/StartupScreen.as:1228
+#: ../../Scripts/Gui/StartupScreen.as:1169
+#: ../../Scripts/Gui/StartupScreen.as:1207
+#: ../../Scripts/Gui/StartupScreen.as:1229
 msgctxt "StartupScreen"
 msgid "Low"
 msgstr "낮음"
 
 #: ../../Scripts/Gui/StartupScreen.as:1169
 #: ../../Scripts/Gui/StartupScreen.as:1207
+#: ../../Scripts/Gui/StartupScreen.as:1170
+#: ../../Scripts/Gui/StartupScreen.as:1208
 msgctxt "StartupScreen"
 msgid "Medium"
 msgstr "중간"
@@ -1192,16 +1248,21 @@ msgstr "중간"
 #: ../../Scripts/Gui/StartupScreen.as:1170
 #: ../../Scripts/Gui/StartupScreen.as:1208
 #: ../../Scripts/Gui/StartupScreen.as:1230
+#: ../../Scripts/Gui/StartupScreen.as:1171
+#: ../../Scripts/Gui/StartupScreen.as:1209
+#: ../../Scripts/Gui/StartupScreen.as:1231
 msgctxt "StartupScreen"
 msgid "High"
 msgstr "높음"
 
 #: ../../Scripts/Gui/StartupScreen.as:1173
+#: ../../Scripts/Gui/StartupScreen.as:1174
 msgctxt "StartupScreen"
 msgid "Post-process"
 msgstr "포스트-프로세싱"
 
 #: ../../Scripts/Gui/StartupScreen.as:1174
+#: ../../Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid ""
 "Post-process modifies the image to make it look better and more realistic."
@@ -1209,6 +1270,7 @@ msgstr ""
 "포스트 프로세싱은 그려진 화면을 수정하여 더욱 좋고 사실적으로 보이게 합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1181
+#: ../../Scripts/Gui/StartupScreen.as:1182
 msgctxt "StartupScreen"
 msgid ""
 "Particles|Low:Artifact occurs when a particle intersects other objects.|"
@@ -1220,11 +1282,13 @@ msgstr ""
 "럽게 교차합니다. 또한 일부 개체가 입자에 그림자를 드리웁니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1191
+#: ../../Scripts/Gui/StartupScreen.as:1192
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
 msgstr "동적 빛"
 
 #: ../../Scripts/Gui/StartupScreen.as:1193
+#: ../../Scripts/Gui/StartupScreen.as:1194
 msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
@@ -1232,21 +1296,25 @@ msgid ""
 msgstr "에너지를 내뿜는 듯한 느낌을 위해 일부 객체가 빛을 내도록 허용합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1196
+#: ../../Scripts/Gui/StartupScreen.as:1197
 msgctxt "StartupScreen"
 msgid "Shadows"
 msgstr "그림자"
 
 #: ../../Scripts/Gui/StartupScreen.as:1197
+#: ../../Scripts/Gui/StartupScreen.as:1198
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
 msgstr "동적 개체가 그림자를 드리웁니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1199
+#: ../../Scripts/Gui/StartupScreen.as:1200
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
 msgstr "Volumetric Fog"
 
 #: ../../Scripts/Gui/StartupScreen.as:1200
+#: ../../Scripts/Gui/StartupScreen.as:1201
 msgctxt "StartupScreen"
 msgid ""
 "Simulates shadow being casted to the fog particles using a super highly "
@@ -1256,11 +1324,13 @@ msgstr ""
 "드리웁니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1203
+#: ../../Scripts/Gui/StartupScreen.as:1204
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
 msgstr "물리 기반 빛 효과"
 
 #: ../../Scripts/Gui/StartupScreen.as:1204
+#: ../../Scripts/Gui/StartupScreen.as:1205
 msgctxt "StartupScreen"
 msgid ""
 "Uses more accurate approximation techniques to decide the brightness of "
@@ -1268,11 +1338,13 @@ msgid ""
 msgstr "더 정확한 기술을 사용하여 객체의 밝기를 결정합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1211
+#: ../../Scripts/Gui/StartupScreen.as:1212
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr "직사광"
 
 #: ../../Scripts/Gui/StartupScreen.as:1212
+#: ../../Scripts/Gui/StartupScreen.as:1213
 msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
@@ -1282,6 +1354,7 @@ msgstr ""
 "다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1222
+#: ../../Scripts/Gui/StartupScreen.as:1223
 msgctxt "StartupScreen"
 msgid ""
 "Water Shader|None:Water is rendered in the same way that normal blocks are "
@@ -1295,26 +1368,31 @@ msgstr ""
 "사 및 굴절이 화면 공간 기술을 이용해 가장 좋은 품질로 렌더링됩니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1229
+#: ../../Scripts/Gui/StartupScreen.as:1230
 msgctxt "StartupScreen"
 msgid "Med"
 msgstr "중간"
 
 #: ../../Scripts/Gui/StartupScreen.as:1231
+#: ../../Scripts/Gui/StartupScreen.as:1232
 msgctxt "StartupScreen"
 msgid "Ultra"
 msgstr "매우 높음"
 
 #: ../../Scripts/Gui/StartupScreen.as:1234
+#: ../../Scripts/Gui/StartupScreen.as:1235
 msgctxt "StartupScreen"
 msgid "Shader Effects"
 msgstr "쉐이더 효과"
 
 #: ../../Scripts/Gui/StartupScreen.as:1234
+#: ../../Scripts/Gui/StartupScreen.as:1235
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr "특수 효과"
 
 #: ../../Scripts/Gui/StartupScreen.as:1251
+#: ../../Scripts/Gui/StartupScreen.as:1252
 msgctxt "StartupScreen"
 msgid ""
 "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
@@ -1322,16 +1400,19 @@ msgid ""
 msgstr "고속 모드 : 화면 해상도를 낮춰 렌더링을 가속화합니다. |꺼짐 | 2x | 4x"
 
 #: ../../Scripts/Gui/StartupScreen.as:1464
+#: ../../Scripts/Gui/StartupScreen.as:1465
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr "오디오 설정"
 
 #: ../../Scripts/Gui/StartupScreen.as:1473
+#: ../../Scripts/Gui/StartupScreen.as:1474
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr "OpenAL"
 
 #: ../../Scripts/Gui/StartupScreen.as:1477
+#: ../../Scripts/Gui/StartupScreen.as:1478
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
@@ -1341,11 +1422,13 @@ msgstr ""
 "운드 카드가 없으므로 소프트웨어 에뮬레이션이 사용됩니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1486
+#: ../../Scripts/Gui/StartupScreen.as:1487
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr "YSR"
 
 #: ../../Scripts/Gui/StartupScreen.as:1490
+#: ../../Scripts/Gui/StartupScreen.as:1491
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -1356,22 +1439,27 @@ msgstr ""
 "어 및 역학 압축기, HRTF 기반의 입체 음향과 고음질 반향 효과를 제공합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1500
+#: ../../Scripts/Gui/StartupScreen.as:1501
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr "없음"
 
 #: ../../Scripts/Gui/StartupScreen.as:1504
+#: ../../Scripts/Gui/StartupScreen.as:1505
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr "오디오 출력을 비활성화합니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1515
 #: ../../Scripts/Gui/StartupScreen.as:1539
+#: ../../Scripts/Gui/StartupScreen.as:1516
+#: ../../Scripts/Gui/StartupScreen.as:1540
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "최대 동시 음향 효과"
 
 #: ../../Scripts/Gui/StartupScreen.as:1516
+#: ../../Scripts/Gui/StartupScreen.as:1517
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
@@ -1382,11 +1470,13 @@ msgstr ""
 "가하기 때문에 특히 소프트웨어 에뮬레이션에 과부하가 발생할 수 있습니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1523
+#: ../../Scripts/Gui/StartupScreen.as:1524
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
 
 #: ../../Scripts/Gui/StartupScreen.as:1524
+#: ../../Scripts/Gui/StartupScreen.as:1525
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1394,6 +1484,7 @@ msgid ""
 msgstr "OpenAL 드라이버가 제공하는 확장 기능을 이용하여 현장감을 높여줍니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1540
+#: ../../Scripts/Gui/StartupScreen.as:1541
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1403,35 +1494,149 @@ msgstr ""
 "방지하기 위해 동시 발음 수를 줄일 수 있습니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1600
+#: ../../Scripts/Gui/StartupScreen.as:1601
 msgctxt "StartupScreen"
 msgid "Language"
 msgstr "언어"
 
 #: ../../Scripts/Gui/StartupScreen.as:1657
+#: ../../Scripts/Gui/StartupScreen.as:1703
+#: ../../Scripts/Gui/StartupScreen.as:1702
+#: ../../Scripts/Gui/StartupScreen.as:1726
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
 msgstr "알 수 없음 ({0})"
 
 #: ../../Scripts/Gui/StartupScreen.as:1659
 #: ../../Scripts/Gui/StartupScreen.as:1673
+#: ../../Scripts/Gui/StartupScreen.as:1705
+#: ../../Scripts/Gui/StartupScreen.as:1719
+#: ../../Scripts/Gui/StartupScreen.as:1704
+#: ../../Scripts/Gui/StartupScreen.as:1718
+#: ../../Scripts/Gui/StartupScreen.as:1728
+#: ../../Scripts/Gui/StartupScreen.as:1742
 msgctxt "StartupScreen"
 msgid "System default"
 msgstr "시스템 기본 설정"
 
 #: ../../Scripts/Gui/StartupScreen.as:1722
+#: ../../Scripts/Gui/StartupScreen.as:1768
+#: ../../Scripts/Gui/StartupScreen.as:1767
+#: ../../Scripts/Gui/StartupScreen.as:1791
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "클립보드에 복사"
 
 #: ../../Scripts/Gui/StartupScreen.as:1758
+#: ../../Scripts/Gui/StartupScreen.as:1804
+#: ../../Scripts/Gui/StartupScreen.as:1803
+#: ../../Scripts/Gui/StartupScreen.as:1827
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "고급 설정"
 
 #: ../../Scripts/Gui/StartupScreen.as:1767
+#: ../../Scripts/Gui/StartupScreen.as:1813
+#: ../../Scripts/Gui/StartupScreen.as:1812
+#: ../../Scripts/Gui/StartupScreen.as:1836
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "필터"
+
+#: ../../Scripts/Gui/MessageBox.as:144
+msgctxt "MessageBox"
+msgid "Cancel"
+msgstr "취소"
+
+#: ../../Scripts/Gui/StartupScreen.as:1613
+msgctxt "StartupScreen"
+msgid "Reset"
+msgstr "초기화"
+
+#: ../../Scripts/Gui/StartupScreen.as:1616
+msgctxt "StartupScreen"
+msgid "Reset All Settings"
+msgstr "모든 설정 초기화"
+
+#: ../../Scripts/Gui/StartupScreen.as:1628
+#: ../../Scripts/Gui/StartupScreen.as:1652
+msgctxt "StartupScreen"
+msgid ""
+"Are you sure to reset all settings? They include (but are not limited to):"
+msgstr ""
+"정말로 모든 설정을 초기화 하시겠습니까? 다음과 같은 설정들이 초기화됩니다:"
+
+#: ../../Scripts/Gui/StartupScreen.as:1629
+#: ../../Scripts/Gui/StartupScreen.as:1653
+msgctxt "StartupScreen"
+msgid "All graphics/audio settings"
+msgstr "모든 그래픽/오디오 설정"
+
+#: ../../Scripts/Gui/StartupScreen.as:1630
+#: ../../Scripts/Gui/StartupScreen.as:1654
+msgctxt "StartupScreen"
+msgid "All key bindings"
+msgstr "모든 키 지정"
+
+#: ../../Scripts/Gui/StartupScreen.as:1631
+#: ../../Scripts/Gui/StartupScreen.as:1655
+msgctxt "StartupScreen"
+msgid "Your player name"
+msgstr "플레이어 이름"
+
+#: ../../Scripts/Gui/StartupScreen.as:1633
+#: ../../Scripts/Gui/StartupScreen.as:1632
+#: ../../Scripts/Gui/StartupScreen.as:1656
+msgctxt "StartupScreen"
+msgid ""
+"Other advanced settings only accessible through '{0}' tab and in-game "
+"commands"
+msgstr ""
+"다른 고급 설정은 '{0}' 탭과 게임 내 명령어를 통해서만 접근할 수 있습니다."
+
+#: ../../Scripts/Gui/StartupScreen.as:1613
+msgctxt "StartupScreen"
+msgid "Tools"
+msgstr "도구"
+
+#: ../../Scripts/Gui/StartupScreen.as:1646
+msgctxt "StartupScreen"
+msgid "An unknown error has occurred while opening the config directory."
+msgstr "설정 폴더를 여는 동안 알 수 없는 오류가 발생했습니다."
+
+#: ../../Scripts/Gui/StartupScreen.as:1625
+msgctxt "StartupScreen"
+msgid "Open Config Folder in Explorer"
+msgstr "윈도우 탐색기에서 설정 폴더 열기"
+
+#: ../../Scripts/Gui/StartupScreen.as:1627
+msgctxt "StartupScreen"
+msgid "Reveal Config Folder in Finder"
+msgstr "파인더에서 설정 폴더 열기"
+
+#: ../../Scripts/Gui/StartupScreen.as:1629
+msgctxt "StartupScreen"
+msgid "Browse Config Folder"
+msgstr "설정 폴더 불러오기"
+
+#~ msgctxt "StartupScreen"
+#~ msgid ""
+#~ "Antialias:Enables a technique to improve the appearance of high-constrast "
+#~ "edges.\n"
+#~ "\n"
+#~ "MSAA: Performs antialiasing by generating an intermediate high-resolution "
+#~ "image. Looks best, but doesn't cope with some settings.\n"
+#~ "\n"
+#~ "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
+#~ "Off|MSAA 2x|4x|FXAA"
+#~ msgstr ""
+#~ "앤티앨리어싱 : 오브젝트의 윤곽에 발생하는 계단 현상을 줄여 줍니다..\n"
+#~ "\n"
+#~ "MSAA : 보통의 경우보다 고해상도의 이미지를 생성하여 앤티앨리어싱을 수행합"
+#~ "니다. 가장 멋져 보이지만, 몇몇 설정과는 호환되지 않습니다.\n"
+#~ "\n"
+#~ "FXAA : 계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합"
+#~ "니다. | 꺼짐 | MSAA 2x | 4x | FXAA"
 
 #~ msgctxt "Preferences"
 #~ msgid "Weapon Spread Guide"
