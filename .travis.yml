@@ -14,6 +14,8 @@ before_install:
 
 install:
   - sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev libsdl2-dev libsdl2-image-dev libfreetype6-dev $APT_INSTALL_GPP
+  - ls /usr/include/freetype2 || true
+  - ls /usr/include/freetype2/config || true
 
 before_script:
   # Travis defaults to plain gcc if unknown
@@ -26,4 +28,5 @@ before_script:
 
 script:
   - cmake -DOPENSPADES_RESOURCES=off ..
+  - cat CMakeCache.txt
   - make
