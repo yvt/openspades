@@ -14,7 +14,7 @@ before_install:
 
 install:
   - sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev libsdl2-dev libsdl2-image-dev libfreetype6-dev $APT_INSTALL_GPP
-  - ln -s /usr/include/freetype2/ft2build.h /usr/include/
+  - sudo ln -s /usr/include/freetype2/ft2build.h /usr/include/
 
 before_script:
   # Travis defaults to plain gcc if unknown
