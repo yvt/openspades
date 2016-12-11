@@ -50,8 +50,6 @@ static const unsigned char Icon[] = {
 SPADES_SETTING(r_videoWidth);
 SPADES_SETTING(r_videoHeight);
 DEFINE_SPADES_SETTING(r_fullscreen, "0");
-DEFINE_SPADES_SETTING(r_colorBits, "32");
-DEFINE_SPADES_SETTING(r_depthBits, "16");
 DEFINE_SPADES_SETTING(r_vsync, "1");
 DEFINE_SPADES_SETTING(r_allowSoftwareRendering, "0");
 DEFINE_SPADES_SETTING(r_renderer, "gl");
@@ -404,7 +402,7 @@ namespace spades {
 					case RendererType::GL:
 						sdlFlags = SDL_WINDOW_OPENGL;
 						SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-						SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, r_depthBits);
+						SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
 						SDL_GL_SetSwapInterval(r_vsync);
 						if (!r_allowSoftwareRendering)
 							SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);

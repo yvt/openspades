@@ -8,23 +8,21 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2014-02-14 15:34+0900\n"
-"PO-Revision-Date: 2014-04-10 16:10+0900\n"
-"Last-Translator: yvt <i@yvt.jp>\n"
-"Language-Team: Japanese\n"
-"Language: ja_JP\n"
+"PO-Revision-Date: 2016-12-10 17:47+0000\n"
+"Language-Team: Portuguese Portugal <joaoadriano3@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Language: ja_JP\n"
-"X-Source-Language: C\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.8.11\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: João Rodrigues <joaoadriano3@gmail.com>\n"
+"Language: pt_pt\n"
 
 #: ../../../Sources/Client/Client.cpp:586
 #: ../../../Sources/Client/Client.cpp:587
 msgctxt "Client"
 msgid "Map saved: {0}"
-msgstr "マップデータを保存しました: {0}"
+msgstr "Mapa gravado: {0}"
 
 #: ../../../Sources/Client/Client.cpp:590
 #: ../../../Sources/Client/Client.cpp:596
@@ -32,262 +30,263 @@ msgstr "マップデータを保存しました: {0}"
 #: ../../../Sources/Client/Client.cpp:597
 msgctxt "Client"
 msgid "Saving map failed: "
-msgstr "マップの保存に失敗しました:"
+msgstr "Falha na gravação do mapa:"
 
 #: ../../../Sources/Client/Client.cpp:628
 #: ../../../Sources/Client/Client.cpp:629
 msgctxt "Client"
 msgid "[Global] "
-msgstr "[全体] "
+msgstr "[Global]"
 
 #: ../../../Sources/Client/Client_Draw.cpp:118
 msgctxt "Client"
 msgid "Sceneshot saved: {0}"
-msgstr "シーンショットを保存しました: {0}"
+msgstr "Sceneshot gravado: {0}"
 
 #: ../../../Sources/Client/Client_Draw.cpp:120
 msgctxt "Client"
 msgid "Screenshot saved: {0}"
-msgstr "スクリーンショットを保存しました: {0}"
+msgstr "Captura de ecrã gravada: {0}"
 
 #: ../../../Sources/Client/Client_Draw.cpp:124
 #: ../../../Sources/Client/Client_Draw.cpp:130
 msgctxt "Client"
 msgid "Screenshot failed: "
-msgstr "スクリーンショットに失敗しました:"
+msgstr "Falha na captura de ecrã:"
 
 #: ../../../Sources/Client/Client_Draw.cpp:197
 msgctxt "Client"
 msgid "NOW LOADING"
-msgstr "読み込み中"
+msgstr "A CARREGAR"
 
 #: ../../../Sources/Client/Client_Draw.cpp:219
 msgctxt "Client"
 msgid "Disconnecting..."
-msgstr "切断中です..."
+msgstr "A desconectar..."
 
 #: ../../../Sources/Client/Client_Draw.cpp:522
 msgctxt "Client"
 msgid "Out of Block"
-msgstr "ブロック切れ"
+msgstr "Sem Bloco"
 
 #: ../../../Sources/Client/Client_Draw.cpp:527
 msgctxt "Client"
 msgid "Out of Grenade"
-msgstr "手榴弾切れ"
+msgstr "Sem Granada"
 
 #: ../../../Sources/Client/Client_Draw.cpp:533
 msgctxt "Client"
 msgid "Reloading"
-msgstr "リロード中"
+msgstr "A recarregar"
 
 #: ../../../Sources/Client/Client_Draw.cpp:535
 #: ../../../Sources/Client/Client_Input.cpp:448
 msgctxt "Client"
 msgid "Out of Ammo"
-msgstr "弾切れ"
+msgstr "Sem Munições"
 
 #: ../../../Sources/Client/Client_Draw.cpp:538
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
-msgstr "[{0}] でリロード"
+msgstr "Clica [{0}] para Recarregar"
 
 #: ../../../Sources/Client/Client_Draw.cpp:583
 msgctxt "Client"
 msgid "You will respawn in: {0}"
-msgstr "リスポーンまであと: {0}秒"
+msgstr "Renascerás em: {0}"
 
 #: ../../../Sources/Client/Client_Draw.cpp:585
 msgctxt "Client"
 msgid "Waiting for respawn"
-msgstr "リスポーン待ち"
+msgstr "A aguardar até renascer"
 
 #: ../../../Sources/Client/Client_Draw.cpp:752
 msgctxt "Client"
 msgid "Following {0}"
-msgstr "{0} をフォロー中"
+msgstr "A seguir {0}"
 
 #: ../../../Sources/Client/Client_Input.cpp:436
 msgctxt "Client"
 msgid "Out of Blocks"
-msgstr "ブロック切れ"
+msgstr "Sem Blocos"
 
 #: ../../../Sources/Client/Client_Input.cpp:460
 msgctxt "Client"
 msgid "Out of Grenades"
-msgstr "手榴弾切れ"
+msgstr "Sem Granadas"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:89
 msgctxt "Client"
 msgid "{0} captured {1}'s territory"
-msgstr "{0} が {1} の陣地を占領しました"
+msgstr "{0} capturou o território do {1}"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:91
 msgctxt "Client"
 msgid "{0} captured an neutral territory"
-msgstr "{0} が未占領の陣地を占領しました"
+msgstr "{0} capturou um território neutro"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:99
 msgctxt "Client"
 msgid "{0} captured {1}'s Territory"
-msgstr "{0} が {1} の陣地を占領しました"
+msgstr "{0} capturou o território de {1}"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:101
 msgctxt "Client"
 msgid "{0} captured an Neutral Territory"
-msgstr "{0} が未占領の陣地を占領しました"
+msgstr "{0} capturou um Território Neutro"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:127
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
-msgstr "{0} が {1} のIntelをキャプチャーしました"
+msgstr "{0} capturou a intel dos {1}"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:134
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
-msgstr "{0} が {1} のIntelをキャプチャーしました"
+msgstr "{0} capturou a Intel  dos {1}."
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:158
 msgctxt "Client"
 msgid "{0} picked up {1}'s intel"
-msgstr "{0} が {1} のIntelを入手しました"
+msgstr "{0} apanhou a Intel dos {1}"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:165
 msgctxt "Client"
 msgid "{0} picked up {1}'s Intel."
-msgstr "{0} が {1} のIntelを入手しました"
+msgstr "{0} apanhou a Intel dos {1}."
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:183
 msgctxt "Client"
 msgid "{0} dropped {1}'s intel"
-msgstr "{0} が {1} のIntelを落としました"
+msgstr "{0} largou a Intel dos {1}"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:190
 msgctxt "Client"
 msgid "{0} dropped {1}'s Intel"
-msgstr "{0} が {1} のIntelを落としました"
+msgstr "{0} largou a Intel dos {1}"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:237
 #: ../../../Sources/Client/Client_NetHandler.cpp:243
 msgctxt "Client"
 msgid "Player {0} has left"
-msgstr "プレイヤー {0} が退場"
+msgstr "Jogador {0} saiu"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:257
 #: ../../../Sources/Client/Client_NetHandler.cpp:264
 msgctxt "Client"
 msgid "{0} joined {1} team"
-msgstr "プレイヤー {0} が {1} に参加"
+msgstr "{0} juntou-se à equipa {1}"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:294
 msgctxt "Client"
 msgid "{0} wins!"
-msgstr "{0} の勝利!"
+msgstr "{0} ganharam!"
 
 #: ../../../Sources/Client/Client_NetHandler.cpp:298
 msgctxt "Client"
 msgid "{0} Wins!"
-msgstr "{0} の勝利!"
+msgstr "{0} Ganharam!"
 
 #: ../../../Sources/Client/Client_Update.cpp:457
 msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
-msgstr[0] "ブロック {0}個"
+msgstr[0] "{0} bloco"
+msgstr[1] "{0} blocos"
 
 #: ../../../Sources/Client/Client_Update.cpp:464
 msgctxt "Client"
 msgid "-- blocks"
-msgstr "ブロック --個"
+msgstr "-- blocos"
 
 #: ../../../Sources/Client/Client_Update.cpp:851
 msgctxt "Client"
 msgid "You have killed {0}"
-msgstr "{0} を殺害した"
+msgstr "Mataste o {0}"
 
 #: ../../../Sources/Client/Client_Update.cpp:853
 msgctxt "Client"
 msgid "You were killed by {0}"
-msgstr "{0} に殺害された"
+msgstr "Foste morto pelo {0}"
 
 #: ../../../Sources/Client/Client_Update.cpp:1166
 msgctxt "Client"
 msgid "Insufficient blocks."
-msgstr "ブロックが不足しています。"
+msgstr "Blocos insuficientes."
 
 #: ../../../Sources/Client/Client_Update.cpp:1169
 msgctxt "Client"
 msgid "You cannot place a block there."
-msgstr "そこにブロックを置くことはできません。"
+msgstr "Não podes colocar um bloco ali."
 
 #: ../../../Sources/Client/LimboView.cpp:67
 msgctxt "Client"
 msgid "Rifle"
-msgstr "ライフル"
+msgstr "Rifle"
 
 #: ../../../Sources/Client/LimboView.cpp:70
 msgctxt "Client"
 msgid "SMG"
-msgstr "サブマシンガン"
+msgstr "SMG"
 
 #: ../../../Sources/Client/LimboView.cpp:73
 msgctxt "Client"
 msgid "Shotgun"
-msgstr "ショットガン"
+msgstr "Caçadeira"
 
 #: ../../../Sources/Client/LimboView.cpp:77
 msgctxt "Client"
 msgid "Spawn"
-msgstr "スポーン"
+msgstr "Nascer"
 
 #: ../../../Sources/Client/LimboView.cpp:181
 msgctxt "Client"
 msgid "Select Team:"
-msgstr "チームを選択:"
+msgstr "Selecciona a Equipa:"
 
 #: ../../../Sources/Client/LimboView.cpp:189
 msgctxt "Client"
 msgid "Select Weapon:"
-msgstr "武器を選択:"
+msgstr "Selecciona a Arma"
 
 #: ../../../Sources/Client/NetClient.cpp:376
 msgctxt "NetClient"
 msgid "Connecting to the server"
-msgstr "サーバーに接続中"
+msgstr "A conectar ao servidor"
 
 #: ../../../Sources/Client/NetClient.cpp:390
 msgctxt "NetClient"
 msgid "Not connected"
-msgstr "接続されていません"
+msgstr "Não conectado"
 
 #: ../../../Sources/Client/NetClient.cpp:459
 msgctxt "NetClient"
 msgid "Awaiting for state"
-msgstr "ゲーム状態の受信を待機中"
+msgstr "A aguardar pelo estado"
 
 #: ../../../Sources/Client/NetClient.cpp:469
 #: ../../../Sources/Client/NetClient.cpp:1235
 msgctxt "NetClient"
 msgid "Loading snapshot"
-msgstr "スナップショットを読込中"
+msgstr "A carregar snapshot"
 
 #: ../../../Sources/Client/NetClient.cpp:484
 msgctxt "NetClient"
 msgid "Loading snapshot ({0}/{1})"
-msgstr "スナップショットを読込中 ({0} / {1})"
+msgstr "A carregar snapshot ({0}/{1})"
 
 #: ../../../Sources/Client/NetClient.cpp:489
 #: ../../../Sources/Client/NetClient.cpp:523
 msgctxt "NetClient"
 msgid "Connected"
-msgstr "接続されました"
+msgstr "Conectado"
 
 #: ../../../Sources/Client/NetClient.cpp:501
 #: ../../../Sources/Client/NetClient.cpp:536
 #: ../../../Sources/Client/NetClient.cpp:588
 msgctxt "NetClient"
 msgid "Still loading..."
-msgstr "引き続き読み込み中..."
+msgstr "Ainda a carregar..."
 
 #: ../../../Sources/Client/NetClient.cpp:504
 #: ../../../Sources/Client/NetClient.cpp:510
@@ -297,54 +296,55 @@ msgstr "引き続き読み込み中..."
 #: ../../../Sources/Client/NetClient.cpp:597
 msgctxt "NetClient"
 msgid "Error"
-msgstr "エラー"
+msgstr "Erro"
 
 #: ../../../Sources/Client/NetClient.cpp:663
 msgctxt "NetClient"
 msgid "You are banned from this server."
-msgstr "このサーバーへの接続は禁止されています。"
+msgstr "Foste banido deste servidor."
 
 #: ../../../Sources/Client/NetClient.cpp:668
 #: ../../../Sources/Client/NetClient.cpp:671
 msgctxt "NetClient"
 msgid "You were kicked from this server."
-msgstr "サーバーから追放されました。"
+msgstr "Foste expulso deste servidor."
 
 #: ../../../Sources/Client/NetClient.cpp:669
 msgctxt "NetClient"
 msgid "Incompatible client protocol version."
-msgstr "プロトコルバージョンが違います。"
+msgstr "Versão do protocolo do client incompatível."
 
 #: ../../../Sources/Client/NetClient.cpp:670
 msgctxt "NetClient"
 msgid "Server full"
-msgstr "サーバーが満員です"
+msgstr "Servidor cheio"
 
 #: ../../../Sources/Client/NetClient.cpp:672
 msgctxt "NetClient"
 msgid "Unknown Reason"
-msgstr "不明な理由"
+msgstr "Motivo desconhecido"
 
 #: ../../../Sources/Client/ScoreboardView.cpp:330
 msgctxt "Client"
 msgid "Spectator{1}"
 msgid_plural "Spectators{1}"
-msgstr[0] "観戦者{1}"
+msgstr[0] "Espectador{1}"
+msgstr[1] "Espectadores{1}"
 
 #: ../../../Sources/Client/TCProgressView.cpp:150
 msgctxt "Client"
 msgid "Neutral Territory"
-msgstr "未占領テリトリー"
+msgstr "Território Neutro"
 
 #: ../../../Sources/Client/TCProgressView.cpp:153
 msgctxt "Client"
 msgid "{0}'s Territory"
-msgstr "{0}のテリトリー"
+msgstr "Território dos {0}"
 
 #: ../../../Sources/Gui/Main.cpp:622 ../../../Sources/Gui/Main.cpp:634
 msgctxt "Main"
 msgid "Localization System Loaded"
-msgstr "ローカライゼーションシステムが読み込まれました"
+msgstr "Sistema de Linguagem carregado"
 
 #: ../../../Sources/Gui/Main.cpp:680 ../../../Sources/Gui/Runner.cpp:58
 #: ../../../Sources/Gui/Main.cpp:692
@@ -356,82 +356,82 @@ msgid ""
 "\n"
 "See SystemMessages.log for more details."
 msgstr ""
-"深刻な問題により、OpenSpadesは動作を停止しました:\n"
+"Um erro crítico fez com que o OpenSpades deixásse de funcionar:\n"
 "\n"
 "{0}\n"
 "\n"
-"詳細については SystemMessages.log をご覧下さい。"
+"Veja o SystemMessages.log para mais detalhes."
 
 #: ../../../Sources/Gui/Main.cpp:688 ../../../Sources/Gui/Runner.cpp:64
 #: ../../../Sources/Gui/Main.cpp:700
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
-msgstr "OpenSpades 重大なエラー"
+msgstr "Erro Crítico do OpenSpades"
 
 #: ../../../Sources/Gui/MainScreen.cpp:227
 msgctxt "MainScreen"
 msgid "NOW LOADING"
-msgstr "読み込み中"
+msgstr "A CARREGAR"
 
 #: ../../Scripts/Gui/ClientUI.as:198
 msgctxt "Client"
 msgid "Back to Game"
-msgstr "ゲームに戻る"
+msgstr "Voltar ao Jogo"
 
 #: ../../Scripts/Gui/ClientUI.as:205
 msgctxt "Client"
 msgid "Chat Log"
-msgstr "チャットログ"
+msgstr "Histórico do Chat"
 
 #: ../../Scripts/Gui/ClientUI.as:212
 msgctxt "Client"
 msgid "Setup"
-msgstr "オプション"
+msgstr "Definições"
 
 #: ../../Scripts/Gui/ClientUI.as:219
 msgctxt "Client"
 msgid "Disconnect"
-msgstr "切断"
+msgstr "Desconectar"
 
 #: ../../Scripts/Gui/ClientUI.as:484
 msgctxt "Client"
 msgid "Say"
-msgstr "送信"
+msgstr "Falar"
 
 #: ../../Scripts/Gui/ClientUI.as:492
 msgctxt "Client"
 msgid "Cancel"
-msgstr "キャンセル"
+msgstr "Cancelar"
 
 #: ../../Scripts/Gui/ClientUI.as:500
 msgctxt "Client"
 msgid "Chat Text"
-msgstr "送信内容"
+msgstr "Texto do Chat"
 
 #: ../../Scripts/Gui/ClientUI.as:508
 msgctxt "Client"
 msgid "Global"
-msgstr "全体"
+msgstr "Global"
 
 #: ../../Scripts/Gui/ClientUI.as:517
 msgctxt "Client"
 msgid "Team"
-msgstr "チーム"
+msgstr "Equipa"
 
 #: ../../Scripts/Gui/ClientUI.as:661
 msgctxt "Client"
 msgid "Close"
-msgstr "閉じる"
+msgstr "Fechar"
 
 #: ../../Scripts/Gui/ClientUI.as:671
 msgctxt "Client"
 msgid "Say Global"
-msgstr "全体チャット"
+msgstr "Falar Global"
 
 #: ../../Scripts/Gui/ClientUI.as:682
 msgctxt "Client"
 msgid "Say Team"
-msgstr "チームチャット"
+msgstr "Falar Equipa"
 
 #: ../../Scripts/Gui/CreateProfileScreen.as:58
 msgctxt "CreateProfileScreen"
@@ -441,37 +441,37 @@ msgstr "OK"
 #: ../../Scripts/Gui/CreateProfileScreen.as:70
 msgctxt "CreateProfileScreen"
 msgid "Decide later"
-msgstr "後で入力する"
+msgstr "Decidir mais tarde"
 
 #: ../../Scripts/Gui/CreateProfileScreen.as:80
 msgctxt "CreateProfileScreen"
 msgid "Welcome to OpenSpades"
-msgstr "OpenSpades 初回起動時設定"
+msgstr "Bem-vindo ao OpenSpades"
 
 #: ../../Scripts/Gui/CreateProfileScreen.as:88
 msgctxt "CreateProfileScreen"
 msgid "Choose a player name:"
-msgstr "プレイヤー名を入力してください:"
+msgstr "Escolhe um nome de jogador:"
 
 #: ../../Scripts/Gui/CreateProfileScreen.as:96
 msgctxt "CreateProfileScreen"
 msgid "Player name"
-msgstr "プレイヤー名"
+msgstr "Nome do Jogador"
 
 #: ../../Scripts/Gui/CreateProfileScreen.as:104
 msgctxt "CreateProfileScreen"
 msgid "You can change it later in the Setup dialog."
-msgstr "プレイヤー名は「オプション」からいつでも変更できます。"
+msgstr "Podes alterá-lo mais tarde nas Definições."
 
 #: ../../Scripts/Gui/MainScreen.as:362 ../../Scripts/Gui/MainScreen.as:376
 msgctxt "MainScreen"
 msgid "Connect"
-msgstr "接続"
+msgstr "Conectar"
 
 #: ../../Scripts/Gui/MainScreen.as:370 ../../Scripts/Gui/MainScreen.as:384
 msgctxt "MainScreen"
 msgid "Quick Connect"
-msgstr "クイック接続"
+msgstr "Conexão Rápida"
 
 #: ../../Scripts/Gui/MainScreen.as:379 ../../Scripts/Gui/MainScreen.as:433
 #: ../../Scripts/Gui/MainScreen.as:393 ../../Scripts/Gui/MainScreen.as:447
@@ -488,53 +488,53 @@ msgstr "0.76"
 #: ../../Scripts/Gui/MainScreen.as:397 ../../Scripts/Gui/MainScreen.as:411
 msgctxt "MainScreen"
 msgid "Quit"
-msgstr "終了"
+msgstr "Sair"
 
 #: ../../Scripts/Gui/MainScreen.as:404 ../../Scripts/Gui/MainScreen.as:418
 msgctxt "MainScreen"
 msgid "Credits"
-msgstr "クレジット"
+msgstr "Crédito"
 
 #: ../../Scripts/Gui/MainScreen.as:411 ../../Scripts/Gui/MainScreen.as:425
 msgctxt "MainScreen"
 msgid "Setup"
-msgstr "オプション"
+msgstr "Definições"
 
 #: ../../Scripts/Gui/MainScreen.as:424 ../../Scripts/Gui/MainScreen.as:468
 #: ../../Scripts/Gui/MainScreen.as:438 ../../Scripts/Gui/MainScreen.as:482
 msgctxt "MainScreen"
 msgid "Filter"
-msgstr "フィルタ"
+msgstr "Filtrar"
 
 #: ../../Scripts/Gui/MainScreen.as:451 ../../Scripts/Gui/MainScreen.as:465
 msgctxt "MainScreen"
 msgid "Empty"
-msgstr "無人"
+msgstr "Vazio"
 
 #: ../../Scripts/Gui/MainScreen.as:460 ../../Scripts/Gui/MainScreen.as:474
 msgctxt "MainScreen"
 msgid "Not Full"
-msgstr "空有り"
+msgstr "Livre"
 
 #: ../../Scripts/Gui/MainScreen.as:480 ../../Scripts/Gui/MainScreen.as:494
 msgctxt "MainScreen"
 msgid "Server Name"
-msgstr "サーバー名"
+msgstr "Nome do Servidor"
 
 #: ../../Scripts/Gui/MainScreen.as:487 ../../Scripts/Gui/MainScreen.as:501
 msgctxt "MainScreen"
 msgid "Players"
-msgstr "プレイヤー数"
+msgstr "Jogadores"
 
 #: ../../Scripts/Gui/MainScreen.as:494 ../../Scripts/Gui/MainScreen.as:508
 msgctxt "MainScreen"
 msgid "Map Name"
-msgstr "マップ名"
+msgstr "Nome do Mapa"
 
 #: ../../Scripts/Gui/MainScreen.as:501 ../../Scripts/Gui/MainScreen.as:515
 msgctxt "MainScreen"
 msgid "Game Mode"
-msgstr "ゲームモード"
+msgstr "Modo de Jogo"
 
 #: ../../Scripts/Gui/MainScreen.as:508 ../../Scripts/Gui/MainScreen.as:522
 msgctxt "MainScreen"
@@ -544,7 +544,7 @@ msgstr "Ver."
 #: ../../Scripts/Gui/MainScreen.as:515 ../../Scripts/Gui/MainScreen.as:529
 msgctxt "MainScreen"
 msgid "Loc."
-msgstr "国"
+msgstr "Loc."
 
 #: ../../Scripts/Gui/MainScreen.as:767 ../../Scripts/Gui/MainScreen.as:787
 msgctxt "MainScreen"
@@ -553,19 +553,19 @@ msgid ""
 "\n"
 "{0}"
 msgstr ""
-"サーバーから切断されました。理由は以下の通りです:\n"
+"Foste desconectado do servidor pelo seguinte motivo:\n"
 "\n"
 "{0}"
 
 #: ../../Scripts/Gui/MainScreen.as:787 ../../Scripts/Gui/MainScreen.as:807
 msgctxt "MainScreen"
 msgid "Loading..."
-msgstr "読み込み中..."
+msgstr "A carregar..."
 
 #: ../../Scripts/Gui/MainScreen.as:805 ../../Scripts/Gui/MainScreen.as:825
 msgctxt "MainScreen"
 msgid "Failed to fetch the server list."
-msgstr "サーバー一覧のダウンロード中にエラーが発生しました。"
+msgstr "Falha ao obter a lista de servidores."
 
 #: ../../Scripts/Gui/MessageBox.as:53 ../../Scripts/Gui/MessageBox.as:130
 #: ../../Scripts/Gui/MessageBox.as:144
@@ -576,83 +576,83 @@ msgstr "OK"
 #: ../../Scripts/Gui/Preferences.as:60
 msgctxt "Preferences"
 msgid "Game Options"
-msgstr "ゲームオプション"
+msgstr "Definições do Jogo"
 
 #: ../../Scripts/Gui/Preferences.as:61
 msgctxt "Preferences"
 msgid "Controls"
-msgstr "操作"
+msgstr "Controlos"
 
 #: ../../Scripts/Gui/Preferences.as:62 ../../Scripts/Gui/Preferences.as:661
 #: ../../Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Misc"
-msgstr "その他"
+msgstr "Outras"
 
 #: ../../Scripts/Gui/Preferences.as:66
 msgctxt "Preferences"
 msgid "Back"
-msgstr "戻る"
+msgstr "Voltar"
 
 #: ../../Scripts/Gui/Preferences.as:407
 msgctxt "Preferences"
 msgid "Press Key to Bind or [Escape] to Cancel..."
-msgstr "割り当てるキーを押下して下さい。[Esc]でキャンセルします..."
+msgstr "Pressiona uma tecla para seleccionar ou [ESC] para cancelar..."
 
 #: ../../Scripts/Gui/Preferences.as:418
 msgctxt "Preferences"
 msgid "Space"
-msgstr "スペース"
+msgstr "Espaço"
 
 #: ../../Scripts/Gui/Preferences.as:420
 msgctxt "Preferences"
 msgid "Unbound"
-msgstr "未割り当て"
+msgstr "Não Definido"
 
 #: ../../Scripts/Gui/Preferences.as:423
 msgctxt "Preferences"
 msgid "Shift"
-msgstr "Shiftキー"
+msgstr "Shift"
 
 #: ../../Scripts/Gui/Preferences.as:425
 msgctxt "Preferences"
 msgid "Control"
-msgstr "Controlキー"
+msgstr "Control"
 
 #: ../../Scripts/Gui/Preferences.as:427
 msgctxt "Preferences"
 msgid "Meta"
-msgstr "メタキー"
+msgstr "Meta"
 
 #: ../../Scripts/Gui/Preferences.as:429
 msgctxt "Preferences"
 msgid "Alt"
-msgstr "Altキー"
+msgstr "Alt"
 
 #: ../../Scripts/Gui/Preferences.as:431
 msgctxt "Preferences"
 msgid "Left Mouse Button"
-msgstr "左マウスボタン"
+msgstr "Botão Esquerdo do Rato"
 
 #: ../../Scripts/Gui/Preferences.as:433
 msgctxt "Preferences"
 msgid "Right Mouse Button"
-msgstr "右マウスボタン"
+msgstr "Botão Direito do Rato"
 
 #: ../../Scripts/Gui/Preferences.as:435
 msgctxt "Preferences"
 msgid "Middle Mouse Button"
-msgstr "中央マウスボタン"
+msgstr "Botão do Meio do Rato"
 
 #: ../../Scripts/Gui/Preferences.as:437
 msgctxt "Preferences"
 msgid "Mouse Button 4"
-msgstr "マウスボタン4"
+msgstr "Botão 4 do Rato"
 
 #: ../../Scripts/Gui/Preferences.as:439
 msgctxt "Preferences"
 msgid "Mouse Button 5"
-msgstr "マウスボタン5"
+msgstr "Botão 5 do Rato"
 
 #: ../../Scripts/Gui/Preferences.as:611 ../../Scripts/Gui/Preferences.as:617
 msgctxt "Preferences"
@@ -668,338 +668,338 @@ msgstr "OFF"
 #: ../../Scripts/Gui/Preferences.as:617
 msgctxt "Preferences"
 msgid "REVERSED"
-msgstr "反転"
+msgstr "INVERSO"
 
 #: ../../Scripts/Gui/Preferences.as:635
 msgctxt "Preferences"
 msgid "Player Information"
-msgstr "プレイヤー情報"
+msgstr "Informações do Jogador"
 
 #: ../../Scripts/Gui/Preferences.as:636
 msgctxt "Preferences"
 msgid "Player Name"
-msgstr "プレイヤー名"
+msgstr "Nome do Jogador"
 
 #: ../../Scripts/Gui/Preferences.as:640
 msgctxt "Preferences"
 msgid "Effects"
-msgstr "エフェクト"
+msgstr "Efeitos"
 
 #: ../../Scripts/Gui/Preferences.as:641
 msgctxt "Preferences"
 msgid "Blood"
-msgstr "流血表現"
+msgstr "Sangue"
 
 #: ../../Scripts/Gui/Preferences.as:642
 msgctxt "Preferences"
 msgid "Ejecting Brass"
-msgstr "薬莢"
+msgstr "Ejetar Cápsulas"
 
 #: ../../Scripts/Gui/Preferences.as:643
 msgctxt "Preferences"
 msgid "Ragdoll"
-msgstr "ラグドール表現"
+msgstr "Ragdolls"
 
 #: ../../Scripts/Gui/Preferences.as:644
 msgctxt "Preferences"
 msgid "Animations"
-msgstr "アニメーション"
+msgstr "Animações"
 
 #: ../../Scripts/Gui/Preferences.as:645
 msgctxt "Preferences"
 msgid "Camera Shake"
-msgstr "カメラの揺れ"
+msgstr "Tremor da Câmara"
 
 #: ../../Scripts/Gui/Preferences.as:646
 msgctxt "Preferences"
 msgid "MORE"
-msgstr "多め"
+msgstr "MUITAS"
 
 #: ../../Scripts/Gui/Preferences.as:646 ../../Scripts/Gui/Preferences.as:649
 msgctxt "Preferences"
 msgid "NORMAL"
-msgstr "標準"
+msgstr "NORMAL"
 
 #: ../../Scripts/Gui/Preferences.as:648
 msgctxt "Preferences"
 msgid "Particles"
-msgstr "パーティクル"
+msgstr "Partículas"
 
 #: ../../Scripts/Gui/Preferences.as:649
 msgctxt "Preferences"
 msgid "LESS"
-msgstr "少なめ"
+msgstr "MENOS"
 
 #: ../../Scripts/Gui/Preferences.as:652
 msgctxt "Preferences"
 msgid "Feedbacks"
-msgstr "通知"
+msgstr "Alertas"
 
 #: ../../Scripts/Gui/Preferences.as:653
 msgctxt "Preferences"
 msgid "Chat Notify Sounds"
-msgstr "チャット新着通知音"
+msgstr "Sons de Notificação do Chat"
 
 #: ../../Scripts/Gui/Preferences.as:654
 msgctxt "Preferences"
 msgid "Hit Indicator"
-msgstr "命中表示"
+msgstr "Indicador de Acertos"
 
 #: ../../Scripts/Gui/Preferences.as:655
 msgctxt "Preferences"
 msgid "Show Alerts"
-msgstr "アラートを表示"
+msgstr "Mostrar Alertas"
 
 #: ../../Scripts/Gui/Preferences.as:657
 msgctxt "Preferences"
 msgid "AoS 0.75/0.76 Compatibility"
-msgstr "AoS 0.75/0.76 互換性"
+msgstr "Compatibilidade entre AoS 0.75/0.76"
 
 #: ../../Scripts/Gui/Preferences.as:658
 msgctxt "Preferences"
 msgid "Allow Unicode"
-msgstr "Unicodeの送信を許可"
+msgstr "Permitir Unicode"
 
 #: ../../Scripts/Gui/Preferences.as:659
 msgctxt "Preferences"
 msgid "Server Alert"
-msgstr "サーバーアラート"
+msgstr "Alerta do Servidor"
 
 #: ../../Scripts/Gui/Preferences.as:662
 msgctxt "Preferences"
 msgid "Field of View"
-msgstr "視界"
+msgstr "Campo de Visão"
 
 #: ../../Scripts/Gui/Preferences.as:664
 msgctxt "Preferences"
 msgid "Minimap size"
-msgstr "ミニマップのサイズ"
+msgstr "Tamanho do Minimapa"
 
 #: ../../Scripts/Gui/Preferences.as:666
 msgctxt "Preferences"
 msgid "Show Statistics"
-msgstr "統計情報を表示"
+msgstr "Exibir Estatísticas"
 
 #: ../../Scripts/Gui/Preferences.as:676
 msgctxt "Preferences"
 msgid "Weapons/Tools"
-msgstr "武器/道具"
+msgstr "Armas/Ferramentas"
 
 #: ../../Scripts/Gui/Preferences.as:677
 msgctxt "Preferences"
 msgid "Attack"
-msgstr "攻撃"
+msgstr "Ataque"
 
 #: ../../Scripts/Gui/Preferences.as:678
 msgctxt "Preferences"
 msgid "Alt. Attack"
-msgstr "副攻撃"
+msgstr "Ataque alt."
 
 #: ../../Scripts/Gui/Preferences.as:679
 msgctxt "Preferences"
 msgid "Hold Aim Down Sight"
-msgstr "ホールドしてADS"
+msgstr "Segurar a Mira"
 
 #: ../../Scripts/Gui/Preferences.as:680
 msgctxt "Preferences"
 msgid "Mouse Sensitivity"
-msgstr "マウス速度"
+msgstr "Sensibilidade do Rato"
 
 #: ../../Scripts/Gui/Preferences.as:682
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
-msgstr "ADS時マウス速度"
+msgstr "Sens. do Rato a fazer Mira"
 
 #: ../../Scripts/Gui/Preferences.as:684
 msgctxt "Preferences"
 msgid "Exponential Power"
-msgstr "マウス加速指数"
+msgstr "Força Exponencial"
 
 #: ../../Scripts/Gui/Preferences.as:686
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
-msgstr "Y軸の入力を反転"
+msgstr "inverter o Eixo Y do Rato"
 
 #: ../../Scripts/Gui/Preferences.as:687
 msgctxt "Preferences"
 msgid "Reload"
-msgstr "リロード"
+msgstr "Recarregar"
 
 #: ../../Scripts/Gui/Preferences.as:688
 msgctxt "Preferences"
 msgid "Capture Color"
-msgstr "色をコピー"
+msgstr "Capturar Cor"
 
 #: ../../Scripts/Gui/Preferences.as:689
 msgctxt "Preferences"
 msgid "Equip Spade"
-msgstr "スペードを装備"
+msgstr "Equipar a Pá"
 
 #: ../../Scripts/Gui/Preferences.as:690
 msgctxt "Preferences"
 msgid "Equip Block"
-msgstr "ブロックを装備"
+msgstr "Equipar Bloco"
 
 #: ../../Scripts/Gui/Preferences.as:691
 msgctxt "Preferences"
 msgid "Equip Weapon"
-msgstr "銃を装備"
+msgstr "Equipar Arma"
 
 #: ../../Scripts/Gui/Preferences.as:692
 msgctxt "Preferences"
 msgid "Equip Grenade"
-msgstr "手榴弾を装備"
+msgstr "Equipar Granada"
 
 #: ../../Scripts/Gui/Preferences.as:693
 msgctxt "Preferences"
 msgid "Last Used Tool"
-msgstr "最後に使用したツール"
+msgstr "Última ferramenta usada"
 
 #: ../../Scripts/Gui/Preferences.as:694
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
-msgstr "ホイールで装備切替"
+msgstr "Trocar Ferramentas com a Roda"
 
 #: ../../Scripts/Gui/Preferences.as:696
 msgctxt "Preferences"
 msgid "Movement"
-msgstr "移動"
+msgstr "Movimento"
 
 #: ../../Scripts/Gui/Preferences.as:697
 msgctxt "Preferences"
 msgid "Walk Forward"
-msgstr "前方に移動"
+msgstr "Andar para Frente"
 
 #: ../../Scripts/Gui/Preferences.as:698
 msgctxt "Preferences"
 msgid "Backpedal"
-msgstr "後方に移動"
+msgstr "Recuar"
 
 #: ../../Scripts/Gui/Preferences.as:699
 msgctxt "Preferences"
 msgid "Move Left"
-msgstr "左に移動"
+msgstr "Andar para Esquerda"
 
 #: ../../Scripts/Gui/Preferences.as:700
 msgctxt "Preferences"
 msgid "Move Right"
-msgstr "右に移動"
+msgstr "Andar para Direita"
 
 #: ../../Scripts/Gui/Preferences.as:701
 msgctxt "Preferences"
 msgid "Crouch"
-msgstr "しゃがむ"
+msgstr "Agachar"
 
 #: ../../Scripts/Gui/Preferences.as:702
 msgctxt "Preferences"
 msgid "Sneak"
-msgstr "歩く"
+msgstr "Andar Furtivamente"
 
 #: ../../Scripts/Gui/Preferences.as:703
 msgctxt "Preferences"
 msgid "Jump"
-msgstr "ジャンプ"
+msgstr "Saltar"
 
 #: ../../Scripts/Gui/Preferences.as:704
 msgctxt "Preferences"
 msgid "Sprint"
-msgstr "全力疾走"
+msgstr "Correr"
 
 #: ../../Scripts/Gui/Preferences.as:707
 msgctxt "Preferences"
 msgid "Minimap Scale"
-msgstr "ミニマップ縮尺切替"
+msgstr "Escala do Minimapa"
 
 #: ../../Scripts/Gui/Preferences.as:708
 msgctxt "Preferences"
 msgid "Toggle Map"
-msgstr "マップ拡大"
+msgstr "Alternar entre Mapa/Minimapa"
 
 #: ../../Scripts/Gui/Preferences.as:709
 msgctxt "Preferences"
 msgid "Flashlight"
-msgstr "ヘッドライト"
+msgstr "Lanterna"
 
 #: ../../Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Global Chat"
-msgstr "全体チャット"
+msgstr "Chat Global"
 
 #: ../../Scripts/Gui/Preferences.as:711
 msgctxt "Preferences"
 msgid "Team Chat"
-msgstr "チームチャット"
+msgstr "Chat de Equipa"
 
 #: ../../Scripts/Gui/Preferences.as:712
 msgctxt "Preferences"
 msgid "Limbo Menu"
-msgstr "武器・チーム切替"
+msgstr "Menu do Limbo"
 
 #: ../../Scripts/Gui/Preferences.as:713
 msgctxt "Preferences"
 msgid "Save Map"
-msgstr "マップを保存"
+msgstr "Gravar Mapa"
 
 #: ../../Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Save Sceneshot"
-msgstr "シーンショット"
+msgstr "Guardar Sceneshot"
 
 #: ../../Scripts/Gui/Preferences.as:715
 msgctxt "Preferences"
 msgid "Save Screenshot"
-msgstr "スクリーンショット"
+msgstr "Guardar Captura de Ecrã"
 
 #: ../../Scripts/Gui/Preferences.as:734
 msgctxt "Preferences"
 msgid "Enable Startup Window"
-msgstr "スタートアップウィンドウを有効化"
+msgstr "Ativar Janela Inicial"
 
 #: ../../Scripts/Gui/Preferences.as:755
 msgctxt "Preferences"
 msgid "Quit and restart OpenSpades to access the startup window."
-msgstr "スタートアップウィンドウを表示するにはOpenSpadesを再起動してください。"
+msgstr "Saia e reinicie o OpenSpades para aceder à janela inicial"
 
 #: ../../Scripts/Gui/Preferences.as:756
 msgctxt "Preferences"
 msgid "Some settings only can be changed in the startup window."
-msgstr "一部の設定はスタートアップウィンドウでのみ変更が可能です。"
+msgstr "Algumas definições só podem ser alteradas na janela inicial."
 
 #: ../../Scripts/Gui/StartupScreen.as:158
 #: ../../Scripts/Gui/StartupScreen.as:159
 msgctxt "StartupScreen"
 msgid "Start"
-msgstr "スタート"
+msgstr "Iniciar"
 
 #: ../../Scripts/Gui/StartupScreen.as:165
 #: ../../Scripts/Gui/StartupScreen.as:166
 msgctxt "StartupScreen"
 msgid "Skip this screen next time"
-msgstr "次回起動時はこの画面を表示しない"
+msgstr "Saltar este ecrã da próxima vez"
 
 #: ../../Scripts/Gui/StartupScreen.as:203
 #: ../../Scripts/Gui/StartupScreen.as:204
 msgctxt "StartupScreen"
 msgid "Graphics"
-msgstr "映像"
+msgstr "Gráficos"
 
 #: ../../Scripts/Gui/StartupScreen.as:204
 #: ../../Scripts/Gui/StartupScreen.as:205
 msgctxt "StartupScreen"
 msgid "Audio"
-msgstr "音声"
+msgstr "Audio"
 
 #: ../../Scripts/Gui/StartupScreen.as:205
 #: ../../Scripts/Gui/StartupScreen.as:206
 msgctxt "StartupScreen"
 msgid "Generic"
-msgstr "一般"
+msgstr "Genérico"
 
 #: ../../Scripts/Gui/StartupScreen.as:206
 #: ../../Scripts/Gui/StartupScreen.as:207
 msgctxt "StartupScreen"
 msgid "System Info"
-msgstr "システム情報"
+msgstr "Informações do Sistema"
 
 #: ../../Scripts/Gui/StartupScreen.as:207
 #: ../../Scripts/Gui/StartupScreen.as:208
@@ -1008,37 +1008,37 @@ msgstr "システム情報"
 #: ../../Scripts/Gui/StartupScreen.as:1657
 msgctxt "StartupScreen"
 msgid "Advanced"
-msgstr "高度な設定"
+msgstr "Avançado"
 
 #: ../../Scripts/Gui/StartupScreen.as:835
 #: ../../Scripts/Gui/StartupScreen.as:836
 msgctxt "StartupScreen"
 msgid "Custom"
-msgstr "カスタム"
+msgstr "Customizado"
 
 #: ../../Scripts/Gui/StartupScreen.as:961
 #: ../../Scripts/Gui/StartupScreen.as:962
 msgctxt "StartupScreen"
 msgid "Close"
-msgstr "閉じる"
+msgstr "Fechar"
 
 #: ../../Scripts/Gui/StartupScreen.as:1067
 #: ../../Scripts/Gui/StartupScreen.as:1068
 msgctxt "StartupScreen"
 msgid "Graphics Settings"
-msgstr "グラフィックス設定"
+msgstr "Configurações Gráficas"
 
 #: ../../Scripts/Gui/StartupScreen.as:1072
 #: ../../Scripts/Gui/StartupScreen.as:1073
 msgctxt "StartupScreen"
 msgid "Resolution"
-msgstr "画面解像度"
+msgstr "Resolução"
 
 #: ../../Scripts/Gui/StartupScreen.as:1082
 #: ../../Scripts/Gui/StartupScreen.as:1083
 msgctxt "StartupScreen"
 msgid "Fullscreen Mode"
-msgstr "フルスクリーンモード"
+msgstr "Modo de Ecrã Inteiro"
 
 #: ../../Scripts/Gui/StartupScreen.as:1085
 #: ../../Scripts/Gui/StartupScreen.as:1086
@@ -1046,7 +1046,9 @@ msgctxt "StartupScreen"
 msgid ""
 "By running in fullscreen mode OpenSpades occupies the screen, making it "
 "easier for you to concentrate on playing the game."
-msgstr "フルスクリーンモードを使用すると画面全体を占領してプレイできるため、ゲームに集中しやすくなります。"
+msgstr ""
+"Por executar o OpenSpade em modo de ecrã inteiro ocupa o ecrã todo, sendo "
+"mais fácil para ti de te concentrares no jogo."
 
 #: ../../Scripts/Gui/StartupScreen.as:1092
 #: ../../Scripts/Gui/StartupScreen.as:1470
@@ -1054,7 +1056,7 @@ msgstr "フルスクリーンモードを使用すると画面全体を占領し
 #: ../../Scripts/Gui/StartupScreen.as:1471
 msgctxt "StartupScreen"
 msgid "Backend"
-msgstr "バックエンド"
+msgstr "Backend"
 
 #: ../../Scripts/Gui/StartupScreen.as:1095
 #: ../../Scripts/Gui/StartupScreen.as:1096
@@ -1068,13 +1070,15 @@ msgctxt "StartupScreen"
 msgid ""
 "OpenGL renderer uses your computer's graphics accelerator to generate the "
 "game screen."
-msgstr "OpenGLレンダラーはコンピュータに内蔵されたGPUを使用してゲーム画面を描画します。"
+msgstr ""
+"A renderização OpenGL usa a aceleração de gráficos do teu computador para "
+"gerar os gráficos."
 
 #: ../../Scripts/Gui/StartupScreen.as:1107
 #: ../../Scripts/Gui/StartupScreen.as:1108
 msgctxt "StartupScreen"
 msgid "Software"
-msgstr "ソフトウェア"
+msgstr "Software"
 
 #: ../../Scripts/Gui/StartupScreen.as:1111
 #: ../../Scripts/Gui/StartupScreen.as:1112
@@ -1084,33 +1088,37 @@ msgid ""
 "performance might be inferior to OpenGL renderer, but it works even with an "
 "unsupported GPU."
 msgstr ""
-"ソフトウェアレンダラーはCPUを使用してゲーム画面を描画します。画質やパフォーマンスはOpenGLには劣りますが、未対応GPUでも確実に動作します。"
+"A renderização Software usa o teu CPU para gerar os gráficos. A sua "
+"qualidade e desempenho podem ser inferiores ao OpenGL, mas podem funcionar "
+"melhor em GPUs não suportados."
 
 #: ../../Scripts/Gui/StartupScreen.as:1125
 #: ../../Scripts/Gui/StartupScreen.as:1126
 msgctxt "StartupScreen"
 msgid ""
-"Antialias:Enables a technique to improve the appearance of high-contrast "
+"Antialias:Enables a technique to improve the appearance of high-constrast "
 "edges.\n"
 "\n"
 "MSAA: Performs antialiasing by generating an intermediate high-resolution "
 "image. Looks best, but doesn't cope with some settings.\n"
 "\n"
-"FXAA: Performs antialiasing by smoothing artifacts out as a "
-"post-process.|Off|MSAA 2x|4x|FXAA"
+"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
+"Off|MSAA 2x|4x|FXAA"
 msgstr ""
-"アンチエイリアシング:オブジェクトの輪郭に発生する階段上のギザギザ(ジャギー)を除去する手法を有効にします。\n"
+"Antialias: Ativa uma técnica para melhorar a aparência dos cantos de alto-"
+"contraste.\n"
 "\n"
-"MSAA: "
-"中間的に画面より数倍程度の高解像度な画像を生成しアンチエイリアシングを行います。見た目は最も良くなりますが、一部の設定と相性が悪い場合があります。\n"
+"MSAA: Executa antialiasing gerando uma imagem de alta resolução "
+"intermediária. Parece melhor, mas não combina com algumas definições.\n"
 "\n"
-"FXAA: 描画された画像からジャギーを検出してぼかすことによりアンチエイリアシングを行います。|オフ|MSAA 2x|4x|FXAA"
+"FXAA: Executa antialiasing por suavizar artefactos como um pós-"
+"processamento.|Off|MSAA 2x|4x|FXAA"
 
 #: ../../Scripts/Gui/StartupScreen.as:1132
 #: ../../Scripts/Gui/StartupScreen.as:1133
 msgctxt "StartupScreen"
 msgid "Global Illumination"
-msgstr "大域照明"
+msgstr "Iluminação Global"
 
 #: ../../Scripts/Gui/StartupScreen.as:1134
 #: ../../Scripts/Gui/StartupScreen.as:1135
@@ -1118,13 +1126,15 @@ msgctxt "StartupScreen"
 msgid ""
 "Enables a physically based simulation of light path for more realistic "
 "lighting."
-msgstr "物理的に正確な計算手法を使用することにより、より写実的な光表現を行います。"
+msgstr ""
+"Ativa uma simulação física baseada no caminho de luz para uma iluminação "
+"mais realista."
 
 #: ../../Scripts/Gui/StartupScreen.as:1137
 #: ../../Scripts/Gui/StartupScreen.as:1138
 msgctxt "StartupScreen"
 msgid "Linear HDR Rendering"
-msgstr "線形色空間HDRレンダリング"
+msgstr "Renderização Linear HDR"
 
 #: ../../Scripts/Gui/StartupScreen.as:1139
 #: ../../Scripts/Gui/StartupScreen.as:1140
@@ -1135,91 +1145,94 @@ msgid ""
 "is in linear correspondence with actual energy, that is, physically accurate "
 "blending can be achieved."
 msgstr ""
-"より幅広いダイナミックレンジを表現可能な数値の表現方法をレンダリング処理に使用します。これにより実際のエネルギー量と線形関係のある値を使用して色を表現できるため物理的に正確なブレンディングを行うことができます。"
+"Usa uma representação numérica que permite uma faixa dinâmica maior durante "
+"o processo de renderização. Adicionalmente, permite o cálculo de cor cujo "
+"valor é em correspondência linear com a energia atual, isto é, misturas "
+"físicas podem ser feitas."
 
 #: ../../Scripts/Gui/StartupScreen.as:1146
 #: ../../Scripts/Gui/StartupScreen.as:1147
 msgctxt "StartupScreen"
 msgid "Camera Blur"
-msgstr "カメラブラー"
+msgstr "Desfoque da Câmara"
 
 #: ../../Scripts/Gui/StartupScreen.as:1147
 #: ../../Scripts/Gui/StartupScreen.as:1148
 msgctxt "StartupScreen"
 msgid "Blurs the screen when you turn quickly."
-msgstr "視点が動いた際のブレを再現します。"
+msgstr "Causa um desfoque quando te moves rapidamente."
 
 #: ../../Scripts/Gui/StartupScreen.as:1149
 #: ../../Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
 msgid "Lens Effect"
-msgstr "レンズ効果"
+msgstr "Efeito de Lentes"
 
 #: ../../Scripts/Gui/StartupScreen.as:1150
 #: ../../Scripts/Gui/StartupScreen.as:1151
 msgctxt "StartupScreen"
 msgid "Simulates distortion caused by a real camera lens."
-msgstr "現実世界のレンズの歪みをシミュレートします。"
+msgstr "Simula a distorção causada por uma lente de câmara real."
 
 #: ../../Scripts/Gui/StartupScreen.as:1152
 #: ../../Scripts/Gui/StartupScreen.as:1153
 msgctxt "StartupScreen"
 msgid "Lens Scattering Filter"
-msgstr "レンズ散乱フィルタ"
+msgstr "Filtro de Dispersão de Lentes"
 
 #: ../../Scripts/Gui/StartupScreen.as:1153
 #: ../../Scripts/Gui/StartupScreen.as:1154
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
-msgstr "レンズの汚れによる光の散乱を再現します。"
+msgstr "Simula a dispersão de luz pela poeira nas lentes da câmara."
 
 #: ../../Scripts/Gui/StartupScreen.as:1156
 #: ../../Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
 msgid "Lens Flare"
-msgstr "レンズフレア"
+msgstr "Reflexo nas lentes"
 
 #: ../../Scripts/Gui/StartupScreen.as:1157
 #: ../../Scripts/Gui/StartupScreen.as:1158
 msgctxt "StartupScreen"
 msgid "The Sun causes lens flare."
-msgstr "太陽を直視したときにレンズフレアを描画します。"
+msgstr "O Sol causa reflexo nas lentes."
 
 #: ../../Scripts/Gui/StartupScreen.as:1159
 #: ../../Scripts/Gui/StartupScreen.as:1160
 msgctxt "StartupScreen"
 msgid "Flares for Dynamic Lights"
-msgstr "動的ライトにレンズフレア"
+msgstr "Reflexos para Luzes Dinâmicas"
 
 #: ../../Scripts/Gui/StartupScreen.as:1160
 #: ../../Scripts/Gui/StartupScreen.as:1161
 msgctxt "StartupScreen"
 msgid "Enables lens flare for light sources other than the Sun."
-msgstr "太陽以外の光源を直視したときにレンズフレアを描画します。"
+msgstr "Ativa o reflexo em lentes para fontes de luz diferentes do Sol."
 
 #: ../../Scripts/Gui/StartupScreen.as:1162
 #: ../../Scripts/Gui/StartupScreen.as:1163
 msgctxt "StartupScreen"
 msgid "Color Correction"
-msgstr "色調補正"
+msgstr "Correção de Cor"
 
 #: ../../Scripts/Gui/StartupScreen.as:1163
 #: ../../Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
-msgstr "色調補正を適用することにより見た目を改善します。"
+msgstr "Aplica correção de cor cinemática para tornar melhor a imagem."
 
 #: ../../Scripts/Gui/StartupScreen.as:1165
 #: ../../Scripts/Gui/StartupScreen.as:1166
 msgctxt "StartupScreen"
 msgid "Depth of Field"
-msgstr "被写界深度"
+msgstr "Profundidade do Campo de Visão"
 
 #: ../../Scripts/Gui/StartupScreen.as:1166
 #: ../../Scripts/Gui/StartupScreen.as:1167
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
-msgstr "ピントの合っていない物体をぼかします。"
+msgstr "Desfoca objetos fora do campo de visão."
 
 #: ../../Scripts/Gui/StartupScreen.as:1168
 #: ../../Scripts/Gui/StartupScreen.as:1206
@@ -1229,7 +1242,7 @@ msgstr "ピントの合っていない物体をぼかします。"
 #: ../../Scripts/Gui/StartupScreen.as:1229
 msgctxt "StartupScreen"
 msgid "Low"
-msgstr "低"
+msgstr "Baixo"
 
 #: ../../Scripts/Gui/StartupScreen.as:1169
 #: ../../Scripts/Gui/StartupScreen.as:1207
@@ -1237,7 +1250,7 @@ msgstr "低"
 #: ../../Scripts/Gui/StartupScreen.as:1208
 msgctxt "StartupScreen"
 msgid "Medium"
-msgstr "中"
+msgstr "Médio"
 
 #: ../../Scripts/Gui/StartupScreen.as:1170
 #: ../../Scripts/Gui/StartupScreen.as:1208
@@ -1247,37 +1260,40 @@ msgstr "中"
 #: ../../Scripts/Gui/StartupScreen.as:1231
 msgctxt "StartupScreen"
 msgid "High"
-msgstr "高"
+msgstr "Alto"
 
 #: ../../Scripts/Gui/StartupScreen.as:1173
 #: ../../Scripts/Gui/StartupScreen.as:1174
 msgctxt "StartupScreen"
 msgid "Post-process"
-msgstr "後処理"
+msgstr "Pós-Processamento"
 
 #: ../../Scripts/Gui/StartupScreen.as:1174
 #: ../../Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid ""
 "Post-process modifies the image to make it look better and more realistic."
-msgstr "後処理により描画された画面を加工しより良く見せます。"
+msgstr ""
+"O Pós-processamento modifica a imagem para parecer melhor e mais realista."
 
 #: ../../Scripts/Gui/StartupScreen.as:1181
 #: ../../Scripts/Gui/StartupScreen.as:1182
 msgctxt "StartupScreen"
 msgid ""
-"Particles|Low:Artifact occurs when a particle intersects other "
-"objects.|Medium:Particle intersects objects smoothly.|High:Particle "
-"intersects objects smoothly, and some objects casts their shadow to "
-"particles."
+"Particles|Low:Artifact occurs when a particle intersects other objects.|"
+"Medium:Particle intersects objects smoothly.|High:Particle intersects "
+"objects smoothly, and some objects casts their shadow to particles."
 msgstr ""
-"パーティクル|低:パーティクルが他のオブジェクトと交差すると鋭い境界が現れます。|中:パーティクルは他のオブジェクトと滑らかに交わります。|高:パーティクルは他のオブジェクトと滑らかに交わります。また一部のオブジェクトがパーティクルに影を落とします。"
+"Partículas|Poucas:Artefactos ocorrem quando a partícula interseta outro "
+"objeto.|Algumas:Partículas intersetam objetos sem problemas.|Muitas:"
+"Partículas intersetam objetos sem problemas, alguns objetos transmitem a sua "
+"sombra para estas."
 
 #: ../../Scripts/Gui/StartupScreen.as:1191
 #: ../../Scripts/Gui/StartupScreen.as:1192
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
-msgstr "動的ライト"
+msgstr "Luzes Dinâmicas"
 
 #: ../../Scripts/Gui/StartupScreen.as:1193
 #: ../../Scripts/Gui/StartupScreen.as:1194
@@ -1285,25 +1301,27 @@ msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
 "impression."
-msgstr "一部のオブジェクトが発光するようにし、エネルギーを発しているような印象を与えます。"
+msgstr ""
+"Dá a habilidade de emitir luz a alguns objetos para lhes dar uma impressão "
+"de emitir energia."
 
 #: ../../Scripts/Gui/StartupScreen.as:1196
 #: ../../Scripts/Gui/StartupScreen.as:1197
 msgctxt "StartupScreen"
 msgid "Shadows"
-msgstr "影"
+msgstr "Sombras"
 
 #: ../../Scripts/Gui/StartupScreen.as:1197
 #: ../../Scripts/Gui/StartupScreen.as:1198
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
-msgstr "動的なオブジェクトも影が描画されるようにします。"
+msgstr "Objetos não-estáticos possuem sombra."
 
 #: ../../Scripts/Gui/StartupScreen.as:1199
 #: ../../Scripts/Gui/StartupScreen.as:1200
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
-msgstr "ボリューメトリックフォグ"
+msgstr "Névoa Volumétrica"
 
 #: ../../Scripts/Gui/StartupScreen.as:1200
 #: ../../Scripts/Gui/StartupScreen.as:1201
@@ -1311,13 +1329,15 @@ msgctxt "StartupScreen"
 msgid ""
 "Simulates shadow being casted to the fog particles using a super highly "
 "computationally demanding algorithm. "
-msgstr "非常に計算量が膨大なアルゴリズムを使用することにより、大気中の霧の粒子に影が落とされる様子をシミュレーションします。"
+msgstr ""
+"Simula a projeção de sombra para as partículas do nevoeiro usando um "
+"algoritmo exigente altamente computacional."
 
 #: ../../Scripts/Gui/StartupScreen.as:1203
 #: ../../Scripts/Gui/StartupScreen.as:1204
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
-msgstr "物理ベースライティング"
+msgstr "Iluminação baseada fisicamente"
 
 #: ../../Scripts/Gui/StartupScreen.as:1204
 #: ../../Scripts/Gui/StartupScreen.as:1205
@@ -1325,13 +1345,13 @@ msgctxt "StartupScreen"
 msgid ""
 "Uses more accurate approximation techniques to decide the brightness of "
 "objects."
-msgstr "直接反射光の明るさを物理的に正確な手法を用いて計算します。"
+msgstr "Usa técnicas de aproximação melhores que decidem o brilho dos objetos."
 
 #: ../../Scripts/Gui/StartupScreen.as:1211
 #: ../../Scripts/Gui/StartupScreen.as:1212
 msgctxt "StartupScreen"
 msgid "Direct Lights"
-msgstr "直接光"
+msgstr "Luzes Diretas"
 
 #: ../../Scripts/Gui/StartupScreen.as:1212
 #: ../../Scripts/Gui/StartupScreen.as:1213
@@ -1339,7 +1359,9 @@ msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
 "appearance."
-msgstr "物体(大気含む)に直接当たった光がどのようにその外観に影響するかを制御します。"
+msgstr ""
+"Controlam como a luz reage ao encontrar um material e como a atmosfera afeta "
+"diretamente a sua aparência"
 
 #: ../../Scripts/Gui/StartupScreen.as:1222
 #: ../../Scripts/Gui/StartupScreen.as:1223
@@ -1351,46 +1373,51 @@ msgid ""
 "and refractions are rendered at the highest quality using screen-space "
 "techniques."
 msgstr ""
-"水シェーダー|オフ:水は通常のブロックと同じように描画されます。|レベル 1:屈折と太陽光の反射が描画されます。|レベル "
-"2:屈折・太陽光の反射に加え、波やその他の反射も描画されます。|レベル 3:スクリーンスペース手法を用いることにより、屈折と反射を最高品質で描画します。"
+"Shaders da Água|Nenhum:A água é renderizada da mesma maneira que os blocos "
+"normais.|Nível 1:Refração e a reflexão do sol são simuladas.|Nível 2:As "
+"ondas da água são simuladas assim como a reflexão e a refração.|Nível 3:"
+"Reflexões e refrações são renderizadas na qualidade máxima usando técnicas "
+"do espaço do ecrã."
 
 #: ../../Scripts/Gui/StartupScreen.as:1229
 #: ../../Scripts/Gui/StartupScreen.as:1230
 msgctxt "StartupScreen"
 msgid "Med"
-msgstr "中"
+msgstr "Méd"
 
 #: ../../Scripts/Gui/StartupScreen.as:1231
 #: ../../Scripts/Gui/StartupScreen.as:1232
 msgctxt "StartupScreen"
 msgid "Ultra"
-msgstr "最高"
+msgstr "Ultra"
 
 #: ../../Scripts/Gui/StartupScreen.as:1234
 #: ../../Scripts/Gui/StartupScreen.as:1235
 msgctxt "StartupScreen"
 msgid "Shader Effects"
-msgstr "シェーダー効果"
+msgstr "Efeitos do Shader"
 
 #: ../../Scripts/Gui/StartupScreen.as:1234
 #: ../../Scripts/Gui/StartupScreen.as:1235
 msgctxt "StartupScreen"
 msgid "Special effects."
-msgstr "特殊効果。"
+msgstr "Efeitos especiais."
 
 #: ../../Scripts/Gui/StartupScreen.as:1251
 #: ../../Scripts/Gui/StartupScreen.as:1252
 msgctxt "StartupScreen"
 msgid ""
-"Fast Mode:Reduces the image resolution to make the rendering "
-"faster.|Off|2x|4x"
-msgstr "高速モード:画面解像度を低下させ、描画を高速化します。|オフ|2x|4x"
+"Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
+"4x"
+msgstr ""
+"Modo Rápido:Reduz a resolução da imagem para renderizar mais depressa.|Off|"
+"2x|4x"
 
 #: ../../Scripts/Gui/StartupScreen.as:1464
 #: ../../Scripts/Gui/StartupScreen.as:1465
 msgctxt "StartupScreen"
 msgid "Audio Settings"
-msgstr "音声の設定"
+msgstr "Definições de Som"
 
 #: ../../Scripts/Gui/StartupScreen.as:1473
 #: ../../Scripts/Gui/StartupScreen.as:1474
@@ -1405,7 +1432,8 @@ msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
 "there isn't such a sound card, software emulation is used."
 msgstr ""
-"OpenALに対応したサウンドカードを使用して音声を処理します。ほとんどの場合このようなサウンドカードがありませんので、ソフトウェアエミュレーションが使用されます。"
+"Usa uma placa de som capaz de processar som com OpenAL. Em alguns casos, "
+"quando não existe nenhuma, a emulação por software é usada."
 
 #: ../../Scripts/Gui/StartupScreen.as:1486
 #: ../../Scripts/Gui/StartupScreen.as:1487
@@ -1421,20 +1449,20 @@ msgid ""
 "features several enhanced features including automatic load control, "
 "dynamics compressor, HRTF-based 3D audio, and high quality reverb."
 msgstr ""
-"YSRはOpenSpadesに最適化された、実験的な3D "
-"HDRサウンドエンジンです。自動負荷制御やダイナミクスコンプレッサー、HRTFベースの立体音響や高音質リバーブエフェクタを備えています。"
+"YSR é um motor de som experimental e optimizado para o OpenSpades. Utiliza "
+"várias funcion"
 
 #: ../../Scripts/Gui/StartupScreen.as:1500
 #: ../../Scripts/Gui/StartupScreen.as:1501
 msgctxt "StartupScreen"
 msgid "Null"
-msgstr "ヌル"
+msgstr "Nulo"
 
 #: ../../Scripts/Gui/StartupScreen.as:1504
 #: ../../Scripts/Gui/StartupScreen.as:1505
 msgctxt "StartupScreen"
 msgid "Disables audio output."
-msgstr "オーディオ出力を無効にします。"
+msgstr "Desativa a saída de som."
 
 #: ../../Scripts/Gui/StartupScreen.as:1515
 #: ../../Scripts/Gui/StartupScreen.as:1539
@@ -1442,7 +1470,7 @@ msgstr "オーディオ出力を無効にします。"
 #: ../../Scripts/Gui/StartupScreen.as:1540
 msgctxt "StartupScreen"
 msgid "Polyphonics"
-msgstr "最大同時発音数"
+msgstr "Polifónicos"
 
 #: ../../Scripts/Gui/StartupScreen.as:1516
 #: ../../Scripts/Gui/StartupScreen.as:1517
@@ -1452,7 +1480,9 @@ msgid ""
 "more processing power, so setting this too high might cause an overload "
 "(especially with a software emulation)."
 msgstr ""
-"同時に発音可能な音声の個数を指定します。この値が大きいと必要な処理能力も増大するため、特にソフトウェアエミュレーションにおいて過負荷状態を生じることがあります。"
+"Especifica quantos sons podem ser tocados em simultâneo. Valores mais altos "
+"necessitam de mais processamento, então, se estiver muito alta, pode causar "
+"sobrecarregamento. (especialmente em software)"
 
 #: ../../Scripts/Gui/StartupScreen.as:1523
 #: ../../Scripts/Gui/StartupScreen.as:1524
@@ -1466,7 +1496,9 @@ msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
 "ambience."
-msgstr "OpenALドライバが提供する拡張機能を利用して臨場感を高めます。"
+msgstr ""
+"Ativa as funcionalidades avançadas disponibilizadas pelo OpenAL para criar "
+"mais ambiente."
 
 #: ../../Scripts/Gui/StartupScreen.as:1540
 #: ../../Scripts/Gui/StartupScreen.as:1541
@@ -1474,13 +1506,15 @@ msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
 "is set, YSR might reduce the number of sounds when an overload is detected."
-msgstr "同時に発音可能な音声の個数を指定します。この値によらず、YSRは過負荷を防ぐために同時発音数を減らすことがあります。"
+msgstr ""
+"Especifica quantos sons podem ser tocados em simultâneo. Não interessa qual "
+"o valor, o YSR vai reduzir o número de sons quando sobrecarregar."
 
 #: ../../Scripts/Gui/StartupScreen.as:1600
 #: ../../Scripts/Gui/StartupScreen.as:1601
 msgctxt "StartupScreen"
 msgid "Language"
-msgstr "言語"
+msgstr "Linguagem"
 
 #: ../../Scripts/Gui/StartupScreen.as:1657
 #: ../../Scripts/Gui/StartupScreen.as:1703
@@ -1488,7 +1522,7 @@ msgstr "言語"
 #: ../../Scripts/Gui/StartupScreen.as:1726
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
-msgstr "不明 ({0})"
+msgstr "Desconhecido ({0})"
 
 #: ../../Scripts/Gui/StartupScreen.as:1659
 #: ../../Scripts/Gui/StartupScreen.as:1673
@@ -1500,7 +1534,7 @@ msgstr "不明 ({0})"
 #: ../../Scripts/Gui/StartupScreen.as:1742
 msgctxt "StartupScreen"
 msgid "System default"
-msgstr "システムデフォルト"
+msgstr "Predefinição do Sistema"
 
 #: ../../Scripts/Gui/StartupScreen.as:1722
 #: ../../Scripts/Gui/StartupScreen.as:1768
@@ -1508,7 +1542,7 @@ msgstr "システムデフォルト"
 #: ../../Scripts/Gui/StartupScreen.as:1791
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
-msgstr "クリップボードにコピー"
+msgstr "Copiar para a Área de Trans."
 
 #: ../../Scripts/Gui/StartupScreen.as:1758
 #: ../../Scripts/Gui/StartupScreen.as:1804
@@ -1516,7 +1550,7 @@ msgstr "クリップボードにコピー"
 #: ../../Scripts/Gui/StartupScreen.as:1827
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
-msgstr "高度な設定"
+msgstr "Definições Avançadas"
 
 #: ../../Scripts/Gui/StartupScreen.as:1767
 #: ../../Scripts/Gui/StartupScreen.as:1813
@@ -1524,47 +1558,48 @@ msgstr "高度な設定"
 #: ../../Scripts/Gui/StartupScreen.as:1836
 msgctxt "StartupScreen"
 msgid "Filter"
-msgstr "フィルタ"
+msgstr "Filtro"
 
 #: ../../Scripts/Gui/MessageBox.as:144
 msgctxt "MessageBox"
 msgid "Cancel"
-msgstr "キャンセル"
+msgstr "Cancelar"
 
 #: ../../Scripts/Gui/StartupScreen.as:1613
 msgctxt "StartupScreen"
 msgid "Reset"
-msgstr "リセット"
+msgstr "Resetar"
 
 #: ../../Scripts/Gui/StartupScreen.as:1616
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
-msgstr "設定を全てリセット"
+msgstr "Resetar Todas as Definições"
 
 #: ../../Scripts/Gui/StartupScreen.as:1628
 #: ../../Scripts/Gui/StartupScreen.as:1652
 msgctxt "StartupScreen"
 msgid ""
 "Are you sure to reset all settings? They include (but are not limited to):"
-msgstr "設定を全てリセットしますか？対象となる設定には以下のものが含まれます:"
+msgstr ""
+"Deseja resetar todas as definições? isto inclui (mas não está limitado a):"
 
 #: ../../Scripts/Gui/StartupScreen.as:1629
 #: ../../Scripts/Gui/StartupScreen.as:1653
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
-msgstr "全ての映像・音声設定"
+msgstr "Todas as definições gráficas/som"
 
 #: ../../Scripts/Gui/StartupScreen.as:1630
 #: ../../Scripts/Gui/StartupScreen.as:1654
 msgctxt "StartupScreen"
 msgid "All key bindings"
-msgstr "全てのキー割り当て"
+msgstr "Todas as teclas definidas"
 
 #: ../../Scripts/Gui/StartupScreen.as:1631
 #: ../../Scripts/Gui/StartupScreen.as:1655
 msgctxt "StartupScreen"
 msgid "Your player name"
-msgstr "プレイヤー名"
+msgstr "O teu nome de Jogador"
 
 #: ../../Scripts/Gui/StartupScreen.as:1633
 #: ../../Scripts/Gui/StartupScreen.as:1632
@@ -1573,29 +1608,50 @@ msgctxt "StartupScreen"
 msgid ""
 "Other advanced settings only accessible through '{0}' tab and in-game "
 "commands"
-msgstr "その他の高度な設定"
+msgstr ""
+"Outras definições avançadas podem ser apenas acessíveis através do separador "
+"'{0} e em comandos de jogo"
 
 #: ../../Scripts/Gui/StartupScreen.as:1613
 msgctxt "StartupScreen"
 msgid "Tools"
-msgstr "ツール"
+msgstr "Ferramentas"
 
 #: ../../Scripts/Gui/StartupScreen.as:1646
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
-msgstr "設定ディレクトリを開いている最中に不明なエラーが発生しました。"
+msgstr ""
+"Um erro desconhecido ocorreu enquanto se abria o diretório de configurações."
 
 #: ../../Scripts/Gui/StartupScreen.as:1625
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
-msgstr "設定フォルダをエクスプローラで開く"
+msgstr "Abrir a Pasta de Configs. no Explorador"
 
 #: ../../Scripts/Gui/StartupScreen.as:1627
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
-msgstr "設定フォルダをFinderで表示"
+msgstr "Revelar a Pasta de Configs. no Finder"
 
 #: ../../Scripts/Gui/StartupScreen.as:1629
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
-msgstr "設定フォルダを開く"
+msgstr "Abrir a Pasta de Configs."
+
+msgctxt "Preferences"
+msgid "Weapon Spread Guide"
+msgstr "Depurar Propagação de Balas"
+
+msgctxt "StartupScreen"
+msgid ""
+"Water Shader|None:Water is rendered in the same way that normal blocks are "
+"done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving "
+"water is simulated as well as reflection and refraction."
+msgstr ""
+"Shader de Água|Nenhum:A água é renderizada da mesma maneira que os blocos.|"
+"Level 1:Refração e o Sol refletido são simulados.|Level 1:Ondas de água são "
+"simulados assim como a reflexão e a refração."
+
+msgctxt "Preferences"
+msgid "Debug Hit Detection"
+msgstr "Depurar Deteção de Colisão"

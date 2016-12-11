@@ -36,6 +36,8 @@
 #include <Core/FileManager.h>
 #include <Core/Settings.h>
 #include <OpenSpades.h>
+#include <Core/ShellApi.h>
+#include <Gui/Main.h>
 
 #ifdef __APPLE__
 #elif __unix
@@ -55,8 +57,6 @@ SPADES_SETTING(r_dlights);
 SPADES_SETTING(r_water);
 SPADES_SETTING(r_multisamples);
 SPADES_SETTING(r_fxaa);
-SPADES_SETTING(r_depthBits);
-SPADES_SETTING(r_colorBits);
 SPADES_SETTING(r_videoWidth);
 SPADES_SETTING(r_videoHeight);
 SPADES_SETTING(r_fullscreen);
@@ -99,10 +99,16 @@ namespace spades {
 		void StartupScreenHelper::ExamineSystem() {
 			SPADES_MARK_FUNCTION();
 
+			// clear capability report
+			// (this function can be called multiple times via StartupScreenHelper::FixConfig)
+			reportLines.clear();
+			report.clear();
+
 			// check installed locales
 			SPLog("Checking installed locales");
 
 			auto localeDirectories = FileManager::EnumFiles("Locales");
+			locales.clear();
 			for (const std::string &localeInfoName : localeDirectories) {
 				static std::regex localeInfoRegex("[-a-zA-Z0-9_]+\\.json");
 				if (!std::regex_match(localeInfoName, localeInfoRegex)) {
@@ -603,6 +609,31 @@ namespace spades {
 					  }
 				  }));
 			}
+		}
+
+		void StartupScreenHelper::FixConfigs() { ExamineSystem(); }
+
+		std::string StartupScreenHelper::GetOperatingSystemType() {
+#if defined(OS_PLATFORM_LINUX)
+			return "Linux";
+#elif defined(TARGET_OS_MAC)
+			return "Mac";
+#elif defined(OS_PLATFORM_WINDOWS)
+			return "Windows";
+#else
+			return std::string{};
+#endif
+		}
+
+		bool StartupScreenHelper::BrowseUserDirectory() {
+			std::string path = g_userResourceDirectory;
+
+			if (path.empty()) {
+				SPLog("Cannot open the user resource directory: g_userResourceDirectory is empty.");
+				return false;
+			}
+
+			return ShowDirectoryInShell(path);
 		}
 
 		void StartupScreenHelper::Start() {

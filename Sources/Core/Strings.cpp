@@ -41,7 +41,7 @@ DEFINE_SPADES_SETTING(core_locale, "");
 static std::string GetUserLocale() {
 	SPADES_MARK_FUNCTION();
 	spades::DynamicLibrary kernel32("kernel32");
-	auto *GetUserDefaultLocaleName = reinterpret_cast<int (*)(wchar_t *, int)>(
+	auto *GetUserDefaultLocaleName = reinterpret_cast<int(__stdcall *)(wchar_t *, int)>(
 	  kernel32.GetSymbolOrNull("GetUserDefaultLocaleName"));
 	if (GetUserDefaultLocaleName) {
 		char buf[256];

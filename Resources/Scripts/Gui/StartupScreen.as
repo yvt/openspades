@@ -19,6 +19,7 @@
  */
 
 #include "DropDownList.as"
+#include "MessageBox.as"
 
 namespace spades {
 
@@ -1122,7 +1123,7 @@ namespace spades {
 				cfg.AddRow(StartupScreenConfigSelectItemEditor(ui,
 					StartupScreenGraphicsAntialiasConfig(ui), "0|2|4|fxaa",
 					_Tr("StartupScreen",
-					"Antialias:Enables a technique to improve the appearance of high-constrast edges.\n\n"
+					"Antialias:Enables a technique to improve the appearance of high-contrast edges.\n\n"
 					"MSAA: Performs antialiasing by generating an intermediate high-resolution image. "
 					"Looks best, but doesn't cope with some settings.\n\n"
 					"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
@@ -1608,10 +1609,78 @@ namespace spades {
 				e.Bounds = AABB2(160.f, 0.f, 300.f, 24.f);
 				@locale = e;
 			}
+
+			AddLabel(0.f, 30.f, 30.f, _Tr("StartupScreen", "Tools"));
+			{
+				spades::ui::Button button(Manager);
+				button.Caption = _Tr("StartupScreen", "Reset All Settings");
+				button.Bounds = AABB2(160.f, 30.f, 350.f, 30.f);
+				@button.Activated = spades::ui::EventHandler(this.OnResetSettingsPressed);
+				AddChild(button);
+			}
+			{
+				spades::ui::Button button(Manager);
+				string osType = helper.OperatingSystemType;
+				if (osType == "Windows") {
+					button.Caption = _Tr("StartupScreen", "Open Config Folder in Explorer");
+				} else if (osType == "Mac") {
+					button.Caption = _Tr("StartupScreen", "Reveal Config Folder in Finder");
+				} else {
+					button.Caption = _Tr("StartupScreen", "Browse Config Folder");
+				}
+				button.Bounds = AABB2(160.f, 66.f, 350.f, 30.f);
+				@button.Activated = spades::ui::EventHandler(this.OnBrowseUserDirectoryPressed);
+				AddChild(button);
+			}
 		}
 
 		void LoadConfig() {
 			locale.LoadConfig();
+		}
+
+		private void OnBrowseUserDirectoryPressed(spades::ui::UIElement@) {
+			if (helper.BrowseUserDirectory()) {
+				return;
+			}
+
+			string msg = _Tr("StartupScreen", "An unknown error has occurred while opening the config directory.");
+			AlertScreen al(Parent, msg, 100.f);
+			al.Run();
+		}
+
+		private void OnResetSettingsPressed(spades::ui::UIElement@) {
+			string msg = _Tr("StartupScreen", "Are you sure to reset all settings? They include (but are not limited to):") + "\n" +
+				"- " + _Tr("StartupScreen", "All graphics/audio settings") + "\n" +
+				"- " + _Tr("StartupScreen", "All key bindings") + "\n" +
+				"- " + _Tr("StartupScreen", "Your player name") + "\n" +
+				"- " + _Tr("StartupScreen", "Other advanced settings only accessible through '{0}' tab and in-game commands",
+					_Tr("StartupScreen", "Advanced"));
+			ConfirmScreen al(Parent, msg, 200.f);
+			@al.Closed = spades::ui::EventHandler(OnResetSettingsConfirmed);
+			al.Run();
+		}
+
+		private void OnResetSettingsConfirmed(spades::ui::UIElement@ sender) {
+			if (!cast<ConfirmScreen>(sender).Result) {
+				return;
+			}
+
+			ResetAllSettings();
+
+			// Reload the startup screen so the language config takes effect
+			ui.Reload();
+		}
+
+		private void ResetAllSettings() {
+			string[]@ names = GetAllConfigNames();
+
+			for(uint i = 0, count = names.length; i < count; i++) {
+				ConfigItem item(names[i]);
+				item.StringValue = item.DefaultValue;
+			}
+
+			// Some of default values may be infeasible for the user's system.
+			helper.FixConfigs();
 		}
 
 	}
