@@ -36,7 +36,6 @@ if(NOT GLEW_FOUND)
 	message(FATAL_ERROR "GLEW not found, please install it and make sure CMake can find it (add it to the PATH)")
 endif()
 
-
 include(FindZLIB)
 if(NOT ZLIB_FOUND)
 	message(FATAL_ERROR "ZLIB not found, manually set ZLIB_ROOT in CMake")
@@ -46,6 +45,13 @@ include(FindCURL)
 if(NOT CURL_FOUND)
 	message(FATAL_ERROR "cURL not found, please install it (and make sure it's in your path)")
 endif()
+
+include(FindFreetype)
+if(NOT FREETYPE_FOUND)
+	message(FATAL_ERROR "FreeType not found, please install it (and make sure it's in your path)")
+endif()
+
+# TODO: add FreeType2
 
 if(CMAKE_COMPILER_IS_GNUCXX)
 	# GCC C++11 support
@@ -190,7 +196,8 @@ if(OPENGL_INCLUDE_DIR)
 endif()
 include_directories("${GLEW_INCLUDE_DIR}")
 include_directories("${ZLIB_INCLUDE_DIR}")
-include_directories("${CURL_INCLUDE_DIRS}")
+include_directories(${CURL_INCLUDE_DIRS})
+include_directories(${FREETYPE_INCLUDE_DIRS})
 
 add_subdirectory(Resources)
 add_subdirectory(Sources)
@@ -211,9 +218,9 @@ if(UNIX AND NOT APPLE)
 
 	# copyright file
 	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Debian/copyright DESTINATION ${OPENSPADES_INSTALL_DOC}/)
-	
+
 	# install asset paks (including non-GPL one)
-	install(FILES 
+	install(FILES
 		${CMAKE_BINARY_DIR}/Resources/pak000-Nonfree.pak
 		${CMAKE_BINARY_DIR}/Resources/pak002-Base.pak
 		${CMAKE_BINARY_DIR}/Resources/pak005-Models.pak
@@ -248,7 +255,7 @@ set(CPACK_PACKAGE_NAME "OpenSpades")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Open-source clone of Ace of Spades")
 set(CPACK_PACKAGE_DESCRIPTION "Open-source clone of Ace of Spades - free FPS sandbox game")
 set(CPACK_PACKAGE_VENDOR "yvt, assorted")
-set(CPACK_PACKAGE_CONTACT "yvt <i@yvt.jp>") 
+set(CPACK_PACKAGE_CONTACT "yvt <i@yvt.jp>")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 SET(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
@@ -282,12 +289,12 @@ elseif(UNIX AND NOT APPLE)
 	INCLUDE(InstallRequiredSystemLibraries)
 	set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Open-source clone of Ace of Spades - free FPS sandbox game\n OpenSpades is a clone of Voxlap Ace of Spades 0.75, which is a free \n multiplayer game created by Ben Aksoy.\n .\n Here are some features:\n .\n   - Ability to connect to vanilla/pyspades server\n   - Better performance on some modern computers/netbooks\n   - Sophisticated graphics\n   - Fully open source (GPLv3 compliant)\n   - Cross-platform")
 	set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_SOURCE_DIR}/Resources/Unix/Control/postinst)
-	set(CPACK_PACKAGING_INSTALL_PREFIX "/usr") 
+	set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
 	SET(CPACK_STRIP_FILES "bin/openspades")
 	SET(CPACK_SET_DESTDIR "on")
 	SET(CPACK_GENERATOR "DEB;TGZ")
 	SET(CPACK_DEBIAN_PACKAGE_DEPENDS
-		"libc6 (>= 2.19), libgcc1 (>= 1:4.9), libstdc++6 (>= 4.8.2), zlib1g (>= 1:1.2.8), libcurl3 (>= 7.35.0), libglew1.10 (>= 1.10.0), libsdl2-2.0-0 (>= 2.0.2), libsdl2-image-2.0-0 (>= 2.0.0)")
+		"libc6 (>= 2.19), libgcc1 (>= 1:4.9), libstdc++6 (>= 4.8.2), zlib1g (>= 1:1.2.8), libcurl3 (>= 7.35.0), libglew1.10 (>= 1.10.0), libsdl2-2.0-0 (>= 2.0.2), libsdl2-image-2.0-0 (>= 2.0.0), libfreetype6 (>= 2.4.0)")
 	SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 	SET(CPACK_DEBIAN_PACKAGE_SECTION "games")
 	SET(CPACK_DEBIAN_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})

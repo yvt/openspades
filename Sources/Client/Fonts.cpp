@@ -18,22 +18,57 @@
 
  */
 
-#include "Fonts.h"
+#include <memory>
+#include <regex>
+
+#include "FTFont.h"
 #include "FontData.h"
+#include "Fonts.h"
 #include "IRenderer.h"
 #include "Quake3Font.h"
+#include <Core/FileManager.h>
 
 namespace spades {
 	namespace client {
-		IFont *CreateSquareDesignFont(IRenderer *renderer) {
-			auto *designFont =
-			  new Quake3Font(renderer, renderer->RegisterImage("Gfx/Fonts/UnsteadyOversteer.tga"),
-			                 (const int *)UnsteadyOversteerMap, 30, 18);
-			designFont->SetGlyphYRange(9.f, 24.f);
-			SPLog("Font 'Unsteady Oversteer' Loaded");
-			return designFont;
+		namespace {
+			Handle<ngclient::FTFontSet> guiFontSet;
 		}
-		IFont *CreateLargeFont(IRenderer *renderer) {
+
+		FontManager::FontManager() {
+			SPLog("Loading built-in fonts");
+
+			guiFontSet.Set(new ngclient::FTFontSet(), false);
+
+			if (FileManager::FileExists("Gfx/Fonts/AlteDIN1451.ttf")) {
+				guiFontSet->AddFace("Gfx/Fonts/AlteDIN1451.ttf");
+				SPLog("Font 'Alte DIN 1451' loaded");
+			} else {
+				SPLog("Font 'Alte DIN 1451' was not found");
+			}
+
+			// Preliminary custom font support
+			auto files = FileManager::EnumFiles("Fonts");
+			static std::regex re(".*\\.(?:otf|ttf|ttc)",
+								 std::regex::icase);
+			for (const auto &name: files) {
+				if (!std::regex_match(name, re)) {
+					continue;
+				}
+				SPLog("Loading custom font '%s'", name.c_str());
+
+				auto path = "Fonts/" + name;
+				guiFontSet->AddFace(path);
+			}
+		}
+
+		FontManager::~FontManager() {}
+
+		FontManager &FontManager::GetInstance() {
+			static FontManager manager;
+			return manager;
+		}
+
+		IFont *FontManager::CreateSquareDesignFont(IRenderer *renderer) {
 			auto *bigTextFont =
 			  new Quake3Font(renderer, renderer->RegisterImage("Gfx/Fonts/SquareFontBig.png"),
 			                 (const int *)SquareFontBigMap, 48, 8, true);
@@ -41,12 +76,12 @@ namespace spades {
 			SPLog("Font 'SquareFont (Large)' Loaded");
 			return bigTextFont;
 		}
-		IFont *CreateGuiFont(IRenderer *renderer) {
-			auto *font =
-			  new Quake3Font(renderer, renderer->RegisterImage("Gfx/Fonts/CMUSansCondensed.png"),
-			                 (const int *)CMUSansCondensedMap, 20, 4, true);
-			font->SetGlyphYRange(2.f, 14.f);
-			SPLog("Font 'CMUSansCondensed' Loaded");
+		IFont *FontManager::CreateLargeFont(IRenderer *renderer) {
+			auto *font = new ngclient::FTFont(renderer, guiFontSet, 34.f, 48.f);
+			return font;
+		}
+		IFont *FontManager::CreateGuiFont(IRenderer *renderer) {
+			auto *font = new ngclient::FTFont(renderer, guiFontSet, 16.f, 20.f);
 			return font;
 		}
 	}

@@ -237,7 +237,7 @@ namespace spades {
 					Vector2 size = bFont->Measure(msg);
 					Vector2 pos;
 					pos.x = item.rect.GetMinX() + (item.rect.GetWidth() - size.x) / 2.f + 2.f;
-					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f + 2.f;
+					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f;
 					bFont->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
 					                  MakeVector4(0, 0, 0, 0.4f));
 				} else {
@@ -251,7 +251,7 @@ namespace spades {
 					Vector2 size = font->Measure(msg);
 					Vector2 pos;
 					pos.x = item.rect.GetMinX() + 5.f;
-					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f + 2.f;
+					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f;
 					font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
 					                 MakeVector4(0, 0, 0, 0.4f));
 					if (index > 0) {

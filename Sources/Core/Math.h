@@ -221,6 +221,8 @@ namespace spades {
 			float scale = 1.f / GetLength();
 			return Make(x * scale, y * scale);
 		}
+
+		Vector2 Floor() const { return Vector2(floorf(x), floorf(y)); }
 	};
 
 	class Vector3 {

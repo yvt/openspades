@@ -116,9 +116,9 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
 
-			designFont.Set(CreateSquareDesignFont(renderer), false);
-			textFont.Set(CreateGuiFont(renderer), false);
-			bigTextFont.Set(CreateLargeFont(renderer), false);
+			designFont.Set(FontManager::GetInstance().CreateSquareDesignFont(renderer), false);
+			textFont.Set(FontManager::GetInstance().CreateGuiFont(renderer), false);
+			bigTextFont.Set(FontManager::GetInstance().CreateLargeFont(renderer), false);
 
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));

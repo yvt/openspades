@@ -159,7 +159,7 @@ namespace spades {
 			renderer->DrawImage(
 			  image, AABB2(contentsRight, teamBarTop + teamBarHeight - size.y, -size.x, size.y));
 
-			font = client->bigTextFont;
+			font = client->designFont;
 			str = world->GetTeam(0).name;
 			pos.x = contentsLeft + 110.f;
 			pos.y = teamBarTop + 5.f;
@@ -294,7 +294,7 @@ namespace spades {
 		}
 
 		void ScoreboardView::DrawSpectators(float top, float centerX) {
-			IFont *bigFont = client->bigTextFont;
+			IFont *bigFont = client->designFont;
 			IFont *font = client->textFont;
 			char buf[256];
 			std::vector<ScoreboardEntry> entries;

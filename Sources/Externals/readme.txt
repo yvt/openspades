@@ -11,12 +11,16 @@ Externals
 +---include/
 |   +---zconf.h
 |   +---zlib.h
+|   +---ft2build.h
 |   |   
 |   +---curl/
 |   |   \---(All curl headers)
 |   |       
 |   +---GL/
 |   |   \---(All GL headers)
+|   |       
+|   +---freetype/
+|   |   \---(All FreeType 2.7 headers)
 |   |       
 |   \---SDL2/
 |       \---(All SD2L headers)
@@ -28,8 +32,8 @@ You may not need to hunt and compile the headers and libraries all by yourself:
  * There are pre-compiled zip files containing all required files for some versions of Visual Studio
  * They're already packed in the correct layout. You just need to merge.
 
-Visual Studio 2010:
-https://dl.dropboxusercontent.com/u/37804131/OpenSpades-Externals-Windows.zip
-
 Visual Studio 2015:
-https://www.dropbox.com/s/pfvk8tns1qgkxpr/OpenSpades-Externals-Windows-VS2015.rar?dl=1
+https://dl.dropboxusercontent.com/u/37804131/openspades/OpenSpades-Externals-Windows-VS2015-2.zip
+
+Visual Studio 2010 (FreeType is missing):
+https://dl.dropboxusercontent.com/u/37804131/OpenSpades-Externals-Windows.zip
