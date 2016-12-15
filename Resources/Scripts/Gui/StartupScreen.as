@@ -1606,7 +1606,7 @@ namespace spades {
 			{
 				StartupScreenLocaleEditor e(ui);
 				AddChild(e);
-				e.Bounds = AABB2(160.f, 0.f, 300.f, 24.f);
+				e.Bounds = AABB2(160.f, 0.f, 400.f, 24.f);
 				@locale = e;
 			}
 
@@ -1715,7 +1715,7 @@ namespace spades {
 			{
 				StartupScreenDropdownListDropdownButton e(Manager);
 				AddChild(e);
-				e.Bounds = AABB2(0.f, 0.f, 300.f, 24.f);
+				e.Bounds = AABB2(0.f, 0.f, 400.f, 24.f);
 				@e.Activated = spades::ui::EventHandler(this.ShowDropdown);
 				@dropdownButton = e;
 			}
