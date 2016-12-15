@@ -35,15 +35,17 @@
 namespace spades {
 	namespace gui {
 		StartupScreen::StartupScreen(client::IRenderer *r, client::IAudioDevice *a,
-		                             StartupScreenHelper *helper)
-		    : renderer(r), audioDevice(a), startRequested(false), helper(helper) {
+		                             StartupScreenHelper *helper, client::FontManager *fontManager)
+		    : renderer(r),
+		      audioDevice(a),
+		      startRequested(false),
+		      helper(helper),
+		      fontManager(fontManager) {
 			SPADES_MARK_FUNCTION();
 			if (r == NULL)
 				SPInvalidArgument("r");
 			if (a == NULL)
 				SPInvalidArgument("a");
-
-			font = client::FontManager::GetInstance().CreateGuiFont(r);
 
 			helper->BindStartupScreen(this);
 
@@ -197,10 +199,11 @@ namespace spades {
 			renderer->DrawImage(img, AABB2(0, 0, scrSize.x, scrSize.y));
 
 			std::string str = "NOW LOADING";
-			Vector2 size = font->Measure(str);
+			Vector2 size = fontManager->GetGuiFont()->Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
 			pos -= size;
-			font->DrawShadow(str, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.5));
+			fontManager->GetGuiFont()->DrawShadow(str, pos, 1.f, MakeVector4(1, 1, 1, 1),
+			                                      MakeVector4(0, 0, 0, 0.5));
 
 			renderer->FrameDone();
 			renderer->Flip();
@@ -222,12 +225,12 @@ namespace spades {
 
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction uiFactory("StartupScreenUI@ CreateStartupScreenUI(Renderer@, "
-			                                "AudioDevice@, Font@, StartupScreenHelper@)");
+			                                "AudioDevice@, FontManager@, StartupScreenHelper@)");
 			{
 				ScriptContextHandle ctx = uiFactory.Prepare();
 				ctx->SetArgObject(0, renderer);
 				ctx->SetArgObject(1, audioDevice);
-				ctx->SetArgObject(2, font);
+				ctx->SetArgObject(2, fontManager);
 				ctx->SetArgObject(3, &*helper);
 
 				ctx.ExecuteChecked();
@@ -267,7 +270,9 @@ namespace spades {
 					return new audio::NullDevice();
 				}
 				virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) {
-					view.Set(new StartupScreen(renderer, dev, helper), true);
+					Handle<client::FontManager> fontManager(new client::FontManager(renderer),
+					                                        false);
+					view.Set(new StartupScreen(renderer, dev, helper, fontManager), true);
 					return view;
 				}
 

@@ -31,58 +31,62 @@
 namespace spades {
 	namespace client {
 		namespace {
-			Handle<ngclient::FTFontSet> guiFontSet;
+			struct GlobalFontInfo {
+				Handle<ngclient::FTFontSet> guiFontSet;
+
+				GlobalFontInfo() {
+					SPLog("Loading built-in fonts");
+
+					guiFontSet.Set(new ngclient::FTFontSet(), false);
+
+					if (FileManager::FileExists("Gfx/Fonts/AlteDIN1451.ttf")) {
+						guiFontSet->AddFace("Gfx/Fonts/AlteDIN1451.ttf");
+						SPLog("Font 'Alte DIN 1451' loaded");
+					} else {
+						SPLog("Font 'Alte DIN 1451' was not found");
+					}
+
+					// Preliminary custom font support
+					auto files = FileManager::EnumFiles("Fonts");
+					static std::regex re(".*\\.(?:otf|ttf|ttc)", std::regex::icase);
+					for (const auto &name : files) {
+						if (!std::regex_match(name, re)) {
+							continue;
+						}
+						SPLog("Loading custom font '%s'", name.c_str());
+
+						auto path = "Fonts/" + name;
+						guiFontSet->AddFace(path);
+					}
+				}
+
+				static GlobalFontInfo &GetInstance() {
+					static GlobalFontInfo instance;
+					return instance;
+				}
+			};
 		}
 
-		FontManager::FontManager() {
-			SPLog("Loading built-in fonts");
-
-			guiFontSet.Set(new ngclient::FTFontSet(), false);
-
-			if (FileManager::FileExists("Gfx/Fonts/AlteDIN1451.ttf")) {
-				guiFontSet->AddFace("Gfx/Fonts/AlteDIN1451.ttf");
-				SPLog("Font 'Alte DIN 1451' loaded");
-			} else {
-				SPLog("Font 'Alte DIN 1451' was not found");
+		FontManager::FontManager(IRenderer *renderer) {
+			{
+				auto *font =
+				  new Quake3Font(renderer, renderer->RegisterImage("Gfx/Fonts/SquareFontBig.png"),
+				                 (const int *)SquareFontBigMap, 48, 8, true);
+				font->SetGlyphYRange(11.f, 37.f);
+				SPLog("Font 'SquareFont (Large)' Loaded");
+				squareDesignFont.Set(font, false);
 			}
-
-			// Preliminary custom font support
-			auto files = FileManager::EnumFiles("Fonts");
-			static std::regex re(".*\\.(?:otf|ttf|ttc)",
-								 std::regex::icase);
-			for (const auto &name: files) {
-				if (!std::regex_match(name, re)) {
-					continue;
-				}
-				SPLog("Loading custom font '%s'", name.c_str());
-
-				auto path = "Fonts/" + name;
-				guiFontSet->AddFace(path);
-			}
+			largeFont.Set(
+			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 34.f, 48.f),
+			  false);
+			headingFont.Set(
+			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 20.f, 26.f),
+			  false);
+			guiFont.Set(
+			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 16.f, 20.f),
+			  false);
 		}
 
 		FontManager::~FontManager() {}
-
-		FontManager &FontManager::GetInstance() {
-			static FontManager manager;
-			return manager;
-		}
-
-		IFont *FontManager::CreateSquareDesignFont(IRenderer *renderer) {
-			auto *bigTextFont =
-			  new Quake3Font(renderer, renderer->RegisterImage("Gfx/Fonts/SquareFontBig.png"),
-			                 (const int *)SquareFontBigMap, 48, 8, true);
-			bigTextFont->SetGlyphYRange(11.f, 37.f);
-			SPLog("Font 'SquareFont (Large)' Loaded");
-			return bigTextFont;
-		}
-		IFont *FontManager::CreateLargeFont(IRenderer *renderer) {
-			auto *font = new ngclient::FTFont(renderer, guiFontSet, 34.f, 48.f);
-			return font;
-		}
-		IFont *FontManager::CreateGuiFont(IRenderer *renderer) {
-			auto *font = new ngclient::FTFont(renderer, guiFontSet, 16.f, 20.f);
-			return font;
-		}
 	}
 }

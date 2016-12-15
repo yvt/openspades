@@ -21,6 +21,7 @@
 #include <sstream>
 
 #include "Client.h"
+#include "Fonts.h"
 #include "IAudioChunk.h"
 #include "IAudioDevice.h"
 #include "IFont.h"
@@ -173,7 +174,7 @@ namespace spades {
 		void LimboView::Draw() {
 			Handle<IImage> menuItemImage = renderer->RegisterImage("Gfx/Limbo/MenuItem.png");
 			Handle<IImage> menuItemBigImage = renderer->RegisterImage("Gfx/Limbo/BigMenuItem.png");
-			IFont *font = client->textFont;
+			IFont *font = client->fontManager->GetGuiFont();
 
 			float left = (renderer->ScreenWidth() - contentsWidth) * .5f;
 			float top = renderer->ScreenHeight() - 150.f;
@@ -233,7 +234,7 @@ namespace spades {
 					renderer->DrawImage(menuItemBigImage, item.rect);
 
 					std::string msg = item.text;
-					IFont *bFont = client->textFont;
+					IFont *bFont = client->fontManager->GetGuiFont();
 					Vector2 size = bFont->Measure(msg);
 					Vector2 pos;
 					pos.x = item.rect.GetMinX() + (item.rect.GetWidth() - size.x) / 2.f + 2.f;

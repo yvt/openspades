@@ -281,6 +281,7 @@
 		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
 		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
+		E88344101E03244F000C3E39 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E883440F1E03244F000C3E39 /* FontManager.cpp */; };
 		E88F46591DE1B192009E85E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03F2178EF916000683D4 /* Cocoa.framework */; };
 		E89A5F1E1DF8732200857F65 /* ShellApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1C1DF8732200857F65 /* ShellApi.cpp */; };
 		E89A5F201DF8759200857F65 /* ShellApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1F1DF8759200857F65 /* ShellApi.mm */; };
@@ -546,6 +547,7 @@
 		E88319151792A7CC002ABE6D /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		E88319161792A7CC002ABE6D /* unix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unix.c; sourceTree = "<group>"; };
 		E88319171792A7CC002ABE6D /* win32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = win32.c; sourceTree = "<group>"; };
+		E883440F1E03244F000C3E39 /* FontManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontManager.cpp; sourceTree = "<group>"; };
 		E88EB02D185D9DC500565D07 /* YsrDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YsrDevice.cpp; sourceTree = "<group>"; };
 		E88EB02E185D9DC500565D07 /* YsrDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YsrDevice.h; sourceTree = "<group>"; };
 		E890F30E187046990090AAB8 /* CP437.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CP437.cpp; sourceTree = "<group>"; };
@@ -1354,6 +1356,7 @@
 				E8493DB61A7349030055731A /* Config.h */,
 				E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */,
 				E8F74CFE184C753F0085AA54 /* Clipboard.cpp */,
+				E883440F1E03244F000C3E39 /* FontManager.cpp */,
 			);
 			name = ScriptBindings;
 			path = Sources/ScriptBindings;
@@ -2200,6 +2203,7 @@
 				E82E672018EA7954004DBA18 /* MainScreen.cpp in Sources */,
 				E82E672118EA7954004DBA18 /* MainScreenHelper.cpp in Sources */,
 				E82E672218EA7954004DBA18 /* View.cpp in Sources */,
+				E88344101E03244F000C3E39 /* FontManager.cpp in Sources */,
 				E82E672318EA7954004DBA18 /* Runner.cpp in Sources */,
 				E82E672418EA7954004DBA18 /* StartupScreen.cpp in Sources */,
 				E82E66ED18EA7914004DBA18 /* StartupScreenHelper.cpp in Sources */,

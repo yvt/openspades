@@ -27,7 +27,7 @@ namespace spades {
 	class MainScreenUI {
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
-		private Font@ font;
+		FontManager@ fontManager;
 		MainScreenHelper@ helper;
 
 		spades::ui::UIManager@ manager;
@@ -41,16 +41,16 @@ namespace spades {
         private ConfigItem cg_playerName("cg_playerName");
         private ConfigItem cg_playerNameIsSet("cg_playerNameIsSet", "0");
 
-		MainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, Font@ font, MainScreenHelper@ helper) {
+		MainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, FontManager@ fontManager, MainScreenHelper@ helper) {
 			@this.renderer = renderer;
 			@this.audioDevice = audioDevice;
-			@this.font = font;
+			@this.fontManager = fontManager;
 			@this.helper = helper;
 
 			SetupRenderer();
 
 			@manager = spades::ui::UIManager(renderer, audioDevice);
-			@manager.RootElement.Font = font;
+			@manager.RootElement.Font = fontManager.GuiFont;
 
 			@mainMenu = MainScreenMainMenu(this);
 			mainMenu.Bounds = manager.RootElement.Bounds;
@@ -742,7 +742,7 @@ namespace spades {
 		}
 
 		private void OnSetupPressed(spades::ui::UIElement@ sender) {
-			PreferenceView al(this, PreferenceViewOptions());
+			PreferenceView al(this, PreferenceViewOptions(), ui.fontManager);
 			al.Run();
 		}
 
@@ -832,7 +832,7 @@ namespace spades {
 	}
 
 	MainScreenUI@ CreateMainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice,
-		Font@ font, MainScreenHelper@ helper) {
-		return MainScreenUI(renderer, audioDevice, font, helper);
+		FontManager@ fontManager, MainScreenHelper@ helper) {
+		return MainScreenUI(renderer, audioDevice, fontManager, helper);
 	}
 }

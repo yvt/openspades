@@ -67,13 +67,14 @@ namespace spades {
 		  r_device_client()); // Seed Mersenne twister with non-deterministic 32-bit seed
 
 		Client::Client(IRenderer *r, IAudioDevice *audioDev, const ServerAddress &host,
-		               std::string playerName)
+		               std::string playerName, FontManager *fontManager)
 		    : renderer(r),
 		      audioDevice(audioDev),
 		      playerName(playerName),
 		      hasDelayedReload(false),
 		      hostname(host),
 		      logStream(nullptr),
+		      fontManager(fontManager),
 
 		      readyToClose(false),
 		      scoreboardVisible(false),
@@ -97,7 +98,7 @@ namespace spades {
 		      lastPosSentTime(0.f),
 		      worldSubFrame(0.f),
 		      grenadeVibration(0.f),
-			  grenadeVibrationSlow(0.f),
+		      grenadeVibrationSlow(0.f),
 		      lastMyCorpse(nullptr),
 		      hasLastTool(false),
 
@@ -116,25 +117,22 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
 
-			designFont.Set(FontManager::GetInstance().CreateSquareDesignFont(renderer), false);
-			textFont.Set(FontManager::GetInstance().CreateGuiFont(renderer), false);
-			bigTextFont.Set(FontManager::GetInstance().CreateLargeFont(renderer), false);
-
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));
 
-			chatWindow.reset(new ChatWindow(this, GetRenderer(), textFont, false));
-			killfeedWindow.reset(new ChatWindow(this, GetRenderer(), textFont, true));
+			chatWindow.reset(new ChatWindow(this, GetRenderer(), fontManager->GetGuiFont(), false));
+			killfeedWindow.reset(
+			  new ChatWindow(this, GetRenderer(), fontManager->GetGuiFont(), true));
 
 			hurtRingView.reset(new HurtRingView(this));
-			centerMessageView.reset(new CenterMessageView(this, bigTextFont));
+			centerMessageView.reset(new CenterMessageView(this, fontManager->GetLargeFont()));
 			mapView.reset(new MapView(this, false));
 			largeMapView.reset(new MapView(this, true));
 			scoreboard.reset(new ScoreboardView(this));
 			limbo.reset(new LimboView(this));
 			paletteView.reset(new PaletteView(this));
 			tcView.reset(new TCProgressView(this));
-			scriptedUI.Set(new ClientUI(renderer, audioDev, textFont, this), false);
+			scriptedUI.Set(new ClientUI(renderer, audioDev, fontManager, this), false);
 
 			renderer->SetGameMap(nullptr);
 		}
@@ -249,9 +247,6 @@ namespace spades {
 			paletteView.reset();
 			centerMessageView.reset();
 			hurtRingView.reset();
-			designFont.Set(nullptr);
-			textFont.Set(nullptr);
-			bigTextFont.Set(nullptr);
 			world.reset();
 		}
 

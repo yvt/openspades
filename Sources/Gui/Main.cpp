@@ -33,6 +33,7 @@
 #include "MainScreen.h"
 #include "Runner.h"
 #include <Client/Client.h>
+#include <Client/Fonts.h>
 #include <Client/GameMap.h>
 #include <Core/ConcurrentDispatch.h>
 #include <Core/CpuID.h>
@@ -229,7 +230,8 @@ namespace spades {
 		protected:
 			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                                      spades::client::IAudioDevice *audio) {
-				return new spades::client::Client(renderer, audio, addr, playerName);
+				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
+				return new spades::client::Client(renderer, audio, addr, playerName, fontManager);
 			}
 
 		public:
@@ -244,7 +246,8 @@ namespace spades {
 		protected:
 			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                                      spades::client::IAudioDevice *audio) {
-				return new spades::gui::MainScreen(renderer, audio);
+				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
+				return new spades::gui::MainScreen(renderer, audio, fontManager);
 			}
 
 		public:
