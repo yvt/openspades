@@ -18,7 +18,7 @@ function Make-Pak
 	Echo "Creating $($PakName)..."
 
 	$OutputPak = Join-Path $OutputDirectory $PakName
-	
+
 	# Prepare a temporary directory
 	$TempDir = "mkpak.tmp"
 	if (Test-Path $TempDir) { Remove-Item $TempDir -Recurse -Force }
@@ -43,10 +43,10 @@ function Make-Pak
 	if (Test-Path $OutputPak) { Remove-Item $OutputPak -Force }
 
 	# Create zip archive
-	# PowerShell 5 supports Compress-Archive, but the method used here is 
+	# PowerShell 5 supports Compress-Archive, but the method used here is
 	# faster by a order of magnitude for some reason.
 	# However, it's still much slower than "zip" command on Linux/macOS.
-	[IO.Compression.ZipFile]::CreateFromDirectory($TempDir, $OutputPak, 
+	[IO.Compression.ZipFile]::CreateFromDirectory($TempDir, $OutputPak,
 	  [IO.Compression.CompressionLevel]::Fastest, $false)
 
 	# Clean up
@@ -64,7 +64,7 @@ Make-Pak -PakName pak005-Models.pak -RelativePaths `
 
 Make-Pak -PakName pak010-BaseSkin.pak -RelativePaths `
   License/Credits-pak010-BaseSkin.md,
-  Scripts/Skin, Sounds/Weapons
+  Scripts/Skin, Sounds/Weapons, Models/Weapons
 
 Make-Pak -PakName pak050-Locales.pak -RelativePaths `
   License/Credits-pak050-Locales.md, Locales
