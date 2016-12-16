@@ -506,7 +506,7 @@ namespace spades {
 
 				char buf[64];
 				sprintf(buf, "%d", stockNum);
-				font = fontManager->GetGuiFont();
+				font = fontManager->GetSquareDesignFont();
 				std::string stockStr = buf;
 				Vector2 size = font->Measure(stockStr);
 				Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f - iconHeight);
