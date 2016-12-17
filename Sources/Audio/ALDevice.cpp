@@ -32,7 +32,7 @@
 #include <Core/FileManager.h>
 #include <Core/IAudioStream.h>
 #include <Core/Settings.h>
-#include <Core/WavAudioStream.h>
+#include <Core/AudioStream.h>
 
 DEFINE_SPADES_SETTING(s_maxPolyphonics, "96");
 DEFINE_SPADES_SETTING(s_eax, "1");
@@ -748,16 +748,7 @@ namespace spades {
 		ALAudioChunk *ALDevice::CreateChunk(const char *name) {
 			SPADES_MARK_FUNCTION();
 
-			IStream *stream = NULL;
-			IAudioStream *as = NULL;
-			try {
-				stream = FileManager::OpenForReading(name);
-				as = new WavAudioStream(stream, true);
-			} catch (...) {
-				if (stream)
-					delete stream;
-				throw;
-			}
+			IAudioStream *as = OpenAudioStream(name);
 
 			try {
 				ALAudioChunk *ch = new ALAudioChunk(as);

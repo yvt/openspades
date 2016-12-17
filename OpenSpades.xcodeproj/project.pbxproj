@@ -269,6 +269,11 @@
 		E82E67F018EA7A60004DBA18 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03C4178EE78C000683D4 /* OpenGL.framework */; };
 		E82E67FA18EA7EAB004DBA18 /* font-unifont.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F318EA7EAB004DBA18 /* font-unifont.pak */; };
 		E82E680418EA7F60004DBA18 /* libysrspades.dylib in Resources */ = {isa = PBXBuildFile; fileRef = E82E680318EA7F60004DBA18 /* libysrspades.dylib */; };
+		E83668AA1E05750D00977A63 /* libopus.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E83668A91E05750D00977A63 /* libopus.0.dylib */; };
+		E83668AC1E05751900977A63 /* libopusfile.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E83668AB1E05751900977A63 /* libopusfile.0.dylib */; };
+		E83668AF1E05757B00977A63 /* OpusAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668AD1E05757B00977A63 /* OpusAudioStream.cpp */; };
+		E83668B21E05844E00977A63 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668B01E05844E00977A63 /* AudioStream.cpp */; };
+		E83668B41E058A6900977A63 /* libogg.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E83668B31E058A6900977A63 /* libogg.0.dylib */; };
 		E8655AA81DFC0A6E00D5058A /* FTFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8655AA61DFC0A6E00D5058A /* FTFont.cpp */; };
 		E8655AAB1DFC0BCB00D5058A /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8655AAA1DFC0BCB00D5058A /* libfreetype.6.dylib */; };
 		E8690AEC1D3920C800DBC331 /* pak000-Nonfree.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */; };
@@ -403,6 +408,13 @@
 		E834F56C1797AA2C004EBE88 /* FontData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FontData.h; sourceTree = "<group>"; };
 		E834F56D1797D92F004EBE88 /* ChatWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChatWindow.cpp; sourceTree = "<group>"; };
 		E834F56E1797D932004EBE88 /* ChatWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatWindow.h; sourceTree = "<group>"; };
+		E83668A91E05750D00977A63 /* libopus.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopus.0.dylib; path = /opt/local/lib/libopus.0.dylib; sourceTree = "<absolute>"; };
+		E83668AB1E05751900977A63 /* libopusfile.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopusfile.0.dylib; path = /opt/local/lib/libopusfile.0.dylib; sourceTree = "<absolute>"; };
+		E83668AD1E05757B00977A63 /* OpusAudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpusAudioStream.cpp; sourceTree = "<group>"; };
+		E83668AE1E05757B00977A63 /* OpusAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpusAudioStream.h; sourceTree = "<group>"; };
+		E83668B01E05844E00977A63 /* AudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioStream.cpp; sourceTree = "<group>"; };
+		E83668B11E05844E00977A63 /* AudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioStream.h; sourceTree = "<group>"; };
+		E83668B31E058A6900977A63 /* libogg.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.0.dylib; path = ../../../../../opt/local/lib/libogg.0.dylib; sourceTree = "<group>"; };
 		E838D41D18AC726B00EE3C53 /* Strings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Strings.cpp; sourceTree = "<group>"; };
 		E838D41E18AC726B00EE3C53 /* Strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Strings.h; sourceTree = "<group>"; };
 		E838D42018ADDE2800EE3C53 /* StringsScript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringsScript.cpp; sourceTree = "<group>"; };
@@ -882,6 +894,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E83668B41E058A6900977A63 /* libogg.0.dylib in Frameworks */,
+				E83668AC1E05751900977A63 /* libopusfile.0.dylib in Frameworks */,
+				E83668AA1E05750D00977A63 /* libopus.0.dylib in Frameworks */,
 				E8655AAB1DFC0BCB00D5058A /* libfreetype.6.dylib in Frameworks */,
 				E88F46591DE1B192009E85E5 /* Cocoa.framework in Frameworks */,
 				E82E67F018EA7A60004DBA18 /* OpenGL.framework in Frameworks */,
@@ -965,6 +980,9 @@
 		E82E66BA18EA78F5004DBA18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E83668B31E058A6900977A63 /* libogg.0.dylib */,
+				E83668AB1E05751900977A63 /* libopusfile.0.dylib */,
+				E83668A91E05750D00977A63 /* libopus.0.dylib */,
 				E8655AAA1DFC0BCB00D5058A /* libfreetype.6.dylib */,
 				E82E680318EA7F60004DBA18 /* libysrspades.dylib */,
 				E844888617D26699005105D0 /* libcurl.tbd */,
@@ -1810,6 +1828,10 @@
 				E8567E651792CCE5009D83E0 /* WavAudioStream.h */,
 				E80B288617A52AB60056179E /* BitmapAtlasGenerator.cpp */,
 				E80B288717A52AB70056179E /* BitmapAtlasGenerator.h */,
+				E83668AD1E05757B00977A63 /* OpusAudioStream.cpp */,
+				E83668AE1E05757B00977A63 /* OpusAudioStream.h */,
+				E83668B01E05844E00977A63 /* AudioStream.cpp */,
+				E83668B11E05844E00977A63 /* AudioStream.h */,
 			);
 			name = Media;
 			sourceTree = "<group>";
@@ -2135,11 +2157,13 @@
 				E82E67DC18EA7972004DBA18 /* SWMapRenderer.cpp in Sources */,
 				E82E67DD18EA7972004DBA18 /* SWFlatMapRenderer.cpp in Sources */,
 				E82E67DE18EA7972004DBA18 /* SWModelRenderer.cpp in Sources */,
+				E83668B21E05844E00977A63 /* AudioStream.cpp in Sources */,
 				E82E672518EA7967004DBA18 /* json_reader.cpp in Sources */,
 				E82E672618EA7967004DBA18 /* json_value.cpp in Sources */,
 				E82E672718EA7967004DBA18 /* json_writer.cpp in Sources */,
 				E82E672818EA7967004DBA18 /* scriptany.cpp in Sources */,
 				E82E672918EA7967004DBA18 /* scriptarray.cpp in Sources */,
+				E83668AF1E05757B00977A63 /* OpusAudioStream.cpp in Sources */,
 				E82E672A18EA7967004DBA18 /* scriptbuilder.cpp in Sources */,
 				E82E672B18EA7967004DBA18 /* scriptdictionary.cpp in Sources */,
 				E82E672C18EA7967004DBA18 /* scripthandle.cpp in Sources */,
@@ -2247,12 +2271,15 @@
 					Sources,
 					Sources/json/include,
 					/opt/X11/include/freetype2,
+					/opt/local/include/opus,
+					/opt/local/include,
 				);
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/X11/lib,
+					/opt/local/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2291,12 +2318,15 @@
 					Sources,
 					Sources/json/include,
 					/opt/X11/include/freetype2,
+					/opt/local/include/opus,
+					/opt/local/include,
 				);
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/X11/lib,
+					/opt/local/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";

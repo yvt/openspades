@@ -47,13 +47,13 @@
 				("Models/Weapons/Rifle/Sight2.kv6");
 
 			@fireSound = dev.RegisterSound
-				("Sounds/Weapons/Rifle/FireLocal.wav");
+				("Sounds/Weapons/Rifle/FireLocal.opus");
 			@fireFarSound = dev.RegisterSound
-				("Sounds/Weapons/Rifle/FireFar.wav");
+				("Sounds/Weapons/Rifle/FireFar.opus");
 			@fireStereoSound = dev.RegisterSound
-				("Sounds/Weapons/Rifle/FireStereo.wav");
+				("Sounds/Weapons/Rifle/FireStereo.opus");
 			@reloadSound = dev.RegisterSound
-				("Sounds/Weapons/Rifle/ReloadLocal.wav");
+				("Sounds/Weapons/Rifle/ReloadLocal.opus");
 		}
 
 		void Update(float dt) {

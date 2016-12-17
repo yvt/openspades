@@ -105,7 +105,7 @@ namespace spades {
 					if (item.hover) {
 						IAudioDevice *dev = client->audioDevice;
 						Handle<IAudioChunk> chunk =
-						  dev->RegisterSound("Sounds/Feedback/Limbo/Select.wav");
+						  dev->RegisterSound("Sounds/Feedback/Limbo/Select.opus");
 						dev->PlayLocal(chunk, AudioParam());
 						switch (item.type) {
 							case MenuTeam1: selectedTeam = 0; break;
@@ -164,7 +164,7 @@ namespace spades {
 				if (newHover && !item.hover) {
 					IAudioDevice *dev = client->audioDevice;
 					Handle<IAudioChunk> chunk =
-					  dev->RegisterSound("Sounds/Feedback/Limbo/Hover.wav");
+					  dev->RegisterSound("Sounds/Feedback/Limbo/Hover.opus");
 					dev->PlayLocal(chunk, AudioParam());
 				}
 				item.hover = newHover;
