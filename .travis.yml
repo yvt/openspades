@@ -13,7 +13,7 @@ before_install:
   - if [ "$CC" == "gcc" ]; then export APT_INSTALL_GPP=g++-4.9; fi
 
 install:
-  - sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev libsdl2-dev libsdl2-image-dev libfreetype6-dev $APT_INSTALL_GPP
+  - sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev libsdl2-dev libsdl2-image-dev libfreetype6-dev libopus-dev libopusfile-dev $APT_INSTALL_GPP
 
 before_script:
   # Travis defaults to plain gcc if unknown
