@@ -124,14 +124,6 @@ namespace spades {
 
 			if (IsFollowing()) {
 				SPAssert(world != nullptr);
-				/*
-				 if(world->GetLocalPlayer() &&
-				 world->GetLocalPlayer()->GetTeamId() >= 2 &&
-				 followingPlayerId == world->GetLocalPlayerIndex()){
-				 // invert dir
-				 x = -x; y = -y;
-				 }
-				 */
 
 				x = -x;
 				if (!cg_invertMouseY)

@@ -353,12 +353,20 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			auto *player = world->GetLocalPlayer();
+			auto clientPlayer = clientPlayers[world->GetLocalPlayerIndex()];
 
 			PlayerInput inp = playerInput;
 			WeaponInput winp = weapInput;
 
+			Vector3 velocity = player->GetVelocty();
+			Vector3 horizontalVelocity{velocity.x, velocity.y, 0.0f};
+
+			if (horizontalVelocity.GetLength() < 0.1f) {
+				inp.sprint = false;
+			}
+
 			// weapon/tools are disabled while/soon after sprinting
-			if (GetSprintState() > 0.001f) {
+			if (GetSprintState() > 0.001f || inp.sprint) {
 				winp.primary = false;
 				winp.secondary = false;
 			}
@@ -379,24 +387,36 @@ namespace spades {
 			}
 
 			// weapon/tools are disabled while changing tools
-			if (clientPlayers[world->GetLocalPlayerIndex()]->IsChangingTool()) {
+			if (clientPlayer->IsChangingTool()) {
 				winp.primary = false;
 				winp.secondary = false;
 			}
 
-			// disable weapon while reloading (except shotgun)
-			if (player->GetTool() == Player::ToolWeapon && player->IsAwaitingReloadCompletion() &&
-			    !player->GetWeapon()->IsReloadSlow()) {
-				winp.primary = false;
+			if (player->GetTool() == Player::ToolWeapon) {
+				// disable weapon while reloading (except shotgun)
+				if (player->IsAwaitingReloadCompletion() && !player->GetWeapon()->IsReloadSlow()) {
+					winp.primary = false;
+					winp.secondary = false;
+				}
+
+				// stop firing if the player is out of ammo
+				if (player->GetWeapon()->GetAmmo() == 0) {
+					winp.primary = false;
+				}
 			}
 
 			player->SetInput(inp);
 			player->SetWeaponInput(winp);
 
 			// send player input
-			// FIXME: send only there are any changed?
-			net->SendPlayerInput(inp);
-			net->SendWeaponInput(winp);
+			{
+				PlayerInput sentInput = inp;
+				WeaponInput sentWeaponInput = winp;
+
+				// FIXME: send only there are any changed?
+				net->SendPlayerInput(sentInput);
+				net->SendWeaponInput(sentWeaponInput);
+			}
 
 			if (hasDelayedReload) {
 				world->GetLocalPlayer()->Reload();
