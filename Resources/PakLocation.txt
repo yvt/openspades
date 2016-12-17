@@ -3,7 +3,7 @@
 External Game Assets
 --------------------
 
-https://github.com/yvt/openspades-paks/releases/download/r30/OpenSpadesDevPackage-r32.zip
+https://github.com/yvt/openspades-paks/releases/download/r32/OpenSpadesDevPackage-r32.zip
 
 This package provides following paks:
 
