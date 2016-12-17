@@ -254,7 +254,9 @@ namespace spades {
 
 				// Update the weapon state asap so it picks up the weapon fire event even
 				// if the player presses the mouse button and releases it really fast.
-				if (weapon->FrameNext(0.0f)) {
+				// We shouldn't do this for the local player because the client haven't sent
+				// a weapon update packet at this point and the hit will be rejected by the server.
+				if (!IsLocalPlayer() && weapon->FrameNext(0.0f)) {
 					FireWeapon();
 				}
 			} else {
