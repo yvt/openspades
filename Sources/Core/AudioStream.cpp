@@ -33,11 +33,12 @@ namespace spades {
 		std::regex wavRegex {".*\\.wav", std::regex::icase};
 		std::regex opusRegex {".*\\.(?:opus|ogg)", std::regex::icase};
 
-		std::tuple<std::string, IAudioStream *(*)(IStream *stream, bool autoClose), std::regex&> g_codecs[] = {
-			{"WAV Decoder", [] (IStream *stream, bool autoClose) -> IAudioStream * {
+		using CodecInfo = std::tuple<std::string, IAudioStream *(*)(IStream *stream, bool autoClose), std::regex&>;
+		CodecInfo g_codecs[] = {
+			CodecInfo {"WAV Decoder", [] (IStream *stream, bool autoClose) -> IAudioStream * {
 				return new WavAudioStream(stream, autoClose);
 			}, wavRegex},
-			{"Opus Decoder", [] (IStream *stream, bool autoClose) -> IAudioStream * {
+			CodecInfo {"Opus Decoder", [] (IStream *stream, bool autoClose) -> IAudioStream * {
 				return new OpusAudioStream(stream, autoClose);
 			}, opusRegex}
 		};

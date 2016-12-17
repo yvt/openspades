@@ -52,7 +52,7 @@ if(NOT FREETYPE_FOUND)
 endif()
 
 include(cmake/FindOpus.cmake)
-if(NOT Opus_FOUND)
+if(NOT OpusFile_FOUND)
 	message(FATAL_ERROR "libopus/libopusfile not found, please install it (and make sure it's in your path)")
 endif()
 
@@ -201,7 +201,7 @@ include_directories("${GLEW_INCLUDE_DIR}")
 include_directories("${ZLIB_INCLUDE_DIR}")
 include_directories(${CURL_INCLUDE_DIRS})
 include_directories(${FREETYPE_INCLUDE_DIRS})
-include_directories(${Opus_INCLUDE_DIR})
+include_directories(${OpusFile_INCLUDE_DIR})
 
 add_subdirectory(Resources)
 add_subdirectory(Sources)

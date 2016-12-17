@@ -21,7 +21,6 @@
 #include <cstring>
 #include <string>
 
-#include <opus.h>
 #include <opusfile.h>
 
 #include "OpusAudioStream.h"
