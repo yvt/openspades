@@ -22,6 +22,7 @@
 #include <exception>
 #include <cstdlib>
 #include <vector>
+#include <utility>
 
 #include "ALDevice.h"
 #include "ALFuncs.h"
@@ -56,6 +57,24 @@ namespace spades {
 		static Vector3 TransformVectorFromAL(Vector3 v) { return MakeVector3(v.x, v.y, v.z); }
 
 		static float NextRandom() { return real_dist_audio(mt_engine); }
+
+		namespace {
+			std::vector<uint8_t> ConvertFloatBufferToSignedShort(const std::vector<uint8_t> &bytes) {
+				if (bytes.size() & 3) {
+					SPRaise("Size is invalid");
+				}
+				std::vector<uint8_t> ret;
+				ret.resize(bytes.size() >> 1);
+
+				for (size_t i = 0; i < bytes.size(); i += 4) {
+					float inValue = reinterpret_cast<const float *>(bytes.data())[i >> 2];
+					int16_t &outValue = reinterpret_cast<std::int16_t *>(ret.data())[i >> 2];
+					outValue = static_cast<int16_t>(std::floor(inValue * 32768.f));
+				}
+
+				return std::move(ret);
+			}
+		}
 
 		class ALAudioChunk : public client::IAudioChunk {
 			ALuint handle;
@@ -96,6 +115,14 @@ namespace spades {
 						}
 						break;
 					case IAudioStream::SignedShort:
+						switch (audioStream->GetNumChannels()) {
+							case 1: alFormat = AL_FORMAT_MONO16; break;
+							case 2: alFormat = AL_FORMAT_STEREO16; break;
+							default: SPRaise("Unsupported audio format");
+						}
+						break;
+					case IAudioStream::SingleFloat:
+						bytes = ConvertFloatBufferToSignedShort(bytes);
 						switch (audioStream->GetNumChannels()) {
 							case 1: alFormat = AL_FORMAT_MONO16; break;
 							case 2: alFormat = AL_FORMAT_STEREO16; break;

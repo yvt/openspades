@@ -96,6 +96,8 @@ namespace spades {
 
 		channels = op_channel_count(opusFile, 0);
 		currentSample.resize(channels);
+
+		SetPosition(0);
 	}
 
 	OpusAudioStream::~OpusAudioStream() {
@@ -145,7 +147,7 @@ namespace spades {
 	size_t OpusAudioStream::Read(void *data, size_t bytes) {
 		SPADES_MARK_FUNCTION();
 
-		uint64_t maxLen = GetLength() - stream->GetPosition();
+		uint64_t maxLen = GetLength() - GetPosition();
 		if ((uint64_t)bytes > maxLen)
 			bytes = (size_t)maxLen;
 

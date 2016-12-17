@@ -2272,7 +2272,6 @@
 					Sources/json/include,
 					/opt/X11/include/freetype2,
 					/opt/local/include/opus,
-					/opt/local/include,
 				);
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
@@ -2319,7 +2318,6 @@
 					Sources/json/include,
 					/opt/X11/include/freetype2,
 					/opt/local/include/opus,
-					/opt/local/include,
 				);
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
