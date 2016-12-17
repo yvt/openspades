@@ -18,17 +18,17 @@
 
  */
 
-#include <string>
 #include <cstring>
+#include <string>
 
 #include <opus.h>
 #include <opusfile.h>
 
 #include "OpusAudioStream.h"
 
-#include <Core/Strings.h>
 #include "Debug.h"
 #include "Exception.h"
+#include <Core/Strings.h>
 
 namespace spades {
 
@@ -54,35 +54,33 @@ namespace spades {
 		}
 	}
 
-	OpusAudioStream::OpusAudioStream(IStream *s, bool ac) :
-	  subsamplePosition{0}
-	{
+	OpusAudioStream::OpusAudioStream(IStream *s, bool ac) : subsamplePosition{0} {
 		SPADES_MARK_FUNCTION();
 
 		stream = s;
 		autoClose = ac;
 
 		opusCallback.reset(new OpusFileCallbacks());
-		opusCallback->read = [] (void *stream, unsigned char *ptr, int nbytes) -> int {
+		opusCallback->read = [](void *stream, unsigned char *ptr, int nbytes) -> int {
 			auto &self = *reinterpret_cast<OpusAudioStream *>(stream);
-			return static_cast<int> (self.stream->Read(ptr, static_cast<int> (nbytes)));
+			return static_cast<int>(self.stream->Read(ptr, static_cast<int>(nbytes)));
 		};
-		opusCallback->seek = [] (void *stream, opus_int64 offset, int whence) -> int {
+		opusCallback->seek = [](void *stream, opus_int64 offset, int whence) -> int {
 			auto &self = *reinterpret_cast<OpusAudioStream *>(stream);
 			switch (whence) {
 				case SEEK_CUR:
-					self.stream->SetPosition(static_cast<std::uint64_t>(offset + self.stream->GetPosition()));
+					self.stream->SetPosition(
+					  static_cast<std::uint64_t>(offset + self.stream->GetPosition()));
 					break;
-				case SEEK_SET:
-					self.stream->SetPosition(static_cast<std::uint64_t>(offset));
-					break;
+				case SEEK_SET: self.stream->SetPosition(static_cast<std::uint64_t>(offset)); break;
 				case SEEK_END:
-					self.stream->SetPosition(static_cast<std::uint64_t>(offset + self.stream->GetLength()));
+					self.stream->SetPosition(
+					  static_cast<std::uint64_t>(offset + self.stream->GetLength()));
 					break;
 			}
 			return 0;
 		};
-		opusCallback->tell = [] (void *stream) -> opus_int64 {
+		opusCallback->tell = [](void *stream) -> opus_int64 {
 			auto &self = *reinterpret_cast<OpusAudioStream *>(stream);
 			return static_cast<opus_int64>(self.stream->GetPosition());
 		};
@@ -92,7 +90,8 @@ namespace spades {
 		opusFile = op_open_callbacks(this, opusCallback.get(), nullptr, 0, &result);
 
 		if (result) {
-			SPRaise("op_open_callbacks failed with error code %s", stringifyOpusErrorCode(result).c_str());
+			SPRaise("op_open_callbacks failed with error code %s",
+			        stringifyOpusErrorCode(result).c_str());
 		}
 
 		channels = op_channel_count(opusFile, 0);
@@ -114,7 +113,9 @@ namespace spades {
 
 	int OpusAudioStream::GetNumChannels() { return channels; }
 
-	OpusAudioStream::SampleFormat OpusAudioStream::GetSampleFormat() { return SampleFormat::SingleFloat; }
+	OpusAudioStream::SampleFormat OpusAudioStream::GetSampleFormat() {
+		return SampleFormat::SingleFloat;
+	}
 
 	int OpusAudioStream::ReadByte() {
 		SPADES_MARK_FUNCTION();
@@ -125,7 +126,8 @@ namespace spades {
 			}
 			int result = op_read_float(opusFile, currentSample.data(), channels, nullptr);
 			if (result < 0) {
-				SPRaise("op_read_float failed with error code %s", stringifyOpusErrorCode(result).c_str());
+				SPRaise("op_read_float failed with error code %s",
+				        stringifyOpusErrorCode(result).c_str());
 			} else if (result != 1) {
 				SPRaise("op_read_float returned %d (expected: 1)", result);
 			}
@@ -151,10 +153,12 @@ namespace spades {
 		uint64_t remainingBytes = bytes;
 
 		if (subsamplePosition) {
-			uint64_t copied = std::min(remainingBytes, static_cast<uint64_t> (channels * 4 - subsamplePosition));
-			std::memcpy(retBytes, reinterpret_cast<uint8_t *>(currentSample.data()) + subsamplePosition,
-						static_cast<size_t> (copied));
-			subsamplePosition += static_cast<int> (copied);
+			uint64_t copied =
+			  std::min(remainingBytes, static_cast<uint64_t>(channels * 4 - subsamplePosition));
+			std::memcpy(retBytes,
+			            reinterpret_cast<uint8_t *>(currentSample.data()) + subsamplePosition,
+			            static_cast<size_t>(copied));
+			subsamplePosition += static_cast<int>(copied);
 			remainingBytes -= copied;
 			retBytes += copied;
 
@@ -166,19 +170,21 @@ namespace spades {
 		while (remainingBytes >= channels * 4) {
 			uint64_t numSamples = remainingBytes / (channels * 4);
 
-			// 64-bit sample count might doesn't fit in int which op_read_float's third parameter accepts
+			// 64-bit sample count might doesn't fit in int which op_read_float's third parameter
+			// accepts
 			numSamples = std::min<uint64_t>(numSamples, 0x1000000);
 
-			int result = op_read_float(opusFile, reinterpret_cast<float *> (retBytes),
-									   static_cast<int> (numSamples * channels), nullptr);
+			int result = op_read_float(opusFile, reinterpret_cast<float *>(retBytes),
+			                           static_cast<int>(numSamples * channels), nullptr);
 
 			if (result < 0) {
-				SPRaise("op_read_float failed with error code %s", stringifyOpusErrorCode(result).c_str());
+				SPRaise("op_read_float failed with error code %s",
+				        stringifyOpusErrorCode(result).c_str());
 			} else if (result == 0) {
 				SPRaise("op_read_float returned 0 (expected: > 0)");
 			}
 
-			numSamples = static_cast<uint64_t> (result);
+			numSamples = static_cast<uint64_t>(result);
 
 			retBytes += numSamples * (channels * 4);
 			remainingBytes -= numSamples * (channels * 4);
@@ -187,13 +193,14 @@ namespace spades {
 		if (remainingBytes) {
 			int result = op_read_float(opusFile, currentSample.data(), channels, nullptr);
 			if (result < 0) {
-				SPRaise("op_read_float failed with error code %s", stringifyOpusErrorCode(result).c_str());
+				SPRaise("op_read_float failed with error code %s",
+				        stringifyOpusErrorCode(result).c_str());
 			} else if (result != 1) {
 				SPRaise("op_read_float returned %d (expected: 1)", result);
 			}
 
 			std::memcpy(retBytes, reinterpret_cast<const uint8_t *>(currentSample.data()),
-						static_cast<size_t> (remainingBytes));
+			            static_cast<size_t>(remainingBytes));
 
 			subsamplePosition = static_cast<int>(remainingBytes);
 		}
@@ -212,13 +219,14 @@ namespace spades {
 	void OpusAudioStream::SetPosition(uint64_t pos) {
 		pos = std::min(pos, GetLength());
 
-		op_pcm_seek(opusFile, static_cast<opus_int64> (pos / (channels * 4)));
+		op_pcm_seek(opusFile, static_cast<opus_int64>(pos / (channels * 4)));
 
-		subsamplePosition = static_cast<int> (pos % (channels * 4));
+		subsamplePosition = static_cast<int>(pos % (channels * 4));
 		if (subsamplePosition) {
 			int result = op_read_float(opusFile, currentSample.data(), channels, nullptr);
 			if (result < 0) {
-				SPRaise("op_read_float failed with error code %s", stringifyOpusErrorCode(result).c_str());
+				SPRaise("op_read_float failed with error code %s",
+				        stringifyOpusErrorCode(result).c_str());
 			} else if (result != 1) {
 				SPRaise("op_read_float returned %d (expected: 1)", result);
 			}
