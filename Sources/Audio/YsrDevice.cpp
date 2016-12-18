@@ -28,7 +28,7 @@
 #include <Core/IAudioStream.h>
 #include <Core/IStream.h>
 #include <Core/Settings.h>
-#include <Core/WavAudioStream.h>
+#include <Core/AudioStream.h>
 
 #if defined(__APPLE__)
 DEFINE_SPADES_SETTING(s_ysrDriver, "libysrspades.dylib");
@@ -416,16 +416,7 @@ namespace spades {
 		auto YsrDevice::CreateChunk(const char *name) -> YsrAudioChunk * {
 			SPADES_MARK_FUNCTION();
 
-			IStream *stream = NULL;
-			IAudioStream *as = NULL;
-			try {
-				stream = FileManager::OpenForReading(name);
-				as = new WavAudioStream(stream, true);
-			} catch (...) {
-				if (stream)
-					delete stream;
-				throw;
-			}
+			IAudioStream *as = OpenAudioStream(name);
 
 			try {
 				YsrAudioChunk *ch = new YsrAudioChunk(driver, as);

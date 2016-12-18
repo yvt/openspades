@@ -50,19 +50,19 @@
 				("Models/Weapons/SMG/Sight3.kv6");
 
 			@fireSounds[0] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireLocal1.wav");
+				("Sounds/Weapons/SMG/FireLocal1.opus");
 			@fireSounds[1] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireLocal2.wav");
+				("Sounds/Weapons/SMG/FireLocal2.opus");
 			@fireSounds[2] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireLocal3.wav");
+				("Sounds/Weapons/SMG/FireLocal3.opus");
 			@fireSounds[3] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireLocal4.wav");
+				("Sounds/Weapons/SMG/FireLocal4.opus");
 			@fireFarSound = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireFar.wav");
+				("Sounds/Weapons/SMG/FireFar.opus");
 			@fireStereoSound = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireStereo.wav");
+				("Sounds/Weapons/SMG/FireStereo.opus");
 			@reloadSound = dev.RegisterSound
-				("Sounds/Weapons/SMG/ReloadLocal.wav");
+				("Sounds/Weapons/SMG/ReloadLocal.opus");
 
 		}
 

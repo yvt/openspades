@@ -83,11 +83,11 @@ namespace spades {
 			}
 
 			void PlayMouseEnterSound() {
-				Manager.PlaySound("Sounds/Feedback/Limbo/Hover.wav");
+				Manager.PlaySound("Sounds/Feedback/Limbo/Hover.opus");
 			}
 
 			void PlayActivateSound() {
-				Manager.PlaySound("Sounds/Feedback/Limbo/Select.wav");
+				Manager.PlaySound("Sounds/Feedback/Limbo/Select.opus");
 			}
 
 			void OnActivated() {
