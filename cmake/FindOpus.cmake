@@ -26,7 +26,7 @@ FIND_LIBRARY(OpusFile_LIBRARY
 )
 
 set(OpusFile_FOUND "NO")
-if(OpusFile_INCLUDE_DIR AND OpusFile_LIBRARY AND OpusFileFile_LIBRARY)
+if(OpusFile_INCLUDE_DIR AND OpusFile_LIBRARY)
   set(OpusFile_FOUND "YES")
 endif()
 
