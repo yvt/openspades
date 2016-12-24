@@ -21,6 +21,7 @@
 #include <sstream>
 
 #include "Client.h"
+#include "Fonts.h"
 #include "IAudioChunk.h"
 #include "IAudioDevice.h"
 #include "IFont.h"
@@ -104,7 +105,7 @@ namespace spades {
 					if (item.hover) {
 						IAudioDevice *dev = client->audioDevice;
 						Handle<IAudioChunk> chunk =
-						  dev->RegisterSound("Sounds/Feedback/Limbo/Select.wav");
+						  dev->RegisterSound("Sounds/Feedback/Limbo/Select.opus");
 						dev->PlayLocal(chunk, AudioParam());
 						switch (item.type) {
 							case MenuTeam1: selectedTeam = 0; break;
@@ -163,7 +164,7 @@ namespace spades {
 				if (newHover && !item.hover) {
 					IAudioDevice *dev = client->audioDevice;
 					Handle<IAudioChunk> chunk =
-					  dev->RegisterSound("Sounds/Feedback/Limbo/Hover.wav");
+					  dev->RegisterSound("Sounds/Feedback/Limbo/Hover.opus");
 					dev->PlayLocal(chunk, AudioParam());
 				}
 				item.hover = newHover;
@@ -173,7 +174,7 @@ namespace spades {
 		void LimboView::Draw() {
 			Handle<IImage> menuItemImage = renderer->RegisterImage("Gfx/Limbo/MenuItem.png");
 			Handle<IImage> menuItemBigImage = renderer->RegisterImage("Gfx/Limbo/BigMenuItem.png");
-			IFont *font = client->textFont;
+			IFont *font = client->fontManager->GetGuiFont();
 
 			float left = (renderer->ScreenWidth() - contentsWidth) * .5f;
 			float top = renderer->ScreenHeight() - 150.f;
@@ -233,11 +234,11 @@ namespace spades {
 					renderer->DrawImage(menuItemBigImage, item.rect);
 
 					std::string msg = item.text;
-					IFont *bFont = client->textFont;
+					IFont *bFont = client->fontManager->GetGuiFont();
 					Vector2 size = bFont->Measure(msg);
 					Vector2 pos;
 					pos.x = item.rect.GetMinX() + (item.rect.GetWidth() - size.x) / 2.f + 2.f;
-					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f + 2.f;
+					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f;
 					bFont->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
 					                  MakeVector4(0, 0, 0, 0.4f));
 				} else {
@@ -251,7 +252,7 @@ namespace spades {
 					Vector2 size = font->Measure(msg);
 					Vector2 pos;
 					pos.x = item.rect.GetMinX() + 5.f;
-					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f + 2.f;
+					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f;
 					font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
 					                 MakeVector4(0, 0, 0, 0.4f));
 					if (index > 0) {

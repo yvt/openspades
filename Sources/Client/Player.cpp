@@ -21,9 +21,6 @@
 
 #include "Player.h"
 
-#include <Core/Debug.h>
-#include <Core/Exception.h>
-#include <Core/Settings.h>
 #include "GameMap.h"
 #include "GameMapWrapper.h"
 #include "Grenade.h"
@@ -32,6 +29,9 @@
 #include "PhysicsConstants.h"
 #include "Weapon.h"
 #include "World.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Settings.h>
 
 namespace spades {
 	namespace client {
@@ -251,6 +251,14 @@ namespace spades {
 				}
 			} else if (IsToolWeapon()) {
 				weapon->SetShooting(newInput.primary);
+
+				// Update the weapon state asap so it picks up the weapon fire event even
+				// if the player presses the mouse button and releases it really fast.
+				// We shouldn't do this for the local player because the client haven't sent
+				// a weapon update packet at this point and the hit will be rejected by the server.
+				if (!IsLocalPlayer() && weapon->FrameNext(0.0f)) {
+					FireWeapon();
+				}
 			} else {
 				SPAssert(false);
 			}

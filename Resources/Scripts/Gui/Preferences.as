@@ -35,7 +35,7 @@ namespace spades {
 
 		spades::ui::EventHandler@ Closed;
 
-		PreferenceView(spades::ui::UIElement@ owner, PreferenceViewOptions@ options) {
+		PreferenceView(spades::ui::UIElement@ owner, PreferenceViewOptions@ options, FontManager@ fontManager) {
 			super(owner.Manager);
 			@this.owner = owner;
 			this.Bounds = owner.Bounds;
@@ -57,9 +57,9 @@ namespace spades {
 				AddChild(label);
 			}
 
-			AddTab(GameOptionsPanel(Manager, options), _Tr("Preferences", "Game Options"));
-			AddTab(ControlOptionsPanel(Manager, options), _Tr("Preferences", "Controls"));
-			AddTab(MiscOptionsPanel(Manager, options), _Tr("Preferences", "Misc"));
+			AddTab(GameOptionsPanel(Manager, options, fontManager), _Tr("Preferences", "Game Options"));
+			AddTab(ControlOptionsPanel(Manager, options, fontManager), _Tr("Preferences", "Controls"));
+			AddTab(MiscOptionsPanel(Manager, options, fontManager), _Tr("Preferences", "Misc"));
 
 			{
 				PreferenceTabButton button(Manager);
@@ -496,9 +496,11 @@ namespace spades {
 		private float FieldWidth = 310.f;
 		private spades::ui::UIElement@[] items;
 		private ConfigHotKeyField@[] hotkeyItems;
+		private FontManager@ fontManager;
 
-		StandardPreferenceLayouter(spades::ui::UIElement@ parent) {
+		StandardPreferenceLayouter(spades::ui::UIElement@ parent, FontManager@ fontManager) {
 			@Parent = parent;
+			@this.fontManager = fontManager;
 		}
 
 		private spades::ui::UIElement@ CreateItem() {
@@ -528,7 +530,7 @@ namespace spades {
 			spades::ui::Label label(Parent.Manager);
 			label.Text = text;
 			label.Alignment = Vector2(0.f, 1.f);
-			label.TextScale = 1.3f;
+			@label.Font = fontManager.HeadingFont;
 			label.Bounds = AABB2(10.f, 0.f, 300.f, 32.f);
 			container.AddChild(label);
 		}
@@ -628,10 +630,10 @@ namespace spades {
 	}
 
 	class GameOptionsPanel: spades::ui::UIElement {
-		GameOptionsPanel(spades::ui::UIManager@ manager, PreferenceViewOptions@ options) {
+		GameOptionsPanel(spades::ui::UIManager@ manager, PreferenceViewOptions@ options, FontManager@ fontManager) {
 			super(manager);
 
-			StandardPreferenceLayouter layouter(this);
+			StandardPreferenceLayouter layouter(this, fontManager);
 			layouter.AddHeading(_Tr("Preferences", "Player Information"));
 			ConfigField@ nameField = layouter.AddInputField(_Tr("Preferences", "Player Name"), "cg_playerName", not options.GameActive);
 			nameField.MaxLength = 15;
@@ -669,10 +671,10 @@ namespace spades {
 	}
 
 	class ControlOptionsPanel: spades::ui::UIElement {
-		ControlOptionsPanel(spades::ui::UIManager@ manager, PreferenceViewOptions@ options) {
+		ControlOptionsPanel(spades::ui::UIManager@ manager, PreferenceViewOptions@ options, FontManager@ fontManager) {
 			super(manager);
 
-			StandardPreferenceLayouter layouter(this);
+			StandardPreferenceLayouter layouter(this, fontManager);
 			layouter.AddHeading(_Tr("Preferences", "Weapons/Tools"));
 			layouter.AddControl(_Tr("Preferences", "Attack"), "cg_keyAttack");
 			layouter.AddControl(_Tr("Preferences", "Alt. Attack"), "cg_keyAltAttack");
@@ -725,7 +727,7 @@ namespace spades {
 
 		private ConfigItem cl_showStartupWindow("cl_showStartupWindow");
 
-		MiscOptionsPanel(spades::ui::UIManager@ manager, PreferenceViewOptions@ options) {
+		MiscOptionsPanel(spades::ui::UIManager@ manager, PreferenceViewOptions@ options, FontManager@ fontManager) {
 			super(manager);
 
 			{

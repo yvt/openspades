@@ -170,7 +170,7 @@ namespace spades {
 					cl.w = 1.f;
 
 					float x = scrW - 100.f + 10.f * col;
-					float y = scrH - 96.f + 10.f * row - 40.f;
+					float y = scrH - 106.f + 10.f * row - 40.f;
 
 					renderer->SetColorAlphaPremultiplied(cl);
 					if (selected) {

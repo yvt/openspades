@@ -22,7 +22,6 @@
 #include "MainScreenHelper.h"
 #include <Client/Client.h>
 #include <Client/Fonts.h>
-#include <Client/Quake3Font.h>
 #include <Core/Exception.h>
 #include <Core/Settings.h>
 #include <Core/Strings.h>
@@ -35,15 +34,14 @@ DEFINE_SPADES_SETTING(cg_playerName, "Deuce");
 
 namespace spades {
 	namespace gui {
-		MainScreen::MainScreen(client::IRenderer *r, client::IAudioDevice *a)
-		    : renderer(r), audioDevice(a) {
+		MainScreen::MainScreen(client::IRenderer *r, client::IAudioDevice *a,
+		                       client::FontManager *fontManager)
+		    : renderer(r), audioDevice(a), fontManager(fontManager) {
 			SPADES_MARK_FUNCTION();
 			if (r == NULL)
 				SPInvalidArgument("r");
 			if (a == NULL)
 				SPInvalidArgument("a");
-
-			font = client::CreateGuiFont(renderer);
 
 			helper = new MainScreenHelper(this);
 
@@ -225,6 +223,7 @@ namespace spades {
 			renderer->DrawImage(img, AABB2(0, 0, scrSize.x, scrSize.y));
 
 			std::string str = _Tr("MainScreen", "NOW LOADING");
+			client::IFont *font = fontManager->GetGuiFont();
 			Vector2 size = font->Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
 			pos -= size;
@@ -281,12 +280,12 @@ namespace spades {
 
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction uiFactory("MainScreenUI@ CreateMainScreenUI(Renderer@, "
-			                                "AudioDevice@, Font@, MainScreenHelper@)");
+			                                "AudioDevice@, FontManager@, MainScreenHelper@)");
 			{
 				ScriptContextHandle ctx = uiFactory.Prepare();
 				ctx->SetArgObject(0, renderer);
 				ctx->SetArgObject(1, audioDevice);
-				ctx->SetArgObject(2, font);
+				ctx->SetArgObject(2, fontManager);
 				ctx->SetArgObject(3, &*helper);
 
 				ctx.ExecuteChecked();
@@ -317,7 +316,8 @@ namespace spades {
 			                                                      : spades::ProtocolVersion::v076);
 			try {
 				subview.Set(new client::Client(&*renderer, &*audioDevice, host,
-				                               std::string(cg_playerName).substr(0, 15)),
+				                               std::string(cg_playerName).substr(0, 15),
+				                               fontManager),
 				            false);
 			} catch (const std::exception &ex) {
 				SPLog("[!] Error while initializing a game client: %s", ex.what());

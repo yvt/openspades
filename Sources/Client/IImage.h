@@ -23,6 +23,9 @@
 #include <Core/RefCountedObject.h>
 
 namespace spades {
+
+	class Bitmap;
+
 	namespace client {
 		class LowLevelNativeImage;
 		class IImage : public RefCountedObject {
@@ -31,6 +34,8 @@ namespace spades {
 
 		public:
 			IImage() {}
+
+			virtual void Update(Bitmap &, int x, int y) = 0;
 
 			virtual float GetWidth() = 0;
 			virtual float GetHeight() = 0;

@@ -27,7 +27,7 @@ namespace spades {
 	class StartupScreenUI {
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
-		Font@ font;
+		FontManager@ fontManager;
 		StartupScreenHelper@ helper;
 
 		spades::ui::UIManager@ manager;
@@ -36,16 +36,16 @@ namespace spades {
 
 		bool shouldExit = false;
 
-		StartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, Font@ font, StartupScreenHelper@ helper) {
+		StartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, FontManager@ fontManager, StartupScreenHelper@ helper) {
 			@this.renderer = renderer;
 			@this.audioDevice = audioDevice;
-			@this.font = font;
+			@this.fontManager = fontManager;
 			@this.helper = helper;
 
 			SetupRenderer();
 
 			@manager = spades::ui::UIManager(renderer, audioDevice);
-			@manager.RootElement.Font = font;
+			@manager.RootElement.Font = fontManager.GuiFont;
 			Init();
 		}
 
@@ -150,7 +150,7 @@ namespace spades {
 			@this.ui = ui;
 			@this.helper = ui.helper;
 
-			@this.Font = ui.font;
+			@this.Font = ui.fontManager.GuiFont;
 
 			float width = Manager.Renderer.ScreenWidth;
 			float height = Manager.Renderer.ScreenHeight;
@@ -279,7 +279,7 @@ namespace spades {
 		}
 
 		private void OnSetupPressed(spades::ui::UIElement@ sender) {
-			PreferenceView al(this, PreferenceViewOptions());
+			PreferenceView al(this, PreferenceViewOptions(), ui.fontManager);
 			al.Run();
 		}
 
@@ -361,7 +361,7 @@ namespace spades {
 
 		private void AddLabel(float x, float y, float h, string text) {
 			spades::ui::Label label(Manager);
-			Font@ font = ui.font;
+			Font@ font = ui.fontManager.GuiFont;
 			Vector2 siz = font.Measure(text);
 			label.Text = text;
 			label.Alignment = Vector2(0.f, 0.5f);
@@ -540,7 +540,7 @@ namespace spades {
 			float x = size.x;
 			for(uint i = buttons.length; i > 0; i--) {
 				spades::ui::RadioButton@ b = buttons[i - 1];
-				float w = ui.font.Measure(b.Caption).x + 26.f;
+				float w = ui.fontManager.GuiFont.Measure(b.Caption).x + 26.f;
 				x -= w + 2.f;
 				b.Bounds = AABB2(x, 0.f, w, h);
 			}
@@ -1064,7 +1064,7 @@ namespace spades {
 			{
 				spades::ui::TextViewer e(Manager);
 				e.Bounds = AABB2(mainWidth + 10.f, 0.f, size.x - mainWidth - 10.f, size.y);
-				@e.Font = ui.font;
+				@e.Font = ui.fontManager.GuiFont;
 				e.Text = _Tr("StartupScreen", "Graphics Settings");
 				AddChild(e);
 				@helpView = e;
@@ -1461,7 +1461,7 @@ namespace spades {
 			{
 				spades::ui::TextViewer e(Manager);
 				e.Bounds = AABB2(mainWidth + 10.f, 0.f, size.x - mainWidth - 10.f, size.y);
-				@e.Font = ui.font;
+				@e.Font = ui.fontManager.GuiFont;
 				e.Text = _Tr("StartupScreen", "Audio Settings");
 				AddChild(e);
 				@helpView = e;
@@ -1606,7 +1606,7 @@ namespace spades {
 			{
 				StartupScreenLocaleEditor e(ui);
 				AddChild(e);
-				e.Bounds = AABB2(160.f, 0.f, 300.f, 24.f);
+				e.Bounds = AABB2(160.f, 0.f, 400.f, 24.f);
 				@locale = e;
 			}
 
@@ -1715,7 +1715,7 @@ namespace spades {
 			{
 				StartupScreenDropdownListDropdownButton e(Manager);
 				AddChild(e);
-				e.Bounds = AABB2(0.f, 0.f, 300.f, 24.f);
+				e.Bounds = AABB2(0.f, 0.f, 400.f, 24.f);
 				@e.Activated = spades::ui::EventHandler(this.ShowDropdown);
 				@dropdownButton = e;
 			}
@@ -1776,7 +1776,7 @@ namespace spades {
 			{
 				spades::ui::TextViewer e(Manager);
 				e.Bounds = AABB2(0.f, 0.f, size.x, size.y - 30.f);
-				@e.Font = ui.font;
+				@e.Font = ui.fontManager.GuiFont;
 				AddChild(e);
 				for(int i = 0, count = helper.GetNumReportLines(); i < count; i++) {
 					string text = helper.GetReportLineText(i);
@@ -1823,7 +1823,7 @@ namespace spades {
 			{
 				spades::ui::TextViewer e(Manager);
 				e.Bounds = AABB2(mainWidth + 10.f, 0.f, size.x - mainWidth - 10.f, size.y);
-				@e.Font = ui.font;
+				@e.Font = ui.fontManager.GuiFont;
 				e.Text = _Tr("StartupScreen", "Advanced Settings");
 				e.Visible = false;
 				AddChild(e);
@@ -1878,7 +1878,7 @@ namespace spades {
 
 
 	StartupScreenUI@ CreateStartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice,
-		Font@ font, StartupScreenHelper@ helper) {
-		return StartupScreenUI(renderer, audioDevice, font, helper);
+		FontManager@ fontManager, StartupScreenHelper@ helper) {
+		return StartupScreenUI(renderer, audioDevice, fontManager, helper);
 	}
 }

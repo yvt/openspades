@@ -269,6 +269,13 @@
 		E82E67F018EA7A60004DBA18 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03C4178EE78C000683D4 /* OpenGL.framework */; };
 		E82E67FA18EA7EAB004DBA18 /* font-unifont.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F318EA7EAB004DBA18 /* font-unifont.pak */; };
 		E82E680418EA7F60004DBA18 /* libysrspades.dylib in Resources */ = {isa = PBXBuildFile; fileRef = E82E680318EA7F60004DBA18 /* libysrspades.dylib */; };
+		E83668AA1E05750D00977A63 /* libopus.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E83668A91E05750D00977A63 /* libopus.0.dylib */; };
+		E83668AC1E05751900977A63 /* libopusfile.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E83668AB1E05751900977A63 /* libopusfile.0.dylib */; };
+		E83668AF1E05757B00977A63 /* OpusAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668AD1E05757B00977A63 /* OpusAudioStream.cpp */; };
+		E83668B21E05844E00977A63 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668B01E05844E00977A63 /* AudioStream.cpp */; };
+		E83668B41E058A6900977A63 /* libogg.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E83668B31E058A6900977A63 /* libogg.0.dylib */; };
+		E8655AA81DFC0A6E00D5058A /* FTFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8655AA61DFC0A6E00D5058A /* FTFont.cpp */; };
+		E8655AAB1DFC0BCB00D5058A /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8655AAA1DFC0BCB00D5058A /* libfreetype.6.dylib */; };
 		E8690AEC1D3920C800DBC331 /* pak000-Nonfree.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */; };
 		E8690AED1D3920C800DBC331 /* pak002-Base.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE71D3920C800DBC331 /* pak002-Base.pak */; };
 		E8690AEE1D3920C800DBC331 /* pak005-Models.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE81D3920C800DBC331 /* pak005-Models.pak */; };
@@ -279,6 +286,7 @@
 		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
 		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
+		E88344101E03244F000C3E39 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E883440F1E03244F000C3E39 /* FontManager.cpp */; };
 		E88F46591DE1B192009E85E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03F2178EF916000683D4 /* Cocoa.framework */; };
 		E89A5F1E1DF8732200857F65 /* ShellApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1C1DF8732200857F65 /* ShellApi.cpp */; };
 		E89A5F201DF8759200857F65 /* ShellApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1F1DF8759200857F65 /* ShellApi.mm */; };
@@ -400,6 +408,13 @@
 		E834F56C1797AA2C004EBE88 /* FontData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FontData.h; sourceTree = "<group>"; };
 		E834F56D1797D92F004EBE88 /* ChatWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChatWindow.cpp; sourceTree = "<group>"; };
 		E834F56E1797D932004EBE88 /* ChatWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatWindow.h; sourceTree = "<group>"; };
+		E83668A91E05750D00977A63 /* libopus.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopus.0.dylib; path = /opt/local/lib/libopus.0.dylib; sourceTree = "<absolute>"; };
+		E83668AB1E05751900977A63 /* libopusfile.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopusfile.0.dylib; path = /opt/local/lib/libopusfile.0.dylib; sourceTree = "<absolute>"; };
+		E83668AD1E05757B00977A63 /* OpusAudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpusAudioStream.cpp; sourceTree = "<group>"; };
+		E83668AE1E05757B00977A63 /* OpusAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpusAudioStream.h; sourceTree = "<group>"; };
+		E83668B01E05844E00977A63 /* AudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioStream.cpp; sourceTree = "<group>"; };
+		E83668B11E05844E00977A63 /* AudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioStream.h; sourceTree = "<group>"; };
+		E83668B31E058A6900977A63 /* libogg.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.0.dylib; path = ../../../../../opt/local/lib/libogg.0.dylib; sourceTree = "<group>"; };
 		E838D41D18AC726B00EE3C53 /* Strings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Strings.cpp; sourceTree = "<group>"; };
 		E838D41E18AC726B00EE3C53 /* Strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Strings.h; sourceTree = "<group>"; };
 		E838D42018ADDE2800EE3C53 /* StringsScript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringsScript.cpp; sourceTree = "<group>"; };
@@ -485,6 +500,10 @@
 		E859511117C645000012810C /* GLFXAAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFXAAFilter.h; sourceTree = "<group>"; };
 		E859511317C96B260012810C /* GLProfiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProfiler.cpp; sourceTree = "<group>"; };
 		E859511417C96B270012810C /* GLProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProfiler.h; sourceTree = "<group>"; };
+		E8655AA61DFC0A6E00D5058A /* FTFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FTFont.cpp; sourceTree = "<group>"; };
+		E8655AA71DFC0A6E00D5058A /* FTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTFont.h; sourceTree = "<group>"; };
+		E8655AA91DFC0AAA00D5058A /* TMPUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TMPUtils.h; sourceTree = "<group>"; };
+		E8655AAA1DFC0BCB00D5058A /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = /opt/X11/lib/libfreetype.6.dylib; sourceTree = "<absolute>"; };
 		E867B6E31DD49D7F0093E4E0 /* as_namespace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = as_namespace.h; sourceTree = "<group>"; };
 		E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak000-Nonfree.pak"; path = "Resources/pak000-Nonfree.pak"; sourceTree = "<group>"; };
 		E8690AE71D3920C800DBC331 /* pak002-Base.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak002-Base.pak"; path = "Resources/pak002-Base.pak"; sourceTree = "<group>"; };
@@ -540,6 +559,7 @@
 		E88319151792A7CC002ABE6D /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		E88319161792A7CC002ABE6D /* unix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unix.c; sourceTree = "<group>"; };
 		E88319171792A7CC002ABE6D /* win32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = win32.c; sourceTree = "<group>"; };
+		E883440F1E03244F000C3E39 /* FontManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontManager.cpp; sourceTree = "<group>"; };
 		E88EB02D185D9DC500565D07 /* YsrDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YsrDevice.cpp; sourceTree = "<group>"; };
 		E88EB02E185D9DC500565D07 /* YsrDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YsrDevice.h; sourceTree = "<group>"; };
 		E890F30E187046990090AAB8 /* CP437.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CP437.cpp; sourceTree = "<group>"; };
@@ -874,6 +894,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E83668B41E058A6900977A63 /* libogg.0.dylib in Frameworks */,
+				E83668AC1E05751900977A63 /* libopusfile.0.dylib in Frameworks */,
+				E83668AA1E05750D00977A63 /* libopus.0.dylib in Frameworks */,
+				E8655AAB1DFC0BCB00D5058A /* libfreetype.6.dylib in Frameworks */,
 				E88F46591DE1B192009E85E5 /* Cocoa.framework in Frameworks */,
 				E82E67F018EA7A60004DBA18 /* OpenGL.framework in Frameworks */,
 				E82E67E218EA7A1E004DBA18 /* libz.tbd in Frameworks */,
@@ -956,6 +980,10 @@
 		E82E66BA18EA78F5004DBA18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E83668B31E058A6900977A63 /* libogg.0.dylib */,
+				E83668AB1E05751900977A63 /* libopusfile.0.dylib */,
+				E83668A91E05750D00977A63 /* libopus.0.dylib */,
+				E8655AAA1DFC0BCB00D5058A /* libfreetype.6.dylib */,
 				E82E680318EA7F60004DBA18 /* libysrspades.dylib */,
 				E844888617D26699005105D0 /* libcurl.tbd */,
 				E8CF039B178EDAC9000683D4 /* libz.tbd */,
@@ -1346,6 +1374,7 @@
 				E8493DB61A7349030055731A /* Config.h */,
 				E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */,
 				E8F74CFE184C753F0085AA54 /* Clipboard.cpp */,
+				E883440F1E03244F000C3E39 /* FontManager.cpp */,
 			);
 			name = ScriptBindings;
 			path = Sources/ScriptBindings;
@@ -1515,6 +1544,7 @@
 				E89A5F1C1DF8732200857F65 /* ShellApi.cpp */,
 				E89A5F1D1DF8732200857F65 /* ShellApi.h */,
 				E89A5F1F1DF8759200857F65 /* ShellApi.mm */,
+				E8655AA91DFC0AAA00D5058A /* TMPUtils.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1624,6 +1654,8 @@
 				E842889518A667930060743D /* Fonts.h */,
 				E8725DAB1DE33B4D003BC987 /* NoiseSampler.cpp */,
 				E8725DAC1DE33B4D003BC987 /* NoiseSampler.h */,
+				E8655AA61DFC0A6E00D5058A /* FTFont.cpp */,
+				E8655AA71DFC0A6E00D5058A /* FTFont.h */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1796,6 +1828,10 @@
 				E8567E651792CCE5009D83E0 /* WavAudioStream.h */,
 				E80B288617A52AB60056179E /* BitmapAtlasGenerator.cpp */,
 				E80B288717A52AB70056179E /* BitmapAtlasGenerator.h */,
+				E83668AD1E05757B00977A63 /* OpusAudioStream.cpp */,
+				E83668AE1E05757B00977A63 /* OpusAudioStream.h */,
+				E83668B01E05844E00977A63 /* AudioStream.cpp */,
+				E83668B11E05844E00977A63 /* AudioStream.h */,
 			);
 			name = Media;
 			sourceTree = "<group>";
@@ -2108,6 +2144,7 @@
 				E82E67D018EA7972004DBA18 /* GameMap.cpp in Sources */,
 				E82E67D118EA7972004DBA18 /* IGameMapListener.cpp in Sources */,
 				E82E67D218EA7972004DBA18 /* GameMapWrapper.cpp in Sources */,
+				E8655AA81DFC0A6E00D5058A /* FTFont.cpp in Sources */,
 				E82E67D318EA7972004DBA18 /* World.cpp in Sources */,
 				E82E67D418EA7972004DBA18 /* IWorldListener.cpp in Sources */,
 				E82E67D518EA7972004DBA18 /* HitTestDebugger.cpp in Sources */,
@@ -2120,11 +2157,13 @@
 				E82E67DC18EA7972004DBA18 /* SWMapRenderer.cpp in Sources */,
 				E82E67DD18EA7972004DBA18 /* SWFlatMapRenderer.cpp in Sources */,
 				E82E67DE18EA7972004DBA18 /* SWModelRenderer.cpp in Sources */,
+				E83668B21E05844E00977A63 /* AudioStream.cpp in Sources */,
 				E82E672518EA7967004DBA18 /* json_reader.cpp in Sources */,
 				E82E672618EA7967004DBA18 /* json_value.cpp in Sources */,
 				E82E672718EA7967004DBA18 /* json_writer.cpp in Sources */,
 				E82E672818EA7967004DBA18 /* scriptany.cpp in Sources */,
 				E82E672918EA7967004DBA18 /* scriptarray.cpp in Sources */,
+				E83668AF1E05757B00977A63 /* OpusAudioStream.cpp in Sources */,
 				E82E672A18EA7967004DBA18 /* scriptbuilder.cpp in Sources */,
 				E82E672B18EA7967004DBA18 /* scriptdictionary.cpp in Sources */,
 				E82E672C18EA7967004DBA18 /* scripthandle.cpp in Sources */,
@@ -2188,6 +2227,7 @@
 				E82E672018EA7954004DBA18 /* MainScreen.cpp in Sources */,
 				E82E672118EA7954004DBA18 /* MainScreenHelper.cpp in Sources */,
 				E82E672218EA7954004DBA18 /* View.cpp in Sources */,
+				E88344101E03244F000C3E39 /* FontManager.cpp in Sources */,
 				E82E672318EA7954004DBA18 /* Runner.cpp in Sources */,
 				E82E672418EA7954004DBA18 /* StartupScreen.cpp in Sources */,
 				E82E66ED18EA7914004DBA18 /* StartupScreenHelper.cpp in Sources */,
@@ -2222,9 +2262,24 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/SDL2.framework/Headers,
+					/Library/Frameworks/SDL2_image.framework/Headers,
+					/usr/local/include,
+					Sources/ENet/include,
+					"$(SRCROOT)",
+					Sources,
+					Sources/json/include,
+					/opt/X11/include/freetype2,
+					/opt/local/include/opus,
+				);
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/X11/lib,
+					/opt/local/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -2253,9 +2308,24 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/SDL2.framework/Headers,
+					/Library/Frameworks/SDL2_image.framework/Headers,
+					/usr/local/include,
+					Sources/ENet/include,
+					"$(SRCROOT)",
+					Sources,
+					Sources/json/include,
+					/opt/X11/include/freetype2,
+					/opt/local/include/opus,
+				);
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/X11/lib,
+					/opt/local/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

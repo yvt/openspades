@@ -127,7 +127,7 @@ namespace spades {
 
 			if (!quiet) {
 				Handle<IAudioChunk> c =
-				  audioDevice->RegisterSound("Sounds/Weapons/SwitchLocal.wav");
+				  audioDevice->RegisterSound("Sounds/Weapons/SwitchLocal.opus");
 				audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
 			}
 		}
@@ -353,12 +353,20 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			auto *player = world->GetLocalPlayer();
+			auto clientPlayer = clientPlayers[world->GetLocalPlayerIndex()];
 
 			PlayerInput inp = playerInput;
 			WeaponInput winp = weapInput;
 
+			Vector3 velocity = player->GetVelocty();
+			Vector3 horizontalVelocity{velocity.x, velocity.y, 0.0f};
+
+			if (horizontalVelocity.GetLength() < 0.1f) {
+				inp.sprint = false;
+			}
+
 			// weapon/tools are disabled while/soon after sprinting
-			if (GetSprintState() > 0.001f) {
+			if (GetSprintState() > 0.001f || inp.sprint) {
 				winp.primary = false;
 				winp.secondary = false;
 			}
@@ -379,24 +387,36 @@ namespace spades {
 			}
 
 			// weapon/tools are disabled while changing tools
-			if (clientPlayers[world->GetLocalPlayerIndex()]->IsChangingTool()) {
+			if (clientPlayer->IsChangingTool()) {
 				winp.primary = false;
 				winp.secondary = false;
 			}
 
-			// disable weapon while reloading (except shotgun)
-			if (player->GetTool() == Player::ToolWeapon && player->IsAwaitingReloadCompletion() &&
-			    !player->GetWeapon()->IsReloadSlow()) {
-				winp.primary = false;
+			if (player->GetTool() == Player::ToolWeapon) {
+				// disable weapon while reloading (except shotgun)
+				if (player->IsAwaitingReloadCompletion() && !player->GetWeapon()->IsReloadSlow()) {
+					winp.primary = false;
+					winp.secondary = false;
+				}
+
+				// stop firing if the player is out of ammo
+				if (player->GetWeapon()->GetAmmo() == 0) {
+					winp.primary = false;
+				}
 			}
 
 			player->SetInput(inp);
 			player->SetWeaponInput(winp);
 
 			// send player input
-			// FIXME: send only there are any changed?
-			net->SendPlayerInput(inp);
-			net->SendWeaponInput(winp);
+			{
+				PlayerInput sentInput = inp;
+				WeaponInput sentWeaponInput = winp;
+
+				// FIXME: send only there are any changed?
+				net->SendPlayerInput(sentInput);
+				net->SendWeaponInput(sentWeaponInput);
+			}
 
 			if (hasDelayedReload) {
 				world->GetLocalPlayer()->Reload();
@@ -478,16 +498,16 @@ namespace spades {
 				Handle<IAudioChunk> c;
 				switch ((mt_engine_client() >> 3) & 3) {
 					case 0:
-						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal1.wav");
+						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal1.opus");
 						break;
 					case 1:
-						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal2.wav");
+						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal2.opus");
 						break;
 					case 2:
-						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal3.wav");
+						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal3.opus");
 						break;
 					case 3:
-						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal4.wav");
+						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal4.opus");
 						break;
 				}
 				audioDevice->PlayLocal(c, AudioParam());
@@ -532,8 +552,8 @@ namespace spades {
 			if (!IsMuted()) {
 
 				Handle<IAudioChunk> c =
-				  p->GetWade() ? audioDevice->RegisterSound("Sounds/Player/WaterJump.wav")
-				               : audioDevice->RegisterSound("Sounds/Player/Jump.wav");
+				  p->GetWade() ? audioDevice->RegisterSound("Sounds/Player/WaterJump.opus")
+				               : audioDevice->RegisterSound("Sounds/Player/Jump.opus");
 				audioDevice->Play(c, p->GetOrigin(), AudioParam());
 			}
 		}
@@ -544,11 +564,11 @@ namespace spades {
 			if (!IsMuted()) {
 				Handle<IAudioChunk> c;
 				if (hurt)
-					c = audioDevice->RegisterSound("Sounds/Player/FallHurt.wav");
+					c = audioDevice->RegisterSound("Sounds/Player/FallHurt.opus");
 				else if (p->GetWade())
-					c = audioDevice->RegisterSound("Sounds/Player/WaterLand.wav");
+					c = audioDevice->RegisterSound("Sounds/Player/WaterLand.opus");
 				else
-					c = audioDevice->RegisterSound("Sounds/Player/Land.wav");
+					c = audioDevice->RegisterSound("Sounds/Player/Land.opus");
 				audioDevice->Play(c, p->GetOrigin(), AudioParam());
 			}
 		}
@@ -557,20 +577,20 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
-				const char *snds[] = {"Sounds/Player/Footstep1.wav", "Sounds/Player/Footstep2.wav",
-				                      "Sounds/Player/Footstep3.wav", "Sounds/Player/Footstep4.wav",
-				                      "Sounds/Player/Footstep5.wav", "Sounds/Player/Footstep6.wav",
-				                      "Sounds/Player/Footstep7.wav", "Sounds/Player/Footstep8.wav"};
+				const char *snds[] = {"Sounds/Player/Footstep1.opus", "Sounds/Player/Footstep2.opus",
+				                      "Sounds/Player/Footstep3.opus", "Sounds/Player/Footstep4.opus",
+				                      "Sounds/Player/Footstep5.opus", "Sounds/Player/Footstep6.opus",
+				                      "Sounds/Player/Footstep7.opus", "Sounds/Player/Footstep8.opus"};
 				const char *rsnds[] = {
-				  "Sounds/Player/Run1.wav",  "Sounds/Player/Run2.wav",  "Sounds/Player/Run3.wav",
-				  "Sounds/Player/Run4.wav",  "Sounds/Player/Run5.wav",  "Sounds/Player/Run6.wav",
-				  "Sounds/Player/Run7.wav",  "Sounds/Player/Run8.wav",  "Sounds/Player/Run9.wav",
-				  "Sounds/Player/Run10.wav", "Sounds/Player/Run11.wav", "Sounds/Player/Run12.wav",
+				  "Sounds/Player/Run1.opus",  "Sounds/Player/Run2.opus",  "Sounds/Player/Run3.opus",
+				  "Sounds/Player/Run4.opus",  "Sounds/Player/Run5.opus",  "Sounds/Player/Run6.opus",
+				  "Sounds/Player/Run7.opus",  "Sounds/Player/Run8.opus",  "Sounds/Player/Run9.opus",
+				  "Sounds/Player/Run10.opus", "Sounds/Player/Run11.opus", "Sounds/Player/Run12.opus",
 				};
-				const char *wsnds[] = {"Sounds/Player/Wade1.wav", "Sounds/Player/Wade2.wav",
-				                       "Sounds/Player/Wade3.wav", "Sounds/Player/Wade4.wav",
-				                       "Sounds/Player/Wade5.wav", "Sounds/Player/Wade6.wav",
-				                       "Sounds/Player/Wade7.wav", "Sounds/Player/Wade8.wav"};
+				const char *wsnds[] = {"Sounds/Player/Wade1.opus", "Sounds/Player/Wade2.opus",
+				                       "Sounds/Player/Wade3.opus", "Sounds/Player/Wade4.opus",
+				                       "Sounds/Player/Wade5.opus", "Sounds/Player/Wade6.opus",
+				                       "Sounds/Player/Wade7.opus", "Sounds/Player/Wade8.opus"};
 				bool sprinting = clientPlayers[p->GetId()]
 				                   ? clientPlayers[p->GetId()]->GetSprintState() > 0.5f
 				                   : false;
@@ -601,7 +621,7 @@ namespace spades {
 
 			if (!IsMuted()) {
 				bool isLocal = p == world->GetLocalPlayer();
-				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/DryFire.wav");
+				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/DryFire.opus");
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
 				else
@@ -633,7 +653,7 @@ namespace spades {
 					// played by ClientPlayer::Update
 					return;
 				} else {
-					c = audioDevice->RegisterSound("Sounds/Weapons/Switch.wav");
+					c = audioDevice->RegisterSound("Sounds/Weapons/Switch.opus");
 				}
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
@@ -648,8 +668,8 @@ namespace spades {
 			if (!IsMuted()) {
 				bool isLocal = p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c =
-				  isLocal ? audioDevice->RegisterSound("Sounds/Weapons/RestockLocal.wav")
-				          : audioDevice->RegisterSound("Sounds/Weapons/Restock.wav");
+				  isLocal ? audioDevice->RegisterSound("Sounds/Weapons/RestockLocal.opus")
+				          : audioDevice->RegisterSound("Sounds/Weapons/Restock.opus");
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
 				else
@@ -665,7 +685,7 @@ namespace spades {
 			if (!IsMuted()) {
 				bool isLocal = p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c =
-				  audioDevice->RegisterSound("Sounds/Weapons/Grenade/Throw.wav");
+				  audioDevice->RegisterSound("Sounds/Weapons/Grenade/Throw.opus");
 
 				if (g && isLocal) {
 					net->SendGrenade(g);
@@ -685,7 +705,7 @@ namespace spades {
 
 			if (!IsMuted()) {
 				bool isLocal = p == world->GetLocalPlayer();
-				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/Spade/Miss.wav");
+				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/Spade/Miss.opus");
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.2f, -.1f, 0.7f), AudioParam());
 				else
@@ -714,7 +734,7 @@ namespace spades {
 			if (!IsMuted()) {
 				bool isLocal = p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c =
-				  audioDevice->RegisterSound("Sounds/Weapons/Spade/HitBlock.wav");
+				  audioDevice->RegisterSound("Sounds/Weapons/Spade/HitBlock.opus");
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.1f, -.1f, 1.2f), AudioParam());
 				else
@@ -733,13 +753,13 @@ namespace spades {
 						Handle<IAudioChunk> c;
 						switch (mt_engine_client() % 3) {
 							case 0:
-								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.wav");
+								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.opus");
 								break;
 							case 1:
-								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh2.wav");
+								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh2.opus");
 								break;
 							case 2:
-								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh3.wav");
+								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh3.opus");
 								break;
 						}
 						AudioParam param;
@@ -878,19 +898,19 @@ namespace spades {
 			if (!IsMuted()) {
 				if (type == HitTypeMelee) {
 					Handle<IAudioChunk> c =
-					  audioDevice->RegisterSound("Sounds/Weapons/Spade/HitPlayer.wav");
+					  audioDevice->RegisterSound("Sounds/Weapons/Spade/HitPlayer.opus");
 					audioDevice->Play(c, hitPos, AudioParam());
 				} else {
 					Handle<IAudioChunk> c;
 					switch ((mt_engine_client() >> 6) % 3) {
 						case 0:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.opus");
 							break;
 						case 1:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh2.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh2.opus");
 							break;
 						case 2:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh3.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh3.opus");
 							break;
 					}
 					AudioParam param;
@@ -932,16 +952,16 @@ namespace spades {
 					param.pitch = .9f + GetRandom() * 0.2f;
 					switch ((mt_engine_client() >> 6) & 3) {
 						case 0:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water1.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water1.opus");
 							break;
 						case 1:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water2.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water2.opus");
 							break;
 						case 2:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water3.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water3.opus");
 							break;
 						case 3:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water4.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water4.opus");
 							break;
 					}
 					audioDevice->Play(c, shiftedHitPos, param);
@@ -960,7 +980,7 @@ namespace spades {
 						case 1:
 						case 2:
 						case 3:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Block.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Block.opus");
 							break;
 					}
 					audioDevice->Play(c, shiftedHitPos, param);
@@ -969,16 +989,16 @@ namespace spades {
 					param.volume = 2.f;
 					switch ((mt_engine_client() >> 6) & 3) {
 						case 0:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet1.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet1.opus");
 							break;
 						case 1:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet2.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet2.opus");
 							break;
 						case 2:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet3.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet3.opus");
 							break;
 						case 3:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet4.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet4.opus");
 							break;
 					}
 					audioDevice->Play(c, shiftedHitPos, param);
@@ -1018,7 +1038,7 @@ namespace spades {
 				o.z = v.z;
 				o += .5f;
 
-				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Misc/BlockFall.wav");
+				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Misc/BlockFall.opus");
 				audioDevice->Play(c, o, AudioParam());
 			}
 		}
@@ -1029,7 +1049,7 @@ namespace spades {
 			if (g->GetPosition().z < 63.f) {
 				if (!IsMuted()) {
 					Handle<IAudioChunk> c =
-					  audioDevice->RegisterSound("Sounds/Weapons/Grenade/Bounce.wav");
+					  audioDevice->RegisterSound("Sounds/Weapons/Grenade/Bounce.opus");
 					audioDevice->Play(c, g->GetPosition(), AudioParam());
 				}
 			}
@@ -1040,7 +1060,7 @@ namespace spades {
 
 			if (!IsMuted()) {
 				Handle<IAudioChunk> c =
-				  audioDevice->RegisterSound("Sounds/Weapons/Grenade/DropWater.wav");
+				  audioDevice->RegisterSound("Sounds/Weapons/Grenade/DropWater.opus");
 				audioDevice->Play(c, g->GetPosition(), AudioParam());
 			}
 		}
@@ -1053,17 +1073,17 @@ namespace spades {
 			if (inWater) {
 				if (!IsMuted()) {
 					Handle<IAudioChunk> c =
-					  audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplode.wav");
+					  audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplode.opus");
 					AudioParam param;
 					param.volume = 10.f;
 					audioDevice->Play(c, g->GetPosition(), param);
 
-					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeFar.wav");
+					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeFar.opus");
 					param.volume = 6.f;
 					param.referenceDistance = 10.f;
 					audioDevice->Play(c, g->GetPosition(), param);
 
-					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeStereo.wav");
+					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeStereo.opus");
 					param.volume = 2.f;
 					audioDevice->Play(c, g->GetPosition(), param);
 				}
@@ -1078,14 +1098,14 @@ namespace spades {
 
 					switch ((mt_engine_client() >> 8) & 1) {
 						case 0:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode1.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode1.opus");
 							cs = audioDevice->RegisterSound(
-							  "Sounds/Weapons/Grenade/ExplodeStereo1.wav");
+							  "Sounds/Weapons/Grenade/ExplodeStereo1.opus");
 							break;
 						case 1:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode2.wav");
+							c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode2.opus");
 							cs = audioDevice->RegisterSound(
-							  "Sounds/Weapons/Grenade/ExplodeStereo2.wav");
+							  "Sounds/Weapons/Grenade/ExplodeStereo2.opus");
 							break;
 					}
 
@@ -1097,17 +1117,17 @@ namespace spades {
 					param.referenceDistance = 1.f;
 					audioDevice->Play(cs, g->GetPosition(), param);
 
-					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFar.wav");
+					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFar.opus");
 					param.volume = 6.f;
 					param.referenceDistance = 40.f;
 					audioDevice->Play(c, g->GetPosition(), param);
 
-					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFarStereo.wav");
+					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFarStereo.opus");
 					param.referenceDistance = 10.f;
 					audioDevice->Play(c, g->GetPosition(), param);
 
 					// debri sound
-					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Debris.wav");
+					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Debris.opus");
 					param.volume = 5.f;
 					param.referenceDistance = 3.f;
 					IntVector3 outPos;
@@ -1125,7 +1145,7 @@ namespace spades {
 
 			if (!IsMuted()) {
 				Handle<IAudioChunk> c =
-				  audioDevice->RegisterSound("Sounds/Weapons/Grenade/Fire.wav");
+				  audioDevice->RegisterSound("Sounds/Weapons/Grenade/Fire.opus");
 				audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
 			}
 		}

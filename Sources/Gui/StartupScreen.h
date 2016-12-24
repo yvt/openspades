@@ -28,7 +28,7 @@
 
 namespace spades {
 	namespace client {
-		class IFont;
+		class FontManager;
 	}
 	namespace gui {
 		class StartupScreenHelper;
@@ -37,7 +37,7 @@ namespace spades {
 
 			Handle<client::IRenderer> renderer;
 			Handle<client::IAudioDevice> audioDevice;
-			Handle<client::IFont> font;
+			Handle<client::FontManager> fontManager;
 			float timeToStartInitialization;
 			bool startRequested = false;
 
@@ -55,7 +55,8 @@ namespace spades {
 			virtual ~StartupScreen();
 
 		public:
-			StartupScreen(client::IRenderer *, client::IAudioDevice *, StartupScreenHelper *helper);
+			StartupScreen(client::IRenderer *, client::IAudioDevice *, StartupScreenHelper *helper,
+			              client::FontManager *fontManager);
 
 			client::IRenderer *GetRenderer() { return &*renderer; }
 			client::IAudioDevice *GetAudioDevice() { return &*audioDevice; }

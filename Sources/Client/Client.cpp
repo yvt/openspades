@@ -67,13 +67,14 @@ namespace spades {
 		  r_device_client()); // Seed Mersenne twister with non-deterministic 32-bit seed
 
 		Client::Client(IRenderer *r, IAudioDevice *audioDev, const ServerAddress &host,
-		               std::string playerName)
+		               std::string playerName, FontManager *fontManager)
 		    : renderer(r),
 		      audioDevice(audioDev),
 		      playerName(playerName),
 		      hasDelayedReload(false),
 		      hostname(host),
 		      logStream(nullptr),
+		      fontManager(fontManager),
 
 		      readyToClose(false),
 		      scoreboardVisible(false),
@@ -97,7 +98,7 @@ namespace spades {
 		      lastPosSentTime(0.f),
 		      worldSubFrame(0.f),
 		      grenadeVibration(0.f),
-			  grenadeVibrationSlow(0.f),
+		      grenadeVibrationSlow(0.f),
 		      lastMyCorpse(nullptr),
 		      hasLastTool(false),
 
@@ -116,25 +117,22 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
 
-			designFont.Set(CreateSquareDesignFont(renderer), false);
-			textFont.Set(CreateGuiFont(renderer), false);
-			bigTextFont.Set(CreateLargeFont(renderer), false);
-
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));
 
-			chatWindow.reset(new ChatWindow(this, GetRenderer(), textFont, false));
-			killfeedWindow.reset(new ChatWindow(this, GetRenderer(), textFont, true));
+			chatWindow.reset(new ChatWindow(this, GetRenderer(), fontManager->GetGuiFont(), false));
+			killfeedWindow.reset(
+			  new ChatWindow(this, GetRenderer(), fontManager->GetGuiFont(), true));
 
 			hurtRingView.reset(new HurtRingView(this));
-			centerMessageView.reset(new CenterMessageView(this, bigTextFont));
+			centerMessageView.reset(new CenterMessageView(this, fontManager->GetLargeFont()));
 			mapView.reset(new MapView(this, false));
 			largeMapView.reset(new MapView(this, true));
 			scoreboard.reset(new ScoreboardView(this));
 			limbo.reset(new LimboView(this));
 			paletteView.reset(new PaletteView(this));
 			tcView.reset(new TCProgressView(this));
-			scriptedUI.Set(new ClientUI(renderer, audioDev, textFont, this), false);
+			scriptedUI.Set(new ClientUI(renderer, audioDev, fontManager, this), false);
 
 			renderer->SetGameMap(nullptr);
 		}
@@ -249,9 +247,6 @@ namespace spades {
 			paletteView.reset();
 			centerMessageView.reset();
 			hurtRingView.reset();
-			designFont.Set(nullptr);
-			textFont.Set(nullptr);
-			bigTextFont.Set(nullptr);
 			world.reset();
 		}
 
@@ -263,52 +258,52 @@ namespace spades {
 			renderer->RegisterImage("Textures/Fluid.png");
 			renderer->RegisterImage("Textures/WaterExpl.png");
 			renderer->RegisterImage("Gfx/White.tga");
-			audioDevice->RegisterSound("Sounds/Weapons/Block/Build.wav");
-			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal1.wav");
-			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal2.wav");
-			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal3.wav");
-			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal4.wav");
-			audioDevice->RegisterSound("Sounds/Misc/SwitchMapZoom.wav");
-			audioDevice->RegisterSound("Sounds/Misc/OpenMap.wav");
-			audioDevice->RegisterSound("Sounds/Misc/CloseMap.wav");
-			audioDevice->RegisterSound("Sounds/Player/Flashlight.wav");
-			audioDevice->RegisterSound("Sounds/Player/Footstep1.wav");
-			audioDevice->RegisterSound("Sounds/Player/Footstep2.wav");
-			audioDevice->RegisterSound("Sounds/Player/Footstep3.wav");
-			audioDevice->RegisterSound("Sounds/Player/Footstep4.wav");
-			audioDevice->RegisterSound("Sounds/Player/Footstep5.wav");
-			audioDevice->RegisterSound("Sounds/Player/Footstep6.wav");
-			audioDevice->RegisterSound("Sounds/Player/Footstep7.wav");
-			audioDevice->RegisterSound("Sounds/Player/Footstep8.wav");
-			audioDevice->RegisterSound("Sounds/Player/Wade1.wav");
-			audioDevice->RegisterSound("Sounds/Player/Wade2.wav");
-			audioDevice->RegisterSound("Sounds/Player/Wade3.wav");
-			audioDevice->RegisterSound("Sounds/Player/Wade4.wav");
-			audioDevice->RegisterSound("Sounds/Player/Wade5.wav");
-			audioDevice->RegisterSound("Sounds/Player/Wade6.wav");
-			audioDevice->RegisterSound("Sounds/Player/Wade7.wav");
-			audioDevice->RegisterSound("Sounds/Player/Wade8.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run1.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run2.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run3.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run4.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run5.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run6.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run7.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run8.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run9.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run10.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run11.wav");
-			audioDevice->RegisterSound("Sounds/Player/Run12.wav");
-			audioDevice->RegisterSound("Sounds/Player/Jump.wav");
-			audioDevice->RegisterSound("Sounds/Player/Land.wav");
-			audioDevice->RegisterSound("Sounds/Player/WaterJump.wav");
-			audioDevice->RegisterSound("Sounds/Player/WaterLand.wav");
-			audioDevice->RegisterSound("Sounds/Weapons/SwitchLocal.wav");
-			audioDevice->RegisterSound("Sounds/Weapons/Switch.wav");
-			audioDevice->RegisterSound("Sounds/Weapons/Restock.wav");
-			audioDevice->RegisterSound("Sounds/Weapons/RestockLocal.wav");
-			audioDevice->RegisterSound("Sounds/Weapons/AimDownSightLocal.wav");
+			audioDevice->RegisterSound("Sounds/Weapons/Block/Build.opus");
+			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal1.opus");
+			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal2.opus");
+			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal3.opus");
+			audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal4.opus");
+			audioDevice->RegisterSound("Sounds/Misc/SwitchMapZoom.opus");
+			audioDevice->RegisterSound("Sounds/Misc/OpenMap.opus");
+			audioDevice->RegisterSound("Sounds/Misc/CloseMap.opus");
+			audioDevice->RegisterSound("Sounds/Player/Flashlight.opus");
+			audioDevice->RegisterSound("Sounds/Player/Footstep1.opus");
+			audioDevice->RegisterSound("Sounds/Player/Footstep2.opus");
+			audioDevice->RegisterSound("Sounds/Player/Footstep3.opus");
+			audioDevice->RegisterSound("Sounds/Player/Footstep4.opus");
+			audioDevice->RegisterSound("Sounds/Player/Footstep5.opus");
+			audioDevice->RegisterSound("Sounds/Player/Footstep6.opus");
+			audioDevice->RegisterSound("Sounds/Player/Footstep7.opus");
+			audioDevice->RegisterSound("Sounds/Player/Footstep8.opus");
+			audioDevice->RegisterSound("Sounds/Player/Wade1.opus");
+			audioDevice->RegisterSound("Sounds/Player/Wade2.opus");
+			audioDevice->RegisterSound("Sounds/Player/Wade3.opus");
+			audioDevice->RegisterSound("Sounds/Player/Wade4.opus");
+			audioDevice->RegisterSound("Sounds/Player/Wade5.opus");
+			audioDevice->RegisterSound("Sounds/Player/Wade6.opus");
+			audioDevice->RegisterSound("Sounds/Player/Wade7.opus");
+			audioDevice->RegisterSound("Sounds/Player/Wade8.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run1.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run2.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run3.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run4.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run5.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run6.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run7.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run8.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run9.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run10.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run11.opus");
+			audioDevice->RegisterSound("Sounds/Player/Run12.opus");
+			audioDevice->RegisterSound("Sounds/Player/Jump.opus");
+			audioDevice->RegisterSound("Sounds/Player/Land.opus");
+			audioDevice->RegisterSound("Sounds/Player/WaterJump.opus");
+			audioDevice->RegisterSound("Sounds/Player/WaterLand.opus");
+			audioDevice->RegisterSound("Sounds/Weapons/SwitchLocal.opus");
+			audioDevice->RegisterSound("Sounds/Weapons/Switch.opus");
+			audioDevice->RegisterSound("Sounds/Weapons/Restock.opus");
+			audioDevice->RegisterSound("Sounds/Weapons/RestockLocal.opus");
+			audioDevice->RegisterSound("Sounds/Weapons/AimDownSightLocal.opus");
 			renderer->RegisterImage("Gfx/Ball.png");
 			renderer->RegisterModel("Models/Player/Dead.kv6");
 			renderer->RegisterImage("Gfx/Spotlight.png");
@@ -341,7 +336,7 @@ namespace spades {
 			renderer->RegisterImage("Gfx/CircleGradient.png");
 			renderer->RegisterImage("Gfx/HurtSprite.png");
 			renderer->RegisterImage("Gfx/HurtRing2.png");
-			audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
+			audioDevice->RegisterSound("Sounds/Feedback/Chat.opus");
 
 			if (mumbleLink.init())
 				SPLog("Mumble linked");
@@ -529,7 +524,7 @@ namespace spades {
 		}
 
 		void Client::PlayAlertSound() {
-			Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Alert.wav");
+			Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Alert.opus");
 			audioDevice->PlayLocal(chunk, AudioParam());
 		}
 
@@ -654,7 +649,7 @@ namespace spades {
 				       world->GetTeam(p->GetTeamId()).name.c_str(), msg.c_str());
 
 			if ((!IsMuted()) && (int)cg_chatBeep) {
-				Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Chat.wav");
+				Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Chat.opus");
 				audioDevice->PlayLocal(chunk, AudioParam());
 			}
 		}

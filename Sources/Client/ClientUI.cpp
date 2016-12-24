@@ -24,7 +24,7 @@
 #include "NetClient.h"
 #include <Client/Client.h>
 #include <Client/FontData.h>
-#include <Client/Quake3Font.h>
+#include <Client/Fonts.h>
 #include <Core/Exception.h>
 #include <Core/Settings.h>
 #include <ScriptBindings/Config.h>
@@ -32,9 +32,8 @@
 
 namespace spades {
 	namespace client {
-		ClientUI::ClientUI(client::IRenderer *r, client::IAudioDevice *a, IFont *font,
-		                   Client *client)
-		    : renderer(r), audioDevice(a), font(font), client(client) {
+		ClientUI::ClientUI(IRenderer *r, IAudioDevice *a, FontManager *fontManager, Client *client)
+		    : renderer(r), audioDevice(a), fontManager(fontManager), client(client) {
 			SPADES_MARK_FUNCTION();
 			if (r == NULL)
 				SPInvalidArgument("r");
@@ -45,12 +44,12 @@ namespace spades {
 
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction uiFactory(
-			  "ClientUI@ CreateClientUI(Renderer@, AudioDevice@, Font@, ClientUIHelper@)");
+			  "ClientUI@ CreateClientUI(Renderer@, AudioDevice@, FontManager@, ClientUIHelper@)");
 			{
 				ScriptContextHandle ctx = uiFactory.Prepare();
 				ctx->SetArgObject(0, renderer);
 				ctx->SetArgObject(1, audioDevice);
-				ctx->SetArgObject(2, font);
+				ctx->SetArgObject(2, fontManager);
 				ctx->SetArgObject(3, &*helper);
 
 				ctx.ExecuteChecked();

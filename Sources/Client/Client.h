@@ -51,6 +51,7 @@ namespace spades {
 		class IAudioChunk;
 		class NetClient;
 		class IFont;
+		class FontManager;
 		class ChatWindow;
 		class CenterMessageView;
 		class Corpse;
@@ -217,9 +218,7 @@ namespace spades {
 			void BulletHitWaterSurface(Vector3);
 
 			// drawings
-			Handle<IFont> designFont;
-			Handle<IFont> textFont;
-			Handle<IFont> bigTextFont;
+			Handle<FontManager> fontManager;
 
 			enum class AlertType { Notice, Warning, Error };
 			AlertType alertType;
@@ -297,7 +296,8 @@ namespace spades {
 			virtual ~Client();
 
 		public:
-			Client(IRenderer *, IAudioDevice *, const ServerAddress &host, std::string playerName);
+			Client(IRenderer *, IAudioDevice *, const ServerAddress &host, std::string playerName,
+			       FontManager *);
 
 			virtual void RunFrame(float dt);
 

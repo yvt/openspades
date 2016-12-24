@@ -23,10 +23,9 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <Core/Debug.h>
-#include <Core/Settings.h>
 #include "CTFGameMode.h"
 #include "Client.h"
+#include "Fonts.h"
 #include "IFont.h"
 #include "IImage.h"
 #include "IRenderer.h"
@@ -36,6 +35,8 @@
 #include "ScoreboardView.h"
 #include "TCGameMode.h"
 #include "World.h"
+#include <Core/Debug.h>
+#include <Core/Settings.h>
 #include <Core/Strings.h>
 
 SPADES_SETTING(cg_Minimap_Player_Color);
@@ -159,7 +160,7 @@ namespace spades {
 			renderer->DrawImage(
 			  image, AABB2(contentsRight, teamBarTop + teamBarHeight - size.y, -size.x, size.y));
 
-			font = client->bigTextFont;
+			font = client->fontManager->GetSquareDesignFont();
 			str = world->GetTeam(0).name;
 			pos.x = contentsLeft + 110.f;
 			pos.y = teamBarTop + 5.f;
@@ -220,7 +221,7 @@ namespace spades {
 
 		void ScoreboardView::DrawPlayers(int team, float left, float top, float width,
 		                                 float height) {
-			IFont *font = client->textFont;
+			IFont *font = client->fontManager->GetGuiFont();
 			float rowHeight = 24.f;
 			char buf[256];
 			Vector2 size;
@@ -294,8 +295,8 @@ namespace spades {
 		}
 
 		void ScoreboardView::DrawSpectators(float top, float centerX) {
-			IFont *bigFont = client->bigTextFont;
-			IFont *font = client->textFont;
+			IFont *bigFont = client->fontManager->GetSquareDesignFont();
+			IFont *font = client->fontManager->GetGuiFont();
 			char buf[256];
 			std::vector<ScoreboardEntry> entries;
 

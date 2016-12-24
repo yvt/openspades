@@ -28,7 +28,7 @@ zip -r "$OUTPUT_DIR/pak005-Models.pak" Maps $ZIPARGS > "$LOG_FILE"
 
 zip -r "$OUTPUT_DIR/pak010-BaseSkin."pak \
 License/Credits-pak010-BaseSkin.md \
-Scripts/Skin Sounds/Weapons $ZIPARGS > "$LOG_FILE"
+Scripts/Skin Sounds/Weapons Models/Weapons $ZIPARGS > "$LOG_FILE"
 
 zip -r "$OUTPUT_DIR/pak050-Locales.pak" License/Credits-pak050-Locales.md Locales $ZIPARGS > "$LOG_FILE"
 

@@ -36,7 +36,7 @@ namespace spades {
 	class ClientUI {
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
-		private Font@ font;
+		FontManager@ fontManager;
 		ClientUIHelper@ helper;
 
 		spades::ui::UIManager@ manager;
@@ -52,14 +52,14 @@ namespace spades {
 
 		private float time = -1.f;
 
-		ClientUI(Renderer@ renderer, AudioDevice@ audioDevice, Font@ font, ClientUIHelper@ helper) {
+		ClientUI(Renderer@ renderer, AudioDevice@ audioDevice, FontManager@ fontManager, ClientUIHelper@ helper) {
 			@this.renderer = renderer;
 			@this.audioDevice = audioDevice;
-			@this.font = font;
+			@this.fontManager = fontManager;
 			@this.helper = helper;
 
 			@manager = spades::ui::UIManager(renderer, audioDevice);
-			@manager.RootElement.Font = font;
+			@manager.RootElement.Font = fontManager.GuiFont;
 
 			@clientMenu = ClientMenu(this);
 			clientMenu.Bounds = manager.RootElement.Bounds;
@@ -230,7 +230,7 @@ namespace spades {
 			PreferenceViewOptions opt;
 			opt.GameActive = true;
 
-			PreferenceView al(this, opt);
+			PreferenceView al(this, opt, ui.fontManager);
 			al.Run();
 		}
 		private void OnChatLog(spades::ui::UIElement@ sender) {
@@ -786,7 +786,7 @@ namespace spades {
 	}
 
 	ClientUI@ CreateClientUI(Renderer@ renderer, AudioDevice@ audioDevice,
-		Font@ font, ClientUIHelper@ helper) {
-		return ClientUI(renderer, audioDevice, font, helper);
+		FontManager@ fontManager, ClientUIHelper@ helper) {
+		return ClientUI(renderer, audioDevice, fontManager, helper);
 	}
 }

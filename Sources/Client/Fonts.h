@@ -21,11 +21,27 @@
 #pragma once
 
 #include "IFont.h"
+#include <Core/RefCountedObject.h>
 
 namespace spades {
-    namespace client {
-        IFont *CreateSquareDesignFont(IRenderer *);
-        IFont *CreateLargeFont(IRenderer *);
-        IFont *CreateGuiFont(IRenderer *);
-    }
+	namespace client {
+		class FontManager : public RefCountedObject {
+		public:
+			FontManager(IRenderer *);
+
+			IFont *GetSquareDesignFont() { return squareDesignFont; }
+			IFont *GetLargeFont() { return largeFont; }
+			IFont *GetHeadingFont() { return headingFont; }
+			IFont *GetGuiFont() { return guiFont; }
+
+		protected:
+			~FontManager() override;
+
+		private:
+			Handle<IFont> squareDesignFont;
+			Handle<IFont> largeFont;
+			Handle<IFont> headingFont;
+			Handle<IFont> guiFont;
+		};
+	}
 }

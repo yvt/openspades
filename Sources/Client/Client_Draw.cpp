@@ -38,6 +38,7 @@
 #include "ClientUI.h"
 #include "Corpse.h"
 #include "FallingBlock.h"
+#include "Fonts.h"
 #include "HurtRingView.h"
 #include "IFont.h"
 #include "ILocalEntity.h"
@@ -193,7 +194,7 @@ namespace spades {
 
 			DrawSplash();
 
-			IFont *font = textFont;
+			IFont *font = fontManager->GetGuiFont();
 			std::string str = _Tr("Client", "NOW LOADING");
 			Vector2 size = font->Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
@@ -215,7 +216,7 @@ namespace spades {
 
 			DrawSplash();
 
-			IFont *font = textFont;
+			IFont *font = fontManager->GetGuiFont();
 			std::string str = _Tr("Client", "Disconnecting...");
 			Vector2 size = font->Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
@@ -311,7 +312,7 @@ namespace spades {
 				pos.y += (int)cg_playerNameY;
 				pos.x += (int)cg_playerNameX;
 
-				IFont *font = textFont;
+				IFont *font = fontManager->GetGuiFont();
 				Vector2 size = font->Measure(buf);
 				pos.x -= size.x * .5f;
 				pos.y -= size.y;
@@ -505,7 +506,7 @@ namespace spades {
 
 				char buf[64];
 				sprintf(buf, "%d", stockNum);
-				font = designFont;
+				font = fontManager->GetSquareDesignFont();
 				std::string stockStr = buf;
 				Vector2 size = font->Measure(stockStr);
 				Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f - iconHeight);
@@ -544,7 +545,7 @@ namespace spades {
 					}
 
 					if (!msg.empty()) {
-						font = textFont;
+						font = fontManager->GetGuiFont();
 						Vector2 size = font->Measure(msg);
 						Vector2 pos = MakeVector2((scrWidth - size.x) * .5f, scrHeight * 2.f / 3.f);
 						font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
@@ -585,7 +586,7 @@ namespace spades {
 						msg = _Tr("Client", "Waiting for respawn");
 
 					if (!msg.empty()) {
-						font = textFont;
+						font = fontManager->GetGuiFont();
 						Vector2 size = font->Measure(msg);
 						Vector2 pos = MakeVector2((scrWidth - size.x) * .5f, scrHeight / 3.f);
 
@@ -602,7 +603,7 @@ namespace spades {
 		void Client::DrawAlert() {
 			SPADES_MARK_FUNCTION();
 
-			IFont *font = textFont;
+			IFont *font = fontManager->GetGuiFont();
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 			auto &r = renderer;
@@ -707,7 +708,7 @@ namespace spades {
 				numberColor.z = 0.3f;
 			}
 
-			font = designFont;
+			font = fontManager->GetSquareDesignFont();
 			Vector2 size = font->Measure(str);
 			Vector2 pos = MakeVector2(16.f, scrHeight - 16.f);
 			pos.y -= size.y;
@@ -748,7 +749,7 @@ namespace spades {
 					if (followingPlayerId == p->GetId()) {
 						// just spectating
 					} else {
-						font = textFont;
+						font = fontManager->GetGuiFont();
 						std::string msg = _Tr("Client", "Following {0}",
 						                      world->GetPlayerPersistent(followingPlayerId).name);
 						Vector2 size = font->Measure(msg);
@@ -797,7 +798,7 @@ namespace spades {
 			Handle<IImage> img;
 
 			std::string msg = net->GetStatusString();
-			font = textFont;
+			font = fontManager->GetGuiFont();
 			Vector2 textSize = font->Measure(msg);
 			font->Draw(msg, MakeVector2(scrWidth - 16.f, scrHeight - 24.f) - textSize, 1.f,
 			           MakeVector4(1, 1, 1, 0.95f));
@@ -852,7 +853,7 @@ namespace spades {
 
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
-			IFont *font = textFont;
+			IFont *font = fontManager->GetGuiFont();
 			float margin = 5.f;
 
 			IRenderer *r = renderer;

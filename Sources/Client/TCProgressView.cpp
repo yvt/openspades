@@ -20,6 +20,7 @@
 
 #include "TCProgressView.h"
 #include "Client.h"
+#include "Fonts.h"
 #include "IFont.h"
 #include "IRenderer.h"
 #include "TCGameMode.h"
@@ -143,7 +144,7 @@ namespace spades {
 						  AABB2((1.f - state.progress) * 256.f, 0, state.progress * 256.f, 32));
 					}
 
-					IFont *font = client->textFont;
+					IFont *font = client->fontManager->GetGuiFont();
 					std::string str;
 
 					if (nearTerritory->ownerTeamId == 2) {

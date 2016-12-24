@@ -311,7 +311,7 @@ namespace spades {
 			WeaponInput actualWeapInput = player->GetWeaponInput();
 			Vector3 vel = player->GetVelocty();
 			vel.z = 0.f;
-			if (actualInput.sprint && player->IsAlive() && vel.GetLength() > .1f) {
+			if (actualInput.sprint && player->IsAlive()) {
 				sprintState += dt * 4.f;
 				if (sprintState > 1.f)
 					sprintState = 1.f;
@@ -361,32 +361,32 @@ namespace spades {
 						switch (player->GetTool()) {
 							case Player::ToolSpade:
 								c =
-								  audioDevice->RegisterSound("Sounds/Weapons/Spade/RaiseLocal.wav");
+								  audioDevice->RegisterSound("Sounds/Weapons/Spade/RaiseLocal.opus");
 								break;
 							case Player::ToolBlock:
 								c =
-								  audioDevice->RegisterSound("Sounds/Weapons/Block/RaiseLocal.wav");
+								  audioDevice->RegisterSound("Sounds/Weapons/Block/RaiseLocal.opus");
 								break;
 							case Player::ToolWeapon:
 								switch (player->GetWeapon()->GetWeaponType()) {
 									case RIFLE_WEAPON:
 										c = audioDevice->RegisterSound(
-										  "Sounds/Weapons/Rifle/RaiseLocal.wav");
+										  "Sounds/Weapons/Rifle/RaiseLocal.opus");
 										break;
 									case SMG_WEAPON:
 										c = audioDevice->RegisterSound(
-										  "Sounds/Weapons/SMG/RaiseLocal.wav");
+										  "Sounds/Weapons/SMG/RaiseLocal.opus");
 										break;
 									case SHOTGUN_WEAPON:
 										c = audioDevice->RegisterSound(
-										  "Sounds/Weapons/Shotgun/RaiseLocal.wav");
+										  "Sounds/Weapons/Shotgun/RaiseLocal.opus");
 										break;
 								}
 
 								break;
 							case Player::ToolGrenade:
 								c = audioDevice->RegisterSound(
-								  "Sounds/Weapons/Grenade/RaiseLocal.wav");
+								  "Sounds/Weapons/Grenade/RaiseLocal.opus");
 								break;
 						}
 						audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
@@ -1074,10 +1074,10 @@ namespace spades {
 							model = renderer->RegisterModel("Models/Weapons/Rifle/Casing.kv6");
 							snd =
 							  (mt_engine_client() & 0x1000)
-							    ? audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.wav")
-							    : audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop2.wav");
+							    ? audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.opus")
+							    : audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop2.opus");
 							snd2 =
-							  audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellWater.wav");
+							  audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellWater.opus");
 							break;
 						case SHOTGUN_WEAPON:
 							// FIXME: don't want to show shotgun't casing
@@ -1088,9 +1088,9 @@ namespace spades {
 							model = renderer->RegisterModel("Models/Weapons/SMG/Casing.kv6");
 							snd =
 							  (mt_engine_client() & 0x1000)
-							    ? audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop1.wav")
-							    : audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop2.wav");
-							snd2 = audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellWater.wav");
+							    ? audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop1.opus")
+							    : audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop2.opus");
+							snd2 = audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellWater.opus");
 							break;
 					}
 					if (model) {

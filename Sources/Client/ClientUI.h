@@ -28,14 +28,14 @@
 
 namespace spades {
 	namespace client {
-		class IFont;
+		class FontManager;
 		class Client;
 		class ClientUIHelper;
 		class ClientUI : public RefCountedObject {
 			friend class ClientUIHelper;
-			Handle<client::IRenderer> renderer;
-			Handle<client::IAudioDevice> audioDevice;
-			Handle<client::IFont> font;
+			Handle<IRenderer> renderer;
+			Handle<IAudioDevice> audioDevice;
+			Handle<FontManager> fontManager;
 
 			Handle<ClientUIHelper> helper;
 			Handle<asIScriptObject> ui;
@@ -54,8 +54,7 @@ namespace spades {
 			virtual ~ClientUI();
 
 		public:
-			ClientUI(client::IRenderer *, client::IAudioDevice *, client::IFont *font,
-			         Client *client);
+			ClientUI(IRenderer *, IAudioDevice *, FontManager *font, Client *client);
 			void ClientDestroyed();
 
 			client::IRenderer *GetRenderer() { return &*renderer; }
