@@ -69,5 +69,6 @@ openspades.mk/
 Sources/Gui/DetailConfigWindow.txt
 Sources/Gui/MainWindow.txt
 
-# Compiled .mo files (translation)
+# Translation files
 *.mo
+.translate.this
