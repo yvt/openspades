@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-11 10:56+0900\n"
-"PO-Revision-Date: 2016-12-11 21:51+0900\n"
+"PO-Revision-Date: 2016-12-25 10:42+0900\n"
 "Last-Translator: kmsi <sts06196@naver.com>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
@@ -1108,7 +1108,7 @@ msgstr ""
 "다. 가장 멋져 보이지만, 몇몇 설정과는 호환되지 않습니다.\n"
 "\n"
 "FXAA : 계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합니"
-"다. | 꺼짐 | MSAA 2x | 4x | FXAA"
+"다.|꺼짐|MSAA 2x|4x|FXAA"
 
 #: ../../Scripts/Gui/StartupScreen.as:1132
 #: ../../Scripts/Gui/StartupScreen.as:1133
@@ -1277,9 +1277,9 @@ msgid ""
 "Medium:Particle intersects objects smoothly.|High:Particle intersects "
 "objects smoothly, and some objects casts their shadow to particles."
 msgstr ""
-"파티클 | 낮음 : 입자가 다른 객체와 교차하면 날카로운 경계가 나타납니다. | 중"
-"간 : 입자는 다른 개체와 매끄럽게 교차합니다. | 높음 : 입자는 다른 개체와 매끄"
-"럽게 교차합니다. 또한 일부 개체가 입자에 그림자를 드리웁니다."
+"파티클|낮음:입자가 다른 객체와 교차하면 날카로운 경계가 나타납니다.|중간:입자"
+"는 다른 개체와 매끄럽게 교차합니다.|높음:입자는 다른 개체와 매끄럽게 교차합니"
+"다. 또한 일부 개체가 입자에 그림자를 드리웁니다."
 
 #: ../../Scripts/Gui/StartupScreen.as:1191
 #: ../../Scripts/Gui/StartupScreen.as:1192
@@ -1397,7 +1397,7 @@ msgctxt "StartupScreen"
 msgid ""
 "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
 "4x"
-msgstr "고속 모드 : 화면 해상도를 낮춰 렌더링을 가속화합니다. |꺼짐 | 2x | 4x"
+msgstr "고속 모드 : 화면 해상도를 낮춰 렌더링을 가속화합니다.|꺼짐|2x|4x"
 
 #: ../../Scripts/Gui/StartupScreen.as:1464
 #: ../../Scripts/Gui/StartupScreen.as:1465
