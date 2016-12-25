@@ -251,7 +251,6 @@
 		E82E67DE18EA7972004DBA18 /* SWModelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */; };
 		E82E67DF18EA7A05004DBA18 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
 		E82E67E018EA7A05004DBA18 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
-		E82E67E118EA7A15004DBA18 /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.tbd */; };
 		E82E67E218EA7A1E004DBA18 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF039B178EDAC9000683D4 /* libz.tbd */; };
 		E82E67E318EA7A51004DBA18 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = E80B28D617B39D160056179E /* ioapi.c */; };
 		E82E67E418EA7A51004DBA18 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = E80B28D817B39D160056179E /* unzip.c */; };
@@ -269,13 +268,15 @@
 		E82E67F018EA7A60004DBA18 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03C4178EE78C000683D4 /* OpenGL.framework */; };
 		E82E67FA18EA7EAB004DBA18 /* font-unifont.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F318EA7EAB004DBA18 /* font-unifont.pak */; };
 		E82E680418EA7F60004DBA18 /* libysrspades.dylib in Resources */ = {isa = PBXBuildFile; fileRef = E82E680318EA7F60004DBA18 /* libysrspades.dylib */; };
-		E83668AA1E05750D00977A63 /* libopus.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E83668A91E05750D00977A63 /* libopus.0.dylib */; };
-		E83668AC1E05751900977A63 /* libopusfile.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E83668AB1E05751900977A63 /* libopusfile.0.dylib */; };
 		E83668AF1E05757B00977A63 /* OpusAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668AD1E05757B00977A63 /* OpusAudioStream.cpp */; };
 		E83668B21E05844E00977A63 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668B01E05844E00977A63 /* AudioStream.cpp */; };
-		E83668B41E058A6900977A63 /* libogg.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E83668B31E058A6900977A63 /* libogg.0.dylib */; };
+		E8626EAE1E1009D7003365BF /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.tbd */; };
+		E8626EB61E100EC6003365BF /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB51E100EC6003365BF /* libfreetype.a */; };
+		E8626EB81E100FB2003365BF /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB71E100FB2003365BF /* libogg.a */; };
+		E8626EBB1E101072003365BF /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB91E101072003365BF /* libopus.a */; };
+		E8626EBC1E101072003365BF /* libopusfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EBA1E101072003365BF /* libopusfile.a */; };
+		E8626EBE1E1010CA003365BF /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EBD1E1010CA003365BF /* libbz2.tbd */; };
 		E8655AA81DFC0A6E00D5058A /* FTFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8655AA61DFC0A6E00D5058A /* FTFont.cpp */; };
-		E8655AAB1DFC0BCB00D5058A /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E8655AAA1DFC0BCB00D5058A /* libfreetype.6.dylib */; };
 		E8690AEC1D3920C800DBC331 /* pak000-Nonfree.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */; };
 		E8690AED1D3920C800DBC331 /* pak002-Base.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE71D3920C800DBC331 /* pak002-Base.pak */; };
 		E8690AEE1D3920C800DBC331 /* pak005-Models.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AE81D3920C800DBC331 /* pak005-Models.pak */; };
@@ -284,8 +285,8 @@
 		E8690AF11D3920C800DBC331 /* pak999-References.pak in Resources */ = {isa = PBXBuildFile; fileRef = E8690AEB1D3920C800DBC331 /* pak999-References.pak */; };
 		E8725DAD1DE33B4D003BC987 /* NoiseSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8725DAB1DE33B4D003BC987 /* NoiseSampler.cpp */; };
 		E874834718EACF0300C29033 /* OpenSpades.icns in Resources */ = {isa = PBXBuildFile; fileRef = E874834618EACF0300C29033 /* OpenSpades.icns */; };
-		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; };
-		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; };
+		E874834918ED1BE500C29033 /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E87AB82418BB3A04006B7D73 /* SDL2_image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E88344101E03244F000C3E39 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E883440F1E03244F000C3E39 /* FontManager.cpp */; };
 		E88F46591DE1B192009E85E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03F2178EF916000683D4 /* Cocoa.framework */; };
 		E89A5F1E1DF8732200857F65 /* ShellApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1C1DF8732200857F65 /* ShellApi.cpp */; };
@@ -385,7 +386,7 @@
 		E82E66B218E9A35C004DBA18 /* Client_FPSCounter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_FPSCounter.cpp; sourceTree = "<group>"; };
 		E82E66B918EA78F5004DBA18 /* OpenSpades.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenSpades.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E82E67F318EA7EAB004DBA18 /* font-unifont.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "font-unifont.pak"; path = "Resources/font-unifont.pak"; sourceTree = "<group>"; };
-		E82E680318EA7F60004DBA18 /* libysrspades.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libysrspades.dylib; sourceTree = SOURCE_ROOT; };
+		E82E680318EA7F60004DBA18 /* libysrspades.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libysrspades.dylib; path = lib/libysrspades.dylib; sourceTree = "<group>"; };
 		E82E680618EA9502004DBA18 /* XSpades.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = XSpades.entitlements; path = XSpades/XSpades.entitlements; sourceTree = "<group>"; };
 		E834F54E17942C43004EBE88 /* Grenade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grenade.cpp; sourceTree = "<group>"; };
 		E834F54F17942C43004EBE88 /* Grenade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grenade.h; sourceTree = "<group>"; };
@@ -408,13 +409,10 @@
 		E834F56C1797AA2C004EBE88 /* FontData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FontData.h; sourceTree = "<group>"; };
 		E834F56D1797D92F004EBE88 /* ChatWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChatWindow.cpp; sourceTree = "<group>"; };
 		E834F56E1797D932004EBE88 /* ChatWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatWindow.h; sourceTree = "<group>"; };
-		E83668A91E05750D00977A63 /* libopus.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopus.0.dylib; path = /opt/local/lib/libopus.0.dylib; sourceTree = "<absolute>"; };
-		E83668AB1E05751900977A63 /* libopusfile.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopusfile.0.dylib; path = /opt/local/lib/libopusfile.0.dylib; sourceTree = "<absolute>"; };
 		E83668AD1E05757B00977A63 /* OpusAudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpusAudioStream.cpp; sourceTree = "<group>"; };
 		E83668AE1E05757B00977A63 /* OpusAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpusAudioStream.h; sourceTree = "<group>"; };
 		E83668B01E05844E00977A63 /* AudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioStream.cpp; sourceTree = "<group>"; };
 		E83668B11E05844E00977A63 /* AudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioStream.h; sourceTree = "<group>"; };
-		E83668B31E058A6900977A63 /* libogg.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.0.dylib; path = ../../../../../opt/local/lib/libogg.0.dylib; sourceTree = "<group>"; };
 		E838D41D18AC726B00EE3C53 /* Strings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Strings.cpp; sourceTree = "<group>"; };
 		E838D41E18AC726B00EE3C53 /* Strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Strings.h; sourceTree = "<group>"; };
 		E838D42018ADDE2800EE3C53 /* StringsScript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringsScript.cpp; sourceTree = "<group>"; };
@@ -500,10 +498,14 @@
 		E859511117C645000012810C /* GLFXAAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFXAAFilter.h; sourceTree = "<group>"; };
 		E859511317C96B260012810C /* GLProfiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProfiler.cpp; sourceTree = "<group>"; };
 		E859511417C96B270012810C /* GLProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProfiler.h; sourceTree = "<group>"; };
+		E8626EB51E100EC6003365BF /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = lib/libfreetype.a; sourceTree = "<group>"; };
+		E8626EB71E100FB2003365BF /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = lib/libogg.a; sourceTree = "<group>"; };
+		E8626EB91E101072003365BF /* libopus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopus.a; path = lib/libopus.a; sourceTree = "<group>"; };
+		E8626EBA1E101072003365BF /* libopusfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopusfile.a; path = lib/libopusfile.a; sourceTree = "<group>"; };
+		E8626EBD1E1010CA003365BF /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		E8655AA61DFC0A6E00D5058A /* FTFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FTFont.cpp; sourceTree = "<group>"; };
 		E8655AA71DFC0A6E00D5058A /* FTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTFont.h; sourceTree = "<group>"; };
 		E8655AA91DFC0AAA00D5058A /* TMPUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TMPUtils.h; sourceTree = "<group>"; };
-		E8655AAA1DFC0BCB00D5058A /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = /opt/X11/lib/libfreetype.6.dylib; sourceTree = "<absolute>"; };
 		E867B6E31DD49D7F0093E4E0 /* as_namespace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = as_namespace.h; sourceTree = "<group>"; };
 		E8690AE61D3920C800DBC331 /* pak000-Nonfree.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak000-Nonfree.pak"; path = "Resources/pak000-Nonfree.pak"; sourceTree = "<group>"; };
 		E8690AE71D3920C800DBC331 /* pak002-Base.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak002-Base.pak"; path = "Resources/pak002-Base.pak"; sourceTree = "<group>"; };
@@ -515,7 +517,7 @@
 		E8725DAC1DE33B4D003BC987 /* NoiseSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoiseSampler.h; sourceTree = "<group>"; };
 		E874834618EACF0300C29033 /* OpenSpades.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = OpenSpades.icns; path = Resources/Icons/OpenSpades.icns; sourceTree = "<group>"; };
 		E87AB82118BB3957006B7D73 /* SdlImageReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SdlImageReader.cpp; sourceTree = "<group>"; };
-		E87AB82418BB3A04006B7D73 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = /Library/Frameworks/SDL2_image.framework; sourceTree = "<absolute>"; };
+		E87AB82418BB3A04006B7D73 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = lib/SDL2_image.framework; sourceTree = "<group>"; };
 		E88318A91790EBAA002ABE6D /* GLProgramUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgramUniform.cpp; sourceTree = "<group>"; };
 		E88318AA1790EBAA002ABE6D /* GLProgramUniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgramUniform.h; sourceTree = "<group>"; };
 		E88318AC1790EDDF002ABE6D /* GLProgramAttribute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgramAttribute.cpp; sourceTree = "<group>"; };
@@ -731,7 +733,7 @@
 		E8B6B74717EA12E100E35523 /* IWeaponSkin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IWeaponSkin.cpp; sourceTree = "<group>"; };
 		E8B6B74817EA12E500E35523 /* IWeaponSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWeaponSkin.h; sourceTree = "<group>"; };
 		E8B8082718E05B920001013E /* CellToTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellToTriangle.h; sourceTree = "<group>"; };
-		E8B93AD418559EC600BD01E1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = /Library/Frameworks/SDL2.framework; sourceTree = "<absolute>"; };
+		E8B93AD418559EC600BD01E1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = lib/SDL2.framework; sourceTree = "<group>"; };
 		E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModelRenderer.cpp; sourceTree = "<group>"; };
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
@@ -894,14 +896,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E83668B41E058A6900977A63 /* libogg.0.dylib in Frameworks */,
-				E83668AC1E05751900977A63 /* libopusfile.0.dylib in Frameworks */,
-				E83668AA1E05750D00977A63 /* libopus.0.dylib in Frameworks */,
-				E8655AAB1DFC0BCB00D5058A /* libfreetype.6.dylib in Frameworks */,
+				E8626EBE1E1010CA003365BF /* libbz2.tbd in Frameworks */,
+				E8626EBC1E101072003365BF /* libopusfile.a in Frameworks */,
+				E8626EAE1E1009D7003365BF /* libcurl.tbd in Frameworks */,
+				E82E67E218EA7A1E004DBA18 /* libz.tbd in Frameworks */,
+				E8626EBB1E101072003365BF /* libopus.a in Frameworks */,
+				E8626EB81E100FB2003365BF /* libogg.a in Frameworks */,
+				E8626EB61E100EC6003365BF /* libfreetype.a in Frameworks */,
 				E88F46591DE1B192009E85E5 /* Cocoa.framework in Frameworks */,
 				E82E67F018EA7A60004DBA18 /* OpenGL.framework in Frameworks */,
-				E82E67E218EA7A1E004DBA18 /* libz.tbd in Frameworks */,
-				E82E67E118EA7A15004DBA18 /* libcurl.tbd in Frameworks */,
 				E82E67DF18EA7A05004DBA18 /* SDL2_image.framework in Frameworks */,
 				E82E67E018EA7A05004DBA18 /* SDL2.framework in Frameworks */,
 			);
@@ -980,15 +983,9 @@
 		E82E66BA18EA78F5004DBA18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E83668B31E058A6900977A63 /* libogg.0.dylib */,
-				E83668AB1E05751900977A63 /* libopusfile.0.dylib */,
-				E83668A91E05750D00977A63 /* libopus.0.dylib */,
-				E8655AAA1DFC0BCB00D5058A /* libfreetype.6.dylib */,
-				E82E680318EA7F60004DBA18 /* libysrspades.dylib */,
+				E8626EBD1E1010CA003365BF /* libbz2.tbd */,
 				E844888617D26699005105D0 /* libcurl.tbd */,
 				E8CF039B178EDAC9000683D4 /* libz.tbd */,
-				E87AB82418BB3A04006B7D73 /* SDL2_image.framework */,
-				E8B93AD418559EC600BD01E1 /* SDL2.framework */,
 				E8CF03F2178EF916000683D4 /* Cocoa.framework */,
 				E8CF03C4178EE78C000683D4 /* OpenGL.framework */,
 			);
@@ -1084,6 +1081,29 @@
 			path = Audio;
 			sourceTree = "<group>";
 		};
+		E8626EA21E1008F9003365BF /* Externals */ = {
+			isa = PBXGroup;
+			children = (
+				E8626EA31E10090C003365BF /* lib */,
+			);
+			name = Externals;
+			path = Sources/Externals;
+			sourceTree = "<group>";
+		};
+		E8626EA31E10090C003365BF /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				E87AB82418BB3A04006B7D73 /* SDL2_image.framework */,
+				E8B93AD418559EC600BD01E1 /* SDL2.framework */,
+				E82E680318EA7F60004DBA18 /* libysrspades.dylib */,
+				E8626EB71E100FB2003365BF /* libogg.a */,
+				E8626EB91E101072003365BF /* libopus.a */,
+				E8626EBA1E101072003365BF /* libopusfile.a */,
+				E8626EB51E100EC6003365BF /* libfreetype.a */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
 		E88319011792A7C5002ABE6D /* ENet */ = {
 			isa = PBXGroup;
 			children = (
@@ -1145,6 +1165,7 @@
 		E88F46581DE1AF8D009E85E5 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				E8626EA21E1008F9003365BF /* Externals */,
 				E844886C17D26337005105D0 /* json */,
 				E80B28D517B39CFE0056179E /* unzip */,
 				E80B28B117ABAC6C0056179E /* kiss_fft130 */,
@@ -2250,7 +2271,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Sources/Externals/lib",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -2263,22 +2284,20 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/SDL2.framework/Headers,
-					/Library/Frameworks/SDL2_image.framework/Headers,
-					/usr/local/include,
+					Sources/Externals/lib/SDL2.framework/Headers,
+					Sources/Externals/lib/SDL2_image.framework/Headers,
+					Sources/Externals/include,
 					Sources/ENet/include,
 					"$(SRCROOT)",
 					Sources,
 					Sources/json/include,
-					/opt/X11/include/freetype2,
 					/opt/local/include/opus,
 				);
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/opt/X11/lib,
-					/opt/local/lib,
+					"$(PROJECT_DIR)/Sources/Externals/lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2300,7 +2319,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(PROJECT_DIR)/Sources/Externals/lib",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -2309,22 +2328,20 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/SDL2.framework/Headers,
-					/Library/Frameworks/SDL2_image.framework/Headers,
-					/usr/local/include,
+					Sources/Externals/lib/SDL2.framework/Headers,
+					Sources/Externals/lib/SDL2_image.framework/Headers,
+					Sources/Externals/include,
 					Sources/ENet/include,
 					"$(SRCROOT)",
 					Sources,
 					Sources/json/include,
-					/opt/X11/include/freetype2,
 					/opt/local/include/opus,
 				);
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/opt/X11/lib,
-					/opt/local/lib,
+					"$(PROJECT_DIR)/Sources/Externals/lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2346,7 +2363,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = /Library/Frameworks;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -2361,16 +2378,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/SDL2.framework/Headers,
-					/Library/Frameworks/SDL2_image.framework/Headers,
-					/usr/local/include,
-					Sources/ENet/include,
-					"$(SRCROOT)",
-					Sources,
-					Sources/json/include,
-				);
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -2393,7 +2402,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = /Library/Frameworks;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
@@ -2405,16 +2414,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/SDL2.framework/Headers,
-					/Library/Frameworks/SDL2_image.framework/Headers,
-					/usr/local/include,
-					Sources/ENet/include,
-					"$(SRCROOT)",
-					Sources,
-					Sources/json/include,
-				);
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "";

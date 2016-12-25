@@ -130,10 +130,11 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
 ### On Mac OS X (with Xcode)
 1. Get the latest version of Xcode and OpenSpades source.
-2. Download and install [SDL2 development libraries for OS X](http://www.libsdl.org/download-2.0.php) to `/Library/Frameworks`.
-3. Download and install [SDL2_image development libraries for OS X](https://www.libsdl.org/projects/SDL_image/) to `/Library/Frameworks`.
-4. Download [OS X release of OpenSpades](https://github.com/yvt/openspades/releases), show the package contents, and copy `libysrspades.dylib` to the root of OpenSpades source tree.
-5. Open `OpenSpades.xcodeproj` and build.
+2. Get (pre-compiled) copies of libraries, and place them in `Sources/Externals`
+  * See the file `Sources/Externals/readme.txt` for details
+4. Download [OS X release of OpenSpades](https://github.com/yvt/openspades/releases), show the package contents, and copy `libysrspades.dylib` to `Sources/Externals/lib`.
+5. Download and extract the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r32/OpenSpadesDevPackage-r32.zip). After that, copy `pak000-Nonfree.pak` and `font-unifont.pak` to `Resources/`.
+6. Open `OpenSpades.xcodeproj` and build.
 
 ## Troubleshooting
 For troubleshooting and common problems see [TROUBLESHOOTING](TROUBLESHOOTING.md).
