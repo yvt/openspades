@@ -66,7 +66,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    cmake .. -DCMAKE_BUILD_TYPE=Release && make
    ```
 
-6. Install OpensSpades: 
+6. Install OpenSpades: 
 
    `sudo make install`
    
@@ -76,7 +76,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    * If you're compiling certain release (0.0.10 for example): 
 
       Download windows binary of OpenSpades from
-      https://sites.google.com/a/yvt.jp/openspades/downloads, extract it, and copy the .pak files
+      https://github.com/yvt/openspades/releases, extract it, and copy the .pak files
       inside Resources directory into `/usr/local/share/games/openspades/Resources` or
       `$XDG_DATA_HOME/openspades/Resources`. If there were some files in these directories, you probably
       should remove them.
@@ -94,7 +94,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
 8. Launch:
 
-   `openspades` or `cd $REPO_DIRECTORY; ./openspades.mk/bin/OpenSpades` and enjoy
+   `openspades` or `cd $REPO_DIRECTORY/openspades.mk; bin/OpenSpades` and enjoy
 
 
 ### On Windows (with Visual Studio)
