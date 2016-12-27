@@ -313,12 +313,12 @@ msgid "Unknown Reason"
 msgstr "Неизвестная причина"
 
 #: Sources/Client/ScoreboardView.cpp:331
-msgctxt "Client"
-msgid "Spectator{1}"
-msgid_plural "Spectators{1}"
-msgstr[0] "Наблюдатель{1}"
-msgstr[1] "Наблюдателей{1}"
-msgstr[2] "Наблюдателей{1}"
+#msgctxt "Client"
+#msgid "Spectator{1}"
+#msgid_plural "Spectators{1}"
+#msgstr[0] "Наблюдатель{1}"
+#msgstr[1] "Наблюдателей{1}"
+#msgstr[2] "Наблюдателей{1}"
 
 #: Sources/Client/TCProgressView.cpp:151
 msgctxt "Client"
@@ -663,12 +663,12 @@ msgstr "ВЫКЛ"
 #: Resources/Scripts/Gui/Preferences.as:619
 msgctxt "Preferences"
 msgid "REVERSED"
-msgstr "РЕВЕРСИЯ"
+msgstr "ИНВЕРСИЯ"
 
 #: Resources/Scripts/Gui/Preferences.as:637
 msgctxt "Preferences"
 msgid "Player Information"
-msgstr "Информация о игроке"
+msgstr "Информация об игроке"
 
 #: Resources/Scripts/Gui/Preferences.as:638
 msgctxt "Preferences"
@@ -714,7 +714,7 @@ msgstr "БОЛЬШЕ"
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "NORMAL"
-msgstr "НОРМАЛЬНО"
+msgstr "СРЕДНЕ"
 
 #: Resources/Scripts/Gui/Preferences.as:650
 msgctxt "Preferences"
@@ -849,12 +849,12 @@ msgstr "Взять гранату"
 #: Resources/Scripts/Gui/Preferences.as:695
 msgctxt "Preferences"
 msgid "Last Used Tool"
-msgstr "Посл. использован. инструмент"
+msgstr "Последний инструмент"
 
 #: Resources/Scripts/Gui/Preferences.as:696
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
-msgstr "Перекл. инструмент колесом мыши"
+msgstr "Выбор инстр. колесом мыши"
 
 #: Resources/Scripts/Gui/Preferences.as:698
 msgctxt "Preferences"
@@ -909,7 +909,7 @@ msgstr "Масштаб миникарты"
 #: Resources/Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Toggle Map"
-msgstr "Переключатель карты"
+msgstr "Показать карту"
 
 #: Resources/Scripts/Gui/Preferences.as:711
 msgctxt "Preferences"
@@ -1384,7 +1384,7 @@ msgstr ""
 #: Resources/Scripts/Gui/StartupScreen.as:1501
 msgctxt "StartupScreen"
 msgid "Null"
-msgstr "Ноль"
+msgstr "Откл"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1505
 msgctxt "StartupScreen"
@@ -1450,7 +1450,7 @@ msgstr "Сбросить все настройки"
 #: Resources/Scripts/Gui/StartupScreen.as:1625
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
-msgstr "Открыть папку с конфигами в проводнике"
+msgstr "Открыть папку с настрйоками в проводнике"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1627
 msgctxt "StartupScreen"
@@ -1460,12 +1460,12 @@ msgstr "Найти папку с конфигами в поиске"
 #: Resources/Scripts/Gui/StartupScreen.as:1629
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
-msgstr "Обзор папки с конфигами"
+msgstr "Обзор папки с настройками"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1646
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
-msgstr "Возникла неизвестная ошибка при открытии папки с конфигами."
+msgstr "Возникла неизвестная ошибка при открытии папки с настройками."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1652
 msgctxt "StartupScreen"
@@ -1512,7 +1512,7 @@ msgstr "Системный по-умолчанию"
 #: Resources/Scripts/Gui/StartupScreen.as:1791
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
-msgstr "Скопировать в буфер обм."
+msgstr "Копировать в буфер обм."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1827
 msgctxt "StartupScreen"
