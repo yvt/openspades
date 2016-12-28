@@ -61,12 +61,12 @@ msgstr "Déconnexion..."
 #: Sources/Client/Client_Draw.cpp:523
 msgctxt "Client"
 msgid "Out of Block"
-msgstr "A court de bloc"
+msgstr "À court de bloc"
 
 #: Sources/Client/Client_Draw.cpp:528
 msgctxt "Client"
 msgid "Out of Grenade"
-msgstr "A court de grenade"
+msgstr "À court de grenade"
 
 #: Sources/Client/Client_Draw.cpp:534
 msgctxt "Client"
@@ -76,7 +76,7 @@ msgstr "Rechargement"
 #: Sources/Client/Client_Draw.cpp:536 Sources/Client/Client_Input.cpp:440
 msgctxt "Client"
 msgid "Out of Ammo"
-msgstr "A court de munition"
+msgstr "À court de munition"
 
 #: Sources/Client/Client_Draw.cpp:539
 msgctxt "Client"
@@ -101,12 +101,12 @@ msgstr "Vous suivez {0}"
 #: Sources/Client/Client_Input.cpp:428
 msgctxt "Client"
 msgid "Out of Blocks"
-msgstr "A court de blocs"
+msgstr "À court de blocs"
 
 #: Sources/Client/Client_Input.cpp:452
 msgctxt "Client"
 msgid "Out of Grenades"
-msgstr "A court de grenades"
+msgstr "À court de grenades"
 
 #: Sources/Client/Client_NetHandler.cpp:89
 msgctxt "Client"
