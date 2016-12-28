@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2016-12-28 10:58+0100\n"
+"PO-Revision-Date: 2016-12-28 19:43+0100\n"
 "Last-Translator: Damien Flament <damien.flament@gmx.com>\n"
 "Language-Team: French <damien.flament@gmx.com>\n"
 "MIME-Version: 1.0\n"
@@ -131,12 +131,12 @@ msgstr "{0} s'est emparé d'un territoire neutre"
 #: Sources/Client/Client_NetHandler.cpp:127
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
-msgstr "{0} s'est emparé de la malette de l'équipe {1}"
+msgstr "{0} a capturé la malette de l'équipe {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:134
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
-msgstr "{0} s'est emparé de la malette de l'équipe {1}"
+msgstr "{0} a capturé la malette de l'équipe {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:158
 msgctxt "Client"
