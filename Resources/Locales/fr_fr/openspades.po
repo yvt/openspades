@@ -303,7 +303,7 @@ msgstr "Version du protocole client incompatible."
 #: Sources/Client/NetClient.cpp:670
 msgctxt "NetClient"
 msgid "Server full"
-msgstr "Serveur plein"
+msgstr "Serveur complet"
 
 #: Sources/Client/NetClient.cpp:672
 msgctxt "NetClient"
@@ -498,7 +498,7 @@ msgstr "Vide"
 #: Resources/Scripts/Gui/MainScreen.as:474
 msgctxt "MainScreen"
 msgid "Not Full"
-msgstr "Non plein"
+msgstr "Libre"
 
 #: Resources/Scripts/Gui/MainScreen.as:494
 msgctxt "MainScreen"
