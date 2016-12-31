@@ -87,7 +87,7 @@ namespace spades {
 				case SHOTGUN_WEAPON: delta = .4f; break;
 			}
 			float aimDownState = GetAimDownState();
-			return 1.f + powf(aimDownState, 5.f) * delta;
+			return 1.f + (3.f - 2.f * powf(aimDownState, 1.5f)) * powf(aimDownState, 3.f) * delta;
 		}
 
 		SceneDefinition Client::CreateSceneDefinition() {
