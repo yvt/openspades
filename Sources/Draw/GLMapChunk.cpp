@@ -295,6 +295,65 @@ namespace spades {
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 		}
 
+		void GLMapChunk::RenderDepthPass() {
+			SPADES_MARK_FUNCTION();
+			Vector3 eye = renderer->renderer->GetSceneDef().viewOrigin;
+
+			if (!realized)
+				return;
+			if (needsUpdate) {
+				Update();
+				needsUpdate = false;
+			}
+			if (!buffer) {
+				// empty chunk
+				return;
+			}
+			AABB3 bx = aabb;
+
+			Vector3 diff = eye - centerPos;
+			float sx = 0.f, sy = 0.f;
+			// FIXME: variable map size?
+			if (diff.x > 256.f)
+				sx += 512.f;
+			if (diff.y > 256.f)
+				sy += 512.f;
+			if (diff.x < -256.f)
+				sx -= 512.f;
+			if (diff.y < -256.f)
+				sy -= 512.f;
+
+			bx.min.x += sx;
+			bx.min.y += sy;
+			bx.max.x += sx;
+			bx.max.y += sy;
+
+			if (!renderer->renderer->BoxFrustrumCull(bx))
+				return;
+
+			GLProgram *depthonlyProgram = renderer->depthonlyProgram;
+
+			static GLProgramUniform chunkPosition("chunkPosition");
+
+			chunkPosition(depthonlyProgram);
+			chunkPosition.SetValue((float)(chunkX * Size) + sx, (float)(chunkY * Size) + sy,
+			                       (float)(chunkZ * Size));
+
+			static GLProgramAttribute positionAttribute("positionAttribute");
+
+			positionAttribute(depthonlyProgram);
+
+			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::UnsignedByte, false,
+			                            sizeof(Vertex), (void *)asOFFSET(Vertex, x));
+
+			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, iBuffer);
+			device->DrawElements(IGLDevice::Triangles,
+			                     static_cast<IGLDevice::Sizei>(indices.size()),
+			                     IGLDevice::UnsignedShort, NULL);
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
+		}
 		void GLMapChunk::RenderSunlightPass() {
 			SPADES_MARK_FUNCTION();
 			Vector3 eye = renderer->renderer->GetSceneDef().viewOrigin;

@@ -609,6 +609,7 @@ namespace spades {
 				}
 				modelRenderer->Prerender();
 
+				device->DepthFunc(IGLDevice::LessOrEqual);
 				if (!sceneDef.skipWorld && mapRenderer) {
 					mapRenderer->RenderSunlightPass();
 				}
