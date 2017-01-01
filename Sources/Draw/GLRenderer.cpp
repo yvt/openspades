@@ -603,7 +603,7 @@ namespace spades {
 			{
 				GLProfiler profiler(device, "Sunlight Pass");
 
-				device->DepthFunc(IGLDevice::Less);
+				device->DepthFunc(IGLDevice::Equal);
 				if (!sceneDef.skipWorld && mapRenderer) {
 					mapRenderer->Prerender();
 				}
