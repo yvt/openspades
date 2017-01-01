@@ -19,9 +19,6 @@
  */
 
 #include "GLShadowShader.h"
-#include <Core/Debug.h>
-#include <Core/Exception.h>
-#include <Core/Settings.h>
 #include "GLAmbientShadowRenderer.h"
 #include "GLBasicShadowMapRenderer.h"
 #include "GLImage.h"
@@ -30,6 +27,9 @@
 #include "GLRadiosityRenderer.h"
 #include "GLRenderer.h"
 #include "GLSparseShadowMapRenderer.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Settings.h>
 
 namespace spades {
 	namespace draw {
@@ -54,14 +54,20 @@ namespace spades {
 		      pagetableSize("pagetableSize"),
 		      pagetableSizeInv("pagetableSizeInv"),
 		      minLod("minLod"),
-		      shadowMapSizeInv("shadowMapSizeInv") {}
+		      shadowMapSizeInv("shadowMapSizeInv"),
+		      ssaoTexture("ssaoTexture"),
+		      ssaoTextureUVScale("ssaoTextureUVScale") {}
 
 		std::vector<GLShader *> GLShadowShader::RegisterShader(spades::draw::GLProgramManager *r,
-		                                                       GLSettings &settings,
-		                                                       bool variance) {
+		                                                       GLSettings &settings, bool variance,
+		                                                       bool skipSSAO) {
 			std::vector<GLShader *> shaders;
 
-			shaders.push_back(r->RegisterShader("Shaders/Shadow/Common.fs"));
+			if (skipSSAO) {
+				shaders.push_back(r->RegisterShader("Shaders/Shadow/CommonNoSSAO.fs"));
+			} else {
+				shaders.push_back(r->RegisterShader("Shaders/Shadow/Common.fs"));
+			}
 			shaders.push_back(r->RegisterShader("Shaders/Shadow/Common.vs"));
 
 			if (variance) {
@@ -265,6 +271,21 @@ namespace spades {
 				dev->BindTexture(IGLDevice::Texture3D, renderer->radiosityRenderer->GetTextureZ());
 				radiosityTextureZ.SetValue(texStage);
 				texStage++;
+			}
+
+			if (settings.r_ssao) {
+				ssaoTexture(program);
+				ssaoTextureUVScale(program);
+
+				if (ssaoTexture.IsActive()) {
+					dev->ActiveTexture(texStage);
+					dev->BindTexture(IGLDevice::Texture2D, renderer->ssaoBufferTexture);
+					ssaoTexture.SetValue(texStage);
+					texStage++;
+
+					ssaoTextureUVScale.SetValue(1.0f / renderer->ScreenWidth(),
+					                            1.0f / renderer->ScreenHeight());
+				}
 			}
 
 			dev->ActiveTexture(texStage);

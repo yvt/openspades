@@ -63,6 +63,7 @@
 #include "GLSpriteRenderer.h"
 #include "GLVoxelModel.h"
 #include "GLWaterRenderer.h"
+#include "GLSSAOFilter.h"
 #include "IGLDevice.h"
 #include "IGLShadowMapRenderer.h"
 
@@ -595,25 +596,62 @@ namespace spades {
 
 		void GLRenderer::RenderObjects() {
 
+			// draw opaque objects, and do dynamic lighting
+
 			device->Enable(IGLDevice::DepthTest, true);
 			device->Enable(IGLDevice::Texture2D, true);
 			device->Enable(IGLDevice::Blend, false);
 
-			// draw opaque objects, and do dynamic lighting
+			bool needsDepthPrepass = settings.r_depthPrepass || settings.r_ssao;
+			bool needsFullDepthPrepass = settings.r_ssao;
+
+			GLFramebufferManager::BufferHandle ssaoBuffer;
+
+			if (needsDepthPrepass) {
+				{
+					GLProfiler profiler(device, "Depth-only Prepass");
+					device->DepthFunc(IGLDevice::Less);
+					if (!sceneDef.skipWorld && mapRenderer) {
+						mapRenderer->Prerender();
+					}
+					if (needsFullDepthPrepass) {
+						modelRenderer->Prerender();
+					}
+				}
+
+				if (settings.r_ssao) {
+					{
+						GLProfiler profiler(device, "Screen Space Ambient Occlusion");
+						device->DepthMask(false);
+						device->Enable(IGLDevice::DepthTest, false);
+						device->Enable(IGLDevice::CullFace, false);
+
+						ssaoBuffer = GLSSAOFilter(this).Filter();
+						ssaoBufferTexture = ssaoBuffer.GetTexture();
+
+						device->BindTexture(IGLDevice::Texture2D, ssaoBufferTexture);
+						device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
+						device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
+
+						device->Enable(IGLDevice::CullFace, true);
+					}
+					GetFramebufferManager()->PrepareSceneRendering();
+				}
+			}
 			{
 				GLProfiler profiler(device, "Sunlight Pass");
-
-				device->DepthFunc(IGLDevice::Equal);
-				if (!sceneDef.skipWorld && mapRenderer) {
-					mapRenderer->Prerender();
-				}
-				modelRenderer->Prerender();
 
 				device->DepthFunc(IGLDevice::LessOrEqual);
 				if (!sceneDef.skipWorld && mapRenderer) {
 					mapRenderer->RenderSunlightPass();
 				}
 				modelRenderer->RenderSunlightPass();
+			}
+			if (settings.r_ssao) {
+				device->BindTexture(IGLDevice::Texture2D, ssaoBufferTexture);
+				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Linear);
+				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Linear);
+				ssaoBuffer.Release();
 			}
 
 			{

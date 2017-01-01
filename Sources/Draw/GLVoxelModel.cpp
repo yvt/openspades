@@ -257,6 +257,12 @@ namespace spades {
 			}
 		}
 
+		void GLVoxelModel::Prerender(std::vector<client::ModelRenderParam> params) {
+			SPADES_MARK_FUNCTION();
+
+			RenderSunlightPass(params);
+		}
+
 		void GLVoxelModel::RenderShadowMapPass(std::vector<client::ModelRenderParam> params) {
 			SPADES_MARK_FUNCTION();
 

@@ -68,7 +68,21 @@ namespace spades {
 #endif
 		}
 
-		void GLModelRenderer::Prerender() { SPADES_MARK_FUNCTION(); }
+		void GLModelRenderer::Prerender() {
+			device->ColorMask(false, false, false, false);
+
+			GLProfiler profiler(device, "Model [%d model(s), %d unique model type(s)]", modelCount,
+								(int)models.size());
+
+			int numModels = 0;
+			for (size_t i = 0; i < models.size(); i++) {
+				RenderModel &m = models[i];
+				GLModel *model = m.model;
+				model->Prerender(m.params);
+				numModels += (int)m.params.size();
+			}
+			device->ColorMask(true, true, true, true);
+		}
 
 		void GLModelRenderer::RenderSunlightPass() {
 			SPADES_MARK_FUNCTION();

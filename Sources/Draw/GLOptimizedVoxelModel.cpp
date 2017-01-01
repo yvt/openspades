@@ -511,6 +511,12 @@ namespace spades {
 			printf("%d vertices emit\n", (int)indices.size());
 		}
 
+		void GLOptimizedVoxelModel::Prerender(std::vector<client::ModelRenderParam> params) {
+			SPADES_MARK_FUNCTION();
+
+			RenderSunlightPass(params);
+		}
+
 		void
 		GLOptimizedVoxelModel::RenderShadowMapPass(std::vector<client::ModelRenderParam> params) {
 			SPADES_MARK_FUNCTION();

@@ -100,6 +100,9 @@ namespace spades {
 			GLLensDustFilter *lensDustFilter;
 			GLAutoExposureFilter *autoExposureFilter;
 
+			// used when r_ssao = 1. only valid while rendering objects
+			IGLDevice::UInteger ssaoBufferTexture;
+
 			// used when r_srgb = 1
 			IGLDevice::UInteger lastColorBufferTexture;
 

@@ -1,5 +1,6 @@
 Shaders/Water3.fs
 Shaders/Water3.vs
-*shadow*
+# Use lite version of shadow shaders to keep the number of active texture stage 16
+*shadow-lite*
 Shaders/Fog.vs
 Shaders/PhysicalModel/CookTorrance.fs
