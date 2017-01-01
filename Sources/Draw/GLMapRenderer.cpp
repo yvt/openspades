@@ -140,7 +140,7 @@ namespace spades {
 
 		void GLMapRenderer::Prerender() {
 			SPADES_MARK_FUNCTION();
-			// nothing to do now (maybe depth-only pass?)
+			//depth-only pass
 			GLProfiler profiler(device, "Prerender");
 
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
@@ -268,7 +268,8 @@ namespace spades {
 			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
-			RealizeChunks(eye);
+			//RealizeChunks(eye); // should already be realized from the prepass
+			//TODO maybe add some way of checking if the chunks have been realized for the current eye? Probably just a bool called "alreadyrealized" that gets checked in RealizeChunks
 
 			// draw from nearest to farthest
 			int cx = (int)floorf(eye.x) / GLMapChunk::Size;
@@ -353,7 +354,7 @@ namespace spades {
 			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
-			RealizeChunks(eye);
+			//RealizeChunks(eye); // should already be realized from the prepass
 
 			// draw from nearest to farthest
 			int cx = (int)floorf(eye.x) / GLMapChunk::Size;
