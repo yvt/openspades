@@ -42,6 +42,7 @@ namespace spades {
 				renderer->RegisterProgram("Shaders/BasicBlockPhys.program");
 			else
 				renderer->RegisterProgram("Shaders/BasicBlock.program");
+			renderer->RegisterProgram("Shaders/BasicBlockDepthOnly.program");
 			renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
 			renderer->RegisterProgram("Shaders/BackFaceBlock.program");
 			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
@@ -69,6 +70,7 @@ namespace spades {
 				basicProgram = renderer->RegisterProgram("Shaders/BasicBlockPhys.program");
 			else
 				basicProgram = renderer->RegisterProgram("Shaders/BasicBlock.program");
+			depthonlyProgram = renderer->RegisterProgram("Shaders/BasicBlockDepthOnly.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
 			backfaceProgram = renderer->RegisterProgram("Shaders/BackFaceBlock.program");
 			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
@@ -138,12 +140,50 @@ namespace spades {
 
 		void GLMapRenderer::Prerender() {
 			SPADES_MARK_FUNCTION();
+			//depth-only pass
+			GLProfiler profiler(device, "Prerender");
 
-			// nothing to do now (maybe depth-only pass?)
+			Vector3 eye = renderer->GetSceneDef().viewOrigin;
+
+			device->Enable(IGLDevice::CullFace, true);
+			device->Enable(IGLDevice::DepthTest, true);
+			device->ColorMask(false, false, false, false);
+
+			depthonlyProgram->Use();
+			static GLProgramAttribute positionAttribute("positionAttribute");
+			positionAttribute(depthonlyProgram);
+			device->EnableVertexAttribArray(positionAttribute(), true);
+			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
+			projectionViewMatrix(depthonlyProgram);
+			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
+
+			RealizeChunks(eye);
+
+			// draw from nearest to farthest
+			int cx = (int)floorf(eye.x) / GLMapChunk::Size;
+			int cy = (int)floorf(eye.y) / GLMapChunk::Size;
+			int cz = (int)floorf(eye.z) / GLMapChunk::Size;
+			DrawColumnDepth(cx, cy, cz, eye);
+			for (int dist = 1; dist <= 128 / GLMapChunk::Size; dist++) {
+				for (int x = cx - dist; x <= cx + dist; x++) {
+					DrawColumnDepth(x, cy + dist, cz, eye);
+					DrawColumnDepth(x, cy - dist, cz, eye);
+				}
+				for (int y = cy - dist + 1; y <= cy + dist - 1; y++) {
+					DrawColumnDepth(cx + dist, y, cz, eye);
+					DrawColumnDepth(cx - dist, y, cz, eye);
+				}
+			}
+
+
+			device->EnableVertexAttribArray(positionAttribute(), false);
+			device->ColorMask(true, true, true, true);
+
 		}
 
 		void GLMapRenderer::RenderSunlightPass() {
 			SPADES_MARK_FUNCTION();
+
 			GLProfiler profiler(device, "Map");
 
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
@@ -228,7 +268,8 @@ namespace spades {
 			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
-			RealizeChunks(eye);
+			//RealizeChunks(eye); // should already be realized from the prepass
+			//TODO maybe add some way of checking if the chunks have been realized for the current eye? Probably just a bool called "alreadyrealized" that gets checked in RealizeChunks
 
 			// draw from nearest to farthest
 			int cx = (int)floorf(eye.x) / GLMapChunk::Size;
@@ -313,7 +354,7 @@ namespace spades {
 			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
-			RealizeChunks(eye);
+			//RealizeChunks(eye); // should already be realized from the prepass
 
 			// draw from nearest to farthest
 			int cx = (int)floorf(eye.x) / GLMapChunk::Size;
@@ -342,6 +383,14 @@ namespace spades {
 			device->BindTexture(IGLDevice::Texture2D, 0);
 		}
 
+		void GLMapRenderer::DrawColumnDepth(int cx, int cy, int cz, spades::Vector3 eye) {
+			cx &= numChunkWidth - 1;
+			cy &= numChunkHeight - 1;
+			for (int z = std::max(cz, 0); z < numChunkDepth; z++)
+				GetChunk(cx, cy, z)->RenderDepthPass();
+			for (int z = std::min(cz - 1, 63); z >= 0; z--)
+				GetChunk(cx, cy, z)->RenderDepthPass();
+		}
 		void GLMapRenderer::DrawColumnSunlight(int cx, int cy, int cz, spades::Vector3 eye) {
 			cx &= numChunkWidth - 1;
 			cy &= numChunkHeight - 1;

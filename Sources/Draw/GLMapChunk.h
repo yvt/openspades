@@ -89,6 +89,7 @@ namespace spades {
 			float DistanceFromEye(const Vector3 &eye);
 
 			void RenderSunlightPass();
+			void RenderDepthPass();
 			void RenderDLightPass(std::vector<GLDynamicLight> lights);
 		};
 	}
