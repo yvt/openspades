@@ -79,6 +79,8 @@ namespace spades {
 
 			static void PreloadShaders(GLRenderer *);
 
+			virtual void Prerender(std::vector<client::ModelRenderParam> params);
+
 			virtual void RenderShadowMapPass(std::vector<client::ModelRenderParam> params);
 
 			virtual void RenderSunlightPass(std::vector<client::ModelRenderParam> params);

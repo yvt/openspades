@@ -18,14 +18,7 @@
 
  */
 
-
-// Common code for sunlight shadow rendering
-
-
-#if USE_SSAO
-uniform sampler2D ssaoTexture;
-uniform vec2 ssaoTextureUVScale;
-#endif
+// Modified version of Common.fs; SSAO is removed to lower the texture stage pressure
 
 float VisibilityOfSunLight_Map();
 float VisibilityOfSunLight_Model();
@@ -42,10 +35,6 @@ vec3 EvaluateSunLight(){
 }
 
 vec3 EvaluateAmbientLight(float detailAmbientOcclusion) {
-#if USE_SSAO
-    float ssao = texture2D(ssaoTexture, gl_FragCoord.xy * ssaoTextureUVScale).x;
-    detailAmbientOcclusion *= ssao;
-#endif
 	return Radiosity_Map(detailAmbientOcclusion);
 }
 

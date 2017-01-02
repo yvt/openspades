@@ -69,6 +69,8 @@ namespace spades {
 			bool useHighPrec;
 			bool useHdr;
 
+			bool doingPostProcessing;
+
 			IGLDevice::UInteger multisampledFramebuffer;
 
 			// for multisample

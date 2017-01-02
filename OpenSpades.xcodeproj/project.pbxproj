@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E809500A1E17F66500AECDF2 /* GLSSAOFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80950081E17F66500AECDF2 /* GLSSAOFilter.cpp */; };
 		E82E66ED18EA7914004DBA18 /* StartupScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842888C18A3D1520060743D /* StartupScreenHelper.cpp */; };
 		E82E66EE18EA7954004DBA18 /* GLBloomFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89E811F179C2C800059C649 /* GLBloomFilter.cpp */; };
 		E82E66EF18EA7954004DBA18 /* GLQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */; };
@@ -314,6 +315,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E80950081E17F66500AECDF2 /* GLSSAOFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSSAOFilter.cpp; sourceTree = "<group>"; };
+		E80950091E17F66500AECDF2 /* GLSSAOFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLSSAOFilter.h; sourceTree = "<group>"; };
 		E80B286017A2462D0056179E /* GLShadowMapShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLShadowMapShader.cpp; sourceTree = "<group>"; };
 		E80B286117A2462D0056179E /* GLShadowMapShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShadowMapShader.h; sourceTree = "<group>"; };
 		E80B286317A24AED0056179E /* GLBasicShadowMapRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLBasicShadowMapRenderer.cpp; sourceTree = "<group>"; };
@@ -1230,6 +1233,8 @@
 				E8B6B72A17E6095800E35523 /* GLLensDustFilter.h */,
 				E8D0E5D018F3215000DE3BDB /* GLNonlinearizeFilter.cpp */,
 				E8D0E5D118F3215000DE3BDB /* GLNonlinearizeFilter.h */,
+				E80950081E17F66500AECDF2 /* GLSSAOFilter.cpp */,
+				E80950091E17F66500AECDF2 /* GLSSAOFilter.h */,
 			);
 			name = "Post Filters";
 			sourceTree = "<group>";
@@ -2140,6 +2145,7 @@
 				E82E67B718EA7972004DBA18 /* Client_NetHandler.cpp in Sources */,
 				E82E67B818EA7972004DBA18 /* Client_LocalEnts.cpp in Sources */,
 				E82E67B918EA7972004DBA18 /* Client_Draw.cpp in Sources */,
+				E809500A1E17F66500AECDF2 /* GLSSAOFilter.cpp in Sources */,
 				E82E67BA18EA7972004DBA18 /* Client_Scene.cpp in Sources */,
 				E82E67BB18EA7972004DBA18 /* Client_FPSCounter.cpp in Sources */,
 				E82E67BC18EA7972004DBA18 /* ChatWindow.cpp in Sources */,
