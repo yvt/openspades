@@ -22,8 +22,8 @@
 
 float VisibilityOfSunLight_Map();
 float VisibilityOfSunLight_Model();
-vec3 Radiosity_Map(float detailAmbientOcclusion);
-vec3 BlurredReflection_Map(float detailAmbientOcclusion, vec3 direction);
+vec3 Radiosity_Map(float detailAmbientOcclusion, float ssao);
+vec3 BlurredReflection_Map(float detailAmbientOcclusion, vec3 direction, float ssao);
 
 float VisibilityOfSunLight() {
 	return VisibilityOfSunLight_Map() *
@@ -35,9 +35,9 @@ vec3 EvaluateSunLight(){
 }
 
 vec3 EvaluateAmbientLight(float detailAmbientOcclusion) {
-	return Radiosity_Map(detailAmbientOcclusion);
+	return Radiosity_Map(detailAmbientOcclusion, 1.0);
 }
 
 vec3 EvaluateDirectionalAmbientLight(float detailAmbientOcclusion, vec3 direction) {
-    return BlurredReflection_Map(detailAmbientOcclusion, direction);
+    return BlurredReflection_Map(detailAmbientOcclusion, direction, 1.0);
 }

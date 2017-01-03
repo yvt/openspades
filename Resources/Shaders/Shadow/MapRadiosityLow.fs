@@ -38,7 +38,7 @@ vec3 DecodeRadiosityValue(vec3 val){
 	return val;
 }
 
-vec3 Radiosity_Map(float detailAmbientOcclusion) {
+vec3 Radiosity_Map(float detailAmbientOcclusion, float ssao) {
 	vec3 col = DecodeRadiosityValue
 	(texture3D(radiosityTextureFlat,
 			   radiosityTextureCoord).xyz);
@@ -53,7 +53,9 @@ vec3 Radiosity_Map(float detailAmbientOcclusion) {
 	(texture3D(radiosityTextureZ,
 			   radiosityTextureCoord).xyz);
 	col = max(col, 0.);
-	col *= 1.5;
+	col *= 1.5 * ssao;
+
+	detailAmbientOcclusion *= ssao;
 
 	// ambient occlusion
 	float amb = texture3D(ambientShadowTexture, ambientShadowTextureCoord).x;
@@ -68,7 +70,7 @@ vec3 Radiosity_Map(float detailAmbientOcclusion) {
 	return col;
 }
 
-vec3 BlurredReflection_Map(float detailAmbientOcclusion, vec3 direction)
+vec3 BlurredReflection_Map(float detailAmbientOcclusion, vec3 direction, float ssao)
 {
 	vec3 col = DecodeRadiosityValue
 	(texture3D(radiosityTextureFlat,
@@ -84,7 +86,9 @@ vec3 BlurredReflection_Map(float detailAmbientOcclusion, vec3 direction)
 	(texture3D(radiosityTextureZ,
 			   radiosityTextureCoord).xyz);
 	col = max(col, 0.);
-	col *= 1.5;
+	col *= 1.5 * ssao;
+
+	detailAmbientOcclusion *= ssao;
 
 	// ambient occlusion
 	float amb = texture3D(ambientShadowTexture, ambientShadowTextureCoord).x;
