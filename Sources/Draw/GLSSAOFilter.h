@@ -26,12 +26,15 @@ namespace spades {
 	namespace draw {
 		class GLRenderer;
 		class GLProgram;
+		class GLImage;
 		class GLSettings;
 		class GLSSAOFilter {
 			GLRenderer *renderer;
 			GLSettings &settings;
 			GLProgram *ssaoProgram;
 			GLProgram *bilateralProgram;
+
+			GLImage *ditherPattern;
 
 			GLColorBuffer GenerateRawSSAOImage(int width, int height);
 			GLColorBuffer ApplyBilateralFilter(GLColorBuffer, bool direction, int width = -1,

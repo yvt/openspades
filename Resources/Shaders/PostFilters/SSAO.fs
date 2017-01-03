@@ -20,6 +20,7 @@
 
 
 uniform sampler2D depthTexture;
+uniform sampler2D ditherTexture; // 4x4 pattern
 uniform vec2 zNearFar;
 uniform vec2 pixelShift;
 uniform vec2 fieldOfView;
@@ -64,8 +65,11 @@ void main() {
     vec3 originNormal = normalize(cross(viewCoordDiff1, viewCoordDiff2));
 
     // Sampling pattern
-    vec2 patternPos = fract(gl_FragCoord.xy * 0.5);
-    float patternPos2 = fract(dot(floor(gl_FragCoord.xy), vec2(0.25, 0.5)));
+    float patternPos1 = texture2D(ditherTexture, gl_FragCoord.xy * 0.25).x * 15.0 / 16.0;
+    float patternPos2 = texture2D(ditherTexture, gl_FragCoord.xy * 0.25 + vec2(0.25, 0.0)).x * 15.0 / 16.0;
+
+    patternPos1 += texture2D(ditherTexture, gl_FragCoord.xy * 0.25 * 0.25).x / 16.0;
+    patternPos2 += texture2D(ditherTexture, gl_FragCoord.xy * 0.25 * 0.25 + vec2(0.25, 0.0)).x / 16.0;
 
     // generalization of x[n+1] = x[n] * 1.3 + 1, x[0] = 1:
     //   pow(10.0, -n) * pow(13.0, n + 1.0) * (1.0 / 3.0) - 10.0 / 3.0
@@ -74,13 +78,8 @@ void main() {
     const float sampleRotAngle = 2.61314;
     vec2 sampleRot = vec2(sin(sampleRotAngle), cos(sampleRotAngle));
 
-    vec2 sampleDir = vec2(patternPos.x > .5 ? 1. : -1., 0.);
-    sampleDir = patternPos.y > .5 ? sampleDir : sampleDir.yx;
-
-    float initialAngle = dot(gl_FragCoord.xy, vec2(12.345, 6.789));
-    initialAngle += cos(fract(initialAngle * 1234.0) + dot(gl_FragCoord.xy, vec2(9.54641, 5.5463)));
-    initialAngle *= 6.28;
-    // sampleDir = complexMultiply(sampleDir, vec2(sin(initialAngle), cos(initialAngle)));
+    patternPos1 *= 3.141592654 * 2.0;
+    vec2 sampleDir = vec2(sin(patternPos1), cos(patternPos1));
 
     // Center location
     vec3 originViewCoord = vec3((texCoord * 2.0 - 1.0) * fieldOfView, 1.0);

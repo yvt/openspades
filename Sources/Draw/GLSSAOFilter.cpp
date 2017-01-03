@@ -28,6 +28,7 @@
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
 #include "GLSSAOFilter.h"
+#include "GLImage.h"
 #include "IGLDevice.h"
 #include <Core/Debug.h>
 #include <Core/Math.h>
@@ -40,6 +41,8 @@ namespace spades {
 			ssaoProgram = renderer->RegisterProgram("Shaders/PostFilters/SSAO.program");
 			bilateralProgram =
 			  renderer->RegisterProgram("Shaders/PostFilters/BilateralFilter.program");
+
+			ditherPattern = static_cast<GLImage *>(renderer->RegisterImage("Gfx/DitherPattern4x4.png"));
 		}
 
 		GLColorBuffer GLSSAOFilter::GenerateRawSSAOImage(int width, int height) {
@@ -54,6 +57,7 @@ namespace spades {
 				GLProgram *program = ssaoProgram;
 				static GLProgramAttribute positionAttribute("positionAttribute");
 				static GLProgramUniform depthTexture("depthTexture");
+				static GLProgramUniform ditherTexture("ditherTexture");
 				static GLProgramUniform texCoordRange("texCoordRange");
 				static GLProgramUniform zNearFar("zNearFar");
 				static GLProgramUniform pixelShift("pixelShift");
@@ -62,6 +66,7 @@ namespace spades {
 
 				positionAttribute(program);
 				depthTexture(program);
+				ditherTexture(program);
 				texCoordRange(program);
 				zNearFar(program);
 				pixelShift(program);
@@ -91,10 +96,18 @@ namespace spades {
 				depthTexture.SetValue(0);
 				dev->BindTexture(IGLDevice::Texture2D,
 				                 renderer->GetFramebufferManager()->GetDepthTexture());
+
+				dev->ActiveTexture(1);
+				ditherTexture.SetValue(1);
+				ditherPattern->Bind(IGLDevice::Texture2D);
+				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
+				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
+
 				dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
 				dev->Viewport(0, 0, width, height);
 				qr.SetCoordAttributeIndex(positionAttribute());
 				qr.Draw();
+				dev->ActiveTexture(0);
 				dev->BindTexture(IGLDevice::Texture2D, 0);
 			}
 
@@ -138,7 +151,7 @@ namespace spades {
 			depthTexture.SetValue(1);
 			dev->ActiveTexture(1);
 			dev->BindTexture(IGLDevice::Texture2D,
-			                 renderer->GetFramebufferManager()->GetDepthTexture());
+							 renderer->GetFramebufferManager()->GetDepthTexture());
 
 			texCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
 
