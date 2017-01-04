@@ -29,13 +29,14 @@ namespace spades {
 	template <typename T>
 	class PrimitiveArray {
 		std::vector<T> inner;
-		int refCount;
+		int refCount = 1;
 	public:
 		static asITypeInfo *scrType;
 		typedef PrimitiveArray<T> ArrayType;
 		static ArrayType *Factory1() {
 			ArrayType *obj = new ArrayType();
-			asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
+			if(scrType->GetFlags() & asOBJ_GC)
+				asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
 			return obj;
 		}
 		static ArrayType *Factory2(asUINT initialSize) {
@@ -44,7 +45,8 @@ namespace spades {
 				return NULL;
 			}
 			ArrayType *obj = new ArrayType(initialSize);
-			asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
+			if(scrType->GetFlags() & asOBJ_GC)
+				asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
 			return obj;
 		}
 		static ArrayType *Factory3(asUINT initialSize, T initialValue) {
@@ -53,7 +55,8 @@ namespace spades {
 				return NULL;
 			}
 			ArrayType *obj = new ArrayType(initialSize, initialValue);
-			asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
+			if(scrType->GetFlags() & asOBJ_GC)
+				asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
 			return obj;
 		}
 		static ArrayType *Factory4(void *initList) {
@@ -62,7 +65,8 @@ namespace spades {
 				asGetActiveContext()->SetException("Too many array elements");
 			}
 			ArrayType *obj = new ArrayType(initList);
-			asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
+			if(scrType->GetFlags() & asOBJ_GC)
+				asGetActiveContext()->GetEngine()->NotifyGarbageCollectorOfNewObject(obj, scrType);
 			return obj;
 		}
 
