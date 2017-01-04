@@ -979,19 +979,11 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			Player *p = player;
-			IRenderer *renderer = client->GetRenderer();
 			const SceneDefinition &lastSceneDef = client->GetLastSceneDef();
 
 			if (p->GetTeamId() >= 2) {
 				// spectator, or dummy player
 				return;
-			}
-			// debug
-			if (false) {
-				Handle<IImage> img = renderer->RegisterImage("Gfx/Ball.png");
-				renderer->SetColorAlphaPremultiplied(MakeVector4(1, 0, 0, 0));
-				renderer->AddLongSprite(img, lastSceneDef.viewOrigin + MakeVector3(0, 0, 1),
-				                        p->GetOrigin(), 0.5f);
 			}
 
 			float distancePowered = (p->GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();

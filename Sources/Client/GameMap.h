@@ -118,8 +118,6 @@ namespace spades {
 				}
 				if (!unsafe) {
 					if (changed) {
-						if (listener)
-							listener->GameMapChanged(x, y, z, this);
 						{
 							AutoLocker guard(&listenersMutex);
 							for (auto *l : listeners) {
@@ -130,8 +128,6 @@ namespace spades {
 				}
 			}
 
-			void SetListener(IGameMapListener *l) { listener = l; }
-			IGameMapListener *GetListener() { return listener; }
 			void AddListener(IGameMapListener *);
 			void RemoveListener(IGameMapListener *);
 
@@ -157,7 +153,6 @@ namespace spades {
 		private:
 			uint64_t solidMap[DefaultWidth][DefaultHeight];
 			uint32_t colorMap[DefaultWidth][DefaultHeight][DefaultDepth];
-			IGameMapListener *listener;
 			std::list<IGameMapListener *> listeners;
 			Mutex listenersMutex;
 

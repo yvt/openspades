@@ -34,7 +34,7 @@
 namespace spades {
 	namespace client {
 
-		GameMap::GameMap() : listener(NULL) {
+		GameMap::GameMap() {
 			SPADES_MARK_FUNCTION();
 
 			for (int x = 0; x < DefaultWidth; x++)

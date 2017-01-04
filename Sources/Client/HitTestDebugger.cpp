@@ -148,10 +148,8 @@ namespace spades {
 			def.zFar = 200.f;
 
 			// start rendering
-			IGameMapListener *oldListener = nullptr;
 			GameMap *map = world->GetMap();
 			if (!def.skipWorld) {
-				oldListener = map->GetListener();
 				renderer->SetGameMap(map);
 			}
 			renderer->StartScene(def);

@@ -765,6 +765,9 @@ namespace spades {
 						if (GetWorld()->GetLocalPlayer() == p) {
 							// handle "/fly" jump
 							if (inp.jump) {
+								if (!p) {
+									SPRaise("Local player is null");
+								}
 								p->ForceJump();
 							}
 							break;
@@ -1371,7 +1374,7 @@ namespace spades {
 					else {
 						int clip = reader.ReadByte();
 						int reserve = reader.ReadByte();
-						if (clip < 255 && reserve < 255) {
+						if (clip < 255 && reserve < 255 && p) {
 							p->ReloadDone(clip, reserve);
 						}
 					}
