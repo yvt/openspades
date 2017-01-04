@@ -1,0 +1,13 @@
+{
+  "latest": {
+    "stable": {
+      "version": [0, 1, 0],
+      "released_at": "2016-12-26T09:00:50Z",
+      "links": {
+        "info": "https://github.com/yvt/openspades/releases/tag/v0.1.0",
+        "windows": "https://github.com/yvt/openspades/releases/download/v0.1.0/OpenSpades-0.1.0-Windows.zip",
+        "mac": "https://github.com/yvt/openspades/releases/download/v0.1.0/OpenSpades-0.1.0-OSX.zip"
+      }
+    }
+  }
+}
