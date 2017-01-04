@@ -359,7 +359,7 @@ namespace spades {
 		MainScreenServerListErrorView@ errorView;
 		bool loading = false, loaded = false;
 
-		private ConfigItem cg_protocolVersion("cg_protocolVersion");
+		private ConfigItem cg_protocolVersion("cg_protocolVersion", "3");
 		private ConfigItem cg_lastQuickConnectHost("cg_lastQuickConnectHost");
 		private ConfigItem cg_serverlistSort("cg_serverlistSort", "16385");
 
