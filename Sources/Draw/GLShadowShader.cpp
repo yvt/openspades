@@ -232,8 +232,8 @@ namespace spades {
 				Vector3 ac = renderer->GetFogColor();
 				ac *= ac; // linearize
 				ambientColor(program);
-				// ac += .2f;
 				ac *= 0.5f;
+				ac += 0.1f; // so the shadow wouldn't be pitch black even if the fog is black
 				ambientColor.SetValue(ac.x, ac.y, ac.z);
 
 				ambientShadowTexture(program);
