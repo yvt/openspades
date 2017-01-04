@@ -386,7 +386,8 @@ namespace spades {
 						}
 						if (world->GetLocalPlayer()->IsToolWeapon() && weapInput.secondary &&
 						    !lastVal && world->GetLocalPlayer()->IsReadyToUseTool() &&
-						    !world->GetLocalPlayer()->GetWeapon()->IsReloading()) {
+						    !world->GetLocalPlayer()->GetWeapon()->IsReloading() &&
+							GetSprintState() == 0.0f) {
 							AudioParam params;
 							params.volume = 0.08f;
 							Handle<IAudioChunk> chunk =
