@@ -68,7 +68,7 @@ namespace spades {
 			}) != spectatorString.end();
 
 			spectatorFont = has_special_char ?
-				client->fontManager->GetLargeFont() :
+				client->fontManager->GetMediumFont() :
 				client->fontManager->GetSquareDesignFont();
 		}
 
