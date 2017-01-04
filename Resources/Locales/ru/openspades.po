@@ -1,16 +1,16 @@
 # OpenSpades translation
-# Copyright (C) 2016 yvt
+# Copyright (C) 2017 yvt
 # This file is distributed under the same license as the OpenSpades package.
-# yvt <i@yvt.jp>, 2016.
+# yvt <i@yvt.jp>, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
-"POT-Creation-Date: 2016-12-25 23:42-0200\n"
-"PO-Revision-Date: 2016-12-25 23:42-0200\n"
+"POT-Creation-Date: 2016-12-25 23:47-0200\n"
+"PO-Revision-Date: 2017-01-04 16:29+0300\n"
 "Last-Translator: ArionWT <arionwhiteac@gmail.com>\n"
-"Language-Team: \n"
+"Language-Team: Russian\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -237,12 +237,12 @@ msgstr "Спавн"
 #: Sources/Client/LimboView.cpp:182
 msgctxt "Client"
 msgid "Select Team:"
-msgstr "Выберите команду:"
+msgstr "Выбор команды:"
 
 #: Sources/Client/LimboView.cpp:190
 msgctxt "Client"
 msgid "Select Weapon:"
-msgstr "Выберите оружие:"
+msgstr "Выбор оружия:"
 
 #: Sources/Client/NetClient.cpp:376
 msgctxt "NetClient"
@@ -295,7 +295,7 @@ msgstr "Вы забанены на этом сервере"
 #: Sources/Client/NetClient.cpp:668 Sources/Client/NetClient.cpp:671
 msgctxt "NetClient"
 msgid "You were kicked from this server."
-msgstr "Вы были кикнуты с этого сервера"
+msgstr "Вас выкинули с этого сервера"
 
 #: Sources/Client/NetClient.cpp:669
 msgctxt "NetClient"
@@ -313,12 +313,12 @@ msgid "Unknown Reason"
 msgstr "Неизвестная причина"
 
 #: Sources/Client/ScoreboardView.cpp:331
-#msgctxt "Client"
-#msgid "Spectator{1}"
-#msgid_plural "Spectators{1}"
-#msgstr[0] "Наблюдатель{1}"
-#msgstr[1] "Наблюдателей{1}"
-#msgstr[2] "Наблюдателей{1}"
+msgctxt "Client"
+msgid "Spectator{1}"
+msgid_plural "Spectators{1}"
+msgstr[0] "Наблюдатель{1}"
+msgstr[1] "Наблюдатели{1}"
+msgstr[2] "Наблюдатели{1}"
 
 #: Sources/Client/TCProgressView.cpp:151
 msgctxt "Client"
@@ -347,7 +347,7 @@ msgstr ""
 "Серьезная ошибка заставила OpenSpades прекратить работу:\n"
 "{0}\n"
 "\n"
-"Смотрите SystemMessages.log для более подробной информации."
+"Посмотрите SystemMessages.log для более подробной информации."
 
 #: Sources/Gui/Main.cpp:703 Sources/Gui/Runner.cpp:64
 msgctxt "Main"
@@ -372,7 +372,7 @@ msgstr "История чата"
 #: Resources/Scripts/Gui/ClientUI.as:212
 msgctxt "Client"
 msgid "Setup"
-msgstr "Настройка"
+msgstr "Настройки"
 
 #: Resources/Scripts/Gui/ClientUI.as:219
 msgctxt "Client"
@@ -392,7 +392,7 @@ msgstr "Отмена"
 #: Resources/Scripts/Gui/ClientUI.as:500
 msgctxt "Client"
 msgid "Chat Text"
-msgstr "Текст чата"
+msgstr "Текст сообщения"
 
 #: Resources/Scripts/Gui/ClientUI.as:508
 msgctxt "Client"
@@ -551,7 +551,7 @@ msgstr "Загрузка..."
 #: Resources/Scripts/Gui/MainScreen.as:825
 msgctxt "MainScreen"
 msgid "Failed to fetch the server list."
-msgstr "Не удалось загрузить список серверов."
+msgstr "Не удалось получить список серверов."
 
 #: Resources/Scripts/Gui/MessageBox.as:130
 #: Resources/Scripts/Gui/MessageBox.as:144
@@ -567,7 +567,7 @@ msgstr "Отмена"
 #: Resources/Scripts/Gui/Preferences.as:60
 msgctxt "Preferences"
 msgid "Game Options"
-msgstr "Игровые настройки"
+msgstr "Настройки игры"
 
 #: Resources/Scripts/Gui/Preferences.as:61
 msgctxt "Preferences"
@@ -589,7 +589,7 @@ msgstr "Назад"
 #: Resources/Scripts/Gui/Preferences.as:407
 msgctxt "Preferences"
 msgid "Press Key to Bind or [Escape] to Cancel..."
-msgstr "Нажмите клавишу или [Escape] для Отмены..."
+msgstr "Нажмите клавишу или [Esc] для Отмены..."
 
 #: Resources/Scripts/Gui/Preferences.as:418
 msgctxt "Preferences"
@@ -734,7 +734,7 @@ msgstr "Обратная связь"
 #: Resources/Scripts/Gui/Preferences.as:655
 msgctxt "Preferences"
 msgid "Chat Notify Sounds"
-msgstr "Звуки уведомления чата"
+msgstr "Звуки уведомлений чата"
 
 #: Resources/Scripts/Gui/Preferences.as:656
 msgctxt "Preferences"
@@ -759,7 +759,7 @@ msgstr "Разрешить юникод"
 #: Resources/Scripts/Gui/Preferences.as:661
 msgctxt "Preferences"
 msgid "Server Alert"
-msgstr "Название сервера"
+msgstr "Оповещение сервера"
 
 #: Resources/Scripts/Gui/Preferences.as:664
 msgctxt "Preferences"
@@ -794,7 +794,7 @@ msgstr "Альт. атака"
 #: Resources/Scripts/Gui/Preferences.as:681
 msgctxt "Preferences"
 msgid "Hold Aim Down Sight"
-msgstr "Зажимать для прицела"
+msgstr "Удерживать для прицела"
 
 #: Resources/Scripts/Gui/Preferences.as:682
 msgctxt "Preferences"
@@ -804,7 +804,7 @@ msgstr "Чувствительность мыши"
 #: Resources/Scripts/Gui/Preferences.as:684
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
-msgstr "Чувств. приближения"
+msgstr "Чувств. прицела"
 
 #: Resources/Scripts/Gui/Preferences.as:686
 msgctxt "Preferences"
@@ -814,7 +814,7 @@ msgstr "Сила по экспоненте"
 #: Resources/Scripts/Gui/Preferences.as:688
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
-msgstr "Инвертировать Y-ось мыши"
+msgstr "Инверсия Y-оси мыши"
 
 #: Resources/Scripts/Gui/Preferences.as:689
 msgctxt "Preferences"
@@ -894,12 +894,12 @@ msgstr "Красться"
 #: Resources/Scripts/Gui/Preferences.as:705
 msgctxt "Preferences"
 msgid "Jump"
-msgstr "Прыгать"
+msgstr "Прыжок"
 
 #: Resources/Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Sprint"
-msgstr "Бежать"
+msgstr "Бег"
 
 #: Resources/Scripts/Gui/Preferences.as:709
 msgctxt "Preferences"
@@ -992,7 +992,7 @@ msgid "System Info"
 msgstr "Систем. инфо"
 
 #: Resources/Scripts/Gui/StartupScreen.as:208
-#: Resources/Scripts/Gui/StartupScreen.as:1657
+#: Resources/Scripts/Gui/StartupScreen.as:1661
 msgctxt "StartupScreen"
 msgid "Advanced"
 msgstr "Расширенные"
@@ -1032,7 +1032,7 @@ msgstr ""
 "вашу концентрацию в игре."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1093
-#: Resources/Scripts/Gui/StartupScreen.as:1471
+#: Resources/Scripts/Gui/StartupScreen.as:1475
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr "Рендер"
@@ -1048,7 +1048,7 @@ msgid ""
 "OpenGL renderer uses your computer's graphics accelerator to generate the "
 "game screen."
 msgstr ""
-"OpenGL рендер использует графический ускоритель вашего компьютера для "
+"Рендер OpenGL использует графический ускоритель вашего компьютера для "
 "генерации изображения."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1108
@@ -1064,7 +1064,7 @@ msgid ""
 "unsupported GPU."
 msgstr ""
 "Программный рендер использует ЦП для генерации изображения. Качество и "
-"производительность могут быть ниже OpenGL рендера, однако он работает даже с "
+"производительность могут быть ниже рендера OpenGL, однако он работает даже с "
 "неподдерживаемыми видеокартами."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1126
@@ -1086,8 +1086,8 @@ msgstr ""
 "высокого разрешения. Выглядит лучше, но не справляется с некоторыми "
 "настройками.\n"
 "\n"
-"FXAA: выполняет сглаживание с помощью размытия артефактов в пост-"
-"процессинге.|Выкл|MSAA 2x|4x|FXAA"
+"FXAA: выполняет сглаживание с помощью размытия артефактов в постобработке.|"
+"Выкл|MSAA 2x|4x|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1133
 msgctxt "StartupScreen"
@@ -1100,8 +1100,8 @@ msgid ""
 "Enables a physically based simulation of light path for more realistic "
 "lighting."
 msgstr ""
-"Включает моделирование световых лучей на физической основе для более "
-"реалистичного освещения."
+"Включает физическое моделирование световых лучей для более реалистичного "
+"освещения."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1138
 msgctxt "StartupScreen"
@@ -1150,7 +1150,7 @@ msgstr "Фильтр рассеяния объектива"
 #: Resources/Scripts/Gui/StartupScreen.as:1154
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
-msgstr "Моделирует рассеяние света пылью на линзе камеры."
+msgstr "Имитирует рассеяние света пылью на линзе камеры."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
@@ -1193,54 +1193,70 @@ msgid "Blurs out-of-focus objects."
 msgstr "Размывает объекты вне фокуса."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1169
-#: Resources/Scripts/Gui/StartupScreen.as:1207
-#: Resources/Scripts/Gui/StartupScreen.as:1229
+msgctxt "StartupScreen"
+msgid "Screen Space Ambient Occlusion"
+msgstr "SSAO"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1170
+msgctxt "StartupScreen"
+msgid "Simulates soft shadows that occur between nearby objects."
+msgstr "Имитирует мягкие тени, которые возникают между близкими объектами."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1172
+#: Resources/Scripts/Gui/StartupScreen.as:1211
+#: Resources/Scripts/Gui/StartupScreen.as:1233
 msgctxt "StartupScreen"
 msgid "Low"
 msgstr "Низко"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1170
-#: Resources/Scripts/Gui/StartupScreen.as:1208
+#: Resources/Scripts/Gui/StartupScreen.as:1173
+#: Resources/Scripts/Gui/StartupScreen.as:1212
 msgctxt "StartupScreen"
 msgid "Medium"
 msgstr "Средне"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1171
-#: Resources/Scripts/Gui/StartupScreen.as:1209
-#: Resources/Scripts/Gui/StartupScreen.as:1231
+#: Resources/Scripts/Gui/StartupScreen.as:1174
+#: Resources/Scripts/Gui/StartupScreen.as:1213
+#: Resources/Scripts/Gui/StartupScreen.as:1235
 msgctxt "StartupScreen"
 msgid "High"
 msgstr "Высоко"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1174
+#: Resources/Scripts/Gui/StartupScreen.as:1175
+#: Resources/Scripts/Gui/StartupScreen.as:1236
+msgctxt "StartupScreen"
+msgid "Ultra"
+msgstr "Ультра"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1178
 msgctxt "StartupScreen"
 msgid "Post-process"
 msgstr "Постобработка"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1175
+#: Resources/Scripts/Gui/StartupScreen.as:1179
 msgctxt "StartupScreen"
 msgid ""
 "Post-process modifies the image to make it look better and more realistic."
 msgstr ""
 "Постобработка изменяет картинку, чтобы сделать её лучше и более реалистичной."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1182
+#: Resources/Scripts/Gui/StartupScreen.as:1186
 msgctxt "StartupScreen"
 msgid ""
 "Particles|Low:Artifact occurs when a particle intersects other objects.|"
 "Medium:Particle intersects objects smoothly.|High:Particle intersects "
 "objects smoothly, and some objects casts their shadow to particles."
 msgstr ""
-"Частицы|Низко:Появляются артефакты, когда частица пересекает объект.|Средне:"
-"Частица пересекает объект плавно.|Высоко:Частица пересекает объект плавно, "
-"некоторые объекты отбрасывают свою тень на частицы."
+"Частицы|Низко:Когда частица пересекает объект, появляются артефакты.|"
+"Средне:Частица пересекает объект плавно.|Высоко:Частица пересекает "
+"объект плавно, некоторые объекты отбрасывают свою тень на частицы."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1192
+#: Resources/Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
 msgstr "Динамическое освещение"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1194
+#: Resources/Scripts/Gui/StartupScreen.as:1198
 msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
@@ -1249,22 +1265,22 @@ msgstr ""
 "Дает некоторым объектам возможность излучать свет для придания им эффекта "
 "свечения."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1197
+#: Resources/Scripts/Gui/StartupScreen.as:1201
 msgctxt "StartupScreen"
 msgid "Shadows"
 msgstr "Тени"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1198
+#: Resources/Scripts/Gui/StartupScreen.as:1202
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
 msgstr "Подвижные объекты отбрасывают тень."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1200
+#: Resources/Scripts/Gui/StartupScreen.as:1204
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
 msgstr "Объемный туман"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1201
+#: Resources/Scripts/Gui/StartupScreen.as:1205
 msgctxt "StartupScreen"
 msgid ""
 "Simulates shadow being casted to the fog particles using a super highly "
@@ -1273,12 +1289,12 @@ msgstr ""
 "Моделирует отбрасывание тени частицами тумана используя супер сильный "
 "ресурсоемкий алгоритм. "
 
-#: Resources/Scripts/Gui/StartupScreen.as:1204
+#: Resources/Scripts/Gui/StartupScreen.as:1208
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
 msgstr "Освещение на физической основе"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1205
+#: Resources/Scripts/Gui/StartupScreen.as:1209
 msgctxt "StartupScreen"
 msgid ""
 "Uses more accurate approximation techniques to decide the brightness of "
@@ -1286,12 +1302,12 @@ msgid ""
 msgstr ""
 "Использует более точные приближенные методы для определения яркости объектов."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1212
+#: Resources/Scripts/Gui/StartupScreen.as:1216
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr "Прямой свет"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1213
+#: Resources/Scripts/Gui/StartupScreen.as:1217
 msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
@@ -1300,7 +1316,7 @@ msgstr ""
 "Управляет тем, как столкновение света с материалами и атмосферой напрямую "
 "влияет на их внешний вид."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1223
+#: Resources/Scripts/Gui/StartupScreen.as:1227
 msgctxt "StartupScreen"
 msgid ""
 "Water Shader|None:Water is rendered in the same way that normal blocks are "
@@ -1309,33 +1325,28 @@ msgid ""
 "and refractions are rendered at the highest quality using screen-space "
 "techniques."
 msgstr ""
-"Шейдеры воды|Выкл:Рендер воды происходит таким же способом, что и ренднер "
+"Шейдеры воды|Выкл:Рендер воды происходит таким же способом, как и ренднер "
 "блоков.|1 уровень:Симулируется преломление и отражение солнца.|2 уровня:Волны"
 "имитируются также хорошо, как и преломления и отражения.|3 уровень:Отражения "
 "и преломления рендерятся с наивысшим качеством, используя экранно-пространственные "
 "методы."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1230
+#: Resources/Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
 msgid "Med"
 msgstr "Средне"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1232
-msgctxt "StartupScreen"
-msgid "Ultra"
-msgstr "Ультра"
-
-#: Resources/Scripts/Gui/StartupScreen.as:1235
+#: Resources/Scripts/Gui/StartupScreen.as:1239
 msgctxt "StartupScreen"
 msgid "Shader Effects"
-msgstr "Эффекты шейдеров"
+msgstr "Шейдеры"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1235
+#: Resources/Scripts/Gui/StartupScreen.as:1239
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr "Специальные эффекты."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1252
+#: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid ""
 "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
@@ -1344,32 +1355,32 @@ msgstr ""
 "Быстрый режим:Уменьшает разрешение картинки, чтобы сделать рендеринг быстрее.|"
 "Выкл|2x|4x"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1465
+#: Resources/Scripts/Gui/StartupScreen.as:1469
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr "Настройки аудио"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1474
+#: Resources/Scripts/Gui/StartupScreen.as:1478
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr "OpenAL"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1478
+#: Resources/Scripts/Gui/StartupScreen.as:1482
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
 "there isn't such a sound card, software emulation is used."
 msgstr ""
-"Использует OpenAL-совместимую звуковую карту для обработки звука. В "
-"большинстве случаев, где нет такой звуковой карты, используется программная "
-"эмуляция."
+"Использует OpenAL-совместимую звуковую карту для обработки звука. "
+"В большинстве случаев, когда нет такой звуковой карты, используется "
+"программная эмуляция."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1487
+#: Resources/Scripts/Gui/StartupScreen.as:1491
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr "YSR"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1491
+#: Resources/Scripts/Gui/StartupScreen.as:1495
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -1377,27 +1388,27 @@ msgid ""
 "dynamics compressor, HRTF-based 3D audio, and high quality reverb."
 msgstr ""
 "YSR - Это экспериментальный 3D HDR звуковой движок оптимизированный для "
-"OpenSpades. Он включает в себя некоторые улучшенные особенности, такие как "
+"OpenSpades. Он включает в себя некоторые улучшенные особенности, такие как: "
 "автоматическое управление загрузкой, динамический компрессор, HRTF-based 3D "
 "аудио и реверберации высокого качества."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1501
+#: Resources/Scripts/Gui/StartupScreen.as:1505
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr "Откл"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1505
+#: Resources/Scripts/Gui/StartupScreen.as:1509
 msgctxt "StartupScreen"
 msgid "Disables audio output."
-msgstr "Отключить аудио выход."
+msgstr "Отключить вывод аудио."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1516
-#: Resources/Scripts/Gui/StartupScreen.as:1540
+#: Resources/Scripts/Gui/StartupScreen.as:1520
+#: Resources/Scripts/Gui/StartupScreen.as:1544
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "Полифоника"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1517
+#: Resources/Scripts/Gui/StartupScreen.as:1521
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
@@ -1405,15 +1416,15 @@ msgid ""
 "(especially with a software emulation)."
 msgstr ""
 "Определяет как много звуков может проигрываться одновременно. Высокие "
-"значения требуют большой вычислительной мощности, так что установка на "
-"слишком большие значение может привести к перегрузке."
+"значения требуют большой вычислительной мощности, так что слишком высокое "
+"значение может привести к перегрузке."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1524
+#: Resources/Scripts/Gui/StartupScreen.as:1528
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1525
+#: Resources/Scripts/Gui/StartupScreen.as:1529
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1422,7 +1433,7 @@ msgstr ""
 "Включает расширенные особенности предусмотренные драйвером OpenAL для "
 "создания лучшей атмосферы."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1541
+#: Resources/Scripts/Gui/StartupScreen.as:1545
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1432,64 +1443,64 @@ msgstr ""
 "значение установлено, YSR может уменьшить количество звуков, когда обнаружена "
 "перегрузка."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1601
+#: Resources/Scripts/Gui/StartupScreen.as:1605
 msgctxt "StartupScreen"
 msgid "Language"
 msgstr "Язык"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1613
+#: Resources/Scripts/Gui/StartupScreen.as:1617
 msgctxt "StartupScreen"
 msgid "Tools"
 msgstr "Инструменты"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1616
+#: Resources/Scripts/Gui/StartupScreen.as:1620
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
 msgstr "Сбросить все настройки"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1625
+#: Resources/Scripts/Gui/StartupScreen.as:1629
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
 msgstr "Открыть папку с настрйоками в проводнике"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1627
+#: Resources/Scripts/Gui/StartupScreen.as:1631
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
 msgstr "Найти папку с конфигами в поиске"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1629
+#: Resources/Scripts/Gui/StartupScreen.as:1633
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
 msgstr "Обзор папки с настройками"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1646
+#: Resources/Scripts/Gui/StartupScreen.as:1650
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
 msgstr "Возникла неизвестная ошибка при открытии папки с настройками."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1652
+#: Resources/Scripts/Gui/StartupScreen.as:1656
 msgctxt "StartupScreen"
 msgid ""
 "Are you sure to reset all settings? They include (but are not limited to):"
 msgstr ""
 "Вы уверены, что хотите сбросить все настройки? Включая (и не только):"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1653
+#: Resources/Scripts/Gui/StartupScreen.as:1657
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
 msgstr "Все настройки графики/аудио"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1654
+#: Resources/Scripts/Gui/StartupScreen.as:1658
 msgctxt "StartupScreen"
 msgid "All key bindings"
-msgstr "Все настройки клавиатуры"
+msgstr "Все настройки управления"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1655
+#: Resources/Scripts/Gui/StartupScreen.as:1659
 msgctxt "StartupScreen"
 msgid "Your player name"
 msgstr "Ваше имя игрока"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1656
+#: Resources/Scripts/Gui/StartupScreen.as:1660
 msgctxt "StartupScreen"
 msgid ""
 "Other advanced settings only accessible through '{0}' tab and in-game "
@@ -1498,28 +1509,28 @@ msgstr ""
 "Другие расширенные настройки, доступные только через вкладку '{0}' и "
 "внутриигровые команды"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1726
+#: Resources/Scripts/Gui/StartupScreen.as:1730
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
 msgstr "Неизвестн. ({0})"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1728
-#: Resources/Scripts/Gui/StartupScreen.as:1742
+#: Resources/Scripts/Gui/StartupScreen.as:1732
+#: Resources/Scripts/Gui/StartupScreen.as:1746
 msgctxt "StartupScreen"
 msgid "System default"
 msgstr "Системный по-умолчанию"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1791
+#: Resources/Scripts/Gui/StartupScreen.as:1795
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
-msgstr "Копировать в буфер обм."
+msgstr "Копировать в буфер"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1827
+#: Resources/Scripts/Gui/StartupScreen.as:1831
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "Расширенные настройки"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1836
+#: Resources/Scripts/Gui/StartupScreen.as:1840
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "Фильтр"
