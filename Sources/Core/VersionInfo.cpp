@@ -1,11 +1,12 @@
 #if __linux__
-#define OS_PLATFORM_LINUX
+	#define OS_PLATFORM_LINUX
 #elif TARGET_OS_MAC
-#define OS_PLATFORM_MAC
+	#define OS_PLATFORM_MAC
 #elif defined _WIN32 || defined _WIN64
-#define OS_PLATFORM_WINDOWS
-#include <Windows.h>
-#include <sstream>
+	#define OS_PLATFORM_WINDOWS
+	#include <Windows.h>
+	#include <sstream>
+	#include <VersionHelpers.h> // Requires windows 8.1 sdk at least
 #endif
 
 #include "VersionInfo.h"
@@ -16,29 +17,37 @@ std::string VersionInfo::GetVersionInfo() {
 #elif defined(TARGET_OS_MAC)
 	return std::string("Mac OS X");
 #elif defined(OS_PLATFORM_WINDOWS)
-	OSVERSIONINFO osv = {sizeof(osv), 0};
-	if (GetVersionEx(&osv)) {
-		if (5 == osv.dwMajorVersion) {
-			switch (osv.dwMinorVersion) {
-				case 0: return "Windows 2000";
-				case 1: return "Windows XP";
-				case 2: return "Windows XPx64";
-				default: break;
-			}
-		} else if (6 == osv.dwMajorVersion) {
-			switch (osv.dwMinorVersion) {
-				case 0: return "Windows Vista";
-				case 1: return "Windows 7";
-				case 2: return "Windows 8";
-				case 3: return "Windows 8.1";
-				default: break;
-			}
+		// TODO: IsWindowsServer()
+
+		if((IsWindowsXPOrGreater()) && !(IsWindowsVistaOrGreater())) {
+			return std::string("Windows XP");
 		}
-		std::stringstream ss;
-		ss << "Windows " << osv.dwMajorVersion << "." << osv.dwMinorVersion;
-		return ss.str();
+		
+		if((IsWindowsVistaOrGreater()) && !(IsWindows7OrGreater())) {
+			return std::string("Windows Vista");
+		}
+		
+		if((IsWindows7OrGreater()) && !(IsWindows8OrGreater())) {
+			return std::string("Windows 7");
+		}
+		
+		if((IsWindows8OrGreater()) && !(IsWindows8Point1OrGreater())) {
+			return std::string("Windows 8");
+		}
+		
+		if((IsWindows8Point1OrGreater()) && !(IsWindows10OrGreater())) {
+			return std::string("Windows 8.1");
+		}
+		
+		if((IsWindows10OrGreater())) {
+			return std::string("Windows 10");
+			
+			//   Might be a greater version, but the new Microsoft
+			// API doesn't support checking for specific versions.            
+		}
 	}
-	return "Windows ??";
+	
+	return std::string("Windows ??");
 #else
 	return std::string("Unknown OS");
 #endif
