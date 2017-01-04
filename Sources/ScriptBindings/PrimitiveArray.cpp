@@ -256,7 +256,8 @@ namespace spades {
 					r = eng->RegisterObjectType(ATN(),
 											0,
 											asOBJ_REF | asOBJ_GC);
-					ArrayType::scrType = eng->GetTypeInfoByName(ATN());
+					ArrayType::scrType = eng->GetTypeInfoByDecl(ATN());
+					SPAssert(ArrayType::scrType);
 					manager->CheckError(r);
 					break;
 				case PhaseObjectMember:
