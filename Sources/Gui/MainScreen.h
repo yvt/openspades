@@ -25,6 +25,7 @@
 #include <Client/IRenderer.h>
 #include <Core/RefCountedObject.h>
 #include <ScriptBindings/ScriptManager.h>
+#include <Core/ServerAddress.h>
 
 namespace spades {
 	namespace client {
@@ -48,7 +49,7 @@ namespace spades {
 
 			void RestoreRenderer();
 
-			std::string Connect();
+			std::string Connect(const ServerAddress &host);
 
 		protected:
 			virtual ~MainScreen();

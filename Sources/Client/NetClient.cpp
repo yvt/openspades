@@ -43,7 +43,6 @@
 #include <Core/Settings.h>
 #include <Core/Strings.h>
 
-DEFINE_SPADES_SETTING(cg_protocolVersion, "3");
 DEFINE_SPADES_SETTING(cg_unicode, "1");
 
 namespace spades {
@@ -352,22 +351,24 @@ namespace spades {
 			Disconnect();
 			SPAssert(status == NetClientStatusNotConnected);
 
-			if (hostname.protocol() != ProtocolVersion::Unknown) {
-				cg_protocolVersion = (int)hostname.protocol();
+			switch (hostname.GetProtocolVersion()) {
+				case ProtocolVersion::v075:
+					SPLog("Using Ace of Spades 0.75 protocol");
+					protocolVersion = 3;
+					break;
+				case ProtocolVersion::v076:
+					SPLog("Using Ace of Spades 0.76 protocol");
+					protocolVersion = 4;
+					break;
+				default: SPRaise("Invalid ProtocolVersion"); break;
 			}
 
-			switch ((int)cg_protocolVersion) {
-				case 3: SPLog("Using Ace of Spades 0.75 protocol"); break;
-				case 4: SPLog("Using Ace of Spades 0.76 protocol"); break;
-				default: SPRaise("Invalid cg_protocolVersion, should be 3 or 4"); break;
-			}
-
-			ENetAddress addr = hostname.asAddress();
+			ENetAddress addr = hostname.GetENetAddress();
 			SPLog("Connecting to %u:%u", (unsigned int)addr.host, (unsigned int)addr.port);
 
 			savedPackets.clear();
 
-			peer = enet_host_connect(host, &addr, 1, (int)cg_protocolVersion);
+			peer = enet_host_connect(host, &addr, 1, protocolVersion);
 			if (peer == NULL) {
 				SPRaise("Failed to create ENet peer");
 			}
@@ -375,8 +376,6 @@ namespace spades {
 			status = NetClientStatusConnecting;
 			statusString = _Tr("NetClient", "Connecting to the server");
 			timeToTryMapLoad = 0;
-
-			protocolVersion = cg_protocolVersion;
 		}
 
 		void NetClient::Disconnect() {
@@ -430,11 +429,6 @@ namespace spades {
 
 			if (status == NetClientStatusNotConnected)
 				return;
-
-			// don't allow changin cg_protocolVersion
-			if ((int)cg_protocolVersion != protocolVersion) {
-				cg_protocolVersion = protocolVersion;
-			}
 
 			if (bandwidthMonitor)
 				bandwidthMonitor->Update();
@@ -701,13 +695,13 @@ namespace spades {
 				case PacketTypeWorldUpdate: {
 					// reader.DumpDebug();
 					int bytesPerEntry = 24;
-					if ((int)cg_protocolVersion == 4)
+					if (protocolVersion == 4)
 						bytesPerEntry++;
 
 					int entries = static_cast<int>(reader.GetData().size() / bytesPerEntry);
 					for (int i = 0; i < entries; i++) {
 						int idx = i;
-						if ((int)cg_protocolVersion == 4) {
+						if (protocolVersion == 4) {
 							idx = reader.ReadByte();
 							if (idx < 0 || idx >= 32) {
 								SPRaise("Invalid player number %d received with WorldUpdate", idx);

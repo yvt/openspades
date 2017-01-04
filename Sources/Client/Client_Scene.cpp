@@ -195,7 +195,7 @@ namespace spades {
 						Vector3 front = center - eye;
 						front = front.Normalize();
 
-						if (FirstPersonSpectate == false) {
+						if (firstPersonSpectate == false) {
 							def.viewOrigin = eye;
 							def.viewAxis[0] = -Vector3::Cross(up, front).Normalize();
 							def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();

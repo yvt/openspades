@@ -40,10 +40,10 @@ namespace spades {
 		return vl;
 	}
 
-	ServerAddress::ServerAddress(std::string address, ProtocolVersion::Version version)
+	ServerAddress::ServerAddress(std::string address, ProtocolVersion version)
 	    : mAddress(address), mVersion(version) {}
 
-	std::string ServerAddress::stripProtocol(const std::string &address) const {
+	std::string ServerAddress::StripProtocol(const std::string &address) {
 		if (address.find("aos:///") == 0) {
 			return address.substr(7);
 		} else if (address.find("aos://") == 0) {
@@ -52,8 +52,8 @@ namespace spades {
 		return address;
 	}
 
-	ENetAddress ServerAddress::asAddress() const {
-		std::string address = stripProtocol(mAddress);
+	ENetAddress ServerAddress::GetENetAddress() const {
+		std::string address = StripProtocol(mAddress);
 
 		ENetAddress addr;
 		size_t pos = address.find(':');
@@ -73,9 +73,9 @@ namespace spades {
 		return addr;
 	}
 
-	std::string ServerAddress::asString(bool includeProtocol) const {
+	std::string ServerAddress::ToString(bool includeProtocol) const {
 		if (!includeProtocol) {
-			return stripProtocol(mAddress);
+			return StripProtocol(mAddress);
 		}
 		return mAddress;
 	}

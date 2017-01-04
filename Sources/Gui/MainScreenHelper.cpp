@@ -380,11 +380,12 @@ namespace spades {
 			return arr;
 		}
 
-		std::string MainScreenHelper::ConnectServer() {
+		std::string MainScreenHelper::ConnectServer(std::string hostname, int protocolVersion) {
 			if (mainScreen == NULL) {
 				return "mainScreen == NULL";
 			}
-			return mainScreen->Connect();
+			return mainScreen->Connect(ServerAddress(
+			  hostname, protocolVersion == 3 ? ProtocolVersion::v075 : ProtocolVersion::v076));
 		}
 
 		std::string MainScreenHelper::GetServerListQueryMessage() {

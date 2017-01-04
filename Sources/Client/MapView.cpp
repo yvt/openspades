@@ -31,8 +31,8 @@
 #include <Core/Settings.h>
 
 DEFINE_SPADES_SETTING(cg_minimapSize, "128");
-DEFINE_SPADES_SETTING(cg_Minimap_Player_Color, "1");
-DEFINE_SPADES_SETTING(cg_Minimap_Player_Icon, "1");
+DEFINE_SPADES_SETTING(cg_minimapPlayerColor, "1");
+DEFINE_SPADES_SETTING(cg_minimapPlayerIcon, "1");
 
 namespace spades {
 	namespace client {
@@ -397,10 +397,10 @@ namespace spades {
 			}
 			// draw objects
 
-			std::string iconmode = cg_Minimap_Player_Icon; // import variable from configuration
+			std::string iconmode = cg_minimapPlayerIcon; // import variable from configuration
 			                                               // file
 			std::string colormode =
-			  cg_Minimap_Player_Color; // import variable from configuration file
+			  cg_minimapPlayerColor; // import variable from configuration file
 
 			Handle<IImage> playerSMG = renderer->RegisterImage("Gfx/Map/SMG.png");
 			Handle<IImage> playerRifle = renderer->RegisterImage("Gfx/Map/Rifle.png");

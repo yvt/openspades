@@ -90,8 +90,6 @@ namespace spades {
 
 		bool Client::WantsToBeClosed() { return readyToClose; }
 
-		bool FirstPersonSpectate = false;
-
 		void Client::Closing() { SPADES_MARK_FUNCTION(); }
 
 		bool Client::NeedsAbsoluteMouseCoordinate() {
@@ -370,7 +368,7 @@ namespace spades {
 						playerInput.sneak = down;
 					} else if (CheckKey(cg_keyJump, name)) {
 						if (down) {
-							FirstPersonSpectate = !FirstPersonSpectate;
+							firstPersonSpectate = !firstPersonSpectate;
 						}
 						playerInput.jump = down;
 					} else if (CheckKey(cg_keyAttack, name)) {

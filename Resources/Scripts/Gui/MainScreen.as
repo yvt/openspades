@@ -747,7 +747,7 @@ namespace spades {
 		}
 
 		private void Connect() {
-			string msg = helper.ConnectServer();
+			string msg = helper.ConnectServer(addressField.Text, cg_protocolVersion.IntValue);
 			if(msg.length > 0) {
 				// failde to initialize client.
 				AlertScreen al(this, msg);

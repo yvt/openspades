@@ -20,6 +20,7 @@
 
 #include <algorithm> //std::sort
 #include <memory>
+#include <regex>
 
 #if !defined(__APPLE__) && (__unix || __unix__)
 #include <sys/stat.h>
@@ -174,71 +175,71 @@ LONG WINAPI UnhandledExceptionProc(LPEXCEPTION_POINTERS lpEx) {
 class ThreadQuantumSetter {};
 #endif
 
-SPADES_SETTING(cg_lastQuickConnectHost);
-SPADES_SETTING(cg_protocolVersion);
-SPADES_SETTING(cg_playerName);
-int cg_autoConnect = 0;
-bool cg_printVersion = false;
-bool cg_printHelp = false;
+namespace {
+	bool g_autoconnect = false;
+	std::string g_autoconnectHostName;
+	spades::ProtocolVersion g_autoconnectProtocolVersion = spades::ProtocolVersion::v075;
 
-void printHelp(char *binaryName) {
-	printf("usage: %s [server_address] [v=protocol_version] [-h|--help] [-v|--version] \n",
-	       binaryName);
-}
+	bool g_printVersion = false;
+	bool g_printHelp = false;
 
-int argsHandler(int argc, char **argv, int &i) {
-	if (char *a = argv[i]) {
-		if (!strncasecmp(a, "aos://", 6)) {
-			cg_lastQuickConnectHost = a;
-			cg_autoConnect = 1;
-			return ++i;
-		}
-		// lm: we attempt to detect protocol version, allowing with or without a prefix 'v='
-		// we set proto, but without url we will not auto-connect
-		if (a[0] == 'v' && a[1] == '=') {
-			a += 2;
-		}
-		if (!strcasecmp(a, "75") || !strcasecmp(a, "075") || !strcasecmp(a, "0.75")) {
-			cg_protocolVersion = 3;
-			return ++i;
-		}
-		if (!strcasecmp(a, "76") || !strcasecmp(a, "076") || !strcasecmp(a, "0.76")) {
-			cg_protocolVersion = 4;
-			return ++i;
-		}
-		if (!strcasecmp(a, "--version") || !strcasecmp(a, "-v")) {
-			cg_printVersion = true;
-			return ++i;
-		}
-		if (!strcasecmp(a, "--help") || !strcasecmp(a, "-h")) {
-			cg_printHelp = true;
-			return ++i;
-		}
+	void printHelp(char *binaryName) {
+		printf("usage: %s [server_address] [v=protocol_version] [-h|--help] [-v|--version] \n",
+		       binaryName);
 	}
 
-	return 0;
+	int handleCommandLineArgument(int argc, char **argv, int &i) {
+		if (char *a = argv[i]) {
+			static std::regex hostNameRegex{"aos://.*"};
+			static std::regex v075Regex{"(?:v=)?0?\\.?75"};
+			static std::regex v076Regex{"(?:v=)?0?\\.?76"};
+
+			if (std::regex_match(a, hostNameRegex)) {
+				g_autoconnect = true;
+				g_autoconnectHostName = a;
+				return ++i;
+			}
+			if (std::regex_match(a, v075Regex)) {
+				g_autoconnectProtocolVersion = spades::ProtocolVersion::v075;
+				return ++i;
+			}
+			if (std::regex_match(a, v076Regex)) {
+				g_autoconnectProtocolVersion = spades::ProtocolVersion::v076;
+				return ++i;
+			}
+			if (!strcasecmp(a, "--version") || !strcasecmp(a, "-v")) {
+				g_printVersion = true;
+				return ++i;
+			}
+			if (!strcasecmp(a, "--help") || !strcasecmp(a, "-h")) {
+				g_printHelp = true;
+				return ++i;
+			}
+		}
+
+		return 0;
+	}
 }
 
 namespace spades {
 	std::string g_userResourceDirectory;
 
-	void StartClient(const spades::ServerAddress &addr, const std::string &playerName) {
+	void StartClient(const spades::ServerAddress &addr) {
 		class ConcreteRunner : public spades::gui::Runner {
 			spades::ServerAddress addr;
-			std::string playerName;
 
 		protected:
 			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                                      spades::client::IAudioDevice *audio) {
 				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				return new spades::client::Client(renderer, audio, addr, playerName, fontManager);
+				return new spades::client::Client(renderer, audio, addr, fontManager);
 			}
 
 		public:
-			ConcreteRunner(const spades::ServerAddress &addr, const std::string &playerName)
-			    : addr(addr), playerName(playerName) {}
+			ConcreteRunner(const spades::ServerAddress &addr)
+			    : addr(addr) {}
 		};
-		ConcreteRunner runner(addr, playerName);
+		ConcreteRunner runner(addr);
 		runner.RunProtected();
 	}
 	void StartMainScreen() {
@@ -374,19 +375,19 @@ int main(int argc, char **argv) {
 #endif
 
 	for (int i = 1; i < argc;) {
-		int ret = argsHandler(argc, argv, i);
+		int ret = handleCommandLineArgument(argc, argv, i);
 		if (!ret) {
 			// ignore unknown arg
 			i++;
 		}
 	}
 
-	if (cg_printVersion) {
+	if (g_printVersion) {
 		printf("%s\n", PACKAGE_STRING);
 		return 0;
 	}
 
-	if (cg_printHelp) {
+	if (g_printHelp) {
 		printHelp(argv[0]);
 		return 0;
 	}
@@ -658,7 +659,7 @@ int main(int argc, char **argv) {
 		pumpEvents();
 
 		// everything is now ready!
-		if (!cg_autoConnect) {
+		if (!g_autoconnect) {
 			if (!((int)cl_showStartupWindow != 0 || splashWindow->IsStartupScreenRequested())) {
 				splashWindow.reset();
 
@@ -673,11 +674,9 @@ int main(int argc, char **argv) {
 		} else {
 			splashWindow.reset();
 
-			spades::ServerAddress host(cg_lastQuickConnectHost.CString(),
-			                           (int)cg_protocolVersion == 3
-			                             ? spades::ProtocolVersion::v075
-			                             : spades::ProtocolVersion::v076);
-			spades::StartClient(host, std::string(cg_playerName).substr(0, 15));
+			spades::ServerAddress host(g_autoconnectHostName,
+			                           g_autoconnectProtocolVersion);
+			spades::StartClient(host);
 		}
 
 		spades::Settings::GetInstance()->Flush();

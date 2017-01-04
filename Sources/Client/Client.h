@@ -144,7 +144,7 @@ namespace spades {
 			KeypadInput keypadInput;
 			Player::ToolType lastTool;
 			bool hasLastTool;
-			bool FirstPersonSpectate;
+			bool firstPersonSpectate;
 			Vector3 lastFront;
 			float lastPosSentTime;
 			int lastHealth;
@@ -296,8 +296,7 @@ namespace spades {
 			virtual ~Client();
 
 		public:
-			Client(IRenderer *, IAudioDevice *, const ServerAddress &host, std::string playerName,
-			       FontManager *);
+			Client(IRenderer *, IAudioDevice *, const ServerAddress &host, FontManager *);
 
 			virtual void RunFrame(float dt);
 
