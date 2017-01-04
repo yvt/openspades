@@ -49,17 +49,32 @@ namespace spades {
 		static const Vector4 spectatorTextColor = {220.f / 255, 220.f / 255, 0,
 		                                           1}; // Goldish yellow
 		static const auto spectatorTeamId = 255;       // Spectators have a team id of 255
+		
 
 		ScoreboardView::ScoreboardView(Client *client)
 		    : client(client), renderer(client->GetRenderer()) {
 			SPADES_MARK_FUNCTION();
-			ctf = NULL;
-			tc = NULL;
+			world = nullptr;
+			tc = nullptr;
+			ctf = nullptr;
+			image = nullptr;
+
+			// Use GUI font if spectator string has special chars
+			auto spectatorString = _TrN("Client", "Spectator{1}", "Spectators{1}", "", "");
+			auto has_special_char = 
+				std::find_if(spectatorString.begin(), spectatorString.end(),
+				[](char ch) {
+					return !(isalnum(static_cast<unsigned char>(ch)) || ch == '_');
+			}) != spectatorString.end();
+
+			spectatorFont = has_special_char ?
+				client->fontManager->GetLargeFont() :
+				client->fontManager->GetSquareDesignFont();
 		}
 
 		ScoreboardView::~ScoreboardView() {}
 
-		int ScoreboardView::GetTeamScore(int team) {
+		int ScoreboardView::GetTeamScore(int team) const {
 			if (ctf) {
 				return ctf->GetTeam(team).score;
 			} else if (tc) {
@@ -79,7 +94,7 @@ namespace spades {
 			return MakeVector4(c.x / 255.f, c.y / 255.f, c.z / 255.f, 1.f);
 		}
 
-		Vector4 ScoreboardView::AdjustColor(spades::Vector4 col, float bright, float saturation) {
+		Vector4 ScoreboardView::AdjustColor(spades::Vector4 col, float bright, float saturation) const {
 			col.x *= bright;
 			col.y *= bright;
 			col.z *= bright;
@@ -294,8 +309,7 @@ namespace spades {
 			}
 		}
 
-		void ScoreboardView::DrawSpectators(float top, float centerX) {
-			IFont *bigFont = client->fontManager->GetSquareDesignFont();
+		void ScoreboardView::DrawSpectators(float top, float centerX) const {
 			IFont *font = client->fontManager->GetGuiFont();
 			char buf[256];
 			std::vector<ScoreboardEntry> entries;
@@ -330,9 +344,12 @@ namespace spades {
 			strcpy(buf,
 			       _TrN("Client", "Spectator{1}", "Spectators{1}", numSpectators, ":").c_str());
 
-			auto sizeSpecString = bigFont->Measure(buf);
-			bigFont->Draw(buf, MakeVector2(centerX - sizeSpecString.x / 2, top), 1.f,
-			              spectatorTextColor);
+			auto isSquareFont = spectatorFont == client->fontManager->GetSquareDesignFont();
+			auto sizeSpecString = spectatorFont->Measure(buf);
+			spectatorFont->Draw(buf,
+				MakeVector2(centerX - sizeSpecString.x / 2, top + (isSquareFont ? 0 : 10)),
+				1.f,
+				spectatorTextColor);
 
 			auto yOffset = top + sizeSpecString.y;
 			auto halfTotalX = totalPixelWidth / 2;
