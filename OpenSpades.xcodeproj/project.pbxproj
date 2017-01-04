@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E809500A1E17F66500AECDF2 /* GLSSAOFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80950081E17F66500AECDF2 /* GLSSAOFilter.cpp */; };
+		E81012311E1D7301009955D3 /* Icon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E810122F1E1D7301009955D3 /* Icon.cpp */; };
 		E82E66ED18EA7914004DBA18 /* StartupScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E842888C18A3D1520060743D /* StartupScreenHelper.cpp */; };
 		E82E66EE18EA7954004DBA18 /* GLBloomFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89E811F179C2C800059C649 /* GLBloomFilter.cpp */; };
 		E82E66EF18EA7954004DBA18 /* GLQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D88AAF179C3004004C2451 /* GLQuadRenderer.cpp */; };
@@ -297,6 +298,7 @@
 		E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
 		E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47D41DE084AB00BF606A /* GLSettings.cpp */; };
 		E8D0E5D318F321E300DE3BDB /* GLNonlinearizeFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5D018F3215000DE3BDB /* GLNonlinearizeFilter.cpp */; };
+		E8EF8B571E1D70D900E0829C /* SplashWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EF8B551E1D70D900E0829C /* SplashWindow.cpp */; };
 		E8F6E6E71DCF503500FE76BB /* MumbleLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F6E6E41DCF503200FE76BB /* MumbleLink.cpp */; };
 /* End PBXBuildFile section */
 
@@ -365,6 +367,8 @@
 		E80B28DD17B39EEF0056179E /* ZipFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipFileSystem.h; sourceTree = "<group>"; };
 		E80B28DF17B4FDD40056179E /* DynamicMemoryStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicMemoryStream.cpp; sourceTree = "<group>"; };
 		E80B28E017B4FDD70056179E /* DynamicMemoryStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicMemoryStream.h; sourceTree = "<group>"; };
+		E810122F1E1D7301009955D3 /* Icon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Icon.cpp; sourceTree = "<group>"; };
+		E81012301E1D7301009955D3 /* Icon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Icon.h; sourceTree = "<group>"; };
 		E81A7C6218610AA900BF3FCE /* SWRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWRenderer.cpp; sourceTree = "<group>"; };
 		E81A7C6318610AA900BF3FCE /* SWRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRenderer.h; sourceTree = "<group>"; };
 		E81A7C6518610BE400BF3FCE /* SWPort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWPort.cpp; sourceTree = "<group>"; };
@@ -864,6 +868,8 @@
 		E8EE089F17B8F4B000631987 /* GLRadiosityRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRadiosityRenderer.cpp; sourceTree = "<group>"; };
 		E8EE08A017B8F4B000631987 /* GLRadiosityRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRadiosityRenderer.h; sourceTree = "<group>"; };
 		E8EE08A217BA016F00631987 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
+		E8EF8B551E1D70D900E0829C /* SplashWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SplashWindow.cpp; sourceTree = "<group>"; };
+		E8EF8B561E1D70D900E0829C /* SplashWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashWindow.h; sourceTree = "<group>"; };
 		E8F6E6E41DCF503200FE76BB /* MumbleLink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MumbleLink.cpp; sourceTree = "<group>"; };
 		E8F6E6E51DCF503200FE76BB /* MumbleLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MumbleLink.h; sourceTree = "<group>"; };
 		E8F74CE3183F86AE0085AA54 /* View.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = View.cpp; sourceTree = "<group>"; };
@@ -1479,6 +1485,8 @@
 				E8F74CEA183F92DA0085AA54 /* SDLmain.m */,
 				E8CF03BE178EE50E000683D4 /* Main.cpp */,
 				E8F74CE6183F8A110085AA54 /* Main.h */,
+				E8EF8B551E1D70D900E0829C /* SplashWindow.cpp */,
+				E8EF8B561E1D70D900E0829C /* SplashWindow.h */,
 				E8CF03BB178EE502000683D4 /* SDLGLDevice.cpp */,
 				E8CF03BC178EE502000683D4 /* SDLGLDevice.h */,
 				E8CF03E1178EF57E000683D4 /* SDLRunner.cpp */,
@@ -1498,6 +1506,8 @@
 				E842888C18A3D1520060743D /* StartupScreenHelper.cpp */,
 				E842888D18A3D1520060743D /* StartupScreenHelper.h */,
 				E84E221818BB4BA0001282B0 /* Credits.inc */,
+				E810122F1E1D7301009955D3 /* Icon.cpp */,
+				E81012301E1D7301009955D3 /* Icon.h */,
 			);
 			path = Gui;
 			sourceTree = "<group>";
@@ -1998,6 +2008,7 @@
 				E82E67E918EA7A51004DBA18 /* list.c in Sources */,
 				E82E67EA18EA7A51004DBA18 /* packet.c in Sources */,
 				E82E67EB18EA7A51004DBA18 /* peer.c in Sources */,
+				E81012311E1D7301009955D3 /* Icon.cpp in Sources */,
 				E82E67EC18EA7A51004DBA18 /* protocol.c in Sources */,
 				E82E67ED18EA7A51004DBA18 /* unix.c in Sources */,
 				E82E67EE18EA7A51004DBA18 /* win32.c in Sources */,
@@ -2025,6 +2036,7 @@
 				E8725DAD1DE33B4D003BC987 /* NoiseSampler.cpp in Sources */,
 				E82E674618EA7972004DBA18 /* as_generic.cpp in Sources */,
 				E82E674718EA7972004DBA18 /* as_globalproperty.cpp in Sources */,
+				E8EF8B571E1D70D900E0829C /* SplashWindow.cpp in Sources */,
 				E82E674818EA7972004DBA18 /* as_memory.cpp in Sources */,
 				E82E674918EA7972004DBA18 /* as_module.cpp in Sources */,
 				E82E674A18EA7972004DBA18 /* as_objecttype.cpp in Sources */,
