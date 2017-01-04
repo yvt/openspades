@@ -86,8 +86,8 @@ namespace spades {
 			const client::SceneDefinition &def = renderer->GetSceneDef();
 			Matrix4 newMatrix = Matrix4::Identity();
 			Vector3 axes[] = {def.viewAxis[0], def.viewAxis[1], def.viewAxis[2]};
-			axes[0] *= std::tan(def.fovX * 0.5f);
-			axes[1] *= std::tan(def.fovY * 0.5f);
+			axes[0] /= std::tan(def.fovX * 0.5f);
+			axes[1] /= std::tan(def.fovY * 0.5f);
 			newMatrix.m[0] = axes[0].x;
 			newMatrix.m[1] = axes[1].x;
 			newMatrix.m[2] = axes[2].x;
