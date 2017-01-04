@@ -243,10 +243,6 @@ namespace spades {
 						def.denyCameraBlur = false;
 
 					} else {
-						Vector3 front = player->GetFront();
-						Vector3 right = player->GetRight();
-						Vector3 up = player->GetUp();
-
 						Matrix4 eyeMatrix = clientPlayers[player->GetId()]->GetEyeMatrix();
 						def.viewOrigin = eyeMatrix.GetOrigin();
 						def.viewAxis[0] = -eyeMatrix.GetAxis(0);

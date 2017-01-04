@@ -207,7 +207,7 @@ namespace spades {
 							mag *= expf(-scal * 3.f);
 
 							cell.magnitude = mag;
-							cell.phase = mt_engine();
+							cell.phase = static_cast<uint32_t>(mt_engine());
 							cell.phasePerSecond = dist * 1.e+9f * 128 / Size;
 						}
 

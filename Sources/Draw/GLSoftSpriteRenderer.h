@@ -91,11 +91,11 @@ namespace spades {
 
 		public:
 			GLSoftSpriteRenderer(GLRenderer *);
-			virtual ~GLSoftSpriteRenderer();
+			~GLSoftSpriteRenderer();
 
-			virtual void Add(GLImage *img, Vector3 center, float rad, float ang, Vector4 color);
-			virtual void Clear();
-			virtual void Render();
+			void Add(GLImage *img, Vector3 center, float rad, float ang, Vector4 color) override;
+			void Clear() override;
+			void Render() override;
 		};
 	}
 }

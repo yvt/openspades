@@ -50,13 +50,13 @@ namespace spades {
 			Mutex stateMutex;
 
 		protected:
-			virtual int GetModState() { return modState; }
-			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
-			virtual void ClientThreadProc(client::IRenderer *renderer, client::IAudioDevice *dev);
+			int GetModState() override { return modState; }
+			void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev) override;
+			void ClientThreadProc(client::IRenderer *renderer, client::IAudioDevice *dev);
 
 		public:
 			SDLAsyncRunner();
-			virtual ~SDLAsyncRunner();
+			~SDLAsyncRunner();
 		};
 	}
 }

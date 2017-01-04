@@ -80,7 +80,7 @@ namespace spades {
 			                                   IAudioDevice *audio);
 
 		protected:
-			virtual ~ClientPlayer();
+			~ClientPlayer();
 
 		public:
 			ClientPlayer(Player *p, Client *);

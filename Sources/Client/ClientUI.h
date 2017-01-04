@@ -51,7 +51,7 @@ namespace spades {
 			void AlertError(const std::string &);
 
 		protected:
-			virtual ~ClientUI();
+			~ClientUI();
 
 		public:
 			ClientUI(IRenderer *, IAudioDevice *, FontManager *font, Client *client);

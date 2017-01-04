@@ -32,7 +32,7 @@ namespace spades {
 		void Post();
 		void Wait();
 
-		virtual void Lock() { Wait(); }
-		virtual void Unlock() { Post(); }
+		void Lock() override { Wait(); }
+		void Unlock() override { Post(); }
 	};
 }

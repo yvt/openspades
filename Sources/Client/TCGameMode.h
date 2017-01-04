@@ -59,7 +59,7 @@ namespace spades {
 
 		public:
 			TCGameMode(World *);
-			virtual ~TCGameMode();
+			~TCGameMode();
 
 			Team &GetTeam(int t);
 

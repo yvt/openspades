@@ -25,11 +25,11 @@
 #include <memory>
 #include <vector>
 
+#include "SWFeatureLevel.h"
 #include <Client/IGameMapListener.h>
 #include <Client/IRenderer.h>
 #include <Client/SceneDefinition.h>
 #include <Core/Math.h>
-#include "SWFeatureLevel.h"
 #include <Core/Stopwatch.h>
 
 namespace spades {
@@ -146,71 +146,70 @@ namespace spades {
 			template <SWFeatureLevel> void ApplyDynamicLight(const DynamicLight &);
 
 		protected:
-			virtual ~SWRenderer();
+			~SWRenderer();
 
 		public:
 			SWRenderer(SWPort *port, SWFeatureLevel featureLevel = DetectFeatureLevel());
 
-			virtual void Init();
-			virtual void Shutdown();
+			void Init() override;
+			void Shutdown() override;
 
-			virtual client::IImage *RegisterImage(const char *filename);
-			virtual client::IModel *RegisterModel(const char *filename);
+			client::IImage *RegisterImage(const char *filename) override;
+			client::IModel *RegisterModel(const char *filename) override;
 
-			virtual client::IImage *CreateImage(Bitmap *);
-			virtual client::IModel *CreateModel(VoxelModel *);
+			client::IImage *CreateImage(Bitmap *) override;
+			client::IModel *CreateModel(VoxelModel *) override;
 			/*
-			GLProgram *RegisterProgram(const std::string& name);
-			GLShader *RegisterShader(const std::string& name);
+			GLProgram *RegisterProgram(const std::string& name) override;
+			GLShader *RegisterShader(const std::string& name) override;
 			*/
-			virtual void SetGameMap(client::GameMap *);
-			virtual void SetFogColor(Vector3 v);
-			virtual void SetFogDistance(float f) { fogDistance = f; }
+			void SetGameMap(client::GameMap *) override;
+			void SetFogColor(Vector3 v) override;
+			void SetFogDistance(float f) override { fogDistance = f; }
 
 			Vector3 GetFogColor() { return fogColor; }
 			float GetFogDistance() { return fogDistance; }
 
-			virtual void StartScene(const client::SceneDefinition &);
+			void StartScene(const client::SceneDefinition &) override;
 
-			virtual void RenderModel(client::IModel *, const client::ModelRenderParam &);
+			void RenderModel(client::IModel *, const client::ModelRenderParam &) override;
 
-			virtual void AddLight(const client::DynamicLightParam &light);
+			void AddLight(const client::DynamicLightParam &light) override;
 
-			virtual void AddDebugLine(Vector3 a, Vector3 b, Vector4 color);
+			void AddDebugLine(Vector3 a, Vector3 b, Vector4 color) override;
 
-			virtual void AddSprite(client::IImage *, Vector3 center, float radius, float rotation);
-			virtual void AddLongSprite(client::IImage *, Vector3 p1, Vector3 p2, float radius);
+			void AddSprite(client::IImage *, Vector3 center, float radius, float rotation) override;
+			void AddLongSprite(client::IImage *, Vector3 p1, Vector3 p2, float radius) override;
 
-			virtual void EndScene();
+			void EndScene() override;
 
-			virtual void MultiplyScreenColor(Vector3);
+			void MultiplyScreenColor(Vector3) override;
 
-			virtual void SetColor(Vector4);
-			virtual void SetColorAlphaPremultiplied(Vector4);
+			void SetColor(Vector4) override;
+			void SetColorAlphaPremultiplied(Vector4) override;
 
-			virtual void DrawImage(client::IImage *, const Vector2 &outTopLeft);
-			virtual void DrawImage(client::IImage *, const AABB2 &outRect);
-			virtual void DrawImage(client::IImage *, const Vector2 &outTopLeft,
-			                       const AABB2 &inRect);
-			virtual void DrawImage(client::IImage *, const AABB2 &outRect, const AABB2 &inRect);
-			virtual void DrawImage(client::IImage *, const Vector2 &outTopLeft,
-			                       const Vector2 &outTopRight, const Vector2 &outBottomLeft,
-			                       const AABB2 &inRect);
+			void DrawImage(client::IImage *, const Vector2 &outTopLeft) override;
+			void DrawImage(client::IImage *, const AABB2 &outRect) override;
+			void DrawImage(client::IImage *, const Vector2 &outTopLeft,
+			               const AABB2 &inRect) override;
+			void DrawImage(client::IImage *, const AABB2 &outRect, const AABB2 &inRect) override;
+			void DrawImage(client::IImage *, const Vector2 &outTopLeft, const Vector2 &outTopRight,
+			               const Vector2 &outBottomLeft, const AABB2 &inRect) override;
 
-			virtual void DrawFlatGameMap(const AABB2 &outRect, const AABB2 &inRect);
+			void DrawFlatGameMap(const AABB2 &outRect, const AABB2 &inRect) override;
 
-			virtual void FrameDone();
-			virtual void Flip();
-			virtual Bitmap *ReadBitmap();
+			void FrameDone() override;
+			void Flip() override;
+			Bitmap *ReadBitmap() override;
 
-			virtual float ScreenWidth();
-			virtual float ScreenHeight();
+			float ScreenWidth() override;
+			float ScreenHeight() override;
 
 			const Matrix4 &GetProjectionMatrix() const { return projectionMatrix; }
 			const Matrix4 &GetProjectionViewMatrix() const { return projectionViewMatrix; }
 			const Matrix4 &GetViewMatrix() const { return viewMatrix; }
 
-			virtual void GameMapChanged(int x, int y, int z, client::GameMap *);
+			void GameMapChanged(int x, int y, int z, client::GameMap *) override;
 
 			const client::SceneDefinition &GetSceneDef() const { return sceneDef; }
 

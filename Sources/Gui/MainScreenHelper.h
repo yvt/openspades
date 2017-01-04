@@ -85,7 +85,7 @@ namespace spades {
 			std::unordered_set<std::string> favorites;
 
 		protected:
-			virtual ~MainScreenHelper();
+			~MainScreenHelper();
 
 		public:
 			MainScreenHelper(MainScreen *scr);

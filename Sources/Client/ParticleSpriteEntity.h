@@ -56,10 +56,10 @@ namespace spades {
 		public:
 			ParticleSpriteEntity(Client *cli, IImage *image, Vector4 color);
 
-			virtual ~ParticleSpriteEntity();
+			~ParticleSpriteEntity();
 
-			virtual bool Update(float dt);
-			virtual void Render3D();
+			bool Update(float dt) override;
+			void Render3D() override;
 
 			void SetAdditive(bool b) { additive = b; }
 

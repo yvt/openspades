@@ -22,9 +22,9 @@
 
 #include <vector>
 
+#include "ILocalEntity.h"
 #include <Core/Math.h>
 #include <Core/VoxelModel.h>
-#include "ILocalEntity.h"
 
 namespace spades {
 	namespace client {
@@ -42,10 +42,10 @@ namespace spades {
 
 		public:
 			FallingBlock(Client *, std::vector<IntVector3> blocks);
-			virtual ~FallingBlock();
+			~FallingBlock();
 
-			virtual bool Update(float dt);
-			virtual void Render3D();
+			bool Update(float dt) override;
+			void Render3D() override;
 		};
 	}
 }
