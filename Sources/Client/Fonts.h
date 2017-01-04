@@ -31,6 +31,7 @@ namespace spades {
 
 			IFont *GetSquareDesignFont() { return squareDesignFont; }
 			IFont *GetLargeFont() { return largeFont; }
+			IFont *GetMediumFont() { return mediumFont; }
 			IFont *GetHeadingFont() { return headingFont; }
 			IFont *GetGuiFont() { return guiFont; }
 
@@ -40,6 +41,7 @@ namespace spades {
 		private:
 			Handle<IFont> squareDesignFont;
 			Handle<IFont> largeFont;
+			Handle<IFont> mediumFont;
 			Handle<IFont> headingFont;
 			Handle<IFont> guiFont;
 		};
