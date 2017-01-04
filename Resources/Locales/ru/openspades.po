@@ -589,7 +589,7 @@ msgstr "Назад"
 #: Resources/Scripts/Gui/Preferences.as:407
 msgctxt "Preferences"
 msgid "Press Key to Bind or [Escape] to Cancel..."
-msgstr "Нажмите клавишу или [Escape] для Отмены..."
+msgstr "Нажмите клавишу или [Esc] для Отмены..."
 
 #: Resources/Scripts/Gui/Preferences.as:418
 msgctxt "Preferences"
@@ -1339,7 +1339,7 @@ msgstr "Средне"
 #: Resources/Scripts/Gui/StartupScreen.as:1239
 msgctxt "StartupScreen"
 msgid "Shader Effects"
-msgstr "Эффекты шейдеров"
+msgstr "Шейдеры"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1239
 msgctxt "StartupScreen"
@@ -1523,7 +1523,7 @@ msgstr "Системный по-умолчанию"
 #: Resources/Scripts/Gui/StartupScreen.as:1795
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
-msgstr "Копировать в буфер обм."
+msgstr "Копировать в буфер"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1831
 msgctxt "StartupScreen"
