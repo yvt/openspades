@@ -59,6 +59,8 @@ namespace spades {
 		protected int ammo, clipSize;
 		protected float localFireVibration;
 
+		protected float sprintStateSmooth;
+
 		float AimDownSightState {
 			set {
 				aimDownSightState = value;
@@ -164,13 +166,15 @@ namespace spades {
 
 		Matrix4 GetViewWeaponMatrix() {
 			Matrix4 mat;
-			if(sprintState > 0.f) {
-				mat = CreateRotateMatrix(Vector3(0.f, 0.f, 1.f),
-					sprintState * -1.3f) * mat;
+			if(sprintStateSmooth > 0.f) {
 				mat = CreateRotateMatrix(Vector3(0.f, 1.f, 0.f),
-					sprintState * 0.2f) * mat;
-				mat = CreateTranslateMatrix(Vector3(0.2f, -0.2f, 0.05f)
-					* sprintState)  * mat;
+					sprintStateSmooth * -0.1f) * mat;
+				mat = CreateRotateMatrix(Vector3(1.f, 0.f, 0.f),
+					sprintStateSmooth * 0.3f) * mat;
+				mat = CreateRotateMatrix(Vector3(0.f, 0.f, 1.f),
+					sprintStateSmooth * -0.55f) * mat;
+				mat = CreateTranslateMatrix(Vector3(0.23f, -0.05f, 0.15f)
+					* sprintStateSmooth)  * mat;
 			}
 
 			if(raiseState < 1.f) {
@@ -197,6 +201,13 @@ namespace spades {
 			localFireVibration -= dt * 10.f;
 			if(localFireVibration < 0.f){
 				localFireVibration = 0.f;
+			}
+
+			float sprintStateSS = sprintState * sprintState;
+			if (sprintStateSS > sprintStateSmooth) {
+				sprintStateSmooth += (sprintStateSS - sprintStateSmooth) * (1.f - pow(0.001, dt));
+			} else {
+				sprintStateSmooth = sprintStateSS;
 			}
 		}
 

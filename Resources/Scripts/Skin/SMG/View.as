@@ -124,7 +124,7 @@
 			Vector3 leftHand, rightHand;
 
 			leftHand = mat * Vector3(1.f, 6.f, 1.f);
-			rightHand = mat * Vector3(0.f, -8.f, 2.f);
+			rightHand = mat * Vector3(0.f, -8.f, 4.f);
 
 			Vector3 leftHand2 = mat * Vector3(5.f, -10.f, 4.f);
 			Vector3 leftHand3 = mat * Vector3(1.f, 6.f, -4.f);
