@@ -1,52 +1,53 @@
 # OpenSpades translation
-# Copyright (C) 2016 yvt
+# Copyright (C) 2017 yvt
 # This file is distributed under the same license as the OpenSpades package.
-# yvt <i@yvt.jp>, 2016.
+# yvt <i@yvt.jp>, 2017.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
-"POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2016-12-28 19:43+0100\n"
+"POT-Creation-Date: 2017-01-04 02:30+0100\n"
+"PO-Revision-Date: 2017-01-04 04:21+0100\n"
 "Last-Translator: Damien Flament <damien.flament@gmx.com>\n"
 "Language-Team: French <damien.flament@gmx.com>\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.11\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: Sources/Client/Client.cpp:582
 msgctxt "Client"
 msgid "Map saved: {0}"
-msgstr "Carte sauvegardée: {0}"
+msgstr "Carte sauvegardée : {0}"
 
 #: Sources/Client/Client.cpp:586 Sources/Client/Client.cpp:592
 msgctxt "Client"
 msgid "Saving map failed: "
-msgstr "La sauvegarde de la carte a échouée: "
+msgstr "La sauvegarde de la carte a échouée : "
 
 #: Sources/Client/Client.cpp:624
 msgctxt "Client"
 msgid "[Global] "
-msgstr "[Global]"
+msgstr "[Global] "
 
 #: Sources/Client/Client_Draw.cpp:119
 msgctxt "Client"
 msgid "Sceneshot saved: {0}"
-msgstr "Capture de scène sauvegardée: {0}"
+msgstr "Capture de scène sauvegardée : {0}"
 
 #: Sources/Client/Client_Draw.cpp:121
 msgctxt "Client"
 msgid "Screenshot saved: {0}"
-msgstr "Capture d'écran sauvegardée: {0}"
+msgstr "Capture d'écran sauvegardée : {0}"
 
 #: Sources/Client/Client_Draw.cpp:125 Sources/Client/Client_Draw.cpp:131
 msgctxt "Client"
 msgid "Screenshot failed: "
-msgstr "La capture d'écran a échouée: "
+msgstr "La capture d'écran a échouée : "
 
 #: Sources/Client/Client_Draw.cpp:198
 msgctxt "Client"
@@ -86,7 +87,7 @@ msgstr "Appuyer sur [{0}] pour recharger"
 #: Sources/Client/Client_Draw.cpp:584
 msgctxt "Client"
 msgid "You will respawn in: {0}"
-msgstr "Vous allez réaparraître dans: {0}"
+msgstr "Vous allez réapparaître dans : {0}"
 
 #: Sources/Client/Client_Draw.cpp:586
 msgctxt "Client"
@@ -131,32 +132,32 @@ msgstr "{0} s'est emparé d'un territoire neutre"
 #: Sources/Client/Client_NetHandler.cpp:127
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
-msgstr "{0} a capturé la malette de l'équipe {1}"
+msgstr "{0} a capturé la mallette de l'équipe {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:134
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
-msgstr "{0} a capturé la malette de l'équipe {1}"
+msgstr "{0} a capturé la mallette de l'équipe {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:158
 msgctxt "Client"
 msgid "{0} picked up {1}'s intel"
-msgstr "{0} a ramassé la malette de {1}"
+msgstr "{0} a ramassé la mallette de {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:165
 msgctxt "Client"
 msgid "{0} picked up {1}'s Intel."
-msgstr "{0} a ramassé la malette de l'équipe {1}"
+msgstr "{0} a ramassé la mallette de l'équipe {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:183
 msgctxt "Client"
 msgid "{0} dropped {1}'s intel"
-msgstr "{0} a laissé tombé la malette de l'équipe {1}"
+msgstr "{0} a laissé tombé la mallette de l'équipe {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:190
 msgctxt "Client"
 msgid "{0} dropped {1}'s Intel"
-msgstr "{0} a laissé tombé la malette de l'équipe {1}"
+msgstr "{0} a laissé tombé la mallette de l'équipe {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:237
 #: Sources/Client/Client_NetHandler.cpp:243
@@ -225,7 +226,7 @@ msgstr "Mitraillette"
 #: Sources/Client/LimboView.cpp:74
 msgctxt "Client"
 msgid "Shotgun"
-msgstr "Fusil à pompte"
+msgstr "Fusil à pompe"
 
 #: Sources/Client/LimboView.cpp:78
 msgctxt "Client"
@@ -341,7 +342,7 @@ msgid ""
 "\n"
 "See SystemMessages.log for more details."
 msgstr ""
-"Une erreur sérieuse a forcé OpenSpades a s'arréter :\n"
+"Une erreur sérieuse a forcé OpenSpades a s’arrêter :\n"
 "\n"
 "{0}\n"
 "\n"
@@ -390,7 +391,7 @@ msgstr "Annuler"
 #: Resources/Scripts/Gui/ClientUI.as:500
 msgctxt "Client"
 msgid "Chat Text"
-msgstr "Qu'avez -vous à dire ?"
+msgstr "Qu'avez-vous à dire ?"
 
 #: Resources/Scripts/Gui/ClientUI.as:508
 msgctxt "Client"
@@ -445,7 +446,9 @@ msgstr "Nom de joueur"
 #: Resources/Scripts/Gui/CreateProfileScreen.as:104
 msgctxt "CreateProfileScreen"
 msgid "You can change it later in the Setup dialog."
-msgstr "Vous pourrez le changez par la suite via la boîte de dialogue de Configuration"
+msgstr ""
+"Vous pourrez le changez par la suite via la boîte de dialogue de "
+"Configuration."
 
 #: Resources/Scripts/Gui/MainScreen.as:376
 msgctxt "MainScreen"
@@ -602,12 +605,12 @@ msgstr "Pas d'association"
 #: Resources/Scripts/Gui/Preferences.as:423
 msgctxt "Preferences"
 msgid "Shift"
-msgstr "Majuscule"
+msgstr "Maj."
 
 #: Resources/Scripts/Gui/Preferences.as:425
 msgctxt "Preferences"
 msgid "Control"
-msgstr "Contrôle"
+msgstr "Ctrl"
 
 #: Resources/Scripts/Gui/Preferences.as:427
 msgctxt "Preferences"
@@ -617,7 +620,7 @@ msgstr "Meta"
 #: Resources/Scripts/Gui/Preferences.as:429
 msgctxt "Preferences"
 msgid "Alt"
-msgstr "Alternative"
+msgstr "Alt."
 
 #: Resources/Scripts/Gui/Preferences.as:431
 msgctxt "Preferences"
@@ -737,12 +740,12 @@ msgstr "Sons des discussions"
 #: Resources/Scripts/Gui/Preferences.as:656
 msgctxt "Preferences"
 msgid "Hit Indicator"
-msgstr "Indicateur de touche"
+msgstr "Indicateur d'impact"
 
 #: Resources/Scripts/Gui/Preferences.as:657
 msgctxt "Preferences"
 msgid "Show Alerts"
-msgstr "Alertes"
+msgstr "Afficher les alertes"
 
 #: Resources/Scripts/Gui/Preferences.as:659
 msgctxt "Preferences"
@@ -772,7 +775,7 @@ msgstr "Taille de la mini-carte"
 #: Resources/Scripts/Gui/Preferences.as:668
 msgctxt "Preferences"
 msgid "Show Statistics"
-msgstr "Voir les statistiques"
+msgstr "Afficher les statistiques"
 
 #: Resources/Scripts/Gui/Preferences.as:678
 msgctxt "Preferences"
@@ -812,7 +815,7 @@ msgstr "Augmentation exp. de la sensibilité"
 #: Resources/Scripts/Gui/Preferences.as:688
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
-msgstr "Axe vertical de la souris inversé"
+msgstr "Inverser l'axe vertical de la souris"
 
 #: Resources/Scripts/Gui/Preferences.as:689
 msgctxt "Preferences"
@@ -887,7 +890,7 @@ msgstr "S'accroupir"
 #: Resources/Scripts/Gui/Preferences.as:704
 msgctxt "Preferences"
 msgid "Sneak"
-msgstr "Se déplacer discrètement"
+msgstr "Se déplacer furtivement"
 
 #: Resources/Scripts/Gui/Preferences.as:705
 msgctxt "Preferences"
@@ -957,7 +960,9 @@ msgstr "Redémarrer OpenSpades pour accéder à la fenêtre de lancement."
 #: Resources/Scripts/Gui/Preferences.as:758
 msgctxt "Preferences"
 msgid "Some settings only can be changed in the startup window."
-msgstr "Certains paramètres sont seulement modifiables depuis la fenêtre de lancement."
+msgstr ""
+"Certains paramètres sont seulement modifiables depuis la fenêtre de "
+"lancement."
 
 #: Resources/Scripts/Gui/StartupScreen.as:159
 msgctxt "StartupScreen"
@@ -990,7 +995,7 @@ msgid "System Info"
 msgstr "Informations système"
 
 #: Resources/Scripts/Gui/StartupScreen.as:208
-#: Resources/Scripts/Gui/StartupScreen.as:1657
+#: Resources/Scripts/Gui/StartupScreen.as:1661
 msgctxt "StartupScreen"
 msgid "Advanced"
 msgstr "Avancé"
@@ -1030,7 +1035,7 @@ msgstr ""
 "et vous permet de vous concentrer sur le jeu."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1093
-#: Resources/Scripts/Gui/StartupScreen.as:1471
+#: Resources/Scripts/Gui/StartupScreen.as:1475
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr "Mode de rendu"
@@ -1046,8 +1051,8 @@ msgid ""
 "OpenGL renderer uses your computer's graphics accelerator to generate the "
 "game screen."
 msgstr ""
-"OpenGL utilise l'accélérateur graphique de votre ordinateur pour générer "
-"les images."
+"OpenGL utilise l'accélérateur graphique de votre ordinateur pour générer les "
+"images."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1108
 msgctxt "StartupScreen"
@@ -1066,7 +1071,6 @@ msgstr ""
 "rendu OpenGL, mais il fonctionne avec les processeurs graphiques non "
 "supportés."
 
-
 #: Resources/Scripts/Gui/StartupScreen.as:1126
 msgctxt "StartupScreen"
 msgid ""
@@ -1079,15 +1083,14 @@ msgid ""
 "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
 "Off|MSAA 2x|4x|FXAA"
 msgstr ""
-"Anti-crénelage : Active une technique pour améliorer l'apparence des bords à "
+"Anti-crénelage:Active une technique pour améliorer l'apparence des bords à "
 "fort contraste.\n"
 "\n"
-"MSAA : Effectue l'anti-crénelage en générant une image intermédiaire de haute "
-"résolution. De meilleur aspect mais ne gère pas certains paramètres.\n"
+"MSAA : Effectue l'anti-crénelage en générant une image intermédiaire de "
+"haute résolution. De meilleur aspect mais ne gère pas certains paramètres.\n"
 "\n"
-"FXAA : Effectue l'anti-crénelage en adoucissant les artéfacts en "
-"post-traitement.|"
-"Désactivé|MSAA 2x|4x|FXAA"
+"FXAA : Effectue l'anti-crénelage en adoucissant les artéfacts en post-"
+"traitement.|Désactivé|MSAA 2x|4x|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1133
 msgctxt "StartupScreen"
@@ -1117,9 +1120,10 @@ msgid ""
 "blending can be achieved."
 msgstr ""
 "Utilise une représentation numérique qui permet d'utiliser une gamme "
-"dynamique plus large lors du processus de rendu. De plus, il permet un calcul "
-"des couleurs dont les valeurs sont en correspondance linéaire avec l'énergie "
-"actuelle. De cette manière, un mélange physiquement précis peut être effectué."
+"dynamique plus large lors du processus de rendu. De plus, il permet un "
+"calcul des couleurs dont les valeurs sont en correspondance linéaire avec "
+"l'énergie actuelle. De cette manière, un mélange physiquement précis peut "
+"être effectué."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1147
 msgctxt "StartupScreen"
@@ -1149,7 +1153,8 @@ msgstr "Filtre de dispersion sur lentille"
 #: Resources/Scripts/Gui/StartupScreen.as:1154
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
-msgstr "Simule une lumière dispersée par la poussière sur la lentille de la caméra."
+msgstr ""
+"Simule une lumière dispersée par la poussière sur la lentille de la caméra."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
@@ -1179,7 +1184,9 @@ msgstr "Correction des couleurs"
 #: Resources/Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
-msgstr "Applique une correction cinématographique des couleurs pour une meilleure image."
+msgstr ""
+"Applique une correction cinématographique des couleurs pour une meilleure "
+"image."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1166
 msgctxt "StartupScreen"
@@ -1189,34 +1196,50 @@ msgstr "Profondeur de champ"
 #: Resources/Scripts/Gui/StartupScreen.as:1167
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
-msgstr "Floute les objets hors de la mise au point."
+msgstr "Floute les objets hors de la distance focale."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1169
-#: Resources/Scripts/Gui/StartupScreen.as:1207
-#: Resources/Scripts/Gui/StartupScreen.as:1229
+msgctxt "StartupScreen"
+msgid "Screen Space Ambient Occlusion"
+msgstr "Occlusion ambiante (SSAO)"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1170
+msgctxt "StartupScreen"
+msgid "Simulates soft shadows that occur between nearby objects."
+msgstr "Simule de légères ombres entre les objets proches."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1172
+#: Resources/Scripts/Gui/StartupScreen.as:1211
+#: Resources/Scripts/Gui/StartupScreen.as:1233
 msgctxt "StartupScreen"
 msgid "Low"
 msgstr "Faible"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1170
-#: Resources/Scripts/Gui/StartupScreen.as:1208
+#: Resources/Scripts/Gui/StartupScreen.as:1173
+#: Resources/Scripts/Gui/StartupScreen.as:1212
 msgctxt "StartupScreen"
 msgid "Medium"
 msgstr "Moyen"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1171
-#: Resources/Scripts/Gui/StartupScreen.as:1209
-#: Resources/Scripts/Gui/StartupScreen.as:1231
+#: Resources/Scripts/Gui/StartupScreen.as:1174
+#: Resources/Scripts/Gui/StartupScreen.as:1213
+#: Resources/Scripts/Gui/StartupScreen.as:1235
 msgctxt "StartupScreen"
 msgid "High"
 msgstr "Élevé"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1174
+#: Resources/Scripts/Gui/StartupScreen.as:1175
+#: Resources/Scripts/Gui/StartupScreen.as:1236
+msgctxt "StartupScreen"
+msgid "Ultra"
+msgstr "Ultra"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1178
 msgctxt "StartupScreen"
 msgid "Post-process"
 msgstr "Post-traitement"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1175
+#: Resources/Scripts/Gui/StartupScreen.as:1179
 msgctxt "StartupScreen"
 msgid ""
 "Post-process modifies the image to make it look better and more realistic."
@@ -1224,24 +1247,24 @@ msgstr ""
 "Le post-traitement modifie l'image pour la rendre plus plaisante et plus "
 "réaliste."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1182
+#: Resources/Scripts/Gui/StartupScreen.as:1186
 msgctxt "StartupScreen"
 msgid ""
 "Particles|Low:Artifact occurs when a particle intersects other objects.|"
 "Medium:Particle intersects objects smoothly.|High:Particle intersects "
 "objects smoothly, and some objects casts their shadow to particles."
 msgstr ""
-"Particules|Faible:Des artéfacts apparaissent lorsque une particule croise "
-"un autre object.|Moyen:Les particules croisent les objets en douceur.|"
-"Élevé:Les particules croisent les objets en douceur et certains d'entre eux "
-"projettent leur ombre sur les particules."
+"Particules|Faible:Des artefacts apparaissent lorsque une particule croise un "
+"autre objet.|Moyen:Les particules croisent les objets en douceur.|Élevé:Les "
+"particules croisent les objets en douceur et certains d'entre eux projettent "
+"leur ombre sur les particules."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1192
+#: Resources/Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
 msgstr "Éclairage dynamique"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1194
+#: Resources/Scripts/Gui/StartupScreen.as:1198
 msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
@@ -1250,36 +1273,36 @@ msgstr ""
 "Permet à certains objets d'émettre de la lumière pour donner l'impression "
 "qu'ils émettent de l'énergie."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1197
+#: Resources/Scripts/Gui/StartupScreen.as:1201
 msgctxt "StartupScreen"
 msgid "Shadows"
 msgstr "Ombres"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1198
+#: Resources/Scripts/Gui/StartupScreen.as:1202
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
 msgstr "Les objets mobiles projettent une ombre."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1200
+#: Resources/Scripts/Gui/StartupScreen.as:1204
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
 msgstr "Brouillard volumétrique"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1201
+#: Resources/Scripts/Gui/StartupScreen.as:1205
 msgctxt "StartupScreen"
 msgid ""
 "Simulates shadow being casted to the fog particles using a super highly "
 "computationally demanding algorithm. "
 msgstr ""
-"Simule la projection des ombres sur les particules de brouillard en utilisant "
-"un algorithme demandant une très haute puissance de calcul."
+"Simule la projection des ombres sur les particules de brouillard en "
+"utilisant un algorithme demandant une très haute puissance de calcul."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1204
+#: Resources/Scripts/Gui/StartupScreen.as:1208
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
 msgstr "Éclairage physique"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1205
+#: Resources/Scripts/Gui/StartupScreen.as:1209
 msgctxt "StartupScreen"
 msgid ""
 "Uses more accurate approximation techniques to decide the brightness of "
@@ -1287,12 +1310,12 @@ msgid ""
 msgstr ""
 "Utilise une technique plus précise pour déterminer la luminosité des objets."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1212
+#: Resources/Scripts/Gui/StartupScreen.as:1216
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr "Éclairage direct"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1213
+#: Resources/Scripts/Gui/StartupScreen.as:1217
 msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
@@ -1301,7 +1324,7 @@ msgstr ""
 "Contrôle comment la lumière rencontrant la matière et l'atmosphère affecte "
 "son apparence."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1223
+#: Resources/Scripts/Gui/StartupScreen.as:1227
 msgctxt "StartupScreen"
 msgid ""
 "Water Shader|None:Water is rendered in the same way that normal blocks are "
@@ -1309,52 +1332,49 @@ msgid ""
 "water is simulated as well as reflection and refraction.|Level 3:Reflections "
 "and refractions are rendered at the highest quality using screen-space "
 "techniques."
-msgstr "Nuanceur de l'eau|Aucun:L'eau est rendue de la même manière que les"
-"blocs normaux.|Niveau 1:La réfraction et la réflection des rayons du soleil "
-"sont simulés.|Niveau 2:Les vagues sont simulés ainsi que la réflection et "
-"la réfraction.|Niveau 3:La réflection et la réfraction sont rendu au plus "
-"haut niveau de qualité en utilisant des techniques appliquées aux objects "
-"visibles."
+msgstr ""
+"Nuanceur de l'eau|Aucun:L'eau est rendue de la même manière que les blocs "
+"normaux.|Niveau 1:La réfraction et la réflexion des rayons du soleil sont "
+"simulés.|Niveau 2:Les vagues sont simulés ainsi que la réflexion et la "
+"réfraction.|Niveau 3:La réflexion et la réfraction sont rendu au plus haut "
+"niveau de qualité en utilisant des techniques appliquées à l'espace "
+"d'affichage."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1230
+#: Resources/Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
 msgid "Med"
 msgstr "Moyen"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1232
-msgctxt "StartupScreen"
-msgid "Ultra"
-msgstr "Ultra"
-
-#: Resources/Scripts/Gui/StartupScreen.as:1235
+#: Resources/Scripts/Gui/StartupScreen.as:1239
 msgctxt "StartupScreen"
 msgid "Shader Effects"
 msgstr "Effets de nuanceur"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1235
+#: Resources/Scripts/Gui/StartupScreen.as:1239
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr "Effets spéciaux."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1252
+#: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid ""
 "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
 "4x"
-msgstr "Mode rapide:Réduit la résolution de l'image pour accélérer le rendu.|"
+msgstr ""
+"Mode rapide:Réduit la résolution de l'image pour accélérer le rendu.|"
 "Désactivé|2x|4x"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1465
+#: Resources/Scripts/Gui/StartupScreen.as:1469
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr "Paramètres audio"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1474
+#: Resources/Scripts/Gui/StartupScreen.as:1478
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr "OpenAL"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1478
+#: Resources/Scripts/Gui/StartupScreen.as:1482
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
@@ -1364,12 +1384,12 @@ msgstr ""
 "des cas où une telle carte son n'est pas présente, une émulation logicielle "
 "est utilisée."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1487
+#: Resources/Scripts/Gui/StartupScreen.as:1491
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr "YSR"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1491
+#: Resources/Scripts/Gui/StartupScreen.as:1495
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -1377,43 +1397,43 @@ msgid ""
 "dynamics compressor, HRTF-based 3D audio, and high quality reverb."
 msgstr ""
 "YSR est un moteur de son 3D HDR expérimental optimisé pour OpenSpades. Il "
-"fournit plusieurs fonctionnalités améliorées incluant un contrôle automatique "
-"de la charge, des compresseurs dynamiques, une audio 3D basée sur des HRTF "
-"et une réverbération de haute qualité."
+"fournit plusieurs fonctionnalités améliorées incluant un contrôle "
+"automatique de la charge, des compresseurs dynamiques, une audio 3D basée "
+"sur des HRTF et une réverbération de haute qualité."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1501
+#: Resources/Scripts/Gui/StartupScreen.as:1505
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr "Désactivée"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1505
+#: Resources/Scripts/Gui/StartupScreen.as:1509
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr "Désactive la sortie audio."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1516
-#: Resources/Scripts/Gui/StartupScreen.as:1540
+#: Resources/Scripts/Gui/StartupScreen.as:1520
+#: Resources/Scripts/Gui/StartupScreen.as:1544
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "Polyphoniques"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1517
+#: Resources/Scripts/Gui/StartupScreen.as:1521
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
 "more processing power, so setting this too high might cause an overload "
 "(especially with a software emulation)."
 msgstr ""
-"Spécifie combien de sons peuvent être joués simultanément. Une valeur "
-"élevée nécessite plus de puissance de calcul. Un paramètre trop élevé peut "
-"donc causer une surcharge (plus particulièrement avec une émulation logicielle)."
+"Spécifie combien de sons peuvent être joués simultanément. Une valeur élevée "
+"nécessite plus de puissance de calcul. Un paramètre trop élevé peut donc "
+"causer une surcharge (plus particulièrement avec une émulation logicielle)."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1524
+#: Resources/Scripts/Gui/StartupScreen.as:1528
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1525
+#: Resources/Scripts/Gui/StartupScreen.as:1529
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1422,7 +1442,7 @@ msgstr ""
 "Active les fonctionnalités étendue fournies par OpenAL pour créer une "
 "meilleure ambiance."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1541
+#: Resources/Scripts/Gui/StartupScreen.as:1545
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1432,63 +1452,67 @@ msgstr ""
 "pas poser de problème car YSR réduit le nombre de sons lorsque une surcharge "
 "est détectée."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1601
+#: Resources/Scripts/Gui/StartupScreen.as:1605
 msgctxt "StartupScreen"
 msgid "Language"
 msgstr "Langue"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1613
+#: Resources/Scripts/Gui/StartupScreen.as:1617
 msgctxt "StartupScreen"
 msgid "Tools"
 msgstr "Outils"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1616
+#: Resources/Scripts/Gui/StartupScreen.as:1620
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
 msgstr "Réinitialiser tous les paramètres"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1625
+#: Resources/Scripts/Gui/StartupScreen.as:1629
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
 msgstr "Ouvrir le dossier de configuration dans l'explorateur"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1627
+#: Resources/Scripts/Gui/StartupScreen.as:1631
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
 msgstr "Ouvrir le dossier de configuration dans le Finder"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1629
+#: Resources/Scripts/Gui/StartupScreen.as:1633
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
 msgstr "Ouvrir le dossier de configuration"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1646
+#: Resources/Scripts/Gui/StartupScreen.as:1650
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
-msgstr "Une erreur inconnue s'est produite lors de l'ouverture du dossier de configuration."
+msgstr ""
+"Une erreur inconnue s'est produite lors de l'ouverture du dossier de "
+"configuration."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1652
+#: Resources/Scripts/Gui/StartupScreen.as:1656
 msgctxt "StartupScreen"
 msgid ""
 "Are you sure to reset all settings? They include (but are not limited to):"
-msgstr "Êtes-vous sûr de vouloir réinitialiser tous les paramètres ? Ils incluent (mais ne se limitent pas) à :"
+msgstr ""
+"Êtes-vous sûr de vouloir réinitialiser tous les paramètres ? Ils incluent "
+"(mais ne se limitent pas) à :"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1653
+#: Resources/Scripts/Gui/StartupScreen.as:1657
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
 msgstr "Tous les paramètres graphiques et audio"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1654
+#: Resources/Scripts/Gui/StartupScreen.as:1658
 msgctxt "StartupScreen"
 msgid "All key bindings"
 msgstr "Toutes les associations de touches"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1655
+#: Resources/Scripts/Gui/StartupScreen.as:1659
 msgctxt "StartupScreen"
 msgid "Your player name"
 msgstr "Votre nom de joueur"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1656
+#: Resources/Scripts/Gui/StartupScreen.as:1660
 msgctxt "StartupScreen"
 msgid ""
 "Other advanced settings only accessible through '{0}' tab and in-game "
@@ -1497,28 +1521,28 @@ msgstr ""
 "D'autres paramètres avancés seulement accessibles via l'onglet '{0}' ainsi "
 "que les commandes en jeu"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1726
+#: Resources/Scripts/Gui/StartupScreen.as:1730
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
 msgstr "Inconnu ({0})"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1728
-#: Resources/Scripts/Gui/StartupScreen.as:1742
+#: Resources/Scripts/Gui/StartupScreen.as:1732
+#: Resources/Scripts/Gui/StartupScreen.as:1746
 msgctxt "StartupScreen"
 msgid "System default"
 msgstr "Valeur par défaut du système"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1791
+#: Resources/Scripts/Gui/StartupScreen.as:1795
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "Copier"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1827
+#: Resources/Scripts/Gui/StartupScreen.as:1831
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "Paramètres avancés"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1836
+#: Resources/Scripts/Gui/StartupScreen.as:1840
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "Filtre"
