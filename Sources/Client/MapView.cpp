@@ -397,10 +397,8 @@ namespace spades {
 			}
 			// draw objects
 
-			std::string iconmode = cg_minimapPlayerIcon; // import variable from configuration
-			                                               // file
-			std::string colormode =
-			  cg_minimapPlayerColor; // import variable from configuration file
+			const int iconMode = cg_minimapPlayerIcon;
+			const int colorMode = cg_minimapPlayerColor;
 
 			Handle<IImage> playerSMG = renderer->RegisterImage("Gfx/Map/SMG.png");
 			Handle<IImage> playerRifle = renderer->RegisterImage("Gfx/Map/Rifle.png");
@@ -448,7 +446,7 @@ namespace spades {
 					}
 
 					// use a spec color for each player
-					if (colormode == "1") {
+					if (colorMode) {
 						IntVector3 Colorplayer =
 						  IntVector3::Make(palette[i][0], palette[i][1], palette[i][2]);
 						Vector4 ColorplayerF = ModifyColor(Colorplayer);
@@ -459,7 +457,7 @@ namespace spades {
 					}
 
 					// use a different icon in minimap according to weapon of player
-					if (iconmode == "1") {
+					if (iconMode) {
 						WeaponType weapon = world->GetPlayer(i)->GetWeaponType();
 						if (weapon == WeaponType::SMG_WEAPON) {
 							DrawIcon(player->GetTeamId() >= 2 ? client->followPos
