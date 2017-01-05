@@ -20,7 +20,7 @@
 
  namespace spades {
 	class ThirdPersonSMGSkin:
-	IToolSkin, IThirdPersonToolSkin, IWeaponSkin {
+	IToolSkin, IThirdPersonToolSkin, IWeaponSkin, IWeaponSkin2 {
 		private float sprintState;
 		private float raiseState;
 		private Vector3 teamColor;
@@ -31,6 +31,10 @@
 		private bool reloading;
 		private float reloadProgress;
 		private int ammo, clipSize;
+
+		private float ambienceRoom;
+		private float ambienceSize;
+		private float ambienceDistance;
 
 		float SprintState {
 			set { sprintState = value; }
@@ -77,15 +81,22 @@
 			set { readyState = value; }
 		}
 
+		// IWeaponSkin2
+		void SetSoundAmbience(float room, float size, float distance) {
+			ambienceRoom = room;
+			ambienceSize = size;
+			ambienceDistance = distance;
+		}
+
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		private Model@ model;
 
-		private AudioChunk@[] fireSounds(4);
 		private AudioChunk@[] fireMediumSounds(4);
 		private AudioChunk@ fireFarSound;
 		private AudioChunk@ fireStereoSound;
-		private AudioChunk@[] fireMechSounds(4);
+		private AudioChunk@[] fireSmallReverbSounds(4);
+		private AudioChunk@[] fireLargeReverbSounds(4);
 		private AudioChunk@ reloadSound;
 
 		ThirdPersonSMGSkin(Renderer@ r, AudioDevice@ dev) {
@@ -95,22 +106,33 @@
 				("Models/Weapons/SMG/Weapon.kv6");
 
 
-			@fireSounds[0] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Fire1.opus");
-			@fireSounds[1] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Fire2.opus");
-			@fireSounds[2] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Fire3.opus");
-			@fireSounds[3] = dev.RegisterSound
-				("Sounds/Weapons/SMG/Fire4.opus");
 			@fireMediumSounds[0] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireMedium1.opus");
+				("Sounds/Weapons/SMG/V2Third1.opus");
 			@fireMediumSounds[1] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireMedium2.opus");
+				("Sounds/Weapons/SMG/V2Third2.opus");
 			@fireMediumSounds[2] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireMedium3.opus");
+				("Sounds/Weapons/SMG/V2Third3.opus");
 			@fireMediumSounds[3] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireMedium4.opus");
+				("Sounds/Weapons/SMG/V2Third4.opus");
+
+			@fireSmallReverbSounds[0] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceSmall1.opus");
+			@fireSmallReverbSounds[1] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceSmall2.opus");
+			@fireSmallReverbSounds[2] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceSmall3.opus");
+			@fireSmallReverbSounds[3] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceSmall4.opus");
+
+			@fireLargeReverbSounds[0] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceLarge1.opus");
+			@fireLargeReverbSounds[1] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceLarge2.opus");
+			@fireLargeReverbSounds[2] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceLarge3.opus");
+			@fireLargeReverbSounds[3] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceLarge4.opus");
+
 			@fireFarSound = dev.RegisterSound
 				("Sounds/Weapons/SMG/FireFar.opus");
 			@fireStereoSound = dev.RegisterSound
@@ -130,8 +152,16 @@
 				param.volume = 9.f;
 				audioDevice.Play(fireMediumSounds[GetRandom(fireMediumSounds.length)], origin, param);
 
+				param.volume = 8.f * ambienceRoom;
+				param.referenceDistance = 10.f;
+				if (ambienceSize < 0.5f) {
+					audioDevice.Play(fireSmallReverbSounds[GetRandom(fireSmallReverbSounds.length)], origin, param);
+				} else {
+					audioDevice.Play(fireLargeReverbSounds[GetRandom(fireLargeReverbSounds.length)], origin, param);
+				}
+
 				param.volume = .4f;
-				param.referenceDistance = 5.f;
+				param.referenceDistance = 10.f;
 				audioDevice.Play(fireFarSound,  origin, param);
 				param.referenceDistance = 1.f;
 				audioDevice.Play(fireStereoSound, origin, param);

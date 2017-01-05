@@ -25,7 +25,15 @@
 namespace spades{
 	namespace client {
 		ScriptIWeaponSkin::ScriptIWeaponSkin(asIScriptObject *obj):
-		obj(obj){}
+		obj(obj) {
+			SPAssert(obj);
+			SPAssert(obj->GetObjectType());
+		}
+
+		bool ScriptIWeaponSkin::ImplementsInterface()
+		{
+			return obj->GetObjectType()->Implements(obj->GetEngine()->GetTypeInfoByName("IWeaponSkin"));
+		}
 		
 		void ScriptIWeaponSkin::SetReadyState(float v) {
 			SPADES_MARK_FUNCTION_DEBUG();
@@ -137,7 +145,35 @@ namespace spades{
 			ScriptManager::CheckError(r);
 			ctx.ExecuteChecked();
 		}
-		
+
+		ScriptIWeaponSkin2::ScriptIWeaponSkin2(asIScriptObject *obj):
+		obj(obj) {
+			SPAssert(obj);
+			SPAssert(obj->GetObjectType());
+		}
+
+		bool ScriptIWeaponSkin2::ImplementsInterface()
+		{
+			return obj->GetObjectType()->Implements(obj->GetEngine()->GetTypeInfoByName("IWeaponSkin2"));
+		}
+
+		void ScriptIWeaponSkin2::SetSoundAmbience(float room, float size, float distance) {
+			SPADES_MARK_FUNCTION_DEBUG();
+			static ScriptFunction func("IWeaponSkin2",
+									   "void SetSoundAmbience(float, float, float)");
+			ScriptContextHandle ctx = func.Prepare();
+			int r;
+			r = ctx->SetObject((void *)obj);
+			ScriptManager::CheckError(r);
+			r = ctx->SetArgFloat(0, room);
+			ScriptManager::CheckError(r);
+			r = ctx->SetArgFloat(1, size);
+			ScriptManager::CheckError(r);
+			r = ctx->SetArgFloat(2, distance);
+			ScriptManager::CheckError(r);
+			ctx.ExecuteChecked();
+		}
+
 		class IWeaponSkinRegistrar: public ScriptObjectRegistrar {
 		public:
 			IWeaponSkinRegistrar():
@@ -151,6 +187,8 @@ namespace spades{
 				switch(phase){
 					case PhaseObjectType:
 						r = eng->RegisterInterface("IWeaponSkin");
+						manager->CheckError(r);
+						r = eng->RegisterInterface("IWeaponSkin2");
 						manager->CheckError(r);
 						break;
 					case PhaseObjectMember:
@@ -181,9 +219,12 @@ namespace spades{
 						r = eng->RegisterInterfaceMethod("IWeaponSkin",
 														 "void ReloadedWeapon()");
 						manager->CheckError(r);
+
+						r = eng->RegisterInterfaceMethod("IWeaponSkin2",
+														 "void SetSoundAmbience(float, float, float)");
+						manager->CheckError(r);
 						break;
 					default:
-						
 						break;
 				}
 			}

@@ -72,6 +72,9 @@ namespace spades {
 			void SetSkinParameterForTool(Player::ToolType, asIScriptObject *);
 			void SetCommonSkinParameter(asIScriptObject *);
 
+			struct AmbienceInfo;
+			AmbienceInfo ComputeAmbience();
+
 			float GetLocalFireVibration();
 
 			bool ShouldRenderInThirdPersonView();

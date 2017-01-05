@@ -30,6 +30,7 @@ namespace spades {
 			asIScriptObject *obj;
 		public:
 			ScriptIWeaponSkin(asIScriptObject *obj);
+			bool ImplementsInterface();
 			void SetReadyState(float);
 			void SetAimDownSightState(float);
 			void SetReloading(bool);
@@ -39,6 +40,14 @@ namespace spades {
 			void WeaponFired();
 			void ReloadingWeapon();
 			void ReloadedWeapon();
+		};
+
+		class ScriptIWeaponSkin2 {
+			asIScriptObject *obj;
+		public:
+			ScriptIWeaponSkin2(asIScriptObject *obj);
+			bool ImplementsInterface();
+			void SetSoundAmbience(float room, float size, float distance);
 		};
 	}
 }

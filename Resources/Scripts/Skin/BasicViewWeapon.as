@@ -20,7 +20,7 @@
 
 namespace spades {
 	class BasicViewWeapon:
-	IToolSkin, IViewToolSkin, IWeaponSkin {
+	IToolSkin, IViewToolSkin, IWeaponSkin, IWeaponSkin2 {
 		// IToolSkin
 		protected float sprintState;
 		protected float raiseState;
@@ -129,6 +129,15 @@ namespace spades {
 			set {
 				rightHand = value;
 			}
+		}
+
+		// IWeaponSkin2
+		protected float ambienceRoom;
+		protected float ambienceSize;
+
+		void SetSoundAmbience(float room, float size, float distance) {
+			ambienceRoom = room;
+			ambienceSize = size;
 		}
 
 		protected Renderer@ renderer;

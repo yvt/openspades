@@ -20,7 +20,7 @@
 
  namespace spades {
 	class ViewSMGSkin:
-	IToolSkin, IViewToolSkin, IWeaponSkin,
+	IToolSkin, IViewToolSkin, IWeaponSkin, IWeaponSkin2,
 	BasicViewWeapon {
 
 		private AudioDevice@ audioDevice;
@@ -33,6 +33,8 @@
 		private AudioChunk@[] fireSounds(4);
 		private AudioChunk@ fireFarSound;
 		private AudioChunk@ fireStereoSound;
+		private AudioChunk@[] fireSmallReverbSounds(4);
+		private AudioChunk@[] fireLargeReverbSounds(4);
 		private AudioChunk@ reloadSound;
 
 		ViewSMGSkin(Renderer@ r, AudioDevice@ dev){
@@ -49,14 +51,32 @@
 			@sightModel3 = renderer.RegisterModel
 				("Models/Weapons/SMG/Sight3.kv6");
 
+			@fireSmallReverbSounds[0] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceSmall1.opus");
+			@fireSmallReverbSounds[1] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceSmall2.opus");
+			@fireSmallReverbSounds[2] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceSmall3.opus");
+			@fireSmallReverbSounds[3] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceSmall4.opus");
+
+			@fireLargeReverbSounds[0] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceLarge1.opus");
+			@fireLargeReverbSounds[1] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceLarge2.opus");
+			@fireLargeReverbSounds[2] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceLarge3.opus");
+			@fireLargeReverbSounds[3] = dev.RegisterSound
+				("Sounds/Weapons/SMG/V2AmbienceLarge4.opus");
+
 			@fireSounds[0] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireLocal1.opus");
+				("Sounds/Weapons/SMG/V2Local1.opus");
 			@fireSounds[1] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireLocal2.opus");
+				("Sounds/Weapons/SMG/V2Local2.opus");
 			@fireSounds[2] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireLocal3.opus");
+				("Sounds/Weapons/SMG/V2Local3.opus");
 			@fireSounds[3] = dev.RegisterSound
-				("Sounds/Weapons/SMG/FireLocal4.opus");
+				("Sounds/Weapons/SMG/V2Local4.opus");
 			@fireFarSound = dev.RegisterSound
 				("Sounds/Weapons/SMG/FireFar.opus");
 			@fireStereoSound = dev.RegisterSound
@@ -79,11 +99,12 @@
 				param.volume = 8.f;
 				audioDevice.PlayLocal(fireSounds[GetRandom(fireSounds.length)], origin, param);
 
-				param.volume = 4.f;
-				audioDevice.PlayLocal(fireFarSound, origin, param);
-				param.volume = 1.f;
-				audioDevice.PlayLocal(fireStereoSound, origin, param);
-
+				param.volume = 8.f * ambienceRoom;
+				if (ambienceSize < 0.5f) {
+					audioDevice.PlayLocal(fireSmallReverbSounds[GetRandom(fireSmallReverbSounds.length)], origin, param);
+				} else {
+					audioDevice.PlayLocal(fireLargeReverbSounds[GetRandom(fireLargeReverbSounds.length)], origin, param);
+				}
 			}
 		}
 

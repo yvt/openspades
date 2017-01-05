@@ -32,6 +32,8 @@
 		private AudioChunk@ fireSound;
 		private AudioChunk@ fireFarSound;
 		private AudioChunk@ fireStereoSound;
+		private AudioChunk@ fireSmallReverbSound;
+		private AudioChunk@ fireLargeReverbSound;
 		private AudioChunk@ reloadSound;
 		private AudioChunk@ cockSound;
 
@@ -47,7 +49,6 @@
 			@sightModel2 = renderer.RegisterModel
 				("Models/Weapons/Shotgun/Sight2.kv6");
 
-
 			@fireSound = dev.RegisterSound
 				("Sounds/Weapons/Shotgun/FireLocal.opus");
 			@fireFarSound = dev.RegisterSound
@@ -58,6 +59,11 @@
 				("Sounds/Weapons/Shotgun/ReloadLocal.opus");
 			@cockSound = dev.RegisterSound
 				("Sounds/Weapons/Shotgun/CockLocal.opus");
+
+			@fireSmallReverbSound = dev.RegisterSound
+				("Sounds/Weapons/Shotgun/V2AmbienceSmall.opus");
+			@fireLargeReverbSound = dev.RegisterSound
+				("Sounds/Weapons/Shotgun/V2AmbienceLarge.opus");
 		}
 
 		void Update(float dt) {
@@ -72,6 +78,13 @@
 				AudioParam param;
 				param.volume = 8.f;
 				audioDevice.PlayLocal(fireSound, origin, param);
+
+				param.volume = 8.f * ambienceRoom;
+				if (ambienceSize < 0.5f) {
+					audioDevice.PlayLocal(fireSmallReverbSound, origin, param);
+				} else {
+					audioDevice.PlayLocal(fireLargeReverbSound, origin, param);
+				}
 
 				param.volume = 2.f;
 				audioDevice.PlayLocal(fireFarSound, origin, param);

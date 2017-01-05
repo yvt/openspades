@@ -18,11 +18,13 @@
 
  */
 
+#include <array>
 #include <cstdlib>
 
 #include "CTFGameMode.h"
 #include "Client.h"
 #include "ClientPlayer.h"
+#include "GameMap.h"
 #include "GunCasing.h"
 #include "GunCasing.h"
 #include "IAudioChunk.h"
@@ -360,12 +362,12 @@ namespace spades {
 						Handle<IAudioChunk> c;
 						switch (player->GetTool()) {
 							case Player::ToolSpade:
-								c =
-								  audioDevice->RegisterSound("Sounds/Weapons/Spade/RaiseLocal.opus");
+								c = audioDevice->RegisterSound(
+								  "Sounds/Weapons/Spade/RaiseLocal.opus");
 								break;
 							case Player::ToolBlock:
-								c =
-								  audioDevice->RegisterSound("Sounds/Weapons/Block/RaiseLocal.opus");
+								c = audioDevice->RegisterSound(
+								  "Sounds/Weapons/Block/RaiseLocal.opus");
 								break;
 							case Player::ToolWeapon:
 								switch (player->GetWeapon()->GetWeaponType()) {
@@ -1034,6 +1036,91 @@ namespace spades {
 			return client->ShouldRenderInThirdPersonView();
 		}
 
+		struct ClientPlayer::AmbienceInfo {
+			float room;
+			float size;
+			float distance;
+		};
+
+		ClientPlayer::AmbienceInfo ClientPlayer::ComputeAmbience() {
+			float maxDistance = 40.f;
+			GameMap *map = client->map;
+			SPAssert(map);
+
+			// do raycast
+			Vector3 rayFrom = player->GetEye();
+			Vector3 rayTo;
+			std::array<float, 32> distances;
+			std::array<float, 32> feedbacknesses;
+
+			std::fill(feedbacknesses.begin(), feedbacknesses.end(), 0.0f);
+
+			for (std::size_t i = 0; i < distances.size(); ++i) {
+				float &distance = distances[i];
+				float &feedbackness = feedbacknesses[i];
+
+				rayTo.x = GetRandom() - GetRandom();
+				rayTo.y = GetRandom() - GetRandom();
+				rayTo.z = GetRandom() - GetRandom();
+				rayTo = rayTo.Normalize();
+
+				IntVector3 hitPos;
+				bool hit = map->CastRay(rayFrom, rayTo, maxDistance, hitPos);
+				if (hit) {
+					Vector3 hitPosf = {(float)hitPos.x, (float)hitPos.y, (float)hitPos.z};
+					distance = (hitPosf - rayFrom).GetLength();
+				} else {
+					distance = maxDistance * 2.f;
+				}
+
+				if (hit) {
+					bool hit2 = map->CastRay(rayFrom, -rayTo, maxDistance, hitPos);
+					if (hit2)
+						feedbackness = 1.f;
+					else
+						feedbackness = 0.f;
+				}
+			}
+
+			// monte-carlo integration
+			unsigned int rayHitCount = 0;
+			float roomSize = 0.f;
+			float feedbackness = 0.f;
+
+			for (float dist : distances) {
+				if (dist < maxDistance) {
+					rayHitCount++;
+					roomSize += dist;
+				}
+			}
+			for (float fb : feedbacknesses) {
+				feedbackness += fb;
+			}
+
+			float reflections;
+			if (rayHitCount > distances.size() / 4) {
+				roomSize /= (float)rayHitCount;
+				reflections = (float)rayHitCount / (float)distances.size();
+			} else {
+				reflections = 0.1f;
+				roomSize = 100.f;
+			}
+
+			feedbackness /= (float)distances.size();
+			feedbackness = std::min(std::max(0.0f, feedbackness - 0.2f) / 0.6f, 1.0f);
+
+			const SceneDefinition &lastSceneDef = client->GetLastSceneDef();
+
+			AmbienceInfo result;
+			result.room = reflections * feedbackness;
+			result.distance = (lastSceneDef.viewOrigin - player->GetEye()).GetLength();
+			result.size = std::max(std::min(roomSize / 15.0f, 1.0f), 0.0f);
+			result.room *= std::max(0.0f, std::min((result.size - 0.1f) * 4.0f, 1.0f));
+			result.room *= 1.0f - result.size * 0.3f;
+
+			return result;
+		}
+
 		void ClientPlayer::FiredWeapon() {
 			World *world = player->GetWorld();
 			Vector3 muzzle;
@@ -1067,7 +1154,8 @@ namespace spades {
 							snd =
 							  (mt_engine_client() & 0x1000)
 							    ? audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.opus")
-							    : audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop2.opus");
+							    : audioDevice->RegisterSound(
+							        "Sounds/Weapons/Rifle/ShellDrop2.opus");
 							snd2 =
 							  audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellWater.opus");
 							break;
@@ -1104,12 +1192,22 @@ namespace spades {
 				}
 			}
 
+			// sound ambience estimation
+			auto ambience = ComputeAmbience();
+
 			asIScriptObject *skin;
 			// FIXME: what if current tool isn't weapon?
 			if (ShouldRenderInThirdPersonView()) {
 				skin = weaponSkin;
 			} else {
 				skin = weaponViewSkin;
+			}
+
+			{
+				ScriptIWeaponSkin2 interface(skin);
+				if (interface.ImplementsInterface()) {
+					interface.SetSoundAmbience(ambience.room, ambience.size, ambience.distance);
+				}
 			}
 
 			{
