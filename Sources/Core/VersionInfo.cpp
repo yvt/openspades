@@ -22,30 +22,22 @@ std::string VersionInfo::GetVersionInfo() {
 
 	if (IsWindowsXPOrGreater() && !IsWindowsVistaOrGreater()) {
 		windowsVersion = "Windows XP";
-	}
-
-	if (IsWindowsVistaOrGreater() && !IsWindows7OrGreater()) {
+	} else if (IsWindowsVistaOrGreater() && !IsWindows7OrGreater()) {
 		windowsVersion = "Windows Vista";
-	}
-
-	if (IsWindows7OrGreater() && !IsWindows8OrGreater()) {
+	} else if (IsWindows7OrGreater() && !IsWindows8OrGreater()) {
 		windowsVersion = "Windows 7";
-	}
-
-	if (IsWindows8OrGreater() && !IsWindows8Point1OrGreater()) {
+	} else if (IsWindows8OrGreater() && !IsWindows8Point1OrGreater()) {
 		windowsVersion = "Windows 8";
-	}
-
-	if (IsWindows8Point1OrGreater()) {
+	} else if (IsWindows8Point1OrGreater()) {
 		windowsVersion = "Windows 8.1";
+	} else {
+		// Default to Windows 10
+		// See https://github.com/yvt/openspades/pull/528 for reason.
+		windowsVersion = "Windows 10";
 	}
 
 	// Might be a greater version, but the new Microsoft
 	// API doesn't support checking for specific versions.
-
-	// Default to Windows 10
-	// See https://github.com/yvt/openspades/pull/528 for reason.
-	windowsVersion = "Windows 10";
 
 	if (IsWindowsServer())
 		windowsVersion += " Server";
