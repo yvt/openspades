@@ -79,8 +79,8 @@
 				param.volume = 8.f;
 				audioDevice.PlayLocal(fireSound, origin, param);
 
-				param.volume = 8.f * ambienceRoom;
-				if (ambienceSize < 0.5f) {
+				param.volume = 8.f * environmentRoom;
+				if (environmentSize < 0.5f) {
 					audioDevice.PlayLocal(fireSmallReverbSound, origin, param);
 				} else {
 					audioDevice.PlayLocal(fireLargeReverbSound, origin, param);

@@ -157,10 +157,10 @@ namespace spades{
 			return obj->GetObjectType()->Implements(obj->GetEngine()->GetTypeInfoByName("IWeaponSkin2"));
 		}
 
-		void ScriptIWeaponSkin2::SetSoundAmbience(float room, float size, float distance) {
+		void ScriptIWeaponSkin2::SetSoundEnvironment(float room, float size, float distance) {
 			SPADES_MARK_FUNCTION_DEBUG();
 			static ScriptFunction func("IWeaponSkin2",
-									   "void SetSoundAmbience(float, float, float)");
+									   "void SetSoundEnvironment(float, float, float)");
 			ScriptContextHandle ctx = func.Prepare();
 			int r;
 			r = ctx->SetObject((void *)obj);
@@ -221,7 +221,7 @@ namespace spades{
 						manager->CheckError(r);
 
 						r = eng->RegisterInterfaceMethod("IWeaponSkin2",
-														 "void SetSoundAmbience(float, float, float)");
+														 "void SetSoundEnvironment(float, float, float)");
 						manager->CheckError(r);
 						break;
 					default:

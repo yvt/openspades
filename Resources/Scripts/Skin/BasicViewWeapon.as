@@ -132,12 +132,12 @@ namespace spades {
 		}
 
 		// IWeaponSkin2
-		protected float ambienceRoom;
-		protected float ambienceSize;
+		protected float environmentRoom;
+		protected float environmentSize;
 
-		void SetSoundAmbience(float room, float size, float distance) {
-			ambienceRoom = room;
-			ambienceSize = size;
+		void SetSoundEnvironment(float room, float size, float distance) {
+			environmentRoom = room;
+			environmentSize = size;
 		}
 
 		protected Renderer@ renderer;

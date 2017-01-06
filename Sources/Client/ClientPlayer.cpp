@@ -1236,7 +1236,7 @@ namespace spades {
 			{
 				ScriptIWeaponSkin2 interface(skin);
 				if (interface.ImplementsInterface()) {
-					interface.SetSoundAmbience(ambience.room, ambience.size, ambience.distance);
+					interface.SetSoundEnvironment(ambience.room, ambience.size, ambience.distance);
 				}
 			}
 

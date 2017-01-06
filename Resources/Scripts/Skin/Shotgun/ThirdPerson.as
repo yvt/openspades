@@ -32,9 +32,9 @@
 		private float reloadProgress;
 		private int ammo, clipSize;
 
-		private float ambienceRoom;
-		private float ambienceSize;
-		private float ambienceDistance;
+		private float environmentRoom;
+		private float environmentSize;
+		private float environmentDistance;
 
 		float SprintState {
 			set { sprintState = value; }
@@ -82,10 +82,10 @@
 		}
 
 		// IWeaponSkin2
-		void SetSoundAmbience(float room, float size, float distance) {
-			ambienceRoom = room;
-			ambienceSize = size;
-			ambienceDistance = distance;
+		void SetSoundEnvironment(float room, float size, float distance) {
+			environmentRoom = room;
+			environmentSize = size;
+			environmentDistance = distance;
 		}
 
 		private Renderer@ renderer;
@@ -133,8 +133,8 @@
 				param.volume = 8.f;
 				audioDevice.Play(fireSound, origin, param);
 
-				param.volume = 8.f * ambienceRoom;
-				if (ambienceSize < 0.5f) {
+				param.volume = 8.f * environmentRoom;
+				if (environmentSize < 0.5f) {
 					audioDevice.Play(fireSmallReverbSound, origin, param);
 				} else {
 					audioDevice.Play(fireLargeReverbSound, origin, param);

@@ -99,8 +99,8 @@
 				param.volume = 8.f;
 				audioDevice.PlayLocal(fireSounds[GetRandom(fireSounds.length)], origin, param);
 
-				param.volume = 8.f * ambienceRoom;
-				if (ambienceSize < 0.5f) {
+				param.volume = 8.f * environmentRoom;
+				if (environmentSize < 0.5f) {
 					audioDevice.PlayLocal(fireSmallReverbSounds[GetRandom(fireSmallReverbSounds.length)], origin, param);
 				} else {
 					audioDevice.PlayLocal(fireLargeReverbSounds[GetRandom(fireLargeReverbSounds.length)], origin, param);
