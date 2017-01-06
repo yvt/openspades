@@ -49,6 +49,7 @@ SPADES_SETTING(cg_ragdoll);
 SPADES_SETTING(cg_ejectBrass);
 DEFINE_SPADES_SETTING(cg_animations, "1");
 SPADES_SETTING(cg_shake);
+DEFINE_SPADES_SETTING(cg_environmentalAudio, "1");
 
 namespace spades {
 	namespace client {
@@ -1043,6 +1044,16 @@ namespace spades {
 		};
 
 		ClientPlayer::AmbienceInfo ClientPlayer::ComputeAmbience() {
+			const SceneDefinition &lastSceneDef = client->GetLastSceneDef();
+
+			if (!cg_environmentalAudio) {
+				AmbienceInfo result;
+				result.room = 0.0f;
+				result.distance = (lastSceneDef.viewOrigin - player->GetEye()).GetLength();
+				result.size = 0.0f;
+				return result;
+			}
+
 			float maxDistance = 40.f;
 			GameMap *map = client->map;
 			SPAssert(map);
@@ -1129,8 +1140,6 @@ namespace spades {
 
 			feedbackness /= (float)distances.size();
 			feedbackness = std::min(std::max(0.0f, feedbackness - 0.35f) / 0.5f, 1.0f);
-
-			const SceneDefinition &lastSceneDef = client->GetLastSceneDef();
 
 			AmbienceInfo result;
 			result.room = reflections * feedbackness;
