@@ -1047,11 +1047,35 @@ namespace spades {
 			GameMap *map = client->map;
 			SPAssert(map);
 
-			// do raycast
 			Vector3 rayFrom = player->GetEye();
-			Vector3 rayTo;
-			std::array<float, 32> distances;
-			std::array<float, 32> feedbacknesses;
+			// uniformly distributed random unit vectors
+			const Vector3 directions[24] = {
+			  {-0.4806003057749437f, -0.42909622618705534f, 0.7647874049440525f},
+			  {-0.32231294555647927f, 0.6282069816346844f, 0.7081457147735524f},
+			  {0.048740582496498826f, -0.6670915238644523f, 0.7433796166200044f},
+			  {0.4507022412112344f, 0.2196054264547812f, 0.8652403980621708f},
+			  {-0.42721511627413183f, -0.587164590982542f, -0.6875499891085622f},
+			  {-0.5570464880797501f, 0.3832470400156089f, -0.7367638131974799f},
+			  {0.4379032819319448f, -0.5217172826725083f, -0.732155579528044f},
+			  {0.5505793235065188f, 0.5884516130938041f, -0.5921039668625805f},
+			  {0.681714179159347f, -0.6289005125058891f, -0.3738314102679548f},
+			  {0.882424317058847f, 0.4680895178240496f, -0.047111866514457174f},
+			  {0.8175844570742612f, -0.5123280060684333f, 0.26282250616819125f},
+			  {0.7326555076593512f, 0.16938649523355995f, 0.6591844372623717f},
+			  {-0.8833847855718798f, -0.46859333747646814f, -0.007183640636104698f},
+			  {-0.6478926243769724f, 0.5325399055055595f, -0.5446433661783178f},
+			  {-0.7011236289377749f, -0.4179353735633245f, 0.5777159167528706f},
+			  {-0.8834742898471629f, 0.3226030059694268f, 0.3397064611080296f},
+			  {-0.701272268659947f, 0.7126868112640804f, -0.017167243773185584f},
+			  {-0.4048459451282839f, 0.8049148135357349f, 0.4338339586338529f},
+			  {0.10511344475950758f, 0.7400485819463978f, -0.664288536774432f},
+			  {0.4228172536676786f, 0.7759558485735245f, 0.46810051384874957f},
+			  {-0.641642302739998f, -0.7293326298605313f, -0.23742171416118207f},
+			  {-0.269582155924164f, -0.957885171758109f, 0.09890125850168793f},
+			  {0.09274966874325204f, -0.9126579244190587f, -0.39806156803076687f},
+			  {0.49359438685568013f, -0.721891173178783f, 0.48501310843226225f}};
+			std::array<float, 24> distances;
+			std::array<float, 24> feedbacknesses;
 
 			std::fill(feedbacknesses.begin(), feedbacknesses.end(), 0.0f);
 
@@ -1059,10 +1083,7 @@ namespace spades {
 				float &distance = distances[i];
 				float &feedbackness = feedbacknesses[i];
 
-				rayTo.x = GetRandom() - GetRandom();
-				rayTo.y = GetRandom() - GetRandom();
-				rayTo.z = GetRandom() - GetRandom();
-				rayTo = rayTo.Normalize();
+				const Vector3 &rayTo = directions[i];
 
 				IntVector3 hitPos;
 				bool hit = map->CastRay(rayFrom, rayTo, maxDistance, hitPos);
@@ -1107,7 +1128,7 @@ namespace spades {
 			}
 
 			feedbackness /= (float)distances.size();
-			feedbackness = std::min(std::max(0.0f, feedbackness - 0.2f) / 0.6f, 1.0f);
+			feedbackness = std::min(std::max(0.0f, feedbackness - 0.35f) / 0.5f, 1.0f);
 
 			const SceneDefinition &lastSceneDef = client->GetLastSceneDef();
 
