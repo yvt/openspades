@@ -59,7 +59,6 @@
 		E82E671C18EA7954004DBA18 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03BE178EE50E000683D4 /* Main.cpp */; };
 		E82E671D18EA7954004DBA18 /* SDLGLDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03BB178EE502000683D4 /* SDLGLDevice.cpp */; };
 		E82E671E18EA7954004DBA18 /* SDLRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03E1178EF57E000683D4 /* SDLRunner.cpp */; };
-		E82E671F18EA7954004DBA18 /* SDLAsyncRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B289117A683500056179E /* SDLAsyncRunner.cpp */; };
 		E82E672018EA7954004DBA18 /* MainScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81CE4A7183F7F2000F22685 /* MainScreen.cpp */; };
 		E82E672118EA7954004DBA18 /* MainScreenHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */; };
 		E82E672218EA7954004DBA18 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CE3183F86AE0085AA54 /* View.cpp */; };
@@ -199,7 +198,6 @@
 		E82E67A818EA7972004DBA18 /* IInputInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03C9178EE869000683D4 /* IInputInterface.cpp */; };
 		E82E67A918EA7972004DBA18 /* IImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03F4178FAA8B000683D4 /* IImage.cpp */; };
 		E82E67AA18EA7972004DBA18 /* IModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E711793D5AD009D83E0 /* IModel.cpp */; };
-		E82E67AB18EA7972004DBA18 /* AsyncRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B288E17A659F30056179E /* AsyncRenderer.cpp */; };
 		E82E67AC18EA7972004DBA18 /* NetClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F55117944778004EBE88 /* NetClient.cpp */; };
 		E82E67AD18EA7972004DBA18 /* ILocalEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E0AFAA179ADC2100C6B5A9 /* ILocalEntity.cpp */; };
 		E82E67AE18EA7972004DBA18 /* ParticleSpriteEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E0AFAD179ADDCB00C6B5A9 /* ParticleSpriteEntity.cpp */; };
@@ -332,10 +330,6 @@
 		E80B288A17A52CBB0056179E /* binpack2d.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = binpack2d.hpp; sourceTree = "<group>"; };
 		E80B288B17A5FFB30056179E /* ThreadLocalStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadLocalStorage.cpp; sourceTree = "<group>"; };
 		E80B288C17A5FFB40056179E /* ThreadLocalStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadLocalStorage.h; sourceTree = "<group>"; };
-		E80B288E17A659F30056179E /* AsyncRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AsyncRenderer.cpp; sourceTree = "<group>"; };
-		E80B288F17A659F30056179E /* AsyncRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncRenderer.h; sourceTree = "<group>"; };
-		E80B289117A683500056179E /* SDLAsyncRunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDLAsyncRunner.cpp; sourceTree = "<group>"; };
-		E80B289217A683500056179E /* SDLAsyncRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLAsyncRunner.h; sourceTree = "<group>"; };
 		E80B289417A9D6B40056179E /* GLDynamicLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLDynamicLight.cpp; sourceTree = "<group>"; };
 		E80B289517A9D6B50056179E /* GLDynamicLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLDynamicLight.h; sourceTree = "<group>"; };
 		E80B289717AA63FC0056179E /* GLWaterRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLWaterRenderer.cpp; sourceTree = "<group>"; };
@@ -1491,8 +1485,6 @@
 				E8CF03BC178EE502000683D4 /* SDLGLDevice.h */,
 				E8CF03E1178EF57E000683D4 /* SDLRunner.cpp */,
 				E8CF03E2178EF57E000683D4 /* SDLRunner.h */,
-				E80B289117A683500056179E /* SDLAsyncRunner.cpp */,
-				E80B289217A683500056179E /* SDLAsyncRunner.h */,
 				E81CE4A7183F7F2000F22685 /* MainScreen.cpp */,
 				E81CE4A8183F7F2000F22685 /* MainScreen.h */,
 				E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */,
@@ -1672,8 +1664,6 @@
 				E8CF03F5178FAA8B000683D4 /* IImage.h */,
 				E8567E711793D5AD009D83E0 /* IModel.cpp */,
 				E8567E721793D5AD009D83E0 /* IModel.h */,
-				E80B288E17A659F30056179E /* AsyncRenderer.cpp */,
-				E80B288F17A659F30056179E /* AsyncRenderer.h */,
 			);
 			name = "I/O Interfaces";
 			sourceTree = "<group>";
@@ -2141,7 +2131,6 @@
 				E82E67A818EA7972004DBA18 /* IInputInterface.cpp in Sources */,
 				E82E67A918EA7972004DBA18 /* IImage.cpp in Sources */,
 				E82E67AA18EA7972004DBA18 /* IModel.cpp in Sources */,
-				E82E67AB18EA7972004DBA18 /* AsyncRenderer.cpp in Sources */,
 				E82E67AC18EA7972004DBA18 /* NetClient.cpp in Sources */,
 				E82E67AD18EA7972004DBA18 /* ILocalEntity.cpp in Sources */,
 				E82E67AE18EA7972004DBA18 /* ParticleSpriteEntity.cpp in Sources */,
@@ -2262,7 +2251,6 @@
 				E82E671C18EA7954004DBA18 /* Main.cpp in Sources */,
 				E82E671D18EA7954004DBA18 /* SDLGLDevice.cpp in Sources */,
 				E82E671E18EA7954004DBA18 /* SDLRunner.cpp in Sources */,
-				E82E671F18EA7954004DBA18 /* SDLAsyncRunner.cpp in Sources */,
 				E82E672018EA7954004DBA18 /* MainScreen.cpp in Sources */,
 				E82E672118EA7954004DBA18 /* MainScreenHelper.cpp in Sources */,
 				E82E672218EA7954004DBA18 /* View.cpp in Sources */,
