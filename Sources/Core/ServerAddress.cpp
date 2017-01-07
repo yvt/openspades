@@ -19,6 +19,7 @@
  */
 
 #include <enet/enet.h>
+#include <regex>
 
 #include "ServerAddress.h"
 
@@ -41,7 +42,20 @@ namespace spades {
 	}
 
 	ServerAddress::ServerAddress(std::string address, ProtocolVersion version)
-	    : mAddress(address), mVersion(version) {}
+	: mAddress(address), mVersion(version) {
+		static std::regex v075regex {"(.*):0?\\.?75"};
+		static std::regex v076regex {"(.*):0?\\.?76"};
+
+		std::smatch matchResult;
+
+		if (std::regex_match(address, matchResult, v075regex)) {
+			version = ProtocolVersion::v075;
+			mAddress = matchResult[1];
+		} else if (std::regex_match(address, matchResult, v076regex)) {
+			version = ProtocolVersion::v076;
+			mAddress = matchResult[1];
+		}
+	}
 
 	std::string ServerAddress::StripProtocol(const std::string &address) {
 		if (address.find("aos:///") == 0) {
