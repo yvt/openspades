@@ -30,6 +30,8 @@
 		private AudioChunk@ fireSound;
 		private AudioChunk@ fireFarSound;
 		private AudioChunk@ fireStereoSound;
+		private AudioChunk@ fireSmallReverbSound;
+		private AudioChunk@ fireLargeReverbSound;
 		private AudioChunk@ reloadSound;
 		private Model@ sightModel1;
 		private Model@ sightModel2;
@@ -54,6 +56,11 @@
 				("Sounds/Weapons/Rifle/FireStereo.opus");
 			@reloadSound = dev.RegisterSound
 				("Sounds/Weapons/Rifle/ReloadLocal.opus");
+
+			@fireSmallReverbSound = dev.RegisterSound
+				("Sounds/Weapons/Rifle/V2AmbienceSmall.opus");
+			@fireLargeReverbSound = dev.RegisterSound
+				("Sounds/Weapons/Rifle/V2AmbienceLarge.opus");
 		}
 
 		void Update(float dt) {
@@ -68,6 +75,13 @@
 				AudioParam param;
 				param.volume = 8.f;
 				audioDevice.PlayLocal(fireSound, origin, param);
+
+				param.volume = 8.f * environmentRoom;
+				if (environmentSize < 0.5f) {
+					audioDevice.PlayLocal(fireSmallReverbSound, origin, param);
+				} else {
+					audioDevice.PlayLocal(fireLargeReverbSound, origin, param);
+				}
 
 				param.referenceDistance = 4.f;
 				param.volume = 1.f;

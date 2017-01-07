@@ -20,7 +20,7 @@
 
  namespace spades {
 	class ThirdPersonRifleSkin:
-	IToolSkin, IThirdPersonToolSkin, IWeaponSkin {
+	IToolSkin, IThirdPersonToolSkin, IWeaponSkin, IWeaponSkin2 {
 		private float sprintState;
 		private float raiseState;
 		private Vector3 teamColor;
@@ -31,6 +31,10 @@
 		private bool reloading;
 		private float reloadProgress;
 		private int ammo, clipSize;
+
+		private float environmentRoom;
+		private float environmentSize;
+		private float environmentDistance;
 
 		float SprintState {
 			set { sprintState = value; }
@@ -77,12 +81,21 @@
 			set { readyState = value; }
 		}
 
+		// IWeaponSkin2
+		void SetSoundEnvironment(float room, float size, float distance) {
+			environmentRoom = room;
+			environmentSize = size;
+			environmentDistance = distance;
+		}
+
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		private Model@ model;
 		private AudioChunk@[] fireSounds(3);
 		private AudioChunk@ fireFarSound;
 		private AudioChunk@ fireStereoSound;
+		private AudioChunk@ fireSmallReverbSound;
+		private AudioChunk@ fireLargeReverbSound;
 		private AudioChunk@ reloadSound;
 
 		ThirdPersonRifleSkin(Renderer@ r, AudioDevice@ dev) {
@@ -103,6 +116,11 @@
 				("Sounds/Weapons/Rifle/FireStereo.opus");
 			@reloadSound = dev.RegisterSound
 				("Sounds/Weapons/Rifle/Reload.opus");
+
+			@fireSmallReverbSound = dev.RegisterSound
+				("Sounds/Weapons/Rifle/V2AmbienceSmall.opus");
+			@fireLargeReverbSound = dev.RegisterSound
+				("Sounds/Weapons/Rifle/V2AmbienceLarge.opus");
 		}
 
 		void Update(float dt) {
@@ -114,6 +132,13 @@
 				AudioParam param;
 				param.volume = 20.f;
 				audioDevice.Play(fireSounds[GetRandom(fireSounds.length)], origin, param);
+
+				param.volume = 20.f * environmentRoom;
+				if (environmentSize < 0.5f) {
+					audioDevice.Play(fireSmallReverbSound, origin, param);
+				} else {
+					audioDevice.Play(fireLargeReverbSound, origin, param);
+				}
 
 				param.volume = 1.f;
 				param.referenceDistance = 26.f;
