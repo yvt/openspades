@@ -101,7 +101,6 @@ namespace spades {
 	namespace gui {
 		constexpr auto FAVORITE_PATH = "/favorite_servers.json";
 
-		// FIXME: mostly duplicated code with Serverbrowser.cpp
 		class MainScreenHelper::ServerListQuery : public Thread {
 			Mutex infoLock;
 			Handle<MainScreenHelper> owner;

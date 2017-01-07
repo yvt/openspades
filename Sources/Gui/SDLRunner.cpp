@@ -119,7 +119,7 @@ namespace spades {
 					view->KeyEvent(TranslateButton(event.button.button), false);
 					break;
 				case SDL_MOUSEMOTION:
-					if (mActive) {
+					if (m_active) {
 						// FIXME: this might fail with cg_smp
 						if (view->NeedsAbsoluteMouseCoordinate()) {
 							view->MouseEvent(event.motion.x, event.motion.y);
@@ -163,10 +163,10 @@ namespace spades {
 					if (event.window.type == SDL_WINDOWEVENT_FOCUS_GAINED) {
 						SDL_ShowCursor(0);
 						SDL_SetRelativeMouseMode(SDL_TRUE);
-						mActive = true;
+						m_active = true;
 					} else if (event.window.type == SDL_WINDOWEVENT_FOCUS_LOST) {
 						SDL_SetRelativeMouseMode(SDL_FALSE);
-						mActive = false;
+						m_active = false;
 						SDL_ShowCursor(1);
 					}
 					break;
@@ -473,7 +473,7 @@ namespace spades {
 #endif
 				SDL_SetRelativeMouseMode(SDL_FALSE);
 				SDL_ShowCursor(0);
-				mActive = true;
+				m_active = true;
 
 				{
 					Handle<client::IRenderer> renderer(CreateRenderer(window), false);
