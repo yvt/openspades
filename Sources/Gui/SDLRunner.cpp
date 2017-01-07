@@ -130,8 +130,29 @@ namespace spades {
 					break;
 				case SDL_MOUSEWHEEL: view->WheelEvent(-event.wheel.x, -event.wheel.y); break;
 				case SDL_KEYDOWN:
-					if (!event.key.repeat)
+					if (!event.key.repeat) {
+						if (event.key.keysym.sym == SDLK_RETURN &&
+							event.key.keysym.mod & (KMOD_LALT | KMOD_RALT)) {
+							SDL_Window *window = SDL_GetWindowFromID(event.key.windowID);
+
+							// Toggle fullscreen mode
+							if (r_fullscreen) {
+								if (!SDL_SetWindowFullscreen(window, 0)) {
+									r_fullscreen = 0;
+								} else {
+									SPLog("Couldn't exit fullscreen mode: %s", SDL_GetError());
+								}
+							} else {
+								if (!SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN)) {
+									r_fullscreen = 1;
+								} else {
+									SPLog("Couldn't enter fullscreen mode: %s", SDL_GetError());
+								}
+							}
+							return;
+						}
 						view->KeyEvent(TranslateKey(event.key.keysym), true);
+					}
 					break;
 				case SDL_KEYUP: view->KeyEvent(TranslateKey(event.key.keysym), false); break;
 				case SDL_TEXTINPUT: view->TextInputEvent(event.text.text); break;
