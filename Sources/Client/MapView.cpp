@@ -432,10 +432,13 @@ namespace spades {
 					}
 				}
 
+				bool isSpectating = player->GetTeamId() >= 2;
+
 				// draw player's icon
 				for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
 					Player *p = world->GetPlayer(i);
-					if (p == nullptr || p->GetTeamId() != world->GetLocalPlayer()->GetTeamId() ||
+					if (p == nullptr ||
+						(p->GetTeamId() != world->GetLocalPlayer()->GetTeamId() && !isSpectating) ||
 					    !p->IsAlive())
 						continue;
 
