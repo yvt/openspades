@@ -464,9 +464,14 @@ namespace spades {
 				return;
 			}
 
+			// Move the grenade slightly so that it doesn't look like sinking in
+			// the ground
+			Vector3 position = g->GetPosition();
+			position.z -= 0.03f * 3.0f;
+
 			ModelRenderParam param;
-			Matrix4 mat = Matrix4::Scale(0.03f);
-			mat = Matrix4::Translate(g->GetPosition()) * mat;
+			Matrix4 mat = g->GetOrientation().ToRotationMatrix() * Matrix4::Scale(0.03f);
+			mat = Matrix4::Translate(position) * mat;
 			param.matrix = mat;
 
 			renderer->RenderModel(model, param);

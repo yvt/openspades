@@ -35,6 +35,7 @@ namespace spades {
 			velocity = vel;
 			this->fuse = fuse;
 			world = w;
+			orientation = Quaternion {0.0f, 0.0f, 0.0f, 1.0f};
 		}
 
 		Grenade::~Grenade() { SPADES_MARK_FUNCTION(); }
@@ -71,6 +72,12 @@ namespace spades {
 			velocity.z += fsynctics;
 			position += velocity * f;
 
+			// Make it roll
+			float radius = 4.0f * 0.03f;
+			orientation = Quaternion::MakeRotation(Vector3(-velocity.y, velocity.x, 0.0f) * (f / radius)) * orientation;
+			orientation = orientation.Normalize();
+
+			// Collision
 			IntVector3 lp = position.Floor();
 			IntVector3 lp2 = oldPos.Floor();
 			GameMap *m = world->GetMap();
