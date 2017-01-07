@@ -404,7 +404,7 @@ namespace spades {
 
 			globalBlur = std::min(globalBlur * 3.f, 1.f);
 			{
-				GLProfiler p(dev, "CoC Computation");
+				GLProfiler::Context p(renderer->GetGLProfiler(), "CoC Computation");
 				coc = GenerateCoC(blurDepthRange, vignetteBlur, globalBlur, nearBlur, farBlur);
 			}
 
@@ -433,31 +433,31 @@ namespace spades {
 
 			GLColorBuffer buf1, buf2;
 			{
-				GLProfiler p(dev, "Blur 1");
+				GLProfiler::Context p(renderer->GetGLProfiler(), "Blur 1");
 				buf1 = Blur(lowbuf, coc, MakeVector2(0.f, -1.f) * maxCoc);
 			}
 			{
-				GLProfiler p(dev, "Blur 2");
+				GLProfiler::Context p(renderer->GetGLProfiler(), "Blur 2");
 				buf2 = Blur(lowbuf, coc, MakeVector2(-sin60, cos60) * maxCoc);
 				lowbuf.Release();
 			}
 			{
-				GLProfiler p(dev, "Mix 1");
+				GLProfiler::Context p(renderer->GetGLProfiler(), "Mix 1");
 				buf2 = AddMix(buf1, buf2);
 			}
 			// return buf2;
 			{
-				GLProfiler p(dev, "Blur 3");
+				GLProfiler::Context p(renderer->GetGLProfiler(), "Blur 3");
 				buf1 = Blur(buf1, coc, MakeVector2(-sin60, cos60) * maxCoc);
 			}
 			{
-				GLProfiler p(dev, "Blur 4");
+				GLProfiler::Context p(renderer->GetGLProfiler(), "Blur 4");
 				buf2 = Blur(buf2, coc, MakeVector2(sin60, cos60) * maxCoc);
 			}
 
 			dev->Viewport(0, 0, w, h);
 			{
-				GLProfiler p(dev, "Mix 2");
+				GLProfiler::Context p(renderer->GetGLProfiler(), "Mix 2");
 				GLColorBuffer output = FinalMix(input, buf1, buf2, coc);
 				return output;
 			}

@@ -52,7 +52,7 @@ namespace spades {
 		void GLModelRenderer::RenderShadowMapPass() {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler profiler(device, "Model [%d model(s), %d unique model type(s)]", modelCount,
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Model [%d model(s), %d unique model type(s)]", modelCount,
 			                    (int)models.size());
 
 			int numModels = 0;
@@ -71,7 +71,7 @@ namespace spades {
 		void GLModelRenderer::Prerender() {
 			device->ColorMask(false, false, false, false);
 
-			GLProfiler profiler(device, "Model [%d model(s), %d unique model type(s)]", modelCount,
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Model [%d model(s), %d unique model type(s)]", modelCount,
 								(int)models.size());
 
 			int numModels = 0;
@@ -87,7 +87,7 @@ namespace spades {
 		void GLModelRenderer::RenderSunlightPass() {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler profiler(device, "Model [%d model(s), %d unique model type(s)]", modelCount,
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Model [%d model(s), %d unique model type(s)]", modelCount,
 			                    (int)models.size());
 
 			for (size_t i = 0; i < models.size(); i++) {
@@ -101,7 +101,7 @@ namespace spades {
 		void GLModelRenderer::RenderDynamicLightPass(std::vector<GLDynamicLight> lights) {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler profiler(device, "Model [%d model(s), %d unique model type(s)]", modelCount,
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Model [%d model(s), %d unique model type(s)]", modelCount,
 			                    (int)models.size());
 
 			if (!lights.empty()) {

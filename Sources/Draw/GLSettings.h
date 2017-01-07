@@ -32,6 +32,9 @@ namespace spades {
 			TypedItemHandle<bool> r_cameraBlur          { *this, "r_cameraBlur" };
 			TypedItemHandle<bool> r_colorCorrection     { *this, "r_colorCorrection" };
 			TypedItemHandle<bool> r_debugTiming         { *this, "r_debugTiming" };
+			TypedItemHandle<bool> r_debugTimingOutputScreen { *this, "r_debugTimingOutputScreen" };
+			TypedItemHandle<bool> r_debugTimingOutputLog { *this, "r_debugTimingOutputLog" };
+			TypedItemHandle<bool> r_debugTimingAverage  { *this, "r_debugTimingAverage" };
 			TypedItemHandle<int> r_depthOfField         { *this, "r_depthOfField" };
 			TypedItemHandle<float> r_depthOfFieldMaxCoc { *this, "r_depthOfFieldMaxCoc" };
 			TypedItemHandle<bool> r_depthPrepass        { *this, "r_depthPrepass" };

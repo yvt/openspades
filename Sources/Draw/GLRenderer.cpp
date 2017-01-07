@@ -108,6 +108,7 @@ namespace spades {
 			programManager = new GLProgramManager(_device, shadowMapRenderer, settings);
 			imageManager = new GLImageManager(_device);
 			imageRenderer = new GLImageRenderer(this);
+			profiler.reset(new GLProfiler(*this));
 
 			smoothedFogColor = MakeVector3(-1.f, -1.f, -1.f);
 
@@ -235,6 +236,7 @@ namespace spades {
 			imageManager = NULL;
 			delete fbManager;
 			fbManager = NULL;
+			profiler.reset();
 			SPLog("GLRenderer finalized");
 		}
 
@@ -458,6 +460,8 @@ namespace spades {
 			sceneUsedInThisFrame = true;
 			duringSceneRendering = true;
 
+			profiler->BeginFrame();
+
 			// clear scene objects
 			debugLines.clear();
 			spriteRenderer->Clear();
@@ -609,7 +613,7 @@ namespace spades {
 
 			if (needsDepthPrepass) {
 				{
-					GLProfiler profiler(device, "Depth-only Prepass");
+					GLProfiler::Context p(*profiler, "Depth-only Prepass");
 					device->DepthFunc(IGLDevice::Less);
 					if (!sceneDef.skipWorld && mapRenderer) {
 						mapRenderer->Prerender();
@@ -621,7 +625,7 @@ namespace spades {
 
 				if (settings.r_ssao) {
 					{
-						GLProfiler profiler(device, "Screen Space Ambient Occlusion");
+						GLProfiler::Context p(*profiler, "Screen Space Ambient Occlusion");
 						device->DepthMask(false);
 						device->Enable(IGLDevice::DepthTest, false);
 						device->Enable(IGLDevice::CullFace, false);
@@ -639,7 +643,7 @@ namespace spades {
 				}
 			}
 			{
-				GLProfiler profiler(device, "Sunlight Pass");
+				GLProfiler::Context p(*profiler, "Sunlight Pass");
 
 				device->DepthFunc(IGLDevice::LessOrEqual);
 				if (!sceneDef.skipWorld && mapRenderer) {
@@ -655,7 +659,7 @@ namespace spades {
 			}
 
 			{
-				GLProfiler profiler(device, "Dynamic Light Pass [%d light(s)]", (int)lights.size());
+				GLProfiler::Context p(*profiler, "Dynamic Light Pass [%d light(s)]", (int)lights.size());
 
 				device->Enable(IGLDevice::Blend, true);
 				device->Enable(IGLDevice::DepthTest, true);
@@ -669,7 +673,7 @@ namespace spades {
 			}
 
 			{
-				GLProfiler profiler(device, "Debug Line");
+				GLProfiler::Context p(*profiler, "Debug Line");
 				device->Enable(IGLDevice::Blend, false);
 				device->Enable(IGLDevice::DepthTest, true);
 				device->DepthFunc(IGLDevice::Less);
@@ -683,7 +687,7 @@ namespace spades {
 			EnsureInitialized();
 			EnsureSceneStarted();
 
-			GLProfiler rootProfiler(device, "EndScene");
+			GLProfiler::Context pRoot(*profiler, "EndScene");
 
 			float dt = (float)(sceneDef.time - lastTime) / 1000.f;
 			if (dt > .1f)
@@ -695,7 +699,7 @@ namespace spades {
 			renderingMirror = false;
 
 			{
-				GLProfiler profiler(device, "Uploading Software Rendered Stuff");
+				GLProfiler::Context p(*profiler, "Uploading Software Rendered Stuff");
 				if (mapShadowRenderer)
 					mapShadowRenderer->Update();
 				if (ambientShadowRenderer) {
@@ -711,7 +715,7 @@ namespace spades {
 
 			// build shadowmap
 			{
-				GLProfiler profiler(device, "Shadow Map Pass");
+				GLProfiler::Context p(*profiler, "Shadow Map Pass");
 				device->Enable(IGLDevice::DepthTest, true);
 				device->DepthFunc(IGLDevice::Less);
 				if (shadowMapRenderer)
@@ -762,7 +766,7 @@ namespace spades {
 					  (IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
 
 					// render scene
-					GLProfiler profiler(device, "Mirrored Objects");
+					GLProfiler::Context p(*profiler, "Mirrored Objects");
 					RenderObjects();
 
 					// restore matrices
@@ -771,7 +775,7 @@ namespace spades {
 
 					if (settings.r_fogShadow && mapShadowRenderer &&
 					    fogColor.GetPoweredLength() > .000001f) {
-						GLProfiler profiler(device, "Volumetric Fog");
+						GLProfiler::Context p(*profiler, "Volumetric Fog");
 
 						GLFramebufferManager::BufferHandle handle;
 						GLFogFilter fogfilter(this);
@@ -804,13 +808,13 @@ namespace spades {
 			device->FrontFace(IGLDevice::CW);
 
 			{
-				GLProfiler profiler(device, "Non-mirrored Objects");
+				GLProfiler::Context p(*profiler, "Non-mirrored Objects");
 				RenderObjects();
 			}
 
 			device->Enable(IGLDevice::CullFace, false);
 			if (settings.r_water && waterRenderer) {
-				GLProfiler profiler(device, "Water");
+				GLProfiler::Context p(*profiler, "Water");
 				waterRenderer->Update(dt);
 				waterRenderer->Render();
 			}
@@ -819,13 +823,13 @@ namespace spades {
 
 			device->DepthMask(false);
 			if (!settings.r_softParticles) { // softparticle is a part of postprocess
-				GLProfiler profiler(device, "Particle");
+				GLProfiler::Context p(*profiler, "Particle");
 				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 				spriteRenderer->Render();
 			}
 
 			{
-				GLProfiler profiler(device, "Long Particle");
+				GLProfiler::Context p(*profiler, "Long Particle");
 				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 				longSpriteRenderer->Render();
 			}
@@ -834,24 +838,24 @@ namespace spades {
 
 			GLFramebufferManager::BufferHandle handle;
 			{
-				GLProfiler profiler(device, "Post-process");
+				GLProfiler::Context p(*profiler, "Post-process");
 
 				// now process the non-multisampled buffer.
 				// depth buffer is also can be read
 				{
-					GLProfiler profiler(device, "Preparation");
+					GLProfiler::Context p(*profiler, "Preparation");
 					handle = fbManager->StartPostProcessing();
 				}
 				if (settings.r_fogShadow && mapShadowRenderer &&
 				    fogColor.GetPoweredLength() > .000001f) {
-					GLProfiler profiler(device, "Volumetric Fog");
+					GLProfiler::Context p(*profiler, "Volumetric Fog");
 					GLFogFilter fogfilter(this);
 					handle = fogfilter.Filter(handle);
 				}
 				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
 
 				if (settings.r_softParticles) { // softparticle is a part of postprocess
-					GLProfiler profiler(device, "Soft Particle");
+					GLProfiler::Context p(*profiler, "Soft Particle");
 					device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 					spriteRenderer->Render();
 				}
@@ -860,7 +864,7 @@ namespace spades {
 
 				if (settings.r_depthOfField &&
 				    (sceneDef.depthOfFieldFocalLength > 0.f || sceneDef.blurVignette > 0.f)) {
-					GLProfiler profiler(device, "Depth of Field");
+					GLProfiler::Context p(*profiler, "Depth of Field");
 					handle = GLDepthOfFieldFilter(this).Filter(
 					  handle, sceneDef.depthOfFieldFocalLength, sceneDef.blurVignette,
 					  sceneDef.globalBlur, sceneDef.depthOfFieldNearBlurStrength,
@@ -868,35 +872,35 @@ namespace spades {
 				}
 
 				if (settings.r_cameraBlur && !sceneDef.denyCameraBlur) {
-					GLProfiler profiler(device, "Camera Blur");
+					GLProfiler::Context p(*profiler, "Camera Blur");
 					// FIXME: better (correctly constructed) radial blur algorithm
 					handle = cameraBlur->Filter(handle, sceneDef.radialBlur);
 				}
 
 				if (settings.r_bloom) {
-					GLProfiler profiler(device, "Lens Dust Filter");
+					GLProfiler::Context p(*profiler, "Lens Dust Filter");
 					handle = lensDustFilter->Filter(handle);
 				}
 
 				// do r_fxaa before lens filter so that color aberration looks nice
 				if (settings.r_fxaa) {
-					GLProfiler profiler(device, "FXAA");
+					GLProfiler::Context p(*profiler, "FXAA");
 					handle = GLFXAAFilter(this).Filter(handle);
 				}
 
 				if (settings.r_lens) {
-					GLProfiler profiler(device, "Lens Filter");
+					GLProfiler::Context p(*profiler, "Lens Filter");
 					handle = GLLensFilter(this).Filter(handle);
 				}
 
 				if (settings.r_lensFlare) {
-					GLProfiler profiler(device, "Lens Flare");
+					GLProfiler::Context p(*profiler, "Lens Flare");
 					device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
 					GLLensFlareFilter(this).Draw();
 				}
 
 				if (settings.r_lensFlare && settings.r_lensFlareDynamic) {
-					GLProfiler profiler(device, "Dynamic Light Lens Flare");
+					GLProfiler::Context p(*profiler, "Dynamic Light Lens Flare");
 					GLLensFlareFilter lensFlareRenderer(this);
 					device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
 					for (size_t i = 0; i < lights.size(); i++) {
@@ -948,7 +952,7 @@ namespace spades {
 				}
 
 				if (settings.r_colorCorrection) {
-					GLProfiler profiler(device, "Color Correction");
+					GLProfiler::Context p(*profiler, "Color Correction");
 					Vector3 tint = smoothedFogColor + MakeVector3(1.f, 1.f, 1.f);
 					tint = MakeVector3(1.f, 1.f, 1.f) / tint;
 					tint = Mix(tint, MakeVector3(1.f, 1.f, 1.f), 0.2f);
@@ -975,7 +979,7 @@ namespace spades {
 				if (settings.r_srgb)
 					device->Enable(IGLDevice::FramebufferSRGB, false);
 
-				GLProfiler profiler(device, "Copying to WM-given Framebuffer");
+				GLProfiler::Context p(*profiler, "Copying to WM-given Framebuffer");
 
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
@@ -1149,6 +1153,12 @@ namespace spades {
 
 			EnsureSceneNotStarted();
 
+			if (settings.r_debugTimingOutputScreen &&
+				settings.r_debugTiming) {
+				GLProfiler::Context p(*profiler, "Draw GLProfiler Results");
+				profiler->DrawResult();
+			}
+
 			imageRenderer->Flush();
 
 			if (settings.r_srgb && settings.r_srgb2D && sceneUsedInThisFrame) {
@@ -1158,7 +1168,7 @@ namespace spades {
 
 				device->Enable(IGLDevice::FramebufferSRGB, false);
 				;
-				GLProfiler profiler(device, "Copying to WM-given Framebuffer");
+				GLProfiler::Context p(*profiler, "Copying to WM-given Framebuffer");
 
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
@@ -1181,6 +1191,9 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			EnsureSceneNotStarted();
+
+			profiler->EndFrame();
+
 			device->Swap();
 		}
 

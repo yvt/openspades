@@ -20,26 +20,65 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
-namespace spades {
+#include <Core/Stopwatch.h>
 
-	class Stopwatch;
+namespace spades {
 	namespace draw {
+		class GLRenderer;
+		class GLSettings;
 		class IGLDevice;
+
 		class GLProfiler {
-			std::string msg;
-			std::string name;
-			Stopwatch *watch;
-			IGLDevice *device;
-			double time, timeNoFinish;
+			struct Phase;
+			struct Measurement;
+
+			GLSettings &m_settings;
+			GLRenderer &m_renderer;
+			IGLDevice &m_device;
+			bool m_active;
+			double m_lastSaveTime;
+			bool m_shouldSaveThisFrame;
+
+			Stopwatch m_stopwatch;
+
+			std::unique_ptr<Phase> m_root;
+			std::vector<std::reference_wrapper<Phase>> m_stack;
+
+			Phase &GetCurrentPhase() { return m_stack.back(); }
+
+			void BeginPhase(const std::string &name, const std::string &description);
+			void EndPhase();
+
+			void BeginPhaseInner(Phase&);
+
+			void EndPhaseInner();
+
+			void LogResult(Phase &root);
+			void DrawResult(Phase &root);
 
 		public:
-			static void ResetLevel();
-			GLProfiler(IGLDevice *, const char *format, ...);
-			std::string GetProfileMessage();
+			GLProfiler(GLRenderer &);
 			~GLProfiler();
+
+			void BeginFrame();
+			void EndFrame();
+
+			void DrawResult();
+
+			class Context {
+				GLProfiler &m_profiler;
+				bool m_active;
+
+			public:
+				Context(GLProfiler &profiler, const char *format, ...);
+				std::string GetProfileMessage();
+				~Context();
+			};
 		};
 	}
 }

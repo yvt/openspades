@@ -21,6 +21,7 @@
 #pragma once
 
 #include <map>
+#include <memory>
 
 #include "GLCameraBlurFilter.h"
 #include "GLDynamicLight.h"
@@ -54,6 +55,7 @@ namespace spades {
 		class GLLensDustFilter;
 		class GLSoftLitSpriteRenderer;
 		class GLAutoExposureFilter;
+		class GLProfiler;
 
 		class GLRenderer : public client::IRenderer, public client::IGameMapListener {
 			friend class GLShadowShader;
@@ -70,6 +72,8 @@ namespace spades {
 			GLFramebufferManager *fbManager;
 			client::GameMap *map;
 			GLSettings settings;
+
+			std::unique_ptr<GLProfiler> profiler;
 
 			bool inited;
 			bool sceneUsedInThisFrame;
@@ -200,6 +204,7 @@ namespace spades {
 
 			GLSettings &GetSettings() { return settings; }
 			IGLDevice *GetGLDevice() { return device; }
+			GLProfiler &GetGLProfiler() { return *profiler; }
 			GLFramebufferManager *GetFramebufferManager() { return fbManager; }
 			IGLShadowMapRenderer *GetShadowMapRenderer() { return shadowMapRenderer; }
 			GLAmbientShadowRenderer *GetAmbientShadowRenderer() { return ambientShadowRenderer; }

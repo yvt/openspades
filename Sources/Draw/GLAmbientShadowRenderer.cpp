@@ -287,7 +287,7 @@ namespace spades {
 				if (!chunks[i].transfered)
 					cnt++;
 			}
-			GLProfiler profiler(device, "Large Ambient Occlusion [>= %d chunk(s)]", cnt);
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Large Ambient Occlusion [>= %d chunk(s)]", cnt);
 
 			device->BindTexture(IGLDevice::Texture3D, texture);
 			for (size_t i = 0; i < chunks.size(); i++) {

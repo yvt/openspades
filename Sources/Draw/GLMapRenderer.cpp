@@ -141,7 +141,7 @@ namespace spades {
 		void GLMapRenderer::Prerender() {
 			SPADES_MARK_FUNCTION();
 			//depth-only pass
-			GLProfiler profiler(device, "Prerender");
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Prerender");
 
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
 
@@ -184,7 +184,7 @@ namespace spades {
 		void GLMapRenderer::RenderSunlightPass() {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler profiler(device, "Map");
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map");
 
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
 
@@ -304,7 +304,7 @@ namespace spades {
 		void GLMapRenderer::RenderDynamicLightPass(std::vector<GLDynamicLight> lights) {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler profiler(device, "Map");
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map");
 
 			if (lights.empty())
 				return;
@@ -441,7 +441,7 @@ namespace spades {
 		}
 
 		void GLMapRenderer::RenderBackface() {
-			GLProfiler profiler(device, "Back-face");
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Back-face");
 
 			IntVector3 eye = renderer->GetSceneDef().viewOrigin.Floor();
 			std::vector<BFVertex> vertices;
