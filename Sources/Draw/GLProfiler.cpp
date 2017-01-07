@@ -60,7 +60,7 @@ namespace spades {
 		};
 
 		struct GLProfiler::Phase {
-			std::string name;
+			const std::string name;
 			std::string description;
 
 			// can't use vector here; a reference to a vector's element can be invalidated
@@ -70,11 +70,14 @@ namespace spades {
 			std::unordered_map<std::string, std::reference_wrapper<Phase>> subphaseMap;
 
 			double startWallClockTime;
-			double startCPUTime;
+			stmp::optional<std::pair<std::size_t, std::size_t>> queryObjectIndices;
 
 			Measurement measurementLatest;
+			bool measured = false;
 
 			stmp::optional<Measurement> measurementSaved;
+
+			Phase(const std::string &name) : name{name} {}
 		};
 
 		GLProfiler::GLProfiler(GLRenderer &renderer)
@@ -83,14 +86,17 @@ namespace spades {
 		      m_device{*renderer.GetGLDevice()},
 		      m_active{false},
 		      m_lastSaveTime{0.0},
-		      m_shouldSaveThisFrame{false} {
+		      m_shouldSaveThisFrame{false},
+			  m_waitingTimerQueryResult{false} {
 			SPADES_MARK_FUNCTION();
-
-			m_root.reset(new Phase());
-			m_root->name = "Frame";
 		}
 
-		GLProfiler::~GLProfiler() {}
+		GLProfiler::~GLProfiler() {
+			SPADES_MARK_FUNCTION();
+			for (IGLDevice::UInteger timerQueryObject: m_timerQueryObjects) {
+				m_device.DeleteQuery(timerQueryObject);
+			}
+		}
 
 		void GLProfiler::BeginFrame() {
 			SPADES_MARK_FUNCTION();
@@ -98,7 +104,17 @@ namespace spades {
 			if (!m_settings.r_debugTiming) {
 				// Clear history
 				m_root.reset();
+				m_waitingTimerQueryResult = false;
 				return;
+			}
+
+			if (m_waitingTimerQueryResult) {
+				FinalizeMeasurement();
+
+				// Still waiting?
+				if (m_waitingTimerQueryResult) {
+					return;
+				}
 			}
 
 			SPAssert(m_stack.empty());
@@ -117,9 +133,31 @@ namespace spades {
 
 			ResetTimes();
 
+			if (m_settings.r_debugTimingGPUTime) {
+				m_currentTimerQueryObjectIndex = 0;
+				if (m_timerQueryObjects.empty()) {
+					m_timerQueryObjects.push_back(m_device.GenQuery());
+				}
+				m_device.BeginQuery(IGLDevice::TimeElapsed, m_timerQueryObjects[0]);
+			}
+
+			if (m_root) {
+				struct Traverser {
+					GLProfiler &self;
+					Traverser(GLProfiler &self) : self{self} {}
+					void Traverse(Phase &phase) {
+						phase.measured = false;
+						phase.queryObjectIndices.reset();
+						for (Phase &subphase : phase.subphases) {
+							Traverse(subphase);
+						}
+					}
+				};
+				Traverser{*this}.Traverse(*m_root);
+			}
+
 			if (!m_root) {
-				m_root.reset(new Phase());
-				m_root->name = "Frame";
+				m_root.reset(new Phase{"Frame"});
 				m_root->description = "Frame";
 			}
 
@@ -143,15 +181,93 @@ namespace spades {
 			EndPhaseInner();
 			SPAssert(m_stack.empty());
 
-			if (m_settings.r_debugTimingOutputLog) {
-				LogResult(root);
+			m_active = false;
+
+			FinalizeMeasurement();
+		}
+
+		void GLProfiler::FinalizeMeasurement() {
+			SPADES_MARK_FUNCTION();
+			Phase &root = *m_root;
+
+			// Collect GPU time information
+			if (m_settings.r_debugTimingGPUTime) {
+				if (!m_waitingTimerQueryResult) {
+					m_device.EndQuery(IGLDevice::TimeElapsed);
+				}
+
+				m_waitingTimerQueryResult = false;
+
+				// are results available?
+				for (std::size_t i = 0; i <= m_currentTimerQueryObjectIndex; ++i) {
+					if (!m_device.GetQueryObjectUInteger(m_timerQueryObjects[i], IGLDevice::QueryResultAvailable)) {
+						m_waitingTimerQueryResult = true;
+						return;
+					}
+				}
+
+				double t = 0;
+				m_timerQueryTimes.resize(m_currentTimerQueryObjectIndex + 2);
+				m_timerQueryTimes[0] = 0.0;
+				for (std::size_t i = 0; i <= m_currentTimerQueryObjectIndex; ++i) {
+					auto nanoseconds = m_device.GetQueryObjectUInteger64(m_timerQueryObjects[i], IGLDevice::QueryResult);
+					t += static_cast<double>(nanoseconds) / 1.0e+9;
+					m_timerQueryTimes[i + 1] = t;
+				}
+				struct Traverser {
+					GLProfiler &self;
+					Traverser(GLProfiler &self) : self{self} {}
+					void Traverse(Phase &phase) {
+						if (phase.queryObjectIndices) {
+							auto indices = *phase.queryObjectIndices;
+							double time1 = self.m_timerQueryTimes[indices.first];
+							double time2 = self.m_timerQueryTimes[indices.second];
+							phase.measurementLatest.totalGPUTime += time2 - time1;
+						}
+
+						for (Phase &subphase : phase.subphases) {
+							Traverse(subphase);
+						}
+					}
+				};
+				Traverser{*this}.Traverse(root);
+			} else {
+				m_waitingTimerQueryResult = false;
 			}
 
 			if (m_shouldSaveThisFrame) {
-				m_lastSaveTime = m_stopwatch.GetTime();
-			}
+				struct Traverser {
+					GLProfiler &self;
+					Traverser(GLProfiler &self) : self{self} {}
+					void Traverse(Phase &phase) {
+						phase.measurementSaved = phase.measurementLatest;
+						phase.measurementLatest = Measurement{};
+						for (Phase &subphase : phase.subphases) {
+							Traverse(subphase);
+						}
+					}
+				};
+				Traverser{*this}.Traverse(root);
 
-			m_active = false;
+				m_lastSaveTime = m_stopwatch.GetTime();
+
+				// Output the result to the system log
+				if (m_settings.r_debugTimingOutputLog) {
+					LogResult(root);
+				}
+			}
+		}
+
+		void GLProfiler::NewTimerQuery() {
+			SPADES_MARK_FUNCTION_DEBUG();
+
+			m_device.EndQuery(IGLDevice::TimeElapsed);
+			++m_currentTimerQueryObjectIndex;
+
+			if (m_currentTimerQueryObjectIndex >= m_timerQueryObjects.size()) {
+				m_timerQueryObjects.push_back(m_device.GenQuery());
+			}
+			m_device.BeginQuery(IGLDevice::TimeElapsed, m_timerQueryObjects[m_currentTimerQueryObjectIndex]);
 		}
 
 		void GLProfiler::BeginPhase(const std::string &name, const std::string &description) {
@@ -166,26 +282,35 @@ namespace spades {
 
 			if (it == current.subphaseMap.end()) {
 				// Create a new subphase
-				current.subphases.emplace_back();
-
-				auto subphasesIt = current.subphases.emplace(current.subphases.end());
+				auto subphasesIt = current.subphases.emplace(current.subphases.end(), name);
 				auto insertResult = current.subphaseMap.emplace(name, std::ref(*subphasesIt));
 				SPAssert(insertResult.second);
 				it = insertResult.first;
-
-				it->second.get().name = name;
 			}
 
 			Phase &next = it->second;
 			m_stack.emplace_back(next);
 
+			if (next.measured) {
+				SPRaise("Cannot measure the timing of phase '%s' twice", name.c_str());
+			}
+
+			next.measured = true;
 			next.description = description;
 
 			BeginPhaseInner(next);
 		}
 
 		void GLProfiler::BeginPhaseInner(Phase &phase) {
+			SPADES_MARK_FUNCTION_DEBUG();
+
 			phase.startWallClockTime = GetWallClockTime();
+
+			if (m_settings.r_debugTimingGPUTime) {
+				NewTimerQuery();
+				phase.queryObjectIndices = std::pair<std::size_t, std::size_t>{};
+				(*phase.queryObjectIndices).first = m_currentTimerQueryObjectIndex;
+			}
 		}
 
 		void GLProfiler::EndPhase() {
@@ -209,9 +334,10 @@ namespace spades {
 			current.measurementLatest.totalWallClockTime += wallClockTime - current.startWallClockTime;
 			current.measurementLatest.totalNumFrames += 1;
 
-			if (m_shouldSaveThisFrame) {
-				current.measurementSaved = current.measurementLatest;
-				current.measurementLatest = Measurement{};
+			if (m_settings.r_debugTimingGPUTime) {
+				SPAssert(current.queryObjectIndices);
+				NewTimerQuery();
+				(*current.queryObjectIndices).second = m_currentTimerQueryObjectIndex;
 			}
 
 			m_stack.pop_back();
@@ -227,7 +353,12 @@ namespace spades {
 			SPLog("---- Start of GLProfiler Result ----");
 			SPLog("(%d sampled frame(s). Showing the per-frame timing)",
 			      (*root.measurementSaved).totalNumFrames);
-			SPLog("(wall clock time)");
+
+			if (m_settings.r_debugTimingGPUTime) {
+				SPLog("(GPU time / wall clock time)");
+			} else {
+				SPLog("(wall clock time)");
+			}
 
 			struct Traverser {
 				GLProfiler &self;
@@ -246,8 +377,14 @@ namespace spades {
 					for (int i = 0; i < indent; i++)
 						buf[i] = ' ';
 					buf[511] = 0;
-					snprintf(buf + indent, 511 - indent, "%s - %.3fms", phase.description.c_str(),
-					         result.totalWallClockTime * 1000. * factor);
+					if (self.m_settings.r_debugTimingGPUTime) {
+						snprintf(buf + indent, 511 - indent, "%s - %.3fms / %.3fms", phase.description.c_str(),
+								 result.totalGPUTime * 1000. * factor,
+								 result.totalWallClockTime * 1000. * factor);
+					} else {
+						snprintf(buf + indent, 511 - indent, "%s - %.3fms", phase.description.c_str(),
+								 result.totalWallClockTime * 1000. * factor);
+					}
 					SPLog("%s", buf);
 
 					for (Phase &subphase : phase.subphases) {

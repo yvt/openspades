@@ -26,12 +26,12 @@
 #include <vector>
 
 #include <Core/Stopwatch.h>
+#include "IGLDevice.h"
 
 namespace spades {
 	namespace draw {
 		class GLRenderer;
 		class GLSettings;
-		class IGLDevice;
 
 		class GLProfiler {
 			struct Phase;
@@ -43,11 +43,16 @@ namespace spades {
 			bool m_active;
 			double m_lastSaveTime;
 			bool m_shouldSaveThisFrame;
+			bool m_waitingTimerQueryResult;
 
 			Stopwatch m_stopwatch;
 
 			std::unique_ptr<Phase> m_root;
 			std::vector<std::reference_wrapper<Phase>> m_stack;
+
+			std::vector<IGLDevice::UInteger> m_timerQueryObjects;
+			std::vector<double> m_timerQueryTimes;
+			std::size_t m_currentTimerQueryObjectIndex;
 
 			Phase &GetCurrentPhase() { return m_stack.back(); }
 
@@ -58,8 +63,12 @@ namespace spades {
 
 			void EndPhaseInner();
 
+			void NewTimerQuery();
+
 			void LogResult(Phase &root);
 			void DrawResult(Phase &root);
+
+			void FinalizeMeasurement();
 
 		public:
 			GLProfiler(GLRenderer &);

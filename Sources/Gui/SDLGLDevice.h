@@ -82,6 +82,7 @@ namespace spades {
 			void BeginQuery(Enum target, UInteger query) override;
 			void EndQuery(Enum target) override;
 			UInteger GetQueryObjectUInteger(UInteger query, Enum pname) override;
+			UInteger64 GetQueryObjectUInteger64(UInteger query, Enum pname) override;
 			void BeginConditionalRender(UInteger query, Enum) override;
 			void EndConditionalRender() override;
 

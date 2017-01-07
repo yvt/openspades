@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <cstdlib> // for integer types
+
 #include <Core/Math.h>
 #include <Core/RefCountedObject.h>
 
@@ -243,6 +245,9 @@ namespace spades {
 				FramebufferIncompleteMultisample,
 				FramebufferIncompleteLayerTargets,
 
+				// EXT_timer_query
+				TimeElapsed,
+
 				ColorBufferBit = 1,
 				DepthBufferBit = 2,
 				StencilBufferBit = 4
@@ -252,6 +257,7 @@ namespace spades {
 			typedef int Integer;
 			typedef float Float;
 			typedef unsigned int Sizei;
+			typedef std::uint64_t UInteger64;
 
 			virtual void DepthRange(Float near, Float far) = 0;
 			virtual void Viewport(Integer x, Integer y, Sizei width, Sizei height) = 0;
@@ -294,6 +300,7 @@ namespace spades {
 			virtual void BeginQuery(Enum target, UInteger query) = 0;
 			virtual void EndQuery(Enum target) = 0;
 			virtual UInteger GetQueryObjectUInteger(UInteger query, Enum pname) = 0;
+			virtual UInteger64 GetQueryObjectUInteger64(UInteger query, Enum pname) = 0;
 			virtual void BeginConditionalRender(UInteger query, Enum mode) = 0;
 			virtual void EndConditionalRender() = 0;
 

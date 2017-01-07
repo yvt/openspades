@@ -152,7 +152,6 @@ namespace spades {
 			dev->ActiveTexture(0);
 
 			for (int i = 0; i < levels; i++) {
-				GLProfiler::Context measure(renderer->GetGLProfiler(), "Apply [%d / %d]", i + 1, levels);
 				GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 				programShutterTimeScale.SetValue(shutterTimeScale);
 				dev->BindTexture(IGLDevice::Texture2D, buf.GetTexture());

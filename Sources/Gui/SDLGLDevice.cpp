@@ -602,6 +602,7 @@ namespace spades {
 			switch (target) {
 				case IGLDevice::SamplesPassed: return GL_SAMPLES_PASSED;
 				case IGLDevice::AnySamplesPassed: return GL_ANY_SAMPLES_PASSED;
+				case IGLDevice::TimeElapsed: return GL_TIME_ELAPSED;
 				default: SPInvalidEnum("target", target);
 			}
 		}
@@ -674,6 +675,41 @@ namespace spades {
 					break;
 				case draw::IGLDevice::QueryResultAvailable:
 					glGetQueryObjectuiv(query, GL_QUERY_RESULT_AVAILABLE, &val);
+					break;
+				default: SPInvalidEnum("pname", pname);
+			}
+#endif
+			CheckError();
+			return val;
+		}
+
+		IGLDevice::UInteger64 SDLGLDevice::GetQueryObjectUInteger64(UInteger query, Enum pname) {
+			GLuint64 val;
+			SPADES_MARK_FUNCTION_DEBUG();
+
+#if GLEW
+			if (glGetQueryObjectui64v) {
+				switch (pname) {
+					case draw::IGLDevice::QueryResult:
+						glGetQueryObjectui64v(query, GL_QUERY_RESULT, &val);
+						break;
+					default: SPInvalidEnum("pname", pname);
+				}
+			} else if (glGetQueryObjectui64vEXT) {
+				switch (pname) {
+					case draw::IGLDevice::QueryResult:
+						glGetQueryObjectui64vEXT(query, GL_QUERY_RESULT, &val);
+						break;
+					default: SPInvalidEnum("pname", pname);
+				}
+			} else {
+				ReportMissingFunc("glGetQueryObjectui64v");
+			}
+#else
+			CheckExistence(glGetQueryObjectui64v);
+			switch (pname) {
+				case draw::IGLDevice::QueryResult:
+					glGetQueryObjectui64v(query, GL_QUERY_RESULT, &val);
 					break;
 				default: SPInvalidEnum("pname", pname);
 			}

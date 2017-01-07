@@ -35,6 +35,7 @@ namespace spades {
 			TypedItemHandle<bool> r_debugTimingOutputScreen { *this, "r_debugTimingOutputScreen" };
 			TypedItemHandle<bool> r_debugTimingOutputLog { *this, "r_debugTimingOutputLog" };
 			TypedItemHandle<bool> r_debugTimingAverage  { *this, "r_debugTimingAverage" };
+			TypedItemHandle<bool> r_debugTimingGPUTime  { *this, "r_debugTimingGPUTime" };
 			TypedItemHandle<int> r_depthOfField         { *this, "r_depthOfField" };
 			TypedItemHandle<float> r_depthOfFieldMaxCoc { *this, "r_depthOfFieldMaxCoc" };
 			TypedItemHandle<bool> r_depthPrepass        { *this, "r_depthPrepass" };

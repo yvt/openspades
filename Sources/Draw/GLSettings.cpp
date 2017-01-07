@@ -28,6 +28,7 @@ DEFINE_SPADES_SETTING(r_debugTiming, "0");
 DEFINE_SPADES_SETTING(r_debugTimingOutputScreen, "1");
 DEFINE_SPADES_SETTING(r_debugTimingOutputLog, "0");
 DEFINE_SPADES_SETTING(r_debugTimingAverage, "1");
+DEFINE_SPADES_SETTING(r_debugTimingGPUTime, "1");
 DEFINE_SPADES_SETTING(r_depthOfField, "0");
 DEFINE_SPADES_SETTING(r_depthOfFieldMaxCoc, "0.01");
 DEFINE_SPADES_SETTING(r_depthPrepass, "1");
