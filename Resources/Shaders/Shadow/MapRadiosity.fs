@@ -69,8 +69,7 @@ vec3 Radiosity_Map(float detailAmbientOcclusion, float ssao) {
 	return col;
 }
 
-vec3 BlurredReflection_Map(float detailAmbientOcclusion, vec3 direction, float ssao)
-{
+vec3 BlurredReflection_Map(float detailAmbientOcclusion, vec3 direction, float ssao) {
 	vec3 col = DecodeRadiosityValue
 	(texture3D(radiosityTextureFlat,
 			   radiosityTextureCoord).xyz);
