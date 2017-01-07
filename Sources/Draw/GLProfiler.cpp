@@ -18,6 +18,7 @@
 
  */
 
+#include <algorithm>
 #include <chrono>
 #include <cstdarg>
 #include <cstdio>
@@ -26,6 +27,7 @@
 #include <functional>
 #include <list>
 #include <unordered_map>
+#include <cstring>
 
 #include "GLProfiler.h"
 
@@ -382,13 +384,14 @@ namespace spades {
 						buf[i] = ' ';
 					buf[511] = 0;
 					if (self.m_settings.r_debugTimingGPUTime) {
-						snprintf(buf + indent, 511 - indent, "%s - %.3fms / %.3fms",
-						         phase.description.c_str(), result.totalGPUTime * 1000. * factor,
-						         result.totalWallClockTime * 1000. * factor);
+						std::snprintf(buf + indent, 511 - indent, "%s - %.3fms / %.3fms",
+						              phase.description.c_str(),
+						              result.totalGPUTime * 1000. * factor,
+						              result.totalWallClockTime * 1000. * factor);
 					} else {
-						snprintf(buf + indent, 511 - indent, "%s - %.3fms",
-						         phase.description.c_str(),
-						         result.totalWallClockTime * 1000. * factor);
+						std::snprintf(buf + indent, 511 - indent, "%s - %.3fms",
+						              phase.description.c_str(),
+						              result.totalWallClockTime * 1000. * factor);
 					}
 					SPLog("%s", buf);
 
@@ -474,9 +477,9 @@ namespace spades {
 					for (int i = 0; i < indent; i++)
 						buf[i] = ' ';
 					std::fill(buf, buf + timeColumn, ' ');
-					strcpy(buf + indent, phase.description.c_str());
-					buf[strlen(buf)] = ' ';
-					sprintf(buf + timeColumn, "%7.3fms", time * 1000.);
+					std::strcpy(buf + indent, phase.description.c_str());
+					buf[std::strlen(buf)] = ' ';
+					std::sprintf(buf + timeColumn, "%7.3fms", time * 1000.);
 					DrawText(buf);
 
 					float subphaseTime = 0.0f;
@@ -515,8 +518,8 @@ namespace spades {
 				void Draw(Phase &root) {
 					renderer.SetColorAlphaPremultiplied(Vector4{1.0f, 1.0f, 0.0f, 1.0f});
 					DrawText("[GLProfiler result] ");
-					sprintf(buf, "%d sampled frame(s). Showing the per-frame timing.\n",
-					        (*root.measurementSaved).totalNumFrames);
+					std::sprintf(buf, "%d sampled frame(s). Showing the per-frame timing.\n",
+					             (*root.measurementSaved).totalNumFrames);
 					DrawText(buf);
 					DrawText("Legends: ");
 					DrawText(gpu ? "GPU time" : "wall clock time");
@@ -545,7 +548,7 @@ namespace spades {
 			va_list va;
 			va_start(va, format);
 			buf[2047] = 0;
-			vsnprintf(buf, 2047, format, va);
+			std::vsnprintf(buf, 2047, format, va);
 			va_end(va);
 
 			profiler.BeginPhase(format, buf);
