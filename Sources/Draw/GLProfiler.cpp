@@ -18,14 +18,14 @@
 
  */
 
+#include <chrono>
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+#include <ctime>
 #include <functional>
 #include <list>
 #include <unordered_map>
-#include <ctime>
-#include <chrono>
 
 #include "GLProfiler.h"
 
@@ -44,12 +44,13 @@ namespace spades {
 		namespace {
 			chrono::high_resolution_clock::time_point startTimePoint;
 
-			void ResetTimes() {
-				startTimePoint = chrono::high_resolution_clock::now();
-			}
+			void ResetTimes() { startTimePoint = chrono::high_resolution_clock::now(); }
 
 			double GetWallClockTime() {
-				return chrono::duration_cast<chrono::microseconds>(chrono::high_resolution_clock::now() - startTimePoint).count() / 1000000.0;
+				return chrono::duration_cast<chrono::microseconds>(
+				         chrono::high_resolution_clock::now() - startTimePoint)
+				         .count() /
+				       1000000.0;
 			}
 		}
 
@@ -87,13 +88,16 @@ namespace spades {
 		      m_active{false},
 		      m_lastSaveTime{0.0},
 		      m_shouldSaveThisFrame{false},
-			  m_waitingTimerQueryResult{false} {
+		      m_waitingTimerQueryResult{false} {
 			SPADES_MARK_FUNCTION();
+
+			m_font = m_renderer.RegisterImage("Gfx/Fonts/Debug.png");
+			m_white = m_renderer.RegisterImage("Gfx/White.tga");
 		}
 
 		GLProfiler::~GLProfiler() {
 			SPADES_MARK_FUNCTION();
-			for (IGLDevice::UInteger timerQueryObject: m_timerQueryObjects) {
+			for (IGLDevice::UInteger timerQueryObject : m_timerQueryObjects) {
 				m_device.DeleteQuery(timerQueryObject);
 			}
 		}
@@ -125,9 +129,6 @@ namespace spades {
 			if (m_settings.r_debugTimingAverage) {
 				m_shouldSaveThisFrame = m_stopwatch.GetTime() > m_lastSaveTime + 1.0;
 			} else {
-				// Clear history each frame in this case
-				m_root.reset();
-
 				m_shouldSaveThisFrame = true;
 			}
 
@@ -174,9 +175,7 @@ namespace spades {
 			}
 
 			SPAssert(m_stack.size() == 1);
-
-			Phase &root = GetCurrentPhase();
-			SPAssert(&root == m_root.get());
+			SPAssert(&GetCurrentPhase() == m_root.get());
 
 			EndPhaseInner();
 			SPAssert(m_stack.empty());
@@ -200,7 +199,8 @@ namespace spades {
 
 				// are results available?
 				for (std::size_t i = 0; i <= m_currentTimerQueryObjectIndex; ++i) {
-					if (!m_device.GetQueryObjectUInteger(m_timerQueryObjects[i], IGLDevice::QueryResultAvailable)) {
+					if (!m_device.GetQueryObjectUInteger(m_timerQueryObjects[i],
+					                                     IGLDevice::QueryResultAvailable)) {
 						m_waitingTimerQueryResult = true;
 						return;
 					}
@@ -210,7 +210,8 @@ namespace spades {
 				m_timerQueryTimes.resize(m_currentTimerQueryObjectIndex + 2);
 				m_timerQueryTimes[0] = 0.0;
 				for (std::size_t i = 0; i <= m_currentTimerQueryObjectIndex; ++i) {
-					auto nanoseconds = m_device.GetQueryObjectUInteger64(m_timerQueryObjects[i], IGLDevice::QueryResult);
+					auto nanoseconds = m_device.GetQueryObjectUInteger64(m_timerQueryObjects.at(i),
+					                                                     IGLDevice::QueryResult);
 					t += static_cast<double>(nanoseconds) / 1.0e+9;
 					m_timerQueryTimes[i + 1] = t;
 				}
@@ -220,8 +221,8 @@ namespace spades {
 					void Traverse(Phase &phase) {
 						if (phase.queryObjectIndices) {
 							auto indices = *phase.queryObjectIndices;
-							double time1 = self.m_timerQueryTimes[indices.first];
-							double time2 = self.m_timerQueryTimes[indices.second];
+							double time1 = self.m_timerQueryTimes.at(indices.first);
+							double time2 = self.m_timerQueryTimes.at(indices.second);
 							phase.measurementLatest.totalGPUTime += time2 - time1;
 						}
 
@@ -267,7 +268,8 @@ namespace spades {
 			if (m_currentTimerQueryObjectIndex >= m_timerQueryObjects.size()) {
 				m_timerQueryObjects.push_back(m_device.GenQuery());
 			}
-			m_device.BeginQuery(IGLDevice::TimeElapsed, m_timerQueryObjects[m_currentTimerQueryObjectIndex]);
+			m_device.BeginQuery(IGLDevice::TimeElapsed,
+			                    m_timerQueryObjects[m_currentTimerQueryObjectIndex]);
 		}
 
 		void GLProfiler::BeginPhase(const std::string &name, const std::string &description) {
@@ -310,6 +312,7 @@ namespace spades {
 				NewTimerQuery();
 				phase.queryObjectIndices = std::pair<std::size_t, std::size_t>{};
 				(*phase.queryObjectIndices).first = m_currentTimerQueryObjectIndex;
+				(*phase.queryObjectIndices).second = static_cast<std::size_t>(-1);
 			}
 		}
 
@@ -331,7 +334,8 @@ namespace spades {
 
 			double wallClockTime = GetWallClockTime();
 
-			current.measurementLatest.totalWallClockTime += wallClockTime - current.startWallClockTime;
+			current.measurementLatest.totalWallClockTime +=
+			  wallClockTime - current.startWallClockTime;
 			current.measurementLatest.totalNumFrames += 1;
 
 			if (m_settings.r_debugTimingGPUTime) {
@@ -378,12 +382,13 @@ namespace spades {
 						buf[i] = ' ';
 					buf[511] = 0;
 					if (self.m_settings.r_debugTimingGPUTime) {
-						snprintf(buf + indent, 511 - indent, "%s - %.3fms / %.3fms", phase.description.c_str(),
-								 result.totalGPUTime * 1000. * factor,
-								 result.totalWallClockTime * 1000. * factor);
+						snprintf(buf + indent, 511 - indent, "%s - %.3fms / %.3fms",
+						         phase.description.c_str(), result.totalGPUTime * 1000. * factor,
+						         result.totalWallClockTime * 1000. * factor);
 					} else {
-						snprintf(buf + indent, 511 - indent, "%s - %.3fms", phase.description.c_str(),
-								 result.totalWallClockTime * 1000. * factor);
+						snprintf(buf + indent, 511 - indent, "%s - %.3fms",
+						         phase.description.c_str(),
+						         result.totalWallClockTime * 1000. * factor);
 					}
 					SPLog("%s", buf);
 
@@ -404,7 +409,126 @@ namespace spades {
 		}
 
 		void GLProfiler::DrawResult(Phase &root) {
-			// TODO: draw results
+			if (!root.measurementSaved) {
+				// No results yet
+				return;
+			}
+
+			double factor = 1.0 / (*root.measurementSaved).totalNumFrames;
+
+			struct ResultRenderer {
+				GLProfiler &self;
+				GLRenderer &renderer;
+				bool gpu;
+				double factor;
+				char buf[512];
+				Vector2 cursor{0.0f, 0.0f};
+				int column = 0;
+
+				ResultRenderer(GLProfiler &self, double factor)
+				    : self{self},
+				      renderer{self.m_renderer},
+				      gpu{self.m_settings.r_debugTimingGPUTime},
+				      factor{factor} {}
+
+				void DrawText(const char *str) {
+					client::IImage *font = self.m_font;
+
+					while (*str) {
+						char c = *str;
+						if (c == '\n') {
+							cursor.y += 12.0f;
+							if (cursor.y + 12.0f > renderer.ScreenHeight()) {
+								cursor.y = 0.0f;
+								++column;
+							}
+							cursor.x = column * 600.0f;
+						} else {
+							int col = c & 15;
+							int row = (c >> 4) - 2;
+							renderer.DrawImage(font, cursor,
+							                   AABB2{col * 7.0f, row * 12.0f, 7.0f, 12.0f});
+							cursor.x += 7.0f;
+						}
+						++str;
+					}
+				}
+
+				void Traverse(Phase &phase, int level) {
+					if (!phase.measurementSaved) {
+						// No results yet
+						return;
+					}
+					Measurement &result = *phase.measurementSaved;
+					double time = (gpu ? result.totalGPUTime : result.totalWallClockTime) * factor;
+
+					// draw text
+					if (result.totalNumFrames > 0) {
+						renderer.SetColorAlphaPremultiplied(Vector4{1.0f, 1.0f, 1.0f, 1.0f});
+					} else {
+						renderer.SetColorAlphaPremultiplied(Vector4{0.5f, 0.5f, 0.5f, 1.0f});
+					}
+
+					int indent = level * 2;
+					int timeColumn = 30;
+					for (int i = 0; i < indent; i++)
+						buf[i] = ' ';
+					std::fill(buf, buf + timeColumn, ' ');
+					strcpy(buf + indent, phase.description.c_str());
+					buf[strlen(buf)] = ' ';
+					sprintf(buf + timeColumn, "%7.3fms", time * 1000.);
+					DrawText(buf);
+
+					float subphaseTime = 0.0f;
+					for (Phase &subphase : phase.subphases) {
+						if (!subphase.measurementSaved) {
+							continue;
+						}
+						Measurement &subresult = *subphase.measurementSaved;
+						subphaseTime +=
+						  (gpu ? subresult.totalGPUTime : subresult.totalWallClockTime) * factor;
+					}
+
+					// draw bar
+					float barScale = 4000.0 * self.m_settings.r_debugTimingOutputBarScale;
+					float boxWidth = static_cast<float>(time * barScale);
+					float childBoxWidth = static_cast<float>(subphaseTime * barScale);
+					client::IImage *white = self.m_white;
+
+					renderer.SetColorAlphaPremultiplied(Vector4{0.0f, 0.0f, 0.0f, 0.5f});
+					renderer.DrawImage(white, AABB2{cursor.x, cursor.y + 2.0f, boxWidth, 8.0f});
+
+					renderer.SetColorAlphaPremultiplied(Vector4{0.0f, 1.0f, 0.0f, 1.0f});
+					renderer.DrawImage(white, AABB2{cursor.x, cursor.y + 4.0f, boxWidth, 4.0f});
+
+					renderer.SetColorAlphaPremultiplied(Vector4{1.0f, 0.0f, 0.0f, 1.0f});
+					renderer.DrawImage(
+					  white, AABB2{cursor.x, cursor.y + 4.0f, boxWidth - childBoxWidth, 4.0f});
+
+					DrawText("\n");
+
+					for (Phase &subphase : phase.subphases) {
+						Traverse(subphase, level + 1);
+					}
+				}
+
+				void Draw(Phase &root) {
+					renderer.SetColorAlphaPremultiplied(Vector4{1.0f, 1.0f, 0.0f, 1.0f});
+					DrawText("[GLProfiler result] ");
+					sprintf(buf, "%d sampled frame(s). Showing the per-frame timing.\n",
+					        (*root.measurementSaved).totalNumFrames);
+					DrawText(buf);
+					DrawText("Legends: ");
+					DrawText(gpu ? "GPU time" : "wall clock time");
+					renderer.SetColorAlphaPremultiplied(Vector4{1.0f, 0.0f, 0.0f, 1.0f});
+					DrawText(" Self");
+					renderer.SetColorAlphaPremultiplied(Vector4{0.0f, 1.0f, 0.0f, 1.0f});
+					DrawText(" Total\n");
+
+					Traverse(root, 0);
+				}
+			};
+			ResultRenderer{*this, factor}.Draw(root);
 		}
 
 		GLProfiler::Context::Context(GLProfiler &profiler, const char *format, ...)

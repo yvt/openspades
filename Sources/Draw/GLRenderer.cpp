@@ -1153,13 +1153,14 @@ namespace spades {
 
 			EnsureSceneNotStarted();
 
+			imageRenderer->Flush();
+
 			if (settings.r_debugTimingOutputScreen &&
 				settings.r_debugTiming) {
 				GLProfiler::Context p(*profiler, "Draw GLProfiler Results");
 				profiler->DrawResult();
+				imageRenderer->Flush();
 			}
-
-			imageRenderer->Flush();
 
 			if (settings.r_srgb && settings.r_srgb2D && sceneUsedInThisFrame) {
 				// copy buffer to WM given framebuffer
@@ -1185,14 +1186,14 @@ namespace spades {
 			// ready for 2d draw of next frame
 			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			device->Enable(IGLDevice::Blend, true);
+
+			profiler->EndFrame();
 		}
 
 		void GLRenderer::Flip() {
 			SPADES_MARK_FUNCTION();
 
 			EnsureSceneNotStarted();
-
-			profiler->EndFrame();
 
 			device->Swap();
 		}

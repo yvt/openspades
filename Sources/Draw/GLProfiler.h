@@ -25,13 +25,17 @@
 #include <unordered_map>
 #include <vector>
 
-#include <Core/Stopwatch.h>
 #include "IGLDevice.h"
+#include <Core/Stopwatch.h>
 
 namespace spades {
+	namespace client {
+		class IImage;
+	}
 	namespace draw {
 		class GLRenderer;
 		class GLSettings;
+		class GLImage;
 
 		class GLProfiler {
 			struct Phase;
@@ -44,6 +48,9 @@ namespace spades {
 			double m_lastSaveTime;
 			bool m_shouldSaveThisFrame;
 			bool m_waitingTimerQueryResult;
+
+			client::IImage *m_font;
+			client::IImage *m_white;
 
 			Stopwatch m_stopwatch;
 
@@ -59,7 +66,7 @@ namespace spades {
 			void BeginPhase(const std::string &name, const std::string &description);
 			void EndPhase();
 
-			void BeginPhaseInner(Phase&);
+			void BeginPhaseInner(Phase &);
 
 			void EndPhaseInner();
 
