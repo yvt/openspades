@@ -699,14 +699,18 @@ namespace spades {
 			renderingMirror = false;
 
 			{
-				GLProfiler::Context p(*profiler, "Uploading Software Rendered Stuff");
-				if (mapShadowRenderer)
+				GLProfiler::Context p(*profiler, "Upload Dynamic Data");
+				if (mapShadowRenderer) {
 					mapShadowRenderer->Update();
+				}
 				if (ambientShadowRenderer) {
 					ambientShadowRenderer->Update();
 				}
 				if (radiosityRenderer) {
 					radiosityRenderer->Update();
+				}
+				if (mapRenderer) {
+					mapRenderer->Realize();
 				}
 			}
 
@@ -761,9 +765,12 @@ namespace spades {
 					if (settings.r_hdr) {
 						bgCol *= bgCol;
 					} // linearlize
-					device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
-					device->Clear(
-					  (IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+					{
+						GLProfiler::Context p(*profiler, "Clear (Mirrored Scene)");
+						device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
+						device->Clear(
+						  (IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+					}
 
 					// render scene
 					GLProfiler::Context p(*profiler, "Mirrored Objects");
@@ -802,8 +809,11 @@ namespace spades {
 			if (settings.r_hdr) {
 				bgCol *= bgCol;
 			} // linearlize
-			device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
-			device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+			{
+				GLProfiler::Context p(*profiler, "Clear");
+				device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
+				device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+			}
 
 			device->FrontFace(IGLDevice::CW);
 
@@ -823,13 +833,13 @@ namespace spades {
 
 			device->DepthMask(false);
 			if (!settings.r_softParticles) { // softparticle is a part of postprocess
-				GLProfiler::Context p(*profiler, "Particle");
+				GLProfiler::Context p(*profiler, "Particles");
 				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 				spriteRenderer->Render();
 			}
 
 			{
-				GLProfiler::Context p(*profiler, "Long Particle");
+				GLProfiler::Context p(*profiler, "Long Particles");
 				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 				longSpriteRenderer->Render();
 			}
@@ -878,7 +888,7 @@ namespace spades {
 				}
 
 				if (settings.r_bloom) {
-					GLProfiler::Context p(*profiler, "Lens Dust Filter");
+					GLProfiler::Context p(*profiler, "Bloom");
 					handle = lensDustFilter->Filter(handle);
 				}
 
@@ -944,10 +954,12 @@ namespace spades {
 				}
 
 				if (settings.r_hdr && settings.r_hdrAutoExposure) {
+					GLProfiler::Context p(*profiler, "Auto Exposure");
 					handle = autoExposureFilter->Filter(handle);
 				}
 
 				if (settings.r_hdr) {
+					GLProfiler::Context p(*profiler, "Gamma Correction");
 					handle = GLNonlinearlizeFilter(this).Filter(handle);
 				}
 
@@ -1168,7 +1180,7 @@ namespace spades {
 				int h = device->ScreenHeight();
 
 				device->Enable(IGLDevice::FramebufferSRGB, false);
-				;
+
 				GLProfiler::Context p(*profiler, "Copying to WM-given Framebuffer");
 
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
