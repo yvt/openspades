@@ -20,7 +20,11 @@
 
 #pragma once
 
+#include <utility>
+
+#include "ILocalEntity.h"
 #include <Core/Math.h>
+#include <Core/TMPUtils.h>
 
 namespace spades {
 	namespace client {
@@ -44,6 +48,8 @@ namespace spades {
 			AABB2 inRect;
 			AABB2 outRect;
 
+			Vector2 Project(const Vector2 &) const;
+
 			void DrawIcon(Vector3 pos, IImage *img, float rotation);
 
 		public:
@@ -55,6 +61,23 @@ namespace spades {
 			bool ToggleZoom();
 
 			void Draw();
+		};
+
+		class MapViewTracer : public ILocalEntity {
+			Vector3 startPos, dir;
+			float length;
+			float curDistance;
+			float visibleLength;
+			float velocity;
+			bool firstUpdate;
+
+		public:
+			MapViewTracer(Vector3 p1, Vector3 p2, float bulletVel);
+			~MapViewTracer();
+
+			bool Update(float dt) override;
+
+			stmp::optional<std::pair<Vector3, Vector3>> GetLineSegment();
 		};
 	}
 }

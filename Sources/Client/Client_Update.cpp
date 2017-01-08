@@ -1012,15 +1012,14 @@ namespace spades {
 		                             spades::Vector3 hitPos) {
 			SPADES_MARK_FUNCTION();
 
-			Tracer *t;
 			float vel;
 			switch (player->GetWeapon()->GetWeaponType()) {
 				case RIFLE_WEAPON: vel = 700.f; break;
 				case SMG_WEAPON: vel = 360.f; break;
 				case SHOTGUN_WEAPON: return;
 			}
-			t = new Tracer(this, muzzlePos, hitPos, vel);
-			AddLocalEntity(t);
+			AddLocalEntity(new Tracer(this, muzzlePos, hitPos, vel));
+			AddLocalEntity(new MapViewTracer(muzzlePos, hitPos, vel));
 		}
 
 		void Client::BlocksFell(std::vector<IntVector3> blocks) {
