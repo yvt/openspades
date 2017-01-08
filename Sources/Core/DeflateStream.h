@@ -56,17 +56,17 @@ namespace spades {
 		DeflateStream(IStream *stream, CompressMode mode, bool autoClose = false);
 		virtual ~DeflateStream();
 
-		virtual int ReadByte();
-		virtual size_t Read(void *, size_t bytes);
+		int ReadByte() override;
+		size_t Read(void *, size_t bytes) override;
 
-		virtual void WriteByte(int);
-		virtual void Write(const void *, size_t bytes);
+		void WriteByte(int) override;
+		void Write(const void *, size_t bytes) override;
 
-		virtual uint64_t GetPosition();
-		virtual void SetPosition(uint64_t);
+		uint64_t GetPosition() override;
+		void SetPosition(uint64_t) override;
 
-		virtual uint64_t GetLength();
-		virtual void SetLength(uint64_t);
+		uint64_t GetLength() override;
+		void SetLength(uint64_t) override;
 
 		/** Must be called when all data was written, in case of compressing, or output will be
 		 * corrupted */

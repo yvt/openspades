@@ -1165,10 +1165,14 @@ namespace spades {
 					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_depthOfField"), "0", "1", _Tr("StartupScreen", "Depth of Field"),
 					_Tr("StartupScreen", "Blurs out-of-focus objects.")));
+					cplx.AddEditor(StartupScreenConfigCheckItemEditor(ui,
+					StartupScreenConfig(ui, "r_ssao"), "0", "1", _Tr("StartupScreen", "Screen Space Ambient Occlusion"),
+					_Tr("StartupScreen", "Simulates soft shadows that occur between nearby objects.")));
 
-					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "0|0|0|0|0|0|0"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1|0|0|1|0|1|0"));
-					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|1|1|1|1|1"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "0|0|0|0|0|0|0|0"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"), "1|0|0|1|0|1|0|0"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|1|1|1|1|1|0"));
+					cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Ultra"), "1|1|1|1|1|1|1|1"));
 
 					cfg.AddRow(StartupScreenConfigComplexItemEditor(ui, cplx,
 						_Tr("StartupScreen", "Post-process"),

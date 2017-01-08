@@ -72,6 +72,9 @@ namespace spades {
 			void SetSkinParameterForTool(Player::ToolType, asIScriptObject *);
 			void SetCommonSkinParameter(asIScriptObject *);
 
+			struct AmbienceInfo;
+			AmbienceInfo ComputeAmbience();
+
 			float GetLocalFireVibration();
 
 			bool ShouldRenderInThirdPersonView();
@@ -80,7 +83,7 @@ namespace spades {
 			                                   IAudioDevice *audio);
 
 		protected:
-			virtual ~ClientPlayer();
+			~ClientPlayer();
 
 		public:
 			ClientPlayer(Player *p, Client *);

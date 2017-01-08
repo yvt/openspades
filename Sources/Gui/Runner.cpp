@@ -19,14 +19,12 @@
  */
 
 #include "Runner.h"
-#include "SDLAsyncRunner.h"
 #include "SDLRunner.h"
 #include "View.h"
 #include <Core/Exception.h>
 #include <Core/Settings.h>
 #include <Core/Strings.h>
 
-DEFINE_SPADES_SETTING(cg_smp, "0");
 DEFINE_SPADES_SETTING(r_videoWidth, "1024");
 DEFINE_SPADES_SETTING(r_videoHeight, "640");
 
@@ -81,25 +79,9 @@ namespace spades {
 			public:
 				ConcreteRunner(Runner *r) : r(r) {}
 			};
-			class ConcreteAsnycRunner : public SDLAsyncRunner {
-				Runner *r;
 
-			protected:
-				virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) {
-					return r->CreateView(renderer, dev);
-				}
-
-			public:
-				ConcreteAsnycRunner(Runner *r) : r(r) {}
-			};
-
-			if (cg_smp) {
-				ConcreteAsnycRunner r(this);
-				r.Run(m_videoWidth, m_videoHeight);
-			} else {
-				ConcreteRunner r(this);
-				r.Run(m_videoWidth, m_videoHeight);
-			}
+			ConcreteRunner r(this);
+			r.Run(m_videoWidth, m_videoHeight);
 		}
 
 		void Runner::OverrideVideoSize(int width, int height) {

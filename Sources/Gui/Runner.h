@@ -27,8 +27,6 @@ namespace spades {
 	}
 	namespace gui {
 		class View;
-		class SDLRunner;
-		class SDLAsyncRunner;
 
 		// FIXME: better naming
 		class Runner {

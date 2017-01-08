@@ -39,7 +39,7 @@ namespace spades {
 			float iw, ih;
 
 		protected:
-			virtual ~SWImage();
+			~SWImage();
 
 		public:
 			SWImage(Bitmap *bmp);
@@ -53,10 +53,10 @@ namespace spades {
 
 			void Update(Bitmap &, int x, int y) override;
 
-			virtual float GetWidth() { return w; }
-			virtual float GetHeight() { return h; }
-			virtual float GetInvWidth() { return iw; }
-			virtual float GetInvHeight() { return ih; }
+			float GetWidth() override { return w; }
+			float GetHeight() override { return h; }
+			float GetInvWidth() { return iw; }
+			float GetInvHeight() { return ih; }
 		};
 
 		class SWImageManager {

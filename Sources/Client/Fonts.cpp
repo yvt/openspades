@@ -79,6 +79,9 @@ namespace spades {
 			largeFont.Set(
 			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 34.f, 48.f),
 			  false);
+			mediumFont.Set(
+				new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 24.f, 32.f),
+				false);
 			headingFont.Set(
 			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 20.f, 26.f),
 			  false);

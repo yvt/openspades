@@ -62,7 +62,7 @@ namespace spades {
 		}
 
 		GLFramebufferManager::GLFramebufferManager(IGLDevice *dev, GLSettings &settings)
-		    : device(dev), settings(settings) {
+		    : device(dev), settings(settings), doingPostProcessing(false) {
 			SPADES_MARK_FUNCTION();
 
 			SPLog("Initializing framebuffer manager");
@@ -367,8 +367,11 @@ namespace spades {
 				// some video drivers?
 			}
 
+			doingPostProcessing = false;
+
 			device->Enable(IGLDevice::DepthTest, true);
 			device->DepthMask(true);
+			device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
 		}
 
 		GLColorBuffer
@@ -517,6 +520,9 @@ namespace spades {
 
 		GLFramebufferManager::BufferHandle GLFramebufferManager::StartPostProcessing() {
 			SPADES_MARK_FUNCTION();
+
+			doingPostProcessing = true;
+
 			if (useMultisample) {
 				// downsample
 				int w = device->ScreenWidth();
@@ -575,7 +581,10 @@ namespace spades {
 				w = device->ScreenWidth();
 			if (h < 0)
 				h = device->ScreenHeight();
-			for (size_t i = 0; i < buffers.size(); i++) {
+
+			// During the main rendering pass the first buffer is allocated to the render target
+			// and cannot be allocated for pre/postprocessing pass
+			for (size_t i = doingPostProcessing ? 0 : 1; i < buffers.size(); i++) {
 				Buffer &b = buffers[i];
 				if (b.refCount > 0)
 					continue;

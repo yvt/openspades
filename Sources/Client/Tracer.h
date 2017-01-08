@@ -27,10 +27,10 @@ namespace spades {
 
 		public:
 			Tracer(Client *, Vector3 p1, Vector3 p2, float bulletVel);
-			virtual ~Tracer();
+			~Tracer();
 
-			virtual bool Update(float dt);
-			virtual void Render3D();
+			bool Update(float dt) override;
+			void Render3D() override;
 		};
 	}
 }

@@ -33,6 +33,10 @@ namespace spades {
 			Vector3 position;
 			Vector3 velocity;
 
+			// FIXME: this actually shouldn't be here because
+			//		  the orientation is actually not a part of grenade physics...
+			Quaternion orientation;
+
 			void Explode();
 
 			/** @return non-zero if bounced, 2 when sound should be played. */
@@ -47,6 +51,7 @@ namespace spades {
 
 			Vector3 GetPosition() { return position; }
 			Vector3 GetVelocity() { return velocity; }
+			Quaternion GetOrientation() { return orientation; }
 			float GetFuse() { return fuse; }
 		};
 	}

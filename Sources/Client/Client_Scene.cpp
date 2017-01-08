@@ -87,7 +87,7 @@ namespace spades {
 				case SHOTGUN_WEAPON: delta = .4f; break;
 			}
 			float aimDownState = GetAimDownState();
-			return 1.f + powf(aimDownState, 5.f) * delta;
+			return 1.f + (3.f - 2.f * powf(aimDownState, 1.5f)) * powf(aimDownState, 3.f) * delta;
 		}
 
 		SceneDefinition Client::CreateSceneDefinition() {
@@ -195,7 +195,7 @@ namespace spades {
 						Vector3 front = center - eye;
 						front = front.Normalize();
 
-						if (FirstPersonSpectate == false) {
+						if (firstPersonSpectate == false) {
 							def.viewOrigin = eye;
 							def.viewAxis[0] = -Vector3::Cross(up, front).Normalize();
 							def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
@@ -243,10 +243,6 @@ namespace spades {
 						def.denyCameraBlur = false;
 
 					} else {
-						Vector3 front = player->GetFront();
-						Vector3 right = player->GetRight();
-						Vector3 up = player->GetUp();
-
 						Matrix4 eyeMatrix = clientPlayers[player->GetId()]->GetEyeMatrix();
 						def.viewOrigin = eyeMatrix.GetOrigin();
 						def.viewAxis[0] = -eyeMatrix.GetAxis(0);
@@ -468,9 +464,14 @@ namespace spades {
 				return;
 			}
 
+			// Move the grenade slightly so that it doesn't look like sinking in
+			// the ground
+			Vector3 position = g->GetPosition();
+			position.z -= 0.03f * 3.0f;
+
 			ModelRenderParam param;
-			Matrix4 mat = Matrix4::Scale(0.03f);
-			mat = Matrix4::Translate(g->GetPosition()) * mat;
+			Matrix4 mat = g->GetOrientation().ToRotationMatrix() * Matrix4::Scale(0.03f);
+			mat = Matrix4::Translate(position) * mat;
 			param.matrix = mat;
 
 			renderer->RenderModel(model, param);

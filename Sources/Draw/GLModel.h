@@ -40,7 +40,7 @@ namespace spades {
 			virtual void RenderShadowMapPass(std::vector<client::ModelRenderParam> params) = 0;
 
 			/** Renders only in depth buffer (optional) */
-			virtual void Prerender(std::vector<client::ModelRenderParam> params) {}
+			virtual void Prerender(std::vector<client::ModelRenderParam> params) = 0;
 
 			/** Renders sunlighted solid geometry */
 			virtual void RenderSunlightPass(std::vector<client::ModelRenderParam> params) = 0;

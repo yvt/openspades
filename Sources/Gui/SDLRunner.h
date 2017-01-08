@@ -35,7 +35,7 @@ namespace spades {
 	namespace gui {
 		class View;
 		class SDLRunner {
-			bool mActive;
+			bool m_active;
 			bool m_hasSystemMenu;
 
 		protected:

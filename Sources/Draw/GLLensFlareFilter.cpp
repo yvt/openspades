@@ -127,7 +127,7 @@ namespace spades {
 			GLQuadRenderer qr(dev);
 
 			{
-				GLProfiler measure(dev, "Occlusion Test");
+				GLProfiler::Context measure(renderer->GetGLProfiler(), "Occlusion Test");
 
 				GLProgram *scanner = scannerProgram;
 				static GLProgramAttribute positionAttribute("positionAttribute");
@@ -208,7 +208,7 @@ namespace spades {
 			dev->BindFramebuffer(IGLDevice::Framebuffer, lastFramebuffer);
 
 			{
-				GLProfiler measure(dev, "Draw");
+				GLProfiler::Context measure(renderer->GetGLProfiler(), "Draw");
 
 				GLProgram *draw = drawProgram;
 				static GLProgramAttribute positionAttribute("positionAttribute");

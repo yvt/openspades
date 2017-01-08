@@ -50,11 +50,11 @@ namespace spades {
 
 		public:
 			GLBasicShadowMapRenderer(GLRenderer *);
-			virtual ~GLBasicShadowMapRenderer();
-			virtual void Render();
+			~GLBasicShadowMapRenderer();
+			void Render() override;
 
-			virtual bool Cull(const AABB3 &);
-			virtual bool SphereCull(const Vector3 &center, float rad);
+			bool Cull(const AABB3 &) override;
+			bool SphereCull(const Vector3 &center, float rad) override;
 		};
 	}
 }

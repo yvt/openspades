@@ -42,17 +42,17 @@ namespace spades {
 
 	public:
 		OpusAudioStream(IStream *, bool autoClose);
-		virtual ~OpusAudioStream();
+		~OpusAudioStream();
 
-		virtual uint64_t GetLength();
-		virtual int GetSamplingFrequency();
-		virtual SampleFormat GetSampleFormat();
-		virtual int GetNumChannels();
+		uint64_t GetLength() override;
+		int GetSamplingFrequency() override;
+		SampleFormat GetSampleFormat() override;
+		int GetNumChannels() override;
 
-		virtual int ReadByte();
-		virtual size_t Read(void *, size_t bytes);
+		int ReadByte() override;
+		size_t Read(void *, size_t bytes) override;
 
-		virtual uint64_t GetPosition();
-		virtual void SetPosition(uint64_t);
+		uint64_t GetPosition() override;
+		void SetPosition(uint64_t) override;
 	};
 }

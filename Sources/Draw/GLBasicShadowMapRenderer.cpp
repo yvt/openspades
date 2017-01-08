@@ -232,7 +232,7 @@ namespace spades {
 
 			for (int i = 0; i < NumSlices; i++) {
 
-				GLProfiler profiler(device, "Slice %d / %d", i + 1, (int)NumSlices);
+				GLProfiler::Context profiler(GetRenderer()->GetGLProfiler(), "Slice %d / %d", i + 1, (int)NumSlices);
 
 				float farDist = 0.0;
 				// TODO: variable far distance according to the scene definition

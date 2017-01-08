@@ -207,7 +207,7 @@ namespace spades {
 							mag *= expf(-scal * 3.f);
 
 							cell.magnitude = mag;
-							cell.phase = mt_engine();
+							cell.phase = static_cast<uint32_t>(mt_engine());
 							cell.phasePerSecond = dist * 1.e+9f * 128 / Size;
 						}
 
@@ -617,7 +617,7 @@ namespace spades {
 		void GLWaterRenderer::Render() {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler profiler(device, "Render");
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Render");
 
 			if (occlusionQuery == 0 && settings.r_occlusionQuery)
 				occlusionQuery = device->GenQuery();
@@ -625,7 +625,7 @@ namespace spades {
 			GLColorBuffer colorBuffer;
 
 			{
-				GLProfiler profiler(device, "Preparation");
+				GLProfiler::Context profiler(renderer->GetGLProfiler(), "Preparation");
 				colorBuffer = renderer->GetFramebufferManager()->PrepareForWaterRendering(
 				  tempFramebuffer, tempDepthTexture);
 			}
@@ -644,7 +644,7 @@ namespace spades {
 			Matrix4 mat = Matrix4::Translate(def.viewOrigin.x, def.viewOrigin.y, waterLevel);
 			mat = mat * Matrix4::Scale(waterRange, waterRange, 1.f);
 
-			GLProfiler profiler2(device, "Draw Plane");
+			GLProfiler::Context profiler2(renderer->GetGLProfiler(), "Draw Plane");
 
 			// do color
 			device->DepthFunc(IGLDevice::Less);
@@ -834,18 +834,18 @@ namespace spades {
 
 		void GLWaterRenderer::Update(float dt) {
 			SPADES_MARK_FUNCTION();
-			GLProfiler profiler(device, "Update");
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Update");
 
 			// update wavetank simulation
 			{
-				GLProfiler profiler(device, "Waiting for Simulation To Done");
+				GLProfiler::Context profiler(renderer->GetGLProfiler(), "Waiting for Simulation To Done");
 				for (size_t i = 0; i < waveTanks.size(); i++) {
 					waveTanks[i]->Join();
 				}
 			}
 			{
 				{
-					GLProfiler profiler(device, "Upload");
+					GLProfiler::Context profiler(renderer->GetGLProfiler(), "Upload");
 					for (size_t i = 0; i < waveTanks.size(); i++) {
 						device->BindTexture(IGLDevice::Texture2D, waveTextures[i]);
 						device->TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0,
@@ -855,7 +855,7 @@ namespace spades {
 					}
 				}
 				{
-					GLProfiler profiler(device, "Generate Mipmap");
+					GLProfiler::Context profiler(renderer->GetGLProfiler(), "Generate Mipmap");
 					for (size_t i = 0; i < waveTanks.size(); i++) {
 						device->BindTexture(IGLDevice::Texture2D, waveTextures[i]);
 						device->GenerateMipmap(IGLDevice::Texture2D);
@@ -872,7 +872,7 @@ namespace spades {
 			}
 
 			{
-				GLProfiler profiler(device, "Upload Water Color Texture");
+				GLProfiler::Context profiler(renderer->GetGLProfiler(), "Upload Water Color Texture");
 				device->BindTexture(IGLDevice::Texture2D, texture);
 				bool fullUpdate = true;
 				for (size_t i = 0; i < updateBitmap.size(); i++) {

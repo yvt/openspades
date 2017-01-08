@@ -38,13 +38,7 @@
 #include <OpenSpades.h>
 #include <Core/ShellApi.h>
 #include <Gui/Main.h>
-
-#ifdef __APPLE__
-#elif __unix
-static const unsigned char Icon[] = {
-#include "Icon.inc"
-};
-#endif
+#include <Gui/Icon.h>
 
 SPADES_SETTING(r_bloom);
 SPADES_SETTING(r_lens);
@@ -212,7 +206,7 @@ namespace spades {
 #elif __unix
 			SDL_Surface *icon = nullptr;
 			SDL_RWops *icon_rw = nullptr;
-			icon_rw = SDL_RWFromConstMem(Icon, sizeof(Icon));
+			icon_rw = SDL_RWFromConstMem(g_appIconData, GetAppIconDataSize());
 			if (icon_rw != nullptr) {
 				icon = IMG_LoadPNG_RW(icon_rw);
 				SDL_FreeRW(icon_rw);

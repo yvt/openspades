@@ -98,7 +98,7 @@ namespace spades {
 			return;
 		size_t len(std::min(256, static_cast<int>(context.size())));
 		std::memcpy(mumbleLinkedMemory->context, context.c_str(), len);
-		mumbleLinkedMemory->context_len = len;
+		mumbleLinkedMemory->context_len = static_cast<std::uint32_t>(len);
 	}
 
 	void MumbleLink::setIdentity(const std::string &identity) {

@@ -35,7 +35,7 @@ namespace spades {
 		uint32_t *colors;
 
 	protected:
-		virtual ~VoxelModel();
+		~VoxelModel();
 
 	public:
 		VoxelModel(int width, int height, int depth);

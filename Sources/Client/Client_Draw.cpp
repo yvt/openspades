@@ -600,6 +600,15 @@ namespace spades {
 			}
 		}
 
+		void Client::DrawSpectateHUD() {
+			SPADES_MARK_FUNCTION();
+
+			if (!cg_hideHud) {
+				// draw map
+				mapView->Draw();
+			}
+		}
+
 		void Client::DrawAlert() {
 			SPADES_MARK_FUNCTION();
 
@@ -743,6 +752,8 @@ namespace spades {
 					} else {
 						DrawDeadPlayerHUD();
 					}
+				} else {
+					DrawSpectateHUD();
 				}
 
 				if (IsFollowing() && !cg_hideHud) {

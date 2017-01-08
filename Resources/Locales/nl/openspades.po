@@ -1,0 +1,1559 @@
+# OpenSpades translation
+# Copyright (C) 2016 yvt
+# This file is distributed under the same license as the OpenSpades package.
+# yvt <i@yvt.jp>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSpades\n"
+"Report-Msgid-Bugs-To: i at yvt.jp\n"
+"POT-Creation-Date: 2016-12-25 23:47-0200\n"
+"PO-Revision-Date: 2017-01-03 20:09+0100\n"
+"Last-Translator: Tapmemer\n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.10\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: Sources/Client/Client.cpp:582
+msgctxt "Client"
+msgid "Map saved: {0}"
+msgstr "Map opslaan: {0}"
+
+#: Sources/Client/Client.cpp:586 Sources/Client/Client.cpp:592
+msgctxt "Client"
+msgid "Saving map failed: "
+msgstr "Opslaan van Map Gefaalt: "
+
+#: Sources/Client/Client.cpp:624
+msgctxt "Client"
+msgid "[Global] "
+msgstr "[Globaal]"
+
+#: Sources/Client/Client_Draw.cpp:119
+msgctxt "Client"
+msgid "Sceneshot saved: {0}"
+msgstr "Sceneshot opgeslagen: {0}"
+
+#: Sources/Client/Client_Draw.cpp:121
+msgctxt "Client"
+msgid "Screenshot saved: {0}"
+msgstr "Screenshot opgeslagen: {0}"
+
+#: Sources/Client/Client_Draw.cpp:125 Sources/Client/Client_Draw.cpp:131
+msgctxt "Client"
+msgid "Screenshot failed: "
+msgstr "Maken van screenshot is gefaalt"
+
+#: Sources/Client/Client_Draw.cpp:198
+msgctxt "Client"
+msgid "NOW LOADING"
+msgstr "Laden"
+
+#: Sources/Client/Client_Draw.cpp:220
+msgctxt "Client"
+msgid "Disconnecting..."
+msgstr "Server verlaten..."
+
+#: Sources/Client/Client_Draw.cpp:523
+msgctxt "Client"
+msgid "Out of Block"
+msgstr "Geen blokken meer"
+
+#: Sources/Client/Client_Draw.cpp:528
+msgctxt "Client"
+msgid "Out of Grenade"
+msgstr "Geen granaten meer"
+
+#: Sources/Client/Client_Draw.cpp:534
+msgctxt "Client"
+msgid "Reloading"
+msgstr "Herladen"
+
+#: Sources/Client/Client_Draw.cpp:536 Sources/Client/Client_Input.cpp:440
+msgctxt "Client"
+msgid "Out of Ammo"
+msgstr "Geen kogels meer"
+
+#: Sources/Client/Client_Draw.cpp:539
+msgctxt "Client"
+msgid "Press [{0}] to Reload"
+msgstr "Druk op [{0}] om te herladen"
+
+#: Sources/Client/Client_Draw.cpp:584
+msgctxt "Client"
+msgid "You will respawn in: {0}"
+msgstr "Je zult respawnen in {0} seconden "
+
+#: Sources/Client/Client_Draw.cpp:586
+msgctxt "Client"
+msgid "Waiting for respawn"
+msgstr "Wachten op Respawn"
+
+#: Sources/Client/Client_Draw.cpp:753
+msgctxt "Client"
+msgid "Following {0}"
+msgstr "Volgen {0}"
+
+#: Sources/Client/Client_Input.cpp:428
+msgctxt "Client"
+msgid "Out of Blocks"
+msgstr "Geen blokken neer"
+
+#: Sources/Client/Client_Input.cpp:452
+msgctxt "Client"
+msgid "Out of Grenades"
+msgstr "Geen granaten meer"
+
+#: Sources/Client/Client_NetHandler.cpp:89
+msgctxt "Client"
+msgid "{0} captured {1}'s territory"
+msgstr "{0} heeft {1}'s gebied verovert"
+
+#: Sources/Client/Client_NetHandler.cpp:91
+msgctxt "Client"
+msgid "{0} captured an neutral territory"
+msgstr "{0} heeft een neutraal gebied verovert"
+
+#: Sources/Client/Client_NetHandler.cpp:99
+msgctxt "Client"
+msgid "{0} captured {1}'s Territory"
+msgstr "{0} heeft {1}'s gebied verovert"
+
+#: Sources/Client/Client_NetHandler.cpp:101
+msgctxt "Client"
+msgid "{0} captured an Neutral Territory"
+msgstr "{0} heeft een neutraal gebied verovert"
+
+#: Sources/Client/Client_NetHandler.cpp:127
+msgctxt "Client"
+msgid "{0} captured {1}'s intel"
+msgstr "{0} heeft {1}'s Intel gestolen"
+
+#: Sources/Client/Client_NetHandler.cpp:134
+msgctxt "Client"
+msgid "{0} captured {1}'s Intel."
+msgstr "{0} heeft {1}'s Intel gestolen"
+
+#: Sources/Client/Client_NetHandler.cpp:158
+msgctxt "Client"
+msgid "{0} picked up {1}'s intel"
+msgstr "{0} heeft {1}'s herovert"
+
+#: Sources/Client/Client_NetHandler.cpp:165
+msgctxt "Client"
+msgid "{0} picked up {1}'s Intel."
+msgstr "{0} heeft {1}'s Intel heroverd"
+
+#: Sources/Client/Client_NetHandler.cpp:183
+msgctxt "Client"
+msgid "{0} dropped {1}'s intel"
+msgstr "{0} heeft {1}'s Intel verloren"
+
+#: Sources/Client/Client_NetHandler.cpp:190
+msgctxt "Client"
+msgid "{0} dropped {1}'s Intel"
+msgstr "{0} heeft {1}'s Intel verloren"
+
+#: Sources/Client/Client_NetHandler.cpp:237
+#: Sources/Client/Client_NetHandler.cpp:243
+msgctxt "Client"
+msgid "Player {0} has left"
+msgstr "Speler {0} heeft de server verlaten"
+
+#: Sources/Client/Client_NetHandler.cpp:257
+#: Sources/Client/Client_NetHandler.cpp:264
+msgctxt "Client"
+msgid "{0} joined {1} team"
+msgstr "{0} is bij team {1} gekomen"
+
+#: Sources/Client/Client_NetHandler.cpp:294
+msgctxt "Client"
+msgid "{0} wins!"
+msgstr "{0} wins"
+
+#: Sources/Client/Client_NetHandler.cpp:298
+msgctxt "Client"
+msgid "{0} Wins!"
+msgstr "{0} wint"
+
+#: Sources/Client/Client_Update.cpp:477
+msgctxt "Client"
+msgid "{0} block"
+msgid_plural "{0} blocks"
+msgstr[0] "{0} blok"
+msgstr[1] "{0} blokken"
+
+#: Sources/Client/Client_Update.cpp:484
+msgctxt "Client"
+msgid "-- blocks"
+msgstr "-- blokken"
+
+#: Sources/Client/Client_Update.cpp:871
+msgctxt "Client"
+msgid "You have killed {0}"
+msgstr "je hebt {0} gedood"
+
+#: Sources/Client/Client_Update.cpp:873
+msgctxt "Client"
+msgid "You were killed by {0}"
+msgstr "Je bent gedood door {0}"
+
+#: Sources/Client/Client_Update.cpp:1186
+msgctxt "Client"
+msgid "Insufficient blocks."
+msgstr "Niet genoeg blokken"
+
+#: Sources/Client/Client_Update.cpp:1189
+msgctxt "Client"
+msgid "You cannot place a block there."
+msgstr "Je kan hier geen blok plaatesen"
+
+#: Sources/Client/LimboView.cpp:68
+msgctxt "Client"
+msgid "Rifle"
+msgstr "Geweer"
+
+#: Sources/Client/LimboView.cpp:71
+msgctxt "Client"
+msgid "SMG"
+msgstr "Machinegeweer"
+
+#: Sources/Client/LimboView.cpp:74
+msgctxt "Client"
+msgid "Shotgun"
+msgstr "Shotgun"
+
+#: Sources/Client/LimboView.cpp:78
+msgctxt "Client"
+msgid "Spawn"
+msgstr ""
+
+#: Sources/Client/LimboView.cpp:182
+msgctxt "Client"
+msgid "Select Team:"
+msgstr "Selecteer team"
+
+#: Sources/Client/LimboView.cpp:190
+msgctxt "Client"
+msgid "Select Weapon:"
+msgstr "Selecteer wapen"
+
+#: Sources/Client/NetClient.cpp:376
+msgctxt "NetClient"
+msgid "Connecting to the server"
+msgstr "Verbinden met de server"
+
+#: Sources/Client/NetClient.cpp:390
+msgctxt "NetClient"
+msgid "Not connected"
+msgstr "Niet verbonden"
+
+#: Sources/Client/NetClient.cpp:459
+msgctxt "NetClient"
+msgid "Awaiting for state"
+msgstr "Status afwachten"
+
+#: Sources/Client/NetClient.cpp:469 Sources/Client/NetClient.cpp:1235
+msgctxt "NetClient"
+msgid "Loading snapshot"
+msgstr "Snapshots laden"
+
+#: Sources/Client/NetClient.cpp:484
+msgctxt "NetClient"
+msgid "Loading snapshot ({0}/{1})"
+msgstr "Snapshots laden ({0}/{1})"
+
+#: Sources/Client/NetClient.cpp:489 Sources/Client/NetClient.cpp:523
+msgctxt "NetClient"
+msgid "Connected"
+msgstr "Verbonden"
+
+#: Sources/Client/NetClient.cpp:501 Sources/Client/NetClient.cpp:536
+#: Sources/Client/NetClient.cpp:588
+msgctxt "NetClient"
+msgid "Still loading..."
+msgstr "Nog steeds aan het laden..."
+
+#: Sources/Client/NetClient.cpp:504 Sources/Client/NetClient.cpp:510
+#: Sources/Client/NetClient.cpp:540 Sources/Client/NetClient.cpp:545
+#: Sources/Client/NetClient.cpp:592 Sources/Client/NetClient.cpp:597
+msgctxt "NetClient"
+msgid "Error"
+msgstr "Fout"
+
+#: Sources/Client/NetClient.cpp:663
+msgctxt "NetClient"
+msgid "You are banned from this server."
+msgstr "Je bent van de server verbannen."
+
+#: Sources/Client/NetClient.cpp:668 Sources/Client/NetClient.cpp:671
+msgctxt "NetClient"
+msgid "You were kicked from this server."
+msgstr "Je bent van de server gekickt."
+
+#: Sources/Client/NetClient.cpp:669
+msgctxt "NetClient"
+msgid "Incompatible client protocol version."
+msgstr "Geselecteerd protocool komt niet overeen met het server protocool."
+
+#: Sources/Client/NetClient.cpp:670
+msgctxt "NetClient"
+msgid "Server full"
+msgstr "Server is vol"
+
+#: Sources/Client/NetClient.cpp:672
+msgctxt "NetClient"
+msgid "Unknown Reason"
+msgstr "Onbekende reden"
+
+#: Sources/Client/ScoreboardView.cpp:331
+msgctxt "Client"
+msgid "Spectator{1}"
+msgid_plural "Spectators{1}"
+msgstr[0] "Toeschouwer{1}"
+msgstr[1] "Toeschouwers{1}"
+
+#: Sources/Client/TCProgressView.cpp:151
+msgctxt "Client"
+msgid "Neutral Territory"
+msgstr "Neutraal Gebied"
+
+#: Sources/Client/TCProgressView.cpp:154
+msgctxt "Client"
+msgid "{0}'s Territory"
+msgstr "{0}'s Gebied"
+
+#: Sources/Gui/Main.cpp:637
+msgctxt "Main"
+msgid "Localization System Loaded"
+msgstr "Localisatie Systeem Geladen"
+
+#: Sources/Gui/Main.cpp:695 Sources/Gui/Runner.cpp:58
+msgctxt "Main"
+msgid ""
+"A serious error caused OpenSpades to stop working:\n"
+"\n"
+"{0}\n"
+"\n"
+"See SystemMessages.log for more details."
+msgstr ""
+"Een fatale fout heeft OpenSpades laten falen:\n"
+"\n"
+"{0}\n"
+"\n"
+"Zie SystemMessages.log voor meer info"
+
+#: Sources/Gui/Main.cpp:703 Sources/Gui/Runner.cpp:64
+msgctxt "Main"
+msgid "OpenSpades Fatal Error"
+msgstr "OpenSpades Fatale fout"
+
+#: Sources/Gui/MainScreen.cpp:225
+msgctxt "MainScreen"
+msgid "NOW LOADING"
+msgstr "LADEN"
+
+#: Resources/Scripts/Gui/ClientUI.as:198
+msgctxt "Client"
+msgid "Back to Game"
+msgstr "Spel Hervatten"
+
+#: Resources/Scripts/Gui/ClientUI.as:205
+msgctxt "Client"
+msgid "Chat Log"
+msgstr "Chat Log"
+
+#: Resources/Scripts/Gui/ClientUI.as:212
+msgctxt "Client"
+msgid "Setup"
+msgstr "Instellingen"
+
+#: Resources/Scripts/Gui/ClientUI.as:219
+msgctxt "Client"
+msgid "Disconnect"
+msgstr "Verbinding verbreken"
+
+#: Resources/Scripts/Gui/ClientUI.as:484
+msgctxt "Client"
+msgid "Say"
+msgstr "Zeg"
+
+#: Resources/Scripts/Gui/ClientUI.as:492
+msgctxt "Client"
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: Resources/Scripts/Gui/ClientUI.as:500
+msgctxt "Client"
+msgid "Chat Text"
+msgstr ""
+
+#: Resources/Scripts/Gui/ClientUI.as:508
+msgctxt "Client"
+msgid "Global"
+msgstr "Globaal"
+
+#: Resources/Scripts/Gui/ClientUI.as:517
+msgctxt "Client"
+msgid "Team"
+msgstr ""
+
+#: Resources/Scripts/Gui/ClientUI.as:661
+msgctxt "Client"
+msgid "Close"
+msgstr "Sluit"
+
+#: Resources/Scripts/Gui/ClientUI.as:671
+msgctxt "Client"
+msgid "Say Global"
+msgstr "Zeg Globaal"
+
+#: Resources/Scripts/Gui/ClientUI.as:682
+msgctxt "Client"
+msgid "Say Team"
+msgstr "Zeg in team"
+
+#: Resources/Scripts/Gui/CreateProfileScreen.as:58
+msgctxt "CreateProfileScreen"
+msgid "OK"
+msgstr ""
+
+#: Resources/Scripts/Gui/CreateProfileScreen.as:70
+msgctxt "CreateProfileScreen"
+msgid "Decide later"
+msgstr "Kies later"
+
+#: Resources/Scripts/Gui/CreateProfileScreen.as:80
+msgctxt "CreateProfileScreen"
+msgid "Welcome to OpenSpades"
+msgstr "Welkom in OpenSpades"
+
+#: Resources/Scripts/Gui/CreateProfileScreen.as:88
+msgctxt "CreateProfileScreen"
+msgid "Choose a player name:"
+msgstr "‪Kies een naam:"
+
+#: Resources/Scripts/Gui/CreateProfileScreen.as:96
+msgctxt "CreateProfileScreen"
+msgid "Player name"
+msgstr "Spelers naam"
+
+#: Resources/Scripts/Gui/CreateProfileScreen.as:104
+msgctxt "CreateProfileScreen"
+msgid "You can change it later in the Setup dialog."
+msgstr "Je kan het later veranderen in opstart menu"
+
+#: Resources/Scripts/Gui/MainScreen.as:376
+msgctxt "MainScreen"
+msgid "Connect"
+msgstr "Verbind"
+
+#: Resources/Scripts/Gui/MainScreen.as:384
+msgctxt "MainScreen"
+msgid "Quick Connect"
+msgstr "Snel verbinden"
+
+#: Resources/Scripts/Gui/MainScreen.as:393
+#: Resources/Scripts/Gui/MainScreen.as:447
+msgctxt "MainScreen"
+msgid "0.75"
+msgstr ""
+
+#: Resources/Scripts/Gui/MainScreen.as:403
+#: Resources/Scripts/Gui/MainScreen.as:456
+msgctxt "MainScreen"
+msgid "0.76"
+msgstr ""
+
+#: Resources/Scripts/Gui/MainScreen.as:411
+msgctxt "MainScreen"
+msgid "Quit"
+msgstr "Afsluiten"
+
+#: Resources/Scripts/Gui/MainScreen.as:418
+msgctxt "MainScreen"
+msgid "Credits"
+msgstr "Krediet"
+
+#: Resources/Scripts/Gui/MainScreen.as:425
+msgctxt "MainScreen"
+msgid "Setup"
+msgstr "Instellingen"
+
+#: Resources/Scripts/Gui/MainScreen.as:438
+#: Resources/Scripts/Gui/MainScreen.as:482
+msgctxt "MainScreen"
+msgid "Filter"
+msgstr ""
+
+#: Resources/Scripts/Gui/MainScreen.as:465
+msgctxt "MainScreen"
+msgid "Empty"
+msgstr "Leeg"
+
+#: Resources/Scripts/Gui/MainScreen.as:474
+msgctxt "MainScreen"
+msgid "Not Full"
+msgstr "Niet vol"
+
+#: Resources/Scripts/Gui/MainScreen.as:494
+msgctxt "MainScreen"
+msgid "Server Name"
+msgstr "Servernaam"
+
+#: Resources/Scripts/Gui/MainScreen.as:501
+msgctxt "MainScreen"
+msgid "Players"
+msgstr "Spelers"
+
+#: Resources/Scripts/Gui/MainScreen.as:508
+msgctxt "MainScreen"
+msgid "Map Name"
+msgstr "Mapnaam"
+
+#: Resources/Scripts/Gui/MainScreen.as:515
+msgctxt "MainScreen"
+msgid "Game Mode"
+msgstr "Spelmodus"
+
+#: Resources/Scripts/Gui/MainScreen.as:522
+msgctxt "MainScreen"
+msgid "Ver."
+msgstr ""
+
+#: Resources/Scripts/Gui/MainScreen.as:529
+msgctxt "MainScreen"
+msgid "Loc."
+msgstr ""
+
+#: Resources/Scripts/Gui/MainScreen.as:787
+msgctxt "MainScreen"
+msgid ""
+"You were disconnected from the server because of the following reason:\n"
+"\n"
+"{0}"
+msgstr ""
+"De server heeft de verbinding verbroken vanwege: \n"
+"\n"
+"{0}"
+
+#: Resources/Scripts/Gui/MainScreen.as:807
+msgctxt "MainScreen"
+msgid "Loading..."
+msgstr "Laden..."
+
+#: Resources/Scripts/Gui/MainScreen.as:825
+msgctxt "MainScreen"
+msgid "Failed to fetch the server list."
+msgstr "Het laden van de serverlijst is mislukt."
+
+#: Resources/Scripts/Gui/MessageBox.as:130
+#: Resources/Scripts/Gui/MessageBox.as:144
+msgctxt "MessageBox"
+msgid "OK"
+msgstr ""
+
+#: Resources/Scripts/Gui/MessageBox.as:144
+msgctxt "MessageBox"
+msgid "Cancel"
+msgstr "Annuleer"
+
+#: Resources/Scripts/Gui/Preferences.as:60
+msgctxt "Preferences"
+msgid "Game Options"
+msgstr "Spelopties"
+
+#: Resources/Scripts/Gui/Preferences.as:61
+msgctxt "Preferences"
+msgid "Controls"
+msgstr "Controls"
+
+#: Resources/Scripts/Gui/Preferences.as:62
+#: Resources/Scripts/Gui/Preferences.as:663
+#: Resources/Scripts/Gui/Preferences.as:708
+msgctxt "Preferences"
+msgid "Misc"
+msgstr "Extra"
+
+#: Resources/Scripts/Gui/Preferences.as:66
+msgctxt "Preferences"
+msgid "Back"
+msgstr "Terug"
+
+#: Resources/Scripts/Gui/Preferences.as:407
+msgctxt "Preferences"
+msgid "Press Key to Bind or [Escape] to Cancel..."
+msgstr "Druk op een knop om te binden of druk op[Escape] om te annuleren..."
+
+#: Resources/Scripts/Gui/Preferences.as:418
+msgctxt "Preferences"
+msgid "Space"
+msgstr "Spatie"
+
+#: Resources/Scripts/Gui/Preferences.as:420
+msgctxt "Preferences"
+msgid "Unbound"
+msgstr "Niet gebonden"
+
+#: Resources/Scripts/Gui/Preferences.as:423
+msgctxt "Preferences"
+msgid "Shift"
+msgstr "Shift-knop"
+
+#: Resources/Scripts/Gui/Preferences.as:425
+msgctxt "Preferences"
+msgid "Control"
+msgstr "Control-knop"
+
+#: Resources/Scripts/Gui/Preferences.as:427
+msgctxt "Preferences"
+msgid "Meta"
+msgstr ""
+
+#: Resources/Scripts/Gui/Preferences.as:429
+msgctxt "Preferences"
+msgid "Alt"
+msgstr ""
+
+#: Resources/Scripts/Gui/Preferences.as:431
+msgctxt "Preferences"
+msgid "Left Mouse Button"
+msgstr "Linker-muisknop"
+
+#: Resources/Scripts/Gui/Preferences.as:433
+msgctxt "Preferences"
+msgid "Right Mouse Button"
+msgstr "Rechter-muisknop"
+
+#: Resources/Scripts/Gui/Preferences.as:435
+msgctxt "Preferences"
+msgid "Middle Mouse Button"
+msgstr "Middelste muisknop"
+
+#: Resources/Scripts/Gui/Preferences.as:437
+msgctxt "Preferences"
+msgid "Mouse Button 4"
+msgstr "Muisknop 4"
+
+#: Resources/Scripts/Gui/Preferences.as:439
+msgctxt "Preferences"
+msgid "Mouse Button 5"
+msgstr "Muisknop 5"
+
+#: Resources/Scripts/Gui/Preferences.as:613
+#: Resources/Scripts/Gui/Preferences.as:619
+msgctxt "Preferences"
+msgid "ON"
+msgstr "AAN"
+
+#: Resources/Scripts/Gui/Preferences.as:613
+#: Resources/Scripts/Gui/Preferences.as:619
+#: Resources/Scripts/Gui/Preferences.as:648
+#: Resources/Scripts/Gui/Preferences.as:651
+msgctxt "Preferences"
+msgid "OFF"
+msgstr "UIT"
+
+#: Resources/Scripts/Gui/Preferences.as:619
+msgctxt "Preferences"
+msgid "REVERSED"
+msgstr "OMGEKEERD"
+
+#: Resources/Scripts/Gui/Preferences.as:637
+msgctxt "Preferences"
+msgid "Player Information"
+msgstr "Spelersnformatie"
+
+#: Resources/Scripts/Gui/Preferences.as:638
+msgctxt "Preferences"
+msgid "Player Name"
+msgstr "Spelersnaam"
+
+#: Resources/Scripts/Gui/Preferences.as:642
+msgctxt "Preferences"
+msgid "Effects"
+msgstr "Effecten"
+
+#: Resources/Scripts/Gui/Preferences.as:643
+msgctxt "Preferences"
+msgid "Blood"
+msgstr "Bloed"
+
+#: Resources/Scripts/Gui/Preferences.as:644
+msgctxt "Preferences"
+msgid "Ejecting Brass"
+msgstr "Kogelomhulsel weergeven na schot"
+
+#: Resources/Scripts/Gui/Preferences.as:645
+msgctxt "Preferences"
+msgid "Ragdoll"
+msgstr ""
+
+#: Resources/Scripts/Gui/Preferences.as:646
+msgctxt "Preferences"
+msgid "Animations"
+msgstr "Animaties"
+
+#: Resources/Scripts/Gui/Preferences.as:647
+msgctxt "Preferences"
+msgid "Camera Shake"
+msgstr "Cameraschud"
+
+#: Resources/Scripts/Gui/Preferences.as:648
+msgctxt "Preferences"
+msgid "MORE"
+msgstr "MEER"
+
+#: Resources/Scripts/Gui/Preferences.as:648
+#: Resources/Scripts/Gui/Preferences.as:651
+msgctxt "Preferences"
+msgid "NORMAL"
+msgstr "NORMAAL"
+
+#: Resources/Scripts/Gui/Preferences.as:650
+msgctxt "Preferences"
+msgid "Particles"
+msgstr "Deeltjes"
+
+#: Resources/Scripts/Gui/Preferences.as:651
+msgctxt "Preferences"
+msgid "LESS"
+msgstr "MINDER"
+
+#: Resources/Scripts/Gui/Preferences.as:654
+msgctxt "Preferences"
+msgid "Feedbacks"
+msgstr "Meldingen"
+
+#: Resources/Scripts/Gui/Preferences.as:655
+msgctxt "Preferences"
+msgid "Chat Notify Sounds"
+msgstr "Chat Meldingsgeluid"
+
+#: Resources/Scripts/Gui/Preferences.as:656
+msgctxt "Preferences"
+msgid "Hit Indicator"
+msgstr "Raakindicator"
+
+#: Resources/Scripts/Gui/Preferences.as:657
+msgctxt "Preferences"
+msgid "Show Alerts"
+msgstr "Laat waarschuwingen zien"
+
+#: Resources/Scripts/Gui/Preferences.as:659
+msgctxt "Preferences"
+msgid "AoS 0.75/0.76 Compatibility"
+msgstr "AoS 0.75/0.75 overeenkomst"
+
+#: Resources/Scripts/Gui/Preferences.as:660
+msgctxt "Preferences"
+msgid "Allow Unicode"
+msgstr "Unicode toestaan"
+
+#: Resources/Scripts/Gui/Preferences.as:661
+msgctxt "Preferences"
+msgid "Server Alert"
+msgstr "Server Waarschuwingen"
+
+#: Resources/Scripts/Gui/Preferences.as:664
+msgctxt "Preferences"
+msgid "Field of View"
+msgstr "Gezichtsveld"
+
+#: Resources/Scripts/Gui/Preferences.as:666
+msgctxt "Preferences"
+msgid "Minimap size"
+msgstr "Minimap maat"
+
+#: Resources/Scripts/Gui/Preferences.as:668
+msgctxt "Preferences"
+msgid "Show Statistics"
+msgstr "Statistieken weergeven"
+
+#: Resources/Scripts/Gui/Preferences.as:678
+msgctxt "Preferences"
+msgid "Weapons/Tools"
+msgstr "Wapen/Gereedschappen"
+
+#: Resources/Scripts/Gui/Preferences.as:679
+msgctxt "Preferences"
+msgid "Attack"
+msgstr "Schiet"
+
+#: Resources/Scripts/Gui/Preferences.as:680
+msgctxt "Preferences"
+msgid "Alt. Attack"
+msgstr "Aimen"
+
+#: Resources/Scripts/Gui/Preferences.as:681
+msgctxt "Preferences"
+msgid "Hold Aim Down Sight"
+msgstr "Aim-knop inhouden"
+
+#: Resources/Scripts/Gui/Preferences.as:682
+msgctxt "Preferences"
+msgid "Mouse Sensitivity"
+msgstr "Muis gevoeligheid"
+
+#: Resources/Scripts/Gui/Preferences.as:684
+msgctxt "Preferences"
+msgid "ADS Mouse Sens. Scale"
+msgstr "extra muisgevoeligheid"
+
+#: Resources/Scripts/Gui/Preferences.as:686
+msgctxt "Preferences"
+msgid "Exponential Power"
+msgstr "exponentiele kracht"
+
+#: Resources/Scripts/Gui/Preferences.as:688
+msgctxt "Preferences"
+msgid "Invert Y-axis Mouse Input"
+msgstr "Y-as van muis omkeren"
+
+#: Resources/Scripts/Gui/Preferences.as:689
+msgctxt "Preferences"
+msgid "Reload"
+msgstr "Herladen"
+
+#: Resources/Scripts/Gui/Preferences.as:690
+msgctxt "Preferences"
+msgid "Capture Color"
+msgstr "Kleur gebruikeb"
+
+#: Resources/Scripts/Gui/Preferences.as:691
+msgctxt "Preferences"
+msgid "Equip Spade"
+msgstr "Schep pakken"
+
+#: Resources/Scripts/Gui/Preferences.as:692
+msgctxt "Preferences"
+msgid "Equip Block"
+msgstr "Blok pakken"
+
+#: Resources/Scripts/Gui/Preferences.as:693
+msgctxt "Preferences"
+msgid "Equip Weapon"
+msgstr "Wapen pakken"
+
+#: Resources/Scripts/Gui/Preferences.as:694
+msgctxt "Preferences"
+msgid "Equip Grenade"
+msgstr "Granaat pakken"
+
+#: Resources/Scripts/Gui/Preferences.as:695
+msgctxt "Preferences"
+msgid "Last Used Tool"
+msgstr "Laats gebruikt gereedschap pakken"
+
+#: Resources/Scripts/Gui/Preferences.as:696
+msgctxt "Preferences"
+msgid "Switch Tools by Wheel"
+msgstr "Wapen wisselen met muiswiel"
+
+#: Resources/Scripts/Gui/Preferences.as:698
+msgctxt "Preferences"
+msgid "Movement"
+msgstr "Beweging"
+
+#: Resources/Scripts/Gui/Preferences.as:699
+msgctxt "Preferences"
+msgid "Walk Forward"
+msgstr "Voorwaarts lopen"
+
+#: Resources/Scripts/Gui/Preferences.as:700
+msgctxt "Preferences"
+msgid "Backpedal"
+msgstr "Naar achteren lopen"
+
+#: Resources/Scripts/Gui/Preferences.as:701
+msgctxt "Preferences"
+msgid "Move Left"
+msgstr "Naar links bewegen"
+
+#: Resources/Scripts/Gui/Preferences.as:702
+msgctxt "Preferences"
+msgid "Move Right"
+msgstr "Naar rechts bewegen"
+
+#: Resources/Scripts/Gui/Preferences.as:703
+msgctxt "Preferences"
+msgid "Crouch"
+msgstr "Bukken"
+
+#: Resources/Scripts/Gui/Preferences.as:704
+msgctxt "Preferences"
+msgid "Sneak"
+msgstr "Sluipen"
+
+#: Resources/Scripts/Gui/Preferences.as:705
+msgctxt "Preferences"
+msgid "Jump"
+msgstr "Spring"
+
+#: Resources/Scripts/Gui/Preferences.as:706
+msgctxt "Preferences"
+msgid "Sprint"
+msgstr "Rennen"
+
+#: Resources/Scripts/Gui/Preferences.as:709
+msgctxt "Preferences"
+msgid "Minimap Scale"
+msgstr "Minimap schaal"
+
+#: Resources/Scripts/Gui/Preferences.as:710
+msgctxt "Preferences"
+msgid "Toggle Map"
+msgstr "Map weergeven"
+
+#: Resources/Scripts/Gui/Preferences.as:711
+msgctxt "Preferences"
+msgid "Flashlight"
+msgstr "Zaklamp"
+
+#: Resources/Scripts/Gui/Preferences.as:712
+msgctxt "Preferences"
+msgid "Global Chat"
+msgstr "Globale chat"
+
+#: Resources/Scripts/Gui/Preferences.as:713
+msgctxt "Preferences"
+msgid "Team Chat"
+msgstr ""
+
+#: Resources/Scripts/Gui/Preferences.as:714
+msgctxt "Preferences"
+msgid "Limbo Menu"
+msgstr "Limbo menu"
+
+#: Resources/Scripts/Gui/Preferences.as:715
+msgctxt "Preferences"
+msgid "Save Map"
+msgstr "Map opslaan"
+
+#: Resources/Scripts/Gui/Preferences.as:716
+msgctxt "Preferences"
+msgid "Save Sceneshot"
+msgstr "Sceneshot opslaan"
+
+#: Resources/Scripts/Gui/Preferences.as:717
+msgctxt "Preferences"
+msgid "Save Screenshot"
+msgstr "Screenshot opslaan"
+
+#: Resources/Scripts/Gui/Preferences.as:736
+msgctxt "Preferences"
+msgid "Enable Startup Window"
+msgstr "Opstart menu activeren"
+
+#: Resources/Scripts/Gui/Preferences.as:757
+msgctxt "Preferences"
+msgid "Quit and restart OpenSpades to access the startup window."
+msgstr "Sluit en start OpenSpades opniew voor opstart menu."
+
+#: Resources/Scripts/Gui/Preferences.as:758
+msgctxt "Preferences"
+msgid "Some settings only can be changed in the startup window."
+msgstr "Sommige instellingen kunnen veranderd worden in het opstart menu."
+
+#: Resources/Scripts/Gui/StartupScreen.as:159
+msgctxt "StartupScreen"
+msgid "Start"
+msgstr ""
+
+#: Resources/Scripts/Gui/StartupScreen.as:166
+msgctxt "StartupScreen"
+msgid "Skip this screen next time"
+msgstr "Dit menu niet meer weergeven"
+
+#: Resources/Scripts/Gui/StartupScreen.as:204
+msgctxt "StartupScreen"
+msgid "Graphics"
+msgstr "Grafische instellingen"
+
+#: Resources/Scripts/Gui/StartupScreen.as:205
+msgctxt "StartupScreen"
+msgid "Audio"
+msgstr ""
+
+#: Resources/Scripts/Gui/StartupScreen.as:206
+msgctxt "StartupScreen"
+msgid "Generic"
+msgstr "Normaale"
+
+#: Resources/Scripts/Gui/StartupScreen.as:207
+msgctxt "StartupScreen"
+msgid "System Info"
+msgstr "Systeeminformatie"
+
+#: Resources/Scripts/Gui/StartupScreen.as:208
+#: Resources/Scripts/Gui/StartupScreen.as:1661
+msgctxt "StartupScreen"
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+#: Resources/Scripts/Gui/StartupScreen.as:836
+msgctxt "StartupScreen"
+msgid "Custom"
+msgstr "Bewerkt"
+
+#: Resources/Scripts/Gui/StartupScreen.as:962
+msgctxt "StartupScreen"
+msgid "Close"
+msgstr "Sluit"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1068
+msgctxt "StartupScreen"
+msgid "Graphics Settings"
+msgstr "Grafische instellingen"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1073
+msgctxt "StartupScreen"
+msgid "Resolution"
+msgstr "Resolutie"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1083
+msgctxt "StartupScreen"
+msgid "Fullscreen Mode"
+msgstr "Volledig scherm"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1086
+msgctxt "StartupScreen"
+msgid ""
+"By running in fullscreen mode OpenSpades occupies the screen, making it "
+"easier for you to concentrate on playing the game."
+msgstr ""
+"Door OpenSpades te draaien in volledig scherm, kan het makkelijker zijn voor "
+"je om op de game te kunnen concentreren."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1093
+#: Resources/Scripts/Gui/StartupScreen.as:1475
+msgctxt "StartupScreen"
+msgid "Backend"
+msgstr "Backend systeem"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1096
+msgctxt "StartupScreen"
+msgid "OpenGL"
+msgstr ""
+
+#: Resources/Scripts/Gui/StartupScreen.as:1100
+msgctxt "StartupScreen"
+msgid ""
+"OpenGL renderer uses your computer's graphics accelerator to generate the "
+"game screen."
+msgstr ""
+"OpenGL renderer gebruikt je computer's grafische versneller om het game "
+"scherm te genereren."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1108
+msgctxt "StartupScreen"
+msgid "Software"
+msgstr ""
+
+#: Resources/Scripts/Gui/StartupScreen.as:1112
+msgctxt "StartupScreen"
+msgid ""
+"Software renderer uses CPU to generate the game screen. Its quality and "
+"performance might be inferior to OpenGL renderer, but it works even with an "
+"unsupported GPU."
+msgstr ""
+"Software renderer gebruikt de CPU om het game scherm te kunnen genereren. De "
+"kwaliteit en de prestaties kunnen onderdoen voor OpenGL renderer, maar het "
+"werkt zelfs met een niet-ondersteunende GPU."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1126
+msgctxt "StartupScreen"
+msgid ""
+"Antialias:Enables a technique to improve the appearance of high-contrast "
+"edges.\n"
+"\n"
+"MSAA: Performs antialiasing by generating an intermediate high-resolution "
+"image. Looks best, but doesn't cope with some settings.\n"
+"\n"
+"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
+"Off|MSAA 2x|4x|FXAA"
+msgstr ""
+"Antialias: Maakt een techniek om het uiterlijk van hoge contrast randen te "
+"verbeteren \n"
+".\n"
+" MSAA: Voert antialiasing door een afbeelding tussenliggende hoge resolutie "
+"te genereren.\n"
+"\n"
+" FXAA: Voert antialiasing door het gladstrijken van artefacten als een post-"
+"proces | Uit | MSAA 2x | 4x | FXAA."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1133
+msgctxt "StartupScreen"
+msgid "Global Illumination"
+msgstr "Globale Belichting"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1135
+msgctxt "StartupScreen"
+msgid ""
+"Enables a physically based simulation of light path for more realistic "
+"lighting."
+msgstr ""
+"Hiermee kan een fysiek gebaseerde simulatie van lichtpad voor meer "
+"realistische belichting."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1138
+msgctxt "StartupScreen"
+msgid "Linear HDR Rendering"
+msgstr "Lineare HDR Rendering"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1140
+msgctxt "StartupScreen"
+msgid ""
+"Uses a number representation which allows wider dynamic range during "
+"rendering process. Additionally, this allows color calculation whose value "
+"is in linear correspondence with actual energy, that is, physically accurate "
+"blending can be achieved."
+msgstr ""
+"Gebruikt een aantal representaties wier bredere dynamische afstand "
+"produceren. Dit staat toe dat kleur calculatie wiens waarde recht evenredig "
+"is met de werkelijke energie, dat wil zeggen dat accuraat natuurlijk mengen "
+"worden bereikt."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1147
+msgctxt "StartupScreen"
+msgid "Camera Blur"
+msgstr "Camera vervaging"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1148
+msgctxt "StartupScreen"
+msgid "Blurs the screen when you turn quickly."
+msgstr "Vervaagt het scherm als je snel omdraait."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1150
+msgctxt "StartupScreen"
+msgid "Lens Effect"
+msgstr ""
+
+#: Resources/Scripts/Gui/StartupScreen.as:1151
+msgctxt "StartupScreen"
+msgid "Simulates distortion caused by a real camera lens."
+msgstr "Simuleert vervorming die wordt veroorzaakt door een echte camera lens."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1153
+msgctxt "StartupScreen"
+msgid "Lens Scattering Filter"
+msgstr "Lens-verstrooingsfilter"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1154
+msgctxt "StartupScreen"
+msgid "Simulates light being scattered by dust on the camera lens."
+msgstr "Simuleert light dat wordt verstrooid door stof om de camera lens heen."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1157
+msgctxt "StartupScreen"
+msgid "Lens Flare"
+msgstr "Lens-gloed"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1158
+msgctxt "StartupScreen"
+msgid "The Sun causes lens flare."
+msgstr "De zon veroorzaakt gloed."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1160
+msgctxt "StartupScreen"
+msgid "Flares for Dynamic Lights"
+msgstr "Gloed voor dynamische lichten"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1161
+msgctxt "StartupScreen"
+msgid "Enables lens flare for light sources other than the Sun."
+msgstr "Activeer lens gloed voor lightbronnen anders dan de zon."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1163
+msgctxt "StartupScreen"
+msgid "Color Correction"
+msgstr "Kleurcorrectie"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1164
+msgctxt "StartupScreen"
+msgid "Applies cinematic color correction to make the image look better."
+msgstr ""
+"Past filmachtige kleurcorrectie toe om het plaatje er beter er uit te laten "
+"zien."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1166
+msgctxt "StartupScreen"
+msgid "Depth of Field"
+msgstr "Diepte"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1167
+msgctxt "StartupScreen"
+msgid "Blurs out-of-focus objects."
+msgstr "Vervaagt onscherpe objecten"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1169
+msgctxt "StartupScreen"
+msgid "Screen Space Ambient Occlusion"
+msgstr "Scherm ruimte omringing-afsluiting"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1170
+msgctxt "StartupScreen"
+msgid "Simulates soft shadows that occur between nearby objects."
+msgstr ""
+"Simuleert zachte schaduwen die worden veroorzaakt door twee objecten die "
+"dicht bij elkaar zijn"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1172
+#: Resources/Scripts/Gui/StartupScreen.as:1211
+#: Resources/Scripts/Gui/StartupScreen.as:1233
+msgctxt "StartupScreen"
+msgid "Low"
+msgstr "Laag"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1173
+#: Resources/Scripts/Gui/StartupScreen.as:1212
+msgctxt "StartupScreen"
+msgid "Medium"
+msgstr "Gemiddeld"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1174
+#: Resources/Scripts/Gui/StartupScreen.as:1213
+#: Resources/Scripts/Gui/StartupScreen.as:1235
+msgctxt "StartupScreen"
+msgid "High"
+msgstr "Hoog"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1175
+#: Resources/Scripts/Gui/StartupScreen.as:1236
+msgctxt "StartupScreen"
+msgid "Ultra"
+msgstr ""
+
+#: Resources/Scripts/Gui/StartupScreen.as:1178
+msgctxt "StartupScreen"
+msgid "Post-process"
+msgstr "Nabewerking"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1179
+msgctxt "StartupScreen"
+msgid ""
+"Post-process modifies the image to make it look better and more realistic."
+msgstr ""
+"Nabewerking bewerkt het plaatje om het beter en realistischer eruit te laten "
+"zien."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1186
+msgctxt "StartupScreen"
+msgid ""
+"Particles|Low:Artifact occurs when a particle intersects other objects.|"
+"Medium:Particle intersects objects smoothly.|High:Particle intersects "
+"objects smoothly, and some objects casts their shadow to particles."
+msgstr ""
+"Deeltkes|Laag:Artefactie treedt op wanneer een deeltje andere objecten "
+"kruist |Gemiddeld: Het deeltje snijdt objecten soepel | Hoog: Het deeltje "
+"snijdt objecten vlot, en sommige objecten werpen hun schaduw op de deeltjes."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1196
+msgctxt "StartupScreen"
+msgid "Dynamic Lights"
+msgstr "Dynamische Lichten"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1198
+msgctxt "StartupScreen"
+msgid ""
+"Gives some objects an ability to emit light to give them an energy-emitting "
+"impression."
+msgstr ""
+"Geeft sommige objecten het vermogen om licht te geven met een energie "
+"uitsralende impressie."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1201
+msgctxt "StartupScreen"
+msgid "Shadows"
+msgstr "Schaduwen"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1202
+msgctxt "StartupScreen"
+msgid "Non-static object casts a shadow."
+msgstr "Niet bewegende objecten maken een schaduwen."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1204
+msgctxt "StartupScreen"
+msgid "Volumetric Fog"
+msgstr "Volumetrische mist"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1205
+msgctxt "StartupScreen"
+msgid ""
+"Simulates shadow being casted to the fog particles using a super highly "
+"computationally demanding algorithm. "
+msgstr ""
+"Simuleert een schaduw die word gemaakt op mistdeeltjes met een super sterk "
+"computer veeleisende algoritme."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1208
+msgctxt "StartupScreen"
+msgid "Physically Based Lighting"
+msgstr "Physiek gebaseerd licht"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1209
+msgctxt "StartupScreen"
+msgid ""
+"Uses more accurate approximation techniques to decide the brightness of "
+"objects."
+msgstr ""
+"Gebruikt meer accurate geschatte technieken om de duisternis van een object "
+"te bepalen."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1216
+msgctxt "StartupScreen"
+msgid "Direct Lights"
+msgstr "Direct licht"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1217
+msgctxt "StartupScreen"
+msgid ""
+"Controls how light encounting a material and atmosphere directly affects its "
+"appearance."
+msgstr ""
+"Bepaalt hoe licht met een materiaal in aanraking komt en de sfeer "
+"rechtstreeks op het uiterlijk beinvloed."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1227
+msgctxt "StartupScreen"
+msgid ""
+"Water Shader|None:Water is rendered in the same way that normal blocks are "
+"done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving "
+"water is simulated as well as reflection and refraction.|Level 3:Reflections "
+"and refractions are rendered at the highest quality using screen-space "
+"techniques."
+msgstr ""
+"Water Shader|Geen:Water is gegenereerd net zoals normale blokken.|Niveau 1:"
+"Breking en de gereflecteerde zon gesimuleerd | Niveau 2:Golvend water is "
+"evenals gesimuleerde reflectie en breking | Niveau 3: Reflecties and "
+"brekingen zijn verkregen bij de hoogste kwaliteit met behulp van scherm-"
+"ruimte technieken."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1234
+msgctxt "StartupScreen"
+msgid "Med"
+msgstr ""
+
+#: Resources/Scripts/Gui/StartupScreen.as:1239
+msgctxt "StartupScreen"
+msgid "Shader Effects"
+msgstr "shader effecten"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1239
+msgctxt "StartupScreen"
+msgid "Special effects."
+msgstr "Speciale effecten"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1256
+msgctxt "StartupScreen"
+msgid ""
+"Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
+"4x"
+msgstr ""
+"Snelle Modus: vermindert de resolutie van het plaatje om de generatie "
+"sneller te maken.|Uit|2x|4x"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1469
+msgctxt "StartupScreen"
+msgid "Audio Settings"
+msgstr "Geluids instellingen"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1478
+msgctxt "StartupScreen"
+msgid "OpenAL"
+msgstr ""
+
+#: Resources/Scripts/Gui/StartupScreen.as:1482
+msgctxt "StartupScreen"
+msgid ""
+"Uses an OpenAL-capable sound card to process sound. In most cases where "
+"there isn't such a sound card, software emulation is used."
+msgstr ""
+"Gebruikt een OpenAL beschikbare geluidskaart om geluid te produceren. In de "
+"meeste gevallen waar er is niet zo'n geluidskaart aanwezig, software "
+"emulatie wordt gebruikt."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1491
+msgctxt "StartupScreen"
+msgid "YSR"
+msgstr ""
+
+#: Resources/Scripts/Gui/StartupScreen.as:1495
+msgctxt "StartupScreen"
+msgid ""
+"YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
+"features several enhanced features including automatic load control, "
+"dynamics compressor, HRTF-based 3D audio, and high quality reverb."
+msgstr ""
+"YSR is een experimentele 3D HDR geluids engine geoptimaliseerd voor "
+"OpenSpades. het heeft meerdere geavanceerde functies zoals automatische "
+"laadcontrole, dynamische vermindering, HRTF-gebaseerde 3D audio en hoge "
+"qualiteits reverb."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1505
+msgctxt "StartupScreen"
+msgid "Null"
+msgstr ""
+
+#: Resources/Scripts/Gui/StartupScreen.as:1509
+msgctxt "StartupScreen"
+msgid "Disables audio output."
+msgstr "Schakelt audio uit/"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1520
+#: Resources/Scripts/Gui/StartupScreen.as:1544
+msgctxt "StartupScreen"
+msgid "Polyphonics"
+msgstr "Polytoniek"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1521
+msgctxt "StartupScreen"
+msgid ""
+"Specifies how many sounds can be played simultaneously. Higher value needs "
+"more processing power, so setting this too high might cause an overload "
+"(especially with a software emulation)."
+msgstr ""
+"Bepaalt hoe veel geluiden er tegelijk kan worden afgespeelt. Hogere waardes "
+"betekent meer producerings kracht, dus zet de waarde niet te hoog om een "
+"overbelasting te voorkomen."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1528
+msgctxt "StartupScreen"
+msgid "EAX"
+msgstr ""
+
+#: Resources/Scripts/Gui/StartupScreen.as:1529
+msgctxt "StartupScreen"
+msgid ""
+"Enables extended features provided by the OpenAL driver to create more "
+"ambience."
+msgstr ""
+"Activeert meer functies door de OpenAL gegeven driver om meer "
+"achtergrondgeluiden te procuderen."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1545
+msgctxt "StartupScreen"
+msgid ""
+"Specifies how many sounds can be played simultaneously. No matter what value "
+"is set, YSR might reduce the number of sounds when an overload is detected."
+msgstr ""
+"Bepaalt hoeveel geluiden er mogen worden afgespeelt tegelijk. Hoeveel de "
+"waarde ook maar is, YSR kan het aantal van geluiden verminderen waneer een "
+"overbelasting is gedetecteerd."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1605
+msgctxt "StartupScreen"
+msgid "Language"
+msgstr "Taal"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1617
+msgctxt "StartupScreen"
+msgid "Tools"
+msgstr "Gereedschappen"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1620
+msgctxt "StartupScreen"
+msgid "Reset All Settings"
+msgstr "Herstel alle instellingen"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1629
+msgctxt "StartupScreen"
+msgid "Open Config Folder in Explorer"
+msgstr "Open folder waar instellingen worden opgeslagen"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1631
+msgctxt "StartupScreen"
+msgid "Reveal Config Folder in Finder"
+msgstr "Onthul instellingen folder in zoeker"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1633
+msgctxt "StartupScreen"
+msgid "Browse Config Folder"
+msgstr "Blader instellingen folder door"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1650
+msgctxt "StartupScreen"
+msgid "An unknown error has occurred while opening the config directory."
+msgstr ""
+"Een onbekende fout is opgetreden tijdens het openen van de instellingen "
+"folder"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1656
+msgctxt "StartupScreen"
+msgid ""
+"Are you sure to reset all settings? They include (but are not limited to):"
+msgstr ""
+"Weet je zeker dat je alle instellingen wil herstellen? Ze omvatten (maar "
+"zijn niet beperkt tot):"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1657
+msgctxt "StartupScreen"
+msgid "All graphics/audio settings"
+msgstr "Alle grafische/geluids instellingen"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1658
+msgctxt "StartupScreen"
+msgid "All key bindings"
+msgstr "Alle gebonden knoppen"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1659
+msgctxt "StartupScreen"
+msgid "Your player name"
+msgstr "Jou spelersnaam"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1660
+msgctxt "StartupScreen"
+msgid ""
+"Other advanced settings only accessible through '{0}' tab and in-game "
+"commands"
+msgstr ""
+"Andere geavanceerde instellingen alleen toegankelijk door '{0}' tabblad en "
+"in-game commandos"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1730
+msgctxt "StartupScreen"
+msgid "Unknown ({0})"
+msgstr "Onbekend ({0})"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1732
+#: Resources/Scripts/Gui/StartupScreen.as:1746
+msgctxt "StartupScreen"
+msgid "System default"
+msgstr "Systeem norme"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1795
+msgctxt "StartupScreen"
+msgid "Copy to Clipboard"
+msgstr "Kopieer naar plakbord"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1831
+msgctxt "StartupScreen"
+msgid "Advanced Settings"
+msgstr "Geavanceerde instellingen"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1840
+msgctxt "StartupScreen"
+msgid "Filter"
+msgstr ""
+
+#~ msgctxt "Preferences"
+#~ msgid "Weapon Spread Guide"
+#~ msgstr "Anzeige der Waffenstreuung"
+
+#~ msgctxt "StartupScreen"
+#~ msgid ""
+#~ "Water Shader|None:Water is rendered in the same way that normal blocks "
+#~ "are done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:"
+#~ "Waving water is simulated as well as reflection and refraction."
+#~ msgstr ""
+#~ "Wasserschatten|Keine:Wasser wird wie normale Blöcke gerendert.|Level 1:"
+#~ "Lichtbrechung und die reflektierte Sonne werden simuliert.|Level 2:"
+#~ "Wellen, Lichtbrechungen und Reflexionen werden simuliert."
+
+#~ msgctxt "Preferences"
+#~ msgid "Debug Hit Detection"
+#~ msgstr "Debug Hit Detection"

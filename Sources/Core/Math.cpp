@@ -167,28 +167,53 @@ namespace spades {
 		return Matrix4(m[0], m[4], m[8], m[12], m[1], m[5], m[9], m[13], m[2], m[6], m[10], m[14],
 		               m[3], m[7], m[11], m[15]);
 	}
-#define MADDR(x, y) ((x) + ((y) << 2))
-	// from BloodyKart
+
 	static void inverseMatrix4(float *matrix) {
-		float det = 1.f;
-		float t, u;
-		int k, j, i;
-		for (k = 0; k < 4; k++) {
-			t = matrix[MADDR(k, k)];
-			det *= t;
-			for (i = 0; i < 4; i++)
-				matrix[MADDR(k, i)] /= t;
-			matrix[MADDR(k, k)] = 1.f / t;
-			for (j = 0; j < 4; j++) {
-				if (j == k)
-					continue;
-				u = matrix[MADDR(j, k)];
-				for (i = 0; i < 4; i++)
-					if (i != k)
-						matrix[MADDR(j, i)] -= matrix[MADDR(k, i)] * u;
-					else
-						matrix[MADDR(j, i)] = -u / t;
-			}
+		// based on three.js's getInverse, which is in turn based on
+		// http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
+
+		float n11 = matrix[0], n12 = matrix[4], n13 = matrix[8], n14 = matrix[12];
+		float n21 = matrix[1], n22 = matrix[5], n23 = matrix[9], n24 = matrix[13];
+		float n31 = matrix[2], n32 = matrix[6], n33 = matrix[10], n34 = matrix[14];
+		float n41 = matrix[3], n42 = matrix[7], n43 = matrix[11], n44 = matrix[15];
+
+		matrix[0] = n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 -
+		            n23 * n32 * n44 + n22 * n33 * n44;
+		matrix[4] = n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 +
+		            n13 * n32 * n44 - n12 * n33 * n44;
+		matrix[8] = n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 -
+		            n13 * n22 * n44 + n12 * n23 * n44;
+		matrix[12] = n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 +
+		             n13 * n22 * n34 - n12 * n23 * n34;
+		matrix[1] = n24 * n33 * n41 - n23 * n34 * n41 - n24 * n31 * n43 + n21 * n34 * n43 +
+		            n23 * n31 * n44 - n21 * n33 * n44;
+		matrix[5] = n13 * n34 * n41 - n14 * n33 * n41 + n14 * n31 * n43 - n11 * n34 * n43 -
+		            n13 * n31 * n44 + n11 * n33 * n44;
+		matrix[9] = n14 * n23 * n41 - n13 * n24 * n41 - n14 * n21 * n43 + n11 * n24 * n43 +
+		            n13 * n21 * n44 - n11 * n23 * n44;
+		matrix[13] = n13 * n24 * n31 - n14 * n23 * n31 + n14 * n21 * n33 - n11 * n24 * n33 -
+		             n13 * n21 * n34 + n11 * n23 * n34;
+		matrix[2] = n22 * n34 * n41 - n24 * n32 * n41 + n24 * n31 * n42 - n21 * n34 * n42 -
+		            n22 * n31 * n44 + n21 * n32 * n44;
+		matrix[6] = n14 * n32 * n41 - n12 * n34 * n41 - n14 * n31 * n42 + n11 * n34 * n42 +
+		            n12 * n31 * n44 - n11 * n32 * n44;
+		matrix[10] = n12 * n24 * n41 - n14 * n22 * n41 + n14 * n21 * n42 - n11 * n24 * n42 -
+		             n12 * n21 * n44 + n11 * n22 * n44;
+		matrix[14] = n14 * n22 * n31 - n12 * n24 * n31 - n14 * n21 * n32 + n11 * n24 * n32 +
+		             n12 * n21 * n34 - n11 * n22 * n34;
+		matrix[3] = n23 * n32 * n41 - n22 * n33 * n41 - n23 * n31 * n42 + n21 * n33 * n42 +
+		            n22 * n31 * n43 - n21 * n32 * n43;
+		matrix[7] = n12 * n33 * n41 - n13 * n32 * n41 + n13 * n31 * n42 - n11 * n33 * n42 -
+		            n12 * n31 * n43 + n11 * n32 * n43;
+		matrix[11] = n13 * n22 * n41 - n12 * n23 * n41 - n13 * n21 * n42 + n11 * n23 * n42 +
+		             n12 * n21 * n43 - n11 * n22 * n43;
+		matrix[15] = n12 * n23 * n31 - n13 * n22 * n31 + n13 * n21 * n32 - n11 * n23 * n32 -
+		             n12 * n21 * n33 + n11 * n22 * n33;
+
+		float det = n11 * matrix[0] + n21 * matrix[4] + n31 * matrix[8] + n41 * matrix[12];
+		float idet = 1.0f / det;
+		for (int i = 0; i < 16; ++i) {
+			matrix[i] *= idet;
 		}
 	}
 

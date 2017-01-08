@@ -59,6 +59,8 @@ DEFINE_SPADES_SETTING(cg_chatBeep, "1");
 
 DEFINE_SPADES_SETTING(cg_serverAlert, "1");
 
+SPADES_SETTING(cg_playerName);
+
 namespace spades {
 	namespace client {
 
@@ -67,10 +69,10 @@ namespace spades {
 		  r_device_client()); // Seed Mersenne twister with non-deterministic 32-bit seed
 
 		Client::Client(IRenderer *r, IAudioDevice *audioDev, const ServerAddress &host,
-		               std::string playerName, FontManager *fontManager)
+		               FontManager *fontManager)
 		    : renderer(r),
 		      audioDevice(audioDev),
-		      playerName(playerName),
+			  playerName(cg_playerName.operator std::string().substr(0, 15)),
 		      hasDelayedReload(false),
 		      hostname(host),
 		      logStream(nullptr),
@@ -343,15 +345,15 @@ namespace spades {
 			else
 				SPLog("Mumble link failed");
 
-			mumbleLink.setContext(hostname.asString(false));
+			mumbleLink.setContext(hostname.ToString(false));
 			mumbleLink.setIdentity(playerName);
 
-			SPLog("Started connecting to '%s'", hostname.asString(true).c_str());
+			SPLog("Started connecting to '%s'", hostname.ToString(true).c_str());
 			net.reset(new NetClient(this));
 			net->Connect(hostname);
 
 			// decide log file name
-			std::string fn = hostname.asString(false);
+			std::string fn = hostname.ToString(false);
 			std::string fn2;
 			{
 				time_t t;

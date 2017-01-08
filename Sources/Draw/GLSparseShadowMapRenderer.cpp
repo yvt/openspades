@@ -478,7 +478,7 @@ namespace spades {
 
 			Internal(GLSparseShadowMapRenderer *r) : renderer(r) {
 
-				GLProfiler profiler(r->device, "Sparse Page Table Generation");
+				GLProfiler::Context profiler(r->GetRenderer()->GetGLProfiler(), "Sparse Page Table Generation");
 
 				cameraShadowCoord = r->GetRenderer()->GetSceneDef().viewOrigin;
 				cameraShadowCoord = (r->matrix * cameraShadowCoord).GetXYZ();
@@ -563,7 +563,7 @@ namespace spades {
 				}
 
 				if (false) {
-					GLProfiler profiler(r->device, "Debug Output");
+					GLProfiler::Context profiler(r->GetRenderer()->GetGLProfiler(), "Debug Output");
 
 					SPLog("Sparse Page Table -------");
 					for (int y = 0; y < Tiles; y++) {
@@ -684,7 +684,7 @@ namespace spades {
 				if (groups.empty())
 					return;
 
-				GLProfiler profiler(renderer->device, "Pack [%d group(s)]", (int)groups.size());
+				GLProfiler::Context profiler(renderer->GetRenderer()->GetGLProfiler(), "Pack [%d group(s)]", (int)groups.size());
 
 				lodBias = 100;
 				if (TryPack()) {
@@ -733,7 +733,7 @@ namespace spades {
 			itnl.Pack();
 
 			{
-				GLProfiler profiler(device, "Page Table Generation");
+				GLProfiler::Context profiler(GetRenderer()->GetGLProfiler(), "Page Table Generation");
 				for (int x = 0; x < Tiles; x++) {
 					for (int y = 0; y < Tiles; y++) {
 						size_t val = itnl.groupMap[x][y];
@@ -770,7 +770,7 @@ namespace spades {
 			}
 
 			{
-				GLProfiler profiler(device, "Page Table Upload");
+				GLProfiler::Context profiler(GetRenderer()->GetGLProfiler(), "Page Table Upload");
 				device->BindTexture(IGLDevice::Texture2D, pagetableTexture);
 				device->TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, Tiles, Tiles, IGLDevice::BGRA,
 				                      IGLDevice::UnsignedByte, pagetable);
@@ -778,7 +778,7 @@ namespace spades {
 
 			Matrix4 baseMatrix = matrix;
 			{
-				GLProfiler profiler(device, "Shadow Maps [%d group(s)]", (int)itnl.groups.size());
+				GLProfiler::Context profiler(GetRenderer()->GetGLProfiler(), "Shadow Maps [%d group(s)]", (int)itnl.groups.size());
 				ModelRenderer mrend;
 				for (size_t i = 0; i < itnl.groups.size(); i++) {
 					Internal::Group &g = itnl.groups[i];

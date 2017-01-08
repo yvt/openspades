@@ -1,13 +1,23 @@
 #!/bin/sh
+# This file should be run from the repository root (e.g. ~/openspades)
+# TODO: Optimize and error-checking
 
-cd Resources/Locales/pot
+  FILES_H=`find . -iname *.h`
+FILES_CPP=`find . -iname *.cpp`
+  FILES_C=`find . -iname *.c`
+ FILES_AS=`find . -iname *.as`
 
-INFILES=" `find ../../../Sources -iname \*.cpp`"
-INFILES+=" `find ../../../Sources -iname \*.c`"
-INFILES+=" `find ../../../Sources -iname \*.h`"
-INFILES+=" `find ../../Scripts -iname \*.as`"
+FILES="${FILES_H} ${FILES_CPP} ${FILES_C} ${FILES_AS}"
+echo $FILES| tr " " "\n" > .translate.this # Convert spaces to newlines
 
-xgettext -o openspades.pot -j -d openspades -k_Tr:2,1c -k_TrN:2,1c,3 $INFILES \
---package-name=OpenSpades --copyright-holder=yvt --msgid-bugs-address=i\ at\ yvt.jp \
---omit-header
+OPTIONS_OUTPUT="-o Resources/Locales/pot/openspades.pot"
+OPTIONS_CPP="--c++"
+OPTIONS_KEYWORD="-k_Tr:2,1c -k_TrN:2,1c,3" # Have no idea how this works
+OPTIONS="-j ${OPTIONS_OUTPUT} ${OPTIONS_CPP} ${OPTIONS_KEYWORD}"
 
+META_PKG="--package-name=OpenSpades"
+META_COPYRIGHT="--copyright-holder=yvt"
+META_BUGS="--msgid-bugs-address=i@yvt.jp"
+METADATA="$META_PKG $META_COPYRIGHT $META_BUGS --omit-header"
+
+xgettext $OPTIONS $METADATA -f .translate.this

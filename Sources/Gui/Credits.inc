@@ -6,7 +6,7 @@ ${PACKAGE_STRING}
 CREDITS
 -------
 
-"yvt" - Most of the code
+"yvt" - Most of the code, Japanese translation
 "Dany0" - System profiler, ideas, etc.
 "learn_more" - CMake support, server browser, ideas, Win32 build guide
 "iamgreaser" - AoS 0.76 protocol support
@@ -17,11 +17,12 @@ CREDITS
 "pandaro" - Improvements to the Minimap
 "kmsi" - Korean translation
 "tungdil" - German translation
-"feikname" - Brazilian portuguese translation, GUI ideas, wiki maintenance
+"feikname" - Brazilian Portuguese translation, GUI ideas, wiki maintenance
 "VelocityRa" - Repo maintenance, VS2015 support, better random generator
 "Mailaender" - FreeDesktop definitions fixes
 "Chameleonhider" - Configurable player name drawing
 "CenturionFox" - Server Disconnect Screen
+"DarkDracoon" - European Portuguese translation
 
 And many others which weren't mentioned here.
 

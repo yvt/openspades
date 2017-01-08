@@ -52,12 +52,16 @@ namespace spades {
 			GLProgramUniform minLod;
 			GLProgramUniform shadowMapSizeInv;
 
+			GLProgramUniform ssaoTexture;
+			GLProgramUniform ssaoTextureUVScale;
+
 		public:
 			GLShadowShader();
 			~GLShadowShader() {}
 
 			static std::vector<GLShader *> RegisterShader(GLProgramManager *, GLSettings &,
-			                                              bool variance = false);
+			                                              bool variance = false,
+			                                              bool skipSSAO = false);
 
 			/** setups shadow shader.
 			 * note that this function sets the current active texture

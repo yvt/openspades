@@ -265,7 +265,7 @@ namespace spades {
 
 			// full-resolution sprites
 			{
-				GLProfiler measure(device, "Full Resolution");
+				GLProfiler::Context measure(renderer->GetGLProfiler(), "Full Resolution");
 				for (size_t i = 0; i < sprites.size(); i++) {
 					Sprite &spr = sprites[i];
 					float layer = LayerForSprite(spr);
@@ -330,7 +330,7 @@ namespace spades {
 			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			device->Viewport(0, 0, lW, lH);
 			{
-				GLProfiler measure(device, "Low Resolution");
+				GLProfiler::Context measure(renderer->GetGLProfiler(), "Low Resolution");
 				for (size_t i = 0; i < sprites.size(); i++) {
 					Sprite &spr = sprites[i];
 					float layer = LayerForSprite(spr);
@@ -401,7 +401,7 @@ namespace spades {
 			// composite downsampled sprite
 			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			if (numLowResSprites > 0) {
-				GLProfiler measure(device, "Finalize");
+				GLProfiler::Context measure(renderer->GetGLProfiler(), "Finalize");
 				GLQuadRenderer qr(device);
 
 				// do gaussian blur
