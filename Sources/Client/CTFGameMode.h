@@ -40,7 +40,7 @@ namespace spades {
 
 		public:
 			CTFGameMode();
-			virtual ~CTFGameMode();
+			~CTFGameMode();
 
 			Team &GetTeam(int t);
 			int GetCaptureLimit() { return captureLimit; }

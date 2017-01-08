@@ -1148,7 +1148,6 @@ namespace spades {
 				velocity.y *= .5f;
 
 				if (f2 > FALL_DAMAGE_VELOCITY) {
-					f2 -= FALL_DAMAGE_VELOCITY;
 					if (world->GetListener()) {
 						world->GetListener()->PlayerLanded(this, true);
 					}

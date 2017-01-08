@@ -41,7 +41,7 @@ namespace spades {
 			std::vector<uint32_t> renderDataAddr;
 
 		protected:
-			virtual ~SWModel();
+			~SWModel();
 
 		public:
 			SWModel(VoxelModel *model);

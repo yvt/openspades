@@ -85,7 +85,7 @@ namespace spades {
 			std::unordered_set<std::string> favorites;
 
 		protected:
-			virtual ~MainScreenHelper();
+			~MainScreenHelper();
 
 		public:
 			MainScreenHelper(MainScreen *scr);
@@ -100,7 +100,7 @@ namespace spades {
 			CScriptArray *GetServerList(std::string sortKey, bool descending);
 			std::string GetServerListQueryMessage();
 
-			std::string ConnectServer();
+			std::string ConnectServer(std::string hostname, int protocolVersion);
 			std::string GetPendingErrorMessage();
 
 			std::string GetCredits();

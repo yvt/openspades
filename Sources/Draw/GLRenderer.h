@@ -21,14 +21,15 @@
 #pragma once
 
 #include <map>
+#include <memory>
 
+#include "GLCameraBlurFilter.h"
+#include "GLDynamicLight.h"
+#include "GLSettings.h"
 #include <Client/IGameMapListener.h>
 #include <Client/IRenderer.h>
 #include <Client/SceneDefinition.h>
 #include <Core/Math.h>
-#include "GLCameraBlurFilter.h"
-#include "GLDynamicLight.h"
-#include "GLSettings.h"
 
 namespace spades {
 	namespace draw {
@@ -54,6 +55,7 @@ namespace spades {
 		class GLLensDustFilter;
 		class GLSoftLitSpriteRenderer;
 		class GLAutoExposureFilter;
+		class GLProfiler;
 
 		class GLRenderer : public client::IRenderer, public client::IGameMapListener {
 			friend class GLShadowShader;
@@ -70,6 +72,8 @@ namespace spades {
 			GLFramebufferManager *fbManager;
 			client::GameMap *map;
 			GLSettings settings;
+
+			std::unique_ptr<GLProfiler> profiler;
 
 			bool inited;
 			bool sceneUsedInThisFrame;
@@ -99,6 +103,9 @@ namespace spades {
 			GLCameraBlurFilter *cameraBlur;
 			GLLensDustFilter *lensDustFilter;
 			GLAutoExposureFilter *autoExposureFilter;
+
+			// used when r_ssao = 1. only valid while rendering objects
+			IGLDevice::UInteger ssaoBufferTexture;
 
 			// used when r_srgb = 1
 			IGLDevice::UInteger lastColorBufferTexture;
@@ -134,70 +141,70 @@ namespace spades {
 			void EnsureSceneNotStarted();
 
 		protected:
-			virtual ~GLRenderer();
+			~GLRenderer();
 
 		public:
 			GLRenderer(IGLDevice *glDevice);
 
-			virtual void Init();
-			virtual void Shutdown();
+			void Init() override;
+			void Shutdown() override;
 
-			virtual client::IImage *RegisterImage(const char *filename);
-			virtual client::IModel *RegisterModel(const char *filename);
+			client::IImage *RegisterImage(const char *filename) override;
+			client::IModel *RegisterModel(const char *filename) override;
 
-			virtual client::IImage *CreateImage(Bitmap *);
-			virtual client::IModel *CreateModel(VoxelModel *);
-			virtual client::IModel *CreateModelOptimized(VoxelModel *);
+			client::IImage *CreateImage(Bitmap *) override;
+			client::IModel *CreateModel(VoxelModel *) override;
+			client::IModel *CreateModelOptimized(VoxelModel *);
 
 			GLProgram *RegisterProgram(const std::string &name);
 			GLShader *RegisterShader(const std::string &name);
 
-			virtual void SetGameMap(client::GameMap *);
-			virtual void SetFogColor(Vector3 v);
-			virtual void SetFogDistance(float f) { fogDistance = f; }
+			void SetGameMap(client::GameMap *) override;
+			void SetFogColor(Vector3 v) override;
+			void SetFogDistance(float f) override { fogDistance = f; }
 
 			Vector3 GetFogColor() { return fogColor; }
 			float GetFogDistance() { return fogDistance; }
 			Vector3 GetFogColorForSolidPass();
 
-			virtual void StartScene(const client::SceneDefinition &);
+			void StartScene(const client::SceneDefinition &) override;
 
-			virtual void RenderModel(client::IModel *, const client::ModelRenderParam &);
+			void RenderModel(client::IModel *, const client::ModelRenderParam &) override;
 
-			virtual void AddLight(const client::DynamicLightParam &light);
+			void AddLight(const client::DynamicLightParam &light) override;
 
-			virtual void AddDebugLine(Vector3 a, Vector3 b, Vector4 color);
+			void AddDebugLine(Vector3 a, Vector3 b, Vector4 color) override;
 
-			virtual void AddSprite(client::IImage *, Vector3 center, float radius, float rotation);
-			virtual void AddLongSprite(client::IImage *, Vector3 p1, Vector3 p2, float radius);
+			void AddSprite(client::IImage *, Vector3 center, float radius, float rotation) override;
+			void AddLongSprite(client::IImage *, Vector3 p1, Vector3 p2, float radius) override;
 
-			virtual void EndScene();
+			void EndScene() override;
 
-			virtual void MultiplyScreenColor(Vector3);
+			void MultiplyScreenColor(Vector3) override;
 
-			virtual void SetColor(Vector4);
-			virtual void SetColorAlphaPremultiplied(Vector4);
+			void SetColor(Vector4) override;
+			void SetColorAlphaPremultiplied(Vector4) override;
 
-			virtual void DrawImage(client::IImage *, const Vector2 &outTopLeft);
-			virtual void DrawImage(client::IImage *, const AABB2 &outRect);
-			virtual void DrawImage(client::IImage *, const Vector2 &outTopLeft,
-			                       const AABB2 &inRect);
-			virtual void DrawImage(client::IImage *, const AABB2 &outRect, const AABB2 &inRect);
-			virtual void DrawImage(client::IImage *, const Vector2 &outTopLeft,
-			                       const Vector2 &outTopRight, const Vector2 &outBottomLeft,
-			                       const AABB2 &inRect);
+			void DrawImage(client::IImage *, const Vector2 &outTopLeft) override;
+			void DrawImage(client::IImage *, const AABB2 &outRect) override;
+			void DrawImage(client::IImage *, const Vector2 &outTopLeft,
+			               const AABB2 &inRect) override;
+			void DrawImage(client::IImage *, const AABB2 &outRect, const AABB2 &inRect) override;
+			void DrawImage(client::IImage *, const Vector2 &outTopLeft, const Vector2 &outTopRight,
+			               const Vector2 &outBottomLeft, const AABB2 &inRect) override;
 
-			virtual void DrawFlatGameMap(const AABB2 &outRect, const AABB2 &inRect);
+			void DrawFlatGameMap(const AABB2 &outRect, const AABB2 &inRect) override;
 
-			virtual void FrameDone();
-			virtual void Flip();
-			virtual Bitmap *ReadBitmap();
+			void FrameDone() override;
+			void Flip() override;
+			Bitmap *ReadBitmap() override;
 
-			virtual float ScreenWidth();
-			virtual float ScreenHeight();
+			float ScreenWidth() override;
+			float ScreenHeight() override;
 
 			GLSettings &GetSettings() { return settings; }
 			IGLDevice *GetGLDevice() { return device; }
+			GLProfiler &GetGLProfiler() { return *profiler; }
 			GLFramebufferManager *GetFramebufferManager() { return fbManager; }
 			IGLShadowMapRenderer *GetShadowMapRenderer() { return shadowMapRenderer; }
 			GLAmbientShadowRenderer *GetAmbientShadowRenderer() { return ambientShadowRenderer; }
@@ -211,7 +218,7 @@ namespace spades {
 
 			bool IsRenderingMirror() const { return renderingMirror; }
 
-			virtual void GameMapChanged(int x, int y, int z, client::GameMap *);
+			void GameMapChanged(int x, int y, int z, client::GameMap *) override;
 
 			const client::SceneDefinition &GetSceneDef() const { return sceneDef; }
 

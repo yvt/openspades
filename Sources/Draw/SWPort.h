@@ -27,7 +27,7 @@ namespace spades {
 	namespace draw {
 		class SWPort : public RefCountedObject {
 		protected:
-			virtual ~SWPort() {}
+			~SWPort() {}
 
 		public:
 			virtual Bitmap *GetFramebuffer() = 0;

@@ -52,7 +52,7 @@ namespace spades {
 			void Start();
 
 		protected:
-			virtual ~StartupScreen();
+			~StartupScreen();
 
 		public:
 			StartupScreen(client::IRenderer *, client::IAudioDevice *, StartupScreenHelper *helper,
@@ -61,23 +61,22 @@ namespace spades {
 			client::IRenderer *GetRenderer() { return &*renderer; }
 			client::IAudioDevice *GetAudioDevice() { return &*audioDevice; }
 
-			virtual void MouseEvent(float x, float y);
-			virtual void KeyEvent(const std::string &, bool down);
-			virtual void TextInputEvent(const std::string &);
-			virtual void TextEditingEvent(const std::string &, int start, int len);
-			virtual bool AcceptsTextInput();
-			virtual AABB2 GetTextInputRect();
-			virtual void WheelEvent(float x, float y);
-			virtual bool NeedsAbsoluteMouseCoordinate();
+			void MouseEvent(float x, float y) override;
+			void KeyEvent(const std::string &, bool down) override;
+			void TextInputEvent(const std::string &) override;
+			void TextEditingEvent(const std::string &, int start, int len) override;
+			bool AcceptsTextInput() override;
+			AABB2 GetTextInputRect() override;
+			void WheelEvent(float x, float y) override;
+			bool NeedsAbsoluteMouseCoordinate() override;
 
-			virtual void RunFrame(float dt);
+			void RunFrame(float dt) override;
 
-			virtual void Closing();
+			void Closing() override;
 
-			virtual bool WantsToBeClosed();
+			bool WantsToBeClosed() override;
 
 			static void Run();
 		};
-		;
 	}
 }

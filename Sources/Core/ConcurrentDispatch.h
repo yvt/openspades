@@ -65,7 +65,7 @@ namespace spades {
 	public:
 		ConcurrentDispatch();
 		ConcurrentDispatch(std::string name);
-		virtual ~ConcurrentDispatch();
+		~ConcurrentDispatch();
 
 		void Start();
 		void StartOn(DispatchQueue *);
@@ -75,7 +75,7 @@ namespace spades {
 		 * when the dispatch completes, this instance will be deleted. */
 		void Release();
 
-		virtual void Run();
+		void Run() override;
 
 		void SetRunnable(IRunnable *r) { runnable = r; }
 		IRunnable *GetRunnable() const { return runnable; }
@@ -86,6 +86,6 @@ namespace spades {
 
 	public:
 		FunctionDispatch(F f) : f(f) {}
-		virtual void Run() { f(); }
+		void Run() override { f(); }
 	};
 }

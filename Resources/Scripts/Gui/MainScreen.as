@@ -359,7 +359,7 @@ namespace spades {
 		MainScreenServerListErrorView@ errorView;
 		bool loading = false, loaded = false;
 
-		private ConfigItem cg_protocolVersion("cg_protocolVersion");
+		private ConfigItem cg_protocolVersion("cg_protocolVersion", "3");
 		private ConfigItem cg_lastQuickConnectHost("cg_lastQuickConnectHost");
 		private ConfigItem cg_serverlistSort("cg_serverlistSort", "16385");
 
@@ -747,7 +747,7 @@ namespace spades {
 		}
 
 		private void Connect() {
-			string msg = helper.ConnectServer();
+			string msg = helper.ConnectServer(addressField.Text, cg_protocolVersion.IntValue);
 			if(msg.length > 0) {
 				// failde to initialize client.
 				AlertScreen al(this, msg);

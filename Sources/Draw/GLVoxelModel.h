@@ -22,9 +22,9 @@
 
 #include <vector>
 
-#include <Core/VoxelModel.h>
 #include "GLModel.h"
 #include "IGLDevice.h"
+#include <Core/VoxelModel.h>
 
 namespace spades {
 	namespace draw {
@@ -72,21 +72,23 @@ namespace spades {
 			void BuildVertices(VoxelModel *);
 
 		protected:
-			virtual ~GLVoxelModel();
+			~GLVoxelModel();
 
 		public:
 			GLVoxelModel(VoxelModel *, GLRenderer *r);
 
 			static void PreloadShaders(GLRenderer *);
 
-			virtual void RenderShadowMapPass(std::vector<client::ModelRenderParam> params);
+			void Prerender(std::vector<client::ModelRenderParam> params) override;
 
-			virtual void RenderSunlightPass(std::vector<client::ModelRenderParam> params);
+			void RenderShadowMapPass(std::vector<client::ModelRenderParam> params) override;
 
-			virtual void RenderDynamicLightPass(std::vector<client::ModelRenderParam> params,
-			                                    std::vector<GLDynamicLight> lights);
+			void RenderSunlightPass(std::vector<client::ModelRenderParam> params) override;
 
-			virtual AABB3 GetBoundingBox() { return boundingBox; }
+			void RenderDynamicLightPass(std::vector<client::ModelRenderParam> params,
+			                            std::vector<GLDynamicLight> lights) override;
+
+			AABB3 GetBoundingBox() override { return boundingBox; }
 		};
 	}
 }

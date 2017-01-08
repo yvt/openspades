@@ -20,6 +20,7 @@
 
 #include <algorithm> //std::sort
 #include <memory>
+#include <regex>
 
 #if !defined(__APPLE__) && (__unix || __unix__)
 #include <sys/stat.h>
@@ -32,6 +33,7 @@
 #include "Main.h"
 #include "MainScreen.h"
 #include "Runner.h"
+#include "SplashWindow.h"
 #include <Client/Client.h>
 #include <Client/Fonts.h>
 #include <Client/GameMap.h>
@@ -62,183 +64,179 @@ FILE __iob_func[3] = {*stdin, *stdout, *stderr};
 }
 #endif
 
-static const unsigned char splashImage[] = {
-#include "SplashImage.inc"
-};
-
-#if !defined(__APPLE__) && __unix
-static const unsigned char Icon[] = {
-#include "Icon.inc"
-};
-#endif
-
 DEFINE_SPADES_SETTING(cl_showStartupWindow, "1");
 
 #ifdef WIN32
 #include <shlobj.h>
 #include <windows.h>
+#include <DbgHelp.h>
+
 #define strncasecmp(x, y, z) _strnicmp(x, y, z)
 #define strcasecmp(x, y) _stricmp(x, y)
 
 DEFINE_SPADES_SETTING(core_win32BeginPeriod, "1");
 
-class ThreadQuantumSetter {
-public:
-	ThreadQuantumSetter() {
-		if (core_win32BeginPeriod) {
-			timeBeginPeriod(1);
-			SPLog("Thread quantum was modified to 1ms by timeBeginPeriod");
-			SPLog("(to disable this behavior, set core_win32BeginPeriod to 0)");
+namespace
+{
+	class ThreadQuantumSetter {
+	public:
+		ThreadQuantumSetter() {
+			if (core_win32BeginPeriod) {
+				timeBeginPeriod(1);
+				SPLog("Thread quantum was modified to 1ms by timeBeginPeriod");
+				SPLog("(to disable this behavior, set core_win32BeginPeriod to 0)");
+			} else {
+				SPLog("Thread quantum is not modified");
+				SPLog("(to enable this behavior, set core_win32BeginPeriod to 1)");
+			}
+		}
+		~ThreadQuantumSetter() {
+			if (core_win32BeginPeriod) {
+				timeEndPeriod(1);
+				SPLog("Thread quantum was restored");
+			}
+		}
+	};
+
+	// lm: without doing it this way, we will get a low-res icon or an ugly resampled icon in our
+	// window.
+	// we cannot use the fltk function on the console window, because it's not an Fl_Window...
+	void setIcon(HWND hWnd) {
+		HINSTANCE hInstance = GetModuleHandle(NULL);
+		HICON hIcon = (HICON)LoadImageA(hInstance, "AppIcon", IMAGE_ICON, GetSystemMetrics(SM_CXICON),
+										GetSystemMetrics(SM_CYICON), 0);
+		if (hIcon) {
+			SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+		}
+		hIcon = (HICON)LoadImageA(hInstance, "AppIcon", IMAGE_ICON, GetSystemMetrics(SM_CXSMICON),
+								  GetSystemMetrics(SM_CYSMICON), 0);
+		if (hIcon) {
+			SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+		}
+	}
+
+	LONG WINAPI UnhandledExceptionProc(LPEXCEPTION_POINTERS lpEx) {
+		typedef BOOL(WINAPI * PDUMPFN)(HANDLE hProcess, DWORD ProcessId, HANDLE hFile,
+									   MINIDUMP_TYPE DumpType,
+									   PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam,
+									   PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam,
+									   PMINIDUMP_CALLBACK_INFORMATION CallbackParam);
+		HMODULE hLib = LoadLibrary("DbgHelp.dll");
+		PDUMPFN pMiniDumpWriteDump = (PDUMPFN)GetProcAddress(hLib, "MiniDumpWriteDump");
+
+		static char buf[MAX_PATH + 120] = {0}; // this is our display buffer.
+		if (pMiniDumpWriteDump) {
+			static char fullBuf[MAX_PATH + 120] = {0};
+			if (SUCCEEDED(
+				  SHGetFolderPath(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0,
+								  buf))) { // max length = MAX_PATH (temp abuse this buffer space)
+				strcat_s(buf, "\\");       // ensure we end with a slash.
+			} else {
+				buf[0] = 0; // empty it, the file will now end up in the working directory :(
+			}
+			sprintf(fullBuf, "%sOpenSpadesCrash%d.dmp", buf,
+					GetTickCount()); // some sort of randomization.
+			HANDLE hFile = CreateFile(fullBuf, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
+									  FILE_ATTRIBUTE_NORMAL, NULL);
+			if (hFile != INVALID_HANDLE_VALUE) {
+				MINIDUMP_EXCEPTION_INFORMATION mdei = {0};
+				mdei.ThreadId = GetCurrentThreadId();
+				mdei.ExceptionPointers = lpEx;
+				mdei.ClientPointers = TRUE;
+				MINIDUMP_TYPE mdt = MiniDumpNormal;
+				BOOL rv = pMiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, mdt,
+											 (lpEx != 0) ? &mdei : 0, 0, 0);
+				CloseHandle(hFile);
+				sprintf_s(buf,
+						  "Something went horribly wrong, please send the file \n%s\nfor analysis.",
+						  fullBuf);
+			} else {
+				sprintf_s(buf, "Something went horribly wrong,\ni even failed to store information "
+							   "about the problem... (0x%08x)",
+						  lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff);
+			}
 		} else {
-			SPLog("Thread quantum is not modified");
-			SPLog("(to enable this behavior, set core_win32BeginPeriod to 1)");
+			sprintf_s(buf, "Something went horribly wrong,\ni even failed to retrieve information "
+						   "about the problem... (0x%08x)",
+					  lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff);
 		}
+		MessageBoxA(NULL, buf, "Oops, we crashed...", MB_OK | MB_ICONERROR);
+		ExitProcess(-1);
+		// return EXCEPTION_EXECUTE_HANDLER;
 	}
-	~ThreadQuantumSetter() {
-		if (core_win32BeginPeriod) {
-			timeEndPeriod(1);
-			SPLog("Thread quantum was restored");
-		}
-	}
-};
-
-// lm: without doing it this way, we will get a low-res icon or an ugly resampled icon in our
-// window.
-// we cannot use the fltk function on the console window, because it's not an Fl_Window...
-void setIcon(HWND hWnd) {
-	HINSTANCE hInstance = GetModuleHandle(NULL);
-	HICON hIcon = (HICON)LoadImageA(hInstance, "AppIcon", IMAGE_ICON, GetSystemMetrics(SM_CXICON),
-	                                GetSystemMetrics(SM_CYICON), 0);
-	if (hIcon) {
-		SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
-	}
-	hIcon = (HICON)LoadImageA(hInstance, "AppIcon", IMAGE_ICON, GetSystemMetrics(SM_CXSMICON),
-	                          GetSystemMetrics(SM_CYSMICON), 0);
-	if (hIcon) {
-		SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
-	}
-}
-
-#include <DbgHelp.h>
-
-LONG WINAPI UnhandledExceptionProc(LPEXCEPTION_POINTERS lpEx) {
-	typedef BOOL(WINAPI * PDUMPFN)(HANDLE hProcess, DWORD ProcessId, HANDLE hFile,
-	                               MINIDUMP_TYPE DumpType,
-	                               PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam,
-	                               PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam,
-	                               PMINIDUMP_CALLBACK_INFORMATION CallbackParam);
-	HMODULE hLib = LoadLibrary("DbgHelp.dll");
-	PDUMPFN pMiniDumpWriteDump = (PDUMPFN)GetProcAddress(hLib, "MiniDumpWriteDump");
-
-	static char buf[MAX_PATH + 120] = {0}; // this is our display buffer.
-	if (pMiniDumpWriteDump) {
-		static char fullBuf[MAX_PATH + 120] = {0};
-		if (SUCCEEDED(
-		      SHGetFolderPath(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0,
-		                      buf))) { // max length = MAX_PATH (temp abuse this buffer space)
-			strcat_s(buf, "\\");       // ensure we end with a slash.
-		} else {
-			buf[0] = 0; // empty it, the file will now end up in the working directory :(
-		}
-		sprintf(fullBuf, "%sOpenSpadesCrash%d.dmp", buf,
-		        GetTickCount()); // some sort of randomization.
-		HANDLE hFile = CreateFile(fullBuf, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
-		                          FILE_ATTRIBUTE_NORMAL, NULL);
-		if (hFile != INVALID_HANDLE_VALUE) {
-			MINIDUMP_EXCEPTION_INFORMATION mdei = {0};
-			mdei.ThreadId = GetCurrentThreadId();
-			mdei.ExceptionPointers = lpEx;
-			mdei.ClientPointers = TRUE;
-			MINIDUMP_TYPE mdt = MiniDumpNormal;
-			BOOL rv = pMiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, mdt,
-			                             (lpEx != 0) ? &mdei : 0, 0, 0);
-			CloseHandle(hFile);
-			sprintf_s(buf,
-			          "Something went horribly wrong, please send the file \n%s\nfor analysis.",
-			          fullBuf);
-		} else {
-			sprintf_s(buf, "Something went horribly wrong,\ni even failed to store information "
-			               "about the problem... (0x%08x)",
-			          lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff);
-		}
-	} else {
-		sprintf_s(buf, "Something went horribly wrong,\ni even failed to retrieve information "
-		               "about the problem... (0x%08x)",
-		          lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff);
-	}
-	MessageBoxA(NULL, buf, "Oops, we crashed...", MB_OK | MB_ICONERROR);
-	ExitProcess(-1);
-	// return EXCEPTION_EXECUTE_HANDLER;
 }
 #else
-class ThreadQuantumSetter {};
+namespace
+{
+	class ThreadQuantumSetter {};
+}
 #endif
 
-SPADES_SETTING(cg_lastQuickConnectHost);
-SPADES_SETTING(cg_protocolVersion);
-SPADES_SETTING(cg_playerName);
-int cg_autoConnect = 0;
-bool cg_printVersion = false;
-bool cg_printHelp = false;
+namespace {
+	bool g_autoconnect = false;
+	std::string g_autoconnectHostName;
+	spades::ProtocolVersion g_autoconnectProtocolVersion = spades::ProtocolVersion::v075;
 
-void printHelp(char *binaryName) {
-	printf("usage: %s [server_address] [v=protocol_version] [-h|--help] [-v|--version] \n",
-	       binaryName);
-}
+	bool g_printVersion = false;
+	bool g_printHelp = false;
 
-int argsHandler(int argc, char **argv, int &i) {
-	if (char *a = argv[i]) {
-		if (!strncasecmp(a, "aos://", 6)) {
-			cg_lastQuickConnectHost = a;
-			cg_autoConnect = 1;
-			return ++i;
-		}
-		// lm: we attempt to detect protocol version, allowing with or without a prefix 'v='
-		// we set proto, but without url we will not auto-connect
-		if (a[0] == 'v' && a[1] == '=') {
-			a += 2;
-		}
-		if (!strcasecmp(a, "75") || !strcasecmp(a, "075") || !strcasecmp(a, "0.75")) {
-			cg_protocolVersion = 3;
-			return ++i;
-		}
-		if (!strcasecmp(a, "76") || !strcasecmp(a, "076") || !strcasecmp(a, "0.76")) {
-			cg_protocolVersion = 4;
-			return ++i;
-		}
-		if (!strcasecmp(a, "--version") || !strcasecmp(a, "-v")) {
-			cg_printVersion = true;
-			return ++i;
-		}
-		if (!strcasecmp(a, "--help") || !strcasecmp(a, "-h")) {
-			cg_printHelp = true;
-			return ++i;
-		}
+	void printHelp(char *binaryName) {
+		printf("usage: %s [server_address] [v=protocol_version] [-h|--help] [-v|--version] \n",
+		       binaryName);
 	}
 
-	return 0;
+	int handleCommandLineArgument(int argc, char **argv, int &i) {
+		if (char *a = argv[i]) {
+			static std::regex hostNameRegex{"aos://.*"};
+			static std::regex v075Regex{"(?:v=)?0?\\.?75"};
+			static std::regex v076Regex{"(?:v=)?0?\\.?76"};
+
+			if (std::regex_match(a, hostNameRegex)) {
+				g_autoconnect = true;
+				g_autoconnectHostName = a;
+				return ++i;
+			}
+			if (std::regex_match(a, v075Regex)) {
+				g_autoconnectProtocolVersion = spades::ProtocolVersion::v075;
+				return ++i;
+			}
+			if (std::regex_match(a, v076Regex)) {
+				g_autoconnectProtocolVersion = spades::ProtocolVersion::v076;
+				return ++i;
+			}
+			if (!strcasecmp(a, "--version") || !strcasecmp(a, "-v")) {
+				g_printVersion = true;
+				return ++i;
+			}
+			if (!strcasecmp(a, "--help") || !strcasecmp(a, "-h")) {
+				g_printHelp = true;
+				return ++i;
+			}
+		}
+
+		return 0;
+	}
 }
 
 namespace spades {
 	std::string g_userResourceDirectory;
 
-	void StartClient(const spades::ServerAddress &addr, const std::string &playerName) {
+	void StartClient(const spades::ServerAddress &addr) {
 		class ConcreteRunner : public spades::gui::Runner {
 			spades::ServerAddress addr;
-			std::string playerName;
 
 		protected:
 			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                                      spades::client::IAudioDevice *audio) {
 				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				return new spades::client::Client(renderer, audio, addr, playerName, fontManager);
+				return new spades::client::Client(renderer, audio, addr, fontManager);
 			}
 
 		public:
-			ConcreteRunner(const spades::ServerAddress &addr, const std::string &playerName)
-			    : addr(addr), playerName(playerName) {}
+			ConcreteRunner(const spades::ServerAddress &addr)
+			    : addr(addr) {}
 		};
-		ConcreteRunner runner(addr, playerName);
+		ConcreteRunner runner(addr);
 		runner.RunProtected();
 	}
 	void StartMainScreen() {
@@ -256,93 +254,6 @@ namespace spades {
 		runner.RunProtected();
 	}
 }
-
-/** Thrown when user wants to exit the program while its initialization. */
-class ExitRequestException : public std::exception {
-public:
-	ExitRequestException() throw() {}
-};
-
-class SplashWindow {
-	SDL_Window *window;
-	SDL_Surface *surface;
-	spades::Handle<spades::Bitmap> bmp;
-	bool startupScreenRequested;
-
-public:
-	SplashWindow() : window(nullptr), surface(nullptr), startupScreenRequested(false) {
-
-		spades::MemoryStream stream(reinterpret_cast<const char *>(splashImage),
-		                            sizeof(splashImage));
-		bmp.Set(spades::Bitmap::Load(&stream), false);
-
-		SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_TIMER);
-		window = SDL_CreateWindow("OpenSpades Splash Window", SDL_WINDOWPOS_CENTERED,
-		                          SDL_WINDOWPOS_CENTERED, bmp->GetWidth(), bmp->GetHeight(),
-		                          SDL_WINDOW_BORDERLESS);
-		if (window == nullptr) {
-			SPLog("Creation of splash window failed.");
-			return;
-		}
-
-		surface = SDL_GetWindowSurface(window);
-		if (surface == nullptr) {
-			SPLog("Creation of splash window surface failed.");
-			SDL_DestroyWindow(window);
-			return;
-		}
-
-#ifdef __APPLE__
-#elif __unix
-		SDL_Surface *icon = nullptr;
-		SDL_RWops *icon_rw = nullptr;
-		icon_rw = SDL_RWFromConstMem(Icon, sizeof(Icon));
-		if (icon_rw != nullptr) {
-			icon = IMG_LoadPNG_RW(icon_rw);
-			SDL_FreeRW(icon_rw);
-		}
-		if (icon == nullptr) {
-			std::string msg = SDL_GetError();
-			SPLog("Failed to load icon: %s", msg.c_str());
-		} else {
-			SDL_SetWindowIcon(window, icon);
-			SDL_FreeSurface(icon);
-		}
-#endif
-		// put splash image
-		auto *s = SDL_CreateRGBSurfaceFrom(bmp->GetPixels(), bmp->GetWidth(), bmp->GetHeight(), 32,
-		                                   bmp->GetWidth() * 4, 0xff, 0xff00, 0xff0000, 0);
-		SDL_BlitSurface(s, nullptr, surface, nullptr);
-		SDL_FreeSurface(s);
-
-		SDL_UpdateWindowSurface(window);
-	}
-
-	SDL_Window *GetWindow() { return window; }
-
-	void PumpEvents() {
-		SDL_PumpEvents();
-		SDL_Event e;
-		while (SDL_PollEvent(&e)) {
-			switch (e.type) {
-				case SDL_KEYDOWN:
-					switch (e.key.keysym.sym) {
-						case SDLK_ESCAPE: throw ExitRequestException();
-						case SDLK_SPACE: startupScreenRequested = true; break;
-					}
-					break;
-				case SDL_QUIT: throw ExitRequestException();
-			}
-		}
-	}
-
-	bool IsStartupScreenRequested() { return startupScreenRequested; }
-
-	~SplashWindow() {
-		if (window)
-			SDL_DestroyWindow(window);
-	}
-};
 
 static uLong computeCrc32ForStream(spades::IStream *s) {
 	uLong crc = crc32(0L, Z_NULL, 0);
@@ -374,24 +285,24 @@ int main(int argc, char **argv) {
 #endif
 
 	for (int i = 1; i < argc;) {
-		int ret = argsHandler(argc, argv, i);
+		int ret = handleCommandLineArgument(argc, argv, i);
 		if (!ret) {
 			// ignore unknown arg
 			i++;
 		}
 	}
 
-	if (cg_printVersion) {
+	if (g_printVersion) {
 		printf("%s\n", PACKAGE_STRING);
 		return 0;
 	}
 
-	if (cg_printHelp) {
+	if (g_printHelp) {
 		printHelp(argv[0]);
 		return 0;
 	}
 
-	std::unique_ptr<SplashWindow> splashWindow;
+	std::unique_ptr<spades::SplashWindow> splashWindow;
 
 	try {
 
@@ -401,7 +312,7 @@ int main(int argc, char **argv) {
 
 		// show splash window
 		// NOTE: splash window uses image loader, which assumes backtrace is already initialized.
-		splashWindow.reset(new SplashWindow());
+		splashWindow.reset(new spades::SplashWindow());
 		auto showSplashWindowTime = SDL_GetTicks();
 		auto pumpEvents = [&splashWindow] { splashWindow->PumpEvents(); };
 
@@ -658,7 +569,7 @@ int main(int argc, char **argv) {
 		pumpEvents();
 
 		// everything is now ready!
-		if (!cg_autoConnect) {
+		if (!g_autoconnect) {
 			if (!((int)cl_showStartupWindow != 0 || splashWindow->IsStartupScreenRequested())) {
 				splashWindow.reset();
 
@@ -673,16 +584,14 @@ int main(int argc, char **argv) {
 		} else {
 			splashWindow.reset();
 
-			spades::ServerAddress host(cg_lastQuickConnectHost.CString(),
-			                           (int)cg_protocolVersion == 3
-			                             ? spades::ProtocolVersion::v075
-			                             : spades::ProtocolVersion::v076);
-			spades::StartClient(host, std::string(cg_playerName).substr(0, 15));
+			spades::ServerAddress host(g_autoconnectHostName,
+			                           g_autoconnectProtocolVersion);
+			spades::StartClient(host);
 		}
 
 		spades::Settings::GetInstance()->Flush();
 
-	} catch (const ExitRequestException &) {
+	} catch (const spades::ExitRequestException &) {
 		// user changed his/her mind.
 	} catch (const std::exception &ex) {
 

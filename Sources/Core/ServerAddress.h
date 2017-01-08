@@ -27,27 +27,21 @@ struct _ENetAddress;
 typedef _ENetAddress ENetAddress;
 
 namespace spades {
-	struct ProtocolVersion {
-		enum Version {
-			Unknown = 0,
-			v075 = 3,
-			v076 = 4,
-		};
-	};
+	enum class ProtocolVersion { Unknown = 0, v075 = 3, v076 = 4 };
 	class ServerAddress {
 		std::string mAddress;
-		ProtocolVersion::Version mVersion;
+		ProtocolVersion mVersion;
 
-		std::string stripProtocol(const std::string &address) const;
+		static std::string StripProtocol(const std::string &address);
 
 	public:
 		explicit ServerAddress(std::string address = "",
-		                       ProtocolVersion::Version version = ProtocolVersion::Unknown);
+		                       ProtocolVersion version = ProtocolVersion::Unknown);
 
 		bool valid() const;
-		ENetAddress asAddress() const;
-		ProtocolVersion::Version protocol() const { return mVersion; }
-		std::string asString(bool includeProtocol = true) const;
+		ENetAddress GetENetAddress() const;
+		ProtocolVersion GetProtocolVersion() const { return mVersion; }
+		std::string ToString(bool includeProtocol = true) const;
 
 		static uint32_t ParseIntegerAddress(const std::string &str);
 	};

@@ -60,15 +60,15 @@ namespace spades {
 			void BuildMatrix(float near, float far);
 
 		protected:
-			virtual void RenderShadowMapPass();
+			void RenderShadowMapPass() override;
 
 		public:
 			GLSparseShadowMapRenderer(GLRenderer *);
-			virtual ~GLSparseShadowMapRenderer();
-			virtual void Render();
+			~GLSparseShadowMapRenderer();
+			void Render() override;
 
-			virtual bool Cull(const AABB3 &);
-			virtual bool SphereCull(const Vector3 &center, float rad);
+			bool Cull(const AABB3 &) override;
+			bool SphereCull(const Vector3 &center, float rad) override;
 		};
 	}
 }

@@ -32,20 +32,20 @@ namespace spades {
 	public:
 		MemoryStream(char *buffer, size_t length, bool allowWrite);
 		MemoryStream(const char *buffer, size_t length);
-		virtual ~MemoryStream();
+		~MemoryStream();
 
-		virtual int ReadByte();
-		virtual size_t Read(void *, size_t bytes);
-		virtual std::string Read(size_t maxBytes);
+		int ReadByte() override;
+		size_t Read(void *, size_t bytes) override;
+		std::string Read(size_t maxBytes) override;
 
-		virtual void WriteByte(int);
-		virtual void Write(const void *, size_t bytes);
+		void WriteByte(int) override;
+		void Write(const void *, size_t bytes) override;
 
-		virtual uint64_t GetPosition();
-		virtual void SetPosition(uint64_t);
+		uint64_t GetPosition() override;
+		void SetPosition(uint64_t) override;
 
-		virtual uint64_t GetLength();
+		uint64_t GetLength() override;
 		/** prohibited */
-		virtual void SetLength(uint64_t);
+		void SetLength(uint64_t) override;
 	};
 }

@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include <Core/Math.h>
 #include "ILocalEntity.h"
 #include "IModel.h"
+#include <Core/Math.h>
 
 namespace spades {
 	namespace client {
@@ -48,9 +48,9 @@ namespace spades {
 		public:
 			GunCasing(Client *client, IModel *model, IAudioChunk *dropSound,
 			          IAudioChunk *waterSound, Vector3 pos, Vector3 dir, Vector3 flyDir);
-			virtual ~GunCasing();
-			virtual bool Update(float dt);
-			virtual void Render3D();
+			~GunCasing();
+			bool Update(float dt) override;
+			void Render3D() override;
 		};
 	}
 }

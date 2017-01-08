@@ -41,7 +41,7 @@ namespace spades {
 
 			static void Preload(IRenderer *);
 
-			virtual bool Update(float dt);
+			bool Update(float dt) override;
 		};
 	}
 }

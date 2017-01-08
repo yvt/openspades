@@ -40,6 +40,7 @@ namespace spades {
 			GLRenderer *renderer;
 			IGLDevice *device;
 
+			GLProgram *depthonlyProgram;
 			GLProgram *basicProgram;
 			GLProgram *dlightProgram;
 			GLProgram *backfaceProgram;
@@ -69,6 +70,7 @@ namespace spades {
 
 			void RealizeChunks(Vector3 eye);
 
+			void DrawColumnDepth(int cx, int cy, int cz, Vector3 eye);
 			void DrawColumnSunlight(int cx, int cy, int cz, Vector3 eye);
 			void DrawColumnDLight(int cx, int cy, int cz, Vector3 eye,
 			                      const std::vector<GLDynamicLight> &lights);

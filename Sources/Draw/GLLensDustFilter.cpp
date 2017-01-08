@@ -142,14 +142,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			noise.resize(128 * 128);
-			uint32_t rnd = mt_engine();
-			rnd ^= 0x7abd4513;
 			for (size_t i = 0; i < 128 * 128; i++) {
-				noise[i] = rnd;
-
-				rnd = (rnd * 0x71931) + 0x981f311;
-				if (rnd == 0xffffffff) // mod 2^32-1
-					rnd = 0;
+				noise[i] = static_cast<std::uint32_t>(mt_engine());
 			}
 
 			IGLDevice *dev = renderer->GetGLDevice();

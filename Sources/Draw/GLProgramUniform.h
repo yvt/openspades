@@ -45,6 +45,7 @@ namespace spades {
 			void SetValue(IGLDevice::Integer, IGLDevice::Integer, IGLDevice::Integer,
 			              IGLDevice::Integer);
 			void SetValue(const Matrix4 &, bool transpose = false);
+			bool IsActive() const { return loc != -1; }
 		};
 	}
 }

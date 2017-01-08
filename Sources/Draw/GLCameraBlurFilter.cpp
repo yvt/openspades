@@ -85,18 +85,20 @@ namespace spades {
 
 			const client::SceneDefinition &def = renderer->GetSceneDef();
 			Matrix4 newMatrix = Matrix4::Identity();
-			newMatrix.m[0] = def.viewAxis[0].x;
-			newMatrix.m[1] = def.viewAxis[1].x;
-			newMatrix.m[2] = def.viewAxis[2].x;
-			newMatrix.m[4] = def.viewAxis[0].y;
-			newMatrix.m[5] = def.viewAxis[1].y;
-			newMatrix.m[6] = def.viewAxis[2].y;
-			newMatrix.m[8] = def.viewAxis[0].z;
-			newMatrix.m[9] = def.viewAxis[1].z;
-			newMatrix.m[10] = def.viewAxis[2].z;
+			Vector3 axes[] = {def.viewAxis[0], def.viewAxis[1], def.viewAxis[2]};
+			axes[0] /= std::tan(def.fovX * 0.5f);
+			axes[1] /= std::tan(def.fovY * 0.5f);
+			newMatrix.m[0] = axes[0].x;
+			newMatrix.m[1] = axes[1].x;
+			newMatrix.m[2] = axes[2].x;
+			newMatrix.m[4] = axes[0].y;
+			newMatrix.m[5] = axes[1].y;
+			newMatrix.m[6] = axes[2].y;
+			newMatrix.m[8] = axes[0].z;
+			newMatrix.m[9] = axes[1].z;
+			newMatrix.m[10] = axes[2].z;
 
-			// othrogonal matrix can be reversed fast
-			Matrix4 inverseNewMatrix = newMatrix.Transposed();
+			Matrix4 inverseNewMatrix = newMatrix.Inversed();
 			Matrix4 diffMatrix = prevMatrix * inverseNewMatrix;
 			prevMatrix = newMatrix;
 			Matrix4 reverseMatrix = ReverseMatrix(diffMatrix);
@@ -150,7 +152,6 @@ namespace spades {
 			dev->ActiveTexture(0);
 
 			for (int i = 0; i < levels; i++) {
-				GLProfiler measure(dev, "Apply [%d / %d]", i + 1, levels);
 				GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 				programShutterTimeScale.SetValue(shutterTimeScale);
 				dev->BindTexture(IGLDevice::Texture2D, buf.GetTexture());

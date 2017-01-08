@@ -33,12 +33,12 @@ namespace spades {
 
 	public:
 		DirectoryFileSystem(const std::string &root, bool canWrite = true);
-		virtual ~DirectoryFileSystem();
+		~DirectoryFileSystem();
 
-		virtual std::vector<std::string> EnumFiles(const char *);
+		std::vector<std::string> EnumFiles(const char *) override;
 
-		virtual IStream *OpenForReading(const char *);
-		virtual IStream *OpenForWriting(const char *);
-		virtual bool FileExists(const char *);
+		IStream *OpenForReading(const char *) override;
+		IStream *OpenForWriting(const char *) override;
+		bool FileExists(const char *) override;
 	};
 }

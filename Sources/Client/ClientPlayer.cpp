@@ -18,11 +18,13 @@
 
  */
 
+#include <array>
 #include <cstdlib>
 
 #include "CTFGameMode.h"
 #include "Client.h"
 #include "ClientPlayer.h"
+#include "GameMap.h"
 #include "GunCasing.h"
 #include "GunCasing.h"
 #include "IAudioChunk.h"
@@ -47,6 +49,7 @@ SPADES_SETTING(cg_ragdoll);
 SPADES_SETTING(cg_ejectBrass);
 DEFINE_SPADES_SETTING(cg_animations, "1");
 SPADES_SETTING(cg_shake);
+DEFINE_SPADES_SETTING(cg_environmentalAudio, "1");
 
 namespace spades {
 	namespace client {
@@ -360,12 +363,12 @@ namespace spades {
 						Handle<IAudioChunk> c;
 						switch (player->GetTool()) {
 							case Player::ToolSpade:
-								c =
-								  audioDevice->RegisterSound("Sounds/Weapons/Spade/RaiseLocal.opus");
+								c = audioDevice->RegisterSound(
+								  "Sounds/Weapons/Spade/RaiseLocal.opus");
 								break;
 							case Player::ToolBlock:
-								c =
-								  audioDevice->RegisterSound("Sounds/Weapons/Block/RaiseLocal.opus");
+								c = audioDevice->RegisterSound(
+								  "Sounds/Weapons/Block/RaiseLocal.opus");
 								break;
 							case Player::ToolWeapon:
 								switch (player->GetWeapon()->GetWeaponType()) {
@@ -979,19 +982,11 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			Player *p = player;
-			IRenderer *renderer = client->GetRenderer();
 			const SceneDefinition &lastSceneDef = client->GetLastSceneDef();
 
 			if (p->GetTeamId() >= 2) {
 				// spectator, or dummy player
 				return;
-			}
-			// debug
-			if (false) {
-				Handle<IImage> img = renderer->RegisterImage("Gfx/Ball.png");
-				renderer->SetColorAlphaPremultiplied(MakeVector4(1, 0, 0, 0));
-				renderer->AddLongSprite(img, lastSceneDef.viewOrigin + MakeVector3(0, 0, 1),
-				                        p->GetOrigin(), 0.5f);
 			}
 
 			float distancePowered = (p->GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
@@ -1042,6 +1037,120 @@ namespace spades {
 			return client->ShouldRenderInThirdPersonView();
 		}
 
+		struct ClientPlayer::AmbienceInfo {
+			float room;
+			float size;
+			float distance;
+		};
+
+		ClientPlayer::AmbienceInfo ClientPlayer::ComputeAmbience() {
+			const SceneDefinition &lastSceneDef = client->GetLastSceneDef();
+
+			if (!cg_environmentalAudio) {
+				AmbienceInfo result;
+				result.room = 0.0f;
+				result.distance = (lastSceneDef.viewOrigin - player->GetEye()).GetLength();
+				result.size = 0.0f;
+				return result;
+			}
+
+			float maxDistance = 40.f;
+			GameMap *map = client->map;
+			SPAssert(map);
+
+			Vector3 rayFrom = player->GetEye();
+			// uniformly distributed random unit vectors
+			const Vector3 directions[24] = {
+			  {-0.4806003057749437f, -0.42909622618705534f, 0.7647874049440525f},
+			  {-0.32231294555647927f, 0.6282069816346844f, 0.7081457147735524f},
+			  {0.048740582496498826f, -0.6670915238644523f, 0.7433796166200044f},
+			  {0.4507022412112344f, 0.2196054264547812f, 0.8652403980621708f},
+			  {-0.42721511627413183f, -0.587164590982542f, -0.6875499891085622f},
+			  {-0.5570464880797501f, 0.3832470400156089f, -0.7367638131974799f},
+			  {0.4379032819319448f, -0.5217172826725083f, -0.732155579528044f},
+			  {0.5505793235065188f, 0.5884516130938041f, -0.5921039668625805f},
+			  {0.681714179159347f, -0.6289005125058891f, -0.3738314102679548f},
+			  {0.882424317058847f, 0.4680895178240496f, -0.047111866514457174f},
+			  {0.8175844570742612f, -0.5123280060684333f, 0.26282250616819125f},
+			  {0.7326555076593512f, 0.16938649523355995f, 0.6591844372623717f},
+			  {-0.8833847855718798f, -0.46859333747646814f, -0.007183640636104698f},
+			  {-0.6478926243769724f, 0.5325399055055595f, -0.5446433661783178f},
+			  {-0.7011236289377749f, -0.4179353735633245f, 0.5777159167528706f},
+			  {-0.8834742898471629f, 0.3226030059694268f, 0.3397064611080296f},
+			  {-0.701272268659947f, 0.7126868112640804f, -0.017167243773185584f},
+			  {-0.4048459451282839f, 0.8049148135357349f, 0.4338339586338529f},
+			  {0.10511344475950758f, 0.7400485819463978f, -0.664288536774432f},
+			  {0.4228172536676786f, 0.7759558485735245f, 0.46810051384874957f},
+			  {-0.641642302739998f, -0.7293326298605313f, -0.23742171416118207f},
+			  {-0.269582155924164f, -0.957885171758109f, 0.09890125850168793f},
+			  {0.09274966874325204f, -0.9126579244190587f, -0.39806156803076687f},
+			  {0.49359438685568013f, -0.721891173178783f, 0.48501310843226225f}};
+			std::array<float, 24> distances;
+			std::array<float, 24> feedbacknesses;
+
+			std::fill(feedbacknesses.begin(), feedbacknesses.end(), 0.0f);
+
+			for (std::size_t i = 0; i < distances.size(); ++i) {
+				float &distance = distances[i];
+				float &feedbackness = feedbacknesses[i];
+
+				const Vector3 &rayTo = directions[i];
+
+				IntVector3 hitPos;
+				bool hit = map->CastRay(rayFrom, rayTo, maxDistance, hitPos);
+				if (hit) {
+					Vector3 hitPosf = {(float)hitPos.x, (float)hitPos.y, (float)hitPos.z};
+					distance = (hitPosf - rayFrom).GetLength();
+				} else {
+					distance = maxDistance * 2.f;
+				}
+
+				if (hit) {
+					bool hit2 = map->CastRay(rayFrom, -rayTo, maxDistance, hitPos);
+					if (hit2)
+						feedbackness = 1.f;
+					else
+						feedbackness = 0.f;
+				}
+			}
+
+			// monte-carlo integration
+			unsigned int rayHitCount = 0;
+			float roomSize = 0.f;
+			float feedbackness = 0.f;
+
+			for (float dist : distances) {
+				if (dist < maxDistance) {
+					rayHitCount++;
+					roomSize += dist;
+				}
+			}
+			for (float fb : feedbacknesses) {
+				feedbackness += fb;
+			}
+
+			float reflections;
+			if (rayHitCount > distances.size() / 4) {
+				roomSize /= (float)rayHitCount;
+				reflections = (float)rayHitCount / (float)distances.size();
+			} else {
+				reflections = 0.1f;
+				roomSize = 100.f;
+			}
+
+			feedbackness /= (float)distances.size();
+			feedbackness = std::min(std::max(0.0f, feedbackness - 0.35f) / 0.5f, 1.0f);
+
+			AmbienceInfo result;
+			result.room = reflections * feedbackness;
+			result.distance = (lastSceneDef.viewOrigin - player->GetEye()).GetLength();
+			result.size = std::max(std::min(roomSize / 15.0f, 1.0f), 0.0f);
+			result.room *= std::max(0.0f, std::min((result.size - 0.1f) * 4.0f, 1.0f));
+			result.room *= 1.0f - result.size * 0.3f;
+
+			return result;
+		}
+
 		void ClientPlayer::FiredWeapon() {
 			World *world = player->GetWorld();
 			Vector3 muzzle;
@@ -1075,7 +1184,8 @@ namespace spades {
 							snd =
 							  (mt_engine_client() & 0x1000)
 							    ? audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.opus")
-							    : audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop2.opus");
+							    : audioDevice->RegisterSound(
+							        "Sounds/Weapons/Rifle/ShellDrop2.opus");
 							snd2 =
 							  audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellWater.opus");
 							break;
@@ -1112,12 +1222,22 @@ namespace spades {
 				}
 			}
 
+			// sound ambience estimation
+			auto ambience = ComputeAmbience();
+
 			asIScriptObject *skin;
 			// FIXME: what if current tool isn't weapon?
 			if (ShouldRenderInThirdPersonView()) {
 				skin = weaponSkin;
 			} else {
 				skin = weaponViewSkin;
+			}
+
+			{
+				ScriptIWeaponSkin2 interface(skin);
+				if (interface.ImplementsInterface()) {
+					interface.SetSoundEnvironment(ambience.room, ambience.size, ambience.distance);
+				}
 			}
 
 			{

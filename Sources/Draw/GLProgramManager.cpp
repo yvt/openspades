@@ -101,6 +101,12 @@ namespace spades {
 					for (size_t i = 0; i < shaders.size(); i++)
 						p->Attach(shaders[i]);
 					continue;
+				} else if (text == "*shadow-lite*") {
+					std::vector<GLShader *> shaders =
+					  GLShadowShader::RegisterShader(this, settings, false, true);
+					for (size_t i = 0; i < shaders.size(); i++)
+						p->Attach(shaders[i]);
+					continue;
 				} else if (text == "*shadow-variance*") {
 					std::vector<GLShader *> shaders =
 					  GLShadowShader::RegisterShader(this, settings, true);
@@ -119,6 +125,8 @@ namespace spades {
 					continue;
 				} else if (text[0] == '*') {
 					SPRaise("Unknown special shader: %s", text.c_str());
+				} else if (text[0] == '#') {
+					continue;
 				}
 				GLShader *s = CreateShader(text);
 
@@ -162,6 +170,12 @@ namespace spades {
 				finalSource += "#define USE_VOLUMETRIC_FOG 1\n";
 			} else {
 				finalSource += "#define USE_VOLUMETRIC_FOG 0\n";
+			}
+
+			if (settings.r_ssao) {
+				finalSource += "#define USE_SSAO 1\n";
+			} else {
+				finalSource += "#define USE_SSAO 0\n";
 			}
 
 			finalSource += text;

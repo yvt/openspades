@@ -32,8 +32,14 @@ namespace spades {
 			TypedItemHandle<bool> r_cameraBlur          { *this, "r_cameraBlur" };
 			TypedItemHandle<bool> r_colorCorrection     { *this, "r_colorCorrection" };
 			TypedItemHandle<bool> r_debugTiming         { *this, "r_debugTiming" };
+			TypedItemHandle<bool> r_debugTimingOutputScreen { *this, "r_debugTimingOutputScreen" };
+			TypedItemHandle<bool> r_debugTimingOutputLog { *this, "r_debugTimingOutputLog" };
+			TypedItemHandle<bool> r_debugTimingAverage  { *this, "r_debugTimingAverage" };
+			TypedItemHandle<bool> r_debugTimingGPUTime  { *this, "r_debugTimingGPUTime" };
+			TypedItemHandle<float> r_debugTimingOutputBarScale { *this, "r_debugTimingOutputBarScale" };
 			TypedItemHandle<int> r_depthOfField         { *this, "r_depthOfField" };
 			TypedItemHandle<float> r_depthOfFieldMaxCoc { *this, "r_depthOfFieldMaxCoc" };
+			TypedItemHandle<bool> r_depthPrepass        { *this, "r_depthPrepass" };
 			TypedItemHandle<bool> r_dlights             { *this, "r_dlights" };
 			TypedItemHandle<float> r_exposureValue      { *this, "r_exposureValue" };
 			TypedItemHandle<bool> r_fogShadow           { *this, "r_fogShadow", ItemFlags::Latch };
@@ -58,6 +64,7 @@ namespace spades {
 			TypedItemHandle<bool> r_sparseShadowMaps    { *this, "r_sparseShadowMaps", ItemFlags::Latch };
 			TypedItemHandle<bool> r_srgb                { *this, "r_srgb", ItemFlags::Latch };
 			TypedItemHandle<bool> r_srgb2D              { *this, "r_srgb2D", ItemFlags::Latch };
+			TypedItemHandle<bool> r_ssao                { *this, "r_ssao", ItemFlags::Latch };
 			TypedItemHandle<int> r_water                { *this, "r_water", ItemFlags::Latch };
 		};
 	}

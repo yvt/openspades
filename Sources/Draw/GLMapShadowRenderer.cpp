@@ -78,7 +78,7 @@ namespace spades {
 		void GLMapShadowRenderer::Update() {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler profiler(device, "Terrain Shadow Map");
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Terrain Shadow Map");
 			GLRadiosityRenderer *radiosity = renderer->GetRadiosityRenderer();
 
 			std::vector<uint8_t> coarseUpdateBitmap;
@@ -163,7 +163,7 @@ namespace spades {
 					}
 				}
 				if (coarseUpdated) {
-					GLProfiler profiler(device, "Coarse Shadow Map Upload");
+					GLProfiler::Context profiler(renderer->GetGLProfiler(), "Coarse Shadow Map Upload");
 
 					device->BindTexture(IGLDevice::Texture2D, coarseTexture);
 					device->TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, w >> CoarseBits,

@@ -372,7 +372,7 @@ namespace spades {
 				if (!chunks[i].transfered)
 					cnt++;
 			}
-			GLProfiler profiler(device, "Radiosity [>= %d chunk(s)]", cnt);
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Radiosity [>= %d chunk(s)]", cnt);
 			for (size_t i = 0; i < chunks.size(); i++) {
 				Chunk &c = chunks[i];
 				if (!c.transfered) {

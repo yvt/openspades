@@ -20,7 +20,7 @@
 
  namespace spades {
 	class ThirdPersonShotgunSkin:
-	IToolSkin, IThirdPersonToolSkin, IWeaponSkin {
+	IToolSkin, IThirdPersonToolSkin, IWeaponSkin, IWeaponSkin2 {
 		private float sprintState;
 		private float raiseState;
 		private Vector3 teamColor;
@@ -31,6 +31,10 @@
 		private bool reloading;
 		private float reloadProgress;
 		private int ammo, clipSize;
+
+		private float environmentRoom;
+		private float environmentSize;
+		private float environmentDistance;
 
 		float SprintState {
 			set { sprintState = value; }
@@ -77,6 +81,13 @@
 			set { readyState = value; }
 		}
 
+		// IWeaponSkin2
+		void SetSoundEnvironment(float room, float size, float distance) {
+			environmentRoom = room;
+			environmentSize = size;
+			environmentDistance = distance;
+		}
+
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
 		private Model@ model;
@@ -84,6 +95,8 @@
 		private AudioChunk@ fireSound;
 		private AudioChunk@ fireFarSound;
 		private AudioChunk@ fireStereoSound;
+		private AudioChunk@ fireSmallReverbSound;
+		private AudioChunk@ fireLargeReverbSound;
 		private AudioChunk@ reloadSound;
 		private AudioChunk@ cockSound;
 
@@ -103,6 +116,11 @@
 				("Sounds/Weapons/Shotgun/Reload.opus");
 			@cockSound = dev.RegisterSound
 				("Sounds/Weapons/Shotgun/Cock.opus");
+
+			@fireSmallReverbSound = dev.RegisterSound
+				("Sounds/Weapons/Shotgun/V2AmbienceSmall.opus");
+			@fireLargeReverbSound = dev.RegisterSound
+				("Sounds/Weapons/Shotgun/V2AmbienceLarge.opus");
 		}
 
 		void Update(float dt) {
@@ -115,11 +133,19 @@
 				param.volume = 8.f;
 				audioDevice.Play(fireSound, origin, param);
 
+				param.volume = 8.f * environmentRoom;
+				if (environmentSize < 0.5f) {
+					audioDevice.Play(fireSmallReverbSound, origin, param);
+				} else {
+					audioDevice.Play(fireLargeReverbSound, origin, param);
+				}
+
 				param.volume = 2.f;
 				param.referenceDistance = 4.f;
 				audioDevice.Play(fireFarSound, origin, param);
 				param.referenceDistance = 1.f;
 				audioDevice.Play(fireStereoSound, origin, param);
+
 			}
 		}
 		void ReloadingWeapon() {

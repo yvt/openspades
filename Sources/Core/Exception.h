@@ -33,8 +33,8 @@ namespace spades {
 	public:
 		Exception(const char *format, ...);
 		Exception(const char *file, int line, const char *format, ...);
-		virtual ~Exception() throw();
-		virtual const char *what() const throw();
+		~Exception() throw();
+		const char *what() const throw() override;
 		const std::string &GetShortMessage() const throw() { return shortMessage; }
 	};
 }

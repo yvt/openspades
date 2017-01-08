@@ -31,8 +31,8 @@
 #include <Core/Settings.h>
 
 DEFINE_SPADES_SETTING(cg_minimapSize, "128");
-DEFINE_SPADES_SETTING(cg_Minimap_Player_Color, "1");
-DEFINE_SPADES_SETTING(cg_Minimap_Player_Icon, "1");
+DEFINE_SPADES_SETTING(cg_minimapPlayerColor, "1");
+DEFINE_SPADES_SETTING(cg_minimapPlayerIcon, "1");
 
 namespace spades {
 	namespace client {
@@ -397,10 +397,8 @@ namespace spades {
 			}
 			// draw objects
 
-			std::string iconmode = cg_Minimap_Player_Icon; // import variable from configuration
-			                                               // file
-			std::string colormode =
-			  cg_Minimap_Player_Color; // import variable from configuration file
+			const int iconMode = cg_minimapPlayerIcon;
+			const int colorMode = cg_minimapPlayerColor;
 
 			Handle<IImage> playerSMG = renderer->RegisterImage("Gfx/Map/SMG.png");
 			Handle<IImage> playerRifle = renderer->RegisterImage("Gfx/Map/Rifle.png");
@@ -434,10 +432,13 @@ namespace spades {
 					}
 				}
 
+				bool isSpectating = player->GetTeamId() >= 2;
+
 				// draw player's icon
 				for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
 					Player *p = world->GetPlayer(i);
-					if (p == nullptr || p->GetTeamId() != world->GetLocalPlayer()->GetTeamId() ||
+					if (p == nullptr ||
+						(p->GetTeamId() != world->GetLocalPlayer()->GetTeamId() && !isSpectating) ||
 					    !p->IsAlive())
 						continue;
 
@@ -448,7 +449,7 @@ namespace spades {
 					}
 
 					// use a spec color for each player
-					if (colormode == "1") {
+					if (colorMode) {
 						IntVector3 Colorplayer =
 						  IntVector3::Make(palette[i][0], palette[i][1], palette[i][2]);
 						Vector4 ColorplayerF = ModifyColor(Colorplayer);
@@ -459,7 +460,7 @@ namespace spades {
 					}
 
 					// use a different icon in minimap according to weapon of player
-					if (iconmode == "1") {
+					if (iconMode) {
 						WeaponType weapon = world->GetPlayer(i)->GetWeaponType();
 						if (weapon == WeaponType::SMG_WEAPON) {
 							DrawIcon(player->GetTeamId() >= 2 ? client->followPos

@@ -30,6 +30,7 @@ namespace spades {
 		class World;
 		class CTFGameMode;
 		class TCGameMode;
+		class IFont;
 		class ScoreboardView {
 			Client *client;
 			IRenderer *renderer;
@@ -38,16 +39,17 @@ namespace spades {
 			World *world;
 			CTFGameMode *ctf;
 			TCGameMode *tc;
+			IFont *spectatorFont;
 
-			int GetTeamScore(int);
+			int GetTeamScore(int) const;
 			Vector4 GetTeamColor(int);
 			Vector4 AdjustColor(Vector4 col,
 								float bright,
-								float saturation);
+								float saturation) const;
 			void DrawPlayers(int team,
 							 float left, float top,
 							 float width, float height);
-			void DrawSpectators(float top, float width);
+			void DrawSpectators(float top, float width) const;
 			bool areSpectatorsPresent() const;
 		public:
 			ScoreboardView(Client *);

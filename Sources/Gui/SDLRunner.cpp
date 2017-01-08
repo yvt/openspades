@@ -39,13 +39,7 @@
 #include <Draw/SWPort.h>
 #include <Draw/SWRenderer.h>
 #include <OpenSpades.h>
-
-#ifdef __APPLE__
-#elif __unix
-static const unsigned char Icon[] = {
-#include "Icon.inc"
-};
-#endif
+#include "Icon.h"
 
 SPADES_SETTING(r_videoWidth);
 SPADES_SETTING(r_videoHeight);
@@ -125,7 +119,7 @@ namespace spades {
 					view->KeyEvent(TranslateButton(event.button.button), false);
 					break;
 				case SDL_MOUSEMOTION:
-					if (mActive) {
+					if (m_active) {
 						// FIXME: this might fail with cg_smp
 						if (view->NeedsAbsoluteMouseCoordinate()) {
 							view->MouseEvent(event.motion.x, event.motion.y);
@@ -136,8 +130,29 @@ namespace spades {
 					break;
 				case SDL_MOUSEWHEEL: view->WheelEvent(-event.wheel.x, -event.wheel.y); break;
 				case SDL_KEYDOWN:
-					if (!event.key.repeat)
+					if (!event.key.repeat) {
+						if (event.key.keysym.sym == SDLK_RETURN &&
+							event.key.keysym.mod & (KMOD_LALT | KMOD_RALT)) {
+							SDL_Window *window = SDL_GetWindowFromID(event.key.windowID);
+
+							// Toggle fullscreen mode
+							if (r_fullscreen) {
+								if (!SDL_SetWindowFullscreen(window, 0)) {
+									r_fullscreen = 0;
+								} else {
+									SPLog("Couldn't exit fullscreen mode: %s", SDL_GetError());
+								}
+							} else {
+								if (!SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN)) {
+									r_fullscreen = 1;
+								} else {
+									SPLog("Couldn't enter fullscreen mode: %s", SDL_GetError());
+								}
+							}
+							return;
+						}
 						view->KeyEvent(TranslateKey(event.key.keysym), true);
+					}
 					break;
 				case SDL_KEYUP: view->KeyEvent(TranslateKey(event.key.keysym), false); break;
 				case SDL_TEXTINPUT: view->TextInputEvent(event.text.text); break;
@@ -148,10 +163,10 @@ namespace spades {
 					if (event.window.type == SDL_WINDOWEVENT_FOCUS_GAINED) {
 						SDL_ShowCursor(0);
 						SDL_SetRelativeMouseMode(SDL_TRUE);
-						mActive = true;
+						m_active = true;
 					} else if (event.window.type == SDL_WINDOWEVENT_FOCUS_LOST) {
 						SDL_SetRelativeMouseMode(SDL_FALSE);
-						mActive = false;
+						m_active = false;
 						SDL_ShowCursor(1);
 					}
 					break;
@@ -443,7 +458,7 @@ namespace spades {
 #elif __unix
 				SDL_Surface *icon = nullptr;
 				SDL_RWops *icon_rw = nullptr;
-				icon_rw = SDL_RWFromConstMem(Icon, sizeof(Icon));
+				icon_rw = SDL_RWFromConstMem(g_appIconData, GetAppIconDataSize());
 				if (icon_rw != nullptr) {
 					icon = IMG_LoadPNG_RW(icon_rw);
 					SDL_FreeRW(icon_rw);
@@ -458,7 +473,7 @@ namespace spades {
 #endif
 				SDL_SetRelativeMouseMode(SDL_FALSE);
 				SDL_ShowCursor(0);
-				mActive = true;
+				m_active = true;
 
 				{
 					Handle<client::IRenderer> renderer(CreateRenderer(window), false);

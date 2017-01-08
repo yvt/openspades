@@ -52,8 +52,8 @@ namespace spades {
 			Quake3Font(IRenderer *, IImage *texture, const int *map, int glyphHeight,
 			           float spaceWidth, bool extended = false);
 
-			virtual Vector2 Measure(const std::string &);
-			virtual void Draw(const std::string &, Vector2 offset, float scale, Vector4 color);
+			Vector2 Measure(const std::string &) override;
+			void Draw(const std::string &, Vector2 offset, float scale, Vector4 color) override;
 			void SetGlyphYRange(float yMin, float yMax);
 		};
 	}

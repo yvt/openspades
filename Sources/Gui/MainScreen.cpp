@@ -310,13 +310,9 @@ namespace spades {
 			c.ExecuteChecked();
 		}
 
-		std::string MainScreen::Connect() {
-			spades::ServerAddress host(cg_lastQuickConnectHost, (int)cg_protocolVersion == 3
-			                                                      ? spades::ProtocolVersion::v075
-			                                                      : spades::ProtocolVersion::v076);
+		std::string MainScreen::Connect(const ServerAddress &host) {
 			try {
 				subview.Set(new client::Client(&*renderer, &*audioDevice, host,
-				                               std::string(cg_playerName).substr(0, 15),
 				                               fontManager),
 				            false);
 			} catch (const std::exception &ex) {

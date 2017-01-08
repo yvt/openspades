@@ -20,26 +20,81 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
-namespace spades {
+#include "IGLDevice.h"
+#include <Core/Stopwatch.h>
 
-	class Stopwatch;
+namespace spades {
+	namespace client {
+		class IImage;
+	}
 	namespace draw {
-		class IGLDevice;
+		class GLRenderer;
+		class GLSettings;
+		class GLImage;
+
 		class GLProfiler {
-			std::string msg;
-			std::string name;
-			Stopwatch *watch;
-			IGLDevice *device;
-			double time, timeNoFinish;
+			struct Phase;
+			struct Measurement;
+
+			GLSettings &m_settings;
+			GLRenderer &m_renderer;
+			IGLDevice &m_device;
+			bool m_active;
+			double m_lastSaveTime;
+			bool m_shouldSaveThisFrame;
+			bool m_waitingTimerQueryResult;
+
+			client::IImage *m_font;
+			client::IImage *m_white;
+
+			Stopwatch m_stopwatch;
+
+			std::unique_ptr<Phase> m_root;
+			std::vector<std::reference_wrapper<Phase>> m_stack;
+
+			std::vector<IGLDevice::UInteger> m_timerQueryObjects;
+			std::vector<double> m_timerQueryTimes;
+			std::size_t m_currentTimerQueryObjectIndex;
+
+			Phase &GetCurrentPhase() { return m_stack.back(); }
+
+			void BeginPhase(const std::string &name, const std::string &description);
+			void EndPhase();
+
+			void BeginPhaseInner(Phase &);
+
+			void EndPhaseInner();
+
+			void NewTimerQuery();
+
+			void LogResult(Phase &root);
+			void DrawResult(Phase &root);
+
+			void FinalizeMeasurement();
 
 		public:
-			static void ResetLevel();
-			GLProfiler(IGLDevice *, const char *format, ...);
-			std::string GetProfileMessage();
+			GLProfiler(GLRenderer &);
 			~GLProfiler();
+
+			void BeginFrame();
+			void EndFrame();
+
+			void DrawResult();
+
+			class Context {
+				GLProfiler &m_profiler;
+				bool m_active;
+
+			public:
+				Context(GLProfiler &profiler, const char *format, ...);
+				std::string GetProfileMessage();
+				~Context();
+			};
 		};
 	}
 }

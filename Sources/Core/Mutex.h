@@ -30,7 +30,7 @@ namespace spades {
 		Mutex();
 		~Mutex();
 
-		virtual void Lock();
-		virtual void Unlock();
+		void Lock() override;
+		void Unlock() override;
 	};
 }

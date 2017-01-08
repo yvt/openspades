@@ -373,8 +373,12 @@ namespace spades {
 		Vector4 operator/(float v) const { return Make(x / v, y / v, z / v, w / v); }
 
 		Vector4 operator-() const { return Make(-x, -y, -z, -w); }
+
 		bool operator==(const Vector4 &v) const {
 			return x == v.x && y == v.y && z == v.z && w == v.w;
+		}
+		bool operator!=(const Vector4 &v) const {
+			return x != v.x || y != v.y || z != v.z || z != v.w;
 		}
 
 		Vector4 &operator+=(const Vector4 &v) {
@@ -757,6 +761,116 @@ namespace spades {
 	};
 
 	static inline OBB3 operator*(const Matrix4 &m, const OBB3 &b) { return OBB3(m * b.m); }
+
+#pragma mark - Quaternion for Spatial Rotations
+
+	struct Quaternion {
+		Vector4 v; // i, j, k, (real)
+		explicit Quaternion(const Vector4 &v) : v(v) {}
+
+	public:
+		Quaternion() = default;
+		Quaternion(float i, float j, float k, float real) : v(i, j, k, real) {}
+
+		inline Quaternion Conjugate() const { return Quaternion(-v.x, -v.y, -v.z, v.w); }
+
+		inline Quaternion Normalize() const { return Quaternion(v.Normalize()); }
+
+		inline Quaternion operator*(const Quaternion &o) const {
+			const auto &a = v;
+			const auto &b = o.v;
+			return Quaternion(a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y,
+			                  a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x,
+			                  a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w,
+			                  a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z);
+		}
+
+		inline Quaternion &operator*=(const Quaternion &o) {
+			*this = *this * o;
+			return *this;
+		}
+
+		/** Real power of quaternion |Q| = 1. */
+		inline Quaternion operator^(float r) const {
+			float theta = acosf(v.w) * r;
+			auto vv = v;
+			vv.w = 1.e-30f;
+			vv = vv.Normalize();
+			float newCos = cosf(theta);
+			float newSin = sinf(theta);
+			vv *= newSin;
+			vv.w = newCos;
+			return Quaternion(vv);
+		}
+
+		inline bool operator!=(const Quaternion &o) const { return v != o.v; }
+
+		inline Vector3 Apply(const Vector3 &v) const {
+			auto q = *this * Quaternion(v.x, v.y, v.z, 0.f) * Conjugate();
+			return Vector3(q.v.x, q.v.y, q.v.z);
+		}
+
+		/** Stores rotation quaternion into compact format for
+		 * transmission. */
+		Vector3 EncodeRotation() const {
+			if (v.w > 0.f)
+				return Vector3(v.x, v.y, v.z);
+			else
+				return -Vector3(v.x, v.y, v.z);
+		}
+		static inline Quaternion DecodeRotation(Vector3 v) {
+			auto s = v.x * v.x + v.y * v.y + v.z * v.z;
+			return Quaternion(v.x, v.y, v.z, sqrtf(1.f - s));
+		}
+
+		/** Creates quaternion from rotation axis vector.
+		 * @param axis Rotation axis vector of which length is radians. */
+		static inline Quaternion MakeRotation(const Vector3 &axis) {
+			auto ln = axis.GetLength();
+			auto norm = axis.Normalize();
+			auto c = cosf(ln * 0.5f), s = -sinf(ln * 0.5f);
+			norm *= s;
+			return Quaternion(norm.x, norm.y, norm.z, c);
+		}
+
+		inline Matrix4 ToRotationMatrix() const {
+			auto a = v.w, b = v.x, c = v.y, d = v.z;
+			auto aa = a * a, bb = b * b, cc = c * c, dd = d * d;
+			return Matrix4(aa + bb - cc - dd, 2.f * (b * c + a * d), 2.f * (b * d - a * c), 0.f,
+
+			               2.f * (b * c - a * d), aa - bb + cc - dd, 2.f * (c * d + a * b), 0.f,
+
+			               2.f * (b * d + a * c), 2.f * (c * d - a * b), aa - bb - cc + dd, 0.f,
+
+			               0.f, 0.f, 0.f, 1.f);
+		}
+
+		static inline Quaternion FromRotationMatrix(const Matrix4 &m, bool normalize = true) {
+			auto axis1 = m.GetAxis(0);
+			auto axis2 = m.GetAxis(1);
+			auto axis3 = m.GetAxis(2);
+
+			if (normalize) {
+				axis1 = axis1.Normalize();
+				axis2 = axis2.Normalize();
+				axis3 = axis3.Normalize();
+			}
+
+			auto trace = axis1.x + axis2.y + axis3.z + 1.f;
+			auto trace2 = axis1.x - axis2.y - axis3.z + 1.f;
+			if (trace > trace2) {
+				auto w = 0.5f * sqrtf(trace);
+				auto s = 0.25f / w;
+				return Quaternion(s * (axis2.z - axis3.y), s * (axis3.x - axis1.z),
+				                  s * (axis1.y - axis2.x), w);
+			} else {
+				auto w = 0.5f * sqrtf(trace2);
+				auto s = 0.25f / w;
+				return Quaternion(w, s * (axis1.y + axis2.x), s * (axis3.x + axis1.z),
+				                  s * (axis2.z - axis3.y));
+			}
+		}
+	};
 
 #pragma mark - Utilities
 

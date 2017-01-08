@@ -27,7 +27,7 @@ namespace spades {
         class IAudioChunk : public RefCountedObject {
         protected:
             IAudioChunk() {}
-            virtual ~IAudioChunk() {}
+            ~IAudioChunk() {}
 
         public:
         };
