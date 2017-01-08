@@ -440,18 +440,18 @@ namespace spades {
 					while (*str) {
 						char c = *str;
 						if (c == '\n') {
-							cursor.y += 12.0f;
-							if (cursor.y + 12.0f > renderer.ScreenHeight()) {
+							cursor.y += 10.0f;
+							if (cursor.y + 10.0f > renderer.ScreenHeight()) {
 								cursor.y = 0.0f;
 								++column;
 							}
-							cursor.x = column * 600.0f;
+							cursor.x = column * 500.0f;
 						} else {
 							int col = c & 15;
 							int row = (c >> 4) - 2;
 							renderer.DrawImage(font, cursor,
-							                   AABB2{col * 7.0f, row * 12.0f, 7.0f, 12.0f});
-							cursor.x += 7.0f;
+							                   AABB2{col * 6.0f, row * 10.0f, 6.0f, 10.0f});
+							cursor.x += 6.0f;
 						}
 						++str;
 					}
@@ -499,14 +499,14 @@ namespace spades {
 					client::IImage *white = self.m_white;
 
 					renderer.SetColorAlphaPremultiplied(Vector4{0.0f, 0.0f, 0.0f, 0.5f});
-					renderer.DrawImage(white, AABB2{cursor.x, cursor.y + 2.0f, boxWidth, 8.0f});
+					renderer.DrawImage(white, AABB2{cursor.x, cursor.y + 1.0f, boxWidth, 8.0f});
 
 					renderer.SetColorAlphaPremultiplied(Vector4{0.0f, 1.0f, 0.0f, 1.0f});
-					renderer.DrawImage(white, AABB2{cursor.x, cursor.y + 4.0f, boxWidth, 4.0f});
+					renderer.DrawImage(white, AABB2{cursor.x, cursor.y + 3.0f, boxWidth, 4.0f});
 
 					renderer.SetColorAlphaPremultiplied(Vector4{1.0f, 0.0f, 0.0f, 1.0f});
 					renderer.DrawImage(
-					  white, AABB2{cursor.x, cursor.y + 4.0f, boxWidth - childBoxWidth, 4.0f});
+					  white, AABB2{cursor.x, cursor.y + 3.0f, boxWidth - childBoxWidth, 4.0f});
 
 					DrawText("\n");
 
