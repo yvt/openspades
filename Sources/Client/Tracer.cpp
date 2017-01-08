@@ -17,10 +17,12 @@ namespace spades {
 			dir = (p2 - p1).Normalize();
 			length = (p2 - p1).GetLength();
 
-			const float maxTimeSpread = 1.f / 60.f;
-			const float shutterTime = .3f / 60.f;
+			velocity *= 0.5f; // make it slower for visual effect
 
-			visibleLength = shutterTime * bulletVel;
+			const float maxTimeSpread = 1.0f / 30.f;
+			const float shutterTime = 1.0f / 30.f;
+
+			visibleLength = shutterTime * velocity;
 			curDistance = -visibleLength;
 			curDistance += maxTimeSpread * GetRandom();
 
@@ -41,20 +43,27 @@ namespace spades {
 		}
 
 		void Tracer::Render3D() {
-			float startDist = curDistance;
-			float endDist = curDistance + visibleLength;
-			startDist = std::max(startDist, 0.f);
-			endDist = std::min(endDist, length);
-			if (startDist >= endDist) {
-				return;
-			}
+			for (float step = 0.0f; step <= 1.0f; step += 0.1f) {
+				float startDist = curDistance;
+				float endDist = curDistance + visibleLength;
 
-			Vector3 pos1 = startPos + dir * startDist;
-			Vector3 pos2 = startPos + dir * endDist;
-			IRenderer *r = client->GetRenderer();
-			Vector4 col = {1.f, .6f, .2f, 0.f};
-			r->SetColorAlphaPremultiplied(col * 1.3f);
-			r->AddLongSprite(image, pos1, pos2, .05f);
+				float midDist = (startDist + endDist) * 0.5f;
+				startDist = Mix(startDist, midDist, step);
+				endDist = Mix(endDist, midDist, step);
+
+				startDist = std::max(startDist, 0.f);
+				endDist = std::min(endDist, length);
+				if (startDist >= endDist) {
+					continue;
+				}
+
+				Vector3 pos1 = startPos + dir * startDist;
+				Vector3 pos2 = startPos + dir * endDist;
+				IRenderer *r = client->GetRenderer();
+				Vector4 col = {1.f, .6f, .2f, 0.f};
+				r->SetColorAlphaPremultiplied(col * 0.4f);
+				r->AddLongSprite(image, pos1, pos2, .05f);
+			}
 		}
 
 		Tracer::~Tracer() {}
