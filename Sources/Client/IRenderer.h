@@ -114,12 +114,17 @@ namespace spades {
 			/** Sets color for image drawing. Always alpha premultiplied. */
 			virtual void SetColorAlphaPremultiplied(Vector4) = 0;
 
+			virtual void SetScissor(const AABB2 &) = 0;
+
 			virtual void DrawImage(IImage *, const Vector2 &outTopLeft) = 0;
 			virtual void DrawImage(IImage *, const AABB2 &outRect) = 0;
 			virtual void DrawImage(IImage *, const Vector2 &outTopLeft, const AABB2 &inRect) = 0;
 			virtual void DrawImage(IImage *, const AABB2 &outRect, const AABB2 &inRect) = 0;
 			virtual void DrawImage(IImage *, const Vector2 &outTopLeft, const Vector2 &outTopRight,
 			                       const Vector2 &outBottomLeft, const AABB2 &inRect) = 0;
+
+			/* Applies a frosting glass effect (if possible). */
+			virtual void Blur() {}
 
 			virtual void DrawFlatGameMap(const AABB2 &outRect, const AABB2 &inRect) = 0;
 

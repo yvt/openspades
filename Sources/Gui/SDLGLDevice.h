@@ -51,6 +51,8 @@ namespace spades {
 			void DepthMask(bool) override;
 			void ColorMask(bool r, bool g, bool b, bool a) override;
 
+			void Scissor(Integer x, Integer y, Sizei width, Sizei height) override;
+
 			void FrontFace(Enum) override;
 			void Enable(Enum state, bool) override;
 

@@ -516,6 +516,16 @@ namespace spades {
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
+													  "void Blur()",
+													  asMETHOD(IRenderer,Blur),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void set_ScissorRect(const AABB2&in)",
+													  asMETHOD(IRenderer,SetScissor),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
 													  "void FrameDone()",
 													  asMETHOD(IRenderer,FrameDone),
 													  asCALL_THISCALL);

@@ -59,6 +59,7 @@ namespace spades {
 				Blend,
 				Multisample,
 				FramebufferSRGB,
+				ScissorTest,
 
 				// Parameters
 				FramebufferBinding,
@@ -268,6 +269,8 @@ namespace spades {
 
 			virtual void DepthMask(bool) = 0;
 			virtual void ColorMask(bool r, bool g, bool b, bool a) = 0;
+
+			virtual void Scissor(Integer x, Integer y, Sizei width, Sizei height) = 0;
 
 			virtual void Finish() = 0;
 			virtual void Flush() = 0;

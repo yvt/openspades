@@ -188,6 +188,8 @@ namespace spades {
 			void SetColor(Vector4) override;
 			void SetColorAlphaPremultiplied(Vector4) override;
 
+			void SetScissor(const AABB2&) override;
+
 			void DrawImage(client::IImage *, const Vector2 &outTopLeft) override;
 			void DrawImage(client::IImage *, const AABB2 &outRect) override;
 			void DrawImage(client::IImage *, const Vector2 &outTopLeft,

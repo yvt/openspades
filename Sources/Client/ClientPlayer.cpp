@@ -149,6 +149,8 @@ namespace spades {
 			/** Sets color for image drawing. Always alpha premultiplied. */
 			void SetColorAlphaPremultiplied(Vector4 col) { base->SetColorAlphaPremultiplied(col); }
 
+			void SetScissor(const AABB2 &) { OnProhibitedAction(); }
+
 			void DrawImage(IImage *img, const Vector2 &outTopLeft) {
 				if (allowDepthHack)
 					base->DrawImage(img, outTopLeft);

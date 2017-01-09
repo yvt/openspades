@@ -275,7 +275,13 @@ namespace spades {
 		void SDLGLDevice::ColorMask(bool r, bool g, bool b, bool a) {
 			CheckExistence(glColorMask);
 			glColorMask(r ? GL_TRUE : GL_FALSE, g ? GL_TRUE : GL_FALSE, b ? GL_TRUE : GL_FALSE,
-			            a ? GL_TRUE : GL_FALSE);
+						a ? GL_TRUE : GL_FALSE);
+			CheckError();
+		}
+
+		void SDLGLDevice::Scissor(Integer x, Integer y, Sizei width, Sizei height) {
+			CheckExistence(glScissor);
+			glScissor(x, y, width, height);
 			CheckError();
 		}
 
@@ -299,6 +305,7 @@ namespace spades {
 				case Texture2D: type = GL_TEXTURE_2D; break;
 				case Multisample: type = GL_MULTISAMPLE; break;
 				case FramebufferSRGB: type = GL_FRAMEBUFFER_SRGB; break;
+				case ScissorTest: type = GL_SCISSOR_TEST; break;
 				default: SPInvalidEnum("state", state);
 			}
 			if (b)

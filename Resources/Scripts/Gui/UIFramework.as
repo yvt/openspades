@@ -53,6 +53,8 @@ namespace spades {
 			private KeyRepeatManager keyRepeater;
 			private KeyRepeatManager charRepeater;
 
+			private AABB2[] clipRects;
+
 			Renderer@ Renderer {
 				get final { return renderer; }
 			}
@@ -355,6 +357,9 @@ namespace spades {
 			}
 
 			void Render() {
+				clipRects.length = 0;
+				clipRects.insertLast(AABB2(0, 0, Renderer.ScreenWidth, Renderer.ScreenHeight));
+
 				if(RootElement.Visible) {
 					RootElement.Render();
 				}
@@ -364,6 +369,21 @@ namespace spades {
 				if(c !is null) {
 					c.Render(MouseCursorPosition);
 				}
+			}
+
+			void PushClippingRect(AABB2 rect) {
+				AABB2 newRect = clipRects[clipRects.length - 1];
+				newRect.min.x = Max(newRect.min.x, rect.min.x);
+				newRect.min.y = Max(newRect.min.y, rect.min.y);
+				newRect.max.x = Max(Min(newRect.max.x, rect.max.x), newRect.min.x);
+				newRect.max.y = Max(Min(newRect.max.y, rect.max.y), newRect.min.y);
+				clipRects.insertLast(newRect);
+				renderer.ScissorRect = newRect;
+			}
+
+			void PopClippingRect() {
+				clipRects.removeLast();
+				renderer.ScissorRect = clipRects[clipRects.length - 1];
 			}
 
 			void Copy(string text) {
@@ -527,6 +547,10 @@ namespace spades {
 			/** When this is set to true, all mouse interraction outside the client area is
 			 * ignored for all sub-elements, reducing the CPU load. The visual is not clipped. */
 			bool ClipMouse = true;
+
+			/** When this is set to true, all drawings inside this element are clipped by
+			 * the bounding rect of this element. */
+			bool ClipVisual = false;
 
 			Vector2 Position;
 			Vector2 Size;
@@ -879,11 +903,17 @@ namespace spades {
 			}
 
 			void Render() {
+				if (ClipVisual) {
+					Manager.PushClippingRect(ScreenBounds);
+				}
 				UIElementIterator iterator(this);
 				while(iterator.MoveNext()) {
 					if(iterator.Current.Visible) {
 						iterator.Current.Render();
 					}
+				}
+				if (ClipVisual) {
+					Manager.PopClippingRect();
 				}
 			}
 		}

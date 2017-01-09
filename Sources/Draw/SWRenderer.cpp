@@ -968,6 +968,10 @@ namespace spades {
 			drawColorAlphaPremultiplied = col;
 		}
 
+		void SWRenderer::SetScissor(const AABB2 &) {
+			// TODO: implement scissor rectangle for SWRenderer
+		}
+
 		void SWRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft) {
 			SPADES_MARK_FUNCTION();
 

@@ -479,6 +479,7 @@ namespace spades {
 
 			if (settings.r_srgb)
 				device->Enable(IGLDevice::FramebufferSRGB, true);
+			device->Enable(IGLDevice::ScissorTest, false);
 		}
 
 #pragma mark - Add Scene Objects
@@ -1016,9 +1017,22 @@ namespace spades {
 			// prepare for 2d drawing
 			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			device->Enable(IGLDevice::Blend, true);
+			device->Scissor(0, 0, device->ScreenWidth(), device->ScreenHeight());
+			device->Enable(IGLDevice::ScissorTest, true);
 		}
 
 		//#pragma mark - 2D Drawings
+
+		void GLRenderer::SetScissor(const AABB2 &rect) {
+			device->Scissor(static_cast<IGLDevice::Integer>(rect.GetMinX()),
+							static_cast<IGLDevice::Integer>(rect.GetMinY()),
+							static_cast<IGLDevice::Integer>(rect.GetWidth()),
+							static_cast<IGLDevice::Integer>(rect.GetHeight()));
+		}
+
+		void GLRenderer::Blur() {
+			// TODO: implement blur effect for GLRenderer
+		}
 
 		void GLRenderer::MultiplyScreenColor(spades::Vector3 color) {
 			SPADES_MARK_FUNCTION();
@@ -1167,6 +1181,8 @@ namespace spades {
 
 			imageRenderer->Flush();
 
+			device->Scissor(0, 0, device->ScreenWidth(), device->ScreenHeight());
+
 			if (settings.r_debugTimingOutputScreen &&
 				settings.r_debugTiming) {
 				GLProfiler::Context p(*profiler, "Draw GLProfiler Results");
@@ -1198,6 +1214,8 @@ namespace spades {
 			// ready for 2d draw of next frame
 			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			device->Enable(IGLDevice::Blend, true);
+			device->Enable(IGLDevice::ScissorTest, true);
+			device->Scissor(0, 0, device->ScreenWidth(), device->ScreenHeight());
 
 			profiler->EndFrame();
 		}
