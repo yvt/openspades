@@ -112,7 +112,7 @@ namespace spades {
 				default: SPAssert(false);
 			}
 			if (actualScale != scale) {
-				float spd = fabsf(scale - lastScale) * 6.f;
+				float spd = fabsf(scale - lastScale) * 10.f;
 				spd = std::max(spd, 0.2f);
 				spd *= dt;
 				if (scale > actualScale) {
@@ -127,13 +127,9 @@ namespace spades {
 			}
 
 			if (zoomed) {
-				zoomState += dt * 5.f;
-				if (zoomState > 1.f)
-					zoomState = 1.f;
+				zoomState = 1.0f;
 			} else {
-				zoomState -= dt * 5.f;
-				if (zoomState < 0.f)
-					zoomState = 0.f;
+				zoomState = 0.0f;
 			}
 		}
 
