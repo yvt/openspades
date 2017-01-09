@@ -45,6 +45,21 @@ namespace spades{
 				font->AddRef();
 				return font;
 			}
+			static IFont *GetSmallFont(FontManager *self) {
+				IFont *font = self->GetSmallFont();
+				font->AddRef();
+				return font;
+			}
+			static IFont *GetSmallerFont(FontManager *self) {
+				IFont *font = self->GetSmallerFont();
+				font->AddRef();
+				return font;
+			}
+			static IFont *GetMediumFont(FontManager *self) {
+				IFont *font = self->GetMediumFont();
+				font->AddRef();
+				return font;
+			}
 
 		public:
 			FontManagerRegistrar() : ScriptObjectRegistrar("FontManager") {}
@@ -85,6 +100,21 @@ namespace spades{
 						r = eng->RegisterObjectMethod("FontManager",
 													  "Font@ get_SquareDesignFont()",
 													  asFUNCTION(GetSquareDesignFont),
+													  asCALL_CDECL_OBJLAST);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("FontManager",
+													  "Font@ get_SmallerFont()",
+													  asFUNCTION(GetSmallerFont),
+													  asCALL_CDECL_OBJLAST);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("FontManager",
+													  "Font@ get_SmallFont()",
+													  asFUNCTION(GetSmallFont),
+													  asCALL_CDECL_OBJLAST);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("FontManager",
+													  "Font@ get_MediumFont()",
+													  asFUNCTION(GetMediumFont),
 													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 

@@ -80,13 +80,13 @@ namespace spades {
 			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 34.f, 48.f),
 			  false);
 			mediumFont.Set(
-				new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 24.f, 32.f),
-				false);
-			headingFont.Set(
-			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 20.f, 26.f),
+			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 22.f, 32.f),
 			  false);
-			guiFont.Set(
+			smallFont.Set(
 			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 16.f, 20.f),
+			  false);
+			smallerFont.Set(
+			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 15.f, 18.f),
 			  false);
 		}
 

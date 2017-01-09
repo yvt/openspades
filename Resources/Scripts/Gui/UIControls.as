@@ -208,39 +208,58 @@ namespace spades {
 
 		}
 
-		class SimpleButton: spades::ui::Button {
-			SimpleButton(spades::ui::UIManager@ manager){
+		class Button: ButtonBase {
+			Vector2 Alignment = Vector2(0.0f, 0.5f);
+
+			string HotKeyText;
+			Vector2 HotKeyTextAlignment = Vector2(1.0f, 0.5f);
+
+			Button(spades::ui::UIManager@ manager){
 				super(manager);
 			}
 			void Render() {
+
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				if((Pressed && Hover) || Toggled) {
-					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
+					renderer.ColorNP = Vector4(0.9f, 0.9f, 0.9f, 1.0f);
 				} else if(Hover) {
-					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.12f);
+					renderer.ColorNP = Vector4(0.9f, 0.9f, 0.9f, 0.7f);
 				} else {
-					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.07f);
+					renderer.ColorNP = Vector4(0.9f, 0.9f, 0.9f, 0.6f);
 				}
 				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
+
 				if((Pressed && Hover) || Toggled) {
-					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.1f);
+					renderer.ColorNP = Vector4(1.f, 0.74f, 0.08f, 1.0f);
 				} else if(Hover) {
-					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.07f);
+					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.0f);
 				} else {
-					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.03f);
+					renderer.ColorNP = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
 				}
-				renderer.DrawImage(img, AABB2(pos.x, pos.y, 1.f, size.y));
-				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
-				renderer.DrawImage(img, AABB2(pos.x+size.x-1.f, pos.y, 1.f, size.y));
-				renderer.DrawImage(img, AABB2(pos.x, pos.y+size.y-1.f, size.x, 1.f));
+				renderer.DrawImage(img, AABB2(pos.x - 3.0f, pos.y - 3.0f, 2.f, size.y + 6.0f));
+				renderer.DrawImage(img, AABB2(pos.x - 3.0f, pos.y - 3.0f, size.x + 6.0f, 2.f));
+				renderer.DrawImage(img, AABB2(pos.x + size.x + 1.0f, pos.y - 3.0f, 2.f, size.y + 6.0f));
+				renderer.DrawImage(img, AABB2(pos.x - 3.0f, pos.y + size.y + 1.0f, size.x + 6.0f, 2.f));
+
 				Vector2 txtSize = Font.Measure(Caption);
-				float margin = 4.f;
+				float margin = 8.f;
+
 				Font.DrawShadow(Caption, pos + Vector2(margin, margin) +
 					(size - txtSize - Vector2(margin * 2.f, margin * 2.f)) * Alignment,
-					1.f, Vector4(1,1,1,1), Vector4(0,0,0,0.4f));
+					1.f,
+					Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+					Vector4(1.0f, 1.0f, 1.0f, 0.1f));
+
+				// TODO: use "FontManager::SmallFont" for this
+				txtSize = Font.Measure(HotKeyText);
+				Font.DrawShadow(HotKeyText, pos + Vector2(margin, margin) +
+					(size - txtSize - Vector2(margin * 2.f, margin * 2.f)) * HotKeyTextAlignment,
+					1.f,
+					Vector4(0.0f, 0.0f, 0.0f, 0.6f),
+					Vector4(1.0f, 1.0f, 1.0f, 0.1f));
 			}
 		}
 
@@ -347,52 +366,10 @@ namespace spades {
 			}
 		}
 
-		class Button: ButtonBase {
-			private Image@ image;
-			Vector2 Alignment = Vector2(0.5f, 0.5f);
-
-			Button(UIManager@ manager) {
+		class SimpleButton: Button {
+			SimpleButton(UIManager@ manager) {
 				super(manager);
-
-				Renderer@ renderer = Manager.Renderer;
-				@image = renderer.RegisterImage("Gfx/UI/Button.png");
 			}
-
-			void Render() {
-				Renderer@ renderer = Manager.Renderer;
-				Vector2 pos = ScreenPosition;
-				Vector2 size = Size;
-
-				Vector4 color = Vector4(0.2f, 0.2f, 0.2f, 0.5f);
-				if(Toggled or (Pressed and Hover)) {
-					color = Vector4(0.7f, 0.7f, 0.7f, 0.9f);
-				}else if(Hover) {
-					color = Vector4(0.4f, 0.4f, 0.4f, 0.7f);
-				}
-				if(!IsEnabled) {
-					color.w *= 0.5f;
-				}
-				renderer.ColorNP = color;
-
-				DrawSliceImage(renderer, image, pos.x, pos.y, size.x, size.y, 12.f);
-
-				Font@ font = this.Font;
-				string text = this.Caption;
-				Vector2 txtSize = font.Measure(text);
-				Vector2 txtPos;
-				pos += Vector2(8.f, 8.f);
-				size -= Vector2(16.f, 16.f);
-				txtPos = pos + (size - txtSize) * Alignment;
-
-				if(IsEnabled){
-					font.DrawShadow(text, txtPos, 1.f,
-						Vector4(1.f, 1.f, 1.f, 1.f), Vector4(0.f, 0.f, 0.f, 0.4f));
-				}else{
-					font.DrawShadow(text, txtPos, 1.f,
-						Vector4(1.f, 1.f, 1.f, 0.5f), Vector4(0.f, 0.f, 0.f, 0.1f));
-				}
-			}
-
 		}
 
 		class FieldCommand {
@@ -415,9 +392,9 @@ namespace spades {
 			private int historyPos = 0; // index to insert next command
 
 			Vector4 TextColor = Vector4(1.f, 1.f, 1.f, 1.f);
+			Vector4 ActiveTextColor = Vector4(0.f, 0.f, 0.f, 1.f);
 			Vector4 DisabledTextColor = Vector4(1.f, 1.f, 1.f, 0.3f);
-			Vector4 PlaceholderColor = Vector4(1.f, 1.f, 1.f, 0.5f);
-			Vector4 HighlightColor = Vector4(1.f, 1.f, 1.f, 0.3f);
+			Vector4 HighlightColor = Vector4(0.f, 0.f, 0.f, 0.3f);
 
 			Vector2 TextOrigin = Vector2(0.f, 0.f);
 			float TextScale = 1.f;
@@ -750,7 +727,7 @@ namespace spades {
 
 			void DrawHighlight(float x, float y, float w, float h) {
 				Renderer@ renderer = Manager.Renderer;
-				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
+				renderer.ColorNP = HighlightColor;
 
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				renderer.DrawImage(img, AABB2(x, y, w, h));
@@ -760,7 +737,7 @@ namespace spades {
 				Renderer@ renderer = Manager.Renderer;
 				float pulse = sin(Manager.Time * 5.f);
 				pulse = abs(pulse);
-				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, pulse);
+				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, pulse);
 
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				renderer.DrawImage(img, AABB2(x - 1.f, y, 2, h));
@@ -768,7 +745,7 @@ namespace spades {
 
 			void DrawEditingLine(float x, float y, float w, float h) {
 				Renderer@ renderer = Manager.Renderer;
-				renderer.ColorNP = Vector4(1.f, 1.f, 1.f, .3f);
+				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, .3f);
 
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
 				renderer.DrawImage(img, AABB2(x, y + h, w, 2.f));
@@ -798,10 +775,12 @@ namespace spades {
 
 				if(text.length == 0){
 					if(IsEnabled) {
-						font.Draw(Placeholder, textPos, TextScale, PlaceholderColor);
+						Vector4 color = IsFocused ? ActiveTextColor : TextColor;
+						color.w *= 0.5f;
+						font.Draw(Placeholder, textPos, TextScale, color);
 					}
 				}else{
-					font.Draw(text, textPos, TextScale, IsEnabled ? TextColor : DisabledTextColor);
+					font.Draw(text, textPos, TextScale, IsEnabled ? (IsFocused ? ActiveTextColor : TextColor) : DisabledTextColor);
 				}
 
 				if(IsFocused){
@@ -853,20 +832,12 @@ namespace spades {
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
 				Image@ img = renderer.RegisterImage("Gfx/White.tga");
-				renderer.ColorNP = Vector4(0.f, 0.f, 0.f, IsFocused ? 0.3f : 0.1f);
-				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
-
-				if(IsFocused) {
-					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.2f);
-				}else if(hover) {
-					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.1f);
+				if (IsFocused) {
+					renderer.ColorNP = Vector4(1.0f, 1.0f, 1.0f, 0.9f);
 				} else {
-					renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.06f);
+					renderer.ColorNP = Vector4(0.6f, 0.6f, 0.6f, 0.3f);
 				}
-				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
-				renderer.DrawImage(img, AABB2(pos.x, pos.y + size.y - 1.f, size.x, 1.f));
-				renderer.DrawImage(img, AABB2(pos.x, pos.y + 1.f, 1.f, size.y - 2.f));
-				renderer.DrawImage(img, AABB2(pos.x + size.x - 1.f, pos.y + 1.f, 1.f, size.y - 2.f));
+				renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 
 				FieldBase::Render();
 			}

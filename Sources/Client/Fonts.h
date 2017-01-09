@@ -31,9 +31,20 @@ namespace spades {
 
 			IFont *GetSquareDesignFont() { return squareDesignFont; }
 			IFont *GetLargeFont() { return largeFont; }
+
+			/** Returns a GUI font that is roughly 15pt size. */
+			IFont *GetSmallerFont() { return smallerFont; }
+
+			/** Returns a GUI font that is roughly 16pt size. */
+			IFont *GetSmallFont() { return smallFont; }
+
+			/** Returns a GUI font that is roughly 22pt size. */
 			IFont *GetMediumFont() { return mediumFont; }
-			IFont *GetHeadingFont() { return headingFont; }
-			IFont *GetGuiFont() { return guiFont; }
+
+			/** @deprecated */
+			IFont *GetGuiFont() { return GetSmallerFont(); }
+			/** @deprecated */
+			IFont *GetHeadingFont() { return GetMediumFont(); }
 
 		protected:
 			~FontManager() override;
@@ -42,8 +53,8 @@ namespace spades {
 			Handle<IFont> squareDesignFont;
 			Handle<IFont> largeFont;
 			Handle<IFont> mediumFont;
-			Handle<IFont> headingFont;
-			Handle<IFont> guiFont;
+			Handle<IFont> smallFont;
+			Handle<IFont> smallerFont;
 		};
 	}
 }
