@@ -1,4 +1,3 @@
-﻿# OpenSpades translation
 # Copyright (C) 2017 yvt
 # This file is distributed under the same license as the OpenSpades package.
 # yvt <i@yvt.jp>, 2014.
@@ -8,7 +7,7 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2017-01-08 12:48+0900\n"
-"PO-Revision-Date: 2017-01-08 12:55+0900\n"
+"PO-Revision-Date: 2017-01-12 00:33+0900\n"
 "Last-Translator: kmsi <sts06196@naver.com>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
@@ -1074,12 +1073,12 @@ msgid ""
 "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
 "Off|MSAA 2x|4x|FXAA"
 msgstr ""
-"앤티앨리어싱:오브젝트의 윤곽에 발생하는 계단 현상을 줄여 줍니다.\n"
+"앤티앨리어싱: 오브젝트의 윤곽에 발생하는 계단 현상을 줄여 줍니다.\n"
 "\n"
-"MSAA:보통의 경우보다 고해상도의 이미지를 생성하여 앤티앨리어싱을 수행합니다. "
-"가장 멋져 보이지만, 몇몇 설정과는 호환되지 않습니다.\n"
+"MSAA: 보통의 경우보다 고해상도의 이미지를 생성하여 앤티앨리어싱을 수행합니"
+"다. 가장 멋져 보이지만, 몇몇 설정과는 호환되지 않습니다.\n"
 "\n"
-"FXAA : 계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합니"
+"FXAA: 계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합니"
 "다.|꺼짐|MSAA 2x|4x|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1133
