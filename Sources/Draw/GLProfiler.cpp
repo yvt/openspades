@@ -69,10 +69,10 @@ namespace spades {
 			// can't use vector here; a reference to a vector's element can be invalidated
 			std::list<Phase> subphases;
 
-			/** Looks up a subphase by its name. */
-			std::unordered_map<std::string, std::reference_wrapper<Phase>> subphaseMap;
+			std::list<Phase>::iterator nextSubphaseIterator;
 
 			double startWallClockTime;
+			double endWallClockTime;
 			stmp::optional<std::pair<std::size_t, std::size_t>> queryObjectIndices;
 
 			Measurement measurementLatest;
@@ -80,7 +80,7 @@ namespace spades {
 
 			stmp::optional<Measurement> measurementSaved;
 
-			Phase(const std::string &name) : name{name} {}
+			Phase(const std::string &name) : name{name}, nextSubphaseIterator{subphases.begin()} {}
 		};
 
 		GLProfiler::GLProfiler(GLRenderer &renderer)
@@ -151,6 +151,7 @@ namespace spades {
 					void Traverse(Phase &phase) {
 						phase.measured = false;
 						phase.queryObjectIndices.reset();
+						phase.nextSubphaseIterator = phase.subphases.begin();
 						for (Phase &subphase : phase.subphases) {
 							Traverse(subphase);
 						}
@@ -190,6 +191,41 @@ namespace spades {
 		void GLProfiler::FinalizeMeasurement() {
 			SPADES_MARK_FUNCTION();
 			Phase &root = *m_root;
+
+			// Fill gap
+			if (m_settings.r_debugTimingFillGap) {
+				struct Traverser {
+					GLProfiler &self;
+					Traverser(GLProfiler &self) : self{self} {}
+					void Traverse(Phase &phase, stmp::optional<std::pair<Phase&, bool>> base) {
+						if (!phase.queryObjectIndices) {
+							return;
+						}
+						if (base) {
+							auto baseIndices = *(*base).first.queryObjectIndices;
+							(*phase.queryObjectIndices).second = (*base).second ? baseIndices.second : baseIndices.first;
+						}
+						auto it = phase.subphases.begin();
+						while (it != phase.subphases.end() && !it->queryObjectIndices) {
+							++it;
+						}
+						while (it != phase.subphases.end()) {
+							auto it2 = it; ++it2;
+							while (it2 != phase.subphases.end() && !it2->queryObjectIndices) {
+								++it2;
+							}
+							if (it2 == phase.subphases.end()) {
+								Traverse(*it, std::pair<Phase&, bool>{phase, true});
+							} else {
+								Traverse(*it, std::pair<Phase&, bool>{*it2, false});
+							}
+							it = it2;
+						}
+					}
+				};
+				Traverser{*this}.Traverse(root, {});
+				// TODO: fill gap for wall clock times
+			}
 
 			// Collect GPU time information
 			if (m_settings.r_debugTimingGPUTime) {
@@ -281,18 +317,23 @@ namespace spades {
 
 			Phase &current = GetCurrentPhase();
 
-			// Look up existing Phase object (only when r_debugTimingAverage != 0)
-			auto it = current.subphaseMap.find(name);
+			auto it = current.nextSubphaseIterator;
 
-			if (it == current.subphaseMap.end()) {
-				// Create a new subphase
-				auto subphasesIt = current.subphases.emplace(current.subphases.end(), name);
-				auto insertResult = current.subphaseMap.emplace(name, std::ref(*subphasesIt));
-				SPAssert(insertResult.second);
-				it = insertResult.first;
+			for (; it != current.subphases.end(); ++it) {
+				if (it->name == name) {
+					break;
+				}
 			}
 
-			Phase &next = it->second;
+			if (it == current.subphases.end()) {
+				// Create a new subphase
+				it = current.subphases.emplace(current.nextSubphaseIterator, name);
+			}
+
+			current.nextSubphaseIterator = it;
+			++current.nextSubphaseIterator;
+
+			Phase &next = *it;
 			m_stack.emplace_back(next);
 
 			if (next.measured) {
@@ -307,6 +348,10 @@ namespace spades {
 
 		void GLProfiler::BeginPhaseInner(Phase &phase) {
 			SPADES_MARK_FUNCTION_DEBUG();
+
+			if (m_settings.r_debugTimingFlush) {
+				m_device.Flush();
+			}
 
 			phase.startWallClockTime = GetWallClockTime();
 
@@ -334,7 +379,13 @@ namespace spades {
 
 			Phase &current = GetCurrentPhase();
 
+			if (m_settings.r_debugTimingFlush) {
+				m_device.Flush();
+			}
+
 			double wallClockTime = GetWallClockTime();
+
+			current.endWallClockTime = wallClockTime;
 
 			current.measurementLatest.totalWallClockTime +=
 			  wallClockTime - current.startWallClockTime;
