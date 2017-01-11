@@ -34,6 +34,11 @@ float decodeDepth(float w, float near, float far){
 
 void main() {
     float centerDepth = texture2D(depthTexture, texCoord).x;
+    if (centerDepth >= 0.999999) {
+        // skip background
+        gl_FragColor = vec4(1.0);
+        return;
+    }
     centerDepth = decodeDepth(centerDepth, zNearFar.x, zNearFar.y);
 
     vec2 sum = vec2(0.0);
