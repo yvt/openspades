@@ -489,7 +489,7 @@ namespace spades {
 			if (team == 2)
 				team = 255;
 
-			if (!world->GetLocalPlayer()) {
+			if (!world->GetLocalPlayer() || world->GetLocalPlayer()->GetTeamId() >= 2) {
 				// join
 				net->SendJoin(team, weap, playerName, lastKills);
 			} else {

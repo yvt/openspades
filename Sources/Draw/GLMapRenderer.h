@@ -87,6 +87,7 @@ namespace spades {
 
 			client::GameMap *GetMap() { return gameMap; }
 
+			void Realize();
 			void Prerender();
 			void RenderSunlightPass();
 			void RenderDynamicLightPass(std::vector<GLDynamicLight> lights);

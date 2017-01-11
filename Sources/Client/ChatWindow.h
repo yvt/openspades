@@ -36,13 +36,12 @@ namespace spades {
 		static const char MsgColorTeam2 = 2;
 		static const char MsgColorTeam3 = 3;
 		static const char MsgColorRed = 4;
-		static const char MsgColorFriendlyFire = MsgColorRed;
 		static const char MsgColorGreen = 5;
-		static const char MsgColorSysInfo = MsgColorGreen;
 		static const char MsgColorRestore = 6;
-		static const char MsgImage = 7;
-		static const char MsgColorBlack = 8;
-		static const char MsgColorMax = 9;
+		static const char MsgColorGray = 7;
+		static const char MsgColorMax = 8;
+		static const char MsgColorFriendlyFire = MsgColorRed;
+		static const char MsgColorSysInfo = MsgColorGreen;
 
 		class ChatWindow {
 			Client *client;
@@ -56,9 +55,7 @@ namespace spades {
 				float timeFade; // timeout fade opacity
 
 				ChatEntry(const std::string &Msg, float Height, float Fade, float TimeFade)
-				    : msg(Msg), height(Height), fade(Fade), timeFade(TimeFade) {
-					;
-				}
+				    : msg(Msg), height(Height), fade(Fade), timeFade(TimeFade) {}
 			};
 
 			std::list<ChatEntry> entries;
@@ -70,8 +67,6 @@ namespace spades {
 			float GetLineHeight();
 
 			Vector4 GetColor(char);
-			std::vector<IImage *> mKillImages;
-			IImage *imageForIndex(char index);
 
 		public:
 			ChatWindow(Client *, IRenderer *rend, IFont *font, bool killfeed);

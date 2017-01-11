@@ -113,7 +113,8 @@ namespace spades {
 			smoothedFogColor = MakeVector3(-1.f, -1.f, -1.f);
 
 			// ready for 2d draw
-			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
+				  device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
+									IGLDevice::Zero, IGLDevice::One);
 			device->Enable(IGLDevice::Blend, true);
 
 			SPLog("GLRenderer started");
@@ -664,7 +665,8 @@ namespace spades {
 				device->Enable(IGLDevice::Blend, true);
 				device->Enable(IGLDevice::DepthTest, true);
 				device->DepthFunc(IGLDevice::Equal);
-				device->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::One);
+				device->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::One,
+								  IGLDevice::Zero, IGLDevice::One);
 
 				if (!sceneDef.skipWorld && mapRenderer) {
 					mapRenderer->RenderDynamicLightPass(lights);
@@ -699,14 +701,18 @@ namespace spades {
 			renderingMirror = false;
 
 			{
-				GLProfiler::Context p(*profiler, "Uploading Software Rendered Stuff");
-				if (mapShadowRenderer)
+				GLProfiler::Context p(*profiler, "Upload Dynamic Data");
+				if (mapShadowRenderer) {
 					mapShadowRenderer->Update();
+				}
 				if (ambientShadowRenderer) {
 					ambientShadowRenderer->Update();
 				}
 				if (radiosityRenderer) {
 					radiosityRenderer->Update();
+				}
+				if (mapRenderer) {
+					mapRenderer->Realize();
 				}
 			}
 
@@ -761,9 +767,12 @@ namespace spades {
 					if (settings.r_hdr) {
 						bgCol *= bgCol;
 					} // linearlize
-					device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
-					device->Clear(
-					  (IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+					{
+						GLProfiler::Context p(*profiler, "Clear (Mirrored Scene)");
+						device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
+						device->Clear(
+						  (IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+					}
 
 					// render scene
 					GLProfiler::Context p(*profiler, "Mirrored Objects");
@@ -802,8 +811,11 @@ namespace spades {
 			if (settings.r_hdr) {
 				bgCol *= bgCol;
 			} // linearlize
-			device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
-			device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+			{
+				GLProfiler::Context p(*profiler, "Clear");
+				device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
+				device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+			}
 
 			device->FrontFace(IGLDevice::CW);
 
@@ -823,14 +835,16 @@ namespace spades {
 
 			device->DepthMask(false);
 			if (!settings.r_softParticles) { // softparticle is a part of postprocess
-				GLProfiler::Context p(*profiler, "Particle");
-				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
+				GLProfiler::Context p(*profiler, "Particles");
+				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
+								  IGLDevice::Zero, IGLDevice::One);
 				spriteRenderer->Render();
 			}
 
 			{
-				GLProfiler::Context p(*profiler, "Long Particle");
-				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
+				GLProfiler::Context p(*profiler, "Long Particles");
+				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
+								  IGLDevice::Zero, IGLDevice::One);
 				longSpriteRenderer->Render();
 			}
 
@@ -856,11 +870,13 @@ namespace spades {
 
 				if (settings.r_softParticles) { // softparticle is a part of postprocess
 					GLProfiler::Context p(*profiler, "Soft Particle");
-					device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
+					device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
+									  IGLDevice::Zero, IGLDevice::One);
 					spriteRenderer->Render();
 				}
 
-				device->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::OneMinusSrcAlpha);
+				device->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::OneMinusSrcAlpha,
+								  IGLDevice::Zero, IGLDevice::One);
 
 				if (settings.r_depthOfField &&
 				    (sceneDef.depthOfFieldFocalLength > 0.f || sceneDef.blurVignette > 0.f)) {
@@ -878,7 +894,7 @@ namespace spades {
 				}
 
 				if (settings.r_bloom) {
-					GLProfiler::Context p(*profiler, "Lens Dust Filter");
+					GLProfiler::Context p(*profiler, "Bloom");
 					handle = lensDustFilter->Filter(handle);
 				}
 
@@ -944,10 +960,12 @@ namespace spades {
 				}
 
 				if (settings.r_hdr && settings.r_hdrAutoExposure) {
+					GLProfiler::Context p(*profiler, "Auto Exposure");
 					handle = autoExposureFilter->Filter(handle);
 				}
 
 				if (settings.r_hdr) {
+					GLProfiler::Context p(*profiler, "Gamma Correction");
 					handle = GLNonlinearlizeFilter(this).Filter(handle);
 				}
 
@@ -1002,7 +1020,8 @@ namespace spades {
 			modelRenderer->Clear();
 
 			// prepare for 2d drawing
-			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
+			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
+							  IGLDevice::Zero, IGLDevice::One);
 			device->Enable(IGLDevice::Blend, true);
 		}
 
@@ -1013,7 +1032,8 @@ namespace spades {
 			void EnsureSceneNotStarted();
 			imageRenderer->Flush();
 
-			device->BlendFunc(IGLDevice::Zero, IGLDevice::SrcColor);
+			device->BlendFunc(IGLDevice::Zero, IGLDevice::SrcColor,
+							  IGLDevice::Zero, IGLDevice::One);
 
 			Vector4 col = {color.x, color.y, color.z, 1};
 
@@ -1052,7 +1072,8 @@ namespace spades {
 			device->EnableVertexAttribArray(positionAttribute(), false);
 			device->EnableVertexAttribArray(colorAttribute(), false);
 
-			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
+			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
+							  IGLDevice::Zero, IGLDevice::One);
 		}
 
 		void GLRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft) {
@@ -1168,7 +1189,7 @@ namespace spades {
 				int h = device->ScreenHeight();
 
 				device->Enable(IGLDevice::FramebufferSRGB, false);
-				;
+
 				GLProfiler::Context p(*profiler, "Copying to WM-given Framebuffer");
 
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
@@ -1184,7 +1205,8 @@ namespace spades {
 			lastTime = sceneDef.time;
 
 			// ready for 2d draw of next frame
-			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
+			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
+							  IGLDevice::Zero, IGLDevice::One);
 			device->Enable(IGLDevice::Blend, true);
 
 			profiler->EndFrame();

@@ -830,22 +830,51 @@ namespace spades {
 			s = ChatWindow::TeamColorMessage(killer->GetName(), killer->GetTeamId());
 
 			std::string cause;
-			bool ff = killer->GetTeamId() == victim->GetTeamId();
+			bool isFriendlyFire = killer->GetTeamId() == victim->GetTeamId();
 			if (killer == victim)
-				ff = false;
+				isFriendlyFire = false;
 
-			cause = " [";
 			Weapon *w =
 			  killer ? killer->GetWeapon() : nullptr; // only used in case of KillTypeWeapon
-			cause += ChatWindow::killImage(kt, w ? w->GetWeaponType() : RIFLE_WEAPON);
-			cause += "] ";
+			switch (kt) {
+				case KillTypeWeapon:
+					switch (w ? w->GetWeaponType() : RIFLE_WEAPON) {
+						case RIFLE_WEAPON: cause += _Tr("Client", "Rifle"); break;
+						case SMG_WEAPON: cause += _Tr("Client", "SMG"); break;
+						case SHOTGUN_WEAPON: cause += _Tr("Client", "Shotgun"); break;
+					}
+					break;
+				case KillTypeFall:
+					cause += _Tr("Client", "Fall");
+					break;
+				case KillTypeMelee:
+					cause += _Tr("Client", "Melee");
+					break;
+				case KillTypeGrenade:
+					cause += _Tr("Client", "Grenade");
+					break;
+				case KillTypeHeadshot:
+					cause += _Tr("Client", "Headshot");
+					break;
+				case KillTypeTeamChange:
+					cause += _Tr("Client", "Team Change");
+					break;
+				case KillTypeClassChange:
+					cause += _Tr("Client", "Weapon Change");
+					break;
+				default:
+					cause += "???";
+					break;
+			}
 
-			if (ff)
-				s += ChatWindow::ColoredMessage(cause, MsgColorRed);
+			s += " [";
+			if (isFriendlyFire)
+				s += ChatWindow::ColoredMessage(cause, MsgColorFriendlyFire);
 			else if (killer == world->GetLocalPlayer() || victim == world->GetLocalPlayer())
-				s += ChatWindow::ColoredMessage(cause, MsgColorBlack);
+				s += ChatWindow::ColoredMessage(cause, MsgColorGray);
 			else
 				s += cause;
+			s += "] ";
 
 			if (killer != victim) {
 				s += ChatWindow::TeamColorMessage(victim->GetName(), victim->GetTeamId());
@@ -1012,15 +1041,14 @@ namespace spades {
 		                             spades::Vector3 hitPos) {
 			SPADES_MARK_FUNCTION();
 
-			Tracer *t;
 			float vel;
 			switch (player->GetWeapon()->GetWeaponType()) {
 				case RIFLE_WEAPON: vel = 700.f; break;
 				case SMG_WEAPON: vel = 360.f; break;
 				case SHOTGUN_WEAPON: return;
 			}
-			t = new Tracer(this, muzzlePos, hitPos, vel);
-			AddLocalEntity(t);
+			AddLocalEntity(new Tracer(this, muzzlePos, hitPos, vel));
+			AddLocalEntity(new MapViewTracer(muzzlePos, hitPos, vel));
 		}
 
 		void Client::BlocksFell(std::vector<IntVector3> blocks) {

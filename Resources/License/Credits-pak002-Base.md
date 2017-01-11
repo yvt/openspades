@@ -1,5 +1,5 @@
 
-Copyright 2016 OpenSpades Contributors, some rights reserved.
+Copyright 2017 OpenSpades Contributors, some rights reserved.
 
 This file is distributed as a part of OpenSpades.
 

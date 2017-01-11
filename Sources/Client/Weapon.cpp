@@ -20,11 +20,11 @@
  */
 
 #include "Weapon.h"
+#include "IWorldListener.h"
+#include "World.h"
 #include <Core/Debug.h>
 #include <Core/Exception.h>
 #include <Core/Settings.h>
-#include "IWorldListener.h"
-#include "World.h"
 
 SPADES_SETTING(cg_protocolVersion);
 
@@ -60,7 +60,8 @@ namespace spades {
 		void Weapon::SetShooting(bool b) { shooting = b; }
 
 		bool Weapon::IsReadyToShoot() {
-			return ammo > 0 && time >= nextShotTime && (!reloading || IsReloadSlow());
+			return (ammo > 0 || !owner->IsLocalPlayer()) && time >= nextShotTime &&
+			       (!reloading || IsReloadSlow());
 		}
 
 		float Weapon::GetReloadProgress() {
@@ -72,16 +73,28 @@ namespace spades {
 		bool Weapon::FrameNext(float dt) {
 			SPADES_MARK_FUNCTION();
 
+			bool ownerIsLocalPlayer = owner->IsLocalPlayer();
+
 			bool fired = false;
 			bool dryFire = false;
 			if (shooting && (!reloading || IsReloadSlow())) {
 				// abort slow reload
 				reloading = false;
-				if (time >= nextShotTime && ammo > 0) {
+
+				// Automatic operation of weapon.
+				if (time >= nextShotTime && (ammo > 0 || !ownerIsLocalPlayer)) {
 					fired = true;
-					ammo--;
-					if (world->GetListener())
+
+					// Consume an ammo.
+					// Ammo count tracking is disabled for remote players because the server doesn't
+					// send enough information for us to do that.
+					if (ownerIsLocalPlayer) {
+						ammo--;
+					}
+
+					if (world->GetListener()) {
 						world->GetListener()->PlayerFiredWeapon(owner);
+					}
 					nextShotTime = time + GetDelay();
 				} else if (time >= nextShotTime) {
 					dryFire = true;
@@ -94,8 +107,7 @@ namespace spades {
 					if (IsReloadSlow()) {
 						// for local player, server sends
 						// new ammo/stock value
-						if (ammo < GetClipSize() && stock > 0 &&
-						    owner != owner->GetWorld()->GetLocalPlayer()) {
+						if (ammo < GetClipSize() && stock > 0 && !ownerIsLocalPlayer) {
 							ammo++;
 							stock--;
 						}
@@ -107,7 +119,7 @@ namespace spades {
 					} else {
 						// for local player, server sends
 						// new ammo/stock value
-						if (owner != owner->GetWorld()->GetLocalPlayer()) {
+						if (!ownerIsLocalPlayer) {
 							int newStock;
 							newStock = std::max(0, stock - GetClipSize() + ammo);
 							ammo += stock - newStock;

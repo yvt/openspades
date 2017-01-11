@@ -44,7 +44,6 @@
 #include "PaletteView.h"
 #include "ParticleSpriteEntity.h"
 #include "SmokeSpriteEntity.h"
-#include "Tracer.h"
 
 #include "GameMap.h"
 #include "Grenade.h"

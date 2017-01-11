@@ -138,11 +138,18 @@ namespace spades {
 			}
 		}
 
+		void GLMapRenderer::Realize() {
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map Chunks");
+
+			Vector3 eye = renderer->GetSceneDef().viewOrigin;
+			RealizeChunks(eye);
+		}
+
 		void GLMapRenderer::Prerender() {
 			SPADES_MARK_FUNCTION();
 			//depth-only pass
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Prerender");
 
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map");
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
 
 			device->Enable(IGLDevice::CullFace, true);
@@ -156,8 +163,6 @@ namespace spades {
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(depthonlyProgram);
 			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
-
-			RealizeChunks(eye);
 
 			// draw from nearest to farthest
 			int cx = (int)floorf(eye.x) / GLMapChunk::Size;

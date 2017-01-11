@@ -18,24 +18,71 @@
 
  */
 
-#include "MapView.h"
+#include <utility>
+
 #include "CTFGameMode.h"
 #include "Client.h"
 #include "GameMap.h"
 #include "IImage.h"
 #include "IRenderer.h"
+#include "MapView.h"
 #include "Player.h"
 #include "TCGameMode.h"
 #include "Weapon.h"
 #include "World.h"
 #include <Core/Settings.h>
+#include <Core/TMPUtils.h>
 
 DEFINE_SPADES_SETTING(cg_minimapSize, "128");
 DEFINE_SPADES_SETTING(cg_minimapPlayerColor, "1");
 DEFINE_SPADES_SETTING(cg_minimapPlayerIcon, "1");
 
+using std::pair;
+using stmp::optional;
+
 namespace spades {
 	namespace client {
+		namespace {
+			optional<pair<Vector2, Vector2>> ClipLineSegment(const pair<Vector2, Vector2> &inLine,
+			                                                 const Plane2 &plane) {
+				const float distance1 = plane.GetDistanceTo(inLine.first);
+				const float distance2 = plane.GetDistanceTo(inLine.second);
+				int bits = distance1 > 0 ? 1 : 0;
+				bits |= distance2 > 0 ? 2 : 0;
+				switch (bits) {
+					case 0: return {};
+					case 3: return inLine;
+				}
+
+				const float fraction = distance1 / (distance1 - distance2);
+				Vector2 intersection = Mix(inLine.first, inLine.second, fraction);
+				if (bits == 1) {
+					return std::make_pair(inLine.first, intersection);
+				} else {
+					return std::make_pair(intersection, inLine.second);
+				}
+			}
+
+			optional<pair<Vector2, Vector2>> ClipLineSegment(const pair<Vector2, Vector2> &inLine,
+			                                                 const AABB2 &rect) {
+				optional<pair<Vector2, Vector2>> line =
+				  ClipLineSegment(inLine, Plane2{1.0f, 0.0f, -rect.GetMinX()});
+				if (!line) {
+					return line;
+				}
+				line = ClipLineSegment(*line, Plane2{-1.0f, 0.0f, rect.GetMaxX()});
+				if (!line) {
+					return line;
+				}
+				line = ClipLineSegment(*line, Plane2{0.0f, 1.0f, -rect.GetMinY()});
+				if (!line) {
+					return line;
+				}
+				line = ClipLineSegment(*line, Plane2{0.0f, -1.0f, rect.GetMaxY()});
+				return line;
+			}
+		}
+
 		MapView::MapView(Client *c, bool largeMap)
 		    : client(c), renderer(c->GetRenderer()), largeMap(largeMap) {
 			scaleMode = 2;
@@ -65,7 +112,7 @@ namespace spades {
 				default: SPAssert(false);
 			}
 			if (actualScale != scale) {
-				float spd = fabsf(scale - lastScale) * 6.f;
+				float spd = fabsf(scale - lastScale) * 10.f;
 				spd = std::max(spd, 0.2f);
 				spd *= dt;
 				if (scale > actualScale) {
@@ -80,14 +127,19 @@ namespace spades {
 			}
 
 			if (zoomed) {
-				zoomState += dt * 5.f;
-				if (zoomState > 1.f)
-					zoomState = 1.f;
+				zoomState = 1.0f;
 			} else {
-				zoomState -= dt * 5.f;
-				if (zoomState < 0.f)
-					zoomState = 0.f;
+				zoomState = 0.0f;
 			}
+		}
+
+		Vector2 MapView::Project(const Vector2 &pos) const {
+			Vector2 scrPos;
+			scrPos.x = (pos.x - inRect.GetMinX()) / inRect.GetWidth();
+			scrPos.x = (scrPos.x * outRect.GetWidth()) + outRect.GetMinX();
+			scrPos.y = (pos.y - inRect.GetMinY()) / inRect.GetHeight();
+			scrPos.y = (scrPos.y * outRect.GetHeight()) + outRect.GetMinY();
+			return scrPos;
 		}
 
 		void MapView::DrawIcon(spades::Vector3 pos, spades::client::IImage *img, float rotation) {
@@ -95,11 +147,7 @@ namespace spades {
 			    pos.y > inRect.GetMaxY())
 				return;
 
-			Vector2 scrPos;
-			scrPos.x = (pos.x - inRect.GetMinX()) / inRect.GetWidth();
-			scrPos.x = (scrPos.x * outRect.GetWidth()) + outRect.GetMinX();
-			scrPos.y = (pos.y - inRect.GetMinY()) / inRect.GetHeight();
-			scrPos.y = (scrPos.y * outRect.GetHeight()) + outRect.GetMinY();
+			Vector2 scrPos = Project(Vector2{pos.x, pos.y});
 
 			scrPos.x = floorf(scrPos.x);
 			scrPos.y = floorf(scrPos.y);
@@ -438,7 +486,7 @@ namespace spades {
 				for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
 					Player *p = world->GetPlayer(i);
 					if (p == nullptr ||
-						(p->GetTeamId() != world->GetLocalPlayer()->GetTeamId() && !isSpectating) ||
+					    (p->GetTeamId() != world->GetLocalPlayer()->GetTeamId() && !isSpectating) ||
 					    !p->IsAlive())
 						continue;
 
@@ -541,6 +589,100 @@ namespace spades {
 					DrawIcon(t->pos, icon, 0.f);
 				}
 			}
+
+			// draw tracers
+			Handle<IImage> tracerImage = renderer->RegisterImage("Gfx/Ball.png");
+			const float tracerWidth = 2.0f;
+			const AABB2 tracerInRect{0.0f, 0.0f, tracerImage->GetWidth(), tracerImage->GetHeight()};
+
+			for (const auto &localEntity : client->localEntities) {
+				auto *const tracer = dynamic_cast<MapViewTracer *>(localEntity.get());
+				if (!tracer) {
+					continue;
+				}
+
+				const auto line1 = tracer->GetLineSegment();
+				if (!line1) {
+					continue;
+				}
+
+				auto line2 =
+				  ClipLineSegment(std::make_pair(Vector2{(*line1).first.x, (*line1).first.y},
+				                                 Vector2{(*line1).second.x, (*line1).second.y}),
+				                  inRect);
+				if (!line2) {
+					continue;
+				}
+
+				auto &line3 = *line2;
+				line3.first = Project(line3.first);
+				line3.second = Project(line3.second);
+
+				if (line3.first == line3.second) {
+					continue;
+				}
+
+				Vector2 normal = (line3.second - line3.first).Normalize();
+				normal = {-normal.y, normal.x};
+
+				{
+					const Vector2 vertices[] = {line3.first - normal * tracerWidth,
+					                            line3.first + normal * tracerWidth,
+					                            line3.second - normal * tracerWidth};
+
+					renderer->SetColorAlphaPremultiplied(Vector4{1.0f, 0.8f, 0.6f, 1.0f} * alpha);
+					renderer->DrawImage(tracerImage, vertices[0], vertices[1], vertices[2],
+					                    tracerInRect);
+				}
+			}
 		}
+
+		MapViewTracer::MapViewTracer(Vector3 p1, Vector3 p2, float bulletVel)
+		    : startPos(p1), velocity(bulletVel) {
+			// Z coordinate doesn't matter in MapView
+			p1.z = 0.0f;
+			p2.z = 0.0f;
+
+			dir = (p2 - p1).Normalize();
+			length = (p2 - p1).GetLength();
+
+			// in MapView it looks slower than it is actually, so compensate for that
+			bulletVel *= 4.0f;
+
+			const float maxTimeSpread = 1.0f / 10.f;
+			const float shutterTime = 1.0f / 10.f;
+
+			visibleLength = shutterTime * velocity;
+			curDistance = -visibleLength;
+			curDistance += maxTimeSpread * GetRandom();
+
+			firstUpdate = true;
+		}
+
+		bool MapViewTracer::Update(float dt) {
+			if (!firstUpdate) {
+				curDistance += dt * velocity;
+				if (curDistance > length) {
+					return false;
+				}
+			}
+			firstUpdate = false;
+			return true;
+		}
+
+		stmp::optional<std::pair<Vector3, Vector3>> MapViewTracer::GetLineSegment() {
+			float startDist = curDistance;
+			float endDist = curDistance + visibleLength;
+			startDist = std::max(startDist, 0.f);
+			endDist = std::min(endDist, length);
+			if (startDist >= endDist) {
+				return {};
+			}
+			Vector3 pos1 = startPos + dir * startDist;
+			Vector3 pos2 = startPos + dir * endDist;
+			return std::make_pair(pos1, pos2);
+		}
+
+		MapViewTracer::~MapViewTracer() {}
 	}
 }

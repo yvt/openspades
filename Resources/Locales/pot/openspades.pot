@@ -1,7 +1,7 @@
 # OpenSpades translation
-# Copyright (C) 2016 yvt
+# Copyright (C) 2017 yvt
 # This file is distributed under the same license as the OpenSpades package.
-# yvt <i@yvt.jp>, 2016.
+# yvt <i@yvt.jp>, 2017.
 #
 #, fuzzy
 msgid ""
