@@ -1,14 +1,13 @@
-# OpenSpades translation
-# Copyright (C) 2016 yvt
+# Copyright (C) 2017 yvt
 # This file is distributed under the same license as the OpenSpades package.
-# yvt <i@yvt.jp>, 2016.
+# yvt <i@yvt.jp>, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
-"POT-Creation-Date: 2016-12-25 23:31-0200\n"
-"PO-Revision-Date: 2016-12-25 23:34-0200\n"
+"POT-Creation-Date: 2017-01-08 12:48+0900\n"
+"PO-Revision-Date: 2017-01-12 17:06+0900\n"
 "Last-Translator: kmsi <sts06196@naver.com>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
@@ -18,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: ko\n"
 "X-Source-Language: C\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: Sources/Client/Client.cpp:582
 msgctxt "Client"
@@ -990,7 +989,7 @@ msgid "System Info"
 msgstr "시스템 정보"
 
 #: Resources/Scripts/Gui/StartupScreen.as:208
-#: Resources/Scripts/Gui/StartupScreen.as:1657
+#: Resources/Scripts/Gui/StartupScreen.as:1661
 msgctxt "StartupScreen"
 msgid "Advanced"
 msgstr "고급"
@@ -1030,7 +1029,7 @@ msgstr ""
 "집중하기 쉬워집니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1093
-#: Resources/Scripts/Gui/StartupScreen.as:1471
+#: Resources/Scripts/Gui/StartupScreen.as:1475
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr "렌더링 모드"
@@ -1074,13 +1073,13 @@ msgid ""
 "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
 "Off|MSAA 2x|4x|FXAA"
 msgstr ""
-"앤티앨리어싱 :오브젝트의 윤곽에 발생하는 계단 현상을 줄여 줍니다.\n"
+"앤티앨리어싱:오브젝트의 윤곽에 발생하는 계단 현상을 줄여 줍니다.\n"
 "\n"
-"MSAA : 보통의 경우보다 고해상도의 이미지를 생성하여 앤티앨리어싱을 수행합니"
-"다. 가장 멋져 보이지만, 몇몇 설정과는 호환되지 않습니다.\n"
+"MSAA:보통의 경우보다 고해상도의 이미지를 생성하여 앤티앨리어싱을 수행합니다. "
+"가장 멋져 보이지만, 몇몇 설정과는 호환되지 않습니다.\n"
 "\n"
-"FXAA : 계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합니"
-"다.|꺼짐|MSAA 2x|4x|FXAA"
+"FXAA:계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합니다.|"
+"꺼짐|MSAA 2x|4x|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1133
 msgctxt "StartupScreen"
@@ -1182,38 +1181,54 @@ msgid "Blurs out-of-focus objects."
 msgstr "초점 이외의 물체를 흐리게 표시합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1169
-#: Resources/Scripts/Gui/StartupScreen.as:1207
-#: Resources/Scripts/Gui/StartupScreen.as:1229
+msgctxt "StartupScreen"
+msgid "Screen Space Ambient Occlusion"
+msgstr "SSAO(Screen Space Ambient Occlusion)"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1170
+msgctxt "StartupScreen"
+msgid "Simulates soft shadows that occur between nearby objects."
+msgstr "가까이 있는 물체들 사이에 부드러운 그림자를 생성합니다."
+
+#: Resources/Scripts/Gui/StartupScreen.as:1172
+#: Resources/Scripts/Gui/StartupScreen.as:1211
+#: Resources/Scripts/Gui/StartupScreen.as:1233
 msgctxt "StartupScreen"
 msgid "Low"
 msgstr "낮음"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1170
-#: Resources/Scripts/Gui/StartupScreen.as:1208
+#: Resources/Scripts/Gui/StartupScreen.as:1173
+#: Resources/Scripts/Gui/StartupScreen.as:1212
 msgctxt "StartupScreen"
 msgid "Medium"
 msgstr "중간"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1171
-#: Resources/Scripts/Gui/StartupScreen.as:1209
-#: Resources/Scripts/Gui/StartupScreen.as:1231
+#: Resources/Scripts/Gui/StartupScreen.as:1174
+#: Resources/Scripts/Gui/StartupScreen.as:1213
+#: Resources/Scripts/Gui/StartupScreen.as:1235
 msgctxt "StartupScreen"
 msgid "High"
 msgstr "높음"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1174
+#: Resources/Scripts/Gui/StartupScreen.as:1175
+#: Resources/Scripts/Gui/StartupScreen.as:1236
+msgctxt "StartupScreen"
+msgid "Ultra"
+msgstr "매우 높음"
+
+#: Resources/Scripts/Gui/StartupScreen.as:1178
 msgctxt "StartupScreen"
 msgid "Post-process"
 msgstr "포스트-프로세싱"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1175
+#: Resources/Scripts/Gui/StartupScreen.as:1179
 msgctxt "StartupScreen"
 msgid ""
 "Post-process modifies the image to make it look better and more realistic."
 msgstr ""
 "포스트 프로세싱은 그려진 화면을 수정하여 더욱 좋고 사실적으로 보이게 합니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1182
+#: Resources/Scripts/Gui/StartupScreen.as:1186
 msgctxt "StartupScreen"
 msgid ""
 "Particles|Low:Artifact occurs when a particle intersects other objects.|"
@@ -1224,34 +1239,34 @@ msgstr ""
 "는 다른 개체와 매끄럽게 교차합니다.|높음:입자는 다른 개체와 매끄럽게 교차합니"
 "다. 또한 일부 개체가 입자에 그림자를 드리웁니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1192
+#: Resources/Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
 msgstr "동적 빛"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1194
+#: Resources/Scripts/Gui/StartupScreen.as:1198
 msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
 "impression."
 msgstr "에너지를 내뿜는 듯한 느낌을 위해 일부 객체가 빛을 내도록 허용합니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1197
+#: Resources/Scripts/Gui/StartupScreen.as:1201
 msgctxt "StartupScreen"
 msgid "Shadows"
 msgstr "그림자"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1198
+#: Resources/Scripts/Gui/StartupScreen.as:1202
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
 msgstr "동적 개체가 그림자를 드리웁니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1200
+#: Resources/Scripts/Gui/StartupScreen.as:1204
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
 msgstr "Volumetric Fog"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1201
+#: Resources/Scripts/Gui/StartupScreen.as:1205
 msgctxt "StartupScreen"
 msgid ""
 "Simulates shadow being casted to the fog particles using a super highly "
@@ -1260,24 +1275,24 @@ msgstr ""
 "매우 높은 연산량을 요구하는 알고리즘을 사용하여 대기의 안개 입자에 그림자를 "
 "드리웁니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1204
+#: Resources/Scripts/Gui/StartupScreen.as:1208
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
 msgstr "물리 기반 빛 효과"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1205
+#: Resources/Scripts/Gui/StartupScreen.as:1209
 msgctxt "StartupScreen"
 msgid ""
 "Uses more accurate approximation techniques to decide the brightness of "
 "objects."
 msgstr "더 정확한 기술을 사용하여 객체의 밝기를 결정합니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1212
+#: Resources/Scripts/Gui/StartupScreen.as:1216
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr "직사광"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1213
+#: Resources/Scripts/Gui/StartupScreen.as:1217
 msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
@@ -1286,7 +1301,7 @@ msgstr ""
 "대기 혹은 물체에 직접 맞은 빛이 어떻게 그 모양에 영향을 미치는지를 제어합니"
 "다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1223
+#: Resources/Scripts/Gui/StartupScreen.as:1227
 msgctxt "StartupScreen"
 msgid ""
 "Water Shader|None:Water is rendered in the same way that normal blocks are "
@@ -1299,44 +1314,39 @@ msgstr ""
 "가 표시됩니다.|2단계:굴절과 태양의 반사는 물론, 파도까지 나타납니다.|3단계:반"
 "사 및 굴절이 화면 공간 기술을 이용해 가장 좋은 품질로 렌더링됩니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1230
+#: Resources/Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
 msgid "Med"
 msgstr "중간"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1232
-msgctxt "StartupScreen"
-msgid "Ultra"
-msgstr "매우 높음"
-
-#: Resources/Scripts/Gui/StartupScreen.as:1235
+#: Resources/Scripts/Gui/StartupScreen.as:1239
 msgctxt "StartupScreen"
 msgid "Shader Effects"
 msgstr "쉐이더 효과"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1235
+#: Resources/Scripts/Gui/StartupScreen.as:1239
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr "특수 효과"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1252
+#: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid ""
 "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
 "4x"
-msgstr "고속 모드 : 화면 해상도를 낮춰 렌더링을 가속화합니다.|꺼짐|2x|4x"
+msgstr "고속 모드:화면 해상도를 낮춰 렌더링을 가속화합니다.|꺼짐|2x|4x"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1465
+#: Resources/Scripts/Gui/StartupScreen.as:1469
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr "오디오 설정"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1474
+#: Resources/Scripts/Gui/StartupScreen.as:1478
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr "OpenAL"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1478
+#: Resources/Scripts/Gui/StartupScreen.as:1482
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
@@ -1345,12 +1355,12 @@ msgstr ""
 "OpenAL 호환 사운드 카드를 사용하여 음성을 처리합니다. 대부분의 경우 이러한 사"
 "운드 카드가 없으므로 소프트웨어 에뮬레이션이 사용됩니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1487
+#: Resources/Scripts/Gui/StartupScreen.as:1491
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr "YSR"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1491
+#: Resources/Scripts/Gui/StartupScreen.as:1495
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -1360,23 +1370,23 @@ msgstr ""
 "YSR은 OpenSpades에 최적화된 실험적인 3D HDR 사운드 엔진입니다. 자동 부하 제"
 "어 및 역학 압축기, HRTF 기반의 입체 음향과 고음질 반향 효과를 제공합니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1501
+#: Resources/Scripts/Gui/StartupScreen.as:1505
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr "없음"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1505
+#: Resources/Scripts/Gui/StartupScreen.as:1509
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr "오디오 출력을 비활성화합니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1516
-#: Resources/Scripts/Gui/StartupScreen.as:1540
+#: Resources/Scripts/Gui/StartupScreen.as:1520
+#: Resources/Scripts/Gui/StartupScreen.as:1544
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "최대 동시 음향 효과"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1517
+#: Resources/Scripts/Gui/StartupScreen.as:1521
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
@@ -1386,19 +1396,19 @@ msgstr ""
 "동시에 발음되는 음성의 개수를 지정합니다. 이 값이 크면 필요한 처리 능력도 증"
 "가하기 때문에 특히 소프트웨어 에뮬레이션에 과부하가 발생할 수 있습니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1524
+#: Resources/Scripts/Gui/StartupScreen.as:1528
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1525
+#: Resources/Scripts/Gui/StartupScreen.as:1529
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
 "ambience."
 msgstr "OpenAL 드라이버가 제공하는 확장 기능을 이용하여 현장감을 높여줍니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1541
+#: Resources/Scripts/Gui/StartupScreen.as:1545
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1407,64 +1417,64 @@ msgstr ""
 "동시에 플레이되는 소리의 개수를 지정합니다. 이 값에 상관없이 YSR은 과부하를 "
 "방지하기 위해 동시 발음 수를 줄일 수 있습니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1601
+#: Resources/Scripts/Gui/StartupScreen.as:1605
 msgctxt "StartupScreen"
 msgid "Language"
 msgstr "언어"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1613
+#: Resources/Scripts/Gui/StartupScreen.as:1617
 msgctxt "StartupScreen"
 msgid "Tools"
 msgstr "도구"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1616
+#: Resources/Scripts/Gui/StartupScreen.as:1620
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
 msgstr "모든 설정 초기화"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1625
+#: Resources/Scripts/Gui/StartupScreen.as:1629
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
 msgstr "윈도우 탐색기에서 설정 폴더 열기"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1627
+#: Resources/Scripts/Gui/StartupScreen.as:1631
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
 msgstr "파인더에서 설정 폴더 열기"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1629
+#: Resources/Scripts/Gui/StartupScreen.as:1633
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
 msgstr "설정 폴더 불러오기"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1646
+#: Resources/Scripts/Gui/StartupScreen.as:1650
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
 msgstr "설정 폴더를 여는 동안 알 수 없는 오류가 발생했습니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1652
+#: Resources/Scripts/Gui/StartupScreen.as:1656
 msgctxt "StartupScreen"
 msgid ""
 "Are you sure to reset all settings? They include (but are not limited to):"
 msgstr ""
 "정말로 모든 설정을 초기화 하시겠습니까? 다음과 같은 설정들이 초기화됩니다:"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1653
+#: Resources/Scripts/Gui/StartupScreen.as:1657
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
 msgstr "모든 그래픽/오디오 설정"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1654
+#: Resources/Scripts/Gui/StartupScreen.as:1658
 msgctxt "StartupScreen"
 msgid "All key bindings"
 msgstr "모든 키 지정"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1655
+#: Resources/Scripts/Gui/StartupScreen.as:1659
 msgctxt "StartupScreen"
 msgid "Your player name"
 msgstr "플레이어 이름"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1656
+#: Resources/Scripts/Gui/StartupScreen.as:1660
 msgctxt "StartupScreen"
 msgid ""
 "Other advanced settings only accessible through '{0}' tab and in-game "
@@ -1472,28 +1482,28 @@ msgid ""
 msgstr ""
 "다른 고급 설정은 '{0}' 탭과 게임 내 명령어를 통해서만 접근할 수 있습니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1726
+#: Resources/Scripts/Gui/StartupScreen.as:1730
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
 msgstr "알 수 없음 ({0})"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1728
-#: Resources/Scripts/Gui/StartupScreen.as:1742
+#: Resources/Scripts/Gui/StartupScreen.as:1732
+#: Resources/Scripts/Gui/StartupScreen.as:1746
 msgctxt "StartupScreen"
 msgid "System default"
 msgstr "시스템 기본 설정"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1791
+#: Resources/Scripts/Gui/StartupScreen.as:1795
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "클립보드에 복사"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1827
+#: Resources/Scripts/Gui/StartupScreen.as:1831
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "고급 설정"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1836
+#: Resources/Scripts/Gui/StartupScreen.as:1840
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "필터"
