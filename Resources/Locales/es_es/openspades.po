@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2017-01-11 12:30-0300\n"
-"PO-Revision-Date: 2017-01-11 13:28-0300\n"
+"PO-Revision-Date: 2017-01-11 21:38-0300\n"
 "Last-Translator: Bruno Díaz Ureta <vruuno.d@gmail.com>\n"
 "Language-Team: Bruno y Anaih <vruuno.d@gmail.com>\n"
 "Language: es_ES\n"
@@ -132,32 +132,32 @@ msgstr "{0} ha capturado un Territorio Neutral"
 #: Sources/Client/Client_NetHandler.cpp:127
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
-msgstr "{0} capturó la intel {1}"
+msgstr "{0} capturó la intel de {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:134
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
-msgstr "{0} capturó la Intel {1}."
+msgstr "{0} capturó la Intel de {1}."
 
 #: Sources/Client/Client_NetHandler.cpp:158
 msgctxt "Client"
 msgid "{0} picked up {1}'s intel"
-msgstr "{0} tomó la intel {1}"
+msgstr "{0} tomó la intel de {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:165
 msgctxt "Client"
 msgid "{0} picked up {1}'s Intel."
-msgstr "{0} tomó la Intel {1}."
+msgstr "{0} tomó la Intel de {1}."
 
 #: Sources/Client/Client_NetHandler.cpp:183
 msgctxt "Client"
 msgid "{0} dropped {1}'s intel"
-msgstr "{0} soltó la intel {1}"
+msgstr "{0} soltó la intel de {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:190
 msgctxt "Client"
 msgid "{0} dropped {1}'s Intel"
-msgstr "{0} soltó la Intel {1}"
+msgstr "{0} soltó la Intel de {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:237
 #: Sources/Client/Client_NetHandler.cpp:243
