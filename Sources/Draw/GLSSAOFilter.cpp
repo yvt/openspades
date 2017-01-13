@@ -184,7 +184,8 @@ namespace spades {
 
 			dev->Enable(IGLDevice::Blend, false);
 
-			GLColorBuffer ssao = renderer->IsRenderingMirror() ?
+			bool useLowQualitySSAO = renderer->IsRenderingMirror() || renderer->GetSettings().r_ssao >= 2;
+			GLColorBuffer ssao = useLowQualitySSAO ?
 				GenerateRawSSAOImage((width + 1) / 2, (height + 1) / 2) :
 			GenerateRawSSAOImage(width, height);
 			ssao = ApplyBilateralFilter(ssao, false, width, height);
