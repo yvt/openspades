@@ -41,6 +41,12 @@ namespace spades {
 			void AlertNotice(const std::string &);
 			void AlertWarning(const std::string &);
 			void AlertError(const std::string &);
+
+			std::string GetTeamName(int teamId);
+			void Spawn(int, int);
+			bool HasLocalPlayer();
+			int GetLocalPlayerTeamId();
+			int GetLocalPlayerWeaponId();
 		};
 	}
 }

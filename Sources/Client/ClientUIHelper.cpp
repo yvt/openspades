@@ -54,5 +54,30 @@ namespace spades {
 				return;
 			ui->AlertError(text);
 		}
+		std::string ClientUIHelper::GetTeamName(int teamId) {
+			if (!ui)
+				return std::string{};
+			return ui->GetTeamName(teamId);
+		}
+		void ClientUIHelper::Spawn(int teamId, int weaponId) {
+			if (!ui)
+				return;
+			ui->Spawn(teamId, weaponId);
+		}
+		bool ClientUIHelper::HasLocalPlayer() {
+			if (!ui)
+				return false;
+			return ui->HasLocalPlayer();
+		}
+		int ClientUIHelper::GetLocalPlayerTeamId() {
+			if (!ui)
+				return false;
+			return ui->GetLocalPlayerTeamId();
+		}
+		int ClientUIHelper::GetLocalPlayerWeaponId() {
+			if (!ui)
+				return false;
+			return ui->GetLocalPlayerWeaponId();
+		}
 	}
 }

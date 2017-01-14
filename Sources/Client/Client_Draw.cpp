@@ -42,7 +42,6 @@
 #include "HurtRingView.h"
 #include "IFont.h"
 #include "ILocalEntity.h"
-#include "LimboView.h"
 #include "MapView.h"
 #include "PaletteView.h"
 #include "ParticleSpriteEntity.h"
@@ -795,9 +794,6 @@ namespace spades {
 
 			if (scoreboardVisible || !p)
 				scoreboard->Draw();
-
-			if (IsLimboViewActive())
-				limbo->Draw();
 		}
 
 		void Client::Draw2DWithoutWorld() {

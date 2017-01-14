@@ -78,6 +78,31 @@ namespace spades {
 													  asMETHOD(ClientUIHelper, AlertError),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("ClientUIHelper",
+													  "string GetTeamName(int)",
+													  asMETHOD(ClientUIHelper, GetTeamName),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("ClientUIHelper",
+													  "void Spawn(int, int)",
+													  asMETHOD(ClientUIHelper, Spawn),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("ClientUIHelper",
+													  "bool get_HasLocalPlayer()",
+													  asMETHOD(ClientUIHelper, HasLocalPlayer),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("ClientUIHelper",
+													  "int get_LocalPlayerTeamId()",
+													  asMETHOD(ClientUIHelper, GetLocalPlayerTeamId),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("ClientUIHelper",
+													  "int get_LocalPlayerWeaponId()",
+													  asMETHOD(ClientUIHelper, GetLocalPlayerWeaponId),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
 						break;
 					default:
 						break;

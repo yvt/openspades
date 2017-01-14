@@ -80,13 +80,13 @@ namespace spades {
 			                                   34.f, 48.f, pixelRatio),
 			              false);
 			mediumFont.Set(new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet,
-			                                    22.f, 32.f, pixelRatio),
+			                                    17.f, 24.f, pixelRatio),
 			               false);
 			smallFont.Set(new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet,
-			                                   16.f, 20.f, pixelRatio),
+			                                   16.f, 23.f, pixelRatio),
 			              false);
 			smallerFont.Set(new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet,
-			                                     15.f, 18.f, pixelRatio),
+			                                     15.f, 21.f, pixelRatio),
 			                false);
 		}
 

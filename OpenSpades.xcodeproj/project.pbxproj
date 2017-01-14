@@ -220,7 +220,6 @@
 		E82E67BF18EA7972004DBA18 /* HurtRingView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E0AF98179996A100C6B5A9 /* HurtRingView.cpp */; };
 		E82E67C018EA7972004DBA18 /* MapView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E0AF9E179A698800C6B5A9 /* MapView.cpp */; };
 		E82E67C118EA7972004DBA18 /* ScoreboardView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E0AFA1179A8F1000C6B5A9 /* ScoreboardView.cpp */; };
-		E82E67C218EA7972004DBA18 /* LimboView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E0AFA4179AA31B00C6B5A9 /* LimboView.cpp */; };
 		E82E67C318EA7972004DBA18 /* PaletteView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28CB17AFCCC40056179E /* PaletteView.cpp */; };
 		E82E67C418EA7972004DBA18 /* TCProgressView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80B28D117AFF77B0056179E /* TCProgressView.cpp */; };
 		E82E67C518EA7972004DBA18 /* ClientUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CF61845C5000085AA54 /* ClientUI.cpp */; };
@@ -834,8 +833,6 @@
 		E8E0AF9F179A698800C6B5A9 /* MapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapView.h; sourceTree = "<group>"; };
 		E8E0AFA1179A8F1000C6B5A9 /* ScoreboardView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreboardView.cpp; sourceTree = "<group>"; };
 		E8E0AFA2179A8F1000C6B5A9 /* ScoreboardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreboardView.h; sourceTree = "<group>"; };
-		E8E0AFA4179AA31B00C6B5A9 /* LimboView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LimboView.cpp; sourceTree = "<group>"; };
-		E8E0AFA5179AA31C00C6B5A9 /* LimboView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LimboView.h; sourceTree = "<group>"; };
 		E8E0AFA7179ACDDD00C6B5A9 /* GLSpriteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSpriteRenderer.cpp; sourceTree = "<group>"; };
 		E8E0AFA8179ACDDD00C6B5A9 /* GLSpriteRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLSpriteRenderer.h; sourceTree = "<group>"; };
 		E8E0AFAA179ADC2100C6B5A9 /* ILocalEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILocalEntity.cpp; sourceTree = "<group>"; };
@@ -1616,8 +1613,6 @@
 				E8E0AF9F179A698800C6B5A9 /* MapView.h */,
 				E8E0AFA1179A8F1000C6B5A9 /* ScoreboardView.cpp */,
 				E8E0AFA2179A8F1000C6B5A9 /* ScoreboardView.h */,
-				E8E0AFA4179AA31B00C6B5A9 /* LimboView.cpp */,
-				E8E0AFA5179AA31C00C6B5A9 /* LimboView.h */,
 				E80B28CB17AFCCC40056179E /* PaletteView.cpp */,
 				E80B28CC17AFCCC70056179E /* PaletteView.h */,
 				E80B28D117AFF77B0056179E /* TCProgressView.cpp */,
@@ -2160,7 +2155,6 @@
 				E82E67BF18EA7972004DBA18 /* HurtRingView.cpp in Sources */,
 				E82E67C018EA7972004DBA18 /* MapView.cpp in Sources */,
 				E82E67C118EA7972004DBA18 /* ScoreboardView.cpp in Sources */,
-				E82E67C218EA7972004DBA18 /* LimboView.cpp in Sources */,
 				E82E67C318EA7972004DBA18 /* PaletteView.cpp in Sources */,
 				E82E67C418EA7972004DBA18 /* TCProgressView.cpp in Sources */,
 				E82E67C518EA7972004DBA18 /* ClientUI.cpp in Sources */,

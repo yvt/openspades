@@ -39,7 +39,6 @@
 #include "FallingBlock.h"
 #include "HurtRingView.h"
 #include "ILocalEntity.h"
-#include "LimboView.h"
 #include "MapView.h"
 #include "PaletteView.h"
 #include "ParticleSpriteEntity.h"

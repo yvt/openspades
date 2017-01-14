@@ -25,6 +25,7 @@
 #include <Client/Client.h>
 #include <Client/FontData.h>
 #include <Client/Fonts.h>
+#include <Client/World.h>
 #include <Core/Exception.h>
 #include <Core/Settings.h>
 #include <ScriptBindings/Config.h>
@@ -84,6 +85,37 @@ namespace spades {
 			if (!client)
 				return;
 			client->ShowAlert(msg, Client::AlertType::Error);
+		}
+
+		std::string ClientUI::GetTeamName(int teamId) {
+			if (!client || teamId < 0 || !client->GetWorld())
+				return std::string{};
+			return client->GetWorld()->GetTeam(teamId).name;
+		}
+
+		void ClientUI::Spawn(int teamId, int weaponId) {
+			if (!client)
+				return;
+			client->Spawn(teamId, weaponId);
+		}
+
+		bool ClientUI::HasLocalPlayer() {
+			if (!client || !client->GetWorld())
+				return false;
+			return client->GetWorld()->GetLocalPlayer() != nullptr;
+		}
+
+		int ClientUI::GetLocalPlayerTeamId() {
+			if (!client)
+				return false;
+			auto *player = client->GetWorld()->GetLocalPlayer();
+			return player ? player->GetTeamId() : -1;
+		}
+		int ClientUI::GetLocalPlayerWeaponId() {
+			if (!client)
+				return false;
+			auto *player = client->GetWorld()->GetLocalPlayer();
+			return player ? static_cast<int>(player->GetWeaponType()) : -1;
 		}
 
 		void ClientUI::ClientDestroyed() { client = NULL; }
@@ -306,6 +338,31 @@ namespace spades {
 
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ClientUI", "void EnterCommandWindow()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
+		}
+		void ClientUI::EnterLimboWindow(bool atUsersRequest) {
+			SPADES_MARK_FUNCTION();
+			if (!ui) {
+				return;
+			}
+
+			ScopedPrivilegeEscalation privilege;
+			static ScriptFunction func("ClientUI", "void EnterLimboWindow(bool)");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c->SetArgByte(0, atUsersRequest ? 1 : 0);
+			c.ExecuteChecked();
+		}
+		void ClientUI::LeaveLimboWindow() {
+			SPADES_MARK_FUNCTION();
+			if (!ui) {
+				return;
+			}
+
+			ScopedPrivilegeEscalation privilege;
+			static ScriptFunction func("ClientUI", "void LeaveLimboWindow()");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
 			c.ExecuteChecked();

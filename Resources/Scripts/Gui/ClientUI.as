@@ -18,6 +18,7 @@
 
  */
 
+#include "ClientUI/LimboWindow.as"
 
 namespace spades {
 
@@ -33,6 +34,11 @@ namespace spades {
 		}
 	}
 
+	enum ClientUIState {
+		InitialLimboView = 0,
+		Normal
+	}
+
 	class ClientUI {
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
@@ -42,9 +48,11 @@ namespace spades {
 		spades::ui::UIManager@ manager;
 		spades::ui::UIElement@ activeUI;
 
-		ChatLogWindow@ chatLogWindow;
+		ClientUIState state = ClientUIState::Normal;
 
+		ChatLogWindow@ chatLogWindow;
 		ClientMenu@ clientMenu;
+		ClientLimboWindow@ limboWindow;
 
 		array<spades::ui::CommandHistoryItem@> chatHistory;
 
@@ -65,6 +73,13 @@ namespace spades {
 			clientMenu.Bounds = manager.RootElement.Bounds;
 
 			@chatLogWindow = ChatLogWindow(this);
+			chatLogWindow.Bounds = manager.RootElement.Bounds;
+
+			@limboWindow = ClientLimboWindow(this);
+			@limboWindow.Done = spades::ui::EventHandler(this.OnLimboDone);
+			@limboWindow.Cancelled = spades::ui::EventHandler(this.OnLimboCancelled);
+			limboWindow.Position = Vector2((manager.ScreenWidth - limboWindow.Size.x) * 0.5,
+				manager.ScreenHeight - limboWindow.Size.y - 20.f);
 		}
 
 		void MouseEvent(float x, float y) {
@@ -126,7 +141,6 @@ namespace spades {
 			}
 			@activeUI = value;
 			if(activeUI !is null) {
-				activeUI.Bounds = manager.RootElement.Bounds;
 				manager.RootElement.AddChild(activeUI);
 			}
 			manager.KeyPanic();
@@ -144,11 +158,13 @@ namespace spades {
 			@ActiveUI = wnd;
 			@manager.ActiveElement = wnd.field;
 		}
+
 		void EnterGlobalChatWindow() {
 			ClientChatWindow wnd(this, false);
 			@ActiveUI = wnd;
 			@manager.ActiveElement = wnd.field;
 		}
+
 		void EnterCommandWindow() {
 			ClientChatWindow wnd(this, true);
 			wnd.field.Text = "/";
@@ -157,12 +173,57 @@ namespace spades {
 			@ActiveUI = wnd;
 			@manager.ActiveElement = wnd.field;
 		}
+
+		void EnterLimboWindow(bool atUsersRequest) {
+			if (atUsersRequest) {
+				state = ClientUIState::Normal;
+			} else {
+				state = ClientUIState::InitialLimboView;
+			}
+
+			if (ActiveUI !is limboWindow) {
+				limboWindow.BeforeAppear();
+				@ActiveUI = limboWindow;
+			}
+		}
+		void LeaveLimboWindow() {
+			if (state == ClientUIState::InitialLimboView) {
+				// clientMenu may be active
+				if (ActiveUI is limboWindow) {
+					@ActiveUI = null;
+				}
+				state = ClientUIState::Normal;
+			}
+		}
+
 		void CloseUI() {
+			if (state == ClientUIState::InitialLimboView) {
+				// The response to the limbo view is pending
+				@ActiveUI = limboWindow;
+				return;
+			}
 			@ActiveUI = null;
 		}
 
 		void RecordChatLog(string text, Vector4 color) {
 			chatLogWindow.Record(text, color);
+		}
+
+		private void OnLimboDone(spades::ui::UIElement@ sender) {
+			if (state == ClientUIState::InitialLimboView) {
+				// If the limbo view is visible because Client called
+				// EnterLimboWindow(false), then we must wait until
+				// LeaveLimboWindow() is called before closing the limbo view.
+				return;
+			}
+			@ActiveUI = null;
+		}
+		private void OnLimboCancelled(spades::ui::UIElement@ sender) {
+			if (state == ClientUIState::InitialLimboView) {
+				EnterClientMenu();
+			} else {
+				CloseUI();
+			}
 		}
 	}
 
@@ -243,7 +304,7 @@ namespace spades {
 
 		void HotKey(string key) {
 			if(IsEnabled and key == "Escape") {
-				@ui.ActiveUI = null;
+				ui.CloseUI();
 			} else {
 				UIElement::HotKey(key);
 			}

@@ -38,7 +38,6 @@
 #include "ClientPlayer.h"
 #include "ClientUI.h"
 #include "HurtRingView.h"
-#include "LimboView.h"
 #include "MapView.h"
 #include "PaletteView.h"
 #include "ScoreboardView.h"
@@ -72,7 +71,7 @@ namespace spades {
 		               FontManager *fontManager)
 		    : renderer(r),
 		      audioDevice(audioDev),
-			  playerName(cg_playerName.operator std::string().substr(0, 15)),
+		      playerName(cg_playerName.operator std::string().substr(0, 15)),
 		      hasDelayedReload(false),
 		      hostname(host),
 		      logStream(nullptr),
@@ -81,7 +80,6 @@ namespace spades {
 		      readyToClose(false),
 		      scoreboardVisible(false),
 		      flashlightOn(false),
-		      inGameLimbo(false),
 
 		      frameToRendererInit(5),
 		      time(0.f),
@@ -131,7 +129,6 @@ namespace spades {
 			mapView.reset(new MapView(this, false));
 			largeMapView.reset(new MapView(this, true));
 			scoreboard.reset(new ScoreboardView(this));
-			limbo.reset(new LimboView(this));
 			paletteView.reset(new PaletteView(this));
 			tcView.reset(new TCProgressView(this));
 			scriptedUI.Set(new ClientUI(renderer, audioDev, fontManager, this), false);
@@ -197,12 +194,12 @@ namespace spades {
 				NetLog("------ World Unloaded ------");
 			}
 
-			limbo->SetSelectedTeam(2);
-			limbo->SetSelectedWeapon(RIFLE_WEAPON);
-
 			worldSubFrame = 0.f;
 			worldSetTime = time;
-			inGameLimbo = false;
+
+			if (!world) {
+				scriptedUI->LeaveLimboWindow();
+			}
 		}
 
 		Client::~Client() {
@@ -240,7 +237,6 @@ namespace spades {
 
 			scriptedUI->ClientDestroyed();
 			tcView.reset();
-			limbo.reset();
 			scoreboard.reset();
 			mapView.reset();
 			largeMapView.reset();
@@ -436,7 +432,6 @@ namespace spades {
 
 			chatWindow->Update(dt);
 			killfeedWindow->Update(dt);
-			limbo->Update(dt);
 
 			// CreateSceneDefinition also can be used for sounds
 			SceneDefinition sceneDef = CreateSceneDefinition();
@@ -471,21 +466,9 @@ namespace spades {
 			time += dt;
 		}
 
-		bool Client::IsLimboViewActive() {
-			if (world) {
-				if (!world->GetLocalPlayer()) {
-					return true;
-				} else if (inGameLimbo) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		void Client::SpawnPressed() {
-			WeaponType weap = limbo->GetSelectedWeapon();
-			int team = limbo->GetSelectedTeam();
-			inGameLimbo = false;
+		void Client::Spawn(int teamId, int weaponId) {
+			WeaponType weap = static_cast<WeaponType>(weaponId);
+			int team = teamId;
 			if (team == 2)
 				team = 255;
 
@@ -497,7 +480,7 @@ namespace spades {
 				if (p->GetTeamId() != team) {
 					net->SendTeamChange(team);
 				}
-				if (team != 2 && p->GetWeapon()->GetWeaponType() != weap) {
+				if (team != 255 && p->GetWeapon()->GetWeaponType() != weap) {
 					net->SendWeaponChange(weap);
 				}
 			}

@@ -38,7 +38,7 @@ namespace spades {
 			/** Returns a GUI font that is roughly 16pt size. */
 			IFont *GetSmallFont() { return smallFont; }
 
-			/** Returns a GUI font that is roughly 22pt size. */
+			/** Returns a GUI font that is roughly 17pt size. */
 			IFont *GetMediumFont() { return mediumFont; }
 
 			/** @deprecated */

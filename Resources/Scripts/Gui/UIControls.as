@@ -51,6 +51,8 @@ namespace spades {
 
 					font.Draw(text, txtPos, TextScale, TextColor);
 				}
+
+				UIElement::Render();
 			}
 		}
 
@@ -218,7 +220,6 @@ namespace spades {
 				super(manager);
 			}
 			void Render() {
-
 				Renderer@ renderer = Manager.Renderer;
 				Vector2 pos = ScreenPosition;
 				Vector2 size = Size;
@@ -260,6 +261,8 @@ namespace spades {
 					1.f,
 					Vector4(0.0f, 0.0f, 0.0f, 0.6f),
 					Vector4(1.0f, 1.0f, 1.0f, 0.1f));
+
+				ButtonBase::Render();
 			}
 		}
 
@@ -292,6 +295,7 @@ namespace spades {
 				renderer.DrawImage(img, AABB2(pos.x, pos.y + (size.y - 16.f) * 0.5f, 16.f, 16.f),
 					AABB2(Toggled ? 16.f : 0.f, 0.f, 16.f, 16.f));
 
+				ButtonBase::Render();
 			}
 		}
 
@@ -362,7 +366,7 @@ namespace spades {
 					renderer.DrawImage(img, AABB2(pos.x + 4.f, pos.y + (size.y - 8.f) * 0.5f, 8.f, 8.f));
 				}
 
-
+				UIElement::Render();
 			}
 		}
 

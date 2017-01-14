@@ -50,6 +50,12 @@ namespace spades {
 			void AlertWarning(const std::string &);
 			void AlertError(const std::string &);
 
+			std::string GetTeamName(int teamId);
+			void Spawn(int teamId, int weaponId);
+			bool HasLocalPlayer();
+			int GetLocalPlayerTeamId();
+			int GetLocalPlayerWeaponId();
+			
 		protected:
 			~ClientUI();
 
@@ -82,6 +88,8 @@ namespace spades {
 			void EnterGlobalChatWindow();
 			void EnterTeamChatWindow();
 			void EnterCommandWindow();
+			void EnterLimboWindow(bool atUsersRequest);
+			void LeaveLimboWindow();
 			void CloseUI();
 
 			// lm: so the chat does not have the initial chat key

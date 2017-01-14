@@ -56,6 +56,8 @@ namespace spades {
 			keypadInput = KeypadInput();
 
 			toolRaiseState = .0f;
+
+			scriptedUI->LeaveLimboWindow();
 		}
 
 		void Client::JoinedGame() {
@@ -65,6 +67,8 @@ namespace spades {
 			followingPlayerId = world->GetLocalPlayerIndex();
 			followPos = MakeVector3(256, 256, 30);
 			followVel = MakeVector3(0, 0, 0);
+
+			scriptedUI->EnterLimboWindow(false);
 		}
 
 		void Client::PlayerCreatedBlock(spades::client::Player *p) {

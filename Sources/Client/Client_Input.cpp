@@ -29,7 +29,6 @@
 
 #include "ClientUI.h"
 #include "Corpse.h"
-#include "LimboView.h"
 #include "MapView.h"
 #include "PaletteView.h"
 
@@ -101,9 +100,6 @@ namespace spades {
 				// now loading.
 				return true;
 			}
-			if (IsLimboViewActive()) {
-				return true;
-			}
 			return false;
 		}
 
@@ -112,11 +108,6 @@ namespace spades {
 
 			if (scriptedUI->NeedsInput()) {
 				scriptedUI->MouseEvent(x, y);
-				return;
-			}
-
-			if (IsLimboViewActive()) {
-				limbo->MouseEvent(x, y);
 				return;
 			}
 
@@ -268,25 +259,15 @@ namespace spades {
 
 			if (name == "Escape") {
 				if (down) {
-					if (inGameLimbo) {
-						inGameLimbo = false;
+					if (GetWorld() == nullptr) {
+						// no world = loading now.
+						// in this case, abort download, and quit the game immediately.
+						readyToClose = true;
 					} else {
-						if (GetWorld() == nullptr) {
-							// no world = loading now.
-							// in this case, abort download, and quit the game immediately.
-							readyToClose = true;
-						} else {
-							scriptedUI->EnterClientMenu();
-						}
+						scriptedUI->EnterClientMenu();
 					}
 				}
 			} else if (world) {
-				if (IsLimboViewActive()) {
-					if (down) {
-						limbo->KeyEvent(name);
-					}
-					return;
-				}
 				if (IsFollowing()) {
 					if (CheckKey(cg_keyAttack, name)) {
 						if (down) {
@@ -385,7 +366,7 @@ namespace spades {
 						if (world->GetLocalPlayer()->IsToolWeapon() && weapInput.secondary &&
 						    !lastVal && world->GetLocalPlayer()->IsReadyToUseTool() &&
 						    !world->GetLocalPlayer()->GetWeapon()->IsReloading() &&
-							GetSprintState() == 0.0f) {
+						    GetSprintState() == 0.0f) {
 							AudioParam params;
 							params.volume = 0.08f;
 							Handle<IAudioChunk> chunk =
@@ -492,10 +473,7 @@ namespace spades {
 					} else if (CheckKey(cg_keyScoreboard, name)) {
 						scoreboardVisible = down;
 					} else if (CheckKey(cg_keyLimbo, name) && down) {
-						limbo->SetSelectedTeam(world->GetLocalPlayer()->GetTeamId());
-						limbo->SetSelectedWeapon(
-						  world->GetLocalPlayer()->GetWeapon()->GetWeaponType());
-						inGameLimbo = true;
+						scriptedUI->EnterLimboWindow(true);
 					} else if (CheckKey(cg_keySceneshot, name) && down) {
 						TakeScreenShot(true);
 					} else if (CheckKey(cg_keyScreenshot, name) && down) {

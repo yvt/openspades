@@ -58,7 +58,6 @@ namespace spades {
 		class HurtRingView;
 		class MapView;
 		class ScoreboardView;
-		class LimboView;
 		class Player;
 		class PaletteView;
 		class TCProgressView;
@@ -130,7 +129,6 @@ namespace spades {
 			std::unique_ptr<MapView> mapView;
 			std::unique_ptr<MapView> largeMapView;
 			std::unique_ptr<ScoreboardView> scoreboard;
-			std::unique_ptr<LimboView> limbo;
 			std::unique_ptr<PaletteView> paletteView;
 			std::unique_ptr<TCProgressView> tcView;
 
@@ -197,12 +195,9 @@ namespace spades {
 			/** @return true following is activated (and followingPlayerId should be used) */
 			bool IsFollowing();
 
-			bool inGameLimbo;
-
 			float GetLocalFireVibration();
 			void CaptureColor();
-			bool IsLimboViewActive();
-			void SpawnPressed();
+			void Spawn(int teamId, int weaponId);
 
 			Player *HotTrackedPlayer(hitTag_t *hitFlag);
 

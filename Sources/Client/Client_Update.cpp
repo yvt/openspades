@@ -36,7 +36,6 @@
 #include "FallingBlock.h"
 #include "HurtRingView.h"
 #include "ILocalEntity.h"
-#include "LimboView.h"
 #include "MapView.h"
 #include "PaletteView.h"
 #include "Tracer.h"
@@ -430,7 +429,7 @@ namespace spades {
 			WeaponInput actualWeapInput = player->GetWeaponInput();
 
 			if (!(actualWeapInput.secondary && player->IsToolWeapon() && player->IsAlive()) &&
-				!(cg_holdAimDownSight && weapInput.secondary)) {
+			    !(cg_holdAimDownSight && weapInput.secondary)) {
 				if (player->IsToolWeapon()) {
 					// there is a possibility that player has respawned or something.
 					// stop aiming down
@@ -579,15 +578,18 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
-				const char *snds[] = {"Sounds/Player/Footstep1.opus", "Sounds/Player/Footstep2.opus",
-				                      "Sounds/Player/Footstep3.opus", "Sounds/Player/Footstep4.opus",
-				                      "Sounds/Player/Footstep5.opus", "Sounds/Player/Footstep6.opus",
-				                      "Sounds/Player/Footstep7.opus", "Sounds/Player/Footstep8.opus"};
+				const char *snds[] = {
+				  "Sounds/Player/Footstep1.opus", "Sounds/Player/Footstep2.opus",
+				  "Sounds/Player/Footstep3.opus", "Sounds/Player/Footstep4.opus",
+				  "Sounds/Player/Footstep5.opus", "Sounds/Player/Footstep6.opus",
+				  "Sounds/Player/Footstep7.opus", "Sounds/Player/Footstep8.opus"};
 				const char *rsnds[] = {
-				  "Sounds/Player/Run1.opus",  "Sounds/Player/Run2.opus",  "Sounds/Player/Run3.opus",
-				  "Sounds/Player/Run4.opus",  "Sounds/Player/Run5.opus",  "Sounds/Player/Run6.opus",
-				  "Sounds/Player/Run7.opus",  "Sounds/Player/Run8.opus",  "Sounds/Player/Run9.opus",
-				  "Sounds/Player/Run10.opus", "Sounds/Player/Run11.opus", "Sounds/Player/Run12.opus",
+				  "Sounds/Player/Run1.opus",  "Sounds/Player/Run2.opus",
+				  "Sounds/Player/Run3.opus",  "Sounds/Player/Run4.opus",
+				  "Sounds/Player/Run5.opus",  "Sounds/Player/Run6.opus",
+				  "Sounds/Player/Run7.opus",  "Sounds/Player/Run8.opus",
+				  "Sounds/Player/Run9.opus",  "Sounds/Player/Run10.opus",
+				  "Sounds/Player/Run11.opus", "Sounds/Player/Run12.opus",
 				};
 				const char *wsnds[] = {"Sounds/Player/Wade1.opus", "Sounds/Player/Wade2.opus",
 				                       "Sounds/Player/Wade3.opus", "Sounds/Player/Wade4.opus",
@@ -707,7 +709,8 @@ namespace spades {
 
 			if (!IsMuted()) {
 				bool isLocal = p == world->GetLocalPlayer();
-				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/Spade/Miss.opus");
+				Handle<IAudioChunk> c =
+				  audioDevice->RegisterSound("Sounds/Weapons/Spade/Miss.opus");
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.2f, -.1f, 0.7f), AudioParam());
 				else
@@ -755,13 +758,16 @@ namespace spades {
 						Handle<IAudioChunk> c;
 						switch (mt_engine_client() % 3) {
 							case 0:
-								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.opus");
+								c =
+								  audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.opus");
 								break;
 							case 1:
-								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh2.opus");
+								c =
+								  audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh2.opus");
 								break;
 							case 2:
-								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh3.opus");
+								c =
+								  audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh3.opus");
 								break;
 						}
 						AudioParam param;
@@ -844,27 +850,13 @@ namespace spades {
 						case SHOTGUN_WEAPON: cause += _Tr("Client", "Shotgun"); break;
 					}
 					break;
-				case KillTypeFall:
-					cause += _Tr("Client", "Fall");
-					break;
-				case KillTypeMelee:
-					cause += _Tr("Client", "Melee");
-					break;
-				case KillTypeGrenade:
-					cause += _Tr("Client", "Grenade");
-					break;
-				case KillTypeHeadshot:
-					cause += _Tr("Client", "Headshot");
-					break;
-				case KillTypeTeamChange:
-					cause += _Tr("Client", "Team Change");
-					break;
-				case KillTypeClassChange:
-					cause += _Tr("Client", "Weapon Change");
-					break;
-				default:
-					cause += "???";
-					break;
+				case KillTypeFall: cause += _Tr("Client", "Fall"); break;
+				case KillTypeMelee: cause += _Tr("Client", "Melee"); break;
+				case KillTypeGrenade: cause += _Tr("Client", "Grenade"); break;
+				case KillTypeHeadshot: cause += _Tr("Client", "Headshot"); break;
+				case KillTypeTeamChange: cause += _Tr("Client", "Team Change"); break;
+				case KillTypeClassChange: cause += _Tr("Client", "Weapon Change"); break;
+				default: cause += "???"; break;
 			}
 
 			s += " [";
@@ -1113,7 +1105,8 @@ namespace spades {
 					param.referenceDistance = 10.f;
 					audioDevice->Play(c, g->GetPosition(), param);
 
-					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeStereo.opus");
+					c =
+					  audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeStereo.opus");
 					param.volume = 2.f;
 					audioDevice->Play(c, g->GetPosition(), param);
 				}
