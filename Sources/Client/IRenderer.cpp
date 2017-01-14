@@ -63,7 +63,8 @@ namespace spades {
 				SPRaise("The drawing state stack is full.");
 			}
 
-			m_stateStack.push_back(State2D{GetCurrentState()});
+			State2D copiedState = GetCurrentState();
+			m_stateStack.push_back(copiedState);
 		}
 
 		void IRenderer::Restore() {
