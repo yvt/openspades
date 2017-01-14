@@ -785,6 +785,7 @@ namespace spades {
 			switch (v) {
 				case Texture2D: return GL_TEXTURE_2D;
 				case Texture3D: return GL_TEXTURE_3D;
+				case Texture2DArray: return GL_TEXTURE_2D_ARRAY;
 				default: SPInvalidEnum("v", v);
 			}
 		}

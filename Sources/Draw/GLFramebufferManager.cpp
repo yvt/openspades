@@ -333,9 +333,14 @@ namespace spades {
 				SPLog("Mirror Framebuffer Created");
 			} // (int)r_water >= 2
 
+			renderFramebufferWithoutDepth = dev->GenFramebuffer();
+			dev->BindFramebuffer(IGLDevice::Framebuffer, renderFramebufferWithoutDepth);
+			dev->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
+									  IGLDevice::Texture2D, renderColorTexture, 0);
+
 			// add render buffer as a registered buffer
 			Buffer buf;
-			buf.framebuffer = renderFramebuffer;
+			buf.framebuffer = renderFramebufferWithoutDepth;
 			buf.texture = renderColorTexture;
 			buf.refCount = 0;
 			buf.w = device->ScreenWidth();

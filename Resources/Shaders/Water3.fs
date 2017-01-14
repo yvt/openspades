@@ -1,3 +1,4 @@
+#extension GL_EXT_texture_array : require
 /*
  Copyright (c) 2013 yvt
 
@@ -30,9 +31,7 @@ varying vec2 worldPositionOriginal;
 uniform sampler2D screenTexture;
 uniform sampler2D depthTexture;
 uniform sampler2D mainTexture;
-uniform sampler2D waveTexture1;
-uniform sampler2D waveTexture2;
-uniform sampler2D waveTexture3;
+uniform sampler2DArray waveTextureArray;
 uniform sampler2D mirrorTexture;
 uniform sampler2D mirrorDepthTexture;
 uniform mat4 viewMatrix;
@@ -71,23 +70,23 @@ void main() {
 	vec4 waveCoord = worldPositionOriginal.xyxy * vec4(vec2(0.04),
 											   vec2(0.08704))
 	+ vec4(0., 0., 0.754, 0.1315);
-	vec2 waveCoord2 = worldPositionOriginal.xy * 0.01344 + vec2(.154, .7315);
+	vec2 waveCoord2 = worldPositionOriginal.xy * 0.00844 + vec2(.154, .7315);
 
 	// evaluate waveform (normal vector)
-	vec3 wave = texture2D(waveTexture1, waveCoord.xy).xyz;
+	vec3 wave = texture2DArray(waveTextureArray, vec3(waveCoord.xy, 0.0)).xyz;
 	wave = mix(vec3(-0.0025), vec3(0.0025), wave);
 	wave.xy *= 0.04 * 1.8;
 
 	// detail
-	vec2 wave2 = texture2D(waveTexture2, waveCoord.zw).xy;
+	vec2 wave2 = texture2DArray(waveTextureArray, vec3(waveCoord.zw, 1.0)).xy;
 	wave2 = mix(vec2(-0.0025), vec2(0.0025), wave2);
 	wave2.xy *= 0.08704 * 1.2;
 	wave.xy += wave2;
 
 	// rough
-	wave2 = texture2D(waveTexture3, waveCoord2.xy).xy;
+	wave2 = texture2DArray(waveTextureArray, vec3(waveCoord2.xy, 2.0)).xy;
 	wave2 = mix(vec2(-0.0025), vec2(0.0025), wave2);
-	wave2.xy *= 0.01344 * 2.5;
+	wave2.xy *= 0.00844 * 2.5;
 	wave.xy += wave2;
 
 	wave.z = (1. / 256.) / (4.); // (negated normal vector!)

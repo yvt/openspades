@@ -82,6 +82,8 @@ namespace spades {
 			IGLDevice::UInteger renderColorTexture;
 			IGLDevice::UInteger renderDepthTexture;
 
+			IGLDevice::UInteger renderFramebufferWithoutDepth;
+
 			IGLDevice::Enum fbInternalFormat;
 
 			IGLDevice::UInteger mirrorFramebuffer;

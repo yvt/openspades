@@ -141,6 +141,7 @@ namespace spades {
 				// Texture targets
 				Texture2D,
 				Texture3D,
+				Texture2DArray,
 
 				// Texture parameter
 				TextureMinFilter,

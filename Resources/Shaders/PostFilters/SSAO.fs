@@ -50,6 +50,11 @@ vec2 complexMultiply(vec2 a, vec2 b)
 void main() {
     // Try to estimate the surface normal
     float depth1 = texture2D(depthTexture, texCoord).x;
+    if (depth1 >= 0.999999) {
+        // skip background
+        gl_FragColor = vec4(1.0);
+        return;
+    }
     float depth2 = texture2D(depthTexture, texCoord + vec2(pixelShift.x, 0.0)).x;
     float depth3 = texture2D(depthTexture, texCoord - vec2(pixelShift.x, 0.0)).x;
     float dDepthdX = minabs(depth2 - depth1, depth1 - depth3);

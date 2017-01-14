@@ -37,6 +37,8 @@ namespace spades {
 			TypedItemHandle<bool> r_debugTimingAverage  { *this, "r_debugTimingAverage" };
 			TypedItemHandle<bool> r_debugTimingGPUTime  { *this, "r_debugTimingGPUTime" };
 			TypedItemHandle<float> r_debugTimingOutputBarScale { *this, "r_debugTimingOutputBarScale" };
+			TypedItemHandle<bool> r_debugTimingFlush    { *this, "r_debugTimingFlush" };
+			TypedItemHandle<bool> r_debugTimingFillGap  { *this, "r_debugTimingFillGap" };
 			TypedItemHandle<int> r_depthOfField         { *this, "r_depthOfField" };
 			TypedItemHandle<float> r_depthOfFieldMaxCoc { *this, "r_depthOfFieldMaxCoc" };
 			TypedItemHandle<bool> r_depthPrepass        { *this, "r_depthPrepass" };
@@ -52,7 +54,7 @@ namespace spades {
 			TypedItemHandle<bool> r_lensFlare           { *this, "r_lensFlare" };
 			TypedItemHandle<bool> r_lensFlareDynamic    { *this, "r_lensFlareDynamic" };
 			TypedItemHandle<bool> r_mapSoftShadow       { *this, "r_mapSoftShadow", ItemFlags::Latch };
-			TypedItemHandle<int> r_maxAnisotropy        { *this, "r_maxAnisotropy" };
+			TypedItemHandle<float> r_maxAnisotropy      { *this, "r_maxAnisotropy", ItemFlags::Latch };
 			TypedItemHandle<bool> r_modelShadows        { *this, "r_modelShadows", ItemFlags::Latch };
 			TypedItemHandle<int> r_multisamples         { *this, "r_multisamples", ItemFlags::Latch };
 			TypedItemHandle<bool> r_occlusionQuery      { *this, "r_occlusionQuery" };
@@ -64,7 +66,7 @@ namespace spades {
 			TypedItemHandle<bool> r_sparseShadowMaps    { *this, "r_sparseShadowMaps", ItemFlags::Latch };
 			TypedItemHandle<bool> r_srgb                { *this, "r_srgb", ItemFlags::Latch };
 			TypedItemHandle<bool> r_srgb2D              { *this, "r_srgb2D", ItemFlags::Latch };
-			TypedItemHandle<bool> r_ssao                { *this, "r_ssao", ItemFlags::Latch };
+			TypedItemHandle<int> r_ssao                 { *this, "r_ssao", ItemFlags::Latch };
 			TypedItemHandle<int> r_water                { *this, "r_water", ItemFlags::Latch };
 		};
 	}
