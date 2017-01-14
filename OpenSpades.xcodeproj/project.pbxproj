@@ -292,6 +292,7 @@
 		E89A5F1E1DF8732200857F65 /* ShellApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1C1DF8732200857F65 /* ShellApi.cpp */; };
 		E89A5F201DF8759200857F65 /* ShellApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1F1DF8759200857F65 /* ShellApi.mm */; };
 		E89BBDC31B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */; };
+		E8C8D3BE1E2A591A00F614EB /* GLUIBlurFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C8D3BC1E2A591A00F614EB /* GLUIBlurFilter.cpp */; };
 		E8CB47CE1DE071CA00BF606A /* SWUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */; };
 		E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
 		E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47D41DE084AB00BF606A /* GLSettings.cpp */; };
@@ -735,6 +736,8 @@
 		E8B6B74817EA12E500E35523 /* IWeaponSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWeaponSkin.h; sourceTree = "<group>"; };
 		E8B8082718E05B920001013E /* CellToTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellToTriangle.h; sourceTree = "<group>"; };
 		E8B93AD418559EC600BD01E1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = lib/SDL2.framework; sourceTree = "<group>"; };
+		E8C8D3BC1E2A591A00F614EB /* GLUIBlurFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUIBlurFilter.cpp; sourceTree = "<group>"; };
+		E8C8D3BD1E2A591A00F614EB /* GLUIBlurFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLUIBlurFilter.h; sourceTree = "<group>"; };
 		E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModelRenderer.cpp; sourceTree = "<group>"; };
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
@@ -1235,6 +1238,8 @@
 				E8D0E5D118F3215000DE3BDB /* GLNonlinearizeFilter.h */,
 				E80950081E17F66500AECDF2 /* GLSSAOFilter.cpp */,
 				E80950091E17F66500AECDF2 /* GLSSAOFilter.h */,
+				E8C8D3BC1E2A591A00F614EB /* GLUIBlurFilter.cpp */,
+				E8C8D3BD1E2A591A00F614EB /* GLUIBlurFilter.h */,
 			);
 			name = "Post Filters";
 			sourceTree = "<group>";
@@ -2224,6 +2229,7 @@
 				E82E670118EA7954004DBA18 /* GLVoxelModel.cpp in Sources */,
 				E82E670218EA7954004DBA18 /* GLMapRenderer.cpp in Sources */,
 				E82E670318EA7954004DBA18 /* GLMapChunk.cpp in Sources */,
+				E8C8D3BE1E2A591A00F614EB /* GLUIBlurFilter.cpp in Sources */,
 				E82E670418EA7954004DBA18 /* GLModelRenderer.cpp in Sources */,
 				E82E670518EA7954004DBA18 /* GLOptimizedVoxelModel.cpp in Sources */,
 				E82E670618EA7954004DBA18 /* GLWaterRenderer.cpp in Sources */,

@@ -80,6 +80,7 @@ namespace spades {
 
 			client::SceneDefinition sceneDef;
 			Plane3 frustrum[6];
+			AABB2 scissorRect;
 
 			std::vector<DebugLine> debugLines;
 			std::vector<GLDynamicLight> lights;

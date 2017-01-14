@@ -46,13 +46,13 @@ namespace spades {
 
 			{
 				spades::ui::Label label(Manager);
-				label.BackgroundColor = Vector4(0, 0, 0, 0.4f);
+				label.BackgroundColor = Vector4(0, 0, 0, 0.2f);
 				label.Bounds = Bounds;
 				AddChild(label);
 			}
 			{
 				spades::ui::Label label(Manager);
-				label.BackgroundColor = Vector4(0, 0, 0, 0.8f);
+				label.BackgroundColor = Vector4(0, 0, 0, 0.4f);
 				label.Bounds = AABB2(0.f, ContentsTop - 13.f, Size.x, ContentsHeight + 27.f);
 				AddChild(label);
 			}
@@ -128,6 +128,10 @@ namespace spades {
 			Vector2 size = Size;
 			Renderer@ r = Manager.Renderer;
 			Image@ img = r.RegisterImage("Gfx/White.tga");
+
+			Manager.PushClippingRect(AABB2(pos.x, pos.y + ContentsTop - 15.f, size.x, ContentsHeight + 30.f));
+			r.Blur();
+			Manager.PopClippingRect();
 
 			r.ColorNP = Vector4(1, 1, 1, 0.08f);
 			r.DrawImage(img,
