@@ -141,7 +141,7 @@ namespace spades {
 			GLQuadRenderer qr(dev);
 
 			// Compute the work area
-			int margin = 24;
+			int margin = 48;
 			workArea = {std::max(0, static_cast<int>(target.GetMinX()) - margin),
 			            std::max(0, static_cast<int>(target.GetMinY()) - margin),
 			            std::min(dev->ScreenWidth(), static_cast<int>(target.GetMaxX()) + margin),
@@ -160,6 +160,7 @@ namespace spades {
 
 			// Downsample and then blur it
 			GLColorBuffer downSampled = DownSample(input);
+			downSampled = DownSample(downSampled);
 			downSampled = DownSample(downSampled);
 			downSampled = GaussianBlur(downSampled, false);
 			downSampled = GaussianBlur(downSampled, true);
