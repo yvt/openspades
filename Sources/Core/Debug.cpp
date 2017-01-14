@@ -168,7 +168,7 @@ namespace spades {
 		char buf[4096];
 		va_list va;
 		va_start(va, format);
-		vsprintf(buf, format, va);
+		vsnprintf(buf, sizeof(buf), format, va);
 		va_end(va);
 		std::string str = buf;
 		std::string fn = file;
@@ -182,9 +182,10 @@ namespace spades {
 
 		// lm: using \r\n instead of \n so that some shitty windows editors (notepad f.e.) can parse
 		// this file aswell (all decent editors should ignore it anyway)
-		sprintf(buf, "%04d/%02d/%02d %02d:%02d:%02d [%s:%d] %s\r\n", tm.tm_year + 1900,
+		snprintf(buf, sizeof(buf), "%04d/%02d/%02d %02d:%02d:%02d [%s:%d] %s\r\n", tm.tm_year + 1900,
 		        tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, fn.c_str(), line,
 		        str.c_str());
+		buf[sizeof(buf) - 1] = 0;
 
 		std::string outStr = EscapeControlCharacters(buf);
 
