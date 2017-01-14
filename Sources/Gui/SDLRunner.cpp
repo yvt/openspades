@@ -396,8 +396,12 @@ namespace spades {
 
 		protected:
 			virtual ~SDLTextureSWPort() {
-				SDL_DestroyTexture(sdlTexture);
-				SDL_DestroyRenderer(sdlRenderer);
+				// crashes for some reason (maybe because window is already closed
+				// at this point?)
+				// SDL_DestroyTexture(sdlTexture);
+				// SDL_DestroyRenderer(sdlRenderer);
+				sdlTexture = nullptr;
+				sdlRenderer = nullptr;
 			}
 
 		public:
@@ -422,6 +426,10 @@ namespace spades {
 				sdlTexture =
 				  SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888,
 				                    SDL_TEXTUREACCESS_STREAMING, deviceWidth, deviceHeight);
+
+				if (!sdlTexture) {
+					SPRaise("Failed to create SDL 2D texture.");
+				}
 
 				SetFramebufferBitmap();
 			}

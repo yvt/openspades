@@ -1057,7 +1057,10 @@ namespace spades {
 			GLUIBlurFilter{this}.Apply(0, scissorRect);
 
 			// Restore OpenGL state
-			SetScissor(scissorRect);
+			device->Scissor(static_cast<IGLDevice::Integer>(scissorRect.GetMinX()),
+							static_cast<IGLDevice::Integer>(scissorRect.GetMinY()),
+							static_cast<IGLDevice::Integer>(scissorRect.GetWidth()),
+							static_cast<IGLDevice::Integer>(scissorRect.GetHeight()));
 			device->Enable(IGLDevice::Blend, true);
 		}
 
