@@ -526,6 +526,31 @@ namespace spades {
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
+													  "void Save()",
+													  asMETHOD(IRenderer,Save),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void Restore()",
+													  asMETHOD(IRenderer,Restore),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void Scale(const Vector2&in)",
+													  asMETHODPR(IRenderer,Scale,(const Vector2&),void),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void Scale(float)",
+													  asMETHODPR(IRenderer,Scale,(float),void),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void Translate(const Vector2&in)",
+													  asMETHODPR(IRenderer,Translate,(const Vector2&),void),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
 													  "void FrameDone()",
 													  asMETHOD(IRenderer,FrameDone),
 													  asCALL_THISCALL);

@@ -20,10 +20,12 @@
 
 #pragma once
 
-#include <Core/Math.h>
+#include <vector>
+
 #include "IImage.h"
 #include "IModel.h"
 #include "SceneDefinition.h"
+#include <Core/Math.h>
 #include <Core/RefCountedObject.h>
 
 namespace spades {
@@ -71,12 +73,21 @@ namespace spades {
 		class IRenderer : public RefCountedObject {
 		protected:
 			virtual ~IRenderer() {}
+			IRenderer();
+
+			virtual void SetScissorLowLevel(const AABB2 &) = 0;
+
+			virtual void DrawImageLowLevel(IImage *, const AABB2 &outRect, const AABB2 &inRect);
+			virtual void DrawImageLowLevel(IImage *, const Vector2 &outTopLeft,
+			                               const Vector2 &outTopRight, const Vector2 &outBottomLeft,
+			                               const AABB2 &inRect) = 0;
+
+			virtual void InitLowLevel() = 0;
+			virtual void ShutdownLowLevel() = 0;
 
 		public:
-			IRenderer() {}
-
-			virtual void Init() = 0;
-			virtual void Shutdown() = 0;
+			void Init();
+			void Shutdown();
 
 			virtual IImage *RegisterImage(const char *filename) = 0;
 			virtual IModel *RegisterModel(const char *filename) = 0;
@@ -103,25 +114,39 @@ namespace spades {
 			/** Finalizes a scene. 2D drawing follows. */
 			virtual void EndScene() = 0;
 
+			/** Saves the current 2D drawing state. */
+			void Save();
+
+			/** Restores the previously saved 2D drawing state. */
+			void Restore();
+
+			/** Modifies the current transform matrix by multiplying a scaling matrix. */
+			void Scale(const Vector2 &);
+
+			void Scale(float factor) { Scale(Vector2{factor, factor}); }
+
+			/** Modifies the current transform matrix by multiplying a translation matrix. */
+			void Translate(const Vector2 &);
+
 			virtual void MultiplyScreenColor(Vector3) = 0;
 
 			/** Sets color for image drawing. Deprecated because
-			 * some methods treats this as an alpha premultiplied, while
-			 * others treats this as an alpha non-premultiplied.
+			 * some drawing functions treat this alpha premultiplied, while
+			 * others treat this alpha non-premultiplied.
 			 * @deprecated */
 			virtual void SetColor(Vector4) = 0;
 
 			/** Sets color for image drawing. Always alpha premultiplied. */
 			virtual void SetColorAlphaPremultiplied(Vector4) = 0;
 
-			virtual void SetScissor(const AABB2 &) = 0;
+			void SetScissor(const AABB2 &);
 
-			virtual void DrawImage(IImage *, const Vector2 &outTopLeft) = 0;
-			virtual void DrawImage(IImage *, const AABB2 &outRect) = 0;
-			virtual void DrawImage(IImage *, const Vector2 &outTopLeft, const AABB2 &inRect) = 0;
-			virtual void DrawImage(IImage *, const AABB2 &outRect, const AABB2 &inRect) = 0;
-			virtual void DrawImage(IImage *, const Vector2 &outTopLeft, const Vector2 &outTopRight,
-			                       const Vector2 &outBottomLeft, const AABB2 &inRect) = 0;
+			void DrawImage(IImage *, const Vector2 &outTopLeft);
+			void DrawImage(IImage *, const AABB2 &outRect);
+			void DrawImage(IImage *, const Vector2 &outTopLeft, const AABB2 &inRect);
+			void DrawImage(IImage *, const AABB2 &outRect, const AABB2 &inRect);
+			void DrawImage(IImage *, const Vector2 &outTopLeft, const Vector2 &outTopRight,
+			               const Vector2 &outBottomLeft, const AABB2 &inRect);
 
 			/* Applies a frosting glass effect (if possible). */
 			virtual void Blur() {}
@@ -139,6 +164,21 @@ namespace spades {
 
 			virtual float ScreenWidth() = 0;
 			virtual float ScreenHeight() = 0;
+
+		private:
+			struct State2D {
+				AABB2 scissorRect;
+				Vector2 transformScaling;
+				Vector2 transformTranslation;
+			};
+			std::vector<State2D> m_stateStack;
+
+			void ResetStack();
+			State2D &GetCurrentState();
+
+			Vector2 TransformPoint(const Vector2 &);
+			Vector2 TransformVector(const Vector2 &);
+			AABB2 Transform(const AABB2 &);
 		};
 	}
 }

@@ -144,11 +144,17 @@ namespace spades {
 		protected:
 			~GLRenderer();
 
+			void InitLowLevel() override;
+			void ShutdownLowLevel() override;
+
+			void SetScissorLowLevel(const AABB2 &) override;
+
+			void DrawImageLowLevel(client::IImage *, const Vector2 &outTopLeft,
+			                       const Vector2 &outTopRight, const Vector2 &outBottomLeft,
+			                       const AABB2 &inRect) override;
+
 		public:
 			GLRenderer(IGLDevice *glDevice);
-
-			void Init() override;
-			void Shutdown() override;
 
 			client::IImage *RegisterImage(const char *filename) override;
 			client::IModel *RegisterModel(const char *filename) override;
@@ -186,17 +192,7 @@ namespace spades {
 			void SetColor(Vector4) override;
 			void SetColorAlphaPremultiplied(Vector4) override;
 
-			void SetScissor(const AABB2&) override;
-
 			void Blur() override;
-
-			void DrawImage(client::IImage *, const Vector2 &outTopLeft) override;
-			void DrawImage(client::IImage *, const AABB2 &outRect) override;
-			void DrawImage(client::IImage *, const Vector2 &outTopLeft,
-			               const AABB2 &inRect) override;
-			void DrawImage(client::IImage *, const AABB2 &outRect, const AABB2 &inRect) override;
-			void DrawImage(client::IImage *, const Vector2 &outTopLeft, const Vector2 &outTopRight,
-			               const Vector2 &outBottomLeft, const AABB2 &inRect) override;
 
 			void DrawFlatGameMap(const AABB2 &outRect, const AABB2 &inRect) override;
 

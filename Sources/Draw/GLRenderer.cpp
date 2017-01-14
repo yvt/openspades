@@ -127,7 +127,7 @@ namespace spades {
 			Shutdown();
 		}
 
-		void GLRenderer::Init() {
+		void GLRenderer::InitLowLevel() {
 			if (modelManager != NULL) {
 				// already initialized
 				return;
@@ -193,7 +193,7 @@ namespace spades {
 			SPLog("GLRenderer initialized");
 		}
 
-		void GLRenderer::Shutdown() {
+		void GLRenderer::ShutdownLowLevel() {
 			// FIXME: remove itself from map's listener
 
 			SPLog("GLRender finalizing");
@@ -1038,7 +1038,7 @@ namespace spades {
 
 		//#pragma mark - 2D Drawings
 
-		void GLRenderer::SetScissor(const AABB2 &rect) {
+		void GLRenderer::SetScissorLowLevel(const AABB2 &rect) {
 			scissorRect = rect;
 			device->Scissor(static_cast<IGLDevice::Integer>(rect.GetMinX()),
 			                static_cast<IGLDevice::Integer>(rect.GetMinY()),
@@ -1106,47 +1106,10 @@ namespace spades {
 			                  IGLDevice::One);
 		}
 
-		void GLRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft) {
-			SPADES_MARK_FUNCTION();
-
-			if (image == nullptr) {
-				SPRaise("Size must be specified when null image is provided");
-			}
-
-			DrawImage(image,
-			          AABB2(outTopLeft.x, outTopLeft.y, image->GetWidth(), image->GetHeight()),
-			          AABB2(0, 0, image->GetWidth(), image->GetHeight()));
-		}
-
-		void GLRenderer::DrawImage(client::IImage *image, const spades::AABB2 &outRect) {
-			SPADES_MARK_FUNCTION();
-
-			DrawImage(image, outRect,
-			          AABB2(0, 0, image ? image->GetWidth() : 0, image ? image->GetHeight() : 0));
-		}
-
-		void GLRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft,
-		                           const spades::AABB2 &inRect) {
-			SPADES_MARK_FUNCTION();
-
-			DrawImage(image,
-			          AABB2(outTopLeft.x, outTopLeft.y, inRect.GetWidth(), inRect.GetHeight()),
-			          inRect);
-		}
-
-		void GLRenderer::DrawImage(client::IImage *image, const spades::AABB2 &outRect,
-		                           const spades::AABB2 &inRect) {
-			SPADES_MARK_FUNCTION();
-
-			DrawImage(image, Vector2::Make(outRect.GetMinX(), outRect.GetMinY()),
-			          Vector2::Make(outRect.GetMaxX(), outRect.GetMinY()),
-			          Vector2::Make(outRect.GetMinX(), outRect.GetMaxY()), inRect);
-		}
-
-		void GLRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft,
-		                           const spades::Vector2 &outTopRight,
-		                           const spades::Vector2 &outBottomLeft,
-		                           const spades::AABB2 &inRect) {
+		void GLRenderer::DrawImageLowLevel(client::IImage *image, const spades::Vector2 &outTopLeft,
+		                                   const spades::Vector2 &outTopRight,
+		                                   const spades::Vector2 &outBottomLeft,
+		                                   const spades::AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 
 			void EnsureSceneNotStarted();

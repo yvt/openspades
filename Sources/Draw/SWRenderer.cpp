@@ -109,7 +109,7 @@ namespace spades {
 			}
 		}
 
-		void SWRenderer::Init() {
+		void SWRenderer::InitLowLevel() {
 			SPADES_MARK_FUNCTION();
 
 			SPLog("---- SWRenderer late initialization started ---");
@@ -124,7 +124,7 @@ namespace spades {
 			inited = true;
 		}
 
-		void SWRenderer::Shutdown() {
+		void SWRenderer::ShutdownLowLevel() {
 			SPADES_MARK_FUNCTION();
 
 			SetGameMap(nullptr);
@@ -968,51 +968,14 @@ namespace spades {
 			drawColorAlphaPremultiplied = col;
 		}
 
-		void SWRenderer::SetScissor(const AABB2 &) {
+		void SWRenderer::SetScissorLowLevel(const AABB2 &) {
 			// TODO: implement scissor rectangle for SWRenderer
 		}
 
-		void SWRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft) {
-			SPADES_MARK_FUNCTION();
-
-			if (image == nullptr) {
-				SPRaise("Size must be specified when null image is provided");
-			}
-
-			DrawImage(image,
-			          AABB2(outTopLeft.x, outTopLeft.y, image->GetWidth(), image->GetHeight()),
-			          AABB2(0, 0, image->GetWidth(), image->GetHeight()));
-		}
-
-		void SWRenderer::DrawImage(client::IImage *image, const spades::AABB2 &outRect) {
-			SPADES_MARK_FUNCTION();
-
-			DrawImage(image, outRect,
-			          AABB2(0, 0, image ? image->GetWidth() : 0, image ? image->GetHeight() : 0));
-		}
-
-		void SWRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft,
-		                           const spades::AABB2 &inRect) {
-			SPADES_MARK_FUNCTION();
-
-			DrawImage(image,
-			          AABB2(outTopLeft.x, outTopLeft.y, inRect.GetWidth(), inRect.GetHeight()),
-			          inRect);
-		}
-
-		void SWRenderer::DrawImage(client::IImage *image, const spades::AABB2 &outRect,
-		                           const spades::AABB2 &inRect) {
-			SPADES_MARK_FUNCTION();
-
-			DrawImage(image, Vector2::Make(outRect.GetMinX(), outRect.GetMinY()),
-			          Vector2::Make(outRect.GetMaxX(), outRect.GetMinY()),
-			          Vector2::Make(outRect.GetMinX(), outRect.GetMaxY()), inRect);
-		}
-
-		void SWRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft,
-		                           const spades::Vector2 &outTopRight,
-		                           const spades::Vector2 &outBottomLeft,
-		                           const spades::AABB2 &inRect) {
+		void SWRenderer::DrawImageLowLevel(client::IImage *image, const spades::Vector2 &outTopLeft,
+		                                   const spades::Vector2 &outTopRight,
+		                                   const spades::Vector2 &outBottomLeft,
+		                                   const spades::AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 
 			EnsureValid();

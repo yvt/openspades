@@ -75,36 +75,51 @@ namespace spades {
 		protected:
 			~SandboxedRenderer() {}
 
+			void InitLowLevel() override { OnProhibitedAction(); }
+			void ShutdownLowLevel() override { OnProhibitedAction(); }
+
+			void SetScissorLowLevel(const AABB2 &) override { OnProhibitedAction(); }
+
+			void DrawImageLowLevel(IImage *img, const Vector2 &outTopLeft,
+			                       const Vector2 &outTopRight, const Vector2 &outBottomLeft,
+			                       const AABB2 &inRect) override {
+				if (allowDepthHack)
+					base->DrawImage(img, outTopLeft, outTopRight, outBottomLeft, inRect);
+				else
+					OnProhibitedAction();
+			}
+
 		public:
 			SandboxedRenderer(IRenderer *base) : base(base) {}
 
 			void SetClipBox(const AABB3 &b) { clipBox = b; }
 			void SetAllowDepthHack(bool h) { allowDepthHack = h; }
 
-			void Init() { OnProhibitedAction(); }
-			void Shutdown() { OnProhibitedAction(); }
+			IImage *RegisterImage(const char *filename) override {
+				return base->RegisterImage(filename);
+			}
+			IModel *RegisterModel(const char *filename) override {
+				return base->RegisterModel(filename);
+			}
 
-			IImage *RegisterImage(const char *filename) { return base->RegisterImage(filename); }
-			IModel *RegisterModel(const char *filename) { return base->RegisterModel(filename); }
+			IImage *CreateImage(Bitmap *bmp) override { return base->CreateImage(bmp); }
+			IModel *CreateModel(VoxelModel *m) override { return base->CreateModel(m); }
 
-			IImage *CreateImage(Bitmap *bmp) { return base->CreateImage(bmp); }
-			IModel *CreateModel(VoxelModel *m) { return base->CreateModel(m); }
+			void SetGameMap(GameMap *) override { OnProhibitedAction(); }
 
-			void SetGameMap(GameMap *) { OnProhibitedAction(); }
+			void SetFogDistance(float) override { OnProhibitedAction(); }
+			void SetFogColor(Vector3) override { OnProhibitedAction(); }
 
-			void SetFogDistance(float) { OnProhibitedAction(); }
-			void SetFogColor(Vector3) { OnProhibitedAction(); }
+			void StartScene(const SceneDefinition &) override { OnProhibitedAction(); }
 
-			void StartScene(const SceneDefinition &) { OnProhibitedAction(); }
-
-			void AddLight(const client::DynamicLightParam &light) {
+			void AddLight(const client::DynamicLightParam &light) override {
 				Vector3 rad(light.radius, light.radius, light.radius);
 				if (CheckVisibility(AABB3(light.origin - rad, light.origin + rad))) {
 					base->AddLight(light);
 				}
 			}
 
-			void RenderModel(IModel *model, const ModelRenderParam &p) {
+			void RenderModel(IModel *model, const ModelRenderParam &p) override {
 				if (!model) {
 					SPInvalidArgument("model");
 					return;
@@ -118,15 +133,17 @@ namespace spades {
 					base->RenderModel(model, p);
 				}
 			}
-			void AddDebugLine(Vector3 a, Vector3 b, Vector4 color) { OnProhibitedAction(); }
+			void AddDebugLine(Vector3 a, Vector3 b, Vector4 color) override {
+				OnProhibitedAction();
+			}
 
-			void AddSprite(IImage *image, Vector3 center, float radius, float rotation) {
+			void AddSprite(IImage *image, Vector3 center, float radius, float rotation) override {
 				Vector3 rad(radius * 1.5f, radius * 1.5f, radius * 1.5f);
 				if (CheckVisibility(AABB3(center - rad, center + rad))) {
 					base->AddSprite(image, center, radius, rotation);
 				}
 			}
-			void AddLongSprite(IImage *image, Vector3 p1, Vector3 p2, float radius) {
+			void AddLongSprite(IImage *image, Vector3 p1, Vector3 p2, float radius) override {
 				Vector3 rad(radius * 1.5f, radius * 1.5f, radius * 1.5f);
 				AABB3 bounds1(p1 - rad, p1 + rad);
 				AABB3 bounds2(p2 - rad, p2 + rad);
@@ -136,68 +153,36 @@ namespace spades {
 				}
 			}
 
-			void EndScene() { OnProhibitedAction(); }
+			void EndScene() override { OnProhibitedAction(); }
 
-			void MultiplyScreenColor(Vector3) { OnProhibitedAction(); }
+			void MultiplyScreenColor(Vector3) override { OnProhibitedAction(); }
 
 			/** Sets color for image drawing. Deprecated because
 			 * some methods treats this as an alpha premultiplied, while
 			 * others treats this as an alpha non-premultiplied.
 			 * @deprecated */
-			void SetColor(Vector4 col) { base->SetColor(col); }
+			void SetColor(Vector4 col) override { base->SetColor(col); }
 
 			/** Sets color for image drawing. Always alpha premultiplied. */
-			void SetColorAlphaPremultiplied(Vector4 col) { base->SetColorAlphaPremultiplied(col); }
-
-			void SetScissor(const AABB2 &) { OnProhibitedAction(); }
-
-			void DrawImage(IImage *img, const Vector2 &outTopLeft) {
-				if (allowDepthHack)
-					base->DrawImage(img, outTopLeft);
-				else
-					OnProhibitedAction();
-			}
-			void DrawImage(IImage *img, const AABB2 &outRect) {
-				if (allowDepthHack)
-					base->DrawImage(img, outRect);
-				else
-					OnProhibitedAction();
-			}
-			void DrawImage(IImage *img, const Vector2 &outTopLeft, const AABB2 &inRect) {
-				if (allowDepthHack)
-					base->DrawImage(img, outTopLeft, inRect);
-				else
-					OnProhibitedAction();
-			}
-			void DrawImage(IImage *img, const AABB2 &outRect, const AABB2 &inRect) {
-				if (allowDepthHack)
-					base->DrawImage(img, outRect, inRect);
-				else
-					OnProhibitedAction();
-			}
-			void DrawImage(IImage *img, const Vector2 &outTopLeft, const Vector2 &outTopRight,
-			               const Vector2 &outBottomLeft, const AABB2 &inRect) {
-				if (allowDepthHack)
-					base->DrawImage(img, outTopLeft, outTopRight, outBottomLeft, inRect);
-				else
-					OnProhibitedAction();
+			void SetColorAlphaPremultiplied(Vector4 col) override {
+				base->SetColorAlphaPremultiplied(col);
 			}
 
-			void DrawFlatGameMap(const AABB2 &outRect, const AABB2 &inRect) {
+			void DrawFlatGameMap(const AABB2 &outRect, const AABB2 &inRect) override {
 				OnProhibitedAction();
 			}
 
-			void FrameDone() { OnProhibitedAction(); }
+			void FrameDone() override { OnProhibitedAction(); }
 
-			void Flip() { OnProhibitedAction(); }
+			void Flip() override { OnProhibitedAction(); }
 
-			Bitmap *ReadBitmap() {
+			Bitmap *ReadBitmap() override {
 				OnProhibitedAction();
 				return nullptr;
 			}
 
-			float ScreenWidth() { return base->ScreenWidth(); }
-			float ScreenHeight() { return base->ScreenHeight(); }
+			float ScreenWidth() override { return base->ScreenWidth(); }
+			float ScreenHeight() override { return base->ScreenHeight(); }
 		};
 
 		ClientPlayer::ClientPlayer(Player *p, Client *c) : player(p), client(c) {
