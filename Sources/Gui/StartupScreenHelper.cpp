@@ -459,6 +459,26 @@ namespace spades {
 					AddReport("  r_hdr is disabled.", MakeVector4(1.f, 1.f, 1.f, 0.7f));
 				}
 
+				if (extensions.find("GL_EXT_texture_array") == std::string::npos) {
+					if ((int)r_water >= 2) {
+						r_water = 1;
+						SPLog("Disabling Water 2: no GL_EXT_texture_array");
+					}
+					shaderHighCapable = false;
+					incapableConfigs.insert(
+					  std::make_pair("r_water", [](std::string value) -> std::string {
+						  if (std::stoi(value) >= 2) {
+							  return "Water 2 is disabled because your video card doesn't "
+							         "support GL_EXT_texture_array.";
+						  } else {
+							  return std::string();
+						  }
+					  }));
+					AddReport("GL_EXT_texture_array is NOT SUPPORTED",
+					          MakeVector4(1.f, 1.f, 0.5f, 1.f));
+					AddReport("  Water 2 is disabled.", MakeVector4(1.f, 1.f, 1.f, 0.7f));
+				}
+
 				AddReport("Max Texture Size: " + std::to_string(maxTextureSize),
 				          MakeVector4(1.f, 1.f, 1.f, 0.7f));
 				if (maxTextureSize < 1024) {
@@ -513,6 +533,26 @@ namespace spades {
 						r_radiosity = 0;
 						SPLog(
 						  "Disabling r_radiosity: too small GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS");
+					}
+				}
+				if (maxCombinedTextureUnits < 15) {
+					AddReport("  Water 2 is disabled (15 required)",
+					          MakeVector4(1.f, 1.f, 0.5f, 1.f));
+					shaderHighCapable = false;
+
+					incapableConfigs.insert(
+					  std::make_pair("r_water", [](std::string value) -> std::string {
+						  if (std::stoi(value) >= 2) {
+							  return "Water 2 is disabled because your video card supports too few "
+							         "combined texture image units.";
+						  } else {
+							  return std::string();
+						  }
+					  }));
+
+					if ((int)r_water >= 2) {
+						r_water = 1;
+						SPLog("Disabling Water 2: too small GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS");
 					}
 				}
 

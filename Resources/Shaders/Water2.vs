@@ -1,3 +1,4 @@
+#extension GL_EXT_texture_array : require
 /*
  Copyright (c) 2013 yvt
 
@@ -35,9 +36,7 @@ varying vec3 viewPosition;
 varying vec3 worldPosition;
 varying vec2 worldPositionOriginal;
 
-uniform sampler2D waveTexture1;
-uniform sampler2D waveTexture2;
-uniform sampler2D waveTexture3;
+uniform sampler2DArray waveTextureArray;
 
 void PrepareForShadow(vec3 worldOrigin, vec3 normal);
 vec4 FogDensity(float poweredLength);
@@ -49,18 +48,18 @@ vec3 DisplaceWater(vec2 worldPos){
 
 	vec2 waveCoord2 = worldPos.xy * 0.02344 + vec2(.154, .7315);
 
-	float wave = texture2DLod(waveTexture1, waveCoord.xy, 0.).w;
+	float wave = texture2DArrayLod(waveTextureArray, vec3(waveCoord.xy, 0.0), 0.).w;
 	float disp = mix(-0.1, 0.1, wave) * 0.4;
 
-	float wave2 = texture2DLod(waveTexture2, waveCoord.zw, 0.).w;
+	float wave2 = texture2DArrayLod(waveTextureArray, vec3(waveCoord.zw, 1.0), 0.).w;
 	disp += mix(-0.1, 0.1, wave2) * 0.2;
 
-	float wave3 = texture2DLod(waveTexture3, waveCoord2.xy, 0.).w;
+	float wave3 = texture2DArrayLod(waveTextureArray, vec3(waveCoord2.xy, 2.0), 0.).w;
 	disp += mix(-0.1, 0.1, wave3) * 2.5;
 
-	float waveSmoothed1 = texture2DLod(waveTexture3, waveCoord2.xy, 4.).w;
-	float waveSmoothed2 = texture2DLod(waveTexture3, waveCoord2.xy + vec2(1.0 / 16.0, 0.0), 3.).w;
-	float waveSmoothed3 = texture2DLod(waveTexture3, waveCoord2.xy + vec2(0.0, 1.0 / 16.0), 3.).w;
+	float waveSmoothed1 = texture2DArrayLod(waveTextureArray, vec3(waveCoord2.xy, 2.0), 4.).w;
+	float waveSmoothed2 = texture2DArrayLod(waveTextureArray, vec3(waveCoord2.xy + vec2(1.0 / 16.0, 0.0), 2.0), 3.).w;
+	float waveSmoothed3 = texture2DArrayLod(waveTextureArray, vec3(waveCoord2.xy + vec2(0.0, 1.0 / 16.0), 2.0), 3.).w;
 	vec2 dispHorz = vec2(waveSmoothed2 - waveSmoothed1, waveSmoothed3 - waveSmoothed1) * -16.;
 
 	return vec3(dispHorz, disp * 4.);
