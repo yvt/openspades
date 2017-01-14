@@ -1039,11 +1039,15 @@ namespace spades {
 		//#pragma mark - 2D Drawings
 
 		void GLRenderer::SetScissorLowLevel(const AABB2 &rect) {
+			imageRenderer->Flush();
+
 			scissorRect = rect;
-			device->Scissor(static_cast<IGLDevice::Integer>(rect.GetMinX()),
-			                static_cast<IGLDevice::Integer>(rect.GetMinY()),
-			                static_cast<IGLDevice::Integer>(rect.GetWidth()),
-			                static_cast<IGLDevice::Integer>(rect.GetHeight()));
+			scissorRect.min.y = ScreenHeight() - rect.max.y;
+			scissorRect.max.y = ScreenHeight() - rect.min.y;
+			device->Scissor(static_cast<IGLDevice::Integer>(scissorRect.GetMinX()),
+			                static_cast<IGLDevice::Integer>(scissorRect.GetMinY()),
+			                static_cast<IGLDevice::Integer>(scissorRect.GetWidth()),
+			                static_cast<IGLDevice::Integer>(scissorRect.GetHeight()));
 		}
 
 		void GLRenderer::Blur() {

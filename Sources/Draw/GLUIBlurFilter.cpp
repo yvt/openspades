@@ -141,7 +141,7 @@ namespace spades {
 			GLQuadRenderer qr(dev);
 
 			// Compute the work area
-			int margin = 16;
+			int margin = 24;
 			workArea = {std::max(0, static_cast<int>(target.GetMinX()) - margin),
 			            std::max(0, static_cast<int>(target.GetMinY()) - margin),
 			            std::min(dev->ScreenWidth(), static_cast<int>(target.GetMaxX()) + margin),
