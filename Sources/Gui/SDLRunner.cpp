@@ -401,10 +401,13 @@ namespace spades {
 			}
 
 		public:
-			SDLTextureSWPort(SDL_Window *wnd) : wnd(wnd) {
+			SDLTextureSWPort(SDL_Window *wnd, bool allowHiDPI) : wnd(wnd) {
 				SPADES_MARK_FUNCTION();
 
-				SDL_GL_GetDrawableSize(wnd, &deviceWidth, &deviceHeight);
+				if (allowHiDPI)
+					SDL_GL_GetDrawableSize(wnd, &deviceWidth, &deviceHeight);
+				else
+					SDL_GetWindowSize(wnd, &deviceWidth, &deviceHeight);
 
 				sdlRenderer = SDL_CreateRenderer(wnd, -1, 0);
 
@@ -444,7 +447,7 @@ namespace spades {
 				case RendererType::SW: {
 #ifdef __MACOSX__
 					// We need SDLTextureSWPort to enable Hi-DPI support
-					Handle<SDLTextureSWPort> port(new SDLTextureSWPort(wnd), false);
+					Handle<SDLTextureSWPort> port(new SDLTextureSWPort(wnd, DoesSupportNativeDPIScaling()), false);
 #else
 					Handle<SDLSWPort> port(new SDLSWPort(wnd), false);
 #endif
