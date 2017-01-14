@@ -67,17 +67,16 @@ FILE __iob_func[3] = {*stdin, *stdout, *stderr};
 DEFINE_SPADES_SETTING(cl_showStartupWindow, "1");
 
 #ifdef WIN32
+#include <DbgHelp.h>
 #include <shlobj.h>
 #include <windows.h>
-#include <DbgHelp.h>
 
 #define strncasecmp(x, y, z) _strnicmp(x, y, z)
 #define strcasecmp(x, y) _stricmp(x, y)
 
 DEFINE_SPADES_SETTING(core_win32BeginPeriod, "1");
 
-namespace
-{
+namespace {
 	class ThreadQuantumSetter {
 	public:
 		ThreadQuantumSetter() {
@@ -103,13 +102,14 @@ namespace
 	// we cannot use the fltk function on the console window, because it's not an Fl_Window...
 	void setIcon(HWND hWnd) {
 		HINSTANCE hInstance = GetModuleHandle(NULL);
-		HICON hIcon = (HICON)LoadImageA(hInstance, "AppIcon", IMAGE_ICON, GetSystemMetrics(SM_CXICON),
-										GetSystemMetrics(SM_CYICON), 0);
+		HICON hIcon =
+		  (HICON)LoadImageA(hInstance, "AppIcon", IMAGE_ICON, GetSystemMetrics(SM_CXICON),
+		                    GetSystemMetrics(SM_CYICON), 0);
 		if (hIcon) {
 			SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
 		}
 		hIcon = (HICON)LoadImageA(hInstance, "AppIcon", IMAGE_ICON, GetSystemMetrics(SM_CXSMICON),
-								  GetSystemMetrics(SM_CYSMICON), 0);
+		                          GetSystemMetrics(SM_CYSMICON), 0);
 		if (hIcon) {
 			SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
 		}
@@ -117,10 +117,10 @@ namespace
 
 	LONG WINAPI UnhandledExceptionProc(LPEXCEPTION_POINTERS lpEx) {
 		typedef BOOL(WINAPI * PDUMPFN)(HANDLE hProcess, DWORD ProcessId, HANDLE hFile,
-									   MINIDUMP_TYPE DumpType,
-									   PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam,
-									   PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam,
-									   PMINIDUMP_CALLBACK_INFORMATION CallbackParam);
+		                               MINIDUMP_TYPE DumpType,
+		                               PMINIDUMP_EXCEPTION_INFORMATION ExceptionParam,
+		                               PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam,
+		                               PMINIDUMP_CALLBACK_INFORMATION CallbackParam);
 		HMODULE hLib = LoadLibrary("DbgHelp.dll");
 		PDUMPFN pMiniDumpWriteDump = (PDUMPFN)GetProcAddress(hLib, "MiniDumpWriteDump");
 
@@ -128,16 +128,16 @@ namespace
 		if (pMiniDumpWriteDump) {
 			static char fullBuf[MAX_PATH + 120] = {0};
 			if (SUCCEEDED(
-				  SHGetFolderPath(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0,
-								  buf))) { // max length = MAX_PATH (temp abuse this buffer space)
+			      SHGetFolderPath(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0,
+			                      buf))) { // max length = MAX_PATH (temp abuse this buffer space)
 				strcat_s(buf, "\\");       // ensure we end with a slash.
 			} else {
 				buf[0] = 0; // empty it, the file will now end up in the working directory :(
 			}
 			sprintf(fullBuf, "%sOpenSpadesCrash%d.dmp", buf,
-					GetTickCount()); // some sort of randomization.
+			        GetTickCount()); // some sort of randomization.
 			HANDLE hFile = CreateFile(fullBuf, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
-									  FILE_ATTRIBUTE_NORMAL, NULL);
+			                          FILE_ATTRIBUTE_NORMAL, NULL);
 			if (hFile != INVALID_HANDLE_VALUE) {
 				MINIDUMP_EXCEPTION_INFORMATION mdei = {0};
 				mdei.ThreadId = GetCurrentThreadId();
@@ -145,20 +145,20 @@ namespace
 				mdei.ClientPointers = TRUE;
 				MINIDUMP_TYPE mdt = MiniDumpNormal;
 				BOOL rv = pMiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, mdt,
-											 (lpEx != 0) ? &mdei : 0, 0, 0);
+				                             (lpEx != 0) ? &mdei : 0, 0, 0);
 				CloseHandle(hFile);
 				sprintf_s(buf,
-						  "Something went horribly wrong, please send the file \n%s\nfor analysis.",
-						  fullBuf);
+				          "Something went horribly wrong, please send the file \n%s\nfor analysis.",
+				          fullBuf);
 			} else {
 				sprintf_s(buf, "Something went horribly wrong,\ni even failed to store information "
-							   "about the problem... (0x%08x)",
-						  lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff);
+				               "about the problem... (0x%08x)",
+				          lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff);
 			}
 		} else {
 			sprintf_s(buf, "Something went horribly wrong,\ni even failed to retrieve information "
-						   "about the problem... (0x%08x)",
-					  lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff);
+			               "about the problem... (0x%08x)",
+			          lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff);
 		}
 		MessageBoxA(NULL, buf, "Oops, we crashed...", MB_OK | MB_ICONERROR);
 		ExitProcess(-1);
@@ -166,8 +166,7 @@ namespace
 	}
 }
 #else
-namespace
-{
+namespace {
 	class ThreadQuantumSetter {};
 }
 #endif
@@ -227,14 +226,15 @@ namespace spades {
 
 		protected:
 			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer,
-			                                      spades::client::IAudioDevice *audio) {
+			                                      spades::client::IAudioDevice *audio,
+			                                      float pixelRatio) {
+				(void)pixelRatio; // TODO: not supported!
 				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
 				return new spades::client::Client(renderer, audio, addr, fontManager);
 			}
 
 		public:
-			ConcreteRunner(const spades::ServerAddress &addr)
-			    : addr(addr) {}
+			ConcreteRunner(const spades::ServerAddress &addr) : addr(addr) {}
 		};
 		ConcreteRunner runner(addr);
 		runner.RunProtected();
@@ -243,7 +243,9 @@ namespace spades {
 		class ConcreteRunner : public spades::gui::Runner {
 		protected:
 			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer,
-			                                      spades::client::IAudioDevice *audio) {
+			                                      spades::client::IAudioDevice *audio,
+			                                      float pixelRatio) {
+				(void)pixelRatio; // TODO: not supported!
 				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
 				return new spades::gui::MainScreen(renderer, audio, fontManager);
 			}
@@ -584,8 +586,7 @@ int main(int argc, char **argv) {
 		} else {
 			splashWindow.reset();
 
-			spades::ServerAddress host(g_autoconnectHostName,
-			                           g_autoconnectProtocolVersion);
+			spades::ServerAddress host(g_autoconnectHostName, g_autoconnectProtocolVersion);
 			spades::StartClient(host);
 		}
 

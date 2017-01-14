@@ -38,9 +38,9 @@ namespace spades {
             this.Bounds = owner.Bounds;
 
             float contentsWidth = 500.f;
-            float contentsLeft = (Manager.Renderer.ScreenWidth - contentsWidth) * 0.5f;
+            float contentsLeft = (Manager.ScreenWidth - contentsWidth) * 0.5f;
             contentsHeight = 188.f;
-            contentsTop = (Manager.Renderer.ScreenHeight - contentsHeight) * 0.5f;
+            contentsTop = (Manager.ScreenHeight - contentsHeight) * 0.5f;
             {
                 spades::ui::Label label(Manager);
                 label.BackgroundColor = Vector4(0, 0, 0, 0.4f);

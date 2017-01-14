@@ -191,12 +191,14 @@ namespace spades {
 		};
 
 		FTFont::FTFont(client::IRenderer *renderer, FTFontSet *fontSet, float height,
-		               float lineHeight)
+		               float lineHeight, float pixelRatio)
 		    : client::IFont(renderer),
 		      fontSet(fontSet),
 		      height(height),
 		      lineHeight(lineHeight),
-		      renderer(renderer) {
+		      renderer(renderer),
+		      pixelRatio(pixelRatio),
+		      dpi(static_cast<int>(pixelRatio * 72.0f)) {
 			SPADES_MARK_FUNCTION();
 
 			SPAssert(renderer);
@@ -229,14 +231,15 @@ namespace spades {
 					auto it2 = glyphs.find(std::make_pair<FT_Face>(*face, cId));
 					if (it2 == glyphs.end()) {
 
-						FT_Set_Char_Size(*face, 0, static_cast<FT_F26Dot6>(height * 64.f), 72, 72);
+						FT_Set_Char_Size(*face, 0, static_cast<FT_F26Dot6>(height * 64.f), dpi,
+						                 dpi);
 
 						Glyph g;
 						g.face = *face;
 						g.charIndex = cId;
 						FT_Load_Glyph(*face, cId, FT_LOAD_NO_HINTING);
 						const auto &adv = g.face->glyph->advance;
-						g.advance = Vector2(adv.x, adv.y) / (64.f);
+						g.advance = Vector2(adv.x, adv.y) / (pixelRatio * 64.f);
 
 						auto it3 =
 						  glyphs.emplace(std::make_pair<FT_Face>(*face, cId), std::move(g));
@@ -306,7 +309,7 @@ namespace spades {
 			if (g.image)
 				return;
 
-			FT_Set_Char_Size(g.face, 0, static_cast<FT_F26Dot6>(height * 64.f), 72, 72);
+			FT_Set_Char_Size(g.face, 0, static_cast<FT_F26Dot6>(height * 64.f), dpi, dpi);
 			FT_Load_Glyph(g.face, g.charIndex, FT_LOAD_NO_HINTING);
 			FT_Render_Glyph(g.face->glyph, FT_RENDER_MODE_NORMAL);
 
@@ -344,9 +347,10 @@ namespace spades {
 
 			AABB2 bounds((*result).x, (*result).y, spbmp->GetWidth() - 1, spbmp->GetHeight() - 1);
 
-			Vector2 offs(g.face->glyph->bitmap_left, baselineY - g.face->glyph->bitmap_top);
+			Vector2 offs(g.face->glyph->bitmap_left,
+			             baselineY * pixelRatio - g.face->glyph->bitmap_top);
 
-			g.image.reset((*result).image, bounds, offs);
+			g.image.reset((*result).image, bounds, offs / pixelRatio);
 			g.bmp = spbmp;
 		}
 
@@ -433,7 +437,7 @@ namespace spades {
 
 			AABB2 bounds((*result).x, (*result).y, newbmp->GetWidth(), newbmp->GetHeight());
 
-			Vector2 offs = (*g.image).offset - Vector2(1, 1) * (KernelSize * 0.5f);
+			Vector2 offs = (*g.image).offset - Vector2(1, 1) * (KernelSize * 0.5f / pixelRatio);
 
 			g.blurImage.reset((*result).image, bounds, offs);
 		}
@@ -445,6 +449,8 @@ namespace spades {
 
 			float x = 0.f;
 			float y = 0.f;
+
+			float const rcpPixelRatio = 1.0f / pixelRatio;
 
 			color = Vector4(color.x * color.w, color.y * color.w, color.z * color.w, color.w);
 
@@ -460,8 +466,8 @@ namespace spades {
 				  auto srcBounds = img.bounds;
 				  auto target = offset + (Vector2(x, y) + img.offset) * scale;
 				  target = (target + .5f).Floor(); // for sharper rendering
-				  AABB2 destBounds(target.x, target.y, srcBounds.GetWidth() * scale,
-				                   srcBounds.GetHeight() * scale);
+				  AABB2 destBounds(target.x, target.y, srcBounds.GetWidth() * scale * rcpPixelRatio,
+				                   srcBounds.GetHeight() * scale * rcpPixelRatio);
 
 				  if (!rendererIsLowQuality) {
 					  srcBounds = srcBounds.Inflate(.5f);
@@ -492,6 +498,8 @@ namespace spades {
 			float x = 0.f;
 			float y = 0.f;
 
+			float const rcpPixelRatio = 1.0f / pixelRatio;
+
 			color = Vector4(color.x * color.w, color.y * color.w, color.z * color.w, color.w);
 
 			renderer->SetColorAlphaPremultiplied(color);
@@ -506,8 +514,8 @@ namespace spades {
 				  auto srcBounds = img.bounds;
 				  auto target = offset + (Vector2(x, y) + img.offset) * scale;
 				  target = (target + .5f).Floor(); // for sharper rendering
-				  AABB2 destBounds(target.x, target.y, srcBounds.GetWidth() * scale,
-				                   srcBounds.GetHeight() * scale);
+				  AABB2 destBounds(target.x, target.y, srcBounds.GetWidth() * scale * rcpPixelRatio,
+				                   srcBounds.GetHeight() * scale * rcpPixelRatio);
 
 				  if (!rendererIsLowQuality) {
 					  srcBounds = srcBounds.Inflate(.5f);

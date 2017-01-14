@@ -32,6 +32,12 @@ namespace spades {
 		public:
 			View() {}
 
+			/**
+			 * @param x The X component of the relative (in virtual pixels) or absolute (in device
+			 * pixels) mouse coordinate
+			 * @param y The Y component of the relative (in virtual pixels) or absolute (in device
+			 * pixels) mouse coordinate
+			 */
 			virtual void MouseEvent(float x, float y) {}
 			virtual void KeyEvent(const std::string &, bool down) {}
 			virtual void TextInputEvent(const std::string &) {}

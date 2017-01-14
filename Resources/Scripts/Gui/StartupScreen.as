@@ -36,7 +36,7 @@ namespace spades {
 
 		bool shouldExit = false;
 
-		StartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, FontManager@ fontManager, StartupScreenHelper@ helper) {
+		StartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, FontManager@ fontManager, float pixelRatio, StartupScreenHelper@ helper) {
 			@this.renderer = renderer;
 			@this.audioDevice = audioDevice;
 			@this.fontManager = fontManager;
@@ -44,7 +44,7 @@ namespace spades {
 
 			SetupRenderer();
 
-			@manager = spades::ui::UIManager(renderer, audioDevice);
+			@manager = spades::ui::UIManager(renderer, audioDevice, pixelRatio);
 			@manager.RootElement.Font = fontManager.GuiFont;
 			Init();
 		}
@@ -103,11 +103,6 @@ namespace spades {
 			renderer.DrawImage(renderer.RegisterImage("Gfx/White.tga"),
 				AABB2(0.f, 0.f, renderer.ScreenWidth, renderer.ScreenHeight));
 
-			// draw title logo
-			Image@ img = renderer.RegisterImage("Gfx/Title/LogoSmall.png");
-			renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.f);
-			renderer.DrawImage(img, AABB2(10.f, 10.f, img.Width, img.Height));
-
 			manager.RunFrame(dt);
 			manager.Render();
 
@@ -152,8 +147,8 @@ namespace spades {
 
 			@this.Font = ui.fontManager.GuiFont;
 
-			float width = Manager.Renderer.ScreenWidth;
-			float height = Manager.Renderer.ScreenHeight;
+			float width = Manager.ScreenWidth;
+			float height = Manager.ScreenHeight;
 			{
 				spades::ui::Button button(Manager);
 				button.Caption = _Tr("StartupScreen", "Start");
@@ -304,8 +299,14 @@ namespace spades {
 		}
 
 		void Render() {
-			UIElement::Render();
+			Renderer@ renderer = Manager.Renderer;
 
+			// draw title logo
+			Image@ img = renderer.RegisterImage("Gfx/Title/LogoSmall.png");
+			renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.f);
+			renderer.DrawImage(img, AABB2(10.f, 10.f, img.Width, img.Height));
+
+			UIElement::Render();
 		}
 	}
 
@@ -1883,7 +1884,7 @@ namespace spades {
 
 
 	StartupScreenUI@ CreateStartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice,
-		FontManager@ fontManager, StartupScreenHelper@ helper) {
-		return StartupScreenUI(renderer, audioDevice, fontManager, helper);
+		FontManager@ fontManager, float pixelRatio, StartupScreenHelper@ helper) {
+		return StartupScreenUI(renderer, audioDevice, fontManager, pixelRatio, helper);
 	}
 }

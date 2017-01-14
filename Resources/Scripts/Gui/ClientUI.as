@@ -176,14 +176,14 @@ namespace spades {
 			@this.helper = ui.helper;
 
 			float winW = 180.f, winH = 32.f * 4.f - 2.f;
-			float winX = (Manager.Renderer.ScreenWidth - winW) * 0.5f;
-			float winY = (Manager.Renderer.ScreenHeight - winH) * 0.5f;
+			float winX = (Manager.ScreenWidth - winW) * 0.5f;
+			float winY = (Manager.ScreenHeight - winH) * 0.5f;
 
 			{
 				spades::ui::Label label(Manager);
 				label.BackgroundColor = Vector4(0, 0, 0, 0.5f);
 				label.Bounds = AABB2(0.f, 0.f,
-					Manager.Renderer.ScreenWidth, Manager.Renderer.ScreenHeight);
+					Manager.ScreenWidth, Manager.ScreenHeight);
 				AddChild(label);
 			}
 
@@ -462,9 +462,9 @@ namespace spades {
 			@this.helper = ui.helper;
 			this.isTeamChat = isTeamChat;
 
-			float winW = Manager.Renderer.ScreenWidth * 0.7f, winH = 66.f;
-			float winX = (Manager.Renderer.ScreenWidth - winW) * 0.5f;
-			float winY = (Manager.Renderer.ScreenHeight - winH) - 20.f;
+			float winW = Manager.ScreenWidth * 0.7f, winH = 66.f;
+			float winX = (Manager.ScreenWidth - winW) * 0.5f;
+			float winY = (Manager.ScreenHeight - winH) - 20.f;
 			/*
 			{
 				spades::ui::Label label(Manager);
@@ -641,9 +641,9 @@ namespace spades {
 			this.Bounds = Manager.RootElement.Bounds;
 
 			float contentsWidth = 700.f;
-			float contentsLeft = (Manager.Renderer.ScreenWidth - contentsWidth) * 0.5f;
-			contentsHeight = Manager.Renderer.ScreenHeight - 200.f;
-			contentsTop = (Manager.Renderer.ScreenHeight - contentsHeight - 106.f) * 0.5f;
+			float contentsLeft = (Manager.ScreenWidth - contentsWidth) * 0.5f;
+			contentsHeight = Manager.ScreenHeight - 200.f;
+			contentsTop = (Manager.ScreenHeight - contentsHeight - 106.f) * 0.5f;
 			{
 				spades::ui::Label label(Manager);
 				label.BackgroundColor = Vector4(0, 0, 0, 0.4f);

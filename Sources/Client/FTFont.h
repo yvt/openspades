@@ -57,7 +57,7 @@ namespace spades {
 		/**
 		 * FreeType2 based font renderer.
 		 *
-		 
+
 		 * Warning: only one thread can access multiple FTFonts sharing the same FTFontSet
 		 *          at the same time.
 		 */
@@ -86,10 +86,13 @@ namespace spades {
 			};
 			std::unordered_map<std::pair<FT_Face, uint32_t>, Glyph, GlyphHash> glyphs;
 			std::unordered_map<uint32_t, std::reference_wrapper<Glyph>> glyphMap;
-			float lineHeight;
+			float const lineHeight;
 			/** em height */
-			float height;
+			float const height;
 			float baselineY;
+			float const pixelRatio;
+			/** pixelRatio * 72 */
+			int const dpi;
 
 			bool rendererIsLowQuality;
 
@@ -111,7 +114,8 @@ namespace spades {
 			~FTFont();
 
 		public:
-			FTFont(client::IRenderer *, FTFontSet *, float height, float lineHeight);
+			FTFont(client::IRenderer *, FTFontSet *, float height, float lineHeight,
+			       float pixelRatio = 1.0f);
 
 			Vector2 Measure(const std::string &) override;
 

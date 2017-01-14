@@ -67,7 +67,7 @@ namespace spades {
 			};
 		}
 
-		FontManager::FontManager(IRenderer *renderer) {
+		FontManager::FontManager(IRenderer *renderer, float pixelRatio) {
 			{
 				auto *font =
 				  new Quake3Font(renderer, renderer->RegisterImage("Gfx/Fonts/SquareFontBig.png"),
@@ -76,18 +76,18 @@ namespace spades {
 				SPLog("Font 'SquareFont (Large)' Loaded");
 				squareDesignFont.Set(font, false);
 			}
-			largeFont.Set(
-			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 34.f, 48.f),
-			  false);
-			mediumFont.Set(
-			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 22.f, 32.f),
-			  false);
-			smallFont.Set(
-			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 16.f, 20.f),
-			  false);
-			smallerFont.Set(
-			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 15.f, 18.f),
-			  false);
+			largeFont.Set(new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet,
+			                                   34.f, 48.f, pixelRatio),
+			              false);
+			mediumFont.Set(new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet,
+			                                    22.f, 32.f, pixelRatio),
+			               false);
+			smallFont.Set(new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet,
+			                                   16.f, 20.f, pixelRatio),
+			              false);
+			smallerFont.Set(new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet,
+			                                     15.f, 18.f, pixelRatio),
+			                false);
 		}
 
 		FontManager::~FontManager() {}

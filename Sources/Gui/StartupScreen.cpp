@@ -35,12 +35,14 @@
 namespace spades {
 	namespace gui {
 		StartupScreen::StartupScreen(client::IRenderer *r, client::IAudioDevice *a,
-		                             StartupScreenHelper *helper, client::FontManager *fontManager)
+		                             StartupScreenHelper *helper, client::FontManager *fontManager,
+		                             float pixelRatio)
 		    : renderer(r),
 		      audioDevice(a),
 		      startRequested(false),
 		      helper(helper),
-		      fontManager(fontManager) {
+		      fontManager(fontManager),
+		      pixelRatio(pixelRatio) {
 			SPADES_MARK_FUNCTION();
 			if (r == NULL)
 				SPInvalidArgument("r");
@@ -224,14 +226,16 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			ScopedPrivilegeEscalation privilege;
-			static ScriptFunction uiFactory("StartupScreenUI@ CreateStartupScreenUI(Renderer@, "
-			                                "AudioDevice@, FontManager@, StartupScreenHelper@)");
+			static ScriptFunction uiFactory(
+			  "StartupScreenUI@ CreateStartupScreenUI(Renderer@, "
+			  "AudioDevice@, FontManager@, float, StartupScreenHelper@)");
 			{
 				ScriptContextHandle ctx = uiFactory.Prepare();
 				ctx->SetArgObject(0, renderer);
 				ctx->SetArgObject(1, audioDevice);
 				ctx->SetArgObject(2, fontManager);
-				ctx->SetArgObject(3, &*helper);
+				ctx->SetArgFloat(3, pixelRatio);
+				ctx->SetArgObject(4, &*helper);
 
 				ctx.ExecuteChecked();
 				ui = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
@@ -265,16 +269,19 @@ namespace spades {
 				StartupScreenHelper *helper;
 
 			protected:
-				virtual auto GetRendererType() -> RendererType { return RendererType::SW; }
-				virtual client::IAudioDevice *CreateAudioDevice() {
+				auto GetRendererType() -> RendererType override { return RendererType::SW; }
+				client::IAudioDevice *CreateAudioDevice() override {
 					return new audio::NullDevice();
 				}
-				virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) {
-					Handle<client::FontManager> fontManager(new client::FontManager(renderer),
-					                                        false);
-					view.Set(new StartupScreen(renderer, dev, helper, fontManager), true);
+				View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev,
+				                 float pixelRatio) override {
+					Handle<client::FontManager> fontManager(
+					  new client::FontManager(renderer, pixelRatio), false);
+					view.Set(new StartupScreen(renderer, dev, helper, fontManager, pixelRatio),
+					         true);
 					return view;
 				}
+				bool DoesSupportNativeDPIScaling() override { return true; }
 
 			public:
 				ConcreteRunner(StartupScreenHelper *helper) : helper(helper) {}

@@ -40,9 +40,9 @@ namespace spades {
 			@this.owner = owner;
 			this.Bounds = owner.Bounds;
 			ContentsWidth = 800.f;
-			ContentsLeft = (Manager.Renderer.ScreenWidth - ContentsWidth) * 0.5f;
+			ContentsLeft = (Manager.ScreenWidth - ContentsWidth) * 0.5f;
 			ContentsHeight = 550.f;
-			ContentsTop = (Manager.Renderer.ScreenHeight - ContentsHeight) * 0.5f;
+			ContentsTop = (Manager.ScreenHeight - ContentsHeight) * 0.5f;
 
 			{
 				spades::ui::Label label(Manager);

@@ -39,6 +39,8 @@ namespace spades {
 			bool IsAltPressed = false;
 			bool IsMetaPressed = false;
 
+			float PixelRatio;
+
 			// IME (Input Method Editor) support
 			string EditingText;
 			int EditingStart = 0;
@@ -63,15 +65,21 @@ namespace spades {
 				get final { return audioDevice; }
 			}
 
-			UIManager(Renderer@ renderer, AudioDevice@ audioDevice) {
+			float ScreenWidth;
+			float ScreenHeight;
+
+			UIManager(Renderer@ renderer, AudioDevice@ audioDevice, float pixelRatio = 1.0) {
 				@this.renderer = renderer;
 				@this.audioDevice = audioDevice;
+				PixelRatio = pixelRatio;
+				ScreenWidth = renderer.ScreenWidth / pixelRatio;
+				ScreenHeight = renderer.ScreenHeight / pixelRatio;
 
 				@RootElement = UIElement(this);
-				RootElement.Size = Vector2(renderer.ScreenWidth, renderer.ScreenHeight);
+				RootElement.Size = Vector2(ScreenWidth, ScreenHeight);
 
 				@DefaultCursor = Cursor(this, renderer.RegisterImage("Gfx/UI/Cursor.png"), Vector2(8.f, 8.f));
-				MouseCursorPosition = Vector2(renderer.ScreenWidth * 0.5f, renderer.ScreenHeight * 0.5f);
+				MouseCursorPosition = Vector2(ScreenWidth * 0.5f, ScreenHeight * 0.5f);
 
 				@keyRepeater.handler = KeyRepeatEventHandler(this.HandleKeyInner);
 				@charRepeater.handler = KeyRepeatEventHandler(this.HandleCharInner);
@@ -141,16 +149,13 @@ namespace spades {
 			}
 
 			void MouseEvent(float x, float y) {
-				/*
-				MouseCursorPosition = Vector2(
-					Clamp(MouseCursorPosition.x + x, 0.f, renderer.ScreenWidth),
-					Clamp(MouseCursorPosition.y + y, 0.f, renderer.ScreenHeight)
-				);
-				*/
+				x /= PixelRatio;
+				y /= PixelRatio;
+
 				// in current version, absolute mouse mode is supported.
 				MouseCursorPosition = Vector2(
-					Clamp(x, 0.f, renderer.ScreenWidth),
-					Clamp(y, 0.f, renderer.ScreenHeight)
+					Clamp(x, 0.f, ScreenWidth),
+					Clamp(y, 0.f, ScreenHeight)
 				);
 
 				MouseEventDone();
@@ -268,6 +273,8 @@ namespace spades {
 						Vector2 off = e.ScreenPosition;
 						rt.min += off;
 						rt.max += off;
+						rt.min *= PixelRatio;
+						rt.max *= PixelRatio;
 						return rt;
 					}else{
 						return AABB2();
@@ -357,8 +364,11 @@ namespace spades {
 			}
 
 			void Render() {
+				Renderer.Save();
+				Renderer.Scale(PixelRatio);
+
 				clipRects.length = 0;
-				clipRects.insertLast(AABB2(0, 0, Renderer.ScreenWidth, Renderer.ScreenHeight));
+				clipRects.insertLast(AABB2(0, 0, ScreenWidth, ScreenHeight));
 
 				if(RootElement.Visible) {
 					RootElement.Render();
@@ -369,6 +379,8 @@ namespace spades {
 				if(c !is null) {
 					c.Render(MouseCursorPosition);
 				}
+
+				Renderer.Restore();
 			}
 
 			void PushClippingRect(AABB2 rect) {

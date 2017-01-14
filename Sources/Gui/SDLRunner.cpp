@@ -24,6 +24,7 @@
 
 #include "SDLRunner.h"
 
+#include "Icon.h"
 #include "SDLGLDevice.h"
 #include <Audio/ALDevice.h>
 #include <Audio/NullDevice.h>
@@ -39,7 +40,6 @@
 #include <Draw/SWPort.h>
 #include <Draw/SWRenderer.h>
 #include <OpenSpades.h>
-#include "Icon.h"
 
 SPADES_SETTING(r_videoWidth);
 SPADES_SETTING(r_videoHeight);
@@ -56,7 +56,7 @@ DEFINE_SPADES_SETTING(s_audioDriver, "openal");
 namespace spades {
 	namespace gui {
 
-		SDLRunner::SDLRunner() : m_hasSystemMenu(false) {}
+		SDLRunner::SDLRunner() : m_hasSystemMenu(false), m_devicePixelRatio{1.0f} {}
 
 		SDLRunner::~SDLRunner() {}
 
@@ -120,9 +120,9 @@ namespace spades {
 					break;
 				case SDL_MOUSEMOTION:
 					if (m_active) {
-						// FIXME: this might fail with cg_smp
 						if (view->NeedsAbsoluteMouseCoordinate()) {
-							view->MouseEvent(event.motion.x, event.motion.y);
+							view->MouseEvent(event.motion.x * m_devicePixelRatio,
+							                 event.motion.y * m_devicePixelRatio);
 						} else {
 							view->MouseEvent(event.motion.xrel, event.motion.yrel);
 						}
@@ -132,7 +132,7 @@ namespace spades {
 				case SDL_KEYDOWN:
 					if (!event.key.repeat) {
 						if (event.key.keysym.sym == SDLK_RETURN &&
-							event.key.keysym.mod & (KMOD_LALT | KMOD_RALT)) {
+						    event.key.keysym.mod & (KMOD_LALT | KMOD_RALT)) {
 							SDL_Window *window = SDL_GetWindowFromID(event.key.windowID);
 
 							// Toggle fullscreen mode
@@ -175,9 +175,9 @@ namespace spades {
 		}
 
 		void SDLRunner::RunClientLoop(spades::client::IRenderer *renderer,
-		                              spades::client::IAudioDevice *audio) {
+		                              spades::client::IAudioDevice *audio, float pixelRatio) {
 			{
-				Handle<View> view(CreateView(renderer, audio), false);
+				Handle<View> view(CreateView(renderer, audio, pixelRatio), false);
 				Uint32 ot = SDL_GetTicks();
 				bool running = true;
 
@@ -265,6 +265,9 @@ namespace spades {
 					editing = ed;
 					if (editing) {
 						AABB2 rt = view->GetTextInputRect();
+						rt.min /= m_devicePixelRatio;
+						rt.max /= m_devicePixelRatio;
+
 						SDL_Rect srt;
 						srt.x = (int)rt.GetMinX();
 						srt.y = (int)rt.GetMinY();
@@ -305,6 +308,8 @@ namespace spades {
 
 			Handle<Bitmap> framebuffer;
 			void SetFramebufferBitmap() {
+				SPADES_MARK_FUNCTION();
+
 				if (adjusted) {
 					framebuffer.Set(new Bitmap(actualW, actualH), false);
 				} else {
@@ -316,6 +321,8 @@ namespace spades {
 
 		protected:
 			virtual ~SDLSWPort() {
+				SPADES_MARK_FUNCTION();
+
 				if (surface && SDL_MUSTLOCK(surface)) {
 					SDL_UnlockSurface(surface);
 				}
@@ -323,6 +330,8 @@ namespace spades {
 
 		public:
 			SDLSWPort(SDL_Window *wnd) : wnd(wnd), surface(nullptr) {
+				SPADES_MARK_FUNCTION();
+
 				surface = SDL_GetWindowSurface(wnd);
 				// FIXME: check pixel format
 				if (SDL_MUSTLOCK(surface)) {
@@ -343,6 +352,8 @@ namespace spades {
 			}
 			virtual Bitmap *GetFramebuffer() { return framebuffer; }
 			virtual void Swap() {
+				SPADES_MARK_FUNCTION();
+
 				if (adjusted) {
 					int sy = (surface->h - actualH) >> 1;
 					int sx = (surface->w - actualW) >> 1;
@@ -371,6 +382,59 @@ namespace spades {
 			}
 		};
 
+		class SDLTextureSWPort : public draw::SWPort {
+			SDL_Window *wnd;
+			int deviceWidth, deviceHeight;
+			SDL_Renderer *sdlRenderer;
+			SDL_Texture *sdlTexture;
+
+			Handle<Bitmap> framebuffer;
+			void SetFramebufferBitmap() {
+				SPADES_MARK_FUNCTION();
+				framebuffer.Set(new Bitmap(deviceWidth, deviceHeight), false);
+			}
+
+		protected:
+			virtual ~SDLTextureSWPort() {
+				SDL_DestroyTexture(sdlTexture);
+				SDL_DestroyRenderer(sdlRenderer);
+			}
+
+		public:
+			SDLTextureSWPort(SDL_Window *wnd) : wnd(wnd) {
+				SPADES_MARK_FUNCTION();
+
+				SDL_GL_GetDrawableSize(wnd, &deviceWidth, &deviceHeight);
+
+				sdlRenderer = SDL_CreateRenderer(wnd, -1, 0);
+
+				if (!sdlRenderer) {
+					SPRaise("Failed to create SDL 2D renderer.");
+				}
+
+				// Round-down the surface size to meet the software renderer's requirements.
+				deviceWidth &= ~7;
+				deviceHeight &= ~7;
+
+				sdlTexture =
+				  SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888,
+				                    SDL_TEXTUREACCESS_STREAMING, deviceWidth, deviceHeight);
+
+				SetFramebufferBitmap();
+			}
+			virtual Bitmap *GetFramebuffer() { return framebuffer; }
+			virtual void Swap() {
+				SPADES_MARK_FUNCTION();
+
+				SDL_RenderSetViewport(sdlRenderer, nullptr);
+
+				SDL_UpdateTexture(sdlTexture, nullptr, framebuffer->GetPixels(), deviceWidth * 4);
+				SDL_RenderCopy(sdlRenderer, sdlTexture, nullptr, nullptr);
+
+				SDL_RenderPresent(sdlRenderer);
+			}
+		};
+
 		client::IRenderer *SDLRunner::CreateRenderer(SDL_Window *wnd) {
 			switch (GetRendererType()) {
 				case RendererType::GL: {
@@ -378,7 +442,12 @@ namespace spades {
 					return new draw::GLRenderer(glDevice);
 				}
 				case RendererType::SW: {
+#ifdef __MACOSX__
+					// We need SDLTextureSWPort to enable Hi-DPI support
+					Handle<SDLTextureSWPort> port(new SDLTextureSWPort(wnd), false);
+#else
 					Handle<SDLSWPort> port(new SDLSWPort(wnd), false);
+#endif
 					return new draw::SWRenderer(port);
 				}
 				default: SPRaise("Invalid renderer type");
@@ -443,6 +512,24 @@ namespace spades {
 #endif
 				}
 
+				bool tryNativeDPIScaling = false;
+				if (DoesSupportNativeDPIScaling()) {
+					switch (rtype) {
+						case RendererType::GL: tryNativeDPIScaling = true; break;
+						case RendererType::SW:
+// SDL_GL_GetDrawableSize is unavailable for software renderer ... except
+// macOS version of SDL
+#ifdef __MACOSX__
+							tryNativeDPIScaling = true;
+#endif
+							break;
+					}
+				}
+
+				if (tryNativeDPIScaling) {
+					sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
+				}
+
 				int w = width;
 				int h = height;
 
@@ -478,8 +565,22 @@ namespace spades {
 				{
 					Handle<client::IRenderer> renderer(CreateRenderer(window), false);
 					Handle<client::IAudioDevice> audio(CreateAudioDevice(), false);
+					float pixelRatio = 1.0f;
 
-					RunClientLoop(renderer, audio);
+					if (tryNativeDPIScaling) {
+						int nativeWidth, virtualWidth;
+						SDL_GL_GetDrawableSize(window, &nativeWidth, nullptr);
+						SDL_GetWindowSize(window, &virtualWidth, nullptr);
+						pixelRatio = static_cast<float>(nativeWidth) / virtualWidth;
+						m_devicePixelRatio = pixelRatio;
+					}
+
+					float forcedScaling = GetForcedDPIScalingValue();
+					if (forcedScaling != 0.0f) {
+						pixelRatio = forcedScaling;
+					}
+
+					RunClientLoop(renderer, audio, pixelRatio);
 				}
 			} catch (...) {
 				SDL_Quit();

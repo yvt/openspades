@@ -34,7 +34,7 @@ namespace spades {
 			int m_videoHeight;
 
 		protected:
-			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *audio) = 0;
+			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *audio, float pixelRatio) = 0;
 
 		public:
 			Runner();

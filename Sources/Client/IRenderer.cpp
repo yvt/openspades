@@ -156,9 +156,9 @@ namespace spades {
 		                                  const AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 
-			DrawImage(image, Vector2::Make(outRect.GetMinX(), outRect.GetMinY()),
-			          Vector2::Make(outRect.GetMaxX(), outRect.GetMinY()),
-			          Vector2::Make(outRect.GetMinX(), outRect.GetMaxY()), inRect);
+			DrawImageLowLevel(image, Vector2::Make(outRect.GetMinX(), outRect.GetMinY()),
+			                  Vector2::Make(outRect.GetMaxX(), outRect.GetMinY()),
+			                  Vector2::Make(outRect.GetMinX(), outRect.GetMaxY()), inRect);
 		}
 
 		void IRenderer::SetScissor(const AABB2 &scissorRect) {

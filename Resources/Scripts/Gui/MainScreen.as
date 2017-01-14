@@ -164,6 +164,7 @@ namespace spades {
 			}
 
 			// draw title logo
+			// TODO: draw this inside an UIElement so DPI scaling is applied
 			Image@ img = renderer.RegisterImage("Gfx/Title/Logo.png");
 			renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.f);
 			renderer.DrawImage(img, Vector2((renderer.ScreenWidth - img.Width) * 0.5f, 64.f));
@@ -369,8 +370,8 @@ namespace spades {
 			@this.helper = ui.helper;
 
 			float contentsWidth = 750.f;
-			float contentsLeft = (Manager.Renderer.ScreenWidth - contentsWidth) * 0.5f;
-			float footerPos = Manager.Renderer.ScreenHeight - 50.f;
+			float contentsLeft = (Manager.ScreenWidth - contentsWidth) * 0.5f;
+			float footerPos = Manager.ScreenHeight - 50.f;
 			{
 				spades::ui::Button button(Manager);
 				button.Caption = _Tr("MainScreen", "Connect");

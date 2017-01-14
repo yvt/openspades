@@ -40,6 +40,7 @@ namespace spades {
 			Handle<client::FontManager> fontManager;
 			float timeToStartInitialization;
 			bool startRequested = false;
+			float pixelRatio;
 
 			Handle<StartupScreenHelper> helper;
 			Handle<asIScriptObject> ui;
@@ -56,7 +57,7 @@ namespace spades {
 
 		public:
 			StartupScreen(client::IRenderer *, client::IAudioDevice *, StartupScreenHelper *helper,
-			              client::FontManager *fontManager);
+			              client::FontManager *fontManager, float pixelRatio);
 
 			client::IRenderer *GetRenderer() { return &*renderer; }
 			client::IAudioDevice *GetAudioDevice() { return &*audioDevice; }

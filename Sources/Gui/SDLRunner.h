@@ -37,6 +37,7 @@ namespace spades {
 		class SDLRunner {
 			bool m_active;
 			bool m_hasSystemMenu;
+			float m_devicePixelRatio;
 
 		protected:
 			enum class RendererType { GL, SW };
@@ -47,10 +48,13 @@ namespace spades {
 			std::string TranslateButton(Uint8 b);
 			virtual int GetModState();
 			void ProcessEvent(SDL_Event &event, View *);
-			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
-			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) = 0;
+			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev, float pixelRatio);
+			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev, float pixelRatio) = 0;
 			virtual client::IAudioDevice *CreateAudioDevice();
 			client::IRenderer *CreateRenderer(SDL_Window *);
+
+			virtual bool DoesSupportNativeDPIScaling() { return false; }
+			virtual float GetForcedDPIScalingValue() { return 0.0f; }
 
 		public:
 			SDLRunner();
