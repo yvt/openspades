@@ -23,6 +23,7 @@ CREDITS
 "Chameleonhider" - Configurable player name drawing
 "CenturionFox" - Server Disconnect Screen
 "DarkDracoon" - European Portuguese translation
+"BrunoDiazU" - Spanish translation
 
 And many others which weren't mentioned here.
 
