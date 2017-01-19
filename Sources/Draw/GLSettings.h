@@ -54,7 +54,7 @@ namespace spades {
 			TypedItemHandle<bool> r_lensFlare           { *this, "r_lensFlare" };
 			TypedItemHandle<bool> r_lensFlareDynamic    { *this, "r_lensFlareDynamic" };
 			TypedItemHandle<bool> r_mapSoftShadow       { *this, "r_mapSoftShadow", ItemFlags::Latch };
-			TypedItemHandle<int> r_maxAnisotropy        { *this, "r_maxAnisotropy" };
+			TypedItemHandle<float> r_maxAnisotropy      { *this, "r_maxAnisotropy", ItemFlags::Latch };
 			TypedItemHandle<bool> r_modelShadows        { *this, "r_modelShadows", ItemFlags::Latch };
 			TypedItemHandle<int> r_multisamples         { *this, "r_multisamples", ItemFlags::Latch };
 			TypedItemHandle<bool> r_occlusionQuery      { *this, "r_occlusionQuery" };
@@ -66,7 +66,7 @@ namespace spades {
 			TypedItemHandle<bool> r_sparseShadowMaps    { *this, "r_sparseShadowMaps", ItemFlags::Latch };
 			TypedItemHandle<bool> r_srgb                { *this, "r_srgb", ItemFlags::Latch };
 			TypedItemHandle<bool> r_srgb2D              { *this, "r_srgb2D", ItemFlags::Latch };
-			TypedItemHandle<bool> r_ssao                { *this, "r_ssao", ItemFlags::Latch };
+			TypedItemHandle<int> r_ssao                 { *this, "r_ssao", ItemFlags::Latch };
 			TypedItemHandle<int> r_water                { *this, "r_water", ItemFlags::Latch };
 		};
 	}

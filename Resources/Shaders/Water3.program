@@ -1,6 +1,6 @@
 Shaders/Water3.fs
 Shaders/Water3.vs
-# Use lite version of shadow shaders to keep the number of active texture stage 16
+# Use lite version of shadow shaders because SSAO is not computed for the water surface
 *shadow-lite*
 Shaders/Fog.vs
 Shaders/PhysicalModel/CookTorrance.fs

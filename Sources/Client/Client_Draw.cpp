@@ -781,9 +781,6 @@ namespace spades {
 				// large map view should come in front
 				largeMapView->Draw();
 
-				if (scoreboardVisible)
-					scoreboard->Draw();
-
 				// --- end "player is there" render
 			} else {
 				// world exists, but no local player: not joined
@@ -792,6 +789,12 @@ namespace spades {
 
 				DrawAlert();
 			}
+
+			if (!cg_hideHud)
+				centerMessageView->Draw();
+
+			if (scoreboardVisible || !p)
+				scoreboard->Draw();
 
 			if (IsLimboViewActive())
 				limbo->Draw();
@@ -887,9 +890,6 @@ namespace spades {
 			} else {
 				Draw2DWithoutWorld();
 			}
-
-			if (!cg_hideHud)
-				centerMessageView->Draw();
 
 			DrawStats();
 		}

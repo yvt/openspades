@@ -535,7 +535,7 @@ namespace spades {
 			char buf[4096];
 			va_list va;
 			va_start(va, format);
-			vsprintf(buf, format, va);
+			vsnprintf(buf, sizeof(buf), format, va);
 			va_end(va);
 			std::string str = buf;
 
@@ -549,7 +549,8 @@ namespace spades {
 			// remove '\n' in the end of the result of asctime().
 			timeStr.resize(timeStr.size() - 1);
 
-			sprintf(buf, "%s %s\n", timeStr.c_str(), str.c_str());
+			snprintf(buf, sizeof(buf), "%s %s\n", timeStr.c_str(), str.c_str());
+			buf[sizeof(buf) - 1] = 0;
 
 			std::string outStr = EscapeControlCharacters(buf);
 

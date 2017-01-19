@@ -55,7 +55,7 @@ namespace spades {
 			std::vector<uint32_t> bitmap;
 
 			IGLDevice::UInteger texture; // water color
-			std::vector<IGLDevice::UInteger> waveTextures; // bumpmap
+			IGLDevice::UInteger waveTexture; // bumpmap
 
 			struct Vertex;
 
