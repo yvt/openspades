@@ -189,7 +189,7 @@ void main() {
 
 	// Compute the line segment for refraction ray tracing
 	vec3 reflectedVS = reflect(normalize(viewPosition.xyz), normalVS);
-	reflectedVS = reflect(reflectedVS, waterPlane.xyz * vec3(-1., 1., 1.)); // reflection's Z position is inverted
+	reflectedVS = reflect(reflectedVS, waterPlane.xyz); // reflection's Z position is inverted
 	vec3 reflectTargetVS = viewPosition + reflectedVS * (abs(viewPosition.z) + 1.);
 	if (reflectTargetVS.z > -0.001) {
 		reflectTargetVS = mix(viewPosition, reflectedVS, (-0.001 - viewPosition.z) / (reflectedVS.z - viewPosition.z));

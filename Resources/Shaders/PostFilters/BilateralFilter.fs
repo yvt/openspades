@@ -41,7 +41,7 @@ void main() {
     }
     centerDepth = decodeDepth(centerDepth, zNearFar.x, zNearFar.y);
 
-    vec2 sum = vec2(0.0);
+    vec2 sum = vec2(0.0000001);
     if (isUpsampling) {
         vec2 inputOriginCoord = floor(texCoord * pixelShift.zw * 0.5) - 0.25;
         inputOriginCoord *= pixelShift.xy * 2.0;
