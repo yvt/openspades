@@ -94,7 +94,7 @@ namespace spades {
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
 
 			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(
-			  (w + 1) / 2, (h + 1) / 2, false);
+			  (w + 1) / 2, (h + 1) / 2, IGLDevice::SRGB8Alpha);
 			UpdateScissorRect(buf2.GetWidth(), buf2.GetHeight());
 			dev->Viewport(0, 0, buf2.GetWidth(), buf2.GetHeight());
 			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
@@ -126,7 +126,7 @@ namespace spades {
 
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
 
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
+			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, IGLDevice::SRGB8Alpha);
 			UpdateScissorRect(buf2.GetWidth(), buf2.GetHeight());
 			dev->Viewport(0, 0, buf2.GetWidth(), buf2.GetHeight());
 			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
@@ -151,7 +151,8 @@ namespace spades {
 
 			// Capture the input image
 			auto input = renderer->GetFramebufferManager()->CreateBufferHandle(dev->ScreenWidth(),
-			                                                                   dev->ScreenHeight());
+			                                                                   dev->ScreenHeight(),
+																			   IGLDevice::SRGB8Alpha);
 			dev->BindFramebuffer(IGLDevice::Framebuffer, framebuffer);
 			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
 			dev->CopyTexSubImage2D(IGLDevice::Texture2D, 0, workArea.x1, workArea.y1, workArea.x1,

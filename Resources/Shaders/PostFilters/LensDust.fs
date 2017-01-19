@@ -57,9 +57,6 @@ void main() {
 	sum += dust4 * blur4;
 
 	vec3 final = texture2D(inputTexture, texCoord).xyz;
-#if !LINEAR_FRAMEBUFFER
-	final *= final;
-#endif
 
 	final *= 0.95;
 	final += sum * 0.8;
@@ -70,12 +67,7 @@ void main() {
 	grain = fract(grain) - 0.5;
 	final += grain * 0.003;
 
-	// non-linearize
-#if !LINEAR_FRAMEBUFFER
-	final = sqrt(max(final, 0.));
-#else
 	final = max(final, 0.);
-#endif
 
 	gl_FragColor = vec4(final, 1.);
 }

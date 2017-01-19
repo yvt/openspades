@@ -58,7 +58,6 @@ SPADES_SETTING(r_fogShadow);
 SPADES_SETTING(r_lensFlare);
 SPADES_SETTING(r_lensFlareDynamic);
 SPADES_SETTING(r_blitFramebuffer);
-SPADES_SETTING(r_srgb);
 SPADES_SETTING(r_shadowMapSize);
 SPADES_SETTING(s_maxPolyphonics);
 SPADES_SETTING(s_eax);
@@ -319,6 +318,7 @@ namespace spades {
 				                                          "GL_ARB_texture_non_power_of_two",
 				                                          "GL_ARB_vertex_buffer_object",
 				                                          "GL_EXT_framebuffer_object",
+														  "GL_ARB_framebuffer_sRGB",
 				                                          NULL};
 
 				SPLog("--- Extensions ---");
@@ -338,27 +338,7 @@ namespace spades {
 					}
 				}
 
-				// non-requred extensions
-				if (extensions.find("GL_ARB_framebuffer_sRGB") == std::string::npos) {
-					if (r_srgb) {
-						r_srgb = 0;
-						SPLog("Disabling r_srgb: no GL_ARB_framebuffer_sRGB");
-					}
-
-					incapableConfigs.insert(
-					  std::make_pair("r_srgb", [](std::string value) -> std::string {
-						  if (std::stoi(value) != 0) {
-							  return "SRGB framebuffer is disabled because your video card doesn't "
-							         "support GL_ARB_framebuffer_sRGB.";
-						  } else {
-							  return std::string();
-						  }
-					  }));
-
-					AddReport("GL_ARB_framebuffer_sRGB is NOT SUPPORTED",
-					          MakeVector4(1.f, 1.f, 0.5f, 1.f));
-					AddReport("  r_srgb is disabled.", MakeVector4(1.f, 1.f, 1.f, 0.7f));
-				}
+				// optional extensions
 				if (extensions.find("GL_EXT_framebuffer_blit") == std::string::npos) {
 					if (r_blitFramebuffer) {
 						r_blitFramebuffer = 0;

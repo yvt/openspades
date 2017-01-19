@@ -84,11 +84,6 @@ void main() {
 
 	gl_FragColor.xyz = max(gl_FragColor.xyz, 0.);
 
-	// gamma correct
-#if !LINEAR_FRAMEBUFFER
-	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
-#endif
-
 #if USE_HDR
 	// somehow denormal occurs, so detect it here and remove
 	// (denormal destroys screen)

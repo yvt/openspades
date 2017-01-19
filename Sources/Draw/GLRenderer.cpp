@@ -93,7 +93,6 @@ namespace spades {
 		      cameraBlur(NULL),
 		      lensDustFilter(NULL),
 		      autoExposureFilter(NULL),
-		      lastColorBufferTexture(0),
 		      fogDistance(128.f),
 		      renderingMirror(false),
 		      duringSceneRendering(false),
@@ -501,8 +500,7 @@ namespace spades {
 
 			projectionViewMatrix = projectionMatrix * viewMatrix;
 
-			if (settings.r_srgb)
-				device->Enable(IGLDevice::FramebufferSRGB, true);
+			device->Enable(IGLDevice::FramebufferSRGB, true);
 			device->Enable(IGLDevice::ScissorTest, false);
 		}
 
@@ -745,9 +743,6 @@ namespace spades {
 				}
 			}
 
-			if (settings.r_srgb)
-				device->Enable(IGLDevice::FramebufferSRGB, false);
-
 			// build shadowmap
 			{
 				GLProfiler::Context p(*profiler, "Shadow Map Pass");
@@ -758,9 +753,6 @@ namespace spades {
 			}
 
 			fbManager->PrepareSceneRendering();
-
-			if (settings.r_srgb)
-				device->Enable(IGLDevice::FramebufferSRGB, true);
 
 			Vector3 bgCol;
 
@@ -1014,32 +1006,20 @@ namespace spades {
 				}
 			}
 
-			if (settings.r_srgb && settings.r_srgb2D) {
-				// in gamma corrected mode,
-				// 2d drawings are done on gamma-corrected FB
-				// see also: FrameDone
-				lastColorBufferTexture = handle.GetTexture();
-				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
-				device->Enable(IGLDevice::FramebufferSRGB, true);
+			// copy buffer to the default framebuffer, where 2D rendering occurs
 
-			} else {
-				// copy buffer to WM given framebuffer
-				if (settings.r_srgb)
-					device->Enable(IGLDevice::FramebufferSRGB, false);
+			GLProfiler::Context p(*profiler, "Copy to Default Framebuffer");
 
-				GLProfiler::Context p(*profiler, "Copying to WM-given Framebuffer");
-
-				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
-				device->Enable(IGLDevice::Blend, false);
-				device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
-				Handle<GLImage> image(new GLImage(handle.GetTexture(), device, handle.GetWidth(),
-				                                  handle.GetHeight(), false),
-				                      false);
-				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
-				DrawImage(image, AABB2(0, device->ScreenHeight(), device->ScreenWidth(),
-				                       -device->ScreenHeight()));
-				imageRenderer->Flush();
-			}
+			device->BindFramebuffer(IGLDevice::Framebuffer, 0);
+			device->Enable(IGLDevice::Blend, false);
+			device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
+			Handle<GLImage> image(new GLImage(handle.GetTexture(), device, handle.GetWidth(),
+											  handle.GetHeight(), false),
+								  false);
+			SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
+			DrawImage(image, AABB2(0, device->ScreenHeight(), device->ScreenWidth(),
+								   -device->ScreenHeight()));
+			imageRenderer->Flush();
 
 			handle.Release();
 			fbManager->MakeSureAllBuffersReleased();
@@ -1070,7 +1050,6 @@ namespace spades {
 		void GLRenderer::Blur() {
 			imageRenderer->Flush();
 
-			// FIXME: support r_srgb2D
 			GLUIBlurFilter{this}.Apply(0, scissorRect);
 
 			// Restore OpenGL state
@@ -1151,11 +1130,21 @@ namespace spades {
 
 			Vector4 col = drawColorAlphaPremultiplied;
 			if (legacyColorPremultiply) {
-				// in legacy mode, image color is
-				// non alpha-premultiplied.
+				// sRGB to linear conversion (non alpha-premultiplied)
+				col.x *= col.x;
+				col.y *= col.y;
+				col.z *= col.z;
+
+				// in legacy mode, image color is not alpha-premultiplied.
 				col.x *= col.w;
 				col.y *= col.w;
 				col.z *= col.w;
+			} else {
+				// sRGB to linear conversion (alpha-premultiplied)
+				float rcp = 1.0f / (col.w + 0.00001f);
+				col.x *= col.x * rcp;
+				col.y *= col.y * rcp;
+				col.z *= col.z * rcp;
 			}
 
 			imageRenderer->Add(outTopLeft.x, outTopLeft.y, outTopRight.x, outTopRight.y,
@@ -1195,25 +1184,6 @@ namespace spades {
 				GLProfiler::Context p(*profiler, "Draw GLProfiler Results");
 				profiler->DrawResult();
 				imageRenderer->Flush();
-			}
-
-			if (settings.r_srgb && settings.r_srgb2D && sceneUsedInThisFrame) {
-				// copy buffer to WM given framebuffer
-				int w = device->ScreenWidth();
-				int h = device->ScreenHeight();
-
-				device->Enable(IGLDevice::FramebufferSRGB, false);
-
-				GLProfiler::Context p(*profiler, "Copying to WM-given Framebuffer");
-
-				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
-				device->Enable(IGLDevice::Blend, false);
-				device->Viewport(0, 0, w, h);
-				Handle<GLImage> image(new GLImage(lastColorBufferTexture, device, w, h, false),
-				                      false);
-				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
-				DrawImage(image, AABB2(0, h, w, -h));
-				imageRenderer->Flush(); // must flush now because handle is released soon
 			}
 
 			lastTime = sceneDef.time;

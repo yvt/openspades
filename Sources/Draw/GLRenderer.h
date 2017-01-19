@@ -111,9 +111,6 @@ namespace spades {
 			// used when r_ssao = 1. only valid while rendering objects
 			IGLDevice::UInteger ssaoBufferTexture;
 
-			// used when r_srgb = 1
-			IGLDevice::UInteger lastColorBufferTexture;
-
 			float fogDistance;
 			Vector3 fogColor;
 

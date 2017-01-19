@@ -66,20 +66,18 @@ namespace spades {
 			spr.center = center;
 			spr.radius = rad;
 			spr.angle = ang;
-			if (settings.r_hdr) {
-				// linearize color
-				if (color.x > color.w || color.y > color.w || color.z > color.w) {
-					// emissive material
-					color.x *= color.x;
-					color.y *= color.y;
-					color.z *= color.z;
-				} else {
-					// scattering/absorptive material
-					float rcp = fastRcp(color.w + .01);
-					color.x *= color.x * rcp;
-					color.y *= color.y * rcp;
-					color.z *= color.z * rcp;
-				}
+			// linearize color
+			if (color.x > color.w || color.y > color.w || color.z > color.w) {
+				// emissive material
+				color.x *= color.x;
+				color.y *= color.y;
+				color.z *= color.z;
+			} else {
+				// scattering/absorptive material
+				float rcp = fastRcp(color.w + .01);
+				color.x *= color.x * rcp;
+				color.y *= color.y * rcp;
+				color.z *= color.z * rcp;
 			}
 			spr.color = color;
 			spr.area = rad * rad * 4.f /

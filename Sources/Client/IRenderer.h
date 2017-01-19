@@ -136,7 +136,8 @@ namespace spades {
 			 * @deprecated */
 			virtual void SetColor(Vector4) = 0;
 
-			/** Sets color for image drawing. Always alpha premultiplied. */
+			/** Sets color for image drawing. Always alpha premultiplied.
+			 * The color is specified in the sRGB color space (not linear color space). */
 			virtual void SetColorAlphaPremultiplied(Vector4) = 0;
 
 			void SetScissor(const AABB2 &);

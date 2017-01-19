@@ -49,7 +49,6 @@ namespace spades {
 			TypedItemHandle<bool> r_hdr                 { *this, "r_hdr", ItemFlags::Latch };
 			TypedItemHandle<bool> r_hdrAutoExposure     { *this, "r_hdrAutoExposure" };
 			TypedItemHandle<float> r_hdrGamma           { *this, "r_hdrGamma" };
-			TypedItemHandle<bool> r_highPrec            { *this, "r_highPrec", ItemFlags::Latch };
 			TypedItemHandle<bool> r_lens                { *this, "r_lens" };
 			TypedItemHandle<bool> r_lensFlare           { *this, "r_lensFlare" };
 			TypedItemHandle<bool> r_lensFlareDynamic    { *this, "r_lensFlareDynamic" };
@@ -65,8 +64,6 @@ namespace spades {
 			TypedItemHandle<int> r_shadowMapSize        { *this, "r_shadowMapSize", ItemFlags::Latch };
 			TypedItemHandle<bool> r_softParticles       { *this, "r_softParticles" };
 			TypedItemHandle<bool> r_sparseShadowMaps    { *this, "r_sparseShadowMaps", ItemFlags::Latch };
-			TypedItemHandle<bool> r_srgb                { *this, "r_srgb", ItemFlags::Latch };
-			TypedItemHandle<bool> r_srgb2D              { *this, "r_srgb2D", ItemFlags::Latch };
 			TypedItemHandle<int> r_ssao                 { *this, "r_ssao", ItemFlags::Latch };
 			TypedItemHandle<int> r_water                { *this, "r_water", ItemFlags::Latch };
 		};

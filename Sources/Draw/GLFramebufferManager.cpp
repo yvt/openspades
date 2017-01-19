@@ -78,15 +78,17 @@ namespace spades {
 			}
 
 			useMultisample = (int)settings.r_multisamples > 0;
-			useHighPrec = settings.r_highPrec ? 1 : 0;
 			useHdr = settings.r_hdr;
 
+			if (useHdr) {
+				fbInternalFormat = IGLDevice::RGBA16F;
+			} else {
+				fbInternalFormat = IGLDevice::SRGB8Alpha;
+			}
 			if (useMultisample) {
-				SPLog("Multi-sample Antialiasing Enabled");
+				SPLog("Multi-sample antialiasing enabled");
 
-				// for multisample rendering, use
-				// multisample renderbuffer for scene
-				// rendering.
+				// For multisample rendering, use multisample renderbuffer during scene rendering.
 
 				multisampledFramebuffer = dev->GenFramebuffer();
 				dev->BindFramebuffer(IGLDevice::Framebuffer, multisampledFramebuffer);
@@ -95,7 +97,7 @@ namespace spades {
 				dev->BindRenderbuffer(IGLDevice::Renderbuffer, multisampledDepthRenderbuffer);
 				dev->RenderbufferStorage(IGLDevice::Renderbuffer, (int)settings.r_multisamples,
 				                         IGLDevice::DepthComponent24, renderWidth, renderHeight);
-				SPLog("MSAA Depth Buffer Allocated");
+				SPLog("MSAA depth buffer allocated");
 
 				dev->FramebufferRenderbuffer(IGLDevice::Framebuffer, IGLDevice::DepthAttachment,
 				                             IGLDevice::Renderbuffer,
@@ -103,79 +105,23 @@ namespace spades {
 
 				multisampledColorRenderbuffer = dev->GenRenderbuffer();
 				dev->BindRenderbuffer(IGLDevice::Renderbuffer, multisampledColorRenderbuffer);
-				if (settings.r_srgb) {
-					SPLog("Creating MSAA Color Buffer with SRGB8_ALPHA");
-					useHighPrec = false;
-					dev->RenderbufferStorage(IGLDevice::Renderbuffer, (int)settings.r_multisamples,
-					                         IGLDevice::SRGB8Alpha, renderWidth, renderHeight);
 
-					SPLog("MSAA Color Buffer Allocated");
+				dev->RenderbufferStorage(IGLDevice::Renderbuffer, (int)settings.r_multisamples,
+										 fbInternalFormat, renderWidth, renderHeight);
 
-					dev->FramebufferRenderbuffer(
-					  IGLDevice::Framebuffer, IGLDevice::ColorAttachment0, IGLDevice::Renderbuffer,
-					  multisampledColorRenderbuffer);
-					IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
-					if (status != IGLDevice::FramebufferComplete) {
-						RaiseFBStatusError(status);
-					}
-					fbInternalFormat = IGLDevice::SRGB8Alpha;
-					SPLog("MSAA Framebuffer Allocated");
-				} else {
-					try {
-						if (!useHighPrec && !useHdr) {
-							SPLog("RGB10A2/HDR disabled");
-							SPRaise("jump to catch(...)");
-						}
-						dev->RenderbufferStorage(IGLDevice::Renderbuffer,
-						                         (int)settings.r_multisamples,
-						                         useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2,
-						                         renderWidth, renderHeight);
-						SPLog("MSAA Color Buffer Allocated");
+				SPLog("MSAA color buffer allocated");
 
-						dev->FramebufferRenderbuffer(
-						  IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
-						  IGLDevice::Renderbuffer, multisampledColorRenderbuffer);
-						IGLDevice::Enum status =
-						  dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
-						if (status != IGLDevice::FramebufferComplete) {
-							RaiseFBStatusError(status);
-						}
-						fbInternalFormat = useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2;
-						SPLog("MSAA Framebuffer Allocated");
-
-					} catch (...) {
-						SPLog("Renderbuffer creation failed: trying with RGB8A8");
-						useHighPrec = false;
-						useHdr = false;
-						settings.r_hdr = 0;
-						dev->RenderbufferStorage(IGLDevice::Renderbuffer,
-						                         (int)settings.r_multisamples, IGLDevice::RGBA8,
-						                         renderWidth, renderHeight);
-
-						SPLog("MSAA Color Buffer Allocated");
-
-						dev->FramebufferRenderbuffer(
-						  IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
-						  IGLDevice::Renderbuffer, multisampledColorRenderbuffer);
-						IGLDevice::Enum status =
-						  dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
-						if (status != IGLDevice::FramebufferComplete) {
-							RaiseFBStatusError(status);
-						}
-						fbInternalFormat = IGLDevice::RGBA8;
-						SPLog("MSAA Framebuffer Allocated");
-					}
+				dev->FramebufferRenderbuffer(
+				  IGLDevice::Framebuffer, IGLDevice::ColorAttachment0, IGLDevice::Renderbuffer,
+				  multisampledColorRenderbuffer);
+				IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+				if (status != IGLDevice::FramebufferComplete) {
+					RaiseFBStatusError(status);
 				}
+				SPLog("MSAA framebuffer allocated");
 			}
 
-			SPLog("Creating Non-MSAA Buffer");
-
-			// in non-multisampled rendering,
-			// we can directly draw into
-			// texture.
-			// in multisampled rendering,
-			// we must first copy to non-multismapled
-			// framebuffer to use it in shader as a texture.
+			SPLog("Creating a standard framebuffer");
 
 			renderFramebuffer = dev->GenFramebuffer();
 			dev->BindFramebuffer(IGLDevice::Framebuffer, renderFramebuffer);
@@ -185,7 +131,7 @@ namespace spades {
 			dev->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24, renderWidth,
 			                renderHeight, 0, IGLDevice::DepthComponent, IGLDevice::UnsignedInt,
 			                NULL);
-			SPLog("Depth Buffer Allocated");
+			SPLog("Depth buffer allocated");
 			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 			                  IGLDevice::Nearest);
 			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
@@ -200,104 +146,46 @@ namespace spades {
 
 			renderColorTexture = dev->GenTexture();
 			dev->BindTexture(IGLDevice::Texture2D, renderColorTexture);
-			if (settings.r_srgb) {
-				SPLog("Creating Non-MSAA SRGB buffer");
-				useHighPrec = false;
-				dev->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::SRGB8Alpha, renderWidth,
-				                renderHeight, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
-				SPLog("Color Buffer Allocated");
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-				                  IGLDevice::Linear);
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-				                  IGLDevice::Linear);
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-				                  IGLDevice::ClampToEdge);
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-				                  IGLDevice::ClampToEdge);
 
-				dev->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
-				                          IGLDevice::Texture2D, renderColorTexture, 0);
+			SPLog("Creating a standard color buffer");
+			dev->TexImage2D(IGLDevice::Texture2D, 0, fbInternalFormat, renderWidth,
+							renderHeight, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
+			SPLog("Color Buffer Allocated");
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+							  IGLDevice::Linear);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+							  IGLDevice::Linear);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+							  IGLDevice::ClampToEdge);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+							  IGLDevice::ClampToEdge);
 
-				IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
-				if (status != IGLDevice::FramebufferComplete) {
-					RaiseFBStatusError(status);
-				}
-				fbInternalFormat = IGLDevice::SRGB8Alpha;
-				SPLog("Framebuffer Created");
-			} else {
-				try {
-					if (!useHighPrec && !useHdr) {
-						SPLog("RGB10A2/HDR disabled");
-						SPRaise("jump to catch(...)");
-					}
-					dev->TexImage2D(
-					  IGLDevice::Texture2D, 0, useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2,
-					  renderWidth, renderHeight, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
-					SPLog("Color Buffer Allocated");
-					dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-					                  IGLDevice::Linear);
-					dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-					                  IGLDevice::Linear);
-					dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-					                  IGLDevice::ClampToEdge);
-					dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-					                  IGLDevice::ClampToEdge);
+			dev->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
+									  IGLDevice::Texture2D, renderColorTexture, 0);
 
-					dev->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
-					                          IGLDevice::Texture2D, renderColorTexture, 0);
-
-					IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
-					if (status != IGLDevice::FramebufferComplete) {
-						RaiseFBStatusError(status);
-					}
-					fbInternalFormat = useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2;
-					SPLog("Framebuffer Created");
-				} catch (...) {
-					SPLog("Texture creation failed: trying with RGB8A8");
-					useHighPrec = false;
-					useHdr = false;
-					settings.r_hdr = 0;
-					dev->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, renderWidth,
-					                renderHeight, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte,
-					                NULL);
-					SPLog("Color Buffer Allocated");
-					dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-					                  IGLDevice::Linear);
-					dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-					                  IGLDevice::Linear);
-					dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-					                  IGLDevice::ClampToEdge);
-					dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-					                  IGLDevice::ClampToEdge);
-
-					dev->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
-					                          IGLDevice::Texture2D, renderColorTexture, 0);
-
-					IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
-					if (status != IGLDevice::FramebufferComplete) {
-						RaiseFBStatusError(status);
-					}
-					fbInternalFormat = IGLDevice::RGBA8;
-					SPLog("Framebuffer Created");
-				}
+			IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+			if (status != IGLDevice::FramebufferComplete) {
+				RaiseFBStatusError(status);
 			}
+			SPLog("Created a standard framebuffer");
 
 			if ((int)settings.r_water >= 2) {
-				SPLog("Creating Mirror framebuffer");
+				SPLog("Creating a mirror image framebuffer");
 				mirrorFramebuffer = dev->GenFramebuffer();
 				dev->BindFramebuffer(IGLDevice::Framebuffer, mirrorFramebuffer);
 
 				mirrorColorTexture = dev->GenTexture();
 				dev->BindTexture(IGLDevice::Texture2D, mirrorColorTexture);
-				SPLog("Creating Mirror texture");
-				dev->TexImage2D(IGLDevice::Texture2D, 0, fbInternalFormat, renderWidth,
-				                renderHeight, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
 
-				SPLog("Color Buffer Allocated");
+				SPLog("Creating a mirrored image color texture");
+				dev->TexImage2D(IGLDevice::Texture2D, 0, fbInternalFormat, renderWidth,
+								renderHeight, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
+				SPLog("Created a mirrored image color texture");
+
 				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-				                  IGLDevice::Linear);
+				                  IGLDevice::Nearest);
 				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-				                  IGLDevice::Linear);
+				                  IGLDevice::Nearest);
 				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
 				                  IGLDevice::ClampToEdge);
 				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
@@ -306,14 +194,14 @@ namespace spades {
 				dev->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
 				                          IGLDevice::Texture2D, mirrorColorTexture, 0);
 
-				SPLog("Creating Mirror depth texture");
+				SPLog("Creating a mirrored image depth texture");
 				mirrorDepthTexture = dev->GenTexture();
 				dev->BindTexture(IGLDevice::Texture2D, mirrorDepthTexture);
 				dev->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24, renderWidth,
 				                renderHeight, 0, IGLDevice::DepthComponent, IGLDevice::UnsignedInt,
 				                NULL);
 
-				SPLog("Depth Buffer Allocated");
+				SPLog("Created a mirrored image depth texture");
 				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 				                  IGLDevice::Nearest);
 				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
@@ -330,7 +218,7 @@ namespace spades {
 				if (status != IGLDevice::FramebufferComplete) {
 					RaiseFBStatusError(status);
 				}
-				SPLog("Mirror Framebuffer Created");
+				SPLog("Created a mirror image framebuffer");
 			} // (int)r_water >= 2
 
 			renderFramebufferWithoutDepth = dev->GenFramebuffer();
@@ -380,6 +268,12 @@ namespace spades {
 			if (mirrorDepthTexture) {
 				device->DeleteTexture(mirrorDepthTexture);
 			}
+			if (renderFramebufferWithoutDepth) {
+				device->DeleteFramebuffer(renderFramebufferWithoutDepth);
+			}
+
+			// the first buffer is an alias of renderColorTexture/renderFramebufferWithoutDepth
+			buffers.erase(buffers.begin());
 			for (const Buffer &buffer : buffers) {
 				device->DeleteFramebuffer(buffer.framebuffer);
 				device->DeleteTexture(buffer.texture);
@@ -405,6 +299,7 @@ namespace spades {
 			doingPostProcessing = false;
 
 			device->Enable(IGLDevice::DepthTest, true);
+			device->Enable(IGLDevice::FramebufferSRGB, true);
 			device->DepthMask(true);
 			device->Viewport(0, 0, renderWidth, renderHeight);
 		}
@@ -496,7 +391,7 @@ namespace spades {
 			bool needsDepth = (int)settings.r_water >= 3;
 
 			if (useMultisample) {
-				// downsample
+				// resolve MSAA
 				if (settings.r_blitFramebuffer) {
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer, fb);
 					device->BindFramebuffer(IGLDevice::DrawFramebuffer, mirrorFramebuffer);
@@ -538,7 +433,6 @@ namespace spades {
 			}
 
 			device->BindTexture(IGLDevice::Texture2D, mirrorColorTexture);
-			// device->GenerateMipmap(IGLDevice::Texture2D);
 
 			// restore framebuffer
 			if (useMultisample) {
@@ -559,7 +453,7 @@ namespace spades {
 			doingPostProcessing = true;
 
 			if (useMultisample) {
-				// downsample
+				// resolve MSAA framebuffer
 				int w = renderWidth;
 				int h = renderHeight;
 				if (settings.r_blitFramebuffer) {
@@ -597,16 +491,7 @@ namespace spades {
 
 		GLFramebufferManager::BufferHandle GLFramebufferManager::CreateBufferHandle(int w, int h,
 		                                                                            bool alpha) {
-			IGLDevice::Enum ifmt;
-			if (alpha) {
-				if (settings.r_srgb)
-					ifmt = IGLDevice::SRGB8Alpha;
-				else
-					ifmt = IGLDevice::RGBA8;
-			} else {
-				ifmt = fbInternalFormat;
-			}
-			return CreateBufferHandle(w, h, ifmt);
+			return CreateBufferHandle(w, h, fbInternalFormat);
 		}
 		GLFramebufferManager::BufferHandle
 		GLFramebufferManager::CreateBufferHandle(int w, int h, IGLDevice::Enum iFormat) {
@@ -640,9 +525,25 @@ namespace spades {
 			// no buffer is free!
 			IGLDevice::Enum ifmt = iFormat;
 
+			IGLDevice::Enum format;
+			switch (iFormat) {
+				case 1: format = IGLDevice::Red; break;
+				case 2: format = IGLDevice::RG; break;
+				case 3:
+				case IGLDevice::SRGB8:
+					format = IGLDevice::RGB; break;
+				case 4:
+				case IGLDevice::RGBA8:
+				case IGLDevice::RGBA16F:
+				case IGLDevice::SRGB8Alpha:
+					format = IGLDevice::RGBA; break;
+				default:
+					SPRaise("Unknown internal format");
+			}
+
 			IGLDevice::UInteger tex = device->GenTexture();
 			device->BindTexture(IGLDevice::Texture2D, tex);
-			device->TexImage2D(IGLDevice::Texture2D, 0, ifmt, w, h, 0, IGLDevice::Red,
+			device->TexImage2D(IGLDevice::Texture2D, 0, ifmt, w, h, 0, format,
 			                   IGLDevice::UnsignedByte, NULL);
 			SPLog("Texture allocated.");
 			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,

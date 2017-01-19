@@ -133,9 +133,6 @@ void main() {
 
 	// underwater object color
 	gl_FragColor = texture2D(screenTexture, scrPos);
-#if !LINEAR_FRAMEBUFFER
-	gl_FragColor.xyz *= gl_FragColor.xyz; // screen color to linear
-#endif
 
 	// apply fog color to water color now.
 	// note that fog is already applied to underwater object.
@@ -164,9 +161,6 @@ void main() {
 
 
 	vec3 refl = texture2D(mirrorTexture, scrPos2, lodBias).xyz;
-#if !LINEAR_FRAMEBUFFER
-	refl *= refl; // linearize
-#endif
 
 	// reflectivity
 	vec3 sunlight = EvaluateSunLight();
@@ -217,10 +211,6 @@ void main() {
 
 		gl_FragColor.xyz += sunlight * spec * att;
 	}
-
-#if !LINEAR_FRAMEBUFFER
-	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
-#endif
 
 	gl_FragColor.w = 1.;
 }

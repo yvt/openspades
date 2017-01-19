@@ -42,7 +42,6 @@ DEFINE_SPADES_SETTING(r_fxaa, "1");
 DEFINE_SPADES_SETTING(r_hdr, "0");
 DEFINE_SPADES_SETTING(r_hdrAutoExposure, "0");
 DEFINE_SPADES_SETTING(r_hdrGamma, "2.2");
-DEFINE_SPADES_SETTING(r_highPrec, "1");
 DEFINE_SPADES_SETTING(r_lens, "1");
 DEFINE_SPADES_SETTING(r_lensFlare, "1");
 DEFINE_SPADES_SETTING(r_lensFlareDynamic, "1");
@@ -58,8 +57,6 @@ DEFINE_SPADES_SETTING(r_scale, "1");
 DEFINE_SPADES_SETTING(r_shadowMapSize, "2048");
 DEFINE_SPADES_SETTING(r_softParticles, "1");
 DEFINE_SPADES_SETTING(r_sparseShadowMaps, "1");
-DEFINE_SPADES_SETTING(r_srgb, "0");
-DEFINE_SPADES_SETTING(r_srgb2D, "1");
 DEFINE_SPADES_SETTING(r_ssao, "0");
 DEFINE_SPADES_SETTING(r_water, "2");
 
