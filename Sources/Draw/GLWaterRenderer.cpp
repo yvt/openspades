@@ -469,7 +469,7 @@ namespace spades {
 			tempDepthTexture = device->GenTexture();
 			device->BindTexture(IGLDevice::Texture2D, tempDepthTexture);
 			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24,
-			                   device->ScreenWidth(), device->ScreenHeight(), 0,
+			                   renderer->GetRenderWidth(), renderer->GetRenderHeight(), 0,
 			                   IGLDevice::DepthComponent, IGLDevice::UnsignedInt, NULL);
 			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 			                     IGLDevice::Nearest);

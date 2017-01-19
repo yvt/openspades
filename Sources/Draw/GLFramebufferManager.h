@@ -71,29 +71,32 @@ namespace spades {
 
 			bool doingPostProcessing;
 
-			IGLDevice::UInteger multisampledFramebuffer;
+			int renderWidth;
+			int renderHeight;
+
+			IGLDevice::UInteger multisampledFramebuffer = 0;
 
 			// for multisample
-			IGLDevice::UInteger multisampledColorRenderbuffer;
-			IGLDevice::UInteger multisampledDepthRenderbuffer;
+			IGLDevice::UInteger multisampledColorRenderbuffer = 0;
+			IGLDevice::UInteger multisampledDepthRenderbuffer = 0;
 
 			// common
-			IGLDevice::UInteger renderFramebuffer;
-			IGLDevice::UInteger renderColorTexture;
-			IGLDevice::UInteger renderDepthTexture;
+			IGLDevice::UInteger renderFramebuffer = 0;
+			IGLDevice::UInteger renderColorTexture = 0;
+			IGLDevice::UInteger renderDepthTexture = 0;
 
-			IGLDevice::UInteger renderFramebufferWithoutDepth;
+			IGLDevice::UInteger renderFramebufferWithoutDepth = 0;
 
 			IGLDevice::Enum fbInternalFormat;
 
-			IGLDevice::UInteger mirrorFramebuffer;
-			IGLDevice::UInteger mirrorColorTexture;
-			IGLDevice::UInteger mirrorDepthTexture;
+			IGLDevice::UInteger mirrorFramebuffer = 0;
+			IGLDevice::UInteger mirrorColorTexture = 0;
+			IGLDevice::UInteger mirrorDepthTexture = 0;
 
 			std::vector<Buffer> buffers;
 
 		public:
-			GLFramebufferManager(IGLDevice *, GLSettings &);
+			GLFramebufferManager(IGLDevice *, GLSettings &, int renderWidth, int renderHeight);
 			~GLFramebufferManager();
 
 			/** setups device for scene rendering. */

@@ -85,7 +85,7 @@ namespace spades {
 				float kernelSize = std::max(1.0f, std::min(width, height) * 0.0018f);
 				sampleOffsetScale.SetValue(kernelSize / (float)width, kernelSize / (float)height);
 
-				if (width < dev->ScreenWidth()) {
+				if (width < renderer->GetRenderWidth()) {
 					// 2x downsampling
 					texCoordRange.SetValue(0.25f / width, 0.25f / height, 1.f, 1.f);
 				} else {
@@ -179,8 +179,8 @@ namespace spades {
 
 			IGLDevice *dev = renderer->GetGLDevice();
 
-			int width = dev->ScreenWidth();
-			int height = dev->ScreenHeight();
+			int width = renderer->GetRenderWidth();
+			int height = renderer->GetRenderHeight();
 
 			dev->Enable(IGLDevice::Blend, false);
 

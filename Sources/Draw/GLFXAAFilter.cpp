@@ -53,7 +53,7 @@ namespace spades {
 
 			lens->Use();
 
-			inverseVP.SetValue(1.f / dev->ScreenWidth(), 1.f / dev->ScreenHeight());
+			inverseVP.SetValue(1.f / input.GetWidth(), 1.f / input.GetHeight());
 			lensTexture.SetValue(0);
 
 			// composite to the final image
