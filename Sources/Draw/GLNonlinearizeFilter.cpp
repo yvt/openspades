@@ -41,6 +41,8 @@ namespace spades {
 
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
+			
+			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 
 			static GLProgramAttribute lensPosition("positionAttribute");
 			static GLProgramUniform lensTexture("mainTexture");
@@ -58,7 +60,6 @@ namespace spades {
 			lensGamma.SetValue(1.f / (float)renderer->GetSettings().r_hdrGamma);
 
 			// composite to the final image
-			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 
 			qr.SetCoordAttributeIndex(lensPosition());
 			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());

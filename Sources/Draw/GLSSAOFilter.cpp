@@ -125,6 +125,8 @@ namespace spades {
 			int w = width == -1 ? tex.GetWidth() : width;
 			int h = height == -1 ? tex.GetHeight() : height;
 
+			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, 1);
+
 			static GLProgramAttribute positionAttribute("positionAttribute");
 			static GLProgramUniform inputTexture("inputTexture");
 			static GLProgramUniform depthTexture("depthTexture");
@@ -168,8 +170,6 @@ namespace spades {
 			zNearFar.SetValue(def.zNear, def.zFar);
 
 			qr.SetCoordAttributeIndex(positionAttribute());
-
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, 1);
 			dev->Viewport(0, 0, w, h);
 			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();

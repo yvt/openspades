@@ -46,6 +46,8 @@ namespace spades {
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 
+			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
+			
 			float sharpeningFinalGainValue =
 			  std::max(std::min(settings.r_sharpen.operator float(), 1.0f), 0.0f);
 			GLColorBuffer blurredInput = input;
@@ -197,7 +199,6 @@ namespace spades {
 			blurPixelShift.SetValue(1.0f / (float)input.GetHeight());
 
 			// composite to the final image
-			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 
 			qr.SetCoordAttributeIndex(lensPosition());
 			dev->ActiveTexture(1);

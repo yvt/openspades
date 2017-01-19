@@ -65,6 +65,9 @@ namespace spades {
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
 
+			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(
+			  (w + 1) / 2, (h + 1) / 2, false);
+			
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
 			static GLProgramUniform blur_textureUniform("mainTexture");
 			static GLProgramUniform blur_colorUniform("colorUniform");
@@ -96,8 +99,6 @@ namespace spades {
 				dev->Enable(IGLDevice::Blend, false);
 			}
 
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(
-			  (w + 1) / 2, (h + 1) / 2, false);
 			dev->Viewport(0, 0, buf2.GetWidth(), buf2.GetHeight());
 			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
@@ -111,6 +112,8 @@ namespace spades {
 			GLQuadRenderer qr(dev);
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
+
+			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
 
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
 			static GLProgramUniform blur_textureUniform("mainTexture");
@@ -129,7 +132,6 @@ namespace spades {
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
 			dev->Enable(IGLDevice::Blend, false);
 
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
 			dev->Viewport(0, 0, buf2.GetWidth(), buf2.GetHeight());
 			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
