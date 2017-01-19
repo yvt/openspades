@@ -34,9 +34,9 @@ DEFINE_SPADES_SETTING(cg_playerName, "Deuce");
 
 namespace spades {
 	namespace gui {
-		MainScreen::MainScreen(client::IRenderer *r, client::IAudioDevice *a,
+		MainScreen::MainScreen(client::IRenderer *r, client::IAudioDevice *a, float pixelRatio,
 		                       client::FontManager *fontManager)
-		    : renderer(r), audioDevice(a), fontManager(fontManager) {
+		    : renderer(r), audioDevice(a), fontManager(fontManager), pixelRatio(pixelRatio) {
 			SPADES_MARK_FUNCTION();
 			if (r == NULL)
 				SPInvalidArgument("r");
@@ -280,13 +280,14 @@ namespace spades {
 
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction uiFactory("MainScreenUI@ CreateMainScreenUI(Renderer@, "
-			                                "AudioDevice@, FontManager@, MainScreenHelper@)");
+			                                "AudioDevice@, FontManager@, float, MainScreenHelper@)");
 			{
 				ScriptContextHandle ctx = uiFactory.Prepare();
 				ctx->SetArgObject(0, renderer);
 				ctx->SetArgObject(1, audioDevice);
 				ctx->SetArgObject(2, fontManager);
-				ctx->SetArgObject(3, &*helper);
+				ctx->SetArgFloat(3, pixelRatio);
+				ctx->SetArgObject(4, &*helper);
 
 				ctx.ExecuteChecked();
 				ui = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
@@ -312,7 +313,7 @@ namespace spades {
 
 		std::string MainScreen::Connect(const ServerAddress &host) {
 			try {
-				subview.Set(new client::Client(&*renderer, &*audioDevice, host,
+				subview.Set(new client::Client(&*renderer, &*audioDevice, host, pixelRatio,
 				                               fontManager),
 				            false);
 			} catch (const std::exception &ex) {

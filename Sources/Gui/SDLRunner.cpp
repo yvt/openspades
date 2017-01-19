@@ -449,7 +449,7 @@ namespace spades {
 		client::IRenderer *SDLRunner::CreateRenderer(SDL_Window *wnd) {
 			switch (GetRendererType()) {
 				case RendererType::GL: {
-					Handle<SDLGLDevice> glDevice(new SDLGLDevice(wnd), false);
+					Handle<SDLGLDevice> glDevice(new SDLGLDevice(wnd, DoesSupportNativeDPIScaling()), false);
 					return new draw::GLRenderer(glDevice);
 				}
 				case RendererType::SW: {

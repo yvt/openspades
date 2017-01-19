@@ -36,7 +36,7 @@ namespace spades {
 			~SDLGLDevice();
 
 		public:
-			SDLGLDevice(SDL_Window *);
+			SDLGLDevice(SDL_Window *, bool useDrawableSize);
 
 			void DepthRange(Float near, Float far) override;
 			void Viewport(Integer x, Integer y, Sizei width, Sizei height) override;

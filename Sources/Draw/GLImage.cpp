@@ -32,7 +32,8 @@ namespace spades {
 		      height(h),
 		      autoDelete(autoDelete),
 		      invWidth(1.f / w),
-		      invHeight(1.f / h) {
+		      invHeight(1.f / h),
+			  needsMipmapGeneration(false) {
 			SPADES_MARK_FUNCTION();
 			valid = true;
 		}
@@ -51,6 +52,10 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			MakeSureValid();
 			device->BindTexture(target, tex);
+			if (needsMipmapGeneration) {
+				needsMipmapGeneration = false;
+				device->GenerateMipmap(IGLDevice::Texture2D);
+			}
 		}
 
 		GLImage *GLImage::FromBitmap(spades::Bitmap *bmp, spades::draw::IGLDevice *dev) {
@@ -76,6 +81,7 @@ namespace spades {
 			Bind(IGLDevice::Texture2D);
 			device->TexSubImage2D(IGLDevice::Texture2D, 0, x, y, bmp->GetWidth(), bmp->GetHeight(),
 			                      IGLDevice::RGBA, IGLDevice::UnsignedByte, bmp->GetPixels());
+			needsMipmapGeneration = true;
 		}
 
 		void GLImage::Invalidate() {

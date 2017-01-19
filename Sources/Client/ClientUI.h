@@ -40,6 +40,8 @@ namespace spades {
 			Handle<ClientUIHelper> helper;
 			Handle<asIScriptObject> ui;
 
+			float pixelRatio;
+
 			// weak reference
 			Client *client;
 			std::string ignoreInput;
@@ -60,7 +62,7 @@ namespace spades {
 			~ClientUI();
 
 		public:
-			ClientUI(IRenderer *, IAudioDevice *, FontManager *font, Client *client);
+			ClientUI(IRenderer *, IAudioDevice *, FontManager *font, float pixelRatio, Client *client);
 			void ClientDestroyed();
 
 			client::IRenderer *GetRenderer() { return &*renderer; }

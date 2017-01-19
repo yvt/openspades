@@ -40,6 +40,7 @@ namespace spades {
 			Handle<View> subview;
 			Handle<client::FontManager> fontManager;
 			float timeToStartInitialization;
+			float pixelRatio;
 
 			Handle<MainScreenHelper> helper;
 			Handle<asIScriptObject> ui;
@@ -55,7 +56,7 @@ namespace spades {
 			~MainScreen();
 
 		public:
-			MainScreen(client::IRenderer *, client::IAudioDevice *, client::FontManager *);
+			MainScreen(client::IRenderer *, client::IAudioDevice *, float pixelRatio, client::FontManager *);
 
 			client::IRenderer *GetRenderer() { return &*renderer; }
 			client::IAudioDevice *GetAudioDevice() { return &*audioDevice; }

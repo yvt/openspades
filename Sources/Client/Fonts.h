@@ -27,7 +27,7 @@ namespace spades {
 	namespace client {
 		class FontManager : public RefCountedObject {
 		public:
-			FontManager(IRenderer *, float pixelRatio = 1.0f);
+			FontManager(IRenderer *, float pixelRatio);
 
 			IFont *GetSquareDesignFont() { return squareDesignFont; }
 			IFont *GetLargeFont() { return largeFont; }

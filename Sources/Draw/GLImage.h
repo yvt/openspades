@@ -34,6 +34,7 @@ namespace spades {
 			float invWidth, invHeight;
 			bool autoDelete;
 			bool valid;
+			bool needsMipmapGeneration;
 			void MakeSureValid();
 
 		protected:

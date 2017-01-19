@@ -41,7 +41,7 @@ namespace spades {
         private ConfigItem cg_playerName("cg_playerName");
         private ConfigItem cg_playerNameIsSet("cg_playerNameIsSet", "0");
 
-		MainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, FontManager@ fontManager, MainScreenHelper@ helper) {
+		MainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, FontManager@ fontManager, float pixelRatio, MainScreenHelper@ helper) {
 			@this.renderer = renderer;
 			@this.audioDevice = audioDevice;
 			@this.fontManager = fontManager;
@@ -49,7 +49,7 @@ namespace spades {
 
 			SetupRenderer();
 
-			@manager = spades::ui::UIManager(renderer, audioDevice);
+			@manager = spades::ui::UIManager(renderer, audioDevice, pixelRatio);
 			@manager.RootElement.Font = fontManager.GuiFont;
 
 			@mainMenu = MainScreenMainMenu(this);
@@ -833,7 +833,7 @@ namespace spades {
 	}
 
 	MainScreenUI@ CreateMainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice,
-		FontManager@ fontManager, MainScreenHelper@ helper) {
-		return MainScreenUI(renderer, audioDevice, fontManager, helper);
+		FontManager@ fontManager, float pixelRatio, MainScreenHelper@ helper) {
+		return MainScreenUI(renderer, audioDevice, fontManager, pixelRatio, helper);
 	}
 }

@@ -225,12 +225,11 @@ namespace spades {
 			spades::ServerAddress addr;
 
 		protected:
-			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer,
+			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                                      spades::client::IAudioDevice *audio,
-			                                      float pixelRatio) {
-				(void)pixelRatio; // TODO: not supported!
-				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				return new spades::client::Client(renderer, audio, addr, fontManager);
+			                                      float pixelRatio) override {
+				Handle<client::FontManager> fontManager(new client::FontManager(renderer, pixelRatio), false);
+				return new spades::client::Client(renderer, audio, addr, pixelRatio, fontManager);
 			}
 
 		public:
@@ -242,15 +241,12 @@ namespace spades {
 	void StartMainScreen() {
 		class ConcreteRunner : public spades::gui::Runner {
 		protected:
-			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer,
+			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                                      spades::client::IAudioDevice *audio,
-			                                      float pixelRatio) {
-				(void)pixelRatio; // TODO: not supported!
-				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				return new spades::gui::MainScreen(renderer, audio, fontManager);
+			                                      float pixelRatio) override {
+				Handle<client::FontManager> fontManager(new client::FontManager(renderer, pixelRatio), false);
+				return new spades::gui::MainScreen(renderer, audio, pixelRatio, fontManager);
 			}
-
-		public:
 		};
 		ConcreteRunner runner;
 		runner.RunProtected();

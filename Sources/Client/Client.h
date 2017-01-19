@@ -111,6 +111,7 @@ namespace spades {
 			std::unique_ptr<GameMapWrapper> mapWrapper;
 			Handle<IRenderer> renderer;
 			Handle<IAudioDevice> audioDevice;
+			float pixelRatio;
 			float time;
 			bool readyToClose;
 			float worldSubFrame;
@@ -291,7 +292,7 @@ namespace spades {
 			virtual ~Client();
 
 		public:
-			Client(IRenderer *, IAudioDevice *, const ServerAddress &host, FontManager *);
+			Client(IRenderer *, IAudioDevice *, const ServerAddress &host, float pixelRatio, FontManager *);
 
 			virtual void RunFrame(float dt);
 

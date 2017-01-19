@@ -118,10 +118,13 @@ namespace spades {
 		static void ReportMissingFunc(const char *func) { SPRaise("GL function %s missing", func); }
 #endif
 
-		SDLGLDevice::SDLGLDevice(SDL_Window *s) : window(s) {
+		SDLGLDevice::SDLGLDevice(SDL_Window *s, bool useDrawableSize) : window(s) {
 			SPLog("starting SDLGLDevice");
 
-			SDL_GetWindowSize(window, &w, &h);
+			if (useDrawableSize)
+				SDL_GL_GetDrawableSize(window, &w, &h);
+			else
+				SDL_GetWindowSize(window, &w, &h);
 			context = SDL_GL_CreateContext(s);
 			if (!context) {
 				const char *err = SDL_GetError();

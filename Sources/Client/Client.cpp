@@ -67,10 +67,11 @@ namespace spades {
 		std::mt19937_64 mt_engine_client(
 		  r_device_client()); // Seed Mersenne twister with non-deterministic 32-bit seed
 
-		Client::Client(IRenderer *r, IAudioDevice *audioDev, const ServerAddress &host,
+		Client::Client(IRenderer *r, IAudioDevice *audioDev, const ServerAddress &host, float pixelRatio,
 		               FontManager *fontManager)
 		    : renderer(r),
 		      audioDevice(audioDev),
+			  pixelRatio(pixelRatio),
 		      playerName(cg_playerName.operator std::string().substr(0, 15)),
 		      hasDelayedReload(false),
 		      hostname(host),
@@ -131,7 +132,7 @@ namespace spades {
 			scoreboard.reset(new ScoreboardView(this));
 			paletteView.reset(new PaletteView(this));
 			tcView.reset(new TCProgressView(this));
-			scriptedUI.Set(new ClientUI(renderer, audioDev, fontManager, this), false);
+			scriptedUI.Set(new ClientUI(renderer, audioDev, fontManager, pixelRatio, this), false);
 
 			renderer->SetGameMap(nullptr);
 		}

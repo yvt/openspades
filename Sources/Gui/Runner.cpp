@@ -27,6 +27,8 @@
 
 DEFINE_SPADES_SETTING(r_videoWidth, "1024");
 DEFINE_SPADES_SETTING(r_videoHeight, "640");
+DEFINE_SPADES_SETTING(cl_hidpi, "0");
+DEFINE_SPADES_SETTING(cl_pixelRatio, "0");
 
 namespace spades {
 	namespace gui {
@@ -72,10 +74,14 @@ namespace spades {
 				Runner *r;
 
 			protected:
-				virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev,
-				                         float pixelRatio) {
+				View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev,
+				                         float pixelRatio) override {
 					return r->CreateView(renderer, dev, pixelRatio);
 				}
+
+				bool DoesSupportNativeDPIScaling() override { return cl_hidpi; }
+
+				float GetForcedDPIScalingValue() override { return cl_pixelRatio; }
 
 			public:
 				ConcreteRunner(Runner *r) : r(r) {}
