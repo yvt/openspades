@@ -147,6 +147,8 @@ namespace spades {
 			inputTexture.SetValue(0);
 			dev->ActiveTexture(0);
 			dev->BindTexture(IGLDevice::Texture2D, tex.GetTexture());
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
 
 			depthTexture.SetValue(1);
 			dev->ActiveTexture(1);
@@ -171,6 +173,11 @@ namespace spades {
 			dev->Viewport(0, 0, w, h);
 			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
+
+			dev->ActiveTexture(0);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Linear);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Linear);
+
 			return buf2;
 		}
 
