@@ -23,7 +23,6 @@
 #include <memory>
 
 #include <Core/Debug.h>
-#include "FltkPreferenceImporter.h"
 #include "Settings.h"
 #include <Core/FileManager.h>
 #include <Core/IStream.h>
@@ -47,20 +46,6 @@ namespace spades {
 
 	void Settings::Load() {
 		SPADES_MARK_FUNCTION();
-
-		// import Fltk preferences
-		bool importedPref = false;
-		{
-			auto prefs = ImportFltkPreference();
-			for (const auto &item : prefs) {
-				auto *it = GetItem(item.first, nullptr);
-
-				it->Set(item.second);
-			}
-			if (prefs.size() > 0)
-				importedPref = true;
-			// FIXME: remove legacy preference?
-		}
 
 		SPLog("Loading preferences from " CONFIGFILE);
 		loaded = false;
@@ -164,12 +149,6 @@ namespace spades {
 
 			} else {
 				SPLog(CONFIGFILE " doesn't exist.");
-			}
-
-			if (importedPref) {
-				SPLog("Legacy preference was imported. Removing the legacy pref file.");
-				DeleteFltkPreference();
-				Save();
 			}
 
 			loaded = true;

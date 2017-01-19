@@ -186,7 +186,6 @@
 		E82E679C18EA7972004DBA18 /* Stopwatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88318E21792698D002ABE6D /* Stopwatch.cpp */; };
 		E82E679D18EA7972004DBA18 /* Debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F5541794BBD4004EBE88 /* Debug.cpp */; };
 		E82E679E18EA7972004DBA18 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E0AFB3179BF25B00C6B5A9 /* Settings.cpp */; };
-		E82E679F18EA7972004DBA18 /* FltkPreferenceImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E849654B18E9487300B9706D /* FltkPreferenceImporter.cpp */; };
 		E82E67A018EA7972004DBA18 /* RefCountedObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B6B6EF17E40DA700E35523 /* RefCountedObject.cpp */; };
 		E82E67A118EA7972004DBA18 /* MiniHeap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81A7C7B1865A2E900BF3FCE /* MiniHeap.cpp */; };
 		E82E67A218EA7972004DBA18 /* CP437.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E890F30E187046990090AAB8 /* CP437.cpp */; };
@@ -455,8 +454,6 @@
 		E844888617D26699005105D0 /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
 		E844888B17D3A059005105D0 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		E8493DB61A7349030055731A /* Config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
-		E849654B18E9487300B9706D /* FltkPreferenceImporter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FltkPreferenceImporter.cpp; sourceTree = "<group>"; };
-		E849654C18E9487300B9706D /* FltkPreferenceImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FltkPreferenceImporter.h; sourceTree = "<group>"; };
 		E849654E18E94F1200B9706D /* SdlFileStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SdlFileStream.cpp; sourceTree = "<group>"; };
 		E849654F18E94F1200B9706D /* SdlFileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SdlFileStream.h; sourceTree = "<group>"; };
 		E84E221318BB449A001282B0 /* FindGLEW2.cmake */ = {isa = PBXFileReference; lastKnownFileType = text; path = FindGLEW2.cmake; sourceTree = "<group>"; };
@@ -1559,8 +1556,6 @@
 				E834F5551794BBD4004EBE88 /* Debug.h */,
 				E8E0AFB3179BF25B00C6B5A9 /* Settings.cpp */,
 				E8E0AFB4179BF25B00C6B5A9 /* Settings.h */,
-				E849654B18E9487300B9706D /* FltkPreferenceImporter.cpp */,
-				E849654C18E9487300B9706D /* FltkPreferenceImporter.h */,
 				E8B6B6EF17E40DA700E35523 /* RefCountedObject.cpp */,
 				E8B6B6F017E40DAA00E35523 /* RefCountedObject.h */,
 				E81A7C7B1865A2E900BF3FCE /* MiniHeap.cpp */,
@@ -2118,7 +2113,6 @@
 				E82E679C18EA7972004DBA18 /* Stopwatch.cpp in Sources */,
 				E82E679D18EA7972004DBA18 /* Debug.cpp in Sources */,
 				E82E679E18EA7972004DBA18 /* Settings.cpp in Sources */,
-				E82E679F18EA7972004DBA18 /* FltkPreferenceImporter.cpp in Sources */,
 				E82E67A018EA7972004DBA18 /* RefCountedObject.cpp in Sources */,
 				E82E67A118EA7972004DBA18 /* MiniHeap.cpp in Sources */,
 				E82E67A218EA7972004DBA18 /* CP437.cpp in Sources */,
