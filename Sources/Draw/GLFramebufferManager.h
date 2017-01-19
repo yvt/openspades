@@ -109,7 +109,17 @@ namespace spades {
 			void MakeSureAllBuffersReleased();
 
 			IGLDevice::UInteger GetDepthTexture() { return renderDepthTexture; }
+
+			/** 
+			 * Creates BufferHandle with a given size and format.
+			 * Might clobber the current framebuffer and texture bindings.
+			 */
 			BufferHandle CreateBufferHandle(int w = -1, int h = -1, bool alpha = false);
+
+			/**
+			 * Creates BufferHandle with a given size and format.
+			 * Might clobber the current framebuffer and texture bindings.
+			 */
 			BufferHandle CreateBufferHandle(int w, int h, IGLDevice::Enum internalFormat);
 
 			void CopyToMirrorTexture(IGLDevice::UInteger fb = 0);

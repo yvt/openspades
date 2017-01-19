@@ -168,7 +168,6 @@ namespace spades {
 			GLColorBuffer cocBlur = BlurCoC(coc, 1.f);
 
 			// mix
-
 			GLColorBuffer coc2 = renderer->GetFramebufferManager()->CreateBufferHandle(w2, h2, 1);
 
 			{
@@ -262,6 +261,8 @@ namespace spades {
 			int w = buffer1.GetWidth();
 			int h = buffer1.GetHeight();
 
+			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
+
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
 			static GLProgramUniform blur_textureUniform1("texture1");
 			static GLProgramUniform blur_textureUniform2("texture2");
@@ -291,7 +292,6 @@ namespace spades {
 			dev->Enable(IGLDevice::Blend, false);
 
 			// x-direction
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
 			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
 			return buf2;
@@ -306,6 +306,8 @@ namespace spades {
 			GLQuadRenderer qr(dev);
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
+
+			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
 
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
 			static GLProgramUniform blur_textureUniform1("mainTexture");
@@ -343,7 +345,6 @@ namespace spades {
 			dev->Enable(IGLDevice::Blend, false);
 
 			// x-direction
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
 			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
 			return buf2;
@@ -357,6 +358,9 @@ namespace spades {
 			GLQuadRenderer qr(dev);
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
+
+			GLColorBuffer buf2 =
+			renderer->GetFramebufferManager()->CreateBufferHandle(w / 2, h / 2, false);
 
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
 			static GLProgramUniform blur_textureUniform("mainTexture");
@@ -379,8 +383,6 @@ namespace spades {
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
 			dev->Enable(IGLDevice::Blend, false);
 
-			GLColorBuffer buf2 =
-			  renderer->GetFramebufferManager()->CreateBufferHandle(w / 2, h / 2, false);
 			dev->Viewport(0, 0, w / 2, h / 2);
 			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
