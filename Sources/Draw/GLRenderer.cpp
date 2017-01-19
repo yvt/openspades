@@ -1142,6 +1142,10 @@ namespace spades {
 			} else {
 				// sRGB to linear conversion (alpha-premultiplied)
 				float rcp = 1.0f / (col.w + 0.00001f);
+				if (col.x > col.w || col.y > col.w || col.z > col.w) {
+					// Additive
+					rcp = 1.0f;
+				}
 				col.x *= col.x * rcp;
 				col.y *= col.y * rcp;
 				col.z *= col.z * rcp;
