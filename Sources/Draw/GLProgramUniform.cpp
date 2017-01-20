@@ -26,9 +26,12 @@
 
 namespace spades {
 	namespace draw {
-		GLProgramUniform::GLProgramUniform(const std::string& n):
+		GLProgramUniform::GLProgramUniform(const std::string& n, GLProgram *program):
 		name(n){
 			last = NULL;
+			if (program) {
+				SetProgram(program);
+			}
 		}
 
 		void GLProgramUniform::SetProgram(spades::draw::GLProgram *p){

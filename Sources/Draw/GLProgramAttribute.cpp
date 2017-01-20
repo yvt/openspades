@@ -25,10 +25,13 @@
 
 namespace spades {
 	namespace draw {
-		GLProgramAttribute::GLProgramAttribute(const std::string &n)
-		    : name(n), last(NULL), loc(-1) {}
+		GLProgramAttribute::GLProgramAttribute(const std::string &n, GLProgram *program)
+		    : name(n), last(NULL), loc(-1) {
+			if (program) {
+				(*this)(program);
+			}
+		}
 		int GLProgramAttribute::operator()(spades::draw::GLProgram *prog) {
-
 			SPADES_MARK_FUNCTION_DEBUG();
 
 			if (prog == NULL) {

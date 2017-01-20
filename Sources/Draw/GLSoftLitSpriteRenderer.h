@@ -73,6 +73,10 @@ namespace spades {
 			std::vector<Vertex> vertices;
 			std::vector<uint32_t> indices;
 
+			IGLDevice::UInteger vertexBuffer;
+			IGLDevice::UInteger elementBuffer;
+			IGLDevice::UInteger vertexArray;
+
 			GLProgram *program;
 			GLProgramUniform projectionViewMatrix;
 			GLProgramUniform rightVector;
@@ -87,13 +91,6 @@ namespace spades {
 			GLProgramUniform zNearFar;
 			GLProgramUniform cameraPosition;
 
-			GLProgramAttribute positionAttribute;
-			GLProgramAttribute spritePosAttribute;
-			GLProgramAttribute colorAttribute;
-			GLProgramAttribute emissionAttribute;
-			GLProgramAttribute dlRAttribute;
-			GLProgramAttribute dlGAttribute;
-			GLProgramAttribute dlBAttribute;
 
 			float thresLow, thresRange;
 

@@ -62,8 +62,13 @@ namespace spades {
 
 			std::vector<Vertex> vertices;
 			std::vector<uint16_t> indices;
-			IGLDevice::UInteger buffer;
-			IGLDevice::UInteger iBuffer;
+			IGLDevice::UInteger vertexBuffer;
+			IGLDevice::UInteger elementBuffer;
+			IGLDevice::UInteger vertexArraySunlight;
+			IGLDevice::UInteger vertexArrayDepth;
+			IGLDevice::UInteger vertexArrayDynamicLight;
+
+			void DeleteGLObjects();
 
 			bool needsUpdate;
 			bool realized;

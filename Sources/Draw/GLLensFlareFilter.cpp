@@ -54,7 +54,7 @@ namespace spades {
 			// do gaussian blur
 			GLProgram *program = blurProgram;
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 			int w = buffer.GetWidth();
 			int h = buffer.GetHeight();
 
@@ -124,7 +124,7 @@ namespace spades {
 			GLColorBuffer visiblityBuffer =
 			  renderer->GetFramebufferManager()->CreateBufferHandle(64, 64, false);
 
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 
 			{
 				GLProfiler::Context measure(renderer->GetGLProfiler(), "Occlusion Test");

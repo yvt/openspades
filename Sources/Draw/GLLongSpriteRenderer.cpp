@@ -18,6 +18,8 @@
 
  */
 
+#include <cstddef> // offsetof
+
 #include "GLLongSpriteRenderer.h"
 #include <Core/Debug.h>
 #include "GLImage.h"
@@ -37,9 +39,6 @@ namespace spades {
 		      projectionViewMatrix("projectionViewMatrix"),
 		      rightVector("rightVector"),
 		      upVector("upVector"),
-		      positionAttribute("positionAttribute"),
-		      texCoordAttribute("texCoordAttribute"),
-		      colorAttribute("colorAttribute"),
 		      texture("mainTexture"),
 		      viewMatrix("viewMatrix"),
 		      fogDistance("fogDistance"),
@@ -47,10 +46,50 @@ namespace spades {
 		      viewOriginVector("viewOriginVector") {
 			SPADES_MARK_FUNCTION();
 
+			vertexBuffer = device->GenBuffer();
+			elementBuffer = device->GenBuffer();
+
 			program = renderer->RegisterProgram("Shaders/LongSprite.program");
+			program->Use();
+			
+			GLProgramAttribute positionAttribute{"positionAttribute", program};
+			GLProgramAttribute texCoordAttribute{"texCoordAttribute", program};
+			GLProgramAttribute colorAttribute{"colorAttribute", program};
+
+			vertexArray = device->GenVertexArray();
+			device->BindVertexArray(vertexArray);
+			
+			device->EnableVertexAttribArray(positionAttribute(), true);
+			device->EnableVertexAttribArray(texCoordAttribute(), true);
+			device->EnableVertexAttribArray(colorAttribute(), true);
+
+			device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
+			device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::FloatType, false,
+			                            sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, x)));
+			device->VertexAttribPointer(texCoordAttribute(), 2, IGLDevice::FloatType, false,
+			                            sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, u)));
+			device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
+			                            sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, r)));
+										
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, elementBuffer);
+
+			projectionViewMatrix(program);
+			rightVector(program);
+			upVector(program);
+			texture(program);
+			viewMatrix(program);
+			fogDistance(program);
+			fogColor(program);
+			viewOriginVector(program);
 		}
 
-		GLLongSpriteRenderer::~GLLongSpriteRenderer() { SPADES_MARK_FUNCTION(); }
+		GLLongSpriteRenderer::~GLLongSpriteRenderer() {
+			SPADES_MARK_FUNCTION();
+
+			device->DeleteBuffer(vertexBuffer);
+			device->DeleteBuffer(elementBuffer);
+			device->DeleteVertexArray(vertexArray);
+		}
 
 		void GLLongSpriteRenderer::Add(spades::draw::GLImage *img, spades::Vector3 p1,
 		                               spades::Vector3 p2, float rad, Vector4 color) {
@@ -89,19 +128,6 @@ namespace spades {
 			lastImage = NULL;
 			program->Use();
 
-			projectionViewMatrix(program);
-			rightVector(program);
-			upVector(program);
-			texture(program);
-			viewMatrix(program);
-			fogDistance(program);
-			fogColor(program);
-			viewOriginVector(program);
-
-			positionAttribute(program);
-			texCoordAttribute(program);
-			colorAttribute(program);
-
 			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
 			viewMatrix.SetValue(renderer->GetViewMatrix());
 
@@ -119,10 +145,6 @@ namespace spades {
 			texture.SetValue(0);
 
 			device->ActiveTexture(0);
-
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(texCoordAttribute(), true);
-			device->EnableVertexAttribArray(colorAttribute(), true);
 
 			for (size_t i = 0; i < sprites.size(); i++) {
 				Sprite &spr = sprites[i];
@@ -331,10 +353,6 @@ namespace spades {
 			}
 
 			Flush();
-
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(texCoordAttribute(), false);
-			device->EnableVertexAttribArray(colorAttribute(), false);
 		}
 
 		void GLLongSpriteRenderer::Flush() {
@@ -343,12 +361,13 @@ namespace spades {
 			if (vertices.empty())
 				return;
 
-			device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].x));
-			device->VertexAttribPointer(texCoordAttribute(), 2, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].u));
-			device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].r));
+			device->BindVertexArray(vertexArray);
+
+			device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
+			device->BufferData(IGLDevice::ArrayBuffer, static_cast<IGLDevice::Sizei>(sizeof(Vertex) * vertices.size()), vertices.data(), IGLDevice::StreamDraw);
+			
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, elementBuffer);
+			device->BufferData(IGLDevice::ElementArrayBuffer, static_cast<IGLDevice::Sizei>(4 * indices.size()), indices.data(), IGLDevice::StreamDraw);
 
 			SPAssert(lastImage);
 			lastImage->Bind(IGLDevice::Texture2D);

@@ -66,6 +66,10 @@ namespace spades {
 			std::vector<Vertex> vertices;
 			std::vector<uint32_t> indices;
 
+			IGLDevice::UInteger vertexBuffer;
+			IGLDevice::UInteger elementBuffer;
+			IGLDevice::UInteger vertexArray;
+
 			GLProgram *program;
 			GLProgramUniform projectionViewMatrix;
 			GLProgramUniform rightVector;
@@ -75,10 +79,6 @@ namespace spades {
 			GLProgramUniform fogDistance;
 			GLProgramUniform fogColor;
 			GLProgramUniform viewOriginVector;
-
-			GLProgramAttribute positionAttribute;
-			GLProgramAttribute spritePosAttribute;
-			GLProgramAttribute colorAttribute;
 
 			void Flush();
 

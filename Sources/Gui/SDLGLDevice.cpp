@@ -1073,6 +1073,26 @@ namespace spades {
 			CheckError();
 		}
 
+		IGLDevice::UInteger SDLGLDevice::GenVertexArray() {
+			GLuint i;
+			CheckExistence(glGenVertexArrays);
+			glGenVertexArrays(1, &i);
+			CheckErrorAlways();
+			return i;
+		}
+
+		void SDLGLDevice::BindVertexArray(UInteger vertexArray) {
+			CheckExistence(glBindVertexArray);
+			glBindVertexArray(vertexArray);
+			CheckError();
+		}
+
+		void SDLGLDevice::DeleteVertexArray(UInteger vertexArray) {
+			CheckExistence(glDeleteVertexArrays);
+			glDeleteVertexArrays(1, &vertexArray);
+			CheckErrorAlways();
+		}
+
 		void SDLGLDevice::VertexAttrib(UInteger index, Float x) {
 #if GLEW
 			if (glVertexAttrib1f)

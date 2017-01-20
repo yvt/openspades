@@ -20,11 +20,13 @@
 
 #pragma once
 
+#include <memory>
 #include <cstdint>
 
 #include "GLProgram.h"
 #include "GLProgramAttribute.h"
 #include "GLProgramUniform.h"
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	namespace draw {
@@ -34,20 +36,20 @@ namespace spades {
 		class GLImageRenderer {
 			GLRenderer *renderer;
 			IGLDevice *device;
-			GLImage *image;
+			Handle<GLImage> image;
 
 			float invScreenWidthFactored;
 			float invScreenHeightFactored;
 
 			GLProgram *program;
 
-			GLProgramAttribute *positionAttribute;
-			GLProgramAttribute *colorAttribute;
-			GLProgramAttribute *textureCoordAttribute;
+			IGLDevice::UInteger vertexArray;
+			IGLDevice::UInteger vertexBuffer;
+			IGLDevice::UInteger elementBuffer;
 
-			GLProgramUniform *screenSize;
-			GLProgramUniform *textureSize;
-			GLProgramUniform *texture;
+			std::unique_ptr<GLProgramUniform> screenSize;
+			std::unique_ptr<GLProgramUniform> textureSize;
+			std::unique_ptr<GLProgramUniform> texture;
 
 			struct ImageVertex {
 				float x, y, u, v;

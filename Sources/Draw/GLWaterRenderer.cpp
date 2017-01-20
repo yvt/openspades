@@ -452,6 +452,10 @@ namespace spades {
 				renderer->RegisterProgram("Shaders/Water.program");
 		}
 
+		struct GLWaterRenderer::Vertex {
+			float x, y;
+		};
+
 		GLWaterRenderer::GLWaterRenderer(GLRenderer *renderer, client::GameMap *map)
 		    : renderer(renderer),
 		      device(renderer->GetGLDevice()),
@@ -561,12 +565,20 @@ namespace spades {
 				}
 			}
 
+			// create vertex array object
+			GLProgramAttribute positionAttribute{"positionAttribute", program};
+			vertexArray = device->GenVertexArray();
+
+			device->EnableVertexAttribArray(positionAttribute(), true);
+
+			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			device->VertexAttribPointer(positionAttribute(), 2, IGLDevice::FloatType, false,
+										sizeof(Vertex), NULL);
+
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
+
 			occlusionQuery = 0;
 		}
-
-		struct GLWaterRenderer::Vertex {
-			float x, y;
-		};
 
 		void GLWaterRenderer::BuildVertices() {
 			SPADES_MARK_FUNCTION();
@@ -795,18 +807,8 @@ namespace spades {
 					SPAssert(false);
 				}
 
-				static GLProgramAttribute positionAttribute("positionAttribute");
 
-				positionAttribute(prg);
-
-				device->EnableVertexAttribArray(positionAttribute(), true);
-
-				device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
-				device->VertexAttribPointer(positionAttribute(), 2, IGLDevice::FloatType, false,
-				                            sizeof(Vertex), NULL);
-				device->BindBuffer(IGLDevice::ArrayBuffer, 0);
-
-				device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
+				device->BindVertexArray(vertexArray);
 
 				if (occlusionQuery)
 					device->BeginQuery(IGLDevice::SamplesPassed, occlusionQuery);
@@ -817,10 +819,6 @@ namespace spades {
 
 				if (occlusionQuery)
 					device->EndQuery(IGLDevice::SamplesPassed);
-
-				device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
-
-				device->EnableVertexAttribArray(positionAttribute(), false);
 
 				device->ActiveTexture(0);
 				// restore filter mode for color buffer

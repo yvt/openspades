@@ -32,7 +32,7 @@ namespace spades {
 			std::string name;
 
 		public:
-			GLProgramUniform(const std::string &);
+			GLProgramUniform(const std::string &, GLProgram *program = nullptr);
 			void SetProgram(GLProgram *);
 			void operator()(GLProgram *p) { SetProgram(p); }
 			void SetValue(IGLDevice::Float);

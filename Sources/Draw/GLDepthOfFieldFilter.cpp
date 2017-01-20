@@ -56,7 +56,7 @@ namespace spades {
 			// do gaussian blur
 			GLProgram *program = gaussProgram;
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 			int w = buffer.GetWidth();
 			int h = buffer.GetHeight();
 
@@ -97,7 +97,7 @@ namespace spades {
 		                                                float farBlur) {
 			SPADES_MARK_FUNCTION();
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 
 			int w = dev->ScreenWidth();
 			int h = dev->ScreenHeight();
@@ -209,7 +209,7 @@ namespace spades {
 			// do gaussian blur
 			GLProgram *program = blurProgram;
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 			int w = buffer.GetWidth();
 			int h = buffer.GetHeight();
 			int w2 = w / divide;
@@ -258,7 +258,7 @@ namespace spades {
 			// do gaussian blur
 			GLProgram *program = gammaMix;
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 			int w = buffer1.GetWidth();
 			int h = buffer1.GetHeight();
 
@@ -303,7 +303,7 @@ namespace spades {
 			// do gaussian blur
 			GLProgram *program = finalMix;
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
 
@@ -354,7 +354,7 @@ namespace spades {
 			// do gaussian blur
 			GLProgram *program = passthrough;
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
 
@@ -393,7 +393,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 
 			int w = dev->ScreenWidth();
 			int h = dev->ScreenHeight();

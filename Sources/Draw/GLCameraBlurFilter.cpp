@@ -67,7 +67,7 @@ namespace spades {
 			bool hasRadialBlur = radialBlur < .9999f;
 
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 
 			dev->Enable(IGLDevice::Blend, false);
 

@@ -109,6 +109,10 @@ namespace spades {
 			                       Sizei height) override;
 			void GenerateMipmap(Enum target) override;
 
+			UInteger GenVertexArray() override;
+			void BindVertexArray(UInteger) override;
+			void DeleteVertexArray(UInteger) override;
+
 			void VertexAttrib(UInteger index, Float) override;
 			void VertexAttrib(UInteger index, Float, Float) override;
 			void VertexAttrib(UInteger index, Float, Float, Float) override;

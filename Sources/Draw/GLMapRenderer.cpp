@@ -37,6 +37,17 @@
 
 namespace spades {
 	namespace draw {
+
+		struct GLMapRenderer::BFVertex {
+			int16_t x, y, z;
+			uint16_t pad;
+
+			static BFVertex Make(int x, int y, int z) {
+				BFVertex v = {(int16_t)x, (int16_t)y, (int16_t)z, 0};
+				return v;
+			}
+		};
+
 		void GLMapRenderer::PreloadShaders(spades::draw::GLRenderer *renderer) {
 			if (renderer->GetSettings().r_physicalLighting)
 				renderer->RegisterProgram("Shaders/BasicBlockPhys.program");
@@ -81,10 +92,33 @@ namespace spades {
 			device->BufferData(IGLDevice::ArrayBuffer, sizeof(squareVertices), squareVertices,
 			                   IGLDevice::StaticDraw);
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+
+			{
+				backfaceProgram->Use();
+				GLProgramAttribute positionAttribute{"positionAttribute", backfaceProgram};
+
+				backfaceVertexBuffer = device->GenBuffer();
+				backfaceElementBuffer = device->GenBuffer();
+				backfaceVertexArray = device->GenVertexArray();
+
+				device->BindVertexArray(backfaceVertexArray);
+				device->BindBuffer(IGLDevice::ElementArrayBuffer, backfaceElementBuffer);
+
+				device->BindBuffer(IGLDevice::ArrayBuffer, backfaceVertexBuffer);
+				device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::Short, false,
+											sizeof(BFVertex), nullptr);
+
+				device->EnableVertexAttribArray(positionAttribute(), true);
+			}
+
 		}
 
 		GLMapRenderer::~GLMapRenderer() {
 			SPADES_MARK_FUNCTION();
+
+			device->DeleteBuffer(backfaceVertexBuffer);
+			device->DeleteBuffer(backfaceElementBuffer);
+			device->DeleteVertexArray(backfaceVertexArray);
 
 			device->DeleteBuffer(squareVertexBuffer);
 			for (int i = 0; i < numChunks; i++)
@@ -157,9 +191,7 @@ namespace spades {
 			device->ColorMask(false, false, false, false);
 
 			depthonlyProgram->Use();
-			static GLProgramAttribute positionAttribute("positionAttribute");
-			positionAttribute(depthonlyProgram);
-			device->EnableVertexAttribArray(positionAttribute(), true);
+
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(depthonlyProgram);
 			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
@@ -180,8 +212,6 @@ namespace spades {
 				}
 			}
 
-
-			device->EnableVertexAttribArray(positionAttribute(), false);
 			device->ColorMask(true, true, true, true);
 
 		}
@@ -237,29 +267,6 @@ namespace spades {
 			detailTextureUnif(basicProgram);
 			detailTextureUnif.SetValue(1);
 
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
-
-			static GLProgramAttribute positionAttribute("positionAttribute");
-			static GLProgramAttribute ambientOcclusionCoordAttribute(
-			  "ambientOcclusionCoordAttribute");
-			static GLProgramAttribute colorAttribute("colorAttribute");
-			static GLProgramAttribute normalAttribute("normalAttribute");
-			static GLProgramAttribute fixedPositionAttribute("fixedPositionAttribute");
-
-			positionAttribute(basicProgram);
-			ambientOcclusionCoordAttribute(basicProgram);
-			colorAttribute(basicProgram);
-			normalAttribute(basicProgram);
-			fixedPositionAttribute(basicProgram);
-
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			if (ambientOcclusionCoordAttribute() != -1)
-				device->EnableVertexAttribArray(ambientOcclusionCoordAttribute(), true);
-			device->EnableVertexAttribArray(colorAttribute(), true);
-			if (normalAttribute() != -1)
-				device->EnableVertexAttribArray(normalAttribute(), true);
-			device->EnableVertexAttribArray(fixedPositionAttribute(), true);
-
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(basicProgram);
 			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
@@ -292,14 +299,6 @@ namespace spades {
 				}
 			}
 
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			if (ambientOcclusionCoordAttribute() != -1)
-				device->EnableVertexAttribArray(ambientOcclusionCoordAttribute(), false);
-			device->EnableVertexAttribArray(colorAttribute(), false);
-			if (normalAttribute() != -1)
-				device->EnableVertexAttribArray(normalAttribute(), false);
-			device->EnableVertexAttribArray(fixedPositionAttribute(), false);
-
 			device->ActiveTexture(1);
 			device->BindTexture(IGLDevice::Texture2D, 0);
 			device->ActiveTexture(0);
@@ -331,20 +330,6 @@ namespace spades {
 			static GLProgramUniform detailTextureUnif("detailTexture");
 			detailTextureUnif(dlightProgram);
 			detailTextureUnif.SetValue(0);
-
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
-
-			static GLProgramAttribute positionAttribute("positionAttribute");
-			static GLProgramAttribute colorAttribute("colorAttribute");
-			static GLProgramAttribute normalAttribute("normalAttribute");
-
-			positionAttribute(dlightProgram);
-			colorAttribute(dlightProgram);
-			normalAttribute(dlightProgram);
-
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(colorAttribute(), true);
-			device->EnableVertexAttribArray(normalAttribute(), true);
 
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(dlightProgram);
@@ -380,10 +365,6 @@ namespace spades {
 				}
 			}
 
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(colorAttribute(), false);
-			device->EnableVertexAttribArray(normalAttribute(), false);
-
 			device->ActiveTexture(0);
 			device->BindTexture(IGLDevice::Texture2D, 0);
 		}
@@ -417,36 +398,26 @@ namespace spades {
 
 #pragma mark - BackFaceBlock
 
-		struct BFVertex {
-			int16_t x, y, z;
-			uint16_t pad;
-
-			static BFVertex Make(int x, int y, int z) {
-				BFVertex v = {(int16_t)x, (int16_t)y, (int16_t)z, 0};
-				return v;
-			}
-		};
-
-		static void EmitBackFace(int x, int y, int z, int ux, int uy, int uz, int vx, int vy,
-		                         int vz, std::vector<BFVertex> &vertices,
-		                         std::vector<uint16_t> &indices) {
-			uint16_t idx = (uint16_t)vertices.size();
-
-			vertices.push_back(BFVertex::Make(x, y, z));
-			vertices.push_back(BFVertex::Make(x + ux, y + uy, z + uz));
-			vertices.push_back(BFVertex::Make(x + vx, y + vy, z + vz));
-			vertices.push_back(BFVertex::Make(x + ux + vx, y + uy + vy, z + uz + vz));
-
-			indices.push_back(idx);
-			indices.push_back(idx + 1);
-			indices.push_back(idx + 2);
-			indices.push_back(idx + 1);
-			indices.push_back(idx + 3);
-			indices.push_back(idx + 2);
-		}
-
 		void GLMapRenderer::RenderBackface() {
 			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Back-face");
+
+			auto EmitBackFace = [&] (int x, int y, int z, int ux, int uy, int uz, int vx, int vy,
+									 int vz, std::vector<BFVertex> &vertices,
+									 std::vector<uint16_t> &indices) {
+				uint16_t idx = (uint16_t)vertices.size();
+
+				vertices.push_back(BFVertex::Make(x, y, z));
+				vertices.push_back(BFVertex::Make(x + ux, y + uy, z + uz));
+				vertices.push_back(BFVertex::Make(x + vx, y + vy, z + vz));
+				vertices.push_back(BFVertex::Make(x + ux + vx, y + uy + vy, z + uz + vz));
+
+				indices.push_back(idx);
+				indices.push_back(idx + 1);
+				indices.push_back(idx + 2);
+				indices.push_back(idx + 1);
+				indices.push_back(idx + 3);
+				indices.push_back(idx + 2);
+			};
 
 			IntVector3 eye = renderer->GetSceneDef().viewOrigin.Floor();
 			std::vector<BFVertex> vertices;
@@ -495,26 +466,19 @@ namespace spades {
 
 			backfaceProgram->Use();
 
-			static GLProgramAttribute positionAttribute("positionAttribute");
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
-
-			positionAttribute(backfaceProgram);
 			projectionViewMatrix(backfaceProgram);
-
 			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
 
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
-			device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::Short, false,
-			                            sizeof(BFVertex), vertices.data());
+			device->BindVertexArray(backfaceVertexArray);
+			device->BindBuffer(IGLDevice::ArrayBuffer, backfaceVertexBuffer);
+			device->BufferData(IGLDevice::ArrayBuffer, static_cast<IGLDevice::Sizei>(sizeof(BFVertex) * vertices.size()), vertices.data(), IGLDevice::StreamDraw);
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, backfaceElementBuffer);
+			device->BufferData(IGLDevice::ElementArrayBuffer, static_cast<IGLDevice::Sizei>(2 * indices.size()), indices.data(), IGLDevice::StreamDraw);
 
-			device->EnableVertexAttribArray(positionAttribute(), true);
-
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
 			device->DrawElements(IGLDevice::Triangles,
 			                     static_cast<IGLDevice::Sizei>(indices.size()),
 			                     IGLDevice::UnsignedShort, indices.data());
-
-			device->EnableVertexAttribArray(positionAttribute(), false);
 
 			device->Enable(IGLDevice::CullFace, true);
 		}

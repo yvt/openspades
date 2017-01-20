@@ -60,18 +60,80 @@ namespace spades {
 			  renderer->RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
 			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 
-			buffer = device->GenBuffer();
-			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			vertexBuffer = device->GenBuffer();
+			device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
 			device->BufferData(IGLDevice::ArrayBuffer,
 			                   static_cast<IGLDevice::Sizei>(vertices.size() * sizeof(Vertex)),
 			                   vertices.data(), IGLDevice::StaticDraw);
 
-			idxBuffer = device->GenBuffer();
-			device->BindBuffer(IGLDevice::ArrayBuffer, idxBuffer);
-			device->BufferData(IGLDevice::ArrayBuffer,
+			elementBuffer = device->GenBuffer();
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, elementBuffer);
+			device->BufferData(IGLDevice::ElementArrayBuffer,
 			                   static_cast<IGLDevice::Sizei>(indices.size() * sizeof(uint32_t)),
 			                   indices.data(), IGLDevice::StaticDraw);
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+
+			{
+				GLProgramAttribute positionAttribute{"positionAttribute", program};
+				GLProgramAttribute textureCoordAttribute{"textureCoordAttribute", program};
+				GLProgramAttribute normalAttribute{"normalAttribute", program};
+
+				vertexArraySunlight = device->GenVertexArray();
+				device->BindVertexArray(vertexArraySunlight);
+
+				device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
+				device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
+											sizeof(Vertex), (void *)0);
+				device->VertexAttribPointer(textureCoordAttribute(), 2, IGLDevice::UnsignedShort, false,
+											sizeof(Vertex), (void *)4);
+				device->VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
+											sizeof(Vertex), (void *)8);
+
+				device->BindBuffer(IGLDevice::ElementArrayBuffer, elementBuffer);
+
+				device->EnableVertexAttribArray(positionAttribute(), true);
+				device->EnableVertexAttribArray(textureCoordAttribute(), true);
+				device->EnableVertexAttribArray(normalAttribute(), true);
+			}
+			{
+				GLProgramAttribute positionAttribute{"positionAttribute", dlightProgram};
+				GLProgramAttribute textureCoordAttribute{"textureCoordAttribute", dlightProgram};
+				GLProgramAttribute normalAttribute{"normalAttribute", dlightProgram};
+
+				vertexArrayDynamicLight = device->GenVertexArray();
+				device->BindVertexArray(vertexArrayDynamicLight);
+
+				device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
+				device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
+											sizeof(Vertex), (void *)0);
+				device->VertexAttribPointer(textureCoordAttribute(), 2, IGLDevice::UnsignedShort, false,
+											sizeof(Vertex), (void *)4);
+				device->VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
+											sizeof(Vertex), (void *)8);
+
+				device->BindBuffer(IGLDevice::ElementArrayBuffer, elementBuffer);
+
+				device->EnableVertexAttribArray(positionAttribute(), true);
+				device->EnableVertexAttribArray(textureCoordAttribute(), true);
+				device->EnableVertexAttribArray(normalAttribute(), true);
+			}
+			{
+				GLProgramAttribute positionAttribute{"positionAttribute", shadowMapProgram};
+				GLProgramAttribute normalAttribute{"normalAttribute", shadowMapProgram};
+
+				vertexArrayShadowMap = device->GenVertexArray();
+				device->BindVertexArray(vertexArrayShadowMap);
+
+				device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
+				device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
+											sizeof(Vertex), (void *)0);
+				device->VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
+											sizeof(Vertex), (void *)8);
+
+				device->BindBuffer(IGLDevice::ElementArrayBuffer, elementBuffer);
+
+				device->EnableVertexAttribArray(positionAttribute(), true);
+				device->EnableVertexAttribArray(normalAttribute(), true);
+			}
 
 			origin = m->GetOrigin();
 			origin -= .5f; // (0,0,0) is center of voxel (0,0,0)
@@ -96,9 +158,11 @@ namespace spades {
 		GLOptimizedVoxelModel::~GLOptimizedVoxelModel() {
 			SPADES_MARK_FUNCTION();
 
-			image->Release();
-			device->DeleteBuffer(idxBuffer);
-			device->DeleteBuffer(buffer);
+			device->DeleteBuffer(elementBuffer);
+			device->DeleteBuffer(vertexBuffer);
+			device->DeleteVertexArray(vertexArraySunlight);
+			device->DeleteVertexArray(vertexArrayDynamicLight);
+			device->DeleteVertexArray(vertexArrayShadowMap);
 		}
 
 		void GLOptimizedVoxelModel::GenerateTexture() {
@@ -533,27 +597,7 @@ namespace spades {
 			modelOrigin(shadowMapProgram);
 			modelOrigin.SetValue(origin.x, origin.y, origin.z);
 
-			// setup attributes
-			static GLProgramAttribute positionAttribute("positionAttribute");
-			static GLProgramAttribute normalAttribute("normalAttribute");
-
-			positionAttribute(shadowMapProgram);
-			normalAttribute(shadowMapProgram);
-
-			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
-			device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
-			                            sizeof(Vertex), (void *)0);
-			if (normalAttribute() != -1) {
-				device->VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
-				                            sizeof(Vertex), (void *)8);
-			}
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
-
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			if (normalAttribute() != -1)
-				device->EnableVertexAttribArray(normalAttribute(), true);
-
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
+			device->BindVertexArray(vertexArrayShadowMap);
 
 			for (size_t i = 0; i < params.size(); i++) {
 				const client::ModelRenderParam &param = params[i];
@@ -585,15 +629,6 @@ namespace spades {
 				device->DrawElements(IGLDevice::Triangles, numIndices, IGLDevice::UnsignedInt,
 				                     (void *)0);
 			}
-
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
-
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			if (normalAttribute() != -1)
-				device->EnableVertexAttribArray(normalAttribute(), false);
-
-			device->ActiveTexture(0);
-			device->BindTexture(IGLDevice::Texture2D, 0);
 		}
 
 		void
@@ -659,29 +694,7 @@ namespace spades {
 			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
-			// setup attributes
-			static GLProgramAttribute positionAttribute("positionAttribute");
-			static GLProgramAttribute textureCoordAttribute("textureCoordAttribute");
-			static GLProgramAttribute normalAttribute("normalAttribute");
-
-			positionAttribute(program);
-			textureCoordAttribute(program);
-			normalAttribute(program);
-
-			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
-			device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
-			                            sizeof(Vertex), (void *)0);
-			device->VertexAttribPointer(textureCoordAttribute(), 2, IGLDevice::UnsignedShort, false,
-			                            sizeof(Vertex), (void *)4);
-			device->VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
-			                            sizeof(Vertex), (void *)8);
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
-
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(textureCoordAttribute(), true);
-			device->EnableVertexAttribArray(normalAttribute(), true);
-
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
+			device->BindVertexArray(vertexArraySunlight);
 
 			for (size_t i = 0; i < params.size(); i++) {
 				const client::ModelRenderParam &param = params[i];
@@ -731,17 +744,6 @@ namespace spades {
 					device->DepthRange(0.f, 1.f);
 				}
 			}
-
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
-
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(textureCoordAttribute(), false);
-			device->EnableVertexAttribArray(normalAttribute(), false);
-
-			device->ActiveTexture(1);
-			device->BindTexture(IGLDevice::Texture2D, 0);
-			device->ActiveTexture(0);
-			device->BindTexture(IGLDevice::Texture2D, 0);
 		}
 
 		void
@@ -791,29 +793,7 @@ namespace spades {
 			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
-			// setup attributes
-			static GLProgramAttribute positionAttribute("positionAttribute");
-			static GLProgramAttribute textureCoordAttribute("textureCoordAttribute");
-			static GLProgramAttribute normalAttribute("normalAttribute");
-
-			positionAttribute(dlightProgram);
-			textureCoordAttribute(dlightProgram);
-			normalAttribute(dlightProgram);
-
-			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
-			device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
-			                            sizeof(Vertex), (void *)0);
-			device->VertexAttribPointer(textureCoordAttribute(), 2, IGLDevice::UnsignedShort, false,
-			                            sizeof(Vertex), (void *)4);
-			device->VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
-			                            sizeof(Vertex), (void *)8);
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
-
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(textureCoordAttribute(), true);
-			device->EnableVertexAttribArray(normalAttribute(), true);
-
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
+			device->BindVertexArray(vertexArrayDynamicLight);
 
 			for (size_t i = 0; i < params.size(); i++) {
 				const client::ModelRenderParam &param = params[i];
@@ -869,14 +849,6 @@ namespace spades {
 					device->DepthRange(0.f, 1.f);
 				}
 			}
-
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
-
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(textureCoordAttribute(), false);
-			device->EnableVertexAttribArray(normalAttribute(), false);
-
-			device->ActiveTexture(0);
 		}
 	}
 }

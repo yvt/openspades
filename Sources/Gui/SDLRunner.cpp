@@ -422,12 +422,13 @@ namespace spades {
 						if (!r_allowSoftwareRendering)
 							SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
-						/* someday...
-						 SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
-						 SDL_GL_CONTEXT_PROFILE_CORE);
-						 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-						 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-						 */
+						// Need to use the core profile to access newer features on macOS
+#ifdef __MACOSX__
+						SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
+						SDL_GL_CONTEXT_PROFILE_CORE);
+						SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+						SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+#endif
 
 						break;
 					case RendererType::SW: sdlFlags = 0; break;

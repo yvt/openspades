@@ -332,6 +332,10 @@ namespace spades {
 			                               Sizei width, Sizei height) = 0;
 			virtual void GenerateMipmap(Enum target) = 0;
 
+			virtual UInteger GenVertexArray() = 0;
+			virtual void BindVertexArray(UInteger) = 0;
+			virtual void DeleteVertexArray(UInteger) = 0;
+
 			virtual void VertexAttrib(UInteger index, Float) = 0;
 			virtual void VertexAttrib(UInteger index, Float, Float) = 0;
 			virtual void VertexAttrib(UInteger index, Float, Float, Float) = 0;

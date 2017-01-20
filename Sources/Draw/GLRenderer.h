@@ -56,6 +56,7 @@ namespace spades {
 		class GLSoftLitSpriteRenderer;
 		class GLAutoExposureFilter;
 		class GLProfiler;
+		class GLQuadRenderer;
 
 		class GLRenderer : public client::IRenderer, public client::IGameMapListener {
 			friend class GLShadowShader;
@@ -72,6 +73,7 @@ namespace spades {
 			GLFramebufferManager *fbManager;
 			client::GameMap *map;
 			GLSettings settings;
+			std::unique_ptr<GLQuadRenderer> quadRenderer;
 
 			std::unique_ptr<GLProfiler> profiler;
 
@@ -83,6 +85,11 @@ namespace spades {
 
 			std::vector<DebugLine> debugLines;
 			std::vector<GLDynamicLight> lights;
+
+			struct DebugLineVertex;
+			GLProgram *debugLineProgram;
+			IGLDevice::UInteger debugLineVertexBuffer;
+			IGLDevice::UInteger debugLineVertexArray;
 
 			GLProgramManager *programManager;
 			GLImageManager *imageManager;
@@ -206,6 +213,7 @@ namespace spades {
 			IGLDevice *GetGLDevice() { return device; }
 			GLProfiler &GetGLProfiler() { return *profiler; }
 			GLFramebufferManager *GetFramebufferManager() { return fbManager; }
+			GLQuadRenderer *GetQuadRenderer() { return quadRenderer.get(); }
 			IGLShadowMapRenderer *GetShadowMapRenderer() { return shadowMapRenderer; }
 			GLAmbientShadowRenderer *GetAmbientShadowRenderer() { return ambientShadowRenderer; }
 			GLMapShadowRenderer *GetMapShadowRenderer() { return mapShadowRenderer; }

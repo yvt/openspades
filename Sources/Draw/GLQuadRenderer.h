@@ -20,7 +20,10 @@
 
 #pragma once
 
+#include <vector>
+
 #include "IGLDevice.h"
+#include <Core/TMPUtils.h>
 
 namespace spades {
 	namespace draw {
@@ -32,6 +35,9 @@ namespace spades {
 			IGLDevice *device;
 
 			IGLDevice::UInteger attrIndex;
+
+			IGLDevice::UInteger vertexBuffer;
+			std::vector<stmp::optional<IGLDevice::UInteger>> vertexArrays;
 
 		public:
 			GLQuadRenderer(IGLDevice *);

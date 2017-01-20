@@ -20,6 +20,7 @@
 
 #include <cstdarg>
 #include <cstdlib>
+#include <array>
 
 #include <Client/GameMap.h>
 #include <Core/Bitmap.h>
@@ -54,6 +55,7 @@
 #include "GLProgramAttribute.h"
 #include "GLProgramManager.h"
 #include "GLProgramUniform.h"
+#include "GLQuadRenderer.h"
 #include "GLRadiosityRenderer.h"
 #include "GLRenderer.h"
 #include "GLSettings.h"
@@ -70,6 +72,16 @@
 namespace spades {
 	namespace draw {
 		// TODO: raise error for any calls after Shutdown().
+
+		struct GLRenderer::DebugLineVertex {
+			float x, y, z;
+			float r, g, b, a;
+			DebugLineVertex() = default;
+			inline DebugLineVertex(Vector3 v, Vector4 col) {
+				x = v.x; y = v.y; z = v.z;
+				r = col.x; g = col.y; b = col.z; a = col.w;
+			}
+		};
 
 		GLRenderer::GLRenderer(IGLDevice *_device)
 		    : device(_device),
@@ -103,6 +115,8 @@ namespace spades {
 
 			SPLog("GLRenderer bootstrap");
 
+		    quadRenderer.reset(new GLQuadRenderer(_device));
+
 			fbManager = new GLFramebufferManager(_device, settings);
 
 			programManager = new GLProgramManager(_device, shadowMapRenderer, settings);
@@ -117,6 +131,30 @@ namespace spades {
 									IGLDevice::Zero, IGLDevice::One);
 			device->Enable(IGLDevice::Blend, true);
 
+			// Initialize debug line shader
+			{
+				GLProgram *program = RegisterProgram("Shaders/Basic.program");
+				program->Use();
+
+				debugLineVertexBuffer = device->GenBuffer();
+				debugLineVertexArray = device->GenVertexArray();
+				device->BindVertexArray(debugLineVertexArray);
+
+				GLProgramAttribute positionAttribute{"positionAttribute", program};
+				GLProgramAttribute colorAttribute{"colorAttribute", program};
+
+				device->BindBuffer(IGLDevice::ArrayBuffer, debugLineVertexBuffer);
+				device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::FloatType, false,
+											sizeof(DebugLineVertex), (void *)0);
+				device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
+											sizeof(DebugLineVertex), (void *)12);
+											
+				device->EnableVertexAttribArray(positionAttribute(), true);
+				device->EnableVertexAttribArray(colorAttribute(), true);
+
+				debugLineProgram = program;
+			}
+
 			SPLog("GLRenderer started");
 		}
 
@@ -124,6 +162,9 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			Shutdown();
+
+			device->DeleteVertexArray(debugLineVertexArray);
+			device->DeleteBuffer(debugLineVertexBuffer);
 		}
 
 		void GLRenderer::Init() {
@@ -548,14 +589,6 @@ namespace spades {
 
 #pragma mark - Scene Finalizer
 
-		struct DebugLineVertex {
-			float x, y, z;
-			float r, g, b, a;
-			static DebugLineVertex Create(Vector3 v, Vector4 col) {
-				DebugLineVertex vv = {v.x, v.y, v.z, col.x, col.y, col.z, col.w};
-				return vv;
-			}
-		};
 		void GLRenderer::RenderDebugLines() {
 			SPADES_MARK_FUNCTION();
 			if (debugLines.empty())
@@ -567,36 +600,23 @@ namespace spades {
 
 			for (size_t i = 0, j = 0; i < debugLines.size(); i++) {
 				const DebugLine &line = debugLines[i];
-				vertices[j++] = DebugLineVertex::Create(line.v1, line.color);
-				vertices[j++] = DebugLineVertex::Create(line.v2, line.color);
+				vertices[j++] = DebugLineVertex{line.v1, line.color};
+				vertices[j++] = DebugLineVertex{line.v2, line.color};
 			}
 
-			GLProgram *program = RegisterProgram("Shaders/Basic.program");
+			GLProgram * const program = debugLineProgram;
 			program->Use();
 
-			static GLProgramAttribute positionAttribute("positionAttribute");
-			static GLProgramAttribute colorAttribute("colorAttribute");
+			device->BindVertexArray(debugLineVertexArray);
 
-			positionAttribute(program);
-			colorAttribute(program);
-
-			device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::FloatType, false,
-			                            sizeof(DebugLineVertex), vertices.data());
-			device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(DebugLineVertex),
-			                            (const char *)vertices.data() + sizeof(float) * 3);
-
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(colorAttribute(), true);
+			device->BindBuffer(IGLDevice::ArrayBuffer, debugLineVertexBuffer);
+			device->BufferData(IGLDevice::ArrayBuffer, static_cast<IGLDevice::Sizei>(sizeof(DebugLineVertex) * vertices.size()), vertices.data(), IGLDevice::StreamDraw);
 
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(program);
 			projectionViewMatrix.SetValue(GetProjectionViewMatrix());
 
 			device->DrawArrays(IGLDevice::Lines, 0, static_cast<IGLDevice::Sizei>(vertices.size()));
-
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(colorAttribute(), false);
 		}
 
 		void GLRenderer::RenderObjects() {
@@ -1038,39 +1058,26 @@ namespace spades {
 			Vector4 col = {color.x, color.y, color.z, 1};
 
 			// build vertices
-			DebugLineVertex vertices[4];
+			std::array<DebugLineVertex, 4> vertices;
 
-			vertices[0] = DebugLineVertex::Create(MakeVector3(-1, -1, 0), col);
-			vertices[1] = DebugLineVertex::Create(MakeVector3(1, -1, 0), col);
-			vertices[2] = DebugLineVertex::Create(MakeVector3(1, 1, 0), col);
-			vertices[3] = DebugLineVertex::Create(MakeVector3(-1, 1, 0), col);
+			vertices[0] = {MakeVector3(-1, -1, 0), col};
+			vertices[1] = {MakeVector3(1, -1, 0), col};
+			vertices[2] = {MakeVector3(1, 1, 0), col};
+			vertices[3] = {MakeVector3(-1, 1, 0), col};
 
-			GLProgram *program = RegisterProgram("Shaders/Basic.program");
+			GLProgram * const program = debugLineProgram;
 			program->Use();
 
-			static GLProgramAttribute positionAttribute("positionAttribute");
-			static GLProgramAttribute colorAttribute("colorAttribute");
+			device->BindVertexArray(debugLineVertexArray);
 
-			positionAttribute(program);
-			colorAttribute(program);
-
-			device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::FloatType, false,
-			                            sizeof(DebugLineVertex), vertices);
-			device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(DebugLineVertex),
-			                            (const char *)vertices + sizeof(float) * 3);
-
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(colorAttribute(), true);
+			device->BindBuffer(IGLDevice::ArrayBuffer, debugLineVertexBuffer);
+			device->BufferData(IGLDevice::ArrayBuffer, static_cast<IGLDevice::Sizei>(sizeof(DebugLineVertex) * vertices.size()), vertices.data(), IGLDevice::StreamDraw);
 
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(program);
 			projectionViewMatrix.SetValue(Matrix4::Identity());
 
 			device->DrawArrays(IGLDevice::TriangleFan, 0, 4);
-
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(colorAttribute(), false);
 
 			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
 							  IGLDevice::Zero, IGLDevice::One);

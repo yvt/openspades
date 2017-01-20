@@ -25,19 +25,44 @@
 
 namespace spades {
 	namespace draw {
-		GLQuadRenderer::GLQuadRenderer(IGLDevice *device) : device(device) {}
+		GLQuadRenderer::GLQuadRenderer(IGLDevice *device) : device(device) {
+			vertexBuffer = device->GenBuffer();
+			device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
 
-		GLQuadRenderer::~GLQuadRenderer() {}
+			static const uint8_t vertices[][4] = {{0, 0}, {1, 0}, {1, 1}, {0, 1}};
+			device->BufferData(IGLDevice::ArrayBuffer, sizeof(vertices), vertices, IGLDevice::StaticDraw);
+		}
+
+		GLQuadRenderer::~GLQuadRenderer() {
+			device->DeleteBuffer(vertexBuffer);
+			for (auto vertexArray: vertexArrays) {
+				if (vertexArray) {
+					device->DeleteVertexArray(*vertexArray);
+				}
+			}
+		}
 
 		void GLQuadRenderer::SetCoordAttributeIndex(IGLDevice::UInteger idx) { attrIndex = idx; }
 
 		void GLQuadRenderer::Draw() {
-			static const uint8_t vertices[][4] = {{0, 0}, {1, 0}, {1, 1}, {0, 1}};
+			if (attrIndex >= vertexArrays.size()) {
+				vertexArrays.resize(attrIndex + 1);
+			}
 
-			device->EnableVertexAttribArray(attrIndex, true);
-			device->VertexAttribPointer(attrIndex, 2, IGLDevice::UnsignedByte, false, 4, vertices);
+			stmp::optional<IGLDevice::UInteger> &vertexArray = vertexArrays[attrIndex];
+
+			// Create VAO if needed
+			if (vertexArray) {
+				device->BindVertexArray(*vertexArray);
+			} else {
+				vertexArray = device->GenVertexArray();
+				device->BindVertexArray(*vertexArray);
+				device->EnableVertexAttribArray(attrIndex, true);
+				device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
+				device->VertexAttribPointer(attrIndex, 2, IGLDevice::UnsignedByte, false, 4, reinterpret_cast<void *>(0));
+			}
+
 			device->DrawArrays(IGLDevice::TriangleFan, 0, 4);
-			device->EnableVertexAttribArray(attrIndex, false);
 		}
 	}
 }

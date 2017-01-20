@@ -40,7 +40,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 
 			static GLProgramAttribute lensPosition("positionAttribute");
 			static GLProgramUniform lensShadowMapTexture("shadowMapTexture");

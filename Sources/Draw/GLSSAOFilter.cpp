@@ -48,7 +48,7 @@ namespace spades {
 		GLColorBuffer GLSSAOFilter::GenerateRawSSAOImage(int width, int height) {
 			SPADES_MARK_FUNCTION();
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 
 			GLColorBuffer output =
 			  renderer->GetFramebufferManager()->CreateBufferHandle(width, height, 1);
@@ -120,7 +120,7 @@ namespace spades {
 			// do gaussian blur
 			GLProgram *program = bilateralProgram;
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 
 			int w = width == -1 ? tex.GetWidth() : width;
 			int h = height == -1 ? tex.GetHeight() : height;

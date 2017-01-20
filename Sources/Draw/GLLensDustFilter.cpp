@@ -63,7 +63,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			GLProgram *program = thru;
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
 
@@ -110,7 +110,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			GLProgram *program = gauss1d;
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
 
@@ -166,7 +166,7 @@ namespace spades {
 			std::vector<Level> levels;
 
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 
 			static GLProgramAttribute thruPosition("positionAttribute");
 			static GLProgramUniform thruColor("colorUniform");

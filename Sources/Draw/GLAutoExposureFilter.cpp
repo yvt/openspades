@@ -90,7 +90,7 @@ namespace spades {
 			std::vector<Level> levels;
 
 			IGLDevice *dev = renderer->GetGLDevice();
-			GLQuadRenderer qr(dev);
+			GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 
 			static GLProgramAttribute thruPosition("positionAttribute");
 			static GLProgramUniform thruColor("colorUniform");

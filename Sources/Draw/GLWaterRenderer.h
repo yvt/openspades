@@ -61,6 +61,7 @@ namespace spades {
 
 			IGLDevice::UInteger buffer;
 			IGLDevice::UInteger idxBuffer;
+			IGLDevice::UInteger vertexArray;
 			size_t numIndices;
 
 			IGLDevice::UInteger tempFramebuffer;

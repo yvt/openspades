@@ -196,7 +196,15 @@ namespace spades {
 			                                      SDL_WINDOW_OPENGL | SDL_WINDOW_BORDERLESS);
 			if (window == nullptr) {
 				SPLog("Failed to create SDL window: %s", SDL_GetError());
+			} else {
+				// Need to use the core profile to access newer features on macOS
+#ifdef __MACOSX__
+				SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+				SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+#endif
 			}
+
 			SDL_GLContext context = window ? SDL_GL_CreateContext(window) : nullptr;
 			if (window != nullptr && context == nullptr) {
 				SPLog("Failed to create OpenGL context: %s", SDL_GetError());
@@ -318,6 +326,7 @@ namespace spades {
 				                                          "GL_ARB_shading_language_100",
 				                                          "GL_ARB_texture_non_power_of_two",
 				                                          "GL_ARB_vertex_buffer_object",
+				                                          "GL_ARB_vertex_array_object",
 				                                          "GL_EXT_framebuffer_object",
 				                                          NULL};
 

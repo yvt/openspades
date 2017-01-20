@@ -32,7 +32,7 @@ namespace spades {
 			std::string name;
 
 		public:
-			GLProgramAttribute(const std::string &);
+			GLProgramAttribute(const std::string &, GLProgram *program = nullptr);
 			int operator()() { return loc; }
 			int operator()(GLProgram *);
 		};

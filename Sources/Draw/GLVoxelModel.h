@@ -52,10 +52,13 @@ namespace spades {
 			GLProgram *program;
 			GLProgram *dlightProgram;
 			GLProgram *shadowMapProgram;
-			GLImage *aoImage;
+			Handle<GLImage> aoImage;
 
-			IGLDevice::UInteger buffer;
-			IGLDevice::UInteger idxBuffer;
+			IGLDevice::UInteger vertexBuffer;
+			IGLDevice::UInteger elementBuffer;
+			IGLDevice::UInteger vertexArraySunlight;
+			IGLDevice::UInteger vertexArrayDynamicLight;
+			IGLDevice::UInteger vertexArrayShadowMap;
 			std::vector<Vertex> vertices;
 			std::vector<uint32_t> indices;
 			unsigned int numIndices;

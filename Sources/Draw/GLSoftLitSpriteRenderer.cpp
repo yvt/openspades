@@ -18,6 +18,8 @@
 
  */
 
+#include <cstddef> // offsetof
+
 #include "GLSoftLitSpriteRenderer.h"
 #include <Core/Debug.h>
 #include "GLDynamicLight.h"
@@ -42,9 +44,6 @@ namespace spades {
 		      projectionViewMatrix("projectionViewMatrix"),
 		      rightVector("rightVector"),
 		      upVector("upVector"),
-		      positionAttribute("positionAttribute"),
-		      spritePosAttribute("spritePosAttribute"),
-		      colorAttribute("colorAttribute"),
 		      texture("mainTexture"),
 		      viewMatrix("viewMatrix"),
 		      fogDistance("fogDistance"),
@@ -53,17 +52,59 @@ namespace spades {
 		      zNearFar("zNearFar"),
 		      frontVector("frontVector"),
 		      viewOriginVector("viewOriginVector"),
-		      dlRAttribute("dlRAttribute"),
-		      dlGAttribute("dlGAttribute"),
-		      dlBAttribute("dlBAttribute"),
-		      emissionAttribute("emissionAttribute"),
 		      cameraPosition("cameraPosition") {
 			SPADES_MARK_FUNCTION();
 
 			program = renderer->RegisterProgram("Shaders/SoftLitSprite.program");
+
+			vertexBuffer = device->GenBuffer();
+			elementBuffer = device->GenBuffer();
+
+			vertexArray = device->GenVertexArray();
+			device->BindVertexArray(vertexArray);
+
+			GLProgramAttribute positionAttribute{"positionAttribute", program};
+			GLProgramAttribute spritePosAttribute{"spritePosAttribute", program};
+			GLProgramAttribute colorAttribute{"colorAttribute", program};
+			GLProgramAttribute emissionAttribute{"emissionAttribute", program};
+			GLProgramAttribute dlRAttribute{"dlRAttribute", program};
+			GLProgramAttribute dlGAttribute{"dlGAttribute", program};
+			GLProgramAttribute dlBAttribute{"dlBAttribute", program};
+
+			device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
+
+			device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::FloatType, false,
+			                            sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, x)));
+			device->VertexAttribPointer(spritePosAttribute(), 3, IGLDevice::FloatType, false,
+			                            sizeof(Vertex),reinterpret_cast<void *>(offsetof(Vertex, sx)));
+			device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
+			                            sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, color)));
+			device->VertexAttribPointer(emissionAttribute(), 3, IGLDevice::FloatType, false,
+			                            sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, emission)));
+			device->VertexAttribPointer(dlRAttribute(), 4, IGLDevice::FloatType, false,
+			                            sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, dlR)));
+			device->VertexAttribPointer(dlGAttribute(), 4, IGLDevice::FloatType, false,
+			                            sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, dlG)));
+			device->VertexAttribPointer(dlBAttribute(), 4, IGLDevice::FloatType, false,
+			                            sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, dlB)));
+
+			device->EnableVertexAttribArray(positionAttribute(), true);
+			device->EnableVertexAttribArray(spritePosAttribute(), true);
+			device->EnableVertexAttribArray(colorAttribute(), true);
+			device->EnableVertexAttribArray(emissionAttribute(), true);
+			device->EnableVertexAttribArray(dlRAttribute(), true);
+			device->EnableVertexAttribArray(dlGAttribute(), true);
+			device->EnableVertexAttribArray(dlBAttribute(), true);
+
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, elementBuffer);
 		}
 
-		GLSoftLitSpriteRenderer::~GLSoftLitSpriteRenderer() { SPADES_MARK_FUNCTION(); }
+		GLSoftLitSpriteRenderer::~GLSoftLitSpriteRenderer() {
+			SPADES_MARK_FUNCTION();
+			device->DeleteBuffer(vertexBuffer);
+			device->DeleteBuffer(elementBuffer);
+			device->DeleteVertexArray(vertexArray);
+		}
 
 		void GLSoftLitSpriteRenderer::Add(spades::draw::GLImage *img, spades::Vector3 center,
 		                                  float rad, float ang, Vector4 color) {
@@ -218,14 +259,6 @@ namespace spades {
 			fogColor(program);
 			zNearFar(program);
 
-			positionAttribute(program);
-			spritePosAttribute(program);
-			colorAttribute(program);
-			emissionAttribute(program);
-			dlRAttribute(program);
-			dlGAttribute(program);
-			dlBAttribute(program);
-
 			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
 			viewMatrix.SetValue(renderer->GetViewMatrix());
 
@@ -251,14 +284,6 @@ namespace spades {
 			device->BindTexture(IGLDevice::Texture2D,
 			                    renderer->GetFramebufferManager()->GetDepthTexture());
 			device->ActiveTexture(0);
-
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(spritePosAttribute(), true);
-			device->EnableVertexAttribArray(colorAttribute(), true);
-			device->EnableVertexAttribArray(emissionAttribute(), true);
-			device->EnableVertexAttribArray(dlRAttribute(), true);
-			device->EnableVertexAttribArray(dlGAttribute(), true);
-			device->EnableVertexAttribArray(dlBAttribute(), true);
 
 			thresLow = tanf(def.fovX * .5f) * tanf(def.fovY * .5f) * 1.8f;
 			thresRange = thresLow * .5f;
@@ -384,25 +409,11 @@ namespace spades {
 				Flush();
 			}
 
-			// finalize
-
-			device->ActiveTexture(1);
-			device->BindTexture(IGLDevice::Texture2D, 0);
-			device->ActiveTexture(0);
-			device->BindTexture(IGLDevice::Texture2D, 0);
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(spritePosAttribute(), false);
-			device->EnableVertexAttribArray(colorAttribute(), false);
-			device->EnableVertexAttribArray(emissionAttribute(), false);
-			device->EnableVertexAttribArray(dlRAttribute(), false);
-			device->EnableVertexAttribArray(dlGAttribute(), false);
-			device->EnableVertexAttribArray(dlBAttribute(), false);
-
 			// composite downsampled sprite
 			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			if (numLowResSprites > 0) {
 				GLProfiler::Context measure(renderer->GetGLProfiler(), "Finalize");
-				GLQuadRenderer qr(device);
+				GLQuadRenderer &qr = *renderer->GetQuadRenderer();
 
 				// do gaussian blur
 				GLProgram *program =
@@ -481,20 +492,15 @@ namespace spades {
 			if (vertices.empty())
 				return;
 
-			device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].x));
-			device->VertexAttribPointer(spritePosAttribute(), 3, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].sx));
-			device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].color));
-			device->VertexAttribPointer(emissionAttribute(), 3, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].emission));
-			device->VertexAttribPointer(dlRAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].dlR));
-			device->VertexAttribPointer(dlGAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].dlG));
-			device->VertexAttribPointer(dlBAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].dlB));
+			device->BindVertexArray(vertexArray);
+
+			device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
+			
+			device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
+			device->BufferData(IGLDevice::ArrayBuffer, static_cast<IGLDevice::Sizei>(sizeof(Vertex) * vertices.size()), vertices.data(), IGLDevice::StreamDraw);
+			
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, vertexBuffer);
+			device->BufferData(IGLDevice::ElementArrayBuffer, static_cast<IGLDevice::Sizei>(4 * indices.size()), indices.data(), IGLDevice::StreamDraw);
 
 			SPAssert(lastImage);
 			lastImage->Bind(IGLDevice::Texture2D);

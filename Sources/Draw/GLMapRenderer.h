@@ -48,6 +48,11 @@ namespace spades {
 
 			IGLDevice::UInteger squareVertexBuffer;
 
+			struct BFVertex;
+			IGLDevice::UInteger backfaceVertexBuffer;
+			IGLDevice::UInteger backfaceElementBuffer;
+			IGLDevice::UInteger backfaceVertexArray;
+
 			struct ChunkRenderInfo {
 				bool rendered;
 				float distance;

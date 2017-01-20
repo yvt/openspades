@@ -37,37 +37,46 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			image = NULL;
 
-			program = renderer->RegisterProgram("Shaders/BasicImage.program");
+			IGLDevice *const device = renderer->GetGLDevice();
+			vertexBuffer = device->GenBuffer();
+			elementBuffer = device->GenBuffer();
 
+			program = renderer->RegisterProgram("Shaders/BasicImage.program");
 			program->Use();
 
-			positionAttribute = new GLProgramAttribute("positionAttribute");
-			colorAttribute = new GLProgramAttribute("colorAttribute");
-			textureCoordAttribute = new GLProgramAttribute("textureCoordAttribute");
-			screenSize = new GLProgramUniform("invScreenSizeFactored");
-			textureSize = new GLProgramUniform("invTextureSize");
-			texture = new GLProgramUniform("mainTexture");
+			GLProgramAttribute positionAttribute{"positionAttribute", program};
+			GLProgramAttribute colorAttribute{"colorAttribute", program};
+			GLProgramAttribute textureCoordAttribute{"textureCoordAttribute", program};
 
-			(*positionAttribute)(program);
-			(*colorAttribute)(program);
-			(*textureCoordAttribute)(program);
+			vertexArray = device->GenVertexArray();
+			device->BindVertexArray(vertexArray);
 
-			(*screenSize)(program);
-			(*textureSize)(program);
-			(*texture)(program);
+			device->EnableVertexAttribArray(positionAttribute(), true);
+			device->EnableVertexAttribArray(colorAttribute(), true);
+			device->EnableVertexAttribArray(textureCoordAttribute(), true);
+			
+			device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
+			device->VertexAttribPointer(positionAttribute(), 2, IGLDevice::FloatType, false,
+			                            sizeof(ImageVertex), vertices.data());
+			device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
+			                            sizeof(ImageVertex),
+			                            (const char *)vertices.data() + sizeof(float) * 4);
+			device->VertexAttribPointer(textureCoordAttribute(), 2, IGLDevice::FloatType, false,
+			                            sizeof(ImageVertex),
+			                            (const char *)vertices.data() + sizeof(float) * 2);
+
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, elementBuffer);
+
+			screenSize.reset(new GLProgramUniform{"invScreenSizeFactored", program});
+			textureSize.reset(new GLProgramUniform{"invTextureSize", program});
+			texture.reset(new GLProgramUniform{"mainTexture", program});
 		}
 
 		GLImageRenderer::~GLImageRenderer() {
-			if (image != NULL) {
-				image->Release();
-				image = NULL;
-			}
-			delete positionAttribute;
-			delete colorAttribute;
-			delete textureCoordAttribute;
-			delete screenSize;
-			delete textureSize;
-			delete texture;
+			IGLDevice *const device = renderer->GetGLDevice();
+			device->DeleteVertexArray(vertexArray);
+			device->DeleteBuffer(vertexBuffer);
+			device->DeleteBuffer(elementBuffer);
 		}
 
 		void GLImageRenderer::Flush() {
@@ -82,18 +91,11 @@ namespace spades {
 			device->ActiveTexture(0);
 			image->Bind(IGLDevice::Texture2D);
 
-			device->VertexAttribPointer((*positionAttribute)(), 2, IGLDevice::FloatType, false,
-			                            sizeof(ImageVertex), vertices.data());
-			device->VertexAttribPointer((*colorAttribute)(), 4, IGLDevice::FloatType, false,
-			                            sizeof(ImageVertex),
-			                            (const char *)vertices.data() + sizeof(float) * 4);
-			device->VertexAttribPointer((*textureCoordAttribute)(), 2, IGLDevice::FloatType, false,
-			                            sizeof(ImageVertex),
-			                            (const char *)vertices.data() + sizeof(float) * 2);
-
-			device->EnableVertexAttribArray((*positionAttribute)(), true);
-			device->EnableVertexAttribArray((*colorAttribute)(), true);
-			device->EnableVertexAttribArray((*textureCoordAttribute)(), true);
+			device->BindBuffer(IGLDevice::ArrayBuffer, vertexBuffer);
+			device->BufferData(IGLDevice::ArrayBuffer, static_cast<IGLDevice::Sizei>(sizeof(ImageVertex) * vertices.size()), vertices.data(), IGLDevice::StreamDraw);
+			
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, elementBuffer);
+			device->BufferData(IGLDevice::ElementArrayBuffer, static_cast<IGLDevice::Sizei>(4 * indices.size()), indices.data(), IGLDevice::StreamDraw);
 
 			screenSize->SetValue(invScreenWidthFactored, invScreenHeightFactored);
 			textureSize->SetValue(image->GetInvWidth(), image->GetInvHeight());
@@ -103,14 +105,9 @@ namespace spades {
 			                     static_cast<IGLDevice::Sizei>(indices.size()),
 			                     IGLDevice::UnsignedInt, indices.data());
 
-			device->EnableVertexAttribArray((*positionAttribute)(), false);
-			device->EnableVertexAttribArray((*colorAttribute)(), false);
-			device->EnableVertexAttribArray((*textureCoordAttribute)(), false);
-
 			vertices.clear();
 			indices.clear();
-			image->Release();
-			image = NULL;
+			image = nullptr;
 		}
 
 		void GLImageRenderer::SetImage(spades::draw::GLImage *img) {
@@ -118,7 +115,6 @@ namespace spades {
 				return;
 			Flush();
 			image = img;
-			image->AddRef();
 		}
 
 		void GLImageRenderer::Add(float dx1, float dy1, float dx2, float dy2, float dx3, float dy3,
