@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2017-01-08 12:48+0900\n"
-"PO-Revision-Date: 2017-01-12 17:06+0900\n"
+"PO-Revision-Date: 2017-01-19 13:56+0900\n"
 "Last-Translator: kmsi <sts06196@naver.com>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
@@ -344,12 +344,12 @@ msgstr ""
 "\n"
 "{0}\n"
 "\n"
-"자세한 정보를 위해서는 SystemMessages.log을 확인하세요."
+"자세한 정보는 SystemMessages.log을 확인하세요."
 
 #: Sources/Gui/Main.cpp:703 Sources/Gui/Runner.cpp:64
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
-msgstr "OpenSpades의 심각한 오류"
+msgstr "치명적인 오류"
 
 #: Sources/Gui/MainScreen.cpp:225
 msgctxt "MainScreen"
@@ -685,17 +685,17 @@ msgstr "혈흔"
 #: Resources/Scripts/Gui/Preferences.as:644
 msgctxt "Preferences"
 msgid "Ejecting Brass"
-msgstr "탄피 배출 효과"
+msgstr "탄피 배출"
 
 #: Resources/Scripts/Gui/Preferences.as:645
 msgctxt "Preferences"
 msgid "Ragdoll"
-msgstr "래그돌 기술"
+msgstr "래그돌"
 
 #: Resources/Scripts/Gui/Preferences.as:646
 msgctxt "Preferences"
 msgid "Animations"
-msgstr "애니메이셔"
+msgstr "애니메이션"
 
 #: Resources/Scripts/Gui/Preferences.as:647
 msgctxt "Preferences"
@@ -705,7 +705,7 @@ msgstr "카메라 흔들림"
 #: Resources/Scripts/Gui/Preferences.as:648
 msgctxt "Preferences"
 msgid "MORE"
-msgstr "더보기"
+msgstr "많음"
 
 #: Resources/Scripts/Gui/Preferences.as:648
 #: Resources/Scripts/Gui/Preferences.as:651
@@ -721,7 +721,7 @@ msgstr "파티클"
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "LESS"
-msgstr "적게"
+msgstr "적음"
 
 #: Resources/Scripts/Gui/Preferences.as:654
 msgctxt "Preferences"
@@ -741,7 +741,7 @@ msgstr "명중 표시"
 #: Resources/Scripts/Gui/Preferences.as:657
 msgctxt "Preferences"
 msgid "Show Alerts"
-msgstr "경고 보이기"
+msgstr "알림 보기"
 
 #: Resources/Scripts/Gui/Preferences.as:659
 msgctxt "Preferences"
@@ -756,7 +756,7 @@ msgstr "유니코드 문자 보이기"
 #: Resources/Scripts/Gui/Preferences.as:661
 msgctxt "Preferences"
 msgid "Server Alert"
-msgstr "서버 경고"
+msgstr "서버 알림"
 
 #: Resources/Scripts/Gui/Preferences.as:664
 msgctxt "Preferences"
@@ -771,7 +771,7 @@ msgstr "미니맵 크기"
 #: Resources/Scripts/Gui/Preferences.as:668
 msgctxt "Preferences"
 msgid "Show Statistics"
-msgstr "통계 보이기"
+msgstr "통계 보기"
 
 #: Resources/Scripts/Gui/Preferences.as:678
 msgctxt "Preferences"
@@ -806,7 +806,7 @@ msgstr "정조준 시 마우스 감도"
 #: Resources/Scripts/Gui/Preferences.as:686
 msgctxt "Preferences"
 msgid "Exponential Power"
-msgstr "마우스 가속 지수"
+msgstr "마우스 가속"
 
 #: Resources/Scripts/Gui/Preferences.as:688
 msgctxt "Preferences"
@@ -896,7 +896,7 @@ msgstr "점프"
 #: Resources/Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Sprint"
-msgstr "전력 질주"
+msgstr "달리기"
 
 #: Resources/Scripts/Gui/Preferences.as:709
 msgctxt "Preferences"
@@ -1026,7 +1026,7 @@ msgid ""
 "easier for you to concentrate on playing the game."
 msgstr ""
 "전체 화면 모드를 사용하면 화면 전체를 이용하여 플레이 할 수 있으므로 게임에 "
-"집중하기 쉬워집니다."
+"집중하기 쉽습니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1093
 #: Resources/Scripts/Gui/StartupScreen.as:1475
@@ -1106,9 +1106,9 @@ msgid ""
 "is in linear correspondence with actual energy, that is, physically accurate "
 "blending can be achieved."
 msgstr ""
-"렌더링 프로세스 중에 더 넓은 동적 범위를 허용하는 숫자 표현을 사용합니다. 또"
-"한,이 값은 실제 에너지와 선형으로 대응하는 색상 계산을 허용합니다. 즉, 물리적"
-"으로 정확한 블렌딩을 얻을 수 있습니다."
+"렌더링 과정 중 더 넓은 범위의 숫자 표현을 사용합니다. 또, 실제 값과 선형으로 "
+"대응하도록 색상의 계산을 수행합니다. 즉, 물리적으로 정확한 색의 합성이 가능해"
+"집니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1147
 msgctxt "StartupScreen"
@@ -1168,7 +1168,7 @@ msgstr "색깔 보정"
 #: Resources/Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
-msgstr "색감 보정을 적용하여 더 나아 보이도록 합니다."
+msgstr "색감을 영화처럼 보정해 화면을 더욱 멋지게 합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1166
 msgctxt "StartupScreen"
@@ -1225,8 +1225,7 @@ msgstr "포스트-프로세싱"
 msgctxt "StartupScreen"
 msgid ""
 "Post-process modifies the image to make it look better and more realistic."
-msgstr ""
-"포스트 프로세싱은 그려진 화면을 수정하여 더욱 좋고 사실적으로 보이게 합니다."
+msgstr "화면 수정을 통해 더욱 멋지고 실제같은 화면이 나타나도록 합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1186
 msgctxt "StartupScreen"
@@ -1235,21 +1234,23 @@ msgid ""
 "Medium:Particle intersects objects smoothly.|High:Particle intersects "
 "objects smoothly, and some objects casts their shadow to particles."
 msgstr ""
-"파티클|낮음:입자가 다른 객체와 교차하면 날카로운 경계가 나타납니다.|중간:입자"
-"는 다른 개체와 매끄럽게 교차합니다.|높음:입자는 다른 개체와 매끄럽게 교차합니"
-"다. 또한 일부 개체가 입자에 그림자를 드리웁니다."
+"파티클|낮음:입자가 다른 물체와 겹칠 때 그 경계면이 날카롭게 그려집니다.|중간:"
+"입자가 다른 물체와 겹칠 때 그 경계면이 매끄럽게 그려집니다.|높음:입자가 다른 "
+"물체와 겹칠 때 그 경계면이 매끄럽게 그려지며, 일부 물체의 그림자가 입자에 드"
+"리웁니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
-msgstr "동적 빛"
+msgstr "동적 조명"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1198
 msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
 "impression."
-msgstr "에너지를 내뿜는 듯한 느낌을 위해 일부 객체가 빛을 내도록 허용합니다."
+msgstr ""
+"몇몇 물체가 빛을 발산할 수 있도록 해 마치 에너지를 내뿜는 듯한 느낌을 줍니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1201
 msgctxt "StartupScreen"
@@ -1259,12 +1260,12 @@ msgstr "그림자"
 #: Resources/Scripts/Gui/StartupScreen.as:1202
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
-msgstr "동적 개체가 그림자를 드리웁니다."
+msgstr "움직이는 물체에 그림자를 드리웁니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1204
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
-msgstr "Volumetric Fog"
+msgstr "입체적 안개 효과"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1205
 msgctxt "StartupScreen"
@@ -1278,19 +1279,19 @@ msgstr ""
 #: Resources/Scripts/Gui/StartupScreen.as:1208
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
-msgstr "물리 기반 빛 효과"
+msgstr "물리 기반 광원 효과"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1209
 msgctxt "StartupScreen"
 msgid ""
 "Uses more accurate approximation techniques to decide the brightness of "
 "objects."
-msgstr "더 정확한 기술을 사용하여 객체의 밝기를 결정합니다."
+msgstr "물체의 밝기를 계산하는 데 더 정확한 근삿값을 활용합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1216
 msgctxt "StartupScreen"
 msgid "Direct Lights"
-msgstr "직사광"
+msgstr "직접 조명"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1217
 msgctxt "StartupScreen"
@@ -1298,7 +1299,7 @@ msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
 "appearance."
 msgstr ""
-"대기 혹은 물체에 직접 맞은 빛이 어떻게 그 모양에 영향을 미치는지를 제어합니"
+"대기 혹은 물체에 직접 입사하는 빛이 그 물체에 영향을 끼치는 정도를 조정합니"
 "다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1227
@@ -1310,9 +1311,9 @@ msgid ""
 "and refractions are rendered at the highest quality using screen-space "
 "techniques."
 msgstr ""
-"물 쉐이더|없음:물은 일반 블럭과 똑같이 렌더링됩니다.|1단계:굴절과 태양의 반사"
+"물 쉐이더|없음:일반 블럭과 똑같이 물을 렌더링합니다.|1단계:굴절과 태양의 반사"
 "가 표시됩니다.|2단계:굴절과 태양의 반사는 물론, 파도까지 나타납니다.|3단계:반"
-"사 및 굴절이 화면 공간 기술을 이용해 가장 좋은 품질로 렌더링됩니다."
+"사 및 굴절이 Screen-Space 기술을 이용해 가장 좋은 품질로 렌더링됩니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
@@ -1327,7 +1328,7 @@ msgstr "쉐이더 효과"
 #: Resources/Scripts/Gui/StartupScreen.as:1239
 msgctxt "StartupScreen"
 msgid "Special effects."
-msgstr "특수 효과"
+msgstr "특수 효과입니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
@@ -1368,7 +1369,8 @@ msgid ""
 "dynamics compressor, HRTF-based 3D audio, and high quality reverb."
 msgstr ""
 "YSR은 OpenSpades에 최적화된 실험적인 3D HDR 사운드 엔진입니다. 자동 부하 제"
-"어 및 역학 압축기, HRTF 기반의 입체 음향과 고음질 반향 효과를 제공합니다."
+"어 및 동적 압축, HRTF 기반의 3D 오디오, 고음질 반향 효과 등의 개선된 기능을 "
+"제공합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1505
 msgctxt "StartupScreen"
@@ -1384,7 +1386,7 @@ msgstr "오디오 출력을 비활성화합니다."
 #: Resources/Scripts/Gui/StartupScreen.as:1544
 msgctxt "StartupScreen"
 msgid "Polyphonics"
-msgstr "최대 동시 음향 효과"
+msgstr "최대 동시 음향"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1521
 msgctxt "StartupScreen"
@@ -1393,8 +1395,9 @@ msgid ""
 "more processing power, so setting this too high might cause an overload "
 "(especially with a software emulation)."
 msgstr ""
-"동시에 발음되는 음성의 개수를 지정합니다. 이 값이 크면 필요한 처리 능력도 증"
-"가하기 때문에 특히 소프트웨어 에뮬레이션에 과부하가 발생할 수 있습니다."
+"동시에 재생되는 소리의 수를 지정합니다. 이 값이 크면 필요한 처리 능력도 증가"
+"하기 때문에 지나친 설정값은 (특히 소프트웨어 에뮬레이션하는 경우)과부하가 발"
+"생할 수 있습니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1528
 msgctxt "StartupScreen"
@@ -1414,8 +1417,8 @@ msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
 "is set, YSR might reduce the number of sounds when an overload is detected."
 msgstr ""
-"동시에 플레이되는 소리의 개수를 지정합니다. 이 값에 상관없이 YSR은 과부하를 "
-"방지하기 위해 동시 발음 수를 줄일 수 있습니다."
+"동시에 플레이되는 소리의 개수를 지정합니다. 이 값에 상관없이 YSR은 과부하가 "
+"감지될 경우 이를 방지하기 위해 동시 발음 수를 줄일 수 있습니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1605
 msgctxt "StartupScreen"

@@ -35,6 +35,7 @@ namespace spades {
 		      owner(p),
 		      time(0),
 		      shooting(false),
+			  shootingPreviously(false),
 		      reloading(false),
 		      nextShotTime(0.f),
 		      reloadEndTime(-100.f),
@@ -81,6 +82,10 @@ namespace spades {
 				// abort slow reload
 				reloading = false;
 
+				if (!shootingPreviously) {
+					nextShotTime = std::max(nextShotTime, time);
+				}
+
 				// Automatic operation of weapon.
 				if (time >= nextShotTime && (ammo > 0 || !ownerIsLocalPlayer)) {
 					fired = true;
@@ -95,10 +100,13 @@ namespace spades {
 					if (world->GetListener()) {
 						world->GetListener()->PlayerFiredWeapon(owner);
 					}
-					nextShotTime = time + GetDelay();
+					nextShotTime += GetDelay();
 				} else if (time >= nextShotTime) {
 					dryFire = true;
 				}
+				shootingPreviously = true;
+			} else {
+				shootingPreviously = false;
 			}
 			if (reloading) {
 				if (time >= reloadEndTime) {
@@ -211,7 +219,7 @@ namespace spades {
 		public:
 			SMGWeapon3(World *w, Player *p) : Weapon(w, p) {}
 			virtual std::string GetName() { return "SMG"; }
-			virtual float GetDelay() { return 0.1f; }
+			virtual float GetDelay() { return 0.11f; }
 			virtual int GetClipSize() { return 30; }
 			virtual int GetMaxStock() { return 120; }
 			virtual float GetReloadTime() { return 2.5f; }
