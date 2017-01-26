@@ -34,6 +34,7 @@ namespace spades {
 			Player *owner;
 			float time;
 			bool shooting;
+			bool shootingPreviously;
 			bool reloading;
 			float nextShotTime;
 			float reloadStartTime;
