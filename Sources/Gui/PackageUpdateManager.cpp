@@ -328,12 +328,21 @@ namespace spades {
 				SPRaise("Failed to parse PackageInfo.json: root.UpdateFeed.Type contains an "
 				        "unrecognizable value.");
 			}
+			SPLog("Update feed type: %s", updateFeedType.c_str());
 		} else if (!jsonUpdateFeed.isNull()) {
 			SPRaise("Failed to parse PackageInfo.json: root.UpdateFeed is not an object nor null.");
+		} else {
+			SPLog("Update feed type: (none)");
 		}
 
 		if (cl_checkForUpdates) {
+			SPRaise("Starting an automatic update check.");
 			CheckForUpdate();
+		} else {
+			SPLog("Automatic update check is disabled.");
+			if (!m_updateFeed) {
+				m_updateInfoReadyState = ReadyState::Unavailable;
+			}
 		}
 	}
 	PackageUpdateManager::~PackageUpdateManager() {}
@@ -381,6 +390,7 @@ namespace spades {
 			m_updateFeed->CheckForUpdate();
 		} else {
 			m_updateInfoReadyState = ReadyState::Unavailable;
+			SPLog("Update feed is not available.");
 		}
 	}
 }
