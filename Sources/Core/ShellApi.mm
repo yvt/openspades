@@ -33,4 +33,11 @@ namespace spades {
         BOOL result = [[NSWorkspace sharedWorkspace] openFile:path];
         return bool(result);
     }
+
+    bool OpenURLInBrowser(const std::string &url) {
+        NSString *urlString = [NSString stringWithCString:url.c_str() encoding:NSUTF8StringEncoding];
+		NSURL *nsurl = [NSURL URLWithString:urlString];
+        BOOL result = [[NSWorkspace sharedWorkspace] openURL:nsurl];
+        return bool(result);
+    }
 }

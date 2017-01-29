@@ -35,6 +35,7 @@
 
 namespace spades {
 	class Serveritem;
+	class PackageUpdateManager;
 	namespace gui {
 		class StartupScreen;
 		class StartupScreenHelper : public RefCountedObject {
@@ -89,6 +90,9 @@ namespace spades {
 			std::string GetLocaleDescriptionEnglish(int index);
 
 			std::string CheckConfigCapability(const std::string &cfg, const std::string &value);
+
+			PackageUpdateManager& GetPackageUpdateManager();
+			bool OpenUpdateInfoURL();
 
 			/** Checks each config value and modifies it if its value isn't feasible */
 			void FixConfigs();

@@ -223,15 +223,20 @@ if(UNIX AND NOT APPLE)
 	# copyright file
 	INSTALL(FILES ${CMAKE_BINARY_DIR}/Resources/Unix/Debian/copyright DESTINATION ${OPENSPADES_INSTALL_DOC}/)
 
-	# install asset paks (including non-GPL one)
-	install(FILES
-		${CMAKE_BINARY_DIR}/Resources/pak000-Nonfree.pak
-		${CMAKE_BINARY_DIR}/Resources/pak002-Base.pak
-		${CMAKE_BINARY_DIR}/Resources/pak005-Models.pak
-		${CMAKE_BINARY_DIR}/Resources/pak010-BaseSkin.pak
-		${CMAKE_BINARY_DIR}/Resources/pak050-Locales.pak
-		${CMAKE_BINARY_DIR}/Resources/pak999-References.pak
-		DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
+	if(OPENSPADES_RESOURCES)
+		# install asset paks (including non-GPL one)
+		install(FILES
+			${CMAKE_BINARY_DIR}/Resources/pak000-Nonfree.pak
+			${CMAKE_BINARY_DIR}/Resources/pak002-Base.pak
+			${CMAKE_BINARY_DIR}/Resources/pak005-Models.pak
+			${CMAKE_BINARY_DIR}/Resources/pak010-BaseSkin.pak
+			${CMAKE_BINARY_DIR}/Resources/pak050-Locales.pak
+			${CMAKE_BINARY_DIR}/Resources/pak999-References.pak
+			DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
+	endif(OPENSPADES_RESOURCES)
+
+	# Package info (used for automatic update check)
+	INSTALL(FILES Resources/PackageInfo.json DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
 
 	# install icons
 	INSTALL(

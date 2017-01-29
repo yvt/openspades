@@ -33,6 +33,7 @@
 #include <Core/IStream.h>
 #include <Core/Settings.h>
 #include <Core/Thread.h>
+#include <Gui/PackageUpdateManager.h>
 #include <OpenSpades.h>
 
 DEFINE_SPADES_SETTING(cl_serverListUrl, "http://services.buildandshoot.com/serverlist.json");
@@ -397,6 +398,10 @@ namespace spades {
 			std::string s = errorMessage;
 			errorMessage.clear();
 			return s;
+		}
+
+		PackageUpdateManager& MainScreenHelper::GetPackageUpdateManager() {
+			return PackageUpdateManager::GetInstance();
 		}
 
 		MainScreenServerList::~MainScreenServerList() {

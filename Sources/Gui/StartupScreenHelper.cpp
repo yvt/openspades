@@ -39,6 +39,7 @@
 #include <Core/ShellApi.h>
 #include <Gui/Main.h>
 #include <Gui/Icon.h>
+#include <Gui/PackageUpdateManager.h>
 
 SPADES_SETTING(r_bloom);
 SPADES_SETTING(r_lens);
@@ -637,6 +638,18 @@ namespace spades {
 #else
 			return std::string{};
 #endif
+		}
+
+		PackageUpdateManager& StartupScreenHelper::GetPackageUpdateManager() {
+			return PackageUpdateManager::GetInstance();
+		}
+
+		bool StartupScreenHelper::OpenUpdateInfoURL() {
+			std::string url = GetPackageUpdateManager().GetLatestVersionInfoPageURL();
+			if (url.find("http:") != 0 && url.find("https:") != 0) {
+				return false;
+			}
+			return OpenURLInBrowser(url);
 		}
 
 		bool StartupScreenHelper::BrowseUserDirectory() {
