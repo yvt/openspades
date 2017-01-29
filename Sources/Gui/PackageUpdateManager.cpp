@@ -124,14 +124,15 @@ namespace spades {
 					auto curl = std::shared_ptr<CURL>{curl_easy_init(),
 					                                  [](CURL *curl) { curl_easy_cleanup(curl); }};
 
-					curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION,
-									 (unsigned long (*)(void *, unsigned long, unsigned long, void *))
-					                 [](void *ptr, size_t size, size_t nmemb, void *data) {
-						                 size_t dataSize = size * nmemb;
-						                 reinterpret_cast<std::string *>(data)->append(
-						                   reinterpret_cast<const char *>(ptr), dataSize);
-						                 return dataSize;
-						             });
+					curl_easy_setopt(
+					  curl.get(), CURLOPT_WRITEFUNCTION,
+					  static_cast<unsigned long (*)(void *, unsigned long, unsigned long, void *)>(
+					    [](void *ptr, size_t size, size_t nmemb, void *data) {
+						    size_t dataSize = size * nmemb;
+						    reinterpret_cast<std::string *>(data)->append(
+						      reinterpret_cast<const char *>(ptr), dataSize);
+						    return dataSize;
+						}));
 					curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &responseBuffer);
 					curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, OpenSpades_VER_STR);
 
