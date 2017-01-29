@@ -99,7 +99,7 @@ namespace spades {
 			SPAssert(m_packageUpdateManager.m_updateInfoReadyState == ReadyState::Loading);
 			m_packageUpdateManager.m_updateInfoReadyState = ReadyState::Error;
 
-			SPLog("Failed to check for update.");
+			SPLog("Failed to check for update.: %s", reason.c_str());
 		}
 		void ReturnVersionInfo(const VersionInfo &info, const std::string &pageURL) {
 			AutoLocker lock{&globalMutex};
@@ -125,6 +125,7 @@ namespace spades {
 					                                  [](CURL *curl) { curl_easy_cleanup(curl); }};
 
 					curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION,
+									 (unsigned long (*)(void *, unsigned long, unsigned long, void *))
 					                 [](void *ptr, size_t size, size_t nmemb, void *data) {
 						                 size_t dataSize = size * nmemb;
 						                 reinterpret_cast<std::string *>(data)->append(
@@ -184,16 +185,21 @@ namespace spades {
 				SPRaise("Failed to parse StandardUpdateFeed parameter: URL is not a string.");
 			}
 			m_url = jsonUrl.asString();
+			SPLog("Update feed URL: %s", m_url.c_str());
+
+			const Json::Value &jsonPlatform = param["Platform"];
+			if (!jsonUrl.isString()) {
+				SPRaise("Failed to parse StandardUpdateFeed parameter: Platform is not a string.");
+			}
+			m_platform = jsonPlatform.asString();
+			SPLog("Package target platform: %s", m_platform.c_str());
 		}
 
 	protected:
 		void SetupCURLRequest(CURL *handle) override {
 			curl_easy_setopt(handle, CURLOPT_URL, m_url.c_str());
-			SPLog("Starting request to: %s", m_url.c_str());
 		}
 		void ProcessResponse(const std::string &responseBody) override {
-			std::string currentPlatform = m_packageUpdateManager.GetTargetPlatformName();
-
 			Json::Value root;
 			if (!Json::Reader{}.parse(responseBody, root, false)) {
 				SPRaise("Failed to parse the response.");
@@ -240,7 +246,7 @@ namespace spades {
 						        (int)i, (int)k);
 					}
 
-					if (jsonPlatform.asString() == currentPlatform) {
+					if (jsonPlatform.asString() == m_platform) {
 						match = true;
 					}
 				}
@@ -276,6 +282,7 @@ namespace spades {
 
 	private:
 		std::string m_url;
+		std::string m_platform;
 	};
 
 	bool PackageUpdateManager::VersionInfo::operator<(const VersionInfo &other) const {
@@ -336,7 +343,7 @@ namespace spades {
 		}
 
 		if (cl_checkForUpdates) {
-			SPRaise("Starting an automatic update check.");
+			SPLog("Starting an automatic update check.");
 			CheckForUpdate();
 		} else {
 			SPLog("Automatic update check is disabled.");
@@ -359,7 +366,7 @@ namespace spades {
 			return false;
 		}
 
-		return GetCurrentVersionInfo() > GetLatestVersionInfo();
+		return GetCurrentVersionInfo() < GetLatestVersionInfo();
 	}
 
 	PackageUpdateManager::VersionInfo PackageUpdateManager::GetLatestVersionInfo() {

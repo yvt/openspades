@@ -75,11 +75,6 @@ namespace spades{
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("PackageUpdateManager",
-													  "string get_TargetPlatformName()",
-													  asMETHOD(PackageUpdateManager, GetTargetPlatformName),
-													  asCALL_THISCALL);
-						manager->CheckError(r);
-						r = eng->RegisterObjectMethod("PackageUpdateManager",
 													  "string get_LatestVersionInfoPageURL()",
 													  asMETHOD(PackageUpdateManager, GetLatestVersionInfoPageURL),
 													  asCALL_THISCALL);
@@ -107,6 +102,27 @@ namespace spades{
 														 "void f()",
 														 asFUNCTION(VersionInfoDestructor),
 														 asCALL_CDECL_OBJLAST);
+						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("PackageUpdateManagerVersionInfo",
+													  "string ToString()",
+													  asMETHOD(PackageUpdateManager::VersionInfo, ToString),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("PackageUpdateManagerVersionInfo",
+														"int Major",
+														asOFFSET(PackageUpdateManager::VersionInfo, major));
+						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("PackageUpdateManagerVersionInfo",
+														"int Minor",
+														asOFFSET(PackageUpdateManager::VersionInfo, minor));
+						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("PackageUpdateManagerVersionInfo",
+														"int Revision",
+														asOFFSET(PackageUpdateManager::VersionInfo, revision));
+						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("PackageUpdateManagerVersionInfo",
+														"string Text",
+														asOFFSET(PackageUpdateManager::VersionInfo, text));
 						manager->CheckError(r);
 						
 						r = eng->RegisterEnumValue("PackageUpdateManagerReadyState", "NotLoaded",

@@ -96,6 +96,11 @@ namespace spades {
 												  asMETHOD(gui::MainScreenHelper, GetCredits),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("MainScreenHelper",
+												  "PackageUpdateManager@ get_PackageUpdateManager()",
+												  asMETHOD(gui::MainScreenHelper, GetPackageUpdateManager),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
 					
 					
 					r = eng->RegisterObjectBehaviour("MainScreenServerItem",

@@ -20,6 +20,7 @@
 
 #include "DropDownList.as"
 #include "MessageBox.as"
+#include "UpdateCheckView.as"
 
 namespace spades {
 
@@ -169,8 +170,14 @@ namespace spades {
 				@bypassStartupWindowCheck = button;
 				@button.Activated = spades::ui::EventHandler(this.OnBypassStartupWindowCheckChanged);
 			}
+			{
+				UpdateCheckView view(Manager, ui.helper.PackageUpdateManager);
+				view.Bounds = AABB2(0.f, height - 40.f, width, 40.f);
+				@view.OpenUpdateInfoURL = spades::ui::EventHandler(this.OnShowUpdateDetailsPressed);
+				AddChild(view);
+			}
 
-			AABB2 clientArea(10.f, 100.f, width - 20.f, height - 110.f);
+			AABB2 clientArea(10.f, 100.f, width - 20.f, height - 150.f);
 			StartupScreenGraphicsTab graphicsTab(ui, clientArea.max - clientArea.min);
 			StartupScreenAudioTab audioTab(ui, clientArea.max - clientArea.min);
 			StartupScreenGenericTab genericTab(ui, clientArea.max - clientArea.min);
@@ -273,6 +280,16 @@ namespace spades {
 			cl_showStartupWindow.IntValue = (bypassStartupWindowCheck.Toggled ? 0 : 1);
 		}
 
+		private void OnShowUpdateDetailsPressed(spades::ui::UIElement@ sender) {
+			if (ui.helper.OpenUpdateInfoURL()) {
+				return;
+			}
+
+			string msg = _Tr("StartupScreen", "An unknown error has occurred while opening the update info website.");
+			msg += "\n\n" + ui.helper.PackageUpdateManager.LatestVersionInfoPageURL;
+			AlertScreen al(Parent, msg, 100.f);
+			al.Run();
+		}
 
 		private void OnQuitPressed(spades::ui::UIElement@ sender) {
 			ui.shouldExit = true;

@@ -31,6 +31,7 @@
 
 namespace spades {
 	class Serveritem;
+	class PackageUpdateManager;
 	namespace gui {
 		class MainScreen;
 
@@ -104,6 +105,8 @@ namespace spades {
 			std::string GetPendingErrorMessage();
 
 			std::string GetCredits();
+
+			PackageUpdateManager& GetPackageUpdateManager();
 		};
 	}
 }

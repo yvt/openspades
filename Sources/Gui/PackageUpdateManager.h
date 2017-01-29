@@ -90,11 +90,6 @@ namespace spades {
 		VersionInfo GetCurrentVersionInfo() { return m_currentVersionInfo; }
 
 		/**
-		 * Returns the target platform of this software package.
-		 */
-		std::string GetTargetPlatformName() { return m_targetPlatformName; }
-
-		/**
 		 * Returns the URL for the web page containing information about the latest version
 		 * of the software.
 		 * Returns an empty string if `!IsUpdateAvailable()`.
@@ -111,7 +106,6 @@ namespace spades {
 		ReadyState m_updateInfoReadyState;
 		VersionInfo m_latestVersionInfo;
 		VersionInfo m_currentVersionInfo;
-		std::string m_targetPlatformName;
 		std::string m_latestVersionInfoPageURL;
 
 		std::unique_ptr<UpdateFeed> m_updateFeed;

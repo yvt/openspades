@@ -32,4 +32,12 @@ namespace spades {
      * @return true if it succeeds. false otherwise.
      */
     bool ShowDirectoryInShell(const std::string &directoryPath);
+
+	/**
+	 * Opens the specified URL with the preferred web browser.
+	 *
+	 * @param url The URL to open.
+	 * @return true if it succeeds. false otherwise.
+	 */
+	bool OpenURLInBrowser(const std::string &url);
 }

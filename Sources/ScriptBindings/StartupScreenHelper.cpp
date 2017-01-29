@@ -132,6 +132,16 @@ namespace spades {
 												  asMETHOD(gui::StartupScreenHelper, GetOperatingSystemType),
 												  asCALL_THISCALL);
 					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "PackageUpdateManager@ get_PackageUpdateManager()",
+												  asMETHOD(gui::StartupScreenHelper, GetPackageUpdateManager),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "bool OpenUpdateInfoURL()",
+												  asMETHOD(gui::StartupScreenHelper, OpenUpdateInfoURL),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
 					break;
 				default:
 					break;

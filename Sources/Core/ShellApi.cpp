@@ -69,6 +69,26 @@ namespace spades {
 			return false;
 		}
 	}
+	bool OpenURLInBrowser(const std::string &url) {
+		std::wstring widePath = WStringFromUtf8(url.c_str());
+
+		// "The return value is cast as an HINSTANCE for backward compatibility with 16-bit Windows
+		// applications. It is not a true HINSTANCE, however. It can be cast only to an int and
+		// compared to either 32 or the following error codes below." --- MSDN Library
+		//
+		// Cast it to INT_PTR instead of int to get rid of "pointer truncation" warning.
+		INT_PTR result = reinterpret_cast<INT_PTR>(
+		  ShellExecuteW(nullptr, L"open", widePath.c_str(), nullptr, nullptr, SW_SHOWNORMAL));
+
+		// "If the function succeeds, it returns a value greater than 32."
+		if (result > 32) {
+			return true;
+		} else {
+			SPLog("ShellExecuteW returned %u while trying to open '%s' with a browser.",
+			      static_cast<unsigned int>(result), url.c_str());
+			return false;
+		}
+	}
 #elif __unix || __unix__
 	bool ShowDirectoryInShell(const std::string &directoryPath) {
 		// FIXME: escape single quotes
@@ -86,6 +106,34 @@ namespace spades {
 		if (result == -1) {
 			int no = errno;
 			SPLog("system() failed while executing xdg-open '%s': %s", directoryPath.c_str(),
+			      std::strerror(no));
+			return false;
+		}
+
+		int status = WEXITSTATUS(result);
+		if (status) {
+			SPLog("xdg-open failed with the exit code %d.", status);
+			return false;
+		}
+
+		return true;
+	}
+	
+	bool OpenURLInBrowser(const std::string &url) {
+		// FIXME: escape single quotes
+		if (url.find("'") != std::string::npos) {
+			SPLog("Cannot launch xdg-open (currently): the URL '%s' contains a single quotation mark",
+			      url.c_str());
+			return false;
+		}
+
+		// Assumption: system() uses the Bourne or any compatible shell internally.
+		//             system() behaves like that of GNU C Library.
+		int result = std::system(Format("xdg-open '{0}'", url).c_str());
+
+		if (result == -1) {
+			int no = errno;
+			SPLog("system() failed while executing xdg-open '%s': %s", url.c_str(),
 			      std::strerror(no));
 			return false;
 		}
