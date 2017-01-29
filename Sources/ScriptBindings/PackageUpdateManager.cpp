@@ -29,7 +29,7 @@ namespace spades{
 				new(p) PackageUpdateManager::VersionInfo{};
 			}
 			static void VersionInfoFactory2(const PackageUpdateManager::VersionInfo& other, PackageUpdateManager::VersionInfo *p) {
-				new(p) PackageUpdateManager::VersionInfo{other};
+				new(p) PackageUpdateManager::VersionInfo(other);
 			}
 			static void VersionInfoDestructor(PackageUpdateManager::VersionInfo *p) {
 				p->~VersionInfo();

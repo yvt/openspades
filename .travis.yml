@@ -28,4 +28,4 @@ before_script:
 script:
   - cmake -DOPENSPADES_RESOURCES=off ..
   - cat CMakeCache.txt
-  - make
+  - make -k
