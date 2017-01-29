@@ -291,6 +291,7 @@
 		E88F46591DE1B192009E85E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03F2178EF916000683D4 /* Cocoa.framework */; };
 		E893A3611E3E141D000654A4 /* PackageUpdateManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E893A35F1E3E141D000654A4 /* PackageUpdateManager.cpp */; };
 		E893A3631E3E3331000654A4 /* PackageUpdateManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E893A3621E3E3331000654A4 /* PackageUpdateManager.cpp */; };
+		E893A3651E3E4181000654A4 /* PackageInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = E893A3641E3E4181000654A4 /* PackageInfo.json */; };
 		E89A5F1E1DF8732200857F65 /* ShellApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1C1DF8732200857F65 /* ShellApi.cpp */; };
 		E89A5F201DF8759200857F65 /* ShellApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1F1DF8759200857F65 /* ShellApi.mm */; };
 		E89BBDC31B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */; };
@@ -572,6 +573,7 @@
 		E893A35F1E3E141D000654A4 /* PackageUpdateManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PackageUpdateManager.cpp; sourceTree = "<group>"; };
 		E893A3601E3E141D000654A4 /* PackageUpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageUpdateManager.h; sourceTree = "<group>"; };
 		E893A3621E3E3331000654A4 /* PackageUpdateManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PackageUpdateManager.cpp; sourceTree = "<group>"; };
+		E893A3641E3E4181000654A4 /* PackageInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = PackageInfo.json; path = XSpades/PackageInfo.json; sourceTree = "<group>"; };
 		E895D65B18D4A10E00F5B9CA /* jpge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jpge.cpp; sourceTree = "<group>"; };
 		E895D65C18D4A10E00F5B9CA /* jpge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jpge.h; sourceTree = "<group>"; };
 		E895D65E18D4A15900F5B9CA /* JpegWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JpegWriter.cpp; sourceTree = "<group>"; };
@@ -1443,6 +1445,7 @@
 		E8CF037C178ED9D2000683D4 = {
 			isa = PBXGroup;
 			children = (
+				E893A3641E3E4181000654A4 /* PackageInfo.json */,
 				E874834618EACF0300C29033 /* OpenSpades.icns */,
 				E82E680618EA9502004DBA18 /* XSpades.entitlements */,
 				E88F46571DE1AF48009E85E5 /* Built-in Paks */,
@@ -1966,6 +1969,7 @@
 				E8690AED1D3920C800DBC331 /* pak002-Base.pak in Resources */,
 				E8690AEE1D3920C800DBC331 /* pak005-Models.pak in Resources */,
 				E8690AEF1D3920C800DBC331 /* pak010-BaseSkin.pak in Resources */,
+				E893A3651E3E4181000654A4 /* PackageInfo.json in Resources */,
 				E8690AF01D3920C800DBC331 /* pak050-Locales.pak in Resources */,
 				E8690AF11D3920C800DBC331 /* pak999-References.pak in Resources */,
 				E874834718EACF0300C29033 /* OpenSpades.icns in Resources */,

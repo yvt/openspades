@@ -235,6 +235,9 @@ if(UNIX AND NOT APPLE)
 			DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
 	endif(OPENSPADES_RESOURCES)
 
+	# Package info (used for automatic update check)
+	INSTALL(FILES Resources/PackageInfo.json DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
+
 	# install icons
 	INSTALL(
 		DIRECTORY ${CMAKE_BINARY_DIR}/Resources/Icons/hicolor/
