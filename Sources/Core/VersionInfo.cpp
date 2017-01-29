@@ -42,6 +42,10 @@ std::string VersionInfo::GetVersionInfo() {
 	if (IsWindowsServer())
 		windowsVersion += " Server";
 	return windowsVersion;
+#elif defined(__FreeBSD__)
+	return std::string("FreeBSD");
+#elif defined(__OpenBSD__)
+	return std::string("OpenBSD");
 #else
 	return std::string("Unknown OS");
 #endif
