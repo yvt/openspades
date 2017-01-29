@@ -1,0 +1,9 @@
+{
+    "Version": [0, 1, 1, 0],
+    "VersionText": "pre-0.1.1",
+    "UpdateFeed": {
+        "Type": "Standard",
+        "Platform": "SourceCode",
+        "URL": "http://openspades.yvt.jp/api/version.json"
+    }
+}

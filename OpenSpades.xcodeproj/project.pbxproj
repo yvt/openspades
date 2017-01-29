@@ -289,6 +289,7 @@
 		E874834A18ED1BE500C29033 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8B93AD418559EC600BD01E1 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		E88344101E03244F000C3E39 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E883440F1E03244F000C3E39 /* FontManager.cpp */; };
 		E88F46591DE1B192009E85E5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03F2178EF916000683D4 /* Cocoa.framework */; };
+		E893A3611E3E141D000654A4 /* PackageUpdateManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E893A35F1E3E141D000654A4 /* PackageUpdateManager.cpp */; };
 		E89A5F1E1DF8732200857F65 /* ShellApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1C1DF8732200857F65 /* ShellApi.cpp */; };
 		E89A5F201DF8759200857F65 /* ShellApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1F1DF8759200857F65 /* ShellApi.mm */; };
 		E89BBDC31B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */; };
@@ -567,6 +568,8 @@
 		E88EB02E185D9DC500565D07 /* YsrDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YsrDevice.h; sourceTree = "<group>"; };
 		E890F30E187046990090AAB8 /* CP437.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CP437.cpp; sourceTree = "<group>"; };
 		E890F30F187046990090AAB8 /* CP437.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CP437.h; sourceTree = "<group>"; };
+		E893A35F1E3E141D000654A4 /* PackageUpdateManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PackageUpdateManager.cpp; sourceTree = "<group>"; };
+		E893A3601E3E141D000654A4 /* PackageUpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageUpdateManager.h; sourceTree = "<group>"; };
 		E895D65B18D4A10E00F5B9CA /* jpge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jpge.cpp; sourceTree = "<group>"; };
 		E895D65C18D4A10E00F5B9CA /* jpge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jpge.h; sourceTree = "<group>"; };
 		E895D65E18D4A15900F5B9CA /* JpegWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JpegWriter.cpp; sourceTree = "<group>"; };
@@ -1500,6 +1503,8 @@
 				E84E221818BB4BA0001282B0 /* Credits.inc */,
 				E810122F1E1D7301009955D3 /* Icon.cpp */,
 				E81012301E1D7301009955D3 /* Icon.h */,
+				E893A35F1E3E141D000654A4 /* PackageUpdateManager.cpp */,
+				E893A3601E3E141D000654A4 /* PackageUpdateManager.h */,
 			);
 			path = Gui;
 			sourceTree = "<group>";
@@ -2182,6 +2187,7 @@
 				E82E67D918EA7972004DBA18 /* SWModel.cpp in Sources */,
 				E82E67DA18EA7972004DBA18 /* SWImageRenderer.cpp in Sources */,
 				E82E67DB18EA7972004DBA18 /* SWFeatureLevel.cpp in Sources */,
+				E893A3611E3E141D000654A4 /* PackageUpdateManager.cpp in Sources */,
 				E82E67DC18EA7972004DBA18 /* SWMapRenderer.cpp in Sources */,
 				E82E67DD18EA7972004DBA18 /* SWFlatMapRenderer.cpp in Sources */,
 				E82E67DE18EA7972004DBA18 /* SWModelRenderer.cpp in Sources */,
