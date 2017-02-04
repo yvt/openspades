@@ -28,9 +28,11 @@ namespace spades {
 		class GLProgram;
 		class GLShader;
 		class IGLShadowMapRenderer;
+		class GLRenderer;
 		class GLSettings;
 		class GLProgramManager {
 			IGLDevice *device;
+			GLRenderer &renderer;
 			GLSettings &settings;
 			IGLShadowMapRenderer *shadowMapRenderer;
 
@@ -41,8 +43,8 @@ namespace spades {
 			GLShader *CreateShader(const std::string &name);
 
 		public:
-			GLProgramManager(IGLDevice *, IGLShadowMapRenderer *shadowMapRenderer,
-			                 GLSettings &settings);
+			GLProgramManager(IGLShadowMapRenderer *shadowMapRenderer,
+			                 GLRenderer &renderer);
 			~GLProgramManager();
 
 			GLProgram *RegisterProgram(const std::string &name);

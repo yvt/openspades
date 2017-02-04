@@ -31,12 +31,13 @@
 #include "GLShadowMapShader.h"
 #include "GLShadowShader.h"
 #include "IGLShadowMapRenderer.h"
+#include "GLRenderer.h"
 
 namespace spades {
 	namespace draw {
-		GLProgramManager::GLProgramManager(IGLDevice *d, IGLShadowMapRenderer *smr,
-		                                   GLSettings &settings)
-		    : device(d), shadowMapRenderer(smr), settings(settings) {
+		GLProgramManager::GLProgramManager(IGLShadowMapRenderer *smr,
+		                                   GLRenderer &renderer)
+		    : device(renderer.GetGLDevice()), renderer(renderer), shadowMapRenderer(smr), settings(renderer.GetSettings()) {
 			SPADES_MARK_FUNCTION();
 		}
 
@@ -176,6 +177,11 @@ namespace spades {
 				finalSource += "#define USE_SSAO 1\n";
 			} else {
 				finalSource += "#define USE_SSAO 0\n";
+			}
+			if (renderer.NeedsVelocitybuffer()) {
+				finalSource += "#define USE_VELOCITY_BUFFER 1\n";
+			} else {
+				finalSource += "#define USE_VELOCITY_BUFFER 0\n";
 			}
 
 			finalSource += text;

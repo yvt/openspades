@@ -48,6 +48,7 @@ DEFINE_SPADES_SETTING(r_lensFlareDynamic, "1");
 DEFINE_SPADES_SETTING(r_mapSoftShadow, "0");
 DEFINE_SPADES_SETTING(r_maxAnisotropy, "8");
 DEFINE_SPADES_SETTING(r_modelShadows, "1");
+DEFINE_SPADES_SETTING(r_motionBlur, "0");
 DEFINE_SPADES_SETTING(r_multisamples, "0");
 DEFINE_SPADES_SETTING(r_occlusionQuery, "0");
 DEFINE_SPADES_SETTING(r_optimizedVoxelModel, "1");
@@ -58,6 +59,7 @@ DEFINE_SPADES_SETTING(r_shadowMapSize, "2048");
 DEFINE_SPADES_SETTING(r_softParticles, "1");
 DEFINE_SPADES_SETTING(r_sparseShadowMaps, "1");
 DEFINE_SPADES_SETTING(r_ssao, "0");
+DEFINE_SPADES_SETTING(r_temporalAA, "0");
 DEFINE_SPADES_SETTING(r_water, "2");
 
 namespace spades {

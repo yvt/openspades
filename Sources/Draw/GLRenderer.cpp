@@ -105,7 +105,7 @@ namespace spades {
 
 			UpdateRenderSize();
 
-			programManager = new GLProgramManager(_device, shadowMapRenderer, settings);
+			programManager = new GLProgramManager(shadowMapRenderer, *this);
 			imageManager = new GLImageManager(_device);
 			imageRenderer = new GLImageRenderer(this);
 			profiler.reset(new GLProfiler(*this));
@@ -371,6 +371,12 @@ namespace spades {
 			} else {
 				return GetFogColor();
 			}
+		}
+
+#pragma mark - Pipeline Configuration Query
+
+		bool GLRenderer::NeedsVelocitybuffer() {
+			return settings.r_temporalAA || settings.r_motionBlur;
 		}
 
 #pragma mark - Resource Manager

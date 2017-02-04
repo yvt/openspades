@@ -55,6 +55,7 @@ namespace spades {
 			TypedItemHandle<bool> r_mapSoftShadow       { *this, "r_mapSoftShadow", ItemFlags::Latch };
 			TypedItemHandle<float> r_maxAnisotropy      { *this, "r_maxAnisotropy", ItemFlags::Latch };
 			TypedItemHandle<bool> r_modelShadows        { *this, "r_modelShadows", ItemFlags::Latch };
+			TypedItemHandle<bool> r_motionBlur          { *this, "r_motionBlur", ItemFlags::Latch };
 			TypedItemHandle<int> r_multisamples         { *this, "r_multisamples", ItemFlags::Latch };
 			TypedItemHandle<bool> r_occlusionQuery      { *this, "r_occlusionQuery" };
 			TypedItemHandle<bool> r_optimizedVoxelModel { *this, "r_optimizedVoxelModel", ItemFlags::Latch };
@@ -65,6 +66,7 @@ namespace spades {
 			TypedItemHandle<bool> r_softParticles       { *this, "r_softParticles" };
 			TypedItemHandle<bool> r_sparseShadowMaps    { *this, "r_sparseShadowMaps", ItemFlags::Latch };
 			TypedItemHandle<int> r_ssao                 { *this, "r_ssao", ItemFlags::Latch };
+			TypedItemHandle<bool> r_temporalAA          { *this, "r_temporalAA", ItemFlags::Latch };
 			TypedItemHandle<int> r_water                { *this, "r_water", ItemFlags::Latch };
 		};
 	}

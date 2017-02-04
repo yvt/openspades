@@ -210,6 +210,8 @@ namespace spades {
 			int GetRenderWidth() const { return renderWidth; }
 			int GetRenderHeight() const { return renderHeight; }
 
+			bool NeedsVelocitybuffer();
+
 			GLSettings &GetSettings() { return settings; }
 			IGLDevice *GetGLDevice() { return device; }
 			GLProfiler &GetGLProfiler() { return *profiler; }
