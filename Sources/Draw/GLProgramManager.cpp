@@ -162,11 +162,9 @@ namespace spades {
 			if (settings.r_hdr) {
 				// FP16 linear framebuffer
 				finalSource += "#define USE_HDR 1\n";
-				finalSource += "#define LINEAR_FRAMEBUFFER 1\n";
 			} else {
 				// sRGB framebuffer (reads/writes as linear)
 				finalSource += "#define USE_HDR 0\n";
-				finalSource += "#define LINEAR_FRAMEBUFFER 1\n";
 			}
 			if (settings.r_fogShadow) {
 				finalSource += "#define USE_VOLUMETRIC_FOG 1\n";
