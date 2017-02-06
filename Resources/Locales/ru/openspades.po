@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: OpenSpades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-01-04 16:29+0300\n"
+"PO-Revision-Date: 2017-02-05 19:29+0300\n"
 "Last-Translator: ArionWT <arionwhiteac@gmail.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -19,17 +19,17 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: Sources/Client/Client.cpp:582
+#: Sources/Client/Client.cpp:585
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr "Карта сохранена: {0}"
 
-#: Sources/Client/Client.cpp:586 Sources/Client/Client.cpp:592
+#: Sources/Client/Client.cpp:589 Sources/Client/Client.cpp:595
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr "Сохранение карты не удалось: "
 
-#: Sources/Client/Client.cpp:624
+#: Sources/Client/Client.cpp:627
 msgctxt "Client"
 msgid "[Global] "
 msgstr "[Общий] "
@@ -74,7 +74,7 @@ msgctxt "Client"
 msgid "Reloading"
 msgstr "Перезарядка"
 
-#: Sources/Client/Client_Draw.cpp:536 Sources/Client/Client_Input.cpp:440
+#: Sources/Client/Client_Draw.cpp:536 Sources/Client/Client_Input.cpp:439
 msgctxt "Client"
 msgid "Out of Ammo"
 msgstr "Патроны закончились"
@@ -94,17 +94,17 @@ msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr "Ожидание респавна"
 
-#: Sources/Client/Client_Draw.cpp:753
+#: Sources/Client/Client_Draw.cpp:764
 msgctxt "Client"
 msgid "Following {0}"
 msgstr "Наблюдение за {0}"
 
-#: Sources/Client/Client_Input.cpp:428
+#: Sources/Client/Client_Input.cpp:427
 msgctxt "Client"
 msgid "Out of Blocks"
 msgstr "Блоки закончились"
 
-#: Sources/Client/Client_Input.cpp:452
+#: Sources/Client/Client_Input.cpp:451
 msgctxt "Client"
 msgid "Out of Grenades"
 msgstr "Гранаты закончились"
@@ -181,7 +181,7 @@ msgctxt "Client"
 msgid "{0} Wins!"
 msgstr "Команда {0} выиграла!"
 
-#: Sources/Client/Client_Update.cpp:477
+#: Sources/Client/Client_Update.cpp:479
 msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
@@ -189,45 +189,75 @@ msgstr[0] "{0} блок"
 msgstr[1] "{0} блока"
 msgstr[2] "{0} блоков"
 
-#: Sources/Client/Client_Update.cpp:484
+#: Sources/Client/Client_Update.cpp:486
 msgctxt "Client"
 msgid "-- blocks"
 msgstr "-- блоков"
 
-#: Sources/Client/Client_Update.cpp:871
-msgctxt "Client"
-msgid "You have killed {0}"
-msgstr "Вы убили игрока {0}"
-
-#: Sources/Client/Client_Update.cpp:873
-msgctxt "Client"
-msgid "You were killed by {0}"
-msgstr "Вы были убиты игроком {0}"
-
-#: Sources/Client/Client_Update.cpp:1186
-msgctxt "Client"
-msgid "Insufficient blocks."
-msgstr "Недостаточно блоков."
-
-#: Sources/Client/Client_Update.cpp:1189
-msgctxt "Client"
-msgid "You cannot place a block there."
-msgstr "Вы не можете поставить здесь блок."
-
-#: Sources/Client/LimboView.cpp:68
+#: Sources/Client/Client_Update.cpp:842 Sources/Client/LimboView.cpp:68
 msgctxt "Client"
 msgid "Rifle"
 msgstr "Винтовка"
 
-#: Sources/Client/LimboView.cpp:71
+#: Sources/Client/Client_Update.cpp:843 Sources/Client/LimboView.cpp:71
 msgctxt "Client"
 msgid "SMG"
 msgstr "SMG"
 
-#: Sources/Client/LimboView.cpp:74
+#: Sources/Client/Client_Update.cpp:844 Sources/Client/LimboView.cpp:74
 msgctxt "Client"
 msgid "Shotgun"
 msgstr "Дробовик"
+
+#: Sources/Client/Client_Update.cpp:848
+msgctxt "Client"
+msgid "Fall"
+msgstr "Упал"
+
+#: Sources/Client/Client_Update.cpp:851
+msgctxt "Client"
+msgid "Melee"
+msgstr "Приклад"
+
+#: Sources/Client/Client_Update.cpp:854
+msgctxt "Client"
+msgid "Grenade"
+msgstr "Граната"
+
+#: Sources/Client/Client_Update.cpp:857
+msgctxt "Client"
+msgid "Headshot"
+msgstr "В голову"
+
+#: Sources/Client/Client_Update.cpp:860
+msgctxt "Client"
+msgid "Team Change"
+msgstr "Смена команды"
+
+#: Sources/Client/Client_Update.cpp:863
+msgctxt "Client"
+msgid "Weapon Change"
+msgstr "Смена оружия"
+
+#: Sources/Client/Client_Update.cpp:902
+msgctxt "Client"
+msgid "You have killed {0}"
+msgstr "Вы убили игрока {0}"
+
+#: Sources/Client/Client_Update.cpp:904
+msgctxt "Client"
+msgid "You were killed by {0}"
+msgstr "Вы были убиты игроком {0}"
+
+#: Sources/Client/Client_Update.cpp:1216
+msgctxt "Client"
+msgid "Insufficient blocks."
+msgstr "Недостаточно блоков."
+
+#: Sources/Client/Client_Update.cpp:1219
+msgctxt "Client"
+msgid "You cannot place a block there."
+msgstr "Вы не можете поставить здесь блок."
 
 #: Sources/Client/LimboView.cpp:78
 msgctxt "Client"
@@ -244,75 +274,75 @@ msgctxt "Client"
 msgid "Select Weapon:"
 msgstr "Выбор оружия:"
 
-#: Sources/Client/NetClient.cpp:376
+#: Sources/Client/NetClient.cpp:377
 msgctxt "NetClient"
 msgid "Connecting to the server"
 msgstr "Подключение к серверу"
 
-#: Sources/Client/NetClient.cpp:390
+#: Sources/Client/NetClient.cpp:389
 msgctxt "NetClient"
 msgid "Not connected"
 msgstr "Не подключен"
 
-#: Sources/Client/NetClient.cpp:459
+#: Sources/Client/NetClient.cpp:453
 msgctxt "NetClient"
 msgid "Awaiting for state"
 msgstr "В ожидании состояния"
 
-#: Sources/Client/NetClient.cpp:469 Sources/Client/NetClient.cpp:1235
+#: Sources/Client/NetClient.cpp:463 Sources/Client/NetClient.cpp:1232
 msgctxt "NetClient"
 msgid "Loading snapshot"
 msgstr "Загрузка снапшота"
 
-#: Sources/Client/NetClient.cpp:484
+#: Sources/Client/NetClient.cpp:478
 msgctxt "NetClient"
 msgid "Loading snapshot ({0}/{1})"
 msgstr "Загрузка снапшота ({0}/{1})"
 
-#: Sources/Client/NetClient.cpp:489 Sources/Client/NetClient.cpp:523
+#: Sources/Client/NetClient.cpp:483 Sources/Client/NetClient.cpp:517
 msgctxt "NetClient"
 msgid "Connected"
 msgstr "Подключено"
 
-#: Sources/Client/NetClient.cpp:501 Sources/Client/NetClient.cpp:536
-#: Sources/Client/NetClient.cpp:588
+#: Sources/Client/NetClient.cpp:495 Sources/Client/NetClient.cpp:530
+#: Sources/Client/NetClient.cpp:582
 msgctxt "NetClient"
 msgid "Still loading..."
 msgstr "Еще загружается..."
 
-#: Sources/Client/NetClient.cpp:504 Sources/Client/NetClient.cpp:510
-#: Sources/Client/NetClient.cpp:540 Sources/Client/NetClient.cpp:545
-#: Sources/Client/NetClient.cpp:592 Sources/Client/NetClient.cpp:597
+#: Sources/Client/NetClient.cpp:498 Sources/Client/NetClient.cpp:504
+#: Sources/Client/NetClient.cpp:534 Sources/Client/NetClient.cpp:539
+#: Sources/Client/NetClient.cpp:586 Sources/Client/NetClient.cpp:591
 msgctxt "NetClient"
 msgid "Error"
 msgstr "Ошибка"
 
-#: Sources/Client/NetClient.cpp:663
+#: Sources/Client/NetClient.cpp:657
 msgctxt "NetClient"
 msgid "You are banned from this server."
 msgstr "Вы забанены на этом сервере"
 
-#: Sources/Client/NetClient.cpp:668 Sources/Client/NetClient.cpp:671
+#: Sources/Client/NetClient.cpp:662 Sources/Client/NetClient.cpp:665
 msgctxt "NetClient"
 msgid "You were kicked from this server."
 msgstr "Вас выкинули с этого сервера"
 
-#: Sources/Client/NetClient.cpp:669
+#: Sources/Client/NetClient.cpp:663
 msgctxt "NetClient"
 msgid "Incompatible client protocol version."
 msgstr "Несовместимая версия протокола клиента"
 
-#: Sources/Client/NetClient.cpp:670
+#: Sources/Client/NetClient.cpp:664
 msgctxt "NetClient"
 msgid "Server full"
 msgstr "Сервер заполнен"
 
-#: Sources/Client/NetClient.cpp:672
+#: Sources/Client/NetClient.cpp:666
 msgctxt "NetClient"
 msgid "Unknown Reason"
 msgstr "Неизвестная причина"
 
-#: Sources/Client/ScoreboardView.cpp:331
+#: Sources/Client/ScoreboardView.cpp:63 Sources/Client/ScoreboardView.cpp:345
 msgctxt "Client"
 msgid "Spectator{1}"
 msgid_plural "Spectators{1}"
@@ -330,12 +360,12 @@ msgctxt "Client"
 msgid "{0}'s Territory"
 msgstr "Территория {0}"
 
-#: Sources/Gui/Main.cpp:637
+#: Sources/Gui/Main.cpp:548
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr "Система локализации загружена"
 
-#: Sources/Gui/Main.cpp:695 Sources/Gui/Runner.cpp:58
+#: Sources/Gui/Main.cpp:604 Sources/Gui/Runner.cpp:56
 msgctxt "Main"
 msgid ""
 "A serious error caused OpenSpades to stop working:\n"
@@ -349,7 +379,7 @@ msgstr ""
 "\n"
 "Посмотрите SystemMessages.log для более подробной информации."
 
-#: Sources/Gui/Main.cpp:703 Sources/Gui/Runner.cpp:64
+#: Sources/Gui/Main.cpp:612 Sources/Gui/Runner.cpp:62
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr "Фатальная ошибка OpenSpades"
@@ -961,68 +991,73 @@ msgctxt "Preferences"
 msgid "Some settings only can be changed in the startup window."
 msgstr "Некоторые настройки могут быть изменены только в стартовом окне."
 
-#: Resources/Scripts/Gui/StartupScreen.as:159
+#: Resources/Scripts/Gui/StartupScreen.as:160
 msgctxt "StartupScreen"
 msgid "Start"
 msgstr "Запуск"
 
-#: Resources/Scripts/Gui/StartupScreen.as:166
+#: Resources/Scripts/Gui/StartupScreen.as:167
 msgctxt "StartupScreen"
 msgid "Skip this screen next time"
 msgstr "Не показывать в следующий раз"
 
-#: Resources/Scripts/Gui/StartupScreen.as:204
+#: Resources/Scripts/Gui/StartupScreen.as:211
 msgctxt "StartupScreen"
 msgid "Graphics"
 msgstr "Графика"
 
-#: Resources/Scripts/Gui/StartupScreen.as:205
+#: Resources/Scripts/Gui/StartupScreen.as:212
 msgctxt "StartupScreen"
 msgid "Audio"
 msgstr "Аудио"
 
-#: Resources/Scripts/Gui/StartupScreen.as:206
+#: Resources/Scripts/Gui/StartupScreen.as:213
 msgctxt "StartupScreen"
 msgid "Generic"
 msgstr "Общие"
 
-#: Resources/Scripts/Gui/StartupScreen.as:207
+#: Resources/Scripts/Gui/StartupScreen.as:214
 msgctxt "StartupScreen"
 msgid "System Info"
 msgstr "Систем. инфо"
 
-#: Resources/Scripts/Gui/StartupScreen.as:208
-#: Resources/Scripts/Gui/StartupScreen.as:1661
+#: Resources/Scripts/Gui/StartupScreen.as:215
+#: Resources/Scripts/Gui/StartupScreen.as:1678
 msgctxt "StartupScreen"
 msgid "Advanced"
 msgstr "Расширенные"
 
-#: Resources/Scripts/Gui/StartupScreen.as:836
+#: Resources/Scripts/Gui/StartupScreen.as:288
+msgctxt "StartupScreen"
+msgid "An unknown error has occurred while opening the update info website."
+msgstr "Возникла неизвестная ошибка при открытии сайта обновлений."
+
+#: Resources/Scripts/Gui/StartupScreen.as:853
 msgctxt "StartupScreen"
 msgid "Custom"
 msgstr "Другое"
 
-#: Resources/Scripts/Gui/StartupScreen.as:962
+#: Resources/Scripts/Gui/StartupScreen.as:979
 msgctxt "StartupScreen"
 msgid "Close"
 msgstr "Закрыть"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1068
+#: Resources/Scripts/Gui/StartupScreen.as:1085
 msgctxt "StartupScreen"
 msgid "Graphics Settings"
 msgstr "Графические настройки"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1073
+#: Resources/Scripts/Gui/StartupScreen.as:1090
 msgctxt "StartupScreen"
 msgid "Resolution"
 msgstr "Разрешение"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1083
+#: Resources/Scripts/Gui/StartupScreen.as:1100
 msgctxt "StartupScreen"
 msgid "Fullscreen Mode"
 msgstr "Полноэкранный режим"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1086
+#: Resources/Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
 msgid ""
 "By running in fullscreen mode OpenSpades occupies the screen, making it "
@@ -1031,18 +1066,18 @@ msgstr ""
 "При запуске в полноэкранном режиме, OpenSpades занимает весь экран, облегчая "
 "вашу концентрацию в игре."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1093
-#: Resources/Scripts/Gui/StartupScreen.as:1475
+#: Resources/Scripts/Gui/StartupScreen.as:1110
+#: Resources/Scripts/Gui/StartupScreen.as:1492
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr "Рендер"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1096
+#: Resources/Scripts/Gui/StartupScreen.as:1113
 msgctxt "StartupScreen"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1100
+#: Resources/Scripts/Gui/StartupScreen.as:1117
 msgctxt "StartupScreen"
 msgid ""
 "OpenGL renderer uses your computer's graphics accelerator to generate the "
@@ -1051,12 +1086,12 @@ msgstr ""
 "Рендер OpenGL использует графический ускоритель вашего компьютера для "
 "генерации изображения."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1108
+#: Resources/Scripts/Gui/StartupScreen.as:1125
 msgctxt "StartupScreen"
 msgid "Software"
 msgstr "Программный"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1112
+#: Resources/Scripts/Gui/StartupScreen.as:1129
 msgctxt "StartupScreen"
 msgid ""
 "Software renderer uses CPU to generate the game screen. Its quality and "
@@ -1067,7 +1102,7 @@ msgstr ""
 "производительность могут быть ниже рендера OpenGL, однако он работает даже с "
 "неподдерживаемыми видеокартами."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1126
+#: Resources/Scripts/Gui/StartupScreen.as:1143
 msgctxt "StartupScreen"
 msgid ""
 "Antialias:Enables a technique to improve the appearance of high-contrast "
@@ -1089,12 +1124,12 @@ msgstr ""
 "FXAA: выполняет сглаживание с помощью размытия артефактов в постобработке.|"
 "Выкл|MSAA 2x|4x|FXAA"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1133
+#: Resources/Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
 msgid "Global Illumination"
 msgstr "Глобальное освещение"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1135
+#: Resources/Scripts/Gui/StartupScreen.as:1152
 msgctxt "StartupScreen"
 msgid ""
 "Enables a physically based simulation of light path for more realistic "
@@ -1103,12 +1138,12 @@ msgstr ""
 "Включает физическое моделирование световых лучей для более реалистичного "
 "освещения."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1138
+#: Resources/Scripts/Gui/StartupScreen.as:1155
 msgctxt "StartupScreen"
 msgid "Linear HDR Rendering"
 msgstr "Линейный HDR рендеринг"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1140
+#: Resources/Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
 msgid ""
 "Uses a number representation which allows wider dynamic range during "
@@ -1122,125 +1157,125 @@ msgstr ""
 "фактической энергией, то есть, физически может быть достигнуто точное "
 "смешивание."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1147
+#: Resources/Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
 msgid "Camera Blur"
 msgstr "Размытие камеры"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1148
+#: Resources/Scripts/Gui/StartupScreen.as:1165
 msgctxt "StartupScreen"
 msgid "Blurs the screen when you turn quickly."
 msgstr "Размывает экран, когда вы быстро поворачиваетесь."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1150
+#: Resources/Scripts/Gui/StartupScreen.as:1167
 msgctxt "StartupScreen"
 msgid "Lens Effect"
 msgstr "Эффекты линзы"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1151
+#: Resources/Scripts/Gui/StartupScreen.as:1168
 msgctxt "StartupScreen"
 msgid "Simulates distortion caused by a real camera lens."
 msgstr "Симулирует искажения, вызванные линзами реальной камеры."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1153
+#: Resources/Scripts/Gui/StartupScreen.as:1170
 msgctxt "StartupScreen"
 msgid "Lens Scattering Filter"
 msgstr "Фильтр рассеяния объектива"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1154
+#: Resources/Scripts/Gui/StartupScreen.as:1171
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
 msgstr "Имитирует рассеяние света пылью на линзе камеры."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1157
+#: Resources/Scripts/Gui/StartupScreen.as:1174
 msgctxt "StartupScreen"
 msgid "Lens Flare"
 msgstr "Блики линзы"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1158
+#: Resources/Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid "The Sun causes lens flare."
 msgstr "Солнце вызывает блики линзы."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1160
+#: Resources/Scripts/Gui/StartupScreen.as:1177
 msgctxt "StartupScreen"
 msgid "Flares for Dynamic Lights"
 msgstr "Блики динамического света"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1161
+#: Resources/Scripts/Gui/StartupScreen.as:1178
 msgctxt "StartupScreen"
 msgid "Enables lens flare for light sources other than the Sun."
 msgstr "Включает блики света для других источников света, кроме солнца."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1163
+#: Resources/Scripts/Gui/StartupScreen.as:1180
 msgctxt "StartupScreen"
 msgid "Color Correction"
 msgstr "Коррекция цвета"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1164
+#: Resources/Scripts/Gui/StartupScreen.as:1181
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
 msgstr "Применяет кинематографичную коррекцию цвета, чтобы картинка выглядела лучше."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1166
+#: Resources/Scripts/Gui/StartupScreen.as:1183
 msgctxt "StartupScreen"
 msgid "Depth of Field"
 msgstr "Глубина резкости"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1167
+#: Resources/Scripts/Gui/StartupScreen.as:1184
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
 msgstr "Размывает объекты вне фокуса."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1169
+#: Resources/Scripts/Gui/StartupScreen.as:1186
 msgctxt "StartupScreen"
 msgid "Screen Space Ambient Occlusion"
 msgstr "SSAO"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1170
+#: Resources/Scripts/Gui/StartupScreen.as:1187
 msgctxt "StartupScreen"
 msgid "Simulates soft shadows that occur between nearby objects."
 msgstr "Имитирует мягкие тени, которые возникают между близкими объектами."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1172
-#: Resources/Scripts/Gui/StartupScreen.as:1211
-#: Resources/Scripts/Gui/StartupScreen.as:1233
+#: Resources/Scripts/Gui/StartupScreen.as:1189
+#: Resources/Scripts/Gui/StartupScreen.as:1228
+#: Resources/Scripts/Gui/StartupScreen.as:1250
 msgctxt "StartupScreen"
 msgid "Low"
 msgstr "Низко"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1173
-#: Resources/Scripts/Gui/StartupScreen.as:1212
+#: Resources/Scripts/Gui/StartupScreen.as:1190
+#: Resources/Scripts/Gui/StartupScreen.as:1229
 msgctxt "StartupScreen"
 msgid "Medium"
 msgstr "Средне"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1174
-#: Resources/Scripts/Gui/StartupScreen.as:1213
-#: Resources/Scripts/Gui/StartupScreen.as:1235
+#: Resources/Scripts/Gui/StartupScreen.as:1191
+#: Resources/Scripts/Gui/StartupScreen.as:1230
+#: Resources/Scripts/Gui/StartupScreen.as:1252
 msgctxt "StartupScreen"
 msgid "High"
 msgstr "Высоко"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1175
-#: Resources/Scripts/Gui/StartupScreen.as:1236
+#: Resources/Scripts/Gui/StartupScreen.as:1192
+#: Resources/Scripts/Gui/StartupScreen.as:1253
 msgctxt "StartupScreen"
 msgid "Ultra"
 msgstr "Ультра"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1178
+#: Resources/Scripts/Gui/StartupScreen.as:1195
 msgctxt "StartupScreen"
 msgid "Post-process"
 msgstr "Постобработка"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1179
+#: Resources/Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
 msgid ""
 "Post-process modifies the image to make it look better and more realistic."
 msgstr ""
 "Постобработка изменяет картинку, чтобы сделать её лучше и более реалистичной."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1186
+#: Resources/Scripts/Gui/StartupScreen.as:1203
 msgctxt "StartupScreen"
 msgid ""
 "Particles|Low:Artifact occurs when a particle intersects other objects.|"
@@ -1251,12 +1286,12 @@ msgstr ""
 "Средне:Частица пересекает объект плавно.|Высоко:Частица пересекает "
 "объект плавно, некоторые объекты отбрасывают свою тень на частицы."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1196
+#: Resources/Scripts/Gui/StartupScreen.as:1213
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
 msgstr "Динамическое освещение"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1198
+#: Resources/Scripts/Gui/StartupScreen.as:1215
 msgctxt "StartupScreen"
 msgid ""
 "Gives some objects an ability to emit light to give them an energy-emitting "
@@ -1265,22 +1300,22 @@ msgstr ""
 "Дает некоторым объектам возможность излучать свет для придания им эффекта "
 "свечения."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1201
+#: Resources/Scripts/Gui/StartupScreen.as:1218
 msgctxt "StartupScreen"
 msgid "Shadows"
 msgstr "Тени"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1202
+#: Resources/Scripts/Gui/StartupScreen.as:1219
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
 msgstr "Подвижные объекты отбрасывают тень."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1204
+#: Resources/Scripts/Gui/StartupScreen.as:1221
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
 msgstr "Объемный туман"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1205
+#: Resources/Scripts/Gui/StartupScreen.as:1222
 msgctxt "StartupScreen"
 msgid ""
 "Simulates shadow being casted to the fog particles using a super highly "
@@ -1289,12 +1324,12 @@ msgstr ""
 "Моделирует отбрасывание тени частицами тумана используя супер сильный "
 "ресурсоемкий алгоритм. "
 
-#: Resources/Scripts/Gui/StartupScreen.as:1208
+#: Resources/Scripts/Gui/StartupScreen.as:1225
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
 msgstr "Освещение на физической основе"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1209
+#: Resources/Scripts/Gui/StartupScreen.as:1226
 msgctxt "StartupScreen"
 msgid ""
 "Uses more accurate approximation techniques to decide the brightness of "
@@ -1302,12 +1337,12 @@ msgid ""
 msgstr ""
 "Использует более точные приближенные методы для определения яркости объектов."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1216
+#: Resources/Scripts/Gui/StartupScreen.as:1233
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr "Прямой свет"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1217
+#: Resources/Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
 msgid ""
 "Controls how light encounting a material and atmosphere directly affects its "
@@ -1316,7 +1351,7 @@ msgstr ""
 "Управляет тем, как столкновение света с материалами и атмосферой напрямую "
 "влияет на их внешний вид."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1227
+#: Resources/Scripts/Gui/StartupScreen.as:1244
 msgctxt "StartupScreen"
 msgid ""
 "Water Shader|None:Water is rendered in the same way that normal blocks are "
@@ -1331,22 +1366,22 @@ msgstr ""
 "и преломления рендерятся с наивысшим качеством, используя экранно-пространственные "
 "методы."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1234
+#: Resources/Scripts/Gui/StartupScreen.as:1251
 msgctxt "StartupScreen"
 msgid "Med"
 msgstr "Средне"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1239
+#: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid "Shader Effects"
 msgstr "Шейдеры"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1239
+#: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr "Специальные эффекты."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1256
+#: Resources/Scripts/Gui/StartupScreen.as:1273
 msgctxt "StartupScreen"
 msgid ""
 "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
@@ -1355,17 +1390,17 @@ msgstr ""
 "Быстрый режим:Уменьшает разрешение картинки, чтобы сделать рендеринг быстрее.|"
 "Выкл|2x|4x"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1469
+#: Resources/Scripts/Gui/StartupScreen.as:1486
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr "Настройки аудио"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1478
+#: Resources/Scripts/Gui/StartupScreen.as:1495
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr "OpenAL"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1482
+#: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
 msgid ""
 "Uses an OpenAL-capable sound card to process sound. In most cases where "
@@ -1375,12 +1410,12 @@ msgstr ""
 "В большинстве случаев, когда нет такой звуковой карты, используется "
 "программная эмуляция."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1491
+#: Resources/Scripts/Gui/StartupScreen.as:1508
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr "YSR"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1495
+#: Resources/Scripts/Gui/StartupScreen.as:1512
 msgctxt "StartupScreen"
 msgid ""
 "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
@@ -1392,23 +1427,23 @@ msgstr ""
 "автоматическое управление загрузкой, динамический компрессор, HRTF-based 3D "
 "аудио и реверберации высокого качества."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1505
+#: Resources/Scripts/Gui/StartupScreen.as:1522
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr "Откл"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1509
+#: Resources/Scripts/Gui/StartupScreen.as:1526
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr "Отключить вывод аудио."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1520
-#: Resources/Scripts/Gui/StartupScreen.as:1544
+#: Resources/Scripts/Gui/StartupScreen.as:1537
+#: Resources/Scripts/Gui/StartupScreen.as:1561
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "Полифоника"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1521
+#: Resources/Scripts/Gui/StartupScreen.as:1538
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. Higher value needs "
@@ -1419,12 +1454,12 @@ msgstr ""
 "значения требуют большой вычислительной мощности, так что слишком высокое "
 "значение может привести к перегрузке."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1528
+#: Resources/Scripts/Gui/StartupScreen.as:1545
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1529
+#: Resources/Scripts/Gui/StartupScreen.as:1546
 msgctxt "StartupScreen"
 msgid ""
 "Enables extended features provided by the OpenAL driver to create more "
@@ -1433,7 +1468,7 @@ msgstr ""
 "Включает расширенные особенности предусмотренные драйвером OpenAL для "
 "создания лучшей атмосферы."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1545
+#: Resources/Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
 msgid ""
 "Specifies how many sounds can be played simultaneously. No matter what value "
@@ -1443,64 +1478,64 @@ msgstr ""
 "значение установлено, YSR может уменьшить количество звуков, когда обнаружена "
 "перегрузка."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1605
+#: Resources/Scripts/Gui/StartupScreen.as:1622
 msgctxt "StartupScreen"
 msgid "Language"
 msgstr "Язык"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1617
+#: Resources/Scripts/Gui/StartupScreen.as:1634
 msgctxt "StartupScreen"
 msgid "Tools"
 msgstr "Инструменты"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1620
+#: Resources/Scripts/Gui/StartupScreen.as:1637
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
 msgstr "Сбросить все настройки"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1629
+#: Resources/Scripts/Gui/StartupScreen.as:1646
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
 msgstr "Открыть папку с настрйоками в проводнике"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1631
+#: Resources/Scripts/Gui/StartupScreen.as:1648
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
 msgstr "Найти папку с конфигами в поиске"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1633
+#: Resources/Scripts/Gui/StartupScreen.as:1650
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
 msgstr "Обзор папки с настройками"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1650
+#: Resources/Scripts/Gui/StartupScreen.as:1667
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
 msgstr "Возникла неизвестная ошибка при открытии папки с настройками."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1656
+#: Resources/Scripts/Gui/StartupScreen.as:1673
 msgctxt "StartupScreen"
 msgid ""
 "Are you sure to reset all settings? They include (but are not limited to):"
 msgstr ""
 "Вы уверены, что хотите сбросить все настройки? Включая (и не только):"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1657
+#: Resources/Scripts/Gui/StartupScreen.as:1674
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
 msgstr "Все настройки графики/аудио"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1658
+#: Resources/Scripts/Gui/StartupScreen.as:1675
 msgctxt "StartupScreen"
 msgid "All key bindings"
 msgstr "Все настройки управления"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1659
+#: Resources/Scripts/Gui/StartupScreen.as:1676
 msgctxt "StartupScreen"
 msgid "Your player name"
 msgstr "Ваше имя игрока"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1660
+#: Resources/Scripts/Gui/StartupScreen.as:1677
 msgctxt "StartupScreen"
 msgid ""
 "Other advanced settings only accessible through '{0}' tab and in-game "
@@ -1509,28 +1544,68 @@ msgstr ""
 "Другие расширенные настройки, доступные только через вкладку '{0}' и "
 "внутриигровые команды"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1730
+#: Resources/Scripts/Gui/StartupScreen.as:1747
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
 msgstr "Неизвестн. ({0})"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1732
-#: Resources/Scripts/Gui/StartupScreen.as:1746
+#: Resources/Scripts/Gui/StartupScreen.as:1749
+#: Resources/Scripts/Gui/StartupScreen.as:1763
 msgctxt "StartupScreen"
 msgid "System default"
 msgstr "Системный по-умолчанию"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1795
+#: Resources/Scripts/Gui/StartupScreen.as:1812
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "Копировать в буфер"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1831
+#: Resources/Scripts/Gui/StartupScreen.as:1848
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "Расширенные настройки"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1840
+#: Resources/Scripts/Gui/StartupScreen.as:1857
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "Фильтр"
+
+#: Resources/Scripts/Gui/UpdateCheckView.as:40
+msgctxt "UpdateCheck"
+msgid "Enable"
+msgstr "Включить"
+
+#: Resources/Scripts/Gui/UpdateCheckView.as:47
+msgctxt "UpdateCheck"
+msgid "Show details..."
+msgstr "Подробнее..."
+
+#: Resources/Scripts/Gui/UpdateCheckView.as:102
+msgctxt "UpdateCheck"
+msgid "Version {0} is available! (You currently have {1})"
+msgstr "Версия {0} доступна! (Теперешняя {1})"
+
+#: Resources/Scripts/Gui/UpdateCheckView.as:105
+msgctxt "UpdateCheck"
+msgid "You're using the latest version of OpenSpades. ({0})"
+msgstr "Вы используете последнюю версию OpenSpades. ({0})"
+
+#: Resources/Scripts/Gui/UpdateCheckView.as:110
+msgctxt "UpdateCheck"
+msgid "Checking for updates..."
+msgstr "Проверка обновлений..."
+
+#: Resources/Scripts/Gui/UpdateCheckView.as:113
+msgctxt "UpdateCheck"
+msgid "Failed to check for updates."
+msgstr "Ошибка проверки обновлений."
+
+#: Resources/Scripts/Gui/UpdateCheckView.as:116
+msgctxt "UpdateCheck"
+msgid "Automatic update check is not enabled."
+msgstr "Автоматическая проверка обновлений выключена."
+
+#: Resources/Scripts/Gui/UpdateCheckView.as:119
+msgctxt "UpdateCheck"
+msgid "Automatic update check is not available."
+msgstr "Автоматическая проверка обновлений не доступна."
