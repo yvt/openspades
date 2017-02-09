@@ -1041,6 +1041,10 @@ namespace spades {
 		                             spades::Vector3 hitPos) {
 			SPADES_MARK_FUNCTION();
 
+			if (IsFollowing() && followingPlayerId == player->GetId()) {
+				return;
+			}
+
 			float vel;
 			switch (player->GetWeapon()->GetWeaponType()) {
 				case RIFLE_WEAPON: vel = 700.f; break;
