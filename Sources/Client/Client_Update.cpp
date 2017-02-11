@@ -850,13 +850,32 @@ namespace spades {
 						case SHOTGUN_WEAPON: cause += _Tr("Client", "Shotgun"); break;
 					}
 					break;
-				case KillTypeFall: cause += _Tr("Client", "Fall"); break;
-				case KillTypeMelee: cause += _Tr("Client", "Melee"); break;
-				case KillTypeGrenade: cause += _Tr("Client", "Grenade"); break;
-				case KillTypeHeadshot: cause += _Tr("Client", "Headshot"); break;
-				case KillTypeTeamChange: cause += _Tr("Client", "Team Change"); break;
-				case KillTypeClassChange: cause += _Tr("Client", "Weapon Change"); break;
-				default: cause += "???"; break;
+				case KillTypeFall:
+					//! A cause of death shown in the kill feed.
+					cause += _Tr("Client", "Fall");
+					break;
+				case KillTypeMelee:
+					//! A cause of death shown in the kill feed.
+					cause += _Tr("Client", "Melee");
+					break;
+				case KillTypeGrenade:
+					cause += _Tr("Client", "Grenade");
+					break;
+				case KillTypeHeadshot:
+					//! A cause of death shown in the kill feed.
+					cause += _Tr("Client", "Headshot");
+					break;
+				case KillTypeTeamChange:
+					//! A cause of death shown in the kill feed.
+					cause += _Tr("Client", "Team Change");
+					break;
+				case KillTypeClassChange:
+					//! A cause of death shown in the kill feed.
+					cause += _Tr("Client", "Weapon Change");
+					break;
+				default:
+					cause += "???";
+					break;
 			}
 
 			s += " [";
@@ -876,11 +895,11 @@ namespace spades {
 
 			// log to netlog
 			if (killer != victim) {
-				NetLog("%s (%s)%s%s (%s)", killer->GetName().c_str(),
+				NetLog("%s (%s) [%s] %s (%s)", killer->GetName().c_str(),
 				       world->GetTeam(killer->GetTeamId()).name.c_str(), cause.c_str(),
 				       victim->GetName().c_str(), world->GetTeam(victim->GetTeamId()).name.c_str());
 			} else {
-				NetLog("%s (%s)%s", killer->GetName().c_str(),
+				NetLog("%s (%s) [%s]", killer->GetName().c_str(),
 				       world->GetTeam(killer->GetTeamId()).name.c_str(), cause.c_str());
 			}
 
@@ -1032,6 +1051,10 @@ namespace spades {
 		void Client::AddBulletTracer(spades::client::Player *player, spades::Vector3 muzzlePos,
 		                             spades::Vector3 hitPos) {
 			SPADES_MARK_FUNCTION();
+
+			if (IsFollowing() && followingPlayerId == player->GetId()) {
+				return;
+			}
 
 			float vel;
 			switch (player->GetWeapon()->GetWeaponType()) {

@@ -313,6 +313,11 @@ namespace spades {
 	extern CatalogDomainHandle defaultDomain;
 
 	void LoadCurrentLocale();
+
+	/**
+	 * Returns a current local identifier in this format: `[language[_territory]]`.
+	 */
+	std::string GetCurrentLocaleAndRegion();
 }
 
 #define _Tr(...) ::spades::defaultDomain.Get(__VA_ARGS__)
