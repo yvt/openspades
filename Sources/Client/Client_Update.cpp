@@ -889,11 +889,11 @@ namespace spades {
 
 			// log to netlog
 			if (killer != victim) {
-				NetLog("%s (%s)%s%s (%s)", killer->GetName().c_str(),
+				NetLog("%s (%s) [%s] %s (%s)", killer->GetName().c_str(),
 				       world->GetTeam(killer->GetTeamId()).name.c_str(), cause.c_str(),
 				       victim->GetName().c_str(), world->GetTeam(victim->GetTeamId()).name.c_str());
 			} else {
-				NetLog("%s (%s)%s", killer->GetName().c_str(),
+				NetLog("%s (%s) [%s]", killer->GetName().c_str(),
 				       world->GetTeam(killer->GetTeamId()).name.c_str(), cause.c_str());
 			}
 
