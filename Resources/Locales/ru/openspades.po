@@ -1,23 +1,21 @@
-# OpenSpades translation
-# Copyright (C) 2017 yvt
-# This file is distributed under the same license as the OpenSpades package.
-# yvt <i@yvt.jp>, 2017.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSpades\n"
+"Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-02-05 19:29+0300\n"
-"Last-Translator: ArionWT <arionwhiteac@gmail.com>\n"
+"PO-Revision-Date: 2017-02-11 03:09-0500\n"
+"Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Russian\n"
-"Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: crowdin.com\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Crowdin-Project: openspades\n"
+"X-Crowdin-Language: ru\n"
+"X-Crowdin-File: openspades.pot\n"
+"Language: ru_RU\n"
 
 #: Sources/Client/Client.cpp:585
 msgctxt "Client"
@@ -367,16 +365,11 @@ msgstr "Система локализации загружена"
 
 #: Sources/Gui/Main.cpp:604 Sources/Gui/Runner.cpp:56
 msgctxt "Main"
-msgid ""
-"A serious error caused OpenSpades to stop working:\n"
-"\n"
-"{0}\n"
-"\n"
+msgid "A serious error caused OpenSpades to stop working:\n\n"
+"{0}\n\n"
 "See SystemMessages.log for more details."
-msgstr ""
-"Серьезная ошибка заставила OpenSpades прекратить работу:\n"
-"{0}\n"
-"\n"
+msgstr "Серьезная ошибка заставила OpenSpades прекратить работу:\n"
+"{0}\n\n"
 "Посмотрите SystemMessages.log для более подробной информации."
 
 #: Sources/Gui/Main.cpp:612 Sources/Gui/Runner.cpp:62
@@ -564,13 +557,9 @@ msgstr "Стр."
 
 #: Resources/Scripts/Gui/MainScreen.as:787
 msgctxt "MainScreen"
-msgid ""
-"You were disconnected from the server because of the following reason:\n"
-"\n"
+msgid "You were disconnected from the server because of the following reason:\n\n"
 "{0}"
-msgstr ""
-"Вы были отключены от сервера по следующей причине:\n"
-"\n"
+msgstr "Вы были отключены от сервера по следующей причине:\n\n"
 "{0}"
 
 #: Resources/Scripts/Gui/MainScreen.as:807
@@ -1059,12 +1048,8 @@ msgstr "Полноэкранный режим"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
-msgid ""
-"By running in fullscreen mode OpenSpades occupies the screen, making it "
-"easier for you to concentrate on playing the game."
-msgstr ""
-"При запуске в полноэкранном режиме, OpenSpades занимает весь экран, облегчая "
-"вашу концентрацию в игре."
+msgid "By running in fullscreen mode OpenSpades occupies the screen, making it easier for you to concentrate on playing the game."
+msgstr "При запуске в полноэкранном режиме, OpenSpades занимает весь экран, облегчая вашу концентрацию в игре."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1110
 #: Resources/Scripts/Gui/StartupScreen.as:1492
@@ -1079,12 +1064,8 @@ msgstr "OpenGL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1117
 msgctxt "StartupScreen"
-msgid ""
-"OpenGL renderer uses your computer's graphics accelerator to generate the "
-"game screen."
-msgstr ""
-"Рендер OpenGL использует графический ускоритель вашего компьютера для "
-"генерации изображения."
+msgid "OpenGL renderer uses your computer's graphics accelerator to generate the game screen."
+msgstr "Рендер OpenGL использует графический ускоритель вашего компьютера для генерации изображения."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1125
 msgctxt "StartupScreen"
@@ -1093,36 +1074,17 @@ msgstr "Программный"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1129
 msgctxt "StartupScreen"
-msgid ""
-"Software renderer uses CPU to generate the game screen. Its quality and "
-"performance might be inferior to OpenGL renderer, but it works even with an "
-"unsupported GPU."
-msgstr ""
-"Программный рендер использует ЦП для генерации изображения. Качество и "
-"производительность могут быть ниже рендера OpenGL, однако он работает даже с "
-"неподдерживаемыми видеокартами."
+msgid "Software renderer uses CPU to generate the game screen. Its quality and performance might be inferior to OpenGL renderer, but it works even with an unsupported GPU."
+msgstr "Программный рендер использует ЦП для генерации изображения. Качество и производительность могут быть ниже рендера OpenGL, однако он работает даже с неподдерживаемыми видеокартами."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1143
 msgctxt "StartupScreen"
-msgid ""
-"Antialias:Enables a technique to improve the appearance of high-contrast "
-"edges.\n"
-"\n"
-"MSAA: Performs antialiasing by generating an intermediate high-resolution "
-"image. Looks best, but doesn't cope with some settings.\n"
-"\n"
-"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
-"Off|MSAA 2x|4x|FXAA"
-msgstr ""
-"Сглаживание:Включает метод улучшения внешнего вида высоко-контрастных "
-"граней.\n"
-"\n"
-"MSAA: выполняет сглаживание с помощью генерации промежуточной картинки "
-"высокого разрешения. Выглядит лучше, но не справляется с некоторыми "
-"настройками.\n"
-"\n"
-"FXAA: выполняет сглаживание с помощью размытия артефактов в постобработке.|"
-"Выкл|MSAA 2x|4x|FXAA"
+msgid "Antialias:Enables a technique to improve the appearance of high-contrast edges.\n\n"
+"MSAA: Performs antialiasing by generating an intermediate high-resolution image. Looks best, but doesn't cope with some settings.\n\n"
+"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|Off|MSAA 2x|4x|FXAA"
+msgstr "Сглаживание:Включает метод улучшения внешнего вида высоко-контрастных граней.\n\n"
+"MSAA: выполняет сглаживание с помощью генерации промежуточной картинки высокого разрешения. Выглядит лучше, но не справляется с некоторыми настройками.\n\n"
+"FXAA: выполняет сглаживание с помощью размытия артефактов в постобработке.|Выкл|MSAA 2x|4x|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
@@ -1131,12 +1093,8 @@ msgstr "Глобальное освещение"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1152
 msgctxt "StartupScreen"
-msgid ""
-"Enables a physically based simulation of light path for more realistic "
-"lighting."
-msgstr ""
-"Включает физическое моделирование световых лучей для более реалистичного "
-"освещения."
+msgid "Enables a physically based simulation of light path for more realistic lighting."
+msgstr "Включает физическое моделирование световых лучей для более реалистичного освещения."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1155
 msgctxt "StartupScreen"
@@ -1145,17 +1103,8 @@ msgstr "Линейный HDR рендеринг"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
-msgid ""
-"Uses a number representation which allows wider dynamic range during "
-"rendering process. Additionally, this allows color calculation whose value "
-"is in linear correspondence with actual energy, that is, physically accurate "
-"blending can be achieved."
-msgstr ""
-"Использует ряд представлений, которые позволяют использовать более широкий "
-"динамический диапазон во время процесса рендеринга. Кроме того, позволяет "
-"вычислить цвета, значения которых находится в линейном соответствии с "
-"фактической энергией, то есть, физически может быть достигнуто точное "
-"смешивание."
+msgid "Uses a number representation which allows wider dynamic range during rendering process. Additionally, this allows color calculation whose value is in linear correspondence with actual energy, that is, physically accurate blending can be achieved."
+msgstr "Использует ряд представлений, которые позволяют использовать более широкий динамический диапазон во время процесса рендеринга. Кроме того, позволяет вычислить цвета, значения которых находится в линейном соответствии с фактической энергией, то есть, физически может быть достигнуто точное смешивание."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
@@ -1270,21 +1219,13 @@ msgstr "Постобработка"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
-msgid ""
-"Post-process modifies the image to make it look better and more realistic."
-msgstr ""
-"Постобработка изменяет картинку, чтобы сделать её лучше и более реалистичной."
+msgid "Post-process modifies the image to make it look better and more realistic."
+msgstr "Постобработка изменяет картинку, чтобы сделать её лучше и более реалистичной."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1203
 msgctxt "StartupScreen"
-msgid ""
-"Particles|Low:Artifact occurs when a particle intersects other objects.|"
-"Medium:Particle intersects objects smoothly.|High:Particle intersects "
-"objects smoothly, and some objects casts their shadow to particles."
-msgstr ""
-"Частицы|Низко:Когда частица пересекает объект, появляются артефакты.|"
-"Средне:Частица пересекает объект плавно.|Высоко:Частица пересекает "
-"объект плавно, некоторые объекты отбрасывают свою тень на частицы."
+msgid "Particles|Low:Artifact occurs when a particle intersects other objects.|Medium:Particle intersects objects smoothly.|High:Particle intersects objects smoothly, and some objects casts their shadow to particles."
+msgstr "Частицы|Низко:Когда частица пересекает объект, появляются артефакты.|Средне:Частица пересекает объект плавно.|Высоко:Частица пересекает объект плавно, некоторые объекты отбрасывают свою тень на частицы."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1213
 msgctxt "StartupScreen"
@@ -1293,12 +1234,8 @@ msgstr "Динамическое освещение"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1215
 msgctxt "StartupScreen"
-msgid ""
-"Gives some objects an ability to emit light to give them an energy-emitting "
-"impression."
-msgstr ""
-"Дает некоторым объектам возможность излучать свет для придания им эффекта "
-"свечения."
+msgid "Gives some objects an ability to emit light to give them an energy-emitting impression."
+msgstr "Дает некоторым объектам возможность излучать свет для придания им эффекта свечения."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1218
 msgctxt "StartupScreen"
@@ -1317,12 +1254,8 @@ msgstr "Объемный туман"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1222
 msgctxt "StartupScreen"
-msgid ""
-"Simulates shadow being casted to the fog particles using a super highly "
-"computationally demanding algorithm. "
-msgstr ""
-"Моделирует отбрасывание тени частицами тумана используя супер сильный "
-"ресурсоемкий алгоритм. "
+msgid "Simulates shadow being casted to the fog particles using a super highly computationally demanding algorithm. "
+msgstr "Моделирует отбрасывание тени частицами тумана используя супер сильный ресурсоемкий алгоритм. "
 
 #: Resources/Scripts/Gui/StartupScreen.as:1225
 msgctxt "StartupScreen"
@@ -1331,11 +1264,8 @@ msgstr "Освещение на физической основе"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1226
 msgctxt "StartupScreen"
-msgid ""
-"Uses more accurate approximation techniques to decide the brightness of "
-"objects."
-msgstr ""
-"Использует более точные приближенные методы для определения яркости объектов."
+msgid "Uses more accurate approximation techniques to decide the brightness of objects."
+msgstr "Использует более точные приближенные методы для определения яркости объектов."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1233
 msgctxt "StartupScreen"
@@ -1344,27 +1274,13 @@ msgstr "Прямой свет"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
-msgid ""
-"Controls how light encounting a material and atmosphere directly affects its "
-"appearance."
-msgstr ""
-"Управляет тем, как столкновение света с материалами и атмосферой напрямую "
-"влияет на их внешний вид."
+msgid "Controls how light encounting a material and atmosphere directly affects its appearance."
+msgstr "Управляет тем, как столкновение света с материалами и атмосферой напрямую влияет на их внешний вид."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1244
 msgctxt "StartupScreen"
-msgid ""
-"Water Shader|None:Water is rendered in the same way that normal blocks are "
-"done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving "
-"water is simulated as well as reflection and refraction.|Level 3:Reflections "
-"and refractions are rendered at the highest quality using screen-space "
-"techniques."
-msgstr ""
-"Шейдеры воды|Выкл:Рендер воды происходит таким же способом, как и ренднер "
-"блоков.|1 уровень:Симулируется преломление и отражение солнца.|2 уровня:Волны"
-"имитируются также хорошо, как и преломления и отражения.|3 уровень:Отражения "
-"и преломления рендерятся с наивысшим качеством, используя экранно-пространственные "
-"методы."
+msgid "Water Shader|None:Water is rendered in the same way that normal blocks are done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving water is simulated as well as reflection and refraction.|Level 3:Reflections and refractions are rendered at the highest quality using screen-space techniques."
+msgstr "Шейдеры воды|Выкл:Рендер воды происходит таким же способом, как и ренднер блоков.|1 уровень:Симулируется преломление и отражение солнца.|2 уровня:Волныимитируются также хорошо, как и преломления и отражения.|3 уровень:Отражения и преломления рендерятся с наивысшим качеством, используя экранно-пространственные методы."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1251
 msgctxt "StartupScreen"
@@ -1383,12 +1299,8 @@ msgstr "Специальные эффекты."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1273
 msgctxt "StartupScreen"
-msgid ""
-"Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
-"4x"
-msgstr ""
-"Быстрый режим:Уменьшает разрешение картинки, чтобы сделать рендеринг быстрее.|"
-"Выкл|2x|4x"
+msgid "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|4x"
+msgstr "Быстрый режим:Уменьшает разрешение картинки, чтобы сделать рендеринг быстрее.|Выкл|2x|4x"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1486
 msgctxt "StartupScreen"
@@ -1402,13 +1314,8 @@ msgstr "OpenAL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
-msgid ""
-"Uses an OpenAL-capable sound card to process sound. In most cases where "
-"there isn't such a sound card, software emulation is used."
-msgstr ""
-"Использует OpenAL-совместимую звуковую карту для обработки звука. "
-"В большинстве случаев, когда нет такой звуковой карты, используется "
-"программная эмуляция."
+msgid "Uses an OpenAL-capable sound card to process sound. In most cases where there isn't such a sound card, software emulation is used."
+msgstr "Использует OpenAL-совместимую звуковую карту для обработки звука. В большинстве случаев, когда нет такой звуковой карты, используется программная эмуляция."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1508
 msgctxt "StartupScreen"
@@ -1417,15 +1324,8 @@ msgstr "YSR"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1512
 msgctxt "StartupScreen"
-msgid ""
-"YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
-"features several enhanced features including automatic load control, "
-"dynamics compressor, HRTF-based 3D audio, and high quality reverb."
-msgstr ""
-"YSR - Это экспериментальный 3D HDR звуковой движок оптимизированный для "
-"OpenSpades. Он включает в себя некоторые улучшенные особенности, такие как: "
-"автоматическое управление загрузкой, динамический компрессор, HRTF-based 3D "
-"аудио и реверберации высокого качества."
+msgid "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It features several enhanced features including automatic load control, dynamics compressor, HRTF-based 3D audio, and high quality reverb."
+msgstr "YSR - Это экспериментальный 3D HDR звуковой движок оптимизированный для OpenSpades. Он включает в себя некоторые улучшенные особенности, такие как: автоматическое управление загрузкой, динамический компрессор, HRTF-based 3D аудио и реверберации высокого качества."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1522
 msgctxt "StartupScreen"
@@ -1445,14 +1345,8 @@ msgstr "Полифоника"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1538
 msgctxt "StartupScreen"
-msgid ""
-"Specifies how many sounds can be played simultaneously. Higher value needs "
-"more processing power, so setting this too high might cause an overload "
-"(especially with a software emulation)."
-msgstr ""
-"Определяет как много звуков может проигрываться одновременно. Высокие "
-"значения требуют большой вычислительной мощности, так что слишком высокое "
-"значение может привести к перегрузке."
+msgid "Specifies how many sounds can be played simultaneously. Higher value needs more processing power, so setting this too high might cause an overload (especially with a software emulation)."
+msgstr "Определяет как много звуков может проигрываться одновременно. Высокие значения требуют большой вычислительной мощности, так что слишком высокое значение может привести к перегрузке."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1545
 msgctxt "StartupScreen"
@@ -1461,22 +1355,13 @@ msgstr "EAX"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1546
 msgctxt "StartupScreen"
-msgid ""
-"Enables extended features provided by the OpenAL driver to create more "
-"ambience."
-msgstr ""
-"Включает расширенные особенности предусмотренные драйвером OpenAL для "
-"создания лучшей атмосферы."
+msgid "Enables extended features provided by the OpenAL driver to create more ambience."
+msgstr "Включает расширенные особенности предусмотренные драйвером OpenAL для создания лучшей атмосферы."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
-msgid ""
-"Specifies how many sounds can be played simultaneously. No matter what value "
-"is set, YSR might reduce the number of sounds when an overload is detected."
-msgstr ""
-"Определяет сколько звуков может проигрываться одновременно. Не важно, какое "
-"значение установлено, YSR может уменьшить количество звуков, когда обнаружена "
-"перегрузка."
+msgid "Specifies how many sounds can be played simultaneously. No matter what value is set, YSR might reduce the number of sounds when an overload is detected."
+msgstr "Определяет сколько звуков может проигрываться одновременно. Не важно, какое значение установлено, YSR может уменьшить количество звуков, когда обнаружена перегрузка."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1622
 msgctxt "StartupScreen"
@@ -1515,10 +1400,8 @@ msgstr "Возникла неизвестная ошибка при открыт
 
 #: Resources/Scripts/Gui/StartupScreen.as:1673
 msgctxt "StartupScreen"
-msgid ""
-"Are you sure to reset all settings? They include (but are not limited to):"
-msgstr ""
-"Вы уверены, что хотите сбросить все настройки? Включая (и не только):"
+msgid "Are you sure to reset all settings? They include (but are not limited to):"
+msgstr "Вы уверены, что хотите сбросить все настройки? Включая (и не только):"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1674
 msgctxt "StartupScreen"
@@ -1537,12 +1420,8 @@ msgstr "Ваше имя игрока"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1677
 msgctxt "StartupScreen"
-msgid ""
-"Other advanced settings only accessible through '{0}' tab and in-game "
-"commands"
-msgstr ""
-"Другие расширенные настройки, доступные только через вкладку '{0}' и "
-"внутриигровые команды"
+msgid "Other advanced settings only accessible through '{0}' tab and in-game commands"
+msgstr "Другие расширенные настройки, доступные только через вкладку '{0}' и внутриигровые команды"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1747
 msgctxt "StartupScreen"
@@ -1609,3 +1488,4 @@ msgstr "Автоматическая проверка обновлений вы�
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
 msgstr "Автоматическая проверка обновлений не доступна."
+

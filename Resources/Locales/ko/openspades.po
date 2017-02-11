@@ -1,23 +1,21 @@
-# Copyright (C) 2017 yvt
-# This file is distributed under the same license as the OpenSpades package.
-# yvt <i@yvt.jp>, 2017.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSpades\n"
+"Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
-"POT-Creation-Date: 2017-01-30 15:04+0900\n"
-"PO-Revision-Date: 2017-01-30 15:10+0900\n"
-"Last-Translator: kmsi <sts06196@naver.com>\n"
+"POT-Creation-Date: 2016-12-25 23:47-0200\n"
+"PO-Revision-Date: 2017-02-11 03:09-0500\n"
+"Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Korean\n"
-"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: crowdin.com\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Language: ko\n"
-"X-Source-Language: C\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Crowdin-Project: openspades\n"
+"X-Crowdin-Language: ko\n"
+"X-Crowdin-File: openspades.pot\n"
+"Language: ko_KR\n"
 
 #: Sources/Client/Client.cpp:585
 msgctxt "Client"
@@ -32,7 +30,7 @@ msgstr "맵 저장이 실패했습니다:"
 #: Sources/Client/Client.cpp:627
 msgctxt "Client"
 msgid "[Global] "
-msgstr "전체"
+msgstr "[전체] "
 
 #: Sources/Client/Client_Draw.cpp:119
 msgctxt "Client"
@@ -363,17 +361,11 @@ msgstr "한글화 기능을 불러왔습니다."
 
 #: Sources/Gui/Main.cpp:604 Sources/Gui/Runner.cpp:56
 msgctxt "Main"
-msgid ""
-"A serious error caused OpenSpades to stop working:\n"
-"\n"
-"{0}\n"
-"\n"
+msgid "A serious error caused OpenSpades to stop working:\n\n"
+"{0}\n\n"
 "See SystemMessages.log for more details."
-msgstr ""
-"심각한 오류가 발생하여 Openspades가 작동을 멈췄습니다:\n"
-"\n"
-"{0}\n"
-"\n"
+msgstr "심각한 오류가 발생하여 Openspades가 작동을 멈췄습니다:\n\n"
+"{0}\n\n"
 "자세한 정보는 SystemMessages.log을 확인하세요."
 
 #: Sources/Gui/Main.cpp:612 Sources/Gui/Runner.cpp:62
@@ -561,13 +553,9 @@ msgstr "국가"
 
 #: Resources/Scripts/Gui/MainScreen.as:787
 msgctxt "MainScreen"
-msgid ""
-"You were disconnected from the server because of the following reason:\n"
-"\n"
+msgid "You were disconnected from the server because of the following reason:\n\n"
 "{0}"
-msgstr ""
-"다음 이유 때문에 서버에서 나가졌습니다:\n"
-"\n"
+msgstr "다음 이유 때문에 서버에서 나가졌습니다:\n\n"
 "{0}"
 
 #: Resources/Scripts/Gui/MainScreen.as:807
@@ -1027,7 +1015,7 @@ msgstr "고급"
 #: Resources/Scripts/Gui/StartupScreen.as:288
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the update info website."
-msgstr "업데이트 정보를 받는 중 알 수 없는 오류가 발생했습니다."
+msgstr "업데이트 정보를 여는 중 알 수 없는 오류가 발생했습니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:853
 msgctxt "StartupScreen"
@@ -1056,12 +1044,8 @@ msgstr "전체 화면"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
-msgid ""
-"By running in fullscreen mode OpenSpades occupies the screen, making it "
-"easier for you to concentrate on playing the game."
-msgstr ""
-"전체 화면 모드를 사용하면 화면 전체를 이용하여 플레이 할 수 있으므로 게임에 "
-"집중하기 쉽습니다."
+msgid "By running in fullscreen mode OpenSpades occupies the screen, making it easier for you to concentrate on playing the game."
+msgstr "전체 화면 모드를 사용하면 화면 전체를 이용하여 플레이 할 수 있으므로 게임에 집중하기 쉽습니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1110
 #: Resources/Scripts/Gui/StartupScreen.as:1492
@@ -1076,9 +1060,7 @@ msgstr "OpenGL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1117
 msgctxt "StartupScreen"
-msgid ""
-"OpenGL renderer uses your computer's graphics accelerator to generate the "
-"game screen."
+msgid "OpenGL renderer uses your computer's graphics accelerator to generate the game screen."
 msgstr "OpenGL 렌더러는 컴퓨터에 내장 된 GPU를 사용하여 게임 화면을 그립니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1125
@@ -1088,33 +1070,17 @@ msgstr "소프트웨어"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1129
 msgctxt "StartupScreen"
-msgid ""
-"Software renderer uses CPU to generate the game screen. Its quality and "
-"performance might be inferior to OpenGL renderer, but it works even with an "
-"unsupported GPU."
-msgstr ""
-"소프트웨어 렌더러는 CPU를 사용하여 게임 화면을 그립니다. 품질 및 성능은 "
-"OpenGL에 비해 떨어지지만 지원되지 않는 GPU에서도 항상 작동합니다."
+msgid "Software renderer uses CPU to generate the game screen. Its quality and performance might be inferior to OpenGL renderer, but it works even with an unsupported GPU."
+msgstr "소프트웨어 렌더러는 CPU를 사용하여 게임 화면을 그립니다. 품질 및 성능은 OpenGL에 비해 떨어지지만 지원되지 않는 GPU에서도 항상 작동합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1143
 msgctxt "StartupScreen"
-msgid ""
-"Antialias:Enables a technique to improve the appearance of high-contrast "
-"edges.\n"
-"\n"
-"MSAA: Performs antialiasing by generating an intermediate high-resolution "
-"image. Looks best, but doesn't cope with some settings.\n"
-"\n"
-"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
-"Off|MSAA 2x|4x|FXAA"
-msgstr ""
-"앤티앨리어싱:오브젝트의 윤곽에 발생하는 계단 현상을 줄여 줍니다.\n"
-"\n"
-"MSAA:보통의 경우보다 고해상도의 이미지를 생성하여 앤티앨리어싱을 수행합니다. "
-"가장 멋져 보이지만, 몇몇 설정과는 호환되지 않습니다.\n"
-"\n"
-"FXAA:계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합니다.|"
-"꺼짐|MSAA 2x|4x|FXAA"
+msgid "Antialias:Enables a technique to improve the appearance of high-contrast edges.\n\n"
+"MSAA: Performs antialiasing by generating an intermediate high-resolution image. Looks best, but doesn't cope with some settings.\n\n"
+"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|Off|MSAA 2x|4x|FXAA"
+msgstr "앤티앨리어싱:오브젝트의 윤곽에 발생하는 계단 현상을 줄여 줍니다.\n\n"
+"MSAA:보통의 경우보다 고해상도의 이미지를 생성하여 앤티앨리어싱을 수행합니다. 가장 멋져 보이지만, 몇몇 설정과는 호환되지 않습니다.\n\n"
+"FXAA:계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합니다.|꺼짐|MSAA 2x|4x|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
@@ -1123,9 +1089,7 @@ msgstr "전역 조명"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1152
 msgctxt "StartupScreen"
-msgid ""
-"Enables a physically based simulation of light path for more realistic "
-"lighting."
+msgid "Enables a physically based simulation of light path for more realistic lighting."
 msgstr "물리 기반 시뮬레이션을 사용하여 보다 사실적으로 빛을 표현합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1155
@@ -1135,15 +1099,8 @@ msgstr "선형 HDR 렌더리"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
-msgid ""
-"Uses a number representation which allows wider dynamic range during "
-"rendering process. Additionally, this allows color calculation whose value "
-"is in linear correspondence with actual energy, that is, physically accurate "
-"blending can be achieved."
-msgstr ""
-"렌더링 과정 중 더 넓은 범위의 숫자 표현을 사용합니다. 또, 실제 값과 선형으로 "
-"대응하도록 색상의 계산을 수행합니다. 즉, 물리적으로 정확한 색의 합성이 가능해"
-"집니다."
+msgid "Uses a number representation which allows wider dynamic range during rendering process. Additionally, this allows color calculation whose value is in linear correspondence with actual energy, that is, physically accurate blending can be achieved."
+msgstr "렌더링 과정 중 더 넓은 범위의 숫자 표현을 사용합니다. 또, 실제 값과 선형으로 대응하도록 색상의 계산을 수행합니다. 즉, 물리적으로 정확한 색의 합성이 가능해집니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
@@ -1258,21 +1215,13 @@ msgstr "포스트-프로세싱"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
-msgid ""
-"Post-process modifies the image to make it look better and more realistic."
+msgid "Post-process modifies the image to make it look better and more realistic."
 msgstr "화면 수정을 통해 더욱 멋지고 실제같은 화면이 나타나도록 합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1203
 msgctxt "StartupScreen"
-msgid ""
-"Particles|Low:Artifact occurs when a particle intersects other objects.|"
-"Medium:Particle intersects objects smoothly.|High:Particle intersects "
-"objects smoothly, and some objects casts their shadow to particles."
-msgstr ""
-"파티클|낮음:입자가 다른 물체와 겹칠 때 그 경계면이 날카롭게 그려집니다.|중간:"
-"입자가 다른 물체와 겹칠 때 그 경계면이 매끄럽게 그려집니다.|높음:입자가 다른 "
-"물체와 겹칠 때 그 경계면이 매끄럽게 그려지며, 일부 물체의 그림자가 입자에 드"
-"리웁니다."
+msgid "Particles|Low:Artifact occurs when a particle intersects other objects.|Medium:Particle intersects objects smoothly.|High:Particle intersects objects smoothly, and some objects casts their shadow to particles."
+msgstr "파티클|낮음:입자가 다른 물체와 겹칠 때 그 경계면이 날카롭게 그려집니다.|중간:입자가 다른 물체와 겹칠 때 그 경계면이 매끄럽게 그려집니다.|높음:입자가 다른 물체와 겹칠 때 그 경계면이 매끄럽게 그려지며, 일부 물체의 그림자가 입자에 드리웁니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1213
 msgctxt "StartupScreen"
@@ -1281,11 +1230,8 @@ msgstr "동적 조명"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1215
 msgctxt "StartupScreen"
-msgid ""
-"Gives some objects an ability to emit light to give them an energy-emitting "
-"impression."
-msgstr ""
-"몇몇 물체가 빛을 발산할 수 있도록 해 마치 에너지를 내뿜는 듯한 느낌을 줍니다."
+msgid "Gives some objects an ability to emit light to give them an energy-emitting impression."
+msgstr "몇몇 물체가 빛을 발산할 수 있도록 해 마치 에너지를 내뿜는 듯한 느낌을 줍니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1218
 msgctxt "StartupScreen"
@@ -1304,12 +1250,8 @@ msgstr "입체적 안개 효과"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1222
 msgctxt "StartupScreen"
-msgid ""
-"Simulates shadow being casted to the fog particles using a super highly "
-"computationally demanding algorithm. "
-msgstr ""
-"매우 높은 연산량을 요구하는 알고리즘을 사용하여 대기의 안개 입자에 그림자를 "
-"드리웁니다."
+msgid "Simulates shadow being casted to the fog particles using a super highly computationally demanding algorithm. "
+msgstr "매우 높은 연산량을 요구하는 알고리즘을 사용하여 대기의 안개 입자에 그림자를 드리웁니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1225
 msgctxt "StartupScreen"
@@ -1318,9 +1260,7 @@ msgstr "물리 기반 광원 효과"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1226
 msgctxt "StartupScreen"
-msgid ""
-"Uses more accurate approximation techniques to decide the brightness of "
-"objects."
+msgid "Uses more accurate approximation techniques to decide the brightness of objects."
 msgstr "물체의 밝기를 계산하는 데 더 정확한 근삿값을 활용합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1233
@@ -1330,25 +1270,13 @@ msgstr "직접 조명"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
-msgid ""
-"Controls how light encounting a material and atmosphere directly affects its "
-"appearance."
-msgstr ""
-"대기 혹은 물체에 직접 입사하는 빛이 그 물체에 영향을 끼치는 정도를 조정합니"
-"다."
+msgid "Controls how light encounting a material and atmosphere directly affects its appearance."
+msgstr "대기 혹은 물체에 직접 입사하는 빛이 그 물체에 영향을 끼치는 정도를 조정합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1244
 msgctxt "StartupScreen"
-msgid ""
-"Water Shader|None:Water is rendered in the same way that normal blocks are "
-"done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving "
-"water is simulated as well as reflection and refraction.|Level 3:Reflections "
-"and refractions are rendered at the highest quality using screen-space "
-"techniques."
-msgstr ""
-"물 쉐이더|없음:일반 블럭과 똑같이 물을 렌더링합니다.|1단계:굴절과 태양의 반사"
-"가 표시됩니다.|2단계:굴절과 태양의 반사는 물론, 파도까지 나타납니다.|3단계:반"
-"사 및 굴절이 Screen-Space 기술을 이용해 가장 좋은 품질로 렌더링됩니다."
+msgid "Water Shader|None:Water is rendered in the same way that normal blocks are done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving water is simulated as well as reflection and refraction.|Level 3:Reflections and refractions are rendered at the highest quality using screen-space techniques."
+msgstr "물 쉐이더|없음:일반 블럭과 똑같이 물을 렌더링합니다.|1단계:굴절과 태양의 반사가 표시됩니다.|2단계:굴절과 태양의 반사는 물론, 파도까지 나타납니다.|3단계:반사 및 굴절이 Screen-Space 기술을 이용해 가장 좋은 품질로 렌더링됩니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1251
 msgctxt "StartupScreen"
@@ -1367,9 +1295,7 @@ msgstr "특수 효과입니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1273
 msgctxt "StartupScreen"
-msgid ""
-"Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|"
-"4x"
+msgid "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|4x"
 msgstr "고속 모드:화면 해상도를 낮춰 렌더링을 가속화합니다.|꺼짐|2x|4x"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1486
@@ -1384,12 +1310,8 @@ msgstr "OpenAL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
-msgid ""
-"Uses an OpenAL-capable sound card to process sound. In most cases where "
-"there isn't such a sound card, software emulation is used."
-msgstr ""
-"OpenAL 호환 사운드 카드를 사용하여 음성을 처리합니다. 대부분의 경우 이러한 사"
-"운드 카드가 없으므로 소프트웨어 에뮬레이션이 사용됩니다."
+msgid "Uses an OpenAL-capable sound card to process sound. In most cases where there isn't such a sound card, software emulation is used."
+msgstr "OpenAL 호환 사운드 카드를 사용하여 음성을 처리합니다. 대부분의 경우 이러한 사운드 카드가 없으므로 소프트웨어 에뮬레이션이 사용됩니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1508
 msgctxt "StartupScreen"
@@ -1398,14 +1320,8 @@ msgstr "YSR"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1512
 msgctxt "StartupScreen"
-msgid ""
-"YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
-"features several enhanced features including automatic load control, "
-"dynamics compressor, HRTF-based 3D audio, and high quality reverb."
-msgstr ""
-"YSR은 OpenSpades에 최적화된 실험적인 3D HDR 사운드 엔진입니다. 자동 부하 제"
-"어 및 동적 압축, HRTF 기반의 3D 오디오, 고음질 반향 효과 등의 개선된 기능을 "
-"제공합니다."
+msgid "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It features several enhanced features including automatic load control, dynamics compressor, HRTF-based 3D audio, and high quality reverb."
+msgstr "YSR은 OpenSpades에 최적화된 실험적인 3D HDR 사운드 엔진입니다. 자동 부하 제어 및 동적 압축, HRTF 기반의 3D 오디오, 고음질 반향 효과 등의 개선된 기능을 제공합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1522
 msgctxt "StartupScreen"
@@ -1425,14 +1341,8 @@ msgstr "최대 동시 음향"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1538
 msgctxt "StartupScreen"
-msgid ""
-"Specifies how many sounds can be played simultaneously. Higher value needs "
-"more processing power, so setting this too high might cause an overload "
-"(especially with a software emulation)."
-msgstr ""
-"동시에 재생되는 소리의 수를 지정합니다. 이 값이 크면 필요한 처리 능력도 증가"
-"하기 때문에 지나친 설정값은 (특히 소프트웨어 에뮬레이션하는 경우)과부하가 발"
-"생할 수 있습니다."
+msgid "Specifies how many sounds can be played simultaneously. Higher value needs more processing power, so setting this too high might cause an overload (especially with a software emulation)."
+msgstr "동시에 재생되는 소리의 수를 지정합니다. 이 값이 크면 필요한 처리 능력도 증가하기 때문에 지나친 설정값은 (특히 소프트웨어 에뮬레이션하는 경우)과부하가 발생할 수 있습니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1545
 msgctxt "StartupScreen"
@@ -1441,19 +1351,13 @@ msgstr "EAX"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1546
 msgctxt "StartupScreen"
-msgid ""
-"Enables extended features provided by the OpenAL driver to create more "
-"ambience."
+msgid "Enables extended features provided by the OpenAL driver to create more ambience."
 msgstr "OpenAL 드라이버가 제공하는 확장 기능을 이용하여 현장감을 높여줍니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
-msgid ""
-"Specifies how many sounds can be played simultaneously. No matter what value "
-"is set, YSR might reduce the number of sounds when an overload is detected."
-msgstr ""
-"동시에 플레이되는 소리의 개수를 지정합니다. 이 값에 상관없이 YSR은 과부하가 "
-"감지될 경우 이를 방지하기 위해 동시 발음 수를 줄일 수 있습니다."
+msgid "Specifies how many sounds can be played simultaneously. No matter what value is set, YSR might reduce the number of sounds when an overload is detected."
+msgstr "동시에 플레이되는 소리의 개수를 지정합니다. 이 값에 상관없이 YSR은 과부하가 감지될 경우 이를 방지하기 위해 동시 발음 수를 줄일 수 있습니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1622
 msgctxt "StartupScreen"
@@ -1483,7 +1387,7 @@ msgstr "파인더에서 설정 폴더 열기"
 #: Resources/Scripts/Gui/StartupScreen.as:1650
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
-msgstr "설정 폴더 불러오기"
+msgstr "설정 폴더 열기"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1667
 msgctxt "StartupScreen"
@@ -1492,10 +1396,8 @@ msgstr "설정 폴더를 여는 동안 알 수 없는 오류가 발생했습니�
 
 #: Resources/Scripts/Gui/StartupScreen.as:1673
 msgctxt "StartupScreen"
-msgid ""
-"Are you sure to reset all settings? They include (but are not limited to):"
-msgstr ""
-"정말로 모든 설정을 초기화 하시겠습니까? 다음과 같은 설정들이 초기화됩니다:"
+msgid "Are you sure to reset all settings? They include (but are not limited to):"
+msgstr "정말로 모든 설정을 초기화 하시겠습니까? 다음과 같은 설정들이 초기화됩니다:"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1674
 msgctxt "StartupScreen"
@@ -1514,11 +1416,8 @@ msgstr "플레이어 이름"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1677
 msgctxt "StartupScreen"
-msgid ""
-"Other advanced settings only accessible through '{0}' tab and in-game "
-"commands"
-msgstr ""
-"다른 고급 설정은 '{0}' 탭과 게임 내 명령어를 통해서만 접근할 수 있습니다."
+msgid "Other advanced settings only accessible through '{0}' tab and in-game commands"
+msgstr "다른 고급 설정은 '{0}' 탭과 게임 내 명령어를 통해서만 접근할 수 있습니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1747
 msgctxt "StartupScreen"
@@ -1549,12 +1448,12 @@ msgstr "필터"
 #: Resources/Scripts/Gui/UpdateCheckView.as:40
 msgctxt "UpdateCheck"
 msgid "Enable"
-msgstr "켜기"
+msgstr "사용"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:47
 msgctxt "UpdateCheck"
 msgid "Show details..."
-msgstr "자세히.."
+msgstr "자세히..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 msgctxt "UpdateCheck"
@@ -1564,7 +1463,7 @@ msgstr "{0} 버전이 나왔습니다! (현재 {1} 버전 사용 중)"
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 msgctxt "UpdateCheck"
 msgid "You're using the latest version of OpenSpades. ({0})"
-msgstr "Openspades 최신 버전입니다. ({0})"
+msgstr "OpenSpades가 최신 버전입니다. ({0})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
 msgctxt "UpdateCheck"
@@ -1579,69 +1478,10 @@ msgstr "업데이트 확인에 실패했습니다."
 #: Resources/Scripts/Gui/UpdateCheckView.as:116
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not enabled."
-msgstr "자동 업데이트 체크가 꺼져 있습니다."
+msgstr "자동 업데이트 확인이 꺼져 있습니다."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:119
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
-msgstr "자동 업데이트 체크가 불가능합니다."
+msgstr "자동 업데이트 확인이 불가능합니다."
 
-#~ msgctxt "StartupScreen"
-#~ msgid ""
-#~ "Antialias: Enables a technique to improve the appearance of high-contrast "
-#~ "edges.\n"
-#~ "\n"
-#~ "MSAA: Performs antialiasing by generating an intermediate high-resolution "
-#~ "image. Looks best, but doesn't cope with some settings.\n"
-#~ "\n"
-#~ "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
-#~ "Off|MSAA 2x|4x|FXAA"
-#~ msgstr ""
-#~ "앤티앨리어싱 : 오브젝트의 윤곽에 발생하는 계단 현상을 줄여 줍니다.\n"
-#~ "\n"
-#~ "MSAA : 보통의 경우보다 고해상도의 이미지를 생성하여 앤티앨리어싱을 수행합"
-#~ "니다. 가장 멋져 보이지만, 몇몇 설정과는 호환되지 않습니다.\n"
-#~ "\n"
-#~ "FXAA : 계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합"
-#~ "니다.|꺼짐|MSAA 2x|4x|FXAA"
-
-#~ msgctxt "StartupScreen"
-#~ msgid "Reset"
-#~ msgstr "초기화"
-
-#~ msgctxt "StartupScreen"
-#~ msgid ""
-#~ "Antialias:Enables a technique to improve the appearance of high-constrast "
-#~ "edges.\n"
-#~ "\n"
-#~ "MSAA: Performs antialiasing by generating an intermediate high-resolution "
-#~ "image. Looks best, but doesn't cope with some settings.\n"
-#~ "\n"
-#~ "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
-#~ "Off|MSAA 2x|4x|FXAA"
-#~ msgstr ""
-#~ "앤티앨리어싱 : 오브젝트의 윤곽에 발생하는 계단 현상을 줄여 줍니다..\n"
-#~ "\n"
-#~ "MSAA : 보통의 경우보다 고해상도의 이미지를 생성하여 앤티앨리어싱을 수행합"
-#~ "니다. 가장 멋져 보이지만, 몇몇 설정과는 호환되지 않습니다.\n"
-#~ "\n"
-#~ "FXAA : 계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합"
-#~ "니다. | 꺼짐 | MSAA 2x | 4x | FXAA"
-
-#~ msgctxt "Preferences"
-#~ msgid "Weapon Spread Guide"
-#~ msgstr "무기 확산 가이드"
-
-#~ msgctxt "StartupScreen"
-#~ msgid ""
-#~ "Water Shader|None:Water is rendered in the same way that normal blocks "
-#~ "are done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:"
-#~ "Waving water is simulated as well as reflection and refraction."
-#~ msgstr ""
-#~ "물 쉐이더 | 꺼짐 : 물은 일반 블록처럼 그려집니다. | 1단계 : 굴절과 태양광"
-#~ "의 반사가 그려집니다. | 2단계 : 굴절 · 태양광의 반사뿐만 아니라 파도와 기"
-#~ "타 반사 역시 그려집니다."
-
-#~ msgctxt "Preferences"
-#~ msgid "Debug Hit Detection"
-#~ msgstr "타격 디버거를 활성화"

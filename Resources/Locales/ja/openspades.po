@@ -1,29 +1,26 @@
-# OpenSpades translation
-# Copyright (C) 2016 yvt
-# This file is distributed under the same license as the OpenSpades package.
-# yvt <i@yvt.jp>, 2016.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSpades\n"
+"Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2016-12-25 23:31-0200\n"
+"PO-Revision-Date: 2017-02-11 03:09-0500\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Japanese\n"
-"Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: crowdin.com\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Language: ja_JP\n"
-"X-Source-Language: C\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Crowdin-Project: openspades\n"
+"X-Crowdin-Language: ja\n"
+"X-Crowdin-File: openspades.pot\n"
+"Language: ja_JP\n"
 
 #: Sources/Client/Client.cpp:585
 msgctxt "Client"
 msgid "Map saved: {0}"
-msgstr "マップデータを保存しました: {0}"
+msgstr "マップを保存しました: {0}"
 
 #: Sources/Client/Client.cpp:589 Sources/Client/Client.cpp:595
 msgctxt "Client"
@@ -364,17 +361,11 @@ msgstr "ローカライゼーションシステムが読み込まれました"
 
 #: Sources/Gui/Main.cpp:604 Sources/Gui/Runner.cpp:56
 msgctxt "Main"
-msgid ""
-"A serious error caused OpenSpades to stop working:\n"
-"\n"
-"{0}\n"
-"\n"
+msgid "A serious error caused OpenSpades to stop working:\n\n"
+"{0}\n\n"
 "See SystemMessages.log for more details."
-msgstr ""
-"深刻な問題により、OpenSpadesは動作を停止しました:\n"
-"\n"
-"{0}\n"
-"\n"
+msgstr "深刻な問題により、OpenSpadesは動作を停止しました:\n\n"
+"{0}\n\n"
 "詳細については SystemMessages.log をご覧下さい。"
 
 #: Sources/Gui/Main.cpp:612 Sources/Gui/Runner.cpp:62
@@ -562,13 +553,9 @@ msgstr "国"
 
 #: Resources/Scripts/Gui/MainScreen.as:787
 msgctxt "MainScreen"
-msgid ""
-"You were disconnected from the server because of the following reason:\n"
-"\n"
+msgid "You were disconnected from the server because of the following reason:\n\n"
 "{0}"
-msgstr ""
-"サーバーから切断されました。理由は以下の通りです:\n"
-"\n"
+msgstr "サーバーから切断されました。理由は以下の通りです:\n\n"
 "{0}"
 
 #: Resources/Scripts/Gui/MainScreen.as:807
@@ -1057,9 +1044,7 @@ msgstr "フルスクリーンモード"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
-msgid ""
-"By running in fullscreen mode OpenSpades occupies the screen, making it "
-"easier for you to concentrate on playing the game."
+msgid "By running in fullscreen mode OpenSpades occupies the screen, making it easier for you to concentrate on playing the game."
 msgstr "フルスクリーンモードを使用すると画面全体を占領してプレイできるため、ゲームに集中しやすくなります。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1110
@@ -1075,9 +1060,7 @@ msgstr "OpenGL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1117
 msgctxt "StartupScreen"
-msgid ""
-"OpenGL renderer uses your computer's graphics accelerator to generate the "
-"game screen."
+msgid "OpenGL renderer uses your computer's graphics accelerator to generate the game screen."
 msgstr "OpenGLレンダラーはコンピュータに内蔵されたGPUを使用してゲーム画面を描画します。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1125
@@ -1087,30 +1070,16 @@ msgstr "ソフトウェア"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1129
 msgctxt "StartupScreen"
-msgid ""
-"Software renderer uses CPU to generate the game screen. Its quality and "
-"performance might be inferior to OpenGL renderer, but it works even with an "
-"unsupported GPU."
-msgstr ""
-"ソフトウェアレンダラーはCPUを使用してゲーム画面を描画します。画質やパフォーマンスはOpenGLには劣りますが、未対応GPUでも確実に動作します。"
+msgid "Software renderer uses CPU to generate the game screen. Its quality and performance might be inferior to OpenGL renderer, but it works even with an unsupported GPU."
+msgstr "ソフトウェアレンダラーはCPUを使用してゲーム画面を描画します。画質やパフォーマンスはOpenGLには劣りますが、未対応GPUでも確実に動作します。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1143
 msgctxt "StartupScreen"
-msgid ""
-"Antialias:Enables a technique to improve the appearance of high-contrast "
-"edges.\n"
-"\n"
-"MSAA: Performs antialiasing by generating an intermediate high-resolution "
-"image. Looks best, but doesn't cope with some settings.\n"
-"\n"
-"FXAA: Performs antialiasing by smoothing artifacts out as a "
-"post-process.|Off|MSAA 2x|4x|FXAA"
-msgstr ""
-"アンチエイリアシング:オブジェクトの輪郭に発生する階段上のギザギザ(ジャギー)を除去する手法を有効にします。\n"
-"\n"
-"MSAA: "
-"中間的に画面より数倍程度の高解像度な画像を生成しアンチエイリアシングを行います。見た目は最も良くなりますが、一部の設定と相性が悪い場合があります。\n"
-"\n"
+msgid "Antialias:Enables a technique to improve the appearance of high-contrast edges.\n\n"
+"MSAA: Performs antialiasing by generating an intermediate high-resolution image. Looks best, but doesn't cope with some settings.\n\n"
+"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|Off|MSAA 2x|4x|FXAA"
+msgstr "アンチエイリアシング:オブジェクトの輪郭に発生する階段上のギザギザ(ジャギー)を除去する手法を有効にします。\n\n"
+"MSAA: 中間的に画面より数倍程度の高解像度な画像を生成しアンチエイリアシングを行います。見た目は最も良くなりますが、一部の設定と相性が悪い場合があります。\n\n"
 "FXAA: 描画された画像からジャギーを検出してぼかすことによりアンチエイリアシングを行います。|オフ|MSAA 2x|4x|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1150
@@ -1120,9 +1089,7 @@ msgstr "大域照明"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1152
 msgctxt "StartupScreen"
-msgid ""
-"Enables a physically based simulation of light path for more realistic "
-"lighting."
+msgid "Enables a physically based simulation of light path for more realistic lighting."
 msgstr "物理的に正確な計算手法を使用することにより、より写実的な光表現を行います。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1155
@@ -1132,13 +1099,8 @@ msgstr "線形色空間HDRレンダリング"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
-msgid ""
-"Uses a number representation which allows wider dynamic range during "
-"rendering process. Additionally, this allows color calculation whose value "
-"is in linear correspondence with actual energy, that is, physically accurate "
-"blending can be achieved."
-msgstr ""
-"より幅広いダイナミックレンジを表現可能な数値の表現方法をレンダリング処理に使用します。これにより実際のエネルギー量と線形関係のある値を使用して色を表現できるため物理的に正確なブレンディングを行うことができます。"
+msgid "Uses a number representation which allows wider dynamic range during rendering process. Additionally, this allows color calculation whose value is in linear correspondence with actual energy, that is, physically accurate blending can be achieved."
+msgstr "より幅広いダイナミックレンジを表現可能な数値の表現方法をレンダリング処理に使用します。これにより実際のエネルギー量と線形関係のある値を使用して色を表現できるため物理的に正確なブレンディングを行うことができます。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
@@ -1253,19 +1215,13 @@ msgstr "後処理"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
-msgid ""
-"Post-process modifies the image to make it look better and more realistic."
+msgid "Post-process modifies the image to make it look better and more realistic."
 msgstr "後処理により描画された画面を加工しより良く見せます。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1203
 msgctxt "StartupScreen"
-msgid ""
-"Particles|Low:Artifact occurs when a particle intersects other "
-"objects.|Medium:Particle intersects objects smoothly.|High:Particle "
-"intersects objects smoothly, and some objects casts their shadow to "
-"particles."
-msgstr ""
-"パーティクル|低:パーティクルが他のオブジェクトと交差すると鋭い境界が現れます。|中:パーティクルは他のオブジェクトと滑らかに交わります。|高:パーティクルは他のオブジェクトと滑らかに交わります。また一部のオブジェクトがパーティクルに影を落とします。"
+msgid "Particles|Low:Artifact occurs when a particle intersects other objects.|Medium:Particle intersects objects smoothly.|High:Particle intersects objects smoothly, and some objects casts their shadow to particles."
+msgstr "パーティクル|低:パーティクルが他のオブジェクトと交差すると鋭い境界が現れます。|中:パーティクルは他のオブジェクトと滑らかに交わります。|高:パーティクルは他のオブジェクトと滑らかに交わります。また一部のオブジェクトがパーティクルに影を落とします。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1213
 msgctxt "StartupScreen"
@@ -1274,9 +1230,7 @@ msgstr "動的ライト"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1215
 msgctxt "StartupScreen"
-msgid ""
-"Gives some objects an ability to emit light to give them an energy-emitting "
-"impression."
+msgid "Gives some objects an ability to emit light to give them an energy-emitting impression."
 msgstr "一部のオブジェクトが発光するようにし、エネルギーを発しているような印象を与えます。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1218
@@ -1296,9 +1250,7 @@ msgstr "ボリューメトリックフォグ"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1222
 msgctxt "StartupScreen"
-msgid ""
-"Simulates shadow being casted to the fog particles using a super highly "
-"computationally demanding algorithm. "
+msgid "Simulates shadow being casted to the fog particles using a super highly computationally demanding algorithm. "
 msgstr "非常に計算量が膨大なアルゴリズムを使用することにより、大気中の霧の粒子に影が落とされる様子をシミュレーションします。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1225
@@ -1308,9 +1260,7 @@ msgstr "物理ベースライティング"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1226
 msgctxt "StartupScreen"
-msgid ""
-"Uses more accurate approximation techniques to decide the brightness of "
-"objects."
+msgid "Uses more accurate approximation techniques to decide the brightness of objects."
 msgstr "直接反射光の明るさを物理的に正確な手法を用いて計算します。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1233
@@ -1320,22 +1270,13 @@ msgstr "直接光"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
-msgid ""
-"Controls how light encounting a material and atmosphere directly affects its "
-"appearance."
+msgid "Controls how light encounting a material and atmosphere directly affects its appearance."
 msgstr "物体(大気含む)に直接当たった光がどのようにその外観に影響するかを制御します。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1244
 msgctxt "StartupScreen"
-msgid ""
-"Water Shader|None:Water is rendered in the same way that normal blocks are "
-"done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving "
-"water is simulated as well as reflection and refraction.|Level 3:Reflections "
-"and refractions are rendered at the highest quality using screen-space "
-"techniques."
-msgstr ""
-"水シェーダー|オフ:水は通常のブロックと同じように描画されます。|レベル 1:屈折と太陽光の反射が描画されます。|レベル "
-"2:屈折・太陽光の反射に加え、波やその他の反射も描画されます。|レベル 3:スクリーンスペース手法を用いることにより、屈折と反射を最高品質で描画します。"
+msgid "Water Shader|None:Water is rendered in the same way that normal blocks are done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving water is simulated as well as reflection and refraction.|Level 3:Reflections and refractions are rendered at the highest quality using screen-space techniques."
+msgstr "水シェーダー|オフ:水は通常のブロックと同じように描画されます。|レベル 1:屈折と太陽光の反射が描画されます。|レベル 2:屈折・太陽光の反射に加え、波やその他の反射も描画されます。|レベル 3:スクリーンスペース手法を用いることにより、屈折と反射を最高品質で描画します。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1251
 msgctxt "StartupScreen"
@@ -1354,9 +1295,7 @@ msgstr "特殊効果。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1273
 msgctxt "StartupScreen"
-msgid ""
-"Fast Mode:Reduces the image resolution to make the rendering "
-"faster.|Off|2x|4x"
+msgid "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|4x"
 msgstr "高速モード:画面解像度を低下させ、描画を高速化します。|オフ|2x|4x"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1486
@@ -1371,11 +1310,8 @@ msgstr "OpenAL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
-msgid ""
-"Uses an OpenAL-capable sound card to process sound. In most cases where "
-"there isn't such a sound card, software emulation is used."
-msgstr ""
-"OpenALに対応したサウンドカードを使用して音声を処理します。ほとんどの場合このようなサウンドカードがありませんので、ソフトウェアエミュレーションが使用されます。"
+msgid "Uses an OpenAL-capable sound card to process sound. In most cases where there isn't such a sound card, software emulation is used."
+msgstr "OpenALに対応したサウンドカードを使用して音声を処理します。ほとんどの場合このようなサウンドカードがありませんので、ソフトウェアエミュレーションが使用されます。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1508
 msgctxt "StartupScreen"
@@ -1384,13 +1320,8 @@ msgstr "YSR"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1512
 msgctxt "StartupScreen"
-msgid ""
-"YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It "
-"features several enhanced features including automatic load control, "
-"dynamics compressor, HRTF-based 3D audio, and high quality reverb."
-msgstr ""
-"YSRはOpenSpadesに最適化された、実験的な3D "
-"HDRサウンドエンジンです。自動負荷制御やダイナミクスコンプレッサー、HRTFベースの立体音響や高音質リバーブエフェクタを備えています。"
+msgid "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It features several enhanced features including automatic load control, dynamics compressor, HRTF-based 3D audio, and high quality reverb."
+msgstr "YSRはOpenSpadesに最適化された、実験的な3D HDRサウンドエンジンです。自動負荷制御やダイナミクスコンプレッサー、HRTFベースの立体音響や高音質リバーブエフェクタを備えています。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1522
 msgctxt "StartupScreen"
@@ -1410,12 +1341,8 @@ msgstr "最大同時発音数"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1538
 msgctxt "StartupScreen"
-msgid ""
-"Specifies how many sounds can be played simultaneously. Higher value needs "
-"more processing power, so setting this too high might cause an overload "
-"(especially with a software emulation)."
-msgstr ""
-"同時に発音可能な音声の個数を指定します。この値が大きいと必要な処理能力も増大するため、特にソフトウェアエミュレーションにおいて過負荷状態を生じることがあります。"
+msgid "Specifies how many sounds can be played simultaneously. Higher value needs more processing power, so setting this too high might cause an overload (especially with a software emulation)."
+msgstr "同時に発音可能な音声の個数を指定します。この値が大きいと必要な処理能力も増大するため、特にソフトウェアエミュレーションにおいて過負荷状態を生じることがあります。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1545
 msgctxt "StartupScreen"
@@ -1424,16 +1351,12 @@ msgstr "EAX"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1546
 msgctxt "StartupScreen"
-msgid ""
-"Enables extended features provided by the OpenAL driver to create more "
-"ambience."
+msgid "Enables extended features provided by the OpenAL driver to create more ambience."
 msgstr "OpenALドライバが提供する拡張機能を利用して臨場感を高めます。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
-msgid ""
-"Specifies how many sounds can be played simultaneously. No matter what value "
-"is set, YSR might reduce the number of sounds when an overload is detected."
+msgid "Specifies how many sounds can be played simultaneously. No matter what value is set, YSR might reduce the number of sounds when an overload is detected."
 msgstr "同時に発音可能な音声の個数を指定します。この値によらず、YSRは過負荷を防ぐために同時発音数を減らすことがあります。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1622
@@ -1473,8 +1396,7 @@ msgstr "設定ディレクトリを開いている最中に不明なエラーが
 
 #: Resources/Scripts/Gui/StartupScreen.as:1673
 msgctxt "StartupScreen"
-msgid ""
-"Are you sure to reset all settings? They include (but are not limited to):"
+msgid "Are you sure to reset all settings? They include (but are not limited to):"
 msgstr "設定を全てリセットしますか？対象となる設定には以下のものが含まれます:"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1674
@@ -1494,9 +1416,7 @@ msgstr "プレイヤー名"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1677
 msgctxt "StartupScreen"
-msgid ""
-"Other advanced settings only accessible through '{0}' tab and in-game "
-"commands"
+msgid "Other advanced settings only accessible through '{0}' tab and in-game commands"
 msgstr "その他の高度な設定"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1747
@@ -1564,3 +1484,4 @@ msgstr "アップデートの自動チェックは無効になっています。
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
 msgstr "アップデートの自動チェックは利用できません。"
+
