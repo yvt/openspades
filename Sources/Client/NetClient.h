@@ -24,6 +24,8 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <set>
+#include <cstdint>
 
 #include "PhysicsConstants.h"
 #include "Player.h"
@@ -115,6 +117,9 @@ namespace spades {
 			std::string DisconnectReasonString(uint32_t);
 
 			void MapLoaded();
+			
+			void SendVersion();
+			void SendVersionEnhanced(const std::set<std::uint8_t> &propertyIds);
 
 		public:
 			NetClient(Client *);
@@ -147,7 +152,6 @@ namespace spades {
 			void SendWeaponChange(WeaponType);
 			void SendTeamChange(int team);
 			void SendHandShakeValid(int challenge);
-			void SendVersion();
 
 			double GetDownlinkBps() { return bandwidthMonitor->GetDownlinkBps(); }
 			double GetUplinkBps() { return bandwidthMonitor->GetUplinkBps(); }

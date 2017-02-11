@@ -48,69 +48,86 @@ DEFINE_SPADES_SETTING(cg_unicode, "1");
 namespace spades {
 	namespace client {
 
-		static const char UtfSign = -1;
+		namespace {
+			const char UtfSign = -1;
 
-		enum { BLUE_FLAG = 0, GREEN_FLAG = 1, BLUE_BASE = 2, GREEN_BASE = 3 };
-		enum PacketType {
-			PacketTypePositionData = 0,
-			PacketTypeOrientationData = 1,
-			PacketTypeWorldUpdate = 2,
-			PacketTypeInputData = 3,
-			PacketTypeWeaponInput = 4,
-			PacketTypeHitPacket = 5, // C2S
-			PacketTypeSetHP = 5,     // S2C
-			PacketTypeGrenadePacket = 6,
-			PacketTypeSetTool = 7,
-			PacketTypeSetColour = 8,
-			PacketTypeExistingPlayer = 9,
-			PacketTypeShortPlayerData = 10,
-			PacketTypeMoveObject = 11,
-			PacketTypeCreatePlayer = 12,
-			PacketTypeBlockAction = 13,
-			PacketTypeBlockLine = 14,
-			PacketTypeStateData = 15,
-			PacketTypeKillAction = 16,
-			PacketTypeChatMessage = 17,
-			PacketTypeMapStart = 18,         // S2C
-			PacketTypeMapChunk = 19,         // S2C
-			PacketTypePlayerLeft = 20,       // S2P
-			PacketTypeTerritoryCapture = 21, // S2P
-			PacketTypeProgressBar = 22,
-			PacketTypeIntelCapture = 23,    // S2P
-			PacketTypeIntelPickup = 24,     // S2P
-			PacketTypeIntelDrop = 25,       // S2P
-			PacketTypeRestock = 26,         // S2P
-			PacketTypeFogColour = 27,       // S2C
-			PacketTypeWeaponReload = 28,    // C2S2P
-			PacketTypeChangeTeam = 29,      // C2S2P
-			PacketTypeChangeWeapon = 30,    // C2S2P
-			PacketTypeHandShakeInit = 31,   // S2C
-			PacketTypeHandShakeReturn = 32, // C2S
-			PacketTypeVersionGet = 33,      // S2C
-			PacketTypeVersionSend = 34,     // C2S
+			enum { BLUE_FLAG = 0, GREEN_FLAG = 1, BLUE_BASE = 2, GREEN_BASE = 3 };
+			enum PacketType {
+				PacketTypePositionData = 0,
+				PacketTypeOrientationData = 1,
+				PacketTypeWorldUpdate = 2,
+				PacketTypeInputData = 3,
+				PacketTypeWeaponInput = 4,
+				PacketTypeHitPacket = 5, // C2S
+				PacketTypeSetHP = 5,     // S2C
+				PacketTypeGrenadePacket = 6,
+				PacketTypeSetTool = 7,
+				PacketTypeSetColour = 8,
+				PacketTypeExistingPlayer = 9,
+				PacketTypeShortPlayerData = 10,
+				PacketTypeMoveObject = 11,
+				PacketTypeCreatePlayer = 12,
+				PacketTypeBlockAction = 13,
+				PacketTypeBlockLine = 14,
+				PacketTypeStateData = 15,
+				PacketTypeKillAction = 16,
+				PacketTypeChatMessage = 17,
+				PacketTypeMapStart = 18,         // S2C
+				PacketTypeMapChunk = 19,         // S2C
+				PacketTypePlayerLeft = 20,       // S2P
+				PacketTypeTerritoryCapture = 21, // S2P
+				PacketTypeProgressBar = 22,
+				PacketTypeIntelCapture = 23,    // S2P
+				PacketTypeIntelPickup = 24,     // S2P
+				PacketTypeIntelDrop = 25,       // S2P
+				PacketTypeRestock = 26,         // S2P
+				PacketTypeFogColour = 27,       // S2C
+				PacketTypeWeaponReload = 28,    // C2S2P
+				PacketTypeChangeTeam = 29,      // C2S2P
+				PacketTypeChangeWeapon = 30,    // C2S2P
+				PacketTypeHandShakeInit = 31,   // S2C
+				PacketTypeHandShakeReturn = 32, // C2S
+				PacketTypeVersionGet = 33,      // S2C
+				PacketTypeVersionSend = 34,     // C2S
 
-		};
+			};
 
-		static std::string EncodeString(std::string str) {
-			auto str2 = CP437::Encode(str, -1);
-			if (!cg_unicode) {
-				// ignore fallbacks
-				return str2;
+			enum class VersionInfoPropertyId : std::uint8_t {
+				ApplicationNameAndVersion = 0,
+				UserLocale = 1,
+				ClientFeatureFlags1 = 2
+			};
+
+			enum class ClientFeatureFlags1 : std::uint32_t { None = 0, SupportsUnicode = 1 << 0 };
+
+			ClientFeatureFlags1 operator|(ClientFeatureFlags1 a, ClientFeatureFlags1 b) {
+				return (ClientFeatureFlags1)((uint32_t)a | (uint32_t)b);
 			}
-			if (str2.find(-1) != std::string::npos) {
-				// some fallbacks; always use UTF8
-				str.insert(0, &UtfSign, 1);
-			} else {
-				str = str2;
+			ClientFeatureFlags1 &operator|=(ClientFeatureFlags1 &a, ClientFeatureFlags1 b) {
+				return a = a | b;
 			}
-			return str;
-		}
 
-		static std::string DecodeString(std::string s) {
-			if (s.size() > 0 && s[0] == UtfSign) {
-				return s.substr(1);
+			std::string EncodeString(std::string str) {
+				auto str2 = CP437::Encode(str, -1);
+				if (!cg_unicode) {
+					// ignore fallbacks
+					return str2;
+				}
+				if (str2.find(-1) != std::string::npos) {
+					// some fallbacks; always use UTF8
+					str.insert(0, &UtfSign, 1);
+				} else {
+					str = str2;
+				}
+				return str;
 			}
-			return CP437::Decode(s);
+
+			std::string DecodeString(std::string s) {
+				if (s.size() > 0 && s[0] == UtfSign) {
+					return s.substr(1);
+				}
+				return CP437::Decode(s);
+			}
 		}
 
 		class NetPacketReader {
@@ -196,6 +213,8 @@ namespace spades {
 				col.x = ReadByte() / 255.f;
 				return col;
 			}
+
+			std::size_t GetNumRemainingBytes() { return data.size() - pos; }
 
 			std::vector<char> GetData() { return data; }
 
@@ -296,6 +315,32 @@ namespace spades {
 					Write((uint8_t)0);
 					sz++;
 				}
+			}
+
+			std::size_t GetPosition() { return data.size(); }
+
+			void Update(std::size_t position, std::uint8_t newValue) {
+				SPADES_MARK_FUNCTION_DEBUG();
+
+				if (position >= data.size()) {
+					SPRaise("Invalid write (%d should be less than %d)", (int)position,
+					        (int)data.size());
+				}
+
+				data[position] = static_cast<char>(newValue);
+			}
+
+			void Update(std::size_t position, std::uint32_t newValue) {
+				SPADES_MARK_FUNCTION_DEBUG();
+
+				if (position + 4 > data.size()) {
+					SPRaise("Invalid write (%d should be less than or equal to %d)",
+					        (int)(position + 4), (int)data.size());
+				}
+
+				// Assuming the target platform is little endian and supports
+				// unaligned memory access...
+				*reinterpret_cast<std::uint32_t *>(data.data() + position) = newValue;
 			}
 
 			ENetPacket *CreatePacket(int flag = ENET_PACKET_FLAG_RELIABLE) {
@@ -1402,10 +1447,61 @@ namespace spades {
 					// p->SetWeaponType(wType);
 				} break;
 				case PacketTypeHandShakeInit: SendHandShakeValid(reader.ReadInt()); break;
-				case PacketTypeVersionGet: SendVersion(); break;
+				case PacketTypeVersionGet: {
+					if (reader.GetNumRemainingBytes() > 0) {
+						// Enhanced variant
+						std::set<std::uint8_t> propertyIds;
+						while (reader.GetNumRemainingBytes()) {
+							propertyIds.insert(reader.ReadByte());
+						}
+						SendVersionEnhanced(propertyIds);
+					} else {
+						// Simple variant
+						SendVersion();
+					}
+				} break;
 				default:
 					printf("WARNING: dropped packet %d\n", (int)reader.GetType());
 					reader.DumpDebug();
+			}
+		}
+
+		void NetClient::SendVersionEnhanced(const std::set<std::uint8_t> &propertyIds) {
+			NetPacketWriter wri(PacketTypeExistingPlayer);
+			wri.Write((uint8_t)'x');
+
+			for (std::uint8_t propertyId : propertyIds) {
+				wri.Write(propertyId);
+
+				auto lengthLabel = wri.GetPosition();
+				wri.Write((uint8_t)0); // dummy data for "Payload Length"
+
+				auto beginLabel = wri.GetPosition();
+				switch (static_cast<VersionInfoPropertyId>(propertyId)) {
+					case VersionInfoPropertyId::ApplicationNameAndVersion:
+						wri.Write((uint8_t)OpenSpades_VERSION_MAJOR);
+						wri.Write((uint8_t)OpenSpades_VERSION_MINOR);
+						wri.Write((uint8_t)OpenSpades_VERSION_REVISION);
+						wri.Write("OpenSpades");
+						break;
+					case VersionInfoPropertyId::UserLocale:
+						wri.Write(GetCurrentLocaleAndRegion());
+						break;
+					case VersionInfoPropertyId::ClientFeatureFlags1: {
+						auto flags = ClientFeatureFlags1::None;
+
+						if (cg_unicode) {
+							flags |= ClientFeatureFlags1::SupportsUnicode;
+						}
+
+						wri.Write(static_cast<uint32_t>(flags));
+					} break;
+					default:
+						// Just return empty payload for an unrecognized property
+						break;
+				}
+
+				wri.Update(lengthLabel, (uint8_t)(wri.GetPosition() - beginLabel));
 			}
 		}
 

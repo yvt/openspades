@@ -1167,12 +1167,25 @@ namespace spades {
 			locale.clear();
 		}
 
+		auto p = std::min(locale.find('_'), locale.find('-'));
+		if (p != std::string::npos) {
+			// The separator must be an underscore
+			locale[p] = '_';
+		}
+
 		currentLocaleRegion = locale;
 
-		auto p = std::min(locale.find('_'), locale.find('-'));
 		if (p != std::string::npos)
 			locale = locale.substr(0, p);
 		currentLocale = locale;
+	}
+
+	std::string GetCurrentLocaleAndRegion() {
+		LoadCurrentLocale();
+		if (currentLocaleRegion.empty()) {
+			return "en_us";
+		}
+		return currentLocaleRegion;
 	}
 
 	static std::shared_ptr<CatalogDomain> GetDomain(const std::string &s) {
