@@ -623,7 +623,13 @@ namespace spades {
 			{
 				std::string s;
 				if (global)
-					/// prefix added to global chat messages.
+					//! Prefix added to global chat messages.
+					//!
+					//! Example: [Global] playername (Red) blah blah
+					//!
+					//! Crowdin warns that this string shouldn't be translated,
+					//! but it actually can be.
+					//! The extra whitespace is not a typo.
 					s = _Tr("Client", "[Global] ");
 				s += ChatWindow::TeamColorMessage(p->GetName(), p->GetTeamId());
 				s += ": ";

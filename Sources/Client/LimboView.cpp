@@ -73,6 +73,7 @@ namespace spades {
 			                         AABB2(weapX, firstY + rowHeight * 2.f, menuWidth, menuHeight),
 			                         _Tr("Client", "Shotgun")));
 
+			//! The "Spawn" button that you press when you're ready to "spawn".
 			items.push_back(MenuItem(MenuSpawn,
 			                         AABB2(left + contentsWidth - 266.f, firstY + 4.f, 256.f, 64.f),
 			                         _Tr("Client", "Spawn")));

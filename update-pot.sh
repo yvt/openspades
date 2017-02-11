@@ -13,7 +13,8 @@ echo $FILES| tr " " "\n" > .translate.this # Convert spaces to newlines
 OPTIONS_OUTPUT="-o Resources/Locales/pot/openspades.pot"
 OPTIONS_CPP="--c++"
 OPTIONS_KEYWORD="-k_Tr:2,1c -k_TrN:2,1c,3" # Have no idea how this works
-OPTIONS="-j ${OPTIONS_OUTPUT} ${OPTIONS_CPP} ${OPTIONS_KEYWORD}"
+OPTIONS_COMMENTS="-c!" # comments for translators
+OPTIONS="-j ${OPTIONS_OUTPUT} ${OPTIONS_CPP} ${OPTIONS_KEYWORD} ${OPTIONS_COMMENTS}"
 
 META_PKG="--package-name=OpenSpades"
 META_COPYRIGHT="--copyright-holder=yvt"

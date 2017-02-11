@@ -845,21 +845,26 @@ namespace spades {
 					}
 					break;
 				case KillTypeFall:
+					//! A cause of death shown in the kill feed.
 					cause += _Tr("Client", "Fall");
 					break;
 				case KillTypeMelee:
+					//! A cause of death shown in the kill feed.
 					cause += _Tr("Client", "Melee");
 					break;
 				case KillTypeGrenade:
 					cause += _Tr("Client", "Grenade");
 					break;
 				case KillTypeHeadshot:
+					//! A cause of death shown in the kill feed.
 					cause += _Tr("Client", "Headshot");
 					break;
 				case KillTypeTeamChange:
+					//! A cause of death shown in the kill feed.
 					cause += _Tr("Client", "Team Change");
 					break;
 				case KillTypeClassChange:
+					//! A cause of death shown in the kill feed.
 					cause += _Tr("Client", "Weapon Change");
 					break;
 				default:

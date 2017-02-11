@@ -1519,6 +1519,7 @@ namespace spades {
 			}
 			{
 				spades::ui::RadioButton e(Manager);
+				//! The name of audio driver that outputs no audio.
 				e.Caption = _Tr("StartupScreen", "Null");
 				e.Bounds = AABB2(320.f, 0.f, 100.f, 24.f);
 				e.GroupName = "driver";
