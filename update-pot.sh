@@ -22,3 +22,8 @@ META_BUGS="--msgid-bugs-address=i@yvt.jp"
 METADATA="$META_PKG $META_COPYRIGHT $META_BUGS --omit-header"
 
 xgettext $OPTIONS $METADATA -f .translate.this
+
+echo "Gettext template file is now up-to-date."
+echo
+echo "Now you can run 'crowdin upload sources' to upload it to Crowdin!"
+echo "(provided that you have an API key to do that)"
