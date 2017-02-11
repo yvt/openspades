@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-02-11 03:09-0500\n"
+"PO-Revision-Date: 2017-02-11 05:00-0500\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Crowdin-Project: openspades\n"
 "X-Crowdin-Language: ko\n"
-"X-Crowdin-File: openspades.pot\n"
+"X-Crowdin-File: /master/openspades.pot\n"
 "Language: ko_KR\n"
 
 #: Sources/Client/Client.cpp:585
@@ -27,7 +27,14 @@ msgctxt "Client"
 msgid "Saving map failed: "
 msgstr "맵 저장이 실패했습니다:"
 
-#: Sources/Client/Client.cpp:627
+#. ! Prefix added to global chat messages.
+#. !
+#. ! Example: [Global] playername (Red) blah blah
+#. !
+#. ! Crowdin warns that this string shouldn't be translated,
+#. ! but it actually can be.
+#. ! The extra whitespace is not a typo.
+#: Sources/Client/Client.cpp:633
 msgctxt "Client"
 msgid "[Global] "
 msgstr "[전체] "
@@ -205,135 +212,140 @@ msgctxt "Client"
 msgid "Shotgun"
 msgstr "샷건"
 
-#: Sources/Client/Client_Update.cpp:848
+#. ! A cause of death shown in the kill feed.
+#: Sources/Client/Client_Update.cpp:849
 msgctxt "Client"
 msgid "Fall"
 msgstr "떨어짐"
 
-#: Sources/Client/Client_Update.cpp:851
+#. ! A cause of death shown in the kill feed.
+#: Sources/Client/Client_Update.cpp:853
 msgctxt "Client"
 msgid "Melee"
 msgstr "삽"
 
-#: Sources/Client/Client_Update.cpp:854
+#: Sources/Client/Client_Update.cpp:856
 msgctxt "Client"
 msgid "Grenade"
 msgstr "수류탄"
 
-#: Sources/Client/Client_Update.cpp:857
+#. ! A cause of death shown in the kill feed.
+#: Sources/Client/Client_Update.cpp:860
 msgctxt "Client"
 msgid "Headshot"
 msgstr "헤드샷"
 
-#: Sources/Client/Client_Update.cpp:860
+#. ! A cause of death shown in the kill feed.
+#: Sources/Client/Client_Update.cpp:864
 msgctxt "Client"
 msgid "Team Change"
 msgstr "팀 변경"
 
-#: Sources/Client/Client_Update.cpp:863
+#. ! A cause of death shown in the kill feed.
+#: Sources/Client/Client_Update.cpp:868
 msgctxt "Client"
 msgid "Weapon Change"
 msgstr "무기 변경"
 
-#: Sources/Client/Client_Update.cpp:902
+#: Sources/Client/Client_Update.cpp:907
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr "플레이어 {0}을 사살했습니다."
 
-#: Sources/Client/Client_Update.cpp:904
+#: Sources/Client/Client_Update.cpp:909
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr "플레이어 {0}에게 사살당했습니다."
 
-#: Sources/Client/Client_Update.cpp:1216
+#: Sources/Client/Client_Update.cpp:1225
 msgctxt "Client"
 msgid "Insufficient blocks."
 msgstr "블럭이 부족합니다."
 
-#: Sources/Client/Client_Update.cpp:1219
+#: Sources/Client/Client_Update.cpp:1228
 msgctxt "Client"
 msgid "You cannot place a block there."
 msgstr "이곳에는 블럭을 놓을 수 없습니다."
 
-#: Sources/Client/LimboView.cpp:78
+#: Sources/Client/LimboView.cpp:79
 msgctxt "Client"
 msgid "Spawn"
 msgstr "스폰"
 
-#: Sources/Client/LimboView.cpp:182
+#: Sources/Client/LimboView.cpp:183
 msgctxt "Client"
 msgid "Select Team:"
 msgstr "팀 선택:"
 
-#: Sources/Client/LimboView.cpp:190
+#: Sources/Client/LimboView.cpp:191
 msgctxt "Client"
 msgid "Select Weapon:"
 msgstr "무기 선택:"
 
-#: Sources/Client/NetClient.cpp:377
+#: Sources/Client/NetClient.cpp:422
 msgctxt "NetClient"
 msgid "Connecting to the server"
 msgstr "서버 연결 중"
 
-#: Sources/Client/NetClient.cpp:389
+#: Sources/Client/NetClient.cpp:434
 msgctxt "NetClient"
 msgid "Not connected"
 msgstr "연결되지 않음"
 
-#: Sources/Client/NetClient.cpp:453
+#: Sources/Client/NetClient.cpp:498
 msgctxt "NetClient"
 msgid "Awaiting for state"
 msgstr "상태 기다리는 중"
 
-#: Sources/Client/NetClient.cpp:463 Sources/Client/NetClient.cpp:1232
+#: Sources/Client/NetClient.cpp:508 Sources/Client/NetClient.cpp:1277
 msgctxt "NetClient"
 msgid "Loading snapshot"
 msgstr "스냅샷 불러오는 중"
 
-#: Sources/Client/NetClient.cpp:478
+#: Sources/Client/NetClient.cpp:523
 msgctxt "NetClient"
 msgid "Loading snapshot ({0}/{1})"
 msgstr "스냅샷 불러오는 중 ({0} / {1})"
 
-#: Sources/Client/NetClient.cpp:483 Sources/Client/NetClient.cpp:517
+#: Sources/Client/NetClient.cpp:528 Sources/Client/NetClient.cpp:562
 msgctxt "NetClient"
 msgid "Connected"
 msgstr "연결됨"
 
-#: Sources/Client/NetClient.cpp:495 Sources/Client/NetClient.cpp:530
-#: Sources/Client/NetClient.cpp:582
+#: Sources/Client/NetClient.cpp:540 Sources/Client/NetClient.cpp:575
+#: Sources/Client/NetClient.cpp:627
 msgctxt "NetClient"
 msgid "Still loading..."
 msgstr "계속 불러오는 중..."
 
-#: Sources/Client/NetClient.cpp:498 Sources/Client/NetClient.cpp:504
-#: Sources/Client/NetClient.cpp:534 Sources/Client/NetClient.cpp:539
-#: Sources/Client/NetClient.cpp:586 Sources/Client/NetClient.cpp:591
+#: Sources/Client/NetClient.cpp:543 Sources/Client/NetClient.cpp:549
+#: Sources/Client/NetClient.cpp:579 Sources/Client/NetClient.cpp:584
+#: Sources/Client/NetClient.cpp:631 Sources/Client/NetClient.cpp:636
 msgctxt "NetClient"
 msgid "Error"
 msgstr "에러"
 
-#: Sources/Client/NetClient.cpp:657
+#: Sources/Client/NetClient.cpp:702
 msgctxt "NetClient"
 msgid "You are banned from this server."
 msgstr "이 서버에서 영구 추방(밴) 당했습니다."
 
-#: Sources/Client/NetClient.cpp:662 Sources/Client/NetClient.cpp:665
+#: Sources/Client/NetClient.cpp:707 Sources/Client/NetClient.cpp:710
 msgctxt "NetClient"
 msgid "You were kicked from this server."
 msgstr "이 서버에서 임시 추방(킥) 당했습니다."
 
-#: Sources/Client/NetClient.cpp:663
+#: Sources/Client/NetClient.cpp:708
 msgctxt "NetClient"
 msgid "Incompatible client protocol version."
 msgstr "호환되지 않는 클라이언트 버전입니다."
 
-#: Sources/Client/NetClient.cpp:664
+#: Sources/Client/NetClient.cpp:709
 msgctxt "NetClient"
 msgid "Server full"
 msgstr "서버가 꽉 찼습니다."
 
-#: Sources/Client/NetClient.cpp:666
+#: Sources/Client/NetClient.cpp:711
 msgctxt "NetClient"
 msgid "Unknown Reason"
 msgstr "알 수 없는 이유"
@@ -1007,7 +1019,7 @@ msgid "System Info"
 msgstr "시스템 정보"
 
 #: Resources/Scripts/Gui/StartupScreen.as:215
-#: Resources/Scripts/Gui/StartupScreen.as:1678
+#: Resources/Scripts/Gui/StartupScreen.as:1679
 msgctxt "StartupScreen"
 msgid "Advanced"
 msgstr "고급"
@@ -1323,124 +1335,125 @@ msgctxt "StartupScreen"
 msgid "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It features several enhanced features including automatic load control, dynamics compressor, HRTF-based 3D audio, and high quality reverb."
 msgstr "YSR은 OpenSpades에 최적화된 실험적인 3D HDR 사운드 엔진입니다. 자동 부하 제어 및 동적 압축, HRTF 기반의 3D 오디오, 고음질 반향 효과 등의 개선된 기능을 제공합니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1522
+#. ! The name of audio driver that outputs no audio.
+#: Resources/Scripts/Gui/StartupScreen.as:1523
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr "없음"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1526
+#: Resources/Scripts/Gui/StartupScreen.as:1527
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr "오디오 출력을 비활성화합니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1537
-#: Resources/Scripts/Gui/StartupScreen.as:1561
+#: Resources/Scripts/Gui/StartupScreen.as:1538
+#: Resources/Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "최대 동시 음향"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1538
+#: Resources/Scripts/Gui/StartupScreen.as:1539
 msgctxt "StartupScreen"
 msgid "Specifies how many sounds can be played simultaneously. Higher value needs more processing power, so setting this too high might cause an overload (especially with a software emulation)."
 msgstr "동시에 재생되는 소리의 수를 지정합니다. 이 값이 크면 필요한 처리 능력도 증가하기 때문에 지나친 설정값은 (특히 소프트웨어 에뮬레이션하는 경우)과부하가 발생할 수 있습니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1545
+#: Resources/Scripts/Gui/StartupScreen.as:1546
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1546
+#: Resources/Scripts/Gui/StartupScreen.as:1547
 msgctxt "StartupScreen"
 msgid "Enables extended features provided by the OpenAL driver to create more ambience."
 msgstr "OpenAL 드라이버가 제공하는 확장 기능을 이용하여 현장감을 높여줍니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1562
+#: Resources/Scripts/Gui/StartupScreen.as:1563
 msgctxt "StartupScreen"
 msgid "Specifies how many sounds can be played simultaneously. No matter what value is set, YSR might reduce the number of sounds when an overload is detected."
 msgstr "동시에 플레이되는 소리의 개수를 지정합니다. 이 값에 상관없이 YSR은 과부하가 감지될 경우 이를 방지하기 위해 동시 발음 수를 줄일 수 있습니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1622
+#: Resources/Scripts/Gui/StartupScreen.as:1623
 msgctxt "StartupScreen"
 msgid "Language"
 msgstr "언어"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1634
+#: Resources/Scripts/Gui/StartupScreen.as:1635
 msgctxt "StartupScreen"
 msgid "Tools"
 msgstr "도구"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1637
+#: Resources/Scripts/Gui/StartupScreen.as:1638
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
 msgstr "모든 설정 초기화"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1646
+#: Resources/Scripts/Gui/StartupScreen.as:1647
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
 msgstr "윈도우 탐색기에서 설정 폴더 열기"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1648
+#: Resources/Scripts/Gui/StartupScreen.as:1649
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
 msgstr "파인더에서 설정 폴더 열기"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1650
+#: Resources/Scripts/Gui/StartupScreen.as:1651
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
 msgstr "설정 폴더 열기"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1667
+#: Resources/Scripts/Gui/StartupScreen.as:1668
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
 msgstr "설정 폴더를 여는 동안 알 수 없는 오류가 발생했습니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1673
+#: Resources/Scripts/Gui/StartupScreen.as:1674
 msgctxt "StartupScreen"
 msgid "Are you sure to reset all settings? They include (but are not limited to):"
 msgstr "정말로 모든 설정을 초기화 하시겠습니까? 다음과 같은 설정들이 초기화됩니다:"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1674
+#: Resources/Scripts/Gui/StartupScreen.as:1675
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
 msgstr "모든 그래픽/오디오 설정"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1675
+#: Resources/Scripts/Gui/StartupScreen.as:1676
 msgctxt "StartupScreen"
 msgid "All key bindings"
 msgstr "모든 키 지정"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1676
+#: Resources/Scripts/Gui/StartupScreen.as:1677
 msgctxt "StartupScreen"
 msgid "Your player name"
 msgstr "플레이어 이름"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1677
+#: Resources/Scripts/Gui/StartupScreen.as:1678
 msgctxt "StartupScreen"
 msgid "Other advanced settings only accessible through '{0}' tab and in-game commands"
 msgstr "다른 고급 설정은 '{0}' 탭과 게임 내 명령어를 통해서만 접근할 수 있습니다."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1747
+#: Resources/Scripts/Gui/StartupScreen.as:1748
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
 msgstr "알 수 없음 ({0})"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1749
-#: Resources/Scripts/Gui/StartupScreen.as:1763
+#: Resources/Scripts/Gui/StartupScreen.as:1750
+#: Resources/Scripts/Gui/StartupScreen.as:1764
 msgctxt "StartupScreen"
 msgid "System default"
 msgstr "시스템 기본 설정"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1812
+#: Resources/Scripts/Gui/StartupScreen.as:1813
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "클립보드에 복사"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1848
+#: Resources/Scripts/Gui/StartupScreen.as:1849
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "고급 설정"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1857
+#: Resources/Scripts/Gui/StartupScreen.as:1858
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "필터"

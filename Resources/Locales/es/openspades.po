@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-02-11 03:09-0500\n"
+"PO-Revision-Date: 2017-02-11 05:00-0500\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: openspades\n"
 "X-Crowdin-Language: es-ES\n"
-"X-Crowdin-File: openspades.pot\n"
+"X-Crowdin-File: /master/openspades.pot\n"
 "Language: es_ES\n"
 
 #: Sources/Client/Client.cpp:585
@@ -27,7 +27,14 @@ msgctxt "Client"
 msgid "Saving map failed: "
 msgstr "Error en el guardado del mapa: {0}"
 
-#: Sources/Client/Client.cpp:627
+#. ! Prefix added to global chat messages.
+#. !
+#. ! Example: [Global] playername (Red) blah blah
+#. !
+#. ! Crowdin warns that this string shouldn't be translated,
+#. ! but it actually can be.
+#. ! The extra whitespace is not a typo.
+#: Sources/Client/Client.cpp:633
 msgctxt "Client"
 msgid "[Global] "
 msgstr ""
@@ -206,135 +213,140 @@ msgctxt "Client"
 msgid "Shotgun"
 msgstr ""
 
-#: Sources/Client/Client_Update.cpp:848
+#. ! A cause of death shown in the kill feed.
+#: Sources/Client/Client_Update.cpp:849
 msgctxt "Client"
 msgid "Fall"
 msgstr ""
 
-#: Sources/Client/Client_Update.cpp:851
+#. ! A cause of death shown in the kill feed.
+#: Sources/Client/Client_Update.cpp:853
 msgctxt "Client"
 msgid "Melee"
 msgstr ""
 
-#: Sources/Client/Client_Update.cpp:854
+#: Sources/Client/Client_Update.cpp:856
 msgctxt "Client"
 msgid "Grenade"
 msgstr ""
 
-#: Sources/Client/Client_Update.cpp:857
+#. ! A cause of death shown in the kill feed.
+#: Sources/Client/Client_Update.cpp:860
 msgctxt "Client"
 msgid "Headshot"
 msgstr ""
 
-#: Sources/Client/Client_Update.cpp:860
+#. ! A cause of death shown in the kill feed.
+#: Sources/Client/Client_Update.cpp:864
 msgctxt "Client"
 msgid "Team Change"
 msgstr ""
 
-#: Sources/Client/Client_Update.cpp:863
+#. ! A cause of death shown in the kill feed.
+#: Sources/Client/Client_Update.cpp:868
 msgctxt "Client"
 msgid "Weapon Change"
 msgstr ""
 
-#: Sources/Client/Client_Update.cpp:902
+#: Sources/Client/Client_Update.cpp:907
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr "Has matado a {0}"
 
-#: Sources/Client/Client_Update.cpp:904
+#: Sources/Client/Client_Update.cpp:909
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr "Fuiste asesinado por {0}"
 
-#: Sources/Client/Client_Update.cpp:1216
+#: Sources/Client/Client_Update.cpp:1225
 msgctxt "Client"
 msgid "Insufficient blocks."
 msgstr "Insuficientes bloques."
 
-#: Sources/Client/Client_Update.cpp:1219
+#: Sources/Client/Client_Update.cpp:1228
 msgctxt "Client"
 msgid "You cannot place a block there."
 msgstr "No puedes colocar un bloque aquí"
 
-#: Sources/Client/LimboView.cpp:78
+#: Sources/Client/LimboView.cpp:79
 msgctxt "Client"
 msgid "Spawn"
 msgstr "Aparecer"
 
-#: Sources/Client/LimboView.cpp:182
+#: Sources/Client/LimboView.cpp:183
 msgctxt "Client"
 msgid "Select Team:"
 msgstr "Seleccionar equipo:"
 
-#: Sources/Client/LimboView.cpp:190
+#: Sources/Client/LimboView.cpp:191
 msgctxt "Client"
 msgid "Select Weapon:"
 msgstr "Seleccionar arma:"
 
-#: Sources/Client/NetClient.cpp:377
+#: Sources/Client/NetClient.cpp:422
 msgctxt "NetClient"
 msgid "Connecting to the server"
 msgstr "Conectando al servidor"
 
-#: Sources/Client/NetClient.cpp:389
+#: Sources/Client/NetClient.cpp:434
 msgctxt "NetClient"
 msgid "Not connected"
 msgstr "No conectado"
 
-#: Sources/Client/NetClient.cpp:453
+#: Sources/Client/NetClient.cpp:498
 msgctxt "NetClient"
 msgid "Awaiting for state"
 msgstr "A la espera del estado"
 
-#: Sources/Client/NetClient.cpp:463 Sources/Client/NetClient.cpp:1232
+#: Sources/Client/NetClient.cpp:508 Sources/Client/NetClient.cpp:1277
 msgctxt "NetClient"
 msgid "Loading snapshot"
 msgstr "Cargando snapshot"
 
-#: Sources/Client/NetClient.cpp:478
+#: Sources/Client/NetClient.cpp:523
 msgctxt "NetClient"
 msgid "Loading snapshot ({0}/{1})"
 msgstr "Cargando snapshot ({0}/{1})"
 
-#: Sources/Client/NetClient.cpp:483 Sources/Client/NetClient.cpp:517
+#: Sources/Client/NetClient.cpp:528 Sources/Client/NetClient.cpp:562
 msgctxt "NetClient"
 msgid "Connected"
 msgstr "Conectado"
 
-#: Sources/Client/NetClient.cpp:495 Sources/Client/NetClient.cpp:530
-#: Sources/Client/NetClient.cpp:582
+#: Sources/Client/NetClient.cpp:540 Sources/Client/NetClient.cpp:575
+#: Sources/Client/NetClient.cpp:627
 msgctxt "NetClient"
 msgid "Still loading..."
 msgstr "Aún cargando"
 
-#: Sources/Client/NetClient.cpp:498 Sources/Client/NetClient.cpp:504
-#: Sources/Client/NetClient.cpp:534 Sources/Client/NetClient.cpp:539
-#: Sources/Client/NetClient.cpp:586 Sources/Client/NetClient.cpp:591
+#: Sources/Client/NetClient.cpp:543 Sources/Client/NetClient.cpp:549
+#: Sources/Client/NetClient.cpp:579 Sources/Client/NetClient.cpp:584
+#: Sources/Client/NetClient.cpp:631 Sources/Client/NetClient.cpp:636
 msgctxt "NetClient"
 msgid "Error"
 msgstr ""
 
-#: Sources/Client/NetClient.cpp:657
+#: Sources/Client/NetClient.cpp:702
 msgctxt "NetClient"
 msgid "You are banned from this server."
 msgstr "Has sido baneado del servidor."
 
-#: Sources/Client/NetClient.cpp:662 Sources/Client/NetClient.cpp:665
+#: Sources/Client/NetClient.cpp:707 Sources/Client/NetClient.cpp:710
 msgctxt "NetClient"
 msgid "You were kicked from this server."
 msgstr "Has sido expulsado del servidor."
 
-#: Sources/Client/NetClient.cpp:663
+#: Sources/Client/NetClient.cpp:708
 msgctxt "NetClient"
 msgid "Incompatible client protocol version."
 msgstr "Versión del protocolo cliente incompatible."
 
-#: Sources/Client/NetClient.cpp:664
+#: Sources/Client/NetClient.cpp:709
 msgctxt "NetClient"
 msgid "Server full"
 msgstr "Servidor lleno"
 
-#: Sources/Client/NetClient.cpp:666
+#: Sources/Client/NetClient.cpp:711
 msgctxt "NetClient"
 msgid "Unknown Reason"
 msgstr "Razón desconocida"
@@ -1009,7 +1021,7 @@ msgid "System Info"
 msgstr "Información del sistema"
 
 #: Resources/Scripts/Gui/StartupScreen.as:215
-#: Resources/Scripts/Gui/StartupScreen.as:1678
+#: Resources/Scripts/Gui/StartupScreen.as:1679
 msgctxt "StartupScreen"
 msgid "Advanced"
 msgstr "Avanzado"
@@ -1325,124 +1337,125 @@ msgctxt "StartupScreen"
 msgid "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It features several enhanced features including automatic load control, dynamics compressor, HRTF-based 3D audio, and high quality reverb."
 msgstr "YSR es un motor de sonido experimental 3D HDR optimizado para OpenSpades. Cuenta con varias funciones avanzadas como control de carga automático, compresor dinámico,  HRTF basado en audio 3D, reverb de alta calidad."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1522
+#. ! The name of audio driver that outputs no audio.
+#: Resources/Scripts/Gui/StartupScreen.as:1523
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr "Nulo"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1526
+#: Resources/Scripts/Gui/StartupScreen.as:1527
 msgctxt "StartupScreen"
 msgid "Disables audio output."
 msgstr "Desactivar salida de audio."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1537
-#: Resources/Scripts/Gui/StartupScreen.as:1561
+#: Resources/Scripts/Gui/StartupScreen.as:1538
+#: Resources/Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "Polifónico"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1538
+#: Resources/Scripts/Gui/StartupScreen.as:1539
 msgctxt "StartupScreen"
 msgid "Specifies how many sounds can be played simultaneously. Higher value needs more processing power, so setting this too high might cause an overload (especially with a software emulation)."
 msgstr "Especifica cuántos sonidos se pueden reproducir simultáneamente. Un valor más alto necesita más potencia de procesamiento, por lo que un parámetro demasiado alto puede causar una sobrecarga (especialmente con una emulación de software)."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1545
+#: Resources/Scripts/Gui/StartupScreen.as:1546
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr ""
 
-#: Resources/Scripts/Gui/StartupScreen.as:1546
+#: Resources/Scripts/Gui/StartupScreen.as:1547
 msgctxt "StartupScreen"
 msgid "Enables extended features provided by the OpenAL driver to create more ambience."
 msgstr "Activa caracteristicas extendidas por el driver OpenAL para crear más ambiente."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1562
+#: Resources/Scripts/Gui/StartupScreen.as:1563
 msgctxt "StartupScreen"
 msgid "Specifies how many sounds can be played simultaneously. No matter what value is set, YSR might reduce the number of sounds when an overload is detected."
 msgstr "Especifica cuántos sonidos se pueden reproducir simultáneamente. No importa qué valor se establece, YSR podría reducir el número de sonidos cuando se detecta una sobrecarga."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1622
+#: Resources/Scripts/Gui/StartupScreen.as:1623
 msgctxt "StartupScreen"
 msgid "Language"
 msgstr "Lenguaje"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1634
+#: Resources/Scripts/Gui/StartupScreen.as:1635
 msgctxt "StartupScreen"
 msgid "Tools"
 msgstr "Herramientas"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1637
+#: Resources/Scripts/Gui/StartupScreen.as:1638
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
 msgstr "Resetear todas las configuraciones"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1646
+#: Resources/Scripts/Gui/StartupScreen.as:1647
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
 msgstr "Abrir carpeta de configuración en el explorador"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1648
+#: Resources/Scripts/Gui/StartupScreen.as:1649
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
 msgstr "Revelar carpeta de configuraciones en el buscador"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1650
+#: Resources/Scripts/Gui/StartupScreen.as:1651
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
 msgstr "Examinar carpeta de configuraciones"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1667
+#: Resources/Scripts/Gui/StartupScreen.as:1668
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
 msgstr "Un error desconocido ha ocurrido mientras se abria el directorio de configuraciones."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1673
+#: Resources/Scripts/Gui/StartupScreen.as:1674
 msgctxt "StartupScreen"
 msgid "Are you sure to reset all settings? They include (but are not limited to):"
 msgstr "¿Estás seguro de reiniciar todas las opciones? Incluyen (pero no limitadas a): "
 
-#: Resources/Scripts/Gui/StartupScreen.as:1674
+#: Resources/Scripts/Gui/StartupScreen.as:1675
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
 msgstr "Todas las configuraciones graficas/audio"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1675
+#: Resources/Scripts/Gui/StartupScreen.as:1676
 msgctxt "StartupScreen"
 msgid "All key bindings"
 msgstr "Todas las teclas asignadas"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1676
+#: Resources/Scripts/Gui/StartupScreen.as:1677
 msgctxt "StartupScreen"
 msgid "Your player name"
 msgstr "Tu nombre de jugador"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1677
+#: Resources/Scripts/Gui/StartupScreen.as:1678
 msgctxt "StartupScreen"
 msgid "Other advanced settings only accessible through '{0}' tab and in-game commands"
 msgstr "Otros ajustes avanzados sólo accesibles a través de la pestaña {0} y desde los comandos en el juego."
 
-#: Resources/Scripts/Gui/StartupScreen.as:1747
+#: Resources/Scripts/Gui/StartupScreen.as:1748
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
 msgstr "Desconocido ({0})"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1749
-#: Resources/Scripts/Gui/StartupScreen.as:1763
+#: Resources/Scripts/Gui/StartupScreen.as:1750
+#: Resources/Scripts/Gui/StartupScreen.as:1764
 msgctxt "StartupScreen"
 msgid "System default"
 msgstr ""
 
-#: Resources/Scripts/Gui/StartupScreen.as:1812
+#: Resources/Scripts/Gui/StartupScreen.as:1813
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "Copiar al portapapeles"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1848
+#: Resources/Scripts/Gui/StartupScreen.as:1849
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "Configuraciones avanzadas"
 
-#: Resources/Scripts/Gui/StartupScreen.as:1857
+#: Resources/Scripts/Gui/StartupScreen.as:1858
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "Filtro"
