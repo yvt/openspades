@@ -3,7 +3,7 @@ static const char *credits = R"**(
 ${PACKAGE_STRING}
 
 
-CREDITS
+Credits
 -------
 
 "yvt" - Most of the code, Japanese translation
@@ -26,6 +26,21 @@ CREDITS
 "BrunoDiazU" - Spanish translation
 
 And many others which weren't mentioned here.
+
+
+Translators
+-----------
+
+- Brazilian Portuguese: "feikname"
+- Dutch: "Tapmemer"
+- European Portuguese: "DarkDracoon"
+- French: "damienflament"
+- German: "tungdil", "NotAFile", "theunknownxy"
+- Japanese: "yvt"
+- Korean: "kmsi"
+- Polish: João Rodrigues
+- Russian: "noway421", "ArionWT"
+- Spanish: "BrunoDiazU"
 
 
 Portions of program is based on following software
