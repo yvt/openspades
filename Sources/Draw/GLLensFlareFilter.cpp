@@ -39,7 +39,6 @@ namespace spades {
 			blurProgram = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 			scannerProgram = renderer->RegisterProgram("Shaders/LensFlare/Scanner.program");
 			drawProgram = renderer->RegisterProgram("Shaders/LensFlare/Draw.program");
-			dustImg = (GLImage *)renderer->RegisterImage("Textures/RealLens.jpg");
 			flare1 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/1.png");
 			flare2 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/2.png");
 			flare3 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/3.png");
