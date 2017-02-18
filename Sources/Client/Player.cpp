@@ -569,7 +569,8 @@ namespace spades {
 				mapResult = map->CastRay2(muzzle, dir, 500);
 
 				Player *hitPlayer = NULL;
-				float hitPlayerDistance = 0.f;
+				float hitPlayerDistance = 0.f; // disregarding Z coordinate
+				float hitPlayerActualDistance = 0.f;
 				HitBodyPart hitPart = HitBodyPart::None;
 
 				for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
@@ -590,6 +591,7 @@ namespace spades {
 						if (hitPlayer == NULL || dist < hitPlayerDistance) {
 							hitPlayer = other;
 							hitPlayerDistance = dist;
+							hitPlayerActualDistance = (hitPos - muzzle).GetLength();
 							hitPart = HitBodyPart::Head;
 						}
 					}
@@ -598,6 +600,7 @@ namespace spades {
 						if (hitPlayer == NULL || dist < hitPlayerDistance) {
 							hitPlayer = other;
 							hitPlayerDistance = dist;
+							hitPlayerActualDistance = (hitPos - muzzle).GetLength();
 							hitPart = HitBodyPart::Torso;
 						}
 					}
@@ -607,6 +610,7 @@ namespace spades {
 							if (hitPlayer == NULL || dist < hitPlayerDistance) {
 								hitPlayer = other;
 								hitPlayerDistance = dist;
+								hitPlayerActualDistance = (hitPos - muzzle).GetLength();
 								switch (j) {
 									case 0: hitPart = HitBodyPart::Limb1; break;
 									case 1: hitPart = HitBodyPart::Limb2; break;
@@ -677,7 +681,7 @@ namespace spades {
 				} else if (hitPlayer != NULL) {
 					if (hitPlayerDistance < 128.f) {
 
-						finalHitPos = muzzle + dir * hitPlayerDistance;
+						finalHitPos = muzzle + dir * hitPlayerActualDistance;
 
 						switch (hitPart) {
 							case HitBodyPart::Head:
@@ -702,23 +706,23 @@ namespace spades {
 							switch (hitPart) {
 								case HitBodyPart::Head:
 									world->GetListener()->BulletHitPlayer(
-									  hitPlayer, HitTypeHead, muzzle + dir * hitPlayerDistance,
+									  hitPlayer, HitTypeHead, finalHitPos,
 									  this);
 									break;
 								case HitBodyPart::Torso:
 									world->GetListener()->BulletHitPlayer(
-									  hitPlayer, HitTypeTorso, muzzle + dir * hitPlayerDistance,
+									  hitPlayer, HitTypeTorso, finalHitPos,
 									  this);
 									break;
 								case HitBodyPart::Limb1:
 								case HitBodyPart::Limb2:
 									world->GetListener()->BulletHitPlayer(
-									  hitPlayer, HitTypeLegs, muzzle + dir * hitPlayerDistance,
+									  hitPlayer, HitTypeLegs, finalHitPos,
 									  this);
 									break;
 								case HitBodyPart::Arms:
 									world->GetListener()->BulletHitPlayer(
-									  hitPlayer, HitTypeArms, muzzle + dir * hitPlayerDistance,
+									  hitPlayer, HitTypeArms, finalHitPos,
 									  this);
 									break;
 								case HitBodyPart::None: SPAssert(false); break;
