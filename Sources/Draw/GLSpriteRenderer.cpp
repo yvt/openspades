@@ -110,6 +110,7 @@ namespace spades {
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
 			Vector3 fogCol = renderer->GetFogColor();
+			fogCol *= fogCol;
 			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 
 			const client::SceneDefinition &def = renderer->GetSceneDef();
