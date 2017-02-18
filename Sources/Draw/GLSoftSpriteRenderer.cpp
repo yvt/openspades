@@ -129,6 +129,7 @@ namespace spades {
 			fogDistance.SetValue(renderer->GetFogDistance());
 
 			Vector3 fogCol = renderer->GetFogColor();
+			fogCol *= fogCol; // linearize
 			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 
 			const client::SceneDefinition &def = renderer->GetSceneDef();

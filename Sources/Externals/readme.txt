@@ -40,7 +40,7 @@ You may not need to hunt and compile the headers and libraries all by yourself:
  * They're already packed in the correct layout. You just need to merge.
 
 Visual Studio 2015:
-https://dl.dropboxusercontent.com/u/37804131/openspades/OpenSpades-Externals-Windows-VS2015-3.zip
+https://openspadesmedia.yvt.jp/development-packages/OpenSpades-Externals-Windows-VS2015-3.zip
 
 Visual Studio 2010 (FreeType, libopus and libopusfile is missing):
 https://dl.dropboxusercontent.com/u/37804131/OpenSpades-Externals-Windows.zip
@@ -69,4 +69,4 @@ Externals
 
 The following URL provides a pre-compiled zip file containing all required files.
 
-https://dl.dropboxusercontent.com/u/37804131/openspades/OpenSpades-Externals-Darwin-1.zip
+https://openspadesmedia.yvt.jp/development-packages/OpenSpades-Externals-Darwin-1.zip

@@ -20,46 +20,30 @@
 
 
 uniform sampler2D blurTexture1;
-uniform sampler2D blurTexture2;
-uniform sampler2D blurTexture3;
-uniform sampler2D blurTexture4;
 uniform sampler2D dustTexture;
 uniform sampler2D inputTexture;
 uniform sampler2D noiseTexture;
 
 varying vec2 texCoord;
-varying vec4 dustTexCoord1;
-varying vec4 dustTexCoord2;
+varying vec2 dustTexCoord;
 varying vec4 noiseTexCoord;
 
 void main() {
 	// dust filter texture
-	vec3 dust1 = texture2D(dustTexture, dustTexCoord1.xy).xyz;
-	vec3 dust2 = texture2D(dustTexture, dustTexCoord1.zw).xyz;
-	vec3 dust3 = texture2D(dustTexture, dustTexCoord2.xy).xyz;
-	vec3 dust4 = texture2D(dustTexture, dustTexCoord2.zw).xyz;
+	vec3 dust1 = texture2D(dustTexture, dustTexCoord).xyz;
 
 	// linearize
 	dust1 *= dust1;
-	dust2 *= dust2;
-	dust3 *= dust3;
-	dust4 *= dust4;
 
 	// blurred texture (already linearized?)
 	vec3 blur1 = texture2D(blurTexture1, texCoord).xyz;
-	vec3 blur2 = texture2D(blurTexture2, texCoord).xyz;
-	vec3 blur3 = texture2D(blurTexture3, texCoord).xyz;
-	vec3 blur4 = texture2D(blurTexture4, texCoord).xyz;
 
 	vec3 sum = dust1 * blur1;
-	sum += dust2 * blur2;
-	sum += dust3 * blur3;
-	sum += dust4 * blur4;
 
 	vec3 final = texture2D(inputTexture, texCoord).xyz;
 
 	final *= 0.95;
-	final += sum * 0.8;
+	final += sum * 2.0;
 
 	// add grain
 	float grain = texture2D(noiseTexture, noiseTexCoord.xy).x;

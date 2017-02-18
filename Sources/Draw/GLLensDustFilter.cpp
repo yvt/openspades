@@ -40,7 +40,7 @@ namespace spades {
 			thru = renderer->RegisterProgram("Shaders/PostFilters/PassThroughConstAlpha.program");
 			gauss1d = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 			dust = renderer->RegisterProgram("Shaders/PostFilters/LensDust.program");
-			dustImg = (GLImage *)renderer->RegisterImage("Textures/RealLens.jpg");
+			dustImg = (GLImage *)renderer->RegisterImage("Textures/LensDustTexture.jpg");
 
 			IGLDevice *dev = renderer->GetGLDevice();
 			noiseTex = dev->GenTexture();
@@ -233,7 +233,7 @@ namespace spades {
 				float sx = .25f / curLevel.GetWidth();
 				float sy = .25f / curLevel.GetHeight();
 
-				for (int j = 0; j < 4; j++) {
+				for (int j = 0; j < 1; j++) {
 					if (i < (int)levels.size() - 1) {
 						curLevel = levels[i].retBuf[j];
 					}
@@ -252,12 +252,6 @@ namespace spades {
 					qr.Draw();
 
 					float cx = 0.f, cy = 0.f;
-					switch (j) {
-						case 0: cx = sx; break;
-						case 1: cx = -sx; break;
-						case 2: cy = sy; break;
-						case 3: cy = -sy; break;
-					}
 
 					dev->BindTexture(IGLDevice::Texture2D, curLevel.GetTexture());
 					thruColor.SetValue(1.f, 1.f, 1.f, alpha);
@@ -272,9 +266,6 @@ namespace spades {
 			static GLProgramAttribute dustPosition("positionAttribute");
 			static GLProgramUniform dustDustTexture("dustTexture");
 			static GLProgramUniform dustBlurTexture1("blurTexture1");
-			static GLProgramUniform dustBlurTexture2("blurTexture2");
-			static GLProgramUniform dustBlurTexture3("blurTexture3");
-			static GLProgramUniform dustBlurTexture4("blurTexture4");
 			static GLProgramUniform dustInputTexture("inputTexture");
 			static GLProgramUniform dustNoiseTexture("noiseTexture");
 			static GLProgramUniform dustNoiseTexCoordFactor("noiseTexCoordFactor");
@@ -282,9 +273,6 @@ namespace spades {
 			dustPosition(dust);
 			dustDustTexture(dust);
 			dustBlurTexture1(dust);
-			dustBlurTexture2(dust);
-			dustBlurTexture3(dust);
-			dustBlurTexture4(dust);
 			dustInputTexture(dust);
 			dustNoiseTexture(dust);
 			dustNoiseTexCoordFactor(dust);
@@ -298,31 +286,19 @@ namespace spades {
 			// composite to the final image
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 			GLColorBuffer topLevel1 = levels[0].retBuf[0];
-			GLColorBuffer topLevel2 = levels[0].retBuf[1];
-			GLColorBuffer topLevel3 = levels[0].retBuf[2];
-			GLColorBuffer topLevel4 = levels[0].retBuf[3];
 
 			qr.SetCoordAttributeIndex(dustPosition());
 			dev->ActiveTexture(0);
 			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
 			dev->ActiveTexture(1);
 			dev->BindTexture(IGLDevice::Texture2D, topLevel1.GetTexture());
-			dev->ActiveTexture(2);
-			dev->BindTexture(IGLDevice::Texture2D, topLevel2.GetTexture());
-			dev->ActiveTexture(3);
-			dev->BindTexture(IGLDevice::Texture2D, topLevel3.GetTexture());
-			dev->ActiveTexture(4);
-			dev->BindTexture(IGLDevice::Texture2D, topLevel4.GetTexture());
 			dev->ActiveTexture(5);
 			dustImg->Bind(IGLDevice::Texture2D);
 			dev->ActiveTexture(6);
 			dev->BindTexture(IGLDevice::Texture2D, noiseTex);
 			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
 			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
-			dustBlurTexture1.SetValue(2);
-			dustBlurTexture2.SetValue(1);
-			dustBlurTexture3.SetValue(3);
-			dustBlurTexture4.SetValue(4);
+			dustBlurTexture1.SetValue(1);
 			dustDustTexture.SetValue(5);
 			dustNoiseTexture.SetValue(6);
 			dustInputTexture.SetValue(0);
