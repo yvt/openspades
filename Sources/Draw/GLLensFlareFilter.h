@@ -32,7 +32,6 @@ namespace spades {
 			GLProgram *blurProgram, *scannerProgram, *drawProgram;
 			GLImage *flare1, *flare2, *flare3, *flare4, *white;
 			GLImage *mask1, *mask2, *mask3;
-            GLImage *dustImg;
 			GLColorBuffer Blur(GLColorBuffer, float spread = 1.f);
 		public:
 			GLLensFlareFilter(GLRenderer *);
