@@ -39,7 +39,7 @@ namespace spades {
 		public:
 			GLAutoExposureFilter(GLRenderer *);
 			~GLAutoExposureFilter();
-			GLColorBuffer Filter(GLColorBuffer);
+			GLColorBuffer Filter(GLColorBuffer, float dt);
 		};
 	}
 }

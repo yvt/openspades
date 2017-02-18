@@ -47,7 +47,9 @@ namespace spades {
 			TypedItemHandle<bool> r_fogShadow           { *this, "r_fogShadow", ItemFlags::Latch };
 			TypedItemHandle<bool> r_fxaa                { *this, "r_fxaa" };
 			TypedItemHandle<bool> r_hdr                 { *this, "r_hdr", ItemFlags::Latch };
-			TypedItemHandle<bool> r_hdrAutoExposure     { *this, "r_hdrAutoExposure" };
+			TypedItemHandle<float> r_hdrAutoExposureMin { *this, "r_hdrAutoExposureMin" };
+			TypedItemHandle<float> r_hdrAutoExposureMax { *this, "r_hdrAutoExposureMax" };
+			TypedItemHandle<float> r_hdrAutoExposureSpeed{ *this, "r_hdrAutoExposureSpeed" };
 			TypedItemHandle<float> r_hdrGamma           { *this, "r_hdrGamma" };
 			TypedItemHandle<bool> r_highPrec            { *this, "r_highPrec", ItemFlags::Latch };
 			TypedItemHandle<bool> r_lens                { *this, "r_lens" };

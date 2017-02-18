@@ -65,13 +65,25 @@ namespace spades {
 
 			const client::SceneDefinition &def = renderer->GetSceneDef();
 
-			if (settings.r_bloom) {
-				// make image sharper
-				saturation.SetValue(.85f * def.saturation);
-				enhancement.SetValue(0.7f);
+			if (settings.r_hdr) {
+				// when HDR is enabled ACES tone mapping is applied first, so
+				// lower enhancement value is required
+				if (settings.r_bloom) {
+					saturation.SetValue(0.8f * def.saturation);
+					enhancement.SetValue(0.1f);
+				} else {
+					saturation.SetValue(0.9f * def.saturation);
+					enhancement.SetValue(0.0f);
+				}
 			} else {
-				saturation.SetValue(1.f * def.saturation);
-				enhancement.SetValue(0.3f);
+				if (settings.r_bloom) {
+					// make image sharper
+					saturation.SetValue(.85f * def.saturation);
+					enhancement.SetValue(0.7f);
+				} else {
+					saturation.SetValue(1.f * def.saturation);
+					enhancement.SetValue(0.3f);
+				}
 			}
 
 			lensTexture.SetValue(0);

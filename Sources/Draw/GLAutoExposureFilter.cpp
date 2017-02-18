@@ -29,6 +29,7 @@
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
+#include "GLSettings.h"
 
 namespace spades {
 	namespace draw {
@@ -77,20 +78,22 @@ namespace spades {
 			dev->DeleteFramebuffer(exposureFramebuffer);
 		}
 
-#define Level BloomLevel
+		namespace {
+			struct Level {
+				int w, h;
+				GLColorBuffer buffer;
+			};
+		}
 
-		struct Level {
-			int w, h;
-			GLColorBuffer buffer;
-		};
-
-		GLColorBuffer GLAutoExposureFilter::Filter(GLColorBuffer input) {
+		GLColorBuffer GLAutoExposureFilter::Filter(GLColorBuffer input, float dt) {
 			SPADES_MARK_FUNCTION();
 
 			std::vector<Level> levels;
 
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
+
+			GLSettings &settings = renderer->GetSettings();
 
 			static GLProgramAttribute thruPosition("positionAttribute");
 			static GLProgramUniform thruColor("colorUniform");
@@ -116,11 +119,15 @@ namespace spades {
 			static GLProgramUniform computeGainColor("colorUniform");
 			static GLProgramUniform computeGainTexture("mainTexture");
 			static GLProgramUniform computeGainTexCoordRange("texCoordRange");
+			static GLProgramUniform computeGainMinGain("minGain");
+			static GLProgramUniform computeGainMaxGain("maxGain");
 
 			computeGainPosition(computeGain);
 			computeGainColor(computeGain);
 			computeGainTexture(computeGain);
 			computeGainTexCoordRange(computeGain);
+			computeGainMinGain(computeGain);
+			computeGainMaxGain(computeGain);
 
 			preprocess->Use();
 			preprocessColor.SetValue(1.f, 1.f, 1.f, 1.f);
@@ -169,10 +176,25 @@ namespace spades {
 			dev->Enable(IGLDevice::Blend, true);
 			dev->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::OneMinusSrcAlpha);
 
+			float minExposure = settings.r_hdrAutoExposureMin;
+			float maxExposure = settings.r_hdrAutoExposureMax;
+
+			// safety
+			minExposure = std::min(std::max(minExposure, -10.0f), 10.0f);
+			maxExposure = std::min(std::max(maxExposure, minExposure), 10.0f);
+
+			// adaption speed control
+			if ((float)settings.r_hdrAutoExposureSpeed < 0.0f) {
+				settings.r_hdrAutoExposureSpeed = 0.0f;
+			}
+			float rate = 1.0f - std::pow(0.01f, dt * settings.r_hdrAutoExposureSpeed);
+
 			computeGain->Use();
 			computeGainTexCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
 			computeGainTexture.SetValue(0);
-			computeGainColor.SetValue(1.f, 1.f, 1.f, 0.1f);
+			computeGainColor.SetValue(1.f, 1.f, 1.f, rate);
+			computeGainMinGain.SetValue(std::pow(2.0f, minExposure));
+			computeGainMaxGain.SetValue(std::pow(2.0f, maxExposure));
 			qr.SetCoordAttributeIndex(computeGainPosition());
 			dev->BindFramebuffer(IGLDevice::Framebuffer, exposureFramebuffer);
 			dev->BindTexture(IGLDevice::Texture2D, buffer.GetTexture());

@@ -29,6 +29,7 @@ varying vec3 radiosityTextureCoord;
 varying vec3 ambientShadowTextureCoord;
 varying vec3 normalVarying;
 uniform vec3 ambientColor;
+uniform vec3 fogColor;
 
 vec3 DecodeRadiosityValue(vec3 val){
 	// reverse bias
@@ -98,5 +99,5 @@ vec3 BlurredReflection_Map(float detailAmbientOcclusion, vec3 direction, float s
 
 	amb *= .8 - normalVarying.z * .2;
 
-	return col + ambientColor * amb;
+	return col + fogColor * amb;
 }

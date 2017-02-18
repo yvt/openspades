@@ -233,7 +233,13 @@ namespace spades {
 				ac *= ac; // linearize
 				ambientColor(program);
 				ac *= 0.5f;
-				ac += 0.1f; // so the shadow wouldn't be pitch black even if the fog is black
+				const float minimumLuminance = 0.35f;
+				float luminance = std::min({ac.x, ac.y, ac.z});
+				if (luminance < minimumLuminance) {
+					// we want things still visible even if sky is pitch black
+					Vector3 offset = (ac + 0.003f) / (luminance + 0.003f);
+					ac += offset * (minimumLuminance - luminance);
+				}
 				ambientColor.SetValue(ac.x, ac.y, ac.z);
 
 				ambientShadowTexture(program);

@@ -959,9 +959,11 @@ namespace spades {
 					}
 				}
 
-				if (settings.r_hdr && settings.r_hdrAutoExposure) {
+				// FIXME: these passes should be combined for lower VRAM bandwidth usage
+
+				if (settings.r_hdr) {
 					GLProfiler::Context p(*profiler, "Auto Exposure");
-					handle = autoExposureFilter->Filter(handle);
+					handle = autoExposureFilter->Filter(handle, dt);
 				}
 
 				if (settings.r_hdr) {
@@ -971,7 +973,7 @@ namespace spades {
 
 				if (settings.r_colorCorrection) {
 					GLProfiler::Context p(*profiler, "Color Correction");
-					Vector3 tint = smoothedFogColor + MakeVector3(1.f, 1.f, 1.f);
+					Vector3 tint = smoothedFogColor + MakeVector3(1.f, 1.f, 1.f) * 0.5f;
 					tint = MakeVector3(1.f, 1.f, 1.f) / tint;
 					tint = Mix(tint, MakeVector3(1.f, 1.f, 1.f), 0.2f);
 					tint *= 1.f / std::min(std::min(tint.x, tint.y), tint.z);
