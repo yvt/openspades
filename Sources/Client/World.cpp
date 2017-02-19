@@ -97,6 +97,25 @@ namespace spades {
 				if (players[i])
 					players[i]->Update(dt);
 
+			while (!blockRegenerationQueue.empty()) {
+				auto it = blockRegenerationQueue.begin();
+				if (it->first > time) {
+					break;
+				}
+
+				const IntVector3 &block = it->second;
+
+				if (map && map->IsSolid(block.x, block.y, block.z)) {
+					uint32_t color = map->GetColor(block.x, block.y, block.z);
+					uint32_t health = 100;
+					color = (color & 0xffffff) | (health << 24);
+					map->Set(block.x, block.y, block.z, true, color);
+				}
+
+				blockRegenerationQueueMap.erase(blockRegenerationQueueMap.find(it->second));
+				blockRegenerationQueue.erase(it);
+			}
+
 			std::vector<std::list<Grenade *>::iterator> removedGrenades;
 			for (std::list<Grenade *>::iterator it = grenades.begin(); it != grenades.end(); it++) {
 				Grenade *g = *it;
@@ -164,6 +183,25 @@ namespace spades {
 			if (mode)
 				delete mode;
 			mode = m;
+		}
+		
+		void World::MarkBlockForRegeneration(const IntVector3 &blockLocation) {
+			UnmarkBlockForRegeneration(blockLocation);
+
+			// Regenerate after 10 seconds
+			auto result = blockRegenerationQueue.emplace(time + 10.0f, blockLocation);
+			SPAssert(result.second);
+			blockRegenerationQueueMap.emplace(blockLocation, result.first);
+		}
+		
+		void World::UnmarkBlockForRegeneration(const IntVector3 &blockLocation) {
+			auto it = blockRegenerationQueueMap.find(blockLocation);
+			if (it == blockRegenerationQueueMap.end()) {
+				return;
+			}
+
+			blockRegenerationQueue.erase(it->second);
+			blockRegenerationQueueMap.erase(it);
 		}
 
 		static std::vector<std::vector<CellPos>>

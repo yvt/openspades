@@ -673,6 +673,8 @@ namespace spades {
 							if (map->IsSolid(x, y, z))
 								map->Set(x, y, z, true, color);
 
+							world->MarkBlockForRegeneration(outBlockCoord);
+
 							if (world->GetListener())
 								world->GetListener()->BulletHitBlock(
 								  mapResult.hitPos, mapResult.hitBlock, mapResult.normal);
@@ -905,6 +907,8 @@ namespace spades {
 					color = (color & 0xffffff) | ((uint32_t)health << 24);
 					if (map->IsSolid(x, y, z))
 						map->Set(x, y, z, true, color);
+						
+					world->MarkBlockForRegeneration(outBlockCoord);
 
 					if (world->GetListener())
 						world->GetListener()->PlayerHitBlockWithSpade(
