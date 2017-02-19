@@ -76,6 +76,7 @@ namespace spades {
 			lastReloadingTime = 0.f;
 
 			pendingPlaceBlock = false;
+			pendingRestockBlock = false;
 
 			blockCursorActive = false;
 			blockCursorDragging = false;
@@ -291,7 +292,7 @@ namespace spades {
 
 			weapon->Restock();
 			grenades = 3;
-			blockStocks = 50;
+			pendingRestockBlock = true;
 			health = 100;
 
 			if (world->GetListener())
@@ -509,6 +510,11 @@ namespace spades {
 					weapon->ForceReloadDone();
 				}
 			}
+
+			if (pendingRestockBlock) {
+				blockStocks = 50;
+				pendingRestockBlock = false;
+			}
 		}
 
 		bool Player::RayCastApprox(spades::Vector3 start, spades::Vector3 dir) {
@@ -673,6 +679,8 @@ namespace spades {
 							if (map->IsSolid(x, y, z))
 								map->Set(x, y, z, true, color);
 
+							world->MarkBlockForRegeneration(outBlockCoord);
+
 							if (world->GetListener())
 								world->GetListener()->BulletHitBlock(
 								  mapResult.hitPos, mapResult.hitBlock, mapResult.normal);
@@ -750,7 +758,7 @@ namespace spades {
 			upLimit -= 0.03f; // ???
 			o += GetUp() * std::min(rec.y, std::max(0.f, upLimit)) *
 				(input.crouch ? 0.5f : 1.0f);
-			o += GetRight() * rec.x * sinf(world->GetTime() * 10.f);
+			o += GetRight() * rec.x * sinf(world->GetTime() * 5.f);
 			o = o.Normalize();
 			SetOrientation(o);
 
@@ -905,6 +913,8 @@ namespace spades {
 					color = (color & 0xffffff) | ((uint32_t)health << 24);
 					if (map->IsSolid(x, y, z))
 						map->Set(x, y, z, true, color);
+						
+					world->MarkBlockForRegeneration(outBlockCoord);
 
 					if (world->GetListener())
 						world->GetListener()->PlayerHitBlockWithSpade(

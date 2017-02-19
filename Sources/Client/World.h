@@ -26,6 +26,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <map>
 
 #include "GameMapWrapper.h"
 #include "PhysicsConstants.h"
@@ -76,6 +77,10 @@ namespace spades {
 			std::unordered_map<CellPos, spades::IntVector3, CellPosHash> createdBlocks;
 			std::unordered_set<CellPos, CellPosHash> destroyedBlocks;
 
+			std::map<float, IntVector3> blockRegenerationQueue;
+			std::unordered_map<IntVector3, std::map<float, IntVector3>::iterator>
+			  blockRegenerationQueueMap;
+
 			void ApplyBlockActions();
 
 		public:
@@ -94,6 +99,9 @@ namespace spades {
 
 			void AddGrenade(Grenade *);
 			std::vector<Grenade *> GetAllGrenades();
+
+			void MarkBlockForRegeneration(const IntVector3 &blockLocation);
+			void UnmarkBlockForRegeneration(const IntVector3 &blockLocation);
 
 			std::vector<IntVector3> CubeLine(IntVector3 v1, IntVector3 v2, int maxLength);
 

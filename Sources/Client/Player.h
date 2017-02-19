@@ -114,6 +114,7 @@ namespace spades {
 			float lastReloadingTime;
 
 			bool pendingPlaceBlock;
+			bool pendingRestockBlock;
 			bool canPending;
 			IntVector3 pendingPlaceBlockPos;
 

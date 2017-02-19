@@ -26,6 +26,7 @@
 #include <random>
 #include <string>
 #include <vector>
+#include <functional>
 
 namespace spades {
 
@@ -937,4 +938,19 @@ namespace spades {
 
 	float GetRandom();
 	float SmoothStep(float);
+}
+
+namespace std {
+	template <> struct hash<::spades::IntVector3> {
+		using argument_type = spades::IntVector3;
+		using result_type = std::size_t;
+		result_type operator()(argument_type const& s) const {
+			result_type result = std::hash<int>{}(s.x);
+			result ^= result >> 8;
+			result += std::hash<int>{}(s.y) * 114;
+			result ^= result >> 10;
+			result += std::hash<int>{}(s.z) * 514;
+			return result;
+		}
+	};
 }

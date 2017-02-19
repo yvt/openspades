@@ -9,6 +9,7 @@
 #include "Tracer.h"
 #include "Client.h"
 #include "IRenderer.h"
+#include <Draw/SWRenderer.h>
 
 namespace spades {
 	namespace client {
@@ -43,26 +44,43 @@ namespace spades {
 		}
 
 		void Tracer::Render3D() {
-			for (float step = 0.0f; step <= 1.0f; step += 0.1f) {
+			IRenderer *r = client->GetRenderer();
+			if (dynamic_cast<draw::SWRenderer *>(r)) {
+				// SWRenderer doesn't support long sprites (yet)
 				float startDist = curDistance;
 				float endDist = curDistance + visibleLength;
-
-				float midDist = (startDist + endDist) * 0.5f;
-				startDist = Mix(startDist, midDist, step);
-				endDist = Mix(endDist, midDist, step);
 
 				startDist = std::max(startDist, 0.f);
 				endDist = std::min(endDist, length);
 				if (startDist >= endDist) {
-					continue;
+					return;
 				}
 
 				Vector3 pos1 = startPos + dir * startDist;
 				Vector3 pos2 = startPos + dir * endDist;
-				IRenderer *r = client->GetRenderer();
 				Vector4 col = {1.f, .6f, .2f, 0.f};
-				r->SetColorAlphaPremultiplied(col * 0.4f);
-				r->AddLongSprite(image, pos1, pos2, .05f);
+				r->AddDebugLine(pos1, pos2, Vector4{1.0f, 0.6f, 0.2f, 1.0f});
+			} else {
+				for (float step = 0.0f; step <= 1.0f; step += 0.1f) {
+					float startDist = curDistance;
+					float endDist = curDistance + visibleLength;
+
+					float midDist = (startDist + endDist) * 0.5f;
+					startDist = Mix(startDist, midDist, step);
+					endDist = Mix(endDist, midDist, step);
+
+					startDist = std::max(startDist, 0.f);
+					endDist = std::min(endDist, length);
+					if (startDist >= endDist) {
+						continue;
+					}
+
+					Vector3 pos1 = startPos + dir * startDist;
+					Vector3 pos2 = startPos + dir * endDist;
+					Vector4 col = {1.f, .6f, .2f, 0.f};
+					r->SetColorAlphaPremultiplied(col * 0.4f);
+					r->AddLongSprite(image, pos1, pos2, .05f);
+				}
 			}
 		}
 

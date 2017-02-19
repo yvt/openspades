@@ -52,6 +52,7 @@ DEFINE_SPADES_SETTING(s_audioDriver, "ysr");
 #else
 DEFINE_SPADES_SETTING(s_audioDriver, "openal");
 #endif
+DEFINE_SPADES_SETTING(cl_fps, "0");
 
 namespace spades {
 	namespace gui {
@@ -196,6 +197,19 @@ namespace spades {
 					DispatchQueue::GetThreadQueue()->ProcessQueue();
 
 					Uint32 dt = SDL_GetTicks() - ot;
+
+					if ((float)cl_fps != 0) {
+						// Limit the frame rate
+						Uint32 desiredDelay = static_cast<Uint32>(1000.0f / (float)cl_fps);
+						desiredDelay = std::max<Uint32>(std::min<Uint32>(desiredDelay, 200), 1);
+						if (dt < desiredDelay) {
+							SDL_Delay(desiredDelay - dt);
+
+							// Remeasure the time delta
+							dt = SDL_GetTicks() - ot;
+						}
+					}
+
 					ot += dt;
 					if ((int32_t)dt > 0)
 						view->RunFrame((float)dt / 1000.f);
