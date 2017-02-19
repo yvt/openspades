@@ -76,6 +76,7 @@ namespace spades {
 			lastReloadingTime = 0.f;
 
 			pendingPlaceBlock = false;
+			pendingRestockBlock = false;
 
 			blockCursorActive = false;
 			blockCursorDragging = false;
@@ -291,7 +292,7 @@ namespace spades {
 
 			weapon->Restock();
 			grenades = 3;
-			blockStocks = 50;
+			pendingRestockBlock = true;
 			health = 100;
 
 			if (world->GetListener())
@@ -508,6 +509,11 @@ namespace spades {
 					reloadingServerSide = false;
 					weapon->ForceReloadDone();
 				}
+			}
+
+			if (pendingRestockBlock) {
+				blockStocks = 50;
+				pendingRestockBlock = false;
 			}
 		}
 
