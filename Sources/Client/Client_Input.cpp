@@ -41,7 +41,7 @@
 using namespace std;
 
 DEFINE_SPADES_SETTING(cg_mouseSensitivity, "1");
-DEFINE_SPADES_SETTING(cg_zoomedMouseSensScale, "0.6");
+DEFINE_SPADES_SETTING(cg_zoomedMouseSensScale, "1");
 DEFINE_SPADES_SETTING(cg_mouseExpPower, "1");
 DEFINE_SPADES_SETTING(cg_invertMouseY, "0");
 
