@@ -190,8 +190,7 @@ namespace spades {
 
 			// Regenerate after 10 seconds
 			auto result = blockRegenerationQueue.emplace(time + 10.0f, blockLocation);
-			SPAssert(result.second);
-			blockRegenerationQueueMap.emplace(blockLocation, result.first);
+			blockRegenerationQueueMap.emplace(blockLocation, result);
 		}
 		
 		void World::UnmarkBlockForRegeneration(const IntVector3 &blockLocation) {

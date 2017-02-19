@@ -77,8 +77,8 @@ namespace spades {
 			std::unordered_map<CellPos, spades::IntVector3, CellPosHash> createdBlocks;
 			std::unordered_set<CellPos, CellPosHash> destroyedBlocks;
 
-			std::map<float, IntVector3> blockRegenerationQueue;
-			std::unordered_map<IntVector3, std::map<float, IntVector3>::iterator>
+			std::multimap<float, IntVector3> blockRegenerationQueue;
+			std::unordered_map<IntVector3, std::multimap<float, IntVector3>::iterator>
 			  blockRegenerationQueueMap;
 
 			void ApplyBlockActions();
