@@ -750,7 +750,7 @@ namespace spades {
 			upLimit -= 0.03f; // ???
 			o += GetUp() * std::min(rec.y, std::max(0.f, upLimit)) *
 				(input.crouch ? 0.5f : 1.0f);
-			o += GetRight() * rec.x * sinf(world->GetTime() * 10.f);
+			o += GetRight() * rec.x * sinf(world->GetTime() * 5.f);
 			o = o.Normalize();
 			SetOrientation(o);
 
