@@ -40,6 +40,7 @@ DEFINE_SPADES_SETTING(s_ysrDriver, "libysrspades.so");
 
 DEFINE_SPADES_SETTING(s_ysrNumThreads, "2");
 SPADES_SETTING(s_maxPolyphonics);
+SPADES_SETTING(s_gain);
 DEFINE_SPADES_SETTING(s_ysrBufferSize, "1024");
 DEFINE_SPADES_SETTING(s_ysrDebug, "0");
 
@@ -554,7 +555,7 @@ namespace spades {
 			YsrContext::PlayParam param;
 			param.pitch = base.pitch;
 			param.referenceDistance = base.referenceDistance;
-			param.volume = base.volume;
+			param.volume = base.volume * (float)s_gain;
 			return param;
 		}
 

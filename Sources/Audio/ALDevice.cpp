@@ -38,6 +38,7 @@
 DEFINE_SPADES_SETTING(s_maxPolyphonics, "96");
 DEFINE_SPADES_SETTING(s_eax, "1");
 DEFINE_SPADES_SETTING(s_alPreciseErrorCheck, "1");
+DEFINE_SPADES_SETTING(s_gain, "1");
 
 // lm: seems to be missing for me..
 #ifndef ALC_ALL_DEVICES_SPECIFIER
@@ -210,7 +211,7 @@ namespace spades {
 
 					al::qalSourcef(handle, AL_PITCH, param.pitch);
 					ALCheckErrorPrecise();
-					al::qalSourcef(handle, AL_GAIN, param.volume);
+					al::qalSourcef(handle, AL_GAIN, param.volume * (float)s_gain);
 					ALCheckErrorPrecise();
 					al::qalSourcef(handle, AL_REFERENCE_DISTANCE, param.referenceDistance);
 
