@@ -32,8 +32,6 @@
 #include "IGLDevice.h"
 #include <Core/Settings.h>
 
-SPADES_SETTING(r_hdr);
-
 namespace spades {
 	namespace draw {
 		GLLensDustFilter::GLLensDustFilter(GLRenderer *renderer) : renderer(renderer) {
@@ -168,6 +166,8 @@ namespace spades {
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 
+			GLSettings &settings = renderer->GetSettings();
+
 			static GLProgramAttribute thruPosition("positionAttribute");
 			static GLProgramUniform thruColor("colorUniform");
 			static GLProgramUniform thruTexture("mainTexture");
@@ -178,7 +178,7 @@ namespace spades {
 			thruTexture(thru);
 			thruTexCoordRange(thru);
 
-			GLColorBuffer downSampled = DownSample(input, r_hdr ? false : true);
+			GLColorBuffer downSampled = DownSample(input, settings.r_hdr ? false : true);
 			downSampled = GaussianBlur(downSampled, false);
 			downSampled = GaussianBlur(downSampled, true);
 
