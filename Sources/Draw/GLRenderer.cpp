@@ -101,6 +101,14 @@ namespace spades {
 
 			SPLog("GLRenderer bootstrap");
 
+			// Work-around for broken settings
+			if (!settings.r_hdr) {
+				SPRaise("Apologies, disabling r_hdr is currently not supported for this branch");
+			}
+			if (settings.r_fogShadow) {
+				SPRaise("Apologies, enabling r_fogShadow is currently not supported for this branch");
+			}
+
 			renderWidth = renderHeight = -1;
 
 			UpdateRenderSize();
