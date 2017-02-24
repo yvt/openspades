@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-02-11 05:00-0500\n"
+"PO-Revision-Date: 2017-02-24 11:25-0500\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgstr "ŁADOWANIE"
 #: Sources/Client/Client_Draw.cpp:220
 msgctxt "Client"
 msgid "Disconnecting..."
-msgstr "Odłączanie od serwer..."
+msgstr "Rozłączanie..."
 
 #: Sources/Client/Client_Draw.cpp:523
 msgctxt "Client"
@@ -218,36 +218,36 @@ msgstr "Strzelba"
 #: Sources/Client/Client_Update.cpp:849
 msgctxt "Client"
 msgid "Fall"
-msgstr ""
+msgstr "Upadek"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:853
 msgctxt "Client"
 msgid "Melee"
-msgstr ""
+msgstr "Wręcz"
 
 #: Sources/Client/Client_Update.cpp:856
 msgctxt "Client"
 msgid "Grenade"
-msgstr ""
+msgstr "Granat"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:860
 msgctxt "Client"
 msgid "Headshot"
-msgstr ""
+msgstr "Trafienie w głowę"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:864
 msgctxt "Client"
 msgid "Team Change"
-msgstr ""
+msgstr "Zmiana drużyny"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:868
 msgctxt "Client"
 msgid "Weapon Change"
-msgstr ""
+msgstr "Zmiana broni"
 
 #: Sources/Client/Client_Update.cpp:907
 msgctxt "Client"
@@ -356,9 +356,9 @@ msgstr "Nieznany powód"
 msgctxt "Client"
 msgid "Spectator{1}"
 msgid_plural "Spectators{1}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Obserwator{1}"
+msgstr[1] "Obserwatorzy{1}"
+msgstr[2] "Obserwatorzy{1}"
 
 #: Sources/Client/TCProgressView.cpp:151
 msgctxt "Client"
@@ -457,37 +457,37 @@ msgstr "Powiedz drużynie"
 #: Resources/Scripts/Gui/CreateProfileScreen.as:58
 msgctxt "CreateProfileScreen"
 msgid "OK"
-msgstr ""
+msgstr "Potwierdź"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:70
 msgctxt "CreateProfileScreen"
 msgid "Decide later"
-msgstr ""
+msgstr "Zdecyduj później"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:80
 msgctxt "CreateProfileScreen"
 msgid "Welcome to OpenSpades"
-msgstr ""
+msgstr "Witaj w OpenSpades"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:88
 msgctxt "CreateProfileScreen"
 msgid "Choose a player name:"
-msgstr ""
+msgstr "Wpisz swoją nazwę:"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:96
 msgctxt "CreateProfileScreen"
 msgid "Player name"
-msgstr ""
+msgstr "Nazwa gracza"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:104
 msgctxt "CreateProfileScreen"
 msgid "You can change it later in the Setup dialog."
-msgstr ""
+msgstr "Możesz to zmienić później w ustawieniach."
 
 #: Resources/Scripts/Gui/MainScreen.as:376
 msgctxt "MainScreen"
 msgid "Connect"
-msgstr "Graj"
+msgstr "Połącz"
 
 #: Resources/Scripts/Gui/MainScreen.as:384
 msgctxt "MainScreen"
@@ -498,13 +498,13 @@ msgstr "Szybka gra"
 #: Resources/Scripts/Gui/MainScreen.as:447
 msgctxt "MainScreen"
 msgid "0.75"
-msgstr ""
+msgstr "0.75"
 
 #: Resources/Scripts/Gui/MainScreen.as:403
 #: Resources/Scripts/Gui/MainScreen.as:456
 msgctxt "MainScreen"
 msgid "0.76"
-msgstr ""
+msgstr "0.76"
 
 #: Resources/Scripts/Gui/MainScreen.as:411
 msgctxt "MainScreen"
@@ -588,12 +588,12 @@ msgstr "Nie udało się załadować listy serwerów."
 #: Resources/Scripts/Gui/MessageBox.as:144
 msgctxt "MessageBox"
 msgid "OK"
-msgstr ""
+msgstr "Potwierdź"
 
 #: Resources/Scripts/Gui/MessageBox.as:144
 msgctxt "MessageBox"
 msgid "Cancel"
-msgstr ""
+msgstr "Anuluj"
 
 #: Resources/Scripts/Gui/Preferences.as:60
 msgctxt "Preferences"
@@ -635,7 +635,7 @@ msgstr "Nieprzypisany"
 #: Resources/Scripts/Gui/Preferences.as:423
 msgctxt "Preferences"
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: Resources/Scripts/Gui/Preferences.as:425
 msgctxt "Preferences"
@@ -645,12 +645,12 @@ msgstr "Ctrl"
 #: Resources/Scripts/Gui/Preferences.as:427
 msgctxt "Preferences"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: Resources/Scripts/Gui/Preferences.as:429
 msgctxt "Preferences"
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: Resources/Scripts/Gui/Preferences.as:431
 msgctxt "Preferences"
@@ -729,33 +729,33 @@ msgstr "Efekt kukły"
 #: Resources/Scripts/Gui/Preferences.as:646
 msgctxt "Preferences"
 msgid "Animations"
-msgstr ""
+msgstr "Animacje"
 
 #: Resources/Scripts/Gui/Preferences.as:647
 msgctxt "Preferences"
 msgid "Camera Shake"
-msgstr ""
+msgstr "Wstrząsy kamery"
 
 #: Resources/Scripts/Gui/Preferences.as:648
 msgctxt "Preferences"
 msgid "MORE"
-msgstr ""
+msgstr "WIĘCEJ"
 
 #: Resources/Scripts/Gui/Preferences.as:648
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "NORMAL"
-msgstr ""
+msgstr "NORMALNE"
 
 #: Resources/Scripts/Gui/Preferences.as:650
 msgctxt "Preferences"
 msgid "Particles"
-msgstr ""
+msgstr "Cząstki"
 
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "LESS"
-msgstr ""
+msgstr "MNIEJ"
 
 #: Resources/Scripts/Gui/Preferences.as:654
 msgctxt "Preferences"
@@ -960,7 +960,7 @@ msgstr "Czat drużynowy"
 #: Resources/Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Limbo Menu"
-msgstr ""
+msgstr "Limbo Menu"
 
 #: Resources/Scripts/Gui/Preferences.as:715
 msgctxt "Preferences"
@@ -995,7 +995,7 @@ msgstr "Niektóre ustawienia mogą zostać zmienione tylko w ekranie startowym."
 #: Resources/Scripts/Gui/StartupScreen.as:160
 msgctxt "StartupScreen"
 msgid "Start"
-msgstr ""
+msgstr "Rozpocznij"
 
 #: Resources/Scripts/Gui/StartupScreen.as:167
 msgctxt "StartupScreen"
@@ -1015,7 +1015,7 @@ msgstr "Dźwięk"
 #: Resources/Scripts/Gui/StartupScreen.as:213
 msgctxt "StartupScreen"
 msgid "Generic"
-msgstr ""
+msgstr "Ogólny"
 
 #: Resources/Scripts/Gui/StartupScreen.as:214
 msgctxt "StartupScreen"
@@ -1031,7 +1031,7 @@ msgstr "Zaawansowane"
 #: Resources/Scripts/Gui/StartupScreen.as:288
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the update info website."
-msgstr ""
+msgstr "Wystąpił nieznany błąd podczas otwierania strony z informacjami o aktualizacji."
 
 #: Resources/Scripts/Gui/StartupScreen.as:853
 msgctxt "StartupScreen"
@@ -1072,7 +1072,7 @@ msgstr "Koniec"
 #: Resources/Scripts/Gui/StartupScreen.as:1113
 msgctxt "StartupScreen"
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1117
 msgctxt "StartupScreen"
@@ -1191,12 +1191,12 @@ msgstr "Rozmywa obiekty poza skupieniem."
 #: Resources/Scripts/Gui/StartupScreen.as:1186
 msgctxt "StartupScreen"
 msgid "Screen Space Ambient Occlusion"
-msgstr ""
+msgstr "SSAO"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1187
 msgctxt "StartupScreen"
 msgid "Simulates soft shadows that occur between nearby objects."
-msgstr ""
+msgstr "Symuluje miękkie cienie pomiędzy bliskimi obiektami."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1189
 #: Resources/Scripts/Gui/StartupScreen.as:1228
@@ -1222,7 +1222,7 @@ msgstr "Wysokie"
 #: Resources/Scripts/Gui/StartupScreen.as:1253
 msgctxt "StartupScreen"
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1195
 msgctxt "StartupScreen"
@@ -1292,12 +1292,12 @@ msgstr "Kontroluje jak materiał i atmosfera wpływa na wyświetlanie światła.
 #: Resources/Scripts/Gui/StartupScreen.as:1244
 msgctxt "StartupScreen"
 msgid "Water Shader|None:Water is rendered in the same way that normal blocks are done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving water is simulated as well as reflection and refraction.|Level 3:Reflections and refractions are rendered at the highest quality using screen-space techniques."
-msgstr ""
+msgstr "Cieniowanie wody|Brak:Woda wygląda tak jak zwykłe bloki.|Poziom 1:Jest symulowana refrakcja i odbite Słońce.|Poziom 2:Poza refrakcją i Słońcem symulowane są też fale.|Poziom 3:Refrakcja i odbicia są generowane w najwyższej możliwej jakości."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1251
 msgctxt "StartupScreen"
 msgid "Med"
-msgstr ""
+msgstr "Średnie"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
@@ -1322,7 +1322,7 @@ msgstr "Ustawienia dźwięku"
 #: Resources/Scripts/Gui/StartupScreen.as:1495
 msgctxt "StartupScreen"
 msgid "OpenAL"
-msgstr ""
+msgstr "OpenAL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
@@ -1332,7 +1332,7 @@ msgstr "Używa OpenAL do generowania dźwięku. Jeśli nie ma karty dźwiękowej
 #: Resources/Scripts/Gui/StartupScreen.as:1508
 msgctxt "StartupScreen"
 msgid "YSR"
-msgstr ""
+msgstr "YSR"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1512
 msgctxt "StartupScreen"
@@ -1364,7 +1364,7 @@ msgstr "Określa jak dużo dźwięków może być odtwarzanych na raz, zużywa w
 #: Resources/Scripts/Gui/StartupScreen.as:1546
 msgctxt "StartupScreen"
 msgid "EAX"
-msgstr ""
+msgstr "EAX"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1547
 msgctxt "StartupScreen"
@@ -1379,73 +1379,73 @@ msgstr "Określa jak dużo dźwięków może być odtwarzanych na raz. Bez znacz
 #: Resources/Scripts/Gui/StartupScreen.as:1623
 msgctxt "StartupScreen"
 msgid "Language"
-msgstr ""
+msgstr "Język"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1635
 msgctxt "StartupScreen"
 msgid "Tools"
-msgstr ""
+msgstr "Narzędzia"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1638
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
-msgstr ""
+msgstr "Zresetuj wszystkie ustawienia"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1647
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
-msgstr ""
+msgstr "Otwórz folder z ustawieniami w osobnym oknie"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1649
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
-msgstr ""
+msgstr "Wyświetl folder z ustawieniami w Finderze"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1651
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
-msgstr ""
+msgstr "Przeglądaj folder z ustawieniami"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1668
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
-msgstr ""
+msgstr "Wystąpił nieznany błąd podczas próby otwarcia folderu z ustawieniami."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1674
 msgctxt "StartupScreen"
 msgid "Are you sure to reset all settings? They include (but are not limited to):"
-msgstr ""
+msgstr "Czy jesteś pewny, że chcesz zresetować wszystkie ustawienia? Zawierają one (ale nie są ograniczone):"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1675
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
-msgstr ""
+msgstr "Wszystkie ustawienia graficzne i dźwiękowe"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1676
 msgctxt "StartupScreen"
 msgid "All key bindings"
-msgstr ""
+msgstr "Wszystkie skróty klawiszowe"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1677
 msgctxt "StartupScreen"
 msgid "Your player name"
-msgstr ""
+msgstr "Twoja nazwa gracza"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1678
 msgctxt "StartupScreen"
 msgid "Other advanced settings only accessible through '{0}' tab and in-game commands"
-msgstr ""
+msgstr "Inne zaawansowane ustawienia są dostępne w zakładce '{0}' i jako komendy w grze"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1748
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
-msgstr ""
+msgstr "Nieznane ({0})"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1750
 #: Resources/Scripts/Gui/StartupScreen.as:1764
 msgctxt "StartupScreen"
 msgid "System default"
-msgstr ""
+msgstr "Ustawienia domyślne"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1813
 msgctxt "StartupScreen"
@@ -1465,40 +1465,40 @@ msgstr "Filtr"
 #: Resources/Scripts/Gui/UpdateCheckView.as:40
 msgctxt "UpdateCheck"
 msgid "Enable"
-msgstr ""
+msgstr "Włącz"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:47
 msgctxt "UpdateCheck"
 msgid "Show details..."
-msgstr ""
+msgstr "Pokaż więcej..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 msgctxt "UpdateCheck"
 msgid "Version {0} is available! (You currently have {1})"
-msgstr ""
+msgstr "Wersja {0} jest dostępna! (Obecnie używasz {1})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 msgctxt "UpdateCheck"
 msgid "You're using the latest version of OpenSpades. ({0})"
-msgstr ""
+msgstr "Używasz najnowszej wersji OpenSpades. ({0})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
 msgctxt "UpdateCheck"
 msgid "Checking for updates..."
-msgstr ""
+msgstr "Poszukiwanie aktualizacji..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
 msgctxt "UpdateCheck"
 msgid "Failed to check for updates."
-msgstr ""
+msgstr "Nieudało sie sprawdzić aktualizacji."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:116
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not enabled."
-msgstr ""
+msgstr "Automatyczne sprawdzanie aktualizacji jest wyłączone."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:119
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
-msgstr ""
+msgstr "Automatyczne sprawdzanie aktualizacji jest niedostępne."
 

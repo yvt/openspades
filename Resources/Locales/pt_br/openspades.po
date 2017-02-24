@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-02-11 05:00-0500\n"
+"PO-Revision-Date: 2017-02-24 11:25-0500\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -217,36 +217,36 @@ msgstr "Shotgun"
 #: Sources/Client/Client_Update.cpp:849
 msgctxt "Client"
 msgid "Fall"
-msgstr ""
+msgstr "Queda"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:853
 msgctxt "Client"
 msgid "Melee"
-msgstr ""
+msgstr "Corpo a Corpo"
 
 #: Sources/Client/Client_Update.cpp:856
 msgctxt "Client"
 msgid "Grenade"
-msgstr ""
+msgstr "Granada"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:860
 msgctxt "Client"
 msgid "Headshot"
-msgstr ""
+msgstr "Headshot"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:864
 msgctxt "Client"
 msgid "Team Change"
-msgstr ""
+msgstr "Mudança de Equipa"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:868
 msgctxt "Client"
 msgid "Weapon Change"
-msgstr ""
+msgstr "Mudança de Arma"
 
 #: Sources/Client/Client_Update.cpp:907
 msgctxt "Client"
@@ -496,13 +496,13 @@ msgstr "Conexão rápida"
 #: Resources/Scripts/Gui/MainScreen.as:447
 msgctxt "MainScreen"
 msgid "0.75"
-msgstr ""
+msgstr "0.75"
 
 #: Resources/Scripts/Gui/MainScreen.as:403
 #: Resources/Scripts/Gui/MainScreen.as:456
 msgctxt "MainScreen"
 msgid "0.76"
-msgstr ""
+msgstr "0.76"
 
 #: Resources/Scripts/Gui/MainScreen.as:411
 msgctxt "MainScreen"
@@ -633,22 +633,22 @@ msgstr "Não Definido"
 #: Resources/Scripts/Gui/Preferences.as:423
 msgctxt "Preferences"
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: Resources/Scripts/Gui/Preferences.as:425
 msgctxt "Preferences"
 msgid "Control"
-msgstr ""
+msgstr "Control"
 
 #: Resources/Scripts/Gui/Preferences.as:427
 msgctxt "Preferences"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: Resources/Scripts/Gui/Preferences.as:429
 msgctxt "Preferences"
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: Resources/Scripts/Gui/Preferences.as:431
 msgctxt "Preferences"
@@ -679,7 +679,7 @@ msgstr "Botão do Mouse 5"
 #: Resources/Scripts/Gui/Preferences.as:619
 msgctxt "Preferences"
 msgid "ON"
-msgstr ""
+msgstr "ON"
 
 #: Resources/Scripts/Gui/Preferences.as:613
 #: Resources/Scripts/Gui/Preferences.as:619
@@ -687,7 +687,7 @@ msgstr ""
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "OFF"
-msgstr ""
+msgstr "OFF"
 
 #: Resources/Scripts/Gui/Preferences.as:619
 msgctxt "Preferences"
@@ -743,7 +743,7 @@ msgstr "MUITAS"
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "NORMAL"
-msgstr ""
+msgstr "NORMAL"
 
 #: Resources/Scripts/Gui/Preferences.as:650
 msgctxt "Preferences"
@@ -758,7 +758,7 @@ msgstr "POUCAS"
 #: Resources/Scripts/Gui/Preferences.as:654
 msgctxt "Preferences"
 msgid "Feedbacks"
-msgstr ""
+msgstr "Alertas"
 
 #: Resources/Scripts/Gui/Preferences.as:655
 msgctxt "Preferences"
@@ -1029,7 +1029,7 @@ msgstr "Avançado"
 #: Resources/Scripts/Gui/StartupScreen.as:288
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the update info website."
-msgstr ""
+msgstr "Um erro desconhecido ocorreu enquanto se abria o site de info. das atualizações."
 
 #: Resources/Scripts/Gui/StartupScreen.as:853
 msgctxt "StartupScreen"
@@ -1065,12 +1065,12 @@ msgstr "Quando em fullscreen, o OpenSpades ocupa a tela inteira, tornando mais f
 #: Resources/Scripts/Gui/StartupScreen.as:1492
 msgctxt "StartupScreen"
 msgid "Backend"
-msgstr ""
+msgstr "Plano de fundo"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1113
 msgctxt "StartupScreen"
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1117
 msgctxt "StartupScreen"
@@ -1080,7 +1080,7 @@ msgstr "Renderização OpenGL usa o acelerador de gráficos do computador para g
 #: Resources/Scripts/Gui/StartupScreen.as:1125
 msgctxt "StartupScreen"
 msgid "Software"
-msgstr ""
+msgstr "Software"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1129
 msgctxt "StartupScreen"
@@ -1221,7 +1221,7 @@ msgstr "Alto"
 #: Resources/Scripts/Gui/StartupScreen.as:1253
 msgctxt "StartupScreen"
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1195
 msgctxt "StartupScreen"
@@ -1321,7 +1321,7 @@ msgstr "Configurações de Áudio"
 #: Resources/Scripts/Gui/StartupScreen.as:1495
 msgctxt "StartupScreen"
 msgid "OpenAL"
-msgstr ""
+msgstr "OpenAL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
@@ -1331,7 +1331,7 @@ msgstr "Utiliza uma placa de som compátivel com OpenAL para processar o som. Na
 #: Resources/Scripts/Gui/StartupScreen.as:1508
 msgctxt "StartupScreen"
 msgid "YSR"
-msgstr ""
+msgstr "YSR"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1512
 msgctxt "StartupScreen"
@@ -1363,7 +1363,7 @@ msgstr "Especifica quantos sons podem ser tocados simultaneamente. Quanto mais a
 #: Resources/Scripts/Gui/StartupScreen.as:1546
 msgctxt "StartupScreen"
 msgid "EAX"
-msgstr ""
+msgstr "EAX"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1547
 msgctxt "StartupScreen"
@@ -1464,40 +1464,40 @@ msgstr "Filtro"
 #: Resources/Scripts/Gui/UpdateCheckView.as:40
 msgctxt "UpdateCheck"
 msgid "Enable"
-msgstr ""
+msgstr "Ativar"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:47
 msgctxt "UpdateCheck"
 msgid "Show details..."
-msgstr ""
+msgstr "Exibir detalhes..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 msgctxt "UpdateCheck"
 msgid "Version {0} is available! (You currently have {1})"
-msgstr ""
+msgstr "A versão {0} está disponível! (Atualmente tens a {1})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 msgctxt "UpdateCheck"
 msgid "You're using the latest version of OpenSpades. ({0})"
-msgstr ""
+msgstr "Estás a usar a última versão do OpenSpades. ({0})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
 msgctxt "UpdateCheck"
 msgid "Checking for updates..."
-msgstr ""
+msgstr "A verificar atualizações..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
 msgctxt "UpdateCheck"
 msgid "Failed to check for updates."
-msgstr ""
+msgstr "Falha ao verificar atualizações."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:116
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not enabled."
-msgstr ""
+msgstr "Verif. auto. de atualizações não está ativada."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:119
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
-msgstr ""
+msgstr "Verif. auto. de atualizações não está disponível."
 
