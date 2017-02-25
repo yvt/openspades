@@ -555,6 +555,11 @@ namespace spades {
 			float spread = weapon->GetSpread();
 			GameMap *map = world->GetMap();
 
+			if (weapInput.secondary) {
+				// vanilla behavior (confirmed by measurement)
+				spread *= 0.5f;
+			}
+
 			// pyspades takes destroying more than one block as a
 			// speed hack (shotgun does this)
 			bool blockDestroyed = false;
@@ -758,7 +763,9 @@ namespace spades {
 			upLimit -= 0.03f; // ???
 			o += GetUp() * std::min(rec.y, std::max(0.f, upLimit)) *
 				(input.crouch ? 0.5f : 1.0f);
-			o += GetRight() * rec.x * sinf(world->GetTime() * 5.f);
+			// actually, vanilla's horizontial recoil seems to be more complex than this
+			o += GetRight() * rec.x * sinf(world->GetTime() * 6.15f) *
+				(input.crouch ? 0.5f : 1.0f); // measured with SMG
 			o = o.Normalize();
 			SetOrientation(o);
 

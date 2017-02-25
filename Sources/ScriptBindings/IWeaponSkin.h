@@ -48,6 +48,7 @@ namespace spades {
 			ScriptIWeaponSkin2(asIScriptObject *obj);
 			bool ImplementsInterface();
 			void SetSoundEnvironment(float room, float size, float distance);
+			void SetSoundOrigin(Vector3);
 		};
 	}
 }

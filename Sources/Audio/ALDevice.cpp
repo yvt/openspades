@@ -211,7 +211,7 @@ namespace spades {
 
 					al::qalSourcef(handle, AL_PITCH, param.pitch);
 					ALCheckErrorPrecise();
-					al::qalSourcef(handle, AL_GAIN, param.volume * (float)s_gain);
+					al::qalSourcef(handle, AL_GAIN, param.volume * std::max<float>(std::min<float>(s_gain, 4.0f), 0.0f));
 					ALCheckErrorPrecise();
 					al::qalSourcef(handle, AL_REFERENCE_DISTANCE, param.referenceDistance);
 

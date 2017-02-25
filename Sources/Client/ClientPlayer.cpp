@@ -185,7 +185,7 @@ namespace spades {
 			float ScreenHeight() override { return base->ScreenHeight(); }
 		};
 
-		ClientPlayer::ClientPlayer(Player *p, Client *c) : player(p), client(c) {
+		ClientPlayer::ClientPlayer(Player *p, Client *c) : player(p), client(c), hasValidOriginMatrix(false) {
 			SPADES_MARK_FUNCTION();
 
 			sprintState = 0.f;
@@ -938,6 +938,8 @@ namespace spades {
 				interface.AddToScene();
 			}
 
+			hasValidOriginMatrix = true;
+
 			// draw intel in ctf
 			IGameMode *mode = world->GetMode();
 			if (mode && IGameMode::m_CTF == mode->ModeType()) {
@@ -970,6 +972,8 @@ namespace spades {
 
 			Player *p = player;
 			const SceneDefinition &lastSceneDef = client->GetLastSceneDef();
+
+			hasValidOriginMatrix = false;
 
 			if (p->GetTeamId() >= 2) {
 				// spectator, or dummy player
@@ -1224,6 +1228,11 @@ namespace spades {
 				ScriptIWeaponSkin2 interface(skin);
 				if (interface.ImplementsInterface()) {
 					interface.SetSoundEnvironment(ambience.room, ambience.size, ambience.distance);
+					interface.SetSoundOrigin(player->GetEye());
+				} else if (ShouldRenderInThirdPersonView() && !hasValidOriginMatrix) {
+					// Legacy skin scripts rely on OriginMatrix which is only updated when
+					// the player's location is within the fog range.
+					return;
 				}
 			}
 
@@ -1240,6 +1249,21 @@ namespace spades {
 				skin = weaponSkin;
 			} else {
 				skin = weaponViewSkin;
+			}
+
+			// sound ambience estimation
+			auto ambience = ComputeAmbience();
+
+			{
+				ScriptIWeaponSkin2 interface(skin);
+				if (interface.ImplementsInterface()) {
+					interface.SetSoundEnvironment(ambience.room, ambience.size, ambience.distance);
+					interface.SetSoundOrigin(player->GetEye());
+				} else if (ShouldRenderInThirdPersonView() && !hasValidOriginMatrix) {
+					// Legacy skin scripts rely on OriginMatrix which is only updated when
+					// the player's location is within the fog range.
+					return;
+				}
 			}
 
 			{

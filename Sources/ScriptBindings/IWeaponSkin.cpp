@@ -174,6 +174,19 @@ namespace spades{
 			ctx.ExecuteChecked();
 		}
 
+		void ScriptIWeaponSkin2::SetSoundOrigin(Vector3 origin) {
+			SPADES_MARK_FUNCTION_DEBUG();
+			static ScriptFunction func("IWeaponSkin2",
+									   "void set_SoundOrigin(Vector3)");
+			ScriptContextHandle ctx = func.Prepare();
+			int r;
+			r = ctx->SetObject((void *)obj);
+			ScriptManager::CheckError(r);
+			r = ctx->SetArgObject(0, &origin);
+			ScriptManager::CheckError(r);
+			ctx.ExecuteChecked();
+		}
+
 		class IWeaponSkinRegistrar: public ScriptObjectRegistrar {
 		public:
 			IWeaponSkinRegistrar():
@@ -222,6 +235,8 @@ namespace spades{
 
 						r = eng->RegisterInterfaceMethod("IWeaponSkin2",
 														 "void SetSoundEnvironment(float, float, float)");
+						r = eng->RegisterInterfaceMethod("IWeaponSkin2",
+														 "void set_SoundOrigin(Vector3)");
 						manager->CheckError(r);
 						break;
 					default:

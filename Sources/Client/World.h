@@ -117,7 +117,7 @@ namespace spades {
 			void SetMode(IGameMode *);
 
 			Team &GetTeam(int t) {
-				if (t >= 2) // spectator
+				if (t >= 2 || t < 0) // spectator
 					return teams[2];
 				return teams[t];
 			}

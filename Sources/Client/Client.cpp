@@ -475,6 +475,11 @@ namespace spades {
 
 			if (!world->GetLocalPlayer() || world->GetLocalPlayer()->GetTeamId() >= 2) {
 				// join
+				if (team == 255) {
+					// weaponId doesn't matter for spectators, but
+					// NetClient doesn't like invalid weapon ID
+					weap = WeaponType::RIFLE_WEAPON;
+				}
 				net->SendJoin(team, weap, playerName, lastKills);
 			} else {
 				Player *p = world->GetLocalPlayer();
