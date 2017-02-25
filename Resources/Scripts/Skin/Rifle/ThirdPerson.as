@@ -35,6 +35,7 @@
 		private float environmentRoom;
 		private float environmentSize;
 		private float environmentDistance;
+		private Vector3 soundOrigin;
 
 		float SprintState {
 			set { sprintState = value; }
@@ -87,6 +88,9 @@
 			environmentSize = size;
 			environmentDistance = distance;
 		}
+		Vector3 SoundOrigin {
+			set { soundOrigin = value; }
+		}
 
 		private Renderer@ renderer;
 		private AudioDevice@ audioDevice;
@@ -128,7 +132,7 @@
 
 		void WeaponFired(){
 			if(!muted){
-				Vector3 origin = originMatrix * Vector3(0.f, 0.f, 0.f);
+				Vector3 origin = soundOrigin;
 				AudioParam param;
 				param.volume = 20.f;
 				audioDevice.Play(fireSounds[GetRandom(fireSounds.length)], origin, param);
@@ -151,7 +155,7 @@
 
 		void ReloadingWeapon() {
 			if(!muted){
-				Vector3 origin = originMatrix * Vector3(0.f, 0.f, 0.f);
+				Vector3 origin = soundOrigin;
 				AudioParam param;
 				param.volume = 0.2f;
 				audioDevice.Play(reloadSound, origin, param);

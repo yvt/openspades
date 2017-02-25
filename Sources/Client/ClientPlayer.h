@@ -50,6 +50,12 @@ namespace spades {
 			float localFireVibrationTime;
 			float time;
 
+			/**
+			 * Indicates whether the third-person weapon skin script has the latest
+			 * value of `OriginMatrix`.
+			 */
+			bool hasValidOriginMatrix;
+
 			Vector3 viewWeaponOffset;
 
 			Vector3 lastFront;

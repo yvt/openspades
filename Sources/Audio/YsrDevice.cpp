@@ -555,7 +555,7 @@ namespace spades {
 			YsrContext::PlayParam param;
 			param.pitch = base.pitch;
 			param.referenceDistance = base.referenceDistance;
-			param.volume = base.volume * (float)s_gain;
+			param.volume = base.volume * std::max<float>(std::min<float>(s_gain, 4.0f), 0.0f);
 			return param;
 		}
 

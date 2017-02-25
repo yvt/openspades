@@ -47,8 +47,6 @@ namespace spades {
 			get { return muted; }
 		}
 
-
-
 		// IWeaponSkin
 
 		protected float aimDownSightState;
@@ -138,6 +136,10 @@ namespace spades {
 		void SetSoundEnvironment(float room, float size, float distance) {
 			environmentRoom = room;
 			environmentSize = size;
+		}
+		// set_SoundOrigin is not called for first-person skin scripts
+		Vector3 SoundOrigin {
+			set { }
 		}
 
 		protected Renderer@ renderer;
