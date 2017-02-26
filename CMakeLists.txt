@@ -232,6 +232,7 @@ if(UNIX AND NOT APPLE)
 			${CMAKE_BINARY_DIR}/Resources/pak010-BaseSkin.pak
 			${CMAKE_BINARY_DIR}/Resources/pak050-Locales.pak
 			${CMAKE_BINARY_DIR}/Resources/pak999-References.pak
+			${CMAKE_BINARY_DIR}/Resources/font-unifont.pak
 			DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
 	endif(OPENSPADES_RESOURCES)
 
