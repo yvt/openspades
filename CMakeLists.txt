@@ -3,7 +3,7 @@ project(OpenSpades)
 
 set(OpenSpades_VERSION_MAJOR 0)
 set(OpenSpades_VERSION_MINOR 1)
-set(OpenSpades_VERSION_REVISION 0)
+set(OpenSpades_VERSION_REVISION 1)
 
 set(OPENSPADES_FULL_VERSION "${OpenSpades_VERSION_MAJOR}.${OpenSpades_VERSION_MINOR}.${OpenSpades_VERSION_REVISION}")
 
@@ -232,6 +232,7 @@ if(UNIX AND NOT APPLE)
 			${CMAKE_BINARY_DIR}/Resources/pak010-BaseSkin.pak
 			${CMAKE_BINARY_DIR}/Resources/pak050-Locales.pak
 			${CMAKE_BINARY_DIR}/Resources/pak999-References.pak
+			${CMAKE_BINARY_DIR}/Resources/font-unifont.pak
 			DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
 	endif(OPENSPADES_RESOURCES)
 

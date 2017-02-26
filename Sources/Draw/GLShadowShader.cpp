@@ -234,7 +234,7 @@ namespace spades {
 				ambientColor(program);
 				ac *= 0.5f;
 				const float minimumLuminance = 0.35f;
-				float luminance = std::min({ac.x, ac.y, ac.z});
+				float luminance = (ac.x + ac.y + ac.z) / 3.0f;
 				if (luminance < minimumLuminance) {
 					// we want things still visible even if sky is pitch black
 					Vector3 offset = (ac + 0.003f) / (luminance + 0.003f);

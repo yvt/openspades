@@ -113,6 +113,13 @@ namespace spades {
 	};
 
 	class PackageUpdateManager::HttpUpdateFeed : public UpdateFeed {
+
+		// Protected members of the base class is only accessible by
+		// the current object, so...
+		void ReturnErrorVeneer(const std::string &reason) {
+			ReturnError(reason);
+		}
+
 		class RequestThread : public Thread {
 		public:
 			RequestThread(HttpUpdateFeed &parent) : m_parent{parent} {}
@@ -127,7 +134,7 @@ namespace spades {
 					curl_easy_setopt(
 					  curl.get(), CURLOPT_WRITEFUNCTION,
 					  static_cast<unsigned long (*)(void *, unsigned long, unsigned long, void *)>(
-					    [](void *ptr, size_t size, size_t nmemb, void *data) {
+					    [](void *ptr, unsigned long size, unsigned long nmemb, void *data) -> unsigned long {
 						    size_t dataSize = size * nmemb;
 						    reinterpret_cast<std::string *>(data)->append(
 						      reinterpret_cast<const char *>(ptr), dataSize);
@@ -139,15 +146,15 @@ namespace spades {
 					m_parent.SetupCURLRequest(curl.get());
 
 					if (curl_easy_perform(curl.get())) {
-						m_parent.ReturnError("HTTP request error.");
+						m_parent.ReturnErrorVeneer("HTTP request error.");
 						return;
 					}
 
 					m_parent.ProcessResponse(responseBuffer);
 				} catch (std::exception &ex) {
-					m_parent.ReturnError(ex.what());
+					m_parent.ReturnErrorVeneer(ex.what());
 				} catch (...) {
-					m_parent.ReturnError("Unknown error.");
+					m_parent.ReturnErrorVeneer("Unknown error.");
 				}
 			}
 
@@ -164,7 +171,11 @@ namespace spades {
 			}
 			m_thread->Start();
 		}
-		~HttpUpdateFeed() override { m_thread->Join(); }
+		~HttpUpdateFeed() override {
+			if (m_thread) {
+				m_thread->Join();
+			}
+		}
 
 	protected:
 		HttpUpdateFeed(PackageUpdateManager &packageUpdateManager)
