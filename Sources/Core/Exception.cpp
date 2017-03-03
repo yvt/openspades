@@ -21,28 +21,36 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+#include <mutex>
 
 #include "Exception.h"
 #include <Core/Strings.h>
 
 namespace spades {
-	static char buf[65536];
+	namespace {
+		char exceptionMessageBuffer[65536];
+		std::mutex exceptionMessageBufferMutex;
+	}
 	Exception::Exception(const char *format, ...) {
 		va_list va;
 		va_start(va, format);
-		vsprintf(buf, format, va);
+		vsprintf(exceptionMessageBuffer, format, va);
 		va_end(va);
-		message = buf;
+		message = exceptionMessageBuffer;
 		shortMessage = message;
 	}
 	Exception::Exception(const char *file, int line, const char *format, ...) {
 		reflection::Backtrace &trace = *reflection::Backtrace::GetGlobalBacktrace();
 
-		va_list va;
-		va_start(va, format);
-		vsprintf(buf, format, va);
-		va_end(va);
-		message = buf;
+		{
+			std::lock_guard<std::mutex> guard{exceptionMessageBufferMutex};
+			va_list va;
+			va_start(va, format);
+			exceptionMessageBuffer[65535] = 0;
+			std::vsnprintf(exceptionMessageBuffer, 65535, format, va);
+			va_end(va);
+			message = exceptionMessageBuffer;
+		}
 		shortMessage = message;
 
 		message = Format("{0}\nat {1}:{2}\n{3}", message, file, line, trace.ToString());

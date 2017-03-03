@@ -47,6 +47,7 @@
 #include <Core/Strings.h>
 #include <Core/Thread.h>
 #include <Core/ZipFileSystem.h>
+#include <Gui/PackageUpdateManager.h>
 #include <Gui/StartupScreen.h>
 #include <OpenSpades.h>
 
@@ -319,6 +320,7 @@ int main(int argc, char **argv) {
 		spades::DispatchQueue::GetThreadQueue()->MarkSDLVideoThread();
 
 		SPLog("Package: " PACKAGE_STRING);
+
 // setup user-specific default resource directories
 #ifdef WIN32
 		static wchar_t buf[4096];
@@ -539,6 +541,19 @@ int main(int argc, char **argv) {
 			}
 		}
 		pumpEvents();
+
+		// Force PackageUpdateManager's instance to be created
+		// (If PackageInfo.json is missing, the startup process will be halted here)
+		try {
+			spades::PackageUpdateManager::GetInstance();
+		} catch (const std::exception &ex) {
+			SPRaise("Failed to load the package information. In most cases this happens when a "
+			        "file named PackageInfo.json "
+			        "is corrupted or not installed properly.\n\n"
+			        "Please make sure all required files are installed. "
+			        "If the problem persists, please contact the package maintainer.\n\n%s",
+			        ex.what());
+		}
 
 		// initialize localization system
 		SPLog("Initializing localization system");

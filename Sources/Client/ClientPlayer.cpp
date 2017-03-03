@@ -50,6 +50,9 @@ SPADES_SETTING(cg_ejectBrass);
 DEFINE_SPADES_SETTING(cg_animations, "1");
 SPADES_SETTING(cg_shake);
 DEFINE_SPADES_SETTING(cg_environmentalAudio, "1");
+DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
+DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
+DEFINE_SPADES_SETTING(cg_viewWeaponZ, "0");
 
 namespace spades {
 	namespace client {
@@ -661,6 +664,9 @@ namespace spades {
 				viewWeaponOffset.y += vl * 0.0007f * sp;
 				viewWeaponOffset.z += vl * 0.003f * sp;
 			}
+
+			// manual adjustment
+			viewWeaponOffset += Vector3{cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ} * (1.f - aimDownState);
 
 			asIScriptObject *skin;
 

@@ -763,9 +763,16 @@ namespace spades {
 			upLimit -= 0.03f; // ???
 			o += GetUp() * std::min(rec.y, std::max(0.f, upLimit)) *
 				(input.crouch ? 0.5f : 1.0f);
-			// actually, vanilla's horizontial recoil seems to be more complex than this
-			o += GetRight() * rec.x * sinf(world->GetTime() * 6.15f) *
-				(input.crouch ? 0.5f : 1.0f); // measured with SMG
+			// vanilla's horizontial recoil seems to driven by a triangular wave generator.
+			// the period was measured with SMG
+			float triWave = world->GetTime() * 0.9788f;
+			triWave -= std::floor(triWave);
+			if (triWave < 0.5f) {
+				triWave = triWave * 4.0f - 1.0f;
+			} else {
+				triWave = 3.0f - triWave * 4.0f;
+			}
+			o += GetRight() * rec.x * triWave * (input.crouch ? 0.5f : 1.0f);
 			o = o.Normalize();
 			SetOrientation(o);
 
