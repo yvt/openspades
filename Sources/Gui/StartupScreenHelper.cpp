@@ -655,6 +655,10 @@ namespace spades {
 			return "Mac";
 #elif defined(OS_PLATFORM_WINDOWS)
 			return "Windows";
+#elif defined(__FreeBSD__)
+			return "FreeBSD";
+#elif defined(__OpenBSD__)
+			return "OpenBSD";
 #else
 			return std::string{};
 #endif
