@@ -113,6 +113,7 @@ if(UNIX)
 	if(NOT CMAKE_SYSTEM_NAME MATCHES "BSD")
 		target_link_libraries(OpenSpades rt)
 	endif()
+	target_link_libraries(OpenSpades pthread)
 endif()
 
 #install(TARGETS OpenSpades DESTINATION bin)

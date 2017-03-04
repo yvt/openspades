@@ -619,6 +619,7 @@ int main(int argc, char **argv) {
 
 		spades::Settings::GetInstance()->Flush();
 
+		spades::FileManager::Close();
 	} catch (const spades::ExitRequestException &) {
 		// user changed his/her mind.
 	} catch (const std::exception &ex) {

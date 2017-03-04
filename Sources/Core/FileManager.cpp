@@ -145,4 +145,10 @@ namespace spades {
 
 		return list;
 	}
+
+	void FileManager::Close() {
+		for (auto *fs: g_fileSystems) {
+			delete fs;
+		}
+	}       
 }
