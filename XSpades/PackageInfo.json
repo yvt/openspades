@@ -1,6 +1,6 @@
 {
-    "Version": [0, 1, 1, 4],
-    "VersionText": "0.1.1",
+    "Version": [0, 1, 1, 6],
+    "VersionText": "0.1.1c",
     "UpdateFeed": {
         "Type": "Standard",
         "Platform": "Mac",
