@@ -328,16 +328,29 @@ int main(int argc, char **argv) {
 		std::wstring appdir = buf;
 		appdir = appdir.substr(0, appdir.find_last_of(L'\\') + 1);
 
-		if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, buf))) {
-			std::wstring datadir = buf;
-			datadir += L"\\OpenSpades\\Resources";
+		// Switch to "portable" mode if "UserResources" exists
+		std::wstring userAppDir = appdir + L"UserResources";
 
-			spades::g_userResourceDirectory = Utf8FromWString(datadir.c_str());
+		DWORD userAppDirAttrib = GetFileAttributesW(userAppDir.c_str());
+		if (userAppDirAttrib != INVALID_FILE_ATTRIBUTES && (userAppDirAttrib & FILE_ATTRIBUTE_DIRECTORY)) {
+			SPLog("UserResources found - switching to 'portable' mode");
 
 			spades::FileManager::AddFileSystem(
-			  new spades::DirectoryFileSystem(spades::g_userResourceDirectory, true));
+			  new spades::DirectoryFileSystem(Utf8FromWString(userAppDir.c_str()), true));
+
+			spades::g_userResourceDirectory = Utf8FromWString(userAppDir.c_str());
 		} else {
-			SPLog("SHGetFolderPathW failed.");
+			if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, buf))) {
+				std::wstring datadir = buf;
+				datadir += L"\\OpenSpades\\Resources";
+
+				spades::g_userResourceDirectory = Utf8FromWString(datadir.c_str());
+
+				spades::FileManager::AddFileSystem(
+				  new spades::DirectoryFileSystem(spades::g_userResourceDirectory, true));
+			} else {
+				SPLog("SHGetFolderPathW failed.");
+			}
 		}
 
 		spades::FileManager::AddFileSystem(
@@ -476,6 +489,20 @@ int main(int argc, char **argv) {
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(RESDIR, false));
 #endif
 
+		// Force PackageUpdateManager's instance to be created
+		// (If PackageInfo.json is missing, the startup process will be halted here)
+		// Load PackageInfo.json earlier than .pak files to prevent certain security issus
+		try {
+			spades::PackageUpdateManager::GetInstance();
+		} catch (const std::exception &ex) {
+			SPRaise("Failed to load the package information. In most cases this happens when a "
+			        "file named PackageInfo.json "
+			        "is corrupted or not installed properly.\n\n"
+			        "Please make sure all required files are installed. "
+			        "If the problem persists, please contact the package maintainer.\n\n%s",
+			        ex.what());
+		}
+
 		// search current file system for .pak files
 		{
 			std::vector<spades::IFileSystem *> fss;
@@ -541,19 +568,6 @@ int main(int argc, char **argv) {
 			}
 		}
 		pumpEvents();
-
-		// Force PackageUpdateManager's instance to be created
-		// (If PackageInfo.json is missing, the startup process will be halted here)
-		try {
-			spades::PackageUpdateManager::GetInstance();
-		} catch (const std::exception &ex) {
-			SPRaise("Failed to load the package information. In most cases this happens when a "
-			        "file named PackageInfo.json "
-			        "is corrupted or not installed properly.\n\n"
-			        "Please make sure all required files are installed. "
-			        "If the problem persists, please contact the package maintainer.\n\n%s",
-			        ex.what());
-		}
 
 		// initialize localization system
 		SPLog("Initializing localization system");
