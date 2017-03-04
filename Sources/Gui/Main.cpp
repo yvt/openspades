@@ -68,9 +68,11 @@ FILE __iob_func[3] = {*stdin, *stdout, *stderr};
 DEFINE_SPADES_SETTING(cl_showStartupWindow, "1");
 
 #ifdef WIN32
+// windows.h must be included before DbgHelp.h and shlobj.h.
+#include <windows.h>
+
 #include <DbgHelp.h>
 #include <shlobj.h>
-#include <windows.h>
 
 #define strncasecmp(x, y, z) _strnicmp(x, y, z)
 #define strcasecmp(x, y) _stricmp(x, y)
