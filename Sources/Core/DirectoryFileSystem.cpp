@@ -175,7 +175,7 @@ namespace spades {
 				if (nextPos == path.size())
 					break;
 #ifdef WIN32
-				mkdir(path.substr(0, nextPos).c_str());
+				CreateDirectoryW(Utf8ToWString(path.substr(0, nextPos).c_str()).c_str(), nullptr);
 #else
 				mkdir(path.substr(0, nextPos).c_str(), 0774);
 #endif
