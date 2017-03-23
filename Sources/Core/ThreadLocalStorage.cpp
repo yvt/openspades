@@ -47,7 +47,7 @@ namespace spades {
 				std::lock_guard<std::mutex> lock{m_mutex};
 
 				auto it = m_allTlses.find(tls);
-				SPAssert(it != allTls.end());
+				SPAssert(it != m_allTlses.end());
 				m_allTlses.erase(it);
 			}
 
