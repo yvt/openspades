@@ -20,6 +20,7 @@
 
 #include <list>
 #include <sys/types.h>
+#include <memory>
 
 #include <Imports/SDL.h>
 
@@ -187,7 +188,6 @@ namespace spades {
 		}
 	};
 
-	static SynchronizedQueue globalQueue;
 	static AutoDeletedThreadLocalStorage<DispatchQueue> threadQueue("threadDispatchQueue");
 	static DispatchQueue *sdlQueue = NULL;
 
@@ -228,18 +228,68 @@ namespace spades {
 
 	void DispatchQueue::MarkSDLVideoThread() { sdlQueue = this; }
 
+	namespace {
+		struct GlobalDispatchThreadPool {
+			SynchronizedQueue globalQueue;
+			std::vector<std::unique_ptr<DispatchThread>> threads;
+
+			GlobalDispatchThreadPool();
+			~GlobalDispatchThreadPool();
+		};
+
+		std::unique_ptr<GlobalDispatchThreadPool> globalThreadPool;
+	}
+
+	// Cannot define this in an anonymous namespace since this is referred to by
+	// `ConcurrentDispatch`'s friend class declaration
 	class DispatchThread : public Thread {
 	public:
+		DispatchThread(GlobalDispatchThreadPool &pool) : pool{pool} {
+		}
 		virtual void Run() throw() {
 			SPADES_MARK_FUNCTION();
 			while (true) {
-				SyncQueueEntry *ent = globalQueue.Wait();
+				SyncQueueEntry *ent = pool.globalQueue.Wait();
+				if (ent->dispatch == nullptr) {
+					// Exit request
+					return;
+				}
 				ent->dispatch->ExecuteProtected();
 			}
 		}
-	};
 
-	static std::vector<DispatchThread *> threads;
+	private:
+		GlobalDispatchThreadPool &pool;
+	};
+	
+	GlobalDispatchThreadPool::GlobalDispatchThreadPool() {
+		int cnt = GetNumCores();
+		if (!("auto" == core_numDispatchQueueThreads)) {
+			cnt = core_numDispatchQueueThreads;
+		}
+
+		SPLog("Creating %d dispatch thread(s)", cnt);
+		for (int i = 0; i < cnt; i++) {
+			DispatchThread *t = new DispatchThread(*this);
+			threads.emplace_back(t);
+			t->Start();
+		}
+	}
+
+	GlobalDispatchThreadPool::~GlobalDispatchThreadPool() {
+		// From this point no more dispatches are accepted
+		for (const auto &_: threads) {
+			(void) _; // unused!
+			globalQueue.Push(new SyncQueueEntry(nullptr));
+		}
+
+		// Destroy all `DispatchThread`s
+		threads.clear();
+
+		// When `Thread`s' destructors are called, they'll wait until the execution of
+		// the thread is completed. So at this point all `DispatchThread`s have finished execution
+		// and there'll be no threads accessing the `globalQueue`, thus it's safe to delete it.
+	}
 
 	ConcurrentDispatch::ConcurrentDispatch() : entry(NULL), runnable(NULL) {
 		SPADES_MARK_FUNCTION();
@@ -286,20 +336,12 @@ namespace spades {
 		if (entry) {
 			SPRaise("Attempted to start dispatch '%s' when it's already started", name.c_str());
 		} else {
-			if (threads.empty()) {
-				int cnt = GetNumCores();
-				if (!("auto" == core_numDispatchQueueThreads)) {
-					cnt = core_numDispatchQueueThreads;
-				}
-				SPLog("Creating %d dispatch thread(s)", cnt);
-				for (int i = 0; i < cnt; i++) {
-					DispatchThread *t = new DispatchThread();
-					threads.push_back(t);
-					t->Start();
-				}
+			// should we atomically initialize globalThreadPool? maybe not
+			if (!globalThreadPool) {
+				globalThreadPool.reset(new GlobalDispatchThreadPool());
 			}
 			entry = new SyncQueueEntry(this);
-			globalQueue.Push(entry);
+			globalThreadPool->globalQueue.Push(entry);
 		}
 	}
 

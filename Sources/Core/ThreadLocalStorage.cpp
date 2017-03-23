@@ -18,7 +18,9 @@
 
  */
 
-#include <vector>
+#include <algorithm>
+#include <mutex>
+#include <unordered_set>
 
 #ifdef WIN32
 #include <windows.h>
@@ -30,27 +32,67 @@
 
 namespace spades {
 
-	class ThreadLocalStorageImplInternal;
+	namespace {
+		class ThreadLocalStorageImplInternal;
 
-	static std::vector<ThreadLocalStorageImplInternal *> allTls;
+		class TlsManager
+		{
+		public:
+			void AddTls(ThreadLocalStorageImplInternal *tls) {
+				std::lock_guard<std::mutex> lock{m_mutex};
 
-	class ThreadLocalStorageImplInternal : public ThreadLocalStorageImpl {
-	public:
-		ThreadLocalStorageImplInternal() { allTls.push_back(this); }
-		~ThreadLocalStorageImplInternal() {
-			// TODO: remove this from allTls?
+				m_allTlses.insert(tls);
+			}
+			void RemoveTls(ThreadLocalStorageImplInternal *tls) {
+				std::lock_guard<std::mutex> lock{m_mutex};
+
+				auto it = m_allTlses.find(tls);
+				SPAssert(it != m_allTlses.end());
+				m_allTlses.erase(it);
+			}
+
+			void ThreadExiting();
+
+			static TlsManager &GetInstance() {
+				// This object will NEVER be destroyed (until the program really exits)
+				static TlsManager *instance = new TlsManager();
+				return *instance;
+			}
+
+		private:
+			std::unordered_set<ThreadLocalStorageImplInternal *> m_allTlses;
+			std::mutex m_mutex;
+		};
+
+
+		class ThreadLocalStorageImplInternal : public ThreadLocalStorageImpl {
+		public:
+			ThreadLocalStorageImplInternal() {
+				// Be careful: this function can be called during static storage object construction
+				TlsManager::GetInstance().AddTls(this);
+			}
+			~ThreadLocalStorageImplInternal() {
+				TlsManager::GetInstance().RemoveTls(this);
+			}
+			void ThreadExiting() {
+				void *p = Get();
+				if (p)
+					destructor->Destruct(p);
+			}
+		};
+	}
+
+	void TlsManager::ThreadExiting() {
+		std::lock_guard<std::mutex> lock{m_mutex};
+
+		for (auto *tls: m_allTlses) {
+			tls->ThreadExiting();
 		}
-		void ThreadExiting() {
-			void *p = Get();
-			if (p)
-				destructor->Destruct(p);
-		}
-	};
+	}
 
 	void ThreadExiting() {
-		for (size_t i = 0; i < allTls.size(); i++) {
-			allTls[i]->ThreadExiting();
-		}
+		// Be careful: this function can be called during static storage object destruction
+		TlsManager::GetInstance().ThreadExiting();
 	}
 
 #ifdef WIN32
