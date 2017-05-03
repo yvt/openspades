@@ -19,6 +19,13 @@ OpenSpades is a compatible client of Ace of Spades 0.75.
  2. Or [open an issue](https://github.com/yvt/openspades/issues) if the problem persists
 
 ### On Linux
+
+On [snap enabled](https://snapcraft.io/docs/core/install) systems, the latest pre-built stable release of OpenSpades can be installed with:-
+
+   snap install openspades
+   
+Once installed, the OpenSpades icon will appear in the menu, or it can be launched from the terminal with ```openspades```.
+
 GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
 
 1. Install dependencies:
