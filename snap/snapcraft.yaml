@@ -1,0 +1,56 @@
+name: openspades
+version: 'master'
+summary: Sandbox building and FPS videogame
+description: |
+  OpenSpades is a compatible client of Ace of Spades 0.75.
+  Can connect to a vanilla/pyspades/pysnip server.
+  Uses OpenGL/AL for better experience.
+  Open source, and cross platform.
+
+grade: stable
+confinement: strict
+
+apps:
+  openspades:
+    command: launch_openspades
+    plugs:
+      - network
+      - network-bind
+      - opengl
+      - x11
+      - pulseaudio
+
+parts:
+  scripts:
+    plugin: dump
+    source: snap/scripts
+    organize:
+      'launch_openspades': bin/
+  openspades:
+    plugin: cmake
+    configflags: [-DCMAKE_BUILD_TYPE=RelWithDebInfo]
+    source: .
+    build-packages:
+      - clang
+      - imagemagick
+      - wget
+      - zip
+      - unzip
+      - pkg-config
+      - libglew-dev
+      - libcurl4-openssl-dev
+      - libsdl2-dev
+      - libsdl2-image-dev
+      - libalut-dev
+      - xdg-utils
+      - libfreetype6-dev
+      - libopus-dev
+      - libopusfile-dev
+      - libjpeg-dev
+      - libxinerama-dev
+      - libxft-dev
+    stage-packages:
+      - libgl1-mesa-dri
+      - libgl1-mesa-glx
+      - libglew1.13
+      - libopenal1
