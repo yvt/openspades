@@ -152,6 +152,8 @@ namespace spades {
 				type = GLShader::FragmentShader;
 			else if (name.find(".vs") != std::string::npos)
 				type = GLShader::VertexShader;
+			else if (name.find(".gs") != std::string::npos)
+				type = GLShader::GeometryShader;
 			else
 				SPRaise("Failed to determine the type of a shader: %s", name.c_str());
 
@@ -184,7 +186,7 @@ namespace spades {
 
 			Stopwatch sw;
 			s->Compile();
-			SPLog("Successfully compiled GLSL program '%s' in %.3fms", name.c_str(),
+			SPLog("Successfully compiled GLSL program '%s' in %.3fms", name.c_str(), // should this be "program" or "shader"?
 			      sw.GetTime() * 1000.);
 			return s;
 		}
