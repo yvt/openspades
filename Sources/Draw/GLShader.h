@@ -33,7 +33,7 @@ namespace spades {
 			bool compiled;
 
 		public:
-			enum Type { VertexShader, FragmentShader };
+			enum Type { VertexShader, FragmentShader, GeometryShader };
 
 			GLShader(IGLDevice *, Type);
 			~GLShader();

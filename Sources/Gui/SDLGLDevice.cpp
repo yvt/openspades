@@ -1331,6 +1331,7 @@ namespace spades {
 					ret = glCreateShader(GL_FRAGMENT_SHADER);
 					break;
 				case draw::IGLDevice::VertexShader: ret = glCreateShader(GL_VERTEX_SHADER); break;
+				case draw::IGLDevice::GeometryShader: ret = glCreateShader(GL_GEOMETRY_SHADER); break;
 				default: SPInvalidEnum("type", type);
 			}
 #endif
