@@ -28,11 +28,11 @@
 namespace spades {
 
 	class Thread {
-		void *volatile threadInfo;
+		void *threadInfo;
 		Mutex lock;
 		IRunnable *runnable;
-		bool volatile autoDelete;
-		SDL_threadID volatile threadId;
+		bool autoDelete;
+		SDL_threadID threadId;
 
 		static int InternalRunner(void *);
 		void Quited();

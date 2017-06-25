@@ -86,8 +86,8 @@ namespace spades {
 		SDL_cond *doneCond;
 		SDL_mutex *doneMutex;
 		ConcurrentDispatch *dispatch;
-		volatile bool done;
-		volatile bool released;
+		bool done;
+		bool released;
 
 		SyncQueueEntry(ConcurrentDispatch *disp)
 		    : doneCond(SDL_CreateCond()),
@@ -261,7 +261,7 @@ namespace spades {
 	private:
 		GlobalDispatchThreadPool &pool;
 	};
-	
+
 	GlobalDispatchThreadPool::GlobalDispatchThreadPool() {
 		int cnt = GetNumCores();
 		if (!("auto" == core_numDispatchQueueThreads)) {

@@ -63,19 +63,10 @@ namespace spades {
 			chunkH = h / ChunkSize;
 			chunkD = d / ChunkSize;
 
-			chunks.resize(chunkW * chunkH * chunkD);
+			chunks = std::vector<Chunk>{static_cast<std::size_t>(chunkW * chunkH * chunkD)};
 
 			for (size_t i = 0; i < chunks.size(); i++) {
 				Chunk &c = chunks[i];
-				c.dirty = true;
-				c.dirtyMinX = 0;
-				c.dirtyMinY = 0;
-				c.dirtyMinZ = 0;
-				c.dirtyMaxX = ChunkSize - 1;
-				c.dirtyMaxY = ChunkSize - 1;
-				c.dirtyMaxZ = ChunkSize - 1;
-				c.transfered = true;
-
 				float *data = (float *)c.data;
 				std::fill(data, data + ChunkSize * ChunkSize * ChunkSize, 1.f);
 			}
@@ -282,9 +273,11 @@ namespace spades {
 				dispatch->Start();
 			}
 
+			// Count the number of chunks that need to be uploaded to GPU.
+			// This value is approximate but it should be okay for profiling use
 			int cnt = 0;
 			for (size_t i = 0; i < chunks.size(); i++) {
-				if (!chunks[i].transfered)
+				if (!chunks[i].transferDone.load())
 					cnt++;
 			}
 			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Large Ambient Occlusion [>= %d chunk(s)]", cnt);
@@ -292,8 +285,7 @@ namespace spades {
 			device->BindTexture(IGLDevice::Texture3D, texture);
 			for (size_t i = 0; i < chunks.size(); i++) {
 				Chunk &c = chunks[i];
-				if (!c.transfered) {
-					c.transfered = true;
+				if (!c.transferDone.exchange(true)) {
 					device->TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
 					                      c.cy * ChunkSize, c.cz * ChunkSize + 1, ChunkSize,
 					                      ChunkSize, ChunkSize, IGLDevice::Red,
@@ -385,7 +377,7 @@ namespace spades {
 					}
 
 			c.dirty = false;
-			c.transfered = false;
+			c.transferDone = false;
 		}
 	}
 }

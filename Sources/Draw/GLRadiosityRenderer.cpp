@@ -72,18 +72,10 @@ namespace spades {
 			chunkH = h / ChunkSize;
 			chunkD = d / ChunkSize;
 
-			chunks.resize(chunkW * chunkH * chunkD);
+			chunks = std::vector<Chunk>{static_cast<std::size_t>(chunkW * chunkH * chunkD)};
 
 			for (size_t i = 0; i < chunks.size(); i++) {
 				Chunk &c = chunks[i];
-				c.dirty = true;
-				c.dirtyMinX = 0;
-				c.dirtyMinY = 0;
-				c.dirtyMinZ = 0;
-				c.dirtyMaxX = ChunkSize - 1;
-				c.dirtyMaxY = ChunkSize - 1;
-				c.dirtyMaxZ = ChunkSize - 1;
-				c.transfered = true;
 
 				uint32_t *data;
 
@@ -238,10 +230,10 @@ namespace spades {
 					float invDiffLen = 1.f / diffLen;
 					float invDiffLenSmooth = 1.f / ((diffLen) + .4f);
 
-					// fallout because of direciton
+					// fall-off because of direciton
 					float intensity = diffDot * invDiffLen;
 
-					// 1/(r^2) distance falloff
+					// 1/(r^2) distance fall-off
 					intensity *= invDiffLenSmooth;
 					intensity *= invDiffLenSmooth;
 
@@ -369,14 +361,13 @@ namespace spades {
 			}
 			int cnt = 0;
 			for (size_t i = 0; i < chunks.size(); i++) {
-				if (!chunks[i].transfered)
+				if (!chunks[i].transferDone.load())
 					cnt++;
 			}
 			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Radiosity [>= %d chunk(s)]", cnt);
 			for (size_t i = 0; i < chunks.size(); i++) {
 				Chunk &c = chunks[i];
-				if (!c.transfered) {
-					c.transfered = true;
+				if (!c.transferDone.exchange(true)) {
 					device->BindTexture(IGLDevice::Texture3D, textureFlat);
 					device->TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
 					                      c.cy * ChunkSize, c.cz * ChunkSize, ChunkSize, ChunkSize,
@@ -552,7 +543,7 @@ namespace spades {
 					}
 
 			c.dirty = false;
-			c.transfered = false;
+			c.transferDone = false;
 		}
 	}
 }
