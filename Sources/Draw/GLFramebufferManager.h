@@ -110,6 +110,8 @@ namespace spades {
 
 			IGLDevice::UInteger GetDepthTexture() { return renderDepthTexture; }
 
+			IGLDevice::Enum GetMainInternalFormat() { return fbInternalFormat; }
+
 			/** 
 			 * Creates BufferHandle with a given size and format.
 			 * Might clobber the current framebuffer and texture bindings.

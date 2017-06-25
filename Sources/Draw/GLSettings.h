@@ -68,6 +68,7 @@ namespace spades {
 			TypedItemHandle<bool> r_softParticles       { *this, "r_softParticles" };
 			TypedItemHandle<bool> r_sparseShadowMaps    { *this, "r_sparseShadowMaps", ItemFlags::Latch };
 			TypedItemHandle<int> r_ssao                 { *this, "r_ssao", ItemFlags::Latch };
+			TypedItemHandle<bool> r_temporalAA          { *this, "r_temporalAA" };
 			TypedItemHandle<int> r_water                { *this, "r_water", ItemFlags::Latch };
 		};
 	}

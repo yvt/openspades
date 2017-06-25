@@ -300,6 +300,7 @@
 		E8D0E5D318F321E300DE3BDB /* GLNonlinearizeFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0E5D018F3215000DE3BDB /* GLNonlinearizeFilter.cpp */; };
 		E8EF8B571E1D70D900E0829C /* SplashWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EF8B551E1D70D900E0829C /* SplashWindow.cpp */; };
 		E8F6E6E71DCF503500FE76BB /* MumbleLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F6E6E41DCF503200FE76BB /* MumbleLink.cpp */; };
+		E8F819F81EFFE18D00FAD0D5 /* GLTemporalAAFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F819F61EFFE18D00FAD0D5 /* GLTemporalAAFilter.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -887,6 +888,8 @@
 		E8F74CFA1845C64B0085AA54 /* ClientUIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientUIHelper.h; sourceTree = "<group>"; };
 		E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ClientUIHelper.cpp; sourceTree = "<group>"; };
 		E8F74CFE184C753F0085AA54 /* Clipboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Clipboard.cpp; sourceTree = "<group>"; };
+		E8F819F61EFFE18D00FAD0D5 /* GLTemporalAAFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTemporalAAFilter.cpp; sourceTree = "<group>"; };
+		E8F819F71EFFE18D00FAD0D5 /* GLTemporalAAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTemporalAAFilter.h; sourceTree = "<group>"; };
 		E8FC02D8186829BC00F84A0D /* SWUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWUtils.h; sourceTree = "<group>"; };
 		E8FE748818CB329C00291338 /* HitTestDebugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HitTestDebugger.cpp; sourceTree = "<group>"; };
 		E8FE748918CB329C00291338 /* HitTestDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitTestDebugger.h; sourceTree = "<group>"; };
@@ -1229,6 +1232,8 @@
 				E859510E17C61F850012810C /* GLLensFlareFilter.h */,
 				E859511017C645000012810C /* GLFXAAFilter.cpp */,
 				E859511117C645000012810C /* GLFXAAFilter.h */,
+				E8F819F61EFFE18D00FAD0D5 /* GLTemporalAAFilter.cpp */,
+				E8F819F71EFFE18D00FAD0D5 /* GLTemporalAAFilter.h */,
 				E8D2ACE117D704E600BE5490 /* GLColorCorrectionFilter.cpp */,
 				E8D2ACE217D704E600BE5490 /* GLColorCorrectionFilter.h */,
 				E8B6B6E317E165A400E35523 /* GLDepthOfFieldFilter.cpp */,
@@ -2163,6 +2168,7 @@
 				E82E67C118EA7972004DBA18 /* ScoreboardView.cpp in Sources */,
 				E82E67C318EA7972004DBA18 /* PaletteView.cpp in Sources */,
 				E82E67C418EA7972004DBA18 /* TCProgressView.cpp in Sources */,
+				E8F819F81EFFE18D00FAD0D5 /* GLTemporalAAFilter.cpp in Sources */,
 				E82E67C518EA7972004DBA18 /* ClientUI.cpp in Sources */,
 				E82E67C618EA7972004DBA18 /* ClientUIHelper.cpp in Sources */,
 				E82E67C718EA7972004DBA18 /* Quake3Font.cpp in Sources */,

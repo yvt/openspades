@@ -1140,13 +1140,22 @@ namespace spades {
 				StartupScreenConfigView cfg(Manager);
 
 				cfg.AddRow(StartupScreenConfigSelectItemEditor(ui,
-					StartupScreenGraphicsAntialiasConfig(ui), "0|2|4|fxaa",
+					StartupScreenGraphicsAntialiasConfig(ui), "0|2|4|fxaa|temporalaa",
 					_Tr("StartupScreen",
-					"Antialias:Enables a technique to improve the appearance of high-contrast edges.\n\n"
+					"Antialias:Enables a technique to improve the appearance of high-contrast edges.") + "\n\n" +
+					_Tr("StartupScreen",
 					"MSAA: Performs antialiasing by generating an intermediate high-resolution image. "
-					"Looks best, but doesn't cope with some settings.\n\n"
-					"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|"
-					"Off|MSAA 2x|4x|FXAA")));
+					"Doesn't cope with post-process effects.") + "\n\n" +
+					_Tr("StartupScreen",
+					"FXAA: Performs antialiasing by smoothing artifacts out as a post-process.") + "\n\n" +
+					_Tr("StartupScreen",
+					"Temporal AA: In addition to FXAA, makes use of information from previous frames "
+					"for better appearance.") + "|" +
+					_Tr("StartupScreen", "Off") + "|" +
+					_Tr("StartupScreen", "MSAA 2x") + "|" +
+					_Tr("StartupScreen", "4x") + "|" +
+					_Tr("StartupScreen", "FXAA") + "|" +
+					_Tr("StartupScreen", "Temporal AA")));
 
 				cfg.AddRow(StartupScreenConfigCheckItemEditor(ui,
 					StartupScreenConfig(ui, "r_radiosity"), "0", "1", _Tr("StartupScreen", "Global Illumination"),
@@ -1417,13 +1426,17 @@ namespace spades {
 		private StartupScreenUI@ ui;
 		private ConfigItem@ msaaConfig;
 		private ConfigItem@ fxaaConfig;
+		private ConfigItem@ temporalAAConfig;
 		StartupScreenGraphicsAntialiasConfig(StartupScreenUI@ ui) {
 			@this.ui = ui;
 			@msaaConfig = ConfigItem("r_multisamples");
 			@fxaaConfig = ConfigItem("r_fxaa");
+			@temporalAAConfig = ConfigItem("r_temporalAA");
 		}
 		string GetValue() {
-			if(fxaaConfig.IntValue != 0) {
+			if(fxaaConfig.IntValue != 0 && temporalAAConfig.IntValue != 0) {
+				return "temporalaa";
+			}else if(fxaaConfig.IntValue != 0) {
 				return "fxaa";
 			}else{
 				int v = msaaConfig.IntValue;
@@ -1432,19 +1445,30 @@ namespace spades {
 			}
 		}
 		void SetValue(string v) {
-			if(v == "fxaa") {
+			if(v == "temporalaa") {
 				msaaConfig.StringValue = "0";
 				fxaaConfig.StringValue = "1";
+				temporalAAConfig.StringValue = "1";
+			} else if(v == "fxaa") {
+				msaaConfig.StringValue = "0";
+				fxaaConfig.StringValue = "1";
+				temporalAAConfig.StringValue = "0";
 			} else if (v == "0" || v == "1") {
 				msaaConfig.StringValue = "0";
 				fxaaConfig.StringValue = "0";
+				temporalAAConfig.StringValue = "0";
 			} else {
 				msaaConfig.StringValue = v;
 				fxaaConfig.StringValue = "0";
+				temporalAAConfig.StringValue = "0";
 			}
 		}
 		string CheckValueCapability(string v) {
-			if(v == "fxaa") {
+			if(v == "temporalaa") {
+				return ui.helper.CheckConfigCapability("r_multisamples", "0") +
+					   ui.helper.CheckConfigCapability("r_fxaa", "1") +
+					   ui.helper.CheckConfigCapability("r_temporalAA", "1");
+			} else if(v == "fxaa") {
 				return ui.helper.CheckConfigCapability("r_multisamples", "0") +
 					   ui.helper.CheckConfigCapability("r_fxaa", "1");
 			} else if (v == "0" || v == "1") {

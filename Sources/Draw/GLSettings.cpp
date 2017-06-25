@@ -61,6 +61,7 @@ DEFINE_SPADES_SETTING(r_shadowMapSize, "2048");
 DEFINE_SPADES_SETTING(r_softParticles, "1");
 DEFINE_SPADES_SETTING(r_sparseShadowMaps, "1");
 DEFINE_SPADES_SETTING(r_ssao, "0");
+DEFINE_SPADES_SETTING(r_temporalAA, "0");
 DEFINE_SPADES_SETTING(r_water, "2");
 
 namespace spades {

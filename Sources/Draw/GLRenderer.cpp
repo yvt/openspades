@@ -56,6 +56,7 @@
 #include "GLSoftLitSpriteRenderer.h"
 #include "GLSoftSpriteRenderer.h"
 #include "GLSpriteRenderer.h"
+#include "GLTemporalAAFilter.h"
 #include "GLUIBlurFilter.h"
 #include "GLVoxelModel.h"
 #include "GLWaterRenderer.h"
@@ -190,6 +191,9 @@ namespace spades {
 			if (settings.r_cameraBlur) {
 				cameraBlur = new GLCameraBlurFilter(this);
 			}
+			if (settings.r_temporalAA) {
+				temporalAAFilter.reset(new GLTemporalAAFilter(this));
+			}
 
 			if (settings.r_fogShadow) {
 				GLFogFilter(this);
@@ -232,6 +236,7 @@ namespace spades {
 
 			SPLog("GLRender finalizing");
 			SetGameMap(nullptr);
+			temporalAAFilter.reset();
 			delete autoExposureFilter;
 			autoExposureFilter = NULL;
 			delete lensDustFilter;
@@ -418,6 +423,16 @@ namespace spades {
 			mat.m[13] = 0.f;
 			mat.m[14] = -(far * near * 2.f) / c;
 			mat.m[15] = 0.f;
+
+			if (settings.r_temporalAA && temporalAAFilter) {
+				float jitterX = 1.0f / GetRenderWidth();
+				float jitterY = 1.0f / GetRenderHeight();
+				Vector2 jitter = temporalAAFilter->GetProjectionMatrixJitter();
+				jitterX *= jitter.x * 1.3f;
+				jitterY *= jitter.y * 1.3f;
+				mat = Matrix4::Translate(jitterX, jitterY, 0.0f) * mat;
+			}
+
 			projectionMatrix = mat;
 		}
 
@@ -928,7 +943,15 @@ namespace spades {
 					handle = lensDustFilter->Filter(handle);
 				}
 
-				// do r_fxaa before lens filter so that color aberration looks nice
+				if (settings.r_temporalAA) {
+					if (!temporalAAFilter) {
+						temporalAAFilter.reset(new GLTemporalAAFilter(this));
+					}
+					GLProfiler::Context p(*profiler, "Temporal AA");
+					handle = temporalAAFilter->Filter(handle, settings.r_fxaa);
+				}
+
+				// Do r_fxaa before lens filter so that color aberration looks nice.
 				if (settings.r_fxaa) {
 					GLProfiler::Context p(*profiler, "FXAA");
 					handle = GLFXAAFilter(this).Filter(handle);
