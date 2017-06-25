@@ -72,6 +72,7 @@ SPADES_SETTING(r_vsync);
 SPADES_SETTING(r_renderer);
 SPADES_SETTING(r_swUndersampling);
 SPADES_SETTING(r_hdr);
+SPADES_SETTING(r_temporalAA);
 
 namespace spades {
 	namespace gui {
@@ -371,10 +372,23 @@ namespace spades {
 						r_multisamples = 0;
 						SPLog("Disabling r_multisamples: no GL_EXT_framebuffer_blit");
 					}
+					if (r_temporalAA) {
+						r_temporalAA = 0;
+						SPLog("Disabling r_temporalAA: no GL_EXT_framebuffer_blit");
+					}
 					incapableConfigs.insert(
 					  std::make_pair("r_blitFramebuffer", [](std::string value) -> std::string {
 						  if (std::stoi(value) != 0) {
 							  return "r_blitFramebuffer is disabled because your video card "
+							         "doesn't support GL_EXT_framebuffer_blit.";
+						  } else {
+							  return std::string();
+						  }
+					  }));
+					incapableConfigs.insert(
+					  std::make_pair("r_temporalAA", [](std::string value) -> std::string {
+						  if (std::stoi(value) != 0) {
+							  return "r_temporalAA is disabled because your video card "
 							         "doesn't support GL_EXT_framebuffer_blit.";
 						  } else {
 							  return std::string();
