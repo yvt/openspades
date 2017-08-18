@@ -35,7 +35,7 @@ namespace spades{
 					return false;
 				}
 				clipboardData = txt;
-				free(txt);
+				SDL_free(txt);
 				hasClipboardData = true;
 			}
 			return hasClipboardData;
