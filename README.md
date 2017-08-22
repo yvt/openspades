@@ -23,7 +23,7 @@ OpenSpades is a compatible client of Ace of Spades 0.75.
 On [snap enabled](https://snapcraft.io/docs/core/install) systems, the latest pre-built stable release of OpenSpades can be installed with:
 
 ```bash
-snap install openspades
+sudo snap install openspades
 ```
 
 Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with the `openspades` command.
