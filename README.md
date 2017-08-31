@@ -79,8 +79,8 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
     * VS2013 is no longer supported, but might work
     * VS2017 is not yet supported, but might work
 2. Grab the source code:
-  * From a release: https://github.com/yvt/openspades/releases
-  * Latest development version (0.1.0): https://github.com/yvt/openspades/archive/master.zip
+  * Stable version: https://github.com/yvt/openspades/releases
+  * Latest development version (0.1.x): https://github.com/yvt/openspades/archive/master.zip
 3. Extract or checkout the source
   * All examples will assume `E:/Projects/openspades`, update paths in the examples to reflect yours
 4. Get (pre-compiled) copies of glew, curl, sdl2 and zlib, and place them in `E:/Projects/openspades/Sources/Externals`
