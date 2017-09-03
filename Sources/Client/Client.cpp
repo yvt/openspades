@@ -685,6 +685,10 @@ namespace spades {
 					ShowAlert(msg.substr(3), AlertType::Warning);
 					return;
 				}
+				if (msg.substr(0, 3) == "C% ") {
+					centerMessageView->AddMessage(msg.substr(3));
+					return;
+				}
 			}
 
 			chatWindow->AddMessage(msg);
