@@ -33,6 +33,7 @@
 #include "Player.h"
 #include "TCGameMode.h"
 #include "World.h"
+#include "GameProperties.h"
 #include <Core/CP437.h>
 #include <Core/Debug.h>
 #include <Core/Debug.h>
@@ -377,6 +378,8 @@ namespace spades {
 			playerPosRecords.resize(32);
 
 			std::fill(savedPlayerTeam.begin(), savedPlayerTeam.end(), -1);
+
+			properties.reset(new GameProperties());
 
 			bandwidthMonitor.reset(new BandwidthMonitor(host));
 		}
@@ -1038,6 +1041,7 @@ namespace spades {
 							savedPlayerTeam[pId] = team;
 						}
 					}
+					client->PlayerSpawned(p);
 
 				} break;
 				case PacketTypeBlockAction: {
@@ -1262,11 +1266,13 @@ namespace spades {
 								break;
 							case 2: // system???
 								client->ServerSentMessage(txt);
-								/*SPRaise("Player #%d %s sent system message", p->GetId(),
-								 * p->GetName().c_str());*/
 						}
 					} else {
 						client->ServerSentMessage(txt);
+
+						// Speculate the best game properties based on the server generated
+						// messages
+						properties->HandleServerMessage(txt);
 					}
 				} break;
 				case PacketTypeMapStart: {

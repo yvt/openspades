@@ -235,6 +235,7 @@ namespace spades {
 			void RemoveAllCorpses();
 			void RemoveInvisibleCorpses();
 			void RemoveAllLocalEntities();
+			void RemoveCorpseForPlayer(int playerId);
 
 			int nextScreenShotIndex;
 			int nextMapShotIndex;
@@ -337,6 +338,7 @@ namespace spades {
 			void GrenadeDestroyedBlock(IntVector3);
 			void PlayerLeaving(Player *);
 			void PlayerJoinedTeam(Player *);
+			void PlayerSpawned(Player *);
 
 			virtual void PlayerObjectSet(int);
 			virtual void PlayerMadeFootstep(Player *);

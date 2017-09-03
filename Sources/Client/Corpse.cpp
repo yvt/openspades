@@ -37,6 +37,8 @@ namespace spades {
 		    : renderer(renderer), map(map) {
 			SPADES_MARK_FUNCTION();
 
+			playerId = p->GetId();
+
 			IntVector3 col = p->GetWorld()->GetTeam(p->GetTeamId()).color;
 			color = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 

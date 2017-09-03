@@ -56,6 +56,7 @@ namespace spades {
 		struct PlayerInput;
 		struct WeaponInput;
 		class Grenade;
+		class GameProperties;
 		class NetClient {
 			Client *client;
 			NetClientStatus status;
@@ -64,6 +65,7 @@ namespace spades {
 			std::string statusString;
 			unsigned int mapSize;
 			std::vector<char> mapData;
+			std::shared_ptr<GameProperties> properties;
 
 			int protocolVersion;
 
@@ -128,6 +130,11 @@ namespace spades {
 			NetClientStatus GetStatus() { return status; }
 
 			std::string GetStatusString() { return statusString; }
+
+			/**
+			 * Return a non-null reference to `GameProperties` for this connection.
+			 */
+			std::shared_ptr<GameProperties>& GetGameProperties() { return properties; }
 
 			void Connect(const ServerAddress &hostname);
 			void Disconnect();
