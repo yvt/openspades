@@ -1031,7 +1031,7 @@ namespace spades {
 							rec.pos = pos;
 							rec.time = GetWorld()->GetTime();
 						}
-						if (savedPlayerTeam[pId] != team && team < 2) {
+						if (savedPlayerTeam[pId] != team) {
 
 							client->PlayerJoinedTeam(p);
 

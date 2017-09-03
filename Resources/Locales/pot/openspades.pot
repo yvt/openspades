@@ -1553,3 +1553,8 @@ msgstr ""
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
 msgstr ""
+
+#: Sources/Client/Client_NetHandler.cpp:258
+msgctxt "Client"
+msgid "Spectator"
+msgstr ""
