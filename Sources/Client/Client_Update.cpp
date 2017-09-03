@@ -936,6 +936,12 @@ namespace spades {
 					Handle<IAudioChunk> c =
 					  audioDevice->RegisterSound("Sounds/Weapons/Spade/HitPlayer.opus");
 					audioDevice->Play(c, hitPos, AudioParam());
+				} else if(type == HitTypeHead) {
+					Handle<IAudioChunk> c =
+					  audioDevice->RegisterSound("Sounds/Weapons/Impacts/whack.wav"); //TODO: add this file to resoruces
+					AudioParam param;
+					param.volume = 50.f;
+					audioDevice->Play(c, hitPos, param);
 				} else {
 					Handle<IAudioChunk> c;
 					switch ((mt_engine_client() >> 6) % 3) {
