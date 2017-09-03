@@ -1287,6 +1287,7 @@ namespace spades {
 					Player *p = GetPlayer(reader.ReadByte());
 
 					client->PlayerLeaving(p);
+					GetWorld()->GetPlayerPersistent(p->GetId()).kills = 0;
 
 					savedPlayerTeam[p->GetId()] = -1;
 					playerPosRecords[p->GetId()].valid = false;
