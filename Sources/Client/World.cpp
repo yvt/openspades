@@ -52,7 +52,7 @@ namespace spades {
 			mapWrapper = NULL;
 
 			localPlayerIndex = -1;
-			for (int i = 0; i < 32; i++) {
+			for (int i = 0; i < 128; i++) {
 				players.push_back((Player *)NULL);
 				playerPersistents.push_back(PlayerPersistent());
 			}

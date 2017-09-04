@@ -45,10 +45,21 @@ namespace spades {
 			 * Indicates whether the server does not provide the game properties in a way OpenSpades
 			 * can reliably parse and it must speculate them using non-program friendly information
 			 * (e.g., server message).
+			 *
+			 * Reserved for a future extension.
 			 */
 			bool useHeuristics = true;
 
 			bool clearCorpseOnRespawn = false;
+
+			/**
+			 * Raises the upper limit of the number of player slots to 128.
+			 *
+			 * Reserved for a future extension.
+			 */
+			bool manyPlayers = false;
+
+			int GetMaxNumPlayerSlots() const { return manyPlayers ? 128 : 32; }
 		};
 	}
 }
