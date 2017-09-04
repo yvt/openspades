@@ -936,12 +936,6 @@ namespace spades {
 					Handle<IAudioChunk> c =
 					  audioDevice->RegisterSound("Sounds/Weapons/Spade/HitPlayer.opus");
 					audioDevice->Play(c, hitPos, AudioParam());
-				} else if(type == HitTypeHead) {
-					Handle<IAudioChunk> c =
-					  audioDevice->RegisterSound("Sounds/Weapons/Impacts/whack.wav");
-					AudioParam param;
-					param.volume = 30.f;
-					audioDevice->Play(c, hitPos, param);
 				} else {
 					Handle<IAudioChunk> c;
 					switch ((mt_engine_client() >> 6) % 3) {
@@ -963,7 +957,15 @@ namespace spades {
 
 			if (by == world->GetLocalPlayer() && hurtPlayer) {
 				net->SendHit(hurtPlayer->GetId(), type);
-
+				
+				if (type == HitTypeHead) {
+					Handle<IAudioChunk> c =
+					  audioDevice->RegisterSound("Sounds/Feedback/HeadshotFeedback.opus");
+					AudioParam param;
+					param.volume = 10.f;
+					audioDevice->Play(c, hitPos, param);
+				}
+				
 				hitFeedbackIconState = 1.f;
 				if (hurtPlayer->GetTeamId() == world->GetLocalPlayer()->GetTeamId()) {
 					hitFeedbackFriendly = true;
