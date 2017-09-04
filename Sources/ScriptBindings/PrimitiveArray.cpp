@@ -107,14 +107,20 @@ namespace spades {
 		T& At(asUINT index) {
 			if(index >= inner.size()){
 				asGetActiveContext()->SetException("Index out of bounds");
-				return *((T*)0);
+
+				// Cannot return `nullptr` because that will result in an undefined behavior
+				static T dummyValue;
+				return dummyValue;
 			}
 			return inner[index];
 		}
 		const T& At(asUINT index) const {
 			if(index >= inner.size()){
 				asGetActiveContext()->SetException("Index out of bounds");
-				return *((T*)0);
+
+				// Cannot return `nullptr` because that will result in an undefined behavior
+				static T dummyValue;
+				return dummyValue;
 			}
 			return inner[index];
 		}

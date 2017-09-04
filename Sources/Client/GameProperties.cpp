@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2017 yvt
 
  This file is part of OpenSpades.
 
@@ -17,35 +17,20 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-
-#pragma once
-
-#include <vector>
-
-#include "IGLDevice.h"
+#include "GameProperties.h"
+#include <Core/Debug.h>
 
 namespace spades {
-	namespace draw {
-		class GLShader {
-			IGLDevice *device;
-			IGLDevice::UInteger handle;
-			std::vector<std::string> sources;
-			bool compiled;
+	namespace client {
+		void GameProperties::HandleServerMessage(const std::string &msg) {
+			if (!useHeuristics) {
+				return;
+			}
 
-		public:
-			enum Type { VertexShader, FragmentShader, GeometryShader };
-
-			GLShader(IGLDevice *, Type);
-			~GLShader();
-
-			void AddSource(const std::string &);
-
-			void Compile();
-			IGLDevice::UInteger GetHandle() const { return handle; }
-
-			bool IsCompiled() const { return compiled; }
-
-			IGLDevice *GetDevice() const { return device; }
-		};
+			if (msg == "Game mode: Arena by Yourself") {
+				clearCorpseOnRespawn = true;
+				SPLog("Enabled clearCorpseOnRespawn based on a server message heuristics");
+			}
+		}
 	}
 }

@@ -79,9 +79,9 @@ namespace spades {
 
 			MainScreen *mainScreen;
 			MainScreenServerList *result;
-			MainScreenServerList *volatile newResult;
+			MainScreenServerList *newResult;
 			Mutex newResultArrayLock;
-			ServerListQuery *volatile query;
+			ServerListQuery *query;
 			std::string errorMessage;
 			std::unordered_set<std::string> favorites;
 

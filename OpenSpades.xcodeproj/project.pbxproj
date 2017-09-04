@@ -294,6 +294,7 @@
 		E89A5F201DF8759200857F65 /* ShellApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1F1DF8759200857F65 /* ShellApi.mm */; };
 		E89BBDC31B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */; };
 		E8C8D3BE1E2A591A00F614EB /* GLUIBlurFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C8D3BC1E2A591A00F614EB /* GLUIBlurFilter.cpp */; };
+		E8A2EBA01F5BE16D00E39CD9 /* GameProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8A2EB9E1F5BE16D00E39CD9 /* GameProperties.cpp */; };
 		E8CB47CE1DE071CA00BF606A /* SWUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */; };
 		E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
 		E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47D41DE084AB00BF606A /* GLSettings.cpp */; };
@@ -595,6 +596,8 @@
 		E89BBDC11B3559CD00F53EE9 /* GLAutoExposureFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLAutoExposureFilter.h; sourceTree = "<group>"; };
 		E89E811F179C2C800059C649 /* GLBloomFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLBloomFilter.cpp; sourceTree = "<group>"; };
 		E89E8120179C2C800059C649 /* GLBloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLBloomFilter.h; sourceTree = "<group>"; };
+		E8A2EB9E1F5BE16D00E39CD9 /* GameProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameProperties.cpp; sourceTree = "<group>"; };
+		E8A2EB9F1F5BE16D00E39CD9 /* GameProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameProperties.h; sourceTree = "<group>"; };
 		E8B6B63F17DE27B500E35523 /* angelscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = angelscript.h; sourceTree = "<group>"; };
 		E8B6B64117DE27B500E35523 /* as_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = as_array.h; sourceTree = "<group>"; };
 		E8B6B64217DE27B500E35523 /* as_atomic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = as_atomic.cpp; sourceTree = "<group>"; };
@@ -1654,6 +1657,8 @@
 				E88318E517928EAC002ABE6D /* PhysicsConstants.h */,
 				E8FE748818CB329C00291338 /* HitTestDebugger.cpp */,
 				E8FE748918CB329C00291338 /* HitTestDebugger.h */,
+				E8A2EB9E1F5BE16D00E39CD9 /* GameProperties.cpp */,
+				E8A2EB9F1F5BE16D00E39CD9 /* GameProperties.h */,
 			);
 			name = World;
 			sourceTree = "<group>";
@@ -2011,6 +2016,7 @@
 				E82E67EA18EA7A51004DBA18 /* packet.c in Sources */,
 				E82E67EB18EA7A51004DBA18 /* peer.c in Sources */,
 				E81012311E1D7301009955D3 /* Icon.cpp in Sources */,
+				E8A2EBA01F5BE16D00E39CD9 /* GameProperties.cpp in Sources */,
 				E82E67EC18EA7A51004DBA18 /* protocol.c in Sources */,
 				E82E67ED18EA7A51004DBA18 /* unix.c in Sources */,
 				E82E67EE18EA7A51004DBA18 /* win32.c in Sources */,

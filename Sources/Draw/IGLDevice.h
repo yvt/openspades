@@ -200,6 +200,7 @@ namespace spades {
 
 				// shader type
 				VertexShader,
+				GeometryShader,
 				FragmentShader,
 
 				// shader query

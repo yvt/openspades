@@ -21,6 +21,7 @@
 #pragma once
 
 #include <vector>
+#include <atomic>
 
 #include <Core/Debug.h>
 #include <Core/Math.h>
@@ -45,12 +46,12 @@ namespace spades {
 			struct Chunk {
 				int cx, cy, cz;
 				float data[ChunkSize][ChunkSize][ChunkSize];
-				bool dirty;
-				int dirtyMinX, dirtyMaxX;
-				int dirtyMinY, dirtyMaxY;
-				int dirtyMinZ, dirtyMaxZ;
+				bool dirty = true;
+				int dirtyMinX = 0, dirtyMaxX = ChunkSize - 1;
+				int dirtyMinY = 0, dirtyMaxY = ChunkSize - 1;
+				int dirtyMinZ = 0, dirtyMaxZ = ChunkSize - 1;
 
-				volatile bool transfered;
+				std::atomic<bool> transferDone {true};
 			};
 
 			IGLDevice::UInteger texture;

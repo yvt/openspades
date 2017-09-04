@@ -35,6 +35,7 @@
 #include "IGameMode.h"
 #include "TCGameMode.h"
 #include "World.h"
+#include "GameProperties.h"
 
 #include "CenterMessageView.h"
 #include "ChatWindow.h"
@@ -253,20 +254,25 @@ namespace spades {
 				scriptedUI->RecordChatLog(
 				  msg, MakeVector4(col.x / 255.f, col.y / 255.f, col.z / 255.f, 0.8f));
 			}
+			RemoveCorpseForPlayer(p->GetId());
 		}
 
 		void Client::PlayerJoinedTeam(spades::client::Player *p) {
+			std::string teamName = world->GetTeam(p->GetTeamId()).name;
+
+			if (p->GetTeamId() >= 2) {
+				teamName = _Tr("Client", "Spectator");
+			}
+
 			{
 				std::string msg;
 				msg = _Tr("Client", "{0} joined {1} team", p->GetName(),
-				          chatWindow->TeamColorMessage(world->GetTeam(p->GetTeamId()).name,
-				                                       p->GetTeamId()));
+				          chatWindow->TeamColorMessage(teamName, p->GetTeamId()));
 				chatWindow->AddMessage(msg);
 			}
 			{
 				std::string msg;
-				msg = _Tr("Client", "{0} joined {1} team", p->GetName(),
-				          world->GetTeam(p->GetTeamId()).name);
+				msg = _Tr("Client", "{0} joined {1} team", p->GetName(), teamName);
 
 				auto col = p->GetTeamId() < 2 ? world->GetTeam(p->GetTeamId()).color
 				                              : IntVector3::Make(255, 255, 255);
@@ -274,6 +280,12 @@ namespace spades {
 				NetLog("%s", msg.c_str());
 				scriptedUI->RecordChatLog(
 				  msg, MakeVector4(col.x / 255.f, col.y / 255.f, col.z / 255.f, 0.8f));
+			}
+		}
+
+		void Client::PlayerSpawned(Player *p) {
+			if (net->GetGameProperties()->clearCorpseOnRespawn) {
+				RemoveCorpseForPlayer(p->GetId());
 			}
 		}
 

@@ -21,6 +21,7 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <iterator>
 
 #include "Client.h"
 
@@ -95,6 +96,18 @@ namespace spades {
 
 			for (size_t i = 0; i < its.size(); i++)
 				corpses.erase(its[i]);
+		}
+
+		void Client::RemoveCorpseForPlayer(int playerId) {
+			for (auto it = corpses.begin(); it != corpses.end();) {
+				auto cur = it;
+				++it;
+
+				auto &c = *cur;
+				if (c->GetPlayerId() == playerId) {
+					corpses.erase(cur);
+				}
+			}
 		}
 
 		Player *Client::HotTrackedPlayer(hitTag_t *hitFlag) {

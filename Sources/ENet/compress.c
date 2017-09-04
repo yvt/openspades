@@ -343,10 +343,10 @@ enet_range_coder_compress (void * context, const ENetBuffer * inBuffers, size_t 
 
 #define ENET_RANGE_CODER_SEED \
 { \
-    if (inData < inEnd) decodeCode |= * inData ++ << 24; \
-    if (inData < inEnd) decodeCode |= * inData ++ << 16; \
-    if (inData < inEnd) decodeCode |= * inData ++ << 8; \
-    if (inData < inEnd) decodeCode |= * inData ++; \
+    if (inData < inEnd) decodeCode |= (enet_uint32)(* inData ++) << 24; \
+    if (inData < inEnd) decodeCode |= (enet_uint32)(* inData ++) << 16; \
+    if (inData < inEnd) decodeCode |= (enet_uint32)(* inData ++) << 8; \
+    if (inData < inEnd) decodeCode |= (enet_uint32)(* inData ++); \
 }
 
 #define ENET_RANGE_CODER_READ(total) ((decodeCode - decodeLow) / (decodeRange /= (total)))

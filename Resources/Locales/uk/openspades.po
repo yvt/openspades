@@ -5,27 +5,27 @@ msgstr ""
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
 "PO-Revision-Date: 2017-06-25 07:43-0400\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
-"Language-Team: Japanese\n"
+"Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: crowdin.com\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Crowdin-Project: openspades\n"
-"X-Crowdin-Language: ja\n"
+"X-Crowdin-Language: uk\n"
 "X-Crowdin-File: /master/openspades.pot\n"
-"Language: ja_JP\n"
+"Language: uk_UA\n"
 
 #: Sources/Client/Client.cpp:585
 msgctxt "Client"
 msgid "Map saved: {0}"
-msgstr "マップを保存しました: {0}"
+msgstr "Карта збережена: {0}"
 
 #: Sources/Client/Client.cpp:589 Sources/Client/Client.cpp:595
 msgctxt "Client"
 msgid "Saving map failed: "
-msgstr "マップを保存できませんでした: "
+msgstr "Не вдалось зберегти карту: "
 
 #. ! Prefix added to global chat messages.
 #. !
@@ -37,458 +37,462 @@ msgstr "マップを保存できませんでした: "
 #: Sources/Client/Client.cpp:633
 msgctxt "Client"
 msgid "[Global] "
-msgstr "[全体] "
+msgstr "[Загальний] "
 
 #: Sources/Client/Client_Draw.cpp:119
 msgctxt "Client"
 msgid "Sceneshot saved: {0}"
-msgstr "シーンショットを保存しました: {0}"
+msgstr "Сценшот збережений: {0}"
 
 #: Sources/Client/Client_Draw.cpp:121
 msgctxt "Client"
 msgid "Screenshot saved: {0}"
-msgstr "スクリーンショットを保存しました: {0}"
+msgstr "Скріншот збережений: {0}"
 
 #: Sources/Client/Client_Draw.cpp:125 Sources/Client/Client_Draw.cpp:131
 msgctxt "Client"
 msgid "Screenshot failed: "
-msgstr "スクリーンショットに失敗しました:"
+msgstr "Не вдалося зберегти скріншот: "
 
 #: Sources/Client/Client_Draw.cpp:198
 msgctxt "Client"
 msgid "NOW LOADING"
-msgstr "読み込み中"
+msgstr "ЗАВАНТАЖУЄТЬСЯ"
 
 #: Sources/Client/Client_Draw.cpp:220
 msgctxt "Client"
 msgid "Disconnecting..."
-msgstr "切断中です..."
+msgstr "Відключення..."
 
 #: Sources/Client/Client_Draw.cpp:523
 msgctxt "Client"
 msgid "Out of Block"
-msgstr "ブロック切れ"
+msgstr "Блоки закінчились"
 
 #: Sources/Client/Client_Draw.cpp:528
 msgctxt "Client"
 msgid "Out of Grenade"
-msgstr "手榴弾切れ"
+msgstr "Гранати закінчились"
 
 #: Sources/Client/Client_Draw.cpp:534
 msgctxt "Client"
 msgid "Reloading"
-msgstr "リロード中"
+msgstr "Перезарядка"
 
 #: Sources/Client/Client_Draw.cpp:536 Sources/Client/Client_Input.cpp:439
 msgctxt "Client"
 msgid "Out of Ammo"
-msgstr "弾切れ"
+msgstr "Набої закінчились"
 
 #: Sources/Client/Client_Draw.cpp:539
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
-msgstr "[{0}] でリロード"
+msgstr "Натисніть [{0}] для перезарядки"
 
 #: Sources/Client/Client_Draw.cpp:584
 msgctxt "Client"
 msgid "You will respawn in: {0}"
-msgstr "リスポーンまであと: {0}秒"
+msgstr "Респавн через: {0}"
 
 #: Sources/Client/Client_Draw.cpp:586
 msgctxt "Client"
 msgid "Waiting for respawn"
-msgstr "リスポーン待ち"
+msgstr "Очікування респавна"
 
 #: Sources/Client/Client_Draw.cpp:764
 msgctxt "Client"
 msgid "Following {0}"
-msgstr "{0} をフォロー中"
+msgstr "Спостереження за {0}"
 
 #: Sources/Client/Client_Input.cpp:427
 msgctxt "Client"
 msgid "Out of Blocks"
-msgstr "ブロック切れ"
+msgstr "Блоки закінчились"
 
 #: Sources/Client/Client_Input.cpp:451
 msgctxt "Client"
 msgid "Out of Grenades"
-msgstr "手榴弾切れ"
+msgstr "Гранати закінчились"
 
 #: Sources/Client/Client_NetHandler.cpp:89
 msgctxt "Client"
 msgid "{0} captured {1}'s territory"
-msgstr "{0} が {1} の陣地を占領しました"
+msgstr "{0} захопили територію команди {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:91
 msgctxt "Client"
 msgid "{0} captured an neutral territory"
-msgstr "{0} が未占領の陣地を占領しました"
+msgstr "{0} захопили нейтральну територію"
 
 #: Sources/Client/Client_NetHandler.cpp:99
 msgctxt "Client"
 msgid "{0} captured {1}'s Territory"
-msgstr "{0} が {1} の陣地を占領しました"
+msgstr "{0} захопили територію команди {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:101
 msgctxt "Client"
 msgid "{0} captured an Neutral Territory"
-msgstr "{0} が未占領の陣地を占領しました"
+msgstr "{0} захопили нейтральну територію"
 
 #: Sources/Client/Client_NetHandler.cpp:127
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
-msgstr "{0} が {1} のIntelをキャプチャーしました"
+msgstr "{0} захопив інтел команди {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:134
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
-msgstr "{0} が {1} のIntelをキャプチャーしました"
+msgstr "{0} захопив інтел команди {1}."
 
 #: Sources/Client/Client_NetHandler.cpp:158
 msgctxt "Client"
 msgid "{0} picked up {1}'s intel"
-msgstr "{0} が {1} のIntelを入手しました"
+msgstr "{0} підібрав інтел команди {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:165
 msgctxt "Client"
 msgid "{0} picked up {1}'s Intel."
-msgstr "{0} が {1} のIntelを入手しました"
+msgstr "{0} підібрав інтел команди {1}."
 
 #: Sources/Client/Client_NetHandler.cpp:183
 msgctxt "Client"
 msgid "{0} dropped {1}'s intel"
-msgstr "{0} が {1} のIntelを落としました"
+msgstr "{0} прогавив інтел команди {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:190
 msgctxt "Client"
 msgid "{0} dropped {1}'s Intel"
-msgstr "{0} が {1} のIntelを落としました"
+msgstr "{0} прогавив інтел команди {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:237
 #: Sources/Client/Client_NetHandler.cpp:243
 msgctxt "Client"
 msgid "Player {0} has left"
-msgstr "プレイヤー {0} が退場"
+msgstr "Гравець {0} вийшов"
 
 #: Sources/Client/Client_NetHandler.cpp:257
 #: Sources/Client/Client_NetHandler.cpp:264
 msgctxt "Client"
 msgid "{0} joined {1} team"
-msgstr "プレイヤー {0} が {1} に参加"
+msgstr "{0} приєднався до команди {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:294
 msgctxt "Client"
 msgid "{0} wins!"
-msgstr "{0} の勝利!"
+msgstr "Команда {0} виграла!"
 
 #: Sources/Client/Client_NetHandler.cpp:298
 msgctxt "Client"
 msgid "{0} Wins!"
-msgstr "{0} の勝利!"
+msgstr "Команда {0} виграла!"
 
 #: Sources/Client/Client_Update.cpp:479
 msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
-msgstr[0] "ブロック {0}個"
+msgstr[0] "{0} блок"
+msgstr[1] "{0} блока"
+msgstr[2] "{0} блоків"
 
 #: Sources/Client/Client_Update.cpp:486
 msgctxt "Client"
 msgid "-- blocks"
-msgstr "ブロック --個"
+msgstr "-- блоків"
 
 #: Sources/Client/Client_Update.cpp:842 Sources/Client/LimboView.cpp:68
 msgctxt "Client"
 msgid "Rifle"
-msgstr "ライフル"
+msgstr "Гвинтівка"
 
 #: Sources/Client/Client_Update.cpp:843 Sources/Client/LimboView.cpp:71
 msgctxt "Client"
 msgid "SMG"
-msgstr "サブマシンガン"
+msgstr "SMG"
 
 #: Sources/Client/Client_Update.cpp:844 Sources/Client/LimboView.cpp:74
 msgctxt "Client"
 msgid "Shotgun"
-msgstr "ショットガン"
+msgstr "Дробовик"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:849
 msgctxt "Client"
 msgid "Fall"
-msgstr "落下"
+msgstr "Упав"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:853
 msgctxt "Client"
 msgid "Melee"
-msgstr "スペード"
+msgstr "Рукопашна"
 
 #: Sources/Client/Client_Update.cpp:856
 msgctxt "Client"
 msgid "Grenade"
-msgstr "手榴弾"
+msgstr "Граната"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:860
 msgctxt "Client"
 msgid "Headshot"
-msgstr "ヘッドショット"
+msgstr "Постріл у голову"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:864
 msgctxt "Client"
 msgid "Team Change"
-msgstr "チーム変更"
+msgstr "Зміна команди"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:868
 msgctxt "Client"
 msgid "Weapon Change"
-msgstr "武器変更"
+msgstr "Зміна зброї"
 
 #: Sources/Client/Client_Update.cpp:907
 msgctxt "Client"
 msgid "You have killed {0}"
-msgstr "{0} を殺害した"
+msgstr "Ви вбили гравця {0}"
 
 #: Sources/Client/Client_Update.cpp:909
 msgctxt "Client"
 msgid "You were killed by {0}"
-msgstr "{0} に殺害された"
+msgstr "Ви були вбиті гравцем {0}"
 
 #: Sources/Client/Client_Update.cpp:1225
 msgctxt "Client"
 msgid "Insufficient blocks."
-msgstr "ブロックが不足しています。"
+msgstr "Недостатньо блоків."
 
 #: Sources/Client/Client_Update.cpp:1228
 msgctxt "Client"
 msgid "You cannot place a block there."
-msgstr "そこにブロックを置くことはできません。"
+msgstr "Ви не можете поставить тут блок."
 
 #: Sources/Client/LimboView.cpp:79
 msgctxt "Client"
 msgid "Spawn"
-msgstr "スポーン"
+msgstr "Спавн"
 
 #: Sources/Client/LimboView.cpp:183
 msgctxt "Client"
 msgid "Select Team:"
-msgstr "チームを選択:"
+msgstr "Виберіть команду:"
 
 #: Sources/Client/LimboView.cpp:191
 msgctxt "Client"
 msgid "Select Weapon:"
-msgstr "武器を選択:"
+msgstr "Виберіть зброю:"
 
 #: Sources/Client/NetClient.cpp:422
 msgctxt "NetClient"
 msgid "Connecting to the server"
-msgstr "サーバーに接続中"
+msgstr "Підключення до серверу"
 
 #: Sources/Client/NetClient.cpp:434
 msgctxt "NetClient"
 msgid "Not connected"
-msgstr "接続されていません"
+msgstr "Не підключений"
 
 #: Sources/Client/NetClient.cpp:498
 msgctxt "NetClient"
 msgid "Awaiting for state"
-msgstr "ゲーム状態の受信を待機中"
+msgstr "Очікування стану"
 
 #: Sources/Client/NetClient.cpp:508 Sources/Client/NetClient.cpp:1277
 msgctxt "NetClient"
 msgid "Loading snapshot"
-msgstr "スナップショットを読込中"
+msgstr "Завантаження снапшоту"
 
 #: Sources/Client/NetClient.cpp:523
 msgctxt "NetClient"
 msgid "Loading snapshot ({0}/{1})"
-msgstr "スナップショットを読込中 ({0} / {1})"
+msgstr "Завантаження снапшоту ({0}/{1})"
 
 #: Sources/Client/NetClient.cpp:528 Sources/Client/NetClient.cpp:562
 msgctxt "NetClient"
 msgid "Connected"
-msgstr "接続されました"
+msgstr "Підключено"
 
 #: Sources/Client/NetClient.cpp:540 Sources/Client/NetClient.cpp:575
 #: Sources/Client/NetClient.cpp:627
 msgctxt "NetClient"
 msgid "Still loading..."
-msgstr "引き続き読み込み中..."
+msgstr "Ще завантажується..."
 
 #: Sources/Client/NetClient.cpp:543 Sources/Client/NetClient.cpp:549
 #: Sources/Client/NetClient.cpp:579 Sources/Client/NetClient.cpp:584
 #: Sources/Client/NetClient.cpp:631 Sources/Client/NetClient.cpp:636
 msgctxt "NetClient"
 msgid "Error"
-msgstr "エラー"
+msgstr "Помилка"
 
 #: Sources/Client/NetClient.cpp:702
 msgctxt "NetClient"
 msgid "You are banned from this server."
-msgstr "このサーバーへの接続は禁止されています。"
+msgstr "Ви забанені на цьому сервері."
 
 #: Sources/Client/NetClient.cpp:707 Sources/Client/NetClient.cpp:710
 msgctxt "NetClient"
 msgid "You were kicked from this server."
-msgstr "サーバーから追放されました。"
+msgstr "Вас викинули з цього серверу."
 
 #: Sources/Client/NetClient.cpp:708
 msgctxt "NetClient"
 msgid "Incompatible client protocol version."
-msgstr "プロトコルバージョンが違います。"
+msgstr "Несумісна версія протоколу клієнта."
 
 #: Sources/Client/NetClient.cpp:709
 msgctxt "NetClient"
 msgid "Server full"
-msgstr "サーバーが満員です"
+msgstr "Сервер заповнений"
 
 #: Sources/Client/NetClient.cpp:711
 msgctxt "NetClient"
 msgid "Unknown Reason"
-msgstr "不明な理由"
+msgstr "Невідома причина"
 
 #: Sources/Client/ScoreboardView.cpp:63 Sources/Client/ScoreboardView.cpp:345
 msgctxt "Client"
 msgid "Spectator{1}"
 msgid_plural "Spectators{1}"
-msgstr[0] "観戦者{1}"
+msgstr[0] "Спостерігач{1}"
+msgstr[1] "Спостерігачі{1}"
+msgstr[2] "Спостерігачі{1}"
 
 #: Sources/Client/TCProgressView.cpp:151
 msgctxt "Client"
 msgid "Neutral Territory"
-msgstr "未占領テリトリー"
+msgstr "Нейтральна територія"
 
 #: Sources/Client/TCProgressView.cpp:154
 msgctxt "Client"
 msgid "{0}'s Territory"
-msgstr "{0}のテリトリー"
+msgstr "Територія {0}"
 
 #: Sources/Gui/Main.cpp:548
 msgctxt "Main"
 msgid "Localization System Loaded"
-msgstr "ローカライゼーションシステムが読み込まれました"
+msgstr "Система локалізації завантажена"
 
 #: Sources/Gui/Main.cpp:604 Sources/Gui/Runner.cpp:56
 msgctxt "Main"
 msgid "A serious error caused OpenSpades to stop working:\n\n"
 "{0}\n\n"
 "See SystemMessages.log for more details."
-msgstr "深刻な問題により、OpenSpadesは動作を停止しました:\n\n"
+msgstr "Серйозна помилка змусила OpenSpades припинити роботу:\n"
 "{0}\n\n"
-"詳細については SystemMessages.log をご覧下さい。"
+"Подивіться SystemMessages.log для більш детальної інформації."
 
 #: Sources/Gui/Main.cpp:612 Sources/Gui/Runner.cpp:62
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
-msgstr "OpenSpades 重大なエラー"
+msgstr "Фатальна помилка OpenSpades"
 
 #: Sources/Gui/MainScreen.cpp:225
 msgctxt "MainScreen"
 msgid "NOW LOADING"
-msgstr "読み込み中"
+msgstr "ЗАВАНТАЖУЄТЬСЯ"
 
 #: Resources/Scripts/Gui/ClientUI.as:198
 msgctxt "Client"
 msgid "Back to Game"
-msgstr "ゲームに戻る"
+msgstr "Назад в гру"
 
 #: Resources/Scripts/Gui/ClientUI.as:205
 msgctxt "Client"
 msgid "Chat Log"
-msgstr "チャットログ"
+msgstr "Історія чату"
 
 #: Resources/Scripts/Gui/ClientUI.as:212
 msgctxt "Client"
 msgid "Setup"
-msgstr "オプション"
+msgstr "Налаштування"
 
 #: Resources/Scripts/Gui/ClientUI.as:219
 msgctxt "Client"
 msgid "Disconnect"
-msgstr "切断"
+msgstr "Відключитись"
 
 #: Resources/Scripts/Gui/ClientUI.as:484
 msgctxt "Client"
 msgid "Say"
-msgstr "送信"
+msgstr "Сказати"
 
 #: Resources/Scripts/Gui/ClientUI.as:492
 msgctxt "Client"
 msgid "Cancel"
-msgstr "キャンセル"
+msgstr "Скасувати"
 
 #: Resources/Scripts/Gui/ClientUI.as:500
 msgctxt "Client"
 msgid "Chat Text"
-msgstr "送信内容"
+msgstr "Текст повідомлення"
 
 #: Resources/Scripts/Gui/ClientUI.as:508
 msgctxt "Client"
 msgid "Global"
-msgstr "全体"
+msgstr "Загальний"
 
 #: Resources/Scripts/Gui/ClientUI.as:517
 msgctxt "Client"
 msgid "Team"
-msgstr "チーム"
+msgstr "Команд."
 
 #: Resources/Scripts/Gui/ClientUI.as:661
 msgctxt "Client"
 msgid "Close"
-msgstr "閉じる"
+msgstr "Закрити"
 
 #: Resources/Scripts/Gui/ClientUI.as:671
 msgctxt "Client"
 msgid "Say Global"
-msgstr "全体チャット"
+msgstr "Сказати в загальний"
 
 #: Resources/Scripts/Gui/ClientUI.as:682
 msgctxt "Client"
 msgid "Say Team"
-msgstr "チームチャット"
+msgstr "Сказати в команд."
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:58
 msgctxt "CreateProfileScreen"
 msgid "OK"
-msgstr "OK"
+msgstr "ОК"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:70
 msgctxt "CreateProfileScreen"
 msgid "Decide later"
-msgstr "後で入力する"
+msgstr "Вирішити пізніше"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:80
 msgctxt "CreateProfileScreen"
 msgid "Welcome to OpenSpades"
-msgstr "OpenSpades 初回起動時設定"
+msgstr "Ласкаво просимо в OpenSpades"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:88
 msgctxt "CreateProfileScreen"
 msgid "Choose a player name:"
-msgstr "プレイヤー名を入力してください:"
+msgstr "Виберіть ім'я гравця:"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:96
 msgctxt "CreateProfileScreen"
 msgid "Player name"
-msgstr "プレイヤー名"
+msgstr "Ім'я гравця"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:104
 msgctxt "CreateProfileScreen"
 msgid "You can change it later in the Setup dialog."
-msgstr "プレイヤー名は「オプション」からいつでも変更できます。"
+msgstr "Ви можете змінити його пізніше в меню налаштувань."
 
 #: Resources/Scripts/Gui/MainScreen.as:376
 msgctxt "MainScreen"
 msgid "Connect"
-msgstr "接続"
+msgstr "Підключитись"
 
 #: Resources/Scripts/Gui/MainScreen.as:384
 msgctxt "MainScreen"
 msgid "Quick Connect"
-msgstr "クイック接続"
+msgstr "Швидке підключення"
 
 #: Resources/Scripts/Gui/MainScreen.as:393
 #: Resources/Scripts/Gui/MainScreen.as:447
@@ -505,179 +509,179 @@ msgstr "0.76"
 #: Resources/Scripts/Gui/MainScreen.as:411
 msgctxt "MainScreen"
 msgid "Quit"
-msgstr "終了"
+msgstr "Вийти"
 
 #: Resources/Scripts/Gui/MainScreen.as:418
 msgctxt "MainScreen"
 msgid "Credits"
-msgstr "クレジット"
+msgstr "Автори"
 
 #: Resources/Scripts/Gui/MainScreen.as:425
 msgctxt "MainScreen"
 msgid "Setup"
-msgstr "オプション"
+msgstr "Налаштування"
 
 #: Resources/Scripts/Gui/MainScreen.as:438
 #: Resources/Scripts/Gui/MainScreen.as:482
 msgctxt "MainScreen"
 msgid "Filter"
-msgstr "フィルタ"
+msgstr "Фільтр"
 
 #: Resources/Scripts/Gui/MainScreen.as:465
 msgctxt "MainScreen"
 msgid "Empty"
-msgstr "無人"
+msgstr "Пусті"
 
 #: Resources/Scripts/Gui/MainScreen.as:474
 msgctxt "MainScreen"
 msgid "Not Full"
-msgstr "空有り"
+msgstr "Неповні"
 
 #: Resources/Scripts/Gui/MainScreen.as:494
 msgctxt "MainScreen"
 msgid "Server Name"
-msgstr "サーバー名"
+msgstr "Ім'я серверу"
 
 #: Resources/Scripts/Gui/MainScreen.as:501
 msgctxt "MainScreen"
 msgid "Players"
-msgstr "プレイヤー数"
+msgstr "Гравці"
 
 #: Resources/Scripts/Gui/MainScreen.as:508
 msgctxt "MainScreen"
 msgid "Map Name"
-msgstr "マップ名"
+msgstr "Назва карти"
 
 #: Resources/Scripts/Gui/MainScreen.as:515
 msgctxt "MainScreen"
 msgid "Game Mode"
-msgstr "ゲームモード"
+msgstr "Режим гри"
 
 #: Resources/Scripts/Gui/MainScreen.as:522
 msgctxt "MainScreen"
 msgid "Ver."
-msgstr "Ver."
+msgstr "Верс."
 
 #: Resources/Scripts/Gui/MainScreen.as:529
 msgctxt "MainScreen"
 msgid "Loc."
-msgstr "国"
+msgstr "Кра."
 
 #: Resources/Scripts/Gui/MainScreen.as:787
 msgctxt "MainScreen"
 msgid "You were disconnected from the server because of the following reason:\n\n"
 "{0}"
-msgstr "サーバーから切断されました。理由は以下の通りです:\n\n"
+msgstr "Ви були відключені від сервера з такої причини:\n\n"
 "{0}"
 
 #: Resources/Scripts/Gui/MainScreen.as:807
 msgctxt "MainScreen"
 msgid "Loading..."
-msgstr "読み込み中..."
+msgstr "Завантаження..."
 
 #: Resources/Scripts/Gui/MainScreen.as:825
 msgctxt "MainScreen"
 msgid "Failed to fetch the server list."
-msgstr "サーバー一覧のダウンロード中にエラーが発生しました。"
+msgstr "Не вдалось отримати список серверів."
 
 #: Resources/Scripts/Gui/MessageBox.as:130
 #: Resources/Scripts/Gui/MessageBox.as:144
 msgctxt "MessageBox"
 msgid "OK"
-msgstr "OK"
+msgstr "ОК"
 
 #: Resources/Scripts/Gui/MessageBox.as:144
 msgctxt "MessageBox"
 msgid "Cancel"
-msgstr "キャンセル"
+msgstr "Скасувати"
 
 #: Resources/Scripts/Gui/Preferences.as:60
 msgctxt "Preferences"
 msgid "Game Options"
-msgstr "ゲームオプション"
+msgstr "Налаштування гри"
 
 #: Resources/Scripts/Gui/Preferences.as:61
 msgctxt "Preferences"
 msgid "Controls"
-msgstr "操作"
+msgstr "Управління"
 
 #: Resources/Scripts/Gui/Preferences.as:62
 #: Resources/Scripts/Gui/Preferences.as:663
 #: Resources/Scripts/Gui/Preferences.as:708
 msgctxt "Preferences"
 msgid "Misc"
-msgstr "その他"
+msgstr "Різне"
 
 #: Resources/Scripts/Gui/Preferences.as:66
 msgctxt "Preferences"
 msgid "Back"
-msgstr "戻る"
+msgstr "Назад"
 
 #: Resources/Scripts/Gui/Preferences.as:407
 msgctxt "Preferences"
 msgid "Press Key to Bind or [Escape] to Cancel..."
-msgstr "割り当てるキーを押下して下さい。[Esc]でキャンセルします..."
+msgstr "Натисніть клавішу для прив'язки або [Esc] для Скасування..."
 
 #: Resources/Scripts/Gui/Preferences.as:418
 msgctxt "Preferences"
 msgid "Space"
-msgstr "スペース"
+msgstr "Пробіл"
 
 #: Resources/Scripts/Gui/Preferences.as:420
 msgctxt "Preferences"
 msgid "Unbound"
-msgstr "未割り当て"
+msgstr "Не назначено"
 
 #: Resources/Scripts/Gui/Preferences.as:423
 msgctxt "Preferences"
 msgid "Shift"
-msgstr "Shiftキー"
+msgstr "Shift"
 
 #: Resources/Scripts/Gui/Preferences.as:425
 msgctxt "Preferences"
 msgid "Control"
-msgstr "Controlキー"
+msgstr "Control"
 
 #: Resources/Scripts/Gui/Preferences.as:427
 msgctxt "Preferences"
 msgid "Meta"
-msgstr "メタキー"
+msgstr "Meta"
 
 #: Resources/Scripts/Gui/Preferences.as:429
 msgctxt "Preferences"
 msgid "Alt"
-msgstr "Altキー"
+msgstr "Alt"
 
 #: Resources/Scripts/Gui/Preferences.as:431
 msgctxt "Preferences"
 msgid "Left Mouse Button"
-msgstr "左マウスボタン"
+msgstr "Ліва кнопка миші"
 
 #: Resources/Scripts/Gui/Preferences.as:433
 msgctxt "Preferences"
 msgid "Right Mouse Button"
-msgstr "右マウスボタン"
+msgstr "Права кнопка миші"
 
 #: Resources/Scripts/Gui/Preferences.as:435
 msgctxt "Preferences"
 msgid "Middle Mouse Button"
-msgstr "中央マウスボタン"
+msgstr "Середня кнопка миші"
 
 #: Resources/Scripts/Gui/Preferences.as:437
 msgctxt "Preferences"
 msgid "Mouse Button 4"
-msgstr "マウスボタン4"
+msgstr "Кнопка миші 4"
 
 #: Resources/Scripts/Gui/Preferences.as:439
 msgctxt "Preferences"
 msgid "Mouse Button 5"
-msgstr "マウスボタン5"
+msgstr "Кнопка миші 5"
 
 #: Resources/Scripts/Gui/Preferences.as:613
 #: Resources/Scripts/Gui/Preferences.as:619
 msgctxt "Preferences"
 msgid "ON"
-msgstr "ON"
+msgstr "ВКЛ"
 
 #: Resources/Scripts/Gui/Preferences.as:613
 #: Resources/Scripts/Gui/Preferences.as:619
@@ -685,385 +689,385 @@ msgstr "ON"
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "OFF"
-msgstr "OFF"
+msgstr "ВИКЛ"
 
 #: Resources/Scripts/Gui/Preferences.as:619
 msgctxt "Preferences"
 msgid "REVERSED"
-msgstr "反転"
+msgstr "ІНВЕРТОВАНО"
 
 #: Resources/Scripts/Gui/Preferences.as:637
 msgctxt "Preferences"
 msgid "Player Information"
-msgstr "プレイヤー情報"
+msgstr "Інформація про гравця"
 
 #: Resources/Scripts/Gui/Preferences.as:638
 msgctxt "Preferences"
 msgid "Player Name"
-msgstr "プレイヤー名"
+msgstr "Ім'я гравця"
 
 #: Resources/Scripts/Gui/Preferences.as:642
 msgctxt "Preferences"
 msgid "Effects"
-msgstr "エフェクト"
+msgstr "Ефекти"
 
 #: Resources/Scripts/Gui/Preferences.as:643
 msgctxt "Preferences"
 msgid "Blood"
-msgstr "流血表現"
+msgstr "Кров"
 
 #: Resources/Scripts/Gui/Preferences.as:644
 msgctxt "Preferences"
 msgid "Ejecting Brass"
-msgstr "薬莢"
+msgstr "Гільзи"
 
 #: Resources/Scripts/Gui/Preferences.as:645
 msgctxt "Preferences"
 msgid "Ragdoll"
-msgstr "ラグドール表現"
+msgstr "Фізика Ragdoll"
 
 #: Resources/Scripts/Gui/Preferences.as:646
 msgctxt "Preferences"
 msgid "Animations"
-msgstr "アニメーション"
+msgstr "Анімація"
 
 #: Resources/Scripts/Gui/Preferences.as:647
 msgctxt "Preferences"
 msgid "Camera Shake"
-msgstr "カメラの揺れ"
+msgstr "Тремтіння камери"
 
 #: Resources/Scripts/Gui/Preferences.as:648
 msgctxt "Preferences"
 msgid "MORE"
-msgstr "多め"
+msgstr "БІЛЬШЕ"
 
 #: Resources/Scripts/Gui/Preferences.as:648
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "NORMAL"
-msgstr "標準"
+msgstr "СЕРЕДНЬО"
 
 #: Resources/Scripts/Gui/Preferences.as:650
 msgctxt "Preferences"
 msgid "Particles"
-msgstr "パーティクル"
+msgstr "Частинки"
 
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "LESS"
-msgstr "少なめ"
+msgstr "МЕНШЕ"
 
 #: Resources/Scripts/Gui/Preferences.as:654
 msgctxt "Preferences"
 msgid "Feedbacks"
-msgstr "通知"
+msgstr "Зворотний зв'язок"
 
 #: Resources/Scripts/Gui/Preferences.as:655
 msgctxt "Preferences"
 msgid "Chat Notify Sounds"
-msgstr "チャット新着通知音"
+msgstr "Звуки повідомлень чату"
 
 #: Resources/Scripts/Gui/Preferences.as:656
 msgctxt "Preferences"
 msgid "Hit Indicator"
-msgstr "命中表示"
+msgstr "Індикатор попадання"
 
 #: Resources/Scripts/Gui/Preferences.as:657
 msgctxt "Preferences"
 msgid "Show Alerts"
-msgstr "アラートを表示"
+msgstr "Показувати оповіщення"
 
 #: Resources/Scripts/Gui/Preferences.as:659
 msgctxt "Preferences"
 msgid "AoS 0.75/0.76 Compatibility"
-msgstr "AoS 0.75/0.76 互換性"
+msgstr "Сумісність з AoS 0.75/0.76"
 
 #: Resources/Scripts/Gui/Preferences.as:660
 msgctxt "Preferences"
 msgid "Allow Unicode"
-msgstr "Unicodeの送信を許可"
+msgstr "Дозволити Юнікод"
 
 #: Resources/Scripts/Gui/Preferences.as:661
 msgctxt "Preferences"
 msgid "Server Alert"
-msgstr "サーバーアラート"
+msgstr "Оповіщення серверу"
 
 #: Resources/Scripts/Gui/Preferences.as:664
 msgctxt "Preferences"
 msgid "Field of View"
-msgstr "視界"
+msgstr "Поле зору"
 
 #: Resources/Scripts/Gui/Preferences.as:666
 msgctxt "Preferences"
 msgid "Minimap size"
-msgstr "ミニマップのサイズ"
+msgstr "Розмір мінікарти"
 
 #: Resources/Scripts/Gui/Preferences.as:668
 msgctxt "Preferences"
 msgid "Show Statistics"
-msgstr "統計情報を表示"
+msgstr "Показувати статистику"
 
 #: Resources/Scripts/Gui/Preferences.as:678
 msgctxt "Preferences"
 msgid "Weapons/Tools"
-msgstr "武器/道具"
+msgstr "Зброя/Інструменти"
 
 #: Resources/Scripts/Gui/Preferences.as:679
 msgctxt "Preferences"
 msgid "Attack"
-msgstr "攻撃"
+msgstr "Атака"
 
 #: Resources/Scripts/Gui/Preferences.as:680
 msgctxt "Preferences"
 msgid "Alt. Attack"
-msgstr "副攻撃"
+msgstr "Альт. атака"
 
 #: Resources/Scripts/Gui/Preferences.as:681
 msgctxt "Preferences"
 msgid "Hold Aim Down Sight"
-msgstr "ホールドしてADS"
+msgstr "Утримувати для прицілу"
 
 #: Resources/Scripts/Gui/Preferences.as:682
 msgctxt "Preferences"
 msgid "Mouse Sensitivity"
-msgstr "マウス速度"
+msgstr "Чутливість миші"
 
 #: Resources/Scripts/Gui/Preferences.as:684
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
-msgstr "ADS時マウス速度"
+msgstr "Чутл. прицілу"
 
 #: Resources/Scripts/Gui/Preferences.as:686
 msgctxt "Preferences"
 msgid "Exponential Power"
-msgstr "マウス加速指数"
+msgstr "Сила по експоненті"
 
 #: Resources/Scripts/Gui/Preferences.as:688
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
-msgstr "Y軸の入力を反転"
+msgstr "Інверсія Y-осі миші"
 
 #: Resources/Scripts/Gui/Preferences.as:689
 msgctxt "Preferences"
 msgid "Reload"
-msgstr "リロード"
+msgstr "Перезарядка"
 
 #: Resources/Scripts/Gui/Preferences.as:690
 msgctxt "Preferences"
 msgid "Capture Color"
-msgstr "色をコピー"
+msgstr "Захоплення кольору"
 
 #: Resources/Scripts/Gui/Preferences.as:691
 msgctxt "Preferences"
 msgid "Equip Spade"
-msgstr "スペードを装備"
+msgstr "Взяти лопату"
 
 #: Resources/Scripts/Gui/Preferences.as:692
 msgctxt "Preferences"
 msgid "Equip Block"
-msgstr "ブロックを装備"
+msgstr "Взяти блок"
 
 #: Resources/Scripts/Gui/Preferences.as:693
 msgctxt "Preferences"
 msgid "Equip Weapon"
-msgstr "銃を装備"
+msgstr "Взяти зброю"
 
 #: Resources/Scripts/Gui/Preferences.as:694
 msgctxt "Preferences"
 msgid "Equip Grenade"
-msgstr "手榴弾を装備"
+msgstr "Взяти гранату"
 
 #: Resources/Scripts/Gui/Preferences.as:695
 msgctxt "Preferences"
 msgid "Last Used Tool"
-msgstr "最後に使用したツール"
+msgstr "Останній інструмент"
 
 #: Resources/Scripts/Gui/Preferences.as:696
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
-msgstr "ホイールで装備切替"
+msgstr "Вибір інстр. колесом миші"
 
 #: Resources/Scripts/Gui/Preferences.as:698
 msgctxt "Preferences"
 msgid "Movement"
-msgstr "移動"
+msgstr "Переміщення"
 
 #: Resources/Scripts/Gui/Preferences.as:699
 msgctxt "Preferences"
 msgid "Walk Forward"
-msgstr "前方に移動"
+msgstr "Йти вперед"
 
 #: Resources/Scripts/Gui/Preferences.as:700
 msgctxt "Preferences"
 msgid "Backpedal"
-msgstr "後方に移動"
+msgstr "Йти назад"
 
 #: Resources/Scripts/Gui/Preferences.as:701
 msgctxt "Preferences"
 msgid "Move Left"
-msgstr "左に移動"
+msgstr "Йти наліво"
 
 #: Resources/Scripts/Gui/Preferences.as:702
 msgctxt "Preferences"
 msgid "Move Right"
-msgstr "右に移動"
+msgstr "Йти направо"
 
 #: Resources/Scripts/Gui/Preferences.as:703
 msgctxt "Preferences"
 msgid "Crouch"
-msgstr "しゃがむ"
+msgstr "Присісти"
 
 #: Resources/Scripts/Gui/Preferences.as:704
 msgctxt "Preferences"
 msgid "Sneak"
-msgstr "歩く"
+msgstr "Крастися"
 
 #: Resources/Scripts/Gui/Preferences.as:705
 msgctxt "Preferences"
 msgid "Jump"
-msgstr "ジャンプ"
+msgstr "Стрибок"
 
 #: Resources/Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Sprint"
-msgstr "全力疾走"
+msgstr "Біг"
 
 #: Resources/Scripts/Gui/Preferences.as:709
 msgctxt "Preferences"
 msgid "Minimap Scale"
-msgstr "ミニマップ縮尺切替"
+msgstr "Масштаб мінікарти"
 
 #: Resources/Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Toggle Map"
-msgstr "マップ拡大"
+msgstr "Показати карту"
 
 #: Resources/Scripts/Gui/Preferences.as:711
 msgctxt "Preferences"
 msgid "Flashlight"
-msgstr "ヘッドライト"
+msgstr "Ліхтарик"
 
 #: Resources/Scripts/Gui/Preferences.as:712
 msgctxt "Preferences"
 msgid "Global Chat"
-msgstr "全体チャット"
+msgstr "Загальний чат"
 
 #: Resources/Scripts/Gui/Preferences.as:713
 msgctxt "Preferences"
 msgid "Team Chat"
-msgstr "チームチャット"
+msgstr "Командний чат"
 
 #: Resources/Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Limbo Menu"
-msgstr "武器・チーム切替"
+msgstr "Меню вибору"
 
 #: Resources/Scripts/Gui/Preferences.as:715
 msgctxt "Preferences"
 msgid "Save Map"
-msgstr "マップを保存"
+msgstr "Зберегти карту"
 
 #: Resources/Scripts/Gui/Preferences.as:716
 msgctxt "Preferences"
 msgid "Save Sceneshot"
-msgstr "シーンショット"
+msgstr "Зберегти сценшот"
 
 #: Resources/Scripts/Gui/Preferences.as:717
 msgctxt "Preferences"
 msgid "Save Screenshot"
-msgstr "スクリーンショット"
+msgstr "Зберегти скріншот"
 
 #: Resources/Scripts/Gui/Preferences.as:736
 msgctxt "Preferences"
 msgid "Enable Startup Window"
-msgstr "スタートアップウィンドウを有効化"
+msgstr "Включити стартове вікно"
 
 #: Resources/Scripts/Gui/Preferences.as:757
 msgctxt "Preferences"
 msgid "Quit and restart OpenSpades to access the startup window."
-msgstr "スタートアップウィンドウを表示するにはOpenSpadesを再起動してください。"
+msgstr "Вийти і перезапустити OpenSpades для доступу до стартового вікна."
 
 #: Resources/Scripts/Gui/Preferences.as:758
 msgctxt "Preferences"
 msgid "Some settings only can be changed in the startup window."
-msgstr "一部の設定はスタートアップウィンドウでのみ変更が可能です。"
+msgstr "Деякі налаштування можуть бути змінені тільки у стартовому вікні."
 
 #: Resources/Scripts/Gui/StartupScreen.as:160
 msgctxt "StartupScreen"
 msgid "Start"
-msgstr "スタート"
+msgstr "Запуск"
 
 #: Resources/Scripts/Gui/StartupScreen.as:167
 msgctxt "StartupScreen"
 msgid "Skip this screen next time"
-msgstr "次回起動時はこの画面を表示しない"
+msgstr "Не показувати наступного разу"
 
 #: Resources/Scripts/Gui/StartupScreen.as:211
 msgctxt "StartupScreen"
 msgid "Graphics"
-msgstr "映像"
+msgstr "Графіка"
 
 #: Resources/Scripts/Gui/StartupScreen.as:212
 msgctxt "StartupScreen"
 msgid "Audio"
-msgstr "音声"
+msgstr "Аудіо"
 
 #: Resources/Scripts/Gui/StartupScreen.as:213
 msgctxt "StartupScreen"
 msgid "Generic"
-msgstr "一般"
+msgstr "Загальні"
 
 #: Resources/Scripts/Gui/StartupScreen.as:214
 msgctxt "StartupScreen"
 msgid "System Info"
-msgstr "システム情報"
+msgstr "Систем. інфо"
 
 #: Resources/Scripts/Gui/StartupScreen.as:215
 #: Resources/Scripts/Gui/StartupScreen.as:1679
 msgctxt "StartupScreen"
 msgid "Advanced"
-msgstr "高度な設定"
+msgstr "Розширені"
 
 #: Resources/Scripts/Gui/StartupScreen.as:288
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the update info website."
-msgstr "更新情報のウェブサイトを開いている最中に不明なエラーが発生しました。"
+msgstr "Виникла невідома помилка при відкритті сайту з інформацією про обновлення."
 
 #: Resources/Scripts/Gui/StartupScreen.as:853
 msgctxt "StartupScreen"
 msgid "Custom"
-msgstr "カスタム"
+msgstr "Інше"
 
 #: Resources/Scripts/Gui/StartupScreen.as:979
 msgctxt "StartupScreen"
 msgid "Close"
-msgstr "閉じる"
+msgstr "Закрити"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1085
 msgctxt "StartupScreen"
 msgid "Graphics Settings"
-msgstr "グラフィックス設定"
+msgstr "Графічні налаштування"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1090
 msgctxt "StartupScreen"
 msgid "Resolution"
-msgstr "画面解像度"
+msgstr "Роздільність"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1100
 msgctxt "StartupScreen"
 msgid "Fullscreen Mode"
-msgstr "フルスクリーンモード"
+msgstr "Повноекранний режим"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
 msgid "By running in fullscreen mode OpenSpades occupies the screen, making it easier for you to concentrate on playing the game."
-msgstr "フルスクリーンモードを使用すると画面全体を占領してプレイできるため、ゲームに集中しやすくなります。"
+msgstr "При запуску в повноекранному режимі, OpenSpades займає весь екран, що полегшує вашу концентрацію у грі."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1110
 #: Resources/Scripts/Gui/StartupScreen.as:1492
 msgctxt "StartupScreen"
 msgid "Backend"
-msgstr "バックエンド"
+msgstr "Рендер"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1113
 msgctxt "StartupScreen"
@@ -1073,247 +1077,247 @@ msgstr "OpenGL"
 #: Resources/Scripts/Gui/StartupScreen.as:1117
 msgctxt "StartupScreen"
 msgid "OpenGL renderer uses your computer's graphics accelerator to generate the game screen."
-msgstr "OpenGLレンダラーはコンピュータに内蔵されたGPUを使用してゲーム画面を描画します。"
+msgstr "Рендер OpenGL використовує графічний прискорювач комп'ютера для генерації зображення."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1125
 msgctxt "StartupScreen"
 msgid "Software"
-msgstr "ソフトウェア"
+msgstr "Програмний"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1129
 msgctxt "StartupScreen"
 msgid "Software renderer uses CPU to generate the game screen. Its quality and performance might be inferior to OpenGL renderer, but it works even with an unsupported GPU."
-msgstr "ソフトウェアレンダラーはCPUを使用してゲーム画面を描画します。画質やパフォーマンスはOpenGLには劣りますが、未対応GPUでも確実に動作します。"
+msgstr "Програмній рендер використовує ЦП для генерації зображення. Його якість та продуктивність може бути нижче рендеру OpenGL, але він працює навіть з непідтримуваними відеокартами."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1143
 msgctxt "StartupScreen"
 msgid "Antialias:Enables a technique to improve the appearance of high-contrast edges.\n\n"
 "MSAA: Performs antialiasing by generating an intermediate high-resolution image. Looks best, but doesn't cope with some settings.\n\n"
 "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|Off|MSAA 2x|4x|FXAA"
-msgstr "アンチエイリアシング:オブジェクトの輪郭に発生する階段上のギザギザ(ジャギー)を除去する手法を有効にします。\n\n"
-"MSAA: 中間的に画面より数倍程度の高解像度な画像を生成しアンチエイリアシングを行います。見た目は最も良くなりますが、一部の設定と相性が悪い場合があります。\n\n"
-"FXAA: 描画された画像からジャギーを検出してぼかすことによりアンチエイリアシングを行います。|オフ|MSAA 2x|4x|FXAA"
+msgstr "Згладжування:Включає метод покращення зовнішнього виду високо-контрастних граней.\n\n"
+"MSAA: Виконує згладжування за допомогою генерації проміжного зображення з високою роздільною здатністю. Виглядає краще, але не справляється з деякими налаштуваннями.\n\n"
+"FXAA: виконує згладжування за допомогою розмиття артефактів у постобробці.|Викл|MSAA 2x|4x|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
 msgid "Global Illumination"
-msgstr "大域照明"
+msgstr "Глобальне освітлення"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1152
 msgctxt "StartupScreen"
 msgid "Enables a physically based simulation of light path for more realistic lighting."
-msgstr "物理的に正確な計算手法を使用することにより、より写実的な光表現を行います。"
+msgstr "Включає фізичне моделювання світових променів для більш реалістичного освітлення."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1155
 msgctxt "StartupScreen"
 msgid "Linear HDR Rendering"
-msgstr "線形色空間HDRレンダリング"
+msgstr "Лінійний HDR рендеринг"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
 msgid "Uses a number representation which allows wider dynamic range during rendering process. Additionally, this allows color calculation whose value is in linear correspondence with actual energy, that is, physically accurate blending can be achieved."
-msgstr "より幅広いダイナミックレンジを表現可能な数値の表現方法をレンダリング処理に使用します。これにより実際のエネルギー量と線形関係のある値を使用して色を表現できるため物理的に正確なブレンディングを行うことができます。"
+msgstr "Використовує ряд представлень, які дозволяють використовувати більш широкий динамічний діапазон протягом рендерингу. Крім того, це дозволяє розрахувати кольори, значення яких знаходяться в лінійній відповідності з фактичною енергією, тобто, може бути досягнуте фізично точне змішування."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
 msgid "Camera Blur"
-msgstr "カメラブラー"
+msgstr "Розмиття камери"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1165
 msgctxt "StartupScreen"
 msgid "Blurs the screen when you turn quickly."
-msgstr "視点が動いた際のブレを再現します。"
+msgstr "Розмиває екран, коли ви швидко повертаєтесь."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1167
 msgctxt "StartupScreen"
 msgid "Lens Effect"
-msgstr "レンズ効果"
+msgstr "Ефект лінзи"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1168
 msgctxt "StartupScreen"
 msgid "Simulates distortion caused by a real camera lens."
-msgstr "現実世界のレンズの歪みをシミュレートします。"
+msgstr "Симулює викривлення, викликані лінзами реальної камери."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1170
 msgctxt "StartupScreen"
 msgid "Lens Scattering Filter"
-msgstr "レンズ散乱フィルタ"
+msgstr "Фільтр розсіювання об'єктиву"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1171
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
-msgstr "レンズの汚れによる光の散乱を再現します。"
+msgstr "Імітує розсіювання світу пилом на лінзі камери."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1174
 msgctxt "StartupScreen"
 msgid "Lens Flare"
-msgstr "レンズフレア"
+msgstr "Відблиски лінзи"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid "The Sun causes lens flare."
-msgstr "太陽を直視したときにレンズフレアを描画します。"
+msgstr "Сонце викликає відблиски лінзи."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1177
 msgctxt "StartupScreen"
 msgid "Flares for Dynamic Lights"
-msgstr "動的ライトにレンズフレア"
+msgstr "Відблиски динамічного світла"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1178
 msgctxt "StartupScreen"
 msgid "Enables lens flare for light sources other than the Sun."
-msgstr "太陽以外の光源を直視したときにレンズフレアを描画します。"
+msgstr "Вмикає відблиски світла для інших джерел світла, окрім Сонця."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1180
 msgctxt "StartupScreen"
 msgid "Color Correction"
-msgstr "色調補正"
+msgstr "Корекція кольору"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1181
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
-msgstr "色調補正を適用することにより見た目を改善します。"
+msgstr "Застосовує кінематографічну корекцію світла для кращого зображення."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1183
 msgctxt "StartupScreen"
 msgid "Depth of Field"
-msgstr "被写界深度"
+msgstr "Глибина різкості"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1184
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
-msgstr "ピントの合っていない物体をぼかします。"
+msgstr "Розмиває об'єкти поза фокусом."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1186
 msgctxt "StartupScreen"
 msgid "Screen Space Ambient Occlusion"
-msgstr "スクリーンスペースAO"
+msgstr "SSAO"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1187
 msgctxt "StartupScreen"
 msgid "Simulates soft shadows that occur between nearby objects."
-msgstr "近接する物体の間に生じるソフトシャドウをシミュレートします。"
+msgstr "Імітує м'які тіні, які виникають між близькими об'єктами."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1189
 #: Resources/Scripts/Gui/StartupScreen.as:1228
 #: Resources/Scripts/Gui/StartupScreen.as:1250
 msgctxt "StartupScreen"
 msgid "Low"
-msgstr "低"
+msgstr "Низько"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1190
 #: Resources/Scripts/Gui/StartupScreen.as:1229
 msgctxt "StartupScreen"
 msgid "Medium"
-msgstr "中"
+msgstr "Середньо"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1191
 #: Resources/Scripts/Gui/StartupScreen.as:1230
 #: Resources/Scripts/Gui/StartupScreen.as:1252
 msgctxt "StartupScreen"
 msgid "High"
-msgstr "高"
+msgstr "Високо"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1192
 #: Resources/Scripts/Gui/StartupScreen.as:1253
 msgctxt "StartupScreen"
 msgid "Ultra"
-msgstr "最高"
+msgstr "Ультра"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1195
 msgctxt "StartupScreen"
 msgid "Post-process"
-msgstr "後処理"
+msgstr "Постобробка"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
 msgid "Post-process modifies the image to make it look better and more realistic."
-msgstr "後処理により描画された画面を加工しより良く見せます。"
+msgstr "Постобробка видозмінює зображення, щоб зробити його кращим та більш реалістичним."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1203
 msgctxt "StartupScreen"
 msgid "Particles|Low:Artifact occurs when a particle intersects other objects.|Medium:Particle intersects objects smoothly.|High:Particle intersects objects smoothly, and some objects casts their shadow to particles."
-msgstr "パーティクル|低:パーティクルが他のオブジェクトと交差すると鋭い境界が現れます。|中:パーティクルは他のオブジェクトと滑らかに交わります。|高:パーティクルは他のオブジェクトと滑らかに交わります。また一部のオブジェクトがパーティクルに影を落とします。"
+msgstr "Частинки|Низько:Коли частинка пересікає інші об'єкти, з'являються артефакти.|Середнє:Частинка пересікає об'єкти плавно.|Високо:Частинка пересікає об'єкти плавно, деякі об'єкти відкидають свою тінь на частинки."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1213
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
-msgstr "動的ライト"
+msgstr "Динамічне освітлення"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1215
 msgctxt "StartupScreen"
 msgid "Gives some objects an ability to emit light to give them an energy-emitting impression."
-msgstr "一部のオブジェクトが発光するようにし、エネルギーを発しているような印象を与えます。"
+msgstr "Дає деяким об'єктам можливість випромінювати світло для придання їм враження випромінювання енергії."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1218
 msgctxt "StartupScreen"
 msgid "Shadows"
-msgstr "影"
+msgstr "Тіні"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1219
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
-msgstr "動的なオブジェクトも影が描画されるようにします。"
+msgstr "Нестатичні об'єкти відкидають тінь."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1221
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
-msgstr "ボリューメトリックフォグ"
+msgstr "Об'ємний туман"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1222
 msgctxt "StartupScreen"
 msgid "Simulates shadow being casted to the fog particles using a super highly computationally demanding algorithm. "
-msgstr "非常に計算量が膨大なアルゴリズムを使用することにより、大気中の霧の粒子に影が落とされる様子をシミュレーションします。"
+msgstr "Імітує відкидання тіні частинками туману використовуючи дуже ресурсоємкий алгоритм. "
 
 #: Resources/Scripts/Gui/StartupScreen.as:1225
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
-msgstr "物理ベースライティング"
+msgstr "Освітлення на фізичній основі"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1226
 msgctxt "StartupScreen"
 msgid "Uses more accurate approximation techniques to decide the brightness of objects."
-msgstr "直接反射光の明るさを物理的に正確な手法を用いて計算します。"
+msgstr "Використовую більш точні методи апроксимації для визначення яскравості об'єктів."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1233
 msgctxt "StartupScreen"
 msgid "Direct Lights"
-msgstr "直接光"
+msgstr "Пряме світло"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
 msgid "Controls how light encounting a material and atmosphere directly affects its appearance."
-msgstr "物体(大気含む)に直接当たった光がどのようにその外観に影響するかを制御します。"
+msgstr "Регулює як зіткнення світла з матеріалом і атмосферою безпосередньо впливає на їх зовнішній вигляд."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1244
 msgctxt "StartupScreen"
 msgid "Water Shader|None:Water is rendered in the same way that normal blocks are done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving water is simulated as well as reflection and refraction.|Level 3:Reflections and refractions are rendered at the highest quality using screen-space techniques."
-msgstr "水シェーダー|オフ:水は通常のブロックと同じように描画されます。|レベル 1:屈折と太陽光の反射が描画されます。|レベル 2:屈折・太陽光の反射に加え、波やその他の反射も描画されます。|レベル 3:スクリーンスペース手法を用いることにより、屈折と反射を最高品質で描画します。"
+msgstr "Шейдери води|Викл:Рендер води проходить так само як і рендер блоків.|1 рівень:Симулюється заломлення світла і відбиття Сонця.|2 рівень:Коливання води симулюються в доповнення заломленню і відбиттю.|3 рівень:Відбиття та заломлення відображаються з найкращою якістю, використовуючи техніки екранного простору."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1251
 msgctxt "StartupScreen"
 msgid "Med"
-msgstr "中"
+msgstr "Середньо"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid "Shader Effects"
-msgstr "シェーダー効果"
+msgstr "Шейдерні ефекти"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid "Special effects."
-msgstr "特殊効果。"
+msgstr "Спеціальні ефекти."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1273
 msgctxt "StartupScreen"
 msgid "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|4x"
-msgstr "高速モード:画面解像度を低下させ、描画を高速化します。|オフ|2x|4x"
+msgstr "Швидкий режим:Зменшує роздільність зображення для більш швидкого рендерингу.|Викл|2x|4x"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1486
 msgctxt "StartupScreen"
 msgid "Audio Settings"
-msgstr "音声の設定"
+msgstr "Налаштування аудіо"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1495
 msgctxt "StartupScreen"
@@ -1323,7 +1327,7 @@ msgstr "OpenAL"
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
 msgid "Uses an OpenAL-capable sound card to process sound. In most cases where there isn't such a sound card, software emulation is used."
-msgstr "OpenALに対応したサウンドカードを使用して音声を処理します。ほとんどの場合このようなサウンドカードがありませんので、ソフトウェアエミュレーションが使用されます。"
+msgstr "Використовує OpenAL-сумісну звукову карту для обробки звуку. В більшості випадків, коли немає такої звукової карти, використовується програмна емуляція."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1508
 msgctxt "StartupScreen"
@@ -1333,29 +1337,29 @@ msgstr "YSR"
 #: Resources/Scripts/Gui/StartupScreen.as:1512
 msgctxt "StartupScreen"
 msgid "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It features several enhanced features including automatic load control, dynamics compressor, HRTF-based 3D audio, and high quality reverb."
-msgstr "YSRはOpenSpadesに最適化された、実験的な3D HDRサウンドエンジンです。自動負荷制御やダイナミクスコンプレッサー、HRTFベースの立体音響や高音質リバーブエフェクタを備えています。"
+msgstr "YSR - це експериментальний 3D HDR звуковий рушій, оптимізований для OpenSpades. Він включає в себе декілька розширених функцій, таких як автоматичний контроль навантаження, динамічну компресію, 3D звук, базований на HRTF, і високоякісну реверберацію."
 
 #. ! The name of audio driver that outputs no audio.
 #: Resources/Scripts/Gui/StartupScreen.as:1523
 msgctxt "StartupScreen"
 msgid "Null"
-msgstr "ヌル"
+msgstr "Відкл"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1527
 msgctxt "StartupScreen"
 msgid "Disables audio output."
-msgstr "オーディオ出力を無効にします。"
+msgstr "Відключити вивід аудіо."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1538
 #: Resources/Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
 msgid "Polyphonics"
-msgstr "最大同時発音数"
+msgstr "Поліфоніка"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1539
 msgctxt "StartupScreen"
 msgid "Specifies how many sounds can be played simultaneously. Higher value needs more processing power, so setting this too high might cause an overload (especially with a software emulation)."
-msgstr "同時に発音可能な音声の個数を指定します。この値が大きいと必要な処理能力も増大するため、特にソフトウェアエミュレーションにおいて過負荷状態を生じることがあります。"
+msgstr "Визначає кількість звуків, що можуть програватися одночасно. Вищі значення потребують більшу обчислювальну потужність, тому виставлення занадто високих значень може привести до перевантаження (особливо з програмною емуляцією)."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1546
 msgctxt "StartupScreen"
@@ -1365,136 +1369,136 @@ msgstr "EAX"
 #: Resources/Scripts/Gui/StartupScreen.as:1547
 msgctxt "StartupScreen"
 msgid "Enables extended features provided by the OpenAL driver to create more ambience."
-msgstr "OpenALドライバが提供する拡張機能を利用して臨場感を高めます。"
+msgstr "Включає розширені особливості, які забезпечуються OpenAL, для відтворення більшої атмосфери оточення."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1563
 msgctxt "StartupScreen"
 msgid "Specifies how many sounds can be played simultaneously. No matter what value is set, YSR might reduce the number of sounds when an overload is detected."
-msgstr "同時に発音可能な音声の個数を指定します。この値によらず、YSRは過負荷を防ぐために同時発音数を減らすことがあります。"
+msgstr "Визначає кількість звуків, що можуть програватися одночасно. Незважаючи на встановлене значення, YSR може зменшити кількість звуків, якщо виявлено перевантаження."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1623
 msgctxt "StartupScreen"
 msgid "Language"
-msgstr "言語"
+msgstr "Мова"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1635
 msgctxt "StartupScreen"
 msgid "Tools"
-msgstr "ツール"
+msgstr "Інструменти"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1638
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
-msgstr "設定を全てリセット"
+msgstr "Скинути всі налаштування"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1647
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
-msgstr "設定フォルダをエクスプローラで開く"
+msgstr "Відкрити папку конфігурації в провіднику"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1649
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
-msgstr "設定フォルダをFinderで表示"
+msgstr "Виявити папку конфігурації у пошуку"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1651
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
-msgstr "設定フォルダを開く"
+msgstr "Переглянути папку з конфігурацією"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1668
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
-msgstr "設定ディレクトリを開いている最中に不明なエラーが発生しました。"
+msgstr "Виникла невідома помилка при відкритті папки конфігурації."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1674
 msgctxt "StartupScreen"
 msgid "Are you sure to reset all settings? They include (but are not limited to):"
-msgstr "設定を全てリセットしますか？対象となる設定には以下のものが含まれます:"
+msgstr "Ви впевнені, що бажаєте скинути всі налаштування? Включаючи (але не обмежуючись тільки ними):"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1675
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
-msgstr "全ての映像・音声設定"
+msgstr "Всі графічні та аудіо налаштування"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1676
 msgctxt "StartupScreen"
 msgid "All key bindings"
-msgstr "全てのキー割り当て"
+msgstr "Всі прив'язки клавіш"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1677
 msgctxt "StartupScreen"
 msgid "Your player name"
-msgstr "プレイヤー名"
+msgstr "Ваше ім'я гравця"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1678
 msgctxt "StartupScreen"
 msgid "Other advanced settings only accessible through '{0}' tab and in-game commands"
-msgstr "その他の高度な設定"
+msgstr "Інші розширені налаштування, доступні тільки через вкладку '{0}' та внутрішньоігрові команди"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1748
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
-msgstr "不明 ({0})"
+msgstr "Невідом. ({0})"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1750
 #: Resources/Scripts/Gui/StartupScreen.as:1764
 msgctxt "StartupScreen"
 msgid "System default"
-msgstr "システムデフォルト"
+msgstr "Системний за замовчуванням"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1813
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
-msgstr "クリップボードにコピー"
+msgstr "Копіювати у буфер обміну"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1849
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
-msgstr "高度な設定"
+msgstr "Розширені налаштування"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1858
 msgctxt "StartupScreen"
 msgid "Filter"
-msgstr "フィルタ"
+msgstr "Фільтр"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:40
 msgctxt "UpdateCheck"
 msgid "Enable"
-msgstr "有効化"
+msgstr "Включити"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:47
 msgctxt "UpdateCheck"
 msgid "Show details..."
-msgstr "詳細を表示..."
+msgstr "Детальніше..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 msgctxt "UpdateCheck"
 msgid "Version {0} is available! (You currently have {1})"
-msgstr "バージョン {0} が入手できます! (現在は {1} を使用中)"
+msgstr "Версія {0} доступна! (Ви зараз використовуєте {1})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 msgctxt "UpdateCheck"
 msgid "You're using the latest version of OpenSpades. ({0})"
-msgstr "このOpenSpadesは最新版です。({0})"
+msgstr "Ви використовуєте останню версію OpenSpades. ({0})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
 msgctxt "UpdateCheck"
 msgid "Checking for updates..."
-msgstr "アップデートを確認中..."
+msgstr "Перевірка оновлень..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
 msgctxt "UpdateCheck"
 msgid "Failed to check for updates."
-msgstr "アップデートの確認に失敗しました。"
+msgstr "Помилка перевірки оновлень."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:116
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not enabled."
-msgstr "アップデートの自動チェックは無効になっています。"
+msgstr "Автоматична перевірка оновлень виключена."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:119
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
-msgstr "アップデートの自動チェックは利用できません。"
+msgstr "Автоматична перевірка оновлень недоступна."
 

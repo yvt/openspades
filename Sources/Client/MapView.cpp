@@ -95,7 +95,7 @@ namespace spades {
 		MapView::~MapView() {}
 
 		void MapView::Update(float dt) {
-			float scale;
+			float scale = 0.0f;
 			switch (scaleMode) {
 				case 0: // 400%
 					scale = 1.f / 4.f;

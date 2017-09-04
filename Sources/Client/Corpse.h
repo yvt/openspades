@@ -64,6 +64,7 @@ namespace spades {
 			IRenderer *renderer;
 			GameMap *map;
 			Vector3 color;
+			int playerId;
 
 			Node nodes[NodeCount];
 			Edge edges[8];
@@ -88,6 +89,8 @@ namespace spades {
 			~Corpse();
 
 			void Update(float dt);
+
+			int GetPlayerId() { return playerId; }
 
 			void AddToScene();
 

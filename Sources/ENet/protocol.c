@@ -454,7 +454,7 @@ enet_protocol_handle_send_unsequenced (ENetHost * host, ENetPeer * peer, const E
         memset (peer -> unsequencedWindow, 0, sizeof (peer -> unsequencedWindow));
     }
     else
-    if (peer -> unsequencedWindow [index / 32] & (1 << (index % 32)))
+    if (peer -> unsequencedWindow [index / 32] & (1u << (index % 32)))
       return 0;
       
     packet = enet_packet_create ((const enet_uint8 *) command + sizeof (ENetProtocolSendUnsequenced),
@@ -464,7 +464,7 @@ enet_protocol_handle_send_unsequenced (ENetHost * host, ENetPeer * peer, const E
         enet_peer_queue_incoming_command (peer, command, packet, 0) == NULL)
       return -1;
    
-    peer -> unsequencedWindow [index / 32] |= 1 << (index % 32);
+    peer -> unsequencedWindow [index / 32] |= 1u << (index % 32);
  
     return 0;
 }

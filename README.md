@@ -19,6 +19,16 @@ OpenSpades is a compatible client of Ace of Spades 0.75.
  2. Or [open an issue](https://github.com/yvt/openspades/issues) if the problem persists
 
 ### On Linux
+#### Snap package
+On [snap enabled](https://snapcraft.io/docs/core/install) systems, the latest pre-built stable release of OpenSpades can be installed with:
+
+```bash
+sudo snap install openspades
+```
+
+Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with the `openspades` command.
+
+#### Building and installing from source
 GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
 
 1. Install dependencies:
@@ -26,7 +36,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    *On Debian-derived distributions*: 
    ```
    sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev \
-     libsdl2-image-dev libalut-dev xdg-utils libfreetype6-dev libopus-dev libopusfile-dev
+     libsdl2-image-dev libalut-dev xdg-utils libfreetype6-dev libopus-dev libopusfile-dev cmake
    ```
    (because of a bug in some distributions, you might also
    have to install more packages by `sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev`)
@@ -69,8 +79,8 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
     * VS2013 is no longer supported, but might work
     * VS2017 is not yet supported, but might work
 2. Grab the source code:
-  * From a release: https://github.com/yvt/openspades/releases
-  * Latest development version (0.1.0): https://github.com/yvt/openspades/archive/master.zip
+  * Stable version: https://github.com/yvt/openspades/releases
+  * Latest development version (0.1.x): https://github.com/yvt/openspades/archive/master.zip
 3. Extract or checkout the source
   * All examples will assume `E:/Projects/openspades`, update paths in the examples to reflect yours
 4. Get (pre-compiled) copies of glew, curl, sdl2 and zlib, and place them in `E:/Projects/openspades/Sources/Externals`

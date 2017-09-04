@@ -111,13 +111,15 @@ files: [
       "de_DE": "de",
       "es_ES": "es",
       "fr_FR": "fr",
+      "it_IT": "it",
       "ja_JP": "ja",
       "ko_KR": "ko",
       "nl_NL": "nl",
       "pl_PL": "pl",
       "pt_PT": "pt_pt",
       "pt_BR": "pt_br",
-      "ru_RU": "ru"
+      "ru_RU": "ru",
+      "uk_UA": "uk"
      }
   },
 

@@ -33,6 +33,7 @@
 #include "Player.h"
 #include "TCGameMode.h"
 #include "World.h"
+#include "GameProperties.h"
 #include <Core/CP437.h>
 #include <Core/Debug.h>
 #include <Core/Debug.h>
@@ -371,12 +372,14 @@ namespace spades {
 			lastPlayerInput = 0;
 			lastWeaponInput = 0;
 
-			savedPlayerPos.resize(32);
-			savedPlayerFront.resize(32);
-			savedPlayerTeam.resize(32);
-			playerPosRecords.resize(32);
+			savedPlayerPos.resize(128);
+			savedPlayerFront.resize(128);
+			savedPlayerTeam.resize(128);
+			playerPosRecords.resize(128);
 
 			std::fill(savedPlayerTeam.begin(), savedPlayerTeam.end(), -1);
+
+			properties.reset(new GameProperties());
 
 			bandwidthMonitor.reset(new BandwidthMonitor(host));
 		}
@@ -748,7 +751,7 @@ namespace spades {
 						int idx = i;
 						if (protocolVersion == 4) {
 							idx = reader.ReadByte();
-							if (idx < 0 || idx >= 32) {
+							if (idx < 0 || idx >= properties->GetMaxNumPlayerSlots()) {
 								SPRaise("Invalid player number %d received with WorldUpdate", idx);
 							}
 						}
@@ -993,8 +996,9 @@ namespace spades {
 					std::string name = reader.ReadRemainingString();
 					// TODO: decode name?
 
-					if (pId < 0 || pId >= 32) {
-						SPLog("Ignoring player 32 (bug in pyspades?: %s)", name.c_str());
+					if (pId < 0 || pId >= properties->GetMaxNumPlayerSlots()) {
+						SPLog("Ignoring invalid player number %d (bug in pyspades?: %s)", pId,
+						      name.c_str());
 						break;
 					}
 					WeaponType wType;
@@ -1031,13 +1035,14 @@ namespace spades {
 							rec.pos = pos;
 							rec.time = GetWorld()->GetTime();
 						}
-						if (savedPlayerTeam[pId] != team && team < 2) {
+						if (savedPlayerTeam[pId] != team) {
 
 							client->PlayerJoinedTeam(p);
 
 							savedPlayerTeam[pId] = team;
 						}
 					}
+					client->PlayerSpawned(p);
 
 				} break;
 				case PacketTypeBlockAction: {
@@ -1244,12 +1249,7 @@ namespace spades {
 				case PacketTypeChatMessage: {
 					// might be wrong player id for server message
 					uint8_t pId = reader.ReadByte();
-					Player *p;
-					if (pId < 32) {
-						p = GetPlayerOrNull(pId);
-					} else {
-						p = NULL;
-					}
+					Player *p = GetPlayerOrNull(pId);
 					int type = reader.ReadByte();
 					std::string txt = reader.ReadRemainingString();
 					if (p) {
@@ -1262,11 +1262,13 @@ namespace spades {
 								break;
 							case 2: // system???
 								client->ServerSentMessage(txt);
-								/*SPRaise("Player #%d %s sent system message", p->GetId(),
-								 * p->GetName().c_str());*/
 						}
 					} else {
 						client->ServerSentMessage(txt);
+
+						// Speculate the best game properties based on the server generated
+						// messages
+						properties->HandleServerMessage(txt);
 					}
 				} break;
 				case PacketTypeMapStart: {
@@ -1281,6 +1283,7 @@ namespace spades {
 					Player *p = GetPlayer(reader.ReadByte());
 
 					client->PlayerLeaving(p);
+					GetWorld()->GetPlayerPersistent(p->GetId()).kills = 0;
 
 					savedPlayerTeam[p->GetId()] = -1;
 					playerPosRecords[p->GetId()].valid = false;
