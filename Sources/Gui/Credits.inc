@@ -24,6 +24,7 @@ Credits
 "CenturionFox" - Server Disconnect Screen
 "DarkDracoon" - European Portuguese translation
 "BrunoDiazU" - Spanish translation
+"teodor6140" - Headshot feedback "whack" sound
 
 And many others which weren't mentioned here.
 
