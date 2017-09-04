@@ -938,9 +938,9 @@ namespace spades {
 					audioDevice->Play(c, hitPos, AudioParam());
 				} else if(type == HitTypeHead) {
 					Handle<IAudioChunk> c =
-					  audioDevice->RegisterSound("Sounds/Weapons/Impacts/whack.wav"); //TODO: add this file to resoruces
+					  audioDevice->RegisterSound("Sounds/Weapons/Impacts/whack.wav");
 					AudioParam param;
-					param.volume = 50.f;
+					param.volume = 30.f;
 					audioDevice->Play(c, hitPos, param);
 				} else {
 					Handle<IAudioChunk> c;
