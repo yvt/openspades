@@ -39,7 +39,7 @@ files: [
   # The dest allows you to specify a file name on Crowdin
   # e.g. "/messages.json"
   #
-  "dest" : "/openspades.pot",
+  "dest" : "/master/openspades.pot",
 
   #
   # File type
