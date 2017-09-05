@@ -963,7 +963,15 @@ namespace spades {
 
 			if (by == world->GetLocalPlayer() && hurtPlayer) {
 				net->SendHit(hurtPlayer->GetId(), type);
-
+				
+				if (type == HitTypeHead) {
+					Handle<IAudioChunk> c =
+					  audioDevice->RegisterSound("Sounds/Feedback/HeadshotFeedback.opus");
+					AudioParam param;
+					param.volume = 10.f;
+					audioDevice->Play(c, hitPos, param);
+				}
+				
 				hitFeedbackIconState = 1.f;
 				if (hurtPlayer->GetTeamId() == world->GetLocalPlayer()->GetTeamId()) {
 					hitFeedbackFriendly = true;
