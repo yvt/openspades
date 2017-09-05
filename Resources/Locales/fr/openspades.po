@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-02-24 11:25-0500\n"
+"PO-Revision-Date: 2017-09-05 03:35-0400\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -137,32 +137,32 @@ msgstr "{0} s'est emparé d'un territoire neutre"
 #: Sources/Client/Client_NetHandler.cpp:127
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
-msgstr "{0} a capturé la mallette de l'équipe {1}"
+msgstr "{0} a capturé les renseignements de l'équipe {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:134
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
-msgstr "{0} a capturé la mallette de l'équipe {1}"
+msgstr "{0} a capturé les renseignements de l'équipe {1}."
 
 #: Sources/Client/Client_NetHandler.cpp:158
 msgctxt "Client"
 msgid "{0} picked up {1}'s intel"
-msgstr "{0} a ramassé la mallette de {1}"
+msgstr "{0} a ramassé les renseignements de {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:165
 msgctxt "Client"
 msgid "{0} picked up {1}'s Intel."
-msgstr "{0} a ramassé la mallette de l'équipe {1}"
+msgstr "{0} a ramassé les renseignements de {1}."
 
 #: Sources/Client/Client_NetHandler.cpp:183
 msgctxt "Client"
 msgid "{0} dropped {1}'s intel"
-msgstr "{0} a laissé tombé la mallette de l'équipe {1}"
+msgstr "{0} a laissé tombé les renseignements de l'équipe {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:190
 msgctxt "Client"
 msgid "{0} dropped {1}'s Intel"
-msgstr "{0} a laissé tombé la mallette de l'équipe {1}"
+msgstr "{0} a laissé tombé les renseignements de l'équipe {1}"
 
 #: Sources/Client/Client_NetHandler.cpp:237
 #: Sources/Client/Client_NetHandler.cpp:243
@@ -261,12 +261,12 @@ msgstr "Vous avez été tué par {0}"
 #: Sources/Client/Client_Update.cpp:1225
 msgctxt "Client"
 msgid "Insufficient blocks."
-msgstr "Nombre de blocs insuffisant."
+msgstr "Blocs insuffisants."
 
 #: Sources/Client/Client_Update.cpp:1228
 msgctxt "Client"
 msgid "You cannot place a block there."
-msgstr "Vous ne pouvez placer un bloc à cet endroit."
+msgstr "Vous ne pouvez placer un bloc ici."
 
 #: Sources/Client/LimboView.cpp:79
 msgctxt "Client"
@@ -329,12 +329,12 @@ msgstr "Erreur"
 #: Sources/Client/NetClient.cpp:702
 msgctxt "NetClient"
 msgid "You are banned from this server."
-msgstr "Vous avez été bannis de ce serveur."
+msgstr "Vous avez été banni de ce serveur."
 
 #: Sources/Client/NetClient.cpp:707 Sources/Client/NetClient.cpp:710
 msgctxt "NetClient"
 msgid "You were kicked from this server."
-msgstr "Vous avez été éjecté de ce serveur."
+msgstr "Vous avez été expulsé de ce serveur."
 
 #: Sources/Client/NetClient.cpp:708
 msgctxt "NetClient"
@@ -366,7 +366,7 @@ msgstr "Territoire neutre"
 #: Sources/Client/TCProgressView.cpp:154
 msgctxt "Client"
 msgid "{0}'s Territory"
-msgstr "Territoire de l'équipe {0}"
+msgstr "Territoire de {0}"
 
 #: Sources/Gui/Main.cpp:548
 msgctxt "Main"
@@ -395,7 +395,7 @@ msgstr "CHARGEMENT"
 #: Resources/Scripts/Gui/ClientUI.as:198
 msgctxt "Client"
 msgid "Back to Game"
-msgstr "Retour au jeu"
+msgstr "Reprendre la partie"
 
 #: Resources/Scripts/Gui/ClientUI.as:205
 msgctxt "Client"
@@ -415,7 +415,7 @@ msgstr "Se déconnecter"
 #: Resources/Scripts/Gui/ClientUI.as:484
 msgctxt "Client"
 msgid "Say"
-msgstr "Envoyer"
+msgstr "Dire"
 
 #: Resources/Scripts/Gui/ClientUI.as:492
 msgctxt "Client"
@@ -430,7 +430,7 @@ msgstr "Qu'avez-vous à dire ?"
 #: Resources/Scripts/Gui/ClientUI.as:508
 msgctxt "Client"
 msgid "Global"
-msgstr "Global"
+msgstr "Général"
 
 #: Resources/Scripts/Gui/ClientUI.as:517
 msgctxt "Client"
@@ -543,7 +543,7 @@ msgstr "Nom du serveur"
 #: Resources/Scripts/Gui/MainScreen.as:501
 msgctxt "MainScreen"
 msgid "Players"
-msgstr "Joueur"
+msgstr "Joueurs"
 
 #: Resources/Scripts/Gui/MainScreen.as:508
 msgctxt "MainScreen"
@@ -793,7 +793,7 @@ msgstr "Alerte du serveur"
 #: Resources/Scripts/Gui/Preferences.as:664
 msgctxt "Preferences"
 msgid "Field of View"
-msgstr "Angle de vision"
+msgstr "Champ de vision"
 
 #: Resources/Scripts/Gui/Preferences.as:666
 msgctxt "Preferences"
@@ -943,7 +943,7 @@ msgstr "Afficher/Cacher la carte"
 #: Resources/Scripts/Gui/Preferences.as:711
 msgctxt "Preferences"
 msgid "Flashlight"
-msgstr "Lampe torche"
+msgstr "Lampe-torche"
 
 #: Resources/Scripts/Gui/Preferences.as:712
 msgctxt "Preferences"
@@ -1003,7 +1003,7 @@ msgstr "Éviter cette fenêtre la prochaine fois"
 #: Resources/Scripts/Gui/StartupScreen.as:211
 msgctxt "StartupScreen"
 msgid "Graphics"
-msgstr "Grapiques"
+msgstr "Graphismes"
 
 #: Resources/Scripts/Gui/StartupScreen.as:212
 msgctxt "StartupScreen"
@@ -1059,7 +1059,7 @@ msgstr "Mode plein écran"
 #: Resources/Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
 msgid "By running in fullscreen mode OpenSpades occupies the screen, making it easier for you to concentrate on playing the game."
-msgstr "En utilisant le mode plein écran OpenSpades, occupe la totalité de celui-ci et vous permet de vous concentrer sur le jeu."
+msgstr "En utilisant le mode plein écran, OpenSpades occupe la totalité de celui-ci et vous permet de vous concentrer sur le jeu."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1110
 #: Resources/Scripts/Gui/StartupScreen.as:1492
@@ -1085,7 +1085,7 @@ msgstr "Logiciel"
 #: Resources/Scripts/Gui/StartupScreen.as:1129
 msgctxt "StartupScreen"
 msgid "Software renderer uses CPU to generate the game screen. Its quality and performance might be inferior to OpenGL renderer, but it works even with an unsupported GPU."
-msgstr "Le mode de rendu logiciel utilise votre processeur pour générer les images. Sa qualité et ses performances peuvent être inférieure à celles du mode de rendu OpenGL, mais il fonctionne avec les processeurs graphiques non supportés."
+msgstr "Le mode de rendu logiciel utilise votre processeur pour générer les images. Sa qualité et ses performances peuvent être inférieures à celles du mode de rendu OpenGL, mais il fonctionne avec les processeurs graphiques non supportés."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1143
 msgctxt "StartupScreen"
@@ -1325,7 +1325,7 @@ msgstr "OpenAL"
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
 msgid "Uses an OpenAL-capable sound card to process sound. In most cases where there isn't such a sound card, software emulation is used."
-msgstr "Utilise une carte son compatible OpenAL pour traiter le son. Dans la plupart des cas où une telle carte son n'est pas présente, une émulation logicielle est utilisée."
+msgstr "Utilise une carte son compatible OpenAL pour traiter le son. Dans la plupart des cas, lorsque une telle carte son n'est pas présente, une émulation logicielle est utilisée."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1508
 msgctxt "StartupScreen"
@@ -1402,7 +1402,7 @@ msgstr "Ouvrir le dossier de configuration dans le Finder"
 #: Resources/Scripts/Gui/StartupScreen.as:1651
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
-msgstr "Ouvrir le dossier de configuration"
+msgstr "Parcourir le dossier de configuration"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1668
 msgctxt "StartupScreen"
@@ -1448,7 +1448,7 @@ msgstr "Valeur par défaut du système"
 #: Resources/Scripts/Gui/StartupScreen.as:1813
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
-msgstr "Copier"
+msgstr "Copier dans le presse-papiers"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1849
 msgctxt "StartupScreen"
@@ -1483,7 +1483,7 @@ msgstr "Vous utilisez la dernière version de OpenSpades. ({0})"
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
 msgctxt "UpdateCheck"
 msgid "Checking for updates..."
-msgstr "Recherche de mises à jour..."
+msgstr "Vérification des mises à jour..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
 msgctxt "UpdateCheck"
@@ -1499,4 +1499,9 @@ msgstr "La vérification des mises à jour automatique n’est pas activée."
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
 msgstr "La vérification automatique des mises à jour n’est pas disponible."
+
+#: Sources/Client/Client_NetHandler.cpp:258
+msgctxt "Client"
+msgid "Spectator"
+msgstr "Spectateur"
 

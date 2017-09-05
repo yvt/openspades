@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-02-24 11:25-0500\n"
+"PO-Revision-Date: 2017-09-05 05:09-0400\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr "Map gespeichert: {0}"
 #: Sources/Client/Client.cpp:589 Sources/Client/Client.cpp:595
 msgctxt "Client"
 msgid "Saving map failed: "
-msgstr "Map Speichern fehlgeschlagen: "
+msgstr "Speichern der Map fehlgeschlagen: "
 
 #. ! Prefix added to global chat messages.
 #. !
@@ -52,7 +52,7 @@ msgstr "Screenshot gespeichert: {0}"
 #: Sources/Client/Client_Draw.cpp:125 Sources/Client/Client_Draw.cpp:131
 msgctxt "Client"
 msgid "Screenshot failed: "
-msgstr "Screen"
+msgstr "Screenshot Fehlgeschlagen: "
 
 #: Sources/Client/Client_Draw.cpp:198
 msgctxt "Client"
@@ -67,17 +67,17 @@ msgstr "Verbindung wird getrennt..."
 #: Sources/Client/Client_Draw.cpp:523
 msgctxt "Client"
 msgid "Out of Block"
-msgstr "Keine Blöcke mehr"
+msgstr "Blöcke leer"
 
 #: Sources/Client/Client_Draw.cpp:528
 msgctxt "Client"
 msgid "Out of Grenade"
-msgstr "Keine Granaten mehr"
+msgstr "Granaten leer"
 
 #: Sources/Client/Client_Draw.cpp:534
 msgctxt "Client"
 msgid "Reloading"
-msgstr "Lädt nach"
+msgstr "Nachladen"
 
 #: Sources/Client/Client_Draw.cpp:536 Sources/Client/Client_Input.cpp:439
 msgctxt "Client"
@@ -102,22 +102,22 @@ msgstr "Warte auf Respawn"
 #: Sources/Client/Client_Draw.cpp:764
 msgctxt "Client"
 msgid "Following {0}"
-msgstr "Folge {0}"
+msgstr "Du folgst {0}"
 
 #: Sources/Client/Client_Input.cpp:427
 msgctxt "Client"
 msgid "Out of Blocks"
-msgstr "Keine Blöcke mehr"
+msgstr "Blöcke leer"
 
 #: Sources/Client/Client_Input.cpp:451
 msgctxt "Client"
 msgid "Out of Grenades"
-msgstr "Keine Granaten mehr"
+msgstr "Granaten leer"
 
 #: Sources/Client/Client_NetHandler.cpp:89
 msgctxt "Client"
 msgid "{0} captured {1}'s territory"
-msgstr "{0} hat {1}'s Gebiet erobert"
+msgstr "{0} hat ein Gebiet von {1} erobert"
 
 #: Sources/Client/Client_NetHandler.cpp:91
 msgctxt "Client"
@@ -137,7 +137,7 @@ msgstr "{0} hat ein neutrales Gebiet erobert"
 #: Sources/Client/Client_NetHandler.cpp:127
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
-msgstr "{0} hat {1}'s Intel erobert"
+msgstr "{0} hat das Intel von {1} erobert"
 
 #: Sources/Client/Client_NetHandler.cpp:134
 msgctxt "Client"
@@ -1290,7 +1290,7 @@ msgstr "Kontrolliert wie Licht das auf Objekte trifft direkt das Erscheinungsbil
 #: Resources/Scripts/Gui/StartupScreen.as:1244
 msgctxt "StartupScreen"
 msgid "Water Shader|None:Water is rendered in the same way that normal blocks are done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving water is simulated as well as reflection and refraction.|Level 3:Reflections and refractions are rendered at the highest quality using screen-space techniques."
-msgstr "Wasser Shader|None:Wasser wird wie ein normaler Block gerendert.|Level 1:Lichtbrechung und Spiegelung werden simuliert.|Level 2:Wellen werden zusätzlich zu Brechung und Spiegelung simuliert.|Level 3:Brechung und Spiegelung werden hochwertig mit screen-space Techniken simuliert."
+msgstr "Wasser Shader|None:Wasser wird wie ein normaler Block gerendert.|Level 1:Lichbrechung und Spiegelung werden Simuliert.|Level 2:Wellen werden zusätzlich zu Brechung und Spiegelung simuliert.|Level 3:Brechung und Spiegelung werden hochwertig mit screen-space Techniken simuliert."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1251
 msgctxt "StartupScreen"
@@ -1499,4 +1499,9 @@ msgstr "Automatische Suche nach Aktualisierung ist nicht aktiviert."
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
 msgstr "Automatische Suche nach Aktualisierung ist nicht verfügbar."
+
+#: Sources/Client/Client_NetHandler.cpp:258
+msgctxt "Client"
+msgid "Spectator"
+msgstr ""
 
