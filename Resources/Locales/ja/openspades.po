@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-06-25 07:43-0400\n"
+"PO-Revision-Date: 2017-09-05 05:09-0400\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -102,7 +102,7 @@ msgstr "リスポーン待ち"
 #: Sources/Client/Client_Draw.cpp:764
 msgctxt "Client"
 msgid "Following {0}"
-msgstr "{0} をフォロー中"
+msgstr "{0} を追跡中"
 
 #: Sources/Client/Client_Input.cpp:427
 msgctxt "Client"
@@ -222,7 +222,7 @@ msgstr "落下"
 #: Sources/Client/Client_Update.cpp:853
 msgctxt "Client"
 msgid "Melee"
-msgstr "スペード"
+msgstr "近接攻撃"
 
 #: Sources/Client/Client_Update.cpp:856
 msgctxt "Client"
@@ -328,7 +328,7 @@ msgstr "エラー"
 #: Sources/Client/NetClient.cpp:702
 msgctxt "NetClient"
 msgid "You are banned from this server."
-msgstr "このサーバーへの接続は禁止されています。"
+msgstr "このサーバーへの接続が禁止されています。"
 
 #: Sources/Client/NetClient.cpp:707 Sources/Client/NetClient.cpp:710
 msgctxt "NetClient"
@@ -364,12 +364,12 @@ msgstr "未占領テリトリー"
 #: Sources/Client/TCProgressView.cpp:154
 msgctxt "Client"
 msgid "{0}'s Territory"
-msgstr "{0}のテリトリー"
+msgstr "{0} の領地"
 
 #: Sources/Gui/Main.cpp:548
 msgctxt "Main"
 msgid "Localization System Loaded"
-msgstr "ローカライゼーションシステムが読み込まれました"
+msgstr "地域化システムが読み込まれました"
 
 #: Sources/Gui/Main.cpp:604 Sources/Gui/Runner.cpp:56
 msgctxt "Main"
@@ -423,7 +423,7 @@ msgstr "キャンセル"
 #: Resources/Scripts/Gui/ClientUI.as:500
 msgctxt "Client"
 msgid "Chat Text"
-msgstr "送信内容"
+msgstr "テキストを入力"
 
 #: Resources/Scripts/Gui/ClientUI.as:508
 msgctxt "Client"
@@ -463,7 +463,7 @@ msgstr "後で入力する"
 #: Resources/Scripts/Gui/CreateProfileScreen.as:80
 msgctxt "CreateProfileScreen"
 msgid "Welcome to OpenSpades"
-msgstr "OpenSpades 初回起動時設定"
+msgstr "OpenSpades へようこそ"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:88
 msgctxt "CreateProfileScreen"
@@ -1497,4 +1497,9 @@ msgstr "アップデートの自動チェックは無効になっています。
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
 msgstr "アップデートの自動チェックは利用できません。"
+
+#: Sources/Client/Client_NetHandler.cpp:258
+msgctxt "Client"
+msgid "Spectator"
+msgstr "観戦者"
 

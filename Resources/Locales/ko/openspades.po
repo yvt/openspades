@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-02-24 11:25-0500\n"
+"PO-Revision-Date: 2017-09-05 03:35-0400\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -1497,4 +1497,9 @@ msgstr "자동 업데이트 확인이 꺼져 있습니다."
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
 msgstr "자동 업데이트 확인이 불가능합니다."
+
+#: Sources/Client/Client_NetHandler.cpp:258
+msgctxt "Client"
+msgid "Spectator"
+msgstr ""
 
