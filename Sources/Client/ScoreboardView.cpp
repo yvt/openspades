@@ -49,7 +49,7 @@ namespace spades {
 		static const Vector4 spectatorTextColor = {220.f / 255, 220.f / 255, 0,
 		                                           1}; // Goldish yellow
 		static const auto spectatorTeamId = 255;       // Spectators have a team id of 255
-		
+
 
 		ScoreboardView::ScoreboardView(Client *client)
 		    : client(client), renderer(client->GetRenderer()) {
@@ -61,7 +61,7 @@ namespace spades {
 
 			// Use GUI font if spectator string has special chars
 			auto spectatorString = _TrN("Client", "Spectator{1}", "Spectators{1}", "", "");
-			auto has_special_char = 
+			auto has_special_char =
 				std::find_if(spectatorString.begin(), spectatorString.end(),
 				[](char ch) {
 					return !(isalnum(static_cast<unsigned char>(ch)) || ch == '_');
@@ -231,6 +231,7 @@ namespace spades {
 			int id;
 			int score;
 			std::string name;
+			bool alive;
 			bool operator<(const ScoreboardEntry &ent) const { return score > ent.score; }
 		};
 
@@ -241,6 +242,7 @@ namespace spades {
 			char buf[256];
 			Vector2 size;
 			Vector4 white = {1, 1, 1, 1};
+			Vector4 gray = {0.5, 0.5, 0.5, 1};
 			int maxRows = (int)floorf(height / rowHeight);
 			int numPlayers = 0;
 			int cols;
@@ -256,6 +258,7 @@ namespace spades {
 				ScoreboardEntry ent;
 				ent.name = p->GetName();
 				ent.score = world->GetPlayerPersistent(i).kills;
+				ent.alive = p->IsAlive();
 				ent.id = i;
 				entries.push_back(ent);
 
@@ -295,7 +298,11 @@ namespace spades {
 					font->Draw(buf, MakeVector2(colX + 35.f - size.x, rowY), 1.f, white);
 				}
 
+				color = ent.alive ? white : gray;
+
 				font->Draw(ent.name, MakeVector2(colX + 45.f, rowY), 1.f, color);
+
+				color = white;
 
 				sprintf(buf, "%d", ent.score);
 				size = font->Measure(buf);
