@@ -715,6 +715,9 @@ namespace spades {
 					continue;
 				if (myTeam < 2 && p->GetTeamId() != myTeam)
 					continue;
+				if (myTeam < 2 && !p->IsAlive())
+					// Skip dead players when not spectator
+					continue;
 				if (p->GetFront().GetPoweredLength() < .01f)
 					continue;
 
