@@ -283,7 +283,7 @@ namespace spades {
 
 			float GetAimDownZoomScale();
 			bool ShouldRenderInThirdPersonView();
-			Player *GetFollowedPlayer();
+			Player *GetViewedPlayer();
 			SceneDefinition CreateSceneDefinition();
 
 			std::string ScreenShotPath();

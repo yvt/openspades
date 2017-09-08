@@ -57,7 +57,7 @@ namespace spades {
 
 		bool Client::ShouldRenderInThirdPersonView() {
 			if (IsFollowing()){
-				if (!GetFollowedPlayer()->IsAlive()){
+				if (!GetViewedPlayer()->IsAlive()){
 					return true;
 				}
 				return !firstPersonSpectate;
@@ -74,8 +74,15 @@ namespace spades {
 			return false;
 		}
 
-		Player *Client::GetFollowedPlayer() {
-			return world->GetPlayer(followingPlayerId);
+		Player *Client::GetViewedPlayer() {
+			// what happens if we are in free mode?
+			// doesn't matter for the current code, but keep this in mind
+			if (IsFollowing()){
+				return world->GetPlayer(followingPlayerId);
+			}
+			else {
+				return world->GetLocalPlayer();
+			}
 		}
 
 		float Client::GetLocalFireVibration() {
@@ -216,7 +223,7 @@ namespace spades {
 						Vector3 front = center - eye;
 						front = front.Normalize();
 
-						if (firstPersonSpectate == false) {
+						if (ShouldRenderInThirdPersonView()) {
 							def.viewOrigin = eye;
 							def.viewAxis[0] = -Vector3::Cross(up, front).Normalize();
 							def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
