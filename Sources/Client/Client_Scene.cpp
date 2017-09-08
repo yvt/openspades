@@ -56,14 +56,26 @@ namespace spades {
 #pragma mark - Drawing
 
 		bool Client::ShouldRenderInThirdPersonView() {
+			if (IsFollowing()){
+				if (!GetFollowedPlayer()->IsAlive()){
+					return true;
+				}
+				return !firstPersonSpectate;
+			}
+
 			if (world && world->GetLocalPlayer()) {
 				if (!world->GetLocalPlayer()->IsAlive())
 					return true;
 			}
+
 			if ((int)cg_thirdperson != 0 && world->GetNumPlayers() <= 1) {
 				return true;
 			}
 			return false;
+		}
+
+		Player *Client::GetFollowedPlayer() {
+			return world->GetPlayer(followingPlayerId);
 		}
 
 		float Client::GetLocalFireVibration() {
