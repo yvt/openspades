@@ -51,6 +51,7 @@
 DEFINE_SPADES_SETTING(cg_ragdoll, "1");
 SPADES_SETTING(cg_blood);
 DEFINE_SPADES_SETTING(cg_ejectBrass, "1");
+DEFINE_SPADES_SETTING(cg_hitFeedbackSoundGain, "0.2");
 
 SPADES_SETTING(cg_alerts);
 SPADES_SETTING(cg_centerMessage);
@@ -962,8 +963,8 @@ namespace spades {
 					Handle<IAudioChunk> c =
 					  audioDevice->RegisterSound("Sounds/Feedback/HeadshotFeedback.opus");
 					AudioParam param;
-					param.volume = 10.f;
-					audioDevice->Play(c, hitPos, param);
+					param.volume = cg_hitFeedbackSoundGain;
+					audioDevice->PlayLocal(c, param);
 				}
 				
 				hitFeedbackIconState = 1.f;
