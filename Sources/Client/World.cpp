@@ -29,6 +29,7 @@
 #include <Core/IStream.h>
 #include "GameMap.h"
 #include "GameMapWrapper.h"
+#include "GameProperties.h"
 #include "Grenade.h"
 #include "HitTestDebugger.h"
 #include "IGameMode.h"
@@ -43,7 +44,8 @@ DEFINE_SPADES_SETTING(cg_debugHitTest, "0");
 namespace spades {
 	namespace client {
 
-		World::World() {
+		World::World(const std::shared_ptr<GameProperties> &gameProperties)
+		    : gameProperties{gameProperties} {
 			SPADES_MARK_FUNCTION();
 
 			listener = NULL;
@@ -184,7 +186,7 @@ namespace spades {
 				delete mode;
 			mode = m;
 		}
-		
+
 		void World::MarkBlockForRegeneration(const IntVector3 &blockLocation) {
 			UnmarkBlockForRegeneration(blockLocation);
 
@@ -192,7 +194,7 @@ namespace spades {
 			auto result = blockRegenerationQueue.emplace(time + 10.0f, blockLocation);
 			blockRegenerationQueueMap.emplace(blockLocation, result);
 		}
-		
+
 		void World::UnmarkBlockForRegeneration(const IntVector3 &blockLocation) {
 			auto it = blockRegenerationQueueMap.find(blockLocation);
 			if (it == blockRegenerationQueueMap.end()) {

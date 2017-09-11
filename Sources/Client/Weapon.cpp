@@ -20,13 +20,11 @@
  */
 
 #include "Weapon.h"
+#include "GameProperties.h"
 #include "IWorldListener.h"
 #include "World.h"
 #include <Core/Debug.h>
 #include <Core/Exception.h>
-#include <Core/Settings.h>
-
-SPADES_SETTING(cg_protocolVersion);
 
 namespace spades {
 	namespace client {
@@ -361,23 +359,26 @@ namespace spades {
 			virtual int GetPelletSize() { return 8; }
 		};
 
-		Weapon *Weapon::CreateWeapon(WeaponType type, Player *p) {
+		Weapon *Weapon::CreateWeapon(WeaponType type, Player *p, const GameProperties &gp) {
 			SPADES_MARK_FUNCTION();
 
-			if ((int)cg_protocolVersion == 4) {
-				switch (type) {
-					case RIFLE_WEAPON: return new RifleWeapon4(p->GetWorld(), p);
-					case SMG_WEAPON: return new SMGWeapon4(p->GetWorld(), p);
-					case SHOTGUN_WEAPON: return new ShotgunWeapon4(p->GetWorld(), p);
-					default: SPInvalidEnum("type", type);
-				}
-			} else {
-				switch (type) {
-					case RIFLE_WEAPON: return new RifleWeapon3(p->GetWorld(), p);
-					case SMG_WEAPON: return new SMGWeapon3(p->GetWorld(), p);
-					case SHOTGUN_WEAPON: return new ShotgunWeapon3(p->GetWorld(), p);
-					default: SPInvalidEnum("type", type);
-				}
+			switch (gp.protocolVersion) {
+				case ProtocolVersion::v075:
+					switch (type) {
+						case RIFLE_WEAPON: return new RifleWeapon3(p->GetWorld(), p);
+						case SMG_WEAPON: return new SMGWeapon3(p->GetWorld(), p);
+						case SHOTGUN_WEAPON: return new ShotgunWeapon3(p->GetWorld(), p);
+						default: SPInvalidEnum("type", type);
+					}
+				case ProtocolVersion::v076:
+					switch (type) {
+						case RIFLE_WEAPON: return new RifleWeapon4(p->GetWorld(), p);
+						case SMG_WEAPON: return new SMGWeapon4(p->GetWorld(), p);
+						case SHOTGUN_WEAPON: return new ShotgunWeapon4(p->GetWorld(), p);
+						default: SPInvalidEnum("type", type);
+					}
+                default:
+                    SPInvalidEnum("protocolVersion", gp.protocolVersion);
 			}
 		}
 	}

@@ -43,6 +43,7 @@ namespace spades {
 		class IGameMode;
 		class Client; // FIXME: for debug
 		class HitTestDebugger;
+		class GameProperties;
 		class World {
 			friend class Client; // FIXME: for debug
 		public:
@@ -67,6 +68,8 @@ namespace spades {
 			IntVector3 fogColor;
 			Team teams[3];
 
+			std::shared_ptr<GameProperties> gameProperties;
+
 			std::vector<Player *> players;
 			std::vector<PlayerPersistent> playerPersistents;
 			int localPlayerIndex;
@@ -84,11 +87,14 @@ namespace spades {
 			void ApplyBlockActions();
 
 		public:
-			World();
+			World(const std::shared_ptr<GameProperties>&);
 			~World();
 			GameMap *GetMap() { return map; }
 			GameMapWrapper *GetMapWrapper() { return mapWrapper; }
 			float GetTime() { return time; }
+
+			/** Returns a non-null reference to `GameProperties`. */
+			const std::shared_ptr<GameProperties> &GetGameProperties() { return gameProperties; }
 
 			void SetMap(GameMap *);
 

@@ -1772,7 +1772,7 @@ namespace spades {
 			SPLog("Map decoding succeeded.");
 
 			// now initialize world
-			World *w = new World();
+			World *w = new World(properties);
 			w->SetMap(map);
 			map->Release();
 			SPLog("World initialized.");

@@ -29,7 +29,6 @@
 #include <ScriptBindings/ScriptFunction.h>
 
 DEFINE_SPADES_SETTING(cg_lastQuickConnectHost, "127.0.0.1");
-SPADES_SETTING(cg_protocolVersion);
 DEFINE_SPADES_SETTING(cg_playerName, "Deuce");
 
 namespace spades {

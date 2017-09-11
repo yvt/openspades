@@ -28,6 +28,7 @@ namespace spades {
 	namespace client {
 		class World;
 		class Player;
+		class GameProperties;
 
 		class Weapon {
 			World *world;
@@ -64,7 +65,7 @@ namespace spades {
 
 			virtual int GetPelletSize() = 0;
 
-			static Weapon *CreateWeapon(WeaponType index, Player *);
+			static Weapon *CreateWeapon(WeaponType index, Player *, const GameProperties &);
 
 			void Restock();
 			void Reset();
