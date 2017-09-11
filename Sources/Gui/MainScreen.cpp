@@ -23,13 +23,9 @@
 #include <Client/Client.h>
 #include <Client/Fonts.h>
 #include <Core/Exception.h>
-#include <Core/Settings.h>
 #include <Core/Strings.h>
 #include <ScriptBindings/Config.h>
 #include <ScriptBindings/ScriptFunction.h>
-
-DEFINE_SPADES_SETTING(cg_lastQuickConnectHost, "127.0.0.1");
-DEFINE_SPADES_SETTING(cg_playerName, "Deuce");
 
 namespace spades {
 	namespace gui {
