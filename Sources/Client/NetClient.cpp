@@ -379,8 +379,6 @@ namespace spades {
 
 			std::fill(savedPlayerTeam.begin(), savedPlayerTeam.end(), -1);
 
-			properties.reset(new GameProperties());
-
 			bandwidthMonitor.reset(new BandwidthMonitor(host));
 		}
 		NetClient::~NetClient() {
@@ -420,6 +418,8 @@ namespace spades {
 			if (peer == NULL) {
 				SPRaise("Failed to create ENet peer");
 			}
+
+			properties.reset(new GameProperties(hostname.GetProtocolVersion()));
 
 			status = NetClientStatusConnecting;
 			statusString = _Tr("NetClient", "Connecting to the server");

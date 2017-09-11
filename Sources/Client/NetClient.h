@@ -29,6 +29,7 @@
 
 #include "PhysicsConstants.h"
 #include "Player.h"
+#include <Core/Debug.h>
 #include <Core/Math.h>
 #include <Core/ServerAddress.h>
 #include <Core/Stopwatch.h>
@@ -119,7 +120,7 @@ namespace spades {
 			std::string DisconnectReasonString(uint32_t);
 
 			void MapLoaded();
-			
+
 			void SendVersion();
 			void SendVersionEnhanced(const std::set<std::uint8_t> &propertyIds);
 
@@ -133,8 +134,12 @@ namespace spades {
 
 			/**
 			 * Return a non-null reference to `GameProperties` for this connection.
+			 * Must be the connected state.
 			 */
-			std::shared_ptr<GameProperties>& GetGameProperties() { return properties; }
+			std::shared_ptr<GameProperties> &GetGameProperties() {
+				SPAssert(properties);
+				return properties;
+			}
 
 			void Connect(const ServerAddress &hostname);
 			void Disconnect();

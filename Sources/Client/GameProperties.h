@@ -34,12 +34,18 @@ namespace spades {
 			 * Construct and initialize `GameProperties` with values optimal for the compatibility
 			 * with the original client.
 			 */
-			GameProperties() {}
+			GameProperties(ProtocolVersion protocol) : protocolVersion{protocol} {}
 
 			/**
 			 * Parse a given server message and speculatively update the properties.
 			 */
 			void HandleServerMessage(const std::string &msg);
+
+			/**
+			 * The protocol version affecting various physics properties
+			 * e.g., weapon spread values.
+			 */
+			ProtocolVersion protocolVersion;
 
 			/**
 			 * Indicates whether the server does not provide the game properties in a way OpenSpades
