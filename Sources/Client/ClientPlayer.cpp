@@ -1042,8 +1042,10 @@ namespace spades {
 		}
 
 		bool ClientPlayer::ShouldRenderInThirdPersonView() {
-			if (player != player->GetWorld()->GetLocalPlayer())
-				return true;
+			// the player from whom's perspective the game is seen
+
+			if (player != client->GetViewedPlayer()) return true;
+
 			return client->ShouldRenderInThirdPersonView();
 		}
 

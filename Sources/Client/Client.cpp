@@ -723,6 +723,9 @@ namespace spades {
 					continue;
 				if (p->GetFront().GetPoweredLength() < .01f)
 					continue;
+				if (p->GetTeamId() >= 2){
+					continue; // Don't spectate spectators
+				}
 
 				break;
 			} while (nextId != followingPlayerId);
