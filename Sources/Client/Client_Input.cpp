@@ -348,7 +348,7 @@ namespace spades {
 					} else if (CheckKey(cg_keySneak, name)) {
 						playerInput.sneak = down;
 					} else if (CheckKey(cg_keyJump, name)) {
-						if (down) {
+						if (down && IsFollowing()) {
 							firstPersonSpectate = !firstPersonSpectate;
 						}
 						playerInput.jump = down;

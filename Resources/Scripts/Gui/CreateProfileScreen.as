@@ -28,8 +28,8 @@ namespace spades {
         private spades::ui::Field@ nameField;
         private spades::ui::Button@ okButton;
 
-        private ConfigItem cg_playerName("cg_playerName");
-        private ConfigItem cg_playerNameIsSet("cg_playerNameIsSet");
+        private ConfigItem cg_playerName("cg_playerName", "Deuce");
+        private ConfigItem cg_playerNameIsSet("cg_playerNameIsSet", "0");
 
         CreateProfileScreen(spades::ui::UIElement@ owner) {
             super(owner.Manager);

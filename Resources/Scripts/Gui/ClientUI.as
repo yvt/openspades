@@ -617,7 +617,7 @@ namespace spades {
 			Close();
 		}
 
-		private bool CheckConfigVariableSet() {
+		private bool CheckAndSetConfigVariable() {
 			string text = field.Text;
 			if(text.substr(0, 1) != "/") return false;
 			int idx = text.findFirst(" ");
@@ -634,6 +634,7 @@ namespace spades {
 					string val = text.substr(idx + 1);
 					ConfigItem item(vars[i]);
 					item.StringValue = val;
+					return true;
 				}
 			}
 
@@ -642,7 +643,7 @@ namespace spades {
 
 		private void OnSay(spades::ui::UIElement@ sender) {
 			field.CommandSent();
-			if(!CheckConfigVariableSet()) {
+			if(!CheckAndSetConfigVariable()) {
 				if(isTeamChat)
 					ui.helper.SayTeam(field.Text);
 				else

@@ -361,7 +361,7 @@ namespace spades {
 		bool loading = false, loaded = false;
 
 		private ConfigItem cg_protocolVersion("cg_protocolVersion", "3");
-		private ConfigItem cg_lastQuickConnectHost("cg_lastQuickConnectHost");
+		private ConfigItem cg_lastQuickConnectHost("cg_lastQuickConnectHost", "127.0.0.1");
 		private ConfigItem cg_serverlistSort("cg_serverlistSort", "16385");
 
 		MainScreenMainMenu(MainScreenUI@ ui) {

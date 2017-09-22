@@ -57,7 +57,7 @@ namespace spades {
 			moveSteps = 0;
 
 			this->playerId = playerId;
-			this->weapon = Weapon::CreateWeapon(wType, this);
+			this->weapon = Weapon::CreateWeapon(wType, this, *w->GetGameProperties());
 			this->weaponType = wType;
 			this->teamId = teamId;
 			this->weapon->Reset();
@@ -927,7 +927,7 @@ namespace spades {
 					color = (color & 0xffffff) | ((uint32_t)health << 24);
 					if (map->IsSolid(x, y, z))
 						map->Set(x, y, z, true, color);
-						
+
 					world->MarkBlockForRegeneration(outBlockCoord);
 
 					if (world->GetListener())
@@ -1388,7 +1388,7 @@ namespace spades {
 			if (this->weapon->GetWeaponType() == weap)
 				return;
 			delete this->weapon;
-			this->weapon = Weapon::CreateWeapon(weap, this);
+			this->weapon = Weapon::CreateWeapon(weap, this, *world->GetGameProperties());
 			this->weaponType = weap;
 		}
 
