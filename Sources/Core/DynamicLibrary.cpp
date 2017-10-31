@@ -96,6 +96,7 @@ namespace spades {
 
 		name = fn;
 		handle = dlopen(fn, RTLD_LAZY);
+#ifndef __OpenBSD__
 		if (handle == nullptr && strchr(fn, '/') == nullptr && strchr(fn, '\\') == nullptr) {
 			char *baseDir = SDL_GetBasePath();
 			std::string newPath = baseDir;
@@ -103,6 +104,7 @@ namespace spades {
 			newPath += fn;
 			handle = dlopen(newPath.c_str(), RTLD_LAZY);
 		}
+#endif
 		if (handle == nullptr) {
 			std::string err = dlerror();
 			SPRaise("Failed to dlload '%s': %s", fn, err.c_str());
