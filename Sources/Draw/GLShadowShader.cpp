@@ -34,10 +34,11 @@
 namespace spades {
 	namespace draw {
 		GLShadowShader::GLShadowShader()
-		    : fogColor("fogColor"),
+		    : eyeOrigin("eyeOrigin"),
 		      eyeFront("eyeFront"),
-		      eyeOrigin("eyeOrigin"),
 		      mapShadowTexture("mapShadowTexture"),
+		      fogColor("fogColor"),
+		      ambientColor("ambientColor"),
 		      shadowMapViewMatrix("shadowMapViewMatrix"),
 		      shadowMapTexture1("shadowMapTexture1"),
 		      shadowMapTexture2("shadowMapTexture2"),
@@ -50,7 +51,6 @@ namespace spades {
 		      radiosityTextureX("radiosityTextureX"),
 		      radiosityTextureY("radiosityTextureY"),
 		      radiosityTextureZ("radiosityTextureZ"),
-		      ambientColor("ambientColor"),
 		      pagetableSize("pagetableSize"),
 		      pagetableSizeInv("pagetableSizeInv"),
 		      minLod("minLod"),

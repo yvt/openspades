@@ -27,11 +27,11 @@
 namespace spades {
 	namespace draw {
 		GLDynamicLightShader::GLDynamicLightShader()
-		    : dynamicLightRadius("dynamicLightRadius"),
+		    : dynamicLightOrigin("dynamicLightOrigin"),
 		      dynamicLightColor("dynamicLightColor"),
-		      dynamicLightOrigin("dynamicLightOrigin"),
-		      dynamicLightSpotMatrix("dynamicLightSpotMatrix"),
+		      dynamicLightRadius("dynamicLightRadius"),
 		      dynamicLightRadiusInversed("dynamicLightRadiusInversed"),
+		      dynamicLightSpotMatrix("dynamicLightSpotMatrix"),
 		      dynamicLightProjectionTexture("dynamicLightProjectionTexture")
 
 		{

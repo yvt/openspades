@@ -27,7 +27,7 @@
 namespace spades {
 	namespace client {
 		CenterMessageView::CenterMessageView(Client *client, IFont *font)
-		    : client(client), font(font), renderer(client->GetRenderer()) {
+		    : client(client), renderer(client->GetRenderer()), font(font) {
 			SPADES_MARK_FUNCTION();
 
 			for (int i = 0; i < 2; i++)

@@ -38,9 +38,9 @@ namespace spades {
 		                             StartupScreenHelper *helper, client::FontManager *fontManager)
 		    : renderer(r),
 		      audioDevice(a),
+		      fontManager(fontManager),
 		      startRequested(false),
-		      helper(helper),
-		      fontManager(fontManager) {
+		      helper(helper) {
 			SPADES_MARK_FUNCTION();
 			if (r == NULL)
 				SPInvalidArgument("r");

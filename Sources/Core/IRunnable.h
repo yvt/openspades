@@ -24,5 +24,6 @@ namespace spades {
 	class IRunnable {
 	public:
 		virtual void Run() = 0;
+		virtual ~IRunnable() {};
 	};
 }

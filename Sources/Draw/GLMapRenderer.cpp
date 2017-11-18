@@ -48,7 +48,7 @@ namespace spades {
 			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 		}
 
-		GLMapRenderer::GLMapRenderer(client::GameMap *m, GLRenderer *r) : gameMap(m), renderer(r) {
+		GLMapRenderer::GLMapRenderer(client::GameMap *m, GLRenderer *r) : renderer(r), gameMap(m) {
 			SPADES_MARK_FUNCTION();
 
 			device = renderer->GetGLDevice();

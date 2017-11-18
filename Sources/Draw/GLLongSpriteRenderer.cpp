@@ -37,14 +37,14 @@ namespace spades {
 		      projectionViewMatrix("projectionViewMatrix"),
 		      rightVector("rightVector"),
 		      upVector("upVector"),
-		      positionAttribute("positionAttribute"),
-		      texCoordAttribute("texCoordAttribute"),
-		      colorAttribute("colorAttribute"),
 		      texture("mainTexture"),
 		      viewMatrix("viewMatrix"),
 		      fogDistance("fogDistance"),
 		      fogColor("fogColor"),
-		      viewOriginVector("viewOriginVector") {
+		      viewOriginVector("viewOriginVector"),
+		      positionAttribute("positionAttribute"),
+		      texCoordAttribute("texCoordAttribute"),
+		      colorAttribute("colorAttribute") {
 			SPADES_MARK_FUNCTION();
 
 			program = renderer->RegisterProgram("Shaders/LongSprite.program");

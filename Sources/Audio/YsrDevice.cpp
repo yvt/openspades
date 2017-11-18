@@ -329,10 +329,10 @@ namespace spades {
 		static void DebugLog(const char *msg, void *) { SPLog("YSR Debug: %s", msg); }
 
 		YsrDevice::YsrDevice()
-		    : gameMap(nullptr),
-		      driver(new YsrDriver()),
-		      roomHistoryPos(0),
-		      listenerPosition(MakeVector3(0, 0, 0)) {
+		    : driver(new YsrDriver()),
+		      gameMap(nullptr),
+		      listenerPosition(MakeVector3(0, 0, 0)),
+		      roomHistoryPos(0) {
 			SDL_AudioSpec spec;
 			spec.callback = reinterpret_cast<SDL_AudioCallback>(RenderCallback);
 			spec.userdata = this;

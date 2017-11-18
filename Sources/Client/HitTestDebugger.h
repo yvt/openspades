@@ -51,7 +51,7 @@ namespace spades {
 				int numHeadHits;
 				std::array<int, 3> numLimbHits;
 				int numTorsoHits;
-				PlayerHit() : numHeadHits(0), numLimbHits({0, 0, 0}), numTorsoHits(0) {}
+				PlayerHit() : numHeadHits(0), numLimbHits({{0, 0, 0}}), numTorsoHits(0) {}
 			};
 
 			/** Save hit detection debug image */
