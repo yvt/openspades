@@ -31,7 +31,7 @@
 namespace spades {
 	namespace draw {
 		SWFlatMapRenderer::SWFlatMapRenderer(SWRenderer *r, client::GameMap *map)
-		    : map(map), r(r), needsUpdate(true), w(map->Width()), h(map->Height()) {
+		    : r(r), map(map), w(map->Width()), h(map->Height()), needsUpdate(true) {
 			SPADES_MARK_FUNCTION();
 
 			if (w & 31) {

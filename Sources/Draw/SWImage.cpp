@@ -43,13 +43,13 @@ namespace spades {
 		}
 
 		SWImage::SWImage(Bitmap *m)
-		    : w(static_cast<float>(m->GetWidth())),
+		    : ew(m->GetWidth()),
+		      eh(m->GetHeight()),
+		      isWhite(false),
+		      w(static_cast<float>(m->GetWidth())),
 		      h(static_cast<float>(m->GetHeight())),
 		      iw(1.f / w),
-		      ih(1.f / h),
-		      ew(m->GetWidth()),
-		      eh(m->GetHeight()),
-		      isWhite(false) {
+		      ih(1.f / h) {
 			bmp.resize(ew * eh);
 
 			// premultiplied alpha
@@ -72,11 +72,11 @@ namespace spades {
 		SWImage::SWImage(int w, int h)
 		    : ew(w),
 		      eh(h),
+		      isWhite(false),
 		      w(static_cast<float>(ew)),
 		      h(static_cast<float>(eh)),
 		      iw(1.f / w),
-		      ih(1.f / h),
-		      isWhite(false) {
+		      ih(1.f / h) {
 			bmp.reserve(ew * eh);
 		}
 

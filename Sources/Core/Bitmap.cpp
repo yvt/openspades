@@ -31,7 +31,7 @@
 #include <ScriptBindings/ScriptManager.h>
 
 namespace spades {
-	Bitmap::Bitmap(int ww, int hh) : w(ww), h(hh), autoDelete(true), pixels(nullptr) {
+	Bitmap::Bitmap(int ww, int hh) : w(ww), h(hh), pixels(nullptr), autoDelete(true) {
 		SPADES_MARK_FUNCTION();
 
 		if (w < 1 || h < 1 || w > 8192 || h > 8192) {
@@ -42,7 +42,7 @@ namespace spades {
 		SPAssert(pixels != NULL);
 	}
 
-	Bitmap::Bitmap(uint32_t *pixels, int w, int h) : pixels(pixels), w(w), h(h), autoDelete(false) {
+	Bitmap::Bitmap(uint32_t *pixels, int w, int h) : w(w), h(h), pixels(pixels), autoDelete(false) {
 		SPADES_MARK_FUNCTION();
 
 		if (w < 1 || h < 1 || w > 8192 || h > 8192) {

@@ -43,7 +43,8 @@ DEFINE_SPADES_SETTING(r_swNumThreads, "4");
 namespace spades {
 	namespace draw {
 		SWRenderer::SWRenderer(SWPort *port, SWFeatureLevel level)
-		    : port(port),
+		    : featureLevel(level),
+		      port(port),
 		      map(nullptr),
 		      fb(nullptr),
 		      inited(false),
@@ -53,8 +54,7 @@ namespace spades {
 		      drawColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1)),
 		      legacyColorPremultiply(false),
 		      lastTime(0),
-		      duringSceneRendering(false),
-		      featureLevel(level) {
+		      duringSceneRendering(false) {
 
 			SPADES_MARK_FUNCTION();
 

@@ -97,8 +97,8 @@ namespace spades {
 		      lastColorBufferTexture(0),
 		      fogDistance(128.f),
 		      renderingMirror(false),
-		      duringSceneRendering(false),
-		      lastTime(0) {
+		      lastTime(0),
+		      duringSceneRendering(false) {
 			SPADES_MARK_FUNCTION();
 
 			SPLog("GLRenderer bootstrap");

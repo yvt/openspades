@@ -295,7 +295,7 @@ namespace spades {
 		SPADES_MARK_FUNCTION();
 	}
 	ConcurrentDispatch::ConcurrentDispatch(std::string name)
-	    : entry(NULL), name(name), runnable(NULL) {
+	    : name(name), entry(NULL), runnable(NULL) {
 		SPADES_MARK_FUNCTION();
 	}
 

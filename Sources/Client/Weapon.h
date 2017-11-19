@@ -28,7 +28,7 @@ namespace spades {
 	namespace client {
 		class World;
 		class Player;
-		class GameProperties;
+		struct GameProperties;
 
 		class Weapon {
 			World *world;

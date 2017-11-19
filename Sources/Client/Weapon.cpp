@@ -36,8 +36,8 @@ namespace spades {
 			  shootingPreviously(false),
 		      reloading(false),
 		      nextShotTime(0.f),
-		      reloadEndTime(-100.f),
 		      reloadStartTime(-101.f),
+		      reloadEndTime(-100.f),
 		      lastDryFire(false) {
 			SPADES_MARK_FUNCTION();
 		}

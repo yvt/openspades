@@ -105,14 +105,14 @@ namespace spades {
 		};
 
 		SWMapRenderer::SWMapRenderer(SWRenderer *r, client::GameMap *m, SWFeatureLevel level)
-		    : map(m),
+		    : w(m->Width()),
+		      h(m->Height()),
+		      renderer(r),
+		      level(level),
+		      map(m),
 		      frameBuf(nullptr),
 		      depthBuf(nullptr),
-		      rleHeap(m->Width() * m->Height() * 64),
-		      level(level),
-		      w(m->Width()),
-		      h(m->Height()),
-		      renderer(r) {
+		      rleHeap(m->Width() * m->Height() * 64) {
 			rle.resize(w * h);
 			rleLen.resize(w * h);
 

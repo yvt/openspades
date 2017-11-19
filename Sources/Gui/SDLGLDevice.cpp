@@ -427,7 +427,7 @@ namespace spades {
 
 		IGLDevice::UInteger SDLGLDevice::GenBuffer() {
 			SPADES_MARK_FUNCTION_DEBUG();
-			GLuint i;
+			GLuint i = 0;
 #if GLEW
 			if (glGenBuffers)
 				glGenBuffers(1, &i);
@@ -469,7 +469,7 @@ namespace spades {
 				case draw::IGLDevice::ReadWrite: acc = GL_READ_WRITE; break;
 				default: SPInvalidEnum("access", access);
 			}
-			void *ret;
+			void *ret = nullptr;
 #if GLEW
 			if (glMapBuffer)
 				ret = glMapBuffer(parseBufferTarget(target), acc);
@@ -565,7 +565,7 @@ namespace spades {
 
 		IGLDevice::UInteger SDLGLDevice::GenQuery() {
 			SPADES_MARK_FUNCTION_DEBUG();
-			GLuint val;
+			GLuint val = 0;
 #if GLEW
 			if (glGenQueries)
 				glGenQueries(1, &val);
@@ -640,7 +640,7 @@ namespace spades {
 		}
 
 		IGLDevice::UInteger SDLGLDevice::GetQueryObjectUInteger(UInteger query, Enum pname) {
-			GLuint val;
+			GLuint val = 0;
 			SPADES_MARK_FUNCTION_DEBUG();
 
 #if GLEW
@@ -684,7 +684,7 @@ namespace spades {
 		}
 
 		IGLDevice::UInteger64 SDLGLDevice::GetQueryObjectUInteger64(UInteger query, Enum pname) {
-			GLuint64 val;
+			GLuint64 val = 0;
 			SPADES_MARK_FUNCTION_DEBUG();
 
 #if GLEW
@@ -1300,7 +1300,7 @@ namespace spades {
 
 		IGLDevice::UInteger SDLGLDevice::CreateShader(Enum type) {
 			SPADES_MARK_FUNCTION();
-			IGLDevice::UInteger ret;
+			IGLDevice::UInteger ret = 0;
 #if GLEW
 			if (glCreateShader)
 				switch (type) {
@@ -1386,7 +1386,7 @@ namespace spades {
 
 		IGLDevice::Integer SDLGLDevice::GetShaderInteger(UInteger shader, Enum param) {
 			SPADES_MARK_FUNCTION();
-			GLint ret;
+			GLint ret = -1;
 #if GLEW
 			if (glGetShaderiv)
 				switch (param) {
@@ -1454,7 +1454,7 @@ namespace spades {
 
 		IGLDevice::Integer SDLGLDevice::GetProgramInteger(UInteger shader, Enum param) {
 			SPADES_MARK_FUNCTION();
-			GLint ret;
+			GLint ret = -1;
 #if GLEW
 			if (glGetProgramiv)
 				switch (param) {
@@ -1520,6 +1520,7 @@ namespace spades {
 				return glCreateProgramObjectARB();
 			else
 				ReportMissingFunc("glCreateProgram");
+			return 0;
 #else
 			CheckExistence(glCreateProgram);
 			return glCreateProgram();
@@ -1625,6 +1626,7 @@ namespace spades {
 				return glGetAttribLocationARB(program, name);
 			else
 				ReportMissingFunc("glGetAttribLocation");
+			return 0;
 #else
 			CheckExistence(glGetAttribLocation);
 			return glGetAttribLocation(program, name);
@@ -1654,6 +1656,7 @@ namespace spades {
 				return glGetUniformLocationARB(program, name);
 			else
 				ReportMissingFunc("glGetUniformLocation");
+			return 0;
 #else
 			CheckExistence(glGetUniformLocation);
 			return glGetUniformLocation(program, name);
@@ -1799,7 +1802,7 @@ namespace spades {
 		}
 
 		IGLDevice::UInteger SDLGLDevice::GenFramebuffer() {
-			GLuint v;
+			GLuint v = 0;
 #if GLEW
 			if (glGenFramebuffers)
 				glGenFramebuffers(1, &v);
@@ -1844,7 +1847,7 @@ namespace spades {
 			CheckError();
 		}
 		IGLDevice::Enum SDLGLDevice::CheckFramebufferStatus(spades::draw::IGLDevice::Enum target) {
-			GLenum ret;
+			GLenum ret = 0;
 #if GLEW
 			if (glCheckFramebufferStatus)
 				ret = glCheckFramebufferStatus(parseFramebufferTarget(target));
@@ -1950,7 +1953,7 @@ namespace spades {
 		}
 
 		IGLDevice::UInteger SDLGLDevice::GenRenderbuffer() {
-			GLuint v;
+			GLuint v = 0;
 #if GLEW
 			if (glGenRenderbuffers)
 				glGenRenderbuffers(1, &v);

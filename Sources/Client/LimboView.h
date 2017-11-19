@@ -49,7 +49,7 @@ namespace spades {
 
 				MenuItem() {}
 				MenuItem(MenuType type, AABB2 rt, std::string txt)
-				    : type(type), rect(rt), hover(false), text(txt) {}
+				    : type(type), rect(rt), text(txt), hover(false) {}
 			};
 			Client *client;
 			IRenderer *renderer;

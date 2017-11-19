@@ -201,7 +201,7 @@ namespace spades {
 			float ScreenHeight() { return base->ScreenHeight(); }
 		};
 
-		ClientPlayer::ClientPlayer(Player *p, Client *c) : player(p), client(c), hasValidOriginMatrix(false) {
+		ClientPlayer::ClientPlayer(Player *p, Client *c) : client(c), player(p), hasValidOriginMatrix(false) {
 			SPADES_MARK_FUNCTION();
 
 			sprintState = 0.f;
