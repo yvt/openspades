@@ -95,17 +95,37 @@ namespace spades {
 		}
 
 		float Client::GetAimDownZoomScale() {
-			if (world == nullptr || world->GetLocalPlayer() == nullptr ||
-			    world->GetLocalPlayer()->IsToolWeapon() == false ||
-			    world->GetLocalPlayer()->IsAlive() == false)
+			if (!world) {
 				return 1.f;
+			}
+
+			if (ShouldRenderInThirdPersonView()) {
+				return 1.f;
+			}
+
+			Player* player = GetViewedPlayer();
+			if (
+			    !player ||
+			    !player->IsToolWeapon() ||
+			    !player->IsAlive()
+			   ) {
+				return 1.f;
+			}
+
+			ClientPlayer* clientPlayer = clientPlayers[player->GetId()];
+			if (!clientPlayer) {
+				return 1.f;
+			}
+
 			float delta = .8f;
-			switch (world->GetLocalPlayer()->GetWeapon()->GetWeaponType()) {
+			switch (player->GetWeapon()->GetWeaponType()) {
 				case SMG_WEAPON: delta = .8f; break;
 				case RIFLE_WEAPON: delta = 1.4f; break;
 				case SHOTGUN_WEAPON: delta = .4f; break;
 			}
-			float aimDownState = GetAimDownState();
+
+			float aimDownState = clientPlayer->GetAimDownState();
+
 			return 1.f + (3.f - 2.f * powf(aimDownState, 1.5f)) * powf(aimDownState, 3.f) * delta;
 		}
 
@@ -158,6 +178,8 @@ namespace spades {
 					float scale = 1.f;
 					float vibPitch = 0.f;
 					float vibYaw = 0.f;
+					scale /= GetAimDownZoomScale();
+
 					if (ShouldRenderInThirdPersonView() ||
 					    (IsFollowing() && player != world->GetLocalPlayer())) {
 						Vector3 center = player->GetEye();
@@ -324,8 +346,6 @@ namespace spades {
 								}
 							}
 						}
-
-						scale /= GetAimDownZoomScale();
 
 						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
