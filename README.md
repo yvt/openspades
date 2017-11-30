@@ -28,6 +28,18 @@ sudo snap install openspades
 
 Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with the `openspades` command.
 
+#### PPA
+
+On Ubuntu-based systems, you can add the OpenSpades PPA with:
+
+```bash
+sudo apt-add-repository ppa:fantoro/openspades
+sudo apt update
+sudo apt install openspades
+```
+
+Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with the `openspades` command.
+
 #### Building and installing from source
 GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
 
