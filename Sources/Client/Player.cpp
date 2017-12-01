@@ -428,6 +428,7 @@ namespace spades {
 				if (result.hit && (result.hitBlock + result.normal).z < 62 &&
 				    (!OverlapsWithOneBlock(result.hitBlock + result.normal)) &&
 				    BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f &&
+				    (result.hitBlock + result.normal).z >= 0 &&
 				    !pendingPlaceBlock) {
 
 					// Building is possible, and there's no delayed block placement.
