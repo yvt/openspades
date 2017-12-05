@@ -39,9 +39,9 @@ namespace spades {
 		                             float pixelRatio)
 		    : renderer(r),
 		      audioDevice(a),
+		      fontManager(fontManager),
 		      startRequested(false),
 		      helper(helper),
-		      fontManager(fontManager),
 		      pixelRatio(pixelRatio) {
 			SPADES_MARK_FUNCTION();
 			if (r == NULL)

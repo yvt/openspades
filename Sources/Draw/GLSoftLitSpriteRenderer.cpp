@@ -37,27 +37,27 @@ namespace spades {
 
 		GLSoftLitSpriteRenderer::GLSoftLitSpriteRenderer(GLRenderer *renderer)
 		    : renderer(renderer),
-		      device(renderer->GetGLDevice()),
 		      settings(renderer->GetSettings()),
+		      device(renderer->GetGLDevice()),
 		      projectionViewMatrix("projectionViewMatrix"),
 		      rightVector("rightVector"),
 		      upVector("upVector"),
-		      positionAttribute("positionAttribute"),
-		      spritePosAttribute("spritePosAttribute"),
-		      colorAttribute("colorAttribute"),
+		      frontVector("frontVector"),
+		      viewOriginVector("viewOriginVector"),
 		      texture("mainTexture"),
+		      depthTexture("depthTexture"),
 		      viewMatrix("viewMatrix"),
 		      fogDistance("fogDistance"),
 		      fogColor("sRGBFogColor"),
-		      depthTexture("depthTexture"),
 		      zNearFar("zNearFar"),
-		      frontVector("frontVector"),
-		      viewOriginVector("viewOriginVector"),
+		      cameraPosition("cameraPosition"),
+		      positionAttribute("positionAttribute"),
+		      spritePosAttribute("spritePosAttribute"),
+		      colorAttribute("colorAttribute"),
+		      emissionAttribute("emissionAttribute"),
 		      dlRAttribute("dlRAttribute"),
 		      dlGAttribute("dlGAttribute"),
-		      dlBAttribute("dlBAttribute"),
-		      emissionAttribute("emissionAttribute"),
-		      cameraPosition("cameraPosition") {
+		      dlBAttribute("dlBAttribute") {
 			SPADES_MARK_FUNCTION();
 
 			program = renderer->RegisterProgram("Shaders/SoftLitSprite.program");

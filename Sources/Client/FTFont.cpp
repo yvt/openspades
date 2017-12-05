@@ -193,11 +193,11 @@ namespace spades {
 		FTFont::FTFont(client::IRenderer *renderer, FTFontSet *fontSet, float height,
 		               float lineHeight, float pixelRatio)
 		    : client::IFont(renderer),
-		      fontSet(fontSet),
-		      height(height),
-		      lineHeight(lineHeight),
 		      renderer(renderer),
+		      lineHeight(lineHeight),
 		      pixelRatio(pixelRatio),
+			  fontSet(fontSet),
+		      height(height),
 		      dpi(static_cast<int>(pixelRatio * 72.0f)) {
 			SPADES_MARK_FUNCTION();
 

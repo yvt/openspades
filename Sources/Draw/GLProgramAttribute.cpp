@@ -26,7 +26,7 @@
 namespace spades {
 	namespace draw {
 		GLProgramAttribute::GLProgramAttribute(const std::string &n)
-		    : name(n), last(NULL), loc(-1) {}
+		    : last(NULL), loc(-1), name(n) {}
 		int GLProgramAttribute::operator()(spades::draw::GLProgram *prog) {
 
 			SPADES_MARK_FUNCTION_DEBUG();

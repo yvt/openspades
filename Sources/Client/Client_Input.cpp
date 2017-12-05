@@ -111,60 +111,80 @@ namespace spades {
 				return;
 			}
 
-			if (IsFollowing()) {
-				SPAssert(world != nullptr);
+			auto cameraMode = GetCameraMode();
 
-				x = -x;
-				if (!cg_invertMouseY)
-					y = -y;
+			switch (cameraMode) {
+				case ClientCameraMode::None:
+				case ClientCameraMode::NotJoined:
+				case ClientCameraMode::FirstPersonFollow:
+					// No-op
+					break;
 
-				followYaw -= x * 0.003f;
-				followPitch -= y * 0.003f;
-				if (followPitch < -M_PI * .45f)
-					followPitch = -static_cast<float>(M_PI) * .45f;
-				if (followPitch > M_PI * .45f)
-					followPitch = static_cast<float>(M_PI) * .45f;
-				followYaw = fmodf(followYaw, static_cast<float>(M_PI) * 2.f);
-			} else if (world && world->GetLocalPlayer()) {
-				Player *p = world->GetLocalPlayer();
-				float aimDownState = GetAimDownState();
-				if (p->IsAlive()) {
-					x /= GetAimDownZoomScale();
-					y /= GetAimDownZoomScale();
-
-					float rad = x * x + y * y;
-					if (rad > 0.f) {
-						if ((float)cg_mouseExpPower < 0.001f || isnan((float)cg_mouseExpPower)) {
-							SPLog("Invalid cg_mouseExpPower value, resetting to 1.0");
-							cg_mouseExpPower = 1.f;
-						}
-						float factor = renderer->ScreenWidth() * .1f;
-						factor *= factor;
-						rad /= factor;
-						rad = powf(rad, (float)cg_mouseExpPower * 0.5f - 0.5f);
-
-						// shouldn't happen...
-						if (isnan(rad))
-							rad = 1.f;
-
-						x *= rad;
-						y *= rad;
-					}
-
-					if (aimDownState > 0.f) {
-						float scale = cg_zoomedMouseSensScale;
-						scale = powf(scale, aimDownState);
-						x *= scale;
-						y *= scale;
-					}
-
-					x *= (float)cg_mouseSensitivity;
-					y *= (float)cg_mouseSensitivity;
-
-					if (cg_invertMouseY)
+				case ClientCameraMode::Free:
+				case ClientCameraMode::ThirdPersonFollow: {
+					// Move the third-person or free-floating camera
+					x = -x;
+					if (!cg_invertMouseY)
 						y = -y;
 
-					p->Turn(x * 0.003f, y * 0.003f);
+					auto &state = followAndFreeCameraState;
+
+					state.yaw -= x * 0.003f;
+					state.pitch -= y * 0.003f;
+					if (state.pitch < -M_PI * .45f)
+						state.pitch = -static_cast<float>(M_PI) * .45f;
+					if (state.pitch > M_PI * .45f)
+						state.pitch = static_cast<float>(M_PI) * .45f;
+					state.yaw = fmodf(state.yaw, static_cast<float>(M_PI) * 2.f);
+					break;
+				}
+
+				case ClientCameraMode::FirstPersonLocal:
+				case ClientCameraMode::ThirdPersonLocal: {
+					SPAssert(world);
+					SPAssert(world->GetLocalPlayer());
+
+					Player *p = world->GetLocalPlayer();
+					if (p->IsAlive()) {
+						float aimDownState = GetAimDownState();
+						x /= GetAimDownZoomScale();
+						y /= GetAimDownZoomScale();
+
+						float rad = x * x + y * y;
+						if (rad > 0.f) {
+							if ((float)cg_mouseExpPower < 0.001f || isnan((float)cg_mouseExpPower)) {
+								SPLog("Invalid cg_mouseExpPower value, resetting to 1.0");
+								cg_mouseExpPower = 1.f;
+							}
+							float factor = renderer->ScreenWidth() * .1f;
+							factor *= factor;
+							rad /= factor;
+							rad = powf(rad, (float)cg_mouseExpPower * 0.5f - 0.5f);
+
+							// shouldn't happen...
+							if (isnan(rad))
+								rad = 1.f;
+
+							x *= rad;
+							y *= rad;
+						}
+
+						if (aimDownState > 0.f) {
+							float scale = cg_zoomedMouseSensScale;
+							scale = powf(scale, aimDownState);
+							x *= scale;
+							y *= scale;
+						}
+
+						x *= (float)cg_mouseSensitivity;
+						y *= (float)cg_mouseSensitivity;
+
+						if (cg_invertMouseY)
+							y = -y;
+
+						p->Turn(x * 0.003f, y * 0.003f);
+					}
+					break;
 				}
 			}
 		}
@@ -268,27 +288,59 @@ namespace spades {
 					}
 				}
 			} else if (world) {
-				if (IsFollowing()) {
-					if (CheckKey(cg_keyAttack, name)) {
-						if (down) {
-							if (world->GetLocalPlayer()->GetTeamId() >= 2 ||
-							    time > lastAliveTime + 1.3f)
-								FollowNextPlayer(false);
+				auto cameraMode = GetCameraMode();
+
+				switch (cameraMode) {
+					case ClientCameraMode::None:
+					case ClientCameraMode::NotJoined:
+					case ClientCameraMode::FirstPersonLocal:
+						break;
+					case ClientCameraMode::ThirdPersonLocal:
+						if (world->GetLocalPlayer()->IsAlive()) {
+							break;
 						}
-						return;
-					} else if (CheckKey(cg_keyAltAttack, name)) {
-						if (down) {
-							if (world->GetLocalPlayer()->GetTeamId() >= 2) {
-								// spectating
-								followingPlayerId = world->GetLocalPlayerIndex();
-							} else if (time > lastAliveTime + 1.3f) {
-								// dead
-								FollowNextPlayer(true);
+					case ClientCameraMode::FirstPersonFollow:
+					case ClientCameraMode::ThirdPersonFollow:
+					case ClientCameraMode::Free:
+						if (CheckKey(cg_keyAttack, name)) {
+							if (down) {
+								if (cameraMode == ClientCameraMode::Free ||
+									cameraMode == ClientCameraMode::ThirdPersonLocal) {
+									// Start with the local player
+									followedPlayerId = world->GetLocalPlayerIndex();
+								}
+								if (world->GetLocalPlayer()->IsSpectator() ||
+									time > lastAliveTime + 1.3f) {
+									FollowNextPlayer(false);
+									followCameraState.enabled = true;
+								}
 							}
+							return;
+						} else if (CheckKey(cg_keyAltAttack, name)) {
+							if (down) {
+								if (cameraMode == ClientCameraMode::Free ||
+									cameraMode == ClientCameraMode::ThirdPersonLocal) {
+									// Start with the local player
+									followedPlayerId = world->GetLocalPlayerIndex();
+								}
+								if (world->GetLocalPlayer()->IsSpectator()) {
+									// Unfollow
+									followCameraState.enabled = false;
+								} else if (time > lastAliveTime + 1.3f) {
+									FollowNextPlayer(true);
+									followCameraState.enabled = true;
+								}
+							}
+							return;
+						} else if (CheckKey(cg_keyJump, name)) {
+							if (down) {
+								followCameraState.firstPerson = !followCameraState.firstPerson;
+							}
+							return;
 						}
-						return;
-					}
+						break;
 				}
+
 				if (world->GetLocalPlayer()) {
 					Player *p = world->GetLocalPlayer();
 
@@ -348,9 +400,6 @@ namespace spades {
 					} else if (CheckKey(cg_keySneak, name)) {
 						playerInput.sneak = down;
 					} else if (CheckKey(cg_keyJump, name)) {
-						if (down && IsFollowing()) {
-							firstPersonSpectate = !firstPersonSpectate;
-						}
 						playerInput.jump = down;
 					} else if (CheckKey(cg_keyAttack, name)) {
 						weapInput.primary = down;

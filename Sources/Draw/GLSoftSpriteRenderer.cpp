@@ -39,17 +39,17 @@ namespace spades {
 		      projectionViewMatrix("projectionViewMatrix"),
 		      rightVector("rightVector"),
 		      upVector("upVector"),
-		      positionAttribute("positionAttribute"),
-		      spritePosAttribute("spritePosAttribute"),
-		      colorAttribute("colorAttribute"),
+		      frontVector("frontVector"),
+		      viewOriginVector("viewOriginVector"),
 		      texture("mainTexture"),
+		      depthTexture("depthTexture"),
 		      viewMatrix("viewMatrix"),
 		      fogDistance("fogDistance"),
 		      fogColor("fogColor"),
-		      depthTexture("depthTexture"),
 		      zNearFar("zNearFar"),
-		      frontVector("frontVector"),
-		      viewOriginVector("viewOriginVector") {
+		      positionAttribute("positionAttribute"),
+		      spritePosAttribute("spritePosAttribute"),
+		      colorAttribute("colorAttribute") {
 			SPADES_MARK_FUNCTION();
 
 			program = renderer->RegisterProgram("Shaders/SoftSprite.program");

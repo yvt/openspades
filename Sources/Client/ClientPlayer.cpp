@@ -188,7 +188,7 @@ namespace spades {
 			float ScreenHeight() override { return base->ScreenHeight(); }
 		};
 
-		ClientPlayer::ClientPlayer(Player *p, Client *c) : player(p), client(c), hasValidOriginMatrix(false) {
+		ClientPlayer::ClientPlayer(Player *p, Client *c) : client(c), player(p), hasValidOriginMatrix(false) {
 			SPADES_MARK_FUNCTION();
 
 			sprintState = 0.f;
@@ -1029,11 +1029,8 @@ namespace spades {
 		}
 
 		bool ClientPlayer::ShouldRenderInThirdPersonView() {
-			// the player from whom's perspective the game is seen
-
-			if (player != client->GetViewedPlayer()) return true;
-
-			return client->ShouldRenderInThirdPersonView();
+			// The player from whom's perspective the game is
+			return !IsFirstPerson(client->GetCameraMode()) || player != &client->GetCameraTargetPlayer();
 		}
 
 		struct ClientPlayer::AmbienceInfo {

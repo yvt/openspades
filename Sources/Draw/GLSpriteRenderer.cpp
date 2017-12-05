@@ -36,14 +36,14 @@ namespace spades {
 		      projectionViewMatrix("projectionViewMatrix"),
 		      rightVector("rightVector"),
 		      upVector("upVector"),
-		      positionAttribute("positionAttribute"),
-		      spritePosAttribute("spritePosAttribute"),
-		      colorAttribute("colorAttribute"),
 		      texture("mainTexture"),
 		      viewMatrix("viewMatrix"),
 		      fogDistance("fogDistance"),
 		      fogColor("fogColor"),
-		      viewOriginVector("viewOriginVector") {
+		      viewOriginVector("viewOriginVector"),
+		      positionAttribute("positionAttribute"),
+		      spritePosAttribute("spritePosAttribute"),
+		      colorAttribute("colorAttribute") {
 			SPADES_MARK_FUNCTION();
 
 			program = renderer->RegisterProgram("Shaders/Sprite.program");

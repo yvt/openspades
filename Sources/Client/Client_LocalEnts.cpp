@@ -111,22 +111,20 @@ namespace spades {
 		}
 
 		Player *Client::HotTrackedPlayer(hitTag_t *hitFlag) {
-			if (!world)
+			if (!IsFirstPerson(GetCameraMode()))
 				return nullptr;
-			Player *p = world->GetLocalPlayer();
-			if (!p || !p->IsAlive())
-				return nullptr;
-			if (ShouldRenderInThirdPersonView())
-				return nullptr;
-			Vector3 origin = p->GetEye();
-			Vector3 dir = p->GetFront();
-			World::WeaponRayCastResult result = world->WeaponRayCast(origin, dir, p);
+
+			auto &p = GetCameraTargetPlayer();
+
+			Vector3 origin = p.GetEye();
+			Vector3 dir = p.GetFront();
+			World::WeaponRayCastResult result = world->WeaponRayCast(origin, dir, &p);
 
 			if (result.hit == false || result.player == nullptr)
 				return nullptr;
 
 			// don't hot track enemies (non-spectator only)
-			if (result.player->GetTeamId() != p->GetTeamId() && p->GetTeamId() < 2)
+			if (result.player->GetTeamId() != p.GetTeamId() && p.GetTeamId() < 2)
 				return nullptr;
 			if (hitFlag) {
 				*hitFlag = result.hitFlag;

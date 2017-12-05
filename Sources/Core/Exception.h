@@ -47,6 +47,8 @@ namespace spades {
 
 #define SPNotImplemented() SPRaise("Not implemented")
 
+#define SPUnreachable() SPRaise("Internal error; unreachable code")
+
 #define SPInvalidArgument(name) SPRaise("Invalid argument: %s", name)
 
 #define SPInvalidEnum(name, value) SPRaise("Invalid enum: %s: %d", name, (int)(value))

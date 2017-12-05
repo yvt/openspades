@@ -51,7 +51,7 @@ namespace spades {
 #pragma mark - Server Packet Handlers
 
 		void Client::LocalPlayerCreated() {
-			followPos = world->GetLocalPlayer()->GetEye();
+			freeCameraState.position = world->GetLocalPlayer()->GetEye();
 			weapInput = WeaponInput();
 			playerInput = PlayerInput();
 			keypadInput = KeypadInput();
@@ -62,12 +62,12 @@ namespace spades {
 		}
 
 		void Client::JoinedGame() {
-			// note: local player doesn't exist yet now
+			// Note: A local player doesn't exist yet
 
-			// tune for spectate mode
-			followingPlayerId = world->GetLocalPlayerIndex();
-			followPos = MakeVector3(256, 256, 30);
-			followVel = MakeVector3(0, 0, 0);
+			// Prepare the spectate mode
+			followCameraState.enabled = false;
+			freeCameraState.position = MakeVector3(256, 256, 30);
+			freeCameraState.velocity = MakeVector3(0, 0, 0);
 
 			scriptedUI->EnterLimboWindow(false);
 		}
@@ -237,6 +237,17 @@ namespace spades {
 		}
 
 		void Client::PlayerLeaving(spades::client::Player *p) {
+			// Choose the next player if a follow cam is active on this player
+			if (FollowsNonLocalPlayer(GetCameraMode()) && &GetCameraTargetPlayer() == p) {
+				FollowNextPlayer(false);
+
+				// Still unable to find a substitute?
+				if (&GetCameraTargetPlayer() == p) {
+					// Turn off the follow cam mode
+					followCameraState.enabled = false;
+				}
+			}
+
 			{
 				std::string msg;
 				msg = _Tr("Client", "Player {0} has left",

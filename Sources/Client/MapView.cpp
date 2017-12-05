@@ -241,12 +241,13 @@ namespace spades {
 			if (!world)
 				return;
 
-			Player *player = world->GetLocalPlayer();
-			if (client->IsFollowing()) {
-				player = world->GetPlayer(client->followingPlayerId);
-			}
-			if (!player)
+			if (!HasTargetPlayer(client->GetCameraMode())) {
+				// Do not display `MapView` until the player is joined and there is a player to
+				// focus
 				return;
+			}
+
+			Player &player = client->GetCameraTargetPlayer();
 
 			if (largeMap)
 				if (zoomState < .0001f)
@@ -255,11 +256,11 @@ namespace spades {
 			GameMap *map = world->GetMap();
 			Vector2 mapSize = MakeVector2(map->Width(), map->Height());
 
-			Vector3 pos = player->GetPosition();
-			;
-			if (player->GetTeamId() >= 2) {
-				pos = client->followPos;
+			Vector3 pos = player.GetPosition();
+			if (player.IsSpectator()) {
+				pos = client->freeCameraState.position;
 			}
+
 			Vector2 center = {pos.x, pos.y};
 			float cfgMapSize = cg_minimapSize;
 			if (cfgMapSize < 32)
@@ -462,38 +463,37 @@ namespace spades {
 				Vector4 teamColorF = ModifyColor(teamColor);
 				teamColorF *= alpha;
 
-				// draw local player's view
+				// Draw the local player's view
 				{
-					Player *p = player;
 					Handle<IImage> viewIcon = renderer->RegisterImage("Gfx/Map/View.png");
-					if (p->IsAlive()) {
-						Vector3 front = p->GetFront2D();
-						float ang = atan2(front.x, -front.y);
-						if (player->GetTeamId() >= 2) {
-							ang = client->followYaw - static_cast<float>(M_PI) * .5f;
+					if (player.IsAlive()) {
+						Vector3 front = player.GetFront2D();
+						float ang;
+						if (player.IsSpectator()) {
+							ang = client->followAndFreeCameraState.yaw - static_cast<float>(M_PI) * .5f;
+						} else {
+							ang = atan2(front.x, -front.y);
 						}
 
 						renderer->SetColorAlphaPremultiplied(teamColorF * 0.9f);
 
-						DrawIcon(player->GetTeamId() >= 2 ? client->followPos : p->GetPosition(),
+						DrawIcon(player.IsSpectator() ? client->freeCameraState.position : player.GetPosition(),
 						         viewIcon, ang);
 					}
 				}
-
-				bool isSpectating = player->GetTeamId() >= 2;
 
 				// draw player's icon
 				for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
 					Player *p = world->GetPlayer(i);
 					if (p == nullptr ||
-					    (p->GetTeamId() != world->GetLocalPlayer()->GetTeamId() && !isSpectating) ||
+					    (p->GetTeamId() != world->GetLocalPlayer()->GetTeamId() && !player.IsSpectator()) ||
 					    !p->IsAlive())
 						continue;
 
 					Vector3 front = p->GetFront2D();
 					float ang = atan2(front.x, -front.y);
-					if (player->GetTeamId() >= 2) {
-						ang = client->followYaw - static_cast<float>(M_PI) * .5f;
+					if (p->IsSpectator()) {
+						ang = client->followAndFreeCameraState.yaw - static_cast<float>(M_PI) * .5f;
 					}
 
 					// use a spec color for each player
@@ -511,24 +511,24 @@ namespace spades {
 					if (iconMode) {
 						WeaponType weapon = world->GetPlayer(i)->GetWeaponType();
 						if (weapon == WeaponType::SMG_WEAPON) {
-							DrawIcon(player->GetTeamId() >= 2 ? client->followPos
+							DrawIcon(p->IsSpectator() ? client->freeCameraState.position
 							                                  : p->GetPosition(),
 							         playerSMG, ang);
 						}
 
 						else if (weapon == WeaponType::RIFLE_WEAPON) {
-							DrawIcon(player->GetTeamId() >= 2 ? client->followPos
+							DrawIcon(p->IsSpectator() ? client->freeCameraState.position
 							                                  : p->GetPosition(),
 							         playerRifle, ang);
 						}
 
 						else if (weapon == WeaponType::SHOTGUN_WEAPON) {
-							DrawIcon(player->GetTeamId() >= 2 ? client->followPos
+							DrawIcon(p->IsSpectator() ? client->freeCameraState.position
 							                                  : p->GetPosition(),
 							         playerShotgun, ang);
 						}
 					} else { // draw normal color
-						DrawIcon(player->GetTeamId() >= 2 ? client->followPos : p->GetPosition(),
+						DrawIcon(p->IsSpectator() ? client->freeCameraState.position : p->GetPosition(),
 						         playerIcon, ang);
 					}
 				}

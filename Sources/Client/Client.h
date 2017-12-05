@@ -35,6 +35,7 @@
 #include <Core/ServerAddress.h>
 #include <Core/Stopwatch.h>
 #include <Gui/View.h>
+#include "ClientCameraMode.h"
 
 namespace spades {
 	class IStream;
@@ -143,7 +144,6 @@ namespace spades {
 			KeypadInput keypadInput;
 			Player::ToolType lastTool;
 			bool hasLastTool;
-			bool firstPersonSpectate;
 			Vector3 lastFront;
 			float lastPosSentTime;
 			int lastHealth;
@@ -159,8 +159,29 @@ namespace spades {
 				float strength;
 			};
 			std::vector<HurtSprite> hurtSprites;
+
 			float GetAimDownState();
 			float GetSprintState();
+
+			/**
+			 * Queries whether the local player is allowed to use a tool in this state.
+			 *
+			 * The following factors are considered by this function:
+			 *
+			 *  - The player cannot use a tool while / soon after sprinting.
+			 *  - The player cannot use a tool while switching tools.
+			 *  - The player must exist and be alive to use a tool.
+			 *
+			 * The following factors also affect whether a tool can actually be used, but they
+			 * do not affect the result of this function:
+			 *
+			 *  - Tool-specific status — e.g., out of ammo, out of block, "cannot build there"
+			 *  - Firing rate limit imposed by the tool
+			 */
+			bool CanLocalPlayerUseToolNow();
+
+			/** Retrieves `ClientPlayer` for the local player, or `nullptr` if it does not exist. */
+			ClientPlayer *GetLocalClientPlayer();
 
 			float toolRaiseState;
 			void SetSelectedTool(Player::ToolType, bool quiet = false);
@@ -184,17 +205,78 @@ namespace spades {
 			float targetFocalLength;
 			bool autoFocusEnabled;
 
-			// when dead...
-			/** Following player ID, which may be local player itself */
-			int followingPlayerId;
-			float followYaw, followPitch;
-			/** only for when spectating */
-			Vector3 followPos;
-			/** only for when spectating */
-			Vector3 followVel;
+			// Spectator camera control
+			/** The state of the following camera used for spectating. */
+			struct {
+				bool firstPerson = true;
+
+				/** Controls whether the follow camera is enabled. */
+				bool enabled = false;
+			} followCameraState;
+
+			/** The state of the free floating camera used for spectating. */
+			struct {
+				/** The temporally smoothed position (I guess). */
+				Vector3 position {0.0f, 0.0f, 0.0f};
+
+				/** The temporally smoothed velocity (I guess). */
+				Vector3 velocity {0.0f, 0.0f, 0.0f};
+			} freeCameraState;
+
+			/**
+			 * The state shared by both of the third-person and free-floating cameras.
+			 *
+			 * Note: These values are not used in the `cg_thirdperson` mode.
+			 */
+			struct {
+				/** The yaw angle. */
+				float yaw = 0.0f;
+
+				/** The pitch angle. */
+				float pitch = 0.0f;
+			} followAndFreeCameraState;
+
+			/**
+			 * The ID of the player being followed (in a spectator mode, or when the local player is
+			 * dead). Must be valid as long as the follow cam is enabled.
+			 *
+			 * Must *not* specify a local player.
+			 */
+			int followedPlayerId;
+
+			/**
+			 * Chooses the next player to follow and assigns it to `this->followingPlayerId`.
+			 * If the next player is the local player, disables the follow cam.
+			 */
 			void FollowNextPlayer(bool reverse);
-			/** @return true following is activated (and followingPlayerId should be used) */
-			bool IsFollowing();
+
+			/**
+			 * Retrieves the current camera mode.
+			 */
+			ClientCameraMode GetCameraMode();
+
+			/**
+			 * Retrieves the target player ID of the current camera mode (as returned by
+			 * `GetCameraMode`).
+		     *
+		     * Throws an exception if the current camera mode does not have a player in concern.
+			 */
+			int GetCameraTargetPlayerId();
+
+			/**
+			 * Retrieves the target player of the current camera mode (as returned by
+			 * `GetCameraMode`).
+		     *
+		     * Throws an exception if the current camera mode does not have a player in concern.
+			 */
+			Player &GetCameraTargetPlayer();
+
+			/**
+			 * Calculate the zoom value incorporating the effect of ADS for a first-person view.
+			 *
+			 * The camera mode must be first-person.
+			 */
+			float GetAimDownZoomScale();
 
 			float GetLocalFireVibration();
 			void CaptureColor();
@@ -277,9 +359,6 @@ namespace spades {
 			void DrawCTFObjects();
 			void DrawTCObjects();
 
-			float GetAimDownZoomScale();
-			bool ShouldRenderInThirdPersonView();
-			Player *GetViewedPlayer();
 			SceneDefinition CreateSceneDefinition();
 
 			std::string ScreenShotPath();

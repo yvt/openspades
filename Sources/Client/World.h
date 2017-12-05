@@ -43,7 +43,7 @@ namespace spades {
 		class IGameMode;
 		class Client; // FIXME: for debug
 		class HitTestDebugger;
-		class GameProperties;
+		struct GameProperties;
 		class World {
 			friend class Client; // FIXME: for debug
 		public:

@@ -71,52 +71,46 @@ namespace spades {
 
 		Client::Client(IRenderer *r, IAudioDevice *audioDev, const ServerAddress &host, float pixelRatio,
 		               FontManager *fontManager)
-		    : renderer(r),
-		      audioDevice(audioDev),
-			  pixelRatio(pixelRatio),
+		    : pixelRatio(pixelRatio),
 		      playerName(cg_playerName.operator std::string().substr(0, 15)),
-		      hasDelayedReload(false),
-		      hostname(host),
 		      logStream(nullptr),
-		      fontManager(fontManager),
+		      hostname(host),
+		      renderer(r),
+		      audioDevice(audioDev),
 
-		      readyToClose(false),
-		      scoreboardVisible(false),
-		      flashlightOn(false),
 
-		      frameToRendererInit(5),
 		      time(0.f),
-		      timeSinceInit(0.f),
+		      readyToClose(false),
 
+
+
+		      worldSubFrame(0.f),
+		      frameToRendererInit(5),
+		      timeSinceInit(0.f),
+		      hasLastTool(false),
+		      lastPosSentTime(0.f),
 		      lastAliveTime(0.f),
 		      lastKills(0),
-
+		      hasDelayedReload(false),
+		      localFireVibrationTime(-1.f),
+		      grenadeVibration(0.f),
+		      grenadeVibrationSlow(0.f),
+		      scoreboardVisible(false),
+		      flashlightOn(false),
+		      hitFeedbackIconState(0.f),
+		      hitFeedbackFriendly(false),
 		      focalLength(20.f),
 		      targetFocalLength(20.f),
 		      autoFocusEnabled(true),
 
-		      hitFeedbackIconState(0.f),
-		      hitFeedbackFriendly(false),
-		      localFireVibrationTime(-1.f),
-		      lastPosSentTime(0.f),
-		      worldSubFrame(0.f),
-		      grenadeVibration(0.f),
-		      grenadeVibrationSlow(0.f),
-		      lastMyCorpse(nullptr),
-		      hasLastTool(false),
-
-		      nextScreenShotIndex(0),
-		      nextMapShotIndex(0),
-
+		      fontManager(fontManager),
 		      alertDisappearTime(-10000.f),
-
-		      // FIXME: preferences?
+		      lastMyCorpse(nullptr),
 		      corpseSoftTimeLimit(30.f), // FIXME: this is not used
 		      corpseSoftLimit(6),
 		      corpseHardLimit(16),
-
-		      followYaw(0.f),
-		      followPitch(0.f) {
+		      nextScreenShotIndex(0),
+		      nextMapShotIndex(0) {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
 
@@ -688,7 +682,7 @@ namespace spades {
 				myTeam = world->GetLocalPlayer()->GetTeamId();
 			}
 
-			int nextId = followingPlayerId;
+			int nextId = followedPlayerId;
 			do {
 				reverse ? --nextId : ++nextId;
 				if (nextId >= static_cast<int>(world->GetNumPlayerSlots()))
@@ -712,23 +706,12 @@ namespace spades {
 				}
 
 				break;
-			} while (nextId != followingPlayerId);
+			} while (nextId != followedPlayerId);
 
-			followingPlayerId = nextId;
-		}
-
-		bool Client::IsFollowing() {
-			if (!world)
-				return false;
-			if (!world->GetLocalPlayer())
-				return false;
-			Player *p = world->GetLocalPlayer();
-			if (p->GetTeamId() >= 2)
-				return true;
-			if (p->IsAlive())
-				return false;
-			else
-				return true;
+			followedPlayerId = nextId;
+			if (followedPlayerId == world->GetLocalPlayerIndex()) {
+				followCameraState.enabled = false;
+			}
 		}
 	}
 }

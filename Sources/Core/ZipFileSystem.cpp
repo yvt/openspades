@@ -50,7 +50,7 @@ namespace spades {
 		size_t remDataPos;
 
 	public:
-		ZipFileInputStream(ZipFileSystem *fs, unzFile zf) : streaming(true), zip(zf), fs(fs) {
+		ZipFileInputStream(ZipFileSystem *fs, unzFile zf) : fs(fs), zip(zf), streaming(true) {
 			SPADES_MARK_FUNCTION();
 		}
 

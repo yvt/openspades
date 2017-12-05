@@ -57,7 +57,7 @@ namespace spades {
 		struct PlayerInput;
 		struct WeaponInput;
 		class Grenade;
-		class GameProperties;
+		struct GameProperties;
 		class NetClient {
 			Client *client;
 			NetClientStatus status;
