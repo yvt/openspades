@@ -103,11 +103,6 @@ namespace spades {
 		      targetFocalLength(20.f),
 		      autoFocusEnabled(true),
 
-
-		      // FIXME: preferences?
-
-		      followYaw(0.f),
-		      followPitch(0.f),
 		      inGameLimbo(false),
 		      fontManager(fontManager),
 		      alertDisappearTime(-10000.f),
@@ -703,7 +698,7 @@ namespace spades {
 				myTeam = world->GetLocalPlayer()->GetTeamId();
 			}
 
-			int nextId = followingPlayerId;
+			int nextId = followedPlayerId;
 			do {
 				reverse ? --nextId : ++nextId;
 				if (nextId >= static_cast<int>(world->GetNumPlayerSlots()))
@@ -727,23 +722,12 @@ namespace spades {
 				}
 
 				break;
-			} while (nextId != followingPlayerId);
+			} while (nextId != followedPlayerId);
 
-			followingPlayerId = nextId;
-		}
-
-		bool Client::IsFollowing() {
-			if (!world)
-				return false;
-			if (!world->GetLocalPlayer())
-				return false;
-			Player *p = world->GetLocalPlayer();
-			if (p->GetTeamId() >= 2)
-				return true;
-			if (p->IsAlive())
-				return false;
-			else
-				return true;
+			followedPlayerId = nextId;
+			if (followedPlayerId == world->GetLocalPlayerIndex()) {
+				followCameraState.enabled = false;
+			}
 		}
 	}
 }

@@ -1042,11 +1042,8 @@ namespace spades {
 		}
 
 		bool ClientPlayer::ShouldRenderInThirdPersonView() {
-			// the player from whom's perspective the game is seen
-
-			if (player != client->GetViewedPlayer()) return true;
-
-			return client->ShouldRenderInThirdPersonView();
+			// The player from whom's perspective the game is
+			return !IsFirstPerson(client->GetCameraMode()) || player != &client->GetCameraTargetPlayer();
 		}
 
 		struct ClientPlayer::AmbienceInfo {

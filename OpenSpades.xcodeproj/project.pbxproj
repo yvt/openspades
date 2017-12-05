@@ -393,6 +393,7 @@
 		E82E67F318EA7EAB004DBA18 /* font-unifont.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "font-unifont.pak"; path = "Resources/font-unifont.pak"; sourceTree = "<group>"; };
 		E82E680318EA7F60004DBA18 /* libysrspades.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libysrspades.dylib; path = lib/libysrspades.dylib; sourceTree = "<group>"; };
 		E82E680618EA9502004DBA18 /* XSpades.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = XSpades.entitlements; path = XSpades/XSpades.entitlements; sourceTree = "<group>"; };
+		E831D8661FD65BD5003C0D97 /* ClientCameraMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ClientCameraMode.h; sourceTree = "<group>"; };
 		E834F54E17942C43004EBE88 /* Grenade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grenade.cpp; sourceTree = "<group>"; };
 		E834F54F17942C43004EBE88 /* Grenade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grenade.h; sourceTree = "<group>"; };
 		E834F55117944778004EBE88 /* NetClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetClient.cpp; sourceTree = "<group>"; };
@@ -1613,6 +1614,7 @@
 				E8FE749518CC6F2900291338 /* Client_Scene.cpp */,
 				E82E66B218E9A35C004DBA18 /* Client_FPSCounter.cpp */,
 				E8CF03C2178EE6D8000683D4 /* Client.h */,
+				E831D8661FD65BD5003C0D97 /* ClientCameraMode.h */,
 				E834F56D1797D92F004EBE88 /* ChatWindow.cpp */,
 				E834F56E1797D932004EBE88 /* ChatWindow.h */,
 				E8E0AF92179942DB00C6B5A9 /* Corpse.cpp */,

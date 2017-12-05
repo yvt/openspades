@@ -276,25 +276,28 @@ namespace spades {
 		void Client::UpdateLocalSpectator(float dt) {
 			SPADES_MARK_FUNCTION();
 
-			Vector3 lastPos = followPos;
-			followVel *= powf(.3f, dt);
-			followPos += followVel * dt;
+			auto &sharedState = followAndFreeCameraState;
+			auto &freeState = freeCameraState;
 
-			if (followPos.x < 0.f) {
-				followVel.x = fabsf(followVel.x) * 0.2f;
-				followPos = lastPos + followVel * dt;
+			Vector3 lastPos = freeState.position;
+			freeState.velocity *= powf(.3f, dt);
+			freeState.position += freeState.velocity * dt;
+
+			if (freeState.position.x < 0.f) {
+				freeState.velocity.x = fabsf(freeState.velocity.x) * 0.2f;
+				freeState.position = lastPos + freeState.velocity * dt;
 			}
-			if (followPos.y < 0.f) {
-				followVel.y = fabsf(followVel.y) * 0.2f;
-				followPos = lastPos + followVel * dt;
+			if (freeState.position.y < 0.f) {
+				freeState.velocity.y = fabsf(freeState.velocity.y) * 0.2f;
+				freeState.position = lastPos + freeState.velocity * dt;
 			}
-			if (followPos.x > (float)GetWorld()->GetMap()->Width()) {
-				followVel.x = fabsf(followVel.x) * -0.2f;
-				followPos = lastPos + followVel * dt;
+			if (freeState.position.x > (float)GetWorld()->GetMap()->Width()) {
+				freeState.velocity.x = fabsf(freeState.velocity.x) * -0.2f;
+				freeState.position = lastPos + freeState.velocity * dt;
 			}
-			if (followPos.y > (float)GetWorld()->GetMap()->Height()) {
-				followVel.y = fabsf(followVel.y) * -0.2f;
-				followPos = lastPos + followVel * dt;
+			if (freeState.position.y > (float)GetWorld()->GetMap()->Height()) {
+				freeState.velocity.y = fabsf(freeState.velocity.y) * -0.2f;
+				freeState.position = lastPos + freeState.velocity * dt;
 			}
 
 			GameMap::RayCastResult minResult;
@@ -302,22 +305,22 @@ namespace spades {
 			Vector3 minShift;
 
 			// check collision
-			if (followVel.GetLength() < .01) {
-				followPos = lastPos;
-				followVel *= 0.f;
+			if (freeState.velocity.GetLength() < .01) {
+				freeState.position = lastPos;
+				freeState.velocity *= 0.f;
 			} else {
 				for (int sx = -1; sx <= 1; sx++)
 					for (int sy = -1; sy <= 1; sy++)
 						for (int sz = -1; sz <= 1; sz++) {
 							GameMap::RayCastResult result;
 							Vector3 shift = {sx * .1f, sy * .1f, sz * .1f};
-							result = map->CastRay2(lastPos + shift, followPos - lastPos, 256);
+							result = map->CastRay2(lastPos + shift, freeState.position - lastPos, 256);
 							if (result.hit && !result.startSolid &&
-							    Vector3::Dot(result.hitPos - followPos - shift,
-							                 followPos - lastPos) < 0.f) {
+							    Vector3::Dot(result.hitPos - freeState.position - shift,
+							                 freeState.position - lastPos) < 0.f) {
 
-								float dist = Vector3::Dot(result.hitPos - followPos - shift,
-								                          (followPos - lastPos).Normalize());
+								float dist = Vector3::Dot(result.hitPos - freeState.position - shift,
+								                          (freeState.position - lastPos).Normalize());
 								if (dist < minDist) {
 									minResult = result;
 									minDist = dist;
@@ -329,25 +332,25 @@ namespace spades {
 			if (minDist < 1.e+9f) {
 				GameMap::RayCastResult result = minResult;
 				Vector3 shift = minShift;
-				followPos = result.hitPos - shift;
-				followPos.x += result.normal.x * .02f;
-				followPos.y += result.normal.y * .02f;
-				followPos.z += result.normal.z * .02f;
+				freeState.position = result.hitPos - shift;
+				freeState.position.x += result.normal.x * .02f;
+				freeState.position.y += result.normal.y * .02f;
+				freeState.position.z += result.normal.z * .02f;
 
 				// bounce
 				Vector3 norm = {(float)result.normal.x, (float)result.normal.y,
 				                (float)result.normal.z};
-				float dot = Vector3::Dot(followVel, norm);
-				followVel -= norm * (dot * 1.2f);
+				float dot = Vector3::Dot(freeState.velocity, norm);
+				freeState.velocity -= norm * (dot * 1.2f);
 			}
 
 			// acceleration
 			Vector3 front;
 			Vector3 up = {0, 0, -1};
 
-			front.x = -cosf(followYaw) * cosf(followPitch);
-			front.y = -sinf(followYaw) * cosf(followPitch);
-			front.z = sinf(followPitch);
+			front.x = -cosf(sharedState.yaw) * cosf(sharedState.pitch);
+			front.y = -sinf(sharedState.yaw) * cosf(sharedState.pitch);
+			front.z = sinf(sharedState.pitch);
 
 			Vector3 right = -Vector3::Cross(up, front).Normalize();
 			Vector3 up2 = Vector3::Cross(right, front).Normalize();
@@ -361,22 +364,22 @@ namespace spades {
 			up2 *= scale;
 
 			if (playerInput.moveForward) {
-				followVel += front;
+				freeState.velocity += front;
 			} else if (playerInput.moveBackward) {
-				followVel -= front;
+				freeState.velocity -= front;
 			}
 			if (playerInput.moveLeft) {
-				followVel -= right;
+				freeState.velocity -= right;
 			} else if (playerInput.moveRight) {
-				followVel += right;
+				freeState.velocity += right;
 			}
 			if (playerInput.jump) {
-				followVel += up2;
+				freeState.velocity += up2;
 			} else if (playerInput.crouch) {
-				followVel -= up2;
+				freeState.velocity -= up2;
 			}
 
-			SPAssert(followVel.GetLength() < 100.f);
+			SPAssert(freeState.velocity.GetLength() < 100.f);
 		}
 
 		/** Handles movement of joined local player. */
@@ -794,13 +797,13 @@ namespace spades {
 				}
 			}
 
-			// begin following
+			// The local player is dead; initialize the look-you-are-dead cam
 			if (victim == world->GetLocalPlayer()) {
-				followingPlayerId = victim->GetId();
+				followCameraState.enabled = false;
 
 				Vector3 v = -victim->GetFront();
-				followYaw = atan2(v.y, v.x);
-				followPitch = 30.f * M_PI / 180.f;
+				followAndFreeCameraState.yaw = atan2(v.y, v.x);
+				followAndFreeCameraState.pitch = 30.f * M_PI / 180.f;
 			}
 
 			// emit blood (also for local player)
@@ -943,7 +946,7 @@ namespace spades {
 			SPAssert(type != HitTypeBlock);
 
 			// don't bleed local player
-			if (hurtPlayer != world->GetLocalPlayer() || ShouldRenderInThirdPersonView()) {
+			if (!IsFirstPerson(GetCameraMode()) || &GetCameraTargetPlayer() != hurtPlayer) {
 				Bleed(hitPos);
 			}
 
@@ -980,7 +983,7 @@ namespace spades {
 
 			if (by == world->GetLocalPlayer() && hurtPlayer) {
 				net->SendHit(hurtPlayer->GetId(), type);
-				
+
 				if (type == HitTypeHead) {
 					Handle<IAudioChunk> c =
 					  audioDevice->RegisterSound("Sounds/Feedback/HeadshotFeedback.opus");
@@ -988,7 +991,7 @@ namespace spades {
 					param.volume = cg_hitFeedbackSoundGain;
 					audioDevice->PlayLocal(c, param);
 				}
-				
+
 				hitFeedbackIconState = 1.f;
 				if (hurtPlayer->GetTeamId() == world->GetLocalPlayer()->GetTeamId()) {
 					hitFeedbackFriendly = true;
@@ -1077,7 +1080,8 @@ namespace spades {
 		                             spades::Vector3 hitPos) {
 			SPADES_MARK_FUNCTION();
 
-			if (IsFollowing() && followingPlayerId == player->GetId()) {
+			// Do not display tracers for bullets fired by the local player
+			if (IsFirstPerson(GetCameraMode()) && GetCameraTargetPlayerId() == player->GetId()) {
 				return;
 			}
 

@@ -756,19 +756,15 @@ namespace spades {
 					DrawSpectateHUD();
 				}
 
-				if (IsFollowing() && !cg_hideHud) {
-					if (followingPlayerId == p->GetId()) {
-						// just spectating
-					} else {
-						font = fontManager->GetGuiFont();
-						std::string msg = _Tr("Client", "Following {0}",
-						                      world->GetPlayerPersistent(followingPlayerId).name);
-						Vector2 size = font->Measure(msg);
-						Vector2 pos = MakeVector2(scrWidth - 8.f, 256.f + 32.f);
-						pos.x -= size.x;
-						font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
-						                 MakeVector4(0, 0, 0, 0.5));
-					}
+				if (FollowsNonLocalPlayer(GetCameraMode()) && !cg_hideHud) {
+					font = fontManager->GetGuiFont();
+					std::string msg = _Tr("Client", "Following {0}",
+										  world->GetPlayerPersistent(GetCameraTargetPlayerId()).name);
+					Vector2 size = font->Measure(msg);
+					Vector2 pos = MakeVector2(scrWidth - 8.f, 256.f + 32.f);
+					pos.x -= size.x;
+					font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
+									 MakeVector4(0, 0, 0, 0.5));
 				}
 
 				if (!cg_hideHud) {

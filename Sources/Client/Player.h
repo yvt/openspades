@@ -143,6 +143,7 @@ namespace spades {
 			Weapon *GetWeapon() { return weapon; }
 			WeaponType GetWeaponType() { return weaponType; }
 			int GetTeamId() { return teamId; }
+			bool IsSpectator() { return teamId >= 2; }
 			std::string GetName();
 			IntVector3 GetColor();
 			IntVector3 GetBlockColor() { return blockColor; }

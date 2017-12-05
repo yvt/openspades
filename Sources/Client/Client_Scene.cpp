@@ -55,34 +55,62 @@ namespace spades {
 
 #pragma mark - Drawing
 
-		bool Client::ShouldRenderInThirdPersonView() {
-			if (IsFollowing()){
-				if (!GetViewedPlayer()->IsAlive()){
-					return true;
+		ClientCameraMode Client::GetCameraMode() {
+			if (!world) {
+				return ClientCameraMode::None;
+			}
+
+			Player *p = world->GetLocalPlayer();
+			if (!p) {
+				return ClientCameraMode::NotJoined;
+			}
+
+			if (p->IsAlive() && !p->IsSpectator()) {
+				// There exists an alive (non-spectator) local player
+				if ((int)cg_thirdperson != 0 && world->GetNumPlayers() <= 1) {
+					return ClientCameraMode::ThirdPersonLocal;
 				}
-				return !firstPersonSpectate;
+				return ClientCameraMode::FirstPersonLocal;
+			} else {
+				// The local player is dead or a spectator
+				if (followCameraState.enabled) {
+					if (followCameraState.firstPerson) {
+						return ClientCameraMode::FirstPersonFollow;
+					} else {
+						return ClientCameraMode::ThirdPersonFollow;
+					}
+				} else {
+					if (p->IsSpectator()) {
+						return ClientCameraMode::Free;
+					} else {
+						// Look at your own cadaver!
+						return ClientCameraMode::ThirdPersonLocal;
+					}
+				}
 			}
-
-			if (world && world->GetLocalPlayer()) {
-				if (!world->GetLocalPlayer()->IsAlive())
-					return true;
-			}
-
-			if ((int)cg_thirdperson != 0 && world->GetNumPlayers() <= 1) {
-				return true;
-			}
-			return false;
 		}
 
-		Player *Client::GetViewedPlayer() {
-			// what happens if we are in free mode?
-			// doesn't matter for the current code, but keep this in mind
-			if (IsFollowing()){
-				return world->GetPlayer(followingPlayerId);
+		int Client::GetCameraTargetPlayerId() {
+			switch (GetCameraMode()) {
+				case ClientCameraMode::None:
+				case ClientCameraMode::NotJoined:
+				case ClientCameraMode::Free:
+					SPUnreachable();
+				case ClientCameraMode::FirstPersonLocal:
+				case ClientCameraMode::ThirdPersonLocal:
+					SPAssert(world);
+					return world->GetLocalPlayerIndex();
+				case ClientCameraMode::FirstPersonFollow:
+				case ClientCameraMode::ThirdPersonFollow:
+					return followedPlayerId;
 			}
-			else {
-				return world->GetLocalPlayer();
-			}
+			SPUnreachable();
+		}
+
+		Player &Client::GetCameraTargetPlayer() {
+			Player *p = world->GetPlayer(GetCameraTargetPlayerId());
+			SPAssert(p);
+			return *p;
 		}
 
 		float Client::GetLocalFireVibration() {
@@ -95,30 +123,17 @@ namespace spades {
 		}
 
 		float Client::GetAimDownZoomScale() {
-			if (!world) {
+			Player &player = GetCameraTargetPlayer();
+			if (!player.IsToolWeapon() ||
+			    !player.IsAlive()) {
 				return 1.f;
 			}
 
-			if (ShouldRenderInThirdPersonView()) {
-				return 1.f;
-			}
-
-			Player* player = GetViewedPlayer();
-			if (
-			    !player ||
-			    !player->IsToolWeapon() ||
-			    !player->IsAlive()
-			   ) {
-				return 1.f;
-			}
-
-			ClientPlayer* clientPlayer = clientPlayers[player->GetId()];
-			if (!clientPlayer) {
-				return 1.f;
-			}
+			ClientPlayer* clientPlayer = clientPlayers[player.GetId()];
+			SPAssert(clientPlayer);
 
 			float delta = .8f;
-			switch (player->GetWeapon()->GetWeaponType()) {
+			switch (player.GetWeapon()->GetWeaponType()) {
 				case SMG_WEAPON: delta = .8f; break;
 				case RIFLE_WEAPON: delta = 1.4f; break;
 				case SHOTGUN_WEAPON: delta = .4f; break;
@@ -153,49 +168,143 @@ namespace spades {
 				renderer->SetFogColor(
 				  MakeVector3(fogColor.x / 255.f, fogColor.y / 255.f, fogColor.z / 255.f));
 
-				Player *player = world->GetLocalPlayer();
+				def.blurVignette = 0.0f;
 
-				def.blurVignette = .0f;
+				float roll = 0.f;
+				float scale = 1.f;
+				float vibPitch = 0.f;
+				float vibYaw = 0.f;
 
-				if (IsFollowing()) {
-					int limit = 100;
-					// if current following player has left,
-					// or removed,
-					// choose next player.
-					while (!world->GetPlayer(followingPlayerId) ||
-					       world->GetPlayer(followingPlayerId)->GetFront().GetPoweredLength() <
-					         .01f) {
-						FollowNextPlayer(false);
-						if ((limit--) <= 0) {
-							break;
+				switch (GetCameraMode()) {
+					case ClientCameraMode::None:
+						SPUnreachable();
+
+					case ClientCameraMode::NotJoined:
+						def.viewOrigin = MakeVector3(256, 256, 4);
+						def.viewAxis[0] = MakeVector3(-1, 0, 0);
+						def.viewAxis[1] = MakeVector3(0, 1, 0);
+						def.viewAxis[2] = MakeVector3(0, 0, 1);
+
+						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
+						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
+										 renderer->ScreenHeight()) * 2.f;
+
+						def.zNear = 0.05f;
+
+						def.skipWorld = false;
+						break;
+
+					case ClientCameraMode::FirstPersonLocal:
+					case ClientCameraMode::FirstPersonFollow: {
+						Player &player = GetCameraTargetPlayer();
+
+						Matrix4 eyeMatrix = clientPlayers[player.GetId()]->GetEyeMatrix();
+
+						def.viewOrigin = eyeMatrix.GetOrigin();
+						def.viewAxis[0] = -eyeMatrix.GetAxis(0);
+						def.viewAxis[1] = -eyeMatrix.GetAxis(2);
+						def.viewAxis[2] = eyeMatrix.GetAxis(1);
+
+						if (shakeLevel >= 1) {
+							float localFireVibration = GetLocalFireVibration();
+							localFireVibration *= localFireVibration;
+
+							if (player.GetTool() == Player::ToolSpade) {
+								localFireVibration *= 0.4f;
+							}
+
+							roll += (nextRandom() - nextRandom()) * 0.03f * localFireVibration;
+							scale += nextRandom() * 0.04f * localFireVibration;
+
+							vibPitch += localFireVibration * (1.f - localFireVibration) * 0.01f;
+							vibYaw += sinf(localFireVibration * (float)M_PI * 2.f) * 0.001f;
+
+							def.radialBlur += localFireVibration * 0.05f;
+
+							// sprint bob
+							{
+								float sp = SmoothStep(GetSprintState());
+								vibYaw += sinf(player.GetWalkAnimationProgress() *
+											   static_cast<float>(M_PI) * 2.f) *
+								0.01f * sp;
+								roll -= sinf(player.GetWalkAnimationProgress() *
+											 static_cast<float>(M_PI) * 2.f) *
+								0.005f * (sp);
+								float p = cosf(player.GetWalkAnimationProgress() *
+											   static_cast<float>(M_PI) * 2.f);
+								p = p * p;
+								p *= p;
+								p *= p;
+								vibPitch += p * 0.01f * sp;
+
+								if (shakeLevel >= 2) {
+									vibYaw += coherentNoiseSamplers[0].Sample(
+																			  player.GetWalkAnimationProgress() * 2.5f) *
+									0.005f * sp;
+									vibPitch += coherentNoiseSamplers[1].Sample(
+																				player.GetWalkAnimationProgress() * 2.5f) *
+									0.01f * sp;
+									roll += coherentNoiseSamplers[2].Sample(
+																			player.GetWalkAnimationProgress() * 2.5f) *
+									0.008f * sp;
+
+									scale += sp * 0.1f;
+								}
+							}
 						}
+
+						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
+						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
+										 renderer->ScreenHeight()) * 2.f;
+
+						// for 1st view, camera blur can be used
+						def.denyCameraBlur = false;
+
+						// DoF when doing ADS
+						float aimDownState = GetAimDownState();
+						float per = aimDownState;
+						per *= per * per;
+						def.depthOfFieldFocalLength = per * 13.f + .054f;
+
+						// Hurt effect
+						{
+							float wTime = world->GetTime();
+							if (wTime < lastHurtTime + .15f && wTime >= lastHurtTime) {
+								float per = 1.f - (wTime - lastHurtTime) / .15f;
+								per *= .5f - player.GetHealth() / 100.f * .3f;
+								def.blurVignette += per * 6.f;
+							}
+							if (wTime < lastHurtTime + .2f && wTime >= lastHurtTime) {
+								float per = 1.f - (wTime - lastHurtTime) / .2f;
+								per *= .5f - player.GetHealth() / 100.f * .3f;
+								def.saturation *= std::max(0.f, 1.f - per * 4.f);
+							}
+						}
+
+						// Apply ADS zoom
+						scale /= GetAimDownZoomScale();
+
+						// Update initial floating camera pos
+						freeCameraState.position = def.viewOrigin;
+						freeCameraState.velocity = MakeVector3(0, 0, 0);
+						break;
 					}
-					player = world->GetPlayer(followingPlayerId);
-				}
-				if (player) {
 
-					float roll = 0.f;
-					float scale = 1.f;
-					float vibPitch = 0.f;
-					float vibYaw = 0.f;
-					scale /= GetAimDownZoomScale();
+					case ClientCameraMode::ThirdPersonLocal:
+					case ClientCameraMode::ThirdPersonFollow: {
+						Player &player = GetCameraTargetPlayer();
+						Vector3 center = player.GetEye();
 
-					if (ShouldRenderInThirdPersonView() ||
-					    (IsFollowing() && player != world->GetLocalPlayer())) {
-						Vector3 center = player->GetEye();
-						Vector3 playerFront = player->GetFront2D();
-						Vector3 up = MakeVector3(0, 0, -1);
-
-						if ((!player->IsAlive()) && lastMyCorpse &&
-						    player == world->GetLocalPlayer()) {
+						if (!player.IsAlive() && lastMyCorpse &&
+							&player == world->GetLocalPlayer()) {
 							center = lastMyCorpse->GetCenter();
 						}
 						if (map->IsSolidWrapped((int)floorf(center.x), (int)floorf(center.y),
-						                        (int)floorf(center.z))) {
+												(int)floorf(center.z))) {
 							float z = center.z;
 							while (z > center.z - 5.f) {
 								if (!map->IsSolidWrapped((int)floorf(center.x),
-								                         (int)floorf(center.y), (int)floorf(z))) {
+														 (int)floorf(center.y), (int)floorf(z))) {
 									center.z = z;
 									break;
 								} else {
@@ -205,31 +314,21 @@ namespace spades {
 						}
 
 						float distance = 5.f;
-						if (player == world->GetLocalPlayer() &&
-						    world->GetLocalPlayer()->GetTeamId() < 2 &&
-						    !world->GetLocalPlayer()->IsAlive()) {
+						if (&player == world->GetLocalPlayer() &&
+							world->GetLocalPlayer()->GetTeamId() < 2 &&
+							!world->GetLocalPlayer()->IsAlive()) {
 							// deathcam.
 							float elapsedTime = time - lastAliveTime;
 							distance -= 3.f * expf(-elapsedTime * 1.f);
 						}
 
+						auto &state = followAndFreeCameraState;
 						Vector3 eye = center;
-						// eye -= playerFront * 5.f;
-						// eye += up * 2.0f;
-						eye.x += cosf(followYaw) * cosf(followPitch) * distance;
-						eye.y += sinf(followYaw) * cosf(followPitch) * distance;
-						eye.z -= sinf(followPitch) * distance;
+						eye.x += cosf(state.yaw) * cosf(state.pitch) * distance;
+						eye.y += sinf(state.yaw) * cosf(state.pitch) * distance;
+						eye.z -= sinf(state.pitch) * distance;
 
-						if (false) {
-							// settings for making limbo stuff
-							eye = center;
-							eye += playerFront * 3.f;
-							eye += up * -.1f;
-							eye += player->GetRight() * 2.f;
-							scale *= .6f;
-						}
-
-						// try ray casting
+						// Prevent the camera from being behind a wall
 						GameMap::RayCastResult result;
 						result = map->CastRay2(center, (eye - center).Normalize(), 256);
 						if (result.hit) {
@@ -245,39 +344,32 @@ namespace spades {
 						Vector3 front = center - eye;
 						front = front.Normalize();
 
-						if (ShouldRenderInThirdPersonView()) {
-							def.viewOrigin = eye;
-							def.viewAxis[0] = -Vector3::Cross(up, front).Normalize();
-							def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
-							def.viewAxis[2] = front;
-						} else {
-							def.viewOrigin = player->GetEye();
-							def.viewAxis[0] = player->GetRight();
-							def.viewAxis[1] = player->GetUp();
-							def.viewAxis[2] = player->GetFront();
-						}
+						Vector3 up = MakeVector3(0, 0, -1);
+
+						def.viewOrigin = eye;
+						def.viewAxis[0] = -Vector3::Cross(up, front).Normalize();
+						def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
+						def.viewAxis[2] = front;
 
 						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
-						                 renderer->ScreenHeight()) *
-						           2.f;
+										 renderer->ScreenHeight()) * 2.f;
 
-						// update initial spectate pos
-						// this is not used now, but if the local player is
-						// is spectating, this is used when he/she's no
-						// longer following
-						followPos = def.viewOrigin;
-						followVel = MakeVector3(0, 0, 0);
-
-					} else if (player->GetTeamId() >= 2) {
+						// Update initial floating camera pos
+						freeCameraState.position = def.viewOrigin;
+						freeCameraState.velocity = MakeVector3(0, 0, 0);
+						break;
+					}
+					case ClientCameraMode::Free: {
 						// spectator view (noclip view)
-						Vector3 center = followPos;
+						Vector3 center = freeCameraState.position;
 						Vector3 front;
 						Vector3 up = {0, 0, -1};
 
-						front.x = -cosf(followYaw) * cosf(followPitch);
-						front.y = -sinf(followYaw) * cosf(followPitch);
-						front.z = sinf(followPitch);
+						auto &state = followAndFreeCameraState;
+						front.x = -cosf(state.yaw) * cosf(state.pitch);
+						front.y = -sinf(state.yaw) * cosf(state.pitch);
+						front.z = sinf(state.pitch);
 
 						def.viewOrigin = center;
 						def.viewAxis[0] = -Vector3::Cross(up, front).Normalize();
@@ -286,180 +378,98 @@ namespace spades {
 
 						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
-						                 renderer->ScreenHeight()) *
-						           2.f;
+										 renderer->ScreenHeight()) * 2.f;
 
 						// for 1st view, camera blur can be used
 						def.denyCameraBlur = false;
-
-					} else {
-						Matrix4 eyeMatrix = clientPlayers[player->GetId()]->GetEyeMatrix();
-						def.viewOrigin = eyeMatrix.GetOrigin();
-						def.viewAxis[0] = -eyeMatrix.GetAxis(0);
-						def.viewAxis[1] = -eyeMatrix.GetAxis(2);
-						def.viewAxis[2] = eyeMatrix.GetAxis(1);
-
-						if (shakeLevel >= 1) {
-							float localFireVibration = GetLocalFireVibration();
-							localFireVibration *= localFireVibration;
-
-							if (player->GetTool() == Player::ToolSpade) {
-								localFireVibration *= 0.4f;
-							}
-
-							roll += (nextRandom() - nextRandom()) * 0.03f * localFireVibration;
-							scale += nextRandom() * 0.04f * localFireVibration;
-
-							vibPitch += localFireVibration * (1.f - localFireVibration) * 0.01f;
-							vibYaw += sinf(localFireVibration * (float)M_PI * 2.f) * 0.001f;
-
-							def.radialBlur += localFireVibration * 0.05f;
-
-							// sprint bob
-							{
-								float sp = SmoothStep(GetSprintState());
-								vibYaw += sinf(player->GetWalkAnimationProgress() *
-								               static_cast<float>(M_PI) * 2.f) *
-								          0.01f * sp;
-								roll -= sinf(player->GetWalkAnimationProgress() *
-								             static_cast<float>(M_PI) * 2.f) *
-								        0.005f * (sp);
-								float p = cosf(player->GetWalkAnimationProgress() *
-								               static_cast<float>(M_PI) * 2.f);
-								p = p * p;
-								p *= p;
-								p *= p;
-								vibPitch += p * 0.01f * sp;
-
-								if (shakeLevel >= 2) {
-									vibYaw += coherentNoiseSamplers[0].Sample(
-									            player->GetWalkAnimationProgress() * 2.5f) *
-									          0.005f * sp;
-									vibPitch += coherentNoiseSamplers[1].Sample(
-									              player->GetWalkAnimationProgress() * 2.5f) *
-									            0.01f * sp;
-									roll += coherentNoiseSamplers[2].Sample(
-									          player->GetWalkAnimationProgress() * 2.5f) *
-									        0.008f * sp;
-
-									scale += sp * 0.1f;
-								}
-							}
-						}
-
-						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
-						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
-						                 renderer->ScreenHeight()) *
-						           2.f;
-
-						// for 1st view, camera blur can be used
-						def.denyCameraBlur = false;
-
-						float aimDownState = GetAimDownState();
-						float per = aimDownState;
-						per *= per * per;
-						def.depthOfFieldFocalLength = per * 13.f + .054f;
-
-						def.blurVignette = .0f;
+						break;
 					}
-
-					// add vibration for both 1st/3rd view
-					{
-						// add grenade vibration
-						float grenVib = grenadeVibration;
-						if (grenVib > 0.f) {
-							if (shakeLevel >= 1) {
-								grenVib *= 10.f;
-								if (grenVib > 1.f)
-									grenVib = 1.f;
-								roll += (nextRandom() - nextRandom()) * 0.2f * grenVib;
-								vibPitch += (nextRandom() - nextRandom()) * 0.1f * grenVib;
-								vibYaw += (nextRandom() - nextRandom()) * 0.1f * grenVib;
-								scale -= (nextRandom() - nextRandom()) * 0.1f * grenVib;
-
-								def.radialBlur += grenVib * 0.1f;
-							}
-						}
-					}
-					{
-						// add grenade vibration
-						float grenVib = grenadeVibrationSlow;
-						if (grenVib > 0.f) {
-							if (shakeLevel >= 2) {
-								grenVib *= 4.f;
-								if (grenVib > 1.f)
-									grenVib = 1.f;
-								grenVib *= grenVib;
-
-								roll +=
-								  coherentNoiseSamplers[0].Sample(time * 8.f) * 0.2f * grenVib;
-								vibPitch +=
-								  coherentNoiseSamplers[1].Sample(time * 12.f) * 0.1f * grenVib;
-								vibYaw +=
-								  coherentNoiseSamplers[2].Sample(time * 11.f) * 0.1f * grenVib;
-							}
-						}
-					}
-
-					// add roll / scale
-					{
-						Vector3 right = def.viewAxis[0];
-						Vector3 up = def.viewAxis[1];
-
-						def.viewAxis[0] = right * cosf(roll) - up * sinf(roll);
-						def.viewAxis[1] = up * cosf(roll) + right * sinf(roll);
-
-						def.fovX = atanf(tanf(def.fovX * .5f) * scale) * 2.f;
-						def.fovY = atanf(tanf(def.fovY * .5f) * scale) * 2.f;
-					}
-					{
-						Vector3 u = def.viewAxis[1];
-						Vector3 v = def.viewAxis[2];
-
-						def.viewAxis[1] = u * cosf(vibPitch) - v * sinf(vibPitch);
-						def.viewAxis[2] = v * cosf(vibPitch) + u * sinf(vibPitch);
-					}
-					{
-						Vector3 u = def.viewAxis[0];
-						Vector3 v = def.viewAxis[2];
-
-						def.viewAxis[0] = u * cosf(vibYaw) - v * sinf(vibYaw);
-						def.viewAxis[2] = v * cosf(vibYaw) + u * sinf(vibYaw);
-					}
-					{
-						float wTime = world->GetTime();
-						if (wTime < lastHurtTime + .15f && wTime >= lastHurtTime) {
-							float per = 1.f - (wTime - lastHurtTime) / .15f;
-							per *= .5f - player->GetHealth() / 100.f * .3f;
-							def.blurVignette += per * 6.f;
-						}
-						if (wTime < lastHurtTime + .2f && wTime >= lastHurtTime) {
-							float per = 1.f - (wTime - lastHurtTime) / .2f;
-							per *= .5f - player->GetHealth() / 100.f * .3f;
-							def.saturation *= std::max(0.f, 1.f - per * 4.f);
-						}
-					}
-
-					def.zNear = 0.05f;
-
-					def.skipWorld = false;
-				} else {
-					def.viewOrigin = MakeVector3(256, 256, 4);
-					def.viewAxis[0] = MakeVector3(-1, 0, 0);
-					def.viewAxis[1] = MakeVector3(0, 1, 0);
-					def.viewAxis[2] = MakeVector3(0, 0, 1);
-
-					def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
-					def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
-					                 renderer->ScreenHeight()) *
-					           2.f;
-
-					def.zNear = 0.05f;
-
-					def.skipWorld = false;
 				}
 
+				// Add vibration effects
+				{
+					float grenVib = grenadeVibration;
+					if (grenVib > 0.f) {
+						if (shakeLevel >= 1) {
+							grenVib *= 10.f;
+							if (grenVib > 1.f)
+								grenVib = 1.f;
+							roll += (nextRandom() - nextRandom()) * 0.2f * grenVib;
+							vibPitch += (nextRandom() - nextRandom()) * 0.1f * grenVib;
+							vibYaw += (nextRandom() - nextRandom()) * 0.1f * grenVib;
+							scale -= (nextRandom() - nextRandom()) * 0.1f * grenVib;
+
+							def.radialBlur += grenVib * 0.1f;
+						}
+					}
+				}
+				{
+					float grenVib = grenadeVibrationSlow;
+					if (grenVib > 0.f) {
+						if (shakeLevel >= 2) {
+							grenVib *= 4.f;
+							if (grenVib > 1.f)
+								grenVib = 1.f;
+							grenVib *= grenVib;
+
+							roll +=
+							  coherentNoiseSamplers[0].Sample(time * 8.f) * 0.2f * grenVib;
+							vibPitch +=
+							  coherentNoiseSamplers[1].Sample(time * 12.f) * 0.1f * grenVib;
+							vibYaw +=
+							  coherentNoiseSamplers[2].Sample(time * 11.f) * 0.1f * grenVib;
+						}
+					}
+				}
+
+				// Add roll / scale
+				{
+					Vector3 right = def.viewAxis[0];
+					Vector3 up = def.viewAxis[1];
+
+					def.viewAxis[0] = right * cosf(roll) - up * sinf(roll);
+					def.viewAxis[1] = up * cosf(roll) + right * sinf(roll);
+
+					def.fovX = atanf(tanf(def.fovX * .5f) * scale) * 2.f;
+					def.fovY = atanf(tanf(def.fovY * .5f) * scale) * 2.f;
+				}
+				{
+					Vector3 u = def.viewAxis[1];
+					Vector3 v = def.viewAxis[2];
+
+					def.viewAxis[1] = u * cosf(vibPitch) - v * sinf(vibPitch);
+					def.viewAxis[2] = v * cosf(vibPitch) + u * sinf(vibPitch);
+				}
+				{
+					Vector3 u = def.viewAxis[0];
+					Vector3 v = def.viewAxis[2];
+
+					def.viewAxis[0] = u * cosf(vibYaw) - v * sinf(vibYaw);
+					def.viewAxis[2] = v * cosf(vibYaw) + u * sinf(vibYaw);
+				}
+
+				if (def.viewOrigin.z < 0.f) {
+					// Need to move the far plane because there's no vertical fog
+					def.zFar -= def.viewOrigin.z;
+				}
+
+				if ((int)cg_manualFocus) {
+					// Depth of field is manually controlled
+					def.depthOfFieldNearBlurStrength = def.depthOfFieldFarBlurStrength =
+					0.5f * (float)cg_depthOfFieldAmount;
+					def.depthOfFieldFocalLength = focalLength;
+				} else {
+					def.depthOfFieldNearBlurStrength = cg_depthOfFieldAmount;
+					def.depthOfFieldFarBlurStrength = 0.f;
+				}
+
+				def.zNear = 0.05f;
+
+				def.skipWorld = false;
 			} else {
+				SPAssert(GetCameraMode() == ClientCameraMode::None);
+
+				// Let there be darkness
 				def.viewOrigin = MakeVector3(0, 0, 0);
 				def.viewAxis[0] = MakeVector3(1, 0, 0);
 				def.viewAxis[1] = MakeVector3(0, 0, -1);
@@ -477,26 +487,11 @@ namespace spades {
 				renderer->SetFogColor(MakeVector3(0, 0, 0));
 			}
 
-			if (def.viewOrigin.z < 0.f) {
-				// Need to move the far plane because there's no vertical fog
-				def.zFar -= def.viewOrigin.z;
-			}
-
 			SPAssert(!std::isnan(def.viewOrigin.x));
 			SPAssert(!std::isnan(def.viewOrigin.y));
 			SPAssert(!std::isnan(def.viewOrigin.z));
 
 			def.radialBlur = std::min(def.radialBlur, 1.f);
-
-			if ((int)cg_manualFocus) {
-				// Depth of field is manually controlled
-				def.depthOfFieldNearBlurStrength = def.depthOfFieldFarBlurStrength =
-				  0.5f * (float)cg_depthOfFieldAmount;
-				def.depthOfFieldFocalLength = focalLength;
-			} else {
-				def.depthOfFieldNearBlurStrength = cg_depthOfFieldAmount;
-				def.depthOfFieldFarBlurStrength = 0.f;
-			}
 
 			return def;
 		}
