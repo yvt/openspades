@@ -163,6 +163,26 @@ namespace spades {
 			float GetAimDownState();
 			float GetSprintState();
 
+			/**
+			 * Queries whether the local player is allowed to use a tool in this state.
+			 *
+			 * The following factors are considered by this function:
+			 *
+			 *  - The player cannot use a tool while / soon after sprinting.
+			 *  - The player cannot use a tool while switching tools.
+			 *  - The player must exist and be alive to use a tool.
+			 *
+			 * The following factors also affect whether a tool can actually be used, but they
+			 * do not affect the result of this function:
+			 *
+			 *  - Tool-specific status — e.g., out of ammo, out of block, "cannot build there"
+			 *  - Firing rate limit imposed by the tool
+			 */
+			bool CanLocalPlayerUseToolNow();
+
+			/** Retrieves `ClientPlayer` for the local player, or `nullptr` if it does not exist. */
+			ClientPlayer *GetLocalClientPlayer();
+
 			float toolRaiseState;
 			void SetSelectedTool(Player::ToolType, bool quiet = false);
 

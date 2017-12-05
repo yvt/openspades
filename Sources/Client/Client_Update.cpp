@@ -89,6 +89,34 @@ namespace spades {
 			return p->GetAimDownState();
 		}
 
+		bool Client::CanLocalPlayerUseToolNow() {
+			if (!world || !world->GetLocalPlayer() || !world->GetLocalPlayer()->IsAlive()) {
+				return false;
+			}
+
+			if (GetSprintState() > 0 || world->GetLocalPlayer()->GetInput().sprint) {
+				// Player is unable to use a tool while/soon after sprinting
+				return false;
+			}
+
+			auto *clientPlayer = GetLocalClientPlayer();
+			SPAssert(clientPlayer);
+
+			if (clientPlayer->IsChangingTool()) {
+				// Player is unable to use a tool while switching to another tool
+				return false;
+			}
+
+			return true;
+		}
+
+		ClientPlayer *Client::GetLocalClientPlayer() {
+			if (!world || !world->GetLocalPlayer()) {
+				return nullptr;
+			}
+			return clientPlayers.at(static_cast<std::size_t>(world->GetLocalPlayerIndex()));
+		}
+
 #pragma mark - World Actions
 		/** Captures the color of the block player is looking at. */
 		void Client::CaptureColor() {
@@ -368,8 +396,8 @@ namespace spades {
 				inp.sprint = false;
 			}
 
-			// weapon/tools are disabled while/soon after sprinting
-			if (GetSprintState() > 0.001f || inp.sprint) {
+			// Can't use a tool while sprinting or switching to another tool, etc.
+			if (!CanLocalPlayerUseToolNow()) {
 				winp.primary = false;
 				winp.secondary = false;
 			}
@@ -387,12 +415,6 @@ namespace spades {
 			if (inp.jump) {
 				if (!player->IsOnGroundOrWade())
 					inp.jump = false;
-			}
-
-			// weapon/tools are disabled while changing tools
-			if (clientPlayer->IsChangingTool()) {
-				winp.primary = false;
-				winp.secondary = false;
 			}
 
 			if (player->GetTool() == Player::ToolWeapon) {

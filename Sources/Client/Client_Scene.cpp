@@ -626,7 +626,7 @@ namespace spades {
 					}
 				}
 
-				// draw block cursor
+				// Draw block cursor
 				// FIXME: don't use debug line
 				if (p) {
 					if (p->IsReadyToUseTool() && p->GetTool() == Player::ToolBlock &&
@@ -639,7 +639,7 @@ namespace spades {
 							blocks.push_back(p->GetBlockCursorPos());
 						}
 
-						bool active = p->IsBlockCursorActive();
+						bool active = p->IsBlockCursorActive() && CanLocalPlayerUseToolNow();
 
 						Vector4 color = {1, 1, 1, 1};
 						if (!active)
