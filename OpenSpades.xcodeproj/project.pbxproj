@@ -266,6 +266,7 @@
 		E82E67F018EA7A60004DBA18 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8CF03C4178EE78C000683D4 /* OpenGL.framework */; };
 		E82E67FA18EA7EAB004DBA18 /* font-unifont.pak in Resources */ = {isa = PBXBuildFile; fileRef = E82E67F318EA7EAB004DBA18 /* font-unifont.pak */; };
 		E82E680418EA7F60004DBA18 /* libysrspades.dylib in Resources */ = {isa = PBXBuildFile; fileRef = E82E680318EA7F60004DBA18 /* libysrspades.dylib */; };
+		E831D8681FD69E93003C0D97 /* libdiscord-rpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E831D8671FD69E93003C0D97 /* libdiscord-rpc.a */; };
 		E83668AF1E05757B00977A63 /* OpusAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668AD1E05757B00977A63 /* OpusAudioStream.cpp */; };
 		E83668B21E05844E00977A63 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668B01E05844E00977A63 /* AudioStream.cpp */; };
 		E8626EAE1E1009D7003365BF /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.tbd */; };
@@ -293,8 +294,8 @@
 		E89A5F1E1DF8732200857F65 /* ShellApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1C1DF8732200857F65 /* ShellApi.cpp */; };
 		E89A5F201DF8759200857F65 /* ShellApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1F1DF8759200857F65 /* ShellApi.mm */; };
 		E89BBDC31B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */; };
-		E8C8D3BE1E2A591A00F614EB /* GLUIBlurFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C8D3BC1E2A591A00F614EB /* GLUIBlurFilter.cpp */; };
 		E8A2EBA01F5BE16D00E39CD9 /* GameProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8A2EB9E1F5BE16D00E39CD9 /* GameProperties.cpp */; };
+		E8C8D3BE1E2A591A00F614EB /* GLUIBlurFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C8D3BC1E2A591A00F614EB /* GLUIBlurFilter.cpp */; };
 		E8CB47CE1DE071CA00BF606A /* SWUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */; };
 		E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
 		E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47D41DE084AB00BF606A /* GLSettings.cpp */; };
@@ -394,6 +395,9 @@
 		E82E680318EA7F60004DBA18 /* libysrspades.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libysrspades.dylib; path = lib/libysrspades.dylib; sourceTree = "<group>"; };
 		E82E680618EA9502004DBA18 /* XSpades.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = XSpades.entitlements; path = XSpades/XSpades.entitlements; sourceTree = "<group>"; };
 		E831D8661FD65BD5003C0D97 /* ClientCameraMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ClientCameraMode.h; sourceTree = "<group>"; };
+		E831D8671FD69E93003C0D97 /* libdiscord-rpc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libdiscord-rpc.a"; path = "Sources/Externals/lib/libdiscord-rpc.a"; sourceTree = "<group>"; };
+		E831D8691FD69EA7003C0D97 /* libdiscord-rpc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libdiscord-rpc.a"; path = "lib/libdiscord-rpc.a"; sourceTree = "<group>"; };
+		E831D86D1FD69EF1003C0D97 /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; path = include; sourceTree = "<group>"; };
 		E834F54E17942C43004EBE88 /* Grenade.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Grenade.cpp; sourceTree = "<group>"; };
 		E834F54F17942C43004EBE88 /* Grenade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grenade.h; sourceTree = "<group>"; };
 		E834F55117944778004EBE88 /* NetClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetClient.cpp; sourceTree = "<group>"; };
@@ -910,6 +914,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E831D8681FD69E93003C0D97 /* libdiscord-rpc.a in Frameworks */,
 				E8626EBE1E1010CA003365BF /* libbz2.tbd in Frameworks */,
 				E8626EBC1E101072003365BF /* libopusfile.a in Frameworks */,
 				E8626EAE1E1009D7003365BF /* libcurl.tbd in Frameworks */,
@@ -997,6 +1002,7 @@
 		E82E66BA18EA78F5004DBA18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E831D8671FD69E93003C0D97 /* libdiscord-rpc.a */,
 				E8626EBD1E1010CA003365BF /* libbz2.tbd */,
 				E844888617D26699005105D0 /* libcurl.tbd */,
 				E8CF039B178EDAC9000683D4 /* libz.tbd */,
@@ -1098,6 +1104,7 @@
 		E8626EA21E1008F9003365BF /* Externals */ = {
 			isa = PBXGroup;
 			children = (
+				E831D86D1FD69EF1003C0D97 /* include */,
 				E8626EA31E10090C003365BF /* lib */,
 			);
 			name = Externals;
@@ -1114,6 +1121,7 @@
 				E8626EB91E101072003365BF /* libopus.a */,
 				E8626EBA1E101072003365BF /* libopusfile.a */,
 				E8626EB51E100EC6003365BF /* libfreetype.a */,
+				E831D8691FD69EA7003C0D97 /* libdiscord-rpc.a */,
 			);
 			name = lib;
 			sourceTree = "<group>";

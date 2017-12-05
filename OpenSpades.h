@@ -11,6 +11,8 @@
 #define OpenSpades_VER_STR	"OpenSpades 0.1.0 for OS X"
 #define PACKAGE_STRING		OpenSpades_VER_STR
 
+#define HAS_DISCORD_RPC 1
+
 /* #undef HAS_OPENAL */
 
 /* #undef RESDIR_DEFINED */

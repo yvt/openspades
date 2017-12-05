@@ -39,6 +39,8 @@ You may not need to hunt and compile the headers and libraries all by yourself:
  * There are pre-compiled zip files containing all required files for some versions of Visual Studio
  * They're already packed in the correct layout. You just need to merge.
 
+TODO: Add Discord RPC library (https://github.com/discordapp/discord-rpc)
+
 Visual Studio 2015:
 https://openspadesmedia.yvt.jp/development-packages/OpenSpades-Externals-Windows-VS2015-3.zip
 
@@ -57,6 +59,7 @@ Externals
 +---include/
 |   +---ft2build.h
 |   +---opusfile.h
+|   +---discord-rpc.h
 |   |
 |   +---ogg/
 |   |   \---(All libogg headers)
@@ -68,5 +71,7 @@ Externals
         (All libs here)
 
 The following URL provides a pre-compiled zip file containing all required files.
+
+TODO: Add Discord RPC library (https://github.com/discordapp/discord-rpc)
 
 https://openspadesmedia.yvt.jp/development-packages/OpenSpades-Externals-Darwin-2.zip
