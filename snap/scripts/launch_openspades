@@ -10,15 +10,6 @@ case "$SNAP_ARCH" in
 	;;
 esac
 
-if [ ! -f $SNAP_USER_DATA/.local/share/openspades/Resources ];
-then
-  mkdir -p $SNAP_USER_DATA/.local/share/openspades/Resources
-	cp $SNAP/share/games/openspades/Resources/* $SNAP_USER_DATA/.local/share/openspades/Resources
-	echo cl_checkForUpdates: 1 > $SNAP_USER_DATA/.local/share/openspades/Resources/SPConfig.cfg
-	echo s_eax: 1 >> $SNAP_USER_DATA/.local/share/openspades/Resources/SPConfig.cfg
-fi
-
-
 export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH:$LD_LIBRARY_PATH
 
 # XKB config
@@ -30,7 +21,7 @@ export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH/pulseaudio:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH/mesa:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH/mesa-egl:$LD_LIBRARY_PATH
 
-# XDG Config
+# XDG Config (TODO: confirm if this block is really necessary and remove it if not)
 export XDG_CONFIG_DIRS=$SNAP/etc/xdg:$XDG_CONFIG_DIRS
 export XDG_CONFIG_DIRS=$SNAP/usr/xdg:$XDG_CONFIG_DIRS
 # Note: this doesn't seem to work, QML's LocalStorage either ignores
