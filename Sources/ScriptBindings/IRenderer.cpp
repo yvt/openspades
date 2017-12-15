@@ -47,7 +47,7 @@ namespace spades {
 					return im;
 				}catch(const std::exception& ex) {
 					ScriptContextUtils().SetNativeException(ex);
-					return NULL;
+					return nullptr;
 				}
 			}
 			static void AddDebugLine(const Vector3& a, const Vector3& b,

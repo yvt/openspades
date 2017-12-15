@@ -17,7 +17,7 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
-
+#include <memory>
 #include <Core/VoxelModel.h>
 #include "ScriptManager.h"
 #include <Core/FileManager.h>
@@ -31,20 +31,17 @@ namespace spades {
 				return new VoxelModel(w, h, d);
 			}catch(const std::exception& ex){
 				ScriptContextUtils().SetNativeException(ex);
-				return NULL;
+				return nullptr;
 			}
 		}
 		static VoxelModel *LoadFactory(const std::string& fn){
-			spades::IStream *stream = NULL;
 			try{
-				stream = FileManager::OpenForReading(fn.c_str());
-				VoxelModel *ret = VoxelModel::LoadKV6(stream);
-				delete stream;
+				std::unique_ptr<spades::IStream> stream{FileManager::OpenForReading(fn.c_str())};
+				VoxelModel *ret = VoxelModel::LoadKV6(stream.get());
 				return ret;
 			}catch(const std::exception& ex) {
 				ScriptContextUtils().SetNativeException(ex);
-				if(stream) delete stream;
-				return NULL;
+				return nullptr;
 			}
 		}
 		static uint64_t GetSolidBits(int x, int y,

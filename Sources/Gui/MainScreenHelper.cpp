@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <memory>
 
 #include <curl/curl.h>
 #include <json/json.h>
@@ -119,34 +120,29 @@ namespace spades {
 				return size;
 			}
 
-			void ReturnResult(MainScreenServerList *list) {
+			void ReturnResult(std::unique_ptr<MainScreenServerList> list) {
 				AutoLocker lock(&(owner->newResultArrayLock));
-				delete owner->newResult;
-				owner->newResult = list;
+				owner->newResult = std::move(list);
 				owner = NULL; // release owner
 			}
 
 			void ProcessResponse() {
 				Json::Reader reader;
 				Json::Value root;
-				MainScreenServerList *resp = new MainScreenServerList();
-				try {
+				std::unique_ptr<MainScreenServerList> resp{new MainScreenServerList()};
+
 					if (reader.parse(buffer, root, false)) {
 						for (Json::Value::iterator it = root.begin(); it != root.end(); ++it) {
 							Json::Value &obj = *it;
-							Serveritem *srv = Serveritem::create(obj);
+						std::unique_ptr<Serveritem> srv{Serveritem::create(obj)};
 							if (srv) {
 								resp->list.push_back(new MainScreenServerItem(
-								  srv, owner->favorites.count(srv->Ip()) >= 1));
-								delete srv;
+							  srv.get(), owner->favorites.count(srv->Ip()) >= 1));
 							}
 						}
 					}
-					ReturnResult(resp);
-				} catch (...) {
-					delete resp;
-					throw;
-				}
+
+				ReturnResult(std::move(resp));
 			}
 
 		public:
@@ -178,19 +174,19 @@ namespace spades {
 						SPRaise("Failed to create cURL object.");
 					}
 				} catch (std::exception &ex) {
-					MainScreenServerList *lst = new MainScreenServerList();
+					std::unique_ptr<MainScreenServerList> lst{new MainScreenServerList()};
 					lst->message = ex.what();
-					ReturnResult(lst);
+					ReturnResult(std::move(lst));
 				} catch (...) {
-					MainScreenServerList *lst = new MainScreenServerList();
+					std::unique_ptr<MainScreenServerList> lst{new MainScreenServerList()};
 					lst->message = "Unknown error.";
-					ReturnResult(lst);
+					ReturnResult(std::move(lst));
 				}
 			}
 		};
 
 		MainScreenHelper::MainScreenHelper(MainScreen *scr)
-		    : mainScreen(scr), result(NULL), newResult(NULL), query(NULL) {
+		    : mainScreen(scr), query(NULL) {
 			SPADES_MARK_FUNCTION();
 			LoadFavorites();
 		}
@@ -200,8 +196,6 @@ namespace spades {
 			if (query) {
 				query->MarkForAutoDeletion();
 			}
-			delete result;
-			delete newResult;
 		}
 
 		void MainScreenHelper::MainScreenDestroyed() {
@@ -261,9 +255,9 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			AutoLocker lock(&newResultArrayLock);
 			if (newResult) {
-				delete result;
-				result = newResult;
-				newResult = NULL;
+				// Move `newResult` to `result`
+				result = std::move(newResult);
+				SPAssert(!newResult);
 				query->MarkForAutoDeletion();
 				query = NULL;
 				return true;

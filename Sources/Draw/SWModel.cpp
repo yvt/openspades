@@ -118,20 +118,18 @@ namespace spades {
 		SWModel *SWModelManager::RegisterModel(const std::string &name) {
 			auto it = models.find(name);
 			if (it == models.end()) {
-				auto *str = FileManager::OpenForReading(name.c_str());
+				std::unique_ptr<IStream> stream{FileManager::OpenForReading(name.c_str())};
+
 				Handle<VoxelModel> vm;
-				try {
-					vm.Set(VoxelModel::LoadKV6(str), false);
-					auto *m = CreateModel(vm);
-					models.insert(std::make_pair(name, m));
-					m->AddRef();
-					return m;
-				} catch (...) {
-					delete str;
-					throw;
-				}
+				vm.Set(VoxelModel::LoadKV6(stream.get()), false);
+
+				SWModel *model = CreateModel(vm);
+				models.insert(std::make_pair(name, model));
+				model->AddRef();
+
+				return model;
 			} else {
-				auto *model = it->second;
+				SWModel *model = it->second;
 				model->AddRef();
 				return model;
 			}

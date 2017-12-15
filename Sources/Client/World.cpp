@@ -145,7 +145,7 @@ namespace spades {
 			map = newMap;
 			if (map) {
 				map->AddRef();
-				mapWrapper = new GameMapWrapper(map);
+				mapWrapper = new GameMapWrapper(*map);
 				mapWrapper->Rebuild();
 			}
 		}

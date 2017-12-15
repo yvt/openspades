@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <memory>
 
 namespace spades {
 	namespace client {
@@ -72,10 +73,10 @@ namespace spades {
 			friend class Client; // FIXME: for debug
 		public:
 		private:
-			GameMap *map;
+			GameMap &map;
 
 			/** Each element represents where this cell is connected from. */
-			uint8_t *linkMap;
+			std::unique_ptr<uint8_t[]> linkMap;
 
 			enum LinkType {
 				Invalid = 0,
@@ -100,7 +101,7 @@ namespace spades {
 			}
 
 		public:
-			GameMapWrapper(GameMap *);
+			GameMapWrapper(GameMap &);
 			~GameMapWrapper();
 
 			/** Addes a new block. */

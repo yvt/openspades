@@ -17,6 +17,7 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+#include <memory>
 
 #include "GLModelManager.h"
 #include <Core/Debug.h>
@@ -61,24 +62,10 @@ namespace spades {
 		GLModel *GLModelManager::CreateModel(const char *name) {
 			SPADES_MARK_FUNCTION();
 
-			VoxelModel *bmp;
-			IStream *stream = FileManager::OpenForReading(name);
-			try {
-				bmp = VoxelModel::LoadKV6(stream);
-				delete stream;
-			} catch (...) {
-				delete stream;
-				throw;
-			}
-			try {
-				GLModel *model = static_cast<GLModel *>(
-				  renderer->CreateModelOptimized(bmp)); // new GLVoxelModel(bmp, renderer);
-				bmp->Release();
-				return model;
-			} catch (...) {
-				bmp->Release();
-				throw;
-			}
+			std::unique_ptr<IStream> stream{FileManager::OpenForReading(name)};
+			Handle<VoxelModel> voxelModel{VoxelModel::LoadKV6(stream.get()), false};
+
+			return static_cast<GLModel *>(renderer->CreateModelOptimized(voxelModel));
 		}
 	}
 }

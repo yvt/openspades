@@ -38,7 +38,7 @@ namespace spades {
 					return c;
 				}catch(const std::exception& ex) {
 					ScriptContextUtils().SetNativeException(ex);
-					return NULL;
+					return nullptr;
 				}
 			}
 		public:
