@@ -17,7 +17,7 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  
  */
-
+#include <memory>
 #include <Client/GameMap.h>
 #include "ScriptManager.h"
 #include <Core/IStream.h>
@@ -32,26 +32,23 @@ namespace spades {
 				   h != GameMap::DefaultHeight ||
 				   d != GameMap::DefaultDepth) {
 					asGetActiveContext()->SetException("Currently, non-default GameMap dimensions aren't supported.");
-					return NULL;
+					return nullptr;
 				}
 				try{
 					return new GameMap();
 				}catch(const std::exception& ex){
 					ScriptContextUtils().SetNativeException(ex);
-					return NULL;
+					return nullptr;
 				}
 			}
 			static GameMap *LoadFactory(const std::string& fn){
-				spades::IStream *stream = NULL;
 				try{
-					stream = FileManager::OpenForReading(fn.c_str());
-					GameMap *ret = GameMap::Load(stream);
-					delete stream;
+					std::unique_ptr<spades::IStream> stream{FileManager::OpenForReading(fn.c_str())};
+					GameMap *ret = GameMap::Load(stream.get());
 					return ret;
 				}catch(const std::exception& ex) {
 					ScriptContextUtils().SetNativeException(ex);
-					if(stream) delete stream;
-					return NULL;
+					return nullptr;
 				}
 			}
 			

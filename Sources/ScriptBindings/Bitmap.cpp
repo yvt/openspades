@@ -32,7 +32,7 @@ namespace spades {
 				return Bitmap::Load(str);
 			}catch(const std::exception& ex) {
 				ScriptContextUtils().SetNativeException(ex);
-				return NULL;
+				return nullptr;
 			}
 		}
 		

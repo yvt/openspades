@@ -22,6 +22,7 @@
 
 #include <unordered_set>
 #include <vector>
+#include <memory>
 
 #include <Core/Mutex.h>
 #include <Core/RefCountedObject.h>
@@ -78,8 +79,8 @@ namespace spades {
 			class ServerListQuery;
 
 			MainScreen *mainScreen;
-			MainScreenServerList *result;
-			MainScreenServerList *newResult;
+			std::unique_ptr<MainScreenServerList> result;
+			std::unique_ptr<MainScreenServerList> newResult;
 			Mutex newResultArrayLock;
 			ServerListQuery *query;
 			std::string errorMessage;

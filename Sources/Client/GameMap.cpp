@@ -523,8 +523,8 @@ namespace spades {
 			size_t len = bytes.size();
 			size_t pos = 0;
 
-			GameMap *map = new GameMap();
-			try {
+			Handle<GameMap> map{new GameMap(), false};
+
 				for (int y = 0; y < 512; y++) {
 					for (int x = 0; x < 512; x++) {
 						map->solidMap[x][y] = 0xffffffffffffffffULL;
@@ -589,11 +589,7 @@ namespace spades {
 					}
 				}
 
-				return map;
-			} catch (...) {
-				delete map;
-				throw;
-			}
+			return map.Unmanage();
 		}
 	}
 }
