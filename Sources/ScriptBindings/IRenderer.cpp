@@ -390,18 +390,22 @@ namespace spades {
 													  asFUNCTION(RegisterModel),
 													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
+						// OpenSpades' C++ functions increase the reference count of a passed object
+						// when storing it (just like the convention of Objective C), so we must
+						// use "auto handles" (`@+`).  Otherwise, a memory leak would occur
+						// (https://github.com/yvt/openspades/issues/687).
 						r = eng->RegisterObjectMethod("Renderer",
-													  "Image@ CreateImage(Bitmap@)",
+													  "Image@ CreateImage(Bitmap@+)",
 													  asMETHOD(IRenderer, CreateImage),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "Model@ CreateModel(VoxelModel@)",
+													  "Model@ CreateModel(VoxelModel@+)",
 													  asMETHOD(IRenderer, CreateModel),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void set_GameMap(GameMap@)",
+													  "void set_GameMap(GameMap@+)",
 													  asMETHOD(IRenderer, SetGameMap),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
@@ -426,7 +430,7 @@ namespace spades {
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void AddModel(Model@, const ModelRenderParam& in)",
+													  "void AddModel(Model@+, const ModelRenderParam& in)",
 													  asMETHOD(IRenderer, RenderModel),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
@@ -436,12 +440,12 @@ namespace spades {
 													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void AddSprite(Image@, const Vector3&in, float, float)",
+													  "void AddSprite(Image@+, const Vector3&in, float, float)",
 													  asFUNCTION(AddSprite),
 													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void AddLongSprite(Image@, const Vector3& in, const Vector3& in, float)",
+													  "void AddLongSprite(Image@+, const Vector3& in, const Vector3& in, float)",
 													  asFUNCTION(AddLongSprite),
 													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
@@ -476,35 +480,35 @@ namespace spades {
 													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void DrawImage(Image@, const Vector2& in)",
+													  "void DrawImage(Image@+, const Vector2& in)",
 													  asMETHODPR(IRenderer, DrawImage,
 																 (IImage*, const Vector2&),
 																 void),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void DrawImage(Image@, const AABB2& in)",
+													  "void DrawImage(Image@+, const AABB2& in)",
 													  asMETHODPR(IRenderer, DrawImage,
 																 (IImage*, const AABB2&),
 																 void),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void DrawImage(Image@, const Vector2&in, const AABB2& in)",
+													  "void DrawImage(Image@+, const Vector2&in, const AABB2& in)",
 													  asMETHODPR(IRenderer, DrawImage,
 																 (IImage*, const Vector2&, const AABB2&),
 																 void),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void DrawImage(Image@, const AABB2&in, const AABB2& in)",
+													  "void DrawImage(Image@+, const AABB2&in, const AABB2& in)",
 													  asMETHODPR(IRenderer, DrawImage,
 																 (IImage*, const AABB2&, const AABB2&),
 																 void),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
-													  "void DrawImage(Image@, const Vector2&in, const Vector2&in, const Vector2&in, const AABB2& in)",
+													  "void DrawImage(Image@+, const Vector2&in, const Vector2&in, const Vector2&in, const AABB2& in)",
 													  asMETHODPR(IRenderer, DrawImage,
 																 (IImage*, const Vector2&, const Vector2&, const Vector2&, const AABB2&),
 																 void),

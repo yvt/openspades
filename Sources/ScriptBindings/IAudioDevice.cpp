@@ -77,22 +77,22 @@ namespace spades {
 													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("AudioDevice",
-													  "void set_GameMap(GameMap@)",
+													  "void set_GameMap(GameMap@+)",
 													  asMETHOD(IAudioDevice, SetGameMap),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("AudioDevice",
-													  "void Play(AudioChunk@, const Vector3& in, const AudioParam& in)",
+													  "void Play(AudioChunk@+, const Vector3& in, const AudioParam& in)",
 													  asMETHOD(IAudioDevice, Play),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("AudioDevice",
-													  "void PlayLocal(AudioChunk@, const Vector3& in, const AudioParam& in)",
+													  "void PlayLocal(AudioChunk@+, const Vector3& in, const AudioParam& in)",
 													  asMETHODPR(IAudioDevice, PlayLocal, (IAudioChunk*, const Vector3&, const AudioParam&), void),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("AudioDevice",
-													  "void PlayLocal(AudioChunk@, const AudioParam& in)",
+													  "void PlayLocal(AudioChunk@+, const AudioParam& in)",
 													  asMETHODPR(IAudioDevice, PlayLocal, (IAudioChunk*, const AudioParam&), void),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
