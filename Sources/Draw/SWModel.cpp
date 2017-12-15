@@ -17,6 +17,7 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+#include <memory>
 
 #include "SWModel.h"
 #include <Core/FileManager.h>
