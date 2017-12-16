@@ -557,7 +557,36 @@ namespace spades {
 						} else {
 							reader.DumpDebug();
 
-							if (reader.GetType() != PacketTypeWorldUpdate &&
+							// On pyspades and derivative servers the actual size of the map data
+							// cannot be known in beforehand, so we have to find the end of the data
+							// by one of other means. One indicator for this would be a packet of a
+							// type other than MapChunk, which usually marks the end of map data
+							// transfer.
+							//
+							// However, we can't rely on this heuristics entirely because there are
+							// several occasions where the server would send non-MapChunk packets
+							// during map loading sequence, for example:
+							//
+							//  - World update packets (WorldUpdate, ExistingPlayer, and
+							//    CreatePlayer) for the current round. We must store such packets
+							//	  temporarily and process them later when a `World` is created.
+							//
+							//  - Leftover reload packet from the previous round. This happens when
+							//    you initiate the reload action and a map change occurs before it
+							// 	  is completed. In pyspades, sending a reload packet is implemented
+							// 	  by registering a callback function to the Twisted reactor. This
+							//    callback function sends a reload packet, but it does not check if
+							//    the current game round is finished, nor is it unregistered on a
+							//    map change.
+							//
+							//    Such a reload packet would not (and should not) have any effect on
+							//    the current round. Also, an attempt to process it would result in
+							//    an "invalid player ID" exception, so we simply drop it during
+							//    map load sequence.
+							//
+							if (reader.GetType() == PacketTypeWeaponReload) {
+								// Drop reload packets
+							} else if (reader.GetType() != PacketTypeWorldUpdate &&
 							    reader.GetType() != PacketTypeExistingPlayer &&
 							    reader.GetType() != PacketTypeCreatePlayer &&
 							    tryMapLoadOnPacketType) {
