@@ -40,32 +40,37 @@
 DEFINE_SPADES_SETTING(cl_serverListUrl, "http://services.buildandshoot.com/serverlist.json");
 
 namespace spades {
+	namespace {
+		struct CURLEasyDeleter {
+			void operator()(CURL *ptr) const { curl_easy_cleanup(ptr); }
+		};
+	}
 
-	class Serveritem {
+	class ServerItem {
 		// NetClient::Connect
 		std::string mName, mIp, mMap, mGameMode;
 		std::string mCountry, mVersion;
 		int mPing, mPlayers, mMaxPlayers;
 
-		Serveritem(const std::string &name, const std::string &ip, const std::string &map,
+		ServerItem(const std::string &name, const std::string &ip, const std::string &map,
 		           const std::string &gameMode, const std::string &country,
 		           const std::string &version, int ping, int players, int maxPlayers);
 
 	public:
-		static Serveritem *create(Json::Value &val);
+		static ServerItem *Create(Json::Value &val);
 
-		inline const std::string &Name() const { return mName; }
-		inline const std::string &Ip() const { return mIp; }
-		inline const std::string &Map() const { return mMap; }
-		inline const std::string &GameMode() const { return mGameMode; }
-		inline const std::string &Country() const { return mCountry; }
-		inline const std::string &Version() const { return mVersion; }
-		inline int Ping() const { return mPing; }
-		inline int Players() const { return mPlayers; }
-		inline int MaxPlayers() const { return mMaxPlayers; }
+		inline const std::string &GetName() const { return mName; }
+		inline const std::string &GetAddress() const { return mIp; }
+		inline const std::string &GetMapName() const { return mMap; }
+		inline const std::string &GetGameMode() const { return mGameMode; }
+		inline const std::string &GetCountryCode() const { return mCountry; }
+		inline const std::string &GetVersion() const { return mVersion; }
+		inline int GetPing() const { return mPing; }
+		inline int GetNumPlayers() const { return mPlayers; }
+		inline int GetMaxNumPlayers() const { return mMaxPlayers; }
 	};
 
-	Serveritem::Serveritem(const std::string &name, const std::string &ip, const std::string &map,
+	ServerItem::ServerItem(const std::string &name, const std::string &ip, const std::string &map,
 	                       const std::string &gameMode, const std::string &country,
 	                       const std::string &version, int ping, int players, int maxPlayers)
 	    : mName(name),
@@ -78,8 +83,8 @@ namespace spades {
 	      mPlayers(players),
 	      mMaxPlayers(maxPlayers) {}
 
-	Serveritem *Serveritem::create(Json::Value &val) {
-		Serveritem *item = NULL;
+	ServerItem *ServerItem::Create(Json::Value &val) {
+		ServerItem *item = NULL;
 		if (val.type() == Json::objectValue) {
 			std::string name, ip, map, gameMode, country, version;
 			int ping = 0, players = 0, maxPlayers = 0;
@@ -95,7 +100,7 @@ namespace spades {
 			players = val["players_current"].asInt();
 			maxPlayers = val["players_max"].asInt();
 			item =
-			  new Serveritem(name, ip, map, gameMode, country, version, ping, players, maxPlayers);
+			  new ServerItem(name, ip, map, gameMode, country, version, ping, players, maxPlayers);
 		}
 		return item;
 	}
@@ -103,26 +108,12 @@ namespace spades {
 	namespace gui {
 		constexpr auto FAVORITE_PATH = "/favorite_servers.json";
 
-		class MainScreenHelper::ServerListQuery : public Thread {
-			Mutex infoLock;
+		class MainScreenHelper::ServerListQuery final : public Thread {
 			Handle<MainScreenHelper> owner;
 			std::string buffer;
 
-			static size_t curlWriteCallback(void *ptr, size_t size, size_t nmemb,
-			                                ServerListQuery *query) {
-				size_t dataSize = size * nmemb;
-				return query->writeCallback(ptr, dataSize);
-			}
-
-			size_t writeCallback(void *ptr, size_t size) {
-
-				buffer.append(reinterpret_cast<char *>(ptr), size);
-				return size;
-			}
-
-			void ReturnResult(std::unique_ptr<MainScreenServerList> list) {
-				AutoLocker lock(&(owner->newResultArrayLock));
-				owner->newResult = std::move(list);
+			void ReturnResult(std::unique_ptr<MainScreenServerList> &&list) {
+				owner->resultCell.store(std::move(list));
 				owner = NULL; // release owner
 			}
 
@@ -131,44 +122,43 @@ namespace spades {
 				Json::Value root;
 				std::unique_ptr<MainScreenServerList> resp{new MainScreenServerList()};
 
-					if (reader.parse(buffer, root, false)) {
-						for (Json::Value::iterator it = root.begin(); it != root.end(); ++it) {
-							Json::Value &obj = *it;
-						std::unique_ptr<Serveritem> srv{Serveritem::create(obj)};
-							if (srv) {
-								resp->list.push_back(new MainScreenServerItem(
-							  srv.get(), owner->favorites.count(srv->Ip()) >= 1));
-							}
+				if (reader.parse(buffer, root, false)) {
+					for (Json::Value::iterator it = root.begin(); it != root.end(); ++it) {
+						Json::Value &obj = *it;
+						std::unique_ptr<ServerItem> srv{ServerItem::Create(obj)};
+						if (srv) {
+							resp->list.emplace_back(
+							  new MainScreenServerItem(
+							    srv.get(), owner->favorites.count(srv->GetAddress()) >= 1),
+							  false);
 						}
 					}
+				}
 
 				ReturnResult(std::move(resp));
 			}
 
 		public:
-			ServerListQuery(MainScreenHelper *owner) : owner(owner) {}
+			ServerListQuery(MainScreenHelper *owner) : owner{owner} {}
 
-			virtual void Run() {
+			void Run() override {
 				try {
-					CURL *cHandle = curl_easy_init();
+					std::unique_ptr<CURL, CURLEasyDeleter> cHandle{curl_easy_init()};
 					if (cHandle) {
-						try {
-							curl_easy_setopt(cHandle, CURLOPT_USERAGENT, OpenSpades_VER_STR);
-							curl_easy_setopt(cHandle, CURLOPT_URL, cl_serverListUrl.CString());
-							curl_easy_setopt(cHandle, CURLOPT_WRITEFUNCTION,
-							                 &ServerListQuery::curlWriteCallback);
-							curl_easy_setopt(cHandle, CURLOPT_WRITEDATA, this);
-							if (0 == curl_easy_perform(cHandle)) {
-
-								ProcessResponse();
-
-							} else {
-								SPRaise("HTTP request error.");
-							}
-							curl_easy_cleanup(cHandle);
-						} catch (...) {
-							curl_easy_cleanup(cHandle);
-							throw;
+						size_t (*curlWriteCallback)(void *, size_t, size_t, ServerListQuery *) = [](
+						  void *ptr, size_t size, size_t nmemb, ServerListQuery *self) -> size_t {
+							size_t numBytes = size * nmemb;
+							self->buffer.append(reinterpret_cast<char *>(ptr), numBytes);
+							return numBytes;
+						};
+						curl_easy_setopt(cHandle.get(), CURLOPT_USERAGENT, OpenSpades_VER_STR);
+						curl_easy_setopt(cHandle.get(), CURLOPT_URL, cl_serverListUrl.CString());
+						curl_easy_setopt(cHandle.get(), CURLOPT_WRITEFUNCTION, curlWriteCallback);
+						curl_easy_setopt(cHandle.get(), CURLOPT_WRITEDATA, this);
+						if (0 == curl_easy_perform(cHandle.get())) {
+							ProcessResponse();
+						} else {
+							SPRaise("HTTP request error.");
 						}
 					} else {
 						SPRaise("Failed to create cURL object.");
@@ -185,8 +175,7 @@ namespace spades {
 			}
 		};
 
-		MainScreenHelper::MainScreenHelper(MainScreen *scr)
-		    : mainScreen(scr), query(NULL) {
+		MainScreenHelper::MainScreenHelper(MainScreen *scr) : mainScreen(scr), query(NULL) {
 			SPADES_MARK_FUNCTION();
 			LoadFavorites();
 		}
@@ -253,21 +242,22 @@ namespace spades {
 
 		bool MainScreenHelper::PollServerListState() {
 			SPADES_MARK_FUNCTION();
-			AutoLocker lock(&newResultArrayLock);
+
+			// Do we have a new result?
+			auto newResult = resultCell.take();
 			if (newResult) {
-				// Move `newResult` to `result`
 				result = std::move(newResult);
-				SPAssert(!newResult);
 				query->MarkForAutoDeletion();
 				query = NULL;
 				return true;
 			}
+
 			return false;
 		}
 
 		void MainScreenHelper::StartQuery() {
 			if (query) {
-				// ongoing
+				// There already is an ongoing query
 				return;
 			}
 
@@ -280,43 +270,40 @@ namespace spades {
 		std::string MainScreenHelper::GetCredits() {
 			std::string html = credits;
 			html = Replace(html, "${PACKAGE_STRING}", PACKAGE_STRING);
-
 			return html;
 		}
 
-		struct serverSorter {
-			int type;
-			bool order;
-			serverSorter(int type_, bool order_) : type(type_), order(order_) { ; }
-			bool operator()(MainScreenServerItem *x, MainScreenServerItem *y) const {
+		CScriptArray *MainScreenHelper::GetServerList(std::string sortKey, bool descending) {
+			if (result == NULL) {
+				return NULL;
+			}
+
+			using Item = const Handle<MainScreenServerItem> &;
+			std::vector<Handle<MainScreenServerItem>> &lst = result->list;
+			if (lst.empty())
+				return NULL;
+
+			auto compareFavorite = [&](Item x, Item y) -> stmp::optional<bool> {
 				if (x->IsFavorite() && !y->IsFavorite()) {
 					return true;
 				} else if (!x->IsFavorite() && y->IsFavorite()) {
 					return false;
+				} else {
+					return {};
 				}
+			};
 
-				if (order) {
-					MainScreenServerItem *t = x;
-					x = y;
-					y = t;
+			auto compareInts = [&](int x, int y) -> bool {
+				if (descending) {
+					return y < x;
+				} else {
+					return x < y;
 				}
-				switch (type) {
-					default:
-					case 0: return asInt(x->GetPing(), y->GetPing());
-					case 1: return asInt(x->GetNumPlayers(), y->GetNumPlayers());
-					case 2: return asString(x->GetName(), y->GetName());
-					case 3: return asString(x->GetMapName(), y->GetMapName());
-					case 4: return asString(x->GetGameMode(), y->GetGameMode());
-					case 5: return asString(x->GetProtocol(), y->GetProtocol());
-					case 6: return asString(x->GetCountry(), y->GetCountry());
-				}
-			}
-			bool asInt(int x, int y) const {
-				if (x == y)
-					return false;
-				return (x < y);
-			}
-			bool asString(const std::string &x, const std::string &y) const {
+			};
+
+			auto compareStrings = [&](const std::string &x0, const std::string &y0) -> bool {
+				const auto &x = descending ? y0 : x0;
+				const auto &y = descending ? x0 : y0;
 				std::string::size_type t = 0;
 				for (t = 0; t < x.length() && t < y.length(); ++t) {
 					int xx = std::tolower(x[t]);
@@ -329,39 +316,47 @@ namespace spades {
 					return false;
 				}
 				return x.length() < y.length();
-			}
-			static bool ciCharLess(char c1, char c2) {
-				return (std::tolower(static_cast<char>(c1)) < std::tolower(static_cast<char>(c1)));
-			}
-		};
+			};
 
-		CScriptArray *MainScreenHelper::GetServerList(std::string sortKey, bool descending) {
-			if (result == NULL) {
-				return NULL;
-			}
-
-			std::vector<MainScreenServerItem *> lst = result->list;
-			if (lst.empty())
-				return NULL;
-
-			int sortKeyId = -1;
-			if (sortKey == "Ping") {
-				sortKeyId = 0;
-			} else if (sortKey == "NumPlayers") {
-				sortKeyId = 1;
-			} else if (sortKey == "Name") {
-				sortKeyId = 2;
-			} else if (sortKey == "MapName") {
-				sortKeyId = 3;
-			} else if (sortKey == "GameMode") {
-				sortKeyId = 4;
-			} else if (sortKey == "Protocol") {
-				sortKeyId = 5;
-			} else if (sortKey == "Country") {
-				sortKeyId = 6;
-			}
-			if (sortKeyId != -1) {
-				std::sort(lst.begin(), lst.end(), serverSorter(sortKeyId, descending));
+			if (!sortKey.empty()) {
+				if (sortKey == "Ping") {
+					std::stable_sort(lst.begin(), lst.end(), [&](Item x, Item y) {
+						return compareFavorite(x, y).value_or(
+						  compareInts(x->GetPing(), y->GetPing()));
+					});
+				} else if (sortKey == "NumPlayers") {
+					std::stable_sort(lst.begin(), lst.end(), [&](Item x, Item y) {
+						return compareFavorite(x, y).value_or(
+						  compareInts(x->GetNumPlayers(), y->GetNumPlayers()));
+					});
+				} else if (sortKey == "Name") {
+					std::stable_sort(lst.begin(), lst.end(), [&](Item x, Item y) {
+						return compareFavorite(x, y).value_or(
+						  compareStrings(x->GetName(), y->GetName()));
+					});
+				} else if (sortKey == "MapName") {
+					std::stable_sort(lst.begin(), lst.end(), [&](Item x, Item y) {
+						return compareFavorite(x, y).value_or(
+						  compareStrings(x->GetMapName(), y->GetMapName()));
+					});
+				} else if (sortKey == "GameMode") {
+					std::stable_sort(lst.begin(), lst.end(), [&](Item x, Item y) {
+						return compareFavorite(x, y).value_or(
+						  compareStrings(x->GetGameMode(), y->GetGameMode()));
+					});
+				} else if (sortKey == "Protocol") {
+					std::stable_sort(lst.begin(), lst.end(), [&](Item x, Item y) {
+						return compareFavorite(x, y).value_or(
+						  compareStrings(x->GetProtocol(), y->GetProtocol()));
+					});
+				} else if (sortKey == "Country") {
+					std::stable_sort(lst.begin(), lst.end(), [&](Item x, Item y) {
+						return compareFavorite(x, y).value_or(
+						  compareStrings(x->GetCountry(), y->GetCountry()));
+					});
+				} else {
+					SPRaise("Invalid sort key: %s", sortKey.c_str());
+				}
 			}
 
 			asIScriptEngine *eng = ScriptManager::GetInstance()->GetEngine();
@@ -394,26 +389,23 @@ namespace spades {
 			return s;
 		}
 
-		PackageUpdateManager& MainScreenHelper::GetPackageUpdateManager() {
+		PackageUpdateManager &MainScreenHelper::GetPackageUpdateManager() {
 			return PackageUpdateManager::GetInstance();
 		}
 
-		MainScreenServerList::~MainScreenServerList() {
-			for (size_t i = 0; i < list.size(); i++)
-				list[i]->Release();
-		}
+		MainScreenServerList::~MainScreenServerList() {}
 
-		MainScreenServerItem::MainScreenServerItem(Serveritem *item, bool favorite) {
+		MainScreenServerItem::MainScreenServerItem(ServerItem *item, bool favorite) {
 			SPADES_MARK_FUNCTION();
-			name = item->Name();
-			address = item->Ip();
-			mapName = item->Map();
-			gameMode = item->GameMode();
-			country = item->Country();
-			protocol = item->Version();
-			ping = item->Ping();
-			numPlayers = item->Players();
-			maxPlayers = item->MaxPlayers();
+			name = item->GetName();
+			address = item->GetAddress();
+			mapName = item->GetMapName();
+			gameMode = item->GetGameMode();
+			country = item->GetCountryCode();
+			protocol = item->GetVersion();
+			ping = item->GetPing();
+			numPlayers = item->GetNumPlayers();
+			maxPlayers = item->GetMaxNumPlayers();
 			this->favorite = favorite;
 		}
 

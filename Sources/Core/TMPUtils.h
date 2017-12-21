@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <cassert>
 #include <iostream>
 #include <iterator>
@@ -81,13 +82,27 @@ namespace stmp {
 		const T *get_pointer() const {
 			return has_some ? reinterpret_cast<const T *>(&storage) : nullptr;
 		}
-		T &get() {
+		T &get() & {
 			assert(has_some);
 			return *get_pointer();
 		}
-		const T &get() const {
+		const T &get() const & {
 			assert(has_some);
 			return *get_pointer();
+		}
+		T &&get() && {
+			assert(has_some);
+			return *get_pointer();
+		}
+		const T &&get() const && {
+			assert(has_some);
+			return *get_pointer();
+		}
+		template <class U> T value_or(U &&default_value) const & {
+			return *this ? get() : static_cast<T>(std::forward<U>(default_value));
+		}
+		template <class U> T value_or(U &&default_value) && {
+			return *this ? std::move(get()) : static_cast<T>(std::forward<U>(default_value));
 		}
 		T &operator->() {
 			assert(has_some);
@@ -108,5 +123,42 @@ namespace stmp {
 		}
 
 		explicit operator bool() const { return has_some; }
+	};
+
+	/** Safe atomic smart pointer. */
+	template <class T> class atomic_unique_ptr {
+		std::atomic<T *> inner;
+
+	public:
+		inline atomic_unique_ptr() : inner{nullptr} {}
+		inline atomic_unique_ptr(std::unique_ptr<T> &&x) : inner{x.release()} {}
+		atomic_unique_ptr(const atomic_unique_ptr &) = delete;
+		inline atomic_unique_ptr(atomic_unique_ptr &&x) : inner{x.release()} {}
+		inline ~atomic_unique_ptr() { take(); }
+
+		void operator=(const atomic_unique_ptr &) = delete;
+		void operator=(atomic_unique_ptr &&x) { exchange(x.take()); }
+
+		inline std::unique_ptr<T>
+		unsafe_exchange(std::unique_ptr<T> &&desired,
+		                std::memory_order order = std::memory_order_seq_cst) {
+			return std::unique_ptr<T>{inner.exchange(desired.release(), order)};
+		}
+
+		inline std::unique_ptr<T> exchange(std::unique_ptr<T> &&desired) {
+			return unsafe_exchange(std::move(desired));
+		}
+
+		inline std::unique_ptr<T> take() {
+			auto p = unsafe_exchange(std::unique_ptr<T>{}, std::memory_order_relaxed);
+			if (p) {
+				std::atomic_thread_fence(std::memory_order_acquire);
+			}
+			return p;
+		}
+
+		inline void store(std::unique_ptr<T> &&desired) { exchange(std::move(desired)); }
+
+		inline T *release() { return take().release(); }
 	};
 }

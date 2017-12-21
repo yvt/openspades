@@ -26,12 +26,13 @@
 
 #include <Core/Mutex.h>
 #include <Core/RefCountedObject.h>
+#include <Core/TMPUtils.h>
 #include <ScriptBindings/ScriptManager.h>
 
 #include <AngelScript/addons/scriptarray.h>
 
 namespace spades {
-	class Serveritem;
+	class ServerItem;
 	class PackageUpdateManager;
 	namespace gui {
 		class MainScreen;
@@ -52,23 +53,23 @@ namespace spades {
 			~MainScreenServerItem();
 
 		public:
-			MainScreenServerItem(Serveritem *, bool favorite);
+			MainScreenServerItem(ServerItem *, bool favorite);
 
-			std::string GetName() { return name; }
-			std::string GetAddress() { return address; }
-			std::string GetMapName() { return mapName; }
-			std::string GetGameMode() { return gameMode; }
-			std::string GetCountry() { return country; }
-			std::string GetProtocol() { return protocol; }
-			int GetPing() { return ping; }
-			int GetNumPlayers() { return numPlayers; }
-			int GetMaxPlayers() { return maxPlayers; }
-			bool IsFavorite() { return favorite; }
+			std::string GetName() const { return name; }
+			std::string GetAddress() const { return address; }
+			std::string GetMapName() const { return mapName; }
+			std::string GetGameMode() const { return gameMode; }
+			std::string GetCountry() const { return country; }
+			std::string GetProtocol() const { return protocol; }
+			int GetPing() const { return ping; }
+			int GetNumPlayers() const { return numPlayers; }
+			int GetMaxPlayers() const { return maxPlayers; }
+			bool IsFavorite() const { return favorite; }
 			void SetFavorite(bool favorite) { this->favorite = favorite; }
 		};
 
 		struct MainScreenServerList {
-			std::vector<MainScreenServerItem *> list;
+			std::vector<Handle<MainScreenServerItem>> list;
 			std::string message;
 
 			~MainScreenServerList();
@@ -80,8 +81,7 @@ namespace spades {
 
 			MainScreen *mainScreen;
 			std::unique_ptr<MainScreenServerList> result;
-			std::unique_ptr<MainScreenServerList> newResult;
-			Mutex newResultArrayLock;
+			stmp::atomic_unique_ptr<MainScreenServerList> resultCell;
 			ServerListQuery *query;
 			std::string errorMessage;
 			std::unordered_set<std::string> favorites;
