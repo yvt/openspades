@@ -89,9 +89,7 @@ namespace spades {
 					fired = true;
 
 					// Consume an ammo.
-					// Ammo count tracking is disabled for remote players because the server doesn't
-					// send enough information for us to do that.
-					if (ownerIsLocalPlayer) {
+					if (ammo > 0) {
 						ammo--;
 					}
 
@@ -108,12 +106,22 @@ namespace spades {
 			}
 			if (reloading) {
 				if (time >= reloadEndTime) {
-					// reload done
+					// A reload was completed (non-slow-loading weapon), or a single shell was
+					// loaded (slow-loading weapon).
+					//
+					// For local players, the number of bullets/shells loaded onto the magazine is
+					// sent by the server. However, we still calculate it by ourselves for slow
+					// -loading weapons so the reloading animation and the number displayed on the
+					// screen is synchronized. (This is especially important on a slow connection.)
+					//
+					// For remote players, the server does not send any information regarding the
+					// number of bullets/shells loaded or held as stock. This is problematic for
+					// slow-loading weapons because we can't tell how many times the reloading
+					// animation has to be repeated. For now, we just assume a remote player has
+					// an infinite supply of ammo, but a limited number of bullets in a clip.
 					reloading = false;
 					if (IsReloadSlow()) {
-						// for local player, server sends
-						// new ammo/stock value
-						if (ammo < GetClipSize() && stock > 0 && !ownerIsLocalPlayer) {
+						if (ammo < GetClipSize() && (stock > 0 || !ownerIsLocalPlayer)) {
 							ammo++;
 							stock--;
 						}
@@ -123,13 +131,8 @@ namespace spades {
 						else if (world->GetListener())
 							world->GetListener()->PlayerReloadedWeapon(owner);
 					} else {
-						// for local player, server sends
-						// new ammo/stock value
 						if (!ownerIsLocalPlayer) {
-							int newStock;
-							newStock = std::max(0, stock - GetClipSize() + ammo);
-							ammo += stock - newStock;
-							stock = newStock;
+							ammo = GetClipSize();
 						}
 						if (world->GetListener())
 							world->GetListener()->PlayerReloadedWeapon(owner);
@@ -157,18 +160,26 @@ namespace spades {
 			reloading = false;
 		}
 
-		void Weapon::Reload(bool manual) {
+		void Weapon::Reload(bool initial) {
 			SPADES_MARK_FUNCTION();
+
+			bool ownerIsLocalPlayer = owner->IsLocalPlayer();
 
 			if (reloading)
 				return;
+
+			// Is the clip already full?
 			if (ammo >= GetClipSize())
 				return;
-			if (stock == 0)
-				return;
-			if (IsReloadSlow() && ammo > 0 && shooting)
-				return;
-			if (manual)
+			
+			if (ownerIsLocalPlayer) {
+				if (stock == 0)
+					return;
+				if (IsReloadSlow() && ammo > 0 && shooting)
+					return;
+			}
+
+			if (initial)
 				slowReloadLeftCount = stock - std::max(0, stock - GetClipSize() + ammo);
 			reloading = true;
 			shooting = false;
