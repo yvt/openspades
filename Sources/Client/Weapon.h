@@ -74,7 +74,10 @@ namespace spades {
 			/** @return true when fired. */
 			bool FrameNext(float);
 
-			void Reload(bool manual = true);
+			/**
+			 * @param initial `true` if the reload was initiated by the user.
+			 */
+			void Reload(bool initial = true);
 			void AbortReload();
 
 			bool IsShooting() const { return shooting; }
