@@ -181,8 +181,8 @@ namespace spades {
 		HttpUpdateFeed(PackageUpdateManager &packageUpdateManager)
 		    : UpdateFeed{packageUpdateManager} {}
 
-		virtual void SetupCURLRequest(CURL *handle) = 0;
-		virtual void ProcessResponse(const std::string &responseBody) = 0;
+		virtual void SetupCURLRequest(CURL *handle) {};
+		virtual void ProcessResponse(const std::string &responseBody) {};
 
 	private:
 		std::unique_ptr<RequestThread> m_thread;
