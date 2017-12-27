@@ -293,8 +293,8 @@
 		E89A5F1E1DF8732200857F65 /* ShellApi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1C1DF8732200857F65 /* ShellApi.cpp */; };
 		E89A5F201DF8759200857F65 /* ShellApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1F1DF8759200857F65 /* ShellApi.mm */; };
 		E89BBDC31B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */; };
-		E8C8D3BE1E2A591A00F614EB /* GLUIBlurFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C8D3BC1E2A591A00F614EB /* GLUIBlurFilter.cpp */; };
 		E8A2EBA01F5BE16D00E39CD9 /* GameProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8A2EB9E1F5BE16D00E39CD9 /* GameProperties.cpp */; };
+		E8C8D3BE1E2A591A00F614EB /* GLUIBlurFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C8D3BC1E2A591A00F614EB /* GLUIBlurFilter.cpp */; };
 		E8CB47CE1DE071CA00BF606A /* SWUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */; };
 		E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
 		E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47D41DE084AB00BF606A /* GLSettings.cpp */; };
@@ -302,6 +302,7 @@
 		E8EF8B571E1D70D900E0829C /* SplashWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EF8B551E1D70D900E0829C /* SplashWindow.cpp */; };
 		E8F6E6E71DCF503500FE76BB /* MumbleLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F6E6E41DCF503200FE76BB /* MumbleLink.cpp */; };
 		E8F819F81EFFE18D00FAD0D5 /* GLTemporalAAFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F819F61EFFE18D00FAD0D5 /* GLTemporalAAFilter.cpp */; };
+		E8F9E5AA1FF3A94000616636 /* PingTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F9E5A81FF3A94000616636 /* PingTester.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -894,6 +895,9 @@
 		E8F74CFE184C753F0085AA54 /* Clipboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Clipboard.cpp; sourceTree = "<group>"; };
 		E8F819F61EFFE18D00FAD0D5 /* GLTemporalAAFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTemporalAAFilter.cpp; sourceTree = "<group>"; };
 		E8F819F71EFFE18D00FAD0D5 /* GLTemporalAAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTemporalAAFilter.h; sourceTree = "<group>"; };
+		E8F9E5A81FF3A94000616636 /* PingTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PingTester.cpp; sourceTree = "<group>"; };
+		E8F9E5AB1FF3A95600616636 /* PingTester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PingTester.h; sourceTree = "<group>"; };
+		E8F9E5AC1FF3C1BA00616636 /* ENetUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ENetUtils.h; sourceTree = "<group>"; };
 		E8FC02D8186829BC00F84A0D /* SWUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWUtils.h; sourceTree = "<group>"; };
 		E8FE748818CB329C00291338 /* HitTestDebugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HitTestDebugger.cpp; sourceTree = "<group>"; };
 		E8FE748918CB329C00291338 /* HitTestDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitTestDebugger.h; sourceTree = "<group>"; };
@@ -1506,6 +1510,8 @@
 				E81CE4A8183F7F2000F22685 /* MainScreen.h */,
 				E8F74CED183FBA9C0085AA54 /* MainScreenHelper.cpp */,
 				E8F74CEE183FBA9C0085AA54 /* MainScreenHelper.h */,
+				E8F9E5A81FF3A94000616636 /* PingTester.cpp */,
+				E8F9E5AB1FF3A95600616636 /* PingTester.h */,
 				E8F74CE3183F86AE0085AA54 /* View.cpp */,
 				E8F74CE4183F86AE0085AA54 /* View.h */,
 				E8F74CE7183F8B9D0085AA54 /* Runner.cpp */,
@@ -1590,6 +1596,7 @@
 				E89A5F1D1DF8732200857F65 /* ShellApi.h */,
 				E89A5F1F1DF8759200857F65 /* ShellApi.mm */,
 				E8655AA91DFC0AAA00D5058A /* TMPUtils.h */,
+				E8F9E5AC1FF3C1BA00616636 /* ENetUtils.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2120,6 +2127,7 @@
 				E82E678C18EA7972004DBA18 /* IToolSkin.cpp in Sources */,
 				E82E678D18EA7972004DBA18 /* ScriptFunction.cpp in Sources */,
 				E82E678E18EA7972004DBA18 /* ISpadeSkin.cpp in Sources */,
+				E8F9E5AA1FF3A94000616636 /* PingTester.cpp in Sources */,
 				E82E678F18EA7972004DBA18 /* IBlockSkin.cpp in Sources */,
 				E82E679018EA7972004DBA18 /* IViewToolSkin.cpp in Sources */,
 				E82E679118EA7972004DBA18 /* IThirdPersonToolSkin.cpp in Sources */,

@@ -187,10 +187,13 @@ namespace spades {
 	}
 
 	class ServerListItem: spades::ui::ButtonBase {
+		MainScreenHelper@ helper;
 		MainScreenServerItem@ item;
 		FlagIconRenderer@ flagIconRenderer;
-		ServerListItem(spades::ui::UIManager@ manager, MainScreenServerItem@ item){
+
+		ServerListItem(spades::ui::UIManager@ manager, MainScreenHelper@ helper, MainScreenServerItem@ item){
 			super(manager);
+			@this.helper = helper;
 			@this.item = item;
 			@flagIconRenderer = FlagIconRenderer(manager.Renderer);
 		}
@@ -215,12 +218,18 @@ namespace spades {
 			renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 
 			Font.Draw(item.Name, ScreenPosition + Vector2(4.f, 2.f), 1.f, fgcolor);
+
+			int ping = helper.GetServerPing(item.Address);
+			string pingStr = ping == -1 ? "" : ToString(ping);
+			Font.Draw(pingStr, ScreenPosition + Vector2(335.f-Font.Measure(pingStr).x, 2.f), 1.f, Vector4(1,1,1,1));
+
 			string playersStr = ToString(item.NumPlayers) + "/" + ToString(item.MaxPlayers);
 			Vector4 col(1,1,1,1);
 			if(item.NumPlayers >= item.MaxPlayers) col = Vector4(1,0.7f,0.7f,1);
 			else if(item.NumPlayers >= item.MaxPlayers * 3 / 4) col = Vector4(1,1,0.7f,1);
 			else if(item.NumPlayers == 0) col = Vector4(0.7f,0.7f,1,1);
-			Font.Draw(playersStr, ScreenPosition + Vector2(340.f-Font.Measure(playersStr).x * 0.5f, 2.f), 1.f, col);
+			Font.Draw(playersStr, ScreenPosition + Vector2(370.f-Font.Measure(playersStr).x * 0.5f, 2.f), 1.f, col);
+
 			Font.Draw(item.MapName, ScreenPosition + Vector2(400.f, 2.f), 1.f, Vector4(1,1,1,1));
 			Font.Draw(item.GameMode, ScreenPosition + Vector2(550.f, 2.f), 1.f, Vector4(1,1,1,1));
 			Font.Draw(item.Protocol, ScreenPosition + Vector2(630.f, 2.f), 1.f, Vector4(1,1,1,1));
@@ -234,16 +243,37 @@ namespace spades {
 
 	class ServerListModel: spades::ui::ListViewModel {
 		spades::ui::UIManager@ manager;
+		MainScreenHelper@ helper;
 		MainScreenServerItem@[]@ list;
+		ServerListItem@[]@ itemElements;
 
 		ServerListItemEventHandler@ ItemActivated;
 		ServerListItemEventHandler@ ItemDoubleClicked;
 		ServerListItemEventHandler@ ItemRightClicked;
 
-		ServerListModel(spades::ui::UIManager@ manager, MainScreenServerItem@[]@ list) {
+		ServerListModel(spades::ui::UIManager@ manager, MainScreenHelper@ helper, MainScreenServerItem@[]@ list) {
 			@this.manager = manager;
+			@this.helper = helper;
 			@this.list = list;
+
+			@this.itemElements = array<ServerListItem@>();
+			for (uint i = list.length; i > 0; --i) {
+				itemElements.insertLast(null);
+			}
 		}
+
+		void ReplaceList(MainScreenServerItem@[]@ list) {
+			Assert(list.length == this.list.length);
+			@this.list = list;
+
+			// Kinda dirty hack
+			for (uint i = 0, count = list.length; i < count; ++i) {
+				if (itemElements[i] !is null) {
+					@itemElements[i].item = list[i];
+				}
+			}
+		}
+
 		int NumRows {
 			get { return int(list.length); }
 		}
@@ -266,11 +296,14 @@ namespace spades {
 			}
 		}
 		spades::ui::UIElement@ CreateElement(int row) {
-			ServerListItem i(manager, list[row]);
-			@i.Activated = spades::ui::EventHandler(this.OnItemClicked);
-			@i.DoubleClicked = spades::ui::EventHandler(this.OnItemDoubleClicked);
-			@i.RightClicked = spades::ui::EventHandler(this.OnItemRightClicked);
-			return i;
+			if (itemElements[row] is null) {
+				ServerListItem i(manager, helper, list[row]);
+				@i.Activated = spades::ui::EventHandler(this.OnItemClicked);
+				@i.DoubleClicked = spades::ui::EventHandler(this.OnItemDoubleClicked);
+				@i.RightClicked = spades::ui::EventHandler(this.OnItemRightClicked);
+				@itemElements[row] = i;
+			}
+			return itemElements[row];
 		}
 		void RecycleElement(spades::ui::UIElement@ elem) {}
 	}
@@ -359,6 +392,9 @@ namespace spades {
 		MainScreenServerListLoadingView@ loadingView;
 		MainScreenServerListErrorView@ errorView;
 		bool loading = false, loaded = false;
+
+		ServerListModel@ currentServerListModel;
+		int serverListUpdateTimer = 5;
 
 		private ConfigItem cg_protocolVersion("cg_protocolVersion", "3");
 		private ConfigItem cg_lastQuickConnectHost("cg_lastQuickConnectHost", "127.0.0.1");
@@ -491,14 +527,21 @@ namespace spades {
 			}
 			{
 				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 2.f, 240.f, 300.f - 2.f, 30.f);
+				header.Bounds = AABB2(contentsLeft + 2.f, 240.f, 280.f - 2.f, 30.f);
 				header.Text = _Tr("MainScreen", "Server Name");
 				@header.Activated = spades::ui::EventHandler(this.SortServerListByName);
 				AddChild(header);
 			}
 			{
 				ServerListHeader header(Manager);
-				header.Bounds = AABB2(contentsLeft + 300.f, 240.f, 100.f, 30.f);
+				header.Bounds = AABB2(contentsLeft + 280.f, 240.f, 60.f, 30.f);
+				header.Text = _Tr("MainScreen", "Ping");
+				@header.Activated = spades::ui::EventHandler(this.SortServerListByPing);
+				AddChild(header);
+			}
+			{
+				ServerListHeader header(Manager);
+				header.Bounds = AABB2(contentsLeft + 340.f, 240.f, 60.f, 30.f);
 				header.Text = _Tr("MainScreen", "Players");
 				@header.Activated = spades::ui::EventHandler(this.SortServerListByNumPlayers);
 				AddChild(header);
@@ -578,7 +621,7 @@ namespace spades {
 
 		void ServerListItemRightClicked(ServerListModel@ sender, MainScreenServerItem@ item) {
 			helper.SetServerFavorite(item.Address, !item.Favorite);
-			UpdateServerList();
+			UpdateServerList(true);
 		}
 
 		private void SortServerListByPing(spades::ui::UIElement@ sender) {
@@ -611,10 +654,10 @@ namespace spades {
 				sort = keyId;
 			}
 			cg_serverlistSort = sort;
-			UpdateServerList();
+			UpdateServerList(true);
 		}
 
-		private void UpdateServerList() {
+		private void UpdateServerList(bool refresh) {
 			string key = "";
 			switch(cg_serverlistSort.IntValue & 0xfff) {
 				case 0: key = "Ping"; break;
@@ -663,12 +706,24 @@ namespace spades {
 				list2.insertLast(item);
 			}
 
-			ServerListModel model(Manager, list2);
+			// If we are updating the list in real time, try not to replace the
+			// model
+			if (currentServerListModel !is null && !refresh && currentServerListModel.list.length == list2.length) {
+				currentServerListModel.ReplaceList(list2);
+				return;
+			}
+
+			ServerListModel model(Manager, helper, list2);
 			@serverList.Model = model;
 			@model.ItemActivated = ServerListItemEventHandler(this.ServerListItemActivated);
 			@model.ItemDoubleClicked = ServerListItemEventHandler(this.ServerListItemDoubleClicked);
 			@model.ItemRightClicked = ServerListItemEventHandler(this.ServerListItemRightClicked);
-			serverList.ScrollToTop();
+
+			@currentServerListModel = model;
+
+			if (refresh) {
+				serverList.ScrollToTop();
+			}
 		}
 
 		private void CheckServerList() {
@@ -687,7 +742,16 @@ namespace spades {
 				loaded = true;
 				errorView.Visible = false;
 				loadingView.Visible = false;
-				UpdateServerList();
+				UpdateServerList(true);
+			}
+
+			if ((cg_serverlistSort.IntValue & 0xfff) == 0 && loaded) {
+				// Ping (RTT) is updated in real-time
+				if (serverListUpdateTimer == 0) {
+					UpdateServerList(false);
+					serverListUpdateTimer = 5;
+				}
+				--serverListUpdateTimer;
 			}
 		}
 
@@ -711,22 +775,22 @@ namespace spades {
 
 		private void OnFilterProtocol3Pressed(spades::ui::UIElement@ sender) {
 			filterProtocol4Button.Toggled = false;
-			UpdateServerList();
+			UpdateServerList(true);
 		}
 		private void OnFilterProtocol4Pressed(spades::ui::UIElement@ sender) {
 			filterProtocol3Button.Toggled = false;
-			UpdateServerList();
+			UpdateServerList(true);
 		}
 		private void OnFilterFullPressed(spades::ui::UIElement@ sender) {
 			filterEmptyButton.Toggled = false;
-			UpdateServerList();
+			UpdateServerList(true);
 		}
 		private void OnFilterEmptyPressed(spades::ui::UIElement@ sender) {
 			filterFullButton.Toggled = false;
-			UpdateServerList();
+			UpdateServerList(true);
 		}
 		private void OnFilterTextChanged(spades::ui::UIElement@ sender) {
-			UpdateServerList();
+			UpdateServerList(true);
 		}
 
 		private void OnRefreshServerListPressed(spades::ui::UIElement@ sender) {

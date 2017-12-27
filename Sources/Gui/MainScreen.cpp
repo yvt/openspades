@@ -261,6 +261,8 @@ namespace spades {
 				return;
 			}
 
+			helper->Update();
+
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("MainScreenUI", "void RunFrame(float)");
 			ScriptContextHandle c = func.Prepare();

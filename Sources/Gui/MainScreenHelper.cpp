@@ -35,9 +35,11 @@
 #include <Core/Settings.h>
 #include <Core/Thread.h>
 #include <Gui/PackageUpdateManager.h>
+#include <Gui/PingTester.h>
 #include <OpenSpades.h>
 
 DEFINE_SPADES_SETTING(cl_serverListUrl, "http://services.buildandshoot.com/serverlist.json");
+DEFINE_SPADES_SETTING(cl_serverPing, "1");
 
 namespace spades {
 	namespace {
@@ -187,6 +189,12 @@ namespace spades {
 			}
 		}
 
+		void MainScreenHelper::Update() {
+			if (pingTester) {
+				pingTester->Update();
+			}
+		}
+
 		void MainScreenHelper::MainScreenDestroyed() {
 			SPADES_MARK_FUNCTION();
 			SaveFavorites();
@@ -249,6 +257,16 @@ namespace spades {
 				result = std::move(newResult);
 				query->MarkForAutoDeletion();
 				query = NULL;
+
+				// Start the ping measurement
+				if (cl_serverPing) {
+					pingTester.reset(new PingTester());
+
+					for (const auto &item: result->list) {
+						pingTester->AddTarget(item->GetAddress());
+					}
+				}
+
 				return true;
 			}
 
@@ -261,6 +279,9 @@ namespace spades {
 				return;
 			}
 
+			if (pingTester) {
+				pingTester.reset();
+			}
 			query = new ServerListQuery(this);
 			query->Start();
 		}
@@ -320,6 +341,14 @@ namespace spades {
 
 			if (!sortKey.empty()) {
 				if (sortKey == "Ping") {
+					// Overwrite the master server's ping values with those relative to the user
+					// for sorting
+					for (auto &item : lst) {
+						item->ping = GetServerPing(item->GetAddress());
+						if (item->ping == -1) {
+							item->ping = std::numeric_limits<int>::max();
+						}
+					}
 					std::stable_sort(lst.begin(), lst.end(), [&](Item x, Item y) {
 						return compareFavorite(x, y).value_or(
 						  compareInts(x->GetPing(), y->GetPing()));
@@ -367,6 +396,20 @@ namespace spades {
 				arr->SetValue((asUINT)i, &(lst[i]));
 			}
 			return arr;
+		}
+
+		int MainScreenHelper::GetServerPing(const std::string &address) {
+			if (!pingTester) {
+				return -1;
+			}
+
+			auto result = pingTester->GetTargetResult(address);
+
+			if (!result) {
+				return -1;
+			}
+
+			return result.get().ping.value_or(-1);
 		}
 
 		std::string MainScreenHelper::ConnectServer(std::string hostname, int protocolVersion) {
