@@ -25,9 +25,13 @@
 #include <iostream>
 #include <iterator>
 #include <memory>
+#include <stdexcept>
 #include <type_traits>
 
 namespace stmp {
+	struct bad_optional_access : public std::logic_error {
+		bad_optional_access() : std::logic_error{"bad optional access"} {};
+	};
 
 	// creating our own version because boost is overweighted
 	// (preproecssing optional.hpp emits 50000 lines of C++ code!)
@@ -82,6 +86,7 @@ namespace stmp {
 		const T *get_pointer() const {
 			return has_some ? reinterpret_cast<const T *>(&storage) : nullptr;
 		}
+
 		T &get() & {
 			assert(has_some);
 			return *get_pointer();
@@ -98,12 +103,39 @@ namespace stmp {
 			assert(has_some);
 			return *get_pointer();
 		}
+
+		T &value() & {
+			if (!has_some) {
+				throw bad_optional_access{};
+			}
+			return *get_pointer();
+		}
+		const T &value() const & {
+			if (!has_some) {
+				throw bad_optional_access{};
+			}
+			return *get_pointer();
+		}
+		T &&value() && {
+			if (!has_some) {
+				throw bad_optional_access{};
+			}
+			return *get_pointer();
+		}
+		const T &&value() const && {
+			if (!has_some) {
+				throw bad_optional_access{};
+			}
+			return *get_pointer();
+		}
+
 		template <class U> T value_or(U &&default_value) const & {
 			return *this ? get() : static_cast<T>(std::forward<U>(default_value));
 		}
 		template <class U> T value_or(U &&default_value) && {
 			return *this ? std::move(get()) : static_cast<T>(std::forward<U>(default_value));
 		}
+
 		T &operator->() {
 			assert(has_some);
 			return get();

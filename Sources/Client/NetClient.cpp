@@ -43,6 +43,7 @@
 #include <Core/MemoryStream.h>
 #include <Core/Settings.h>
 #include <Core/Strings.h>
+#include <Core/TMPUtils.h>
 
 DEFINE_SPADES_SETTING(cg_unicode, "1");
 
@@ -497,8 +498,12 @@ namespace spades {
 					SPRaise("Disconnected: %s", DisconnectReasonString(event.data).c_str());
 				}
 
+				stmp::optional<NetPacketReader> readerOrNone;
+
 				if (event.type == ENET_EVENT_TYPE_RECEIVE) {
-					NetPacketReader reader(event.packet);
+					readerOrNone.reset(event.packet);
+					auto &reader = readerOrNone.value();
+
 					try {
 						if (HandleHandshakePacket(reader)) {
 							continue;
@@ -515,7 +520,7 @@ namespace spades {
 					if (event.type == ENET_EVENT_TYPE_CONNECT) {
 						statusString = _Tr("NetClient", "Awaiting for state");
 					} else if (event.type == ENET_EVENT_TYPE_RECEIVE) {
-						NetPacketReader reader(event.packet);
+						auto &reader = readerOrNone.value();
 						reader.DumpDebug();
 						if (reader.GetType() != PacketTypeMapStart) {
 							SPRaise("Unexpected packet: %d", (int)reader.GetType());
@@ -529,7 +534,7 @@ namespace spades {
 					}
 				} else if (status == NetClientStatusReceivingMap) {
 					if (event.type == ENET_EVENT_TYPE_RECEIVE) {
-						NetPacketReader reader(event.packet);
+						auto &reader = readerOrNone.value();
 
 						if (reader.GetType() == PacketTypeMapChunk) {
 							std::vector<char> dt = reader.GetData();
@@ -642,7 +647,7 @@ namespace spades {
 					}
 				} else if (status == NetClientStatusConnected) {
 					if (event.type == ENET_EVENT_TYPE_RECEIVE) {
-						NetPacketReader reader(event.packet);
+						auto &reader = readerOrNone.value();
 						// reader.DumpDebug();
 						try {
 							HandleGamePacket(reader);
