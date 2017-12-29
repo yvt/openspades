@@ -74,7 +74,8 @@ namespace spades {
 			} else {
 				// The local player is dead or a spectator
 				if (followCameraState.enabled) {
-					if (followCameraState.firstPerson) {
+					bool isAlive = world->GetPlayer(followedPlayerId)->IsAlive();
+					if (followCameraState.firstPerson && isAlive) {
 						return ClientCameraMode::FirstPersonFollow;
 					} else {
 						return ClientCameraMode::ThirdPersonFollow;

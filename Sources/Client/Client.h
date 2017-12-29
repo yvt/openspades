@@ -209,6 +209,11 @@ namespace spades {
 			// Spectator camera control
 			/** The state of the following camera used for spectating. */
 			struct {
+				/**
+				 * Indicates whether the current camera mode is first-person or not.
+				 * Ignored and locked to third-person when the target player
+				 * (`followedPlayerId`) is dead.
+				 */
 				bool firstPerson = true;
 
 				/** Controls whether the follow camera is enabled. */

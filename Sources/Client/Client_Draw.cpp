@@ -652,7 +652,9 @@ namespace spades {
 
 			// Help messages (make sure to synchronize these with the keyboard input handler)
 			if (FollowsNonLocalPlayer(GetCameraMode())) {
-				addLine(_Tr("Client", "[{0}] Cycle camera mode", TranslateKeyName(cg_keyJump)));
+				if (GetCameraTargetPlayer().IsAlive()) {
+					addLine(_Tr("Client", "[{0}] Cycle camera mode", TranslateKeyName(cg_keyJump)));
+				}
 				addLine(_Tr("Client", "[{0}/{1}] Next/previous player", TranslateKeyName(cg_keyAttack), TranslateKeyName(cg_keyAltAttack)));
 
 				if (GetWorld()->GetLocalPlayer()->IsSpectator()) {

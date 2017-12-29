@@ -351,7 +351,7 @@ namespace spades {
 							}
 							return;
 						} else if (CheckKey(cg_keyJump, name) && cameraMode != ClientCameraMode::Free) {
-							if (down) {
+							if (down && GetCameraTargetPlayer().IsAlive()) {
 								followCameraState.firstPerson = !followCameraState.firstPerson;
 							}
 							return;
