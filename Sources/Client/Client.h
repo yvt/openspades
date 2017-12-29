@@ -345,8 +345,11 @@ namespace spades {
 			void Draw2DWithoutWorld();
 			void Draw2DWithWorld();
 
+			/** Called when the local plyaer is alive. */
 			void DrawJoinedAlivePlayerHUD();
+			/** Called when the local plyaer is dead. */
 			void DrawDeadPlayerHUD();
+			/** Called when the local plyaer is a spectator. */
 			void DrawSpectateHUD();
 
 			void DrawHottrackedPlayerName();
