@@ -110,7 +110,8 @@ namespace spades {
 			// used for some scripts including Arena by Yourself
 			IntVector3 temporaryPlayerBlockColor;
 
-			void Handle(NetPacketReader &);
+			bool HandleHandshakePacket(NetPacketReader &);
+			void HandleGamePacket(NetPacketReader &);
 			World *GetWorld();
 			Player *GetPlayer(int);
 			Player *GetPlayerOrNull(int);

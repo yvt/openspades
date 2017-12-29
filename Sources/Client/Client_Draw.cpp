@@ -60,6 +60,10 @@
 DEFINE_SPADES_SETTING(cg_hitIndicator, "1");
 DEFINE_SPADES_SETTING(cg_debugAim, "0");
 SPADES_SETTING(cg_keyReloadWeapon);
+SPADES_SETTING(cg_keyJump);
+SPADES_SETTING(cg_keyAttack);
+SPADES_SETTING(cg_keyAltAttack);
+SPADES_SETTING(cg_keyCrouch);
 DEFINE_SPADES_SETTING(cg_screenshotFormat, "jpeg");
 DEFINE_SPADES_SETTING(cg_stats, "0");
 DEFINE_SPADES_SETTING(cg_hideHud, "0");
@@ -82,6 +86,18 @@ namespace spades {
 					return ScreenshotFormat::Png;
 				} else {
 					SPRaise("Invalid screenshot format: %s", cg_screenshotFormat.CString());
+				}
+			}
+
+			std::string TranslateKeyName(const std::string &name) {
+				if (name == "LeftMouseButton") {
+					return "LMB";
+				} else if (name == "RightMouseButton") {
+					return "RMB";
+				} else if (name.empty()) {
+					return _Tr("Client", "Unbound");
+				} else {
+					return name;
 				}
 			}
 		}
@@ -325,15 +341,15 @@ namespace spades {
 			// float scrWidth = renderer->ScreenWidth();
 			// float scrHeight = renderer->ScreenHeight();
 			// float wTime = world->GetTime();
-			Player *p = GetWorld()->GetLocalPlayer();
+			Player &p = GetCameraTargetPlayer();
 			// IFont *font;
 
-			Weapon *w = p->GetWeapon();
-			float spread = w->GetSpread();
+			Weapon &w = *p.GetWeapon();
+			float spread = w.GetSpread();
 
 			AABB2 boundary(0, 0, 0, 0);
 			for (int i = 0; i < 8; i++) {
-				Vector3 vec = p->GetFront();
+				Vector3 vec = p.GetFront();
 				if (i & 1)
 					vec.x += spread;
 				else
@@ -348,9 +364,9 @@ namespace spades {
 					vec.z -= spread;
 
 				Vector3 viewPos;
-				viewPos.x = Vector3::Dot(vec, p->GetRight());
-				viewPos.y = Vector3::Dot(vec, p->GetUp());
-				viewPos.z = Vector3::Dot(vec, p->GetFront());
+				viewPos.x = Vector3::Dot(vec, p.GetRight());
+				viewPos.y = Vector3::Dot(vec, p.GetUp());
+				viewPos.z = Vector3::Dot(vec, p.GetFront());
 
 				Vector2 p;
 				p.x = viewPos.x / viewPos.z;
@@ -391,21 +407,16 @@ namespace spades {
 			renderer->DrawImage(img, AABB2(p2.x, p1.y - 1, 1, p2.y - p1.y + 2));
 		}
 
-		void Client::DrawJoinedAlivePlayerHUD() {
+		void Client::DrawFirstPersonHUD() {
 			SPADES_MARK_FUNCTION();
 
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
-			// float wTime = world->GetTime();
-			Player *p = GetWorld()->GetLocalPlayer();
-			IFont *font;
 
-			// draw local weapon's 2d things
-			clientPlayers[p->GetId()]->Draw2D();
+			Player &player = GetCameraTargetPlayer();
+			int playerId = GetCameraTargetPlayerId();
 
-			// draw damage ring
-			if (!cg_hideHud)
-				hurtRingView->Draw();
+			clientPlayers[playerId]->Draw2D();
 
 			if (cg_hitIndicator && hitFeedbackIconState > 0.f && !cg_hideHud) {
 				Handle<IImage> img(renderer->RegisterImage("Gfx/HitFeedback.png"), false);
@@ -427,13 +438,27 @@ namespace spades {
 				renderer->DrawImage(img, pos);
 			}
 
-			if (cg_debugAim && p->GetTool() == Player::ToolWeapon) {
+			if (cg_debugAim && player.GetTool() == Player::ToolWeapon && player.IsAlive()) {
 				DrawDebugAim();
 			}
+		}
+
+		void Client::DrawJoinedAlivePlayerHUD() {
+			SPADES_MARK_FUNCTION();
+
+			float scrWidth = renderer->ScreenWidth();
+			float scrHeight = renderer->ScreenHeight();
+			Player *p = GetWorld()->GetLocalPlayer();
+			IFont *font;
+
+			// Draw damage rings
+			if (!cg_hideHud)
+				hurtRingView->Draw();
 
 			if (!cg_hideHud) {
-
-				// draw ammo
+				// Draw ammo amount
+				// (Note: this cannot be displayed for a spectated player --- the server
+				//        does not submit sufficient information)
 				Weapon *weap = p->GetWeapon();
 				Handle<IImage> ammoIcon;
 				float iconWidth, iconHeight;
@@ -536,7 +561,7 @@ namespace spades {
 							} else if (weap->GetStock() > 0 &&
 							           weap->GetAmmo() < weap->GetClipSize() / 4) {
 								msg = _Tr("Client", "Press [{0}] to Reload",
-								          (std::string)cg_keyReloadWeapon);
+								          TranslateKeyName(cg_keyReloadWeapon));
 							}
 						} break;
 						default:;
@@ -572,7 +597,6 @@ namespace spades {
 			float scrHeight = renderer->ScreenHeight();
 
 			if (!cg_hideHud) {
-
 				// draw respawn tme
 				if (!p->IsAlive()) {
 					std::string msg;
@@ -593,19 +617,59 @@ namespace spades {
 						                 MakeVector4(0, 0, 0, 0.5));
 					}
 				}
-
-				// draw map
-				mapView->Draw();
 			}
 		}
 
 		void Client::DrawSpectateHUD() {
 			SPADES_MARK_FUNCTION();
 
-			if (!cg_hideHud) {
-				// draw map
-				mapView->Draw();
+			if (cg_hideHud) {
+				return;
 			}
+
+			IFont &font = *fontManager->GetGuiFont();
+			float scrWidth = renderer->ScreenWidth();
+
+			float textX = scrWidth - 8.0f;
+			float textY = 256.0f + 32.0f;
+
+			auto addLine = [&](const std::string &text) {
+				Vector2 size = font.Measure(text);
+				Vector2 pos = MakeVector2(textX, textY);
+				pos.x -= size.x;
+				textY += 20.0f;
+				font.DrawShadow(text, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.5));
+			};
+
+			if (HasTargetPlayer(GetCameraMode())) {
+				addLine(_Tr("Client", "Following {0}",
+				            world->GetPlayerPersistent(GetCameraTargetPlayerId()).name));
+			}
+
+			textY += 10.0f;
+
+			// Help messages (make sure to synchronize these with the keyboard input handler)
+			if (FollowsNonLocalPlayer(GetCameraMode())) {
+				if (GetCameraTargetPlayer().IsAlive()) {
+					addLine(_Tr("Client", "[{0}] Cycle camera mode", TranslateKeyName(cg_keyJump)));
+				}
+				addLine(_Tr("Client", "[{0}/{1}] Next/previous player",
+				            TranslateKeyName(cg_keyAttack), TranslateKeyName(cg_keyAltAttack)));
+
+				if (GetWorld()->GetLocalPlayer()->IsSpectator()) {
+					addLine(_Tr("Client", "[{0}] Unfollow", TranslateKeyName(cg_keyReloadWeapon)));
+				}
+			} else {
+				addLine(_Tr("Client", "[{0}/{1}] Follow a player", TranslateKeyName(cg_keyAttack),
+				            TranslateKeyName(cg_keyAltAttack)));
+			}
+
+			if (GetCameraMode() == ClientCameraMode::Free) {
+				addLine(_Tr("Client", "[{0}/{1}] Go up/down", TranslateKeyName(cg_keyJump),
+				            TranslateKeyName(cg_keyCrouch)));
+			}
+
+			mapView->Draw();
 		}
 
 		void Client::DrawAlert() {
@@ -726,11 +790,6 @@ namespace spades {
 		void Client::Draw2DWithWorld() {
 			SPADES_MARK_FUNCTION();
 
-			float scrWidth = renderer->ScreenWidth();
-			// float scrHeight = renderer->ScreenHeight();
-			IFont *font;
-			// float wTime = world->GetTime();
-
 			for (auto &ent : localEntities) {
 				ent->Render2D();
 			}
@@ -741,8 +800,13 @@ namespace spades {
 				DrawHurtScreenEffect();
 				DrawHottrackedPlayerName();
 
-				if (!cg_hideHud)
+				if (!cg_hideHud) {
 					tcView->Draw();
+
+					if (IsFirstPerson(GetCameraMode())) {
+						DrawFirstPersonHUD();
+					}
+				}
 
 				if (p->GetTeamId() < 2) {
 					// player is not spectator
@@ -750,20 +814,10 @@ namespace spades {
 						DrawJoinedAlivePlayerHUD();
 					} else {
 						DrawDeadPlayerHUD();
+						DrawSpectateHUD();
 					}
 				} else {
 					DrawSpectateHUD();
-				}
-
-				if (FollowsNonLocalPlayer(GetCameraMode()) && !cg_hideHud) {
-					font = fontManager->GetGuiFont();
-					std::string msg = _Tr("Client", "Following {0}",
-										  world->GetPlayerPersistent(GetCameraTargetPlayerId()).name);
-					Vector2 size = font->Measure(msg);
-					Vector2 pos = MakeVector2(scrWidth - 8.f, 256.f + 32.f);
-					pos.x -= size.x;
-					font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
-									 MakeVector4(0, 0, 0, 0.5));
 				}
 
 				if (!cg_hideHud) {

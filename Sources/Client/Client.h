@@ -208,6 +208,11 @@ namespace spades {
 			// Spectator camera control
 			/** The state of the following camera used for spectating. */
 			struct {
+				/**
+				 * Indicates whether the current camera mode is first-person or not.
+				 * Ignored and locked to third-person when the target player
+				 * (`followedPlayerId`) is dead.
+				 */
 				bool firstPerson = true;
 
 				/** Controls whether the follow camera is enabled. */
@@ -246,6 +251,7 @@ namespace spades {
 
 			/**
 			 * Chooses the next player to follow and assigns it to `this->followingPlayerId`.
+			 * Enables the follow cam by assigning `true` to `followCameraState.enabled`.
 			 * If the next player is the local player, disables the follow cam.
 			 */
 			void FollowNextPlayer(bool reverse);
@@ -341,8 +347,20 @@ namespace spades {
 			void Draw2DWithoutWorld();
 			void Draw2DWithWorld();
 
+			/** Called when the local plyaer is alive. */
 			void DrawJoinedAlivePlayerHUD();
+			/** Called when the local plyaer is dead. */
 			void DrawDeadPlayerHUD();
+
+			/**
+			 * Called when `IsFirstPerson(GetCameraMode()).` Renders the follwing element:
+			 *  - The center reticule
+			 */
+			void DrawFirstPersonHUD();
+
+			/**
+			 * Called when the local player is dead or a spectator.
+			 */
 			void DrawSpectateHUD();
 
 			void DrawHottrackedPlayerName();

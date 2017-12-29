@@ -58,7 +58,7 @@ DEFINE_SPADES_SETTING(cg_chatBeep, "1");
 
 DEFINE_SPADES_SETTING(cg_serverAlert, "1");
 
-DEFINE_SPADES_SETTING(cg_SkipDeadPlayersWhenDead, "1");
+DEFINE_SPADES_SETTING(cg_skipDeadPlayersWhenDead, "1");
 
 SPADES_SETTING(cg_playerName);
 
@@ -677,32 +677,41 @@ namespace spades {
 #pragma mark - Follow / Spectate
 
 		void Client::FollowNextPlayer(bool reverse) {
-			int myTeam = 2;
-			if (world->GetLocalPlayer()) {
-				myTeam = world->GetLocalPlayer()->GetTeamId();
-			}
+			SPAssert(world->GetLocalPlayer());
 
-			int nextId = followedPlayerId;
+			auto &localPlayer = *world->GetLocalPlayer();
+			int myTeam = localPlayer.GetTeamId();
+
+			bool localPlayerIsSpectator = localPlayer.IsSpectator();
+
+			int nextId = FollowsNonLocalPlayer(GetCameraMode()) ? followedPlayerId :
+				world->GetLocalPlayerIndex();
 			do {
 				reverse ? --nextId : ++nextId;
+
 				if (nextId >= static_cast<int>(world->GetNumPlayerSlots()))
 					nextId = 0;
 				if (nextId < 0)
 					nextId = static_cast<int>(world->GetNumPlayerSlots() - 1);
 
 				Player *p = world->GetPlayer(nextId);
-				if (p == nullptr)
+				if (p == nullptr || p->IsSpectator()) {
+					// Do not follow a non-existent player or spectator
 					continue;
-				if (myTeam < 2 && p->GetTeamId() != myTeam)
-					continue;
+				}
 
-				if (myTeam < 2 && cg_SkipDeadPlayersWhenDead && !p->IsAlive())
-					// Skip dead players when not spectator
+				if (!localPlayerIsSpectator && p->GetTeamId() != myTeam) {
 					continue;
-				if (p->GetFront().GetPoweredLength() < .01f)
+				}
+
+				if (!localPlayerIsSpectator && cg_skipDeadPlayersWhenDead && !p->IsAlive()) {
+					// Skip dead players unless the local player is not a spectator
 					continue;
-				if (p->GetTeamId() >= 2){
-					continue; // Don't spectate spectators
+				}
+
+				if (p->GetFront().GetPoweredLength() < .01f) {
+					// Do not follow a player with an invalid state
+					continue;
 				}
 
 				break;
@@ -711,6 +720,8 @@ namespace spades {
 			followedPlayerId = nextId;
 			if (followedPlayerId == world->GetLocalPlayerIndex()) {
 				followCameraState.enabled = false;
+			} else {
+				followCameraState.enabled = true;
 			}
 		}
 	}

@@ -152,7 +152,8 @@ namespace spades {
 
 						float rad = x * x + y * y;
 						if (rad > 0.f) {
-							if ((float)cg_mouseExpPower < 0.001f || isnan((float)cg_mouseExpPower)) {
+							if ((float)cg_mouseExpPower < 0.001f ||
+							    isnan((float)cg_mouseExpPower)) {
 								SPLog("Invalid cg_mouseExpPower value, resetting to 1.0");
 								cg_mouseExpPower = 1.f;
 							}
@@ -293,8 +294,7 @@ namespace spades {
 				switch (cameraMode) {
 					case ClientCameraMode::None:
 					case ClientCameraMode::NotJoined:
-					case ClientCameraMode::FirstPersonLocal:
-						break;
+					case ClientCameraMode::FirstPersonLocal: break;
 					case ClientCameraMode::ThirdPersonLocal:
 						if (world->GetLocalPlayer()->IsAlive()) {
 							break;
@@ -305,36 +305,41 @@ namespace spades {
 						if (CheckKey(cg_keyAttack, name)) {
 							if (down) {
 								if (cameraMode == ClientCameraMode::Free ||
-									cameraMode == ClientCameraMode::ThirdPersonLocal) {
+								    cameraMode == ClientCameraMode::ThirdPersonLocal) {
 									// Start with the local player
 									followedPlayerId = world->GetLocalPlayerIndex();
 								}
 								if (world->GetLocalPlayer()->IsSpectator() ||
-									time > lastAliveTime + 1.3f) {
+								    time > lastAliveTime + 1.3f) {
 									FollowNextPlayer(false);
-									followCameraState.enabled = true;
 								}
 							}
 							return;
 						} else if (CheckKey(cg_keyAltAttack, name)) {
 							if (down) {
 								if (cameraMode == ClientCameraMode::Free ||
-									cameraMode == ClientCameraMode::ThirdPersonLocal) {
+								    cameraMode == ClientCameraMode::ThirdPersonLocal) {
 									// Start with the local player
 									followedPlayerId = world->GetLocalPlayerIndex();
 								}
-								if (world->GetLocalPlayer()->IsSpectator()) {
-									// Unfollow
-									followCameraState.enabled = false;
-								} else if (time > lastAliveTime + 1.3f) {
+								if (world->GetLocalPlayer()->IsSpectator() ||
+								    time > lastAliveTime + 1.3f) {
 									FollowNextPlayer(true);
-									followCameraState.enabled = true;
 								}
 							}
 							return;
-						} else if (CheckKey(cg_keyJump, name)) {
-							if (down) {
+						} else if (CheckKey(cg_keyJump, name) &&
+						           cameraMode != ClientCameraMode::Free) {
+							if (down && GetCameraTargetPlayer().IsAlive()) {
 								followCameraState.firstPerson = !followCameraState.firstPerson;
+							}
+							return;
+						} else if (CheckKey(cg_keyReloadWeapon, name) &&
+						           world->GetLocalPlayer()->IsSpectator() &&
+						           followCameraState.enabled) {
+							if (down) {
+								// Unfollow
+								followCameraState.enabled = false;
 							}
 							return;
 						}

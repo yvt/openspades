@@ -241,13 +241,35 @@ namespace spades {
 			if (!world)
 				return;
 
-			if (!HasTargetPlayer(client->GetCameraMode())) {
-				// Do not display `MapView` until the player is joined and there is a player to
-				// focus
+			// The player to focus on
+			Player *focusPlayerPtr = nullptr;
+			Vector3 focusPlayerPos;
+			float focusPlayerAngle;
+
+			if (HasTargetPlayer(client->GetCameraMode())) {
+				Player &player = client->GetCameraTargetPlayer();
+				Vector3 front = player.GetFront2D();
+
+				focusPlayerPos = player.GetPosition();
+				focusPlayerAngle = atan2(front.x, -front.y);
+
+				focusPlayerPtr = &player;
+			} else if (client->GetCameraMode() == ClientCameraMode::Free) {
+				focusPlayerPos = client->freeCameraState.position;
+				focusPlayerAngle = client->followAndFreeCameraState.yaw - static_cast<float>(M_PI) * .5f;
+				focusPlayerPtr = world->GetLocalPlayer();
+			} else {
 				return;
 			}
 
-			Player &player = client->GetCameraTargetPlayer();
+			// The local player (this is important for access control)
+			if (!world->GetLocalPlayer()) {
+				return;
+			}
+			Player &localPlayer = *world->GetLocalPlayer();
+
+			SPAssert(focusPlayerPtr);
+			Player &focusPlayer = *focusPlayerPtr;
 
 			if (largeMap)
 				if (zoomState < .0001f)
@@ -256,12 +278,7 @@ namespace spades {
 			GameMap *map = world->GetMap();
 			Vector2 mapSize = MakeVector2(map->Width(), map->Height());
 
-			Vector3 pos = player.GetPosition();
-			if (player.IsSpectator()) {
-				pos = client->freeCameraState.position;
-			}
-
-			Vector2 center = {pos.x, pos.y};
+			Vector2 center = {focusPlayerPos.x, focusPlayerPos.y};
 			float cfgMapSize = cg_minimapSize;
 			if (cfgMapSize < 32)
 				cfgMapSize = 32;
@@ -463,37 +480,31 @@ namespace spades {
 				Vector4 teamColorF = ModifyColor(teamColor);
 				teamColorF *= alpha;
 
-				// Draw the local player's view
+				// Draw the focused player's view
 				{
 					Handle<IImage> viewIcon = renderer->RegisterImage("Gfx/Map/View.png");
-					if (player.IsAlive()) {
-						Vector3 front = player.GetFront2D();
-						float ang;
-						if (player.IsSpectator()) {
-							ang = client->followAndFreeCameraState.yaw - static_cast<float>(M_PI) * .5f;
-						} else {
-							ang = atan2(front.x, -front.y);
-						}
-
+					if (focusPlayer.IsAlive()) {
 						renderer->SetColorAlphaPremultiplied(teamColorF * 0.9f);
-
-						DrawIcon(player.IsSpectator() ? client->freeCameraState.position : player.GetPosition(),
-						         viewIcon, ang);
+						DrawIcon(focusPlayerPos, viewIcon, focusPlayerAngle);
 					}
 				}
 
 				// draw player's icon
 				for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
 					Player *p = world->GetPlayer(i);
-					if (p == nullptr ||
-					    (p->GetTeamId() != world->GetLocalPlayer()->GetTeamId() && !player.IsSpectator()) ||
-					    !p->IsAlive())
+					if (!p || !p->IsAlive()) {
+						// The player is non-existent or dead
 						continue;
+					}
+					if (!localPlayer.IsSpectator() && localPlayer.GetTeamId() != p->GetTeamId()) {
+						// Duh
+						continue;
+					}
 
 					Vector3 front = p->GetFront2D();
 					float ang = atan2(front.x, -front.y);
-					if (p->IsSpectator()) {
-						ang = client->followAndFreeCameraState.yaw - static_cast<float>(M_PI) * .5f;
+					if (p == &focusPlayer && p->IsSpectator()) {
+						ang = focusPlayerAngle;
 					}
 
 					// use a spec color for each player
@@ -528,7 +539,7 @@ namespace spades {
 							         playerShotgun, ang);
 						}
 					} else { // draw normal color
-						DrawIcon(p->IsSpectator() ? client->freeCameraState.position : p->GetPosition(),
+						DrawIcon(p == &focusPlayer ? focusPlayerPos : p->GetPosition(),
 						         playerIcon, ang);
 					}
 				}
