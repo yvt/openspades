@@ -268,7 +268,7 @@ namespace spades {
 			}
 			Player &localPlayer = *world->GetLocalPlayer();
 
-			SPAssert(targetOrLocalPlayer);
+			SPAssert(focusPlayerPtr);
 			Player &focusPlayer = *focusPlayerPtr;
 
 			if (largeMap)
