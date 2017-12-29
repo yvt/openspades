@@ -59,7 +59,7 @@ DEFINE_SPADES_SETTING(cg_chatBeep, "1");
 
 DEFINE_SPADES_SETTING(cg_serverAlert, "1");
 
-DEFINE_SPADES_SETTING(cg_SkipDeadPlayersWhenDead, "1");
+DEFINE_SPADES_SETTING(cg_skipDeadPlayersWhenDead, "1");
 
 SPADES_SETTING(cg_playerName);
 
@@ -712,7 +712,7 @@ namespace spades {
 				if (myTeam < 2 && p->GetTeamId() != myTeam)
 					continue;
 
-				if (myTeam < 2 && cg_SkipDeadPlayersWhenDead && !p->IsAlive())
+				if (myTeam < 2 && cg_skipDeadPlayersWhenDead && !p->IsAlive())
 					// Skip dead players when not spectator
 					continue;
 				if (p->GetFront().GetPoweredLength() < .01f)
