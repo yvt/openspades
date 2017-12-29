@@ -342,8 +342,8 @@ namespace spades {
 									// Start with the local player
 									followedPlayerId = world->GetLocalPlayerIndex();
 								}
-								if (world->GetLocalPlayer()->IsSpectator()) {
-								} else if (time > lastAliveTime + 1.3f) {
+								if (world->GetLocalPlayer()->IsSpectator() ||
+									time > lastAliveTime + 1.3f) {
 									FollowNextPlayer(true);
 								}
 							}
