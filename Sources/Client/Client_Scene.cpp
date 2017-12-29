@@ -95,15 +95,13 @@ namespace spades {
 			switch (GetCameraMode()) {
 				case ClientCameraMode::None:
 				case ClientCameraMode::NotJoined:
-				case ClientCameraMode::Free:
-					SPUnreachable();
+				case ClientCameraMode::Free: SPUnreachable();
 				case ClientCameraMode::FirstPersonLocal:
 				case ClientCameraMode::ThirdPersonLocal:
 					SPAssert(world);
 					return world->GetLocalPlayerIndex();
 				case ClientCameraMode::FirstPersonFollow:
-				case ClientCameraMode::ThirdPersonFollow:
-					return followedPlayerId;
+				case ClientCameraMode::ThirdPersonFollow: return followedPlayerId;
 			}
 			SPUnreachable();
 		}
@@ -125,8 +123,7 @@ namespace spades {
 
 		float Client::GetAimDownZoomScale() {
 			Player &player = GetCameraTargetPlayer();
-			if (!player.IsToolWeapon() ||
-			    !player.IsAlive()) {
+			if (!player.IsToolWeapon() || !player.IsAlive()) {
 				return 1.f;
 			}
 
@@ -177,8 +174,7 @@ namespace spades {
 				float vibYaw = 0.f;
 
 				switch (GetCameraMode()) {
-					case ClientCameraMode::None:
-						SPUnreachable();
+					case ClientCameraMode::None: SPUnreachable();
 
 					case ClientCameraMode::NotJoined:
 						def.viewOrigin = MakeVector3(256, 256, 4);
@@ -413,12 +409,10 @@ namespace spades {
 								grenVib = 1.f;
 							grenVib *= grenVib;
 
-							roll +=
-							  coherentNoiseSamplers[0].Sample(time * 8.f) * 0.2f * grenVib;
+							roll += coherentNoiseSamplers[0].Sample(time * 8.f) * 0.2f * grenVib;
 							vibPitch +=
 							  coherentNoiseSamplers[1].Sample(time * 12.f) * 0.1f * grenVib;
-							vibYaw +=
-							  coherentNoiseSamplers[2].Sample(time * 11.f) * 0.1f * grenVib;
+							vibYaw += coherentNoiseSamplers[2].Sample(time * 11.f) * 0.1f * grenVib;
 						}
 					}
 				}

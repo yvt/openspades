@@ -416,7 +416,7 @@ namespace spades {
 
 			Player &player = GetCameraTargetPlayer();
 			int playerId = GetCameraTargetPlayerId();
-			
+
 			clientPlayers[playerId]->Draw2D();
 
 			if (cg_hitIndicator && hitFeedbackIconState > 0.f && !cg_hideHud) {
@@ -639,13 +639,12 @@ namespace spades {
 				Vector2 pos = MakeVector2(textX, textY);
 				pos.x -= size.x;
 				textY += 20.0f;
-				font.DrawShadow(text, pos, 1.f, MakeVector4(1, 1, 1, 1),
-								MakeVector4(0, 0, 0, 0.5));
+				font.DrawShadow(text, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.5));
 			};
 
 			if (HasTargetPlayer(GetCameraMode())) {
 				addLine(_Tr("Client", "Following {0}",
-							 world->GetPlayerPersistent(GetCameraTargetPlayerId()).name));
+				            world->GetPlayerPersistent(GetCameraTargetPlayerId()).name));
 			}
 
 			textY += 10.0f;
@@ -655,17 +654,20 @@ namespace spades {
 				if (GetCameraTargetPlayer().IsAlive()) {
 					addLine(_Tr("Client", "[{0}] Cycle camera mode", TranslateKeyName(cg_keyJump)));
 				}
-				addLine(_Tr("Client", "[{0}/{1}] Next/previous player", TranslateKeyName(cg_keyAttack), TranslateKeyName(cg_keyAltAttack)));
+				addLine(_Tr("Client", "[{0}/{1}] Next/previous player",
+				            TranslateKeyName(cg_keyAttack), TranslateKeyName(cg_keyAltAttack)));
 
 				if (GetWorld()->GetLocalPlayer()->IsSpectator()) {
 					addLine(_Tr("Client", "[{0}] Unfollow", TranslateKeyName(cg_keyReloadWeapon)));
 				}
 			} else {
-				addLine(_Tr("Client", "[{0}/{1}] Follow a player", TranslateKeyName(cg_keyAttack), TranslateKeyName(cg_keyAltAttack)));
+				addLine(_Tr("Client", "[{0}/{1}] Follow a player", TranslateKeyName(cg_keyAttack),
+				            TranslateKeyName(cg_keyAltAttack)));
 			}
 
 			if (GetCameraMode() == ClientCameraMode::Free) {
-				addLine(_Tr("Client", "[{0}/{1}] Go up/down", TranslateKeyName(cg_keyJump), TranslateKeyName(cg_keyCrouch)));
+				addLine(_Tr("Client", "[{0}/{1}] Go up/down", TranslateKeyName(cg_keyJump),
+				            TranslateKeyName(cg_keyCrouch)));
 			}
 
 			mapView->Draw();

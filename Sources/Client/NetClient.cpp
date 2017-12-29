@@ -602,9 +602,9 @@ namespace spades {
 							if (reader.GetType() == PacketTypeWeaponReload) {
 								// Drop reload packets
 							} else if (reader.GetType() != PacketTypeWorldUpdate &&
-							    reader.GetType() != PacketTypeExistingPlayer &&
-							    reader.GetType() != PacketTypeCreatePlayer &&
-							    tryMapLoadOnPacketType) {
+							           reader.GetType() != PacketTypeExistingPlayer &&
+							           reader.GetType() != PacketTypeCreatePlayer &&
+							           tryMapLoadOnPacketType) {
 								status = NetClientStatusConnected;
 								statusString = _Tr("NetClient", "Connected");
 
@@ -776,7 +776,8 @@ namespace spades {
 						// Simple variant
 						SendVersion();
 					}
-				} return true;
+				}
+					return true;
 				default: return false;
 			}
 		}
