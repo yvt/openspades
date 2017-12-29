@@ -496,6 +496,21 @@ namespace spades {
 					statusString = "Disconnected: " + DisconnectReasonString(event.data);
 					SPRaise("Disconnected: %s", DisconnectReasonString(event.data).c_str());
 				}
+
+				if (event.type == ENET_EVENT_TYPE_RECEIVE) {
+					NetPacketReader reader(event.packet);
+					try {
+						if (HandleHandshakePacket(reader)) {
+							continue;
+						}
+					} catch (const std::exception &ex) {
+						int type = reader.GetType();
+						reader.DumpDebug();
+						SPRaise("Exception while handling packet type 0x%08x:\n%s", type,
+						        ex.what());
+					}
+				}
+
 				if (status == NetClientStatusConnecting) {
 					if (event.type == ENET_EVENT_TYPE_CONNECT) {
 						statusString = _Tr("NetClient", "Awaiting for state");
@@ -616,13 +631,13 @@ namespace spades {
 									statusString = _Tr("NetClient", "Error");
 									throw;
 								}
-								Handle(reader);
+								HandleGamePacket(reader);
 							} else {
 							stillLoading:
 								savedPackets.push_back(reader.GetData());
 							}
 
-							// Handle(reader);
+							// HandleGamePacket(reader);
 						}
 					}
 				} else if (status == NetClientStatusConnected) {
@@ -630,7 +645,7 @@ namespace spades {
 						NetPacketReader reader(event.packet);
 						// reader.DumpDebug();
 						try {
-							Handle(reader);
+							HandleGamePacket(reader);
 						} catch (const std::exception &ex) {
 							int type = reader.GetType();
 							reader.DumpDebug();
@@ -744,7 +759,30 @@ namespace spades {
 			}
 		}
 
-		void NetClient::Handle(spades::client::NetPacketReader &reader) {
+		bool NetClient::HandleHandshakePacket(spades::client::NetPacketReader &reader) {
+			SPADES_MARK_FUNCTION();
+
+			switch (reader.GetType()) {
+				case PacketTypeHandShakeInit: SendHandShakeValid(reader.ReadInt()); return true;
+				case PacketTypeVersionGet: {
+					if (reader.GetNumRemainingBytes() > 0) {
+						// Enhanced variant
+						std::set<std::uint8_t> propertyIds;
+						while (reader.GetNumRemainingBytes()) {
+							propertyIds.insert(reader.ReadByte());
+						}
+						SendVersionEnhanced(propertyIds);
+					} else {
+						// Simple variant
+						SendVersion();
+					}
+				} return true;
+			}
+
+			return false;
+		}
+
+		void NetClient::HandleGamePacket(spades::client::NetPacketReader &reader) {
 			SPADES_MARK_FUNCTION();
 
 			switch (reader.GetType()) {
@@ -1478,20 +1516,6 @@ namespace spades {
 					// weapon...
 					// p->SetWeaponType(wType);
 				} break;
-				case PacketTypeHandShakeInit: SendHandShakeValid(reader.ReadInt()); break;
-				case PacketTypeVersionGet: {
-					if (reader.GetNumRemainingBytes() > 0) {
-						// Enhanced variant
-						std::set<std::uint8_t> propertyIds;
-						while (reader.GetNumRemainingBytes()) {
-							propertyIds.insert(reader.ReadByte());
-						}
-						SendVersionEnhanced(propertyIds);
-					} else {
-						// Simple variant
-						SendVersion();
-					}
-				} break;
 				default:
 					printf("WARNING: dropped packet %d\n", (int)reader.GetType());
 					reader.DumpDebug();
@@ -1822,7 +1846,7 @@ namespace spades {
 			try {
 				for (size_t i = 0; i < savedPackets.size(); i++) {
 					NetPacketReader r(savedPackets[i]);
-					Handle(r);
+					HandleGamePacket(r);
 				}
 				savedPackets.clear();
 				SPLog("Done.");
