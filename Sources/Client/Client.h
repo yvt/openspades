@@ -352,6 +352,12 @@ namespace spades {
 			/** Called when the local plyaer is a spectator. */
 			void DrawSpectateHUD();
 
+			/**
+			 * Called when `IsFirstPerson(GetCameraMode()).` Renders the follwing element:
+			 *  - The center reticule
+			 */
+			void DrawFirstPersonHUD();
+
 			void DrawHottrackedPlayerName();
 			void DrawHurtScreenEffect();
 			void DrawHurtSprites();

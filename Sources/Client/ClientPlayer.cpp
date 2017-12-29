@@ -1012,7 +1012,7 @@ namespace spades {
 		}
 
 		void ClientPlayer::Draw2D() {
-			if (!ShouldRenderInThirdPersonView()) {
+			if (!ShouldRenderInThirdPersonView() && player->IsAlive()) {
 				asIScriptObject *skin;
 
 				if (currentTool == Player::ToolSpade) {

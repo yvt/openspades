@@ -326,15 +326,15 @@ namespace spades {
 			// float scrWidth = renderer->ScreenWidth();
 			// float scrHeight = renderer->ScreenHeight();
 			// float wTime = world->GetTime();
-			Player *p = GetWorld()->GetLocalPlayer();
+			Player &p = GetCameraTargetPlayer();
 			// IFont *font;
 
-			Weapon *w = p->GetWeapon();
-			float spread = w->GetSpread();
+			Weapon &w = *p.GetWeapon();
+			float spread = w.GetSpread();
 
 			AABB2 boundary(0, 0, 0, 0);
 			for (int i = 0; i < 8; i++) {
-				Vector3 vec = p->GetFront();
+				Vector3 vec = p.GetFront();
 				if (i & 1)
 					vec.x += spread;
 				else
@@ -349,9 +349,9 @@ namespace spades {
 					vec.z -= spread;
 
 				Vector3 viewPos;
-				viewPos.x = Vector3::Dot(vec, p->GetRight());
-				viewPos.y = Vector3::Dot(vec, p->GetUp());
-				viewPos.z = Vector3::Dot(vec, p->GetFront());
+				viewPos.x = Vector3::Dot(vec, p.GetRight());
+				viewPos.y = Vector3::Dot(vec, p.GetUp());
+				viewPos.z = Vector3::Dot(vec, p.GetFront());
 
 				Vector2 p;
 				p.x = viewPos.x / viewPos.z;
@@ -392,21 +392,16 @@ namespace spades {
 			renderer->DrawImage(img, AABB2(p2.x, p1.y - 1, 1, p2.y - p1.y + 2));
 		}
 
-		void Client::DrawJoinedAlivePlayerHUD() {
+		void Client::DrawFirstPersonHUD() {
 			SPADES_MARK_FUNCTION();
 
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
-			// float wTime = world->GetTime();
-			Player *p = GetWorld()->GetLocalPlayer();
-			IFont *font;
 
-			// draw local weapon's 2d things
-			clientPlayers[p->GetId()]->Draw2D();
-
-			// draw damage ring
-			if (!cg_hideHud)
-				hurtRingView->Draw();
+			Player &player = GetCameraTargetPlayer();
+			int playerId = GetCameraTargetPlayerId();
+			
+			clientPlayers[playerId]->Draw2D();
 
 			if (cg_hitIndicator && hitFeedbackIconState > 0.f && !cg_hideHud) {
 				Handle<IImage> img(renderer->RegisterImage("Gfx/HitFeedback.png"), false);
@@ -428,13 +423,27 @@ namespace spades {
 				renderer->DrawImage(img, pos);
 			}
 
-			if (cg_debugAim && p->GetTool() == Player::ToolWeapon) {
+			if (cg_debugAim && player.GetTool() == Player::ToolWeapon && player.IsAlive()) {
 				DrawDebugAim();
 			}
+		}
+
+		void Client::DrawJoinedAlivePlayerHUD() {
+			SPADES_MARK_FUNCTION();
+
+			float scrWidth = renderer->ScreenWidth();
+			float scrHeight = renderer->ScreenHeight();
+			Player *p = GetWorld()->GetLocalPlayer();
+			IFont *font;
+
+			// Draw damage rings
+			if (!cg_hideHud)
+				hurtRingView->Draw();
 
 			if (!cg_hideHud) {
-
-				// draw ammo
+				// Draw ammo amount
+				// (Note: this cannot be displayed for a spectated player --- the server
+				//        does not submit sufficient information)
 				Weapon *weap = p->GetWeapon();
 				Handle<IImage> ammoIcon;
 				float iconWidth, iconHeight;
@@ -573,7 +582,6 @@ namespace spades {
 			float scrHeight = renderer->ScreenHeight();
 
 			if (!cg_hideHud) {
-
 				// draw respawn tme
 				if (!p->IsAlive()) {
 					std::string msg;
@@ -742,8 +750,13 @@ namespace spades {
 				DrawHurtScreenEffect();
 				DrawHottrackedPlayerName();
 
-				if (!cg_hideHud)
+				if (!cg_hideHud) {
 					tcView->Draw();
+
+					if (IsFirstPerson(GetCameraMode())) {
+						DrawFirstPersonHUD();
+					}
+				}
 
 				if (p->GetTeamId() < 2) {
 					// player is not spectator
