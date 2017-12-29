@@ -332,7 +332,6 @@ namespace spades {
 								if (world->GetLocalPlayer()->IsSpectator() ||
 									time > lastAliveTime + 1.3f) {
 									FollowNextPlayer(false);
-									followCameraState.enabled = true;
 								}
 							}
 							return;
@@ -346,7 +345,6 @@ namespace spades {
 								if (world->GetLocalPlayer()->IsSpectator()) {
 								} else if (time > lastAliveTime + 1.3f) {
 									FollowNextPlayer(true);
-									followCameraState.enabled = true;
 								}
 							}
 							return;

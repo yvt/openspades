@@ -252,6 +252,7 @@ namespace spades {
 
 			/**
 			 * Chooses the next player to follow and assigns it to `this->followingPlayerId`.
+			 * Enables the follow cam by assigning `true` to `followCameraState.enabled`.
 			 * If the next player is the local player, disables the follow cam.
 			 */
 			void FollowNextPlayer(bool reverse);
