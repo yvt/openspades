@@ -777,9 +777,8 @@ namespace spades {
 						SendVersion();
 					}
 				} return true;
+				default: return false;
 			}
-
-			return false;
 		}
 
 		void NetClient::HandleGamePacket(spades::client::NetPacketReader &reader) {
