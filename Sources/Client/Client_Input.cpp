@@ -344,17 +344,23 @@ namespace spades {
 									followedPlayerId = world->GetLocalPlayerIndex();
 								}
 								if (world->GetLocalPlayer()->IsSpectator()) {
-									// Unfollow
-									followCameraState.enabled = false;
 								} else if (time > lastAliveTime + 1.3f) {
 									FollowNextPlayer(true);
 									followCameraState.enabled = true;
 								}
 							}
 							return;
-						} else if (CheckKey(cg_keyJump, name)) {
+						} else if (CheckKey(cg_keyJump, name) && cameraMode != ClientCameraMode::Free) {
 							if (down) {
 								followCameraState.firstPerson = !followCameraState.firstPerson;
+							}
+							return;
+						} else if (CheckKey(cg_keyReloadWeapon, name) &&
+								   world->GetLocalPlayer()->IsSpectator() &&
+								   followCameraState.enabled) {
+							if (down) {
+								// Unfollow
+								followCameraState.enabled = false;
 							}
 							return;
 						}

@@ -61,6 +61,10 @@
 DEFINE_SPADES_SETTING(cg_hitIndicator, "1");
 DEFINE_SPADES_SETTING(cg_debugAim, "0");
 SPADES_SETTING(cg_keyReloadWeapon);
+SPADES_SETTING(cg_keyJump);
+SPADES_SETTING(cg_keyAttack);
+SPADES_SETTING(cg_keyAltAttack);
+SPADES_SETTING(cg_keyCrouch);
 DEFINE_SPADES_SETTING(cg_screenshotFormat, "jpeg");
 DEFINE_SPADES_SETTING(cg_stats, "0");
 DEFINE_SPADES_SETTING(cg_hideHud, "0");
@@ -83,6 +87,18 @@ namespace spades {
 					return ScreenshotFormat::Png;
 				} else {
 					SPRaise("Invalid screenshot format: %s", cg_screenshotFormat.CString());
+				}
+			}
+
+			std::string TranslateKeyName(const std::string &name) {
+				if (name == "LeftMouseButton") {
+					return "LMB";
+				} else if (name == "RightMouseButton") {
+					return "RMB";
+				} else if (name.empty()) {
+					return _Tr("Client", "Unbound");
+				} else {
+					return name;
 				}
 			}
 		}
@@ -546,7 +562,7 @@ namespace spades {
 							} else if (weap->GetStock() > 0 &&
 							           weap->GetAmmo() < weap->GetClipSize() / 4) {
 								msg = _Tr("Client", "Press [{0}] to Reload",
-								          (std::string)cg_keyReloadWeapon);
+								          TranslateKeyName(cg_keyReloadWeapon));
 							}
 						} break;
 						default:;
@@ -602,19 +618,55 @@ namespace spades {
 						                 MakeVector4(0, 0, 0, 0.5));
 					}
 				}
-
-				// draw map
-				mapView->Draw();
 			}
 		}
 
 		void Client::DrawSpectateHUD() {
 			SPADES_MARK_FUNCTION();
 
-			if (!cg_hideHud) {
-				// draw map
-				mapView->Draw();
+			if (cg_hideHud) {
+				return;
 			}
+
+			IFont &font = *fontManager->GetGuiFont();
+			float scrWidth = renderer->ScreenWidth();
+
+			float textX = scrWidth - 8.0f;
+			float textY = 256.0f + 32.0f;
+
+			auto addLine = [&](const std::string &text) {
+				Vector2 size = font.Measure(text);
+				Vector2 pos = MakeVector2(textX, textY);
+				pos.x -= size.x;
+				textY += 20.0f;
+				font.DrawShadow(text, pos, 1.f, MakeVector4(1, 1, 1, 1),
+								MakeVector4(0, 0, 0, 0.5));
+			};
+
+			if (HasTargetPlayer(GetCameraMode())) {
+				addLine(_Tr("Client", "Following {0}",
+							 world->GetPlayerPersistent(GetCameraTargetPlayerId()).name));
+			}
+
+			textY += 10.0f;
+
+			// Help messages (make sure to synchronize these with the keyboard input handler)
+			if (FollowsNonLocalPlayer(GetCameraMode())) {
+				addLine(_Tr("Client", "[{0}] Cycle camera mode", TranslateKeyName(cg_keyJump)));
+				addLine(_Tr("Client", "[{0}/{1}] Next/previous player", TranslateKeyName(cg_keyAttack), TranslateKeyName(cg_keyAltAttack)));
+
+				if (GetWorld()->GetLocalPlayer()->IsSpectator()) {
+					addLine(_Tr("Client", "[{0}] Unfollow", TranslateKeyName(cg_keyReloadWeapon)));
+				}
+			} else {
+				addLine(_Tr("Client", "[{0}/{1}] Follow a player", TranslateKeyName(cg_keyAttack), TranslateKeyName(cg_keyAltAttack)));
+			}
+
+			if (GetCameraMode() == ClientCameraMode::Free) {
+				addLine(_Tr("Client", "[{0}/{1}] Go up/down", TranslateKeyName(cg_keyJump), TranslateKeyName(cg_keyCrouch)));
+			}
+
+			mapView->Draw();
 		}
 
 		void Client::DrawAlert() {
@@ -735,11 +787,6 @@ namespace spades {
 		void Client::Draw2DWithWorld() {
 			SPADES_MARK_FUNCTION();
 
-			float scrWidth = renderer->ScreenWidth();
-			// float scrHeight = renderer->ScreenHeight();
-			IFont *font;
-			// float wTime = world->GetTime();
-
 			for (auto &ent : localEntities) {
 				ent->Render2D();
 			}
@@ -764,20 +811,10 @@ namespace spades {
 						DrawJoinedAlivePlayerHUD();
 					} else {
 						DrawDeadPlayerHUD();
+						DrawSpectateHUD();
 					}
 				} else {
 					DrawSpectateHUD();
-				}
-
-				if (FollowsNonLocalPlayer(GetCameraMode()) && !cg_hideHud) {
-					font = fontManager->GetGuiFont();
-					std::string msg = _Tr("Client", "Following {0}",
-										  world->GetPlayerPersistent(GetCameraTargetPlayerId()).name);
-					Vector2 size = font->Measure(msg);
-					Vector2 pos = MakeVector2(scrWidth - 8.f, 256.f + 32.f);
-					pos.x -= size.x;
-					font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
-									 MakeVector4(0, 0, 0, 0.5));
 				}
 
 				if (!cg_hideHud) {

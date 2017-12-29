@@ -349,14 +349,17 @@ namespace spades {
 			void DrawJoinedAlivePlayerHUD();
 			/** Called when the local plyaer is dead. */
 			void DrawDeadPlayerHUD();
-			/** Called when the local plyaer is a spectator. */
-			void DrawSpectateHUD();
 
 			/**
 			 * Called when `IsFirstPerson(GetCameraMode()).` Renders the follwing element:
 			 *  - The center reticule
 			 */
 			void DrawFirstPersonHUD();
+
+			/**
+			 * Called when the local player is dead or a spectator.
+			 */
+			void DrawSpectateHUD();
 
 			void DrawHottrackedPlayerName();
 			void DrawHurtScreenEffect();
