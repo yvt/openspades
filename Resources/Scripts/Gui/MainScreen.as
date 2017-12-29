@@ -220,8 +220,21 @@ namespace spades {
 			Font.Draw(item.Name, ScreenPosition + Vector2(4.f, 2.f), 1.f, fgcolor);
 
 			int ping = helper.GetServerPing(item.Address);
+			Vector4 pingColor;
+			if(ping < 90) {
+				pingColor = Vector4(0.7f, 1, 0.7f, 1); // Green
+			}
+			else if (ping < 120) {
+				pingColor = Vector4(1, 1, 0.7f, 1); // Yellow
+			}
+			else if (ping < 200) {
+				pingColor = Vector4(1, .9f, 0.7f, 1); // Orange
+			}
+			else {
+				pingColor = Vector4(1, 0.7f, 0.7f, 1); // Red
+			}
 			string pingStr = ping == -1 ? "" : ToString(ping);
-			Font.Draw(pingStr, ScreenPosition + Vector2(335.f-Font.Measure(pingStr).x, 2.f), 1.f, Vector4(1,1,1,1));
+			Font.Draw(pingStr, ScreenPosition + Vector2(335.f-Font.Measure(pingStr).x, 2.f), 1.f, pingColor);
 
 			string playersStr = ToString(item.NumPlayers) + "/" + ToString(item.MaxPlayers);
 			Vector4 col(1,1,1,1);
