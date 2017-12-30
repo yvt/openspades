@@ -392,13 +392,17 @@ namespace spades {
         private StartupScreenUI@ ui;
         private ConfigItem@ msaaConfig;
         private ConfigItem@ fxaaConfig;
+        private ConfigItem@ temporalAAConfig;
         StartupScreenGraphicsAntialiasConfig(StartupScreenUI@ ui) {
             @this.ui = ui;
             @msaaConfig = ConfigItem("r_multisamples");
             @fxaaConfig = ConfigItem("r_fxaa");
+            @temporalAAConfig = ConfigItem("r_temporalAA");
         }
         string GetValue() {
-            if(fxaaConfig.IntValue != 0) {
+            if(fxaaConfig.IntValue != 0 && temporalAAConfig.IntValue != 0) {
+                return "temporalaa";
+            }else if(fxaaConfig.IntValue != 0) {
                 return "fxaa";
             }else{
                 int v = msaaConfig.IntValue;
@@ -407,19 +411,30 @@ namespace spades {
             }
         }
         void SetValue(string v) {
-            if(v == "fxaa") {
+            if(v == "temporalaa") {
                 msaaConfig.StringValue = "0";
                 fxaaConfig.StringValue = "1";
+                temporalAAConfig.StringValue = "1";
+            } else if(v == "fxaa") {
+                msaaConfig.StringValue = "0";
+                fxaaConfig.StringValue = "1";
+                temporalAAConfig.StringValue = "0";
             } else if (v == "0" || v == "1") {
                 msaaConfig.StringValue = "0";
                 fxaaConfig.StringValue = "0";
+                temporalAAConfig.StringValue = "0";
             } else {
                 msaaConfig.StringValue = v;
                 fxaaConfig.StringValue = "0";
+                temporalAAConfig.StringValue = "0";
             }
         }
         string CheckValueCapability(string v) {
-            if(v == "fxaa") {
+            if(v == "temporalaa") {
+                return ui.helper.CheckConfigCapability("r_multisamples", "0") +
+                       ui.helper.CheckConfigCapability("r_fxaa", "1") +
+                       ui.helper.CheckConfigCapability("r_temporalAA", "1");
+            } else if(v == "fxaa") {
                 return ui.helper.CheckConfigCapability("r_multisamples", "0") +
                        ui.helper.CheckConfigCapability("r_fxaa", "1");
             } else if (v == "0" || v == "1") {
@@ -432,7 +447,6 @@ namespace spades {
 
         }
     }
-
 
     class StartupScreenAudioTab: spades::ui::UIElement, LabelAddable {
         StartupScreenUI@ ui;
