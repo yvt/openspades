@@ -421,4 +421,8 @@ namespace spades {
 	const SettingItemDescriptor &Settings::ItemHandle::GetDescriptor() {
 		return item->descriptor ? *item->descriptor : defaultDescriptor;
 	}
+
+	bool Settings::ItemHandle::IsUnknown() {
+		return item->descriptor == nullptr;
+	}
 }

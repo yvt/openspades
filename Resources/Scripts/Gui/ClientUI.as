@@ -393,7 +393,10 @@ namespace spades {
 					string[]@ names = GetAllConfigNames();
 					string[] filteredNames;
 					for(uint i = 0, len = names.length; i < len; i++) {
-						if(StringCommonPrefixLength(input, names[i]) == input.length) {
+						if (
+							StringCommonPrefixLength(input, names[i]) == input.length &&
+							!ConfigItem(names[i]).IsUnknown
+						) {
 							filteredNames.insertLast(names[i]);
 							if(filteredNames.length >= 8) {
 								// too many
@@ -422,7 +425,10 @@ namespace spades {
 					string commonPart;
 					bool foundOne = false;
 					for(uint i = 0, len = names.length; i < len; i++) {
-						if(StringCommonPrefixLength(input, names[i]) == input.length) {
+						if (
+							StringCommonPrefixLength(input, names[i]) == input.length &&
+							!ConfigItem(names[i]).IsUnknown
+						) {
 							if(!foundOne) {
 								commonPart = names[i];
 								foundOne = true;

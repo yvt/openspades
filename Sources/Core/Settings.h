@@ -110,6 +110,12 @@ namespace spades {
 
 			const SettingItemDescriptor &GetDescriptor();
 
+			/**
+			 * Returns whether this config variable is used and defined by the program
+			 * or not.
+			 */
+			bool IsUnknown();
+
 			void AddListener(ISettingItemListener *);
 			void RemoveListener(ISettingItemListener *);
 		};
