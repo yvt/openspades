@@ -18,7 +18,7 @@
 
  */
 
-#include "UIControls.as"
+#include "../UIFramework/UIControls.as"
 
 namespace spades {
     class UpdateCheckView: spades::ui::UIElement {

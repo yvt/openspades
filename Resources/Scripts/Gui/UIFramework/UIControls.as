@@ -18,9 +18,11 @@
 
  */
 
-#include "UIFramework/UIFramework.as"
-#include "MessageBox.as"
-#include "MainScreen/MainScreenUI.as"
-#include "StartupScreen/StartupScreenUI.as"
-#include "Preferences.as"
-#include "Client/ClientUI.as"
+#include "Button.as"
+#include "Field.as"
+#include "Label.as"
+#include "ListView.as"
+#include "ScrollBar.as"
+#include "Slider.as"
+#include "TabStrip.as"
+#include "TextViewer.as"
