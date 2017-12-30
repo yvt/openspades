@@ -24,6 +24,9 @@
 
 namespace spades {
 	namespace client {
+		class World;
+		class Player;
+
 		class CTFGameMode : public IGameMode {
 		public:
 			struct Team {
@@ -45,6 +48,8 @@ namespace spades {
 			Team &GetTeam(int t);
 			int GetCaptureLimit() { return captureLimit; }
 			void SetCaptureLimit(int v) { captureLimit = v; }
+
+			bool PlayerHasIntel(World &world, Player &player);
 		};
 	}
 }

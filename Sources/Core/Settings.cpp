@@ -280,6 +280,9 @@ namespace spades {
 			item = new Item();
 			item->name = name;
 			item->defaults = true;
+			item->descriptor = nullptr;
+			item->intValue = 0;
+			item->value = 0.0f;
 
 			items[name] = item;
 		} else {
@@ -396,5 +399,9 @@ namespace spades {
 
 	const SettingItemDescriptor &Settings::ItemHandle::GetDescriptor() {
 		return item->descriptor ? *item->descriptor : defaultDescriptor;
+	}
+
+	bool Settings::ItemHandle::IsUnknown() {
+		return item->descriptor == nullptr;
 	}
 }

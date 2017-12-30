@@ -17,7 +17,7 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-
+#include "../UIFramework/UIFramework.as"
 
 namespace spades {
     class ClientLimboWindow: spades::ui::UIElement {

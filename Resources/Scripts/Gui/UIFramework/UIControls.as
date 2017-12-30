@@ -18,31 +18,11 @@
 
  */
 
-#include "CTFGameMode.h"
-#include <Core/Debug.h>
-
-#include "World.h"
-#include "Player.h"
-
-namespace spades {
-	namespace client {
-		CTFGameMode::CTFGameMode() : IGameMode(m_CTF) { SPADES_MARK_FUNCTION(); }
-		CTFGameMode::~CTFGameMode() { SPADES_MARK_FUNCTION(); }
-
-		CTFGameMode::Team &CTFGameMode::GetTeam(int t) {
-			SPADES_MARK_FUNCTION();
-			SPAssert(t >= 0);
-			SPAssert(t < 2);
-			return teams[t];
-		}
-
-		bool CTFGameMode::PlayerHasIntel(World &world, Player &player) {
-			if (player.IsSpectator()) {
-				return false;
-			}
-
-			auto &team = teams[player.GetTeamId()];
-			return team.hasIntel && team.carrier == player.GetId();
-		}
-	}
-}
+#include "Button.as"
+#include "Field.as"
+#include "Label.as"
+#include "ListView.as"
+#include "ScrollBar.as"
+#include "Slider.as"
+#include "TabStrip.as"
+#include "TextViewer.as"

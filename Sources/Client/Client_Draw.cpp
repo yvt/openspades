@@ -49,6 +49,8 @@
 #include "SmokeSpriteEntity.h"
 #include "TCProgressView.h"
 #include "Tracer.h"
+#include "IGameMode.h"
+#include "CTFGameMode.h"
 
 #include "GameMap.h"
 #include "Grenade.h"
@@ -436,6 +438,23 @@ namespace spades {
 				renderer->SetColorAlphaPremultiplied(color);
 
 				renderer->DrawImage(img, pos);
+			}
+
+			// If the player has the intel, display an intel icon
+			IGameMode &mode = *world->GetMode();
+			if (mode.ModeType() == IGameMode::m_CTF) {
+				auto &ctfMode = static_cast<CTFGameMode &>(mode);
+				if (ctfMode.PlayerHasIntel(*world, player)) {
+					Handle<IImage> img(renderer->RegisterImage("Gfx/Intel.png"), false);
+
+					// Strobe
+					Vector4 color {1.0f, 1.0f, 1.0f, 1.0f};
+					color *= std::fabs(std::sin(world->GetTime() * 2.0f));
+
+					renderer->SetColorAlphaPremultiplied(color);
+
+					renderer->DrawImage(img, Vector2{scrWidth - 260.f, scrHeight - 64.0f});
+				}
 			}
 
 			if (cg_debugAim && player.GetTool() == Player::ToolWeapon && player.IsAlive()) {
