@@ -334,6 +334,7 @@ namespace spades {
 			renderer->RegisterImage("Gfx/CircleGradient.png");
 			renderer->RegisterImage("Gfx/HurtSprite.png");
 			renderer->RegisterImage("Gfx/HurtRing2.png");
+			renderer->RegisterImage("Gfx/Intel.png");
 			audioDevice->RegisterSound("Sounds/Feedback/Chat.opus");
 
 			if (mumbleLink.init())
