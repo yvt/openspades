@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-09-05 03:35-0400\n"
+"PO-Revision-Date: 2017-12-31 04:46-0500\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -14,15 +14,16 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Crowdin-Project: openspades\n"
 "X-Crowdin-Language: ko\n"
-"X-Crowdin-File: /master/openspades.pot\n"
+"X-Crowdin-File: openspades.pot\n"
 "Language: ko_KR\n"
 
-#: Sources/Client/Client.cpp:585
+#: Sources/Client/Client.cpp:585 Sources/Client/Client.cpp:586
 msgctxt "Client"
 msgid "Map saved: {0}"
 msgstr "{0} 맵이 저장되었습니다."
 
 #: Sources/Client/Client.cpp:589 Sources/Client/Client.cpp:595
+#: Sources/Client/Client.cpp:590 Sources/Client/Client.cpp:596
 msgctxt "Client"
 msgid "Saving map failed: "
 msgstr "맵 저장이 실패했습니다:"
@@ -34,286 +35,310 @@ msgstr "맵 저장이 실패했습니다:"
 #. ! Crowdin warns that this string shouldn't be translated,
 #. ! but it actually can be.
 #. ! The extra whitespace is not a typo.
-#: Sources/Client/Client.cpp:633
+#: Sources/Client/Client.cpp:633 Sources/Client/Client.cpp:634
 msgctxt "Client"
 msgid "[Global] "
 msgstr "[전체] "
 
-#: Sources/Client/Client_Draw.cpp:119
+#: Sources/Client/Client_Draw.cpp:119 Sources/Client/Client_Draw.cpp:135
 msgctxt "Client"
 msgid "Sceneshot saved: {0}"
 msgstr "Sceneshot이 저장되었습니다: {0}"
 
-#: Sources/Client/Client_Draw.cpp:121
+#: Sources/Client/Client_Draw.cpp:121 Sources/Client/Client_Draw.cpp:137
 msgctxt "Client"
 msgid "Screenshot saved: {0}"
 msgstr "스크린샷이 저장되었습니다: {0}"
 
 #: Sources/Client/Client_Draw.cpp:125 Sources/Client/Client_Draw.cpp:131
+#: Sources/Client/Client_Draw.cpp:141 Sources/Client/Client_Draw.cpp:147
 msgctxt "Client"
 msgid "Screenshot failed: "
-msgstr "스크린샷 저장이 실패했습니다."
+msgstr "스크린샷 저장이 실패했습니다: "
 
-#: Sources/Client/Client_Draw.cpp:198
+#: Sources/Client/Client_Draw.cpp:198 Sources/Client/Client_Draw.cpp:214
 msgctxt "Client"
 msgid "NOW LOADING"
 msgstr "불러오는 중"
 
-#: Sources/Client/Client_Draw.cpp:220
+#: Sources/Client/Client_Draw.cpp:220 Sources/Client/Client_Draw.cpp:236
 msgctxt "Client"
 msgid "Disconnecting..."
 msgstr "서버에서 나가는 중.."
 
-#: Sources/Client/Client_Draw.cpp:523
+#: Sources/Client/Client_Draw.cpp:523 Sources/Client/Client_Draw.cpp:548
 msgctxt "Client"
 msgid "Out of Block"
-msgstr "블럭이 다 떨어짐"
+msgstr "블럭을 다 씀"
 
-#: Sources/Client/Client_Draw.cpp:528
+#: Sources/Client/Client_Draw.cpp:528 Sources/Client/Client_Draw.cpp:553
 msgctxt "Client"
 msgid "Out of Grenade"
-msgstr "수류탄이 다 떨어짐"
+msgstr "수류탄을 다 씀"
 
-#: Sources/Client/Client_Draw.cpp:534
+#: Sources/Client/Client_Draw.cpp:534 Sources/Client/Client_Draw.cpp:559
 msgctxt "Client"
 msgid "Reloading"
 msgstr "재장전 중"
 
 #: Sources/Client/Client_Draw.cpp:536 Sources/Client/Client_Input.cpp:439
+#: Sources/Client/Client_Draw.cpp:561 Sources/Client/Client_Input.cpp:494
 msgctxt "Client"
 msgid "Out of Ammo"
-msgstr "총알이 다 떨어짐"
+msgstr "탄약을 다 씀"
 
-#: Sources/Client/Client_Draw.cpp:539
+#: Sources/Client/Client_Draw.cpp:539 Sources/Client/Client_Draw.cpp:564
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
 msgstr "재장전하려면 [{0}] 키를 누르세요"
 
-#: Sources/Client/Client_Draw.cpp:584
+#: Sources/Client/Client_Draw.cpp:584 Sources/Client/Client_Draw.cpp:608
 msgctxt "Client"
 msgid "You will respawn in: {0}"
 msgstr "{0}초 후 리스폰됩니다."
 
-#: Sources/Client/Client_Draw.cpp:586
+#: Sources/Client/Client_Draw.cpp:586 Sources/Client/Client_Draw.cpp:610
 msgctxt "Client"
 msgid "Waiting for respawn"
 msgstr "리스폰 대기 중"
 
-#: Sources/Client/Client_Draw.cpp:764
+#: Sources/Client/Client_Draw.cpp:764 Sources/Client/Client_Draw.cpp:646
 msgctxt "Client"
 msgid "Following {0}"
 msgstr "{0}을 따라가는 중"
 
-#: Sources/Client/Client_Input.cpp:427
+#: Sources/Client/Client_Input.cpp:427 Sources/Client/Client_Input.cpp:482
 msgctxt "Client"
 msgid "Out of Blocks"
 msgstr "블럭을 다 씀"
 
-#: Sources/Client/Client_Input.cpp:451
+#: Sources/Client/Client_Input.cpp:451 Sources/Client/Client_Input.cpp:506
 msgctxt "Client"
 msgid "Out of Grenades"
 msgstr "수류탄을 다 씀"
 
 #: Sources/Client/Client_NetHandler.cpp:89
+#: Sources/Client/Client_NetHandler.cpp:90
 msgctxt "Client"
 msgid "{0} captured {1}'s territory"
 msgstr "플레이어 {0}이 {1}팀의 영토를 점령했습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:91
+#: Sources/Client/Client_NetHandler.cpp:92
 msgctxt "Client"
 msgid "{0} captured an neutral territory"
 msgstr "플레이어 {0}이 중립 영토를 점령했습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:99
+#: Sources/Client/Client_NetHandler.cpp:100
 msgctxt "Client"
 msgid "{0} captured {1}'s Territory"
 msgstr "플레이어 {0}이 {1}팀의 영토를 점령했습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:101
+#: Sources/Client/Client_NetHandler.cpp:102
 msgctxt "Client"
 msgid "{0} captured an Neutral Territory"
 msgstr "플레이어 {0}이 중립 영토를 점령했습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:127
+#: Sources/Client/Client_NetHandler.cpp:128
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
 msgstr "플레이어 {0}이 {1}팀의 인텔을 확보했습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:134
+#: Sources/Client/Client_NetHandler.cpp:135
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
 msgstr "플레이어 {0}이 {1}팀의 인텔을 확보했습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:158
+#: Sources/Client/Client_NetHandler.cpp:159
 msgctxt "Client"
 msgid "{0} picked up {1}'s intel"
 msgstr "플레이어 {0}이 {1}팀의 인텔을 가지고 있습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:165
+#: Sources/Client/Client_NetHandler.cpp:166
 msgctxt "Client"
 msgid "{0} picked up {1}'s Intel."
 msgstr "플레이어 {0}이 {1}팀의 인텔을 가지고 있습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:183
+#: Sources/Client/Client_NetHandler.cpp:184
 msgctxt "Client"
 msgid "{0} dropped {1}'s intel"
 msgstr "플레이어 {0}이 {1}팀의 인텔을 떨어트렸습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:190
+#: Sources/Client/Client_NetHandler.cpp:191
 msgctxt "Client"
 msgid "{0} dropped {1}'s Intel"
 msgstr "플레이어 {0}이 {1}팀의 인텔을 떨어트렸습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:237
 #: Sources/Client/Client_NetHandler.cpp:243
+#: Sources/Client/Client_NetHandler.cpp:249
+#: Sources/Client/Client_NetHandler.cpp:255
 msgctxt "Client"
 msgid "Player {0} has left"
 msgstr "플레이어 {0}가 나갔습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:257
 #: Sources/Client/Client_NetHandler.cpp:264
+#: Sources/Client/Client_NetHandler.cpp:276
+#: Sources/Client/Client_NetHandler.cpp:282
 msgctxt "Client"
 msgid "{0} joined {1} team"
 msgstr "플레이어 {0}이 {1}팀에 참가했습니다."
 
 #: Sources/Client/Client_NetHandler.cpp:294
+#: Sources/Client/Client_NetHandler.cpp:317
 msgctxt "Client"
 msgid "{0} wins!"
 msgstr "{0}팀이 승리했습니다!"
 
 #: Sources/Client/Client_NetHandler.cpp:298
+#: Sources/Client/Client_NetHandler.cpp:321
 msgctxt "Client"
 msgid "{0} Wins!"
 msgstr "{0}팀이 승리했습니다!"
 
-#: Sources/Client/Client_Update.cpp:479
+#: Sources/Client/Client_Update.cpp:479 Sources/Client/Client_Update.cpp:505
 msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
 msgstr[0] "{0} 블럭"
 
-#: Sources/Client/Client_Update.cpp:486
+#: Sources/Client/Client_Update.cpp:486 Sources/Client/Client_Update.cpp:512
 msgctxt "Client"
 msgid "-- blocks"
 msgstr "-- 블럭"
 
 #: Sources/Client/Client_Update.cpp:842 Sources/Client/LimboView.cpp:68
+#: Sources/Client/Client_Update.cpp:868 Sources/Client/LimboView.cpp:68
 msgctxt "Client"
 msgid "Rifle"
 msgstr "라이플"
 
 #: Sources/Client/Client_Update.cpp:843 Sources/Client/LimboView.cpp:71
+#: Sources/Client/Client_Update.cpp:869 Sources/Client/LimboView.cpp:71
 msgctxt "Client"
 msgid "SMG"
 msgstr "SMG"
 
 #: Sources/Client/Client_Update.cpp:844 Sources/Client/LimboView.cpp:74
+#: Sources/Client/Client_Update.cpp:870 Sources/Client/LimboView.cpp:74
 msgctxt "Client"
 msgid "Shotgun"
 msgstr "샷건"
 
 #. ! A cause of death shown in the kill feed.
-#: Sources/Client/Client_Update.cpp:849
+#: Sources/Client/Client_Update.cpp:849 Sources/Client/Client_Update.cpp:875
 msgctxt "Client"
 msgid "Fall"
 msgstr "떨어짐"
 
 #. ! A cause of death shown in the kill feed.
-#: Sources/Client/Client_Update.cpp:853
+#: Sources/Client/Client_Update.cpp:853 Sources/Client/Client_Update.cpp:879
 msgctxt "Client"
 msgid "Melee"
 msgstr "삽"
 
-#: Sources/Client/Client_Update.cpp:856
+#: Sources/Client/Client_Update.cpp:856 Sources/Client/Client_Update.cpp:882
 msgctxt "Client"
 msgid "Grenade"
 msgstr "수류탄"
 
 #. ! A cause of death shown in the kill feed.
-#: Sources/Client/Client_Update.cpp:860
+#: Sources/Client/Client_Update.cpp:860 Sources/Client/Client_Update.cpp:886
 msgctxt "Client"
 msgid "Headshot"
 msgstr "헤드샷"
 
 #. ! A cause of death shown in the kill feed.
-#: Sources/Client/Client_Update.cpp:864
+#: Sources/Client/Client_Update.cpp:864 Sources/Client/Client_Update.cpp:890
 msgctxt "Client"
 msgid "Team Change"
 msgstr "팀 변경"
 
 #. ! A cause of death shown in the kill feed.
-#: Sources/Client/Client_Update.cpp:868
+#: Sources/Client/Client_Update.cpp:868 Sources/Client/Client_Update.cpp:894
 msgctxt "Client"
 msgid "Weapon Change"
 msgstr "무기 변경"
 
-#: Sources/Client/Client_Update.cpp:907
+#: Sources/Client/Client_Update.cpp:907 Sources/Client/Client_Update.cpp:933
 msgctxt "Client"
 msgid "You have killed {0}"
 msgstr "플레이어 {0}을 사살했습니다."
 
-#: Sources/Client/Client_Update.cpp:909
+#: Sources/Client/Client_Update.cpp:909 Sources/Client/Client_Update.cpp:935
 msgctxt "Client"
 msgid "You were killed by {0}"
 msgstr "플레이어 {0}에게 사살당했습니다."
 
-#: Sources/Client/Client_Update.cpp:1225
+#: Sources/Client/Client_Update.cpp:1225 Sources/Client/Client_Update.cpp:1260
 msgctxt "Client"
 msgid "Insufficient blocks."
 msgstr "블럭이 부족합니다."
 
-#: Sources/Client/Client_Update.cpp:1228
+#: Sources/Client/Client_Update.cpp:1228 Sources/Client/Client_Update.cpp:1263
 msgctxt "Client"
 msgid "You cannot place a block there."
 msgstr "이곳에는 블럭을 놓을 수 없습니다."
 
-#: Sources/Client/LimboView.cpp:79
+#: Sources/Client/LimboView.cpp:79 Sources/Client/LimboView.cpp:79
 msgctxt "Client"
 msgid "Spawn"
 msgstr "스폰"
 
-#: Sources/Client/LimboView.cpp:183
+#: Sources/Client/LimboView.cpp:183 Sources/Client/LimboView.cpp:183
 msgctxt "Client"
 msgid "Select Team:"
 msgstr "팀 선택:"
 
-#: Sources/Client/LimboView.cpp:191
+#: Sources/Client/LimboView.cpp:191 Sources/Client/LimboView.cpp:191
 msgctxt "Client"
 msgid "Select Weapon:"
 msgstr "무기 선택:"
 
-#: Sources/Client/NetClient.cpp:422
+#: Sources/Client/NetClient.cpp:422 Sources/Client/NetClient.cpp:425
 msgctxt "NetClient"
 msgid "Connecting to the server"
 msgstr "서버 연결 중"
 
-#: Sources/Client/NetClient.cpp:434
+#: Sources/Client/NetClient.cpp:434 Sources/Client/NetClient.cpp:437
 msgctxt "NetClient"
 msgid "Not connected"
 msgstr "연결되지 않음"
 
-#: Sources/Client/NetClient.cpp:498
+#: Sources/Client/NetClient.cpp:498 Sources/Client/NetClient.cpp:516
 msgctxt "NetClient"
 msgid "Awaiting for state"
 msgstr "상태 기다리는 중"
 
 #: Sources/Client/NetClient.cpp:508 Sources/Client/NetClient.cpp:1277
+#: Sources/Client/NetClient.cpp:526 Sources/Client/NetClient.cpp:1346
 msgctxt "NetClient"
 msgid "Loading snapshot"
-msgstr "스냅샷 불러오는 중"
+msgstr "데이터 불러오는 중"
 
-#: Sources/Client/NetClient.cpp:523
+#: Sources/Client/NetClient.cpp:523 Sources/Client/NetClient.cpp:541
 msgctxt "NetClient"
 msgid "Loading snapshot ({0}/{1})"
 msgstr "스냅샷 불러오는 중 ({0} / {1})"
 
 #: Sources/Client/NetClient.cpp:528 Sources/Client/NetClient.cpp:562
+#: Sources/Client/NetClient.cpp:546 Sources/Client/NetClient.cpp:609
 msgctxt "NetClient"
 msgid "Connected"
 msgstr "연결됨"
 
 #: Sources/Client/NetClient.cpp:540 Sources/Client/NetClient.cpp:575
-#: Sources/Client/NetClient.cpp:627
+#: Sources/Client/NetClient.cpp:627 Sources/Client/NetClient.cpp:558
+#: Sources/Client/NetClient.cpp:622 Sources/Client/NetClient.cpp:674
 msgctxt "NetClient"
 msgid "Still loading..."
 msgstr "계속 불러오는 중..."
@@ -321,57 +346,63 @@ msgstr "계속 불러오는 중..."
 #: Sources/Client/NetClient.cpp:543 Sources/Client/NetClient.cpp:549
 #: Sources/Client/NetClient.cpp:579 Sources/Client/NetClient.cpp:584
 #: Sources/Client/NetClient.cpp:631 Sources/Client/NetClient.cpp:636
+#: Sources/Client/NetClient.cpp:561 Sources/Client/NetClient.cpp:567
+#: Sources/Client/NetClient.cpp:626 Sources/Client/NetClient.cpp:631
+#: Sources/Client/NetClient.cpp:678 Sources/Client/NetClient.cpp:683
 msgctxt "NetClient"
 msgid "Error"
 msgstr "에러"
 
-#: Sources/Client/NetClient.cpp:702
+#: Sources/Client/NetClient.cpp:702 Sources/Client/NetClient.cpp:749
 msgctxt "NetClient"
 msgid "You are banned from this server."
 msgstr "이 서버에서 영구 추방(밴) 당했습니다."
 
 #: Sources/Client/NetClient.cpp:707 Sources/Client/NetClient.cpp:710
+#: Sources/Client/NetClient.cpp:754 Sources/Client/NetClient.cpp:757
 msgctxt "NetClient"
 msgid "You were kicked from this server."
 msgstr "이 서버에서 임시 추방(킥) 당했습니다."
 
-#: Sources/Client/NetClient.cpp:708
+#: Sources/Client/NetClient.cpp:708 Sources/Client/NetClient.cpp:755
 msgctxt "NetClient"
 msgid "Incompatible client protocol version."
-msgstr "호환되지 않는 클라이언트 버전입니다."
+msgstr "클라이언트 프로토콜 버전이 해당 서버와 호환되지 않습니다."
 
-#: Sources/Client/NetClient.cpp:709
+#: Sources/Client/NetClient.cpp:709 Sources/Client/NetClient.cpp:756
 msgctxt "NetClient"
 msgid "Server full"
 msgstr "서버가 꽉 찼습니다."
 
-#: Sources/Client/NetClient.cpp:711
+#: Sources/Client/NetClient.cpp:711 Sources/Client/NetClient.cpp:758
 msgctxt "NetClient"
 msgid "Unknown Reason"
 msgstr "알 수 없는 이유"
 
+#: Sources/Client/ScoreboardView.cpp:63 Sources/Client/ScoreboardView.cpp:345
 #: Sources/Client/ScoreboardView.cpp:63 Sources/Client/ScoreboardView.cpp:345
 msgctxt "Client"
 msgid "Spectator{1}"
 msgid_plural "Spectators{1}"
 msgstr[0] "관전자{1}"
 
-#: Sources/Client/TCProgressView.cpp:151
+#: Sources/Client/TCProgressView.cpp:151 Sources/Client/TCProgressView.cpp:151
 msgctxt "Client"
 msgid "Neutral Territory"
 msgstr "중립 영토"
 
-#: Sources/Client/TCProgressView.cpp:154
+#: Sources/Client/TCProgressView.cpp:154 Sources/Client/TCProgressView.cpp:154
 msgctxt "Client"
 msgid "{0}'s Territory"
 msgstr "{0}의 영토"
 
-#: Sources/Gui/Main.cpp:548
+#: Sources/Gui/Main.cpp:548 Sources/Gui/Main.cpp:577
 msgctxt "Main"
 msgid "Localization System Loaded"
 msgstr "한글화 기능을 불러왔습니다."
 
-#: Sources/Gui/Main.cpp:604 Sources/Gui/Runner.cpp:56
+#: Sources/Gui/Main.cpp:604 Sources/Gui/Runner.cpp:56 Sources/Gui/Main.cpp:633
+#: Sources/Gui/Runner.cpp:56
 msgctxt "Main"
 msgid "A serious error caused OpenSpades to stop working:\n\n"
 "{0}\n\n"
@@ -380,116 +411,127 @@ msgstr "심각한 오류가 발생하여 Openspades가 작동을 멈췄습니다
 "{0}\n\n"
 "자세한 정보는 SystemMessages.log을 확인하세요."
 
-#: Sources/Gui/Main.cpp:612 Sources/Gui/Runner.cpp:62
+#: Sources/Gui/Main.cpp:612 Sources/Gui/Runner.cpp:62 Sources/Gui/Main.cpp:641
+#: Sources/Gui/Runner.cpp:62
 msgctxt "Main"
 msgid "OpenSpades Fatal Error"
 msgstr "치명적인 오류"
 
-#: Sources/Gui/MainScreen.cpp:225
+#: Sources/Gui/MainScreen.cpp:225 Sources/Gui/MainScreen.cpp:220
 msgctxt "MainScreen"
 msgid "NOW LOADING"
 msgstr "불러오는 중"
 
-#: Resources/Scripts/Gui/ClientUI.as:198
+#: Resources/Scripts/Gui/ClientUI.as:198 Resources/Scripts/Gui/ClientUI.as:198
 msgctxt "Client"
 msgid "Back to Game"
 msgstr "게임으로 돌아가기"
 
-#: Resources/Scripts/Gui/ClientUI.as:205
+#: Resources/Scripts/Gui/ClientUI.as:205 Resources/Scripts/Gui/ClientUI.as:205
 msgctxt "Client"
 msgid "Chat Log"
 msgstr "채팅 기록"
 
-#: Resources/Scripts/Gui/ClientUI.as:212
+#: Resources/Scripts/Gui/ClientUI.as:212 Resources/Scripts/Gui/ClientUI.as:212
 msgctxt "Client"
 msgid "Setup"
 msgstr "설정"
 
-#: Resources/Scripts/Gui/ClientUI.as:219
+#: Resources/Scripts/Gui/ClientUI.as:219 Resources/Scripts/Gui/ClientUI.as:219
 msgctxt "Client"
 msgid "Disconnect"
 msgstr "서버에서 나가기"
 
-#: Resources/Scripts/Gui/ClientUI.as:484
+#: Resources/Scripts/Gui/ClientUI.as:484 Resources/Scripts/Gui/ClientUI.as:484
 msgctxt "Client"
 msgid "Say"
-msgstr "말하기"
+msgstr "전송"
 
-#: Resources/Scripts/Gui/ClientUI.as:492
+#: Resources/Scripts/Gui/ClientUI.as:492 Resources/Scripts/Gui/ClientUI.as:492
 msgctxt "Client"
 msgid "Cancel"
 msgstr "취소"
 
-#: Resources/Scripts/Gui/ClientUI.as:500
+#: Resources/Scripts/Gui/ClientUI.as:500 Resources/Scripts/Gui/ClientUI.as:500
 msgctxt "Client"
 msgid "Chat Text"
 msgstr "채팅 텍스트"
 
-#: Resources/Scripts/Gui/ClientUI.as:508
+#: Resources/Scripts/Gui/ClientUI.as:508 Resources/Scripts/Gui/ClientUI.as:508
 msgctxt "Client"
 msgid "Global"
 msgstr "전체"
 
-#: Resources/Scripts/Gui/ClientUI.as:517
+#: Resources/Scripts/Gui/ClientUI.as:517 Resources/Scripts/Gui/ClientUI.as:517
 msgctxt "Client"
 msgid "Team"
 msgstr "팀"
 
-#: Resources/Scripts/Gui/ClientUI.as:661
+#: Resources/Scripts/Gui/ClientUI.as:661 Resources/Scripts/Gui/ClientUI.as:662
 msgctxt "Client"
 msgid "Close"
 msgstr "닫기"
 
-#: Resources/Scripts/Gui/ClientUI.as:671
+#: Resources/Scripts/Gui/ClientUI.as:671 Resources/Scripts/Gui/ClientUI.as:672
 msgctxt "Client"
 msgid "Say Global"
 msgstr "전체에게 말하기"
 
-#: Resources/Scripts/Gui/ClientUI.as:682
+#: Resources/Scripts/Gui/ClientUI.as:682 Resources/Scripts/Gui/ClientUI.as:683
 msgctxt "Client"
 msgid "Say Team"
 msgstr "팀에게 말하기"
 
+#: Resources/Scripts/Gui/CreateProfileScreen.as:58
 #: Resources/Scripts/Gui/CreateProfileScreen.as:58
 msgctxt "CreateProfileScreen"
 msgid "OK"
 msgstr "확인"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:70
+#: Resources/Scripts/Gui/CreateProfileScreen.as:70
 msgctxt "CreateProfileScreen"
 msgid "Decide later"
 msgstr "다음에"
 
+#: Resources/Scripts/Gui/CreateProfileScreen.as:80
 #: Resources/Scripts/Gui/CreateProfileScreen.as:80
 msgctxt "CreateProfileScreen"
 msgid "Welcome to OpenSpades"
 msgstr "오픈스페이드에 오신 것을 환영합니다!"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:88
+#: Resources/Scripts/Gui/CreateProfileScreen.as:88
 msgctxt "CreateProfileScreen"
 msgid "Choose a player name:"
 msgstr "플레이어 이름을 입력하세요:"
 
+#: Resources/Scripts/Gui/CreateProfileScreen.as:96
 #: Resources/Scripts/Gui/CreateProfileScreen.as:96
 msgctxt "CreateProfileScreen"
 msgid "Player name"
 msgstr "플레이어 이름"
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:104
+#: Resources/Scripts/Gui/CreateProfileScreen.as:104
 msgctxt "CreateProfileScreen"
 msgid "You can change it later in the Setup dialog."
 msgstr "나중에 설정에서 변경하실 수 있습니다."
 
+#: Resources/Scripts/Gui/MainScreen.as:376
 #: Resources/Scripts/Gui/MainScreen.as:376
 msgctxt "MainScreen"
 msgid "Connect"
 msgstr "연결"
 
 #: Resources/Scripts/Gui/MainScreen.as:384
+#: Resources/Scripts/Gui/MainScreen.as:384
 msgctxt "MainScreen"
 msgid "Quick Connect"
 msgstr "빠른 연결"
 
+#: Resources/Scripts/Gui/MainScreen.as:393
+#: Resources/Scripts/Gui/MainScreen.as:447
 #: Resources/Scripts/Gui/MainScreen.as:393
 #: Resources/Scripts/Gui/MainScreen.as:447
 msgctxt "MainScreen"
@@ -498,20 +540,25 @@ msgstr "0.75"
 
 #: Resources/Scripts/Gui/MainScreen.as:403
 #: Resources/Scripts/Gui/MainScreen.as:456
+#: Resources/Scripts/Gui/MainScreen.as:403
+#: Resources/Scripts/Gui/MainScreen.as:456
 msgctxt "MainScreen"
 msgid "0.76"
 msgstr "0.76"
 
+#: Resources/Scripts/Gui/MainScreen.as:411
 #: Resources/Scripts/Gui/MainScreen.as:411
 msgctxt "MainScreen"
 msgid "Quit"
 msgstr "종료"
 
 #: Resources/Scripts/Gui/MainScreen.as:418
+#: Resources/Scripts/Gui/MainScreen.as:418
 msgctxt "MainScreen"
 msgid "Credits"
 msgstr "제작자"
 
+#: Resources/Scripts/Gui/MainScreen.as:425
 #: Resources/Scripts/Gui/MainScreen.as:425
 msgctxt "MainScreen"
 msgid "Setup"
@@ -519,50 +566,61 @@ msgstr "설정"
 
 #: Resources/Scripts/Gui/MainScreen.as:438
 #: Resources/Scripts/Gui/MainScreen.as:482
+#: Resources/Scripts/Gui/MainScreen.as:438
+#: Resources/Scripts/Gui/MainScreen.as:482
 msgctxt "MainScreen"
 msgid "Filter"
 msgstr "필터"
 
+#: Resources/Scripts/Gui/MainScreen.as:465
 #: Resources/Scripts/Gui/MainScreen.as:465
 msgctxt "MainScreen"
 msgid "Empty"
 msgstr "비었음"
 
 #: Resources/Scripts/Gui/MainScreen.as:474
+#: Resources/Scripts/Gui/MainScreen.as:474
 msgctxt "MainScreen"
 msgid "Not Full"
 msgstr "자리 있음"
 
+#: Resources/Scripts/Gui/MainScreen.as:494
 #: Resources/Scripts/Gui/MainScreen.as:494
 msgctxt "MainScreen"
 msgid "Server Name"
 msgstr "서버 이름"
 
 #: Resources/Scripts/Gui/MainScreen.as:501
+#: Resources/Scripts/Gui/MainScreen.as:501
 msgctxt "MainScreen"
 msgid "Players"
 msgstr "플레이어"
 
+#: Resources/Scripts/Gui/MainScreen.as:508
 #: Resources/Scripts/Gui/MainScreen.as:508
 msgctxt "MainScreen"
 msgid "Map Name"
 msgstr "맵 이름"
 
 #: Resources/Scripts/Gui/MainScreen.as:515
+#: Resources/Scripts/Gui/MainScreen.as:515
 msgctxt "MainScreen"
 msgid "Game Mode"
 msgstr "게임 모드"
 
+#: Resources/Scripts/Gui/MainScreen.as:522
 #: Resources/Scripts/Gui/MainScreen.as:522
 msgctxt "MainScreen"
 msgid "Ver."
 msgstr "버전"
 
 #: Resources/Scripts/Gui/MainScreen.as:529
+#: Resources/Scripts/Gui/MainScreen.as:529
 msgctxt "MainScreen"
 msgid "Loc."
 msgstr "국가"
 
+#: Resources/Scripts/Gui/MainScreen.as:787
 #: Resources/Scripts/Gui/MainScreen.as:787
 msgctxt "MainScreen"
 msgid "You were disconnected from the server because of the following reason:\n\n"
@@ -571,10 +629,12 @@ msgstr "다음 이유 때문에 서버에서 나가졌습니다:\n\n"
 "{0}"
 
 #: Resources/Scripts/Gui/MainScreen.as:807
+#: Resources/Scripts/Gui/MainScreen.as:807
 msgctxt "MainScreen"
 msgid "Loading..."
 msgstr "불러오는 중..."
 
+#: Resources/Scripts/Gui/MainScreen.as:825
 #: Resources/Scripts/Gui/MainScreen.as:825
 msgctxt "MainScreen"
 msgid "Failed to fetch the server list."
@@ -582,20 +642,25 @@ msgstr "서버 목록을 불러오지 못했습니다."
 
 #: Resources/Scripts/Gui/MessageBox.as:130
 #: Resources/Scripts/Gui/MessageBox.as:144
+#: Resources/Scripts/Gui/MessageBox.as:130
+#: Resources/Scripts/Gui/MessageBox.as:144
 msgctxt "MessageBox"
 msgid "OK"
 msgstr "확인"
 
+#: Resources/Scripts/Gui/MessageBox.as:144
 #: Resources/Scripts/Gui/MessageBox.as:144
 msgctxt "MessageBox"
 msgid "Cancel"
 msgstr "취소"
 
 #: Resources/Scripts/Gui/Preferences.as:60
+#: Resources/Scripts/Gui/Preferences.as:60
 msgctxt "Preferences"
 msgid "Game Options"
-msgstr "게임 옵션"
+msgstr "게임 설정"
 
+#: Resources/Scripts/Gui/Preferences.as:61
 #: Resources/Scripts/Gui/Preferences.as:61
 msgctxt "Preferences"
 msgid "Controls"
@@ -604,75 +669,93 @@ msgstr "조작 설정"
 #: Resources/Scripts/Gui/Preferences.as:62
 #: Resources/Scripts/Gui/Preferences.as:663
 #: Resources/Scripts/Gui/Preferences.as:708
+#: Resources/Scripts/Gui/Preferences.as:62
+#: Resources/Scripts/Gui/Preferences.as:663
+#: Resources/Scripts/Gui/Preferences.as:708
 msgctxt "Preferences"
 msgid "Misc"
 msgstr "기타"
 
+#: Resources/Scripts/Gui/Preferences.as:66
 #: Resources/Scripts/Gui/Preferences.as:66
 msgctxt "Preferences"
 msgid "Back"
 msgstr "뒤로"
 
 #: Resources/Scripts/Gui/Preferences.as:407
+#: Resources/Scripts/Gui/Preferences.as:407
 msgctxt "Preferences"
 msgid "Press Key to Bind or [Escape] to Cancel..."
-msgstr "지정할 키를 누르시거나 ESC 눌러 키 지정을 취소하세요."
+msgstr "지정할 키를 누르시거나 [Esc]를 눌러 키 지정을 취소하세요."
 
+#: Resources/Scripts/Gui/Preferences.as:418
 #: Resources/Scripts/Gui/Preferences.as:418
 msgctxt "Preferences"
 msgid "Space"
 msgstr "스페이스 바"
 
 #: Resources/Scripts/Gui/Preferences.as:420
+#: Resources/Scripts/Gui/Preferences.as:420
 msgctxt "Preferences"
 msgid "Unbound"
 msgstr "지정 안 됨"
 
+#: Resources/Scripts/Gui/Preferences.as:423
 #: Resources/Scripts/Gui/Preferences.as:423
 msgctxt "Preferences"
 msgid "Shift"
 msgstr "Shift 키"
 
 #: Resources/Scripts/Gui/Preferences.as:425
+#: Resources/Scripts/Gui/Preferences.as:425
 msgctxt "Preferences"
 msgid "Control"
 msgstr "컨트롤 키"
 
 #: Resources/Scripts/Gui/Preferences.as:427
+#: Resources/Scripts/Gui/Preferences.as:427
 msgctxt "Preferences"
 msgid "Meta"
-msgstr "메타"
+msgstr "메타 키"
 
+#: Resources/Scripts/Gui/Preferences.as:429
 #: Resources/Scripts/Gui/Preferences.as:429
 msgctxt "Preferences"
 msgid "Alt"
 msgstr "Alt 키"
 
 #: Resources/Scripts/Gui/Preferences.as:431
+#: Resources/Scripts/Gui/Preferences.as:431
 msgctxt "Preferences"
 msgid "Left Mouse Button"
 msgstr "마우스 왼쪽 버튼"
 
+#: Resources/Scripts/Gui/Preferences.as:433
 #: Resources/Scripts/Gui/Preferences.as:433
 msgctxt "Preferences"
 msgid "Right Mouse Button"
 msgstr "마우스 오른쪽 버튼"
 
 #: Resources/Scripts/Gui/Preferences.as:435
+#: Resources/Scripts/Gui/Preferences.as:435
 msgctxt "Preferences"
 msgid "Middle Mouse Button"
 msgstr "마우스 가운데 버튼"
 
+#: Resources/Scripts/Gui/Preferences.as:437
 #: Resources/Scripts/Gui/Preferences.as:437
 msgctxt "Preferences"
 msgid "Mouse Button 4"
 msgstr "마우스 버튼 4"
 
 #: Resources/Scripts/Gui/Preferences.as:439
+#: Resources/Scripts/Gui/Preferences.as:439
 msgctxt "Preferences"
 msgid "Mouse Button 5"
 msgstr "마우스 버튼 5"
 
+#: Resources/Scripts/Gui/Preferences.as:613
+#: Resources/Scripts/Gui/Preferences.as:619
 #: Resources/Scripts/Gui/Preferences.as:613
 #: Resources/Scripts/Gui/Preferences.as:619
 msgctxt "Preferences"
@@ -683,55 +766,69 @@ msgstr "켜짐"
 #: Resources/Scripts/Gui/Preferences.as:619
 #: Resources/Scripts/Gui/Preferences.as:648
 #: Resources/Scripts/Gui/Preferences.as:651
+#: Resources/Scripts/Gui/Preferences.as:613
+#: Resources/Scripts/Gui/Preferences.as:619
+#: Resources/Scripts/Gui/Preferences.as:648
+#: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "OFF"
 msgstr "꺼짐"
 
+#: Resources/Scripts/Gui/Preferences.as:619
 #: Resources/Scripts/Gui/Preferences.as:619
 msgctxt "Preferences"
 msgid "REVERSED"
 msgstr "반전됨"
 
 #: Resources/Scripts/Gui/Preferences.as:637
+#: Resources/Scripts/Gui/Preferences.as:637
 msgctxt "Preferences"
 msgid "Player Information"
 msgstr "플레이어 정보"
 
+#: Resources/Scripts/Gui/Preferences.as:638
 #: Resources/Scripts/Gui/Preferences.as:638
 msgctxt "Preferences"
 msgid "Player Name"
 msgstr "플레이어 이름"
 
 #: Resources/Scripts/Gui/Preferences.as:642
+#: Resources/Scripts/Gui/Preferences.as:642
 msgctxt "Preferences"
 msgid "Effects"
 msgstr "효과"
 
+#: Resources/Scripts/Gui/Preferences.as:643
 #: Resources/Scripts/Gui/Preferences.as:643
 msgctxt "Preferences"
 msgid "Blood"
 msgstr "혈흔"
 
 #: Resources/Scripts/Gui/Preferences.as:644
+#: Resources/Scripts/Gui/Preferences.as:644
 msgctxt "Preferences"
 msgid "Ejecting Brass"
 msgstr "탄피 배출"
 
+#: Resources/Scripts/Gui/Preferences.as:645
 #: Resources/Scripts/Gui/Preferences.as:645
 msgctxt "Preferences"
 msgid "Ragdoll"
 msgstr "래그돌"
 
 #: Resources/Scripts/Gui/Preferences.as:646
+#: Resources/Scripts/Gui/Preferences.as:646
 msgctxt "Preferences"
 msgid "Animations"
 msgstr "애니메이션"
 
 #: Resources/Scripts/Gui/Preferences.as:647
+#: Resources/Scripts/Gui/Preferences.as:647
 msgctxt "Preferences"
 msgid "Camera Shake"
 msgstr "카메라 흔들림"
 
+#: Resources/Scripts/Gui/Preferences.as:648
 #: Resources/Scripts/Gui/Preferences.as:648
 msgctxt "Preferences"
 msgid "MORE"
@@ -739,280 +836,337 @@ msgstr "많음"
 
 #: Resources/Scripts/Gui/Preferences.as:648
 #: Resources/Scripts/Gui/Preferences.as:651
+#: Resources/Scripts/Gui/Preferences.as:648
+#: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "NORMAL"
 msgstr "보통"
 
+#: Resources/Scripts/Gui/Preferences.as:650
 #: Resources/Scripts/Gui/Preferences.as:650
 msgctxt "Preferences"
 msgid "Particles"
 msgstr "파티클"
 
 #: Resources/Scripts/Gui/Preferences.as:651
+#: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "LESS"
 msgstr "적음"
 
+#: Resources/Scripts/Gui/Preferences.as:654
 #: Resources/Scripts/Gui/Preferences.as:654
 msgctxt "Preferences"
 msgid "Feedbacks"
 msgstr "반응"
 
 #: Resources/Scripts/Gui/Preferences.as:655
+#: Resources/Scripts/Gui/Preferences.as:655
 msgctxt "Preferences"
 msgid "Chat Notify Sounds"
 msgstr "채팅 알림음"
 
+#: Resources/Scripts/Gui/Preferences.as:656
 #: Resources/Scripts/Gui/Preferences.as:656
 msgctxt "Preferences"
 msgid "Hit Indicator"
 msgstr "명중 표시"
 
 #: Resources/Scripts/Gui/Preferences.as:657
+#: Resources/Scripts/Gui/Preferences.as:657
 msgctxt "Preferences"
 msgid "Show Alerts"
 msgstr "알림 보기"
 
+#: Resources/Scripts/Gui/Preferences.as:659
 #: Resources/Scripts/Gui/Preferences.as:659
 msgctxt "Preferences"
 msgid "AoS 0.75/0.76 Compatibility"
 msgstr "AoS 0.75/0.76 호환성"
 
 #: Resources/Scripts/Gui/Preferences.as:660
+#: Resources/Scripts/Gui/Preferences.as:660
 msgctxt "Preferences"
 msgid "Allow Unicode"
 msgstr "유니코드 문자 보이기"
 
+#: Resources/Scripts/Gui/Preferences.as:661
 #: Resources/Scripts/Gui/Preferences.as:661
 msgctxt "Preferences"
 msgid "Server Alert"
 msgstr "서버 알림"
 
 #: Resources/Scripts/Gui/Preferences.as:664
+#: Resources/Scripts/Gui/Preferences.as:664
 msgctxt "Preferences"
 msgid "Field of View"
 msgstr "시야각"
 
+#: Resources/Scripts/Gui/Preferences.as:666
 #: Resources/Scripts/Gui/Preferences.as:666
 msgctxt "Preferences"
 msgid "Minimap size"
 msgstr "미니맵 크기"
 
 #: Resources/Scripts/Gui/Preferences.as:668
+#: Resources/Scripts/Gui/Preferences.as:668
 msgctxt "Preferences"
 msgid "Show Statistics"
 msgstr "통계 보기"
 
+#: Resources/Scripts/Gui/Preferences.as:678
 #: Resources/Scripts/Gui/Preferences.as:678
 msgctxt "Preferences"
 msgid "Weapons/Tools"
 msgstr "무기/도구"
 
 #: Resources/Scripts/Gui/Preferences.as:679
+#: Resources/Scripts/Gui/Preferences.as:679
 msgctxt "Preferences"
 msgid "Attack"
 msgstr "공격"
 
+#: Resources/Scripts/Gui/Preferences.as:680
 #: Resources/Scripts/Gui/Preferences.as:680
 msgctxt "Preferences"
 msgid "Alt. Attack"
 msgstr "보조 공격"
 
 #: Resources/Scripts/Gui/Preferences.as:681
+#: Resources/Scripts/Gui/Preferences.as:681
 msgctxt "Preferences"
 msgid "Hold Aim Down Sight"
 msgstr "마우스를 누르는 동안 정조준"
 
+#: Resources/Scripts/Gui/Preferences.as:682
 #: Resources/Scripts/Gui/Preferences.as:682
 msgctxt "Preferences"
 msgid "Mouse Sensitivity"
 msgstr "마우스 감도"
 
 #: Resources/Scripts/Gui/Preferences.as:684
+#: Resources/Scripts/Gui/Preferences.as:684
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
 msgstr "정조준 시 마우스 감도"
 
+#: Resources/Scripts/Gui/Preferences.as:686
 #: Resources/Scripts/Gui/Preferences.as:686
 msgctxt "Preferences"
 msgid "Exponential Power"
 msgstr "마우스 가속"
 
 #: Resources/Scripts/Gui/Preferences.as:688
+#: Resources/Scripts/Gui/Preferences.as:688
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
 msgstr "Y축 마우스 입력 반전"
 
+#: Resources/Scripts/Gui/Preferences.as:689
 #: Resources/Scripts/Gui/Preferences.as:689
 msgctxt "Preferences"
 msgid "Reload"
 msgstr "재장전"
 
 #: Resources/Scripts/Gui/Preferences.as:690
+#: Resources/Scripts/Gui/Preferences.as:690
 msgctxt "Preferences"
 msgid "Capture Color"
 msgstr "색깔 가져오기"
 
+#: Resources/Scripts/Gui/Preferences.as:691
 #: Resources/Scripts/Gui/Preferences.as:691
 msgctxt "Preferences"
 msgid "Equip Spade"
 msgstr "삽 들기"
 
 #: Resources/Scripts/Gui/Preferences.as:692
+#: Resources/Scripts/Gui/Preferences.as:692
 msgctxt "Preferences"
 msgid "Equip Block"
 msgstr "블럭 들기"
 
+#: Resources/Scripts/Gui/Preferences.as:693
 #: Resources/Scripts/Gui/Preferences.as:693
 msgctxt "Preferences"
 msgid "Equip Weapon"
 msgstr "무기 들기"
 
 #: Resources/Scripts/Gui/Preferences.as:694
+#: Resources/Scripts/Gui/Preferences.as:694
 msgctxt "Preferences"
 msgid "Equip Grenade"
 msgstr "수류탄 들기"
 
+#: Resources/Scripts/Gui/Preferences.as:695
 #: Resources/Scripts/Gui/Preferences.as:695
 msgctxt "Preferences"
 msgid "Last Used Tool"
 msgstr "마지막으로 사용된 도구"
 
 #: Resources/Scripts/Gui/Preferences.as:696
+#: Resources/Scripts/Gui/Preferences.as:696
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
 msgstr "마우스 휠로 도구 바꾸기"
 
+#: Resources/Scripts/Gui/Preferences.as:698
 #: Resources/Scripts/Gui/Preferences.as:698
 msgctxt "Preferences"
 msgid "Movement"
 msgstr "움직임"
 
 #: Resources/Scripts/Gui/Preferences.as:699
+#: Resources/Scripts/Gui/Preferences.as:699
 msgctxt "Preferences"
 msgid "Walk Forward"
 msgstr "앞으로 이동"
 
+#: Resources/Scripts/Gui/Preferences.as:700
 #: Resources/Scripts/Gui/Preferences.as:700
 msgctxt "Preferences"
 msgid "Backpedal"
 msgstr "뒤로 이동"
 
 #: Resources/Scripts/Gui/Preferences.as:701
+#: Resources/Scripts/Gui/Preferences.as:701
 msgctxt "Preferences"
 msgid "Move Left"
 msgstr "왼쪽으로 이동"
 
+#: Resources/Scripts/Gui/Preferences.as:702
 #: Resources/Scripts/Gui/Preferences.as:702
 msgctxt "Preferences"
 msgid "Move Right"
 msgstr "오른쪽으로 이동"
 
 #: Resources/Scripts/Gui/Preferences.as:703
+#: Resources/Scripts/Gui/Preferences.as:703
 msgctxt "Preferences"
 msgid "Crouch"
 msgstr "앉기"
 
+#: Resources/Scripts/Gui/Preferences.as:704
 #: Resources/Scripts/Gui/Preferences.as:704
 msgctxt "Preferences"
 msgid "Sneak"
 msgstr "조용히 걷기"
 
 #: Resources/Scripts/Gui/Preferences.as:705
+#: Resources/Scripts/Gui/Preferences.as:705
 msgctxt "Preferences"
 msgid "Jump"
 msgstr "점프"
 
+#: Resources/Scripts/Gui/Preferences.as:706
 #: Resources/Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Sprint"
 msgstr "달리기"
 
 #: Resources/Scripts/Gui/Preferences.as:709
+#: Resources/Scripts/Gui/Preferences.as:709
 msgctxt "Preferences"
 msgid "Minimap Scale"
 msgstr "미니맵 크기"
 
+#: Resources/Scripts/Gui/Preferences.as:710
 #: Resources/Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Toggle Map"
 msgstr "지도 켜기/끄기"
 
 #: Resources/Scripts/Gui/Preferences.as:711
+#: Resources/Scripts/Gui/Preferences.as:711
 msgctxt "Preferences"
 msgid "Flashlight"
 msgstr "손전등"
 
+#: Resources/Scripts/Gui/Preferences.as:712
 #: Resources/Scripts/Gui/Preferences.as:712
 msgctxt "Preferences"
 msgid "Global Chat"
 msgstr "전체 채팅"
 
 #: Resources/Scripts/Gui/Preferences.as:713
+#: Resources/Scripts/Gui/Preferences.as:713
 msgctxt "Preferences"
 msgid "Team Chat"
 msgstr "팀 채팅"
 
+#: Resources/Scripts/Gui/Preferences.as:714
 #: Resources/Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Limbo Menu"
 msgstr "팀/무기 선택 메뉴"
 
 #: Resources/Scripts/Gui/Preferences.as:715
+#: Resources/Scripts/Gui/Preferences.as:715
 msgctxt "Preferences"
 msgid "Save Map"
 msgstr "맵 저장"
 
+#: Resources/Scripts/Gui/Preferences.as:716
 #: Resources/Scripts/Gui/Preferences.as:716
 msgctxt "Preferences"
 msgid "Save Sceneshot"
 msgstr "Sceneshot 찍기"
 
 #: Resources/Scripts/Gui/Preferences.as:717
+#: Resources/Scripts/Gui/Preferences.as:717
 msgctxt "Preferences"
 msgid "Save Screenshot"
 msgstr "스크린샷 찍기"
 
 #: Resources/Scripts/Gui/Preferences.as:736
+#: Resources/Scripts/Gui/Preferences.as:736
 msgctxt "Preferences"
 msgid "Enable Startup Window"
-msgstr "시작 윈도우를 활성화합니다."
+msgstr "시작 윈도우 활성화"
 
+#: Resources/Scripts/Gui/Preferences.as:757
 #: Resources/Scripts/Gui/Preferences.as:757
 msgctxt "Preferences"
 msgid "Quit and restart OpenSpades to access the startup window."
 msgstr "시작 화면에 진입하려면 Openspades를 재시작하세요."
 
 #: Resources/Scripts/Gui/Preferences.as:758
+#: Resources/Scripts/Gui/Preferences.as:758
 msgctxt "Preferences"
 msgid "Some settings only can be changed in the startup window."
 msgstr "몇몇 설정은 시작 화면에서만 바꿀 수 있습니다."
 
+#: Resources/Scripts/Gui/StartupScreen.as:160
 #: Resources/Scripts/Gui/StartupScreen.as:160
 msgctxt "StartupScreen"
 msgid "Start"
 msgstr "시작"
 
 #: Resources/Scripts/Gui/StartupScreen.as:167
+#: Resources/Scripts/Gui/StartupScreen.as:167
 msgctxt "StartupScreen"
 msgid "Skip this screen next time"
 msgstr "다음에는 이 화면을 보지 않음"
 
+#: Resources/Scripts/Gui/StartupScreen.as:211
 #: Resources/Scripts/Gui/StartupScreen.as:211
 msgctxt "StartupScreen"
 msgid "Graphics"
 msgstr "그래픽"
 
 #: Resources/Scripts/Gui/StartupScreen.as:212
+#: Resources/Scripts/Gui/StartupScreen.as:212
 msgctxt "StartupScreen"
 msgid "Audio"
 msgstr "오디오"
 
 #: Resources/Scripts/Gui/StartupScreen.as:213
+#: Resources/Scripts/Gui/StartupScreen.as:213
 msgctxt "StartupScreen"
 msgid "Generic"
 msgstr "일반"
 
+#: Resources/Scripts/Gui/StartupScreen.as:214
 #: Resources/Scripts/Gui/StartupScreen.as:214
 msgctxt "StartupScreen"
 msgid "System Info"
@@ -1020,40 +1174,49 @@ msgstr "시스템 정보"
 
 #: Resources/Scripts/Gui/StartupScreen.as:215
 #: Resources/Scripts/Gui/StartupScreen.as:1679
+#: Resources/Scripts/Gui/StartupScreen.as:215
+#: Resources/Scripts/Gui/StartupScreen.as:1679
 msgctxt "StartupScreen"
 msgid "Advanced"
 msgstr "고급"
 
+#: Resources/Scripts/Gui/StartupScreen.as:288
 #: Resources/Scripts/Gui/StartupScreen.as:288
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the update info website."
 msgstr "업데이트 정보를 여는 중 알 수 없는 오류가 발생했습니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:853
+#: Resources/Scripts/Gui/StartupScreen.as:853
 msgctxt "StartupScreen"
 msgid "Custom"
 msgstr "사용자 지정"
 
+#: Resources/Scripts/Gui/StartupScreen.as:979
 #: Resources/Scripts/Gui/StartupScreen.as:979
 msgctxt "StartupScreen"
 msgid "Close"
 msgstr "닫기"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1085
+#: Resources/Scripts/Gui/StartupScreen.as:1085
 msgctxt "StartupScreen"
 msgid "Graphics Settings"
 msgstr "그래픽 설정"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1090
 #: Resources/Scripts/Gui/StartupScreen.as:1090
 msgctxt "StartupScreen"
 msgid "Resolution"
 msgstr "해상도"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1100
+#: Resources/Scripts/Gui/StartupScreen.as:1100
 msgctxt "StartupScreen"
 msgid "Fullscreen Mode"
 msgstr "전체 화면"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1103
 #: Resources/Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
 msgid "By running in fullscreen mode OpenSpades occupies the screen, making it easier for you to concentrate on playing the game."
@@ -1061,30 +1224,37 @@ msgstr "전체 화면 모드를 사용하면 화면 전체를 이용하여 플�
 
 #: Resources/Scripts/Gui/StartupScreen.as:1110
 #: Resources/Scripts/Gui/StartupScreen.as:1492
+#: Resources/Scripts/Gui/StartupScreen.as:1110
+#: Resources/Scripts/Gui/StartupScreen.as:1492
 msgctxt "StartupScreen"
 msgid "Backend"
 msgstr "렌더링 모드"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1113
 #: Resources/Scripts/Gui/StartupScreen.as:1113
 msgctxt "StartupScreen"
 msgid "OpenGL"
 msgstr "OpenGL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1117
+#: Resources/Scripts/Gui/StartupScreen.as:1117
 msgctxt "StartupScreen"
 msgid "OpenGL renderer uses your computer's graphics accelerator to generate the game screen."
-msgstr "OpenGL 렌더러는 컴퓨터에 내장 된 GPU를 사용하여 게임 화면을 그립니다."
+msgstr "OpenGL 렌더러는 컴퓨터에 내장된 GPU를 사용하여 게임 화면을 그립니다."
 
+#: Resources/Scripts/Gui/StartupScreen.as:1125
 #: Resources/Scripts/Gui/StartupScreen.as:1125
 msgctxt "StartupScreen"
 msgid "Software"
 msgstr "소프트웨어"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1129
+#: Resources/Scripts/Gui/StartupScreen.as:1129
 msgctxt "StartupScreen"
 msgid "Software renderer uses CPU to generate the game screen. Its quality and performance might be inferior to OpenGL renderer, but it works even with an unsupported GPU."
 msgstr "소프트웨어 렌더러는 CPU를 사용하여 게임 화면을 그립니다. 품질 및 성능은 OpenGL에 비해 떨어지지만 지원되지 않는 GPU에서도 항상 작동합니다."
 
+#: Resources/Scripts/Gui/StartupScreen.as:1143
 #: Resources/Scripts/Gui/StartupScreen.as:1143
 msgctxt "StartupScreen"
 msgid "Antialias:Enables a technique to improve the appearance of high-contrast edges.\n\n"
@@ -1095,105 +1265,128 @@ msgstr "앤티앨리어싱:오브젝트의 윤곽에 발생하는 계단 현상�
 "FXAA:계단 현상을 감지하여 포스트 프로세싱을 통해 안티 앨리어싱을 수행합니다.|꺼짐|MSAA 2x|4x|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1150
+#: Resources/Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
 msgid "Global Illumination"
 msgstr "전역 조명"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1152
 #: Resources/Scripts/Gui/StartupScreen.as:1152
 msgctxt "StartupScreen"
 msgid "Enables a physically based simulation of light path for more realistic lighting."
 msgstr "물리 기반 시뮬레이션을 사용하여 보다 사실적으로 빛을 표현합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1155
+#: Resources/Scripts/Gui/StartupScreen.as:1155
 msgctxt "StartupScreen"
 msgid "Linear HDR Rendering"
 msgstr "선형 HDR 렌더리"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1157
 #: Resources/Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
 msgid "Uses a number representation which allows wider dynamic range during rendering process. Additionally, this allows color calculation whose value is in linear correspondence with actual energy, that is, physically accurate blending can be achieved."
 msgstr "렌더링 과정 중 더 넓은 범위의 숫자 표현을 사용합니다. 또, 실제 값과 선형으로 대응하도록 색상의 계산을 수행합니다. 즉, 물리적으로 정확한 색의 합성이 가능해집니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1164
+#: Resources/Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
 msgid "Camera Blur"
 msgstr "모션 블러"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1165
 #: Resources/Scripts/Gui/StartupScreen.as:1165
 msgctxt "StartupScreen"
 msgid "Blurs the screen when you turn quickly."
 msgstr "빠르게 화면을 움직일 때 화면을 흐리게 합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1167
+#: Resources/Scripts/Gui/StartupScreen.as:1167
 msgctxt "StartupScreen"
 msgid "Lens Effect"
 msgstr "렌즈 효과"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1168
 #: Resources/Scripts/Gui/StartupScreen.as:1168
 msgctxt "StartupScreen"
 msgid "Simulates distortion caused by a real camera lens."
 msgstr "카메라 렌즈로 인해 나타나는 왜곡을 표시합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1170
+#: Resources/Scripts/Gui/StartupScreen.as:1170
 msgctxt "StartupScreen"
 msgid "Lens Scattering Filter"
 msgstr "렌즈 산란 필터"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1171
 #: Resources/Scripts/Gui/StartupScreen.as:1171
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
 msgstr "렌즈의 이물질에 의한 빛의 산란을 재현합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1174
+#: Resources/Scripts/Gui/StartupScreen.as:1174
 msgctxt "StartupScreen"
 msgid "Lens Flare"
 msgstr "렌즈 플레어"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1175
 #: Resources/Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid "The Sun causes lens flare."
 msgstr "태양이 렌즈 플레어를 만듭니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1177
+#: Resources/Scripts/Gui/StartupScreen.as:1177
 msgctxt "StartupScreen"
 msgid "Flares for Dynamic Lights"
 msgstr "동적 빛 렌즈 플레어"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1178
 #: Resources/Scripts/Gui/StartupScreen.as:1178
 msgctxt "StartupScreen"
 msgid "Enables lens flare for light sources other than the Sun."
 msgstr "태양 이외의 광원을 볼 때 렌즈 플레어를 그립니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1180
+#: Resources/Scripts/Gui/StartupScreen.as:1180
 msgctxt "StartupScreen"
 msgid "Color Correction"
 msgstr "색깔 보정"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1181
 #: Resources/Scripts/Gui/StartupScreen.as:1181
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
 msgstr "색감을 영화처럼 보정해 화면을 더욱 멋지게 합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1183
+#: Resources/Scripts/Gui/StartupScreen.as:1183
 msgctxt "StartupScreen"
 msgid "Depth of Field"
 msgstr "피사계 심도"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1184
 #: Resources/Scripts/Gui/StartupScreen.as:1184
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
 msgstr "초점 이외의 물체를 흐리게 표시합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1186
+#: Resources/Scripts/Gui/StartupScreen.as:1186
 msgctxt "StartupScreen"
 msgid "Screen Space Ambient Occlusion"
 msgstr "SSAO(Screen Space Ambient Occlusion)"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1187
+#: Resources/Scripts/Gui/StartupScreen.as:1187
 msgctxt "StartupScreen"
 msgid "Simulates soft shadows that occur between nearby objects."
 msgstr "가까이 있는 물체들 사이에 부드러운 그림자를 생성합니다."
 
+#: Resources/Scripts/Gui/StartupScreen.as:1189
+#: Resources/Scripts/Gui/StartupScreen.as:1228
+#: Resources/Scripts/Gui/StartupScreen.as:1250
 #: Resources/Scripts/Gui/StartupScreen.as:1189
 #: Resources/Scripts/Gui/StartupScreen.as:1228
 #: Resources/Scripts/Gui/StartupScreen.as:1250
@@ -1203,10 +1396,15 @@ msgstr "낮음"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1190
 #: Resources/Scripts/Gui/StartupScreen.as:1229
+#: Resources/Scripts/Gui/StartupScreen.as:1190
+#: Resources/Scripts/Gui/StartupScreen.as:1229
 msgctxt "StartupScreen"
 msgid "Medium"
 msgstr "중간"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1191
+#: Resources/Scripts/Gui/StartupScreen.as:1230
+#: Resources/Scripts/Gui/StartupScreen.as:1252
 #: Resources/Scripts/Gui/StartupScreen.as:1191
 #: Resources/Scripts/Gui/StartupScreen.as:1230
 #: Resources/Scripts/Gui/StartupScreen.as:1252
@@ -1216,120 +1414,145 @@ msgstr "높음"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1192
 #: Resources/Scripts/Gui/StartupScreen.as:1253
+#: Resources/Scripts/Gui/StartupScreen.as:1192
+#: Resources/Scripts/Gui/StartupScreen.as:1253
 msgctxt "StartupScreen"
 msgid "Ultra"
 msgstr "매우 높음"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1195
 #: Resources/Scripts/Gui/StartupScreen.as:1195
 msgctxt "StartupScreen"
 msgid "Post-process"
 msgstr "포스트-프로세싱"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1196
+#: Resources/Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
 msgid "Post-process modifies the image to make it look better and more realistic."
 msgstr "화면 수정을 통해 더욱 멋지고 실제같은 화면이 나타나도록 합니다."
 
+#: Resources/Scripts/Gui/StartupScreen.as:1203
 #: Resources/Scripts/Gui/StartupScreen.as:1203
 msgctxt "StartupScreen"
 msgid "Particles|Low:Artifact occurs when a particle intersects other objects.|Medium:Particle intersects objects smoothly.|High:Particle intersects objects smoothly, and some objects casts their shadow to particles."
 msgstr "파티클|낮음:입자가 다른 물체와 겹칠 때 그 경계면이 날카롭게 그려집니다.|중간:입자가 다른 물체와 겹칠 때 그 경계면이 매끄럽게 그려집니다.|높음:입자가 다른 물체와 겹칠 때 그 경계면이 매끄럽게 그려지며, 일부 물체의 그림자가 입자에 드리웁니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1213
+#: Resources/Scripts/Gui/StartupScreen.as:1213
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
 msgstr "동적 조명"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1215
 #: Resources/Scripts/Gui/StartupScreen.as:1215
 msgctxt "StartupScreen"
 msgid "Gives some objects an ability to emit light to give them an energy-emitting impression."
 msgstr "몇몇 물체가 빛을 발산할 수 있도록 해 마치 에너지를 내뿜는 듯한 느낌을 줍니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1218
+#: Resources/Scripts/Gui/StartupScreen.as:1218
 msgctxt "StartupScreen"
 msgid "Shadows"
 msgstr "그림자"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1219
 #: Resources/Scripts/Gui/StartupScreen.as:1219
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
 msgstr "움직이는 물체에 그림자를 드리웁니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1221
+#: Resources/Scripts/Gui/StartupScreen.as:1221
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
 msgstr "입체적 안개 효과"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1222
 #: Resources/Scripts/Gui/StartupScreen.as:1222
 msgctxt "StartupScreen"
 msgid "Simulates shadow being casted to the fog particles using a super highly computationally demanding algorithm. "
 msgstr "매우 높은 연산량을 요구하는 알고리즘을 사용하여 대기의 안개 입자에 그림자를 드리웁니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1225
+#: Resources/Scripts/Gui/StartupScreen.as:1225
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
 msgstr "물리 기반 광원 효과"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1226
 #: Resources/Scripts/Gui/StartupScreen.as:1226
 msgctxt "StartupScreen"
 msgid "Uses more accurate approximation techniques to decide the brightness of objects."
 msgstr "물체의 밝기를 계산하는 데 더 정확한 근삿값을 활용합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1233
+#: Resources/Scripts/Gui/StartupScreen.as:1233
 msgctxt "StartupScreen"
 msgid "Direct Lights"
 msgstr "직접 조명"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1234
 #: Resources/Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
 msgid "Controls how light encounting a material and atmosphere directly affects its appearance."
 msgstr "대기 혹은 물체에 직접 입사하는 빛이 그 물체에 영향을 끼치는 정도를 조정합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1244
+#: Resources/Scripts/Gui/StartupScreen.as:1244
 msgctxt "StartupScreen"
 msgid "Water Shader|None:Water is rendered in the same way that normal blocks are done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving water is simulated as well as reflection and refraction.|Level 3:Reflections and refractions are rendered at the highest quality using screen-space techniques."
 msgstr "물 쉐이더|없음:일반 블럭과 똑같이 물을 렌더링합니다.|1단계:굴절과 태양의 반사가 표시됩니다.|2단계:굴절과 태양의 반사는 물론, 파도까지 나타납니다.|3단계:반사 및 굴절이 Screen-Space 기술을 이용해 가장 좋은 품질로 렌더링됩니다."
 
+#: Resources/Scripts/Gui/StartupScreen.as:1251
 #: Resources/Scripts/Gui/StartupScreen.as:1251
 msgctxt "StartupScreen"
 msgid "Med"
 msgstr "중간"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1256
+#: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid "Shader Effects"
 msgstr "쉐이더 효과"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1256
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid "Special effects."
 msgstr "특수 효과입니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1273
+#: Resources/Scripts/Gui/StartupScreen.as:1273
 msgctxt "StartupScreen"
 msgid "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|4x"
 msgstr "고속 모드:화면 해상도를 낮춰 렌더링을 가속화합니다.|꺼짐|2x|4x"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1486
 #: Resources/Scripts/Gui/StartupScreen.as:1486
 msgctxt "StartupScreen"
 msgid "Audio Settings"
 msgstr "오디오 설정"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1495
+#: Resources/Scripts/Gui/StartupScreen.as:1495
 msgctxt "StartupScreen"
 msgid "OpenAL"
 msgstr "OpenAL"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1499
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
 msgid "Uses an OpenAL-capable sound card to process sound. In most cases where there isn't such a sound card, software emulation is used."
 msgstr "OpenAL 호환 사운드 카드를 사용하여 음성을 처리합니다. 대부분의 경우 이러한 사운드 카드가 없으므로 소프트웨어 에뮬레이션이 사용됩니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1508
+#: Resources/Scripts/Gui/StartupScreen.as:1508
 msgctxt "StartupScreen"
 msgid "YSR"
 msgstr "YSR"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1512
 #: Resources/Scripts/Gui/StartupScreen.as:1512
 msgctxt "StartupScreen"
 msgid "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It features several enhanced features including automatic load control, dynamics compressor, HRTF-based 3D audio, and high quality reverb."
@@ -1337,10 +1560,12 @@ msgstr "YSR은 OpenSpades에 최적화된 실험적인 3D HDR 사운드 엔진�
 
 #. ! The name of audio driver that outputs no audio.
 #: Resources/Scripts/Gui/StartupScreen.as:1523
+#: Resources/Scripts/Gui/StartupScreen.as:1523
 msgctxt "StartupScreen"
 msgid "Null"
 msgstr "없음"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1527
 #: Resources/Scripts/Gui/StartupScreen.as:1527
 msgctxt "StartupScreen"
 msgid "Disables audio output."
@@ -1348,90 +1573,109 @@ msgstr "오디오 출력을 비활성화합니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1538
 #: Resources/Scripts/Gui/StartupScreen.as:1562
+#: Resources/Scripts/Gui/StartupScreen.as:1538
+#: Resources/Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
 msgid "Polyphonics"
 msgstr "최대 동시 음향"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1539
 #: Resources/Scripts/Gui/StartupScreen.as:1539
 msgctxt "StartupScreen"
 msgid "Specifies how many sounds can be played simultaneously. Higher value needs more processing power, so setting this too high might cause an overload (especially with a software emulation)."
 msgstr "동시에 재생되는 소리의 수를 지정합니다. 이 값이 크면 필요한 처리 능력도 증가하기 때문에 지나친 설정값은 (특히 소프트웨어 에뮬레이션하는 경우)과부하가 발생할 수 있습니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1546
+#: Resources/Scripts/Gui/StartupScreen.as:1546
 msgctxt "StartupScreen"
 msgid "EAX"
 msgstr "EAX"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1547
 #: Resources/Scripts/Gui/StartupScreen.as:1547
 msgctxt "StartupScreen"
 msgid "Enables extended features provided by the OpenAL driver to create more ambience."
 msgstr "OpenAL 드라이버가 제공하는 확장 기능을 이용하여 현장감을 높여줍니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1563
+#: Resources/Scripts/Gui/StartupScreen.as:1563
 msgctxt "StartupScreen"
 msgid "Specifies how many sounds can be played simultaneously. No matter what value is set, YSR might reduce the number of sounds when an overload is detected."
 msgstr "동시에 플레이되는 소리의 개수를 지정합니다. 이 값에 상관없이 YSR은 과부하가 감지될 경우 이를 방지하기 위해 동시 발음 수를 줄일 수 있습니다."
 
+#: Resources/Scripts/Gui/StartupScreen.as:1623
 #: Resources/Scripts/Gui/StartupScreen.as:1623
 msgctxt "StartupScreen"
 msgid "Language"
 msgstr "언어"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1635
+#: Resources/Scripts/Gui/StartupScreen.as:1635
 msgctxt "StartupScreen"
 msgid "Tools"
 msgstr "도구"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1638
 #: Resources/Scripts/Gui/StartupScreen.as:1638
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
 msgstr "모든 설정 초기화"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1647
+#: Resources/Scripts/Gui/StartupScreen.as:1647
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
 msgstr "윈도우 탐색기에서 설정 폴더 열기"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1649
 #: Resources/Scripts/Gui/StartupScreen.as:1649
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
 msgstr "파인더에서 설정 폴더 열기"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1651
+#: Resources/Scripts/Gui/StartupScreen.as:1651
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
 msgstr "설정 폴더 열기"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1668
 #: Resources/Scripts/Gui/StartupScreen.as:1668
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
 msgstr "설정 폴더를 여는 동안 알 수 없는 오류가 발생했습니다."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1674
+#: Resources/Scripts/Gui/StartupScreen.as:1674
 msgctxt "StartupScreen"
 msgid "Are you sure to reset all settings? They include (but are not limited to):"
 msgstr "정말로 모든 설정을 초기화 하시겠습니까? 다음과 같은 설정들이 초기화됩니다:"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1675
 #: Resources/Scripts/Gui/StartupScreen.as:1675
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
 msgstr "모든 그래픽/오디오 설정"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1676
+#: Resources/Scripts/Gui/StartupScreen.as:1676
 msgctxt "StartupScreen"
 msgid "All key bindings"
 msgstr "모든 키 지정"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1677
 #: Resources/Scripts/Gui/StartupScreen.as:1677
 msgctxt "StartupScreen"
 msgid "Your player name"
 msgstr "플레이어 이름"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1678
+#: Resources/Scripts/Gui/StartupScreen.as:1678
 msgctxt "StartupScreen"
 msgid "Other advanced settings only accessible through '{0}' tab and in-game commands"
 msgstr "다른 고급 설정은 '{0}' 탭과 게임 내 명령어를 통해서만 접근할 수 있습니다."
 
+#: Resources/Scripts/Gui/StartupScreen.as:1748
 #: Resources/Scripts/Gui/StartupScreen.as:1748
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
@@ -1439,67 +1683,111 @@ msgstr "알 수 없음 ({0})"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1750
 #: Resources/Scripts/Gui/StartupScreen.as:1764
+#: Resources/Scripts/Gui/StartupScreen.as:1750
+#: Resources/Scripts/Gui/StartupScreen.as:1764
 msgctxt "StartupScreen"
 msgid "System default"
 msgstr "시스템 기본 설정"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1813
 #: Resources/Scripts/Gui/StartupScreen.as:1813
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
 msgstr "클립보드에 복사"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1849
+#: Resources/Scripts/Gui/StartupScreen.as:1849
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
 msgstr "고급 설정"
 
+#: Resources/Scripts/Gui/StartupScreen.as:1858
 #: Resources/Scripts/Gui/StartupScreen.as:1858
 msgctxt "StartupScreen"
 msgid "Filter"
 msgstr "필터"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:40
+#: Resources/Scripts/Gui/UpdateCheckView.as:40
 msgctxt "UpdateCheck"
 msgid "Enable"
 msgstr "사용"
 
+#: Resources/Scripts/Gui/UpdateCheckView.as:47
 #: Resources/Scripts/Gui/UpdateCheckView.as:47
 msgctxt "UpdateCheck"
 msgid "Show details..."
 msgstr "자세히..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
+#: Resources/Scripts/Gui/UpdateCheckView.as:102
 msgctxt "UpdateCheck"
 msgid "Version {0} is available! (You currently have {1})"
 msgstr "{0} 버전이 나왔습니다! (현재 {1} 버전 사용 중)"
 
+#: Resources/Scripts/Gui/UpdateCheckView.as:105
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 msgctxt "UpdateCheck"
 msgid "You're using the latest version of OpenSpades. ({0})"
 msgstr "OpenSpades가 최신 버전입니다. ({0})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
+#: Resources/Scripts/Gui/UpdateCheckView.as:110
 msgctxt "UpdateCheck"
 msgid "Checking for updates..."
 msgstr "업데이트 확인 중..."
 
+#: Resources/Scripts/Gui/UpdateCheckView.as:113
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
 msgctxt "UpdateCheck"
 msgid "Failed to check for updates."
 msgstr "업데이트 확인에 실패했습니다."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:116
+#: Resources/Scripts/Gui/UpdateCheckView.as:116
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not enabled."
 msgstr "자동 업데이트 확인이 꺼져 있습니다."
 
+#: Resources/Scripts/Gui/UpdateCheckView.as:119
 #: Resources/Scripts/Gui/UpdateCheckView.as:119
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
 msgstr "자동 업데이트 확인이 불가능합니다."
 
 #: Sources/Client/Client_NetHandler.cpp:258
+#: Sources/Client/Client_NetHandler.cpp:271
 msgctxt "Client"
 msgid "Spectator"
-msgstr ""
+msgstr "관전자"
+
+#: Sources/Client/Client_Draw.cpp:99
+msgctxt "Client"
+msgid "Unbound"
+msgstr "지정 안 됨"
+
+#: Sources/Client/Client_Draw.cpp:655
+msgctxt "Client"
+msgid "[{0}] Cycle camera mode"
+msgstr "[{0}] 카메라 모드 변경"
+
+#: Sources/Client/Client_Draw.cpp:657
+msgctxt "Client"
+msgid "[{0}/{1}] Next/previous player"
+msgstr "[{0}/{1}] 다음/이전 플레이어"
+
+#: Sources/Client/Client_Draw.cpp:661
+msgctxt "Client"
+msgid "[{0}] Unfollow"
+msgstr "[{0}] 그만 따라가기"
+
+#: Sources/Client/Client_Draw.cpp:664
+msgctxt "Client"
+msgid "[{0}/{1}] Follow a player"
+msgstr "[{0}/{1}] 플레이어 따라가기"
+
+#: Sources/Client/Client_Draw.cpp:669
+msgctxt "Client"
+msgid "[{0}/{1}] Go up/down"
+msgstr "[{0}/{1}] 위/아래 이동"
 
