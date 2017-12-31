@@ -39,7 +39,7 @@
 #include <Core/Settings.h>
 #include <Core/Strings.h>
 
-SPADES_SETTING(cg_Minimap_Player_Color);
+SPADES_SETTING(cg_minimapPlayerColor);
 
 namespace spades {
 	namespace client {
@@ -272,7 +272,7 @@ namespace spades {
 			int row = 0, col = 0;
 			float colWidth = (float)width / (float)cols;
 			extern int palette[32][3];
-			std::string colormode = cg_Minimap_Player_Color;
+			std::string colormode = cg_minimapPlayerColor;
 			for (int i = 0; i < numPlayers; i++) {
 				ScoreboardEntry &ent = entries[i];
 
