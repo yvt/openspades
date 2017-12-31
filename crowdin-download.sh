@@ -19,8 +19,10 @@ crowdin download || exit 1
 rm -rf "Resources/Locales/temp"
 
 remap de_DE de
+remap el_GR el
 remap es_ES es
 remap fr_FR fr
+remap id_ID id
 remap it_IT it
 remap ja_JP ja
 remap ko_KR ko
@@ -30,3 +32,4 @@ remap pt_PT pt_pt
 remap pt_BR pt_br
 remap ru_RU ru
 remap uk_UA uk
+remap vi_VN vi
