@@ -1,6 +1,14 @@
 {
   "Versions": [
     {
+      "Version": [0, 1, 2, 4],
+      "VersionText": "0.1.2",
+      "Platforms": ["Windows", "Mac"],
+      "Links": {
+        "Info": ""
+      }
+    },
+    {
       "Version": [0, 1, 0, 4],
       "VersionText": "0.1.0",
       "Platforms": ["Windows", "Mac"],
