@@ -99,6 +99,7 @@ namespace spades {
 			};
 
 			FPSCounter fpsCounter;
+			//FPSCounter upsCounter;
 
 			std::unique_ptr<NetClient> net;
 			std::string playerName;
@@ -265,16 +266,16 @@ namespace spades {
 			/**
 			 * Retrieves the target player ID of the current camera mode (as returned by
 			 * `GetCameraMode`).
-		     *
-		     * Throws an exception if the current camera mode does not have a player in concern.
+			 *
+			 * Throws an exception if the current camera mode does not have a player in concern.
 			 */
 			int GetCameraTargetPlayerId();
 
 			/**
 			 * Retrieves the target player of the current camera mode (as returned by
 			 * `GetCameraMode`).
-		     *
-		     * Throws an exception if the current camera mode does not have a player in concern.
+			 *
+			 * Throws an exception if the current camera mode does not have a player in concern.
 			 */
 			Player &GetCameraTargetPlayer();
 
@@ -395,6 +396,7 @@ namespace spades {
 			virtual ~Client();
 
 		public:
+			FPSCounter upsCounter;
 			Client(IRenderer *, IAudioDevice *, const ServerAddress &host, FontManager *);
 
 			virtual void RunFrame(float dt);

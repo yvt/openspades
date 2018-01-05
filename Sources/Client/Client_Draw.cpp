@@ -924,6 +924,16 @@ namespace spades {
 					str += buf;
 				}
 			}
+			{
+				// Display world updates per second
+				auto ups = upsCounter.GetFps();
+				if (ups == 0.0)
+					str += ", --.-- ups";
+				else {
+					sprintf(buf, ", %.02f ups", ups);
+					str += buf;
+				}
+			}
 
 			if (net) {
 				auto ping = net->GetPing();
