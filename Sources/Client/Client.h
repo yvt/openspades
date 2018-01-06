@@ -99,6 +99,7 @@ namespace spades {
 			};
 
 			FPSCounter fpsCounter;
+			FPSCounter upsCounter;
 
 			std::unique_ptr<NetClient> net;
 			std::string playerName;
@@ -265,16 +266,16 @@ namespace spades {
 			/**
 			 * Retrieves the target player ID of the current camera mode (as returned by
 			 * `GetCameraMode`).
-		     *
-		     * Throws an exception if the current camera mode does not have a player in concern.
+			 *
+			 * Throws an exception if the current camera mode does not have a player in concern.
 			 */
 			int GetCameraTargetPlayerId();
 
 			/**
 			 * Retrieves the target player of the current camera mode (as returned by
 			 * `GetCameraMode`).
-		     *
-		     * Throws an exception if the current camera mode does not have a player in concern.
+			 *
+			 * Throws an exception if the current camera mode does not have a player in concern.
 			 */
 			Player &GetCameraTargetPlayer();
 
@@ -412,6 +413,8 @@ namespace spades {
 			void SetWorld(World *);
 			World *GetWorld() const { return world.get(); }
 			void AddLocalEntity(ILocalEntity *ent) { localEntities.emplace_back(ent); }
+
+			void MarkWorldUpdate();
 
 			IRenderer *GetRenderer() { return renderer; }
 			SceneDefinition GetLastSceneDef() { return lastSceneDef; }
