@@ -818,7 +818,7 @@ namespace spades {
 					if (protocolVersion == 4)
 						bytesPerEntry++;
 
-					client->upsCounter.MarkFrame();
+					client->MarkWorldUpdate();
 
 					int entries = static_cast<int>(reader.GetData().size() / bytesPerEntry);
 					for (int i = 0; i < entries; i++) {

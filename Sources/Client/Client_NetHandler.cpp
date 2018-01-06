@@ -336,5 +336,9 @@ namespace spades {
 				}
 			}
 		}
+
+		void Client::MarkWorldUpdate() {
+			upsCounter.MarkFrame();
+		}
 	}
 }

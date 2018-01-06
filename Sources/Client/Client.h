@@ -99,7 +99,7 @@ namespace spades {
 			};
 
 			FPSCounter fpsCounter;
-			//FPSCounter upsCounter;
+			FPSCounter upsCounter;
 
 			std::unique_ptr<NetClient> net;
 			std::string playerName;
@@ -396,7 +396,6 @@ namespace spades {
 			virtual ~Client();
 
 		public:
-			FPSCounter upsCounter;
 			Client(IRenderer *, IAudioDevice *, const ServerAddress &host, FontManager *);
 
 			virtual void RunFrame(float dt);
@@ -414,6 +413,8 @@ namespace spades {
 			void SetWorld(World *);
 			World *GetWorld() const { return world.get(); }
 			void AddLocalEntity(ILocalEntity *ent) { localEntities.emplace_back(ent); }
+
+			void MarkWorldUpdate();
 
 			IRenderer *GetRenderer() { return renderer; }
 			SceneDefinition GetLastSceneDef() { return lastSceneDef; }
