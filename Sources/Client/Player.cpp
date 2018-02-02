@@ -762,18 +762,37 @@ namespace spades {
 			Vector3 rec = weapon->GetRecoil();
 			float upLimit = Vector3::Dot(GetFront2D(), o);
 			upLimit -= 0.03f; // ???
-			o += GetUp() * std::min(rec.y, std::max(0.f, upLimit)) *
-				(input.crouch ? 0.5f : 1.0f);
-			// vanilla's horizontial recoil seems to driven by a triangular wave generator.
-			// the period was measured with SMG
-			float triWave = world->GetTime() * 0.9788f;
-			triWave -= std::floor(triWave);
-			if (triWave < 0.5f) {
-				triWave = triWave * 4.0f - 1.0f;
+
+			// vanilla's horizontial recoil is driven by a triangular wave generator.
+			int time = (int) (world->GetTime() * 1000);
+			float triWave;
+			if (time % 1024 < 512) {
+				triWave = (time % 512) - 255.5;
 			} else {
-				triWave = 3.0f - triWave * 4.0f;
+				triWave = 255.5 - (time % 512);
 			}
-			o += GetRight() * rec.x * triWave * (input.crouch ? 0.5f : 1.0f);
+
+			float horzModifier = 1;
+			float vertModifier = 1;
+
+			if ((input.moveLeft || input.moveRight || input.moveForward || input.moveBackward) && !weapInput.secondary) {
+				horzModifier *= 2;
+				vertModifier *= 2;
+			}
+
+			if (airborne) {
+				horzModifier *= 2;
+				vertModifier *= 2;
+			}
+			else if (input.crouch) {
+				horzModifier /= 2;
+				vertModifier /= 2;
+			}
+
+			horzModifier *= sqrt(1 - pow(o.z, 4));
+
+			o += GetRight() * rec.x * triWave * horzModifier;
+			o += GetUp() * std::min(rec.y, std::max(0.f, upLimit)) * vertModifier;
 			o = o.Normalize();
 			SetOrientation(o);
 
