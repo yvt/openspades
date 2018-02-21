@@ -130,6 +130,7 @@ namespace spades {
 					break;
 
 				case ClientCameraMode::Free:
+				case ClientCameraMode::ThirdPersonLocal:
 				case ClientCameraMode::ThirdPersonFollow: {
 					// Move the third-person or free-floating camera
 					x = -x;
@@ -148,8 +149,7 @@ namespace spades {
 					break;
 				}
 
-				case ClientCameraMode::FirstPersonLocal:
-				case ClientCameraMode::ThirdPersonLocal: {
+				case ClientCameraMode::FirstPersonLocal: {
 					SPAssert(world);
 					SPAssert(world->GetLocalPlayer());
 
