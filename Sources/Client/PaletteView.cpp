@@ -18,6 +18,8 @@
 
  */
 
+#include <Core/Settings.h>
+
 #include "PaletteView.h"
 #include "Client.h"
 #include "IImage.h"
@@ -25,6 +27,11 @@
 #include "NetClient.h"
 #include "Player.h"
 #include "World.h"
+
+DEFINE_SPADES_SETTING(cg_keyPaletteLeft, "Left");
+DEFINE_SPADES_SETTING(cg_keyPaletteRight, "Right");
+DEFINE_SPADES_SETTING(cg_keyPaletteUp, "Up");
+DEFINE_SPADES_SETTING(cg_keyPaletteDown, "Down");
 
 namespace spades {
 	namespace client {
@@ -104,7 +111,7 @@ namespace spades {
 		}
 
 		bool PaletteView::KeyInput(std::string keyName) {
-			if (keyName == "Left") {
+			if (EqualsIgnoringCase(keyName, cg_keyPaletteLeft)) {
 				int c = GetSelectedOrDefaultIndex();
 				if (c == 0)
 					c = (int)colors.size() - 1;
@@ -112,7 +119,7 @@ namespace spades {
 					c--;
 				SetSelectedIndex(c);
 				return true;
-			} else if (keyName == "Right") {
+			} else if (EqualsIgnoringCase(keyName, cg_keyPaletteRight)) {
 				int c = GetSelectedOrDefaultIndex();
 				if (c == (int)colors.size() - 1)
 					c = 0;
@@ -120,7 +127,7 @@ namespace spades {
 					c++;
 				SetSelectedIndex(c);
 				return true;
-			} else if (keyName == "Up") {
+			} else if (EqualsIgnoringCase(keyName, cg_keyPaletteUp)) {
 				int c = GetSelectedOrDefaultIndex();
 				if (c < 8)
 					c += (int)colors.size() - 8;
@@ -128,7 +135,7 @@ namespace spades {
 					c -= 8;
 				SetSelectedIndex(c);
 				return true;
-			} else if (keyName == "Down") {
+			} else if (EqualsIgnoringCase(keyName, cg_keyPaletteDown)) {
 				int c = GetSelectedOrDefaultIndex();
 				if (c >= (int)colors.size() - 8)
 					c -= (int)colors.size() - 8;
