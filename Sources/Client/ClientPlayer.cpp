@@ -617,7 +617,8 @@ namespace spades {
 			                                    eyeMatrix.GetOrigin() + Vector3(20.f, 20.f, 20.f)));
 			sandboxedRenderer->SetAllowDepthHack(true);
 
-			if (client->flashlightOn) {
+			// no flashlight if spectating other players while dead
+			if (client->flashlightOn && world->GetLocalPlayer()->IsAlive()) {
 				float brightness;
 				brightness = client->time - client->flashlightOnTime;
 				brightness = 1.f - expf(-brightness * 5.f);
