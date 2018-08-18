@@ -10,9 +10,9 @@ case "$SNAP_ARCH" in
 	;;
 esac
 
-if [ ! -f $SNAP_USER_DATA/.local/share/openspades/Resources ];
+if [ ! -d $SNAP_USER_DATA/.local/share/openspades/Resources ];
 then
-  mkdir -p $SNAP_USER_DATA/.local/share/openspades/Resources
+	mkdir -p $SNAP_USER_DATA/.local/share/openspades/Resources
 	cp $SNAP/share/games/openspades/Resources/* $SNAP_USER_DATA/.local/share/openspades/Resources
 	echo cl_checkForUpdates: 1 > $SNAP_USER_DATA/.local/share/openspades/Resources/SPConfig.cfg
 	echo s_eax: 1 >> $SNAP_USER_DATA/.local/share/openspades/Resources/SPConfig.cfg
