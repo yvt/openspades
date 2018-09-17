@@ -20,7 +20,6 @@
 
 #include <new>
 #include <cstdlib>
-#include <mutex>
 
 #include "Math.h"
 #include <Core/Debug.h>
