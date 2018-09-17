@@ -135,6 +135,9 @@ namespace spades {
 				client->grenadeVibration += impact / (dist + 5.f);
 				if (client->grenadeVibration > 1.f)
 					client->grenadeVibration = 1.f;
+                
+                LocalRNG rng;
+                auto getRandom = [&] { return rng.SampleFloat(); };
 
 				for (int x = 0; x < w; x++) {
 					Vector3 p1 = vmOrigin + vmAxis1 * (float)x;
@@ -162,15 +165,15 @@ namespace spades {
 							{
 								ParticleSpriteEntity *ent =
 								  new SmokeSpriteEntity(client, col, 70.f);
-								ent->SetTrajectory(p3, (MakeVector3(GetRandom() - GetRandom(),
-								                                    GetRandom() - GetRandom(),
-								                                    GetRandom() - GetRandom())) *
+								ent->SetTrajectory(p3, (MakeVector3(getRandom() - getRandom(),
+								                                    getRandom() - getRandom(),
+								                                    getRandom() - getRandom())) *
 								                         0.2f,
 								                   1.f, 0.f);
-								ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
+								ent->SetRotation(getRandom() * (float)M_PI * 2.f);
 								ent->SetRadius(1.0f, 0.5f);
 								ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-								ent->SetLifeTime(1.0f + GetRandom() * 0.5f, 0.f, 1.0f);
+								ent->SetLifeTime(1.0f + getRandom() * 0.5f, 0.f, 1.0f);
 								client->AddLocalEntity(ent);
 							}
 
@@ -178,13 +181,13 @@ namespace spades {
 							for (int i = 0; i < 6; i++) {
 								ParticleSpriteEntity *ent =
 								  new ParticleSpriteEntity(client, img, col);
-								ent->SetTrajectory(p3, MakeVector3(GetRandom() - GetRandom(),
-								                                   GetRandom() - GetRandom(),
-								                                   GetRandom() - GetRandom()) *
+								ent->SetTrajectory(p3, MakeVector3(getRandom() - getRandom(),
+								                                   getRandom() - getRandom(),
+								                                   getRandom() - getRandom()) *
 								                         13.f,
 								                   1.f, .6f);
-								ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-								ent->SetRadius(0.35f + GetRandom() * GetRandom() * 0.1f);
+								ent->SetRotation(getRandom() * (float)M_PI * 2.f);
+								ent->SetRadius(0.35f + getRandom() * getRandom() * 0.1f);
 								ent->SetLifeTime(2.f, 0.f, 1.f);
 								if (usePrecisePhysics)
 									ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);

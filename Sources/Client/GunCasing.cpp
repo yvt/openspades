@@ -64,9 +64,9 @@ namespace spades {
 		}
 		static Vector3 RandomAxis() {
 			Vector3 v;
-			v.x = GetRandom() - GetRandom();
-			v.y = GetRandom() - GetRandom();
-			v.z = GetRandom() - GetRandom();
+			v.x = SampleRandomFloat() - SampleRandomFloat();
+			v.y = SampleRandomFloat() - SampleRandomFloat();
+			v.z = SampleRandomFloat() - SampleRandomFloat();
 			return v.Normalize();
 		}
 		bool GunCasing::Update(float dt) {
@@ -100,7 +100,7 @@ namespace spades {
 							IAudioDevice *dev = client->GetAudioDevice();
 							AudioParam param;
 							param.referenceDistance = .6f;
-							param.pitch = .9f + GetRandom() * .2f;
+							param.pitch = .9f + SampleRandomFloat() * .2f;
 
 							dev->Play(waterSound, lastMat.GetOrigin(), param);
 						}
@@ -108,7 +108,7 @@ namespace spades {
 					}
 
 					if (dist < 40.f * 40.f) {
-						int splats = mt_engine_client() % 3;
+						int splats = SampleRandomInt(0, 2);
 
 						Handle<IImage> img = client->GetRenderer()->RegisterImage("Gfx/White.tga");
 
@@ -117,13 +117,15 @@ namespace spades {
 						pt.z = 62.99f;
 						for (int i = 0; i < splats; i++) {
 							ParticleSpriteEntity *ent = new ParticleSpriteEntity(client, img, col);
-							ent->SetTrajectory(pt, MakeVector3(GetRandom() - GetRandom(),
-							                                   GetRandom() - GetRandom(),
-							                                   -GetRandom()) *
-							                         2.f,
-							                   1.f, .4f);
-							ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-							ent->SetRadius(0.1f + GetRandom() * GetRandom() * 0.1f);
+							ent->SetTrajectory(
+							  pt,
+							  MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+							              SampleRandomFloat() - SampleRandomFloat(),
+							              -SampleRandomFloat()) *
+							    2.f,
+							  1.f, .4f);
+							ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+							ent->SetRadius(0.1f + SampleRandomFloat() * SampleRandomFloat() * 0.1f);
 							ent->SetLifeTime(2.f, 0.f, 1.f);
 							client->AddLocalEntity(ent);
 						}
@@ -194,9 +196,9 @@ namespace spades {
 						rotAxis = RandomAxis();
 
 						Vector3 r;
-						r.x = GetRandom() - GetRandom();
-						r.y = GetRandom() - GetRandom();
-						r.z = GetRandom() - GetRandom();
+						r.x = SampleRandomFloat() - SampleRandomFloat();
+						r.y = SampleRandomFloat() - SampleRandomFloat();
+						r.z = SampleRandomFloat() - SampleRandomFloat();
 
 						vel += r * 0.1f;
 

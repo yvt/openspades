@@ -20,6 +20,7 @@
 
 #include <new>
 #include <cstdlib>
+#include <mutex>
 
 #include "Math.h"
 #include <Core/Debug.h>
@@ -37,11 +38,37 @@ namespace spades {
 	 }
 	 */
 
-	std::random_device r_device;
-	std::mt19937_64
-	  mt_engine(r_device()); // Seed Mersenne twister with non-deterministic 32-bit seed
+	namespace {
+		std::random_device r_device;
+	} // namespace
 
-	std::uniform_real_distribution<float> real_dist(0, 1);
+	ThreadSafeRNG globalThreadSafeRNG;
+
+	// Seed Mersenne twister with non-deterministic seed
+	ThreadSafeRNG::ThreadSafeRNG() : inner{r_device()} {}
+
+	auto ThreadSafeRNG::operator()() -> result_type {
+		std::lock_guard<std::mutex> lock{mutex};
+		return inner();
+	}
+
+	LocalRNG::LocalRNG() {
+		do {
+			s[0] = SampleRandom();
+		} while (s[0] == 0);
+		do {
+			s[1] = SampleRandom();
+		} while (s[1] == 0);
+	}
+
+	auto LocalRNG::operator()() -> result_type {
+		uint64_t x = s[0];
+		uint64_t y = s[1];
+		s[0] = y;
+		x ^= x << 23;                         // a
+		s[1] = x ^ y ^ (x >> 17) ^ (y >> 26); // b, c
+		return s[1] + y;
+	}
 
 	void Matrix4Multiply(const float a[16], const float b[16], float out[16]) {
 		out[0] = b[0] * a[0] + b[1] * a[4] + b[2] * a[8] + b[3] * a[12];
@@ -634,7 +661,6 @@ namespace spades {
 		return (uint32_t)str[start];
 	}
 
-	float GetRandom() { return real_dist(mt_engine); }
 	float SmoothStep(float v) { return v * v * (3.f - 2.f * v); }
 
 	float Mix(float a, float b, float frac) { return a + (b - a) * frac; }

@@ -30,9 +30,88 @@
 
 namespace spades {
 
-	// Make mt_engine and a real dist [0,1] accesible everywhere in the spades namespace
-	extern std::mt19937_64 mt_engine;
-	extern std::uniform_real_distribution<float> real_dist;
+#pragma mark - Random number generation
+	/**
+	 * A thread-safe random number generator satistying
+	 * `UniformRandomBitGenerator`.
+	 */
+	class ThreadSafeRNG {
+	public:
+		using inner_type = std::mt19937_64;
+		using result_type = inner_type::result_type;
+
+		ThreadSafeRNG();
+
+		result_type operator()();
+
+		static constexpr result_type min() { return inner_type::min(); }
+		static constexpr result_type max() { return inner_type::max(); }
+
+	private:
+		inner_type inner;
+		std::mutex mutex;
+	};
+
+	extern ThreadSafeRNG globalThreadSafeRNG;
+
+	/** Generates a random `uint_fast64_t`. This function is thread-safe. */
+	inline std::uint_fast64_t SampleRandom() { return globalThreadSafeRNG(); }
+
+	/** Generates a random `float`. This function is thread-safe. */
+	inline float SampleRandomFloat() {
+		return std::uniform_real_distribution<float>{}(globalThreadSafeRNG);
+	}
+
+	/**
+	 * Generates an integer in a specified inclusive range.
+	 * This function is thread-safe.
+	 */
+	template <class T = int> inline T SampleRandomInt(T a, T b) {
+		return std::uniform_int_distribution<T>{a, b}(globalThreadSafeRNG);
+	}
+
+	/** Generates a random `bool`. This function is thread-safe. */
+	inline bool SampleRandomBool() { return globalThreadSafeRNG() & 0x1; }
+
+	/** Get a mutable reference to a random element from a container. */
+	template <class T> inline typename T::reference SampleRandomElement(T &container) {
+		auto begin = std::begin(container);
+		auto end = std::end(container);
+		auto numElements = std::distance(begin, end);
+		begin += SampleRandomInt<typeof(numElements)>(0, numElements - 1);
+		return *begin;
+	}
+
+	/** Get a constant reference to a random element from a container. */
+	template <class T> inline typename T::const_reference SampleRandomElement(const T &container) {
+		auto begin = std::begin(container);
+		auto end = std::end(container);
+		auto numElements = std::distance(begin, end);
+		begin += SampleRandomInt(0, numElements - 1);
+		return *begin;
+	}
+
+	/** Thread-unsafe random number generator. */
+	class LocalRNG {
+	public:
+		using result_type = std::uint64_t;
+
+		LocalRNG();
+
+		result_type operator()();
+
+		float SampleFloat() { return std::uniform_real_distribution<float>{}(*this); }
+
+		template <class T = int> inline T SampleInt(T a, T b) {
+			return std::uniform_int_distribution<T>{a, b}(*this);
+		}
+
+		static constexpr result_type min() { return 0; }
+		static constexpr result_type max() { return std::numeric_limits<result_type>::max(); }
+
+	private:
+		std::uint64_t s[2];
+	};
 
 #pragma mark - Integer Vector
 
@@ -936,7 +1015,6 @@ namespace spades {
 
 	std::string TrimSpaces(const std::string &);
 
-	float GetRandom();
 	float SmoothStep(float);
 }
 

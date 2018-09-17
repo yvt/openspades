@@ -37,12 +37,14 @@ namespace spades {
 		GameMap::GameMap() {
 			SPADES_MARK_FUNCTION();
 
+			LocalRNG rng;
+
 			for (int x = 0; x < DefaultWidth; x++)
 				for (int y = 0; y < DefaultHeight; y++) {
 					solidMap[x][y] = 1; // ground only
 					for (int z = 0; z < DefaultDepth; z++) {
 						uint32_t col = 0x00284067;
-						col ^= 0x070707 & static_cast<uint32_t>(mt_engine());
+						col ^= 0x070707 & static_cast<uint32_t>(rng());
 						colorMap[x][y][z] = col + (100UL * 0x1000000UL);
 					}
 				}

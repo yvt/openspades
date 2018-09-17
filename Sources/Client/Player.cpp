@@ -564,14 +564,16 @@ namespace spades {
 			// pyspades takes destroying more than one block as a
 			// speed hack (shotgun does this)
 			bool blockDestroyed = false;
+            
+            LocalRNG rng;
 
 			Vector3 dir2 = GetFront();
 			for (int i = 0; i < pellets; i++) {
 
 				// AoS 0.75's way (dir2 shouldn't be normalized!)
-				dir2.x += (GetRandom() - GetRandom()) * spread;
-				dir2.y += (GetRandom() - GetRandom()) * spread;
-				dir2.z += (GetRandom() - GetRandom()) * spread;
+				dir2.x += (rng.SampleFloat() - rng.SampleFloat()) * spread;
+				dir2.y += (rng.SampleFloat() - rng.SampleFloat()) * spread;
+				dir2.z += (rng.SampleFloat() - rng.SampleFloat()) * spread;
 				Vector3 dir = dir2.Normalize();
 
 				bulletVectors.push_back(dir);
