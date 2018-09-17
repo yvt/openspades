@@ -432,7 +432,6 @@ namespace spades {
 						sdlFlags = SDL_WINDOW_OPENGL;
 						SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 						SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
-						SDL_GL_SetSwapInterval(r_vsync);
 						if (!r_allowSoftwareRendering)
 							SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
@@ -492,6 +491,12 @@ namespace spades {
 				{
 					Handle<client::IRenderer> renderer(CreateRenderer(window), false);
 					Handle<client::IAudioDevice> audio(CreateAudioDevice(), false);
+					
+					if (rtype == RendererType::GL) {
+						if (SDL_GL_SetSwapInterval(r_vsync) != 0) {
+							SPRaise("SDL_GL_SetSwapInterval failed: %s", SDL_GetError());
+						}
+					}
 
 					RunClientLoop(renderer, audio);
 				}
