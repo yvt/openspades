@@ -27,11 +27,9 @@ namespace spades {
 	namespace client {
 
 		CoherentNoiseSampler1D::CoherentNoiseSampler1D() {
-            LocalRNG rng;
-            
 			values.resize(1024);
 			for (float &value : values) {
-				value = rng.SampleFloat() - rng.SampleFloat();
+				value = SampleRandomFloat() - SampleRandomFloat();
 			}
 		}
 
@@ -56,11 +54,9 @@ namespace spades {
 		}
 
 		GradientCoherentNoiseSampler1D::GradientCoherentNoiseSampler1D() {
-            LocalRNG rng;
-            
 			derivatives.resize(1024);
 			for (float &derivative : derivatives) {
-				derivative = (rng.SampleFloat() - rng.SampleFloat()) * 4.f;
+				derivative = (SampleRandomFloat() - SampleRandomFloat()) * 4.f;
 			}
 		}
 

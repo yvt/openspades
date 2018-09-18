@@ -98,12 +98,7 @@ namespace spades {
 
 			FPSCounter fpsCounter;
 			FPSCounter upsCounter;
-
-			/**
-			 * A random number generator. Only can be accessed by a main thread.
-			 */
-			LocalRNG rng;
-
+			
 			std::unique_ptr<NetClient> net;
 			std::string playerName;
 			std::unique_ptr<IStream> logStream;

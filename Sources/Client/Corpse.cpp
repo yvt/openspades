@@ -54,44 +54,42 @@ namespace spades {
 
 			Matrix4 torso;
 
-			LocalRNG rng;
-
 			if (crouch) {
 				lower = lower * Matrix4::Translate(0, 0, -0.4f);
 				torso = lower * Matrix4::Translate(0, 0, -0.3f);
 
-				SetNode(rng, Torso1, torso * MakeVector3(0.4f, -.15f, 0.1f));
-				SetNode(rng, Torso2, torso * MakeVector3(-0.4f, -.15f, 0.1f));
-				SetNode(rng, Torso3, torso * MakeVector3(-0.4f, .8f, 0.7f));
-				SetNode(rng, Torso4, torso * MakeVector3(0.4f, .8f, 0.7f));
+				SetNode(Torso1, torso * MakeVector3(0.4f, -.15f, 0.1f));
+				SetNode(Torso2, torso * MakeVector3(-0.4f, -.15f, 0.1f));
+				SetNode(Torso3, torso * MakeVector3(-0.4f, .8f, 0.7f));
+				SetNode(Torso4, torso * MakeVector3(0.4f, .8f, 0.7f));
 
-				SetNode(rng, Leg1, lower * MakeVector3(-0.4f, .1f, 1.f));
-				SetNode(rng, Leg2, lower * MakeVector3(0.4f, .1f, 1.f));
+				SetNode(Leg1, lower * MakeVector3(-0.4f, .1f, 1.f));
+				SetNode(Leg2, lower * MakeVector3(0.4f, .1f, 1.f));
 
-				SetNode(rng, Arm1, torso * MakeVector3(0.2f, -.4f, .2f));
-				SetNode(rng, Arm2, torso * MakeVector3(-0.2f, -.4f, .2f));
+				SetNode(Arm1, torso * MakeVector3(0.2f, -.4f, .2f));
+				SetNode(Arm2, torso * MakeVector3(-0.2f, -.4f, .2f));
 
 			} else {
 				torso = lower * Matrix4::Translate(0, 0, -1.1f);
 
-				SetNode(rng, Torso1, torso * MakeVector3(0.4f, 0.f, 0.1f));
-				SetNode(rng, Torso2, torso * MakeVector3(-0.4f, 0.f, 0.1f));
-				SetNode(rng, Torso3, torso * MakeVector3(-0.4f, .0f, 1.f));
-				SetNode(rng, Torso4, torso * MakeVector3(0.4f, .0f, 1.f));
+				SetNode(Torso1, torso * MakeVector3(0.4f, 0.f, 0.1f));
+				SetNode(Torso2, torso * MakeVector3(-0.4f, 0.f, 0.1f));
+				SetNode(Torso3, torso * MakeVector3(-0.4f, .0f, 1.f));
+				SetNode(Torso4, torso * MakeVector3(0.4f, .0f, 1.f));
 
-				SetNode(rng, Leg1, lower * MakeVector3(-0.4f, .0f, 1.f));
-				SetNode(rng, Leg2, lower * MakeVector3(0.4f, .0f, 1.f));
+				SetNode(Leg1, lower * MakeVector3(-0.4f, .0f, 1.f));
+				SetNode(Leg2, lower * MakeVector3(0.4f, .0f, 1.f));
 
-				SetNode(rng, Arm1, torso * MakeVector3(0.2f, -.4f, .2f));
-				SetNode(rng, Arm2, torso * MakeVector3(-0.2f, -.4f, .2f));
+				SetNode(Arm1, torso * MakeVector3(0.2f, -.4f, .2f));
+				SetNode(Arm2, torso * MakeVector3(-0.2f, -.4f, .2f));
 			}
 
-			SetNode(rng, Head,
+			SetNode(Head,
 			        (nodes[Torso1].pos + nodes[Torso2].pos) * .5f + MakeVector3(0, 0, -0.6f));
 		}
 
-		void Corpse::SetNode(LocalRNG &rng, NodeType n, spades::Vector3 v) {
-			auto velNoise = [&] { return (rng.SampleFloat() - rng.SampleFloat()) * 2.0f; };
+		void Corpse::SetNode(NodeType n, spades::Vector3 v) {
+			auto velNoise = [&] { return (SampleRandomFloat() - SampleRandomFloat()) * 2.0f; };
 
 			SPAssert(n >= 0);
 			SPAssert(n < NodeCount);
@@ -101,8 +99,8 @@ namespace spades {
 			nodes[n].lastPos = v;
 			nodes[n].lastForce = MakeVector3(0, 0, 0);
 		}
-		void Corpse::SetNode(LocalRNG &rng, NodeType n, spades::Vector4 v) {
-			SetNode(rng, n, v.GetXYZ());
+		void Corpse::SetNode(NodeType n, spades::Vector4 v) {
+			SetNode(n, v.GetXYZ());
 		}
 
 		Corpse::~Corpse() {}

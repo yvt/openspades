@@ -47,11 +47,9 @@ namespace spades {
 		GLAmbientShadowRenderer::GLAmbientShadowRenderer(GLRenderer *r, client::GameMap *m)
 		    : renderer(r), device(r->GetGLDevice()), map(m) {
 			SPADES_MARK_FUNCTION();
-                
-            LocalRNG rng;
 
 			for (int i = 0; i < NumRays; i++) {
-				Vector3 dir = MakeVector3(rng.SampleFloat(), rng.SampleFloat(), rng.SampleFloat());
+				Vector3 dir = MakeVector3(SampleRandomFloat(), SampleRandomFloat(), SampleRandomFloat());
 				dir = dir.Normalize();
 				dir += 0.01f;
 				rays[i] = dir;
@@ -339,11 +337,10 @@ namespace spades {
 			}
 
 			// limit update count per frame
-            LocalRNG rng;
 			for (int i = 0; i < 8; i++) {
 				if (numDirtyChunks <= 0)
 					break;
-                int idx = rng.SampleInt(0, numDirtyChunks - 1);
+                int idx = SampleRandomInt(0, numDirtyChunks - 1);
 				Chunk &c = chunks[dirtyChunkIds[idx]];
 
 				// remove from list (fast)

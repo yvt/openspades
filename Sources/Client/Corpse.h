@@ -69,8 +69,8 @@ namespace spades {
 			Node nodes[NodeCount];
 			Edge edges[8];
 
-			void SetNode(LocalRNG&, NodeType n, Vector3);
-			void SetNode(LocalRNG&, NodeType n, Vector4);
+			void SetNode(NodeType n, Vector3);
+			void SetNode(NodeType n, Vector4);
 
 			void Spring(NodeType n1, NodeType n2, float distance, float dt);
 			void Spring(NodeType n1a, NodeType n1b, NodeType n2, float distance, float dt);

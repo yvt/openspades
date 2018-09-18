@@ -139,10 +139,9 @@ namespace spades {
 		void GLLensDustFilter::UpdateNoise() {
 			SPADES_MARK_FUNCTION();
 
-			LocalRNG rng;
 			noise.resize(128 * 128);
 			for (size_t i = 0; i < 128 * 128; i++) {
-				noise[i] = static_cast<std::uint32_t>(rng());
+				noise[i] = static_cast<std::uint32_t>(SampleRandom());
 			}
 
 			IGLDevice *dev = renderer->GetGLDevice();

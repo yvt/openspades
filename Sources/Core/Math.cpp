@@ -23,6 +23,7 @@
 
 #include "Math.h"
 #include <Core/Debug.h>
+#include <Core/ThreadLocalStorage.h>
 
 namespace spades {
 	/*
@@ -39,35 +40,82 @@ namespace spades {
 
 	namespace {
 		std::random_device r_device;
+		std::mt19937_64 global_rng{r_device()};
+		std::mutex global_rng_mutex;
 	} // namespace
 
-	ThreadSafeRNG globalThreadSafeRNG;
-
-	// Seed Mersenne twister with non-deterministic seed
-	ThreadSafeRNG::ThreadSafeRNG() : inner{r_device()} {}
-
-	auto ThreadSafeRNG::operator()() -> result_type {
-		std::lock_guard<std::mutex> lock{mutex};
-		return inner();
+	/** Thread-local random number generator. */
+	class LocalRNG {
+	public:
+		using result_type = std::uint64_t;
+		
+		LocalRNG() {
+			auto sampleRandom = [] {
+				std::lock_guard<std::mutex> lock{global_rng_mutex};
+				return global_rng();
+			};
+			do {
+				s[0] = sampleRandom();
+			} while (s[0] == 0);
+			do {
+				s[1] = sampleRandom();
+			} while (s[1] == 0);
+		}
+		
+		result_type operator()() {
+			uint64_t x = s[0];
+			uint64_t y = s[1];
+			s[0] = y;
+			x ^= x << 23;                         // a
+			s[1] = x ^ y ^ (x >> 17) ^ (y >> 26); // b, c
+			return s[1] + y;
+		}
+		
+		float SampleFloat() { return std::uniform_real_distribution<float>{}(*this); }
+		
+		template <class T = int> inline T SampleInt(T a, T b) {
+			return std::uniform_int_distribution<T>{a, b}(*this);
+		}
+		
+		static constexpr result_type min() { return 0; }
+		static constexpr result_type max() { return std::numeric_limits<result_type>::max(); }
+		
+	private:
+		std::uint64_t s[2];
+	};
+	
+	namespace {
+		AutoDeletedThreadLocalStorage<LocalRNG> thread_local_rng;
+		
+		LocalRNG &GetThreadLocalRNG() {
+			LocalRNG *rng = thread_local_rng.GetPointer();
+			if (!rng) {
+				thread_local_rng = rng = new LocalRNG();
+			}
+			return *rng;
+		}
+	} // namespace
+	
+	std::uint_fast64_t SampleRandom() { return GetThreadLocalRNG()(); }
+	
+	float SampleRandomFloat() {
+		return std::uniform_real_distribution<float>{}(GetThreadLocalRNG());
 	}
-
-	LocalRNG::LocalRNG() {
-		do {
-			s[0] = SampleRandom();
-		} while (s[0] == 0);
-		do {
-			s[1] = SampleRandom();
-		} while (s[1] == 0);
+	
+	template <class T> T SampleRandomInt(T a, T b) {
+		return std::uniform_int_distribution<T>{a, b}(GetThreadLocalRNG());
 	}
-
-	auto LocalRNG::operator()() -> result_type {
-		uint64_t x = s[0];
-		uint64_t y = s[1];
-		s[0] = y;
-		x ^= x << 23;                         // a
-		s[1] = x ^ y ^ (x >> 17) ^ (y >> 26); // b, c
-		return s[1] + y;
-	}
+	
+	template char SampleRandomInt(char a, char b);
+	template unsigned char SampleRandomInt(unsigned char a, unsigned char b);
+	template short SampleRandomInt(short a, short b);
+	template unsigned short SampleRandomInt(unsigned short a, unsigned short b);
+	template int SampleRandomInt(int a, int b);
+	template unsigned int SampleRandomInt(unsigned int a, unsigned int b);
+	template long SampleRandomInt(long a, long b);
+	template unsigned long SampleRandomInt(unsigned long a, unsigned long b);
+	template long long SampleRandomInt(long long a, long long b);
+	template unsigned long long SampleRandomInt(unsigned long long a, unsigned long long b);
 
 	void Matrix4Multiply(const float a[16], const float b[16], float out[16]) {
 		out[0] = b[0] * a[0] + b[1] * a[4] + b[2] * a[8] + b[3] * a[12];

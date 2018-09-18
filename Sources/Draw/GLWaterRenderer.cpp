@@ -187,8 +187,7 @@ namespace spades {
 
 		public:
 			FFTWaveTank() : IWaveTank(Size) {
-				LocalRNG rng;
-				auto getRandom = [&] { return rng.SampleFloat(); };
+				auto *getRandom = SampleRandomFloat;
 
 				fft = kiss_fft_alloc(Size, 1, NULL, NULL);
 
@@ -210,7 +209,7 @@ namespace spades {
 							mag *= expf(-scal * 3.f);
 
 							cell.magnitude = mag;
-							cell.phase = static_cast<uint32_t>(rng());
+							cell.phase = static_cast<uint32_t>(SampleRandom());
 							cell.phasePerSecond = dist * 1.e+9f * 128 / Size;
 						}
 
@@ -423,13 +422,13 @@ namespace spades {
 				int count = (int)floorf(dt * 600.f);
 				if (count > 400)
 					count = 400;
-				LocalRNG rng;
+				
 				for (int i = 0; i < count; i++) {
-					int ox = rng.SampleInt(0, size - 3);
-					int oy = rng.SampleInt(0, size - 3);
+					int ox = SampleRandomInt(0, size - 3);
+					int oy = SampleRandomInt(0, size - 3);
 					static const float gauss[] = {0.225610111284052f, 0.548779777431897f,
 					                              0.225610111284052f};
-					float strength = (rng.SampleFloat() - rng.SampleFloat()) * 0.15f * 100.f;
+					float strength = (SampleRandomFloat() - SampleRandomFloat()) * 0.15f * 100.f;
 					for (int x = 0; x < 3; x++)
 						for (int y = 0; y < 3; y++) {
 							velocity[(x + ox) + (y + oy) * size] += strength * gauss[x] * gauss[y];

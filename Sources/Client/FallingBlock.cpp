@@ -135,9 +135,8 @@ namespace spades {
 				client->grenadeVibration += impact / (dist + 5.f);
 				if (client->grenadeVibration > 1.f)
 					client->grenadeVibration = 1.f;
-                
-                LocalRNG rng;
-                auto getRandom = [&] { return rng.SampleFloat(); };
+				
+                auto *getRandom = SampleRandomFloat;
 
 				for (int x = 0; x < w; x++) {
 					Vector3 p1 = vmOrigin + vmAxis1 * (float)x;
