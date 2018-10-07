@@ -18,7 +18,7 @@
 
  */
 
-
+varying vec4 color;
 
 uniform mat4 projectionViewMatrix;
 uniform vec3 chunkPosition;
@@ -31,5 +31,7 @@ void main() {
 	vec4 vertexPos = vec4(chunkPosition, 1.);
 	vertexPos.xyz += positionAttribute.xyz;
 	gl_Position = projectionViewMatrix * vertexPos;
+
+    color = vec4(0.0);
 }
 
