@@ -45,11 +45,6 @@ namespace stmp {
 		optional() : has_some(false) {}
 		optional(const T &v) : has_some(false) { reset(v); }
 		optional(T &&v) : has_some(false) { reset(std::forward<T>(v)); }
-		optional(optional &o) : has_some(o.has_some) {
-			if (has_some) {
-				Allocator().construct(get_pointer(), o.get());
-			}
-		}
 		optional(const optional &o) : has_some(o.has_some) {
 			if (has_some) {
 				Allocator().construct(get_pointer(), o.get());
