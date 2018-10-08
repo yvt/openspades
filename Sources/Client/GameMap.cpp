@@ -42,7 +42,7 @@ namespace spades {
 					solidMap[x][y] = 1; // ground only
 					for (int z = 0; z < DefaultDepth; z++) {
 						uint32_t col = 0x00284067;
-						col ^= 0x070707 & static_cast<uint32_t>(mt_engine());
+						col ^= 0x070707 & static_cast<uint32_t>(SampleRandom());
 						colorMap[x][y][z] = col + (100UL * 0x1000000UL);
 					}
 				}

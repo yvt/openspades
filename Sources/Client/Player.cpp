@@ -569,9 +569,9 @@ namespace spades {
 			for (int i = 0; i < pellets; i++) {
 
 				// AoS 0.75's way (dir2 shouldn't be normalized!)
-				dir2.x += (GetRandom() - GetRandom()) * spread;
-				dir2.y += (GetRandom() - GetRandom()) * spread;
-				dir2.z += (GetRandom() - GetRandom()) * spread;
+				dir2.x += (SampleRandomFloat() - SampleRandomFloat()) * spread;
+				dir2.y += (SampleRandomFloat() - SampleRandomFloat()) * spread;
+				dir2.z += (SampleRandomFloat() - SampleRandomFloat()) * spread;
 				Vector3 dir = dir2.Normalize();
 
 				bulletVectors.push_back(dir);

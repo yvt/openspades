@@ -67,8 +67,6 @@ namespace spades {
 
 		class ClientUI;
 
-		extern std::mt19937_64 mt_engine_client; // randomness generator
-
 		class Client : public IWorldListener, public gui::View {
 			friend class ScoreboardView;
 			friend class LimboView;
@@ -100,7 +98,7 @@ namespace spades {
 
 			FPSCounter fpsCounter;
 			FPSCounter upsCounter;
-
+			
 			std::unique_ptr<NetClient> net;
 			std::string playerName;
 			std::unique_ptr<IStream> logStream;

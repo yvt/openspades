@@ -49,7 +49,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			for (int i = 0; i < NumRays; i++) {
-				Vector3 dir = MakeVector3(GetRandom(), GetRandom(), GetRandom());
+				Vector3 dir = MakeVector3(SampleRandomFloat(), SampleRandomFloat(), SampleRandomFloat());
 				dir = dir.Normalize();
 				dir += 0.01f;
 				rays[i] = dir;
@@ -340,7 +340,7 @@ namespace spades {
 			for (int i = 0; i < 8; i++) {
 				if (numDirtyChunks <= 0)
 					break;
-				int idx = mt_engine() % numDirtyChunks;
+                int idx = SampleRandomInt(0, numDirtyChunks - 1);
 				Chunk &c = chunks[dirtyChunkIds[idx]];
 
 				// remove from list (fast)

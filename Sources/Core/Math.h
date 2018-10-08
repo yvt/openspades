@@ -27,12 +27,48 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <mutex>
 
 namespace spades {
 
-	// Make mt_engine and a real dist [0,1] accesible everywhere in the spades namespace
-	extern std::mt19937_64 mt_engine;
-	extern std::uniform_real_distribution<float> real_dist;
+#pragma mark - Random number generation
+	
+	/** Generates a random `uint_fast64_t`. This function is thread-safe. */
+	std::uint_fast64_t SampleRandom();
+
+	/** Generates a random `float`. This function is thread-safe. */
+	float SampleRandomFloat();
+
+	/**
+	 * Generates an integer in a specified inclusive range.
+	 * This function is thread-safe.
+	 *
+	 * `T` must be one of `int`, `unsigned int`, `long`, `unsigned long`,
+	 * `short`, `unsigned short`, `long long`, and `unsigned long long`.
+	 */
+	template <class T = int> T SampleRandomInt(T a, T b);
+
+	/** Generates a random `bool`. This function is thread-safe. */
+	inline bool SampleRandomBool() { return SampleRandom() & 0x1; }
+
+	/** Get a mutable reference to a random element from a container. */
+	template <class T> inline typename T::reference SampleRandomElement(T &container) {
+		auto begin = std::begin(container);
+		auto end = std::end(container);
+		auto numElements = std::distance(begin, end);
+		begin += SampleRandomInt<decltype(numElements)>(0, numElements - 1);
+		return *begin;
+	}
+
+	/** Get a constant reference to a random element from a container. */
+	template <class T> inline typename T::const_reference SampleRandomElement(const T &container) {
+		auto begin = std::begin(container);
+		auto end = std::end(container);
+		auto numElements = std::distance(begin, end);
+		begin += SampleRandomInt(0, numElements - 1);
+		return *begin;
+	}
+
 
 #pragma mark - Integer Vector
 
@@ -936,7 +972,6 @@ namespace spades {
 
 	std::string TrimSpaces(const std::string &);
 
-	float GetRandom();
 	float SmoothStep(float);
 }
 

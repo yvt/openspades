@@ -29,7 +29,7 @@ namespace spades {
 		CoherentNoiseSampler1D::CoherentNoiseSampler1D() {
 			values.resize(1024);
 			for (float &value : values) {
-				value = GetRandom() - GetRandom();
+				value = SampleRandomFloat() - SampleRandomFloat();
 			}
 		}
 
@@ -56,7 +56,7 @@ namespace spades {
 		GradientCoherentNoiseSampler1D::GradientCoherentNoiseSampler1D() {
 			derivatives.resize(1024);
 			for (float &derivative : derivatives) {
-				derivative = (GetRandom() - GetRandom()) * 4.f;
+				derivative = (SampleRandomFloat() - SampleRandomFloat()) * 4.f;
 			}
 		}
 

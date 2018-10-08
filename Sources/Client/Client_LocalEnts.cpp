@@ -151,18 +151,19 @@ namespace spades {
 
 			if ((int)cg_particles < 1)
 				return;
-
+            
 			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {0.5f, 0.02f, 0.04f, 1.f};
 			for (int i = 0; i < 10; i++) {
 				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(v,
-				                   MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                               GetRandom() - GetRandom()) *
+				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+                                               SampleRandomFloat() - SampleRandomFloat(),
+				                               SampleRandomFloat() - SampleRandomFloat()) *
 				                     10.f,
 				                   1.f, 0.7f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(0.1f + GetRandom() * GetRandom() * 0.2f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(0.1f + SampleRandomFloat() * SampleRandomFloat() * 0.2f);
 				ent->SetLifeTime(3.f, 0.f, 1.f);
 				localEntities.emplace_back(ent);
 			}
@@ -175,14 +176,15 @@ namespace spades {
 				ParticleSpriteEntity *ent =
 				  new SmokeSpriteEntity(this, color, 100.f, SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(v,
-				                   MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                               GetRandom() - GetRandom()) *
+				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+                                               SampleRandomFloat() - SampleRandomFloat(),
+				                               SampleRandomFloat() - SampleRandomFloat()) *
 				                     .7f,
 				                   .8f, 0.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(.5f + GetRandom() * GetRandom() * 0.2f, 2.f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(.5f + SampleRandomFloat() * SampleRandomFloat() * 0.2f, 2.f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(.20f + GetRandom() * .2f, 0.06f, .20f);
+				ent->SetLifeTime(.20f + SampleRandomFloat() * .2f, 0.06f, .20f);
 				localEntities.emplace_back(ent);
 			}
 
@@ -191,14 +193,15 @@ namespace spades {
 				ParticleSpriteEntity *ent =
 				  new SmokeSpriteEntity(this, color, 40.f, SmokeSpriteEntity::Type::Steady);
 				ent->SetTrajectory(v,
-				                   MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                               GetRandom() - GetRandom()) *
+				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+                                               SampleRandomFloat() - SampleRandomFloat(),
+				                               SampleRandomFloat() - SampleRandomFloat()) *
 				                     .7f,
 				                   .8f, 0.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(.7f + GetRandom() * GetRandom() * 0.2f, 2.f, 0.1f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(.7f + SampleRandomFloat() * SampleRandomFloat() * 0.2f, 2.f, 0.1f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(.80f + GetRandom() * 0.4f, 0.06f, 1.0f);
+				ent->SetLifeTime(.80f + SampleRandomFloat() * 0.4f, 0.06f, 1.0f);
 				localEntities.emplace_back(ent);
 			}
 		}
@@ -219,12 +222,13 @@ namespace spades {
 			for (int i = 0; i < 7; i++) {
 				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
-				                   MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                               GetRandom() - GetRandom()) *
+				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+                                               SampleRandomFloat() - SampleRandomFloat(),
+				                               SampleRandomFloat() - SampleRandomFloat()) *
 				                     7.f,
 				                   1.f, .9f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(0.2f + GetRandom() * GetRandom() * 0.1f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(0.2f + SampleRandomFloat() * SampleRandomFloat() * 0.1f);
 				ent->SetLifeTime(2.f, 0.f, 1.f);
 				if (distPowered < 16.f * 16.f)
 					ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);
@@ -237,13 +241,13 @@ namespace spades {
 			if (distPowered < 32.f * 32.f) {
 				for (int i = 0; i < 16; i++) {
 					ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
-					ent->SetTrajectory(origin, MakeVector3(GetRandom() - GetRandom(),
-					                                       GetRandom() - GetRandom(),
-					                                       GetRandom() - GetRandom()) *
+					ent->SetTrajectory(origin, MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+					                                       SampleRandomFloat() - SampleRandomFloat(),
+					                                       SampleRandomFloat() - SampleRandomFloat()) *
 					                             12.f,
 					                   1.f, .9f);
-					ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-					ent->SetRadius(0.1f + GetRandom() * GetRandom() * 0.14f);
+					ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+					ent->SetRadius(0.1f + SampleRandomFloat() * SampleRandomFloat() * 0.14f);
 					ent->SetLifeTime(2.f, 0.f, 1.f);
 					if (distPowered < 16.f * 16.f)
 						ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);
@@ -256,13 +260,14 @@ namespace spades {
 			for (int i = 0; i < 2; i++) {
 				ParticleSpriteEntity *ent = new SmokeSpriteEntity(this, color, 100.f);
 				ent->SetTrajectory(origin,
-				                   MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                               GetRandom() - GetRandom()) *
+				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+                                               SampleRandomFloat() - SampleRandomFloat(),
+				                               SampleRandomFloat() - SampleRandomFloat()) *
 				                     .7f,
 				                   1.f, 0.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(.6f + GetRandom() * GetRandom() * 0.2f, 0.8f);
-				ent->SetLifeTime(.3f + GetRandom() * .3f, 0.06f, .4f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(.6f + SampleRandomFloat() * SampleRandomFloat() * 0.2f, 0.8f);
+				ent->SetLifeTime(.3f + SampleRandomFloat() * .3f, 0.06f, .4f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
 				localEntities.emplace_back(ent);
 			}
@@ -285,12 +290,13 @@ namespace spades {
 			for (int i = 0; i < 8; i++) {
 				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
-				                   MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                               GetRandom() - GetRandom()) *
+				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+                                               SampleRandomFloat() - SampleRandomFloat(),
+				                               SampleRandomFloat() - SampleRandomFloat()) *
 				                     7.f,
 				                   1.f, 1.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(0.3f + GetRandom() * GetRandom() * 0.2f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(0.3f + SampleRandomFloat() * SampleRandomFloat() * 0.2f);
 				ent->SetLifeTime(2.f, 0.f, 1.f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);
 				localEntities.emplace_back(ent);
@@ -317,15 +323,16 @@ namespace spades {
 				ParticleSpriteEntity *ent =
 				  new SmokeSpriteEntity(this, color, 120.f, SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(
-				  origin, (MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                       GetRandom() - GetRandom()) +
+				  origin, (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+                                       SampleRandomFloat() - SampleRandomFloat(),
+				                       SampleRandomFloat() - SampleRandomFloat()) +
 				           velBias * .5f) *
 				            0.3f,
 				  1.f, 0.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(.4f, 3.f, 0.0000005f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(0.2f + GetRandom() * 0.1f, 0.f, .30f);
+				ent->SetLifeTime(0.2f + SampleRandomFloat() * 0.1f, 0.f, .30f);
 				localEntities.emplace_back(ent);
 			}
 		}
@@ -381,15 +388,16 @@ namespace spades {
 				ParticleSpriteEntity *ent =
 				  new SmokeSpriteEntity(this, color, 60.f, SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(
-				  origin, (MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                       GetRandom() - GetRandom()) +
+				  origin, (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+                                       SampleRandomFloat() - SampleRandomFloat(),
+				                       SampleRandomFloat() - SampleRandomFloat()) +
 				           velBias * .5f) *
 				            2.f,
 				  1.f, 0.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(.6f + GetRandom() * GetRandom() * 0.4f, 2.f, .2f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(.6f + SampleRandomFloat() * SampleRandomFloat() * 0.4f, 2.f, .2f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(1.8f + GetRandom() * 0.1f, 0.f, .20f);
+				ent->SetLifeTime(1.8f + SampleRandomFloat() * 0.1f, 0.f, .20f);
 				localEntities.emplace_back(ent);
 			}
 
@@ -398,18 +406,19 @@ namespace spades {
 			for (int i = 0; i < 8; i++) {
 				ParticleSpriteEntity *ent = new SmokeSpriteEntity(this, color, 20.f);
 				ent->SetTrajectory(
-				  origin, (MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                       (GetRandom() - GetRandom()) * .2f)) *
+				  origin, (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+                                       SampleRandomFloat() - SampleRandomFloat(),
+				                       (SampleRandomFloat() - SampleRandomFloat()) * .2f)) *
 				            2.f,
 				  1.f, 0.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(1.5f + GetRandom() * GetRandom() * 0.8f, 0.2f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(1.5f + SampleRandomFloat() * SampleRandomFloat() * 0.8f, 0.2f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
 				switch ((int)cg_particles) {
-					case 1: ent->SetLifeTime(0.8f + GetRandom() * 1.f, 0.1f, 8.f); break;
-					case 2: ent->SetLifeTime(1.5f + GetRandom() * 2.f, 0.1f, 8.f); break;
+					case 1: ent->SetLifeTime(0.8f + SampleRandomFloat() * 1.f, 0.1f, 8.f); break;
+					case 2: ent->SetLifeTime(1.5f + SampleRandomFloat() * 2.f, 0.1f, 8.f); break;
 					case 3:
-					default: ent->SetLifeTime(2.f + GetRandom() * 5.f, 0.1f, 8.f); break;
+					default: ent->SetLifeTime(2.f + SampleRandomFloat() * 5.f, 0.1f, 8.f); break;
 				}
 				localEntities.emplace_back(ent);
 			}
@@ -419,14 +428,15 @@ namespace spades {
 			color = MakeVector4(0.01, 0.03, 0, 1.f);
 			for (int i = 0; i < 42; i++) {
 				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
-				Vector3 dir = MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                          GetRandom() - GetRandom());
+				Vector3 dir = MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+                                          SampleRandomFloat() - SampleRandomFloat(),
+				                          SampleRandomFloat() - SampleRandomFloat());
 				dir += velBias * .5f;
-				float radius = 0.1f + GetRandom() * GetRandom() * 0.2f;
+				float radius = 0.1f + SampleRandomFloat() * SampleRandomFloat() * 0.2f;
 				ent->SetTrajectory(origin + dir * .2f, dir * 20.f, .1f + radius * 3.f, 1.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(radius);
-				ent->SetLifeTime(3.5f + GetRandom() * 2.f, 0.f, 1.f);
+				ent->SetLifeTime(3.5f + SampleRandomFloat() * 2.f, 0.f, 1.f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);
 				localEntities.emplace_back(ent);
 			}
@@ -437,15 +447,15 @@ namespace spades {
 				ParticleSpriteEntity *ent =
 				  new SmokeSpriteEntity(this, color, 120.f, SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(
-				  origin, (MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                       GetRandom() - GetRandom()) +
+				  origin, (MakeVector3(SampleRandomFloat() - SampleRandomFloat(), SampleRandomFloat() - SampleRandomFloat(),
+				                       SampleRandomFloat() - SampleRandomFloat()) +
 				           velBias) *
 				            6.f,
 				  1.f, 0.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(.3f + GetRandom() * GetRandom() * 0.4f, 3.f, .1f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(.3f + SampleRandomFloat() * SampleRandomFloat() * 0.4f, 3.f, .1f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(.18f + GetRandom() * 0.03f, 0.f, .10f);
+				ent->SetLifeTime(.18f + SampleRandomFloat() * 0.03f, 0.f, .10f);
 				// ent->SetAdditive(true);
 				localEntities.emplace_back(ent);
 			}
@@ -471,14 +481,14 @@ namespace spades {
 			for (int i = 0; i < 7; i++) {
 				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
-				                   (MakeVector3(GetRandom() - GetRandom(),
-				                                GetRandom() - GetRandom(), -GetRandom() * 7.f)) *
+				                   (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+				                                SampleRandomFloat() - SampleRandomFloat(), -SampleRandomFloat() * 7.f)) *
 				                     2.5f,
 				                   .3f, .6f);
 				ent->SetRotation(0.f);
-				ent->SetRadius(1.5f + GetRandom() * GetRandom() * 0.4f, 1.3f);
+				ent->SetRadius(1.5f + SampleRandomFloat() * SampleRandomFloat() * 0.4f, 1.3f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(3.f + GetRandom() * 0.3f, 0.f, .60f);
+				ent->SetLifeTime(3.f + SampleRandomFloat() * 0.3f, 0.f, .60f);
 				localEntities.emplace_back(ent);
 			}
 
@@ -490,14 +500,14 @@ namespace spades {
 			for (int i = 0; i < 16; i++) {
 				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
-				                   (MakeVector3(GetRandom() - GetRandom(),
-				                                GetRandom() - GetRandom(), -GetRandom() * 10.f)) *
+				                   (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+				                                SampleRandomFloat() - SampleRandomFloat(), -SampleRandomFloat() * 10.f)) *
 				                     3.5f,
 				                   1.f, 1.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(0.9f + GetRandom() * GetRandom() * 0.4f, 0.7f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(0.9f + SampleRandomFloat() * SampleRandomFloat() * 0.4f, 0.7f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(3.f + GetRandom() * 0.3f, .7f, .60f);
+				ent->SetLifeTime(3.f + SampleRandomFloat() * 0.3f, .7f, .60f);
 				localEntities.emplace_back(ent);
 			}
 
@@ -508,18 +518,18 @@ namespace spades {
 			for (int i = 0; i < 8; i++) {
 				ParticleSpriteEntity *ent = new SmokeSpriteEntity(this, color, 20.f);
 				ent->SetTrajectory(
-				  origin, (MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                       (GetRandom() - GetRandom()) * .2f)) *
+				  origin, (MakeVector3(SampleRandomFloat() - SampleRandomFloat(), SampleRandomFloat() - SampleRandomFloat(),
+				                       (SampleRandomFloat() - SampleRandomFloat()) * .2f)) *
 				            2.f,
 				  1.f, 0.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(1.4f + GetRandom() * GetRandom() * 0.8f, 0.2f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(1.4f + SampleRandomFloat() * SampleRandomFloat() * 0.8f, 0.2f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
 				switch ((int)cg_particles) {
-					case 1: ent->SetLifeTime(3.f + GetRandom() * 5.f, 0.1f, 8.f); break;
+					case 1: ent->SetLifeTime(3.f + SampleRandomFloat() * 5.f, 0.1f, 8.f); break;
 					case 2:
 					case 3:
-					default: ent->SetLifeTime(6.f + GetRandom() * 5.f, 0.1f, 8.f); break;
+					default: ent->SetLifeTime(6.f + SampleRandomFloat() * 5.f, 0.1f, 8.f); break;
 				}
 				localEntities.emplace_back(ent);
 			}
@@ -529,15 +539,15 @@ namespace spades {
 			color = MakeVector4(1, 1, 1, 0.7f);
 			for (int i = 0; i < 42; i++) {
 				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
-				Vector3 dir = MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                          -GetRandom() * 3.f);
+				Vector3 dir = MakeVector3(SampleRandomFloat() - SampleRandomFloat(), SampleRandomFloat() - SampleRandomFloat(),
+				                          -SampleRandomFloat() * 3.f);
 				dir += velBias * .5f;
-				float radius = 0.1f + GetRandom() * GetRandom() * 0.2f;
+				float radius = 0.1f + SampleRandomFloat() * SampleRandomFloat() * 0.2f;
 				ent->SetTrajectory(origin + dir * .2f + MakeVector3(0, 0, -1.2f), dir * 13.f,
 				                   .1f + radius * 3.f, 1.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(radius);
-				ent->SetLifeTime(3.5f + GetRandom() * 2.f, 0.f, 1.f);
+				ent->SetLifeTime(3.5f + SampleRandomFloat() * 2.f, 0.f, 1.f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Delete);
 				localEntities.emplace_back(ent);
 			}
@@ -554,7 +564,7 @@ namespace spades {
 
 			if ((int)cg_particles < 1)
 				return;
-
+            
 			Vector4 color;
 			color = MakeVector4(.95f, .95f, .95f, .3f);
 			// water1
@@ -564,14 +574,14 @@ namespace spades {
 			for (int i = 0; i < 2; i++) {
 				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
-				                   (MakeVector3(GetRandom() - GetRandom(),
-				                                GetRandom() - GetRandom(), -GetRandom() * 7.f)) *
+				                   (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+				                                SampleRandomFloat() - SampleRandomFloat(), -SampleRandomFloat() * 7.f)) *
 				                     1.f,
 				                   .3f, .6f);
 				ent->SetRotation(0.f);
-				ent->SetRadius(0.6f + GetRandom() * GetRandom() * 0.4f, .7f);
+				ent->SetRadius(0.6f + SampleRandomFloat() * SampleRandomFloat() * 0.4f, .7f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(3.f + GetRandom() * 0.3f, 0.1f, .60f);
+				ent->SetLifeTime(3.f + SampleRandomFloat() * 0.3f, 0.1f, .60f);
 				localEntities.emplace_back(ent);
 			}
 
@@ -583,14 +593,14 @@ namespace spades {
 			for (int i = 0; i < 6; i++) {
 				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
-				                   (MakeVector3(GetRandom() - GetRandom(),
-				                                GetRandom() - GetRandom(), -GetRandom() * 10.f)) *
+				                   (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+				                                SampleRandomFloat() - SampleRandomFloat(), -SampleRandomFloat() * 10.f)) *
 				                     2.f,
 				                   1.f, 1.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
-				ent->SetRadius(0.6f + GetRandom() * GetRandom() * 0.6f, 0.6f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(0.6f + SampleRandomFloat() * SampleRandomFloat() * 0.6f, 0.6f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
-				ent->SetLifeTime(3.f + GetRandom() * 0.3f, GetRandom() * 0.3f, .60f);
+				ent->SetLifeTime(3.f + SampleRandomFloat() * 0.3f, SampleRandomFloat() * 0.3f, .60f);
 				localEntities.emplace_back(ent);
 			}
 
@@ -599,14 +609,15 @@ namespace spades {
 			color = MakeVector4(1, 1, 1, 0.7f);
 			for (int i = 0; i < 10; i++) {
 				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
-				Vector3 dir = MakeVector3(GetRandom() - GetRandom(), GetRandom() - GetRandom(),
-				                          -GetRandom() * 3.f);
-				float radius = 0.03f + GetRandom() * GetRandom() * 0.05f;
+				Vector3 dir = MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+                                          SampleRandomFloat() - SampleRandomFloat(),
+				                          -SampleRandomFloat() * 3.f);
+				float radius = 0.03f + SampleRandomFloat() * SampleRandomFloat() * 0.05f;
 				ent->SetTrajectory(origin + dir * .2f + MakeVector3(0, 0, -1.2f), dir * 5.f,
 				                   .1f + radius * 3.f, 1.f);
-				ent->SetRotation(GetRandom() * (float)M_PI * 2.f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(radius);
-				ent->SetLifeTime(3.5f + GetRandom() * 2.f, 0.f, 1.f);
+				ent->SetLifeTime(3.5f + SampleRandomFloat() * 2.f, 0.f, 1.f);
 				ent->SetBlockHitAction(ParticleSpriteEntity::Delete);
 				localEntities.emplace_back(ent);
 			}
