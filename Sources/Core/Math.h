@@ -42,6 +42,9 @@ namespace spades {
 	/**
 	 * Generates an integer in a specified inclusive range.
 	 * This function is thread-safe.
+	 *
+	 * `T` must be one of `int`, `unsigned int`, `long`, `unsigned long`,
+	 * `short`, `unsigned short`, `long long`, and `unsigned long long`.
 	 */
 	template <class T = int> T SampleRandomInt(T a, T b);
 

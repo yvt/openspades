@@ -105,9 +105,9 @@ namespace spades {
 	template <class T> T SampleRandomInt(T a, T b) {
 		return std::uniform_int_distribution<T>{a, b}(GetThreadLocalRNG());
 	}
-	
-	template char SampleRandomInt(char a, char b);
-	template unsigned char SampleRandomInt(unsigned char a, unsigned char b);
+
+	// Note: `uniform_int_distribution` does not accept `char` nor `unsigned char`
+	//       (N4659 29.6.1.1 [rand.req.genl])
 	template short SampleRandomInt(short a, short b);
 	template unsigned short SampleRandomInt(unsigned short a, unsigned short b);
 	template int SampleRandomInt(int a, int b);
