@@ -36,7 +36,8 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    *On Debian-derived distributions*:
    ```
    sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev \
-     libsdl2-image-dev libalut-dev xdg-utils libfreetype6-dev libopus-dev libopusfile-dev cmake
+     libsdl2-image-dev libalut-dev xdg-utils libfreetype6-dev libopus-dev \
+     libopusfile-dev cmake imagemagick
    ```
    (because of a bug in some distributions, you might also
    have to install more packages by `sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev`)
