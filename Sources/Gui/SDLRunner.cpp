@@ -314,6 +314,7 @@ namespace spades {
 		class SDLSWPort : public draw::SWPort {
 			SDL_Window *wnd;
 			SDL_Surface *surface;
+			bool locked;
 			bool adjusted;
 			int actualW, actualH;
 
@@ -330,7 +331,7 @@ namespace spades {
 
 		protected:
 			virtual ~SDLSWPort() {
-				if (surface && SDL_MUSTLOCK(surface)) {
+				if (surface && locked) {
 					SDL_UnlockSurface(surface);
 				}
 			}
@@ -339,7 +340,7 @@ namespace spades {
 			SDLSWPort(SDL_Window *wnd) : wnd(wnd), surface(nullptr) {
 				surface = SDL_GetWindowSurface(wnd);
 				// FIXME: check pixel format
-				if (SDL_MUSTLOCK(surface)) {
+				if ((locked = SDL_MUSTLOCK(surface))) {
 					SDL_LockSurface(surface);
 				}
 				actualW = surface->w & ~7;
