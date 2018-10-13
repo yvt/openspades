@@ -18,6 +18,7 @@
 
  */
 
+#include <atomic>
 #include <cstdlib>
 
 #include <Client/GameMap.h>
@@ -33,9 +34,9 @@ namespace spades {
 			GLAmbientShadowRenderer *renderer;
 
 		public:
-			volatile bool done;
-			UpdateDispatch(GLAmbientShadowRenderer *r) : renderer(r) { done = false; }
-			virtual void Run() {
+			std::atomic<bool> done {false};
+			UpdateDispatch(GLAmbientShadowRenderer *r) : renderer(r) { }
+			void Run() override {
 				SPADES_MARK_FUNCTION();
 
 				renderer->UpdateDirtyChunks();

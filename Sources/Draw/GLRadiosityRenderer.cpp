@@ -18,6 +18,7 @@
 
  */
 
+#include <atomic>
 #include <cstdlib>
 
 #include <Client/GameMap.h>
@@ -39,9 +40,9 @@ namespace spades {
 			GLRadiosityRenderer *renderer;
 
 		public:
-			volatile bool done;
-			UpdateDispatch(GLRadiosityRenderer *r) : renderer(r) { done = false; }
-			virtual void Run() {
+			std::atomic<bool> done {false};
+			UpdateDispatch(GLRadiosityRenderer *r) : renderer(r) { }
+			void Run() override {
 				SPADES_MARK_FUNCTION();
 
 // Enable FPE
@@ -351,7 +352,7 @@ namespace spades {
 		}
 
 		void GLRadiosityRenderer::Update() {
-			if (GetNumDirtyChunks() > 0 && (dispatch == NULL || dispatch->done)) {
+			if (GetNumDirtyChunks() > 0 && (dispatch == NULL || dispatch->done.load())) {
 				if (dispatch) {
 					dispatch->Join();
 					delete dispatch;

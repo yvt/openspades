@@ -46,7 +46,7 @@ namespace spades {
 			float yMin, yMax;
 
 		protected:
-			virtual ~Quake3Font();
+			~Quake3Font();
 
 		public:
 			Quake3Font(IRenderer *, IImage *texture, const int *map, int glyphHeight,

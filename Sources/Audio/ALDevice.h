@@ -39,7 +39,7 @@ namespace spades {
 
 		public:
 			ALDevice();
-			virtual ~ALDevice();
+			~ALDevice();
 
 			static bool TryLoad();
 

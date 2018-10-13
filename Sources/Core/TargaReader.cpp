@@ -41,19 +41,19 @@ typedef unsigned char byte;
 namespace spades {
 	class TargaReader : public IBitmapCodec {
 	public:
-		virtual bool CanLoad() { return true; }
-		virtual bool CanSave() { return false; }
+		bool CanLoad() override { return true; }
+		bool CanSave() override { return false; }
 
-		virtual bool CheckExtension(const std::string &filename) {
+		bool CheckExtension(const std::string &filename) override {
 			return EndsWith(filename, ".tga");
 		}
 
-		virtual std::string GetName() {
+		std::string GetName() override {
 			static std::string name("Quake 3 Derived Targa Importer");
 			return name;
 		}
 
-		virtual Bitmap *Load(IStream *str) {
+		Bitmap *Load(IStream *str) override {
 			SPADES_MARK_FUNCTION();
 
 			unsigned columns, rows, numPixels;
@@ -313,9 +313,9 @@ namespace spades {
 
 			return bmp;
 		}
-		virtual void Save(IStream *stream, Bitmap *bmp) {
+		void Save(IStream *stream, Bitmap *bmp) override {
 			SPADES_MARK_FUNCTION();
-			SPNotImplemented();
+			SPUnreachable();
 		}
 	};
 

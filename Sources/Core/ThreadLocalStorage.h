@@ -53,7 +53,7 @@ namespace spades {
 			internal = ThreadLocalStorageImpl::Create();
 			internal->destructor = this;
 		}
-		virtual ~ThreadLocalStorage() {
+		~ThreadLocalStorage() {
 			// FIXME: should support deleting tls?
 		}
 		void operator=(T *ptr) { internal->Set(reinterpret_cast<void *>(ptr)); }
@@ -66,14 +66,14 @@ namespace spades {
 		}
 		T *operator->() { return GetPointer(); }
 		operator T *() { return GetPointer(); }
-		virtual void Destruct(void *) {}
+		void Destruct(void *) override {}
 	};
 
 	template <typename T> class AutoDeletedThreadLocalStorage : public ThreadLocalStorage<T> {
 	public:
 		AutoDeletedThreadLocalStorage() : ThreadLocalStorage<T>() {}
 		AutoDeletedThreadLocalStorage(std::string name) : ThreadLocalStorage<T>(name) {}
-		virtual void Destruct(void *v) { delete reinterpret_cast<T *>(v); }
+		void Destruct(void *v) override { delete reinterpret_cast<T *>(v); }
 		void operator=(T *ptr) { *static_cast<ThreadLocalStorage<T> *>(this) = ptr; }
 	};
 

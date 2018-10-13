@@ -265,11 +265,11 @@ namespace spades {
 				StartupScreenHelper *helper;
 
 			protected:
-				virtual auto GetRendererType() -> RendererType { return RendererType::SW; }
-				virtual client::IAudioDevice *CreateAudioDevice() {
+				auto GetRendererType() -> RendererType override { return RendererType::SW; }
+				client::IAudioDevice *CreateAudioDevice() override {
 					return new audio::NullDevice();
 				}
-				virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) {
+				View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) override {
 					Handle<client::FontManager> fontManager(new client::FontManager(renderer),
 					                                        false);
 					view.Set(new StartupScreen(renderer, dev, helper, fontManager), true);

@@ -220,7 +220,7 @@ namespace spades {
 
 			public:
 				CorpseUpdateDispatch(Client *c, float dt) : client(c), dt(dt) {}
-				virtual void Run() {
+				void Run() override {
 					for (auto &c : client->corpses) {
 						for (int i = 0; i < 4; i++)
 							c->Update(dt / 4.f);

@@ -267,7 +267,7 @@ namespace spades {
 			std::shared_ptr<YsrBuffer> buffer;
 
 		protected:
-			virtual ~YsrAudioChunk() {}
+			~YsrAudioChunk() {}
 
 		public:
 			YsrAudioChunk(std::shared_ptr<YsrDriver> driver, IAudioStream *stream) {

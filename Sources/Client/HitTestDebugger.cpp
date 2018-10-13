@@ -45,8 +45,8 @@ namespace spades {
 				SPADES_MARK_FUNCTION();
 				bmp.Set(new Bitmap(512, 512), false);
 			}
-			virtual Bitmap *GetFramebuffer() { return bmp; }
-			virtual void Swap() {
+			Bitmap *GetFramebuffer() override { return bmp; }
+			void Swap() override {
 				// nothing to do here
 			}
 		};

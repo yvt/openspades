@@ -67,7 +67,7 @@ namespace spades {
 			FindResult FindGlyph(uint32_t);
 
 		protected:
-			virtual ~FallbackFontRenderer();
+			~FallbackFontRenderer();
 
 		public:
 			FallbackFontRenderer(IRenderer *renderer, FallbackFontManager *manager);

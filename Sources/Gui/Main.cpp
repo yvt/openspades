@@ -228,8 +228,8 @@ namespace spades {
 			spades::ServerAddress addr;
 
 		protected:
-			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer,
-			                                      spades::client::IAudioDevice *audio) {
+			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
+			                                      spades::client::IAudioDevice *audio) override {
 				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
 				return new spades::client::Client(renderer, audio, addr, fontManager);
 			}
@@ -243,8 +243,8 @@ namespace spades {
 	void StartMainScreen() {
 		class ConcreteRunner : public spades::gui::Runner {
 		protected:
-			virtual spades::gui::View *CreateView(spades::client::IRenderer *renderer,
-			                                      spades::client::IAudioDevice *audio) {
+			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
+			                                      spades::client::IAudioDevice *audio) override {
 				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
 				return new spades::gui::MainScreen(renderer, audio, fontManager);
 			}

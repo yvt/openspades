@@ -220,9 +220,9 @@ namespace spades {
 					}
 				}
 			}
-			virtual ~FFTWaveTank() { kiss_fft_free(fft); }
+			~FFTWaveTank() { kiss_fft_free(fft); }
 
-			virtual void Run() {
+			void Run() override {
 				// advance cells
 				for (int x = 0; x < Size; x++) {
 					for (int y = 0; y <= SizeHalf; y++) {
@@ -350,14 +350,14 @@ namespace spades {
 				std::fill(velocity, velocity + size * size, 0.f);
 			}
 
-			virtual ~StandardWaveTank() {
+			~StandardWaveTank() {
 
 				delete[] height;
 				delete[] heightFiltered;
 				delete[] velocity;
 			}
 
-			virtual void Run() {
+			void Run() override {
 				// advance time
 				for (int i = 0; i < samples; i++)
 					height[i] += velocity[i] * dt;

@@ -54,7 +54,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 		}
 
-		virtual ~ZipFileInputStream() {
+		~ZipFileInputStream() {
 			SPADES_MARK_FUNCTION();
 			if (streaming) {
 				unzCloseCurrentFile(zip);
@@ -84,7 +84,7 @@ namespace spades {
 			}
 		}
 
-		virtual int ReadByte() {
+		int ReadByte() override {
 			SPADES_MARK_FUNCTION();
 			int byte;
 			if (streaming) {
@@ -109,7 +109,7 @@ namespace spades {
 			}
 			return byte;
 		}
-		virtual size_t Read(void *buf, size_t bytes) {
+		size_t Read(void *buf, size_t bytes) override {
 			SPADES_MARK_FUNCTION();
 			size_t outBytes;
 			if (streaming) {
@@ -132,33 +132,33 @@ namespace spades {
 			return outBytes;
 		}
 
-		virtual void WriteByte(int) {
+		void WriteByte(int) override {
 			SPADES_MARK_FUNCTION();
-			SPNotImplemented();
+			SPUnsupported();
 		}
-		virtual void Write(const void *, size_t bytes) {
+		void Write(const void *, size_t bytes) override {
 			SPADES_MARK_FUNCTION();
-			SPNotImplemented();
+			SPUnsupported();
 		}
-		virtual void Write(const std::string &) {
+		void Write(const std::string &) override {
 			SPADES_MARK_FUNCTION();
-			SPNotImplemented();
-		}
-
-		virtual uint64_t GetPosition() { return pos; }
-		virtual void SetPosition(uint64_t) {
-			SPADES_MARK_FUNCTION();
-			SPNotImplemented();
+			SPUnsupported();
 		}
 
-		virtual uint64_t GetLength() {
+		uint64_t GetPosition() override { return pos; }
+		void SetPosition(uint64_t) override {
+			SPADES_MARK_FUNCTION();
+			SPUnsupported();
+		}
+
+		uint64_t GetLength() override {
 			SPADES_MARK_FUNCTION();
 			ForceCloseUnzipFile();
 			return pos + remainingData.size() - remDataPos;
 		}
-		virtual void SetLength(uint64_t) {
+		void SetLength(uint64_t) override {
 			SPADES_MARK_FUNCTION();
-			SPNotImplemented();
+			SPUnsupported();
 		}
 	};
 

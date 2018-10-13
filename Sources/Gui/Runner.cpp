@@ -72,7 +72,7 @@ namespace spades {
 				Runner *r;
 
 			protected:
-				virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) {
+				View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) override {
 					return r->CreateView(renderer, dev);
 				}
 

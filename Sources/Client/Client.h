@@ -391,22 +391,22 @@ namespace spades {
 			void NetLog(const char *format, ...);
 
 		protected:
-			virtual ~Client();
+			~Client();
 
 		public:
 			Client(IRenderer *, IAudioDevice *, const ServerAddress &host, FontManager *);
 
-			virtual void RunFrame(float dt);
+			void RunFrame(float dt) override;
 
-			virtual void Closing();
-			virtual void MouseEvent(float x, float y);
-			virtual void WheelEvent(float x, float y);
-			virtual void KeyEvent(const std::string &, bool down);
-			virtual void TextInputEvent(const std::string &);
-			virtual void TextEditingEvent(const std::string &, int start, int len);
-			virtual bool AcceptsTextInput();
-			virtual AABB2 GetTextInputRect();
-			virtual bool NeedsAbsoluteMouseCoordinate();
+			void Closing() override;
+			void MouseEvent(float x, float y) override;
+			void WheelEvent(float x, float y) override;
+			void KeyEvent(const std::string &, bool down) override;
+			void TextInputEvent(const std::string &) override;
+			void TextEditingEvent(const std::string &, int start, int len) override;
+			bool AcceptsTextInput() override;
+			AABB2 GetTextInputRect() override;
+			bool NeedsAbsoluteMouseCoordinate() override;
 
 			void SetWorld(World *);
 			World *GetWorld() const { return world.get(); }
@@ -418,7 +418,7 @@ namespace spades {
 			SceneDefinition GetLastSceneDef() { return lastSceneDef; }
 			IAudioDevice *GetAudioDevice() { return audioDevice; }
 
-			virtual bool WantsToBeClosed();
+			bool WantsToBeClosed() override;
 			bool IsMuted();
 
 			void PlayerSentChatMessage(Player *, bool global, const std::string &);
@@ -439,38 +439,38 @@ namespace spades {
 			void PlayerJoinedTeam(Player *);
 			void PlayerSpawned(Player *);
 
-			virtual void PlayerObjectSet(int);
-			virtual void PlayerMadeFootstep(Player *);
-			virtual void PlayerJumped(Player *);
-			virtual void PlayerLanded(Player *, bool hurt);
-			virtual void PlayerFiredWeapon(Player *);
-			virtual void PlayerDryFiredWeapon(Player *);
-			virtual void PlayerReloadingWeapon(Player *);
-			virtual void PlayerReloadedWeapon(Player *);
-			virtual void PlayerChangedTool(Player *);
-			virtual void PlayerThrownGrenade(Player *, Grenade *);
-			virtual void PlayerMissedSpade(Player *);
-			virtual void PlayerRestocked(Player *);
+			void PlayerObjectSet(int) override;
+			void PlayerMadeFootstep(Player *) override;
+			void PlayerJumped(Player *) override;
+			void PlayerLanded(Player *, bool hurt) override;
+			void PlayerFiredWeapon(Player *) override;
+			void PlayerDryFiredWeapon(Player *) override;
+			void PlayerReloadingWeapon(Player *) override;
+			void PlayerReloadedWeapon(Player *) override;
+			void PlayerChangedTool(Player *) override;
+			void PlayerThrownGrenade(Player *, Grenade *) override;
+			void PlayerMissedSpade(Player *) override;
+			void PlayerRestocked(Player *) override;
 
 			/** @deprecated use BulletHitPlayer */
-			virtual void PlayerHitBlockWithSpade(Player *, Vector3 hitPos, IntVector3 blockPos,
-			                                     IntVector3 normal);
-			virtual void PlayerKilledPlayer(Player *killer, Player *victim, KillType);
+			void PlayerHitBlockWithSpade(Player *, Vector3 hitPos, IntVector3 blockPos,
+			                                     IntVector3 normal) override;
+			void PlayerKilledPlayer(Player *killer, Player *victim, KillType) override;
 
-			virtual void BulletHitPlayer(Player *hurtPlayer, HitType, Vector3 hitPos, Player *by);
-			virtual void BulletHitBlock(Vector3, IntVector3 blockPos, IntVector3 normal);
-			virtual void AddBulletTracer(Player *player, Vector3 muzzlePos, Vector3 hitPos);
-			virtual void GrenadeExploded(Grenade *);
-			virtual void GrenadeBounced(Grenade *);
-			virtual void GrenadeDroppedIntoWater(Grenade *);
+			void BulletHitPlayer(Player *hurtPlayer, HitType, Vector3 hitPos, Player *by) override;
+			void BulletHitBlock(Vector3, IntVector3 blockPos, IntVector3 normal) override;
+			void AddBulletTracer(Player *player, Vector3 muzzlePos, Vector3 hitPos) override;
+			void GrenadeExploded(Grenade *) override;
+			void GrenadeBounced(Grenade *) override;
+			void GrenadeDroppedIntoWater(Grenade *) override;
 
-			virtual void BlocksFell(std::vector<IntVector3>);
+			void BlocksFell(std::vector<IntVector3>) override;
 
-			virtual void LocalPlayerPulledGrenadePin();
-			virtual void LocalPlayerBlockAction(IntVector3, BlockActionType type);
-			virtual void LocalPlayerCreatedLineBlock(IntVector3, IntVector3);
-			virtual void LocalPlayerHurt(HurtType type, bool sourceGiven, Vector3 source);
-			virtual void LocalPlayerBuildError(BuildFailureReason reason);
+			void LocalPlayerPulledGrenadePin() override;
+			void LocalPlayerBlockAction(IntVector3, BlockActionType type) override;
+			void LocalPlayerCreatedLineBlock(IntVector3, IntVector3) override;
+			void LocalPlayerHurt(HurtType type, bool sourceGiven, Vector3 source) override;
+			void LocalPlayerBuildError(BuildFailureReason reason) override;
 		};
 	}
 }

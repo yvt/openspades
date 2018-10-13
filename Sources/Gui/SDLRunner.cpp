@@ -329,7 +329,7 @@ namespace spades {
 			}
 
 		protected:
-			virtual ~SDLSWPort() {
+			~SDLSWPort() {
 				if (surface && SDL_MUSTLOCK(surface)) {
 					SDL_UnlockSurface(surface);
 				}
@@ -355,8 +355,8 @@ namespace spades {
 				}
 				SetFramebufferBitmap();
 			}
-			virtual Bitmap *GetFramebuffer() { return framebuffer; }
-			virtual void Swap() {
+			Bitmap *GetFramebuffer() override { return framebuffer; }
+			void Swap() override {
 				if (adjusted) {
 					int sy = (surface->h - actualH) >> 1;
 					int sx = (surface->w - actualW) >> 1;

@@ -36,7 +36,7 @@ namespace spades{
 			}
 		public:
 			PackageUpdateManagerRegistrar() : ScriptObjectRegistrar("PackageUpdateManager") {}
-			virtual void Register(ScriptManager *manager, Phase phase) {
+			void Register(ScriptManager *manager, Phase phase) override {
 				asIScriptEngine *eng = manager->GetEngine();
 				int r;
 				eng->SetDefaultNamespace("spades");
