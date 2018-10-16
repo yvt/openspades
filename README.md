@@ -3,7 +3,7 @@
 
 ![OpenSpades banner](https://openspadesmedia.yvt.jp/brand/OpenSpadesBanner.jpg)
 
-[Official website](http://openspades.yvt.jp) — [Download](https://github.com/yvt/openspades/releases) — [Community](http://buildandshoot.com) — [Trello board](https://trello.com/b/3rfpvODj/openspades-roadmap)
+[Official website](https://openspades.yvt.jp) — [Download](https://github.com/yvt/openspades/releases) — [Community](https://buildandshoot.com) — [Trello board](https://trello.com/b/3rfpvODj/openspades-roadmap)
 
 ## What is it?
 OpenSpades is a compatible client of Ace of Spades 0.75.
@@ -104,11 +104,11 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 10. Download the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip), extract it, and copy `Nonfree/pak000-Nonfree.pak` to the `Resources` folder inside your build output directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE/Resources`. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
 11. Copy `Resources/PackageInfo.json` to the `Resources` folder inside your build output directory.
 
-### On Mac OS X (with Xcode)
+### On macOS (with Xcode)
 1. Get the latest version of Xcode and OpenSpades source.
 2. Get (pre-compiled) copies of libraries, and place them in `Sources/Externals`
   * See the file `Sources/Externals/readme.txt` for details
-4. Download [OS X release of OpenSpades](https://github.com/yvt/openspades/releases), show the package contents, and copy `libysrspades.dylib` to `Sources/Externals/lib`.
+4. Download [macOS release of OpenSpades](https://github.com/yvt/openspades/releases), show the package contents, and copy `libysrspades.dylib` to `Sources/Externals/lib`.
 5. Download and extract the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip). After that, copy `Nonfree/pak000-Nonfree.pak` and `font-unifont.pak` to `Resources/`.
 6. Open `OpenSpades.xcodeproj` and build.
 
