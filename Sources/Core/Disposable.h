@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2018 yvt
 
  This file is part of OpenSpades.
 
@@ -17,29 +17,18 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-
 #pragma once
 
-#include <Core/Bitmap.h>
-#include <Core/RefCountedObject.h>
+#include "RefCountedObject.h"
 
 namespace spades {
-	namespace draw {
-		class SWPort : public virtual RefCountedObject {
-		protected:
-			~SWPort() {}
 
-		public:
-			/**
-			 * Returns a `Bitmap` on which the scene is rendered.
-			 */
-			virtual Bitmap *GetFramebuffer() = 0;
+	/**
+	 * Implements explicit finalization semantics.
+	 */
+	class Disposable: public virtual RefCountedObject {
+	public:
+		virtual void Dispose() {}
+	};
 
-			/**
-			 * Presents the contents of the framebuffer (returned by
-			 * `GetFramebuffer`) to the screen.
-			 */
-			virtual void Swap() = 0;
-		};
-	}
 }

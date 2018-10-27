@@ -519,6 +519,7 @@
 		E8690AE91D3920C800DBC331 /* pak010-BaseSkin.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak010-BaseSkin.pak"; path = "Resources/pak010-BaseSkin.pak"; sourceTree = "<group>"; };
 		E8690AEA1D3920C800DBC331 /* pak050-Locales.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak050-Locales.pak"; path = "Resources/pak050-Locales.pak"; sourceTree = "<group>"; };
 		E8690AEB1D3920C800DBC331 /* pak999-References.pak */ = {isa = PBXFileReference; lastKnownFileType = file; name = "pak999-References.pak"; path = "Resources/pak999-References.pak"; sourceTree = "<group>"; };
+		E86D20D12171BF9700964257 /* Disposable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Disposable.h; sourceTree = "<group>"; };
 		E8725DAB1DE33B4D003BC987 /* NoiseSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NoiseSampler.cpp; sourceTree = "<group>"; };
 		E8725DAC1DE33B4D003BC987 /* NoiseSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoiseSampler.h; sourceTree = "<group>"; };
 		E874834618EACF0300C29033 /* OpenSpades.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = OpenSpades.icns; path = Resources/Icons/OpenSpades.icns; sourceTree = "<group>"; };
@@ -1588,6 +1589,7 @@
 				E89A5F1D1DF8732200857F65 /* ShellApi.h */,
 				E89A5F1F1DF8759200857F65 /* ShellApi.mm */,
 				E8655AA91DFC0AAA00D5058A /* TMPUtils.h */,
+				E86D20D12171BF9700964257 /* Disposable.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";

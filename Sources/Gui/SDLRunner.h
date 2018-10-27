@@ -21,9 +21,11 @@
 #pragma once
 
 #include <string>
+#include <tuple>
 
 #include <Imports/SDL.h>
 
+#include <Core/Disposable.h>
 #include <Core/IRunnable.h>
 #include <Core/ServerAddress.h>
 
@@ -50,7 +52,7 @@ namespace spades {
 			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
 			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) = 0;
 			virtual client::IAudioDevice *CreateAudioDevice();
-			client::IRenderer *CreateRenderer(SDL_Window *);
+			std::tuple<Handle<client::IRenderer>, Handle<Disposable>> CreateRenderer(SDL_Window *);
 
 		public:
 			SDLRunner();
