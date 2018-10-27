@@ -67,6 +67,8 @@ namespace spades {
 
 		template <class S> Handle(Handle<S> &&h) : ptr(h.MaybeUnmanage()) {}
 
+		template <class S> operator Handle<S>() && { return {std::move(*this)}; }
+
 		~Handle() {
 			if (ptr)
 				ptr->Release();

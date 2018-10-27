@@ -409,11 +409,15 @@ namespace spades {
 				case RendererType::GL: {
 					auto glDevice = Handle<SDLGLDevice>::New(wnd);
 					auto dummy = Handle<Disposable>::New(); // FIXME
-					return {Handle<draw::GLRenderer>::New(glDevice), std::move(dummy)};
+					return std::make_tuple(
+					  Handle<draw::GLRenderer>::New(glDevice).Cast<client::IRenderer>(),
+					  std::move(dummy));
 				}
 				case RendererType::SW: {
 					auto port = Handle<SDLSWPort>::New(wnd);
-					return {Handle<draw::SWRenderer>::New(port), std::move(port)};
+					return std::make_tuple(
+					  Handle<draw::SWRenderer>::New(port).Cast<client::IRenderer>(),
+					  std::move(port).Cast<Disposable>());
 				}
 				default: SPRaise("Invalid renderer type");
 			}
