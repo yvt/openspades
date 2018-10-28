@@ -45,16 +45,6 @@ namespace spades {
 			void Run() override {
 				SPADES_MARK_FUNCTION();
 
-// Enable FPE
-#if 1
-#ifdef __APPLE__
-				short fpflags = 0x1332; // Default FP flags, change this however you want.
-				__asm__("fnclex\n\tfldcw %0\n\t" : "=m"(fpflags));
-
-				_MM_SET_EXCEPTION_MASK(_MM_GET_EXCEPTION_MASK() & ~_MM_MASK_INVALID);
-#endif
-#endif
-
 				renderer->UpdateDirtyChunks();
 
 				done = true;
