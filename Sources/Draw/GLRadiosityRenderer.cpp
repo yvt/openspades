@@ -18,6 +18,7 @@
 
  */
 
+#include <atomic>
 #include <cstdlib>
 
 #include <Client/GameMap.h>
@@ -39,20 +40,10 @@ namespace spades {
 			GLRadiosityRenderer *renderer;
 
 		public:
-			volatile bool done;
-			UpdateDispatch(GLRadiosityRenderer *r) : renderer(r) { done = false; }
-			virtual void Run() {
+			std::atomic<bool> done {false};
+			UpdateDispatch(GLRadiosityRenderer *r) : renderer(r) { }
+			void Run() override {
 				SPADES_MARK_FUNCTION();
-
-// Enable FPE
-#if 1
-#ifdef __APPLE__
-				short fpflags = 0x1332; // Default FP flags, change this however you want.
-				__asm__("fnclex\n\tfldcw %0\n\t" : "=m"(fpflags));
-
-				_MM_SET_EXCEPTION_MASK(_MM_GET_EXCEPTION_MASK() & ~_MM_MASK_INVALID);
-#endif
-#endif
 
 				renderer->UpdateDirtyChunks();
 
@@ -351,7 +342,7 @@ namespace spades {
 		}
 
 		void GLRadiosityRenderer::Update() {
-			if (GetNumDirtyChunks() > 0 && (dispatch == NULL || dispatch->done)) {
+			if (GetNumDirtyChunks() > 0 && (dispatch == NULL || dispatch->done.load())) {
 				if (dispatch) {
 					dispatch->Join();
 					delete dispatch;
@@ -441,7 +432,7 @@ namespace spades {
 			for (int i = 0; i < 8; i++) {
 				if (numDirtyChunks <= 0)
 					break;
-				int idx = mt_engine() % numDirtyChunks;
+				int idx = SampleRandomInt(0, numDirtyChunks - 1);
 				Chunk &c = chunks[dirtyChunkIds[idx]];
 
 				// remove from list (fast)

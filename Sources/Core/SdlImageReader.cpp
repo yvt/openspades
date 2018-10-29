@@ -32,16 +32,12 @@
 namespace spades {
 	class SdlImageReader : public IBitmapCodec {
 	public:
-		virtual std::string GetName() = 0;
-
 		virtual SDL_Surface *LoadSdlImage(const std::string &data) = 0;
 
-		virtual bool CanLoad() { return true; }
-		virtual bool CanSave() { return false; }
+		bool CanLoad() override { return true; }
+		bool CanSave() override { return false; }
 
-		virtual bool CheckExtension(const std::string &) = 0;
-
-		virtual Bitmap *Load(IStream *stream) {
+		Bitmap *Load(IStream *stream) override {
 			SPADES_MARK_FUNCTION();
 
 			// read all
@@ -89,9 +85,9 @@ namespace spades {
 			}
 		}
 
-		virtual void Save(IStream *, Bitmap *) {
+		void Save(IStream *, Bitmap *) override {
 			SPADES_MARK_FUNCTION();
-			SPNotImplemented();
+			SPUnreachable();
 		}
 	};
 
@@ -109,9 +105,9 @@ namespace spades {
 
 	class SdlImageImageReader : public SdlImageReader {
 	public:
-		virtual std::string GetName() { return "SDL_image Image Reader"; }
+		std::string GetName() override { return "SDL_image Image Reader"; }
 
-		virtual SDL_Surface *LoadSdlImage(const std::string &data) {
+		SDL_Surface *LoadSdlImage(const std::string &data) override {
 			StringSdlRWops ops(data);
 			int flags = IMG_INIT_PNG | IMG_INIT_JPG;
 			int initted = IMG_Init(flags);
@@ -125,7 +121,7 @@ namespace spades {
 			return s;
 		}
 
-		virtual bool CheckExtension(const std::string &fn) {
+		bool CheckExtension(const std::string &fn) override {
 			return EndsWith(fn, ".png") || EndsWith(fn, ".jpg") || EndsWith(fn, ".tif") ||
 			       EndsWith(fn, ".bmp");
 		}

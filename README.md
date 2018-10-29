@@ -3,7 +3,7 @@
 
 ![OpenSpades banner](https://openspadesmedia.yvt.jp/brand/OpenSpadesBanner.jpg)
 
-[Official website](http://openspades.yvt.jp) — [Download](https://github.com/yvt/openspades/releases) — [Community](http://buildandshoot.com) — [Trello board](https://trello.com/b/3rfpvODj/openspades-roadmap)
+[Official website](https://openspades.yvt.jp) — [Download](https://github.com/yvt/openspades/releases) — [Community](https://buildandshoot.com) — [Trello board](https://trello.com/b/3rfpvODj/openspades-roadmap)
 
 ## What is it?
 OpenSpades is a compatible client of Ace of Spades 0.75.
@@ -28,32 +28,21 @@ sudo snap install openspades
 
 Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with the `openspades` command.
 
-#### PPA
-
-On Ubuntu-based systems, you can add the OpenSpades PPA with:
-
-```bash
-sudo apt-add-repository ppa:fantoro/openspades
-sudo apt update
-sudo apt install openspades
-```
-
-Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with the `openspades` command.
-
 #### Building and installing from source
 GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
 
 1. Install dependencies:
 
-   *On Debian-derived distributions*: 
+   *On Debian-derived distributions*:
    ```
    sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev \
-     libsdl2-image-dev libalut-dev xdg-utils libfreetype6-dev libopus-dev libopusfile-dev cmake
+     libsdl2-image-dev libalut-dev xdg-utils libfreetype6-dev libopus-dev \
+     libopusfile-dev cmake imagemagick
    ```
    (because of a bug in some distributions, you might also
    have to install more packages by `sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev`)
 
-   *On other distributions*: 
+   *On other distributions*:
    Install corresponding packages from your repository (or compile from source).
 
 2. Clone OpenSpades repository:
@@ -70,10 +59,10 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make
    ```
 
-4. Install OpenSpades (optional but recommended): 
+4. Install OpenSpades (optional but recommended):
 
    `sudo make install`
-   
+
    **note**: If you have a previous installation of OpenSpades, you have to uninstall it manually by `sudo rm -rf /usr/local/share/games/openspades` before installing a new one.
 
 5. Launch:
@@ -87,9 +76,9 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
   * PowerShell 5.0
     * Integrated with Windows 10.
     * Older versions are not tested, but might work
-  * *Visual Studio 2015* 
+  * *Visual Studio 2017*
+    * VS2015 is also supported, but VS2017 is more recommended
     * VS2013 is no longer supported, but might work
-    * VS2017 is not yet supported, but might work
 2. Grab the source code:
   * Stable version: https://github.com/yvt/openspades/releases
   * Latest development version (0.1.x): https://github.com/yvt/openspades/archive/master.zip
@@ -100,24 +89,26 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 5. Run CMake:
   * Source: `E:/Projects/openspades`
   * Binaries: `E:/Projects/openspades/OpenSpades.msvc`
-  * Generator: Visual Studio 14 (2015) (not Win64!)
-  
+  * Generator:
+    * For VS2017: `Visual Studio 15 (2017)` (not Win64!)
+    * For VS2015: `Visual Studio 14 (2015)` (not Win64!)
+
 6. Open `E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln` in Visual Studio.
-7. Build the solution. 
+7. Build the solution.
  * The recommended build configuration is `MinSizeRel` or `Release` if you're not an developer
  * The default build output directory is `E:/projects/OpenSpades/OpenSpades.msvc/bin/BUILD_TYPE/`
 8. Copy all `.dll` files from `Source/Externals/lib` to the build output directory.
 9. To get audio working, download a [Windows release of OpenSpades](https://github.com/yvt/openspades/releases), extract it, and copy the following dlls to the build output directory:
- * For OpenAL audio: `openal32.dll` 
+ * For OpenAL audio: `openal32.dll`
  * For YSR audio: `YSRSpades.dll`, `libgcc_s_dw2-1.dll`, `libstdc++-6.dll`, `pthreadGC2.dll`
 10. Download the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip), extract it, and copy `Nonfree/pak000-Nonfree.pak` to the `Resources` folder inside your build output directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE/Resources`. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
 11. Copy `Resources/PackageInfo.json` to the `Resources` folder inside your build output directory.
 
-### On Mac OS X (with Xcode)
+### On macOS (with Xcode)
 1. Get the latest version of Xcode and OpenSpades source.
 2. Get (pre-compiled) copies of libraries, and place them in `Sources/Externals`
   * See the file `Sources/Externals/readme.txt` for details
-4. Download [OS X release of OpenSpades](https://github.com/yvt/openspades/releases), show the package contents, and copy `libysrspades.dylib` to `Sources/Externals/lib`.
+4. Download [macOS release of OpenSpades](https://github.com/yvt/openspades/releases), show the package contents, and copy `libysrspades.dylib` to `Sources/Externals/lib`.
 5. Download and extract the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip). After that, copy `Nonfree/pak000-Nonfree.pak` and `font-unifont.pak` to `Resources/`.
 6. Open `OpenSpades.xcodeproj` and build.
 

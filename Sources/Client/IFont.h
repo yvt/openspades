@@ -43,8 +43,13 @@ namespace spades {
 			IFont(IRenderer *);
 			virtual Vector2 Measure(const std::string &) = 0;
 
-			/** Draws text.
-			 * @param color Non-premultiplied alpha color value. */
+			/**
+			 * Draws a specified string.
+			 *
+			 * @param offset Specifies the origin point of the rendered string.
+			 * @param scale Scaling factor relative to the default size of the font.
+			 * @param color A non-premultiplied alpha color value.
+			 */
 			virtual void Draw(const std::string &, Vector2 offset, float scale, Vector4 color) = 0;
 			virtual void DrawShadow(const std::string &message, const Vector2 &offset, float scale,
 			                        const Vector4 &color, const Vector4 &shadowColor);

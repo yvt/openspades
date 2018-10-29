@@ -66,7 +66,7 @@ namespace spades {
 			bool openGLCapable;
 
 		protected:
-			virtual ~StartupScreenHelper();
+			~StartupScreenHelper();
 
 		public:
 			StartupScreenHelper();

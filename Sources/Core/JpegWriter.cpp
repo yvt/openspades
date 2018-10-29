@@ -50,25 +50,25 @@ namespace spades {
 		};
 
 	public:
-		virtual bool CanLoad() { return false; }
-		virtual bool CanSave() { return true; }
+		bool CanLoad() override { return false; }
+		bool CanSave() override { return true; }
 
-		virtual bool CheckExtension(const std::string &filename) {
+		bool CheckExtension(const std::string &filename) override {
 			return EndsWith(filename, ".jpg") || EndsWith(filename, ".jpeg") ||
 			       EndsWith(filename, ".jpe");
 		}
 
-		virtual std::string GetName() {
+		std::string GetName() override {
 			static std::string name("JPEG Exporter");
 			return name;
 		}
 
-		virtual Bitmap *Load(IStream *str) {
+		Bitmap *Load(IStream *str) override {
 			SPADES_MARK_FUNCTION();
 
-			SPNotImplemented();
+			SPUnreachable();
 		}
-		virtual void Save(IStream *stream, Bitmap *bmp) {
+		void Save(IStream *stream, Bitmap *bmp) override {
 			SPADES_MARK_FUNCTION();
 
 			jpge::params params;

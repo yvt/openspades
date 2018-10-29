@@ -21,9 +21,11 @@
 #pragma once
 
 #include <string>
+#include <tuple>
 
 #include <Imports/SDL.h>
 
+#include <Core/Disposable.h>
 #include <Core/IRunnable.h>
 #include <Core/ServerAddress.h>
 
@@ -51,7 +53,7 @@ namespace spades {
 			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev, float pixelRatio);
 			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev, float pixelRatio) = 0;
 			virtual client::IAudioDevice *CreateAudioDevice();
-			client::IRenderer *CreateRenderer(SDL_Window *);
+			std::tuple<Handle<client::IRenderer>, Handle<Disposable>> CreateRenderer(SDL_Window *);
 
 			virtual bool DoesSupportNativeDPIScaling() { return false; }
 			virtual float GetForcedDPIScalingValue() { return 0.0f; }

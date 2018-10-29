@@ -54,7 +54,7 @@ namespace spades {
 
 	public:
 		DeflateStream(IStream *stream, CompressMode mode, bool autoClose = false);
-		virtual ~DeflateStream();
+		~DeflateStream();
 
 		int ReadByte() override;
 		size_t Read(void *, size_t bytes) override;

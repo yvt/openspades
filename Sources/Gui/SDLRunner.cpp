@@ -32,6 +32,7 @@
 #include <Client/Client.h>
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Debug.h>
+#include <Core/Disposable.h>
 #include <Core/FileManager.h>
 #include <Core/IStream.h>
 #include <Core/Math.h>
@@ -314,13 +315,14 @@ namespace spades {
 				SPRaise("Unknown renderer name: %s", r_renderer.CString());
 		}
 
-		class SDLSWPort : public draw::SWPort {
+		class SDLSWPort : public draw::SWPort, public Disposable {
 			SDL_Window *wnd;
 			SDL_Surface *surface;
 			bool adjusted;
 			int actualW, actualH;
 
 			Handle<Bitmap> framebuffer;
+
 			void SetFramebufferBitmap() {
 				SPADES_MARK_FUNCTION();
 
@@ -333,8 +335,15 @@ namespace spades {
 				}
 			}
 
+			void EnsureSurfaceIsValid() {
+				if (!surface) {
+					SPRaise("The SDL surface associated with this SDLSWPart has already been"
+					        "destroyed.");
+				}
+			}
+
 		protected:
-			virtual ~SDLSWPort() {
+			~SDLSWPort() {
 				SPADES_MARK_FUNCTION();
 
 				if (surface && SDL_MUSTLOCK(surface)) {
@@ -364,9 +373,16 @@ namespace spades {
 				}
 				SetFramebufferBitmap();
 			}
-			virtual Bitmap *GetFramebuffer() { return framebuffer; }
-			virtual void Swap() {
-				SPADES_MARK_FUNCTION();
+
+			void Dispose() override { surface = nullptr; }
+
+			Bitmap *GetFramebuffer() override {
+				EnsureSurfaceIsValid();
+
+				return framebuffer;
+			}
+			void Swap() override {
+				EnsureSurfaceIsValid();
 
 				if (adjusted) {
 					int sy = (surface->h - actualH) >> 1;
@@ -396,7 +412,7 @@ namespace spades {
 			}
 		};
 
-		class SDLTextureSWPort : public draw::SWPort {
+		class SDLTextureSWPort : public draw::SWPort, public Disposable {
 			SDL_Window *wnd;
 			int deviceWidth, deviceHeight;
 			SDL_Renderer *sdlRenderer;
@@ -408,14 +424,17 @@ namespace spades {
 				framebuffer.Set(new Bitmap(deviceWidth, deviceHeight), false);
 			}
 
+			void EnsureSurfaceIsValid() {
+				if (!sdlRenderer) {
+					SPRaise("This SDLTextureSWPort has already been disposed.");
+				}
+			}
+
 		protected:
-			virtual ~SDLTextureSWPort() {
-				// crashes for some reason (maybe because window is already closed
-				// at this point?)
-				// SDL_DestroyTexture(sdlTexture);
-				// SDL_DestroyRenderer(sdlRenderer);
-				sdlTexture = nullptr;
-				sdlRenderer = nullptr;
+			~SDLTextureSWPort() {
+				SPADES_MARK_FUNCTION();
+
+				Dispose();
 			}
 
 		public:
@@ -447,9 +466,17 @@ namespace spades {
 
 				SetFramebufferBitmap();
 			}
-			virtual Bitmap *GetFramebuffer() { return framebuffer; }
-			virtual void Swap() {
+
+			Bitmap *GetFramebuffer() override {
+				EnsureSurfaceIsValid();
+
+				return framebuffer;
+			}
+
+			void Swap() override {
 				SPADES_MARK_FUNCTION();
+
+				EnsureSurfaceIsValid();
 
 				SDL_RenderSetViewport(sdlRenderer, nullptr);
 
@@ -458,22 +485,42 @@ namespace spades {
 
 				SDL_RenderPresent(sdlRenderer);
 			}
+
+			void Dispose() override {
+				SPADES_MARK_FUNCTION();
+				
+				if (!sdlTexture) {
+					return;
+				}
+				SDL_DestroyTexture(sdlTexture);
+				SDL_DestroyRenderer(sdlRenderer);
+				sdlTexture = nullptr;
+				sdlRenderer = nullptr;
+			}
 		};
 
-		client::IRenderer *SDLRunner::CreateRenderer(SDL_Window *wnd) {
+		std::tuple<Handle<client::IRenderer>, Handle<Disposable>>
+		SDLRunner::CreateRenderer(SDL_Window *wnd) {
 			switch (GetRendererType()) {
 				case RendererType::GL: {
-					Handle<SDLGLDevice> glDevice(new SDLGLDevice(wnd, DoesSupportNativeDPIScaling()), false);
-					return new draw::GLRenderer(glDevice);
+					auto glDevice = Handle<SDLGLDevice>::New(wnd, DoesSupportNativeDPIScaling());
+					auto dummy = Handle<Disposable>::New(); // FIXME
+					return std::make_tuple(
+					  Handle<draw::GLRenderer>::New(glDevice).Cast<client::IRenderer>(),
+					  std::move(dummy));
 				}
 				case RendererType::SW: {
 #ifdef __MACOSX__
 					// We need SDLTextureSWPort to enable Hi-DPI support
-					Handle<SDLTextureSWPort> port(new SDLTextureSWPort(wnd, DoesSupportNativeDPIScaling()), false);
+					auto port =
+						Handle<SDLTextureSWPort>::New(wnd, DoesSupportNativeDPIScaling());
 #else
-					Handle<SDLSWPort> port(new SDLSWPort(wnd), false);
+					auto port =
+						Handle<SDLSWPort>::New(wnd);
 #endif
-					return new draw::SWRenderer(port);
+					return std::make_tuple(
+					  Handle<draw::SWRenderer>::New(port).Cast<client::IRenderer>(),
+					  std::move(port).Cast<Disposable>());
 				}
 				default: SPRaise("Invalid renderer type");
 			}
@@ -512,7 +559,6 @@ namespace spades {
 						sdlFlags = SDL_WINDOW_OPENGL;
 						SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 						SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
-						SDL_GL_SetSwapInterval(r_vsync);
 						if (!r_allowSoftwareRendering)
 							SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
@@ -588,7 +634,11 @@ namespace spades {
 				m_active = true;
 
 				{
-					Handle<client::IRenderer> renderer(CreateRenderer(window), false);
+					Handle<client::IRenderer> renderer;
+					Handle<Disposable> windowReference;
+
+					std::tie(renderer, windowReference) = CreateRenderer(window);
+
 					Handle<client::IAudioDevice> audio(CreateAudioDevice(), false);
 					float pixelRatio = 1.0f;
 
@@ -605,7 +655,19 @@ namespace spades {
 						pixelRatio = forcedScaling;
 					}
 
+					if (rtype == RendererType::GL) {
+						if (SDL_GL_SetSwapInterval(r_vsync) != 0) {
+							SPRaise("SDL_GL_SetSwapInterval failed: %s", SDL_GetError());
+						}
+					}
+
 					RunClientLoop(renderer, audio, pixelRatio);
+
+					// `SDL_Window` and its associated resources will be inaccessible
+					// past this point. Some referencing objects might be still alive due to
+					// the indeterministic nature of AngelScript's tracing GC, so we explicitly
+					// break such references right now.
+					windowReference->Dispose();
 				}
 			} catch (...) {
 				SDL_Quit();

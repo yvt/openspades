@@ -46,10 +46,6 @@ DEFINE_SPADES_SETTING(cg_manualFocus, "0");
 DEFINE_SPADES_SETTING(cg_depthOfFieldAmount, "1");
 DEFINE_SPADES_SETTING(cg_shake, "1");
 
-static float nextRandom() {
-	return spades::real_dist(spades::client::mt_engine_client);
-}
-
 namespace spades {
 	namespace client {
 
@@ -210,8 +206,8 @@ namespace spades {
 								localFireVibration *= 0.4f;
 							}
 
-							roll += (nextRandom() - nextRandom()) * 0.03f * localFireVibration;
-							scale += nextRandom() * 0.04f * localFireVibration;
+							roll += (SampleRandomFloat() - SampleRandomFloat()) * 0.03f * localFireVibration;
+							scale += SampleRandomFloat() * 0.04f * localFireVibration;
 
 							vibPitch += localFireVibration * (1.f - localFireVibration) * 0.01f;
 							vibYaw += sinf(localFireVibration * (float)M_PI * 2.f) * 0.001f;
@@ -391,10 +387,10 @@ namespace spades {
 							grenVib *= 10.f;
 							if (grenVib > 1.f)
 								grenVib = 1.f;
-							roll += (nextRandom() - nextRandom()) * 0.2f * grenVib;
-							vibPitch += (nextRandom() - nextRandom()) * 0.1f * grenVib;
-							vibYaw += (nextRandom() - nextRandom()) * 0.1f * grenVib;
-							scale -= (nextRandom() - nextRandom()) * 0.1f * grenVib;
+							roll += (SampleRandomFloat() - SampleRandomFloat()) * 0.2f * grenVib;
+							vibPitch += (SampleRandomFloat() - SampleRandomFloat()) * 0.1f * grenVib;
+							vibYaw += (SampleRandomFloat() - SampleRandomFloat()) * 0.1f * grenVib;
+							scale -= (SampleRandomFloat() - SampleRandomFloat()) * 0.1f * grenVib;
 
 							def.radialBlur += grenVib * 0.1f;
 						}

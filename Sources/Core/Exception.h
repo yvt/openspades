@@ -45,7 +45,17 @@ namespace spades {
 #define SPRaise(fmt, val...) throw ::spades::Exception(__FILE__, __LINE__, fmt, ##val)
 #endif
 
+/**
+ * Raises a "not implemented" exception.
+ *
+ * This serves as a dynamic "TODO" marker. Mere occurrences of this macro don't mean there are
+ * missing features. They have to be *reachable*.
+ *
+ * Do not use this to indicate unreachable code! Use `SPUnreachable` instead in such cases.
+ */
 #define SPNotImplemented() SPRaise("Not implemented")
+
+#define SPUnsupported() SPRaise("Unsupported")
 
 #define SPUnreachable() SPRaise("Internal error; unreachable code")
 

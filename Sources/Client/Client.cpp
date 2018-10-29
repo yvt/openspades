@@ -65,10 +65,6 @@ SPADES_SETTING(cg_playerName);
 namespace spades {
 	namespace client {
 
-		std::random_device r_device_client;
-		std::mt19937_64 mt_engine_client(
-		  r_device_client()); // Seed Mersenne twister with non-deterministic 32-bit seed
-
 		Client::Client(IRenderer *r, IAudioDevice *audioDev, const ServerAddress &host, float pixelRatio,
 		               FontManager *fontManager)
 		    : pixelRatio(pixelRatio),

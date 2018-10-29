@@ -246,7 +246,7 @@ namespace spades {
 	public:
 		DispatchThread(GlobalDispatchThreadPool &pool) : pool{pool} {
 		}
-		virtual void Run() throw() {
+		void Run() noexcept override {
 			SPADES_MARK_FUNCTION();
 			while (true) {
 				SyncQueueEntry *ent = pool.globalQueue.Wait();

@@ -25,7 +25,7 @@ namespace spades {
 
 			visibleLength = shutterTime * velocity;
 			curDistance = -visibleLength;
-			curDistance += maxTimeSpread * GetRandom();
+			curDistance += maxTimeSpread * SampleRandomFloat();
 
 			firstUpdate = true;
 

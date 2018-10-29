@@ -27,7 +27,7 @@
 
 namespace spades {
 	IStream::~IStream() {}
-	int IStream::ReadByte() { SPNotImplemented(); }
+	int IStream::ReadByte() { SPUnsupported(); }
 
 	size_t IStream::Read(void *out, size_t bytes) {
 		SPADES_MARK_FUNCTION();
@@ -66,7 +66,7 @@ namespace spades {
 	void IStream::WriteByte(int) {
 		SPADES_MARK_FUNCTION();
 
-		SPNotImplemented();
+		SPUnsupported();
 	}
 
 	void IStream::Write(const void *inp, size_t bytes) {
@@ -84,13 +84,13 @@ namespace spades {
 		Write(str.data(), str.size());
 	}
 
-	uint64_t IStream::GetPosition() { SPNotImplemented(); }
+	uint64_t IStream::GetPosition() { SPUnsupported(); }
 
-	void IStream::SetPosition(uint64_t pos) { SPNotImplemented(); }
+	void IStream::SetPosition(uint64_t pos) { SPUnsupported(); }
 
-	uint64_t IStream::GetLength() { SPNotImplemented(); }
+	uint64_t IStream::GetLength() { SPUnsupported(); }
 
-	void IStream::SetLength(uint64_t) { SPNotImplemented(); }
+	void IStream::SetLength(uint64_t) { SPUnsupported(); }
 
 	uint16_t IStream::ReadLittleShort() {
 		SPADES_MARK_FUNCTION();

@@ -121,6 +121,7 @@ namespace spades {
 					break;
 
 				case ClientCameraMode::Free:
+				case ClientCameraMode::ThirdPersonLocal:
 				case ClientCameraMode::ThirdPersonFollow: {
 					// Move the third-person or free-floating camera
 					x = -x;
@@ -139,8 +140,7 @@ namespace spades {
 					break;
 				}
 
-				case ClientCameraMode::FirstPersonLocal:
-				case ClientCameraMode::ThirdPersonLocal: {
+				case ClientCameraMode::FirstPersonLocal: {
 					SPAssert(world);
 					SPAssert(world->GetLocalPlayer());
 
@@ -535,6 +535,9 @@ namespace spades {
 					} else if (CheckKey(cg_keySaveMap, name) && down) {
 						TakeMapShot();
 					} else if (CheckKey(cg_keyFlashlight, name) && down) {
+						// spectators and dead players should not be able to toggle the flashlight
+						if (world->GetLocalPlayer()->IsSpectator() || !world->GetLocalPlayer()->IsAlive())
+							return;
 						flashlightOn = !flashlightOn;
 						flashlightOnTime = time;
 						Handle<IAudioChunk> chunk =

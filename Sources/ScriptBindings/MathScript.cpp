@@ -35,24 +35,22 @@ namespace spades {
 				case 1:
 					return 0;
 				case 2:
-					return mt_engine() & 1;
+					return SampleRandom() & 1;
 				case 4:
-					return mt_engine() & 3;
+					return SampleRandom() & 3;
 				case 8:
-					return mt_engine() & 7;
+					return SampleRandom() & 7;
 				case 16:
-					return mt_engine() & 15;
+					return SampleRandom() & 15;
 				case 32:
-					return mt_engine() & 31;
+					return SampleRandom() & 31;
 				case 64:
-					return mt_engine() & 63;
+					return SampleRandom() & 63;
 			}
 			// We can't directly use the engine here, we need a distribution
 
 			// range - 1 because it's inclusive and we want exclusive
-			std::uniform_int_distribution<unsigned int> int_dist(0, range - 1);
-
-			return int_dist(mt_engine);
+            return SampleRandomInt<unsigned int>(0, range - 1);
 		}
 		static unsigned int GetRandomUIntRange(unsigned int a,
 											   unsigned int b){
@@ -70,7 +68,7 @@ namespace spades {
 			return (int)(GetRandomInt((unsigned int)(b - a)) + (unsigned int)a);
 		}
 		static float GetRandomFloatRange(float a, float b) {
-			return GetRandom() * (b - a) + a;
+			return SampleRandomFloat() * (b - a) + a;
 		}
 	public:
 		MathScriptObjectRegistrar():
@@ -995,7 +993,7 @@ namespace spades {
 					manager->CheckError(r);
 					
 					r = eng->RegisterGlobalFunction("float GetRandom()",
-													asFUNCTION(GetRandom),
+													asFUNCTION(SampleRandomFloat),
 													asCALL_CDECL);
 					manager->CheckError(r);
 					

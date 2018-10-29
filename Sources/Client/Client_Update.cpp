@@ -219,7 +219,7 @@ namespace spades {
 
 			public:
 				CorpseUpdateDispatch(Client *c, float dt) : client(c), dt(dt) {}
-				virtual void Run() {
+				void Run() override {
 					for (auto &c : client->corpses) {
 						for (int i = 0; i < 4; i++)
 							c->Update(dt / 4.f);
@@ -523,7 +523,7 @@ namespace spades {
 				lastHurtTime = world->GetTime();
 
 				Handle<IAudioChunk> c;
-				switch ((mt_engine_client() >> 3) & 3) {
+				switch (SampleRandomInt(0, 3)) {
 					case 0:
 						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal1.opus");
 						break;
@@ -544,10 +544,10 @@ namespace spades {
 				hurtSprites.resize(std::max(cnt, 6));
 				for (size_t i = 0; i < hurtSprites.size(); i++) {
 					HurtSprite &spr = hurtSprites[i];
-					spr.angle = GetRandom() * (2.f * static_cast<float>(M_PI));
-					spr.scale = .2f + GetRandom() * GetRandom() * .7f;
-					spr.horzShift = GetRandom();
-					spr.strength = .3f + GetRandom() * .7f;
+					spr.angle = SampleRandomFloat() * (2.f * static_cast<float>(M_PI));
+					spr.scale = .2f + SampleRandomFloat() * SampleRandomFloat() * .7f;
+					spr.horzShift = SampleRandomFloat();
+					spr.strength = .3f + SampleRandomFloat() * .7f;
 					if (hpper > .5f) {
 						spr.strength *= 1.5f - hpper;
 					}
@@ -604,20 +604,17 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
-				const char *snds[] = {
-				  "Sounds/Player/Footstep1.opus", "Sounds/Player/Footstep2.opus",
-				  "Sounds/Player/Footstep3.opus", "Sounds/Player/Footstep4.opus",
-				  "Sounds/Player/Footstep5.opus", "Sounds/Player/Footstep6.opus",
-				  "Sounds/Player/Footstep7.opus", "Sounds/Player/Footstep8.opus"};
-				const char *rsnds[] = {
-				  "Sounds/Player/Run1.opus",  "Sounds/Player/Run2.opus",
-				  "Sounds/Player/Run3.opus",  "Sounds/Player/Run4.opus",
-				  "Sounds/Player/Run5.opus",  "Sounds/Player/Run6.opus",
-				  "Sounds/Player/Run7.opus",  "Sounds/Player/Run8.opus",
-				  "Sounds/Player/Run9.opus",  "Sounds/Player/Run10.opus",
-				  "Sounds/Player/Run11.opus", "Sounds/Player/Run12.opus",
+                std::array<const char *, 8> snds = {"Sounds/Player/Footstep1.opus", "Sounds/Player/Footstep2.opus",
+				                      "Sounds/Player/Footstep3.opus", "Sounds/Player/Footstep4.opus",
+				                      "Sounds/Player/Footstep5.opus", "Sounds/Player/Footstep6.opus",
+				                      "Sounds/Player/Footstep7.opus", "Sounds/Player/Footstep8.opus"};
+				std::array<const char *, 12> rsnds = {
+				  "Sounds/Player/Run1.opus",  "Sounds/Player/Run2.opus",  "Sounds/Player/Run3.opus",
+				  "Sounds/Player/Run4.opus",  "Sounds/Player/Run5.opus",  "Sounds/Player/Run6.opus",
+				  "Sounds/Player/Run7.opus",  "Sounds/Player/Run8.opus",  "Sounds/Player/Run9.opus",
+				  "Sounds/Player/Run10.opus", "Sounds/Player/Run11.opus", "Sounds/Player/Run12.opus",
 				};
-				const char *wsnds[] = {"Sounds/Player/Wade1.opus", "Sounds/Player/Wade2.opus",
+				std::array<const char *, 8> wsnds = {"Sounds/Player/Wade1.opus", "Sounds/Player/Wade2.opus",
 				                       "Sounds/Player/Wade3.opus", "Sounds/Player/Wade4.opus",
 				                       "Sounds/Player/Wade5.opus", "Sounds/Player/Wade6.opus",
 				                       "Sounds/Player/Wade7.opus", "Sounds/Player/Wade8.opus"};
@@ -625,13 +622,13 @@ namespace spades {
 				                   ? clientPlayers[p->GetId()]->GetSprintState() > 0.5f
 				                   : false;
 				Handle<IAudioChunk> c =
-				  p->GetWade() ? audioDevice->RegisterSound(wsnds[(mt_engine_client() >> 8) % 8])
-				               : audioDevice->RegisterSound(snds[(mt_engine_client() >> 8) % 8]);
+				  p->GetWade() ? audioDevice->RegisterSound(SampleRandomElement(wsnds))
+				               : audioDevice->RegisterSound(SampleRandomElement(snds));
 				audioDevice->Play(c, p->GetOrigin(), AudioParam());
 				if (sprinting && !p->GetWade()) {
 					AudioParam param;
 					param.volume *= clientPlayers[p->GetId()]->GetSprintState();
-					c = audioDevice->RegisterSound(rsnds[(mt_engine_client() >> 8) % 12]);
+					c = audioDevice->RegisterSound(SampleRandomElement(rsnds));
 					audioDevice->Play(c, p->GetOrigin(), param);
 				}
 			}
@@ -782,7 +779,7 @@ namespace spades {
 				if (victim != world->GetLocalPlayer()) {
 					if (!IsMuted()) {
 						Handle<IAudioChunk> c;
-						switch (mt_engine_client() % 3) {
+						switch (SampleRandomInt(0, 2)) {
 							case 0:
 								c =
 								  audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.opus");
@@ -845,7 +842,7 @@ namespace spades {
 					}
 					corp->AddImpulse(dir);
 				} else if (kt == KillTypeGrenade) {
-					corp->AddImpulse(MakeVector3(0, 0, -4.f - GetRandom() * 4.f));
+					corp->AddImpulse(MakeVector3(0, 0, -4.f - SampleRandomFloat() * 4.f));
 				}
 				corp->AddImpulse(victim->GetVelocty() * 32.f);
 				corpses.emplace_back(corp);
@@ -970,7 +967,7 @@ namespace spades {
 					audioDevice->Play(c, hitPos, AudioParam());
 				} else {
 					Handle<IAudioChunk> c;
-					switch ((mt_engine_client() >> 6) % 3) {
+					switch (SampleRandomInt(0, 2)) {
 						case 0:
 							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.opus");
 							break;
@@ -1025,8 +1022,8 @@ namespace spades {
 
 					Handle<IAudioChunk> c;
 
-					param.pitch = .9f + GetRandom() * 0.2f;
-					switch ((mt_engine_client() >> 6) & 3) {
+					param.pitch = .9f + SampleRandomFloat() * 0.2f;
+					switch (SampleRandomInt(0, 3)) {
 						case 0:
 							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water1.opus");
 							break;
@@ -1050,20 +1047,12 @@ namespace spades {
 					param.volume = 2.f;
 
 					Handle<IAudioChunk> c;
-
-					switch ((mt_engine_client() >> 6) & 3) {
-						case 0:
-						case 1:
-						case 2:
-						case 3:
-							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Block.opus");
-							break;
-					}
+                    c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Block.opus");
 					audioDevice->Play(c, shiftedHitPos, param);
 
-					param.pitch = .9f + GetRandom() * 0.2f;
+					param.pitch = .9f + SampleRandomFloat() * 0.2f;
 					param.volume = 2.f;
-					switch ((mt_engine_client() >> 6) & 3) {
+					switch (SampleRandomInt(0, 3)) {
 						case 0:
 							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet1.opus");
 							break;
@@ -1177,7 +1166,7 @@ namespace spades {
 				if (!IsMuted()) {
 					Handle<IAudioChunk> c, cs;
 
-					switch ((mt_engine_client() >> 8) & 1) {
+					switch (SampleRandomInt(0, 1)) {
 						case 0:
 							c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Explode1.opus");
 							cs = audioDevice->RegisterSound(

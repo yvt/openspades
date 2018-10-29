@@ -39,26 +39,26 @@ namespace spades {
 	public:
 		PngWriter() : IBitmapCodec() { png_init(nullptr, nullptr); }
 
-		virtual bool CanLoad() { return false; }
+		bool CanLoad() override { return false; }
 
-		virtual bool CanSave() { return true; }
+		bool CanSave() override { return true; }
 
-		virtual bool CheckExtension(const std::string &filename) {
+		bool CheckExtension(const std::string &filename) override {
 			return EndsWith(filename, ".png");
 		}
 
-		virtual std::string GetName() {
+		std::string GetName() override {
 			static std::string name("libpng exporter");
 			return name;
 		}
 
-		virtual Bitmap *Load(IStream *str) {
+		Bitmap *Load(IStream *str) override {
 			SPADES_MARK_FUNCTION();
 
-			SPNotImplemented();
+			SPUnreachable();
 		}
 
-		virtual void Save(IStream *stream, Bitmap *bmp) {
+		void Save(IStream *stream, Bitmap *bmp) override {
 			SPADES_MARK_FUNCTION();
 
 			int err;

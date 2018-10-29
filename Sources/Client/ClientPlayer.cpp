@@ -604,7 +604,8 @@ namespace spades {
 			                                    eyeMatrix.GetOrigin() + Vector3(20.f, 20.f, 20.f)));
 			sandboxedRenderer->SetAllowDepthHack(true);
 
-			if (client->flashlightOn) {
+			// no flashlight if spectating other players while dead
+			if (client->flashlightOn && world->GetLocalPlayer()->IsAlive()) {
 				float brightness;
 				brightness = client->time - client->flashlightOnTime;
 				brightness = 1.f - expf(-brightness * 5.f);
@@ -1178,7 +1179,7 @@ namespace spades {
 						case RIFLE_WEAPON:
 							model = renderer->RegisterModel("Models/Weapons/Rifle/Casing.kv6");
 							snd =
-							  (mt_engine_client() & 0x1000)
+							  SampleRandomBool()
 							    ? audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.opus")
 							    : audioDevice->RegisterSound(
 							        "Sounds/Weapons/Rifle/ShellDrop2.opus");
@@ -1193,7 +1194,7 @@ namespace spades {
 						case SMG_WEAPON:
 							model = renderer->RegisterModel("Models/Weapons/SMG/Casing.kv6");
 							snd =
-							  (mt_engine_client() & 0x1000)
+							  SampleRandomBool()
 							    ? audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop1.opus")
 							    : audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop2.opus");
 							snd2 = audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellWater.opus");

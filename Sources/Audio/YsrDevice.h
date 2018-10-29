@@ -53,24 +53,24 @@ namespace spades {
 			void Spatialize(const void *, void *);
 
 		protected:
-			virtual ~YsrDevice();
+			~YsrDevice();
 
 		public:
 			YsrDevice();
 
 			static bool TryLoadYsr();
 
-			virtual client::IAudioChunk *RegisterSound(const char *name);
+			client::IAudioChunk *RegisterSound(const char *name) override;
 
-			virtual void SetGameMap(client::GameMap *);
+			void SetGameMap(client::GameMap *) override;
 
-			virtual void Play(client::IAudioChunk *, const Vector3 &origin,
-			                  const client::AudioParam &);
-			virtual void PlayLocal(client::IAudioChunk *, const Vector3 &origin,
-			                       const client::AudioParam &);
-			virtual void PlayLocal(client::IAudioChunk *, const client::AudioParam &);
+			void Play(client::IAudioChunk *, const Vector3 &origin,
+			                  const client::AudioParam &) override;
+			void PlayLocal(client::IAudioChunk *, const Vector3 &origin,
+			                       const client::AudioParam &) override;
+			void PlayLocal(client::IAudioChunk *, const client::AudioParam &) override;
 
-			virtual void Respatialize(const Vector3 &eye, const Vector3 &front, const Vector3 &up);
+			void Respatialize(const Vector3 &eye, const Vector3 &front, const Vector3 &up) override;
 		};
 	}
 }

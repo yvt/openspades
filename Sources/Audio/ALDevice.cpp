@@ -52,12 +52,8 @@ DEFINE_SPADES_SETTING(s_gain, "1");
 namespace spades {
 	namespace audio {
 
-		std::uniform_real_distribution<float> real_dist_audio(0, 1);
-
 		static Vector3 TransformVectorToAL(Vector3 v) { return MakeVector3(v.x, v.y, v.z); }
 		static Vector3 TransformVectorFromAL(Vector3 v) { return MakeVector3(v.x, v.y, v.z); }
-
-		static float NextRandom() { return real_dist_audio(mt_engine); }
 
 		namespace {
 			std::vector<uint8_t> ConvertFloatBufferToSignedShort(const std::vector<uint8_t> &bytes) {
@@ -562,7 +558,7 @@ namespace spades {
 			ALSrc *AllocChunk() {
 				SPADES_MARK_FUNCTION();
 
-				size_t start = mt_engine() % srcs.size();
+                size_t start = SampleRandomInt<std::size_t>(0, srcs.size() - 1);
 				for (size_t i = 0; i < srcs.size(); i++) {
 					ALSrc *src = srcs[(i + start) % srcs.size()];
 					if (src->IsPlaying())
@@ -570,7 +566,7 @@ namespace spades {
 					return src;
 				}
 
-				ALSrc *src = srcs[mt_engine() % srcs.size()];
+                ALSrc *src = SampleRandomElement(srcs);
 				src->Terminate();
 				return src;
 			}
@@ -649,9 +645,9 @@ namespace spades {
 						Vector3 rayTo;
 
 						for (int rays = 0; rays < 4; rays++) {
-							rayTo.x = NextRandom() - NextRandom();
-							rayTo.y = NextRandom() - NextRandom();
-							rayTo.z = NextRandom() - NextRandom();
+							rayTo.x = SampleRandomFloat() - SampleRandomFloat();
+							rayTo.y = SampleRandomFloat() - SampleRandomFloat();
+							rayTo.z = SampleRandomFloat() - SampleRandomFloat();
 							rayTo = rayTo.Normalize();
 
 							IntVector3 hitPos;
@@ -742,7 +738,7 @@ namespace spades {
 
 				for (size_t i = 0; i < srcs.size(); i++) {
 					ALSrc *s = srcs[i];
-					if ((mt_engine() % 8 == 0) && s->IsPlaying())
+					if ((SampleRandomInt(0, 7) == 0) && s->IsPlaying())
 						s->UpdateObstruction();
 				}
 			}

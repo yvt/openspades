@@ -105,7 +105,7 @@ namespace spades {
 
 	void SdlFileStream::SetLength(uint64_t len) {
 		SPADES_MARK_FUNCTION();
-		SPNotImplemented();
+		SPUnsupported();
 	}
 
 	void SdlFileStream::Flush() {

@@ -84,20 +84,24 @@ namespace spades {
 				SetNode(Arm2, torso * MakeVector3(-0.2f, -.4f, .2f));
 			}
 
-			SetNode(Head, (nodes[Torso1].pos + nodes[Torso2].pos) * .5f + MakeVector3(0, 0, -0.6f));
+			SetNode(Head,
+			        (nodes[Torso1].pos + nodes[Torso2].pos) * .5f + MakeVector3(0, 0, -0.6f));
 		}
 
-		static float VelNoise() { return (GetRandom() - GetRandom()) * 2.f; }
-
 		void Corpse::SetNode(NodeType n, spades::Vector3 v) {
+			auto velNoise = [&] { return (SampleRandomFloat() - SampleRandomFloat()) * 2.0f; };
+
 			SPAssert(n >= 0);
 			SPAssert(n < NodeCount);
+
 			nodes[n].pos = v;
-			nodes[n].vel = MakeVector3(VelNoise(), VelNoise(), 0.f);
+			nodes[n].vel = MakeVector3(velNoise(), velNoise(), 0.f);
 			nodes[n].lastPos = v;
 			nodes[n].lastForce = MakeVector3(0, 0, 0);
 		}
-		void Corpse::SetNode(NodeType n, spades::Vector4 v) { SetNode(n, v.GetXYZ()); }
+		void Corpse::SetNode(NodeType n, spades::Vector4 v) {
+			SetNode(n, v.GetXYZ());
+		}
 
 		Corpse::~Corpse() {}
 

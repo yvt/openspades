@@ -594,14 +594,14 @@ BEGIN_AS_NAMESPACE
 template<typename T>
 asUINT asGetTypeTraits()
 {
-#if defined(_MSC_VER) || defined(_LIBCPP_TYPE_TRAITS) || (__GNUC__ >= 5)
+#if defined(_MSC_VER) || defined(_LIBCPP_TYPE_TRAITS) || (__GNUC__ >= 5) || defined(__clang__)
 	// MSVC, XCode/Clang, and gnuc 5+
 	// C++11 compliant code
 	bool hasConstructor        = std::is_default_constructible<T>::value && !std::is_trivially_default_constructible<T>::value;
 	bool hasDestructor         = std::is_destructible<T>::value          && !std::is_trivially_destructible<T>::value;
 	bool hasAssignmentOperator = std::is_copy_assignable<T>::value       && !std::is_trivially_copy_assignable<T>::value;
 	bool hasCopyConstructor    = std::is_copy_constructible<T>::value    && !std::is_trivially_copy_constructible<T>::value;
-#elif defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)) || defined(__clang__)
+#elif defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8))
 	// gnuc 4.8 is using a mix of C++11 standard and pre-standard templates
 	bool hasConstructor        = std::is_default_constructible<T>::value && !std::has_trivial_default_constructor<T>::value;
 	bool hasDestructor         = std::is_destructible<T>::value          && !std::is_trivially_destructible<T>::value;

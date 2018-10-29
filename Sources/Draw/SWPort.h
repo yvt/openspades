@@ -25,12 +25,20 @@
 
 namespace spades {
 	namespace draw {
-		class SWPort : public RefCountedObject {
+		class SWPort : public virtual RefCountedObject {
 		protected:
 			~SWPort() {}
 
 		public:
+			/**
+			 * Returns a `Bitmap` on which the scene is rendered.
+			 */
 			virtual Bitmap *GetFramebuffer() = 0;
+
+			/**
+			 * Presents the contents of the framebuffer (returned by
+			 * `GetFramebuffer`) to the screen.
+			 */
 			virtual void Swap() = 0;
 		};
 	}

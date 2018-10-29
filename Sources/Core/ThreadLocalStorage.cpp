@@ -106,11 +106,11 @@ namespace spades {
 				SPRaise("Failed to create Windows TLS key");
 			}
 		}
-		virtual ~Win32ThreadLocalStorageImpl() { TlsFree(key); }
+		~Win32ThreadLocalStorageImpl() { TlsFree(key); }
 
-		virtual void Set(void *value) { TlsSetValue(key, value); }
+		void Set(void *value) override { TlsSetValue(key, value); }
 
-		virtual void *Get() { return TlsGetValue(key); }
+		void *Get() override { return TlsGetValue(key); }
 	};
 
 	ThreadLocalStorageImpl *ThreadLocalStorageImpl::Create() {
@@ -127,15 +127,15 @@ namespace spades {
 				SPRaise("Failed to create PThread TLS key");
 			}
 		}
-		virtual ~PThreadThreadLocalStorageImpl() { pthread_key_delete(key); }
+		~PThreadThreadLocalStorageImpl() { pthread_key_delete(key); }
 
-		virtual void Set(void *value) {
+		void Set(void *value) override {
 			if (pthread_setspecific(key, value)) {
 				SPRaise("Failed to set TLS value");
 			}
 		}
 
-		virtual void *Get() { return pthread_getspecific(key); }
+		void *Get() override { return pthread_getspecific(key); }
 	};
 
 	ThreadLocalStorageImpl *ThreadLocalStorageImpl::Create() {

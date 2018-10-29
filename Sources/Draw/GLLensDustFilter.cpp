@@ -143,7 +143,7 @@ namespace spades {
 
 			noise.resize(128 * 128);
 			for (size_t i = 0; i < 128 * 128; i++) {
-				noise[i] = static_cast<std::uint32_t>(mt_engine());
+				noise[i] = static_cast<std::uint32_t>(SampleRandom());
 			}
 
 			IGLDevice *dev = renderer->GetGLDevice();
