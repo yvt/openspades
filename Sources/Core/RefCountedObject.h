@@ -144,5 +144,13 @@ namespace spades {
 			ptr = nullptr;
 			return {other, false};
 		}
+
+		/**
+		* Attempts to cast this `Handle<T>` to `Handle<S>` using `dynamic_cast`.
+		* Throws an exception if the cast was unsuccessful.
+		*/
+		template <class S> Handle<S> Cast() const & {
+			return Handle{*this}.Cast<S>();
+		}
 	};
 }
