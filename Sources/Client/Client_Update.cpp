@@ -1081,7 +1081,7 @@ namespace spades {
 			switch (player->GetWeapon()->GetWeaponType()) {
 				case RIFLE_WEAPON: vel = 700.f; break;
 				case SMG_WEAPON: vel = 360.f; break;
-				case SHOTGUN_WEAPON: return;
+				case SHOTGUN_WEAPON: vel = 500.f; break;
 			}
 			AddLocalEntity(new Tracer(this, muzzlePos, hitPos, vel));
 			AddLocalEntity(new MapViewTracer(muzzlePos, hitPos, vel));
