@@ -207,7 +207,7 @@ add_subdirectory(Resources)
 add_subdirectory(Sources)
 
 
-if(UNIX AND NOT APPLE)
+if(UNIX)
 	# various texts
 	INSTALL(FILES AUTHORS LICENSE README.md DESTINATION ${OPENSPADES_INSTALL_DOC}/)
 
@@ -256,7 +256,7 @@ if(UNIX AND NOT APPLE)
 	# Currently there is no files in lib/openspades. But if you reading this message in future and want to
 	# place somewhere libs, binaries or other non-media stuff, place them in lib/openspades. Thank you.
 
-endif(UNIX AND NOT APPLE)
+endif(UNIX)
 
 
 

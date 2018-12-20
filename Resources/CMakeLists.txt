@@ -51,7 +51,7 @@ if(OPENSPADES_RESOURCES)
 		DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
-if(UNIX AND NOT APPLE)
+if(UNIX)
 	add_custom_target(OpenSpades_Unix ALL COMMENT "Process unix stuff")
 
 	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Icons)
@@ -77,4 +77,4 @@ if(UNIX AND NOT APPLE)
 		COMMAND sh -c \"gzip -9 -c ${CMAKE_CURRENT_BINARY_DIR}/Unix/Man/openspades.6 > openspades.6.gz\"
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Unix/Man
 	)
-endif(UNIX AND NOT APPLE)
+endif(UNIX)
