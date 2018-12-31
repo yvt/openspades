@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <type_traits>
 #include <typeinfo>
 
@@ -31,7 +32,7 @@
 namespace spades {
 
 	class RefCountedObject {
-		int refCount;
+		std::atomic<int> refCount;
 #if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
 		reflection::BacktraceRecord lastRelease;
 		reflection::BacktraceRecord secondLastRelease;

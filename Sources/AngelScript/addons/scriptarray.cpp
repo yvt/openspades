@@ -1719,14 +1719,14 @@ void CScriptArray::AddRef() const
 {
 	// Clear the GC flag then increase the counter
 	gcFlag = false;
-	asAtomicInc(refCount);
+	refCount.fetch_add(1);
 }
 
 void CScriptArray::Release() const
 {
 	// Clearing the GC flag then descrease the counter
 	gcFlag = false;
-	if( asAtomicDec(refCount) == 0 )
+	if( refCount.fetch_sub(1) == 1 )
 	{
 		// When reaching 0 no more references to this instance
 		// exists and the object should be destroyed

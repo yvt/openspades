@@ -19,6 +19,7 @@
  */
 
 #include "ScriptManager.h"
+#include <atomic>
 #include <vector>
 #include <Core/Debug.h>
 #include <Core/Math.h>
@@ -29,7 +30,8 @@ namespace spades {
 	template <typename T>
 	class PrimitiveArray {
 		std::vector<T> inner;
-		int refCount = 1;
+		std::atomic<int> refCount {1};
+		bool gcFlag = false;
 	public:
 		static asITypeInfo *scrType;
 		typedef PrimitiveArray<T> ArrayType;
@@ -83,23 +85,24 @@ namespace spades {
 		}
 
 		void AddRef() {
-			refCount &= 0x7fffffff;
-			asAtomicInc(refCount);
+			gcFlag = false;
+			refCount.fetch_add(1);
 		}
 		void Release() {
-			refCount &= 0x7fffffff;
+			gcFlag = false;
 
-			if(asAtomicDec(refCount) <= 0)
+			if(refCount.fetch_sub(1) == 1) {
 				delete this;
+			}
 		}
 		void SetGCFlag() {
-			refCount |= 0x80000000;
+			gcFlag = true;
 		}
 		bool GetGCFlag() {
-			return (refCount & 0x80000000) != 0;
+			return gcFlag;
 		}
 		int GetRefCount() {
-			return refCount & 0x7fffffff;
+			return refCount;
 		}
 		void EnumReferences(asIScriptEngine *eng) {}
 		void ReleaseAllReferences(asIScriptEngine *eng){}
