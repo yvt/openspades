@@ -3,7 +3,7 @@
 
 #define OpenSpades_VERSION_MAJOR 0
 #define OpenSpades_VERSION_MINOR 1
-#define OpenSpades_VERSION_REVISION 2
+#define OpenSpades_VERSION_REVISION 3
 
 #define OS_STRINGIFY2(x)	#x
 #define OS_STRINGIFY(x)		OS_STRINGIFY2(x)
