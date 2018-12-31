@@ -501,15 +501,6 @@ namespace spades {
 			LineCollision(Torso2, Arm2, dt);
 			LineCollision(Torso3, Leg1, dt);
 			LineCollision(Torso4, Leg2, dt);
-
-			return;
-			AngleSpring(Torso4, Torso1, Head, 0.5f, 1.f, dt);
-
-			AngleSpring(Torso3, Torso2, Head, 0.5f, 1.f, dt);
-
-			AngleSpring(Torso4, Torso2, Head, 0.5f, 1.f, dt);
-
-			AngleSpring(Torso3, Torso1, Head, 0.5f, 1.f, dt);
 		}
 
 		void Corpse::Update(float dt) {
@@ -627,28 +618,6 @@ namespace spades {
 		}
 
 		void Corpse::AddToScene() {
-			if (false) {
-				// debug line only
-				Vector4 col = {1, 1, 0, 0};
-				renderer->AddDebugLine(nodes[Torso1].pos, nodes[Torso2].pos, col);
-				renderer->AddDebugLine(nodes[Torso2].pos, nodes[Torso3].pos, col);
-				renderer->AddDebugLine(nodes[Torso3].pos, nodes[Torso4].pos, col);
-				renderer->AddDebugLine(nodes[Torso4].pos, nodes[Torso1].pos, col);
-
-				renderer->AddDebugLine(nodes[Torso2].pos, nodes[Torso4].pos, col);
-				renderer->AddDebugLine(nodes[Torso1].pos, nodes[Torso3].pos, col);
-
-				renderer->AddDebugLine(nodes[Torso1].pos, nodes[Arm1].pos, col);
-				renderer->AddDebugLine(nodes[Torso2].pos, nodes[Arm2].pos, col);
-
-				renderer->AddDebugLine(nodes[Torso3].pos, nodes[Leg1].pos, col);
-				renderer->AddDebugLine(nodes[Torso4].pos, nodes[Leg2].pos, col);
-
-				renderer->AddDebugLine((nodes[Torso1].pos + nodes[Torso2].pos) * .5f,
-				                       nodes[Head].pos, col);
-				return;
-			}
-
 			ModelRenderParam param;
 			param.customColor = color;
 
