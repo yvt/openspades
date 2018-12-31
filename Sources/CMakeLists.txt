@@ -108,7 +108,7 @@ endif()
 
 if(WIN32)
 	target_link_libraries(OpenSpades ws2_32.lib winmm.lib)
-else()
+elseif(UNIX AND NOT APPLE)
 	target_link_libraries(OpenSpades Xext)
 endif()
 
