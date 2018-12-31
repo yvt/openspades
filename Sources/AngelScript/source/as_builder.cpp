@@ -4094,7 +4094,7 @@ void asCBuilder::GetParsedFunctionDetails(asCScriptNode *node, asCScriptCode *fi
 	node = node->firstChild;
 
 	// Is the function a private or protected class method?
-	isPrivate = false, isProtected = false;
+	isPrivate = false; isProtected = false;
 	if( node->tokenType == ttPrivate )
 	{
 		isPrivate = true;

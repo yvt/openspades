@@ -275,7 +275,7 @@ namespace spades {
 
 			SPAssert(addedCount == blocks.size());
 
-			return std::move(ret);
+			return ret;
 		}
 
 		void World::ApplyBlockActions() {

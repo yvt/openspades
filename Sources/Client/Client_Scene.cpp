@@ -639,8 +639,8 @@ namespace spades {
 					    p->IsAlive()) {
 						std::vector<IntVector3> blocks;
 						if (p->IsBlockCursorDragging()) {
-							blocks = std::move(world->CubeLine(p->GetBlockCursorDragPos(),
-							                                   p->GetBlockCursorPos(), 256));
+							blocks = world->CubeLine(p->GetBlockCursorDragPos(),
+													 p->GetBlockCursorPos(), 256);
 						} else {
 							blocks.push_back(p->GetBlockCursorPos());
 						}

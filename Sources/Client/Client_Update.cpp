@@ -500,8 +500,8 @@ namespace spades {
 			if (player->IsAlive() && player->GetTool() == Player::ToolBlock &&
 			    player->GetWeaponInput().secondary && player->IsBlockCursorDragging()) {
 				if (player->IsBlockCursorActive()) {
-					auto blocks = std::move(world->CubeLine(player->GetBlockCursorDragPos(),
-					                                        player->GetBlockCursorPos(), 256));
+					auto blocks = world->CubeLine(player->GetBlockCursorDragPos(),
+												  player->GetBlockCursorPos(), 256);
 					auto msg = _TrN("Client", "{0} block", "{0} blocks", blocks.size());
 					AlertType type = static_cast<int>(blocks.size()) > player->GetNumBlocks()
 					                   ? AlertType::Warning

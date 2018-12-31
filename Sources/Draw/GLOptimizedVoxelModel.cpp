@@ -217,7 +217,7 @@ namespace spades {
 					  new c2t::Trianglulator<Model>(Model(slice, usize, vsize))};
 				}
 
-				return std::move(triangulator->Triangulate());
+				return triangulator->Triangulate();
 			}
 		};
 
@@ -362,7 +362,7 @@ namespace spades {
 			}
 
 			// TODO: optimize scan range
-			auto polys = std::move(generator.ProcessArea());
+			auto polys = generator.ProcessArea();
 			for (std::size_t i = 0; i < polys.size(); i += 3) {
 				uint32_t idx = (uint32_t)vertices.size();
 				IntVector3 pt1 = ExactPoint(polys[i + 0]);
