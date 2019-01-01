@@ -30,10 +30,11 @@ include(FindOpenGL)
 if(NOT OPENGL_FOUND AND NOT OPENGL_XMESA_FOUND AND NOT OPENGL_GLU_FOUND)
 	message(FATAL_ERROR "OpenGL not found, please install it")
 endif()
-
-include(cmake/FindGLEW2.cmake)
-if(NOT GLEW_FOUND)
-	message(FATAL_ERROR "GLEW not found, please install it and make sure CMake can find it (add it to the PATH)")
+if(NOT APPLE)
+	include(cmake/FindGLEW2.cmake)
+	if(NOT GLEW_FOUND)
+		message(FATAL_ERROR "GLEW not found, please install it and make sure CMake can find it (add it to the PATH)")
+	endif()
 endif()
 
 include(FindZLIB)
@@ -197,7 +198,9 @@ include_directories("${SDL2_IMAGE_INCLUDE_DIR}")
 if(OPENGL_INCLUDE_DIR)
 	include_directories("${OPENGL_INCLUDE_DIR}")
 endif()
+if(NOT APPLE)
 include_directories("${GLEW_INCLUDE_DIR}")
+endif()
 include_directories("${ZLIB_INCLUDE_DIR}")
 include_directories(${CURL_INCLUDE_DIRS})
 include_directories(${FREETYPE_INCLUDE_DIRS})
@@ -207,7 +210,7 @@ add_subdirectory(Resources)
 add_subdirectory(Sources)
 
 
-if(UNIX AND NOT APPLE)
+if(UNIX)
 	# various texts
 	INSTALL(FILES AUTHORS LICENSE README.md DESTINATION ${OPENSPADES_INSTALL_DOC}/)
 
@@ -256,7 +259,7 @@ if(UNIX AND NOT APPLE)
 	# Currently there is no files in lib/openspades. But if you reading this message in future and want to
 	# place somewhere libs, binaries or other non-media stuff, place them in lib/openspades. Thank you.
 
-endif(UNIX AND NOT APPLE)
+endif(UNIX)
 
 
 
