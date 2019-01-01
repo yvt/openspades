@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-12-31 04:46-0500\n"
+"PO-Revision-Date: 2019-01-01 05:55\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: crowdin.com\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "X-Crowdin-Project: openspades\n"
 "X-Crowdin-Language: ru\n"
 "X-Crowdin-File: openspades.pot\n"
@@ -212,6 +212,7 @@ msgid_plural "{0} blocks"
 msgstr[0] "{0} блок"
 msgstr[1] "{0} блока"
 msgstr[2] "{0} блоков"
+msgstr[3] "{0} блоков"
 
 #: Sources/Client/Client_Update.cpp:486 Sources/Client/Client_Update.cpp:512
 msgctxt "Client"
@@ -389,6 +390,7 @@ msgid_plural "Spectators{1}"
 msgstr[0] "Наблюдатель{1}"
 msgstr[1] "Наблюдатели{1}"
 msgstr[2] "Наблюдатели{1}"
+msgstr[3] "Наблюдатели{1}"
 
 #: Sources/Client/TCProgressView.cpp:151 Sources/Client/TCProgressView.cpp:151
 msgctxt "Client"
@@ -1768,30 +1770,30 @@ msgstr "Наблюдатель"
 #: Sources/Client/Client_Draw.cpp:99
 msgctxt "Client"
 msgid "Unbound"
-msgstr ""
+msgstr "Не назначено"
 
 #: Sources/Client/Client_Draw.cpp:655
 msgctxt "Client"
 msgid "[{0}] Cycle camera mode"
-msgstr ""
+msgstr "[{0}] Изменить режим камеры"
 
 #: Sources/Client/Client_Draw.cpp:657
 msgctxt "Client"
 msgid "[{0}/{1}] Next/previous player"
-msgstr ""
+msgstr "[{0}/{1}] Следующий/предыдущий игрок"
 
 #: Sources/Client/Client_Draw.cpp:661
 msgctxt "Client"
 msgid "[{0}] Unfollow"
-msgstr ""
+msgstr "[{0}] Прекратить наблюдение"
 
 #: Sources/Client/Client_Draw.cpp:664
 msgctxt "Client"
 msgid "[{0}/{1}] Follow a player"
-msgstr ""
+msgstr "[{0}/{1}] Наблюдать за игроком"
 
 #: Sources/Client/Client_Draw.cpp:669
 msgctxt "Client"
 msgid "[{0}/{1}] Go up/down"
-msgstr ""
+msgstr "[{0}/{1}] Двигаться вверх/вниз"
 

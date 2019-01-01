@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-12-31 04:46-0500\n"
+"PO-Revision-Date: 2019-01-01 05:55\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -239,7 +239,7 @@ msgstr ""
 #: Sources/Client/Client_Update.cpp:849 Sources/Client/Client_Update.cpp:875
 msgctxt "Client"
 msgid "Fall"
-msgstr ""
+msgstr "Val"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:853 Sources/Client/Client_Update.cpp:879
@@ -250,7 +250,7 @@ msgstr ""
 #: Sources/Client/Client_Update.cpp:856 Sources/Client/Client_Update.cpp:882
 msgctxt "Client"
 msgid "Grenade"
-msgstr ""
+msgstr "Granaat"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:860 Sources/Client/Client_Update.cpp:886
@@ -432,7 +432,7 @@ msgstr "Spel Hervatten"
 #: Resources/Scripts/Gui/ClientUI.as:205 Resources/Scripts/Gui/ClientUI.as:205
 msgctxt "Client"
 msgid "Chat Log"
-msgstr ""
+msgstr "Chat log"
 
 #: Resources/Scripts/Gui/ClientUI.as:212 Resources/Scripts/Gui/ClientUI.as:212
 msgctxt "Client"
@@ -457,7 +457,7 @@ msgstr "Annuleren"
 #: Resources/Scripts/Gui/ClientUI.as:500 Resources/Scripts/Gui/ClientUI.as:500
 msgctxt "Client"
 msgid "Chat Text"
-msgstr ""
+msgstr "Chat tekst"
 
 #: Resources/Scripts/Gui/ClientUI.as:508 Resources/Scripts/Gui/ClientUI.as:508
 msgctxt "Client"
@@ -816,7 +816,7 @@ msgstr "Kogelomhulsel weergeven na schot"
 #: Resources/Scripts/Gui/Preferences.as:645
 msgctxt "Preferences"
 msgid "Ragdoll"
-msgstr ""
+msgstr "Lappenpop"
 
 #: Resources/Scripts/Gui/Preferences.as:646
 #: Resources/Scripts/Gui/Preferences.as:646
@@ -1142,7 +1142,7 @@ msgstr "Sommige instellingen kunnen veranderd worden in het opstart menu."
 #: Resources/Scripts/Gui/StartupScreen.as:160
 msgctxt "StartupScreen"
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: Resources/Scripts/Gui/StartupScreen.as:167
 #: Resources/Scripts/Gui/StartupScreen.as:167
@@ -1186,7 +1186,7 @@ msgstr "Geavanceerd"
 #: Resources/Scripts/Gui/StartupScreen.as:288
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the update info website."
-msgstr ""
+msgstr "Een onbekende fout is opgetreed tijdens het openen  van de update informatie-site."
 
 #: Resources/Scripts/Gui/StartupScreen.as:853
 #: Resources/Scripts/Gui/StartupScreen.as:853
@@ -1421,7 +1421,7 @@ msgstr "Hoog"
 #: Resources/Scripts/Gui/StartupScreen.as:1253
 msgctxt "StartupScreen"
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1195
 #: Resources/Scripts/Gui/StartupScreen.as:1195
@@ -1714,83 +1714,83 @@ msgstr ""
 #: Resources/Scripts/Gui/UpdateCheckView.as:40
 msgctxt "UpdateCheck"
 msgid "Enable"
-msgstr ""
+msgstr "Aanzetten"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:47
 #: Resources/Scripts/Gui/UpdateCheckView.as:47
 msgctxt "UpdateCheck"
 msgid "Show details..."
-msgstr ""
+msgstr "Details weergeven..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 msgctxt "UpdateCheck"
 msgid "Version {0} is available! (You currently have {1})"
-msgstr ""
+msgstr "Versie {0} is beschikbaar! (Je hebt huidig versie {1})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 msgctxt "UpdateCheck"
 msgid "You're using the latest version of OpenSpades. ({0})"
-msgstr ""
+msgstr "Je gebruikt de nieuwste versie van OpenSpades. ({0})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
 msgctxt "UpdateCheck"
 msgid "Checking for updates..."
-msgstr ""
+msgstr "Controleren op updates..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
 msgctxt "UpdateCheck"
 msgid "Failed to check for updates."
-msgstr ""
+msgstr "Controleren voor updates is foutgegaan.\t"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:116
 #: Resources/Scripts/Gui/UpdateCheckView.as:116
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not enabled."
-msgstr ""
+msgstr "Automatisch controleren op updates is niet ingeschakeld."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:119
 #: Resources/Scripts/Gui/UpdateCheckView.as:119
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
-msgstr ""
+msgstr "Automatisch controleren op updates is niet beschikbaar."
 
 #: Sources/Client/Client_NetHandler.cpp:258
 #: Sources/Client/Client_NetHandler.cpp:271
 msgctxt "Client"
 msgid "Spectator"
-msgstr ""
+msgstr "Toeschouwer"
 
 #: Sources/Client/Client_Draw.cpp:99
 msgctxt "Client"
 msgid "Unbound"
-msgstr ""
+msgstr "Ongebonden"
 
 #: Sources/Client/Client_Draw.cpp:655
 msgctxt "Client"
 msgid "[{0}] Cycle camera mode"
-msgstr ""
+msgstr "[{0}] Cameramodus doorbladeren"
 
 #: Sources/Client/Client_Draw.cpp:657
 msgctxt "Client"
 msgid "[{0}/{1}] Next/previous player"
-msgstr ""
+msgstr "[{0}/{1}] Volgende/vorige speler"
 
 #: Sources/Client/Client_Draw.cpp:661
 msgctxt "Client"
 msgid "[{0}] Unfollow"
-msgstr ""
+msgstr "[{0}] Ontvolgen"
 
 #: Sources/Client/Client_Draw.cpp:664
 msgctxt "Client"
 msgid "[{0}/{1}] Follow a player"
-msgstr ""
+msgstr "[{0}/{1}] Volg een speler"
 
 #: Sources/Client/Client_Draw.cpp:669
 msgctxt "Client"
 msgid "[{0}/{1}] Go up/down"
-msgstr ""
+msgstr "[{0}/{1}] Ga omhoog/omlaag"
 

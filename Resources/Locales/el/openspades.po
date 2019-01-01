@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-12-31 04:46-0500\n"
+"PO-Revision-Date: 2019-01-01 05:55\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Greek\n"
 "MIME-Version: 1.0\n"
@@ -105,7 +105,7 @@ msgstr "Αναμονή για respawn"
 #: Sources/Client/Client_Draw.cpp:764 Sources/Client/Client_Draw.cpp:646
 msgctxt "Client"
 msgid "Following {0}"
-msgstr ""
+msgstr "Ακολουθείτε τον {0}"
 
 #: Sources/Client/Client_Input.cpp:427 Sources/Client/Client_Input.cpp:482
 msgctxt "Client"
@@ -210,7 +210,7 @@ msgctxt "Client"
 msgid "{0} block"
 msgid_plural "{0} blocks"
 msgstr[0] "{0} κύβος"
-msgstr[1] ""
+msgstr[1] "{0} κύβοι"
 
 #: Sources/Client/Client_Update.cpp:486 Sources/Client/Client_Update.cpp:512
 msgctxt "Client"
@@ -582,62 +582,62 @@ msgstr "Κενό"
 #: Resources/Scripts/Gui/MainScreen.as:474
 msgctxt "MainScreen"
 msgid "Not Full"
-msgstr ""
+msgstr "Δεν είναι πλήρης"
 
 #: Resources/Scripts/Gui/MainScreen.as:494
 #: Resources/Scripts/Gui/MainScreen.as:494
 msgctxt "MainScreen"
 msgid "Server Name"
-msgstr ""
+msgstr "Όνομα του server"
 
 #: Resources/Scripts/Gui/MainScreen.as:501
 #: Resources/Scripts/Gui/MainScreen.as:501
 msgctxt "MainScreen"
 msgid "Players"
-msgstr ""
+msgstr "Παίκτες"
 
 #: Resources/Scripts/Gui/MainScreen.as:508
 #: Resources/Scripts/Gui/MainScreen.as:508
 msgctxt "MainScreen"
 msgid "Map Name"
-msgstr ""
+msgstr "Όνομα χάρτη"
 
 #: Resources/Scripts/Gui/MainScreen.as:515
 #: Resources/Scripts/Gui/MainScreen.as:515
 msgctxt "MainScreen"
 msgid "Game Mode"
-msgstr ""
+msgstr "Είδος παιχνιδιού"
 
 #: Resources/Scripts/Gui/MainScreen.as:522
 #: Resources/Scripts/Gui/MainScreen.as:522
 msgctxt "MainScreen"
 msgid "Ver."
-msgstr ""
+msgstr "Έκδ."
 
 #: Resources/Scripts/Gui/MainScreen.as:529
 #: Resources/Scripts/Gui/MainScreen.as:529
 msgctxt "MainScreen"
 msgid "Loc."
-msgstr ""
+msgstr "Loc."
 
 #: Resources/Scripts/Gui/MainScreen.as:787
 #: Resources/Scripts/Gui/MainScreen.as:787
 msgctxt "MainScreen"
 msgid "You were disconnected from the server because of the following reason:\n\n"
 "{0}"
-msgstr ""
+msgstr "Αποσυνδεθήκατε από τον server λόγω του εξής λόγου:{0}"
 
 #: Resources/Scripts/Gui/MainScreen.as:807
 #: Resources/Scripts/Gui/MainScreen.as:807
 msgctxt "MainScreen"
 msgid "Loading..."
-msgstr ""
+msgstr "Φόρτωση..."
 
 #: Resources/Scripts/Gui/MainScreen.as:825
 #: Resources/Scripts/Gui/MainScreen.as:825
 msgctxt "MainScreen"
 msgid "Failed to fetch the server list."
-msgstr ""
+msgstr "Αποτυχία στη λήψη της λίστας των server."
 
 #: Resources/Scripts/Gui/MessageBox.as:130
 #: Resources/Scripts/Gui/MessageBox.as:144
@@ -645,25 +645,25 @@ msgstr ""
 #: Resources/Scripts/Gui/MessageBox.as:144
 msgctxt "MessageBox"
 msgid "OK"
-msgstr ""
+msgstr "ΟΚ"
 
 #: Resources/Scripts/Gui/MessageBox.as:144
 #: Resources/Scripts/Gui/MessageBox.as:144
 msgctxt "MessageBox"
 msgid "Cancel"
-msgstr ""
+msgstr "Ακύρωση"
 
 #: Resources/Scripts/Gui/Preferences.as:60
 #: Resources/Scripts/Gui/Preferences.as:60
 msgctxt "Preferences"
 msgid "Game Options"
-msgstr ""
+msgstr "Επιλογές παιχνιδιού"
 
 #: Resources/Scripts/Gui/Preferences.as:61
 #: Resources/Scripts/Gui/Preferences.as:61
 msgctxt "Preferences"
 msgid "Controls"
-msgstr ""
+msgstr "Κουμπιά"
 
 #: Resources/Scripts/Gui/Preferences.as:62
 #: Resources/Scripts/Gui/Preferences.as:663
@@ -673,85 +673,85 @@ msgstr ""
 #: Resources/Scripts/Gui/Preferences.as:708
 msgctxt "Preferences"
 msgid "Misc"
-msgstr ""
+msgstr "Διάφορα"
 
 #: Resources/Scripts/Gui/Preferences.as:66
 #: Resources/Scripts/Gui/Preferences.as:66
 msgctxt "Preferences"
 msgid "Back"
-msgstr ""
+msgstr "Πίσω"
 
 #: Resources/Scripts/Gui/Preferences.as:407
 #: Resources/Scripts/Gui/Preferences.as:407
 msgctxt "Preferences"
 msgid "Press Key to Bind or [Escape] to Cancel..."
-msgstr ""
+msgstr "Πατήστε το πλήκτρο που θα δεσμευτεί ή [Escape] για να ακυρώσετε..."
 
 #: Resources/Scripts/Gui/Preferences.as:418
 #: Resources/Scripts/Gui/Preferences.as:418
 msgctxt "Preferences"
 msgid "Space"
-msgstr ""
+msgstr "Space"
 
 #: Resources/Scripts/Gui/Preferences.as:420
 #: Resources/Scripts/Gui/Preferences.as:420
 msgctxt "Preferences"
 msgid "Unbound"
-msgstr ""
+msgstr "Χωρίς κουμπί"
 
 #: Resources/Scripts/Gui/Preferences.as:423
 #: Resources/Scripts/Gui/Preferences.as:423
 msgctxt "Preferences"
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: Resources/Scripts/Gui/Preferences.as:425
 #: Resources/Scripts/Gui/Preferences.as:425
 msgctxt "Preferences"
 msgid "Control"
-msgstr ""
+msgstr "Control"
 
 #: Resources/Scripts/Gui/Preferences.as:427
 #: Resources/Scripts/Gui/Preferences.as:427
 msgctxt "Preferences"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: Resources/Scripts/Gui/Preferences.as:429
 #: Resources/Scripts/Gui/Preferences.as:429
 msgctxt "Preferences"
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: Resources/Scripts/Gui/Preferences.as:431
 #: Resources/Scripts/Gui/Preferences.as:431
 msgctxt "Preferences"
 msgid "Left Mouse Button"
-msgstr ""
+msgstr "Αριστερό κλικ"
 
 #: Resources/Scripts/Gui/Preferences.as:433
 #: Resources/Scripts/Gui/Preferences.as:433
 msgctxt "Preferences"
 msgid "Right Mouse Button"
-msgstr ""
+msgstr "Δεξί κλικ"
 
 #: Resources/Scripts/Gui/Preferences.as:435
 #: Resources/Scripts/Gui/Preferences.as:435
 msgctxt "Preferences"
 msgid "Middle Mouse Button"
-msgstr ""
+msgstr "Μεσαίο κλικ"
 
 #: Resources/Scripts/Gui/Preferences.as:437
 #: Resources/Scripts/Gui/Preferences.as:437
 msgctxt "Preferences"
 msgid "Mouse Button 4"
-msgstr ""
+msgstr "Κουμπί ποντικιού 4"
 
 #: Resources/Scripts/Gui/Preferences.as:439
 #: Resources/Scripts/Gui/Preferences.as:439
 msgctxt "Preferences"
 msgid "Mouse Button 5"
-msgstr ""
+msgstr "Κουμπί ποντικιού 5"
 
 #: Resources/Scripts/Gui/Preferences.as:613
 #: Resources/Scripts/Gui/Preferences.as:619
@@ -759,7 +759,7 @@ msgstr ""
 #: Resources/Scripts/Gui/Preferences.as:619
 msgctxt "Preferences"
 msgid "ON"
-msgstr ""
+msgstr "ΕΝΕΡΓΟΠΟΙΗΣΗ"
 
 #: Resources/Scripts/Gui/Preferences.as:613
 #: Resources/Scripts/Gui/Preferences.as:619
@@ -771,67 +771,67 @@ msgstr ""
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "OFF"
-msgstr ""
+msgstr "Απενεργοποιήση"
 
 #: Resources/Scripts/Gui/Preferences.as:619
 #: Resources/Scripts/Gui/Preferences.as:619
 msgctxt "Preferences"
 msgid "REVERSED"
-msgstr ""
+msgstr "ΑΝΤΕΣΤΡΑΜΜΕΝΟ"
 
 #: Resources/Scripts/Gui/Preferences.as:637
 #: Resources/Scripts/Gui/Preferences.as:637
 msgctxt "Preferences"
 msgid "Player Information"
-msgstr ""
+msgstr "Πληροφορίες παίκτη"
 
 #: Resources/Scripts/Gui/Preferences.as:638
 #: Resources/Scripts/Gui/Preferences.as:638
 msgctxt "Preferences"
 msgid "Player Name"
-msgstr ""
+msgstr "Όνομα Παίκτη"
 
 #: Resources/Scripts/Gui/Preferences.as:642
 #: Resources/Scripts/Gui/Preferences.as:642
 msgctxt "Preferences"
 msgid "Effects"
-msgstr ""
+msgstr "Εφέ"
 
 #: Resources/Scripts/Gui/Preferences.as:643
 #: Resources/Scripts/Gui/Preferences.as:643
 msgctxt "Preferences"
 msgid "Blood"
-msgstr ""
+msgstr "Αίμα"
 
 #: Resources/Scripts/Gui/Preferences.as:644
 #: Resources/Scripts/Gui/Preferences.as:644
 msgctxt "Preferences"
 msgid "Ejecting Brass"
-msgstr ""
+msgstr "Εκτίναξη περιβλήματος σφαίρας"
 
 #: Resources/Scripts/Gui/Preferences.as:645
 #: Resources/Scripts/Gui/Preferences.as:645
 msgctxt "Preferences"
 msgid "Ragdoll"
-msgstr ""
+msgstr "Πτώμα"
 
 #: Resources/Scripts/Gui/Preferences.as:646
 #: Resources/Scripts/Gui/Preferences.as:646
 msgctxt "Preferences"
 msgid "Animations"
-msgstr ""
+msgstr "Εφέ Κίνησης"
 
 #: Resources/Scripts/Gui/Preferences.as:647
 #: Resources/Scripts/Gui/Preferences.as:647
 msgctxt "Preferences"
 msgid "Camera Shake"
-msgstr ""
+msgstr "Κίνηση κάμερας"
 
 #: Resources/Scripts/Gui/Preferences.as:648
 #: Resources/Scripts/Gui/Preferences.as:648
 msgctxt "Preferences"
 msgid "MORE"
-msgstr ""
+msgstr "ΠΕΡΙΣΣΟΤΕΡΑ"
 
 #: Resources/Scripts/Gui/Preferences.as:648
 #: Resources/Scripts/Gui/Preferences.as:651
@@ -839,337 +839,337 @@ msgstr ""
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "NORMAL"
-msgstr ""
+msgstr "ΚΑΝΟΝΙΚΟ"
 
 #: Resources/Scripts/Gui/Preferences.as:650
 #: Resources/Scripts/Gui/Preferences.as:650
 msgctxt "Preferences"
 msgid "Particles"
-msgstr ""
+msgstr "Particles"
 
 #: Resources/Scripts/Gui/Preferences.as:651
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "LESS"
-msgstr ""
+msgstr "ΛΙΓΟΤΕΡΟ"
 
 #: Resources/Scripts/Gui/Preferences.as:654
 #: Resources/Scripts/Gui/Preferences.as:654
 msgctxt "Preferences"
 msgid "Feedbacks"
-msgstr ""
+msgstr "Αξιολόγηση"
 
 #: Resources/Scripts/Gui/Preferences.as:655
 #: Resources/Scripts/Gui/Preferences.as:655
 msgctxt "Preferences"
 msgid "Chat Notify Sounds"
-msgstr ""
+msgstr "Ήχοι ειδοποίησης του chat"
 
 #: Resources/Scripts/Gui/Preferences.as:656
 #: Resources/Scripts/Gui/Preferences.as:656
 msgctxt "Preferences"
 msgid "Hit Indicator"
-msgstr ""
+msgstr "Δείκτης ευστοχίας"
 
 #: Resources/Scripts/Gui/Preferences.as:657
 #: Resources/Scripts/Gui/Preferences.as:657
 msgctxt "Preferences"
 msgid "Show Alerts"
-msgstr ""
+msgstr "Εμφάνιση ειδοποιήσεων"
 
 #: Resources/Scripts/Gui/Preferences.as:659
 #: Resources/Scripts/Gui/Preferences.as:659
 msgctxt "Preferences"
 msgid "AoS 0.75/0.76 Compatibility"
-msgstr ""
+msgstr "AoS 0.75/0.76 συμβατότητα"
 
 #: Resources/Scripts/Gui/Preferences.as:660
 #: Resources/Scripts/Gui/Preferences.as:660
 msgctxt "Preferences"
 msgid "Allow Unicode"
-msgstr ""
+msgstr "Επίτρεψη Unicode"
 
 #: Resources/Scripts/Gui/Preferences.as:661
 #: Resources/Scripts/Gui/Preferences.as:661
 msgctxt "Preferences"
 msgid "Server Alert"
-msgstr ""
+msgstr "Ειδοποίηση server"
 
 #: Resources/Scripts/Gui/Preferences.as:664
 #: Resources/Scripts/Gui/Preferences.as:664
 msgctxt "Preferences"
 msgid "Field of View"
-msgstr ""
+msgstr "Οπτικό πεδίο"
 
 #: Resources/Scripts/Gui/Preferences.as:666
 #: Resources/Scripts/Gui/Preferences.as:666
 msgctxt "Preferences"
 msgid "Minimap size"
-msgstr ""
+msgstr "Μέγεθος χάρτη"
 
 #: Resources/Scripts/Gui/Preferences.as:668
 #: Resources/Scripts/Gui/Preferences.as:668
 msgctxt "Preferences"
 msgid "Show Statistics"
-msgstr ""
+msgstr "Εμφάνιση στατιστικών"
 
 #: Resources/Scripts/Gui/Preferences.as:678
 #: Resources/Scripts/Gui/Preferences.as:678
 msgctxt "Preferences"
 msgid "Weapons/Tools"
-msgstr ""
+msgstr "Όπλα/εργαλεία"
 
 #: Resources/Scripts/Gui/Preferences.as:679
 #: Resources/Scripts/Gui/Preferences.as:679
 msgctxt "Preferences"
 msgid "Attack"
-msgstr ""
+msgstr "Επίθεση"
 
 #: Resources/Scripts/Gui/Preferences.as:680
 #: Resources/Scripts/Gui/Preferences.as:680
 msgctxt "Preferences"
 msgid "Alt. Attack"
-msgstr ""
+msgstr "Alt. επίθεση"
 
 #: Resources/Scripts/Gui/Preferences.as:681
 #: Resources/Scripts/Gui/Preferences.as:681
 msgctxt "Preferences"
 msgid "Hold Aim Down Sight"
-msgstr ""
+msgstr "Στόχος"
 
 #: Resources/Scripts/Gui/Preferences.as:682
 #: Resources/Scripts/Gui/Preferences.as:682
 msgctxt "Preferences"
 msgid "Mouse Sensitivity"
-msgstr ""
+msgstr "Ευαισθησία ποντικιού"
 
 #: Resources/Scripts/Gui/Preferences.as:684
 #: Resources/Scripts/Gui/Preferences.as:684
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
-msgstr ""
+msgstr "ADS κλίμακα ευαισθησίας ποντικιού"
 
 #: Resources/Scripts/Gui/Preferences.as:686
 #: Resources/Scripts/Gui/Preferences.as:686
 msgctxt "Preferences"
 msgid "Exponential Power"
-msgstr ""
+msgstr "Εκθετική δύναμη"
 
 #: Resources/Scripts/Gui/Preferences.as:688
 #: Resources/Scripts/Gui/Preferences.as:688
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
-msgstr ""
+msgstr "Αντιστροφή άξονα y ποντικιού"
 
 #: Resources/Scripts/Gui/Preferences.as:689
 #: Resources/Scripts/Gui/Preferences.as:689
 msgctxt "Preferences"
 msgid "Reload"
-msgstr ""
+msgstr "Επαναφόρτωση"
 
 #: Resources/Scripts/Gui/Preferences.as:690
 #: Resources/Scripts/Gui/Preferences.as:690
 msgctxt "Preferences"
 msgid "Capture Color"
-msgstr ""
+msgstr "Αντιγραφή χρώματος"
 
 #: Resources/Scripts/Gui/Preferences.as:691
 #: Resources/Scripts/Gui/Preferences.as:691
 msgctxt "Preferences"
 msgid "Equip Spade"
-msgstr ""
+msgstr "Εξοπλίστε το φτυάρι"
 
 #: Resources/Scripts/Gui/Preferences.as:692
 #: Resources/Scripts/Gui/Preferences.as:692
 msgctxt "Preferences"
 msgid "Equip Block"
-msgstr ""
+msgstr "Εξοπλίστε κύβο"
 
 #: Resources/Scripts/Gui/Preferences.as:693
 #: Resources/Scripts/Gui/Preferences.as:693
 msgctxt "Preferences"
 msgid "Equip Weapon"
-msgstr ""
+msgstr "Εξοπλίστε το όπλο"
 
 #: Resources/Scripts/Gui/Preferences.as:694
 #: Resources/Scripts/Gui/Preferences.as:694
 msgctxt "Preferences"
 msgid "Equip Grenade"
-msgstr ""
+msgstr "Εξοπλίστε χειροβομβίδα"
 
 #: Resources/Scripts/Gui/Preferences.as:695
 #: Resources/Scripts/Gui/Preferences.as:695
 msgctxt "Preferences"
 msgid "Last Used Tool"
-msgstr ""
+msgstr "Τελευταίο εργαλείο που χρησιμοποιήθηκε"
 
 #: Resources/Scripts/Gui/Preferences.as:696
 #: Resources/Scripts/Gui/Preferences.as:696
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
-msgstr ""
+msgstr "Εναλλαγή εργαλείων μέσω ροδέλας ποντικιού"
 
 #: Resources/Scripts/Gui/Preferences.as:698
 #: Resources/Scripts/Gui/Preferences.as:698
 msgctxt "Preferences"
 msgid "Movement"
-msgstr ""
+msgstr "Κίνηση"
 
 #: Resources/Scripts/Gui/Preferences.as:699
 #: Resources/Scripts/Gui/Preferences.as:699
 msgctxt "Preferences"
 msgid "Walk Forward"
-msgstr ""
+msgstr "Κίνηση προς τα μπροστά"
 
 #: Resources/Scripts/Gui/Preferences.as:700
 #: Resources/Scripts/Gui/Preferences.as:700
 msgctxt "Preferences"
 msgid "Backpedal"
-msgstr ""
+msgstr "Κίνηση προς τα πίσω"
 
 #: Resources/Scripts/Gui/Preferences.as:701
 #: Resources/Scripts/Gui/Preferences.as:701
 msgctxt "Preferences"
 msgid "Move Left"
-msgstr ""
+msgstr "Κίνηση αριστερά"
 
 #: Resources/Scripts/Gui/Preferences.as:702
 #: Resources/Scripts/Gui/Preferences.as:702
 msgctxt "Preferences"
 msgid "Move Right"
-msgstr ""
+msgstr "Κίνηση δεξιά"
 
 #: Resources/Scripts/Gui/Preferences.as:703
 #: Resources/Scripts/Gui/Preferences.as:703
 msgctxt "Preferences"
 msgid "Crouch"
-msgstr ""
+msgstr "Σκύψιμο"
 
 #: Resources/Scripts/Gui/Preferences.as:704
 #: Resources/Scripts/Gui/Preferences.as:704
 msgctxt "Preferences"
 msgid "Sneak"
-msgstr ""
+msgstr "Αθόρυβο περπάτημα"
 
 #: Resources/Scripts/Gui/Preferences.as:705
 #: Resources/Scripts/Gui/Preferences.as:705
 msgctxt "Preferences"
 msgid "Jump"
-msgstr ""
+msgstr "Πήδημα"
 
 #: Resources/Scripts/Gui/Preferences.as:706
 #: Resources/Scripts/Gui/Preferences.as:706
 msgctxt "Preferences"
 msgid "Sprint"
-msgstr ""
+msgstr "Τρέξιμο"
 
 #: Resources/Scripts/Gui/Preferences.as:709
 #: Resources/Scripts/Gui/Preferences.as:709
 msgctxt "Preferences"
 msgid "Minimap Scale"
-msgstr ""
+msgstr "Κλίμακα χάρτη"
 
 #: Resources/Scripts/Gui/Preferences.as:710
 #: Resources/Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Toggle Map"
-msgstr ""
+msgstr "Άνοιγμα/Κλείσιμο χάρτη"
 
 #: Resources/Scripts/Gui/Preferences.as:711
 #: Resources/Scripts/Gui/Preferences.as:711
 msgctxt "Preferences"
 msgid "Flashlight"
-msgstr ""
+msgstr "Φακός"
 
 #: Resources/Scripts/Gui/Preferences.as:712
 #: Resources/Scripts/Gui/Preferences.as:712
 msgctxt "Preferences"
 msgid "Global Chat"
-msgstr ""
+msgstr "Παγκόσμια συνομιλία"
 
 #: Resources/Scripts/Gui/Preferences.as:713
 #: Resources/Scripts/Gui/Preferences.as:713
 msgctxt "Preferences"
 msgid "Team Chat"
-msgstr ""
+msgstr "Συνομιλία ομάδας"
 
 #: Resources/Scripts/Gui/Preferences.as:714
 #: Resources/Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Limbo Menu"
-msgstr ""
+msgstr "Μενού επιλογής ομάδας και όπλου"
 
 #: Resources/Scripts/Gui/Preferences.as:715
 #: Resources/Scripts/Gui/Preferences.as:715
 msgctxt "Preferences"
 msgid "Save Map"
-msgstr ""
+msgstr "Αποθήκευση χάρτη"
 
 #: Resources/Scripts/Gui/Preferences.as:716
 #: Resources/Scripts/Gui/Preferences.as:716
 msgctxt "Preferences"
 msgid "Save Sceneshot"
-msgstr ""
+msgstr "Αποθήκευση Sceneshot"
 
 #: Resources/Scripts/Gui/Preferences.as:717
 #: Resources/Scripts/Gui/Preferences.as:717
 msgctxt "Preferences"
 msgid "Save Screenshot"
-msgstr ""
+msgstr "Αποθήκευση στιγμιότυπου οθόνης"
 
 #: Resources/Scripts/Gui/Preferences.as:736
 #: Resources/Scripts/Gui/Preferences.as:736
 msgctxt "Preferences"
 msgid "Enable Startup Window"
-msgstr ""
+msgstr "Ενεργοποίηση παράθυρου εκκίνησης"
 
 #: Resources/Scripts/Gui/Preferences.as:757
 #: Resources/Scripts/Gui/Preferences.as:757
 msgctxt "Preferences"
 msgid "Quit and restart OpenSpades to access the startup window."
-msgstr ""
+msgstr "Κλείστε και ξεκινήστε πάλι το OpenSpades για να μεταβείτε στο παράθυρο εκκίνησης."
 
 #: Resources/Scripts/Gui/Preferences.as:758
 #: Resources/Scripts/Gui/Preferences.as:758
 msgctxt "Preferences"
 msgid "Some settings only can be changed in the startup window."
-msgstr ""
+msgstr "Ορισμένες ρυθμίσεις μπορούν να αλλάξουν μόνο στο παράθυρο εκκίνησης."
 
 #: Resources/Scripts/Gui/StartupScreen.as:160
 #: Resources/Scripts/Gui/StartupScreen.as:160
 msgctxt "StartupScreen"
 msgid "Start"
-msgstr ""
+msgstr "Έναρξη"
 
 #: Resources/Scripts/Gui/StartupScreen.as:167
 #: Resources/Scripts/Gui/StartupScreen.as:167
 msgctxt "StartupScreen"
 msgid "Skip this screen next time"
-msgstr ""
+msgstr "Παραλείψτε αυτήν την οθόνη την επόμενη φορά"
 
 #: Resources/Scripts/Gui/StartupScreen.as:211
 #: Resources/Scripts/Gui/StartupScreen.as:211
 msgctxt "StartupScreen"
 msgid "Graphics"
-msgstr ""
+msgstr "Γραφικά"
 
 #: Resources/Scripts/Gui/StartupScreen.as:212
 #: Resources/Scripts/Gui/StartupScreen.as:212
 msgctxt "StartupScreen"
 msgid "Audio"
-msgstr ""
+msgstr "Ήχος"
 
 #: Resources/Scripts/Gui/StartupScreen.as:213
 #: Resources/Scripts/Gui/StartupScreen.as:213
 msgctxt "StartupScreen"
 msgid "Generic"
-msgstr ""
+msgstr "Γενικής χρήσης"
 
 #: Resources/Scripts/Gui/StartupScreen.as:214
 #: Resources/Scripts/Gui/StartupScreen.as:214
 msgctxt "StartupScreen"
 msgid "System Info"
-msgstr ""
+msgstr "Πληροφορίες συστήματος"
 
 #: Resources/Scripts/Gui/StartupScreen.as:215
 #: Resources/Scripts/Gui/StartupScreen.as:1679
@@ -1177,49 +1177,49 @@ msgstr ""
 #: Resources/Scripts/Gui/StartupScreen.as:1679
 msgctxt "StartupScreen"
 msgid "Advanced"
-msgstr ""
+msgstr "Για προχωρημένους"
 
 #: Resources/Scripts/Gui/StartupScreen.as:288
 #: Resources/Scripts/Gui/StartupScreen.as:288
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the update info website."
-msgstr ""
+msgstr "Παρουσιάστηκε ένα άγνωστο σφάλμα κατά το άνοιγμα της καινούργιας έκδοσης στη σελίδα στο internet."
 
 #: Resources/Scripts/Gui/StartupScreen.as:853
 #: Resources/Scripts/Gui/StartupScreen.as:853
 msgctxt "StartupScreen"
 msgid "Custom"
-msgstr ""
+msgstr "Προσαρμοσμένο"
 
 #: Resources/Scripts/Gui/StartupScreen.as:979
 #: Resources/Scripts/Gui/StartupScreen.as:979
 msgctxt "StartupScreen"
 msgid "Close"
-msgstr ""
+msgstr "Κλείσε"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1085
 #: Resources/Scripts/Gui/StartupScreen.as:1085
 msgctxt "StartupScreen"
 msgid "Graphics Settings"
-msgstr ""
+msgstr "Ρυθμίσεις γραφικών"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1090
 #: Resources/Scripts/Gui/StartupScreen.as:1090
 msgctxt "StartupScreen"
 msgid "Resolution"
-msgstr ""
+msgstr "Ανάλυση"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1100
 #: Resources/Scripts/Gui/StartupScreen.as:1100
 msgctxt "StartupScreen"
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Λειτουργία Πλήρους Οθόνης"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1103
 #: Resources/Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
 msgid "By running in fullscreen mode OpenSpades occupies the screen, making it easier for you to concentrate on playing the game."
-msgstr ""
+msgstr "Με την χρήση της λειτουργίας πλήρους οθόνης το παιχνίδι καταλαμβάνει όλη την οθόνη, καθιστώντας ευκολότερο για σας να επικεντρωθείτε στο παιχνίδι."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1110
 #: Resources/Scripts/Gui/StartupScreen.as:1492
@@ -1227,31 +1227,31 @@ msgstr ""
 #: Resources/Scripts/Gui/StartupScreen.as:1492
 msgctxt "StartupScreen"
 msgid "Backend"
-msgstr ""
+msgstr "Backend"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1113
 #: Resources/Scripts/Gui/StartupScreen.as:1113
 msgctxt "StartupScreen"
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1117
 #: Resources/Scripts/Gui/StartupScreen.as:1117
 msgctxt "StartupScreen"
 msgid "OpenGL renderer uses your computer's graphics accelerator to generate the game screen."
-msgstr ""
+msgstr "Το OpenGL renderer χρησιμοποιεί τον επιταχυντής της κάρτας γραφικών σας για τη δημιουργία της οθόνης του παιχνιδιού."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1125
 #: Resources/Scripts/Gui/StartupScreen.as:1125
 msgctxt "StartupScreen"
 msgid "Software"
-msgstr ""
+msgstr "Λογισμικό"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1129
 #: Resources/Scripts/Gui/StartupScreen.as:1129
 msgctxt "StartupScreen"
 msgid "Software renderer uses CPU to generate the game screen. Its quality and performance might be inferior to OpenGL renderer, but it works even with an unsupported GPU."
-msgstr ""
+msgstr "Το software renderer χρησιμοποιεί την CPU για τη δημιουργία της οθόνης του παιχνιδιού. Η ποιότητά του και η απόδοσή του μπορεί να είναι κατώτερης ποιότητας από αυτές του OpenGL renderer, αλλά δουλεύει ακόμη και με μια μη υποστηριζόμενη GPU."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1143
 #: Resources/Scripts/Gui/StartupScreen.as:1143
@@ -1259,127 +1259,127 @@ msgctxt "StartupScreen"
 msgid "Antialias:Enables a technique to improve the appearance of high-contrast edges.\n\n"
 "MSAA: Performs antialiasing by generating an intermediate high-resolution image. Looks best, but doesn't cope with some settings.\n\n"
 "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|Off|MSAA 2x|4x|FXAA"
-msgstr ""
+msgstr "Antialias: Επιτρέπει την εμφανισιακή βελτίωση των ακρών με υψηλές αντιθέσεις. Το MSAA: Χρησιμοποιεί το Antialias για να εξομαλύνει τα γραφικά, δημιουργώντας μια ενδιάμεση εικόνα υψηλής ευκρίνειας. Εμφανισιακά καλύτερο, αλλά δεν συμβαδίζει με κάποιες ρυθμίσεις. FXAA: Χρησιμοποιεί το Antialias, εξομαλύνοντας αντικείμενα ως μετα-διεργασία. | Απενεργοποίηση | MSAA 2 x | 4 x | FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1150
 #: Resources/Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
 msgid "Global Illumination"
-msgstr ""
+msgstr "Παγκόσμιος Φωτισμός"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1152
 #: Resources/Scripts/Gui/StartupScreen.as:1152
 msgctxt "StartupScreen"
 msgid "Enables a physically based simulation of light path for more realistic lighting."
-msgstr ""
+msgstr "Επιτρέπει μια προσομοίωση της διαδρομής του φωτός για πιο ρεαλιστικό φωτισμό."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1155
 #: Resources/Scripts/Gui/StartupScreen.as:1155
 msgctxt "StartupScreen"
 msgid "Linear HDR Rendering"
-msgstr ""
+msgstr "Γραμμικό HDR Rendering"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1157
 #: Resources/Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
 msgid "Uses a number representation which allows wider dynamic range during rendering process. Additionally, this allows color calculation whose value is in linear correspondence with actual energy, that is, physically accurate blending can be achieved."
-msgstr ""
+msgstr "Χρησιμοποιεί μια αναπαράσταση αριθμών που επιτρέπει την ευρύτερη δυναμική περιοχή κατά τη διάρκεια της διαδικασίας rendering. Επιπλέον, αυτό επιτρέπει τον υπολογισμό χρώματος του οποίου η τιμή είναι σε γραμμική αλληλογραφία με πραγματική ενεργεια, άρα, επιτρέπει την επίτευξη ακριβής ανάμιξης χρωμάτων."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1164
 #: Resources/Scripts/Gui/StartupScreen.as:1164
 msgctxt "StartupScreen"
 msgid "Camera Blur"
-msgstr ""
+msgstr "Θόλωση κάμερας"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1165
 #: Resources/Scripts/Gui/StartupScreen.as:1165
 msgctxt "StartupScreen"
 msgid "Blurs the screen when you turn quickly."
-msgstr ""
+msgstr "Θολώνει την οθόνη όταν γυρίζετε γρήγορα."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1167
 #: Resources/Scripts/Gui/StartupScreen.as:1167
 msgctxt "StartupScreen"
 msgid "Lens Effect"
-msgstr ""
+msgstr "Επίδραση φακών"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1168
 #: Resources/Scripts/Gui/StartupScreen.as:1168
 msgctxt "StartupScreen"
 msgid "Simulates distortion caused by a real camera lens."
-msgstr ""
+msgstr "Προσομοιώνει την παραμόρφωση που προκαλείται από τον φακό μιας πραγματικής φωτογραφικής μηχανής."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1170
 #: Resources/Scripts/Gui/StartupScreen.as:1170
 msgctxt "StartupScreen"
 msgid "Lens Scattering Filter"
-msgstr ""
+msgstr "Σκέδαση φίλτρου φακού"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1171
 #: Resources/Scripts/Gui/StartupScreen.as:1171
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
-msgstr ""
+msgstr "Μιμείται το φως που διαχέεται διά της σκόνη στο φακό της κάμερας."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1174
 #: Resources/Scripts/Gui/StartupScreen.as:1174
 msgctxt "StartupScreen"
 msgid "Lens Flare"
-msgstr ""
+msgstr "Αναλαμπή φακού"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1175
 #: Resources/Scripts/Gui/StartupScreen.as:1175
 msgctxt "StartupScreen"
 msgid "The Sun causes lens flare."
-msgstr ""
+msgstr "Ο ήλιος προκαλεί Αναλαμπή φακού."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1177
 #: Resources/Scripts/Gui/StartupScreen.as:1177
 msgctxt "StartupScreen"
 msgid "Flares for Dynamic Lights"
-msgstr ""
+msgstr "Φωτοβολίδες για δυναμικό φωτισμό"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1178
 #: Resources/Scripts/Gui/StartupScreen.as:1178
 msgctxt "StartupScreen"
 msgid "Enables lens flare for light sources other than the Sun."
-msgstr ""
+msgstr "Δίνει τη δυνατότητα της αναλαμπής φακού για πηγές φωτός εκτός του ήλιου."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1180
 #: Resources/Scripts/Gui/StartupScreen.as:1180
 msgctxt "StartupScreen"
 msgid "Color Correction"
-msgstr ""
+msgstr "Διόρθωση Χρώματος"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1181
 #: Resources/Scripts/Gui/StartupScreen.as:1181
 msgctxt "StartupScreen"
 msgid "Applies cinematic color correction to make the image look better."
-msgstr ""
+msgstr "Χρησιμοποιεί κινηματογραφική διόρθωση χρώματος για να κάνει την εικόνα να φαίνετε καλύτερα."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1183
 #: Resources/Scripts/Gui/StartupScreen.as:1183
 msgctxt "StartupScreen"
 msgid "Depth of Field"
-msgstr ""
+msgstr "Βάθος πεδίου"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1184
 #: Resources/Scripts/Gui/StartupScreen.as:1184
 msgctxt "StartupScreen"
 msgid "Blurs out-of-focus objects."
-msgstr ""
+msgstr "Θολώνει αντικείμενα στα οποία δεν συγκεντρώνεσαι."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1186
 #: Resources/Scripts/Gui/StartupScreen.as:1186
 msgctxt "StartupScreen"
 msgid "Screen Space Ambient Occlusion"
-msgstr ""
+msgstr "Screen space ambient occlusion (Ssao)"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1187
 #: Resources/Scripts/Gui/StartupScreen.as:1187
 msgctxt "StartupScreen"
 msgid "Simulates soft shadows that occur between nearby objects."
-msgstr ""
+msgstr "Προσομοιώνει σκιές που παρουσιάζονται ανάμεσα σε κοντινά στον παίχτη αντικείμενα."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1189
 #: Resources/Scripts/Gui/StartupScreen.as:1228
@@ -1389,7 +1389,7 @@ msgstr ""
 #: Resources/Scripts/Gui/StartupScreen.as:1250
 msgctxt "StartupScreen"
 msgid "Low"
-msgstr ""
+msgstr "Χαμηλά"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1190
 #: Resources/Scripts/Gui/StartupScreen.as:1229
@@ -1397,7 +1397,7 @@ msgstr ""
 #: Resources/Scripts/Gui/StartupScreen.as:1229
 msgctxt "StartupScreen"
 msgid "Medium"
-msgstr ""
+msgstr "Μεσαία"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1191
 #: Resources/Scripts/Gui/StartupScreen.as:1230
@@ -1407,7 +1407,7 @@ msgstr ""
 #: Resources/Scripts/Gui/StartupScreen.as:1252
 msgctxt "StartupScreen"
 msgid "High"
-msgstr ""
+msgstr "Υψηλά"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1192
 #: Resources/Scripts/Gui/StartupScreen.as:1253
@@ -1415,158 +1415,158 @@ msgstr ""
 #: Resources/Scripts/Gui/StartupScreen.as:1253
 msgctxt "StartupScreen"
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1195
 #: Resources/Scripts/Gui/StartupScreen.as:1195
 msgctxt "StartupScreen"
 msgid "Post-process"
-msgstr ""
+msgstr "Μετα-διεργασία"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1196
 #: Resources/Scripts/Gui/StartupScreen.as:1196
 msgctxt "StartupScreen"
 msgid "Post-process modifies the image to make it look better and more realistic."
-msgstr ""
+msgstr "Η Μετα-διεργασία τροποποιεί την εικόνα κάνοντας την να φαίνεται καλύτερη και πιο ρεαλιστική."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1203
 #: Resources/Scripts/Gui/StartupScreen.as:1203
 msgctxt "StartupScreen"
 msgid "Particles|Low:Artifact occurs when a particle intersects other objects.|Medium:Particle intersects objects smoothly.|High:Particle intersects objects smoothly, and some objects casts their shadow to particles."
-msgstr ""
+msgstr "Σωματίδια| Χαμηλά: Ένα artifact συμβαίνει όταν ένα σωματίδιο εισέρχεται σε άλλα αντικείμενα. | Μεσαία: Τα σωματίδια τέμνουν άλλα αντικείμενα ομαλά. | Υψηλά:Τα σωματίδια τέμνουν άλλα αντικείμενα ομαλά, και η σκιά κάποιων αντικειμένων πέφτει πάνω στα σωματίδια αυτά."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1213
 #: Resources/Scripts/Gui/StartupScreen.as:1213
 msgctxt "StartupScreen"
 msgid "Dynamic Lights"
-msgstr ""
+msgstr "Δυναμικός φωτισμός"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1215
 #: Resources/Scripts/Gui/StartupScreen.as:1215
 msgctxt "StartupScreen"
 msgid "Gives some objects an ability to emit light to give them an energy-emitting impression."
-msgstr ""
+msgstr "Δίνει σε κάποια αντικείμενα την ικανότητα να εκπέμπουν φως ώστε να φαίνεται σαν να εκπέμπουν ενέργεια."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1218
 #: Resources/Scripts/Gui/StartupScreen.as:1218
 msgctxt "StartupScreen"
 msgid "Shadows"
-msgstr ""
+msgstr "Σκιές"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1219
 #: Resources/Scripts/Gui/StartupScreen.as:1219
 msgctxt "StartupScreen"
 msgid "Non-static object casts a shadow."
-msgstr ""
+msgstr "Ένα μη στατικό αντικείμενο έχει σκιά."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1221
 #: Resources/Scripts/Gui/StartupScreen.as:1221
 msgctxt "StartupScreen"
 msgid "Volumetric Fog"
-msgstr ""
+msgstr "Ογκομετρική ομίχλη"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1222
 #: Resources/Scripts/Gui/StartupScreen.as:1222
 msgctxt "StartupScreen"
 msgid "Simulates shadow being casted to the fog particles using a super highly computationally demanding algorithm. "
-msgstr ""
+msgstr "Προσομοιώνει σκιά να πέφτει στα πιο μικρά σωματίδια ομίχλης χρησιμοποιώντας έναν πολύ υπολογιστικά απαιτητικό αλγόριθμο. "
 
 #: Resources/Scripts/Gui/StartupScreen.as:1225
 #: Resources/Scripts/Gui/StartupScreen.as:1225
 msgctxt "StartupScreen"
 msgid "Physically Based Lighting"
-msgstr ""
+msgstr "Ρεαλιστικός φωτισμός"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1226
 #: Resources/Scripts/Gui/StartupScreen.as:1226
 msgctxt "StartupScreen"
 msgid "Uses more accurate approximation techniques to decide the brightness of objects."
-msgstr ""
+msgstr "Χρησιμοποιεί πιο ακριβής τεχνικές προσέγγισης για να καθορίσει την φωτεινότητα των αντικειμένων."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1233
 #: Resources/Scripts/Gui/StartupScreen.as:1233
 msgctxt "StartupScreen"
 msgid "Direct Lights"
-msgstr ""
+msgstr "Άμεσος φωτισμός"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1234
 #: Resources/Scripts/Gui/StartupScreen.as:1234
 msgctxt "StartupScreen"
 msgid "Controls how light encounting a material and atmosphere directly affects its appearance."
-msgstr ""
+msgstr "Ελέγχει πως επηρεάζεται άμεσα ν εμφάνιση του φωτός όταν συγκρούεται με άλλα υλικά ή την ατμόσφαιρα."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1244
 #: Resources/Scripts/Gui/StartupScreen.as:1244
 msgctxt "StartupScreen"
 msgid "Water Shader|None:Water is rendered in the same way that normal blocks are done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving water is simulated as well as reflection and refraction.|Level 3:Reflections and refractions are rendered at the highest quality using screen-space techniques."
-msgstr ""
+msgstr "Σκιές νερού| Χωρίς: Το νερό κάνει render με τον ίδιο τρόπο όπως οι κύβοι. | Επίπεδο 1:Η διάθλαση και το ανακλώμενο φως του ηλίου προσομοιώνονται. | Επίπεδο 2: Προσομοιώνεται κινούμενο νερό καθώς και ανάκλαση και διάθλαση. | Επίπεδο 3:Οι ανακλάσεις και οι διαθλάσεις αποδίδονται με την υψηλότερη ποιότητα χρησιμοποιώντας τεχνικές screen-space."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1251
 #: Resources/Scripts/Gui/StartupScreen.as:1251
 msgctxt "StartupScreen"
 msgid "Med"
-msgstr ""
+msgstr "Μεσαίο"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid "Shader Effects"
-msgstr ""
+msgstr "Εφέ σκιών"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid "Special effects."
-msgstr ""
+msgstr "Ειδικά εφέ."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1273
 #: Resources/Scripts/Gui/StartupScreen.as:1273
 msgctxt "StartupScreen"
 msgid "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|4x"
-msgstr ""
+msgstr "Γρήγορη λειτουργία: μειώνει την ανάλυση της εικόνας για ταχύτερη απόδοση. | Απενεργοποίηση | 2 x | 4 x"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1486
 #: Resources/Scripts/Gui/StartupScreen.as:1486
 msgctxt "StartupScreen"
 msgid "Audio Settings"
-msgstr ""
+msgstr "Ρυθμίσεις Ήχου"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1495
 #: Resources/Scripts/Gui/StartupScreen.as:1495
 msgctxt "StartupScreen"
 msgid "OpenAL"
-msgstr ""
+msgstr "OpenAL"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
 msgid "Uses an OpenAL-capable sound card to process sound. In most cases where there isn't such a sound card, software emulation is used."
-msgstr ""
+msgstr "Χρησιμοποιεί μια κάρτα ήχου που μπορεί να χρησιμοποιήσει OpenAL για την επεξεργασία ήχου. Στις περισσότερες περιπτώσεις όπου δεν υπάρχει μια τέτοια κάρτα ήχου, χρησιμοποιείται προσομοίωση λογισμικού."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1508
 #: Resources/Scripts/Gui/StartupScreen.as:1508
 msgctxt "StartupScreen"
 msgid "YSR"
-msgstr ""
+msgstr "YSR"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1512
 #: Resources/Scripts/Gui/StartupScreen.as:1512
 msgctxt "StartupScreen"
 msgid "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It features several enhanced features including automatic load control, dynamics compressor, HRTF-based 3D audio, and high quality reverb."
-msgstr ""
+msgstr "Το YSR είναι μια πειραματική 3D HDR μηχανή ήχου βελτιστοποιημένη για το OpenSpades. Διαθέτει αρκετές βελτιωμένες δυνατότητες όπως αυτόματη φόρτωση στοιχείου ελέγχου, συμπιεστής δυνάμεων, βασισμένο σε τεχνολογία HRTF 3D ήχου και υψηλής ποιότητας αντήχησης."
 
 #. ! The name of audio driver that outputs no audio.
 #: Resources/Scripts/Gui/StartupScreen.as:1523
 #: Resources/Scripts/Gui/StartupScreen.as:1523
 msgctxt "StartupScreen"
 msgid "Null"
-msgstr ""
+msgstr "Κενό"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1527
 #: Resources/Scripts/Gui/StartupScreen.as:1527
 msgctxt "StartupScreen"
 msgid "Disables audio output."
-msgstr ""
+msgstr "Απενεργοποιεί την έξοδο ήχου."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1538
 #: Resources/Scripts/Gui/StartupScreen.as:1562
@@ -1574,109 +1574,109 @@ msgstr ""
 #: Resources/Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
 msgid "Polyphonics"
-msgstr ""
+msgstr "Πολυφωνία"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1539
 #: Resources/Scripts/Gui/StartupScreen.as:1539
 msgctxt "StartupScreen"
 msgid "Specifies how many sounds can be played simultaneously. Higher value needs more processing power, so setting this too high might cause an overload (especially with a software emulation)."
-msgstr ""
+msgstr "Καθορίζει πόσοι ήχοι μπορούν να παιχτούν ταυτόχρονα. Υψηλότερη τιμή απαιτεί περισσότερη επεξεργαστική ισχύ, έτσι η ρύθμιση αυτού σε πολύ υψηλό επίπεδο μπορεί να προκαλέσει υπερφόρτωση (ειδικά αν γίνεται προσομοίωση λογισμικού)."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1546
 #: Resources/Scripts/Gui/StartupScreen.as:1546
 msgctxt "StartupScreen"
 msgid "EAX"
-msgstr ""
+msgstr "EAX"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1547
 #: Resources/Scripts/Gui/StartupScreen.as:1547
 msgctxt "StartupScreen"
 msgid "Enables extended features provided by the OpenAL driver to create more ambience."
-msgstr ""
+msgstr "Επιτρέπει την χρήση περισσότερων χαρακτηριστικά που παρέχονται από το OpenAL driver για την δημιουργία καλύτερης ατμόσφαιρας."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1563
 #: Resources/Scripts/Gui/StartupScreen.as:1563
 msgctxt "StartupScreen"
 msgid "Specifies how many sounds can be played simultaneously. No matter what value is set, YSR might reduce the number of sounds when an overload is detected."
-msgstr ""
+msgstr "Καθορίζει πόσοι ήχοι μπορούν να παιχτόυν ταυτόχρονα. Ανεξαρτήτως της καθορισμένης τιμής, το YSR μπορεί να μειώσει τον αριθμό των ήχων όταν εντοπίσει μια υπερφόρτωση."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1623
 #: Resources/Scripts/Gui/StartupScreen.as:1623
 msgctxt "StartupScreen"
 msgid "Language"
-msgstr ""
+msgstr "Γλώσσα"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1635
 #: Resources/Scripts/Gui/StartupScreen.as:1635
 msgctxt "StartupScreen"
 msgid "Tools"
-msgstr ""
+msgstr "Εργαλεία"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1638
 #: Resources/Scripts/Gui/StartupScreen.as:1638
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
-msgstr ""
+msgstr "Επαναφορά όλων των ρυθμίσεων"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1647
 #: Resources/Scripts/Gui/StartupScreen.as:1647
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
-msgstr ""
+msgstr "Ανοίξτε το φάκελο Config στον Explorer"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1649
 #: Resources/Scripts/Gui/StartupScreen.as:1649
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
-msgstr ""
+msgstr "Εμφάνιση του φακέλου Config στο Finder"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1651
 #: Resources/Scripts/Gui/StartupScreen.as:1651
 msgctxt "StartupScreen"
 msgid "Browse Config Folder"
-msgstr ""
+msgstr "Αναζήτηση φακέλου Config"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1668
 #: Resources/Scripts/Gui/StartupScreen.as:1668
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the config directory."
-msgstr ""
+msgstr "Παρουσιάστηκε ένα άγνωστο σφάλμα κατά το άνοιγμα του φακέλου Config."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1674
 #: Resources/Scripts/Gui/StartupScreen.as:1674
 msgctxt "StartupScreen"
 msgid "Are you sure to reset all settings? They include (but are not limited to):"
-msgstr ""
+msgstr "Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλες τις ρυθμίσεις; Αυτές περιλαμβάνουν (αλλά δεν περιορίζονται σε):"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1675
 #: Resources/Scripts/Gui/StartupScreen.as:1675
 msgctxt "StartupScreen"
 msgid "All graphics/audio settings"
-msgstr ""
+msgstr "Όλες τις ρυθμίσεις γραφικών/ήχου"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1676
 #: Resources/Scripts/Gui/StartupScreen.as:1676
 msgctxt "StartupScreen"
 msgid "All key bindings"
-msgstr ""
+msgstr "Όλες τις δεσμεύσεις πλήκτρων"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1677
 #: Resources/Scripts/Gui/StartupScreen.as:1677
 msgctxt "StartupScreen"
 msgid "Your player name"
-msgstr ""
+msgstr "Το όνομά σας"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1678
 #: Resources/Scripts/Gui/StartupScreen.as:1678
 msgctxt "StartupScreen"
 msgid "Other advanced settings only accessible through '{0}' tab and in-game commands"
-msgstr ""
+msgstr "Άλλες ρυθμίσεις για προχωρημένους προσβάσιμες μόνο μέσω της '{0}' καρτέλας και των εντολών εντός του παιχνιδιού"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1748
 #: Resources/Scripts/Gui/StartupScreen.as:1748
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
-msgstr ""
+msgstr "Άγνωστο ({0})"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1750
 #: Resources/Scripts/Gui/StartupScreen.as:1764
@@ -1684,107 +1684,107 @@ msgstr ""
 #: Resources/Scripts/Gui/StartupScreen.as:1764
 msgctxt "StartupScreen"
 msgid "System default"
-msgstr ""
+msgstr "Προεπιλογή συστήματος"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1813
 #: Resources/Scripts/Gui/StartupScreen.as:1813
 msgctxt "StartupScreen"
 msgid "Copy to Clipboard"
-msgstr ""
+msgstr "Αντιγραφή στο πρόχειρο"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1849
 #: Resources/Scripts/Gui/StartupScreen.as:1849
 msgctxt "StartupScreen"
 msgid "Advanced Settings"
-msgstr ""
+msgstr "Ρυθμίσεις για Προχωρημένους"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1858
 #: Resources/Scripts/Gui/StartupScreen.as:1858
 msgctxt "StartupScreen"
 msgid "Filter"
-msgstr ""
+msgstr "Φίλτρο"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:40
 #: Resources/Scripts/Gui/UpdateCheckView.as:40
 msgctxt "UpdateCheck"
 msgid "Enable"
-msgstr ""
+msgstr "Ενεργοποίηση"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:47
 #: Resources/Scripts/Gui/UpdateCheckView.as:47
 msgctxt "UpdateCheck"
 msgid "Show details..."
-msgstr ""
+msgstr "Εμφάνιση λεπτομερειών..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 msgctxt "UpdateCheck"
 msgid "Version {0} is available! (You currently have {1})"
-msgstr ""
+msgstr "Η έκδοση {0} είναι διαθέσιμη! (Αυτή τη στιγμή έχετε την έκδοση {1})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 msgctxt "UpdateCheck"
 msgid "You're using the latest version of OpenSpades. ({0})"
-msgstr ""
+msgstr "Χρησιμοποιείτε την τελευταία έκδοση του OpenSpades. ({0})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
 msgctxt "UpdateCheck"
 msgid "Checking for updates..."
-msgstr ""
+msgstr "Έλεγχος για ενημερώσεις..."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
 msgctxt "UpdateCheck"
 msgid "Failed to check for updates."
-msgstr ""
+msgstr "Αδύνατο να γίνει έλεγχος για ενημερώσεις."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:116
 #: Resources/Scripts/Gui/UpdateCheckView.as:116
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not enabled."
-msgstr ""
+msgstr "Ο αυτόματος έλεγχος ενημερώσεων δεν είναι ενεργοποιημένος."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:119
 #: Resources/Scripts/Gui/UpdateCheckView.as:119
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
-msgstr ""
+msgstr "Ο αυτόματος έλεγχος ενημερώσεων δεν είναι διαθέσιμος."
 
 #: Sources/Client/Client_NetHandler.cpp:258
 #: Sources/Client/Client_NetHandler.cpp:271
 msgctxt "Client"
 msgid "Spectator"
-msgstr ""
+msgstr "Ομάδα θεατών"
 
 #: Sources/Client/Client_Draw.cpp:99
 msgctxt "Client"
 msgid "Unbound"
-msgstr ""
+msgstr "Χωρίς κουμπί"
 
 #: Sources/Client/Client_Draw.cpp:655
 msgctxt "Client"
 msgid "[{0}] Cycle camera mode"
-msgstr ""
+msgstr "[{0}] Λειτουργία αλλαγής κάμερας"
 
 #: Sources/Client/Client_Draw.cpp:657
 msgctxt "Client"
 msgid "[{0}/{1}] Next/previous player"
-msgstr ""
+msgstr "[{0}/{1}] Επόμενος/προηγούμενος παίκτης"
 
 #: Sources/Client/Client_Draw.cpp:661
 msgctxt "Client"
 msgid "[{0}] Unfollow"
-msgstr ""
+msgstr "[{0}] Σταμάτα να ακολουθάς"
 
 #: Sources/Client/Client_Draw.cpp:664
 msgctxt "Client"
 msgid "[{0}/{1}] Follow a player"
-msgstr ""
+msgstr "[{0}/{1}] Ακολουθήστε ένα παίκτη"
 
 #: Sources/Client/Client_Draw.cpp:669
 msgctxt "Client"
 msgid "[{0}/{1}] Go up/down"
-msgstr ""
+msgstr "[{0}/{1}] Πηγαίνετε προς τα πάνω/κάτω"
 

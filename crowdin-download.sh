@@ -33,3 +33,4 @@ remap pt_BR pt_br
 remap ru_RU ru
 remap uk_UA uk
 remap vi_VN vi
+remap hu_HU hu
