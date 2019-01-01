@@ -44,10 +44,21 @@ namespace spades {
 
 		float ChatWindow::GetWidth() { return renderer->ScreenWidth() / 2; }
 
-		float ChatWindow::GetHeight() {
+		float ChatWindow::GetNormalHeight() {
 			float prop = killfeed ? (float)cg_killfeedHeight : (float)cg_chatHeight;
 
 			return renderer->ScreenHeight() * prop * 0.01f;
+		}
+
+		float ChatWindow::GetBufferHeight() {
+			if (killfeed) {
+				return GetNormalHeight();
+			} else {
+				// Take up the remaining height
+				float prop = 100.0f - (float)cg_killfeedHeight;
+
+				return renderer->ScreenHeight() * prop * 0.01f - 100.0f;
+			}
 		}
 
 		float ChatWindow::GetLineHeight() { return 20.f; }
@@ -131,7 +142,7 @@ namespace spades {
 				}
 			}
 
-			entries.push_front(ChatEntry(msg, h, 0.f, 15.f));
+			entries.push_front(ChatEntry(msg, h, 15.f));
 
 			firstY -= h;
 		}
@@ -183,32 +194,32 @@ namespace spades {
 					firstY = 0.f;
 			}
 
-			float height = GetHeight();
+			float normalHeight = GetNormalHeight();
+			float bufferHeight = GetBufferHeight();
 			float y = firstY;
 
 			for (std::list<ChatEntry>::iterator it = entries.begin(); it != entries.end();) {
 				ChatEntry &ent = *it;
-				if (y + ent.height > height) {
-					// should fade out
-					ent.fade -= dt * 4.f;
-					if (ent.fade < 0.f) {
-						ent.fade = 0.f;
+				if (y + ent.height > bufferHeight) {
+					ent.bufferFade -= dt * 4.f;
+					if (ent.bufferFade < 0.f) {
+						// evict from the buffer
 						std::list<ChatEntry>::iterator er = it++;
 						entries.erase(er);
 						continue;
 					}
+				}
+
+				if (y + ent.height > normalHeight) {
+					ent.fade = std::max(ent.fade - dt * 4.f, 0.0f);
 				} else if (y + ent.height > 0.f) {
-					// should fade in
-					ent.fade += dt * 4.f;
-					if (ent.fade > 1.f)
-						ent.fade = 1.f;
+					ent.fade = std::min(ent.fade + dt * 4.f, 1.0f);
+					ent.bufferFade = std::min(ent.bufferFade + dt * 4.f, 1.0f);
 				}
 
 				ent.timeFade -= dt;
 				if (ent.timeFade < 0.f) {
-					std::list<ChatEntry>::iterator er = it++;
-					entries.erase(er);
-					continue;
+					ent.timeFade = 0.f;
 				}
 
 				y += ent.height;
@@ -219,8 +230,10 @@ namespace spades {
 		void ChatWindow::Draw() {
 			SPADES_MARK_FUNCTION();
 
+			float winH = expanded ? GetBufferHeight() : GetNormalHeight();
+
 			float winX = 4.f;
-			float winY = killfeed ? 8.f : renderer->ScreenHeight() - GetHeight() - 60.f;
+			float winY = killfeed ? 8.f : renderer->ScreenHeight() - winH - 60.f;
 			std::list<ChatEntry>::iterator it;
 
 			float lHeight = GetLineHeight();
@@ -233,6 +246,13 @@ namespace spades {
 			std::string ch = "aaaaaa"; // let's not make a new object for each character.
 			// note: UTF-8's longest character is 6 bytes
 
+			if (expanded) {
+				// Draw a box behind text when expanded
+				Handle<IImage> whiteImage = renderer->RegisterImage("Gfx/White.tga");
+				renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 0.2f));
+				renderer->DrawImage(whiteImage, AABB2(0, winY, GetWidth(), winH));
+			}
+
 			for (it = entries.begin(); it != entries.end(); ++it) {
 				ChatEntry &ent = *it;
 
@@ -242,9 +262,21 @@ namespace spades {
 				float tx = 0.f, ty = y;
 
 				float fade = ent.fade;
-				if (ent.timeFade < 1.f) {
-					fade *= ent.timeFade;
+
+				if (expanded) {
+					// Display out-dated messages when expanded
+					fade = ent.bufferFade;
+				} else {
+					if (ent.timeFade < 1.f) {
+						fade *= ent.timeFade;
+					}
 				}
+
+				if (fade < 0.01f) {
+					// Skip rendering invisible messages
+					goto endDrawLine;
+				}
+
 				brightShadowColor.w = shadowColor.w = .8f * fade;
 
 				color.w = fade;
@@ -266,11 +298,12 @@ namespace spades {
 						float luminosity = color.x + color.y + color.z;
 
 						font->DrawShadow(ch, MakeVector2(tx + winX, ty + winY), 1.f, color,
-										 luminosity > 0.9f ? shadowColor : brightShadowColor);
+						                 luminosity > 0.9f ? shadowColor : brightShadowColor);
 						tx += font->Measure(ch).x;
 					}
 				}
 
+			endDrawLine:
 				y += ent.height;
 			}
 		}
