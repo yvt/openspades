@@ -72,7 +72,7 @@
 
 # SDL 1.2 has SDL.h too. As such, the search paths should be restricted to
 # directories specific to SDL2.
-FIND_PATH(SDL2_INCLUDE_DIR SDL.h
+FIND_PATH(SDL2_INCLUDE_DIR SDL_render.h
   HINTS
   $ENV{SDL2DIR}
   PATH_SUFFIXES include/SDL2 include
@@ -85,7 +85,6 @@ FIND_PATH(SDL2_INCLUDE_DIR SDL.h
   /opt/local/include/SDL2 # DarwinPorts
   /opt/csw # Blastwave
   /opt
-  NO_DEFAULT_PATH
 )
 #MESSAGE("SDL2_INCLUDE_DIR is ${SDL2_INCLUDE_DIR}")
 
