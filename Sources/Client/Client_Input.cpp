@@ -28,6 +28,7 @@
 #include "IAudioDevice.h"
 
 #include "ClientUI.h"
+#include "ChatWindow.h"
 #include "Corpse.h"
 #include "MapView.h"
 #include "PaletteView.h"
@@ -68,6 +69,7 @@ DEFINE_SPADES_SETTING(cg_keySneak, "v");
 DEFINE_SPADES_SETTING(cg_keyCaptureColor, "e");
 DEFINE_SPADES_SETTING(cg_keyGlobalChat, "t");
 DEFINE_SPADES_SETTING(cg_keyTeamChat, "y");
+DEFINE_SPADES_SETTING(cg_keyZoomChatLog, "h");
 DEFINE_SPADES_SETTING(cg_keyChangeMapScale, "m");
 DEFINE_SPADES_SETTING(cg_keyToggleMapZoom, "n");
 DEFINE_SPADES_SETTING(cg_keyScoreboard, "Tab");
@@ -503,6 +505,8 @@ namespace spades {
 						// team chat
 						scriptedUI->EnterTeamChatWindow();
 						scriptedUI->setIgnored(name);
+					} else if (CheckKey(cg_keyZoomChatLog, name)) {
+						chatWindow->SetExpanded(down);
 					} else if (name == "/" && down) {
 						// command
 						scriptedUI->EnterCommandWindow();

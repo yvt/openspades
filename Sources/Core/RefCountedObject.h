@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <type_traits>
 #include <typeinfo>
 
@@ -31,7 +32,7 @@
 namespace spades {
 
 	class RefCountedObject {
-		int refCount;
+		std::atomic<int> refCount;
 #if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
 		reflection::BacktraceRecord lastRelease;
 		reflection::BacktraceRecord secondLastRelease;
@@ -143,6 +144,14 @@ namespace spades {
 
 			ptr = nullptr;
 			return {other, false};
+		}
+
+		/**
+		* Attempts to cast this `Handle<T>` to `Handle<S>` using `dynamic_cast`.
+		* Throws an exception if the cast was unsuccessful.
+		*/
+		template <class S> Handle<S> Cast() const & {
+			return Handle{*this}.Cast<S>();
 		}
 	};
 }

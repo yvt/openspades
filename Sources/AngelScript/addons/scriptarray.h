@@ -6,6 +6,8 @@
 #include "angelscript.h"
 #endif
 
+#include <atomic>
+
 // Sometimes it may be desired to use the same method names as used by C++ STL.
 // This may for example reduce time when converting code from script to C++ or
 // back.
@@ -100,7 +102,7 @@ public:
 	void ReleaseAllHandles(asIScriptEngine *engine);
 
 protected:
-	mutable int     refCount;
+	mutable std::atomic<int> refCount;
 	mutable bool    gcFlag;
 	asITypeInfo    *objType;
 	SArrayBuffer   *buffer;

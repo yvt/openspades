@@ -520,7 +520,7 @@ namespace spades {
 #endif
 					return std::make_tuple(
 					  Handle<draw::SWRenderer>::New(port).Cast<client::IRenderer>(),
-					  std::move(port).Cast<Disposable>());
+					  port.Cast<Disposable>());
 				}
 				default: SPRaise("Invalid renderer type");
 			}

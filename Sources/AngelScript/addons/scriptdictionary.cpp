@@ -186,14 +186,14 @@ void CScriptDictionary::AddRef() const
 {
 	// We need to clear the GC flag
 	gcFlag = false;
-	asAtomicInc(refCount);
+	refCount.fetch_add(1);
 }
 
 void CScriptDictionary::Release() const
 {
 	// We need to clear the GC flag
 	gcFlag = false;
-	if( asAtomicDec(refCount) == 0 )
+	if( refCount.fetch_sub(1) == 1 )
 	{
 		this->~CScriptDictionary();
 		asFreeMem(const_cast<CScriptDictionary*>(this));

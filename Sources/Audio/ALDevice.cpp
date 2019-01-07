@@ -69,7 +69,7 @@ namespace spades {
 					outValue = static_cast<int16_t>(std::floor(inValue * 32768.f));
 				}
 
-				return std::move(ret);
+				return ret;
 			}
 		}
 

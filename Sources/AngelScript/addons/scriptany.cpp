@@ -444,14 +444,14 @@ int CScriptAny::AddRef() const
 {
 	// Increase counter and clear flag set by GC
 	gcFlag = false;
-	return asAtomicInc(refCount);
+	return refCount.fetch_add(1) + 1;
 }
 
 int CScriptAny::Release() const
 {
 	// Decrease the ref counter
 	gcFlag = false;
-	if( asAtomicDec(refCount) == 0 )
+	if( refCount.fetch_sub(1) == 1 )
 	{
 		// Delete this object as no more references to it exists
 		delete this;

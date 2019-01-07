@@ -6,6 +6,7 @@
 #include "angelscript.h"
 #endif
 
+#include <atomic>
 
 BEGIN_AS_NAMESPACE
 
@@ -48,7 +49,7 @@ protected:
 	virtual ~CScriptAny();
 	void FreeObject();
 
-	mutable int refCount;
+	mutable std::atomic<int> refCount;
 	mutable bool gcFlag;
 	asIScriptEngine *engine;
 

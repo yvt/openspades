@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-12-31 04:46-0500\n"
+"PO-Revision-Date: 2019-01-01 05:55\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -220,7 +220,7 @@ msgstr "-- khối"
 #: Sources/Client/Client_Update.cpp:868 Sources/Client/LimboView.cpp:68
 msgctxt "Client"
 msgid "Rifle"
-msgstr ""
+msgstr "Súng trường"
 
 #: Sources/Client/Client_Update.cpp:843 Sources/Client/LimboView.cpp:71
 #: Sources/Client/Client_Update.cpp:869 Sources/Client/LimboView.cpp:71
@@ -232,7 +232,7 @@ msgstr ""
 #: Sources/Client/Client_Update.cpp:870 Sources/Client/LimboView.cpp:74
 msgctxt "Client"
 msgid "Shotgun"
-msgstr ""
+msgstr "Súng săn"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:849 Sources/Client/Client_Update.cpp:875
@@ -249,7 +249,7 @@ msgstr ""
 #: Sources/Client/Client_Update.cpp:856 Sources/Client/Client_Update.cpp:882
 msgctxt "Client"
 msgid "Grenade"
-msgstr ""
+msgstr "Lựu đạn"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:860 Sources/Client/Client_Update.cpp:886

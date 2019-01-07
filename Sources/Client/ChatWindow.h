@@ -51,19 +51,23 @@ namespace spades {
 			struct ChatEntry {
 				std::string msg;
 				float height;
-				float fade;     // usual fade opacity
+				float fade = 0.0f; // usual fade opacity
+				float bufferFade = 0.0f;
 				float timeFade; // timeout fade opacity
 
-				ChatEntry(const std::string &Msg, float Height, float Fade, float TimeFade)
-				    : msg(Msg), height(Height), fade(Fade), timeFade(TimeFade) {}
+				ChatEntry(const std::string &Msg, float Height, float TimeFade)
+				    : msg(Msg), height(Height), timeFade(TimeFade) {}
 			};
 
 			std::list<ChatEntry> entries;
 			float firstY;
 			bool killfeed;
 
+			bool expanded = false;
+
 			float GetWidth();
-			float GetHeight();
+			float GetNormalHeight();
+			float GetBufferHeight();
 			float GetLineHeight();
 
 			Vector4 GetColor(char);
@@ -76,6 +80,8 @@ namespace spades {
 			static std::string ColoredMessage(const std::string &, char);
 			static std::string TeamColorMessage(const std::string &, int);
 			static std::string killImage(int killType, int weapon);
+
+			void SetExpanded(bool value) { expanded = value; }
 
 			void Update(float dt);
 			void Draw();

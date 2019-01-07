@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2017-12-31 04:46-0500\n"
+"PO-Revision-Date: 2019-01-01 06:00\n"
 "Last-Translator: yvt <i@yvt.jp>\n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -1262,7 +1262,7 @@ msgid "Antialias:Enables a technique to improve the appearance of high-contrast 
 "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|Off|MSAA 2x|4x|FXAA"
 msgstr "Antialias: Memungkinkan teknik memperbaiki kemunculan tepi kontras tinggi.\n\n"
 "MSAA: Lakukan antialias dengan menghasilkan gambar beresolusi tinggi menengah. Terlihat terbaik, namun tidak mengatasi beberapa pengaturan.\n\n"
-"FXAA: Melakukan antialias dengan merapikan artefak sebagai pasca-proses. | Mati | MSAA 2x | 4x | FXAA"
+"FXAA: Melakukan antialias dengan merapikan artefak sebagai pasca-proses. |Mati|MSAA 2x|4x|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1150
 #: Resources/Scripts/Gui/StartupScreen.as:1150
@@ -1436,7 +1436,7 @@ msgstr "Pasca-proses memodifikasi gambar agar terlihat lebih baik dan lebih real
 #: Resources/Scripts/Gui/StartupScreen.as:1203
 msgctxt "StartupScreen"
 msgid "Particles|Low:Artifact occurs when a particle intersects other objects.|Medium:Particle intersects objects smoothly.|High:Particle intersects objects smoothly, and some objects casts their shadow to particles."
-msgstr ""
+msgstr "Partikel melintang benda dengan lancar, dan beberapa benda melemparkan bayangannya ke partikel."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1213
 #: Resources/Scripts/Gui/StartupScreen.as:1213

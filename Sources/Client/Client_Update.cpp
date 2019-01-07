@@ -499,8 +499,8 @@ namespace spades {
 			if (player->IsAlive() && player->GetTool() == Player::ToolBlock &&
 			    player->GetWeaponInput().secondary && player->IsBlockCursorDragging()) {
 				if (player->IsBlockCursorActive()) {
-					auto blocks = std::move(world->CubeLine(player->GetBlockCursorDragPos(),
-					                                        player->GetBlockCursorPos(), 256));
+					auto blocks = world->CubeLine(player->GetBlockCursorDragPos(),
+												  player->GetBlockCursorPos(), 256);
 					auto msg = _TrN("Client", "{0} block", "{0} blocks", blocks.size());
 					AlertType type = static_cast<int>(blocks.size()) > player->GetNumBlocks()
 					                   ? AlertType::Warning
@@ -1084,7 +1084,7 @@ namespace spades {
 			switch (player->GetWeapon()->GetWeaponType()) {
 				case RIFLE_WEAPON: vel = 700.f; break;
 				case SMG_WEAPON: vel = 360.f; break;
-				case SHOTGUN_WEAPON: return;
+				case SHOTGUN_WEAPON: vel = 500.f; break;
 			}
 			AddLocalEntity(new Tracer(this, muzzlePos, hitPos, vel));
 			AddLocalEntity(new MapViewTracer(muzzlePos, hitPos, vel));

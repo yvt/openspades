@@ -554,27 +554,6 @@ namespace spades {
 					}
 				}
 
-				if (false) {
-					GLProfiler::Context profiler(r->GetRenderer()->GetGLProfiler(), "Debug Output");
-
-					SPLog("Sparse Page Table -------");
-					for (int y = 0; y < Tiles; y++) {
-						char buf[Tiles + 1];
-						for (int x = 0; x < Tiles; x++) {
-							size_t g = groupMap[x][y];
-							const char *c = "0123456789ABCDEF";
-							if (g == NoGroup)
-								buf[x] = ' ';
-							else
-								buf[x] = c[g & 15];
-						}
-						buf[Tiles] = 0;
-						SPLog("%s", buf);
-					}
-
-					SPLog("-----------------------");
-				}
-
 				mapSize = r->settings.r_shadowMapSize;
 			}
 

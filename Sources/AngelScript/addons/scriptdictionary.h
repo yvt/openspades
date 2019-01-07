@@ -10,6 +10,8 @@
 #include "angelscript.h"
 #endif
 
+#include <atomic>
+
 // By default the CScriptDictionary use the std::string for the keys.
 // If the application uses a custom string type, then this typedef
 // can be changed accordingly. Remember, if the application uses
@@ -218,7 +220,7 @@ protected:
 
 	// Our properties
 	asIScriptEngine *engine;
-	mutable int      refCount;
+	mutable std::atomic<int> refCount;
 	mutable bool     gcFlag;
 	dictMap_t        dict;
 };

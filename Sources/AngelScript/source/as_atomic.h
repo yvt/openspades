@@ -42,6 +42,7 @@
 #ifndef AS_ATOMIC_H
 #define AS_ATOMIC_H
 
+#include <atomic>
 #include "as_config.h"
 
 BEGIN_AS_NAMESPACE
@@ -49,19 +50,19 @@ BEGIN_AS_NAMESPACE
 class asCAtomic
 {
 public:
-	asCAtomic();
+	asCAtomic() {}
 
-	asDWORD get() const;
-	void    set(asDWORD val);
+	asDWORD get() const { return value.load(); }
+	void    set(asDWORD val) { value.store(val); }
 
 	// Increase and return new value
-	asDWORD atomicInc();
+	asDWORD atomicInc() { return value.fetch_add(1) + 1; }
 
 	// Decrease and return new value
-	asDWORD atomicDec();
+	asDWORD atomicDec() { return value.fetch_sub(1) - 1; }
 
 protected:
-	asDWORD value;
+	std::atomic<asDWORD> value {0};
 };
 
 END_AS_NAMESPACE
