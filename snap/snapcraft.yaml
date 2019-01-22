@@ -42,7 +42,7 @@ parts:
       fi
     override-build: |
       snapcraftctl build
-      snapcraftctl set-version "$(git rev-parse --short HEAD)"
+      snapcraftctl set-version "$(git describe --tags)"
     build-packages:
       - clang
       - imagemagick
