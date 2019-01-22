@@ -1,11 +1,11 @@
 name: openspades
-version: 'master'
 summary: Sandbox building and FPS videogame
 description: |
   OpenSpades is a compatible client of Ace of Spades 0.75.
   Can connect to a vanilla/pyspades/pysnip server.
   Uses OpenGL/AL for better experience.
   Open source, and cross platform.
+adopt-info: openspades
 
 grade: stable
 confinement: strict
@@ -23,13 +23,26 @@ apps:
 parts:
   scripts:
     plugin: dump
-    source: snap/scripts
+    source: snap/local
     organize:
       'launch_openspades': bin/
   openspades:
     plugin: cmake
     configflags: [-DCMAKE_BUILD_TYPE=RelWithDebInfo]
     source: .
+    override-pull: |
+      snapcraftctl pull
+      last_committed_tag="$(git tag | grep -v rc | tail -n 1)"
+      last_released_tag="$(snap info openspades | awk '$1 == "beta:" { print $2 }')"
+      # If the latest tag from the upstream project has not been released to
+      # beta, build that tag instead of master.
+      if [ "${last_committed_tag}" != "${last_released_tag}" ]; then
+        git fetch
+        git checkout "${last_committed_tag}"
+      fi
+    override-build: |
+      snapcraftctl build
+      snapcraftctl set-version "$(git rev-parse --short HEAD)"
     build-packages:
       - clang
       - imagemagick
