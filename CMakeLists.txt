@@ -11,9 +11,9 @@ set(OS_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(CMAKE_PREFIX_PATH Sources/Externals)
 
-if(POLICY CMP0054)
-	# Escape variables in if
-	cmake_policy(SET CMP0054 OLD)
+# Prefer GLVND OpenGL
+if(POLICY CMP0072)
+	cmake_policy(SET CMP0072 NEW)
 endif()
 
 include(cmake/FindSDL2.cmake)
