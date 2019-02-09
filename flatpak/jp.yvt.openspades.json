@@ -50,13 +50,13 @@
       "name": "openspades",
       "buildsystem": "cmake",
       "build-options": {
-        "cflags": "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-        "cxxflags": "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
         "env": {
-          "CC": "clang",
           "CXX": "clang++"
         }
       },
+      "config-opts": [
+        "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+      ],
       "sources": [
         {
           "type": "archive",
