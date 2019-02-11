@@ -11,9 +11,8 @@
     "--socket=wayland",
     "--share=network",
     "--device=dri",
-    "--extra-data=nonfree.zip:0927dc323a0b3aba0ee8d1d68d6b544b00fe654740fead6d1faad37aac77a2ad:4036321::https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip",
     "--extension=org.freedesktop.Platform.GL=directory=lib/GL",
-    "--persist=.local/share/openspades/"
+    "--persist=.openspades/"
   ],
   "cleanup": [
     "/include",
@@ -62,17 +61,22 @@
     {
       "name": "openspades",
       "buildsystem": "cmake",
+      "build-options": {
+        "env": {
+          "CC": "clang",
+          "CXX": "clang++"
+        }
+      },
       "config-opts": [
         "-DOPENSPADES_INSTALL_BINARY=bin",
-        "-DOPENSPADES_RESDIR=/app/extra/paks/",
+        "-DOPENSPADES_INSTALL_RESOURCES=share/openspades/Resources/",
         "-DCMAKE_CXX_FLAGS=-DGLEW_NO_GLU",
         "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
       ],
       "post-install": [
         "mv /app/share/applications/openspades.desktop /app/share/applications/jp.yvt.OpenSpades.desktop",
         "mkdir -p /app/share/appdata/",
-        "mv jp.yvt.OpenSpades.appdata.xml /app/share/appdata/jp.yvt.OpenSpades.appdata.xml",
-        "mv apply_extra /app/bin/apply_extra"
+        "mv jp.yvt.OpenSpades.appdata.xml /app/share/appdata/jp.yvt.OpenSpades.appdata.xml"
       ],
       "sources": [
         {
@@ -91,15 +95,23 @@
         {
           "type": "file",
           "path": "jp.yvt.OpenSpades.appdata.xml"
-        },
+        }
+      ]
+    },
+    {
+      "name": "openspades-paks",
+      "buildsystem": "simple",
+      "build-commands": [
+        "unzip OpenSpadesDevPackage-r33.zip",
+        "mv Nonfree/* /app/share/openspades/Resources",
+        "mv OfficialMods/* /app/share/openspades/Resources"
+      ],
+      "sources": [
         {
-          "type": "script",
-          "dest-filename": "apply_extra",
-          "commands": [
-            "mkdir ./paks/",
-            "cd ./paks/",
-            "unzip -j /app/extra/nonfree.zip Nonfree/pak000-Nonfree.pak OfficialMods/font-unifont.pak"
-          ]
+          "type": "file",
+          "url": "https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip",
+          "sha256": "0927dc323a0b3aba0ee8d1d68d6b544b00fe654740fead6d1faad37aac77a2ad"
+
         }
       ]
     }
