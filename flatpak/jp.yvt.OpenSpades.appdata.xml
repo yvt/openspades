@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>jp.yvt.OpenSpades.desktop</id>
+  <metadata_license>GPL-3.0+</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <name>OpenSpades</name>
+
+  <summary>Open Source voxel shooter</summary>
+
+  <description>
+    <p>OpenSpades is a compatible client of Ace of Spades 0.75.</p>
+    <ul>
+      <li>Can connect to a vanilla/pyspades/pysnip server.</li>
+      <li>Uses OpenGL/AL for better experience.</li>
+      <li>Open source, and cross platform.</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">jp.yvt.OpenSpades.desktop</launchable>
+
+  <url type="homepage">http://openspades.yvt.jp/</url>
+  <url type="bugtracker">https://github.com/yvt/openspades/issues</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>http://openspades.yvt.jp/media/images/ss4.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image>http://openspades.yvt.jp/media/images/ss5.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image>http://openspades.yvt.jp/media/images/ss6.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image>http://openspades.yvt.jp/media/images/ss1.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image>http://openspades.yvt.jp/media/images/ss2.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image>http://openspades.yvt.jp/media/images/ss3.jpg</image>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="0.1.3" date="2018-01-04">
+      <description>
+        This release contains minor fixes since the previous version 0.1.2.
+      </description>
+    </release>
+    <release version="0.1.2" date="2018-01-08">
+      <description>
+        This release contains minor fixes since the previous version 0.1.1c.
+      </description>
+    </release>
+    <release version="0.1.1c" date="2017-03-04">
+      <description>
+        Contains minor or critical fixes since the previous version 0.1.1b.
+      </description>
+    </release>
+  </releases>
+</component>
