@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <id>jp.yvt.OpenSpades.desktop</id>
-  <metadata_license>GPL-3.0+</metadata_license>
+  <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
+  <project_license>OpenSpades Non-GPL Pak License</project_license>
   <name>OpenSpades</name>
 
   <summary>Open Source voxel shooter</summary>
@@ -10,9 +11,9 @@
   <description>
     <p>OpenSpades is a compatible client of Ace of Spades 0.75.</p>
     <ul>
-      <li>Can connect to a vanilla/pyspades/pysnip server.</li>
-      <li>Uses OpenGL/AL for better experience.</li>
-      <li>Open source, and cross platform.</li>
+      <li>Can connect to a vanilla/pyspades/pysnip server</li>
+      <li>Uses OpenGL/AL for better experience</li>
+      <li>Open source, and cross platform</li>
     </ul>
   </description>
 
