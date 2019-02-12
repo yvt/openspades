@@ -9,7 +9,10 @@
   <summary>Open Source voxel shooter</summary>
 
   <description>
-    <p>OpenSpades is a compatible client of Ace of Spades 0.75.</p>
+    <p> OpenSpades is a clone of Ace of Spades 0.75, which is a free online
+    first-person shooter created by Ben Aksoy, featuring fully destructible
+    terrain and plenty of game modes (including the well-known Capture the
+    Flag) created by the community.</p>
     <ul>
       <li>Can connect to a vanilla/pyspades/pysnip server</li>
       <li>Uses OpenGL/AL for better experience</li>
