@@ -24,11 +24,8 @@
       "name": "opus",
       "sources": [
         {
-          "type": "git",
-          "url": "https://git.xiph.org/opus.git",
-          "tag": "v1.3",
-          "commit": "83d5155f151ca47c9d6274ded1a7481f746b9a43",
-          "disable-shallow-clone": true
+          "type": "archive",
+          "url": "https://archive.mozilla.org/pub/opus/opus-1.3.tar.gz"
         }
       ]
     },
@@ -61,12 +58,6 @@
     {
       "name": "openspades",
       "buildsystem": "cmake",
-      "build-options": {
-        "env": {
-          "CC": "clang",
-          "CXX": "clang++"
-        }
-      },
       "config-opts": [
         "-DOPENSPADES_INSTALL_BINARY=bin",
         "-DOPENSPADES_INSTALL_RESOURCES=share/openspades/Resources/",
