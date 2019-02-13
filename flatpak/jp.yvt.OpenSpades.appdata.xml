@@ -21,8 +21,8 @@
   </description>
 
   <categories>
-​      <category>Game</category>
-​      <category>Shooter</category>
+    <category>Game</category>
+    <category>Shooter</category>
   ​</categories>
 
   <launchable type="desktop-id">jp.yvt.OpenSpades.desktop</launchable>
@@ -30,7 +30,7 @@
   <url type="homepage">http://openspades.yvt.jp/</url>
   <url type="bugtracker">https://github.com/yvt/openspades/issues</url>
   <url type="translate">https://crowdin.com/project/openspades</url>
-
+  
   <screenshots>
     <screenshot type="default">
       <image>http://openspades.yvt.jp/media/images/ss4.jpg</image>
