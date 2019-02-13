@@ -20,6 +20,11 @@
     </ul>
   </description>
 
+  <categories>
+​      <category>Game</category>
+​      <category>Shooter</category>
+  ​</categories>
+
   <launchable type="desktop-id">jp.yvt.OpenSpades.desktop</launchable>
 
   <url type="homepage">http://openspades.yvt.jp/</url>
