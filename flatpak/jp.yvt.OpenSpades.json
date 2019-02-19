@@ -12,7 +12,7 @@
     "--share=network",
     "--device=dri",
     "--extension=org.freedesktop.Platform.GL=directory=lib/GL",
-    "--filesystem=home"
+    "--persist=.local/share/openspades"
   ],
   "cleanup": [
     "/include",
