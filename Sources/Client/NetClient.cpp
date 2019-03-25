@@ -752,14 +752,12 @@ namespace spades {
 		std::string NetClient::DisconnectReasonString(enet_uint32 num) {
 			switch (num) {
 				case 1: return _Tr("NetClient", "You are banned from this server.");
-				case 2:
-					// FIXME: this number seems to be used when per-IP connection limit was
-					// exceeded.
-					//        we need to check other usages
-					return _Tr("NetClient", "You were kicked from this server.");
+				case 2: return _Tr("NetClient", "You have too many connections to this server.");
 				case 3: return _Tr("NetClient", "Incompatible client protocol version.");
 				case 4: return _Tr("NetClient", "Server full");
+				case 4: return _Tr("NetClient", "Server was shut down");
 				case 10: return _Tr("NetClient", "You were kicked from this server.");
+				case 20: return _Tr("NetClient", "Invalid name");
 				default: return _Tr("NetClient", "Unknown Reason");
 			}
 		}
