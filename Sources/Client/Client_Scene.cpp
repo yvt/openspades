@@ -46,6 +46,8 @@ DEFINE_SPADES_SETTING(cg_manualFocus, "0");
 DEFINE_SPADES_SETTING(cg_depthOfFieldAmount, "1");
 DEFINE_SPADES_SETTING(cg_shake, "1");
 
+SPADES_SETTING(dd_specEnhance);
+
 namespace spades {
 	namespace client {
 
@@ -118,6 +120,22 @@ namespace spades {
 		}
 
 		float Client::GetAimDownZoomScale() {
+			if (dd_specEnhance && IsFirstPersonSpectating()) {
+				Player *p = world->GetPlayer(followingPlayerId);
+
+				if (p == nullptr || p->IsToolWeapon() == false || p->IsAlive() == false)
+					return 1.f;
+				float delta = .8f;
+				switch (p->GetWeapon()->GetWeaponType()) {
+					case SMG_WEAPON: delta = .8f; break;
+					case RIFLE_WEAPON: delta = 1.4f; break;
+					case SHOTGUN_WEAPON: delta = .4f; break;
+				}
+
+				float aimDownState = clientPlayers[followingPlayerId]->GetAimDownState();
+				return 1.f + (3.f - 2.f * powf(aimDownState, 1.5f)) * powf(aimDownState, 3.f) * delta;
+			}
+			
 			Player &player = GetCameraTargetPlayer();
 			if (!player.IsToolWeapon() || !player.IsAlive()) {
 				return 1.f;
@@ -343,7 +361,11 @@ namespace spades {
 						def.viewAxis[0] = -Vector3::Cross(up, front).Normalize();
 						def.viewAxis[1] = -Vector3::Cross(front, def.viewAxis[0]).Normalize();
 						def.viewAxis[2] = front;
-
+						
+						if (dd_specEnhance) {
+							scale /= GetAimDownZoomScale();
+						} 
+						
 						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
 										 renderer->ScreenHeight()) * 2.f;
