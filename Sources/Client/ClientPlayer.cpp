@@ -54,6 +54,8 @@ DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponZ, "0");
 
+SPADES_SETTING(dd_specEnhance);
+
 namespace spades {
 	namespace client {
 
@@ -828,7 +830,12 @@ namespace spades {
 			Vector3 front = p->GetFront();
 			IntVector3 col = p->GetColor();
 			param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
-
+			
+			param.playerID = GetPlayer()->GetId();
+			if (client::Client::WallhackActive()) {
+				param.teamId = GetPlayer()->GetTeamId();
+			}
+			
 			float yaw = atan2(front.y, front.x) + M_PI * .5f;
 			float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));
 
@@ -987,9 +994,11 @@ namespace spades {
 				return;
 			}
 
-			float distancePowered = (p->GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
-			if (distancePowered > 140.f * 140.f) {
-				return;
+			if (!client::Client::WallhackActive()) {
+				float distancePowered = (p->GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
+				if (distancePowered > 140.f * 140.f) {
+					return;
+				}
 			}
 
 			if (!ShouldRenderInThirdPersonView()) {
@@ -1031,6 +1040,12 @@ namespace spades {
 
 		bool ClientPlayer::ShouldRenderInThirdPersonView() {
 			// The player from whom's perspective the game is
+			if (dd_specEnhance && client::Client::IsFirstPersonSpectating() && 
+				client->followingPlayerId == player->GetId()) {
+				// render in first person mode iff alive
+				return !player->GetWorld()->GetPlayer(client->followingPlayerId)->IsAlive();
+			}
+			
 			return !IsFirstPerson(client->GetCameraMode()) || player != &client->GetCameraTargetPlayer();
 		}
 
