@@ -68,7 +68,9 @@ DEFINE_SPADES_SETTING(dd_specWallhack, "0");
 
 namespace spades {
 	namespace client {
-
+		
+		Client *Client::globalInstance = nullptr;
+		
 		Client::Client(IRenderer *r, IAudioDevice *audioDev, const ServerAddress &host, float pixelRatio,
 		               FontManager *fontManager)
 		    : pixelRatio(pixelRatio),
@@ -113,6 +115,8 @@ namespace spades {
 		      nextMapShotIndex(0) {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
+				  
+			Client::globalInstance = this;
 
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));
@@ -203,7 +207,9 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			NetLog("Disconnecting");
-
+			
+			Client::globalInstance = nullptr;
+			
 			DrawDisconnectScreen();
 
 			if (logStream) {
@@ -724,6 +730,39 @@ namespace spades {
 			} else {
 				followCameraState.enabled = true;
 			}
+		}
+		
+		bool Client::IsFirstPersonSpectating() {
+			if (!globalInstance) {
+				return false;
+			}
+			return globalInstance->IsFollowing() && globalInstance->firstPersonSpectate;
+		}
+
+		bool Client::AreCheatsEnabled() {
+			if (!globalInstance)
+				return false;
+			if (!globalInstance->world)
+				return false;
+			if (!globalInstance->world->GetLocalPlayer())
+				return false;
+
+			Player *p = globalInstance->world->GetLocalPlayer();
+
+			return (p->GetTeamId() >= 2) &&		// on spectator team
+					p->IsAlive();				// alive
+		}
+
+		bool Client::WallhackActive() {
+			return AreCheatsEnabled() && dd_specWallhack;
+		}
+
+		spades::Vector3 Client::TeamCol(unsigned int teamId) {
+			if (!globalInstance) {
+				return Vector3(0, 0, 0);
+			}
+			spades::IntVector3 col = ((teamId == 0) ? globalInstance->world->GetTeam(0) : globalInstance->world->GetTeam(1)).color;
+			return Vector3(col.x / 255.0f, col.y / 255.0f, col.z / 255.0f);
 		}
 	}
 }
