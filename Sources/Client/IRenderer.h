@@ -40,7 +40,10 @@ namespace spades {
 			Matrix4 matrix;
 			Vector3 customColor;
 			bool depthHack;
-
+			
+			int playerID = -1;
+			bool teamId;
+			
 			ModelRenderParam() {
 				matrix = Matrix4::Identity();
 				customColor = MakeVector3(0, 0, 0);
