@@ -62,6 +62,10 @@ DEFINE_SPADES_SETTING(cg_skipDeadPlayersWhenDead, "1");
 
 SPADES_SETTING(cg_playerName);
 
+DEFINE_SPADES_SETTING(dd_specNames, "1");
+DEFINE_SPADES_SETTING(dd_specEnhance, "1");
+DEFINE_SPADES_SETTING(dd_specWallhack, "0");
+
 namespace spades {
 	namespace client {
 
