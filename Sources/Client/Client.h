@@ -385,7 +385,9 @@ namespace spades {
 			void TakeMapShot();
 
 			void NetLog(const char *format, ...);
-
+			
+			static Client *globalInstance;
+			
 		protected:
 			~Client();
 
@@ -467,6 +469,11 @@ namespace spades {
 			void LocalPlayerCreatedLineBlock(IntVector3, IntVector3) override;
 			void LocalPlayerHurt(HurtType type, bool sourceGiven, Vector3 source) override;
 			void LocalPlayerBuildError(BuildFailureReason reason) override;
+			
+			static bool IsFirstPersonSpectating();
+			static bool AreCheatsEnabled();
+			static bool WallhackActive();
+			static spades::Vector3 TeamCol(unsigned int teamId);
 		};
 	}
 }
