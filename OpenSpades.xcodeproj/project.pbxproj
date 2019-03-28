@@ -2321,7 +2321,7 @@
 					"$(SRCROOT)",
 					Sources,
 					Sources/json/include,
-					/opt/local/include/opus,
+					Sources/Externals/include/opus,
 				);
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
@@ -2365,7 +2365,7 @@
 					"$(SRCROOT)",
 					Sources,
 					Sources/json/include,
-					/opt/local/include/opus,
+					Sources/Externals/include/opus,
 				);
 				INFOPLIST_FILE = "XSpades/XSpades-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
