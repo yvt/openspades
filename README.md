@@ -25,8 +25,14 @@ On [snap enabled](https://snapcraft.io/docs/core/install) systems, the latest pr
 ```bash
 sudo snap install openspades
 ```
+#### Flatpak package
+On [flatpak enabled](https://flatpak.org/setup/) systems, OpenSpades can be installed with:
 
-Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with the `openspades` command.
+```bash
+flatpak install flathub jp.yvt.OpenSpades
+```
+
+Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with the `openspades` (Snap) or `flatpak run jp.yvt.OpenSpades` (Flatpak) command.
 
 #### Building and installing from source
 GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
