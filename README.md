@@ -19,12 +19,15 @@ OpenSpades is a compatible client of Ace of Spades 0.75.
  2. Or [open an issue](https://github.com/yvt/openspades/issues) if the problem persists
 
 ### On Linux
+
 #### Snap package
 On [snap enabled](https://snapcraft.io/docs/core/install) systems, the latest pre-built stable release of OpenSpades can be installed with:
 
 ```bash
 sudo snap install openspades
 ```
+Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with the `openspades`
+
 #### Flatpak package
 On [flatpak enabled](https://flatpak.org/setup/) systems, OpenSpades can be installed with:
 
@@ -32,7 +35,7 @@ On [flatpak enabled](https://flatpak.org/setup/) systems, OpenSpades can be inst
 flatpak install flathub jp.yvt.OpenSpades
 ```
 
-Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with the `openspades` (Snap) or `flatpak run jp.yvt.OpenSpades` (Flatpak) command.
+Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with `flatpak run jp.yvt.OpenSpades`
 
 #### Building and installing from source
 GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
