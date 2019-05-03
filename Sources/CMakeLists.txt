@@ -17,7 +17,9 @@ file(GLOB JSON_INCLUDE json/include/json/*.h)
 file(GLOB SCRIPTBINDING_FILES ScriptBindings/*.cpp ScriptBindings/*.h)
 file(GLOB UNZIP_FILES unzip/*.c unzip/*.h)
 
-# TODO: compile ShellApi.mm on macOS
+if(APPLE)
+	file(GLOB PLATFORM_FILES Core/*.mm)
+endif()
 
 add_subdirectory(AngelScript/projects/cmake)
 add_subdirectory(AngelScript/projects/cmake_addons)
@@ -37,7 +39,7 @@ if(WIN32)
 	endif()
 endif()
 
-add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${GUI_FILES}
+add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${PLATFORM_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${GUI_FILES}
 	${IMPORTS_FILES} ${KISS_FILES} ${JSON_FILES} ${JSON_INCLUDE} ${UNZIP_FILES} ${SCRIPTBINDING_FILES} ${RESOURCE_FILES})
 set_target_properties(OpenSpades PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(OpenSpades PROPERTIES OUTPUT_NAME openspades)
@@ -83,6 +85,7 @@ source_group("Audio\\AL" FILES ${AUDIO_AL_FILES})
 source_group("libs\\binpack2d" FILES ${BINPACK_FILES})
 source_group("Client" FILES ${CLIENT_FILES})
 source_group("Core" FILES ${CORE_FILES})
+source_group("Platform-specific" FILES ${PLATFORM_FILES})
 source_group("Draw" FILES ${DRAW_FILES})
 source_group("libs\\Enet" FILES ${ENET_FILES})
 source_group("libs\\Enet\\include" FILES ${ENET_INCLUDE})
@@ -94,7 +97,10 @@ source_group("libs\\json\\include" FILES ${JSON_INCLUDE})
 source_group("ScriptBindings" FILES ${SCRIPTBINDING_FILES})
 source_group("libs\\unzip" FILES ${UNZIP_FILES})
 
-target_link_libraries(OpenSpades ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${FREETYPE_LIBRARIES} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS} ${OpusFile_LIBRARY})
+target_link_libraries(OpenSpades ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${OPENGL_LIBRARIES} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${FREETYPE_LIBRARIES} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS} ${OpusFile_LIBRARY})
+if(NOT APPLE)
+	target_link_libraries(OpenSpades ${GLEW_LIBRARY})
+endif()
 
 #todo: MACOSX_BUNDLE_ICON_FILE ?
 
@@ -105,12 +111,12 @@ endif()
 
 if(WIN32)
 	target_link_libraries(OpenSpades ws2_32.lib winmm.lib)
-else()
+elseif(UNIX AND NOT APPLE)
 	target_link_libraries(OpenSpades Xext)
 endif()
 
 if(UNIX)
-	if(NOT CMAKE_SYSTEM_NAME MATCHES "BSD")
+	if(NOT(CMAKE_SYSTEM_NAME MATCHES "BSD" OR APPLE))
 		target_link_libraries(OpenSpades rt)
 	endif()
 	target_link_libraries(OpenSpades pthread)
