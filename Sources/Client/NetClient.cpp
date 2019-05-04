@@ -592,15 +592,13 @@ namespace spades {
 									throw;
 								}
 								HandleGamePacket(reader);
-							} else if (reader.GetType() == PacketTypeVersionGet) {
-								// Packets that should be handled now even when
-								// the map is downloading
-								HandleGamePacket(reader);
-							} else if (reader.GetType() != PacketTypeWeaponReload) {
+							} else if (reader.GetType() == PacketTypeWeaponReload) {
 								// Drop the reload packet. Pyspades does not
 								// cancel the reload packets on map change and
 								// they would cause an error if we would
 								// process them
+							} else  {
+								// Save the packet for later
 								savedPackets.push_back(reader.GetData());
 							}
 						}
