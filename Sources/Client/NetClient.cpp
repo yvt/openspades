@@ -424,7 +424,6 @@ namespace spades {
 
 			status = NetClientStatusConnecting;
 			statusString = _Tr("NetClient", "Connecting to the server");
-			timeToTryMapLoad = 0;
 		}
 
 		void NetClient::Disconnect() {
@@ -529,8 +528,6 @@ namespace spades {
 						mapSize = reader.ReadInt();
 						status = NetClientStatusReceivingMap;
 						statusString = _Tr("NetClient", "Loading snapshot");
-						timeToTryMapLoad = 30;
-						tryMapLoadOnPacketType = true;
 					}
 				} else if (status == NetClientStatusReceivingMap) {
 					if (event.type == ENET_EVENT_TYPE_RECEIVE) {
@@ -541,60 +538,29 @@ namespace spades {
 							dt.erase(dt.begin());
 							mapData.insert(mapData.end(), dt.begin(), dt.end());
 
-							timeToTryMapLoad = 200;
-
 							statusString = _Tr("NetClient", "Loading snapshot ({0}/{1})",
 							                   mapData.size(), mapSize);
-
-							if (mapSize == mapData.size()) {
-								status = NetClientStatusConnected;
-								statusString = _Tr("NetClient", "Connected");
-
-								try {
-									MapLoaded();
-								} catch (const std::exception &ex) {
-									if (strstr(ex.what(), "File truncated") ||
-									    strstr(ex.what(), "EOF reached")) {
-										SPLog("Map decoder returned error. Maybe we will get more "
-										      "data...:\n%s",
-										      ex.what());
-										// hack: more data to load...
-										status = NetClientStatusReceivingMap;
-										statusString = _Tr("NetClient", "Still loading...");
-									} else {
-										Disconnect();
-										statusString = _Tr("NetClient", "Error");
-										throw;
-									}
-
-								} catch (...) {
-									Disconnect();
-									statusString = _Tr("NetClient", "Error");
-									throw;
-								}
-							}
 
 						} else {
 							reader.DumpDebug();
 
-							// On pyspades and derivative servers the actual size of the map data
-							// cannot be known in beforehand, so we have to find the end of the data
-							// by one of other means. One indicator for this would be a packet of a
-							// type other than MapChunk, which usually marks the end of map data
-							// transfer.
+							// The actual size of the map data cannot be known beforehand because
+							// of compression. This means we must detect the end of the map
+							// transfer in another way.
 							//
-							// However, we can't rely on this heuristics entirely because there are
-							// several occasions where the server would send non-MapChunk packets
-							// during map loading sequence, for example:
+							// We do this by checking for a StateData packet, which is sent
+							// directly after the map transfer completes.
+							//
+							// A number of other packets can also be received while loading the map:
 							//
 							//  - World update packets (WorldUpdate, ExistingPlayer, and
 							//    CreatePlayer) for the current round. We must store such packets
-							//	  temporarily and process them later when a `World` is created.
+							//    temporarily and process them later when a `World` is created.
 							//
 							//  - Leftover reload packet from the previous round. This happens when
 							//    you initiate the reload action and a map change occurs before it
-							// 	  is completed. In pyspades, sending a reload packet is implemented
-							// 	  by registering a callback function to the Twisted reactor. This
+							//    is completed. In pyspades, sending a reload packet is implemented
+							//    by registering a callback function to the Twisted reactor. This
 							//    callback function sends a reload packet, but it does not check if
 							//    the current game round is finished, nor is it unregistered on a
 							//    map change.
@@ -604,29 +570,18 @@ namespace spades {
 							//    an "invalid player ID" exception, so we simply drop it during
 							//    map load sequence.
 							//
-							if (reader.GetType() == PacketTypeWeaponReload) {
-								// Drop reload packets
-							} else if (reader.GetType() != PacketTypeWorldUpdate &&
-							           reader.GetType() != PacketTypeExistingPlayer &&
-							           reader.GetType() != PacketTypeCreatePlayer &&
-							           tryMapLoadOnPacketType) {
+
+							if (reader.GetType() == PacketTypeStateData) {
 								status = NetClientStatusConnected;
 								statusString = _Tr("NetClient", "Connected");
 
 								try {
 									MapLoaded();
 								} catch (const std::exception &ex) {
-									tryMapLoadOnPacketType = false;
 									if (strstr(ex.what(), "File truncated") ||
 									    strstr(ex.what(), "EOF reached")) {
-										SPLog("Map decoder returned error. Maybe we will get more "
-										      "data...:\n%s",
+										SPLog("Map decoder returned error:\n%s",
 										      ex.what());
-										// hack: more data to load...
-										status = NetClientStatusReceivingMap;
-										statusString = _Tr("NetClient", "Still loading...");
-										goto stillLoading;
-									} else {
 										Disconnect();
 										statusString = _Tr("NetClient", "Error");
 										throw;
@@ -637,12 +592,17 @@ namespace spades {
 									throw;
 								}
 								HandleGamePacket(reader);
-							} else {
-							stillLoading:
+							} else if (reader.GetType() == PacketTypeVersionGet) {
+								// Packets that should be handled now even when
+								// the map is downloading
+								HandleGamePacket(reader);
+							} else if (reader.GetType() != PacketTypeWeaponReload) {
+								// Drop the reload packet. Pyspades does not
+								// cancel the reload packets on map change and
+								// they would cause an error if we would
+								// process them
 								savedPackets.push_back(reader.GetData());
 							}
-
-							// HandleGamePacket(reader);
 						}
 					}
 				} else if (status == NetClientStatusConnected) {
@@ -656,37 +616,6 @@ namespace spades {
 							reader.DumpDebug();
 							SPRaise("Exception while handling packet type 0x%08x:\n%s", type,
 							        ex.what());
-						}
-					}
-				}
-			}
-
-			if (status == NetClientStatusReceivingMap) {
-				if (timeToTryMapLoad > 0) {
-					timeToTryMapLoad--;
-					if (timeToTryMapLoad == 0) {
-						try {
-							MapLoaded();
-						} catch (const std::exception &ex) {
-							if ((strstr(ex.what(), "File truncated") ||
-							     strstr(ex.what(), "EOF reached")) &&
-							    savedPackets.size() < 400) {
-								// hack: more data to load...
-								SPLog(
-								  "Map decoder returned error. Maybe we will get more data...:\n%s",
-								  ex.what());
-								status = NetClientStatusReceivingMap;
-								statusString = _Tr("NetClient", "Still loading...");
-								timeToTryMapLoad = 200;
-							} else {
-								Disconnect();
-								statusString = _Tr("NetClient", "Error");
-								throw;
-							}
-						} catch (...) {
-							Disconnect();
-							statusString = _Tr("NetClient", "Error");
-							throw;
 						}
 					}
 				}
