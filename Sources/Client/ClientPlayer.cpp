@@ -26,7 +26,6 @@
 #include "ClientPlayer.h"
 #include "GameMap.h"
 #include "GunCasing.h"
-#include "GunCasing.h"
 #include "IAudioChunk.h"
 #include "IAudioDevice.h"
 #include "IImage.h"
