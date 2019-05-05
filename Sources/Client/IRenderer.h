@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <array>
+
 #include <Core/Math.h>
 #include "IImage.h"
 #include "IModel.h"
@@ -54,7 +56,7 @@ namespace spades {
 			float radius;
 			Vector3 color;
 
-			Vector3 spotAxis[3];
+			std::array<Vector3, 3> spotAxis;
 			IImage *image;
 			float spotAngle;
 
