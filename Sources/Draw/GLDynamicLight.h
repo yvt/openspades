@@ -21,12 +21,17 @@
 #pragma once
 
 #include <Client/IRenderer.h>
+#include <Core/Math.h>
+#include <array>
 
 namespace spades {
 	namespace draw {
 		class GLDynamicLight {
 			client::DynamicLightParam param;
 			Matrix4 projMatrix;
+
+			/** World-space clip planes (spotlight only) */
+			std::array<Plane3, 4> clipPlanes;
 
 		public:
 			GLDynamicLight(const client::DynamicLightParam &param);
