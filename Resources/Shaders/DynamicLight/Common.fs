@@ -46,8 +46,10 @@ varying vec3 lightNormal;
 varying vec3 lightTexCoord;
 
 vec3 EvaluateDynamicLightNoBump() {
-	if(lightTexCoord.z < 0.) discard;
-	
+	if (lightTexCoord.z < 0. || any(lessThan(lightTexCoord.xy, vec2(0.0))) ||
+	    any(greaterThan(lightTexCoord.xy, vec2(lightTexCoord.z))))
+		discard;
+
 	// diffuse lighting
 	float intensity = dot(normalize(lightPos), normalize(lightNormal));
 	if(intensity < 0.) discard;
