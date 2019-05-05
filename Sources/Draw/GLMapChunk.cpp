@@ -502,7 +502,7 @@ namespace spades {
 				static GLDynamicLightShader lightShader;
 				lightShader(renderer->renderer, program, lights[i], 1);
 
-				if (!GLDynamicLightShader::Cull(lights[i], bx))
+				if (!lights[i].Cull(bx))
 					continue;
 
 				device->DrawElements(IGLDevice::Triangles,

@@ -26,7 +26,6 @@
 #include "ClientPlayer.h"
 #include "GameMap.h"
 #include "GunCasing.h"
-#include "GunCasing.h"
 #include "IAudioChunk.h"
 #include "IAudioDevice.h"
 #include "IImage.h"
@@ -199,6 +198,7 @@ namespace spades {
 			time = 0.f;
 			viewWeaponOffset = MakeVector3(0, 0, 0);
 			lastFront = MakeVector3(0, 0, 0);
+			flashlightOrientation = p->GetFront();
 
 			ScriptContextHandle ctx;
 			IRenderer *renderer = client->GetRenderer();
@@ -302,8 +302,6 @@ namespace spades {
 
 			PlayerInput actualInput = player->GetInput();
 			WeaponInput actualWeapInput = player->GetWeaponInput();
-			Vector3 vel = player->GetVelocty();
-			vel.z = 0.f;
 			if (actualInput.sprint && player->IsAlive()) {
 				sprintState += dt * 4.f;
 				if (sprintState > 1.f)
@@ -440,6 +438,19 @@ namespace spades {
 					softLimitFunc(viewWeaponOffset.x, -limitX, limitX);
 					softLimitFunc(viewWeaponOffset.z, 0, limitY);
 				}
+			}
+
+			{
+				// Smooth the flashlight's movement
+				Vector3 diff = player->GetFront() - flashlightOrientation;
+				float sq = diff.GetLength();
+				if (sq > 0.1) {
+					flashlightOrientation += diff.Normalize() * (sq - 0.1);
+				}
+
+				flashlightOrientation =
+				  Mix(flashlightOrientation, player->GetFront(), 1.0f - powf(1.0e-6, dt))
+				    .Normalize();
 			}
 
 			// FIXME: should do for non-active skins?
@@ -594,6 +605,16 @@ namespace spades {
 			}
 		}
 
+		std::array<Vector3, 3> ClientPlayer::GetFlashlightAxes() {
+			std::array<Vector3, 3> axes;
+
+			axes[2] = flashlightOrientation;
+			axes[0] = Vector3::Cross(flashlightOrientation, player->GetUp()).Normalize();
+			axes[1] = Vector3::Cross(axes[0], axes[2]);
+
+			return axes;
+		}
+
 		void ClientPlayer::AddToSceneFirstPersonView() {
 			Player *p = player;
 			IRenderer *renderer = client->GetRenderer();
@@ -617,9 +638,7 @@ namespace spades {
 				light.radius = 40.f;
 				light.type = DynamicLightTypeSpotlight;
 				light.spotAngle = 30.f * M_PI / 180.f;
-				light.spotAxis[0] = p->GetRight();
-				light.spotAxis[1] = p->GetUp();
-				light.spotAxis[2] = p->GetFront();
+				light.spotAxis = GetFlashlightAxes();
 				light.image = renderer->RegisterImage("Gfx/Spotlight.png");
 				renderer->AddLight(light);
 

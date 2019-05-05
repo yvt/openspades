@@ -25,11 +25,11 @@ namespace spades {
 		GLDynamicLight::GLDynamicLight(const client::DynamicLightParam &param) : param(param) {
 
 			if (param.type == client::DynamicLightTypeSpotlight) {
-				float t = tanf(param.spotAngle * .5f) * 2.f;
+				float t = tanf(param.spotAngle * .5f);
 				Matrix4 mat;
 				mat = Matrix4::FromAxis(param.spotAxis[0], param.spotAxis[1], param.spotAxis[2],
 				                        param.origin);
-				mat = mat * Matrix4::Scale(t, t, 1.f);
+				mat = mat * Matrix4::Scale(t * 2.0f, t * 2.0f, 1.f);
 
 				projMatrix = mat.InversedFast();
 
@@ -40,7 +40,55 @@ namespace spades {
 				m.m[8] += .5f;
 				m.m[9] += .5f;
 				projMatrix = m * projMatrix;
+
+				// Construct clipping planes which are oriented inside.
+				// To do that, first we calculate tangent vectors:
+				Vector3 planeTan[] = {
+				  param.spotAxis[2] + param.spotAxis[0] * t,
+				  param.spotAxis[2] + param.spotAxis[1] * t,
+				  param.spotAxis[2] - param.spotAxis[0] * t,
+				  param.spotAxis[2] - param.spotAxis[1] * t,
+				};
+				// Then, use them to derive normal vectors:
+				Vector3 planeN[] = {
+				  Vector3::Cross(param.spotAxis[1], planeTan[0]),
+				  Vector3::Cross(planeTan[1], param.spotAxis[0]),
+				  Vector3::Cross(planeTan[2], param.spotAxis[1]),
+				  Vector3::Cross(param.spotAxis[0], planeTan[3]),
+				};
+				// Finally, find planes with these normal vectors:
+				for (std::size_t i = 0; i < 4; ++i) {
+					clipPlanes[i] = Plane3::PlaneWithPointOnPlane(param.origin, planeN[i]);
+				}
 			}
+		}
+
+		bool GLDynamicLight::Cull(const spades::AABB3 &box) const {
+			if (param.type == client::DynamicLightTypeSpotlight) {
+				for (const Plane3 &plane : clipPlanes) {
+					if (!PlaneCullTest(plane, box)) {
+						return false;
+					}
+				}
+			}
+
+			const client::DynamicLightParam &param = GetParam();
+			return box.Inflate(param.radius) && param.origin;
+		}
+
+		bool GLDynamicLight::SphereCull(const spades::Vector3 &center, float radius) const {
+			const client::DynamicLightParam &param = GetParam();
+
+			if (param.type == client::DynamicLightTypeSpotlight) {
+				for (const Plane3 &plane : clipPlanes) {
+					if (plane.GetDistanceTo(center) < -radius) {
+						return false;
+					}
+				}
+			}
+
+			float maxDistance = radius + param.radius;
+			return (center - param.origin).GetPoweredLength() < maxDistance * maxDistance;
 		}
 	}
 }

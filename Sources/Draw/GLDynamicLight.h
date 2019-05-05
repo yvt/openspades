@@ -21,6 +21,8 @@
 #pragma once
 
 #include <Client/IRenderer.h>
+#include <Core/Math.h>
+#include <array>
 
 namespace spades {
 	namespace draw {
@@ -28,11 +30,18 @@ namespace spades {
 			client::DynamicLightParam param;
 			Matrix4 projMatrix;
 
+			/** World-space clip planes (spotlight only) */
+			std::array<Plane3, 4> clipPlanes;
+
 		public:
 			GLDynamicLight(const client::DynamicLightParam &param);
 			const client::DynamicLightParam &GetParam() const { return param; }
 
 			const Matrix4 &GetProjectionMatrix() const { return projMatrix; }
+
+			bool Cull(const AABB3 &) const;
+
+			bool SphereCull(const Vector3 &center, float radius) const;
 		};
 	}
 }

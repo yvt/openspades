@@ -100,20 +100,5 @@ namespace spades {
 
 			return texStage;
 		}
-
-		bool GLDynamicLightShader::Cull(const GLDynamicLight &light, const spades::AABB3 &box) {
-			// TOOD: more tighter check?
-			// TODO: spotlight check?
-			// TODO: move this function to GLDynamicLight?
-			const client::DynamicLightParam &param = light.GetParam();
-			return box.Inflate(param.radius) && param.origin;
-		}
-
-		bool GLDynamicLightShader::SphereCull(const GLDynamicLight &light,
-		                                      const spades::Vector3 &center, float radius) {
-			const client::DynamicLightParam &param = light.GetParam();
-			float maxDistance = radius + param.radius;
-			return (center - param.origin).GetPoweredLength() < maxDistance * maxDistance;
-		}
 	}
 }
