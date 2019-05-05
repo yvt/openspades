@@ -211,6 +211,7 @@ namespace spades {
 			time = 0.f;
 			viewWeaponOffset = MakeVector3(0, 0, 0);
 			lastFront = MakeVector3(0, 0, 0);
+			flashlightOrientation = p->GetFront();
 
 			ScriptContextHandle ctx;
 			IRenderer *renderer = client->GetRenderer();
@@ -452,6 +453,19 @@ namespace spades {
 				}
 			}
 
+			{
+				// Smooth the flashlight's movement
+				Vector3 diff = player->GetFront() - flashlightOrientation;
+				float sq = diff.GetLength();
+				if (sq > 0.1) {
+					flashlightOrientation += diff.Normalize() * (sq - 0.1);
+				}
+
+				flashlightOrientation =
+				  Mix(flashlightOrientation, player->GetFront(), 1.0f - powf(1.0e-6, dt))
+				    .Normalize();
+			}
+
 			// FIXME: should do for non-active skins?
 			asIScriptObject *skin;
 			if (ShouldRenderInThirdPersonView()) {
@@ -604,6 +618,16 @@ namespace spades {
 			}
 		}
 
+		std::array<Vector3, 3> ClientPlayer::GetFlashlightAxes() {
+			std::array<Vector3, 3> axes;
+
+			axes[2] = flashlightOrientation;
+			axes[0] = Vector3::Cross(flashlightOrientation, player->GetUp()).Normalize();
+			axes[1] = Vector3::Cross(axes[0], axes[2]);
+
+			return axes;
+		}
+
 		void ClientPlayer::AddToSceneFirstPersonView() {
 			Player *p = player;
 			IRenderer *renderer = client->GetRenderer();
@@ -627,9 +651,7 @@ namespace spades {
 				light.radius = 40.f;
 				light.type = DynamicLightTypeSpotlight;
 				light.spotAngle = 30.f * M_PI / 180.f;
-				light.spotAxis[0] = p->GetRight();
-				light.spotAxis[1] = p->GetUp();
-				light.spotAxis[2] = p->GetFront();
+				light.spotAxis = GetFlashlightAxes();
 				light.image = renderer->RegisterImage("Gfx/Spotlight.png");
 				renderer->AddLight(light);
 

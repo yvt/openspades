@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <array>
+
 #include "Player.h"
 #include <Core/Math.h>
 #include <Core/RefCountedObject.h>
@@ -60,6 +62,8 @@ namespace spades {
 
 			Vector3 lastFront;
 
+			Vector3 flashlightOrientation;
+
 			asIScriptObject *spadeSkin;
 			asIScriptObject *blockSkin;
 			asIScriptObject *weaponSkin;
@@ -72,6 +76,7 @@ namespace spades {
 
 			Handle<SandboxedRenderer> sandboxedRenderer;
 
+			std::array<Vector3, 3> GetFlashlightAxes();
 			void AddToSceneThirdPersonView();
 			void AddToSceneFirstPersonView();
 
