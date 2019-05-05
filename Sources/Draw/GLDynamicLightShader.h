@@ -49,11 +49,6 @@ namespace spades {
 
 			static std::vector<GLShader *> RegisterShader(GLProgramManager *);
 
-			static bool Cull(const GLDynamicLight &light, const AABB3 &);
-
-			static bool SphereCull(const GLDynamicLight &light, const Vector3 &center,
-			                       float radius);
-
 			/** setups shadow shader.
 			 * note that this function sets the current active texture
 			 * stage to the returned texture stage.

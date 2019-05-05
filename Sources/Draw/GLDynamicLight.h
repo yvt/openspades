@@ -33,6 +33,10 @@ namespace spades {
 			const client::DynamicLightParam &GetParam() const { return param; }
 
 			const Matrix4 &GetProjectionMatrix() const { return projMatrix; }
+
+			bool Cull(const AABB3 &) const;
+
+			bool SphereCull(const Vector3 &center, float radius) const;
 		};
 	}
 }

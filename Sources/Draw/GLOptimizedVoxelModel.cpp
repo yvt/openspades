@@ -857,7 +857,7 @@ namespace spades {
 					device->DepthRange(0.f, 0.1f);
 				}
 				for (size_t i = 0; i < lights.size(); i++) {
-					if (!GLDynamicLightShader::SphereCull(lights[i], param.matrix.GetOrigin(), rad))
+					if (!lights[i].SphereCull(param.matrix.GetOrigin(), rad))
 						continue;
 
 					dlightShader(renderer, dlightProgram, lights[i], 2);

@@ -42,5 +42,18 @@ namespace spades {
 				projMatrix = m * projMatrix;
 			}
 		}
+
+		bool GLDynamicLight::Cull(const spades::AABB3 &box) const {
+			// TOOD: more tighter check?
+			// TODO: spotlight check?
+			const client::DynamicLightParam &param = GetParam();
+			return box.Inflate(param.radius) && param.origin;
+		}
+
+		bool GLDynamicLight::SphereCull(const spades::Vector3 &center, float radius) const {
+			const client::DynamicLightParam &param = GetParam();
+			float maxDistance = radius + param.radius;
+			return (center - param.origin).GetPoweredLength() < maxDistance * maxDistance;
+		}
 	}
 }
