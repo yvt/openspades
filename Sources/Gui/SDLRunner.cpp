@@ -561,7 +561,7 @@ namespace spades {
 						SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
 						if (!r_allowSoftwareRendering)
 							SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-                        SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 1);
+						SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 1);
 
 						/* someday...
 						 SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
