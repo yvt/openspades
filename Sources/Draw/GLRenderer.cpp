@@ -401,8 +401,8 @@ namespace spades {
 			mat.m[15] = 0.f;
 
 			if (settings.r_temporalAA && temporalAAFilter) {
-				float jitterX = 1.0f / GetRenderWidth();
-				float jitterY = 1.0f / GetRenderHeight();
+				float jitterX = 1.0f / device->ScreenWidth();
+				float jitterY = 1.0f / device->ScreenHeight();
 				Vector2 jitter = temporalAAFilter->GetProjectionMatrixJitter();
 				jitterX *= jitter.x * 1.3f;
 				jitterY *= jitter.y * 1.3f;
