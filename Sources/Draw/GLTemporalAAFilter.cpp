@@ -44,17 +44,6 @@ namespace spades {
 
 		GLTemporalAAFilter::~GLTemporalAAFilter() { DeleteHistoryBuffer(); }
 
-#define M(r, c) (d.m[(r) + (c)*4])
-
-		static Matrix4 ReverseMatrix(Matrix4 d) {
-			return Matrix4(
-			  M(1, 2) * M(2, 1) - M(1, 1) * M(2, 2), M(1, 0) * M(2, 2) - M(1, 2) * M(2, 0),
-			  M(1, 1) * M(2, 0) - M(1, 0) * M(2, 1), 0, M(0, 1) * M(2, 2) - M(0, 2) * M(2, 1),
-			  M(0, 2) * M(2, 0) - M(0, 0) * M(2, 2), M(0, 0) * M(2, 1) - M(0, 1) * M(2, 0), 0, 0, 0,
-			  0, 0, M(0, 2) * M(1, 1) - M(0, 1) * M(1, 2), M(0, 0) * M(1, 2) - M(0, 2) * M(1, 0),
-			  M(0, 1) * M(1, 0) - M(0, 0) * M(1, 1), 1);
-		}
-
 		void GLTemporalAAFilter::DeleteHistoryBuffer() {
 			if (!historyBuffer.valid) {
 				return;
