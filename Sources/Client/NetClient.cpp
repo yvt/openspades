@@ -92,6 +92,7 @@ namespace spades {
 				PacketTypeHandShakeReturn = 32, // C2S
 				PacketTypeVersionGet = 33,      // S2C
 				PacketTypeVersionSend = 34,     // C2S
+				PacketTypeExtensionInfo = 60,
 
 			};
 
@@ -505,7 +506,7 @@ namespace spades {
 					auto &reader = readerOrNone.value();
 
 					try {
-						if (HandleHandshakePacket(reader)) {
+						if (HandleHandshakePackets(reader)) {
 							continue;
 						}
 					} catch (const std::exception &ex) {
@@ -696,11 +697,12 @@ namespace spades {
 			}
 		}
 
-		bool NetClient::HandleHandshakePacket(spades::client::NetPacketReader &reader) {
+		bool NetClient::HandleHandshakePackets(spades::client::NetPacketReader &reader) {
 			SPADES_MARK_FUNCTION();
 
 			switch (reader.GetType()) {
 				case PacketTypeHandShakeInit: SendHandShakeValid(reader.ReadInt()); return true;
+				case PacketTypeExtensionInfo: HandleExtensionPacket(reader); return true;
 				case PacketTypeVersionGet: {
 					if (reader.GetNumRemainingBytes() > 0) {
 						// Enhanced variant
@@ -717,6 +719,25 @@ namespace spades {
 					return true;
 				default: return false;
 			}
+		}
+
+		void NetClient::HandleExtensionPacket(spades::client::NetPacketReader& reader) {
+			std::unordered_map<uint8_t, uint8_t> implementedExtensions ( {{192, 1}, {120, 1}} );
+			int ext_count = reader.ReadByte();
+			for (int i = 0; i < ext_count; i++) {
+				int ext_id = reader.ReadByte();
+				int ext_version = reader.ReadByte();
+
+				auto got = implementedExtensions.find(ext_id);
+
+				if (got == implementedExtensions.end()) {
+					SPLog("Client does not support extension %d", ext_id);
+				} else {
+					SPLog("Client supports extension %d", ext_id);
+					extensions.emplace(got->first, got->second);
+				}
+			}
+			SendSupportedExtensions();
 		}
 
 		void NetClient::HandleGamePacket(spades::client::NetPacketReader &reader) {
@@ -1757,6 +1778,18 @@ namespace spades {
 			wri.Write((uint8_t)OpenSpades_VERSION_REVISION);
 			wri.Write(VersionInfo::GetVersionInfo());
 			SPLog("Sending version back.");
+			enet_peer_send(peer, 0, wri.CreatePacket());
+		}
+
+		void NetClient::SendSupportedExtensions() {
+			SPADES_MARK_FUNCTION();
+			NetPacketWriter wri(PacketTypeExtensionInfo);
+			wri.Write(static_cast<uint8_t>(extensions.size()));
+			for (auto& i: extensions) {
+				wri.Write(static_cast<uint8_t>(i.first)); // ext id
+				wri.Write(static_cast<uint8_t>(i.second)); // ext version
+			}
+			SPLog("Sending extension support.");
 			enet_peer_send(peer, 0, wri.CreatePacket());
 		}
 
