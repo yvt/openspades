@@ -1,27 +1,15 @@
 language: cpp
-dist: trusty
+dist: xenial
 
 compiler:
-  - gcc-4.9
-#  - clang
+  - gcc
 
 cache: apt
 
-before_install:
-  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-  - sudo add-apt-repository --yes ppa:zoogie/sdl2-snapshots
-  - sudo apt-get update
-  - if [ "$CC" == "gcc" ]; then export APT_INSTALL_GPP=g++-4.9; fi
-
 install:
-  - sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev libsdl2-dev libsdl2-image-dev libfreetype6-dev libopus-dev libopusfile-dev $APT_INSTALL_GPP
+  - sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libjpeg-dev libxinerama-dev libxft-dev libsdl2-dev libsdl2-image-dev libfreetype6-dev libopus-dev libopusfile-dev gcc
 
 before_script:
-  # Travis defaults to plain gcc if unknown
-  # http://github.com/travis-ci/travis-ci/issues/979
-  - if [ "$CC" == "gcc" ]; then export CC=gcc-4.9; fi
-  - if [ "$CXX" == "g++" ]; then export CXX=g++-4.9; fi
-
   - mkdir openspades.mk
   - cd openspades.mk
 
