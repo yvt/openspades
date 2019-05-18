@@ -21,7 +21,7 @@
 
 #include <Core/Exception.h>
 #include <Core/IStream.h>
-#include <string>
+#include <cstring>
 
 namespace spades {
 	RandomAccessAdaptor::RandomAccessAdaptor(IStream &inner) : inner{inner} {}
