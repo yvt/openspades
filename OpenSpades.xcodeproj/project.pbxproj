@@ -270,6 +270,7 @@
 		E82E680418EA7F60004DBA18 /* libysrspades.dylib in Resources */ = {isa = PBXBuildFile; fileRef = E82E680318EA7F60004DBA18 /* libysrspades.dylib */; };
 		E83668AF1E05757B00977A63 /* OpusAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668AD1E05757B00977A63 /* OpusAudioStream.cpp */; };
 		E83668B21E05844E00977A63 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668B01E05844E00977A63 /* AudioStream.cpp */; };
+		E8403CA8229061BF00093C3E /* RandomAccessAdaptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CA6229061BE00093C3E /* RandomAccessAdaptor.cpp */; };
 		E8626EAE1E1009D7003365BF /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.tbd */; };
 		E8626EB61E100EC6003365BF /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB51E100EC6003365BF /* libfreetype.a */; };
 		E8626EB81E100FB2003365BF /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB71E100FB2003365BF /* libogg.a */; };
@@ -422,6 +423,8 @@
 		E838D41D18AC726B00EE3C53 /* Strings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Strings.cpp; sourceTree = "<group>"; };
 		E838D41E18AC726B00EE3C53 /* Strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Strings.h; sourceTree = "<group>"; };
 		E838D42018ADDE2800EE3C53 /* StringsScript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringsScript.cpp; sourceTree = "<group>"; };
+		E8403CA6229061BE00093C3E /* RandomAccessAdaptor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandomAccessAdaptor.cpp; sourceTree = "<group>"; };
+		E8403CA7229061BE00093C3E /* RandomAccessAdaptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomAccessAdaptor.h; sourceTree = "<group>"; };
 		E842888918A3CF6C0060743D /* StartupScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreen.cpp; sourceTree = "<group>"; };
 		E842888A18A3CF6C0060743D /* StartupScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupScreen.h; sourceTree = "<group>"; };
 		E842888C18A3D1520060743D /* StartupScreenHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreenHelper.cpp; sourceTree = "<group>"; };
@@ -1834,6 +1837,8 @@
 		E8E44681179CC49C00BE8855 /* I/O */ = {
 			isa = PBXGroup;
 			children = (
+				E8403CA6229061BE00093C3E /* RandomAccessAdaptor.cpp */,
+				E8403CA7229061BE00093C3E /* RandomAccessAdaptor.h */,
 				E8B6B72617E5AC9C00E35523 /* ServerAddress.cpp */,
 				E8B6B72717E5AC9C00E35523 /* ServerAddress.h */,
 				E8CF04091790471D000683D4 /* IFileSystem.cpp */,
@@ -1956,6 +1961,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -2042,6 +2048,7 @@
 				E82E674018EA7972004DBA18 /* as_callfunc_xenon.cpp in Sources */,
 				E82E674118EA7972004DBA18 /* as_compiler.cpp in Sources */,
 				E82E674218EA7972004DBA18 /* as_configgroup.cpp in Sources */,
+				E8403CA8229061BF00093C3E /* RandomAccessAdaptor.cpp in Sources */,
 				E82E674318EA7972004DBA18 /* as_context.cpp in Sources */,
 				E82E674418EA7972004DBA18 /* as_datatype.cpp in Sources */,
 				E82E674518EA7972004DBA18 /* as_gc.cpp in Sources */,
