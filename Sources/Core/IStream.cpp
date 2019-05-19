@@ -152,6 +152,8 @@ namespace spades {
 		return o->stream;
 	}
 
+	StreamHandle::operator bool() const { return o->stream; }
+
 	void StreamHandle::Reset() {
 		if (o) {
 			o->Release();
