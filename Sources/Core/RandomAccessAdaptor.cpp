@@ -19,6 +19,7 @@
  */
 #include "RandomAccessAdaptor.h"
 
+#include <Core/Debug.h>
 #include <Core/Exception.h>
 #include <Core/IStream.h>
 #include <cstring>
@@ -34,6 +35,8 @@ namespace spades {
 		if (newBufferSize <= buffer.size()) {
 			return;
 		}
+
+		SPADES_MARK_FUNCTION();
 
 		std::size_t numAdditionalBytes = newBufferSize - buffer.size();
 		std::size_t originalSize = buffer.size();
@@ -56,6 +59,8 @@ namespace spades {
 	}
 
 	bool RandomAccessAdaptor::TryRead(std::size_t offset, std::size_t size, char *output) {
+		SPADES_MARK_FUNCTION();
+
 		std::size_t newLen = offset + size;
 		if (newLen < offset) {
 			// `newLen` overflowed `size_t`.
