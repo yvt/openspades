@@ -282,8 +282,6 @@ namespace spades {
 				float rowY = top + 6.f + row * rowHeight;
 				float colX = left + width / (float)cols * (float)col;
 				Vector4 color = white;
-				if (ent.id == world->GetLocalPlayerIndex())
-					color = GetTeamColor(team);
 
 				sprintf(buf, "#%d", ent.id); // FIXME: 1-base?
 				size = font->Measure(buf);
@@ -299,6 +297,8 @@ namespace spades {
 				}
 
 				color = ent.alive ? white : gray;
+				if (ent.id == world->GetLocalPlayerIndex())
+					color = GetTeamColor(team);
 
 				font->Draw(ent.name, MakeVector2(colX + 45.f, rowY), 1.f, color);
 
