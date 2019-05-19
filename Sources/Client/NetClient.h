@@ -26,6 +26,7 @@
 #include <vector>
 #include <set>
 #include <cstdint>
+#include <unordered_map>
 
 #include "PhysicsConstants.h"
 #include "Player.h"
@@ -50,6 +51,12 @@ namespace spades {
 			NetClientStatusConnecting,
 			NetClientStatusReceivingMap,
 			NetClientStatusConnected
+		};
+
+		enum NetExtensionType {
+			ExtensionType128Player = 192,
+			ExtensionTypeMessageTypes = 193,
+			ExtensionTypeKickReason = 194,
 		};
 
 		class World;
@@ -88,6 +95,12 @@ namespace spades {
 			std::shared_ptr<GameProperties> properties;
 
 			int protocolVersion;
+			/** Extensions supported by both client and server (map of extension id → version) */
+			std::unordered_map<uint8_t, uint8_t> extensions;
+			/** Extensions implemented in this client (map of extension id → version) */
+			std::unordered_map<uint8_t, uint8_t> implementedExtensions{
+			  {ExtensionType128Player, 1},
+			};
 
 			class BandwidthMonitor {
 				ENetHost *host;
@@ -129,7 +142,8 @@ namespace spades {
 			// used for some scripts including Arena by Yourself
 			IntVector3 temporaryPlayerBlockColor;
 
-			bool HandleHandshakePacket(NetPacketReader &);
+			bool HandleHandshakePackets(NetPacketReader &);
+			void HandleExtensionPacket(NetPacketReader &);
 			void HandleGamePacket(NetPacketReader &);
 			World *GetWorld();
 			Player *GetPlayer(int);
@@ -143,6 +157,7 @@ namespace spades {
 
 			void SendVersion();
 			void SendVersionEnhanced(const std::set<std::uint8_t> &propertyIds);
+			void SendSupportedExtensions();
 
 		public:
 			NetClient(Client *);
