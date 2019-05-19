@@ -17,8 +17,10 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+#include <algorithm>
 #include <vector>
 
+#include <Core/Exception.h>
 #include <Core/TMPUtils.h>
 
 namespace spades {
@@ -60,6 +62,21 @@ namespace spades {
 				return {data};
 			} else {
 				return {};
+			}
+		}
+
+		/**
+		 * Read the value of type `T` at the specified offset. Throws an exception if an EOF is
+		 * reached.
+		 *
+		 * See also: `TryRead`.
+		 */
+		template <class T> T Read(std::size_t offset) {
+			auto data = TryRead<T>(offset);
+			if (data) {
+				return std::move(*data);
+			} else {
+				SPRaise("Unexpected EOF");
 			}
 		}
 
