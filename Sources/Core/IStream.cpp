@@ -136,8 +136,12 @@ namespace spades {
 		if (o != h.o) {
 			SharedStream *old = o;
 			o = h.o;
-			o->Retain();
-			old->Release();
+			if (o) {
+				o->Retain();
+			}
+			if (old) {
+				old->Release();
+			}
 		}
 		return *this;
 	}

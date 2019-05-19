@@ -87,6 +87,7 @@ namespace spades {
 			rawDataReader = StreamHandle{};
 
 			decodingThread.reset(new Thread(&*decodingThreadRunnable));
+			decodingThread->Start();
 		}
 
 		GameMapLoader::~GameMapLoader() {
@@ -138,6 +139,7 @@ namespace spades {
 			SPAssert(IsComplete());
 
 			std::unique_ptr<Result> result = resultCell.take();
+			SPAssert(result);
 
 			if (result->gameMap) {
 				return result->gameMap.Unmanage();

@@ -126,7 +126,7 @@ namespace spades {
 					state->condvar.wait(
 					  lock, [&] { return !state->buffer.empty() || state->writerHangup; });
 
-					if (state->writerHangup) {
+					if (state->writerHangup && state->buffer.empty()) {
 						break;
 					}
 
