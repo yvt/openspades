@@ -271,6 +271,7 @@
 		E83668AF1E05757B00977A63 /* OpusAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668AD1E05757B00977A63 /* OpusAudioStream.cpp */; };
 		E83668B21E05844E00977A63 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668B01E05844E00977A63 /* AudioStream.cpp */; };
 		E8403CA8229061BF00093C3E /* RandomAccessAdaptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CA6229061BE00093C3E /* RandomAccessAdaptor.cpp */; };
+		E8403CAB229123CF00093C3E /* PipeStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CA9229123CF00093C3E /* PipeStream.cpp */; };
 		E8626EAE1E1009D7003365BF /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.tbd */; };
 		E8626EB61E100EC6003365BF /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB51E100EC6003365BF /* libfreetype.a */; };
 		E8626EB81E100FB2003365BF /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB71E100FB2003365BF /* libogg.a */; };
@@ -425,6 +426,8 @@
 		E838D42018ADDE2800EE3C53 /* StringsScript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringsScript.cpp; sourceTree = "<group>"; };
 		E8403CA6229061BE00093C3E /* RandomAccessAdaptor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandomAccessAdaptor.cpp; sourceTree = "<group>"; };
 		E8403CA7229061BE00093C3E /* RandomAccessAdaptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomAccessAdaptor.h; sourceTree = "<group>"; };
+		E8403CA9229123CF00093C3E /* PipeStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PipeStream.cpp; sourceTree = "<group>"; };
+		E8403CAA229123CF00093C3E /* PipeStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PipeStream.h; sourceTree = "<group>"; };
 		E842888918A3CF6C0060743D /* StartupScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreen.cpp; sourceTree = "<group>"; };
 		E842888A18A3CF6C0060743D /* StartupScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupScreen.h; sourceTree = "<group>"; };
 		E842888C18A3D1520060743D /* StartupScreenHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreenHelper.cpp; sourceTree = "<group>"; };
@@ -1837,6 +1840,8 @@
 		E8E44681179CC49C00BE8855 /* I/O */ = {
 			isa = PBXGroup;
 			children = (
+				E8403CA9229123CF00093C3E /* PipeStream.cpp */,
+				E8403CAA229123CF00093C3E /* PipeStream.h */,
 				E8403CA6229061BE00093C3E /* RandomAccessAdaptor.cpp */,
 				E8403CA7229061BE00093C3E /* RandomAccessAdaptor.h */,
 				E8B6B72617E5AC9C00E35523 /* ServerAddress.cpp */,
@@ -2025,6 +2030,7 @@
 				E82E67E918EA7A51004DBA18 /* list.c in Sources */,
 				E82E67EA18EA7A51004DBA18 /* packet.c in Sources */,
 				E82E67EB18EA7A51004DBA18 /* peer.c in Sources */,
+				E8403CAB229123CF00093C3E /* PipeStream.cpp in Sources */,
 				E81012311E1D7301009955D3 /* Icon.cpp in Sources */,
 				E8A2EBA01F5BE16D00E39CD9 /* GameProperties.cpp in Sources */,
 				E82E67EC18EA7A51004DBA18 /* protocol.c in Sources */,
