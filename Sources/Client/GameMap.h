@@ -22,6 +22,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 #include <list>
 
 #include <Core/Debug.h>
@@ -48,7 +49,15 @@ namespace spades {
 			};
 			GameMap();
 
-			static GameMap *Load(IStream *);
+			/**
+			 * Construct a `GameMap` from VOXLAP5 terrain data supplied by the specified stream.
+			 *
+			 * @param onProgress Called whenever a new column (a set of voxels with the same X and Y
+			 *                   coordinates) is loaded from the stream. The parameter indicates
+			 *					 the number of columns loaded
+			 *					 (up to `DefaultWidth * DefaultHeight`).
+			 */
+			static GameMap *Load(IStream *, std::function<void(int)> onProgress = {});
 
 			void Save(IStream *);
 

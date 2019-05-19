@@ -517,7 +517,7 @@ namespace spades {
 			return (u.c & 0xffffff) | (100UL * 0x1000000);
 		}
 
-		GameMap *GameMap::Load(spades::IStream *stream) {
+		GameMap *GameMap::Load(spades::IStream *stream, std::function<void(int)> onProgress) {
 			SPADES_MARK_FUNCTION();
 
 			RandomAccessAdaptor view{*stream};
@@ -525,6 +525,10 @@ namespace spades {
 			size_t pos = 0;
 
 			Handle<GameMap> map{new GameMap(), false};
+
+			if (onProgress) {
+				onProgress(0);
+			}
 
 			for (int y = 0; y < 512; y++) {
 				for (int x = 0; x < 512; x++) {
@@ -581,6 +585,10 @@ namespace spades {
 						if (bottom_color_end == 63) {
 							map->Set(x, y, 63, true, map->GetColor(x, y, 62), true);
 						}
+					}
+
+					if (onProgress) {
+						onProgress(x + y * 512 + 1);
 					}
 				}
 			}
