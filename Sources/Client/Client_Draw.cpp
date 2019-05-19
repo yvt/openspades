@@ -870,7 +870,7 @@ namespace spades {
 
 			if (net->GetStatus() == NetClientStatusReceivingMap) {
 				// Normal progress bar
-				float progress = net->GetMapReceivingProgress();
+				float progress = mapReceivingProgressSmoothed;
 
 				renderer->SetColorAlphaPremultiplied(MakeVector4(0.2f, 0.2f, 0.2f, 0.2f));
 				renderer->DrawImage(img, AABB2(scrWidth - 236.f, scrHeight - 18.f, 222.f, 4.f));
