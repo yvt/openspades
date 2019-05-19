@@ -70,7 +70,7 @@ namespace spades {
 			}
 		};
 
-		GameMapLoader::GameMapLoader() {
+		GameMapLoader::GameMapLoader() : progressCell{0} {
 			SPADES_MARK_FUNCTION();
 
 			auto pipe = CreatePipeStream();

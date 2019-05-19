@@ -867,20 +867,34 @@ namespace spades {
 			           MakeVector4(1, 1, 1, 0.95f));
 
 			img = renderer->RegisterImage("Gfx/White.tga");
-			float pos = timeSinceInit / 3.6f;
-			pos -= floorf(pos);
-			pos = 1.f - pos * 2.0f;
-			for (float v = 0; v < 0.6f; v += 0.14f) {
-				float p = pos + v;
-				if (p < 0.01f || p > .99f)
-					continue;
-				p = asin(p * 2.f - 1.f);
-				p = p / (float)M_PI + 0.5f;
 
-				float op = p * (1.f - p) * 4.f;
-				renderer->SetColorAlphaPremultiplied(MakeVector4(op, op, op, op));
+			if (net->GetStatus() == NetClientStatusReceivingMap) {
+				// Normal progress bar
+				float progress = net->GetMapReceivingProgress();
+
+				renderer->SetColorAlphaPremultiplied(MakeVector4(0.2f, 0.2f, 0.2f, 0.2f));
+				renderer->DrawImage(img, AABB2(scrWidth - 236.f, scrHeight - 18.f, 222.f, 4.f));
+
+				renderer->SetColorAlphaPremultiplied(MakeVector4(1.0f, 1.0f, 1.0f, 1.0f));
 				renderer->DrawImage(
-				  img, AABB2(scrWidth - 236.f + p * 234.f, scrHeight - 18.f, 4.f, 4.f));
+				  img, AABB2(scrWidth - 236.f, scrHeight - 18.f, 222.f * progress, 4.f));
+			} else {
+				// Indeterminate progress bar
+				float pos = timeSinceInit / 3.6f;
+				pos -= floorf(pos);
+				pos = 1.f - pos * 2.0f;
+				for (float v = 0; v < 0.6f; v += 0.14f) {
+					float p = pos + v;
+					if (p < 0.01f || p > .99f)
+						continue;
+					p = asin(p * 2.f - 1.f);
+					p = p / (float)M_PI + 0.5f;
+
+					float op = p * (1.f - p) * 4.f;
+					renderer->SetColorAlphaPremultiplied(MakeVector4(op, op, op, op));
+					renderer->DrawImage(
+					  img, AABB2(scrWidth - 236.f + p * 234.f, scrHeight - 18.f, 4.f, 4.f));
+				}
 			}
 
 			DrawAlert();

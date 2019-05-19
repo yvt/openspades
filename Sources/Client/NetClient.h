@@ -58,14 +58,18 @@ namespace spades {
 		struct WeaponInput;
 		class Grenade;
 		struct GameProperties;
+		class GameMapLoader;
+
 		class NetClient {
 			Client *client;
 			NetClientStatus status;
 			ENetHost *host;
 			ENetPeer *peer;
 			std::string statusString;
-			unsigned int mapSize;
-			std::vector<char> mapData;
+
+			/** Only valid in the `NetClientStatusReceivingMap` state */
+			std::unique_ptr<GameMapLoader> mapLoader;
+
 			std::shared_ptr<GameProperties> properties;
 
 			int protocolVersion;
@@ -132,6 +136,14 @@ namespace spades {
 			NetClientStatus GetStatus() { return status; }
 
 			std::string GetStatusString() { return statusString; }
+
+			/**
+			 * Gets how much portion of the map has completed loading.
+			 * `GetStatus()` must be `NetClientStatusReceivingMap`.
+			 *
+			 * @return A value in range `[0, 1]`.
+			 */
+			float GetMapReceivingProgress();
 
 			/**
 			 * Return a non-null reference to `GameProperties` for this connection.
