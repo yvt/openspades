@@ -272,6 +272,7 @@
 		E83668B21E05844E00977A63 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E83668B01E05844E00977A63 /* AudioStream.cpp */; };
 		E8403CA8229061BF00093C3E /* RandomAccessAdaptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CA6229061BE00093C3E /* RandomAccessAdaptor.cpp */; };
 		E8403CAB229123CF00093C3E /* PipeStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CA9229123CF00093C3E /* PipeStream.cpp */; };
+		E8403CAE2291280800093C3E /* GameMapLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CAD2291280700093C3E /* GameMapLoader.cpp */; };
 		E8626EAE1E1009D7003365BF /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.tbd */; };
 		E8626EB61E100EC6003365BF /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB51E100EC6003365BF /* libfreetype.a */; };
 		E8626EB81E100FB2003365BF /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB71E100FB2003365BF /* libogg.a */; };
@@ -428,6 +429,8 @@
 		E8403CA7229061BE00093C3E /* RandomAccessAdaptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomAccessAdaptor.h; sourceTree = "<group>"; };
 		E8403CA9229123CF00093C3E /* PipeStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PipeStream.cpp; sourceTree = "<group>"; };
 		E8403CAA229123CF00093C3E /* PipeStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PipeStream.h; sourceTree = "<group>"; };
+		E8403CAC2291280700093C3E /* GameMapLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMapLoader.h; sourceTree = "<group>"; };
+		E8403CAD2291280700093C3E /* GameMapLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMapLoader.cpp; sourceTree = "<group>"; };
 		E842888918A3CF6C0060743D /* StartupScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreen.cpp; sourceTree = "<group>"; };
 		E842888A18A3CF6C0060743D /* StartupScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupScreen.h; sourceTree = "<group>"; };
 		E842888C18A3D1520060743D /* StartupScreenHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreenHelper.cpp; sourceTree = "<group>"; };
@@ -1728,6 +1731,8 @@
 		E8E0AF9017993D1800C6B5A9 /* Net */ = {
 			isa = PBXGroup;
 			children = (
+				E8403CAD2291280700093C3E /* GameMapLoader.cpp */,
+				E8403CAC2291280700093C3E /* GameMapLoader.h */,
 				E8F6E6E41DCF503200FE76BB /* MumbleLink.cpp */,
 				E8F6E6E51DCF503200FE76BB /* MumbleLink.h */,
 				E834F55117944778004EBE88 /* NetClient.cpp */,
@@ -2200,6 +2205,7 @@
 				E82E67C918EA7972004DBA18 /* Fonts.cpp in Sources */,
 				E82E67CA18EA7972004DBA18 /* IGameMode.cpp in Sources */,
 				E82E67CB18EA7972004DBA18 /* CTFGameMode.cpp in Sources */,
+				E8403CAE2291280800093C3E /* GameMapLoader.cpp in Sources */,
 				E82E67CC18EA7972004DBA18 /* TCGameMode.cpp in Sources */,
 				E82E67CD18EA7972004DBA18 /* Player.cpp in Sources */,
 				E82E67CE18EA7972004DBA18 /* Grenade.cpp in Sources */,
