@@ -30,6 +30,7 @@
 #include <Core/Exception.h>
 #include <Core/FileManager.h>
 #include <Core/IStream.h>
+#include <Core/RandomAccessAdaptor.h>
 
 namespace spades {
 	namespace client {
@@ -516,80 +517,83 @@ namespace spades {
 			return (u.c & 0xffffff) | (100UL * 0x1000000);
 		}
 
-		GameMap *GameMap::Load(spades::IStream *stream) {
+		GameMap *GameMap::Load(spades::IStream *stream, std::function<void(int)> onProgress) {
 			SPADES_MARK_FUNCTION();
 
-			std::string bytes = stream->ReadAllBytes();
-			size_t len = bytes.size();
+			RandomAccessAdaptor view{*stream};
+
 			size_t pos = 0;
 
 			Handle<GameMap> map{new GameMap(), false};
 
-				for (int y = 0; y < 512; y++) {
-					for (int x = 0; x < 512; x++) {
-						map->solidMap[x][y] = 0xffffffffffffffffULL;
+			if (onProgress) {
+				onProgress(0);
+			}
 
-						if (pos + 2 >= len) {
-							SPRaise("File truncated");
+			for (int y = 0; y < 512; y++) {
+				for (int x = 0; x < 512; x++) {
+					map->solidMap[x][y] = 0xffffffffffffffffULL;
+
+					int z = 0;
+					for (;;) {
+						// Read a block ahead in attempt to minimize the number of calls to
+						// `IStream::Read`
+						view.Prefetch(pos + 512);
+
+						int i;
+						int number_4byte_chunks = view.Read<int8_t>(pos);
+						int top_color_start = view.Read<int8_t>(pos + 1);
+						int top_color_end = view.Read<int8_t>(pos + 2);
+						int bottom_color_start;
+						int bottom_color_end;
+						int len_top;
+						int len_bottom;
+
+						for (i = z; i < top_color_start; i++)
+							map->Set(x, y, i, false, 0, true);
+
+						size_t colorOffset = pos + 4;
+						for (z = top_color_start; z <= top_color_end; z++) {
+							uint32_t col = swapColor(view.Read<uint32_t>(colorOffset));
+							map->Set(x, y, z, true, col, true);
+							colorOffset += 4;
 						}
 
-						int z = 0;
-						for (;;) {
-							int i;
-							uint32_t *color;
-							int number_4byte_chunks = bytes[pos];
-							int top_color_start = bytes[pos + 1];
-							int top_color_end = bytes[pos + 2];
-							int bottom_color_start;
-							int bottom_color_end;
-							int len_top;
-							int len_bottom;
+						if (top_color_end == 62) {
+							map->Set(x, y, 63, true, map->GetColor(x, y, 62), true);
+						}
 
-							for (i = z; i < top_color_start; i++)
-								map->Set(x, y, i, false, 0, true);
+						len_bottom = top_color_end - top_color_start + 1;
 
-							if (pos + 4 + top_color_end - top_color_start + 3 >= len) {
-								SPRaise("File truncated");
-							}
+						if (number_4byte_chunks == 0) {
+							pos += 4 * (len_bottom + 1);
+							break;
+						}
 
-							color = (uint32_t *)(bytes.data() + pos + 4);
-							for (z = top_color_start; z <= top_color_end; z++)
-								map->Set(x, y, z, true, swapColor(*(color++)), true);
+						len_top = (number_4byte_chunks - 1) - len_bottom;
 
-							if (top_color_end == 62) {
-								map->Set(x, y, 63, true, map->GetColor(x, y, 62), true);
-							}
+						pos += (int)view.Read<int8_t>(pos) * 4;
 
-							len_bottom = top_color_end - top_color_start + 1;
+						bottom_color_end = view.Read<int8_t>(pos + 3);
+						bottom_color_start = bottom_color_end - len_top;
 
-							if (number_4byte_chunks == 0) {
-								pos += 4 * (len_bottom + 1);
-								break;
-							}
-
-							len_top = (number_4byte_chunks - 1) - len_bottom;
-
-							pos += (int)bytes[pos] * 4;
-
-							if (pos + 3 >= len) {
-								SPRaise("File truncated");
-							}
-
-							bottom_color_end = bytes[pos + 3];
-							bottom_color_start = bottom_color_end - len_top;
-
-							for (z = bottom_color_start; z < bottom_color_end; z++) {
-								uint32_t col = swapColor(*(color++));
-								map->Set(x, y, z, true, col, true);
-							}
-							if (bottom_color_end == 63) {
-								map->Set(x, y, 63, true, map->GetColor(x, y, 62), true);
-							}
+						for (z = bottom_color_start; z < bottom_color_end; z++) {
+							uint32_t col = swapColor(view.Read<uint32_t>(colorOffset));
+							map->Set(x, y, z, true, col, true);
+							colorOffset += 4;
+						}
+						if (bottom_color_end == 63) {
+							map->Set(x, y, 63, true, map->GetColor(x, y, 62), true);
 						}
 					}
+
+					if (onProgress) {
+						onProgress(x + y * 512 + 1);
+					}
 				}
+			}
 
 			return map.Unmanage();
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

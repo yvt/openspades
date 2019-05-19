@@ -166,6 +166,8 @@ namespace stmp {
 		void operator=(const atomic_unique_ptr &) = delete;
 		void operator=(atomic_unique_ptr &&x) { exchange(x.take()); }
 
+		operator bool() const { return inner.load() != nullptr; }
+
 		inline std::unique_ptr<T>
 		unsafe_exchange(std::unique_ptr<T> &&desired,
 		                std::memory_order order = std::memory_order_seq_cst) {
