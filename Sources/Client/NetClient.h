@@ -100,8 +100,8 @@ namespace spades {
 			std::unordered_map<uint8_t, uint8_t> extensions;
 			// extensions implemented in this client
 			// map of extension id -> version
-			std::unordered_map<uint8_t, uint8_t> implementedExtensions {
-				{ExtensionType128Player, 1},
+			std::unordered_map<uint8_t, uint8_t> implementedExtensions{
+			  {ExtensionType128Player, 1},
 			};
 
 			class BandwidthMonitor {

@@ -721,7 +721,7 @@ namespace spades {
 			}
 		}
 
-		void NetClient::HandleExtensionPacket(spades::client::NetPacketReader& reader) {
+		void NetClient::HandleExtensionPacket(spades::client::NetPacketReader &reader) {
 			int ext_count = reader.ReadByte();
 			for (int i = 0; i < ext_count; i++) {
 				int ext_id = reader.ReadByte();
@@ -1784,8 +1784,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			NetPacketWriter wri(PacketTypeExtensionInfo);
 			wri.Write(static_cast<uint8_t>(extensions.size()));
-			for (auto& i: extensions) {
-				wri.Write(static_cast<uint8_t>(i.first)); // ext id
+			for (auto &i : extensions) {
+				wri.Write(static_cast<uint8_t>(i.first));  // ext id
 				wri.Write(static_cast<uint8_t>(i.second)); // ext version
 			}
 			SPLog("Sending extension support.");
