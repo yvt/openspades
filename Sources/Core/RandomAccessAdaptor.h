@@ -84,6 +84,15 @@ namespace spades {
 			}
 		}
 
+		/**
+		 * Read the inner stream ahead to make the internal buffer at least `length` bytes long.
+		 */
+		void Prefetch(std::size_t length) {
+			SPADES_MARK_FUNCTION();
+
+			ExpandTo(length);
+		}
+
 	private:
 		/**
 		 * Tries to ensure `buffer` is at least `newBufferSize` bytes long.
