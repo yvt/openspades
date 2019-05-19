@@ -153,9 +153,6 @@ namespace spades {
 	std::tuple<IStream *, IStream *> CreatePipeStream() {
 		auto state = std::make_shared<State>();
 
-		return {
-		  new PipeWriter(state),
-		  new PipeReader(state),
-		};
+		return std::make_tuple(new PipeWriter(state), new PipeReader(state));
 	}
 } // namespace spades
