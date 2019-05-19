@@ -67,8 +67,23 @@ namespace spades {
 			ENetPeer *peer;
 			std::string statusString;
 
+			class MapDownloadMonitor {
+				Stopwatch sw;
+				unsigned int numBytesDownloaded;
+				GameMapLoader &mapLoader;
+				bool receivedFirstByte;
+
+			public:
+				MapDownloadMonitor(GameMapLoader &);
+
+				void AccumulateBytes(unsigned int);
+				std::string GetDisplayedText();
+			};
+
 			/** Only valid in the `NetClientStatusReceivingMap` state */
 			std::unique_ptr<GameMapLoader> mapLoader;
+			/** Only valid in the `NetClientStatusReceivingMap` state */
+			std::unique_ptr<MapDownloadMonitor> mapLoadMonitor;
 
 			std::shared_ptr<GameProperties> properties;
 
@@ -135,7 +150,7 @@ namespace spades {
 
 			NetClientStatus GetStatus() { return status; }
 
-			std::string GetStatusString() { return statusString; }
+			std::string GetStatusString();
 
 			/**
 			 * Gets how much portion of the map has completed loading.

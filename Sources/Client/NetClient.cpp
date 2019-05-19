@@ -530,6 +530,7 @@ namespace spades {
 						SPLog("Map size advertised by the server: %lu", (unsigned long)mapSize);
 
 						mapLoader.reset(new GameMapLoader());
+						mapLoadMonitor.reset(new MapDownloadMonitor(*mapLoader));
 
 						status = NetClientStatusReceivingMap;
 						statusString = _Tr("NetClient", "Loading snapshot");
@@ -544,6 +545,8 @@ namespace spades {
 							std::vector<char> dt = reader.GetData();
 
 							mapLoader->AddRawChunk(dt.data() + 1, dt.size() - 1);
+							mapLoadMonitor->AccumulateBytes(
+							  static_cast<unsigned int>(dt.size() - 1));
 						} else {
 							reader.DumpDebug();
 
@@ -1282,6 +1285,7 @@ namespace spades {
 					SPLog("Map size advertised by the server: %lu", (unsigned long)mapSize);
 
 					mapLoader.reset(new GameMapLoader());
+					mapLoadMonitor.reset(new MapDownloadMonitor(*mapLoader));
 
 					status = NetClientStatusReceivingMap;
 					statusString = _Tr("NetClient", "Loading snapshot");
@@ -1764,6 +1768,7 @@ namespace spades {
 			// Move `mapLoader` to a local variable so that the associated resources
 			// are released as soon as possible when no longer needed
 			std::unique_ptr<GameMapLoader> mapLoader = std::move(this->mapLoader);
+			mapLoadMonitor.reset();
 
 			SPLog("Waiting for the game map decoding to complete...");
 			mapLoader->MarkEOF();
@@ -1807,6 +1812,17 @@ namespace spades {
 			return mapLoader->GetProgress();
 		}
 
+		std::string NetClient::GetStatusString() {
+			if (status == NetClientStatusReceivingMap) {
+				// Display extra information
+				auto text = mapLoadMonitor->GetDisplayedText();
+				if (!text.empty()) {
+					return Format("{0} ({1})", statusString, text);
+				}
+			}
+			return statusString;
+		}
+
 		NetClient::BandwidthMonitor::BandwidthMonitor(ENetHost *host)
 		    : host(host), lastDown(0.0), lastUp(0.0) {
 			sw.Reset();
@@ -1820,6 +1836,58 @@ namespace spades {
 				host->totalReceivedData = 0;
 				sw.Reset();
 			}
+		}
+
+		NetClient::MapDownloadMonitor::MapDownloadMonitor(GameMapLoader &mapLoader)
+		    : numBytesDownloaded{0}, mapLoader{mapLoader}, receivedFirstByte{false} {}
+
+		void NetClient::MapDownloadMonitor::AccumulateBytes(unsigned int numBytes) {
+			// It might take a while before receiving the first byte. Take this into account to
+			// get a more accurate estimate of download time.
+			if (!receivedFirstByte) {
+				sw.Reset();
+				receivedFirstByte = true;
+			}
+
+			numBytesDownloaded += numBytes;
+		}
+
+		std::string NetClient::MapDownloadMonitor::GetDisplayedText() {
+			if (!receivedFirstByte) {
+				return {};
+			}
+
+			float secondsElapsed = static_cast<float>(sw.GetTime());
+
+			if (secondsElapsed <= 0.0) {
+				return {};
+			}
+
+			float progress = mapLoader.GetProgress();
+			float bytesPerSec = static_cast<float>(numBytesDownloaded) / secondsElapsed;
+			float progressPerSec = progress / secondsElapsed;
+
+			std::string text = Format("{0} KB, {1} KB/s", (numBytesDownloaded + 500) / 1000,
+			                          ((int)bytesPerSec + 500) / 1000);
+
+			// Estimate the remaining time
+			float secondsRemaining = (1.0 - progress) / progressPerSec;
+
+			if (secondsRemaining < 86400.0) {
+				int seconds = (int)secondsRemaining + 1;
+
+				text += ", ";
+
+				if (seconds < 120) {
+					text +=
+					  _TrN("NetClient", "{0} second remaining", "{0} seconds remaining", seconds);
+				} else {
+					text += _TrN("NetClient", "{0} minute remaining", "{0} minutes remaining",
+					             seconds / 60);
+				}
+			}
+
+			return text;
 		}
 	}
 }
