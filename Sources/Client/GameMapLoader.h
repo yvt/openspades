@@ -95,7 +95,7 @@ namespace spades {
 			std::unique_ptr<IRunnable> decodingThreadRunnable;
 
 			/** The cell for receiving the decode progress. */
-			std::atomic_uint32_t progressCell;
+			std::atomic<std::uint32_t> progressCell;
 
 			/** The cell for receiving the decode result. */
 			stmp::atomic_unique_ptr<Result> resultCell;
