@@ -95,7 +95,11 @@ namespace spades {
 			std::shared_ptr<GameProperties> properties;
 
 			int protocolVersion;
+			// extensions supported by both client and server
+			// map of extension id -> version
 			std::unordered_map<uint8_t, uint8_t> extensions;
+			// extensions implemented in this client
+			// map of extension id -> version
 			std::unordered_map<uint8_t, uint8_t> implementedExtensions {
 				{ExtensionType128Player, 1},
 			};

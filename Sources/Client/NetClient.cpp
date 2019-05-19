@@ -722,7 +722,6 @@ namespace spades {
 		}
 
 		void NetClient::HandleExtensionPacket(spades::client::NetPacketReader& reader) {
-			std::unordered_map<uint8_t, uint8_t> implementedExtensions ( {{192, 1}, {120, 1}} );
 			int ext_count = reader.ReadByte();
 			for (int i = 0; i < ext_count; i++) {
 				int ext_id = reader.ReadByte();
