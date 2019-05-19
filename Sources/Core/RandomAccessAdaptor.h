@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <vector>
 
+#include <Core/Debug.h>
 #include <Core/Exception.h>
 #include <Core/TMPUtils.h>
 
@@ -57,6 +58,8 @@ namespace spades {
 		 * but probably should abort the program in the future.
 		 */
 		template <class T> stmp::optional<T> TryRead(std::size_t offset) {
+			SPADES_MARK_FUNCTION();
+
 			T data;
 			if (TryRead(offset, sizeof(T), reinterpret_cast<char *>(&data))) {
 				return {data};
@@ -76,6 +79,7 @@ namespace spades {
 			if (data) {
 				return std::move(*data);
 			} else {
+				SPADES_MARK_FUNCTION();
 				SPRaise("Unexpected EOF");
 			}
 		}
