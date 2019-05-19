@@ -304,11 +304,6 @@ msgctxt "NetClient"
 msgid "Loading snapshot"
 msgstr ""
 
-#: Sources/Client/NetClient.cpp:523
-msgctxt "NetClient"
-msgid "Loading snapshot ({0}/{1})"
-msgstr ""
-
 #: Sources/Client/NetClient.cpp:528 Sources/Client/NetClient.cpp:562
 msgctxt "NetClient"
 msgid "Connected"
@@ -1588,3 +1583,17 @@ msgstr ""
 msgctxt "Client"
 msgid "[{0}/{1}] Go up/down"
 msgstr ""
+
+#: Sources/Client/NetClient.cpp:1883
+msgctxt "NetClient"
+msgid "{0} second remaining"
+msgid_plural "{0} seconds remaining"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Sources/Client/NetClient.cpp:1885
+msgctxt "NetClient"
+msgid "{0} minute remaining"
+msgid_plural "{0} minutes remaining"
+msgstr[0] ""
+msgstr[1] ""

@@ -309,6 +309,9 @@ namespace spades {
 			float alertDisappearTime;
 			float alertAppearTime;
 
+			// Loading screen
+			float mapReceivingProgressSmoothed = 0.0;
+
 			std::list<std::unique_ptr<ILocalEntity>> localEntities;
 			std::list<std::unique_ptr<Corpse>> corpses;
 			Corpse *lastMyCorpse;

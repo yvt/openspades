@@ -427,6 +427,21 @@ namespace spades {
 			chatWindow->Update(dt);
 			killfeedWindow->Update(dt);
 
+			// The loading screen
+			if (net->GetStatus() == NetClientStatusReceivingMap) {
+				// Apply temporal smoothing on the progress value
+				float progress = net->GetMapReceivingProgress();
+
+				if (mapReceivingProgressSmoothed > progress) {
+					mapReceivingProgressSmoothed = progress;
+				} else {
+					mapReceivingProgressSmoothed +=
+					  (progress - mapReceivingProgressSmoothed) * (1.0 - powf(.05f, dt));
+				}
+			} else {
+				mapReceivingProgressSmoothed = 0.0;
+			}
+
 			// CreateSceneDefinition also can be used for sounds
 			SceneDefinition sceneDef = CreateSceneDefinition();
 			lastSceneDef = sceneDef;

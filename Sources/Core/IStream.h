@@ -87,5 +87,6 @@ namespace spades {
 		void Reset();
 		IStream *operator->() const;
 		operator IStream *() const;
+		operator bool() const;
 	};
 }

@@ -136,8 +136,12 @@ namespace spades {
 		if (o != h.o) {
 			SharedStream *old = o;
 			o = h.o;
-			o->Retain();
-			old->Release();
+			if (o) {
+				o->Retain();
+			}
+			if (old) {
+				old->Release();
+			}
 		}
 		return *this;
 	}
@@ -151,6 +155,8 @@ namespace spades {
 		SPAssert(o);
 		return o->stream;
 	}
+
+	StreamHandle::operator bool() const { return o->stream; }
 
 	void StreamHandle::Reset() {
 		if (o) {
