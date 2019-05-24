@@ -660,7 +660,7 @@ namespace spades {
 							ModelRenderParam param;
 							param.customColor = color;
 							param.matrix = Matrix4::Translate(MakeVector3(v.x + .5f, v.y + .5f, v.z + .5f));
-							param.matrix = param.matrix * Matrix4::Scale(1.f / 16.f);
+							param.matrix = param.matrix * Matrix4::Scale(1.f / 24.f);
 							renderer->RenderModel(active ? curActive : curInactive, param);
 						}
 
