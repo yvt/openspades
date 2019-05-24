@@ -324,6 +324,8 @@ namespace spades {
 			renderer->RegisterModel("Models/Player/Head.kv6");
 			renderer->RegisterModel("Models/MapObjects/Intel.kv6");
 			renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
+			renderer->RegisterModel("Models/MapObjects/BlockCursorActive.kv6");
+			renderer->RegisterModel("Models/MapObjects/BlockCursorInactive.kv6");
 			renderer->RegisterImage("Gfx/Bullet/7.62mm.png");
 			renderer->RegisterImage("Gfx/Bullet/9mm.png");
 			renderer->RegisterImage("Gfx/Bullet/12gauge.png");

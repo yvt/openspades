@@ -64,7 +64,7 @@ Make-Pak -PakName pak005-Models.pak -RelativePaths `
 
 Make-Pak -PakName pak010-BaseSkin.pak -RelativePaths `
   License/Credits-pak010-BaseSkin.md,
-  Scripts/Skin, Sounds/Weapons, Models/Weapons
+  Scripts/Skin, Sounds/Weapons, Models/Weapons, Models/MapObjects
 
 Make-Pak -PakName pak050-Locales.pak -RelativePaths `
   License/Credits-pak050-Locales.md, Locales

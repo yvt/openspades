@@ -647,131 +647,24 @@ namespace spades {
 
 						bool active = p->IsBlockCursorActive() && CanLocalPlayerUseToolNow();
 
-						Vector4 color = {1, 1, 1, 1};
+						Vector3 color = {1.f, 1.f, 1.f};
 						if (!active)
-							color = Vector4(1, 1, 0, 1);
+							color = MakeVector3(1.f, 1.f, 0.f);
 						if ((int)blocks.size() > p->GetNumBlocks())
-							color = MakeVector4(1, 0, 0, 1);
-						if (!active)
-							color.w *= 0.5f;
+							color = MakeVector3(1.f, 0.f, 0.f);
 
+						IModel *curActive = renderer->RegisterModel("Models/MapObjects/BlockCursorActive.kv6");
+						IModel *curInactive = renderer->RegisterModel("Models/MapObjects/BlockCursorInactive.kv6");
 						for (size_t i = 0; i < blocks.size(); i++) {
 							IntVector3 &v = blocks[i];
+							ModelRenderParam param;
+							param.customColor = color;
+							param.matrix = Matrix4::Translate(MakeVector3(v.x + .5f, v.y + .5f, v.z + .5f));
+							param.matrix = param.matrix * Matrix4::Scale(1.f / 16.f);
+							renderer->RenderModel(active ? curActive : curInactive, param);
+						}
 
-							if (active) {
-
-								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z),
-								                       MakeVector3(v.x + 1, v.y, v.z), color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y + 1, v.z),
-								                       MakeVector3(v.x + 1, v.y + 1, v.z), color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z + 1),
-								                       MakeVector3(v.x + 1, v.y, v.z + 1), color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y + 1, v.z + 1),
-								                       MakeVector3(v.x + 1, v.y + 1, v.z + 1),
-								                       color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z),
-								                       MakeVector3(v.x + 1, v.y, v.z), color);
-
-								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z),
-								                       MakeVector3(v.x, v.y + 1, v.z), color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z + 1),
-								                       MakeVector3(v.x, v.y + 1, v.z + 1), color);
-								renderer->AddDebugLine(MakeVector3(v.x + 1, v.y, v.z),
-								                       MakeVector3(v.x + 1, v.y + 1, v.z), color);
-								renderer->AddDebugLine(MakeVector3(v.x + 1, v.y, v.z + 1),
-								                       MakeVector3(v.x + 1, v.y + 1, v.z + 1),
-								                       color);
-
-								renderer->AddDebugLine(MakeVector3(v.x, v.y, v.z),
-								                       MakeVector3(v.x, v.y, v.z + 1), color);
-								renderer->AddDebugLine(MakeVector3(v.x, v.y + 1, v.z),
-								                       MakeVector3(v.x, v.y + 1, v.z + 1), color);
-								renderer->AddDebugLine(MakeVector3(v.x + 1, v.y, v.z),
-								                       MakeVector3(v.x + 1, v.y, v.z + 1), color);
-								renderer->AddDebugLine(MakeVector3(v.x + 1, v.y + 1, v.z),
-								                       MakeVector3(v.x + 1, v.y + 1, v.z + 1),
-								                       color);
-							} else {
-								// not active
-
-								const float ln = 0.1f;
-								{
-									float xx = v.x, yy = v.y, zz = v.z;
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx + ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy + ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy, zz + ln), color);
-								}
-								{
-									float xx = v.x + 1, yy = v.y, zz = v.z;
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx - ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy + ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy, zz + ln), color);
-								}
-								{
-									float xx = v.x, yy = v.y + 1, zz = v.z;
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx + ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy - ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy, zz + ln), color);
-								}
-								{
-									float xx = v.x + 1, yy = v.y + 1, zz = v.z;
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx - ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy - ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy, zz + ln), color);
-								}
-								{
-									float xx = v.x, yy = v.y, zz = v.z + 1;
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx + ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy + ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy, zz - ln), color);
-								}
-								{
-									float xx = v.x + 1, yy = v.y, zz = v.z + 1;
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx - ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy + ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy, zz - ln), color);
-								}
-								{
-									float xx = v.x, yy = v.y + 1, zz = v.z + 1;
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx + ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy - ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy, zz - ln), color);
-								}
-								{
-									float xx = v.x + 1, yy = v.y + 1, zz = v.z + 1;
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx - ln, yy, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy - ln, zz), color);
-									renderer->AddDebugLine(Vector3(xx, yy, zz),
-									                       Vector3(xx, yy, zz - ln), color);
-								}
-							}
-							// --- one block drawn
-						} // end for
-
-					} // p->IsReadyToUseTool
+					}
 				}
 			}
 
