@@ -653,15 +653,16 @@ namespace spades {
 						if ((int)blocks.size() > p->GetNumBlocks())
 							color = MakeVector3(1.f, 0.f, 0.f);
 
-						IModel *curActive = renderer->RegisterModel("Models/MapObjects/BlockCursorActive.kv6");
-						IModel *curInactive = renderer->RegisterModel("Models/MapObjects/BlockCursorInactive.kv6");
+						IModel *curLine = renderer->RegisterModel("Models/MapObjects/BlockCursorLine.kv6");
+						IModel *curSingle = renderer->RegisterModel("Models/MapObjects/BlockCursorSingle.kv6");
 						for (size_t i = 0; i < blocks.size(); i++) {
+							if (!active && (blocks.size() == 1 || (i > 0 && i < blocks.size() - 1))) continue;
 							IntVector3 &v = blocks[i];
 							ModelRenderParam param;
 							param.customColor = color;
 							param.matrix = Matrix4::Translate(MakeVector3(v.x + .5f, v.y + .5f, v.z + .5f));
 							param.matrix = param.matrix * Matrix4::Scale(1.f / 24.f);
-							renderer->RenderModel(active ? curActive : curInactive, param);
+							renderer->RenderModel(blocks.size() > 1 ? curLine : curSingle, param);
 						}
 
 					}
