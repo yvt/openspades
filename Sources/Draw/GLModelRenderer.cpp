@@ -68,7 +68,7 @@ namespace spades {
 #endif
 		}
 
-		void GLModelRenderer::Prerender() {
+		void GLModelRenderer::Prerender(bool ghostPass) {
 			device->ColorMask(false, false, false, false);
 
 			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Model [%d model(s), %d unique model type(s)]", modelCount,
@@ -78,13 +78,13 @@ namespace spades {
 			for (size_t i = 0; i < models.size(); i++) {
 				RenderModel &m = models[i];
 				GLModel *model = m.model;
-				model->Prerender(m.params);
+				model->Prerender(m.params, ghostPass);
 				numModels += (int)m.params.size();
 			}
 			device->ColorMask(true, true, true, true);
 		}
 
-		void GLModelRenderer::RenderSunlightPass() {
+		void GLModelRenderer::RenderSunlightPass(bool ghostPass) {
 			SPADES_MARK_FUNCTION();
 
 			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Model [%d model(s), %d unique model type(s)]", modelCount,
@@ -94,7 +94,7 @@ namespace spades {
 				RenderModel &m = models[i];
 				GLModel *model = m.model;
 
-				model->RenderSunlightPass(m.params);
+				model->RenderSunlightPass(m.params, ghostPass);
 			}
 		}
 

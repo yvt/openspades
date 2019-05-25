@@ -21,6 +21,7 @@
 
 
 varying vec4 color;
+varying vec3 emissionColor;
 varying vec2 ambientOcclusionCoord;
 //varying vec2 detailCoord;
 varying vec3 fogDensity;
@@ -28,6 +29,7 @@ varying vec3 fogDensity;
 uniform sampler2D ambientOcclusionTexture;
 uniform sampler2D detailTexture;
 uniform vec3 fogColor;
+uniform float modelOpacity;
 
 vec3 EvaluateSunLight();
 vec3 EvaluateAmbientLight(float detailAmbientOcclusion);
@@ -35,7 +37,6 @@ vec3 EvaluateAmbientLight(float detailAmbientOcclusion);
 void main() {
 	// color is linearized
 	gl_FragColor = color;
-	gl_FragColor.w = 1.;
 
 	vec3 shading = vec3(color.w);
 
@@ -47,8 +48,13 @@ void main() {
 
 	gl_FragColor.xyz *= shading;
 
+	gl_FragColor.xyz += emissionColor;
+
 	//gl_FragColor.xyz *= texture2D(detailTexture, detailCoord).xyz * 2.;
 
 	gl_FragColor.xyz = mix(gl_FragColor.xyz, fogColor, fogDensity);
+
+	// Only valid in the ghost pass - Blending is disabled for most models
+	gl_FragColor.w = modelOpacity;
 }
 

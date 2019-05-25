@@ -65,7 +65,7 @@ namespace spades {
 			TypedItemHandle<float> r_scale              { *this, "r_scale" };
 			TypedItemHandle<float> r_saturation         { *this, "r_saturation" };
 			TypedItemHandle<int> r_shadowMapSize        { *this, "r_shadowMapSize", ItemFlags::Latch };
-			TypedItemHandle<bool> r_softParticles       { *this, "r_softParticles" };
+			TypedItemHandle<int> r_softParticles        { *this, "r_softParticles" };
 			TypedItemHandle<bool> r_sparseShadowMaps    { *this, "r_sparseShadowMaps", ItemFlags::Latch };
 			TypedItemHandle<int> r_ssao                 { *this, "r_ssao", ItemFlags::Latch };
 			TypedItemHandle<bool> r_temporalAA          { *this, "r_temporalAA" };

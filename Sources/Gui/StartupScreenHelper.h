@@ -25,7 +25,6 @@
 #include <vector>
 
 #include <Core/Math.h>
-#include <Core/Mutex.h>
 #include <Core/RefCountedObject.h>
 #include <ScriptBindings/ScriptManager.h>
 

@@ -44,6 +44,7 @@ attribute vec3 normalAttribute;
 
 varying vec2 ambientOcclusionCoord;
 varying vec4 color;
+varying vec3 emissionColor;
 varying vec3 fogDensity;
 //varying vec2 detailCoord;
 
@@ -66,6 +67,17 @@ void main() {
 
 	// linearize
 	color.xyz *= color.xyz;
+
+	// material type (see `VoxelModel.h` for the definition)
+	float materialType = colorAttribute.w * 255.0;
+
+	if (materialType > 0.5) {
+		// emissive material
+		emissionColor = color.xyz;
+		color.xyz = vec3(0.0);
+	} else {
+		emissionColor = vec3(0.0);
+	}
 
 	// direct sunlight
 	vec3 normal = normalAttribute;

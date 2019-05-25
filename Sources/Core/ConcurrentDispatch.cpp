@@ -39,11 +39,9 @@
 #endif
 #endif
 
-#include "AutoLocker.h"
 #include "ConcurrentDispatch.h"
 #include "Debug.h"
 #include "Exception.h"
-#include "Mutex.h"
 #include "Settings.h"
 #include "Thread.h"
 #include <OpenSpades.h>

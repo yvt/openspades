@@ -29,7 +29,6 @@
 
 #include "MainScreen.h"
 #include "MainScreenHelper.h"
-#include <Core/AutoLocker.h>
 #include <Core/FileManager.h>
 #include <Core/IStream.h>
 #include <Core/Settings.h>

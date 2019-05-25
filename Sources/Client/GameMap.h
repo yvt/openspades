@@ -24,13 +24,12 @@
 #include <cstdint>
 #include <functional>
 #include <list>
+#include <mutex>
 
 #include <Core/Debug.h>
 #include <Core/Math.h>
 
 #include "IGameMapListener.h"
-#include <Core/AutoLocker.h>
-#include <Core/Mutex.h>
 #include <Core/RefCountedObject.h>
 
 namespace spades {
@@ -127,11 +126,9 @@ namespace spades {
 				}
 				if (!unsafe) {
 					if (changed) {
-						{
-							AutoLocker guard(&listenersMutex);
-							for (auto *l : listeners) {
-								l->GameMapChanged(x, y, z, this);
-							}
+						std::lock_guard<std::mutex> guard{listenersMutex};
+						for (auto *l : listeners) {
+							l->GameMapChanged(x, y, z, this);
 						}
 					}
 				}
@@ -163,9 +160,9 @@ namespace spades {
 			uint64_t solidMap[DefaultWidth][DefaultHeight];
 			uint32_t colorMap[DefaultWidth][DefaultHeight][DefaultDepth];
 			std::list<IGameMapListener *> listeners;
-			Mutex listenersMutex;
+			std::mutex listenersMutex;
 
 			bool IsSurface(int x, int y, int z);
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

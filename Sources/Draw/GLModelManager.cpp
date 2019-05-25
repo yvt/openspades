@@ -20,13 +20,13 @@
 #include <memory>
 
 #include "GLModelManager.h"
+#include "GLRenderer.h"
+#include "GLVoxelModel.h"
 #include <Core/Debug.h>
-#include <Core/FileManager.h>
 #include <Core/IStream.h>
 #include <Core/Settings.h>
 #include <Core/VoxelModel.h>
-#include "GLRenderer.h"
-#include "GLVoxelModel.h"
+#include <Core/VoxelModelLoader.h>
 
 namespace spades {
 	namespace draw {
@@ -62,10 +62,9 @@ namespace spades {
 		GLModel *GLModelManager::CreateModel(const char *name) {
 			SPADES_MARK_FUNCTION();
 
-			std::unique_ptr<IStream> stream{FileManager::OpenForReading(name)};
-			Handle<VoxelModel> voxelModel{VoxelModel::LoadKV6(stream.get()), false};
+			Handle<VoxelModel> voxelModel{VoxelModelLoader::Load(name), false};
 
 			return static_cast<GLModel *>(renderer->CreateModelOptimized(voxelModel));
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -63,6 +63,14 @@ void main() {
 	// linearize
 	color.xyz *= color.xyz;
 
+	// material type (see `VoxelModel.h` for the definition)
+	float materialType = colorAttribute.w * 255.0;
+
+	if (materialType > 0.5) {
+		// emissive material - unaffected by dynamic lights
+		color.xyz = vec3(0.0);
+	}
+
 	// calculate normal
 	vec3 normal = normalAttribute;
 	normal = (modelNormalMatrix * vec4(normal, 1.)).xyz;

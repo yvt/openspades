@@ -343,14 +343,27 @@ namespace spades {
 
 						SPAssert(model->IsSolid(p3.x, p3.y, p3.z));
 						uint32_t col = model->GetColor(p3.x, p3.y, p3.z);
+						auto material = static_cast<MaterialType>(col >> 24);
 
 						col &= 0xffffff;
 
-						// add AOID
-						p3 += nn;
-						SPAssert(!model->IsSolid(p3.x, p3.y, p3.z));
-						uint8_t aoId = calcAOID(model, p3.x, p3.y, p3.z, ux, uy, uz, vx, vy, vz);
-						col |= ((uint8_t)aoId) << 24;
+						// Add AOID (selector for the pre-integrated ambient occlusion texture).
+						// Use special values for certain materials.
+						if (material == MaterialType::Emissive) {
+							col |= ((uint32_t)255) << 24;
+						} else {
+							p3 += nn;
+							SPAssert(!model->IsSolid(p3.x, p3.y, p3.z));
+
+							uint8_t aoId = calcAOID(model, p3.x, p3.y, p3.z, ux, uy, uz, vx, vy, vz);
+
+							if (aoId % 16 == 15) {
+								// These AOIDs are allocated for non-default materials.
+								aoId = 15;
+							}
+
+							col |= ((uint8_t)aoId) << 24;
+						}
 
 						*(pixels++) = col;
 
@@ -511,10 +524,11 @@ namespace spades {
 			printf("%d vertices emit\n", (int)indices.size());
 		}
 
-		void GLOptimizedVoxelModel::Prerender(std::vector<client::ModelRenderParam> params) {
+		void GLOptimizedVoxelModel::Prerender(std::vector<client::ModelRenderParam> params,
+		                                      bool ghostPass) {
 			SPADES_MARK_FUNCTION();
 
-			RenderSunlightPass(params);
+			RenderSunlightPass(params, ghostPass);
 		}
 
 		void
@@ -558,6 +572,10 @@ namespace spades {
 			for (size_t i = 0; i < params.size(); i++) {
 				const client::ModelRenderParam &param = params[i];
 
+				if (!param.castShadow || param.ghost) {
+					continue;
+				}
+
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
@@ -596,8 +614,8 @@ namespace spades {
 			device->BindTexture(IGLDevice::Texture2D, 0);
 		}
 
-		void
-		GLOptimizedVoxelModel::RenderSunlightPass(std::vector<client::ModelRenderParam> params) {
+		void GLOptimizedVoxelModel::RenderSunlightPass(std::vector<client::ModelRenderParam> params,
+		                                               bool ghostPass) {
 			SPADES_MARK_FUNCTION();
 
 			bool mirror = renderer->IsRenderingMirror();
@@ -689,6 +707,10 @@ namespace spades {
 				if (mirror && param.depthHack)
 					continue;
 
+				if (param.ghost != ghostPass) {
+					continue;
+				}
+
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
@@ -720,6 +742,10 @@ namespace spades {
 				static GLProgramUniform modelNormalMatrix("modelNormalMatrix");
 				modelNormalMatrix(program);
 				modelNormalMatrix.SetValue(modelMatrix);
+
+				static GLProgramUniform modelOpacity("modelOpacity");
+				modelOpacity(program);
+				modelOpacity.SetValue(param.opacity);
 
 				if (param.depthHack) {
 					device->DepthRange(0.f, 0.1f);
@@ -819,6 +845,9 @@ namespace spades {
 				const client::ModelRenderParam &param = params[i];
 
 				if (mirror && param.depthHack)
+					continue;
+
+				if (param.ghost)
 					continue;
 
 				// frustrum cull

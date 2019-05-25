@@ -186,6 +186,8 @@ namespace spades {
 		Matrix4 matrix;
 		Vector3 customColor;
 		bool depthHack;
+		bool castShadow;
+		bool unlit;
 	}
 	
 	class DynamicLightParam {

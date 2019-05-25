@@ -18,7 +18,9 @@
 
  */
 
+#include <algorithm>
 #include <array>
+#include <cmath>
 #include <cstdlib>
 
 #include "CTFGameMode.h"
@@ -121,15 +123,31 @@ namespace spades {
 				}
 			}
 
-			void RenderModel(IModel *model, const ModelRenderParam &p) override {
+			void RenderModel(IModel *model, const ModelRenderParam &_p) override {
+				ModelRenderParam p = _p;
+
 				if (!model) {
 					SPInvalidArgument("model");
 					return;
 				}
+
 				if (p.depthHack && !allowDepthHack) {
 					OnProhibitedAction();
 					return;
 				}
+
+				// Overbright surfaces bypass the fog
+				p.customColor.x = std::max(std::min(p.customColor.x, 1.0f), 0.0f);
+				p.customColor.y = std::max(std::min(p.customColor.y, 1.0f), 0.0f);
+				p.customColor.z = std::max(std::min(p.customColor.z, 1.0f), 0.0f);
+
+				// NaN values bypass the fog
+				if (std::isnan(p.customColor.x) || std::isnan(p.customColor.y) ||
+				    std::isnan(p.customColor.z)) {
+					OnProhibitedAction();
+					return;
+				}
+
 				auto bounds = (p.matrix * OBB3(model->GetBoundingBox())).GetBoundingAABB();
 				if (CheckVisibility(bounds)) {
 					base->RenderModel(model, p);
