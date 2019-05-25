@@ -37,10 +37,18 @@ namespace spades {
 		class GameMap;
 
 		struct ModelRenderParam {
+			/** The transformatrix matrix applied on the model. */
 			Matrix4 matrix = Matrix4::Identity();
+			/** Voxels having a color value `(0, 0, 0)` are replaced with
+			 *  this color. */
 			Vector3 customColor = MakeVector3(0, 0, 0);
+			/** Specifies to render the model in front of other non-depth-hack
+			 *  models. Useful for first-person models. */
 			bool depthHack = false;
+			/** Specifies whether the model casts a shadow. */
 			bool castShadow = true;
+			/** When set to `true`, the model uses a emissive material instead
+			 * of the default shading model, making it unaffected by lights. */
 			bool unlit = false;
 		};
 
@@ -48,14 +56,22 @@ namespace spades {
 
 		struct DynamicLightParam {
 			DynamicLightType type = DynamicLightTypePoint;
+			/** The position of the light. */
 			Vector3 origin;
+			/** The effective radius of the light. Objects outside this radius
+			 * is unaffected by the light. */
 			float radius;
 			Vector3 color;
 
+			/** The basis vectors specifying the orientation of a spotlight.
+			 *  See the existing code for usage. */
 			std::array<Vector3, 3> spotAxis;
+			/** The projected image for a spotlight. */
 			IImage *image = nullptr;
 			float spotAngle = 0.0f;
 
+			/** When set to `true`, the lens flare post-effect is enabled for
+			 * the light. */
 			bool useLensFlare = false;
 		};
 
