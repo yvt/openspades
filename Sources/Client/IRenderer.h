@@ -40,11 +40,15 @@ namespace spades {
 			Matrix4 matrix;
 			Vector3 customColor;
 			bool depthHack;
+			bool castShadow;
+			bool unlit;
 
 			ModelRenderParam() {
 				matrix = Matrix4::Identity();
 				customColor = MakeVector3(0, 0, 0);
 				depthHack = false;
+				castShadow = true;
+				unlit = false;
 			}
 		};
 
