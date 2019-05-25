@@ -68,7 +68,7 @@ void main() {
 
 	if (materialType > 0.5) {
 		// emissive material - unaffected by dynamic lights
-		color = vec3(0.0);
+		color.xyz = vec3(0.0);
 	}
 
 	// calculate normal
