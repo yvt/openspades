@@ -21,15 +21,15 @@
 #pragma once
 
 #include <Imports/SDL.h>
+#include <mutex>
 
 #include "IRunnable.h"
-#include "Mutex.h"
 
 namespace spades {
 
 	class Thread {
 		void *threadInfo;
-		Mutex lock;
+		std::recursive_mutex lock;
 		IRunnable *runnable;
 		bool autoDelete;
 		SDL_threadID threadId;

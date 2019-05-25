@@ -146,9 +146,7 @@
 		E82E677418EA7972004DBA18 /* VersionInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E85233791839B28C00F40541 /* VersionInfo.cpp */; };
 		E82E677518EA7972004DBA18 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03B0178EE300000683D4 /* Thread.cpp */; };
 		E82E677618EA7972004DBA18 /* Semaphore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03CF178EEF80000683D4 /* Semaphore.cpp */; };
-		E82E677718EA7972004DBA18 /* Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03D2178EF069000683D4 /* Mutex.cpp */; };
 		E82E677818EA7972004DBA18 /* ILockable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03D5178EF09C000683D4 /* ILockable.cpp */; };
-		E82E677918EA7972004DBA18 /* AutoLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03D8178EF165000683D4 /* AutoLocker.cpp */; };
 		E82E677A18EA7972004DBA18 /* IRunnable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03DE178EF4E9000683D4 /* IRunnable.cpp */; };
 		E82E677B18EA7972004DBA18 /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF0403178FF776000683D4 /* Exception.cpp */; };
 		E82E677C18EA7972004DBA18 /* DynamicLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E5E1792C0FF009D83E0 /* DynamicLibrary.cpp */; };
@@ -793,12 +791,8 @@
 		E8CF03CD178EE95F000683D4 /* Math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Math.h; sourceTree = "<group>"; };
 		E8CF03CF178EEF80000683D4 /* Semaphore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Semaphore.cpp; sourceTree = "<group>"; };
 		E8CF03D0178EEF80000683D4 /* Semaphore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Semaphore.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		E8CF03D2178EF069000683D4 /* Mutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mutex.cpp; sourceTree = "<group>"; };
-		E8CF03D3178EF06A000683D4 /* Mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mutex.h; sourceTree = "<group>"; };
 		E8CF03D5178EF09C000683D4 /* ILockable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILockable.cpp; sourceTree = "<group>"; };
 		E8CF03D6178EF09C000683D4 /* ILockable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILockable.h; sourceTree = "<group>"; };
-		E8CF03D8178EF165000683D4 /* AutoLocker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AutoLocker.cpp; sourceTree = "<group>"; };
-		E8CF03D9178EF166000683D4 /* AutoLocker.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = AutoLocker.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		E8CF03DE178EF4E9000683D4 /* IRunnable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IRunnable.cpp; sourceTree = "<group>"; };
 		E8CF03DF178EF4E9000683D4 /* IRunnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRunnable.h; sourceTree = "<group>"; };
 		E8CF03E1178EF57E000683D4 /* SDLRunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDLRunner.cpp; sourceTree = "<group>"; };
@@ -1823,12 +1817,8 @@
 				E8CF03B1178EE300000683D4 /* Thread.h */,
 				E8CF03CF178EEF80000683D4 /* Semaphore.cpp */,
 				E8CF03D0178EEF80000683D4 /* Semaphore.h */,
-				E8CF03D2178EF069000683D4 /* Mutex.cpp */,
-				E8CF03D3178EF06A000683D4 /* Mutex.h */,
 				E8CF03D5178EF09C000683D4 /* ILockable.cpp */,
 				E8CF03D6178EF09C000683D4 /* ILockable.h */,
-				E8CF03D8178EF165000683D4 /* AutoLocker.cpp */,
-				E8CF03D9178EF166000683D4 /* AutoLocker.h */,
 				E8CF03DE178EF4E9000683D4 /* IRunnable.cpp */,
 				E8CF03DF178EF4E9000683D4 /* IRunnable.h */,
 				E8CF0403178FF776000683D4 /* Exception.cpp */,
@@ -2121,9 +2111,7 @@
 				E82E677418EA7972004DBA18 /* VersionInfo.cpp in Sources */,
 				E82E677518EA7972004DBA18 /* Thread.cpp in Sources */,
 				E82E677618EA7972004DBA18 /* Semaphore.cpp in Sources */,
-				E82E677718EA7972004DBA18 /* Mutex.cpp in Sources */,
 				E82E677818EA7972004DBA18 /* ILockable.cpp in Sources */,
-				E82E677918EA7972004DBA18 /* AutoLocker.cpp in Sources */,
 				E82E677A18EA7972004DBA18 /* IRunnable.cpp in Sources */,
 				E82E677B18EA7972004DBA18 /* Exception.cpp in Sources */,
 				E82E677C18EA7972004DBA18 /* DynamicLibrary.cpp in Sources */,

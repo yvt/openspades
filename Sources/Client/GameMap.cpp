@@ -25,7 +25,6 @@
 #include <vector>
 
 #include "GameMap.h"
-#include <Core/AutoLocker.h>
 #include <Core/Debug.h>
 #include <Core/Exception.h>
 #include <Core/FileManager.h>
@@ -51,12 +50,12 @@ namespace spades {
 		GameMap::~GameMap() { SPADES_MARK_FUNCTION(); }
 
 		void GameMap::AddListener(spades::client::IGameMapListener *l) {
-			AutoLocker guard(&listenersMutex);
+			std::lock_guard<std::mutex> _guard{listenersMutex};
 			listeners.push_back(l);
 		}
 
 		void GameMap::RemoveListener(spades::client::IGameMapListener *l) {
-			AutoLocker guard(&listenersMutex);
+			std::lock_guard<std::mutex> _guard{listenersMutex};
 			auto it = std::find(listeners.begin(), listeners.end(), l);
 			if (it != listeners.end()) {
 				listeners.erase(it);

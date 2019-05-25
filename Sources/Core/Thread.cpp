@@ -18,11 +18,11 @@
 
  */
 
+#include <mutex>
 #include <typeinfo>
 
 #include <Imports/SDL.h>
 
-#include "AutoLocker.h"
 #include "ConcurrentDispatch.h"
 #include "Debug.h"
 #include "Thread.h"
@@ -39,15 +39,15 @@ namespace spades {
 
 	class ThreadCleanuper : public ConcurrentDispatch {
 		std::vector<SDL_Thread *> threads;
-		Mutex mutex;
+		std::recursive_mutex mutex;
 
 	public:
 		void Add(SDL_Thread *thread) {
-			AutoLocker locker(&mutex);
+			std::lock_guard<std::recursive_mutex> _lock{this->mutex};
 			threads.push_back(thread);
 		}
 		void Cleanup() {
-			AutoLocker locker(&mutex);
+			std::lock_guard<std::recursive_mutex> _lock{this->mutex};
 			for (size_t i = 0; i < threads.size(); i++)
 				SDL_WaitThread(threads[i], NULL);
 			threads.clear();
@@ -63,7 +63,7 @@ namespace spades {
 	Thread::~Thread() {
 		SDL_Thread *th = NULL;
 		{
-			AutoLocker locker(&lock);
+			std::lock_guard<std::recursive_mutex> _lock{this->lock};
 			th = (SDL_Thread *)threadInfo;
 			if (!th)
 				return;
@@ -80,7 +80,7 @@ namespace spades {
 	}
 
 	void Thread::Start() {
-		AutoLocker locker(&lock);
+		std::lock_guard<std::recursive_mutex> _lock{this->lock};
 		if (threadInfo)
 			return;
 
@@ -99,7 +99,7 @@ namespace spades {
 		}
 		SDL_Thread *th = NULL;
 		{
-			AutoLocker locker(&lock);
+			std::lock_guard<std::recursive_mutex> _lock{this->lock};
 			th = (SDL_Thread *)threadInfo;
 			if (!th)
 				return;
@@ -137,13 +137,13 @@ namespace spades {
 	}
 
 	void Thread::Quited() {
-		lock.Lock();
+		lock.lock();
 		threadInfo = NULL;
 		if (autoDelete) {
 			delete this;
 			return;
 		}
-		lock.Unlock();
+		lock.unlock();
 	}
 
 	void Thread::Run() {
@@ -152,13 +152,14 @@ namespace spades {
 	}
 
 	void Thread::MarkForAutoDeletion() {
-		lock.Lock();
+		lock.lock();
 		if (threadInfo == NULL) {
 			// already exited
+			lock.unlock();
 			delete this;
 			return;
 		}
 		autoDelete = true;
-		lock.Unlock();
+		lock.unlock();
 	}
-}
+} // namespace spades
