@@ -56,32 +56,45 @@ namespace spades {
 						if (z == 0 || z == (d - 1) || ((map >> (z - 1)) & 7ULL) != 7ULL ||
 						    (map1 & (1ULL << z)) == 0) {
 							uint32_t col = m->GetColor(x, y, z);
-							col = (col & 0xff00) | ((col & 0xff) << 16) | ((col & 0xff0000) >> 16);
-							col |= z << 24;
-							renderData.push_back(col);
+
+							uint32_t encodedColor;
+							encodedColor =
+							  (col & 0xff00) | ((col & 0xff) << 16) | ((col & 0xff0000) >> 16);
+							encodedColor |= z << 24;
+							renderData.push_back(encodedColor);
+
+							auto material = static_cast<MaterialType>(col >> 24);
 
 							// store normal
-							int nx = 0, ny = 0, nz = 0;
-							for (int cx = -1; cx <= 1; cx++)
-								for (int cy = -1; cy <= 1; cy++)
-									for (int cz = -1; cz <= 1; cz++) {
-										if (m->IsSolid(x + cx, y + cy, z + cz)) {
-											nx -= cx;
-											ny -= cy;
-											nz -= cz;
-										} else {
-											nx += cx;
-											ny += cy;
-											nz += cz;
+							uint32_t normal;
+
+							if (material == MaterialType::Emissive) {
+								normal = 27;
+							} else {
+								int nx = 0, ny = 0, nz = 0;
+								for (int cx = -1; cx <= 1; cx++)
+									for (int cy = -1; cy <= 1; cy++)
+										for (int cz = -1; cz <= 1; cz++) {
+											if (m->IsSolid(x + cx, y + cy, z + cz)) {
+												nx -= cx;
+												ny -= cy;
+												nz -= cz;
+											} else {
+												nx += cx;
+												ny += cy;
+												nz += cz;
+											}
 										}
-									}
-							nx = std::max(std::min(nx, 1), -1);
-							ny = std::max(std::min(ny, 1), -1);
-							nz = std::max(std::min(nz, 1), -1);
-							nx++;
-							ny++;
-							nz++;
-							renderData.push_back(nx + ny * 3 + nz * 9);
+								nx = std::max(std::min(nx, 1), -1);
+								ny = std::max(std::min(ny, 1), -1);
+								nz = std::max(std::min(nz, 1), -1);
+								nx++;
+								ny++;
+								nz++;
+								normal = nx + ny * 3 + nz * 9;
+							}
+
+							renderData.push_back(normal);
 						}
 					}
 

@@ -63,7 +63,7 @@ namespace spades {
 			// int d = rawModel->GetDepth();
 
 			// evaluate brightness for each normals
-			uint8_t brights[3 * 3 * 3];
+			uint8_t brights[3 * 3 * 3 + 1];
 			{
 				auto lightVec = MakeVector3(0.f, -0.707f, -0.707f);
 				float dot1 = Vector3::Dot(axis1, lightVec) * fastRSqrt(axis1.GetPoweredLength());
@@ -124,6 +124,9 @@ namespace spades {
 					}
 				}
 			}
+
+			// "emissive" material
+			brights[27] = 255;
 
 			// compute center coord. for culling
 			{
@@ -228,7 +231,7 @@ namespace spades {
 						if (color == 0)
 							color = customColor;
 
-						SPAssert(normal < 27);
+						SPAssert(normal < 28);
 						int bright = brights[normal];
 #if ENABLE_SSE2
 						if (lvl == SWFeatureLevel::SSE2) {
