@@ -54,6 +54,9 @@ void main() {
 		(15. / 256.);
 	ambientOcclusionCoord += .5 / 256.;
 
+	// Emissive material flag is encoded in AOID
+	bool isEmissive = texData.w == 1.0;
+
 	// linearize
 	gl_FragColor.xyz *= gl_FragColor.xyz;
 
@@ -65,7 +68,9 @@ void main() {
 	vec3 ao = texture2D(ambientOcclusionTexture, ambientOcclusionCoord).xyz;
 	shading += EvaluateAmbientLight(ao.x);
 
-	gl_FragColor.xyz *= shading;
+	if (!isEmissive) {
+		gl_FragColor.xyz *= shading;
+	}
 
 	gl_FragColor.xyz = mix(gl_FragColor.xyz, fogColor, fogDensity);
 

@@ -21,6 +21,7 @@
 
 
 varying vec4 color;
+varying vec3 emissionColor;
 varying vec2 ambientOcclusionCoord;
 //varying vec2 detailCoord;
 varying vec3 fogDensity;
@@ -46,7 +47,9 @@ void main() {
 	shading += EvaluateAmbientLight(ao.x);
 	
 	gl_FragColor.xyz *= shading;
-	
+
+	gl_FragColor.xyz += emissionColor;
+
 	//gl_FragColor.xyz *= texture2D(detailTexture, detailCoord).xyz * 2.;
 	
 	gl_FragColor.xyz = mix(gl_FragColor.xyz, fogColor, fogDensity);

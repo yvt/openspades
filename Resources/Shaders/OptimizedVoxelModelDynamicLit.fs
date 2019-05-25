@@ -39,7 +39,12 @@ void main() {
 	if(dot(gl_FragColor.xyz, vec3(1.)) < 0.0001){
 		gl_FragColor.xyz = customColor;
 	}
-	
+
+	bool isEmissive = texData.w == 1.0;
+	if (isEmissive) {
+		discard;
+	}
+
 	// linearize
 	gl_FragColor.xyz *= gl_FragColor.xyz;
 	

@@ -343,14 +343,27 @@ namespace spades {
 
 						SPAssert(model->IsSolid(p3.x, p3.y, p3.z));
 						uint32_t col = model->GetColor(p3.x, p3.y, p3.z);
+						auto material = static_cast<MaterialType>(col >> 24);
 
 						col &= 0xffffff;
 
-						// add AOID
-						p3 += nn;
-						SPAssert(!model->IsSolid(p3.x, p3.y, p3.z));
-						uint8_t aoId = calcAOID(model, p3.x, p3.y, p3.z, ux, uy, uz, vx, vy, vz);
-						col |= ((uint8_t)aoId) << 24;
+						// Add AOID (selector for the pre-integrated ambient occlusion texture).
+						// Use special values for certain materials.
+						if (material == MaterialType::Emissive) {
+							col |= ((uint32_t)255) << 24;
+						} else {
+							p3 += nn;
+							SPAssert(!model->IsSolid(p3.x, p3.y, p3.z));
+
+							uint8_t aoId = calcAOID(model, p3.x, p3.y, p3.z, ux, uy, uz, vx, vy, vz);
+
+							if (aoId % 16 == 15) {
+								// These AOIDs are allocated for non-default materials.
+								aoId = 15;
+							}
+
+							col |= ((uint8_t)aoId) << 24;
+						}
 
 						*(pixels++) = col;
 
