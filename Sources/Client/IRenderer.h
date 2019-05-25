@@ -47,6 +47,19 @@ namespace spades {
 			bool depthHack = false;
 			/** Specifies whether the model casts a shadow. */
 			bool castShadow = true;
+			/**
+			 * Specifies that the model is not an actual object in the virtual world, thus does not
+			 * affect the shading of other objects and does not appear in a mirror.
+			 *
+			 * This excludes the model from visual effects such as shadowing, global illumination
+			 * (specifically, screen-space ambient occlusion, ATM), and dynamic lighting.
+			 * In exchange, it allows the use of an opacity value other than `1`.
+			 *
+			 * `ghost` implies `!castShadow`.
+			 */
+			bool ghost = false;
+			/** Specifies the opacity of the model. Ignored if `ghost` is `false`. */
+			float opacity = 1.0;
 		};
 
 		enum DynamicLightType { DynamicLightTypePoint, DynamicLightTypeSpotlight };

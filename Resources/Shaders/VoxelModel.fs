@@ -29,6 +29,7 @@ varying vec3 fogDensity;
 uniform sampler2D ambientOcclusionTexture;
 uniform sampler2D detailTexture;
 uniform vec3 fogColor;
+uniform float modelOpacity;
 
 vec3 EvaluateSunLight();
 vec3 EvaluateAmbientLight(float detailAmbientOcclusion);
@@ -36,8 +37,7 @@ vec3 EvaluateAmbientLight(float detailAmbientOcclusion);
 void main() {
 	// color is linearized
 	gl_FragColor = color;
-	gl_FragColor.w = 1.;
-	
+
 	vec3 shading = vec3(color.w);
 	
 	// FIXME: prepare for shadow?
@@ -57,5 +57,8 @@ void main() {
 #if !LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
 #endif
+
+	// Only valid in the ghost pass - Blending is disabled for most models
+	gl_FragColor.w = modelOpacity;
 }
 
