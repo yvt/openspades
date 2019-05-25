@@ -273,6 +273,7 @@
 		E8403CA8229061BF00093C3E /* RandomAccessAdaptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CA6229061BE00093C3E /* RandomAccessAdaptor.cpp */; };
 		E8403CAB229123CF00093C3E /* PipeStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CA9229123CF00093C3E /* PipeStream.cpp */; };
 		E8403CAE2291280800093C3E /* GameMapLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CAD2291280700093C3E /* GameMapLoader.cpp */; };
+		E8403CB12299073400093C3E /* VoxelModelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CB02299073400093C3E /* VoxelModelLoader.cpp */; };
 		E8626EAE1E1009D7003365BF /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.tbd */; };
 		E8626EB61E100EC6003365BF /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB51E100EC6003365BF /* libfreetype.a */; };
 		E8626EB81E100FB2003365BF /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB71E100FB2003365BF /* libogg.a */; };
@@ -431,6 +432,8 @@
 		E8403CAA229123CF00093C3E /* PipeStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PipeStream.h; sourceTree = "<group>"; };
 		E8403CAC2291280700093C3E /* GameMapLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMapLoader.h; sourceTree = "<group>"; };
 		E8403CAD2291280700093C3E /* GameMapLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMapLoader.cpp; sourceTree = "<group>"; };
+		E8403CAF2299073400093C3E /* VoxelModelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoxelModelLoader.h; sourceTree = "<group>"; };
+		E8403CB02299073400093C3E /* VoxelModelLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoxelModelLoader.cpp; sourceTree = "<group>"; };
 		E842888918A3CF6C0060743D /* StartupScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreen.cpp; sourceTree = "<group>"; };
 		E842888A18A3CF6C0060743D /* StartupScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupScreen.h; sourceTree = "<group>"; };
 		E842888C18A3D1520060743D /* StartupScreenHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreenHelper.cpp; sourceTree = "<group>"; };
@@ -1878,6 +1881,8 @@
 		E8E44682179CC4A400BE8855 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				E8403CB02299073400093C3E /* VoxelModelLoader.cpp */,
+				E8403CAF2299073400093C3E /* VoxelModelLoader.h */,
 				E8E44683179CC4DE00BE8855 /* Bitmap Codecs */,
 				E88318D3179172AF002ABE6D /* Bitmap.cpp */,
 				E88318D4179172AF002ABE6D /* Bitmap.h */,
@@ -2089,6 +2094,7 @@
 				E82E675A18EA7972004DBA18 /* ALFuncs.cpp in Sources */,
 				E82E675B18EA7972004DBA18 /* YsrDevice.cpp in Sources */,
 				E82E675C18EA7972004DBA18 /* NullDevice.cpp in Sources */,
+				E8403CB12299073400093C3E /* VoxelModelLoader.cpp in Sources */,
 				E82E675D18EA7972004DBA18 /* PngWriter.cpp in Sources */,
 				E82E675E18EA7972004DBA18 /* jpge.cpp in Sources */,
 				E82E675F18EA7972004DBA18 /* IBitmapCodec.cpp in Sources */,

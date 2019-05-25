@@ -20,7 +20,7 @@
 #include <memory>
 
 #include "SWModel.h"
-#include <Core/FileManager.h>
+#include <Core/VoxelModelLoader.h>
 #include <Core/IStream.h>
 
 namespace spades {
@@ -119,10 +119,8 @@ namespace spades {
 		SWModel *SWModelManager::RegisterModel(const std::string &name) {
 			auto it = models.find(name);
 			if (it == models.end()) {
-				std::unique_ptr<IStream> stream{FileManager::OpenForReading(name.c_str())};
-
 				Handle<VoxelModel> vm;
-				vm.Set(VoxelModel::LoadKV6(stream.get()), false);
+				vm.Set(VoxelModelLoader::Load(name.c_str()), false);
 
 				SWModel *model = CreateModel(vm);
 				models.insert(std::make_pair(name, model));
