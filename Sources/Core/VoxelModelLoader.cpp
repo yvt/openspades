@@ -103,9 +103,9 @@ namespace spades {
 			} else {
 				SPRaise("The voxel model metadata file is not a valid JSON file.");
 			}
-        } else {
-            SPLog("Ignoring a non-existend metadata file '%s'.", metadataPath.c_str());
-        }
+		} else {
+			SPLog("Ignoring a non-existend metadata file '%s'.", metadataPath.c_str());
+		}
 
 		// Load the base KV6 model
 		Handle<VoxelModel> voxelModel;

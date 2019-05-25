@@ -37,20 +37,20 @@ namespace spades {
 		 *
 		 * In addition to loading the file at `path`, this method also loads
 		 * metadata from `BASENAME.meta.json` (where `BASENAME` is a portion of
-         * `path` without a file extension).
-         *
-         * All supported fields of a metadata file are shown below:
-         *
-         *     {
-         *       // Override the origin point
-         *       "Origin": [0.3, 0.5, 0.7],
-         *
-         *       // Replace the material ID
-         *       "ForceMaterial": "Default",
-         *       "ForceMaterial": "Emissive",
-         *
-         *       // (All fields are optional)
-         *     }
+		 * `path` without a file extension).
+		 *
+		 * All supported fields of a metadata file are shown below:
+		 *
+		 *     {
+		 *       // Override the origin point
+		 *       "Origin": [0.3, 0.5, 0.7],
+		 *
+		 *       // Replace the material ID
+		 *       "ForceMaterial": "Default",
+		 *       "ForceMaterial": "Emissive",
+		 *
+		 *       // (All fields are optional)
+		 *     }
 		 */
 		static VoxelModel *Load(const char *path);
 	};
