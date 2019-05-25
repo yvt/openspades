@@ -60,7 +60,7 @@ Make-Pak -PakName pak002-Base.pak -RelativePaths `
   Sounds/Misc, Sounds/Player, Textures
 
 Make-Pak -PakName pak005-Models.pak -RelativePaths `
-  Maps
+  Maps, Models/MapObjects, Models/Player
 
 Make-Pak -PakName pak010-BaseSkin.pak -RelativePaths `
   License/Credits-pak010-BaseSkin.md,
