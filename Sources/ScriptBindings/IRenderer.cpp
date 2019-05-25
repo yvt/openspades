@@ -224,10 +224,6 @@ namespace spades {
 														"bool castShadow",
 														asOFFSET(ModelRenderParam, castShadow));
 						manager->CheckError(r);
-						r = eng->RegisterObjectProperty("ModelRenderParam",
-														"bool unlit",
-														asOFFSET(ModelRenderParam, unlit));
-						manager->CheckError(r);
 
 						r = eng->RegisterObjectBehaviour("DynamicLightParam",
 														 asBEHAVE_CONSTRUCT,

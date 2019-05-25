@@ -47,9 +47,6 @@ namespace spades {
 			bool depthHack = false;
 			/** Specifies whether the model casts a shadow. */
 			bool castShadow = true;
-			/** When set to `true`, the model uses a emissive material instead
-			 * of the default shading model, making it unaffected by lights. */
-			bool unlit = false;
 		};
 
 		enum DynamicLightType { DynamicLightTypePoint, DynamicLightTypeSpotlight };
