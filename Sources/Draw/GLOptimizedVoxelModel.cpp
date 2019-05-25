@@ -558,6 +558,10 @@ namespace spades {
 			for (size_t i = 0; i < params.size(); i++) {
 				const client::ModelRenderParam &param = params[i];
 
+				if (!param.castShadow) {
+					continue;
+				}
+
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
