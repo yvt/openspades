@@ -56,7 +56,6 @@ namespace spades {
 						if (z == 0 || z == (d - 1) || ((map >> (z - 1)) & 7ULL) != 7ULL ||
 						    (map1 & (1ULL << z)) == 0) {
 							uint32_t col = m->GetColor(x, y, z);
-							SPAssert(col != 0xddbeef);
 							col = (col & 0xff00) | ((col & 0xff) << 16) | ((col & 0xff0000) >> 16);
 							col |= z << 24;
 							renderData.push_back(col);
