@@ -37,41 +37,26 @@ namespace spades {
 		class GameMap;
 
 		struct ModelRenderParam {
-			Matrix4 matrix;
-			Vector3 customColor;
-			bool depthHack;
-			bool castShadow;
-			bool unlit;
-
-			ModelRenderParam() {
-				matrix = Matrix4::Identity();
-				customColor = MakeVector3(0, 0, 0);
-				depthHack = false;
-				castShadow = true;
-				unlit = false;
-			}
+			Matrix4 matrix = Matrix4::Identity();
+			Vector3 customColor = MakeVector3(0, 0, 0);
+			bool depthHack = false;
+			bool castShadow = true;
+			bool unlit = false;
 		};
 
 		enum DynamicLightType { DynamicLightTypePoint, DynamicLightTypeSpotlight };
 
 		struct DynamicLightParam {
-			DynamicLightType type;
+			DynamicLightType type = DynamicLightTypePoint;
 			Vector3 origin;
 			float radius;
 			Vector3 color;
 
 			std::array<Vector3, 3> spotAxis;
-			IImage *image;
-			float spotAngle;
+			IImage *image = nullptr;
+			float spotAngle = 0.0f;
 
-			bool useLensFlare;
-
-			DynamicLightParam() {
-				image = NULL;
-				type = DynamicLightTypePoint;
-				spotAngle = 0.f;
-				useLensFlare = false;
-			}
+			bool useLensFlare = false;
 		};
 
 		class IRenderer : public RefCountedObject {
