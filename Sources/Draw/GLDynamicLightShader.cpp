@@ -93,7 +93,10 @@ namespace spades {
 				dynamicLightProjectionTexture.SetValue(texStage);
 				texStage++;
 
-				dynamicLightSpotMatrix.SetValue(Matrix4::Identity());
+				// The shader samples from a white image. However, we still have to make sure
+				// UV is in a valid range so the fragments are not discarded.
+				dynamicLightSpotMatrix.SetValue(Matrix4::Translate(0.5, 0.5, 0.0) *
+				                                Matrix4::Scale(0.0));
 			}
 
 			device->ActiveTexture(texStage);

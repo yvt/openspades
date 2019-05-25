@@ -140,6 +140,7 @@ namespace spades {
 		lock.lock();
 		threadInfo = NULL;
 		if (autoDelete) {
+			lock.unlock();
 			delete this;
 			return;
 		}
