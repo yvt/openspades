@@ -29,6 +29,7 @@ uniform sampler2D ambientOcclusionTexture;
 uniform sampler2D modelTexture;
 uniform vec3 fogColor;
 uniform vec3 customColor;
+uniform float modelOpacity;
 
 vec3 EvaluateSunLight();
 vec3 EvaluateAmbientLight(float detailAmbientOcclusion);
@@ -54,6 +55,9 @@ void main() {
 		(15. / 256.);
 	ambientOcclusionCoord += .5 / 256.;
 
+	// Emissive material flag is encoded in AOID
+	bool isEmissive = texData.w == 1.0;
+
 	// linearize
 	gl_FragColor.xyz *= gl_FragColor.xyz;
 
@@ -65,12 +69,17 @@ void main() {
 	vec3 ao = texture2D(ambientOcclusionTexture, ambientOcclusionCoord).xyz;
 	shading += EvaluateAmbientLight(ao.x);
 
-	gl_FragColor.xyz *= shading;
+	if (!isEmissive) {
+		gl_FragColor.xyz *= shading;
+	}
 
 	gl_FragColor.xyz = mix(gl_FragColor.xyz, fogColor, fogDensity);
 
 #if !LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
 #endif
+
+	// Only valid in the ghost pass - Blending is disabled for most models
+	gl_FragColor.w = modelOpacity;
 }
 

@@ -31,8 +31,8 @@
 #include <AngelScript/addons/scriptmathcomplex.h>
 #include <AngelScript/addons/scriptstdstring.h>
 #include <AngelScript/addons/weakref.h>
-#include <Core/Mutex.h>
 #include <list>
+#include <mutex>
 
 namespace spades {
 
@@ -44,7 +44,7 @@ namespace spades {
 			asIScriptContext *obj;
 			int refCount;
 		};
-		Mutex contextMutex;
+		std::recursive_mutex contextMutex;
 		std::list<Context *> contextFreeList;
 
 		asIScriptEngine *engine;

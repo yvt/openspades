@@ -24,7 +24,6 @@
 #include <vector>
 #include <memory>
 
-#include <Core/Mutex.h>
 #include <Core/RefCountedObject.h>
 #include <Core/TMPUtils.h>
 #include <ScriptBindings/ScriptManager.h>

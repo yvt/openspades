@@ -146,9 +146,7 @@
 		E82E677418EA7972004DBA18 /* VersionInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E85233791839B28C00F40541 /* VersionInfo.cpp */; };
 		E82E677518EA7972004DBA18 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03B0178EE300000683D4 /* Thread.cpp */; };
 		E82E677618EA7972004DBA18 /* Semaphore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03CF178EEF80000683D4 /* Semaphore.cpp */; };
-		E82E677718EA7972004DBA18 /* Mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03D2178EF069000683D4 /* Mutex.cpp */; };
 		E82E677818EA7972004DBA18 /* ILockable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03D5178EF09C000683D4 /* ILockable.cpp */; };
-		E82E677918EA7972004DBA18 /* AutoLocker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03D8178EF165000683D4 /* AutoLocker.cpp */; };
 		E82E677A18EA7972004DBA18 /* IRunnable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03DE178EF4E9000683D4 /* IRunnable.cpp */; };
 		E82E677B18EA7972004DBA18 /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF0403178FF776000683D4 /* Exception.cpp */; };
 		E82E677C18EA7972004DBA18 /* DynamicLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8567E5E1792C0FF009D83E0 /* DynamicLibrary.cpp */; };
@@ -273,6 +271,7 @@
 		E8403CA8229061BF00093C3E /* RandomAccessAdaptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CA6229061BE00093C3E /* RandomAccessAdaptor.cpp */; };
 		E8403CAB229123CF00093C3E /* PipeStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CA9229123CF00093C3E /* PipeStream.cpp */; };
 		E8403CAE2291280800093C3E /* GameMapLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CAD2291280700093C3E /* GameMapLoader.cpp */; };
+		E8403CB12299073400093C3E /* VoxelModelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8403CB02299073400093C3E /* VoxelModelLoader.cpp */; };
 		E8626EAE1E1009D7003365BF /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E844888617D26699005105D0 /* libcurl.tbd */; };
 		E8626EB61E100EC6003365BF /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB51E100EC6003365BF /* libfreetype.a */; };
 		E8626EB81E100FB2003365BF /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8626EB71E100FB2003365BF /* libogg.a */; };
@@ -431,6 +430,8 @@
 		E8403CAA229123CF00093C3E /* PipeStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PipeStream.h; sourceTree = "<group>"; };
 		E8403CAC2291280700093C3E /* GameMapLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMapLoader.h; sourceTree = "<group>"; };
 		E8403CAD2291280700093C3E /* GameMapLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMapLoader.cpp; sourceTree = "<group>"; };
+		E8403CAF2299073400093C3E /* VoxelModelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoxelModelLoader.h; sourceTree = "<group>"; };
+		E8403CB02299073400093C3E /* VoxelModelLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoxelModelLoader.cpp; sourceTree = "<group>"; };
 		E842888918A3CF6C0060743D /* StartupScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreen.cpp; sourceTree = "<group>"; };
 		E842888A18A3CF6C0060743D /* StartupScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupScreen.h; sourceTree = "<group>"; };
 		E842888C18A3D1520060743D /* StartupScreenHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartupScreenHelper.cpp; sourceTree = "<group>"; };
@@ -790,12 +791,8 @@
 		E8CF03CD178EE95F000683D4 /* Math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Math.h; sourceTree = "<group>"; };
 		E8CF03CF178EEF80000683D4 /* Semaphore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Semaphore.cpp; sourceTree = "<group>"; };
 		E8CF03D0178EEF80000683D4 /* Semaphore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Semaphore.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		E8CF03D2178EF069000683D4 /* Mutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mutex.cpp; sourceTree = "<group>"; };
-		E8CF03D3178EF06A000683D4 /* Mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mutex.h; sourceTree = "<group>"; };
 		E8CF03D5178EF09C000683D4 /* ILockable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILockable.cpp; sourceTree = "<group>"; };
 		E8CF03D6178EF09C000683D4 /* ILockable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILockable.h; sourceTree = "<group>"; };
-		E8CF03D8178EF165000683D4 /* AutoLocker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AutoLocker.cpp; sourceTree = "<group>"; };
-		E8CF03D9178EF166000683D4 /* AutoLocker.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = AutoLocker.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		E8CF03DE178EF4E9000683D4 /* IRunnable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IRunnable.cpp; sourceTree = "<group>"; };
 		E8CF03DF178EF4E9000683D4 /* IRunnable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRunnable.h; sourceTree = "<group>"; };
 		E8CF03E1178EF57E000683D4 /* SDLRunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDLRunner.cpp; sourceTree = "<group>"; };
@@ -1820,12 +1817,8 @@
 				E8CF03B1178EE300000683D4 /* Thread.h */,
 				E8CF03CF178EEF80000683D4 /* Semaphore.cpp */,
 				E8CF03D0178EEF80000683D4 /* Semaphore.h */,
-				E8CF03D2178EF069000683D4 /* Mutex.cpp */,
-				E8CF03D3178EF06A000683D4 /* Mutex.h */,
 				E8CF03D5178EF09C000683D4 /* ILockable.cpp */,
 				E8CF03D6178EF09C000683D4 /* ILockable.h */,
-				E8CF03D8178EF165000683D4 /* AutoLocker.cpp */,
-				E8CF03D9178EF166000683D4 /* AutoLocker.h */,
 				E8CF03DE178EF4E9000683D4 /* IRunnable.cpp */,
 				E8CF03DF178EF4E9000683D4 /* IRunnable.h */,
 				E8CF0403178FF776000683D4 /* Exception.cpp */,
@@ -1878,6 +1871,8 @@
 		E8E44682179CC4A400BE8855 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				E8403CB02299073400093C3E /* VoxelModelLoader.cpp */,
+				E8403CAF2299073400093C3E /* VoxelModelLoader.h */,
 				E8E44683179CC4DE00BE8855 /* Bitmap Codecs */,
 				E88318D3179172AF002ABE6D /* Bitmap.cpp */,
 				E88318D4179172AF002ABE6D /* Bitmap.h */,
@@ -2089,6 +2084,7 @@
 				E82E675A18EA7972004DBA18 /* ALFuncs.cpp in Sources */,
 				E82E675B18EA7972004DBA18 /* YsrDevice.cpp in Sources */,
 				E82E675C18EA7972004DBA18 /* NullDevice.cpp in Sources */,
+				E8403CB12299073400093C3E /* VoxelModelLoader.cpp in Sources */,
 				E82E675D18EA7972004DBA18 /* PngWriter.cpp in Sources */,
 				E82E675E18EA7972004DBA18 /* jpge.cpp in Sources */,
 				E82E675F18EA7972004DBA18 /* IBitmapCodec.cpp in Sources */,
@@ -2115,9 +2111,7 @@
 				E82E677418EA7972004DBA18 /* VersionInfo.cpp in Sources */,
 				E82E677518EA7972004DBA18 /* Thread.cpp in Sources */,
 				E82E677618EA7972004DBA18 /* Semaphore.cpp in Sources */,
-				E82E677718EA7972004DBA18 /* Mutex.cpp in Sources */,
 				E82E677818EA7972004DBA18 /* ILockable.cpp in Sources */,
-				E82E677918EA7972004DBA18 /* AutoLocker.cpp in Sources */,
 				E82E677A18EA7972004DBA18 /* IRunnable.cpp in Sources */,
 				E82E677B18EA7972004DBA18 /* Exception.cpp in Sources */,
 				E82E677C18EA7972004DBA18 /* DynamicLibrary.cpp in Sources */,

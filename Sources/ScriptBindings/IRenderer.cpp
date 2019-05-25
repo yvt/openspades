@@ -220,7 +220,11 @@ namespace spades {
 														"bool depthHack",
 														asOFFSET(ModelRenderParam, depthHack));
 						manager->CheckError(r);
-						
+						r = eng->RegisterObjectProperty("ModelRenderParam",
+														"bool castShadow",
+														asOFFSET(ModelRenderParam, castShadow));
+						manager->CheckError(r);
+
 						r = eng->RegisterObjectBehaviour("DynamicLightParam",
 														 asBEHAVE_CONSTRUCT,
 														 "void f()",

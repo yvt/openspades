@@ -37,37 +37,52 @@ namespace spades {
 		class GameMap;
 
 		struct ModelRenderParam {
-			Matrix4 matrix;
-			Vector3 customColor;
-			bool depthHack;
-
-			ModelRenderParam() {
-				matrix = Matrix4::Identity();
-				customColor = MakeVector3(0, 0, 0);
-				depthHack = false;
-			}
+			/** The transformatrix matrix applied on the model. */
+			Matrix4 matrix = Matrix4::Identity();
+			/** Voxels having a color value `(0, 0, 0)` are replaced with
+			 *  this color. */
+			Vector3 customColor = MakeVector3(0, 0, 0);
+			/** Specifies to render the model in front of other non-depth-hack
+			 *  models. Useful for first-person models. */
+			bool depthHack = false;
+			/** Specifies whether the model casts a shadow. */
+			bool castShadow = true;
+			/**
+			 * Specifies that the model is not an actual object in the virtual world, thus does not
+			 * affect the shading of other objects and does not appear in a mirror.
+			 *
+			 * This excludes the model from visual effects such as shadowing, global illumination
+			 * (specifically, screen-space ambient occlusion, ATM), and dynamic lighting.
+			 * In exchange, it allows the use of an opacity value other than `1`.
+			 *
+			 * `ghost` implies `!castShadow`.
+			 */
+			bool ghost = false;
+			/** Specifies the opacity of the model. Ignored if `ghost` is `false`. */
+			float opacity = 1.0;
 		};
 
 		enum DynamicLightType { DynamicLightTypePoint, DynamicLightTypeSpotlight };
 
 		struct DynamicLightParam {
-			DynamicLightType type;
+			DynamicLightType type = DynamicLightTypePoint;
+			/** The position of the light. */
 			Vector3 origin;
+			/** The effective radius of the light. Objects outside this radius
+			 * is unaffected by the light. */
 			float radius;
 			Vector3 color;
 
+			/** The basis vectors specifying the orientation of a spotlight.
+			 *  See the existing code for usage. */
 			std::array<Vector3, 3> spotAxis;
-			IImage *image;
-			float spotAngle;
+			/** The projected image for a spotlight. */
+			IImage *image = nullptr;
+			float spotAngle = 0.0f;
 
-			bool useLensFlare;
-
-			DynamicLightParam() {
-				image = NULL;
-				type = DynamicLightTypePoint;
-				spotAngle = 0.f;
-				useLensFlare = false;
-			}
+			/** When set to `true`, the lens flare post-effect is enabled for
+			 * the light. */
+			bool useLensFlare = false;
 		};
 
 		class IRenderer : public RefCountedObject {

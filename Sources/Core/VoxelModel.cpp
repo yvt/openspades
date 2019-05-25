@@ -54,6 +54,13 @@ namespace spades {
 		delete[] colors;
 	}
 
+	void VoxelModel::ForceMaterial(MaterialType newMaterialId) {
+		int count = width * height * depth;
+		for (int i = 0; i < count; ++i) {
+			colors[i] = (colors[i] & 0xffffff) | (static_cast<uint32_t>(newMaterialId) << 24);
+		}
+	}
+
 	struct KV6Block {
 		uint32_t color;
 		uint16_t zPos;

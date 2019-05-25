@@ -20,7 +20,6 @@
 
 #include "RefCountedObject.h"
 #include <ScriptBindings/ScriptManager.h>
-#include "AutoLocker.h"
 #include "Exception.h"
 
 namespace spades {
@@ -32,7 +31,7 @@ namespace spades {
 
 	void RefCountedObject::Release() {
 #if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
-		AutoLocker guard(&releaseInfoMutex);
+		std::lock_guard<std::mutex> guard{releaseInfoMutex};
 #endif
 		int cnt = refCount.fetch_sub(1);
 		if (cnt == 1) {

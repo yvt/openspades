@@ -68,6 +68,10 @@ namespace spades {
 			for (size_t i = 0; i < blocks.size(); i++) {
 				IntVector3 v = blocks[i];
 				uint32_t col = map->GetColor(v.x, v.y, v.z);
+
+				// Use the default material
+				col &= 0xffffff;
+
 				vmodel->SetSolid(v.x - minX, v.y - minY, v.z - minZ, col);
 			}
 

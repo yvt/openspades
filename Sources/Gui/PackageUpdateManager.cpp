@@ -21,14 +21,13 @@
 #include <curl/curl.h>
 #include <json/json.h>
 #include <memory>
+#include <mutex>
 
 #include "PackageUpdateManager.h"
 
-#include <Core/AutoLocker.h>
 #include <Core/Debug.h>
 #include <Core/Exception.h>
 #include <Core/FileManager.h>
-#include <Core/Mutex.h>
 #include <Core/Settings.h>
 #include <Core/Strings.h>
 #include <Core/TMPUtils.h>
@@ -39,7 +38,7 @@ DEFINE_SPADES_SETTING(cl_checkForUpdates, "0");
 
 namespace spades {
 	namespace {
-		Mutex globalMutex;
+		std::recursive_mutex globalMutex;
 
 		PackageUpdateManager::VersionInfo ParseVersionInfo(const Json::Value &value) {
 			if (!value.isObject()) {
@@ -88,21 +87,21 @@ namespace spades {
 		PackageUpdateManager &m_packageUpdateManager;
 
 		void ReturnUnavailable() {
-			AutoLocker lock{&globalMutex};
+			std::lock_guard<std::recursive_mutex> _lock{globalMutex};
 			SPAssert(m_packageUpdateManager.m_updateInfoReadyState == ReadyState::Loading);
 			m_packageUpdateManager.m_updateInfoReadyState = ReadyState::Unavailable;
 
 			SPLog("Update info is not available for the package and/or the current platform.");
 		}
 		void ReturnError(const std::string &reason) {
-			AutoLocker lock{&globalMutex};
+			std::lock_guard<std::recursive_mutex> _lock{globalMutex};
 			SPAssert(m_packageUpdateManager.m_updateInfoReadyState == ReadyState::Loading);
 			m_packageUpdateManager.m_updateInfoReadyState = ReadyState::Error;
 
 			SPLog("Failed to check for update.: %s", reason.c_str());
 		}
 		void ReturnVersionInfo(const VersionInfo &info, const std::string &pageURL) {
-			AutoLocker lock{&globalMutex};
+			std::lock_guard<std::recursive_mutex> _lock{globalMutex};
 			SPAssert(m_packageUpdateManager.m_updateInfoReadyState == ReadyState::Loading);
 			m_packageUpdateManager.m_updateInfoReadyState = ReadyState::Loaded;
 			m_packageUpdateManager.m_latestVersionInfo = info;
@@ -367,12 +366,12 @@ namespace spades {
 	PackageUpdateManager::~PackageUpdateManager() {}
 
 	PackageUpdateManager::ReadyState PackageUpdateManager::GetUpdateInfoReadyState() {
-		AutoLocker lock{&globalMutex};
+		std::lock_guard<std::recursive_mutex> _lock{globalMutex};
 		return m_updateInfoReadyState;
 	}
 
 	bool PackageUpdateManager::IsUpdateAvailable() {
-		AutoLocker lock{&globalMutex};
+		std::lock_guard<std::recursive_mutex> _lock{globalMutex};
 
 		if (m_updateInfoReadyState != ReadyState::Loaded) {
 			return false;
@@ -382,12 +381,12 @@ namespace spades {
 	}
 
 	PackageUpdateManager::VersionInfo PackageUpdateManager::GetLatestVersionInfo() {
-		AutoLocker lock{&globalMutex};
+		std::lock_guard<std::recursive_mutex> _lock{globalMutex};
 		return m_latestVersionInfo;
 	}
 
 	std::string PackageUpdateManager::GetLatestVersionInfoPageURL() {
-		AutoLocker lock{&globalMutex};
+		std::lock_guard<std::recursive_mutex> _lock{globalMutex};
 
 		if (m_updateInfoReadyState != ReadyState::Loaded) {
 			return std::string{};
@@ -397,7 +396,7 @@ namespace spades {
 	}
 
 	void PackageUpdateManager::CheckForUpdate() {
-		AutoLocker lock{&globalMutex};
+		std::lock_guard<std::recursive_mutex> _lock{globalMutex};
 		if (m_updateInfoReadyState == ReadyState::Loading) {
 			return;
 		}

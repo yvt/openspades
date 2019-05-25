@@ -23,7 +23,6 @@
 #include <vector>
 #include <sstream>
 #include <Core/Exception.h>
-#include <Core/AutoLocker.h>
 #include <Core/FileManager.h>
 #include <Core/IStream.h>
 
@@ -199,8 +198,8 @@ namespace spades {
 	
 	ScriptContextHandle ScriptManager::GetContext() {
 		SPADES_MARK_FUNCTION_DEBUG();
-		AutoLocker locker(&contextMutex);
 		if(contextFreeList.empty()){
+			std::lock_guard<std::recursive_mutex> _lock{contextMutex};
 			// no free context; create one
 			Context *ctx = new Context();
 			ctx->obj = engine->CreateContext();
@@ -223,13 +222,13 @@ namespace spades {
 	ScriptContextHandle::ScriptContextHandle(ScriptManager::Context *ctx,
 											 ScriptManager *manager):
 	manager(manager), obj(ctx){
-		AutoLocker locker(&manager->contextMutex);
+		std::lock_guard<std::recursive_mutex> _lock{manager->contextMutex};
 		ctx->refCount++;
 	}
 	
 	ScriptContextHandle::ScriptContextHandle(const ScriptContextHandle& h) :
 	manager(h.manager), obj(h.obj){
-		AutoLocker locker(&manager->contextMutex);
+		std::lock_guard<std::recursive_mutex> _lock{manager->contextMutex};
 		obj->refCount++;
 	}
 	
@@ -239,7 +238,7 @@ namespace spades {
 	
 	void ScriptContextHandle::Release() {
 		if(obj){
-			AutoLocker locker(&manager->contextMutex);
+			std::lock_guard<std::recursive_mutex> _lock{manager->contextMutex};
 			obj->refCount--;
 			if(obj->refCount == 0){
 				// this context is no longer used;
@@ -258,7 +257,7 @@ namespace spades {
 		
 		manager = h.manager;
 		obj = h.obj;
-		AutoLocker locker(&manager->contextMutex);
+		std::lock_guard<std::recursive_mutex> _lock{manager->contextMutex};
 		obj->refCount++;
 	}
 	

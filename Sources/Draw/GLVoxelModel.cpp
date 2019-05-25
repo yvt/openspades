@@ -257,10 +257,10 @@ namespace spades {
 			}
 		}
 
-		void GLVoxelModel::Prerender(std::vector<client::ModelRenderParam> params) {
+		void GLVoxelModel::Prerender(std::vector<client::ModelRenderParam> params, bool ghostPass) {
 			SPADES_MARK_FUNCTION();
 
-			RenderSunlightPass(params);
+			RenderSunlightPass(params, ghostPass);
 		}
 
 		void GLVoxelModel::RenderShadowMapPass(std::vector<client::ModelRenderParam> params) {
@@ -303,6 +303,10 @@ namespace spades {
 			for (size_t i = 0; i < params.size(); i++) {
 				const client::ModelRenderParam &param = params[i];
 
+				if (!param.castShadow || param.ghost) {
+					continue;
+				}
+
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
@@ -341,7 +345,7 @@ namespace spades {
 			device->BindTexture(IGLDevice::Texture2D, 0);
 		}
 
-		void GLVoxelModel::RenderSunlightPass(std::vector<client::ModelRenderParam> params) {
+		void GLVoxelModel::RenderSunlightPass(std::vector<client::ModelRenderParam> params, bool ghostPass) {
 			SPADES_MARK_FUNCTION();
 
 			device->ActiveTexture(0);
@@ -418,6 +422,10 @@ namespace spades {
 			for (size_t i = 0; i < params.size(); i++) {
 				const client::ModelRenderParam &param = params[i];
 
+				if (param.ghost != ghostPass) {
+					continue;
+				}
+
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
@@ -449,6 +457,10 @@ namespace spades {
 				static GLProgramUniform modelNormalMatrix("modelNormalMatrix");
 				modelNormalMatrix(program);
 				modelNormalMatrix.SetValue(modelMatrix);
+
+				static GLProgramUniform modelOpacity("modelOpacity");
+				modelOpacity(program);
+				modelOpacity.SetValue(param.opacity);
 
 				if (param.depthHack) {
 					device->DepthRange(0.f, 0.1f);
@@ -530,6 +542,9 @@ namespace spades {
 
 			for (size_t i = 0; i < params.size(); i++) {
 				const client::ModelRenderParam &param = params[i];
+
+				if (param.ghost)
+					continue;
 
 				// frustrum cull
 				float rad = radius;
