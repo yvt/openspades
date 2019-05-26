@@ -24,6 +24,8 @@
 #include <cstdio>
 #include <string>
 
+#include "Exception.h"
+
 namespace spades {
 	/** operation mode for data-compression streams. */
 	enum CompressMode {
@@ -39,7 +41,7 @@ namespace spades {
 		IStream() {}
 
 	public:
-		virtual ~IStream();
+		virtual ~IStream() throw(Exception);
 		/** reads one byte and return in range [0, 255].
 		 * -1 if EOF reached. */
 		virtual int ReadByte();
