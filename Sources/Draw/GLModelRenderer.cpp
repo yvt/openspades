@@ -26,7 +26,7 @@
 
 namespace spades {
 	namespace draw {
-		GLModelRenderer::GLModelRenderer(GLRenderer *r) : device(r->GetGLDevice()), renderer(r) {
+		GLModelRenderer::GLModelRenderer(GLRenderer *r) : renderer(r), device(r->GetGLDevice()) {
 			SPADES_MARK_FUNCTION();
 			modelCount = 0;
 		}

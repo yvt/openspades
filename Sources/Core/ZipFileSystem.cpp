@@ -344,9 +344,6 @@ namespace spades {
 		unzOpenCurrentFile(zip);
 		try {
 			currentStream = new ZipFileInputStream(this, zip);
-#if 0
-			return currentStream;
-#else
 			// load all data to allow seeking
 			DynamicMemoryStream *stream;
 			stream = new DynamicMemoryStream();
@@ -365,7 +362,6 @@ namespace spades {
 				delete currentStream;
 				throw;
 			}
-#endif
 		} catch (...) {
 			unzCloseCurrentFile(zip);
 			throw;

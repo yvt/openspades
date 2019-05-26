@@ -26,13 +26,13 @@ namespace spades {
 	namespace draw {
 		GLImage::GLImage(IGLDevice::UInteger texObj, IGLDevice *dev, float w, float h,
 		                 bool autoDelete)
-		    : tex(texObj),
-		      device(dev),
+		    : device(dev),
+		      tex(texObj),
 		      width(w),
 		      height(h),
-		      autoDelete(autoDelete),
 		      invWidth(1.f / w),
-		      invHeight(1.f / h) {
+		      invHeight(1.f / h),
+		      autoDelete(autoDelete) {
 			SPADES_MARK_FUNCTION();
 			valid = true;
 		}
