@@ -81,7 +81,7 @@ namespace spades {
 				line = ClipLineSegment(*line, Plane2{0.0f, -1.0f, rect.GetMaxY()});
 				return line;
 			}
-		}
+		} // namespace
 
 		MapView::MapView(Client *c, bool largeMap)
 		    : client(c), renderer(c->GetRenderer()), largeMap(largeMap) {
@@ -256,7 +256,8 @@ namespace spades {
 				focusPlayerPtr = &player;
 			} else if (client->GetCameraMode() == ClientCameraMode::Free) {
 				focusPlayerPos = client->freeCameraState.position;
-				focusPlayerAngle = client->followAndFreeCameraState.yaw - static_cast<float>(M_PI) * .5f;
+				focusPlayerAngle =
+				  client->followAndFreeCameraState.yaw - static_cast<float>(M_PI) * .5f;
 				focusPlayerPtr = world->GetLocalPlayer();
 			} else {
 				return;
@@ -367,15 +368,17 @@ namespace spades {
 			                    AABB2(0, 16, 16, 16));
 			renderer->DrawImage(border, AABB2(borderRect.GetMaxX(), borderRect.GetMaxY(), 16, 16),
 			                    AABB2(16, 16, 16, 16));
-			renderer->DrawImage(border, AABB2(borderRect.GetMinX(), borderRect.GetMinY() - 16,
-			                                  borderRect.GetWidth(), 16),
-			                    AABB2(16, 0, 0, 16));
+			renderer->DrawImage(
+			  border,
+			  AABB2(borderRect.GetMinX(), borderRect.GetMinY() - 16, borderRect.GetWidth(), 16),
+			  AABB2(16, 0, 0, 16));
 			renderer->DrawImage(
 			  border, AABB2(borderRect.GetMinX(), borderRect.GetMaxY(), borderRect.GetWidth(), 16),
 			  AABB2(16, 16, 0, 16));
-			renderer->DrawImage(border, AABB2(borderRect.GetMinX() - 16, borderRect.GetMinY(), 16,
-			                                  borderRect.GetHeight()),
-			                    AABB2(0, 16, 16, 0));
+			renderer->DrawImage(
+			  border,
+			  AABB2(borderRect.GetMinX() - 16, borderRect.GetMinY(), 16, borderRect.GetHeight()),
+			  AABB2(0, 16, 16, 0));
 			renderer->DrawImage(
 			  border, AABB2(borderRect.GetMaxX(), borderRect.GetMinY(), 16, borderRect.GetHeight()),
 			  AABB2(16, 16, 16, 0));
@@ -483,7 +486,8 @@ namespace spades {
 					// Duh
 					continue;
 				}
-				if (p->IsSpectator() && p == &localPlayer && HasTargetPlayer(client->GetCameraMode())) {
+				if (p->IsSpectator() && p == &localPlayer &&
+				    HasTargetPlayer(client->GetCameraMode())) {
 					// Don't draw white icon when spectating a player
 					continue;
 				}
@@ -492,12 +496,14 @@ namespace spades {
 					continue;
 				}
 
-				IntVector3 iconColor = colorMode
-					? IntVector3::Make(palette[i][0], palette[i][1], palette[i][2])
-					: world->GetTeam(p->GetTeamId()).color;
-				if (p->GetTeamId() >= 2) iconColor = IntVector3::Make(200, 200, 200); // colorMode doesn't matter here, right?
+				IntVector3 iconColor =
+				  colorMode ? IntVector3::Make(palette[i][0], palette[i][1], palette[i][2])
+				            : world->GetTeam(p->GetTeamId()).color;
+				if (p->GetTeamId() >= 2)
+					iconColor =
+					  IntVector3::Make(200, 200, 200); // colorMode doesn't matter here, right?
 				Vector4 iconColorF = ModifyColor(iconColor);
-				iconColorF  *= alpha;
+				iconColorF *= alpha;
 
 				Vector3 front = p->GetFront2D();
 				float ang = atan2(front.x, -front.y);
@@ -508,8 +514,8 @@ namespace spades {
 				// Draw the focused player's view
 				if (p == &focusPlayer) {
 					renderer->SetColorAlphaPremultiplied(iconColorF * 0.9f);
-					DrawIcon(p->IsSpectator() ? client->freeCameraState.position
-						: p->GetPosition(), viewIcon, ang);
+					DrawIcon(p->IsSpectator() ? client->freeCameraState.position : p->GetPosition(),
+					         viewIcon, ang);
 				}
 
 				renderer->SetColorAlphaPremultiplied(iconColorF);
@@ -518,24 +524,24 @@ namespace spades {
 					WeaponType weapon = world->GetPlayer(i)->GetWeaponType();
 					if (weapon == WeaponType::SMG_WEAPON) {
 						DrawIcon(p->IsSpectator() ? client->freeCameraState.position
-						                                  : p->GetPosition(),
+						                          : p->GetPosition(),
 						         playerSMG, ang);
 					}
 
 					else if (weapon == WeaponType::RIFLE_WEAPON) {
 						DrawIcon(p->IsSpectator() ? client->freeCameraState.position
-						                                  : p->GetPosition(),
+						                          : p->GetPosition(),
 						         playerRifle, ang);
 					}
 
 					else if (weapon == WeaponType::SHOTGUN_WEAPON) {
 						DrawIcon(p->IsSpectator() ? client->freeCameraState.position
-						                                  : p->GetPosition(),
+						                          : p->GetPosition(),
 						         playerShotgun, ang);
 					}
 				} else { // draw normal color
-					DrawIcon(p == &focusPlayer ? focusPlayerPos : p->GetPosition(),
-					         playerIcon, ang);
+					DrawIcon(p == &focusPlayer ? focusPlayerPos : p->GetPosition(), playerIcon,
+					         ang);
 				}
 			}
 
@@ -689,5 +695,5 @@ namespace spades {
 		}
 
 		MapViewTracer::~MapViewTracer() {}
-	}
-}
+	} // namespace client
+} // namespace spades
