@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2019 yvt
 
  This file is part of OpenSpades.
 
@@ -15,13 +15,17 @@
 
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
-
  */
+#include "ConsoleHelper.h"
 
-#include "UIFramework/UIFramework.as"
-#include "MessageBox.as"
-#include "MainScreen/MainScreenUI.as"
-#include "StartupScreen/StartupScreenUI.as"
-#include "Preferences.as"
-#include "Client/ClientUI.as"
-#include "Console/ConsoleUI.as"
+namespace spades {
+	namespace gui {
+		ConsoleHelper::ConsoleHelper(ConsoleScreen *scr) {
+			(void)scr;
+			// TODO
+		}
+		void ConsoleHelper::ConsoleScreenDestroyed() {
+			// TODO
+		}
+	} // namespace gui
+} // namespace spades

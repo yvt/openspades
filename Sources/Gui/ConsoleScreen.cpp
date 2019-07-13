@@ -1,0 +1,192 @@
+/*
+ Copyright (c) 2019 yvt
+
+ This file is part of OpenSpades.
+
+ OpenSpades is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ OpenSpades is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
+
+ */
+#include <ScriptBindings/Config.h>
+#include <ScriptBindings/ScriptFunction.h>
+
+#include "ConsoleHelper.h"
+#include "ConsoleScreen.h"
+
+namespace spades {
+	namespace gui {
+		ConsoleScreen::ConsoleScreen(Handle<client::IRenderer> renderer,
+		                             Handle<client::IAudioDevice> audioDevice,
+		                             Handle<client::FontManager> fontManager,
+		                             Handle<View> subview) {
+			this->subview = subview;
+			renderer->Init();
+
+			helper.Set(new ConsoleHelper(this), true);
+
+			ScopedPrivilegeEscalation privilege;
+			static ScriptFunction uiFactory("ConsoleUI@ CreateConsoleUI(Renderer@, "
+			                                "AudioDevice@, FontManager@, ConsoleHelper@)");
+			{
+				ScriptContextHandle ctx = uiFactory.Prepare();
+				ctx->SetArgObject(0, &*renderer);
+				ctx->SetArgObject(1, &*audioDevice);
+				ctx->SetArgObject(2, &*fontManager);
+				ctx->SetArgObject(3, &*helper);
+
+				ctx.ExecuteChecked();
+				ui = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
+			}
+		}
+
+		ConsoleScreen::~ConsoleScreen() { helper->ConsoleScreenDestroyed(); }
+
+		void ConsoleScreen::MouseEvent(float x, float y) {
+			if (ShouldInterceptInput()) {
+				ScopedPrivilegeEscalation privilege;
+				static ScriptFunction func("ConsoleUI", "void MouseEvent(float, float)");
+				ScriptContextHandle c = func.Prepare();
+				c->SetObject(&*ui);
+				c->SetArgFloat(0, x);
+				c->SetArgFloat(1, y);
+				c.ExecuteChecked();
+			} else {
+				return subview->MouseEvent(x, y);
+			}
+		}
+		void ConsoleScreen::KeyEvent(const std::string &key, bool down) {
+			// TODO: Check if "`" is correct
+			if (key == "`" || key == "F1") {
+				if (down) {
+					ToggleConsole();
+				}
+				return;
+			}
+
+			if (ShouldInterceptInput()) {
+				ScopedPrivilegeEscalation privilege;
+				static ScriptFunction func("ConsoleUI", "void KeyEvent(string, bool)");
+				ScriptContextHandle c = func.Prepare();
+				std::string k = key;
+				c->SetObject(&*ui);
+				c->SetArgObject(0, reinterpret_cast<void *>(&k));
+				c->SetArgByte(1, down ? 1 : 0);
+				c.ExecuteChecked();
+			} else {
+				return subview->KeyEvent(key, down);
+			}
+		}
+		void ConsoleScreen::TextInputEvent(const std::string &ch) {
+			if (ShouldInterceptInput()) {
+				ScopedPrivilegeEscalation privilege;
+				static ScriptFunction func("ConsoleUI", "void TextInputEvent(string)");
+				ScriptContextHandle c = func.Prepare();
+				std::string k = ch;
+				c->SetObject(&*ui);
+				c->SetArgObject(0, reinterpret_cast<void *>(&k));
+				c.ExecuteChecked();
+			} else {
+				return subview->TextInputEvent(ch);
+			}
+		}
+		void ConsoleScreen::TextEditingEvent(const std::string &ch, int start, int len) {
+			if (ShouldInterceptInput()) {
+				ScopedPrivilegeEscalation privilege;
+				static ScriptFunction func("ConsoleUI", "void TextEditingEvent(string, int, int)");
+				ScriptContextHandle c = func.Prepare();
+				std::string k = ch;
+				c->SetObject(&*ui);
+				c->SetArgObject(0, reinterpret_cast<void *>(&k));
+				c->SetArgDWord(1, static_cast<asDWORD>(start));
+				c->SetArgDWord(2, static_cast<asDWORD>(len));
+				c.ExecuteChecked();
+			} else {
+				return subview->TextEditingEvent(ch, start, len);
+			}
+		}
+		bool ConsoleScreen::AcceptsTextInput() {
+			if (ShouldInterceptInput()) {
+				ScopedPrivilegeEscalation privilege;
+				static ScriptFunction func("ConsoleUI", "bool AcceptsTextInput()");
+				ScriptContextHandle c = func.Prepare();
+				c->SetObject(&*ui);
+				c.ExecuteChecked();
+				return c->GetReturnByte() != 0;
+			} else {
+				return subview->AcceptsTextInput();
+			}
+		}
+		AABB2 ConsoleScreen::GetTextInputRect() {
+			if (ShouldInterceptInput()) {
+				ScopedPrivilegeEscalation privilege;
+				static ScriptFunction func("ConsoleUI", "AABB2 GetTextInputRect()");
+				ScriptContextHandle c = func.Prepare();
+				c->SetObject(&*ui);
+				c.ExecuteChecked();
+				return *reinterpret_cast<AABB2 *>(c->GetReturnObject());
+			} else {
+				return subview->GetTextInputRect();
+			}
+		}
+		void ConsoleScreen::WheelEvent(float x, float y) {
+			if (ShouldInterceptInput()) {
+				ScopedPrivilegeEscalation privilege;
+				static ScriptFunction func("ConsoleUI", "void WheelEvent(float, float)");
+				ScriptContextHandle c = func.Prepare();
+				c->SetObject(&*ui);
+				c->SetArgFloat(0, x);
+				c->SetArgFloat(1, y);
+				c.ExecuteChecked();
+			} else {
+				return subview->WheelEvent(x, y);
+			}
+		}
+		bool ConsoleScreen::NeedsAbsoluteMouseCoordinate() {
+			return ShouldInterceptInput() ? true : subview->NeedsAbsoluteMouseCoordinate();
+		}
+
+		void ConsoleScreen::RunFrame(float dt) {
+			subview->RunFrame(dt);
+
+			ScopedPrivilegeEscalation privilege;
+			static ScriptFunction func("ConsoleUI", "void RunFrame(float)");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c->SetArgFloat(0, dt);
+			c.ExecuteChecked();
+		}
+
+		void ConsoleScreen::RunFrameLate(float dt) { subview->RunFrameLate(dt); }
+
+		void ConsoleScreen::Closing() { subview->Closing(); }
+
+		bool ConsoleScreen::WantsToBeClosed() { return subview->WantsToBeClosed(); }
+
+		bool ConsoleScreen::ShouldInterceptInput() {
+			ScopedPrivilegeEscalation privilege;
+			static ScriptFunction func("ConsoleUI", "bool ShouldInterceptInput()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
+			return c->GetReturnByte() != 0;
+		}
+
+		void ConsoleScreen::ToggleConsole() {
+			ScopedPrivilegeEscalation privilege;
+			static ScriptFunction func("ConsoleUI", "void ToggleConsole()");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c.ExecuteChecked();
+		}
+	} // namespace gui
+} // namespace spades
