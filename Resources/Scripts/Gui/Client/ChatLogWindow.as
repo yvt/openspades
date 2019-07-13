@@ -21,10 +21,10 @@
 
 namespace spades {
 
-    class ChatLogSayWindow: ClientChatWindow {
-        ChatLogWindow@ owner;
+    class ChatLogSayWindow : ClientChatWindow {
+        ChatLogWindow @owner;
 
-        ChatLogSayWindow(ChatLogWindow@ own, bool isTeamChat) {
+        ChatLogSayWindow(ChatLogWindow @own, bool isTeamChat) {
             super(own.ui, isTeamChat);
             @owner = own;
         }
@@ -35,20 +35,20 @@ namespace spades {
         }
     }
 
-    class ChatLogWindow: spades::ui::UIElement {
+    class ChatLogWindow : spades::ui::UIElement {
 
         float contentsTop, contentsHeight;
 
-        ClientUI@ ui;
-        private ClientUIHelper@ helper;
+        ClientUI @ui;
+        private ClientUIHelper @helper;
 
-        private spades::ui::TextViewer@ viewer;
-        ChatLogSayWindow@ sayWindow;
+        private spades::ui::TextViewer @viewer;
+        ChatLogSayWindow @sayWindow;
 
-        private spades::ui::UIElement@ sayButton1;
-        private spades::ui::UIElement@ sayButton2;
+        private spades::ui::UIElement @sayButton1;
+        private spades::ui::UIElement @sayButton2;
 
-        ChatLogWindow(ClientUI@ ui) {
+        ChatLogWindow(ClientUI @ui) {
             super(ui.manager);
             @this.ui = ui;
             @this.helper = ui.helper;
@@ -75,20 +75,16 @@ namespace spades {
             {
                 spades::ui::Button button(Manager);
                 button.Caption = _Tr("Client", "Close");
-                button.Bounds = AABB2(
-                    contentsLeft + contentsWidth - 150.f,
-                    contentsTop + contentsHeight - 30.f
-                    , 150.f, 30.f);
+                button.Bounds = AABB2(contentsLeft + contentsWidth - 150.f,
+                                      contentsTop + contentsHeight - 30.f, 150.f, 30.f);
                 @button.Activated = spades::ui::EventHandler(this.OnOkPressed);
                 AddChild(button);
             }
             {
                 spades::ui::Button button(Manager);
                 button.Caption = _Tr("Client", "Say Global");
-                button.Bounds = AABB2(
-                    contentsLeft,
-                    contentsTop + contentsHeight - 30.f
-                    , 150.f, 30.f);
+                button.Bounds =
+                    AABB2(contentsLeft, contentsTop + contentsHeight - 30.f, 150.f, 30.f);
                 @button.Activated = spades::ui::EventHandler(this.OnGlobalChat);
                 AddChild(button);
                 @this.sayButton1 = button;
@@ -96,10 +92,8 @@ namespace spades {
             {
                 spades::ui::Button button(Manager);
                 button.Caption = _Tr("Client", "Say Team");
-                button.Bounds = AABB2(
-                    contentsLeft + 155.f,
-                    contentsTop + contentsHeight - 30.f
-                    , 150.f, 30.f);
+                button.Bounds =
+                    AABB2(contentsLeft + 155.f, contentsTop + contentsHeight - 30.f, 150.f, 30.f);
                 @button.Activated = spades::ui::EventHandler(this.OnTeamChat);
                 AddChild(button);
                 @this.sayButton2 = button;
@@ -107,7 +101,8 @@ namespace spades {
             {
                 spades::ui::TextViewer viewer(Manager);
                 AddChild(viewer);
-                viewer.Bounds = AABB2(contentsLeft, contentsTop, contentsWidth, contentsHeight - 40.f);
+                viewer.Bounds =
+                    AABB2(contentsLeft, contentsTop, contentsWidth, contentsHeight - 40.f);
                 @this.viewer = viewer;
             }
         }
@@ -117,9 +112,7 @@ namespace spades {
             viewer.ScrollToEnd();
         }
 
-        void Close() {
-            @ui.ActiveUI = null;
-        }
+        void Close() { @ui.ActiveUI = null; }
 
         void SayWindowClosed() {
             @sayWindow = null;
@@ -127,12 +120,10 @@ namespace spades {
             sayButton2.Enable = true;
         }
 
-        private void OnOkPressed(spades::ui::UIElement@ sender) {
-            Close();
-        }
+        private void OnOkPressed(spades::ui::UIElement @sender) { Close(); }
 
-        private void OnTeamChat(spades::ui::UIElement@ sender) {
-            if(sayWindow !is null) {
+        private void OnTeamChat(spades::ui::UIElement @sender) {
+            if (sayWindow !is null) {
                 sayWindow.IsTeamChat = true;
                 return;
             }
@@ -145,8 +136,8 @@ namespace spades {
             @Manager.ActiveElement = wnd.field;
         }
 
-        private void OnGlobalChat(spades::ui::UIElement@ sender) {
-            if(sayWindow !is null) {
+        private void OnGlobalChat(spades::ui::UIElement @sender) {
+            if (sayWindow !is null) {
                 sayWindow.IsTeamChat = false;
                 return;
             }
@@ -160,45 +151,40 @@ namespace spades {
         }
 
         void HotKey(string key) {
-            if(sayWindow !is null) {
+            if (sayWindow !is null) {
                 UIElement::HotKey(key);
                 return;
             }
-            if(IsEnabled and (key == "Escape")) {
+            if (IsEnabled and(key == "Escape")) {
                 Close();
-            } else if(IsEnabled and (key == "y")) {
+            } else if (IsEnabled and(key == "y")) {
                 OnTeamChat(this);
-            } else if(IsEnabled and (key == "t")) {
+            } else if (IsEnabled and(key == "t")) {
                 OnGlobalChat(this);
             } else {
                 UIElement::HotKey(key);
             }
         }
 
-        void Record(string text, Vector4 color) {
-            viewer.AddLine(text, this.IsVisible, color);
-        }
+        void Record(string text, Vector4 color) { viewer.AddLine(text, this.IsVisible, color); }
 
         void Render() {
             Vector2 pos = ScreenPosition;
             Vector2 size = Size;
-            Renderer@ r = Manager.Renderer;
-            Image@ img = r.RegisterImage("Gfx/White.tga");
+            Renderer @r = Manager.Renderer;
+            Image @img = r.RegisterImage("Gfx/White.tga");
 
             r.ColorNP = Vector4(1, 1, 1, 0.08f);
+            r.DrawImage(img, AABB2(pos.x, pos.y + contentsTop - 15.f, size.x, 1.f));
             r.DrawImage(img,
-                AABB2(pos.x, pos.y + contentsTop - 15.f, size.x, 1.f));
-            r.DrawImage(img,
-                AABB2(pos.x, pos.y + contentsTop + contentsHeight + 15.f, size.x, 1.f));
+                        AABB2(pos.x, pos.y + contentsTop + contentsHeight + 15.f, size.x, 1.f));
             r.ColorNP = Vector4(1, 1, 1, 0.2f);
+            r.DrawImage(img, AABB2(pos.x, pos.y + contentsTop - 14.f, size.x, 1.f));
             r.DrawImage(img,
-                AABB2(pos.x, pos.y + contentsTop - 14.f, size.x, 1.f));
-            r.DrawImage(img,
-                AABB2(pos.x, pos.y + contentsTop + contentsHeight + 14.f, size.x, 1.f));
+                        AABB2(pos.x, pos.y + contentsTop + contentsHeight + 14.f, size.x, 1.f));
 
             UIElement::Render();
         }
-
     }
 
 }

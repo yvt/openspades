@@ -24,14 +24,14 @@
 namespace spades {
 
     class MainScreenUI {
-        private Renderer@ renderer;
-        private AudioDevice@ audioDevice;
-        FontManager@ fontManager;
-        MainScreenHelper@ helper;
+        private Renderer @renderer;
+        private AudioDevice @audioDevice;
+        FontManager @fontManager;
+        MainScreenHelper @helper;
 
-        spades::ui::UIManager@ manager;
+        spades::ui::UIManager @manager;
 
-        MainScreenMainMenu@ mainMenu;
+        MainScreenMainMenu @mainMenu;
 
         bool shouldExit = false;
 
@@ -40,7 +40,8 @@ namespace spades {
         private ConfigItem cg_playerName("cg_playerName");
         private ConfigItem cg_playerNameIsSet("cg_playerNameIsSet", "0");
 
-        MainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, FontManager@ fontManager, MainScreenHelper@ helper) {
+        MainScreenUI(Renderer @renderer, AudioDevice @audioDevice, FontManager @fontManager,
+                     MainScreenHelper @helper) {
             @this.renderer = renderer;
             @this.audioDevice = audioDevice;
             @this.fontManager = fontManager;
@@ -56,15 +57,13 @@ namespace spades {
             manager.RootElement.AddChild(mainMenu);
 
             // Let the new player choose their IGN
-            if (cg_playerName.StringValue != "" &&
-                cg_playerName.StringValue != "Deuce") {
+            if (cg_playerName.StringValue != "" && cg_playerName.StringValue != "Deuce") {
                 cg_playerNameIsSet.IntValue = 1;
             }
             if (cg_playerNameIsSet.IntValue == 0) {
                 CreateProfileScreen al(mainMenu);
                 al.Run();
             }
-
         }
 
         void SetupRenderer() {
@@ -75,43 +74,31 @@ namespace spades {
             time = -1.f;
 
             // returned from the client game, so reload the server list.
-            if(mainMenu !is null)
+            if (mainMenu !is null)
                 mainMenu.LoadServerList();
 
-            if(manager !is null)
+            if (manager !is null)
                 manager.KeyPanic();
         }
 
-        void MouseEvent(float x, float y) {
-            manager.MouseEvent(x, y);
-        }
+        void MouseEvent(float x, float y) { manager.MouseEvent(x, y); }
 
-        void WheelEvent(float x, float y) {
-            manager.WheelEvent(x, y);
-        }
+        void WheelEvent(float x, float y) { manager.WheelEvent(x, y); }
 
-        void KeyEvent(string key, bool down) {
-            manager.KeyEvent(key, down);
-        }
+        void KeyEvent(string key, bool down) { manager.KeyEvent(key, down); }
 
-        void TextInputEvent(string text) {
-            manager.TextInputEvent(text);
-        }
+        void TextInputEvent(string text) { manager.TextInputEvent(text); }
 
         void TextEditingEvent(string text, int start, int len) {
             manager.TextEditingEvent(text, start, len);
         }
 
-        bool AcceptsTextInput() {
-            return manager.AcceptsTextInput;
-        }
+        bool AcceptsTextInput() { return manager.AcceptsTextInput; }
 
-        AABB2 GetTextInputRect() {
-            return manager.TextInputRect;
-        }
+        AABB2 GetTextInputRect() { return manager.TextInputRect; }
 
-        private SceneDefinition SetupCamera(SceneDefinition sceneDef,
-            Vector3 eye, Vector3 at, Vector3 up, float fov) {
+        private SceneDefinition SetupCamera(SceneDefinition sceneDef, Vector3 eye, Vector3 at,
+                                            Vector3 up, float fov) {
             Vector3 dir = (at - eye).Normalized;
             Vector3 side = Cross(dir, up).Normalized;
             up = -Cross(dir, side);
@@ -120,12 +107,14 @@ namespace spades {
             sceneDef.viewAxisY = up;
             sceneDef.viewAxisZ = dir;
             sceneDef.fovY = fov * 3.141592654f / 180.f;
-            sceneDef.fovX = atan(tan(sceneDef.fovY * 0.5f) * renderer.ScreenWidth / renderer.ScreenHeight) * 2.f;
+            sceneDef.fovX =
+                atan(tan(sceneDef.fovY * 0.5f) * renderer.ScreenWidth / renderer.ScreenHeight) *
+                2.f;
             return sceneDef;
         }
 
         void RunFrame(float dt) {
-            if(time < 0.f) {
+            if (time < 0.f) {
                 time = 0.f;
             }
 
@@ -133,9 +122,9 @@ namespace spades {
             float cameraX = time;
             cameraX -= floor(cameraX / 512.f) * 512.f;
             cameraX = 512.f - cameraX;
-            sceneDef = SetupCamera(sceneDef,
-                Vector3(cameraX, 256.f, 12.f), Vector3(cameraX + .1f, 257.f, 12.5f), Vector3(0.f, 0.f, -1.f),
-                30.f);
+            sceneDef =
+                SetupCamera(sceneDef, Vector3(cameraX, 256.f, 12.f),
+                            Vector3(cameraX + .1f, 257.f, 12.5f), Vector3(0.f, 0.f, -1.f), 30.f);
             sceneDef.zNear = 0.1f;
             sceneDef.zFar = 222.f;
             sceneDef.time = int(time * 1000.f);
@@ -148,7 +137,7 @@ namespace spades {
             // fade the map
             float fade = Clamp((time - 1.f) / 2.2f, 0.f, 1.f);
             sceneDef.globalBlur = Clamp((1.f - (time - 1.f) / 2.5f), 0.f, 1.f);
-            if(!mainMenu.IsEnabled) {
+            if (!mainMenu.IsEnabled) {
                 sceneDef.globalBlur = Max(sceneDef.globalBlur, 0.5f);
             }
 
@@ -156,14 +145,14 @@ namespace spades {
             renderer.EndScene();
 
             // fade the map (draw)
-            if(fade < 1.f) {
+            if (fade < 1.f) {
                 renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 1.f - fade);
                 renderer.DrawImage(renderer.RegisterImage("Gfx/White.tga"),
-                    AABB2(0.f, 0.f, renderer.ScreenWidth, renderer.ScreenHeight));
+                                   AABB2(0.f, 0.f, renderer.ScreenWidth, renderer.ScreenHeight));
             }
 
             // draw title logo
-            Image@ img = renderer.RegisterImage("Gfx/Title/Logo.png");
+            Image @img = renderer.RegisterImage("Gfx/Title/Logo.png");
             renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.f);
             renderer.DrawImage(img, Vector2((renderer.ScreenWidth - img.Width) * 0.5f, 64.f));
 
@@ -175,20 +164,16 @@ namespace spades {
             time += Min(dt, 0.05f);
         }
 
-        void Closing() {
-            shouldExit = true;
-        }
+        void Closing() { shouldExit = true; }
 
-        bool WantsToBeClosed() {
-            return shouldExit;
-        }
+        bool WantsToBeClosed() { return shouldExit; }
     }
 
     /**
      * The entry point of the main screen.
      */
-    MainScreenUI@ CreateMainScreenUI(Renderer@ renderer, AudioDevice@ audioDevice,
-        FontManager@ fontManager, MainScreenHelper@ helper) {
+    MainScreenUI @CreateMainScreenUI(Renderer @renderer, AudioDevice @audioDevice,
+                                     FontManager @fontManager, MainScreenHelper @helper) {
         return MainScreenUI(renderer, audioDevice, fontManager, helper);
     }
 

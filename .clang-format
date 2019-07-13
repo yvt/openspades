@@ -18,3 +18,15 @@ PointerAlignment: Right
 AllowShortFunctionsOnASingleLine: Inline
 AllowShortCaseLabelsOnASingleLine: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
+---
+# The style for AngelScript source files
+Language: Java
+UseTab: Never
+ColumnLimit: 100
+
+NamespaceIndentation: All
+IndentCaseLabels: true
+
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortCaseLabelsOnASingleLine: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: true

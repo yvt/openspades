@@ -21,17 +21,18 @@
 #include "../UIFramework/UIControls.as"
 
 namespace spades {
-    class UpdateCheckView: spades::ui::UIElement {
-        spades::ui::EventHandler@ OpenUpdateInfoURL;
+    class UpdateCheckView : spades::ui::UIElement {
+        spades::ui::EventHandler @OpenUpdateInfoURL;
 
-        private PackageUpdateManager@ packageUpdateManager;
+        private PackageUpdateManager @packageUpdateManager;
 
-        private spades::ui::Button@ enableCheckButton;
-        private spades::ui::Button@ showDetailsButton;
+        private spades::ui::Button @enableCheckButton;
+        private spades::ui::Button @showDetailsButton;
 
         private ConfigItem cl_checkForUpdates("cl_checkForUpdates");
 
-        UpdateCheckView(spades::ui::UIManager@ manager, PackageUpdateManager@ packageUpdateManager) {
+        UpdateCheckView(spades::ui::UIManager @manager,
+                        PackageUpdateManager @packageUpdateManager) {
             super(manager);
             @this.packageUpdateManager = packageUpdateManager;
 
@@ -56,15 +57,15 @@ namespace spades {
 
             float viewWidth = Size.x;
             float viewHeight = Size.y;
-            enableCheckButton.Bounds = AABB2(
-               viewWidth - 160.f, (viewHeight - 30.f) * 0.5f, 150.f, 30.f);
-            showDetailsButton.Bounds = AABB2(
-               viewWidth - 160.f, (viewHeight - 30.f) * 0.5f, 150.f, 30.f);
+            enableCheckButton.Bounds =
+                AABB2(viewWidth - 160.f, (viewHeight - 30.f) * 0.5f, 150.f, 30.f);
+            showDetailsButton.Bounds =
+                AABB2(viewWidth - 160.f, (viewHeight - 30.f) * 0.5f, 150.f, 30.f);
 
-            Renderer@ renderer = Manager.Renderer;
+            Renderer @renderer = Manager.Renderer;
             Vector2 pos = ScreenPosition;
             Vector2 size = Size;
-            Image@ white = renderer.RegisterImage("Gfx/White.tga");
+            Image @white = renderer.RegisterImage("Gfx/White.tga");
 
             Vector4 background = Vector4(0.0f, 0.0f, 0.0f, 1.0f);
             switch (state) {
@@ -89,8 +90,8 @@ namespace spades {
                 float phase = fraction(Manager.Time) * 80.0f;
                 renderer.ColorNP = Vector4(0.15f, 0.15f, 0.15f, 1.0f);
                 for (float x = phase - 160.0f; x < size.x + 160.0f; x += 80.0f) {
-                    renderer.DrawImage(white, Vector2(x, pos.y), Vector2(x + 40.f, pos.y), Vector2(x - 20.f, pos.y + size.y),
-                        AABB2(0, 0, 0, 0));
+                    renderer.DrawImage(white, Vector2(x, pos.y), Vector2(x + 40.f, pos.y),
+                                       Vector2(x - 20.f, pos.y + size.y), AABB2(0, 0, 0, 0));
                 }
             }
 
@@ -99,11 +100,14 @@ namespace spades {
             switch (state) {
                 case PackageUpdateManagerReadyState::Loaded:
                     if (packageUpdateManager.UpdateAvailable) {
-                        text = _Tr("UpdateCheck", "Version {0} is available! (You currently have {1})",
-                            packageUpdateManager.LatestVersionInfo.Text, packageUpdateManager.CurrentVersionInfo.Text);
+                        text =
+                            _Tr("UpdateCheck", "Version {0} is available! (You currently have {1})",
+                                packageUpdateManager.LatestVersionInfo.Text,
+                                packageUpdateManager.CurrentVersionInfo.Text);
                     } else {
-                        text = _Tr("UpdateCheck", "You're using the latest version of OpenSpades. ({0})",
-                            packageUpdateManager.CurrentVersionInfo.Text);
+                        text = _Tr("UpdateCheck",
+                                   "You're using the latest version of OpenSpades. ({0})",
+                                   packageUpdateManager.CurrentVersionInfo.Text);
                     }
                     break;
                 case PackageUpdateManagerReadyState::Loading:
@@ -120,7 +124,7 @@ namespace spades {
                     break;
             }
 
-            Font@ font = this.Font;
+            Font @font = this.Font;
             Vector2 txtSize = font.Measure(text);
             Vector2 txtPos = pos + (size - txtSize) * Vector2(0.0f, 0.5f) + Vector2(10.0f, 0.0f);
             font.Draw(text, txtPos, 1.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -142,12 +146,10 @@ namespace spades {
             UIElement::Render();
         }
 
-        private void OnEnableCheckPressed(spades::ui::UIElement@) {
+        private void OnEnableCheckPressed(spades::ui::UIElement @) {
             cl_checkForUpdates.IntValue = 1;
             packageUpdateManager.CheckForUpdate();
         }
-        private void OnShowDetailsPressed(spades::ui::UIElement@) {
-            OpenUpdateInfoURL(this);
-        }
+        private void OnShowDetailsPressed(spades::ui::UIElement @) { OpenUpdateInfoURL(this); }
     }
 }

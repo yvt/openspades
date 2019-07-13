@@ -24,25 +24,26 @@
 namespace spades {
 
     class ClientUI {
-        private Renderer@ renderer;
-        private AudioDevice@ audioDevice;
-        FontManager@ fontManager;
-        ClientUIHelper@ helper;
+        private Renderer @renderer;
+        private AudioDevice @audioDevice;
+        FontManager @fontManager;
+        ClientUIHelper @helper;
 
-        spades::ui::UIManager@ manager;
-        spades::ui::UIElement@ activeUI;
+        spades::ui::UIManager @manager;
+        spades::ui::UIElement @activeUI;
 
-        ChatLogWindow@ chatLogWindow;
+        ChatLogWindow @chatLogWindow;
 
-        ClientMenu@ clientMenu;
+        ClientMenu @clientMenu;
 
-        array<spades::ui::CommandHistoryItem@> chatHistory;
+        array<spades::ui::CommandHistoryItem @> chatHistory;
 
         bool shouldExit = false;
 
         private float time = -1.f;
 
-        ClientUI(Renderer@ renderer, AudioDevice@ audioDevice, FontManager@ fontManager, ClientUIHelper@ helper) {
+        ClientUI(Renderer @renderer, AudioDevice @audioDevice, FontManager @fontManager,
+                 ClientUIHelper @helper) {
             @this.renderer = renderer;
             @this.audioDevice = audioDevice;
             @this.fontManager = fontManager;
@@ -57,77 +58,55 @@ namespace spades {
             @chatLogWindow = ChatLogWindow(this);
         }
 
-        void MouseEvent(float x, float y) {
-            manager.MouseEvent(x, y);
-        }
+        void MouseEvent(float x, float y) { manager.MouseEvent(x, y); }
 
-        void WheelEvent(float x, float y) {
-            manager.WheelEvent(x, y);
-        }
+        void WheelEvent(float x, float y) { manager.WheelEvent(x, y); }
 
-        void KeyEvent(string key, bool down) {
-            manager.KeyEvent(key, down);
-        }
+        void KeyEvent(string key, bool down) { manager.KeyEvent(key, down); }
 
-        void TextInputEvent(string text) {
-            manager.TextInputEvent(text);
-        }
+        void TextInputEvent(string text) { manager.TextInputEvent(text); }
 
         void TextEditingEvent(string text, int start, int len) {
             manager.TextEditingEvent(text, start, len);
         }
 
-        bool AcceptsTextInput() {
-            return manager.AcceptsTextInput;
-        }
+        bool AcceptsTextInput() { return manager.AcceptsTextInput; }
 
-        AABB2 GetTextInputRect() {
-            return manager.TextInputRect;
-        }
+        AABB2 GetTextInputRect() { return manager.TextInputRect; }
 
         void RunFrame(float dt) {
-            if(time < 0.f) {
+            if (time < 0.f) {
                 time = 0.f;
             }
 
             manager.RunFrame(dt);
-            if(activeUI !is null){
+            if (activeUI !is null) {
                 manager.Render();
             }
 
             time += Min(dt, 0.05f);
         }
 
-        void Closing() {
+        void Closing() {}
 
-        }
+        bool WantsClientToBeClosed() { return shouldExit; }
 
-        bool WantsClientToBeClosed() {
-            return shouldExit;
-        }
+        bool NeedsInput() { return activeUI !is null; }
 
-        bool NeedsInput() {
-            return activeUI !is null;
-        }
-
-        void set_ActiveUI(spades::ui::UIElement@ value) {
-            if(activeUI !is null) {
+        void set_ActiveUI(spades::ui::UIElement @value) {
+            if (activeUI !is null) {
                 manager.RootElement.RemoveChild(activeUI);
             }
             @activeUI = value;
-            if(activeUI !is null) {
+            if (activeUI !is null) {
                 activeUI.Bounds = manager.RootElement.Bounds;
                 manager.RootElement.AddChild(activeUI);
             }
             manager.KeyPanic();
         }
-        spades::ui::UIElement@ get_ActiveUI(){
-            return activeUI;
-        }
+        spades::ui::UIElement @get_ActiveUI() { return activeUI; }
 
-        void EnterClientMenu() {
-            @ActiveUI = clientMenu;
-        }
+        void EnterClientMenu() { @ActiveUI = clientMenu; }
 
         void EnterTeamChatWindow() {
             ClientChatWindow wnd(this, true);
@@ -147,17 +126,13 @@ namespace spades {
             @ActiveUI = wnd;
             @manager.ActiveElement = wnd.field;
         }
-        void CloseUI() {
-            @ActiveUI = null;
-        }
+        void CloseUI() { @ActiveUI = null; }
 
-        void RecordChatLog(string text, Vector4 color) {
-            chatLogWindow.Record(text, color);
-        }
+        void RecordChatLog(string text, Vector4 color) { chatLogWindow.Record(text, color); }
     }
 
-    ClientUI@ CreateClientUI(Renderer@ renderer, AudioDevice@ audioDevice,
-        FontManager@ fontManager, ClientUIHelper@ helper) {
+    ClientUI @CreateClientUI(Renderer @renderer, AudioDevice @audioDevice, FontManager @fontManager,
+                             ClientUIHelper @helper) {
         return ClientUI(renderer, audioDevice, fontManager, helper);
     }
 

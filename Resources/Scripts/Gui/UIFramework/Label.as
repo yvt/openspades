@@ -23,29 +23,27 @@
 namespace spades {
     namespace ui {
 
-        class Label: UIElement {
+        class Label : UIElement {
             string Text;
             Vector4 BackgroundColor = Vector4(0, 0, 0, 0);
             Vector4 TextColor = Vector4(1, 1, 1, 1);
             Vector2 Alignment = Vector2(0.f, 0.0f);
             float TextScale = 1.f;
 
-            Label(UIManager@ manager) {
-                super(manager);
-            }
+            Label(UIManager @manager) { super(manager); }
             void Render() {
-                Renderer@ renderer = Manager.Renderer;
+                Renderer @renderer = Manager.Renderer;
                 Vector2 pos = ScreenPosition;
                 Vector2 size = Size;
 
-                if(BackgroundColor.w > 0.f) {
-                    Image@ img = renderer.RegisterImage("Gfx/White.tga");
+                if (BackgroundColor.w > 0.f) {
+                    Image @img = renderer.RegisterImage("Gfx/White.tga");
                     renderer.ColorNP = BackgroundColor;
                     renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
                 }
 
-                if(Text.length > 0) {
-                    Font@ font = this.Font;
+                if (Text.length > 0) {
+                    Font @font = this.Font;
                     string text = this.Text;
                     Vector2 txtSize = font.Measure(text) * TextScale;
                     Vector2 txtPos;

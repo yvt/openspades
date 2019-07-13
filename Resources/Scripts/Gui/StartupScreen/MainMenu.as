@@ -27,24 +27,24 @@ namespace spades {
         int ActiveTabIndex;
     }
 
-    class StartupScreenMainMenu: spades::ui::UIElement {
+    class StartupScreenMainMenu : spades::ui::UIElement {
 
-        StartupScreenUI@ ui;
-        StartupScreenHelper@ helper;
+        StartupScreenUI @ui;
+        StartupScreenHelper @helper;
 
-        spades::ui::ListView@ serverList;
-        spades::ui::CheckBox@ bypassStartupWindowCheck;
+        spades::ui::ListView @serverList;
+        spades::ui::CheckBox @bypassStartupWindowCheck;
 
-        StartupScreenGraphicsTab@ graphicsTab;
-        StartupScreenAudioTab@ audioTab;
-        StartupScreenGenericTab@ genericTab;
-        StartupScreenSystemInfoTab@ systemInfoTab;
-        StartupScreenAdvancedTab@ advancedTab;
+        StartupScreenGraphicsTab @graphicsTab;
+        StartupScreenAudioTab @audioTab;
+        StartupScreenGenericTab @genericTab;
+        StartupScreenSystemInfoTab @systemInfoTab;
+        StartupScreenAdvancedTab @advancedTab;
 
         private ConfigItem cl_showStartupWindow("cl_showStartupWindow", "-1");
         private bool advancedTabVisible = false;
 
-        StartupScreenMainMenu(StartupScreenUI@ ui) {
+        StartupScreenMainMenu(StartupScreenUI @ui) {
             super(ui.manager);
             @this.ui = ui;
             @this.helper = ui.helper;
@@ -63,10 +63,12 @@ namespace spades {
             {
                 spades::ui::CheckBox button(Manager);
                 button.Caption = _Tr("StartupScreen", "Skip this screen next time");
-                button.Bounds = AABB2(360.f, 62.f, width - 380.f, 20.f); // note: this is updated later soon
+                button.Bounds = AABB2(360.f, 62.f, width - 380.f,
+                                      20.f); // note: this is updated later soon
                 AddChild(button);
                 @bypassStartupWindowCheck = button;
-                @button.Activated = spades::ui::EventHandler(this.OnBypassStartupWindowCheckChanged);
+                @button.Activated
+                = spades::ui::EventHandler(this.OnBypassStartupWindowCheckChanged);
             }
             {
                 UpdateCheckView view(Manager, ui.helper.PackageUpdateManager);
@@ -114,34 +116,28 @@ namespace spades {
                 @tabStrip.Changed = spades::ui::EventHandler(this.OnTabChanged);
 
                 // Reposition the "Skip this screen next time" check box
-                spades::ui::UIElement@[]@ tabStripItems = tabStrip.GetChildren();
+                spades::ui::UIElement @[] @tabStripItems = tabStrip.GetChildren();
                 float right = tabStripItems[tabStripItems.length - 1].Bounds.max.x +
-                    tabStrip.Bounds.min.x + 10.f;
+                              tabStrip.Bounds.min.x + 10.f;
                 bypassStartupWindowCheck.Bounds = AABB2(right, 62.f, width - right - 20.f, 20.f);
             }
 
             LoadConfig();
         }
 
-        private void OnTabChanged(spades::ui::UIElement@) {
+        private void OnTabChanged(spades::ui::UIElement @) {
             bool v = advancedTab.Visible;
-            if(advancedTabVisible and not v) {
+            if (advancedTabVisible and not v) {
                 LoadConfig();
             }
             advancedTabVisible = v;
         }
 
         void LoadConfig() {
-            switch(cl_showStartupWindow.IntValue) {
-            case -1:
-                bypassStartupWindowCheck.Toggled = false;
-                break;
-            case 0:
-                bypassStartupWindowCheck.Toggled = true;
-                break;
-            default:
-                bypassStartupWindowCheck.Toggled = false;
-                break;
+            switch (cl_showStartupWindow.IntValue) {
+                case -1: bypassStartupWindowCheck.Toggled = false; break;
+                case 0: bypassStartupWindowCheck.Toggled = true; break;
+                default: bypassStartupWindowCheck.Toggled = false; break;
             }
 
             this.graphicsTab.LoadConfig();
@@ -150,7 +146,7 @@ namespace spades {
             this.advancedTab.LoadConfig();
         }
 
-        StartupScreenMainMenuState@ GetState() {
+        StartupScreenMainMenuState @GetState() {
             StartupScreenMainMenuState state;
             if (this.graphicsTab.Visible) {
                 state.ActiveTabIndex = 0;
@@ -166,7 +162,7 @@ namespace spades {
             return state;
         }
 
-        void SetState(StartupScreenMainMenuState@ state) {
+        void SetState(StartupScreenMainMenuState @state) {
             this.graphicsTab.Visible = state.ActiveTabIndex == 0;
             this.audioTab.Visible = state.ActiveTabIndex == 1;
             this.genericTab.Visible = state.ActiveTabIndex == 2;
@@ -174,26 +170,26 @@ namespace spades {
             this.advancedTab.Visible = state.ActiveTabIndex == 4;
         }
 
-        private void OnBypassStartupWindowCheckChanged(spades::ui::UIElement@ sender) {
+        private void OnBypassStartupWindowCheckChanged(spades::ui::UIElement @sender) {
             cl_showStartupWindow.IntValue = (bypassStartupWindowCheck.Toggled ? 0 : 1);
         }
 
-        private void OnShowUpdateDetailsPressed(spades::ui::UIElement@ sender) {
+        private void OnShowUpdateDetailsPressed(spades::ui::UIElement @sender) {
             if (ui.helper.OpenUpdateInfoURL()) {
                 return;
             }
 
-            string msg = _Tr("StartupScreen", "An unknown error has occurred while opening the update info website.");
+            string msg =
+                _Tr("StartupScreen",
+                    "An unknown error has occurred while opening the update info website.");
             msg += "\n\n" + ui.helper.PackageUpdateManager.LatestVersionInfoPageURL;
             AlertScreen al(Parent, msg, 100.f);
             al.Run();
         }
 
-        private void OnQuitPressed(spades::ui::UIElement@ sender) {
-            ui.shouldExit = true;
-        }
+        private void OnQuitPressed(spades::ui::UIElement @sender) { ui.shouldExit = true; }
 
-        private void OnSetupPressed(spades::ui::UIElement@ sender) {
+        private void OnSetupPressed(spades::ui::UIElement @sender) {
             PreferenceView al(this, PreferenceViewOptions(), ui.fontManager);
             al.Run();
         }
@@ -203,24 +199,19 @@ namespace spades {
             ui.shouldExit = true; // we have to exit from the startup screen to start the game
         }
 
-        private void OnStartPressed(spades::ui::UIElement@ sender) {
-            Start();
-        }
+        private void OnStartPressed(spades::ui::UIElement @sender) { Start(); }
 
         void HotKey(string key) {
-            if(IsEnabled and key == "Enter") {
+            if (IsEnabled and key == "Enter") {
                 Start();
-            } else if(IsEnabled and key == "Escape") {
+            } else if (IsEnabled and key == "Escape") {
                 ui.shouldExit = true;
             } else {
                 UIElement::HotKey(key);
             }
         }
 
-        void Render() {
-            UIElement::Render();
-
-        }
+        void Render() { UIElement::Render(); }
     }
 
 }

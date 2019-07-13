@@ -34,12 +34,13 @@ namespace spades {
     }
 
     // Field with bash-like history support
-    class FieldWithHistory: spades::ui::Field {
-        array<spades::ui::CommandHistoryItem@>@ cmdhistory;
-        CommandHistoryItem@ temporalLastHistory;
+    class FieldWithHistory : spades::ui::Field {
+        array<spades::ui::CommandHistoryItem @> @cmdhistory;
+        CommandHistoryItem @temporalLastHistory;
         uint currentHistoryIndex;
 
-        FieldWithHistory(spades::ui::UIManager@ manager, array<spades::ui::CommandHistoryItem@>@ history) {
+        FieldWithHistory(spades::ui::UIManager @manager,
+                         array<spades::ui::CommandHistoryItem @> @history) {
             super(manager);
 
             @this.cmdhistory = history;
@@ -47,10 +48,8 @@ namespace spades {
             @temporalLastHistory = this.CommandHistoryItemRep;
         }
 
-        private CommandHistoryItem@ CommandHistoryItemRep {
-            get {
-                return CommandHistoryItem(this.Text, this.SelectionStart, this.SelectionEnd);
-            }
+        private CommandHistoryItem @CommandHistoryItemRep {
+            get { return CommandHistoryItem(this.Text, this.SelectionStart, this.SelectionEnd); }
             set {
                 this.Text = value.text;
                 this.Select(value.selStart, value.selEnd - value.selStart);
@@ -58,35 +57,35 @@ namespace spades {
         }
 
         private void OverwriteItem() {
-            if(currentHistoryIndex < cmdhistory.length) {
+            if (currentHistoryIndex < cmdhistory.length) {
                 @cmdhistory[currentHistoryIndex] = this.CommandHistoryItemRep;
-            }else if(currentHistoryIndex == cmdhistory.length) {
+            } else if (currentHistoryIndex == cmdhistory.length) {
                 @temporalLastHistory = this.CommandHistoryItemRep;
             }
         }
 
         private void LoadItem() {
-            if(currentHistoryIndex < cmdhistory.length) {
+            if (currentHistoryIndex < cmdhistory.length) {
                 @this.CommandHistoryItemRep = cmdhistory[currentHistoryIndex];
-            }else if(currentHistoryIndex == cmdhistory.length) {
+            } else if (currentHistoryIndex == cmdhistory.length) {
                 @this.CommandHistoryItemRep = temporalLastHistory;
             }
         }
 
         void KeyDown(string key) {
-            if(key == "Up") {
-                if(currentHistoryIndex > 0) {
+            if (key == "Up") {
+                if (currentHistoryIndex > 0) {
                     OverwriteItem();
                     currentHistoryIndex--;
                     LoadItem();
                 }
-            }else if(key == "Down") {
-                if(currentHistoryIndex < cmdhistory.length) {
+            } else if (key == "Down") {
+                if (currentHistoryIndex < cmdhistory.length) {
                     OverwriteItem();
                     currentHistoryIndex++;
                     LoadItem();
                 }
-            }else{
+            } else {
                 Field::KeyDown(key);
             }
         }
@@ -96,9 +95,7 @@ namespace spades {
             currentHistoryIndex = cmdhistory.length - 1;
         }
 
-        void Cancelled() {
-            OverwriteItem();
-        }
+        void Cancelled() { OverwriteItem(); }
     };
 
 }

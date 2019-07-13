@@ -23,25 +23,23 @@
 namespace spades {
     namespace ui {
 
-        class SliderKnob: UIElement {
-            private Slider@ slider;
+        class SliderKnob : UIElement {
+            private Slider @slider;
             private bool dragging = false;
             private double startValue;
             private float startCursorPos;
             private bool hover = false;
 
-            SliderKnob(Slider@ slider) {
+            SliderKnob(Slider @slider) {
                 super(slider.Manager);
                 @this.slider = slider;
                 IsMouseInteractive = true;
             }
 
-            private float GetCursorPos(Vector2 pos) {
-                return pos.x + Position.x;
-            }
+            private float GetCursorPos(Vector2 pos) { return pos.x + Position.x; }
 
             void MouseDown(MouseButton button, Vector2 clientPosition) {
-                if(button != spades::ui::MouseButton::LeftMouseButton) {
+                if (button != spades::ui::MouseButton::LeftMouseButton) {
                     return;
                 }
                 dragging = true;
@@ -49,16 +47,16 @@ namespace spades {
                 startCursorPos = GetCursorPos(clientPosition);
             }
             void MouseMove(Vector2 clientPosition) {
-                if(dragging) {
+                if (dragging) {
                     double val = startValue;
                     float delta = GetCursorPos(clientPosition) - startCursorPos;
                     val += delta * (slider.MaxValue - slider.MinValue) /
-                        double(slider.TrackBarMovementRange);
+                           double(slider.TrackBarMovementRange);
                     slider.ScrollTo(val);
                 }
             }
             void MouseUp(MouseButton button, Vector2 clientPosition) {
-                if(button != spades::ui::MouseButton::LeftMouseButton) {
+                if (button != spades::ui::MouseButton::LeftMouseButton) {
                     return;
                 }
                 dragging = false;
@@ -73,34 +71,31 @@ namespace spades {
             }
 
             void Render() {
-                Renderer@ renderer = Manager.Renderer;
+                Renderer @renderer = Manager.Renderer;
                 Vector2 pos = ScreenPosition;
                 Vector2 size = Size;
-                Image@ img = renderer.RegisterImage("Gfx/White.tga");
+                Image @img = renderer.RegisterImage("Gfx/White.tga");
 
                 if (hover) {
                     renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.5f);
                 } else {
                     renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.3f);
                 }
-                renderer.DrawImage(img,
-                    AABB2(pos.x + size.x * 0.5f - 3.f, pos.y,
-                    6.f, size.y));
+                renderer.DrawImage(img, AABB2(pos.x + size.x * 0.5f - 3.f, pos.y, 6.f, size.y));
 
                 renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 0.6f);
-                renderer.DrawImage(img,
-                    AABB2(pos.x + size.x * 0.5f - 2.f, pos.y + 1.f,
-                    4.f, size.y - 2.f));
+                renderer.DrawImage(
+                    img, AABB2(pos.x + size.x * 0.5f - 2.f, pos.y + 1.f, 4.f, size.y - 2.f));
             }
         }
 
-        class Slider: ScrollBarBase {
+        class Slider : ScrollBarBase {
 
-            private SliderKnob@ knob;
-            private ScrollBarFill@ fill1;
-            private ScrollBarFill@ fill2;
+            private SliderKnob @knob;
+            private ScrollBarFill @fill1;
+            private ScrollBarFill @fill2;
 
-            Slider(UIManager@ manager) {
+            Slider(UIManager @manager) {
                 super(manager);
 
                 @knob = SliderKnob(this);
@@ -112,21 +107,18 @@ namespace spades {
                 @fill2 = ScrollBarFill(this, true);
                 @fill2.Activated = EventHandler(this.LargeUp);
                 AddChild(fill2);
-
             }
 
-            private void LargeDown(UIElement@ e) {
-                ScrollBy(-LargeChange);
-            }
-            private void LargeUp(UIElement@ e) {
+            private void LargeDown(UIElement @e) { ScrollBy(-LargeChange); }
+            private void LargeUp(UIElement @e) {
                 ScrollBy(LargeChange);
-            }/*
-            private void SmallDown(UIElement@ e) {
-                ScrollBy(-SmallChange);
-            }
-            private void SmallUp(UIElement@ e) {
-                ScrollBy(SmallChange);
-            }*/
+            } /*
+             private void SmallDown(UIElement@ e) {
+                 ScrollBy(-SmallChange);
+             }
+             private void SmallUp(UIElement@ e) {
+                 ScrollBy(SmallChange);
+             }*/
 
             void OnChanged() {
                 Layout();
@@ -150,7 +142,7 @@ namespace spades {
 
             float Length {
                 get {
-                    if(Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
+                    if (Orientation == spades::ui::ScrollBarOrientation::Horizontal) {
                         return Size.x;
                     } else {
                         return Size.y;
@@ -159,46 +151,38 @@ namespace spades {
             }
 
             float TrackBarAreaLength {
-                get {
-                    return Length;
-                }
+                get { return Length; }
             }
 
             float TrackBarLength {
-                get {
-                    return 16.f;
-                }
+                get { return 16.f; }
             }
 
             float TrackBarMovementRange {
-                get {
-                    return TrackBarAreaLength - TrackBarLength;
-                }
+                get { return TrackBarAreaLength - TrackBarLength; }
             }
 
             float TrackBarPosition {
                 get {
-                    return float((Value - MinValue) / (MaxValue - MinValue) * TrackBarMovementRange);
+                    return float((Value - MinValue) / (MaxValue - MinValue) *
+                                 TrackBarMovementRange);
                 }
             }
 
             void Render() {
                 Layout();
 
-                Renderer@ renderer = Manager.Renderer;
+                Renderer @renderer = Manager.Renderer;
                 Vector2 pos = ScreenPosition;
                 Vector2 size = Size;
-                Image@ img = renderer.RegisterImage("Gfx/White.tga");
+                Image @img = renderer.RegisterImage("Gfx/White.tga");
 
                 renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 0.1f);
-                renderer.DrawImage(img,
-                    AABB2(pos.x, pos.y + size.y * 0.5f - 3.f,
-                    size.x, 6.f));
+                renderer.DrawImage(img, AABB2(pos.x, pos.y + size.y * 0.5f - 3.f, size.x, 6.f));
 
                 renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 0.2f);
-                renderer.DrawImage(img,
-                    AABB2(pos.x + 1.f, pos.y + size.y * 0.5f - 2.f,
-                    size.x - 2.f, 4.f));
+                renderer.DrawImage(
+                    img, AABB2(pos.x + 1.f, pos.y + size.y * 0.5f - 2.f, size.x - 2.f, 4.f));
 
                 ScrollBarBase::Render();
             }

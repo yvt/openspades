@@ -22,20 +22,20 @@
 
 namespace spades {
 
-
     class StartupScreenUI {
-        private Renderer@ renderer;
-        private AudioDevice@ audioDevice;
-        FontManager@ fontManager;
-        StartupScreenHelper@ helper;
+        private Renderer @renderer;
+        private AudioDevice @audioDevice;
+        FontManager @fontManager;
+        StartupScreenHelper @helper;
 
-        spades::ui::UIManager@ manager;
+        spades::ui::UIManager @manager;
 
-        StartupScreenMainMenu@ mainMenu;
+        StartupScreenMainMenu @mainMenu;
 
         bool shouldExit = false;
 
-        StartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice, FontManager@ fontManager, StartupScreenHelper@ helper) {
+        StartupScreenUI(Renderer @renderer, AudioDevice @audioDevice, FontManager @fontManager,
+                        StartupScreenHelper @helper) {
             @this.renderer = renderer;
             @this.audioDevice = audioDevice;
             @this.fontManager = fontManager;
@@ -58,52 +58,41 @@ namespace spades {
             // Delete StartupScreenMainMenu
             @manager.RootElement.GetChildren()[0].Parent = null;
 
-            // Reload entire the startup screen while preserving the state as much as possible
-            auto@ state = mainMenu.GetState();
+            // Reload entire the startup screen while preserving the state as much
+            // as possible
+            auto @state = mainMenu.GetState();
             Init();
             mainMenu.SetState(state);
         }
 
         void SetupRenderer() {
-            if(manager !is null)
+            if (manager !is null)
                 manager.KeyPanic();
         }
 
-        void MouseEvent(float x, float y) {
-            manager.MouseEvent(x, y);
-        }
+        void MouseEvent(float x, float y) { manager.MouseEvent(x, y); }
 
-        void WheelEvent(float x, float y) {
-            manager.WheelEvent(x, y);
-        }
+        void WheelEvent(float x, float y) { manager.WheelEvent(x, y); }
 
-        void KeyEvent(string key, bool down) {
-            manager.KeyEvent(key, down);
-        }
+        void KeyEvent(string key, bool down) { manager.KeyEvent(key, down); }
 
-        void TextInputEvent(string text) {
-            manager.TextInputEvent(text);
-        }
+        void TextInputEvent(string text) { manager.TextInputEvent(text); }
 
         void TextEditingEvent(string text, int start, int len) {
             manager.TextEditingEvent(text, start, len);
         }
 
-        bool AcceptsTextInput() {
-            return manager.AcceptsTextInput;
-        }
+        bool AcceptsTextInput() { return manager.AcceptsTextInput; }
 
-        AABB2 GetTextInputRect() {
-            return manager.TextInputRect;
-        }
+        AABB2 GetTextInputRect() { return manager.TextInputRect; }
 
         void RunFrame(float dt) {
             renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 1.f);
             renderer.DrawImage(renderer.RegisterImage("Gfx/White.tga"),
-                AABB2(0.f, 0.f, renderer.ScreenWidth, renderer.ScreenHeight));
+                               AABB2(0.f, 0.f, renderer.ScreenWidth, renderer.ScreenHeight));
 
             // draw title logo
-            Image@ img = renderer.RegisterImage("Gfx/Title/LogoSmall.png");
+            Image @img = renderer.RegisterImage("Gfx/Title/LogoSmall.png");
             renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.f);
             renderer.DrawImage(img, AABB2(10.f, 10.f, img.Width, img.Height));
 
@@ -114,17 +103,13 @@ namespace spades {
             renderer.Flip();
         }
 
-        void Closing() {
-            shouldExit = true;
-        }
+        void Closing() { shouldExit = true; }
 
-        bool WantsToBeClosed() {
-            return shouldExit;
-        }
+        bool WantsToBeClosed() { return shouldExit; }
     }
 
-    StartupScreenUI@ CreateStartupScreenUI(Renderer@ renderer, AudioDevice@ audioDevice,
-        FontManager@ fontManager, StartupScreenHelper@ helper) {
+    StartupScreenUI @CreateStartupScreenUI(Renderer @renderer, AudioDevice @audioDevice,
+                                           FontManager @fontManager, StartupScreenHelper @helper) {
         return StartupScreenUI(renderer, audioDevice, fontManager, helper);
     }
 

@@ -23,68 +23,66 @@
 
 namespace spades {
 
-    class RefreshButton: spades::ui::SimpleButton {
-        RefreshButton(spades::ui::UIManager@ manager){
-            super(manager);
-        }
+    class RefreshButton : spades::ui::SimpleButton {
+        RefreshButton(spades::ui::UIManager @manager) { super(manager); }
         void Render() {
             SimpleButton::Render();
 
-            Renderer@ renderer = Manager.Renderer;
+            Renderer @renderer = Manager.Renderer;
             Vector2 pos = ScreenPosition;
             Vector2 size = Size;
-            Image@ img = renderer.RegisterImage("Gfx/UI/Refresh.png");
+            Image @img = renderer.RegisterImage("Gfx/UI/Refresh.png");
             renderer.DrawImage(img, pos + (size - Vector2(16.f, 16.f)) * 0.5f);
         }
     }
 
-    class ProtocolButton: spades::ui::SimpleButton {
-        ProtocolButton(spades::ui::UIManager@ manager){
+    class ProtocolButton : spades::ui::SimpleButton {
+        ProtocolButton(spades::ui::UIManager @manager) {
             super(manager);
             Toggle = true;
         }
     }
 
     uint8 ToLower(uint8 c) {
-        if(c >= uint8(0x41) and c <= uint8(0x5a)) {
+        if (c >= uint8(0x41) and c <= uint8(0x5a)) {
             return uint8(c - 0x41 + 0x61);
         } else {
             return c;
         }
     }
     bool StringContainsCaseInsensitive(string text, string pattern) {
-        for(int i = text.length - 1; i >= 0; i--)
+        for (int i = text.length - 1; i >= 0; i--)
             text[i] = ToLower(text[i]);
-        for(int i = pattern.length - 1; i >= 0; i--)
+        for (int i = pattern.length - 1; i >= 0; i--)
             pattern[i] = ToLower(pattern[i]);
         return text.findFirst(pattern) >= 0;
     }
 
-    class MainScreenMainMenu: spades::ui::UIElement {
+    class MainScreenMainMenu : spades::ui::UIElement {
 
-        MainScreenUI@ ui;
-        MainScreenHelper@ helper;
-        spades::ui::Field@ addressField;
+        MainScreenUI @ui;
+        MainScreenHelper @helper;
+        spades::ui::Field @addressField;
 
-        spades::ui::Button@ protocol3Button;
-        spades::ui::Button@ protocol4Button;
+        spades::ui::Button @protocol3Button;
+        spades::ui::Button @protocol4Button;
 
-        spades::ui::Button@ filterProtocol3Button;
-        spades::ui::Button@ filterProtocol4Button;
-        spades::ui::Button@ filterEmptyButton;
-        spades::ui::Button@ filterFullButton;
-        spades::ui::Field@ filterField;
+        spades::ui::Button @filterProtocol3Button;
+        spades::ui::Button @filterProtocol4Button;
+        spades::ui::Button @filterEmptyButton;
+        spades::ui::Button @filterFullButton;
+        spades::ui::Field @filterField;
 
-        spades::ui::ListView@ serverList;
-        MainScreenServerListLoadingView@ loadingView;
-        MainScreenServerListErrorView@ errorView;
+        spades::ui::ListView @serverList;
+        MainScreenServerListLoadingView @loadingView;
+        MainScreenServerListErrorView @errorView;
         bool loading = false, loaded = false;
 
         private ConfigItem cg_protocolVersion("cg_protocolVersion", "3");
         private ConfigItem cg_lastQuickConnectHost("cg_lastQuickConnectHost", "127.0.0.1");
         private ConfigItem cg_serverlistSort("cg_serverlistSort", "16385");
 
-        MainScreenMainMenu(MainScreenUI@ ui) {
+        MainScreenMainMenu(MainScreenUI @ui) {
             super(ui.manager);
             @this.ui = ui;
             @this.helper = ui.helper;
@@ -109,8 +107,8 @@ namespace spades {
             }
             {
                 @protocol3Button = ProtocolButton(Manager);
-                protocol3Button.Bounds = AABB2(contentsLeft + contentsWidth - 240.f + 6.f, 200,
-                    40.f, 30.f);
+                protocol3Button.Bounds =
+                    AABB2(contentsLeft + contentsWidth - 240.f + 6.f, 200, 40.f, 30.f);
                 protocol3Button.Caption = _Tr("MainScreen", "0.75");
                 @protocol3Button.Activated = spades::ui::EventHandler(this.OnProtocol3Pressed);
                 protocol3Button.Toggle = true;
@@ -119,8 +117,8 @@ namespace spades {
             }
             {
                 @protocol4Button = ProtocolButton(Manager);
-                protocol4Button.Bounds = AABB2(contentsLeft + contentsWidth - 200.f + 6.f, 200,
-                    40.f, 30.f);
+                protocol4Button.Bounds =
+                    AABB2(contentsLeft + contentsWidth - 200.f + 6.f, 200, 40.f, 30.f);
                 protocol4Button.Caption = _Tr("MainScreen", "0.76");
                 @protocol4Button.Activated = spades::ui::EventHandler(this.OnProtocol4Pressed);
                 protocol4Button.Toggle = true;
@@ -163,26 +161,25 @@ namespace spades {
             }
             {
                 @filterProtocol3Button = ProtocolButton(Manager);
-                filterProtocol3Button.Bounds = AABB2(contentsLeft + 50.f, footerPos,
-                    40.f, 30.f);
+                filterProtocol3Button.Bounds = AABB2(contentsLeft + 50.f, footerPos, 40.f, 30.f);
                 filterProtocol3Button.Caption = _Tr("MainScreen", "0.75");
-                @filterProtocol3Button.Activated = spades::ui::EventHandler(this.OnFilterProtocol3Pressed);
+                @filterProtocol3Button.Activated
+                = spades::ui::EventHandler(this.OnFilterProtocol3Pressed);
                 filterProtocol3Button.Toggle = true;
                 AddChild(filterProtocol3Button);
             }
             {
                 @filterProtocol4Button = ProtocolButton(Manager);
-                filterProtocol4Button.Bounds = AABB2(contentsLeft + 90.f, footerPos,
-                    40.f, 30.f);
+                filterProtocol4Button.Bounds = AABB2(contentsLeft + 90.f, footerPos, 40.f, 30.f);
                 filterProtocol4Button.Caption = _Tr("MainScreen", "0.76");
-                @filterProtocol4Button.Activated = spades::ui::EventHandler(this.OnFilterProtocol4Pressed);
+                @filterProtocol4Button.Activated
+                = spades::ui::EventHandler(this.OnFilterProtocol4Pressed);
                 filterProtocol4Button.Toggle = true;
                 AddChild(filterProtocol4Button);
             }
             {
                 @filterEmptyButton = ProtocolButton(Manager);
-                filterEmptyButton.Bounds = AABB2(contentsLeft + 135.f, footerPos,
-                    50.f, 30.f);
+                filterEmptyButton.Bounds = AABB2(contentsLeft + 135.f, footerPos, 50.f, 30.f);
                 filterEmptyButton.Caption = _Tr("MainScreen", "Empty");
                 @filterEmptyButton.Activated = spades::ui::EventHandler(this.OnFilterEmptyPressed);
                 filterEmptyButton.Toggle = true;
@@ -190,8 +187,7 @@ namespace spades {
             }
             {
                 @filterFullButton = ProtocolButton(Manager);
-                filterFullButton.Bounds = AABB2(contentsLeft + 185.f, footerPos,
-                    70.f, 30.f);
+                filterFullButton.Bounds = AABB2(contentsLeft + 185.f, footerPos, 70.f, 30.f);
                 filterFullButton.Caption = _Tr("MainScreen", "Not Full");
                 @filterFullButton.Activated = spades::ui::EventHandler(this.OnFilterFullPressed);
                 filterFullButton.Toggle = true;
@@ -267,7 +263,7 @@ namespace spades {
         }
 
         void LoadServerList() {
-            if(loading) {
+            if (loading) {
                 return;
             }
             loaded = false;
@@ -278,54 +274,42 @@ namespace spades {
             helper.StartQuery();
         }
 
-        void ServerListItemActivated(ServerListModel@ sender, MainScreenServerItem@ item) {
+        void ServerListItemActivated(ServerListModel @sender, MainScreenServerItem @item) {
             addressField.Text = item.Address;
             cg_lastQuickConnectHost = addressField.Text;
-            if(item.Protocol == "0.75") {
+            if (item.Protocol == "0.75") {
                 SetProtocolVersion(3);
-            }else if(item.Protocol == "0.76") {
+            } else if (item.Protocol == "0.76") {
                 SetProtocolVersion(4);
             }
             addressField.SelectAll();
         }
 
-        void ServerListItemDoubleClicked(ServerListModel@ sender, MainScreenServerItem@ item) {
+        void ServerListItemDoubleClicked(ServerListModel @sender, MainScreenServerItem @item) {
             ServerListItemActivated(sender, item);
 
             // Double-click to connect
             Connect();
         }
 
-        void ServerListItemRightClicked(ServerListModel@ sender, MainScreenServerItem@ item) {
+        void ServerListItemRightClicked(ServerListModel @sender, MainScreenServerItem @item) {
             helper.SetServerFavorite(item.Address, !item.Favorite);
             UpdateServerList();
         }
 
-        private void SortServerListByPing(spades::ui::UIElement@ sender) {
-            SortServerList(0);
-        }
-        private void SortServerListByNumPlayers(spades::ui::UIElement@ sender) {
+        private void SortServerListByPing(spades::ui::UIElement @sender) { SortServerList(0); }
+        private void SortServerListByNumPlayers(spades::ui::UIElement @sender) {
             SortServerList(1);
         }
-        private void SortServerListByName(spades::ui::UIElement@ sender) {
-            SortServerList(2);
-        }
-        private void SortServerListByMapName(spades::ui::UIElement@ sender) {
-            SortServerList(3);
-        }
-        private void SortServerListByGameMode(spades::ui::UIElement@ sender) {
-            SortServerList(4);
-        }
-        private void SortServerListByProtocol(spades::ui::UIElement@ sender) {
-            SortServerList(5);
-        }
-        private void SortServerListByCountry(spades::ui::UIElement@ sender) {
-            SortServerList(6);
-        }
+        private void SortServerListByName(spades::ui::UIElement @sender) { SortServerList(2); }
+        private void SortServerListByMapName(spades::ui::UIElement @sender) { SortServerList(3); }
+        private void SortServerListByGameMode(spades::ui::UIElement @sender) { SortServerList(4); }
+        private void SortServerListByProtocol(spades::ui::UIElement @sender) { SortServerList(5); }
+        private void SortServerListByCountry(spades::ui::UIElement @sender) { SortServerList(6); }
 
         private void SortServerList(int keyId) {
             int sort = cg_serverlistSort.IntValue;
-            if(int(sort & 0xfff) == keyId) {
+            if (int(sort & 0xfff) == keyId) {
                 sort ^= int(0x4000);
             } else {
                 sort = keyId;
@@ -336,7 +320,7 @@ namespace spades {
 
         private void UpdateServerList() {
             string key = "";
-            switch(cg_serverlistSort.IntValue & 0xfff) {
+            switch (cg_serverlistSort.IntValue & 0xfff) {
                 case 0: key = "Ping"; break;
                 case 1: key = "NumPlayers"; break;
                 case 2: key = "Name"; break;
@@ -345,9 +329,9 @@ namespace spades {
                 case 5: key = "Protocol"; break;
                 case 6: key = "Country"; break;
             }
-            MainScreenServerItem@[]@ list = helper.GetServerList(key,
-                (cg_serverlistSort.IntValue & 0x4000) != 0);
-            if((list is null) or (loading)){
+            MainScreenServerItem @[] @list =
+                helper.GetServerList(key, (cg_serverlistSort.IntValue & 0x4000) != 0);
+            if ((list is null)or(loading)) {
                 @serverList.Model = spades::ui::ListViewModel(); // empty
                 return;
             }
@@ -358,25 +342,25 @@ namespace spades {
             bool filterEmpty = filterEmptyButton.Toggled;
             bool filterFull = filterFullButton.Toggled;
             string filterText = filterField.Text;
-            MainScreenServerItem@[]@ list2 = array<spades::MainScreenServerItem@>();
-            for(int i = 0, count = list.length; i < count; i++) {
-                MainScreenServerItem@ item = list[i];
-                if(filterProtocol3 and (item.Protocol != "0.75")) {
+            MainScreenServerItem @[] @list2 = array<spades::MainScreenServerItem @>();
+            for (int i = 0, count = list.length; i < count; i++) {
+                MainScreenServerItem @item = list[i];
+                if (filterProtocol3 and(item.Protocol != "0.75")) {
                     continue;
                 }
-                if(filterProtocol4 and (item.Protocol != "0.76")) {
+                if (filterProtocol4 and(item.Protocol != "0.76")) {
                     continue;
                 }
-                if(filterEmpty and (item.NumPlayers > 0)) {
+                if (filterEmpty and(item.NumPlayers > 0)) {
                     continue;
                 }
-                if(filterFull and (item.NumPlayers >= item.MaxPlayers)) {
+                if (filterFull and(item.NumPlayers >= item.MaxPlayers)) {
                     continue;
                 }
-                if(filterText.length > 0) {
-                    if(not (StringContainsCaseInsensitive(item.Name, filterText) or
-                        StringContainsCaseInsensitive(item.MapName, filterText) or
-                        StringContainsCaseInsensitive(item.GameMode, filterText))) {
+                if (filterText.length > 0) {
+                    if (not(StringContainsCaseInsensitive(item.Name, filterText)
+                                or StringContainsCaseInsensitive(item.MapName, filterText)
+                                    or StringContainsCaseInsensitive(item.GameMode, filterText))) {
                         continue;
                     }
                 }
@@ -392,12 +376,13 @@ namespace spades {
         }
 
         private void CheckServerList() {
-            if(helper.PollServerListState()) {
-                MainScreenServerItem@[]@ list = helper.GetServerList("", false);
-                if(list is null or list.length == 0) {
+            if (helper.PollServerListState()) {
+                MainScreenServerItem @[] @list = helper.GetServerList("", false);
+                if (list is null or list.length == 0) {
                     // failed.
                     // FIXME: show error message?
-                    loaded = false; loading = false;
+                    loaded = false;
+                    loading = false;
                     errorView.Visible = true;
                     loadingView.Visible = false;
                     @serverList.Model = spades::ui::ListViewModel(); // empty
@@ -411,7 +396,7 @@ namespace spades {
             }
         }
 
-        private void OnAddressChanged(spades::ui::UIElement@ sender) {
+        private void OnAddressChanged(spades::ui::UIElement @sender) {
             cg_lastQuickConnectHost = addressField.Text;
         }
 
@@ -421,69 +406,58 @@ namespace spades {
             cg_protocolVersion = ver;
         }
 
-        private void OnProtocol3Pressed(spades::ui::UIElement@ sender) {
-            SetProtocolVersion(3);
-        }
+        private void OnProtocol3Pressed(spades::ui::UIElement @sender) { SetProtocolVersion(3); }
 
-        private void OnProtocol4Pressed(spades::ui::UIElement@ sender) {
-            SetProtocolVersion(4);
-        }
+        private void OnProtocol4Pressed(spades::ui::UIElement @sender) { SetProtocolVersion(4); }
 
-        private void OnFilterProtocol3Pressed(spades::ui::UIElement@ sender) {
+        private void OnFilterProtocol3Pressed(spades::ui::UIElement @sender) {
             filterProtocol4Button.Toggled = false;
             UpdateServerList();
         }
-        private void OnFilterProtocol4Pressed(spades::ui::UIElement@ sender) {
+        private void OnFilterProtocol4Pressed(spades::ui::UIElement @sender) {
             filterProtocol3Button.Toggled = false;
             UpdateServerList();
         }
-        private void OnFilterFullPressed(spades::ui::UIElement@ sender) {
+        private void OnFilterFullPressed(spades::ui::UIElement @sender) {
             filterEmptyButton.Toggled = false;
             UpdateServerList();
         }
-        private void OnFilterEmptyPressed(spades::ui::UIElement@ sender) {
+        private void OnFilterEmptyPressed(spades::ui::UIElement @sender) {
             filterFullButton.Toggled = false;
             UpdateServerList();
         }
-        private void OnFilterTextChanged(spades::ui::UIElement@ sender) {
-            UpdateServerList();
-        }
+        private void OnFilterTextChanged(spades::ui::UIElement @sender) { UpdateServerList(); }
 
-        private void OnRefreshServerListPressed(spades::ui::UIElement@ sender) {
-            LoadServerList();
-        }
+        private void OnRefreshServerListPressed(spades::ui::UIElement @sender) { LoadServerList(); }
 
-        private void OnQuitPressed(spades::ui::UIElement@ sender) {
-            ui.shouldExit = true;
-        }
+        private void OnQuitPressed(spades::ui::UIElement @sender) { ui.shouldExit = true; }
 
-        private void OnCreditsPressed(spades::ui::UIElement@ sender) {
-            AlertScreen al(this, ui.helper.Credits, Min(500.f, Manager.Renderer.ScreenHeight - 100.f));
+        private void OnCreditsPressed(spades::ui::UIElement @sender) {
+            AlertScreen al(this, ui.helper.Credits,
+                           Min(500.f, Manager.Renderer.ScreenHeight - 100.f));
             al.Run();
         }
 
-        private void OnSetupPressed(spades::ui::UIElement@ sender) {
+        private void OnSetupPressed(spades::ui::UIElement @sender) {
             PreferenceView al(this, PreferenceViewOptions(), ui.fontManager);
             al.Run();
         }
 
         private void Connect() {
             string msg = helper.ConnectServer(addressField.Text, cg_protocolVersion.IntValue);
-            if(msg.length > 0) {
+            if (msg.length > 0) {
                 // failde to initialize client.
                 AlertScreen al(this, msg);
                 al.Run();
             }
         }
 
-        private void OnConnectPressed(spades::ui::UIElement@ sender) {
-            Connect();
-        }
+        private void OnConnectPressed(spades::ui::UIElement @sender) { Connect(); }
 
         void HotKey(string key) {
-            if(IsEnabled and key == "Enter") {
+            if (IsEnabled and key == "Enter") {
                 Connect();
-            } else if(IsEnabled and key == "Escape") {
+            } else if (IsEnabled and key == "Escape") {
                 ui.shouldExit = true;
             } else {
                 UIElement::HotKey(key);
@@ -495,17 +469,21 @@ namespace spades {
             UIElement::Render();
 
             // check for client error message.
-            if(IsEnabled) {
+            if (IsEnabled) {
                 string msg = helper.GetPendingErrorMessage();
-                if(msg.length > 0) {
+                if (msg.length > 0) {
                     // try to maek the "disconnected" message more friendly.
-                    if(msg.findFirst("Disconnected:") >= 0) {
+                    if (msg.findFirst("Disconnected:") >= 0) {
                         int ind1 = msg.findFirst("Disconnected:");
                         int ind2 = msg.findFirst("\n", ind1);
-                        if(ind2 < 0) ind2 = msg.length;
+                        if (ind2 < 0)
+                            ind2 = msg.length;
                         ind1 += "Disconnected:".length;
                         msg = msg.substr(ind1, ind2 - ind1);
-                        msg = _Tr("MainScreen", "You were disconnected from the server because of the following reason:\n\n{0}", msg);
+                        msg = _Tr(
+                            "MainScreen",
+                            "You were disconnected from the server because of the following reason:\n\n{0}",
+                            msg);
                     }
 
                     // failed to connect.

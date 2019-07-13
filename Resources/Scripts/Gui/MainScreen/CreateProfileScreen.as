@@ -19,19 +19,19 @@
  */
 
 namespace spades {
-    class CreateProfileScreen: spades::ui::UIElement {
+    class CreateProfileScreen : spades::ui::UIElement {
 
         private float contentsTop, contentsHeight;
 
-        spades::ui::EventHandler@ Closed;
-        private spades::ui::UIElement@ owner;
-        private spades::ui::Field@ nameField;
-        private spades::ui::Button@ okButton;
+        spades::ui::EventHandler @Closed;
+        private spades::ui::UIElement @owner;
+        private spades::ui::Field @nameField;
+        private spades::ui::Button @okButton;
 
         private ConfigItem cg_playerName("cg_playerName", "Deuce");
         private ConfigItem cg_playerNameIsSet("cg_playerNameIsSet", "0");
 
-        CreateProfileScreen(spades::ui::UIElement@ owner) {
+        CreateProfileScreen(spades::ui::UIElement @owner) {
             super(owner.Manager);
             @this.owner = owner;
             @Font = Manager.RootElement.Font;
@@ -56,10 +56,8 @@ namespace spades {
             {
                 spades::ui::Button button(Manager);
                 button.Caption = _Tr("CreateProfileScreen", "OK");
-                button.Bounds = AABB2(
-                    contentsLeft + contentsWidth - 140.f,
-                    contentsTop + contentsHeight - 40.f
-                    , 140.f, 30.f);
+                button.Bounds = AABB2(contentsLeft + contentsWidth - 140.f,
+                                      contentsTop + contentsHeight - 40.f, 140.f, 30.f);
                 @button.Activated = spades::ui::EventHandler(this.OnOkPressed);
                 button.Enable = false;
                 AddChild(button);
@@ -68,10 +66,8 @@ namespace spades {
             {
                 spades::ui::Button button(Manager);
                 button.Caption = _Tr("CreateProfileScreen", "Decide later");
-                button.Bounds = AABB2(
-                    contentsLeft,
-                    contentsTop + contentsHeight - 40.f
-                    , 140.f, 30.f);
+                button.Bounds =
+                    AABB2(contentsLeft, contentsTop + contentsHeight - 40.f, 140.f, 30.f);
                 @button.Activated = spades::ui::EventHandler(this.OnChooseLater);
                 AddChild(button);
             }
@@ -101,7 +97,8 @@ namespace spades {
             }
             {
                 spades::ui::Label label(Manager);
-                label.Text = _Tr("CreateProfileScreen", "You can change it later in the Setup dialog.");
+                label.Text =
+                    _Tr("CreateProfileScreen", "You can change it later in the Setup dialog.");
                 label.Bounds = AABB2(contentsLeft, contentsTop + 106.f, contentsWidth, 32.f);
                 label.Alignment = Vector2(0.f, 0.5f);
                 AddChild(label);
@@ -109,7 +106,7 @@ namespace spades {
         }
 
         private void OnClosed() {
-            if(Closed !is null) {
+            if (Closed !is null) {
                 Closed(this);
             }
         }
@@ -126,7 +123,7 @@ namespace spades {
             @Manager.ActiveElement = nameField;
         }
 
-        private void OnOkPressed(spades::ui::UIElement@ sender) {
+        private void OnOkPressed(spades::ui::UIElement @sender) {
             if (nameField.Text.length == 0) {
                 return;
             }
@@ -135,16 +132,14 @@ namespace spades {
             Close();
         }
 
-        private void OnChooseLater(spades::ui::UIElement@ sender) {
-            Close();
-        }
+        private void OnChooseLater(spades::ui::UIElement @sender) { Close(); }
 
-        private void OnNameChanged(spades::ui::UIElement@ sender) {
+        private void OnNameChanged(spades::ui::UIElement @sender) {
             okButton.Enable = nameField.Text.length > 0;
         }
 
         void HotKey(string key) {
-            if(IsEnabled and (key == "Enter" or key == "Escape")) {
+            if (IsEnabled and(key == "Enter" or key == "Escape")) {
                 if (key == "Enter") {
                     OnOkPressed(this);
                 } else if (key == "Escape") {
@@ -158,22 +153,19 @@ namespace spades {
         void Render() {
             Vector2 pos = ScreenPosition;
             Vector2 size = Size;
-            Renderer@ r = Manager.Renderer;
-            Image@ img = r.RegisterImage("Gfx/White.tga");
+            Renderer @r = Manager.Renderer;
+            Image @img = r.RegisterImage("Gfx/White.tga");
 
             r.ColorNP = Vector4(1, 1, 1, 0.08f);
+            r.DrawImage(img, AABB2(pos.x, pos.y + contentsTop - 15.f, size.x, 1.f));
             r.DrawImage(img,
-                AABB2(pos.x, pos.y + contentsTop - 15.f, size.x, 1.f));
-            r.DrawImage(img,
-                AABB2(pos.x, pos.y + contentsTop + contentsHeight + 15.f, size.x, 1.f));
+                        AABB2(pos.x, pos.y + contentsTop + contentsHeight + 15.f, size.x, 1.f));
             r.ColorNP = Vector4(1, 1, 1, 0.2f);
+            r.DrawImage(img, AABB2(pos.x, pos.y + contentsTop - 14.f, size.x, 1.f));
             r.DrawImage(img,
-                AABB2(pos.x, pos.y + contentsTop - 14.f, size.x, 1.f));
-            r.DrawImage(img,
-                AABB2(pos.x, pos.y + contentsTop + contentsHeight + 14.f, size.x, 1.f));
+                        AABB2(pos.x, pos.y + contentsTop + contentsHeight + 14.f, size.x, 1.f));
 
             UIElement::Render();
         }
-
     }
 }

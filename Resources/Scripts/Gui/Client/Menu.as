@@ -21,11 +21,11 @@
 
 namespace spades {
 
-    class ClientMenu: spades::ui::UIElement {
-        private ClientUI@ ui;
-        private ClientUIHelper@ helper;
+    class ClientMenu : spades::ui::UIElement {
+        private ClientUI @ui;
+        private ClientUIHelper @helper;
 
-        ClientMenu(ClientUI@ ui) {
+        ClientMenu(ClientUI @ui) {
             super(ui.manager);
             @this.ui = ui;
             @this.helper = ui.helper;
@@ -37,8 +37,8 @@ namespace spades {
             {
                 spades::ui::Label label(Manager);
                 label.BackgroundColor = Vector4(0, 0, 0, 0.5f);
-                label.Bounds = AABB2(0.f, 0.f,
-                    Manager.Renderer.ScreenWidth, Manager.Renderer.ScreenHeight);
+                label.Bounds =
+                    AABB2(0.f, 0.f, Manager.Renderer.ScreenWidth, Manager.Renderer.ScreenHeight);
                 AddChild(label);
             }
 
@@ -78,26 +78,22 @@ namespace spades {
             }
         }
 
-        private void OnBackToGame(spades::ui::UIElement@ sender) {
-            @ui.ActiveUI = null;
-        }
-        private void OnSetup(spades::ui::UIElement@ sender) {
+        private void OnBackToGame(spades::ui::UIElement @sender) { @ui.ActiveUI = null; }
+        private void OnSetup(spades::ui::UIElement @sender) {
             PreferenceViewOptions opt;
             opt.GameActive = true;
 
             PreferenceView al(this, opt, ui.fontManager);
             al.Run();
         }
-        private void OnChatLog(spades::ui::UIElement@ sender) {
+        private void OnChatLog(spades::ui::UIElement @sender) {
             @ui.ActiveUI = @ui.chatLogWindow;
             ui.chatLogWindow.ScrollToEnd();
         }
-        private void OnDisconnect(spades::ui::UIElement@ sender) {
-            ui.shouldExit = true;
-        }
+        private void OnDisconnect(spades::ui::UIElement @sender) { ui.shouldExit = true; }
 
         void HotKey(string key) {
-            if(IsEnabled and key == "Escape") {
+            if (IsEnabled and key == "Escape") {
                 @ui.ActiveUI = null;
             } else {
                 UIElement::HotKey(key);

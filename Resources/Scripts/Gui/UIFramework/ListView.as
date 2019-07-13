@@ -24,21 +24,23 @@ namespace spades {
     namespace ui {
 
         class ListViewModel {
-            int NumRows { get { return 0; } }
-            UIElement@ CreateElement(int row) { return null; }
-            void RecycleElement(UIElement@ elem) {}
+            int NumRows {
+                get { return 0; }
+            }
+            UIElement @CreateElement(int row) { return null; }
+            void RecycleElement(UIElement @elem) {}
         }
 
         /** Simple virtual stack panel implementation. */
-        class ListViewBase: UIElement {
-            private ScrollBar@ scrollBar;
-            private ListViewModel@ model;
+        class ListViewBase : UIElement {
+            private ScrollBar @scrollBar;
+            private ListViewModel @model;
             float RowHeight = 24.f;
             float ScrollBarWidth = 16.f;
             private UIElementDeque items;
             private int loadedStartIndex = 0;
 
-            ListViewBase(UIManager@ manager) {
+            ListViewBase(UIManager @manager) {
                 super(manager);
                 @scrollBar = ScrollBar(Manager);
                 scrollBar.Bounds = AABB2();
@@ -49,20 +51,14 @@ namespace spades {
                 @model = ListViewModel();
             }
 
-            private void OnScrolled(UIElement@ sender) {
-                Layout();
-            }
+            private void OnScrolled(UIElement @sender) { Layout(); }
 
             int NumVisibleRows {
-                get final {
-                    return int(floor(Size.y / RowHeight));
-                }
+                get final { return int(floor(Size.y / RowHeight)); }
             }
 
             int MaxTopRowIndex {
-                get final {
-                    return Max(0, model.NumRows - NumVisibleRows);
-                }
+                get final { return Max(0, model.NumRows - NumVisibleRows); }
             }
 
             int TopRowIndex {
@@ -90,33 +86,33 @@ namespace spades {
                 int loadedStart = loadedStartIndex;
                 int loadedEnd = loadedStartIndex + items.Count;
 
-                if(items.Count == 0 or visibleStart >= loadedEnd or visibleEnd <= loadedStart) {
+                if (items.Count == 0 or visibleStart >= loadedEnd or visibleEnd <= loadedStart) {
                     // full reload
                     UnloadAll();
-                    for(int i = visibleStart; i < visibleEnd; i++) {
+                    for (int i = visibleStart; i < visibleEnd; i++) {
                         items.PushBack(model.CreateElement(i));
                         AddChild(items.Back);
                     }
                     loadedStartIndex = visibleStart;
                 } else {
-                    while(loadedStart < visibleStart) {
+                    while (loadedStart < visibleStart) {
                         RemoveChild(items.Front);
                         model.RecycleElement(items.Front);
                         items.PopFront();
                         loadedStart++;
                     }
-                    while(loadedEnd > visibleEnd) {
+                    while (loadedEnd > visibleEnd) {
                         RemoveChild(items.Back);
                         model.RecycleElement(items.Back);
                         items.PopBack();
                         loadedEnd--;
                     }
-                    while(visibleStart < loadedStart) {
+                    while (visibleStart < loadedStart) {
                         loadedStart--;
                         items.PushFront(model.CreateElement(loadedStart));
                         AddChild(items.Front);
                     }
-                    while(visibleEnd > loadedEnd) {
+                    while (visibleEnd > loadedEnd) {
                         items.PushBack(model.CreateElement(loadedEnd));
                         AddChild(items.Back);
                         loadedEnd++;
@@ -125,11 +121,11 @@ namespace spades {
                 }
 
                 // relayout items
-                UIElementDeque@ items = this.items;
+                UIElementDeque @items = this.items;
                 int count = items.Count;
                 float y = 0.f;
                 float w = ItemWidth;
-                for(int i = 0; i < count; i++){
+                for (int i = 0; i < count; i++) {
                     items[i].Bounds = AABB2(0.f, y, w, RowHeight);
                     y += RowHeight;
                 }
@@ -139,14 +135,10 @@ namespace spades {
             }
 
             float ItemWidth {
-                get {
-                    return Size.x - ScrollBarWidth;
-                }
+                get { return Size.x - ScrollBarWidth; }
             }
 
-            void MouseWheel(float delta) {
-                scrollBar.ScrollBy(delta);
-            }
+            void MouseWheel(float delta) { scrollBar.ScrollBy(delta); }
 
             void Reload() {
                 UnloadAll();
@@ -154,19 +146,19 @@ namespace spades {
             }
 
             private void UnloadAll() {
-                UIElementDeque@ items = this.items;
+                UIElementDeque @items = this.items;
                 int count = items.Count;
-                for(int i = 0; i < count; i++){
+                for (int i = 0; i < count; i++) {
                     RemoveChild(items[i]);
                     model.RecycleElement(items[i]);
                 }
                 items.Clear();
             }
 
-            ListViewModel@ Model {
+            ListViewModel @Model {
                 get final { return model; }
                 set {
-                    if(model is value) {
+                    if (model is value) {
                         return;
                     }
                     UnloadAll();
@@ -175,26 +167,19 @@ namespace spades {
                 }
             }
 
-            void ScrollToTop() {
-                scrollBar.ScrollTo(0.0);
-            }
+            void ScrollToTop() { scrollBar.ScrollTo(0.0); }
 
-            void ScrollToEnd() {
-                scrollBar.ScrollTo(scrollBar.MaxValue);
-            }
+            void ScrollToEnd() { scrollBar.ScrollTo(scrollBar.MaxValue); }
         }
 
-
-        class ListView: ListViewBase {
-            ListView(UIManager@ manager) {
-                super(manager);
-            }
+        class ListView : ListViewBase {
+            ListView(UIManager @manager) { super(manager); }
             void Render() {
                 // render background
-                Renderer@ renderer = Manager.Renderer;
+                Renderer @renderer = Manager.Renderer;
                 Vector2 pos = ScreenPosition;
                 Vector2 size = Size;
-                Image@ img = renderer.RegisterImage("Gfx/White.tga");
+                Image @img = renderer.RegisterImage("Gfx/White.tga");
                 renderer.ColorNP = Vector4(0.f, 0.f, 0.f, 0.2f);
                 renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, size.y));
 
@@ -202,7 +187,8 @@ namespace spades {
                 renderer.DrawImage(img, AABB2(pos.x, pos.y, size.x, 1.f));
                 renderer.DrawImage(img, AABB2(pos.x, pos.y + size.y - 1.f, size.x, 1.f));
                 renderer.DrawImage(img, AABB2(pos.x, pos.y + 1.f, 1.f, size.y - 2.f));
-                renderer.DrawImage(img, AABB2(pos.x + size.x - 1.f, pos.y + 1.f, 1.f, size.y - 2.f));
+                renderer.DrawImage(img,
+                                   AABB2(pos.x + size.x - 1.f, pos.y + 1.f, 1.f, size.y - 2.f));
 
                 ListViewBase::Render();
             }
