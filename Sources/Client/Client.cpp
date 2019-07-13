@@ -65,7 +65,7 @@ SPADES_SETTING(cg_playerName);
 
 namespace spades {
 	namespace client {
-        
+
 		Client::Client(IRenderer *r, IAudioDevice *audioDev, const ServerAddress &host,
 		               FontManager *fontManager)
 		    : playerName(cg_playerName.operator std::string().substr(0, 15)),
@@ -471,14 +471,19 @@ namespace spades {
 			if (scriptedUI->WantsClientToBeClosed())
 				readyToClose = true;
 
-			// Well done!
-			renderer->FrameDone();
-			renderer->Flip();
-
 			// reset all "delayed actions" (in case we forget to reset these)
 			hasDelayedReload = false;
 
 			time += dt;
+		}
+
+
+		void Client::RunFrameLate(float dt) {
+			SPADES_MARK_FUNCTION();
+
+			// Well done!
+			renderer->FrameDone();
+			renderer->Flip();
 		}
 
 		bool Client::IsLimboViewActive() {

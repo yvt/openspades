@@ -98,7 +98,7 @@ namespace spades {
 
 			FPSCounter fpsCounter;
 			FPSCounter upsCounter;
-			
+
 			std::unique_ptr<NetClient> net;
 			std::string playerName;
 			std::unique_ptr<IStream> logStream;
@@ -400,6 +400,7 @@ namespace spades {
 			Client(IRenderer *, IAudioDevice *, const ServerAddress &host, FontManager *);
 
 			void RunFrame(float dt) override;
+			void RunFrameLate(float dt) override;
 
 			void Closing() override;
 			void MouseEvent(float x, float y) override;

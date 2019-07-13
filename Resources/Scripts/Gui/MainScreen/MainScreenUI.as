@@ -159,9 +159,12 @@ namespace spades {
             manager.RunFrame(dt);
             manager.Render();
 
+            time += Min(dt, 0.05f);
+        }
+
+        void RunFrameLate(float dt) {
             renderer.FrameDone();
             renderer.Flip();
-            time += Min(dt, 0.05f);
         }
 
         void Closing() { shouldExit = true; }

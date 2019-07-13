@@ -98,7 +98,9 @@ namespace spades {
 
             manager.RunFrame(dt);
             manager.Render();
+        }
 
+        void RunFrameLate(float dt) {
             renderer.FrameDone();
             renderer.Flip();
         }

@@ -41,7 +41,10 @@ namespace spades {
 			virtual bool NeedsAbsoluteMouseCoordinate() { return false; }
 			virtual void WheelEvent(float x, float y) {}
 
+			/** Called for every frame. */
 			virtual void RunFrame(float dt) {}
+			/** Called for every frame after `RunFrame`. */
+			virtual void RunFrameLate(float dt) {}
 
 			virtual void Closing() {}
 
