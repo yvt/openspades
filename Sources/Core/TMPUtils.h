@@ -190,4 +190,35 @@ namespace stmp {
 
 		inline T *release() { return take().release(); }
 	};
-}
+
+	/** `dyn Fn` */
+	template <class T> class dyn_function {
+	public:
+		static_assert(sizeof(T) != sizeof(T), "bad usage");
+	};
+
+	template <class R, class... Args> class dyn_function<R(Args...)> {
+	public:
+		virtual R operator()(Args &&... args) const = 0;
+	};
+
+	/** `impl Fn` */
+	template <class T, class Fn> class function {
+	public:
+		static_assert(sizeof(T) != sizeof(T), "bad usage");
+	};
+
+	template <class T, class R, class... Args>
+	class function<T, R(Args...)> : public dyn_function<R(Args...)> {
+	public:
+		function(T &&inner) : inner{inner} {}
+		R operator()(Args &&... args) const override { return inner(std::forward<Args>(args)...); }
+
+	private:
+		T inner;
+	};
+
+	template <class Fn, class T> function<T, Fn> make_fn(T &&inner) {
+		return function<T, Fn>(std::move(inner));
+	}
+} // namespace stmp

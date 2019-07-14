@@ -23,6 +23,7 @@
 #include <vector>
 
 #include "Exception.h"
+#include "TMPUtils.h"
 
 namespace spades {
 	namespace reflection {
@@ -79,7 +80,7 @@ namespace spades {
 		};
 
 		std::string BacktraceRecordToString(const BacktraceRecord &);
-	}
+	} // namespace reflection
 	void StartLog();
 
 	void LogMessage(const char *file, int line, const char *format, ...)
@@ -87,7 +88,14 @@ namespace spades {
 	  __attribute__((format(printf, 3, 4)))
 #endif
 	  ;
-}
+
+	/**
+	 * Read and remove log lines in a buffer.
+	 *
+	 * This function is used by the internal system console.
+	 */
+	void GetBufferedLogLines(stmp::dyn_function<void(std::string)> &&cb);
+} // namespace spades
 
 #ifdef _MSC_VER
 #define __PRETTY_FUNCTION__ __FUNCDNAME__

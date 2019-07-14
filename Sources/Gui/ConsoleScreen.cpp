@@ -180,6 +180,14 @@ namespace spades {
 		void ConsoleScreen::RunFrame(float dt) {
 			SPADES_MARK_FUNCTION();
 
+			// Read the global log buffer dedicated to `ConsoleScreen`
+			GetBufferedLogLines(stmp::make_fn<void(std::string)>([this](std::string entry) {
+				auto lines = SplitIntoLines(entry);
+				for (const auto &line : lines) {
+					AddLine(line);
+				}
+			}));
+
 			subview->RunFrame(dt);
 
 			ScopedPrivilegeEscalation privilege;
