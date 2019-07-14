@@ -63,6 +63,7 @@ namespace spades {
 			Handle<asIScriptObject> ui;
 			bool ShouldInterceptInput();
 			void ToggleConsole();
+			void AddLine(const std::string &);
 		};
 	} // namespace gui
 } // namespace spades

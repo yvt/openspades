@@ -18,16 +18,24 @@
 
  */
 #include "../UIFramework/UIFramework.as"
+#include "../Client/FieldWithHistory.as"
 
 namespace spades {
     class ConsoleWindow : spades::ui::UIElement {
         private ConsoleHelper @helper;
+        private array<spades::ui::CommandHistoryItem @> history = {};
+        private FieldWithHistory @field;
+        private spades::ui::TextViewer @viewer;
+
+        private ConfigItem cl_consoleScrollbackLines("cl_consoleScrollbackLines", "1000");
 
         ConsoleWindow(ConsoleHelper @helper, spades::ui::UIManager @manager) {
             super(manager);
             @this.helper = helper;
 
-            float height = floor(Manager.Renderer.ScreenHeight * 0.2);
+            float screenWidth = Manager.Renderer.ScreenWidth;
+            float screenHeight = Manager.Renderer.ScreenHeight;
+            float height = floor(screenHeight * 0.4);
 
             {
                 spades::ui::Label label(Manager);
@@ -42,7 +50,39 @@ namespace spades {
                                      Manager.Renderer.ScreenHeight - height);
                 AddChild(label);
             }
-            // TODO
+
+            {
+                @field = FieldWithHistory(Manager, this.history);
+                field.Bounds = AABB2(10.0, height - 35.0, screenWidth - 20.0, 30.f);
+                field.Placeholder = _Tr("Console", "Command");
+                @field.Changed = spades::ui::EventHandler(this.OnFieldChanged);
+                AddChild(field);
+            }
+            {
+                spades::ui::TextViewer viewer(Manager);
+                AddChild(viewer);
+                viewer.Bounds = AABB2(10.0, 5.0, screenWidth - 20.0, height - 45.0);
+                viewer.MaxNumLines = uint(cl_consoleScrollbackLines.IntValue);
+                @this.viewer = viewer;
+            }
+        }
+
+        private void OnFieldChanged(spades::ui::UIElement @sender) {}
+
+        void FocusField() { @Manager.ActiveElement = field; }
+
+        void AddLine(string line) { viewer.AddLine(line, true); }
+
+        void HotKey(string key) {
+            if (key == "Enter") {
+                if (field.Text.length == 0) {
+                    return;
+                }
+                field.CommandSent();
+                // TODO: Execute the command
+                viewer.AddLine("TODO: " + field.Text, true);
+                field.Text = "";
+            }
         }
     }
 } // namespace spades

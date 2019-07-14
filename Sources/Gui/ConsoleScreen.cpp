@@ -188,5 +188,15 @@ namespace spades {
 			c->SetObject(&*ui);
 			c.ExecuteChecked();
 		}
+
+		void ConsoleScreen::AddLine(const std::string &line) {
+			ScopedPrivilegeEscalation privilege;
+			static ScriptFunction func("ConsoleUI", "void AddLine(string)");
+			ScriptContextHandle c = func.Prepare();
+			std::string k = line;
+			c->SetObject(&*ui);
+			c->SetArgObject(0, reinterpret_cast<void *>(&k));
+			c.ExecuteChecked();
+		}
 	} // namespace gui
 } // namespace spades

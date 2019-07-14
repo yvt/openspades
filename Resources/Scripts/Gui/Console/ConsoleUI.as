@@ -82,6 +82,13 @@ namespace spades {
 
         bool ShouldInterceptInput() { return active; }
 
-        void ToggleConsole() { active = !active; }
+        void ToggleConsole() {
+            active = !active;
+            if (active) {
+                console.FocusField();
+            }
+        }
+
+        void AddLine(string line) { console.AddLine(line); }
     }
 }
