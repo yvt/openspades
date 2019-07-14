@@ -20,6 +20,7 @@
 #include <ScriptBindings/Config.h>
 #include <ScriptBindings/ScriptFunction.h>
 
+#include "ConfigConsoleResponder.h"
 #include "ConsoleHelper.h"
 #include "ConsoleScreen.h"
 
@@ -215,7 +216,7 @@ namespace spades {
 
 		bool ConsoleScreen::ExecCommand(const Handle<ConsoleCommand> &command) {
 			SPADES_MARK_FUNCTION();
-			return subview->ExecCommand(command);
+			return ConfigConsoleResponder::ExecCommand(command) || subview->ExecCommand(command);
 		}
 
 		bool ConsoleScreen::ShouldInterceptInput() {
