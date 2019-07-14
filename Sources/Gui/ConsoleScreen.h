@@ -60,6 +60,8 @@ namespace spades {
 		private:
 			~ConsoleScreen();
 
+			Handle<client::IRenderer> renderer;
+			Handle<client::IAudioDevice> audioDevice;
 			Handle<View> subview;
 
 			// Scripting

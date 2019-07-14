@@ -29,11 +29,10 @@ namespace spades {
 	namespace gui {
 		ConsoleScreen::ConsoleScreen(Handle<client::IRenderer> renderer,
 		                             Handle<client::IAudioDevice> audioDevice,
-		                             Handle<client::FontManager> fontManager,
-		                             Handle<View> subview) {
+		                             Handle<client::FontManager> fontManager, Handle<View> subview)
+		    : renderer{renderer}, audioDevice{audioDevice}, subview{subview} {
 			SPADES_MARK_FUNCTION();
 
-			this->subview = subview;
 			renderer->Init();
 
 			helper.Set(new ConsoleHelper(this), true);
@@ -226,9 +225,11 @@ namespace spades {
 
 		namespace {
 			constexpr const char *CMD_HELP = "help";
+			constexpr const char *CMD_CLEARGFXCACHE = "cleargfxcache";
 
 			std::map<std::string, std::string> const g_commands{
 			  {CMD_HELP, ": Display all available commands"},
+			  {CMD_CLEARGFXCACHE, ": Clear the GFX (models and images) cache, forcing reload"},
 			};
 		} // namespace
 
@@ -236,10 +237,17 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			if (command->GetName() == CMD_HELP) {
 				if (command->GetNumArguments() != 0) {
-					SPLog("Usage: help (no arguments)");
+					SPLog("Usage: %s (no arguments)", CMD_HELP);
 					return true;
 				}
 				DumpAllCommands();
+				return true;
+			} else if (command->GetName() == CMD_CLEARGFXCACHE) {
+				if (command->GetNumArguments() != 0) {
+					SPLog("Usage: %s (no arguments)", CMD_CLEARGFXCACHE);
+					return true;
+				}
+				renderer->ClearCache();
 				return true;
 			}
 			return ConfigConsoleResponder::ExecCommand(command) || subview->ExecCommand(command);
