@@ -70,8 +70,6 @@ namespace spades {
 
 				bool MoveNext() override {
 					if (i >= names.size() || !StartsWith(names[i], query)) {
-						// Make sure it returns `MoveNext` indefinitely
-						i = names.size();
 						return false;
 					}
 
