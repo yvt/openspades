@@ -222,7 +222,8 @@ namespace spades {
 		Handle<ConsoleCommandCandidateIterator>
 		ConsoleScreen::AutocompleteCommandName(const std::string &name) {
 			SPADES_MARK_FUNCTION();
-			return subview->AutocompleteCommandName(name);
+			return ConfigConsoleResponder::AutocompleteCommandName(name) +
+			       subview->AutocompleteCommandName(name);
 		}
 
 		bool ConsoleScreen::ShouldInterceptInput() {
