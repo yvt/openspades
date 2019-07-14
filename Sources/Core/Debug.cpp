@@ -160,7 +160,7 @@ namespace spades {
 			void Push(std::string &&line) {
 				lines.push_back(std::move(line));
 
-				if (lines.size() > 100) {
+				if (lines.size() > 1000) {
 					++overflow;
 					lines.pop_front();
 				}
