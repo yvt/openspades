@@ -21,10 +21,14 @@
 namespace spades {
 	namespace gui {
 		ConsoleHelper::ConsoleHelper(ConsoleScreen *scr) {
+			SPADES_MARK_FUNCTION();
+
 			(void)scr;
 			// TODO
 		}
 		void ConsoleHelper::ConsoleScreenDestroyed() {
+			SPADES_MARK_FUNCTION();
+
 			// TODO
 		}
 	} // namespace gui

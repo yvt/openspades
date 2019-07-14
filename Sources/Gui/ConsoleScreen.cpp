@@ -29,6 +29,8 @@ namespace spades {
 		                             Handle<client::IAudioDevice> audioDevice,
 		                             Handle<client::FontManager> fontManager,
 		                             Handle<View> subview) {
+			SPADES_MARK_FUNCTION();
+
 			this->subview = subview;
 			renderer->Init();
 
@@ -49,9 +51,15 @@ namespace spades {
 			}
 		}
 
-		ConsoleScreen::~ConsoleScreen() { helper->ConsoleScreenDestroyed(); }
+		ConsoleScreen::~ConsoleScreen() {
+			SPADES_MARK_FUNCTION();
+
+			helper->ConsoleScreenDestroyed();
+		}
 
 		void ConsoleScreen::MouseEvent(float x, float y) {
+			SPADES_MARK_FUNCTION();
+
 			if (ShouldInterceptInput()) {
 				ScopedPrivilegeEscalation privilege;
 				static ScriptFunction func("ConsoleUI", "void MouseEvent(float, float)");
@@ -65,6 +73,8 @@ namespace spades {
 			}
 		}
 		void ConsoleScreen::KeyEvent(const std::string &key, bool down) {
+			SPADES_MARK_FUNCTION();
+
 			// TODO: Check if "`" is correct
 			if (key == "`" || key == "F1") {
 				if (down) {
@@ -87,6 +97,8 @@ namespace spades {
 			}
 		}
 		void ConsoleScreen::TextInputEvent(const std::string &ch) {
+			SPADES_MARK_FUNCTION();
+
 			if (ShouldInterceptInput()) {
 				ScopedPrivilegeEscalation privilege;
 				static ScriptFunction func("ConsoleUI", "void TextInputEvent(string)");
@@ -100,6 +112,8 @@ namespace spades {
 			}
 		}
 		void ConsoleScreen::TextEditingEvent(const std::string &ch, int start, int len) {
+			SPADES_MARK_FUNCTION();
+
 			if (ShouldInterceptInput()) {
 				ScopedPrivilegeEscalation privilege;
 				static ScriptFunction func("ConsoleUI", "void TextEditingEvent(string, int, int)");
@@ -115,6 +129,8 @@ namespace spades {
 			}
 		}
 		bool ConsoleScreen::AcceptsTextInput() {
+			SPADES_MARK_FUNCTION();
+
 			if (ShouldInterceptInput()) {
 				ScopedPrivilegeEscalation privilege;
 				static ScriptFunction func("ConsoleUI", "bool AcceptsTextInput()");
@@ -127,6 +143,8 @@ namespace spades {
 			}
 		}
 		AABB2 ConsoleScreen::GetTextInputRect() {
+			SPADES_MARK_FUNCTION();
+
 			if (ShouldInterceptInput()) {
 				ScopedPrivilegeEscalation privilege;
 				static ScriptFunction func("ConsoleUI", "AABB2 GetTextInputRect()");
@@ -139,6 +157,8 @@ namespace spades {
 			}
 		}
 		void ConsoleScreen::WheelEvent(float x, float y) {
+			SPADES_MARK_FUNCTION();
+
 			if (ShouldInterceptInput()) {
 				ScopedPrivilegeEscalation privilege;
 				static ScriptFunction func("ConsoleUI", "void WheelEvent(float, float)");
@@ -152,10 +172,14 @@ namespace spades {
 			}
 		}
 		bool ConsoleScreen::NeedsAbsoluteMouseCoordinate() {
+			SPADES_MARK_FUNCTION();
+
 			return ShouldInterceptInput() ? true : subview->NeedsAbsoluteMouseCoordinate();
 		}
 
 		void ConsoleScreen::RunFrame(float dt) {
+			SPADES_MARK_FUNCTION();
+
 			subview->RunFrame(dt);
 
 			ScopedPrivilegeEscalation privilege;
@@ -166,13 +190,24 @@ namespace spades {
 			c.ExecuteChecked();
 		}
 
-		void ConsoleScreen::RunFrameLate(float dt) { subview->RunFrameLate(dt); }
+		void ConsoleScreen::RunFrameLate(float dt) {
+			SPADES_MARK_FUNCTION();
+			subview->RunFrameLate(dt);
+		}
 
-		void ConsoleScreen::Closing() { subview->Closing(); }
+		void ConsoleScreen::Closing() {
+			SPADES_MARK_FUNCTION();
+			subview->Closing();
+		}
 
-		bool ConsoleScreen::WantsToBeClosed() { return subview->WantsToBeClosed(); }
+		bool ConsoleScreen::WantsToBeClosed() {
+			SPADES_MARK_FUNCTION();
+			return subview->WantsToBeClosed();
+		}
 
 		bool ConsoleScreen::ShouldInterceptInput() {
+			SPADES_MARK_FUNCTION();
+
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ConsoleUI", "bool ShouldInterceptInput()");
 			ScriptContextHandle c = func.Prepare();
@@ -182,6 +217,8 @@ namespace spades {
 		}
 
 		void ConsoleScreen::ToggleConsole() {
+			SPADES_MARK_FUNCTION();
+
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ConsoleUI", "void ToggleConsole()");
 			ScriptContextHandle c = func.Prepare();
@@ -190,6 +227,8 @@ namespace spades {
 		}
 
 		void ConsoleScreen::AddLine(const std::string &line) {
+			SPADES_MARK_FUNCTION();
+
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("ConsoleUI", "void AddLine(string)");
 			ScriptContextHandle c = func.Prepare();
