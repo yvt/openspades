@@ -48,11 +48,22 @@ namespace spades {
 				std::size_t i = 0;
 				ConsoleCommandCandidate current;
 
+				void SkipUnknowns() {
+					while (i < names.size()) {
+						Settings::ItemHandle cvarHandle{names[i], nullptr};
+						if (!cvarHandle.IsUnknown()) {
+							break;
+						}
+						++i;
+					}
+				}
+
 			public:
 				ConfigNameIterator(const std::string &query)
 				    : names{Settings::GetInstance()->GetAllItemNames()}, query{query} {
 					// Find the starting position
 					i = std::lower_bound(names.begin(), names.end(), query) - names.begin();
+					SkipUnknowns();
 				}
 
 				const ConsoleCommandCandidate &GetCurrent() override { return current; }
@@ -71,6 +82,7 @@ namespace spades {
 					current.description = " = \"" + EscapeQuotes(cvarHandle) + "\"";
 
 					i += 1;
+					SkipUnknowns();
 
 					return true;
 				}
