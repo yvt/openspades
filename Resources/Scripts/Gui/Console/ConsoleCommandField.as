@@ -111,6 +111,11 @@ namespace spades {
             }
         }
 
+        void Clear() {
+            FieldWithHistory::Clear();
+            OnChanged();
+        }
+
         void KeyDown(string key) {
             if (key == "Tab") {
                 // Find the command name part

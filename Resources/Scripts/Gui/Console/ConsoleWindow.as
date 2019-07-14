@@ -80,7 +80,7 @@ namespace spades {
                 }
                 field.CommandSent();
                 helper.ExecCommand(field.Text);
-                field.Text = "";
+                field.Clear();
             }
         }
     }

@@ -95,6 +95,12 @@ namespace spades {
             currentHistoryIndex = cmdhistory.length - 1;
         }
 
+        void Clear() {
+            currentHistoryIndex = cmdhistory.length;
+            this.Text = "";
+            OverwriteItem();
+        }
+
         void Cancelled() { OverwriteItem(); }
     };
 
