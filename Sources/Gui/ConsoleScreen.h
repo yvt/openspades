@@ -68,6 +68,9 @@ namespace spades {
 			bool ShouldInterceptInput();
 			void ToggleConsole();
 			void AddLine(const std::string &);
+
+			/** Dump all available commands to `SPLog`. */
+			void DumpAllCommands();
 		};
 	} // namespace gui
 } // namespace spades

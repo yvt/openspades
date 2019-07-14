@@ -21,6 +21,7 @@
 #include <ScriptBindings/ScriptFunction.h>
 
 #include "ConfigConsoleResponder.h"
+#include "ConsoleCommand.h"
 #include "ConsoleHelper.h"
 #include "ConsoleScreen.h"
 
@@ -214,15 +215,41 @@ namespace spades {
 			return subview->WantsToBeClosed();
 		}
 
+		void ConsoleScreen::DumpAllCommands() {
+			SPADES_MARK_FUNCTION();
+			auto it = AutocompleteCommandName("");
+			while (it->MoveNext()) {
+				const auto &cmd = it->GetCurrent();
+				SPLog("%s %s", cmd.name.c_str(), cmd.description.c_str());
+			}
+		}
+
+		namespace {
+			constexpr const char *CMD_HELP = "help";
+
+			std::map<std::string, std::string> const g_commands{
+			  {CMD_HELP, ": Display all available commands"},
+			};
+		} // namespace
+
 		bool ConsoleScreen::ExecCommand(const Handle<ConsoleCommand> &command) {
 			SPADES_MARK_FUNCTION();
+			if (command->GetName() == CMD_HELP) {
+				if (command->GetNumArguments() != 0) {
+					SPLog("Usage: help (no arguments)");
+					return true;
+				}
+				DumpAllCommands();
+				return true;
+			}
 			return ConfigConsoleResponder::ExecCommand(command) || subview->ExecCommand(command);
 		}
 
 		Handle<ConsoleCommandCandidateIterator>
 		ConsoleScreen::AutocompleteCommandName(const std::string &name) {
 			SPADES_MARK_FUNCTION();
-			return ConfigConsoleResponder::AutocompleteCommandName(name) +
+			return MakeCandidates(g_commands, name) +
+			       ConfigConsoleResponder::AutocompleteCommandName(name) +
 			       subview->AutocompleteCommandName(name);
 		}
 
