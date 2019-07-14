@@ -767,6 +767,8 @@ namespace spades {
 		ALDevice::~ALDevice() {
 			SPADES_MARK_FUNCTION();
 
+			// TODO: Fix memory leak!
+
 			delete d;
 		}
 		ALAudioChunk *ALDevice::CreateChunk(const char *name) {
@@ -796,6 +798,15 @@ namespace spades {
 			}
 			it->second->AddRef();
 			return it->second;
+		}
+
+		void ALDevice::ClearCache() {
+			SPADES_MARK_FUNCTION();
+
+			for (auto &chunk: chunks) {
+				chunk.second->Release();
+			}
+			chunks.clear();
 		}
 
 		void ALDevice::Play(client::IAudioChunk *chunk, const spades::Vector3 &origin,

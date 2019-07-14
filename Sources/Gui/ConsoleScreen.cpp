@@ -226,10 +226,12 @@ namespace spades {
 		namespace {
 			constexpr const char *CMD_HELP = "help";
 			constexpr const char *CMD_CLEARGFXCACHE = "cleargfxcache";
+			constexpr const char *CMD_CLEARSFXCACHE = "clearsfxcache";
 
 			std::map<std::string, std::string> const g_commands{
 			  {CMD_HELP, ": Display all available commands"},
 			  {CMD_CLEARGFXCACHE, ": Clear the GFX (models and images) cache, forcing reload"},
+			  {CMD_CLEARSFXCACHE, ": Clear the SFX cache, forcing reload"},
 			};
 		} // namespace
 
@@ -248,6 +250,13 @@ namespace spades {
 					return true;
 				}
 				renderer->ClearCache();
+				return true;
+			} else if (command->GetName() == CMD_CLEARSFXCACHE) {
+				if (command->GetNumArguments() != 0) {
+					SPLog("Usage: %s (no arguments)", CMD_CLEARSFXCACHE);
+					return true;
+				}
+				audioDevice->ClearCache();
 				return true;
 			}
 			return ConfigConsoleResponder::ExecCommand(command) || subview->ExecCommand(command);

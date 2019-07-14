@@ -46,6 +46,13 @@ namespace spades {
 
 			virtual IAudioChunk *RegisterSound(const char *name) = 0;
 
+			/**
+			 * Clear the cache of chunks loaded via `RegisterSound`. This method
+			 * is merely a hint - the implementation may partially or completely
+			 * ignore the request.
+			 */
+			virtual void ClearCache() {}
+
 			virtual void SetGameMap(GameMap *) = 0;
 
 			virtual void Play(IAudioChunk *, const Vector3 &origin, const AudioParam &) = 0;
