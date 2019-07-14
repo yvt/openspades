@@ -41,7 +41,7 @@ namespace spades {
 				      hasFirst{true},
 				      hasSecond{true},
 				      chooseSecond{false},
-				      initial{false} {}
+				      initial{true} {}
 
 				const ConsoleCommandCandidate &GetCurrent() override {
 					SPADES_MARK_FUNCTION_DEBUG();
