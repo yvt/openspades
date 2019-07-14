@@ -28,15 +28,20 @@ namespace spades {
 			class MergeConsoleCommandCandidates final : public ConsoleCommandCandidateIterator {
 				Handle<ConsoleCommandCandidateIterator> first;
 				Handle<ConsoleCommandCandidateIterator> second;
-				bool hasFirst : 1 = true;
-				bool hasSecond : 1 = true;
-				bool chooseSecond : 1 = false;
-				bool initial : 1 = false;
+				bool hasFirst : 1;
+				bool hasSecond : 1;
+				bool chooseSecond : 1;
+				bool initial : 1;
 
 			public:
 				MergeConsoleCommandCandidates(Handle<ConsoleCommandCandidateIterator> first,
 				                              Handle<ConsoleCommandCandidateIterator> second)
-				    : first{std::move(first)}, second{std::move(second)} {}
+				    : first{std::move(first)},
+				      second{std::move(second)},
+				      hasFirst{true},
+				      hasSecond{true},
+				      chooseSecond{false},
+				      initial{false} {}
 
 				const ConsoleCommandCandidate &GetCurrent() override {
 					SPADES_MARK_FUNCTION_DEBUG();
