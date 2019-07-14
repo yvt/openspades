@@ -16,20 +16,48 @@
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <Core/Debug.h>
+
+#include "ConsoleCommand.h"
 #include "ConsoleHelper.h"
+#include "ConsoleScreen.h"
 
 namespace spades {
 	namespace gui {
 		ConsoleHelper::ConsoleHelper(ConsoleScreen *scr) {
 			SPADES_MARK_FUNCTION();
 
-			(void)scr;
-			// TODO
+			parentWeak = scr;
 		}
+
+		ConsoleHelper::~ConsoleHelper() {}
+
 		void ConsoleHelper::ConsoleScreenDestroyed() {
 			SPADES_MARK_FUNCTION();
 
-			// TODO
+			parentWeak = nullptr;
+		}
+
+		Handle<ConsoleScreen> ConsoleHelper::GetParent() { return {parentWeak, true}; }
+
+		void ConsoleHelper::ExecCommand(const std::string &text) {
+			SPADES_MARK_FUNCTION();
+
+			auto parent = GetParent();
+			if (!parent) {
+				return;
+			}
+
+			SPLog("Command: %s", text.c_str());
+			try {
+				auto const command = ConsoleCommand::Parse(text);
+
+				if (!parent->ExecCommand(command)) {
+					SPLog("Unknown command: '%s'", command->GetName().c_str());
+				}
+			} catch (const std::exception &e) {
+				SPLog("An exception was thrown while executing a console command: %s", e.what());
+			}
 		}
 	} // namespace gui
 } // namespace spades

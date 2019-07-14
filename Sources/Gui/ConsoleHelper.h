@@ -30,6 +30,16 @@ namespace spades {
 		public:
 			ConsoleHelper(ConsoleScreen *scr);
 			void ConsoleScreenDestroyed();
+
+			/** Execute a console command. */
+			void ExecCommand(const std::string &);
+
+		private:
+			~ConsoleHelper();
+			/** A weak reference to the owning `ConsoleScreen`. */
+			ConsoleScreen *parentWeak;
+			/** Get a strong reference to the owning `ConsoleScreen`. */
+			Handle<ConsoleScreen> GetParent();
 		};
 	} // namespace gui
 } // namespace spades

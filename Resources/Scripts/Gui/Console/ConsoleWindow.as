@@ -79,8 +79,7 @@ namespace spades {
                     return;
                 }
                 field.CommandSent();
-                // TODO: Execute the command
-                viewer.AddLine("TODO: " + field.Text, true);
+                helper.ExecCommand(field.Text);
                 field.Text = "";
             }
         }

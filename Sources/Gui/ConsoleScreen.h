@@ -35,6 +35,7 @@ namespace spades {
 		 * functionality which can be invoked anytime by using a hotkey.
 		 */
 		class ConsoleScreen : public View {
+			friend class ConsoleHelper;
 		public:
 			ConsoleScreen(Handle<client::IRenderer>, Handle<client::IAudioDevice>,
 			              Handle<client::FontManager>, Handle<View>);

@@ -45,6 +45,11 @@ namespace spades {
 					                                 asMETHOD(gui::ConsoleHelper, Release),
 					                                 asCALL_THISCALL);
 					manager->CheckError(r);
+
+					r = eng->RegisterObjectMethod(
+					  "ConsoleHelper", "void ExecCommand(const string& in)",
+					  asMETHOD(gui::ConsoleHelper, ExecCommand), asCALL_THISCALL);
+					manager->CheckError(r);
 					break;
 				default: break;
 			}
