@@ -147,5 +147,9 @@ namespace spades {
 		}
 
 		SWModel *SWModelManager::CreateModel(spades::VoxelModel *vm) { return new SWModel(vm); }
+
+		void SWModelManager::ClearCache() {
+			models.clear();
+		}
 	}
 }

@@ -38,6 +38,8 @@ namespace spades {
 			GLModelManager(GLRenderer *);
 			~GLModelManager();
 			GLModel *RegisterModel(const char *);
+
+			void ClearCache();
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

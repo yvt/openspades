@@ -251,6 +251,12 @@ namespace spades {
 			return modelManager->RegisterModel(filename);
 		}
 
+		void GLRenderer::ClearCache() {
+			SPADES_MARK_FUNCTION();
+			modelManager->ClearCache();
+			imageManager->ClearCache();
+		}
+
 		client::IImage *GLRenderer::CreateImage(spades::Bitmap *bmp) {
 			SPADES_MARK_FUNCTION();
 			return GLImage::FromBitmap(bmp, device);

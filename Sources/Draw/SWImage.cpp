@@ -127,5 +127,9 @@ namespace spades {
 		}
 
 		SWImage *SWImageManager::CreateImage(Bitmap *vm) { return new SWImage(vm); }
+
+		void SWImageManager::ClearCache() {
+			images.clear();
+		}
 	}
 }

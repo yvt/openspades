@@ -43,6 +43,13 @@ namespace spades {
          */
         Model @RegisterModel(const string @path) {}
 
+        /**
+         * Clear the cache of models and images loaded via `RegisterModel`
+         * and `RegisterImage`. This method is merely a hint - the
+         * implementation may partially or completely ignore the request.
+         */
+        void ClearCache() {}
+
         /** Creates an image from the specified bitmap. */
         Image @CreateImage(Bitmap @bitmap) {}
 

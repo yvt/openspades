@@ -394,6 +394,11 @@ namespace spades {
 													  asFUNCTION(RegisterModel),
 													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
+						r = eng->RegisterObjectMethod("Renderer",
+													  "void ClearCache()",
+													  asMETHOD(IRenderer, ClearCache),
+													  asCALL_THISCALL);
+						manager->CheckError(r);
 						// OpenSpades' C++ functions increase the reference count of a passed object
 						// when storing it (just like the convention of Objective C), so we must
 						// use "auto handles" (`@+`).  Otherwise, a memory leak would occur

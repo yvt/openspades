@@ -159,6 +159,8 @@ namespace spades {
 
 			client::IImage *CreateImage(Bitmap *) override;
 			client::IModel *CreateModel(VoxelModel *) override;
+
+			void ClearCache() override;
 			/*
 			GLProgram *RegisterProgram(const std::string& name) override;
 			GLShader *RegisterShader(const std::string& name) override;

@@ -45,6 +45,8 @@ namespace spades {
 			GLImage *GetWhiteImage();
 
 			void DrawAllImages(GLRenderer *);
+
+			void ClearCache();
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades
