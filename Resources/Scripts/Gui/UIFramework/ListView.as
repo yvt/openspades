@@ -158,9 +158,6 @@ namespace spades {
             ListViewModel @Model {
                 get final { return model; }
                 set {
-                    if (model is value) {
-                        return;
-                    }
                     UnloadAll();
                     @model = value;
                     Layout();

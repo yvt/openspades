@@ -118,13 +118,14 @@ namespace spades {
             Font @font;
             float width;
             TextViewerSelectionState @selection;
-            int contentLength;
+            int contentStart;
+            int contentEnd;
 
             void AddLine(string text, Vector4 color) {
                 int startPos = 0;
                 if (font.Measure(text).x <= width) {
-                    lines.insertLast(TextViewerItem(text, color, contentLength));
-                    contentLength += text.length + 1;
+                    lines.insertLast(TextViewerItem(text, color, contentEnd));
+                    contentEnd += text.length + 1;
                     return;
                 }
 
@@ -152,8 +153,8 @@ namespace spades {
                             continue;
                         } else {
                             lines.insertLast(TextViewerItem(text.substr(startPos, pos - startPos),
-                                                            color, contentLength));
-                            contentLength += pos - startPos;
+                                                            color, contentEnd));
+                            contentEnd += pos - startPos;
                             startPos = pos;
                             while (startPos < len && text[startPos] == 0x20) {
                                 startPos++;
@@ -166,12 +167,35 @@ namespace spades {
                         pos = nextPos;
                         if (nextPos >= len) {
                             lines.insertLast(TextViewerItem(
-                                text.substr(startPos, nextPos - startPos), color, contentLength));
-                            contentLength += nextPos - startPos + 1;
+                                text.substr(startPos, nextPos - startPos), color, contentEnd));
+                            contentEnd += nextPos - startPos + 1;
                             break;
                         }
                     }
                 }
+            }
+
+            /**
+             * Remove the first line from the model.
+             *
+             * `ListViewModel` doesn't support removing items from other places
+             * than the end of the list. Therefore, after calling this,
+             * `ListViewBase.Model` must be reassigned to recreate all elements
+             * in view.
+             */
+            void RemoveFirstLines(uint numLines) {
+                int removedLength;
+                if (lines.length > numLines) {
+                    removedLength = lines[numLines].Index - contentStart;
+                } else {
+                    removedLength = contentEnd - contentStart;
+                }
+
+                lines.removeRange(0, numLines);
+                contentStart += removedLength;
+
+                selection.MarkPosition = Max(selection.MarkPosition, contentStart);
+                selection.CursorPosition = Max(selection.CursorPosition, contentStart);
             }
 
             TextViewerModel(UIManager @manager, string text, Font @font, float width,
@@ -202,6 +226,12 @@ namespace spades {
             private TextViewerSelectionState selection;
             private bool dragging = false;
 
+            /**
+             * The maximum number of lines. This affects the behavior of the
+             * `AddLine` method. `0` means unlimited.
+             */
+            int MaxNumLines = 0;
+
             TextViewer(UIManager @manager) {
                 super(manager);
 
@@ -229,10 +259,10 @@ namespace spades {
             private int PointToCharIndex(Vector2 clientPosition) {
                 int line = int(clientPosition.y / RowHeight) + TopRowIndex;
                 if (line < 0) {
-                    return 0;
+                    return textmodel.contentStart;
                 }
                 if (line >= int(textmodel.lines.length)) {
-                    return textmodel.contentLength;
+                    return textmodel.contentEnd;
                 }
 
                 float x = clientPosition.x;
@@ -297,8 +327,8 @@ namespace spades {
                         Manager.Copy(this.SelectedText);
                         return;
                     } else if (key == "A") {
-                        this.selection.MarkPosition = 0;
-                        this.selection.CursorPosition = textmodel.contentLength;
+                        this.selection.MarkPosition = textmodel.contentStart;
+                        this.selection.CursorPosition = textmodel.contentEnd;
                         return;
                     }
                 }
@@ -348,6 +378,10 @@ namespace spades {
                     }
                 }
                 textmodel.AddLine(line, color);
+                if (MaxNumLines > 0 && textmodel.NumRows > MaxNumLines) {
+                    textmodel.RemoveFirstLines(textmodel.NumRows - MaxNumLines);
+                    @Model = textmodel;
+                }
                 if (autoscroll) {
                     this.Layout();
                     this.ScrollToEnd();
