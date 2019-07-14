@@ -20,6 +20,8 @@
 
 #include <Core/RefCountedObject.h>
 
+#include "ConsoleCommandCandidate.h"
+
 namespace spades {
 	namespace gui {
 		class ConsoleScreen;
@@ -35,6 +37,9 @@ namespace spades {
 
 			/** Execute a console command. */
 			void ExecCommand(const std::string &);
+
+			/** Produce a sequence of candidates for command name autocompletion. */
+			ConsoleCommandCandidateIterator *AutocompleteCommandName(const std::string &name);
 
 		private:
 			~ConsoleHelper();

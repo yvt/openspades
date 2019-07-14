@@ -62,7 +62,7 @@ namespace spades {
 			virtual bool ExecCommand(const Handle<ConsoleCommand> &) { return false; }
 
 			/**
-			 * Produce a sequence of candidates of command name autocompletion.
+			 * Produce a sequence of candidates for command name autocompletion.
 			 *
 			 * `name` is an incomplete command name. This method produces
 			 * a sequence of candidates starting with `name`.

@@ -59,5 +59,17 @@ namespace spades {
 				SPLog("An exception was thrown while executing a console command: %s", e.what());
 			}
 		}
+
+		ConsoleCommandCandidateIterator *
+		ConsoleHelper::AutocompleteCommandName(const std::string &name) {
+			SPADES_MARK_FUNCTION();
+
+			auto parent = GetParent();
+			if (!parent) {
+				return new EmptyIterator<const ConsoleCommandCandidate &>();
+			}
+
+			return parent->AutocompleteCommandName(name).Unmanage();
+		}
 	} // namespace gui
 } // namespace spades
