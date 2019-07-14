@@ -33,8 +33,6 @@ namespace spades {
 		    : renderer{renderer}, audioDevice{audioDevice}, subview{subview} {
 			SPADES_MARK_FUNCTION();
 
-			renderer->Init();
-
 			helper.Set(new ConsoleHelper(this), true);
 
 			ScopedPrivilegeEscalation privilege;
