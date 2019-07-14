@@ -53,7 +53,13 @@ namespace spades {
 
         void WheelEvent(float x, float y) { manager.WheelEvent(x, y); }
 
-        void KeyEvent(string key, bool down) { manager.KeyEvent(key, down); }
+        void KeyEvent(string key, bool down) {
+            if (key == "Escape") {
+                active = false;
+                return;
+            }
+            manager.KeyEvent(key, down);
+        }
 
         void TextInputEvent(string text) { manager.TextInputEvent(text); }
 
