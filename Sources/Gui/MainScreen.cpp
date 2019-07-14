@@ -284,9 +284,9 @@ namespace spades {
 				}
 			}
 
-            if (!ui) {
-            	return;
-            }
+			if (!ui) {
+				return;
+			}
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("MainScreenUI", "void RunFrameLate(float)");
 			ScriptContextHandle c = func.Prepare();
@@ -331,10 +331,26 @@ namespace spades {
 			c.ExecuteChecked();
 		}
 
+		bool MainScreen::ExecCommand(const Handle<ConsoleCommand> &cmd) {
+			SPADES_MARK_FUNCTION();
+			if (subview) {
+				return subview->ExecCommand(cmd);
+			}
+			return View::ExecCommand(cmd);
+		}
+
+		Handle<ConsoleCommandCandidateIterator>
+		MainScreen::AutocompleteCommandName(const std::string &name) {
+			SPADES_MARK_FUNCTION();
+			if (subview) {
+				return subview->AutocompleteCommandName(name);
+			}
+			return View::AutocompleteCommandName(name);
+		}
+
 		std::string MainScreen::Connect(const ServerAddress &host) {
 			try {
-				subview.Set(new client::Client(&*renderer, &*audioDevice, host,
-				                               fontManager),
+				subview.Set(new client::Client(&*renderer, &*audioDevice, host, fontManager),
 				            false);
 			} catch (const std::exception &ex) {
 				SPLog("[!] Error while initializing a game client: %s", ex.what());
@@ -342,5 +358,5 @@ namespace spades {
 			}
 			return "";
 		}
-	}
-}
+	} // namespace gui
+} // namespace spades
