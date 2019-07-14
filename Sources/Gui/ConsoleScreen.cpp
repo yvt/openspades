@@ -205,6 +205,11 @@ namespace spades {
 			return subview->WantsToBeClosed();
 		}
 
+		bool ConsoleScreen::ExecCommand(const Handle<ConsoleCommand> &command) {
+			SPADES_MARK_FUNCTION();
+			return subview->ExecCommand(command);
+		}
+
 		bool ConsoleScreen::ShouldInterceptInput() {
 			SPADES_MARK_FUNCTION();
 

@@ -301,6 +301,7 @@
 		E8C7D7AE22DA34F500F78763 /* ConsoleHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7AB22DA34F400F78763 /* ConsoleHelper.cpp */; };
 		E8C7D7AF22DA34F500F78763 /* ConsoleScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7AC22DA34F400F78763 /* ConsoleScreen.cpp */; };
 		E8C7D7B122DA35F000F78763 /* ConsoleHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7B022DA35F000F78763 /* ConsoleHelper.cpp */; };
+		E8C7D7B422DAF5B500F78763 /* ConsoleCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7B322DAF5B400F78763 /* ConsoleCommand.cpp */; };
 		E8CB47CE1DE071CA00BF606A /* SWUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */; };
 		E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
 		E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47D41DE084AB00BF606A /* GLSettings.cpp */; };
@@ -765,6 +766,8 @@
 		E8C7D7AC22DA34F400F78763 /* ConsoleScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleScreen.cpp; sourceTree = "<group>"; };
 		E8C7D7AD22DA34F500F78763 /* ConsoleScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleScreen.h; sourceTree = "<group>"; };
 		E8C7D7B022DA35F000F78763 /* ConsoleHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleHelper.cpp; sourceTree = "<group>"; };
+		E8C7D7B222DAF5B400F78763 /* ConsoleCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleCommand.h; sourceTree = "<group>"; };
+		E8C7D7B322DAF5B400F78763 /* ConsoleCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleCommand.cpp; sourceTree = "<group>"; };
 		E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModelRenderer.cpp; sourceTree = "<group>"; };
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
@@ -1504,6 +1507,8 @@
 		E8CF039D178EDDBF000683D4 /* Gui */ = {
 			isa = PBXGroup;
 			children = (
+				E8C7D7B322DAF5B400F78763 /* ConsoleCommand.cpp */,
+				E8C7D7B222DAF5B400F78763 /* ConsoleCommand.h */,
 				E8C7D7AB22DA34F400F78763 /* ConsoleHelper.cpp */,
 				E8C7D7AA22DA34F400F78763 /* ConsoleHelper.h */,
 				E8C7D7AC22DA34F400F78763 /* ConsoleScreen.cpp */,
@@ -2049,6 +2054,7 @@
 				E81012311E1D7301009955D3 /* Icon.cpp in Sources */,
 				E8A2EBA01F5BE16D00E39CD9 /* GameProperties.cpp in Sources */,
 				E82E67EC18EA7A51004DBA18 /* protocol.c in Sources */,
+				E8C7D7B422DAF5B500F78763 /* ConsoleCommand.cpp in Sources */,
 				E82E67ED18EA7A51004DBA18 /* unix.c in Sources */,
 				E82E67EE18EA7A51004DBA18 /* win32.c in Sources */,
 				E82E67EF18EA7A51004DBA18 /* pnglite.c in Sources */,

@@ -25,6 +25,8 @@
 
 namespace spades {
 	namespace gui {
+		class ConsoleCommand;
+
 		class View : public RefCountedObject {
 		protected:
 			virtual ~View() {}
@@ -49,6 +51,13 @@ namespace spades {
 			virtual void Closing() {}
 
 			virtual bool WantsToBeClosed() { return false; }
+
+			/**
+			 * Execute a console command.
+			 *
+			 * @return `true` if the command was handled.
+			 */
+			virtual bool ExecCommand(const Handle<ConsoleCommand> &) { return false; }
 		};
-	}
-}
+	} // namespace gui
+} // namespace spades

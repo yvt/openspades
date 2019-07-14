@@ -52,6 +52,7 @@ namespace spades {
 			void RunFrameLate(float dt) override;
 			void Closing() override;
 			bool WantsToBeClosed() override;
+			bool ExecCommand(const Handle<ConsoleCommand> &) override;
 
 		private:
 			~ConsoleScreen();
