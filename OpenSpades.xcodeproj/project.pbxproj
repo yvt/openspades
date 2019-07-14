@@ -303,6 +303,7 @@
 		E8C7D7B122DA35F000F78763 /* ConsoleHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7B022DA35F000F78763 /* ConsoleHelper.cpp */; };
 		E8C7D7B422DAF5B500F78763 /* ConsoleCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7B322DAF5B400F78763 /* ConsoleCommand.cpp */; };
 		E8C7D7BA22DB220300F78763 /* ConfigConsoleResponder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7B822DB220200F78763 /* ConfigConsoleResponder.cpp */; };
+		E8C7D7BE22DB2A4400F78763 /* ConsoleCommandCandidate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7BD22DB2A4400F78763 /* ConsoleCommandCandidate.cpp */; };
 		E8CB47CE1DE071CA00BF606A /* SWUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */; };
 		E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
 		E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47D41DE084AB00BF606A /* GLSettings.cpp */; };
@@ -771,6 +772,9 @@
 		E8C7D7B322DAF5B400F78763 /* ConsoleCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleCommand.cpp; sourceTree = "<group>"; };
 		E8C7D7B822DB220200F78763 /* ConfigConsoleResponder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConfigConsoleResponder.cpp; sourceTree = "<group>"; };
 		E8C7D7B922DB220300F78763 /* ConfigConsoleResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigConsoleResponder.h; sourceTree = "<group>"; };
+		E8C7D7BB22DB263200F78763 /* Iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Iterator.h; sourceTree = "<group>"; };
+		E8C7D7BC22DB2A4400F78763 /* ConsoleCommandCandidate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleCommandCandidate.h; sourceTree = "<group>"; };
+		E8C7D7BD22DB2A4400F78763 /* ConsoleCommandCandidate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleCommandCandidate.cpp; sourceTree = "<group>"; };
 		E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModelRenderer.cpp; sourceTree = "<group>"; };
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
@@ -1510,6 +1514,8 @@
 		E8CF039D178EDDBF000683D4 /* Gui */ = {
 			isa = PBXGroup;
 			children = (
+				E8C7D7BD22DB2A4400F78763 /* ConsoleCommandCandidate.cpp */,
+				E8C7D7BC22DB2A4400F78763 /* ConsoleCommandCandidate.h */,
 				E8C7D7B822DB220200F78763 /* ConfigConsoleResponder.cpp */,
 				E8C7D7B922DB220300F78763 /* ConfigConsoleResponder.h */,
 				E8C7D7B322DAF5B400F78763 /* ConsoleCommand.cpp */,
@@ -1588,6 +1594,7 @@
 		E8CF03AF178EE2CD000683D4 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E8C7D7BB22DB263200F78763 /* Iterator.h */,
 				E8E44682179CC4A400BE8855 /* Media */,
 				E8E44681179CC49C00BE8855 /* I/O */,
 				E8E44680179CC48B00BE8855 /* System */,
@@ -2095,6 +2102,7 @@
 				E82E674C18EA7972004DBA18 /* as_parser.cpp in Sources */,
 				E82E674D18EA7972004DBA18 /* as_restore.cpp in Sources */,
 				E82E674E18EA7972004DBA18 /* as_scriptcode.cpp in Sources */,
+				E8C7D7BE22DB2A4400F78763 /* ConsoleCommandCandidate.cpp in Sources */,
 				E82E674F18EA7972004DBA18 /* as_scriptengine.cpp in Sources */,
 				E82E675018EA7972004DBA18 /* as_scriptfunction.cpp in Sources */,
 				E82E675118EA7972004DBA18 /* as_scriptnode.cpp in Sources */,

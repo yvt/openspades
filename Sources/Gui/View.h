@@ -23,6 +23,8 @@
 #include <Core/Math.h>
 #include <Core/RefCountedObject.h>
 
+#include "ConsoleCommandCandidate.h"
+
 namespace spades {
 	namespace gui {
 		class ConsoleCommand;
@@ -58,6 +60,15 @@ namespace spades {
 			 * @return `true` if the command was handled.
 			 */
 			virtual bool ExecCommand(const Handle<ConsoleCommand> &) { return false; }
+
+			/**
+			 * Produce a sequence of candidates of command name autocompletion.
+			 *
+			 * `name` is an incomplete command name. This method produces
+			 * a sequence of candidates starting with `name`.
+			 */
+			virtual Handle<ConsoleCommandCandidateIterator>
+			AutocompleteCommandName(const std::string &name);
 		};
 	} // namespace gui
 } // namespace spades
