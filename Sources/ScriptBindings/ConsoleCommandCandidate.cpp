@@ -30,6 +30,10 @@ namespace spades {
 		                                            gui::ConsoleCommandCandidate *p) {
 			new (p) gui::ConsoleCommandCandidate(other);
 		}
+		static void ConsoleCommandCandidateAssign(const gui::ConsoleCommandCandidate &other,
+		                                          gui::ConsoleCommandCandidate *p) {
+			*p = other;
+		}
 		static void ConsoleCommandCandidateDestructor(gui::ConsoleCommandCandidate *p) {
 			p->~ConsoleCommandCandidate();
 		}
@@ -64,6 +68,10 @@ namespace spades {
 					r = eng->RegisterObjectBehaviour(
 					  "ConsoleCommandCandidate", asBEHAVE_DESTRUCT, "void f()",
 					  asFUNCTION(ConsoleCommandCandidateDestructor), asCALL_CDECL_OBJLAST);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod(
+					  "ConsoleCommandCandidate", "void opAssign(const ConsoleCommandCandidate& in)",
+					  asFUNCTION(ConsoleCommandCandidateAssign), asCALL_CDECL_OBJLAST);
 					manager->CheckError(r);
 					r = eng->RegisterObjectProperty("ConsoleCommandCandidate", "string Name",
 					                                asOFFSET(gui::ConsoleCommandCandidate, name));
