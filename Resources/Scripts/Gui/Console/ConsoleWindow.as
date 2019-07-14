@@ -18,7 +18,7 @@
 
  */
 #include "../UIFramework/UIFramework.as"
-#include "../Client/FieldWithHistory.as"
+#include "ConsoleCommandField.as"
 
 namespace spades {
     class ConsoleWindow : spades::ui::UIElement {
@@ -52,7 +52,7 @@ namespace spades {
             }
 
             {
-                @field = FieldWithHistory(Manager, this.history);
+                @field = ConsoleCommandField(Manager, this.history, helper);
                 field.Bounds = AABB2(10.0, height - 35.0, screenWidth - 20.0, 30.f);
                 field.Placeholder = _Tr("Console", "Command");
                 @field.Changed = spades::ui::EventHandler(this.OnFieldChanged);

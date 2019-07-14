@@ -20,15 +20,6 @@
 #include "FieldWithHistory.as"
 
 namespace spades {
-
-    uint StringCommonPrefixLength(string a, string b) {
-        for (uint i = 0, ln = Min(a.length, b.length); i < ln; i++) {
-            if (ToLower(a[i]) != ToLower(b[i]))
-                return i;
-        }
-        return Min(a.length, b.length);
-    }
-
     /** Shows cvar's current value when user types something like "/cg_foobar" */
     class CommandFieldConfigValueView : spades::ui::UIElement {
         string[] @configNames;
