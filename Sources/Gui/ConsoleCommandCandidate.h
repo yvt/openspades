@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <map>
 #include <string>
 
 #include <Core/Iterator.h>
@@ -37,6 +38,15 @@ namespace spades {
 		 * `ConsoleCommandCandidate::name`.
 		 */
 		using ConsoleCommandCandidateIterator = Iterator<const ConsoleCommandCandidate &>;
+
+		/**
+		 * Construct a `ConsoleCommandCandidateIterator` from the specified
+		 * `std::map`.
+		 *
+		 * The map should remain unmodified and outlive the returned iterator.
+		 */
+		Handle<ConsoleCommandCandidateIterator>
+		MakeCandidates(const std::map<std::string, std::string> &, const std::string &query);
 
 		Handle<ConsoleCommandCandidateIterator>
 		MergeCandidates(Handle<ConsoleCommandCandidateIterator> first,

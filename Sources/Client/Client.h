@@ -412,6 +412,9 @@ namespace spades {
 			bool AcceptsTextInput() override;
 			AABB2 GetTextInputRect() override;
 			bool NeedsAbsoluteMouseCoordinate() override;
+			bool ExecCommand(const Handle<gui::ConsoleCommand> &) override;
+			Handle<gui::ConsoleCommandCandidateIterator>
+			AutocompleteCommandName(const std::string &name) override;
 
 			void SetWorld(World *);
 			World *GetWorld() const { return world.get(); }

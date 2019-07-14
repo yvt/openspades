@@ -305,6 +305,7 @@
 		E8C7D7BA22DB220300F78763 /* ConfigConsoleResponder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7B822DB220200F78763 /* ConfigConsoleResponder.cpp */; };
 		E8C7D7BE22DB2A4400F78763 /* ConsoleCommandCandidate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7BD22DB2A4400F78763 /* ConsoleCommandCandidate.cpp */; };
 		E8C7D7C022DB3AE000F78763 /* ConsoleCommandCandidate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7BF22DB3AE000F78763 /* ConsoleCommandCandidate.cpp */; };
+		E8C7D7C222DB636000F78763 /* Client_Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7C122DB635F00F78763 /* Client_Console.cpp */; };
 		E8CB47CE1DE071CA00BF606A /* SWUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */; };
 		E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
 		E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47D41DE084AB00BF606A /* GLSettings.cpp */; };
@@ -777,6 +778,7 @@
 		E8C7D7BC22DB2A4400F78763 /* ConsoleCommandCandidate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleCommandCandidate.h; sourceTree = "<group>"; };
 		E8C7D7BD22DB2A4400F78763 /* ConsoleCommandCandidate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleCommandCandidate.cpp; sourceTree = "<group>"; };
 		E8C7D7BF22DB3AE000F78763 /* ConsoleCommandCandidate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleCommandCandidate.cpp; sourceTree = "<group>"; };
+		E8C7D7C122DB635F00F78763 /* Client_Console.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_Console.cpp; sourceTree = "<group>"; };
 		E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModelRenderer.cpp; sourceTree = "<group>"; };
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
@@ -1647,6 +1649,7 @@
 			children = (
 				E844886317D0C404005105D0 /* Local Entities */,
 				E8CF03C1178EE6D8000683D4 /* Client.cpp */,
+				E8C7D7C122DB635F00F78763 /* Client_Console.cpp */,
 				E8FE748B18CC6AA100291338 /* Client_Input.cpp */,
 				E8FE748D18CC6C2B00291338 /* Client_Update.cpp */,
 				E8FE748F18CC6CE000291338 /* Client_NetHandler.cpp */,
@@ -2280,6 +2283,7 @@
 				E82E66F018EA7954004DBA18 /* GLLensFilter.cpp in Sources */,
 				E82E66F118EA7954004DBA18 /* GLCameraBlurFilter.cpp in Sources */,
 				E82E66F218EA7954004DBA18 /* GLFogFilter.cpp in Sources */,
+				E8C7D7C222DB636000F78763 /* Client_Console.cpp in Sources */,
 				E82E66F318EA7954004DBA18 /* GLLensFlareFilter.cpp in Sources */,
 				E82E66F418EA7954004DBA18 /* GLFXAAFilter.cpp in Sources */,
 				E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */,

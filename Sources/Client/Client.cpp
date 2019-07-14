@@ -600,6 +600,7 @@ namespace spades {
 				std::string msg;
 				msg = _Tr("Client", "Map saved: {0}", name);
 				ShowAlert(msg, AlertType::Notice);
+				SPLog("Map saved: %s", name.c_str());
 			} catch (const Exception &ex) {
 				std::string msg;
 				msg = _Tr("Client", "Saving map failed: ");

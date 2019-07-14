@@ -86,5 +86,56 @@ namespace spades {
 
 			return {new MergeConsoleCommandCandidates{std::move(first), std::move(second)}, false};
 		}
+
+		namespace {
+			/** Equivalent to `std::string::starts_with` (since C++20) */
+			bool StartsWith(const std::string &subject, const std::string &prefix) {
+				// FIXME: Code duplicate (see `ConfigConsoleResponder.cpp`)
+				if (subject.size() < prefix.size()) {
+					return false;
+				}
+				for (std::size_t i = 0; i < prefix.size(); ++i) {
+					if (subject[i] != prefix[i]) {
+						return false;
+					}
+				}
+				return true;
+			}
+
+			class MapIterator : public ConsoleCommandCandidateIterator {
+				const std::map<std::string, std::string> &items;
+				std::string query;
+				std::map<std::string, std::string>::const_iterator it;
+				ConsoleCommandCandidate current;
+
+			public:
+				MapIterator(const std::map<std::string, std::string> &items,
+				            const std::string &query)
+				    : items{items}, query{query} {
+					// Find the starting position
+					it = items.lower_bound(query);
+				}
+
+				const ConsoleCommandCandidate &GetCurrent() override { return current; }
+
+				bool MoveNext() override {
+					if (it == items.end() || !StartsWith(it->first, query)) {
+						return false;
+					}
+
+					// Create `ConsoleCommandCandidate` for the current item
+					current.name = it->first;
+					current.description = it->second;
+
+					++it;
+					return true;
+				}
+			};
+		} // namespace
+
+		Handle<ConsoleCommandCandidateIterator>
+		MakeCandidates(const std::map<std::string, std::string> &items, const std::string &query) {
+			return {new MapIterator{items, query}, false};
+		}
 	} // namespace gui
 } // namespace spades
