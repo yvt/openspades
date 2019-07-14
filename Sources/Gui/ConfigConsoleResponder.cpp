@@ -28,6 +28,54 @@ namespace spades {
 	namespace gui {
 		namespace {
 			std::string EscapeQuotes(std::string s) { return Replace(s, "\"", "\\\""); }
+
+			/** Equivalent to `std::string::starts_with` (since C++20) */
+			bool StartsWith(const std::string &subject, const std::string &prefix) {
+				if (subject.size() < prefix.size()) {
+					return false;
+				}
+				for (std::size_t i = 0; i < prefix.size(); ++i) {
+					if (subject[i] != prefix[i]) {
+						return false;
+					}
+				}
+				return true;
+			}
+
+			class ConfigNameIterator : public ConsoleCommandCandidateIterator {
+				std::vector<std::string> const names;
+				std::string query;
+				std::size_t i = 0;
+				ConsoleCommandCandidate current;
+
+			public:
+				ConfigNameIterator(const std::string &query)
+				    : names{Settings::GetInstance()->GetAllItemNames()}, query{query} {
+					// Find the starting position
+					i = std::lower_bound(names.begin(), names.end(), query) - names.begin();
+				}
+
+				const ConsoleCommandCandidate &GetCurrent() override { return current; }
+
+				bool MoveNext() override {
+					if (i >= names.size() || !StartsWith(names[i], query)) {
+						// Make sure it returns `MoveNext` indefinitely
+						i = names.size();
+						return false;
+					}
+
+					// Create `ConsoleCommandCandidate` for the current
+					// config variable
+					Settings::ItemHandle cvarHandle{names[i], nullptr};
+					current.name = names[i];
+					current.description = " = \"" + EscapeQuotes(cvarHandle) + "\"";
+
+					i += 1;
+
+					return true;
+				}
+			};
+
 		} // namespace
 
 		bool ConfigConsoleResponder::ExecCommand(const Handle<ConsoleCommand> &cmd) {
@@ -53,6 +101,11 @@ namespace spades {
 			}
 
 			return true;
+		}
+
+		Handle<ConsoleCommandCandidateIterator>
+		ConfigConsoleResponder::AutocompleteCommandName(const std::string &name) {
+			return {new ConfigNameIterator(name), false};
 		}
 	} // namespace gui
 } // namespace spades

@@ -122,6 +122,7 @@ namespace spades {
 
 		void Load();
 		void Flush();
+		/** Return a list of all config variables, sorted by name. */
 		std::vector<std::string> GetAllItemNames();
 	};
 	/*

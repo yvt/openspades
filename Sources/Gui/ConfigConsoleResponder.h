@@ -19,6 +19,9 @@
 #pragma once
 
 #include <Core/RefCountedObject.h>
+#include <string>
+
+#include "ConsoleCommandCandidate.h"
 
 namespace spades {
 	namespace gui {
@@ -28,6 +31,9 @@ namespace spades {
 		class ConfigConsoleResponder {
 		public:
 			static bool ExecCommand(const Handle<ConsoleCommand> &);
+
+			static Handle<ConsoleCommandCandidateIterator>
+			AutocompleteCommandName(const std::string &name);
 		};
 	} // namespace gui
 } // namespace spades
