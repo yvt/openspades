@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include <Client/IModel.h>
@@ -54,8 +54,7 @@ namespace spades {
 		};
 
 		class SWModelManager {
-			// unordered_map is preferred, but not supported by MSVC2010
-			std::map<std::string, SWModel *> models;
+			std::unordered_map<std::string, SWModel *> models;
 
 		public:
 			SWModelManager() {}

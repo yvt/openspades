@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <map>
+#include <unordered_map>
 
 #include <Client/IImage.h>
 #include <Core/Bitmap.h>
@@ -60,8 +60,7 @@ namespace spades {
 		};
 
 		class SWImageManager {
-			// unordered_map is preferred, but not supported by MSVC2010
-			std::map<std::string, SWImage *> images;
+			std::unordered_map<std::string, SWImage *> images;
 
 		public:
 			SWImageManager() {}

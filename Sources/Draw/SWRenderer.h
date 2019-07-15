@@ -161,10 +161,7 @@ namespace spades {
 			client::IModel *CreateModel(VoxelModel *) override;
 
 			void ClearCache() override;
-			/*
-			GLProgram *RegisterProgram(const std::string& name) override;
-			GLShader *RegisterShader(const std::string& name) override;
-			*/
+
 			void SetGameMap(client::GameMap *) override;
 			void SetFogColor(Vector3 v) override;
 			void SetFogDistance(float f) override { fogDistance = f; }
