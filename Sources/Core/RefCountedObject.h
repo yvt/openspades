@@ -128,6 +128,8 @@ namespace spades {
 		}
 		operator bool() { return ptr != NULL; }
 
+		bool operator==(const Handle &rhs) const { return ptr == rhs.ptr; }
+
 		/**
 		 * Attempts to cast this `Handle<T>` to `Handle<S>` using `dynamic_cast`, consuming this
 		 * `Handle<T>`. Throws an exception if the cast was unsuccessful.
