@@ -150,7 +150,18 @@ namespace stmp {
 		}
 
 		explicit operator bool() const { return has_some; }
+
+		bool operator==(const optional &rhs) const {
+			return has_some == rhs.has_some && (!has_some || **this == *rhs);
+		}
+		bool operator!=(const optional &rhs) const {
+			return has_some != rhs.has_some || (has_some && **this != *rhs);
+		}
 	};
+
+	template <class T> optional<typename std::decay<T>::type> make_optional(T &&value) {
+		return {std::forward<T>(value)};
+	}
 
 	/** Safe atomic smart pointer. */
 	template <class T> class atomic_unique_ptr {
