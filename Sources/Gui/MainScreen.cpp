@@ -233,13 +233,7 @@ namespace spades {
 			if (subview) {
 				try {
 					subview->RunFrame(dt);
-					if (subview->WantsToBeClosed()) {
-						subview->Closing();
-						subview = NULL;
-						RestoreRenderer();
-					} else {
-						return;
-					}
+					return;
 				} catch (const std::exception &ex) {
 					SPLog("[!] Error while running a game client: %s", ex.what());
 					subview->Closing();
@@ -263,6 +257,38 @@ namespace spades {
 
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction func("MainScreenUI", "void RunFrame(float)");
+			ScriptContextHandle c = func.Prepare();
+			c->SetObject(&*ui);
+			c->SetArgFloat(0, dt);
+			c.ExecuteChecked();
+		}
+
+		void MainScreen::RunFrameLate(float dt) {
+			SPADES_MARK_FUNCTION();
+			if (subview) {
+				try {
+					subview->RunFrameLate(dt);
+					if (subview->WantsToBeClosed()) {
+						subview->Closing();
+						subview = NULL;
+						RestoreRenderer();
+					} else {
+						return;
+					}
+				} catch (const std::exception &ex) {
+					SPLog("[!] Error while running a game client: %s", ex.what());
+					subview->Closing();
+					subview = NULL;
+					RestoreRenderer();
+					helper->errorMessage = ex.what();
+				}
+			}
+
+			if (!ui) {
+				return;
+			}
+			ScopedPrivilegeEscalation privilege;
+			static ScriptFunction func("MainScreenUI", "void RunFrameLate(float)");
 			ScriptContextHandle c = func.Prepare();
 			c->SetObject(&*ui);
 			c->SetArgFloat(0, dt);
@@ -305,10 +331,26 @@ namespace spades {
 			c.ExecuteChecked();
 		}
 
+		bool MainScreen::ExecCommand(const Handle<ConsoleCommand> &cmd) {
+			SPADES_MARK_FUNCTION();
+			if (subview) {
+				return subview->ExecCommand(cmd);
+			}
+			return View::ExecCommand(cmd);
+		}
+
+		Handle<ConsoleCommandCandidateIterator>
+		MainScreen::AutocompleteCommandName(const std::string &name) {
+			SPADES_MARK_FUNCTION();
+			if (subview) {
+				return subview->AutocompleteCommandName(name);
+			}
+			return View::AutocompleteCommandName(name);
+		}
+
 		std::string MainScreen::Connect(const ServerAddress &host) {
 			try {
-				subview.Set(new client::Client(&*renderer, &*audioDevice, host,
-				                               fontManager),
+				subview.Set(new client::Client(&*renderer, &*audioDevice, host, fontManager),
 				            false);
 			} catch (const std::exception &ex) {
 				SPLog("[!] Error while initializing a game client: %s", ex.what());
@@ -316,5 +358,5 @@ namespace spades {
 			}
 			return "";
 		}
-	}
-}
+	} // namespace gui
+} // namespace spades

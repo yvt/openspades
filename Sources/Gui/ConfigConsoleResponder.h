@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2019 yvt
 
  This file is part of OpenSpades.
 
@@ -15,38 +15,25 @@
 
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
-
  */
-
 #pragma once
 
-#include <map>
+#include <Core/RefCountedObject.h>
 #include <string>
-#include <vector>
+
+#include "ConsoleCommandCandidate.h"
 
 namespace spades {
-	namespace draw {
-		class IGLDevice;
-		class GLImage;
-		class GLRenderer;
+	namespace gui {
+		class ConsoleCommand;
 
-		class GLImageManager {
-			IGLDevice *device;
-			std::map<std::string, GLImage *> images;
-			GLImage *whiteImage;
-
-			GLImage *CreateImage(const std::string &);
-
+		/** Responds to console commands for accessing config variables. */
+		class ConfigConsoleResponder {
 		public:
-			GLImageManager(IGLDevice *);
-			~GLImageManager();
+			static bool ExecCommand(const Handle<ConsoleCommand> &);
 
-			GLImage *RegisterImage(const std::string &);
-			GLImage *GetWhiteImage();
-
-			void DrawAllImages(GLRenderer *);
-
-			void ClearCache();
+			static Handle<ConsoleCommandCandidateIterator>
+			AutocompleteCommandName(const std::string &name);
 		};
-	} // namespace draw
+	} // namespace gui
 } // namespace spades

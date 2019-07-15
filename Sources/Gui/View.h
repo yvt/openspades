@@ -23,8 +23,12 @@
 #include <Core/Math.h>
 #include <Core/RefCountedObject.h>
 
+#include "ConsoleCommandCandidate.h"
+
 namespace spades {
 	namespace gui {
+		class ConsoleCommand;
+
 		class View : public RefCountedObject {
 		protected:
 			virtual ~View() {}
@@ -41,11 +45,30 @@ namespace spades {
 			virtual bool NeedsAbsoluteMouseCoordinate() { return false; }
 			virtual void WheelEvent(float x, float y) {}
 
+			/** Called for every frame. */
 			virtual void RunFrame(float dt) {}
+			/** Called for every frame after `RunFrame`. */
+			virtual void RunFrameLate(float dt) {}
 
 			virtual void Closing() {}
 
 			virtual bool WantsToBeClosed() { return false; }
+
+			/**
+			 * Execute a console command.
+			 *
+			 * @return `true` if the command was handled.
+			 */
+			virtual bool ExecCommand(const Handle<ConsoleCommand> &) { return false; }
+
+			/**
+			 * Produce a sequence of candidates for command name autocompletion.
+			 *
+			 * `name` is an incomplete command name. This method produces
+			 * a sequence of candidates starting with `name`.
+			 */
+			virtual Handle<ConsoleCommandCandidateIterator>
+			AutocompleteCommandName(const std::string &name);
 		};
-	}
-}
+	} // namespace gui
+} // namespace spades

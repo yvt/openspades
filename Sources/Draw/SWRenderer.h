@@ -160,6 +160,8 @@ namespace spades {
 			client::IImage *CreateImage(Bitmap *) override;
 			client::IModel *CreateModel(VoxelModel *) override;
 
+			void ClearCache() override;
+
 			void SetGameMap(client::GameMap *) override;
 			void SetFogColor(Vector3 v) override;
 			void SetFogDistance(float f) override { fogDistance = f; }

@@ -68,6 +68,8 @@ namespace spades {
 
 			SWImage *RegisterImage(const std::string &);
 			SWImage *CreateImage(Bitmap *);
+
+			void ClearCache();
 		};
 	}
 }

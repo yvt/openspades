@@ -25,6 +25,7 @@
 #include <memory>
 #include <string>
 
+#include "ClientCameraMode.h"
 #include "ILocalEntity.h"
 #include "IRenderer.h"
 #include "IWorldListener.h"
@@ -35,7 +36,6 @@
 #include <Core/ServerAddress.h>
 #include <Core/Stopwatch.h>
 #include <Gui/View.h>
-#include "ClientCameraMode.h"
 
 namespace spades {
 	class IStream;
@@ -98,7 +98,7 @@ namespace spades {
 
 			FPSCounter fpsCounter;
 			FPSCounter upsCounter;
-			
+
 			std::unique_ptr<NetClient> net;
 			std::string playerName;
 			std::unique_ptr<IStream> logStream;
@@ -222,10 +222,10 @@ namespace spades {
 			/** The state of the free floating camera used for spectating. */
 			struct {
 				/** The temporally smoothed position (I guess). */
-				Vector3 position {0.0f, 0.0f, 0.0f};
+				Vector3 position{0.0f, 0.0f, 0.0f};
 
 				/** The temporally smoothed velocity (I guess). */
-				Vector3 velocity {0.0f, 0.0f, 0.0f};
+				Vector3 velocity{0.0f, 0.0f, 0.0f};
 			} freeCameraState;
 
 			/**
@@ -397,9 +397,11 @@ namespace spades {
 			~Client();
 
 		public:
-			Client(IRenderer *, IAudioDevice *, const ServerAddress &host, FontManager *);
+			Client(Handle<IRenderer>, Handle<IAudioDevice>, const ServerAddress &host,
+			       Handle<FontManager>);
 
 			void RunFrame(float dt) override;
+			void RunFrameLate(float dt) override;
 
 			void Closing() override;
 			void MouseEvent(float x, float y) override;
@@ -410,6 +412,9 @@ namespace spades {
 			bool AcceptsTextInput() override;
 			AABB2 GetTextInputRect() override;
 			bool NeedsAbsoluteMouseCoordinate() override;
+			bool ExecCommand(const Handle<gui::ConsoleCommand> &) override;
+			Handle<gui::ConsoleCommandCandidateIterator>
+			AutocompleteCommandName(const std::string &name) override;
 
 			void SetWorld(World *);
 			World *GetWorld() const { return world.get(); }
@@ -457,7 +462,7 @@ namespace spades {
 
 			/** @deprecated use BulletHitPlayer */
 			void PlayerHitBlockWithSpade(Player *, Vector3 hitPos, IntVector3 blockPos,
-			                                     IntVector3 normal) override;
+			                             IntVector3 normal) override;
 			void PlayerKilledPlayer(Player *killer, Player *victim, KillType) override;
 
 			void BulletHitPlayer(Player *hurtPlayer, HitType, Vector3 hitPos, Player *by) override;
@@ -475,5 +480,5 @@ namespace spades {
 			void LocalPlayerHurt(HurtType type, bool sourceGiven, Vector3 source) override;
 			void LocalPlayerBuildError(BuildFailureReason reason) override;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

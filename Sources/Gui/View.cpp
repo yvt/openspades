@@ -17,9 +17,13 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-
 #include "View.h"
 
 namespace spades {
-	namespace gui {}
-}
+	namespace gui {
+		Handle<ConsoleCommandCandidateIterator>
+		View::AutocompleteCommandName(const std::string &name) {
+			return {new EmptyIterator<const ConsoleCommandCandidate &>(), false};
+		}
+	} // namespace gui
+} // namespace spades

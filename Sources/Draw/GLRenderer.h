@@ -153,6 +153,8 @@ namespace spades {
 			client::IImage *RegisterImage(const char *filename) override;
 			client::IModel *RegisterModel(const char *filename) override;
 
+			void ClearCache() override;
+
 			client::IImage *CreateImage(Bitmap *) override;
 			client::IModel *CreateModel(VoxelModel *) override;
 			client::IModel *CreateModelOptimized(VoxelModel *);

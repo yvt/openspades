@@ -664,7 +664,7 @@ void CScriptArray::RemoveRange(asUINT start, asUINT count)
 	// Compact the elements
 	// As objects in arrays of objects are not stored inline, it is safe to use memmove here
 	// since we're just copying the pointers to objects and not the actual objects.
-	memmove(buffer->data + start*elementSize, buffer->data + (start + count)*elementSize, count*elementSize);
+	memcpy(buffer->data + start*elementSize, buffer->data + (start + count)*elementSize, (buffer->numElements - count)*elementSize);
 	buffer->numElements -= count;
 }
 

@@ -66,5 +66,7 @@ namespace spades {
 
 			return static_cast<GLModel *>(renderer->CreateModelOptimized(voxelModel));
 		}
+
+		void GLModelManager::ClearCache() { models.clear(); }
 	} // namespace draw
 } // namespace spades

@@ -47,6 +47,7 @@
 #include <Core/Strings.h>
 #include <Core/Thread.h>
 #include <Core/ZipFileSystem.h>
+#include <Gui/ConsoleScreen.h>
 #include <Gui/PackageUpdateManager.h>
 #include <Gui/StartupScreen.h>
 #include <OpenSpades.h>
@@ -154,24 +155,26 @@ namespace {
 				          "Something went horribly wrong, please send the file \n%s\nfor analysis.",
 				          fullBuf);
 			} else {
-				sprintf_s(buf, "Something went horribly wrong,\ni even failed to store information "
-				               "about the problem... (0x%08x)",
+				sprintf_s(buf,
+				          "Something went horribly wrong,\ni even failed to store information "
+				          "about the problem... (0x%08x)",
 				          lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff);
 			}
 		} else {
-			sprintf_s(buf, "Something went horribly wrong,\ni even failed to retrieve information "
-			               "about the problem... (0x%08x)",
+			sprintf_s(buf,
+			          "Something went horribly wrong,\ni even failed to retrieve information "
+			          "about the problem... (0x%08x)",
 			          lpEx ? lpEx->ExceptionRecord->ExceptionCode : 0xffffffff);
 		}
 		MessageBoxA(NULL, buf, "Oops, we crashed...", MB_OK | MB_ICONERROR);
 		ExitProcess(-1);
 		// return EXCEPTION_EXECUTE_HANDLER;
 	}
-}
+} // namespace
 #else
 namespace {
 	class ThreadQuantumSetter {};
-}
+} // namespace
 #endif
 
 namespace {
@@ -218,7 +221,7 @@ namespace {
 
 		return 0;
 	}
-}
+} // namespace
 
 namespace spades {
 	std::string g_userResourceDirectory;
@@ -229,9 +232,10 @@ namespace spades {
 
 		protected:
 			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
-			                                      spades::client::IAudioDevice *audio) override {
+			                              spades::client::IAudioDevice *audio) override {
 				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				return new spades::client::Client(renderer, audio, addr, fontManager);
+				Handle<gui::View> innerView{new spades::client::Client(renderer, audio, addr, fontManager), false};
+				return new spades::gui::ConsoleScreen(renderer, audio, fontManager, std::move(innerView));
 			}
 
 		public:
@@ -244,9 +248,10 @@ namespace spades {
 		class ConcreteRunner : public spades::gui::Runner {
 		protected:
 			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
-			                                      spades::client::IAudioDevice *audio) override {
+			                              spades::client::IAudioDevice *audio) override {
 				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				return new spades::gui::MainScreen(renderer, audio, fontManager);
+				Handle<gui::View> innerView{new spades::gui::MainScreen(renderer, audio, fontManager), false};
+				return new spades::gui::ConsoleScreen(renderer, audio, fontManager, std::move(innerView));
 			}
 
 		public:
@@ -254,7 +259,7 @@ namespace spades {
 		ConcreteRunner runner;
 		runner.RunProtected();
 	}
-}
+} // namespace spades
 
 static uLong computeCrc32ForStream(spades::IStream *s) {
 	uLong crc = crc32(0L, Z_NULL, 0);
@@ -334,7 +339,8 @@ int main(int argc, char **argv) {
 		std::wstring userAppDir = appdir + L"UserResources";
 
 		DWORD userAppDirAttrib = GetFileAttributesW(userAppDir.c_str());
-		if (userAppDirAttrib != INVALID_FILE_ATTRIBUTES && (userAppDirAttrib & FILE_ATTRIBUTE_DIRECTORY)) {
+		if (userAppDirAttrib != INVALID_FILE_ATTRIBUTES &&
+		    (userAppDirAttrib & FILE_ATTRIBUTE_DIRECTORY)) {
 			SPLog("UserResources found - switching to 'portable' mode");
 
 			spades::FileManager::AddFileSystem(
@@ -630,8 +636,9 @@ int main(int argc, char **argv) {
 		}
 
 		std::string msg = ex.what();
-		msg = _Tr("Main", "A serious error caused OpenSpades to stop working:\n\n{0}\n\nSee "
-		                  "SystemMessages.log for more details.",
+		msg = _Tr("Main",
+		          "A serious error caused OpenSpades to stop working:\n\n{0}\n\nSee "
+		          "SystemMessages.log for more details.",
 		          msg);
 
 		SPLog("[!] Terminating due to the fatal error: %s", ex.what());

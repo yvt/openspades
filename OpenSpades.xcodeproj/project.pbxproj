@@ -298,6 +298,14 @@
 		E89A5F201DF8759200857F65 /* ShellApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = E89A5F1F1DF8759200857F65 /* ShellApi.mm */; };
 		E89BBDC31B3559CD00F53EE9 /* GLAutoExposureFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89BBDC01B3559CD00F53EE9 /* GLAutoExposureFilter.cpp */; };
 		E8A2EBA01F5BE16D00E39CD9 /* GameProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8A2EB9E1F5BE16D00E39CD9 /* GameProperties.cpp */; };
+		E8C7D7AE22DA34F500F78763 /* ConsoleHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7AB22DA34F400F78763 /* ConsoleHelper.cpp */; };
+		E8C7D7AF22DA34F500F78763 /* ConsoleScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7AC22DA34F400F78763 /* ConsoleScreen.cpp */; };
+		E8C7D7B122DA35F000F78763 /* ConsoleHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7B022DA35F000F78763 /* ConsoleHelper.cpp */; };
+		E8C7D7B422DAF5B500F78763 /* ConsoleCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7B322DAF5B400F78763 /* ConsoleCommand.cpp */; };
+		E8C7D7BA22DB220300F78763 /* ConfigConsoleResponder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7B822DB220200F78763 /* ConfigConsoleResponder.cpp */; };
+		E8C7D7BE22DB2A4400F78763 /* ConsoleCommandCandidate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7BD22DB2A4400F78763 /* ConsoleCommandCandidate.cpp */; };
+		E8C7D7C022DB3AE000F78763 /* ConsoleCommandCandidate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7BF22DB3AE000F78763 /* ConsoleCommandCandidate.cpp */; };
+		E8C7D7C222DB636000F78763 /* Client_Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C7D7C122DB635F00F78763 /* Client_Console.cpp */; };
 		E8CB47CE1DE071CA00BF606A /* SWUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CC1DE071CA00BF606A /* SWUtils.cpp */; };
 		E8CB47D21DE07CF000BF606A /* SettingSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47CF1DE07CF000BF606A /* SettingSet.cpp */; };
 		E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CB47D41DE084AB00BF606A /* GLSettings.cpp */; };
@@ -757,6 +765,20 @@
 		E8B6B74817EA12E500E35523 /* IWeaponSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWeaponSkin.h; sourceTree = "<group>"; };
 		E8B8082718E05B920001013E /* CellToTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellToTriangle.h; sourceTree = "<group>"; };
 		E8B93AD418559EC600BD01E1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = lib/SDL2.framework; sourceTree = "<group>"; };
+		E8C7D7AA22DA34F400F78763 /* ConsoleHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleHelper.h; sourceTree = "<group>"; };
+		E8C7D7AB22DA34F400F78763 /* ConsoleHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleHelper.cpp; sourceTree = "<group>"; };
+		E8C7D7AC22DA34F400F78763 /* ConsoleScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleScreen.cpp; sourceTree = "<group>"; };
+		E8C7D7AD22DA34F500F78763 /* ConsoleScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleScreen.h; sourceTree = "<group>"; };
+		E8C7D7B022DA35F000F78763 /* ConsoleHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleHelper.cpp; sourceTree = "<group>"; };
+		E8C7D7B222DAF5B400F78763 /* ConsoleCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleCommand.h; sourceTree = "<group>"; };
+		E8C7D7B322DAF5B400F78763 /* ConsoleCommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleCommand.cpp; sourceTree = "<group>"; };
+		E8C7D7B822DB220200F78763 /* ConfigConsoleResponder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConfigConsoleResponder.cpp; sourceTree = "<group>"; };
+		E8C7D7B922DB220300F78763 /* ConfigConsoleResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigConsoleResponder.h; sourceTree = "<group>"; };
+		E8C7D7BB22DB263200F78763 /* Iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Iterator.h; sourceTree = "<group>"; };
+		E8C7D7BC22DB2A4400F78763 /* ConsoleCommandCandidate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleCommandCandidate.h; sourceTree = "<group>"; };
+		E8C7D7BD22DB2A4400F78763 /* ConsoleCommandCandidate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleCommandCandidate.cpp; sourceTree = "<group>"; };
+		E8C7D7BF22DB3AE000F78763 /* ConsoleCommandCandidate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleCommandCandidate.cpp; sourceTree = "<group>"; };
+		E8C7D7C122DB635F00F78763 /* Client_Console.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Client_Console.cpp; sourceTree = "<group>"; };
 		E8C92A0A18695EA500740C9F /* SWModelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWModelRenderer.cpp; sourceTree = "<group>"; };
 		E8C92A0B18695EA500740C9F /* SWModelRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWModelRenderer.h; sourceTree = "<group>"; };
 		E8C92A0D186A8D3600740C9F /* CpuID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuID.h; sourceTree = "<group>"; };
@@ -1382,6 +1404,8 @@
 		E8B6B6E617E40AF300E35523 /* ScriptBindings */ = {
 			isa = PBXGroup;
 			children = (
+				E8C7D7BF22DB3AE000F78763 /* ConsoleCommandCandidate.cpp */,
+				E8C7D7B022DA35F000F78763 /* ConsoleHelper.cpp */,
 				E8B6B6E717E40AF500E35523 /* MathScript.cpp */,
 				E838D42018ADDE2800EE3C53 /* StringsScript.cpp */,
 				E8B6B6E817E40AF500E35523 /* ScriptManager.cpp */,
@@ -1495,6 +1519,16 @@
 		E8CF039D178EDDBF000683D4 /* Gui */ = {
 			isa = PBXGroup;
 			children = (
+				E8C7D7BD22DB2A4400F78763 /* ConsoleCommandCandidate.cpp */,
+				E8C7D7BC22DB2A4400F78763 /* ConsoleCommandCandidate.h */,
+				E8C7D7B822DB220200F78763 /* ConfigConsoleResponder.cpp */,
+				E8C7D7B922DB220300F78763 /* ConfigConsoleResponder.h */,
+				E8C7D7B322DAF5B400F78763 /* ConsoleCommand.cpp */,
+				E8C7D7B222DAF5B400F78763 /* ConsoleCommand.h */,
+				E8C7D7AB22DA34F400F78763 /* ConsoleHelper.cpp */,
+				E8C7D7AA22DA34F400F78763 /* ConsoleHelper.h */,
+				E8C7D7AC22DA34F400F78763 /* ConsoleScreen.cpp */,
+				E8C7D7AD22DA34F500F78763 /* ConsoleScreen.h */,
 				E8F74CEC183F931F0085AA54 /* SDLMain.h */,
 				E8F74CEA183F92DA0085AA54 /* SDLmain.m */,
 				E8CF03BE178EE50E000683D4 /* Main.cpp */,
@@ -1565,6 +1599,7 @@
 		E8CF03AF178EE2CD000683D4 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E8C7D7BB22DB263200F78763 /* Iterator.h */,
 				E8E44682179CC4A400BE8855 /* Media */,
 				E8E44681179CC49C00BE8855 /* I/O */,
 				E8E44680179CC48B00BE8855 /* System */,
@@ -1614,6 +1649,7 @@
 			children = (
 				E844886317D0C404005105D0 /* Local Entities */,
 				E8CF03C1178EE6D8000683D4 /* Client.cpp */,
+				E8C7D7C122DB635F00F78763 /* Client_Console.cpp */,
 				E8FE748B18CC6AA100291338 /* Client_Input.cpp */,
 				E8FE748D18CC6C2B00291338 /* Client_Update.cpp */,
 				E8FE748F18CC6CE000291338 /* Client_NetHandler.cpp */,
@@ -2029,11 +2065,14 @@
 				E82E67E818EA7A51004DBA18 /* host.c in Sources */,
 				E82E67E918EA7A51004DBA18 /* list.c in Sources */,
 				E82E67EA18EA7A51004DBA18 /* packet.c in Sources */,
+				E8C7D7AE22DA34F500F78763 /* ConsoleHelper.cpp in Sources */,
+				E8C7D7AF22DA34F500F78763 /* ConsoleScreen.cpp in Sources */,
 				E82E67EB18EA7A51004DBA18 /* peer.c in Sources */,
 				E8403CAB229123CF00093C3E /* PipeStream.cpp in Sources */,
 				E81012311E1D7301009955D3 /* Icon.cpp in Sources */,
 				E8A2EBA01F5BE16D00E39CD9 /* GameProperties.cpp in Sources */,
 				E82E67EC18EA7A51004DBA18 /* protocol.c in Sources */,
+				E8C7D7B422DAF5B500F78763 /* ConsoleCommand.cpp in Sources */,
 				E82E67ED18EA7A51004DBA18 /* unix.c in Sources */,
 				E82E67EE18EA7A51004DBA18 /* win32.c in Sources */,
 				E82E67EF18EA7A51004DBA18 /* pnglite.c in Sources */,
@@ -2067,8 +2106,10 @@
 				E82E674A18EA7972004DBA18 /* as_objecttype.cpp in Sources */,
 				E82E674B18EA7972004DBA18 /* as_outputbuffer.cpp in Sources */,
 				E82E674C18EA7972004DBA18 /* as_parser.cpp in Sources */,
+				E8C7D7C022DB3AE000F78763 /* ConsoleCommandCandidate.cpp in Sources */,
 				E82E674D18EA7972004DBA18 /* as_restore.cpp in Sources */,
 				E82E674E18EA7972004DBA18 /* as_scriptcode.cpp in Sources */,
+				E8C7D7BE22DB2A4400F78763 /* ConsoleCommandCandidate.cpp in Sources */,
 				E82E674F18EA7972004DBA18 /* as_scriptengine.cpp in Sources */,
 				E82E675018EA7972004DBA18 /* as_scriptfunction.cpp in Sources */,
 				E82E675118EA7972004DBA18 /* as_scriptnode.cpp in Sources */,
@@ -2242,6 +2283,7 @@
 				E82E66F018EA7954004DBA18 /* GLLensFilter.cpp in Sources */,
 				E82E66F118EA7954004DBA18 /* GLCameraBlurFilter.cpp in Sources */,
 				E82E66F218EA7954004DBA18 /* GLFogFilter.cpp in Sources */,
+				E8C7D7C222DB636000F78763 /* Client_Console.cpp in Sources */,
 				E82E66F318EA7954004DBA18 /* GLLensFlareFilter.cpp in Sources */,
 				E82E66F418EA7954004DBA18 /* GLFXAAFilter.cpp in Sources */,
 				E8CB47D61DE084AB00BF606A /* GLSettings.cpp in Sources */,
@@ -2266,6 +2308,7 @@
 				E82E670718EA7954004DBA18 /* GLLongSpriteRenderer.cpp in Sources */,
 				E82E670818EA7954004DBA18 /* GLSoftLitSpriteRenderer.cpp in Sources */,
 				E82E670918EA7954004DBA18 /* GLShader.cpp in Sources */,
+				E8C7D7B122DA35F000F78763 /* ConsoleHelper.cpp in Sources */,
 				E82E670A18EA7954004DBA18 /* GLProgramUniform.cpp in Sources */,
 				E82E670B18EA7954004DBA18 /* GLProgramAttribute.cpp in Sources */,
 				E82E670C18EA7954004DBA18 /* GLProgram.cpp in Sources */,
@@ -2293,6 +2336,7 @@
 				E88344101E03244F000C3E39 /* FontManager.cpp in Sources */,
 				E893A3631E3E3331000654A4 /* PackageUpdateManager.cpp in Sources */,
 				E82E672318EA7954004DBA18 /* Runner.cpp in Sources */,
+				E8C7D7BA22DB220300F78763 /* ConfigConsoleResponder.cpp in Sources */,
 				E82E672418EA7954004DBA18 /* StartupScreen.cpp in Sources */,
 				E82E66ED18EA7914004DBA18 /* StartupScreenHelper.cpp in Sources */,
 			);

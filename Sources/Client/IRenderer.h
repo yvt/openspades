@@ -98,6 +98,13 @@ namespace spades {
 			virtual IImage *RegisterImage(const char *filename) = 0;
 			virtual IModel *RegisterModel(const char *filename) = 0;
 
+			/**
+			 * Clear the cache of models and images loaded via `RegisterModel`
+			 * and `RegisterImage`. This method is merely a hint - the
+			 * implementation may partially or completely ignore the request.
+			 */
+			virtual void ClearCache() {}
+
 			virtual IImage *CreateImage(Bitmap *) = 0;
 			virtual IModel *CreateModel(VoxelModel *) = 0;
 

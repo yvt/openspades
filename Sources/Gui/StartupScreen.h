@@ -71,6 +71,7 @@ namespace spades {
 			bool NeedsAbsoluteMouseCoordinate() override;
 
 			void RunFrame(float dt) override;
+			void RunFrameLate(float dt) override;
 
 			void Closing() override;
 

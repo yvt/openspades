@@ -152,6 +152,13 @@ namespace spades {
 			return modelManager->RegisterModel(filename);
 		}
 
+		void SWRenderer::ClearCache() {
+			SPADES_MARK_FUNCTION();
+			EnsureValid();
+			imageManager->ClearCache();
+			modelManager->ClearCache();
+		}
+
 		client::IImage *SWRenderer::CreateImage(spades::Bitmap *bmp) {
 			SPADES_MARK_FUNCTION();
 			EnsureValid();
@@ -1186,5 +1193,5 @@ namespace spades {
 
 			flatMapRenderer->SetNeedsUpdate(x, y);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -20,14 +20,7 @@
 #include "FieldWithHistory.as"
 
 namespace spades {
-
-    uint StringCommonPrefixLength(string a, string b) {
-        for (uint i = 0, ln = Min(a.length, b.length); i < ln; i++) {
-            if (ToLower(a[i]) != ToLower(b[i]))
-                return i;
-        }
-        return Min(a.length, b.length);
-    }
+    // TODO: Remove cvar editing (superseded by the system console) after 0.1.4
 
     /** Shows cvar's current value when user types something like "/cg_foobar" */
     class CommandFieldConfigValueView : spades::ui::UIElement {
@@ -279,6 +272,9 @@ namespace spades {
                     ui.helper.SayTeam(field.Text);
                 else
                     ui.helper.SayGlobal(field.Text);
+            } else {
+                ui.helper.AlertWarning(_Tr(
+                    "Client", "cvar editing via chat window is being phased out (see issue #842)"));
             }
             Close();
         }

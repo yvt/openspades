@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2019 yvt
 
  This file is part of OpenSpades.
 
@@ -15,16 +15,12 @@
 
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
-
  */
-
 #pragma once
 
 #include "View.h"
 #include <Client/IAudioDevice.h>
 #include <Client/IRenderer.h>
-#include <Core/RefCountedObject.h>
-#include <Core/ServerAddress.h>
 #include <ScriptBindings/ScriptManager.h>
 
 namespace spades {
@@ -32,34 +28,19 @@ namespace spades {
 		class FontManager;
 	}
 	namespace gui {
-		class MainScreenHelper;
-		class MainScreen : public View {
-			friend class MainScreenHelper;
-			Handle<client::IRenderer> renderer;
-			Handle<client::IAudioDevice> audioDevice;
-			Handle<View> subview;
-			Handle<client::FontManager> fontManager;
-			float timeToStartInitialization;
+		class ConsoleHelper;
 
-			Handle<MainScreenHelper> helper;
-			Handle<asIScriptObject> ui;
-
-			void DrawStartupScreen();
-			void DoInit();
-
-			void RestoreRenderer();
-
-			std::string Connect(const ServerAddress &host);
-
-		protected:
-			~MainScreen();
-
+		/**
+		 * This `View` wraps another `View` to provide the system console
+		 * functionality which can be invoked anytime by using a hotkey.
+		 */
+		class ConsoleScreen : public View {
+			friend class ConsoleHelper;
 		public:
-			MainScreen(client::IRenderer *, client::IAudioDevice *, client::FontManager *);
+			ConsoleScreen(Handle<client::IRenderer>, Handle<client::IAudioDevice>,
+			              Handle<client::FontManager>, Handle<View>);
 
-			client::IRenderer *GetRenderer() { return &*renderer; }
-			client::IAudioDevice *GetAudioDevice() { return &*audioDevice; }
-
+			// Implements `View`
 			void MouseEvent(float x, float y) override;
 			void KeyEvent(const std::string &, bool down) override;
 			void TextInputEvent(const std::string &) override;
@@ -68,16 +49,30 @@ namespace spades {
 			AABB2 GetTextInputRect() override;
 			void WheelEvent(float x, float y) override;
 			bool NeedsAbsoluteMouseCoordinate() override;
-
 			void RunFrame(float dt) override;
 			void RunFrameLate(float dt) override;
-
 			void Closing() override;
 			bool WantsToBeClosed() override;
-
 			bool ExecCommand(const Handle<ConsoleCommand> &) override;
 			Handle<ConsoleCommandCandidateIterator>
 			AutocompleteCommandName(const std::string &name) override;
+
+		private:
+			~ConsoleScreen();
+
+			Handle<client::IRenderer> renderer;
+			Handle<client::IAudioDevice> audioDevice;
+			Handle<View> subview;
+
+			// Scripting
+			Handle<ConsoleHelper> helper;
+			Handle<asIScriptObject> ui;
+			bool ShouldInterceptInput();
+			void ToggleConsole();
+			void AddLine(const std::string &);
+
+			/** Dump all available commands to `SPLog`. */
+			void DumpAllCommands();
 		};
 	} // namespace gui
 } // namespace spades

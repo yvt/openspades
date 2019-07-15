@@ -20,15 +20,17 @@
 
 #include <cstdarg>
 #include <ctime>
+#include <deque>
 #include <map>
 #include <string>
 
-#include <Core/Debug.h>
-#include <Imports/SDL.h>
 #include "Debug.h"
 #include "FileManager.h"
 #include "IStream.h"
 #include "Math.h"
+#include "Strings.h"
+#include <Core/Debug.h>
+#include <Imports/SDL.h>
 
 #define SPADES_USE_TLS 1
 
@@ -148,9 +150,49 @@ namespace spades {
 			}
 			return message;
 		}
-	}
+	} // namespace reflection
 
 #pragma mark -
+
+	namespace {
+		class BoundedLogBuffer {
+		public:
+			void Push(std::string &&line) {
+				lines.push_back(std::move(line));
+
+				if (lines.size() > 1000) {
+					++overflow;
+					lines.pop_front();
+				}
+			}
+
+			void MergeFrom(BoundedLogBuffer &&other) {
+				for (auto &line : other.lines) {
+					Push(std::move(line));
+				}
+				other.lines.clear();
+			}
+
+			/** Flush log lines. Not safe to call `Push` while in progress. */
+			template <class C> void Flush(C &&cb) {
+				if (overflow > 0) {
+					cb(Format("[{} log lines were lost]", overflow));
+					overflow = 0;
+				}
+				for (auto &line : lines) {
+					cb(std::move(line));
+				}
+				lines.clear();
+			}
+
+		private:
+			std::deque<std::string> lines;
+			std::size_t overflow = 0;
+		};
+
+		/** Stores log lines to be displayed in the internal console. */
+		BoundedLogBuffer g_consoleLogBuffer;
+	} // namespace
 
 	static IStream *logStream = NULL;
 	static bool attemptedToInitializeLog = false;
@@ -163,6 +205,24 @@ namespace spades {
 		logStream->Write(accumlatedLog);
 		accumlatedLog.clear();
 	}
+
+	void GetBufferedLogLines(stmp::dyn_function<void(std::string)> &&cb) {
+		BoundedLogBuffer tmp;
+
+		// Swap log buffers because `Push` is not safe to call while
+		// `Flush` is in progress
+		std::swap(tmp, g_consoleLogBuffer);
+
+		tmp.Flush(cb);
+
+		// Swap them back
+		std::swap(tmp, g_consoleLogBuffer);
+
+		// Process log lines recoded while we were doing this
+		g_consoleLogBuffer.MergeFrom(std::move(tmp));
+	}
+
+	// TODO: What happened to thread-safety here
 
 	void LogMessage(const char *file, int line, const char *format, ...) {
 		char buf[4096];
@@ -182,15 +242,18 @@ namespace spades {
 
 		// lm: using \r\n instead of \n so that some shitty windows editors (notepad f.e.) can parse
 		// this file aswell (all decent editors should ignore it anyway)
-		snprintf(buf, sizeof(buf), "%04d/%02d/%02d %02d:%02d:%02d [%s:%d] %s\r\n", tm.tm_year + 1900,
-		        tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, fn.c_str(), line,
-		        str.c_str());
+		snprintf(buf, sizeof(buf), "%04d/%02d/%02d %02d:%02d:%02d [%s:%d] %s\r\n",
+		         tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec,
+		         fn.c_str(), line, str.c_str());
 		buf[sizeof(buf) - 1] = 0;
 
-		std::string outStr = EscapeControlCharacters(buf);
+		// Log messages are outputted to three destinations.
 
+		// (1) stdout
+		std::string outStr = EscapeControlCharacters(buf);
 		printf("%s", outStr.c_str());
 
+		// (2) The log file a.k.a. `SystemMessages.log`
 		if (logStream || !attemptedToInitializeLog) {
 
 			if (attemptedToInitializeLog) {
@@ -199,5 +262,9 @@ namespace spades {
 			} else
 				accumlatedLog += buf;
 		}
+
+		// (3) The internal console window
+		std::string consoleLogLine{buf, strlen(buf) - 2}; // Remove `\r\n`
+		g_consoleLogBuffer.Push(std::move(consoleLogLine));
 	}
-}
+} // namespace spades

@@ -443,6 +443,15 @@ namespace spades {
 			return it->second;
 		}
 
+		void YsrDevice::ClearCache() {
+			SPADES_MARK_FUNCTION();
+
+			for (auto &chunk: chunks) {
+				chunk.second->Release();
+			}
+			chunks.clear();
+		}
+
 		void YsrDevice::SetGameMap(client::GameMap *gameMap) {
 			SPADES_MARK_FUNCTION();
 			auto *old = this->gameMap;

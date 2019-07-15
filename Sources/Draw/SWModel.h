@@ -62,6 +62,8 @@ namespace spades {
 
 			SWModel *RegisterModel(const std::string &);
 			SWModel *CreateModel(VoxelModel *);
+
+			void ClearCache();
 		};
 	}
 }
