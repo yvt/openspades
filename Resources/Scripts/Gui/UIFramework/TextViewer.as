@@ -223,6 +223,8 @@ namespace spades {
                     text = value;
                     @textmodel = TextViewerModel(Manager, text, Font, ItemWidth, selection);
                     @Model = textmodel;
+                    this.selection.MarkPosition = 0;
+                    this.selection.CursorPosition = 0;
                 }
             }
 
