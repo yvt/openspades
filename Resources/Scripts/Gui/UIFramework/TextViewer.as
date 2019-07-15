@@ -227,6 +227,10 @@ namespace spades {
             }
 
             private int PointToCharIndex(Vector2 clientPosition) {
+                if (textmodel is null) {
+                    return 0;
+                }
+
                 int line = int(clientPosition.y / RowHeight) + TopRowIndex;
                 if (line < 0) {
                     return 0;
@@ -297,6 +301,9 @@ namespace spades {
                         Manager.Copy(this.SelectedText);
                         return;
                     } else if (key == "A") {
+                        if (textmodel is null) {
+                            return;
+                        }
                         this.selection.MarkPosition = 0;
                         this.selection.CursorPosition = textmodel.contentLength;
                         return;
@@ -307,6 +314,9 @@ namespace spades {
 
             string SelectedText {
                 get final {
+                    if (textmodel is null) {
+                        return "";
+                    }
                     string result;
                     int start = this.selection.SelectionStart;
                     int end = this.selection.SelectionEnd;
@@ -336,6 +346,10 @@ namespace spades {
                 }
             }
 
+            /**
+             * Appends a text. Make sure `TextViewer.Font` is not null before
+             * calling this method.
+             */
             void AddLine(string line, bool autoscroll = false,
                          Vector4 color = Vector4(1.f, 1.f, 1.f, 1.f)) {
                 if (textmodel is null) {
