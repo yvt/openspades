@@ -244,7 +244,7 @@ namespace spades {
             }
 
             /**
-             * Sets the displayed text. Ensure TextViewer.Font is not null before
+             * Sets the displayed text. Make sure `TextViewer.Font` is not null before
              * setting this proeprty.
              */
             string Text {
@@ -253,10 +253,16 @@ namespace spades {
                     text = value;
                     @textmodel = TextViewerModel(Manager, text, Font, ItemWidth, selection);
                     @Model = textmodel;
+                    this.selection.MarkPosition = 0;
+                    this.selection.CursorPosition = 0;
                 }
             }
 
             private int PointToCharIndex(Vector2 clientPosition) {
+                if (textmodel is null) {
+                    return 0;
+                }
+
                 int line = int(clientPosition.y / RowHeight) + TopRowIndex;
                 if (line < 0) {
                     return textmodel.contentStart;
@@ -327,6 +333,9 @@ namespace spades {
                         Manager.Copy(this.SelectedText);
                         return;
                     } else if (key == "A") {
+                        if (textmodel is null) {
+                            return;
+                        }
                         this.selection.MarkPosition = textmodel.contentStart;
                         this.selection.CursorPosition = textmodel.contentEnd;
                         return;
@@ -337,6 +346,9 @@ namespace spades {
 
             string SelectedText {
                 get final {
+                    if (textmodel is null) {
+                        return "";
+                    }
                     string result;
                     int start = this.selection.SelectionStart;
                     int end = this.selection.SelectionEnd;
@@ -366,6 +378,10 @@ namespace spades {
                 }
             }
 
+            /**
+             * Appends a text. Make sure `TextViewer.Font` is not null before
+             * calling this method.
+             */
             void AddLine(string line, bool autoscroll = false,
                          Vector4 color = Vector4(1.f, 1.f, 1.f, 1.f)) {
                 if (textmodel is null) {
