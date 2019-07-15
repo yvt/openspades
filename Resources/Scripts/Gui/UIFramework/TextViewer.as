@@ -214,7 +214,7 @@ namespace spades {
             }
 
             /**
-             * Sets the displayed text. Ensure TextViewer.Font is not null before
+             * Sets the displayed text. Make sure `TextViewer.Font` is not null before
              * setting this proeprty.
              */
             string Text {
