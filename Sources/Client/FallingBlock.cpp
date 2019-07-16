@@ -19,8 +19,6 @@
  */
 
 #include "FallingBlock.h"
-#include <Core/Debug.h>
-#include <Core/Exception.h>
 #include "Client.h"
 #include "GameMap.h"
 #include "IModel.h"
@@ -28,6 +26,8 @@
 #include "ParticleSpriteEntity.h"
 #include "SmokeSpriteEntity.h"
 #include "World.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 #include <limits.h>
 
 namespace spades {
@@ -104,7 +104,7 @@ namespace spades {
 
 			const Handle<GameMap> &map = client->GetWorld()->GetMap();
 			Vector3 orig = matrix.GetOrigin();
-			
+
 			SPAssert(map);
 
 			if (time > 1.f || map->ClipBox(orig.x, orig.y, orig.z)) {
@@ -142,8 +142,8 @@ namespace spades {
 				client->grenadeVibration += impact / (dist + 5.f);
 				if (client->grenadeVibration > 1.f)
 					client->grenadeVibration = 1.f;
-				
-                auto *getRandom = SampleRandomFloat;
+
+				auto *getRandom = SampleRandomFloat;
 
 				for (int x = 0; x < w; x++) {
 					Vector3 p1 = vmOrigin + vmAxis1 * (float)x;
@@ -171,11 +171,12 @@ namespace spades {
 							{
 								ParticleSpriteEntity *ent =
 								  new SmokeSpriteEntity(client, col, 70.f);
-								ent->SetTrajectory(p3, (MakeVector3(getRandom() - getRandom(),
-								                                    getRandom() - getRandom(),
-								                                    getRandom() - getRandom())) *
-								                         0.2f,
-								                   1.f, 0.f);
+								ent->SetTrajectory(
+								  p3,
+								  (MakeVector3(getRandom() - getRandom(), getRandom() - getRandom(),
+								               getRandom() - getRandom())) *
+								    0.2f,
+								  1.f, 0.f);
 								ent->SetRotation(getRandom() * (float)M_PI * 2.f);
 								ent->SetRadius(1.0f, 0.5f);
 								ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
@@ -187,10 +188,11 @@ namespace spades {
 							for (int i = 0; i < 6; i++) {
 								ParticleSpriteEntity *ent =
 								  new ParticleSpriteEntity(client, img, col);
-								ent->SetTrajectory(p3, MakeVector3(getRandom() - getRandom(),
-								                                   getRandom() - getRandom(),
-								                                   getRandom() - getRandom()) *
-								                         13.f,
+								ent->SetTrajectory(p3,
+								                   MakeVector3(getRandom() - getRandom(),
+								                               getRandom() - getRandom(),
+								                               getRandom() - getRandom()) *
+								                     13.f,
 								                   1.f, .6f);
 								ent->SetRotation(getRandom() * (float)M_PI * 2.f);
 								ent->SetRadius(0.35f + getRandom() * getRandom() * 0.1f);
@@ -223,5 +225,5 @@ namespace spades {
 			param.matrix = matrix;
 			client->GetRenderer()->RenderModel(model, param);
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

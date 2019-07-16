@@ -149,4 +149,4 @@ namespace spades {
 		 */
 		template <class S> Handle<S> Cast() const & { return Handle{*this}.Cast<S>(); }
 	};
-}
+} // namespace spades

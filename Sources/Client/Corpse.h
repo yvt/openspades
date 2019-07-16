@@ -100,5 +100,5 @@ namespace spades {
 
 			void AddImpulse(Vector3);
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

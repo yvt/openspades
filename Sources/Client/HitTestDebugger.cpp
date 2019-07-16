@@ -21,8 +21,8 @@
 
 #include <ctime> //windows needs this.
 
-#include "HitTestDebugger.h"
 #include "GameMap.h"
+#include "HitTestDebugger.h"
 #include "Player.h"
 #include "Weapon.h"
 #include "World.h"
@@ -148,7 +148,7 @@ namespace spades {
 			def.zFar = 200.f;
 
 			// start rendering
-			const Handle<GameMap>& map = world->GetMap();
+			const Handle<GameMap> &map = world->GetMap();
 			if (!def.skipWorld) {
 				renderer->SetGameMap(&*map);
 			}
@@ -307,5 +307,5 @@ namespace spades {
 
 			renderer->Flip();
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

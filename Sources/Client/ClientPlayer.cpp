@@ -530,8 +530,7 @@ namespace spades {
 				eye.z -= p * 0.06f * sp;
 			}
 
-			return Matrix4::FromAxis(-player.GetRight(), player.GetFront(), -player.GetUp(),
-			                         eye);
+			return Matrix4::FromAxis(-player.GetRight(), player.GetFront(), -player.GetUp(), eye);
 		}
 
 		void ClientPlayer::SetSkinParameterForTool(Player::ToolType type, asIScriptObject *skin) {
@@ -548,7 +547,7 @@ namespace spades {
 					interface.SetActionProgress(p.GetSpadeAnimationProgress());
 				} else if (inp.secondary) {
 					interface.SetActionType(p.IsFirstDig() ? SpadeActionTypeDigStart
-					                                        : SpadeActionTypeDig);
+					                                       : SpadeActionTypeDig);
 					interface.SetActionProgress(p.GetDigAnimationProgress());
 				} else {
 					interface.SetActionType(SpadeActionTypeIdle);
@@ -697,8 +696,7 @@ namespace spades {
 				float sp = 1.f - aimDownState;
 				sp *= .3f;
 				sp *= std::min(1.f, p.GetVelocty().GetLength() * 5.f);
-				viewWeaponOffset.x +=
-				sinf(p.GetWalkAnimationProgress() * M_PI * 2.f) * 0.013f * sp;
+				viewWeaponOffset.x += sinf(p.GetWalkAnimationProgress() * M_PI * 2.f) * 0.013f * sp;
 				float vl = cosf(p.GetWalkAnimationProgress() * M_PI * 2.f);
 				vl *= vl;
 				viewWeaponOffset.z += vl * 0.018f * sp;

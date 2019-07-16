@@ -78,5 +78,5 @@ namespace spades {
 
 			void AddTerritory(const Territory &);
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

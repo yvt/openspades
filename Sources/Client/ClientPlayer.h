@@ -114,5 +114,5 @@ namespace spades {
 
 			Matrix4 GetEyeMatrix();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

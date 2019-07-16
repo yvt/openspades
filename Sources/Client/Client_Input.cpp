@@ -27,8 +27,8 @@
 #include "IAudioChunk.h"
 #include "IAudioDevice.h"
 
-#include "ClientUI.h"
 #include "ChatWindow.h"
+#include "ClientUI.h"
 #include "Corpse.h"
 #include "LimboView.h"
 #include "MapView.h"
@@ -441,7 +441,7 @@ namespace spades {
 						}
 						if (world->GetLocalPlayer()->IsToolWeapon() && weapInput.secondary &&
 						    !lastVal && world->GetLocalPlayer()->IsReadyToUseTool() &&
-							!world->GetLocalPlayer()->GetWeapon().IsReloading() &&
+						    !world->GetLocalPlayer()->GetWeapon().IsReloading() &&
 						    GetSprintState() == 0.0f) {
 							AudioParam params;
 							params.volume = 0.08f;
@@ -453,7 +453,7 @@ namespace spades {
 						Weapon &w = world->GetLocalPlayer()->GetWeapon();
 						if (w.GetAmmo() < w.GetClipSize() && w.GetStock() > 0 &&
 						    (!world->GetLocalPlayer()->IsAwaitingReloadCompletion()) &&
-							(!w.IsReloading()) &&
+						    (!w.IsReloading()) &&
 						    world->GetLocalPlayer()->GetTool() == Player::ToolWeapon) {
 							if (world->GetLocalPlayer()->IsToolWeapon()) {
 								if (weapInput.secondary) {
@@ -553,7 +553,7 @@ namespace spades {
 					} else if (CheckKey(cg_keyLimbo, name) && down) {
 						limbo->SetSelectedTeam(world->GetLocalPlayer()->GetTeamId());
 						limbo->SetSelectedWeapon(
-												 world->GetLocalPlayer()->GetWeapon().GetWeaponType());
+						  world->GetLocalPlayer()->GetWeapon().GetWeaponType());
 						inGameLimbo = true;
 					} else if (CheckKey(cg_keySceneshot, name) && down) {
 						TakeScreenShot(true);
@@ -563,7 +563,8 @@ namespace spades {
 						TakeMapShot();
 					} else if (CheckKey(cg_keyFlashlight, name) && down) {
 						// spectators and dead players should not be able to toggle the flashlight
-						if (world->GetLocalPlayer()->IsSpectator() || !world->GetLocalPlayer()->IsAlive())
+						if (world->GetLocalPlayer()->IsSpectator() ||
+						    !world->GetLocalPlayer()->IsAlive())
 							return;
 						flashlightOn = !flashlightOn;
 						flashlightOnTime = time;
@@ -626,5 +627,5 @@ namespace spades {
 				}
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

@@ -33,7 +33,7 @@ namespace spades {
 		      owner(p),
 		      time(0),
 		      shooting(false),
-			  shootingPreviously(false),
+		      shootingPreviously(false),
 		      reloading(false),
 		      nextShotTime(0.f),
 		      reloadStartTime(-101.f),
@@ -388,9 +388,8 @@ namespace spades {
 						case SHOTGUN_WEAPON: return new ShotgunWeapon4(p.GetWorld(), p);
 						default: SPInvalidEnum("type", type);
 					}
-                default:
-                    SPInvalidEnum("protocolVersion", gp.protocolVersion);
+				default: SPInvalidEnum("protocolVersion", gp.protocolVersion);
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

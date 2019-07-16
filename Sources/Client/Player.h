@@ -140,7 +140,7 @@ namespace spades {
 			       IntVector3 color);
 
 			Player(const Player &) = delete;
-			void operator =(const Player &) = delete;
+			void operator=(const Player &) = delete;
 
 			~Player();
 

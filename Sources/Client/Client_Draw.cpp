@@ -32,6 +32,7 @@
 #include "IAudioChunk.h"
 #include "IAudioDevice.h"
 
+#include "CTFGameMode.h"
 #include "CenterMessageView.h"
 #include "ChatWindow.h"
 #include "ClientPlayer.h"
@@ -41,6 +42,7 @@
 #include "Fonts.h"
 #include "HurtRingView.h"
 #include "IFont.h"
+#include "IGameMode.h"
 #include "ILocalEntity.h"
 #include "LimboView.h"
 #include "MapView.h"
@@ -50,8 +52,6 @@
 #include "SmokeSpriteEntity.h"
 #include "TCProgressView.h"
 #include "Tracer.h"
-#include "IGameMode.h"
-#include "CTFGameMode.h"
 
 #include "GameMap.h"
 #include "Grenade.h"
@@ -103,7 +103,7 @@ namespace spades {
 					return name;
 				}
 			}
-		}
+		} // namespace
 
 		void Client::TakeScreenShot(bool sceneOnly) {
 			SceneDefinition sceneDef = CreateSceneDefinition();
@@ -290,7 +290,7 @@ namespace spades {
 
 			if ((int)cg_playerNames == 0)
 				return;
-			
+
 			Player &p = GetWorld()->GetLocalPlayer().value();
 
 			hitTag_t tag = hit_None;
@@ -429,7 +429,7 @@ namespace spades {
 					Handle<IImage> img(renderer->RegisterImage("Gfx/Intel.png"), false);
 
 					// Strobe
-					Vector4 color {1.0f, 1.0f, 1.0f, 1.0f};
+					Vector4 color{1.0f, 1.0f, 1.0f, 1.0f};
 					color *= std::fabs(std::sin(world->GetTime() * 2.0f));
 
 					renderer->SetColorAlphaPremultiplied(color);
@@ -559,7 +559,7 @@ namespace spades {
 							} else if (weap.GetAmmo() == 0 && weap.GetStock() == 0) {
 								msg = _Tr("Client", "Out of Ammo");
 							} else if (weap.GetStock() > 0 &&
-									   weap.GetAmmo() < weap.GetClipSize() / 4) {
+							           weap.GetAmmo() < weap.GetClipSize() / 4) {
 								msg = _Tr("Client", "Press [{0}] to Reload",
 								          TranslateKeyName(cg_keyReloadWeapon));
 							}
@@ -756,8 +756,9 @@ namespace spades {
 			color = Vector4(1.f, 1.f, 1.f, 1.f);
 			color *= fade;
 
-			font->DrawShadow(alertContents, Vector2(pos.x + contentsSize.x - textSize.x - margin,
-			                                        pos.y + (contentsSize.y - textSize.y) * 0.5f),
+			font->DrawShadow(alertContents,
+			                 Vector2(pos.x + contentsSize.x - textSize.x - margin,
+			                         pos.y + (contentsSize.y - textSize.y) * 0.5f),
 			                 1.f, color, Vector4(0.f, 0.f, 0.f, fade * 0.5f));
 		}
 
@@ -966,5 +967,5 @@ namespace spades {
 
 			DrawStats();
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

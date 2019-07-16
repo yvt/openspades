@@ -121,7 +121,7 @@ namespace spades {
 				return 1.f;
 			}
 
-			ClientPlayer* clientPlayer = clientPlayers[player.GetId()];
+			ClientPlayer *clientPlayer = clientPlayers[player.GetId()];
 			SPAssert(clientPlayer);
 
 			float delta = .8f;
@@ -178,7 +178,8 @@ namespace spades {
 
 						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
-										 renderer->ScreenHeight()) * 2.f;
+						                 renderer->ScreenHeight()) *
+						           2.f;
 
 						def.zNear = 0.05f;
 
@@ -204,7 +205,8 @@ namespace spades {
 								localFireVibration *= 0.4f;
 							}
 
-							roll += (SampleRandomFloat() - SampleRandomFloat()) * 0.03f * localFireVibration;
+							roll += (SampleRandomFloat() - SampleRandomFloat()) * 0.03f *
+							        localFireVibration;
 							scale += SampleRandomFloat() * 0.04f * localFireVibration;
 
 							vibPitch += localFireVibration * (1.f - localFireVibration) * 0.01f;
@@ -216,13 +218,13 @@ namespace spades {
 							{
 								float sp = SmoothStep(GetSprintState());
 								vibYaw += sinf(player.GetWalkAnimationProgress() *
-											   static_cast<float>(M_PI) * 2.f) *
-								0.01f * sp;
+								               static_cast<float>(M_PI) * 2.f) *
+								          0.01f * sp;
 								roll -= sinf(player.GetWalkAnimationProgress() *
-											 static_cast<float>(M_PI) * 2.f) *
-								0.005f * (sp);
+								             static_cast<float>(M_PI) * 2.f) *
+								        0.005f * (sp);
 								float p = cosf(player.GetWalkAnimationProgress() *
-											   static_cast<float>(M_PI) * 2.f);
+								               static_cast<float>(M_PI) * 2.f);
 								p = p * p;
 								p *= p;
 								p *= p;
@@ -230,14 +232,14 @@ namespace spades {
 
 								if (shakeLevel >= 2) {
 									vibYaw += coherentNoiseSamplers[0].Sample(
-																			  player.GetWalkAnimationProgress() * 2.5f) *
-									0.005f * sp;
+									            player.GetWalkAnimationProgress() * 2.5f) *
+									          0.005f * sp;
 									vibPitch += coherentNoiseSamplers[1].Sample(
-																				player.GetWalkAnimationProgress() * 2.5f) *
-									0.01f * sp;
+									              player.GetWalkAnimationProgress() * 2.5f) *
+									            0.01f * sp;
 									roll += coherentNoiseSamplers[2].Sample(
-																			player.GetWalkAnimationProgress() * 2.5f) *
-									0.008f * sp;
+									          player.GetWalkAnimationProgress() * 2.5f) *
+									        0.008f * sp;
 
 									scale += sp * 0.1f;
 								}
@@ -246,7 +248,8 @@ namespace spades {
 
 						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
-										 renderer->ScreenHeight()) * 2.f;
+						                 renderer->ScreenHeight()) *
+						           2.f;
 
 						// for 1st view, camera blur can be used
 						def.denyCameraBlur = false;
@@ -287,15 +290,15 @@ namespace spades {
 						Vector3 center = player.GetEye();
 
 						if (!player.IsAlive() && lastMyCorpse &&
-							&player == world->GetLocalPlayer()) {
+						    &player == world->GetLocalPlayer()) {
 							center = lastMyCorpse->GetCenter();
 						}
 						if (map->IsSolidWrapped((int)floorf(center.x), (int)floorf(center.y),
-												(int)floorf(center.z))) {
+						                        (int)floorf(center.z))) {
 							float z = center.z;
 							while (z > center.z - 5.f) {
 								if (!map->IsSolidWrapped((int)floorf(center.x),
-														 (int)floorf(center.y), (int)floorf(z))) {
+								                         (int)floorf(center.y), (int)floorf(z))) {
 									center.z = z;
 									break;
 								} else {
@@ -306,8 +309,8 @@ namespace spades {
 
 						float distance = 5.f;
 						if (&player == world->GetLocalPlayer() &&
-							world->GetLocalPlayer()->GetTeamId() < 2 &&
-							!world->GetLocalPlayer()->IsAlive()) {
+						    world->GetLocalPlayer()->GetTeamId() < 2 &&
+						    !world->GetLocalPlayer()->IsAlive()) {
 							// deathcam.
 							float elapsedTime = time - lastAliveTime;
 							distance -= 3.f * expf(-elapsedTime * 1.f);
@@ -344,7 +347,8 @@ namespace spades {
 
 						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
-										 renderer->ScreenHeight()) * 2.f;
+						                 renderer->ScreenHeight()) *
+						           2.f;
 
 						// Update initial floating camera pos
 						freeCameraState.position = def.viewOrigin;
@@ -369,7 +373,8 @@ namespace spades {
 
 						def.fovY = (float)cg_fov * static_cast<float>(M_PI) / 180.f;
 						def.fovX = atanf(tanf(def.fovY * .5f) * renderer->ScreenWidth() /
-										 renderer->ScreenHeight()) * 2.f;
+						                 renderer->ScreenHeight()) *
+						           2.f;
 
 						// for 1st view, camera blur can be used
 						def.denyCameraBlur = false;
@@ -386,7 +391,8 @@ namespace spades {
 							if (grenVib > 1.f)
 								grenVib = 1.f;
 							roll += (SampleRandomFloat() - SampleRandomFloat()) * 0.2f * grenVib;
-							vibPitch += (SampleRandomFloat() - SampleRandomFloat()) * 0.1f * grenVib;
+							vibPitch +=
+							  (SampleRandomFloat() - SampleRandomFloat()) * 0.1f * grenVib;
 							vibYaw += (SampleRandomFloat() - SampleRandomFloat()) * 0.1f * grenVib;
 							scale -= (SampleRandomFloat() - SampleRandomFloat()) * 0.1f * grenVib;
 
@@ -445,7 +451,7 @@ namespace spades {
 				if ((int)cg_manualFocus) {
 					// Depth of field is manually controlled
 					def.depthOfFieldNearBlurStrength = def.depthOfFieldFarBlurStrength =
-					0.5f * (float)cg_depthOfFieldAmount;
+					  0.5f * (float)cg_depthOfFieldAmount;
 					def.depthOfFieldFocalLength = focalLength;
 				} else {
 					def.depthOfFieldNearBlurStrength = cg_depthOfFieldAmount;
@@ -605,7 +611,7 @@ namespace spades {
 						clientPlayers[i]->AddToScene();
 					}
 				auto &nades = world->GetAllGrenades();
-				for (auto &nade: nades) {
+				for (auto &nade : nades) {
 					AddGrenadeToScene(*nade);
 				}
 
@@ -638,7 +644,7 @@ namespace spades {
 						std::vector<IntVector3> blocks;
 						if (p->IsBlockCursorDragging()) {
 							blocks = world->CubeLine(p->GetBlockCursorDragPos(),
-													 p->GetBlockCursorPos(), 256);
+							                         p->GetBlockCursorPos(), 256);
 						} else {
 							blocks.push_back(p->GetBlockCursorPos());
 						}
@@ -651,8 +657,10 @@ namespace spades {
 						if ((int)blocks.size() > p->GetNumBlocks())
 							color = MakeVector3(1.f, 0.f, 0.f);
 
-						IModel *curLine = renderer->RegisterModel("Models/MapObjects/BlockCursorLine.kv6");
-						IModel *curSingle = renderer->RegisterModel("Models/MapObjects/BlockCursorSingle.kv6");
+						IModel *curLine =
+						  renderer->RegisterModel("Models/MapObjects/BlockCursorLine.kv6");
+						IModel *curSingle =
+						  renderer->RegisterModel("Models/MapObjects/BlockCursorSingle.kv6");
 						for (size_t i = 0; i < blocks.size(); i++) {
 							IntVector3 &v = blocks[i];
 							bool solid = blocks.size() > 2 && map->IsSolid(v.x, v.y, v.z);
@@ -660,11 +668,16 @@ namespace spades {
 							param.ghost = true;
 							param.opacity = active && !solid ? .7f : .3f;
 							param.customColor = color;
-							param.matrix = Matrix4::Translate(MakeVector3(v.x + .5f, v.y + .5f, v.z + .5f));
-							param.matrix = param.matrix * Matrix4::Scale(1.f / 24.f + (solid ? 0.0005f : 0.f)); // make cursor larger if needed to stop z-fighting
+							param.matrix =
+							  Matrix4::Translate(MakeVector3(v.x + .5f, v.y + .5f, v.z + .5f));
+							param.matrix =
+							  param.matrix *
+							  Matrix4::Scale(
+							    1.f / 24.f +
+							    (solid ? 0.0005f
+							           : 0.f)); // make cursor larger if needed to stop z-fighting
 							renderer->RenderModel(blocks.size() > 1 ? curLine : curSingle, param);
 						}
-
 					}
 				}
 			}
@@ -717,5 +730,5 @@ namespace spades {
 
 			return v2;
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

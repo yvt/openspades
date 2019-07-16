@@ -19,13 +19,13 @@
  */
 
 #include "Corpse.h"
-#include <Core/Debug.h>
-#include <Core/Settings.h>
 #include "GameMap.h"
 #include "IModel.h"
 #include "IRenderer.h"
 #include "Player.h"
 #include "World.h"
+#include <Core/Debug.h>
+#include <Core/Settings.h>
 
 using namespace std;
 
@@ -84,8 +84,7 @@ namespace spades {
 				SetNode(Arm2, torso * MakeVector3(-0.2f, -.4f, .2f));
 			}
 
-			SetNode(Head,
-			        (nodes[Torso1].pos + nodes[Torso2].pos) * .5f + MakeVector3(0, 0, -0.6f));
+			SetNode(Head, (nodes[Torso1].pos + nodes[Torso2].pos) * .5f + MakeVector3(0, 0, -0.6f));
 		}
 
 		void Corpse::SetNode(NodeType n, spades::Vector3 v) {
@@ -99,9 +98,7 @@ namespace spades {
 			nodes[n].lastPos = v;
 			nodes[n].lastForce = MakeVector3(0, 0, 0);
 		}
-		void Corpse::SetNode(NodeType n, spades::Vector4 v) {
-			SetNode(n, v.GetXYZ());
-		}
+		void Corpse::SetNode(NodeType n, spades::Vector4 v) { SetNode(n, v.GetXYZ()); }
 
 		Corpse::~Corpse() {}
 
@@ -746,5 +743,5 @@ namespace spades {
 			for (int i = 0; i < NodeCount; i++)
 				nodes[i].vel += v;
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

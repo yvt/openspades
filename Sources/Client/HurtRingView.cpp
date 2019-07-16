@@ -112,5 +112,5 @@ namespace spades {
 				                    AABB2(0, 0, image->GetWidth(), image->GetHeight()));
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

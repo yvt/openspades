@@ -20,8 +20,8 @@
  */
 
 #include "TCGameMode.h"
-#include <Core/Debug.h>
 #include "World.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace client {
@@ -49,5 +49,5 @@ namespace spades {
 				prog = 1.f;
 			return prog;
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

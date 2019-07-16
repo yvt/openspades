@@ -689,10 +689,9 @@ namespace spades {
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
 				else
-					audioDevice->Play(c,
-					                  p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f +
-					                    p.GetRight() * .4f,
-					                  AudioParam());
+					audioDevice->Play(
+					  c, p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f + p.GetRight() * .4f,
+					  AudioParam());
 			}
 		}
 
@@ -705,14 +704,14 @@ namespace spades {
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
 				else
-					audioDevice->Play(c,
-					                  p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f +
-					                    p.GetRight() * .4f,
-					                  AudioParam());
+					audioDevice->Play(
+					  c, p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f + p.GetRight() * .4f,
+					  AudioParam());
 			}
 		}
 
-		void Client::PlayerThrewGrenade(spades::client::Player &p, stmp::optional<const Grenade &> g) {
+		void Client::PlayerThrewGrenade(spades::client::Player &p,
+		                                stmp::optional<const Grenade &> g) {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
@@ -727,10 +726,9 @@ namespace spades {
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, 0.1f, .3f), AudioParam());
 				else
-					audioDevice->Play(c,
-					                  p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .2f +
-					                    p.GetRight() * .3f,
-					                  AudioParam());
+					audioDevice->Play(
+					  c, p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .2f + p.GetRight() * .3f,
+					  AudioParam());
 			}
 		}
 
@@ -922,11 +920,11 @@ namespace spades {
 			// log to netlog
 			if (&killer != &victim) {
 				NetLog("%s (%s) [%s] %s (%s)", killer.GetName().c_str(),
-					   world->GetTeam(killer.GetTeamId()).name.c_str(), cause.c_str(),
-					   victim.GetName().c_str(), world->GetTeam(victim.GetTeamId()).name.c_str());
+				       world->GetTeam(killer.GetTeamId()).name.c_str(), cause.c_str(),
+				       victim.GetName().c_str(), world->GetTeam(victim.GetTeamId()).name.c_str());
 			} else {
 				NetLog("%s (%s) [%s]", killer.GetName().c_str(),
-					   world->GetTeam(killer.GetTeamId()).name.c_str(), cause.c_str());
+				       world->GetTeam(killer.GetTeamId()).name.c_str(), cause.c_str());
 			}
 
 			// show big message if player is involved

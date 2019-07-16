@@ -54,5 +54,5 @@ namespace spades {
 
 			bool PlayerHasIntel(World &world, Player &player);
 		};
-	}
-}
+	} // namespace client
+} // namespace spades
