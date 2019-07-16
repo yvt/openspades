@@ -34,7 +34,7 @@ namespace spades {
 
 		private:
 			IRenderer *renderer;
-			GameMap *map;
+			Handle<GameMap> map;
 
 			IImage *image;
 			Vector4 color;

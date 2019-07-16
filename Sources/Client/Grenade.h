@@ -28,7 +28,7 @@ namespace spades {
 		class World;
 
 		class Grenade {
-			World *world;
+			World &world;
 			float fuse;
 			Vector3 position;
 			Vector3 velocity;
@@ -43,16 +43,16 @@ namespace spades {
 			int MoveGrenade(float fsynctics);
 
 		public:
-			Grenade(World *, Vector3 pos, Vector3 vel, float fuse);
+			Grenade(World &, Vector3 pos, Vector3 vel, float fuse);
 			~Grenade();
 
 			/** @return true when exploded. */
 			bool Update(float dt);
 
-			Vector3 GetPosition() { return position; }
-			Vector3 GetVelocity() { return velocity; }
-			Quaternion GetOrientation() { return orientation; }
-			float GetFuse() { return fuse; }
+			Vector3 GetPosition() const { return position; }
+			Vector3 GetVelocity() const { return velocity; }
+			Quaternion GetOrientation() const { return orientation; }
+			float GetFuse() const { return fuse; }
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

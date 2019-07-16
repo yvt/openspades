@@ -40,16 +40,16 @@ namespace spades {
 
 		TCProgressView::~TCProgressView() {}
 
-		static TCProgressState StateForTerritory(TCGameMode::Territory *t, int myTeam) {
+		static TCProgressState StateForTerritory(TCGameMode::Territory &t, int myTeam) {
 			TCProgressState state;
-			if (t->capturingTeamId == -1) {
-				state.team1 = t->ownerTeamId;
+			if (t.capturingTeamId == -1) {
+				state.team1 = t.ownerTeamId;
 				state.team2 = 2;
 				state.progress = 0.f;
 			} else {
-				float prg = t->GetProgress();
-				state.team1 = t->ownerTeamId;
-				state.team2 = t->capturingTeamId;
+				float prg = t.GetProgress();
+				state.team1 = t.ownerTeamId;
+				state.team2 = t.capturingTeamId;
 				state.progress = prg;
 
 				if (state.team2 == myTeam) {
@@ -66,11 +66,11 @@ namespace spades {
 				lastTerritoryId = -1;
 				return;
 			}
-			IGameMode *mode = w->GetMode();
+			stmp::optional<IGameMode &> mode = w->GetMode();
 			if (!mode || IGameMode::m_TC != mode->ModeType()) {
 				return;
 			}
-			TCGameMode *tc = static_cast<TCGameMode *>(mode);
+			TCGameMode &tc = dynamic_cast<TCGameMode &>(mode.value());
 
 			float scrW = renderer->ScreenWidth();
 			float scrH = renderer->ScreenHeight();
@@ -78,22 +78,25 @@ namespace spades {
 			Handle<IImage> prgBg = renderer->RegisterImage("Gfx/TC/ProgressBg.png");
 			Handle<IImage> prgBar = renderer->RegisterImage("Gfx/TC/ProgressBar.png");
 
-			Player *p = w->GetLocalPlayer();
-			if (p && p->GetTeamId() < 2 && p->IsAlive()) {
+			stmp::optional<Player &> maybePlayer = w->GetLocalPlayer();
+			if (maybePlayer && maybePlayer.value().GetTeamId() < 2 &&
+			    maybePlayer.value().IsAlive()) {
+				Player &p = maybePlayer.value();
+
 				// show approaching territory
-				TCGameMode::Territory *nearTerritory = NULL;
+				stmp::optional<TCGameMode::Territory &> nearTerritory;
 				int nearTerId = 0;
 				float distance = 0.f;
-				int myTeam = p->GetTeamId();
+				int myTeam = p.GetTeamId();
 
-				int cnt = tc->GetNumTerritories();
+				int cnt = tc.GetNumTerritories();
 				for (int i = 0; i < cnt; i++) {
-					TCGameMode::Territory *t = tc->GetTerritory(i);
-					Vector3 diff = t->pos - p->GetEye();
+					TCGameMode::Territory &t = tc.GetTerritory(i);
+					Vector3 diff = t.pos - p.GetEye();
 					if (fabsf(diff.x) < 18.f && fabsf(diff.y) < 18.f && fabsf(diff.z) < 18.f) {
 						float dist = diff.GetPoweredLength();
-						if (nearTerritory == NULL || dist < distance) {
-							nearTerritory = t;
+						if (!nearTerritory || dist < distance) {
+							nearTerritory = &t;
 							nearTerId = i;
 							distance = dist;
 						}
@@ -106,11 +109,11 @@ namespace spades {
 					lastTerritoryTime = w->GetTime();
 				} else if (lastTerritoryId != -1 && w->GetTime() < lastTerritoryTime + 2.f) {
 					fade = 1.f - (w->GetTime() - lastTerritoryTime) / 2.f;
-					nearTerritory = tc->GetTerritory(lastTerritoryId);
+					nearTerritory = &tc.GetTerritory(lastTerritoryId);
 				}
 
 				if (nearTerritory) {
-					TCProgressState state = StateForTerritory(nearTerritory, myTeam);
+					TCProgressState state = StateForTerritory(*nearTerritory, myTeam);
 
 					float x = (scrW - 256.f) * .5f;
 					float y = scrH * 0.7f;
@@ -166,5 +169,5 @@ namespace spades {
 				lastTerritoryId = -1;
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

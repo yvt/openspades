@@ -242,7 +242,7 @@ namespace spades {
 				return;
 
 			// The player to focus on
-			Player *focusPlayerPtr = nullptr;
+			stmp::optional<Player &> focusPlayerPtr;
 			Vector3 focusPlayerPos;
 			float focusPlayerAngle;
 
@@ -253,7 +253,7 @@ namespace spades {
 				focusPlayerPos = player.GetPosition();
 				focusPlayerAngle = atan2(front.x, -front.y);
 
-				focusPlayerPtr = &player;
+				focusPlayerPtr = player;
 			} else if (client->GetCameraMode() == ClientCameraMode::Free) {
 				focusPlayerPos = client->freeCameraState.position;
 				focusPlayerAngle =
@@ -267,16 +267,16 @@ namespace spades {
 			if (!world->GetLocalPlayer()) {
 				return;
 			}
-			Player &localPlayer = *world->GetLocalPlayer();
+			Player &localPlayer = world->GetLocalPlayer().value();
 
-			SPAssert(focusPlayerPtr);
-			Player &focusPlayer = *focusPlayerPtr;
+			Player &focusPlayer = focusPlayerPtr.value();
 
 			if (largeMap)
 				if (zoomState < .0001f)
 					return;
 
-			GameMap *map = world->GetMap();
+			Handle<GameMap> map = world->GetMap();
+			SPAssert(map);
 			Vector2 mapSize = MakeVector2(map->Width(), map->Height());
 
 			Vector2 center = {focusPlayerPos.x, focusPlayerPos.y};
@@ -477,44 +477,49 @@ namespace spades {
 
 			// draw player's icon
 			for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
-				Player *p = world->GetPlayer(i);
-				if (!p || !p->IsAlive()) {
+				auto maybePlayer = world->GetPlayer(i);
+				if (!maybePlayer) {
+					continue;
+				}
+
+				Player &p = maybePlayer.value();
+				if (!p.IsAlive()) {
 					// The player is non-existent or dead
 					continue;
 				}
-				if (!localPlayer.IsSpectator() && localPlayer.GetTeamId() != p->GetTeamId()) {
+				if (!localPlayer.IsSpectator() && localPlayer.GetTeamId() != p.GetTeamId()) {
 					// Duh
 					continue;
 				}
-				if (p->IsSpectator() && p == &localPlayer &&
+				if (p.IsSpectator() && &p == &localPlayer &&
 				    HasTargetPlayer(client->GetCameraMode())) {
 					// Don't draw white icon when spectating a player
 					continue;
 				}
-				if (p->IsSpectator() && p != &localPlayer) {
+				if (p.IsSpectator() && &p != &localPlayer) {
 					// Don't draw other spectators
 					continue;
 				}
 
 				IntVector3 iconColor =
 				  colorMode ? IntVector3::Make(palette[i][0], palette[i][1], palette[i][2])
-				            : world->GetTeam(p->GetTeamId()).color;
-				if (p->GetTeamId() >= 2)
+				            : world->GetTeam(p.GetTeamId()).color;
+				if (p.GetTeamId() >= 2)
 					iconColor =
 					  IntVector3::Make(200, 200, 200); // colorMode doesn't matter here, right?
 				Vector4 iconColorF = ModifyColor(iconColor);
 				iconColorF *= alpha;
 
-				Vector3 front = p->GetFront2D();
+				Vector3 front = p.GetFront2D();
 				float ang = atan2(front.x, -front.y);
-				if (p->IsSpectator() && client->GetCameraMode() == ClientCameraMode::Free) {
+				if (p.IsSpectator() && client->GetCameraMode() == ClientCameraMode::Free) {
 					ang = focusPlayerAngle;
 				}
 
 				// Draw the focused player's view
-				if (p == &focusPlayer) {
+				if (&p == &focusPlayer) {
 					renderer->SetColorAlphaPremultiplied(iconColorF * 0.9f);
-					DrawIcon(p->IsSpectator() ? client->freeCameraState.position : p->GetPosition(),
+					DrawIcon(p.IsSpectator() ? client->freeCameraState.position : p.GetPosition(),
 					         viewIcon, ang);
 				}
 
@@ -523,35 +528,35 @@ namespace spades {
 				if (iconMode) {
 					WeaponType weapon = world->GetPlayer(i)->GetWeaponType();
 					if (weapon == WeaponType::SMG_WEAPON) {
-						DrawIcon(p->IsSpectator() ? client->freeCameraState.position
-						                          : p->GetPosition(),
+						DrawIcon(p.IsSpectator() ? client->freeCameraState.position
+						                         : p.GetPosition(),
 						         playerSMG, ang);
 					}
 
 					else if (weapon == WeaponType::RIFLE_WEAPON) {
-						DrawIcon(p->IsSpectator() ? client->freeCameraState.position
-						                          : p->GetPosition(),
+						DrawIcon(p.IsSpectator() ? client->freeCameraState.position
+						                         : p.GetPosition(),
 						         playerRifle, ang);
 					}
 
 					else if (weapon == WeaponType::SHOTGUN_WEAPON) {
-						DrawIcon(p->IsSpectator() ? client->freeCameraState.position
-						                          : p->GetPosition(),
+						DrawIcon(p.IsSpectator() ? client->freeCameraState.position
+						                         : p.GetPosition(),
 						         playerShotgun, ang);
 					}
 				} else { // draw normal color
-					DrawIcon(p == &focusPlayer ? focusPlayerPos : p->GetPosition(), playerIcon,
+					DrawIcon(&p == &focusPlayer ? focusPlayerPos : p.GetPosition(), playerIcon,
 					         ang);
 				}
 			}
 
-			IGameMode *mode = world->GetMode();
+			stmp::optional<IGameMode &> mode = world->GetMode();
 			if (mode && IGameMode::m_CTF == mode->ModeType()) {
-				CTFGameMode *ctf = static_cast<CTFGameMode *>(mode);
+				CTFGameMode &ctf = dynamic_cast<CTFGameMode &>(*mode);
 				Handle<IImage> intelIcon = renderer->RegisterImage("Gfx/Map/Intel.png");
 				Handle<IImage> baseIcon = renderer->RegisterImage("Gfx/Map/CommandPost.png");
 				for (int tId = 0; tId < 2; tId++) {
-					CTFGameMode::Team &team = ctf->GetTeam(tId);
+					CTFGameMode::Team &team = ctf.GetTeam(tId);
 					IntVector3 teamColor = world->GetTeam(tId).color;
 					Vector4 teamColorF = ModifyColor(teamColor);
 					teamColorF *= alpha;
@@ -561,16 +566,16 @@ namespace spades {
 					DrawIcon(team.basePos, baseIcon, 0.f);
 
 					// draw flag
-					if (!ctf->GetTeam(1 - tId).hasIntel) {
+					if (!ctf.GetTeam(1 - tId).hasIntel) {
 						renderer->SetColorAlphaPremultiplied(teamColorF);
 						DrawIcon(team.flagPos, intelIcon, 0.f);
 					} else if (world->GetLocalPlayer()->GetTeamId() == 1 - tId) {
 						// local player's team is carrying
-						int cId = ctf->GetTeam(1 - tId).carrier;
+						int cId = ctf.GetTeam(1 - tId).carrier;
 
 						// in some game modes, carrier becomes invalid
 						if (cId < world->GetNumPlayerSlots()) {
-							Player *carrier = world->GetPlayer(cId);
+							auto carrier = world->GetPlayer(cId);
 							if (carrier &&
 							    carrier->GetTeamId() == world->GetLocalPlayer()->GetTeamId()) {
 
@@ -583,21 +588,21 @@ namespace spades {
 					}
 				}
 			} else if (mode && IGameMode::m_TC == mode->ModeType()) {
-				TCGameMode *tc = static_cast<TCGameMode *>(mode);
+				TCGameMode &tc = dynamic_cast<TCGameMode &>(*mode);
 				Handle<IImage> icon = renderer->RegisterImage("Gfx/Map/CommandPost.png");
-				int cnt = tc->GetNumTerritories();
+				int cnt = tc.GetNumTerritories();
 				for (int i = 0; i < cnt; i++) {
-					TCGameMode::Territory *t = tc->GetTerritory(i);
+					TCGameMode::Territory &t = tc.GetTerritory(i);
 					IntVector3 teamColor = {128, 128, 128};
-					if (t->ownerTeamId < 2) {
-						teamColor = world->GetTeam(t->ownerTeamId).color;
+					if (t.ownerTeamId < 2) {
+						teamColor = world->GetTeam(t.ownerTeamId).color;
 					}
 					Vector4 teamColorF = ModifyColor(teamColor);
 					teamColorF *= alpha;
 
 					// draw base
 					renderer->SetColorAlphaPremultiplied(teamColorF);
-					DrawIcon(t->pos, icon, 0.f);
+					DrawIcon(t.pos, icon, 0.f);
 				}
 			}
 

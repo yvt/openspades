@@ -46,6 +46,7 @@ namespace spades {
 			float rotSpeed;
 
 		public:
+			// TODO: Replace pointers with references
 			GunCasing(Client *client, IModel *model, IAudioChunk *dropSound,
 			          IAudioChunk *waterSound, Vector3 pos, Vector3 dir, Vector3 flyDir);
 			~GunCasing();

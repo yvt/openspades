@@ -25,7 +25,7 @@
 
 namespace spades {
 	namespace client {
-		TCGameMode::TCGameMode(World *w) : IGameMode(m_TC), world(w) { SPADES_MARK_FUNCTION(); }
+		TCGameMode::TCGameMode(World &w) : IGameMode(m_TC), world(w) { SPADES_MARK_FUNCTION(); }
 		TCGameMode::~TCGameMode() { SPADES_MARK_FUNCTION(); }
 
 		TCGameMode::Team &TCGameMode::GetTeam(int t) {
@@ -40,7 +40,7 @@ namespace spades {
 		}
 
 		float TCGameMode::Territory::GetProgress() {
-			float dt = mode->world->GetTime() - progressStartTime;
+			float dt = mode.world.GetTime() - progressStartTime;
 			float prog = progressBasePos;
 			prog += progressRate * dt;
 			if (prog < 0.f)

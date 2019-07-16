@@ -71,9 +71,9 @@ namespace spades {
 			renderer->SetFogColor(MakeVector3(0.f, 0.f, 0.f));
 			renderer->SetFogDistance(128.f);
 
-			Player *localPlayer = world->GetLocalPlayer();
+			stmp::optional<Player &> localPlayer = world->GetLocalPlayer();
 
-			if (localPlayer == nullptr) {
+			if (!localPlayer) {
 				SPLog("HitTestDebugger failure: Local player is null");
 				return;
 			}
@@ -100,7 +100,7 @@ namespace spades {
 			// fit FoV to include all possibly hit players
 			float range = 0.2f;
 			for (std::size_t i = 0; i < world->GetNumPlayerSlots(); i++) {
-				auto *p = world->GetPlayer(static_cast<unsigned int>(i));
+				auto p = world->GetPlayer(static_cast<unsigned int>(i));
 				if (!p)
 					continue;
 				if (p == localPlayer)
@@ -148,9 +148,9 @@ namespace spades {
 			def.zFar = 200.f;
 
 			// start rendering
-			GameMap *map = world->GetMap();
+			const Handle<GameMap>& map = world->GetMap();
 			if (!def.skipWorld) {
-				renderer->SetGameMap(map);
+				renderer->SetGameMap(&*map);
 			}
 			renderer->StartScene(def);
 
@@ -204,7 +204,7 @@ namespace spades {
 			};
 
 			for (std::size_t i = 0; i < numPlayers; i++) {
-				auto *p = world->GetPlayer(static_cast<unsigned int>(i));
+				auto p = world->GetPlayer(static_cast<unsigned int>(i));
 				if (!p)
 					continue;
 				if (p == localPlayer)
@@ -271,7 +271,7 @@ namespace spades {
 				fileName = buf;
 			}
 
-			switch (localPlayer->GetWeapon()->GetWeaponType()) {
+			switch (localPlayer->GetWeapon().GetWeaponType()) {
 				case SMG_WEAPON: fileName += "-SMG"; break;
 				case RIFLE_WEAPON: fileName += "-Rifle"; break;
 				case SHOTGUN_WEAPON: fileName += "-Shotgun"; break;

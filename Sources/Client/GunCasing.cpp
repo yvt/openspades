@@ -76,7 +76,7 @@ namespace spades {
 					return false;
 				}
 
-				GameMap *map = client->GetWorld()->GetMap();
+				const Handle<GameMap> &map = client->GetWorld()->GetMap();
 				if (!map->ClipWorld(groundPos.x, groundPos.y, groundPos.z)) {
 					return false;
 				}
@@ -88,7 +88,7 @@ namespace spades {
 				vel.z += dt * 32.f;
 
 				IntVector3 lp = matrix.GetOrigin().Floor();
-				GameMap *m = client->GetWorld()->GetMap();
+				Handle<GameMap> m = client->GetWorld()->GetMap();
 
 				if (lp.z >= 63) {
 					// dropped into water
@@ -219,5 +219,5 @@ namespace spades {
 			}
 			renderer->RenderModel(model, param);
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

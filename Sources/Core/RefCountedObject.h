@@ -83,19 +83,11 @@ namespace spades {
 			return {ptr, false};
 		}
 
-		T *operator->() {
+		T *operator->() const {
 			SPAssert(ptr != NULL);
 			return ptr;
 		}
-		const T *operator->() const {
-			SPAssert(ptr != NULL);
-			return ptr;
-		}
-		T &operator*() {
-			SPAssert(ptr != NULL);
-			return *ptr;
-		}
-		const T &operator*() const {
+		T &operator*() const {
 			SPAssert(ptr != NULL);
 			return *ptr;
 		}
@@ -126,7 +118,7 @@ namespace spades {
 			ptr = NULL;
 			return p;
 		}
-		operator bool() { return ptr != NULL; }
+		operator bool() const { return ptr != NULL; }
 
 		bool operator==(const Handle &rhs) const { return ptr == rhs.ptr; }
 

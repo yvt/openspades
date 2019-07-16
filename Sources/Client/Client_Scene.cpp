@@ -56,7 +56,7 @@ namespace spades {
 				return ClientCameraMode::None;
 			}
 
-			Player *p = world->GetLocalPlayer();
+			stmp::optional<Player &> p = world->GetLocalPlayer();
 			if (!p) {
 				return ClientCameraMode::NotJoined;
 			}
@@ -95,7 +95,7 @@ namespace spades {
 				case ClientCameraMode::FirstPersonLocal:
 				case ClientCameraMode::ThirdPersonLocal:
 					SPAssert(world);
-					return world->GetLocalPlayerIndex();
+					return world->GetLocalPlayerIndex().value();
 				case ClientCameraMode::FirstPersonFollow:
 				case ClientCameraMode::ThirdPersonFollow: return followedPlayerId;
 			}
@@ -103,9 +103,7 @@ namespace spades {
 		}
 
 		Player &Client::GetCameraTargetPlayer() {
-			Player *p = world->GetPlayer(GetCameraTargetPlayerId());
-			SPAssert(p);
-			return *p;
+			return world->GetPlayer(GetCameraTargetPlayerId()).value();
 		}
 
 		float Client::GetLocalFireVibration() {
@@ -127,7 +125,7 @@ namespace spades {
 			SPAssert(clientPlayer);
 
 			float delta = .8f;
-			switch (player.GetWeapon()->GetWeaponType()) {
+			switch (player.GetWeapon().GetWeaponType()) {
 				case SMG_WEAPON: delta = .8f; break;
 				case RIFLE_WEAPON: delta = 1.4f; break;
 				case SHOTGUN_WEAPON: delta = .4f; break;
@@ -487,24 +485,24 @@ namespace spades {
 			return def;
 		}
 
-		void Client::AddGrenadeToScene(spades::client::Grenade *g) {
+		void Client::AddGrenadeToScene(Grenade &g) {
 			SPADES_MARK_FUNCTION();
 
 			IModel *model;
 			model = renderer->RegisterModel("Models/Weapons/Grenade/Grenade.kv6");
 
-			if (g->GetPosition().z > 63.f) {
+			if (g.GetPosition().z > 63.f) {
 				// work-around for water refraction problem
 				return;
 			}
 
 			// Move the grenade slightly so that it doesn't look like sinking in
 			// the ground
-			Vector3 position = g->GetPosition();
+			Vector3 position = g.GetPosition();
 			position.z -= 0.03f * 3.0f;
 
 			ModelRenderParam param;
-			Matrix4 mat = g->GetOrientation().ToRotationMatrix() * Matrix4::Scale(0.03f);
+			Matrix4 mat = g.GetOrientation().ToRotationMatrix() * Matrix4::Scale(0.03f);
 			mat = Matrix4::Translate(position) * mat;
 			param.matrix = mat;
 
@@ -541,12 +539,12 @@ namespace spades {
 
 		void Client::DrawCTFObjects() {
 			SPADES_MARK_FUNCTION();
-			CTFGameMode *mode = static_cast<CTFGameMode *>(world->GetMode());
+			CTFGameMode &mode = dynamic_cast<CTFGameMode &>(world->GetMode().value());
 			int tId;
 			IModel *base = renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
 			IModel *intel = renderer->RegisterModel("Models/MapObjects/Intel.kv6");
 			for (tId = 0; tId < 2; tId++) {
-				CTFGameMode::Team &team = mode->GetTeam(tId);
+				CTFGameMode::Team &team = mode.GetTeam(tId);
 				IntVector3 col = world->GetTeam(tId).color;
 				Vector3 color = {col.x / 255.f, col.y / 255.f, col.z / 255.f};
 
@@ -559,7 +557,7 @@ namespace spades {
 				renderer->RenderModel(base, param);
 
 				// draw flag
-				if (!mode->GetTeam(1 - tId).hasIntel) {
+				if (!mode.GetTeam(1 - tId).hasIntel) {
 					param.matrix = Matrix4::Translate(team.flagPos);
 					param.matrix = param.matrix * Matrix4::Scale(.1f);
 					renderer->RenderModel(intel, param);
@@ -569,17 +567,17 @@ namespace spades {
 
 		void Client::DrawTCObjects() {
 			SPADES_MARK_FUNCTION();
-			TCGameMode *mode = static_cast<TCGameMode *>(world->GetMode());
+			TCGameMode &mode = dynamic_cast<TCGameMode &>(world->GetMode().value());
 			int tId;
 			IModel *base = renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
-			int cnt = mode->GetNumTerritories();
+			int cnt = mode.GetNumTerritories();
 			for (tId = 0; tId < cnt; tId++) {
-				TCGameMode::Territory *t = mode->GetTerritory(tId);
+				TCGameMode::Territory &t = mode.GetTerritory(tId);
 				IntVector3 col;
-				if (t->ownerTeamId == 2) {
+				if (t.ownerTeamId == 2) {
 					col = IntVector3::Make(255, 255, 255);
 				} else {
-					col = world->GetTeam(t->ownerTeamId).color;
+					col = world->GetTeam(t.ownerTeamId).color;
 				}
 				Vector3 color = {col.x / 255.f, col.y / 255.f, col.z / 255.f};
 
@@ -587,7 +585,7 @@ namespace spades {
 				param.customColor = color;
 
 				// draw base
-				param.matrix = Matrix4::Translate(t->pos);
+				param.matrix = Matrix4::Translate(t.pos);
 				param.matrix = param.matrix * Matrix4::Scale(.3f);
 				renderer->RenderModel(base, param);
 			}
@@ -599,16 +597,16 @@ namespace spades {
 			renderer->StartScene(lastSceneDef);
 
 			if (world) {
-				Player *p = world->GetLocalPlayer();
+				stmp::optional<Player &> p = world->GetLocalPlayer();
 
 				for (size_t i = 0; i < world->GetNumPlayerSlots(); i++)
 					if (world->GetPlayer(static_cast<unsigned int>(i))) {
 						SPAssert(clientPlayers[i]);
 						clientPlayers[i]->AddToScene();
 					}
-				std::vector<Grenade *> nades = world->GetAllGrenades();
-				for (size_t i = 0; i < nades.size(); i++) {
-					AddGrenadeToScene(nades[i]);
+				auto &nades = world->GetAllGrenades();
+				for (auto &nade: nades) {
+					AddGrenadeToScene(*nade);
 				}
 
 				{
@@ -680,7 +678,7 @@ namespace spades {
 			// FIXME: don't use debug line
 			{
 				hitTag_t tag = hit_None;
-				Player *hottracked = HotTrackedPlayer(&tag);
+				stmp::optional<Player &> hottracked = HotTrackedPlayer(&tag);
 				if (hottracked) {
 					IntVector3 col = world->GetTeam(hottracked->GetTeamId()).color;
 					Vector4 color = Vector4::Make(col.x / 255.f, col.y / 255.f, col.z / 255.f, 1.f);

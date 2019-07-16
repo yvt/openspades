@@ -269,11 +269,11 @@ namespace spades {
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 			float wTime = world->GetTime();
-			Player *p = GetWorld()->GetLocalPlayer();
+			Player &p = GetWorld()->GetLocalPlayer().value();
 			if (wTime < lastHurtTime + .35f && wTime >= lastHurtTime) {
 				float per = (wTime - lastHurtTime) / .35f;
 				per = 1.f - per;
-				per *= .3f + (1.f - p->GetHealth() / 100.f) * .7f;
+				per *= .3f + (1.f - p.GetHealth() / 100.f) * .7f;
 				per = std::min(per, 0.9f);
 				per = 1.f - per;
 				Vector3 color = {1.f, per, per};
@@ -290,17 +290,17 @@ namespace spades {
 
 			if ((int)cg_playerNames == 0)
 				return;
-
-			Player *p = GetWorld()->GetLocalPlayer();
+			
+			Player &p = GetWorld()->GetLocalPlayer().value();
 
 			hitTag_t tag = hit_None;
-			Player *hottracked = HotTrackedPlayer(&tag);
+			stmp::optional<Player &> hottracked = HotTrackedPlayer(&tag);
 			if (hottracked) {
 				Vector3 posxyz = Project(hottracked->GetEye());
 				Vector2 pos = {posxyz.x, posxyz.y};
 				char buf[64];
 				if ((int)cg_playerNames == 1) {
-					float dist = (hottracked->GetEye() - p->GetEye()).GetLength();
+					float dist = (hottracked->GetEye() - p.GetEye()).GetLength();
 					int idist = (int)floorf(dist + .5f);
 					sprintf(buf, "%s [%d%s]", hottracked->GetName().c_str(), idist,
 					        (idist == 1) ? "block" : "blocks");
@@ -327,7 +327,7 @@ namespace spades {
 			Player &p = GetCameraTargetPlayer();
 			// IFont *font;
 
-			Weapon &w = *p.GetWeapon();
+			Weapon &w = p.GetWeapon();
 			float spread = w.GetSpread();
 
 			AABB2 boundary(0, 0, 0, 0);
@@ -448,7 +448,7 @@ namespace spades {
 
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
-			Player *p = GetWorld()->GetLocalPlayer();
+			Player &p = GetWorld()->GetLocalPlayer().value();
 			IFont *font;
 
 			// Draw damage rings
@@ -459,15 +459,15 @@ namespace spades {
 				// Draw ammo amount
 				// (Note: this cannot be displayed for a spectated player --- the server
 				//        does not submit sufficient information)
-				Weapon *weap = p->GetWeapon();
+				Weapon &weap = p.GetWeapon();
 				Handle<IImage> ammoIcon;
 				float iconWidth, iconHeight;
 				float spacing = 2.f;
 				int stockNum;
 				int warnLevel;
 
-				if (p->IsToolWeapon()) {
-					switch (weap->GetWeaponType()) {
+				if (p.IsToolWeapon()) {
+					switch (weap.GetWeaponType()) {
 						case RIFLE_WEAPON:
 							ammoIcon = renderer->RegisterImage("Gfx/Bullet/7.62mm.png");
 							iconWidth = 6.f;
@@ -484,11 +484,11 @@ namespace spades {
 							iconHeight = iconWidth / 4.f;
 							spacing = -6.f;
 							break;
-						default: SPInvalidEnum("weap->GetWeaponType()", weap->GetWeaponType());
+						default: SPInvalidEnum("weap->GetWeaponType()", weap.GetWeaponType());
 					}
 
-					int clipSize = weap->GetClipSize();
-					int clip = weap->GetAmmo();
+					int clipSize = weap.GetClipSize();
+					int clip = weap.GetAmmo();
 
 					clipSize = std::max(clipSize, clip);
 
@@ -505,17 +505,17 @@ namespace spades {
 						renderer->DrawImage(ammoIcon, AABB2(x, y, iconWidth, iconHeight));
 					}
 
-					stockNum = weap->GetStock();
-					warnLevel = weap->GetMaxStock() / 3;
+					stockNum = weap.GetStock();
+					warnLevel = weap.GetMaxStock() / 3;
 				} else {
 					iconHeight = 0.f;
 					warnLevel = 0;
 
-					switch (p->GetTool()) {
+					switch (p.GetTool()) {
 						case Player::ToolSpade:
-						case Player::ToolBlock: stockNum = p->GetNumBlocks(); break;
-						case Player::ToolGrenade: stockNum = p->GetNumGrenades(); break;
-						default: SPInvalidEnum("p->GetTool()", p->GetTool());
+						case Player::ToolBlock: stockNum = p.GetNumBlocks(); break;
+						case Player::ToolGrenade: stockNum = p.GetNumGrenades(); break;
+						default: SPInvalidEnum("p->GetTool()", p.GetTool());
 					}
 				}
 
@@ -541,25 +541,25 @@ namespace spades {
 				{
 					std::string msg = "";
 
-					switch (p->GetTool()) {
+					switch (p.GetTool()) {
 						case Player::ToolBlock:
-							if (p->GetNumBlocks() == 0) {
+							if (p.GetNumBlocks() == 0) {
 								msg = _Tr("Client", "Out of Block");
 							}
 							break;
 						case Player::ToolGrenade:
-							if (p->GetNumGrenades() == 0) {
+							if (p.GetNumGrenades() == 0) {
 								msg = _Tr("Client", "Out of Grenade");
 							}
 							break;
 						case Player::ToolWeapon: {
-							Weapon *weap = p->GetWeapon();
-							if (weap->IsReloading() || p->IsAwaitingReloadCompletion()) {
+							Weapon &weap = p.GetWeapon();
+							if (weap.IsReloading() || p.IsAwaitingReloadCompletion()) {
 								msg = _Tr("Client", "Reloading");
-							} else if (weap->GetAmmo() == 0 && weap->GetStock() == 0) {
+							} else if (weap.GetAmmo() == 0 && weap.GetStock() == 0) {
 								msg = _Tr("Client", "Out of Ammo");
-							} else if (weap->GetStock() > 0 &&
-							           weap->GetAmmo() < weap->GetClipSize() / 4) {
+							} else if (weap.GetStock() > 0 &&
+									   weap.GetAmmo() < weap.GetClipSize() / 4) {
 								msg = _Tr("Client", "Press [{0}] to Reload",
 								          TranslateKeyName(cg_keyReloadWeapon));
 							}
@@ -577,7 +577,7 @@ namespace spades {
 					}
 				}
 
-				if (p->GetTool() == Player::ToolBlock) {
+				if (p.GetTool() == Player::ToolBlock) {
 					paletteView->Draw();
 				}
 
@@ -591,17 +591,17 @@ namespace spades {
 		void Client::DrawDeadPlayerHUD() {
 			SPADES_MARK_FUNCTION();
 
-			Player *p = GetWorld()->GetLocalPlayer();
+			Player &p = GetWorld()->GetLocalPlayer().value();
 			IFont *font;
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 
 			if (!cg_hideHud) {
 				// draw respawn tme
-				if (!p->IsAlive()) {
+				if (!p.IsAlive()) {
 					std::string msg;
 
-					float secs = p->GetRespawnTime() - world->GetTime();
+					float secs = p.GetRespawnTime() - world->GetTime();
 
 					if (secs > 0.f)
 						msg = _Tr("Client", "You will respawn in: {0}", (int)ceilf(secs));
@@ -764,19 +764,19 @@ namespace spades {
 		void Client::DrawHealth() {
 			SPADES_MARK_FUNCTION();
 
-			Player *p = GetWorld()->GetLocalPlayer();
+			Player &p = GetWorld()->GetLocalPlayer().value();
 			IFont *font;
 			// float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 
-			std::string str = std::to_string(p->GetHealth());
+			std::string str = std::to_string(p.GetHealth());
 
 			Vector4 numberColor = {1, 1, 1, 1};
 
-			if (p->GetHealth() == 0) {
+			if (p.GetHealth() == 0) {
 				numberColor.y = 0.3f;
 				numberColor.z = 0.3f;
-			} else if (p->GetHealth() <= 50) {
+			} else if (p.GetHealth() <= 50) {
 				numberColor.z = 0.3f;
 			}
 
@@ -794,7 +794,7 @@ namespace spades {
 				ent->Render2D();
 			}
 
-			Player *p = GetWorld()->GetLocalPlayer();
+			stmp::optional<Player &> p = GetWorld()->GetLocalPlayer();
 			if (p) {
 				DrawHurtSprites();
 				DrawHurtScreenEffect();

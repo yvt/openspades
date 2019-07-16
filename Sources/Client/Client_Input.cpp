@@ -155,8 +155,8 @@ namespace spades {
 					SPAssert(world);
 					SPAssert(world->GetLocalPlayer());
 
-					Player *p = world->GetLocalPlayer();
-					if (p->IsAlive()) {
+					Player &p = world->GetLocalPlayer().value();
+					if (p.IsAlive()) {
 						float aimDownState = GetAimDownState();
 						x /= GetAimDownZoomScale();
 						y /= GetAimDownZoomScale();
@@ -194,7 +194,7 @@ namespace spades {
 						if (cg_invertMouseY)
 							y = -y;
 
-						p->Turn(x * 0.003f, y * 0.003f);
+						p.Turn(x * 0.003f, y * 0.003f);
 					}
 					break;
 				}
@@ -329,7 +329,7 @@ namespace spades {
 								if (cameraMode == ClientCameraMode::Free ||
 								    cameraMode == ClientCameraMode::ThirdPersonLocal) {
 									// Start with the local player
-									followedPlayerId = world->GetLocalPlayerIndex();
+									followedPlayerId = world->GetLocalPlayerIndex().value();
 								}
 								if (world->GetLocalPlayer()->IsSpectator() ||
 								    time > lastAliveTime + 1.3f) {
@@ -342,7 +342,7 @@ namespace spades {
 								if (cameraMode == ClientCameraMode::Free ||
 								    cameraMode == ClientCameraMode::ThirdPersonLocal) {
 									// Start with the local player
-									followedPlayerId = world->GetLocalPlayerIndex();
+									followedPlayerId = world->GetLocalPlayerIndex().value();
 								}
 								if (world->GetLocalPlayer()->IsSpectator() ||
 								    time > lastAliveTime + 1.3f) {
@@ -369,9 +369,9 @@ namespace spades {
 				}
 
 				if (world->GetLocalPlayer()) {
-					Player *p = world->GetLocalPlayer();
+					Player &p = world->GetLocalPlayer().value();
 
-					if (p->IsAlive() && p->GetTool() == Player::ToolBlock && down) {
+					if (p.IsAlive() && p.GetTool() == Player::ToolBlock && down) {
 						if (paletteView->KeyInput(name)) {
 							return;
 						}
@@ -380,9 +380,9 @@ namespace spades {
 					if (cg_debugCorpse) {
 						if (name == "p" && down) {
 							Corpse *corp;
-							Player *victim = world->GetLocalPlayer();
-							corp = new Corpse(renderer, map, victim);
-							corp->AddImpulse(victim->GetFront() * 32.f);
+							Player &victim = world->GetLocalPlayer().value();
+							corp = new Corpse(renderer, map, &victim);
+							corp->AddImpulse(victim.GetFront() * 32.f);
 							corpses.emplace_back(corp);
 
 							if (corpses.size() > corpseHardLimit) {
@@ -433,7 +433,7 @@ namespace spades {
 					} else if (CheckKey(cg_keyAltAttack, name)) {
 						auto lastVal = weapInput.secondary;
 						if (world->GetLocalPlayer()->IsToolWeapon() && (!cg_holdAimDownSight)) {
-							if (down && !world->GetLocalPlayer()->GetWeapon()->IsReloading()) {
+							if (down && !world->GetLocalPlayer()->GetWeapon().IsReloading()) {
 								weapInput.secondary = !weapInput.secondary;
 							}
 						} else {
@@ -441,7 +441,7 @@ namespace spades {
 						}
 						if (world->GetLocalPlayer()->IsToolWeapon() && weapInput.secondary &&
 						    !lastVal && world->GetLocalPlayer()->IsReadyToUseTool() &&
-						    !world->GetLocalPlayer()->GetWeapon()->IsReloading() &&
+							!world->GetLocalPlayer()->GetWeapon().IsReloading() &&
 						    GetSprintState() == 0.0f) {
 							AudioParam params;
 							params.volume = 0.08f;
@@ -450,10 +450,10 @@ namespace spades {
 							audioDevice->PlayLocal(chunk, MakeVector3(.4f, -.3f, .5f), params);
 						}
 					} else if (CheckKey(cg_keyReloadWeapon, name) && down) {
-						Weapon *w = world->GetLocalPlayer()->GetWeapon();
-						if (w->GetAmmo() < w->GetClipSize() && w->GetStock() > 0 &&
+						Weapon &w = world->GetLocalPlayer()->GetWeapon();
+						if (w.GetAmmo() < w.GetClipSize() && w.GetStock() > 0 &&
 						    (!world->GetLocalPlayer()->IsAwaitingReloadCompletion()) &&
-						    (!w->IsReloading()) &&
+							(!w.IsReloading()) &&
 						    world->GetLocalPlayer()->GetTool() == Player::ToolWeapon) {
 							if (world->GetLocalPlayer()->IsToolWeapon()) {
 								if (weapInput.secondary) {
@@ -553,7 +553,7 @@ namespace spades {
 					} else if (CheckKey(cg_keyLimbo, name) && down) {
 						limbo->SetSelectedTeam(world->GetLocalPlayer()->GetTeamId());
 						limbo->SetSelectedWeapon(
-						  world->GetLocalPlayer()->GetWeapon()->GetWeaponType());
+												 world->GetLocalPlayer()->GetWeapon().GetWeaponType());
 						inGameLimbo = true;
 					} else if (CheckKey(cg_keySceneshot, name) && down) {
 						TakeScreenShot(true);

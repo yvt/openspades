@@ -68,10 +68,8 @@ namespace spades {
 		float Client::GetSprintState() {
 			if (!world)
 				return 0.f;
-			if (!world->GetLocalPlayer())
-				return 0.f;
 
-			ClientPlayer *p = clientPlayers[(int)world->GetLocalPlayerIndex()];
+			ClientPlayer *p = GetLocalClientPlayer();
 			if (!p)
 				return 0.f;
 			return p->GetSprintState();
@@ -80,10 +78,8 @@ namespace spades {
 		float Client::GetAimDownState() {
 			if (!world)
 				return 0.f;
-			if (!world->GetLocalPlayer())
-				return 0.f;
 
-			ClientPlayer *p = clientPlayers[(int)world->GetLocalPlayerIndex()];
+			ClientPlayer *p = GetLocalClientPlayer();
 			if (!p)
 				return 0.f;
 			return p->GetAimDownState();
@@ -111,10 +107,10 @@ namespace spades {
 		}
 
 		ClientPlayer *Client::GetLocalClientPlayer() {
-			if (!world || !world->GetLocalPlayer()) {
+			if (!world || !world->GetLocalPlayerIndex()) {
 				return nullptr;
 			}
-			return clientPlayers.at(static_cast<std::size_t>(world->GetLocalPlayerIndex()));
+			return clientPlayers.at(static_cast<std::size_t>(*world->GetLocalPlayerIndex()));
 		}
 
 #pragma mark - World Actions
@@ -122,7 +118,7 @@ namespace spades {
 		void Client::CaptureColor() {
 			if (!world)
 				return;
-			Player *p = world->GetLocalPlayer();
+			stmp::optional<Player &> p = world->GetLocalPlayer();
 			if (!p)
 				return;
 			if (!p->IsAlive())
@@ -168,10 +164,9 @@ namespace spades {
 		void Client::UpdateWorld(float dt) {
 			SPADES_MARK_FUNCTION();
 
-			Player *player = world->GetLocalPlayer();
+			stmp::optional<Player &> player = world->GetLocalPlayer();
 
 			if (player) {
-
 				// disable input when UI is open
 				if (scriptedUI->NeedsInput()) {
 					weapInput.primary = false;
@@ -206,9 +201,9 @@ namespace spades {
 #endif
 
 			// update player view (doesn't affect physics/game logics)
-			for (size_t i = 0; i < clientPlayers.size(); i++) {
-				if (clientPlayers[i]) {
-					clientPlayers[i]->Update(dt);
+			for (auto &clientPlayer : clientPlayers) {
+				if (clientPlayer) {
+					clientPlayer->Update(dt);
 				}
 			}
 
@@ -264,7 +259,7 @@ namespace spades {
 			}
 
 			if (time > lastPosSentTime + 1.f && world->GetLocalPlayer()) {
-				Player *p = world->GetLocalPlayer();
+				stmp::optional<Player &> p = world->GetLocalPlayer();
 				if (p->IsAlive() && p->GetTeamId() < 2) {
 					net->SendPosition();
 					lastPosSentTime = time;
@@ -314,13 +309,15 @@ namespace spades {
 						for (int sz = -1; sz <= 1; sz++) {
 							GameMap::RayCastResult result;
 							Vector3 shift = {sx * .1f, sy * .1f, sz * .1f};
-							result = map->CastRay2(lastPos + shift, freeState.position - lastPos, 256);
+							result =
+							  map->CastRay2(lastPos + shift, freeState.position - lastPos, 256);
 							if (result.hit && !result.startSolid &&
 							    Vector3::Dot(result.hitPos - freeState.position - shift,
 							                 freeState.position - lastPos) < 0.f) {
 
-								float dist = Vector3::Dot(result.hitPos - freeState.position - shift,
-								                          (freeState.position - lastPos).Normalize());
+								float dist =
+								  Vector3::Dot(result.hitPos - freeState.position - shift,
+								               (freeState.position - lastPos).Normalize());
 								if (dist < minDist) {
 									minResult = result;
 									minDist = dist;
@@ -386,13 +383,15 @@ namespace spades {
 		void Client::UpdateLocalPlayer(float dt) {
 			SPADES_MARK_FUNCTION();
 
-			auto *player = world->GetLocalPlayer();
-			auto clientPlayer = clientPlayers[world->GetLocalPlayerIndex()];
+			Player &player = GetWorld()->GetLocalPlayer().value();
+
+			SPAssert(GetLocalClientPlayer());
+			ClientPlayer &clientPlayer = *GetLocalClientPlayer();
 
 			PlayerInput inp = playerInput;
 			WeaponInput winp = weapInput;
 
-			Vector3 velocity = player->GetVelocty();
+			Vector3 velocity = player.GetVelocty();
 			Vector3 horizontalVelocity{velocity.x, velocity.y, 0.0f};
 
 			if (horizontalVelocity.GetLength() < 0.1f) {
@@ -407,8 +406,8 @@ namespace spades {
 
 			// don't allow to stand up when ceilings are too low
 			if (inp.crouch == false) {
-				if (player->GetInput().crouch) {
-					if (!player->TryUncrouch(false)) {
+				if (player.GetInput().crouch) {
+					if (!player.TryUncrouch(false)) {
 						inp.crouch = true;
 					}
 				}
@@ -416,25 +415,25 @@ namespace spades {
 
 			// don't allow jumping in the air
 			if (inp.jump) {
-				if (!player->IsOnGroundOrWade())
+				if (!player.IsOnGroundOrWade())
 					inp.jump = false;
 			}
 
-			if (player->GetTool() == Player::ToolWeapon) {
+			if (player.GetTool() == Player::ToolWeapon) {
 				// disable weapon while reloading (except shotgun)
-				if (player->IsAwaitingReloadCompletion() && !player->GetWeapon()->IsReloadSlow()) {
+				if (player.IsAwaitingReloadCompletion() && !player.GetWeapon().IsReloadSlow()) {
 					winp.primary = false;
 					winp.secondary = false;
 				}
 
 				// stop firing if the player is out of ammo
-				if (player->GetWeapon()->GetAmmo() == 0) {
+				if (player.GetWeapon().GetAmmo() == 0) {
 					winp.primary = false;
 				}
 			}
 
-			player->SetInput(inp);
-			player->SetWeaponInput(winp);
+			player.SetInput(inp);
+			player.SetWeaponInput(winp);
 
 			// send player input
 			{
@@ -453,11 +452,11 @@ namespace spades {
 			}
 
 			// PlayerInput actualInput = player->GetInput();
-			WeaponInput actualWeapInput = player->GetWeaponInput();
+			WeaponInput actualWeapInput = player.GetWeaponInput();
 
-			if (!(actualWeapInput.secondary && player->IsToolWeapon() && player->IsAlive()) &&
-				!(cg_holdAimDownSight && weapInput.secondary)) {
-				if (player->IsToolWeapon()) {
+			if (!(actualWeapInput.secondary && player.IsToolWeapon() && player.IsAlive()) &&
+			    !(cg_holdAimDownSight && weapInput.secondary)) {
+				if (player.IsToolWeapon()) {
 					// there is a possibility that player has respawned or something.
 					// stop aiming down
 					weapInput.secondary = false;
@@ -465,16 +464,16 @@ namespace spades {
 			}
 
 			// is the selected tool no longer usable (ex. out of ammo)?
-			if (!player->IsToolSelectable(player->GetTool())) {
+			if (!player.IsToolSelectable(player.GetTool())) {
 				// release mouse button before auto-switching tools
 				winp.primary = false;
 				winp.secondary = false;
 				weapInput = winp;
 				net->SendWeaponInput(weapInput);
-				actualWeapInput = winp = player->GetWeaponInput();
+				actualWeapInput = winp = player.GetWeaponInput();
 
 				// select another tool
-				Player::ToolType t = player->GetTool();
+				Player::ToolType t = player.GetTool();
 				do {
 					switch (t) {
 						case Player::ToolSpade: t = Player::ToolGrenade; break;
@@ -487,23 +486,23 @@ namespace spades {
 			}
 
 			// send orientation
-			Vector3 curFront = player->GetFront();
+			Vector3 curFront = player.GetFront();
 			if (curFront.x != lastFront.x || curFront.y != lastFront.y ||
 			    curFront.z != lastFront.z) {
 				lastFront = curFront;
 				net->SendOrientation(curFront);
 			}
 
-			lastKills = world->GetPlayerPersistent(player->GetId()).kills;
+			lastKills = world->GetPlayerPersistent(player.GetId()).kills;
 
 			// show block count when building block lines.
-			if (player->IsAlive() && player->GetTool() == Player::ToolBlock &&
-			    player->GetWeaponInput().secondary && player->IsBlockCursorDragging()) {
-				if (player->IsBlockCursorActive()) {
-					auto blocks = world->CubeLine(player->GetBlockCursorDragPos(),
-												  player->GetBlockCursorPos(), 256);
+			if (player.IsAlive() && player.GetTool() == Player::ToolBlock &&
+			    player.GetWeaponInput().secondary && player.IsBlockCursorDragging()) {
+				if (player.IsBlockCursorActive()) {
+					auto blocks = world->CubeLine(player.GetBlockCursorDragPos(),
+					                              player.GetBlockCursorPos(), 256);
 					auto msg = _TrN("Client", "{0} block", "{0} blocks", blocks.size());
-					AlertType type = static_cast<int>(blocks.size()) > player->GetNumBlocks()
+					AlertType type = static_cast<int>(blocks.size()) > player.GetNumBlocks()
 					                   ? AlertType::Warning
 					                   : AlertType::Notice;
 					ShowAlert(msg, type, 0.f, true);
@@ -515,12 +514,12 @@ namespace spades {
 				}
 			}
 
-			if (player->IsAlive())
+			if (player.IsAlive())
 				lastAliveTime = time;
 
-			if (player->GetHealth() < lastHealth) {
+			if (player.GetHealth() < lastHealth) {
 				// ouch!
-				lastHealth = player->GetHealth();
+				lastHealth = player.GetHealth();
 				lastHurtTime = world->GetTime();
 
 				Handle<IAudioChunk> c;
@@ -540,8 +539,8 @@ namespace spades {
 				}
 				audioDevice->PlayLocal(c, AudioParam());
 
-				float hpper = player->GetHealth() / 100.f;
-				int cnt = 18 - (int)(player->GetHealth() / 100.f * 8.f);
+				float hpper = player.GetHealth() / 100.f;
+				int cnt = 18 - (int)(player.GetHealth() / 100.f * 8.f);
 				hurtSprites.resize(std::max(cnt, 6));
 				for (size_t i = 0; i < hurtSprites.size(); i++) {
 					HurtSprite &spr = hurtSprites[i];
@@ -555,7 +554,7 @@ namespace spades {
 				}
 
 			} else {
-				lastHealth = player->GetHealth();
+				lastHealth = player.GetHealth();
 			}
 
 			inp.jump = false;
@@ -565,117 +564,121 @@ namespace spades {
 
 		void Client::PlayerObjectSet(int id) {
 			if (clientPlayers[id]) {
-				clientPlayers[id]->Invalidate();
 				clientPlayers[id] = nullptr;
 			}
 
-			Player *p = world->GetPlayer(id);
-			if (p)
-				clientPlayers[id].Set(new ClientPlayer(p, this), false);
+			stmp::optional<Player &> p = world->GetPlayer(id);
+			if (p) {
+				clientPlayers[id].Set(new ClientPlayer(*p, *this), false);
+			}
 		}
 
-		void Client::PlayerJumped(spades::client::Player *p) {
+		void Client::PlayerJumped(spades::client::Player &p) {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
 
 				Handle<IAudioChunk> c =
-				  p->GetWade() ? audioDevice->RegisterSound("Sounds/Player/WaterJump.opus")
-				               : audioDevice->RegisterSound("Sounds/Player/Jump.opus");
-				audioDevice->Play(c, p->GetOrigin(), AudioParam());
+				  p.GetWade() ? audioDevice->RegisterSound("Sounds/Player/WaterJump.opus")
+				              : audioDevice->RegisterSound("Sounds/Player/Jump.opus");
+				audioDevice->Play(c, p.GetOrigin(), AudioParam());
 			}
 		}
 
-		void Client::PlayerLanded(spades::client::Player *p, bool hurt) {
+		void Client::PlayerLanded(spades::client::Player &p, bool hurt) {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
 				Handle<IAudioChunk> c;
 				if (hurt)
 					c = audioDevice->RegisterSound("Sounds/Player/FallHurt.opus");
-				else if (p->GetWade())
+				else if (p.GetWade())
 					c = audioDevice->RegisterSound("Sounds/Player/WaterLand.opus");
 				else
 					c = audioDevice->RegisterSound("Sounds/Player/Land.opus");
-				audioDevice->Play(c, p->GetOrigin(), AudioParam());
+				audioDevice->Play(c, p.GetOrigin(), AudioParam());
 			}
 		}
 
-		void Client::PlayerMadeFootstep(spades::client::Player *p) {
+		void Client::PlayerMadeFootstep(spades::client::Player &p) {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
-                std::array<const char *, 8> snds = {"Sounds/Player/Footstep1.opus", "Sounds/Player/Footstep2.opus",
-				                      "Sounds/Player/Footstep3.opus", "Sounds/Player/Footstep4.opus",
-				                      "Sounds/Player/Footstep5.opus", "Sounds/Player/Footstep6.opus",
-				                      "Sounds/Player/Footstep7.opus", "Sounds/Player/Footstep8.opus"};
+				std::array<const char *, 8> snds = {
+				  "Sounds/Player/Footstep1.opus", "Sounds/Player/Footstep2.opus",
+				  "Sounds/Player/Footstep3.opus", "Sounds/Player/Footstep4.opus",
+				  "Sounds/Player/Footstep5.opus", "Sounds/Player/Footstep6.opus",
+				  "Sounds/Player/Footstep7.opus", "Sounds/Player/Footstep8.opus"};
 				std::array<const char *, 12> rsnds = {
-				  "Sounds/Player/Run1.opus",  "Sounds/Player/Run2.opus",  "Sounds/Player/Run3.opus",
-				  "Sounds/Player/Run4.opus",  "Sounds/Player/Run5.opus",  "Sounds/Player/Run6.opus",
-				  "Sounds/Player/Run7.opus",  "Sounds/Player/Run8.opus",  "Sounds/Player/Run9.opus",
-				  "Sounds/Player/Run10.opus", "Sounds/Player/Run11.opus", "Sounds/Player/Run12.opus",
+				  "Sounds/Player/Run1.opus",  "Sounds/Player/Run2.opus",
+				  "Sounds/Player/Run3.opus",  "Sounds/Player/Run4.opus",
+				  "Sounds/Player/Run5.opus",  "Sounds/Player/Run6.opus",
+				  "Sounds/Player/Run7.opus",  "Sounds/Player/Run8.opus",
+				  "Sounds/Player/Run9.opus",  "Sounds/Player/Run10.opus",
+				  "Sounds/Player/Run11.opus", "Sounds/Player/Run12.opus",
 				};
-				std::array<const char *, 8> wsnds = {"Sounds/Player/Wade1.opus", "Sounds/Player/Wade2.opus",
-				                       "Sounds/Player/Wade3.opus", "Sounds/Player/Wade4.opus",
-				                       "Sounds/Player/Wade5.opus", "Sounds/Player/Wade6.opus",
-				                       "Sounds/Player/Wade7.opus", "Sounds/Player/Wade8.opus"};
-				bool sprinting = clientPlayers[p->GetId()]
-				                   ? clientPlayers[p->GetId()]->GetSprintState() > 0.5f
+				std::array<const char *, 8> wsnds = {
+				  "Sounds/Player/Wade1.opus", "Sounds/Player/Wade2.opus",
+				  "Sounds/Player/Wade3.opus", "Sounds/Player/Wade4.opus",
+				  "Sounds/Player/Wade5.opus", "Sounds/Player/Wade6.opus",
+				  "Sounds/Player/Wade7.opus", "Sounds/Player/Wade8.opus"};
+				bool sprinting = clientPlayers[p.GetId()]
+				                   ? clientPlayers[p.GetId()]->GetSprintState() > 0.5f
 				                   : false;
-				Handle<IAudioChunk> c =
-				  p->GetWade() ? audioDevice->RegisterSound(SampleRandomElement(wsnds))
-				               : audioDevice->RegisterSound(SampleRandomElement(snds));
-				audioDevice->Play(c, p->GetOrigin(), AudioParam());
-				if (sprinting && !p->GetWade()) {
+				Handle<IAudioChunk> c = p.GetWade()
+				                          ? audioDevice->RegisterSound(SampleRandomElement(wsnds))
+				                          : audioDevice->RegisterSound(SampleRandomElement(snds));
+				audioDevice->Play(c, p.GetOrigin(), AudioParam());
+				if (sprinting && !p.GetWade()) {
 					AudioParam param;
-					param.volume *= clientPlayers[p->GetId()]->GetSprintState();
+					param.volume *= clientPlayers[p.GetId()]->GetSprintState();
 					c = audioDevice->RegisterSound(SampleRandomElement(rsnds));
-					audioDevice->Play(c, p->GetOrigin(), param);
+					audioDevice->Play(c, p.GetOrigin(), param);
 				}
 			}
 		}
 
-		void Client::PlayerFiredWeapon(spades::client::Player *p) {
+		void Client::PlayerFiredWeapon(spades::client::Player &p) {
 			SPADES_MARK_FUNCTION();
 
-			if (p == world->GetLocalPlayer()) {
+			if (&p == world->GetLocalPlayer()) {
 				localFireVibrationTime = time;
 			}
 
-			clientPlayers[p->GetId()]->FiredWeapon();
+			clientPlayers.at(p.GetId())->FiredWeapon();
 		}
-		void Client::PlayerDryFiredWeapon(spades::client::Player *p) {
+		void Client::PlayerDryFiredWeapon(spades::client::Player &p) {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
-				bool isLocal = p == world->GetLocalPlayer();
+				bool isLocal = &p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/DryFire.opus");
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
 				else
-					audioDevice->Play(c, p->GetEye() + p->GetFront() * 0.5f - p->GetUp() * .3f +
-					                       p->GetRight() * .4f,
-					                  AudioParam());
+					audioDevice->Play(
+					  c, p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f + p.GetRight() * .4f,
+					  AudioParam());
 			}
 		}
 
-		void Client::PlayerReloadingWeapon(spades::client::Player *p) {
+		void Client::PlayerReloadingWeapon(spades::client::Player &p) {
 			SPADES_MARK_FUNCTION();
 
-			clientPlayers[p->GetId()]->ReloadingWeapon();
+			clientPlayers.at(p.GetId())->ReloadingWeapon();
 		}
 
-		void Client::PlayerReloadedWeapon(spades::client::Player *p) {
+		void Client::PlayerReloadedWeapon(spades::client::Player &p) {
 			SPADES_MARK_FUNCTION();
 
-			clientPlayers[p->GetId()]->ReloadedWeapon();
+			clientPlayers.at(p.GetId())->ReloadedWeapon();
 		}
 
-		void Client::PlayerChangedTool(spades::client::Player *p) {
+		void Client::PlayerChangedTool(spades::client::Player &p) {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
-				bool isLocal = p == world->GetLocalPlayer();
+				bool isLocal = &p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c;
 				if (isLocal) {
 					// played by ClientPlayer::Update
@@ -686,63 +689,67 @@ namespace spades {
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
 				else
-					audioDevice->Play(c, p->GetEye() + p->GetFront() * 0.5f - p->GetUp() * .3f +
-					                       p->GetRight() * .4f,
+					audioDevice->Play(c,
+					                  p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f +
+					                    p.GetRight() * .4f,
 					                  AudioParam());
 			}
 		}
 
-		void Client::PlayerRestocked(spades::client::Player *p) {
+		void Client::PlayerRestocked(spades::client::Player &p) {
 			if (!IsMuted()) {
-				bool isLocal = p == world->GetLocalPlayer();
+				bool isLocal = &p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c =
 				  isLocal ? audioDevice->RegisterSound("Sounds/Weapons/RestockLocal.opus")
 				          : audioDevice->RegisterSound("Sounds/Weapons/Restock.opus");
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
 				else
-					audioDevice->Play(c, p->GetEye() + p->GetFront() * 0.5f - p->GetUp() * .3f +
-					                       p->GetRight() * .4f,
+					audioDevice->Play(c,
+					                  p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f +
+					                    p.GetRight() * .4f,
 					                  AudioParam());
 			}
 		}
 
-		void Client::PlayerThrownGrenade(spades::client::Player *p, Grenade *g) {
+		void Client::PlayerThrewGrenade(spades::client::Player &p, stmp::optional<const Grenade &> g) {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
-				bool isLocal = p == world->GetLocalPlayer();
+				bool isLocal = &p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c =
 				  audioDevice->RegisterSound("Sounds/Weapons/Grenade/Throw.opus");
 
 				if (g && isLocal) {
-					net->SendGrenade(g);
+					net->SendGrenade(*g);
 				}
 
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.4f, 0.1f, .3f), AudioParam());
 				else
-					audioDevice->Play(c, p->GetEye() + p->GetFront() * 0.5f - p->GetUp() * .2f +
-					                       p->GetRight() * .3f,
+					audioDevice->Play(c,
+					                  p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .2f +
+					                    p.GetRight() * .3f,
 					                  AudioParam());
 			}
 		}
 
-		void Client::PlayerMissedSpade(spades::client::Player *p) {
+		void Client::PlayerMissedSpade(spades::client::Player &p) {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
-				bool isLocal = p == world->GetLocalPlayer();
-				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/Spade/Miss.opus");
+				bool isLocal = &p == world->GetLocalPlayer();
+				Handle<IAudioChunk> c =
+				  audioDevice->RegisterSound("Sounds/Weapons/Spade/Miss.opus");
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.2f, -.1f, 0.7f), AudioParam());
 				else
-					audioDevice->Play(c, p->GetOrigin() + p->GetFront() * 0.8f - p->GetUp() * .2f,
+					audioDevice->Play(c, p.GetOrigin() + p.GetFront() * 0.8f - p.GetUp() * .2f,
 					                  AudioParam());
 			}
 		}
 
-		void Client::PlayerHitBlockWithSpade(spades::client::Player *p, Vector3 hitPos,
+		void Client::PlayerHitBlockWithSpade(spades::client::Player &p, Vector3 hitPos,
 		                                     IntVector3 blockPos, IntVector3 normal) {
 			SPADES_MARK_FUNCTION();
 
@@ -755,53 +762,56 @@ namespace spades {
 
 			EmitBlockFragments(shiftedHitPos, colV);
 
-			if (p == world->GetLocalPlayer()) {
+			if (&p == world->GetLocalPlayer()) {
 				localFireVibrationTime = time;
 			}
 
 			if (!IsMuted()) {
-				bool isLocal = p == world->GetLocalPlayer();
+				bool isLocal = &p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c =
 				  audioDevice->RegisterSound("Sounds/Weapons/Spade/HitBlock.opus");
 				if (isLocal)
 					audioDevice->PlayLocal(c, MakeVector3(.1f, -.1f, 1.2f), AudioParam());
 				else
-					audioDevice->Play(c, p->GetOrigin() + p->GetFront() * 0.5f - p->GetUp() * .2f,
+					audioDevice->Play(c, p.GetOrigin() + p.GetFront() * 0.5f - p.GetUp() * .2f,
 					                  AudioParam());
 			}
 		}
 
-		void Client::PlayerKilledPlayer(spades::client::Player *killer,
-		                                spades::client::Player *victim, KillType kt) {
+		void Client::PlayerKilledPlayer(spades::client::Player &killer,
+		                                spades::client::Player &victim, KillType kt) {
 			// play hit sound
 			if (kt == KillTypeWeapon || kt == KillTypeHeadshot) {
 				// don't play on local: see BullethitPlayer
-				if (victim != world->GetLocalPlayer()) {
+				if (&victim != world->GetLocalPlayer()) {
 					if (!IsMuted()) {
 						Handle<IAudioChunk> c;
 						switch (SampleRandomInt(0, 2)) {
 							case 0:
-								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.opus");
+								c =
+								  audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh1.opus");
 								break;
 							case 1:
-								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh2.opus");
+								c =
+								  audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh2.opus");
 								break;
 							case 2:
-								c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh3.opus");
+								c =
+								  audioDevice->RegisterSound("Sounds/Weapons/Impacts/Flesh3.opus");
 								break;
 						}
 						AudioParam param;
 						param.volume = 4.f;
-						audioDevice->Play(c, victim->GetEye(), param);
+						audioDevice->Play(c, victim.GetEye(), param);
 					}
 				}
 			}
 
 			// The local player is dead; initialize the look-you-are-dead cam
-			if (victim == world->GetLocalPlayer()) {
+			if (&victim == world->GetLocalPlayer()) {
 				followCameraState.enabled = false;
 
-				Vector3 v = -victim->GetFront();
+				Vector3 v = -victim.GetFront();
 				followAndFreeCameraState.yaw = atan2(v.y, v.x);
 				followAndFreeCameraState.pitch = 30.f * M_PI / 180.f;
 			}
@@ -813,25 +823,25 @@ namespace spades {
 				case KillTypeGrenade:
 				case KillTypeHeadshot:
 				case KillTypeMelee:
-				case KillTypeWeapon: Bleed(victim->GetEye()); break;
+				case KillTypeWeapon: Bleed(victim.GetEye()); break;
 				default: break;
 			}
 
 			// create ragdoll corpse
-			if (cg_ragdoll && victim->GetTeamId() < 2) {
+			if (cg_ragdoll && victim.GetTeamId() < 2) {
 				Corpse *corp;
-				corp = new Corpse(renderer, map, victim);
-				if (victim == world->GetLocalPlayer())
+				corp = new Corpse(renderer, map, &victim);
+				if (&victim == world->GetLocalPlayer())
 					lastMyCorpse = corp;
-				if (killer != victim && kt != KillTypeGrenade) {
-					Vector3 dir = victim->GetPosition() - killer->GetPosition();
+				if (&killer != &victim && kt != KillTypeGrenade) {
+					Vector3 dir = victim.GetPosition() - killer.GetPosition();
 					dir = dir.Normalize();
 					if (kt == KillTypeMelee) {
 						dir *= 6.f;
 					} else {
-						if (killer->GetWeapon()->GetWeaponType() == SMG_WEAPON) {
+						if (killer.GetWeapon().GetWeaponType() == SMG_WEAPON) {
 							dir *= 2.8f;
-						} else if (killer->GetWeapon()->GetWeaponType() == SHOTGUN_WEAPON) {
+						} else if (killer.GetWeapon().GetWeaponType() == SHOTGUN_WEAPON) {
 							dir *= 4.5f;
 						} else {
 							dir *= 3.5f;
@@ -841,7 +851,7 @@ namespace spades {
 				} else if (kt == KillTypeGrenade) {
 					corp->AddImpulse(MakeVector3(0, 0, -4.f - SampleRandomFloat() * 4.f));
 				}
-				corp->AddImpulse(victim->GetVelocty() * 32.f);
+				corp->AddImpulse(victim.GetVelocty() * 32.f);
 				corpses.emplace_back(corp);
 
 				if (corpses.size() > corpseHardLimit) {
@@ -853,21 +863,21 @@ namespace spades {
 
 			// add chat message
 			std::string s;
-			s = ChatWindow::TeamColorMessage(killer->GetName(), killer->GetTeamId());
+			s = ChatWindow::TeamColorMessage(killer.GetName(), killer.GetTeamId());
 
 			std::string cause;
-			bool isFriendlyFire = killer->GetTeamId() == victim->GetTeamId();
-			if (killer == victim)
+			bool isFriendlyFire = killer.GetTeamId() == victim.GetTeamId();
+			if (&killer == &victim)
 				isFriendlyFire = false;
 
-			Weapon *w =
-			  killer ? killer->GetWeapon() : nullptr; // only used in case of KillTypeWeapon
+			Weapon &w = killer.GetWeapon(); // only used in case of KillTypeWeapon
 			switch (kt) {
 				case KillTypeWeapon:
-					switch (w ? w->GetWeaponType() : RIFLE_WEAPON) {
+					switch (w.GetWeaponType()) {
 						case RIFLE_WEAPON: cause += _Tr("Client", "Rifle"); break;
 						case SMG_WEAPON: cause += _Tr("Client", "SMG"); break;
 						case SHOTGUN_WEAPON: cause += _Tr("Client", "Shotgun"); break;
+						default: SPUnreachable();
 					}
 					break;
 				case KillTypeFall:
@@ -878,9 +888,7 @@ namespace spades {
 					//! A cause of death shown in the kill feed.
 					cause += _Tr("Client", "Melee");
 					break;
-				case KillTypeGrenade:
-					cause += _Tr("Client", "Grenade");
-					break;
+				case KillTypeGrenade: cause += _Tr("Client", "Grenade"); break;
 				case KillTypeHeadshot:
 					//! A cause of death shown in the kill feed.
 					cause += _Tr("Client", "Headshot");
@@ -893,64 +901,62 @@ namespace spades {
 					//! A cause of death shown in the kill feed.
 					cause += _Tr("Client", "Weapon Change");
 					break;
-				default:
-					cause += "???";
-					break;
+				default: cause += "???"; break;
 			}
 
 			s += " [";
 			if (isFriendlyFire)
 				s += ChatWindow::ColoredMessage(cause, MsgColorFriendlyFire);
-			else if (killer == world->GetLocalPlayer() || victim == world->GetLocalPlayer())
+			else if (&killer == world->GetLocalPlayer() || &victim == world->GetLocalPlayer())
 				s += ChatWindow::ColoredMessage(cause, MsgColorGray);
 			else
 				s += cause;
 			s += "] ";
 
-			if (killer != victim) {
-				s += ChatWindow::TeamColorMessage(victim->GetName(), victim->GetTeamId());
+			if (&killer != &victim) {
+				s += ChatWindow::TeamColorMessage(victim.GetName(), victim.GetTeamId());
 			}
 
 			killfeedWindow->AddMessage(s);
 
 			// log to netlog
-			if (killer != victim) {
-				NetLog("%s (%s) [%s] %s (%s)", killer->GetName().c_str(),
-				       world->GetTeam(killer->GetTeamId()).name.c_str(), cause.c_str(),
-				       victim->GetName().c_str(), world->GetTeam(victim->GetTeamId()).name.c_str());
+			if (&killer != &victim) {
+				NetLog("%s (%s) [%s] %s (%s)", killer.GetName().c_str(),
+					   world->GetTeam(killer.GetTeamId()).name.c_str(), cause.c_str(),
+					   victim.GetName().c_str(), world->GetTeam(victim.GetTeamId()).name.c_str());
 			} else {
-				NetLog("%s (%s) [%s]", killer->GetName().c_str(),
-				       world->GetTeam(killer->GetTeamId()).name.c_str(), cause.c_str());
+				NetLog("%s (%s) [%s]", killer.GetName().c_str(),
+					   world->GetTeam(killer.GetTeamId()).name.c_str(), cause.c_str());
 			}
 
 			// show big message if player is involved
-			if (victim != killer) {
-				Player *local = world->GetLocalPlayer();
-				if (killer == local || victim == local) {
+			if (&victim != &killer) {
+				stmp::optional<Player &> local = world->GetLocalPlayer();
+				if (&killer == local || &victim == local) {
 					std::string msg;
-					if (killer == local) {
+					if (&killer == local) {
 						if ((int)cg_centerMessage == 2)
-							msg = _Tr("Client", "You have killed {0}", victim->GetName());
+							msg = _Tr("Client", "You have killed {0}", victim.GetName());
 					} else {
-						msg = _Tr("Client", "You were killed by {0}", killer->GetName());
+						msg = _Tr("Client", "You were killed by {0}", killer.GetName());
 					}
 					centerMessageView->AddMessage(msg);
 				}
 			}
 		}
 
-		void Client::BulletHitPlayer(spades::client::Player *hurtPlayer, HitType type,
-		                             spades::Vector3 hitPos, spades::client::Player *by) {
+		void Client::BulletHitPlayer(spades::client::Player &hurtPlayer, HitType type,
+		                             spades::Vector3 hitPos, spades::client::Player &by) {
 			SPADES_MARK_FUNCTION();
 
 			SPAssert(type != HitTypeBlock);
 
 			// don't bleed local player
-			if (!IsFirstPerson(GetCameraMode()) || &GetCameraTargetPlayer() != hurtPlayer) {
+			if (!IsFirstPerson(GetCameraMode()) || &GetCameraTargetPlayer() != &hurtPlayer) {
 				Bleed(hitPos);
 			}
 
-			if (hurtPlayer == world->GetLocalPlayer()) {
+			if (&hurtPlayer == world->GetLocalPlayer()) {
 				// don't player hit sound now;
 				// local bullet impact sound is
 				// played by checking the decrease of HP
@@ -981,8 +987,8 @@ namespace spades {
 				}
 			}
 
-			if (by == world->GetLocalPlayer() && hurtPlayer) {
-				net->SendHit(hurtPlayer->GetId(), type);
+			if (&by == world->GetLocalPlayer()) {
+				net->SendHit(hurtPlayer.GetId(), type);
 
 				if (type == HitTypeHead) {
 					Handle<IAudioChunk> c =
@@ -993,7 +999,7 @@ namespace spades {
 				}
 
 				hitFeedbackIconState = 1.f;
-				if (hurtPlayer->GetTeamId() == world->GetLocalPlayer()->GetTeamId()) {
+				if (hurtPlayer.GetTeamId() == world->GetLocalPlayer()->GetTeamId()) {
 					hitFeedbackFriendly = true;
 				} else {
 					hitFeedbackFriendly = false;
@@ -1044,7 +1050,7 @@ namespace spades {
 					param.volume = 2.f;
 
 					Handle<IAudioChunk> c;
-                    c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Block.opus");
+					c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Block.opus");
 					audioDevice->Play(c, shiftedHitPos, param);
 
 					param.pitch = .9f + SampleRandomFloat() * 0.2f;
@@ -1068,17 +1074,17 @@ namespace spades {
 			}
 		}
 
-		void Client::AddBulletTracer(spades::client::Player *player, spades::Vector3 muzzlePos,
+		void Client::AddBulletTracer(spades::client::Player &player, spades::Vector3 muzzlePos,
 		                             spades::Vector3 hitPos) {
 			SPADES_MARK_FUNCTION();
 
 			// Do not display tracers for bullets fired by the local player
-			if (IsFirstPerson(GetCameraMode()) && GetCameraTargetPlayerId() == player->GetId()) {
+			if (IsFirstPerson(GetCameraMode()) && GetCameraTargetPlayerId() == player.GetId()) {
 				return;
 			}
 
 			float vel;
-			switch (player->GetWeapon()->GetWeaponType()) {
+			switch (player.GetWeapon().GetWeaponType()) {
 				case RIFLE_WEAPON: vel = 700.f; break;
 				case SMG_WEAPON: vel = 360.f; break;
 				case SHOTGUN_WEAPON: vel = 500.f; break;
@@ -1109,32 +1115,32 @@ namespace spades {
 			}
 		}
 
-		void Client::GrenadeBounced(spades::client::Grenade *g) {
+		void Client::GrenadeBounced(const Grenade &g) {
 			SPADES_MARK_FUNCTION();
 
-			if (g->GetPosition().z < 63.f) {
+			if (g.GetPosition().z < 63.f) {
 				if (!IsMuted()) {
 					Handle<IAudioChunk> c =
 					  audioDevice->RegisterSound("Sounds/Weapons/Grenade/Bounce.opus");
-					audioDevice->Play(c, g->GetPosition(), AudioParam());
+					audioDevice->Play(c, g.GetPosition(), AudioParam());
 				}
 			}
 		}
 
-		void Client::GrenadeDroppedIntoWater(spades::client::Grenade *g) {
+		void Client::GrenadeDroppedIntoWater(const Grenade &g) {
 			SPADES_MARK_FUNCTION();
 
 			if (!IsMuted()) {
 				Handle<IAudioChunk> c =
 				  audioDevice->RegisterSound("Sounds/Weapons/Grenade/DropWater.opus");
-				audioDevice->Play(c, g->GetPosition(), AudioParam());
+				audioDevice->Play(c, g.GetPosition(), AudioParam());
 			}
 		}
 
-		void Client::GrenadeExploded(spades::client::Grenade *g) {
+		void Client::GrenadeExploded(const Grenade &g) {
 			SPADES_MARK_FUNCTION();
 
-			bool inWater = g->GetPosition().z > 63.f;
+			bool inWater = g.GetPosition().z > 63.f;
 
 			if (inWater) {
 				if (!IsMuted()) {
@@ -1142,22 +1148,23 @@ namespace spades {
 					  audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplode.opus");
 					AudioParam param;
 					param.volume = 10.f;
-					audioDevice->Play(c, g->GetPosition(), param);
+					audioDevice->Play(c, g.GetPosition(), param);
 
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeFar.opus");
 					param.volume = 6.f;
 					param.referenceDistance = 10.f;
-					audioDevice->Play(c, g->GetPosition(), param);
+					audioDevice->Play(c, g.GetPosition(), param);
 
-					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeStereo.opus");
+					c =
+					  audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeStereo.opus");
 					param.volume = 2.f;
-					audioDevice->Play(c, g->GetPosition(), param);
+					audioDevice->Play(c, g.GetPosition(), param);
 				}
 
-				GrenadeExplosionUnderwater(g->GetPosition());
+				GrenadeExplosionUnderwater(g.GetPosition());
 			} else {
 
-				GrenadeExplosion(g->GetPosition());
+				GrenadeExplosion(g.GetPosition());
 
 				if (!IsMuted()) {
 					Handle<IAudioChunk> c, cs;
@@ -1178,26 +1185,26 @@ namespace spades {
 					AudioParam param;
 					param.volume = 30.f;
 					param.referenceDistance = 5.f;
-					audioDevice->Play(c, g->GetPosition(), param);
+					audioDevice->Play(c, g.GetPosition(), param);
 
 					param.referenceDistance = 1.f;
-					audioDevice->Play(cs, g->GetPosition(), param);
+					audioDevice->Play(cs, g.GetPosition(), param);
 
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFar.opus");
 					param.volume = 6.f;
 					param.referenceDistance = 40.f;
-					audioDevice->Play(c, g->GetPosition(), param);
+					audioDevice->Play(c, g.GetPosition(), param);
 
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFarStereo.opus");
 					param.referenceDistance = 10.f;
-					audioDevice->Play(c, g->GetPosition(), param);
+					audioDevice->Play(c, g.GetPosition(), param);
 
 					// debri sound
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Debris.opus");
 					param.volume = 5.f;
 					param.referenceDistance = 3.f;
 					IntVector3 outPos;
-					Vector3 soundPos = g->GetPosition();
+					Vector3 soundPos = g.GetPosition();
 					if (world->GetMap()->CastRay(soundPos, MakeVector3(0, 0, 1), 8.f, outPos)) {
 						soundPos.z = (float)outPos.z - .2f;
 					}
@@ -1229,7 +1236,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			if (sourceGiven) {
-				Player *p = world->GetLocalPlayer();
+				stmp::optional<Player &> p = world->GetLocalPlayer();
 				if (!p)
 					return;
 				Vector3 rel = source - p->GetEye();
@@ -1256,5 +1263,5 @@ namespace spades {
 					break;
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

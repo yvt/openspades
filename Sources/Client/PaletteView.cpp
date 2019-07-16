@@ -20,11 +20,11 @@
 
 #include <Core/Settings.h>
 
-#include "PaletteView.h"
 #include "Client.h"
 #include "IImage.h"
 #include "IRenderer.h"
 #include "NetClient.h"
+#include "PaletteView.h"
 #include "Player.h"
 #include "World.h"
 
@@ -74,7 +74,7 @@ namespace spades {
 			if (!w)
 				return -1;
 
-			Player *p = w->GetLocalPlayer();
+			stmp::optional<Player &> p = w->GetLocalPlayer();
 			if (!p)
 				return -1;
 
@@ -101,7 +101,7 @@ namespace spades {
 			if (!w)
 				return;
 
-			Player *p = w->GetLocalPlayer();
+			stmp::optional<Player &> p = w->GetLocalPlayer();
 			if (!p)
 				return;
 
@@ -195,5 +195,5 @@ namespace spades {
 				}
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

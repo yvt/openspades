@@ -21,17 +21,20 @@
 
 #pragma once
 
+#include <array>
 #include <list>
+#include <map>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <map>
 
 #include "GameMapWrapper.h"
 #include "PhysicsConstants.h"
 #include <Core/Debug.h>
 #include <Core/Math.h>
+#include <Core/RefCountedObject.h>
+#include <Core/TMPUtils.h>
 
 namespace spades {
 	namespace client {
@@ -44,6 +47,9 @@ namespace spades {
 		class Client; // FIXME: for debug
 		class HitTestDebugger;
 		struct GameProperties;
+
+		constexpr std::size_t NumPlayerSlots = 128;
+
 		class World {
 			friend class Client; // FIXME: for debug
 		public:
@@ -58,23 +64,23 @@ namespace spades {
 			};
 
 		private:
-			IWorldListener *listener;
+			IWorldListener *listener = nullptr;
 
-			IGameMode *mode;
+			std::unique_ptr<IGameMode> mode;
 
-			GameMap *map;
-			GameMapWrapper *mapWrapper;
-			float time;
+			Handle<GameMap> map;
+			std::unique_ptr<GameMapWrapper> mapWrapper;
+			float time = 0.0f;
 			IntVector3 fogColor;
 			Team teams[3];
 
 			std::shared_ptr<GameProperties> gameProperties;
 
-			std::vector<Player *> players;
-			std::vector<PlayerPersistent> playerPersistents;
-			int localPlayerIndex;
+			std::array<std::unique_ptr<Player>, NumPlayerSlots> players;
+			std::array<PlayerPersistent, NumPlayerSlots> playerPersistents;
+			stmp::optional<int> localPlayerIndex;
 
-			std::list<Grenade *> grenades;
+			std::list<std::unique_ptr<Grenade>> grenades;
 			std::unique_ptr<HitTestDebugger> hitTestDebugger;
 
 			std::unordered_map<CellPos, spades::IntVector3, CellPosHash> createdBlocks;
@@ -87,40 +93,43 @@ namespace spades {
 			void ApplyBlockActions();
 
 		public:
-			World(const std::shared_ptr<GameProperties>&);
+			World(const std::shared_ptr<GameProperties> &);
 			~World();
-			GameMap *GetMap() { return map; }
-			GameMapWrapper *GetMapWrapper() { return mapWrapper; }
+			const Handle<GameMap> &GetMap() { return map; }
+			GameMapWrapper &GetMapWrapper() { return *mapWrapper; }
 			float GetTime() { return time; }
 
 			/** Returns a non-null reference to `GameProperties`. */
 			const std::shared_ptr<GameProperties> &GetGameProperties() { return gameProperties; }
 
-			void SetMap(GameMap *);
+			void SetMap(Handle<GameMap>);
 
 			IntVector3 GetFogColor() { return fogColor; }
 			void SetFogColor(IntVector3 v) { fogColor = v; }
 
 			void Advance(float dt);
 
-			void AddGrenade(Grenade *);
-			std::vector<Grenade *> GetAllGrenades();
+			void AddGrenade(std::unique_ptr<Grenade>);
+			const std::list<std::unique_ptr<Grenade>> &GetAllGrenades() { return grenades; }
 
 			void MarkBlockForRegeneration(const IntVector3 &blockLocation);
 			void UnmarkBlockForRegeneration(const IntVector3 &blockLocation);
 
 			std::vector<IntVector3> CubeLine(IntVector3 v1, IntVector3 v2, int maxLength);
 
-			Player *GetPlayer(unsigned int i) {
-				// SPAssert(i >= 0);	lm: unsigned cannot be smaller than 0 :)
+			stmp::optional<Player &> GetPlayer(unsigned int i) {
 				SPAssert(i < players.size());
-				return players[i];
+				return players[i].get();
 			}
 
-			void SetPlayer(int i, Player *p);
+			void SetPlayer(int i, std::unique_ptr<Player> p);
 
-			IGameMode *GetMode() { return mode; }
-			void SetMode(IGameMode *);
+			/**
+			 * Get the object containing data specific to the current game mode.
+			 * Can be `{}` if the game mode is not specified yet.
+			 */
+			stmp::optional<IGameMode &> GetMode() { return mode.get(); }
+			void SetMode(std::unique_ptr<IGameMode>);
 
 			Team &GetTeam(int t) {
 				if (t >= 2 || t < 0) // spectator
@@ -135,32 +144,33 @@ namespace spades {
 
 			struct WeaponRayCastResult {
 				bool hit, startSolid;
-				Player *player;
+				stmp::optional<int> playerId;
 				IntVector3 blockPos;
 				Vector3 hitPos;
 				hitTag_t hitFlag;
 			};
 
-			WeaponRayCastResult WeaponRayCast(Vector3 startPos, Vector3 dir, Player *exclude);
+			WeaponRayCastResult WeaponRayCast(Vector3 startPos, Vector3 dir,
+			                                  stmp::optional<int> excludePlayerId);
 
 			size_t GetNumPlayerSlots() { return players.size(); }
-
 			size_t GetNumPlayers();
 
-			int GetLocalPlayerIndex() { return localPlayerIndex; }
+			stmp::optional<int> GetLocalPlayerIndex() { return localPlayerIndex; }
+			void SetLocalPlayerIndex(stmp::optional<int> p) { localPlayerIndex = p; }
 
-			void SetLocalPlayerIndex(int p) { localPlayerIndex = p; }
-
-			Player *GetLocalPlayer() {
-				if (GetLocalPlayerIndex() == -1)
-					return NULL;
-				return GetPlayer(GetLocalPlayerIndex());
+			/** Get the local player. Can be `nullptr`. */
+			stmp::optional<Player &> GetLocalPlayer() {
+				if (!GetLocalPlayerIndex())
+					return {};
+				return GetPlayer(*GetLocalPlayerIndex());
 			}
 
+			/** Can be `nullptr`. */
 			HitTestDebugger *GetHitTestDebugger();
 
-			void SetListener(IWorldListener *l) { listener = l; }
+			void SetListener(IWorldListener *newListener) { listener = newListener; }
 			IWorldListener *GetListener() { return listener; }
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

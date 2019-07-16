@@ -39,7 +39,7 @@ namespace spades {
 
 			playerId = p->GetId();
 
-			IntVector3 col = p->GetWorld()->GetTeam(p->GetTeamId()).color;
+			IntVector3 col = p->GetWorld().GetTeam(p->GetTeamId()).color;
 			color = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 
 			bool crouch = p->GetInput().crouch;

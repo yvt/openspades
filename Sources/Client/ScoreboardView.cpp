@@ -50,7 +50,6 @@ namespace spades {
 		                                           1}; // Goldish yellow
 		static const auto spectatorTeamId = 255;       // Spectators have a team id of 255
 
-
 		ScoreboardView::ScoreboardView(Client *client)
 		    : client(client), renderer(client->GetRenderer()) {
 			SPADES_MARK_FUNCTION();
@@ -62,14 +61,12 @@ namespace spades {
 			// Use GUI font if spectator string has special chars
 			auto spectatorString = _TrN("Client", "Spectator{1}", "Spectators{1}", "", "");
 			auto has_special_char =
-				std::find_if(spectatorString.begin(), spectatorString.end(),
-				[](char ch) {
-					return !(isalnum(static_cast<unsigned char>(ch)) || ch == '_');
-			}) != spectatorString.end();
+			  std::find_if(spectatorString.begin(), spectatorString.end(), [](char ch) {
+				  return !(isalnum(static_cast<unsigned char>(ch)) || ch == '_');
+			  }) != spectatorString.end();
 
-			spectatorFont = has_special_char ?
-				client->fontManager->GetMediumFont() :
-				client->fontManager->GetSquareDesignFont();
+			spectatorFont = has_special_char ? client->fontManager->GetMediumFont()
+			                                 : client->fontManager->GetSquareDesignFont();
 		}
 
 		ScoreboardView::~ScoreboardView() {}
@@ -81,7 +78,7 @@ namespace spades {
 				int cnt = tc->GetNumTerritories();
 				int num = 0;
 				for (int i = 0; i < cnt; i++)
-					if (tc->GetTerritory(i)->ownerTeamId == team)
+					if (tc->GetTerritory(i).ownerTeamId == team)
 						num++;
 				return num;
 			} else {
@@ -94,7 +91,8 @@ namespace spades {
 			return MakeVector4(c.x / 255.f, c.y / 255.f, c.z / 255.f, 1.f);
 		}
 
-		Vector4 ScoreboardView::AdjustColor(spades::Vector4 col, float bright, float saturation) const {
+		Vector4 ScoreboardView::AdjustColor(spades::Vector4 col, float bright,
+		                                    float saturation) const {
 			col.x *= bright;
 			col.y *= bright;
 			col.z *= bright;
@@ -129,9 +127,15 @@ namespace spades {
 				return;
 			}
 
-			IGameMode *mode = world->GetMode();
-			ctf = IGameMode::m_CTF == mode->ModeType() ? static_cast<CTFGameMode *>(mode) : NULL;
-			tc = IGameMode::m_TC == mode->ModeType() ? static_cast<TCGameMode *>(mode) : NULL;
+			// TODO: `ctf` and `tc` are only valid throughout the method call's
+			//       duration. Move them to a new context type
+			auto mode = world->GetMode();
+			ctf = IGameMode::m_CTF == mode->ModeType()
+			        ? dynamic_cast<CTFGameMode *>(mode.get_pointer())
+			        : NULL;
+			tc = IGameMode::m_TC == mode->ModeType()
+			       ? dynamic_cast<TCGameMode *>(mode.get_pointer())
+			       : NULL;
 
 			Handle<IImage> image;
 			IFont *font;
@@ -249,16 +253,17 @@ namespace spades {
 			std::vector<ScoreboardEntry> entries;
 
 			for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
-				Player *p = world->GetPlayer(i);
-				if (!p)
+				auto maybePlayer = world->GetPlayer(i);
+				if (!maybePlayer)
 					continue;
-				if (p->GetTeamId() != team)
+				Player &player = maybePlayer.value();
+				if (player.GetTeamId() != team)
 					continue;
 
 				ScoreboardEntry ent;
-				ent.name = p->GetName();
+				ent.name = player.GetName();
 				ent.score = world->GetPlayerPersistent(i).kills;
-				ent.alive = p->IsAlive();
+				ent.alive = player.IsAlive();
 				ent.id = i;
 				entries.push_back(ent);
 
@@ -297,7 +302,7 @@ namespace spades {
 				}
 
 				color = ent.alive ? white : gray;
-				if (ent.id == world->GetLocalPlayerIndex())
+				if (stmp::make_optional(ent.id) == world->GetLocalPlayerIndex())
 					color = GetTeamColor(team);
 
 				font->Draw(ent.name, MakeVector2(colX + 45.f, rowY), 1.f, color);
@@ -326,14 +331,16 @@ namespace spades {
 			int numSpectators = 0;
 			float totalPixelWidth = 0;
 			for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
-				Player *p = world->GetPlayer(i);
-				if (!p)
+				auto maybePlayer = world->GetPlayer(i);
+				if (!maybePlayer)
 					continue;
-				if (p->GetTeamId() != spectatorTeamId)
+				Player &player = maybePlayer.value();
+
+				if (player.GetTeamId() != spectatorTeamId)
 					continue;
 
 				ScoreboardEntry ent;
-				ent.name = p->GetName();
+				ent.name = player.GetName();
 				ent.id = i;
 				entries.push_back(ent);
 
@@ -353,10 +360,9 @@ namespace spades {
 
 			auto isSquareFont = spectatorFont == client->fontManager->GetSquareDesignFont();
 			auto sizeSpecString = spectatorFont->Measure(buf);
-			spectatorFont->Draw(buf,
-				MakeVector2(centerX - sizeSpecString.x / 2, top + (isSquareFont ? 0 : 10)),
-				1.f,
-				spectatorTextColor);
+			spectatorFont->Draw(
+			  buf, MakeVector2(centerX - sizeSpecString.x / 2, top + (isSquareFont ? 0 : 10)), 1.f,
+			  spectatorTextColor);
 
 			auto yOffset = top + sizeSpecString.y;
 			auto halfTotalX = totalPixelWidth / 2;
@@ -379,11 +385,11 @@ namespace spades {
 
 		bool ScoreboardView::areSpectatorsPresent() const {
 			for (auto i = 0; i < client->GetWorld()->GetNumPlayerSlots(); i++) {
-				auto *p = world->GetPlayer(i);
-				if (p && p->GetTeamId() == spectatorTeamId)
+				auto p = world->GetPlayer(i);
+				if (p && p.value().GetTeamId() == spectatorTeamId)
 					return true;
 			}
 			return false;
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

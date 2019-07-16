@@ -61,7 +61,8 @@ namespace spades {
 				zSum += v.z;
 			}
 
-			GameMap *map = client->GetWorld()->GetMap();
+			const Handle<GameMap> &map = client->GetWorld()->GetMap();
+			SPAssert(map);
 
 			// build voxel model
 			vmodel = new VoxelModel(maxX - minX + 1, maxY - minY + 1, maxZ - minZ + 1);
@@ -101,8 +102,10 @@ namespace spades {
 		bool FallingBlock::Update(float dt) {
 			time += dt;
 
-			GameMap *map = client->GetWorld()->GetMap();
+			const Handle<GameMap> &map = client->GetWorld()->GetMap();
 			Vector3 orig = matrix.GetOrigin();
+			
+			SPAssert(map);
 
 			if (time > 1.f || map->ClipBox(orig.x, orig.y, orig.z)) {
 				// destroy

@@ -74,8 +74,8 @@ namespace spades {
 				return;
 			}
 
-			Player *p = w->GetLocalPlayer();
-			if (p == NULL || !p->IsAlive()) {
+			auto p = w->GetLocalPlayer();
+			if (!p || !p->IsAlive()) {
 				ClearAll();
 				return;
 			}

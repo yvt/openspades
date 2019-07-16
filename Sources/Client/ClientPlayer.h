@@ -42,8 +42,8 @@ namespace spades {
 		/** Representation of player which is used by
 		 * drawing/view layer of game client. */
 		class ClientPlayer : public RefCountedObject {
-			Client *client;
-			Player *player;
+			Client &client;
+			Player &player;
 
 			float sprintState;
 			float aimDownState;
@@ -97,10 +97,8 @@ namespace spades {
 			~ClientPlayer();
 
 		public:
-			ClientPlayer(Player *p, Client *);
-			Player *GetPlayer() const { return player; }
-
-			void Invalidate();
+			ClientPlayer(Player &p, Client &);
+			Player &GetPlayer() const { return player; }
 
 			void Update(float dt);
 			void AddToScene();

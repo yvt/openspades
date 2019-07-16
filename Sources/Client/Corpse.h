@@ -85,6 +85,7 @@ namespace spades {
 			void LineCollision(NodeType a, NodeType b, float dt);
 
 		public:
+			// TODO: Replace pointers with references
 			Corpse(IRenderer *renderer, GameMap *map, Player *p);
 			~Corpse();
 
