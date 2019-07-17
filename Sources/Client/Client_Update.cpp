@@ -828,7 +828,7 @@ namespace spades {
 			// create ragdoll corpse
 			if (cg_ragdoll && victim.GetTeamId() < 2) {
 				Corpse *corp;
-				corp = new Corpse(renderer, map, &victim);
+				corp = new Corpse(*renderer, *map, victim);
 				if (&victim == world->GetLocalPlayer())
 					lastMyCorpse = corp;
 				if (&killer != &victim && kt != KillTypeGrenade) {

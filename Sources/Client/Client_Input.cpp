@@ -381,7 +381,7 @@ namespace spades {
 						if (name == "p" && down) {
 							Corpse *corp;
 							Player &victim = world->GetLocalPlayer().value();
-							corp = new Corpse(renderer, map, &victim);
+							corp = new Corpse(*renderer, *map, victim);
 							corp->AddImpulse(victim.GetFront() * 32.f);
 							corpses.emplace_back(corp);
 
