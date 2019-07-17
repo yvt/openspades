@@ -379,11 +379,10 @@ namespace spades {
 
 					if (cg_debugCorpse) {
 						if (name == "p" && down) {
-							Corpse *corp;
 							Player &victim = world->GetLocalPlayer().value();
-							corp = new Corpse(*renderer, *map, victim);
+							std::unique_ptr<Corpse> corp{new Corpse(*renderer, *map, victim)};
 							corp->AddImpulse(victim.GetFront() * 32.f);
-							corpses.emplace_back(corp);
+							corpses.emplace_back(std::move(corp));
 
 							if (corpses.size() > corpseHardLimit) {
 								corpses.pop_front();

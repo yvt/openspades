@@ -827,10 +827,11 @@ namespace spades {
 
 			// create ragdoll corpse
 			if (cg_ragdoll && victim.GetTeamId() < 2) {
-				Corpse *corp;
-				corp = new Corpse(*renderer, *map, victim);
+				std::unique_ptr<Corpse> corp{new Corpse(*renderer, *map, victim)};
+
 				if (&victim == world->GetLocalPlayer())
 					lastMyCorpse = corp;
+
 				if (&killer != &victim && kt != KillTypeGrenade) {
 					Vector3 dir = victim.GetPosition() - killer.GetPosition();
 					dir = dir.Normalize();
@@ -850,7 +851,7 @@ namespace spades {
 					corp->AddImpulse(MakeVector3(0, 0, -4.f - SampleRandomFloat() * 4.f));
 				}
 				corp->AddImpulse(victim.GetVelocty() * 32.f);
-				corpses.emplace_back(corp);
+				corpses.emplace_back(std::move(corp));
 
 				if (corpses.size() > corpseHardLimit) {
 					corpses.pop_front();
