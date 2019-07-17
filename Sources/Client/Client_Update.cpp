@@ -210,19 +210,19 @@ namespace spades {
 			// corpse never accesses audio nor renderer, so
 			// we can do it in the separate thread
 			class CorpseUpdateDispatch : public ConcurrentDispatch {
-				Client *client;
+				Client &client;
 				float dt;
 
 			public:
-				CorpseUpdateDispatch(Client *c, float dt) : client(c), dt(dt) {}
+				CorpseUpdateDispatch(Client &c, float dt) : client{c}, dt{dt} {}
 				void Run() override {
-					for (auto &c : client->corpses) {
+					for (auto &c : client.corpses) {
 						for (int i = 0; i < 4; i++)
 							c->Update(dt / 4.f);
 					}
 				}
 			};
-			CorpseUpdateDispatch corpseDispatch(this, dt);
+			CorpseUpdateDispatch corpseDispatch{*this, dt};
 			corpseDispatch.Start();
 
 			// local entities should be done in the client thread
