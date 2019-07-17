@@ -24,6 +24,7 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <tuple>
 
 #include "ClientCameraMode.h"
 #include "ILocalEntity.h"
@@ -291,8 +292,7 @@ namespace spades {
 			bool IsLimboViewActive();
 			void SpawnPressed();
 
-			// TODO: Stop using pointers as an out parameter
-			stmp::optional<Player &> HotTrackedPlayer(hitTag_t *hitFlag);
+			stmp::optional<std::tuple<Player &, hitTag_t>> HotTrackedPlayer();
 
 			// effects (local entity, etc)
 			std::vector<DynamicLightParam> flashDlights;

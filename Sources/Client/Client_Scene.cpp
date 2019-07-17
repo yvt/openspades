@@ -689,21 +689,21 @@ namespace spades {
 
 			// draw player hottrack
 			// FIXME: don't use debug line
-			{
-				hitTag_t tag = hit_None;
-				stmp::optional<Player &> hottracked = HotTrackedPlayer(&tag);
-				if (hottracked) {
-					IntVector3 col = world->GetTeam(hottracked->GetTeamId()).color;
-					Vector4 color = Vector4::Make(col.x / 255.f, col.y / 255.f, col.z / 255.f, 1.f);
-					Vector4 color2 = Vector4::Make(1, 1, 1, 1);
+			auto hottracked = HotTrackedPlayer();
+			if (hottracked) {
+				Player &player = std::get<0>(*hottracked);
+				hitTag_t tag = std::get<1>(*hottracked);
 
-					Player::HitBoxes hb = hottracked->GetHitBoxes();
-					AddDebugObjectToScene(hb.head, (tag & hit_Head) ? color2 : color);
-					AddDebugObjectToScene(hb.torso, (tag & hit_Torso) ? color2 : color);
-					AddDebugObjectToScene(hb.limbs[0], (tag & hit_Legs) ? color2 : color);
-					AddDebugObjectToScene(hb.limbs[1], (tag & hit_Legs) ? color2 : color);
-					AddDebugObjectToScene(hb.limbs[2], (tag & hit_Arms) ? color2 : color);
-				}
+				IntVector3 col = world->GetTeam(player.GetTeamId()).color;
+				Vector4 color = Vector4::Make(col.x / 255.f, col.y / 255.f, col.z / 255.f, 1.f);
+				Vector4 color2 = Vector4::Make(1, 1, 1, 1);
+
+				Player::HitBoxes hb = player.GetHitBoxes();
+				AddDebugObjectToScene(hb.head, (tag & hit_Head) ? color2 : color);
+				AddDebugObjectToScene(hb.torso, (tag & hit_Torso) ? color2 : color);
+				AddDebugObjectToScene(hb.limbs[0], (tag & hit_Legs) ? color2 : color);
+				AddDebugObjectToScene(hb.limbs[1], (tag & hit_Legs) ? color2 : color);
+				AddDebugObjectToScene(hb.limbs[2], (tag & hit_Arms) ? color2 : color);
 			}
 
 			renderer->EndScene();

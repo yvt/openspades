@@ -111,7 +111,7 @@ namespace spades {
 			}
 		}
 
-		stmp::optional<Player &> Client::HotTrackedPlayer(hitTag_t *hitFlag) {
+		stmp::optional<std::tuple<Player &, hitTag_t>> Client::HotTrackedPlayer() {
 			if (!IsFirstPerson(GetCameraMode()))
 				return {};
 
@@ -134,10 +134,7 @@ namespace spades {
 			    cameraTargetPlayer.GetTeamId() < 2) {
 				return {};
 			}
-			if (hitFlag) {
-				*hitFlag = result.hitFlag;
-			}
-			return player;
+			return std::tuple<Player &, hitTag_t>{player, result.hitFlag};
 		}
 
 		bool Client::IsMuted() {

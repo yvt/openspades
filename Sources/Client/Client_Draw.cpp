@@ -293,19 +293,20 @@ namespace spades {
 
 			Player &p = GetWorld()->GetLocalPlayer().value();
 
-			hitTag_t tag = hit_None;
-			stmp::optional<Player &> hottracked = HotTrackedPlayer(&tag);
+			auto hottracked = HotTrackedPlayer();
 			if (hottracked) {
-				Vector3 posxyz = Project(hottracked->GetEye());
+				Player &hottrackedPlayer = std::get<0>(*hottracked);
+
+				Vector3 posxyz = Project(hottrackedPlayer.GetEye());
 				Vector2 pos = {posxyz.x, posxyz.y};
 				char buf[64];
 				if ((int)cg_playerNames == 1) {
-					float dist = (hottracked->GetEye() - p.GetEye()).GetLength();
+					float dist = (hottrackedPlayer.GetEye() - p.GetEye()).GetLength();
 					int idist = (int)floorf(dist + .5f);
-					sprintf(buf, "%s [%d%s]", hottracked->GetName().c_str(), idist,
+					sprintf(buf, "%s [%d%s]", hottrackedPlayer.GetName().c_str(), idist,
 					        (idist == 1) ? "block" : "blocks");
 				} else
-					sprintf(buf, "%s", hottracked->GetName().c_str());
+					sprintf(buf, "%s", hottrackedPlayer.GetName().c_str());
 
 				pos.y += (int)cg_playerNameY;
 				pos.x += (int)cg_playerNameX;
