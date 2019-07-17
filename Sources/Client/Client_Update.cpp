@@ -69,7 +69,7 @@ namespace spades {
 			if (!world)
 				return 0.f;
 
-			ClientPlayer *p = GetLocalClientPlayer();
+			stmp::optional<ClientPlayer &> p = GetLocalClientPlayer();
 			if (!p)
 				return 0.f;
 			return p->GetSprintState();
@@ -79,7 +79,7 @@ namespace spades {
 			if (!world)
 				return 0.f;
 
-			ClientPlayer *p = GetLocalClientPlayer();
+			stmp::optional<ClientPlayer &> p = GetLocalClientPlayer();
 			if (!p)
 				return 0.f;
 			return p->GetAimDownState();
@@ -95,10 +95,9 @@ namespace spades {
 				return false;
 			}
 
-			auto *clientPlayer = GetLocalClientPlayer();
-			SPAssert(clientPlayer);
+			stmp::optional<ClientPlayer &> clientPlayer = GetLocalClientPlayer();
 
-			if (clientPlayer->IsChangingTool()) {
+			if (clientPlayer.value().IsChangingTool()) {
 				// Player is unable to use a tool while switching to another tool
 				return false;
 			}
@@ -106,11 +105,13 @@ namespace spades {
 			return true;
 		}
 
-		ClientPlayer *Client::GetLocalClientPlayer() {
+		stmp::optional<ClientPlayer &> Client::GetLocalClientPlayer() {
 			if (!world || !world->GetLocalPlayerIndex()) {
-				return nullptr;
+				return {};
 			}
-			return clientPlayers.at(static_cast<std::size_t>(*world->GetLocalPlayerIndex()));
+			return clientPlayers.at(static_cast<std::size_t>(*world->GetLocalPlayerIndex()))
+			  .
+			  operator ClientPlayer *();
 		}
 
 #pragma mark - World Actions
@@ -385,8 +386,7 @@ namespace spades {
 
 			Player &player = GetWorld()->GetLocalPlayer().value();
 
-			SPAssert(GetLocalClientPlayer());
-			ClientPlayer &clientPlayer = *GetLocalClientPlayer();
+			ClientPlayer &clientPlayer = GetLocalClientPlayer().value();
 
 			PlayerInput inp = playerInput;
 			WeaponInput winp = weapInput;
@@ -830,7 +830,7 @@ namespace spades {
 				std::unique_ptr<Corpse> corp{new Corpse(*renderer, *map, victim)};
 
 				if (&victim == world->GetLocalPlayer())
-					lastMyCorpse = corp;
+					lastMyCorpse = corp.get();
 
 				if (&killer != &victim && kt != KillTypeGrenade) {
 					Vector3 dir = victim.GetPosition() - killer.GetPosition();

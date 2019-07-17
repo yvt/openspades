@@ -180,8 +180,8 @@ namespace spades {
 			 */
 			bool CanLocalPlayerUseToolNow();
 
-			/** Retrieves `ClientPlayer` for the local player, or `nullptr` if it does not exist. */
-			ClientPlayer *GetLocalClientPlayer(); // TODO: Use `optional<ClientPlayer &>`
+			/** Retrieves `ClientPlayer` for the local player, or `{}` if it does not exist. */
+			stmp::optional<ClientPlayer &> GetLocalClientPlayer();
 
 			float toolRaiseState;
 			void SetSelectedTool(Player::ToolType, bool quiet = false);
