@@ -34,6 +34,24 @@
 
 namespace spades {
 
+	/**
+	 * A ref-counted object that internally holds a reference count.
+	 *
+	 * This type is used mainly for compatibility with AngelScript's GC
+	 * behavior as it's impossible to implement with `std::shared_ptr`. In
+	 * general cases, `std::unique_ptr` or `std::shared_ptr` is more suitable.
+	 *
+	 * # Conventions
+	 *
+	 *  - When storing a strong reference, use `Handle<T>`. Do not attempt to
+	 *    manually update the reference count unless absolutely necessary.
+	 *  - Under any circumstances, do not manually call its destructor.
+	 *  - Use `Handle<T>::New(...)` to consturct an object.
+	 *  - Methods receive `T` via a parameter of type `T&` or
+	 *    `stmp::optional<T&>`. They may create and hold a strong reference
+	 *    using `Handle::Handle(T&)`.
+	 *  - Methods return `T` via a return type `Handle<T>`.
+	 */
 	class RefCountedObject {
 		std::atomic<int> refCount;
 #if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
@@ -51,6 +69,9 @@ namespace spades {
 		void Release();
 	};
 
+	/**
+	 * A nullable smart pointer for `T <: RefCountedObject`.
+	 */
 	template <typename T> class Handle {
 		T *ptr;
 
@@ -68,6 +89,7 @@ namespace spades {
 				ptr->AddRef();
 		}
 		Handle(Handle<T> &&h) : ptr(h.MaybeUnmanage()) {}
+		Handle(T &ref) : ptr{&ptr} { ptr->AddRef(); }
 
 		template <class S> Handle(Handle<S> &&h) : ptr(h.MaybeUnmanage()) {}
 
