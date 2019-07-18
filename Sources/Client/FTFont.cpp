@@ -87,7 +87,7 @@ namespace spades {
 		}
 
 		struct BinPlaceResult {
-			client::IImage &image;
+			std::reference_wrapper<client::IImage> image;
 			int x, y;
 			BinPlaceResult(client::IImage &image, int x, int y) : image(image), x(x), y(y) {}
 		};

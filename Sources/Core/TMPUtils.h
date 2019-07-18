@@ -68,13 +68,33 @@ namespace stmp {
 			Allocator().construct(reinterpret_cast<T *>(&storage), std::forward<Args>(args)...);
 			has_some = true;
 		}
-		void operator=(const T &o) { reset(o); }
-		void operator=(T &&o) { reset(std::move(o)); }
+		void operator=(const T &o) {
+			if (has_some) {
+				**this = o;
+			} else {
+				reset(o);
+			}
+		}
+		void operator=(T &&o) {
+			if (has_some) {
+				**this = std::move(o);
+			} else {
+				reset(std::move(o));
+			}
+		}
 		void operator=(const optional &o) {
-			if (o)
+			if (has_some && o.has_some) {
+				**this = *o;
+			} else {
 				reset(*o);
-			else
-				reset();
+			}
+		}
+		void operator=(optional &&o) {
+			if (has_some && o.has_some) {
+				**this = *std::move(o);
+			} else {
+				reset(*std::move(o));
+			}
 		}
 
 		T *get_pointer() { return has_some ? reinterpret_cast<T *>(&storage) : nullptr; }
