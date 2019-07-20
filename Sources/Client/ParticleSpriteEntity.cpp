@@ -19,9 +19,9 @@
  */
 
 #include "ParticleSpriteEntity.h"
-#include <Core/Debug.h>
 #include "GameMap.h"
 #include "World.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace client {
@@ -43,20 +43,13 @@ namespace spades {
 			additive = false;
 			blockHitAction = Delete;
 
-			if (image != NULL)
-				image->AddRef();
-
 			if (cli->GetWorld())
 				map = cli->GetWorld()->GetMap();
 			else
 				map = NULL;
 		}
 
-		ParticleSpriteEntity::~ParticleSpriteEntity() {
-			if (image != NULL) {
-				image->Release();
-			}
-		}
+		ParticleSpriteEntity::~ParticleSpriteEntity() {}
 
 		void ParticleSpriteEntity::SetLifeTime(float lifeTime, float fadeIn, float fadeOut) {
 			lifetime = lifeTime;
@@ -157,14 +150,6 @@ namespace spades {
 			renderer.SetColorAlphaPremultiplied(col);
 			renderer.AddSprite(*image, position, radius, angle);
 		}
-		void ParticleSpriteEntity::SetImage(IImage *img) {
-			if (img == image)
-				return;
-			if (image != NULL)
-				image->Release();
-			image = img;
-			if (image != NULL)
-				image->AddRef();
-		}
-	}
-}
+		void ParticleSpriteEntity::SetImage(IImage *newImage) { image = newImage; }
+	} // namespace client
+} // namespace spades

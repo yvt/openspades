@@ -36,7 +36,7 @@ namespace spades {
 			IRenderer &renderer;
 			Handle<GameMap> map;
 
-			IImage *image;
+			Handle<IImage> image;
 			Vector4 color;
 			bool additive;
 			BlockHitAction blockHitAction;
