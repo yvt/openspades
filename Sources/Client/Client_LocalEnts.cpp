@@ -159,8 +159,7 @@ namespace spades {
 			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {0.5f, 0.02f, 0.04f, 1.f};
 			for (int i = 0; i < 10; i++) {
-				ParticleSpriteEntity *ent =
-				  new ParticleSpriteEntity(this, img.GetPointerOrNull(), color);
+				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(v,
 				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                               SampleRandomFloat() - SampleRandomFloat(),
@@ -225,8 +224,7 @@ namespace spades {
 			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {c.x / 255.f, c.y / 255.f, c.z / 255.f, 1.f};
 			for (int i = 0; i < 7; i++) {
-				ParticleSpriteEntity *ent =
-				  new ParticleSpriteEntity(this, img.GetPointerOrNull(), color);
+				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
 				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                               SampleRandomFloat() - SampleRandomFloat(),
@@ -246,8 +244,7 @@ namespace spades {
 
 			if (distPowered < 32.f * 32.f) {
 				for (int i = 0; i < 16; i++) {
-					ParticleSpriteEntity *ent =
-					  new ParticleSpriteEntity(this, img.GetPointerOrNull(), color);
+					ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 					ent->SetTrajectory(origin,
 					                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 					                               SampleRandomFloat() - SampleRandomFloat(),
@@ -296,8 +293,7 @@ namespace spades {
 			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {c.x / 255.f, c.y / 255.f, c.z / 255.f, 1.f};
 			for (int i = 0; i < 8; i++) {
-				ParticleSpriteEntity *ent =
-				  new ParticleSpriteEntity(this, img.GetPointerOrNull(), color);
+				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
 				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                               SampleRandomFloat() - SampleRandomFloat(),
@@ -437,8 +433,7 @@ namespace spades {
 			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			color = MakeVector4(0.01, 0.03, 0, 1.f);
 			for (int i = 0; i < 42; i++) {
-				ParticleSpriteEntity *ent =
-				  new ParticleSpriteEntity(this, img.GetPointerOrNull(), color);
+				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				Vector3 dir = MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                          SampleRandomFloat() - SampleRandomFloat(),
 				                          SampleRandomFloat() - SampleRandomFloat());
@@ -491,8 +486,7 @@ namespace spades {
 			if ((int)cg_particles < 2)
 				color.w = .3f;
 			for (int i = 0; i < 7; i++) {
-				ParticleSpriteEntity *ent =
-				  new ParticleSpriteEntity(this, img.GetPointerOrNull(), color);
+				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
 				                   (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                                SampleRandomFloat() - SampleRandomFloat(),
@@ -512,8 +506,7 @@ namespace spades {
 			if ((int)cg_particles < 2)
 				color.w = .4f;
 			for (int i = 0; i < 16; i++) {
-				ParticleSpriteEntity *ent =
-				  new ParticleSpriteEntity(this, img.GetPointerOrNull(), color);
+				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
 				                   (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                                SampleRandomFloat() - SampleRandomFloat(),
@@ -556,8 +549,7 @@ namespace spades {
 			img = renderer->RegisterImage("Gfx/White.tga");
 			color = MakeVector4(1, 1, 1, 0.7f);
 			for (int i = 0; i < 42; i++) {
-				ParticleSpriteEntity *ent =
-				  new ParticleSpriteEntity(this, img.GetPointerOrNull(), color);
+				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				Vector3 dir = MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                          SampleRandomFloat() - SampleRandomFloat(),
 				                          -SampleRandomFloat() * 3.f);
@@ -592,8 +584,7 @@ namespace spades {
 			if ((int)cg_particles < 2)
 				color.w = .2f;
 			for (int i = 0; i < 2; i++) {
-				ParticleSpriteEntity *ent =
-				  new ParticleSpriteEntity(this, img.GetPointerOrNull(), color);
+				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
 				                   (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                                SampleRandomFloat() - SampleRandomFloat(),
@@ -613,8 +604,7 @@ namespace spades {
 			if ((int)cg_particles < 2)
 				color.w = .4f;
 			for (int i = 0; i < 6; i++) {
-				ParticleSpriteEntity *ent =
-				  new ParticleSpriteEntity(this, img.GetPointerOrNull(), color);
+				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				ent->SetTrajectory(origin,
 				                   (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                                SampleRandomFloat() - SampleRandomFloat(),
@@ -633,8 +623,7 @@ namespace spades {
 			img = renderer->RegisterImage("Gfx/White.tga");
 			color = MakeVector4(1, 1, 1, 0.7f);
 			for (int i = 0; i < 10; i++) {
-				ParticleSpriteEntity *ent =
-				  new ParticleSpriteEntity(this, img.GetPointerOrNull(), color);
+				ParticleSpriteEntity *ent = new ParticleSpriteEntity(this, img, color);
 				Vector3 dir = MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                          SampleRandomFloat() - SampleRandomFloat(),
 				                          -SampleRandomFloat() * 3.f);

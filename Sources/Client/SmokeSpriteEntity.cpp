@@ -63,7 +63,7 @@ namespace spades {
 		}
 
 		SmokeSpriteEntity::SmokeSpriteEntity(Client *c, Vector4 color, float fps, Type type)
-		    : ParticleSpriteEntity(c, &GetSequence(0, &c->GetRenderer(), type), color),
+		    : ParticleSpriteEntity(c, GetSequence(0, &c->GetRenderer(), type), color),
 		      fps(fps),
 		      type(type) {
 			frame = 0.f;
@@ -83,9 +83,9 @@ namespace spades {
 			}
 
 			int fId = (int)floorf(frame);
-			SetImage(&GetSequence(fId, &GetRenderer(), type));
+			SetImage(GetSequence(fId, &GetRenderer(), type));
 
 			return ParticleSpriteEntity::Update(dt);
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

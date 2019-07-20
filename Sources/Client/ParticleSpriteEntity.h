@@ -54,7 +54,7 @@ namespace spades {
 			float fadeOutDuration;
 
 		public:
-			ParticleSpriteEntity(Client *cli, IImage *image, Vector4 color);
+			ParticleSpriteEntity(Client *cli, Handle<IImage> image, Vector4 color);
 
 			~ParticleSpriteEntity();
 
@@ -74,7 +74,7 @@ namespace spades {
 
 			void SetBlockHitAction(BlockHitAction act) { blockHitAction = act; }
 
-			void SetImage(IImage *img);
+			void SetImage(Handle<IImage> img);
 			void SetColor(Vector4 col) { color = col; }
 
 			IRenderer &GetRenderer() { return renderer; }

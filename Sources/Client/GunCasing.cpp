@@ -116,7 +116,7 @@ namespace spades {
 						Vector3 pt = matrix.GetOrigin();
 						pt.z = 62.99f;
 						for (int i = 0; i < splats; i++) {
-							ParticleSpriteEntity *ent = new ParticleSpriteEntity(client, img.GetPointerOrNull(), col);
+							ParticleSpriteEntity *ent = new ParticleSpriteEntity(client, img, col);
 							ent->SetTrajectory(
 							  pt,
 							  MakeVector3(SampleRandomFloat() - SampleRandomFloat(),

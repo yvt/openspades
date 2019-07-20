@@ -25,7 +25,7 @@
 
 namespace spades {
 	namespace client {
-		ParticleSpriteEntity::ParticleSpriteEntity(Client *cli, IImage *image, Vector4 color)
+		ParticleSpriteEntity::ParticleSpriteEntity(Client *cli, Handle<IImage> image, Vector4 color)
 		    : renderer(cli->GetRenderer()), image(image), color(color) {
 			position = MakeVector3(0, 0, 0);
 			velocity = MakeVector3(0, 0, 0);
@@ -150,6 +150,6 @@ namespace spades {
 			renderer.SetColorAlphaPremultiplied(col);
 			renderer.AddSprite(*image, position, radius, angle);
 		}
-		void ParticleSpriteEntity::SetImage(IImage *newImage) { image = newImage; }
+		void ParticleSpriteEntity::SetImage(Handle<IImage> newImage) { image = newImage; }
 	} // namespace client
 } // namespace spades
