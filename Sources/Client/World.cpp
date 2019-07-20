@@ -111,7 +111,7 @@ namespace spades {
 
 			map = newMap;
 			if (map) {
-				mapWrapper.reset(new GameMapWrapper(*map));
+				mapWrapper = stmp::make_unique<GameMapWrapper>(*map);
 				mapWrapper->Rebuild();
 			}
 		}
@@ -470,7 +470,7 @@ namespace spades {
 		HitTestDebugger *World::GetHitTestDebugger() {
 			if (cg_debugHitTest) {
 				if (hitTestDebugger == nullptr) {
-					hitTestDebugger.reset(new HitTestDebugger(this));
+					hitTestDebugger = stmp::make_unique<HitTestDebugger>(this);
 				}
 				return hitTestDebugger.get();
 			}

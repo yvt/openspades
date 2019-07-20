@@ -39,6 +39,7 @@ namespace spades {
 			width = mp.Width();
 			height = mp.Height();
 			depth = mp.Depth();
+			// TODO: `stmp::make_unique` doesn't support array initialization yet
 			linkMap.reset(new uint8_t[width * height * depth]);
 			memset(linkMap.get(), 0, width * height * depth);
 		}

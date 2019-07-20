@@ -78,7 +78,7 @@ namespace spades {
 			rawDataWriter = StreamHandle{std::get<0>(pipe)};
 			auto rawDataReader = StreamHandle{std::get<1>(pipe)};
 
-			decodingThreadRunnable.reset(new Decoder(*this, rawDataReader));
+			decodingThreadRunnable = stmp::make_unique<Decoder>(*this, rawDataReader);
 
 			// Drop `rawDataReader` before the thread starts. `StreamHandle`'s internally
 			// ref-counted and it's not thread-safe. So, if we don't drop it here, there'll be
@@ -86,7 +86,7 @@ namespace spades {
 			// variable `rawDataReader`.
 			rawDataReader = StreamHandle{};
 
-			decodingThread.reset(new Thread(&*decodingThreadRunnable));
+			decodingThread = stmp::make_unique<Thread>(&*decodingThreadRunnable);
 			decodingThread->Start();
 		}
 

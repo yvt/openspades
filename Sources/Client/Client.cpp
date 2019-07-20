@@ -111,19 +111,20 @@ namespace spades {
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));
 
-			chatWindow.reset(
-			  new ChatWindow(this, &GetRenderer(), &fontManager->GetGuiFont(), false));
-			killfeedWindow.reset(
-			  new ChatWindow(this, &GetRenderer(), &fontManager->GetGuiFont(), true));
+			chatWindow = stmp::make_unique<ChatWindow>(this, &GetRenderer(),
+			                                           &fontManager->GetGuiFont(), false);
+			killfeedWindow =
+			  stmp::make_unique<ChatWindow>(this, &GetRenderer(), &fontManager->GetGuiFont(), true);
 
-			hurtRingView.reset(new HurtRingView(this));
-			centerMessageView.reset(new CenterMessageView(this, &fontManager->GetLargeFont()));
-			mapView.reset(new MapView(this, false));
-			largeMapView.reset(new MapView(this, true));
-			scoreboard.reset(new ScoreboardView(this));
-			limbo.reset(new LimboView(this));
-			paletteView.reset(new PaletteView(this));
-			tcView.reset(new TCProgressView(this));
+			hurtRingView = stmp::make_unique<HurtRingView>(this);
+			centerMessageView =
+			  stmp::make_unique<CenterMessageView>(this, &fontManager->GetLargeFont());
+			mapView = stmp::make_unique<MapView>(this, false);
+			largeMapView = stmp::make_unique<MapView>(this, true);
+			scoreboard = stmp::make_unique<ScoreboardView>(this);
+			limbo = stmp::make_unique<LimboView>(this);
+			paletteView = stmp::make_unique<PaletteView>(this);
+			tcView = stmp::make_unique<TCProgressView>(this);
 			scriptedUI.Set(new ClientUI(renderer.GetPointerOrNull(), audioDev.GetPointerOrNull(),
 			                            fontManager.GetPointerOrNull(), this),
 			               false);
@@ -334,7 +335,7 @@ namespace spades {
 			mumbleLink.setIdentity(playerName);
 
 			SPLog("Started connecting to '%s'", hostname.ToString(true).c_str());
-			net.reset(new NetClient(this));
+			net = stmp::make_unique<NetClient>(this);
 			net->Connect(hostname);
 
 			// decide log file name

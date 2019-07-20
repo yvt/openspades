@@ -116,7 +116,7 @@ namespace spades {
 						Vector3 pt = matrix.GetOrigin();
 						pt.z = 62.99f;
 						for (int i = 0; i < splats; i++) {
-							ParticleSpriteEntity *ent = new ParticleSpriteEntity(client, img, col);
+							auto ent = stmp::make_unique<ParticleSpriteEntity>(client, img, col);
 							ent->SetTrajectory(
 							  pt,
 							  MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
@@ -127,7 +127,7 @@ namespace spades {
 							ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 							ent->SetRadius(0.1f + SampleRandomFloat() * SampleRandomFloat() * 0.1f);
 							ent->SetLifeTime(2.f, 0.f, 1.f);
-							client->AddLocalEntity(ent);
+							client->AddLocalEntity(std::move(ent));
 						}
 					}
 

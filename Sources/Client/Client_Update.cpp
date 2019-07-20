@@ -1099,8 +1099,8 @@ namespace spades {
 				case SMG_WEAPON: vel = 360.f; break;
 				case SHOTGUN_WEAPON: vel = 500.f; break;
 			}
-			AddLocalEntity(new Tracer(this, muzzlePos, hitPos, vel));
-			AddLocalEntity(new MapViewTracer(muzzlePos, hitPos, vel));
+			AddLocalEntity(stmp::make_unique<Tracer>(this, muzzlePos, hitPos, vel));
+			AddLocalEntity(stmp::make_unique<MapViewTracer>(muzzlePos, hitPos, vel));
 		}
 
 		void Client::BlocksFell(std::vector<IntVector3> blocks) {
@@ -1108,8 +1108,7 @@ namespace spades {
 
 			if (blocks.empty())
 				return;
-			FallingBlock *b = new FallingBlock(this, blocks);
-			AddLocalEntity(b);
+			AddLocalEntity(stmp::make_unique<FallingBlock>(this, blocks));
 
 			if (!IsMuted()) {
 

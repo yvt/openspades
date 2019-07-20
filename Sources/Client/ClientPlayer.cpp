@@ -1259,11 +1259,11 @@ namespace spades {
 							default: break;
 						}
 
-						ILocalEntity *ent;
-						ent =
-						  new GunCasing(&client, model.GetPointerOrNull(), snd.GetPointerOrNull(),
-						                snd2.GetPointerOrNull(), origin, p.GetFront(), vel);
-						client.AddLocalEntity(ent);
+						auto ent = stmp::make_unique<GunCasing>(
+						  &client, model.GetPointerOrNull(), snd.GetPointerOrNull(),
+						  snd2.GetPointerOrNull(), origin, p.GetFront(), vel);
+
+						client.AddLocalEntity(std::move(ent));
 					}
 				}
 			}

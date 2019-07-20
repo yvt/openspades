@@ -419,7 +419,9 @@ namespace spades {
 
 			void SetWorld(World *);
 			World *GetWorld() const { return world.get(); }
-			void AddLocalEntity(ILocalEntity *ent) { localEntities.emplace_back(ent); }
+			void AddLocalEntity(std::unique_ptr<ILocalEntity> &&ent) {
+				localEntities.emplace_back(std::move(ent));
+			}
 
 			void MarkWorldUpdate();
 
