@@ -48,7 +48,7 @@ namespace spades {
 
 	DirectoryFileSystem::~DirectoryFileSystem() { SPADES_MARK_FUNCTION(); }
 
-	std::string DirectoryFileSystem::physicalPath(const std::string &lg) {
+	std::string DirectoryFileSystem::PathToPhysical(const std::string &lg) {
 		// TODO: check ".."?
 		return rootPath + '/' + lg;
 	}
@@ -82,7 +82,7 @@ namespace spades {
 		std::vector<std::string> ret;
 		std::wstring filePath;
 
-		std::wstring path = Utf8ToWString(physicalPath(p).c_str());
+		std::wstring path = Utf8ToWString(PathToPhysical(p).c_str());
 		// open the Win32 find handle.
 		h = FindFirstFileExW((path + L"\\*").c_str(), FindExInfoStandard, &fd,
 		                     FindExSearchNameMatch, NULL, 0);
@@ -116,7 +116,7 @@ namespace spades {
 #else
 		// open the directory.
 
-		std::string path = physicalPath(p);
+		std::string path = PathToPhysical(p);
 		DIR *dir = opendir(path.c_str());
 		struct dirent *ent;
 
@@ -149,7 +149,7 @@ namespace spades {
 	IStream *DirectoryFileSystem::OpenForReading(const char *fn) {
 		SPADES_MARK_FUNCTION();
 
-		std::string path = physicalPath(fn);
+		std::string path = PathToPhysical(fn);
 		SDL_RWops *f = SDL_RWFromFile(path.c_str(), "rb");
 		if (f == NULL) {
 			SPRaise("I/O error while opening %s for reading: %s", fn, SDL_GetError());
@@ -163,7 +163,7 @@ namespace spades {
 			SPRaise("Writing prohibited for root path '%s'", rootPath.c_str());
 		}
 
-		std::string path = physicalPath(fn);
+		std::string path = PathToPhysical(fn);
 
 		// create required directory
 		if (path.find_first_of("/\\") != std::string::npos) {
@@ -194,7 +194,7 @@ namespace spades {
 
 	bool DirectoryFileSystem::FileExists(const char *fn) {
 		SPADES_MARK_FUNCTION();
-		std::string path = physicalPath(fn);
+		std::string path = PathToPhysical(fn);
 		SDL_RWops *f = SDL_RWFromFile(path.c_str(), "rb");
 		if (f) {
 			SDL_RWclose(f);

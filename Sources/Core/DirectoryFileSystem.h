@@ -29,7 +29,7 @@ namespace spades {
 		std::string rootPath;
 		bool canWrite;
 
-		std::string physicalPath(const std::string &);
+		std::string PathToPhysical(const std::string &);
 
 	public:
 		DirectoryFileSystem(const std::string &root, bool canWrite = true);
