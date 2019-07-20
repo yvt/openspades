@@ -59,7 +59,6 @@ namespace spades {
 		/**
 		 * FreeType2 based font renderer.
 		 *
-
 		 * Warning: only one thread can access multiple FTFonts sharing the same FTFontSet
 		 *          at the same time.
 		 */
