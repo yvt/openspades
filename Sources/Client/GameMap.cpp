@@ -592,7 +592,7 @@ namespace spades {
 				}
 			}
 
-			return map.Unmanage();
+			return std::move(map).Unmanage();
 		}
 	} // namespace client
 } // namespace spades

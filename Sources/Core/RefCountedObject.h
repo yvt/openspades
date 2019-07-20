@@ -94,7 +94,7 @@ namespace spades {
 			if (ptr)
 				ptr->AddRef();
 		}
-		Handle(Handle<T> &&h) : ptr(h.MaybeUnmanage()) {}
+		Handle(Handle<T> &&h) : ptr(std::move(h).MaybeUnmanage()) {}
 		Handle(T &ref) : ptr{&ref} { ptr->AddRef(); }
 		Handle(stmp::optional<T &> ref) : ptr{ref.get_pointer()} { if (ptr)
 				ptr->AddRef();
@@ -158,7 +158,7 @@ namespace spades {
 		 * Convert a `Handle` to a raw pointer, transfering the ownership.
 		 * Throws an exception if the `Handle` is null.
 		 */
-		T *Unmanage() {
+		T *Unmanage() && {
 			SPAssert(ptr != NULL);
 			T *p = ptr;
 			ptr = NULL;
@@ -167,7 +167,7 @@ namespace spades {
 		/**
 		 * Convert a `Handle` to a raw pointer, transfering the ownership.
 		 */
-		T *MaybeUnmanage() {
+		T *MaybeUnmanage() && {
 			T *p = ptr;
 			ptr = NULL;
 			return p;

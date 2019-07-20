@@ -124,6 +124,6 @@ namespace spades {
 			voxelModel->ForceMaterial(*meta.forceMaterial);
 		}
 
-		return voxelModel.Unmanage();
+		return std::move(voxelModel).Unmanage();
 	}
 } // namespace spades

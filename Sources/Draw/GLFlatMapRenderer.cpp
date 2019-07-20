@@ -72,7 +72,7 @@ namespace spades {
 			} catch (...) {
 				throw;
 			}
-			return bmp.Unmanage();
+			return std::move(bmp).Unmanage();
 		}
 
 		void GLFlatMapRenderer::GameMapChanged(int x, int y, int z, client::GameMap *map) {

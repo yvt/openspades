@@ -79,7 +79,7 @@ namespace spades {
 						inPixels += pitch;
 					}
 				}
-				return bmp.Unmanage();
+				return std::move(bmp).Unmanage();
 			} catch (...) {
 				throw;
 			}

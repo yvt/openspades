@@ -142,7 +142,7 @@ namespace spades {
 			SPAssert(result);
 
 			if (result->gameMap) {
-				return result->gameMap.Unmanage();
+				return std::move(result->gameMap).Unmanage();
 			} else {
 				std::rethrow_exception(result->exceptionThrown);
 			}
