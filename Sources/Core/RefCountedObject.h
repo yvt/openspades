@@ -68,6 +68,8 @@ namespace spades {
 
 	public:
 		RefCountedObject();
+		RefCountedObject(const RefCountedObject &) = delete;
+		void operator=(const RefCountedObject &) = delete;
 
 		void AddRef();
 		void Release();
