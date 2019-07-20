@@ -100,7 +100,7 @@ namespace spades {
 				ptr->AddRef();
 		}
 		Handle(Handle<T> &&h) : ptr(h.MaybeUnmanage()) {}
-		Handle(T &ref) : ptr{&ptr} { ptr->AddRef(); }
+		Handle(T &ref) : ptr{&ref} { ptr->AddRef(); }
 		Handle(stmp::optional<T &> ref) : ptr{ref.get_pointer()} { if (ptr)
 				ptr->AddRef();
 		}
