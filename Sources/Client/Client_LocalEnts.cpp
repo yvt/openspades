@@ -187,7 +187,7 @@ namespace spades {
 				                   .8f, 0.f);
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(.5f + SampleRandomFloat() * SampleRandomFloat() * 0.2f, 2.f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				ent->SetLifeTime(.20f + SampleRandomFloat() * .2f, 0.06f, .20f);
 				localEntities.emplace_back(ent);
 			}
@@ -204,7 +204,7 @@ namespace spades {
 				                   .8f, 0.f);
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(.7f + SampleRandomFloat() * SampleRandomFloat() * 0.2f, 2.f, 0.1f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				ent->SetLifeTime(.80f + SampleRandomFloat() * 0.4f, 0.06f, 1.0f);
 				localEntities.emplace_back(ent);
 			}
@@ -235,7 +235,7 @@ namespace spades {
 				ent->SetRadius(0.2f + SampleRandomFloat() * SampleRandomFloat() * 0.1f);
 				ent->SetLifeTime(2.f, 0.f, 1.f);
 				if (distPowered < 16.f * 16.f)
-					ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);
+					ent->SetBlockHitAction(BlockHitAction::BounceWeak);
 				localEntities.emplace_back(ent);
 			}
 
@@ -255,7 +255,7 @@ namespace spades {
 					ent->SetRadius(0.1f + SampleRandomFloat() * SampleRandomFloat() * 0.14f);
 					ent->SetLifeTime(2.f, 0.f, 1.f);
 					if (distPowered < 16.f * 16.f)
-						ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);
+						ent->SetBlockHitAction(BlockHitAction::BounceWeak);
 					localEntities.emplace_back(ent);
 				}
 			}
@@ -273,7 +273,7 @@ namespace spades {
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(.6f + SampleRandomFloat() * SampleRandomFloat() * 0.2f, 0.8f);
 				ent->SetLifeTime(.3f + SampleRandomFloat() * .3f, 0.06f, .4f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				localEntities.emplace_back(ent);
 			}
 		}
@@ -303,7 +303,7 @@ namespace spades {
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(0.3f + SampleRandomFloat() * SampleRandomFloat() * 0.2f);
 				ent->SetLifeTime(2.f, 0.f, 1.f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);
+				ent->SetBlockHitAction(BlockHitAction::BounceWeak);
 				localEntities.emplace_back(ent);
 			}
 		}
@@ -336,7 +336,7 @@ namespace spades {
 				                   1.f, 0.f);
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(.4f, 3.f, 0.0000005f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				ent->SetLifeTime(0.2f + SampleRandomFloat() * 0.1f, 0.f, .30f);
 				localEntities.emplace_back(ent);
 			}
@@ -401,7 +401,7 @@ namespace spades {
 				                   1.f, 0.f);
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(.6f + SampleRandomFloat() * SampleRandomFloat() * 0.4f, 2.f, .2f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				ent->SetLifeTime(1.8f + SampleRandomFloat() * 0.1f, 0.f, .20f);
 				localEntities.emplace_back(ent);
 			}
@@ -419,7 +419,7 @@ namespace spades {
 				  1.f, 0.f);
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(1.5f + SampleRandomFloat() * SampleRandomFloat() * 0.8f, 0.2f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				switch ((int)cg_particles) {
 					case 1: ent->SetLifeTime(0.8f + SampleRandomFloat() * 1.f, 0.1f, 8.f); break;
 					case 2: ent->SetLifeTime(1.5f + SampleRandomFloat() * 2.f, 0.1f, 8.f); break;
@@ -443,7 +443,7 @@ namespace spades {
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(radius);
 				ent->SetLifeTime(3.5f + SampleRandomFloat() * 2.f, 0.f, 1.f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);
+				ent->SetBlockHitAction(BlockHitAction::BounceWeak);
 				localEntities.emplace_back(ent);
 			}
 
@@ -461,7 +461,7 @@ namespace spades {
 				                   1.f, 0.f);
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(.3f + SampleRandomFloat() * SampleRandomFloat() * 0.4f, 3.f, .1f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				ent->SetLifeTime(.18f + SampleRandomFloat() * 0.03f, 0.f, .10f);
 				// ent->SetAdditive(true);
 				localEntities.emplace_back(ent);
@@ -495,7 +495,7 @@ namespace spades {
 				                   .3f, .6f);
 				ent->SetRotation(0.f);
 				ent->SetRadius(1.5f + SampleRandomFloat() * SampleRandomFloat() * 0.4f, 1.3f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				ent->SetLifeTime(3.f + SampleRandomFloat() * 0.3f, 0.f, .60f);
 				localEntities.emplace_back(ent);
 			}
@@ -515,7 +515,7 @@ namespace spades {
 				                   1.f, 1.f);
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(0.9f + SampleRandomFloat() * SampleRandomFloat() * 0.4f, 0.7f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				ent->SetLifeTime(3.f + SampleRandomFloat() * 0.3f, .7f, .60f);
 				localEntities.emplace_back(ent);
 			}
@@ -535,7 +535,7 @@ namespace spades {
 				  1.f, 0.f);
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(1.4f + SampleRandomFloat() * SampleRandomFloat() * 0.8f, 0.2f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				switch ((int)cg_particles) {
 					case 1: ent->SetLifeTime(3.f + SampleRandomFloat() * 5.f, 0.1f, 8.f); break;
 					case 2:
@@ -560,7 +560,7 @@ namespace spades {
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(radius);
 				ent->SetLifeTime(3.5f + SampleRandomFloat() * 2.f, 0.f, 1.f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Delete);
+				ent->SetBlockHitAction(BlockHitAction::Delete);
 				localEntities.emplace_back(ent);
 			}
 
@@ -593,7 +593,7 @@ namespace spades {
 				                   .3f, .6f);
 				ent->SetRotation(0.f);
 				ent->SetRadius(0.6f + SampleRandomFloat() * SampleRandomFloat() * 0.4f, .7f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				ent->SetLifeTime(3.f + SampleRandomFloat() * 0.3f, 0.1f, .60f);
 				localEntities.emplace_back(ent);
 			}
@@ -613,7 +613,7 @@ namespace spades {
 				                   1.f, 1.f);
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(0.6f + SampleRandomFloat() * SampleRandomFloat() * 0.6f, 0.6f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+				ent->SetBlockHitAction(BlockHitAction::Ignore);
 				ent->SetLifeTime(3.f + SampleRandomFloat() * 0.3f, SampleRandomFloat() * 0.3f,
 				                 .60f);
 				localEntities.emplace_back(ent);
@@ -633,7 +633,7 @@ namespace spades {
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 				ent->SetRadius(radius);
 				ent->SetLifeTime(3.5f + SampleRandomFloat() * 2.f, 0.f, 1.f);
-				ent->SetBlockHitAction(ParticleSpriteEntity::Delete);
+				ent->SetBlockHitAction(BlockHitAction::Delete);
 				localEntities.emplace_back(ent);
 			}
 

@@ -179,7 +179,7 @@ namespace spades {
 								  1.f, 0.f);
 								ent->SetRotation(getRandom() * (float)M_PI * 2.f);
 								ent->SetRadius(1.0f, 0.5f);
-								ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+								ent->SetBlockHitAction(BlockHitAction::Ignore);
 								ent->SetLifeTime(1.0f + getRandom() * 0.5f, 0.f, 1.0f);
 								client->AddLocalEntity(ent);
 							}
@@ -198,7 +198,7 @@ namespace spades {
 								ent->SetRadius(0.35f + getRandom() * getRandom() * 0.1f);
 								ent->SetLifeTime(2.f, 0.f, 1.f);
 								if (usePrecisePhysics)
-									ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);
+									ent->SetBlockHitAction(BlockHitAction::BounceWeak);
 								client->AddLocalEntity(ent);
 							}
 						}

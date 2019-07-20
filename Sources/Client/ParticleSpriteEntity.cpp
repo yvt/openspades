@@ -41,7 +41,7 @@ namespace spades {
 			fadeInDuration = .1f;
 			fadeOutDuration = .5f;
 			additive = false;
-			blockHitAction = Delete;
+			blockHitAction = BlockHitAction::Delete;
 
 			if (cli->GetWorld())
 				map = cli->GetWorld()->GetMap();
@@ -87,9 +87,9 @@ namespace spades {
 			velocity.z += 32.f * dt * gravityScale;
 
 			// TODO: control clip action
-			if (blockHitAction != Ignore && map) {
+			if (blockHitAction != BlockHitAction::Ignore && map) {
 				if (map->ClipWorld(position.x, position.y, position.z)) {
-					if (blockHitAction == Delete) {
+					if (blockHitAction == BlockHitAction::Delete) {
 						return false;
 					} else {
 						IntVector3 lp2 = lastPos.Floor();

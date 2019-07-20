@@ -20,18 +20,17 @@
 
 #pragma once
 
-#include <Core/Math.h>
 #include "Client.h"
 #include "ILocalEntity.h"
+#include <Core/Math.h>
 
 namespace spades {
 	namespace client {
 		class IImage;
 
-		class ParticleSpriteEntity : public ILocalEntity {
-		public:
-			enum BlockHitAction { Delete, Ignore, BounceWeak };
+		enum class BlockHitAction { Delete, Ignore, BounceWeak };
 
+		class ParticleSpriteEntity : public ILocalEntity {
 		private:
 			IRenderer &renderer;
 			Handle<GameMap> map;
@@ -79,5 +78,5 @@ namespace spades {
 
 			IRenderer &GetRenderer() { return renderer; }
 		};
-	}
-}
+	} // namespace client
+} // namespace spades
