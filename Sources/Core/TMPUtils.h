@@ -85,15 +85,19 @@ namespace stmp {
 		void operator=(const optional &o) {
 			if (has_some && o.has_some) {
 				**this = *o;
-			} else {
+			} else if (o.has_some) {
 				reset(*o);
+			} else {
+				reset();
 			}
 		}
 		void operator=(optional &&o) {
 			if (has_some && o.has_some) {
 				**this = *std::move(o);
-			} else {
+			} else if (o.has_some) {
 				reset(*std::move(o));
+			} else {
+				reset();
 			}
 		}
 
