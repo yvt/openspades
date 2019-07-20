@@ -166,7 +166,7 @@ namespace spades {
 			if (m_thread) {
 				m_thread->Join();
 			} else {
-				m_thread.reset(new RequestThread{*this});
+				m_thread = stmp::make_unique<RequestThread>(*this);
 			}
 			m_thread->Start();
 		}
@@ -341,7 +341,7 @@ namespace spades {
 			std::string updateFeedType = jsonUpdateFeedType.asString();
 
 			if (updateFeedType == "Standard") {
-				m_updateFeed.reset(new StandardUpdateFeed(*this, jsonUpdateFeed));
+				m_updateFeed = stmp::make_unique<StandardUpdateFeed>(*this, jsonUpdateFeed);
 			} else {
 				SPRaise("Failed to parse PackageInfo.json: root.UpdateFeed.Type contains an "
 				        "unrecognizable value.");
