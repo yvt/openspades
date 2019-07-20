@@ -385,8 +385,6 @@ namespace spades {
 
 			Player &player = GetWorld()->GetLocalPlayer().value();
 
-			ClientPlayer &clientPlayer = GetLocalClientPlayer().value();
-
 			PlayerInput inp = playerInput;
 			WeaponInput winp = weapInput;
 

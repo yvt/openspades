@@ -592,7 +592,6 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			Player &p = GetWorld()->GetLocalPlayer().value();
-			IFont *font;
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 

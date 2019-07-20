@@ -724,7 +724,7 @@ namespace spades {
 			int ext_count = reader.ReadByte();
 			for (int i = 0; i < ext_count; i++) {
 				int ext_id = reader.ReadByte();
-				int ext_version = reader.ReadByte();
+				// int ext_version = reader.ReadByte();
 
 				auto got = implementedExtensions.find(ext_id);
 
