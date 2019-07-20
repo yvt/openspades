@@ -37,11 +37,7 @@ namespace spades {
 				chunkInvalid.push_back(false);
 
 			Handle<Bitmap> bmp(GenerateBitmap(0, 0, m->Width(), m->Height()), false);
-			try {
-				image = static_cast<GLImage *>(renderer->CreateImage(bmp));
-			} catch (...) {
-				throw;
-			}
+			image = renderer->CreateImage(*bmp).Cast<GLImage>();
 
 			image->Bind(IGLDevice::Texture2D);
 			IGLDevice *dev = renderer->GetGLDevice();
@@ -51,7 +47,7 @@ namespace spades {
 			                  IGLDevice::Nearest);
 		}
 
-		GLFlatMapRenderer::~GLFlatMapRenderer() { image->Release(); }
+		GLFlatMapRenderer::~GLFlatMapRenderer() {}
 
 		Bitmap *GLFlatMapRenderer::GenerateBitmap(int mx, int my, int w, int h) {
 			SPADES_MARK_FUNCTION();
@@ -119,7 +115,7 @@ namespace spades {
 				chunkInvalid[i] = false;
 			}
 
-			renderer->DrawImage(image, dest, src);
+			renderer->DrawImage(*image, dest, src);
 		}
 	}
 }

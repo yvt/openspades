@@ -618,7 +618,7 @@ namespace spades {
 			ModelRenderParam param;
 			param.customColor = color;
 
-			IModel *model;
+			Handle<IModel> model;
 			Matrix4 scaler = Matrix4::Scale(.1f);
 
 			// draw torso
@@ -639,7 +639,7 @@ namespace spades {
 				param.matrix = torso * scaler;
 
 				model = renderer.RegisterModel("Models/Player/Torso.kv6");
-				renderer.RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 			}
 			// draw Head
 			{
@@ -658,7 +658,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(-aX, aY, -aZ, headBase) * scaler;
 
-				renderer.RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 			}
 
 			// draw Arms
@@ -677,7 +677,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, arm1Base) * scaler;
 
-				renderer.RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 
 				aZ = nodes[Arm2].pos - nodes[Torso2].pos;
 				aZ = aZ.Normalize();
@@ -686,7 +686,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, arm2Base) * scaler;
 
-				renderer.RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 			}
 
 			// draw Leg
@@ -705,7 +705,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, leg1Base) * scaler;
 
-				renderer.RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 
 				aZ = nodes[Leg2].pos - nodes[Torso4].pos;
 				aZ = aZ.Normalize();
@@ -714,7 +714,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, leg2Base) * scaler;
 
-				renderer.RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 			}
 		}
 

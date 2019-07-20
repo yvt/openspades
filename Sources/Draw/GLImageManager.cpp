@@ -73,7 +73,7 @@ namespace spades {
 
 			Handle<Bitmap> bmp(Bitmap::Load(name), false);
 
-			return GLImage::FromBitmap(bmp, device);
+			return GLImage::FromBitmap(*bmp, device).Unmanage();
 		}
 
 		// draw all imaegs so that all textures are resident

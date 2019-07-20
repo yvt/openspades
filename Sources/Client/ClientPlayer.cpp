@@ -88,13 +88,13 @@ namespace spades {
 			void Init() { OnProhibitedAction(); }
 			void Shutdown() { OnProhibitedAction(); }
 
-			IImage *RegisterImage(const char *filename) { return base->RegisterImage(filename); }
-			IModel *RegisterModel(const char *filename) { return base->RegisterModel(filename); }
+			Handle<IImage> RegisterImage(const char *filename) { return base->RegisterImage(filename); }
+			Handle<IModel> RegisterModel(const char *filename) { return base->RegisterModel(filename); }
 
-			IImage *CreateImage(Bitmap *bmp) { return base->CreateImage(bmp); }
-			IModel *CreateModel(VoxelModel *m) { return base->CreateModel(m); }
+			Handle<IImage> CreateImage(Bitmap &bmp) { return base->CreateImage(bmp); }
+			Handle<IModel> CreateModel(VoxelModel &m) { return base->CreateModel(m); }
 
-			void SetGameMap(GameMap *) { OnProhibitedAction(); }
+			void SetGameMap(stmp::optional<GameMap &>) { OnProhibitedAction(); }
 
 			void SetFogDistance(float) { OnProhibitedAction(); }
 			void SetFogColor(Vector3) { OnProhibitedAction(); }
@@ -108,13 +108,8 @@ namespace spades {
 				}
 			}
 
-			void RenderModel(IModel *model, const ModelRenderParam &_p) {
+			void RenderModel(IModel &model, const ModelRenderParam &_p) {
 				ModelRenderParam p = _p;
-
-				if (!model) {
-					SPInvalidArgument("model");
-					return;
-				}
 
 				if (p.depthHack && !allowDepthHack) {
 					OnProhibitedAction();
@@ -133,20 +128,20 @@ namespace spades {
 					return;
 				}
 
-				auto bounds = (p.matrix * OBB3(model->GetBoundingBox())).GetBoundingAABB();
+				auto bounds = (p.matrix * OBB3(model.GetBoundingBox())).GetBoundingAABB();
 				if (CheckVisibility(bounds)) {
 					base->RenderModel(model, p);
 				}
 			}
 			void AddDebugLine(Vector3 a, Vector3 b, Vector4 color) { OnProhibitedAction(); }
 
-			void AddSprite(IImage *image, Vector3 center, float radius, float rotation) {
+			void AddSprite(IImage &image, Vector3 center, float radius, float rotation) {
 				Vector3 rad(radius * 1.5f, radius * 1.5f, radius * 1.5f);
 				if (CheckVisibility(AABB3(center - rad, center + rad))) {
 					base->AddSprite(image, center, radius, rotation);
 				}
 			}
-			void AddLongSprite(IImage *image, Vector3 p1, Vector3 p2, float radius) {
+			void AddLongSprite(IImage &image, Vector3 p1, Vector3 p2, float radius) {
 				Vector3 rad(radius * 1.5f, radius * 1.5f, radius * 1.5f);
 				AABB3 bounds1(p1 - rad, p1 + rad);
 				AABB3 bounds2(p2 - rad, p2 + rad);
@@ -169,31 +164,31 @@ namespace spades {
 			/** Sets color for image drawing. Always alpha premultiplied. */
 			void SetColorAlphaPremultiplied(Vector4 col) { base->SetColorAlphaPremultiplied(col); }
 
-			void DrawImage(IImage *img, const Vector2 &outTopLeft) {
+			void DrawImage(stmp::optional<IImage &> img, const Vector2 &outTopLeft) {
 				if (allowDepthHack)
 					base->DrawImage(img, outTopLeft);
 				else
 					OnProhibitedAction();
 			}
-			void DrawImage(IImage *img, const AABB2 &outRect) {
+			void DrawImage(stmp::optional<IImage &> img, const AABB2 &outRect) {
 				if (allowDepthHack)
 					base->DrawImage(img, outRect);
 				else
 					OnProhibitedAction();
 			}
-			void DrawImage(IImage *img, const Vector2 &outTopLeft, const AABB2 &inRect) {
+			void DrawImage(stmp::optional<IImage &> img, const Vector2 &outTopLeft, const AABB2 &inRect) {
 				if (allowDepthHack)
 					base->DrawImage(img, outTopLeft, inRect);
 				else
 					OnProhibitedAction();
 			}
-			void DrawImage(IImage *img, const AABB2 &outRect, const AABB2 &inRect) {
+			void DrawImage(stmp::optional<IImage &> img, const AABB2 &outRect, const AABB2 &inRect) {
 				if (allowDepthHack)
 					base->DrawImage(img, outRect, inRect);
 				else
 					OnProhibitedAction();
 			}
-			void DrawImage(IImage *img, const Vector2 &outTopLeft, const Vector2 &outTopRight,
+			void DrawImage(stmp::optional<IImage &> img, const Vector2 &outTopLeft, const Vector2 &outTopRight,
 			               const Vector2 &outBottomLeft, const AABB2 &inRect) {
 				if (allowDepthHack)
 					base->DrawImage(img, outTopLeft, outTopRight, outBottomLeft, inRect);
@@ -209,9 +204,9 @@ namespace spades {
 
 			void Flip() { OnProhibitedAction(); }
 
-			Bitmap *ReadBitmap() {
+			Handle<Bitmap> ReadBitmap() {
 				OnProhibitedAction();
-				return nullptr;
+				return {};
 			}
 
 			float ScreenWidth() { return base->ScreenWidth(); }
@@ -679,7 +674,7 @@ namespace spades {
 				// add glare
 				renderer->SetColorAlphaPremultiplied(MakeVector4(1, .7f, .5f, 0) * brightness *
 				                                     .3f);
-				renderer->AddSprite(renderer->RegisterImage("Gfx/Glare.png"),
+				renderer->AddSprite(*renderer->RegisterImage("Gfx/Glare.png"),
 				                    (eyeMatrix * MakeVector3(0, 0.3f, -0.3f)).GetXYZ(), .8f, 0.f);
 			}
 
@@ -756,8 +751,8 @@ namespace spades {
 				ModelRenderParam param;
 				param.depthHack = true;
 
-				IModel *model = renderer->RegisterModel("Models/Player/Arm.kv6");
-				IModel *model2 = renderer->RegisterModel("Models/Player/UpperArm.kv6");
+				Handle<IModel> model = renderer->RegisterModel("Models/Player/Arm.kv6");
+				Handle<IModel> model2 = renderer->RegisterModel("Models/Player/UpperArm.kv6");
 
 				IntVector3 col = p.GetColor();
 				param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
@@ -797,7 +792,7 @@ namespace spades {
 						mat = eyeMatrix * mat;
 
 						param.matrix = mat;
-						renderer->RenderModel(model, param);
+						renderer->RenderModel(*model, param);
 					}
 
 					{
@@ -812,7 +807,7 @@ namespace spades {
 						mat = eyeMatrix * mat;
 
 						param.matrix = mat;
-						renderer->RenderModel(model2, param);
+						renderer->RenderModel(*model2, param);
 					}
 				}
 			}
@@ -833,8 +828,8 @@ namespace spades {
 					IntVector3 col = p.GetColor();
 					param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 
-					IModel *model = renderer->RegisterModel("Models/Player/Dead.kv6");
-					renderer->RenderModel(model, param);
+					Handle<IModel> model = renderer->RegisterModel("Models/Player/Dead.kv6");
+					renderer->RenderModel(*model, param);
 				}
 				return;
 			}
@@ -870,7 +865,7 @@ namespace spades {
 			}
 
 			ModelRenderParam param;
-			IModel *model;
+			Handle<IModel> model;
 			Vector3 front = p.GetFront();
 			IntVector3 col = p.GetColor();
 			param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
@@ -907,16 +902,16 @@ namespace spades {
 
 				model = renderer->RegisterModel("Models/Player/LegCrouch.kv6");
 				param.matrix = leg1 * scaler;
-				renderer->RenderModel(model, param);
+				renderer->RenderModel(*model, param);
 				param.matrix = leg2 * scaler;
-				renderer->RenderModel(model, param);
+				renderer->RenderModel(*model, param);
 
 				torso = Matrix4::Translate(0.f, 0.f, -0.55f);
 				torso = lower * torso;
 
 				model = renderer->RegisterModel("Models/Player/TorsoCrouch.kv6");
 				param.matrix = torso * scaler;
-				renderer->RenderModel(model, param);
+				renderer->RenderModel(*model, param);
 
 				head = Matrix4::Translate(0.f, 0.f, -0.0f);
 				head = torso * head;
@@ -941,16 +936,16 @@ namespace spades {
 
 				model = renderer->RegisterModel("Models/Player/Leg.kv6");
 				param.matrix = leg1 * scaler;
-				renderer->RenderModel(model, param);
+				renderer->RenderModel(*model, param);
 				param.matrix = leg2 * scaler;
-				renderer->RenderModel(model, param);
+				renderer->RenderModel(*model, param);
 
 				torso = Matrix4::Translate(0.f, 0.f, -1.0f);
 				torso = lower * torso;
 
 				model = renderer->RegisterModel("Models/Player/Torso.kv6");
 				param.matrix = torso * scaler;
-				renderer->RenderModel(model, param);
+				renderer->RenderModel(*model, param);
 
 				head = Matrix4::Translate(0.f, 0.f, -0.0f);
 				head = torso * head;
@@ -973,13 +968,13 @@ namespace spades {
 
 			model = renderer->RegisterModel("Models/Player/Arms.kv6");
 			param.matrix = arms * scaler;
-			renderer->RenderModel(model, param);
+			renderer->RenderModel(*model, param);
 
 			head = head * Matrix4::Rotate(MakeVector3(1, 0, 0), pitch);
 
 			model = renderer->RegisterModel("Models/Player/Head.kv6");
 			param.matrix = head * scaler;
-			renderer->RenderModel(model, param);
+			renderer->RenderModel(*model, param);
 
 			// draw tool
 			{
@@ -1009,7 +1004,7 @@ namespace spades {
 
 						model = renderer->RegisterModel("Models/MapObjects/Intel.kv6");
 						param.matrix = mIntel * scaler;
-						renderer->RenderModel(model, param);
+						renderer->RenderModel(*model, param);
 
 						param.customColor =
 						  MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
@@ -1219,7 +1214,7 @@ namespace spades {
 			if (cg_ejectBrass) {
 				float dist = (player.GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
 				if (dist < 130.f * 130.f) {
-					IModel *model = NULL;
+					Handle<IModel> model;
 					Handle<IAudioChunk> snd = NULL;
 					Handle<IAudioChunk> snd2 = NULL;
 					switch (player.GetWeapon().GetWeaponType()) {

@@ -39,14 +39,14 @@ namespace spades {
 			blurProgram = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 			scannerProgram = renderer->RegisterProgram("Shaders/LensFlare/Scanner.program");
 			drawProgram = renderer->RegisterProgram("Shaders/LensFlare/Draw.program");
-			flare1 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/1.png");
-			flare2 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/2.png");
-			flare3 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/3.png");
-			flare4 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/4.jpg");
-			mask1 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/mask1.png");
-			mask2 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/mask2.png");
-			mask3 = (GLImage *)renderer->RegisterImage("Gfx/LensFlare/mask3.png");
-			white = (GLImage *)renderer->RegisterImage("Gfx/White.tga");
+			flare1 = renderer->RegisterImage("Gfx/LensFlare/1.png").Cast<GLImage>();
+			flare2 = renderer->RegisterImage("Gfx/LensFlare/2.png").Cast<GLImage>();
+			flare3 = renderer->RegisterImage("Gfx/LensFlare/3.png").Cast<GLImage>();
+			flare4 = renderer->RegisterImage("Gfx/LensFlare/4.jpg").Cast<GLImage>();
+			mask1 = renderer->RegisterImage("Gfx/LensFlare/mask1.png").Cast<GLImage>();
+			mask2 = renderer->RegisterImage("Gfx/LensFlare/mask2.png").Cast<GLImage>();
+			mask3 = renderer->RegisterImage("Gfx/LensFlare/mask3.png").Cast<GLImage>();
+			white = renderer->RegisterImage("Gfx/White.tga").Cast<GLImage>();
 		}
 
 		GLColorBuffer GLLensFlareFilter::Blur(GLColorBuffer buffer, float spread) {

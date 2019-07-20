@@ -58,7 +58,7 @@ namespace spades {
 			  renderer->RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
 			shadowMapProgram =
 			  renderer->RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
-			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
+			aoImage = renderer->RegisterImage("Gfx/AmbientOcclusion.png").Cast<GLImage>();
 
 			buffer = device->GenBuffer();
 			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
@@ -96,7 +96,6 @@ namespace spades {
 		GLOptimizedVoxelModel::~GLOptimizedVoxelModel() {
 			SPADES_MARK_FUNCTION();
 
-			image->Release();
 			device->DeleteBuffer(idxBuffer);
 			device->DeleteBuffer(buffer);
 		}
@@ -137,7 +136,7 @@ namespace spades {
 
 			std::vector<uint16_t>().swap(bmpIndex);
 
-			image = static_cast<GLImage *>(renderer->CreateImage(bmp));
+			image = renderer->CreateImage(*bmp).Cast<GLImage>();
 		}
 
 		uint8_t GLOptimizedVoxelModel::calcAOID(VoxelModel *m, int x, int y, int z, int ux, int uy,

@@ -30,8 +30,8 @@
 
 namespace spades {
 	namespace draw {
-		SWFlatMapRenderer::SWFlatMapRenderer(SWRenderer *r, client::GameMap *map)
-		    : r(r), map(map), w(map->Width()), h(map->Height()), needsUpdate(true) {
+		SWFlatMapRenderer::SWFlatMapRenderer(SWRenderer *r, Handle<client::GameMap> inMap)
+		    : r(r), map(std::move(inMap)), w(map->Width()), h(map->Height()), needsUpdate(true) {
 			SPADES_MARK_FUNCTION();
 
 			if (w & 31) {

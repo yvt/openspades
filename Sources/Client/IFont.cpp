@@ -176,10 +176,10 @@ namespace spades {
 		    : renderer(renderer), manager(manager) {
 			for (auto font = manager->fonts.begin(); font != manager->fonts.end(); ++font) {
 				auto imgPath = (*font)->imagePath;
-				auto *img = renderer->RegisterImage(imgPath.c_str()); // addref'd
+				auto img = renderer->RegisterImage(imgPath.c_str()).Unmanage();
 				images.push_back(img);
 			}
-			whiteImage.Set(renderer->RegisterImage("Gfx/White.tga"), false);
+			whiteImage = renderer->RegisterImage("Gfx/White.tga");
 
 			// SW renderer doesn't perform linear interpolation on
 			// rendering images, so size rounding must be done to

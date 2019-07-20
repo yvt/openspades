@@ -47,7 +47,7 @@ namespace spades {
 			program = renderer->RegisterProgram("Shaders/VoxelModel.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/VoxelModelDynamicLit.program");
 			shadowMapProgram = renderer->RegisterProgram("Shaders/VoxelModelShadowMap.program");
-			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
+			aoImage = renderer->RegisterImage("Gfx/AmbientOcclusion.png").Cast<GLImage>();
 
 			BuildVertices(m);
 

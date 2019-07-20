@@ -73,7 +73,7 @@ namespace spades {
 			depthonlyProgram = renderer->RegisterProgram("Shaders/BasicBlockDepthOnly.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
 			backfaceProgram = renderer->RegisterProgram("Shaders/BackFaceBlock.program");
-			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
+			aoImage = renderer->RegisterImage("Gfx/AmbientOcclusion.png").Cast<GLImage>();
 
 			static const uint8_t squareVertices[] = {0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1};
 			squareVertexBuffer = device->GenBuffer();

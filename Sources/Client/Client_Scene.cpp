@@ -494,7 +494,7 @@ namespace spades {
 		void Client::AddGrenadeToScene(Grenade &g) {
 			SPADES_MARK_FUNCTION();
 
-			IModel *model;
+			Handle<IModel> model;
 			model = renderer->RegisterModel("Models/Weapons/Grenade/Grenade.kv6");
 
 			if (g.GetPosition().z > 63.f) {
@@ -512,7 +512,7 @@ namespace spades {
 			mat = Matrix4::Translate(position) * mat;
 			param.matrix = mat;
 
-			renderer->RenderModel(model, param);
+			renderer->RenderModel(*model, param);
 		}
 
 		void Client::AddDebugObjectToScene(const spades::OBB3 &obb, const Vector4 &color) {
@@ -547,8 +547,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			CTFGameMode &mode = dynamic_cast<CTFGameMode &>(world->GetMode().value());
 			int tId;
-			IModel *base = renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
-			IModel *intel = renderer->RegisterModel("Models/MapObjects/Intel.kv6");
+			Handle<IModel> base = renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
+			Handle<IModel> intel = renderer->RegisterModel("Models/MapObjects/Intel.kv6");
 			for (tId = 0; tId < 2; tId++) {
 				CTFGameMode::Team &team = mode.GetTeam(tId);
 				IntVector3 col = world->GetTeam(tId).color;
@@ -560,13 +560,13 @@ namespace spades {
 				// draw base
 				param.matrix = Matrix4::Translate(team.basePos);
 				param.matrix = param.matrix * Matrix4::Scale(.3f);
-				renderer->RenderModel(base, param);
+				renderer->RenderModel(*base, param);
 
 				// draw flag
 				if (!mode.GetTeam(1 - tId).hasIntel) {
 					param.matrix = Matrix4::Translate(team.flagPos);
 					param.matrix = param.matrix * Matrix4::Scale(.1f);
-					renderer->RenderModel(intel, param);
+					renderer->RenderModel(*intel, param);
 				}
 			}
 		}
@@ -575,7 +575,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			TCGameMode &mode = dynamic_cast<TCGameMode &>(world->GetMode().value());
 			int tId;
-			IModel *base = renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
+			Handle<IModel> base = renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
 			int cnt = mode.GetNumTerritories();
 			for (tId = 0; tId < cnt; tId++) {
 				TCGameMode::Territory &t = mode.GetTerritory(tId);
@@ -593,7 +593,7 @@ namespace spades {
 				// draw base
 				param.matrix = Matrix4::Translate(t.pos);
 				param.matrix = param.matrix * Matrix4::Scale(.3f);
-				renderer->RenderModel(base, param);
+				renderer->RenderModel(*base, param);
 			}
 		}
 
@@ -657,9 +657,9 @@ namespace spades {
 						if ((int)blocks.size() > p->GetNumBlocks())
 							color = MakeVector3(1.f, 0.f, 0.f);
 
-						IModel *curLine =
+						Handle<IModel> curLine =
 						  renderer->RegisterModel("Models/MapObjects/BlockCursorLine.kv6");
-						IModel *curSingle =
+						Handle<IModel> curSingle =
 						  renderer->RegisterModel("Models/MapObjects/BlockCursorSingle.kv6");
 						for (size_t i = 0; i < blocks.size(); i++) {
 							IntVector3 &v = blocks[i];
@@ -676,7 +676,7 @@ namespace spades {
 							    1.f / 24.f +
 							    (solid ? 0.0005f
 							           : 0.f)); // make cursor larger if needed to stop z-fighting
-							renderer->RenderModel(blocks.size() > 1 ? curLine : curSingle, param);
+							renderer->RenderModel(blocks.size() > 1 ? *curLine : *curSingle, param);
 						}
 					}
 				}

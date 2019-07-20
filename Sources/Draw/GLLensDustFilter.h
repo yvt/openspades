@@ -36,7 +36,7 @@ namespace spades {
 			GLProgram *thru;
 			GLProgram *dust;
 			GLProgram *gauss1d;
-			GLImage *dustImg;
+			Handle<GLImage> dustImg;
 			GLRenderer *renderer;
 			IGLDevice::UInteger noiseTex;
 			std::vector<uint32_t> noise;

@@ -38,6 +38,8 @@ namespace spades {
 			lastRenderer = NULL;
 		}
 
+		GLDynamicLightShader::~GLDynamicLightShader() {}
+
 		std::vector<GLShader *>
 		GLDynamicLightShader::RegisterShader(spades::draw::GLProgramManager *r) {
 			std::vector<GLShader *> shaders;
@@ -54,7 +56,7 @@ namespace spades {
 		int GLDynamicLightShader::operator()(GLRenderer *renderer, spades::draw::GLProgram *program,
 		                                     const GLDynamicLight &light, int texStage) {
 			if (lastRenderer != renderer) {
-				whiteImage = static_cast<GLImage *>(renderer->RegisterImage("Gfx/White.tga"));
+				whiteImage = renderer->RegisterImage("Gfx/White.tga").Cast<GLImage>();
 				lastRenderer = renderer;
 			}
 

@@ -42,7 +42,7 @@ namespace spades {
 			bilateralProgram =
 			  renderer->RegisterProgram("Shaders/PostFilters/BilateralFilter.program");
 
-			ditherPattern = static_cast<GLImage *>(renderer->RegisterImage("Gfx/DitherPattern4x4.png"));
+			ditherPattern = renderer->RegisterImage("Gfx/DitherPattern4x4.png").Cast<GLImage>();
 		}
 
 		GLColorBuffer GLSSAOFilter::GenerateRawSSAOImage(int width, int height) {

@@ -34,7 +34,7 @@ namespace spades {
 			GLProgram *ssaoProgram;
 			GLProgram *bilateralProgram;
 
-			GLImage *ditherPattern;
+			Handle<GLImage> ditherPattern;
 
 			GLColorBuffer GenerateRawSSAOImage(int width, int height);
 			GLColorBuffer ApplyBilateralFilter(GLColorBuffer, bool direction, int width = -1,

@@ -40,6 +40,7 @@ namespace spades {
 		Bitmap(int w, int h);
 		Bitmap(uint32_t *pixels, int w, int h);
 
+		// TODO: Return `Handle<Bitmap>`
 		static Bitmap *Load(const std::string &);
 		static Bitmap *Load(IStream *); // must be seekable
 		void Save(const std::string &);

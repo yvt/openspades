@@ -217,7 +217,7 @@ namespace spades {
 				float move = (groundTime - 1.f) * .2f;
 				param.matrix = Matrix4::Translate(0, 0, move) * param.matrix;
 			}
-			renderer->RenderModel(model, param);
+			renderer->RenderModel(*model, param);
 		}
 	} // namespace client
 } // namespace spades

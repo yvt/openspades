@@ -241,12 +241,12 @@ namespace spades {
 			SPLog("GLRenderer finalized");
 		}
 
-		client::IImage *GLRenderer::RegisterImage(const char *filename) {
+		Handle<client::IImage> GLRenderer::RegisterImage(const char *filename) {
 			SPADES_MARK_FUNCTION();
 			return imageManager->RegisterImage(filename);
 		}
 
-		client::IModel *GLRenderer::RegisterModel(const char *filename) {
+		Handle<client::IModel> GLRenderer::RegisterModel(const char *filename) {
 			SPADES_MARK_FUNCTION();
 			return modelManager->RegisterModel(filename);
 		}
@@ -257,22 +257,22 @@ namespace spades {
 			imageManager->ClearCache();
 		}
 
-		client::IImage *GLRenderer::CreateImage(spades::Bitmap *bmp) {
+		Handle<client::IImage> GLRenderer::CreateImage(spades::Bitmap &bmp) {
 			SPADES_MARK_FUNCTION();
-			return GLImage::FromBitmap(bmp, device);
+			return GLImage::FromBitmap(bmp, device).Cast<client::IImage>();
 		}
 
-		client::IModel *GLRenderer::CreateModel(spades::VoxelModel *model) {
+		Handle<client::IModel> GLRenderer::CreateModel(spades::VoxelModel &model) {
 			SPADES_MARK_FUNCTION();
-			return new GLVoxelModel(model, this);
+			return Handle<GLVoxelModel>::New(&model, this).Cast<client::IModel>();
 		}
 
-		client::IModel *GLRenderer::CreateModelOptimized(spades::VoxelModel *model) {
+		Handle<client::IModel> GLRenderer::CreateModelOptimized(spades::VoxelModel &model) {
 			SPADES_MARK_FUNCTION();
 			if (settings.r_optimizedVoxelModel) {
-				return new GLOptimizedVoxelModel(model, this);
+				return Handle<GLOptimizedVoxelModel>::New(&model, this).Cast<client::IModel>();
 			} else {
-				return new GLVoxelModel(model, this);
+				return Handle<GLVoxelModel>::New(&model, this).Cast<client::IModel>();
 			}
 		}
 
@@ -283,11 +283,12 @@ namespace spades {
 			}
 		}
 
-		void GLRenderer::SetGameMap(client::GameMap *mp) {
+		void GLRenderer::SetGameMap(stmp::optional<client::GameMap &> newMap) {
 			SPADES_MARK_FUNCTION();
 
-			if (mp)
+			if (newMap) {
 				EnsureInitialized();
+			}
 
 			client::GameMap *oldMap = map;
 
@@ -305,34 +306,34 @@ namespace spades {
 			delete ambientShadowRenderer;
 			ambientShadowRenderer = NULL;
 
-			if (mp) {
+			if (newMap) {
 				SPLog("Creating new renderers...");
 
 				SPLog("Creating Terrain Shadow Map Renderer");
-				mapShadowRenderer = new GLMapShadowRenderer(this, mp);
+				mapShadowRenderer = new GLMapShadowRenderer(this, newMap.get_pointer());
 				SPLog("Creating TerrainRenderer");
-				mapRenderer = new GLMapRenderer(mp, this);
+				mapRenderer = new GLMapRenderer(newMap.get_pointer(), this);
 				SPLog("Creating Minimap Renderer");
-				flatMapRenderer = new GLFlatMapRenderer(this, mp);
+				flatMapRenderer = new GLFlatMapRenderer(this, newMap.get_pointer());
 				SPLog("Creating Water Renderer");
-				waterRenderer = new GLWaterRenderer(this, mp);
+				waterRenderer = new GLWaterRenderer(this, newMap.get_pointer());
 
 				if (settings.r_radiosity) {
 					SPLog("Creating Ray-traced Ambient Occlusion Renderer");
-					ambientShadowRenderer = new GLAmbientShadowRenderer(this, mp);
+					ambientShadowRenderer = new GLAmbientShadowRenderer(this, newMap.get_pointer());
 					SPLog("Creating Relective Shadow Maps Renderer");
-					radiosityRenderer = new GLRadiosityRenderer(this, mp);
+					radiosityRenderer = new GLRadiosityRenderer(this, newMap.get_pointer());
 				} else {
 					SPLog("Radiosity is disabled");
 				}
 
-				mp->AddListener(this);
-				mp->AddRef();
+				newMap->AddListener(this);
+				newMap->AddRef();
 				SPLog("Created");
 			} else {
 				SPLog("No map loaded");
 			}
-			this->map = mp;
+			this->map = newMap.get_pointer();
 			if (oldMap) {
 				oldMap->RemoveListener(this);
 				oldMap->Release();
@@ -490,20 +491,17 @@ namespace spades {
 
 #pragma mark - Add Scene Objects
 
-		void GLRenderer::RenderModel(client::IModel *model, const client::ModelRenderParam &param) {
+		void GLRenderer::RenderModel(client::IModel &model, const client::ModelRenderParam &param) {
 			SPADES_MARK_FUNCTION();
 
-			GLModel *m = dynamic_cast<GLModel *>(model);
-			if (!m) {
-				SPInvalidArgument("model");
-			}
+			GLModel &glModel = dynamic_cast<GLModel &>(model);
 
 			EnsureInitialized();
 			EnsureSceneStarted();
 
 			// TODO: early frustrum cull?
 
-			modelRenderer->AddModel(m, param);
+			modelRenderer->AddModel(&glModel, param);
 		}
 
 		void GLRenderer::AddLight(const client::DynamicLightParam &light) {
@@ -523,12 +521,10 @@ namespace spades {
 			debugLines.push_back(line);
 		}
 
-		void GLRenderer::AddSprite(client::IImage *img, spades::Vector3 center, float radius,
+		void GLRenderer::AddSprite(client::IImage &img, spades::Vector3 center, float radius,
 		                           float rotation) {
 			SPADES_MARK_FUNCTION_DEBUG();
-			GLImage *im = dynamic_cast<GLImage *>(img);
-			if (!im)
-				SPInvalidArgument("im");
+			GLImage &glImage = dynamic_cast<GLImage &>(img);
 
 			if (!SphereFrustrumCull(center, radius * 1.5f))
 				return;
@@ -536,20 +532,18 @@ namespace spades {
 			EnsureInitialized();
 			EnsureSceneStarted();
 
-			spriteRenderer->Add(im, center, radius, rotation, drawColorAlphaPremultiplied);
+			spriteRenderer->Add(&glImage, center, radius, rotation, drawColorAlphaPremultiplied);
 		}
 
-		void GLRenderer::AddLongSprite(client::IImage *img, spades::Vector3 p1, spades::Vector3 p2,
+		void GLRenderer::AddLongSprite(client::IImage &img, spades::Vector3 p1, spades::Vector3 p2,
 		                               float radius) {
 			SPADES_MARK_FUNCTION_DEBUG();
-			GLImage *im = dynamic_cast<GLImage *>(img);
-			if (!im)
-				SPInvalidArgument("im");
+			GLImage &glImage = dynamic_cast<GLImage &>(img);
 
 			EnsureInitialized();
 			EnsureSceneStarted();
 
-			longSpriteRenderer->Add(im, p1, p2, radius, drawColorAlphaPremultiplied);
+			longSpriteRenderer->Add(&glImage, p1, p2, radius, drawColorAlphaPremultiplied);
 		}
 
 #pragma mark - Scene Finalizer
@@ -1045,7 +1039,7 @@ namespace spades {
 				                                  handle.GetHeight(), false),
 				                      false);
 				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
-				DrawImage(image,
+				DrawImage(*image,
 				          AABB2(0, handle.GetHeight(), handle.GetWidth(), -handle.GetHeight()));
 				imageRenderer->Flush();
 			}
@@ -1115,7 +1109,8 @@ namespace spades {
 							  IGLDevice::Zero, IGLDevice::One);
 		}
 
-		void GLRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft) {
+		void GLRenderer::DrawImage(stmp::optional<client::IImage &> image,
+		                           const spades::Vector2 &outTopLeft) {
 			SPADES_MARK_FUNCTION();
 
 			if (image == nullptr) {
@@ -1127,15 +1122,16 @@ namespace spades {
 			          AABB2(0, 0, image->GetWidth(), image->GetHeight()));
 		}
 
-		void GLRenderer::DrawImage(client::IImage *image, const spades::AABB2 &outRect) {
+		void GLRenderer::DrawImage(stmp::optional<client::IImage &> image,
+		                           const spades::AABB2 &outRect) {
 			SPADES_MARK_FUNCTION();
 
 			DrawImage(image, outRect,
 			          AABB2(0, 0, image ? image->GetWidth() : 0, image ? image->GetHeight() : 0));
 		}
 
-		void GLRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft,
-		                           const spades::AABB2 &inRect) {
+		void GLRenderer::DrawImage(stmp::optional<client::IImage &> image,
+		                           const spades::Vector2 &outTopLeft, const spades::AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 
 			DrawImage(image,
@@ -1143,8 +1139,8 @@ namespace spades {
 			          inRect);
 		}
 
-		void GLRenderer::DrawImage(client::IImage *image, const spades::AABB2 &outRect,
-		                           const spades::AABB2 &inRect) {
+		void GLRenderer::DrawImage(stmp::optional<client::IImage &> image,
+		                           const spades::AABB2 &outRect, const spades::AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 
 			DrawImage(image, Vector2::Make(outRect.GetMinX(), outRect.GetMinY()),
@@ -1152,7 +1148,8 @@ namespace spades {
 			          Vector2::Make(outRect.GetMinX(), outRect.GetMaxY()), inRect);
 		}
 
-		void GLRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft,
+		void GLRenderer::DrawImage(stmp::optional<client::IImage &> image,
+		                           const spades::Vector2 &outTopLeft,
 		                           const spades::Vector2 &outTopRight,
 		                           const spades::Vector2 &outBottomLeft,
 		                           const spades::AABB2 &inRect) {
@@ -1163,7 +1160,7 @@ namespace spades {
 			// d = a + (b - a) + (c - a)
 			//   = b + c - a
 			Vector2 outBottomRight = outTopRight + outBottomLeft - outTopLeft;
-			GLImage *img = dynamic_cast<GLImage *>(image);
+			GLImage *img = dynamic_cast<GLImage *>(image.get_pointer());
 			if (!img) {
 				if (!image) {
 					img = imageManager->GetWhiteImage();
@@ -1237,7 +1234,7 @@ namespace spades {
 				Handle<GLImage> image(new GLImage(lastColorBufferTexture, device, w, h, false),
 				                      false);
 				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
-				DrawImage(image, AABB2(0, h, w, -h));
+				DrawImage(*image, AABB2(0, h, w, -h));
 				imageRenderer->Flush(); // must flush now because handle is released soon
 			}
 
@@ -1259,11 +1256,10 @@ namespace spades {
 			device->Swap();
 		}
 
-		Bitmap *GLRenderer::ReadBitmap() {
+		Handle<Bitmap> GLRenderer::ReadBitmap() {
 			SPADES_MARK_FUNCTION();
-			Bitmap *bmp;
 			EnsureSceneNotStarted();
-			bmp = new Bitmap(device->ScreenWidth(), device->ScreenHeight());
+			auto bmp = Handle<Bitmap>::New(device->ScreenWidth(), device->ScreenHeight());
 			device->ReadPixels(0, 0, device->ScreenWidth(), device->ScreenHeight(), IGLDevice::RGBA,
 			                   IGLDevice::UnsignedByte, bmp->GetPixels());
 			return bmp;

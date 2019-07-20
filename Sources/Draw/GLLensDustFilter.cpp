@@ -38,7 +38,7 @@ namespace spades {
 			thru = renderer->RegisterProgram("Shaders/PostFilters/PassThroughConstAlpha.program");
 			gauss1d = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 			dust = renderer->RegisterProgram("Shaders/PostFilters/LensDust.program");
-			dustImg = (GLImage *)renderer->RegisterImage("Textures/LensDustTexture.jpg");
+			dustImg = renderer->RegisterImage("Textures/LensDustTexture.jpg").Cast<GLImage>();
 
 			IGLDevice *dev = renderer->GetGLDevice();
 			noiseTex = dev->GenTexture();

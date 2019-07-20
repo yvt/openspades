@@ -52,7 +52,7 @@ namespace spades {
 			GLProgram *program;
 			GLProgram *dlightProgram;
 			GLProgram *shadowMapProgram;
-			GLImage *aoImage;
+			Handle<GLImage> aoImage;
 
 			IGLDevice::UInteger buffer;
 			IGLDevice::UInteger idxBuffer;

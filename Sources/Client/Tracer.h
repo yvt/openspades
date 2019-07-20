@@ -9,6 +9,7 @@
 #pragma once
 
 #include <Core/Math.h>
+#include <Core/RefCountedObject.h>
 #include "ILocalEntity.h"
 
 namespace spades {
@@ -17,7 +18,7 @@ namespace spades {
 		class IImage;
 		class Tracer : public ILocalEntity {
 			Client *client;
-			IImage *image;
+			Handle<IImage> image;
 			Vector3 startPos, dir;
 			float length;
 			float curDistance;

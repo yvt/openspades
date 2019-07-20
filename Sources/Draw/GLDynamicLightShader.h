@@ -34,7 +34,7 @@ namespace spades {
 		class GLProgramManager;
 		class GLDynamicLightShader {
 			GLRenderer *lastRenderer;
-			GLImage *whiteImage;
+			Handle<GLImage> whiteImage;
 
 			GLProgramUniform dynamicLightOrigin;
 			GLProgramUniform dynamicLightColor;
@@ -45,7 +45,7 @@ namespace spades {
 
 		public:
 			GLDynamicLightShader();
-			~GLDynamicLightShader() {}
+			~GLDynamicLightShader();
 
 			static std::vector<GLShader *> RegisterShader(GLProgramManager *);
 

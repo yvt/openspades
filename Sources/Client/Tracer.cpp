@@ -79,7 +79,7 @@ namespace spades {
 					Vector3 pos2 = startPos + dir * endDist;
 					Vector4 col = {1.f, .6f, .2f, 0.f};
 					r->SetColorAlphaPremultiplied(col * 0.4f);
-					r->AddLongSprite(image, pos1, pos2, .05f);
+					r->AddLongSprite(*image, pos1, pos2, .05f);
 				}
 			}
 		}

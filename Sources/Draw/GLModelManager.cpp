@@ -64,7 +64,7 @@ namespace spades {
 
 			Handle<VoxelModel> voxelModel{VoxelModelLoader::Load(name), false};
 
-			return static_cast<GLModel *>(renderer->CreateModelOptimized(voxelModel));
+			return renderer->CreateModelOptimized(*voxelModel).Cast<GLModel>().Unmanage();
 		}
 
 		void GLModelManager::ClearCache() { models.clear(); }

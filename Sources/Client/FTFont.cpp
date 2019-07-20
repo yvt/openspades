@@ -101,7 +101,7 @@ namespace spades {
 			Bin(int width, int height, client::IRenderer &r) : width(width), height(height) {
 				Handle<Bitmap> tmpbmp(new Bitmap(width, height), false);
 				memset(tmpbmp->GetPixels(), 0, tmpbmp->GetWidth() * tmpbmp->GetHeight() * 4);
-				image.Set(r.CreateImage(tmpbmp), false);
+				image = r.CreateImage(*tmpbmp);
 				skyline.emplace_back(0, 0);
 				skyline.emplace_back(width, 0);
 			}

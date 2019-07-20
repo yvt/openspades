@@ -156,7 +156,7 @@ namespace spades {
 				col.w = 0.f;
 
 			renderer->SetColorAlphaPremultiplied(col);
-			renderer->AddSprite(image, position, radius, angle);
+			renderer->AddSprite(*image, position, radius, angle);
 		}
 		void ParticleSpriteEntity::SetImage(IImage *img) {
 			if (img == image)

@@ -46,7 +46,7 @@ namespace spades {
 			uint32_t GeneratePixel(int x, int y);
 
 		public:
-			SWFlatMapRenderer(SWRenderer *r, client::GameMap *);
+			SWFlatMapRenderer(SWRenderer *r, Handle<client::GameMap>);
 			~SWFlatMapRenderer();
 
 			SWImage *GetImage() {

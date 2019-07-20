@@ -23,6 +23,7 @@
 #include <vector>
 
 #include <Core/Math.h>
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	class Bitmap;
@@ -39,7 +40,7 @@ namespace spades {
 			client::GameMap *map;
 			std::vector<bool> chunkInvalid;
 
-			GLImage *image;
+			Handle<GLImage> image;
 
 			int chunkCols, chunkRows;
 

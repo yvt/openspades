@@ -44,7 +44,7 @@ namespace spades {
 			GLProgram *basicProgram;
 			GLProgram *dlightProgram;
 			GLProgram *backfaceProgram;
-			GLImage *aoImage;
+			Handle<GLImage> aoImage;
 
 			IGLDevice::UInteger squareVertexBuffer;
 

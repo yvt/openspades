@@ -89,7 +89,7 @@ namespace spades {
 			matrix = Matrix4::Translate(matTrans);
 
 			// build renderer model
-			model = client->GetRenderer()->CreateModel(vmodel);
+			model = client->GetRenderer()->CreateModel(*vmodel).Unmanage();
 
 			time = 0.f;
 		}
@@ -223,7 +223,7 @@ namespace spades {
 		void FallingBlock::Render3D() {
 			ModelRenderParam param;
 			param.matrix = matrix;
-			client->GetRenderer()->RenderModel(model, param);
+			client->GetRenderer()->RenderModel(*model, param);
 		}
 	} // namespace client
 } // namespace spades
