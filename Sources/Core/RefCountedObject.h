@@ -101,6 +101,9 @@ namespace spades {
 		}
 		Handle(Handle<T> &&h) : ptr(h.MaybeUnmanage()) {}
 		Handle(T &ref) : ptr{&ptr} { ptr->AddRef(); }
+		Handle(stmp::optional<T &> ref) : ptr{ref.get_pointer()} { if (ptr)
+				ptr->AddRef();
+		}
 
 		template <class S> Handle(Handle<S> &&h) : ptr(h.MaybeUnmanage()) {}
 
@@ -139,7 +142,8 @@ namespace spades {
 		}
 		void operator=(T *p) { Set(p); }
 		void operator=(const Handle<T> &h) { Set(h.ptr, true); }
-		operator T *() { return ptr; }
+		operator T *() const { return ptr; }
+		operator stmp::optional<T &>() const { return ptr; }
 		T *Unmanage() {
 			SPAssert(ptr != NULL);
 			T *p = ptr;
