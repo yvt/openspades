@@ -49,9 +49,9 @@ namespace spades {
 			SWFlatMapRenderer(SWRenderer *r, Handle<client::GameMap>);
 			~SWFlatMapRenderer();
 
-			SWImage *GetImage() {
+			SWImage &GetImage() {
 				Update();
-				return img;
+				return *img;
 			}
 
 			void Update(bool firstTime = false);

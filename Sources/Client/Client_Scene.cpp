@@ -121,8 +121,7 @@ namespace spades {
 				return 1.f;
 			}
 
-			ClientPlayer *clientPlayer = clientPlayers[player.GetId()];
-			SPAssert(clientPlayer);
+			ClientPlayer &clientPlayer = *clientPlayers[player.GetId()];
 
 			float delta = .8f;
 			switch (player.GetWeapon().GetWeaponType()) {
@@ -131,7 +130,7 @@ namespace spades {
 				case SHOTGUN_WEAPON: delta = .4f; break;
 			}
 
-			float aimDownState = clientPlayer->GetAimDownState();
+			float aimDownState = clientPlayer.GetAimDownState();
 
 			return 1.f + (3.f - 2.f * powf(aimDownState, 1.5f)) * powf(aimDownState, 3.f) * delta;
 		}

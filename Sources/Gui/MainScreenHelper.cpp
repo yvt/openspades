@@ -43,7 +43,7 @@ namespace spades {
 		struct CURLEasyDeleter {
 			void operator()(CURL *ptr) const { curl_easy_cleanup(ptr); }
 		};
-	}
+	} // namespace
 
 	class ServerItem {
 		// NetClient::Connect
@@ -144,8 +144,9 @@ namespace spades {
 				try {
 					std::unique_ptr<CURL, CURLEasyDeleter> cHandle{curl_easy_init()};
 					if (cHandle) {
-						size_t (*curlWriteCallback)(void *, size_t, size_t, ServerListQuery *) = [](
-						  void *ptr, size_t size, size_t nmemb, ServerListQuery *self) -> size_t {
+						size_t (*curlWriteCallback)(void *, size_t, size_t, ServerListQuery *) =
+						  [](void *ptr, size_t size, size_t nmemb,
+						     ServerListQuery *self) -> size_t {
 							size_t numBytes = size * nmemb;
 							self->buffer.append(reinterpret_cast<char *>(ptr), numBytes);
 							return numBytes;
@@ -230,9 +231,10 @@ namespace spades {
 			}
 
 			if (result && !result->list.empty()) {
-				auto entry = std::find_if(
-				  result->list.begin(), result->list.end(),
-				  [&](MainScreenServerItem *entry) { return entry->GetAddress() == ip; });
+				auto entry = std::find_if(result->list.begin(), result->list.end(),
+				                          [&](const Handle<MainScreenServerItem> &entry) {
+					                          return entry->GetAddress() == ip;
+				                          });
 				if (entry != result->list.end()) {
 					(*entry)->SetFavorite(favorite);
 				}
@@ -409,5 +411,5 @@ namespace spades {
 		}
 
 		MainScreenServerItem::~MainScreenServerItem() { SPADES_MARK_FUNCTION(); }
-	}
-}
+	} // namespace gui
+} // namespace spades

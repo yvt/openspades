@@ -36,7 +36,7 @@ namespace spades {
 			friend class GLSparseShadowMapRenderer;
 
 			GLRenderer *renderer;
-			IGLDevice *device;
+			IGLDevice &device;
 
 			struct RenderModel {
 				GLModel *model;

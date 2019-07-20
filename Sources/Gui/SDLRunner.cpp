@@ -24,6 +24,7 @@
 
 #include "SDLRunner.h"
 
+#include "Icon.h"
 #include "SDLGLDevice.h"
 #include <Audio/ALDevice.h>
 #include <Audio/NullDevice.h>
@@ -40,7 +41,6 @@
 #include <Draw/SWPort.h>
 #include <Draw/SWRenderer.h>
 #include <OpenSpades.h>
-#include "Icon.h"
 
 SPADES_SETTING(r_videoWidth);
 SPADES_SETTING(r_videoHeight);
@@ -108,33 +108,33 @@ namespace spades {
 
 		int SDLRunner::GetModState() { return SDL_GetModState(); }
 
-		void SDLRunner::ProcessEvent(SDL_Event &event, View *view) {
+		void SDLRunner::ProcessEvent(SDL_Event &event, View &view) {
 			switch (event.type) {
 				case SDL_QUIT:
-					view->Closing();
+					view.Closing();
 					// running = false;
 					break;
 				case SDL_MOUSEBUTTONDOWN:
-					view->KeyEvent(TranslateButton(event.button.button), true);
+					view.KeyEvent(TranslateButton(event.button.button), true);
 					break;
 				case SDL_MOUSEBUTTONUP:
-					view->KeyEvent(TranslateButton(event.button.button), false);
+					view.KeyEvent(TranslateButton(event.button.button), false);
 					break;
 				case SDL_MOUSEMOTION:
 					if (m_active) {
 						// FIXME: this might fail with cg_smp
-						if (view->NeedsAbsoluteMouseCoordinate()) {
-							view->MouseEvent(event.motion.x, event.motion.y);
+						if (view.NeedsAbsoluteMouseCoordinate()) {
+							view.MouseEvent(event.motion.x, event.motion.y);
 						} else {
-							view->MouseEvent(event.motion.xrel, event.motion.yrel);
+							view.MouseEvent(event.motion.xrel, event.motion.yrel);
 						}
 					}
 					break;
-				case SDL_MOUSEWHEEL: view->WheelEvent(-event.wheel.x, -event.wheel.y); break;
+				case SDL_MOUSEWHEEL: view.WheelEvent(-event.wheel.x, -event.wheel.y); break;
 				case SDL_KEYDOWN:
 					if (!event.key.repeat) {
 						if (event.key.keysym.sym == SDLK_RETURN &&
-							event.key.keysym.mod & (KMOD_LALT | KMOD_RALT)) {
+						    event.key.keysym.mod & (KMOD_LALT | KMOD_RALT)) {
 							SDL_Window *window = SDL_GetWindowFromID(event.key.windowID);
 
 							// Toggle fullscreen mode
@@ -153,13 +153,13 @@ namespace spades {
 							}
 							return;
 						}
-						view->KeyEvent(TranslateKey(event.key.keysym), true);
+						view.KeyEvent(TranslateKey(event.key.keysym), true);
 					}
 					break;
-				case SDL_KEYUP: view->KeyEvent(TranslateKey(event.key.keysym), false); break;
-				case SDL_TEXTINPUT: view->TextInputEvent(event.text.text); break;
+				case SDL_KEYUP: view.KeyEvent(TranslateKey(event.key.keysym), false); break;
+				case SDL_TEXTINPUT: view.TextInputEvent(event.text.text); break;
 				case SDL_TEXTEDITING:
-					view->TextEditingEvent(event.edit.text, event.edit.start, event.edit.length);
+					view.TextEditingEvent(event.edit.text, event.edit.start, event.edit.length);
 					break;
 				case SDL_WINDOWEVENT:
 					if (event.window.type == SDL_WINDOWEVENT_FOCUS_GAINED) {
@@ -297,7 +297,7 @@ namespace spades {
 					}
 
 					while (SDL_PollEvent(&event)) {
-						ProcessEvent(event, view);
+						ProcessEvent(event, *view);
 					}
 				}
 
@@ -369,10 +369,10 @@ namespace spades {
 
 			void Dispose() override { surface = nullptr; }
 
-			Bitmap *GetFramebuffer() override {
+			Bitmap &GetFramebuffer() override {
 				EnsureSurfaceIsValid();
 
-				return framebuffer;
+				return *framebuffer;
 			}
 			void Swap() override {
 				EnsureSurfaceIsValid();
@@ -409,14 +409,14 @@ namespace spades {
 		SDLRunner::CreateRenderer(SDL_Window *wnd) {
 			switch (GetRendererType()) {
 				case RendererType::GL: {
-					auto glDevice = Handle<SDLGLDevice>::New(wnd);
+					auto glDevice = Handle<SDLGLDevice>::New(wnd).Cast<draw::IGLDevice>();
 					auto dummy = Handle<Disposable>::New(); // FIXME
 					return std::make_tuple(
-					  Handle<draw::GLRenderer>::New(glDevice).Cast<client::IRenderer>(),
+					  Handle<draw::GLRenderer>::New(std::move(glDevice)).Cast<client::IRenderer>(),
 					  std::move(dummy));
 				}
 				case RendererType::SW: {
-					auto port = Handle<SDLSWPort>::New(wnd);
+					auto port = Handle<SDLSWPort>::New(wnd).Cast<draw::SWPort>();
 					return std::make_tuple(
 					  Handle<draw::SWRenderer>::New(port).Cast<client::IRenderer>(),
 					  port.Cast<Disposable>());
@@ -528,7 +528,7 @@ namespace spades {
 						}
 					}
 
-					RunClientLoop(renderer, audio);
+					RunClientLoop(renderer.GetPointerOrNull(), audio.GetPointerOrNull());
 
 					// `SDL_Window` and its associated resources will be inaccessible
 					// past this point. Some referencing objects might be still alive due to
@@ -543,5 +543,5 @@ namespace spades {
 
 			SDL_Quit();
 		}
-	}
-}
+	} // namespace gui
+} // namespace spades

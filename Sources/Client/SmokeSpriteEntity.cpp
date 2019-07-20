@@ -28,11 +28,12 @@
 namespace spades {
 	namespace client {
 		static IRenderer *lastRenderer = NULL;
-		static IImage *lastSeq[180];
-		static IImage *lastSeq2[48];
+		static Handle<IImage> lastSeq[180];
+		static Handle<IImage> lastSeq2[48];
 
 		// FIXME: add "image manager"?
 		static void Load(IRenderer *r) {
+			// FIXME: Pointers are not unique identifiers since the same value could be reused
 			if (r == lastRenderer)
 				return;
 
@@ -50,19 +51,19 @@ namespace spades {
 			lastRenderer = r;
 		}
 
-		IImage *SmokeSpriteEntity::GetSequence(int i, IRenderer *r, Type type) {
+		IImage &SmokeSpriteEntity::GetSequence(int i, IRenderer *r, Type type) {
 			Load(r);
 			if (type == Type::Steady) {
 				SPAssert(i >= 0 && i < 180);
-				return lastSeq[i];
+				return *lastSeq[i];
 			} else {
 				SPAssert(i >= 0 && i < 48);
-				return lastSeq2[i];
+				return *lastSeq2[i];
 			}
 		}
 
 		SmokeSpriteEntity::SmokeSpriteEntity(Client *c, Vector4 color, float fps, Type type)
-		    : ParticleSpriteEntity(c, GetSequence(0, c->GetRenderer(), type), color),
+		    : ParticleSpriteEntity(c, &GetSequence(0, &c->GetRenderer(), type), color),
 		      fps(fps),
 		      type(type) {
 			frame = 0.f;
@@ -82,7 +83,7 @@ namespace spades {
 			}
 
 			int fId = (int)floorf(frame);
-			SetImage(GetSequence(fId, GetRenderer(), type));
+			SetImage(&GetSequence(fId, &GetRenderer(), type));
 
 			return ParticleSpriteEntity::Update(dt);
 		}

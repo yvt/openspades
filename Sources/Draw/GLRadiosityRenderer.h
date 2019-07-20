@@ -43,7 +43,7 @@ namespace spades {
 			class UpdateDispatch;
 			enum { ChunkSize = 16, ChunkSizeBits = 4, Envelope = 6 };
 			GLRenderer *renderer;
-			IGLDevice *device;
+			IGLDevice &device;
 			GLSettings &settings;
 			client::GameMap *map;
 

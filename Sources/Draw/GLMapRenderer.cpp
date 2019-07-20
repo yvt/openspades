@@ -19,21 +19,20 @@
  */
 
 #include "GLMapRenderer.h"
-#include <Client/GameMap.h>
-#include <Core/Debug.h>
-#include <Core/Settings.h>
 #include "GLDynamicLightShader.h"
 #include "GLImage.h"
 #include "GLMapChunk.h"
 #include "GLMapShadowRenderer.h"
 #include "GLProfiler.h"
 #include "GLProgram.h"
-#include "GLProgram.h"
 #include "GLProgramAttribute.h"
 #include "GLProgramUniform.h"
 #include "GLRenderer.h"
 #include "GLShadowShader.h"
 #include "IGLDevice.h"
+#include <Client/GameMap.h>
+#include <Core/Debug.h>
+#include <Core/Settings.h>
 
 namespace spades {
 	namespace draw {
@@ -48,10 +47,9 @@ namespace spades {
 			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 		}
 
-		GLMapRenderer::GLMapRenderer(client::GameMap *m, GLRenderer *r) : renderer(r), gameMap(m) {
+		GLMapRenderer::GLMapRenderer(client::GameMap *m, GLRenderer *r)
+		    : renderer(r), device(r->GetGLDevice()), gameMap(m) {
 			SPADES_MARK_FUNCTION();
-
-			device = renderer->GetGLDevice();
 
 			numChunkWidth = gameMap->Width() / GLMapChunk::Size;
 			numChunkHeight = gameMap->Height() / GLMapChunk::Size;
@@ -76,17 +74,17 @@ namespace spades {
 			aoImage = renderer->RegisterImage("Gfx/AmbientOcclusion.png").Cast<GLImage>();
 
 			static const uint8_t squareVertices[] = {0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1};
-			squareVertexBuffer = device->GenBuffer();
-			device->BindBuffer(IGLDevice::ArrayBuffer, squareVertexBuffer);
-			device->BufferData(IGLDevice::ArrayBuffer, sizeof(squareVertices), squareVertices,
-			                   IGLDevice::StaticDraw);
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			squareVertexBuffer = device.GenBuffer();
+			device.BindBuffer(IGLDevice::ArrayBuffer, squareVertexBuffer);
+			device.BufferData(IGLDevice::ArrayBuffer, sizeof(squareVertices), squareVertices,
+			                  IGLDevice::StaticDraw);
+			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 		}
 
 		GLMapRenderer::~GLMapRenderer() {
 			SPADES_MARK_FUNCTION();
 
-			device->DeleteBuffer(squareVertexBuffer);
+			device.DeleteBuffer(squareVertexBuffer);
 			for (int i = 0; i < numChunks; i++)
 				delete chunks[i];
 			delete[] chunks;
@@ -147,19 +145,19 @@ namespace spades {
 
 		void GLMapRenderer::Prerender() {
 			SPADES_MARK_FUNCTION();
-			//depth-only pass
+			// depth-only pass
 
 			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map");
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
 
-			device->Enable(IGLDevice::CullFace, true);
-			device->Enable(IGLDevice::DepthTest, true);
-			device->ColorMask(false, false, false, false);
+			device.Enable(IGLDevice::CullFace, true);
+			device.Enable(IGLDevice::DepthTest, true);
+			device.ColorMask(false, false, false, false);
 
 			depthonlyProgram->Use();
 			static GLProgramAttribute positionAttribute("positionAttribute");
 			positionAttribute(depthonlyProgram);
-			device->EnableVertexAttribArray(positionAttribute(), true);
+			device.EnableVertexAttribArray(positionAttribute(), true);
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(depthonlyProgram);
 			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
@@ -180,10 +178,8 @@ namespace spades {
 				}
 			}
 
-
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->ColorMask(true, true, true, true);
-
+			device.EnableVertexAttribArray(positionAttribute(), false);
+			device.ColorMask(true, true, true, true);
 		}
 
 		void GLMapRenderer::RenderSunlightPass() {
@@ -198,16 +194,16 @@ namespace spades {
 			// covering themselves by ones.
 			RenderBackface();
 
-			device->ActiveTexture(0);
+			device.ActiveTexture(0);
 			aoImage->Bind(IGLDevice::Texture2D);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Linear);
 
-			device->ActiveTexture(1);
-			device->BindTexture(IGLDevice::Texture2D, 0);
+			device.ActiveTexture(1);
+			device.BindTexture(IGLDevice::Texture2D, 0);
 
-			device->Enable(IGLDevice::CullFace, true);
-			device->Enable(IGLDevice::DepthTest, true);
+			device.Enable(IGLDevice::CullFace, true);
+			device.Enable(IGLDevice::DepthTest, true);
 
 			basicProgram->Use();
 
@@ -237,7 +233,7 @@ namespace spades {
 			detailTextureUnif(basicProgram);
 			detailTextureUnif.SetValue(1);
 
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 
 			static GLProgramAttribute positionAttribute("positionAttribute");
 			static GLProgramAttribute ambientOcclusionCoordAttribute(
@@ -252,13 +248,13 @@ namespace spades {
 			normalAttribute(basicProgram);
 			fixedPositionAttribute(basicProgram);
 
-			device->EnableVertexAttribArray(positionAttribute(), true);
+			device.EnableVertexAttribArray(positionAttribute(), true);
 			if (ambientOcclusionCoordAttribute() != -1)
-				device->EnableVertexAttribArray(ambientOcclusionCoordAttribute(), true);
-			device->EnableVertexAttribArray(colorAttribute(), true);
+				device.EnableVertexAttribArray(ambientOcclusionCoordAttribute(), true);
+			device.EnableVertexAttribArray(colorAttribute(), true);
 			if (normalAttribute() != -1)
-				device->EnableVertexAttribArray(normalAttribute(), true);
-			device->EnableVertexAttribArray(fixedPositionAttribute(), true);
+				device.EnableVertexAttribArray(normalAttribute(), true);
+			device.EnableVertexAttribArray(fixedPositionAttribute(), true);
 
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(basicProgram);
@@ -273,8 +269,9 @@ namespace spades {
 			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
-			//RealizeChunks(eye); // should already be realized from the prepass
-			//TODO maybe add some way of checking if the chunks have been realized for the current eye? Probably just a bool called "alreadyrealized" that gets checked in RealizeChunks
+			// RealizeChunks(eye); // should already be realized from the prepass
+			// TODO maybe add some way of checking if the chunks have been realized for the current
+			// eye? Probably just a bool called "alreadyrealized" that gets checked in RealizeChunks
 
 			// draw from nearest to farthest
 			int cx = (int)floorf(eye.x) / GLMapChunk::Size;
@@ -292,18 +289,18 @@ namespace spades {
 				}
 			}
 
-			device->EnableVertexAttribArray(positionAttribute(), false);
+			device.EnableVertexAttribArray(positionAttribute(), false);
 			if (ambientOcclusionCoordAttribute() != -1)
-				device->EnableVertexAttribArray(ambientOcclusionCoordAttribute(), false);
-			device->EnableVertexAttribArray(colorAttribute(), false);
+				device.EnableVertexAttribArray(ambientOcclusionCoordAttribute(), false);
+			device.EnableVertexAttribArray(colorAttribute(), false);
 			if (normalAttribute() != -1)
-				device->EnableVertexAttribArray(normalAttribute(), false);
-			device->EnableVertexAttribArray(fixedPositionAttribute(), false);
+				device.EnableVertexAttribArray(normalAttribute(), false);
+			device.EnableVertexAttribArray(fixedPositionAttribute(), false);
 
-			device->ActiveTexture(1);
-			device->BindTexture(IGLDevice::Texture2D, 0);
-			device->ActiveTexture(0);
-			device->BindTexture(IGLDevice::Texture2D, 0);
+			device.ActiveTexture(1);
+			device.BindTexture(IGLDevice::Texture2D, 0);
+			device.ActiveTexture(0);
+			device.BindTexture(IGLDevice::Texture2D, 0);
 		}
 
 		void GLMapRenderer::RenderDynamicLightPass(std::vector<GLDynamicLight> lights) {
@@ -316,11 +313,11 @@ namespace spades {
 
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
 
-			device->ActiveTexture(0);
-			device->BindTexture(IGLDevice::Texture2D, 0);
+			device.ActiveTexture(0);
+			device.BindTexture(IGLDevice::Texture2D, 0);
 
-			device->Enable(IGLDevice::CullFace, true);
-			device->Enable(IGLDevice::DepthTest, true);
+			device.Enable(IGLDevice::CullFace, true);
+			device.Enable(IGLDevice::DepthTest, true);
 
 			dlightProgram->Use();
 
@@ -332,7 +329,7 @@ namespace spades {
 			detailTextureUnif(dlightProgram);
 			detailTextureUnif.SetValue(0);
 
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 
 			static GLProgramAttribute positionAttribute("positionAttribute");
 			static GLProgramAttribute colorAttribute("colorAttribute");
@@ -342,9 +339,9 @@ namespace spades {
 			colorAttribute(dlightProgram);
 			normalAttribute(dlightProgram);
 
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(colorAttribute(), true);
-			device->EnableVertexAttribArray(normalAttribute(), true);
+			device.EnableVertexAttribArray(positionAttribute(), true);
+			device.EnableVertexAttribArray(colorAttribute(), true);
+			device.EnableVertexAttribArray(normalAttribute(), true);
 
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(dlightProgram);
@@ -359,7 +356,7 @@ namespace spades {
 			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
-			//RealizeChunks(eye); // should already be realized from the prepass
+			// RealizeChunks(eye); // should already be realized from the prepass
 
 			// draw from nearest to farthest
 			int cx = (int)floorf(eye.x) / GLMapChunk::Size;
@@ -380,12 +377,12 @@ namespace spades {
 				}
 			}
 
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(colorAttribute(), false);
-			device->EnableVertexAttribArray(normalAttribute(), false);
+			device.EnableVertexAttribArray(positionAttribute(), false);
+			device.EnableVertexAttribArray(colorAttribute(), false);
+			device.EnableVertexAttribArray(normalAttribute(), false);
 
-			device->ActiveTexture(0);
-			device->BindTexture(IGLDevice::Texture2D, 0);
+			device.ActiveTexture(0);
+			device.BindTexture(IGLDevice::Texture2D, 0);
 		}
 
 		void GLMapRenderer::DrawColumnDepth(int cx, int cy, int cz, spades::Vector3 eye) {
@@ -491,7 +488,7 @@ namespace spades {
 			if (vertices.empty())
 				return;
 
-			device->Enable(IGLDevice::CullFace, false);
+			device.Enable(IGLDevice::CullFace, false);
 
 			backfaceProgram->Use();
 
@@ -503,20 +500,19 @@ namespace spades {
 
 			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
 
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
-			device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::Short, false,
-			                            sizeof(BFVertex), vertices.data());
+			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
+			device.VertexAttribPointer(positionAttribute(), 3, IGLDevice::Short, false,
+			                           sizeof(BFVertex), vertices.data());
 
-			device->EnableVertexAttribArray(positionAttribute(), true);
+			device.EnableVertexAttribArray(positionAttribute(), true);
 
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
-			device->DrawElements(IGLDevice::Triangles,
-			                     static_cast<IGLDevice::Sizei>(indices.size()),
-			                     IGLDevice::UnsignedShort, indices.data());
+			device.BindBuffer(IGLDevice::ElementArrayBuffer, 0);
+			device.DrawElements(IGLDevice::Triangles, static_cast<IGLDevice::Sizei>(indices.size()),
+			                    IGLDevice::UnsignedShort, indices.data());
 
-			device->EnableVertexAttribArray(positionAttribute(), false);
+			device.EnableVertexAttribArray(positionAttribute(), false);
 
-			device->Enable(IGLDevice::CullFace, true);
+			device.Enable(IGLDevice::CullFace, true);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

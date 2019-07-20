@@ -26,7 +26,7 @@
 namespace spades {
 	namespace client {
 		ParticleSpriteEntity::ParticleSpriteEntity(Client *cli, IImage *image, Vector4 color)
-		    : image(image), color(color) {
+		    : renderer(cli->GetRenderer()), image(image), color(color) {
 			position = MakeVector3(0, 0, 0);
 			velocity = MakeVector3(0, 0, 0);
 			radius = 1.f;
@@ -46,7 +46,6 @@ namespace spades {
 			if (image != NULL)
 				image->AddRef();
 
-			renderer = cli->GetRenderer();
 			if (cli->GetWorld())
 				map = cli->GetWorld()->GetMap();
 			else
@@ -155,8 +154,8 @@ namespace spades {
 			if (additive)
 				col.w = 0.f;
 
-			renderer->SetColorAlphaPremultiplied(col);
-			renderer->AddSprite(*image, position, radius, angle);
+			renderer.SetColorAlphaPremultiplied(col);
+			renderer.AddSprite(*image, position, radius, angle);
 		}
 		void ParticleSpriteEntity::SetImage(IImage *img) {
 			if (img == image)

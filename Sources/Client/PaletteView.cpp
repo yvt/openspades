@@ -151,12 +151,12 @@ namespace spades {
 		void PaletteView::Update() {}
 
 		void PaletteView::Draw() {
-			Handle<IImage> img = renderer->RegisterImage("Gfx/Palette.png");
+			Handle<IImage> img = renderer.RegisterImage("Gfx/Palette.png");
 
 			int sel = GetSelectedIndex();
 
-			float scrW = renderer->ScreenWidth();
-			float scrH = renderer->ScreenHeight();
+			float scrW = renderer.ScreenWidth();
+			float scrH = renderer.ScreenHeight();
 
 			for (size_t phase = 0; phase < 2; phase++) {
 				for (size_t i = 0; i < colors.size(); i++) {
@@ -179,18 +179,18 @@ namespace spades {
 					float x = scrW - 100.f + 10.f * col;
 					float y = scrH - 106.f + 10.f * row - 40.f;
 
-					renderer->SetColorAlphaPremultiplied(cl);
+					renderer.SetColorAlphaPremultiplied(cl);
 					if (selected) {
-						renderer->DrawImage(img, MakeVector2(x, y), AABB2(0, 16, 16, 16));
+						renderer.DrawImage(img, MakeVector2(x, y), AABB2(0, 16, 16, 16));
 					} else {
-						renderer->DrawImage(img, MakeVector2(x, y), AABB2(0, 0, 16, 16));
+						renderer.DrawImage(img, MakeVector2(x, y), AABB2(0, 0, 16, 16));
 					}
 
-					renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
+					renderer.SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
 					if (selected) {
-						renderer->DrawImage(img, MakeVector2(x, y), AABB2(16, 16, 16, 16));
+						renderer.DrawImage(img, MakeVector2(x, y), AABB2(16, 16, 16, 16));
 					} else {
-						renderer->DrawImage(img, MakeVector2(x, y), AABB2(16, 0, 16, 16));
+						renderer.DrawImage(img, MakeVector2(x, y), AABB2(16, 0, 16, 16));
 					}
 				}
 			}

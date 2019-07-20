@@ -41,7 +41,7 @@ namespace spades {
 			class FFTWaveTank;
 
 			GLRenderer *renderer;
-			IGLDevice *device;
+			IGLDevice &device;
             GLSettings &settings;
 			client::GameMap *map;
 

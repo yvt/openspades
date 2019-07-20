@@ -33,7 +33,7 @@ namespace spades {
 			enum BlockHitAction { Delete, Ignore, BounceWeak };
 
 		private:
-			IRenderer *renderer;
+			IRenderer &renderer;
 			Handle<GameMap> map;
 
 			IImage *image;
@@ -77,7 +77,7 @@ namespace spades {
 			void SetImage(IImage *img);
 			void SetColor(Vector4 col) { color = col; }
 
-			IRenderer *GetRenderer() { return renderer; }
+			IRenderer &GetRenderer() { return renderer; }
 		};
 	}
 }

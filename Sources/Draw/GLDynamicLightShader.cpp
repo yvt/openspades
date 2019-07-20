@@ -19,10 +19,10 @@
  */
 
 #include "GLDynamicLightShader.h"
-#include <Core/Settings.h>
 #include "GLImage.h"
 #include "GLProgramManager.h"
 #include "GLRenderer.h"
+#include <Core/Settings.h>
 
 namespace spades {
 	namespace draw {
@@ -62,7 +62,7 @@ namespace spades {
 
 			const client::DynamicLightParam &param = light.GetParam();
 
-			IGLDevice *device = renderer->GetGLDevice();
+			IGLDevice &device = renderer->GetGLDevice();
 			dynamicLightOrigin(program);
 			dynamicLightColor(program);
 			dynamicLightRadius(program);
@@ -76,7 +76,7 @@ namespace spades {
 			dynamicLightRadiusInversed.SetValue(1.f / param.radius);
 
 			if (param.type == client::DynamicLightTypeSpotlight) {
-				device->ActiveTexture(texStage);
+				device.ActiveTexture(texStage);
 				static_cast<GLImage *>(param.image)->Bind(IGLDevice::Texture2D);
 				dynamicLightProjectionTexture.SetValue(texStage);
 				texStage++;
@@ -84,13 +84,13 @@ namespace spades {
 				dynamicLightSpotMatrix.SetValue(light.GetProjectionMatrix());
 
 				// bad hack to make texture clamped to edge
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-				                     IGLDevice::ClampToEdge);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-				                     IGLDevice::ClampToEdge);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+				                    IGLDevice::ClampToEdge);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+				                    IGLDevice::ClampToEdge);
 
 			} else {
-				device->ActiveTexture(texStage);
+				device.ActiveTexture(texStage);
 				whiteImage->Bind(IGLDevice::Texture2D);
 				dynamicLightProjectionTexture.SetValue(texStage);
 				texStage++;
@@ -101,9 +101,9 @@ namespace spades {
 				                                Matrix4::Scale(0.0));
 			}
 
-			device->ActiveTexture(texStage);
+			device.ActiveTexture(texStage);
 
 			return texStage;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

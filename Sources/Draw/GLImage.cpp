@@ -78,6 +78,10 @@ namespace spades {
 			                      IGLDevice::RGBA, IGLDevice::UnsignedByte, bmp->GetPixels());
 		}
 
+		// TODO: Make sure this method is called even for `GLImage`s created via
+		//       `GLRenderer::CreateImage`. Otherwise, `GLImage` outliving the
+		//		 originating `GLRenderer` will cause a use-after-free in its
+		//		 destructor.
 		void GLImage::Invalidate() {
 			SPADES_MARK_FUNCTION();
 			MakeSureValid();

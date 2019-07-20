@@ -39,7 +39,7 @@ namespace spades {
 			class UpdateDispatch;
 			enum { NumRays = 16, ChunkSize = 16, ChunkSizeBits = 4 };
 			GLRenderer *renderer;
-			IGLDevice *device;
+			IGLDevice &device;
 			client::GameMap *map;
 			Vector3 rays[NumRays];
 

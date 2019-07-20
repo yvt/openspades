@@ -42,9 +42,9 @@ DEFINE_SPADES_SETTING(r_swNumThreads, "4");
 
 namespace spades {
 	namespace draw {
-		SWRenderer::SWRenderer(SWPort *port, SWFeatureLevel level)
+		SWRenderer::SWRenderer(Handle<SWPort> _port, SWFeatureLevel level)
 		    : featureLevel(level),
-		      port(port),
+		      port(std::move(_port)),
 		      map(nullptr),
 		      fb(nullptr),
 		      inited(false),
@@ -58,9 +58,7 @@ namespace spades {
 
 			SPADES_MARK_FUNCTION();
 
-			if (port == nullptr) {
-				SPRaise("Port is null.");
-			}
+			SPAssert(port);
 
 			SPLog("---- SWRenderer early initialization started ---");
 
@@ -78,7 +76,7 @@ namespace spades {
 			renderStopwatch.Reset();
 
 			SPLog("setting framebuffer.");
-			SetFramebuffer(port->GetFramebuffer());
+			SetFramebuffer(&port->GetFramebuffer());
 
 			// alloc depth buffer
 			SPLog("initializing depth buffer.");
@@ -175,7 +173,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			if (map)
 				EnsureInitialized();
-			if (map.get_pointer() == this->map)
+			if (map.get_pointer() == this->map.GetPointerOrNull())
 				return;
 
 			flatMapRenderer.reset();
@@ -760,12 +758,12 @@ namespace spades {
 				// flat map renderer sends 'Update RLE' to map renderer.
 				// rendering map before this leads to the corrupted renderer image.
 				flatMapRenderer->Update();
-				mapRenderer->Render(sceneDef, fb, depthBuffer.data());
+				mapRenderer->Render(sceneDef, *fb, depthBuffer.data());
 			}
 
 			// draw models
 			for (auto &m : models) {
-				modelRenderer->Render(m.model, m.param);
+				modelRenderer->Render(*m.model, m.param);
 			}
 			models.clear();
 
@@ -812,14 +810,14 @@ namespace spades {
 					v2.position = x2;
 					v3.uv = MakeVector2(0.f, 1.f);
 					v3.position = x3;
-					imageRenderer->DrawPolygon(spr.img, v1, v2, v3);
+					imageRenderer->DrawPolygon(spr.img.GetPointerOrNull(), v1, v2, v3);
 					v1.uv = MakeVector2(1.f, 0.f);
 					v1.position = x2;
 					v2.uv = MakeVector2(1.f, 1.f);
 					v2.position = x4;
 					v3.uv = MakeVector2(0.f, 1.f);
 					v3.position = x3;
-					imageRenderer->DrawPolygon(spr.img, v1, v2, v3);
+					imageRenderer->DrawPolygon(spr.img.GetPointerOrNull(), v1, v2, v3);
 				}
 				sprites.clear();
 			}
@@ -1111,7 +1109,7 @@ namespace spades {
 			port->Swap();
 
 			// next frame's framebuffer
-			SetFramebuffer(port->GetFramebuffer());
+			SetFramebuffer(&port->GetFramebuffer());
 		}
 
 		Handle<Bitmap> SWRenderer::ReadBitmap() {
@@ -1185,7 +1183,7 @@ namespace spades {
 		}
 
 		void SWRenderer::GameMapChanged(int x, int y, int z, client::GameMap *map) {
-			if (map != this->map) {
+			if (map != this->map.GetPointerOrNull()) {
 				return;
 			}
 

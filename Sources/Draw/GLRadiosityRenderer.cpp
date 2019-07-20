@@ -21,10 +21,10 @@
 #include <atomic>
 #include <cstdlib>
 
-#include <Client/GameMap.h>
 #include "GLMapShadowRenderer.h"
 #include "GLRadiosityRenderer.h"
 #include "GLRenderer.h"
+#include <Client/GameMap.h>
 
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Settings.h>
@@ -40,8 +40,8 @@ namespace spades {
 			GLRadiosityRenderer *renderer;
 
 		public:
-			std::atomic<bool> done {false};
-			UpdateDispatch(GLRadiosityRenderer *r) : renderer(r) { }
+			std::atomic<bool> done{false};
+			UpdateDispatch(GLRadiosityRenderer *r) : renderer(r) {}
 			void Run() override {
 				SPADES_MARK_FUNCTION();
 
@@ -92,30 +92,31 @@ namespace spades {
 						c.cz = z;
 					}
 
-			SPLog("Chunk buffer allocated (%d bytes)", (int) sizeof(Chunk) * chunkW * chunkH * chunkD);
+			SPLog("Chunk buffer allocated (%d bytes)",
+			      (int)sizeof(Chunk) * chunkW * chunkH * chunkD);
 
 			// make texture
-			textureFlat = device->GenTexture();
-			textureX = device->GenTexture();
-			textureY = device->GenTexture();
-			textureZ = device->GenTexture();
+			textureFlat = device.GenTexture();
+			textureX = device.GenTexture();
+			textureY = device.GenTexture();
+			textureZ = device.GenTexture();
 
 			IGLDevice::UInteger texs[] = {textureFlat, textureX, textureY, textureZ};
 
 			for (int i = 0; i < 4; i++) {
 
-				device->BindTexture(IGLDevice::Texture3D, texs[i]);
-				device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMagFilter,
-				                     IGLDevice::Linear);
-				device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMinFilter,
-				                     IGLDevice::Linear);
-				device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapS,
-				                     IGLDevice::Repeat);
-				device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapT,
-				                     IGLDevice::Repeat);
-				device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapR,
-				                     IGLDevice::ClampToEdge);
-				device->TexImage3D(
+				device.BindTexture(IGLDevice::Texture3D, texs[i]);
+				device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMagFilter,
+				                    IGLDevice::Linear);
+				device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMinFilter,
+				                    IGLDevice::Linear);
+				device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapS,
+				                    IGLDevice::Repeat);
+				device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapT,
+				                    IGLDevice::Repeat);
+				device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapR,
+				                    IGLDevice::ClampToEdge);
+				device.TexImage3D(
 				  IGLDevice::Texture3D, 0,
 				  ((int)settings.r_radiosity >= 2) ? IGLDevice::RGB10A2 : IGLDevice::RGB5A1, w, h,
 				  d, 0, IGLDevice::BGRA, IGLDevice::UnsignedInt2101010Rev, NULL);
@@ -129,11 +130,10 @@ namespace spades {
 
 			for (int j = 0; j < 4; j++) {
 
-				device->BindTexture(IGLDevice::Texture3D, texs[j]);
+				device.BindTexture(IGLDevice::Texture3D, texs[j]);
 				for (int i = 0; i < d; i++) {
-					device->TexSubImage3D(IGLDevice::Texture3D, 0, 0, 0, i, w, h, 1,
-					                      IGLDevice::BGRA, IGLDevice::UnsignedInt2101010Rev,
-					                      v.data());
+					device.TexSubImage3D(IGLDevice::Texture3D, 0, 0, 0, i, w, h, 1, IGLDevice::BGRA,
+					                     IGLDevice::UnsignedInt2101010Rev, v.data());
 				}
 			}
 			dispatch = NULL;
@@ -149,10 +149,10 @@ namespace spades {
 			}
 			SPLog("Releasing textures");
 
-			device->DeleteTexture(textureFlat);
-			device->DeleteTexture(textureX);
-			device->DeleteTexture(textureY);
-			device->DeleteTexture(textureZ);
+			device.DeleteTexture(textureFlat);
+			device.DeleteTexture(textureX);
+			device.DeleteTexture(textureY);
+			device.DeleteTexture(textureZ);
 		}
 
 		GLRadiosityRenderer::Result GLRadiosityRenderer::Evaluate(IntVector3 ipos) {
@@ -355,33 +355,34 @@ namespace spades {
 				if (!chunks[i].transferDone.load())
 					cnt++;
 			}
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Radiosity [>= %d chunk(s)]", cnt);
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Radiosity [>= %d chunk(s)]",
+			                             cnt);
 			for (size_t i = 0; i < chunks.size(); i++) {
 				Chunk &c = chunks[i];
 				if (!c.transferDone.exchange(true)) {
-					device->BindTexture(IGLDevice::Texture3D, textureFlat);
-					device->TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
-					                      c.cy * ChunkSize, c.cz * ChunkSize, ChunkSize, ChunkSize,
-					                      ChunkSize, IGLDevice::BGRA,
-					                      IGLDevice::UnsignedInt2101010Rev, c.dataFlat);
+					device.BindTexture(IGLDevice::Texture3D, textureFlat);
+					device.TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
+					                     c.cy * ChunkSize, c.cz * ChunkSize, ChunkSize, ChunkSize,
+					                     ChunkSize, IGLDevice::BGRA,
+					                     IGLDevice::UnsignedInt2101010Rev, c.dataFlat);
 
-					device->BindTexture(IGLDevice::Texture3D, textureX);
-					device->TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
-					                      c.cy * ChunkSize, c.cz * ChunkSize, ChunkSize, ChunkSize,
-					                      ChunkSize, IGLDevice::BGRA,
-					                      IGLDevice::UnsignedInt2101010Rev, c.dataX);
+					device.BindTexture(IGLDevice::Texture3D, textureX);
+					device.TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
+					                     c.cy * ChunkSize, c.cz * ChunkSize, ChunkSize, ChunkSize,
+					                     ChunkSize, IGLDevice::BGRA,
+					                     IGLDevice::UnsignedInt2101010Rev, c.dataX);
 
-					device->BindTexture(IGLDevice::Texture3D, textureY);
-					device->TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
-					                      c.cy * ChunkSize, c.cz * ChunkSize, ChunkSize, ChunkSize,
-					                      ChunkSize, IGLDevice::BGRA,
-					                      IGLDevice::UnsignedInt2101010Rev, c.dataY);
+					device.BindTexture(IGLDevice::Texture3D, textureY);
+					device.TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
+					                     c.cy * ChunkSize, c.cz * ChunkSize, ChunkSize, ChunkSize,
+					                     ChunkSize, IGLDevice::BGRA,
+					                     IGLDevice::UnsignedInt2101010Rev, c.dataY);
 
-					device->BindTexture(IGLDevice::Texture3D, textureZ);
-					device->TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
-					                      c.cy * ChunkSize, c.cz * ChunkSize, ChunkSize, ChunkSize,
-					                      ChunkSize, IGLDevice::BGRA,
-					                      IGLDevice::UnsignedInt2101010Rev, c.dataZ);
+					device.BindTexture(IGLDevice::Texture3D, textureZ);
+					device.TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
+					                     c.cy * ChunkSize, c.cz * ChunkSize, ChunkSize, ChunkSize,
+					                     ChunkSize, IGLDevice::BGRA,
+					                     IGLDevice::UnsignedInt2101010Rev, c.dataZ);
 				}
 			}
 		}
@@ -536,5 +537,5 @@ namespace spades {
 			c.dirty = false;
 			c.transferDone = false;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

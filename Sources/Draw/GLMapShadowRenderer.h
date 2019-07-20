@@ -39,7 +39,7 @@ namespace spades {
 			enum { CoarseSize = 8, CoarseBits = 3 };
 
 			GLRenderer *renderer;
-			IGLDevice *device;
+			IGLDevice &device;
 			client::GameMap *map;
 			IGLDevice::UInteger texture;
 			IGLDevice::UInteger coarseTexture;

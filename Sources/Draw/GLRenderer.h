@@ -146,7 +146,7 @@ namespace spades {
 			~GLRenderer();
 
 		public:
-			GLRenderer(IGLDevice *glDevice);
+			GLRenderer(Handle<IGLDevice> glDevice);
 
 			void Init() override;
 			void Shutdown() override;
@@ -209,7 +209,7 @@ namespace spades {
 			float ScreenHeight() override;
 
 			GLSettings &GetSettings() { return settings; }
-			IGLDevice *GetGLDevice() { return device; }
+			IGLDevice &GetGLDevice() { return *device; }
 			GLProfiler &GetGLProfiler() { return *profiler; }
 			GLFramebufferManager *GetFramebufferManager() { return fbManager; }
 			IGLShadowMapRenderer *GetShadowMapRenderer() { return shadowMapRenderer; }

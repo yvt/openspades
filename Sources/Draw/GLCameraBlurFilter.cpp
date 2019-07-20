@@ -20,8 +20,6 @@
 
 #include <vector>
 
-#include <Core/Debug.h>
-#include <Core/Math.h>
 #include "GLCameraBlurFilter.h"
 #include "GLProfiler.h"
 #include "GLProgram.h"
@@ -30,6 +28,8 @@
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
@@ -66,10 +66,10 @@ namespace spades {
 
 			bool hasRadialBlur = radialBlur < .9999f;
 
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			static GLProgramAttribute programPosition("positionAttribute");
 			static GLProgramUniform programTexture("mainTexture");
@@ -118,10 +118,10 @@ namespace spades {
 			movePixels = std::max(movePixels, MyACos(diffMatrix.m[5]));
 			movePixels = std::max(movePixels, MyACos(diffMatrix.m[10]));
 			movePixels = tanf(movePixels) / tanf(def.fovX * .5f);
-			movePixels *= (float)dev->ScreenWidth() * .5f;
+			movePixels *= (float)dev.ScreenWidth() * .5f;
 			movePixels *= shutterTimeScale;
 
-			movePixels = std::max(movePixels, (1.f - radialBlur) * dev->ScreenWidth() * 0.5f);
+			movePixels = std::max(movePixels, (1.f - radialBlur) * dev.ScreenWidth() * 0.5f);
 
 			if (movePixels < 1.f) {
 				// too less change, skip camera blur
@@ -146,28 +146,28 @@ namespace spades {
 			GLColorBuffer buf = input;
 
 			qr.SetCoordAttributeIndex(programPosition());
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D,
-			                 renderer->GetFramebufferManager()->GetDepthTexture());
-			dev->ActiveTexture(0);
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D,
+			                renderer->GetFramebufferManager()->GetDepthTexture());
+			dev.ActiveTexture(0);
 
 			for (int i = 0; i < levels; i++) {
 				GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 				programShutterTimeScale.SetValue(shutterTimeScale);
-				dev->BindTexture(IGLDevice::Texture2D, buf.GetTexture());
-				dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
-				dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
+				dev.BindTexture(IGLDevice::Texture2D, buf.GetTexture());
+				dev.BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
+				dev.Viewport(0, 0, output.GetWidth(), output.GetHeight());
 				qr.Draw();
-				dev->BindTexture(IGLDevice::Texture2D, 0);
+				dev.BindTexture(IGLDevice::Texture2D, 0);
 				shutterTimeScale /= 5.f;
 				buf = output;
 			}
 
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D, 0);
-			dev->ActiveTexture(0);
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D, 0);
+			dev.ActiveTexture(0);
 
 			return buf;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

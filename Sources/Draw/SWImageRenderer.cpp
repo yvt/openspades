@@ -280,17 +280,16 @@ namespace spades {
 			                                     const Vertex &v3, SWImageRenderer &r) {
 				// TODO: support null image
 
-				Bitmap *const fb = r.frame;
-				SPAssert(fb != nullptr);
+				Bitmap &fb = *r.frame;
 
 				if (v3.position.y <= 0.f) {
 					// viewport cull
 					return;
 				}
 
-				const int fbW = fb->GetWidth();
-				const int fbH = fb->GetHeight();
-				uint32_t *const bmp = fb->GetPixels();
+				const int fbW = fb.GetWidth();
+				const int fbH = fb.GetHeight();
+				uint32_t *const bmp = fb.GetPixels();
 
 				if (v1.position.y >= static_cast<float>(fbH)) {
 					// viewport cull
@@ -546,17 +545,16 @@ namespace spades {
 			static void DrawPolygonInternalInner(SWImage *img, const Vertex &v1, const Vertex &v2,
 			                                     const Vertex &v3, SWImageRenderer &r) {
 
-				Bitmap *const fb = r.frame;
-				SPAssert(fb != nullptr);
+				Bitmap &fb = *r.frame;
 
 				if (v3.position.y <= 0.f) {
 					// viewport cull
 					return;
 				}
 
-				const int fbW = fb->GetWidth();
-				const int fbH = fb->GetHeight();
-				uint32_t *const bmp = fb->GetPixels();
+				const int fbW = fb.GetWidth();
+				const int fbH = fb.GetHeight();
+				uint32_t *const bmp = fb.GetPixels();
 
 				if (v1.position.y >= static_cast<float>(fbH)) {
 					// viewport cull
@@ -980,17 +978,16 @@ namespace spades {
 			static void DrawPolygonInternalInner(SWImage *img, const Vertex &v1, const Vertex &v2,
 			                                     const Vertex &v3, SWImageRenderer &r) {
 
-				Bitmap *const fb = r.frame;
-				SPAssert(fb != nullptr);
+				Bitmap &fb = *r.frame;
 
 				if (v3.position.y <= 0.f) {
 					// viewport cull
 					return;
 				}
 
-				const int fbW = fb->GetWidth();
-				const int fbH = fb->GetHeight();
-				uint32_t *const bmp = fb->GetPixels();
+				const int fbW = fb.GetWidth();
+				const int fbH = fb.GetHeight();
+				uint32_t *const bmp = fb.GetPixels();
 
 				if (v1.position.y >= static_cast<float>(fbH)) {
 					// viewport cull
@@ -1442,7 +1439,7 @@ namespace spades {
 
 		void SWImageRenderer::DrawPolygon(SWImage *img, const Vertex &v1, const Vertex &v2,
 		                                  const Vertex &v3) {
-			SPAssert(frame != nullptr);
+			SPAssert(frame);
 			switch (shader) {
 				case ShaderType::Sprite:
 					PolygonRenderer2<true, // needs transform

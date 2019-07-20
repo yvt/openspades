@@ -72,11 +72,11 @@ namespace spades {
 			}
 			TCGameMode &tc = dynamic_cast<TCGameMode &>(mode.value());
 
-			float scrW = renderer->ScreenWidth();
-			float scrH = renderer->ScreenHeight();
+			float scrW = renderer.ScreenWidth();
+			float scrH = renderer.ScreenHeight();
 
-			Handle<IImage> prgBg = renderer->RegisterImage("Gfx/TC/ProgressBg.png");
-			Handle<IImage> prgBar = renderer->RegisterImage("Gfx/TC/ProgressBar.png");
+			Handle<IImage> prgBg = renderer.RegisterImage("Gfx/TC/ProgressBg.png");
+			Handle<IImage> prgBar = renderer.RegisterImage("Gfx/TC/ProgressBar.png");
 
 			stmp::optional<Player &> maybePlayer = w->GetLocalPlayer();
 			if (maybePlayer && maybePlayer.value().GetTeamId() < 2 &&
@@ -119,35 +119,35 @@ namespace spades {
 					float y = scrH * 0.7f;
 
 					if (nearTerritory->ownerTeamId == 2) {
-						renderer->SetColorAlphaPremultiplied(MakeVector4(fade, fade, fade, fade));
+						renderer.SetColorAlphaPremultiplied(MakeVector4(fade, fade, fade, fade));
 					} else {
 						IntVector3 c = w->GetTeam(nearTerritory->ownerTeamId).color;
-						renderer->SetColorAlphaPremultiplied(
+						renderer.SetColorAlphaPremultiplied(
 						  MakeVector4(c.x / 255.f, c.y / 255.f, c.z / 255.f, 1) * fade);
 					}
-					renderer->DrawImage(prgBg, MakeVector2(x, y));
+					renderer.DrawImage(prgBg, MakeVector2(x, y));
 
 					// get away from border
 					state.progress += (.5f - state.progress) * 12.f / 256.f;
 
 					if (state.team1 != 2) {
 						IntVector3 c = w->GetTeam(state.team1).color;
-						renderer->SetColorAlphaPremultiplied(
+						renderer.SetColorAlphaPremultiplied(
 						  MakeVector4(c.x / 255.f, c.y / 255.f, c.z / 255.f, 1) * (fade * 0.8f));
-						renderer->DrawImage(prgBar, MakeVector2(x, y),
-						                    AABB2(0, 0, (1.f - state.progress) * 256.f, 32));
+						renderer.DrawImage(prgBar, MakeVector2(x, y),
+						                   AABB2(0, 0, (1.f - state.progress) * 256.f, 32));
 					}
 
 					if (state.team2 != 2) {
 						IntVector3 c = w->GetTeam(state.team2).color;
-						renderer->SetColorAlphaPremultiplied(
+						renderer.SetColorAlphaPremultiplied(
 						  MakeVector4(c.x / 255.f, c.y / 255.f, c.z / 255.f, 1) * (fade * 0.8f));
-						renderer->DrawImage(
+						renderer.DrawImage(
 						  prgBar, MakeVector2(x + (1.f - state.progress) * 256.f, y),
 						  AABB2((1.f - state.progress) * 256.f, 0, state.progress * 256.f, 32));
 					}
 
-					IFont *font = client->fontManager->GetGuiFont();
+					IFont &font = client->fontManager->GetGuiFont();
 					std::string str;
 
 					if (nearTerritory->ownerTeamId == 2) {
@@ -157,11 +157,11 @@ namespace spades {
 						str = _Tr("Client", "{0}'s Territory", str);
 					}
 
-					Vector2 size = font->Measure(str);
+					Vector2 size = font.Measure(str);
 					x = (scrW - size.x) * .5f;
 					y += 35.f;
 
-					font->DrawShadow(str, MakeVector2(x, y), 1.f, MakeVector4(1.f, 1.f, 1.f, fade),
+					font.DrawShadow(str, MakeVector2(x, y), 1.f, MakeVector4(1.f, 1.f, 1.f, fade),
 					                 MakeVector4(0, 0, 0, 0.5f * fade));
 				}
 			} else {

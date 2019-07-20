@@ -52,7 +52,7 @@ namespace spades {
 			};
 
 			GLMapRenderer *renderer;
-			IGLDevice *device;
+			IGLDevice &device;
 			client::GameMap *map;
 			int chunkX, chunkY, chunkZ;
 			AABB3 aabb;

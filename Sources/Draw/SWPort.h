@@ -33,7 +33,7 @@ namespace spades {
 			/**
 			 * Returns a `Bitmap` on which the scene is rendered.
 			 */
-			virtual Bitmap *GetFramebuffer() = 0;
+			virtual Bitmap &GetFramebuffer() = 0;
 
 			/**
 			 * Presents the contents of the framebuffer (returned by

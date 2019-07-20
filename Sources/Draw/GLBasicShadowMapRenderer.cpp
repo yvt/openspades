@@ -19,21 +19,19 @@
  */
 
 #include "GLBasicShadowMapRenderer.h"
-#include <Core/Debug.h>
-#include <Core/Exception.h>
-#include <Core/Settings.h>
 #include "GLProfiler.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Settings.h>
 
 namespace spades {
 	namespace draw {
 
 		GLBasicShadowMapRenderer::GLBasicShadowMapRenderer(GLRenderer *r)
-		    : IGLShadowMapRenderer(r) {
+		    : IGLShadowMapRenderer(r), device(r->GetGLDevice()) {
 			SPADES_MARK_FUNCTION();
-
-			device = r->GetGLDevice();
 
 			textureSize = r->GetSettings().r_shadowMapSize;
 			if ((int)textureSize > 4096) {
@@ -41,42 +39,42 @@ namespace spades {
 				r->GetSettings().r_shadowMapSize = textureSize = 4096;
 			}
 
-			colorTexture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture2D, colorTexture);
-			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGB, textureSize, textureSize, 0,
-			                   IGLDevice::RGB, IGLDevice::UnsignedByte, NULL);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-			                     IGLDevice::ClampToEdge);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-			                     IGLDevice::ClampToEdge);
+			colorTexture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture2D, colorTexture);
+			device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGB, textureSize, textureSize, 0,
+			                  IGLDevice::RGB, IGLDevice::UnsignedByte, NULL);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+			                    IGLDevice::ClampToEdge);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+			                    IGLDevice::ClampToEdge);
 
 			for (int i = 0; i < NumSlices; i++) {
-				texture[i] = device->GenTexture();
-				device->BindTexture(IGLDevice::Texture2D, texture[i]);
-				device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24,
-				                   textureSize, textureSize, 0, IGLDevice::DepthComponent,
-				                   IGLDevice::UnsignedInt, NULL);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-				                     IGLDevice::Linear);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-				                     IGLDevice::Linear);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-				                     IGLDevice::ClampToEdge);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-				                     IGLDevice::ClampToEdge);
+				texture[i] = device.GenTexture();
+				device.BindTexture(IGLDevice::Texture2D, texture[i]);
+				device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24, textureSize,
+				                  textureSize, 0, IGLDevice::DepthComponent, IGLDevice::UnsignedInt,
+				                  NULL);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+				                    IGLDevice::Linear);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+				                    IGLDevice::Linear);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+				                    IGLDevice::ClampToEdge);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+				                    IGLDevice::ClampToEdge);
 
-				framebuffer[i] = device->GenFramebuffer();
-				device->BindFramebuffer(IGLDevice::Framebuffer, framebuffer[i]);
-				device->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
-				                             IGLDevice::Texture2D, colorTexture, 0);
-				device->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::DepthAttachment,
-				                             IGLDevice::Texture2D, texture[i], 0);
+				framebuffer[i] = device.GenFramebuffer();
+				device.BindFramebuffer(IGLDevice::Framebuffer, framebuffer[i]);
+				device.FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
+				                            IGLDevice::Texture2D, colorTexture, 0);
+				device.FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::DepthAttachment,
+				                            IGLDevice::Texture2D, texture[i], 0);
 
-				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
+				device.BindFramebuffer(IGLDevice::Framebuffer, 0);
 			}
 		}
 
@@ -84,10 +82,10 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			for (int i = 0; i < NumSlices; i++) {
-				device->DeleteTexture(texture[i]);
-				device->DeleteFramebuffer(framebuffer[i]);
+				device.DeleteTexture(texture[i]);
+				device.DeleteFramebuffer(framebuffer[i]);
 			}
-			device->DeleteTexture(colorTexture);
+			device.DeleteTexture(colorTexture);
 		}
 
 #define Segment GLBSMRSegment
@@ -224,7 +222,7 @@ namespace spades {
 		void GLBasicShadowMapRenderer::Render() {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice::Integer lastFb = device->GetInteger(IGLDevice::FramebufferBinding);
+			IGLDevice::Integer lastFb = device.GetInteger(IGLDevice::FramebufferBinding);
 
 			// client::SceneDefinition def = GetRenderer()->GetSceneDef();
 
@@ -232,7 +230,8 @@ namespace spades {
 
 			for (int i = 0; i < NumSlices; i++) {
 
-				GLProfiler::Context profiler(GetRenderer()->GetGLProfiler(), "Slice %d / %d", i + 1, (int)NumSlices);
+				GLProfiler::Context profiler(GetRenderer()->GetGLProfiler(), "Slice %d / %d", i + 1,
+				                             (int)NumSlices);
 
 				float farDist = 0.0;
 				// TODO: variable far distance according to the scene definition
@@ -258,19 +257,19 @@ namespace spades {
 				matrix = matrix * Matrix4::Translate(-def.viewOrigin);
 				matrix = Matrix4::Scale(1,1,16.f / 70.f) * matrix;*/
 
-				device->BindFramebuffer(IGLDevice::Framebuffer, framebuffer[i]);
-				device->Viewport(0, 0, textureSize, textureSize);
-				device->ClearDepth(1.f);
-				device->Clear(IGLDevice::DepthBufferBit);
+				device.BindFramebuffer(IGLDevice::Framebuffer, framebuffer[i]);
+				device.Viewport(0, 0, textureSize, textureSize);
+				device.ClearDepth(1.f);
+				device.Clear(IGLDevice::DepthBufferBit);
 
 				RenderShadowMapPass();
 
 				nearDist = farDist;
 			}
 
-			device->BindFramebuffer(IGLDevice::Framebuffer, lastFb);
+			device.BindFramebuffer(IGLDevice::Framebuffer, lastFb);
 
-			device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
+			device.Viewport(0, 0, device.ScreenWidth(), device.ScreenHeight());
 		}
 
 		bool GLBasicShadowMapRenderer::Cull(const spades::AABB3 &) {
@@ -292,5 +291,5 @@ namespace spades {
 			// return true;
 			// return obb.GetDistanceTo(center) < rad;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

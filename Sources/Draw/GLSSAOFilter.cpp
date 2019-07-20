@@ -47,7 +47,7 @@ namespace spades {
 
 		GLColorBuffer GLSSAOFilter::GenerateRawSSAOImage(int width, int height) {
 			SPADES_MARK_FUNCTION();
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			GLColorBuffer output =
@@ -85,30 +85,30 @@ namespace spades {
 				float kernelSize = std::max(1.0f, std::min(width, height) * 0.0018f);
 				sampleOffsetScale.SetValue(kernelSize / (float)width, kernelSize / (float)height);
 
-				if (width < dev->ScreenWidth()) {
+				if (width < dev.ScreenWidth()) {
 					// 2x downsampling
 					texCoordRange.SetValue(0.25f / width, 0.25f / height, 1.f, 1.f);
 				} else {
 					texCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
 				}
 
-				dev->ActiveTexture(0);
+				dev.ActiveTexture(0);
 				depthTexture.SetValue(0);
-				dev->BindTexture(IGLDevice::Texture2D,
+				dev.BindTexture(IGLDevice::Texture2D,
 				                 renderer->GetFramebufferManager()->GetDepthTexture());
 
-				dev->ActiveTexture(1);
+				dev.ActiveTexture(1);
 				ditherTexture.SetValue(1);
 				ditherPattern->Bind(IGLDevice::Texture2D);
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
+				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
+				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
 
-				dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
-				dev->Viewport(0, 0, width, height);
+				dev.BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
+				dev.Viewport(0, 0, width, height);
 				qr.SetCoordAttributeIndex(positionAttribute());
 				qr.Draw();
-				dev->ActiveTexture(0);
-				dev->BindTexture(IGLDevice::Texture2D, 0);
+				dev.ActiveTexture(0);
+				dev.BindTexture(IGLDevice::Texture2D, 0);
 			}
 
 			return output;
@@ -119,7 +119,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			// do gaussian blur
 			GLProgram *program = bilateralProgram;
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			int w = width == -1 ? tex.GetWidth() : width;
@@ -145,14 +145,14 @@ namespace spades {
 			pixelShift(program);
 
 			inputTexture.SetValue(0);
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, tex.GetTexture());
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, tex.GetTexture());
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
 
 			depthTexture.SetValue(1);
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D,
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D,
 							 renderer->GetFramebufferManager()->GetDepthTexture());
 
 			texCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
@@ -170,13 +170,13 @@ namespace spades {
 			qr.SetCoordAttributeIndex(positionAttribute());
 
 			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, 1);
-			dev->Viewport(0, 0, w, h);
-			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
+			dev.Viewport(0, 0, w, h);
+			dev.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
 
-			dev->ActiveTexture(0);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Linear);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Linear);
+			dev.ActiveTexture(0);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Linear);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Linear);
 
 			return buf2;
 		}
@@ -184,12 +184,12 @@ namespace spades {
 		GLColorBuffer GLSSAOFilter::Filter() {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer->GetGLDevice();
 
-			int width = dev->ScreenWidth();
-			int height = dev->ScreenHeight();
+			int width = dev.ScreenWidth();
+			int height = dev.ScreenHeight();
 
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			bool useLowQualitySSAO = renderer->IsRenderingMirror() || renderer->GetSettings().r_ssao >= 2;
 			GLColorBuffer ssao = useLowQualitySSAO ?

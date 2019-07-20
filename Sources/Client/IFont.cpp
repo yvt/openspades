@@ -226,11 +226,11 @@ namespace spades {
 			auto glyph = FindGlyph(unicode);
 			if (glyph.img == nullptr) {
 				// no glyph found! draw box in the last resort
-				IImage *img = whiteImage;
-				renderer->DrawImage(img, AABB2(x, y, size, 1.f));
-				renderer->DrawImage(img, AABB2(x, y + size - 1.f, size, 1.f));
-				renderer->DrawImage(img, AABB2(x, y + 1.f, 1.f, size - 2.f));
-				renderer->DrawImage(img, AABB2(x + size - 1.f, y + 1.f, 1.f, size - 2.f));
+				const Handle<IImage> &img = whiteImage;
+				renderer->DrawImage(*img, AABB2(x, y, size, 1.f));
+				renderer->DrawImage(*img, AABB2(x, y + size - 1.f, size, 1.f));
+				renderer->DrawImage(*img, AABB2(x, y + 1.f, 1.f, size - 2.f));
+				renderer->DrawImage(*img, AABB2(x + size - 1.f, y + 1.f, 1.f, size - 2.f));
 				return;
 			}
 

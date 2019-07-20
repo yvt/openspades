@@ -37,7 +37,7 @@ namespace spades {
 
 			enum { Tiles = 64 };
 
-			IGLDevice *device;
+			IGLDevice &device;
 			GLSettings &settings;
 
 			int textureSize;

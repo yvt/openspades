@@ -109,9 +109,7 @@ namespace spades {
 			if (!world || !world->GetLocalPlayerIndex()) {
 				return {};
 			}
-			return clientPlayers.at(static_cast<std::size_t>(*world->GetLocalPlayerIndex()))
-			  .
-			  operator ClientPlayer *();
+			return clientPlayers.at(static_cast<std::size_t>(*world->GetLocalPlayerIndex()));
 		}
 
 #pragma mark - World Actions
@@ -156,7 +154,8 @@ namespace spades {
 			if (!quiet) {
 				Handle<IAudioChunk> c =
 				  audioDevice->RegisterSound("Sounds/Weapons/SwitchLocal.opus");
-				audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
+				audioDevice->PlayLocal(c.GetPointerOrNull(), MakeVector3(.4f, -.3f, .5f),
+				                       AudioParam());
 			}
 		}
 
@@ -537,7 +536,7 @@ namespace spades {
 						c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/FleshLocal4.opus");
 						break;
 				}
-				audioDevice->PlayLocal(c, AudioParam());
+				audioDevice->PlayLocal(c.GetPointerOrNull(), AudioParam());
 
 				float hpper = player.GetHealth() / 100.f;
 				int cnt = 18 - (int)(player.GetHealth() / 100.f * 8.f);
@@ -581,7 +580,7 @@ namespace spades {
 				Handle<IAudioChunk> c =
 				  p.GetWade() ? audioDevice->RegisterSound("Sounds/Player/WaterJump.opus")
 				              : audioDevice->RegisterSound("Sounds/Player/Jump.opus");
-				audioDevice->Play(c, p.GetOrigin(), AudioParam());
+				audioDevice->Play(c.GetPointerOrNull(), p.GetOrigin(), AudioParam());
 			}
 		}
 
@@ -596,7 +595,7 @@ namespace spades {
 					c = audioDevice->RegisterSound("Sounds/Player/WaterLand.opus");
 				else
 					c = audioDevice->RegisterSound("Sounds/Player/Land.opus");
-				audioDevice->Play(c, p.GetOrigin(), AudioParam());
+				audioDevice->Play(c.GetPointerOrNull(), p.GetOrigin(), AudioParam());
 			}
 		}
 
@@ -628,12 +627,12 @@ namespace spades {
 				Handle<IAudioChunk> c = p.GetWade()
 				                          ? audioDevice->RegisterSound(SampleRandomElement(wsnds))
 				                          : audioDevice->RegisterSound(SampleRandomElement(snds));
-				audioDevice->Play(c, p.GetOrigin(), AudioParam());
+				audioDevice->Play(c.GetPointerOrNull(), p.GetOrigin(), AudioParam());
 				if (sprinting && !p.GetWade()) {
 					AudioParam param;
 					param.volume *= clientPlayers[p.GetId()]->GetSprintState();
 					c = audioDevice->RegisterSound(SampleRandomElement(rsnds));
-					audioDevice->Play(c, p.GetOrigin(), param);
+					audioDevice->Play(c.GetPointerOrNull(), p.GetOrigin(), param);
 				}
 			}
 		}
@@ -654,11 +653,13 @@ namespace spades {
 				bool isLocal = &p == world->GetLocalPlayer();
 				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Weapons/DryFire.opus");
 				if (isLocal)
-					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
+					audioDevice->PlayLocal(c.GetPointerOrNull(), MakeVector3(.4f, -.3f, .5f),
+					                       AudioParam());
 				else
-					audioDevice->Play(
-					  c, p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f + p.GetRight() * .4f,
-					  AudioParam());
+					audioDevice->Play(c.GetPointerOrNull(),
+					                  p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f +
+					                    p.GetRight() * .4f,
+					                  AudioParam());
 			}
 		}
 
@@ -687,11 +688,13 @@ namespace spades {
 					c = audioDevice->RegisterSound("Sounds/Weapons/Switch.opus");
 				}
 				if (isLocal)
-					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
+					audioDevice->PlayLocal(c.GetPointerOrNull(), MakeVector3(.4f, -.3f, .5f),
+					                       AudioParam());
 				else
-					audioDevice->Play(
-					  c, p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f + p.GetRight() * .4f,
-					  AudioParam());
+					audioDevice->Play(c.GetPointerOrNull(),
+					                  p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f +
+					                    p.GetRight() * .4f,
+					                  AudioParam());
 			}
 		}
 
@@ -702,11 +705,13 @@ namespace spades {
 				  isLocal ? audioDevice->RegisterSound("Sounds/Weapons/RestockLocal.opus")
 				          : audioDevice->RegisterSound("Sounds/Weapons/Restock.opus");
 				if (isLocal)
-					audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
+					audioDevice->PlayLocal(c.GetPointerOrNull(), MakeVector3(.4f, -.3f, .5f),
+					                       AudioParam());
 				else
-					audioDevice->Play(
-					  c, p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f + p.GetRight() * .4f,
-					  AudioParam());
+					audioDevice->Play(c.GetPointerOrNull(),
+					                  p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .3f +
+					                    p.GetRight() * .4f,
+					                  AudioParam());
 			}
 		}
 
@@ -724,11 +729,13 @@ namespace spades {
 				}
 
 				if (isLocal)
-					audioDevice->PlayLocal(c, MakeVector3(.4f, 0.1f, .3f), AudioParam());
+					audioDevice->PlayLocal(c.GetPointerOrNull(), MakeVector3(.4f, 0.1f, .3f),
+					                       AudioParam());
 				else
-					audioDevice->Play(
-					  c, p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .2f + p.GetRight() * .3f,
-					  AudioParam());
+					audioDevice->Play(c.GetPointerOrNull(),
+					                  p.GetEye() + p.GetFront() * 0.5f - p.GetUp() * .2f +
+					                    p.GetRight() * .3f,
+					                  AudioParam());
 			}
 		}
 
@@ -740,9 +747,11 @@ namespace spades {
 				Handle<IAudioChunk> c =
 				  audioDevice->RegisterSound("Sounds/Weapons/Spade/Miss.opus");
 				if (isLocal)
-					audioDevice->PlayLocal(c, MakeVector3(.2f, -.1f, 0.7f), AudioParam());
+					audioDevice->PlayLocal(c.GetPointerOrNull(), MakeVector3(.2f, -.1f, 0.7f),
+					                       AudioParam());
 				else
-					audioDevice->Play(c, p.GetOrigin() + p.GetFront() * 0.8f - p.GetUp() * .2f,
+					audioDevice->Play(c.GetPointerOrNull(),
+					                  p.GetOrigin() + p.GetFront() * 0.8f - p.GetUp() * .2f,
 					                  AudioParam());
 			}
 		}
@@ -769,9 +778,11 @@ namespace spades {
 				Handle<IAudioChunk> c =
 				  audioDevice->RegisterSound("Sounds/Weapons/Spade/HitBlock.opus");
 				if (isLocal)
-					audioDevice->PlayLocal(c, MakeVector3(.1f, -.1f, 1.2f), AudioParam());
+					audioDevice->PlayLocal(c.GetPointerOrNull(), MakeVector3(.1f, -.1f, 1.2f),
+					                       AudioParam());
 				else
-					audioDevice->Play(c, p.GetOrigin() + p.GetFront() * 0.5f - p.GetUp() * .2f,
+					audioDevice->Play(c.GetPointerOrNull(),
+					                  p.GetOrigin() + p.GetFront() * 0.5f - p.GetUp() * .2f,
 					                  AudioParam());
 			}
 		}
@@ -800,7 +811,7 @@ namespace spades {
 						}
 						AudioParam param;
 						param.volume = 4.f;
-						audioDevice->Play(c, victim.GetEye(), param);
+						audioDevice->Play(c.GetPointerOrNull(), victim.GetEye(), param);
 					}
 				}
 			}
@@ -966,7 +977,7 @@ namespace spades {
 				if (type == HitTypeMelee) {
 					Handle<IAudioChunk> c =
 					  audioDevice->RegisterSound("Sounds/Weapons/Spade/HitPlayer.opus");
-					audioDevice->Play(c, hitPos, AudioParam());
+					audioDevice->Play(c.GetPointerOrNull(), hitPos, AudioParam());
 				} else {
 					Handle<IAudioChunk> c;
 					switch (SampleRandomInt(0, 2)) {
@@ -982,7 +993,7 @@ namespace spades {
 					}
 					AudioParam param;
 					param.volume = 4.f;
-					audioDevice->Play(c, hitPos, param);
+					audioDevice->Play(c.GetPointerOrNull(), hitPos, param);
 				}
 			}
 
@@ -994,7 +1005,7 @@ namespace spades {
 					  audioDevice->RegisterSound("Sounds/Feedback/HeadshotFeedback.opus");
 					AudioParam param;
 					param.volume = cg_hitFeedbackSoundGain;
-					audioDevice->PlayLocal(c, param);
+					audioDevice->PlayLocal(c.GetPointerOrNull(), param);
 				}
 
 				hitFeedbackIconState = 1.f;
@@ -1039,7 +1050,7 @@ namespace spades {
 							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Water4.opus");
 							break;
 					}
-					audioDevice->Play(c, shiftedHitPos, param);
+					audioDevice->Play(c.GetPointerOrNull(), shiftedHitPos, param);
 				}
 			} else {
 				EmitBlockFragments(shiftedHitPos, colV);
@@ -1050,7 +1061,7 @@ namespace spades {
 
 					Handle<IAudioChunk> c;
 					c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Block.opus");
-					audioDevice->Play(c, shiftedHitPos, param);
+					audioDevice->Play(c.GetPointerOrNull(), shiftedHitPos, param);
 
 					param.pitch = .9f + SampleRandomFloat() * 0.2f;
 					param.volume = 2.f;
@@ -1068,7 +1079,7 @@ namespace spades {
 							c = audioDevice->RegisterSound("Sounds/Weapons/Impacts/Ricochet4.opus");
 							break;
 					}
-					audioDevice->Play(c, shiftedHitPos, param);
+					audioDevice->Play(c.GetPointerOrNull(), shiftedHitPos, param);
 				}
 			}
 		}
@@ -1110,7 +1121,7 @@ namespace spades {
 				o += .5f;
 
 				Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Misc/BlockFall.opus");
-				audioDevice->Play(c, o, AudioParam());
+				audioDevice->Play(c.GetPointerOrNull(), o, AudioParam());
 			}
 		}
 
@@ -1121,7 +1132,7 @@ namespace spades {
 				if (!IsMuted()) {
 					Handle<IAudioChunk> c =
 					  audioDevice->RegisterSound("Sounds/Weapons/Grenade/Bounce.opus");
-					audioDevice->Play(c, g.GetPosition(), AudioParam());
+					audioDevice->Play(c.GetPointerOrNull(), g.GetPosition(), AudioParam());
 				}
 			}
 		}
@@ -1132,7 +1143,7 @@ namespace spades {
 			if (!IsMuted()) {
 				Handle<IAudioChunk> c =
 				  audioDevice->RegisterSound("Sounds/Weapons/Grenade/DropWater.opus");
-				audioDevice->Play(c, g.GetPosition(), AudioParam());
+				audioDevice->Play(c.GetPointerOrNull(), g.GetPosition(), AudioParam());
 			}
 		}
 
@@ -1147,17 +1158,17 @@ namespace spades {
 					  audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplode.opus");
 					AudioParam param;
 					param.volume = 10.f;
-					audioDevice->Play(c, g.GetPosition(), param);
+					audioDevice->Play(c.GetPointerOrNull(), g.GetPosition(), param);
 
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeFar.opus");
 					param.volume = 6.f;
 					param.referenceDistance = 10.f;
-					audioDevice->Play(c, g.GetPosition(), param);
+					audioDevice->Play(c.GetPointerOrNull(), g.GetPosition(), param);
 
 					c =
 					  audioDevice->RegisterSound("Sounds/Weapons/Grenade/WaterExplodeStereo.opus");
 					param.volume = 2.f;
-					audioDevice->Play(c, g.GetPosition(), param);
+					audioDevice->Play(c.GetPointerOrNull(), g.GetPosition(), param);
 				}
 
 				GrenadeExplosionUnderwater(g.GetPosition());
@@ -1184,19 +1195,19 @@ namespace spades {
 					AudioParam param;
 					param.volume = 30.f;
 					param.referenceDistance = 5.f;
-					audioDevice->Play(c, g.GetPosition(), param);
+					audioDevice->Play(c.GetPointerOrNull(), g.GetPosition(), param);
 
 					param.referenceDistance = 1.f;
-					audioDevice->Play(cs, g.GetPosition(), param);
+					audioDevice->Play(cs.GetPointerOrNull(), g.GetPosition(), param);
 
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFar.opus");
 					param.volume = 6.f;
 					param.referenceDistance = 40.f;
-					audioDevice->Play(c, g.GetPosition(), param);
+					audioDevice->Play(c.GetPointerOrNull(), g.GetPosition(), param);
 
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/ExplodeFarStereo.opus");
 					param.referenceDistance = 10.f;
-					audioDevice->Play(c, g.GetPosition(), param);
+					audioDevice->Play(c.GetPointerOrNull(), g.GetPosition(), param);
 
 					// debri sound
 					c = audioDevice->RegisterSound("Sounds/Weapons/Grenade/Debris.opus");
@@ -1207,7 +1218,7 @@ namespace spades {
 					if (world->GetMap()->CastRay(soundPos, MakeVector3(0, 0, 1), 8.f, outPos)) {
 						soundPos.z = (float)outPos.z - .2f;
 					}
-					audioDevice->Play(c, soundPos, param);
+					audioDevice->Play(c.GetPointerOrNull(), soundPos, param);
 				}
 			}
 		}
@@ -1218,7 +1229,8 @@ namespace spades {
 			if (!IsMuted()) {
 				Handle<IAudioChunk> c =
 				  audioDevice->RegisterSound("Sounds/Weapons/Grenade/Fire.opus");
-				audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
+				audioDevice->PlayLocal(c.GetPointerOrNull(), MakeVector3(.4f, -.3f, .5f),
+				                       AudioParam());
 			}
 		}
 

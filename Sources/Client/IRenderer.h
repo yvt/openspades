@@ -77,7 +77,7 @@ namespace spades {
 			 *  See the existing code for usage. */
 			std::array<Vector3, 3> spotAxis;
 			/** The projected image for a spotlight. */
-			IImage *image = nullptr;
+			IImage *image = nullptr; // TODO: Replace this raw pointer with something
 			float spotAngle = 0.0f;
 
 			/** When set to `true`, the lens flare post-effect is enabled for

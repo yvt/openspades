@@ -423,9 +423,9 @@ namespace spades {
 
 			void MarkWorldUpdate();
 
-			IRenderer *GetRenderer() { return renderer; }
+			IRenderer &GetRenderer() { return *renderer; }
 			SceneDefinition GetLastSceneDef() { return lastSceneDef; }
-			IAudioDevice *GetAudioDevice() { return audioDevice; }
+			IAudioDevice &GetAudioDevice() { return *audioDevice; }
 
 			bool WantsToBeClosed() override;
 			bool IsMuted();

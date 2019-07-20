@@ -45,7 +45,7 @@ namespace spades {
 				SPADES_MARK_FUNCTION();
 				bmp.Set(new Bitmap(512, 512), false);
 			}
-			Bitmap *GetFramebuffer() override { return bmp; }
+			Bitmap &GetFramebuffer() override { return *bmp; }
 			void Swap() override {
 				// nothing to do here
 			}
@@ -54,7 +54,7 @@ namespace spades {
 		HitTestDebugger::HitTestDebugger(World *world) : world(world) {
 			SPADES_MARK_FUNCTION();
 			port.Set(new Port(), false);
-			renderer.Set(new draw::SWRenderer(port), false);
+			renderer.Set(new draw::SWRenderer(port.Cast<draw::SWPort>()), false);
 			renderer->Init();
 		}
 
@@ -233,12 +233,12 @@ namespace spades {
 			renderer->EndScene();
 
 			// draw crosshair
-			IImage *img = renderer->RegisterImage("Gfx/White.tga");
+			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			float size = renderer->ScreenWidth();
 
 			renderer->SetColorAlphaPremultiplied(Vector4(1.f, 0.f, 0.f, 0.9f));
-			renderer->DrawImage(img, AABB2(size * 0.5f - 1.f, 0.f, 2.f, size));
-			renderer->DrawImage(img, AABB2(0.f, size * 0.5f - 1.f, size, 2.f));
+			renderer->DrawImage(*img, AABB2(size * 0.5f - 1.f, 0.f, 2.f, size));
+			renderer->DrawImage(*img, AABB2(0.f, size * 0.5f - 1.f, size, 2.f));
 
 			// draw bullet vectors
 			float fov = tanf(def.fovY * .5f);
@@ -250,9 +250,9 @@ namespace spades {
 				x = floorf(x);
 				y = floorf(y);
 				renderer->SetColorAlphaPremultiplied(Vector4(1.f, 0.f, 0.f, 0.9f));
-				renderer->DrawImage(img, AABB2(x - 1.f, y - 1.f, 3.f, 3.f));
+				renderer->DrawImage(*img, AABB2(x - 1.f, y - 1.f, 3.f, 3.f));
 				renderer->SetColorAlphaPremultiplied(Vector4(1.f, 1.f, 0.f, 0.9f));
-				renderer->DrawImage(img, AABB2(x, y, 1.f, 1.f));
+				renderer->DrawImage(*img, AABB2(x, y, 1.f, 1.f));
 			}
 
 			renderer->FrameDone();
@@ -297,7 +297,7 @@ namespace spades {
 
 			// save image
 			try {
-				Handle<Bitmap> b(renderer->ReadBitmap(), false);
+				Handle<Bitmap> b = renderer->ReadBitmap();
 				b->Save(fileName);
 				SPLog("HitTestDebugger: saved to '%s'", fileName.c_str());
 			} catch (const std::exception &ex) {

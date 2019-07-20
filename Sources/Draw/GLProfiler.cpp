@@ -86,7 +86,7 @@ namespace spades {
 		GLProfiler::GLProfiler(GLRenderer &renderer)
 		    : m_settings{renderer.GetSettings()},
 		      m_renderer{renderer},
-		      m_device{*renderer.GetGLDevice()},
+		      m_device{renderer.GetGLDevice()},
 		      m_active{false},
 		      m_lastSaveTime{0.0},
 		      m_shouldSaveThisFrame{false},
@@ -486,7 +486,7 @@ namespace spades {
 				      factor{factor} {}
 
 				void DrawText(const char *str) {
-					client::IImage *font = self.m_font;
+					client::IImage &font = *self.m_font;
 
 					while (*str) {
 						char c = *str;
@@ -547,7 +547,7 @@ namespace spades {
 					float barScale = 4000.0 * self.m_settings.r_debugTimingOutputBarScale;
 					float boxWidth = static_cast<float>(time * barScale);
 					float childBoxWidth = static_cast<float>(subphaseTime * barScale);
-					client::IImage *white = self.m_white;
+					client::IImage &white = *self.m_white;
 
 					renderer.SetColorAlphaPremultiplied(Vector4{0.0f, 0.0f, 0.0f, 0.5f});
 					renderer.DrawImage(white, AABB2{cursor.x, cursor.y + 1.0f, boxWidth, 8.0f});

@@ -49,8 +49,8 @@ namespace spades {
 			bool m_shouldSaveThisFrame;
 			bool m_waitingTimerQueryResult;
 
-			client::IImage *m_font;
-			client::IImage *m_white;
+			Handle<client::IImage> m_font;
+			Handle<client::IImage> m_white;
 
 			Stopwatch m_stopwatch;
 

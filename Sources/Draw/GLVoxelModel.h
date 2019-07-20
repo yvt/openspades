@@ -48,7 +48,7 @@ namespace spades {
 			};
 
 			GLRenderer *renderer;
-			IGLDevice *device;
+			IGLDevice &device;
 			GLProgram *program;
 			GLProgram *dlightProgram;
 			GLProgram *shadowMapProgram;

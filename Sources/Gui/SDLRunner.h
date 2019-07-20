@@ -48,7 +48,7 @@ namespace spades {
 			std::string TranslateKey(const SDL_Keysym &);
 			std::string TranslateButton(Uint8 b);
 			virtual int GetModState();
-			void ProcessEvent(SDL_Event &event, View *);
+			void ProcessEvent(SDL_Event &event, View &);
 			virtual void RunClientLoop(client::IRenderer *renderer, client::IAudioDevice *dev);
 			virtual View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) = 0;
 			virtual client::IAudioDevice *CreateAudioDevice();

@@ -71,8 +71,8 @@ namespace spades {
 	namespace draw {
 		// TODO: raise error for any calls after Shutdown().
 
-		GLRenderer::GLRenderer(IGLDevice *_device)
-		    : device(_device),
+		GLRenderer::GLRenderer(Handle<IGLDevice> _device)
+		    : device(std::move(_device)),
 		      fbManager(NULL),
 		      map(NULL),
 		      inited(false),
@@ -101,12 +101,14 @@ namespace spades {
 		      duringSceneRendering(false) {
 			SPADES_MARK_FUNCTION();
 
+			SPAssert(device);
+
 			SPLog("GLRenderer bootstrap");
 
-			fbManager = new GLFramebufferManager(_device, settings);
+			fbManager = new GLFramebufferManager(*device, settings);
 
-			programManager = new GLProgramManager(_device, shadowMapRenderer, settings);
-			imageManager = new GLImageManager(_device);
+			programManager = new GLProgramManager(*device, shadowMapRenderer, settings);
+			imageManager = new GLImageManager(*device);
 			imageRenderer = new GLImageRenderer(this);
 			profiler.reset(new GLProfiler(*this));
 
@@ -259,7 +261,7 @@ namespace spades {
 
 		Handle<client::IImage> GLRenderer::CreateImage(spades::Bitmap &bmp) {
 			SPADES_MARK_FUNCTION();
-			return GLImage::FromBitmap(bmp, device).Cast<client::IImage>();
+			return GLImage::FromBitmap(bmp, device.GetPointerOrNull()).Cast<client::IImage>();
 		}
 
 		Handle<client::IModel> GLRenderer::CreateModel(spades::VoxelModel &model) {
@@ -1035,7 +1037,7 @@ namespace spades {
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
 				device->Viewport(0, 0, handle.GetWidth(), handle.GetHeight());
-				Handle<GLImage> image(new GLImage(handle.GetTexture(), device, handle.GetWidth(),
+				Handle<GLImage> image(new GLImage(handle.GetTexture(), device.GetPointerOrNull(), handle.GetWidth(),
 				                                  handle.GetHeight(), false),
 				                      false);
 				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
@@ -1231,7 +1233,8 @@ namespace spades {
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
 				device->Viewport(0, 0, w, h);
-				Handle<GLImage> image(new GLImage(lastColorBufferTexture, device, w, h, false),
+				// TODO: Replace this with `Handle::New`
+				Handle<GLImage> image(new GLImage(lastColorBufferTexture, device.GetPointerOrNull(), w, h, false),
 				                      false);
 				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
 				DrawImage(*image, AABB2(0, h, w, -h));

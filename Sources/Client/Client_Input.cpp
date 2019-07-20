@@ -446,7 +446,7 @@ namespace spades {
 							params.volume = 0.08f;
 							Handle<IAudioChunk> chunk =
 							  audioDevice->RegisterSound("Sounds/Weapons/AimDownSightLocal.opus");
-							audioDevice->PlayLocal(chunk, MakeVector3(.4f, -.3f, .5f), params);
+							audioDevice->PlayLocal(chunk.GetPointerOrNull(), MakeVector3(.4f, -.3f, .5f), params);
 						}
 					} else if (CheckKey(cg_keyReloadWeapon, name) && down) {
 						Weapon &w = world->GetLocalPlayer()->GetWeapon();
@@ -536,16 +536,16 @@ namespace spades {
 						mapView->SwitchScale();
 						Handle<IAudioChunk> chunk =
 						  audioDevice->RegisterSound("Sounds/Misc/SwitchMapZoom.opus");
-						audioDevice->PlayLocal(chunk, AudioParam());
+						audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 					} else if (CheckKey(cg_keyToggleMapZoom, name) && down) {
 						if (largeMapView->ToggleZoom()) {
 							Handle<IAudioChunk> chunk =
 							  audioDevice->RegisterSound("Sounds/Misc/OpenMap.opus");
-							audioDevice->PlayLocal(chunk, AudioParam());
+							audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 						} else {
 							Handle<IAudioChunk> chunk =
 							  audioDevice->RegisterSound("Sounds/Misc/CloseMap.opus");
-							audioDevice->PlayLocal(chunk, AudioParam());
+							audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 						}
 					} else if (CheckKey(cg_keyScoreboard, name)) {
 						scoreboardVisible = down;
@@ -569,7 +569,7 @@ namespace spades {
 						flashlightOnTime = time;
 						Handle<IAudioChunk> chunk =
 						  audioDevice->RegisterSound("Sounds/Player/Flashlight.opus");
-						audioDevice->PlayLocal(chunk, AudioParam());
+						audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 					} else if (CheckKey(cg_keyAutoFocus, name) && down && (int)cg_manualFocus) {
 						autoFocusEnabled = true;
 					} else if (down) {

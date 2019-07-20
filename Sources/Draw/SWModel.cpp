@@ -106,9 +106,9 @@ namespace spades {
 		SWModel::~SWModel() {}
 
 		AABB3 SWModel::GetBoundingBox() {
-			VoxelModel *m = rawModel;
+			VoxelModel &m = *rawModel;
 			Vector3 minPos = {0, 0, 0};
-			Vector3 maxPos = {(float)m->GetWidth(), (float)m->GetHeight(), (float)m->GetDepth()};
+			Vector3 maxPos = {(float)m.GetWidth(), (float)m.GetHeight(), (float)m.GetDepth()};
 			auto origin = rawModel->GetOrigin() - .5f;
 			minPos += origin;
 			maxPos += origin;

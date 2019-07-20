@@ -35,10 +35,10 @@ namespace spades {
 		ClientUI::ClientUI(IRenderer *r, IAudioDevice *a, FontManager *fontManager, Client *client)
 		    : renderer(r), audioDevice(a), fontManager(fontManager), client(client) {
 			SPADES_MARK_FUNCTION();
-			if (r == NULL)
-				SPInvalidArgument("r");
-			if (a == NULL)
-				SPInvalidArgument("a");
+			if (!renderer)
+				SPInvalidArgument("renderer");
+			if (!audioDevice)
+				SPInvalidArgument("audioDevice");
 
 			helper.Set(new ClientUIHelper(this), false);
 
@@ -47,8 +47,8 @@ namespace spades {
 			  "ClientUI@ CreateClientUI(Renderer@, AudioDevice@, FontManager@, ClientUIHelper@)");
 			{
 				ScriptContextHandle ctx = uiFactory.Prepare();
-				ctx->SetArgObject(0, renderer);
-				ctx->SetArgObject(1, audioDevice);
+				ctx->SetArgObject(0, renderer.GetPointerOrNull());
+				ctx->SetArgObject(1, audioDevice.GetPointerOrNull());
 				ctx->SetArgObject(2, fontManager);
 				ctx->SetArgObject(3, &*helper);
 

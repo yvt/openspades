@@ -73,7 +73,7 @@ namespace spades {
 			if (!IsMuted()) {
 				Handle<IAudioChunk> c =
 				  audioDevice->RegisterSound("Sounds/Weapons/Block/Build.opus");
-				audioDevice->Play(c, p.GetEye() + p.GetFront(), AudioParam());
+				audioDevice->Play(c.GetPointerOrNull(), p.GetEye() + p.GetFront(), AudioParam());
 			}
 		}
 
@@ -108,11 +108,11 @@ namespace spades {
 				if (teamId == world->GetLocalPlayer()->GetTeamId()) {
 					Handle<IAudioChunk> chunk =
 					  audioDevice->RegisterSound("Sounds/Feedback/TC/YourTeamCaptured.opus");
-					audioDevice->PlayLocal(chunk, AudioParam());
+					audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 				} else {
 					Handle<IAudioChunk> chunk =
 					  audioDevice->RegisterSound("Sounds/Feedback/TC/EnemyCaptured.opus");
-					audioDevice->PlayLocal(chunk, AudioParam());
+					audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 				}
 			}
 		}
@@ -140,11 +140,11 @@ namespace spades {
 				if (p.GetTeamId() == world->GetLocalPlayer()->GetTeamId()) {
 					Handle<IAudioChunk> chunk =
 					  audioDevice->RegisterSound("Sounds/Feedback/CTF/YourTeamCaptured.opus");
-					audioDevice->PlayLocal(chunk, AudioParam());
+					audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 				} else {
 					Handle<IAudioChunk> chunk =
 					  audioDevice->RegisterSound("Sounds/Feedback/CTF/EnemyCaptured.opus");
-					audioDevice->PlayLocal(chunk, AudioParam());
+					audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 				}
 			}
 		}
@@ -170,7 +170,7 @@ namespace spades {
 			if (!IsMuted()) {
 				Handle<IAudioChunk> chunk =
 				  audioDevice->RegisterSound("Sounds/Feedback/CTF/PickedUp.opus");
-				audioDevice->PlayLocal(chunk, AudioParam());
+				audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 			}
 		}
 
@@ -204,7 +204,7 @@ namespace spades {
 
 			Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Misc/BlockDestroy.opus");
 			if (!IsMuted()) {
-				audioDevice->Play(c, origin, AudioParam());
+				audioDevice->Play(c.GetPointerOrNull(), origin, AudioParam());
 			}
 
 			uint32_t col = map->GetColor(blk.x, blk.y, blk.z);
@@ -218,7 +218,7 @@ namespace spades {
 
 			Handle<IAudioChunk> c = audioDevice->RegisterSound("Sounds/Misc/BlockDestroy.opus");
 			if (!IsMuted()) {
-				audioDevice->Play(c, origin, AudioParam());
+				audioDevice->Play(c.GetPointerOrNull(), origin, AudioParam());
 			}
 
 			SPAssert(map);
@@ -333,11 +333,11 @@ namespace spades {
 				if (teamId == world->GetLocalPlayer()->GetTeamId()) {
 					Handle<IAudioChunk> chunk =
 					  audioDevice->RegisterSound("Sounds/Feedback/Win.opus");
-					audioDevice->PlayLocal(chunk, AudioParam());
+					audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 				} else {
 					Handle<IAudioChunk> chunk =
 					  audioDevice->RegisterSound("Sounds/Feedback/Lose.opus");
-					audioDevice->PlayLocal(chunk, AudioParam());
+					audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 				}
 			}
 		}

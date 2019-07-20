@@ -226,7 +226,7 @@ namespace spades {
 
 			const auto *rle = this->rle.data();
 			auto &rleHeap = this->rleHeap;
-			client::GameMap *map = this->map;
+			client::GameMap &map = *this->map;
 
 			// pitch culling
 			{
@@ -529,13 +529,13 @@ namespace spades {
 
 				// check for new spans
 
-				auto BuildLinePixel = [map](int x, int y, int z, Face face, float dist) {
+				auto BuildLinePixel = [&map](int x, int y, int z, Face face, float dist) {
 					LinePixel px;
 					px.depth = dist;
 #if ENABLE_SSE
 					if (flevel == SWFeatureLevel::SSE2) {
 						__m128i m;
-						uint32_t col = map->GetColorWrapped(x, y, z);
+						uint32_t col = map.GetColorWrapped(x, y, z);
 						m = _mm_setr_epi32(col, 0, 0, 0);
 						m = _mm_unpacklo_epi8(m, _mm_setzero_si128());
 						m = _mm_shufflelo_epi16(m, 0xc6);
@@ -560,7 +560,7 @@ namespace spades {
 					// non-optimized
 					{
 						uint32_t col;
-						col = map->GetColorWrapped(x, y, z);
+						col = map.GetColorWrapped(x, y, z);
 						col = (col & 0xff00) | ((col & 0xff) << 16) | ((col & 0xff0000) >> 16);
 						switch (face) {
 							case Face::PosZ: col = (col & 0xfcfcfc) >> 2; break;
@@ -1174,10 +1174,8 @@ namespace spades {
 			depthBuf = nullptr;
 		}
 
-		void SWMapRenderer::Render(const client::SceneDefinition &def, Bitmap *frame,
+		void SWMapRenderer::Render(const client::SceneDefinition &def, Bitmap &frame,
 		                           float *depthBuffer) {
-			if (!frame)
-				SPInvalidArgument("frame");
 			if (!depthBuffer)
 				SPInvalidArgument("depthBuffer");
 
@@ -1188,12 +1186,12 @@ namespace spades {
 
 #if ENABLE_SSE2
 			if (static_cast<int>(level) >= static_cast<int>(SWFeatureLevel::SSE2)) {
-				RenderInner<SWFeatureLevel::SSE2>(def, frame, depthBuffer);
+				RenderInner<SWFeatureLevel::SSE2>(def, &frame, depthBuffer);
 				return;
 			}
 #endif
 
-			RenderInner<SWFeatureLevel::None>(def, frame, depthBuffer);
+			RenderInner<SWFeatureLevel::None>(def, &frame, depthBuffer);
 		}
 	}
 }

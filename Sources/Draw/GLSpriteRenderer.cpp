@@ -118,11 +118,11 @@ namespace spades {
 			upVector.SetValue(def.viewAxis[1].x, def.viewAxis[1].y, def.viewAxis[1].z);
 			texture.SetValue(0);
 
-			device->ActiveTexture(0);
+			device.ActiveTexture(0);
 
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(spritePosAttribute(), true);
-			device->EnableVertexAttribArray(colorAttribute(), true);
+			device.EnableVertexAttribArray(positionAttribute(), true);
+			device.EnableVertexAttribArray(spritePosAttribute(), true);
+			device.EnableVertexAttribArray(colorAttribute(), true);
 
 			for (size_t i = 0; i < sprites.size(); i++) {
 				Sprite &spr = sprites[i];
@@ -167,9 +167,9 @@ namespace spades {
 
 			Flush();
 
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(spritePosAttribute(), false);
-			device->EnableVertexAttribArray(colorAttribute(), false);
+			device.EnableVertexAttribArray(positionAttribute(), false);
+			device.EnableVertexAttribArray(spritePosAttribute(), false);
+			device.EnableVertexAttribArray(colorAttribute(), false);
 		}
 
 		void GLSpriteRenderer::Flush() {
@@ -178,17 +178,17 @@ namespace spades {
 			if (vertices.empty())
 				return;
 
-			device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::FloatType, false,
+			device.VertexAttribPointer(positionAttribute(), 4, IGLDevice::FloatType, false,
 			                            sizeof(Vertex), &(vertices[0].x));
-			device->VertexAttribPointer(spritePosAttribute(), 4, IGLDevice::FloatType, false,
+			device.VertexAttribPointer(spritePosAttribute(), 4, IGLDevice::FloatType, false,
 			                            sizeof(Vertex), &(vertices[0].sx));
-			device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
+			device.VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
 			                            sizeof(Vertex), &(vertices[0].r));
 
 			SPAssert(lastImage);
 			lastImage->Bind(IGLDevice::Texture2D);
 
-			device->DrawElements(IGLDevice::Triangles,
+			device.DrawElements(IGLDevice::Triangles,
 			                     static_cast<IGLDevice::Sizei>(indices.size()),
 			                     IGLDevice::UnsignedInt, indices.data());
 

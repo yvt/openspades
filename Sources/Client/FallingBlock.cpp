@@ -89,7 +89,7 @@ namespace spades {
 			matrix = Matrix4::Translate(matTrans);
 
 			// build renderer model
-			model = client->GetRenderer()->CreateModel(*vmodel).Unmanage();
+			model = client->GetRenderer().CreateModel(*vmodel).Unmanage();
 
 			time = 0.f;
 		}
@@ -122,7 +122,7 @@ namespace spades {
 				Vector3 vmAxis2 = vmat.GetAxis(1);
 				Vector3 vmAxis3 = vmat.GetAxis(2);
 
-				Handle<IImage> img = client->GetRenderer()->RegisterImage("Gfx/White.tga");
+				Handle<IImage> img = client->GetRenderer().RegisterImage("Gfx/White.tga");
 
 				bool usePrecisePhysics = false;
 				float dist =
@@ -187,7 +187,7 @@ namespace spades {
 							col.w = 1.f;
 							for (int i = 0; i < 6; i++) {
 								ParticleSpriteEntity *ent =
-								  new ParticleSpriteEntity(client, img, col);
+								  new ParticleSpriteEntity(client, img.GetPointerOrNull(), col);
 								ent->SetTrajectory(p3,
 								                   MakeVector3(getRandom() - getRandom(),
 								                               getRandom() - getRandom(),
@@ -223,7 +223,7 @@ namespace spades {
 		void FallingBlock::Render3D() {
 			ModelRenderParam param;
 			param.matrix = matrix;
-			client->GetRenderer()->RenderModel(*model, param);
+			client->GetRenderer().RenderModel(*model, param);
 		}
 	} // namespace client
 } // namespace spades

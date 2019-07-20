@@ -31,7 +31,7 @@ namespace spades {
 
 			enum { NumSlices = 3 };
 
-			IGLDevice *device;
+			IGLDevice &device;
 
 			int textureSize;
 

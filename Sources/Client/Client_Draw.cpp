@@ -120,9 +120,9 @@ namespace spades {
 			// Well done!
 			renderer->FrameDone();
 
-			Handle<Bitmap> bmp(renderer->ReadBitmap(), false);
-			// force 100% opacity
+			Handle<Bitmap> bmp = renderer->ReadBitmap();
 
+			// force 100% opacity
 			uint32_t *pixels = bmp->GetPixels();
 			for (size_t i = bmp->GetWidth() * bmp->GetHeight(); i > 0; i--) {
 				*(pixels++) |= 0xff000000UL;
@@ -212,12 +212,12 @@ namespace spades {
 
 			DrawSplash();
 
-			IFont *font = fontManager->GetGuiFont();
+			IFont &font = fontManager->GetGuiFont();
 			std::string str = _Tr("Client", "NOW LOADING");
-			Vector2 size = font->Measure(str);
+			Vector2 size = font.Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
 			pos -= size;
-			font->DrawShadow(str, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.5));
+			font.DrawShadow(str, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.5));
 
 			renderer->FrameDone();
 			renderer->Flip();
@@ -311,11 +311,11 @@ namespace spades {
 				pos.y += (int)cg_playerNameY;
 				pos.x += (int)cg_playerNameX;
 
-				IFont *font = fontManager->GetGuiFont();
-				Vector2 size = font->Measure(buf);
+				IFont &font = fontManager->GetGuiFont();
+				Vector2 size = font.Measure(buf);
 				pos.x -= size.x * .5f;
 				pos.y -= size.y;
-				font->DrawShadow(buf, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.5));
+				font.DrawShadow(buf, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.5));
 			}
 		}
 
@@ -403,7 +403,7 @@ namespace spades {
 			clientPlayers[playerId]->Draw2D();
 
 			if (cg_hitIndicator && hitFeedbackIconState > 0.f && !cg_hideHud) {
-				Handle<IImage> img(renderer->RegisterImage("Gfx/HitFeedback.png"), false);
+				Handle<IImage> img = renderer->RegisterImage("Gfx/HitFeedback.png");
 				Vector2 pos = {scrWidth * .5f, scrHeight * .5f};
 				pos.x -= img->GetWidth() * .5f;
 				pos.y -= img->GetHeight() * .5f;
@@ -427,7 +427,7 @@ namespace spades {
 			if (mode.ModeType() == IGameMode::m_CTF) {
 				auto &ctfMode = static_cast<CTFGameMode &>(mode);
 				if (ctfMode.PlayerHasIntel(*world, player)) {
-					Handle<IImage> img(renderer->RegisterImage("Gfx/Intel.png"), false);
+					Handle<IImage> img = renderer->RegisterImage("Gfx/Intel.png");
 
 					// Strobe
 					Vector4 color{1.0f, 1.0f, 1.0f, 1.0f};
@@ -450,7 +450,6 @@ namespace spades {
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 			Player &p = GetWorld()->GetLocalPlayer().value();
-			IFont *font;
 
 			// Draw damage rings
 			if (!cg_hideHud)
@@ -531,12 +530,12 @@ namespace spades {
 
 				char buf[64];
 				sprintf(buf, "%d", stockNum);
-				font = fontManager->GetSquareDesignFont();
+				IFont &font = fontManager->GetSquareDesignFont();
 				std::string stockStr = buf;
-				Vector2 size = font->Measure(stockStr);
+				Vector2 size = font.Measure(stockStr);
 				Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f - iconHeight);
 				pos -= size;
-				font->DrawShadow(stockStr, pos, 1.f, numberColor, MakeVector4(0, 0, 0, 0.5));
+				font.DrawShadow(stockStr, pos, 1.f, numberColor, MakeVector4(0, 0, 0, 0.5));
 
 				// draw "press ... to reload"
 				{
@@ -570,11 +569,11 @@ namespace spades {
 					}
 
 					if (!msg.empty()) {
-						font = fontManager->GetGuiFont();
-						Vector2 size = font->Measure(msg);
+						IFont &font = fontManager->GetGuiFont();
+						Vector2 size = font.Measure(msg);
 						Vector2 pos = MakeVector2((scrWidth - size.x) * .5f, scrHeight * 2.f / 3.f);
-						font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
-						                 MakeVector4(0, 0, 0, 0.5));
+						font.DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
+						                MakeVector4(0, 0, 0, 0.5));
 					}
 				}
 
@@ -610,12 +609,12 @@ namespace spades {
 						msg = _Tr("Client", "Waiting for respawn");
 
 					if (!msg.empty()) {
-						font = fontManager->GetGuiFont();
-						Vector2 size = font->Measure(msg);
+						IFont &font = fontManager->GetGuiFont();
+						Vector2 size = font.Measure(msg);
 						Vector2 pos = MakeVector2((scrWidth - size.x) * .5f, scrHeight / 3.f);
 
-						font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
-						                 MakeVector4(0, 0, 0, 0.5));
+						font.DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
+						                MakeVector4(0, 0, 0, 0.5));
 					}
 				}
 			}
@@ -628,7 +627,7 @@ namespace spades {
 				return;
 			}
 
-			IFont &font = *fontManager->GetGuiFont();
+			IFont &font = fontManager->GetGuiFont();
 			float scrWidth = renderer->ScreenWidth();
 
 			float textX = scrWidth - 8.0f;
@@ -676,7 +675,7 @@ namespace spades {
 		void Client::DrawAlert() {
 			SPADES_MARK_FUNCTION();
 
-			IFont *font = fontManager->GetGuiFont();
+			IFont &font = fontManager->GetGuiFont();
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 			auto &r = renderer;
@@ -693,9 +692,9 @@ namespace spades {
 			borderFade = std::max(std::min(borderFade, 1.f), 0.f);
 			borderFade *= fade;
 
-			Handle<IImage> alertIcon(renderer->RegisterImage("Gfx/AlertIcon.png"), false);
+			Handle<IImage> alertIcon = renderer->RegisterImage("Gfx/AlertIcon.png");
 
-			Vector2 textSize = font->Measure(alertContents);
+			Vector2 textSize = font.Measure(alertContents);
 			Vector2 contentsSize = textSize;
 			contentsSize.y = std::max(contentsSize.y, 16.f);
 			if (alertType != AlertType::Notice) {
@@ -757,17 +756,16 @@ namespace spades {
 			color = Vector4(1.f, 1.f, 1.f, 1.f);
 			color *= fade;
 
-			font->DrawShadow(alertContents,
-			                 Vector2(pos.x + contentsSize.x - textSize.x - margin,
-			                         pos.y + (contentsSize.y - textSize.y) * 0.5f),
-			                 1.f, color, Vector4(0.f, 0.f, 0.f, fade * 0.5f));
+			font.DrawShadow(alertContents,
+			                Vector2(pos.x + contentsSize.x - textSize.x - margin,
+			                        pos.y + (contentsSize.y - textSize.y) * 0.5f),
+			                1.f, color, Vector4(0.f, 0.f, 0.f, fade * 0.5f));
 		}
 
 		void Client::DrawHealth() {
 			SPADES_MARK_FUNCTION();
 
 			Player &p = GetWorld()->GetLocalPlayer().value();
-			IFont *font;
 			// float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 
@@ -782,11 +780,11 @@ namespace spades {
 				numberColor.z = 0.3f;
 			}
 
-			font = fontManager->GetSquareDesignFont();
-			Vector2 size = font->Measure(str);
+			IFont &font = fontManager->GetSquareDesignFont();
+			Vector2 size = font.Measure(str);
 			Vector2 pos = MakeVector2(16.f, scrHeight - 16.f);
 			pos.y -= size.y;
-			font->DrawShadow(str, pos, 1.f, numberColor, MakeVector4(0, 0, 0, 0.5));
+			font.DrawShadow(str, pos, 1.f, numberColor, MakeVector4(0, 0, 0, 0.5));
 		}
 
 		void Client::Draw2DWithWorld() {
@@ -856,17 +854,16 @@ namespace spades {
 			// no world; loading?
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
-			IFont *font;
 
 			DrawSplash();
 
 			Handle<IImage> img;
 
 			std::string msg = net->GetStatusString();
-			font = fontManager->GetGuiFont();
-			Vector2 textSize = font->Measure(msg);
-			font->Draw(msg, MakeVector2(scrWidth - 16.f, scrHeight - 24.f) - textSize, 1.f,
-			           MakeVector4(1, 1, 1, 0.95f));
+			IFont &font = fontManager->GetGuiFont();
+			Vector2 textSize = font.Measure(msg);
+			font.Draw(msg, MakeVector2(scrWidth - 16.f, scrHeight - 24.f) - textSize, 1.f,
+			          MakeVector4(1, 1, 1, 0.95f));
 
 			img = renderer->RegisterImage("Gfx/White.tga");
 
@@ -942,19 +939,18 @@ namespace spades {
 
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
-			IFont *font = fontManager->GetGuiFont();
+			IFont &font = fontManager->GetGuiFont();
 			float margin = 5.f;
 
-			IRenderer *r = renderer;
-			auto size = font->Measure(str);
+			auto size = font.Measure(str);
 			size += Vector2(margin * 2.f, margin * 2.f);
 
 			auto pos = (Vector2(scrWidth, scrHeight) - size) * Vector2(0.5f, 1.f);
 
-			r->SetColorAlphaPremultiplied(Vector4(0.f, 0.f, 0.f, 0.5f));
-			r->DrawImage(nullptr, AABB2(pos.x, pos.y, size.x, size.y));
-			font->DrawShadow(str, pos + Vector2(margin, margin), 1.f, Vector4(1.f, 1.f, 1.f, 1.f),
-			                 Vector4(0.f, 0.f, 0.f, 0.5f));
+			renderer->SetColorAlphaPremultiplied(Vector4(0.f, 0.f, 0.f, 0.5f));
+			renderer->DrawImage(nullptr, AABB2(pos.x, pos.y, size.x, size.y));
+			font.DrawShadow(str, pos + Vector2(margin, margin), 1.f, Vector4(1.f, 1.f, 1.f, 1.f),
+			                Vector4(0.f, 0.f, 0.f, 0.5f));
 		}
 
 		void Client::Draw2D() {

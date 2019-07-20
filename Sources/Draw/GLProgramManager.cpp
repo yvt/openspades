@@ -34,7 +34,7 @@
 
 namespace spades {
 	namespace draw {
-		GLProgramManager::GLProgramManager(IGLDevice *d, IGLShadowMapRenderer *smr,
+		GLProgramManager::GLProgramManager(IGLDevice &d, IGLShadowMapRenderer *smr,
 		                                   GLSettings &settings)
 		    : device(d), shadowMapRenderer(smr), settings(settings) {
 			SPADES_MARK_FUNCTION();
@@ -88,7 +88,7 @@ namespace spades {
 			std::string text = FileManager::ReadAllBytes(name.c_str());
 			std::vector<std::string> lines = SplitIntoLines(text);
 
-			GLProgram *p = new GLProgram(device, name);
+			GLProgram *p = new GLProgram(&device, name);
 
 			for (size_t i = 0; i < lines.size(); i++) {
 				std::string text = TrimSpaces(lines[i]);
@@ -157,7 +157,7 @@ namespace spades {
 			else
 				SPRaise("Failed to determine the type of a shader: %s", name.c_str());
 
-			GLShader *s = new GLShader(device, type);
+			GLShader *s = new GLShader(&device, type);
 
 			std::string finalSource;
 

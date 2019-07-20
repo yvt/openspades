@@ -80,7 +80,7 @@ namespace spades {
 			~SandboxedRenderer() {}
 
 		public:
-			SandboxedRenderer(IRenderer *base) : base(base) {}
+			SandboxedRenderer(Handle<IRenderer> base) : base(std::move(base)) {}
 
 			void SetClipBox(const AABB3 &b) { clipBox = b; }
 			void SetAllowDepthHack(bool h) { allowDepthHack = h; }
@@ -88,8 +88,12 @@ namespace spades {
 			void Init() { OnProhibitedAction(); }
 			void Shutdown() { OnProhibitedAction(); }
 
-			Handle<IImage> RegisterImage(const char *filename) { return base->RegisterImage(filename); }
-			Handle<IModel> RegisterModel(const char *filename) { return base->RegisterModel(filename); }
+			Handle<IImage> RegisterImage(const char *filename) {
+				return base->RegisterImage(filename);
+			}
+			Handle<IModel> RegisterModel(const char *filename) {
+				return base->RegisterModel(filename);
+			}
 
 			Handle<IImage> CreateImage(Bitmap &bmp) { return base->CreateImage(bmp); }
 			Handle<IModel> CreateModel(VoxelModel &m) { return base->CreateModel(m); }
@@ -176,20 +180,23 @@ namespace spades {
 				else
 					OnProhibitedAction();
 			}
-			void DrawImage(stmp::optional<IImage &> img, const Vector2 &outTopLeft, const AABB2 &inRect) {
+			void DrawImage(stmp::optional<IImage &> img, const Vector2 &outTopLeft,
+			               const AABB2 &inRect) {
 				if (allowDepthHack)
 					base->DrawImage(img, outTopLeft, inRect);
 				else
 					OnProhibitedAction();
 			}
-			void DrawImage(stmp::optional<IImage &> img, const AABB2 &outRect, const AABB2 &inRect) {
+			void DrawImage(stmp::optional<IImage &> img, const AABB2 &outRect,
+			               const AABB2 &inRect) {
 				if (allowDepthHack)
 					base->DrawImage(img, outRect, inRect);
 				else
 					OnProhibitedAction();
 			}
-			void DrawImage(stmp::optional<IImage &> img, const Vector2 &outTopLeft, const Vector2 &outTopRight,
-			               const Vector2 &outBottomLeft, const AABB2 &inRect) {
+			void DrawImage(stmp::optional<IImage &> img, const Vector2 &outTopLeft,
+			               const Vector2 &outTopRight, const Vector2 &outBottomLeft,
+			               const AABB2 &inRect) {
 				if (allowDepthHack)
 					base->DrawImage(img, outTopLeft, outTopRight, outBottomLeft, inRect);
 				else
@@ -228,11 +235,10 @@ namespace spades {
 			flashlightOrientation = p.GetFront();
 
 			ScriptContextHandle ctx;
-			IRenderer *renderer = client.GetRenderer();
-			IAudioDevice *audio = client.GetAudioDevice();
+			IAudioDevice &audio = client.GetAudioDevice();
 
-			sandboxedRenderer.Set(new SandboxedRenderer(renderer), false);
-			renderer = sandboxedRenderer;
+			sandboxedRenderer.Set(new SandboxedRenderer(client.GetRenderer()), false);
+			IRenderer &renderer = *sandboxedRenderer;
 
 			static ScriptFunction spadeFactory(
 			  "ISpadeSkin@ CreateThirdPersonSpadeSkin(Renderer@, AudioDevice@)");
@@ -299,10 +305,10 @@ namespace spades {
 		}
 
 		asIScriptObject *ClientPlayer::initScriptFactory(ScriptFunction &creator,
-		                                                 IRenderer *renderer, IAudioDevice *audio) {
+		                                                 IRenderer &renderer, IAudioDevice &audio) {
 			ScriptContextHandle ctx = creator.Prepare();
-			ctx->SetArgObject(0, reinterpret_cast<void *>(renderer));
-			ctx->SetArgObject(1, reinterpret_cast<void *>(audio));
+			ctx->SetArgObject(0, reinterpret_cast<void *>(&renderer));
+			ctx->SetArgObject(1, reinterpret_cast<void *>(&audio));
 			ctx.ExecuteChecked();
 			asIScriptObject *result = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
 			result->AddRef();
@@ -372,40 +378,41 @@ namespace spades {
 
 					// play tool change sound
 					if (player.IsLocalPlayer()) {
-						auto *audioDevice = client.GetAudioDevice();
+						IAudioDevice &audioDevice = client.GetAudioDevice();
 						Handle<IAudioChunk> c;
 						switch (player.GetTool()) {
 							case Player::ToolSpade:
-								c = audioDevice->RegisterSound(
-								  "Sounds/Weapons/Spade/RaiseLocal.opus");
+								c =
+								  audioDevice.RegisterSound("Sounds/Weapons/Spade/RaiseLocal.opus");
 								break;
 							case Player::ToolBlock:
-								c = audioDevice->RegisterSound(
-								  "Sounds/Weapons/Block/RaiseLocal.opus");
+								c =
+								  audioDevice.RegisterSound("Sounds/Weapons/Block/RaiseLocal.opus");
 								break;
 							case Player::ToolWeapon:
 								switch (player.GetWeapon().GetWeaponType()) {
 									case RIFLE_WEAPON:
-										c = audioDevice->RegisterSound(
+										c = audioDevice.RegisterSound(
 										  "Sounds/Weapons/Rifle/RaiseLocal.opus");
 										break;
 									case SMG_WEAPON:
-										c = audioDevice->RegisterSound(
+										c = audioDevice.RegisterSound(
 										  "Sounds/Weapons/SMG/RaiseLocal.opus");
 										break;
 									case SHOTGUN_WEAPON:
-										c = audioDevice->RegisterSound(
+										c = audioDevice.RegisterSound(
 										  "Sounds/Weapons/Shotgun/RaiseLocal.opus");
 										break;
 								}
 
 								break;
 							case Player::ToolGrenade:
-								c = audioDevice->RegisterSound(
+								c = audioDevice.RegisterSound(
 								  "Sounds/Weapons/Grenade/RaiseLocal.opus");
 								break;
 						}
-						audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
+						audioDevice.PlayLocal(c.GetPointerOrNull(), MakeVector3(.4f, -.3f, .5f),
+						                      AudioParam());
 					}
 				} else if (toolRaiseState > 1.f) {
 					toolRaiseState = 1.f;
@@ -640,7 +647,7 @@ namespace spades {
 
 		void ClientPlayer::AddToSceneFirstPersonView() {
 			Player &p = player;
-			IRenderer *renderer = client.GetRenderer();
+			IRenderer &renderer = client.GetRenderer();
 			World *world = client.GetWorld();
 			Matrix4 eyeMatrix = GetEyeMatrix();
 
@@ -656,26 +663,26 @@ namespace spades {
 
 				// add flash light
 				DynamicLightParam light;
+				Handle<IImage> image = renderer.RegisterImage("Gfx/Spotlight.png");
 				light.origin = (eyeMatrix * MakeVector3(0, -0.05f, -0.1f)).GetXYZ();
 				light.color = MakeVector3(1, .7f, .5f) * 1.5f * brightness;
 				light.radius = 40.f;
 				light.type = DynamicLightTypeSpotlight;
 				light.spotAngle = 30.f * M_PI / 180.f;
 				light.spotAxis = GetFlashlightAxes();
-				light.image = renderer->RegisterImage("Gfx/Spotlight.png");
-				renderer->AddLight(light);
+				light.image = image.GetPointerOrNull();
+				renderer.AddLight(light);
 
 				light.color *= .3f;
 				light.radius = 10.f;
 				light.type = DynamicLightTypePoint;
 				light.image = NULL;
-				renderer->AddLight(light);
+				renderer.AddLight(light);
 
 				// add glare
-				renderer->SetColorAlphaPremultiplied(MakeVector4(1, .7f, .5f, 0) * brightness *
-				                                     .3f);
-				renderer->AddSprite(*renderer->RegisterImage("Gfx/Glare.png"),
-				                    (eyeMatrix * MakeVector3(0, 0.3f, -0.3f)).GetXYZ(), .8f, 0.f);
+				renderer.SetColorAlphaPremultiplied(MakeVector4(1, .7f, .5f, 0) * brightness * .3f);
+				renderer.AddSprite(*renderer.RegisterImage("Gfx/Glare.png"),
+				                   (eyeMatrix * MakeVector3(0, 0.3f, -0.3f)).GetXYZ(), .8f, 0.f);
 			}
 
 			Vector3 leftHand, rightHand;
@@ -751,8 +758,8 @@ namespace spades {
 				ModelRenderParam param;
 				param.depthHack = true;
 
-				Handle<IModel> model = renderer->RegisterModel("Models/Player/Arm.kv6");
-				Handle<IModel> model2 = renderer->RegisterModel("Models/Player/UpperArm.kv6");
+				Handle<IModel> model = renderer.RegisterModel("Models/Player/Arm.kv6");
+				Handle<IModel> model2 = renderer.RegisterModel("Models/Player/UpperArm.kv6");
 
 				IntVector3 col = p.GetColor();
 				param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
@@ -792,7 +799,7 @@ namespace spades {
 						mat = eyeMatrix * mat;
 
 						param.matrix = mat;
-						renderer->RenderModel(*model, param);
+						renderer.RenderModel(*model, param);
 					}
 
 					{
@@ -807,7 +814,7 @@ namespace spades {
 						mat = eyeMatrix * mat;
 
 						param.matrix = mat;
-						renderer->RenderModel(*model2, param);
+						renderer.RenderModel(*model2, param);
 					}
 				}
 			}
@@ -817,7 +824,7 @@ namespace spades {
 
 		void ClientPlayer::AddToSceneThirdPersonView() {
 			Player &p = player;
-			IRenderer *renderer = client.GetRenderer();
+			IRenderer &renderer = client.GetRenderer();
 			World *world = client.GetWorld();
 
 			if (!p.IsAlive()) {
@@ -828,8 +835,8 @@ namespace spades {
 					IntVector3 col = p.GetColor();
 					param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 
-					Handle<IModel> model = renderer->RegisterModel("Models/Player/Dead.kv6");
-					renderer->RenderModel(*model, param);
+					Handle<IModel> model = renderer.RegisterModel("Models/Player/Dead.kv6");
+					renderer.RenderModel(*model, param);
 				}
 				return;
 			}
@@ -900,18 +907,18 @@ namespace spades {
 				leg1 = lower * leg1;
 				leg2 = lower * leg2;
 
-				model = renderer->RegisterModel("Models/Player/LegCrouch.kv6");
+				model = renderer.RegisterModel("Models/Player/LegCrouch.kv6");
 				param.matrix = leg1 * scaler;
-				renderer->RenderModel(*model, param);
+				renderer.RenderModel(*model, param);
 				param.matrix = leg2 * scaler;
-				renderer->RenderModel(*model, param);
+				renderer.RenderModel(*model, param);
 
 				torso = Matrix4::Translate(0.f, 0.f, -0.55f);
 				torso = lower * torso;
 
-				model = renderer->RegisterModel("Models/Player/TorsoCrouch.kv6");
+				model = renderer.RegisterModel("Models/Player/TorsoCrouch.kv6");
 				param.matrix = torso * scaler;
-				renderer->RenderModel(*model, param);
+				renderer.RenderModel(*model, param);
 
 				head = Matrix4::Translate(0.f, 0.f, -0.0f);
 				head = torso * head;
@@ -934,18 +941,18 @@ namespace spades {
 				leg1 = lower * leg1;
 				leg2 = lower * leg2;
 
-				model = renderer->RegisterModel("Models/Player/Leg.kv6");
+				model = renderer.RegisterModel("Models/Player/Leg.kv6");
 				param.matrix = leg1 * scaler;
-				renderer->RenderModel(*model, param);
+				renderer.RenderModel(*model, param);
 				param.matrix = leg2 * scaler;
-				renderer->RenderModel(*model, param);
+				renderer.RenderModel(*model, param);
 
 				torso = Matrix4::Translate(0.f, 0.f, -1.0f);
 				torso = lower * torso;
 
-				model = renderer->RegisterModel("Models/Player/Torso.kv6");
+				model = renderer.RegisterModel("Models/Player/Torso.kv6");
 				param.matrix = torso * scaler;
-				renderer->RenderModel(*model, param);
+				renderer.RenderModel(*model, param);
 
 				head = Matrix4::Translate(0.f, 0.f, -0.0f);
 				head = torso * head;
@@ -966,15 +973,15 @@ namespace spades {
 
 			arms = arms * Matrix4::Rotate(MakeVector3(1, 0, 0), armPitch);
 
-			model = renderer->RegisterModel("Models/Player/Arms.kv6");
+			model = renderer.RegisterModel("Models/Player/Arms.kv6");
 			param.matrix = arms * scaler;
-			renderer->RenderModel(*model, param);
+			renderer.RenderModel(*model, param);
 
 			head = head * Matrix4::Rotate(MakeVector3(1, 0, 0), pitch);
 
-			model = renderer->RegisterModel("Models/Player/Head.kv6");
+			model = renderer.RegisterModel("Models/Player/Head.kv6");
 			param.matrix = head * scaler;
-			renderer->RenderModel(*model, param);
+			renderer.RenderModel(*model, param);
 
 			// draw tool
 			{
@@ -1002,9 +1009,9 @@ namespace spades {
 						  MakeVector3(col2.x / 255.f, col2.y / 255.f, col2.z / 255.f);
 						Matrix4 mIntel = torso * Matrix4::Translate(0, 0.6f, 0.5f);
 
-						model = renderer->RegisterModel("Models/MapObjects/Intel.kv6");
+						model = renderer.RegisterModel("Models/MapObjects/Intel.kv6");
 						param.matrix = mIntel * scaler;
-						renderer->RenderModel(*model, param);
+						renderer.RenderModel(*model, param);
 
 						param.customColor =
 						  MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
@@ -1094,8 +1101,7 @@ namespace spades {
 			}
 
 			float maxDistance = 40.f;
-			GameMap *map = client.map;
-			SPAssert(map);
+			GameMap &map = *client.map;
 
 			Vector3 rayFrom = player.GetEye();
 			// uniformly distributed random unit vectors
@@ -1136,7 +1142,7 @@ namespace spades {
 				const Vector3 &rayTo = directions[i];
 
 				IntVector3 hitPos;
-				bool hit = map->CastRay(rayFrom, rayTo, maxDistance, hitPos);
+				bool hit = map.CastRay(rayFrom, rayTo, maxDistance, hitPos);
 				if (hit) {
 					Vector3 hitPosf = {(float)hitPos.x, (float)hitPos.y, (float)hitPos.z};
 					distance = (hitPosf - rayFrom).GetLength();
@@ -1145,7 +1151,7 @@ namespace spades {
 				}
 
 				if (hit) {
-					bool hit2 = map->CastRay(rayFrom, -rayTo, maxDistance, hitPos);
+					bool hit2 = map.CastRay(rayFrom, -rayTo, maxDistance, hitPos);
 					if (hit2)
 						feedbackness = 1.f;
 					else
@@ -1194,8 +1200,8 @@ namespace spades {
 			World &world = player.GetWorld();
 			Vector3 muzzle;
 			const SceneDefinition &lastSceneDef = client.GetLastSceneDef();
-			IRenderer *renderer = client.GetRenderer();
-			IAudioDevice *audioDevice = client.GetAudioDevice();
+			IRenderer &renderer = client.GetRenderer();
+			IAudioDevice &audioDevice = client.GetAudioDevice();
 			Player &p = player;
 
 			// make dlight
@@ -1219,27 +1225,26 @@ namespace spades {
 					Handle<IAudioChunk> snd2 = NULL;
 					switch (player.GetWeapon().GetWeaponType()) {
 						case RIFLE_WEAPON:
-							model = renderer->RegisterModel("Models/Weapons/Rifle/Casing.kv6");
+							model = renderer.RegisterModel("Models/Weapons/Rifle/Casing.kv6");
 							snd =
 							  SampleRandomBool()
-							    ? audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.opus")
-							    : audioDevice->RegisterSound(
-							        "Sounds/Weapons/Rifle/ShellDrop2.opus");
+							    ? audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.opus")
+							    : audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellDrop2.opus");
 							snd2 =
-							  audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellWater.opus");
+							  audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellWater.opus");
 							break;
 						case SHOTGUN_WEAPON:
 							// FIXME: don't want to show shotgun't casing
 							// because it isn't ejected when firing
-							// model = renderer->RegisterModel("Models/Weapons/Shotgun/Casing.kv6");
+							// model = renderer.RegisterModel("Models/Weapons/Shotgun/Casing.kv6");
 							break;
 						case SMG_WEAPON:
-							model = renderer->RegisterModel("Models/Weapons/SMG/Casing.kv6");
+							model = renderer.RegisterModel("Models/Weapons/SMG/Casing.kv6");
 							snd =
 							  SampleRandomBool()
-							    ? audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop1.opus")
-							    : audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop2.opus");
-							snd2 = audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellWater.opus");
+							    ? audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellDrop1.opus")
+							    : audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellDrop2.opus");
+							snd2 = audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellWater.opus");
 							break;
 					}
 					if (model) {
@@ -1255,7 +1260,9 @@ namespace spades {
 						}
 
 						ILocalEntity *ent;
-						ent = new GunCasing(&client, model, snd, snd2, origin, p.GetFront(), vel);
+						ent =
+						  new GunCasing(&client, model.GetPointerOrNull(), snd.GetPointerOrNull(),
+						                snd2.GetPointerOrNull(), origin, p.GetFront(), vel);
 						client.AddLocalEntity(ent);
 					}
 				}

@@ -115,10 +115,12 @@ namespace spades {
 		}
 
 		T *operator->() const {
+			// TODO: Do not skip null check in release builds
 			SPAssert(ptr != NULL);
 			return ptr;
 		}
 		T &operator*() const {
+			// TODO: Do not skip null check in release builds
 			SPAssert(ptr != NULL);
 			return *ptr;
 		}
@@ -137,14 +139,34 @@ namespace spades {
 		}
 		void operator=(T *p) { Set(p); }
 		void operator=(const Handle<T> &h) { Set(h.ptr, true); }
-		operator T *() const { return ptr; }
+
 		operator stmp::optional<T &>() const { return ptr; }
+
+		/**
+		 * Get a nullable raw pointer. After the operation, the original `Handle`
+		 * still owns a reference to the referent (if any).
+		 *
+		 * This conversion have a danger of causing a pointer use-after-free if
+		 * used incorrectly. For example, `IImage *image = CreateImage().GetPointer();`
+		 * creates a dangling pointer because the temporary value `CreateImage()`
+		 * is destroyed right after initializing the variable, invalidating the
+		 * pointer returned by `GetPointer()`. This is why this conversion is
+		 * no longer supported as implicit casting.
+		 */
+		T *GetPointerOrNull() const { return ptr; }
+		/**
+		 * Convert a `Handle` to a raw pointer, transfering the ownership.
+		 * Throws an exception if the `Handle` is null.
+		 */
 		T *Unmanage() {
 			SPAssert(ptr != NULL);
 			T *p = ptr;
 			ptr = NULL;
 			return p;
 		}
+		/**
+		 * Convert a `Handle` to a raw pointer, transfering the ownership.
+		 */
 		T *MaybeUnmanage() {
 			T *p = ptr;
 			ptr = NULL;

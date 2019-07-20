@@ -97,12 +97,12 @@ namespace spades {
 
 					if (waterSound) {
 						if (dist < 40.f * 40.f && !client->IsMuted()) {
-							IAudioDevice *dev = client->GetAudioDevice();
+							IAudioDevice &dev = client->GetAudioDevice();
 							AudioParam param;
 							param.referenceDistance = .6f;
 							param.pitch = .9f + SampleRandomFloat() * .2f;
 
-							dev->Play(waterSound, lastMat.GetOrigin(), param);
+							dev.Play(waterSound, lastMat.GetOrigin(), param);
 						}
 						waterSound = NULL;
 					}
@@ -110,13 +110,13 @@ namespace spades {
 					if (dist < 40.f * 40.f) {
 						int splats = SampleRandomInt(0, 2);
 
-						Handle<IImage> img = client->GetRenderer()->RegisterImage("Gfx/White.tga");
+						Handle<IImage> img = client->GetRenderer().RegisterImage("Gfx/White.tga");
 
 						Vector4 col = {1, 1, 1, 0.8f};
 						Vector3 pt = matrix.GetOrigin();
 						pt.z = 62.99f;
 						for (int i = 0; i < splats; i++) {
-							ParticleSpriteEntity *ent = new ParticleSpriteEntity(client, img, col);
+							ParticleSpriteEntity *ent = new ParticleSpriteEntity(client, img.GetPointerOrNull(), col);
 							ent->SetTrajectory(
 							  pt,
 							  MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
@@ -172,11 +172,11 @@ namespace spades {
 									  (client->GetLastSceneDef().viewOrigin - matrix.GetOrigin())
 									    .GetPoweredLength();
 									if (dist < 40.f * 40.f && !client->IsMuted()) {
-										IAudioDevice *dev = client->GetAudioDevice();
+										IAudioDevice &dev = client->GetAudioDevice();
 										AudioParam param;
 										param.referenceDistance = .6f;
 
-										dev->Play(dropSound, lastMat.GetOrigin(), param);
+										dev.Play(dropSound, lastMat.GetOrigin(), param);
 									}
 									dropSound = NULL;
 								}
@@ -217,7 +217,7 @@ namespace spades {
 				float move = (groundTime - 1.f) * .2f;
 				param.matrix = Matrix4::Translate(0, 0, move) * param.matrix;
 			}
-			renderer->RenderModel(*model, param);
+			renderer.RenderModel(*model, param);
 		}
 	} // namespace client
 } // namespace spades

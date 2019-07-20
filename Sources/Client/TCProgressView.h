@@ -26,7 +26,7 @@ namespace spades {
 		class IRenderer;
 		class TCProgressView {
 			Client *client;
-			IRenderer *renderer;
+			IRenderer &renderer;
 
 			int lastTerritoryId;
 			float lastTerritoryTime;

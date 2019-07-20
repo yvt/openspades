@@ -111,19 +111,22 @@ namespace spades {
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));
 
-			chatWindow.reset(new ChatWindow(this, GetRenderer(), fontManager->GetGuiFont(), false));
+			chatWindow.reset(
+			  new ChatWindow(this, &GetRenderer(), &fontManager->GetGuiFont(), false));
 			killfeedWindow.reset(
-			  new ChatWindow(this, GetRenderer(), fontManager->GetGuiFont(), true));
+			  new ChatWindow(this, &GetRenderer(), &fontManager->GetGuiFont(), true));
 
 			hurtRingView.reset(new HurtRingView(this));
-			centerMessageView.reset(new CenterMessageView(this, fontManager->GetLargeFont()));
+			centerMessageView.reset(new CenterMessageView(this, &fontManager->GetLargeFont()));
 			mapView.reset(new MapView(this, false));
 			largeMapView.reset(new MapView(this, true));
 			scoreboard.reset(new ScoreboardView(this));
 			limbo.reset(new LimboView(this));
 			paletteView.reset(new PaletteView(this));
 			tcView.reset(new TCProgressView(this));
-			scriptedUI.Set(new ClientUI(renderer, audioDev, fontManager, this), false);
+			scriptedUI.Set(new ClientUI(renderer.GetPointerOrNull(), audioDev.GetPointerOrNull(),
+			                            fontManager.GetPointerOrNull(), this),
+			               false);
 
 			renderer->SetGameMap(nullptr);
 		}
@@ -173,7 +176,7 @@ namespace spades {
 				world->SetListener(this);
 				map = world->GetMap();
 				renderer->SetGameMap(map);
-				audioDevice->SetGameMap(map);
+				audioDevice->SetGameMap(map.GetPointerOrNull());
 				NetLog("------ World Loaded ------");
 			} else {
 
@@ -234,7 +237,7 @@ namespace spades {
 		/** Initiate an initialization which likely to take some time */
 		void Client::DoInit() {
 			renderer->Init();
-			SmokeSpriteEntity::Preload(renderer);
+			SmokeSpriteEntity::Preload(renderer.GetPointerOrNull());
 
 			renderer->RegisterImage("Textures/Fluid.png");
 			renderer->RegisterImage("Textures/WaterExpl.png");
@@ -533,7 +536,7 @@ namespace spades {
 
 		void Client::PlayAlertSound() {
 			Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Alert.opus");
-			audioDevice->PlayLocal(chunk, AudioParam());
+			audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 		}
 
 		/** Records chat message/game events to the log file. */
@@ -665,7 +668,7 @@ namespace spades {
 
 			if ((!IsMuted()) && (int)cg_chatBeep) {
 				Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Chat.opus");
-				audioDevice->PlayLocal(chunk, AudioParam());
+				audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 			}
 		}
 

@@ -48,63 +48,63 @@ namespace spades {
 			minLod = 0;
 			maxLod = 15;
 
-			colorTexture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture2D, colorTexture);
-			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGB, textureSize, textureSize, 0,
+			colorTexture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture2D, colorTexture);
+			device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGB, textureSize, textureSize, 0,
 			                   IGLDevice::RGB, IGLDevice::UnsignedByte, NULL);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
 			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
 			                     IGLDevice::ClampToEdge);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
 			                     IGLDevice::ClampToEdge);
 
-			texture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture2D, texture);
-			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24, textureSize,
+			texture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture2D, texture);
+			device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24, textureSize,
 			                   textureSize, 0, IGLDevice::DepthComponent, IGLDevice::UnsignedInt,
 			                   NULL);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
 			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
 			                     IGLDevice::ClampToEdge);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
 			                     IGLDevice::ClampToEdge);
 
-			pagetableTexture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture2D, pagetableTexture);
-			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, Tiles, Tiles, 0,
+			pagetableTexture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture2D, pagetableTexture);
+			device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, Tiles, Tiles, 0,
 			                   IGLDevice::BGRA, IGLDevice::UnsignedByte, NULL);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
 			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
 			                     IGLDevice::ClampToEdge);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
 			                     IGLDevice::ClampToEdge);
 
-			framebuffer = device->GenFramebuffer();
-			device->BindFramebuffer(IGLDevice::Framebuffer, framebuffer);
-			device->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
+			framebuffer = device.GenFramebuffer();
+			device.BindFramebuffer(IGLDevice::Framebuffer, framebuffer);
+			device.FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
 			                             IGLDevice::Texture2D, colorTexture, 0);
-			device->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::DepthAttachment,
+			device.FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::DepthAttachment,
 			                             IGLDevice::Texture2D, texture, 0);
 
-			device->BindFramebuffer(IGLDevice::Framebuffer, 0);
+			device.BindFramebuffer(IGLDevice::Framebuffer, 0);
 		}
 
 		GLSparseShadowMapRenderer::~GLSparseShadowMapRenderer() {
 			SPADES_MARK_FUNCTION();
 
-			device->DeleteTexture(texture);
-			device->DeleteTexture(pagetableTexture);
-			device->DeleteFramebuffer(framebuffer);
-			device->DeleteTexture(colorTexture);
+			device.DeleteTexture(texture);
+			device.DeleteTexture(pagetableTexture);
+			device.DeleteFramebuffer(framebuffer);
+			device.DeleteTexture(colorTexture);
 		}
 
 #define Segment GLSSMRSegment
@@ -241,7 +241,7 @@ namespace spades {
 		void GLSparseShadowMapRenderer::Render() {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice::Integer lastFb = device->GetInteger(IGLDevice::FramebufferBinding);
+			IGLDevice::Integer lastFb = device.GetInteger(IGLDevice::FramebufferBinding);
 
 			// client::SceneDefinition def = GetRenderer()->GetSceneDef();
 
@@ -250,16 +250,16 @@ namespace spades {
 
 			BuildMatrix(nearDist, farDist);
 
-			device->BindFramebuffer(IGLDevice::Framebuffer, framebuffer);
-			device->Viewport(0, 0, textureSize, textureSize);
-			device->ClearDepth(1.f);
-			device->Clear(IGLDevice::DepthBufferBit);
+			device.BindFramebuffer(IGLDevice::Framebuffer, framebuffer);
+			device.Viewport(0, 0, textureSize, textureSize);
+			device.ClearDepth(1.f);
+			device.Clear(IGLDevice::DepthBufferBit);
 
 			RenderShadowMapPass();
 
-			device->BindFramebuffer(IGLDevice::Framebuffer, lastFb);
+			device.BindFramebuffer(IGLDevice::Framebuffer, lastFb);
 
-			device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
+			device.Viewport(0, 0, device.ScreenWidth(), device.ScreenHeight());
 		}
 
 #pragma mark - Sparse Processor
@@ -750,8 +750,8 @@ namespace spades {
 
 			{
 				GLProfiler::Context profiler(GetRenderer()->GetGLProfiler(), "Page Table Upload");
-				device->BindTexture(IGLDevice::Texture2D, pagetableTexture);
-				device->TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, Tiles, Tiles, IGLDevice::BGRA,
+				device.BindTexture(IGLDevice::Texture2D, pagetableTexture);
+				device.TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, Tiles, Tiles, IGLDevice::BGRA,
 				                      IGLDevice::UnsignedByte, pagetable);
 			}
 
@@ -761,7 +761,7 @@ namespace spades {
 				ModelRenderer mrend;
 				for (size_t i = 0; i < itnl.groups.size(); i++) {
 					Internal::Group &g = itnl.groups[i];
-					device->Viewport(g.rawX, g.rawY, g.rawW, g.rawH);
+					device.Viewport(g.rawX, g.rawY, g.rawW, g.rawH);
 
 					Vector3 dest1 = Internal::TileToShadowMapCoord(g.tile1);
 					Vector3 dest2 = Internal::TileToShadowMapCoord(g.tile2);

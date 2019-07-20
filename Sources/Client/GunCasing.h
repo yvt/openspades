@@ -31,7 +31,7 @@ namespace spades {
 		class IAudioChunk;
 		class GunCasing : public ILocalEntity {
 			Client *client;
-			IRenderer *renderer;
+			IRenderer &renderer;
 			IModel *model;
 			Matrix4 matrix;
 			Vector3 rotAxis;

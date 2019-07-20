@@ -33,7 +33,7 @@ namespace spades {
 		class GLRenderer;
 		class GLImageRenderer {
 			GLRenderer *renderer;
-			IGLDevice *device;
+			IGLDevice &device;
 			GLImage *image;
 
 			float invScreenWidthFactored;

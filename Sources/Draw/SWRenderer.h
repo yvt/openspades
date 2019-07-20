@@ -149,7 +149,7 @@ namespace spades {
 			~SWRenderer();
 
 		public:
-			SWRenderer(SWPort *port, SWFeatureLevel featureLevel = DetectFeatureLevel());
+			SWRenderer(Handle<SWPort> port, SWFeatureLevel featureLevel = DetectFeatureLevel());
 
 			void Init() override;
 			void Shutdown() override;
@@ -217,5 +217,5 @@ namespace spades {
 			bool BoxFrustrumCull(const AABB3 &);
 			bool SphereFrustrumCull(const Vector3 &center, float radius);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -55,8 +55,8 @@ namespace spades {
 			~StartupScreen();
 
 		public:
-			StartupScreen(client::IRenderer *, client::IAudioDevice *, StartupScreenHelper *helper,
-			              client::FontManager *fontManager);
+			StartupScreen(Handle<client::IRenderer>, Handle<client::IAudioDevice>,
+			              StartupScreenHelper *helper, Handle<client::FontManager> fontManager);
 
 			client::IRenderer *GetRenderer() { return &*renderer; }
 			client::IAudioDevice *GetAudioDevice() { return &*audioDevice; }
@@ -79,5 +79,5 @@ namespace spades {
 
 			static void Run();
 		};
-	}
-}
+	} // namespace gui
+} // namespace spades

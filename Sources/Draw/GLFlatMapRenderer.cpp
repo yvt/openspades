@@ -40,11 +40,11 @@ namespace spades {
 			image = renderer->CreateImage(*bmp).Cast<GLImage>();
 
 			image->Bind(IGLDevice::Texture2D);
-			IGLDevice *dev = renderer->GetGLDevice();
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                  IGLDevice::Nearest);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                  IGLDevice::Nearest);
+			IGLDevice &dev = renderer->GetGLDevice();
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                 IGLDevice::Nearest);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                 IGLDevice::Nearest);
 		}
 
 		GLFlatMapRenderer::~GLFlatMapRenderer() {}
@@ -108,7 +108,7 @@ namespace spades {
 				  GenerateBitmap(chunkX * ChunkSize, chunkY * ChunkSize, ChunkSize, ChunkSize),
 				  false);
 				try {
-					image->SubImage(bmp, chunkX * ChunkSize, chunkY * ChunkSize);
+					image->SubImage(bmp.GetPointerOrNull(), chunkX * ChunkSize, chunkY * ChunkSize);
 				} catch (...) {
 					throw;
 				}

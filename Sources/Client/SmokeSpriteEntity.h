@@ -34,7 +34,7 @@ namespace spades {
 			float frame;
 			float fps;
 			Type type;
-			static IImage *GetSequence(int i, IRenderer *r, Type);
+			static IImage &GetSequence(int i, IRenderer *r, Type);
 
 		public:
 			SmokeSpriteEntity(Client *cli, Vector4 color, float fps, Type type = Type::Steady);

@@ -38,7 +38,7 @@ namespace spades {
 			};
 
 			Client *client;
-			IRenderer *renderer;
+			IRenderer &renderer;
 			IFont *font;
 			std::vector<bool> lineUsing;
 			std::list<Entry> entries;

@@ -52,7 +52,7 @@ namespace spades {
 				    : type(type), rect(rt), text(txt), hover(false) {}
 			};
 			Client *client;
-			IRenderer *renderer;
+			IRenderer &renderer;
 
 			std::vector<MenuItem> items;
 

@@ -38,7 +38,7 @@ namespace spades {
 
 		protected:
 			GLRenderer *renderer;
-			IGLDevice *device;
+			IGLDevice &device;
 
 			GLProgram *depthonlyProgram;
 			GLProgram *basicProgram;

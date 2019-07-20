@@ -21,10 +21,10 @@
 #include <atomic>
 #include <cstdlib>
 
-#include <Client/GameMap.h>
 #include "GLAmbientShadowRenderer.h"
 #include "GLProfiler.h"
 #include "GLRenderer.h"
+#include <Client/GameMap.h>
 
 #include <Core/ConcurrentDispatch.h>
 
@@ -34,8 +34,8 @@ namespace spades {
 			GLAmbientShadowRenderer *renderer;
 
 		public:
-			std::atomic<bool> done {false};
-			UpdateDispatch(GLAmbientShadowRenderer *r) : renderer(r) { }
+			std::atomic<bool> done{false};
+			UpdateDispatch(GLAmbientShadowRenderer *r) : renderer(r) {}
 			void Run() override {
 				SPADES_MARK_FUNCTION();
 
@@ -50,7 +50,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			for (int i = 0; i < NumRays; i++) {
-				Vector3 dir = MakeVector3(SampleRandomFloat(), SampleRandomFloat(), SampleRandomFloat());
+				Vector3 dir =
+				  MakeVector3(SampleRandomFloat(), SampleRandomFloat(), SampleRandomFloat());
 				dir = dir.Normalize();
 				dir += 0.01f;
 				rays[i] = dir;
@@ -81,21 +82,22 @@ namespace spades {
 						c.cz = z;
 					}
 
-			SPLog("Chunk buffer allocated (%d bytes)", (int) sizeof(Chunk) * chunkW * chunkH * chunkD);
+			SPLog("Chunk buffer allocated (%d bytes)",
+			      (int)sizeof(Chunk) * chunkW * chunkH * chunkD);
 
 			// make texture
-			texture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture3D, texture);
-			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
-			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
-			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapR,
-			                     IGLDevice::ClampToEdge);
-			device->TexImage3D(IGLDevice::Texture3D, 0, IGLDevice::Red, w, h, d + 1, 0,
-			                   IGLDevice::Red, IGLDevice::FloatType, NULL);
+			texture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture3D, texture);
+			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
+			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
+			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapR,
+			                    IGLDevice::ClampToEdge);
+			device.TexImage3D(IGLDevice::Texture3D, 0, IGLDevice::Red, w, h, d + 1, 0,
+			                  IGLDevice::Red, IGLDevice::FloatType, NULL);
 
 			SPLog("Chunk texture allocated");
 
@@ -103,8 +105,8 @@ namespace spades {
 			v.resize(w * h);
 			std::fill(v.begin(), v.end(), 1.f);
 			for (int i = 0; i < d + 1; i++) {
-				device->TexSubImage3D(IGLDevice::Texture3D, 0, 0, 0, i, w, h, 1, IGLDevice::Red,
-				                      IGLDevice::FloatType, v.data());
+				device.TexSubImage3D(IGLDevice::Texture3D, 0, 0, 0, i, w, h, 1, IGLDevice::Red,
+				                     IGLDevice::FloatType, v.data());
 			}
 
 			SPLog("Chunk texture initialized");
@@ -118,7 +120,7 @@ namespace spades {
 				dispatch->Join();
 				delete dispatch;
 			}
-			device->DeleteTexture(texture);
+			device.DeleteTexture(texture);
 		}
 
 		float GLAmbientShadowRenderer::Evaluate(IntVector3 ipos) {
@@ -281,16 +283,17 @@ namespace spades {
 				if (!chunks[i].transferDone.load())
 					cnt++;
 			}
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Large Ambient Occlusion [>= %d chunk(s)]", cnt);
+			GLProfiler::Context profiler(renderer->GetGLProfiler(),
+			                             "Large Ambient Occlusion [>= %d chunk(s)]", cnt);
 
-			device->BindTexture(IGLDevice::Texture3D, texture);
+			device.BindTexture(IGLDevice::Texture3D, texture);
 			for (size_t i = 0; i < chunks.size(); i++) {
 				Chunk &c = chunks[i];
 				if (!c.transferDone.exchange(true)) {
-					device->TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
-					                      c.cy * ChunkSize, c.cz * ChunkSize + 1, ChunkSize,
-					                      ChunkSize, ChunkSize, IGLDevice::Red,
-					                      IGLDevice::FloatType, c.data);
+					device.TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
+					                     c.cy * ChunkSize, c.cz * ChunkSize + 1, ChunkSize,
+					                     ChunkSize, ChunkSize, IGLDevice::Red, IGLDevice::FloatType,
+					                     c.data);
 				}
 			}
 		}
@@ -341,7 +344,7 @@ namespace spades {
 			for (int i = 0; i < 8; i++) {
 				if (numDirtyChunks <= 0)
 					break;
-                int idx = SampleRandomInt(0, numDirtyChunks - 1);
+				int idx = SampleRandomInt(0, numDirtyChunks - 1);
 				Chunk &c = chunks[dirtyChunkIds[idx]];
 
 				// remove from list (fast)
@@ -380,5 +383,5 @@ namespace spades {
 			c.dirty = false;
 			c.transferDone = false;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

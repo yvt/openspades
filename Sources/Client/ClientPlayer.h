@@ -90,8 +90,9 @@ namespace spades {
 
 			bool ShouldRenderInThirdPersonView();
 
-			asIScriptObject *initScriptFactory(ScriptFunction &creator, IRenderer *renderer,
-			                                   IAudioDevice *audio);
+			// TODO: Naming convention violation
+			asIScriptObject *initScriptFactory(ScriptFunction &creator, IRenderer &renderer,
+			                                   IAudioDevice &audio);
 
 		protected:
 			~ClientPlayer();

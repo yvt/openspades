@@ -65,7 +65,7 @@ namespace spades {
 
 			GLRenderer *renderer;
 			GLSettings &settings;
-			IGLDevice *device;
+			IGLDevice &device;
 			std::vector<Sprite> sprites;
 
 			GLImage *lastImage;
