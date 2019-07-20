@@ -32,12 +32,12 @@ namespace spades {
 	namespace client {
 		namespace {
 			struct GlobalFontInfo {
-				Handle<ngclient::FTFontSet> guiFontSet;
+				std::shared_ptr<ngclient::FTFontSet> guiFontSet;
 
 				GlobalFontInfo() {
 					SPLog("Loading built-in fonts");
 
-					guiFontSet = Handle<ngclient::FTFontSet>::New();
+					guiFontSet = std::make_shared<ngclient::FTFontSet>();
 
 					if (FileManager::FileExists("Gfx/Fonts/AlteDIN1451.ttf")) {
 						guiFontSet->AddFace("Gfx/Fonts/AlteDIN1451.ttf");
@@ -77,22 +77,18 @@ namespace spades {
 				SPLog("Font 'SquareFont (Large)' Loaded");
 				squareDesignFont = std::move(font).Cast<IFont>();
 			}
-			largeFont =
-			  Handle<ngclient::FTFont>::New(
-			    renderer, GlobalFontInfo::GetInstance().guiFontSet.GetPointerOrNull(), 34.f, 48.f)
-			    .Cast<IFont>();
-			mediumFont =
-			  Handle<ngclient::FTFont>::New(
-			    renderer, GlobalFontInfo::GetInstance().guiFontSet.GetPointerOrNull(), 24.f, 32.f)
-			    .Cast<IFont>();
-			headingFont =
-			  Handle<ngclient::FTFont>::New(
-			    renderer, GlobalFontInfo::GetInstance().guiFontSet.GetPointerOrNull(), 20.f, 26.f)
-			    .Cast<IFont>();
-			guiFont =
-			  Handle<ngclient::FTFont>::New(
-			    renderer, GlobalFontInfo::GetInstance().guiFontSet.GetPointerOrNull(), 16.f, 20.f)
-			    .Cast<IFont>();
+			largeFont = Handle<ngclient::FTFont>::New(
+			              renderer, GlobalFontInfo::GetInstance().guiFontSet, 34.f, 48.f)
+			              .Cast<IFont>();
+			mediumFont = Handle<ngclient::FTFont>::New(
+			               renderer, GlobalFontInfo::GetInstance().guiFontSet, 24.f, 32.f)
+			               .Cast<IFont>();
+			headingFont = Handle<ngclient::FTFont>::New(
+			                renderer, GlobalFontInfo::GetInstance().guiFontSet, 20.f, 26.f)
+			                .Cast<IFont>();
+			guiFont = Handle<ngclient::FTFont>::New(
+			            renderer, GlobalFontInfo::GetInstance().guiFontSet, 16.f, 20.f)
+			            .Cast<IFont>();
 		}
 
 		FontManager::~FontManager() {}

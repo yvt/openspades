@@ -42,16 +42,16 @@ namespace spades {
 		struct FTFaceWrapper;
 		class FTFont;
 
-		// TODO: Use `shared_ptr` instead of `RefCountedObject`
-		class FTFontSet : public RefCountedObject {
+		class FTFontSet {
 			friend class FTFont;
 			std::list<std::unique_ptr<FTFaceWrapper>> faces;
 
-		protected:
-			~FTFontSet();
-
 		public:
 			FTFontSet();
+			FTFontSet(const FTFontSet &) = delete;
+			void operator=(const FTFontSet &) = delete;
+			~FTFontSet();
+
 			void AddFace(const std::string &fileName);
 		};
 
@@ -94,7 +94,7 @@ namespace spades {
 
 			bool rendererIsLowQuality;
 
-			Handle<FTFontSet> fontSet;
+			std::shared_ptr<FTFontSet> fontSet;
 
 			struct Bin;
 			std::list<Bin> bins;
@@ -112,7 +112,7 @@ namespace spades {
 			~FTFont();
 
 		public:
-			FTFont(client::IRenderer *, FTFontSet *, float height, float lineHeight);
+			FTFont(client::IRenderer *, std::shared_ptr<FTFontSet>, float height, float lineHeight);
 
 			Vector2 Measure(const std::string &) override;
 

@@ -189,13 +189,13 @@ namespace spades {
 			}
 		};
 
-		FTFont::FTFont(client::IRenderer *renderer, FTFontSet *fontSet, float height,
-		               float lineHeight)
+		FTFont::FTFont(client::IRenderer *renderer, std::shared_ptr<FTFontSet> _fontSet,
+		               float height, float lineHeight)
 		    : client::IFont(renderer),
 		      renderer(renderer),
 		      lineHeight(lineHeight),
 		      height(height),
-		      fontSet(fontSet) {
+		      fontSet(std::move(_fontSet)) {
 			SPADES_MARK_FUNCTION();
 
 			SPAssert(renderer);
