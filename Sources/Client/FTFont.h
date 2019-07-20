@@ -19,6 +19,7 @@
  */
 
 #include <list>
+#include <memory>
 #include <unordered_map>
 
 #include <Client/IFont.h>
@@ -35,7 +36,7 @@ namespace spades {
 	namespace client {
 		class IImage;
 	}
-}
+} // namespace spades
 
 namespace spades {
 	namespace ngclient {
@@ -72,6 +73,7 @@ namespace spades {
 				GlyphImage(client::IImage &img, const AABB2 &bounds, const Vector2 &offset)
 				    : img(img), bounds(bounds), offset(offset) {}
 			};
+
 			struct Glyph {
 				FT_Face face;
 				uint32_t charIndex;
@@ -80,11 +82,13 @@ namespace spades {
 				stmp::optional<GlyphImage> blurImage;
 				Handle<Bitmap> bmp;
 			};
+
 			struct GlyphHash {
 				std::size_t operator()(const std::pair<FT_Face, uint32_t> &p) const {
 					return std::hash<FT_Face>()(p.first) ^ std::hash<uint32_t>()(p.second);
 				}
 			};
+
 			std::unordered_map<std::pair<FT_Face, uint32_t>, Glyph, GlyphHash> glyphs;
 			std::unordered_map<uint32_t, std::reference_wrapper<Glyph>> glyphMap;
 			float lineHeight;
@@ -124,5 +128,5 @@ namespace spades {
 			void DrawShadow(const std::string &, const Vector2 &offset, float scale,
 			                const Vector4 &color, const Vector4 &shadowColor) override;
 		};
-	}
-}
+	} // namespace ngclient
+} // namespace spades

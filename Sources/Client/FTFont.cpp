@@ -51,7 +51,8 @@ namespace spades {
 				}
 				return *ft;
 			}
-		};
+		}; // namespace
+
 		struct FTFaceWrapper {
 			FT_Face face;
 			std::string buffer;
@@ -59,6 +60,7 @@ namespace spades {
 			~FTFaceWrapper() { FT_Done_Face(face); }
 			operator FT_Face() const { return face; }
 		};
+
 		struct FTBitmapWrapper {
 			FT_Bitmap b;
 			FTBitmapWrapper() { FT_Bitmap_New(&b); }
@@ -74,8 +76,10 @@ namespace spades {
 		void FTFontSet::AddFace(const std::string &fileName) {
 			FT_Face face;
 			std::string data = FileManager::ReadAllBytes(fileName.c_str());
+
 			auto ret = FT_New_Memory_Face(
 			  GetFreeType(), reinterpret_cast<const FT_Byte *>(data.data()), data.size(), 0, &face);
+
 			if (ret) {
 				SPRaise("Failed to load font %s: FreeType error %d", fileName.c_str(), ret);
 			}
@@ -88,6 +92,7 @@ namespace spades {
 		struct BinPlaceResult {
 			std::reference_wrapper<client::IImage> image;
 			int x, y;
+
 			BinPlaceResult(client::IImage &image, int x, int y) : image(image), x(x), y(y) {}
 		};
 
@@ -112,6 +117,7 @@ namespace spades {
 					        "%dx%d on %dx%d bin.",
 					        bw, bh, width, height);
 				}
+
 				auto it = skyline.begin();
 				auto it2 = it;
 				++it2;
@@ -128,13 +134,13 @@ namespace spades {
 						break;
 					}
 
-					auto maxY = std::max_element(it, it2, [](const std::pair<int, int> &a,
-					                                         const std::pair<int, int> &b) {
-						            return a.second < b.second;
-						        })->second;
+					auto maxYIter = std::max_element(
+					  it, it2, [](const std::pair<int, int> &a, const std::pair<int, int> &b) {
+						  return a.second < b.second;
+					  });
+					auto maxY = maxYIter->second;
 
 					if (maxY + bh < height) {
-
 						int right = it->first + bw;
 						int wasted = 0;
 						for (auto it1 = it; it1 != it2;) {
@@ -163,6 +169,7 @@ namespace spades {
 
 				int right = bestIt1->first + bw;
 				BinPlaceResult result(*image, bestIt1->first, bestMaxY);
+
 				if (bestIt2->first == right) {
 					it = bestIt1;
 					++it;
@@ -284,19 +291,20 @@ namespace spades {
 			float x = 0.f;
 			int lines = 1;
 
-			SplitTextIntoGlyphs(str,
-			                    [&](Glyph &g) {
-				                    x += g.advance.x;
-				                    maxWidth = std::max(x, maxWidth);
-				                },
-			                    [&](uint32_t codepoint) {
-				                    x += MeasureFallback(codepoint, height);
-				                    maxWidth = std::max(x, maxWidth);
-				                },
-			                    [&]() {
-				                    ++lines;
-				                    x = 0.f;
-				                });
+			SplitTextIntoGlyphs(
+			  str,
+			  [&](Glyph &g) {
+				  x += g.advance.x;
+				  maxWidth = std::max(x, maxWidth);
+			  },
+			  [&](uint32_t codepoint) {
+				  x += MeasureFallback(codepoint, height);
+				  maxWidth = std::max(x, maxWidth);
+			  },
+			  [&]() {
+				  ++lines;
+				  x = 0.f;
+			  });
 
 			return Vector2(maxWidth, lines * lineHeight);
 		}
@@ -452,7 +460,6 @@ namespace spades {
 			SplitTextIntoGlyphs(
 			  str,
 			  [&](Glyph &g) {
-
 				  RenderGlyph(g);
 
 				  auto &img = *g.image;
@@ -498,7 +505,6 @@ namespace spades {
 			SplitTextIntoGlyphs(
 			  str,
 			  [&](Glyph &g) {
-
 				  RenderBlurGlyph(g);
 
 				  auto &img = *g.blurImage;
@@ -533,5 +539,5 @@ namespace spades {
 			DrawBlurred(text, offset, scale, shadowColor);
 			Draw(text, offset, scale, color);
 		}
-	}
-}
+	} // namespace ngclient
+} // namespace spades
