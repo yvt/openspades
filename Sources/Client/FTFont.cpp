@@ -72,7 +72,6 @@ namespace spades {
 		FTFontSet::~FTFontSet() { SPADES_MARK_FUNCTION(); }
 
 		void FTFontSet::AddFace(const std::string &fileName) {
-
 			FT_Face face;
 			std::string data = FileManager::ReadAllBytes(fileName.c_str());
 			auto ret = FT_New_Memory_Face(
@@ -81,9 +80,9 @@ namespace spades {
 				SPRaise("Failed to load font %s: FreeType error %d", fileName.c_str(), ret);
 			}
 
-			auto *wr = new FTFaceWrapper(face);
+			auto wr = stmp::make_unique<FTFaceWrapper>(face);
 			wr->buffer = std::move(data);
-			faces.emplace_back(wr);
+			faces.emplace_back(std::move(wr));
 		}
 
 		struct BinPlaceResult {
