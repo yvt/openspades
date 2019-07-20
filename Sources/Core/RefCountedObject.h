@@ -53,15 +53,8 @@ namespace spades {
 	 *    if it is apparent that they store the object as `Handle<T>`.
 	 *  - Methods return `T` via a return type `Handle<T>`.
 	 *
-	 * # AngelScript interop
-	 *
-	 *  - A return type `Handle<T>` translates to an AngelScript type signature
-	 *    `T@`.
-	 *  - Methods must not return `T&` or `stmp::optional<T&>`.
-	 *  - A parameter type `stmp::optional<T&>` translates to an AngelScript
-	 *    type signature `T@+`.
-	 *  - Methods must not have a parameter of type `T&` because AngelScript
-	 *    does not have a non-nullable object handle.
+	 * Note that `stmp::optional` nor `Handle` can be passed to/from AngelScript
+	 * safely.
 	 */
 	class RefCountedObject {
 		std::atomic<int> refCount;
