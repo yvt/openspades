@@ -940,9 +940,9 @@ namespace spades {
 							default: SPRaise("Received invalid weapon: %d", weapon);
 						}
 
-						std::unique_ptr<Player> p{new Player(*GetWorld(), pId, wType, team,
-						                                     savedPlayerPos[pId],
-						                                     GetWorld()->GetTeam(team).color)};
+						auto p = stmp::make_unique<Player>(*GetWorld(), pId, wType, team,
+						                                   savedPlayerPos[pId],
+						                                   GetWorld()->GetTeam(team).color);
 						p->SetHeldBlockColor(color);
 						// p->SetOrientation(savedPlayerFront[pId]);
 						switch (tool) {
@@ -1030,10 +1030,9 @@ namespace spades {
 						default: SPRaise("Received invalid weapon: %d", weapon);
 					}
 
-					std::unique_ptr<Player> p{new Player(*GetWorld(), pId, wType, team,
-					                                     savedPlayerPos[pId],
-
-					                                     GetWorld()->GetTeam(team).color)};
+					auto p =
+					  stmp::make_unique<Player>(*GetWorld(), pId, wType, team, savedPlayerPos[pId],
+					                            GetWorld()->GetTeam(team).color);
 					p->SetPosition(pos);
 					GetWorld()->SetPlayer(pId, std::move(p));
 
@@ -1166,7 +1165,7 @@ namespace spades {
 						int mode = reader.ReadByte();
 						if (mode == 0) {
 							// CTF
-							std::unique_ptr<CTFGameMode> mode{new CTFGameMode()};
+							auto mode = stmp::make_unique<CTFGameMode>();
 
 							CTFGameMode::Team &mt1 = mode->GetTeam(0);
 							CTFGameMode::Team &mt2 = mode->GetTeam(1);
@@ -1208,7 +1207,7 @@ namespace spades {
 							GetWorld()->SetMode(std::move(mode));
 						} else {
 							// TC
-							std::unique_ptr<TCGameMode> mode{new TCGameMode(*GetWorld())};
+							auto mode = stmp::make_unique<TCGameMode>(*GetWorld());
 							int numTer = reader.ReadByte();
 
 							for (int i = 0; i < numTer; i++) {

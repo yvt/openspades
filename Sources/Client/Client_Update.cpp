@@ -838,7 +838,7 @@ namespace spades {
 
 			// create ragdoll corpse
 			if (cg_ragdoll && victim.GetTeamId() < 2) {
-				std::unique_ptr<Corpse> corp{new Corpse(*renderer, *map, victim)};
+				auto corp = stmp::make_unique<Corpse>(*renderer, *map, victim);
 
 				if (&victim == world->GetLocalPlayer())
 					lastMyCorpse = corp.get();

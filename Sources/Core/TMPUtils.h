@@ -383,4 +383,9 @@ namespace stmp {
 	template <class Fn, class T> function<T, Fn> make_fn(T &&inner) {
 		return function<T, Fn>(std::move(inner));
 	}
+
+	/** Polyfill of `std::make_unique` for compilers which don't support it. */
+	template <class T, class... Args> std::unique_ptr<T> make_unique(Args &&... args) {
+		return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+	}
 } // namespace stmp

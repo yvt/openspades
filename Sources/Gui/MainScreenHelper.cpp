@@ -119,7 +119,7 @@ namespace spades {
 			void ProcessResponse() {
 				Json::Reader reader;
 				Json::Value root;
-				std::unique_ptr<MainScreenServerList> resp{new MainScreenServerList()};
+				auto resp = stmp::make_unique<MainScreenServerList>();
 
 				if (reader.parse(buffer, root, false)) {
 					for (Json::Value::iterator it = root.begin(); it != root.end(); ++it) {
@@ -164,11 +164,11 @@ namespace spades {
 						SPRaise("Failed to create cURL object.");
 					}
 				} catch (std::exception &ex) {
-					std::unique_ptr<MainScreenServerList> lst{new MainScreenServerList()};
+					auto lst = stmp::make_unique<MainScreenServerList>();
 					lst->message = ex.what();
 					ReturnResult(std::move(lst));
 				} catch (...) {
-					std::unique_ptr<MainScreenServerList> lst{new MainScreenServerList()};
+					auto lst = stmp::make_unique<MainScreenServerList>();
 					lst->message = "Unknown error.";
 					ReturnResult(std::move(lst));
 				}

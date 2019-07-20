@@ -795,7 +795,7 @@ namespace spades {
 			vel += GetVelocty();
 
 			if (this == world.GetLocalPlayer()) {
-				std::unique_ptr<Grenade> gren{new Grenade(world, muzzle, vel, fuse)};
+				auto gren = stmp::make_unique<Grenade>(world, muzzle, vel, fuse);
 				if (world.GetListener())
 					world.GetListener()->PlayerThrewGrenade(*this, *gren);
 				world.AddGrenade(std::move(gren));

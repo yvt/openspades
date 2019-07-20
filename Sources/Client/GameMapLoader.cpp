@@ -47,7 +47,7 @@ namespace spades {
 			void Run() override {
 				SPADES_MARK_FUNCTION();
 
-				std::unique_ptr<Result> result{new Result()};
+				auto result = stmp::make_unique<Result>();
 
 				try {
 					DeflateStream inflate(&*rawDataReader, CompressModeDecompress, false);

@@ -380,7 +380,7 @@ namespace spades {
 					if (cg_debugCorpse) {
 						if (name == "p" && down) {
 							Player &victim = world->GetLocalPlayer().value();
-							std::unique_ptr<Corpse> corp{new Corpse(*renderer, *map, victim)};
+							auto corp = stmp::make_unique<Corpse>(*renderer, *map, victim);
 							corp->AddImpulse(victim.GetFront() * 32.f);
 							corpses.emplace_back(std::move(corp));
 
