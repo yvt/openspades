@@ -636,7 +636,6 @@ namespace spades {
 				}
 
 				// Draw block cursor
-				// FIXME: don't use debug line
 				if (p) {
 					if (p->IsReadyToUseTool() && p->GetTool() == Player::ToolBlock &&
 					    p->IsAlive()) {
