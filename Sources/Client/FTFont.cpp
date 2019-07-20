@@ -223,12 +223,13 @@ namespace spades {
 
 		FTFont::~FTFont() { SPADES_MARK_FUNCTION(); }
 
-		FTFont::Glyph *FTFont::GetGlyph(uint32_t code) {
+		stmp::optional<FTFont::Glyph &> FTFont::GetGlyph(uint32_t code) {
 			auto it = glyphMap.find(code);
 			if (it != glyphMap.end()) {
 				auto ref = it->second;
-				return &ref.get();
+				return ref.get();
 			}
+
 			for (const auto &face : fontSet->faces) {
 				auto cId = FT_Get_Char_Index(*face, code);
 				if (cId != 0) {
@@ -247,13 +248,14 @@ namespace spades {
 						auto it3 =
 						  glyphs.emplace(std::make_pair<FT_Face>(*face, cId), std::move(g));
 						glyphMap.emplace(code, it3.first->second);
-						return &it3.first->second;
+						return it3.first->second;
 					} else {
-						return &it2->second;
+						return it2->second;
 					}
 				}
 			}
-			return nullptr;
+
+			return {};
 		}
 
 		template <class T, class T2, class T3>
@@ -275,7 +277,7 @@ namespace spades {
 					continue;
 				}
 
-				auto *g = GetGlyph(code);
+				auto g = GetGlyph(code);
 				if (g) {
 					onGlyph(*g);
 				} else {

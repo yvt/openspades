@@ -103,7 +103,7 @@ namespace spades {
 			std::list<Bin> bins;
 			int binSize;
 
-			Glyph *GetGlyph(uint32_t code);
+			stmp::optional<Glyph &> GetGlyph(uint32_t code);
 			template <class T, class T2, class T3>
 			void SplitTextIntoGlyphs(const std::string &, T glyphHandler, T3 fallbackHandler,
 			                         T2 lineBreakHandler);
