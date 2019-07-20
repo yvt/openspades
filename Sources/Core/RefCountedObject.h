@@ -49,8 +49,19 @@ namespace spades {
 	 *  - Use `Handle<T>::New(...)` to consturct an object.
 	 *  - Methods receive `T` via a parameter of type `T&` or
 	 *    `stmp::optional<T&>`. They may create and hold a strong reference
-	 *    using `Handle::Handle(T&)`.
+	 *    using `Handle::Handle(T&)`. Alternatively, they can use `Handle<T>`
+	 *    if it is apparent that they store the object as `Handle<T>`.
 	 *  - Methods return `T` via a return type `Handle<T>`.
+	 *
+	 * # AngelScript interop
+	 *
+	 *  - A return type `Handle<T>` translates to an AngelScript type signature
+	 *    `T@`.
+	 *  - Methods must not return `T&` or `stmp::optional<T&>`.
+	 *  - A parameter type `stmp::optional<T&>` translates to an AngelScript
+	 *    type signature `T@+`.
+	 *  - Methods must not have a parameter of type `T&` because AngelScript
+	 *    does not have a non-nullable object handle.
 	 */
 	class RefCountedObject {
 		std::atomic<int> refCount;
