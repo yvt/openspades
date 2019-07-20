@@ -233,9 +233,10 @@ namespace spades {
 		protected:
 			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                              spades::client::IAudioDevice *audio) override {
-				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				Handle<gui::View> innerView{new spades::client::Client(renderer, audio, addr, fontManager), false};
-				return new spades::gui::ConsoleScreen(renderer, audio, fontManager, std::move(innerView));
+				auto fontManager = Handle<client::FontManager>::New(renderer);
+				auto innerView = Handle<client::Client>::New(renderer, audio, addr, fontManager);
+				return new spades::gui::ConsoleScreen(renderer, audio, fontManager,
+													  std::move(innerView).Cast<gui::View>());
 			}
 
 		public:
@@ -249,9 +250,10 @@ namespace spades {
 		protected:
 			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                              spades::client::IAudioDevice *audio) override {
-				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				Handle<gui::View> innerView{new spades::gui::MainScreen(renderer, audio, fontManager), false};
-				return new spades::gui::ConsoleScreen(renderer, audio, fontManager, std::move(innerView));
+				auto fontManager = Handle<client::FontManager>::New(renderer);
+				auto innerView = Handle<gui::MainScreen>::New(renderer, audio, fontManager);
+				return new spades::gui::ConsoleScreen(renderer, audio, fontManager,
+				                                      std::move(innerView).Cast<gui::View>());
 			}
 
 		public:

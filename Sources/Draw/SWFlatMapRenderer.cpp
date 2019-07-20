@@ -38,7 +38,7 @@ namespace spades {
 				SPRaise("Map width must be a multiple of 32.");
 			}
 
-			img.Set(new SWImage(map->Width(), map->Height()), false);
+			img = Handle<SWImage>::New(map->Width(), map->Height());
 			updateMap.resize(w * h / 32);
 			std::fill(updateMap.begin(), updateMap.end(), 0xffffffff);
 			updateMap2.resize(w * h / 32);

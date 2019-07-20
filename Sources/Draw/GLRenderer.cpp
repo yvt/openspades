@@ -1037,9 +1037,8 @@ namespace spades {
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
 				device->Viewport(0, 0, handle.GetWidth(), handle.GetHeight());
-				Handle<GLImage> image(new GLImage(handle.GetTexture(), device.GetPointerOrNull(), handle.GetWidth(),
-				                                  handle.GetHeight(), false),
-				                      false);
+				auto image = Handle<GLImage>::New(handle.GetTexture(), device.GetPointerOrNull(),
+				                                  handle.GetWidth(), handle.GetHeight(), false);
 				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
 				DrawImage(*image,
 				          AABB2(0, handle.GetHeight(), handle.GetWidth(), -handle.GetHeight()));
@@ -1233,9 +1232,9 @@ namespace spades {
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
 				device->Viewport(0, 0, w, h);
-				// TODO: Replace this with `Handle::New`
-				Handle<GLImage> image(new GLImage(lastColorBufferTexture, device.GetPointerOrNull(), w, h, false),
-				                      false);
+
+				auto image = Handle<GLImage>::New(lastColorBufferTexture, device.GetPointerOrNull(),
+				                                  w, h, false);
 				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
 				DrawImage(*image, AABB2(0, h, w, -h));
 				imageRenderer->Flush(); // must flush now because handle is released soon

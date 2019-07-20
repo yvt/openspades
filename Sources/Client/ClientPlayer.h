@@ -39,6 +39,7 @@ namespace spades {
 
 		class SandboxedRenderer;
 
+		// TODO: Use `shared_ptr` instead of `RefCountedObject`
 		/** Representation of player which is used by
 		 * drawing/view layer of game client. */
 		class ClientPlayer : public RefCountedObject {

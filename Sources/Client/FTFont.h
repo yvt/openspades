@@ -42,6 +42,7 @@ namespace spades {
 		struct FTFaceWrapper;
 		class FTFont;
 
+		// TODO: Use `shared_ptr` instead of `RefCountedObject`
 		class FTFontSet : public RefCountedObject {
 			friend class FTFont;
 			std::list<std::unique_ptr<FTFaceWrapper>> faces;
@@ -57,7 +58,7 @@ namespace spades {
 		/**
 		 * FreeType2 based font renderer.
 		 *
-		 
+
 		 * Warning: only one thread can access multiple FTFonts sharing the same FTFontSet
 		 *          at the same time.
 		 */

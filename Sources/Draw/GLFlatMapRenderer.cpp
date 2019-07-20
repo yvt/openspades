@@ -51,7 +51,7 @@ namespace spades {
 
 		Bitmap *GLFlatMapRenderer::GenerateBitmap(int mx, int my, int w, int h) {
 			SPADES_MARK_FUNCTION();
-			Handle<Bitmap> bmp(new Bitmap(w, h), false);
+			auto bmp = Handle<Bitmap>::New(w, h);
 			try {
 				uint32_t *pixels = bmp->GetPixels();
 

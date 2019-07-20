@@ -568,7 +568,7 @@ namespace spades {
 
 			stmp::optional<Player &> p = world->GetPlayer(id);
 			if (p) {
-				clientPlayers[id].Set(new ClientPlayer(*p, *this), false);
+				clientPlayers[id] = Handle<ClientPlayer>::New(*p, *this);
 			}
 		}
 

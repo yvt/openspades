@@ -358,8 +358,8 @@ namespace spades {
 
 		std::string MainScreen::Connect(const ServerAddress &host) {
 			try {
-				subview.Set(new client::Client(&*renderer, &*audioDevice, host, fontManager),
-				            false);
+				subview = Handle<client::Client>::New(&*renderer, &*audioDevice, host, fontManager)
+				            .Cast<View>();
 			} catch (const std::exception &ex) {
 				SPLog("[!] Error while initializing a game client: %s", ex.what());
 				return ex.what();

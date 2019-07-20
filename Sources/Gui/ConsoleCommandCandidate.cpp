@@ -84,7 +84,8 @@ namespace spades {
 		                Handle<ConsoleCommandCandidateIterator> second) {
 			SPADES_MARK_FUNCTION();
 
-			return {new MergeConsoleCommandCandidates{std::move(first), std::move(second)}, false};
+			return Handle<MergeConsoleCommandCandidates>::New(std::move(first), std::move(second))
+			  .Cast<ConsoleCommandCandidateIterator>();
 		}
 
 		namespace {
@@ -135,7 +136,7 @@ namespace spades {
 
 		Handle<ConsoleCommandCandidateIterator>
 		MakeCandidates(const std::map<std::string, std::string> &items, const std::string &query) {
-			return {new MapIterator{items, query}, false};
+			return Handle<MapIterator>::New(items, query).Cast<ConsoleCommandCandidateIterator>();
 		}
 	} // namespace gui
 } // namespace spades

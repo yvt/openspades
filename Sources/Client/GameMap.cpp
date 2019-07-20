@@ -523,7 +523,7 @@ namespace spades {
 
 			size_t pos = 0;
 
-			Handle<GameMap> map{new GameMap(), false};
+			auto map = Handle<GameMap>::New();
 
 			if (onProgress) {
 				onProgress(0);

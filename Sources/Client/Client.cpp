@@ -125,9 +125,9 @@ namespace spades {
 			limbo = stmp::make_unique<LimboView>(this);
 			paletteView = stmp::make_unique<PaletteView>(this);
 			tcView = stmp::make_unique<TCProgressView>(this);
-			scriptedUI.Set(new ClientUI(renderer.GetPointerOrNull(), audioDev.GetPointerOrNull(),
-			                            fontManager.GetPointerOrNull(), this),
-			               false);
+			scriptedUI =
+			  Handle<ClientUI>::New(renderer.GetPointerOrNull(), audioDev.GetPointerOrNull(),
+			                        fontManager.GetPointerOrNull(), this);
 
 			renderer->SetGameMap(nullptr);
 		}
@@ -168,7 +168,7 @@ namespace spades {
 				for (size_t i = 0; i < world->GetNumPlayerSlots(); i++) {
 					auto p = world->GetPlayer(static_cast<unsigned int>(i));
 					if (p) {
-						clientPlayers[i] = new ClientPlayer(*p, *this);
+						clientPlayers[i] = Handle<ClientPlayer>::New(*p, *this);
 					} else {
 						clientPlayers[i] = nullptr;
 					}

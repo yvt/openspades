@@ -43,7 +43,7 @@ namespace spades {
 		public:
 			Port() {
 				SPADES_MARK_FUNCTION();
-				bmp.Set(new Bitmap(512, 512), false);
+				bmp = Handle<Bitmap>::New(512, 512);
 			}
 			Bitmap &GetFramebuffer() override { return *bmp; }
 			void Swap() override {
@@ -53,8 +53,8 @@ namespace spades {
 
 		HitTestDebugger::HitTestDebugger(World *world) : world(world) {
 			SPADES_MARK_FUNCTION();
-			port.Set(new Port(), false);
-			renderer.Set(new draw::SWRenderer(port.Cast<draw::SWPort>()), false);
+			port = Handle<Port>::New();
+			renderer = Handle<draw::SWRenderer>::New(port.Cast<draw::SWPort>()).Cast<IRenderer>();
 			renderer->Init();
 		}
 

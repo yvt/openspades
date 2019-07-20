@@ -284,10 +284,9 @@ namespace spades {
 					return new audio::NullDevice();
 				}
 				View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) override {
-					Handle<client::FontManager> fontManager(new client::FontManager(renderer),
-					                                        false);
-					view.Set(new StartupScreen(renderer, dev, helper, fontManager), true);
-					return view.GetPointerOrNull();
+					auto fontManager = Handle<client::FontManager>::New(renderer);
+					view = Handle<StartupScreen>::New(renderer, dev, helper, fontManager);
+					return Handle<StartupScreen>{view}.Unmanage();
 				}
 
 			public:

@@ -37,7 +37,7 @@ namespace spades {
 				GlobalFontInfo() {
 					SPLog("Loading built-in fonts");
 
-					guiFontSet.Set(new ngclient::FTFontSet(), false);
+					guiFontSet = Handle<ngclient::FTFontSet>::New();
 
 					if (FileManager::FileExists("Gfx/Fonts/AlteDIN1451.ttf")) {
 						guiFontSet->AddFace("Gfx/Fonts/AlteDIN1451.ttf");

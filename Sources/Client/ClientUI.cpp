@@ -40,7 +40,7 @@ namespace spades {
 			if (!audioDevice)
 				SPInvalidArgument("audioDevice");
 
-			helper.Set(new ClientUIHelper(this), false);
+			helper = Handle<ClientUIHelper>::New(this);
 
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction uiFactory(

@@ -237,7 +237,7 @@ namespace spades {
 			ScriptContextHandle ctx;
 			IAudioDevice &audio = client.GetAudioDevice();
 
-			sandboxedRenderer.Set(new SandboxedRenderer(client.GetRenderer()), false);
+			sandboxedRenderer = Handle<SandboxedRenderer>::New(client.GetRenderer());
 			IRenderer &renderer = *sandboxedRenderer;
 
 			static ScriptFunction spadeFactory(

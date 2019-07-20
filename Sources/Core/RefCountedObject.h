@@ -110,7 +110,7 @@ namespace spades {
 		}
 
 		template <class... Args> static Handle New(Args &&... args) {
-			T *ptr = new T{std::forward<Args>(args)...};
+			T *ptr = new T(std::forward<Args>(args)...);
 			return {ptr, false};
 		}
 

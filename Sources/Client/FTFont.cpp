@@ -99,7 +99,7 @@ namespace spades {
 			std::list<std::pair<int, int>> skyline;
 
 			Bin(int width, int height, client::IRenderer &r) : width(width), height(height) {
-				Handle<Bitmap> tmpbmp(new Bitmap(width, height), false);
+				auto tmpbmp = Handle<Bitmap>::New(width, height);
 				memset(tmpbmp->GetPixels(), 0, tmpbmp->GetWidth() * tmpbmp->GetHeight() * 4);
 				image = r.CreateImage(*tmpbmp);
 				skyline.emplace_back(0, 0);
@@ -316,7 +316,7 @@ namespace spades {
 
 			SPAssert(outbmp->pixel_mode == FT_PIXEL_MODE_GRAY);
 
-			Handle<Bitmap> spbmp(new Bitmap(outbmp->width + 1, outbmp->rows + 1), false);
+			auto spbmp = Handle<Bitmap>::New(outbmp->width + 1, outbmp->rows + 1);
 
 			memset(spbmp->GetPixels(), 0, 4 * spbmp->GetWidth() * spbmp->GetHeight());
 
@@ -358,8 +358,8 @@ namespace spades {
 			enum { KernelSize = 6 };
 
 			auto &orig = *g.bmp;
-			Handle<Bitmap> newbmp(
-			  new Bitmap(orig.GetWidth() + KernelSize, orig.GetHeight() + KernelSize), false);
+			auto newbmp =
+			  Handle<Bitmap>::New(orig.GetWidth() + KernelSize, orig.GetHeight() + KernelSize);
 
 			int const origW = orig.GetWidth();
 			int const origH = orig.GetHeight();

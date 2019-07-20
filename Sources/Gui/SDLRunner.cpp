@@ -324,11 +324,10 @@ namespace spades {
 
 			void SetFramebufferBitmap() {
 				if (adjusted) {
-					framebuffer.Set(new Bitmap(actualW, actualH), false);
+					framebuffer = Handle<Bitmap>::New(actualW, actualH);
 				} else {
-					framebuffer.Set(new Bitmap(reinterpret_cast<uint32_t *>(surface->pixels),
-					                           surface->w, surface->h),
-					                false);
+					framebuffer = Handle<Bitmap>::New(reinterpret_cast<uint32_t *>(surface->pixels),
+					                                  surface->w, surface->h);
 				}
 			}
 
