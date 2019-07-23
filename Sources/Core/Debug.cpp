@@ -40,8 +40,6 @@
 
 namespace spades {
 	namespace reflection {
-		Function::Function(const char *n, const char *f, int l) : name(n), file(f), line(l) {}
-
 		BacktraceEntryAdder::BacktraceEntryAdder(const BacktraceEntry &entry) {
 			bt = Backtrace::GetGlobalBacktrace();
 			if (bt)
