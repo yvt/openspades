@@ -39,10 +39,10 @@ namespace spades {
 
 		struct GameMapLoader::Decoder : public IRunnable {
 			GameMapLoader &parent;
-			StreamHandle rawDataReader;
+			std::unique_ptr<IStream> rawDataReader;
 
-			Decoder(GameMapLoader &parent, StreamHandle rawDataReader)
-			    : parent{parent}, rawDataReader{rawDataReader} {}
+			Decoder(GameMapLoader &parent, std::unique_ptr<IStream> rawDataReader)
+			    : parent{parent}, rawDataReader{std::move(rawDataReader)} {}
 
 			void Run() override {
 				SPADES_MARK_FUNCTION();
@@ -50,7 +50,7 @@ namespace spades {
 				auto result = stmp::make_unique<Result>();
 
 				try {
-					DeflateStream inflate(&*rawDataReader, CompressModeDecompress, false);
+					DeflateStream inflate(rawDataReader.get(), CompressModeDecompress, false);
 
 					GameMap *gameMapPtr =
 					  GameMap::Load(&inflate, [this](int x) { HandleProgress(x); });
@@ -75,16 +75,10 @@ namespace spades {
 
 			auto pipe = CreatePipeStream();
 
-			rawDataWriter = StreamHandle{std::get<0>(pipe)};
-			auto rawDataReader = StreamHandle{std::get<1>(pipe)};
+			rawDataWriter = std::unique_ptr<IStream>{std::get<0>(pipe)};
+			auto rawDataReader = std::unique_ptr<IStream>{std::get<1>(pipe)};
 
-			decodingThreadRunnable = stmp::make_unique<Decoder>(*this, rawDataReader);
-
-			// Drop `rawDataReader` before the thread starts. `StreamHandle`'s internally
-			// ref-counted and it's not thread-safe. So, if we don't drop it here, there'll be
-			// a data race between the constructor of `Decoder` and the deconstruction of the local
-			// variable `rawDataReader`.
-			rawDataReader = StreamHandle{};
+			decodingThreadRunnable = stmp::make_unique<Decoder>(*this, std::move(rawDataReader));
 
 			decodingThread = stmp::make_unique<Thread>(&*decodingThreadRunnable);
 			decodingThread->Start();
@@ -94,7 +88,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			// Hang up the writer. This causes the decoder thread to exit gracefully.
-			rawDataWriter = StreamHandle{};
+			rawDataWriter.reset();
 
 			decodingThread->Join();
 			decodingThread.reset();
@@ -116,7 +110,7 @@ namespace spades {
 			if (!rawDataWriter) {
 				SPRaise("The raw data channel is already closed.");
 			}
-			rawDataWriter = StreamHandle{};
+			rawDataWriter.reset();
 		}
 
 		bool GameMapLoader::IsComplete() { return resultCell.operator bool(); }

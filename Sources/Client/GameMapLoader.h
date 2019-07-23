@@ -86,7 +86,7 @@ namespace spades {
 			struct Result;
 
 			/** A writable stream used to send undecoded data to the decoding thread. */
-			StreamHandle rawDataWriter;
+			std::unique_ptr<IStream> rawDataWriter;
 
 			/** A handle for the decoding thread. */
 			std::unique_ptr<Thread> decodingThread;

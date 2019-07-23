@@ -84,9 +84,9 @@ namespace spades {
 			if (codec->CanLoad() && codec->CheckExtension(filename)) {
 				// give it a try.
 				// open error shouldn't be handled here
-				StreamHandle str = FileManager::OpenForReading(filename.c_str());
+				std::unique_ptr<IStream> str{FileManager::OpenForReading(filename.c_str())};
 				try {
-					return {codec->Load(str), false};
+					return {codec->Load(str.get()), false};
 				} catch (const std::exception &ex) {
 					errMsg += codec->GetName();
 					errMsg += ":\n";
@@ -135,9 +135,9 @@ namespace spades {
 		std::vector<IBitmapCodec *> codecs = IBitmapCodec::GetAllCodecs();
 		for (IBitmapCodec *codec : codecs) {
 			if (codec->CanSave() && codec->CheckExtension(filename)) {
-				StreamHandle str = FileManager::OpenForWriting(filename.c_str());
+				std::unique_ptr<IStream> str{FileManager::OpenForWriting(filename.c_str())};
 
-				codec->Save(str, this);
+				codec->Save(str.get(), this);
 				return;
 			}
 		}
