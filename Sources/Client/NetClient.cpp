@@ -1808,7 +1808,7 @@ namespace spades {
 			SPLog("Waiting for the game map decoding to complete...");
 			mapLoader->MarkEOF();
 			mapLoader->WaitComplete();
-			GameMap *map = mapLoader->TakeGameMap();
+			GameMap *map = mapLoader->TakeGameMap().Unmanage();
 			SPLog("The game map was decoded successfully.");
 
 			// now initialize world

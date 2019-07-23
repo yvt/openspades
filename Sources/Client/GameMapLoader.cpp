@@ -127,7 +127,7 @@ namespace spades {
 			return static_cast<float>(progressCell.load(std::memory_order_relaxed)) / (512 * 512);
 		}
 
-		GameMap *GameMapLoader::TakeGameMap() {
+		Handle<GameMap> GameMapLoader::TakeGameMap() {
 			SPADES_MARK_FUNCTION();
 
 			SPAssert(IsComplete());
@@ -136,7 +136,7 @@ namespace spades {
 			SPAssert(result);
 
 			if (result->gameMap) {
-				return std::move(result->gameMap).Unmanage();
+				return std::move(result->gameMap);
 			} else {
 				std::rethrow_exception(result->exceptionThrown);
 			}

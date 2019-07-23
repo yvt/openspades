@@ -79,7 +79,7 @@ namespace spades {
 			 * If an exception occured while decoding the map, the exception will be rethrown when
 			 * this method is called.
 			 */
-			GameMap *TakeGameMap();
+			Handle<GameMap> TakeGameMap();
 
 		private:
 			struct Decoder;
