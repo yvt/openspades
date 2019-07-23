@@ -31,6 +31,8 @@
 namespace spades {
 	namespace client {
 		namespace {
+			std::regex const g_fontNameRe(".*\\.(?:otf|ttf|ttc)", std::regex::icase);
+
 			struct GlobalFontInfo {
 				std::shared_ptr<ngclient::FTFontSet> guiFontSet;
 
@@ -48,9 +50,8 @@ namespace spades {
 
 					// Preliminary custom font support
 					auto files = FileManager::EnumFiles("Fonts");
-					static std::regex re(".*\\.(?:otf|ttf|ttc)", std::regex::icase);
 					for (const auto &name : files) {
-						if (!std::regex_match(name, re)) {
+						if (!std::regex_match(name, g_fontNameRe)) {
 							continue;
 						}
 						SPLog("Loading custom font '%s'", name.c_str());

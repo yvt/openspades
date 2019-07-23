@@ -190,11 +190,12 @@ namespace {
 		       binaryName);
 	}
 
+	std::regex const hostNameRegex{"aos://.*"};
+	std::regex const v075Regex{"(?:v=)?0?\\.?75"};
+	std::regex const v076Regex{"(?:v=)?0?\\.?76"};
+
 	int handleCommandLineArgument(int argc, char **argv, int &i) {
 		if (char *a = argv[i]) {
-			static std::regex hostNameRegex{"aos://.*"};
-			static std::regex v075Regex{"(?:v=)?0?\\.?75"};
-			static std::regex v076Regex{"(?:v=)?0?\\.?76"};
 
 			if (std::regex_match(a, hostNameRegex)) {
 				g_autoconnect = true;

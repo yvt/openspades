@@ -30,10 +30,10 @@
 
 namespace spades {
 	namespace {
-		std::regex wavRegex {".*\\.wav", std::regex::icase};
-		std::regex opusRegex {".*\\.(?:opus|ogg)", std::regex::icase};
+		std::regex const wavRegex{".*\\.wav", std::regex::icase};
+		std::regex const opusRegex{".*\\.(?:opus|ogg)", std::regex::icase};
 
-		using CodecInfo = std::tuple<std::string, IAudioStream *(*)(IStream *stream, bool autoClose), std::regex&>;
+		using CodecInfo = std::tuple<std::string, IAudioStream *(*)(IStream *stream, bool autoClose), std::regex const &>;
 		CodecInfo g_codecs[] = {
 			CodecInfo {"WAV Decoder", [] (IStream *stream, bool autoClose) -> IAudioStream * {
 				return new WavAudioStream(stream, autoClose);

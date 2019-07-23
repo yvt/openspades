@@ -41,11 +41,13 @@ namespace spades {
 		return vl;
 	}
 
-	ServerAddress::ServerAddress(std::string address, ProtocolVersion version)
-	: mAddress(address), mVersion(version) {
-		static std::regex v075regex {"(.*):0?\\.?75"};
-		static std::regex v076regex {"(.*):0?\\.?76"};
+	namespace {
+		std::regex const v075regex{"(.*):0?\\.?75"};
+		std::regex const v076regex{"(.*):0?\\.?76"};
+	} // namespace
 
+	ServerAddress::ServerAddress(std::string address, ProtocolVersion version)
+	    : mAddress(address), mVersion(version) {
 		std::smatch matchResult;
 
 		if (std::regex_match(address, matchResult, v075regex)) {
