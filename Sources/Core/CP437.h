@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013 yvt
  * WTFPL
-*/
+ */
 
 #include <cstdint>
 #include <string>
@@ -10,10 +10,8 @@
 
 namespace spades {
 	class CP437 {
-		class ReverseMap;
-		static ReverseMap reverse;
-		CP437() {}
-		~CP437() {}
+		CP437() = delete;
+		~CP437() = delete;
 
 	public:
 		static char EncodeChar(std::uint32_t unicode, char fallback = 0xff);
@@ -21,4 +19,4 @@ namespace spades {
 		static std::string Encode(const std::string &, char fallback = 0xff);
 		static std::string Decode(const std::string &);
 	};
-}
+} // namespace spades
