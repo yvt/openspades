@@ -38,20 +38,27 @@ namespace spades {
 		width = w;
 		height = h;
 		depth = d;
+
 		if (d > 64) {
 			SPRaise("Voxel model with depth > 64 is not supported.");
 		}
 
-		solidBits = new uint64_t[w * h];
-		colors = new uint32_t[w * h * d];
+		// TODO: `stmp::make_unique` doesn't support `T[]` yet
+		solidBits.reset(new uint64_t[w * h]);
+		colors.reset(new uint32_t[w * h * d]);
 
-		std::fill(solidBits, solidBits + w * h, 0);
+		std::fill(solidBits.get(), solidBits.get() + w * h, 0);
 	}
-	VoxelModel::~VoxelModel() {
-		SPADES_MARK_FUNCTION();
+	VoxelModel::~VoxelModel() { SPADES_MARK_FUNCTION(); }
 
-		delete[] solidBits;
-		delete[] colors;
+	void VoxelModel::ThrowInvalidSpan [[noreturn]] (int x, int y) const {
+		SPRaise("Span (%d, %d, :) is out of bounds of voxel model of size %dx%dx%d", x, y, width,
+		        height, depth);
+	}
+
+	void VoxelModel::ThrowInvalidPoint [[noreturn]] (int x, int y, int z) const {
+		SPRaise("Point (%d, %d, %d) is out of bounds of voxel model of size %dx%dx%d", x, y, z,
+		        width, height, depth);
 	}
 
 	void VoxelModel::ForceMaterial(MaterialType newMaterialId) {
@@ -61,27 +68,30 @@ namespace spades {
 		}
 	}
 
-	struct KV6Block {
-		uint32_t color;
-		uint16_t zPos;
-		uint8_t visFaces;
-		uint8_t lighting;
-	};
+	namespace {
+		struct KV6Block {
+			uint32_t color;
+			uint16_t zPos;
+			uint8_t visFaces;
+			uint8_t lighting;
+		};
 
-	struct KV6Header {
-		uint32_t xsiz, ysiz, zsiz;
-		float xpivot, ypivot, zpivot;
-		uint32_t blklen;
-	};
-	static uint32_t swapColor(uint32_t col) {
-		union {
-			uint8_t bytes[4];
-			uint32_t c;
-		} u;
-		u.c = col;
-		std::swap(u.bytes[0], u.bytes[2]);
-		return (u.c & 0xffffff);
-	}
+		struct KV6Header {
+			uint32_t xsiz, ysiz, zsiz;
+			float xpivot, ypivot, zpivot;
+			uint32_t blklen;
+		};
+
+		uint32_t swapColor(uint32_t col) {
+			union {
+				uint8_t bytes[4];
+				uint32_t c;
+			} u;
+			u.c = col;
+			std::swap(u.bytes[0], u.bytes[2]);
+			return (u.c & 0xffffff);
+		}
+	} // namespace
 
 	void VoxelModel::HollowFill() {
 		std::vector<IntVector3> stack;
@@ -191,22 +201,22 @@ namespace spades {
 				}
 	}
 
-	VoxelModel *VoxelModel::LoadKV6(spades::IStream *stream) {
+	Handle<VoxelModel> VoxelModel::LoadKV6(IStream &stream) {
 		SPADES_MARK_FUNCTION();
 
-		if (stream->Read(4) != "Kvxl") {
+		if (stream.Read(4) != "Kvxl") {
 			SPRaise("Invalid magic");
 		}
 
 		KV6Header header;
-		if (stream->Read(&header, sizeof(header)) < sizeof(header)) {
+		if (stream.Read(&header, sizeof(header)) < sizeof(header)) {
 			SPRaise("File truncated: failed to read header");
 		}
 
 		std::vector<KV6Block> blkdata;
 		blkdata.resize(header.blklen);
 
-		if (stream->Read(blkdata.data(), sizeof(KV6Block) * header.blklen) <
+		if (stream.Read(blkdata.data(), sizeof(KV6Block) * header.blklen) <
 		    sizeof(KV6Block) * header.blklen) {
 			SPRaise("File truncated: failed to read blocks");
 		}
@@ -214,7 +224,7 @@ namespace spades {
 		std::vector<uint32_t> xoffset;
 		xoffset.resize(header.xsiz);
 
-		if (stream->Read(xoffset.data(), sizeof(uint32_t) * header.xsiz) <
+		if (stream.Read(xoffset.data(), sizeof(uint32_t) * header.xsiz) <
 		    sizeof(uint32_t) * header.xsiz) {
 			SPRaise("File truncated: failed to read xoffset");
 		}
@@ -222,7 +232,7 @@ namespace spades {
 		std::vector<uint16_t> xyoffset;
 		xyoffset.resize(header.xsiz * header.ysiz);
 
-		if (stream->Read(xyoffset.data(), sizeof(uint16_t) * header.xsiz * header.ysiz) <
+		if (stream.Read(xyoffset.data(), sizeof(uint16_t) * header.xsiz * header.ysiz) <
 		    sizeof(uint16_t) * header.xsiz * header.ysiz) {
 			SPRaise("File truncated: failed to read xyoffset");
 		}
@@ -242,38 +252,30 @@ namespace spades {
 				SPRaise("File corrupted: sum(xyoffset) != blkdata.size()");
 		}
 
-		VoxelModel *model = new VoxelModel(header.xsiz, header.ysiz, header.zsiz);
+		auto model = Handle<VoxelModel>::New(header.xsiz, header.ysiz, header.zsiz);
 		model->SetOrigin(MakeVector3(-header.xpivot, -header.ypivot, -header.zpivot));
-		try {
-			int pos = 0;
-			for (int x = 0; x < (int)header.xsiz; x++)
-				for (int y = 0; y < (int)header.ysiz; y++) {
-					int spanBlocks = (int)xyoffset[x * header.ysiz + y];
-					int lastZ = -1;
-					// printf("pos: %d, (%d, %d): %d\n",
-					//	   pos, x, y, spanBlocks);
-					while (spanBlocks--) {
-						const KV6Block &b = blkdata[pos];
-						// printf("%d, %d, %d: %d, %d\n", x, y, b.zPos,
-						//	   b.visFaces, b.lighting);
-						if (model->IsSolid(x, y, b.zPos)) {
-							SPRaise("Duplicate voxel (%d, %d, %d)", x, y, b.zPos);
-						}
-						if (b.zPos <= lastZ) {
-							SPRaise("Not Z-sorted");
-						}
-						lastZ = b.zPos;
-						model->SetSolid(x, y, b.zPos, swapColor(b.color));
-						pos++;
-					}
-				}
 
-			SPAssert(pos == blkdata.size());
-			model->HollowFill();
-			return model;
-		} catch (...) {
-			delete model;
-			throw;
-		}
+		int pos = 0;
+		for (int x = 0; x < (int)header.xsiz; x++)
+			for (int y = 0; y < (int)header.ysiz; y++) {
+				int spanBlocks = (int)xyoffset[x * header.ysiz + y];
+				int lastZ = -1;
+				while (spanBlocks--) {
+					const KV6Block &b = blkdata[pos];
+					if (model->IsSolid(x, y, b.zPos)) {
+						SPRaise("Duplicate voxel (%d, %d, %d)", x, y, b.zPos);
+					}
+					if (b.zPos <= lastZ) {
+						SPRaise("Not Z-sorted");
+					}
+					lastZ = b.zPos;
+					model->SetSolid(x, y, b.zPos, swapColor(b.color));
+					pos++;
+				}
+			}
+
+		SPAssert(pos == blkdata.size());
+		model->HollowFill();
+		return model;
 	}
-}
+} // namespace spades

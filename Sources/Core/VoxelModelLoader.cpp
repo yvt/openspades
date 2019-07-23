@@ -112,7 +112,7 @@ namespace spades {
 		{
 			SPLog("Loading '%s' as a KV6 voxel model.", path);
 			std::unique_ptr<IStream> stream{FileManager::OpenForReading(path)};
-			voxelModel = Handle<VoxelModel>{VoxelModel::LoadKV6(stream.get()), false};
+			voxelModel = VoxelModel::LoadKV6(*stream);
 		}
 
 		// Apply transformation requested by the metadata
