@@ -36,6 +36,7 @@
 #include "Player.h"
 #include "Weapon.h"
 #include "World.h"
+#include <Core/Bitmap.h>
 #include <Core/Settings.h>
 #include <ScriptBindings/IBlockSkin.h>
 #include <ScriptBindings/IGrenadeSkin.h>
