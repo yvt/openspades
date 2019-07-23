@@ -75,8 +75,8 @@ namespace spades {
 
 			auto pipe = CreatePipeStream();
 
-			rawDataWriter = std::unique_ptr<IStream>{std::get<0>(pipe)};
-			auto rawDataReader = std::unique_ptr<IStream>{std::get<1>(pipe)};
+			rawDataWriter = std::move(std::get<0>(pipe));
+			auto rawDataReader = std::move(std::get<1>(pipe));
 
 			decodingThreadRunnable = stmp::make_unique<Decoder>(*this, std::move(rawDataReader));
 

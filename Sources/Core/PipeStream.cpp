@@ -24,6 +24,8 @@
 #include <memory>
 #include <mutex>
 
+#include <Core/TMPUtils.h>
+
 #include "PipeStream.h"
 
 namespace spades {
@@ -150,9 +152,10 @@ namespace spades {
 
 	} // namespace
 
-	std::tuple<IStream *, IStream *> CreatePipeStream() {
+	std::tuple<std::unique_ptr<IStream>, std::unique_ptr<IStream>> CreatePipeStream() {
 		auto state = std::make_shared<State>();
 
-		return std::make_tuple(new PipeWriter(state), new PipeReader(state));
+		return std::make_tuple(stmp::make_unique<PipeWriter>(state),
+		                       stmp::make_unique<PipeReader>(state));
 	}
 } // namespace spades
