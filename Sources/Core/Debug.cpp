@@ -194,7 +194,7 @@ namespace spades {
 		BoundedLogBuffer g_consoleLogBuffer;
 	} // namespace
 
-	static IStream *logStream = NULL;
+	static std::unique_ptr<IStream> logStream;
 	static bool attemptedToInitializeLog = false;
 	static std::string accumlatedLog;
 

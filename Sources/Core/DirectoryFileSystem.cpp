@@ -146,7 +146,7 @@ namespace spades {
 #endif
 	}
 
-	IStream *DirectoryFileSystem::OpenForReading(const char *fn) {
+	std::unique_ptr<IStream> DirectoryFileSystem::OpenForReading(const char *fn) {
 		SPADES_MARK_FUNCTION();
 
 		std::string path = PathToPhysical(fn);
@@ -154,10 +154,10 @@ namespace spades {
 		if (f == NULL) {
 			SPRaise("I/O error while opening %s for reading: %s", fn, SDL_GetError());
 		}
-		return new SdlFileStream(f, true);
+		return stmp::make_unique<SdlFileStream>(f, true);
 	}
 
-	IStream *DirectoryFileSystem::OpenForWriting(const char *fn) {
+	std::unique_ptr<IStream> DirectoryFileSystem::OpenForWriting(const char *fn) {
 		SPADES_MARK_FUNCTION();
 		if (!canWrite) {
 			SPRaise("Writing prohibited for root path '%s'", rootPath.c_str());
@@ -187,7 +187,7 @@ namespace spades {
 		if (f == NULL) {
 			SPRaise("I/O error while opening %s for writing", fn);
 		}
-		return new SdlFileStream(f, true);
+		return stmp::make_unique<SdlFileStream>(f, true);
 	}
 
 	// TODO: open for appending?
@@ -202,4 +202,4 @@ namespace spades {
 		}
 		return false;
 	}
-}
+} // namespace spades

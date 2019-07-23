@@ -214,7 +214,7 @@ namespace spades {
 			Json::StyledWriter writer;
 			Json::Value v(Json::ValueType::arrayValue);
 
-			IStream *fobj = spades::FileManager::OpenForWriting(FAVORITE_PATH);
+			auto fobj = spades::FileManager::OpenForWriting(FAVORITE_PATH);
 			for (const auto &favorite : favorites) {
 				v.append(Json::Value(favorite));
 			}

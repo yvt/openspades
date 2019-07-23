@@ -15,7 +15,7 @@
 
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include <tuple>
@@ -53,15 +53,20 @@ namespace spades {
 
 			// give it a try.
 			// open error shouldn't be handled here
-			IStream *str = FileManager::OpenForReading(fileName.c_str());
+			auto stream = FileManager::OpenForReading(fileName.c_str());
 			try {
-				return std::get<1>(codec)(str, true);
+				auto parsedStream = std::get<1>(codec)(stream.get(), true);
+
+				// The ownership of `stream` moves to `parsedStream` if the load
+				// succeeds
+				stream.release();
+
+				return parsedStream;
 			} catch (const std::exception &ex) {
 				errMsg += std::get<0>(codec);
 				errMsg += ":\n";
 				errMsg += ex.what();
 				errMsg += "\n\n";
-				delete str;
 			}
 		}
 

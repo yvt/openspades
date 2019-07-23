@@ -362,7 +362,7 @@ namespace spades {
 			fn2 = "NetLogs/" + fn2 + ".log";
 
 			try {
-				logStream.reset(FileManager::OpenForWriting(fn2.c_str()));
+				logStream = FileManager::OpenForWriting(fn2.c_str());
 				SPLog("Netlog Started at '%s'", fn2.c_str());
 			} catch (const std::exception &ex) {
 				SPLog("Failed to open netlog file '%s' (%s)", fn2.c_str(), ex.what());
