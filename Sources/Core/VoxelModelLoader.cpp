@@ -77,7 +77,7 @@ namespace spades {
 		};
 	} // namespace
 
-	VoxelModel *VoxelModelLoader::Load(const char *path) {
+	Handle<VoxelModel> VoxelModelLoader::Load(const char *path) {
 		// Load the metadata file
 		std::string metadataPath = path;
 		{
@@ -124,6 +124,6 @@ namespace spades {
 			voxelModel->ForceMaterial(*meta.forceMaterial);
 		}
 
-		return std::move(voxelModel).Unmanage();
+		return voxelModel;
 	}
 } // namespace spades

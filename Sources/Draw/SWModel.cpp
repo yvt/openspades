@@ -129,8 +129,7 @@ namespace spades {
 		Handle<SWModel> SWModelManager::RegisterModel(const std::string &name) {
 			auto it = models.find(name);
 			if (it == models.end()) {
-				Handle<VoxelModel> vm;
-				vm.Set(VoxelModelLoader::Load(name.c_str()), false);
+				auto vm = VoxelModelLoader::Load(name.c_str());
 
 				Handle<SWModel> model = CreateModel(*vm);
 				models.insert(std::make_pair(name, model));

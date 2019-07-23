@@ -22,6 +22,8 @@
 
 #include <string>
 
+#include <Core/RefCountedObject.h>
+
 namespace spades {
 	class VoxelModel;
 
@@ -52,6 +54,6 @@ namespace spades {
 		 *       // (All fields are optional)
 		 *     }
 		 */
-		static VoxelModel *Load(const char *path);
+		static Handle<VoxelModel> Load(const char *path);
 	};
 } // namespace spades

@@ -62,7 +62,7 @@ namespace spades {
 		GLModel *GLModelManager::CreateModel(const char *name) {
 			SPADES_MARK_FUNCTION();
 
-			Handle<VoxelModel> voxelModel{VoxelModelLoader::Load(name), false};
+			auto voxelModel = VoxelModelLoader::Load(name);
 
 			return renderer->CreateModelOptimized(*voxelModel).Cast<GLModel>().Unmanage();
 		}
