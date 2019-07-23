@@ -80,8 +80,7 @@ namespace spades {
 	Handle<Bitmap> Bitmap::Load(const std::string &filename) {
 		std::vector<IBitmapCodec *> codecs = IBitmapCodec::GetAllCodecs();
 		std::string errMsg;
-		for (size_t i = 0; i < codecs.size(); i++) {
-			IBitmapCodec *codec = codecs[i];
+		for (IBitmapCodec *codec : codecs) {
 			if (codec->CanLoad() && codec->CheckExtension(filename)) {
 				// give it a try.
 				// open error shouldn't be handled here
@@ -109,8 +108,7 @@ namespace spades {
 		std::vector<IBitmapCodec *> codecs = IBitmapCodec::GetAllCodecs();
 		auto pos = stream.GetPosition();
 		std::string errMsg;
-		for (size_t i = 0; i < codecs.size(); i++) {
-			IBitmapCodec *codec = codecs[i];
+		for (IBitmapCodec *codec : codecs) {
 			if (codec->CanLoad()) {
 				// give it a try.
 				// open error shouldn't be handled here
@@ -135,8 +133,7 @@ namespace spades {
 
 	void Bitmap::Save(const std::string &filename) {
 		std::vector<IBitmapCodec *> codecs = IBitmapCodec::GetAllCodecs();
-		for (size_t i = 0; i < codecs.size(); i++) {
-			IBitmapCodec *codec = codecs[i];
+		for (IBitmapCodec *codec : codecs) {
 			if (codec->CanSave() && codec->CheckExtension(filename)) {
 				StreamHandle str = FileManager::OpenForWriting(filename.c_str());
 
