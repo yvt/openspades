@@ -71,7 +71,7 @@ namespace spades {
 		GLImage *GLImageManager::CreateImage(const std::string &name) {
 			SPADES_MARK_FUNCTION();
 
-			Handle<Bitmap> bmp(Bitmap::Load(name), false);
+			Handle<Bitmap> bmp = Bitmap::Load(name);
 
 			return GLImage::FromBitmap(*bmp, &device).Unmanage();
 		}

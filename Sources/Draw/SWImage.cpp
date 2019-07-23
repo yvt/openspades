@@ -111,8 +111,7 @@ namespace spades {
 		Handle<SWImage> SWImageManager::RegisterImage(const std::string &name) {
 			auto it = images.find(name);
 			if (it == images.end()) {
-				Handle<Bitmap> bitmap;
-				bitmap.Set(Bitmap::Load(name), false);
+				Handle<Bitmap> bitmap = Bitmap::Load(name);
 				Handle<SWImage> image = CreateImage(*bitmap);
 				images.insert(std::make_pair(name, image));
 				return image;
