@@ -56,7 +56,7 @@ namespace spades {
 			/**
 			 * Returns `true` if the loading operation is complete, successful or not.
 			 */
-			bool IsComplete();
+			bool IsComplete() const;
 
 			/**
 			 * Blocks the current thread until the decoding is complete.

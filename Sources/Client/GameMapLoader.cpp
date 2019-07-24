@@ -113,7 +113,7 @@ namespace spades {
 			rawDataWriter.reset();
 		}
 
-		bool GameMapLoader::IsComplete() { return resultCell.operator bool(); }
+		bool GameMapLoader::IsComplete() const { return resultCell.operator bool(); }
 
 		void GameMapLoader::WaitComplete() {
 			SPADES_MARK_FUNCTION();
