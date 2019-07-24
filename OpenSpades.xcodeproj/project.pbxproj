@@ -180,7 +180,6 @@
 		E82E679818EA7972004DBA18 /* ClientUIHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CFC1845C8D50085AA54 /* ClientUIHelper.cpp */; };
 		E82E679918EA7972004DBA18 /* Clipboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F74CFE184C753F0085AA54 /* Clipboard.cpp */; };
 		E82E679A18EA7972004DBA18 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8CF03CC178EE95F000683D4 /* Math.cpp */; };
-		E82E679B18EA7972004DBA18 /* Deque.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88318DF17925F2E002ABE6D /* Deque.cpp */; };
 		E82E679C18EA7972004DBA18 /* Stopwatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88318E21792698D002ABE6D /* Stopwatch.cpp */; };
 		E82E679D18EA7972004DBA18 /* Debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E834F5541794BBD4004EBE88 /* Debug.cpp */; };
 		E82E679E18EA7972004DBA18 /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E0AFB3179BF25B00C6B5A9 /* Settings.cpp */; };
@@ -559,8 +558,6 @@
 		E88318DA179256E5002ABE6D /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		E88318DC179257F0002ABE6D /* GameMapWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMapWrapper.cpp; sourceTree = "<group>"; };
 		E88318DD179257F0002ABE6D /* GameMapWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMapWrapper.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		E88318DF17925F2E002ABE6D /* Deque.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Deque.cpp; sourceTree = "<group>"; };
-		E88318E017925F2E002ABE6D /* Deque.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deque.h; sourceTree = "<group>"; };
 		E88318E21792698D002ABE6D /* Stopwatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Stopwatch.cpp; sourceTree = "<group>"; };
 		E88318E31792698D002ABE6D /* Stopwatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stopwatch.h; sourceTree = "<group>"; };
 		E88318E517928EAC002ABE6D /* PhysicsConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhysicsConstants.h; sourceTree = "<group>"; };
@@ -1606,8 +1603,6 @@
 				E8B6B6E617E40AF300E35523 /* ScriptBindings */,
 				E8CF03CC178EE95F000683D4 /* Math.cpp */,
 				E8CF03CD178EE95F000683D4 /* Math.h */,
-				E88318DF17925F2E002ABE6D /* Deque.cpp */,
-				E88318E017925F2E002ABE6D /* Deque.h */,
 				E88318E21792698D002ABE6D /* Stopwatch.cpp */,
 				E88318E31792698D002ABE6D /* Stopwatch.h */,
 				E834F5541794BBD4004EBE88 /* Debug.cpp */,
@@ -2189,7 +2184,6 @@
 				E82E679918EA7972004DBA18 /* Clipboard.cpp in Sources */,
 				E82E679A18EA7972004DBA18 /* Math.cpp in Sources */,
 				E89A5F1E1DF8732200857F65 /* ShellApi.cpp in Sources */,
-				E82E679B18EA7972004DBA18 /* Deque.cpp in Sources */,
 				E82E679C18EA7972004DBA18 /* Stopwatch.cpp in Sources */,
 				E82E679D18EA7972004DBA18 /* Debug.cpp in Sources */,
 				E82E679E18EA7972004DBA18 /* Settings.cpp in Sources */,
