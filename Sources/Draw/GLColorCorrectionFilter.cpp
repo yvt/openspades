@@ -33,14 +33,14 @@
 
 namespace spades {
 	namespace draw {
-		GLColorCorrectionFilter::GLColorCorrectionFilter(GLRenderer *renderer)
-		    : renderer(renderer), settings(renderer->GetSettings()) {
-			lens = renderer->RegisterProgram("Shaders/PostFilters/ColorCorrection.program");
+		GLColorCorrectionFilter::GLColorCorrectionFilter(GLRenderer &renderer)
+		    : renderer(renderer), settings(renderer.GetSettings()) {
+			lens = renderer.RegisterProgram("Shaders/PostFilters/ColorCorrection.program");
 		}
 		GLColorBuffer GLColorCorrectionFilter::Filter(GLColorBuffer input, Vector3 tintVal) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			static GLProgramAttribute lensPosition("positionAttribute");
@@ -63,7 +63,7 @@ namespace spades {
 
 			tint.SetValue(tintVal.x, tintVal.y, tintVal.z);
 
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 
 			if (settings.r_hdr) {
 				// when HDR is enabled ACES tone mapping is applied first, so

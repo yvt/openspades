@@ -28,12 +28,12 @@ namespace spades {
 		class GLProgram;
 		class GLSettings;
 		class GLColorCorrectionFilter {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			GLSettings &settings;
 			GLProgram *lens;
 
 		public:
-			GLColorCorrectionFilter(GLRenderer *);
+			GLColorCorrectionFilter(GLRenderer &);
 			GLColorBuffer Filter(GLColorBuffer, Vector3 tint);
 		};
 	}

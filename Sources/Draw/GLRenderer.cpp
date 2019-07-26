@@ -178,7 +178,7 @@ namespace spades {
 			}
 
 			if (settings.r_colorCorrection) {
-				GLColorCorrectionFilter(this);
+				GLColorCorrectionFilter(*this);
 			}
 
 			if (settings.r_fxaa) {
@@ -1010,7 +1010,7 @@ namespace spades {
 					tint *= 1.f / std::min(std::min(tint.x, tint.y), tint.z);
 
 					float exposure = powf(2.f, (float)settings.r_exposureValue * 0.5f);
-					handle = GLColorCorrectionFilter(this).Filter(handle, tint * exposure);
+					handle = GLColorCorrectionFilter(*this).Filter(handle, tint * exposure);
 
 					// update smoothed fog color
 					smoothedFogColor = Mix(smoothedFogColor, fogColor, 0.002f);
