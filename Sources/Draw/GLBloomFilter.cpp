@@ -32,8 +32,8 @@
 
 namespace spades {
 	namespace draw {
-		GLBloomFilter::GLBloomFilter(GLRenderer *renderer) : renderer(renderer) {
-			thru = renderer->RegisterProgram("Shaders/PostFilters/PassThrough.program");
+		GLBloomFilter::GLBloomFilter(GLRenderer &renderer) : renderer(renderer) {
+			thru = renderer.RegisterProgram("Shaders/PostFilters/PassThrough.program");
 		}
 
 #define Level BloomLevel
@@ -48,7 +48,7 @@ namespace spades {
 
 			std::vector<Level> levels;
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			static GLProgramAttribute thruPosition("positionAttribute");
@@ -61,7 +61,7 @@ namespace spades {
 			thruTexture(thru);
 			thruTexCoordRange(thru);
 
-			GLProgram *gammaMix = renderer->RegisterProgram("Shaders/PostFilters/GammaMix.program");
+			GLProgram *gammaMix = renderer.RegisterProgram("Shaders/PostFilters/GammaMix.program");
 			static GLProgramAttribute gammaMixPosition("positionAttribute");
 			static GLProgramUniform gammaMixTexture1("texture1");
 			static GLProgramUniform gammaMixTexture2("texture2");
