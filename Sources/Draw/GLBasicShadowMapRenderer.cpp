@@ -29,14 +29,14 @@
 namespace spades {
 	namespace draw {
 
-		GLBasicShadowMapRenderer::GLBasicShadowMapRenderer(GLRenderer *r)
-		    : IGLShadowMapRenderer(r), device(r->GetGLDevice()) {
+		GLBasicShadowMapRenderer::GLBasicShadowMapRenderer(GLRenderer &r)
+		    : IGLShadowMapRenderer(r), device(r.GetGLDevice()) {
 			SPADES_MARK_FUNCTION();
 
-			textureSize = r->GetSettings().r_shadowMapSize;
+			textureSize = r.GetSettings().r_shadowMapSize;
 			if ((int)textureSize > 4096) {
 				SPLog("r_shadowMapSize is too large; changed to 4096");
-				r->GetSettings().r_shadowMapSize = textureSize = 4096;
+				r.GetSettings().r_shadowMapSize = textureSize = 4096;
 			}
 
 			colorTexture = device.GenTexture();
@@ -140,7 +140,7 @@ namespace spades {
 			up = Vector3::Cross(lightDir, side).Normalize();
 
 			// build frustrum
-			client::SceneDefinition def = GetRenderer()->GetSceneDef();
+			client::SceneDefinition def = GetRenderer().GetSceneDef();
 			Vector3 frustrum[8];
 			float tanX = tanf(def.fovX * .5f);
 			float tanY = tanf(def.fovY * .5f);
@@ -224,13 +224,13 @@ namespace spades {
 
 			IGLDevice::Integer lastFb = device.GetInteger(IGLDevice::FramebufferBinding);
 
-			// client::SceneDefinition def = GetRenderer()->GetSceneDef();
+			// client::SceneDefinition def = GetRenderer().GetSceneDef();
 
 			float nearDist = 0.f;
 
 			for (int i = 0; i < NumSlices; i++) {
 
-				GLProfiler::Context profiler(GetRenderer()->GetGLProfiler(), "Slice %d / %d", i + 1,
+				GLProfiler::Context profiler(GetRenderer().GetGLProfiler(), "Slice %d / %d", i + 1,
 				                             (int)NumSlices);
 
 				float farDist = 0.0;

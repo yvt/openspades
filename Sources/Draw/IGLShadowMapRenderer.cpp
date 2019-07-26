@@ -25,10 +25,10 @@
 
 namespace spades {
 	namespace draw {
-		IGLShadowMapRenderer::IGLShadowMapRenderer(GLRenderer *renderer) : renderer(renderer) {}
+		IGLShadowMapRenderer::IGLShadowMapRenderer(GLRenderer &renderer) : renderer(renderer) {}
 		void IGLShadowMapRenderer::RenderShadowMapPass() {
 			SPADES_MARK_FUNCTION();
-			renderer->modelRenderer->RenderShadowMapPass();
+			renderer.modelRenderer->RenderShadowMapPass();
 		}
 	}
 }

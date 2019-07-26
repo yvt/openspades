@@ -63,7 +63,7 @@ namespace spades {
 			void RenderShadowMapPass() override;
 
 		public:
-			GLSparseShadowMapRenderer(GLRenderer *);
+			GLSparseShadowMapRenderer(GLRenderer &);
 			~GLSparseShadowMapRenderer();
 			void Render() override;
 

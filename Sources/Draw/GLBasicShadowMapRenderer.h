@@ -49,7 +49,7 @@ namespace spades {
 			void BuildMatrix(float near, float far);
 
 		public:
-			GLBasicShadowMapRenderer(GLRenderer *);
+			GLBasicShadowMapRenderer(GLRenderer &);
 			~GLBasicShadowMapRenderer();
 			void Render() override;
 

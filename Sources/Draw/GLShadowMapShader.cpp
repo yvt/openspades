@@ -49,9 +49,9 @@ namespace spades {
 		}
 
 		IGLShadowMapRenderer *
-		GLShadowMapShader::CreateShadowMapRenderer(spades::draw::GLRenderer *r) {
+		GLShadowMapShader::CreateShadowMapRenderer(GLRenderer &r) {
 			SPADES_MARK_FUNCTION();
-			auto &settings = r->GetSettings();
+			auto &settings = r.GetSettings();
 			if (!settings.r_modelShadows)
 				return NULL;
 			if (settings.r_sparseShadowMaps)

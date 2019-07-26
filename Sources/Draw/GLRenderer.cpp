@@ -135,7 +135,7 @@ namespace spades {
 			}
 
 			SPLog("GLRenderer initializing for 3D rendering");
-			shadowMapRenderer = GLShadowMapShader::CreateShadowMapRenderer(this);
+			shadowMapRenderer = GLShadowMapShader::CreateShadowMapRenderer(*this);
 			modelManager = new GLModelManager(this);
 			if ((int)settings.r_softParticles >= 2)
 				spriteRenderer = new GLSoftLitSpriteRenderer(this);

@@ -34,16 +34,16 @@ namespace spades {
 		};
 
 		class IGLShadowMapRenderer {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 
 		protected:
 			virtual void RenderShadowMapPass();
 
 		public:
-			IGLShadowMapRenderer(GLRenderer *);
+			IGLShadowMapRenderer(GLRenderer &);
 			virtual ~IGLShadowMapRenderer() {}
 
-			GLRenderer *GetRenderer() { return renderer; }
+			GLRenderer &GetRenderer() { return renderer; }
 
 			virtual void Render() = 0;
 

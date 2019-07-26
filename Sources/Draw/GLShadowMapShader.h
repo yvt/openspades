@@ -39,7 +39,7 @@ namespace spades {
 
 			static std::vector<GLShader *> RegisterShader(GLProgramManager *);
 
-			static IGLShadowMapRenderer *CreateShadowMapRenderer(GLRenderer *);
+			static IGLShadowMapRenderer *CreateShadowMapRenderer(GLRenderer &);
 
 			/** setups shadow map shader.
 			 * note that this function sets the current active texture
