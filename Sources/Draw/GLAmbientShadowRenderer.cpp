@@ -31,22 +31,22 @@
 namespace spades {
 	namespace draw {
 		class GLAmbientShadowRenderer::UpdateDispatch : public ConcurrentDispatch {
-			GLAmbientShadowRenderer *renderer;
+			GLAmbientShadowRenderer &renderer;
 
 		public:
 			std::atomic<bool> done{false};
-			UpdateDispatch(GLAmbientShadowRenderer *r) : renderer(r) {}
+			UpdateDispatch(GLAmbientShadowRenderer &r) : renderer(r) {}
 			void Run() override {
 				SPADES_MARK_FUNCTION();
 
-				renderer->UpdateDirtyChunks();
+				renderer.UpdateDirtyChunks();
 
 				done = true;
 			}
 		};
 
-		GLAmbientShadowRenderer::GLAmbientShadowRenderer(GLRenderer *r, client::GameMap *m)
-		    : renderer(r), device(r->GetGLDevice()), map(m) {
+		GLAmbientShadowRenderer::GLAmbientShadowRenderer(GLRenderer &r, client::GameMap &m)
+		    : renderer(r), device(r.GetGLDevice()), map(m) {
 			SPADES_MARK_FUNCTION();
 
 			for (int i = 0; i < NumRays; i++) {
@@ -198,7 +198,7 @@ namespace spades {
 
 		void GLAmbientShadowRenderer::GameMapChanged(int x, int y, int z, client::GameMap *map) {
 			SPADES_MARK_FUNCTION_DEBUG();
-			if (map != this->map)
+			if (map != this->map.GetPointerOrNull())
 				return;
 
 			Invalidate(x - 8, y - 8, z - 8, x + 8, y + 8, z + 8);
@@ -272,7 +272,7 @@ namespace spades {
 					dispatch->Join();
 					delete dispatch;
 				}
-				dispatch = new UpdateDispatch(this);
+				dispatch = new UpdateDispatch(*this);
 				dispatch->Start();
 			}
 
@@ -283,7 +283,7 @@ namespace spades {
 				if (!chunks[i].transferDone.load())
 					cnt++;
 			}
-			GLProfiler::Context profiler(renderer->GetGLProfiler(),
+			GLProfiler::Context profiler(renderer.GetGLProfiler(),
 			                             "Large Ambient Occlusion [>= %d chunk(s)]", cnt);
 
 			device.BindTexture(IGLDevice::Texture3D, texture);
@@ -304,7 +304,7 @@ namespace spades {
 			int nearDirtyChunks = 0;
 
 			// first, check only chunks in near range
-			Vector3 eyePos = renderer->GetSceneDef().viewOrigin;
+			Vector3 eyePos = renderer.GetSceneDef().viewOrigin;
 			int eyeX = (int)(eyePos.x) >> ChunkSizeBits;
 			int eyeY = (int)(eyePos.y) >> ChunkSizeBits;
 			int eyeZ = (int)(eyePos.z) >> ChunkSizeBits;

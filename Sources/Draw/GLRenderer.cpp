@@ -322,7 +322,7 @@ namespace spades {
 
 				if (settings.r_radiosity) {
 					SPLog("Creating Ray-traced Ambient Occlusion Renderer");
-					ambientShadowRenderer = new GLAmbientShadowRenderer(this, newMap.get_pointer());
+					ambientShadowRenderer = new GLAmbientShadowRenderer(*this, *newMap);
 					SPLog("Creating Relective Shadow Maps Renderer");
 					radiosityRenderer = new GLRadiosityRenderer(this, newMap.get_pointer());
 				} else {

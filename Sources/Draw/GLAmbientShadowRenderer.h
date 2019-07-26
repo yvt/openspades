@@ -20,12 +20,13 @@
 
 #pragma once
 
-#include <vector>
 #include <atomic>
+#include <vector>
 
+#include "IGLDevice.h"
 #include <Core/Debug.h>
 #include <Core/Math.h>
-#include "IGLDevice.h"
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	namespace client {
@@ -35,12 +36,12 @@ namespace spades {
 		class GLRenderer;
 		class IGLDevice;
 		class GLAmbientShadowRenderer {
-
 			class UpdateDispatch;
+
 			enum { NumRays = 16, ChunkSize = 16, ChunkSizeBits = 4 };
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			IGLDevice &device;
-			client::GameMap *map;
+			Handle<client::GameMap> map;
 			Vector3 rays[NumRays];
 
 			struct Chunk {
@@ -51,7 +52,7 @@ namespace spades {
 				int dirtyMinY = 0, dirtyMaxY = ChunkSize - 1;
 				int dirtyMinZ = 0, dirtyMaxZ = ChunkSize - 1;
 
-				std::atomic<bool> transferDone {true};
+				std::atomic<bool> transferDone{true};
 			};
 
 			IGLDevice::UInteger texture;
@@ -85,7 +86,7 @@ namespace spades {
 			UpdateDispatch *dispatch;
 
 		public:
-			GLAmbientShadowRenderer(GLRenderer *renderer, client::GameMap *map);
+			GLAmbientShadowRenderer(GLRenderer &renderer, client::GameMap &map);
 			~GLAmbientShadowRenderer();
 
 			float Evaluate(IntVector3);
@@ -96,5 +97,5 @@ namespace spades {
 
 			IGLDevice::UInteger GetTexture() { return texture; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades
