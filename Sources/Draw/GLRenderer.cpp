@@ -186,7 +186,7 @@ namespace spades {
 			}
 
 			if (settings.r_depthOfField) {
-				GLDepthOfFieldFilter(this);
+				GLDepthOfFieldFilter(*this);
 			}
 
 			device->Finish();
@@ -912,7 +912,7 @@ namespace spades {
 				if (settings.r_depthOfField &&
 				    (sceneDef.depthOfFieldFocalLength > 0.f || sceneDef.blurVignette > 0.f)) {
 					GLProfiler::Context p(*profiler, "Depth of Field");
-					handle = GLDepthOfFieldFilter(this).Filter(
+					handle = GLDepthOfFieldFilter(*this).Filter(
 					  handle, sceneDef.depthOfFieldFocalLength, sceneDef.blurVignette,
 					  sceneDef.globalBlur, sceneDef.depthOfFieldNearBlurStrength,
 					  sceneDef.depthOfFieldFarBlurStrength);

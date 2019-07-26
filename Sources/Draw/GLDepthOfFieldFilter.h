@@ -28,7 +28,7 @@ namespace spades {
 		class GLProgram;
 		class GLSettings;
 		class GLDepthOfFieldFilter {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			GLSettings &settings;
 			GLProgram *cocGen;       // program to generate CoC radius
 			GLProgram *cocMix;       // program to mix CoC radius
@@ -49,7 +49,7 @@ namespace spades {
 			bool HighQualityDoFEnabled();
 
 		public:
-			GLDepthOfFieldFilter(GLRenderer *);
+			GLDepthOfFieldFilter(GLRenderer &);
 			GLColorBuffer Filter(GLColorBuffer, float blurDepthRange, float vignetteBlur,
 			                     float globalBlur, float nearBlur, float farBlur);
 		};
