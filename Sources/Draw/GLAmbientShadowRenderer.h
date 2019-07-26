@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <array>
 #include <atomic>
 #include <vector>
 
@@ -38,11 +39,14 @@ namespace spades {
 		class GLAmbientShadowRenderer {
 			class UpdateDispatch;
 
-			enum { NumRays = 16, ChunkSize = 16, ChunkSizeBits = 4 };
+			static constexpr int NumRays = 16;
+			static constexpr int ChunkSizeBits = 4;
+			static constexpr int ChunkSize = 1 << ChunkSizeBits;
+
 			GLRenderer &renderer;
 			IGLDevice &device;
 			Handle<client::GameMap> map;
-			Vector3 rays[NumRays];
+			std::array<Vector3, NumRays> rays;
 
 			struct Chunk {
 				int cx, cy, cz;
