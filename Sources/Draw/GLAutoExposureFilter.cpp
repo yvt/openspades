@@ -33,13 +33,13 @@
 
 namespace spades {
 	namespace draw {
-		GLAutoExposureFilter::GLAutoExposureFilter(GLRenderer *renderer) : renderer(renderer) {
-			thru = renderer->RegisterProgram("Shaders/PostFilters/PassThrough.program");
+		GLAutoExposureFilter::GLAutoExposureFilter(GLRenderer &renderer) : renderer{renderer} {
+			thru = renderer.RegisterProgram("Shaders/PostFilters/PassThrough.program");
 			preprocess =
-			  renderer->RegisterProgram("Shaders/PostFilters/AutoExposurePreprocess.program");
-			computeGain = renderer->RegisterProgram("Shaders/PostFilters/AutoExposure.program");
+			  renderer.RegisterProgram("Shaders/PostFilters/AutoExposurePreprocess.program");
+			computeGain = renderer.RegisterProgram("Shaders/PostFilters/AutoExposure.program");
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 
 			exposureTexture = dev.GenTexture();
 
@@ -69,7 +69,7 @@ namespace spades {
 		}
 
 		GLAutoExposureFilter::~GLAutoExposureFilter() {
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			dev.DeleteTexture(exposureTexture);
 			dev.DeleteFramebuffer(exposureFramebuffer);
 		}
@@ -86,10 +86,10 @@ namespace spades {
 
 			std::vector<Level> levels;
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
-			GLSettings &settings = renderer->GetSettings();
+			GLSettings &settings = renderer.GetSettings();
 
 			static GLProgramAttribute thruPosition("positionAttribute");
 			static GLProgramUniform thruColor("colorUniform");

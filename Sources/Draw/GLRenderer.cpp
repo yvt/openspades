@@ -167,7 +167,7 @@ namespace spades {
 			}
 
 			if (settings.r_hdr) {
-				autoExposureFilter = new GLAutoExposureFilter(this);
+				autoExposureFilter = new GLAutoExposureFilter(*this);
 			}
 
 			if (settings.r_lens) {
