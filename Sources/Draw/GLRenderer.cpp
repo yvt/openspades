@@ -154,7 +154,7 @@ namespace spades {
 				GLWaterRenderer::PreloadShaders(this);
 
 			if (settings.r_cameraBlur) {
-				cameraBlur = new GLCameraBlurFilter(this);
+				cameraBlur = new GLCameraBlurFilter(*this);
 			}
 
 			if (settings.r_fogShadow) {

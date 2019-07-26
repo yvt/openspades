@@ -33,9 +33,9 @@
 
 namespace spades {
 	namespace draw {
-		GLCameraBlurFilter::GLCameraBlurFilter(GLRenderer *renderer) : renderer(renderer) {
+		GLCameraBlurFilter::GLCameraBlurFilter(GLRenderer &renderer) : renderer(renderer) {
 			prevMatrix = Matrix4::Identity();
-			program = renderer->RegisterProgram("Shaders/PostFilters/CameraBlur.program");
+			program = renderer.RegisterProgram("Shaders/PostFilters/CameraBlur.program");
 		}
 
 #define M(r, c) (d.m[(r) + (c)*4])
@@ -66,7 +66,7 @@ namespace spades {
 
 			bool hasRadialBlur = radialBlur < .9999f;
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			dev.Enable(IGLDevice::Blend, false);
@@ -83,7 +83,7 @@ namespace spades {
 			programReverseMatrix(program);
 			programShutterTimeScale(program);
 
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 			Matrix4 newMatrix = Matrix4::Identity();
 			Vector3 axes[] = {def.viewAxis[0], def.viewAxis[1], def.viewAxis[2]};
 			axes[0] /= std::tan(def.fovX * 0.5f);
@@ -148,7 +148,7 @@ namespace spades {
 			qr.SetCoordAttributeIndex(programPosition());
 			dev.ActiveTexture(1);
 			dev.BindTexture(IGLDevice::Texture2D,
-			                renderer->GetFramebufferManager()->GetDepthTexture());
+			                renderer.GetFramebufferManager()->GetDepthTexture());
 			dev.ActiveTexture(0);
 
 			for (int i = 0; i < levels; i++) {

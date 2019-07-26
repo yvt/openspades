@@ -29,11 +29,11 @@ namespace spades {
 		class GLProgram;
 		class GLCameraBlurFilter {
 			GLProgram *program;
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			Matrix4 prevMatrix;
 
 		public:
-			GLCameraBlurFilter(GLRenderer *);
+			GLCameraBlurFilter(GLRenderer &);
 			GLColorBuffer Filter(GLColorBuffer, float radialBlur = 0.f);
 		};
 	}
