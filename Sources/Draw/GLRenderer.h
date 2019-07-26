@@ -89,7 +89,7 @@ namespace spades {
 			GLModelManager *modelManager;
 
 			// TODO: get rid of these abominations called raw pointers
-			IGLShadowMapRenderer *shadowMapRenderer;
+			std::unique_ptr<IGLShadowMapRenderer> shadowMapRenderer;
 			GLMapShadowRenderer *mapShadowRenderer;
 			GLMapRenderer *mapRenderer;
 			GLImageRenderer *imageRenderer;
@@ -212,7 +212,7 @@ namespace spades {
 			IGLDevice &GetGLDevice() { return *device; }
 			GLProfiler &GetGLProfiler() { return *profiler; }
 			GLFramebufferManager *GetFramebufferManager() { return fbManager; }
-			IGLShadowMapRenderer *GetShadowMapRenderer() { return shadowMapRenderer; }
+			IGLShadowMapRenderer *GetShadowMapRenderer() { return shadowMapRenderer.get(); }
 			GLAmbientShadowRenderer *GetAmbientShadowRenderer() { return ambientShadowRenderer; }
 			GLMapShadowRenderer *GetMapShadowRenderer() { return mapShadowRenderer; }
 			GLRadiosityRenderer *GetRadiosityRenderer() { return radiosityRenderer; }

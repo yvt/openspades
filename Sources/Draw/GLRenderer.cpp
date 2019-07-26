@@ -80,7 +80,6 @@ namespace spades {
 		      programManager(NULL),
 		      imageManager(NULL),
 		      modelManager(NULL),
-		      shadowMapRenderer(NULL),
 		      mapShadowRenderer(NULL),
 		      mapRenderer(NULL),
 		      imageRenderer(NULL),
@@ -107,7 +106,7 @@ namespace spades {
 
 			fbManager = new GLFramebufferManager(*device, settings);
 
-			programManager = new GLProgramManager(*device, shadowMapRenderer, settings);
+			programManager = new GLProgramManager(*device, shadowMapRenderer.get(), settings);
 			imageManager = new GLImageManager(*device);
 			imageRenderer = new GLImageRenderer(this);
 			profiler.reset(new GLProfiler(*this));
@@ -217,8 +216,7 @@ namespace spades {
 			waterRenderer = NULL;
 			delete ambientShadowRenderer;
 			ambientShadowRenderer = NULL;
-			delete shadowMapRenderer;
-			shadowMapRenderer = NULL;
+			shadowMapRenderer.reset();
 			delete cameraBlur;
 			cameraBlur = NULL;
 			delete longSpriteRenderer;
