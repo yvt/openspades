@@ -177,7 +177,7 @@ namespace spades {
 
 			color = MakeVector4(.7f, .35f, .37f, .6f);
 			for (int i = 0; i < 2; i++) {
-				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 100.f,
+				auto ent = stmp::make_unique<SmokeSpriteEntity>(*this, color, 100.f,
 				                                                SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(v,
 				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
@@ -194,7 +194,7 @@ namespace spades {
 
 			color.w *= .1f;
 			for (int i = 0; i < 1; i++) {
-				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 40.f,
+				auto ent = stmp::make_unique<SmokeSpriteEntity>(*this, color, 40.f,
 				                                                SmokeSpriteEntity::Type::Steady);
 				ent->SetTrajectory(v,
 				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
@@ -263,7 +263,7 @@ namespace spades {
 			color += (MakeVector4(1, 1, 1, 1) - color) * .2f;
 			color.w *= .2f;
 			for (int i = 0; i < 2; i++) {
-				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 100.f);
+				auto ent = stmp::make_unique<SmokeSpriteEntity>(*this, color, 100.f);
 				ent->SetTrajectory(origin,
 				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                               SampleRandomFloat() - SampleRandomFloat(),
@@ -325,7 +325,7 @@ namespace spades {
 
 			// rapid smoke
 			for (int i = 0; i < 2; i++) {
-				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 120.f,
+				auto ent = stmp::make_unique<SmokeSpriteEntity>(*this, color, 120.f,
 				                                                SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(origin,
 				                   (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
@@ -390,7 +390,7 @@ namespace spades {
 			color = MakeVector4(.6f, .6f, .6f, 1.f);
 			// rapid smoke
 			for (int i = 0; i < 4; i++) {
-				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 60.f,
+				auto ent = stmp::make_unique<SmokeSpriteEntity>(*this, color, 60.f,
 				                                                SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(origin,
 				                   (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
@@ -409,7 +409,7 @@ namespace spades {
 			// slow smoke
 			color.w = .25f;
 			for (int i = 0; i < 8; i++) {
-				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 20.f);
+				auto ent = stmp::make_unique<SmokeSpriteEntity>(*this, color, 20.f);
 				ent->SetTrajectory(
 				  origin,
 				  (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
@@ -450,7 +450,7 @@ namespace spades {
 			// fire smoke
 			color = MakeVector4(1.f, .7f, .4f, .2f) * 5.f;
 			for (int i = 0; i < 4; i++) {
-				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 120.f,
+				auto ent = stmp::make_unique<SmokeSpriteEntity>(*this, color, 120.f,
 				                                                SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(origin,
 				                   (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
@@ -525,7 +525,7 @@ namespace spades {
 			if ((int)cg_particles < 2)
 				color.w = .2f;
 			for (int i = 0; i < 8; i++) {
-				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 20.f);
+				auto ent = stmp::make_unique<SmokeSpriteEntity>(*this, color, 20.f);
 				ent->SetTrajectory(
 				  origin,
 				  (MakeVector3(SampleRandomFloat() - SampleRandomFloat(),

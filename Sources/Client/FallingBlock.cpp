@@ -169,7 +169,7 @@ namespace spades {
 							Vector3 p3 = p2 + vmAxis3 * (float)z;
 
 							{
-								auto ent = stmp::make_unique<SmokeSpriteEntity>(client, col, 70.f);
+								auto ent = stmp::make_unique<SmokeSpriteEntity>(*client, col, 70.f);
 								ent->SetTrajectory(
 								  p3,
 								  (MakeVector3(getRandom() - getRandom(), getRandom() - getRandom(),

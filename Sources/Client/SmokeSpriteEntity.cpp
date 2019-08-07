@@ -62,8 +62,8 @@ namespace spades {
 			}
 		}
 
-		SmokeSpriteEntity::SmokeSpriteEntity(Client *c, Vector4 color, float fps, Type type)
-		    : ParticleSpriteEntity(c, GetSequence(0, &c->GetRenderer(), type), color),
+		SmokeSpriteEntity::SmokeSpriteEntity(Client &client, Vector4 color, float fps, Type type)
+		    : ParticleSpriteEntity(&client, GetSequence(0, &client.GetRenderer(), type), color),
 		      fps(fps),
 		      type(type) {
 			frame = 0.f;
