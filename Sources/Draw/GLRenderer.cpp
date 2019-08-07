@@ -182,7 +182,7 @@ namespace spades {
 			}
 
 			if (settings.r_fxaa) {
-				GLFXAAFilter(this);
+				GLFXAAFilter(*this);
 			}
 
 			if (settings.r_depthOfField) {
@@ -938,7 +938,7 @@ namespace spades {
 				// do r_fxaa before lens filter so that color aberration looks nice
 				if (settings.r_fxaa) {
 					GLProfiler::Context p(*profiler, "FXAA");
-					handle = GLFXAAFilter(this).Filter(handle);
+					handle = GLFXAAFilter(*this).Filter(handle);
 				}
 
 				if (settings.r_lens) {

@@ -32,13 +32,13 @@
 
 namespace spades {
 	namespace draw {
-		GLFXAAFilter::GLFXAAFilter(GLRenderer *renderer) : renderer(renderer) {
-			lens = renderer->RegisterProgram("Shaders/PostFilters/FXAA.program");
+		GLFXAAFilter::GLFXAAFilter(GLRenderer &renderer) : renderer(renderer) {
+			lens = renderer.RegisterProgram("Shaders/PostFilters/FXAA.program");
 		}
 		GLColorBuffer GLFXAAFilter::Filter(GLColorBuffer input) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			static GLProgramAttribute lensPosition("positionAttribute");
