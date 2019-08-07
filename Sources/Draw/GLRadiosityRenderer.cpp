@@ -37,15 +37,15 @@
 namespace spades {
 	namespace draw {
 		class GLRadiosityRenderer::UpdateDispatch : public ConcurrentDispatch {
-			GLRadiosityRenderer *renderer;
+			GLRadiosityRenderer &renderer;
 
 		public:
 			std::atomic<bool> done{false};
-			UpdateDispatch(GLRadiosityRenderer *r) : renderer(r) {}
+			UpdateDispatch(GLRadiosityRenderer &r) : renderer(r) {}
 			void Run() override {
 				SPADES_MARK_FUNCTION();
 
-				renderer->UpdateDirtyChunks();
+				renderer.UpdateDirtyChunks();
 
 				done = true;
 			}
@@ -347,7 +347,7 @@ namespace spades {
 					dispatch->Join();
 					delete dispatch;
 				}
-				dispatch = new UpdateDispatch(this);
+				dispatch = new UpdateDispatch(*this);
 				dispatch->Start();
 			}
 			int cnt = 0;
