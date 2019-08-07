@@ -37,5 +37,5 @@ namespace spades {
 				sw.Reset();
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

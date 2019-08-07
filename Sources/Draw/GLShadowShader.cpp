@@ -298,5 +298,5 @@ namespace spades {
 
 			return texStage;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

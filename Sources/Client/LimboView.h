@@ -22,8 +22,8 @@
 
 #include <vector>
 
-#include <Core/Math.h>
 #include "PhysicsConstants.h"
+#include <Core/Math.h>
 
 namespace spades {
 	namespace client {
@@ -76,5 +76,5 @@ namespace spades {
 
 			void Draw();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

@@ -177,7 +177,8 @@ namespace spades {
 
 			color = MakeVector4(.7f, .35f, .37f, .6f);
 			for (int i = 0; i < 2; i++) {
-				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 100.f, SmokeSpriteEntity::Type::Explosion);
+				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 100.f,
+				                                                SmokeSpriteEntity::Type::Explosion);
 				ent->SetTrajectory(v,
 				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                               SampleRandomFloat() - SampleRandomFloat(),
@@ -193,7 +194,8 @@ namespace spades {
 
 			color.w *= .1f;
 			for (int i = 0; i < 1; i++) {
-				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 40.f, SmokeSpriteEntity::Type::Steady);
+				auto ent = stmp::make_unique<SmokeSpriteEntity>(this, color, 40.f,
+				                                                SmokeSpriteEntity::Type::Steady);
 				ent->SetTrajectory(v,
 				                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
 				                               SampleRandomFloat() - SampleRandomFloat(),

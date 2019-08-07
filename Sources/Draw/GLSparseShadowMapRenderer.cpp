@@ -818,7 +818,7 @@ namespace spades {
 			             float yy = fabsf(vw.y);
 			             float rx = rad * vpWidth;
 			             float ry = rad * vpHeight;
-
+			 
 			             return xx < (1.f + rx) && yy < (1.f + ry);*/
 		}
 	} // namespace draw

@@ -162,7 +162,7 @@ namespace spades {
 					y += 35.f;
 
 					font.DrawShadow(str, MakeVector2(x, y), 1.f, MakeVector4(1.f, 1.f, 1.f, fade),
-					                 MakeVector4(0, 0, 0, 0.5f * fade));
+					                MakeVector4(0, 0, 0, 0.5f * fade));
 				}
 			} else {
 				// unable to show nearby territory

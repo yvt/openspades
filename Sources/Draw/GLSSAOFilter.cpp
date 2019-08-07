@@ -21,6 +21,7 @@
 #include <cmath>
 #include <vector>
 
+#include "GLImage.h"
 #include "GLProfiler.h"
 #include "GLProgram.h"
 #include "GLProgramAttribute.h"
@@ -28,7 +29,6 @@
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
 #include "GLSSAOFilter.h"
-#include "GLImage.h"
 #include "IGLDevice.h"
 #include <Core/Debug.h>
 #include <Core/Math.h>
@@ -95,13 +95,15 @@ namespace spades {
 				dev.ActiveTexture(0);
 				depthTexture.SetValue(0);
 				dev.BindTexture(IGLDevice::Texture2D,
-				                 renderer->GetFramebufferManager()->GetDepthTexture());
+				                renderer->GetFramebufferManager()->GetDepthTexture());
 
 				dev.ActiveTexture(1);
 				ditherTexture.SetValue(1);
 				ditherPattern->Bind(IGLDevice::Texture2D);
-				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
-				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
+				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+				                 IGLDevice::Nearest);
+				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+				                 IGLDevice::Nearest);
 
 				dev.BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
 				dev.Viewport(0, 0, width, height);
@@ -153,14 +155,15 @@ namespace spades {
 			depthTexture.SetValue(1);
 			dev.ActiveTexture(1);
 			dev.BindTexture(IGLDevice::Texture2D,
-							 renderer->GetFramebufferManager()->GetDepthTexture());
+			                renderer->GetFramebufferManager()->GetDepthTexture());
 
 			texCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
 
 			unitShift.SetValue(direction ? 1.f / (float)width : 0.0f,
 			                   direction ? 0.0f : 1.f / (float)height);
 
-			pixelShift.SetValue(1.f / (float)width, 1.f / (float)height, (float)width, (float)height);
+			pixelShift.SetValue(1.f / (float)width, 1.f / (float)height, (float)width,
+			                    (float)height);
 
 			isUpsampling.SetValue(width > tex.GetWidth() ? 1 : 0);
 
@@ -191,10 +194,11 @@ namespace spades {
 
 			dev.Enable(IGLDevice::Blend, false);
 
-			bool useLowQualitySSAO = renderer->IsRenderingMirror() || renderer->GetSettings().r_ssao >= 2;
-			GLColorBuffer ssao = useLowQualitySSAO ?
-				GenerateRawSSAOImage((width + 1) / 2, (height + 1) / 2) :
-			GenerateRawSSAOImage(width, height);
+			bool useLowQualitySSAO =
+			  renderer->IsRenderingMirror() || renderer->GetSettings().r_ssao >= 2;
+			GLColorBuffer ssao = useLowQualitySSAO
+			                       ? GenerateRawSSAOImage((width + 1) / 2, (height + 1) / 2)
+			                       : GenerateRawSSAOImage(width, height);
 			ssao = ApplyBilateralFilter(ssao, false, width, height);
 			ssao = ApplyBilateralFilter(ssao, true, width, height);
 			if (!renderer->IsRenderingMirror()) {
@@ -204,5 +208,5 @@ namespace spades {
 
 			return ssao;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -41,5 +41,5 @@ namespace spades {
 			~GLAutoExposureFilter();
 			GLColorBuffer Filter(GLColorBuffer, float dt);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

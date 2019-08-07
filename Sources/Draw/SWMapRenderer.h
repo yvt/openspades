@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "SWFeatureLevel.h"
-#include "SWFeatureLevel.h"
 #include <Client/SceneDefinition.h>
 #include <Core/Math.h>
 #include <Core/MiniHeap.h>
@@ -83,5 +82,5 @@ namespace spades {
 
 			void UpdateRle(int x, int y);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

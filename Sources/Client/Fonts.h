@@ -45,5 +45,5 @@ namespace spades {
 			Handle<IFont> headingFont;
 			Handle<IFont> guiFont;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

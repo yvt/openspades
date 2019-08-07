@@ -21,8 +21,8 @@
 #include "CTFGameMode.h"
 #include <Core/Debug.h>
 
-#include "World.h"
 #include "Player.h"
+#include "World.h"
 
 namespace spades {
 	namespace client {
@@ -44,5 +44,5 @@ namespace spades {
 			auto &team = teams[player.GetTeamId()];
 			return team.hasIntel && team.carrier == player.GetId();
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

@@ -1157,7 +1157,6 @@ namespace spades {
 			int under = r_swUndersampling;
 
 			InvokeParallel2([&](unsigned int th, unsigned int numThreads) {
-
 				if (under <= 1) {
 					RenderFinal<flevel, 1>(yawMin, yawMax, static_cast<unsigned int>(numLines), th,
 					                       numThreads);
@@ -1193,5 +1192,5 @@ namespace spades {
 
 			RenderInner<SWFeatureLevel::None>(def, &frame, depthBuffer);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

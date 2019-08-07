@@ -532,7 +532,7 @@ namespace spades {
 			}
 		};
 
-// TODO: Non-SSE2 renderer for solid polygons
+		// TODO: Non-SSE2 renderer for solid polygons
 
 #pragma mark - SSE2
 #if ENABLE_SSE2
@@ -1397,8 +1397,8 @@ namespace spades {
 					          [img, &r](Vertex &v1, Vertex &v2, Vertex &v3) {
 						          PolygonRenderer<featureLvl, false, true, depthTest, solidFill,
 						                          lerp>::DrawPolygonInternal(img, v1, v2, v3, r);
-						      });
-					 });
+					          });
+				     });
 			}
 		};
 
@@ -1457,5 +1457,5 @@ namespace spades {
 					break;
 			}
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

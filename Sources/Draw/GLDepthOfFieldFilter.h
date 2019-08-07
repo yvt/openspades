@@ -53,5 +53,5 @@ namespace spades {
 			GLColorBuffer Filter(GLColorBuffer, float blurDepthRange, float vignetteBlur,
 			                     float globalBlur, float nearBlur, float farBlur);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

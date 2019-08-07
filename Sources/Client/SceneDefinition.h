@@ -57,5 +57,5 @@ namespace spades {
 				radialBlur = 0.f;
 			}
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

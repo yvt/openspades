@@ -36,5 +36,5 @@ namespace spades {
 			GLColorCorrectionFilter(GLRenderer &);
 			GLColorBuffer Filter(GLColorBuffer, Vector3 tint);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

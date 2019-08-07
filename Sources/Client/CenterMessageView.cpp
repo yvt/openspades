@@ -94,5 +94,5 @@ namespace spades {
 				font->DrawShadow(ent.msg, MakeVector2(x, y), 1.f, color, shadow);
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

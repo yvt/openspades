@@ -307,5 +307,5 @@ namespace spades {
 				y += ent.height;
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

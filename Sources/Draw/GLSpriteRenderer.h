@@ -23,10 +23,10 @@
 #include <cstdint>
 #include <vector>
 
-#include <Core/Math.h>
 #include "GLProgramAttribute.h"
 #include "GLProgramUniform.h"
 #include "IGLSpriteRenderer.h"
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
@@ -90,5 +90,5 @@ namespace spades {
 			void Clear() override;
 			void Render() override;
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

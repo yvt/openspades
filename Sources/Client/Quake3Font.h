@@ -56,5 +56,5 @@ namespace spades {
 			void Draw(const std::string &, Vector2 offset, float scale, Vector4 color) override;
 			void SetGlyphYRange(float yMin, float yMax);
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

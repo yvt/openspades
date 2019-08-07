@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <Core/Math.h>
 #include "GLFramebufferManager.h"
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
@@ -36,5 +36,5 @@ namespace spades {
 			GLCameraBlurFilter(GLRenderer &);
 			GLColorBuffer Filter(GLColorBuffer, float radialBlur = 0.f);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

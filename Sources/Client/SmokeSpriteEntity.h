@@ -43,5 +43,5 @@ namespace spades {
 
 			bool Update(float dt) override;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

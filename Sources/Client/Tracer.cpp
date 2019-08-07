@@ -85,5 +85,5 @@ namespace spades {
 		}
 
 		Tracer::~Tracer() {}
-	}
-}
+	} // namespace client
+} // namespace spades

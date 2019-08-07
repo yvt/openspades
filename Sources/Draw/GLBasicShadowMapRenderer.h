@@ -56,5 +56,5 @@ namespace spades {
 			bool Cull(const AABB3 &) override;
 			bool SphereCull(const Vector3 &center, float rad) override;
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

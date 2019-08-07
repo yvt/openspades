@@ -166,7 +166,7 @@ namespace spades {
 			}
 
 			renderer.DrawImage(img, vt[0], vt[1], vt[2],
-							   AABB2(0, 0, img.GetWidth(), img.GetHeight()));
+			                   AABB2(0, 0, img.GetWidth(), img.GetHeight()));
 		}
 
 		void MapView::SwitchScale() {

@@ -19,7 +19,6 @@
  */
 
 #include "GLSoftLitSpriteRenderer.h"
-#include <Core/Debug.h>
 #include "GLDynamicLight.h"
 #include "GLFramebufferManager.h"
 #include "GLImage.h"
@@ -30,6 +29,7 @@
 #include "GLShadowShader.h"
 #include "IGLDevice.h"
 #include "SWFeatureLevel.h"
+#include <Core/Debug.h>
 #include <Core/Settings.h>
 
 namespace spades {
@@ -250,7 +250,7 @@ namespace spades {
 
 			device.ActiveTexture(1);
 			device.BindTexture(IGLDevice::Texture2D,
-			                    renderer->GetFramebufferManager()->GetDepthTexture());
+			                   renderer->GetFramebufferManager()->GetDepthTexture());
 			device.ActiveTexture(0);
 
 			device.EnableVertexAttribArray(positionAttribute(), true);
@@ -483,29 +483,28 @@ namespace spades {
 				return;
 
 			device.VertexAttribPointer(positionAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].x));
+			                           sizeof(Vertex), &(vertices[0].x));
 			device.VertexAttribPointer(spritePosAttribute(), 3, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].sx));
+			                           sizeof(Vertex), &(vertices[0].sx));
 			device.VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].color));
+			                           sizeof(Vertex), &(vertices[0].color));
 			device.VertexAttribPointer(emissionAttribute(), 3, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].emission));
+			                           sizeof(Vertex), &(vertices[0].emission));
 			device.VertexAttribPointer(dlRAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].dlR));
+			                           sizeof(Vertex), &(vertices[0].dlR));
 			device.VertexAttribPointer(dlGAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].dlG));
+			                           sizeof(Vertex), &(vertices[0].dlG));
 			device.VertexAttribPointer(dlBAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].dlB));
+			                           sizeof(Vertex), &(vertices[0].dlB));
 
 			SPAssert(lastImage);
 			lastImage->Bind(IGLDevice::Texture2D);
 
-			device.DrawElements(IGLDevice::Triangles,
-			                     static_cast<IGLDevice::Sizei>(indices.size()),
-			                     IGLDevice::UnsignedInt, indices.data());
+			device.DrawElements(IGLDevice::Triangles, static_cast<IGLDevice::Sizei>(indices.size()),
+			                    IGLDevice::UnsignedInt, indices.data());
 
 			vertices.clear();
 			indices.clear();
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

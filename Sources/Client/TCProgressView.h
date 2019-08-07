@@ -37,5 +37,5 @@ namespace spades {
 
 			void Draw();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

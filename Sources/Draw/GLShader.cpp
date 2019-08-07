@@ -31,7 +31,9 @@ namespace spades {
 
 			switch (type) {
 				case VertexShader: handle = device->CreateShader(IGLDevice::VertexShader); break;
-				case GeometryShader: handle = device->CreateShader(IGLDevice::GeometryShader); break;
+				case GeometryShader:
+					handle = device->CreateShader(IGLDevice::GeometryShader);
+					break;
 				case FragmentShader:
 					handle = device->CreateShader(IGLDevice::FragmentShader);
 					break;
@@ -89,5 +91,5 @@ namespace spades {
 
 			compiled = true;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

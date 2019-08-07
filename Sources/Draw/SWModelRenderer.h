@@ -41,5 +41,5 @@ namespace spades {
 
 			void Render(SWModel &model, const client::ModelRenderParam &param);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -309,5 +309,5 @@ namespace spades {
 			Draw(message, offset + MakeVector2(1, 1), scale, shadowColor);
 			Draw(message, offset, scale, color);
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

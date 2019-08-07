@@ -8,9 +8,9 @@
 
 #pragma once
 
+#include "ILocalEntity.h"
 #include <Core/Math.h>
 #include <Core/RefCountedObject.h>
-#include "ILocalEntity.h"
 
 namespace spades {
 	namespace client {
@@ -33,5 +33,5 @@ namespace spades {
 			bool Update(float dt) override;
 			void Render3D() override;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

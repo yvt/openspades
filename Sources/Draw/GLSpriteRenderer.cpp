@@ -19,12 +19,12 @@
  */
 
 #include "GLSpriteRenderer.h"
-#include <Core/Debug.h>
 #include "GLImage.h"
 #include "GLProgram.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
 #include "SWFeatureLevel.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace draw {
@@ -179,21 +179,20 @@ namespace spades {
 				return;
 
 			device.VertexAttribPointer(positionAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].x));
+			                           sizeof(Vertex), &(vertices[0].x));
 			device.VertexAttribPointer(spritePosAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].sx));
+			                           sizeof(Vertex), &(vertices[0].sx));
 			device.VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].r));
+			                           sizeof(Vertex), &(vertices[0].r));
 
 			SPAssert(lastImage);
 			lastImage->Bind(IGLDevice::Texture2D);
 
-			device.DrawElements(IGLDevice::Triangles,
-			                     static_cast<IGLDevice::Sizei>(indices.size()),
-			                     IGLDevice::UnsignedInt, indices.data());
+			device.DrawElements(IGLDevice::Triangles, static_cast<IGLDevice::Sizei>(indices.size()),
+			                    IGLDevice::UnsignedInt, indices.data());
 
 			vertices.clear();
 			indices.clear();
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

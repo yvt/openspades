@@ -54,5 +54,5 @@ namespace spades {
 			virtual void DrawShadow(const std::string &message, const Vector2 &offset, float scale,
 			                        const Vector4 &color, const Vector4 &shadowColor);
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

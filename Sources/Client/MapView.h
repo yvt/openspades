@@ -79,5 +79,5 @@ namespace spades {
 
 			stmp::optional<std::pair<Vector3, Vector3>> GetLineSegment();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

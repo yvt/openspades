@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <Client/IImage.h>
 #include "IGLDevice.h"
+#include <Client/IImage.h>
 
 namespace spades {
 	class Bitmap;
@@ -56,5 +56,5 @@ namespace spades {
 
 			void Update(Bitmap &bmp, int x, int y) override { SubImage(&bmp, x, y); }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

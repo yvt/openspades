@@ -175,5 +175,5 @@ namespace spades {
 				x += MeasureFallback(ch, (yMax - yMin) * scale) * invScale;
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

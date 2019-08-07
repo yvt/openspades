@@ -20,8 +20,8 @@
 #include <memory>
 
 #include "SWModel.h"
-#include <Core/VoxelModelLoader.h>
 #include <Core/IStream.h>
+#include <Core/VoxelModelLoader.h>
 
 namespace spades {
 	namespace draw {
@@ -123,8 +123,7 @@ namespace spades {
 			return boundingBox;
 		}
 
-		SWModelManager::~SWModelManager() {
-		}
+		SWModelManager::~SWModelManager() {}
 
 		Handle<SWModel> SWModelManager::RegisterModel(const std::string &name) {
 			auto it = models.find(name);
@@ -145,8 +144,6 @@ namespace spades {
 			return Handle<SWModel>::New(vm);
 		}
 
-		void SWModelManager::ClearCache() {
-			models.clear();
-		}
-	}
-}
+		void SWModelManager::ClearCache() { models.clear(); }
+	} // namespace draw
+} // namespace spades

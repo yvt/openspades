@@ -48,5 +48,5 @@ namespace spades {
 			void Update();
 			void Draw();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

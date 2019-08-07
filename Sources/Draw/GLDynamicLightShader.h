@@ -22,10 +22,10 @@
 
 #include <vector>
 
-#include <Client/IRenderer.h>
-#include <Core/Math.h>
 #include "GLDynamicLight.h"
 #include "GLProgramUniform.h"
+#include <Client/IRenderer.h>
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
@@ -57,5 +57,5 @@ namespace spades {
 			int operator()(GLRenderer *renderer, GLProgram *, const GLDynamicLight &light,
 			               int firstTexStage);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -53,5 +53,5 @@ namespace spades {
 			void Update(float dt);
 			void Draw();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

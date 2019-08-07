@@ -67,7 +67,7 @@ namespace spades {
 
 			chunks = std::vector<Chunk>{static_cast<std::size_t>(chunkW * chunkH * chunkD)};
 
-			for (Chunk &c: chunks) {
+			for (Chunk &c : chunks) {
 				float *data = (float *)c.data;
 				std::fill(data, data + ChunkSize * ChunkSize * ChunkSize, 1.f);
 			}
@@ -154,7 +154,7 @@ namespace spades {
 
 			int dirId = 0;
 
-			for (Vector3 dir: rays) {
+			for (Vector3 dir : rays) {
 				unsigned int bits = directions[dirId];
 				if (bits & 1)
 					dir.x = -dir.x;
@@ -285,7 +285,7 @@ namespace spades {
 			                             numChunksToLoad};
 
 			device.BindTexture(IGLDevice::Texture3D, texture);
-			for (Chunk &c: chunks) {
+			for (Chunk &c : chunks) {
 				if (!c.transferDone.exchange(true)) {
 					device.TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
 					                     c.cy * ChunkSize, c.cz * ChunkSize + 1, ChunkSize,

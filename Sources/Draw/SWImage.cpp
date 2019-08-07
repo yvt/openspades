@@ -40,7 +40,7 @@ namespace spades {
 				col |= b | (g << 8) | (r << 16); // swap RGB/BGR
 				return col;
 			}
-		}
+		} // namespace
 
 		SWImage::SWImage(Bitmap &m)
 		    : ew(m.GetWidth()),
@@ -105,8 +105,7 @@ namespace spades {
 			isWhite = false;
 		}
 
-		SWImageManager::~SWImageManager() {
-		}
+		SWImageManager::~SWImageManager() {}
 
 		Handle<SWImage> SWImageManager::RegisterImage(const std::string &name) {
 			auto it = images.find(name);
@@ -124,8 +123,6 @@ namespace spades {
 			return Handle<SWImage>::New(bitmap);
 		}
 
-		void SWImageManager::ClearCache() {
-			images.clear();
-		}
-	}
-}
+		void SWImageManager::ClearCache() { images.clear(); }
+	} // namespace draw
+} // namespace spades

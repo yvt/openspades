@@ -301,4 +301,4 @@ namespace c2t {
 			return std::move(polys);
 		}
 	};
-}
+} // namespace c2t

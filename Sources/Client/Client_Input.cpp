@@ -446,7 +446,8 @@ namespace spades {
 							params.volume = 0.08f;
 							Handle<IAudioChunk> chunk =
 							  audioDevice->RegisterSound("Sounds/Weapons/AimDownSightLocal.opus");
-							audioDevice->PlayLocal(chunk.GetPointerOrNull(), MakeVector3(.4f, -.3f, .5f), params);
+							audioDevice->PlayLocal(chunk.GetPointerOrNull(),
+							                       MakeVector3(.4f, -.3f, .5f), params);
 						}
 					} else if (CheckKey(cg_keyReloadWeapon, name) && down) {
 						Weapon &w = world->GetLocalPlayer()->GetWeapon();

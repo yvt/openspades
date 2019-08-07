@@ -50,5 +50,5 @@ namespace spades {
 			virtual bool Cull(const AABB3 &) = 0;
 			virtual bool SphereCull(const Vector3 &center, float rad) = 0;
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

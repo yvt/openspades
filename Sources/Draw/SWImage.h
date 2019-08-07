@@ -71,5 +71,5 @@ namespace spades {
 
 			void ClearCache();
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

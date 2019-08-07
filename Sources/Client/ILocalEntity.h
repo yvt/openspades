@@ -30,5 +30,5 @@ namespace spades {
 			virtual void Render3D() {}
 			virtual void Render2D() {}
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

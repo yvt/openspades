@@ -45,5 +45,5 @@ namespace spades {
 			std::vector<float> values;
 			GradientCoherentNoiseSampler1D gcns;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

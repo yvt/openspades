@@ -19,9 +19,9 @@
  */
 
 #include "IGLShadowMapRenderer.h"
-#include <Core/Debug.h>
 #include "GLModelRenderer.h"
 #include "GLRenderer.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace draw {
@@ -30,5 +30,5 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			renderer.modelRenderer->RenderShadowMapPass();
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -285,5 +285,5 @@ namespace spades {
 #endif
 				RenderInner<SWFeatureLevel::None>(model, param);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -21,12 +21,12 @@
 #pragma once
 
 namespace spades {
-    namespace client {
-        /** input interface
-         * @obsolete */
-        class IInputInterface {
-        public:
-            virtual ~IInputInterface() {}
-        };
-    }
-}
+	namespace client {
+		/** input interface
+		 * @obsolete */
+		class IInputInterface {
+		public:
+			virtual ~IInputInterface() {}
+		};
+	} // namespace client
+} // namespace spades

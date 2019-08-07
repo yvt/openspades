@@ -109,5 +109,5 @@ namespace spades {
 			needsUpdate = true;
 			updateMap[(x + y * w) >> 5] |= 1 << (x & 31);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

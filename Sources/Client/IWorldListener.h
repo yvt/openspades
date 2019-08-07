@@ -20,9 +20,9 @@
 
 #pragma once
 
+#include "PhysicsConstants.h"
 #include <Core/Math.h>
 #include <Core/TMPUtils.h>
-#include "PhysicsConstants.h"
 
 namespace spades {
 	namespace client {
@@ -66,5 +66,5 @@ namespace spades {
 			virtual void LocalPlayerHurt(HurtType type, bool sourceGiven, Vector3 source) = 0;
 			virtual void LocalPlayerBuildError(BuildFailureReason reason) = 0;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades
