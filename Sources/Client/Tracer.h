@@ -17,7 +17,7 @@ namespace spades {
 		class Client;
 		class IImage;
 		class Tracer : public ILocalEntity {
-			Client *client;
+			Client &client;
 			Handle<IImage> image;
 			Vector3 startPos, dir;
 			float length;
@@ -27,7 +27,7 @@ namespace spades {
 			bool firstUpdate;
 
 		public:
-			Tracer(Client *, Vector3 p1, Vector3 p2, float bulletVel);
+			Tracer(Client &, Vector3 p1, Vector3 p2, float bulletVel);
 			~Tracer();
 
 			bool Update(float dt) override;

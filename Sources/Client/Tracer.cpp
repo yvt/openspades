@@ -13,8 +13,8 @@
 
 namespace spades {
 	namespace client {
-		Tracer::Tracer(Client *cli, Vector3 p1, Vector3 p2, float bulletVel)
-		    : client(cli), startPos(p1), velocity(bulletVel) {
+		Tracer::Tracer(Client &_client, Vector3 p1, Vector3 p2, float bulletVel)
+		    : client(_client), startPos(p1), velocity(bulletVel) {
 			dir = (p2 - p1).Normalize();
 			length = (p2 - p1).GetLength();
 
@@ -29,7 +29,7 @@ namespace spades {
 
 			firstUpdate = true;
 
-			image = cli->GetRenderer().RegisterImage("Gfx/Ball.png");
+			image = client.GetRenderer().RegisterImage("Gfx/Ball.png");
 		}
 
 		bool Tracer::Update(float dt) {
@@ -44,7 +44,7 @@ namespace spades {
 		}
 
 		void Tracer::Render3D() {
-			IRenderer &r = client->GetRenderer();
+			IRenderer &r = client.GetRenderer();
 			if (dynamic_cast<draw::SWRenderer *>(&r)) {
 				// SWRenderer doesn't support long sprites (yet)
 				float startDist = curDistance;

@@ -1097,7 +1097,7 @@ namespace spades {
 				case SMG_WEAPON: vel = 360.f; break;
 				case SHOTGUN_WEAPON: vel = 500.f; break;
 			}
-			AddLocalEntity(stmp::make_unique<Tracer>(this, muzzlePos, hitPos, vel));
+			AddLocalEntity(stmp::make_unique<Tracer>(*this, muzzlePos, hitPos, vel));
 			AddLocalEntity(stmp::make_unique<MapViewTracer>(muzzlePos, hitPos, vel));
 		}
 
