@@ -78,11 +78,11 @@ namespace spades {
 				return;
 
 			SPAssert(x >= 0);
-			SPAssert(x < map->Width());
+			SPAssert(x < map.Width());
 			SPAssert(y >= 0);
-			SPAssert(y < map->Height());
+			SPAssert(y < map.Height());
 			SPAssert(z >= 0);
-			SPAssert(z < map->Depth());
+			SPAssert(z < map.Depth());
 
 			int chunkX = x >> ChunkBits;
 			int chunkY = y >> ChunkBits;
