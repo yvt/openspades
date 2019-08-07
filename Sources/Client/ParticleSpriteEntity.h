@@ -53,7 +53,7 @@ namespace spades {
 			float fadeOutDuration;
 
 		public:
-			ParticleSpriteEntity(Client *cli, Handle<IImage> image, Vector4 color);
+			ParticleSpriteEntity(Client &client, Handle<IImage> image, Vector4 color);
 
 			~ParticleSpriteEntity();
 

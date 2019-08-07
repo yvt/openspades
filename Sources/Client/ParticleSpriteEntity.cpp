@@ -25,8 +25,9 @@
 
 namespace spades {
 	namespace client {
-		ParticleSpriteEntity::ParticleSpriteEntity(Client *cli, Handle<IImage> image, Vector4 color)
-		    : renderer(cli->GetRenderer()), image(image), color(color) {
+		ParticleSpriteEntity::ParticleSpriteEntity(Client &client, Handle<IImage> image,
+		                                           Vector4 color)
+		    : renderer(client.GetRenderer()), image(image), color(color) {
 			position = MakeVector3(0, 0, 0);
 			velocity = MakeVector3(0, 0, 0);
 			radius = 1.f;
@@ -43,8 +44,8 @@ namespace spades {
 			additive = false;
 			blockHitAction = BlockHitAction::Delete;
 
-			if (cli->GetWorld())
-				map = cli->GetWorld()->GetMap();
+			if (client.GetWorld())
+				map = client.GetWorld()->GetMap();
 			else
 				map = NULL;
 		}

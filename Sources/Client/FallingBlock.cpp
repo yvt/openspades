@@ -186,7 +186,7 @@ namespace spades {
 							col.w = 1.f;
 							for (int i = 0; i < 6; i++) {
 								auto ent = stmp::make_unique<ParticleSpriteEntity>(
-								  client, img.GetPointerOrNull(), col);
+								  *client, img.GetPointerOrNull(), col);
 								ent->SetTrajectory(p3,
 								                   MakeVector3(getRandom() - getRandom(),
 								                               getRandom() - getRandom(),
