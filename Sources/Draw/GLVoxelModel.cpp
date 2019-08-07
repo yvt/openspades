@@ -32,21 +32,20 @@
 
 namespace spades {
 	namespace draw {
-		void GLVoxelModel::PreloadShaders(spades::draw::GLRenderer *renderer) {
-			renderer->RegisterProgram("Shaders/VoxelModel.program");
-			renderer->RegisterProgram("Shaders/VoxelModelDynamicLit.program");
-			renderer->RegisterProgram("Shaders/VoxelModelShadowMap.program");
-			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
+		void GLVoxelModel::PreloadShaders(GLRenderer &renderer) {
+			renderer.RegisterProgram("Shaders/VoxelModel.program");
+			renderer.RegisterProgram("Shaders/VoxelModelDynamicLit.program");
+			renderer.RegisterProgram("Shaders/VoxelModelShadowMap.program");
+			renderer.RegisterImage("Gfx/AmbientOcclusion.png");
 		}
-		GLVoxelModel::GLVoxelModel(VoxelModel *m, GLRenderer *r) : device(r->GetGLDevice()) {
+		GLVoxelModel::GLVoxelModel(VoxelModel *m, GLRenderer &r)
+		    : renderer{r}, device(r.GetGLDevice()) {
 			SPADES_MARK_FUNCTION();
 
-			renderer = r;
-
-			program = renderer->RegisterProgram("Shaders/VoxelModel.program");
-			dlightProgram = renderer->RegisterProgram("Shaders/VoxelModelDynamicLit.program");
-			shadowMapProgram = renderer->RegisterProgram("Shaders/VoxelModelShadowMap.program");
-			aoImage = renderer->RegisterImage("Gfx/AmbientOcclusion.png").Cast<GLImage>();
+			program = renderer.RegisterProgram("Shaders/VoxelModel.program");
+			dlightProgram = renderer.RegisterProgram("Shaders/VoxelModelDynamicLit.program");
+			shadowMapProgram = renderer.RegisterProgram("Shaders/VoxelModelShadowMap.program");
+			aoImage = renderer.RegisterImage("Gfx/AmbientOcclusion.png").Cast<GLImage>();
 
 			BuildVertices(m);
 
@@ -271,7 +270,7 @@ namespace spades {
 			shadowMapProgram->Use();
 
 			static GLShadowMapShader shadowMapShader;
-			shadowMapShader(renderer, shadowMapProgram, 0);
+			shadowMapShader(&renderer, shadowMapProgram, 0);
 
 			static GLProgramUniform modelOrigin("modelOrigin");
 			modelOrigin(shadowMapProgram);
@@ -313,7 +312,7 @@ namespace spades {
 				if (param.depthHack)
 					continue;
 
-				if (!renderer->GetShadowMapRenderer()->SphereCull(param.matrix.GetOrigin(), rad)) {
+				if (!renderer.GetShadowMapRenderer()->SphereCull(param.matrix.GetOrigin(), rad)) {
 					continue;
 				}
 
@@ -359,15 +358,15 @@ namespace spades {
 			program->Use();
 
 			static GLShadowShader shadowShader;
-			shadowShader(renderer, program, 1);
+			shadowShader(&renderer, program, 1);
 
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(program);
-			fogDistance.SetValue(renderer->GetFogDistance());
+			fogDistance.SetValue(renderer.GetFogDistance());
 
 			static GLProgramUniform fogColor("fogColor");
 			fogColor(program);
-			Vector3 fogCol = renderer->GetFogColorForSolidPass();
+			Vector3 fogCol = renderer.GetFogColorForSolidPass();
 			fogCol *= fogCol;
 			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 
@@ -387,7 +386,7 @@ namespace spades {
 
 			static GLProgramUniform viewOriginVector("viewOriginVector");
 			viewOriginVector(program);
-			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			const auto &viewOrigin = renderer.GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
 			// setup attributes
@@ -429,7 +428,7 @@ namespace spades {
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
-				if (!renderer->SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
+				if (!renderer.SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
 					continue;
 				}
 
@@ -440,12 +439,12 @@ namespace spades {
 				Matrix4 modelMatrix = param.matrix;
 				static GLProgramUniform projectionViewModelMatrix("projectionViewModelMatrix");
 				projectionViewModelMatrix(program);
-				projectionViewModelMatrix.SetValue(renderer->GetProjectionViewMatrix() *
+				projectionViewModelMatrix.SetValue(renderer.GetProjectionViewMatrix() *
 				                                   modelMatrix);
 
 				static GLProgramUniform viewModelMatrix("viewModelMatrix");
 				viewModelMatrix(program);
-				viewModelMatrix.SetValue(renderer->GetViewMatrix() * modelMatrix);
+				viewModelMatrix.SetValue(renderer.GetViewMatrix() * modelMatrix);
 
 				static GLProgramUniform modelMatrixU("modelMatrix");
 				modelMatrixU(program);
@@ -499,7 +498,7 @@ namespace spades {
 
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(dlightProgram);
-			fogDistance.SetValue(renderer->GetFogDistance());
+			fogDistance.SetValue(renderer.GetFogDistance());
 
 			static GLProgramUniform modelOrigin("modelOrigin");
 			modelOrigin(dlightProgram);
@@ -513,7 +512,7 @@ namespace spades {
 
 			static GLProgramUniform viewOriginVector("viewOriginVector");
 			viewOriginVector(dlightProgram);
-			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			const auto &viewOrigin = renderer.GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
 			// setup attributes
@@ -549,7 +548,7 @@ namespace spades {
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
-				if (!renderer->SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
+				if (!renderer.SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
 					continue;
 				}
 
@@ -560,12 +559,12 @@ namespace spades {
 				Matrix4 modelMatrix = param.matrix;
 				static GLProgramUniform projectionViewModelMatrix("projectionViewModelMatrix");
 				projectionViewModelMatrix(dlightProgram);
-				projectionViewModelMatrix.SetValue(renderer->GetProjectionViewMatrix() *
+				projectionViewModelMatrix.SetValue(renderer.GetProjectionViewMatrix() *
 				                                   modelMatrix);
 
 				static GLProgramUniform viewModelMatrix("viewModelMatrix");
 				viewModelMatrix(dlightProgram);
-				viewModelMatrix.SetValue(renderer->GetViewMatrix() * modelMatrix);
+				viewModelMatrix.SetValue(renderer.GetViewMatrix() * modelMatrix);
 
 				static GLProgramUniform modelMatrixU("modelMatrix");
 				modelMatrixU(dlightProgram);
@@ -585,7 +584,7 @@ namespace spades {
 					if (!lights[i].SphereCull(param.matrix.GetOrigin(), rad))
 						continue;
 
-					dlightShader(renderer, dlightProgram, lights[i], 0);
+					dlightShader(&renderer, dlightProgram, lights[i], 0);
 
 					device.DrawElements(IGLDevice::Triangles, numIndices, IGLDevice::UnsignedInt,
 					                    (void *)0);

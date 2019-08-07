@@ -148,7 +148,7 @@ namespace spades {
 			// preload
 			SPLog("Preloading Assets");
 			GLMapRenderer::PreloadShaders(*this);
-			GLVoxelModel::PreloadShaders(this);
+			GLVoxelModel::PreloadShaders(*this);
 			GLOptimizedVoxelModel::PreloadShaders(*this);
 			if (settings.r_water)
 				GLWaterRenderer::PreloadShaders(this);
@@ -264,7 +264,7 @@ namespace spades {
 
 		Handle<client::IModel> GLRenderer::CreateModel(spades::VoxelModel &model) {
 			SPADES_MARK_FUNCTION();
-			return Handle<GLVoxelModel>::New(&model, this).Cast<client::IModel>();
+			return Handle<GLVoxelModel>::New(&model, *this).Cast<client::IModel>();
 		}
 
 		Handle<client::IModel> GLRenderer::CreateModelOptimized(spades::VoxelModel &model) {
@@ -272,7 +272,7 @@ namespace spades {
 			if (settings.r_optimizedVoxelModel) {
 				return Handle<GLOptimizedVoxelModel>::New(&model, *this).Cast<client::IModel>();
 			} else {
-				return Handle<GLVoxelModel>::New(&model, this).Cast<client::IModel>();
+				return Handle<GLVoxelModel>::New(&model, *this).Cast<client::IModel>();
 			}
 		}
 

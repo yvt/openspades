@@ -47,7 +47,7 @@ namespace spades {
 				uint8_t nx, ny, nz;
 			};
 
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			IGLDevice &device;
 			GLProgram *program;
 			GLProgram *dlightProgram;
@@ -75,9 +75,9 @@ namespace spades {
 			~GLVoxelModel();
 
 		public:
-			GLVoxelModel(VoxelModel *, GLRenderer *r);
+			GLVoxelModel(VoxelModel *, GLRenderer &r);
 
-			static void PreloadShaders(GLRenderer *);
+			static void PreloadShaders(GLRenderer &);
 
 			void Prerender(std::vector<client::ModelRenderParam> params, bool ghostPass) override;
 
