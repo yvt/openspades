@@ -158,7 +158,7 @@ namespace spades {
 			}
 
 			if (settings.r_fogShadow) {
-				GLFogFilter(this);
+				GLFogFilter(*this);
 			}
 
 			if (settings.r_bloom) {
@@ -813,7 +813,7 @@ namespace spades {
 						GLProfiler::Context p(*profiler, "Volumetric Fog");
 
 						GLFramebufferManager::BufferHandle handle;
-						GLFogFilter fogfilter(this);
+						GLFogFilter fogfilter(*this);
 
 						handle = fbManager->StartPostProcessing();
 						handle = fogfilter.Filter(handle);
@@ -894,7 +894,7 @@ namespace spades {
 				if (settings.r_fogShadow && mapShadowRenderer &&
 				    fogColor.GetPoweredLength() > .000001f) {
 					GLProfiler::Context p(*profiler, "Volumetric Fog");
-					GLFogFilter fogfilter(this);
+					GLFogFilter fogfilter(*this);
 					handle = fogfilter.Filter(handle);
 				}
 				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
