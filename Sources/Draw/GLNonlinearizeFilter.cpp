@@ -33,13 +33,13 @@
 
 namespace spades {
 	namespace draw {
-		GLNonlinearlizeFilter::GLNonlinearlizeFilter(GLRenderer *renderer) : renderer(renderer) {
-			lens = renderer->RegisterProgram("Shaders/PostFilters/Nonlinearize.program");
+		GLNonlinearlizeFilter::GLNonlinearlizeFilter(GLRenderer &renderer) : renderer(renderer) {
+			lens = renderer.RegisterProgram("Shaders/PostFilters/Nonlinearize.program");
 		}
 		GLColorBuffer GLNonlinearlizeFilter::Filter(GLColorBuffer input) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			static GLProgramAttribute lensPosition("positionAttribute");
@@ -55,7 +55,7 @@ namespace spades {
 			lens->Use();
 
 			lensTexture.SetValue(0);
-			lensGamma.SetValue(1.f / (float)renderer->GetSettings().r_hdrGamma);
+			lensGamma.SetValue(1.f / (float)renderer.GetSettings().r_hdrGamma);
 
 			// composite to the final image
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();

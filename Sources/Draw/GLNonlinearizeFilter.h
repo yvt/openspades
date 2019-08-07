@@ -27,11 +27,11 @@ namespace spades {
 		class GLRenderer;
 		class GLProgram;
 		class GLNonlinearlizeFilter {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			GLProgram *lens;
 
 		public:
-			GLNonlinearlizeFilter(GLRenderer *);
+			GLNonlinearlizeFilter(GLRenderer &);
 			GLColorBuffer Filter(GLColorBuffer);
 		};
 	} // namespace draw

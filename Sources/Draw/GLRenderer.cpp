@@ -1005,7 +1005,7 @@ namespace spades {
 
 				if (settings.r_hdr) {
 					GLProfiler::Context p(*profiler, "Gamma Correction");
-					handle = GLNonlinearlizeFilter(this).Filter(handle);
+					handle = GLNonlinearlizeFilter(*this).Filter(handle);
 				}
 
 				if (settings.r_colorCorrection) {
