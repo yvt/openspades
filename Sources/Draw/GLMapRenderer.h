@@ -37,7 +37,7 @@ namespace spades {
 			friend class GLMapChunk;
 
 		protected:
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			IGLDevice &device;
 
 			GLProgram *depthonlyProgram;
@@ -78,10 +78,10 @@ namespace spades {
 			void RenderBackface();
 
 		public:
-			GLMapRenderer(client::GameMap *, GLRenderer *);
+			GLMapRenderer(client::GameMap *, GLRenderer &);
 			virtual ~GLMapRenderer();
 
-			static void PreloadShaders(GLRenderer *);
+			static void PreloadShaders(GLRenderer &);
 
 			void GameMapChanged(int x, int y, int z, client::GameMap *);
 

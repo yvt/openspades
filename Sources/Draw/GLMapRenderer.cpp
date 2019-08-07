@@ -36,19 +36,19 @@
 
 namespace spades {
 	namespace draw {
-		void GLMapRenderer::PreloadShaders(spades::draw::GLRenderer *renderer) {
-			if (renderer->GetSettings().r_physicalLighting)
-				renderer->RegisterProgram("Shaders/BasicBlockPhys.program");
+		void GLMapRenderer::PreloadShaders(GLRenderer &renderer) {
+			if (renderer.GetSettings().r_physicalLighting)
+				renderer.RegisterProgram("Shaders/BasicBlockPhys.program");
 			else
-				renderer->RegisterProgram("Shaders/BasicBlock.program");
-			renderer->RegisterProgram("Shaders/BasicBlockDepthOnly.program");
-			renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
-			renderer->RegisterProgram("Shaders/BackFaceBlock.program");
-			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
+				renderer.RegisterProgram("Shaders/BasicBlock.program");
+			renderer.RegisterProgram("Shaders/BasicBlockDepthOnly.program");
+			renderer.RegisterProgram("Shaders/BasicBlockDynamicLit.program");
+			renderer.RegisterProgram("Shaders/BackFaceBlock.program");
+			renderer.RegisterImage("Gfx/AmbientOcclusion.png");
 		}
 
-		GLMapRenderer::GLMapRenderer(client::GameMap *m, GLRenderer *r)
-		    : renderer(r), device(r->GetGLDevice()), gameMap(m) {
+		GLMapRenderer::GLMapRenderer(client::GameMap *m, GLRenderer &r)
+		    : renderer(r), device(r.GetGLDevice()), gameMap(m) {
 			SPADES_MARK_FUNCTION();
 
 			numChunkWidth = gameMap->Width() / GLMapChunk::Size;
@@ -64,14 +64,14 @@ namespace spades {
 				chunks[i] = new GLMapChunk(*this, gameMap, i / numChunkDepth / numChunkHeight,
 				                           (i / numChunkDepth) % numChunkHeight, i % numChunkDepth);
 
-			if (r->GetSettings().r_physicalLighting)
-				basicProgram = renderer->RegisterProgram("Shaders/BasicBlockPhys.program");
+			if (r.GetSettings().r_physicalLighting)
+				basicProgram = renderer.RegisterProgram("Shaders/BasicBlockPhys.program");
 			else
-				basicProgram = renderer->RegisterProgram("Shaders/BasicBlock.program");
-			depthonlyProgram = renderer->RegisterProgram("Shaders/BasicBlockDepthOnly.program");
-			dlightProgram = renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
-			backfaceProgram = renderer->RegisterProgram("Shaders/BackFaceBlock.program");
-			aoImage = renderer->RegisterImage("Gfx/AmbientOcclusion.png").Cast<GLImage>();
+				basicProgram = renderer.RegisterProgram("Shaders/BasicBlock.program");
+			depthonlyProgram = renderer.RegisterProgram("Shaders/BasicBlockDepthOnly.program");
+			dlightProgram = renderer.RegisterProgram("Shaders/BasicBlockDynamicLit.program");
+			backfaceProgram = renderer.RegisterProgram("Shaders/BackFaceBlock.program");
+			aoImage = renderer.RegisterImage("Gfx/AmbientOcclusion.png").Cast<GLImage>();
 
 			static const uint8_t squareVertices[] = {0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1};
 			squareVertexBuffer = device.GenBuffer();
@@ -137,9 +137,9 @@ namespace spades {
 		}
 
 		void GLMapRenderer::Realize() {
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map Chunks");
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Map Chunks");
 
-			Vector3 eye = renderer->GetSceneDef().viewOrigin;
+			Vector3 eye = renderer.GetSceneDef().viewOrigin;
 			RealizeChunks(eye);
 		}
 
@@ -147,8 +147,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			// depth-only pass
 
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map");
-			Vector3 eye = renderer->GetSceneDef().viewOrigin;
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Map");
+			Vector3 eye = renderer.GetSceneDef().viewOrigin;
 
 			device.Enable(IGLDevice::CullFace, true);
 			device.Enable(IGLDevice::DepthTest, true);
@@ -160,7 +160,7 @@ namespace spades {
 			device.EnableVertexAttribArray(positionAttribute(), true);
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(depthonlyProgram);
-			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
+			projectionViewMatrix.SetValue(renderer.GetProjectionViewMatrix());
 
 			// draw from nearest to farthest
 			int cx = (int)floorf(eye.x) / GLMapChunk::Size;
@@ -185,9 +185,9 @@ namespace spades {
 		void GLMapRenderer::RenderSunlightPass() {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map");
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Map");
 
-			Vector3 eye = renderer->GetSceneDef().viewOrigin;
+			Vector3 eye = renderer.GetSceneDef().viewOrigin;
 
 			// draw back face to avoid cheating.
 			// without this, players can see through blocks by
@@ -208,20 +208,20 @@ namespace spades {
 			basicProgram->Use();
 
 			static GLShadowShader shadowShader;
-			shadowShader(renderer, basicProgram, 2);
+			shadowShader(&renderer, basicProgram, 2);
 
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(basicProgram);
-			fogDistance.SetValue(renderer->GetFogDistance());
+			fogDistance.SetValue(renderer.GetFogDistance());
 
 			static GLProgramUniform viewSpaceLight("viewSpaceLight");
 			viewSpaceLight(basicProgram);
-			Vector3 vspLight = (renderer->GetViewMatrix() * MakeVector4(0, -1, -1, 0)).GetXYZ();
+			Vector3 vspLight = (renderer.GetViewMatrix() * MakeVector4(0, -1, -1, 0)).GetXYZ();
 			viewSpaceLight.SetValue(vspLight.x, vspLight.y, vspLight.z);
 
 			static GLProgramUniform fogColor("fogColor");
 			fogColor(basicProgram);
-			Vector3 fogCol = renderer->GetFogColorForSolidPass();
+			Vector3 fogCol = renderer.GetFogColorForSolidPass();
 			fogCol *= fogCol; // linearize
 			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 
@@ -258,15 +258,15 @@ namespace spades {
 
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(basicProgram);
-			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
+			projectionViewMatrix.SetValue(renderer.GetProjectionViewMatrix());
 
 			static GLProgramUniform viewMatrix("viewMatrix");
 			viewMatrix(basicProgram);
-			viewMatrix.SetValue(renderer->GetViewMatrix());
+			viewMatrix.SetValue(renderer.GetViewMatrix());
 
 			static GLProgramUniform viewOriginVector("viewOriginVector");
 			viewOriginVector(basicProgram);
-			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			const auto &viewOrigin = renderer.GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
 			// RealizeChunks(eye); // should already be realized from the prepass
@@ -306,12 +306,12 @@ namespace spades {
 		void GLMapRenderer::RenderDynamicLightPass(std::vector<GLDynamicLight> lights) {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map");
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Map");
 
 			if (lights.empty())
 				return;
 
-			Vector3 eye = renderer->GetSceneDef().viewOrigin;
+			Vector3 eye = renderer.GetSceneDef().viewOrigin;
 
 			device.ActiveTexture(0);
 			device.BindTexture(IGLDevice::Texture2D, 0);
@@ -323,7 +323,7 @@ namespace spades {
 
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(dlightProgram);
-			fogDistance.SetValue(renderer->GetFogDistance());
+			fogDistance.SetValue(renderer.GetFogDistance());
 
 			static GLProgramUniform detailTextureUnif("detailTexture");
 			detailTextureUnif(dlightProgram);
@@ -345,15 +345,15 @@ namespace spades {
 
 			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
 			projectionViewMatrix(dlightProgram);
-			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
+			projectionViewMatrix.SetValue(renderer.GetProjectionViewMatrix());
 
 			static GLProgramUniform viewMatrix("viewMatrix");
 			viewMatrix(dlightProgram);
-			viewMatrix.SetValue(renderer->GetViewMatrix());
+			viewMatrix.SetValue(renderer.GetViewMatrix());
 
 			static GLProgramUniform viewOriginVector("viewOriginVector");
 			viewOriginVector(dlightProgram);
-			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			const auto &viewOrigin = renderer.GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
 			// RealizeChunks(eye); // should already be realized from the prepass
@@ -443,9 +443,9 @@ namespace spades {
 		}
 
 		void GLMapRenderer::RenderBackface() {
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Back-face");
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Back-face");
 
-			IntVector3 eye = renderer->GetSceneDef().viewOrigin.Floor();
+			IntVector3 eye = renderer.GetSceneDef().viewOrigin.Floor();
 			std::vector<BFVertex> vertices;
 			std::vector<uint16_t> indices;
 			client::GameMap *m = gameMap;
@@ -498,7 +498,7 @@ namespace spades {
 			positionAttribute(backfaceProgram);
 			projectionViewMatrix(backfaceProgram);
 
-			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
+			projectionViewMatrix.SetValue(renderer.GetProjectionViewMatrix());
 
 			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device.VertexAttribPointer(positionAttribute(), 3, IGLDevice::Short, false,

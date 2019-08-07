@@ -147,7 +147,7 @@ namespace spades {
 
 			// preload
 			SPLog("Preloading Assets");
-			GLMapRenderer::PreloadShaders(this);
+			GLMapRenderer::PreloadShaders(*this);
 			GLVoxelModel::PreloadShaders(this);
 			GLOptimizedVoxelModel::PreloadShaders(this);
 			if (settings.r_water)
@@ -312,7 +312,7 @@ namespace spades {
 				SPLog("Creating Terrain Shadow Map Renderer");
 				mapShadowRenderer = new GLMapShadowRenderer(this, newMap.get_pointer());
 				SPLog("Creating TerrainRenderer");
-				mapRenderer = new GLMapRenderer(newMap.get_pointer(), this);
+				mapRenderer = new GLMapRenderer(newMap.get_pointer(), *this);
 				SPLog("Creating Minimap Renderer");
 				flatMapRenderer = new GLFlatMapRenderer(*this, *newMap);
 				SPLog("Creating Water Renderer");
