@@ -36,7 +36,7 @@ namespace spades {
 			GLProgram *dust;
 			GLProgram *gauss1d;
 			Handle<GLImage> dustImg;
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			IGLDevice::UInteger noiseTex;
 			std::vector<uint32_t> noise;
 			GLColorBuffer DownSample(GLColorBuffer, bool linearize = false);
@@ -44,7 +44,7 @@ namespace spades {
 			void UpdateNoise();
 
 		public:
-			GLLensDustFilter(GLRenderer *);
+			GLLensDustFilter(GLRenderer &);
 			~GLLensDustFilter();
 			GLColorBuffer Filter(GLColorBuffer);
 		};

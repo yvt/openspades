@@ -34,13 +34,13 @@
 
 namespace spades {
 	namespace draw {
-		GLLensDustFilter::GLLensDustFilter(GLRenderer *renderer) : renderer(renderer) {
-			thru = renderer->RegisterProgram("Shaders/PostFilters/PassThroughConstAlpha.program");
-			gauss1d = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
-			dust = renderer->RegisterProgram("Shaders/PostFilters/LensDust.program");
-			dustImg = renderer->RegisterImage("Textures/LensDustTexture.jpg").Cast<GLImage>();
+		GLLensDustFilter::GLLensDustFilter(GLRenderer &renderer) : renderer(renderer) {
+			thru = renderer.RegisterProgram("Shaders/PostFilters/PassThroughConstAlpha.program");
+			gauss1d = renderer.RegisterProgram("Shaders/PostFilters/Gauss1D.program");
+			dust = renderer.RegisterProgram("Shaders/PostFilters/LensDust.program");
+			dustImg = renderer.RegisterImage("Textures/LensDustTexture.jpg").Cast<GLImage>();
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			noiseTex = dev.GenTexture();
 			dev.BindTexture(IGLDevice::Texture2D, noiseTex);
 			dev.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, 128, 128, 0, IGLDevice::BGRA,
@@ -51,14 +51,14 @@ namespace spades {
 			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
 		}
 
-		GLLensDustFilter::~GLLensDustFilter() { renderer->GetGLDevice().DeleteTexture(noiseTex); }
+		GLLensDustFilter::~GLLensDustFilter() { renderer.GetGLDevice().DeleteTexture(noiseTex); }
 
 #define Level GLLensDustFilterLevel
 
 		GLColorBuffer GLLensDustFilter::DownSample(GLColorBuffer tex, bool linearize) {
 			SPADES_MARK_FUNCTION();
 			GLProgram *program = thru;
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
@@ -94,8 +94,8 @@ namespace spades {
 				dev.Enable(IGLDevice::Blend, false);
 			}
 
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(
-			  (w + 1) / 2, (h + 1) / 2, false);
+			GLColorBuffer buf2 =
+			  renderer.GetFramebufferManager()->CreateBufferHandle((w + 1) / 2, (h + 1) / 2, false);
 			dev.Viewport(0, 0, buf2.GetWidth(), buf2.GetHeight());
 			dev.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
@@ -105,7 +105,7 @@ namespace spades {
 		GLColorBuffer GLLensDustFilter::GaussianBlur(GLColorBuffer tex, bool vertical) {
 			SPADES_MARK_FUNCTION();
 			GLProgram *program = gauss1d;
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
@@ -127,7 +127,7 @@ namespace spades {
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
 			dev.Enable(IGLDevice::Blend, false);
 
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
+			GLColorBuffer buf2 = renderer.GetFramebufferManager()->CreateBufferHandle(w, h, false);
 			dev.Viewport(0, 0, buf2.GetWidth(), buf2.GetHeight());
 			dev.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
@@ -142,7 +142,7 @@ namespace spades {
 				noise[i] = static_cast<std::uint32_t>(SampleRandom());
 			}
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			dev.BindTexture(IGLDevice::Texture2D, noiseTex);
 			dev.TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, 128, 128, IGLDevice::BGRA,
 			                  IGLDevice::UnsignedByte, noise.data());
@@ -161,10 +161,10 @@ namespace spades {
 
 			std::vector<Level> levels;
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
-			GLSettings &settings = renderer->GetSettings();
+			GLSettings &settings = renderer.GetSettings();
 
 			static GLProgramAttribute thruPosition("positionAttribute");
 			static GLProgramUniform thruColor("colorUniform");
@@ -272,8 +272,8 @@ namespace spades {
 
 			dust->Use();
 
-			float facX = renderer->ScreenWidth() / 128.f;
-			float facY = renderer->ScreenHeight() / 128.f;
+			float facX = renderer.ScreenWidth() / 128.f;
+			float facY = renderer.ScreenHeight() / 128.f;
 			dustNoiseTexCoordFactor.SetValue(facX, facY, facX / 128.f, facY / 128.f);
 
 			// composite to the final image
