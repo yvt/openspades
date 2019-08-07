@@ -55,6 +55,7 @@ namespace spades {
 
 		int GLDynamicLightShader::operator()(GLRenderer *renderer, spades::draw::GLProgram *program,
 		                                     const GLDynamicLight &light, int texStage) {
+			// TODO: Raw pointers are not unique!
 			if (lastRenderer != renderer) {
 				whiteImage = renderer->RegisterImage("Gfx/White.tga").Cast<GLImage>();
 				lastRenderer = renderer;
