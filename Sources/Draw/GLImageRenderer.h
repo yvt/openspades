@@ -32,7 +32,7 @@ namespace spades {
 		class IGLDevice;
 		class GLRenderer;
 		class GLImageRenderer {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			IGLDevice &device;
 			GLImage *image;
 
@@ -58,7 +58,7 @@ namespace spades {
 			std::vector<uint32_t> indices;
 
 		public:
-			GLImageRenderer(GLRenderer *renderer);
+			GLImageRenderer(GLRenderer &renderer);
 			~GLImageRenderer();
 
 			void Flush();

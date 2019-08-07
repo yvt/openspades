@@ -108,7 +108,7 @@ namespace spades {
 
 			programManager = new GLProgramManager(*device, shadowMapRenderer.get(), settings);
 			imageManager = new GLImageManager(*device);
-			imageRenderer = new GLImageRenderer(this);
+			imageRenderer = new GLImageRenderer(*this);
 			profiler.reset(new GLProfiler(*this));
 
 			smoothedFogColor = MakeVector3(-1.f, -1.f, -1.f);

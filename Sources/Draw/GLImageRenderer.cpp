@@ -27,16 +27,16 @@
 
 namespace spades {
 	namespace draw {
-		GLImageRenderer::GLImageRenderer(GLRenderer *r)
+		GLImageRenderer::GLImageRenderer(GLRenderer &r)
 		    : renderer(r),
-		      device(r->GetGLDevice()),
+		      device(r.GetGLDevice()),
 		      invScreenWidthFactored(2.f / device.ScreenWidth()),
 		      invScreenHeightFactored(-2.f / device.ScreenHeight()) {
 
 			SPADES_MARK_FUNCTION();
 			image = NULL;
 
-			program = renderer->RegisterProgram("Shaders/BasicImage.program");
+			program = renderer.RegisterProgram("Shaders/BasicImage.program");
 
 			program->Use();
 
