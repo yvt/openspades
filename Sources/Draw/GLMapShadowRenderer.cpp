@@ -28,8 +28,8 @@
 
 namespace spades {
 	namespace draw {
-		GLMapShadowRenderer::GLMapShadowRenderer(GLRenderer *renderer, client::GameMap *map)
-		    : renderer(renderer), device(renderer->GetGLDevice()), map(map) {
+		GLMapShadowRenderer::GLMapShadowRenderer(GLRenderer &renderer, client::GameMap *map)
+		    : renderer(renderer), device(renderer.GetGLDevice()), map(map) {
 			SPADES_MARK_FUNCTION();
 			texture = device.GenTexture();
 			coarseTexture = device.GenTexture();
@@ -78,8 +78,8 @@ namespace spades {
 		void GLMapShadowRenderer::Update() {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Terrain Shadow Map");
-			GLRadiosityRenderer *radiosity = renderer->GetRadiosityRenderer();
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Terrain Shadow Map");
+			GLRadiosityRenderer *radiosity = renderer.GetRadiosityRenderer();
 
 			std::vector<uint8_t> coarseUpdateBitmap;
 			coarseUpdateBitmap.resize(coarseBitmap.size());
@@ -163,7 +163,7 @@ namespace spades {
 					}
 				}
 				if (coarseUpdated) {
-					GLProfiler::Context profiler(renderer->GetGLProfiler(),
+					GLProfiler::Context profiler(renderer.GetGLProfiler(),
 					                             "Coarse Shadow Map Upload");
 
 					device.BindTexture(IGLDevice::Texture2D, coarseTexture);

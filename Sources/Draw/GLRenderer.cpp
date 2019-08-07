@@ -310,7 +310,7 @@ namespace spades {
 				SPLog("Creating new renderers...");
 
 				SPLog("Creating Terrain Shadow Map Renderer");
-				mapShadowRenderer = new GLMapShadowRenderer(this, newMap.get_pointer());
+				mapShadowRenderer = new GLMapShadowRenderer(*this, newMap.get_pointer());
 				SPLog("Creating TerrainRenderer");
 				mapRenderer = new GLMapRenderer(newMap.get_pointer(), *this);
 				SPLog("Creating Minimap Renderer");
