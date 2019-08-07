@@ -30,9 +30,7 @@ namespace spades {
 
 		TCGameMode::Team &TCGameMode::GetTeam(int t) {
 			SPADES_MARK_FUNCTION();
-			SPAssert(t >= 0);
-			SPAssert(t < 2);
-			return teams[t];
+			return teams.at(t);
 		}
 
 		void TCGameMode::AddTerritory(const spades::client::TCGameMode::Territory &t) {

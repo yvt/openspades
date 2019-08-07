@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <array>
 #include <vector>
 
 #include "IGameMode.h"
@@ -56,7 +57,7 @@ namespace spades {
 
 		private:
 			World &world;
-			Team teams[2];
+			std::array<Team, 2> teams;
 			std::vector<Territory> territories;
 
 		public:
@@ -71,9 +72,7 @@ namespace spades {
 			int GetNumTerritories() const { return (int)territories.size(); }
 			Territory &GetTerritory(int index) {
 				SPADES_MARK_FUNCTION();
-				SPAssert(index >= 0);
-				SPAssert(index < GetNumTerritories());
-				return territories[index];
+				return territories.at(index);
 			}
 
 			void AddTerritory(const Territory &);
