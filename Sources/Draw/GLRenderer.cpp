@@ -174,7 +174,7 @@ namespace spades {
 			}
 
 			if (settings.r_lensFlare) {
-				GLLensFlareFilter(this);
+				GLLensFlareFilter(*this);
 			}
 
 			if (settings.r_colorCorrection) {
@@ -949,12 +949,12 @@ namespace spades {
 				if (settings.r_lensFlare) {
 					GLProfiler::Context p(*profiler, "Lens Flare");
 					device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
-					GLLensFlareFilter(this).Draw();
+					GLLensFlareFilter(*this).Draw();
 				}
 
 				if (settings.r_lensFlare && settings.r_lensFlareDynamic) {
 					GLProfiler::Context p(*profiler, "Dynamic Light Lens Flare");
-					GLLensFlareFilter lensFlareRenderer(this);
+					GLLensFlareFilter lensFlareRenderer(*this);
 					device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
 					for (size_t i = 0; i < lights.size(); i++) {
 						const GLDynamicLight &dl = lights[i];

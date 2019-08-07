@@ -35,24 +35,24 @@
 
 namespace spades {
 	namespace draw {
-		GLLensFlareFilter::GLLensFlareFilter(GLRenderer *renderer) : renderer(renderer) {
-			blurProgram = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
-			scannerProgram = renderer->RegisterProgram("Shaders/LensFlare/Scanner.program");
-			drawProgram = renderer->RegisterProgram("Shaders/LensFlare/Draw.program");
-			flare1 = renderer->RegisterImage("Gfx/LensFlare/1.png").Cast<GLImage>();
-			flare2 = renderer->RegisterImage("Gfx/LensFlare/2.png").Cast<GLImage>();
-			flare3 = renderer->RegisterImage("Gfx/LensFlare/3.png").Cast<GLImage>();
-			flare4 = renderer->RegisterImage("Gfx/LensFlare/4.jpg").Cast<GLImage>();
-			mask1 = renderer->RegisterImage("Gfx/LensFlare/mask1.png").Cast<GLImage>();
-			mask2 = renderer->RegisterImage("Gfx/LensFlare/mask2.png").Cast<GLImage>();
-			mask3 = renderer->RegisterImage("Gfx/LensFlare/mask3.png").Cast<GLImage>();
-			white = renderer->RegisterImage("Gfx/White.tga").Cast<GLImage>();
+		GLLensFlareFilter::GLLensFlareFilter(GLRenderer &renderer) : renderer(renderer) {
+			blurProgram = renderer.RegisterProgram("Shaders/PostFilters/Gauss1D.program");
+			scannerProgram = renderer.RegisterProgram("Shaders/LensFlare/Scanner.program");
+			drawProgram = renderer.RegisterProgram("Shaders/LensFlare/Draw.program");
+			flare1 = renderer.RegisterImage("Gfx/LensFlare/1.png").Cast<GLImage>();
+			flare2 = renderer.RegisterImage("Gfx/LensFlare/2.png").Cast<GLImage>();
+			flare3 = renderer.RegisterImage("Gfx/LensFlare/3.png").Cast<GLImage>();
+			flare4 = renderer.RegisterImage("Gfx/LensFlare/4.jpg").Cast<GLImage>();
+			mask1 = renderer.RegisterImage("Gfx/LensFlare/mask1.png").Cast<GLImage>();
+			mask2 = renderer.RegisterImage("Gfx/LensFlare/mask2.png").Cast<GLImage>();
+			mask3 = renderer.RegisterImage("Gfx/LensFlare/mask3.png").Cast<GLImage>();
+			white = renderer.RegisterImage("Gfx/White.tga").Cast<GLImage>();
 		}
 
 		GLColorBuffer GLLensFlareFilter::Blur(GLColorBuffer buffer, float spread) {
 			// do gaussian blur
 			GLProgram *program = blurProgram;
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 			int w = buffer.GetWidth();
 			int h = buffer.GetHeight();
@@ -71,7 +71,7 @@ namespace spades {
 			dev.Enable(IGLDevice::Blend, false);
 
 			// x-direction
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
+			GLColorBuffer buf2 = renderer.GetFramebufferManager()->CreateBufferHandle(w, h, false);
 			dev.BindTexture(IGLDevice::Texture2D, buffer.GetTexture());
 			dev.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			blur_unitShift.SetValue(spread / (float)w, 0.f);
@@ -79,7 +79,7 @@ namespace spades {
 			buffer.Release();
 
 			// y-direction
-			GLColorBuffer buf3 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
+			GLColorBuffer buf3 = renderer.GetFramebufferManager()->CreateBufferHandle(w, h, false);
 			dev.BindTexture(IGLDevice::Texture2D, buf2.GetTexture());
 			dev.BindFramebuffer(IGLDevice::Framebuffer, buf3.GetFramebuffer());
 			blur_unitShift.SetValue(0.f, spread / (float)h);
@@ -97,9 +97,9 @@ namespace spades {
 		                             bool infinityDistance) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 
-			client::SceneDefinition def = renderer->GetSceneDef();
+			client::SceneDefinition def = renderer.GetSceneDef();
 
 			// transform sun into NDC
 			Vector3 sunWorld = direction;
@@ -121,12 +121,12 @@ namespace spades {
 			Vector2 sunSize = {sunRadiusTan / fov.x, sunRadiusTan / fov.y};
 
 			GLColorBuffer visiblityBuffer =
-			  renderer->GetFramebufferManager()->CreateBufferHandle(64, 64, false);
+			  renderer.GetFramebufferManager()->CreateBufferHandle(64, 64, false);
 
 			GLQuadRenderer qr(dev);
 
 			{
-				GLProfiler::Context measure(renderer->GetGLProfiler(), "Occlusion Test");
+				GLProfiler::Context measure(renderer.GetGLProfiler(), "Occlusion Test");
 
 				GLProgram *scanner = scannerProgram;
 				static GLProgramAttribute positionAttribute("positionAttribute");
@@ -157,7 +157,7 @@ namespace spades {
 
 				dev.ActiveTexture(0);
 				dev.BindTexture(IGLDevice::Texture2D,
-				                renderer->GetFramebufferManager()->GetDepthTexture());
+				                renderer.GetFramebufferManager()->GetDepthTexture());
 				depthTexture.SetValue(0);
 				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureCompareMode,
 				                 IGLDevice::CompareRefToTexture);
@@ -199,7 +199,7 @@ namespace spades {
 
 			// lens flare size doesn't follow sun size
 			sunSize = MakeVector2(.01f, .01f);
-			sunSize.x *= renderer->ScreenHeight() / renderer->ScreenWidth();
+			sunSize.x *= renderer.ScreenHeight() / renderer.ScreenWidth();
 
 			float aroundness = sunScreen.GetPoweredLength() * 0.6f;
 			float aroundness2 = std::min(sunScreen.GetPoweredLength() * 3.2f, 1.f);
@@ -207,7 +207,7 @@ namespace spades {
 			dev.BindFramebuffer(IGLDevice::Framebuffer, lastFramebuffer);
 
 			{
-				GLProfiler::Context measure(renderer->GetGLProfiler(), "Draw");
+				GLProfiler::Context measure(renderer.GetGLProfiler(), "Draw");
 
 				GLProgram *draw = drawProgram;
 				static GLProgramAttribute positionAttribute("positionAttribute");

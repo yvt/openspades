@@ -28,14 +28,14 @@ namespace spades {
 		class GLRenderer;
 		class GLProgram;
 		class GLLensFlareFilter {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			GLProgram *blurProgram, *scannerProgram, *drawProgram;
 			Handle<GLImage> flare1, flare2, flare3, flare4, white;
 			Handle<GLImage> mask1, mask2, mask3;
 			GLColorBuffer Blur(GLColorBuffer, float spread = 1.f);
 
 		public:
-			GLLensFlareFilter(GLRenderer *);
+			GLLensFlareFilter(GLRenderer &);
 			void Draw();
 			void Draw(Vector3 direction, bool reflections, Vector3 color, bool infinityDistance);
 		};
