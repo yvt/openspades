@@ -19,10 +19,10 @@
  */
 
 #include "GLModelRenderer.h"
-#include <Core/Debug.h>
 #include "GLModel.h"
 #include "GLProfiler.h"
 #include "GLRenderer.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace draw {
@@ -52,8 +52,9 @@ namespace spades {
 		void GLModelRenderer::RenderShadowMapPass() {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Model [%d model(s), %d unique model type(s)]", modelCount,
-			                    (int)models.size());
+			GLProfiler::Context profiler(renderer->GetGLProfiler(),
+			                             "Model [%d model(s), %d unique model type(s)]", modelCount,
+			                             (int)models.size());
 
 			int numModels = 0;
 			for (size_t i = 0; i < models.size(); i++) {
@@ -71,8 +72,9 @@ namespace spades {
 		void GLModelRenderer::Prerender(bool ghostPass) {
 			device.ColorMask(false, false, false, false);
 
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Model [%d model(s), %d unique model type(s)]", modelCount,
-								(int)models.size());
+			GLProfiler::Context profiler(renderer->GetGLProfiler(),
+			                             "Model [%d model(s), %d unique model type(s)]", modelCount,
+			                             (int)models.size());
 
 			int numModels = 0;
 			for (size_t i = 0; i < models.size(); i++) {
@@ -87,8 +89,9 @@ namespace spades {
 		void GLModelRenderer::RenderSunlightPass(bool ghostPass) {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Model [%d model(s), %d unique model type(s)]", modelCount,
-			                    (int)models.size());
+			GLProfiler::Context profiler(renderer->GetGLProfiler(),
+			                             "Model [%d model(s), %d unique model type(s)]", modelCount,
+			                             (int)models.size());
 
 			for (size_t i = 0; i < models.size(); i++) {
 				RenderModel &m = models[i];
@@ -101,8 +104,9 @@ namespace spades {
 		void GLModelRenderer::RenderDynamicLightPass(std::vector<GLDynamicLight> lights) {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Model [%d model(s), %d unique model type(s)]", modelCount,
-			                    (int)models.size());
+			GLProfiler::Context profiler(renderer->GetGLProfiler(),
+			                             "Model [%d model(s), %d unique model type(s)]", modelCount,
+			                             (int)models.size());
 
 			if (!lights.empty()) {
 
@@ -125,5 +129,5 @@ namespace spades {
 
 			modelCount = 0;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

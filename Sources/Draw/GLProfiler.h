@@ -96,5 +96,5 @@ namespace spades {
 				~Context();
 			};
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

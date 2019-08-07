@@ -49,5 +49,5 @@ namespace spades {
 
 			IGLDevice *GetDevice() const { return device; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

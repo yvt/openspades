@@ -21,12 +21,6 @@
 #include <cstdarg>
 #include <cstdlib>
 
-#include <Client/GameMap.h>
-#include <Core/Bitmap.h>
-#include <Core/Debug.h>
-#include <Core/Exception.h>
-#include <Core/Settings.h>
-#include <Core/Stopwatch.h>
 #include "GLAmbientShadowRenderer.h"
 #include "GLAutoExposureFilter.h"
 #include "GLBloomFilter.h"
@@ -56,6 +50,7 @@
 #include "GLProgramUniform.h"
 #include "GLRadiosityRenderer.h"
 #include "GLRenderer.h"
+#include "GLSSAOFilter.h"
 #include "GLSettings.h"
 #include "GLShadowMapShader.h"
 #include "GLSoftLitSpriteRenderer.h"
@@ -63,9 +58,14 @@
 #include "GLSpriteRenderer.h"
 #include "GLVoxelModel.h"
 #include "GLWaterRenderer.h"
-#include "GLSSAOFilter.h"
 #include "IGLDevice.h"
 #include "IGLShadowMapRenderer.h"
+#include <Client/GameMap.h>
+#include <Core/Bitmap.h>
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Settings.h>
+#include <Core/Stopwatch.h>
 
 namespace spades {
 	namespace draw {
@@ -114,8 +114,8 @@ namespace spades {
 			smoothedFogColor = MakeVector3(-1.f, -1.f, -1.f);
 
 			// ready for 2d draw
-				  device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
-									IGLDevice::Zero, IGLDevice::One);
+			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
+			                  IGLDevice::One);
 			device->Enable(IGLDevice::Blend, true);
 
 			SPLog("GLRenderer started");
@@ -635,8 +635,10 @@ namespace spades {
 						ssaoBufferTexture = ssaoBuffer.GetTexture();
 
 						device->BindTexture(IGLDevice::Texture2D, ssaoBufferTexture);
-						device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
-						device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
+						device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+						                     IGLDevice::Nearest);
+						device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+						                     IGLDevice::Nearest);
 
 						device->Enable(IGLDevice::CullFace, true);
 					}
@@ -654,19 +656,22 @@ namespace spades {
 			}
 			if (settings.r_ssao) {
 				device->BindTexture(IGLDevice::Texture2D, ssaoBufferTexture);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Linear);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Linear);
+				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+				                     IGLDevice::Linear);
+				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+				                     IGLDevice::Linear);
 				ssaoBuffer.Release();
 			}
 
 			{
-				GLProfiler::Context p(*profiler, "Dynamic Light Pass [%d light(s)]", (int)lights.size());
+				GLProfiler::Context p(*profiler, "Dynamic Light Pass [%d light(s)]",
+				                      (int)lights.size());
 
 				device->Enable(IGLDevice::Blend, true);
 				device->Enable(IGLDevice::DepthTest, true);
 				device->DepthFunc(IGLDevice::Equal);
-				device->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::One,
-								  IGLDevice::Zero, IGLDevice::One);
+				device->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::One, IGLDevice::Zero,
+				                  IGLDevice::One);
 
 				if (!sceneDef.skipWorld && mapRenderer) {
 					mapRenderer->RenderDynamicLightPass(lights);
@@ -840,7 +845,8 @@ namespace spades {
 			{
 				GLProfiler::Context p(*profiler, "Clear");
 				device->ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
-				device->Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
+				device->Clear(
+				  (IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
 			}
 
 			device->FrontFace(IGLDevice::CW);
@@ -867,15 +873,15 @@ namespace spades {
 			device->DepthMask(false);
 			if (!settings.r_softParticles) { // softparticle is a part of postprocess
 				GLProfiler::Context p(*profiler, "Particles");
-				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
-								  IGLDevice::Zero, IGLDevice::One);
+				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
+				                  IGLDevice::One);
 				spriteRenderer->Render();
 			}
 
 			{
 				GLProfiler::Context p(*profiler, "Long Particles");
-				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
-								  IGLDevice::Zero, IGLDevice::One);
+				device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
+				                  IGLDevice::One);
 				longSpriteRenderer->Render();
 			}
 
@@ -901,13 +907,13 @@ namespace spades {
 
 				if (settings.r_softParticles) { // softparticle is a part of postprocess
 					GLProfiler::Context p(*profiler, "Soft Particle");
-					device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
-									  IGLDevice::Zero, IGLDevice::One);
+					device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
+					                  IGLDevice::One);
 					spriteRenderer->Render();
 				}
 
-				device->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::OneMinusSrcAlpha,
-								  IGLDevice::Zero, IGLDevice::One);
+				device->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
+				                  IGLDevice::One);
 
 				if (settings.r_depthOfField &&
 				    (sceneDef.depthOfFieldFocalLength > 0.f || sceneDef.blurVignette > 0.f)) {
@@ -1052,8 +1058,8 @@ namespace spades {
 			modelRenderer->Clear();
 
 			// prepare for 2d drawing
-			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
-							  IGLDevice::Zero, IGLDevice::One);
+			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
+			                  IGLDevice::One);
 			device->Enable(IGLDevice::Blend, true);
 		}
 
@@ -1064,8 +1070,8 @@ namespace spades {
 			void EnsureSceneNotStarted();
 			imageRenderer->Flush();
 
-			device->BlendFunc(IGLDevice::Zero, IGLDevice::SrcColor,
-							  IGLDevice::Zero, IGLDevice::One);
+			device->BlendFunc(IGLDevice::Zero, IGLDevice::SrcColor, IGLDevice::Zero,
+			                  IGLDevice::One);
 
 			Vector4 col = {color.x, color.y, color.z, 1};
 
@@ -1104,8 +1110,8 @@ namespace spades {
 			device->EnableVertexAttribArray(positionAttribute(), false);
 			device->EnableVertexAttribArray(colorAttribute(), false);
 
-			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
-							  IGLDevice::Zero, IGLDevice::One);
+			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
+			                  IGLDevice::One);
 		}
 
 		void GLRenderer::DrawImage(stmp::optional<client::IImage &> image,
@@ -1211,8 +1217,7 @@ namespace spades {
 
 			imageRenderer->Flush();
 
-			if (settings.r_debugTimingOutputScreen &&
-				settings.r_debugTiming) {
+			if (settings.r_debugTimingOutputScreen && settings.r_debugTiming) {
 				GLProfiler::Context p(*profiler, "Draw GLProfiler Results");
 				profiler->DrawResult();
 				imageRenderer->Flush();
@@ -1241,8 +1246,8 @@ namespace spades {
 			lastTime = sceneDef.time;
 
 			// ready for 2d draw of next frame
-			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
-							  IGLDevice::Zero, IGLDevice::One);
+			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
+			                  IGLDevice::One);
 			device->Enable(IGLDevice::Blend, true);
 
 			profiler->EndFrame();
@@ -1310,5 +1315,5 @@ namespace spades {
 			}
 			return true;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

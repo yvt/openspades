@@ -21,7 +21,6 @@
 #pragma once
 
 #include <cstdint>
-#include <cstdint>
 #include <vector>
 
 #include "GLFramebufferManager.h"
@@ -49,5 +48,5 @@ namespace spades {
 			~GLLensDustFilter();
 			GLColorBuffer Filter(GLColorBuffer);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -21,14 +21,14 @@
 #include <vector>
 
 #include "GLLensFilter.h"
-#include <Core/Debug.h>
-#include <Core/Math.h>
 #include "GLProgram.h"
 #include "GLProgramAttribute.h"
 #include "GLProgramUniform.h"
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
@@ -69,5 +69,5 @@ namespace spades {
 
 			return output;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -281,16 +281,16 @@ namespace spades {
 			device.BindBuffer(IGLDevice::ArrayBuffer, buffer);
 
 			device.BufferData(IGLDevice::ArrayBuffer,
-			                   static_cast<IGLDevice::Sizei>(vertices.size() * sizeof(Vertex)),
-			                   vertices.data(), IGLDevice::DynamicDraw);
+			                  static_cast<IGLDevice::Sizei>(vertices.size() * sizeof(Vertex)),
+			                  vertices.data(), IGLDevice::DynamicDraw);
 
 			if (!indices.empty()) {
 				iBuffer = device.GenBuffer();
 				device.BindBuffer(IGLDevice::ArrayBuffer, iBuffer);
 
 				device.BufferData(IGLDevice::ArrayBuffer,
-				                   static_cast<IGLDevice::Sizei>(indices.size() * sizeof(uint16_t)),
-				                   indices.data(), IGLDevice::DynamicDraw);
+				                  static_cast<IGLDevice::Sizei>(indices.size() * sizeof(uint16_t)),
+				                  indices.data(), IGLDevice::DynamicDraw);
 			}
 			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 		}
@@ -345,13 +345,12 @@ namespace spades {
 
 			device.BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			device.VertexAttribPointer(positionAttribute(), 3, IGLDevice::UnsignedByte, false,
-			                            sizeof(Vertex), (void *)asOFFSET(Vertex, x));
+			                           sizeof(Vertex), (void *)asOFFSET(Vertex, x));
 
 			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device.BindBuffer(IGLDevice::ElementArrayBuffer, iBuffer);
-			device.DrawElements(IGLDevice::Triangles,
-			                     static_cast<IGLDevice::Sizei>(indices.size()),
-			                     IGLDevice::UnsignedShort, NULL);
+			device.DrawElements(IGLDevice::Triangles, static_cast<IGLDevice::Sizei>(indices.size()),
+			                    IGLDevice::UnsignedShort, NULL);
 			device.BindBuffer(IGLDevice::ElementArrayBuffer, 0);
 		}
 		void GLMapChunk::RenderSunlightPass() {
@@ -413,25 +412,24 @@ namespace spades {
 
 			device.BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			device.VertexAttribPointer(positionAttribute(), 3, IGLDevice::UnsignedByte, false,
-			                            sizeof(Vertex), (void *)asOFFSET(Vertex, x));
+			                           sizeof(Vertex), (void *)asOFFSET(Vertex, x));
 			if (ambientOcclusionCoordAttribute() != -1)
 				device.VertexAttribPointer(ambientOcclusionCoordAttribute(), 2,
-				                            IGLDevice::UnsignedShort, false, sizeof(Vertex),
-				                            (void *)asOFFSET(Vertex, aoX));
+				                           IGLDevice::UnsignedShort, false, sizeof(Vertex),
+				                           (void *)asOFFSET(Vertex, aoX));
 			device.VertexAttribPointer(colorAttribute(), 4, IGLDevice::UnsignedByte, true,
-			                            sizeof(Vertex), (void *)asOFFSET(Vertex, colorRed));
+			                           sizeof(Vertex), (void *)asOFFSET(Vertex, colorRed));
 			if (normalAttribute() != -1)
 				device.VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
-				                            sizeof(Vertex), (void *)asOFFSET(Vertex, nx));
+				                           sizeof(Vertex), (void *)asOFFSET(Vertex, nx));
 
 			device.VertexAttribPointer(fixedPositionAttribute(), 3, IGLDevice::Byte, false,
-			                            sizeof(Vertex), (void *)asOFFSET(Vertex, sx));
+			                           sizeof(Vertex), (void *)asOFFSET(Vertex, sx));
 
 			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device.BindBuffer(IGLDevice::ElementArrayBuffer, iBuffer);
-			device.DrawElements(IGLDevice::Triangles,
-			                     static_cast<IGLDevice::Sizei>(indices.size()),
-			                     IGLDevice::UnsignedShort, NULL);
+			device.DrawElements(IGLDevice::Triangles, static_cast<IGLDevice::Sizei>(indices.size()),
+			                    IGLDevice::UnsignedShort, NULL);
 			device.BindBuffer(IGLDevice::ElementArrayBuffer, 0);
 		}
 
@@ -489,11 +487,11 @@ namespace spades {
 
 			device.BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			device.VertexAttribPointer(positionAttribute(), 3, IGLDevice::UnsignedByte, false,
-			                            sizeof(Vertex), (void *)asOFFSET(Vertex, x));
+			                           sizeof(Vertex), (void *)asOFFSET(Vertex, x));
 			device.VertexAttribPointer(colorAttribute(), 4, IGLDevice::UnsignedByte, true,
-			                            sizeof(Vertex), (void *)asOFFSET(Vertex, colorRed));
-			device.VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
-			                            sizeof(Vertex), (void *)asOFFSET(Vertex, nx));
+			                           sizeof(Vertex), (void *)asOFFSET(Vertex, colorRed));
+			device.VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false, sizeof(Vertex),
+			                           (void *)asOFFSET(Vertex, nx));
 
 			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device.BindBuffer(IGLDevice::ElementArrayBuffer, iBuffer);
@@ -506,8 +504,8 @@ namespace spades {
 					continue;
 
 				device.DrawElements(IGLDevice::Triangles,
-				                     static_cast<IGLDevice::Sizei>(indices.size()),
-				                     IGLDevice::UnsignedShort, NULL);
+				                    static_cast<IGLDevice::Sizei>(indices.size()),
+				                    IGLDevice::UnsignedShort, NULL);
 			}
 
 			device.BindBuffer(IGLDevice::ElementArrayBuffer, 0);

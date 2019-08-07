@@ -24,7 +24,7 @@
 
 namespace spades {
 	namespace draw {
-        class GLImage;
+		class GLImage;
 		class GLRenderer;
 		class GLProgram;
 		class GLLensFlareFilter {
@@ -33,12 +33,11 @@ namespace spades {
 			Handle<GLImage> flare1, flare2, flare3, flare4, white;
 			Handle<GLImage> mask1, mask2, mask3;
 			GLColorBuffer Blur(GLColorBuffer, float spread = 1.f);
+
 		public:
 			GLLensFlareFilter(GLRenderer *);
 			void Draw();
-			void Draw(Vector3 direction, bool reflections,
-					  Vector3 color, bool infinityDistance);
+			void Draw(Vector3 direction, bool reflections, Vector3 color, bool infinityDistance);
 		};
-	}
-}
-
+	} // namespace draw
+} // namespace spades

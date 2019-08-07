@@ -117,5 +117,5 @@ namespace spades {
 
 		// name is too long, so shorten it!
 		typedef GLFramebufferManager::BufferHandle GLColorBuffer;
-	}
-}
+	} // namespace draw
+} // namespace spades

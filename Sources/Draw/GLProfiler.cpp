@@ -23,11 +23,11 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <ctime>
 #include <functional>
 #include <list>
 #include <unordered_map>
-#include <cstring>
 
 #include "GLProfiler.h"
 
@@ -54,7 +54,7 @@ namespace spades {
 				         .count() /
 				       1000000.0;
 			}
-		}
+		} // namespace
 
 		struct GLProfiler::Measurement {
 			double totalWallClockTime = 0.0;
@@ -197,27 +197,29 @@ namespace spades {
 				struct Traverser {
 					GLProfiler &self;
 					Traverser(GLProfiler &self) : self{self} {}
-					void Traverse(Phase &phase, stmp::optional<std::pair<Phase&, bool>> base) {
+					void Traverse(Phase &phase, stmp::optional<std::pair<Phase &, bool>> base) {
 						if (!phase.queryObjectIndices) {
 							return;
 						}
 						if (base) {
 							auto baseIndices = *(*base).first.queryObjectIndices;
-							(*phase.queryObjectIndices).second = (*base).second ? baseIndices.second : baseIndices.first;
+							(*phase.queryObjectIndices).second =
+							  (*base).second ? baseIndices.second : baseIndices.first;
 						}
 						auto it = phase.subphases.begin();
 						while (it != phase.subphases.end() && !it->queryObjectIndices) {
 							++it;
 						}
 						while (it != phase.subphases.end()) {
-							auto it2 = it; ++it2;
+							auto it2 = it;
+							++it2;
 							while (it2 != phase.subphases.end() && !it2->queryObjectIndices) {
 								++it2;
 							}
 							if (it2 == phase.subphases.end()) {
-								Traverse(*it, std::pair<Phase&, bool>{phase, true});
+								Traverse(*it, std::pair<Phase &, bool>{phase, true});
 							} else {
-								Traverse(*it, std::pair<Phase&, bool>{*it2, false});
+								Traverse(*it, std::pair<Phase &, bool>{*it2, false});
 							}
 							it = it2;
 						}
@@ -613,5 +615,5 @@ namespace spades {
 
 			m_profiler.EndPhase();
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

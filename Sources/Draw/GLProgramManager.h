@@ -48,5 +48,5 @@ namespace spades {
 			GLProgram *RegisterProgram(const std::string &name);
 			GLShader *RegisterShader(const std::string &name);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -98,5 +98,5 @@ namespace spades {
 
 			AABB3 GetBoundingBox() override { return boundingBox; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

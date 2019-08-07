@@ -19,11 +19,6 @@
  */
 
 #include "GLProgramManager.h"
-#include <Core/Debug.h>
-#include <Core/Exception.h>
-#include <Core/FileManager.h>
-#include <Core/Math.h>
-#include <Core/Stopwatch.h>
 #include "GLDynamicLightShader.h"
 #include "GLProgram.h"
 #include "GLSettings.h"
@@ -31,6 +26,11 @@
 #include "GLShadowMapShader.h"
 #include "GLShadowShader.h"
 #include "IGLShadowMapRenderer.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/FileManager.h>
+#include <Core/Math.h>
+#include <Core/Stopwatch.h>
 
 namespace spades {
 	namespace draw {
@@ -186,9 +186,10 @@ namespace spades {
 
 			Stopwatch sw;
 			s->Compile();
-			SPLog("Successfully compiled GLSL program '%s' in %.3fms", name.c_str(), // should this be "program" or "shader"?
+			SPLog("Successfully compiled GLSL program '%s' in %.3fms",
+			      name.c_str(), // should this be "program" or "shader"?
 			      sw.GetTime() * 1000.);
 			return s;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

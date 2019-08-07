@@ -21,10 +21,10 @@
 #include <cstdio>
 #include <cstring>
 
-#include <Core/Debug.h>
-#include <Core/Exception.h>
 #include "GLProgram.h"
 #include "GLShader.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 
 namespace spades {
 	namespace draw {
@@ -98,5 +98,5 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			device->UseProgram(handle);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

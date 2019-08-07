@@ -66,5 +66,5 @@ namespace spades {
 			IGLDevice::UInteger GetTexture() { return texture; }
 			IGLDevice::UInteger GetCoarseTexture() { return coarseTexture; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

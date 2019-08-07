@@ -34,5 +34,5 @@ namespace spades {
 			GLFXAAFilter(GLRenderer *);
 			GLColorBuffer Filter(GLColorBuffer);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

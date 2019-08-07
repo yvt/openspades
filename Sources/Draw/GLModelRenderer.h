@@ -22,10 +22,10 @@
 
 #include <vector>
 
-#include <Client/IModel.h>
-#include <Client/IRenderer.h>
 #include "GLDynamicLight.h"
 #include "IGLDevice.h"
+#include <Client/IModel.h>
+#include <Client/IRenderer.h>
 
 namespace spades {
 	namespace draw {
@@ -60,5 +60,5 @@ namespace spades {
 
 			void Clear();
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

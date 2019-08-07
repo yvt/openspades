@@ -69,5 +69,5 @@ namespace spades {
 			         float dy4, float sx1, float sy1, float sx2, float sy2, float sx3, float sy3,
 			         float sx4, float sy4, float r, float g, float b, float a);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -22,11 +22,11 @@
 
 #include <vector>
 
+#include "GLDynamicLight.h"
+#include "IGLDevice.h"
 #include <Client/GameMap.h>
 #include <Client/IRenderer.h>
 #include <Core/Math.h>
-#include "GLDynamicLight.h"
-#include "IGLDevice.h"
 
 namespace spades {
 	namespace draw {
@@ -92,5 +92,5 @@ namespace spades {
 			void RenderDepthPass();
 			void RenderDLightPass(std::vector<GLDynamicLight> lights);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

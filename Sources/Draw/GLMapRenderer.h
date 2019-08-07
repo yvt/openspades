@@ -20,11 +20,11 @@
 
 #pragma once
 
+#include "GLDynamicLight.h"
+#include "IGLDevice.h"
 #include <Client/IGameMapListener.h>
 #include <Client/IRenderer.h>
 #include <Core/Math.h>
-#include "GLDynamicLight.h"
-#include "IGLDevice.h"
 
 namespace spades {
 	namespace draw {
@@ -92,5 +92,5 @@ namespace spades {
 			void RenderSunlightPass();
 			void RenderDynamicLightPass(std::vector<GLDynamicLight> lights);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

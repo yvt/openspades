@@ -43,5 +43,5 @@ namespace spades {
 
 			void Draw();
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

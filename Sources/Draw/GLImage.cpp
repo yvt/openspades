@@ -90,5 +90,5 @@ namespace spades {
 			if (autoDelete)
 				device->DeleteTexture(tex);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades
