@@ -51,7 +51,7 @@ namespace spades {
 				uint8_t pad3;
 			};
 
-			GLMapRenderer *renderer;
+			GLMapRenderer &renderer;
 			IGLDevice &device;
 			client::GameMap *map;
 			int chunkX, chunkY, chunkZ;
@@ -79,7 +79,7 @@ namespace spades {
 
 		public:
 			enum { Size = 16, SizeBits = 4 };
-			GLMapChunk(GLMapRenderer *, client::GameMap *mp, int cx, int cy, int cz);
+			GLMapChunk(GLMapRenderer &, client::GameMap *mp, int cx, int cy, int cz);
 			~GLMapChunk();
 
 			void SetNeedsUpdate() { needsUpdate = true; }

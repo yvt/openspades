@@ -35,12 +35,10 @@
 
 namespace spades {
 	namespace draw {
-		GLMapChunk::GLMapChunk(spades::draw::GLMapRenderer *r, client::GameMap *mp, int cx, int cy,
-		                       int cz)
-		    : device(r->device) {
+		GLMapChunk::GLMapChunk(GLMapRenderer &r, client::GameMap *mp, int cx, int cy, int cz)
+		    : renderer(r), device(r.device) {
 			SPADES_MARK_FUNCTION();
 
-			renderer = r;
 			map = mp;
 			chunkX = cx;
 			chunkY = cy;
@@ -202,7 +200,7 @@ namespace spades {
 			y &= 511;
 
 			if (z == 63) {
-				if (renderer->renderer->GetSettings().r_water) {
+				if (renderer.renderer->GetSettings().r_water) {
 					return map->IsSolid(x, y, 62);
 				} else {
 					return map->IsSolid(x, y, 63);
@@ -297,7 +295,7 @@ namespace spades {
 
 		void GLMapChunk::RenderDepthPass() {
 			SPADES_MARK_FUNCTION();
-			Vector3 eye = renderer->renderer->GetSceneDef().viewOrigin;
+			Vector3 eye = renderer.renderer->GetSceneDef().viewOrigin;
 
 			if (!realized)
 				return;
@@ -328,10 +326,10 @@ namespace spades {
 			bx.max.x += sx;
 			bx.max.y += sy;
 
-			if (!renderer->renderer->BoxFrustrumCull(bx))
+			if (!renderer.renderer->BoxFrustrumCull(bx))
 				return;
 
-			GLProgram *depthonlyProgram = renderer->depthonlyProgram;
+			GLProgram *depthonlyProgram = renderer.depthonlyProgram;
 
 			static GLProgramUniform chunkPosition("chunkPosition");
 
@@ -355,7 +353,7 @@ namespace spades {
 		}
 		void GLMapChunk::RenderSunlightPass() {
 			SPADES_MARK_FUNCTION();
-			Vector3 eye = renderer->renderer->GetSceneDef().viewOrigin;
+			Vector3 eye = renderer.renderer->GetSceneDef().viewOrigin;
 
 			if (!realized)
 				return;
@@ -386,10 +384,10 @@ namespace spades {
 			bx.max.x += sx;
 			bx.max.y += sy;
 
-			if (!renderer->renderer->BoxFrustrumCull(bx))
+			if (!renderer.renderer->BoxFrustrumCull(bx))
 				return;
 
-			GLProgram *basicProgram = renderer->basicProgram;
+			GLProgram *basicProgram = renderer.basicProgram;
 
 			static GLProgramUniform chunkPosition("chunkPosition");
 
@@ -435,7 +433,7 @@ namespace spades {
 
 		void GLMapChunk::RenderDLightPass(std::vector<GLDynamicLight> lights) {
 			SPADES_MARK_FUNCTION();
-			Vector3 eye = renderer->renderer->GetSceneDef().viewOrigin;
+			Vector3 eye = renderer.renderer->GetSceneDef().viewOrigin;
 
 			if (!realized)
 				return;
@@ -466,10 +464,10 @@ namespace spades {
 			bx.max.x += sx;
 			bx.max.y += sy;
 
-			if (!renderer->renderer->BoxFrustrumCull(bx))
+			if (!renderer.renderer->BoxFrustrumCull(bx))
 				return;
 
-			GLProgram *program = renderer->dlightProgram;
+			GLProgram *program = renderer.dlightProgram;
 
 			static GLProgramUniform chunkPosition("chunkPosition");
 
@@ -498,7 +496,7 @@ namespace spades {
 			for (size_t i = 0; i < lights.size(); i++) {
 
 				static GLDynamicLightShader lightShader;
-				lightShader(renderer->renderer, program, lights[i], 1);
+				lightShader(renderer.renderer, program, lights[i], 1);
 
 				if (!lights[i].Cull(bx))
 					continue;

@@ -61,7 +61,7 @@ namespace spades {
 			chunkInfos = new ChunkRenderInfo[numChunks];
 
 			for (int i = 0; i < numChunks; i++)
-				chunks[i] = new GLMapChunk(this, gameMap, i / numChunkDepth / numChunkHeight,
+				chunks[i] = new GLMapChunk(*this, gameMap, i / numChunkDepth / numChunkHeight,
 				                           (i / numChunkDepth) % numChunkHeight, i % numChunkDepth);
 
 			if (r->GetSettings().r_physicalLighting)
