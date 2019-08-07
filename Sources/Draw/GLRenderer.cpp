@@ -137,7 +137,7 @@ namespace spades {
 			shadowMapRenderer = GLShadowMapShader::CreateShadowMapRenderer(*this);
 			modelManager = new GLModelManager(*this);
 			if ((int)settings.r_softParticles >= 2)
-				spriteRenderer = new GLSoftLitSpriteRenderer(this);
+				spriteRenderer = new GLSoftLitSpriteRenderer(*this);
 			else if (settings.r_softParticles)
 				spriteRenderer = new GLSoftSpriteRenderer(this);
 			else

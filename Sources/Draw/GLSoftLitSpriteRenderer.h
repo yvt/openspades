@@ -63,7 +63,7 @@ namespace spades {
 				Vector4 dlR, dlG, dlB;
 			};
 
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			GLSettings &settings;
 			IGLDevice &device;
 			std::vector<Sprite> sprites;
@@ -101,7 +101,7 @@ namespace spades {
 			float LayerForSprite(const Sprite &);
 
 		public:
-			GLSoftLitSpriteRenderer(GLRenderer *);
+			GLSoftLitSpriteRenderer(GLRenderer &);
 			~GLSoftLitSpriteRenderer();
 
 			void Add(GLImage *img, Vector3 center, float rad, float ang, Vector4 color) override;

@@ -35,10 +35,10 @@
 namespace spades {
 	namespace draw {
 
-		GLSoftLitSpriteRenderer::GLSoftLitSpriteRenderer(GLRenderer *renderer)
+		GLSoftLitSpriteRenderer::GLSoftLitSpriteRenderer(GLRenderer &renderer)
 		    : renderer(renderer),
-		      settings(renderer->GetSettings()),
-		      device(renderer->GetGLDevice()),
+		      settings(renderer.GetSettings()),
+		      device(renderer.GetGLDevice()),
 		      projectionViewMatrix("projectionViewMatrix"),
 		      rightVector("rightVector"),
 		      upVector("upVector"),
@@ -60,7 +60,7 @@ namespace spades {
 		      dlBAttribute("dlBAttribute") {
 			SPADES_MARK_FUNCTION();
 
-			program = renderer->RegisterProgram("Shaders/SoftLitSprite.program");
+			program = renderer.RegisterProgram("Shaders/SoftLitSprite.program");
 		}
 
 		GLSoftLitSpriteRenderer::~GLSoftLitSpriteRenderer() { SPADES_MARK_FUNCTION(); }
@@ -68,7 +68,7 @@ namespace spades {
 		void GLSoftLitSpriteRenderer::Add(spades::draw::GLImage *img, spades::Vector3 center,
 		                                  float rad, float ang, Vector4 color) {
 			SPADES_MARK_FUNCTION_DEBUG();
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 			Sprite spr;
 			spr.image = img;
 			spr.center = center;
@@ -116,7 +116,7 @@ namespace spades {
 				return;
 
 			// light every sprite
-			const std::vector<GLDynamicLight> &lights = renderer->lights;
+			const std::vector<GLDynamicLight> &lights = renderer.lights;
 			for (size_t i = 0; i < sprites.size(); i++) {
 				Sprite &spr = sprites[i];
 				if (spr.color.w < .0001f &&
@@ -226,16 +226,16 @@ namespace spades {
 			dlGAttribute(program);
 			dlBAttribute(program);
 
-			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
-			viewMatrix.SetValue(renderer->GetViewMatrix());
+			projectionViewMatrix.SetValue(renderer.GetProjectionViewMatrix());
+			viewMatrix.SetValue(renderer.GetViewMatrix());
 
-			fogDistance.SetValue(renderer->GetFogDistance());
+			fogDistance.SetValue(renderer.GetFogDistance());
 
-			Vector3 fogCol = renderer->GetFogColor();
+			Vector3 fogCol = renderer.GetFogColor();
 			fogCol *= fogCol; // linearize
 			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 			rightVector.SetValue(def.viewAxis[0].x, def.viewAxis[0].y, def.viewAxis[0].z);
 			upVector.SetValue(def.viewAxis[1].x, def.viewAxis[1].y, def.viewAxis[1].z);
 			frontVector.SetValue(def.viewAxis[2].x, def.viewAxis[2].y, def.viewAxis[2].z);
@@ -246,11 +246,11 @@ namespace spades {
 			zNearFar.SetValue(def.zNear, def.zFar);
 
 			static GLShadowShader shadowShader;
-			shadowShader(renderer, program, 2);
+			shadowShader(&renderer, program, 2);
 
 			device.ActiveTexture(1);
 			device.BindTexture(IGLDevice::Texture2D,
-			                   renderer->GetFramebufferManager()->GetDepthTexture());
+			                   renderer.GetFramebufferManager()->GetDepthTexture());
 			device.ActiveTexture(0);
 
 			device.EnableVertexAttribArray(positionAttribute(), true);
@@ -266,7 +266,7 @@ namespace spades {
 
 			// full-resolution sprites
 			{
-				GLProfiler::Context measure(renderer->GetGLProfiler(), "Full Resolution");
+				GLProfiler::Context measure(renderer.GetGLProfiler(), "Full Resolution");
 				for (size_t i = 0; i < sprites.size(); i++) {
 					Sprite &spr = sprites[i];
 					float layer = LayerForSprite(spr);
@@ -324,14 +324,14 @@ namespace spades {
 			int sW = device.ScreenWidth(), sH = device.ScreenHeight();
 			int lW = (sW + 3) / 4, lH = (sH + 3) / 4;
 			int numLowResSprites = 0;
-			GLColorBuffer buf = renderer->GetFramebufferManager()->CreateBufferHandle(lW, lH, true);
+			GLColorBuffer buf = renderer.GetFramebufferManager()->CreateBufferHandle(lW, lH, true);
 			device.BindFramebuffer(IGLDevice::Framebuffer, buf.GetFramebuffer());
 			device.ClearColor(0.f, 0.f, 0.f, 0.f);
 			device.Clear(IGLDevice::ColorBufferBit);
 			device.BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			device.Viewport(0, 0, lW, lH);
 			{
-				GLProfiler::Context measure(renderer->GetGLProfiler(), "Low Resolution");
+				GLProfiler::Context measure(renderer.GetGLProfiler(), "Low Resolution");
 				for (size_t i = 0; i < sprites.size(); i++) {
 					Sprite &spr = sprites[i];
 					float layer = LayerForSprite(spr);
@@ -402,12 +402,12 @@ namespace spades {
 			// composite downsampled sprite
 			device.BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha);
 			if (numLowResSprites > 0) {
-				GLProfiler::Context measure(renderer->GetGLProfiler(), "Finalize");
+				GLProfiler::Context measure(renderer.GetGLProfiler(), "Finalize");
 				GLQuadRenderer qr(device);
 
 				// do gaussian blur
 				GLProgram *program =
-				  renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
+				  renderer.RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 				static GLProgramAttribute blur_positionAttribute("positionAttribute");
 				static GLProgramUniform blur_textureUniform("mainTexture");
 				static GLProgramUniform blur_unitShift("unitShift");
@@ -422,7 +422,7 @@ namespace spades {
 
 				// x-direction
 				GLColorBuffer buf2 =
-				  renderer->GetFramebufferManager()->CreateBufferHandle(lW, lH, true);
+				  renderer.GetFramebufferManager()->CreateBufferHandle(lW, lH, true);
 				device.BindTexture(IGLDevice::Texture2D, buf.GetTexture());
 				device.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 				blur_unitShift.SetValue(1.f / lW, 0.f);
@@ -431,7 +431,7 @@ namespace spades {
 
 				// x-direction
 				GLColorBuffer buf3 =
-				  renderer->GetFramebufferManager()->CreateBufferHandle(lW, lH, true);
+				  renderer.GetFramebufferManager()->CreateBufferHandle(lW, lH, true);
 				device.BindTexture(IGLDevice::Texture2D, buf2.GetTexture());
 				device.BindFramebuffer(IGLDevice::Framebuffer, buf3.GetFramebuffer());
 				blur_unitShift.SetValue(0.f, 1.f / lH);
@@ -443,7 +443,7 @@ namespace spades {
 				device.Enable(IGLDevice::Blend, true);
 
 				// composite
-				program = renderer->RegisterProgram("Shaders/PostFilters/PassThrough.program");
+				program = renderer.RegisterProgram("Shaders/PostFilters/PassThrough.program");
 				static GLProgramAttribute positionAttribute("positionAttribute");
 				static GLProgramUniform colorUniform("colorUniform");
 				static GLProgramUniform textureUniform("mainTexture");
