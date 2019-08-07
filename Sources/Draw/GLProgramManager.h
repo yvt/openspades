@@ -19,7 +19,7 @@
  */
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <string>
 
@@ -35,8 +35,8 @@ namespace spades {
 			GLSettings &settings;
 			IGLShadowMapRenderer *shadowMapRenderer;
 
-			std::map<std::string, std::unique_ptr<GLProgram>> programs;
-			std::map<std::string, std::unique_ptr<GLShader>> shaders;
+			std::unordered_map<std::string, std::unique_ptr<GLProgram>> programs;
+			std::unordered_map<std::string, std::unique_ptr<GLShader>> shaders;
 
 			std::unique_ptr<GLProgram> CreateProgram(const std::string &name);
 			std::unique_ptr<GLShader> CreateShader(const std::string &name);
