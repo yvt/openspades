@@ -53,5 +53,5 @@ namespace spades {
 
 			void GameMapChanged(int x, int y, int z, client::GameMap *);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

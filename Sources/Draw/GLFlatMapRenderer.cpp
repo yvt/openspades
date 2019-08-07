@@ -19,11 +19,11 @@
  */
 
 #include "GLFlatMapRenderer.h"
+#include "GLImage.h"
+#include "GLRenderer.h"
 #include <Client/GameMap.h>
 #include <Core/Bitmap.h>
 #include <Core/Debug.h>
-#include "GLImage.h"
-#include "GLRenderer.h"
 
 namespace spades {
 	namespace draw {
@@ -40,11 +40,9 @@ namespace spades {
 			image = renderer.CreateImage(*bmp).Cast<GLImage>();
 
 			image->Bind(IGLDevice::Texture2D);
-			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                 IGLDevice::Nearest);
-			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                 IGLDevice::Nearest);
 			IGLDevice &dev = renderer.GetGLDevice();
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
 		}
 
 		GLFlatMapRenderer::~GLFlatMapRenderer() {}
@@ -117,5 +115,5 @@ namespace spades {
 
 			renderer.DrawImage(*image, dest, src);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades
