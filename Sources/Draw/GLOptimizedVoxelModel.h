@@ -46,7 +46,8 @@ namespace spades {
 				uint8_t padding2;
 			};
 
-			GLRenderer *renderer;
+			GLRenderer &renderer;
+			// TODO: `*this` might outlive `GLRenderer`. Needs a safeguard!
 			IGLDevice &device;
 			GLProgram *program;
 			GLProgram *dlightProgram;
@@ -82,9 +83,9 @@ namespace spades {
 			~GLOptimizedVoxelModel();
 
 		public:
-			GLOptimizedVoxelModel(VoxelModel *, GLRenderer *r);
+			GLOptimizedVoxelModel(VoxelModel *, GLRenderer &r);
 
-			static void PreloadShaders(GLRenderer *);
+			static void PreloadShaders(GLRenderer &);
 
 			void Prerender(std::vector<client::ModelRenderParam> params, bool ghostPass) override;
 

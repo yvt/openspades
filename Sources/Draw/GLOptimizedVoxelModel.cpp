@@ -38,27 +38,25 @@
 
 namespace spades {
 	namespace draw {
-		void GLOptimizedVoxelModel::PreloadShaders(spades::draw::GLRenderer *renderer) {
-			renderer->RegisterProgram("Shaders/OptimizedVoxelModel.program");
-			renderer->RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
-			renderer->RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
-			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
+		void GLOptimizedVoxelModel::PreloadShaders(GLRenderer &renderer) {
+			renderer.RegisterProgram("Shaders/OptimizedVoxelModel.program");
+			renderer.RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
+			renderer.RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
+			renderer.RegisterImage("Gfx/AmbientOcclusion.png");
 		}
-		GLOptimizedVoxelModel::GLOptimizedVoxelModel(VoxelModel *m, GLRenderer *r)
-		    : device{r->GetGLDevice()} {
+		GLOptimizedVoxelModel::GLOptimizedVoxelModel(VoxelModel *m, GLRenderer &r)
+		    : renderer{r}, device{r.GetGLDevice()} {
 			SPADES_MARK_FUNCTION();
-
-			renderer = r;
 
 			BuildVertices(m);
 			GenerateTexture();
 
-			program = renderer->RegisterProgram("Shaders/OptimizedVoxelModel.program");
+			program = renderer.RegisterProgram("Shaders/OptimizedVoxelModel.program");
 			dlightProgram =
-			  renderer->RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
+			  renderer.RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
 			shadowMapProgram =
-			  renderer->RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
-			aoImage = renderer->RegisterImage("Gfx/AmbientOcclusion.png").Cast<GLImage>();
+			  renderer.RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
+			aoImage = renderer.RegisterImage("Gfx/AmbientOcclusion.png").Cast<GLImage>();
 
 			buffer = device.GenBuffer();
 			device.BindBuffer(IGLDevice::ArrayBuffer, buffer);
@@ -136,7 +134,7 @@ namespace spades {
 
 			std::vector<uint16_t>().swap(bmpIndex);
 
-			image = renderer->CreateImage(*bmp).Cast<GLImage>();
+			image = renderer.CreateImage(*bmp).Cast<GLImage>();
 		}
 
 		uint8_t GLOptimizedVoxelModel::calcAOID(VoxelModel *m, int x, int y, int z, int ux, int uy,
@@ -541,7 +539,7 @@ namespace spades {
 			shadowMapProgram->Use();
 
 			static GLShadowMapShader shadowMapShader;
-			shadowMapShader(renderer, shadowMapProgram, 0);
+			shadowMapShader(&renderer, shadowMapProgram, 0);
 
 			static GLProgramUniform modelOrigin("modelOrigin");
 			modelOrigin(shadowMapProgram);
@@ -583,7 +581,7 @@ namespace spades {
 				if (param.depthHack)
 					continue;
 
-				if (!renderer->GetShadowMapRenderer()->SphereCull(param.matrix.GetOrigin(), rad)) {
+				if (!renderer.GetShadowMapRenderer()->SphereCull(param.matrix.GetOrigin(), rad)) {
 					continue;
 				}
 
@@ -618,7 +616,7 @@ namespace spades {
 		                                               bool ghostPass) {
 			SPADES_MARK_FUNCTION();
 
-			bool mirror = renderer->IsRenderingMirror();
+			bool mirror = renderer.IsRenderingMirror();
 
 			device.ActiveTexture(0);
 			aoImage->Bind(IGLDevice::Texture2D);
@@ -638,15 +636,15 @@ namespace spades {
 			program->Use();
 
 			static GLShadowShader shadowShader;
-			shadowShader(renderer, program, 2);
+			shadowShader(&renderer, program, 2);
 
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(program);
-			fogDistance.SetValue(renderer->GetFogDistance());
+			fogDistance.SetValue(renderer.GetFogDistance());
 
 			static GLProgramUniform fogColor("fogColor");
 			fogColor(program);
-			Vector3 fogCol = renderer->GetFogColorForSolidPass();
+			Vector3 fogCol = renderer.GetFogColorForSolidPass();
 			fogCol *= fogCol; // linearize
 			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 
@@ -674,7 +672,7 @@ namespace spades {
 
 			static GLProgramUniform viewOriginVector("viewOriginVector");
 			viewOriginVector(program);
-			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			const auto &viewOrigin = renderer.GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
 			// setup attributes
@@ -714,7 +712,7 @@ namespace spades {
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
-				if (!renderer->SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
+				if (!renderer.SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
 					continue;
 				}
 
@@ -725,12 +723,12 @@ namespace spades {
 				Matrix4 modelMatrix = param.matrix;
 				static GLProgramUniform projectionViewModelMatrix("projectionViewModelMatrix");
 				projectionViewModelMatrix(program);
-				projectionViewModelMatrix.SetValue(renderer->GetProjectionViewMatrix() *
+				projectionViewModelMatrix.SetValue(renderer.GetProjectionViewMatrix() *
 				                                   modelMatrix);
 
 				static GLProgramUniform viewModelMatrix("viewModelMatrix");
 				viewModelMatrix(program);
-				viewModelMatrix.SetValue(renderer->GetViewMatrix() * modelMatrix);
+				viewModelMatrix.SetValue(renderer.GetViewMatrix() * modelMatrix);
 
 				static GLProgramUniform modelMatrixU("modelMatrix");
 				modelMatrixU(program);
@@ -775,7 +773,7 @@ namespace spades {
 		                                              std::vector<GLDynamicLight> lights) {
 			SPADES_MARK_FUNCTION();
 
-			bool mirror = renderer->IsRenderingMirror();
+			bool mirror = renderer.IsRenderingMirror();
 
 			device.ActiveTexture(0);
 			aoImage->Bind(IGLDevice::Texture2D);
@@ -798,7 +796,7 @@ namespace spades {
 
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(dlightProgram);
-			fogDistance.SetValue(renderer->GetFogDistance());
+			fogDistance.SetValue(renderer.GetFogDistance());
 
 			static GLProgramUniform modelOrigin("modelOrigin");
 			modelOrigin(dlightProgram);
@@ -814,7 +812,7 @@ namespace spades {
 
 			static GLProgramUniform viewOriginVector("viewOriginVector");
 			viewOriginVector(dlightProgram);
-			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			const auto &viewOrigin = renderer.GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
 			// setup attributes
@@ -853,7 +851,7 @@ namespace spades {
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
-				if (!renderer->SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
+				if (!renderer.SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
 					continue;
 				}
 
@@ -864,12 +862,12 @@ namespace spades {
 				Matrix4 modelMatrix = param.matrix;
 				static GLProgramUniform projectionViewModelMatrix("projectionViewModelMatrix");
 				projectionViewModelMatrix(dlightProgram);
-				projectionViewModelMatrix.SetValue(renderer->GetProjectionViewMatrix() *
+				projectionViewModelMatrix.SetValue(renderer.GetProjectionViewMatrix() *
 				                                   modelMatrix);
 
 				static GLProgramUniform viewModelMatrix("viewModelMatrix");
 				viewModelMatrix(dlightProgram);
-				viewModelMatrix.SetValue(renderer->GetViewMatrix() * modelMatrix);
+				viewModelMatrix.SetValue(renderer.GetViewMatrix() * modelMatrix);
 
 				static GLProgramUniform modelMatrixU("modelMatrix");
 				modelMatrixU(dlightProgram);
@@ -889,7 +887,7 @@ namespace spades {
 					if (!lights[i].SphereCull(param.matrix.GetOrigin(), rad))
 						continue;
 
-					dlightShader(renderer, dlightProgram, lights[i], 2);
+					dlightShader(&renderer, dlightProgram, lights[i], 2);
 
 					device.DrawElements(IGLDevice::Triangles, numIndices, IGLDevice::UnsignedInt,
 					                    (void *)0);
