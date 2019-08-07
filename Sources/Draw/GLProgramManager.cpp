@@ -131,7 +131,6 @@ namespace spades {
 			p->Link();
 			SPLog("Successfully linked GLSL program '%s' in %.3fms", name.c_str(),
 			      sw.GetTime() * 1000.);
-			// p->Validate();
 			return p;
 		}
 
@@ -142,14 +141,15 @@ namespace spades {
 			std::string text = FileManager::ReadAllBytes(name.c_str());
 			GLShader::Type type;
 
-			if (name.find(".fs") != std::string::npos)
+			if (name.find(".fs") != std::string::npos) {
 				type = GLShader::FragmentShader;
-			else if (name.find(".vs") != std::string::npos)
+			} else if (name.find(".vs") != std::string::npos) {
 				type = GLShader::VertexShader;
-			else if (name.find(".gs") != std::string::npos)
+			} else if (name.find(".gs") != std::string::npos) {
 				type = GLShader::GeometryShader;
-			else
+			} else {
 				SPRaise("Failed to determine the type of a shader: %s", name.c_str());
+			}
 
 			auto s = stmp::make_unique<GLShader>(device, type);
 
@@ -180,8 +180,7 @@ namespace spades {
 
 			Stopwatch sw;
 			s->Compile();
-			SPLog("Successfully compiled GLSL program '%s' in %.3fms",
-			      name.c_str(), // should this be "program" or "shader"?
+			SPLog("Successfully compiled GLSL shader '%s' in %.3fms", name.c_str(),
 			      sw.GetTime() * 1000.);
 			return s;
 		}
