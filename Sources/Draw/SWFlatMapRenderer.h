@@ -34,7 +34,7 @@ namespace spades {
 		class SWImage;
 
 		class SWFlatMapRenderer {
-			SWRenderer *r;
+			SWRenderer &r;
 			Handle<SWImage> img;
 			Handle<client::GameMap> map;
 			int w, h;
@@ -46,7 +46,7 @@ namespace spades {
 			uint32_t GeneratePixel(int x, int y);
 
 		public:
-			SWFlatMapRenderer(SWRenderer *r, Handle<client::GameMap>);
+			SWFlatMapRenderer(SWRenderer &r, Handle<client::GameMap>);
 			~SWFlatMapRenderer();
 
 			SWImage &GetImage() {

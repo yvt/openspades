@@ -30,7 +30,7 @@
 
 namespace spades {
 	namespace draw {
-		SWFlatMapRenderer::SWFlatMapRenderer(SWRenderer *r, Handle<client::GameMap> inMap)
+		SWFlatMapRenderer::SWFlatMapRenderer(SWRenderer &r, Handle<client::GameMap> inMap)
 		    : r(r), map(std::move(inMap)), w(map->Width()), h(map->Height()), needsUpdate(true) {
 			SPADES_MARK_FUNCTION();
 
@@ -62,7 +62,7 @@ namespace spades {
 			}
 			auto *outPixels = img->GetRawBitmap();
 
-			auto *mapRenderer = r->mapRenderer.get();
+			auto *mapRenderer = r.mapRenderer.get();
 
 			int idx = 0;
 			for (int y = 0; y < h; y++) {
