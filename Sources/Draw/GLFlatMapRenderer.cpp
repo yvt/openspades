@@ -27,16 +27,16 @@
 
 namespace spades {
 	namespace draw {
-		GLFlatMapRenderer::GLFlatMapRenderer(GLRenderer &r, client::GameMap *m)
+		GLFlatMapRenderer::GLFlatMapRenderer(GLRenderer &r, client::GameMap &m)
 		    : renderer(r), map(m) {
 			SPADES_MARK_FUNCTION();
 
-			chunkRows = m->Height() >> ChunkBits;
-			chunkCols = m->Width() >> ChunkBits;
+			chunkRows = m.Height() >> ChunkBits;
+			chunkCols = m.Width() >> ChunkBits;
 			for (int i = 0; i < chunkRows * chunkCols; i++)
 				chunkInvalid.push_back(false);
 
-			Handle<Bitmap> bmp(GenerateBitmap(0, 0, m->Width(), m->Height()), false);
+			Handle<Bitmap> bmp(GenerateBitmap(0, 0, m.Width(), m.Height()), false);
 			image = renderer.CreateImage(*bmp).Cast<GLImage>();
 
 			image->Bind(IGLDevice::Texture2D);
@@ -73,8 +73,8 @@ namespace spades {
 			return std::move(bmp).Unmanage();
 		}
 
-		void GLFlatMapRenderer::GameMapChanged(int x, int y, int z, client::GameMap *map) {
-			if (map != this->map)
+		void GLFlatMapRenderer::GameMapChanged(int x, int y, int z, client::GameMap &map) {
+			if (this->map.GetPointerOrNull() != &map)
 				return;
 
 			SPAssert(x >= 0);

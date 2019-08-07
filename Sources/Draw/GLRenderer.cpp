@@ -314,7 +314,7 @@ namespace spades {
 				SPLog("Creating TerrainRenderer");
 				mapRenderer = new GLMapRenderer(newMap.get_pointer(), this);
 				SPLog("Creating Minimap Renderer");
-				flatMapRenderer = new GLFlatMapRenderer(this, newMap.get_pointer());
+				flatMapRenderer = new GLFlatMapRenderer(*this, *newMap);
 				SPLog("Creating Water Renderer");
 				waterRenderer = new GLWaterRenderer(this, newMap.get_pointer());
 
@@ -1269,7 +1269,7 @@ namespace spades {
 			if (mapRenderer)
 				mapRenderer->GameMapChanged(x, y, z, map);
 			if (flatMapRenderer)
-				flatMapRenderer->GameMapChanged(x, y, z, map);
+				flatMapRenderer->GameMapChanged(x, y, z, *map);
 			if (mapShadowRenderer)
 				mapShadowRenderer->GameMapChanged(x, y, z, map);
 			if (waterRenderer)

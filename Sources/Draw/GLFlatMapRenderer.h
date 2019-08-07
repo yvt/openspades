@@ -37,7 +37,7 @@ namespace spades {
 			enum { ChunkSize = 16, ChunkBits = 4 };
 
 			GLRenderer &renderer;
-			client::GameMap *map;
+			Handle<client::GameMap> map;
 			std::vector<bool> chunkInvalid;
 
 			Handle<GLImage> image;
@@ -47,11 +47,11 @@ namespace spades {
 			Bitmap *GenerateBitmap(int x, int y, int w, int h);
 
 		public:
-			GLFlatMapRenderer(GLRenderer &renderer, client::GameMap *map);
+			GLFlatMapRenderer(GLRenderer &renderer, client::GameMap &map);
 			~GLFlatMapRenderer();
 			void Draw(const AABB2 &dest, const AABB2 &src);
 
-			void GameMapChanged(int x, int y, int z, client::GameMap *);
+			void GameMapChanged(int x, int y, int z, client::GameMap &);
 		};
 	} // namespace draw
 } // namespace spades
