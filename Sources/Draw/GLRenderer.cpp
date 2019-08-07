@@ -139,7 +139,7 @@ namespace spades {
 			if ((int)settings.r_softParticles >= 2)
 				spriteRenderer = new GLSoftLitSpriteRenderer(*this);
 			else if (settings.r_softParticles)
-				spriteRenderer = new GLSoftSpriteRenderer(this);
+				spriteRenderer = new GLSoftSpriteRenderer(*this);
 			else
 				spriteRenderer = new GLSpriteRenderer(this);
 			longSpriteRenderer = new GLLongSpriteRenderer(*this);
