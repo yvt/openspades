@@ -248,7 +248,7 @@ namespace spades {
 
 		Handle<client::IModel> GLRenderer::RegisterModel(const char *filename) {
 			SPADES_MARK_FUNCTION();
-			return modelManager->RegisterModel(filename);
+			return modelManager->RegisterModel(filename).Cast<client::IModel>();
 		}
 
 		void GLRenderer::ClearCache() {
