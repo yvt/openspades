@@ -157,7 +157,7 @@ namespace spades {
 			else
 				SPRaise("Failed to determine the type of a shader: %s", name.c_str());
 
-			GLShader *s = new GLShader(&device, type);
+			GLShader *s = new GLShader(device, type);
 
 			std::string finalSource;
 
