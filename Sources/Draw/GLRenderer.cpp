@@ -170,7 +170,7 @@ namespace spades {
 			}
 
 			if (settings.r_lens) {
-				GLLensFilter(this);
+				GLLensFilter(*this);
 			}
 
 			if (settings.r_lensFlare) {
@@ -943,7 +943,7 @@ namespace spades {
 
 				if (settings.r_lens) {
 					GLProfiler::Context p(*profiler, "Lens Filter");
-					handle = GLLensFilter(this).Filter(handle);
+					handle = GLLensFilter(*this).Filter(handle);
 				}
 
 				if (settings.r_lensFlare) {

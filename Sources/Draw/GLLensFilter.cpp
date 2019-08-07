@@ -32,13 +32,13 @@
 
 namespace spades {
 	namespace draw {
-		GLLensFilter::GLLensFilter(GLRenderer *renderer) : renderer(renderer) {
-			lens = renderer->RegisterProgram("Shaders/PostFilters/Lens.program");
+		GLLensFilter::GLLensFilter(GLRenderer &renderer) : renderer(renderer) {
+			lens = renderer.RegisterProgram("Shaders/PostFilters/Lens.program");
 		}
 		GLColorBuffer GLLensFilter::Filter(GLColorBuffer input) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			static GLProgramAttribute lensPosition("positionAttribute");
@@ -53,7 +53,7 @@ namespace spades {
 
 			lens->Use();
 
-			client::SceneDefinition def = renderer->GetSceneDef();
+			client::SceneDefinition def = renderer.GetSceneDef();
 			lensFov.SetValue(tanf(def.fovX * .5f), tanf(def.fovY * .5f));
 			lensTexture.SetValue(0);
 
