@@ -42,7 +42,7 @@ namespace spades {
 
 			class UpdateDispatch;
 			enum { ChunkSize = 16, ChunkSizeBits = 4, Envelope = 6 };
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			IGLDevice &device;
 			GLSettings &settings;
 			client::GameMap *map;
@@ -102,7 +102,7 @@ namespace spades {
 				Vector3 base, x, y, z;
 			};
 
-			GLRadiosityRenderer(GLRenderer *renderer, client::GameMap *map);
+			GLRadiosityRenderer(GLRenderer &renderer, client::GameMap *map);
 			~GLRadiosityRenderer();
 
 			Result Evaluate(IntVector3);

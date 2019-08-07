@@ -51,8 +51,8 @@ namespace spades {
 			}
 		};
 
-		GLRadiosityRenderer::GLRadiosityRenderer(GLRenderer *r, client::GameMap *m)
-		    : renderer(r), device(r->GetGLDevice()), settings(r->GetSettings()), map(m) {
+		GLRadiosityRenderer::GLRadiosityRenderer(GLRenderer &r, client::GameMap *m)
+		    : renderer(r), device(r.GetGLDevice()), settings(r.GetSettings()), map(m) {
 			SPADES_MARK_FUNCTION();
 
 			w = map->Width();
@@ -166,7 +166,7 @@ namespace spades {
 
 			Vector3 pos = {ipos.x + .5f, ipos.y + .5f, ipos.z + .5f};
 
-			GLMapShadowRenderer *shadowmap = renderer->mapShadowRenderer;
+			GLMapShadowRenderer *shadowmap = renderer.mapShadowRenderer;
 			uint32_t *bitmap = shadowmap->bitmap.data();
 			int centerX = ipos.x;
 			int centerY = ipos.y - ipos.z;
@@ -355,7 +355,7 @@ namespace spades {
 				if (!chunks[i].transferDone.load())
 					cnt++;
 			}
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Radiosity [>= %d chunk(s)]",
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Radiosity [>= %d chunk(s)]",
 			                             cnt);
 			for (size_t i = 0; i < chunks.size(); i++) {
 				Chunk &c = chunks[i];
@@ -393,7 +393,7 @@ namespace spades {
 			int nearDirtyChunks = 0;
 
 			// first, check only chunks in near range
-			Vector3 eyePos = renderer->GetSceneDef().viewOrigin;
+			Vector3 eyePos = renderer.GetSceneDef().viewOrigin;
 			int eyeX = (int)(eyePos.x) >> ChunkSizeBits;
 			int eyeY = (int)(eyePos.y) >> ChunkSizeBits;
 			int eyeZ = (int)(eyePos.z) >> ChunkSizeBits;
