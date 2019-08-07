@@ -34,7 +34,8 @@ namespace spades {
 			float progress; // 0 = team1 owns
 		};
 
-		TCProgressView::TCProgressView(Client *c) : client(c), renderer(c->GetRenderer()) {
+		TCProgressView::TCProgressView(Client &client)
+		    : client(client), renderer(client.GetRenderer()) {
 			lastTerritoryId = -1;
 		}
 
@@ -61,7 +62,7 @@ namespace spades {
 		}
 
 		void TCProgressView::Draw() {
-			World *w = client->GetWorld();
+			World *w = client.GetWorld();
 			if (!w) {
 				lastTerritoryId = -1;
 				return;
@@ -147,7 +148,7 @@ namespace spades {
 						  AABB2((1.f - state.progress) * 256.f, 0, state.progress * 256.f, 32));
 					}
 
-					IFont &font = client->fontManager->GetGuiFont();
+					IFont &font = client.fontManager->GetGuiFont();
 					std::string str;
 
 					if (nearTerritory->ownerTeamId == 2) {
