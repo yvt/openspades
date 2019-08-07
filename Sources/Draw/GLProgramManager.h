@@ -20,6 +20,7 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include <string>
 
 namespace spades {
@@ -34,11 +35,11 @@ namespace spades {
 			GLSettings &settings;
 			IGLShadowMapRenderer *shadowMapRenderer;
 
-			std::map<std::string, GLProgram *> programs;
-			std::map<std::string, GLShader *> shaders;
+			std::map<std::string, std::unique_ptr<GLProgram>> programs;
+			std::map<std::string, std::unique_ptr<GLShader>> shaders;
 
-			GLProgram *CreateProgram(const std::string &name);
-			GLShader *CreateShader(const std::string &name);
+			std::unique_ptr<GLProgram> CreateProgram(const std::string &name);
+			std::unique_ptr<GLShader> CreateShader(const std::string &name);
 
 		public:
 			GLProgramManager(IGLDevice &, IGLShadowMapRenderer *shadowMapRenderer,

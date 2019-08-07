@@ -37,9 +37,9 @@ namespace spades {
 			device->DeleteProgram(handle);
 		}
 
-		void GLProgram::Attach(spades::draw::GLShader *shader) {
+		void GLProgram::Attach(GLShader &shader) {
 			SPADES_MARK_FUNCTION();
-			device->AttachShader(handle, shader->GetHandle());
+			this->Attach(shader.GetHandle());
 		}
 
 		void GLProgram::Attach(IGLDevice::UInteger shader) {

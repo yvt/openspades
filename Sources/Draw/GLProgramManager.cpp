@@ -31,6 +31,7 @@
 #include <Core/FileManager.h>
 #include <Core/Math.h>
 #include <Core/Stopwatch.h>
+#include <Core/TMPUtils.h>
 
 namespace spades {
 	namespace draw {
@@ -40,97 +41,90 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 		}
 
-		GLProgramManager::~GLProgramManager() {
-			SPADES_MARK_FUNCTION();
-
-			for (std::map<std::string, GLProgram *>::iterator it = programs.begin();
-			     it != programs.end(); it++) {
-				delete it->second;
-			}
-			for (std::map<std::string, GLShader *>::iterator it = shaders.begin();
-			     it != shaders.end(); it++) {
-				delete it->second;
-			}
-		}
+		GLProgramManager::~GLProgramManager() { SPADES_MARK_FUNCTION(); }
 
 		GLProgram *GLProgramManager::RegisterProgram(const std::string &name) {
 			SPADES_MARK_FUNCTION();
 
-			std::map<std::string, GLProgram *>::iterator it;
-			it = programs.find(name);
+			auto it = programs.find(name);
 			if (it == programs.end()) {
-				GLProgram *prog = CreateProgram(name);
-				programs[name] = prog;
-				return prog;
+				auto program = CreateProgram(name);
+				GLProgram *programPtr = program.get();
+
+				programs[name] = std::move(program);
+
+				return programPtr;
 			} else {
-				return it->second;
+				return it->second.get();
 			}
 		}
 
 		GLShader *GLProgramManager::RegisterShader(const std::string &name) {
 			SPADES_MARK_FUNCTION();
 
-			std::map<std::string, GLShader *>::iterator it;
-			it = shaders.find(name);
+			auto it = shaders.find(name);
 			if (it == shaders.end()) {
-				GLShader *prog = CreateShader(name);
-				shaders[name] = prog;
-				return prog;
+				auto shader = CreateShader(name);
+				GLShader *shaderPtr = shader.get();
+
+				shaders[name] = std::move(shader);
+
+				return shaderPtr;
 			} else {
-				return it->second;
+				return it->second.get();
 			}
 		}
 
-		GLProgram *GLProgramManager::CreateProgram(const std::string &name) {
+		std::unique_ptr<GLProgram> GLProgramManager::CreateProgram(const std::string &name) {
 			SPADES_MARK_FUNCTION();
 
 			SPLog("Loading GLSL program '%s'", name.c_str());
 			std::string text = FileManager::ReadAllBytes(name.c_str());
 			std::vector<std::string> lines = SplitIntoLines(text);
 
-			GLProgram *p = new GLProgram(&device, name);
+			auto p = stmp::make_unique<GLProgram>(&device, name);
 
 			for (size_t i = 0; i < lines.size(); i++) {
 				std::string text = TrimSpaces(lines[i]);
 				if (text.empty())
-					break;
+					break; // TODO: Probably wrong, but unconfirmed
 
 				if (text == "*shadow*") {
 					std::vector<GLShader *> shaders =
 					  GLShadowShader::RegisterShader(this, settings, false);
-					for (size_t i = 0; i < shaders.size(); i++)
-						p->Attach(shaders[i]);
-					continue;
+					for (GLShader *shader : shaders) {
+						p->Attach(*shader);
+					}
 				} else if (text == "*shadow-lite*") {
 					std::vector<GLShader *> shaders =
 					  GLShadowShader::RegisterShader(this, settings, false, true);
-					for (size_t i = 0; i < shaders.size(); i++)
-						p->Attach(shaders[i]);
-					continue;
+					for (GLShader *shader : shaders) {
+						p->Attach(*shader);
+					}
 				} else if (text == "*shadow-variance*") {
 					std::vector<GLShader *> shaders =
 					  GLShadowShader::RegisterShader(this, settings, true);
-					for (size_t i = 0; i < shaders.size(); i++)
-						p->Attach(shaders[i]);
-					continue;
+					for (GLShader *shader : shaders) {
+						p->Attach(*shader);
+					}
 				} else if (text == "*dlight*") {
 					std::vector<GLShader *> shaders = GLDynamicLightShader::RegisterShader(this);
-					for (size_t i = 0; i < shaders.size(); i++)
-						p->Attach(shaders[i]);
-					continue;
+					for (GLShader *shader : shaders) {
+						p->Attach(*shader);
+					}
 				} else if (text == "*shadowmap*") {
 					std::vector<GLShader *> shaders = GLShadowMapShader::RegisterShader(this);
-					for (size_t i = 0; i < shaders.size(); i++)
-						p->Attach(shaders[i]);
-					continue;
+					for (GLShader *shader : shaders) {
+						p->Attach(*shader);
+					}
 				} else if (text[0] == '*') {
 					SPRaise("Unknown special shader: %s", text.c_str());
 				} else if (text[0] == '#') {
-					continue;
+					// Comment line
+				} else {
+					auto shader = CreateShader(text);
+					p->Attach(*shader);
 				}
-				GLShader *s = CreateShader(text);
-
-				p->Attach(s);
 			}
 
 			Stopwatch sw;
@@ -141,7 +135,7 @@ namespace spades {
 			return p;
 		}
 
-		GLShader *GLProgramManager::CreateShader(const std::string &name) {
+		std::unique_ptr<GLShader> GLProgramManager::CreateShader(const std::string &name) {
 			SPADES_MARK_FUNCTION();
 
 			SPLog("Loading GLSL shader '%s'", name.c_str());
@@ -157,7 +151,7 @@ namespace spades {
 			else
 				SPRaise("Failed to determine the type of a shader: %s", name.c_str());
 
-			GLShader *s = new GLShader(device, type);
+			auto s = stmp::make_unique<GLShader>(device, type);
 
 			std::string finalSource;
 
