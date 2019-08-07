@@ -27,7 +27,7 @@
 
 namespace spades {
 	namespace draw {
-		GLFlatMapRenderer::GLFlatMapRenderer(GLRenderer *r, client::GameMap *m)
+		GLFlatMapRenderer::GLFlatMapRenderer(GLRenderer &r, client::GameMap *m)
 		    : renderer(r), map(m) {
 			SPADES_MARK_FUNCTION();
 
@@ -37,14 +37,14 @@ namespace spades {
 				chunkInvalid.push_back(false);
 
 			Handle<Bitmap> bmp(GenerateBitmap(0, 0, m->Width(), m->Height()), false);
-			image = renderer->CreateImage(*bmp).Cast<GLImage>();
+			image = renderer.CreateImage(*bmp).Cast<GLImage>();
 
 			image->Bind(IGLDevice::Texture2D);
-			IGLDevice &dev = renderer->GetGLDevice();
 			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 			                 IGLDevice::Nearest);
 			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
 			                 IGLDevice::Nearest);
+			IGLDevice &dev = renderer.GetGLDevice();
 		}
 
 		GLFlatMapRenderer::~GLFlatMapRenderer() {}
@@ -115,7 +115,7 @@ namespace spades {
 				chunkInvalid[i] = false;
 			}
 
-			renderer->DrawImage(*image, dest, src);
+			renderer.DrawImage(*image, dest, src);
 		}
 	}
 }
