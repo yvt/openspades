@@ -29,7 +29,7 @@ namespace spades {
 		class GLImage;
 		class GLSettings;
 		class GLSSAOFilter {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			GLSettings &settings;
 			GLProgram *ssaoProgram;
 			GLProgram *bilateralProgram;
@@ -41,7 +41,7 @@ namespace spades {
 			                                   int height = -1);
 
 		public:
-			GLSSAOFilter(GLRenderer *);
+			GLSSAOFilter(GLRenderer &);
 			GLColorBuffer Filter();
 		};
 	} // namespace draw

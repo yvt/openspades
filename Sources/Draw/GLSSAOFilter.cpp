@@ -36,22 +36,22 @@
 namespace spades {
 	namespace draw {
 
-		GLSSAOFilter::GLSSAOFilter(GLRenderer *renderer)
-		    : renderer(renderer), settings(renderer->GetSettings()) {
-			ssaoProgram = renderer->RegisterProgram("Shaders/PostFilters/SSAO.program");
+		GLSSAOFilter::GLSSAOFilter(GLRenderer &renderer)
+		    : renderer(renderer), settings(renderer.GetSettings()) {
+			ssaoProgram = renderer.RegisterProgram("Shaders/PostFilters/SSAO.program");
 			bilateralProgram =
-			  renderer->RegisterProgram("Shaders/PostFilters/BilateralFilter.program");
+			  renderer.RegisterProgram("Shaders/PostFilters/BilateralFilter.program");
 
-			ditherPattern = renderer->RegisterImage("Gfx/DitherPattern4x4.png").Cast<GLImage>();
+			ditherPattern = renderer.RegisterImage("Gfx/DitherPattern4x4.png").Cast<GLImage>();
 		}
 
 		GLColorBuffer GLSSAOFilter::GenerateRawSSAOImage(int width, int height) {
 			SPADES_MARK_FUNCTION();
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			GLColorBuffer output =
-			  renderer->GetFramebufferManager()->CreateBufferHandle(width, height, 1);
+			  renderer.GetFramebufferManager()->CreateBufferHandle(width, height, 1);
 
 			{
 				GLProgram *program = ssaoProgram;
@@ -75,7 +75,7 @@ namespace spades {
 
 				program->Use();
 
-				const client::SceneDefinition &def = renderer->GetSceneDef();
+				const client::SceneDefinition &def = renderer.GetSceneDef();
 				zNearFar.SetValue(def.zNear, def.zFar);
 
 				fieldOfView.SetValue(std::tan(def.fovX * 0.5f), std::tan(def.fovY * 0.5f));
@@ -95,7 +95,7 @@ namespace spades {
 				dev.ActiveTexture(0);
 				depthTexture.SetValue(0);
 				dev.BindTexture(IGLDevice::Texture2D,
-				                renderer->GetFramebufferManager()->GetDepthTexture());
+				                renderer.GetFramebufferManager()->GetDepthTexture());
 
 				dev.ActiveTexture(1);
 				ditherTexture.SetValue(1);
@@ -121,7 +121,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			// do gaussian blur
 			GLProgram *program = bilateralProgram;
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			int w = width == -1 ? tex.GetWidth() : width;
@@ -155,7 +155,7 @@ namespace spades {
 			depthTexture.SetValue(1);
 			dev.ActiveTexture(1);
 			dev.BindTexture(IGLDevice::Texture2D,
-			                renderer->GetFramebufferManager()->GetDepthTexture());
+			                renderer.GetFramebufferManager()->GetDepthTexture());
 
 			texCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
 
@@ -167,12 +167,12 @@ namespace spades {
 
 			isUpsampling.SetValue(width > tex.GetWidth() ? 1 : 0);
 
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 			zNearFar.SetValue(def.zNear, def.zFar);
 
 			qr.SetCoordAttributeIndex(positionAttribute());
 
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, 1);
+			GLColorBuffer buf2 = renderer.GetFramebufferManager()->CreateBufferHandle(w, h, 1);
 			dev.Viewport(0, 0, w, h);
 			dev.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
@@ -187,7 +187,7 @@ namespace spades {
 		GLColorBuffer GLSSAOFilter::Filter() {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice &dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 
 			int width = dev.ScreenWidth();
 			int height = dev.ScreenHeight();
@@ -195,13 +195,13 @@ namespace spades {
 			dev.Enable(IGLDevice::Blend, false);
 
 			bool useLowQualitySSAO =
-			  renderer->IsRenderingMirror() || renderer->GetSettings().r_ssao >= 2;
+			  renderer.IsRenderingMirror() || renderer.GetSettings().r_ssao >= 2;
 			GLColorBuffer ssao = useLowQualitySSAO
 			                       ? GenerateRawSSAOImage((width + 1) / 2, (height + 1) / 2)
 			                       : GenerateRawSSAOImage(width, height);
 			ssao = ApplyBilateralFilter(ssao, false, width, height);
 			ssao = ApplyBilateralFilter(ssao, true, width, height);
-			if (!renderer->IsRenderingMirror()) {
+			if (!renderer.IsRenderingMirror()) {
 				ssao = ApplyBilateralFilter(ssao, false, width, height);
 				ssao = ApplyBilateralFilter(ssao, true, width, height);
 			}

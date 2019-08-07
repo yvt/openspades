@@ -631,7 +631,7 @@ namespace spades {
 						device->Enable(IGLDevice::DepthTest, false);
 						device->Enable(IGLDevice::CullFace, false);
 
-						ssaoBuffer = GLSSAOFilter(this).Filter();
+						ssaoBuffer = GLSSAOFilter(*this).Filter();
 						ssaoBufferTexture = ssaoBuffer.GetTexture();
 
 						device->BindTexture(IGLDevice::Texture2D, ssaoBufferTexture);
