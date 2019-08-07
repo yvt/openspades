@@ -30,11 +30,7 @@
 
 namespace spades {
 	namespace draw {
-		GLModelManager::GLModelManager(GLRenderer *r) {
-			SPADES_MARK_FUNCTION();
-
-			renderer = r;
-		}
+		GLModelManager::GLModelManager(GLRenderer &r) : renderer{r} { SPADES_MARK_FUNCTION(); }
 		GLModelManager::~GLModelManager() {
 			SPADES_MARK_FUNCTION();
 
@@ -64,7 +60,7 @@ namespace spades {
 
 			auto voxelModel = VoxelModelLoader::Load(name);
 
-			return renderer->CreateModelOptimized(*voxelModel).Cast<GLModel>().Unmanage();
+			return renderer.CreateModelOptimized(*voxelModel).Cast<GLModel>().Unmanage();
 		}
 
 		void GLModelManager::ClearCache() { models.clear(); }

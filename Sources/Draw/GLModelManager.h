@@ -30,12 +30,12 @@ namespace spades {
 		class GLModel;
 		class GLRenderer;
 		class GLModelManager {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			std::map<std::string, GLModel *> models;
 			GLModel *CreateModel(const char *);
 
 		public:
-			GLModelManager(GLRenderer *);
+			GLModelManager(GLRenderer &);
 			~GLModelManager();
 			GLModel *RegisterModel(const char *);
 
