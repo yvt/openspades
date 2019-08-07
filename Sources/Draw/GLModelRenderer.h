@@ -35,7 +35,7 @@ namespace spades {
 		class GLModelRenderer {
 			friend class GLSparseShadowMapRenderer;
 
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			IGLDevice &device;
 
 			struct RenderModel {
@@ -47,7 +47,7 @@ namespace spades {
 			int modelCount;
 
 		public:
-			GLModelRenderer(GLRenderer *);
+			GLModelRenderer(GLRenderer &);
 			~GLModelRenderer();
 
 			void AddModel(GLModel *model, const client::ModelRenderParam &param);

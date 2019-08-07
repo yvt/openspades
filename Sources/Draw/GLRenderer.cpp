@@ -143,7 +143,7 @@ namespace spades {
 			else
 				spriteRenderer = new GLSpriteRenderer(this);
 			longSpriteRenderer = new GLLongSpriteRenderer(*this);
-			modelRenderer = new GLModelRenderer(this);
+			modelRenderer = new GLModelRenderer(*this);
 
 			// preload
 			SPLog("Preloading Assets");
