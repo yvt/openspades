@@ -186,7 +186,7 @@ namespace spades {
 				this->map->AddListener(this);
 				flatMapRenderer = std::make_shared<SWFlatMapRenderer>(*this, map);
 				mapRenderer =
-				  std::make_shared<SWMapRenderer>(this, map.get_pointer(), featureLevel);
+				  std::make_shared<SWMapRenderer>(*this, map.get_pointer(), featureLevel);
 			}
 		}
 

@@ -43,7 +43,7 @@ namespace spades {
 			struct LinePixel;
 
 			int w, h;
-			SWRenderer *renderer;
+			SWRenderer &renderer;
 
 			SWFeatureLevel level;
 			client::SceneDefinition sceneDef;
@@ -75,7 +75,7 @@ namespace spades {
 			void RenderInner(const client::SceneDefinition &, Bitmap *fb, float *depthBuffer);
 
 		public:
-			SWMapRenderer(SWRenderer *r, client::GameMap *, SWFeatureLevel level);
+			SWMapRenderer(SWRenderer &r, client::GameMap *, SWFeatureLevel level);
 			~SWMapRenderer();
 
 			void Render(const client::SceneDefinition &, Bitmap &fb, float *depthBuffer);

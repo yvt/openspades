@@ -104,7 +104,7 @@ namespace spades {
 			int pitchScaleI;
 		};
 
-		SWMapRenderer::SWMapRenderer(SWRenderer *r, client::GameMap *m, SWFeatureLevel level)
+		SWMapRenderer::SWMapRenderer(SWRenderer &r, client::GameMap *m, SWFeatureLevel level)
 		    : w(m->Width()),
 		      h(m->Height()),
 		      renderer(r),
@@ -230,7 +230,7 @@ namespace spades {
 
 			// pitch culling
 			{
-				const auto &frustrum = renderer->frustrum;
+				const auto &frustrum = renderer.frustrum;
 				static const float pi = M_PI;
 				const auto &horz = line.horizonDir;
 				minPitch = -pi * 0.4999f;
