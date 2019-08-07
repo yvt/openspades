@@ -445,28 +445,28 @@ namespace spades {
 
 #pragma mark - Water Renderer
 
-		void GLWaterRenderer::PreloadShaders(spades::draw::GLRenderer *renderer) {
-			auto &settings = renderer->GetSettings();
+		void GLWaterRenderer::PreloadShaders(GLRenderer &renderer) {
+			auto &settings = renderer.GetSettings();
 			if ((int)settings.r_water >= 3)
-				renderer->RegisterProgram("Shaders/Water3.program");
+				renderer.RegisterProgram("Shaders/Water3.program");
 			else if ((int)settings.r_water >= 2)
-				renderer->RegisterProgram("Shaders/Water2.program");
+				renderer.RegisterProgram("Shaders/Water2.program");
 			else
-				renderer->RegisterProgram("Shaders/Water.program");
+				renderer.RegisterProgram("Shaders/Water.program");
 		}
 
-		GLWaterRenderer::GLWaterRenderer(GLRenderer *renderer, client::GameMap *map)
+		GLWaterRenderer::GLWaterRenderer(GLRenderer &renderer, client::GameMap *map)
 		    : renderer(renderer),
-		      device(renderer->GetGLDevice()),
-		      settings(renderer->GetSettings()),
+		      device(renderer.GetGLDevice()),
+		      settings(renderer.GetSettings()),
 		      map(map) {
 			SPADES_MARK_FUNCTION();
 			if ((int)settings.r_water >= 3)
-				program = renderer->RegisterProgram("Shaders/Water3.program");
+				program = renderer.RegisterProgram("Shaders/Water3.program");
 			else if ((int)settings.r_water >= 2)
-				program = renderer->RegisterProgram("Shaders/Water2.program");
+				program = renderer.RegisterProgram("Shaders/Water2.program");
 			else
-				program = renderer->RegisterProgram("Shaders/Water.program");
+				program = renderer.RegisterProgram("Shaders/Water.program");
 			BuildVertices();
 
 			tempDepthTexture = device.GenTexture();
@@ -641,7 +641,7 @@ namespace spades {
 		void GLWaterRenderer::Render() {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Render");
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Render");
 
 			if (occlusionQuery == 0 && settings.r_occlusionQuery)
 				occlusionQuery = device.GenQuery();
@@ -649,26 +649,26 @@ namespace spades {
 			GLColorBuffer colorBuffer;
 
 			{
-				GLProfiler::Context profiler(renderer->GetGLProfiler(), "Preparation");
-				colorBuffer = renderer->GetFramebufferManager()->PrepareForWaterRendering(
+				GLProfiler::Context profiler(renderer.GetGLProfiler(), "Preparation");
+				colorBuffer = renderer.GetFramebufferManager()->PrepareForWaterRendering(
 				  tempFramebuffer, tempDepthTexture);
 			}
 
-			float fogDist = renderer->GetFogDistance();
-			Vector3 fogCol = renderer->GetFogColorForSolidPass();
+			float fogDist = renderer.GetFogDistance();
+			Vector3 fogCol = renderer.GetFogColorForSolidPass();
 			fogCol *= fogCol; // linearize
 
-			Vector3 skyCol = renderer->GetFogColor();
+			Vector3 skyCol = renderer.GetFogColor();
 			skyCol *= skyCol; // linearize
 
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 			float waterLevel = 63.f;
 			float waterRange = 128.f;
 
 			Matrix4 mat = Matrix4::Translate(def.viewOrigin.x, def.viewOrigin.y, waterLevel);
 			mat = mat * Matrix4::Scale(waterRange, waterRange, 1.f);
 
-			GLProfiler::Context profiler2(renderer->GetGLProfiler(), "Draw Plane");
+			GLProfiler::Context profiler2(renderer.GetGLProfiler(), "Draw Plane");
 
 			// do color
 			device.DepthFunc(IGLDevice::Less);
@@ -705,24 +705,24 @@ namespace spades {
 				fovTan(prg);
 				waterPlane(prg);
 
-				projectionViewModelMatrix.SetValue(renderer->GetProjectionViewMatrix() * mat);
-				projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
+				projectionViewModelMatrix.SetValue(renderer.GetProjectionViewMatrix() * mat);
+				projectionViewMatrix.SetValue(renderer.GetProjectionViewMatrix());
 				modelMatrix.SetValue(mat);
-				viewModelMatrix.SetValue(renderer->GetViewMatrix() * mat);
-				viewMatrix.SetValue(renderer->GetViewMatrix());
+				viewModelMatrix.SetValue(renderer.GetViewMatrix() * mat);
+				viewMatrix.SetValue(renderer.GetViewMatrix());
 				fogDistance.SetValue(fogDist);
 				fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 				skyColor.SetValue(skyCol.x, skyCol.y, skyCol.z);
 				zNearFar.SetValue(def.zNear, def.zFar);
 				viewOrigin.SetValue(def.viewOrigin.x, def.viewOrigin.y, def.viewOrigin.z);
-				/*displaceScale.SetValue(1.f / renderer->ScreenWidth() / tanf(def.fovX * .5f),
-				                       1.f / renderer->ScreenHeight() / tanf(def.fovY) * .5f);*/
+				/*displaceScale.SetValue(1.f / renderer.ScreenWidth() / tanf(def.fovX * .5f),
+				                       1.f / renderer.ScreenHeight() / tanf(def.fovY) * .5f);*/
 				displaceScale.SetValue(1.f / tanf(def.fovX * .5f), 1.f / tanf(def.fovY * .5f));
 				fovTan.SetValue(tanf(def.fovX * .5f), -tanf(def.fovY * .5f), -tanf(def.fovX * .5f),
 				                tanf(def.fovY * .5f));
 
 				// make water plane in view coord
-				Matrix4 wmat = renderer->GetViewMatrix() * mat;
+				Matrix4 wmat = renderer.GetViewMatrix() * mat;
 				Vector3 dir = wmat.GetAxis(2);
 				waterPlane.SetValue(dir.x, dir.y, dir.z, -Vector3::Dot(dir, wmat.GetOrigin()));
 
@@ -766,7 +766,7 @@ namespace spades {
 					device.BindTexture(IGLDevice::Texture2D, waveTexture);
 					waveTextureUnif.SetValue(3);
 
-					shadowShader(renderer, prg, 4);
+					shadowShader(&renderer, prg, 4);
 				} else if (waveTanks.size() == 3) {
 					device.ActiveTexture(3);
 					device.BindTexture(IGLDevice::Texture2DArray, waveTexture);
@@ -775,7 +775,7 @@ namespace spades {
 					// mirror
 					device.ActiveTexture(4);
 					device.BindTexture(IGLDevice::Texture2D,
-					                   renderer->GetFramebufferManager()->GetMirrorTexture());
+					                   renderer.GetFramebufferManager()->GetMirrorTexture());
 					if ((float)settings.r_maxAnisotropy > 1.1f) {
 						device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMaxAnisotropy,
 						                    (float)settings.r_maxAnisotropy);
@@ -786,12 +786,12 @@ namespace spades {
 						device.ActiveTexture(5);
 						device.BindTexture(
 						  IGLDevice::Texture2D,
-						  renderer->GetFramebufferManager()->GetMirrorDepthTexture());
+						  renderer.GetFramebufferManager()->GetMirrorDepthTexture());
 						mirrorDepthTexture.SetValue(5);
 
-						shadowShader(renderer, prg, 6);
+						shadowShader(&renderer, prg, 6);
 					} else {
-						shadowShader(renderer, prg, 5);
+						shadowShader(&renderer, prg, 5);
 					}
 				} else {
 					SPAssert(false);
@@ -844,11 +844,11 @@ namespace spades {
 
 		void GLWaterRenderer::Update(float dt) {
 			SPADES_MARK_FUNCTION();
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Update");
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Update");
 
 			// update wavetank simulation
 			{
-				GLProfiler::Context profiler(renderer->GetGLProfiler(),
+				GLProfiler::Context profiler(renderer.GetGLProfiler(),
 				                             "Waiting for Simulation To Done");
 				for (size_t i = 0; i < waveTanks.size(); i++) {
 					waveTanks[i]->Join();
@@ -856,7 +856,7 @@ namespace spades {
 			}
 			{
 				{
-					GLProfiler::Context profiler(renderer->GetGLProfiler(), "Upload");
+					GLProfiler::Context profiler(renderer.GetGLProfiler(), "Upload");
 					if (waveTanks.size() == 1) {
 						device.BindTexture(IGLDevice::Texture2D, waveTexture);
 						device.TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, waveTanks[0]->GetSize(),
@@ -873,7 +873,7 @@ namespace spades {
 					}
 				}
 				{
-					GLProfiler::Context profiler(renderer->GetGLProfiler(), "Generate Mipmap");
+					GLProfiler::Context profiler(renderer.GetGLProfiler(), "Generate Mipmap");
 					if (waveTanks.size() == 1) {
 						device.BindTexture(IGLDevice::Texture2D, waveTexture);
 						device.GenerateMipmap(IGLDevice::Texture2D);
@@ -893,7 +893,7 @@ namespace spades {
 			}
 
 			{
-				GLProfiler::Context profiler(renderer->GetGLProfiler(),
+				GLProfiler::Context profiler(renderer.GetGLProfiler(),
 				                             "Upload Water Color Texture");
 				device.BindTexture(IGLDevice::Texture2D, texture);
 				bool fullUpdate = true;

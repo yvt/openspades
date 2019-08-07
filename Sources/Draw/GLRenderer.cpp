@@ -151,7 +151,7 @@ namespace spades {
 			GLVoxelModel::PreloadShaders(*this);
 			GLOptimizedVoxelModel::PreloadShaders(*this);
 			if (settings.r_water)
-				GLWaterRenderer::PreloadShaders(this);
+				GLWaterRenderer::PreloadShaders(*this);
 
 			if (settings.r_cameraBlur) {
 				cameraBlur = new GLCameraBlurFilter(*this);
@@ -316,7 +316,7 @@ namespace spades {
 				SPLog("Creating Minimap Renderer");
 				flatMapRenderer = new GLFlatMapRenderer(*this, *newMap);
 				SPLog("Creating Water Renderer");
-				waterRenderer = new GLWaterRenderer(this, newMap.get_pointer());
+				waterRenderer = new GLWaterRenderer(*this, newMap.get_pointer());
 
 				if (settings.r_radiosity) {
 					SPLog("Creating Ray-traced Ambient Occlusion Renderer");

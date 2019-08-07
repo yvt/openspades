@@ -39,7 +39,7 @@ namespace spades {
 			class StandardWaveTank;
 			template <int SizeBits> class FFTWaveTank;
 
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			IGLDevice &device;
 			GLSettings &settings;
 			client::GameMap *map;
@@ -73,10 +73,10 @@ namespace spades {
 			void MarkUpdate(int x, int y);
 
 		public:
-			GLWaterRenderer(GLRenderer *, client::GameMap *map);
+			GLWaterRenderer(GLRenderer &, client::GameMap *map);
 			~GLWaterRenderer();
 
-			static void PreloadShaders(GLRenderer *);
+			static void PreloadShaders(GLRenderer &);
 
 			void Render();
 
