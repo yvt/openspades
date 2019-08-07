@@ -788,8 +788,8 @@ namespace spades {
 						front.y = reader.ReadFloat();
 						front.z = reader.ReadFloat();
 
-						savedPlayerPos[idx] = pos;
-						savedPlayerFront[idx] = front;
+						savedPlayerPos.at(idx) = pos;
+						savedPlayerFront.at(idx) = front;
 						if (pos.x != 0.f || pos.y != 0.f || pos.z != 0.f || front.x != 0.f ||
 						    front.y != 0.f || front.z != 0.f) {
 							SPAssert(!std::isnan(pos.x));
