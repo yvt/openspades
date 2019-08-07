@@ -56,7 +56,7 @@ namespace spades {
 				}
 			};
 
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			IGLDevice &device;
 			GLSettings &settings;
 			std::vector<Sprite> sprites;
@@ -83,7 +83,7 @@ namespace spades {
 			void Flush();
 
 		public:
-			GLLongSpriteRenderer(GLRenderer *);
+			GLLongSpriteRenderer(GLRenderer &);
 			~GLLongSpriteRenderer();
 
 			void Add(GLImage *img, Vector3 p1, Vector3 p2, float rad, Vector4 color);

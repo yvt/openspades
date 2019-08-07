@@ -30,10 +30,10 @@
 namespace spades {
 	namespace draw {
 
-		GLLongSpriteRenderer::GLLongSpriteRenderer(GLRenderer *renderer)
+		GLLongSpriteRenderer::GLLongSpriteRenderer(GLRenderer &renderer)
 		    : renderer(renderer),
-		      device(renderer->GetGLDevice()),
-		      settings(renderer->GetSettings()),
+		      device(renderer.GetGLDevice()),
+		      settings(renderer.GetSettings()),
 		      projectionViewMatrix("projectionViewMatrix"),
 		      rightVector("rightVector"),
 		      upVector("upVector"),
@@ -47,7 +47,7 @@ namespace spades {
 		      colorAttribute("colorAttribute") {
 			SPADES_MARK_FUNCTION();
 
-			program = renderer->RegisterProgram("Shaders/LongSprite.program");
+			program = renderer.RegisterProgram("Shaders/LongSprite.program");
 		}
 
 		GLLongSpriteRenderer::~GLLongSpriteRenderer() { SPADES_MARK_FUNCTION(); }
@@ -102,18 +102,18 @@ namespace spades {
 			texCoordAttribute(program);
 			colorAttribute(program);
 
-			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
-			viewMatrix.SetValue(renderer->GetViewMatrix());
+			projectionViewMatrix.SetValue(renderer.GetProjectionViewMatrix());
+			viewMatrix.SetValue(renderer.GetViewMatrix());
 
-			fogDistance.SetValue(renderer->GetFogDistance());
+			fogDistance.SetValue(renderer.GetFogDistance());
 
-			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			const auto &viewOrigin = renderer.GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
-			Vector3 fogCol = renderer->GetFogColor();
+			Vector3 fogCol = renderer.GetFogColor();
 			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 			rightVector.SetValue(def.viewAxis[0].x, def.viewAxis[0].y, def.viewAxis[0].z);
 			upVector.SetValue(def.viewAxis[1].x, def.viewAxis[1].y, def.viewAxis[1].z);
 			texture.SetValue(0);
