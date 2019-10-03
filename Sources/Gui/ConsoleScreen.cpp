@@ -20,6 +20,8 @@
 #include <ScriptBindings/Config.h>
 #include <ScriptBindings/ScriptFunction.h>
 
+#include <Client/Fonts.h>
+
 #include "ConfigConsoleResponder.h"
 #include "ConsoleCommand.h"
 #include "ConsoleHelper.h"
