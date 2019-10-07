@@ -440,7 +440,7 @@ namespace spades {
 							weapInput.secondary = down;
 						}
 						if (world->GetLocalPlayer()->IsToolWeapon() && weapInput.secondary &&
-						    !lastVal && world->GetLocalPlayer()->IsReadyToUseTool() &&
+						    !lastVal && world->GetLocalPlayer()->GetWeapon()->TimeToNextFire() <= 0 &&
 						    !world->GetLocalPlayer()->GetWeapon()->IsReloading() &&
 						    GetSprintState() == 0.0f) {
 							AudioParam params;
