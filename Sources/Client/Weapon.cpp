@@ -97,7 +97,7 @@ namespace spades {
 						world->GetListener()->PlayerFiredWeapon(owner);
 					}
 					nextShotTime += GetDelay();
-				} else if (time >= nextShotTime) {
+				} else {
 					dryFire = true;
 				}
 				shootingPreviously = true;
