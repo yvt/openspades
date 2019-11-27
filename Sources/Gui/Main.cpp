@@ -425,9 +425,8 @@ int main(int argc, char **argv) {
 						SDL_RWops *io = SDL_RWFromFile(
 						  (home + "/.openspades/CONTENT_MOVED_TO_NEW_DIR").c_str(), "wb");
 						if (io != NULL) {
-							const char *text = ("Content of this directory moved to " +
-							                    xdg_data_home + "/openspades")
-							                     .c_str();
+							const char *directory = (xdg_data_home + "/openspades").c_str();
+							const char *text = ("Content of this directory moved to " + directory).c_str();
 							io->write(io, text, strlen(text), 1);
 							io->close(io);
 						}
