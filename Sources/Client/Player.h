@@ -204,7 +204,7 @@ namespace spades {
 			Vector3 GetUp();
 			Vector3 GetEye() { return eye; }
 			Vector3 GetOrigin(); // actually not origin at all!
-			Vector3 GetVelocty() { return velocity; }
+			Vector3 GetVelocity() { return velocity; }
 			int GetMoveSteps() { return moveSteps; }
 
 			World *GetWorld() { return world; }
