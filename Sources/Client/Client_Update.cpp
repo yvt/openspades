@@ -392,7 +392,7 @@ namespace spades {
 			PlayerInput inp = playerInput;
 			WeaponInput winp = weapInput;
 
-			Vector3 velocity = player->GetVelocty();
+			Vector3 velocity = player->GetVelocity();
 			Vector3 horizontalVelocity{velocity.x, velocity.y, 0.0f};
 
 			if (horizontalVelocity.GetLength() < 0.1f) {
@@ -841,7 +841,7 @@ namespace spades {
 				} else if (kt == KillTypeGrenade) {
 					corp->AddImpulse(MakeVector3(0, 0, -4.f - SampleRandomFloat() * 4.f));
 				}
-				corp->AddImpulse(victim->GetVelocty() * 32.f);
+				corp->AddImpulse(victim->GetVelocity() * 32.f);
 				corpses.emplace_back(corp);
 
 				if (corpses.size() > corpseHardLimit) {

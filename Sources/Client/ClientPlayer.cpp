@@ -420,7 +420,7 @@ namespace spades {
 
 			{
 				float scale = dt;
-				Vector3 vel = player->GetVelocty();
+				Vector3 vel = player->GetVelocity();
 				Vector3 front = player->GetFront();
 				Vector3 right = player->GetRight();
 				Vector3 up = player->GetUp();
@@ -698,7 +698,7 @@ namespace spades {
 			{
 				float sp = 1.f - aimDownState;
 				sp *= .3f;
-				sp *= std::min(1.f, p->GetVelocty().GetLength() * 5.f);
+				sp *= std::min(1.f, p->GetVelocity().GetLength() * 5.f);
 				viewWeaponOffset.x +=
 				  sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.013f * sp;
 				float vl = cosf(p->GetWalkAnimationProgress() * M_PI * 2.f);
@@ -898,11 +898,11 @@ namespace spades {
 				Matrix4 leg2 = Matrix4::Translate(0.25f, 0.2f, -0.1f);
 
 				float ang = sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
-				float walkVel = Vector3::Dot(p->GetVelocty(), p->GetFront2D()) * 4.f;
+				float walkVel = Vector3::Dot(p->GetVelocity(), p->GetFront2D()) * 4.f;
 				leg1 = leg1 * Matrix4::Rotate(MakeVector3(1, 0, 0), ang * walkVel);
 				leg2 = leg2 * Matrix4::Rotate(MakeVector3(1, 0, 0), -ang * walkVel);
 
-				walkVel = Vector3::Dot(p->GetVelocty(), p->GetRight()) * 3.f;
+				walkVel = Vector3::Dot(p->GetVelocity(), p->GetRight()) * 3.f;
 				leg1 = leg1 * Matrix4::Rotate(MakeVector3(0, 1, 0), ang * walkVel);
 				leg2 = leg2 * Matrix4::Rotate(MakeVector3(0, 1, 0), -ang * walkVel);
 
@@ -932,11 +932,11 @@ namespace spades {
 				Matrix4 leg2 = Matrix4::Translate(0.25f, 0.f, -0.1f);
 
 				float ang = sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
-				float walkVel = Vector3::Dot(p->GetVelocty(), p->GetFront2D()) * 4.f;
+				float walkVel = Vector3::Dot(p->GetVelocity(), p->GetFront2D()) * 4.f;
 				leg1 = leg1 * Matrix4::Rotate(MakeVector3(1, 0, 0), ang * walkVel);
 				leg2 = leg2 * Matrix4::Rotate(MakeVector3(1, 0, 0), -ang * walkVel);
 
-				walkVel = Vector3::Dot(p->GetVelocty(), p->GetRight()) * 3.f;
+				walkVel = Vector3::Dot(p->GetVelocity(), p->GetRight()) * 3.f;
 				leg1 = leg1 * Matrix4::Rotate(MakeVector3(0, 1, 0), ang * walkVel);
 				leg2 = leg2 * Matrix4::Rotate(MakeVector3(0, 1, 0), -ang * walkVel);
 
