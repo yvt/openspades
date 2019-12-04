@@ -1,0 +1,34 @@
+From e28fbb02aa0c334e2382f5996417ee846faba7c5 Mon Sep 17 00:00:00 2001
+From: Amar Singh <nly@disroot.org>
+Date: Wed, 4 Dec 2019 21:29:43 +0530
+Subject: [PATCH] guix-patch: do not download nonfree content.
+
+---
+ Resources/downloadpak.sh | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/Resources/downloadpak.sh b/Resources/downloadpak.sh
+index 4fa55d7b..3d87b71c 100755
+--- a/Resources/downloadpak.sh
++++ b/Resources/downloadpak.sh
+@@ -28,11 +28,11 @@ if [ -f "$PAK_NAME" ]; then
+ 	exit 0
+ fi
+ 
+-wget "$PAK_URL" -O "$PAK_NAME"
+-unzip -u  -o "$PAK_NAME" -d "$OUTPUT_DIR"
++# wget "$PAK_URL" -O "$PAK_NAME"
++# unzip -u  -o "$PAK_NAME" -d "$OUTPUT_DIR"
+ 
+ # relocate paks to the proper location
+-mv "$OUTPUT_DIR/Nonfree/pak000-Nonfree.pak" "$OUTPUT_DIR/"
+-mv "$OUTPUT_DIR/OfficialMods/font-unifont.pak" "$OUTPUT_DIR/"
+-mv "$OUTPUT_DIR/Nonfree/LICENSE.md" "$OUTPUT_DIR/LICENSE.pak000.md"
+-mv "$OUTPUT_DIR/OfficialMods/LICENSE" "$OUTPUT_DIR/LICENSE.unifont.txt"
++# mv "$OUTPUT_DIR/Nonfree/pak000-Nonfree.pak" "$OUTPUT_DIR/"
++# mv "$OUTPUT_DIR/OfficialMods/font-unifont.pak" "$OUTPUT_DIR/"
++# mv "$OUTPUT_DIR/Nonfree/LICENSE.md" "$OUTPUT_DIR/LICENSE.pak000.md"
++# mv "$OUTPUT_DIR/OfficialMods/LICENSE" "$OUTPUT_DIR/LICENSE.unifont.txt"
+-- 
+2.24.0
+
