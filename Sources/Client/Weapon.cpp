@@ -218,9 +218,9 @@ namespace spades {
 				}
 			}
 			Vector3 GetRecoil() override {
-				return MakeVector3(0.025f, 0.05f, 0.f); // measured
+				return MakeVector3(0.0001f, 0.05f, 0.f);
 			}
-			float GetSpread() override { return 0.012f; } // measured (standing, crouched)
+			float GetSpread() override { return 0.006f; }
 			int GetPelletSize() override { return 1; }
 		};
 
@@ -228,7 +228,7 @@ namespace spades {
 		public:
 			SMGWeapon3(World *w, Player *p) : Weapon(w, p) {}
 			std::string GetName() override { return "SMG"; }
-			float GetDelay() override { return 0.11f; }
+			float GetDelay() override { return 0.1f; }
 			int GetClipSize() override { return 30; }
 			int GetMaxStock() override { return 120; }
 			float GetReloadTime() override { return 2.5f; }
@@ -240,14 +240,14 @@ namespace spades {
 					case HitTypeHead: return 75;
 					case HitTypeArms: return 18;
 					case HitTypeLegs: return 18;
-					case HitTypeBlock: return 35;
+					case HitTypeBlock: return 34;
 					default: SPAssert(false); return 0;
 				}
 			}
 			Vector3 GetRecoil() override {
-				return MakeVector3(0.01f, 0.0125f, 0.f); // measured
+				return MakeVector3(0.00005f, 0.0125f, 0.f);
 			}
-			float GetSpread() override { return 0.025f; } // measured (standing, crouched)
+			float GetSpread() override { return 0.012f; }
 			int GetPelletSize() override { return 1; }
 		};
 
@@ -268,14 +268,14 @@ namespace spades {
 					case HitTypeArms: return 16;
 					case HitTypeLegs: return 16;
 					case HitTypeBlock:
-						// Actually, you cast a hit per pallet. This value is a guess, by the way.
+						// Actually, you cast a hit per pallet.
 						// --GM
-						return 34;
+						return 22;
 					default: SPAssert(false); return 0;
 				}
 			}
 			Vector3 GetRecoil() override {
-				return MakeVector3(0.05f, 0.1f, 0.f); // measured
+				return MakeVector3(0.0002f, 0.1f, 0.f);
 			}
 			float GetSpread() override { return 0.024f; }
 			int GetPelletSize() override { return 8; }
@@ -307,8 +307,7 @@ namespace spades {
 				}
 			}
 			Vector3 GetRecoil() override {
-				// FIXME: needs to measured
-				return MakeVector3(0.0001f, 0.075f, 0.f);
+				return MakeVector3(0.0002f, 0.075f, 0.f);
 			}
 			float GetSpread() override { return 0.004f; }
 			int GetPelletSize() override { return 1; }
@@ -330,12 +329,11 @@ namespace spades {
 					case HitTypeHead: return 75;
 					case HitTypeArms: return 18;
 					case HitTypeLegs: return 18;
-					case HitTypeBlock: return 34;
+					case HitTypeBlock: return 26;
 					default: SPAssert(false); return 0;
 				}
 			}
 			Vector3 GetRecoil() override {
-				// FIXME: needs to measured
 				return MakeVector3(0.00005f, 0.0125f, 0.f);
 			}
 			float GetSpread() override { return 0.012f; }
@@ -363,7 +361,6 @@ namespace spades {
 				}
 			}
 			Vector3 GetRecoil() override {
-				// FIXME: needs to measured
 				return MakeVector3(0.0002f, 0.075f, 0.f);
 			}
 			float GetSpread() override { return 0.036f; }
