@@ -69,4 +69,4 @@ Externals
 
 The following URL provides a pre-compiled zip file containing all required files.
 
-https://openspadesmedia.yvt.jp/development-packages/OpenSpades-Externals-Darwin-4.zip
+https://openspadesmedia.yvt.jp/development-packages/OpenSpades-Externals-Darwin-5.zip
