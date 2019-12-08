@@ -30,7 +30,7 @@ Externals
 |   |   \---(All libopus/libopusfile/libogg headers)
 |   |
 |   \---SDL2/
-|       \---(All SD2L headers)
+|       \---(All SDL2 headers)
 |
 \---lib/
         (All libs here)
