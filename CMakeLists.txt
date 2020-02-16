@@ -29,6 +29,14 @@ if(USE_VCPKG)
     find_package(SDL2 CONFIG REQUIRED)
     find_package(freetype CONFIG REQUIRED)
 
+ 	if(NOT APPLE)
+ 		find_package(GLEW REQUIRED)
+ 		set(GLEW_LIBRARY GLEW::GLEW)
+
+ 		find_package(CURL REQUIRED)
+ 		set(CURL_LIBRARY CURL::libcurl)
+ 	endif()	
+
     set(SDL2_LIBRARY SDL2::SDL2main SDL2::SDL2-static)
     set(SDL2_IMAGE_LIBRARY SDL2::SDL2_image)
     set(FREETYPE_LIBRARIES freetype)
