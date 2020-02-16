@@ -101,6 +101,9 @@ target_link_libraries(OpenSpades ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${OPENGL_
 if(NOT APPLE)
 	target_link_libraries(OpenSpades ${GLEW_LIBRARY})
 endif()
+if(USE_VCPKG)
+	target_link_libraries(OpenSpades Ogg::ogg Opus::opus)
+endif()
 
 #todo: MACOSX_BUNDLE_ICON_FILE ?
 
