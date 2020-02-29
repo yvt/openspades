@@ -29,7 +29,7 @@ if [ -f "$PAK_NAME" ]; then
 fi
 
 wget "$PAK_URL" -O "$PAK_NAME"
-unzip -u  -o "$PAK_NAME" -d "$OUTPUT_DIR"
+unzip -o "$PAK_NAME" -d "$OUTPUT_DIR"
 
 # relocate paks to the proper location
 mv "$OUTPUT_DIR/Nonfree/pak000-Nonfree.pak" "$OUTPUT_DIR/"
