@@ -639,12 +639,11 @@ namespace spades {
 					// might hit water surface.
 				}
 
-				if (mapResult.hit && GetHorizontalLength(mapResult.hitPos - muzzle) < 128.f &&
-				    (hitPlayer == NULL ||
-				     GetHorizontalLength(mapResult.hitPos - muzzle) < hitPlayerDistance)) {
+				float hLength = GetHorizontalLength(mapResult.hitPos - muzzle);
+				if (mapResult.hit && hLength < 128.f &&
+				    (hitPlayer == NULL || hLength < hitPlayerDistance)) {
 					IntVector3 outBlockCoord = mapResult.hitBlock;
 					// TODO: set correct ray distance
-					// FIXME: why ray casting twice?
 
 					finalHitPos = mapResult.hitPos;
 
