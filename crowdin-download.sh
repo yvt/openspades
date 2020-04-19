@@ -34,3 +34,8 @@ remap ru_RU ru
 remap uk_UA uk
 remap vi_VN vi
 remap hu_HU hu
+remap lt_LT lt
+remap nb_NO nb
+remap nn_NO nn
+remap tr_TR tr
+remap jbo_EN jbo
