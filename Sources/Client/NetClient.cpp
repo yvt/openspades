@@ -1399,8 +1399,10 @@ namespace spades {
 					ctf->GetTeam(p->GetTeamId()).score++;
 
 					bool winning = reader.ReadByte() != 0;
-					if (winning)
+					if (winning) {
+						ctf->ResetTeamScoreAndIntelHoldingStatus();
 						client->TeamWon(p->GetTeamId());
+					}
 				} break;
 				case PacketTypeIntelPickup: {
 					Player *p = GetPlayer(reader.ReadByte());
