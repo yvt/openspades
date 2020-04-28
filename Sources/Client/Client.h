@@ -286,10 +286,15 @@ namespace spades {
 
 			bool inGameLimbo;
 
+			bool hasNextSpawnConfig;
+			int nextTeam;
+			WeaponType nextWeapon;
+
 			float GetLocalFireVibration();
 			void CaptureColor();
 			bool IsLimboViewActive();
 			void SpawnPressed();
+			void NextSpawnPressed();
 
 			Player *HotTrackedPlayer(hitTag_t *hitFlag);
 

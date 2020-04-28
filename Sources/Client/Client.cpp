@@ -519,6 +519,18 @@ namespace spades {
 			}
 		}
 
+		void Client::NextSpawnPressed() {
+			WeaponType weap = limbo->GetSelectedWeapon();
+			int team = limbo->GetSelectedTeam();
+			inGameLimbo = false;
+			if (team == 2)
+				team = 255;
+
+			this->hasNextSpawnConfig = true;
+			this->nextTeam = team;
+			this->nextWeapon = weap;
+		}
+
 		void Client::ShowAlert(const std::string &contents, AlertType type) {
 			float timeout;
 			switch (type) {
