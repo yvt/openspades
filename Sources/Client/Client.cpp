@@ -534,17 +534,21 @@ namespace spades {
 
 			nextSpawnConfig = SpawnConfig {selectedTeam, selectedWeapon};
 
-			std::string teamName = world ? world->GetTeam(selectedTeam).name
-			                             : "Team " + std::to_string(selectedTeam + 1);
-			std::string prefixedWeaponName;
-			switch (selectedWeapon) {
-				case RIFLE_WEAPON: prefixedWeaponName = "a Rifle"; break;
-				case SMG_WEAPON: prefixedWeaponName = "an SMG"; break;
-				case SHOTGUN_WEAPON: prefixedWeaponName = "a Shotgun"; break;
-			};
+			if (selectedTeam < 2) {
+				std::string teamName = world ? world->GetTeam(selectedTeam).name
+				                             : "Team " + std::to_string(selectedTeam + 1);
+				std::string prefixedWeaponName;
+				switch (selectedWeapon) {
+					case RIFLE_WEAPON: prefixedWeaponName = "a Rifle"; break;
+					case SMG_WEAPON: prefixedWeaponName = "an SMG"; break;
+					case SHOTGUN_WEAPON: prefixedWeaponName = "a Shotgun"; break;
+				};
 
-			ShowAlert(_Tr("Client", "You will join {0} with {1} on your next spawn.", teamName, prefixedWeaponName),
-			          AlertType::Notice);
+				ShowAlert(_Tr("Client", "You will join Team {0} with {1} on your next spawn.", teamName, prefixedWeaponName),
+				          AlertType::Notice);
+			} else
+				ShowAlert(_Tr("Client", "You will join the spectators on your next spawn."),
+				          AlertType::Notice);
 		}
 
 		void Client::ShowAlert(const std::string &contents, AlertType type) {
