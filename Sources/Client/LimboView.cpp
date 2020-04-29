@@ -164,7 +164,7 @@ namespace spades {
 						}
 						break;
 					case MenuNextSpawn:
-						if (client->GetWorld() && !(client->world->GetLocalPlayer() && !client->world->GetLocalPlayer()->IsSpectator()))
+						if (client->GetWorld() && !(client->world->GetLocalPlayer() && client->world->GetLocalPlayer()->IsAlive() && !client->world->GetLocalPlayer()->IsSpectator()))
 							item.visible = false;
 						break;
 					default:;
@@ -242,7 +242,7 @@ namespace spades {
 				}
 
 				renderer->SetColorAlphaPremultiplied(fillColor);
-				if (item.type == MenuSpawn) {
+				if (item.type == MenuSpawn || item.type == MenuNextSpawn) {
 					renderer->DrawImage(menuItemBigImage, item.rect);
 
 					std::string msg = item.text;
