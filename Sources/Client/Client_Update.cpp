@@ -517,14 +517,14 @@ namespace spades {
 
 			if (player->IsAlive())
 				lastAliveTime = time;
-			else if (hasNextSpawnConfig) {
+			else if (nextSpawnConfig) {
 				if (player->GetTeamId() != (*nextSpawnConfig).team) {
 					net->SendTeamChange((*nextSpawnConfig).team);
 				}
 				if ((*nextSpawnConfig).team < 2 && player->GetWeapon()->GetWeaponType() != (*nextSpawnConfig).weapon) {
 					net->SendWeaponChange((*nextSpawnConfig).weapon);
 				}
-				hasNextSpawnConfig = false;
+				nextSpawnConfig.reset();
 			}
 
 			if (player->GetHealth() < lastHealth) {

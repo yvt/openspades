@@ -501,7 +501,7 @@ namespace spades {
 				team = 255;
 
 			// Reset next loadout since you manually spawn
-			this->hasNextSpawnConfig = false;
+			this->nextSpawnConfig.reset();
 
 			if (!world->GetLocalPlayer() || world->GetLocalPlayer()->GetTeamId() >= 2) {
 				// join
@@ -532,7 +532,6 @@ namespace spades {
 			if (selectedTeam == 2)
 				selectedTeam = 255;
 
-			this->hasNextSpawnConfig = true;
 			nextSpawnConfig = SpawnConfig {selectedTeam, selectedWeapon};
 
 			std::string teamName = world ? world->GetTeam(selectedTeam).name

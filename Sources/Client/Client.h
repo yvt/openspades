@@ -287,10 +287,8 @@ namespace spades {
 			bool inGameLimbo;
 
 			/*
-				hasNextSpawnConfig: Boolean indicating if the Client will spawn with a new configuration (loadout) on next spawn. Gets cleared on spawn.
-				nextSpawnConfig: Indicates values for next spawn. These are only read when hasNextSpawnConfig is true
+				nextSpawnConfig: Indicates values for next spawn. If set it means next spawn should abide by the config
 			*/
-			bool hasNextSpawnConfig = false;
 			struct SpawnConfig {
 				int team;
 				WeaponType weapon;
