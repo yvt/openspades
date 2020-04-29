@@ -164,7 +164,7 @@ namespace spades {
 						}
 						break;
 					case MenuNextSpawn:
-						if (client && client->GetWorld() && client->world->GetLocalPlayer() && client->world->GetLocalPlayer()->IsAlive() && client->world->GetLocalPlayer()->GetTeamId() >= 2)
+						if (client->GetWorld() && !(client->world->GetLocalPlayer() && !client->world->GetLocalPlayer()->IsSpectator()))
 							item.visible = false;
 						break;
 					default:;
