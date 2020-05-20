@@ -10,6 +10,7 @@
 
 // TODO: support other platform
 #if __APPLE__
+#define GL_SILENCE_DEPRECATION 1
 #include <OpenGL/gl3.h>
 #include <OpenGL/gl3ext.h>
 #else
