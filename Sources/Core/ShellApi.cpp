@@ -89,7 +89,7 @@ namespace spades {
 			return false;
 		}
 	}
-#elif __unix || __unix__
+#elif (__unix || __unix__) || defined(__HAIKU__)
 	bool ShowDirectoryInShell(const std::string &directoryPath) {
 		// FIXME: escape single quotes
 		if (directoryPath.find("'") != std::string::npos) {
