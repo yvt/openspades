@@ -22,7 +22,7 @@
 #include <memory>
 #include <regex>
 
-#if !defined(__APPLE__) && (__unix || __unix__)
+#if (!defined(__APPLE__) && (__unix || __unix__)) || defined(__HAIKU__)
 #include <sys/stat.h>
 #include <sys/types.h>
 #endif

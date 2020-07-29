@@ -659,6 +659,8 @@ namespace spades {
 			return "FreeBSD";
 #elif defined(__OpenBSD__)
 			return "OpenBSD";
+#elif defined(__HAIKU__)
+			return "Haiku";
 #else
 			return std::string{};
 #endif
