@@ -22,10 +22,10 @@
 
 #include <vector>
 
-#include <Client/IModel.h>
-#include <Client/IRenderer.h>
 #include "GLDynamicLight.h"
 #include "IGLDevice.h"
+#include <Client/IModel.h>
+#include <Client/IRenderer.h>
 
 namespace spades {
 	namespace draw {
@@ -46,6 +46,10 @@ namespace spades {
 			std::vector<RenderModel> models;
 			int modelCount;
 
+			// ADDED: player visibility occlusion query object
+			unsigned int playerVisibilityQueries[32];
+			// END OF ADDED
+
 		public:
 			GLModelRenderer(GLRenderer *);
 			~GLModelRenderer();
@@ -57,6 +61,18 @@ namespace spades {
 			void Prerender(bool ghostPass);
 			void RenderSunlightPass(bool ghostPass);
 			void RenderDynamicLightPass(std::vector<GLDynamicLight> lights);
+
+			// ADDED: Additional declarations
+			void RenderOutlinesPass();
+			void DetermineVisiblePlayers(bool visiblePlayers[]);
+			void RenderSunlightPassNoPlayers();
+			void RenderDynamicLightPassNoPlayers(std::vector<GLDynamicLight> lights);
+			void RenderSunlightPassVisiblePlayers(bool visiblePlayers[]);
+			void RenderDynamicLightPassVisiblePlayers(bool visiblePlayers[],
+			                                          std::vector<GLDynamicLight> lights);
+			void RenderOccludedPlayers(bool visiblePlayers[]);
+			void RenderPlayerVisibilityOutlines(bool visiblePlayers[]);
+			// END OF ADDED
 
 			void Clear();
 		};

@@ -74,6 +74,10 @@ DEFINE_SPADES_SETTING(cg_playerNames, "2");
 DEFINE_SPADES_SETTING(cg_playerNameX, "0");
 DEFINE_SPADES_SETTING(cg_playerNameY, "0");
 
+// ADDED: Settings
+SPADES_SETTING(dd_specNames);
+// END OF ADDED
+
 namespace spades {
 	namespace client {
 
@@ -622,12 +626,37 @@ namespace spades {
 
 		void Client::DrawSpectateHUD() {
 			SPADES_MARK_FUNCTION();
+			
+			IFont &font = *fontManager->GetGuiFont();
+
+			// ADDED: Draw player names
+			if (dd_specNames && AreCheatsEnabled()) {
+				for (int i = 0; i < world->GetNumPlayerSlots(); ++i) {
+					Player *pIter = world->GetPlayer(i);
+
+					if (!pIter || !pIter->IsAlive() || pIter->GetTeamId() >= 2) {
+						continue;
+					}
+
+					Vector3 posxyz = Project(pIter->GetEye());
+					if (posxyz.z <= 0) {
+						continue;
+					}
+					Vector2 pos = {posxyz.x, posxyz.y};
+
+					Vector2 size = font.Measure(pIter->GetName());
+					pos.x -= size.x * .5f;
+					pos.y -= size.y;
+					font.DrawShadow(pIter->GetName(), pos, 0.85, MakeVector4(1, 1, 1, 1),
+					                 MakeVector4(0, 0, 0, 0.5));
+				}
+			}
+			// END OF ADDED
 
 			if (cg_hideHud) {
 				return;
 			}
 
-			IFont &font = *fontManager->GetGuiFont();
 			float scrWidth = renderer->ScreenWidth();
 
 			float textX = scrWidth - 8.0f;
@@ -642,8 +671,11 @@ namespace spades {
 			};
 
 			if (HasTargetPlayer(GetCameraMode())) {
-				addLine(_Tr("Client", "Following {0}",
-				            world->GetPlayerPersistent(GetCameraTargetPlayerId()).name));
+				// MODIFIED: include player number
+				addLine(_Tr("Client", "Following {0} (#{1})",
+				            world->GetPlayerPersistent(GetCameraTargetPlayerId()).name,
+				            GetCameraTargetPlayerId()));
+				// END OF MODIFIED
 			}
 
 			textY += 10.0f;

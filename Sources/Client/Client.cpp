@@ -63,8 +63,27 @@ DEFINE_SPADES_SETTING(cg_skipDeadPlayersWhenDead, "1");
 
 SPADES_SETTING(cg_playerName);
 
+// ADDED: Define default values for added mod settings
+DEFINE_SPADES_SETTING(sv_cheats, "0");
+DEFINE_SPADES_SETTING(dd_specNames, "1");
+DEFINE_SPADES_SETTING(dd_specWallhack, "1");
+
+DEFINE_SPADES_SETTING(cg_textures, "1");
+DEFINE_SPADES_SETTING(cg_multiTextures, "0");
+DEFINE_SPADES_SETTING(cg_outlines, "1");
+DEFINE_SPADES_SETTING(cg_textureStrength, "25");
+DEFINE_SPADES_SETTING(cg_multiTextureStrength, "25");
+DEFINE_SPADES_SETTING(cg_outlineStrength, "2");
+
+DEFINE_SPADES_SETTING(s_volume, "100");
+// END OF ADDED
+
 namespace spades {
 	namespace client {
+
+		// ADDED: Define static variables for Client class
+		Client *Client::globalInstance = nullptr;
+		// END OF ADDED
 
 		Client::Client(Handle<IRenderer> r, Handle<IAudioDevice> audioDev,
 		               const ServerAddress &host, Handle<FontManager> fontManager)
@@ -107,6 +126,8 @@ namespace spades {
 		      nextMapShotIndex(0) {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
+
+			Client::globalInstance = this; // ADDED: set global instance
 
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));
@@ -198,6 +219,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			NetLog("Disconnecting");
+
+			Client::globalInstance = nullptr; // ADDED: remove global instance
 
 			DrawDisconnectScreen();
 
@@ -756,5 +779,36 @@ namespace spades {
 				followCameraState.enabled = true;
 			}
 		}
+
+		// ADDED: helper functions
+#pragma mark - Helper functions
+		
+		bool Client::AreCheatsEnabled() {
+			if (!globalInstance)
+				return false;
+			if (!globalInstance->world)
+				return false;
+			Player *p = globalInstance->world->GetLocalPlayer();
+			if (!p)
+				return false;
+
+			return sv_cheats ||
+			       (p->GetTeamId() >= 2 && // on spectator team
+			       p->IsAlive());          // alive
+		}
+
+		bool Client::WallhackActive() { return AreCheatsEnabled() && dd_specWallhack; }
+
+		spades::Vector3 Client::TeamCol(unsigned int teamId) {
+			if (!globalInstance) {
+				return Vector3(0, 0, 0);
+			}
+			if (teamId >= 2) {
+				return Vector3(1, 1, 1);
+			}
+			spades::IntVector3 col = globalInstance->world->GetTeam(teamId).color;
+			return Vector3(col.x / 255.0f, col.y / 255.0f, col.z / 255.0f);
+		}
+		// END OF ADDED
 	} // namespace client
 } // namespace spades

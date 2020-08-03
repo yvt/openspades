@@ -31,6 +31,11 @@
 #include <Client/SceneDefinition.h>
 #include <Core/Math.h>
 
+// ADDED: include client, world stuff
+#include <Client/Client.h>
+#include <Client/World.h>
+// END OF ADDED
+
 namespace spades {
 	namespace draw {
 
@@ -134,7 +139,7 @@ namespace spades {
 
 			void RenderDebugLines();
 
-			void RenderObjects();
+			void RenderObjects(bool reflections); // MODIFIED: Add reflections parameter
 			void RenderGhosts();
 
 			void EnsureInitialized();
@@ -227,6 +232,10 @@ namespace spades {
 
 			bool BoxFrustrumCull(const AABB3 &);
 			bool SphereFrustrumCull(const Vector3 &center, float radius);
+
+			// ADDED: Far pv-matrix
+			Matrix4 farProjectionViewMatrix;
+			// END OF ADDED
 		};
 	}
 }

@@ -46,6 +46,17 @@ namespace spades {
 			GLProgram *backfaceProgram;
 			GLImage *aoImage;
 
+			// ADDED: Variables for textures & outlines
+			GLProgram *basicNoTexturesProgram; // The basic block shader with no textures
+			GLProgram *basicTexturesProgram;   // The basic block shader with textures
+			GLProgram *basicOutlinesProgram;   // The basic block shader for outlines
+			GLImage *mapBlockImage;            // GLImage handle for the map block texture
+			GLImage *multiMapBlockImage;       // GLImage handle for the multi map block texture
+			bool previous_cg_textures; // the cg_textures value of most recent prerender call
+			bool
+			  previous_cg_multiTextures; // the cg_multiTextures value of most recent prerender call
+			// END OF ADDED
+
 			IGLDevice::UInteger squareVertexBuffer;
 
 			struct ChunkRenderInfo {
@@ -75,6 +86,10 @@ namespace spades {
 			void DrawColumnDLight(int cx, int cy, int cz, Vector3 eye,
 			                      const std::vector<GLDynamicLight> &lights);
 
+			// ADDED: DrawColumnOutlines declaration
+			void DrawColumnOutlines(int cx, int cy, int cz, Vector3 eye);
+			// END OF ADDED
+
 			void RenderBackface();
 
 		public:
@@ -87,10 +102,18 @@ namespace spades {
 
 			client::GameMap *GetMap() { return gameMap; }
 
+			// ADDED: Update texture mode
+			void UpdateTextureMode();
+			// END OF ADDED
+
 			void Realize();
 			void Prerender();
 			void RenderSunlightPass();
 			void RenderDynamicLightPass(std::vector<GLDynamicLight> lights);
+
+			// ADDED: RenderOutlinesPass declaration
+			void RenderOutlinesPass(Vector3 outlineColor);
+			// END OF ADDED
 		};
 	}
 }

@@ -40,6 +40,12 @@ DEFINE_SPADES_SETTING(s_eax, "1");
 DEFINE_SPADES_SETTING(s_alPreciseErrorCheck, "1");
 DEFINE_SPADES_SETTING(s_gain, "1");
 
+// ADDED: s_gameVolume field (Corresponds to <Setup->Volume>) and related variables
+SPADES_SETTING(s_volume);
+extern int s_volume_previous = 100;  // keep track of the "previous" volume so the dB isn't recomputed when unnecessary
+extern float dBPrevious = 1.0f;
+// END OF ADDED
+
 // lm: seems to be missing for me..
 #ifndef ALC_ALL_DEVICES_SPECIFIER
 #define ALC_ALL_DEVICES_SPECIFIER 0x1013
@@ -211,6 +217,21 @@ namespace spades {
 					ALCheckErrorPrecise();
 					al::qalSourcef(handle, AL_REFERENCE_DISTANCE, param.referenceDistance);
 
+					// ADDED: Update master volume control
+					if (s_volume_previous != (int)s_volume) {
+						// update the previous volume
+						s_volume_previous = (int)s_volume;
+						// compute the new dB level, where 27.71373379 ~ 10^(1/log(2)), and update
+						// the master gain to it
+						if ((int)s_volume == 0) {
+							dBPrevious = 0;
+						} else {
+							dBPrevious = powf(27.71373379f, log(((float)s_volume) / 100.0f));
+						}
+						al::qalListenerf(AL_GAIN, dBPrevious);
+					}
+					// END OF ADDED
+					
 					ALCheckError();
 					this->param = param;
 				}
