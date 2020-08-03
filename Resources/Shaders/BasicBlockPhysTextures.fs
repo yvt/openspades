@@ -23,7 +23,7 @@
 varying vec4 color;
 varying vec2 ambientOcclusionCoord;
 varying vec3 fogDensity;
-varying vec2 blockTexCoord;																		// ADDED
+varying vec2 blockTexCoord;
 
 varying vec3 viewSpaceCoord;
 varying vec3 viewSpaceNormal;
@@ -35,8 +35,8 @@ uniform sampler2D ambientOcclusionTexture;
 uniform sampler2D detailTexture;
 uniform vec3 fogColor;
 
-uniform sampler2D blockTexture;																	// ADDED
-uniform float blockTextureStrength;																// ADDED
+uniform sampler2D blockTexture;
+uniform float blockTextureStrength;
 
 vec3 EvaluateSunLight();
 vec3 EvaluateAmbientLight(float detailAmbientOcclusion);
@@ -50,7 +50,7 @@ void main() {
 	// color is linear
 	gl_FragColor = vec4(color.xyz, 1.);
 
-	gl_FragColor.rgb = mix(gl_FragColor.rgb, texture2D(blockTexture, blockTexCoord).rgb, blockTextureStrength);	// ADDED
+	gl_FragColor.rgb = mix(gl_FragColor.rgb, texture2D(blockTexture, blockTexCoord).rgb, blockTextureStrength);
 	
 	vec3 shading = vec3(OrenNayar(.8, color.w,
 							 -dot(viewSpaceNormal, normalize(viewSpaceCoord))));

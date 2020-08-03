@@ -879,12 +879,11 @@ namespace spades {
 			IntVector3 col = p->GetColor();
 			param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 
-			// ADDED: Set the param to include player ID, player team id
+			// Set the param to include player ID and team ID
 			param.playerID = GetPlayer()->GetId();
-			if (client::Client::WallhackActive()) {
+			if (Client::WallhackActive()) {
 				param.teamId = GetPlayer()->GetTeamId();
 			}
-			// END OF ADDED
 
 			float yaw = atan2(front.y, front.x) + M_PI * .5f;
 			float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));

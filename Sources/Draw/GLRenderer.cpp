@@ -67,15 +67,11 @@
 #include <Core/Settings.h>
 #include <Core/Stopwatch.h>
 
-// ADDED: Additional headers
 #include "../Client/Client.h"
 #include "../Imports/OpenGL.h"
-// END OF ADDED
 
-// ADDED: Outlines setting, player observe setting
 SPADES_SETTING(cg_outlines);
 SPADES_SETTING(cg_outlineStrength);
-// END OF ADDED
 
 namespace spades {
 	namespace draw {
@@ -361,7 +357,7 @@ namespace spades {
 
 		Vector3 GLRenderer::GetFogColorForSolidPass() {
 			if (settings.r_fogShadow && mapShadowRenderer &&
-			    !client::Client::WallhackActive()) { // MODIFIED: no volumetric fog in wallhack
+			    !client::Client::WallhackActive()) {
 				return MakeVector3(0, 0, 0);
 			} else {
 				return GetFogColor();
@@ -478,11 +474,9 @@ namespace spades {
 			sceneUsedInThisFrame = true;
 			duringSceneRendering = true;
 
-			// ADDED: Update texture mode
 			if (mapRenderer) {
 				mapRenderer->UpdateTextureMode();
 			}
-			// END OF ADDED
 
 			profiler->BeginFrame();
 
@@ -501,14 +495,13 @@ namespace spades {
 
 			projectionViewMatrix = projectionMatrix * viewMatrix;
 
-			// ADDED: Compute the far pv-matrix
 			{
-				float near = sceneDef.zNear;
-				float far = 3000; // this seems to cover the whole map
+				const auto near = sceneDef.zNear;
+				const auto far = 3000.0f; // This seems to cover the whole map.
 
-				float t = near * tanf(sceneDef.fovY * .5f);
-				float r = near * tanf(sceneDef.fovX * .5f);
-				float a = r * 2.f, b = t * 2.f, c = far - near;
+				const auto t = near * tanf(sceneDef.fovY * .5f);
+				const auto r = near * tanf(sceneDef.fovX * .5f);
+				const auto a = r * 2.f, b = t * 2.f, c = far - near;
 				Matrix4 mat;
 				mat.m[0] = near * 2.f / a;
 				mat.m[1] = 0.f;
@@ -529,7 +522,6 @@ namespace spades {
 
 				farProjectionViewMatrix = mat * viewMatrix;
 			}
-			// END OF ADDED
 
 			if (settings.r_srgb)
 				device->Enable(IGLDevice::FramebufferSRGB, true);
@@ -727,7 +719,6 @@ namespace spades {
 				modelRenderer->RenderDynamicLightPass(lights);
 			}
 
-			// ADDED: Do the outlines pass
 			if (cg_outlines && !reflections) {
 				GLProfiler::Context p(*profiler, "Outlines Pass");
 
@@ -753,7 +744,6 @@ namespace spades {
 				glPolygonOffset(0, 0);
 				glDisable(GL_POLYGON_OFFSET_LINE);
 			}
-			// END OF ADDED
 
 			{
 				GLProfiler::Context p(*profiler, "Debug Line");
@@ -810,7 +800,7 @@ namespace spades {
 			{
 				GLProfiler::Context p(*profiler, "Upload Dynamic Data");
 				if (mapShadowRenderer &&
-				    !client::Client::WallhackActive()) { // MODIFIED: not with wallhack
+				    !client::Client::WallhackActive()) {
 					mapShadowRenderer->Update();
 				}
 				if (ambientShadowRenderer) {
@@ -833,7 +823,7 @@ namespace spades {
 				device->Enable(IGLDevice::DepthTest, true);
 				device->DepthFunc(IGLDevice::Less);
 				if (shadowMapRenderer &&
-				    !client::Client::WallhackActive()) // MODIFIED: not with wallhack
+				    !client::Client::WallhackActive())
 					shadowMapRenderer->Render();
 			}
 
@@ -848,7 +838,7 @@ namespace spades {
 			device->DepthRange(0.f, 1.f);
 
 			if ((int)settings.r_water >= 2 &&
-			    !client::Client::WallhackActive()) { // MODIFIED: not with wallhack
+			    !client::Client::WallhackActive()) {
 				// for Water 2 (r_water >= 2), we need to render
 				// reflection
 				try {
@@ -886,7 +876,7 @@ namespace spades {
 
 					// render scene
 					GLProfiler::Context p(*profiler, "Mirrored Objects");
-					RenderObjects(true); // MODIFIED: Reflection param
+					RenderObjects(true);
 
 					// restore matrices
 					std::swap(view, viewMatrix);
@@ -930,20 +920,12 @@ namespace spades {
 
 			device->FrontFace(IGLDevice::CW);
 
-			// ADDED: May be needed to determine and keep track of visible players
 			bool visiblePlayers[32];
-			// END OF ADDED
 
-			// MODIFIED: Do the normal pass if not in wallhack
 			if (!client::Client::WallhackActive()) {
 				GLProfiler::Context p(*profiler, "Non-mirrored Objects");
-				RenderObjects(false); // also, not a reflection pass
-			}
-			// otherwise, render the map, determine visible players, render all non player objects,
-			// debug lines
-			else {
-
-				// do ssao stuff
+				RenderObjects(false);
+			} else {
 				device->Enable(IGLDevice::DepthTest, true);
 				device->Enable(IGLDevice::Texture2D, true);
 				device->Enable(IGLDevice::Blend, false);
@@ -1039,11 +1021,10 @@ namespace spades {
 				device->DepthFunc(IGLDevice::Less);
 				RenderDebugLines();
 			}
-			// END OF MODIFIED
 
 			device->Enable(IGLDevice::CullFace, false);
 			if (settings.r_water && waterRenderer &&
-			    !client::Client::WallhackActive()) { // MODIFIED: not with wallhack
+			    !client::Client::WallhackActive()) {
 				GLProfiler::Context p(*profiler, "Water");
 				waterRenderer->Update(dt);
 				waterRenderer->Render();
@@ -1071,16 +1052,12 @@ namespace spades {
 				longSpriteRenderer->Render();
 			}
 
-			// ADDED: Render all players now, above everything else (if wallhack)
 			if (client::Client::WallhackActive()) {
-				// now clear the depth buffer, enable depth mask & culling
 				device->DepthMask(true);
 				device->Clear(IGLDevice::DepthBufferBit);
 				device->Enable(IGLDevice::CullFace, true);
 
-				// render the non occluded players normally
 				{
-					// do the sunlight pass
 					device->Enable(IGLDevice::DepthTest, true);
 					device->DepthFunc(IGLDevice::Less);
 					device->Enable(IGLDevice::Texture2D, true);
@@ -1088,7 +1065,6 @@ namespace spades {
 
 					modelRenderer->RenderSunlightPassVisiblePlayers(visiblePlayers);
 
-					// the dynamic light pass
 					device->Enable(IGLDevice::Blend, true);
 					device->Enable(IGLDevice::DepthTest, true);
 					device->DepthFunc(IGLDevice::Equal);
@@ -1097,14 +1073,12 @@ namespace spades {
 					modelRenderer->RenderDynamicLightPassVisiblePlayers(visiblePlayers, lights);
 				}
 
-				// render the occluded players
 				device->Enable(IGLDevice::DepthTest, true);
 				device->DepthFunc(IGLDevice::Less);
 				device->Enable(IGLDevice::Texture2D, true);
 				device->Enable(IGLDevice::Blend, false);
 				modelRenderer->RenderOccludedPlayers(visiblePlayers);
 
-				// render the outlines
 				{
 					GLProfiler::Context p(*profiler, "Outlines Pass");
 
@@ -1128,13 +1102,11 @@ namespace spades {
 					glDisable(GL_POLYGON_OFFSET_LINE);
 				}
 
-				// disable settings
 				device->ColorMask(true, true, true, true);
 				device->Enable(IGLDevice::Blend, true);
 				device->DepthMask(false);
 				device->Enable(IGLDevice::CullFace, false);
 			}
-			// END OF ADDED
 
 			device->Enable(IGLDevice::DepthTest, false);
 
@@ -1148,7 +1120,7 @@ namespace spades {
 					GLProfiler::Context p(*profiler, "Preparation");
 					handle = fbManager->StartPostProcessing();
 				}
-				if (!client::Client::WallhackActive() && // MODIFIED: not with wallhack
+				if (!client::Client::WallhackActive() &&
 				    settings.r_fogShadow && mapShadowRenderer &&
 				    fogColor.GetPoweredLength() > .000001f) {
 					GLProfiler::Context p(*profiler, "Volumetric Fog");
@@ -1157,8 +1129,6 @@ namespace spades {
 				}
 				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
 
-				// MODIFIED: Don't do this in wallhack, (nothing changed, just added the if
-				// statement below)
 				if (!client::Client::WallhackActive()) {
 					if (settings.r_softParticles) { // softparticle is a part of postprocess
 						GLProfiler::Context p(*profiler, "Soft Particle");

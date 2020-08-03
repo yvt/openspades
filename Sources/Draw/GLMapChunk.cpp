@@ -33,15 +33,10 @@
 #include <Core/Debug.h>
 #include <Core/Settings.h>
 
-// ADDED: Additional headers
-#include "../Client/PaletteView.h"
 #include "GLImage.h"
-// END OF ADDED
 
-// ADDED: cg_textures spade setting
 SPADES_SETTING(cg_textures);
 SPADES_SETTING(cg_multiTextures);
-// END OF ADDED
 
 namespace spades {
 	namespace draw {
@@ -125,10 +120,12 @@ namespace spades {
 		 * @param x Chunk local X coordinate
 		 * @param y Chunk local Y coordinate
 		 * @param z Chunk local Z coordinate
+		 * @param tNumX Multi-texture X coordinate
+		 * @param tNumY Multi-texture Y coordinate
 		 */
 		void GLMapChunk::EmitVertex(int x, int y, int z, int aoX, int aoY, int aoZ, int ux, int uy,
 		                            int vx, int vy, uint32_t color,
-		                            int tNumX, int tNumY, // ADDED: multi-texture texture coords
+		                            int tNumX, int tNumY,
 		                            int nx, int ny, int nz) {
 			SPADES_MARK_FUNCTION_DEBUG();
 
@@ -176,7 +173,7 @@ namespace spades {
 			inst.aoX = aoTexX;
 			inst.aoY = aoTexY;
 
-			// MODIFIED: Add the vertices differently depending on texture mode
+			// Add the vertices differently depending on texture mode
 			if (!renderer->previous_cg_textures) {
 				// don't bother with ux/uy
 				vertices.push_back(inst);
@@ -202,7 +199,6 @@ namespace spades {
 				inst.aoY = aoTexY + 15;
 				vertices.push_back(inst);
 			} else if (renderer->previous_cg_multiTextures) {
-
 				float ulen = 1.0f / 8.0f;
 
 				// add the vertices
@@ -269,7 +265,6 @@ namespace spades {
 				inst.uy = 1;
 				vertices.push_back(inst);
 			}
-			// END OF MODIFIED
 
 			indices.push_back(idx);
 			indices.push_back(idx + 1);
@@ -332,30 +327,29 @@ namespace spades {
 						uint32_t col = map->GetColor(xx, yy, zz);
 						// col = 0xffffffff;
 
-						// ADDED: do several things
-						// determine which faces are being added up here instead of below
-						bool nsolid1 = !IsSolid(xx, yy, zz + 1);
-						bool nsolid2 = !IsSolid(xx, yy, zz - 1);
-						bool nsolid3 = !IsSolid(xx - 1, yy, zz);
-						bool nsolid4 = !IsSolid(xx + 1, yy, zz);
-						bool nsolid5 = !IsSolid(xx, yy - 1, zz);
-						bool nsolid6 = !IsSolid(xx, yy + 1, zz);
+						// Determine which faces are being added up here instead of below
+						const auto nsolid1 = !IsSolid(xx, yy, zz + 1);
+						const auto nsolid2 = !IsSolid(xx, yy, zz - 1);
+						const auto nsolid3 = !IsSolid(xx - 1, yy, zz);
+						const auto nsolid4 = !IsSolid(xx + 1, yy, zz);
+						const auto nsolid5 = !IsSolid(xx, yy - 1, zz);
+						const auto nsolid6 = !IsSolid(xx, yy + 1, zz);
 
-						// compute the texture coords for this block (perhaps)
+						// Compute the texture coords for this block (perhaps)
 						int tNumX, tNumY;
-						// only do the computation if at least one face added
+						// Only do the computation if at least one face added
 						if (nsolid1 || nsolid2 || nsolid3 || nsolid4 || nsolid5 || nsolid6) {
-							// only do the computation if in multi-texture mode
+							// Only do the computation if in multi-texture mode
 							if (renderer->previous_cg_multiTextures &&
 							    renderer->previous_cg_textures) {
-								int r = (int)((uint8_t)(col));
-								int g = (int)((uint8_t)(col >> 8));
-								int b = (int)((uint8_t)(col >> 16));
-								// determine the r,g,b coords of the color
-								int rCoord = r / 64;
-								int gCoord = g / 64;
-								int bCoord = b / 64;
-								// translate that into texture coords on the block
+								const auto r = static_cast<int>(static_cast<uint8_t>(col));
+								const auto g = static_cast<int>(static_cast<uint8_t>(col >> 8));
+								const auto b = static_cast<int>(static_cast<uint8_t>(col >> 16));
+								// Determine the r,g,b coords of the color
+								const auto rCoord = r / 64;
+								const auto gCoord = g / 64;
+								const auto bCoord = b / 64;
+								// Translate that into texture coords on the block
 								tNumX = rCoord;
 								tNumY = gCoord;
 								if (bCoord == 1 || bCoord == 3) {
@@ -368,7 +362,6 @@ namespace spades {
 						} else {
 							continue; // no faces being added
 						}
-						// END OF ADDED
 
 						// damaged block?
 						int health = col >> 24;
@@ -378,7 +371,6 @@ namespace spades {
 							col >>= 1;
 						}
 
-						// MODIFIED: include multi-texture coords, use pre-calculated nsolid variables
 						if (nsolid1) {
 							EmitVertex(x + 1, y, z + 1, xx, yy, zz + 1, -1, 0, 0, 1, col, tNumX, tNumY, 0, 0, 1);
 						}
@@ -397,7 +389,6 @@ namespace spades {
 						if (nsolid6) {
 							EmitVertex(x + 1, y + 1, z, xx, yy + 1, zz, 0, 0, -1, 0, col, tNumX, tNumY, 0, 1, 0);
 						}
-						// END OF MODIFIED
 					}
 				}
 			}
@@ -533,12 +524,10 @@ namespace spades {
 			static GLProgramAttribute normalAttribute("normalAttribute");
 			static GLProgramAttribute fixedPositionAttribute("fixedPositionAttribute");
 
-			// ADDED: Setup the texture coordinate attribute
 			static GLProgramAttribute blockTexCoordAttribute("blockTexCoordAttribute");
 			if (renderer->previous_cg_textures) {
 				blockTexCoordAttribute(basicProgram);
 			}
-			// END OF ADDED
 
 			positionAttribute(basicProgram);
 			ambientOcclusionCoordAttribute(basicProgram);
@@ -562,12 +551,10 @@ namespace spades {
 			device->VertexAttribPointer(fixedPositionAttribute(), 3, IGLDevice::Byte, false,
 			                            sizeof(Vertex), (void *)asOFFSET(Vertex, sx));
 
-			// ADDED: Bind the texture coordinates
 			if (renderer->previous_cg_textures) {
 				device->VertexAttribPointer(blockTexCoordAttribute(), 2, IGLDevice::FloatType,
 				                            false, sizeof(Vertex), (void *)asOFFSET(Vertex, ux));
 			}
-			// END OF ADDED
 
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device->BindBuffer(IGLDevice::ElementArrayBuffer, iBuffer);
@@ -655,10 +642,9 @@ namespace spades {
 			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
 		}
 
-		// ADDED: RenderOutlinesPass definition
 		void GLMapChunk::RenderOutlinesPass() {
 			SPADES_MARK_FUNCTION();
-			Vector3 eye = renderer->renderer->GetSceneDef().viewOrigin;
+			const auto eye = renderer->renderer->GetSceneDef().viewOrigin;
 
 			if (!realized)
 				return;
@@ -670,10 +656,10 @@ namespace spades {
 				// empty chunk
 				return;
 			}
-			AABB3 bx = aabb;
+			auto bx = aabb;
 
-			Vector3 diff = eye - centerPos;
-			float sx = 0.f, sy = 0.f;
+			const auto diff = eye - centerPos;
+			auto sx = 0.f, sy = 0.f;
 			// FIXME: variable map size?
 			if (diff.x > 256.f)
 				sx += 512.f;
@@ -692,28 +678,27 @@ namespace spades {
 			if (!renderer->renderer->BoxFrustrumCull(bx))
 				return;
 
-			GLProgram *outlinesProgram = renderer->basicOutlinesProgram;
+			auto *const outlinesProgram = renderer->basicOutlinesProgram;
 
 			static GLProgramUniform chunkPosition("chunkPosition");
 
 			chunkPosition(outlinesProgram);
-			chunkPosition.SetValue((float)(chunkX * Size) + sx, (float)(chunkY * Size) + sy,
-			                       (float)(chunkZ * Size));
+			chunkPosition.SetValue(static_cast<float>(chunkX * Size) + sx, static_cast<float>(chunkY * Size) + sy,
+			                       static_cast<float>(chunkZ * Size));
 
 			static GLProgramAttribute positionAttribute("positionAttribute");
 			positionAttribute(outlinesProgram);
 
 			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
 			device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::UnsignedByte, false,
-			                            sizeof(Vertex), (void *)asOFFSET(Vertex, x));
+			                            sizeof(Vertex), reinterpret_cast<void *>(asOFFSET(Vertex, x)));
 
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device->BindBuffer(IGLDevice::ElementArrayBuffer, iBuffer);
 			device->DrawElements(IGLDevice::Triangles, indices.size(), IGLDevice::UnsignedShort,
-			                     NULL);
+			                     nullptr);
 			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
 		}
-		// END OF ADDED
 
 		float GLMapChunk::DistanceFromEye(const Vector3 &eye) {
 			Vector3 diff = eye - centerPos;

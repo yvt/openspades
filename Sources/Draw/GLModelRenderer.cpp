@@ -29,14 +29,13 @@ namespace spades {
 		GLModelRenderer::GLModelRenderer(GLRenderer *r) : renderer(r), device(r->GetGLDevice()) {
 			SPADES_MARK_FUNCTION();
 
-			// ADDED: Create the queries, default them with empty result
-			for (int i = 0; i < 32; ++i) {
-				playerVisibilityQueries[i] = device->GenQuery();
-				device->BeginQuery(IGLDevice::SamplesPassed, playerVisibilityQueries[i]);
+			// Create the queries, default them with empty result.
+			for (auto &playerVisibilityQuerie : playerVisibilityQueries) {
+				playerVisibilityQuerie = device->GenQuery();
+				device->BeginQuery(IGLDevice::SamplesPassed, playerVisibilityQuerie);
 				device->EndQuery(IGLDevice::SamplesPassed);
 			}
 			device->Flush();
-			// END OF ADDED
 			
 			modelCount = 0;
 		}
@@ -44,11 +43,10 @@ namespace spades {
 		GLModelRenderer::~GLModelRenderer() {
 			SPADES_MARK_FUNCTION();
 
-			// ADDED: Free occlusion query objects
-			for (int i = 0; i < 32; ++i) {
-				device->DeleteQuery(playerVisibilityQueries[i]);
+			// Free occlusion query objects.
+			for (auto playerVisibilityQuerie : playerVisibilityQueries) {
+				device->DeleteQuery(playerVisibilityQuerie);
 			}
-			// END OF ADDED
 
 			Clear();
 		}
@@ -114,8 +112,7 @@ namespace spades {
 				RenderModel &m = models[i];
 				GLModel *model = m.model;
 
-				model->RenderSunlightPass(m.params, ghostPass,
-				                          false); // MODIFIED: don't do far render
+				model->RenderSunlightPass(m.params, ghostPass, false);
 			}
 		}
 
@@ -132,13 +129,11 @@ namespace spades {
 					RenderModel &m = models[i];
 					GLModel *model = m.model;
 
-					model->RenderDynamicLightPass(m.params, lights,
-					                              false); // MODIFIED: don't do far render
+					model->RenderDynamicLightPass(m.params, lights, false);
 				}
 			}
 		}
 
-		// ADDED: Additional definitions
 		void GLModelRenderer::RenderOutlinesPass() {
 			SPADES_MARK_FUNCTION();
 
@@ -146,9 +141,8 @@ namespace spades {
 			                             "Model [%d model(s), %d unique model type(s)]", modelCount,
 			                             (int)models.size());
 
-			for (size_t i = 0; i < models.size(); i++) {
-				RenderModel &m = models[i];
-				GLModel *model = m.model;
+			for (auto &m : models) {
+				auto *model = m.model;
 
 				model->RenderOutlinesPass(m.params, Vector3(0.0f, 0.0f, 0.0f), true, false);
 			}
@@ -158,8 +152,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			// determine player visbility via the last frame
 			for (int i = 0; i < 32; ++i) {
-				int iSamplesPassed = device->GetQueryObjectUInteger(playerVisibilityQueries[i],
-				                                                    IGLDevice::QueryResult);
+				const int iSamplesPassed = device->GetQueryObjectUInteger(playerVisibilityQueries[i],
+				                                                          IGLDevice::QueryResult);
 				visiblePlayers[i] = (iSamplesPassed > 0);
 			}
 			// set up the occlusion query
@@ -168,9 +162,9 @@ namespace spades {
 			// iterate every player and get the new occlusion query going
 			for (int i = 0; i < 32; ++i) {
 				device->BeginQuery(IGLDevice::SamplesPassed, playerVisibilityQueries[i]);
-				for (RenderModel &m : models) {
+				for (auto &m : models) {
 					std::vector<client::ModelRenderParam> playerParams;
-					for (client::ModelRenderParam p : m.params) {
+					for (auto p : m.params) {
 						if (p.playerID == i) {
 							playerParams.push_back(p);
 						}
@@ -191,9 +185,9 @@ namespace spades {
 			                             "Model [%d model(s), %d unique model type(s)]", modelCount,
 			                             (int)models.size());
 
-			for (RenderModel &m : models) {
+			for (auto &m : models) {
 				std::vector<client::ModelRenderParam> params;
-				for (client::ModelRenderParam p : m.params) {
+				for (auto p : m.params) {
 					if (p.playerID == -1) {
 						params.push_back(p);
 					}
@@ -209,9 +203,9 @@ namespace spades {
 			                             "Model [%d model(s), %d unique model type(s)]", modelCount,
 			                             (int)models.size());
 
-			for (RenderModel &m : models) {
+			for (auto &m : models) {
 				std::vector<client::ModelRenderParam> params;
-				for (client::ModelRenderParam p : m.params) {
+				for (auto p : m.params) {
 					if (p.playerID == -1) {
 						params.push_back(p);
 					}
@@ -226,9 +220,9 @@ namespace spades {
 			                             "Model [%d model(s), %d unique model type(s)]", modelCount,
 			                             (int)models.size());
 
-			for (RenderModel &m : models) {
+			for (auto &m : models) {
 				std::vector<client::ModelRenderParam> params;
-				for (client::ModelRenderParam p : m.params) {
+				for (auto p : m.params) {
 					if (p.playerID != -1 && visiblePlayers[p.playerID]) {
 						params.push_back(p);
 					}
@@ -245,9 +239,9 @@ namespace spades {
 			                             "Model [%d model(s), %d unique model type(s)]", modelCount,
 			                             (int)models.size());
 
-			for (RenderModel &m : models) {
+			for (auto &m : models) {
 				std::vector<client::ModelRenderParam> params;
-				for (client::ModelRenderParam p : m.params) {
+				for (auto p : m.params) {
 					if (p.playerID != -1 && visiblePlayers[p.playerID]) {
 						params.push_back(p);
 					}
@@ -262,9 +256,9 @@ namespace spades {
 			                             "Model [%d model(s), %d unique model type(s)]", modelCount,
 			                             (int)models.size());
 
-			for (RenderModel &m : models) {
+			for (auto &m : models) {
 				std::vector<client::ModelRenderParam> params;
-				for (client::ModelRenderParam p : m.params) {
+				for (auto p : m.params) {
 					if (p.playerID != -1 && !visiblePlayers[p.playerID]) {
 						params.push_back(p);
 					}
@@ -280,12 +274,12 @@ namespace spades {
 			                             "Model [%d model(s), %d unique model type(s)]", modelCount,
 			                             (int)models.size());
 
-			for (RenderModel &m : models) {
+			for (auto &m : models) {
 				std::vector<client::ModelRenderParam> visibleTeam0;
 				std::vector<client::ModelRenderParam> nonVisibleTeam0;
 				std::vector<client::ModelRenderParam> visibleTeam1;
 				std::vector<client::ModelRenderParam> nonVisibleTeam1;
-				for (client::ModelRenderParam p : m.params) {
+				for (auto p : m.params) {
 					if (p.playerID != -1) {
 						if (visiblePlayers[p.playerID]) {
 							if (p.teamId == 0) {
@@ -303,13 +297,13 @@ namespace spades {
 					}
 				}
 
-				Vector3 team0Col = client::Client::TeamCol(0);
-				Vector3 team1Col = client::Client::TeamCol(1);
+				auto team0Col = client::Client::TeamCol(0);
+				auto team1Col = client::Client::TeamCol(1);
 
-				Vector3 nv0 = team0Col * 0.63;
-				Vector3 nv1 = team1Col * 0.63;
-				Vector3 v0 = team0Col;
-				Vector3 v1 = team1Col;
+				const auto nv0 = team0Col * 0.63;
+				const auto nv1 = team1Col * 0.63;
+				const auto v0 = team0Col;
+				const auto v1 = team1Col;
 
 				m.model->RenderOutlinesPass(nonVisibleTeam0, nv0, false, true);
 				m.model->RenderOutlinesPass(visibleTeam0, v0, false, true);
@@ -317,7 +311,6 @@ namespace spades {
 				m.model->RenderOutlinesPass(visibleTeam1, v1, false, true);
 			}
 		}
-		// END OF ADDED
 
 		void GLModelRenderer::Clear() {
 			// last phase: clear scene

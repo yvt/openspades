@@ -26,15 +26,12 @@
 #include "GLCameraBlurFilter.h"
 #include "GLDynamicLight.h"
 #include "GLSettings.h"
+#include <Client/Client.h>
 #include <Client/IGameMapListener.h>
 #include <Client/IRenderer.h>
 #include <Client/SceneDefinition.h>
-#include <Core/Math.h>
-
-// ADDED: include client, world stuff
-#include <Client/Client.h>
 #include <Client/World.h>
-// END OF ADDED
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
@@ -139,7 +136,7 @@ namespace spades {
 
 			void RenderDebugLines();
 
-			void RenderObjects(bool reflections); // MODIFIED: Add reflections parameter
+			void RenderObjects(bool reflections);
 			void RenderGhosts();
 
 			void EnsureInitialized();
@@ -233,9 +230,7 @@ namespace spades {
 			bool BoxFrustrumCull(const AABB3 &);
 			bool SphereFrustrumCull(const Vector3 &center, float radius);
 
-			// ADDED: Far pv-matrix
 			Matrix4 farProjectionViewMatrix;
-			// END OF ADDED
 		};
 	}
 }

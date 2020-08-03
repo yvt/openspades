@@ -54,11 +54,9 @@ namespace spades {
 			GLProgram *shadowMapProgram;
 			GLImage *aoImage;
 
-			// ADDED: Outlines, occluded program
 			GLProgram *voxelModelOutlinesProgram;
 			GLProgram *voxelModelOccludedProgram;
 			GLProgram *voxelModelOcclusionTestProgram;
-			// END OF ADDED
 
 			IGLDevice::UInteger buffer;
 			IGLDevice::UInteger idxBuffer;
@@ -91,20 +89,18 @@ namespace spades {
 
 			void RenderSunlightPass(std::vector<client::ModelRenderParam> params,
 			                        bool ghostPass,
-			                        bool farRender) override; // MODIFIED: farRender
+			                        bool farRender) override;
 
 			void RenderDynamicLightPass(std::vector<client::ModelRenderParam> params,
 			                            std::vector<GLDynamicLight> lights,
-			                            bool farRender) override; // MODIFIED: farRender
+			                            bool farRender) override;
 
-			// ADDED: Other things
 			virtual void RenderOutlinesPass(std::vector<client::ModelRenderParam> params,
 			                                Vector3 outlineColor, bool fog, bool farRender);
 			virtual void RenderOccludedPass(std::vector<client::ModelRenderParam> params,
 			                                bool farRender);
 			virtual void RenderOcclusionTestPass(std::vector<client::ModelRenderParam> params,
 			                                     bool farRender);
-			// END OF ADDED
 
 			AABB3 GetBoundingBox() override { return boundingBox; }
 		};

@@ -35,11 +35,9 @@
 #include "GLShadowShader.h"
 #include "IGLDevice.h"
 
-// ADDED: cg_textures spade setting
 SPADES_SETTING(cg_textures);
 SPADES_SETTING(cg_multiTextures);
 SPADES_SETTING(cg_textureStrength);
-// END OF ADDED
 
 namespace spades {
 	namespace draw {
@@ -77,7 +75,6 @@ namespace spades {
 			else
 				basicProgram = renderer->RegisterProgram("Shaders/BasicBlock.program");
 
-			// ADDED: Load the texture shaders, set the no texture shader, load the outlines program
 			if (r->GetSettings().r_physicalLighting) {
 				basicTexturesProgram =
 				  renderer->RegisterProgram("Shaders/BasicBlockPhysTextures.program");
@@ -88,19 +85,16 @@ namespace spades {
 			basicNoTexturesProgram = basicProgram;
 
 			basicOutlinesProgram = renderer->RegisterProgram("Shaders/BasicBlockOutlines.program");
-			// END OF ADDED
 			
 			depthonlyProgram = renderer->RegisterProgram("Shaders/BasicBlockDepthOnly.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
 			backfaceProgram = renderer->RegisterProgram("Shaders/BackFaceBlock.program");
 			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
 
-			// ADDED: Load the map block images, init previous things
 			mapBlockImage = (GLImage *)renderer->RegisterImage("Textures/MapBlock.png");
 			multiMapBlockImage = (GLImage *)renderer->RegisterImage("Textures/MultiMapBlock.png");
 			previous_cg_textures = cg_textures;
 			previous_cg_multiTextures = cg_multiTextures;
-			// END OF ADDED
 
 			static const uint8_t squareVertices[] = {0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1};
 			squareVertexBuffer = device->GenBuffer();
@@ -150,22 +144,20 @@ namespace spades {
 					}
 		}
 
-		// ADDED: UpdateTextureMode
 		void GLMapRenderer::UpdateTextureMode() {
-			// determine if texture mode changed
-			if ((((bool)cg_textures) != previous_cg_textures) ||
-			    (((bool)cg_multiTextures) != previous_cg_multiTextures)) {
+			// Determine if texture mode changed
+			if ((static_cast<bool>(cg_textures) != previous_cg_textures) ||
+			    (static_cast<bool>(cg_multiTextures) != previous_cg_multiTextures)) {
 
-				// force the chunks to update (need to update their tex-coords)
+				// Force the chunks to update (need to update their tex-coords)
 				for (int i = 0; i < numChunks; i++) {
 					chunks[i]->SetNeedsUpdate();
 				}
-				// update previous things
+				// Update previous things
 				previous_cg_textures = cg_textures;
 				previous_cg_multiTextures = cg_multiTextures;
 			}
 		}
-		// END OF ADDED
 
 		void GLMapRenderer::RealizeChunks(spades::Vector3 eye) {
 			SPADES_MARK_FUNCTION();
@@ -235,13 +227,8 @@ namespace spades {
 
 			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map");
 
-			// ADDED: Determine if texturing this frame, set the program to use
-			if (previous_cg_textures) {
-				basicProgram = basicTexturesProgram;
-			} else {
-				basicProgram = basicNoTexturesProgram;
-			}
-			// END OF ADDED
+			// Determine if texturing this frame, set the program to use accordingly.
+			basicProgram = previous_cg_textures ? basicTexturesProgram : basicNoTexturesProgram;
 
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
 
@@ -258,7 +245,6 @@ namespace spades {
 			device->ActiveTexture(1);
 			device->BindTexture(IGLDevice::Texture2D, 0);
 
-			// ADDED: Bind the map block texture to GL_TEXTURE_8
 			static GLProgramUniform blockTextureStrength("blockTextureStrength");
 			if (previous_cg_textures) {
 
@@ -275,19 +261,16 @@ namespace spades {
 				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 				                     IGLDevice::Nearest);
 			}
-			// END OF ADDED
 
 			device->Enable(IGLDevice::CullFace, true);
 			device->Enable(IGLDevice::DepthTest, true);
 
 			basicProgram->Use();
 
-			// ADDED: Set the block texture strength
 			if (previous_cg_textures) {
 				blockTextureStrength(basicProgram);
 				blockTextureStrength.SetValue(((float)cg_textureStrength) / 100.0f);
 			}
-			// END OF ADDED
 
 			static GLShadowShader shadowShader;
 			shadowShader(renderer, basicProgram, 2);
@@ -315,13 +298,11 @@ namespace spades {
 			detailTextureUnif(basicProgram);
 			detailTextureUnif.SetValue(1);
 
-			// ADDED: Bind the GL_TEXTURE_8 to the map block texture in the shader
 			if (previous_cg_textures) {
 				static GLProgramUniform blockTexture("blockTexture");
 				blockTexture(basicProgram);
 				blockTexture.SetValue(8);
 			}
-			// END OF ADDED
 
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 
@@ -332,13 +313,11 @@ namespace spades {
 			static GLProgramAttribute normalAttribute("normalAttribute");
 			static GLProgramAttribute fixedPositionAttribute("fixedPositionAttribute");
 
-			// ADDED: Setup the texture coordinate attribute
 			static GLProgramAttribute blockTexCoordAttribute("blockTexCoordAttribute");
 			if (previous_cg_textures) {
 				blockTexCoordAttribute(basicProgram);
 				device->EnableVertexAttribArray(blockTexCoordAttribute(), true);
 			}
-			// END OF ADDED
 
 			positionAttribute(basicProgram);
 			ambientOcclusionCoordAttribute(basicProgram);
@@ -394,7 +373,6 @@ namespace spades {
 				device->EnableVertexAttribArray(normalAttribute(), false);
 			device->EnableVertexAttribArray(fixedPositionAttribute(), false);
 
-			// ADDED: Clean up texture stuff
 			if (previous_cg_textures) {
 				device->EnableVertexAttribArray(blockTexCoordAttribute(), false);
 
@@ -404,7 +382,6 @@ namespace spades {
 				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 				                     IGLDevice::Linear);
 			}
-			// END OF ADDED
 
 			device->ActiveTexture(1);
 			device->BindTexture(IGLDevice::Texture2D, 0);
@@ -511,7 +488,6 @@ namespace spades {
 				GetChunk(cx, cy, z)->RenderSunlightPass();
 		}
 
-		// ADDED: RenderOutlinePass definition
 		void GLMapRenderer::RenderOutlinesPass(Vector3 outlineColor) {
 			SPADES_MARK_FUNCTION();
 
@@ -553,9 +529,9 @@ namespace spades {
 			RealizeChunks(eye);
 
 			// draw from nearest to farthest
-			int cx = (int)floorf(eye.x) / GLMapChunk::Size;
-			int cy = (int)floorf(eye.y) / GLMapChunk::Size;
-			int cz = (int)floorf(eye.z) / GLMapChunk::Size;
+			const auto cx = static_cast<int>(floorf(eye.x)) / GLMapChunk::Size;
+			const auto cy = static_cast<int>(floorf(eye.y)) / GLMapChunk::Size;
+			const auto cz = static_cast<int>(floorf(eye.z)) / GLMapChunk::Size;
 			DrawColumnOutlines(cx, cy, cz, eye);
 			for (int dist = 1; dist <= 128 / GLMapChunk::Size; dist++) {
 				for (int x = cx - dist; x <= cx + dist; x++) {
@@ -570,7 +546,6 @@ namespace spades {
 
 			device->EnableVertexAttribArray(positionAttribute(), false);
 		}
-		// END OF ADDED
 
 		void GLMapRenderer::DrawColumnDLight(int cx, int cy, int cz, spades::Vector3 eye,
 		                                     const std::vector<GLDynamicLight> &lights) {
@@ -582,8 +557,7 @@ namespace spades {
 				GetChunk(cx, cy, z)->RenderDLightPass(lights);
 		}
 
-		// ADDED: DrawColumnOutlines definition
-		void GLMapRenderer::DrawColumnOutlines(int cx, int cy, int cz, spades::Vector3 eye) {
+		void GLMapRenderer::DrawColumnOutlines(int cx, int cy, int cz, Vector3 eye) {
 			cx &= numChunkWidth - 1;
 			cy &= numChunkHeight - 1;
 			for (int z = std::max(cz, 0); z < numChunkDepth; z++)
@@ -591,7 +565,6 @@ namespace spades {
 			for (int z = std::min(cz - 1, 63); z >= 0; z--)
 				GetChunk(cx, cy, z)->RenderOutlinesPass();
 		}
-		// END OF ADDED
 
 #pragma mark - BackFaceBlock
 

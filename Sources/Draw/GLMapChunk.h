@@ -27,8 +27,6 @@
 #include <Client/GameMap.h>
 #include <Client/IRenderer.h>
 #include <Core/Math.h>
-#include "GLDynamicLight.h"
-#include "IGLDevice.h"
 
 namespace spades {
 	namespace draw {
@@ -52,9 +50,7 @@ namespace spades {
 				int8_t sx, sy, sz;
 				uint8_t pad3;
 
-				// ADDED: Texture coordinates variables for the VBO
 				float ux, uy;
-				// END OF ADDED
 			};
 
 			GLMapRenderer *renderer;
@@ -77,9 +73,9 @@ namespace spades {
 			uint8_t calcAOID(int x, int y, int z, int ux, int uy, int uz, int vx, int vy, int vz);
 
 			void EmitVertex(int x, int y, int z, int aoX, int aoY, int aoZ, int ux, int uy,
-		                    int vx, int vy, uint32_t color,
-		                    int tNumX, int tNumY, // ADDED: multi-texture texture coords
-		                    int nx, int ny, int nz);
+			                int vx, int vy, uint32_t color,
+			                int tNumX, int tNumY,
+			                int nx, int ny, int nz);
 
 			bool IsSolid(int x, int y, int z);
 
@@ -100,9 +96,7 @@ namespace spades {
 			void RenderDepthPass();
 			void RenderDLightPass(std::vector<GLDynamicLight> lights);
 
-			// ADDED: RenderOutlinesPass declaration
 			void RenderOutlinesPass();
-			// END OF ADDED
 		};
 	}
 }

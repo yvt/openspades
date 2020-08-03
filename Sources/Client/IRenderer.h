@@ -60,12 +60,10 @@ namespace spades {
 			bool ghost = false;
 			/** Specifies the opacity of the model. Ignored if `ghost` is `false`. */
 			float opacity = 1.0;
-			// ADDED: PlayerID field, enemy field
-			// if -1, then the model for this param isn't a player model
-			// otherwise, it is the ID of the associated player
+			/** Specifies if the player is associated with the model, otherwise it is `-1`. */
 			int playerID = -1;
-			bool teamId; // team id of player (if we care about playerId)
-			// END OF ADDED
+			/** Specifies a player's team ID, ignored if `playerID` is set to `-1`. */
+			unsigned char teamId : 1;
 		};
 
 		enum DynamicLightType { DynamicLightTypePoint, DynamicLightTypeSpotlight };

@@ -42,21 +42,21 @@ attribute vec3 normalAttribute;
 // [sx, sy, sz]
 attribute vec3 fixedPositionAttribute;
 
-// [ux, uy]																				// ADDED
-attribute vec2 blockTexCoordAttribute;													// ADDED
+// [ux, uy]
+attribute vec2 blockTexCoordAttribute;
 
 varying vec2 ambientOcclusionCoord;
 varying vec4 color;
 varying vec3 fogDensity;
 varying vec2 detailCoord;
-varying vec2 blockTexCoord;																// ADDED
+varying vec2 blockTexCoord;
 
 void PrepareForShadowForMap(vec3 vertexCoord, vec3 fixedVertexCoord, vec3 normal);
 vec4 FogDensity(float poweredLength);
 
 void main() {
 
-	blockTexCoord = blockTexCoordAttribute;												// ADDED
+	blockTexCoord = blockTexCoordAttribute;
 
 	vec4 vertexPos = vec4(chunkPosition, 1.);
 

@@ -38,11 +38,9 @@ DEFINE_SPADES_SETTING(s_ysrDriver, "YSRSpades.dll");
 DEFINE_SPADES_SETTING(s_ysrDriver, "libysrspades.so");
 #endif
 
-// ADDED: s_gameVolume field (Corresponds to <Setup->Volume>) and related variables
 SPADES_SETTING(s_volume);
-extern int s_volume_previous; // defined in ALDevice.cpp
-extern float dBPrevious;      // defined in ALDevice.cpp
-// END OF ADDED
+extern int s_volume_previous;
+extern float dBPrevious;
 
 DEFINE_SPADES_SETTING(s_ysrNumThreads, "2");
 SPADES_SETTING(s_maxPolyphonics);
@@ -568,9 +566,8 @@ namespace spades {
 			YsrContext::PlayParam param;
 			param.pitch = base.pitch;
 			param.referenceDistance = base.referenceDistance;
-			//param.volume = base.volume * std::max<float>(std::min<float>(s_gain, 4.0f), 0.0f); // COMMENTED OUT (unused)
 
-			// ADDED: Update master volume control
+			// Update master volume control
 			if (s_volume_previous != (int)s_volume) {
 				// update the previous volume
 				s_volume_previous = (int)s_volume;
@@ -583,7 +580,6 @@ namespace spades {
 				}
 			}
 			param.volume = dBPrevious;
-			// END OF ADDED
 			
 			return param;
 		}

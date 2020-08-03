@@ -46,21 +46,19 @@ namespace spades {
 			/** Renders sunlighted solid geometry */
 			virtual void RenderSunlightPass(std::vector<client::ModelRenderParam> params,
 			                                bool ghostPass,
-			                                bool farRender) = 0; // MODIFIED: Added farRender
+			                                bool farRender) = 0;
 
 			/** Adds dynamic light */
 			virtual void RenderDynamicLightPass(std::vector<client::ModelRenderParam> params,
 			                                    std::vector<GLDynamicLight> lights,
-			                                    bool farRender) = 0; // MODIFIED: Added farRender
+			                                    bool farRender) = 0;
 
-			// ADDED: RenderOutlinesPass, RenderOccludedPass, RenderOcclusionTestPass declaration
 			virtual void RenderOutlinesPass(std::vector<client::ModelRenderParam> params,
 			                                Vector3 outlineColor, bool fog, bool farRender) = 0;
 			virtual void RenderOccludedPass(std::vector<client::ModelRenderParam> params,
 			                                bool farRender) = 0;
 			virtual void RenderOcclusionTestPass(std::vector<client::ModelRenderParam> params,
 			                                     bool farRender) = 0;
-			// END OF ADDED
 
 		private:
 			// members used when rendering by GLModelRenderer

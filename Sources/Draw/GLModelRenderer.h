@@ -46,9 +46,7 @@ namespace spades {
 			std::vector<RenderModel> models;
 			int modelCount;
 
-			// ADDED: player visibility occlusion query object
 			unsigned int playerVisibilityQueries[32];
-			// END OF ADDED
 
 		public:
 			GLModelRenderer(GLRenderer *);
@@ -62,7 +60,6 @@ namespace spades {
 			void RenderSunlightPass(bool ghostPass);
 			void RenderDynamicLightPass(std::vector<GLDynamicLight> lights);
 
-			// ADDED: Additional declarations
 			void RenderOutlinesPass();
 			void DetermineVisiblePlayers(bool visiblePlayers[]);
 			void RenderSunlightPassNoPlayers();
@@ -72,7 +69,6 @@ namespace spades {
 			                                          std::vector<GLDynamicLight> lights);
 			void RenderOccludedPlayers(bool visiblePlayers[]);
 			void RenderPlayerVisibilityOutlines(bool visiblePlayers[]);
-			// END OF ADDED
 
 			void Clear();
 		};
