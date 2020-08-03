@@ -64,7 +64,6 @@ DEFINE_SPADES_SETTING(cg_skipDeadPlayersWhenDead, "1");
 SPADES_SETTING(cg_playerName);
 
 // ADDED: Define default values for added mod settings
-DEFINE_SPADES_SETTING(sv_cheats, "0");
 DEFINE_SPADES_SETTING(dd_specNames, "1");
 DEFINE_SPADES_SETTING(dd_specWallhack, "1");
 
@@ -792,9 +791,8 @@ namespace spades {
 			if (!p)
 				return false;
 
-			return sv_cheats ||
-			       (p->GetTeamId() >= 2 && // on spectator team
-			       p->IsAlive());          // alive
+			return p->GetTeamId() >= 2 && // on spectator team
+			       p->IsAlive();          // alive
 		}
 
 		bool Client::WallhackActive() { return AreCheatsEnabled() && dd_specWallhack; }

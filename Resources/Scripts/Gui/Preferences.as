@@ -667,7 +667,6 @@ namespace spades {
             layouter.AddToggleField(_Tr("Preferences", "Server Alert"), "cg_serverAlert");
 
             layouter.AddHeading(_Tr("Preferences", "Misc"));
-			layouter.AddToggleField(_Tr("Preferences", "Cheats"), "sv_cheats");							                    // ADDED
 			layouter.AddSliderField(_Tr("Preferences", "Volume"), "s_volume", 0, 100, 1, ConfigNumberFormatter(0, "%"));	// ADDED
             layouter.AddSliderField(_Tr("Preferences", "Field of View"), "cg_fov", 45, 90, 1,
                                     ConfigNumberFormatter(0, " deg"));
