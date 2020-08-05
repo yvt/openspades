@@ -620,7 +620,7 @@ namespace spades {
 			device->ActiveTexture(0);
 			device->BindTexture(IGLDevice::Texture2D, 0);
 		}
-		
+
 		void GLOptimizedVoxelModel::RenderSunlightPass(std::vector<client::ModelRenderParam> params,
 		                                               bool ghostPass, bool farRender) {
 			SPADES_MARK_FUNCTION();
