@@ -269,7 +269,7 @@ namespace spades {
 
 			if (previous_cg_textures) {
 				blockTextureStrength(basicProgram);
-				blockTextureStrength.SetValue(((float)cg_textureStrength) / 100.0f);
+				blockTextureStrength.SetValue(((float)cg_textureStrength) / 200.0f);
 			}
 
 			static GLShadowShader shadowShader;

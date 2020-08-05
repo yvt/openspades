@@ -646,7 +646,7 @@ namespace spades {
 
             layouter.AddHeading(_Tr("Preferences", "OpenGL Effects"));
             layouter.AddToggleField(_Tr("Preferences", "Outlines"), "cg_outlines");
-            layouter.AddSliderField(_Tr("Preferences", "Outline Strength"), "cg_outlineStrength", 2, 5, 1,
+            layouter.AddSliderField(_Tr("Preferences", "Outline Strength"), "cg_outlineStrength", 1, 3, 1,
                                     ConfigNumberFormatter(0, "px"));
             layouter.AddToggleField(_Tr("Preferences", "Textures"), "cg_textures");
             layouter.AddToggleField(_Tr("Preferences", "Multi-Texture Mode"), "cg_multiTextures");

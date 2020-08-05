@@ -66,12 +66,11 @@ SPADES_SETTING(cg_playerName);
 DEFINE_SPADES_SETTING(dd_specNames, "0");
 DEFINE_SPADES_SETTING(dd_specWallhack, "0");
 
-DEFINE_SPADES_SETTING(cg_textures, "0");
-DEFINE_SPADES_SETTING(cg_multiTextures, "0");
 DEFINE_SPADES_SETTING(cg_outlines, "0");
-DEFINE_SPADES_SETTING(cg_textureStrength, "25");
-DEFINE_SPADES_SETTING(cg_multiTextureStrength, "25");
 DEFINE_SPADES_SETTING(cg_outlineStrength, "2");
+DEFINE_SPADES_SETTING(cg_textures, "0");
+DEFINE_SPADES_SETTING(cg_textureStrength, "10");
+DEFINE_SPADES_SETTING(cg_multiTextures, "0");
 
 DEFINE_SPADES_SETTING(s_volume, "100");
 

@@ -22,6 +22,7 @@
 #include <cstddef>
 
 #include "GLDynamicLightShader.h"
+#include "GLImage.h"
 #include "GLMapChunk.h"
 #include "GLMapRenderer.h"
 #include "GLProgramAttribute.h"
@@ -32,8 +33,6 @@
 #include <Client/GameMap.h>
 #include <Core/Debug.h>
 #include <Core/Settings.h>
-
-#include "GLImage.h"
 
 SPADES_SETTING(cg_textures);
 SPADES_SETTING(cg_multiTextures);
