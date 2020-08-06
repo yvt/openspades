@@ -1301,6 +1301,11 @@ namespace spades {
 				case PacketTypeMapStart: {
 					// next map!
 					if (protocolVersion == 4) {
+						// The AoS 0.76 protocol allows the client to load a map from a local cache
+						// if possible. After receiving MapStart, the client should respond with
+						// MapCached to indicate whether the map with a given checksum exists in the
+						// cache or not. We don't implement a local cache, so we always ask the
+						// server to send fresh map data.
 						NetPacketWriter wri(PacketTypeMapCached);
 						wri.Write((uint8_t)0);
 						enet_peer_send(peer, 0, wri.CreatePacket());
