@@ -322,10 +322,12 @@ namespace spades {
 				                                          "GL_EXT_framebuffer_object",
 				                                          NULL};
 
-				SPLog("--- Extensions ---");
-				std::vector<std::string> strs = spades::Split(str, " ");
-				for (size_t i = 0; i < strs.size(); i++) {
-					SPLog("%s", strs[i].c_str());
+				if (str) {
+					SPLog("--- Extensions ---");
+					std::vector<std::string> strs = spades::Split(str, " ");
+					for (size_t i = 0; i < strs.size(); i++) {
+						SPLog("%s", strs[i].c_str());
+					}
 				}
 				SPLog("------------------");
 
