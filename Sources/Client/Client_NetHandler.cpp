@@ -41,6 +41,10 @@
 #include "ChatWindow.h"
 #include "ClientUI.h"
 
+#include <thread>
+#include <iostream>
+#include "rpMain.h"
+
 #include "NetClient.h"
 
 DEFINE_SPADES_SETTING(cg_centerMessage, "2");
@@ -233,6 +237,10 @@ namespace spades {
 		}
 
 		void Client::PlayerLeaving(spades::client::Player *p) {
+			// Update the Rich Presence infos
+			std::thread t2(atualizarRP);
+			t2.detach();
+
 			// Choose the next player if a follow cam is active on this player
 			if (FollowsNonLocalPlayer(GetCameraMode()) && &GetCameraTargetPlayer() == p) {
 				FollowNextPlayer(false);
@@ -265,6 +273,10 @@ namespace spades {
 		}
 
 		void Client::PlayerJoinedTeam(spades::client::Player *p) {
+			// Update the rich presence infos
+			std::thread t2(atualizarRP);
+			t2.detach();
+
 			std::string teamName = world->GetTeam(p->GetTeamId()).name;
 
 			if (p->GetTeamId() >= 2) {

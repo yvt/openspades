@@ -46,6 +46,8 @@
 #include <Core/Strings.h>
 #include <Core/TMPUtils.h>
 
+#include "rpMain.h"
+
 DEFINE_SPADES_SETTING(cg_unicode, "1");
 
 namespace spades {
@@ -431,6 +433,11 @@ namespace spades {
 
 		void NetClient::Disconnect() {
 			SPADES_MARK_FUNCTION();
+
+			// On client disconnect from server update the infos to the server list info
+			SPLog("desconectou");
+			std::thread t1(rpM);
+			t1.detach();
 
 			if (!peer)
 				return;

@@ -53,6 +53,10 @@
 #include "Weapon.h"
 #include "World.h"
 
+#include <thread>
+#include <iostream>
+#include "rpMain.h"
+
 #include "NetClient.h"
 
 DEFINE_SPADES_SETTING(cg_chatBeep, "1");
@@ -107,6 +111,10 @@ namespace spades {
 		      nextMapShotIndex(0) {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
+
+			// Start the richPresence for server info
+			std::thread t2(atualizarRP);
+			t2.detach();
 
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));

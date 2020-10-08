@@ -16,6 +16,8 @@ file(GLOB JSON_FILES json/*.cpp json/*.h json/*.inl)
 file(GLOB JSON_INCLUDE json/include/json/*.h)
 file(GLOB SCRIPTBINDING_FILES ScriptBindings/*.cpp ScriptBindings/*.h)
 file(GLOB UNZIP_FILES unzip/*.c unzip/*.h)
+file(GLOB PRESENCE_FILES RichPresence/*.cpp *.h)
+file(GLOB PRESENCE_LIBS RichPresence/include/*.cpp *.h)
 
 if(APPLE)
 	file(GLOB PLATFORM_FILES Core/*.mm)
@@ -28,6 +30,8 @@ set(ANGELSCRIPT_LIBS Angelscript Angelscript_addons)
 include_directories(BEFORE ".")
 include_directories(BEFORE "json/include")
 include_directories(BEFORE "ENet/include")
+include_directories(BEFORE "RichPresence")
+include_directories(BEFORE "RichPresence/include")
 
 if(WIN32)
 	if(MINGW)	# = gcc, can someone confirm that this works?
@@ -40,7 +44,7 @@ if(WIN32)
 endif()
 
 add_executable(OpenSpades ${AUDIO_FILES} ${AUDIO_AL_FILES} ${BINPACK_FILES} ${CLIENT_FILES} ${CORE_FILES} ${PLATFORM_FILES} ${DRAW_FILES} ${ENET_FILES} ${ENET_INCLUDE} ${GUI_FILES}
-	${IMPORTS_FILES} ${KISS_FILES} ${JSON_FILES} ${JSON_INCLUDE} ${UNZIP_FILES} ${SCRIPTBINDING_FILES} ${RESOURCE_FILES})
+	${IMPORTS_FILES} ${KISS_FILES} ${JSON_FILES} ${JSON_INCLUDE} ${UNZIP_FILES} ${SCRIPTBINDING_FILES} ${RESOURCE_FILES} ${PRESENCE_FILES} ${PRESENCE_LIBS})
 set_target_properties(OpenSpades PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(OpenSpades PROPERTIES OUTPUT_NAME openspades)
 set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -96,6 +100,21 @@ source_group("libs\\json" FILES ${JSON_FILES})
 source_group("libs\\json\\include" FILES ${JSON_INCLUDE})
 source_group("ScriptBindings" FILES ${SCRIPTBINDING_FILES})
 source_group("libs\\unzip" FILES ${UNZIP_FILES})
+
+# -- Rich Presence Library
+add_library(AAS SHARED IMPORTED)
+set_target_properties(AAS PROPERTIES
+	IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/../Sources/RichPresence/lib/x86_64/discord_game_sdk.dll"
+	INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}/../Sources/RichPresence/lib/x86_64")
+if(UNIX)
+	set_target_properties(AAS PROPERTIES
+		IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/../Sources/RichPresence/lib/x86_64/discord_game_sdk.so)
+elseif(APPLE)
+	set_target_properties(AAS PROPERTIES
+		IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/../Sources/RichPresence/lib/x86_64/discord_game_sdk.bundle)
+endif()
+target_link_libraries(OpenSpades AAS)
+# -----------------------------------
 
 target_link_libraries(OpenSpades ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${OPENGL_LIBRARIES} ${ZLIB_LIBRARIES} ${CURL_LIBRARY} ${FREETYPE_LIBRARIES} ${CMAKE_DL_LIBS} ${ANGELSCRIPT_LIBS} ${OpusFile_LIBRARY})
 if(NOT APPLE)

@@ -27,6 +27,10 @@
 #include <ScriptBindings/Config.h>
 #include <ScriptBindings/ScriptFunction.h>
 
+#include <thread>
+#include <iostream>
+#include "rpMain.h"
+
 namespace spades {
 	namespace gui {
 		MainScreen::MainScreen(client::IRenderer *r, client::IAudioDevice *a,
@@ -39,6 +43,10 @@ namespace spades {
 				SPInvalidArgument("a");
 
 			helper = new MainScreenHelper(this);
+
+			// Start the Rich Presence
+			std::thread t1(rpM);
+			t1.detach();
 
 			// first call to RunFrame tends to have larger dt value.
 			// so this value is set in the first call.
