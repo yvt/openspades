@@ -140,6 +140,15 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 
     (Universal builds aren't supported yet.)
 
+### Network usage during building
+
+OpenSpades' build process automatically downloads prebuilt game assets and libraries as needed. Specifically:
+
+- `pak000-Nonfree.pak` and `font-uniform.pak` from <https://github.com/yvt/openspades-paks>.
+- The prebuilt binaries of YSRSpades (audio engine) from <https://github.com/yvt/openspades-media>.
+
+In addition, vcpkg (sort of package manager only used for Windows and macOS builds) [collects and sends telemetry data to Microsoft](https://vcpkg.readthedocs.io/en/latest/about/privacy/). You can opt out of this behavior by passing `-disableMetrics` option when running `vcpkg/bootstrap-vcpkg.sh` command.
+
 ## Troubleshooting
 For troubleshooting and common problems see [TROUBLESHOOTING](TROUBLESHOOTING.md).
 
