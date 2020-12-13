@@ -252,8 +252,7 @@ endif()
 add_subdirectory(Resources)
 add_subdirectory(Sources)
 
-
-if(UNIX)
+if(UNIX AND NOT APPLE)
 	# various texts
 	INSTALL(FILES AUTHORS LICENSE README.md DESTINATION ${OPENSPADES_INSTALL_DOC}/)
 
@@ -271,15 +270,7 @@ if(UNIX)
 
 	if(OPENSPADES_RESOURCES)
 		# install asset paks (including non-GPL one)
-		install(FILES
-			${CMAKE_BINARY_DIR}/Resources/pak000-Nonfree.pak
-			${CMAKE_BINARY_DIR}/Resources/pak002-Base.pak
-			${CMAKE_BINARY_DIR}/Resources/pak005-Models.pak
-			${CMAKE_BINARY_DIR}/Resources/pak010-BaseSkin.pak
-			${CMAKE_BINARY_DIR}/Resources/pak050-Locales.pak
-			${CMAKE_BINARY_DIR}/Resources/pak999-References.pak
-			${CMAKE_BINARY_DIR}/Resources/font-unifont.pak
-			DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
+		install(FILES ${PAK_FILES} DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
 	endif(OPENSPADES_RESOURCES)
 
 	# Package info (used for automatic update check)
@@ -302,9 +293,35 @@ if(UNIX)
 	# Currently there is no files in lib/openspades. But if you reading this message in future and want to
 	# place somewhere libs, binaries or other non-media stuff, place them in lib/openspades. Thank you.
 
-endif(UNIX)
+endif(UNIX AND NOT APPLE)
 
+if(APPLE)
+	# Create a macOS application bundle
+	set_target_properties(OpenSpades PROPERTIES
+		MACOSX_BUNDLE ON
+		MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/XSpades/XSpades-Info.plist
+		MACOSX_BUNDLE_BUNDLE_VERSION ${OPENSPADES_FULL_VERSION}
+		MACOSX_BUNDLE_LONG_VERSION_STRING ${OPENSPADES_FULL_VERSION}
+		MACOSX_BUNDLE_SHORT_VERSION_STRING ${OPENSPADES_FULL_VERSION}
+		MACOSX_BUNDLE_GUI_IDENTIFIER jp.yvt.openspades
+		MACOSX_BUNDLE_BUNDLE_NAME OpenSpades)
 
+	set(BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Resources/Icons/OpenSpades.icns)
+	list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE)
+	if(OPENSPADES_RESOURCES)
+		list(APPEND BUNDLE_RESOURCES ${PAK_FILES})
+		set_source_files_properties(${PAK_FILES}
+			PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+		add_dependencies(OpenSpades OpenSpades_Resources_DevPaks OpenSpades_Resources)
+	endif(OPENSPADES_RESOURCES)
+	list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Resources/PackageInfo.json)
+	set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/Resources/PackageInfo.json
+		PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+	list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Externals/lib/libysrspades.dylib)
+	set_target_properties(OpenSpades PROPERTIES RESOURCE "${BUNDLE_RESOURCES}")
+
+	target_sources(OpenSpades PRIVATE "${BUNDLE_RESOURCES}")
+endif(APPLE)
 
 #see http://www.cmake.org/cmake/help/v2.8.11/cpack.html
 set(CPACK_PACKAGE_NAME "OpenSpades")

@@ -47,6 +47,27 @@ set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BIN
 set_target_properties(OpenSpades PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+if(APPLE)
+	# This value is reflected to the macOS application bundle's name, so use
+	# the correct capitalization
+	set_target_properties(OpenSpades PROPERTIES OUTPUT_NAME OpenSpades)
+else(APPLE)
+	set_target_properties(OpenSpades PROPERTIES OUTPUT_NAME openspades)
+endif(APPLE)
+
+if (APPLE)
+	# The built pak files are copied into the macOS application bundle. CMake
+	# won't copy unless they are included in the target's source files.
+	#
+	# Since they are specified as `add_custom_command`'s output files, so they
+	# have the `GENERATED` property. However, `GENERATED` is a directory-local
+	# property (until [cmake!5308] lands in CMake 3.20). This means it needs to
+	# be set again here.
+	#
+	# [cmake!5308]: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/5308
+	set_source_files_properties(${PAK_FILES} PROPERTIES GENERATED 1)
+endif(APPLE)
+
 if(WIN32)
 	# Use a single output directory for all configs
 	# (Without this, the generated binary cannot find pak files created by mkpak.ps1 unless

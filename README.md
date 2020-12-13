@@ -124,8 +124,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 2. `vcpkg/bootstrap-vcpkg.sh`
 3. `vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt`
 4. Download [macOS release of OpenSpades](https://github.com/yvt/openspades/releases), show the package contents, and copy `libysrspades.dylib` to `Sources/Externals/lib`.
-5. Download and extract the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip). After that, copy `Nonfree/pak000-Nonfree.pak` and `font-unifont.pak` to `Resources/`.
-6. Create directory `openspades.mk` in the cloned/downloaded openspades repo and compile:
+5. Create directory `openspades.mk` in the cloned/downloaded openspades repo and compile:
 
    ```bash
    mkdir openspades.mk
@@ -134,13 +133,13 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    ninja
    ```
 
-7. Launch:
+6. Launch:
 
     ```bash
-    bin/openspades
+    open bin/OpenSpades.app
     ```
 
-    (Creating an application bundle is not supported yet. Universal builds aren't supported either.)
+    (Universal builds aren't supported yet.)
 
 ## Troubleshooting
 For troubleshooting and common problems see [TROUBLESHOOTING](TROUBLESHOOTING.md).
