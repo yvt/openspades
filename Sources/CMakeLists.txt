@@ -66,6 +66,9 @@ if (APPLE)
 	#
 	# [cmake!5308]: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/5308
 	set_source_files_properties(${PAK_FILES} PROPERTIES GENERATED 1)
+
+	# The same goes for `libysrspades.dylib`.
+	set_source_files_properties(${PROJECT_BINARY_DIR}/libysrspades.dylib PROPERTIES GENERATED 1)
 endif(APPLE)
 
 if(WIN32)

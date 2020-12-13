@@ -123,8 +123,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
     - Install `convert` from ImageMagick
 2. `vcpkg/bootstrap-vcpkg.sh`
 3. `vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt`
-4. Download [macOS release of OpenSpades](https://github.com/yvt/openspades/releases), show the package contents, and copy `libysrspades.dylib` to `Sources/Externals/lib`.
-5. Create directory `openspades.mk` in the cloned/downloaded openspades repo and compile:
+4. Create directory `openspades.mk` in the cloned/downloaded openspades repo and compile:
 
    ```bash
    mkdir openspades.mk
@@ -133,7 +132,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    ninja
    ```
 
-6. Launch:
+5. Launch:
 
     ```bash
     open bin/OpenSpades.app

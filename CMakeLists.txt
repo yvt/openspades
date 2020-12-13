@@ -317,10 +317,22 @@ if(APPLE)
 	list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Resources/PackageInfo.json)
 	set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/Resources/PackageInfo.json
 		PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-	list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Sources/Externals/lib/libysrspades.dylib)
+	list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/libysrspades.dylib)
 	set_target_properties(OpenSpades PROPERTIES RESOURCE "${BUNDLE_RESOURCES}")
 
 	target_sources(OpenSpades PRIVATE "${BUNDLE_RESOURCES}")
+
+	# Download `libysrspades.dylib` automatically
+	add_dependencies(OpenSpades OpenSpades_YSRSpades_Prebuilt)
+	add_custom_target(OpenSpades_YSRSpades_Prebuilt ALL COMMENT "Downloading libysrspades.dylib"
+		DEPENDS ${PROJECT_BINARY_DIR}/libysrspades.dylib)
+	add_custom_command(
+		OUTPUT ${PROJECT_BINARY_DIR}/libysrspades.dylib
+		WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+		COMMAND
+			wget -c
+			https://openspadesmedia.yvt.jp/development-packages/YSRSpades/libysrspades.dylib
+		)
 endif(APPLE)
 
 #see http://www.cmake.org/cmake/help/v2.8.11/cpack.html
