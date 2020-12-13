@@ -46,6 +46,12 @@ if(USE_VCPKG)
 		include(FindOpenGL)
 		include(FindCURL)
     endif()
+
+	FIND_LIBRARY(OpusFile_LIBRARY
+	  NAMES opusfile
+	  PATH_SUFFIXES lib64 lib
+	  PATHS ${CMAKE_PREFIX_PATH}
+	)
 else()
 	include(cmake/FindSDL2.cmake)
 	if(NOT SDL2_FOUND)
@@ -83,13 +89,12 @@ else()
 		message(FATAL_ERROR "FreeType not found, please install it (and make sure it's in your path)")
 	endif()
 
+	include(cmake/FindOpus.cmake)
+	if(NOT OpusFile_FOUND)
+		message(FATAL_ERROR "libopus/libopusfile not found, please install it (and make sure it's in your path)")
+	endif()
 endif()
 
-# vcpkg's opusfile port doesn't provide a CMake config for opusfile
-include(cmake/FindOpus.cmake)
-if(NOT OpusFile_FOUND)
-	message(FATAL_ERROR "libopus/libopusfile not found, please install it (and make sure it's in your path)")
-endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
 	# GCC C++11 support

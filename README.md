@@ -113,13 +113,34 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 10. Download the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip), extract it, and copy `Nonfree/pak000-Nonfree.pak` to the `Resources` folder inside your build output directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE/Resources`. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
 11. Copy `Resources/PackageInfo.json` to the `Resources` folder inside your build output directory.
 
-### On macOS (with Xcode)
-1. Get the latest version of Xcode and OpenSpades source.
-2. Get (pre-compiled) copies of libraries, and place them in `Sources/Externals`
-  * See the file `Sources/Externals/readme.txt` for details
+### On macOS (with Ninja)
+1. Get the latest version of Xcode and the OpenSpades source code. Install the following prerequisites:
+    - Xcode's command-line tools. Install them by `xcode-select --install` and `sudo xcodebuild -license`.
+    - CMake.
+    - Install `pkg-config` by one of the following methods:
+      - Homebrew: `brew install pkg-config`
+      - Nix: add `$(nix-build '<nixpkgs>' -A pkg-config-unwrapped --no-out-link)/bin` to `PATH`.
+    - Install `convert` from ImageMagick
+2. `vcpkg/bootstrap-vcpkg.sh`
+3. `vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt`
 4. Download [macOS release of OpenSpades](https://github.com/yvt/openspades/releases), show the package contents, and copy `libysrspades.dylib` to `Sources/Externals/lib`.
 5. Download and extract the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip). After that, copy `Nonfree/pak000-Nonfree.pak` and `font-unifont.pak` to `Resources/`.
-6. Open `OpenSpades.xcodeproj` and build.
+6. Create directory `openspades.mk` in the cloned/downloaded openspades repo and compile:
+
+   ```bash
+   mkdir openspades.mk
+   cd openspades.mk
+   cmake -G Ninja .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_OSX_ARCHITECTURES=x86_64 -D CMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-osx
+   ninja
+   ```
+
+7. Launch:
+
+    ```bash
+    bin/openspades
+    ```
+
+    (Creating an application bundle is not supported yet. Universal builds aren't supported either.)
 
 ## Troubleshooting
 For troubleshooting and common problems see [TROUBLESHOOTING](TROUBLESHOOTING.md).
