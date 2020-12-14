@@ -129,7 +129,6 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
     - Install `pkg-config` by one of the following methods:
       - Homebrew: `brew install pkg-config`
       - Nix: add `$(nix-build '<nixpkgs>' -A pkg-config-unwrapped --no-out-link)/bin` to `PATH`.
-    - Install `convert` from ImageMagick
 2. `vcpkg/bootstrap-vcpkg.sh`
 3. `vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt`
 4. Create directory `openspades.mk` in the cloned/downloaded openspades repo and compile:
