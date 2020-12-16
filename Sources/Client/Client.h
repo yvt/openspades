@@ -469,7 +469,8 @@ namespace spades {
 			                             IntVector3 normal) override;
 			void PlayerKilledPlayer(Player &killer, Player &victim, KillType) override;
 
-			void BulletHitPlayer(Player &hurtPlayer, HitType, Vector3 hitPos, Player &by) override;
+			void BulletHitPlayer(Player &hurtPlayer, HitType, Vector3 hitPos, Player &by,
+			                     std::unique_ptr<IBulletHitScanState> &stateCell) override;
 			void BulletHitBlock(Vector3, IntVector3 blockPos, IntVector3 normal) override;
 			void AddBulletTracer(Player &player, Vector3 muzzlePos, Vector3 hitPos) override;
 			void GrenadeExploded(const Grenade &) override;

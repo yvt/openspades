@@ -561,6 +561,9 @@ namespace spades {
 			// speed hack (shotgun does this)
 			bool blockDestroyed = false;
 
+			// The custom state data, optionally set by `BulletHitPlayer`'s implementation
+			std::unique_ptr<IBulletHitScanState> stateCell;
+
 			Vector3 dir2 = GetFront();
 			for (int i = 0; i < pellets; i++) {
 
@@ -719,21 +722,21 @@ namespace spades {
 						if (world.GetListener()) {
 							switch (hitPart) {
 								case HitBodyPart::Head:
-									world.GetListener()->BulletHitPlayer(*hitPlayer, HitTypeHead,
-									                                     finalHitPos, *this);
+									world.GetListener()->BulletHitPlayer(
+									  *hitPlayer, HitTypeHead, finalHitPos, *this, stateCell);
 									break;
 								case HitBodyPart::Torso:
-									world.GetListener()->BulletHitPlayer(*hitPlayer, HitTypeTorso,
-									                                     finalHitPos, *this);
+									world.GetListener()->BulletHitPlayer(
+									  *hitPlayer, HitTypeTorso, finalHitPos, *this, stateCell);
 									break;
 								case HitBodyPart::Limb1:
 								case HitBodyPart::Limb2:
-									world.GetListener()->BulletHitPlayer(*hitPlayer, HitTypeLegs,
-									                                     finalHitPos, *this);
+									world.GetListener()->BulletHitPlayer(
+									  *hitPlayer, HitTypeLegs, finalHitPos, *this, stateCell);
 									break;
 								case HitBodyPart::Arms:
-									world.GetListener()->BulletHitPlayer(*hitPlayer, HitTypeArms,
-									                                     finalHitPos, *this);
+									world.GetListener()->BulletHitPlayer(
+									  *hitPlayer, HitTypeArms, finalHitPos, *this, stateCell);
 									break;
 								case HitBodyPart::None: SPAssert(false); break;
 							}
@@ -936,12 +939,13 @@ namespace spades {
 						world.GetListener()->PlayerHitBlockWithSpade(
 						  *this, mapResult.hitPos, mapResult.hitBlock, mapResult.normal);
 				}
-			} else if (hitPlayer) {
-				if (world.GetListener()) {
-					if (hitFlag)
-						world.GetListener()->BulletHitPlayer(*hitPlayer, HitTypeMelee,
-						                                     hitPlayer->GetEye(), *this);
-				}
+			} else if (hitPlayer && world.GetListener() && hitFlag) {
+				// The custom state data, optionally set by `BulletHitPlayer`'s implementation
+				std::unique_ptr<IBulletHitScanState> stateCell;
+
+				if (hitFlag)
+					world.GetListener()->BulletHitPlayer(*hitPlayer, HitTypeMelee,
+					                                     hitPlayer->GetEye(), *this, stateCell);
 			}
 
 			if (missed) {

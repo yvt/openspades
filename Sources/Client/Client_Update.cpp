@@ -954,7 +954,8 @@ namespace spades {
 		}
 
 		void Client::BulletHitPlayer(spades::client::Player &hurtPlayer, HitType type,
-		                             spades::Vector3 hitPos, spades::client::Player &by) {
+		                             spades::Vector3 hitPos, spades::client::Player &by,
+		                             std::unique_ptr<IBulletHitScanState> &stateCell) {
 			SPADES_MARK_FUNCTION();
 
 			SPAssert(type != HitTypeBlock);
@@ -971,7 +972,21 @@ namespace spades {
 				return;
 			}
 
-			if (!IsMuted()) {
+			// This function gets called for each pellet. We want to play these sounds no more than
+			// once for each instance of firing. `BulletHitScanState`, stored in `stateCell`, tells
+			// whether we have played each sound for the current firing session.
+			struct BulletHitScanState : IBulletHitScanState {
+				bool hasPlayedNormalHitSound = false;
+				bool hasPlayedHeadshotSound = false;
+			};
+
+			if (!stateCell) {
+				stateCell = stmp::make_unique<BulletHitScanState>();
+			}
+
+			auto &hitScanState = dynamic_cast<BulletHitScanState &>(*stateCell);
+
+			if (!IsMuted() && !hitScanState.hasPlayedNormalHitSound) {
 				if (type == HitTypeMelee) {
 					Handle<IAudioChunk> c =
 					  audioDevice->RegisterSound("Sounds/Weapons/Spade/HitPlayer.opus");
@@ -993,17 +1008,21 @@ namespace spades {
 					param.volume = 4.f;
 					audioDevice->Play(c.GetPointerOrNull(), hitPos, param);
 				}
+
+				hitScanState.hasPlayedNormalHitSound = true;
 			}
 
 			if (&by == world->GetLocalPlayer()) {
 				net->SendHit(hurtPlayer.GetId(), type);
 
-				if (type == HitTypeHead) {
+				if (type == HitTypeHead && !hitScanState.hasPlayedHeadshotSound) {
 					Handle<IAudioChunk> c =
 					  audioDevice->RegisterSound("Sounds/Feedback/HeadshotFeedback.opus");
 					AudioParam param;
 					param.volume = cg_hitFeedbackSoundGain;
 					audioDevice->PlayLocal(c.GetPointerOrNull(), param);
+
+					hitScanState.hasPlayedHeadshotSound = true;
 				}
 
 				hitFeedbackIconState = 1.f;
