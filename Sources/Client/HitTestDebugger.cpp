@@ -33,8 +33,6 @@
 #include <Draw/SWPort.h>
 #include <Draw/SWRenderer.h>
 
-SPADES_SETTING(cg_smp);
-
 namespace spades {
 	namespace client {
 		class HitTestDebugger::Port : public draw::SWPort {
@@ -141,8 +139,7 @@ namespace spades {
 
 			def.fovX = def.fovY = range;
 
-			// we cannot change GameMap's listener in the client thread with SMP renderer
-			def.skipWorld = ((int)cg_smp != 0);
+			def.skipWorld = false;
 
 			def.zNear = 0.05f;
 			def.zFar = 200.f;

@@ -122,7 +122,6 @@ namespace spades {
 					break;
 				case SDL_MOUSEMOTION:
 					if (m_active) {
-						// FIXME: this might fail with cg_smp
 						if (view->NeedsAbsoluteMouseCoordinate()) {
 							view->MouseEvent(event.motion.x, event.motion.y);
 						} else {
