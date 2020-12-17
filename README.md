@@ -110,6 +110,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
     * For VS2015: `Visual Studio 14 (2015)`
   * Platform: `Win32`
   * Toolchain file: `E:/Projects/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake`
+  * Add a new string entry `VCPKG_TARGET_TRIPLET=x86-windows-static`
 
 6. Open `E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln` in Visual Studio.
 7. Build the solution.
