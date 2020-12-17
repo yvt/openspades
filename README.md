@@ -85,33 +85,41 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
   * PowerShell 5.0
     * Integrated with Windows 10.
     * Older versions are not tested, but might work
-  * *Visual Studio 2017*
+  * *Visual Studio 2017* or later
     * VS2015 is also supported, but VS2017 is more recommended
     * VS2013 is no longer supported, but might work
 2. Grab the source code:
   * Stable version: https://github.com/yvt/openspades/releases
   * Latest development version (0.1.x): https://github.com/yvt/openspades/archive/master.zip
-3. Extract or checkout the source
+3. Checkout the source
   * All examples will assume `E:/Projects/openspades`, update paths in the examples to reflect yours
-4. Get (pre-compiled) copies of glew, curl, sdl2 and zlib, and place them in `E:/Projects/openspades/Sources/Externals`
-  * See the file `E:/Projects/openspades/Sources/Externals/readme.txt` for details and links to pre-compiled sets of libraries for your version of Visual Studio
+  * Make sure to update all git submodules, e.g., by `git clone ... --recurse-submodules`). Note that the GitHub website's ZIP download currently does not support submodules.
+4. Build libraries using vcpkg:
+   ```bat
+   cd E:/Projects/openspades
+   vcpkg/bootstrap-vcpkg.bat
+   vcpkg/vcpkg install @vcpkg_x86-windows.txt
+   ```
+
 5. Run CMake:
   * Source: `E:/Projects/openspades`
   * Binaries: `E:/Projects/openspades/OpenSpades.msvc`
   * Generator:
-    * For VS2017: `Visual Studio 15 (2017)` (not Win64!)
-    * For VS2015: `Visual Studio 14 (2015)` (not Win64!)
+    * For VS2019: `Visual Studio 16 (2019)`
+    * For VS2017: `Visual Studio 15 (2017)`
+    * For VS2015: `Visual Studio 14 (2015)`
+  * Platform: `Win32`
+  * Toolchain file: `E:/Projects/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake`
 
 6. Open `E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln` in Visual Studio.
 7. Build the solution.
  * The recommended build configuration is `MinSizeRel` or `Release` if you're not an developer
  * The default build output directory is `E:/projects/OpenSpades/OpenSpades.msvc/bin/BUILD_TYPE/`
-8. Copy all `.dll` files from `Source/Externals/lib` to the build output directory.
-9. To get audio working, download a [Windows release of OpenSpades](https://github.com/yvt/openspades/releases), extract it, and copy the following dlls to the build output directory:
+8. To get audio working, download a [Windows release of OpenSpades](https://github.com/yvt/openspades/releases), extract it, and copy the following dlls to the build output directory:
  * For OpenAL audio: `openal32.dll`
  * For YSR audio: `YSRSpades.dll`, `libgcc_s_dw2-1.dll`, `libstdc++-6.dll`, `pthreadGC2.dll`
-10. Download the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip), extract it, and copy `Nonfree/pak000-Nonfree.pak` to the `Resources` folder inside your build output directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE/Resources`. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
-11. Copy `Resources/PackageInfo.json` to the `Resources` folder inside your build output directory.
+9. Download the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip), extract it, and copy `Nonfree/pak000-Nonfree.pak` to the `Resources` folder inside your build output directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE/Resources`. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
+10. Copy `Resources/PackageInfo.json` to the `Resources` folder inside your build output directory.
 
 ### On macOS (with Ninja)
 1. Get the latest version of Xcode and the OpenSpades source code. Install the following prerequisites:
