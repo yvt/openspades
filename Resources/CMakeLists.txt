@@ -47,30 +47,13 @@ if(OPENSPADES_RESOURCES)
 			${COMPILED_PAK_FILES})
 
 	if(WIN32)
-		if(MSVC)
-			# multi-config
-			# FIXME: The actual output directory is
-			#   `${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Resources`, but
-			#   the `OUTPUT` parameter (`${COMPILED_PAK_FILES}`) points to
-			#   `${CMAKE_BINARY_DIR}/Resources`. Consequently, MSVC runs this
-			#   command on every build run whether the input files have changed
-			#   or not.
-			#   CMake does not support generator expressions (`$<...>`) in
-			#   the `OUTPUT` parameter of `add_custom_command`.
-			add_custom_command(
-				OUTPUT ${COMPILED_PAK_FILES}
-				COMMAND powershell -ExecutionPolicy Bypass ${CMAKE_CURRENT_SOURCE_DIR}/mkpak.ps1
-					${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Resources
-					DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}
-				WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-		else()
-			add_custom_command(
-				OUTPUT ${COMPILED_PAK_FILES}
-				COMMAND powershell -ExecutionPolicy Bypass ${CMAKE_CURRENT_SOURCE_DIR}/mkpak.ps1
-					${CMAKE_BINARY_DIR}/bin/Resources
-					DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}
-				WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-		endif()
+		add_custom_command(
+			OUTPUT ${COMPILED_PAK_FILES}
+			COMMAND powershell -ExecutionPolicy Bypass 
+				${CMAKE_CURRENT_SOURCE_DIR}/mkpak.ps1
+				${CMAKE_CURRENT_BINARY_DIR}
+			DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}
+			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 	elseif (UNIX)
 		add_custom_command(
 			OUTPUT ${COMPILED_PAK_FILES}
@@ -79,21 +62,22 @@ if(OPENSPADES_RESOURCES)
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 	endif()
 
+	add_custom_command(
+		OUTPUT ${PACKAGE_INFO_OUT_FILE}
+		DEPENDS ${PACKAGE_INFO_IN_FILE}
+		COMMAND ${CMAKE_COMMAND} -E copy
+			${PACKAGE_INFO_IN_FILE} ${PACKAGE_INFO_OUT_FILE})
+
 	if (WIN32 AND MSVC)
-		# multi-config
-		# FIXME: see above
+		# copy the output files to the multi-config binary directory
+		# (you can't use generator expressions (`$<...>`) in `add_custom_command`'s
+		#  `OUTPUT` parameter; it's not supported by CMake.)
 		add_custom_command(
-			OUTPUT ${PACKAGE_INFO_OUT_FILE}
-			DEPENDS ${PACKAGE_INFO_IN_FILE}
-			COMMAND ${CMAKE_COMMAND} -E copy
-				${PACKAGE_INFO_IN_FILE} 
-				${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Resources/PackageInfo.json)
-	else (WIN32 AND MSVC)
-		add_custom_command(
-			OUTPUT ${PACKAGE_INFO_OUT_FILE}
-			DEPENDS ${PACKAGE_INFO_IN_FILE}
-			COMMAND ${CMAKE_COMMAND} -E copy
-				${PACKAGE_INFO_IN_FILE} ${PACKAGE_INFO_OUT_FILE})
+			TARGET OpenSpades_Resources POST_BUILD
+			COMMAND
+				${CMAKE_COMMAND} -E copy_if_different
+					${COMPILED_PAK_FILES} ${PACKAGE_INFO_OUT_FILE}
+					${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Resources)
 	endif (WIN32 AND MSVC)
 endif()
 
