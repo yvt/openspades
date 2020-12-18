@@ -13,7 +13,6 @@ if(VCPKG_TARGET_TRIPLET)
 	set(USE_VCPKG ON)
 else()
 	set(USE_VCPKG OFF)
-	set(CMAKE_PREFIX_PATH Sources/Externals)
 endif()
 
 # Prefer GLVND OpenGL
