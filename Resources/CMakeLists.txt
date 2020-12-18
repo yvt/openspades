@@ -5,28 +5,34 @@ set(COMPILED_PAK_FILES
 	${CMAKE_CURRENT_BINARY_DIR}/pak050-Locales.pak
 	${CMAKE_CURRENT_BINARY_DIR}/pak999-References.pak)
 
+if(OPENSPADES_RESOURCES AND OPENSPADES_NONFREE_RESOURCES)
+	set(NONFREE_PAK_FILES
+		${CMAKE_CURRENT_BINARY_DIR}/pak000-Nonfree.pak
+		${CMAKE_CURRENT_BINARY_DIR}/font-unifont.pak)
+endif(OPENSPADES_NONFREE_RESOURCES)
+
 set(PAK_FILES
 	${COMPILED_PAK_FILES}
-	${CMAKE_CURRENT_BINARY_DIR}/pak000-Nonfree.pak
-	${CMAKE_CURRENT_BINARY_DIR}/font-unifont.pak
+	${NONFREE_PAK_FILES}
 	PARENT_SCOPE)
 
 if(OPENSPADES_RESOURCES)
-
-	if (WIN32)
-		# No automatic downloading for Windows (for now)
-	elseif (UNIX)
-		add_custom_target(OpenSpades_Resources_DevPaks ALL COMMENT "Downloading non-GPL assets"
-			DEPENDS
-				${CMAKE_CURRENT_BINARY_DIR}/pak000-Nonfree.pak
-				${CMAKE_CURRENT_BINARY_DIR}/font-unifont.pak)
-		add_custom_command(
-			COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/downloadpak.sh
-			OUTPUT
-				${CMAKE_CURRENT_BINARY_DIR}/pak000-Nonfree.pak
-				${CMAKE_CURRENT_BINARY_DIR}/font-unifont.pak
-			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-	endif()
+	if(OPENSPADES_NONFREE_RESOURCES)
+		if (WIN32)
+			# No automatic downloading for Windows (for now)
+		elseif (UNIX)
+			add_custom_target(OpenSpades_Resources_DevPaks ALL COMMENT "Downloading non-GPL assets"
+				DEPENDS
+					${CMAKE_CURRENT_BINARY_DIR}/pak000-Nonfree.pak
+					${CMAKE_CURRENT_BINARY_DIR}/font-unifont.pak)
+			add_custom_command(
+				COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/downloadpak.sh
+				OUTPUT
+					${CMAKE_CURRENT_BINARY_DIR}/pak000-Nonfree.pak
+					${CMAKE_CURRENT_BINARY_DIR}/font-unifont.pak
+				WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+		endif()
+	endif(OPENSPADES_NONFREE_RESOURCES)
 
 	# TODO: subgroups for script files
 	file(GLOB_RECURSE SCRIPT_FILES ${CMAKE_CURRENT_SOURCE_DIR}/Scripts/*.as)
