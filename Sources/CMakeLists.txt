@@ -47,9 +47,10 @@ set_target_properties(OpenSpades PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BIN
 set_target_properties(OpenSpades PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set_target_properties(OpenSpades PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-if(APPLE)
+if(APPLE OR WIN32)
 	# This value is reflected to the macOS application bundle's name, so use
-	# the correct capitalization
+	# the correct capitalization.
+	# We also want the correct capitalization on Windows.
 	set_target_properties(OpenSpades PROPERTIES OUTPUT_NAME OpenSpades)
 else(APPLE)
 	set_target_properties(OpenSpades PROPERTIES OUTPUT_NAME openspades)
