@@ -189,7 +189,7 @@ if(HAS_SOCKLEN_T)
     add_definitions(-DHAS_SOCKLEN_T=1)
 endif()
 
-option(OPENSPADES_RESOURCES "NO_OPENSPADES_RESOURCES" ON)
+option(OPENSPADES_RESOURCES "Build game assets" ON)
 
 # note that all paths are without trailing slash
 set(OPENSPADES_INSTALL_DOC       "share/doc/openspades" CACHE STRING "Directory for installing documentation. ")
