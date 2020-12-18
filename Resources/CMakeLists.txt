@@ -33,18 +33,30 @@ if(OPENSPADES_RESOURCES)
 	file(GLOB_RECURSE SHADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/Shaders/*.fs
 		${CMAKE_CURRENT_SOURCE_DIR}/Shaders/*.program
 		${CMAKE_CURRENT_SOURCE_DIR}/Shaders/*.vs)
+	set(PACKAGE_INFO_IN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/PackageInfo.json)
+	set(PACKAGE_INFO_OUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/PackageInfo.json)
 
 	source_group("Scripts" FILES ${SCRIPT_FILES})
 	source_group("Shaders" FILES ${SHADER_FILES})
 
 	add_custom_target(OpenSpades_Resources ALL
-		COMMENT "Packing assets"
-		SOURCES ${SCRIPT_FILES} ${SHADER_FILES}
-		DEPENDS ${COMPILED_PAK_FILES})
+		COMMENT "Building assets"
+		SOURCES ${SCRIPT_FILES} ${SHADER_FILES} ${PACKAGE_INFO_IN_FILE}
+		DEPENDS 
+			${PACKAGE_INFO_OUT_FILE}
+			${COMPILED_PAK_FILES})
 
 	if(WIN32)
 		if(MSVC)
 			# multi-config
+			# FIXME: The actual output directory is
+			#   `${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Resources`, but
+			#   the `OUTPUT` parameter (`${COMPILED_PAK_FILES}`) points to
+			#   `${CMAKE_BINARY_DIR}/Resources`. Consequently, MSVC runs this
+			#   command on every build run whether the input files have changed
+			#   or not.
+			#   CMake does not support generator expressions (`$<...>`) in
+			#   the `OUTPUT` parameter of `add_custom_command`.
 			add_custom_command(
 				OUTPUT ${COMPILED_PAK_FILES}
 				COMMAND powershell -ExecutionPolicy Bypass ${CMAKE_CURRENT_SOURCE_DIR}/mkpak.ps1
@@ -67,8 +79,22 @@ if(OPENSPADES_RESOURCES)
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 	endif()
 
-	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/PackageInfo.json
-		DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+	if (WIN32 AND MSVC)
+		# multi-config
+		# FIXME: see above
+		add_custom_command(
+			OUTPUT ${PACKAGE_INFO_OUT_FILE}
+			DEPENDS ${PACKAGE_INFO_IN_FILE}
+			COMMAND ${CMAKE_COMMAND} -E copy
+				${PACKAGE_INFO_IN_FILE} 
+				${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Resources/PackageInfo.json)
+	else (WIN32 AND MSVC)
+		add_custom_command(
+			OUTPUT ${PACKAGE_INFO_OUT_FILE}
+			DEPENDS ${PACKAGE_INFO_IN_FILE}
+			COMMAND ${CMAKE_COMMAND} -E copy
+				${PACKAGE_INFO_IN_FILE} ${PACKAGE_INFO_OUT_FILE})
+	endif (WIN32 AND MSVC)
 endif()
 
 if(UNIX AND NOT APPLE)
