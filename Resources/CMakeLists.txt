@@ -96,6 +96,9 @@ if(OPENSPADES_RESOURCES)
 			TARGET OpenSpades_Resources POST_BUILD
 			COMMENT "Copying assets to the currently-selected configuration's build directory"
 			COMMAND
+				${CMAKE_COMMAND} -E make_directory
+					${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Resources
+			COMMAND
 				${CMAKE_COMMAND} -E copy_if_different
 					${COMPILED_PAK_FILES} ${PACKAGE_INFO_OUT_FILE}
 					${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Resources)
