@@ -63,8 +63,21 @@ DEFINE_SPADES_SETTING(cg_skipDeadPlayersWhenDead, "1");
 
 SPADES_SETTING(cg_playerName);
 
+DEFINE_SPADES_SETTING(dd_specNames, "0");
+DEFINE_SPADES_SETTING(dd_specWallhack, "0");
+
+DEFINE_SPADES_SETTING(cg_outlines, "0");
+DEFINE_SPADES_SETTING(cg_outlineStrength, "2");
+DEFINE_SPADES_SETTING(cg_textures, "0");
+DEFINE_SPADES_SETTING(cg_textureStrength, "10");
+DEFINE_SPADES_SETTING(cg_multiTextures, "0");
+
+DEFINE_SPADES_SETTING(s_volume, "100");
+
 namespace spades {
 	namespace client {
+
+		Client *Client::globalInstance = nullptr;
 
 		Client::Client(Handle<IRenderer> r, Handle<IAudioDevice> audioDev,
 		               const ServerAddress &host, Handle<FontManager> fontManager)
@@ -107,6 +120,8 @@ namespace spades {
 		      nextMapShotIndex(0) {
 			SPADES_MARK_FUNCTION();
 			SPLog("Initializing...");
+
+			globalInstance = this;
 
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));
@@ -198,6 +213,8 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			NetLog("Disconnecting");
+
+			globalInstance = nullptr;
 
 			DrawDisconnectScreen();
 
@@ -755,6 +772,34 @@ namespace spades {
 			} else {
 				followCameraState.enabled = true;
 			}
+		}
+
+#pragma mark - Helper functions
+		
+		bool Client::AreCheatsEnabled() {
+			if (!globalInstance)
+				return false;
+			if (!globalInstance->world)
+				return false;
+			auto *ply = globalInstance->world->GetLocalPlayer();
+			if (!ply)
+				return false;
+
+			return ply->GetTeamId() >= 2 &&
+			       ply->IsAlive();
+		}
+
+		bool Client::WallhackActive() { return AreCheatsEnabled() && dd_specWallhack; }
+
+		Vector3 Client::TeamCol(unsigned int teamId) {
+			if (!globalInstance) {
+				return Vector3(0, 0, 0);
+			}
+			if (teamId >= 2) {
+				return Vector3(1, 1, 1);
+			}
+			const auto col = globalInstance->world->GetTeam(teamId).color;
+			return Vector3(col.x / 255.0f, col.y / 255.0f, col.z / 255.0f);
 		}
 	} // namespace client
 } // namespace spades

@@ -21,10 +21,8 @@
 #include <algorithm>
 #include <cstddef>
 
-#include <Client/GameMap.h>
-#include <Core/Debug.h>
-#include <Core/Settings.h>
 #include "GLDynamicLightShader.h"
+#include "GLImage.h"
 #include "GLMapChunk.h"
 #include "GLMapRenderer.h"
 #include "GLProgramAttribute.h"
@@ -32,6 +30,12 @@
 #include "GLRenderer.h"
 #include "IGLDevice.h"
 #include <AngelScript/include/angelscript.h> // for asOFFSET. somehow `offsetof` fails on gcc-4.8
+#include <Client/GameMap.h>
+#include <Core/Debug.h>
+#include <Core/Settings.h>
+
+SPADES_SETTING(cg_textures);
+SPADES_SETTING(cg_multiTextures);
 
 namespace spades {
 	namespace draw {
@@ -115,9 +119,13 @@ namespace spades {
 		 * @param x Chunk local X coordinate
 		 * @param y Chunk local Y coordinate
 		 * @param z Chunk local Z coordinate
+		 * @param tNumX Multi-texture X coordinate
+		 * @param tNumY Multi-texture Y coordinate
 		 */
 		void GLMapChunk::EmitVertex(int x, int y, int z, int aoX, int aoY, int aoZ, int ux, int uy,
-		                            int vx, int vy, uint32_t color, int nx, int ny, int nz) {
+		                            int vx, int vy, uint32_t color,
+		                            int tNumX, int tNumY,
+		                            int nx, int ny, int nz) {
 			SPADES_MARK_FUNCTION_DEBUG();
 
 			int uz = (ux == 0 && uy == 0) ? 1 : 0;
@@ -163,25 +171,99 @@ namespace spades {
 			inst.z = z;
 			inst.aoX = aoTexX;
 			inst.aoY = aoTexY;
-			vertices.push_back(inst);
-			inst.x = x + ux;
-			inst.y = y + uy;
-			inst.z = z + uz;
-			inst.aoX = aoTexX + 15;
-			inst.aoY = aoTexY;
-			vertices.push_back(inst);
-			inst.x = x + vx;
-			inst.y = y + vy;
-			inst.z = z + vz;
-			inst.aoX = aoTexX;
-			inst.aoY = aoTexY + 15;
-			vertices.push_back(inst);
-			inst.x = x + ux + vx;
-			inst.y = y + uy + vy;
-			inst.z = z + uz + vz;
-			inst.aoX = aoTexX + 15;
-			inst.aoY = aoTexY + 15;
-			vertices.push_back(inst);
+
+			// Add the vertices differently depending on texture mode
+			if (!renderer->previous_cg_textures) {
+				// don't bother with ux/uy
+				vertices.push_back(inst);
+
+				inst.x = x + ux;
+				inst.y = y + uy;
+				inst.z = z + uz;
+				inst.aoX = aoTexX + 15;
+				inst.aoY = aoTexY;
+				vertices.push_back(inst);
+
+				inst.x = x + vx;
+				inst.y = y + vy;
+				inst.z = z + vz;
+				inst.aoX = aoTexX;
+				inst.aoY = aoTexY + 15;
+				vertices.push_back(inst);
+
+				inst.x = x + ux + vx;
+				inst.y = y + uy + vy;
+				inst.z = z + uz + vz;
+				inst.aoX = aoTexX + 15;
+				inst.aoY = aoTexY + 15;
+				vertices.push_back(inst);
+			} else if (renderer->previous_cg_multiTextures) {
+				float ulen = 1.0f / 8.0f;
+
+				// add the vertices
+
+				inst.ux = (tNumX + 1) * ulen;
+				inst.uy = tNumY * ulen;
+				vertices.push_back(inst);
+
+				inst.x = x + ux;
+				inst.y = y + uy;
+				inst.z = z + uz;
+				inst.aoX = aoTexX + 15;
+				inst.aoY = aoTexY;
+				inst.ux = (tNumX + 1) * ulen;
+				inst.uy = (tNumY + 1) * ulen;
+				vertices.push_back(inst);
+
+				inst.x = x + vx;
+				inst.y = y + vy;
+				inst.z = z + vz;
+				inst.aoX = aoTexX;
+				inst.aoY = aoTexY + 15;
+				inst.ux = tNumX * ulen;
+				inst.uy = tNumY * ulen;
+				vertices.push_back(inst);
+
+				inst.x = x + ux + vx;
+				inst.y = y + uy + vy;
+				inst.z = z + uz + vz;
+				inst.aoX = aoTexX + 15;
+				inst.aoY = aoTexY + 15;
+				inst.ux = tNumX * ulen;
+				inst.uy = (tNumY + 1) * ulen;
+				vertices.push_back(inst);
+			} else { // i.e. single texture mode
+				inst.ux = 1;
+				inst.uy = 0;
+				vertices.push_back(inst);
+
+				inst.x = x + ux;
+				inst.y = y + uy;
+				inst.z = z + uz;
+				inst.aoX = aoTexX + 15;
+				inst.aoY = aoTexY;
+				inst.ux = 1;
+				inst.uy = 1;
+				vertices.push_back(inst);
+
+				inst.x = x + vx;
+				inst.y = y + vy;
+				inst.z = z + vz;
+				inst.aoX = aoTexX;
+				inst.aoY = aoTexY + 15;
+				inst.ux = 0;
+				inst.uy = 0;
+				vertices.push_back(inst);
+
+				inst.x = x + ux + vx;
+				inst.y = y + uy + vy;
+				inst.z = z + uz + vz;
+				inst.aoX = aoTexX + 15;
+				inst.aoY = aoTexY + 15;
+				inst.ux = 0;
+				inst.uy = 1;
+				vertices.push_back(inst);
+			}
 
 			indices.push_back(idx);
 			indices.push_back(idx + 1);
@@ -244,6 +326,42 @@ namespace spades {
 						uint32_t col = map->GetColor(xx, yy, zz);
 						// col = 0xffffffff;
 
+						// Determine which faces are being added up here instead of below
+						const auto nsolid1 = !IsSolid(xx, yy, zz + 1);
+						const auto nsolid2 = !IsSolid(xx, yy, zz - 1);
+						const auto nsolid3 = !IsSolid(xx - 1, yy, zz);
+						const auto nsolid4 = !IsSolid(xx + 1, yy, zz);
+						const auto nsolid5 = !IsSolid(xx, yy - 1, zz);
+						const auto nsolid6 = !IsSolid(xx, yy + 1, zz);
+
+						// Compute the texture coords for this block (perhaps)
+						int tNumX, tNumY;
+						// Only do the computation if at least one face added
+						if (nsolid1 || nsolid2 || nsolid3 || nsolid4 || nsolid5 || nsolid6) {
+							// Only do the computation if in multi-texture mode
+							if (renderer->previous_cg_multiTextures &&
+							    renderer->previous_cg_textures) {
+								const auto r = static_cast<int>(static_cast<uint8_t>(col));
+								const auto g = static_cast<int>(static_cast<uint8_t>(col >> 8));
+								const auto b = static_cast<int>(static_cast<uint8_t>(col >> 16));
+								// Determine the r,g,b coords of the color
+								const auto rCoord = r / 64;
+								const auto gCoord = g / 64;
+								const auto bCoord = b / 64;
+								// Translate that into texture coords on the block
+								tNumX = rCoord;
+								tNumY = gCoord;
+								if (bCoord == 1 || bCoord == 3) {
+									tNumX += 4;
+								}
+								if (bCoord == 2 || bCoord == 3) {
+									tNumY += 4;
+								}
+							}
+						} else {
+							continue; // no faces being added
+						}
+
 						// damaged block?
 						int health = col >> 24;
 						if (health < 100) {
@@ -252,23 +370,23 @@ namespace spades {
 							col >>= 1;
 						}
 
-						if (!IsSolid(xx, yy, zz + 1)) {
-							EmitVertex(x + 1, y, z + 1, xx, yy, zz + 1, -1, 0, 0, 1, col, 0, 0, 1);
+						if (nsolid1) {
+							EmitVertex(x + 1, y, z + 1, xx, yy, zz + 1, -1, 0, 0, 1, col, tNumX, tNumY, 0, 0, 1);
 						}
-						if (!IsSolid(xx, yy, zz - 1)) {
-							EmitVertex(x, y, z, xx, yy, zz - 1, 1, 0, 0, 1, col, 0, 0, -1);
+						if (nsolid2) {
+							EmitVertex(x, y, z, xx, yy, zz - 1, 1, 0, 0, 1, col, tNumX, tNumY, 0, 0, -1);
 						}
-						if (!IsSolid(xx - 1, yy, zz)) {
-							EmitVertex(x, y + 1, z, xx - 1, yy, zz, 0, 0, 0, -1, col, -1, 0, 0);
+						if (nsolid3) {
+							EmitVertex(x, y + 1, z, xx - 1, yy, zz, 0, 0, 0, -1, col, tNumX, tNumY, -1, 0, 0);
 						}
-						if (!IsSolid(xx + 1, yy, zz)) {
-							EmitVertex(x + 1, y, z, xx + 1, yy, zz, 0, 0, 0, 1, col, 1, 0, 0);
+						if (nsolid4) {
+							EmitVertex(x + 1, y, z, xx + 1, yy, zz, 0, 0, 0, 1, col, tNumX, tNumY, 1, 0, 0);
 						}
-						if (!IsSolid(xx, yy - 1, zz)) {
-							EmitVertex(x, y, z, xx, yy - 1, zz, 0, 0, 1, 0, col, 0, -1, 0);
+						if (nsolid5) {
+							EmitVertex(x, y, z, xx, yy - 1, zz, 0, 0, 1, 0, col, tNumX, tNumY, 0, -1, 0);
 						}
-						if (!IsSolid(xx, yy + 1, zz)) {
-							EmitVertex(x + 1, y + 1, z, xx, yy + 1, zz, 0, 0, -1, 0, col, 0, 1, 0);
+						if (nsolid6) {
+							EmitVertex(x + 1, y + 1, z, xx, yy + 1, zz, 0, 0, -1, 0, col, tNumX, tNumY, 0, 1, 0);
 						}
 					}
 				}
@@ -405,6 +523,11 @@ namespace spades {
 			static GLProgramAttribute normalAttribute("normalAttribute");
 			static GLProgramAttribute fixedPositionAttribute("fixedPositionAttribute");
 
+			static GLProgramAttribute blockTexCoordAttribute("blockTexCoordAttribute");
+			if (renderer->previous_cg_textures) {
+				blockTexCoordAttribute(basicProgram);
+			}
+
 			positionAttribute(basicProgram);
 			ambientOcclusionCoordAttribute(basicProgram);
 			colorAttribute(basicProgram);
@@ -426,6 +549,11 @@ namespace spades {
 
 			device->VertexAttribPointer(fixedPositionAttribute(), 3, IGLDevice::Byte, false,
 			                            sizeof(Vertex), (void *)asOFFSET(Vertex, sx));
+
+			if (renderer->previous_cg_textures) {
+				device->VertexAttribPointer(blockTexCoordAttribute(), 2, IGLDevice::FloatType,
+				                            false, sizeof(Vertex), (void *)asOFFSET(Vertex, ux));
+			}
 
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 			device->BindBuffer(IGLDevice::ElementArrayBuffer, iBuffer);
@@ -510,6 +638,64 @@ namespace spades {
 				                     IGLDevice::UnsignedShort, NULL);
 			}
 
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
+		}
+
+		void GLMapChunk::RenderOutlinesPass() {
+			SPADES_MARK_FUNCTION();
+			const auto eye = renderer->renderer->GetSceneDef().viewOrigin;
+
+			if (!realized)
+				return;
+			if (needsUpdate) {
+				Update();
+				needsUpdate = false;
+			}
+			if (!buffer) {
+				// empty chunk
+				return;
+			}
+			auto bx = aabb;
+
+			const auto diff = eye - centerPos;
+			auto sx = 0.f, sy = 0.f;
+			// FIXME: variable map size?
+			if (diff.x > 256.f)
+				sx += 512.f;
+			if (diff.y > 256.f)
+				sy += 512.f;
+			if (diff.x < -256.f)
+				sx -= 512.f;
+			if (diff.y < -256.f)
+				sy -= 512.f;
+
+			bx.min.x += sx;
+			bx.min.y += sy;
+			bx.max.x += sx;
+			bx.max.y += sy;
+
+			if (!renderer->renderer->BoxFrustrumCull(bx))
+				return;
+
+			auto *const outlinesProgram = renderer->basicOutlinesProgram;
+
+			static GLProgramUniform chunkPosition("chunkPosition");
+
+			chunkPosition(outlinesProgram);
+			chunkPosition.SetValue(static_cast<float>(chunkX * Size) + sx, static_cast<float>(chunkY * Size) + sy,
+			                       static_cast<float>(chunkZ * Size));
+
+			static GLProgramAttribute positionAttribute("positionAttribute");
+			positionAttribute(outlinesProgram);
+
+			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			device->VertexAttribPointer(positionAttribute(), 3, IGLDevice::UnsignedByte, false,
+			                            sizeof(Vertex), reinterpret_cast<void *>(asOFFSET(Vertex, x)));
+
+			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			device->BindBuffer(IGLDevice::ElementArrayBuffer, iBuffer);
+			device->DrawElements(IGLDevice::Triangles, indices.size(), IGLDevice::UnsignedShort,
+			                     nullptr);
 			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
 		}
 

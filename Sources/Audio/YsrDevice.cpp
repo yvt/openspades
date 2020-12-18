@@ -38,6 +38,10 @@ DEFINE_SPADES_SETTING(s_ysrDriver, "YSRSpades.dll");
 DEFINE_SPADES_SETTING(s_ysrDriver, "libysrspades.so");
 #endif
 
+SPADES_SETTING(s_volume);
+extern int s_volume_previous;
+extern float dBPrevious;
+
 DEFINE_SPADES_SETTING(s_ysrNumThreads, "2");
 SPADES_SETTING(s_maxPolyphonics);
 SPADES_SETTING(s_gain);
@@ -562,7 +566,21 @@ namespace spades {
 			YsrContext::PlayParam param;
 			param.pitch = base.pitch;
 			param.referenceDistance = base.referenceDistance;
-			param.volume = base.volume * std::max<float>(std::min<float>(s_gain, 4.0f), 0.0f);
+
+			// Update master volume control
+			if (s_volume_previous != (int)s_volume) {
+				// update the previous volume
+				s_volume_previous = (int)s_volume;
+				// compute the new dB level, where 27.71373379 ~ 10^(1/log(2)), and update the
+				// master gain to it
+				if ((int)s_volume == 0) {
+					dBPrevious = 0;
+				} else {
+					dBPrevious = powf(27.71373379f, log(((float)s_volume) / 100.0f));
+				}
+			}
+			param.volume = dBPrevious;
+			
 			return param;
 		}
 

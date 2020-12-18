@@ -22,9 +22,9 @@
 
 #include <vector>
 
+#include "GLDynamicLight.h"
 #include <Client/IModel.h>
 #include <Client/IRenderer.h>
-#include "GLDynamicLight.h"
 
 namespace spades {
 	namespace draw {
@@ -45,11 +45,20 @@ namespace spades {
 
 			/** Renders sunlighted solid geometry */
 			virtual void RenderSunlightPass(std::vector<client::ModelRenderParam> params,
-			                                bool ghostPass) = 0;
+			                                bool ghostPass,
+			                                bool farRender) = 0;
 
 			/** Adds dynamic light */
 			virtual void RenderDynamicLightPass(std::vector<client::ModelRenderParam> params,
-			                                    std::vector<GLDynamicLight> lights) = 0;
+			                                    std::vector<GLDynamicLight> lights,
+			                                    bool farRender) = 0;
+
+			virtual void RenderOutlinesPass(std::vector<client::ModelRenderParam> params,
+			                                Vector3 outlineColor, bool fog, bool farRender) = 0;
+			virtual void RenderOccludedPass(std::vector<client::ModelRenderParam> params,
+			                                bool farRender) = 0;
+			virtual void RenderOcclusionTestPass(std::vector<client::ModelRenderParam> params,
+			                                     bool farRender) = 0;
 
 		private:
 			// members used when rendering by GLModelRenderer

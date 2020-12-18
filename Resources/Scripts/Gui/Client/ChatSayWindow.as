@@ -190,6 +190,7 @@ namespace spades {
                 @field = CommandField(Manager, ui.chatHistory);
                 field.Bounds = AABB2(winX, winY, winW, 30.f);
                 field.Placeholder = _Tr("Client", "Chat Text");
+                field.MaxLength = 93;
                 @field.Changed = spades::ui::EventHandler(this.OnFieldChanged);
                 AddChild(field);
             }

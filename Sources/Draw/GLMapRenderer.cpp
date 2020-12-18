@@ -35,6 +35,10 @@
 #include "GLShadowShader.h"
 #include "IGLDevice.h"
 
+SPADES_SETTING(cg_textures);
+SPADES_SETTING(cg_multiTextures);
+SPADES_SETTING(cg_textureStrength);
+
 namespace spades {
 	namespace draw {
 		void GLMapRenderer::PreloadShaders(spades::draw::GLRenderer *renderer) {
@@ -70,10 +74,27 @@ namespace spades {
 				basicProgram = renderer->RegisterProgram("Shaders/BasicBlockPhys.program");
 			else
 				basicProgram = renderer->RegisterProgram("Shaders/BasicBlock.program");
+
+			if (r->GetSettings().r_physicalLighting) {
+				basicTexturesProgram =
+				  renderer->RegisterProgram("Shaders/BasicBlockPhysTextures.program");
+			} else {
+				basicTexturesProgram =
+				  renderer->RegisterProgram("Shaders/BasicBlockTextures.program");
+			}
+			basicNoTexturesProgram = basicProgram;
+
+			basicOutlinesProgram = renderer->RegisterProgram("Shaders/BasicBlockOutlines.program");
+			
 			depthonlyProgram = renderer->RegisterProgram("Shaders/BasicBlockDepthOnly.program");
 			dlightProgram = renderer->RegisterProgram("Shaders/BasicBlockDynamicLit.program");
 			backfaceProgram = renderer->RegisterProgram("Shaders/BackFaceBlock.program");
 			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
+
+			mapBlockImage = (GLImage *)renderer->RegisterImage("Textures/MapBlock.png");
+			multiMapBlockImage = (GLImage *)renderer->RegisterImage("Textures/MultiMapBlock.png");
+			previous_cg_textures = cg_textures;
+			previous_cg_multiTextures = cg_multiTextures;
 
 			static const uint8_t squareVertices[] = {0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1};
 			squareVertexBuffer = device->GenBuffer();
@@ -121,6 +142,21 @@ namespace spades {
 							GetChunk(xx, yy, zz)->SetNeedsUpdate();
 						}
 					}
+		}
+
+		void GLMapRenderer::UpdateTextureMode() {
+			// Determine if texture mode changed
+			if ((static_cast<bool>(cg_textures) != previous_cg_textures) ||
+			    (static_cast<bool>(cg_multiTextures) != previous_cg_multiTextures)) {
+
+				// Force the chunks to update (need to update their tex-coords)
+				for (int i = 0; i < numChunks; i++) {
+					chunks[i]->SetNeedsUpdate();
+				}
+				// Update previous things
+				previous_cg_textures = cg_textures;
+				previous_cg_multiTextures = cg_multiTextures;
+			}
 		}
 
 		void GLMapRenderer::RealizeChunks(spades::Vector3 eye) {
@@ -191,6 +227,9 @@ namespace spades {
 
 			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map");
 
+			// Determine if texturing this frame, set the program to use accordingly.
+			basicProgram = previous_cg_textures ? basicTexturesProgram : basicNoTexturesProgram;
+
 			Vector3 eye = renderer->GetSceneDef().viewOrigin;
 
 			// draw back face to avoid cheating.
@@ -206,10 +245,32 @@ namespace spades {
 			device->ActiveTexture(1);
 			device->BindTexture(IGLDevice::Texture2D, 0);
 
+			static GLProgramUniform blockTextureStrength("blockTextureStrength");
+			if (previous_cg_textures) {
+
+				device->ActiveTexture(8);
+				if (previous_cg_multiTextures) {
+					multiMapBlockImage->Bind(IGLDevice::Texture2D);
+					device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+					                     IGLDevice::Nearest);
+				} else {
+					mapBlockImage->Bind(IGLDevice::Texture2D);
+					device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+					                     IGLDevice::Linear);
+				}
+				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+				                     IGLDevice::Nearest);
+			}
+
 			device->Enable(IGLDevice::CullFace, true);
 			device->Enable(IGLDevice::DepthTest, true);
 
 			basicProgram->Use();
+
+			if (previous_cg_textures) {
+				blockTextureStrength(basicProgram);
+				blockTextureStrength.SetValue(((float)cg_textureStrength) / 200.0f);
+			}
 
 			static GLShadowShader shadowShader;
 			shadowShader(renderer, basicProgram, 2);
@@ -237,6 +298,12 @@ namespace spades {
 			detailTextureUnif(basicProgram);
 			detailTextureUnif.SetValue(1);
 
+			if (previous_cg_textures) {
+				static GLProgramUniform blockTexture("blockTexture");
+				blockTexture(basicProgram);
+				blockTexture.SetValue(8);
+			}
+
 			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
 
 			static GLProgramAttribute positionAttribute("positionAttribute");
@@ -245,6 +312,12 @@ namespace spades {
 			static GLProgramAttribute colorAttribute("colorAttribute");
 			static GLProgramAttribute normalAttribute("normalAttribute");
 			static GLProgramAttribute fixedPositionAttribute("fixedPositionAttribute");
+
+			static GLProgramAttribute blockTexCoordAttribute("blockTexCoordAttribute");
+			if (previous_cg_textures) {
+				blockTexCoordAttribute(basicProgram);
+				device->EnableVertexAttribArray(blockTexCoordAttribute(), true);
+			}
 
 			positionAttribute(basicProgram);
 			ambientOcclusionCoordAttribute(basicProgram);
@@ -299,6 +372,16 @@ namespace spades {
 			if (normalAttribute() != -1)
 				device->EnableVertexAttribArray(normalAttribute(), false);
 			device->EnableVertexAttribArray(fixedPositionAttribute(), false);
+
+			if (previous_cg_textures) {
+				device->EnableVertexAttribArray(blockTexCoordAttribute(), false);
+
+				device->ActiveTexture(8);
+				device->BindTexture(IGLDevice::Texture2D, 0);
+
+				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+				                     IGLDevice::Linear);
+			}
 
 			device->ActiveTexture(1);
 			device->BindTexture(IGLDevice::Texture2D, 0);
@@ -405,6 +488,65 @@ namespace spades {
 				GetChunk(cx, cy, z)->RenderSunlightPass();
 		}
 
+		void GLMapRenderer::RenderOutlinesPass(Vector3 outlineColor) {
+			SPADES_MARK_FUNCTION();
+
+			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Map");
+			basicOutlinesProgram->Use();
+
+			Vector3 eye = renderer->GetSceneDef().viewOrigin;
+
+			static GLProgramUniform fogColor("fogColor");
+			fogColor(basicOutlinesProgram);
+			Vector3 fogCol = renderer->GetFogColorForSolidPass();
+			fogCol *= fogCol; // linearize
+			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
+
+			static GLProgramUniform outlineColorUniform("outlineColor");
+			outlineColorUniform(basicOutlinesProgram);
+			outlineColor *= outlineColor;
+			outlineColorUniform.SetValue(outlineColor.x, outlineColor.y, outlineColor.z);
+
+			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+
+			static GLProgramAttribute positionAttribute("positionAttribute");
+			positionAttribute(basicOutlinesProgram);
+			device->EnableVertexAttribArray(positionAttribute(), true);
+
+			static GLProgramUniform viewOriginVector("viewOriginVector");
+			viewOriginVector(basicOutlinesProgram);
+			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
+
+			static GLProgramUniform projectionViewMatrix("projectionViewMatrix");
+			projectionViewMatrix(basicOutlinesProgram);
+			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
+
+			static GLProgramUniform viewMatrix("viewMatrix");
+			viewMatrix(basicOutlinesProgram);
+			viewMatrix.SetValue(renderer->GetViewMatrix());
+
+			RealizeChunks(eye);
+
+			// draw from nearest to farthest
+			const auto cx = static_cast<int>(floorf(eye.x)) / GLMapChunk::Size;
+			const auto cy = static_cast<int>(floorf(eye.y)) / GLMapChunk::Size;
+			const auto cz = static_cast<int>(floorf(eye.z)) / GLMapChunk::Size;
+			DrawColumnOutlines(cx, cy, cz, eye);
+			for (int dist = 1; dist <= 128 / GLMapChunk::Size; dist++) {
+				for (int x = cx - dist; x <= cx + dist; x++) {
+					DrawColumnOutlines(x, cy + dist, cz, eye);
+					DrawColumnOutlines(x, cy - dist, cz, eye);
+				}
+				for (int y = cy - dist + 1; y <= cy + dist - 1; y++) {
+					DrawColumnOutlines(cx + dist, y, cz, eye);
+					DrawColumnOutlines(cx - dist, y, cz, eye);
+				}
+			}
+
+			device->EnableVertexAttribArray(positionAttribute(), false);
+		}
+
 		void GLMapRenderer::DrawColumnDLight(int cx, int cy, int cz, spades::Vector3 eye,
 		                                     const std::vector<GLDynamicLight> &lights) {
 			cx &= numChunkWidth - 1;
@@ -413,6 +555,15 @@ namespace spades {
 				GetChunk(cx, cy, z)->RenderDLightPass(lights);
 			for (int z = std::min(cz - 1, 63); z >= 0; z--)
 				GetChunk(cx, cy, z)->RenderDLightPass(lights);
+		}
+
+		void GLMapRenderer::DrawColumnOutlines(int cx, int cy, int cz, Vector3 eye) {
+			cx &= numChunkWidth - 1;
+			cy &= numChunkHeight - 1;
+			for (int z = std::max(cz, 0); z < numChunkDepth; z++)
+				GetChunk(cx, cy, z)->RenderOutlinesPass();
+			for (int z = std::min(cz - 1, 63); z >= 0; z--)
+				GetChunk(cx, cy, z)->RenderOutlinesPass();
 		}
 
 #pragma mark - BackFaceBlock
