@@ -69,12 +69,14 @@ if(OPENSPADES_RESOURCES)
 			COMMAND powershell -ExecutionPolicy Bypass 
 				${CMAKE_CURRENT_SOURCE_DIR}/mkpak.ps1
 				${CMAKE_CURRENT_BINARY_DIR}
+			COMMENT "Building paks"
 			DEPENDS ${PAK_IN_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/mkpak.ps1
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 	elseif (UNIX)
 		add_custom_command(
 			OUTPUT ${COMPILED_PAK_FILES}
 			COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/mkpak.sh
+			COMMENT "Building paks"
 			DEPENDS ${PAK_IN_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/mkpak.sh
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 	endif()
@@ -82,6 +84,7 @@ if(OPENSPADES_RESOURCES)
 	add_custom_command(
 		OUTPUT ${PACKAGE_INFO_OUT_FILE}
 		DEPENDS ${PACKAGE_INFO_IN_FILE}
+		COMMENT "Copying PackageInfo.json"
 		COMMAND ${CMAKE_COMMAND} -E copy
 			${PACKAGE_INFO_IN_FILE} ${PACKAGE_INFO_OUT_FILE})
 
@@ -91,6 +94,7 @@ if(OPENSPADES_RESOURCES)
 		#  `OUTPUT` parameter; it's not supported by CMake.)
 		add_custom_command(
 			TARGET OpenSpades_Resources POST_BUILD
+			COMMENT "Copying assets to the currently-selected configuration's build directory"
 			COMMAND
 				${CMAKE_COMMAND} -E copy_if_different
 					${COMPILED_PAK_FILES} ${PACKAGE_INFO_OUT_FILE}
