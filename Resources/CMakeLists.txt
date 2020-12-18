@@ -1,13 +1,30 @@
+set(COMPILED_PAK_FILES
+	${CMAKE_CURRENT_BINARY_DIR}/pak002-Base.pak
+	${CMAKE_CURRENT_BINARY_DIR}/pak005-Models.pak
+	${CMAKE_CURRENT_BINARY_DIR}/pak010-BaseSkin.pak
+	${CMAKE_CURRENT_BINARY_DIR}/pak050-Locales.pak
+	${CMAKE_CURRENT_BINARY_DIR}/pak999-References.pak)
+
+set(PAK_FILES
+	${COMPILED_PAK_FILES}
+	${CMAKE_CURRENT_BINARY_DIR}/pak000-Nonfree.pak
+	${CMAKE_CURRENT_BINARY_DIR}/font-unifont.pak
+	PARENT_SCOPE)
 
 if(OPENSPADES_RESOURCES)
 
 	if (WIN32)
 		# No automatic downloading for Windows (for now)
 	elseif (UNIX)
-		add_custom_target(OpenSpades_Resources_DevPaks ALL COMMENT "Downloading non-GPL assets")
+		add_custom_target(OpenSpades_Resources_DevPaks ALL COMMENT "Downloading non-GPL assets"
+			DEPENDS
+				${CMAKE_CURRENT_BINARY_DIR}/pak000-Nonfree.pak
+				${CMAKE_CURRENT_BINARY_DIR}/font-unifont.pak)
 		add_custom_command(
-			TARGET OpenSpades_Resources_DevPaks
 			COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/downloadpak.sh
+			OUTPUT
+				${CMAKE_CURRENT_BINARY_DIR}/pak000-Nonfree.pak
+				${CMAKE_CURRENT_BINARY_DIR}/font-unifont.pak
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 	endif()
 
@@ -23,27 +40,30 @@ if(OPENSPADES_RESOURCES)
 	add_custom_target(OpenSpades_Resources ALL
 		COMMENT "Packing assets"
 		SOURCES ${SCRIPT_FILES} ${SHADER_FILES}
-		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR})
+		DEPENDS ${COMPILED_PAK_FILES})
 
 	if(WIN32)
 		if(MSVC)
 			# multi-config
 			add_custom_command(
-				TARGET OpenSpades_Resources
+				OUTPUT ${COMPILED_PAK_FILES}
 				COMMAND powershell -ExecutionPolicy Bypass ${CMAKE_CURRENT_SOURCE_DIR}/mkpak.ps1
 					${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/Resources
+					DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}
 				WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 		else()
 			add_custom_command(
-				TARGET OpenSpades_Resources
+				OUTPUT ${COMPILED_PAK_FILES}
 				COMMAND powershell -ExecutionPolicy Bypass ${CMAKE_CURRENT_SOURCE_DIR}/mkpak.ps1
 					${CMAKE_BINARY_DIR}/bin/Resources
+					DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}
 				WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 		endif()
 	elseif (UNIX)
 		add_custom_command(
-			TARGET OpenSpades_Resources
+			OUTPUT ${COMPILED_PAK_FILES}
 			COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/mkpak.sh
+			DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}
 			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 	endif()
 
@@ -51,7 +71,7 @@ if(OPENSPADES_RESOURCES)
 		DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
 	add_custom_target(OpenSpades_Unix ALL COMMENT "Process unix stuff")
 
 	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Icons)
@@ -77,4 +97,4 @@ if(UNIX)
 		COMMAND sh -c \"gzip -9 -c ${CMAKE_CURRENT_BINARY_DIR}/Unix/Man/openspades.6 > openspades.6.gz\"
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Unix/Man
 	)
-endif(UNIX)
+endif(UNIX AND NOT APPLE)
