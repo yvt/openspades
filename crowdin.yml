@@ -37,12 +37,6 @@ files: [
   #"ignore" : [],
 
   #
-  # The dest allows you to specify a file name on Crowdin
-  # e.g. "/messages.json"
-  #
-  "dest" : "/master/openspades.pot",
-
-  #
   # File type
   # e.g. "json"
   #
