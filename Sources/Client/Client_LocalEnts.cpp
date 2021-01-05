@@ -697,7 +697,7 @@ namespace spades {
 				return Vector3::Dot(result.hitPos - origin, lastSceneDef.viewAxis[2]);
 			}
 
-			return std::nan(nullptr);
+			return NAN;
 		}
 	}
 }
