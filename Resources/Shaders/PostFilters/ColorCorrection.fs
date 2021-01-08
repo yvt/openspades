@@ -69,8 +69,8 @@ void main() {
 	// We don't want specular highlights to cause black edges, so weaken the
 	// effect if the local luminance is high.
 	localLuminance = max(localLuminance, dot(gl_FragColor.xyz, vec3(1. / 3.)));
-	if (localLuminance > 0.8) {
-		localLuminance -= 0.8;
+	if (localLuminance > 1.0) {
+		localLuminance -= 1.0;
 		enhancingFactor *= 1.0 - (localLuminance + localLuminance * localLuminance) * 100.0;
 	}
 #endif
@@ -90,8 +90,10 @@ void main() {
 	//    r_sharp = 1 + localSharpening / 2
 
 	// Sharpening is done by reversing the effect of the blur kernel.
+	// Clamp the lower bound to suppress the black edges around specular highlights.
+	vec3 lowerBound = gl_FragColor.xyz * 0.6;
 	gl_FragColor.xyz += (gl_FragColor.xyz - blurred.xyz) * localSharpening;
-	gl_FragColor.xyz = max(gl_FragColor.xyz, vec3(0.0));
+	gl_FragColor.xyz = max(gl_FragColor.xyz, lowerBound);
 
 	// Apply tinting and manual exposure
 	gl_FragColor.xyz *= tint;
