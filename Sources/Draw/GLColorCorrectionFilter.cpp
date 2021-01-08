@@ -19,6 +19,7 @@
  */
 
 #include <vector>
+#include <cmath>
 
 #include <Core/Debug.h>
 #include <Core/Math.h>
@@ -37,7 +38,8 @@ namespace spades {
 		    : renderer(renderer), settings(renderer->GetSettings()) {
 			lens = renderer->RegisterProgram("Shaders/PostFilters/ColorCorrection.program");
 		}
-		GLColorBuffer GLColorCorrectionFilter::Filter(GLColorBuffer input, Vector3 tintVal) {
+		GLColorBuffer GLColorCorrectionFilter::Filter(GLColorBuffer input, Vector3 tintVal,
+		                                              float fogLuminance) {
 			SPADES_MARK_FUNCTION();
 
 			IGLDevice *dev = renderer->GetGLDevice();
@@ -49,10 +51,14 @@ namespace spades {
 			static GLProgramUniform saturation("saturation");
 			static GLProgramUniform enhancement("enhancement");
 			static GLProgramUniform tint("tint");
+			static GLProgramUniform sharpening("sharpening");
+			static GLProgramUniform sharpeningFinalGain("sharpeningFinalGain");
 
 			saturation(lens);
 			enhancement(lens);
 			tint(lens);
+			sharpening(lens);
+			sharpeningFinalGain(lens);
 
 			dev->Enable(IGLDevice::Blend, false);
 
@@ -87,6 +93,67 @@ namespace spades {
 			}
 
 			lensTexture.SetValue(0);
+
+			// Calculate the sharpening factor
+			//
+			// One reason to do this is for aesthetic reasons. Another reason is to offset
+			// OpenSpades' denser fog compared to the vanilla client. Technically, the fog density
+			// function is mostly identical between these two clients. However, OpenSpades applies
+			// the fog color in the linear color space, which is physically accurate but has an
+			// unexpected consequence of somewhat strengthening the effect.
+			//
+			// (`r_volumetricFog` completely changes the density function, which we leave out from
+			// this discussion.)
+			//
+			// Given an object color o (only one color channel is discussed here), fog color f, and
+			// fog density d, the output color c_voxlap and c_os for the vanilla client and
+			// OpenSpades, respectively, is calculated by:
+			//
+			//     c_voxlap = o^(1/2)(1-d) + f^(1/2)d
+			//         c_os = (o(1-d) + fd)^(1/2)
+			//
+			// Here the sRGB transfer function is approximated by an exact gamma = 2 power law.
+			// o and f are in the linear color space, whereas c_voxlap and c_os are in the sRGB
+			// color space (because that's how `ColorCorrection.fs` is implemented).
+			//
+			// The contrast reduction by the fog can be calculated by differentiating each of them
+			// by o:
+			//
+			//     c_voxlap' = (1-d) / sqrt(o) / 2
+			//         c_os' = (1-d) / sqrt(o(1-d) + fd) / 2
+			//
+			// Now we find out the amount of color contrast we must recover by dividing c_voxlap' by
+			// c_os'. Since it's objects around the fog end distance that concern the users, let
+			// d = 1:
+			//
+			//   c_voxlap' / c_os' = sqrt(o(1-d) + fd) / sqrt(o)
+			//                     = sqrt(f) / sqrt(o)
+			//
+			// (Turns out, the result so far does not change whichever color space c_voxlap and c_os
+			// are represented in.)
+			//
+			// This is a function over an object color o and fog color f. Let us calculate the
+			// average of this function assuming a uniform distribution of o over the interval
+			// [o_min, o_max]:
+			//
+			//   ∫[c_voxlap' / c_os', {o, o_min, o_max}]
+			//       = 2sqrt(f)(sqrt(o_max) - sqrt(o_min)) / (o_max - o_min)
+			//
+			// Since the pixels aren't usually fully lit nor completely dark, let us arbitrarily
+			// assume o_min = 0.001 and o_max = 0.5 (I think this is reasonable for a deuce hiding
+			// in a shady corridor) (and let it be `r_offset`):
+			//
+			//   r_offset
+			//    = 2sqrt(f)(sqrt(o_max) - sqrt(o_min)) / (o_max - o_min)
+			//    ≈ 2.70 sqrt(f)
+			//
+			// So if this value is higher than 1, we need enhance the rendered image. Otherwise,
+			// we will maintain the status quo for now. (In most servers I have encountered, the fog
+			// color was a bright color, so this status quo won't be a problem, I think. No one has
+			// complained about it so far.)
+			sharpening.SetValue(std::sqrt(fogLuminance) * 2.7f);
+			sharpeningFinalGain.SetValue(
+			  std::max(std::min(settings.r_sharpen.operator float(), 1.0f), 0.0f) * 2.0f);
 
 			// composite to the final image
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();

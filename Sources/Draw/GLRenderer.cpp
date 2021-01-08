@@ -1043,8 +1043,11 @@ namespace spades {
 					tint = Mix(tint, MakeVector3(1.f, 1.f, 1.f), 0.2f);
 					tint *= 1.f / std::min(std::min(tint.x, tint.y), tint.z);
 
+					float fogLuminance = (fogColor.x + fogColor.y + fogColor.z) * (1.0f / 3.0f);
+
 					float exposure = powf(2.f, (float)settings.r_exposureValue * 0.5f);
-					handle = GLColorCorrectionFilter(this).Filter(handle, tint * exposure);
+					handle =
+					  GLColorCorrectionFilter(this).Filter(handle, tint * exposure, fogLuminance);
 
 					// update smoothed fog color
 					smoothedFogColor = Mix(smoothedFogColor, fogColor, 0.002f);

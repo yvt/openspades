@@ -34,7 +34,10 @@ namespace spades {
 
 		public:
 			GLColorCorrectionFilter(GLRenderer *);
-			GLColorBuffer Filter(GLColorBuffer, Vector3 tint);
+			/**
+			 * @param fogLuminance The luminance of the fog color. Must be in the sRGB color space.
+			 */
+			GLColorBuffer Filter(GLColorBuffer, Vector3 tint, float fogLuminance);
 		};
 	}
 }
