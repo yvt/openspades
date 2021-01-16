@@ -37,6 +37,7 @@ namespace spades {
 		GLColorCorrectionFilter::GLColorCorrectionFilter(GLRenderer *renderer)
 		    : renderer(renderer), settings(renderer->GetSettings()) {
 			lens = renderer->RegisterProgram("Shaders/PostFilters/ColorCorrection.program");
+			gaussProgram = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 		}
 		GLColorBuffer GLColorCorrectionFilter::Filter(GLColorBuffer input, Vector3 tintVal,
 		                                              float fogLuminance) {
@@ -45,25 +46,56 @@ namespace spades {
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 
+			float sharpeningFinalGainValue =
+			  std::max(std::min(settings.r_sharpen.operator float(), 1.0f), 0.0f);
+			GLColorBuffer blurredInput = input;
+
+			if (sharpeningFinalGainValue > 0.0f) {
+				// Apply a 1D gaussian blur on the horizontal direction.
+				// (The vertical direction blur is done by the final program)
+				static GLProgramAttribute blur_positionAttribute("positionAttribute");
+				static GLProgramUniform blur_textureUniform("mainTexture");
+				static GLProgramUniform blur_unitShift("unitShift");
+				gaussProgram->Use();
+				blur_positionAttribute(gaussProgram);
+				blur_textureUniform(gaussProgram);
+				blur_unitShift(gaussProgram);
+				blur_textureUniform.SetValue(0);
+
+				dev->ActiveTexture(0);
+				qr.SetCoordAttributeIndex(blur_positionAttribute());
+				dev->Enable(IGLDevice::Blend, false);
+
+				blurredInput = renderer->GetFramebufferManager()->CreateBufferHandle();
+				dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
+				dev->BindFramebuffer(IGLDevice::Framebuffer, blurredInput.GetFramebuffer());
+				blur_unitShift.SetValue(1.0f / (float)input.GetWidth(), 0.f);
+				qr.Draw();
+			}
+
 			static GLProgramAttribute lensPosition("positionAttribute");
 			static GLProgramUniform lensTexture("mainTexture");
+			static GLProgramUniform blurredTexture("blurredTexture");
 
 			static GLProgramUniform saturation("saturation");
 			static GLProgramUniform enhancement("enhancement");
 			static GLProgramUniform tint("tint");
 			static GLProgramUniform sharpening("sharpening");
 			static GLProgramUniform sharpeningFinalGain("sharpeningFinalGain");
+			static GLProgramUniform blurPixelShift("blurPixelShift");
 
 			saturation(lens);
 			enhancement(lens);
 			tint(lens);
 			sharpening(lens);
 			sharpeningFinalGain(lens);
+			blurPixelShift(lens);
 
 			dev->Enable(IGLDevice::Blend, false);
 
 			lensPosition(lens);
 			lensTexture(lens);
+			blurredTexture(lens);
 
 			lens->Use();
 
@@ -93,6 +125,7 @@ namespace spades {
 			}
 
 			lensTexture.SetValue(0);
+			blurredTexture.SetValue(1);
 
 			// Calculate the sharpening factor
 			//
@@ -152,13 +185,16 @@ namespace spades {
 			// color was a bright color, so this status quo won't be a problem, I think. No one has
 			// complained about it so far.)
 			sharpening.SetValue(std::sqrt(fogLuminance) * 2.7f);
-			sharpeningFinalGain.SetValue(
-			  std::max(std::min(settings.r_sharpen.operator float(), 1.0f), 0.0f) * 2.0f);
+			sharpeningFinalGain.SetValue(sharpeningFinalGainValue);
+			blurPixelShift.SetValue(1.0f / (float)input.GetHeight());
 
 			// composite to the final image
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 
 			qr.SetCoordAttributeIndex(lensPosition());
+			dev->ActiveTexture(1);
+			dev->BindTexture(IGLDevice::Texture2D, blurredInput.GetTexture());
+			dev->ActiveTexture(0);
 			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
 			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
 			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());

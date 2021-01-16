@@ -30,6 +30,7 @@ namespace spades {
 		class GLColorCorrectionFilter {
 			GLRenderer *renderer;
 			GLSettings &settings;
+			GLProgram *gaussProgram;
 			GLProgram *lens;
 
 		public:
