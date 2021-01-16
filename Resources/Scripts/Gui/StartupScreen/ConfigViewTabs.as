@@ -113,13 +113,11 @@ namespace spades {
             {
                 StartupScreenConfigView cfg(Manager);
 
-                // TODO: Show a description for temporal AA
-                // TODO: Separate each option as an isolated translatable string
+                // TODO: Add r_temporalAA when it's more complete
                 cfg.AddRow(StartupScreenConfigSelectItemEditor(
-                    ui, StartupScreenGraphicsAntialiasConfig(ui), "0|2|4|fxaa|temporalaa",
+                    ui, StartupScreenGraphicsAntialiasConfig(ui), "0|2|4|fxaa",
                     _Tr("StartupScreen",
-                        "Antialias:Enables a technique to improve the appearance of high-contrast edges.\n\n" "MSAA: Performs antialiasing by generating an intermediate high-resolution image. " "Looks best, but doesn't cope with some settings.\n\n" "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|" "Off|MSAA 2x|4x|FXAA")
-                        + "|Temporal AA"));
+                        "Antialias:Enables a technique to improve the appearance of high-contrast edges.\n\n" "MSAA: Performs antialiasing by generating an intermediate high-resolution image. " "Looks best, but doesn't cope with some settings.\n\n" "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|" "Off|MSAA 2x|4x|FXAA")));
 
                 cfg.AddRow(StartupScreenConfigCheckItemEditor(
                     ui, StartupScreenConfig(ui, "r_radiosity"), "0", "1",
@@ -406,59 +404,45 @@ namespace spades {
         private StartupScreenUI @ui;
         private ConfigItem @msaaConfig;
         private ConfigItem @fxaaConfig;
-        private ConfigItem @temporalAAConfig;
         StartupScreenGraphicsAntialiasConfig(StartupScreenUI @ui) {
             @this.ui = ui;
             @msaaConfig = ConfigItem("r_multisamples");
             @fxaaConfig = ConfigItem("r_fxaa");
-            @temporalAAConfig = ConfigItem("r_temporalAA");
         }
         string GetValue() {
-            if (fxaaConfig.IntValue != 0 && temporalAAConfig.IntValue != 0) {
-                return "temporalaa";
-            } else if (fxaaConfig.IntValue != 0) {
+            if (fxaaConfig.IntValue != 0) {
                 return "fxaa";
             } else {
                 int v = msaaConfig.IntValue;
-                if(v < 2) return "0";
-                else return msaaConfig.StringValue;
+                if (v < 2)
+                    return "0";
+                else
+                    return msaaConfig.StringValue;
             }
         }
         void SetValue(string v) {
-            if(v == "temporalaa") {
+            if (v == "fxaa") {
                 msaaConfig.StringValue = "0";
                 fxaaConfig.StringValue = "1";
-                temporalAAConfig.StringValue = "1";
-            } else if (v == "fxaa") {
-                msaaConfig.StringValue = "0";
-                fxaaConfig.StringValue = "1";
-                temporalAAConfig.StringValue = "0";
             } else if (v == "0" || v == "1") {
                 msaaConfig.StringValue = "0";
                 fxaaConfig.StringValue = "0";
-                temporalAAConfig.StringValue = "0";
             } else {
                 msaaConfig.StringValue = v;
                 fxaaConfig.StringValue = "0";
-                temporalAAConfig.StringValue = "0";
             }
         }
         string CheckValueCapability(string v) {
-            if (v == "temporalaa") {
+            if (v == "fxaa") {
                 return ui.helper.CheckConfigCapability("r_multisamples", "0") +
-                       ui.helper.CheckConfigCapability("r_fxaa", "1") +
-                       ui.helper.CheckConfigCapability("r_temporalAA", "1");
-            } else if (v == "fxaa") {
-                return ui.helper.CheckConfigCapability("r_multisamples", "0") +
-                       ui.helper.CheckConfigCapability("r_fxaa", "1");
+                    ui.helper.CheckConfigCapability("r_fxaa", "1");
             } else if (v == "0" || v == "1") {
                 return ui.helper.CheckConfigCapability("r_multisamples", "0") +
-                       ui.helper.CheckConfigCapability("r_fxaa", "0");
+                    ui.helper.CheckConfigCapability("r_fxaa", "0");
             } else {
                 return ui.helper.CheckConfigCapability("r_multisamples", v) +
-                       ui.helper.CheckConfigCapability("r_fxaa", "0");
+                    ui.helper.CheckConfigCapability("r_fxaa", "0");
             }
-
         }
     }
 
