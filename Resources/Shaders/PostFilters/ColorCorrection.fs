@@ -44,56 +44,58 @@ void main() {
 	// Input is in the device color space
 	gl_FragColor = texture2D(mainTexture, texCoord);
 
-	// Blur kernel:  1/4 2/4 1/4
-	//               2/4 4/4 2/4
-	//               1/4 2/4 1/4
-	float dx = dFdx(texCoord.x) * 0.5, dy = dFdy(texCoord.y) * 0.5;
-	vec4 blurred = 0.25 * (
-		texture2D(mainTexture, texCoord + vec2(dx, dy)) +
-		texture2D(mainTexture, texCoord + vec2(dx, -dy)) +
-		texture2D(mainTexture, texCoord + vec2(-dx, dy)) +
-		texture2D(mainTexture, texCoord + vec2(-dx, -dy)));
+	if (sharpeningFinalGain > 0.0) {
+		// Blur kernel:  1/4 2/4 1/4
+		//               2/4 4/4 2/4
+		//               1/4 2/4 1/4
+		float dx = dFdx(texCoord.x) * 0.5, dy = dFdy(texCoord.y) * 0.5;
+		vec4 blurred = 0.25 * (
+			texture2D(mainTexture, texCoord + vec2(dx, dy)) +
+			texture2D(mainTexture, texCoord + vec2(dx, -dy)) +
+			texture2D(mainTexture, texCoord + vec2(-dx, dy)) +
+			texture2D(mainTexture, texCoord + vec2(-dx, -dy)));
 
-	// `sharpening` tells to what extent we must enhance the edges based on
-	// global factors.
-	float enhancingFactor = sharpening;
+		// `sharpening` tells to what extent we must enhance the edges based on
+		// global factors.
+		float enhancingFactor = sharpening;
 #if USE_HDR
-	// Now we take the derivative of `acesToneMapping` into consideration.
-	// Specifially, when `acesToneMapping` reduces the color contrast
-	// around the current pixel by N times, we compensate by scaling
-	// `enhancingFactor` by N.
-	float localLuminance = dot(blurred.xyz, vec3(1. / 3.));
-	float localLuminanceLinear = clamp(localLuminance * localLuminance, 0.0, 1.0);
-	enhancingFactor *= acesToneMappingDiffRcp(localLuminanceLinear * 0.8);
+		// Now we take the derivative of `acesToneMapping` into consideration.
+		// Specifially, when `acesToneMapping` reduces the color contrast
+		// around the current pixel by N times, we compensate by scaling
+		// `enhancingFactor` by N.
+		float localLuminance = dot(blurred.xyz, vec3(1. / 3.));
+		float localLuminanceLinear = clamp(localLuminance * localLuminance, 0.0, 1.0);
+		enhancingFactor *= acesToneMappingDiffRcp(localLuminanceLinear * 0.8);
 
-	// We don't want specular highlights to cause black edges, so weaken the
-	// effect if the local luminance is high.
-	localLuminance = max(localLuminance, dot(gl_FragColor.xyz, vec3(1. / 3.)));
-	if (localLuminance > 1.0) {
-		localLuminance -= 1.0;
-		enhancingFactor *= 1.0 - (localLuminance + localLuminance * localLuminance) * 100.0;
-	}
+		// We don't want specular highlights to cause black edges, so weaken the
+		// effect if the local luminance is high.
+		localLuminance = max(localLuminance, dot(gl_FragColor.xyz, vec3(1. / 3.)));
+		if (localLuminance > 1.0) {
+			localLuminance -= 1.0;
+			enhancingFactor *= 1.0 - (localLuminance + localLuminance * localLuminance) * 100.0;
+		}
 #endif
 
-	// Clamp the sharpening effect's intensity.
-	enhancingFactor = clamp(enhancingFactor, 1.0, 4.0);
+		// Clamp the sharpening effect's intensity.
+		enhancingFactor = clamp(enhancingFactor, 1.0, 4.0);
 
-	// Derive the value of `localSharpening` that achieves the desired
-	// contrast enhancement. When `sharpeningFinalGain = 2`, the sharpening
-	// effect multiplies the color contrast exactly by `enhancingFactor`.
-	float localSharpening = (enhancingFactor - 1.0) * sharpeningFinalGain;
+		// Derive the value of `localSharpening` that achieves the desired
+		// contrast enhancement. When `sharpeningFinalGain = 2`, the sharpening
+		// effect multiplies the color contrast exactly by `enhancingFactor`.
+		float localSharpening = (enhancingFactor - 1.0) * sharpeningFinalGain;
 
-	// Given a parameter value `localSharpening`, the sharpening kernel defined
-	// in here enhances the color difference across a horizontal or vertical
-	// edge by the following factor:
-	//
-	//    r_sharp = 1 + localSharpening / 2
+		// Given a parameter value `localSharpening`, the sharpening kernel defined
+		// in here enhances the color difference across a horizontal or vertical
+		// edge by the following factor:
+		//
+		//    r_sharp = 1 + localSharpening / 2
 
-	// Sharpening is done by reversing the effect of the blur kernel.
-	// Clamp the lower bound to suppress the black edges around specular highlights.
-	vec3 lowerBound = gl_FragColor.xyz * 0.6;
-	gl_FragColor.xyz += (gl_FragColor.xyz - blurred.xyz) * localSharpening;
-	gl_FragColor.xyz = max(gl_FragColor.xyz, lowerBound);
+		// Sharpening is done by reversing the effect of the blur kernel.
+		// Clamp the lower bound to suppress the black edges around specular highlights.
+		vec3 lowerBound = gl_FragColor.xyz * 0.6;
+		gl_FragColor.xyz += (gl_FragColor.xyz - blurred.xyz) * localSharpening;
+		gl_FragColor.xyz = max(gl_FragColor.xyz, lowerBound);
+	}
 
 	// Apply tinting and manual exposure
 	gl_FragColor.xyz *= tint;
