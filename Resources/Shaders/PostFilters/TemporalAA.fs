@@ -99,5 +99,5 @@ void main() {
 
     antialiased = decodePalYuv(antialiased);
 
-    gl_FragColor = vec4(antialiased, mixRate);
+    gl_FragColor = vec4(max(antialiased, vec3(0.0)), mixRate);
 }
