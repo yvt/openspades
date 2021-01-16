@@ -113,6 +113,7 @@ namespace spades {
             {
                 StartupScreenConfigView cfg(Manager);
 
+                // TODO: Add r_temporalAA when it's more complete
                 cfg.AddRow(StartupScreenConfigSelectItemEditor(
                     ui, StartupScreenGraphicsAntialiasConfig(ui), "0|2|4|fxaa",
                     _Tr("StartupScreen",

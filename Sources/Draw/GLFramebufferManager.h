@@ -106,6 +106,8 @@ namespace spades {
 			void MakeSureAllBuffersReleased();
 
 			IGLDevice::UInteger GetDepthTexture() { return renderDepthTexture; }
+			IGLDevice::Enum GetMainInternalFormat() { return fbInternalFormat; }
+
 			BufferHandle CreateBufferHandle(int w = -1, int h = -1, bool alpha = false);
 			BufferHandle CreateBufferHandle(int w, int h, IGLDevice::Enum internalFormat);
 
