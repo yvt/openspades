@@ -56,7 +56,8 @@ namespace spades {
 				return acosf(v);
 		}
 
-		GLColorBuffer GLCameraBlurFilter::Filter(GLColorBuffer input, float radialBlur) {
+		GLColorBuffer GLCameraBlurFilter::Filter(GLColorBuffer input, float intensity,
+		                                         float radialBlur) {
 			SPADES_MARK_FUNCTION();
 
 			if (radialBlur > 0.f)
@@ -114,7 +115,7 @@ namespace spades {
 			}
 
 			float movePixels = MyACos(diffMatrix.m[0]);
-			float shutterTimeScale = .3f;
+			float shutterTimeScale = intensity;
 			movePixels = std::max(movePixels, MyACos(diffMatrix.m[5]));
 			movePixels = std::max(movePixels, MyACos(diffMatrix.m[10]));
 			movePixels = tanf(movePixels) / tanf(def.fovX * .5f);

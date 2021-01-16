@@ -29,7 +29,7 @@ namespace spades {
 
 			TypedItemHandle<bool> r_blitFramebuffer     { *this, "r_blitFramebuffer" };
 			TypedItemHandle<bool> r_bloom               { *this, "r_bloom" };
-			TypedItemHandle<bool> r_cameraBlur          { *this, "r_cameraBlur", ItemFlags::Latch };
+			TypedItemHandle<float> r_cameraBlur         { *this, "r_cameraBlur" };
 			TypedItemHandle<bool> r_colorCorrection     { *this, "r_colorCorrection" };
 			TypedItemHandle<bool> r_debugTiming         { *this, "r_debugTiming" };
 			TypedItemHandle<bool> r_debugTimingOutputScreen { *this, "r_debugTimingOutputScreen" };

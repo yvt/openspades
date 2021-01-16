@@ -940,9 +940,14 @@ namespace spades {
 				}
 
 				if (settings.r_cameraBlur && !sceneDef.denyCameraBlur) {
+					if (!cameraBlur) {
+						cameraBlur = new GLCameraBlurFilter(this);
+					}
+
 					GLProfiler::Context p(*profiler, "Camera Blur");
 					// FIXME: better (correctly constructed) radial blur algorithm
-					handle = cameraBlur->Filter(handle, sceneDef.radialBlur);
+					handle = cameraBlur->Filter(
+					  handle, std::min(settings.r_cameraBlur * 0.2f, 1.0f), sceneDef.radialBlur);
 				}
 
 				if (settings.r_bloom) {
