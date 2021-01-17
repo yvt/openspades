@@ -950,17 +950,17 @@ namespace spades {
 					  handle, std::min(settings.r_cameraBlur * 0.2f, 1.0f), sceneDef.radialBlur);
 				}
 
-				if (settings.r_bloom) {
-					GLProfiler::Context p(*profiler, "Bloom");
-					handle = lensDustFilter->Filter(handle);
-				}
-
 				if (settings.r_temporalAA) {
 					if (!temporalAAFilter) {
 						temporalAAFilter.reset(new GLTemporalAAFilter(this));
 					}
 					GLProfiler::Context p(*profiler, "Temporal AA");
 					handle = temporalAAFilter->Filter(handle, settings.r_fxaa);
+				}
+
+				if (settings.r_bloom) {
+					GLProfiler::Context p(*profiler, "Bloom");
+					handle = lensDustFilter->Filter(handle);
 				}
 
 				// Do r_fxaa before lens filter so that color aberration looks nice.
