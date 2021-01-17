@@ -36,6 +36,7 @@ namespace spades {
 	namespace draw {
 		GLTemporalAAFilter::GLTemporalAAFilter(GLRenderer *renderer) : renderer(renderer) {
 			prevMatrix = Matrix4::Identity();
+			prevViewOrigin = Vector3(0.0f, 0.0f, 0.0f);
 			program = renderer->RegisterProgram("Shaders/PostFilters/TemporalAA.program");
 
 			// Preload
@@ -62,7 +63,7 @@ namespace spades {
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 
-			// Calculate the current view-projection matrix
+			// Calculate the current view-projection matrix.
 			const client::SceneDefinition &def = renderer->GetSceneDef();
 			Matrix4 newMatrix = Matrix4::Identity();
 			Vector3 axes[] = {def.viewAxis[0], def.viewAxis[1], def.viewAxis[2]};
@@ -75,11 +76,6 @@ namespace spades {
 			newMatrix.m[8] = axes[0].z;
 			newMatrix.m[9] = axes[1].z;
 			newMatrix.m[10] = -axes[2].z;
-
-			Vector4 v = newMatrix * def.viewOrigin;
-			newMatrix.m[12] = -v.x;
-			newMatrix.m[13] = -v.y;
-			newMatrix.m[14] = -v.z;
 
 			Matrix4 projectionMatrix;
 			{
@@ -116,10 +112,16 @@ namespace spades {
 			newMatrix = Matrix4::Translate(1.0f, 1.0f, 1.0f) * newMatrix;
 			newMatrix = Matrix4::Scale(0.5f, 0.5f, 0.5f) * newMatrix;
 
+			// Camera translation must be incorporated into the calculation
+			// separately to avoid numerical errors. (You'd be suprised to see
+			// how visible the visual artifacts can be.)
+			Matrix4 translationMatrix = Matrix4::Translate(def.viewOrigin - prevViewOrigin);
+
 			// Compute the reprojection matrix
 			Matrix4 inverseNewMatrix = newMatrix.Inversed();
-			Matrix4 diffMatrix = prevMatrix * inverseNewMatrix;
+			Matrix4 diffMatrix = prevMatrix * translationMatrix * inverseNewMatrix;
 			prevMatrix = newMatrix;
+			prevViewOrigin = def.viewOrigin;
 
 			if (!historyBuffer.valid || historyBuffer.width != input.GetWidth() ||
 			    historyBuffer.height != input.GetHeight()) {
