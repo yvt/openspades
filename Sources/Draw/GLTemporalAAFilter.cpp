@@ -62,22 +62,61 @@ namespace spades {
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 
-			// Compute the reprojection matrix
+			// Calculate the current view-projection matrix
 			const client::SceneDefinition &def = renderer->GetSceneDef();
 			Matrix4 newMatrix = Matrix4::Identity();
 			Vector3 axes[] = {def.viewAxis[0], def.viewAxis[1], def.viewAxis[2]};
-			axes[0] /= std::tan(def.fovX * 0.5f);
-			axes[1] /= std::tan(def.fovY * 0.5f);
 			newMatrix.m[0] = axes[0].x;
 			newMatrix.m[1] = axes[1].x;
-			newMatrix.m[2] = axes[2].x;
+			newMatrix.m[2] = -axes[2].x;
 			newMatrix.m[4] = axes[0].y;
 			newMatrix.m[5] = axes[1].y;
-			newMatrix.m[6] = axes[2].y;
+			newMatrix.m[6] = -axes[2].y;
 			newMatrix.m[8] = axes[0].z;
 			newMatrix.m[9] = axes[1].z;
-			newMatrix.m[10] = axes[2].z;
+			newMatrix.m[10] = -axes[2].z;
 
+			Vector4 v = newMatrix * def.viewOrigin;
+			newMatrix.m[12] = -v.x;
+			newMatrix.m[13] = -v.y;
+			newMatrix.m[14] = -v.z;
+
+			Matrix4 projectionMatrix;
+			{
+				// From `GLRenderer::BuildProjectionMatrix`
+				float near = def.zNear;
+				float far = def.zFar;
+				float t = near * std::tan(def.fovY * .5f);
+				float r = near * std::tan(def.fovX * .5f);
+				float a = r * 2.f, b = t * 2.f, c = far - near;
+				Matrix4 &mat = projectionMatrix;
+				mat.m[0] = near * 2.f / a;
+				mat.m[1] = 0.f;
+				mat.m[2] = 0.f;
+				mat.m[3] = 0.f;
+				mat.m[4] = 0.f;
+				mat.m[5] = near * 2.f / b;
+				mat.m[6] = 0.f;
+				mat.m[7] = 0.f;
+				mat.m[8] = 0.f;
+				mat.m[9] = 0.f;
+				mat.m[10] = -(far + near) / c;
+				mat.m[11] = -1.f;
+				mat.m[12] = 0.f;
+				mat.m[13] = 0.f;
+				mat.m[14] = -(far * near * 2.f) / c;
+				mat.m[15] = 0.f;
+			}
+
+			newMatrix = projectionMatrix * newMatrix;
+
+			// In `y = newMatrix * x`, the coordinate space `y` belongs to must
+			// cover the clip region by range `[0, 1]` (like texture coordinates)
+			// instead of `[-1, 1]` (like OpenGL clip coordinates)
+			newMatrix = Matrix4::Translate(1.0f, 1.0f, 1.0f) * newMatrix;
+			newMatrix = Matrix4::Scale(0.5f, 0.5f, 0.5f) * newMatrix;
+
+			// Compute the reprojection matrix
 			Matrix4 inverseNewMatrix = newMatrix.Inversed();
 			Matrix4 diffMatrix = prevMatrix * inverseNewMatrix;
 			prevMatrix = newMatrix;
@@ -155,10 +194,9 @@ namespace spades {
 			    return GLFXAAFilter{renderer}.Filter(input);
 			}() : input; */
 
-			// TODO: take camera translation (not just rotation) into account during reprojection
-
 			static GLProgramAttribute positionAttribute("positionAttribute");
 			static GLProgramUniform inputTexture("inputTexture");
+			static GLProgramUniform depthTexture("depthTexture");
 			static GLProgramUniform previousTexture("previousTexture");
 			static GLProgramUniform processedInputTexture("processedInputTexture");
 			static GLProgramUniform reprojectionMatrix("reprojectionMatrix");
@@ -168,6 +206,7 @@ namespace spades {
 
 			positionAttribute(program);
 			inputTexture(program);
+			depthTexture(program);
 			previousTexture(program);
 			processedInputTexture(program);
 			reprojectionMatrix(program);
@@ -178,6 +217,7 @@ namespace spades {
 			inputTexture.SetValue(0);
 			previousTexture.SetValue(1);
 			processedInputTexture.SetValue(2);
+			depthTexture.SetValue(3);
 			reprojectionMatrix.SetValue(diffMatrix);
 			inverseVP.SetValue(1.f / input.GetWidth(), 1.f / input.GetHeight());
 
@@ -190,6 +230,9 @@ namespace spades {
 			dev->BindTexture(IGLDevice::Texture2D, historyBuffer.texture);
 			dev->ActiveTexture(2);
 			dev->BindTexture(IGLDevice::Texture2D, processedInput.GetTexture());
+			dev->ActiveTexture(3);
+			dev->BindTexture(IGLDevice::Texture2D,
+			                 renderer->GetFramebufferManager()->GetDepthTexture());
 			dev->ActiveTexture(0);
 			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
 			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
