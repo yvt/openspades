@@ -20,12 +20,13 @@
 
 
 uniform sampler2D inputTexture;
+uniform sampler2D depthTexture;
 uniform sampler2D previousTexture;
 uniform sampler2D processedInputTexture;
 uniform vec2 inverseVP;
+uniform mat4 reprojectionMatrix;
 
 varying vec2 texCoord;
-varying vec3 reprojectedTexCoord;
 /* UE4-style temporal AA. Implementation is based on my ShaderToy submission */
 
 // YUV-RGB conversion routine from Hyper3D
@@ -49,12 +50,41 @@ vec3 decodePalYuv(vec3 yuv)
 
 
 void main() {
-    vec4 lastColor = texture2D(previousTexture, reprojectedTexCoord.xy / reprojectedTexCoord.z);
+    // ------------------------------------------------------------------------
+    // Reprojection
+    //
+    // Calulate the Z position of the current pixel. Take the minimum Z value
+    // of the neighboring pixels to preserve the antialiasing of foreground
+    // objects.
+    vec2 off = inverseVP;
+    float inputZ0 = texture2D(depthTexture, texCoord).x;
+    float inputZ1 = texture2D(depthTexture, texCoord + vec2(+off.x, 0.0)).x;
+    float inputZ2 = texture2D(depthTexture, texCoord + vec2(-off.x, 0.0)).x;
+    float inputZ3 = texture2D(depthTexture, texCoord + vec2(0.0, +off.y)).x;
+    float inputZ4 = texture2D(depthTexture, texCoord + vec2(0.0, -off.y)).x;
+    float inputZ5 = texture2D(depthTexture, texCoord + vec2(+off.x, +off.y)).x;
+    float inputZ6 = texture2D(depthTexture, texCoord + vec2(-off.x, +off.y)).x;
+    float inputZ7 = texture2D(depthTexture, texCoord + vec2(+off.x, -off.y)).x;
+    float inputZ8 = texture2D(depthTexture, texCoord + vec2(-off.x, -off.y)).x;
+	float inputZ = min(min(min(inputZ0, inputZ1), min(inputZ2, inputZ3)),
+	                   min(min(inputZ4, inputZ5), min(inputZ6, min(inputZ7, inputZ8))));
 
+    // Predict where the point was in the previous frame. The Z range [0, 0.1]
+    // is for a view weapon, so assume no movement in this range.
+    vec4 reprojectedTexCoord;
+    if (inputZ < 0.1) {
+        reprojectedTexCoord.xy = texCoord.xy;
+    } else {
+        reprojectedTexCoord = reprojectionMatrix * vec4(texCoord, inputZ, 1.0);
+        reprojectedTexCoord.xy /= reprojectedTexCoord.w;
+    }
+
+	vec4 lastColor = texture2D(previousTexture, reprojectedTexCoord.xy);
+
+    // ------------------------------------------------------------------------
     vec3 antialiased = lastColor.xyz;
     float mixRate = min(lastColor.w, 0.5);
 
-    vec2 off = inverseVP;
     vec3 in0 = texture2D(processedInputTexture, texCoord).xyz;
 
     antialiased = mix(antialiased, in0, mixRate);

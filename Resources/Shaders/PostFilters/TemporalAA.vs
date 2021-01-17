@@ -23,8 +23,6 @@
 attribute vec2 positionAttribute;
 
 varying vec2 texCoord;
-varying vec3 reprojectedTexCoord;
-uniform mat4 reprojectionMatrix;
 
 void main() {
 	vec2 pos = positionAttribute;
@@ -34,9 +32,5 @@ void main() {
 	gl_Position = vec4(scrPos, 0.5, 1.);
 
 	texCoord = pos;
-
-    reprojectedTexCoord = (reprojectionMatrix * vec4(scrPos, 1., 0.)).xyz;
-    reprojectedTexCoord.xy *= 0.5;
-    reprojectedTexCoord.xy += vec2(reprojectedTexCoord.z) * .5;
 }
 

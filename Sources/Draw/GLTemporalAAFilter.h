@@ -45,6 +45,7 @@ namespace spades {
 			} historyBuffer;
 
 			Matrix4 prevMatrix;
+			Vector3 prevViewOrigin;
 			std::size_t jitterTableIndex = 0;
 
 			void DeleteHistoryBuffer();
