@@ -73,6 +73,14 @@ namespace spades {
 				qr.Draw();
 			}
 
+			float sharpeningFloor = 0.0f;
+
+			// If temporal AA is enabled, enable the sharpening effect regardless of
+			// the current fog color to offset the blurring caused by the temporal AA.
+			if (settings.r_temporalAA) {
+				sharpeningFloor = 1.5f;
+			}
+
 			static GLProgramAttribute lensPosition("positionAttribute");
 			static GLProgramUniform lensTexture("mainTexture");
 			static GLProgramUniform blurredTexture("blurredTexture");
@@ -184,7 +192,7 @@ namespace spades {
 			// we will maintain the status quo for now. (In most servers I have encountered, the fog
 			// color was a bright color, so this status quo won't be a problem, I think. No one has
 			// complained about it so far.)
-			sharpening.SetValue(std::sqrt(fogLuminance) * 2.7f);
+			sharpening.SetValue(std::max(std::sqrt(fogLuminance) * 2.7f, sharpeningFloor));
 			sharpeningFinalGain.SetValue(sharpeningFinalGainValue);
 			blurPixelShift.SetValue(1.0f / (float)input.GetHeight());
 
