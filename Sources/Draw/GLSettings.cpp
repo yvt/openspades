@@ -18,6 +18,8 @@
 
  */
 
+#include <Core/Debug.h>
+
 #include "GLSettings.h"
 
 DEFINE_SPADES_SETTING(r_blitFramebuffer, "1");
@@ -70,5 +72,17 @@ DEFINE_SPADES_SETTING(r_water, "2");
 namespace spades {
 	namespace draw {
 		GLSettings::GLSettings() {}
+
+		void GLSettings::ValidateSettings() {
+			if (this->r_fogShadow.operator int() == 2 && !this->ShouldUseFogFilter2()) {
+				SPLog("`r_fogShadow 2` is ignored because `r_radiosity` or `r_temporalAA` are "
+				      "disabled");
+			}
+		}
+
+		bool GLSettings::ShouldUseFogFilter2() {
+			return this->r_fogShadow.operator int() == 2 && !!this->r_radiosity.operator int() &&
+			       !!this->r_temporalAA;
+		}
 	}
 }

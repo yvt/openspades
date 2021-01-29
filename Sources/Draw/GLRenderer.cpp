@@ -105,6 +105,9 @@ namespace spades {
 
 			SPLog("GLRenderer bootstrap");
 
+			// Report invalid settings via `SPLog`, which might be useful for diagnosis.
+			settings.ValidateSettings();
+
 			fbManager = new GLFramebufferManager(_device, settings);
 
 			programManager = new GLProgramManager(_device, shadowMapRenderer, settings);
@@ -161,10 +164,10 @@ namespace spades {
 				temporalAAFilter.reset(new GLTemporalAAFilter(this));
 			}
 
-			if (settings.r_fogShadow == 1) {
-				GLFogFilter(this);
-			} else if (settings.r_fogShadow == 2) {
+			if (settings.ShouldUseFogFilter2()) {
 				GLFogFilter2(this);
+			} else if (settings.r_fogShadow) {
+				GLFogFilter(this);
 			}
 
 			if (settings.r_bloom) {
@@ -839,10 +842,10 @@ namespace spades {
 						GLFramebufferManager::BufferHandle handle;
 
 						handle = fbManager->StartPostProcessing();
-						if (settings.r_fogShadow == 1) {
-							handle = GLFogFilter(this).Filter(handle);
-						} else {
+						if (settings.ShouldUseFogFilter2()) {
 							handle = GLFogFilter2(this).Filter(handle);
+						} else {
+							handle = GLFogFilter(this).Filter(handle);
 						}
 						fbManager->CopyToMirrorTexture(handle.GetFramebuffer());
 					} else {
@@ -921,10 +924,10 @@ namespace spades {
 				if (settings.r_fogShadow && mapShadowRenderer &&
 				    fogColor.GetPoweredLength() > .000001f) {
 					GLProfiler::Context p(*profiler, "Volumetric Fog");
-					if (settings.r_fogShadow == 1) {
-						handle = GLFogFilter(this).Filter(handle);
-					} else {
+					if (settings.ShouldUseFogFilter2()) {
 						handle = GLFogFilter2(this).Filter(handle);
+					} else {
+						handle = GLFogFilter(this).Filter(handle);
 					}
 				}
 				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());

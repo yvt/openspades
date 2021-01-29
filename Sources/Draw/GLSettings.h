@@ -73,6 +73,10 @@ namespace spades {
 			TypedItemHandle<int> r_ssao                 { *this, "r_ssao", ItemFlags::Latch };
 			TypedItemHandle<bool> r_temporalAA          { *this, "r_temporalAA" };
 			TypedItemHandle<int> r_water                { *this, "r_water", ItemFlags::Latch };
+
+			/** Check illegal settings and report via `SPLog`. */
+			void ValidateSettings();
+			bool ShouldUseFogFilter2();
 		};
 	}
 }
