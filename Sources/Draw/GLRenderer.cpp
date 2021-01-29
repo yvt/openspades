@@ -35,6 +35,7 @@
 #include "GLFXAAFilter.h"
 #include "GLFlatMapRenderer.h"
 #include "GLFogFilter.h"
+#include "GLFogFilter2.h"
 #include "GLFramebufferManager.h"
 #include "GLImage.h"
 #include "GLImageManager.h"
@@ -160,8 +161,10 @@ namespace spades {
 				temporalAAFilter.reset(new GLTemporalAAFilter(this));
 			}
 
-			if (settings.r_fogShadow) {
+			if (settings.r_fogShadow == 1) {
 				GLFogFilter(this);
+			} else if (settings.r_fogShadow == 2) {
+				GLFogFilter2(this);
 			}
 
 			if (settings.r_bloom) {
