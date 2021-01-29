@@ -837,10 +837,13 @@ namespace spades {
 						GLProfiler::Context p(*profiler, "Volumetric Fog");
 
 						GLFramebufferManager::BufferHandle handle;
-						GLFogFilter fogfilter(this);
 
 						handle = fbManager->StartPostProcessing();
-						handle = fogfilter.Filter(handle);
+						if (settings.r_fogShadow == 1) {
+							handle = GLFogFilter(this).Filter(handle);
+						} else {
+							handle = GLFogFilter2(this).Filter(handle);
+						}
 						fbManager->CopyToMirrorTexture(handle.GetFramebuffer());
 					} else {
 						fbManager->CopyToMirrorTexture();
@@ -918,8 +921,11 @@ namespace spades {
 				if (settings.r_fogShadow && mapShadowRenderer &&
 				    fogColor.GetPoweredLength() > .000001f) {
 					GLProfiler::Context p(*profiler, "Volumetric Fog");
-					GLFogFilter fogfilter(this);
-					handle = fogfilter.Filter(handle);
+					if (settings.r_fogShadow == 1) {
+						handle = GLFogFilter(this).Filter(handle);
+					} else {
+						handle = GLFogFilter2(this).Filter(handle);
+					}
 				}
 				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
 
