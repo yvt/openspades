@@ -1292,6 +1292,8 @@ namespace spades {
 			device->Enable(IGLDevice::Blend, true);
 
 			profiler->EndFrame();
+
+			++frameNumber;
 		}
 
 		void GLRenderer::Flip() {

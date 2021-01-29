@@ -21,11 +21,13 @@
 uniform sampler2D colorTexture;
 uniform sampler2D depthTexture;
 uniform sampler2D shadowMapTexture;
+uniform sampler2D ditherTexture;
 
 uniform vec3 viewOrigin;
 uniform vec3 fogColor;
 uniform float fogDistance;
 uniform mat4 viewProjectionMatrixInv;
+uniform vec2 ditherOffset;
 
 varying vec2 texCoord;
 varying vec4 viewcentricWorldPositionPartial;
@@ -65,7 +67,16 @@ void main() {
 	// toward the camera).
 
 	float weightSum = 0.0;
-	const int numSamples = 16;
+	const int numSamples = 32;
+
+	// Dithered sampling
+	float dither = texture2D(ditherTexture, gl_FragCoord.xy * 0.25 + ditherOffset).x * 15.0 / 16.0;
+
+	// Shadows closer to the camera should be more visible
+	float weight = 1.0;
+	float weightDelta = sqrt(voxlapDistanceSq) / fogDistance / float(numSamples);
+
+	weight -= weightDelta * dither;
 
 	// Shadow map sampling + AO
 	float fogColorFactor = 0.0;
@@ -74,17 +85,18 @@ void main() {
 	vec3 currentShadowPosition = transformToShadow(viewOrigin);
 	vec3 shadowPositionDelta = transformToShadow(viewcentricWorldPosition.xyz / float(numSamples));
 
-	for (int i = 0; i < numSamples; ++i) {
-		// Shadows closer to the camera should be more visible
-		float weight = 1.0 - float(i) / float(numSamples) * sqrt(voxlapDistanceSq) / fogDistance;
-		weightSum += weight;
+	currentShadowPosition += shadowPositionDelta * dither;
 
+	for (int i = 0; i < numSamples; ++i) {
 		// Shadow map sampling
 		float val = texture2D(shadowMapTexture, currentShadowPosition.xy).w;
 		val = step(currentShadowPosition.z, val);
 		fogColorFactor += val * weight;
 
 		currentShadowPosition += shadowPositionDelta;
+		weightSum += weight;
+
+		weight -= weightDelta;
 	}
 
 	// Rescale the in-scattering term according to the desired fog density

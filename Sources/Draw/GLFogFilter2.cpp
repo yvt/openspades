@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "GLFogFilter2.h"
+#include "GLImage.h"
 #include "GLMapShadowRenderer.h"
 #include "GLProgram.h"
 #include "GLProgramAttribute.h"
@@ -35,6 +36,8 @@ namespace spades {
 	namespace draw {
 		GLFogFilter2::GLFogFilter2(GLRenderer *renderer) : renderer(renderer) {
 			lens = renderer->RegisterProgram("Shaders/PostFilters/Fog2.program");
+			ditherPattern =
+			  static_cast<GLImage *>(renderer->RegisterImage("Gfx/DitherPattern4x4.png"));
 		}
 		GLColorBuffer GLFogFilter2::Filter(GLColorBuffer input) {
 			SPADES_MARK_FUNCTION();
@@ -111,6 +114,8 @@ namespace spades {
 			static GLProgramUniform viewProjectionMatrixInv("viewProjectionMatrixInv");
 			static GLProgramUniform fogColor("fogColor");
 			static GLProgramUniform fogDistance("fogDistance");
+			static GLProgramUniform ditherTexture("ditherTexture");
+			static GLProgramUniform ditherOffset("ditherOffset");
 
 			dev->Enable(IGLDevice::Blend, false);
 
@@ -121,6 +126,8 @@ namespace spades {
 			lensViewOrigin(lens);
 			fogColor(lens);
 			fogDistance(lens);
+			ditherTexture(lens);
+			ditherOffset(lens);
 			viewProjectionMatrixInv(lens);
 
 			lens->Use();
@@ -138,6 +145,9 @@ namespace spades {
 			lensDepthTexture.SetValue(1);
 			lensShadowMapTexture.SetValue(2);
 
+			std::uint32_t frame = renderer->GetFrameNumber() % 4;
+			ditherOffset.SetValue((float)(frame & 1) * 0.5f, (float)((frame >> 1) & 1) * 0.5f);
+
 			// composite to the final image
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 
@@ -149,6 +159,13 @@ namespace spades {
 			dev->BindTexture(IGLDevice::Texture2D, input.GetManager()->GetDepthTexture());
 			dev->ActiveTexture(2);
 			dev->BindTexture(IGLDevice::Texture2D, renderer->GetMapShadowRenderer()->GetTexture());
+			dev->ActiveTexture(3);
+			ditherTexture.SetValue(3);
+			ditherPattern->Bind(IGLDevice::Texture2D);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                  IGLDevice::Nearest);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                  IGLDevice::Nearest);
 			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
 			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
 			qr.Draw();

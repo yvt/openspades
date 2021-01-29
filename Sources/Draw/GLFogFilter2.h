@@ -26,9 +26,11 @@ namespace spades {
 	namespace draw {
 		class GLRenderer;
 		class GLProgram;
+		class GLImage;
 		class GLFogFilter2 {
 			GLRenderer *renderer;
 			GLProgram *lens;
+			GLImage *ditherPattern;
 
 		public:
 			GLFogFilter2(GLRenderer *);

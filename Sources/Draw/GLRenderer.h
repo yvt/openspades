@@ -128,6 +128,7 @@ namespace spades {
 			bool legacyColorPremultiply;
 
 			unsigned int lastTime;
+			std::uint32_t frameNumber = 0;
 
 			bool duringSceneRendering;
 
@@ -221,6 +222,8 @@ namespace spades {
 			const Matrix4 &GetProjectionMatrix() const { return projectionMatrix; }
 			const Matrix4 &GetProjectionViewMatrix() const { return projectionViewMatrix; }
 			const Matrix4 &GetViewMatrix() const { return viewMatrix; }
+
+			std::uint32_t GetFrameNumber() const { return frameNumber; }
 
 			bool IsRenderingMirror() const { return renderingMirror; }
 
