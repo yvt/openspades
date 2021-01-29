@@ -109,6 +109,8 @@ void main() {
 	vec3 ambientShadowTextureCoordDelta =
 	  viewcentricWorldPosition.xyz / float(numSamples) / vec3(512., 512., 65.);
 	vec3 radiosityFactor = vec3(0.0);
+	float currentRadiosityCutoff = currentAmbientShadowTextureCoord.z * 10.0 + 1.0;
+	float radiosityCutoffDelta = ambientShadowTextureCoordDelta.z * 10.0;
 
 	currentAmbientShadowTextureCoord += ambientShadowTextureCoordDelta * dither;
 
@@ -124,13 +126,17 @@ void main() {
 		fogColorFactor += aoFactor * weight * 0.5;
 
 		// Secondary diffuse reflection sampling
+		//
+		// Since the radiosity texture doesn't have the information above the `z = 0` plane,
+		// gradually reduce the influence above the plane by multiplying `currentRadiosityCutoff`.
 		vec3 radiosity =
 		  DecodeRadiosityValue(texture3D(radiosityTexture, currentRadiosityTextureCoord).xyz);
-		radiosityFactor += radiosity * weight;
+		radiosityFactor += radiosity * (weight * clamp(currentRadiosityCutoff, 0.0, 1.0));
 
 		currentShadowPosition += shadowPositionDelta;
 		currentRadiosityTextureCoord += radiosityTextureCoordDelta;
 		currentAmbientShadowTextureCoord += ambientShadowTextureCoordDelta;
+		currentRadiosityCutoff += radiosityCutoffDelta;
 		weightSum += weight;
 
 		weight -= weightDelta;
