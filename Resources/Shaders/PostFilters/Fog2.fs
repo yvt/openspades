@@ -158,6 +158,13 @@ void main() {
 
 	// ---------------------------------------------------------------------
 
+	// add gradient
+	vec3 sunDir = normalize(vec3(0., -1., -1.));
+	float bright = dot(sunDir, normalize(viewcentricWorldPosition.xyz));
+	fogColorFactor *= bright * 0.5 + 1.0;
+
+	// ---------------------------------------------------------------------
+
 	gl_FragColor = texture2D(colorTexture, texCoord);
 #if !LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz *= gl_FragColor.xyz; // linearize
