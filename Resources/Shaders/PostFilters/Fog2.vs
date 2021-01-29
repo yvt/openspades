@@ -21,7 +21,6 @@
 attribute vec2 positionAttribute;
 attribute vec4 colorAttribute;
 
-uniform vec3 viewOrigin;
 uniform mat4 viewProjectionMatrixInv;
 
 varying vec2 texCoord;
