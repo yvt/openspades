@@ -121,7 +121,7 @@ namespace spades {
 			device->DeleteTexture(texture);
 		}
 
-		float GLAmbientShadowRenderer::Evaluate(IntVector3 ipos) {
+		float GLAmbientShadowRenderer::Evaluate(IntVector3 ipos, bool &wasSolid) {
 			SPADES_MARK_FUNCTION_DEBUG();
 
 			float sum = 0;
@@ -146,6 +146,7 @@ namespace spades {
 							directions[numDirections++] = bits;
 						}
 					}
+			wasSolid = (numDirections == 0);
 			if (numDirections == 0)
 				numDirections = 8;
 
@@ -176,11 +177,11 @@ namespace spades {
 						SPAssert(false);
 					continue;
 				}
-				if (map->CastRay(muzzle, dir, 18.f, hitBlock)) {
+				if (map->CastRay(muzzle, dir, (float)RayLength * 2.5f, hitBlock)) {
 					Vector3 centerPos =
 					  MakeVector3(hitBlock.x + .5f, hitBlock.y + .5f, hitBlock.z + .5f);
 					float dist = (centerPos - muzzle).GetPoweredLength();
-					brightness = dist * 0.02f; // 1/7/7
+					brightness = dist * (1.0 / float((RayLength - 1) * (RayLength - 1)));
 					if (brightness > 1.f)
 						brightness = 1.f;
 				}
@@ -199,7 +200,8 @@ namespace spades {
 			if (map != this->map)
 				return;
 
-			Invalidate(x - 8, y - 8, z - 8, x + 8, y + 8, z + 8);
+			Invalidate(x - RayLength, y - RayLength, z - RayLength, x + RayLength, y + RayLength,
+			           z + RayLength);
 		}
 
 		void GLAmbientShadowRenderer::Invalidate(int minX, int minY, int minZ, int maxX, int maxY,
@@ -366,16 +368,75 @@ namespace spades {
 			int originY = cy * ChunkSize;
 			int originZ = cz * ChunkSize;
 
+			auto b = [](int i) -> std::uint32_t { return (std::uint32_t)1 << i; };
+
+			// Clear `c.solid`
+			std::uint16_t mask = (std::uint16_t)((b(c.dirtyMinZ) - 1) | ~(b(c.dirtyMaxZ) - 1));
+			for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
+				for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
+					c.solid[y][x] &= mask;
+				}
+
 			for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
 				for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
 					for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
 						IntVector3 pos;
+						bool wasSolid = false;
 						pos.x = (x + originX);
 						pos.y = (y + originY);
 						pos.z = (z + originZ);
 
-						c.data[z][y][x] = Evaluate(pos);
+						c.data[z][y][x] = Evaluate(pos, wasSolid);
+
+						if (wasSolid) {
+							c.solid[y][x] |= b(z);
+						}
 					}
+
+			// Blur the result to remove noise
+			for (int blurPass = 0; blurPass < 2; ++blurPass) {
+				for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
+					for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
+						for (int x = c.dirtyMinX + 1; x < c.dirtyMaxX; x++) {
+							std::uint32_t bit = b(z);
+							if ((c.solid[y][x - 1] | c.solid[y][x + 1]) & bit) {
+								// Do not blur the solid voxels' values into
+								// non-solid ones
+								continue;
+							}
+
+							c.data[z][y][x] =
+							  (c.data[z][y][x] + c.data[z][y][x - 1] + c.data[z][y][x + 1]) *
+							  (1.0f / 3.0f);
+						}
+				for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
+					for (int y = c.dirtyMinY + 1; y < c.dirtyMaxY; y++)
+						for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
+							std::uint32_t bit = b(z);
+							if ((c.solid[y - 1][x] | c.solid[y + 1][x]) & bit) {
+								// Do not blur the solid voxels' values into
+								// non-solid ones
+								continue;
+							}
+
+							c.data[z][y][x] =
+							  (c.data[z][y][x] + c.data[z][y - 1][x] + c.data[z][y + 1][x]) *
+							  (1.0f / 3.0f);
+						}
+				for (int z = c.dirtyMinZ + 1; z < c.dirtyMaxZ; z++)
+					for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
+						for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
+							if (c.solid[y][x] & (7 * b(z - 1))) {
+								// Do not blur the solid voxels' values into
+								// non-solid ones
+								continue;
+							}
+
+							c.data[z][y][x] =
+							  (c.data[z][y][x] + c.data[z - 1][y][x] + c.data[z + 1][y][x]) *
+							  (1.0f / 3.0f);
+						}
+			}
 
 			c.dirty = false;
 			c.transferDone = false;
