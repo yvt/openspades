@@ -835,8 +835,7 @@ namespace spades {
 					std::swap(view, viewMatrix);
 					projectionViewMatrix = projectionMatrix * viewMatrix;
 
-					if (settings.r_fogShadow && mapShadowRenderer &&
-					    fogColor.GetPoweredLength() > .000001f) {
+					if (settings.r_fogShadow && mapShadowRenderer) {
 						GLProfiler::Context p(*profiler, "Volumetric Fog");
 
 						GLFramebufferManager::BufferHandle handle;
@@ -921,8 +920,7 @@ namespace spades {
 					GLProfiler::Context p(*profiler, "Preparation");
 					handle = fbManager->StartPostProcessing();
 				}
-				if (settings.r_fogShadow && mapShadowRenderer &&
-				    fogColor.GetPoweredLength() > .000001f) {
+				if (settings.r_fogShadow && mapShadowRenderer) {
 					GLProfiler::Context p(*profiler, "Volumetric Fog");
 					if (settings.ShouldUseFogFilter2()) {
 						handle = GLFogFilter2(this).Filter(handle);
