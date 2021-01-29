@@ -1057,6 +1057,12 @@ namespace spades {
 
 					float fogLuminance = (fogColor.x + fogColor.y + fogColor.z) * (1.0f / 3.0f);
 
+					if (settings.ShouldUseFogFilter2()) {
+						// `GLFogFilter2` adds a GI factor, so the fog receives some light
+						// even if the fog color is set to dark.
+						fogLuminance = fogLuminance * 0.9 + 0.2;
+					}
+
 					float exposure = powf(2.f, (float)settings.r_exposureValue * 0.5f);
 					handle =
 					  GLColorCorrectionFilter(this).Filter(handle, tint * exposure, fogLuminance);
