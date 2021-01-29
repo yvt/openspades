@@ -73,6 +73,11 @@ void main() {
 	if (localClipZ == 1.0) {
 		// The sky should have the fog color.
 		goalFogFactor = 1.0;
+	} else {
+		// Increase the fog factor near the camera so that the effect is more
+		// visible without lowering the visibility of near-fog-distance objects.
+		goalFogFactor = mix(goalFogFactor, sqrt(goalFogFactor),
+		                    (1.0 - goalFogFactor) * (1.0 - goalFogFactor) * 0.5);
 	}
 
 	// ---------------------------------------------------------------------
