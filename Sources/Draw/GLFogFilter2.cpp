@@ -20,6 +20,7 @@
 
 #include <vector>
 
+#include "GLAmbientShadowRenderer.h"
 #include "GLFogFilter2.h"
 #include "GLImage.h"
 #include "GLMapShadowRenderer.h"
@@ -27,6 +28,7 @@
 #include "GLProgramAttribute.h"
 #include "GLProgramUniform.h"
 #include "GLQuadRenderer.h"
+#include "GLRadiosityRenderer.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
 #include <Core/Debug.h>
@@ -43,7 +45,12 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			IGLDevice *dev = renderer->GetGLDevice();
+			GLAmbientShadowRenderer *ambientShadowRenderer = renderer->GetAmbientShadowRenderer();
+			GLRadiosityRenderer *radiosityRenderer = renderer->GetRadiosityRenderer();
 			GLQuadRenderer qr(dev);
+
+			SPAssert(ambientShadowRenderer);
+			SPAssert(radiosityRenderer);
 
 			// Calculate the current view-projection matrix. Exclude `def.viewOrigin` from this
 			// matrix.
@@ -108,6 +115,8 @@ namespace spades {
 			//       `lens` prefix!
 			static GLProgramAttribute lensPosition("positionAttribute");
 			static GLProgramUniform lensShadowMapTexture("shadowMapTexture");
+			static GLProgramUniform ambientShadowTexture("ambientShadowTexture");
+			static GLProgramUniform radiosityTexture("radiosityTexture");
 			static GLProgramUniform lensColorTexture("colorTexture");
 			static GLProgramUniform lensDepthTexture("depthTexture");
 			static GLProgramUniform lensViewOrigin("viewOrigin");
@@ -129,6 +138,8 @@ namespace spades {
 			ditherTexture(lens);
 			ditherOffset(lens);
 			viewProjectionMatrixInv(lens);
+			ambientShadowTexture(lens);
+			radiosityTexture(lens);
 
 			lens->Use();
 
@@ -144,6 +155,9 @@ namespace spades {
 			lensColorTexture.SetValue(0);
 			lensDepthTexture.SetValue(1);
 			lensShadowMapTexture.SetValue(2);
+			ditherTexture.SetValue(3);
+			ambientShadowTexture.SetValue(4);
+			radiosityTexture.SetValue(5);
 
 			std::uint32_t frame = renderer->GetFrameNumber() % 4;
 			ditherOffset.SetValue((float)(frame & 1) * 0.5f, (float)((frame >> 1) & 1) * 0.5f);
@@ -153,19 +167,28 @@ namespace spades {
 
 			dev->Enable(IGLDevice::Blend, false);
 			qr.SetCoordAttributeIndex(lensPosition());
+
 			dev->ActiveTexture(0);
 			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
+
 			dev->ActiveTexture(1);
 			dev->BindTexture(IGLDevice::Texture2D, input.GetManager()->GetDepthTexture());
+
 			dev->ActiveTexture(2);
 			dev->BindTexture(IGLDevice::Texture2D, renderer->GetMapShadowRenderer()->GetTexture());
+
 			dev->ActiveTexture(3);
-			ditherTexture.SetValue(3);
 			ditherPattern->Bind(IGLDevice::Texture2D);
 			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 			                  IGLDevice::Nearest);
 			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
 			                  IGLDevice::Nearest);
+
+			dev->ActiveTexture(4);
+			dev->BindTexture(IGLDevice::Texture3D, ambientShadowRenderer->GetTexture());
+			dev->ActiveTexture(5);
+			dev->BindTexture(IGLDevice::Texture3D, radiosityRenderer->GetTextureFlat());
+
 			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
 			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
 			qr.Draw();

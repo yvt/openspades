@@ -22,6 +22,8 @@ uniform sampler2D colorTexture;
 uniform sampler2D depthTexture;
 uniform sampler2D shadowMapTexture;
 uniform sampler2D ditherTexture;
+uniform sampler3D ambientShadowTexture;
+uniform sampler3D radiosityTexture;
 
 uniform vec3 viewOrigin;
 uniform vec3 fogColor;
@@ -40,6 +42,13 @@ vec3 transformToShadow(vec3 v) {
 	v.y -= v.z;
 	v *= vec3(1. / 512., 1. / 512., 1. / 255.);
 	return v;
+}
+
+vec3 DecodeRadiosityValue(vec3 val) { // TODO
+	// reverse bias
+	val *= 1023. / 1022.;
+	val = (val * 2.) - 1.;
+	return val;
 }
 
 void main() {
@@ -67,7 +76,7 @@ void main() {
 	// toward the camera).
 
 	float weightSum = 0.0;
-	const int numSamples = 32;
+	const int numSamples = 16;
 
 	// Dithered sampling
 	float dither = texture2D(ditherTexture, gl_FragCoord.xy * 0.25 + ditherOffset).x * 15.0 / 16.0;
@@ -87,13 +96,41 @@ void main() {
 
 	currentShadowPosition += shadowPositionDelta * dither;
 
+	// AO sampling
+	vec3 currentRadiosityTextureCoord = (viewOrigin + vec3(0., 0., 0.)) / vec3(512., 512., 64.);
+	vec3 radiosityTextureCoordDelta =
+	  viewcentricWorldPosition.xyz / float(numSamples) / vec3(512., 512., 64.);
+
+	currentRadiosityTextureCoord += radiosityTextureCoordDelta * dither;
+
+	// Secondary diffuse reflection sampling
+	vec3 currentAmbientShadowTextureCoord =
+	  (viewOrigin + vec3(0.5, 0.5, 1.5)) / vec3(512., 512., 65.);
+	vec3 ambientShadowTextureCoordDelta =
+	  viewcentricWorldPosition.xyz / float(numSamples) / vec3(512., 512., 65.);
+	vec3 radiosityFactor = vec3(0.0);
+
+	currentAmbientShadowTextureCoord += ambientShadowTextureCoordDelta * dither;
+
 	for (int i = 0; i < numSamples; ++i) {
 		// Shadow map sampling
 		float val = texture2D(shadowMapTexture, currentShadowPosition.xy).w;
 		val = step(currentShadowPosition.z, val);
-		fogColorFactor += val * weight;
+		fogColorFactor += val * weight * 0.5;
+
+		// AO sampling
+		float aoFactor = texture3D(ambientShadowTexture, currentAmbientShadowTextureCoord).x;
+		aoFactor = max(aoFactor, 0.); // for some reason, mainTexture value becomes negative(?)
+		fogColorFactor += aoFactor * weight * 0.5;
+
+		// Secondary diffuse reflection sampling
+		vec3 radiosity =
+		  DecodeRadiosityValue(texture3D(radiosityTexture, currentRadiosityTextureCoord).xyz);
+		radiosityFactor += radiosity * weight;
 
 		currentShadowPosition += shadowPositionDelta;
+		currentRadiosityTextureCoord += radiosityTextureCoordDelta;
+		currentAmbientShadowTextureCoord += ambientShadowTextureCoordDelta;
 		weightSum += weight;
 
 		weight -= weightDelta;
@@ -102,6 +139,7 @@ void main() {
 	// Rescale the in-scattering term according to the desired fog density
 	float scale = goalFogFactor / (weightSum + 1.0e-4);
 	fogColorFactor *= scale;
+	radiosityFactor *= scale;
 
 	// ---------------------------------------------------------------------
 
@@ -110,7 +148,7 @@ void main() {
 	gl_FragColor.xyz *= gl_FragColor.xyz; // linearize
 #endif
 
-	gl_FragColor.xyz += goalFogFactor * fogColor * fogColorFactor;
+	gl_FragColor.xyz += fogColor * fogColorFactor + radiosityFactor;
 
 #if !LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
