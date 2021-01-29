@@ -204,9 +204,7 @@ namespace spades {
                     _Tr("StartupScreen",
                         "Applies both local illumination and global illumination to the fog.") + "\n\n" +
                     _Tr("StartupScreen",
-                        "Warning: {0} and {1} must be enabled.",
-                            _Tr("StartupScreen", "Global Illumination"),
-                            _Tr("StartupScreen", "Temporal AA"))));
+                        "Warning: {0} must be enabled.", _Tr("StartupScreen", "Global Illumination"))));
 
                 {
                     StartupScreenComplexConfig cplx;

@@ -75,14 +75,12 @@ namespace spades {
 
 		void GLSettings::ValidateSettings() {
 			if (this->r_fogShadow.operator int() == 2 && !this->ShouldUseFogFilter2()) {
-				SPLog("`r_fogShadow 2` is ignored because `r_radiosity` or `r_temporalAA` are "
-				      "disabled");
+				SPLog("`r_fogShadow 2` is ignored because `r_radiosity` is disabled");
 			}
 		}
 
 		bool GLSettings::ShouldUseFogFilter2() {
-			return this->r_fogShadow.operator int() == 2 && !!this->r_radiosity.operator int() &&
-			       !!this->r_temporalAA;
+			return this->r_fogShadow.operator int() == 2 && !!this->r_radiosity.operator int();
 		}
 	}
 }
