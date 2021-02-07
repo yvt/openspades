@@ -101,6 +101,14 @@ void main() {
 
 	// Dithered sampling
 	float dither = texture2D(ditherTexture, gl_FragCoord.xy * 0.25 + ditherOffset).x * 15.0 / 16.0;
+	float dither2a =
+	  texture2D(ditherTexture, gl_FragCoord.yx * 0.25 + ditherOffset + vec2(0.25, 0.0)).x * 15.0 /
+	    16.0 -
+	  0.5;
+	float dither2b =
+	  texture2D(ditherTexture, gl_FragCoord.yx * 0.25 + ditherOffset.yx + vec2(0.0, 0.5)).x * 15.0 /
+	    16.0 -
+	  0.5;
 
 	// Shadows closer to the camera should be more visible
 	float weight = 1.0;
@@ -113,6 +121,8 @@ void main() {
 	vec3 shadowPositionDelta = transformToShadow(viewcentricWorldPosition.xyz / float(numSamples));
 
 	currentShadowPosition += shadowPositionDelta * dither;
+	currentShadowPosition +=
+	  vec3(dither2a, dither2b, max(0.0, -dither2b)) / 512.0; // cheap soft shadowing
 
 	float sunlightFactor = 0.0;
 
