@@ -80,6 +80,16 @@ void main() {
 		                    (1.0 - goalFogFactor) * (1.0 - goalFogFactor) * 0.5);
 	}
 
+	// OpenSpades' fog model uses a Rayleigh-scattering-style wavelength-
+	// dependent fog density. (See `Shaders/Fog.vs`)
+	vec3 goalFogFactorColor;
+	{
+		float weakenedDensity = 1. - goalFogFactor;
+		weakenedDensity *= weakenedDensity;
+		goalFogFactorColor =
+		  mix(vec3(goalFogFactor), vec3(1. - weakenedDensity), vec3(0., 0.3, 1.0));
+	}
+
 	// ---------------------------------------------------------------------
 	// Calculate the in-scattering radiance (the amount of incoming light scattered
 	// toward the camera).
@@ -152,8 +162,8 @@ void main() {
 	}
 
 	// Rescale the in-scattering term according to the desired fog density
-	float scale = goalFogFactor / (weightSum + 1.0e-4);
-	fogColorFactor *= scale;
+	vec3 scale = goalFogFactorColor / (weightSum + 1.0e-4);
+	vec3 fogColorFactorColor = fogColor * fogColorFactor * scale;
 	radiosityFactor *= scale;
 
 	// ---------------------------------------------------------------------
@@ -161,7 +171,7 @@ void main() {
 	// add gradient
 	vec3 sunDir = normalize(vec3(0., -1., -1.));
 	float bright = dot(sunDir, normalize(viewcentricWorldPosition.xyz));
-	fogColorFactor *= bright * 0.5 + 1.0;
+	fogColorFactorColor *= bright * 0.5 + 1.0;
 
 	// ---------------------------------------------------------------------
 
@@ -170,7 +180,7 @@ void main() {
 	gl_FragColor.xyz *= gl_FragColor.xyz; // linearize
 #endif
 
-	gl_FragColor.xyz += fogColor * fogColorFactor + radiosityFactor;
+	gl_FragColor.xyz += fogColorFactorColor + radiosityFactor;
 
 #if !LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);
