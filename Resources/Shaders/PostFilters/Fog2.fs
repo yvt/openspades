@@ -26,7 +26,9 @@ uniform sampler3D ambientShadowTexture;
 uniform sampler3D radiosityTexture;
 
 uniform vec3 viewOrigin;
-uniform vec3 fogColor;
+uniform vec3 sunlightScale;
+uniform vec3 ambientScale;
+uniform vec3 radiosityScale;
 uniform float fogDistance;
 uniform mat4 viewProjectionMatrixInv;
 uniform vec2 ditherOffset;
@@ -106,14 +108,13 @@ void main() {
 
 	weight -= weightDelta * dither;
 
-	// Shadow map sampling + AO
-	float fogColorFactor = 0.0;
-
 	// Shadow map sampling
 	vec3 currentShadowPosition = transformToShadow(viewOrigin);
 	vec3 shadowPositionDelta = transformToShadow(viewcentricWorldPosition.xyz / float(numSamples));
 
 	currentShadowPosition += shadowPositionDelta * dither;
+
+	float sunlightFactor = 0.0;
 
 	// AO sampling
 	vec3 currentRadiosityTextureCoord = (viewOrigin + vec3(0., 0., 0.)) / vec3(512., 512., 64.);
@@ -121,6 +122,8 @@ void main() {
 	  viewcentricWorldPosition.xyz / float(numSamples) / vec3(512., 512., 64.);
 
 	currentRadiosityTextureCoord += radiosityTextureCoordDelta * dither;
+
+	float ambientFactor = 0.0;
 
 	// Secondary diffuse reflection sampling
 	vec3 currentAmbientShadowTextureCoord =
@@ -137,12 +140,12 @@ void main() {
 		// Shadow map sampling
 		float val = texture2D(shadowMapTexture, currentShadowPosition.xy).w;
 		val = step(currentShadowPosition.z, val);
-		fogColorFactor += val * weight * 0.5;
+		sunlightFactor += val * weight;
 
 		// AO sampling
 		float aoFactor = texture3D(ambientShadowTexture, currentAmbientShadowTextureCoord).x;
 		aoFactor = max(aoFactor, 0.); // for some reason, mainTexture value becomes negative(?)
-		fogColorFactor += aoFactor * weight * 0.5;
+		ambientFactor += aoFactor * weight;
 
 		// Secondary diffuse reflection sampling
 		//
@@ -161,17 +164,23 @@ void main() {
 		weight -= weightDelta;
 	}
 
+	vec3 sunlightFactorColor = sunlightFactor * sunlightScale;
+	vec3 ambientFactorColor = ambientFactor * ambientScale;
+	radiosityFactor *= radiosityScale;
+
 	// Rescale the in-scattering term according to the desired fog density
 	vec3 scale = goalFogFactorColor / (weightSum + 1.0e-4);
-	vec3 fogColorFactorColor = fogColor * fogColorFactor * scale;
 	radiosityFactor *= scale;
+	sunlightFactorColor *= scale;
+	ambientFactorColor *= scale;
 
 	// ---------------------------------------------------------------------
 
 	// add gradient
 	vec3 sunDir = normalize(vec3(0., -1., -1.));
 	float bright = dot(sunDir, normalize(viewcentricWorldPosition.xyz));
-	fogColorFactorColor *= bright * 0.5 + 1.0;
+	sunlightFactorColor *= bright * 0.5 + 1.0;
+	ambientFactorColor *= bright * 0.5 + 1.0;
 
 	// ---------------------------------------------------------------------
 
@@ -180,7 +189,7 @@ void main() {
 	gl_FragColor.xyz *= gl_FragColor.xyz; // linearize
 #endif
 
-	gl_FragColor.xyz += fogColorFactorColor + radiosityFactor;
+	gl_FragColor.xyz += sunlightFactorColor + ambientFactorColor + radiosityFactor;
 
 #if !LINEAR_FRAMEBUFFER
 	gl_FragColor.xyz = sqrt(gl_FragColor.xyz);

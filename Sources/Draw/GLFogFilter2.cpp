@@ -121,7 +121,9 @@ namespace spades {
 			static GLProgramUniform lensDepthTexture("depthTexture");
 			static GLProgramUniform lensViewOrigin("viewOrigin");
 			static GLProgramUniform viewProjectionMatrixInv("viewProjectionMatrixInv");
-			static GLProgramUniform fogColor("fogColor");
+			static GLProgramUniform sunlightScale("sunlightScale");
+			static GLProgramUniform ambientScale("ambientScale");
+			static GLProgramUniform radiosityScale("radiosityScale");
 			static GLProgramUniform fogDistance("fogDistance");
 			static GLProgramUniform ditherTexture("ditherTexture");
 			static GLProgramUniform ditherOffset("ditherOffset");
@@ -133,7 +135,9 @@ namespace spades {
 			lensColorTexture(lens);
 			lensDepthTexture(lens);
 			lensViewOrigin(lens);
-			fogColor(lens);
+			sunlightScale(lens);
+			ambientScale(lens);
+			radiosityScale(lens);
 			fogDistance(lens);
 			ditherTexture(lens);
 			ditherOffset(lens);
@@ -148,7 +152,47 @@ namespace spades {
 
 			Vector3 fogCol = renderer->GetFogColor();
 			fogCol *= fogCol; // linearize
-			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
+
+			float sunlightBrightness = 0.6f; // Sun -> Fog -> Eye
+			float ambientBrightness = 1.0f;  // Sun -> Fog -> Fog -> Eye
+			float radiosityBrightness = 1.0f;
+			float radiosityOffset = 0.2f;
+			// Let's say the fog modulates the incoming light with some factor
+			// we call `fogTransmission`. When there are no occluding objects,
+			// we see this color:
+			//
+			//     fogTransmission * sunlightBrightness +
+			//         ambientBrightness * fogTransmission * fogColor
+			//
+			// This expresion's value must be equal to a given `fogColor`:
+			//
+			//     fogTransmission * sunlightBrightness +
+			//       ambientBrightness * fogTransmission * fogColor = fogColor
+			//
+			// Solving this for `fogTransmission`:
+			//
+			//     fogTransmission = fogColor /
+			// 			(sunlightBrightness + ambientBrightness * fogColor)
+			//
+			// We add some value (`radiosityOffset`) to `radiosityScale` for
+			// artistic reasons. We want the fog to reflect some light.
+			auto fogTransmission1 = [=](float fogColor) {
+				return fogColor / (sunlightBrightness + ambientBrightness * fogColor);
+			};
+			Vector3 fogTransmission{
+			  fogTransmission1(fogCol.x),
+			  fogTransmission1(fogCol.y),
+			  fogTransmission1(fogCol.z),
+			};
+			sunlightScale.SetValue(fogTransmission.x * sunlightBrightness,
+			                       fogTransmission.y * sunlightBrightness,
+			                       fogTransmission.z * sunlightBrightness);
+			ambientScale.SetValue(fogTransmission.x * fogCol.x * ambientBrightness,
+			                      fogTransmission.y * fogCol.y * ambientBrightness,
+			                      fogTransmission.z * fogCol.z * ambientBrightness);
+			radiosityScale.SetValue(fogTransmission.x * radiosityBrightness + radiosityOffset,
+			                        fogTransmission.y * radiosityBrightness + radiosityOffset,
+			                        fogTransmission.z * radiosityBrightness + radiosityOffset);
 
 			fogDistance.SetValue(128.f);
 
