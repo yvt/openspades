@@ -137,7 +137,7 @@ void main() {
 
 	// Secondary diffuse reflection sampling
 	vec3 currentAmbientShadowTextureCoord =
-	  (viewOrigin + vec3(0.5, 0.5, 1.5)) / vec3(512., 512., 65.);
+	  (viewOrigin + vec3(0.0, 0.0, 1.0)) / vec3(512., 512., 65.);
 	vec3 ambientShadowTextureCoordDelta =
 	  viewcentricWorldPosition.xyz / float(numSamples) / vec3(512., 512., 65.);
 	vec3 radiosityFactor = vec3(0.0);
