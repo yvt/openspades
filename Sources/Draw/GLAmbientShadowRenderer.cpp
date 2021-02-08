@@ -121,7 +121,14 @@ namespace spades {
 			device->DeleteTexture(texture);
 		}
 
-		float GLAmbientShadowRenderer::Evaluate(IntVector3 ipos, bool &wasSolid) {
+		/**
+		 * Evaluate the AO term at the point specified by given world coordinates.
+		 *
+		 * This function stores the surrounding voxels' solidness to `outSolidFlags`'s bits. Bit
+		 * `ix + 2*iy + 4*iz` will be set if the voxel `(ipos.x - ix, ipos.y - iy, ipos.z - iz)` is
+		 * empty.
+		 */
+		float GLAmbientShadowRenderer::Evaluate(IntVector3 ipos, std::uint8_t &outSolidFlags) {
 			SPADES_MARK_FUNCTION_DEBUG();
 
 			float sum = 0;
@@ -132,6 +139,7 @@ namespace spades {
 			// check allowed ray direction
 			uint8_t directions[8] = {0, 1, 2, 3, 4, 5, 6, 7};
 			int numDirections = 0;
+			std::uint8_t solidFlags = 0;
 			for (int x = -1; x <= 0; x++)
 				for (int y = -1; y <= 0; y++)
 					for (int z = -1; z <= 0; z++) {
@@ -144,9 +152,10 @@ namespace spades {
 							if (z)
 								bits |= 4;
 							directions[numDirections++] = bits;
+							solidFlags |= 1 << bits;
 						}
 					}
-			wasSolid = (numDirections == 0);
+			outSolidFlags = solidFlags;
 			if (numDirections == 0)
 				numDirections = 8;
 
@@ -368,29 +377,17 @@ namespace spades {
 			int originY = cy * ChunkSize;
 			int originZ = cz * ChunkSize;
 
-			auto b = [](int i) -> std::uint32_t { return (std::uint32_t)1 << i; };
-
-			// Clear `c.solid`
-			std::uint16_t mask = (std::uint16_t)((b(c.dirtyMinZ) - 1) | ~(b(c.dirtyMaxZ) - 1));
-			for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
-				for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
-					c.solid[y][x] &= mask;
-				}
-
 			for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
 				for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
 					for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
 						IntVector3 pos;
-						bool wasSolid = false;
+						std::uint8_t solidFlags;
 						pos.x = (x + originX);
 						pos.y = (y + originY);
 						pos.z = (z + originZ);
 
-						c.data[z][y][x] = Evaluate(pos, wasSolid);
-
-						if (wasSolid) {
-							c.solid[y][x] |= b(z);
-						}
+						c.data[z][y][x] = Evaluate(pos, solidFlags);
+						c.solid[z][y][x] = solidFlags;
 					}
 
 			// Blur the result to remove noise
@@ -398,10 +395,9 @@ namespace spades {
 				for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
 					for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
 						for (int x = c.dirtyMinX + 1; x < c.dirtyMaxX; x++) {
-							std::uint32_t bit = b(z);
-							if ((c.solid[y][x - 1] | c.solid[y][x + 1]) & bit) {
-								// Do not blur the solid voxels' values into
-								// non-solid ones
+							if ((c.solid[z][y][x] & 0b10101010) == 0 ||
+							    (c.solid[z][y][x] & 0b01010101) == 0) {
+								// Do not blur across a wall
 								continue;
 							}
 
@@ -412,10 +408,9 @@ namespace spades {
 				for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
 					for (int y = c.dirtyMinY + 1; y < c.dirtyMaxY; y++)
 						for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
-							std::uint32_t bit = b(z);
-							if ((c.solid[y - 1][x] | c.solid[y + 1][x]) & bit) {
-								// Do not blur the solid voxels' values into
-								// non-solid ones
+							if ((c.solid[z][y][x] & 0b11001100) == 0 ||
+							    (c.solid[z][y][x] & 0b00110011) == 0) {
+								// Do not blur across a wall
 								continue;
 							}
 
@@ -426,9 +421,9 @@ namespace spades {
 				for (int z = c.dirtyMinZ + 1; z < c.dirtyMaxZ; z++)
 					for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
 						for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
-							if (c.solid[y][x] & (7 * b(z - 1))) {
-								// Do not blur the solid voxels' values into
-								// non-solid ones
+							if ((c.solid[z][y][x] & 0b11110000) == 0 ||
+							    (c.solid[z][y][x] & 0b00001111) == 0) {
+								// Do not blur across a wall
 								continue;
 							}
 

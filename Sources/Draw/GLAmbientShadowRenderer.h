@@ -46,7 +46,7 @@ namespace spades {
 			struct Chunk {
 				int cx, cy, cz;
 				float data[ChunkSize][ChunkSize][ChunkSize];
-				std::uint16_t solid[ChunkSize][ChunkSize];
+				std::uint8_t solid[ChunkSize][ChunkSize][ChunkSize];
 				bool dirty = true;
 				int dirtyMinX = 0, dirtyMaxX = ChunkSize - 1;
 				int dirtyMinY = 0, dirtyMaxY = ChunkSize - 1;
@@ -89,7 +89,7 @@ namespace spades {
 			GLAmbientShadowRenderer(GLRenderer *renderer, client::GameMap *map);
 			~GLAmbientShadowRenderer();
 
-			float Evaluate(IntVector3, bool &wasSolid);
+			float Evaluate(IntVector3, std::uint8_t &outSolidFlags);
 
 			void GameMapChanged(int x, int y, int z, client::GameMap *);
 
