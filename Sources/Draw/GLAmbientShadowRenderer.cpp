@@ -69,7 +69,7 @@ namespace spades {
 			for (size_t i = 0; i < chunks.size(); i++) {
 				Chunk &c = chunks[i];
 				float *data = (float *)c.data;
-				std::fill(data, data + ChunkSize * ChunkSize * ChunkSize, 1.f);
+				std::fill(data, data + ChunkSize * ChunkSize * ChunkSize * 2, 1.f);
 			}
 
 			for (int x = 0; x < chunkW; x++)
@@ -94,16 +94,16 @@ namespace spades {
 			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
 			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapR,
 			                     IGLDevice::ClampToEdge);
-			device->TexImage3D(IGLDevice::Texture3D, 0, IGLDevice::Red, w, h, d + 1, 0,
-			                   IGLDevice::Red, IGLDevice::FloatType, NULL);
+			device->TexImage3D(IGLDevice::Texture3D, 0, IGLDevice::RG, w, h, d + 1, 0,
+			                   IGLDevice::RG, IGLDevice::FloatType, NULL);
 
 			SPLog("Chunk texture allocated");
 
 			std::vector<float> v;
-			v.resize(w * h);
+			v.resize(w * h * 2);
 			std::fill(v.begin(), v.end(), 1.f);
 			for (int i = 0; i < d + 1; i++) {
-				device->TexSubImage3D(IGLDevice::Texture3D, 0, 0, 0, i, w, h, 1, IGLDevice::Red,
+				device->TexSubImage3D(IGLDevice::Texture3D, 0, 0, 0, i, w, h, 1, IGLDevice::RG,
 				                      IGLDevice::FloatType, v.data());
 			}
 
@@ -123,48 +123,20 @@ namespace spades {
 
 		/**
 		 * Evaluate the AO term at the point specified by given world coordinates.
-		 *
-		 * This function stores the surrounding voxels' solidness to `outSolidFlags`'s bits. Bit
-		 * `ix + 2*iy + 4*iz` will be set if the voxel `(ipos.x - ix, ipos.y - iy, ipos.z - iz)` is
-		 * empty.
 		 */
-		float GLAmbientShadowRenderer::Evaluate(IntVector3 ipos, std::uint8_t &outSolidFlags) {
+		float GLAmbientShadowRenderer::Evaluate(IntVector3 ipos) {
 			SPADES_MARK_FUNCTION_DEBUG();
 
-			float sum = 0;
+			float sum = 0.0f;
 			Vector3 pos = MakeVector3((float)ipos.x, (float)ipos.y, (float)ipos.z);
-
-			float muzzleDiff = 0.02f;
-
-			// check allowed ray direction
-			uint8_t directions[8] = {0, 1, 2, 3, 4, 5, 6, 7};
-			int numDirections = 0;
-			std::uint8_t solidFlags = 0;
-			for (int x = -1; x <= 0; x++)
-				for (int y = -1; y <= 0; y++)
-					for (int z = -1; z <= 0; z++) {
-						if (!map->IsSolidWrapped(ipos.x + x, ipos.y + y, ipos.z + z)) {
-							unsigned int bits = 0;
-							if (x)
-								bits |= 1;
-							if (y)
-								bits |= 2;
-							if (z)
-								bits |= 4;
-							directions[numDirections++] = bits;
-							solidFlags |= 1 << bits;
-						}
-					}
-			outSolidFlags = solidFlags;
-			if (numDirections == 0)
-				numDirections = 8;
-
-			int dirId = 0;
+			pos.x += 0.5f;
+			pos.y += 0.5f;
+			pos.z += 0.5f;
 
 			for (int i = 0; i < NumRays; i++) {
 				Vector3 dir = rays[i];
 
-				unsigned int bits = directions[dirId];
+				unsigned int bits = i & 7;
 				if (bits & 1)
 					dir.x = -dir.x;
 				if (bits & 2)
@@ -172,20 +144,10 @@ namespace spades {
 				if (bits & 4)
 					dir.z = -dir.z;
 
-				dirId++;
-				if (dirId >= numDirections)
-					dirId = 0;
-
-				Vector3 muzzle = pos + dir * muzzleDiff;
+				Vector3 muzzle = pos;
 				IntVector3 hitBlock;
 
 				float brightness = 1.f;
-				if (map->IsSolidWrapped((int)floorf(muzzle.x), (int)floorf(muzzle.y),
-				                        (int)floorf(muzzle.z))) {
-					if (numDirections < 8)
-						SPAssert(false);
-					continue;
-				}
 				if (map->CastRay(muzzle, dir, (float)RayLength * 2.5f, hitBlock)) {
 					Vector3 centerPos =
 					  MakeVector3(hitBlock.x + .5f, hitBlock.y + .5f, hitBlock.z + .5f);
@@ -198,8 +160,7 @@ namespace spades {
 				sum += brightness;
 			}
 
-			sum *= 1.f / (float)NumRays;
-			sum *= (float)numDirections / 4.f;
+			sum = std::min(sum * (2.f / (float)NumRays), 1.0f);
 
 			return sum;
 		}
@@ -300,7 +261,7 @@ namespace spades {
 				if (!c.transferDone.exchange(true)) {
 					device->TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
 					                      c.cy * ChunkSize, c.cz * ChunkSize + 1, ChunkSize,
-					                      ChunkSize, ChunkSize, IGLDevice::Red,
+					                      ChunkSize, ChunkSize, IGLDevice::RG,
 					                      IGLDevice::FloatType, c.data);
 				}
 			}
@@ -377,59 +338,70 @@ namespace spades {
 			int originY = cy * ChunkSize;
 			int originZ = cz * ChunkSize;
 
+			auto b = [](int i) -> std::uint32_t { return (std::uint32_t)1 << i; };
+
+			// Clear `c.solid`
+			std::uint16_t mask = (std::uint16_t)((b(c.dirtyMinZ) - 1) ^ (b(c.dirtyMaxZ + 1) - 1));
+			for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
+				for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
+					c.solid[y][x] |= mask;
+				}
+
 			for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
 				for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
 					for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
 						IntVector3 pos;
-						std::uint8_t solidFlags;
 						pos.x = (x + originX);
 						pos.y = (y + originY);
 						pos.z = (z + originZ);
 
-						c.data[z][y][x] = Evaluate(pos, solidFlags);
-						c.solid[z][y][x] = solidFlags;
+						if (map->IsSolid(pos.x, pos.y, pos.z)) {
+							c.data[z][y][x][0] = 0.0;
+							c.data[z][y][x][1] = 0.0;
+						} else {
+							c.data[z][y][x][0] = Evaluate(pos);
+							c.data[z][y][x][1] = 1.0;
+							c.solid[y][x] &= ~b(z);
+						}
 					}
 
 			// Blur the result to remove noise
-			for (int blurPass = 0; blurPass < 2; ++blurPass) {
+			for (int blurPass = 0; blurPass < 1; ++blurPass) {
 				for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
 					for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
 						for (int x = c.dirtyMinX + 1; x < c.dirtyMaxX; x++) {
-							if ((c.solid[z][y][x] & 0b10101010) == 0 ||
-							    (c.solid[z][y][x] & 0b01010101) == 0) {
-								// Do not blur across a wall
+							if (c.solid[y][x] & b(z)) {
 								continue;
 							}
 
-							c.data[z][y][x] =
-							  (c.data[z][y][x] + c.data[z][y][x - 1] + c.data[z][y][x + 1]) *
-							  (1.0f / 3.0f);
+							c.data[z][y][x][0] = (c.data[z][y][x][0] + c.data[z][y][x - 1][0] +
+							                      c.data[z][y][x + 1][0]) /
+							                     (c.data[z][y][x][1] + c.data[z][y][x - 1][1] +
+							                      c.data[z][y][x + 1][1]);
 						}
 				for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
 					for (int y = c.dirtyMinY + 1; y < c.dirtyMaxY; y++)
 						for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
-							if ((c.solid[z][y][x] & 0b11001100) == 0 ||
-							    (c.solid[z][y][x] & 0b00110011) == 0) {
-								// Do not blur across a wall
+							if (c.solid[y][x] & b(z)) {
 								continue;
 							}
 
-							c.data[z][y][x] =
-							  (c.data[z][y][x] + c.data[z][y - 1][x] + c.data[z][y + 1][x]) *
-							  (1.0f / 3.0f);
+							c.data[z][y][x][0] = (c.data[z][y][x][0] + c.data[z][y - 1][x][0] +
+							                      c.data[z][y + 1][x][0]) /
+							                     (c.data[z][y][x][1] + c.data[z][y - 1][x][1] +
+							                      c.data[z][y + 1][x][1]);
 						}
 				for (int z = c.dirtyMinZ + 1; z < c.dirtyMaxZ; z++)
 					for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
 						for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
-							if ((c.solid[z][y][x] & 0b11110000) == 0 ||
-							    (c.solid[z][y][x] & 0b00001111) == 0) {
-								// Do not blur across a wall
+							if (c.solid[y][x] & b(z)) {
 								continue;
 							}
 
-							c.data[z][y][x] =
-							  (c.data[z][y][x] + c.data[z - 1][y][x] + c.data[z + 1][y][x]) *
-							  (1.0f / 3.0f);
+							c.data[z][y][x][0] = (c.data[z][y][x][0] + c.data[z - 1][y][x][0] +
+							                      c.data[z + 1][y][x][0]) /
+							                     (c.data[z][y][x][1] + c.data[z - 1][y][x][1] +
+							                      c.data[z + 1][y][x][1]);
 						}
 			}
 

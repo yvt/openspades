@@ -23,6 +23,7 @@
 void PrepareForShadow_Map(vec3 vertexCoord, vec3 normal) ;
 void PrepareForShadow_Model(vec3 vertexCoord, vec3 normal);
 void PrepareForRadiosity_Map(vec3 vertexCoord, vec3 normal);
+void PrepareForRadiosityForMap_Map(vec3 vertexCoord, vec3 normal);
 
 void PrepareForShadow(vec3 vertexCoord, vec3 normal) {
 	PrepareForShadow_Map(vertexCoord, normal);
@@ -34,5 +35,5 @@ void PrepareForShadow(vec3 vertexCoord, vec3 normal) {
 void PrepareForShadowForMap(vec3 vertexCoord, vec3 fixedVertexCoord, vec3 normal) {
 	PrepareForShadow_Map(fixedVertexCoord, normal);
 	PrepareForShadow_Model(vertexCoord, normal);
-	PrepareForRadiosity_Map(vertexCoord, normal);
+	PrepareForRadiosityForMap_Map(vertexCoord, normal);
 }
