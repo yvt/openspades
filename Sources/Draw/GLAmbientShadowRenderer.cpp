@@ -365,6 +365,18 @@ namespace spades {
 						}
 					}
 
+			// The AO terms are sampled 0.5 blocks away from the terrain surface, which leads to
+			// under-shadowing. De-noising by blurring also exacerbates this. So we compensate for
+			// this effect.
+			//
+			// This has a nice side-effect of producing shallow gradients on flat surfaces.
+			for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
+				for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
+					for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
+						float &d = c.data[z][y][x][0];
+						d *= d * d * d + 1.0f - d;
+					}
+
 			// Blur the result to remove noise
 			for (int blurPass = 0; blurPass < 1; ++blurPass) {
 				for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
