@@ -148,7 +148,7 @@ namespace spades {
 				IntVector3 hitBlock;
 
 				float brightness = 1.f;
-				if (map->CastRay(muzzle, dir, (float)RayLength * 2.5f, hitBlock)) {
+				if (map->CastRay(muzzle, dir, (float)RayLength, hitBlock)) {
 					Vector3 centerPos =
 					  MakeVector3(hitBlock.x + .5f, hitBlock.y + .5f, hitBlock.z + .5f);
 					float dist = (centerPos - muzzle).GetPoweredLength();

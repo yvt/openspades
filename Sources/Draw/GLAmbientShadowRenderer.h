@@ -37,7 +37,7 @@ namespace spades {
 		class GLAmbientShadowRenderer {
 
 			class UpdateDispatch;
-			enum { NumRays = 32, ChunkSize = 16, ChunkSizeBits = 4, RayLength = 24 };
+			enum { NumRays = 16, ChunkSize = 16, ChunkSizeBits = 4, RayLength = 16 };
 			GLRenderer *renderer;
 			IGLDevice *device;
 			client::GameMap *map;
