@@ -46,7 +46,7 @@ namespace spades {
 			struct Chunk {
 				int cx, cy, cz;
 				float data[ChunkSize][ChunkSize][ChunkSize][2];
-				std::uint16_t solid[ChunkSize][ChunkSize];
+				std::uint8_t flags[ChunkSize][ChunkSize][ChunkSize];
 				bool dirty = true;
 				int dirtyMinX = 0, dirtyMaxX = ChunkSize - 1;
 				int dirtyMinY = 0, dirtyMaxY = ChunkSize - 1;
