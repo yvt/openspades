@@ -148,7 +148,7 @@ namespace spades {
 				IntVector3 hitBlock;
 
 				float brightness = 1.f;
-				if (map->CastRay(muzzle, dir, (float)RayLength * 2.5f, hitBlock)) {
+				if (map->CastRay(muzzle, dir, (float)RayLength, hitBlock)) {
 					Vector3 centerPos =
 					  MakeVector3(hitBlock.x + .5f, hitBlock.y + .5f, hitBlock.z + .5f);
 					float dist = (centerPos - muzzle).GetPoweredLength();
@@ -338,84 +338,167 @@ namespace spades {
 			int originY = cy * ChunkSize;
 			int originZ = cz * ChunkSize;
 
-			auto b = [](int i) -> std::uint32_t { return (std::uint32_t)1 << i; };
+			// Compute the slightly larger volume for blurring
+			constexpr int padding = 2;
+			float wData[ChunkSize + padding * 2][ChunkSize + padding * 2][ChunkSize + padding * 2]
+			           [2];
+			std::uint8_t wFlags[ChunkSize + padding * 2][ChunkSize + padding * 2]
+			                   [ChunkSize + padding * 2];
+			int wOriginX = originX - padding;
+			int wOriginY = originY - padding;
+			int wOriginZ = originZ - padding;
+			int wDirtyMinX = c.dirtyMinX;
+			int wDirtyMinY = c.dirtyMinY;
+			int wDirtyMinZ = c.dirtyMinZ;
+			int wDirtyMaxX = c.dirtyMaxX + padding * 2;
+			int wDirtyMaxY = c.dirtyMaxY + padding * 2;
+			int wDirtyMaxZ = c.dirtyMaxZ + padding * 2;
 
-			// Clear `c.solid`
-			std::uint16_t mask = (std::uint16_t)((b(c.dirtyMinZ) - 1) ^ (b(c.dirtyMaxZ + 1) - 1));
-			for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
-				for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
-					c.solid[y][x] |= mask;
-				}
+			auto b = [](int i) -> std::uint8_t { return (std::uint8_t)1 << i; };
+			auto to_b = [](bool b, int i) -> std::uint8_t { return (std::uint8_t)b << i; };
 
-			for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
-				for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
-					for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
-						IntVector3 pos;
-						pos.x = (x + originX);
-						pos.y = (y + originY);
-						pos.z = (z + originZ);
+			for (int z = wDirtyMinZ; z <= wDirtyMaxZ; z++)
+				for (int y = wDirtyMinY; y <= wDirtyMaxY; y++)
+					for (int x = wDirtyMinX; x <= wDirtyMaxX; x++) {
+						IntVector3 pos{
+						  x + wOriginX,
+						  y + wOriginY,
+						  z + wOriginZ,
+						};
 
-						if (map->IsSolid(pos.x, pos.y, pos.z)) {
-							c.data[z][y][x][0] = 0.0;
-							c.data[z][y][x][1] = 0.0;
+						if (map->IsSolidWrapped(pos.x, pos.y, pos.z)) {
+							wData[z][y][x][0] = 0.0;
+							wData[z][y][x][1] = 0.0;
 						} else {
-							c.data[z][y][x][0] = Evaluate(pos);
-							c.data[z][y][x][1] = 1.0;
-							c.solid[y][x] &= ~b(z);
+							wData[z][y][x][0] = Evaluate(pos);
+							wData[z][y][x][1] = 1.0;
 						}
+						// bit 0: solids
+						// bit 1: contact (by-surface voxel)
+						wFlags[z][y][x] =
+						  to_b(map->IsSolidWrapped(pos.x, pos.y, pos.z), 0) |
+						  to_b(map->IsSolidWrapped(pos.x - 1, pos.y - 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y - 1, pos.z) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y - 1, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y, pos.z) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y + 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y + 1, pos.z) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y + 1, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y - 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x, pos.y - 1, pos.z) |
+						         map->IsSolidWrapped(pos.x, pos.y - 1, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x, pos.y, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x, pos.y, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x, pos.y + 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x, pos.y + 1, pos.z) |
+						         map->IsSolidWrapped(pos.x, pos.y + 1, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y - 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y - 1, pos.z) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y - 1, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y, pos.z) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y + 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y + 1, pos.z) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y + 1, pos.z + 1),
+						       1);
 					}
 
-			// The AO terms are sampled 0.5 blocks away from the terrain surface, which leads to
-			// under-shadowing. De-noising by blurring also exacerbates this. So we compensate for
-			// this effect.
-			//
-			// This has a nice side-effect of producing shallow gradients on flat surfaces.
-			for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
-				for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
-					for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
-						float &d = c.data[z][y][x][0];
-						d *= d * d * d + 1.0f - d;
+			// The AO terms are sampled 0.5 blocks away from the terrain surface,
+			// which leads to under-shadowing. Compensate for this effect.
+			for (int z = wDirtyMinZ; z <= wDirtyMaxZ; z++)
+				for (int y = wDirtyMinY; y <= wDirtyMaxY; y++)
+					for (int x = wDirtyMinX; x <= wDirtyMaxX; x++) {
+						float &d = wData[z][y][x][0];
+						d *= d * d + 1.0f - d;
 					}
 
 			// Blur the result to remove noise
-			for (int blurPass = 0; blurPass < 1; ++blurPass) {
-				for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
-					for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
-						for (int x = c.dirtyMinX + 1; x < c.dirtyMaxX; x++) {
-							if (c.solid[y][x] & b(z)) {
+			//
+			//	  |     this        |     neighbor    |
+			//	  | solid | contact | solid | contact | blur
+			//	  |   0        0    |   0        x    |   1
+			//	  |   0        1    |   0        0    |   0  (prevent under-shadowing)
+			//	  |   0        1    |   0        1    |   1
+			//	  |   0        x    |   1        x    |   0  (solid voxel's value is zero)
+			//	  |   1        x    |   0        x    |   0  (solid voxel's value must remain zero)
+			//	  |   1        x    |   1        x    |   x
+			//
+			//
+			//	             this voxel
+			//
+			//	                    solid
+			//	                  /-------\  				.
+			//	          +---+---+---+---+
+			//	          | 1 | 0 | 0 | 0 |
+			//	          +---+---+---+---+\				.
+			//	          | 1 | 1 | 0 | 0 | |
+			//	         /+---+---+---+---+ | contact  neighbor
+			//	        | | 0 | 0 |   |   | |
+			//	  solid | +---+---+---+---+/
+			//	        | | 0 | 0 |   |   |
+			//	         \+---+---+---+---+
+			//	              \-------/
+			//	               contact
+			//
+			static const float divider[] = {1.0f, 1.0f / 2.0f, 1.0f / 3.0f};
+			auto mask = [](bool b, float x) { return b ? x : 0.0f; };
+			auto shouldBlur = [=](std::uint8_t thisFlags, std::uint8_t neighborFlags) {
+				return ((neighborFlags & b(0)) | ((~thisFlags | neighborFlags) & b(1))) == 0b10;
+			};
+			for (int blurPass = 0; blurPass < 2; ++blurPass) {
+				for (int z = wDirtyMinZ; z <= wDirtyMaxZ; z++)
+					for (int y = wDirtyMinY; y <= wDirtyMaxY; y++)
+						for (int x = wDirtyMinX + 1; x < wDirtyMaxX; x++) {
+							if (wFlags[z][y][x] & b(0)) {
 								continue;
 							}
-
-							c.data[z][y][x][0] = (c.data[z][y][x][0] + c.data[z][y][x - 1][0] +
-							                      c.data[z][y][x + 1][0]) /
-							                     (c.data[z][y][x][1] + c.data[z][y][x - 1][1] +
-							                      c.data[z][y][x + 1][1]);
+							// Do not blur between by-surface voxels and
+							// in-the-air voxels
+							bool m1 = shouldBlur(wFlags[z][y][x], wFlags[z][y][x - 1]);
+							bool m2 = shouldBlur(wFlags[z][y][x], wFlags[z][y][x + 1]);
+							wData[z][y][x][0] =
+							  (wData[z][y][x][0] + mask(m1, wData[z][y][x - 1][0]) +
+							   mask(m2, wData[z][y][x + 1][0])) *
+							  divider[(int)m1 + (int)m2];
 						}
-				for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
-					for (int y = c.dirtyMinY + 1; y < c.dirtyMaxY; y++)
-						for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
-							if (c.solid[y][x] & b(z)) {
+				for (int z = wDirtyMinZ; z <= wDirtyMaxZ; z++)
+					for (int y = wDirtyMinY + 1; y < wDirtyMaxY; y++)
+						for (int x = wDirtyMinX; x <= wDirtyMaxX; x++) {
+							if (wFlags[z][y][x] & b(0)) {
 								continue;
 							}
-
-							c.data[z][y][x][0] = (c.data[z][y][x][0] + c.data[z][y - 1][x][0] +
-							                      c.data[z][y + 1][x][0]) /
-							                     (c.data[z][y][x][1] + c.data[z][y - 1][x][1] +
-							                      c.data[z][y + 1][x][1]);
+							bool m1 = shouldBlur(wFlags[z][y][x], wFlags[z][y - 1][x]);
+							bool m2 = shouldBlur(wFlags[z][y][x], wFlags[z][y + 1][x]);
+							wData[z][y][x][0] =
+							  (wData[z][y][x][0] + mask(m1, wData[z][y - 1][x][0]) +
+							   mask(m2, wData[z][y + 1][x][0])) *
+							  divider[(int)m1 + (int)m2];
 						}
-				for (int z = c.dirtyMinZ + 1; z < c.dirtyMaxZ; z++)
-					for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
-						for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
-							if (c.solid[y][x] & b(z)) {
+				for (int z = wDirtyMinZ + 1; z < wDirtyMaxZ; z++)
+					for (int y = wDirtyMinY; y <= wDirtyMaxY; y++)
+						for (int x = wDirtyMinX; x <= wDirtyMaxX; x++) {
+							if (wFlags[z][y][x] & b(0)) {
 								continue;
 							}
-
-							c.data[z][y][x][0] = (c.data[z][y][x][0] + c.data[z - 1][y][x][0] +
-							                      c.data[z + 1][y][x][0]) /
-							                     (c.data[z][y][x][1] + c.data[z - 1][y][x][1] +
-							                      c.data[z + 1][y][x][1]);
+							bool m1 = shouldBlur(wFlags[z][y][x], wFlags[z - 1][y][x]);
+							bool m2 = shouldBlur(wFlags[z][y][x], wFlags[z + 1][y][x]);
+							wData[z][y][x][0] =
+							  (wData[z][y][x][0] + mask(m1, wData[z - 1][y][x][0]) +
+							   mask(m2, wData[z + 1][y][x][0])) *
+							  divider[(int)m1 + (int)m2];
 						}
 			}
+
+			// Copy the result to `c.data`
+			for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
+				for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
+					for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
+						c.data[z][y][x][0] = wData[z + padding][y + padding][x + padding][0];
+						c.data[z][y][x][1] = wData[z + padding][y + padding][x + padding][1];
+					}
 
 			c.dirty = false;
 			c.transferDone = false;

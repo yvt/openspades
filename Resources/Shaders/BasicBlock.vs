@@ -71,7 +71,6 @@ void main() {
 
 	vec3 fixedPosition = chunkPosition;
 	fixedPosition += fixedPositionAttribute * 0.5;
-	fixedPosition += normalAttribute * 0.1;
 
 	vec3 normal = normalAttribute;
 	vec3 shadowVertexPos = vertexPos.xyz;
