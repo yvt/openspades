@@ -165,7 +165,7 @@ namespace spades {
 			}
 
 			if (settings.ShouldUseFogFilter2()) {
-				GLFogFilter2(this);
+				fogFilter2.reset(new GLFogFilter2(this));
 			} else if (settings.r_fogShadow) {
 				GLFogFilter(this);
 			}
@@ -208,6 +208,7 @@ namespace spades {
 			SPLog("GLRender finalizing");
 			SetGameMap(nullptr);
 			temporalAAFilter.reset();
+			fogFilter2.reset();
 			delete autoExposureFilter;
 			autoExposureFilter = NULL;
 			delete lensDustFilter;
@@ -842,7 +843,10 @@ namespace spades {
 
 						handle = fbManager->StartPostProcessing();
 						if (settings.ShouldUseFogFilter2()) {
-							handle = GLFogFilter2(this).Filter(handle);
+							if (!fogFilter2) {
+								fogFilter2.reset(new GLFogFilter2(this));
+							}
+							handle = fogFilter2->Filter(handle);
 						} else {
 							handle = GLFogFilter(this).Filter(handle);
 						}
@@ -923,7 +927,10 @@ namespace spades {
 				if (settings.r_fogShadow && mapShadowRenderer) {
 					GLProfiler::Context p(*profiler, "Volumetric Fog");
 					if (settings.ShouldUseFogFilter2()) {
-						handle = GLFogFilter2(this).Filter(handle);
+						if (!fogFilter2) {
+							fogFilter2.reset(new GLFogFilter2(this));
+						}
+						handle = fogFilter2->Filter(handle);
 					} else {
 						handle = GLFogFilter(this).Filter(handle);
 					}

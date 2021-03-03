@@ -56,6 +56,7 @@ namespace spades {
 		class GLSoftLitSpriteRenderer;
 		class GLAutoExposureFilter;
 		class GLTemporalAAFilter;
+		class GLFogFilter2;
 		class GLProfiler;
 
 		class GLRenderer : public client::IRenderer, public client::IGameMapListener {
@@ -106,6 +107,7 @@ namespace spades {
 			GLLensDustFilter *lensDustFilter;
 			GLAutoExposureFilter *autoExposureFilter;
 			std::unique_ptr<GLTemporalAAFilter> temporalAAFilter;
+			std::unique_ptr<GLFogFilter2> fogFilter2;
 
 			// used when r_ssao = 1. only valid while rendering objects
 			IGLDevice::UInteger ssaoBufferTexture;
