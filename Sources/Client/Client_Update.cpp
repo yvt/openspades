@@ -426,11 +426,6 @@ namespace spades {
 					winp.primary = false;
 					winp.secondary = false;
 				}
-
-				// stop firing if the player is out of ammo
-				if (player->GetWeapon()->GetAmmo() == 0) {
-					winp.primary = false;
-				}
 			}
 
 			player->SetInput(inp);
