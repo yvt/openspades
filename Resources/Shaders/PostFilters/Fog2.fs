@@ -24,6 +24,9 @@ uniform sampler2D shadowMapTexture;
 uniform sampler2D ditherTexture;
 uniform sampler3D ambientShadowTexture;
 uniform sampler3D radiosityTexture;
+uniform sampler2D noiseTexture;
+
+const int NoiseTextureSize = 128;
 
 uniform vec3 viewOrigin;
 uniform vec3 sunlightScale;
@@ -100,7 +103,6 @@ void main() {
 	const int numSamples = 16;
 
 	// Dithered sampling
-	float dither = texture2D(ditherTexture, gl_FragCoord.xy * 0.25 + ditherOffset).x * 15.0 / 16.0;
 	float dither2a =
 	  texture2D(ditherTexture, gl_FragCoord.yx * 0.25 + ditherOffset + vec2(0.25, 0.0)).x * 15.0 /
 	    16.0 -
@@ -109,6 +111,15 @@ void main() {
 	  texture2D(ditherTexture, gl_FragCoord.yx * 0.25 + ditherOffset.yx + vec2(0.0, 0.5)).x * 15.0 /
 	    16.0 -
 	  0.5;
+
+	// Add jitter based on a noise texture because the dither pattern solely
+	// does not remove banding. The dither pattern is mostly useless for the
+	// raymarching sampling position offset (`dither`). On the other hand, it's
+	// more effective for soft shadowing.
+	vec4 noiseValue = texture2D(noiseTexture, gl_FragCoord.xy / float(NoiseTextureSize));
+	float dither = noiseValue.x;
+	dither2a = (dither2a * 7.0 / 8.0) + (noiseValue.y - 0.5) / 8.0;
+	dither2b = (dither2b * 7.0 / 8.0) + (noiseValue.z - 0.5) / 8.0;
 
 	// Shadows closer to the camera should be more visible
 	float weight = 1.0;

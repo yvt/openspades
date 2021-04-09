@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include "GLFramebufferManager.h"
 
 namespace spades {
@@ -31,9 +33,16 @@ namespace spades {
 			GLRenderer *renderer;
 			GLProgram *lens;
 			GLImage *ditherPattern;
+			IGLDevice::UInteger noiseTex;
+			/**
+			 * The recorded value of `GLRenderer::GetFrameNumber()` of when `noiseTex` was updated
+			 * last time.
+			 */
+			std::uint32_t lastNoiseTexFrameNumber = 0xffffffff;
 
 		public:
 			GLFogFilter2(GLRenderer *);
+			~GLFogFilter2();
 			GLColorBuffer Filter(GLColorBuffer);
 		};
 	} // namespace draw

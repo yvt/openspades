@@ -18,6 +18,7 @@
 
  */
 
+#include <array>
 #include <vector>
 
 #include "GLAmbientShadowRenderer.h"
@@ -34,13 +35,32 @@
 #include <Core/Debug.h>
 #include <Core/Math.h>
 
+namespace {
+	constexpr int NoiseTexSize = 128;
+}
+
 namespace spades {
 	namespace draw {
 		GLFogFilter2::GLFogFilter2(GLRenderer *renderer) : renderer(renderer) {
 			lens = renderer->RegisterProgram("Shaders/PostFilters/Fog2.program");
 			ditherPattern =
 			  static_cast<GLImage *>(renderer->RegisterImage("Gfx/DitherPattern4x4.png"));
+
+			IGLDevice *dev = renderer->GetGLDevice();
+			noiseTex = dev->GenTexture();
+			dev->BindTexture(IGLDevice::Texture2D, noiseTex);
+			dev->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, NoiseTexSize, NoiseTexSize,
+			                0, IGLDevice::BGRA, IGLDevice::UnsignedByte, NULL);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                  IGLDevice::Nearest);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                  IGLDevice::Nearest);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
+			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
 		}
+
+		GLFogFilter2::~GLFogFilter2() { renderer->GetGLDevice()->DeleteTexture(noiseTex); }
+
 		GLColorBuffer GLFogFilter2::Filter(GLColorBuffer input) {
 			SPADES_MARK_FUNCTION();
 
@@ -51,6 +71,21 @@ namespace spades {
 
 			SPAssert(ambientShadowRenderer);
 			SPAssert(radiosityRenderer);
+
+			// Update `noiseTex` if the time has moved forward since the last time
+			if (renderer->GetFrameNumber() != lastNoiseTexFrameNumber) {
+				std::array<uint32_t, NoiseTexSize * NoiseTexSize> noise;
+
+				for (uint32_t &x : noise) {
+					x = static_cast<std::uint32_t>(SampleRandom());
+				}
+
+				dev->BindTexture(IGLDevice::Texture2D, noiseTex);
+				dev->TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, NoiseTexSize, NoiseTexSize,
+				                   IGLDevice::BGRA, IGLDevice::UnsignedByte, noise.data());
+
+				lastNoiseTexFrameNumber = renderer->GetFrameNumber();
+			}
 
 			// Calculate the current view-projection matrix. Exclude `def.viewOrigin` from this
 			// matrix.
@@ -127,6 +162,7 @@ namespace spades {
 			static GLProgramUniform fogDistance("fogDistance");
 			static GLProgramUniform ditherTexture("ditherTexture");
 			static GLProgramUniform ditherOffset("ditherOffset");
+			static GLProgramUniform noiseTexture("noiseTexture");
 
 			dev->Enable(IGLDevice::Blend, false);
 
@@ -144,6 +180,7 @@ namespace spades {
 			viewProjectionMatrixInv(lens);
 			ambientShadowTexture(lens);
 			radiosityTexture(lens);
+			noiseTexture(lens);
 
 			lens->Use();
 
@@ -202,6 +239,7 @@ namespace spades {
 			ditherTexture.SetValue(3);
 			ambientShadowTexture.SetValue(4);
 			radiosityTexture.SetValue(5);
+			noiseTexture.SetValue(6);
 
 			std::uint32_t frame = renderer->GetFrameNumber() % 4;
 			ditherOffset.SetValue((float)(frame & 1) * 0.5f, (float)((frame >> 1) & 1) * 0.5f);
@@ -232,6 +270,8 @@ namespace spades {
 			dev->BindTexture(IGLDevice::Texture3D, ambientShadowRenderer->GetTexture());
 			dev->ActiveTexture(5);
 			dev->BindTexture(IGLDevice::Texture3D, radiosityRenderer->GetTextureFlat());
+			dev->ActiveTexture(6);
+			dev->BindTexture(IGLDevice::Texture2D, noiseTex);
 
 			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
 			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
