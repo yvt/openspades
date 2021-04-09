@@ -56,6 +56,7 @@
 #include "GLProgramUniform.h"
 #include "GLRadiosityRenderer.h"
 #include "GLRenderer.h"
+#include "GLResampleBicubicFilter.h"
 #include "GLSettings.h"
 #include "GLShadowMapShader.h"
 #include "GLSoftLitSpriteRenderer.h"
@@ -213,6 +214,10 @@ namespace spades {
 
 			if (settings.r_fxaa) {
 				GLFXAAFilter(this);
+			}
+
+			if (settings.r_scaleFilter.operator int() == 2) {
+				GLResampleBicubicFilter(*this);
 			}
 
 			if (settings.r_depthOfField) {
@@ -1076,10 +1081,30 @@ namespace spades {
 				}
 			}
 
+			// Resample the rendered image using a non-trivial filter if such
+			// a filter is selected.
+			int scaleFilter = settings.r_scaleFilter;
+			bool scalingMayBeNeeded = GetRenderWidth() != device->ScreenWidth() ||
+			                          GetRenderHeight() != device->ScreenHeight();
+			if (scaleFilter == 0) {
+				// Nearest neighbor - trivial
+			} else if (scaleFilter == 1) {
+				// Bi-linear - trivial
+			} else if (scaleFilter == 2) {
+				// Bi-cubic - non-trivial
+				handle = GLResampleBicubicFilter{*this}.Filter(handle, device->ScreenWidth(),
+				                                               device->ScreenHeight());
+				scaleFilter = 0;
+			} else {
+				// I don't know this filter.
+				scaleFilter = 1;
+			}
+
 			if (settings.r_srgb && settings.r_srgb2D) {
 				// in gamma corrected mode,
 				// 2d drawings are done on gamma-corrected FB
 				// see also: FrameDone
+				// TODO: Handle the case where `scaleFilter == 0`
 				lastColorBufferTexture = handle.GetTexture();
 				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
 				device->Enable(IGLDevice::FramebufferSRGB, true);
@@ -1091,6 +1116,15 @@ namespace spades {
 
 				GLProfiler::Context p(*profiler, "Copying to WM-given Framebuffer");
 
+				if (scaleFilter == 0) {
+					// Temporarily change the textute filter to NN
+					device->BindTexture(IGLDevice::Texture2D, handle.GetTexture());
+					device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+					                     IGLDevice::Nearest);
+					device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+					                     IGLDevice::Nearest);
+				}
+
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
 				device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
@@ -1101,6 +1135,15 @@ namespace spades {
 				DrawImage(image, AABB2(0, device->ScreenHeight(), device->ScreenWidth(),
 				                       -device->ScreenHeight()));
 				imageRenderer->Flush();
+
+				if (scaleFilter == 0) {
+					// Reset the texture filter
+					device->BindTexture(IGLDevice::Texture2D, handle.GetTexture());
+					device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+					                     IGLDevice::Linear);
+					device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+					                     IGLDevice::Linear);
+				}
 			}
 
 			handle.Release();
