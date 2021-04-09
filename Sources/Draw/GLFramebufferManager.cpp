@@ -500,10 +500,13 @@ namespace spades {
 				if (settings.r_blitFramebuffer) {
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer, fb);
 					device->BindFramebuffer(IGLDevice::DrawFramebuffer, mirrorFramebuffer);
-					device->BlitFramebuffer(0, 0, w, h, 0, 0, w, h,
-					                        IGLDevice::ColorBufferBit |
-					                          (needsDepth ? IGLDevice::DepthBufferBit : 0),
+					device->BlitFramebuffer(0, 0, w, h, 0, 0, w, h, IGLDevice::ColorBufferBit,
 					                        IGLDevice::Nearest);
+					if (needsDepth) {
+						device->BindFramebuffer(IGLDevice::ReadFramebuffer, renderFramebuffer);
+						device->BlitFramebuffer(0, 0, w, h, 0, 0, w, h, IGLDevice::DepthBufferBit,
+						                        IGLDevice::Nearest);
+					}
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer, 0);
 					device->BindFramebuffer(IGLDevice::DrawFramebuffer, 0);
 				} else {
@@ -520,10 +523,13 @@ namespace spades {
 				if (settings.r_blitFramebuffer) {
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer, fb);
 					device->BindFramebuffer(IGLDevice::DrawFramebuffer, mirrorFramebuffer);
-					device->BlitFramebuffer(0, 0, w, h, 0, 0, w, h,
-					                        IGLDevice::ColorBufferBit |
-					                          (needsDepth ? IGLDevice::DepthBufferBit : 0),
+					device->BlitFramebuffer(0, 0, w, h, 0, 0, w, h, IGLDevice::ColorBufferBit,
 					                        IGLDevice::Nearest);
+					if (needsDepth) {
+						device->BindFramebuffer(IGLDevice::ReadFramebuffer, renderFramebuffer);
+						device->BlitFramebuffer(0, 0, w, h, 0, 0, w, h, IGLDevice::DepthBufferBit,
+						                        IGLDevice::Nearest);
+					}
 					device->BindFramebuffer(IGLDevice::ReadFramebuffer, 0);
 					device->BindFramebuffer(IGLDevice::DrawFramebuffer, 0);
 				} else {
