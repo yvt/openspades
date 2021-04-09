@@ -45,6 +45,9 @@ namespace spades {
 
 			GLRenderer *GetRenderer() { return renderer; }
 
+			/**
+			 * Clobbers the current framebuffer binding and viewport rectangle.
+			 */
 			virtual void Render() = 0;
 
 			virtual bool Cull(const AABB3 &) = 0;

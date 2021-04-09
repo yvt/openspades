@@ -74,7 +74,6 @@ namespace spades {
 
 		GLRenderer::GLRenderer(IGLDevice *_device)
 		    : device(_device),
-		      fbManager(NULL),
 		      map(NULL),
 		      inited(false),
 		      sceneUsedInThisFrame(false),
@@ -89,7 +88,6 @@ namespace spades {
 		      modelRenderer(NULL),
 		      spriteRenderer(NULL),
 		      longSpriteRenderer(NULL),
-		      waterRenderer(NULL),
 		      ambientShadowRenderer(NULL),
 		      radiosityRenderer(NULL),
 		      cameraBlur(NULL),
@@ -104,7 +102,9 @@ namespace spades {
 
 			SPLog("GLRenderer bootstrap");
 
-			fbManager = new GLFramebufferManager(_device, settings);
+			renderWidth = renderHeight = -1;
+
+			UpdateRenderSize();
 
 			programManager = new GLProgramManager(_device, shadowMapRenderer, settings);
 			imageManager = new GLImageManager(_device);
@@ -125,6 +125,33 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			Shutdown();
+		}
+
+		void GLRenderer::UpdateRenderSize() {
+			float renderScale = settings.r_scale;
+			renderScale = std::max(0.2f, renderScale);
+			if (!(renderScale < 1.0f)) { // eliminates NaN
+				renderScale = 1.0f;
+			}
+
+			int screenWidth = device->ScreenWidth();
+			int screenHeight = device->ScreenHeight();
+
+			int newRenderWidth = static_cast<int>(screenWidth * renderScale);
+			int newRenderHeight = static_cast<int>(screenHeight * renderScale);
+
+			if (newRenderWidth != renderWidth || newRenderHeight != renderHeight) {
+				SPLog("Render size has changed");
+				renderWidth = newRenderWidth;
+				renderHeight = newRenderHeight;
+
+				fbManager.reset(
+				  new GLFramebufferManager(device, settings, renderWidth, renderHeight));
+				if (waterRenderer) {
+					SPLog("Creating Water Renderer");
+					waterRenderer.reset(new GLWaterRenderer(this, map));
+				}
+			}
 		}
 
 		void GLRenderer::Init() {
@@ -216,8 +243,7 @@ namespace spades {
 			mapShadowRenderer = NULL;
 			delete mapRenderer;
 			mapRenderer = NULL;
-			delete waterRenderer;
-			waterRenderer = NULL;
+			waterRenderer.reset();
 			delete ambientShadowRenderer;
 			ambientShadowRenderer = NULL;
 			delete shadowMapRenderer;
@@ -226,8 +252,6 @@ namespace spades {
 			cameraBlur = NULL;
 			delete longSpriteRenderer;
 			longSpriteRenderer = NULL;
-			delete waterRenderer;
-			waterRenderer = NULL;
 			delete modelRenderer;
 			modelRenderer = NULL;
 			delete spriteRenderer;
@@ -240,8 +264,7 @@ namespace spades {
 			programManager = NULL;
 			delete imageManager;
 			imageManager = NULL;
-			delete fbManager;
-			fbManager = NULL;
+			fbManager.reset();
 			profiler.reset();
 			SPLog("GLRenderer finalized");
 		}
@@ -305,8 +328,7 @@ namespace spades {
 			flatMapRenderer = NULL;
 			delete mapShadowRenderer;
 			mapShadowRenderer = NULL;
-			delete waterRenderer;
-			waterRenderer = NULL;
+			waterRenderer.reset();
 			delete ambientShadowRenderer;
 			ambientShadowRenderer = NULL;
 
@@ -320,7 +342,7 @@ namespace spades {
 				SPLog("Creating Minimap Renderer");
 				flatMapRenderer = new GLFlatMapRenderer(this, mp);
 				SPLog("Creating Water Renderer");
-				waterRenderer = new GLWaterRenderer(this, mp);
+				waterRenderer.reset(new GLWaterRenderer(this, mp));
 
 				if (settings.r_radiosity) {
 					SPLog("Creating Ray-traced Ambient Occlusion Renderer");
@@ -401,8 +423,8 @@ namespace spades {
 			mat.m[15] = 0.f;
 
 			if (settings.r_temporalAA && temporalAAFilter) {
-				float jitterX = 1.0f / device->ScreenWidth();
-				float jitterY = 1.0f / device->ScreenHeight();
+				float jitterX = 1.0f / GetRenderWidth();
+				float jitterY = 1.0f / GetRenderHeight();
 				Vector2 jitter = temporalAAFilter->GetProjectionMatrixJitter();
 				jitterX *= jitter.x * 1.3f;
 				jitterY *= jitter.y * 1.3f;
@@ -1071,13 +1093,13 @@ namespace spades {
 
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
-				device->Viewport(0, 0, handle.GetWidth(), handle.GetHeight());
+				device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
 				Handle<GLImage> image(new GLImage(handle.GetTexture(), device, handle.GetWidth(),
 				                                  handle.GetHeight(), false),
 				                      false);
 				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
-				DrawImage(image,
-				          AABB2(0, handle.GetHeight(), handle.GetWidth(), -handle.GetHeight()));
+				DrawImage(image, AABB2(0, device->ScreenHeight(), device->ScreenWidth(),
+				                       -device->ScreenHeight()));
 				imageRenderer->Flush();
 			}
 
@@ -1090,9 +1112,7 @@ namespace spades {
 			modelRenderer->Clear();
 
 			// prepare for 2d drawing
-			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
-							  IGLDevice::Zero, IGLDevice::One);
-			device->Enable(IGLDevice::Blend, true);
+			Prepare2DRendering(true);
 		}
 
 		//#pragma mark - 2D Drawings
@@ -1275,9 +1295,7 @@ namespace spades {
 			lastTime = sceneDef.time;
 
 			// ready for 2d draw of next frame
-			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha,
-							  IGLDevice::Zero, IGLDevice::One);
-			device->Enable(IGLDevice::Blend, true);
+			Prepare2DRendering(true);
 
 			profiler->EndFrame();
 		}
@@ -1288,6 +1306,16 @@ namespace spades {
 			EnsureSceneNotStarted();
 
 			device->Swap();
+
+			UpdateRenderSize();
+		}
+
+		void GLRenderer::Prepare2DRendering(bool reset) {
+			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
+			                  IGLDevice::One);
+			device->Enable(IGLDevice::Blend, true);
+			device->BindFramebuffer(IGLDevice::Framebuffer, 0);
+			device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
 		}
 
 		Bitmap *GLRenderer::ReadBitmap() {

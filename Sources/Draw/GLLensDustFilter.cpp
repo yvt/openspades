@@ -274,8 +274,8 @@ namespace spades {
 
 			dust->Use();
 
-			float facX = renderer->ScreenWidth() / 128.f;
-			float facY = renderer->ScreenHeight() / 128.f;
+			float facX = renderer->GetRenderWidth() / 128.f;
+			float facY = renderer->GetRenderHeight() / 128.f;
 			dustNoiseTexCoordFactor.SetValue(facX, facY, facX / 128.f, facY / 128.f);
 
 			// composite to the final image

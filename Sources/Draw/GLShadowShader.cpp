@@ -289,8 +289,8 @@ namespace spades {
 					ssaoTexture.SetValue(texStage);
 					texStage++;
 
-					ssaoTextureUVScale.SetValue(1.0f / renderer->ScreenWidth(),
-					                            1.0f / renderer->ScreenHeight());
+					ssaoTextureUVScale.SetValue(1.0f / renderer->GetRenderWidth(),
+					                            1.0f / renderer->GetRenderHeight());
 				}
 			}
 

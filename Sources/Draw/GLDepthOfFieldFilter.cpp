@@ -395,8 +395,8 @@ namespace spades {
 			IGLDevice *dev = renderer->GetGLDevice();
 			GLQuadRenderer qr(dev);
 
-			int w = dev->ScreenWidth();
-			int h = dev->ScreenHeight();
+			int w = input.GetWidth();
+			int h = input.GetHeight();
 
 			dev->Enable(IGLDevice::Blend, false);
 

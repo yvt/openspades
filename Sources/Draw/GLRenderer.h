@@ -70,9 +70,12 @@ namespace spades {
 			};
 
 			Handle<IGLDevice> device;
-			GLFramebufferManager *fbManager;
+			std::unique_ptr<GLFramebufferManager> fbManager;
 			client::GameMap *map;
 			GLSettings settings;
+
+			int renderWidth;
+			int renderHeight;
 
 			std::unique_ptr<GLProfiler> profiler;
 
@@ -98,7 +101,7 @@ namespace spades {
 			GLModelRenderer *modelRenderer;
 			IGLSpriteRenderer *spriteRenderer;
 			GLLongSpriteRenderer *longSpriteRenderer;
-			GLWaterRenderer *waterRenderer;
+			std::unique_ptr<GLWaterRenderer> waterRenderer;
 			GLAmbientShadowRenderer *ambientShadowRenderer;
 			GLRadiosityRenderer *radiosityRenderer;
 
@@ -143,6 +146,10 @@ namespace spades {
 			void EnsureInitialized();
 			void EnsureSceneStarted();
 			void EnsureSceneNotStarted();
+
+			void UpdateRenderSize();
+
+			void Prepare2DRendering(bool reset = false);
 
 		protected:
 			~GLRenderer();
@@ -208,10 +215,13 @@ namespace spades {
 			float ScreenWidth() override;
 			float ScreenHeight() override;
 
+			int GetRenderWidth() const { return renderWidth; }
+			int GetRenderHeight() const { return renderHeight; }
+
 			GLSettings &GetSettings() { return settings; }
 			IGLDevice *GetGLDevice() { return device; }
 			GLProfiler &GetGLProfiler() { return *profiler; }
-			GLFramebufferManager *GetFramebufferManager() { return fbManager; }
+			GLFramebufferManager *GetFramebufferManager() { return fbManager.get(); }
 			IGLShadowMapRenderer *GetShadowMapRenderer() { return shadowMapRenderer; }
 			GLAmbientShadowRenderer *GetAmbientShadowRenderer() { return ambientShadowRenderer; }
 			GLMapShadowRenderer *GetMapShadowRenderer() { return mapShadowRenderer; }
