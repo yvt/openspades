@@ -57,6 +57,7 @@
 #include "GLRadiosityRenderer.h"
 #include "GLRenderer.h"
 #include "GLResampleBicubicFilter.h"
+#include "GLResampleNCFilter.h"
 #include "GLSettings.h"
 #include "GLShadowMapShader.h"
 #include "GLSoftLitSpriteRenderer.h"
@@ -218,6 +219,10 @@ namespace spades {
 
 			if (settings.r_scaleFilter.operator int() == 2) {
 				GLResampleBicubicFilter(*this);
+			}
+
+			if (settings.r_scaleFilter.operator int() == 3) {
+				GLResampleNCFilter(*this);
 			}
 
 			if (settings.r_depthOfField) {
@@ -1095,6 +1100,12 @@ namespace spades {
 				handle = GLResampleBicubicFilter{*this}.Filter(handle, device->ScreenWidth(),
 				                                               device->ScreenHeight());
 				scaleFilter = 0;
+			} else if (scaleFilter == 3) {
+				// NC - non-trivial
+				int resampledWidth = std::min(GetRenderWidth() * 2, device->ScreenWidth());
+				int resampledHeight = std::min(GetRenderHeight() * 2, device->ScreenHeight());
+				handle = GLResampleNCFilter{*this}.Filter(handle, resampledWidth, resampledHeight);
+				scaleFilter = 1;
 			} else {
 				// I don't know this filter.
 				scaleFilter = 1;
