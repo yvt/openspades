@@ -41,7 +41,7 @@ namespace spades {
 		IStream() {}
 
 	public:
-		virtual ~IStream() throw(Exception);
+		virtual ~IStream();
 		/** reads one byte and return in range [0, 255].
 		 * -1 if EOF reached. */
 		virtual int ReadByte();

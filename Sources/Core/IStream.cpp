@@ -26,7 +26,7 @@
 #include "IStream.h"
 
 namespace spades {
-	IStream::~IStream() throw(Exception) {}
+	IStream::~IStream() {}
 	int IStream::ReadByte() { SPUnsupported(); }
 
 	size_t IStream::Read(void *out, size_t bytes) {

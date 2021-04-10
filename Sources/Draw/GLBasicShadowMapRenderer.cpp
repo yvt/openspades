@@ -224,10 +224,6 @@ namespace spades {
 		void GLBasicShadowMapRenderer::Render() {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice::Integer lastFb = device->GetInteger(IGLDevice::FramebufferBinding);
-
-			// client::SceneDefinition def = GetRenderer()->GetSceneDef();
-
 			float nearDist = 0.f;
 
 			for (int i = 0; i < NumSlices; i++) {
@@ -245,18 +241,6 @@ namespace spades {
 
 				BuildMatrix(nearDist, farDist);
 				matrices[i] = matrix;
-				/*
-				printf("m[%d]=\n[%f,%f,%f,%f]\n[%f,%f,%f,%f]\n[%f,%f,%f,%f]\n[%f,%f,%f,%f]\n",
-				       i, matrix.m[0], matrix.m[4], matrix.m[8], matrix.m[12],
-				       matrix.m[1], matrix.m[5], matrix.m[9], matrix.m[13],
-				       matrix.m[2], matrix.m[6], matrix.m[10], matrix.m[14],
-				       matrix.m[3], matrix.m[7], matrix.m[11], matrix.m[15]);*/
-				/*
-				matrix = Matrix4::Identity();
-				matrix = Matrix4::Scale(1.f / 16.f);
-				matrix = matrix * Matrix4::Rotate(MakeVector3(1, 0, 0), M_PI / 4.f);
-				matrix = matrix * Matrix4::Translate(-def.viewOrigin);
-				matrix = Matrix4::Scale(1,1,16.f / 70.f) * matrix;*/
 
 				device->BindFramebuffer(IGLDevice::Framebuffer, framebuffer[i]);
 				device->Viewport(0, 0, textureSize, textureSize);
@@ -267,10 +251,6 @@ namespace spades {
 
 				nearDist = farDist;
 			}
-
-			device->BindFramebuffer(IGLDevice::Framebuffer, lastFb);
-
-			device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
 		}
 
 		bool GLBasicShadowMapRenderer::Cull(const spades::AABB3 &) {

@@ -214,7 +214,7 @@ namespace spades {
 
 			// low-res sprites
 			IGLDevice::UInteger lastFb = device->GetInteger(IGLDevice::FramebufferBinding);
-			int sW = device->ScreenWidth(), sH = device->ScreenHeight();
+			int sW = renderer->GetRenderWidth(), sH = renderer->GetRenderHeight();
 			int lW = (sW + 3) / 4, lH = (sH + 3) / 4;
 			int numLowResSprites = 0;
 			GLColorBuffer buf = renderer->GetFramebufferManager()->CreateBufferHandle(lW, lH, true);

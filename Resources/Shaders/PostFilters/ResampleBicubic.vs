@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2021 yvt
 
  This file is part of OpenSpades.
 
@@ -18,13 +18,15 @@
 
  */
 
-varying float hemisphereLighting;
+attribute vec2 positionAttribute;
 
-void PrepareForRadiosity_Map(vec3 vertexCoord, vec3 normal) {
-	hemisphereLighting = 1. - normal.z * .2;
+varying vec2 texCoord;
+uniform vec2 inverseVP;
+
+void main() {
+	vec2 scrPos = positionAttribute * 2. - 1.;
+
+	gl_Position = vec4(scrPos, 0.5, 1.);
+
+	texCoord = positionAttribute / inverseVP;
 }
-
-void PrepareForRadiosityForMap_Map(vec3 vertexCoord, vec3 centerCoord, vec3 normal) {
-	hemisphereLighting = 1. - normal.z * .2;
-}
-

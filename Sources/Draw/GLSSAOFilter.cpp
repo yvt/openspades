@@ -85,7 +85,7 @@ namespace spades {
 				float kernelSize = std::max(1.0f, std::min(width, height) * 0.0018f);
 				sampleOffsetScale.SetValue(kernelSize / (float)width, kernelSize / (float)height);
 
-				if (width < dev->ScreenWidth()) {
+				if (width < renderer->GetRenderWidth()) {
 					// 2x downsampling
 					texCoordRange.SetValue(0.25f / width, 0.25f / height, 1.f, 1.f);
 				} else {
@@ -124,6 +124,8 @@ namespace spades {
 
 			int w = width == -1 ? tex.GetWidth() : width;
 			int h = height == -1 ? tex.GetHeight() : height;
+
+			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, 1);
 
 			static GLProgramAttribute positionAttribute("positionAttribute");
 			static GLProgramUniform inputTexture("inputTexture");
@@ -168,8 +170,6 @@ namespace spades {
 			zNearFar.SetValue(def.zNear, def.zFar);
 
 			qr.SetCoordAttributeIndex(positionAttribute());
-
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, 1);
 			dev->Viewport(0, 0, w, h);
 			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
@@ -186,8 +186,8 @@ namespace spades {
 
 			IGLDevice *dev = renderer->GetGLDevice();
 
-			int width = dev->ScreenWidth();
-			int height = dev->ScreenHeight();
+			int width = renderer->GetRenderWidth();
+			int height = renderer->GetRenderHeight();
 
 			dev->Enable(IGLDevice::Blend, false);
 

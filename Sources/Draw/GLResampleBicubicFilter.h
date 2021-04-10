@@ -20,38 +20,19 @@
 
 #pragma once
 
-#include <Core/Math.h>
+#include "GLFramebufferManager.h"
 
 namespace spades {
 	namespace draw {
-
 		class GLRenderer;
-
-		struct GLShadowMapRenderParam {
-			Matrix4 matrix;
-
-			virtual ~GLShadowMapRenderParam() {}
-		};
-
-		class IGLShadowMapRenderer {
-			GLRenderer *renderer;
-
-		protected:
-			virtual void RenderShadowMapPass();
+		class GLProgram;
+		class GLResampleBicubicFilter {
+			GLRenderer &renderer;
+			GLProgram *lens;
 
 		public:
-			IGLShadowMapRenderer(GLRenderer *);
-			virtual ~IGLShadowMapRenderer() {}
-
-			GLRenderer *GetRenderer() { return renderer; }
-
-			/**
-			 * Clobbers the current framebuffer binding and viewport rectangle.
-			 */
-			virtual void Render() = 0;
-
-			virtual bool Cull(const AABB3 &) = 0;
-			virtual bool SphereCull(const Vector3 &center, float rad) = 0;
+			GLResampleBicubicFilter(GLRenderer &);
+			GLColorBuffer Filter(GLColorBuffer, int outputWidth, int outputHeight);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

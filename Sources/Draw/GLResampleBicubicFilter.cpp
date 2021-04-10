@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2021 yvt
 
  This file is part of OpenSpades.
 
@@ -20,46 +20,46 @@
 
 #include <vector>
 
-#include "GLLensFilter.h"
-#include <Core/Debug.h>
-#include <Core/Math.h>
 #include "GLProgram.h"
 #include "GLProgramAttribute.h"
 #include "GLProgramUniform.h"
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
+#include "GLResampleBicubicFilter.h"
 #include "IGLDevice.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
-		GLLensFilter::GLLensFilter(GLRenderer *renderer) : renderer(renderer) {
-			lens = renderer->RegisterProgram("Shaders/PostFilters/Lens.program");
+		GLResampleBicubicFilter::GLResampleBicubicFilter(GLRenderer &renderer)
+		    : renderer(renderer) {
+			lens = renderer.RegisterProgram("Shaders/PostFilters/ResampleBicubic.program");
 		}
-		GLColorBuffer GLLensFilter::Filter(GLColorBuffer input) {
+		GLColorBuffer GLResampleBicubicFilter::Filter(GLColorBuffer input, int outputWidth,
+		                                              int outputHeight) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice *dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
-			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
-			
+			GLColorBuffer output =
+			  input.GetManager()->CreateBufferHandle(outputWidth, outputHeight);
+
 			static GLProgramAttribute lensPosition("positionAttribute");
 			static GLProgramUniform lensTexture("mainTexture");
-			static GLProgramUniform lensFov("fov");
+			static GLProgramUniform inverseVP("inverseVP");
 
 			dev->Enable(IGLDevice::Blend, false);
 
 			lensPosition(lens);
 			lensTexture(lens);
-			lensFov(lens);
+			inverseVP(lens);
 
 			lens->Use();
 
-			client::SceneDefinition def = renderer->GetSceneDef();
-			lensFov.SetValue(tanf(def.fovX * .5f), tanf(def.fovY * .5f));
+			inverseVP.SetValue(1.f / input.GetWidth(), 1.f / input.GetHeight());
 			lensTexture.SetValue(0);
-
-			// composite to the final image
 
 			qr.SetCoordAttributeIndex(lensPosition());
 			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
@@ -70,5 +70,5 @@ namespace spades {
 
 			return output;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades
