@@ -68,6 +68,8 @@ namespace spades {
 				Vector4 col = {1.f, .6f, .2f, 0.f};
 				r.AddDebugLine(pos1, pos2, Vector4{1.0f, 0.6f, 0.2f, 1.0f});
 			} else {
+				SceneDefinition sceneDef = client.GetLastSceneDef();
+
 				for (float step = 0.0f; step <= 1.0f; step += 0.1f) {
 					float startDist = curDistance;
 					float endDist = curDistance + visibleLength;
@@ -82,11 +84,16 @@ namespace spades {
 						continue;
 					}
 
+
 					Vector3 pos1 = startPos + dir * startDist;
 					Vector3 pos2 = startPos + dir * endDist;
 					Vector4 col = {1.f, .6f, .2f, 0.f};
+
+					float distanceToCamera = (pos2 - sceneDef.viewOrigin).GetLength();
+					float radius = 0.002f * distanceToCamera;
+
 					r.SetColorAlphaPremultiplied(col * 0.4f);
-					r.AddLongSprite(*image, pos1, pos2, .05f);
+					r.AddLongSprite(*image, pos1, pos2, radius);
 				}
 			}
 		}
