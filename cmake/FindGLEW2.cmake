@@ -5,7 +5,7 @@
 # GLEW_FOUND
 # GLEW_INCLUDE_DIR
 # GLEW_LIBRARY
-# 
+#
 
 IF (WIN32)
 	FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h
@@ -36,6 +36,12 @@ ELSE (WIN32)
 		/sw/lib
 		/opt/local/lib
 		DOC "The GLEW library")
+	FIND_PATH( GLU_INCLUDE_DIR GL/glu.h
+		/usr/include
+		/usr/local/include
+		/sw/include
+		/opt/local/include
+		DOC "The directory where GL/glu.h resides")
 ENDIF (WIN32)
 
 IF (GLEW_INCLUDE_DIR)
