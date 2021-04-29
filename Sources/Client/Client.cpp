@@ -102,8 +102,8 @@ namespace spades {
 		      alertDisappearTime(-10000.f),
 		      lastMyCorpse(nullptr),
 		      corpseSoftTimeLimit(30.f), // FIXME: this is not used
-		      corpseSoftLimit(6),
-		      corpseHardLimit(16),
+		      corpseSoftLimit(96),
+		      corpseHardLimit(128),
 		      nextScreenShotIndex(0),
 		      nextMapShotIndex(0) {
 			SPADES_MARK_FUNCTION();
