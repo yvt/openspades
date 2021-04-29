@@ -1110,6 +1110,15 @@ namespace spades {
 				return;
 			}
 
+			// The line segment containing `muzzlePos` and `hitPos` represents the accurate
+			// trajectory of the fired bullet (as far as the game physics is concerned), but
+			// displaying it as-is would make it seem like it was fired from a skull gun. Rewrite
+			// the starting point with the muzzle point of the current weapon skin.
+			Handle<ClientPlayer> clientPlayer = clientPlayers[player->GetId()];
+			muzzlePos = clientPlayer->ShouldRenderInThirdPersonView()
+			              ? clientPlayer->GetMuzzlePosition()
+			              : clientPlayer->GetMuzzlePositionInFirstPersonView();
+
 			float vel;
 			switch (player.GetWeapon().GetWeaponType()) {
 				case RIFLE_WEAPON: vel = 700.f; break;

@@ -89,8 +89,6 @@ namespace spades {
 
 			float GetLocalFireVibration();
 
-			bool ShouldRenderInThirdPersonView();
-
 			// TODO: Naming convention violation
 			asIScriptObject *initScriptFactory(ScriptFunction &creator, IRenderer &renderer,
 			                                   IAudioDevice &audio);
@@ -113,6 +111,8 @@ namespace spades {
 
 			float GetAimDownState() { return aimDownState; }
 			float GetSprintState() { return sprintState; }
+
+			bool ShouldRenderInThirdPersonView();
 
 			/**
 			 * Get the world coordinates representing the position of the currently wielded weapon's
