@@ -50,5 +50,14 @@ namespace spades {
 			void SetSoundEnvironment(float room, float size, float distance);
 			void SetSoundOrigin(Vector3);
 		};
+
+		class ScriptIWeaponSkin3 {
+			asIScriptObject *obj;
+		public:
+			ScriptIWeaponSkin3(asIScriptObject *obj);
+			bool ImplementsInterface();
+			Vector3 GetMuzzlePosition();
+			Vector3 GetCaseEjectPosition();
+		};
 	}
 }

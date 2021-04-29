@@ -19,7 +19,13 @@
  */
 
 namespace spades {
-    class ThirdPersonSMGSkin : IToolSkin, IThirdPersonToolSkin, IWeaponSkin, IWeaponSkin2 {
+    class ThirdPersonSMGSkin :
+        IToolSkin,
+        IThirdPersonToolSkin,
+        IWeaponSkin,
+        IWeaponSkin2,
+        IWeaponSkin3
+    {
         private float sprintState;
         private float raiseState;
         private Vector3 teamColor;
@@ -89,6 +95,15 @@ namespace spades {
         }
         Vector3 SoundOrigin {
             set { soundOrigin = value; }
+        }
+
+        // IWeaponSkin3
+        Vector3 MuzzlePosition {
+            get { return originMatrix * Vector3(0.35f, -1.4f, -0.125f); }
+        }
+
+        Vector3 CaseEjectPosition {
+            get { return originMatrix * Vector3(0.35f, -0.8f, -0.125f); }
         }
 
         private Renderer @renderer;

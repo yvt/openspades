@@ -19,7 +19,13 @@
  */
 
 namespace spades {
-    class BasicViewWeapon : IToolSkin, IViewToolSkin, IWeaponSkin, IWeaponSkin2 {
+    class BasicViewWeapon :
+        IToolSkin,
+        IViewToolSkin,
+        IWeaponSkin,
+        IWeaponSkin2,
+        IWeaponSkin3
+    {
         // IToolSkin
         protected float sprintState;
         protected float raiseState;
@@ -129,6 +135,15 @@ namespace spades {
         // set_SoundOrigin is not called for first-person skin scripts
         Vector3 SoundOrigin {
             set {}
+        }
+
+        // IWeaponSkin3
+        Vector3 MuzzlePosition {
+            get { return eyeMatrix * GetViewWeaponMatrix() * Vector3(0.0, 0.35f, -0.05f); }
+        }
+
+        Vector3 CaseEjectPosition {
+            get { return eyeMatrix * GetViewWeaponMatrix() * Vector3(0.0, -0.1f, -0.05f); }
         }
 
         protected Renderer @renderer;

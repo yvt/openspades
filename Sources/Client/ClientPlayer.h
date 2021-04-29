@@ -114,6 +114,30 @@ namespace spades {
 			float GetAimDownState() { return aimDownState; }
 			float GetSprintState() { return sprintState; }
 
+			/**
+			 * Get the world coordinates representing the position of the currently wielded weapon's
+			 * muzzle.
+			 */
+			Vector3 GetMuzzlePosition();
+
+			/**
+			 * Get the world coordinates representing the position of the currently wielded weapon's
+			 * muzzle, based on the player's first-person view rendering.
+			 */
+			Vector3 GetMuzzlePositionInFirstPersonView();
+
+			/**
+			 * Get the world coordinates representing the position of the currently wielded weapon's
+			 * case ejection port.
+			 */
+			Vector3 GetCaseEjectPosition();
+
+			/**
+			 * Get the world coordinates representing the position of the currently wielded weapon's
+			 * case ejection port, based on the player's first-person view rendering.
+			 */
+			Vector3 GetCaseEjectPositionInFirstPersonView();
+
 			Matrix4 GetEyeMatrix();
 		};
 	} // namespace client

@@ -19,7 +19,14 @@
  */
 
 namespace spades {
-    class ViewSMGSkin : IToolSkin, IViewToolSkin, IWeaponSkin, IWeaponSkin2, BasicViewWeapon {
+    class ViewSMGSkin :
+        IToolSkin,
+        IViewToolSkin,
+        IWeaponSkin,
+        IWeaponSkin2,
+        IWeaponSkin3,
+        BasicViewWeapon
+    {
 
         private AudioDevice @audioDevice;
         private Model @gunModel;
@@ -105,6 +112,15 @@ namespace spades {
         }
 
         float GetZPos() { return 0.2f - AimDownSightStateSmooth * 0.038f; }
+
+        // IWeaponSkin3 (override BasicViewWeapon::{get_MuzzlePosition, get_CaseEjectPosition})
+        Vector3 MuzzlePosition {
+            get { return eyeMatrix * GetViewWeaponMatrix() * Vector3(0.0, 0.35f, -0.05f); }
+        }
+
+        Vector3 CaseEjectPosition {
+            get { return eyeMatrix * GetViewWeaponMatrix() * Vector3(0.0, -0.1f, -0.05f); }
+        }
 
         // rotates gun matrix to ensure the sight is in
         // the center of screen (0, ?, 0).
