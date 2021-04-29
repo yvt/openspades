@@ -205,10 +205,13 @@ namespace spades {
         void ReloadedWeapon() {}
 
         void Draw2D() {
-            renderer.ColorNP = (Vector4(1.f, 1.f, 1.f, 1.f));
+            renderer.ColorP = (Vector4(1.f, 0.f, 0.f, 0.5f));
+            float scale = 0.7f;
             renderer.DrawImage(sightImage,
-                               Vector2((renderer.ScreenWidth - sightImage.Width) * 0.5f,
-                                       (renderer.ScreenHeight - sightImage.Height) * 0.5f));
+                               AABB2((renderer.ScreenWidth - sightImage.Width * scale) * 0.5f,
+                                       (renderer.ScreenHeight - sightImage.Height * scale) * 0.5f,
+                                       sightImage.Width * scale,
+                                       sightImage.Height * scale));
         }
     }
 
