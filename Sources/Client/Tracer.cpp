@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 yvt.jp. All rights reserved.
 //
 
+#include <algorithm>
+
 #include "Tracer.h"
 #include "Client.h"
 #include "IRenderer.h"
@@ -25,7 +27,12 @@ namespace spades {
 
 			visibleLength = shutterTime * velocity;
 			curDistance = -visibleLength;
-			curDistance += maxTimeSpread * SampleRandomFloat();
+
+			// Randomize the starting position within the range of the shutter
+			// time. However, make sure the tracer is displayed for at least
+			// one frame.
+			curDistance +=
+			  std::min(length + visibleLength, maxTimeSpread * SampleRandomFloat() * velocity);
 
 			firstUpdate = true;
 
