@@ -56,6 +56,7 @@ DEFINE_SPADES_SETTING(cg_environmentalAudio, "1");
 DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponZ, "0");
+DEFINE_SPADES_SETTING(cg_debugToolSkinAnchors, "0");
 
 namespace spades {
 	namespace client {
@@ -124,6 +125,12 @@ namespace spades {
 				if (p.depthHack && !allowDepthHack) {
 					OnProhibitedAction();
 					return;
+				}
+
+				// Disable depth hack when `cg_debugToolSkinAnchors` is set
+				// so that the drawn debug lines intersect with the weapon model
+				if (cg_debugToolSkinAnchors) {
+					p.depthHack = false;
 				}
 
 				// Overbright surfaces bypass the fog
@@ -1047,6 +1054,29 @@ namespace spades {
 			} else {
 				AddToSceneThirdPersonView();
 			}
+
+			if (cg_debugToolSkinAnchors && currentTool == Player::ToolWeapon &&
+			    player.IsLocalPlayer()) {
+				IRenderer &renderer = client.GetRenderer();
+
+				auto drawAxes = [&renderer](Vector3 p) {
+					renderer.AddDebugLine(Vector3{p.x - 0.2f, p.y, p.z},
+					                      Vector3{p.x + 0.2f, p.y, p.z},
+					                      Vector4{1.0f, 0.0f, 0.0f, 1.0f});
+					renderer.AddDebugLine(Vector3{p.x, p.y - 0.2f, p.z},
+					                      Vector3{p.x, p.y + 0.2f, p.z},
+					                      Vector4{0.0f, 0.6f, 0.0f, 1.0f});
+					renderer.AddDebugLine(Vector3{p.x, p.y, p.z - 0.2f},
+					                      Vector3{p.x, p.y, p.z + 0.2f},
+					                      Vector4{0.0f, 0.0f, 1.0f, 1.0f});
+				};
+
+				drawAxes(ShouldRenderInThirdPersonView() ? GetMuzzlePosition()
+				                                         : GetMuzzlePositionInFirstPersonView());
+
+				drawAxes(ShouldRenderInThirdPersonView() ? GetCaseEjectPosition()
+				                                         : GetCaseEjectPositionInFirstPersonView());
+			}
 		}
 
 		void ClientPlayer::Draw2D() {
@@ -1083,6 +1113,58 @@ namespace spades {
 			// The player from whom's perspective the game is
 			return !IsFirstPerson(client.GetCameraMode()) ||
 			       &player != &client.GetCameraTargetPlayer();
+		}
+
+		Vector3 ClientPlayer::GetMuzzlePosition() {
+			ScriptIWeaponSkin3 interface(weaponSkin);
+			if (interface.ImplementsInterface()) {
+				Vector3 muzzle = interface.GetMuzzlePosition();
+
+				// The skin should return a legit position. Return the default
+				// position if it didn't.
+				Vector3 origin = player.GetOrigin();
+				AABB3 clip = AABB3(origin - Vector3(2.f, 2.f, 4.f), origin + Vector3(2.f, 2.f, 2.f));
+				if (clip.Contains(muzzle)) {
+					return muzzle;
+				}
+			}
+
+			return (GetEyeMatrix() * MakeVector3(-0.13f, 1.5f, 0.2f)).GetXYZ();
+		}
+
+		Vector3 ClientPlayer::GetMuzzlePositionInFirstPersonView() {
+			ScriptIWeaponSkin3 interface(weaponViewSkin);
+			if (interface.ImplementsInterface()) {
+				return interface.GetMuzzlePosition();
+			}
+
+			return (GetEyeMatrix() * MakeVector3(-0.13f, 1.5f, 0.2f)).GetXYZ();
+		}
+
+		Vector3 ClientPlayer::GetCaseEjectPosition() {
+			ScriptIWeaponSkin3 interface(weaponSkin);
+			if (interface.ImplementsInterface()) {
+				Vector3 CaseEject = interface.GetCaseEjectPosition();
+
+				// The skin should return a legit position. Return the default
+				// position if it didn't.
+				Vector3 origin = player.GetOrigin();
+				AABB3 clip = AABB3(origin - Vector3(2.f, 2.f, 4.f), origin + Vector3(2.f, 2.f, 2.f));
+				if (clip.Contains(CaseEject)) {
+					return CaseEject;
+				}
+			}
+
+			return (GetEyeMatrix() * MakeVector3(-0.13f, .5f, 0.2f)).GetXYZ();
+		}
+
+		Vector3 ClientPlayer::GetCaseEjectPositionInFirstPersonView() {
+			ScriptIWeaponSkin3 interface(weaponViewSkin);
+			if (interface.ImplementsInterface()) {
+				return interface.GetCaseEjectPosition();
+			}
+
+			return (GetEyeMatrix() * MakeVector3(-0.13f, .5f, 0.2f)).GetXYZ();
 		}
 
 		struct ClientPlayer::AmbienceInfo {
@@ -1200,24 +1282,16 @@ namespace spades {
 
 		void ClientPlayer::FiredWeapon() {
 			World &world = player.GetWorld();
-			Vector3 muzzle;
 			const SceneDefinition &lastSceneDef = client.GetLastSceneDef();
 			IRenderer &renderer = client.GetRenderer();
 			IAudioDevice &audioDevice = client.GetAudioDevice();
 			Player &p = player;
 
-			// make dlight
-			{
-				Vector3 vec;
-				Matrix4 eyeMatrix = GetEyeMatrix();
-				Matrix4 mat;
-				mat = Matrix4::Translate(-0.13f, .5f, 0.2f);
-				mat = eyeMatrix * mat;
+			Vector3 muzzle = ShouldRenderInThirdPersonView() ? GetMuzzlePosition()
+			                                                 : GetMuzzlePositionInFirstPersonView();
 
-				vec = (mat * MakeVector3(0, 1, 0)).GetXYZ();
-				muzzle = vec;
-				client.MuzzleFire(vec, player.GetFront(), &player == world.GetLocalPlayer());
-			}
+			// make dlight
+			client.MuzzleFire(muzzle, player.GetFront(), &player == world.GetLocalPlayer());
 
 			if (cg_ejectBrass) {
 				float dist = (player.GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
@@ -1250,8 +1324,9 @@ namespace spades {
 							break;
 					}
 					if (model) {
-						Vector3 origin;
-						origin = muzzle - p.GetFront() * 0.5f;
+						Vector3 origin = ShouldRenderInThirdPersonView()
+						                   ? GetCaseEjectPosition()
+						                   : GetCaseEjectPositionInFirstPersonView();
 
 						Vector3 vel;
 						vel = p.GetFront() * 0.5f + p.GetRight() + p.GetUp() * 0.2f;
