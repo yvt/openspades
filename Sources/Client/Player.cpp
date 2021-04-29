@@ -742,7 +742,7 @@ namespace spades {
 					}
 				}
 
-				if (world.GetListener() && this != world.GetLocalPlayer())
+				if (world.GetListener())
 					world.GetListener()->AddBulletTracer(*this, muzzle, finalHitPos);
 
 				// one pellet done

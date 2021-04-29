@@ -52,6 +52,7 @@ DEFINE_SPADES_SETTING(cg_ragdoll, "1");
 SPADES_SETTING(cg_blood);
 DEFINE_SPADES_SETTING(cg_ejectBrass, "1");
 DEFINE_SPADES_SETTING(cg_hitFeedbackSoundGain, "0.2");
+DEFINE_SPADES_SETTING(cg_tracersFirstPerson, "1");
 
 SPADES_SETTING(cg_alerts);
 SPADES_SETTING(cg_centerMessage);
@@ -1105,16 +1106,19 @@ namespace spades {
 		                             spades::Vector3 hitPos) {
 			SPADES_MARK_FUNCTION();
 
-			// Do not display tracers for bullets fired by the local player
-			if (IsFirstPerson(GetCameraMode()) && GetCameraTargetPlayerId() == player.GetId()) {
-				return;
+			if (!cg_tracersFirstPerson) {
+				// Do not display tracers for bullets fired by the local player
+				if (IsFirstPerson(GetCameraMode()) &&
+				    GetCameraTargetPlayerId() == player.GetId()) {
+					return;
+				}
 			}
 
 			// The line segment containing `muzzlePos` and `hitPos` represents the accurate
 			// trajectory of the fired bullet (as far as the game physics is concerned), but
-			// displaying it as-is would make it seem like it was fired from a skull gun. Rewrite
-			// the starting point with the muzzle point of the current weapon skin.
-			Handle<ClientPlayer> clientPlayer = clientPlayers[player->GetId()];
+			// displaying it as-is would make it seem fired from a skull gun. Rewrite
+			// the starting point with the visual muzzle point of the current weapon skin.
+			Handle<ClientPlayer> clientPlayer = clientPlayers[player.GetId()];
 			muzzlePos = clientPlayer->ShouldRenderInThirdPersonView()
 			              ? clientPlayer->GetMuzzlePosition()
 			              : clientPlayer->GetMuzzlePositionInFirstPersonView();
