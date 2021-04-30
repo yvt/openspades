@@ -683,11 +683,6 @@ namespace spades {
 				light.type = DynamicLightTypePoint;
 				light.image = NULL;
 				renderer.AddLight(light);
-
-				// add glare
-				renderer.SetColorAlphaPremultiplied(MakeVector4(1, .7f, .5f, 0) * brightness * .3f);
-				renderer.AddSprite(*renderer.RegisterImage("Gfx/Glare.png"),
-				                   (eyeMatrix * MakeVector3(0, 0.3f, -0.3f)).GetXYZ(), .8f, 0.f);
 			}
 
 			Vector3 leftHand, rightHand;

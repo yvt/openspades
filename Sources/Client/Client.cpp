@@ -293,7 +293,6 @@ namespace spades {
 			renderer->RegisterImage("Gfx/Ball.png");
 			renderer->RegisterModel("Models/Player/Dead.kv6");
 			renderer->RegisterImage("Gfx/Spotlight.png");
-			renderer->RegisterImage("Gfx/Glare.png");
 			renderer->RegisterModel("Models/Weapons/Spade/Spade.kv6");
 			renderer->RegisterModel("Models/Weapons/Block/Block2.kv6");
 			renderer->RegisterModel("Models/Weapons/Grenade/Grenade.kv6");
