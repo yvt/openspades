@@ -1106,12 +1106,12 @@ namespace spades {
 		                             spades::Vector3 hitPos) {
 			SPADES_MARK_FUNCTION();
 
-			if (!cg_tracersFirstPerson) {
-				// Do not display tracers for bullets fired by the local player
-				if (IsFirstPerson(GetCameraMode()) &&
-				    GetCameraTargetPlayerId() == player.GetId()) {
-					return;
-				}
+			bool isFirstPerson =
+			  IsFirstPerson(GetCameraMode()) && GetCameraTargetPlayerId() == player.GetId();
+
+			// If disabled, do not display tracers for bullets fired by the local player
+			if (!cg_tracersFirstPerson && isFirstPerson) {
+				return;
 			}
 
 			// The line segment containing `muzzlePos` and `hitPos` represents the accurate
@@ -1129,6 +1129,12 @@ namespace spades {
 				case SMG_WEAPON: vel = 360.f; break;
 				case SHOTGUN_WEAPON: vel = 500.f; break;
 			}
+
+			// Not to give the false illusion that the bullets travel slow
+			if (isFirstPerson) {
+				vel *= 2.0f;
+			}
+
 			AddLocalEntity(stmp::make_unique<Tracer>(*this, muzzlePos, hitPos, vel));
 			AddLocalEntity(stmp::make_unique<MapViewTracer>(muzzlePos, hitPos, vel));
 		}
