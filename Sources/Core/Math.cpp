@@ -318,6 +318,12 @@ namespace spades {
 	}
 
 	bool OBB3::RayCast(spades::Vector3 start, spades::Vector3 dir, spades::Vector3 *hitPos) {
+		// inside?
+		if (*this && start) {
+			*hitPos = start;
+			return true;
+		}
+
 		Vector3 normX = {m.m[0], m.m[1], m.m[2]};
 		Vector3 normY = {m.m[4], m.m[5], m.m[6]};
 		Vector3 normZ = {m.m[8], m.m[9], m.m[10]};
@@ -331,12 +337,6 @@ namespace spades {
 		float dotX = Vector3::Dot(dir, normX);
 		float dotY = Vector3::Dot(dir, normY);
 		float dotZ = Vector3::Dot(dir, normZ);
-
-		// inside?
-		if (*this && start) {
-			*hitPos = start + origin;
-			return true;
-		}
 
 		// x-plane hit test
 		if (dotX != 0.f) {
