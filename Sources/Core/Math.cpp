@@ -346,7 +346,7 @@ namespace spades {
 
 		// inside?
 		if (*this && start) {
-			*hitPos = start;
+			*hitPos = start + origin;
 			return true;
 		}
 
