@@ -107,8 +107,12 @@ namespace spades {
 			void StartScene(const SceneDefinition &) { OnProhibitedAction(); }
 
 			void AddLight(const client::DynamicLightParam &light) {
-				Vector3 rad(light.radius, light.radius, light.radius);
-				if (CheckVisibility(AABB3(light.origin - rad, light.origin + rad))) {
+				AABB3 aabb{light.origin, light.origin};
+				if (light.type == DynamicLightTypeLinear) {
+					aabb += light.point2;
+				}
+
+				if (CheckVisibility(aabb.Inflate(light.radius))) {
 					base->AddLight(light);
 				}
 			}

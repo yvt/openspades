@@ -62,7 +62,11 @@ namespace spades {
 			float opacity = 1.0;
 		};
 
-		enum DynamicLightType { DynamicLightTypePoint, DynamicLightTypeSpotlight };
+		enum DynamicLightType {
+			DynamicLightTypePoint,
+			DynamicLightTypeSpotlight,
+			DynamicLightTypeLinear
+		};
 
 		struct DynamicLightParam {
 			DynamicLightType type = DynamicLightTypePoint;
@@ -72,7 +76,13 @@ namespace spades {
 			 * is unaffected by the light. */
 			float radius;
 			Vector3 color;
-
+			/**
+			 * The second position of the light.
+			 *
+			 * For `DyanmicLightTypeLinear`, this specifies the second endpoint's position. For
+			 * other light types, this value is ignored.
+			 */
+			Vector3 point2;
 			/** The basis vectors specifying the orientation of a spotlight.
 			 *  See the existing code for usage. */
 			std::array<Vector3, 3> spotAxis;

@@ -32,7 +32,10 @@ namespace spades {
 		      dynamicLightRadius("dynamicLightRadius"),
 		      dynamicLightRadiusInversed("dynamicLightRadiusInversed"),
 		      dynamicLightSpotMatrix("dynamicLightSpotMatrix"),
-		      dynamicLightProjectionTexture("dynamicLightProjectionTexture")
+		      dynamicLightProjectionTexture("dynamicLightProjectionTexture"),
+		      dynamicLightIsLinear("dynamicLightIsLinear"),
+		      dynamicLightLinearDirection("dynamicLightLinearDirection"),
+		      dynamicLightLinearLength("dynamicLightLinearLength")
 
 		{
 			lastRenderer = NULL;
@@ -70,6 +73,9 @@ namespace spades {
 			dynamicLightRadiusInversed(program);
 			dynamicLightSpotMatrix(program);
 			dynamicLightProjectionTexture(program);
+			dynamicLightIsLinear(program);
+			dynamicLightLinearDirection(program);
+			dynamicLightLinearLength(program);
 
 			dynamicLightOrigin.SetValue(param.origin.x, param.origin.y, param.origin.z);
 			dynamicLightColor.SetValue(param.color.x, param.color.y, param.color.z);
@@ -90,7 +96,9 @@ namespace spades {
 				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
 				                    IGLDevice::ClampToEdge);
 
-			} else {
+				dynamicLightIsLinear.SetValue(0);
+			} else if (param.type == client::DynamicLightTypePoint ||
+			           param.type == client::DynamicLightTypeLinear) {
 				device.ActiveTexture(texStage);
 				whiteImage->Bind(IGLDevice::Texture2D);
 				dynamicLightProjectionTexture.SetValue(texStage);
@@ -100,6 +108,24 @@ namespace spades {
 				// UV is in a valid range so the fragments are not discarded.
 				dynamicLightSpotMatrix.SetValue(Matrix4::Translate(0.5, 0.5, 0.0) *
 				                                Matrix4::Scale(0.0));
+
+				if (param.type == client::DynamicLightTypeLinear) {
+					// Convert two endpoints to one endpoint + direction + length.
+					// `Vector3::Normalize` is no-op when the length is zero,
+					// therefore the zero-length case is handled.
+					Vector3 direction = param.point2 - param.origin;
+					float length = direction.GetLength();
+					direction = direction.Normalize();
+
+					dynamicLightLinearDirection.SetValue(direction.x, direction.y, direction.z);
+					dynamicLightLinearLength.SetValue(length);
+
+					dynamicLightIsLinear.SetValue(1);
+				} else {
+					dynamicLightIsLinear.SetValue(0);
+				}
+			} else {
+				SPUnreachable();
 			}
 
 			device.ActiveTexture(texStage);

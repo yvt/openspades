@@ -288,6 +288,9 @@ namespace spades {
 						r = eng->RegisterEnumValue("DynamicLightType", "Spotlight",
 												   DynamicLightTypeSpotlight);
 						manager->CheckError(r);
+						r = eng->RegisterEnumValue("DynamicLightType", "Linear",
+												   DynamicLightTypeLinear);
+						manager->CheckError(r);
 
 						r = eng->RegisterObjectBehaviour("ModelRenderParam",
 														 asBEHAVE_CONSTRUCT,
@@ -342,6 +345,10 @@ namespace spades {
 						r = eng->RegisterObjectProperty("DynamicLightParam",
 														"Vector3 origin",
 														asOFFSET(DynamicLightParam, origin));
+						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("DynamicLightParam",
+														"Vector3 point2",
+														asOFFSET(DynamicLightParam, point2));
 						manager->CheckError(r);
 						r = eng->RegisterObjectProperty("DynamicLightParam",
 														"float radius",

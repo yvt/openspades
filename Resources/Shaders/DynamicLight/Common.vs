@@ -23,6 +23,10 @@
 uniform vec3 dynamicLightOrigin;
 uniform mat4 dynamicLightSpotMatrix;
 
+uniform bool dynamicLightIsLinear;
+uniform vec3 dynamicLightLinearDirection;
+uniform float dynamicLightLinearLength;
+
 void PrepareForShadow_Map(vec3 vertexCoord) ;
 
 
@@ -32,8 +36,18 @@ varying vec3 lightTexCoord;
 
 void PrepareForDynamicLightNoBump(vec3 vertexCoord, vec3 normal) {
 	PrepareForShadow_Map(vertexCoord);
-	
-	lightPos = dynamicLightOrigin - vertexCoord;
+
+	vec3 lightPosition = dynamicLightOrigin;
+
+	if (dynamicLightIsLinear) {
+		// Linear light approximation - choose the closest point on the light
+		// geometry as the representative light source
+		float d = dot((vertexCoord - dynamicLightOrigin), dynamicLightLinearDirection);
+		d = clamp(d, 0.0, dynamicLightLinearLength);
+		lightPosition += dynamicLightLinearDirection * d;
+	}
+
+	lightPos = lightPosition - vertexCoord;
 	lightNormal = normal;
 	
 	// projection
