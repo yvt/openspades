@@ -56,6 +56,7 @@ DEFINE_SPADES_SETTING(cg_environmentalAudio, "1");
 DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponZ, "0");
+DEFINE_SPADES_SETTING(cg_trueAimDownSight, "1");
 
 namespace spades {
 	namespace client {
@@ -591,7 +592,8 @@ namespace spades {
 				Weapon &w = p.GetWeapon();
 				ScriptIWeaponSkin interface(skin);
 				interface.SetReadyState(1.f - w.TimeToNextFire() / w.GetDelay());
-				interface.SetAimDownSightState(aimDownState);
+				interface.SetAimDownSightState(cg_trueAimDownSight ? aimDownState
+				                                                   : aimDownState * 0.5f);
 				interface.SetAmmo(w.GetAmmo());
 				interface.SetClipSize(w.GetClipSize());
 				interface.SetReloading(w.IsReloading());
