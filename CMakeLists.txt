@@ -3,7 +3,7 @@ project(OpenSpades)
 
 set(OpenSpades_VERSION_MAJOR 0)
 set(OpenSpades_VERSION_MINOR 1)
-set(OpenSpades_VERSION_REVISION 3)
+set(OpenSpades_VERSION_REVISION 5)
 
 set(OPENSPADES_FULL_VERSION "${OpenSpades_VERSION_MAJOR}.${OpenSpades_VERSION_MINOR}.${OpenSpades_VERSION_REVISION}")
 
@@ -33,7 +33,7 @@ if(USE_VCPKG)
 
  		find_package(CURL REQUIRED)
  		set(CURL_LIBRARY CURL::libcurl)
- 	endif()	
+ 	endif()
 
     set(SDL2_LIBRARY SDL2::SDL2main SDL2::SDL2-static)
     set(SDL2_IMAGE_LIBRARY SDL2::SDL2_image)
