@@ -412,28 +412,7 @@ namespace spades {
 		void GLRenderer::BuildProjectionMatrix() {
 			SPADES_MARK_FUNCTION();
 
-			float near = sceneDef.zNear;
-			float far = sceneDef.zFar;
-			float t = near * tanf(sceneDef.fovY * .5f);
-			float r = near * tanf(sceneDef.fovX * .5f);
-			float a = r * 2.f, b = t * 2.f, c = far - near;
-			Matrix4 mat;
-			mat.m[0] = near * 2.f / a;
-			mat.m[1] = 0.f;
-			mat.m[2] = 0.f;
-			mat.m[3] = 0.f;
-			mat.m[4] = 0.f;
-			mat.m[5] = near * 2.f / b;
-			mat.m[6] = 0.f;
-			mat.m[7] = 0.f;
-			mat.m[8] = 0.f;
-			mat.m[9] = 0.f;
-			mat.m[10] = -(far + near) / c;
-			mat.m[11] = -1.f;
-			mat.m[12] = 0.f;
-			mat.m[13] = 0.f;
-			mat.m[14] = -(far * near * 2.f) / c;
-			mat.m[15] = 0.f;
+			Matrix4 mat = sceneDef.ToOpenGLProjectionMatrix();
 
 			if (settings.r_temporalAA && temporalAAFilter) {
 				float jitterX = 1.0f / GetRenderWidth();
@@ -450,23 +429,7 @@ namespace spades {
 		void GLRenderer::BuildView() {
 			SPADES_MARK_FUNCTION();
 
-			Matrix4 mat = Matrix4::Identity();
-			mat.m[0] = sceneDef.viewAxis[0].x;
-			mat.m[4] = sceneDef.viewAxis[0].y;
-			mat.m[8] = sceneDef.viewAxis[0].z;
-			mat.m[1] = sceneDef.viewAxis[1].x;
-			mat.m[5] = sceneDef.viewAxis[1].y;
-			mat.m[9] = sceneDef.viewAxis[1].z;
-			mat.m[2] = -sceneDef.viewAxis[2].x;
-			mat.m[6] = -sceneDef.viewAxis[2].y;
-			mat.m[10] = -sceneDef.viewAxis[2].z;
-
-			Vector4 v = mat * sceneDef.viewOrigin;
-			mat.m[12] = -v.x;
-			mat.m[13] = -v.y;
-			mat.m[14] = -v.z;
-
-			viewMatrix = mat;
+			viewMatrix = sceneDef.ToViewMatrix();
 		}
 
 		void GLRenderer::BuildFrustrum() {
