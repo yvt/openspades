@@ -21,8 +21,10 @@
 
 #pragma once
 
-#include <Core/Math.h>
+#include <memory>
+
 #include "PhysicsConstants.h"
+#include <Core/Math.h>
 
 namespace spades {
 	namespace client {
@@ -66,7 +68,7 @@ namespace spades {
 			};
 
 		private:
-			World *world;
+			World &world;
 
 			Vector3 position;
 			Vector3 velocity;
@@ -79,7 +81,7 @@ namespace spades {
 			ToolType tool;
 
 			WeaponType weaponType;
-			Weapon *weapon;
+			std::unique_ptr<Weapon> weapon;
 			int playerId;
 			int teamId;
 			IntVector3 color; // obsolete
@@ -134,13 +136,16 @@ namespace spades {
 			void ThrowGrenade();
 
 		public:
-			Player(World *, int playerId, WeaponType weapon, int teamId, Vector3 position,
+			Player(World &, int playerId, WeaponType weapon, int teamId, Vector3 position,
 			       IntVector3 color);
+
+			Player(const Player &) = delete;
+			void operator=(const Player &) = delete;
 
 			~Player();
 
 			int GetId() { return playerId; }
-			Weapon *GetWeapon() { return weapon; }
+			Weapon &GetWeapon();
 			WeaponType GetWeaponType() { return weaponType; }
 			int GetTeamId() { return teamId; }
 			bool IsSpectator() { return teamId >= 2; }
@@ -188,7 +193,7 @@ namespace spades {
 			void UsedBlocks(int c) { blockStocks = std::max(blockStocks - c, 0); }
 
 			/** makes player's health 0. */
-			void KilledBy(KillType, Player *killer, int respawnTime);
+			void KilledBy(KillType, Player &killer, int respawnTime);
 
 			bool IsAlive();
 			/** @return world time to respawn */
@@ -207,7 +212,7 @@ namespace spades {
 			Vector3 GetVelocity() { return velocity; }
 			int GetMoveSteps() { return moveSteps; }
 
-			World *GetWorld() { return world; }
+			World &GetWorld() { return world; }
 
 			bool GetWade();
 			bool IsOnGroundOrWade();
@@ -241,5 +246,5 @@ namespace spades {
 
 			float BoxDistanceToBlock(IntVector3);
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

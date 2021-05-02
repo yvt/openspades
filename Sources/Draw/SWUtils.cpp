@@ -26,5 +26,5 @@ SPADES_SETTING(r_swNumThreads);
 namespace spades {
 	namespace draw {
 		int GetNumSWRendererThreads() { return r_swNumThreads; }
-	}
-}
+	} // namespace draw
+} // namespace spades

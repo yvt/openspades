@@ -52,5 +52,5 @@ namespace spades {
 		};
 
 		static RendererModelModelRegistrar registrar;
-	}
-}
+	} // namespace client
+} // namespace spades

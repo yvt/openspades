@@ -42,9 +42,9 @@ DEFINE_SPADES_SETTING(r_swNumThreads, "4");
 
 namespace spades {
 	namespace draw {
-		SWRenderer::SWRenderer(SWPort *port, SWFeatureLevel level)
+		SWRenderer::SWRenderer(Handle<SWPort> _port, SWFeatureLevel level)
 		    : featureLevel(level),
-		      port(port),
+		      port(std::move(_port)),
 		      map(nullptr),
 		      fb(nullptr),
 		      inited(false),
@@ -58,9 +58,7 @@ namespace spades {
 
 			SPADES_MARK_FUNCTION();
 
-			if (port == nullptr) {
-				SPRaise("Port is null.");
-			}
+			SPAssert(port);
 
 			SPLog("---- SWRenderer early initialization started ---");
 
@@ -78,7 +76,7 @@ namespace spades {
 			renderStopwatch.Reset();
 
 			SPLog("setting framebuffer.");
-			SetFramebuffer(port->GetFramebuffer());
+			SetFramebuffer(&port->GetFramebuffer());
 
 			// alloc depth buffer
 			SPLog("initializing depth buffer.");
@@ -140,16 +138,16 @@ namespace spades {
 			inited = false;
 		}
 
-		client::IImage *SWRenderer::RegisterImage(const char *filename) {
+		Handle<client::IImage> SWRenderer::RegisterImage(const char *filename) {
 			SPADES_MARK_FUNCTION();
 			EnsureValid();
-			return imageManager->RegisterImage(filename);
+			return imageManager->RegisterImage(filename).Cast<client::IImage>();
 		}
 
-		client::IModel *SWRenderer::RegisterModel(const char *filename) {
+		Handle<client::IModel> SWRenderer::RegisterModel(const char *filename) {
 			SPADES_MARK_FUNCTION();
 			EnsureInitialized();
-			return modelManager->RegisterModel(filename);
+			return modelManager->RegisterModel(filename).Cast<client::IModel>();
 		}
 
 		void SWRenderer::ClearCache() {
@@ -159,23 +157,23 @@ namespace spades {
 			modelManager->ClearCache();
 		}
 
-		client::IImage *SWRenderer::CreateImage(spades::Bitmap *bmp) {
+		Handle<client::IImage> SWRenderer::CreateImage(spades::Bitmap &bmp) {
 			SPADES_MARK_FUNCTION();
 			EnsureValid();
-			return imageManager->CreateImage(bmp);
+			return imageManager->CreateImage(bmp).Cast<client::IImage>();
 		}
 
-		client::IModel *SWRenderer::CreateModel(spades::VoxelModel *model) {
+		Handle<client::IModel> SWRenderer::CreateModel(spades::VoxelModel &model) {
 			SPADES_MARK_FUNCTION();
 			EnsureInitialized();
-			return modelManager->CreateModel(model);
+			return modelManager->CreateModel(model).Cast<client::IModel>();
 		}
 
-		void SWRenderer::SetGameMap(client::GameMap *map) {
+		void SWRenderer::SetGameMap(stmp::optional<client::GameMap &> map) {
 			SPADES_MARK_FUNCTION();
 			if (map)
 				EnsureInitialized();
-			if (map == this->map)
+			if (map.get_pointer() == this->map.GetPointerOrNull())
 				return;
 
 			flatMapRenderer.reset();
@@ -186,8 +184,9 @@ namespace spades {
 			this->map = map;
 			if (this->map) {
 				this->map->AddListener(this);
-				flatMapRenderer = std::make_shared<SWFlatMapRenderer>(this, map);
-				mapRenderer = std::make_shared<SWMapRenderer>(this, map, featureLevel);
+				flatMapRenderer = std::make_shared<SWFlatMapRenderer>(*this, map);
+				mapRenderer =
+				  std::make_shared<SWMapRenderer>(*this, map.get_pointer(), featureLevel);
 			}
 		}
 
@@ -601,17 +600,15 @@ namespace spades {
 			projectionViewMatrix = projectionMatrix * viewMatrix;
 		}
 
-		void SWRenderer::RenderModel(client::IModel *model, const client::ModelRenderParam &param) {
+		void SWRenderer::RenderModel(client::IModel &model, const client::ModelRenderParam &param) {
 			SPADES_MARK_FUNCTION();
 			EnsureInitialized();
 			EnsureSceneStarted();
 
-			auto *mdl = dynamic_cast<SWModel *>(model);
-			if (mdl == nullptr)
-				SPInvalidArgument("model");
+			SWModel &swModel = dynamic_cast<SWModel &>(model);
 
 			Model m;
-			m.model = mdl;
+			m.model = swModel;
 			m.param = param;
 
 			models.push_back(m);
@@ -705,7 +702,7 @@ namespace spades {
 			debugLines.push_back(l);
 		}
 
-		void SWRenderer::AddSprite(client::IImage *image, spades::Vector3 center, float radius,
+		void SWRenderer::AddSprite(client::IImage &image, spades::Vector3 center, float radius,
 		                           float rotation) {
 			SPADES_MARK_FUNCTION();
 			EnsureInitialized();
@@ -714,22 +711,19 @@ namespace spades {
 			if (!SphereFrustrumCull(center, radius * 1.5f))
 				return;
 
-			SWImage *img = dynamic_cast<SWImage *>(image);
-			if (!img) {
-				SPInvalidArgument("image");
-			}
+			SWImage &swImage = dynamic_cast<SWImage &>(image);
 
 			sprites.push_back(Sprite());
 			auto &spr = sprites.back();
 
-			spr.img = img;
+			spr.img = swImage;
 			spr.center = center;
 			spr.radius = radius;
 			spr.rotation = rotation;
 			spr.color = drawColorAlphaPremultiplied;
 		}
 
-		void SWRenderer::AddLongSprite(client::IImage *, spades::Vector3 p1, spades::Vector3 p2,
+		void SWRenderer::AddLongSprite(client::IImage &, spades::Vector3 p1, spades::Vector3 p2,
 		                               float radius) {
 			SPADES_MARK_FUNCTION();
 			EnsureInitialized();
@@ -765,12 +759,12 @@ namespace spades {
 				// flat map renderer sends 'Update RLE' to map renderer.
 				// rendering map before this leads to the corrupted renderer image.
 				flatMapRenderer->Update();
-				mapRenderer->Render(sceneDef, fb, depthBuffer.data());
+				mapRenderer->Render(sceneDef, *fb, depthBuffer.data());
 			}
 
 			// draw models
 			for (auto &m : models) {
-				modelRenderer->Render(m.model, m.param);
+				modelRenderer->Render(*m.model, m.param);
 			}
 			models.clear();
 
@@ -817,14 +811,14 @@ namespace spades {
 					v2.position = x2;
 					v3.uv = MakeVector2(0.f, 1.f);
 					v3.position = x3;
-					imageRenderer->DrawPolygon(spr.img, v1, v2, v3);
+					imageRenderer->DrawPolygon(spr.img.GetPointerOrNull(), v1, v2, v3);
 					v1.uv = MakeVector2(1.f, 0.f);
 					v1.position = x2;
 					v2.uv = MakeVector2(1.f, 1.f);
 					v2.position = x4;
 					v3.uv = MakeVector2(0.f, 1.f);
 					v3.position = x3;
-					imageRenderer->DrawPolygon(spr.img, v1, v2, v3);
+					imageRenderer->DrawPolygon(spr.img.GetPointerOrNull(), v1, v2, v3);
 				}
 				sprites.clear();
 			}
@@ -975,7 +969,8 @@ namespace spades {
 			drawColorAlphaPremultiplied = col;
 		}
 
-		void SWRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft) {
+		void SWRenderer::DrawImage(stmp::optional<client::IImage &> image,
+		                           const spades::Vector2 &outTopLeft) {
 			SPADES_MARK_FUNCTION();
 
 			if (image == nullptr) {
@@ -987,15 +982,16 @@ namespace spades {
 			          AABB2(0, 0, image->GetWidth(), image->GetHeight()));
 		}
 
-		void SWRenderer::DrawImage(client::IImage *image, const spades::AABB2 &outRect) {
+		void SWRenderer::DrawImage(stmp::optional<client::IImage &> image,
+		                           const spades::AABB2 &outRect) {
 			SPADES_MARK_FUNCTION();
 
 			DrawImage(image, outRect,
 			          AABB2(0, 0, image ? image->GetWidth() : 0, image ? image->GetHeight() : 0));
 		}
 
-		void SWRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft,
-		                           const spades::AABB2 &inRect) {
+		void SWRenderer::DrawImage(stmp::optional<client::IImage &> image,
+		                           const spades::Vector2 &outTopLeft, const spades::AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 
 			DrawImage(image,
@@ -1003,8 +999,8 @@ namespace spades {
 			          inRect);
 		}
 
-		void SWRenderer::DrawImage(client::IImage *image, const spades::AABB2 &outRect,
-		                           const spades::AABB2 &inRect) {
+		void SWRenderer::DrawImage(stmp::optional<client::IImage &> image,
+		                           const spades::AABB2 &outRect, const spades::AABB2 &inRect) {
 			SPADES_MARK_FUNCTION();
 
 			DrawImage(image, Vector2::Make(outRect.GetMinX(), outRect.GetMinY()),
@@ -1012,7 +1008,8 @@ namespace spades {
 			          Vector2::Make(outRect.GetMinX(), outRect.GetMaxY()), inRect);
 		}
 
-		void SWRenderer::DrawImage(client::IImage *image, const spades::Vector2 &outTopLeft,
+		void SWRenderer::DrawImage(stmp::optional<client::IImage &> image,
+		                           const spades::Vector2 &outTopLeft,
 		                           const spades::Vector2 &outTopRight,
 		                           const spades::Vector2 &outBottomLeft,
 		                           const spades::AABB2 &inRect) {
@@ -1025,7 +1022,7 @@ namespace spades {
 			//   = b + c - a
 			Vector2 outBottomRight = outTopRight + outBottomLeft - outTopLeft;
 
-			SWImage *img = dynamic_cast<SWImage *>(image);
+			SWImage *img = dynamic_cast<SWImage *>(image.get_pointer());
 			if (img == nullptr && image != nullptr) {
 				// not SWImage
 				SPInvalidArgument("image");
@@ -1113,10 +1110,10 @@ namespace spades {
 			port->Swap();
 
 			// next frame's framebuffer
-			SetFramebuffer(port->GetFramebuffer());
+			SetFramebuffer(&port->GetFramebuffer());
 		}
 
-		Bitmap *SWRenderer::ReadBitmap() {
+		Handle<Bitmap> SWRenderer::ReadBitmap() {
 			SPADES_MARK_FUNCTION();
 			EnsureValid();
 			EnsureSceneNotStarted();
@@ -1124,7 +1121,7 @@ namespace spades {
 			int w = fb->GetWidth();
 			int h = fb->GetHeight();
 			uint32_t *inPix = fb->GetPixels();
-			Bitmap *bm = new Bitmap(w, h);
+			auto bm = Handle<Bitmap>::New(w, h);
 			uint32_t *outPix = bm->GetPixels();
 			for (int y = 0; y < h; y++) {
 				uint32_t *src = inPix + y * w;
@@ -1187,7 +1184,7 @@ namespace spades {
 		}
 
 		void SWRenderer::GameMapChanged(int x, int y, int z, client::GameMap *map) {
-			if (map != this->map) {
+			if (map != this->map.GetPointerOrNull()) {
 				return;
 			}
 

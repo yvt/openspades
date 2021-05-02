@@ -76,7 +76,7 @@ namespace spades {
 					return false;
 				}
 
-				GameMap *map = client->GetWorld()->GetMap();
+				const Handle<GameMap> &map = client->GetWorld()->GetMap();
 				if (!map->ClipWorld(groundPos.x, groundPos.y, groundPos.z)) {
 					return false;
 				}
@@ -88,7 +88,7 @@ namespace spades {
 				vel.z += dt * 32.f;
 
 				IntVector3 lp = matrix.GetOrigin().Floor();
-				GameMap *m = client->GetWorld()->GetMap();
+				Handle<GameMap> m = client->GetWorld()->GetMap();
 
 				if (lp.z >= 63) {
 					// dropped into water
@@ -97,12 +97,12 @@ namespace spades {
 
 					if (waterSound) {
 						if (dist < 40.f * 40.f && !client->IsMuted()) {
-							IAudioDevice *dev = client->GetAudioDevice();
+							IAudioDevice &dev = client->GetAudioDevice();
 							AudioParam param;
 							param.referenceDistance = .6f;
 							param.pitch = .9f + SampleRandomFloat() * .2f;
 
-							dev->Play(waterSound, lastMat.GetOrigin(), param);
+							dev.Play(waterSound, lastMat.GetOrigin(), param);
 						}
 						waterSound = NULL;
 					}
@@ -110,13 +110,13 @@ namespace spades {
 					if (dist < 40.f * 40.f) {
 						int splats = SampleRandomInt(0, 2);
 
-						Handle<IImage> img = client->GetRenderer()->RegisterImage("Gfx/White.tga");
+						Handle<IImage> img = client->GetRenderer().RegisterImage("Gfx/White.tga");
 
 						Vector4 col = {1, 1, 1, 0.8f};
 						Vector3 pt = matrix.GetOrigin();
 						pt.z = 62.99f;
 						for (int i = 0; i < splats; i++) {
-							ParticleSpriteEntity *ent = new ParticleSpriteEntity(client, img, col);
+							auto ent = stmp::make_unique<ParticleSpriteEntity>(*client, img, col);
 							ent->SetTrajectory(
 							  pt,
 							  MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
@@ -127,7 +127,7 @@ namespace spades {
 							ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
 							ent->SetRadius(0.1f + SampleRandomFloat() * SampleRandomFloat() * 0.1f);
 							ent->SetLifeTime(2.f, 0.f, 1.f);
-							client->AddLocalEntity(ent);
+							client->AddLocalEntity(std::move(ent));
 						}
 					}
 
@@ -172,11 +172,11 @@ namespace spades {
 									  (client->GetLastSceneDef().viewOrigin - matrix.GetOrigin())
 									    .GetPoweredLength();
 									if (dist < 40.f * 40.f && !client->IsMuted()) {
-										IAudioDevice *dev = client->GetAudioDevice();
+										IAudioDevice &dev = client->GetAudioDevice();
 										AudioParam param;
 										param.referenceDistance = .6f;
 
-										dev->Play(dropSound, lastMat.GetOrigin(), param);
+										dev.Play(dropSound, lastMat.GetOrigin(), param);
 									}
 									dropSound = NULL;
 								}
@@ -217,7 +217,7 @@ namespace spades {
 				float move = (groundTime - 1.f) * .2f;
 				param.matrix = Matrix4::Translate(0, 0, move) * param.matrix;
 			}
-			renderer->RenderModel(model, param);
+			renderer.RenderModel(*model, param);
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

@@ -21,8 +21,8 @@
 #pragma once
 
 #include <cstdint>
-#include <vector>
 #include <memory>
+#include <vector>
 
 namespace spades {
 	namespace client {
@@ -113,5 +113,5 @@ namespace spades {
 
 			void Rebuild();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

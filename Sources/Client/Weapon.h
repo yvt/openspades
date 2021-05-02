@@ -31,8 +31,8 @@ namespace spades {
 		struct GameProperties;
 
 		class Weapon {
-			World *world;
-			Player *owner;
+			World &world;
+			Player &owner;
 			float time;
 			bool shooting;
 			bool shootingPreviously;
@@ -49,7 +49,7 @@ namespace spades {
 			int stock;
 
 		public:
-			Weapon(World *, Player *);
+			Weapon(World &, Player &);
 			virtual ~Weapon();
 			virtual std::string GetName() = 0;
 			virtual float GetDelay() = 0;
@@ -65,7 +65,7 @@ namespace spades {
 
 			virtual int GetPelletSize() = 0;
 
-			static Weapon *CreateWeapon(WeaponType index, Player *, const GameProperties &);
+			static Weapon *CreateWeapon(WeaponType index, Player &owner, const GameProperties &);
 
 			void Restock();
 			void Reset();
@@ -95,5 +95,5 @@ namespace spades {
 
 			bool IsReadyToShoot();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

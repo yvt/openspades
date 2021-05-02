@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <array>
 #include <vector>
 
 #include "IGameMode.h"
@@ -32,7 +33,7 @@ namespace spades {
 		class TCGameMode : public IGameMode {
 		public:
 			struct Territory {
-				TCGameMode *mode;
+				TCGameMode &mode;
 
 				Vector3 pos;
 				/** team that owns this territory, or 2 if this territory is currently neutral.*/
@@ -45,6 +46,8 @@ namespace spades {
 				float progressRate;
 				float progressStartTime;
 
+				Territory(TCGameMode &mode) : mode{mode} {}
+
 				/** gets capture progress of this territory.
 				 * 0 = ownerTeamId is capturing, 1 = 1-ownerTeamId has captured this. */
 				float GetProgress();
@@ -53,25 +56,26 @@ namespace spades {
 			int captureLimit;
 
 		private:
-			World *world;
-			Team teams[2];
+			World &world;
+			std::array<Team, 2> teams;
 			std::vector<Territory> territories;
 
 		public:
-			TCGameMode(World *);
+			TCGameMode(World &);
 			~TCGameMode();
+
+			TCGameMode(const TCGameMode &) = delete;
+			void operator=(const TCGameMode &) = delete;
 
 			Team &GetTeam(int t);
 
 			int GetNumTerritories() const { return (int)territories.size(); }
-			Territory *GetTerritory(int index) {
+			Territory &GetTerritory(int index) {
 				SPADES_MARK_FUNCTION();
-				SPAssert(index >= 0);
-				SPAssert(index < GetNumTerritories());
-				return &(territories[index]);
+				return territories.at(index);
 			}
 
 			void AddTerritory(const Territory &);
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

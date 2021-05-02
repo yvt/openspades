@@ -27,12 +27,12 @@ namespace spades {
 		class GLRenderer;
 		class GLProgram;
 		class GLFXAAFilter {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			GLProgram *lens;
 
 		public:
-			GLFXAAFilter(GLRenderer *);
+			GLFXAAFilter(GLRenderer &);
 			GLColorBuffer Filter(GLColorBuffer);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

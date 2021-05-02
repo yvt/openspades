@@ -23,10 +23,6 @@
 
 #include <kiss_fft130/kiss_fft.h>
 
-#include <Client/GameMap.h>
-#include <Core/ConcurrentDispatch.h>
-#include <Core/Debug.h>
-#include <Core/Settings.h>
 #include "GLFramebufferManager.h"
 #include "GLImage.h"
 #include "GLProfiler.h"
@@ -37,6 +33,10 @@
 #include "GLShadowShader.h"
 #include "GLWaterRenderer.h"
 #include "IGLDevice.h"
+#include <Client/GameMap.h>
+#include <Core/ConcurrentDispatch.h>
+#include <Core/Debug.h>
+#include <Core/Settings.h>
 
 namespace spades {
 	namespace draw {
@@ -422,7 +422,7 @@ namespace spades {
 				int count = (int)floorf(dt * 600.f);
 				if (count > 400)
 					count = 400;
-				
+
 				for (int i = 0; i < count; i++) {
 					int ox = SampleRandomInt(0, size - 3);
 					int oy = SampleRandomInt(0, size - 3);
@@ -445,60 +445,60 @@ namespace spades {
 
 #pragma mark - Water Renderer
 
-		void GLWaterRenderer::PreloadShaders(spades::draw::GLRenderer *renderer) {
-			auto &settings = renderer->GetSettings();
+		void GLWaterRenderer::PreloadShaders(GLRenderer &renderer) {
+			auto &settings = renderer.GetSettings();
 			if ((int)settings.r_water >= 3)
-				renderer->RegisterProgram("Shaders/Water3.program");
+				renderer.RegisterProgram("Shaders/Water3.program");
 			else if ((int)settings.r_water >= 2)
-				renderer->RegisterProgram("Shaders/Water2.program");
+				renderer.RegisterProgram("Shaders/Water2.program");
 			else
-				renderer->RegisterProgram("Shaders/Water.program");
+				renderer.RegisterProgram("Shaders/Water.program");
 		}
 
-		GLWaterRenderer::GLWaterRenderer(GLRenderer *renderer, client::GameMap *map)
+		GLWaterRenderer::GLWaterRenderer(GLRenderer &renderer, client::GameMap *map)
 		    : renderer(renderer),
-		      device(renderer->GetGLDevice()),
-		      settings(renderer->GetSettings()),
+		      device(renderer.GetGLDevice()),
+		      settings(renderer.GetSettings()),
 		      map(map) {
 			SPADES_MARK_FUNCTION();
 			if ((int)settings.r_water >= 3)
-				program = renderer->RegisterProgram("Shaders/Water3.program");
+				program = renderer.RegisterProgram("Shaders/Water3.program");
 			else if ((int)settings.r_water >= 2)
-				program = renderer->RegisterProgram("Shaders/Water2.program");
+				program = renderer.RegisterProgram("Shaders/Water2.program");
 			else
-				program = renderer->RegisterProgram("Shaders/Water.program");
+				program = renderer.RegisterProgram("Shaders/Water.program");
 			BuildVertices();
 
-			tempDepthTexture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture2D, tempDepthTexture);
-			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24,
-			                   renderer->GetRenderWidth(), renderer->GetRenderHeight(), 0,
-			                   IGLDevice::DepthComponent, IGLDevice::UnsignedInt, NULL);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-			                     IGLDevice::ClampToEdge);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-			                     IGLDevice::ClampToEdge);
+			tempDepthTexture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture2D, tempDepthTexture);
+			device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24,
+			                  renderer.GetRenderWidth(), renderer.GetRenderHeight(), 0,
+			                  IGLDevice::DepthComponent, IGLDevice::UnsignedInt, NULL);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+			                    IGLDevice::ClampToEdge);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+			                    IGLDevice::ClampToEdge);
 
-			tempFramebuffer = device->GenFramebuffer();
-			device->BindFramebuffer(IGLDevice::Framebuffer, tempFramebuffer);
-			device->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::DepthAttachment,
-			                             IGLDevice::Texture2D, tempDepthTexture, 0);
+			tempFramebuffer = device.GenFramebuffer();
+			device.BindFramebuffer(IGLDevice::Framebuffer, tempFramebuffer);
+			device.FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::DepthAttachment,
+			                            IGLDevice::Texture2D, tempDepthTexture, 0);
 
 			// create water color texture
-			texture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture2D, texture);
-			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, map->Width(),
-			                   map->Height(), 0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
+			texture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture2D, texture);
+			device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, map->Width(),
+			                  map->Height(), 0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
 
 			w = map->Width();
 			h = map->Height();
@@ -510,12 +510,10 @@ namespace spades {
 			std::fill(updateBitmap.begin(), updateBitmap.end(), 0xffffffffUL);
 			std::fill(bitmap.begin(), bitmap.end(), 0xffffffffUL);
 
-			device->TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, w, h, IGLDevice::BGRA,
-			                      IGLDevice::UnsignedByte, bitmap.data());
-
+			device.TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, w, h, IGLDevice::BGRA,
+			                     IGLDevice::UnsignedByte, bitmap.data());
 
 			size_t numLayers = ((int)settings.r_water >= 2) ? 3 : 1;
-
 
 			// create wave tank simlation
 			for (size_t i = 0; i < numLayers; i++) {
@@ -525,42 +523,43 @@ namespace spades {
 					waveTanks.push_back(new FFTWaveTank<7>());
 				}
 			}
-			
+
 			// create heightmap texture
-			waveTexture = device->GenTexture();
+			waveTexture = device.GenTexture();
 			if (numLayers == 1) {
-				device->BindTexture(IGLDevice::Texture2D, waveTexture);
-				device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8,
-				                   waveTanks[0]->GetSize(), waveTanks[0]->GetSize(), 0,
-				                   IGLDevice::BGRA, IGLDevice::UnsignedByte, NULL);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-				                     IGLDevice::Linear);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-				                     IGLDevice::LinearMipmapLinear);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-				                     IGLDevice::Repeat);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-				                     IGLDevice::Repeat);
+				device.BindTexture(IGLDevice::Texture2D, waveTexture);
+				device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8,
+				                  waveTanks[0]->GetSize(), waveTanks[0]->GetSize(), 0,
+				                  IGLDevice::BGRA, IGLDevice::UnsignedByte, NULL);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+				                    IGLDevice::Linear);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+				                    IGLDevice::LinearMipmapLinear);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+				                    IGLDevice::Repeat);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+				                    IGLDevice::Repeat);
 				if (settings.r_maxAnisotropy > 1.0f) {
-					device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMaxAnisotropy,
-					                     (float)settings.r_maxAnisotropy);
+					device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMaxAnisotropy,
+					                    (float)settings.r_maxAnisotropy);
 				}
 			} else {
-				device->BindTexture(IGLDevice::Texture2DArray, waveTexture);
-				device->TexImage3D(IGLDevice::Texture2DArray, 0, IGLDevice::RGBA8,
-				                   waveTanks[0]->GetSize(), waveTanks[0]->GetSize(), static_cast<IGLDevice::Sizei>(numLayers), 0,
-				                   IGLDevice::BGRA, IGLDevice::UnsignedByte, NULL);
-				device->TexParamater(IGLDevice::Texture2DArray, IGLDevice::TextureMagFilter,
-				                     IGLDevice::Linear);
-				device->TexParamater(IGLDevice::Texture2DArray, IGLDevice::TextureMinFilter,
-				                     IGLDevice::LinearMipmapLinear);
-				device->TexParamater(IGLDevice::Texture2DArray, IGLDevice::TextureWrapS,
-				                     IGLDevice::Repeat);
-				device->TexParamater(IGLDevice::Texture2DArray, IGLDevice::TextureWrapT,
-				                     IGLDevice::Repeat);
+				device.BindTexture(IGLDevice::Texture2DArray, waveTexture);
+				device.TexImage3D(IGLDevice::Texture2DArray, 0, IGLDevice::RGBA8,
+				                  waveTanks[0]->GetSize(), waveTanks[0]->GetSize(),
+				                  static_cast<IGLDevice::Sizei>(numLayers), 0, IGLDevice::BGRA,
+				                  IGLDevice::UnsignedByte, NULL);
+				device.TexParamater(IGLDevice::Texture2DArray, IGLDevice::TextureMagFilter,
+				                    IGLDevice::Linear);
+				device.TexParamater(IGLDevice::Texture2DArray, IGLDevice::TextureMinFilter,
+				                    IGLDevice::LinearMipmapLinear);
+				device.TexParamater(IGLDevice::Texture2DArray, IGLDevice::TextureWrapS,
+				                    IGLDevice::Repeat);
+				device.TexParamater(IGLDevice::Texture2DArray, IGLDevice::TextureWrapT,
+				                    IGLDevice::Repeat);
 				if (settings.r_maxAnisotropy > 1.0f) {
-					device->TexParamater(IGLDevice::Texture2DArray, IGLDevice::TextureMaxAnisotropy,
-					                     (float)settings.r_maxAnisotropy);
+					device.TexParamater(IGLDevice::Texture2DArray, IGLDevice::TextureMaxAnisotropy,
+					                    (float)settings.r_maxAnisotropy);
 				}
 			}
 
@@ -606,74 +605,74 @@ namespace spades {
 				}
 			}
 
-			buffer = device->GenBuffer();
-			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
-			device->BufferData(IGLDevice::ArrayBuffer,
-			                   static_cast<IGLDevice::Sizei>(sizeof(Vertex) * vertices.size()),
-			                   vertices.data(), IGLDevice::StaticDraw);
-			idxBuffer = device->GenBuffer();
-			device->BindBuffer(IGLDevice::ArrayBuffer, idxBuffer);
-			device->BufferData(IGLDevice::ArrayBuffer,
-			                   static_cast<IGLDevice::Sizei>(sizeof(uint32_t) * indices.size()),
-			                   indices.data(), IGLDevice::StaticDraw);
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			buffer = device.GenBuffer();
+			device.BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			device.BufferData(IGLDevice::ArrayBuffer,
+			                  static_cast<IGLDevice::Sizei>(sizeof(Vertex) * vertices.size()),
+			                  vertices.data(), IGLDevice::StaticDraw);
+			idxBuffer = device.GenBuffer();
+			device.BindBuffer(IGLDevice::ArrayBuffer, idxBuffer);
+			device.BufferData(IGLDevice::ArrayBuffer,
+			                  static_cast<IGLDevice::Sizei>(sizeof(uint32_t) * indices.size()),
+			                  indices.data(), IGLDevice::StaticDraw);
+			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 
 			numIndices = indices.size();
 		}
 
 		GLWaterRenderer::~GLWaterRenderer() {
 			SPADES_MARK_FUNCTION();
-			device->DeleteBuffer(buffer);
-			device->DeleteBuffer(idxBuffer);
-			device->DeleteFramebuffer(tempFramebuffer);
-			device->DeleteTexture(tempDepthTexture);
-			device->DeleteTexture(texture);
+			device.DeleteBuffer(buffer);
+			device.DeleteBuffer(idxBuffer);
+			device.DeleteFramebuffer(tempFramebuffer);
+			device.DeleteTexture(tempDepthTexture);
+			device.DeleteTexture(texture);
 
 			if (occlusionQuery)
-				device->DeleteQuery(occlusionQuery);
+				device.DeleteQuery(occlusionQuery);
 
 			for (size_t i = 0; i < waveTanks.size(); i++) {
 				waveTanks[i]->Join();
 				delete waveTanks[i];
 			}
-			device->DeleteTexture(waveTexture);
+			device.DeleteTexture(waveTexture);
 		}
 
 		void GLWaterRenderer::Render() {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Render");
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Render");
 
 			if (occlusionQuery == 0 && settings.r_occlusionQuery)
-				occlusionQuery = device->GenQuery();
+				occlusionQuery = device.GenQuery();
 
 			GLColorBuffer colorBuffer;
 
 			{
-				GLProfiler::Context profiler(renderer->GetGLProfiler(), "Preparation");
-				colorBuffer = renderer->GetFramebufferManager()->PrepareForWaterRendering(
+				GLProfiler::Context profiler(renderer.GetGLProfiler(), "Preparation");
+				colorBuffer = renderer.GetFramebufferManager()->PrepareForWaterRendering(
 				  tempFramebuffer, tempDepthTexture);
 			}
 
-			float fogDist = renderer->GetFogDistance();
-			Vector3 fogCol = renderer->GetFogColorForSolidPass();
+			float fogDist = renderer.GetFogDistance();
+			Vector3 fogCol = renderer.GetFogColorForSolidPass();
 			fogCol *= fogCol; // linearize
 
-			Vector3 skyCol = renderer->GetFogColor();
+			Vector3 skyCol = renderer.GetFogColor();
 			skyCol *= skyCol; // linearize
 
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 			float waterLevel = 63.f;
 			float waterRange = 128.f;
 
 			Matrix4 mat = Matrix4::Translate(def.viewOrigin.x, def.viewOrigin.y, waterLevel);
 			mat = mat * Matrix4::Scale(waterRange, waterRange, 1.f);
 
-			GLProfiler::Context profiler2(renderer->GetGLProfiler(), "Draw Plane");
+			GLProfiler::Context profiler2(renderer.GetGLProfiler(), "Draw Plane");
 
 			// do color
-			device->DepthFunc(IGLDevice::Less);
-			device->ColorMask(true, true, true, true);
+			device.DepthFunc(IGLDevice::Less);
+			device.ColorMask(true, true, true, true);
 			{
 				GLProgram *prg = program;
 				prg->Use();
@@ -706,24 +705,24 @@ namespace spades {
 				fovTan(prg);
 				waterPlane(prg);
 
-				projectionViewModelMatrix.SetValue(renderer->GetProjectionViewMatrix() * mat);
-				projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
+				projectionViewModelMatrix.SetValue(renderer.GetProjectionViewMatrix() * mat);
+				projectionViewMatrix.SetValue(renderer.GetProjectionViewMatrix());
 				modelMatrix.SetValue(mat);
-				viewModelMatrix.SetValue(renderer->GetViewMatrix() * mat);
-				viewMatrix.SetValue(renderer->GetViewMatrix());
+				viewModelMatrix.SetValue(renderer.GetViewMatrix() * mat);
+				viewMatrix.SetValue(renderer.GetViewMatrix());
 				fogDistance.SetValue(fogDist);
 				fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 				skyColor.SetValue(skyCol.x, skyCol.y, skyCol.z);
 				zNearFar.SetValue(def.zNear, def.zFar);
 				viewOrigin.SetValue(def.viewOrigin.x, def.viewOrigin.y, def.viewOrigin.z);
-				/*displaceScale.SetValue(1.f / renderer->ScreenWidth() / tanf(def.fovX * .5f),
-				                       1.f / renderer->ScreenHeight() / tanf(def.fovY) * .5f);*/
+				/*displaceScale.SetValue(1.f / renderer.ScreenWidth() / tanf(def.fovX * .5f),
+				                       1.f / renderer.ScreenHeight() / tanf(def.fovY) * .5f);*/
 				displaceScale.SetValue(1.f / tanf(def.fovX * .5f), 1.f / tanf(def.fovY * .5f));
 				fovTan.SetValue(tanf(def.fovX * .5f), -tanf(def.fovY * .5f), -tanf(def.fovX * .5f),
 				                tanf(def.fovY * .5f));
 
 				// make water plane in view coord
-				Matrix4 wmat = renderer->GetViewMatrix() * mat;
+				Matrix4 wmat = renderer.GetViewMatrix() * mat;
 				Vector3 dir = wmat.GetAxis(2);
 				waterPlane.SetValue(dir.x, dir.y, dir.z, -Vector3::Dot(dir, wmat.GetOrigin()));
 
@@ -743,56 +742,56 @@ namespace spades {
 				mirrorTexture(prg);
 				mirrorDepthTexture(prg);
 
-				device->ActiveTexture(0);
-				device->BindTexture(IGLDevice::Texture2D, colorBuffer.GetTexture());
+				device.ActiveTexture(0);
+				device.BindTexture(IGLDevice::Texture2D, colorBuffer.GetTexture());
 				screenTexture.SetValue(0);
 				// depth is not interpolated, so color shouldn't be
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-				                     IGLDevice::Nearest);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-				                     IGLDevice::Nearest);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+				                    IGLDevice::Nearest);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+				                    IGLDevice::Nearest);
 
-				device->ActiveTexture(1);
-				device->BindTexture(IGLDevice::Texture2D, tempDepthTexture);
+				device.ActiveTexture(1);
+				device.BindTexture(IGLDevice::Texture2D, tempDepthTexture);
 				depthTexture.SetValue(1);
 
-				device->ActiveTexture(2);
-				device->BindTexture(IGLDevice::Texture2D, texture);
+				device.ActiveTexture(2);
+				device.BindTexture(IGLDevice::Texture2D, texture);
 				textureUnif.SetValue(2);
 
 				static GLShadowShader shadowShader;
 
 				if (waveTanks.size() == 1) {
-					device->ActiveTexture(3);
-					device->BindTexture(IGLDevice::Texture2D, waveTexture);
+					device.ActiveTexture(3);
+					device.BindTexture(IGLDevice::Texture2D, waveTexture);
 					waveTextureUnif.SetValue(3);
 
-					shadowShader(renderer, prg, 4);
+					shadowShader(&renderer, prg, 4);
 				} else if (waveTanks.size() == 3) {
-					device->ActiveTexture(3);
-					device->BindTexture(IGLDevice::Texture2DArray, waveTexture);
+					device.ActiveTexture(3);
+					device.BindTexture(IGLDevice::Texture2DArray, waveTexture);
 					waveTextureArrayUnif.SetValue(3);
 
 					// mirror
-					device->ActiveTexture(4);
-					device->BindTexture(IGLDevice::Texture2D,
-					                    renderer->GetFramebufferManager()->GetMirrorTexture());
+					device.ActiveTexture(4);
+					device.BindTexture(IGLDevice::Texture2D,
+					                   renderer.GetFramebufferManager()->GetMirrorTexture());
 					if ((float)settings.r_maxAnisotropy > 1.1f) {
-						device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMaxAnisotropy,
-						                     (float)settings.r_maxAnisotropy);
+						device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMaxAnisotropy,
+						                    (float)settings.r_maxAnisotropy);
 					}
 					mirrorTexture.SetValue(4);
 
 					if ((int)settings.r_water >= 3) {
-						device->ActiveTexture(5);
-						device->BindTexture(
+						device.ActiveTexture(5);
+						device.BindTexture(
 						  IGLDevice::Texture2D,
-						  renderer->GetFramebufferManager()->GetMirrorDepthTexture());
+						  renderer.GetFramebufferManager()->GetMirrorDepthTexture());
 						mirrorDepthTexture.SetValue(5);
 
-						shadowShader(renderer, prg, 6);
+						shadowShader(&renderer, prg, 6);
 					} else {
-						shadowShader(renderer, prg, 5);
+						shadowShader(&renderer, prg, 5);
 					}
 				} else {
 					SPAssert(false);
@@ -802,35 +801,34 @@ namespace spades {
 
 				positionAttribute(prg);
 
-				device->EnableVertexAttribArray(positionAttribute(), true);
+				device.EnableVertexAttribArray(positionAttribute(), true);
 
-				device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
-				device->VertexAttribPointer(positionAttribute(), 2, IGLDevice::FloatType, false,
-				                            sizeof(Vertex), NULL);
-				device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+				device.BindBuffer(IGLDevice::ArrayBuffer, buffer);
+				device.VertexAttribPointer(positionAttribute(), 2, IGLDevice::FloatType, false,
+				                           sizeof(Vertex), NULL);
+				device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 
-				device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
-
-				if (occlusionQuery)
-					device->BeginQuery(IGLDevice::SamplesPassed, occlusionQuery);
-
-				device->DrawElements(IGLDevice::Triangles,
-				                     static_cast<IGLDevice::Sizei>(numIndices),
-				                     IGLDevice::UnsignedInt, NULL);
+				device.BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
 
 				if (occlusionQuery)
-					device->EndQuery(IGLDevice::SamplesPassed);
+					device.BeginQuery(IGLDevice::SamplesPassed, occlusionQuery);
 
-				device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
+				device.DrawElements(IGLDevice::Triangles, static_cast<IGLDevice::Sizei>(numIndices),
+				                    IGLDevice::UnsignedInt, NULL);
 
-				device->EnableVertexAttribArray(positionAttribute(), false);
+				if (occlusionQuery)
+					device.EndQuery(IGLDevice::SamplesPassed);
 
-				device->ActiveTexture(0);
+				device.BindBuffer(IGLDevice::ElementArrayBuffer, 0);
+
+				device.EnableVertexAttribArray(positionAttribute(), false);
+
+				device.ActiveTexture(0);
 				// restore filter mode for color buffer
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-				                     IGLDevice::Linear);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-				                     IGLDevice::Linear);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+				                    IGLDevice::Linear);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+				                    IGLDevice::Linear);
 			}
 		}
 
@@ -846,42 +844,42 @@ namespace spades {
 
 		void GLWaterRenderer::Update(float dt) {
 			SPADES_MARK_FUNCTION();
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Update");
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Update");
 
 			// update wavetank simulation
 			{
-				GLProfiler::Context profiler(renderer->GetGLProfiler(), "Waiting for Simulation To Done");
+				GLProfiler::Context profiler(renderer.GetGLProfiler(),
+				                             "Waiting for Simulation To Done");
 				for (size_t i = 0; i < waveTanks.size(); i++) {
 					waveTanks[i]->Join();
 				}
 			}
 			{
 				{
-					GLProfiler::Context profiler(renderer->GetGLProfiler(), "Upload");
+					GLProfiler::Context profiler(renderer.GetGLProfiler(), "Upload");
 					if (waveTanks.size() == 1) {
-						device->BindTexture(IGLDevice::Texture2D, waveTexture);
-						device->TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0,
-						                      waveTanks[0]->GetSize(), waveTanks[0]->GetSize(),
-						                      IGLDevice::BGRA, IGLDevice::UnsignedByte,
-						                      waveTanks[0]->GetBitmap());
+						device.BindTexture(IGLDevice::Texture2D, waveTexture);
+						device.TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, waveTanks[0]->GetSize(),
+						                     waveTanks[0]->GetSize(), IGLDevice::BGRA,
+						                     IGLDevice::UnsignedByte, waveTanks[0]->GetBitmap());
 					} else {
-						device->BindTexture(IGLDevice::Texture2DArray, waveTexture);
+						device.BindTexture(IGLDevice::Texture2DArray, waveTexture);
 						for (size_t i = 0; i < waveTanks.size(); i++) {
-							device->TexSubImage3D(IGLDevice::Texture2DArray, 0, 0, 0, static_cast<IGLDevice::Sizei>(i),
-												  waveTanks[i]->GetSize(), waveTanks[i]->GetSize(), 1,
-												  IGLDevice::BGRA, IGLDevice::UnsignedByte,
-												  waveTanks[i]->GetBitmap());
+							device.TexSubImage3D(
+							  IGLDevice::Texture2DArray, 0, 0, 0, static_cast<IGLDevice::Sizei>(i),
+							  waveTanks[i]->GetSize(), waveTanks[i]->GetSize(), 1, IGLDevice::BGRA,
+							  IGLDevice::UnsignedByte, waveTanks[i]->GetBitmap());
 						}
 					}
 				}
 				{
-					GLProfiler::Context profiler(renderer->GetGLProfiler(), "Generate Mipmap");
+					GLProfiler::Context profiler(renderer.GetGLProfiler(), "Generate Mipmap");
 					if (waveTanks.size() == 1) {
-						device->BindTexture(IGLDevice::Texture2D, waveTexture);
-						device->GenerateMipmap(IGLDevice::Texture2D);
+						device.BindTexture(IGLDevice::Texture2D, waveTexture);
+						device.GenerateMipmap(IGLDevice::Texture2D);
 					} else {
-						device->BindTexture(IGLDevice::Texture2DArray, waveTexture);
-						device->GenerateMipmap(IGLDevice::Texture2DArray);
+						device.BindTexture(IGLDevice::Texture2DArray, waveTexture);
+						device.GenerateMipmap(IGLDevice::Texture2DArray);
 					}
 				}
 			}
@@ -895,8 +893,9 @@ namespace spades {
 			}
 
 			{
-				GLProfiler::Context profiler(renderer->GetGLProfiler(), "Upload Water Color Texture");
-				device->BindTexture(IGLDevice::Texture2D, texture);
+				GLProfiler::Context profiler(renderer.GetGLProfiler(),
+				                             "Upload Water Color Texture");
+				device.BindTexture(IGLDevice::Texture2D, texture);
 				bool fullUpdate = true;
 				for (size_t i = 0; i < updateBitmap.size(); i++) {
 					if (updateBitmap[i] == 0) {
@@ -930,8 +929,8 @@ namespace spades {
 					}
 
 					if (modified) {
-						device->TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, w, h, IGLDevice::BGRA,
-						                      IGLDevice::UnsignedByte, bitmap.data());
+						device.TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, w, h, IGLDevice::BGRA,
+						                     IGLDevice::UnsignedByte, bitmap.data());
 					}
 
 					for (size_t i = 0; i < updateBitmap.size(); i++) {
@@ -961,8 +960,8 @@ namespace spades {
 						}
 
 						if (modified) {
-							device->TexSubImage2D(IGLDevice::Texture2D, 0, x, y, 32, 1,
-							                      IGLDevice::BGRA, IGLDevice::UnsignedByte, pixels);
+							device.TexSubImage2D(IGLDevice::Texture2D, 0, x, y, 32, 1,
+							                     IGLDevice::BGRA, IGLDevice::UnsignedByte, pixels);
 						}
 
 						updateBitmap[i] = 0;
@@ -985,5 +984,5 @@ namespace spades {
 				return;
 			MarkUpdate(x, y);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

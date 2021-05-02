@@ -86,7 +86,7 @@ namespace spades {
 					fade = 1.f;
 
 				float y = 100.f + 32.f * (float)ent.line;
-				float x = (renderer->ScreenWidth() - size.x) * .5f;
+				float x = (renderer.ScreenWidth() - size.x) * .5f;
 
 				Vector4 shadow = {0, 0, 0, fade * 0.5f};
 				Vector4 color = {1, 1, 1, fade};
@@ -94,5 +94,5 @@ namespace spades {
 				font->DrawShadow(ent.msg, MakeVector2(x, y), 1.f, color, shadow);
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

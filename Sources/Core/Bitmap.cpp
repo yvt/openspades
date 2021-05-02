@@ -21,55 +21,72 @@
 #include <cstring>
 #include <vector>
 
-#include <Core/Debug.h>
 #include "Bitmap.h"
 #include "Debug.h"
 #include "Exception.h"
 #include "FileManager.h"
 #include "IBitmapCodec.h"
 #include "IStream.h"
+#include <Core/Debug.h>
 #include <ScriptBindings/ScriptManager.h>
 
 namespace spades {
-	Bitmap::Bitmap(int ww, int hh) : w(ww), h(hh), pixels(nullptr), autoDelete(true) {
-		SPADES_MARK_FUNCTION();
+	namespace {
+		void ValidateDimensions(int width, int height) {
+			SPADES_MARK_FUNCTION();
 
-		if (w < 1 || h < 1 || w > 8192 || h > 8192) {
-			SPRaise("Invalid dimension: %dx%d", w, h);
+			// Do not allow creating a huge image so that we can catch misuses
+			// and memory corruption
+			if (width < 1 || height < 1 || width > 8192 || height > 8192) {
+				SPRaise("Invalid dimensions: %dx%d", width, height);
+			}
 		}
 
-		pixels = new uint32_t[w * h];
-		SPAssert(pixels != NULL);
+		inline void ValidatePoint(const Bitmap &bitmap, int x, int y) {
+			if (static_cast<unsigned int>(x) >= static_cast<unsigned int>(bitmap.GetWidth()) ||
+			    static_cast<unsigned int>(y) >= static_cast<unsigned int>(bitmap.GetHeight())) {
+				SPRaise("The point (%d, %d) is out of bounds of bitmap of size %dx%d", x, y,
+				        bitmap.GetWidth(), bitmap.GetHeight());
+			}
+		}
+	} // namespace
+
+	Bitmap::Bitmap(int width, int height)
+	    : width{width}, height{height}, pixels{nullptr}, autoDelete{true} {
+		SPADES_MARK_FUNCTION();
+
+		ValidateDimensions(width, height);
+
+		pixels = new uint32_t[width * height];
+		SPAssert(pixels != nullptr);
 	}
 
-	Bitmap::Bitmap(uint32_t *pixels, int w, int h) : w(w), h(h), pixels(pixels), autoDelete(false) {
+	Bitmap::Bitmap(uint32_t *pixels, int width, int height)
+	    : width{width}, height{height}, pixels{pixels}, autoDelete{false} {
 		SPADES_MARK_FUNCTION();
 
-		if (w < 1 || h < 1 || w > 8192 || h > 8192) {
-			SPRaise("Invalid dimension: %dx%d", w, h);
-		}
-
-		SPAssert(pixels != NULL);
+		ValidateDimensions(width, height);
+		SPAssert(pixels != nullptr);
 	}
 
 	Bitmap::~Bitmap() {
 		SPADES_MARK_FUNCTION();
 
-		if (autoDelete)
+		if (autoDelete) {
 			delete[] pixels;
+		}
 	}
 
-	Bitmap *Bitmap::Load(const std::string &filename) {
+	Handle<Bitmap> Bitmap::Load(const std::string &filename) {
 		std::vector<IBitmapCodec *> codecs = IBitmapCodec::GetAllCodecs();
 		std::string errMsg;
-		for (size_t i = 0; i < codecs.size(); i++) {
-			IBitmapCodec *codec = codecs[i];
+		for (IBitmapCodec *codec : codecs) {
 			if (codec->CanLoad() && codec->CheckExtension(filename)) {
 				// give it a try.
 				// open error shouldn't be handled here
-				StreamHandle str = FileManager::OpenForReading(filename.c_str());
+				std::unique_ptr<IStream> str{FileManager::OpenForReading(filename.c_str())};
 				try {
-					return codec->Load(str);
+					return {codec->Load(str.get()), false};
 				} catch (const std::exception &ex) {
 					errMsg += codec->GetName();
 					errMsg += ":\n";
@@ -87,18 +104,17 @@ namespace spades {
 		}
 	}
 
-	Bitmap *Bitmap::Load(IStream *stream) {
+	Handle<Bitmap> Bitmap::Load(IStream &stream) {
 		std::vector<IBitmapCodec *> codecs = IBitmapCodec::GetAllCodecs();
-		auto pos = stream->GetPosition();
+		auto pos = stream.GetPosition();
 		std::string errMsg;
-		for (size_t i = 0; i < codecs.size(); i++) {
-			IBitmapCodec *codec = codecs[i];
+		for (IBitmapCodec *codec : codecs) {
 			if (codec->CanLoad()) {
 				// give it a try.
 				// open error shouldn't be handled here
 				try {
-					stream->SetPosition(pos);
-					return codec->Load(stream);
+					stream.SetPosition(pos);
+					return {codec->Load(&stream), false};
 				} catch (const std::exception &ex) {
 					errMsg += codec->GetName();
 					errMsg += ":\n";
@@ -117,12 +133,11 @@ namespace spades {
 
 	void Bitmap::Save(const std::string &filename) {
 		std::vector<IBitmapCodec *> codecs = IBitmapCodec::GetAllCodecs();
-		for (size_t i = 0; i < codecs.size(); i++) {
-			IBitmapCodec *codec = codecs[i];
+		for (IBitmapCodec *codec : codecs) {
 			if (codec->CanSave() && codec->CheckExtension(filename)) {
-				StreamHandle str = FileManager::OpenForWriting(filename.c_str());
+				std::unique_ptr<IStream> str{FileManager::OpenForWriting(filename.c_str())};
 
-				codec->Save(str, this);
+				codec->Save(str.get(), this);
 				return;
 			}
 		}
@@ -130,25 +145,19 @@ namespace spades {
 		SPRaise("Bitmap codec not found for filename: %s", filename.c_str());
 	}
 
-	uint32_t Bitmap::GetPixel(int x, int y) {
-		SPAssert(x >= 0);
-		SPAssert(y >= 0);
-		SPAssert(x < w);
-		SPAssert(y < h);
-		return pixels[x + y * w];
+	uint32_t Bitmap::GetPixel(int x, int y) const {
+		ValidatePoint(*this, x, y);
+		return pixels[x + y * width];
 	}
 
 	void Bitmap::SetPixel(int x, int y, uint32_t p) {
-		SPAssert(x >= 0);
-		SPAssert(y >= 0);
-		SPAssert(x < w);
-		SPAssert(y < h);
-		pixels[x + y * w] = p;
+		ValidatePoint(*this, x, y);
+		pixels[x + y * width] = p;
 	}
 
 	Handle<Bitmap> Bitmap::Clone() {
-		Bitmap *b = new Bitmap(w, h);
-		std::memcpy(b->GetPixels(), pixels, static_cast<std::size_t>(w * h * 4));
-		return Handle<Bitmap>(b, false);
+		Handle<Bitmap> b = Handle<Bitmap>::New(width, height);
+		std::memcpy(b->GetPixels(), pixels, static_cast<std::size_t>(width * height * 4));
+		return b;
 	}
-}
+} // namespace spades

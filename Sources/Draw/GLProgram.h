@@ -36,7 +36,7 @@ namespace spades {
 			GLProgram(IGLDevice *, std::string name = "(unnamed)");
 			~GLProgram();
 
-			void Attach(GLShader *);
+			void Attach(GLShader &);
 			void Attach(IGLDevice::UInteger shader);
 
 			void Link();
@@ -49,5 +49,5 @@ namespace spades {
 
 			IGLDevice *GetDevice() const { return device; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

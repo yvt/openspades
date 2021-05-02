@@ -54,5 +54,5 @@ namespace spades {
 				return;
 			ui->AlertError(text);
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

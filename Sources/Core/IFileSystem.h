@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -29,8 +30,8 @@ namespace spades {
 	public:
 		virtual ~IFileSystem() {}
 		virtual std::vector<std::string> EnumFiles(const char *) = 0;
-		virtual IStream *OpenForReading(const char *) = 0;
-		virtual IStream *OpenForWriting(const char *) = 0;
+		virtual std::unique_ptr<IStream> OpenForReading(const char *) = 0;
+		virtual std::unique_ptr<IStream> OpenForWriting(const char *) = 0;
 		virtual bool FileExists(const char *) = 0;
 	};
-}
+} // namespace spades

@@ -30,15 +30,15 @@
 
 namespace spades {
 	namespace draw {
-		SWFlatMapRenderer::SWFlatMapRenderer(SWRenderer *r, client::GameMap *map)
-		    : r(r), map(map), w(map->Width()), h(map->Height()), needsUpdate(true) {
+		SWFlatMapRenderer::SWFlatMapRenderer(SWRenderer &r, Handle<client::GameMap> inMap)
+		    : r(r), map(std::move(inMap)), w(map->Width()), h(map->Height()), needsUpdate(true) {
 			SPADES_MARK_FUNCTION();
 
 			if (w & 31) {
 				SPRaise("Map width must be a multiple of 32.");
 			}
 
-			img.Set(new SWImage(map->Width(), map->Height()), false);
+			img = Handle<SWImage>::New(map->Width(), map->Height());
 			updateMap.resize(w * h / 32);
 			std::fill(updateMap.begin(), updateMap.end(), 0xffffffff);
 			updateMap2.resize(w * h / 32);
@@ -62,7 +62,7 @@ namespace spades {
 			}
 			auto *outPixels = img->GetRawBitmap();
 
-			auto *mapRenderer = r->mapRenderer.get();
+			auto *mapRenderer = r.mapRenderer.get();
 
 			int idx = 0;
 			for (int y = 0; y < h; y++) {
@@ -109,5 +109,5 @@ namespace spades {
 			needsUpdate = true;
 			updateMap[(x + y * w) >> 5] |= 1 << (x & 31);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

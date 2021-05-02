@@ -40,5 +40,5 @@ namespace spades {
 #else
 		SWFeatureLevel DetectFeatureLevel() { return SWFeatureLevel::None; }
 #endif
-	}
-}
+	} // namespace draw
+} // namespace spades

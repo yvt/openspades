@@ -29,20 +29,20 @@ namespace spades {
 		class GLImage;
 		class GLSettings;
 		class GLSSAOFilter {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			GLSettings &settings;
 			GLProgram *ssaoProgram;
 			GLProgram *bilateralProgram;
 
-			GLImage *ditherPattern;
+			Handle<GLImage> ditherPattern;
 
 			GLColorBuffer GenerateRawSSAOImage(int width, int height);
 			GLColorBuffer ApplyBilateralFilter(GLColorBuffer, bool direction, int width = -1,
 			                                   int height = -1);
 
 		public:
-			GLSSAOFilter(GLRenderer *);
+			GLSSAOFilter(GLRenderer &);
 			GLColorBuffer Filter();
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

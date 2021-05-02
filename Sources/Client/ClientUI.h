@@ -89,5 +89,5 @@ namespace spades {
 			void setIgnored(const std::string &key);
 		};
 		;
-	}
-}
+	} // namespace client
+} // namespace spades

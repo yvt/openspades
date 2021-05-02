@@ -33,7 +33,7 @@ namespace spades {
 		 * The current implementation requires `BlitFramebuffer` for simplicity.
 		 */
 		class GLTemporalAAFilter {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			GLProgram *program;
 
 			struct HistoryBuffer {
@@ -51,7 +51,7 @@ namespace spades {
 			void DeleteHistoryBuffer();
 
 		public:
-			GLTemporalAAFilter(GLRenderer *);
+			GLTemporalAAFilter(GLRenderer &);
 			~GLTemporalAAFilter();
 
 			Vector2 GetProjectionMatrixJitter();

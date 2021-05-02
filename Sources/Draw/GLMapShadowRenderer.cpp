@@ -19,40 +19,40 @@
  */
 
 #include "GLMapShadowRenderer.h"
-#include <Client/GameMap.h>
-#include <Core/Debug.h>
 #include "GLProfiler.h"
 #include "GLRadiosityRenderer.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
+#include <Client/GameMap.h>
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace draw {
-		GLMapShadowRenderer::GLMapShadowRenderer(GLRenderer *renderer, client::GameMap *map)
-		    : renderer(renderer), device(renderer->GetGLDevice()), map(map) {
+		GLMapShadowRenderer::GLMapShadowRenderer(GLRenderer &renderer, client::GameMap *map)
+		    : renderer(renderer), device(renderer.GetGLDevice()), map(map) {
 			SPADES_MARK_FUNCTION();
-			texture = device->GenTexture();
-			coarseTexture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture2D, texture);
-			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA, map->Width(),
-			                   map->Height(), 0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
+			texture = device.GenTexture();
+			coarseTexture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture2D, texture);
+			device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA, map->Width(), map->Height(),
+			                  0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
 
-			device->BindTexture(IGLDevice::Texture2D, coarseTexture);
-			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, map->Width() / CoarseSize,
-			                   map->Height() / CoarseSize, 0, IGLDevice::BGRA,
-			                   IGLDevice::UnsignedByte, NULL);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
+			device.BindTexture(IGLDevice::Texture2D, coarseTexture);
+			device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, map->Width() / CoarseSize,
+			                  map->Height() / CoarseSize, 0, IGLDevice::BGRA,
+			                  IGLDevice::UnsignedByte, NULL);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
 
 			w = map->Width();
 			h = map->Height();
@@ -71,21 +71,21 @@ namespace spades {
 		GLMapShadowRenderer::~GLMapShadowRenderer() {
 			SPADES_MARK_FUNCTION();
 
-			device->DeleteTexture(texture);
-			device->DeleteTexture(coarseTexture);
+			device.DeleteTexture(texture);
+			device.DeleteTexture(coarseTexture);
 		}
 
 		void GLMapShadowRenderer::Update() {
 			SPADES_MARK_FUNCTION();
 
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Terrain Shadow Map");
-			GLRadiosityRenderer *radiosity = renderer->GetRadiosityRenderer();
+			GLProfiler::Context profiler(renderer.GetGLProfiler(), "Terrain Shadow Map");
+			GLRadiosityRenderer *radiosity = renderer.GetRadiosityRenderer();
 
 			std::vector<uint8_t> coarseUpdateBitmap;
 			coarseUpdateBitmap.resize(coarseBitmap.size());
 			std::fill(coarseUpdateBitmap.begin(), coarseUpdateBitmap.end(), 0);
 
-			device->BindTexture(IGLDevice::Texture2D, texture);
+			device.BindTexture(IGLDevice::Texture2D, texture);
 			for (size_t i = 0; i < updateBitmap.size(); i++) {
 				int y = static_cast<int>(i / updateBitmapPitch);
 				int x = static_cast<int>((i - y * updateBitmapPitch) * 32);
@@ -118,8 +118,8 @@ namespace spades {
 							coarseUpdateBitmap[((x + j) >> CoarseBits) +
 							                   (y >> CoarseBits) * (w >> CoarseBits)] = 1;
 
-					device->TexSubImage2D(IGLDevice::Texture2D, 0, x, y, 32, 1, IGLDevice::RGBA,
-					                      IGLDevice::UnsignedByte, pixels);
+					device.TexSubImage2D(IGLDevice::Texture2D, 0, x, y, 32, 1, IGLDevice::RGBA,
+					                     IGLDevice::UnsignedByte, pixels);
 				}
 
 				updateBitmap[i] = 0;
@@ -163,12 +163,13 @@ namespace spades {
 					}
 				}
 				if (coarseUpdated) {
-					GLProfiler::Context profiler(renderer->GetGLProfiler(), "Coarse Shadow Map Upload");
+					GLProfiler::Context profiler(renderer.GetGLProfiler(),
+					                             "Coarse Shadow Map Upload");
 
-					device->BindTexture(IGLDevice::Texture2D, coarseTexture);
-					device->TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, w >> CoarseBits,
-					                      h >> CoarseBits, IGLDevice::BGRA, IGLDevice::UnsignedByte,
-					                      coarseBitmap.data());
+					device.BindTexture(IGLDevice::Texture2D, coarseTexture);
+					device.TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, w >> CoarseBits,
+					                     h >> CoarseBits, IGLDevice::BGRA, IGLDevice::UnsignedByte,
+					                     coarseBitmap.data());
 				}
 			}
 		}
@@ -226,5 +227,5 @@ namespace spades {
 			MarkUpdate(x, y - z);
 			MarkUpdate(x, y - z - 1);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

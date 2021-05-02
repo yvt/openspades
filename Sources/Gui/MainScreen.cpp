@@ -29,14 +29,22 @@
 
 namespace spades {
 	namespace gui {
-		MainScreen::MainScreen(client::IRenderer *r, client::IAudioDevice *a,
-		                       client::FontManager *fontManager)
-		    : renderer(r), audioDevice(a), fontManager(fontManager) {
+		MainScreen::MainScreen(Handle<client::IRenderer> _renderer,
+		                       Handle<client::IAudioDevice> _audioDevice,
+		                       Handle<client::FontManager> _fontManager)
+		    : renderer(std::move(_renderer)),
+		      audioDevice(std::move(_audioDevice)),
+		      fontManager(std::move(_fontManager)) {
 			SPADES_MARK_FUNCTION();
-			if (r == NULL)
-				SPInvalidArgument("r");
-			if (a == NULL)
-				SPInvalidArgument("a");
+			if (!renderer) {
+				SPInvalidArgument("renderer");
+			}
+			if (!audioDevice) {
+				SPInvalidArgument("audioDevice");
+			}
+			if (!fontManager) {
+				SPInvalidArgument("fontManager");
+			}
 
 			helper = new MainScreenHelper(this);
 
@@ -218,11 +226,11 @@ namespace spades {
 			renderer->DrawImage(img, AABB2(0, 0, scrSize.x, scrSize.y));
 
 			std::string str = _Tr("MainScreen", "NOW LOADING");
-			client::IFont *font = fontManager->GetGuiFont();
-			Vector2 size = font->Measure(str);
+			client::IFont &font = fontManager->GetGuiFont();
+			Vector2 size = font.Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
 			pos -= size;
-			font->DrawShadow(str, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.5));
+			font.DrawShadow(str, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.5));
 
 			renderer->FrameDone();
 			renderer->Flip();
@@ -304,9 +312,9 @@ namespace spades {
 			                                "AudioDevice@, FontManager@, MainScreenHelper@)");
 			{
 				ScriptContextHandle ctx = uiFactory.Prepare();
-				ctx->SetArgObject(0, renderer);
-				ctx->SetArgObject(1, audioDevice);
-				ctx->SetArgObject(2, fontManager);
+				ctx->SetArgObject(0, renderer.GetPointerOrNull());
+				ctx->SetArgObject(1, audioDevice.GetPointerOrNull());
+				ctx->SetArgObject(2, fontManager.GetPointerOrNull());
 				ctx->SetArgObject(3, &*helper);
 
 				ctx.ExecuteChecked();
@@ -350,8 +358,8 @@ namespace spades {
 
 		std::string MainScreen::Connect(const ServerAddress &host) {
 			try {
-				subview.Set(new client::Client(&*renderer, &*audioDevice, host, fontManager),
-				            false);
+				subview = Handle<client::Client>::New(&*renderer, &*audioDevice, host, fontManager)
+				            .Cast<View>();
 			} catch (const std::exception &ex) {
 				SPLog("[!] Error while initializing a game client: %s", ex.what());
 				return ex.what();

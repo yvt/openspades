@@ -20,14 +20,13 @@
 
 #include <cstring>
 #include <deque>
+#include <queue>
 #include <set>
 #include <vector>
 
 #include "GameMap.h"
 #include "GameMapWrapper.h"
 #include <Core/Debug.h>
-#include <Core/Debug.h>
-#include <Core/Deque.h>
 #include <Core/Stopwatch.h>
 
 namespace spades {
@@ -39,6 +38,7 @@ namespace spades {
 			width = mp.Width();
 			height = mp.Height();
 			depth = mp.Depth();
+			// TODO: `stmp::make_unique` doesn't support array initialization yet
 			linkMap.reset(new uint8_t[width * height * depth]);
 			memset(linkMap.get(), 0, width * height * depth);
 		}
@@ -57,44 +57,44 @@ namespace spades {
 				for (int y = 0; y < height; y++)
 					SetLink(x, y, depth - 1, Root);
 
-			Deque<CellPos> queue(width * height * 2);
+			std::deque<CellPos> queue(width * height * 2);
 
 			for (int x = 0; x < width; x++)
 				for (int y = 0; y < height; y++)
 					if (m.IsSolid(x, y, depth - 2)) {
 						SetLink(x, y, depth - 2, PositiveZ);
-						queue.Push(CellPos(x, y, depth - 2));
+						queue.push_back(CellPos(x, y, depth - 2));
 					}
 
-			while (!queue.IsEmpty()) {
-				CellPos p = queue.Front();
-				queue.Shift();
+			while (!queue.empty()) {
+				CellPos p = queue.front();
+				queue.pop_front();
 
 				int x = p.x, y = p.y, z = p.z;
 
 				if (p.x > 0 && m.IsSolid(x - 1, y, z) && GetLink(x - 1, y, z) == Invalid) {
 					SetLink(x - 1, y, z, PositiveX);
-					queue.Push(CellPos(x - 1, y, z));
+					queue.push_back(CellPos(x - 1, y, z));
 				}
 				if (p.x < width - 1 && m.IsSolid(x + 1, y, z) && GetLink(x + 1, y, z) == Invalid) {
 					SetLink(x + 1, y, z, NegativeX);
-					queue.Push(CellPos(x + 1, y, z));
+					queue.push_back(CellPos(x + 1, y, z));
 				}
 				if (p.y > 0 && m.IsSolid(x, y - 1, z) && GetLink(x, y - 1, z) == Invalid) {
 					SetLink(x, y - 1, z, PositiveY);
-					queue.Push(CellPos(x, y - 1, z));
+					queue.push_back(CellPos(x, y - 1, z));
 				}
 				if (p.y < height - 1 && m.IsSolid(x, y + 1, z) && GetLink(x, y + 1, z) == Invalid) {
 					SetLink(x, y + 1, z, NegativeY);
-					queue.Push(CellPos(x, y + 1, z));
+					queue.push_back(CellPos(x, y + 1, z));
 				}
 				if (p.z > 0 && m.IsSolid(x, y, z - 1) && GetLink(x, y, z - 1) == Invalid) {
 					SetLink(x, y, z - 1, PositiveZ);
-					queue.Push(CellPos(x, y, z - 1));
+					queue.push_back(CellPos(x, y, z - 1));
 				}
 				if (p.z < depth - 1 && m.IsSolid(x, y, z + 1) && GetLink(x, y, z + 1) == Invalid) {
 					SetLink(x, y, z + 1, NegativeZ);
-					queue.Push(CellPos(x, y, z + 1));
+					queue.push_back(CellPos(x, y, z + 1));
 				}
 			}
 
@@ -148,11 +148,11 @@ namespace spades {
 				return;
 			// if there's invalid block around this block,
 			// rebuild tree
-			Deque<CellPos> queue(1024);
-			queue.Push(CellPos(x, y, z));
-			while (!queue.IsEmpty()) {
-				CellPos p = queue.Front();
-				queue.Shift();
+			std::deque<CellPos> queue{1024};
+			queue.push_back(CellPos(x, y, z));
+			while (!queue.empty()) {
+				CellPos p = queue.front();
+				queue.pop_front();
 
 				int x = p.x, y = p.y, z = p.z;
 				SPAssert(m.IsSolid(x, y, z));
@@ -162,32 +162,32 @@ namespace spades {
 				if (p.x > 0 && m.IsSolid(x - 1, y, z) && GetLink(x - 1, y, z) == Invalid &&
 				    thisLink != NegativeX) {
 					SetLink(x - 1, y, z, PositiveX);
-					queue.Push(CellPos(x - 1, y, z));
+					queue.push_back(CellPos(x - 1, y, z));
 				}
 				if (p.x < width - 1 && m.IsSolid(x + 1, y, z) && GetLink(x + 1, y, z) == Invalid &&
 				    thisLink != PositiveX) {
 					SetLink(x + 1, y, z, NegativeX);
-					queue.Push(CellPos(x + 1, y, z));
+					queue.push_back(CellPos(x + 1, y, z));
 				}
 				if (p.y > 0 && m.IsSolid(x, y - 1, z) && GetLink(x, y - 1, z) == Invalid &&
 				    thisLink != NegativeY) {
 					SetLink(x, y - 1, z, PositiveY);
-					queue.Push(CellPos(x, y - 1, z));
+					queue.push_back(CellPos(x, y - 1, z));
 				}
 				if (p.y < height - 1 && m.IsSolid(x, y + 1, z) && GetLink(x, y + 1, z) == Invalid &&
 				    thisLink != PositiveY) {
 					SetLink(x, y + 1, z, NegativeY);
-					queue.Push(CellPos(x, y + 1, z));
+					queue.push_back(CellPos(x, y + 1, z));
 				}
 				if (p.z > 0 && m.IsSolid(x, y, z - 1) && GetLink(x, y, z - 1) == Invalid &&
 				    thisLink != NegativeZ) {
 					SetLink(x, y, z - 1, PositiveZ);
-					queue.Push(CellPos(x, y, z - 1));
+					queue.push_back(CellPos(x, y, z - 1));
 				}
 				if (p.z < depth - 1 && m.IsSolid(x, y, z + 1) && GetLink(x, y, z + 1) == Invalid &&
 				    thisLink != PositiveZ) {
 					SetLink(x, y, z + 1, NegativeZ);
-					queue.Push(CellPos(x, y, z + 1));
+					queue.push_back(CellPos(x, y, z + 1));
 				}
 			}
 		}
@@ -206,7 +206,7 @@ namespace spades {
 
 			// solid, but unlinked cells
 			std::vector<CellPos> unlinkedCells;
-			Deque<CellPos> queue(1024);
+			std::deque<CellPos> queue{1024};
 
 			// unlink children
 			for (size_t i = 0; i < cells.size(); i++) {
@@ -222,11 +222,11 @@ namespace spades {
 				SPAssert(GetLink(pos.x, pos.y, pos.z) != Root);
 
 				SetLink(pos.x, pos.y, pos.z, Invalid);
-				queue.Push(pos);
+				queue.push_back(pos);
 
-				while (!queue.IsEmpty()) {
-					pos = queue.Front();
-					queue.Shift();
+				while (!queue.empty()) {
+					pos = queue.front();
+					queue.pop_front();
 
 					if (m.IsSolid(pos.x, pos.y, pos.z))
 						unlinkedCells.push_back(pos);
@@ -236,32 +236,32 @@ namespace spades {
 					if (x > 0 && EqualTwoCond(GetLink(x - 1, y, z), PositiveX, Invalid,
 					                          m.IsSolid(x - 1, y, z))) {
 						SetLink(x - 1, y, z, Marked);
-						queue.Push(CellPos(x - 1, y, z));
+						queue.push_back(CellPos(x - 1, y, z));
 					}
 					if (x < width - 1 && EqualTwoCond(GetLink(x + 1, y, z), NegativeX, Invalid,
 					                                  m.IsSolid(x + 1, y, z))) {
 						SetLink(x + 1, y, z, Marked);
-						queue.Push(CellPos(x + 1, y, z));
+						queue.push_back(CellPos(x + 1, y, z));
 					}
 					if (y > 0 && EqualTwoCond(GetLink(x, y - 1, z), PositiveY, Invalid,
 					                          m.IsSolid(x, y - 1, z))) {
 						SetLink(x, y - 1, z, Marked);
-						queue.Push(CellPos(x, y - 1, z));
+						queue.push_back(CellPos(x, y - 1, z));
 					}
 					if (y < height - 1 && EqualTwoCond(GetLink(x, y + 1, z), NegativeY, Invalid,
 					                                   m.IsSolid(x, y + 1, z))) {
 						SetLink(x, y + 1, z, Marked);
-						queue.Push(CellPos(x, y + 1, z));
+						queue.push_back(CellPos(x, y + 1, z));
 					}
 					if (z > 0 && EqualTwoCond(GetLink(x, y, z - 1), PositiveZ, Invalid,
 					                          m.IsSolid(x, y, z - 1))) {
 						SetLink(x, y, z - 1, Marked);
-						queue.Push(CellPos(x, y, z - 1));
+						queue.push_back(CellPos(x, y, z - 1));
 					}
 					if (z < depth - 1 && EqualTwoCond(GetLink(x, y, z + 1), NegativeZ, Invalid,
 					                                  m.IsSolid(x, y, z + 1))) {
 						SetLink(x, y, z + 1, Marked);
-						queue.Push(CellPos(x, y, z + 1));
+						queue.push_back(CellPos(x, y, z + 1));
 					}
 				}
 			}
@@ -273,7 +273,7 @@ namespace spades {
 					SetLink(pos.x, pos.y, pos.z, Invalid);
 			}
 
-			SPAssert(queue.IsEmpty());
+			SPAssert(queue.empty());
 
 			// start relinking
 			for (size_t i = 0; i < unlinkedCells.size(); i++) {
@@ -302,13 +302,13 @@ namespace spades {
 
 				if (newLink != Invalid) {
 					SetLink(x, y, z, newLink);
-					queue.Push(pos);
+					queue.push_back(pos);
 				}
 			}
 
-			while (!queue.IsEmpty()) {
-				CellPos p = queue.Front();
-				queue.Shift();
+			while (!queue.empty()) {
+				CellPos p = queue.front();
+				queue.pop_front();
 
 				int x = p.x, y = p.y, z = p.z;
 				LinkType thisLink = GetLink(x, y, z);
@@ -316,32 +316,32 @@ namespace spades {
 				if (p.x > 0 && m.IsSolid(x - 1, y, z) && GetLink(x - 1, y, z) == Invalid &&
 				    thisLink != NegativeX) {
 					SetLink(x - 1, y, z, PositiveX);
-					queue.Push(CellPos(x - 1, y, z));
+					queue.push_back(CellPos(x - 1, y, z));
 				}
 				if (p.x < width - 1 && m.IsSolid(x + 1, y, z) && GetLink(x + 1, y, z) == Invalid &&
 				    thisLink != PositiveX) {
 					SetLink(x + 1, y, z, NegativeX);
-					queue.Push(CellPos(x + 1, y, z));
+					queue.push_back(CellPos(x + 1, y, z));
 				}
 				if (p.y > 0 && m.IsSolid(x, y - 1, z) && GetLink(x, y - 1, z) == Invalid &&
 				    thisLink != NegativeY) {
 					SetLink(x, y - 1, z, PositiveY);
-					queue.Push(CellPos(x, y - 1, z));
+					queue.push_back(CellPos(x, y - 1, z));
 				}
 				if (p.y < height - 1 && m.IsSolid(x, y + 1, z) && GetLink(x, y + 1, z) == Invalid &&
 				    thisLink != PositiveY) {
 					SetLink(x, y + 1, z, NegativeY);
-					queue.Push(CellPos(x, y + 1, z));
+					queue.push_back(CellPos(x, y + 1, z));
 				}
 				if (p.z > 0 && m.IsSolid(x, y, z - 1) && GetLink(x, y, z - 1) == Invalid &&
 				    thisLink != NegativeZ) {
 					SetLink(x, y, z - 1, PositiveZ);
-					queue.Push(CellPos(x, y, z - 1));
+					queue.push_back(CellPos(x, y, z - 1));
 				}
 				if (p.z < depth - 1 && m.IsSolid(x, y, z + 1) && GetLink(x, y, z + 1) == Invalid &&
 				    thisLink != PositiveZ) {
 					SetLink(x, y, z + 1, NegativeZ);
-					queue.Push(CellPos(x, y, z + 1));
+					queue.push_back(CellPos(x, y, z + 1));
 				}
 			}
 
@@ -359,5 +359,5 @@ namespace spades {
 
 			return floatingBlocks;
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

@@ -33,7 +33,8 @@ namespace spades {
 			int line;
 
 		public:
-			Function(const char *name, const char *File, int line);
+			constexpr Function(const char *name, const char *file, int line)
+			    : name{name}, file{file}, line{line} {}
 
 			const char *GetName() const { return name; }
 			const char *GetFileName() const { return file; }
@@ -43,11 +44,11 @@ namespace spades {
 		class Backtrace;
 
 		class BacktraceEntry {
-			Function *function;
+			Function const *function;
 
 		public:
 			BacktraceEntry() {}
-			BacktraceEntry(Function *f) : function(f) {}
+			BacktraceEntry(Function const *f) : function(f) {}
 
 			const Function &GetFunction() const { return *function; }
 		};
@@ -102,7 +103,8 @@ namespace spades {
 #endif
 
 #define SPADES_MARK_FUNCTION()                                                                     \
-	static ::spades::reflection::Function thisFunction(__PRETTY_FUNCTION__, __FILE__, __LINE__);   \
+	static constexpr ::spades::reflection::Function thisFunction{__PRETTY_FUNCTION__, __FILE__,    \
+	                                                             __LINE__};                        \
 	::spades::reflection::BacktraceEntryAdder backtraceEntryAdder(                                 \
 	  (::spades::reflection::BacktraceEntry(&thisFunction)))
 

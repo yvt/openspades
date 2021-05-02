@@ -43,5 +43,5 @@ namespace spades {
 
 			bool SphereCull(const Vector3 &center, float radius) const;
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

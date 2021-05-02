@@ -21,8 +21,6 @@
 #include <vector>
 #include <cmath>
 
-#include <Core/Debug.h>
-#include <Core/Math.h>
 #include "GLColorCorrectionFilter.h"
 #include "GLProgram.h"
 #include "GLProgramAttribute.h"
@@ -30,24 +28,26 @@
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 #include <Core/Settings.h>
 
 namespace spades {
 	namespace draw {
-		GLColorCorrectionFilter::GLColorCorrectionFilter(GLRenderer *renderer)
-		    : renderer(renderer), settings(renderer->GetSettings()) {
-			lens = renderer->RegisterProgram("Shaders/PostFilters/ColorCorrection.program");
-			gaussProgram = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
+		GLColorCorrectionFilter::GLColorCorrectionFilter(GLRenderer &renderer)
+		    : renderer(renderer), settings(renderer.GetSettings()) {
+			lens = renderer.RegisterProgram("Shaders/PostFilters/ColorCorrection.program");
+			gaussProgram = renderer.RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 		}
 		GLColorBuffer GLColorCorrectionFilter::Filter(GLColorBuffer input, Vector3 tintVal,
 		                                              float fogLuminance) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
-			
+
 			float sharpeningFinalGainValue =
 			  std::max(std::min(settings.r_sharpen.operator float(), 1.0f), 0.0f);
 			GLColorBuffer blurredInput = input;
@@ -64,13 +64,13 @@ namespace spades {
 				blur_unitShift(gaussProgram);
 				blur_textureUniform.SetValue(0);
 
-				dev->ActiveTexture(0);
+				dev.ActiveTexture(0);
 				qr.SetCoordAttributeIndex(blur_positionAttribute());
-				dev->Enable(IGLDevice::Blend, false);
+				dev.Enable(IGLDevice::Blend, false);
 
-				blurredInput = renderer->GetFramebufferManager()->CreateBufferHandle();
-				dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
-				dev->BindFramebuffer(IGLDevice::Framebuffer, blurredInput.GetFramebuffer());
+				blurredInput = renderer.GetFramebufferManager()->CreateBufferHandle();
+				dev.BindTexture(IGLDevice::Texture2D, input.GetTexture());
+				dev.BindFramebuffer(IGLDevice::Framebuffer, blurredInput.GetFramebuffer());
 				blur_unitShift.SetValue(1.0f / (float)input.GetWidth(), 0.f);
 				qr.Draw();
 			}
@@ -101,7 +101,7 @@ namespace spades {
 			sharpeningFinalGain(lens);
 			blurPixelShift(lens);
 
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			lensPosition(lens);
 			lensTexture(lens);
@@ -111,7 +111,7 @@ namespace spades {
 
 			tint.SetValue(tintVal.x, tintVal.y, tintVal.z);
 
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 
 			if (settings.r_hdr) {
 				// when HDR is enabled ACES tone mapping is applied first, so
@@ -201,16 +201,16 @@ namespace spades {
 			// composite to the final image
 
 			qr.SetCoordAttributeIndex(lensPosition());
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D, blurredInput.GetTexture());
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
-			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
-			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D, blurredInput.GetTexture());
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, input.GetTexture());
+			dev.BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
+			dev.Viewport(0, 0, output.GetWidth(), output.GetHeight());
 			qr.Draw();
-			dev->BindTexture(IGLDevice::Texture2D, 0);
+			dev.BindTexture(IGLDevice::Texture2D, 0);
 
 			return output;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

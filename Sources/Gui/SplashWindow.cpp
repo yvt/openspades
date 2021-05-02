@@ -15,7 +15,7 @@
 
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include "SplashWindow.h"
@@ -34,7 +34,7 @@ namespace spades
 
 		spades::MemoryStream stream(reinterpret_cast<const char *>(splashImage),
 									sizeof(splashImage));
-		bmp.Set(spades::Bitmap::Load(&stream), false);
+		bmp = spades::Bitmap::Load(stream);
 
 		SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 		window = SDL_CreateWindow("OpenSpades Splash Window", SDL_WINDOWPOS_CENTERED,

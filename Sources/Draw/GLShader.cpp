@@ -26,22 +26,20 @@
 
 namespace spades {
 	namespace draw {
-		GLShader::GLShader(IGLDevice *dev, Type type) : device(dev), compiled(false) {
+		GLShader::GLShader(IGLDevice &dev, Type type) : device(dev), compiled(false) {
 			SPADES_MARK_FUNCTION();
 
 			switch (type) {
-				case VertexShader: handle = device->CreateShader(IGLDevice::VertexShader); break;
-				case GeometryShader: handle = device->CreateShader(IGLDevice::GeometryShader); break;
-				case FragmentShader:
-					handle = device->CreateShader(IGLDevice::FragmentShader);
-					break;
+				case VertexShader: handle = device.CreateShader(IGLDevice::VertexShader); break;
+				case GeometryShader: handle = device.CreateShader(IGLDevice::GeometryShader); break;
+				case FragmentShader: handle = device.CreateShader(IGLDevice::FragmentShader); break;
 				default: SPInvalidEnum("type", type);
 			}
 		}
 		GLShader::~GLShader() {
 			SPADES_MARK_FUNCTION();
 
-			device->DeleteShader(handle);
+			device.DeleteShader(handle);
 		}
 
 		void GLShader::AddSource(const std::string &src) {
@@ -61,19 +59,19 @@ namespace spades {
 				lens.push_back(static_cast<int>(sources[i].size()));
 			}
 
-			device->ShaderSource(handle, static_cast<IGLDevice::Sizei>(srcs.size()), srcs.data(),
-			                     lens.data());
+			device.ShaderSource(handle, static_cast<IGLDevice::Sizei>(srcs.size()), srcs.data(),
+			                    lens.data());
 
-			device->CompileShader(handle);
+			device.CompileShader(handle);
 
-			if (device->GetShaderInteger(handle, IGLDevice::CompileStatus) == 0) {
+			if (device.GetShaderInteger(handle, IGLDevice::CompileStatus) == 0) {
 				// error
 				std::vector<char> errMsg;
-				errMsg.resize(device->GetShaderInteger(handle, IGLDevice::InfoLogLength) + 1);
+				errMsg.resize(device.GetShaderInteger(handle, IGLDevice::InfoLogLength) + 1);
 
 				IGLDevice::Sizei outLen;
-				device->GetShaderInfoLog(handle, static_cast<IGLDevice::Sizei>(errMsg.size()),
-				                         &outLen, errMsg.data());
+				device.GetShaderInfoLog(handle, static_cast<IGLDevice::Sizei>(errMsg.size()),
+				                        &outLen, errMsg.data());
 				errMsg[outLen] = 0;
 
 				std::string src;
@@ -89,5 +87,5 @@ namespace spades {
 
 			compiled = true;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

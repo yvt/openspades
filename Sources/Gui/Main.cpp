@@ -190,11 +190,12 @@ namespace {
 		       binaryName);
 	}
 
+	std::regex const hostNameRegex{"aos://.*"};
+	std::regex const v075Regex{"(?:v=)?0?\\.?75"};
+	std::regex const v076Regex{"(?:v=)?0?\\.?76"};
+
 	int handleCommandLineArgument(int argc, char **argv, int &i) {
 		if (char *a = argv[i]) {
-			static std::regex hostNameRegex{"aos://.*"};
-			static std::regex v075Regex{"(?:v=)?0?\\.?75"};
-			static std::regex v076Regex{"(?:v=)?0?\\.?76"};
 
 			if (std::regex_match(a, hostNameRegex)) {
 				g_autoconnect = true;
@@ -233,9 +234,10 @@ namespace spades {
 		protected:
 			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                              spades::client::IAudioDevice *audio) override {
-				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				Handle<gui::View> innerView{new spades::client::Client(renderer, audio, addr, fontManager), false};
-				return new spades::gui::ConsoleScreen(renderer, audio, fontManager, std::move(innerView));
+				auto fontManager = Handle<client::FontManager>::New(renderer);
+				auto innerView = Handle<client::Client>::New(renderer, audio, addr, fontManager);
+				return new spades::gui::ConsoleScreen(renderer, audio, fontManager,
+													  std::move(innerView).Cast<gui::View>());
 			}
 
 		public:
@@ -249,9 +251,10 @@ namespace spades {
 		protected:
 			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                              spades::client::IAudioDevice *audio) override {
-				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				Handle<gui::View> innerView{new spades::gui::MainScreen(renderer, audio, fontManager), false};
-				return new spades::gui::ConsoleScreen(renderer, audio, fontManager, std::move(innerView));
+				auto fontManager = Handle<client::FontManager>::New(renderer);
+				auto innerView = Handle<gui::MainScreen>::New(renderer, audio, fontManager);
+				return new spades::gui::ConsoleScreen(renderer, audio, fontManager,
+				                                      std::move(innerView).Cast<gui::View>());
 			}
 
 		public:
@@ -549,12 +552,12 @@ int main(int argc, char **argv) {
 				}
 
 				if (spades::FileManager::FileExists(name.c_str())) {
-					spades::IStream *stream = spades::FileManager::OpenForReading(name.c_str());
-					uLong crc = computeCrc32ForStream(stream);
+					auto stream = spades::FileManager::OpenForReading(name.c_str());
+					uLong crc = computeCrc32ForStream(stream.get());
 
 					stream->SetPosition(0);
 
-					spades::ZipFileSystem *fs = new spades::ZipFileSystem(stream);
+					spades::ZipFileSystem *fs = new spades::ZipFileSystem(stream.release());
 					if (name[0] == '_' && false) { // last resort for #198
 						SPLog("Pak registered: %s: %08lx (marked as 'important')", name.c_str(),
 						      static_cast<unsigned long>(crc));

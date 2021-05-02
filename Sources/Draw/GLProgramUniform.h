@@ -47,5 +47,5 @@ namespace spades {
 			void SetValue(const Matrix4 &, bool transpose = false);
 			bool IsActive() const { return loc != -1; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

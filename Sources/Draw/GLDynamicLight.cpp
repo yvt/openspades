@@ -90,5 +90,5 @@ namespace spades {
 			float maxDistance = radius + param.radius;
 			return (center - param.origin).GetPoweredLength() < maxDistance * maxDistance;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

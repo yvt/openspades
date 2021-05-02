@@ -43,7 +43,7 @@ namespace spades {
 		struct CURLEasyDeleter {
 			void operator()(CURL *ptr) const { curl_easy_cleanup(ptr); }
 		};
-	}
+	} // namespace
 
 	class ServerItem {
 		// NetClient::Connect
@@ -119,7 +119,7 @@ namespace spades {
 			void ProcessResponse() {
 				Json::Reader reader;
 				Json::Value root;
-				std::unique_ptr<MainScreenServerList> resp{new MainScreenServerList()};
+				auto resp = stmp::make_unique<MainScreenServerList>();
 
 				if (reader.parse(buffer, root, false)) {
 					for (Json::Value::iterator it = root.begin(); it != root.end(); ++it) {
@@ -144,8 +144,9 @@ namespace spades {
 				try {
 					std::unique_ptr<CURL, CURLEasyDeleter> cHandle{curl_easy_init()};
 					if (cHandle) {
-						size_t (*curlWriteCallback)(void *, size_t, size_t, ServerListQuery *) = [](
-						  void *ptr, size_t size, size_t nmemb, ServerListQuery *self) -> size_t {
+						size_t (*curlWriteCallback)(void *, size_t, size_t, ServerListQuery *) =
+						  [](void *ptr, size_t size, size_t nmemb,
+						     ServerListQuery *self) -> size_t {
 							size_t numBytes = size * nmemb;
 							self->buffer.append(reinterpret_cast<char *>(ptr), numBytes);
 							return numBytes;
@@ -163,11 +164,11 @@ namespace spades {
 						SPRaise("Failed to create cURL object.");
 					}
 				} catch (std::exception &ex) {
-					std::unique_ptr<MainScreenServerList> lst{new MainScreenServerList()};
+					auto lst = stmp::make_unique<MainScreenServerList>();
 					lst->message = ex.what();
 					ReturnResult(std::move(lst));
 				} catch (...) {
-					std::unique_ptr<MainScreenServerList> lst{new MainScreenServerList()};
+					auto lst = stmp::make_unique<MainScreenServerList>();
 					lst->message = "Unknown error.";
 					ReturnResult(std::move(lst));
 				}
@@ -213,7 +214,7 @@ namespace spades {
 			Json::StyledWriter writer;
 			Json::Value v(Json::ValueType::arrayValue);
 
-			IStream *fobj = spades::FileManager::OpenForWriting(FAVORITE_PATH);
+			auto fobj = spades::FileManager::OpenForWriting(FAVORITE_PATH);
 			for (const auto &favorite : favorites) {
 				v.append(Json::Value(favorite));
 			}
@@ -230,9 +231,10 @@ namespace spades {
 			}
 
 			if (result && !result->list.empty()) {
-				auto entry = std::find_if(
-				  result->list.begin(), result->list.end(),
-				  [&](MainScreenServerItem *entry) { return entry->GetAddress() == ip; });
+				auto entry = std::find_if(result->list.begin(), result->list.end(),
+				                          [&](const Handle<MainScreenServerItem> &entry) {
+					                          return entry->GetAddress() == ip;
+				                          });
 				if (entry != result->list.end()) {
 					(*entry)->SetFavorite(favorite);
 				}
@@ -409,5 +411,5 @@ namespace spades {
 		}
 
 		MainScreenServerItem::~MainScreenServerItem() { SPADES_MARK_FUNCTION(); }
-	}
-}
+	} // namespace gui
+} // namespace spades

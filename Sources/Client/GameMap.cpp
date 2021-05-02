@@ -62,7 +62,7 @@ namespace spades {
 			}
 		}
 
-		bool GameMap::IsSurface(int x, int y, int z) {
+		bool GameMap::IsSurface(int x, int y, int z) const {
 			if (!IsSolid(x, y, z))
 				return false;
 			if (z == 0)
@@ -159,7 +159,7 @@ namespace spades {
 			stream->Write(buffer.data(), buffer.size());
 		}
 
-		bool GameMap::ClipBox(int x, int y, int z) {
+		bool GameMap::ClipBox(int x, int y, int z) const {
 			int sz;
 
 			if (x < 0 || x >= 512 || y < 0 || y >= 512)
@@ -174,7 +174,7 @@ namespace spades {
 			return IsSolid((int)x, (int)y, sz);
 		}
 
-		bool GameMap::ClipWorld(int x, int y, int z) {
+		bool GameMap::ClipWorld(int x, int y, int z) const {
 			int sz;
 
 			if (x < 0 || x >= 512 || y < 0 || y >= 512)
@@ -191,14 +191,14 @@ namespace spades {
 			return IsSolid((int)x, (int)y, sz);
 		}
 
-		bool GameMap::ClipBox(float x, float y, float z) {
+		bool GameMap::ClipBox(float x, float y, float z) const {
 			SPAssert(!std::isnan(x));
 			SPAssert(!std::isnan(y));
 			SPAssert(!std::isnan(z));
 			return ClipBox((int)floorf(x), (int)floorf(y), (int)floorf(z));
 		}
 
-		bool GameMap::ClipWorld(float x, float y, float z) {
+		bool GameMap::ClipWorld(float x, float y, float z) const {
 			SPAssert(!std::isnan(x));
 			SPAssert(!std::isnan(y));
 			SPAssert(!std::isnan(z));
@@ -206,7 +206,7 @@ namespace spades {
 		}
 
 		bool GameMap::CastRay(spades::Vector3 v0, spades::Vector3 v1, float length,
-		                      spades::IntVector3 &vOut) {
+		                      spades::IntVector3 &vOut) const {
 			SPADES_MARK_FUNCTION_DEBUG();
 
 			SPAssert(!std::isnan(v0.x));
@@ -359,7 +359,7 @@ namespace spades {
 		}
 
 		GameMap::RayCastResult GameMap::CastRay2(spades::Vector3 v0, spades::Vector3 dir,
-		                                         int maxSteps) {
+		                                         int maxSteps) const {
 			SPADES_MARK_FUNCTION_DEBUG();
 			GameMap::RayCastResult result;
 
@@ -523,7 +523,7 @@ namespace spades {
 
 			size_t pos = 0;
 
-			Handle<GameMap> map{new GameMap(), false};
+			auto map = Handle<GameMap>::New();
 
 			if (onProgress) {
 				onProgress(0);
@@ -592,7 +592,7 @@ namespace spades {
 				}
 			}
 
-			return map.Unmanage();
+			return std::move(map).Unmanage();
 		}
 	} // namespace client
 } // namespace spades

@@ -31,13 +31,15 @@
 namespace spades {
 	namespace client {
 		namespace {
+			std::regex const g_fontNameRe(".*\\.(?:otf|ttf|ttc)", std::regex::icase);
+
 			struct GlobalFontInfo {
-				Handle<ngclient::FTFontSet> guiFontSet;
+				std::shared_ptr<ngclient::FTFontSet> guiFontSet;
 
 				GlobalFontInfo() {
 					SPLog("Loading built-in fonts");
 
-					guiFontSet.Set(new ngclient::FTFontSet(), false);
+					guiFontSet = std::make_shared<ngclient::FTFontSet>();
 
 					if (FileManager::FileExists("Gfx/Fonts/AlteDIN1451.ttf")) {
 						guiFontSet->AddFace("Gfx/Fonts/AlteDIN1451.ttf");
@@ -48,9 +50,8 @@ namespace spades {
 
 					// Preliminary custom font support
 					auto files = FileManager::EnumFiles("Fonts");
-					static std::regex re(".*\\.(?:otf|ttf|ttc)", std::regex::icase);
 					for (const auto &name : files) {
-						if (!std::regex_match(name, re)) {
+						if (!std::regex_match(name, g_fontNameRe)) {
 							continue;
 						}
 						SPLog("Loading custom font '%s'", name.c_str());
@@ -65,31 +66,32 @@ namespace spades {
 					return instance;
 				}
 			};
-		}
+		} // namespace
 
 		FontManager::FontManager(IRenderer *renderer) {
 			{
-				auto *font =
-				  new Quake3Font(renderer, renderer->RegisterImage("Gfx/Fonts/SquareFontBig.png"),
-				                 (const int *)SquareFontBigMap, 48, 8, true);
+				auto font = Handle<Quake3Font>::New(
+				  renderer,
+				  renderer->RegisterImage("Gfx/Fonts/SquareFontBig.png").GetPointerOrNull(),
+				  (const int *)SquareFontBigMap, 48, 8.f, true);
 				font->SetGlyphYRange(11.f, 37.f);
 				SPLog("Font 'SquareFont (Large)' Loaded");
-				squareDesignFont.Set(font, false);
+				squareDesignFont = std::move(font).Cast<IFont>();
 			}
-			largeFont.Set(
-			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 34.f, 48.f),
-			  false);
-			mediumFont.Set(
-				new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 24.f, 32.f),
-				false);
-			headingFont.Set(
-			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 20.f, 26.f),
-			  false);
-			guiFont.Set(
-			  new ngclient::FTFont(renderer, GlobalFontInfo::GetInstance().guiFontSet, 16.f, 20.f),
-			  false);
+			largeFont = Handle<ngclient::FTFont>::New(
+			              renderer, GlobalFontInfo::GetInstance().guiFontSet, 34.f, 48.f)
+			              .Cast<IFont>();
+			mediumFont = Handle<ngclient::FTFont>::New(
+			               renderer, GlobalFontInfo::GetInstance().guiFontSet, 24.f, 32.f)
+			               .Cast<IFont>();
+			headingFont = Handle<ngclient::FTFont>::New(
+			                renderer, GlobalFontInfo::GetInstance().guiFontSet, 20.f, 26.f)
+			                .Cast<IFont>();
+			guiFont = Handle<ngclient::FTFont>::New(
+			            renderer, GlobalFontInfo::GetInstance().guiFontSet, 16.f, 20.f)
+			            .Cast<IFont>();
 		}
 
 		FontManager::~FontManager() {}
-	}
-}
+	} // namespace client
+} // namespace spades

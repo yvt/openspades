@@ -26,24 +26,16 @@ namespace spades{
 
 		class FontManagerRegistrar : public ScriptObjectRegistrar {
 			static IFont *GetGuiFont(FontManager *self) {
-				IFont *font = self->GetGuiFont();
-				font->AddRef();
-				return font;
+				return Handle<IFont>{self->GetGuiFont()}.Unmanage();
 			}
 			static IFont *GetHeadingFont(FontManager *self) {
-				IFont *font = self->GetHeadingFont();
-				font->AddRef();
-				return font;
+				return Handle<IFont>{self->GetHeadingFont()}.Unmanage();
 			}
 			static IFont *GetLargeFont(FontManager *self) {
-				IFont *font = self->GetLargeFont();
-				font->AddRef();
-				return font;
+				return Handle<IFont>{self->GetLargeFont()}.Unmanage();
 			}
 			static IFont *GetSquareDesignFont(FontManager *self) {
-				IFont *font = self->GetSquareDesignFont();
-				font->AddRef();
-				return font;
+				return Handle<IFont>{self->GetSquareDesignFont()}.Unmanage();
 			}
 
 		public:

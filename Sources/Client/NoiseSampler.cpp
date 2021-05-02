@@ -79,5 +79,5 @@ namespace spades {
 			// Create and evaluate a polynomial with given derivatives
 			return (d1 * (1.f - fracCoord) - d2 * fracCoord) * fracCoord * (1.f - fracCoord);
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

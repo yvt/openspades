@@ -33,13 +33,13 @@ namespace spades {
 			SWFeatureLevel level;
 
 			template <SWFeatureLevel>
-			void RenderInner(SWModel *model, const client::ModelRenderParam &param);
+			void RenderInner(SWModel &model, const client::ModelRenderParam &param);
 
 		public:
 			SWModelRenderer(SWRenderer *, SWFeatureLevel level);
 			~SWModelRenderer();
 
-			void Render(SWModel *model, const client::ModelRenderParam &param);
+			void Render(SWModel &model, const client::ModelRenderParam &param);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -42,7 +42,7 @@ namespace spades {
 			~SWImage();
 
 		public:
-			SWImage(Bitmap *bmp);
+			SWImage(Bitmap &bmp);
 			SWImage(int w, int h);
 
 			uint32_t *GetRawBitmap() { return bmp.data(); }
@@ -60,16 +60,16 @@ namespace spades {
 		};
 
 		class SWImageManager {
-			std::unordered_map<std::string, SWImage *> images;
+			std::unordered_map<std::string, Handle<SWImage>> images;
 
 		public:
 			SWImageManager() {}
 			~SWImageManager();
 
-			SWImage *RegisterImage(const std::string &);
-			SWImage *CreateImage(Bitmap *);
+			Handle<SWImage> RegisterImage(const std::string &);
+			Handle<SWImage> CreateImage(Bitmap &);
 
 			void ClearCache();
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -23,5 +23,5 @@
 namespace spades {
 	namespace draw {
 		GLModel::GLModel() { renderId = -1; }
-	}
-}
+	} // namespace draw
+} // namespace spades

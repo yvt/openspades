@@ -34,7 +34,7 @@ namespace spades {
 		class IImage;
 		class MapView {
 			Client *client;
-			IRenderer *renderer;
+			IRenderer &renderer;
 
 			int scaleMode;
 			float actualScale;
@@ -50,7 +50,7 @@ namespace spades {
 
 			Vector2 Project(const Vector2 &) const;
 
-			void DrawIcon(Vector3 pos, IImage *img, float rotation);
+			void DrawIcon(Vector3 pos, IImage &img, float rotation);
 
 		public:
 			MapView(Client *, bool largeMap);
@@ -79,5 +79,5 @@ namespace spades {
 
 			stmp::optional<std::pair<Vector3, Vector3>> GetLineSegment();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

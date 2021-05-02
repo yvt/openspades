@@ -55,7 +55,8 @@ namespace spades {
 			~MainScreen();
 
 		public:
-			MainScreen(client::IRenderer *, client::IAudioDevice *, client::FontManager *);
+			MainScreen(Handle<client::IRenderer>, Handle<client::IAudioDevice>,
+			           Handle<client::FontManager>);
 
 			client::IRenderer *GetRenderer() { return &*renderer; }
 			client::IAudioDevice *GetAudioDevice() { return &*audioDevice; }

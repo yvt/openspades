@@ -23,7 +23,8 @@ namespace spades {
 	namespace gui {
 		Handle<ConsoleCommandCandidateIterator>
 		View::AutocompleteCommandName(const std::string &name) {
-			return {new EmptyIterator<const ConsoleCommandCandidate &>(), false};
+			return Handle<EmptyIterator<const ConsoleCommandCandidate &>>::New()
+			  .Cast<ConsoleCommandCandidateIterator>();
 		}
 	} // namespace gui
 } // namespace spades

@@ -27,7 +27,7 @@
 namespace spades {
 	namespace draw {
 		class GLShader {
-			IGLDevice *device;
+			IGLDevice &device;
 			IGLDevice::UInteger handle;
 			std::vector<std::string> sources;
 			bool compiled;
@@ -35,7 +35,7 @@ namespace spades {
 		public:
 			enum Type { VertexShader, FragmentShader, GeometryShader };
 
-			GLShader(IGLDevice *, Type);
+			GLShader(IGLDevice &, Type);
 			~GLShader();
 
 			void AddSource(const std::string &);
@@ -45,7 +45,7 @@ namespace spades {
 
 			bool IsCompiled() const { return compiled; }
 
-			IGLDevice *GetDevice() const { return device; }
+			IGLDevice &GetDevice() const { return device; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

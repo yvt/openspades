@@ -36,7 +36,7 @@
 namespace spades {
 	namespace client {
 
-		Player::Player(World *w, int playerId, WeaponType wType, int teamId, Vector3 position,
+		Player::Player(World &w, int playerId, WeaponType wType, int teamId, Vector3 position,
 		               IntVector3 color)
 		    : world(w) {
 			SPADES_MARK_FUNCTION();
@@ -57,7 +57,7 @@ namespace spades {
 			moveSteps = 0;
 
 			this->playerId = playerId;
-			this->weapon = Weapon::CreateWeapon(wType, this, *w->GetGameProperties());
+			this->weapon.reset(Weapon::CreateWeapon(wType, *this, *w.GetGameProperties()));
 			this->weaponType = wType;
 			this->teamId = teamId;
 			this->weapon->Reset();
@@ -86,16 +86,9 @@ namespace spades {
 			canPending = false;
 		}
 
-		Player::~Player() {
-			SPADES_MARK_FUNCTION();
-			delete weapon;
-		}
+		Player::~Player() { SPADES_MARK_FUNCTION(); }
 
-		bool Player::IsLocalPlayer() {
-			if (!world)
-				return false;
-			return world->GetLocalPlayer() == this;
-		}
+		bool Player::IsLocalPlayer() { return world.GetLocalPlayer() == this; }
 
 		void Player::SetInput(PlayerInput newInput) {
 			SPADES_MARK_FUNCTION();
@@ -114,7 +107,7 @@ namespace spades {
 
 		void Player::SetWeaponInput(WeaponInput newInput) {
 			SPADES_MARK_FUNCTION();
-			auto *listener = GetWorld()->GetListener();
+			auto *listener = GetWorld().GetListener();
 
 			if (!IsAlive())
 				return;
@@ -129,12 +122,12 @@ namespace spades {
 					newInput.primary = false;
 				if (newInput.secondary != weapInput.secondary) {
 					if (newInput.secondary) {
-						nextDigTime = world->GetTime() + 1.f;
+						nextDigTime = world.GetTime() + 1.f;
 						firstDig = true;
 					}
 				}
 			} else if (tool == ToolGrenade) {
-				if (world->GetTime() < nextGrenadeTime) {
+				if (world.GetTime() < nextGrenadeTime) {
 					newInput.primary = false;
 				}
 				if (grenades == 0) {
@@ -147,13 +140,13 @@ namespace spades {
 				if (newInput.primary != weapInput.primary) {
 					if (!newInput.primary) {
 						if (holdingGrenade) {
-							nextGrenadeTime = world->GetTime() + .5f;
+							nextGrenadeTime = world.GetTime() + .5f;
 							ThrowGrenade();
 						}
 					} else {
 						holdingGrenade = true;
-						grenadeTime = world->GetTime();
-						if (listener && this == world->GetLocalPlayer())
+						grenadeTime = world.GetTime();
+						if (listener && this == world.GetLocalPlayer())
 							// playing other's grenade sound
 							// is cheating
 							listener->LocalPlayerPulledGrenadePin();
@@ -163,12 +156,12 @@ namespace spades {
 				// work-around for bug that placing block
 				// occasionally becomes impossible
 				if (nextBlockTime >
-				    world->GetTime() + std::max(GetToolPrimaryDelay(), GetToolSecondaryDelay())) {
+				    world.GetTime() + std::max(GetToolPrimaryDelay(), GetToolSecondaryDelay())) {
 					nextBlockTime =
-					  world->GetTime() + std::max(GetToolPrimaryDelay(), GetToolSecondaryDelay());
+					  world.GetTime() + std::max(GetToolPrimaryDelay(), GetToolSecondaryDelay());
 				}
 
-				if (world->GetTime() < nextBlockTime) {
+				if (world.GetTime() < nextBlockTime) {
 					newInput.primary = false;
 					newInput.secondary = false;
 				}
@@ -181,7 +174,7 @@ namespace spades {
 							blockCursorDragPos = blockCursorPos;
 						} else {
 							// cannot build; invalid position.
-							if (listener && this == world->GetLocalPlayer()) {
+							if (listener && this == world.GetLocalPlayer()) {
 								listener->LocalPlayerBuildError(
 								  BuildFailureReason::InvalidPosition);
 							}
@@ -190,23 +183,23 @@ namespace spades {
 						if (IsBlockCursorDragging()) {
 							if (IsBlockCursorActive()) {
 								std::vector<IntVector3> blocks =
-								  GetWorld()->CubeLine(blockCursorDragPos, blockCursorPos, 256);
+								  GetWorld().CubeLine(blockCursorDragPos, blockCursorPos, 256);
 								if ((int)blocks.size() <= blockStocks) {
-									if (listener && this == world->GetLocalPlayer())
+									if (listener && this == world.GetLocalPlayer())
 										listener->LocalPlayerCreatedLineBlock(blockCursorDragPos,
 										                                      blockCursorPos);
 									// blockStocks -= blocks.size(); decrease when created
 								} else {
 									// cannot build; insufficient blocks.
-									if (listener && this == world->GetLocalPlayer()) {
+									if (listener && this == world.GetLocalPlayer()) {
 										listener->LocalPlayerBuildError(
 										  BuildFailureReason::InsufficientBlocks);
 									}
 								}
-								nextBlockTime = world->GetTime() + GetToolSecondaryDelay();
+								nextBlockTime = world.GetTime() + GetToolSecondaryDelay();
 							} else {
 								// cannot build; invalid position.
-								if (listener && this == world->GetLocalPlayer()) {
+								if (listener && this == world.GetLocalPlayer()) {
 									listener->LocalPlayerBuildError(
 									  BuildFailureReason::InvalidPosition);
 								}
@@ -223,15 +216,15 @@ namespace spades {
 						if (!weapInput.primary)
 							lastSingleBlockBuildSeqDone = false;
 						if (IsBlockCursorActive() && blockStocks > 0) {
-							if (listener && this == world->GetLocalPlayer())
+							if (listener && this == world.GetLocalPlayer())
 								listener->LocalPlayerBlockAction(blockCursorPos, BlockActionCreate);
 
 							lastSingleBlockBuildSeqDone = true;
 							// blockStocks--; decrease when created
 
-							nextBlockTime = world->GetTime() + GetToolPrimaryDelay();
+							nextBlockTime = world.GetTime() + GetToolPrimaryDelay();
 						} else if (blockStocks > 0 && airborne && canPending &&
-						           this == world->GetLocalPlayer()) {
+						           this == world.GetLocalPlayer()) {
 							pendingPlaceBlock = true;
 							pendingPlaceBlockPos = blockCursorPos;
 						} else if (!IsBlockCursorActive()) {
@@ -243,7 +236,7 @@ namespace spades {
 					} else {
 						if (!lastSingleBlockBuildSeqDone) {
 							// cannot build; invalid position.
-							if (listener && this == world->GetLocalPlayer()) {
+							if (listener && this == world.GetLocalPlayer()) {
 								listener->LocalPlayerBuildError(
 								  BuildFailureReason::InvalidPosition);
 							}
@@ -274,7 +267,7 @@ namespace spades {
 				return;
 			}
 			weapon->Reload();
-			if (this == world->GetLocalPlayer() && weapon->IsReloading())
+			if (this == world.GetLocalPlayer() && weapon->IsReloading())
 				reloadingServerSide = true;
 		}
 
@@ -295,8 +288,8 @@ namespace spades {
 			pendingRestockBlock = true;
 			health = 100;
 
-			if (world->GetListener())
-				world->GetListener()->PlayerRestocked(this);
+			if (world.GetListener())
+				world.GetListener()->PlayerRestocked(*this);
 		}
 
 		void Player::GotBlock() {
@@ -321,8 +314,8 @@ namespace spades {
 
 			weapon->AbortReload();
 
-			if (world->GetListener())
-				world->GetListener()->PlayerChangedTool(this);
+			if (world.GetListener())
+				world.GetListener()->PlayerChangedTool(*this);
 		}
 
 		void Player::SetHeldBlockColor(spades::IntVector3 col) { blockColor = col; }
@@ -369,16 +362,16 @@ namespace spades {
 
 		void Player::SetHP(int hp, HurtType type, spades::Vector3 p) {
 			health = hp;
-			if (this == world->GetLocalPlayer()) {
-				if (world->GetListener())
-					world->GetListener()->LocalPlayerHurt(
-					  type, p.x != 0.f || p.y != 0.f || p.z != 0.f, p);
+			if (this == world.GetLocalPlayer()) {
+				if (world.GetListener())
+					world.GetListener()->LocalPlayerHurt(type,
+					                                     p.x != 0.f || p.y != 0.f || p.z != 0.f, p);
 			}
 		}
 
 		void Player::Update(float dt) {
 			SPADES_MARK_FUNCTION();
-			auto *listener = world->GetListener();
+			auto *listener = world.GetListener();
 
 			MovePlayer(dt);
 
@@ -389,20 +382,22 @@ namespace spades {
 
 			if (tool == ToolSpade) {
 				if (weapInput.primary) {
-					if (world->GetTime() > nextSpadeTime) {
+					if (world.GetTime() > nextSpadeTime) {
 						UseSpade();
-						nextSpadeTime = world->GetTime() + GetToolPrimaryDelay();
+						nextSpadeTime = world.GetTime() + GetToolPrimaryDelay();
 					}
 				} else if (weapInput.secondary) {
-					if (world->GetTime() > nextDigTime) {
+					if (world.GetTime() > nextDigTime) {
 						DigWithSpade();
-						nextDigTime = world->GetTime() + GetToolSecondaryDelay();
+						nextDigTime = world.GetTime() + GetToolSecondaryDelay();
 						firstDig = false;
 					}
 				}
 			} else if (tool == ToolBlock && IsLocalPlayer()) {
 				GameMap::RayCastResult result;
-				auto *map = GetWorld()->GetMap();
+				Handle<GameMap> map = GetWorld().GetMap();
+				SPAssert(map);
+
 				result = map->CastRay2(GetEye(), GetFront(), 12);
 				canPending = false;
 
@@ -418,7 +413,7 @@ namespace spades {
 						// still okay
 					} else {
 						// cannot build; floating
-						if (listener && this == world->GetLocalPlayer()) {
+						if (listener && this == world.GetLocalPlayer()) {
 							listener->LocalPlayerBuildError(BuildFailureReason::InvalidPosition);
 						}
 						blockCursorDragging = false;
@@ -428,8 +423,7 @@ namespace spades {
 				if (result.hit && (result.hitBlock + result.normal).z < 62 &&
 				    (!OverlapsWithOneBlock(result.hitBlock + result.normal)) &&
 				    BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f &&
-				    (result.hitBlock + result.normal).z >= 0 &&
-				    !pendingPlaceBlock) {
+				    (result.hitBlock + result.normal).z >= 0 && !pendingPlaceBlock) {
 
 					// Building is possible, and there's no delayed block placement.
 					blockCursorActive = true;
@@ -452,17 +446,17 @@ namespace spades {
 					} else if ((!OverlapsWithOneBlock(pendingPlaceBlockPos)) &&
 					           BoxDistanceToBlock(pendingPlaceBlockPos) < 3.f) {
 						// now building became possible.
-						SPAssert(this == world->GetLocalPlayer());
+						SPAssert(this == world.GetLocalPlayer());
 
-						if (GetWorld()->GetListener())
-							GetWorld()->GetListener()->LocalPlayerBlockAction(pendingPlaceBlockPos,
-							                                                  BlockActionCreate);
+						if (GetWorld().GetListener())
+							GetWorld().GetListener()->LocalPlayerBlockAction(pendingPlaceBlockPos,
+							                                                 BlockActionCreate);
 
 						pendingPlaceBlock = false;
 						lastSingleBlockBuildSeqDone = true;
 						// blockStocks--; decrease when created
 
-						nextBlockTime = world->GetTime() + GetToolPrimaryDelay();
+						nextBlockTime = world.GetTime() + GetToolPrimaryDelay();
 					}
 
 				} else {
@@ -476,11 +470,11 @@ namespace spades {
 					int dist = 11;
 					for (; dist >= 1 && BoxDistanceToBlock(result.hitBlock + result.normal) > 3.f;
 					     dist--) {
-						result = GetWorld()->GetMap()->CastRay2(GetEye(), GetFront(), dist);
+						result = GetWorld().GetMap()->CastRay2(GetEye(), GetFront(), dist);
 					}
 					for (; dist < 12 && BoxDistanceToBlock(result.hitBlock + result.normal) < 3.f;
 					     dist++) {
-						result = GetWorld()->GetMap()->CastRay2(GetEye(), GetFront(), dist);
+						result = GetWorld().GetMap()->CastRay2(GetEye(), GetFront(), dist);
 					}
 
 					blockCursorPos = result.hitBlock + result.normal;
@@ -489,7 +483,7 @@ namespace spades {
 			} else if (tool == ToolWeapon) {
 			} else if (tool == ToolGrenade) {
 				if (holdingGrenade) {
-					if (world->GetTime() - grenadeTime > 2.9f) {
+					if (world.GetTime() - grenadeTime > 2.9f) {
 						ThrowGrenade();
 					}
 				}
@@ -502,11 +496,11 @@ namespace spades {
 			}
 
 			if (weapon->IsReloading()) {
-				lastReloadingTime = world->GetTime();
+				lastReloadingTime = world.GetTime();
 			} else if (reloadingServerSide) {
 				// for some reason a server didn't return
 				// WeaponReload packet.
-				if (world->GetTime() + lastReloadingTime + .8f) {
+				if (world.GetTime() + lastReloadingTime + .8f) {
 					reloadingServerSide = false;
 					weapon->ForceReloadDone();
 				}
@@ -554,7 +548,9 @@ namespace spades {
 
 			int pellets = weapon->GetPelletSize();
 			float spread = weapon->GetSpread();
-			GameMap *map = world->GetMap();
+			Handle<GameMap> map = world.GetMap();
+
+			SPAssert(map);
 
 			if (!weapInput.secondary) {
 				spread *= 2;
@@ -563,6 +559,9 @@ namespace spades {
 			// pyspades takes destroying more than one block as a
 			// speed hack (shotgun does this)
 			bool blockDestroyed = false;
+
+			// The custom state data, optionally set by `BulletHitPlayer`'s implementation
+			std::unique_ptr<IBulletHitScanState> stateCell;
 
 			Vector3 dir2 = GetFront();
 			for (int i = 0; i < pellets; i++) {
@@ -579,27 +578,31 @@ namespace spades {
 				GameMap::RayCastResult mapResult;
 				mapResult = map->CastRay2(muzzle, dir, 500);
 
-				Player *hitPlayer = NULL;
+				stmp::optional<Player &> hitPlayer;
 				float hitPlayerDistance = 0.f; // disregarding Z coordinate
 				float hitPlayerActualDistance = 0.f;
 				HitBodyPart hitPart = HitBodyPart::None;
 
-				for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
-					Player *other = world->GetPlayer(i);
-					if (other == this || other == NULL)
-						continue;
-					if (other == this || !other->IsAlive() || other->GetTeamId() >= 2)
-						continue;
-					// quickly reject players unlikely to be hit
-					if (!other->RayCastApprox(muzzle, dir))
+				for (int i = 0; i < world.GetNumPlayerSlots(); i++) {
+					// TODO: This is a repeated pattern, add something like
+					//       `World::GetExistingPlayerRange()` returning a range
+					auto maybeOther = world.GetPlayer(i);
+					if (maybeOther == this || !maybeOther)
 						continue;
 
-					HitBoxes hb = other->GetHitBoxes();
+					Player &other = maybeOther.value();
+					if (!other.IsAlive() || other.GetTeamId() >= 2)
+						continue;
+					// quickly reject players unlikely to be hit
+					if (!other.RayCastApprox(muzzle, dir))
+						continue;
+
+					HitBoxes hb = other.GetHitBoxes();
 					Vector3 hitPos;
 
 					if (hb.head.RayCast(muzzle, dir, &hitPos)) {
 						float dist = GetHorizontalLength(hitPos - muzzle);
-						if (hitPlayer == NULL || dist < hitPlayerDistance) {
+						if (!hitPlayer || dist < hitPlayerDistance) {
 							hitPlayer = other;
 							hitPlayerDistance = dist;
 							hitPlayerActualDistance = (hitPos - muzzle).GetLength();
@@ -608,7 +611,7 @@ namespace spades {
 					}
 					if (hb.torso.RayCast(muzzle, dir, &hitPos)) {
 						float dist = GetHorizontalLength(hitPos - muzzle);
-						if (hitPlayer == NULL || dist < hitPlayerDistance) {
+						if (!hitPlayer || dist < hitPlayerDistance) {
 							hitPlayer = other;
 							hitPlayerDistance = dist;
 							hitPlayerActualDistance = (hitPos - muzzle).GetLength();
@@ -618,7 +621,7 @@ namespace spades {
 					for (int j = 0; j < 3; j++) {
 						if (hb.limbs[j].RayCast(muzzle, dir, &hitPos)) {
 							float dist = GetHorizontalLength(hitPos - muzzle);
-							if (hitPlayer == NULL || dist < hitPlayerDistance) {
+							if (!hitPlayer || dist < hitPlayerDistance) {
 								hitPlayer = other;
 								hitPlayerDistance = dist;
 								hitPlayerActualDistance = (hitPos - muzzle).GetLength();
@@ -635,13 +638,13 @@ namespace spades {
 				Vector3 finalHitPos;
 				finalHitPos = muzzle + dir * 128.f;
 
-				if (hitPlayer == nullptr && !mapResult.hit) {
+				if (!hitPlayer && !mapResult.hit) {
 					// might hit water surface.
 				}
 
-				float hLength = GetHorizontalLength(mapResult.hitPos - muzzle);
-				if (mapResult.hit && hLength < 128.f &&
-				    (hitPlayer == NULL || hLength < hitPlayerDistance)) {
+				if (mapResult.hit && GetHorizontalLength(mapResult.hitPos - muzzle) < 128.f &&
+				    (!hitPlayer ||
+				     GetHorizontalLength(mapResult.hitPos - muzzle) < hitPlayerDistance)) {
 					IntVector3 outBlockCoord = mapResult.hitBlock;
 					// TODO: set correct ray distance
 
@@ -651,13 +654,13 @@ namespace spades {
 					    outBlockCoord.x < map->Width() && outBlockCoord.y < map->Height() &&
 					    outBlockCoord.z < map->Depth()) {
 						if (outBlockCoord.z == 63) {
-							if (world->GetListener())
-								world->GetListener()->BulletHitBlock(
+							if (world.GetListener())
+								world.GetListener()->BulletHitBlock(
 								  mapResult.hitPos, mapResult.hitBlock, mapResult.normal);
 						} else if (outBlockCoord.z == 62) {
 							// blocks at this level cannot be damaged
-							if (world->GetListener())
-								world->GetListener()->BulletHitBlock(
+							if (world.GetListener())
+								world.GetListener()->BulletHitBlock(
 								  mapResult.hitPos, mapResult.hitBlock, mapResult.normal);
 						} else {
 							int x = outBlockCoord.x;
@@ -675,22 +678,22 @@ namespace spades {
 								health = 0;
 								blockDestroyed = true;
 								// send destroy cmd
-								if (world->GetListener() && world->GetLocalPlayer() == this)
-									world->GetListener()->LocalPlayerBlockAction(outBlockCoord,
-									                                             BlockActionTool);
+								if (world.GetListener() && world.GetLocalPlayer() == this)
+									world.GetListener()->LocalPlayerBlockAction(outBlockCoord,
+									                                            BlockActionTool);
 							}
 							color = (color & 0xffffff) | ((uint32_t)health << 24);
 							if (map->IsSolid(x, y, z))
 								map->Set(x, y, z, true, color);
 
-							world->MarkBlockForRegeneration(outBlockCoord);
+							world.MarkBlockForRegeneration(outBlockCoord);
 
-							if (world->GetListener())
-								world->GetListener()->BulletHitBlock(
+							if (world.GetListener())
+								world.GetListener()->BulletHitBlock(
 								  mapResult.hitPos, mapResult.hitBlock, mapResult.normal);
 						}
 					}
-				} else if (hitPlayer != NULL) {
+				} else if (hitPlayer) {
 					if (hitPlayerDistance < 128.f) {
 
 						finalHitPos = muzzle + dir * hitPlayerActualDistance;
@@ -714,28 +717,24 @@ namespace spades {
 							case HitBodyPart::None: SPAssert(false); break;
 						}
 
-						if (world->GetListener()) {
+						if (world.GetListener()) {
 							switch (hitPart) {
 								case HitBodyPart::Head:
-									world->GetListener()->BulletHitPlayer(
-									  hitPlayer, HitTypeHead, finalHitPos,
-									  this);
+									world.GetListener()->BulletHitPlayer(
+									  *hitPlayer, HitTypeHead, finalHitPos, *this, stateCell);
 									break;
 								case HitBodyPart::Torso:
-									world->GetListener()->BulletHitPlayer(
-									  hitPlayer, HitTypeTorso, finalHitPos,
-									  this);
+									world.GetListener()->BulletHitPlayer(
+									  *hitPlayer, HitTypeTorso, finalHitPos, *this, stateCell);
 									break;
 								case HitBodyPart::Limb1:
 								case HitBodyPart::Limb2:
-									world->GetListener()->BulletHitPlayer(
-									  hitPlayer, HitTypeLegs, finalHitPos,
-									  this);
+									world.GetListener()->BulletHitPlayer(
+									  *hitPlayer, HitTypeLegs, finalHitPos, *this, stateCell);
 									break;
 								case HitBodyPart::Arms:
-									world->GetListener()->BulletHitPlayer(
-									  hitPlayer, HitTypeArms, finalHitPos,
-									  this);
+									world.GetListener()->BulletHitPlayer(
+									  *hitPlayer, HitTypeArms, finalHitPos, *this, stateCell);
 									break;
 								case HitBodyPart::None: SPAssert(false); break;
 							}
@@ -743,14 +742,14 @@ namespace spades {
 					}
 				}
 
-				if (world->GetListener() && this != world->GetLocalPlayer())
-					world->GetListener()->AddBulletTracer(this, muzzle, finalHitPos);
+				if (world.GetListener() && this != world.GetLocalPlayer())
+					world.GetListener()->AddBulletTracer(*this, muzzle, finalHitPos);
 
 				// one pellet done
 			}
 
 			// do hit test debugging
-			auto *debugger = world->GetHitTestDebugger();
+			auto *debugger = world.GetHitTestDebugger();
 			if (debugger && IsLocalPlayer()) {
 				debugger->SaveImage(playerHits, bulletVectors);
 			}
@@ -762,7 +761,7 @@ namespace spades {
 			upLimit -= 0.03f; // ???
 
 			// vanilla's horizontial recoil is driven by a triangular wave generator.
-			int time = (int) (world->GetTime() * 1000);
+			int time = (int)(world.GetTime() * 1000);
 			float triWave;
 			if (time % 1024 < 512) {
 				triWave = (time % 512) - 255.5;
@@ -806,7 +805,7 @@ namespace spades {
 
 			Vector3 muzzle = GetEye() + GetFront() * 0.1f;
 			Vector3 vel = GetFront() * 1.f;
-			float fuse = world->GetTime() - grenadeTime;
+			float fuse = world.GetTime() - grenadeTime;
 			fuse = 3.f - fuse;
 
 			if (health <= 0) {
@@ -816,15 +815,15 @@ namespace spades {
 
 			vel += GetVelocity();
 
-			if (this == world->GetLocalPlayer()) {
-				Grenade *gren = new Grenade(world, muzzle, vel, fuse);
-				world->AddGrenade(gren);
-				if (world->GetListener())
-					world->GetListener()->PlayerThrownGrenade(this, gren);
+			if (this == world.GetLocalPlayer()) {
+				auto gren = stmp::make_unique<Grenade>(world, muzzle, vel, fuse);
+				if (world.GetListener())
+					world.GetListener()->PlayerThrewGrenade(*this, *gren);
+				world.AddGrenade(std::move(gren));
 			} else {
 				// grenade packet will be sent by server
-				if (world->GetListener())
-					world->GetListener()->PlayerThrownGrenade(this, NULL);
+				if (world.GetListener())
+					world.GetListener()->PlayerThrewGrenade(*this, {});
 			}
 
 			holdingGrenade = false;
@@ -834,8 +833,10 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			IntVector3 outBlockCoord;
-			GameMap *map = world->GetMap();
+			Handle<GameMap> map = world.GetMap();
 			Vector3 muzzle = GetEye(), dir = GetFront();
+
+			SPAssert(map);
 
 			// TODO: set correct ray distance
 			// first do map raycast
@@ -853,20 +854,20 @@ namespace spades {
 					SPAssert(map->IsSolid(outBlockCoord.x, outBlockCoord.y, outBlockCoord.z));
 
 					// send destroy command only for local cmd
-					if (this == world->GetLocalPlayer()) {
+					if (this == world.GetLocalPlayer()) {
 
-						if (world->GetListener())
-							world->GetListener()->LocalPlayerBlockAction(outBlockCoord,
-							                                             BlockActionDig);
+						if (world.GetListener())
+							world.GetListener()->LocalPlayerBlockAction(outBlockCoord,
+							                                            BlockActionDig);
 					}
 
-					if (world->GetListener())
-						world->GetListener()->PlayerHitBlockWithSpade(
-						  this, mapResult.hitPos, mapResult.hitBlock, mapResult.normal);
+					if (world.GetListener())
+						world.GetListener()->PlayerHitBlockWithSpade(
+						  *this, mapResult.hitPos, mapResult.hitBlock, mapResult.normal);
 				}
 			} else {
-				if (world->GetListener())
-					world->GetListener()->PlayerMissedSpade(this);
+				if (world.GetListener())
+					world.GetListener()->PlayerMissedSpade(*this);
 			}
 		}
 
@@ -878,27 +879,31 @@ namespace spades {
 			Vector3 muzzle = GetEye(), dir = GetFront();
 
 			IntVector3 outBlockCoord;
-			GameMap *map = world->GetMap();
+			Handle<GameMap> map = world.GetMap();
+			SPAssert(map);
+
 			// TODO: set correct ray distance
 			// first do map raycast
 			GameMap::RayCastResult mapResult;
 			mapResult = map->CastRay2(muzzle, dir, 256);
 
-			Player *hitPlayer = NULL;
+			stmp::optional<Player &> hitPlayer;
 			int hitFlag = 0;
 
-			for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
-				Player *other = world->GetPlayer(i);
-				if (other == this || other == NULL)
-					continue;
-				if (other == this || !other->IsAlive() || other->GetTeamId() >= 2)
-					continue;
-				if (!other->RayCastApprox(muzzle, dir))
-					continue;
-				if ((eye - other->GetEye()).GetChebyshevLength() >= MELEE_DISTANCE_F)
+			for (int i = 0; i < world.GetNumPlayerSlots(); i++) {
+				auto maybeOther = world.GetPlayer(i);
+				if (maybeOther == this || !maybeOther)
 					continue;
 
-				Vector3 diff = other->GetEye() - eye;
+				Player &other = maybeOther.value();
+				if (!other.IsAlive() || other.GetTeamId() >= 2)
+					continue;
+				if (!other.RayCastApprox(muzzle, dir))
+					continue;
+				if ((eye - other.GetEye()).GetChebyshevLength() >= MELEE_DISTANCE_F)
+					continue;
+
+				Vector3 diff = other.GetEye() - eye;
 				Vector3 view;
 				view.x = Vector3::Dot(diff, GetRight());
 				view.y = Vector3::Dot(diff, GetUp());
@@ -920,7 +925,7 @@ namespace spades {
 
 			outBlockCoord = mapResult.hitBlock;
 			if (mapResult.hit && BoxDistanceToBlock(mapResult.hitBlock + mapResult.normal) < 3.f &&
-			    (hitPlayer == NULL) && outBlockCoord.x >= 0 && outBlockCoord.y >= 0 &&
+			    !hitPlayer && outBlockCoord.x >= 0 && outBlockCoord.y >= 0 &&
 			    outBlockCoord.z >= 0 && outBlockCoord.x < map->Width() &&
 			    outBlockCoord.y < map->Height() && outBlockCoord.z < map->Depth()) {
 				if (outBlockCoord.z < 62) {
@@ -936,34 +941,34 @@ namespace spades {
 					if (health <= 0) {
 						health = 0;
 						// send destroy command only for local cmd
-						if (this == world->GetLocalPlayer()) {
-							if (world->GetListener())
-								world->GetListener()->LocalPlayerBlockAction(outBlockCoord,
-								                                             BlockActionTool);
+						if (this == world.GetLocalPlayer()) {
+							if (world.GetListener())
+								world.GetListener()->LocalPlayerBlockAction(outBlockCoord,
+								                                            BlockActionTool);
 						}
 					}
 					color = (color & 0xffffff) | ((uint32_t)health << 24);
 					if (map->IsSolid(x, y, z))
 						map->Set(x, y, z, true, color);
 
-					world->MarkBlockForRegeneration(outBlockCoord);
+					world.MarkBlockForRegeneration(outBlockCoord);
 
-					if (world->GetListener())
-						world->GetListener()->PlayerHitBlockWithSpade(
-						  this, mapResult.hitPos, mapResult.hitBlock, mapResult.normal);
+					if (world.GetListener())
+						world.GetListener()->PlayerHitBlockWithSpade(
+						  *this, mapResult.hitPos, mapResult.hitBlock, mapResult.normal);
 				}
-			} else if (hitPlayer != NULL) {
+			} else if (hitPlayer && world.GetListener() && hitFlag) {
+				// The custom state data, optionally set by `BulletHitPlayer`'s implementation
+				std::unique_ptr<IBulletHitScanState> stateCell;
 
-				if (world->GetListener()) {
-					if (hitFlag)
-						world->GetListener()->BulletHitPlayer(hitPlayer, HitTypeMelee,
-						                                      hitPlayer->GetEye(), this);
-				}
+				if (hitFlag)
+					world.GetListener()->BulletHitPlayer(*hitPlayer, HitTypeMelee,
+					                                     hitPlayer->GetEye(), *this, stateCell);
 			}
 
 			if (missed) {
-				if (world->GetListener())
-					world->GetListener()->PlayerMissedSpade(this);
+				if (world.GetListener())
+					world.GetListener()->PlayerMissedSpade(*this);
 			}
 		}
 
@@ -1024,7 +1029,9 @@ namespace spades {
 			float nz = position.z + offset;
 
 			float z;
-			GameMap *map = world->GetMap();
+			const Handle<GameMap> &map = world.GetMap();
+
+			SPAssert(map);
 
 			if (velocity.x < 0.f)
 				f = -0.45f;
@@ -1083,7 +1090,7 @@ namespace spades {
 			if (climb) {
 				velocity.x *= .5f;
 				velocity.y *= .5f;
-				lastClimbTime = world->GetTime();
+				lastClimbTime = world.GetTime();
 				nz -= 1.f;
 				m = -1.35f;
 			} else {
@@ -1116,9 +1123,9 @@ namespace spades {
 		void Player::ForceJump() {
 			velocity.z = -0.36f;
 			lastJump = true;
-			if (world->GetListener() && world->GetTime() > lastJumpTime + .1f) {
-				world->GetListener()->PlayerJumped(this);
-				lastJumpTime = world->GetTime();
+			if (world.GetListener() && world.GetTime() > lastJumpTime + .1f) {
+				world.GetListener()->PlayerJumped(*this);
+				lastJumpTime = world.GetTime();
 			}
 		}
 
@@ -1126,9 +1133,9 @@ namespace spades {
 			if (input.jump && (!lastJump) && IsOnGroundOrWade()) {
 				velocity.z = -0.36f;
 				lastJump = true;
-				if (world->GetListener() && world->GetTime() > lastJumpTime + .1f) {
-					world->GetListener()->PlayerJumped(this);
-					lastJumpTime = world->GetTime();
+				if (world.GetListener() && world.GetTime() > lastJumpTime + .1f) {
+					world.GetListener()->PlayerJumped(*this);
+					lastJumpTime = world.GetTime();
 				}
 			} else if (!input.jump) {
 				lastJump = false;
@@ -1195,12 +1202,12 @@ namespace spades {
 				velocity.y *= .5f;
 
 				if (f2 > FALL_DAMAGE_VELOCITY) {
-					if (world->GetListener()) {
-						world->GetListener()->PlayerLanded(this, true);
+					if (world.GetListener()) {
+						world.GetListener()->PlayerLanded(*this, true);
 					}
 				} else {
-					if (world->GetListener()) {
-						world->GetListener()->PlayerLanded(this, false);
+					if (world.GetListener()) {
+						world.GetListener()->PlayerLanded(*this, false);
 					}
 				}
 			}
@@ -1219,8 +1226,8 @@ namespace spades {
 					moveSteps++;
 					moveDistance -= 1.f;
 
-					if (world->GetListener() && !madeFootstep) {
-						world->GetListener()->PlayerMadeFootstep(this);
+					if (world.GetListener() && !madeFootstep) {
+						world.GetListener()->PlayerMadeFootstep(*this);
 						madeFootstep = true;
 					}
 				}
@@ -1237,12 +1244,13 @@ namespace spades {
 			float z1 = position.z + 2.25f;
 			float z2 = position.z - 1.35f;
 
-			GameMap *map = world->GetMap();
+			const Handle<GameMap> &map = world.GetMap();
+
+			SPAssert(map);
 
 			// lower feet
-			if (airborne &&
-			    !(map->ClipBox(x1, y1, z1) || map->ClipBox(x2, y1, z1) ||
-			      map->ClipBox(x1, y2, z1) || map->ClipBox(x2, y2, z1)))
+			if (airborne && !(map->ClipBox(x1, y1, z1) || map->ClipBox(x2, y1, z1) ||
+			                  map->ClipBox(x1, y2, z1) || map->ClipBox(x2, y2, z1)))
 				return true;
 			else if (!(map->ClipBox(x1, y1, z2) || map->ClipBox(x2, y1, z2) ||
 			           map->ClipBox(x1, y2, z2) || map->ClipBox(x2, y2, z2))) {
@@ -1259,7 +1267,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			eye = position = pos2;
-			float f = lastClimbTime - world->GetTime();
+			float f = lastClimbTime - world.GetTime();
 			if (f > -.25f)
 				eye.z += (f + .25f) / .25f;
 		}
@@ -1291,7 +1299,7 @@ namespace spades {
 
 			SPAssert(tool == ToolSpade);
 			SPAssert(weapInput.primary);
-			return 1.f - (nextSpadeTime - world->GetTime()) / GetToolPrimaryDelay();
+			return 1.f - (nextSpadeTime - world.GetTime()) / GetToolPrimaryDelay();
 		}
 
 		float Player::GetDigAnimationProgress() {
@@ -1299,32 +1307,32 @@ namespace spades {
 
 			SPAssert(tool == ToolSpade);
 			SPAssert(weapInput.secondary);
-			return 1.f - (nextDigTime - world->GetTime()) / GetToolSecondaryDelay();
+			return 1.f - (nextDigTime - world.GetTime()) / GetToolSecondaryDelay();
 		}
 
-		float Player::GetTimeToNextGrenade() { return nextGrenadeTime - world->GetTime(); }
+		float Player::GetTimeToNextGrenade() { return nextGrenadeTime - world.GetTime(); }
 
-		void Player::KilledBy(KillType type, Player *killer, int respawnTime) {
+		void Player::KilledBy(KillType type, Player &killer, int respawnTime) {
 			SPADES_MARK_FUNCTION();
 			health = 0;
 			weapon->SetShooting(false);
 
 			// if local player is killed while cooking grenade,
 			// drop the live grenade.
-			if (this == world->GetLocalPlayer() && tool == ToolGrenade && holdingGrenade) {
+			if (this == world.GetLocalPlayer() && tool == ToolGrenade && holdingGrenade) {
 				ThrowGrenade();
 			}
-			if (world->GetListener())
-				world->GetListener()->PlayerKilledPlayer(killer, this, type);
+			if (world.GetListener())
+				world.GetListener()->PlayerKilledPlayer(killer, *this, type);
 
 			input = PlayerInput();
 			weapInput = WeaponInput();
-			this->respawnTime = world->GetTime() + respawnTime;
+			this->respawnTime = world.GetTime() + respawnTime;
 		}
 
 		bool Player::IsAlive() { return health > 0; }
 
-		std::string Player::GetName() { return world->GetPlayerPersistent(GetId()).name; }
+		std::string Player::GetName() { return world.GetPlayerPersistent(GetId()).name; }
 
 		float Player::GetWalkAnimationProgress() {
 			return moveDistance * .5f + (float)(moveSteps)*.5f;
@@ -1396,17 +1404,22 @@ namespace spades {
 
 			return hb;
 		}
-		IntVector3 Player::GetColor() { return world->GetTeam(teamId).color; }
+		IntVector3 Player::GetColor() { return world.GetTeam(teamId).color; }
 
 		bool Player::IsCookingGrenade() { return tool == ToolGrenade && holdingGrenade; }
-		float Player::GetGrenadeCookTime() { return world->GetTime() - grenadeTime; }
+		float Player::GetGrenadeCookTime() { return world.GetTime() - grenadeTime; }
+
+		Weapon &Player::GetWeapon() {
+			SPADES_MARK_FUNCTION();
+			SPAssert(weapon);
+			return *weapon;
+		}
 
 		void Player::SetWeaponType(WeaponType weap) {
 			SPADES_MARK_FUNCTION_DEBUG();
 			if (this->weapon->GetWeaponType() == weap)
 				return;
-			delete this->weapon;
-			this->weapon = Weapon::CreateWeapon(weap, this, *world->GetGameProperties());
+			this->weapon.reset(Weapon::CreateWeapon(weap, *this, *world.GetGameProperties()));
 			this->weaponType = weap;
 		}
 
@@ -1415,8 +1428,8 @@ namespace spades {
 		bool Player::IsReadyToUseTool() {
 			SPADES_MARK_FUNCTION_DEBUG();
 			switch (tool) {
-				case ToolBlock: return world->GetTime() > nextBlockTime && blockStocks > 0;
-				case ToolGrenade: return world->GetTime() > nextGrenadeTime && grenades > 0;
+				case ToolBlock: return world.GetTime() > nextBlockTime && blockStocks > 0;
+				case ToolGrenade: return world.GetTime() > nextGrenadeTime && grenades > 0;
 				case ToolSpade: return true;
 				case ToolWeapon: return weapon->IsReadyToShoot();
 			}
@@ -1462,5 +1475,5 @@ namespace spades {
 
 			return (e - eye).GetChebyshevLength();
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

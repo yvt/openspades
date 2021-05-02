@@ -22,11 +22,11 @@
 
 #include <vector>
 
+#include "GLDynamicLight.h"
+#include "IGLDevice.h"
 #include <Client/GameMap.h>
 #include <Client/IRenderer.h>
 #include <Core/Math.h>
-#include "GLDynamicLight.h"
-#include "IGLDevice.h"
 
 namespace spades {
 	namespace draw {
@@ -51,8 +51,8 @@ namespace spades {
 				uint8_t pad3;
 			};
 
-			GLMapRenderer *renderer;
-			IGLDevice *device;
+			GLMapRenderer &renderer;
+			IGLDevice &device;
 			client::GameMap *map;
 			int chunkX, chunkY, chunkZ;
 			AABB3 aabb;
@@ -79,7 +79,7 @@ namespace spades {
 
 		public:
 			enum { Size = 16, SizeBits = 4 };
-			GLMapChunk(GLMapRenderer *, client::GameMap *mp, int cx, int cy, int cz);
+			GLMapChunk(GLMapRenderer &, client::GameMap *mp, int cx, int cy, int cz);
 			~GLMapChunk();
 
 			void SetNeedsUpdate() { needsUpdate = true; }
@@ -92,5 +92,5 @@ namespace spades {
 			void RenderDepthPass();
 			void RenderDLightPass(std::vector<GLDynamicLight> lights);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -41,58 +41,55 @@ namespace {
 
 namespace spades {
 	namespace draw {
-		GLFogFilter2::GLFogFilter2(GLRenderer *renderer) : renderer(renderer) {
-			lens = renderer->RegisterProgram("Shaders/PostFilters/Fog2.program");
-			ditherPattern =
-			  static_cast<GLImage *>(renderer->RegisterImage("Gfx/DitherPattern4x4.png"));
+		GLFogFilter2::GLFogFilter2(GLRenderer &renderer) : renderer(renderer) {
+			lens = renderer.RegisterProgram("Shaders/PostFilters/Fog2.program");
+			ditherPattern = renderer.RegisterImage("Gfx/DitherPattern4x4.png").Cast<GLImage>();
 
-			IGLDevice *dev = renderer->GetGLDevice();
-			noiseTex = dev->GenTexture();
-			dev->BindTexture(IGLDevice::Texture2D, noiseTex);
-			dev->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, NoiseTexSize, NoiseTexSize,
-			                0, IGLDevice::BGRA, IGLDevice::UnsignedByte, NULL);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                  IGLDevice::Nearest);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                  IGLDevice::Nearest);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
+			IGLDevice &dev = renderer.GetGLDevice();
+			noiseTex = dev.GenTexture();
+			dev.BindTexture(IGLDevice::Texture2D, noiseTex);
+			dev.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, NoiseTexSize, NoiseTexSize, 0,
+			               IGLDevice::BGRA, IGLDevice::UnsignedByte, NULL);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
 		}
 
-		GLFogFilter2::~GLFogFilter2() { renderer->GetGLDevice()->DeleteTexture(noiseTex); }
+		GLFogFilter2::~GLFogFilter2() { renderer.GetGLDevice().DeleteTexture(noiseTex); }
 
 		GLColorBuffer GLFogFilter2::Filter(GLColorBuffer input) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice *dev = renderer->GetGLDevice();
-			GLAmbientShadowRenderer *ambientShadowRenderer = renderer->GetAmbientShadowRenderer();
-			GLRadiosityRenderer *radiosityRenderer = renderer->GetRadiosityRenderer();
+			IGLDevice &dev = renderer.GetGLDevice();
+			GLAmbientShadowRenderer *ambientShadowRenderer = renderer.GetAmbientShadowRenderer();
+			GLRadiosityRenderer *radiosityRenderer = renderer.GetRadiosityRenderer();
 			GLQuadRenderer qr(dev);
 
 			SPAssert(ambientShadowRenderer);
 			SPAssert(radiosityRenderer);
 
 			// Update `noiseTex` if the time has moved forward since the last time
-			if (renderer->GetFrameNumber() != lastNoiseTexFrameNumber) {
+			if (renderer.GetFrameNumber() != lastNoiseTexFrameNumber) {
 				std::array<uint32_t, NoiseTexSize * NoiseTexSize> noise;
 
 				for (uint32_t &x : noise) {
 					x = static_cast<std::uint32_t>(SampleRandom());
 				}
 
-				dev->BindTexture(IGLDevice::Texture2D, noiseTex);
-				dev->TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, NoiseTexSize, NoiseTexSize,
-				                   IGLDevice::BGRA, IGLDevice::UnsignedByte, noise.data());
+				dev.BindTexture(IGLDevice::Texture2D, noiseTex);
+				dev.TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, NoiseTexSize, NoiseTexSize,
+				                  IGLDevice::BGRA, IGLDevice::UnsignedByte, noise.data());
 
-				lastNoiseTexFrameNumber = renderer->GetFrameNumber();
+				lastNoiseTexFrameNumber = renderer.GetFrameNumber();
 			}
 
 			// Calculate the current view-projection matrix. Exclude `def.viewOrigin` from this
 			// matrix.
 			// TODO: This was copied from `GLTemporalAAFilter.cpp`.
 			//       De-duplicate!
-			client::SceneDefinition def = renderer->GetSceneDef();
-			if (renderer->IsRenderingMirror()) {
+			client::SceneDefinition def = renderer.GetSceneDef();
+			if (renderer.IsRenderingMirror()) {
 				def.viewOrigin.z = 63.f * 2.f - def.viewOrigin.z;
 				def.viewAxis[0].z = -def.viewAxis[0].z;
 				def.viewAxis[1].z = -def.viewAxis[1].z;
@@ -164,7 +161,7 @@ namespace spades {
 			static GLProgramUniform ditherOffset("ditherOffset");
 			static GLProgramUniform noiseTexture("noiseTexture");
 
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			lensPosition(lens);
 			lensShadowMapTexture(lens);
@@ -187,7 +184,7 @@ namespace spades {
 			lensViewOrigin.SetValue(def.viewOrigin.x, def.viewOrigin.y, def.viewOrigin.z);
 			viewProjectionMatrixInv.SetValue(viewProjectionMatrix.Inversed());
 
-			Vector3 fogCol = renderer->GetFogColor();
+			Vector3 fogCol = renderer.GetFogColor();
 			fogCol *= fogCol; // linearize
 
 			float sunlightBrightness = 0.6f; // Sun -> Fog -> Eye
@@ -241,43 +238,41 @@ namespace spades {
 			radiosityTexture.SetValue(5);
 			noiseTexture.SetValue(6);
 
-			std::uint32_t frame = renderer->GetFrameNumber() % 4;
+			std::uint32_t frame = renderer.GetFrameNumber() % 4;
 			ditherOffset.SetValue((float)(frame & 1) * 0.5f, (float)((frame >> 1) & 1) * 0.5f);
 
 			// composite to the final image
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 			qr.SetCoordAttributeIndex(lensPosition());
 
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, input.GetTexture());
 
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D, input.GetManager()->GetDepthTexture());
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D, input.GetManager()->GetDepthTexture());
 
-			dev->ActiveTexture(2);
-			dev->BindTexture(IGLDevice::Texture2D, renderer->GetMapShadowRenderer()->GetTexture());
+			dev.ActiveTexture(2);
+			dev.BindTexture(IGLDevice::Texture2D, renderer.GetMapShadowRenderer()->GetTexture());
 
-			dev->ActiveTexture(3);
+			dev.ActiveTexture(3);
 			ditherPattern->Bind(IGLDevice::Texture2D);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                  IGLDevice::Nearest);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                  IGLDevice::Nearest);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
 
-			dev->ActiveTexture(4);
-			dev->BindTexture(IGLDevice::Texture3D, ambientShadowRenderer->GetTexture());
-			dev->ActiveTexture(5);
-			dev->BindTexture(IGLDevice::Texture3D, radiosityRenderer->GetTextureFlat());
-			dev->ActiveTexture(6);
-			dev->BindTexture(IGLDevice::Texture2D, noiseTex);
+			dev.ActiveTexture(4);
+			dev.BindTexture(IGLDevice::Texture3D, ambientShadowRenderer->GetTexture());
+			dev.ActiveTexture(5);
+			dev.BindTexture(IGLDevice::Texture3D, radiosityRenderer->GetTextureFlat());
+			dev.ActiveTexture(6);
+			dev.BindTexture(IGLDevice::Texture2D, noiseTex);
 
-			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
-			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
+			dev.BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
+			dev.Viewport(0, 0, output.GetWidth(), output.GetHeight());
 			qr.Draw();
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, 0);
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, 0);
 
 			return output;
 		}

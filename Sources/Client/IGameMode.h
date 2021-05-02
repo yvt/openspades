@@ -34,5 +34,5 @@ namespace spades {
 			virtual ~IGameMode() {}
 			Mode ModeType() const { return mMode; }
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

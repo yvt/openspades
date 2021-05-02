@@ -34,10 +34,10 @@
 
 namespace spades {
 	namespace draw {
-		GLTemporalAAFilter::GLTemporalAAFilter(GLRenderer *renderer) : renderer(renderer) {
+		GLTemporalAAFilter::GLTemporalAAFilter(GLRenderer &renderer) : renderer(renderer) {
 			prevMatrix = Matrix4::Identity();
 			prevViewOrigin = Vector3(0.0f, 0.0f, 0.0f);
-			program = renderer->RegisterProgram("Shaders/PostFilters/TemporalAA.program");
+			program = renderer.RegisterProgram("Shaders/PostFilters/TemporalAA.program");
 
 			// Preload
 			GLFXAAFilter{renderer};
@@ -50,9 +50,9 @@ namespace spades {
 				return;
 			}
 
-			IGLDevice *dev = renderer->GetGLDevice();
-			dev->DeleteFramebuffer(historyBuffer.framebuffer);
-			dev->DeleteTexture(historyBuffer.texture);
+			IGLDevice &dev = renderer.GetGLDevice();
+			dev.DeleteFramebuffer(historyBuffer.framebuffer);
+			dev.DeleteTexture(historyBuffer.texture);
 
 			historyBuffer.valid = false;
 		}
@@ -60,11 +60,11 @@ namespace spades {
 		GLColorBuffer GLTemporalAAFilter::Filter(GLColorBuffer input, bool useFxaa) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			// Calculate the current view-projection matrix.
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 			Matrix4 newMatrix = Matrix4::Identity();
 			Vector3 axes[] = {def.viewAxis[0], def.viewAxis[1], def.viewAxis[2]};
 			newMatrix.m[0] = axes[0].x;
@@ -130,54 +130,54 @@ namespace spades {
 				historyBuffer.width = input.GetWidth();
 				historyBuffer.height = input.GetHeight();
 
-				auto internalFormat = renderer->GetFramebufferManager()->GetMainInternalFormat();
+				auto internalFormat = renderer.GetFramebufferManager()->GetMainInternalFormat();
 
-				historyBuffer.framebuffer = dev->GenFramebuffer();
-				dev->BindFramebuffer(IGLDevice::Framebuffer, historyBuffer.framebuffer);
+				historyBuffer.framebuffer = dev.GenFramebuffer();
+				dev.BindFramebuffer(IGLDevice::Framebuffer, historyBuffer.framebuffer);
 
-				historyBuffer.texture = dev->GenTexture();
-				dev->BindTexture(IGLDevice::Texture2D, historyBuffer.texture);
+				historyBuffer.texture = dev.GenTexture();
+				dev.BindTexture(IGLDevice::Texture2D, historyBuffer.texture);
 
 				historyBuffer.valid = true;
 
 				SPLog("Creating a history buffer");
-				dev->TexImage2D(IGLDevice::Texture2D, 0, internalFormat, historyBuffer.width,
-				                historyBuffer.height, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte,
-				                NULL);
+				dev.TexImage2D(IGLDevice::Texture2D, 0, internalFormat, historyBuffer.width,
+				               historyBuffer.height, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte,
+				               NULL);
 				SPLog("History buffer allocated");
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-				                  IGLDevice::Linear);
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-				                  IGLDevice::Linear);
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-				                  IGLDevice::ClampToEdge);
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-				                  IGLDevice::ClampToEdge);
+				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+				                 IGLDevice::Linear);
+				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+				                 IGLDevice::Linear);
+				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+				                 IGLDevice::ClampToEdge);
+				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+				                 IGLDevice::ClampToEdge);
 
-				dev->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
-				                          IGLDevice::Texture2D, historyBuffer.texture, 0);
+				dev.FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
+				                         IGLDevice::Texture2D, historyBuffer.texture, 0);
 
-				IGLDevice::Enum status = dev->CheckFramebufferStatus(IGLDevice::Framebuffer);
+				IGLDevice::Enum status = dev.CheckFramebufferStatus(IGLDevice::Framebuffer);
 				if (status != IGLDevice::FramebufferComplete) {
 					SPRaise("Failed to create a history buffer.");
 				}
 				SPLog("Created a history framebuffer");
 
 				// Initialize the history buffer with the latest input
-				dev->BindFramebuffer(IGLDevice::DrawFramebuffer, historyBuffer.framebuffer);
-				dev->BindFramebuffer(IGLDevice::ReadFramebuffer, input.GetFramebuffer());
-				dev->BlitFramebuffer(0, 0, input.GetWidth(), input.GetHeight(), 0, 0,
-				                     input.GetWidth(), input.GetHeight(), IGLDevice::ColorBufferBit,
-				                     IGLDevice::Nearest);
-				dev->BindFramebuffer(IGLDevice::ReadFramebuffer, 0);
-				dev->BindFramebuffer(IGLDevice::DrawFramebuffer, 0);
+				dev.BindFramebuffer(IGLDevice::DrawFramebuffer, historyBuffer.framebuffer);
+				dev.BindFramebuffer(IGLDevice::ReadFramebuffer, input.GetFramebuffer());
+				dev.BlitFramebuffer(0, 0, input.GetWidth(), input.GetHeight(), 0, 0,
+				                    input.GetWidth(), input.GetHeight(), IGLDevice::ColorBufferBit,
+				                    IGLDevice::Nearest);
+				dev.BindFramebuffer(IGLDevice::ReadFramebuffer, 0);
+				dev.BindFramebuffer(IGLDevice::DrawFramebuffer, 0);
 
 				// Reset the blending factor
-				dev->BindFramebuffer(IGLDevice::Framebuffer, historyBuffer.framebuffer);
-				dev->ColorMask(false, false, false, true);
-				dev->ClearColor(0.0f, 0.0f, 0.0f, 0.5f);
-				dev->Clear(IGLDevice::ColorBufferBit);
-				dev->ColorMask(true, true, true, true);
+				dev.BindFramebuffer(IGLDevice::Framebuffer, historyBuffer.framebuffer);
+				dev.ColorMask(false, false, false, true);
+				dev.ClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+				dev.Clear(IGLDevice::ColorBufferBit);
+				dev.ColorMask(true, true, true, true);
 
 				if (useFxaa) {
 					return GLFXAAFilter{renderer}.Filter(input);
@@ -192,7 +192,7 @@ namespace spades {
 			/* // this didn't work well:
 			GLColorBuffer processedInput =
 			    useFxaa ? [&] {
-			    GLProfiler::Context p(renderer->GetGLProfiler(), "FXAA");
+			    GLProfiler::Context p(renderer.GetGLProfiler(), "FXAA");
 			    return GLFXAAFilter{renderer}.Filter(input);
 			}() : input; */
 
@@ -204,7 +204,7 @@ namespace spades {
 			static GLProgramUniform reprojectionMatrix("reprojectionMatrix");
 			static GLProgramUniform inverseVP("inverseVP");
 
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			positionAttribute(program);
 			inputTexture(program);
@@ -226,28 +226,28 @@ namespace spades {
 			// Perform temporal AA
 			// TODO: pre/post tone mapping to prevent aliasing near overbright area
 			qr.SetCoordAttributeIndex(positionAttribute());
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D, historyBuffer.texture);
-			dev->ActiveTexture(2);
-			dev->BindTexture(IGLDevice::Texture2D, processedInput.GetTexture());
-			dev->ActiveTexture(3);
-			dev->BindTexture(IGLDevice::Texture2D,
-			                 renderer->GetFramebufferManager()->GetDepthTexture());
-			dev->ActiveTexture(0);
-			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
-			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, input.GetTexture());
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D, historyBuffer.texture);
+			dev.ActiveTexture(2);
+			dev.BindTexture(IGLDevice::Texture2D, processedInput.GetTexture());
+			dev.ActiveTexture(3);
+			dev.BindTexture(IGLDevice::Texture2D,
+			                renderer.GetFramebufferManager()->GetDepthTexture());
+			dev.ActiveTexture(0);
+			dev.BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
+			dev.Viewport(0, 0, output.GetWidth(), output.GetHeight());
 			qr.Draw();
-			dev->BindTexture(IGLDevice::Texture2D, 0);
+			dev.BindTexture(IGLDevice::Texture2D, 0);
 
 			// Copy the result to the history buffer
-			dev->BindFramebuffer(IGLDevice::DrawFramebuffer, historyBuffer.framebuffer);
-			dev->BindFramebuffer(IGLDevice::ReadFramebuffer, output.GetFramebuffer());
-			dev->BlitFramebuffer(0, 0, input.GetWidth(), input.GetHeight(), 0, 0, input.GetWidth(),
-			                     input.GetHeight(), IGLDevice::ColorBufferBit, IGLDevice::Nearest);
-			dev->BindFramebuffer(IGLDevice::ReadFramebuffer, 0);
-			dev->BindFramebuffer(IGLDevice::DrawFramebuffer, 0);
+			dev.BindFramebuffer(IGLDevice::DrawFramebuffer, historyBuffer.framebuffer);
+			dev.BindFramebuffer(IGLDevice::ReadFramebuffer, output.GetFramebuffer());
+			dev.BlitFramebuffer(0, 0, input.GetWidth(), input.GetHeight(), 0, 0, input.GetWidth(),
+			                    input.GetHeight(), IGLDevice::ColorBufferBit, IGLDevice::Nearest);
+			dev.BindFramebuffer(IGLDevice::ReadFramebuffer, 0);
+			dev.BindFramebuffer(IGLDevice::DrawFramebuffer, 0);
 			return output;
 		}
 
@@ -377,5 +377,5 @@ namespace spades {
 			}
 			return Vector2{jitterTable[jitterTableIndex], jitterTable[jitterTableIndex + 1]};
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

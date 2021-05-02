@@ -23,11 +23,11 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <ctime>
 #include <functional>
 #include <list>
 #include <unordered_map>
-#include <cstring>
 
 #include "GLProfiler.h"
 
@@ -54,7 +54,7 @@ namespace spades {
 				         .count() /
 				       1000000.0;
 			}
-		}
+		} // namespace
 
 		struct GLProfiler::Measurement {
 			double totalWallClockTime = 0.0;
@@ -86,7 +86,7 @@ namespace spades {
 		GLProfiler::GLProfiler(GLRenderer &renderer)
 		    : m_settings{renderer.GetSettings()},
 		      m_renderer{renderer},
-		      m_device{*renderer.GetGLDevice()},
+		      m_device{renderer.GetGLDevice()},
 		      m_active{false},
 		      m_lastSaveTime{0.0},
 		      m_shouldSaveThisFrame{false},
@@ -197,27 +197,29 @@ namespace spades {
 				struct Traverser {
 					GLProfiler &self;
 					Traverser(GLProfiler &self) : self{self} {}
-					void Traverse(Phase &phase, stmp::optional<std::pair<Phase&, bool>> base) {
+					void Traverse(Phase &phase, stmp::optional<std::pair<Phase &, bool>> base) {
 						if (!phase.queryObjectIndices) {
 							return;
 						}
 						if (base) {
 							auto baseIndices = *(*base).first.queryObjectIndices;
-							(*phase.queryObjectIndices).second = (*base).second ? baseIndices.second : baseIndices.first;
+							(*phase.queryObjectIndices).second =
+							  (*base).second ? baseIndices.second : baseIndices.first;
 						}
 						auto it = phase.subphases.begin();
 						while (it != phase.subphases.end() && !it->queryObjectIndices) {
 							++it;
 						}
 						while (it != phase.subphases.end()) {
-							auto it2 = it; ++it2;
+							auto it2 = it;
+							++it2;
 							while (it2 != phase.subphases.end() && !it2->queryObjectIndices) {
 								++it2;
 							}
 							if (it2 == phase.subphases.end()) {
-								Traverse(*it, std::pair<Phase&, bool>{phase, true});
+								Traverse(*it, std::pair<Phase &, bool>{phase, true});
 							} else {
-								Traverse(*it, std::pair<Phase&, bool>{*it2, false});
+								Traverse(*it, std::pair<Phase &, bool>{*it2, false});
 							}
 							it = it2;
 						}
@@ -486,7 +488,7 @@ namespace spades {
 				      factor{factor} {}
 
 				void DrawText(const char *str) {
-					client::IImage *font = self.m_font;
+					client::IImage &font = *self.m_font;
 
 					while (*str) {
 						char c = *str;
@@ -547,7 +549,7 @@ namespace spades {
 					float barScale = 4000.0 * self.m_settings.r_debugTimingOutputBarScale;
 					float boxWidth = static_cast<float>(time * barScale);
 					float childBoxWidth = static_cast<float>(subphaseTime * barScale);
-					client::IImage *white = self.m_white;
+					client::IImage &white = *self.m_white;
 
 					renderer.SetColorAlphaPremultiplied(Vector4{0.0f, 0.0f, 0.0f, 0.5f});
 					renderer.DrawImage(white, AABB2{cursor.x, cursor.y + 1.0f, boxWidth, 8.0f});
@@ -613,5 +615,5 @@ namespace spades {
 
 			m_profiler.EndPhase();
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

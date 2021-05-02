@@ -55,6 +55,6 @@ namespace spades {
 
 		message = Format("{0}\nat {1}:{2}\n{3}", message, file, line, trace.ToString());
 	}
-	Exception::~Exception() throw() {}
-	const char *Exception::what() const throw() { return message.c_str(); }
+	Exception::~Exception() noexcept {}
+	const char *Exception::what() const noexcept { return message.c_str(); }
 }

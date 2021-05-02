@@ -30,9 +30,9 @@ namespace spades {
 		class GLProgram;
 		class GLImage;
 		class GLFogFilter2 {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			GLProgram *lens;
-			GLImage *ditherPattern;
+			Handle<GLImage> ditherPattern;
 			IGLDevice::UInteger noiseTex;
 			/**
 			 * The recorded value of `GLRenderer::GetFrameNumber()` of when `noiseTex` was updated
@@ -41,7 +41,7 @@ namespace spades {
 			std::uint32_t lastNoiseTexFrameNumber = 0xffffffff;
 
 		public:
-			GLFogFilter2(GLRenderer *);
+			GLFogFilter2(GLRenderer &);
 			~GLFogFilter2();
 			GLColorBuffer Filter(GLColorBuffer);
 		};

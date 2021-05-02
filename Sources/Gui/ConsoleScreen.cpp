@@ -35,7 +35,7 @@ namespace spades {
 		    : renderer{renderer}, audioDevice{audioDevice}, subview{subview} {
 			SPADES_MARK_FUNCTION();
 
-			helper.Set(new ConsoleHelper(this), true);
+			helper = Handle<ConsoleHelper>::New(this);
 
 			ScopedPrivilegeEscalation privilege;
 			static ScriptFunction uiFactory("ConsoleUI@ CreateConsoleUI(Renderer@, "

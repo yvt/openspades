@@ -66,29 +66,4 @@ namespace spades {
 		// utilities
 		virtual std::string ReadAllBytes();
 	};
-
-	/** makes management of stream lifetime easier.
-	 * don't create multiple StreamHandles with the same IStream. */
-	class StreamHandle {
-		struct SharedStream {
-			IStream *stream;
-			int refCount;
-			SharedStream(IStream *);
-			~SharedStream();
-			void Retain();
-			void Release();
-		};
-		SharedStream *o;
-
-	public:
-		StreamHandle();
-		StreamHandle(IStream *);
-		StreamHandle(const StreamHandle &);
-		~StreamHandle();
-		spades::StreamHandle &operator=(const StreamHandle &);
-		void Reset();
-		IStream *operator->() const;
-		operator IStream *() const;
-		operator bool() const;
-	};
 }
