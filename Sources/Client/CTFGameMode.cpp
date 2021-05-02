@@ -44,5 +44,12 @@ namespace spades {
 			auto &team = teams[player.GetTeamId()];
 			return team.hasIntel && team.carrier == player.GetId();
 		}
+
+		void CTFGameMode::ResetTeamScoreAndIntelHoldingStatus() {
+			for (Team &team : teams) {
+				team.score = 0;
+				team.hasIntel = false;
+			}
+		}
 	} // namespace client
 } // namespace spades

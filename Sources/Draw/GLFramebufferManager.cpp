@@ -56,8 +56,13 @@ namespace spades {
 			SPRaise("OpenGL Framebuffer completeness check failed: %s", type.c_str());
 		}
 
-		GLFramebufferManager::GLFramebufferManager(IGLDevice &dev, GLSettings &settings)
-		    : device(dev), settings(settings), doingPostProcessing(false) {
+		GLFramebufferManager::GLFramebufferManager(IGLDevice &dev, GLSettings &settings,
+		                                           int renderWidth, int renderHeight)
+		    : device(dev),
+		      settings(settings),
+		      doingPostProcessing(false),
+		      renderWidth(renderWidth),
+		      renderHeight(renderHeight) {
 			SPADES_MARK_FUNCTION();
 
 			SPLog("Initializing framebuffer manager");
@@ -84,8 +89,7 @@ namespace spades {
 				multisampledDepthRenderbuffer = dev.GenRenderbuffer();
 				dev.BindRenderbuffer(IGLDevice::Renderbuffer, multisampledDepthRenderbuffer);
 				dev.RenderbufferStorage(IGLDevice::Renderbuffer, (int)settings.r_multisamples,
-				                        IGLDevice::DepthComponent24, dev.ScreenWidth(),
-				                        dev.ScreenHeight());
+				                        IGLDevice::DepthComponent24, renderWidth, renderHeight);
 				SPLog("MSAA Depth Buffer Allocated");
 
 				dev.FramebufferRenderbuffer(IGLDevice::Framebuffer, IGLDevice::DepthAttachment,
@@ -97,8 +101,7 @@ namespace spades {
 					SPLog("Creating MSAA Color Buffer with SRGB8_ALPHA");
 					useHighPrec = false;
 					dev.RenderbufferStorage(IGLDevice::Renderbuffer, (int)settings.r_multisamples,
-					                        IGLDevice::SRGB8Alpha, dev.ScreenWidth(),
-					                        dev.ScreenHeight());
+					                        IGLDevice::SRGB8Alpha, renderWidth, renderHeight);
 
 					SPLog("MSAA Color Buffer Allocated");
 
@@ -120,7 +123,7 @@ namespace spades {
 						dev.RenderbufferStorage(IGLDevice::Renderbuffer,
 						                        (int)settings.r_multisamples,
 						                        useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2,
-						                        dev.ScreenWidth(), dev.ScreenHeight());
+						                        renderWidth, renderHeight);
 						SPLog("MSAA Color Buffer Allocated");
 
 						dev.FramebufferRenderbuffer(
@@ -140,7 +143,7 @@ namespace spades {
 						settings.r_hdr = 0;
 						dev.RenderbufferStorage(IGLDevice::Renderbuffer,
 						                        (int)settings.r_multisamples, IGLDevice::RGBA8,
-						                        dev.ScreenWidth(), dev.ScreenHeight());
+						                        renderWidth, renderHeight);
 
 						SPLog("MSAA Color Buffer Allocated");
 
@@ -171,8 +174,8 @@ namespace spades {
 
 			renderDepthTexture = dev.GenTexture();
 			dev.BindTexture(IGLDevice::Texture2D, renderDepthTexture);
-			dev.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24, dev.ScreenWidth(),
-			               dev.ScreenHeight(), 0, IGLDevice::DepthComponent, IGLDevice::UnsignedInt,
+			dev.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24, renderWidth,
+			               renderHeight, 0, IGLDevice::DepthComponent, IGLDevice::UnsignedInt,
 			               NULL);
 			SPLog("Depth Buffer Allocated");
 			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
@@ -188,9 +191,8 @@ namespace spades {
 			if (settings.r_srgb) {
 				SPLog("Creating Non-MSAA SRGB buffer");
 				useHighPrec = false;
-				dev.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::SRGB8Alpha, dev.ScreenWidth(),
-				               dev.ScreenHeight(), 0, IGLDevice::RGBA, IGLDevice::UnsignedByte,
-				               NULL);
+				dev.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::SRGB8Alpha, renderWidth,
+				               renderHeight, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
 				SPLog("Color Buffer Allocated");
 				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 				                 IGLDevice::Linear);
@@ -216,10 +218,9 @@ namespace spades {
 						SPLog("RGB10A2/HDR disabled");
 						SPRaise("jump to catch(...)");
 					}
-					dev.TexImage2D(IGLDevice::Texture2D, 0,
-					               useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2,
-					               dev.ScreenWidth(), dev.ScreenHeight(), 0, IGLDevice::RGBA,
-					               IGLDevice::UnsignedByte, NULL);
+					dev.TexImage2D(
+					  IGLDevice::Texture2D, 0, useHdr ? IGLDevice::RGBA16F : IGLDevice::RGB10A2,
+					  renderWidth, renderHeight, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
 					SPLog("Color Buffer Allocated");
 					dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
 					                 IGLDevice::Linear);
@@ -244,8 +245,8 @@ namespace spades {
 					useHighPrec = false;
 					useHdr = false;
 					settings.r_hdr = 0;
-					dev.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, dev.ScreenWidth(),
-					               dev.ScreenHeight(), 0, IGLDevice::RGBA, IGLDevice::UnsignedByte,
+					dev.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, renderWidth,
+					               renderHeight, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte,
 					               NULL);
 					SPLog("Color Buffer Allocated");
 					dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
@@ -277,9 +278,8 @@ namespace spades {
 				mirrorColorTexture = dev.GenTexture();
 				dev.BindTexture(IGLDevice::Texture2D, mirrorColorTexture);
 				SPLog("Creating Mirror texture");
-				dev.TexImage2D(IGLDevice::Texture2D, 0, fbInternalFormat, dev.ScreenWidth(),
-				               dev.ScreenHeight(), 0, IGLDevice::RGBA, IGLDevice::UnsignedByte,
-				               NULL);
+				dev.TexImage2D(IGLDevice::Texture2D, 0, fbInternalFormat, renderWidth,
+				               renderHeight, 0, IGLDevice::RGBA, IGLDevice::UnsignedByte, NULL);
 
 				SPLog("Color Buffer Allocated");
 				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
@@ -297,9 +297,9 @@ namespace spades {
 				SPLog("Creating Mirror depth texture");
 				mirrorDepthTexture = dev.GenTexture();
 				dev.BindTexture(IGLDevice::Texture2D, mirrorDepthTexture);
-				dev.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24,
-				               dev.ScreenWidth(), dev.ScreenHeight(), 0, IGLDevice::DepthComponent,
-				               IGLDevice::UnsignedInt, NULL);
+				dev.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24, renderWidth,
+				               renderHeight, 0, IGLDevice::DepthComponent, IGLDevice::UnsignedInt,
+				               NULL);
 
 				SPLog("Depth Buffer Allocated");
 				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
@@ -331,8 +331,8 @@ namespace spades {
 			buf.framebuffer = renderFramebufferWithoutDepth;
 			buf.texture = renderColorTexture;
 			buf.refCount = 0;
-			buf.w = device.ScreenWidth();
-			buf.h = device.ScreenHeight();
+			buf.w = renderWidth;
+			buf.h = renderHeight;
 			buf.internalFormat = fbInternalFormat;
 			buffers.push_back(buf);
 
@@ -341,8 +341,38 @@ namespace spades {
 		}
 
 		GLFramebufferManager::~GLFramebufferManager() {
-			// maybe framebuffers are released automatically when
-			// application quits...
+			if (multisampledFramebuffer) {
+				device.DeleteFramebuffer(multisampledFramebuffer);
+			}
+			if (multisampledColorRenderbuffer) {
+				device.DeleteRenderbuffer(multisampledColorRenderbuffer);
+			}
+			if (multisampledDepthRenderbuffer) {
+				device.DeleteRenderbuffer(multisampledDepthRenderbuffer);
+			}
+			if (renderFramebuffer) {
+				device.DeleteFramebuffer(renderFramebuffer);
+			}
+			if (renderColorTexture) {
+				device.DeleteTexture(renderColorTexture);
+			}
+			if (renderDepthTexture) {
+				device.DeleteTexture(renderDepthTexture);
+			}
+			if (mirrorFramebuffer) {
+				device.DeleteFramebuffer(mirrorFramebuffer);
+			}
+			if (mirrorColorTexture) {
+				device.DeleteTexture(mirrorColorTexture);
+			}
+			if (mirrorDepthTexture) {
+				device.DeleteTexture(mirrorDepthTexture);
+			}
+			for (const Buffer &buffer : buffers) {
+				device.DeleteFramebuffer(buffer.framebuffer);
+				device.DeleteTexture(buffer.texture);
+			}
+			buffers.clear();
 		}
 
 		void GLFramebufferManager::PrepareSceneRendering() {
@@ -364,7 +394,7 @@ namespace spades {
 
 			device.Enable(IGLDevice::DepthTest, true);
 			device.DepthMask(true);
-			device.Viewport(0, 0, device.ScreenWidth(), device.ScreenHeight());
+			device.Viewport(0, 0, renderWidth, renderHeight);
 		}
 
 		GLColorBuffer
@@ -387,8 +417,8 @@ namespace spades {
 			                            IGLDevice::Texture2D, handle.GetTexture(), 0);
 
 			// downsample
-			int w = device.ScreenWidth();
-			int h = device.ScreenHeight();
+			int w = renderWidth;
+			int h = renderHeight;
 
 			if (settings.r_blitFramebuffer) {
 				if (useMultisample) {
@@ -429,7 +459,7 @@ namespace spades {
 
 		void GLFramebufferManager::ClearMirrorTexture(spades::Vector3 bgCol) {
 			device.BindFramebuffer(IGLDevice::Framebuffer, mirrorFramebuffer);
-			device.Viewport(0, 0, device.ScreenWidth(), device.ScreenHeight());
+			device.Viewport(0, 0, renderWidth, renderHeight);
 			device.ClearColor(bgCol.x, bgCol.y, bgCol.z, 1.f);
 			device.Clear((IGLDevice::Enum)(IGLDevice::ColorBufferBit | IGLDevice::DepthBufferBit));
 
@@ -445,8 +475,8 @@ namespace spades {
 
 		void GLFramebufferManager::CopyToMirrorTexture(IGLDevice::UInteger fb) {
 			SPADES_MARK_FUNCTION();
-			int w = device.ScreenWidth();
-			int h = device.ScreenHeight();
+			int w = renderWidth;
+			int h = renderHeight;
 			if (fb == 0) {
 				fb = useMultisample ? multisampledFramebuffer : renderFramebuffer;
 			}
@@ -458,10 +488,13 @@ namespace spades {
 				if (settings.r_blitFramebuffer) {
 					device.BindFramebuffer(IGLDevice::ReadFramebuffer, fb);
 					device.BindFramebuffer(IGLDevice::DrawFramebuffer, mirrorFramebuffer);
-					device.BlitFramebuffer(0, 0, w, h, 0, 0, w, h,
-					                       IGLDevice::ColorBufferBit |
-					                         (needsDepth ? IGLDevice::DepthBufferBit : 0),
+					device.BlitFramebuffer(0, 0, w, h, 0, 0, w, h, IGLDevice::ColorBufferBit,
 					                       IGLDevice::Nearest);
+					if (needsDepth) {
+						device.BindFramebuffer(IGLDevice::ReadFramebuffer, renderFramebuffer);
+						device.BlitFramebuffer(0, 0, w, h, 0, 0, w, h, IGLDevice::DepthBufferBit,
+						                       IGLDevice::Nearest);
+					}
 					device.BindFramebuffer(IGLDevice::ReadFramebuffer, 0);
 					device.BindFramebuffer(IGLDevice::DrawFramebuffer, 0);
 				} else {
@@ -478,10 +511,13 @@ namespace spades {
 				if (settings.r_blitFramebuffer) {
 					device.BindFramebuffer(IGLDevice::ReadFramebuffer, fb);
 					device.BindFramebuffer(IGLDevice::DrawFramebuffer, mirrorFramebuffer);
-					device.BlitFramebuffer(0, 0, w, h, 0, 0, w, h,
-					                       IGLDevice::ColorBufferBit |
-					                         (needsDepth ? IGLDevice::DepthBufferBit : 0),
+					device.BlitFramebuffer(0, 0, w, h, 0, 0, w, h, IGLDevice::ColorBufferBit,
 					                       IGLDevice::Nearest);
+					if (needsDepth) {
+						device.BindFramebuffer(IGLDevice::ReadFramebuffer, renderFramebuffer);
+						device.BlitFramebuffer(0, 0, w, h, 0, 0, w, h, IGLDevice::DepthBufferBit,
+						                       IGLDevice::Nearest);
+					}
 					device.BindFramebuffer(IGLDevice::ReadFramebuffer, 0);
 					device.BindFramebuffer(IGLDevice::DrawFramebuffer, 0);
 				} else {
@@ -518,8 +554,8 @@ namespace spades {
 
 			if (useMultisample) {
 				// downsample
-				int w = device.ScreenWidth();
-				int h = device.ScreenHeight();
+				int w = renderWidth;
+				int h = renderHeight;
 				if (settings.r_blitFramebuffer) {
 					device.BindFramebuffer(IGLDevice::ReadFramebuffer, multisampledFramebuffer);
 					device.BindFramebuffer(IGLDevice::DrawFramebuffer, renderFramebuffer);
@@ -571,9 +607,9 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			if (w < 0)
-				w = device.ScreenWidth();
+				w = renderWidth;
 			if (h < 0)
-				h = device.ScreenHeight();
+				h = renderHeight;
 
 			// During the main rendering pass the first buffer is allocated to the render target
 			// and cannot be allocated for pre/postprocessing pass

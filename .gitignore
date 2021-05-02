@@ -34,10 +34,6 @@ CMakeCache.txt
 *CMakeFiles/
 *.cmake
 
-# cmake input dir (optional)
-Sources/Externals/include/
-Sources/Externals/lib/
-
 # mac related
 *.DS_Store
 

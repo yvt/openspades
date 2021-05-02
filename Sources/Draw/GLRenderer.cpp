@@ -50,12 +50,14 @@
 #include "GLProgramUniform.h"
 #include "GLRadiosityRenderer.h"
 #include "GLRenderer.h"
+#include "GLResampleBicubicFilter.h"
 #include "GLSSAOFilter.h"
 #include "GLSettings.h"
 #include "GLShadowMapShader.h"
 #include "GLSoftLitSpriteRenderer.h"
 #include "GLSoftSpriteRenderer.h"
 #include "GLSpriteRenderer.h"
+#include "GLTemporalAAFilter.h"
 #include "GLVoxelModel.h"
 #include "GLWaterRenderer.h"
 #include "IGLDevice.h"
@@ -73,7 +75,6 @@ namespace spades {
 
 		GLRenderer::GLRenderer(Handle<IGLDevice> _device)
 		    : device(std::move(_device)),
-		      fbManager(NULL),
 		      map(NULL),
 		      inited(false),
 		      sceneUsedInThisFrame(false),
@@ -87,7 +88,6 @@ namespace spades {
 		      modelRenderer(NULL),
 		      spriteRenderer(NULL),
 		      longSpriteRenderer(NULL),
-		      waterRenderer(NULL),
 		      ambientShadowRenderer(NULL),
 		      radiosityRenderer(NULL),
 		      cameraBlur(NULL),
@@ -104,7 +104,9 @@ namespace spades {
 
 			SPLog("GLRenderer bootstrap");
 
-			fbManager = new GLFramebufferManager(*device, settings);
+			renderWidth = renderHeight = -1;
+
+			UpdateRenderSize();
 
 			programManager = new GLProgramManager(*device, shadowMapRenderer.get(), settings);
 			imageManager = new GLImageManager(*device);
@@ -125,6 +127,33 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			Shutdown();
+		}
+
+		void GLRenderer::UpdateRenderSize() {
+			float renderScale = settings.r_scale;
+			renderScale = std::max(0.2f, renderScale);
+			if (!(renderScale < 1.0f)) { // eliminates NaN
+				renderScale = 1.0f;
+			}
+
+			int screenWidth = device->ScreenWidth();
+			int screenHeight = device->ScreenHeight();
+
+			int newRenderWidth = static_cast<int>(screenWidth * renderScale);
+			int newRenderHeight = static_cast<int>(screenHeight * renderScale);
+
+			if (newRenderWidth != renderWidth || newRenderHeight != renderHeight) {
+				SPLog("Render size has changed");
+				renderWidth = newRenderWidth;
+				renderHeight = newRenderHeight;
+
+				fbManager.reset(
+				  new GLFramebufferManager(*device, settings, renderWidth, renderHeight));
+				if (waterRenderer) {
+					SPLog("Creating Water Renderer");
+					waterRenderer.reset(new GLWaterRenderer(*this, map));
+				}
+			}
 		}
 
 		void GLRenderer::Init() {
@@ -156,6 +185,9 @@ namespace spades {
 			if (settings.r_cameraBlur) {
 				cameraBlur = new GLCameraBlurFilter(*this);
 			}
+			if (settings.r_temporalAA) {
+				temporalAAFilter.reset(new GLTemporalAAFilter(*this));
+			}
 
 			if (settings.r_fogShadow) {
 				GLFogFilter(*this);
@@ -185,6 +217,10 @@ namespace spades {
 				GLFXAAFilter(*this);
 			}
 
+			if (settings.r_scaleFilter.operator int() == 2) {
+				GLResampleBicubicFilter(*this);
+			}
+
 			if (settings.r_depthOfField) {
 				GLDepthOfFieldFilter(*this);
 			}
@@ -198,6 +234,7 @@ namespace spades {
 
 			SPLog("GLRender finalizing");
 			SetGameMap(nullptr);
+			temporalAAFilter.reset();
 			delete autoExposureFilter;
 			autoExposureFilter = NULL;
 			delete lensDustFilter;
@@ -212,8 +249,7 @@ namespace spades {
 			mapShadowRenderer = NULL;
 			delete mapRenderer;
 			mapRenderer = NULL;
-			delete waterRenderer;
-			waterRenderer = NULL;
+			waterRenderer.reset();
 			delete ambientShadowRenderer;
 			ambientShadowRenderer = NULL;
 			shadowMapRenderer.reset();
@@ -221,8 +257,6 @@ namespace spades {
 			cameraBlur = NULL;
 			delete longSpriteRenderer;
 			longSpriteRenderer = NULL;
-			delete waterRenderer;
-			waterRenderer = NULL;
 			delete modelRenderer;
 			modelRenderer = NULL;
 			delete spriteRenderer;
@@ -235,8 +269,7 @@ namespace spades {
 			programManager = NULL;
 			delete imageManager;
 			imageManager = NULL;
-			delete fbManager;
-			fbManager = NULL;
+			fbManager.reset();
 			profiler.reset();
 			SPLog("GLRenderer finalized");
 		}
@@ -301,8 +334,7 @@ namespace spades {
 			flatMapRenderer = NULL;
 			delete mapShadowRenderer;
 			mapShadowRenderer = NULL;
-			delete waterRenderer;
-			waterRenderer = NULL;
+			waterRenderer.reset();
 			delete ambientShadowRenderer;
 			ambientShadowRenderer = NULL;
 
@@ -316,7 +348,7 @@ namespace spades {
 				SPLog("Creating Minimap Renderer");
 				flatMapRenderer = new GLFlatMapRenderer(*this, *newMap);
 				SPLog("Creating Water Renderer");
-				waterRenderer = new GLWaterRenderer(*this, newMap.get_pointer());
+				waterRenderer.reset(new GLWaterRenderer(*this, newMap.get_pointer()));
 
 				if (settings.r_radiosity) {
 					SPLog("Creating Ray-traced Ambient Occlusion Renderer");
@@ -395,6 +427,16 @@ namespace spades {
 			mat.m[13] = 0.f;
 			mat.m[14] = -(far * near * 2.f) / c;
 			mat.m[15] = 0.f;
+
+			if (settings.r_temporalAA && temporalAAFilter) {
+				float jitterX = 1.0f / GetRenderWidth();
+				float jitterY = 1.0f / GetRenderHeight();
+				Vector2 jitter = temporalAAFilter->GetProjectionMatrixJitter();
+				jitterX *= jitter.x * 1.3f;
+				jitterY *= jitter.y * 1.3f;
+				mat = Matrix4::Translate(jitterX, jitterY, 0.0f) * mat;
+			}
+
 			projectionMatrix = mat;
 		}
 
@@ -925,9 +967,22 @@ namespace spades {
 				}
 
 				if (settings.r_cameraBlur && !sceneDef.denyCameraBlur) {
+					if (!cameraBlur) {
+						cameraBlur = new GLCameraBlurFilter(*this);
+					}
+
 					GLProfiler::Context p(*profiler, "Camera Blur");
 					// FIXME: better (correctly constructed) radial blur algorithm
-					handle = cameraBlur->Filter(handle, sceneDef.radialBlur);
+					handle = cameraBlur->Filter(
+					  handle, std::min(settings.r_cameraBlur * 0.2f, 1.0f), sceneDef.radialBlur);
+				}
+
+				if (settings.r_temporalAA) {
+					if (!temporalAAFilter) {
+						temporalAAFilter.reset(new GLTemporalAAFilter(*this));
+					}
+					GLProfiler::Context p(*profiler, "Temporal AA");
+					handle = temporalAAFilter->Filter(handle, settings.r_fxaa);
 				}
 
 				if (settings.r_bloom) {
@@ -935,7 +990,7 @@ namespace spades {
 					handle = lensDustFilter->Filter(handle);
 				}
 
-				// do r_fxaa before lens filter so that color aberration looks nice
+				// Do r_fxaa before lens filter so that color aberration looks nice.
 				if (settings.r_fxaa) {
 					GLProfiler::Context p(*profiler, "FXAA");
 					handle = GLFXAAFilter(*this).Filter(handle);
@@ -1015,18 +1070,41 @@ namespace spades {
 					tint = Mix(tint, MakeVector3(1.f, 1.f, 1.f), 0.2f);
 					tint *= 1.f / std::min(std::min(tint.x, tint.y), tint.z);
 
+					float fogLuminance = (fogColor.x + fogColor.y + fogColor.z) * (1.0f / 3.0f);
+
 					float exposure = powf(2.f, (float)settings.r_exposureValue * 0.5f);
-					handle = GLColorCorrectionFilter(*this).Filter(handle, tint * exposure);
+					handle =
+					  GLColorCorrectionFilter(*this).Filter(handle, tint * exposure, fogLuminance);
 
 					// update smoothed fog color
 					smoothedFogColor = Mix(smoothedFogColor, fogColor, 0.002f);
 				}
 			}
 
+			// Resample the rendered image using a non-trivial filter if such
+			// a filter is selected.
+			int scaleFilter = settings.r_scaleFilter;
+			bool scalingMayBeNeeded = GetRenderWidth() != device->ScreenWidth() ||
+			                          GetRenderHeight() != device->ScreenHeight();
+			if (scaleFilter == 0) {
+				// Nearest neighbor - trivial
+			} else if (scaleFilter == 1) {
+				// Bi-linear - trivial
+			} else if (scaleFilter == 2) {
+				// Bi-cubic - non-trivial
+				handle = GLResampleBicubicFilter{*this}.Filter(handle, device->ScreenWidth(),
+				                                               device->ScreenHeight());
+				scaleFilter = 0;
+			} else {
+				// I don't know this filter.
+				scaleFilter = 1;
+			}
+
 			if (settings.r_srgb && settings.r_srgb2D) {
 				// in gamma corrected mode,
 				// 2d drawings are done on gamma-corrected FB
 				// see also: FrameDone
+				// TODO: Handle the case where `scaleFilter == 0`
 				lastColorBufferTexture = handle.GetTexture();
 				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
 				device->Enable(IGLDevice::FramebufferSRGB, true);
@@ -1038,15 +1116,34 @@ namespace spades {
 
 				GLProfiler::Context p(*profiler, "Copying to WM-given Framebuffer");
 
+				if (scaleFilter == 0) {
+					// Temporarily change the textute filter to NN
+					device->BindTexture(IGLDevice::Texture2D, handle.GetTexture());
+					device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+					                     IGLDevice::Nearest);
+					device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+					                     IGLDevice::Nearest);
+				}
+
 				device->BindFramebuffer(IGLDevice::Framebuffer, 0);
 				device->Enable(IGLDevice::Blend, false);
-				device->Viewport(0, 0, handle.GetWidth(), handle.GetHeight());
-				auto image = Handle<GLImage>::New(handle.GetTexture(), device.GetPointerOrNull(),
-				                                  handle.GetWidth(), handle.GetHeight(), false);
+				device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
+				Handle<GLImage> image(new GLImage(handle.GetTexture(), device.GetPointerOrNull(),
+				                                  handle.GetWidth(), handle.GetHeight(), false),
+				                      false);
 				SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
-				DrawImage(*image,
-				          AABB2(0, handle.GetHeight(), handle.GetWidth(), -handle.GetHeight()));
+				DrawImage(*image, AABB2(0, device->ScreenHeight(), device->ScreenWidth(),
+				                        -device->ScreenHeight()));
 				imageRenderer->Flush();
+
+				if (scaleFilter == 0) {
+					// Reset the texture filter
+					device->BindTexture(IGLDevice::Texture2D, handle.GetTexture());
+					device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+					                     IGLDevice::Linear);
+					device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+					                     IGLDevice::Linear);
+				}
 			}
 
 			handle.Release();
@@ -1058,9 +1155,7 @@ namespace spades {
 			modelRenderer->Clear();
 
 			// prepare for 2d drawing
-			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
-			                  IGLDevice::One);
-			device->Enable(IGLDevice::Blend, true);
+			Prepare2DRendering(true);
 		}
 
 		//#pragma mark - 2D Drawings
@@ -1246,9 +1341,7 @@ namespace spades {
 			lastTime = sceneDef.time;
 
 			// ready for 2d draw of next frame
-			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
-			                  IGLDevice::One);
-			device->Enable(IGLDevice::Blend, true);
+			Prepare2DRendering(true);
 
 			profiler->EndFrame();
 		}
@@ -1259,6 +1352,16 @@ namespace spades {
 			EnsureSceneNotStarted();
 
 			device->Swap();
+
+			UpdateRenderSize();
+		}
+
+		void GLRenderer::Prepare2DRendering(bool reset) {
+			device->BlendFunc(IGLDevice::One, IGLDevice::OneMinusSrcAlpha, IGLDevice::Zero,
+			                  IGLDevice::One);
+			device->Enable(IGLDevice::Blend, true);
+			device->BindFramebuffer(IGLDevice::Framebuffer, 0);
+			device->Viewport(0, 0, device->ScreenWidth(), device->ScreenHeight());
 		}
 
 		Handle<Bitmap> GLRenderer::ReadBitmap() {

@@ -242,7 +242,7 @@ namespace spades {
 				visibilityTexture.SetValue(0);
 
 				qr.SetCoordAttributeIndex(positionAttribute());
-				dev.Viewport(0, 0, dev.ScreenWidth(), dev.ScreenHeight());
+				dev.Viewport(0, 0, renderer.GetRenderWidth(), renderer.GetRenderHeight());
 
 				/* render flare */
 

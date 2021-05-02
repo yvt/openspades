@@ -28,8 +28,12 @@
 
 #include <Core/ConcurrentDispatch.h>
 #include <Core/Settings.h>
-#ifdef __APPLE__
+#if defined(__APPLE__)
+#if defined(__x86_64__)
 #include <xmmintrin.h>
+#else
+#include <arm_neon.h>
+#endif
 #endif
 
 #include "GLProfiler.h"

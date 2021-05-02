@@ -83,6 +83,7 @@ FIND_PATH(SDL2_INCLUDE_DIR SDL_render.h
   /usr/include/SDL2
   /sw # Fink
   /opt/local/include/SDL2 # DarwinPorts
+  /opt/homebrew/include/SDL2
   /opt/csw # Blastwave
   /opt
 )
@@ -96,6 +97,7 @@ FIND_LIBRARY(SDL2_LIBRARY_TEMP
   PATHS
   /sw
   /opt/local
+  /opt/homebrew
   /opt/csw
   /opt
 )

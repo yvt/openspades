@@ -34,7 +34,7 @@ namespace spades {
 
 		public:
 			GLCameraBlurFilter(GLRenderer &);
-			GLColorBuffer Filter(GLColorBuffer, float radialBlur = 0.f);
+			GLColorBuffer Filter(GLColorBuffer, float intensity, float radialBlur = 0.f);
 		};
 	} // namespace draw
 } // namespace spades

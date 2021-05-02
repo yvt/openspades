@@ -938,7 +938,7 @@
 		#endif
 
 	// Free BSD
-	#elif defined(__FreeBSD__) || defined(__DragonFly__) || defined(__OpenBSD__)
+	#elif defined(__FreeBSD__) || defined(__DragonFly__) || defined(__OpenBSD__) || defined(__NetBSD__)
 		#define AS_BSD
 		#if (defined(i386) || defined(__i386) || defined(__i386__)) && !defined(__LP64__)
 			#undef COMPLEX_MASK
@@ -947,7 +947,7 @@
 			#define COMPLEX_RETURN_MASK (asOBJ_APP_CLASS_DESTRUCTOR | asOBJ_APP_CLASS_COPY_CONSTRUCTOR | asOBJ_APP_ARRAY)
 			#define THISCALL_PASS_OBJECT_POINTER_ON_THE_STACK
 			#define AS_X86
-		#elif defined(__LP64__)
+		#elif defined(__LP64__) && !defined(__sparc64__)
 			#define AS_X64_GCC
 			#define HAS_128_BIT_PRIMITIVES
 			#define SPLIT_OBJS_BY_MEMBER_TYPES
@@ -1079,15 +1079,23 @@
 	// Haiku OS
 	#elif __HAIKU__
 		#define AS_HAIKU
-		// Only x86-32 is currently supported by Haiku, but they do plan to support
-		// x86-64 and PowerPC in the future, so should go ahead and check the platform
-		// for future compatibility
 		#if (defined(i386) || defined(__i386) || defined(__i386__)) && !defined(__LP64__)
 			#define AS_X86
 			#define THISCALL_PASS_OBJECT_POINTER_ON_THE_STACK
 			#define THISCALL_RETURN_SIMPLE_IN_MEMORY
 			#define CDECL_RETURN_SIMPLE_IN_MEMORY
 			#define STDCALL_RETURN_SIMPLE_IN_MEMORY
+		#elif defined(__x86_64__)
+			#define AS_X64_GCC
+			#define HAS_128_BIT_PRIMITIVES
+			#undef COMPLEX_MASK
+			#define COMPLEX_MASK (asOBJ_APP_CLASS_CONSTRUCTOR | asOBJ_APP_CLASS_DESTRUCTOR)
+			#undef COMPLEX_RETURN_MASK
+			#define COMPLEX_RETURN_MASK (asOBJ_APP_CLASS_CONSTRUCTOR | asOBJ_APP_CLASS_DESTRUCTOR)
+			#define AS_LARGE_OBJS_PASSED_BY_REF
+			#define AS_LARGE_OBJ_MIN_SIZE 5
+			#undef STDCALL
+			#define STDCALL
 		#else
 			#define AS_MAX_PORTABILITY
 		#endif

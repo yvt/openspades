@@ -240,10 +240,6 @@ namespace spades {
 		void GLSparseShadowMapRenderer::Render() {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice::Integer lastFb = device.GetInteger(IGLDevice::FramebufferBinding);
-
-			// client::SceneDefinition def = GetRenderer().GetSceneDef();
-
 			float nearDist = 0.f;
 			float farDist = 150.f;
 
@@ -255,10 +251,6 @@ namespace spades {
 			device.Clear(IGLDevice::DepthBufferBit);
 
 			RenderShadowMapPass();
-
-			device.BindFramebuffer(IGLDevice::Framebuffer, lastFb);
-
-			device.Viewport(0, 0, device.ScreenWidth(), device.ScreenHeight());
 		}
 
 #pragma mark - Sparse Processor

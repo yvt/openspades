@@ -2,6 +2,7 @@
 # Your crowdin's credentials
 #
 "project_identifier" : "openspades"
+"project_id" : "246828"
 "api_key" : ""
 "base_path" : ""
 #"base_url" : ""
@@ -34,12 +35,6 @@ files: [
   # e.g. ["/**/?.txt", "/**/[0-9].txt", "/**/*\?*.txt"]
   #
   #"ignore" : [],
-
-  #
-  # The dest allows you to specify a file name on Crowdin
-  # e.g. "/messages.json"
-  #
-  "dest" : "/master/openspades.pot",
 
   #
   # File type

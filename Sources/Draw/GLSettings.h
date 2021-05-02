@@ -30,7 +30,7 @@ namespace spades {
 			// clang-format off
 			TypedItemHandle<bool> r_blitFramebuffer     { *this, "r_blitFramebuffer" };
 			TypedItemHandle<bool> r_bloom               { *this, "r_bloom" };
-			TypedItemHandle<bool> r_cameraBlur          { *this, "r_cameraBlur", ItemFlags::Latch };
+			TypedItemHandle<float> r_cameraBlur         { *this, "r_cameraBlur" };
 			TypedItemHandle<bool> r_colorCorrection     { *this, "r_colorCorrection" };
 			TypedItemHandle<bool> r_debugTiming         { *this, "r_debugTiming" };
 			TypedItemHandle<bool> r_debugTimingOutputScreen { *this, "r_debugTimingOutputScreen" };
@@ -65,12 +65,16 @@ namespace spades {
 			TypedItemHandle<bool> r_physicalLighting    { *this, "r_physicalLighting", ItemFlags::Latch };
 			TypedItemHandle<int> r_radiosity            { *this, "r_radiosity", ItemFlags::Latch };
 			TypedItemHandle<float> r_saturation         { *this, "r_saturation" };
+			TypedItemHandle<float> r_scale              { *this, "r_scale" };
+			TypedItemHandle<int> r_scaleFilter          { *this, "r_scaleFilter" };
 			TypedItemHandle<int> r_shadowMapSize        { *this, "r_shadowMapSize", ItemFlags::Latch };
-			TypedItemHandle<int> r_softParticles        { *this, "r_softParticles" };
+			TypedItemHandle<float> r_sharpen            { *this, "r_sharpen" };
+			TypedItemHandle<int> r_softParticles        { *this, "r_softParticles", ItemFlags::Latch };
 			TypedItemHandle<bool> r_sparseShadowMaps    { *this, "r_sparseShadowMaps", ItemFlags::Latch };
 			TypedItemHandle<bool> r_srgb                { *this, "r_srgb", ItemFlags::Latch };
 			TypedItemHandle<bool> r_srgb2D              { *this, "r_srgb2D", ItemFlags::Latch };
 			TypedItemHandle<int> r_ssao                 { *this, "r_ssao", ItemFlags::Latch };
+			TypedItemHandle<bool> r_temporalAA          { *this, "r_temporalAA" };
 			TypedItemHandle<int> r_water                { *this, "r_water", ItemFlags::Latch };
 			// clang-format on
 		};

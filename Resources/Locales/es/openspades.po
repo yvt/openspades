@@ -3,13 +3,13 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2019-01-01 05:55\n"
-"Last-Translator: yvt <i@yvt.jp>\n"
+"PO-Revision-Date: 2020-04-19 14:46\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: crowdin.com\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: openspades\n"
@@ -256,7 +256,7 @@ msgstr "Granada"
 #: Sources/Client/Client_Update.cpp:860 Sources/Client/Client_Update.cpp:886
 msgctxt "Client"
 msgid "Headshot"
-msgstr "Disparos en la Cabeza"
+msgstr "Disparo en la Cabeza"
 
 #. ! A cause of death shown in the kill feed.
 #: Sources/Client/Client_Update.cpp:864 Sources/Client/Client_Update.cpp:890
@@ -268,7 +268,7 @@ msgstr "Cambio de equipo"
 #: Sources/Client/Client_Update.cpp:868 Sources/Client/Client_Update.cpp:894
 msgctxt "Client"
 msgid "Weapon Change"
-msgstr "Cambiar arma"
+msgstr "Cambio de arma"
 
 #: Sources/Client/Client_Update.cpp:907 Sources/Client/Client_Update.cpp:933
 msgctxt "Client"
@@ -810,7 +810,7 @@ msgstr "Sangre"
 #: Resources/Scripts/Gui/Preferences.as:644
 msgctxt "Preferences"
 msgid "Ejecting Brass"
-msgstr ""
+msgstr "Eyectar cartuchos de bala"
 
 #: Resources/Scripts/Gui/Preferences.as:645
 #: Resources/Scripts/Gui/Preferences.as:645
@@ -1186,7 +1186,7 @@ msgstr "Avanzado"
 #: Resources/Scripts/Gui/StartupScreen.as:288
 msgctxt "StartupScreen"
 msgid "An unknown error has occurred while opening the update info website."
-msgstr "Un error desconocido ha ocurrido mientras se abria el directorio de configuraciones."
+msgstr "Un error desconocido ha ocurrido mientras se abría el sitio web de información de actualización."
 
 #: Resources/Scripts/Gui/StartupScreen.as:853
 #: Resources/Scripts/Gui/StartupScreen.as:853
@@ -1689,7 +1689,7 @@ msgstr "Desconocido ({0})"
 #: Resources/Scripts/Gui/StartupScreen.as:1764
 msgctxt "StartupScreen"
 msgid "System default"
-msgstr "Predeterminado"
+msgstr "Predeterminado por el sistema"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1813
 #: Resources/Scripts/Gui/StartupScreen.as:1813
@@ -1725,7 +1725,7 @@ msgstr "Mostrar detalles..."
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 msgctxt "UpdateCheck"
 msgid "Version {0} is available! (You currently have {1})"
-msgstr "¡Una nueva versión {0} está disponible! (Actualmente tienes la {1})"
+msgstr "¡La nueva versión {0} está disponible! (Actualmente tienes la {1})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
@@ -1743,19 +1743,19 @@ msgstr "Buscando actualizaciones..."
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
 msgctxt "UpdateCheck"
 msgid "Failed to check for updates."
-msgstr "No se ha podido buscar actualizaciones."
+msgstr "Búsqueda de actualizaciones fallida."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:116
 #: Resources/Scripts/Gui/UpdateCheckView.as:116
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not enabled."
-msgstr "Las actualizaciones automáticas no están habilitada."
+msgstr "La comprobación automática de nuevas actualizaciones no está habilitada."
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:119
 #: Resources/Scripts/Gui/UpdateCheckView.as:119
 msgctxt "UpdateCheck"
 msgid "Automatic update check is not available."
-msgstr "Las actualizaciones automáticas no están disponibles."
+msgstr "La comprobación automática de nuevas actualizaciones no está disponible."
 
 #: Sources/Client/Client_NetHandler.cpp:258
 #: Sources/Client/Client_NetHandler.cpp:271
@@ -1771,12 +1771,12 @@ msgstr "Sin Asignar"
 #: Sources/Client/Client_Draw.cpp:655
 msgctxt "Client"
 msgid "[{0}] Cycle camera mode"
-msgstr "[{0}] Cambiar punto de vista"
+msgstr "[{0}] Vista en 3ra persona"
 
 #: Sources/Client/Client_Draw.cpp:657
 msgctxt "Client"
 msgid "[{0}/{1}] Next/previous player"
-msgstr "[{0}/{1}] Próximo jugador/anterior"
+msgstr "[{0}/{1}] Siguiente/anterior jugador"
 
 #: Sources/Client/Client_Draw.cpp:661
 msgctxt "Client"

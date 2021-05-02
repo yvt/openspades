@@ -235,6 +235,7 @@ namespace spades{
 
 						r = eng->RegisterInterfaceMethod("IWeaponSkin2",
 														 "void SetSoundEnvironment(float, float, float)");
+						manager->CheckError(r);
 						r = eng->RegisterInterfaceMethod("IWeaponSkin2",
 														 "void set_SoundOrigin(Vector3)");
 						manager->CheckError(r);

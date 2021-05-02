@@ -16,6 +16,10 @@ namespace spades {
 		std::array<uint32_t, 4> regs;
 #ifdef WIN32
 		__cpuid(reinterpret_cast<int *>(regs.data()), a);
+#elif defined(__i386__) && (defined(__pic__) || defined(__PIC__))
+        asm volatile("mov %%ebx, %%edi\ncpuid\nxchg %%edi, %%ebx\n"
+                     : "=a"(regs[0]), "=D"(regs[1]), "=c"(regs[2]), "=d"(regs[2])
+		             : "a"(a), "c"(0));
 #else
 		asm volatile("cpuid"
 		             : "=a"(regs[0]), "=b"(regs[1]), "=c"(regs[2]), "=d"(regs[3])

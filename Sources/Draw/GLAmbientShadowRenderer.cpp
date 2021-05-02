@@ -69,7 +69,7 @@ namespace spades {
 
 			for (Chunk &c : chunks) {
 				float *data = (float *)c.data;
-				std::fill(data, data + ChunkSize * ChunkSize * ChunkSize, 1.f);
+				std::fill(data, data + ChunkSize * ChunkSize * ChunkSize * 2, 1.f);
 			}
 
 			for (int x = 0; x < chunkW; x++) {
@@ -97,16 +97,16 @@ namespace spades {
 			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
 			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapR,
 			                    IGLDevice::ClampToEdge);
-			device.TexImage3D(IGLDevice::Texture3D, 0, IGLDevice::Red, w, h, d + 1, 0,
-			                  IGLDevice::Red, IGLDevice::FloatType, NULL);
+			device.TexImage3D(IGLDevice::Texture3D, 0, IGLDevice::RG, w, h, d + 1, 0, IGLDevice::RG,
+			                  IGLDevice::FloatType, NULL);
 
 			SPLog("Chunk texture allocated");
 
 			std::vector<float> v;
-			v.resize(w * h);
+			v.resize(w * h * 2);
 			std::fill(v.begin(), v.end(), 1.f);
 			for (int i = 0; i < d + 1; i++) {
-				device.TexSubImage3D(IGLDevice::Texture3D, 0, 0, 0, i, w, h, 1, IGLDevice::Red,
+				device.TexSubImage3D(IGLDevice::Texture3D, 0, 0, 0, i, w, h, 1, IGLDevice::RG,
 				                     IGLDevice::FloatType, v.data());
 			}
 
@@ -124,38 +124,22 @@ namespace spades {
 			device.DeleteTexture(texture);
 		}
 
+		/**
+		 * Evaluate the AO term at the point specified by given world coordinates.
+		 */
 		float GLAmbientShadowRenderer::Evaluate(IntVector3 ipos) {
 			SPADES_MARK_FUNCTION_DEBUG();
 
-			float sum = 0;
+			float sum = 0.0f;
 			Vector3 pos = MakeVector3((float)ipos.x, (float)ipos.y, (float)ipos.z);
+			pos.x += 0.5f;
+			pos.y += 0.5f;
+			pos.z += 0.5f;
 
-			float muzzleDiff = 0.02f;
+			for (int i = 0; i < NumRays; i++) {
+				Vector3 dir = rays[i];
 
-			// check allowed ray direction
-			uint8_t directions[8] = {0, 1, 2, 3, 4, 5, 6, 7};
-			int numDirections = 0;
-			for (int x = -1; x <= 0; x++)
-				for (int y = -1; y <= 0; y++)
-					for (int z = -1; z <= 0; z++) {
-						if (!map->IsSolidWrapped(ipos.x + x, ipos.y + y, ipos.z + z)) {
-							unsigned int bits = 0;
-							if (x)
-								bits |= 1;
-							if (y)
-								bits |= 2;
-							if (z)
-								bits |= 4;
-							directions[numDirections++] = bits;
-						}
-					}
-			if (numDirections == 0)
-				numDirections = 8;
-
-			int dirId = 0;
-
-			for (Vector3 dir : rays) {
-				unsigned int bits = directions[dirId];
+				unsigned int bits = i & 7;
 				if (bits & 1)
 					dir.x = -dir.x;
 				if (bits & 2)
@@ -163,25 +147,15 @@ namespace spades {
 				if (bits & 4)
 					dir.z = -dir.z;
 
-				dirId++;
-				if (dirId >= numDirections)
-					dirId = 0;
-
-				Vector3 muzzle = pos + dir * muzzleDiff;
+				Vector3 muzzle = pos;
 				IntVector3 hitBlock;
 
 				float brightness = 1.f;
-				if (map->IsSolidWrapped((int)floorf(muzzle.x), (int)floorf(muzzle.y),
-				                        (int)floorf(muzzle.z))) {
-					if (numDirections < 8)
-						SPAssert(false);
-					continue;
-				}
-				if (map->CastRay(muzzle, dir, 18.f, hitBlock)) {
+				if (map->CastRay(muzzle, dir, (float)RayLength, hitBlock)) {
 					Vector3 centerPos =
 					  MakeVector3(hitBlock.x + .5f, hitBlock.y + .5f, hitBlock.z + .5f);
 					float dist = (centerPos - muzzle).GetPoweredLength();
-					brightness = dist * 0.02f; // 1/7/7
+					brightness = dist * (1.0 / float((RayLength - 1) * (RayLength - 1)));
 					if (brightness > 1.f)
 						brightness = 1.f;
 				}
@@ -189,8 +163,7 @@ namespace spades {
 				sum += brightness;
 			}
 
-			sum *= 1.f / (float)NumRays;
-			sum *= (float)numDirections / 4.f;
+			sum = std::min(sum * (2.f / (float)NumRays), 1.0f);
 
 			return sum;
 		}
@@ -201,7 +174,8 @@ namespace spades {
 				return;
 			}
 
-			Invalidate(x - 8, y - 8, z - 8, x + 8, y + 8, z + 8);
+			Invalidate(x - RayLength, y - RayLength, z - RayLength, x + RayLength, y + RayLength,
+			           z + RayLength);
 		}
 
 		void GLAmbientShadowRenderer::Invalidate(int minX, int minY, int minZ, int maxX, int maxY,
@@ -289,7 +263,7 @@ namespace spades {
 				if (!c.transferDone.exchange(true)) {
 					device.TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
 					                     c.cy * ChunkSize, c.cz * ChunkSize + 1, ChunkSize,
-					                     ChunkSize, ChunkSize, IGLDevice::Red, IGLDevice::FloatType,
+					                     ChunkSize, ChunkSize, IGLDevice::RG, IGLDevice::FloatType,
 					                     c.data);
 				}
 			}
@@ -366,15 +340,166 @@ namespace spades {
 			int originY = cy * ChunkSize;
 			int originZ = cz * ChunkSize;
 
+			// Compute the slightly larger volume for blurring
+			constexpr int padding = 2;
+			float wData[ChunkSize + padding * 2][ChunkSize + padding * 2][ChunkSize + padding * 2]
+			           [2];
+			std::uint8_t wFlags[ChunkSize + padding * 2][ChunkSize + padding * 2]
+			                   [ChunkSize + padding * 2];
+			int wOriginX = originX - padding;
+			int wOriginY = originY - padding;
+			int wOriginZ = originZ - padding;
+			int wDirtyMinX = c.dirtyMinX;
+			int wDirtyMinY = c.dirtyMinY;
+			int wDirtyMinZ = c.dirtyMinZ;
+			int wDirtyMaxX = c.dirtyMaxX + padding * 2;
+			int wDirtyMaxY = c.dirtyMaxY + padding * 2;
+			int wDirtyMaxZ = c.dirtyMaxZ + padding * 2;
+
+			auto b = [](int i) -> std::uint8_t { return (std::uint8_t)1 << i; };
+			auto to_b = [](bool b, int i) -> std::uint8_t { return (std::uint8_t)b << i; };
+
+			for (int z = wDirtyMinZ; z <= wDirtyMaxZ; z++)
+				for (int y = wDirtyMinY; y <= wDirtyMaxY; y++)
+					for (int x = wDirtyMinX; x <= wDirtyMaxX; x++) {
+						IntVector3 pos{
+						  x + wOriginX,
+						  y + wOriginY,
+						  z + wOriginZ,
+						};
+
+						if (map->IsSolidWrapped(pos.x, pos.y, pos.z)) {
+							wData[z][y][x][0] = 0.0;
+							wData[z][y][x][1] = 0.0;
+						} else {
+							wData[z][y][x][0] = Evaluate(pos);
+							wData[z][y][x][1] = 1.0;
+						}
+						// bit 0: solids
+						// bit 1: contact (by-surface voxel)
+						wFlags[z][y][x] =
+						  to_b(map->IsSolidWrapped(pos.x, pos.y, pos.z), 0) |
+						  to_b(map->IsSolidWrapped(pos.x - 1, pos.y - 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y - 1, pos.z) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y - 1, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y, pos.z) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y + 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y + 1, pos.z) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y + 1, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x - 1, pos.y - 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x, pos.y - 1, pos.z) |
+						         map->IsSolidWrapped(pos.x, pos.y - 1, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x, pos.y, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x, pos.y, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x, pos.y + 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x, pos.y + 1, pos.z) |
+						         map->IsSolidWrapped(pos.x, pos.y + 1, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y - 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y - 1, pos.z) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y - 1, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y, pos.z) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y, pos.z + 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y + 1, pos.z - 1) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y + 1, pos.z) |
+						         map->IsSolidWrapped(pos.x + 1, pos.y + 1, pos.z + 1),
+						       1);
+					}
+
+			// The AO terms are sampled 0.5 blocks away from the terrain surface,
+			// which leads to under-shadowing. Compensate for this effect.
+			for (int z = wDirtyMinZ; z <= wDirtyMaxZ; z++)
+				for (int y = wDirtyMinY; y <= wDirtyMaxY; y++)
+					for (int x = wDirtyMinX; x <= wDirtyMaxX; x++) {
+						float &d = wData[z][y][x][0];
+						d *= d * d + 1.0f - d;
+					}
+
+			// Blur the result to remove noise
+			//
+			//	  |     this        |     neighbor    |
+			//	  | solid | contact | solid | contact | blur
+			//	  |   0        0    |   0        x    |   1
+			//	  |   0        1    |   0        0    |   0  (prevent under-shadowing)
+			//	  |   0        1    |   0        1    |   1
+			//	  |   0        x    |   1        x    |   0  (solid voxel's value is zero)
+			//	  |   1        x    |   0        x    |   0  (solid voxel's value must remain zero)
+			//	  |   1        x    |   1        x    |   x
+			//
+			//
+			//	             this voxel
+			//
+			//	                    solid
+			//	                  /-------\  				.
+			//	          +---+---+---+---+
+			//	          | 1 | 0 | 0 | 0 |
+			//	          +---+---+---+---+\				.
+			//	          | 1 | 1 | 0 | 0 | |
+			//	         /+---+---+---+---+ | contact  neighbor
+			//	        | | 0 | 0 |   |   | |
+			//	  solid | +---+---+---+---+/
+			//	        | | 0 | 0 |   |   |
+			//	         \+---+---+---+---+
+			//	              \-------/
+			//	               contact
+			//
+			static const float divider[] = {1.0f, 1.0f / 2.0f, 1.0f / 3.0f};
+			auto mask = [](bool b, float x) { return b ? x : 0.0f; };
+			auto shouldBlur = [=](std::uint8_t thisFlags, std::uint8_t neighborFlags) {
+				return ((neighborFlags & b(0)) | ((~thisFlags | neighborFlags) & b(1))) == 0b10;
+			};
+			for (int blurPass = 0; blurPass < 2; ++blurPass) {
+				for (int z = wDirtyMinZ; z <= wDirtyMaxZ; z++)
+					for (int y = wDirtyMinY; y <= wDirtyMaxY; y++)
+						for (int x = wDirtyMinX + 1; x < wDirtyMaxX; x++) {
+							if (wFlags[z][y][x] & b(0)) {
+								continue;
+							}
+							// Do not blur between by-surface voxels and
+							// in-the-air voxels
+							bool m1 = shouldBlur(wFlags[z][y][x], wFlags[z][y][x - 1]);
+							bool m2 = shouldBlur(wFlags[z][y][x], wFlags[z][y][x + 1]);
+							wData[z][y][x][0] =
+							  (wData[z][y][x][0] + mask(m1, wData[z][y][x - 1][0]) +
+							   mask(m2, wData[z][y][x + 1][0])) *
+							  divider[(int)m1 + (int)m2];
+						}
+				for (int z = wDirtyMinZ; z <= wDirtyMaxZ; z++)
+					for (int y = wDirtyMinY + 1; y < wDirtyMaxY; y++)
+						for (int x = wDirtyMinX; x <= wDirtyMaxX; x++) {
+							if (wFlags[z][y][x] & b(0)) {
+								continue;
+							}
+							bool m1 = shouldBlur(wFlags[z][y][x], wFlags[z][y - 1][x]);
+							bool m2 = shouldBlur(wFlags[z][y][x], wFlags[z][y + 1][x]);
+							wData[z][y][x][0] =
+							  (wData[z][y][x][0] + mask(m1, wData[z][y - 1][x][0]) +
+							   mask(m2, wData[z][y + 1][x][0])) *
+							  divider[(int)m1 + (int)m2];
+						}
+				for (int z = wDirtyMinZ + 1; z < wDirtyMaxZ; z++)
+					for (int y = wDirtyMinY; y <= wDirtyMaxY; y++)
+						for (int x = wDirtyMinX; x <= wDirtyMaxX; x++) {
+							if (wFlags[z][y][x] & b(0)) {
+								continue;
+							}
+							bool m1 = shouldBlur(wFlags[z][y][x], wFlags[z - 1][y][x]);
+							bool m2 = shouldBlur(wFlags[z][y][x], wFlags[z + 1][y][x]);
+							wData[z][y][x][0] =
+							  (wData[z][y][x][0] + mask(m1, wData[z - 1][y][x][0]) +
+							   mask(m2, wData[z + 1][y][x][0])) *
+							  divider[(int)m1 + (int)m2];
+						}
+			}
+
+			// Copy the result to `c.data`
 			for (int z = c.dirtyMinZ; z <= c.dirtyMaxZ; z++)
 				for (int y = c.dirtyMinY; y <= c.dirtyMaxY; y++)
 					for (int x = c.dirtyMinX; x <= c.dirtyMaxX; x++) {
-						IntVector3 pos;
-						pos.x = (x + originX);
-						pos.y = (y + originY);
-						pos.z = (z + originZ);
-
-						c.data[z][y][x] = Evaluate(pos);
+						c.data[z][y][x][0] = wData[z + padding][y + padding][x + padding][0];
+						c.data[z][y][x][1] = wData[z + padding][y + padding][x + padding][1];
 					}
 
 			c.dirty = false;

@@ -42,6 +42,7 @@ namespace spades {
 			static constexpr int NumRays = 16;
 			static constexpr int ChunkSizeBits = 4;
 			static constexpr int ChunkSize = 1 << ChunkSizeBits;
+			static constexpr int RayLength = 16;
 
 			GLRenderer &renderer;
 			IGLDevice &device;
@@ -50,7 +51,7 @@ namespace spades {
 
 			struct Chunk {
 				int cx, cy, cz;
-				float data[ChunkSize][ChunkSize][ChunkSize];
+				float data[ChunkSize][ChunkSize][ChunkSize][2];
 				bool dirty = true;
 				int dirtyMinX = 0, dirtyMaxX = ChunkSize - 1;
 				int dirtyMinY = 0, dirtyMaxY = ChunkSize - 1;

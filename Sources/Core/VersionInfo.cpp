@@ -46,6 +46,10 @@ std::string VersionInfo::GetVersionInfo() {
 	return std::string("FreeBSD");
 #elif defined(__OpenBSD__)
 	return std::string("OpenBSD");
+#elif defined(__NetBSD__)
+	return std::string("NetBSD");
+#elif defined(__HAIKU__)
+	return std::string("Haiku");
 #else
 	return std::string("Unknown OS");
 #endif

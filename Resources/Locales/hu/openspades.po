@@ -3,13 +3,13 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2019-01-01 05:55\n"
-"Last-Translator: yvt <i@yvt.jp>\n"
+"PO-Revision-Date: 2020-04-19 14:46\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: crowdin.com\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: openspades\n"
@@ -95,7 +95,7 @@ msgstr "Nyomj [{0}]-t az újratöltéshez"
 #: Sources/Client/Client_Draw.cpp:584 Sources/Client/Client_Draw.cpp:608
 msgctxt "Client"
 msgid "You will respawn in: {0}"
-msgstr "{0} mp. múlva újra fogsz éledni"
+msgstr "{0} másodperc múlva újra fogsz éledni"
 
 #: Sources/Client/Client_Draw.cpp:586 Sources/Client/Client_Draw.cpp:610
 msgctxt "Client"
@@ -245,7 +245,7 @@ msgstr "Esés"
 #: Sources/Client/Client_Update.cpp:853 Sources/Client/Client_Update.cpp:879
 msgctxt "Client"
 msgid "Melee"
-msgstr ""
+msgstr "Közelharc"
 
 #: Sources/Client/Client_Update.cpp:856 Sources/Client/Client_Update.cpp:882
 msgctxt "Client"
@@ -293,7 +293,7 @@ msgstr "Nem tehetsz oda blokkot."
 #: Sources/Client/LimboView.cpp:79 Sources/Client/LimboView.cpp:79
 msgctxt "Client"
 msgid "Spawn"
-msgstr ""
+msgstr "Játékba lépés"
 
 #: Sources/Client/LimboView.cpp:183 Sources/Client/LimboView.cpp:183
 msgctxt "Client"
@@ -1264,7 +1264,7 @@ msgid "Antialias:Enables a technique to improve the appearance of high-contrast 
 "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|Off|MSAA 2x|4x|FXAA"
 msgstr "Antialias: Javítja a magas kontrasztú élek megjelenítését.\n\n"
 "MSAA: Antialiasingot végez egy köztes magas felbontású kép generálásával. Ez néz ki a legjobban, de bizonyos beállításokkal nem működik megfelelően.\n\n"
-"FXAA: Antialiasingot végez utómunkálatként a kép elsimításával.|Off|MSAA 2x|4x|FXAA"
+"FXAA: Antialiasingot végez utómunkálatként a kép elsimításával.|Nincs|MSAA 2x|4x|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1150
 #: Resources/Scripts/Gui/StartupScreen.as:1150
@@ -1288,7 +1288,7 @@ msgstr "Lineáris HDR renderelés"
 #: Resources/Scripts/Gui/StartupScreen.as:1157
 msgctxt "StartupScreen"
 msgid "Uses a number representation which allows wider dynamic range during rendering process. Additionally, this allows color calculation whose value is in linear correspondence with actual energy, that is, physically accurate blending can be achieved."
-msgstr "Számábrázolás segítségével nagyobb dinamikus tartományt tud elérni a renderelés alatt. Továbbá, ez lehetővé teszi az energiájuktól lineárisan függő színek kiszámítását, ezzel fizikailag pontos keverést elérve."
+msgstr "Nagyobb dinamikus tartomány elérését lehetővé tévő számábrázolást használ a renderelés közben. Továbbá, ez lehetővé teszi az energiájuktól lineárisan függő színek kiszámítását, ezzel fizikailag pontos színkeverést elérve."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1164
 #: Resources/Scripts/Gui/StartupScreen.as:1164
@@ -1438,7 +1438,7 @@ msgstr "Az utófeldolgozásnak köszönhetően a kép jobban és élethűbben n�
 #: Resources/Scripts/Gui/StartupScreen.as:1203
 msgctxt "StartupScreen"
 msgid "Particles|Low:Artifact occurs when a particle intersects other objects.|Medium:Particle intersects objects smoothly.|High:Particle intersects objects smoothly, and some objects casts their shadow to particles."
-msgstr ""
+msgstr "Részecskék|Alacsony:Maradványok láthatók, amikor egy részecske ütközik objektumokkal.|Közepes:A részecskék és objektumok ütközése egyenletes.|Magas:A részecskék és objektumok ütközése egyenletes, és bizonyos objektumok árnyékot vetnek a részecskékre."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1213
 #: Resources/Scripts/Gui/StartupScreen.as:1213
@@ -1450,7 +1450,7 @@ msgstr "Dinamikus fények"
 #: Resources/Scripts/Gui/StartupScreen.as:1215
 msgctxt "StartupScreen"
 msgid "Gives some objects an ability to emit light to give them an energy-emitting impression."
-msgstr ""
+msgstr "Lehetővé teszi, hogy bizonyos tárgyak fényt bocsássanak ki, hogy energiakibocsátás benyomását keltsék."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1218
 #: Resources/Scripts/Gui/StartupScreen.as:1218
@@ -1510,7 +1510,7 @@ msgstr "Víz shader | Nincs: A víz a többi blokkhoz hasonlóan kerül megrajzo
 #: Resources/Scripts/Gui/StartupScreen.as:1251
 msgctxt "StartupScreen"
 msgid "Med"
-msgstr ""
+msgstr "Közepes"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 #: Resources/Scripts/Gui/StartupScreen.as:1256
@@ -1558,7 +1558,7 @@ msgstr "YSR"
 #: Resources/Scripts/Gui/StartupScreen.as:1512
 msgctxt "StartupScreen"
 msgid "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It features several enhanced features including automatic load control, dynamics compressor, HRTF-based 3D audio, and high quality reverb."
-msgstr "A YSR egy kísérleti 3D HDR hangot előállító, OpenSpades-re optimalizált szoftver. Több javított funkciót is tartalmaz, mint automatikus terheléselosztó, dinamikus kompresszor, HRTF alapú 3D hang, és magas minőségű visszhang."
+msgstr "A YSR egy kísérleti 3D HDR hangot előállító, OpenSpades-re optimalizált szoftver. Több javított funkciót is tartalmaz, mint automatikus terheléselosztás, dinamikai kopresszor, HRTF alapú 3D hang, és magas minőségű visszhang."
 
 #. ! The name of audio driver that outputs no audio.
 #: Resources/Scripts/Gui/StartupScreen.as:1523
@@ -1597,7 +1597,7 @@ msgstr "EAX"
 #: Resources/Scripts/Gui/StartupScreen.as:1547
 msgctxt "StartupScreen"
 msgid "Enables extended features provided by the OpenAL driver to create more ambience."
-msgstr ""
+msgstr "Engedélyezi az OpenAL driver által nyújtott extra funkciókat a jobb hangzás érdekében."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1563
 #: Resources/Scripts/Gui/StartupScreen.as:1563
@@ -1633,7 +1633,7 @@ msgstr "Konfigurációs mappa megnyitása"
 #: Resources/Scripts/Gui/StartupScreen.as:1649
 msgctxt "StartupScreen"
 msgid "Reveal Config Folder in Finder"
-msgstr ""
+msgstr "Konfigurációs mappa megnyitása a fájlkezelőben"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1651
 #: Resources/Scripts/Gui/StartupScreen.as:1651
@@ -1725,7 +1725,7 @@ msgstr "Részletek mutatása..."
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 msgctxt "UpdateCheck"
 msgid "Version {0} is available! (You currently have {1})"
-msgstr "A verzió {0} elérhető! (Jelenlegi verzió: {1})"
+msgstr "A {0} verzió elérhető! (Jelenlegi verzió: {1})"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
