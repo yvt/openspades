@@ -44,26 +44,26 @@ namespace spades {
 			~SWModel();
 
 		public:
-			SWModel(VoxelModel *model);
+			SWModel(VoxelModel &model);
 
 			float GetRadius() { return radius; }
 			Vector3 GetCenter() { return center; }
-			VoxelModel *GetRawModel() { return rawModel; }
+			VoxelModel &GetRawModel() { return *rawModel; }
 
 			AABB3 GetBoundingBox();
 		};
 
 		class SWModelManager {
-			std::unordered_map<std::string, SWModel *> models;
+			std::unordered_map<std::string, Handle<SWModel>> models;
 
 		public:
 			SWModelManager() {}
 			~SWModelManager();
 
-			SWModel *RegisterModel(const std::string &);
-			SWModel *CreateModel(VoxelModel *);
+			Handle<SWModel> RegisterModel(const std::string &);
+			Handle<SWModel> CreateModel(VoxelModel &);
 
 			void ClearCache();
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

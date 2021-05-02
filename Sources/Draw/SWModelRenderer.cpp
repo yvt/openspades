@@ -44,23 +44,23 @@ namespace spades {
 		static ZVals zvals;
 
 		template <SWFeatureLevel lvl>
-		void SWModelRenderer::RenderInner(spades::draw::SWModel *model,
+		void SWModelRenderer::RenderInner(spades::draw::SWModel &model,
 		                                  const client::ModelRenderParam &param) {
 			auto &mat = param.matrix;
 			auto origin = mat.GetOrigin();
 			auto axis1 = mat.GetAxis(0);
 			auto axis2 = mat.GetAxis(1);
 			auto axis3 = mat.GetAxis(2);
-			auto *rawModel = model->GetRawModel();
-			auto rawModelOrigin = rawModel->GetOrigin();
+			auto &rawModel = model.GetRawModel();
+			auto rawModelOrigin = rawModel.GetOrigin();
 			rawModelOrigin += 0.25f;
 			origin += axis1 * rawModelOrigin.x;
 			origin += axis2 * rawModelOrigin.y;
 			origin += axis3 * rawModelOrigin.z;
 
-			int w = rawModel->GetWidth();
-			int h = rawModel->GetHeight();
-			// int d = rawModel->GetDepth();
+			int w = rawModel.GetWidth();
+			int h = rawModel.GetHeight();
+			// int d = rawModel.GetDepth();
 
 			// evaluate brightness for each normals
 			uint8_t brights[3 * 3 * 3 + 1];
@@ -131,7 +131,7 @@ namespace spades {
 			// compute center coord. for culling
 			{
 				auto center = origin;
-				auto localCenter = model->GetCenter();
+				auto localCenter = model.GetCenter();
 				center += axis1 * localCenter.x;
 				center += axis2 * localCenter.y;
 				center += axis3 * localCenter.z;
@@ -140,14 +140,14 @@ namespace spades {
 				largestAxis = std::max(largestAxis, axis2.GetPoweredLength());
 				largestAxis = std::max(largestAxis, axis3.GetPoweredLength());
 
-				if (!r->SphereFrustrumCull(center, model->GetRadius() * sqrtf(largestAxis)))
+				if (!r->SphereFrustrumCull(center, model.GetRadius() * sqrtf(largestAxis)))
 					return;
 			}
 
-			Bitmap *fbmp = r->fb;
-			auto *fb = fbmp->GetPixels();
-			int fw = fbmp->GetWidth();
-			int fh = fbmp->GetHeight();
+			Bitmap &fbmp = *r->fb;
+			auto *fb = fbmp.GetPixels();
+			int fw = fbmp.GetWidth();
+			int fh = fbmp.GetHeight();
 			auto *db = r->depthBuffer.data();
 
 			Matrix4 viewproj = r->GetProjectionViewMatrix();
@@ -183,7 +183,7 @@ namespace spades {
 			for (int x = 0; x < w; x++) {
 				auto v2 = v1;
 				for (int y = 0; y < h; y++) {
-					auto *mp = &model->renderData[model->renderDataAddr[x + y * w]];
+					auto *mp = &model.renderData[model.renderDataAddr[x + y * w]];
 					while (*mp != -1) {
 						uint32_t data = *(mp++);
 						uint32_t normal = *(mp++);
@@ -276,7 +276,7 @@ namespace spades {
 			}
 		}
 
-		void SWModelRenderer::Render(spades::draw::SWModel *model,
+		void SWModelRenderer::Render(spades::draw::SWModel &model,
 		                             const client::ModelRenderParam &param) {
 #if ENABLE_SSE2
 			if (static_cast<int>(level) >= static_cast<int>(SWFeatureLevel::SSE2)) {
@@ -285,5 +285,5 @@ namespace spades {
 #endif
 				RenderInner<SWFeatureLevel::None>(model, param);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

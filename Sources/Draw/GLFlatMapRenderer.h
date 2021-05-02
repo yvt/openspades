@@ -23,6 +23,7 @@
 #include <vector>
 
 #include <Core/Math.h>
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	class Bitmap;
@@ -35,22 +36,22 @@ namespace spades {
 		class GLFlatMapRenderer {
 			enum { ChunkSize = 16, ChunkBits = 4 };
 
-			GLRenderer *renderer;
-			client::GameMap *map;
+			GLRenderer &renderer;
+			Handle<client::GameMap> map;
 			std::vector<bool> chunkInvalid;
 
-			GLImage *image;
+			Handle<GLImage> image;
 
 			int chunkCols, chunkRows;
 
 			Bitmap *GenerateBitmap(int x, int y, int w, int h);
 
 		public:
-			GLFlatMapRenderer(GLRenderer *renderer, client::GameMap *map);
+			GLFlatMapRenderer(GLRenderer &renderer, client::GameMap &map);
 			~GLFlatMapRenderer();
 			void Draw(const AABB2 &dest, const AABB2 &src);
 
-			void GameMapChanged(int x, int y, int z, client::GameMap *);
+			void GameMapChanged(int x, int y, int z, client::GameMap &);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

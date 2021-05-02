@@ -20,12 +20,14 @@
 
 #pragma once
 
-#include <vector>
+#include <array>
 #include <atomic>
+#include <vector>
 
+#include "IGLDevice.h"
 #include <Core/Debug.h>
 #include <Core/Math.h>
-#include "IGLDevice.h"
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	namespace client {
@@ -35,13 +37,17 @@ namespace spades {
 		class GLRenderer;
 		class IGLDevice;
 		class GLAmbientShadowRenderer {
-
 			class UpdateDispatch;
-			enum { NumRays = 16, ChunkSize = 16, ChunkSizeBits = 4, RayLength = 16 };
-			GLRenderer *renderer;
-			IGLDevice *device;
-			client::GameMap *map;
-			Vector3 rays[NumRays];
+
+			static constexpr int NumRays = 16;
+			static constexpr int ChunkSizeBits = 4;
+			static constexpr int ChunkSize = 1 << ChunkSizeBits;
+			static constexpr int RayLength = 16;
+
+			GLRenderer &renderer;
+			IGLDevice &device;
+			Handle<client::GameMap> map;
+			std::array<Vector3, NumRays> rays;
 
 			struct Chunk {
 				int cx, cy, cz;
@@ -51,7 +57,7 @@ namespace spades {
 				int dirtyMinY = 0, dirtyMaxY = ChunkSize - 1;
 				int dirtyMinZ = 0, dirtyMaxZ = ChunkSize - 1;
 
-				std::atomic<bool> transferDone {true};
+				std::atomic<bool> transferDone{true};
 			};
 
 			IGLDevice::UInteger texture;
@@ -85,7 +91,7 @@ namespace spades {
 			UpdateDispatch *dispatch;
 
 		public:
-			GLAmbientShadowRenderer(GLRenderer *renderer, client::GameMap *map);
+			GLAmbientShadowRenderer(GLRenderer &renderer, client::GameMap &map);
 			~GLAmbientShadowRenderer();
 
 			float Evaluate(IntVector3);
@@ -96,5 +102,5 @@ namespace spades {
 
 			IGLDevice::UInteger GetTexture() { return texture; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

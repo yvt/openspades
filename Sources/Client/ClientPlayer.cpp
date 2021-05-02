@@ -36,6 +36,7 @@
 #include "Player.h"
 #include "Weapon.h"
 #include "World.h"
+#include <Core/Bitmap.h>
 #include <Core/Settings.h>
 #include <ScriptBindings/IBlockSkin.h>
 #include <ScriptBindings/IGrenadeSkin.h>
@@ -80,7 +81,7 @@ namespace spades {
 			~SandboxedRenderer() {}
 
 		public:
-			SandboxedRenderer(IRenderer *base) : base(base) {}
+			SandboxedRenderer(Handle<IRenderer> base) : base(std::move(base)) {}
 
 			void SetClipBox(const AABB3 &b) { clipBox = b; }
 			void SetAllowDepthHack(bool h) { allowDepthHack = h; }
@@ -88,13 +89,17 @@ namespace spades {
 			void Init() { OnProhibitedAction(); }
 			void Shutdown() { OnProhibitedAction(); }
 
-			IImage *RegisterImage(const char *filename) { return base->RegisterImage(filename); }
-			IModel *RegisterModel(const char *filename) { return base->RegisterModel(filename); }
+			Handle<IImage> RegisterImage(const char *filename) {
+				return base->RegisterImage(filename);
+			}
+			Handle<IModel> RegisterModel(const char *filename) {
+				return base->RegisterModel(filename);
+			}
 
-			IImage *CreateImage(Bitmap *bmp) { return base->CreateImage(bmp); }
-			IModel *CreateModel(VoxelModel *m) { return base->CreateModel(m); }
+			Handle<IImage> CreateImage(Bitmap &bmp) { return base->CreateImage(bmp); }
+			Handle<IModel> CreateModel(VoxelModel &m) { return base->CreateModel(m); }
 
-			void SetGameMap(GameMap *) { OnProhibitedAction(); }
+			void SetGameMap(stmp::optional<GameMap &>) { OnProhibitedAction(); }
 
 			void SetFogDistance(float) { OnProhibitedAction(); }
 			void SetFogColor(Vector3) { OnProhibitedAction(); }
@@ -108,13 +113,8 @@ namespace spades {
 				}
 			}
 
-			void RenderModel(IModel *model, const ModelRenderParam &_p) {
+			void RenderModel(IModel &model, const ModelRenderParam &_p) {
 				ModelRenderParam p = _p;
-
-				if (!model) {
-					SPInvalidArgument("model");
-					return;
-				}
 
 				if (p.depthHack && !allowDepthHack) {
 					OnProhibitedAction();
@@ -133,20 +133,20 @@ namespace spades {
 					return;
 				}
 
-				auto bounds = (p.matrix * OBB3(model->GetBoundingBox())).GetBoundingAABB();
+				auto bounds = (p.matrix * OBB3(model.GetBoundingBox())).GetBoundingAABB();
 				if (CheckVisibility(bounds)) {
 					base->RenderModel(model, p);
 				}
 			}
 			void AddDebugLine(Vector3 a, Vector3 b, Vector4 color) { OnProhibitedAction(); }
 
-			void AddSprite(IImage *image, Vector3 center, float radius, float rotation) {
+			void AddSprite(IImage &image, Vector3 center, float radius, float rotation) {
 				Vector3 rad(radius * 1.5f, radius * 1.5f, radius * 1.5f);
 				if (CheckVisibility(AABB3(center - rad, center + rad))) {
 					base->AddSprite(image, center, radius, rotation);
 				}
 			}
-			void AddLongSprite(IImage *image, Vector3 p1, Vector3 p2, float radius) {
+			void AddLongSprite(IImage &image, Vector3 p1, Vector3 p2, float radius) {
 				Vector3 rad(radius * 1.5f, radius * 1.5f, radius * 1.5f);
 				AABB3 bounds1(p1 - rad, p1 + rad);
 				AABB3 bounds2(p2 - rad, p2 + rad);
@@ -169,32 +169,35 @@ namespace spades {
 			/** Sets color for image drawing. Always alpha premultiplied. */
 			void SetColorAlphaPremultiplied(Vector4 col) { base->SetColorAlphaPremultiplied(col); }
 
-			void DrawImage(IImage *img, const Vector2 &outTopLeft) {
+			void DrawImage(stmp::optional<IImage &> img, const Vector2 &outTopLeft) {
 				if (allowDepthHack)
 					base->DrawImage(img, outTopLeft);
 				else
 					OnProhibitedAction();
 			}
-			void DrawImage(IImage *img, const AABB2 &outRect) {
+			void DrawImage(stmp::optional<IImage &> img, const AABB2 &outRect) {
 				if (allowDepthHack)
 					base->DrawImage(img, outRect);
 				else
 					OnProhibitedAction();
 			}
-			void DrawImage(IImage *img, const Vector2 &outTopLeft, const AABB2 &inRect) {
+			void DrawImage(stmp::optional<IImage &> img, const Vector2 &outTopLeft,
+			               const AABB2 &inRect) {
 				if (allowDepthHack)
 					base->DrawImage(img, outTopLeft, inRect);
 				else
 					OnProhibitedAction();
 			}
-			void DrawImage(IImage *img, const AABB2 &outRect, const AABB2 &inRect) {
+			void DrawImage(stmp::optional<IImage &> img, const AABB2 &outRect,
+			               const AABB2 &inRect) {
 				if (allowDepthHack)
 					base->DrawImage(img, outRect, inRect);
 				else
 					OnProhibitedAction();
 			}
-			void DrawImage(IImage *img, const Vector2 &outTopLeft, const Vector2 &outTopRight,
-			               const Vector2 &outBottomLeft, const AABB2 &inRect) {
+			void DrawImage(stmp::optional<IImage &> img, const Vector2 &outTopLeft,
+			               const Vector2 &outTopRight, const Vector2 &outBottomLeft,
+			               const AABB2 &inRect) {
 				if (allowDepthHack)
 					base->DrawImage(img, outTopLeft, outTopRight, outBottomLeft, inRect);
 				else
@@ -209,34 +212,34 @@ namespace spades {
 
 			void Flip() { OnProhibitedAction(); }
 
-			Bitmap *ReadBitmap() {
+			Handle<Bitmap> ReadBitmap() {
 				OnProhibitedAction();
-				return nullptr;
+				return {};
 			}
 
 			float ScreenWidth() { return base->ScreenWidth(); }
 			float ScreenHeight() { return base->ScreenHeight(); }
 		};
 
-		ClientPlayer::ClientPlayer(Player *p, Client *c) : client(c), player(p), hasValidOriginMatrix(false) {
+		ClientPlayer::ClientPlayer(Player &p, Client &c)
+		    : client(c), player(p), hasValidOriginMatrix(false) {
 			SPADES_MARK_FUNCTION();
 
 			sprintState = 0.f;
 			aimDownState = 0.f;
 			toolRaiseState = 0.f;
-			currentTool = p->GetTool();
+			currentTool = p.GetTool();
 			localFireVibrationTime = -100.f;
 			time = 0.f;
 			viewWeaponOffset = MakeVector3(0, 0, 0);
 			lastFront = MakeVector3(0, 0, 0);
-			flashlightOrientation = p->GetFront();
+			flashlightOrientation = p.GetFront();
 
 			ScriptContextHandle ctx;
-			IRenderer *renderer = client->GetRenderer();
-			IAudioDevice *audio = client->GetAudioDevice();
+			IAudioDevice &audio = client.GetAudioDevice();
 
-			sandboxedRenderer.Set(new SandboxedRenderer(renderer), false);
-			renderer = sandboxedRenderer;
+			sandboxedRenderer = Handle<SandboxedRenderer>::New(client.GetRenderer());
+			IRenderer &renderer = *sandboxedRenderer;
 
 			static ScriptFunction spadeFactory(
 			  "ISpadeSkin@ CreateThirdPersonSpadeSkin(Renderer@, AudioDevice@)");
@@ -274,7 +277,7 @@ namespace spades {
 			  "IWeaponSkin@ CreateViewSMGSkin(Renderer@, AudioDevice@)");
 			static ScriptFunction shotgunViewFactory(
 			  "IWeaponSkin@ CreateViewShotgunSkin(Renderer@, AudioDevice@)");
-			switch (p->GetWeapon()->GetWeaponType()) {
+			switch (p.GetWeapon().GetWeaponType()) {
 				case RIFLE_WEAPON:
 					weaponSkin = initScriptFactory(rifleFactory, renderer, audio);
 					weaponViewSkin = initScriptFactory(rifleViewFactory, renderer, audio);
@@ -303,20 +306,18 @@ namespace spades {
 		}
 
 		asIScriptObject *ClientPlayer::initScriptFactory(ScriptFunction &creator,
-		                                                 IRenderer *renderer, IAudioDevice *audio) {
+		                                                 IRenderer &renderer, IAudioDevice &audio) {
 			ScriptContextHandle ctx = creator.Prepare();
-			ctx->SetArgObject(0, reinterpret_cast<void *>(renderer));
-			ctx->SetArgObject(1, reinterpret_cast<void *>(audio));
+			ctx->SetArgObject(0, reinterpret_cast<void *>(&renderer));
+			ctx->SetArgObject(1, reinterpret_cast<void *>(&audio));
 			ctx.ExecuteChecked();
 			asIScriptObject *result = reinterpret_cast<asIScriptObject *>(ctx->GetReturnObject());
 			result->AddRef();
 			return result;
 		}
 
-		void ClientPlayer::Invalidate() { player = NULL; }
-
 		bool ClientPlayer::IsChangingTool() {
-			return currentTool != player->GetTool() || toolRaiseState < .999f;
+			return currentTool != player.GetTool() || toolRaiseState < .999f;
 		}
 
 		float ClientPlayer::GetLocalFireVibration() {
@@ -331,9 +332,9 @@ namespace spades {
 		void ClientPlayer::Update(float dt) {
 			time += dt;
 
-			PlayerInput actualInput = player->GetInput();
-			WeaponInput actualWeapInput = player->GetWeaponInput();
-			if (actualInput.sprint && player->IsAlive()) {
+			PlayerInput actualInput = player.GetInput();
+			WeaponInput actualWeapInput = player.GetWeaponInput();
+			if (actualInput.sprint && player.IsAlive()) {
 				sprintState += dt * 4.f;
 				if (sprintState > 1.f)
 					sprintState = 1.f;
@@ -343,7 +344,7 @@ namespace spades {
 					sprintState = 0.f;
 			}
 
-			if (actualWeapInput.secondary && player->IsToolWeapon() && player->IsAlive()) {
+			if (actualWeapInput.secondary && player.IsToolWeapon() && player.IsAlive()) {
 				// This is the only animation that can be turned off
 				// here; others affect the gameplay directly and
 				// turning them off would be considered cheating
@@ -364,7 +365,7 @@ namespace spades {
 				}
 			}
 
-			if (currentTool == player->GetTool()) {
+			if (currentTool == player.GetTool()) {
 				toolRaiseState += dt * 4.f;
 				if (toolRaiseState > 1.f)
 					toolRaiseState = 1.f;
@@ -374,44 +375,45 @@ namespace spades {
 				toolRaiseState -= dt * 4.f;
 				if (toolRaiseState < 0.f) {
 					toolRaiseState = 0.f;
-					currentTool = player->GetTool();
+					currentTool = player.GetTool();
 
 					// play tool change sound
-					if (player->IsLocalPlayer()) {
-						auto *audioDevice = client->GetAudioDevice();
+					if (player.IsLocalPlayer()) {
+						IAudioDevice &audioDevice = client.GetAudioDevice();
 						Handle<IAudioChunk> c;
-						switch (player->GetTool()) {
+						switch (player.GetTool()) {
 							case Player::ToolSpade:
-								c = audioDevice->RegisterSound(
-								  "Sounds/Weapons/Spade/RaiseLocal.opus");
+								c =
+								  audioDevice.RegisterSound("Sounds/Weapons/Spade/RaiseLocal.opus");
 								break;
 							case Player::ToolBlock:
-								c = audioDevice->RegisterSound(
-								  "Sounds/Weapons/Block/RaiseLocal.opus");
+								c =
+								  audioDevice.RegisterSound("Sounds/Weapons/Block/RaiseLocal.opus");
 								break;
 							case Player::ToolWeapon:
-								switch (player->GetWeapon()->GetWeaponType()) {
+								switch (player.GetWeapon().GetWeaponType()) {
 									case RIFLE_WEAPON:
-										c = audioDevice->RegisterSound(
+										c = audioDevice.RegisterSound(
 										  "Sounds/Weapons/Rifle/RaiseLocal.opus");
 										break;
 									case SMG_WEAPON:
-										c = audioDevice->RegisterSound(
+										c = audioDevice.RegisterSound(
 										  "Sounds/Weapons/SMG/RaiseLocal.opus");
 										break;
 									case SHOTGUN_WEAPON:
-										c = audioDevice->RegisterSound(
+										c = audioDevice.RegisterSound(
 										  "Sounds/Weapons/Shotgun/RaiseLocal.opus");
 										break;
 								}
 
 								break;
 							case Player::ToolGrenade:
-								c = audioDevice->RegisterSound(
+								c = audioDevice.RegisterSound(
 								  "Sounds/Weapons/Grenade/RaiseLocal.opus");
 								break;
 						}
-						audioDevice->PlayLocal(c, MakeVector3(.4f, -.3f, .5f), AudioParam());
+						audioDevice.PlayLocal(c.GetPointerOrNull(), MakeVector3(.4f, -.3f, .5f),
+						                      AudioParam());
 					}
 				} else if (toolRaiseState > 1.f) {
 					toolRaiseState = 1.f;
@@ -420,10 +422,10 @@ namespace spades {
 
 			{
 				float scale = dt;
-				Vector3 vel = player->GetVelocity();
-				Vector3 front = player->GetFront();
-				Vector3 right = player->GetRight();
-				Vector3 up = player->GetUp();
+				Vector3 vel = player.GetVelocity();
+				Vector3 front = player.GetFront();
+				Vector3 right = player.GetRight();
+				Vector3 up = player.GetUp();
 
 				// Offset the view weapon according to the player movement
 				viewWeaponOffset.x += Vector3::Dot(vel, right) * scale;
@@ -459,7 +461,7 @@ namespace spades {
 				// When the player is aiming down the sight, the weapon's movement
 				// must be restricted so that other parts of the weapon don't
 				// cover the ironsight.
-				if (currentTool == Player::ToolWeapon && player->GetWeaponInput().secondary) {
+				if (currentTool == Player::ToolWeapon && player.GetWeaponInput().secondary) {
 
 					if (dt > 0.f)
 						viewWeaponOffset *= powf(.01f, dt);
@@ -473,14 +475,14 @@ namespace spades {
 
 			{
 				// Smooth the flashlight's movement
-				Vector3 diff = player->GetFront() - flashlightOrientation;
+				Vector3 diff = player.GetFront() - flashlightOrientation;
 				float sq = diff.GetLength();
 				if (sq > 0.1) {
 					flashlightOrientation += diff.Normalize() * (sq - 0.1);
 				}
 
 				flashlightOrientation =
-				  Mix(flashlightOrientation, player->GetFront(), 1.0f - powf(1.0e-6, dt))
+				  Mix(flashlightOrientation, player.GetFront(), 1.0f - powf(1.0e-6, dt))
 				    .Normalize();
 			}
 
@@ -518,12 +520,12 @@ namespace spades {
 		}
 
 		Matrix4 ClientPlayer::GetEyeMatrix() {
-			Vector3 eye = player->GetEye();
+			Vector3 eye = player.GetEye();
 
 			if ((int)cg_shake >= 2) {
 				float sp = SmoothStep(GetSprintState());
 				float p =
-				  cosf(player->GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f - 0.8f);
+				  cosf(player.GetWalkAnimationProgress() * static_cast<float>(M_PI) * 2.f - 0.8f);
 				p = p * p;
 				p *= p;
 				p *= p;
@@ -531,26 +533,25 @@ namespace spades {
 				eye.z -= p * 0.06f * sp;
 			}
 
-			return Matrix4::FromAxis(-player->GetRight(), player->GetFront(), -player->GetUp(),
-			                         eye);
+			return Matrix4::FromAxis(-player.GetRight(), player.GetFront(), -player.GetUp(), eye);
 		}
 
 		void ClientPlayer::SetSkinParameterForTool(Player::ToolType type, asIScriptObject *skin) {
-			Player *p = player;
+			Player &p = player;
 			if (currentTool == Player::ToolSpade) {
 
 				ScriptISpadeSkin interface(skin);
-				WeaponInput inp = p->GetWeaponInput();
-				if (p->GetTool() != Player::ToolSpade) {
+				WeaponInput inp = p.GetWeaponInput();
+				if (p.GetTool() != Player::ToolSpade) {
 					interface.SetActionType(SpadeActionTypeIdle);
 					interface.SetActionProgress(0.f);
 				} else if (inp.primary) {
 					interface.SetActionType(SpadeActionTypeBash);
-					interface.SetActionProgress(p->GetSpadeAnimationProgress());
+					interface.SetActionProgress(p.GetSpadeAnimationProgress());
 				} else if (inp.secondary) {
-					interface.SetActionType(p->IsFirstDig() ? SpadeActionTypeDigStart
-					                                        : SpadeActionTypeDig);
-					interface.SetActionProgress(p->GetDigAnimationProgress());
+					interface.SetActionType(p.IsFirstDig() ? SpadeActionTypeDigStart
+					                                       : SpadeActionTypeDig);
+					interface.SetActionProgress(p.GetDigAnimationProgress());
 				} else {
 					interface.SetActionType(SpadeActionTypeIdle);
 					interface.SetActionProgress(0.f);
@@ -559,38 +560,37 @@ namespace spades {
 
 				// TODO: smooth ready state
 				ScriptIBlockSkin interface(skin);
-				if (p->GetTool() != Player::ToolBlock) {
+				if (p.GetTool() != Player::ToolBlock) {
 					// FIXME: use block's IsReadyToUseTool
 					// for smoother transition
 					interface.SetReadyState(0.f);
-				} else if (p->IsReadyToUseTool()) {
+				} else if (p.IsReadyToUseTool()) {
 					interface.SetReadyState(1.f);
 				} else {
 					interface.SetReadyState(0.f);
 				}
 
-				interface.SetBlockColor(MakeVector3(p->GetBlockColor()) / 255.f);
+				interface.SetBlockColor(MakeVector3(p.GetBlockColor()) / 255.f);
 			} else if (currentTool == Player::ToolGrenade) {
 
 				ScriptIGrenadeSkin interface(skin);
-				interface.SetReadyState(1.f - p->GetTimeToNextGrenade() / 0.5f);
+				interface.SetReadyState(1.f - p.GetTimeToNextGrenade() / 0.5f);
 
-				WeaponInput inp = p->GetWeaponInput();
+				WeaponInput inp = p.GetWeaponInput();
 				if (inp.primary) {
-					interface.SetCookTime(p->GetGrenadeCookTime());
+					interface.SetCookTime(p.GetGrenadeCookTime());
 				} else {
 					interface.SetCookTime(0.f);
 				}
 			} else if (currentTool == Player::ToolWeapon) {
-
-				Weapon *w = p->GetWeapon();
+				Weapon &w = p.GetWeapon();
 				ScriptIWeaponSkin interface(skin);
-				interface.SetReadyState(1.f - w->TimeToNextFire() / w->GetDelay());
+				interface.SetReadyState(1.f - w.TimeToNextFire() / w.GetDelay());
 				interface.SetAimDownSightState(aimDownState);
-				interface.SetAmmo(w->GetAmmo());
-				interface.SetClipSize(w->GetClipSize());
-				interface.SetReloading(w->IsReloading());
-				interface.SetReloadProgress(w->GetReloadProgress());
+				interface.SetAmmo(w.GetAmmo());
+				interface.SetClipSize(w.GetClipSize());
+				interface.SetReloading(w.IsReloading());
+				interface.SetReloadProgress(w.GetReloadProgress());
 			} else {
 				SPInvalidEnum("currentTool", currentTool);
 			}
@@ -632,7 +632,7 @@ namespace spades {
 				ScriptIToolSkin interface(skin);
 				interface.SetRaiseState((skin == curSkin) ? (1.f - putdown) : 0.f);
 				interface.SetSprintState(sprint);
-				interface.SetMuted(client->IsMuted());
+				interface.SetMuted(client.IsMuted());
 			}
 		}
 
@@ -640,16 +640,16 @@ namespace spades {
 			std::array<Vector3, 3> axes;
 
 			axes[2] = flashlightOrientation;
-			axes[0] = Vector3::Cross(flashlightOrientation, player->GetUp()).Normalize();
+			axes[0] = Vector3::Cross(flashlightOrientation, player.GetUp()).Normalize();
 			axes[1] = Vector3::Cross(axes[0], axes[2]);
 
 			return axes;
 		}
 
 		void ClientPlayer::AddToSceneFirstPersonView() {
-			Player *p = player;
-			IRenderer *renderer = client->GetRenderer();
-			World *world = client->GetWorld();
+			Player &p = player;
+			IRenderer &renderer = client.GetRenderer();
+			World *world = client.GetWorld();
 			Matrix4 eyeMatrix = GetEyeMatrix();
 
 			sandboxedRenderer->SetClipBox(AABB3(eyeMatrix.GetOrigin() - Vector3(20.f, 20.f, 20.f),
@@ -657,33 +657,33 @@ namespace spades {
 			sandboxedRenderer->SetAllowDepthHack(true);
 
 			// no flashlight if spectating other players while dead
-			if (client->flashlightOn && world->GetLocalPlayer()->IsAlive()) {
+			if (client.flashlightOn && world->GetLocalPlayer()->IsAlive()) {
 				float brightness;
-				brightness = client->time - client->flashlightOnTime;
+				brightness = client.time - client.flashlightOnTime;
 				brightness = 1.f - expf(-brightness * 5.f);
 
 				// add flash light
 				DynamicLightParam light;
+				Handle<IImage> image = renderer.RegisterImage("Gfx/Spotlight.png");
 				light.origin = (eyeMatrix * MakeVector3(0, -0.05f, -0.1f)).GetXYZ();
 				light.color = MakeVector3(1, .7f, .5f) * 1.5f * brightness;
 				light.radius = 40.f;
 				light.type = DynamicLightTypeSpotlight;
 				light.spotAngle = 30.f * M_PI / 180.f;
 				light.spotAxis = GetFlashlightAxes();
-				light.image = renderer->RegisterImage("Gfx/Spotlight.png");
-				renderer->AddLight(light);
+				light.image = image.GetPointerOrNull();
+				renderer.AddLight(light);
 
 				light.color *= .3f;
 				light.radius = 10.f;
 				light.type = DynamicLightTypePoint;
 				light.image = NULL;
-				renderer->AddLight(light);
+				renderer.AddLight(light);
 
 				// add glare
-				renderer->SetColorAlphaPremultiplied(MakeVector4(1, .7f, .5f, 0) * brightness *
-				                                     .3f);
-				renderer->AddSprite(renderer->RegisterImage("Gfx/Glare.png"),
-				                    (eyeMatrix * MakeVector3(0, 0.3f, -0.3f)).GetXYZ(), .8f, 0.f);
+				renderer.SetColorAlphaPremultiplied(MakeVector4(1, .7f, .5f, 0) * brightness * .3f);
+				renderer.AddSprite(*renderer.RegisterImage("Gfx/Glare.png"),
+				                   (eyeMatrix * MakeVector3(0, 0.3f, -0.3f)).GetXYZ(), .8f, 0.f);
 			}
 
 			Vector3 leftHand, rightHand;
@@ -698,10 +698,10 @@ namespace spades {
 			{
 				float sp = 1.f - aimDownState;
 				sp *= .3f;
-				sp *= std::min(1.f, p->GetVelocity().GetLength() * 5.f);
+				sp *= std::min(1.f, p.GetVelocity().GetLength() * 5.f);
 				viewWeaponOffset.x +=
-				  sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.013f * sp;
-				float vl = cosf(p->GetWalkAnimationProgress() * M_PI * 2.f);
+				  sinf(p.GetWalkAnimationProgress() * M_PI * 2.f) * 0.013f * sp;
+				float vl = cosf(p.GetWalkAnimationProgress() * M_PI * 2.f);
 				vl *= vl;
 				viewWeaponOffset.z += vl * 0.018f * sp;
 			}
@@ -717,7 +717,8 @@ namespace spades {
 			}
 
 			// manual adjustment
-			viewWeaponOffset += Vector3{cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ} * (1.f - aimDownState);
+			viewWeaponOffset +=
+			  Vector3{cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ} * (1.f - aimDownState);
 
 			asIScriptObject *skin;
 
@@ -759,10 +760,10 @@ namespace spades {
 				ModelRenderParam param;
 				param.depthHack = true;
 
-				IModel *model = renderer->RegisterModel("Models/Player/Arm.kv6");
-				IModel *model2 = renderer->RegisterModel("Models/Player/UpperArm.kv6");
+				Handle<IModel> model = renderer.RegisterModel("Models/Player/Arm.kv6");
+				Handle<IModel> model2 = renderer.RegisterModel("Models/Player/UpperArm.kv6");
 
-				IntVector3 col = p->GetColor();
+				IntVector3 col = p.GetColor();
 				param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 
 				const float armlen = 0.5f;
@@ -800,7 +801,7 @@ namespace spades {
 						mat = eyeMatrix * mat;
 
 						param.matrix = mat;
-						renderer->RenderModel(model, param);
+						renderer.RenderModel(*model, param);
 					}
 
 					{
@@ -815,7 +816,7 @@ namespace spades {
 						mat = eyeMatrix * mat;
 
 						param.matrix = mat;
-						renderer->RenderModel(model2, param);
+						renderer.RenderModel(*model2, param);
 					}
 				}
 			}
@@ -824,26 +825,25 @@ namespace spades {
 		}
 
 		void ClientPlayer::AddToSceneThirdPersonView() {
+			Player &p = player;
+			IRenderer &renderer = client.GetRenderer();
+			World *world = client.GetWorld();
 
-			Player *p = player;
-			IRenderer *renderer = client->GetRenderer();
-			World *world = client->GetWorld();
-
-			if (!p->IsAlive()) {
+			if (!p.IsAlive()) {
 				if (!cg_ragdoll) {
 					ModelRenderParam param;
-					param.matrix = Matrix4::Translate(p->GetOrigin() + MakeVector3(0, 0, 1));
+					param.matrix = Matrix4::Translate(p.GetOrigin() + MakeVector3(0, 0, 1));
 					param.matrix = param.matrix * Matrix4::Scale(.1f);
-					IntVector3 col = p->GetColor();
+					IntVector3 col = p.GetColor();
 					param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 
-					IModel *model = renderer->RegisterModel("Models/Player/Dead.kv6");
-					renderer->RenderModel(model, param);
+					Handle<IModel> model = renderer.RegisterModel("Models/Player/Dead.kv6");
+					renderer.RenderModel(*model, param);
 				}
 				return;
 			}
 
-			auto origin = p->GetOrigin();
+			auto origin = p.GetOrigin();
 			sandboxedRenderer->SetClipBox(
 			  AABB3(origin - Vector3(2.f, 2.f, 4.f), origin + Vector3(2.f, 2.f, 2.f)));
 			sandboxedRenderer->SetAllowDepthHack(false);
@@ -874,22 +874,22 @@ namespace spades {
 			}
 
 			ModelRenderParam param;
-			IModel *model;
-			Vector3 front = p->GetFront();
-			IntVector3 col = p->GetColor();
+			Handle<IModel> model;
+			Vector3 front = p.GetFront();
+			IntVector3 col = p.GetColor();
 			param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 
 			float yaw = atan2(front.y, front.x) + M_PI * .5f;
 			float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));
 
 			// lower axis
-			Matrix4 lower = Matrix4::Translate(p->GetOrigin());
+			Matrix4 lower = Matrix4::Translate(p.GetOrigin());
 			lower = lower * Matrix4::Rotate(MakeVector3(0, 0, 1), yaw);
 
 			Matrix4 scaler = Matrix4::Scale(0.1f);
 			scaler = scaler * Matrix4::Scale(-1, -1, 1);
 
-			PlayerInput inp = p->GetInput();
+			PlayerInput inp = p.GetInput();
 
 			// lower
 			Matrix4 torso, head, arms;
@@ -897,30 +897,30 @@ namespace spades {
 				Matrix4 leg1 = Matrix4::Translate(-0.25f, 0.2f, -0.1f);
 				Matrix4 leg2 = Matrix4::Translate(0.25f, 0.2f, -0.1f);
 
-				float ang = sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
-				float walkVel = Vector3::Dot(p->GetVelocity(), p->GetFront2D()) * 4.f;
+				float ang = sinf(p.GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
+				float walkVel = Vector3::Dot(p.GetVelocity(), p.GetFront2D()) * 4.f;
 				leg1 = leg1 * Matrix4::Rotate(MakeVector3(1, 0, 0), ang * walkVel);
 				leg2 = leg2 * Matrix4::Rotate(MakeVector3(1, 0, 0), -ang * walkVel);
 
-				walkVel = Vector3::Dot(p->GetVelocity(), p->GetRight()) * 3.f;
+				walkVel = Vector3::Dot(p.GetVelocity(), p.GetRight()) * 3.f;
 				leg1 = leg1 * Matrix4::Rotate(MakeVector3(0, 1, 0), ang * walkVel);
 				leg2 = leg2 * Matrix4::Rotate(MakeVector3(0, 1, 0), -ang * walkVel);
 
 				leg1 = lower * leg1;
 				leg2 = lower * leg2;
 
-				model = renderer->RegisterModel("Models/Player/LegCrouch.kv6");
+				model = renderer.RegisterModel("Models/Player/LegCrouch.kv6");
 				param.matrix = leg1 * scaler;
-				renderer->RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 				param.matrix = leg2 * scaler;
-				renderer->RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 
 				torso = Matrix4::Translate(0.f, 0.f, -0.55f);
 				torso = lower * torso;
 
-				model = renderer->RegisterModel("Models/Player/TorsoCrouch.kv6");
+				model = renderer.RegisterModel("Models/Player/TorsoCrouch.kv6");
 				param.matrix = torso * scaler;
-				renderer->RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 
 				head = Matrix4::Translate(0.f, 0.f, -0.0f);
 				head = torso * head;
@@ -931,30 +931,30 @@ namespace spades {
 				Matrix4 leg1 = Matrix4::Translate(-0.25f, 0.f, -0.1f);
 				Matrix4 leg2 = Matrix4::Translate(0.25f, 0.f, -0.1f);
 
-				float ang = sinf(p->GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
-				float walkVel = Vector3::Dot(p->GetVelocity(), p->GetFront2D()) * 4.f;
+				float ang = sinf(p.GetWalkAnimationProgress() * M_PI * 2.f) * 0.6f;
+				float walkVel = Vector3::Dot(p.GetVelocity(), p.GetFront2D()) * 4.f;
 				leg1 = leg1 * Matrix4::Rotate(MakeVector3(1, 0, 0), ang * walkVel);
 				leg2 = leg2 * Matrix4::Rotate(MakeVector3(1, 0, 0), -ang * walkVel);
 
-				walkVel = Vector3::Dot(p->GetVelocity(), p->GetRight()) * 3.f;
+				walkVel = Vector3::Dot(p.GetVelocity(), p.GetRight()) * 3.f;
 				leg1 = leg1 * Matrix4::Rotate(MakeVector3(0, 1, 0), ang * walkVel);
 				leg2 = leg2 * Matrix4::Rotate(MakeVector3(0, 1, 0), -ang * walkVel);
 
 				leg1 = lower * leg1;
 				leg2 = lower * leg2;
 
-				model = renderer->RegisterModel("Models/Player/Leg.kv6");
+				model = renderer.RegisterModel("Models/Player/Leg.kv6");
 				param.matrix = leg1 * scaler;
-				renderer->RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 				param.matrix = leg2 * scaler;
-				renderer->RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 
 				torso = Matrix4::Translate(0.f, 0.f, -1.0f);
 				torso = lower * torso;
 
-				model = renderer->RegisterModel("Models/Player/Torso.kv6");
+				model = renderer.RegisterModel("Models/Player/Torso.kv6");
 				param.matrix = torso * scaler;
-				renderer->RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 
 				head = Matrix4::Translate(0.f, 0.f, -0.0f);
 				head = torso * head;
@@ -975,15 +975,15 @@ namespace spades {
 
 			arms = arms * Matrix4::Rotate(MakeVector3(1, 0, 0), armPitch);
 
-			model = renderer->RegisterModel("Models/Player/Arms.kv6");
+			model = renderer.RegisterModel("Models/Player/Arms.kv6");
 			param.matrix = arms * scaler;
-			renderer->RenderModel(model, param);
+			renderer.RenderModel(*model, param);
 
 			head = head * Matrix4::Rotate(MakeVector3(1, 0, 0), pitch);
 
-			model = renderer->RegisterModel("Models/Player/Head.kv6");
+			model = renderer.RegisterModel("Models/Player/Head.kv6");
 			param.matrix = head * scaler;
-			renderer->RenderModel(model, param);
+			renderer.RenderModel(*model, param);
 
 			// draw tool
 			{
@@ -998,22 +998,22 @@ namespace spades {
 			hasValidOriginMatrix = true;
 
 			// draw intel in ctf
-			IGameMode *mode = world->GetMode();
+			stmp::optional<IGameMode &> mode = world->GetMode();
 			if (mode && IGameMode::m_CTF == mode->ModeType()) {
-				CTFGameMode *ctfMode = static_cast<CTFGameMode *>(world->GetMode());
-				int tId = p->GetTeamId();
+				CTFGameMode &ctfMode = dynamic_cast<CTFGameMode &>(*mode);
+				int tId = p.GetTeamId();
 				if (tId < 3) {
-					CTFGameMode::Team &team = ctfMode->GetTeam(p->GetTeamId());
-					if (team.hasIntel && team.carrier == p->GetId()) {
+					CTFGameMode::Team &team = ctfMode.GetTeam(p.GetTeamId());
+					if (team.hasIntel && team.carrier == p.GetId()) {
 
-						IntVector3 col2 = world->GetTeam(1 - p->GetTeamId()).color;
+						IntVector3 col2 = world->GetTeam(1 - p.GetTeamId()).color;
 						param.customColor =
 						  MakeVector3(col2.x / 255.f, col2.y / 255.f, col2.z / 255.f);
 						Matrix4 mIntel = torso * Matrix4::Translate(0, 0.6f, 0.5f);
 
-						model = renderer->RegisterModel("Models/MapObjects/Intel.kv6");
+						model = renderer.RegisterModel("Models/MapObjects/Intel.kv6");
 						param.matrix = mIntel * scaler;
-						renderer->RenderModel(model, param);
+						renderer.RenderModel(*model, param);
 
 						param.customColor =
 						  MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
@@ -1027,17 +1027,17 @@ namespace spades {
 		void ClientPlayer::AddToScene() {
 			SPADES_MARK_FUNCTION();
 
-			Player *p = player;
-			const SceneDefinition &lastSceneDef = client->GetLastSceneDef();
+			Player &p = player;
+			const SceneDefinition &lastSceneDef = client.GetLastSceneDef();
 
 			hasValidOriginMatrix = false;
 
-			if (p->GetTeamId() >= 2) {
+			if (p.GetTeamId() >= 2) {
 				// spectator, or dummy player
 				return;
 			}
 
-			float distancePowered = (p->GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
+			float distancePowered = (p.GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
 			if (distancePowered > 140.f * 140.f) {
 				return;
 			}
@@ -1050,7 +1050,7 @@ namespace spades {
 		}
 
 		void ClientPlayer::Draw2D() {
-			if (!ShouldRenderInThirdPersonView() && player->IsAlive()) {
+			if (!ShouldRenderInThirdPersonView() && player.IsAlive()) {
 				asIScriptObject *skin;
 
 				if (currentTool == Player::ToolSpade) {
@@ -1081,7 +1081,8 @@ namespace spades {
 
 		bool ClientPlayer::ShouldRenderInThirdPersonView() {
 			// The player from whom's perspective the game is
-			return !IsFirstPerson(client->GetCameraMode()) || player != &client->GetCameraTargetPlayer();
+			return !IsFirstPerson(client.GetCameraMode()) ||
+			       &player != &client.GetCameraTargetPlayer();
 		}
 
 		struct ClientPlayer::AmbienceInfo {
@@ -1091,21 +1092,20 @@ namespace spades {
 		};
 
 		ClientPlayer::AmbienceInfo ClientPlayer::ComputeAmbience() {
-			const SceneDefinition &lastSceneDef = client->GetLastSceneDef();
+			const SceneDefinition &lastSceneDef = client.GetLastSceneDef();
 
 			if (!cg_environmentalAudio) {
 				AmbienceInfo result;
 				result.room = 0.0f;
-				result.distance = (lastSceneDef.viewOrigin - player->GetEye()).GetLength();
+				result.distance = (lastSceneDef.viewOrigin - player.GetEye()).GetLength();
 				result.size = 0.0f;
 				return result;
 			}
 
 			float maxDistance = 40.f;
-			GameMap *map = client->map;
-			SPAssert(map);
+			GameMap &map = *client.map;
 
-			Vector3 rayFrom = player->GetEye();
+			Vector3 rayFrom = player.GetEye();
 			// uniformly distributed random unit vectors
 			const Vector3 directions[24] = {
 			  {-0.4806003057749437f, -0.42909622618705534f, 0.7647874049440525f},
@@ -1144,7 +1144,7 @@ namespace spades {
 				const Vector3 &rayTo = directions[i];
 
 				IntVector3 hitPos;
-				bool hit = map->CastRay(rayFrom, rayTo, maxDistance, hitPos);
+				bool hit = map.CastRay(rayFrom, rayTo, maxDistance, hitPos);
 				if (hit) {
 					Vector3 hitPosf = {(float)hitPos.x, (float)hitPos.y, (float)hitPos.z};
 					distance = (hitPosf - rayFrom).GetLength();
@@ -1153,7 +1153,7 @@ namespace spades {
 				}
 
 				if (hit) {
-					bool hit2 = map->CastRay(rayFrom, -rayTo, maxDistance, hitPos);
+					bool hit2 = map.CastRay(rayFrom, -rayTo, maxDistance, hitPos);
 					if (hit2)
 						feedbackness = 1.f;
 					else
@@ -1190,7 +1190,7 @@ namespace spades {
 
 			AmbienceInfo result;
 			result.room = reflections * feedbackness;
-			result.distance = (lastSceneDef.viewOrigin - player->GetEye()).GetLength();
+			result.distance = (lastSceneDef.viewOrigin - player.GetEye()).GetLength();
 			result.size = std::max(std::min(roomSize / 15.0f, 1.0f), 0.0f);
 			result.room *= std::max(0.0f, std::min((result.size - 0.1f) * 4.0f, 1.0f));
 			result.room *= 1.0f - result.size * 0.3f;
@@ -1199,12 +1199,12 @@ namespace spades {
 		}
 
 		void ClientPlayer::FiredWeapon() {
-			World *world = player->GetWorld();
+			World &world = player.GetWorld();
 			Vector3 muzzle;
-			const SceneDefinition &lastSceneDef = client->GetLastSceneDef();
-			IRenderer *renderer = client->GetRenderer();
-			IAudioDevice *audioDevice = client->GetAudioDevice();
-			Player *p = player;
+			const SceneDefinition &lastSceneDef = client.GetLastSceneDef();
+			IRenderer &renderer = client.GetRenderer();
+			IAudioDevice &audioDevice = client.GetAudioDevice();
+			Player &p = player;
 
 			// make dlight
 			{
@@ -1216,55 +1216,56 @@ namespace spades {
 
 				vec = (mat * MakeVector3(0, 1, 0)).GetXYZ();
 				muzzle = vec;
-				client->MuzzleFire(vec, player->GetFront(), player == world->GetLocalPlayer());
+				client.MuzzleFire(vec, player.GetFront(), &player == world.GetLocalPlayer());
 			}
 
 			if (cg_ejectBrass) {
-				float dist = (player->GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
+				float dist = (player.GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
 				if (dist < 130.f * 130.f) {
-					IModel *model = NULL;
+					Handle<IModel> model;
 					Handle<IAudioChunk> snd = NULL;
 					Handle<IAudioChunk> snd2 = NULL;
-					switch (player->GetWeapon()->GetWeaponType()) {
+					switch (player.GetWeapon().GetWeaponType()) {
 						case RIFLE_WEAPON:
-							model = renderer->RegisterModel("Models/Weapons/Rifle/Casing.kv6");
+							model = renderer.RegisterModel("Models/Weapons/Rifle/Casing.kv6");
 							snd =
 							  SampleRandomBool()
-							    ? audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.opus")
-							    : audioDevice->RegisterSound(
-							        "Sounds/Weapons/Rifle/ShellDrop2.opus");
+							    ? audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.opus")
+							    : audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellDrop2.opus");
 							snd2 =
-							  audioDevice->RegisterSound("Sounds/Weapons/Rifle/ShellWater.opus");
+							  audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellWater.opus");
 							break;
 						case SHOTGUN_WEAPON:
 							// FIXME: don't want to show shotgun't casing
 							// because it isn't ejected when firing
-							// model = renderer->RegisterModel("Models/Weapons/Shotgun/Casing.kv6");
+							// model = renderer.RegisterModel("Models/Weapons/Shotgun/Casing.kv6");
 							break;
 						case SMG_WEAPON:
-							model = renderer->RegisterModel("Models/Weapons/SMG/Casing.kv6");
+							model = renderer.RegisterModel("Models/Weapons/SMG/Casing.kv6");
 							snd =
 							  SampleRandomBool()
-							    ? audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop1.opus")
-							    : audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellDrop2.opus");
-							snd2 = audioDevice->RegisterSound("Sounds/Weapons/SMG/ShellWater.opus");
+							    ? audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellDrop1.opus")
+							    : audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellDrop2.opus");
+							snd2 = audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellWater.opus");
 							break;
 					}
 					if (model) {
 						Vector3 origin;
-						origin = muzzle - p->GetFront() * 0.5f;
+						origin = muzzle - p.GetFront() * 0.5f;
 
 						Vector3 vel;
-						vel = p->GetFront() * 0.5f + p->GetRight() + p->GetUp() * 0.2f;
-						switch (p->GetWeapon()->GetWeaponType()) {
-							case SMG_WEAPON: vel -= p->GetFront() * 0.7f; break;
+						vel = p.GetFront() * 0.5f + p.GetRight() + p.GetUp() * 0.2f;
+						switch (p.GetWeapon().GetWeaponType()) {
+							case SMG_WEAPON: vel -= p.GetFront() * 0.7f; break;
 							case SHOTGUN_WEAPON: vel *= .5f; break;
 							default: break;
 						}
 
-						ILocalEntity *ent;
-						ent = new GunCasing(client, model, snd, snd2, origin, p->GetFront(), vel);
-						client->AddLocalEntity(ent);
+						auto ent = stmp::make_unique<GunCasing>(
+						  &client, model.GetPointerOrNull(), snd.GetPointerOrNull(),
+						  snd2.GetPointerOrNull(), origin, p.GetFront(), vel);
+
+						client.AddLocalEntity(std::move(ent));
 					}
 				}
 			}
@@ -1284,7 +1285,7 @@ namespace spades {
 				ScriptIWeaponSkin2 interface(skin);
 				if (interface.ImplementsInterface()) {
 					interface.SetSoundEnvironment(ambience.room, ambience.size, ambience.distance);
-					interface.SetSoundOrigin(player->GetEye());
+					interface.SetSoundOrigin(player.GetEye());
 				} else if (ShouldRenderInThirdPersonView() && !hasValidOriginMatrix) {
 					// Legacy skin scripts rely on OriginMatrix which is only updated when
 					// the player's location is within the fog range.
@@ -1314,7 +1315,7 @@ namespace spades {
 				ScriptIWeaponSkin2 interface(skin);
 				if (interface.ImplementsInterface()) {
 					interface.SetSoundEnvironment(ambience.room, ambience.size, ambience.distance);
-					interface.SetSoundOrigin(player->GetEye());
+					interface.SetSoundOrigin(player.GetEye());
 				} else if (ShouldRenderInThirdPersonView() && !hasValidOriginMatrix) {
 					// Legacy skin scripts rely on OriginMatrix which is only updated when
 					// the player's location is within the fog range.
@@ -1342,5 +1343,5 @@ namespace spades {
 				interface.ReloadedWeapon();
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

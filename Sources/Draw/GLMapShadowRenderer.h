@@ -38,8 +38,8 @@ namespace spades {
 
 			enum { CoarseSize = 8, CoarseBits = 3 };
 
-			GLRenderer *renderer;
-			IGLDevice *device;
+			GLRenderer &renderer;
+			IGLDevice &device;
 			client::GameMap *map;
 			IGLDevice::UInteger texture;
 			IGLDevice::UInteger coarseTexture;
@@ -56,7 +56,7 @@ namespace spades {
 			void MarkUpdate(int x, int y);
 
 		public:
-			GLMapShadowRenderer(GLRenderer *renderer, client::GameMap *map);
+			GLMapShadowRenderer(GLRenderer &renderer, client::GameMap *map);
 			~GLMapShadowRenderer();
 
 			void GameMapChanged(int x, int y, int z, client::GameMap *);
@@ -66,5 +66,5 @@ namespace spades {
 			IGLDevice::UInteger GetTexture() { return texture; }
 			IGLDevice::UInteger GetCoarseTexture() { return coarseTexture; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

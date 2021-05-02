@@ -29,11 +29,11 @@ namespace spades {
 		public:
 			FontManager(IRenderer *);
 
-			IFont *GetSquareDesignFont() { return squareDesignFont; }
-			IFont *GetLargeFont() { return largeFont; }
-			IFont *GetMediumFont() { return mediumFont; }
-			IFont *GetHeadingFont() { return headingFont; }
-			IFont *GetGuiFont() { return guiFont; }
+			IFont &GetSquareDesignFont() { return *squareDesignFont; }
+			IFont &GetLargeFont() { return *largeFont; }
+			IFont &GetMediumFont() { return *mediumFont; }
+			IFont &GetHeadingFont() { return *headingFont; }
+			IFont &GetGuiFont() { return *guiFont; }
 
 		protected:
 			~FontManager() override;
@@ -45,5 +45,5 @@ namespace spades {
 			Handle<IFont> headingFont;
 			Handle<IFont> guiFont;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

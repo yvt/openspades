@@ -34,5 +34,5 @@ namespace spades {
 
 			virtual AABB3 GetBoundingBox() = 0;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

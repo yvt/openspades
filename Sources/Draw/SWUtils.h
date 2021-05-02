@@ -74,5 +74,5 @@ namespace spades {
 			int i = static_cast<int>(v * 256.f + .5f);
 			return std::max(std::min(i, 256), 0);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

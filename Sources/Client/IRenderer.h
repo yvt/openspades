@@ -22,10 +22,10 @@
 
 #include <array>
 
-#include <Core/Math.h>
 #include "IImage.h"
 #include "IModel.h"
 #include "SceneDefinition.h"
+#include <Core/Math.h>
 #include <Core/RefCountedObject.h>
 
 namespace spades {
@@ -77,7 +77,7 @@ namespace spades {
 			 *  See the existing code for usage. */
 			std::array<Vector3, 3> spotAxis;
 			/** The projected image for a spotlight. */
-			IImage *image = nullptr;
+			IImage *image = nullptr; // TODO: Replace this raw pointer with something
 			float spotAngle = 0.0f;
 
 			/** When set to `true`, the lens flare post-effect is enabled for
@@ -95,8 +95,8 @@ namespace spades {
 			virtual void Init() = 0;
 			virtual void Shutdown() = 0;
 
-			virtual IImage *RegisterImage(const char *filename) = 0;
-			virtual IModel *RegisterModel(const char *filename) = 0;
+			virtual Handle<IImage> RegisterImage(const char *filename) = 0;
+			virtual Handle<IModel> RegisterModel(const char *filename) = 0;
 
 			/**
 			 * Clear the cache of models and images loaded via `RegisterModel`
@@ -105,10 +105,10 @@ namespace spades {
 			 */
 			virtual void ClearCache() {}
 
-			virtual IImage *CreateImage(Bitmap *) = 0;
-			virtual IModel *CreateModel(VoxelModel *) = 0;
+			virtual Handle<IImage> CreateImage(Bitmap &) = 0;
+			virtual Handle<IModel> CreateModel(VoxelModel &) = 0;
 
-			virtual void SetGameMap(GameMap *) = 0;
+			virtual void SetGameMap(stmp::optional<GameMap &>) = 0;
 
 			virtual void SetFogDistance(float) = 0;
 			virtual void SetFogColor(Vector3) = 0;
@@ -118,11 +118,11 @@ namespace spades {
 
 			virtual void AddLight(const client::DynamicLightParam &light) = 0;
 
-			virtual void RenderModel(IModel *, const ModelRenderParam &) = 0;
+			virtual void RenderModel(IModel &, const ModelRenderParam &) = 0;
 			virtual void AddDebugLine(Vector3 a, Vector3 b, Vector4 color) = 0;
 
-			virtual void AddSprite(IImage *, Vector3 center, float radius, float rotation) = 0;
-			virtual void AddLongSprite(IImage *, Vector3 p1, Vector3 p2, float radius) = 0;
+			virtual void AddSprite(IImage &, Vector3 center, float radius, float rotation) = 0;
+			virtual void AddLongSprite(IImage &, Vector3 p1, Vector3 p2, float radius) = 0;
 
 			/** Finalizes a scene. 2D drawing follows. */
 			virtual void EndScene() = 0;
@@ -138,12 +138,15 @@ namespace spades {
 			/** Sets color for image drawing. Always alpha premultiplied. */
 			virtual void SetColorAlphaPremultiplied(Vector4) = 0;
 
-			virtual void DrawImage(IImage *, const Vector2 &outTopLeft) = 0;
-			virtual void DrawImage(IImage *, const AABB2 &outRect) = 0;
-			virtual void DrawImage(IImage *, const Vector2 &outTopLeft, const AABB2 &inRect) = 0;
-			virtual void DrawImage(IImage *, const AABB2 &outRect, const AABB2 &inRect) = 0;
-			virtual void DrawImage(IImage *, const Vector2 &outTopLeft, const Vector2 &outTopRight,
-			                       const Vector2 &outBottomLeft, const AABB2 &inRect) = 0;
+			virtual void DrawImage(stmp::optional<IImage &>, const Vector2 &outTopLeft) = 0;
+			virtual void DrawImage(stmp::optional<IImage &>, const AABB2 &outRect) = 0;
+			virtual void DrawImage(stmp::optional<IImage &>, const Vector2 &outTopLeft,
+			                       const AABB2 &inRect) = 0;
+			virtual void DrawImage(stmp::optional<IImage &>, const AABB2 &outRect,
+			                       const AABB2 &inRect) = 0;
+			virtual void DrawImage(stmp::optional<IImage &>, const Vector2 &outTopLeft,
+			                       const Vector2 &outTopRight, const Vector2 &outBottomLeft,
+			                       const AABB2 &inRect) = 0;
 
 			virtual void DrawFlatGameMap(const AABB2 &outRect, const AABB2 &inRect) = 0;
 
@@ -154,10 +157,10 @@ namespace spades {
 			virtual void Flip() = 0;
 
 			/** get a rendered image. */
-			virtual Bitmap *ReadBitmap() = 0;
+			virtual Handle<Bitmap> ReadBitmap() = 0;
 
 			virtual float ScreenWidth() = 0;
 			virtual float ScreenHeight() = 0;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

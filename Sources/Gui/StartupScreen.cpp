@@ -34,18 +34,21 @@
 
 namespace spades {
 	namespace gui {
-		StartupScreen::StartupScreen(client::IRenderer *r, client::IAudioDevice *a,
-		                             StartupScreenHelper *helper, client::FontManager *fontManager)
-		    : renderer(r),
-		      audioDevice(a),
-		      fontManager(fontManager),
+		StartupScreen::StartupScreen(Handle<client::IRenderer> r, Handle<client::IAudioDevice> a,
+		                             StartupScreenHelper *helper,
+		                             Handle<client::FontManager> _fontManager)
+		    : renderer(std::move(r)),
+		      audioDevice(std::move(a)),
+		      fontManager(std::move(_fontManager)),
 		      startRequested(false),
 		      helper(helper) {
 			SPADES_MARK_FUNCTION();
-			if (r == NULL)
-				SPInvalidArgument("r");
-			if (a == NULL)
-				SPInvalidArgument("a");
+			if (!renderer)
+				SPInvalidArgument("renderer");
+			if (!audioDevice)
+				SPInvalidArgument("audioDevice");
+			if (!fontManager)
+				SPInvalidArgument("fontManager");
 
 			helper->BindStartupScreen(this);
 
@@ -199,11 +202,11 @@ namespace spades {
 			renderer->DrawImage(img, AABB2(0, 0, scrSize.x, scrSize.y));
 
 			std::string str = "NOW LOADING";
-			Vector2 size = fontManager->GetGuiFont()->Measure(str);
+			Vector2 size = fontManager->GetGuiFont().Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
 			pos -= size;
-			fontManager->GetGuiFont()->DrawShadow(str, pos, 1.f, MakeVector4(1, 1, 1, 1),
-			                                      MakeVector4(0, 0, 0, 0.5));
+			fontManager->GetGuiFont().DrawShadow(str, pos, 1.f, MakeVector4(1, 1, 1, 1),
+			                                     MakeVector4(0, 0, 0, 0.5));
 
 			renderer->FrameDone();
 			renderer->Flip();
@@ -239,9 +242,9 @@ namespace spades {
 			                                "AudioDevice@, FontManager@, StartupScreenHelper@)");
 			{
 				ScriptContextHandle ctx = uiFactory.Prepare();
-				ctx->SetArgObject(0, renderer);
-				ctx->SetArgObject(1, audioDevice);
-				ctx->SetArgObject(2, fontManager);
+				ctx->SetArgObject(0, renderer.GetPointerOrNull());
+				ctx->SetArgObject(1, audioDevice.GetPointerOrNull());
+				ctx->SetArgObject(2, fontManager.GetPointerOrNull());
 				ctx->SetArgObject(3, &*helper);
 
 				ctx.ExecuteChecked();
@@ -281,10 +284,9 @@ namespace spades {
 					return new audio::NullDevice();
 				}
 				View *CreateView(client::IRenderer *renderer, client::IAudioDevice *dev) override {
-					Handle<client::FontManager> fontManager(new client::FontManager(renderer),
-					                                        false);
-					view.Set(new StartupScreen(renderer, dev, helper, fontManager), true);
-					return view;
+					auto fontManager = Handle<client::FontManager>::New(renderer);
+					view = Handle<StartupScreen>::New(renderer, dev, helper, fontManager);
+					return Handle<StartupScreen>{view}.Unmanage();
 				}
 
 			public:
@@ -305,5 +307,5 @@ namespace spades {
 			if (startFlag)
 				spades::StartMainScreen();
 		}
-	}
-}
+	} // namespace gui
+} // namespace spades

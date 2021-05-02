@@ -20,19 +20,17 @@
  */
 
 #include "TCGameMode.h"
-#include <Core/Debug.h>
 #include "World.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace client {
-		TCGameMode::TCGameMode(World *w) : IGameMode(m_TC), world(w) { SPADES_MARK_FUNCTION(); }
+		TCGameMode::TCGameMode(World &w) : IGameMode(m_TC), world(w) { SPADES_MARK_FUNCTION(); }
 		TCGameMode::~TCGameMode() { SPADES_MARK_FUNCTION(); }
 
 		TCGameMode::Team &TCGameMode::GetTeam(int t) {
 			SPADES_MARK_FUNCTION();
-			SPAssert(t >= 0);
-			SPAssert(t < 2);
-			return teams[t];
+			return teams.at(t);
 		}
 
 		void TCGameMode::AddTerritory(const spades::client::TCGameMode::Territory &t) {
@@ -40,7 +38,7 @@ namespace spades {
 		}
 
 		float TCGameMode::Territory::GetProgress() {
-			float dt = mode->world->GetTime() - progressStartTime;
+			float dt = mode.world.GetTime() - progressStartTime;
 			float prog = progressBasePos;
 			prog += progressRate * dt;
 			if (prog < 0.f)
@@ -49,5 +47,5 @@ namespace spades {
 				prog = 1.f;
 			return prog;
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

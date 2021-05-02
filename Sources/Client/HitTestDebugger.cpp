@@ -21,8 +21,8 @@
 
 #include <ctime> //windows needs this.
 
-#include "HitTestDebugger.h"
 #include "GameMap.h"
+#include "HitTestDebugger.h"
 #include "Player.h"
 #include "Weapon.h"
 #include "World.h"
@@ -41,9 +41,9 @@ namespace spades {
 		public:
 			Port() {
 				SPADES_MARK_FUNCTION();
-				bmp.Set(new Bitmap(512, 512), false);
+				bmp = Handle<Bitmap>::New(512, 512);
 			}
-			Bitmap *GetFramebuffer() override { return bmp; }
+			Bitmap &GetFramebuffer() override { return *bmp; }
 			void Swap() override {
 				// nothing to do here
 			}
@@ -51,8 +51,8 @@ namespace spades {
 
 		HitTestDebugger::HitTestDebugger(World *world) : world(world) {
 			SPADES_MARK_FUNCTION();
-			port.Set(new Port(), false);
-			renderer.Set(new draw::SWRenderer(port), false);
+			port = Handle<Port>::New();
+			renderer = Handle<draw::SWRenderer>::New(port.Cast<draw::SWPort>()).Cast<IRenderer>();
 			renderer->Init();
 		}
 
@@ -69,9 +69,9 @@ namespace spades {
 			renderer->SetFogColor(MakeVector3(0.f, 0.f, 0.f));
 			renderer->SetFogDistance(128.f);
 
-			Player *localPlayer = world->GetLocalPlayer();
+			stmp::optional<Player &> localPlayer = world->GetLocalPlayer();
 
-			if (localPlayer == nullptr) {
+			if (!localPlayer) {
 				SPLog("HitTestDebugger failure: Local player is null");
 				return;
 			}
@@ -98,7 +98,7 @@ namespace spades {
 			// fit FoV to include all possibly hit players
 			float range = 0.2f;
 			for (std::size_t i = 0; i < world->GetNumPlayerSlots(); i++) {
-				auto *p = world->GetPlayer(static_cast<unsigned int>(i));
+				auto p = world->GetPlayer(static_cast<unsigned int>(i));
 				if (!p)
 					continue;
 				if (p == localPlayer)
@@ -145,9 +145,9 @@ namespace spades {
 			def.zFar = 200.f;
 
 			// start rendering
-			GameMap *map = world->GetMap();
+			const Handle<GameMap> &map = world->GetMap();
 			if (!def.skipWorld) {
-				renderer->SetGameMap(map);
+				renderer->SetGameMap(&*map);
 			}
 			renderer->StartScene(def);
 
@@ -201,7 +201,7 @@ namespace spades {
 			};
 
 			for (std::size_t i = 0; i < numPlayers; i++) {
-				auto *p = world->GetPlayer(static_cast<unsigned int>(i));
+				auto p = world->GetPlayer(static_cast<unsigned int>(i));
 				if (!p)
 					continue;
 				if (p == localPlayer)
@@ -230,12 +230,12 @@ namespace spades {
 			renderer->EndScene();
 
 			// draw crosshair
-			IImage *img = renderer->RegisterImage("Gfx/White.tga");
+			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			float size = renderer->ScreenWidth();
 
 			renderer->SetColorAlphaPremultiplied(Vector4(1.f, 0.f, 0.f, 0.9f));
-			renderer->DrawImage(img, AABB2(size * 0.5f - 1.f, 0.f, 2.f, size));
-			renderer->DrawImage(img, AABB2(0.f, size * 0.5f - 1.f, size, 2.f));
+			renderer->DrawImage(*img, AABB2(size * 0.5f - 1.f, 0.f, 2.f, size));
+			renderer->DrawImage(*img, AABB2(0.f, size * 0.5f - 1.f, size, 2.f));
 
 			// draw bullet vectors
 			float fov = tanf(def.fovY * .5f);
@@ -247,9 +247,9 @@ namespace spades {
 				x = floorf(x);
 				y = floorf(y);
 				renderer->SetColorAlphaPremultiplied(Vector4(1.f, 0.f, 0.f, 0.9f));
-				renderer->DrawImage(img, AABB2(x - 1.f, y - 1.f, 3.f, 3.f));
+				renderer->DrawImage(*img, AABB2(x - 1.f, y - 1.f, 3.f, 3.f));
 				renderer->SetColorAlphaPremultiplied(Vector4(1.f, 1.f, 0.f, 0.9f));
-				renderer->DrawImage(img, AABB2(x, y, 1.f, 1.f));
+				renderer->DrawImage(*img, AABB2(x, y, 1.f, 1.f));
 			}
 
 			renderer->FrameDone();
@@ -268,7 +268,7 @@ namespace spades {
 				fileName = buf;
 			}
 
-			switch (localPlayer->GetWeapon()->GetWeaponType()) {
+			switch (localPlayer->GetWeapon().GetWeaponType()) {
 				case SMG_WEAPON: fileName += "-SMG"; break;
 				case RIFLE_WEAPON: fileName += "-Rifle"; break;
 				case SHOTGUN_WEAPON: fileName += "-Shotgun"; break;
@@ -294,7 +294,7 @@ namespace spades {
 
 			// save image
 			try {
-				Handle<Bitmap> b(renderer->ReadBitmap(), false);
+				Handle<Bitmap> b = renderer->ReadBitmap();
 				b->Save(fileName);
 				SPLog("HitTestDebugger: saved to '%s'", fileName.c_str());
 			} catch (const std::exception &ex) {
@@ -304,5 +304,5 @@ namespace spades {
 
 			renderer->Flip();
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

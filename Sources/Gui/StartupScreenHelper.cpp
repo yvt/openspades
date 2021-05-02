@@ -92,6 +92,10 @@ namespace spades {
 			scr = nullptr;
 		}
 
+		namespace {
+			std::regex const localeInfoRegex("[-a-zA-Z0-9_]+\\.json");
+		}
+
 		void StartupScreenHelper::ExamineSystem() {
 			SPADES_MARK_FUNCTION();
 
@@ -106,7 +110,6 @@ namespace spades {
 			auto localeDirectories = FileManager::EnumFiles("Locales");
 			locales.clear();
 			for (const std::string &localeInfoName : localeDirectories) {
-				static std::regex localeInfoRegex("[-a-zA-Z0-9_]+\\.json");
 				if (!std::regex_match(localeInfoName, localeInfoRegex)) {
 					continue;
 				}

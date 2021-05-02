@@ -31,7 +31,7 @@ namespace spades {
 
 			enum { NumSlices = 3 };
 
-			IGLDevice *device;
+			IGLDevice &device;
 
 			int textureSize;
 
@@ -49,12 +49,12 @@ namespace spades {
 			void BuildMatrix(float near, float far);
 
 		public:
-			GLBasicShadowMapRenderer(GLRenderer *);
+			GLBasicShadowMapRenderer(GLRenderer &);
 			~GLBasicShadowMapRenderer();
 			void Render() override;
 
 			bool Cull(const AABB3 &) override;
 			bool SphereCull(const Vector3 &center, float rad) override;
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

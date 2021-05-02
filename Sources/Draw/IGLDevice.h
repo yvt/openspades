@@ -413,5 +413,5 @@ namespace spades {
 
 			virtual void Swap() = 0;
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

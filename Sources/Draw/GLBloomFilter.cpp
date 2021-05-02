@@ -20,8 +20,6 @@
 
 #include <vector>
 
-#include <Core/Debug.h>
-#include <Core/Math.h>
 #include "GLBloomFilter.h"
 #include "GLProgram.h"
 #include "GLProgramAttribute.h"
@@ -29,11 +27,13 @@
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
-		GLBloomFilter::GLBloomFilter(GLRenderer *renderer) : renderer(renderer) {
-			thru = renderer->RegisterProgram("Shaders/PostFilters/PassThrough.program");
+		GLBloomFilter::GLBloomFilter(GLRenderer &renderer) : renderer(renderer) {
+			thru = renderer.RegisterProgram("Shaders/PostFilters/PassThrough.program");
 		}
 
 #define Level BloomLevel
@@ -48,7 +48,7 @@ namespace spades {
 
 			std::vector<Level> levels;
 
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			static GLProgramAttribute thruPosition("positionAttribute");
@@ -61,7 +61,7 @@ namespace spades {
 			thruTexture(thru);
 			thruTexCoordRange(thru);
 
-			GLProgram *gammaMix = renderer->RegisterProgram("Shaders/PostFilters/GammaMix.program");
+			GLProgram *gammaMix = renderer.RegisterProgram("Shaders/PostFilters/GammaMix.program");
 			static GLProgramAttribute gammaMixPosition("positionAttribute");
 			static GLProgramUniform gammaMixTexture1("texture1");
 			static GLProgramUniform gammaMixTexture2("texture2");
@@ -77,7 +77,7 @@ namespace spades {
 			thru->Use();
 			thruColor.SetValue(1.f, 1.f, 1.f, 1.f);
 			thruTexture.SetValue(0);
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			// create downsample levels
 			for (int i = 0; i < 6; i++) {
@@ -96,14 +96,14 @@ namespace spades {
 
 				thru->Use();
 				qr.SetCoordAttributeIndex(thruPosition());
-				dev->BindTexture(IGLDevice::Texture2D, prevLevel.GetTexture());
-				dev->BindFramebuffer(IGLDevice::Framebuffer, newLevel.GetFramebuffer());
-				dev->Viewport(0, 0, newLevel.GetWidth(), newLevel.GetHeight());
+				dev.BindTexture(IGLDevice::Texture2D, prevLevel.GetTexture());
+				dev.BindFramebuffer(IGLDevice::Framebuffer, newLevel.GetFramebuffer());
+				dev.Viewport(0, 0, newLevel.GetWidth(), newLevel.GetHeight());
 				thruTexCoordRange.SetValue(0.f, 0.f,
 				                           (float)newLevel.GetWidth() * 2.f / (float)prevW,
 				                           (float)newLevel.GetHeight() * 2.f / (float)prevH);
 				qr.Draw();
-				dev->BindTexture(IGLDevice::Texture2D, 0);
+				dev.BindTexture(IGLDevice::Texture2D, 0);
 
 				Level lv;
 				lv.w = newW;
@@ -112,8 +112,8 @@ namespace spades {
 				levels.push_back(lv);
 			}
 
-			dev->Enable(IGLDevice::Blend, true);
-			dev->BlendFunc(IGLDevice::SrcAlpha, IGLDevice::OneMinusSrcAlpha);
+			dev.Enable(IGLDevice::Blend, true);
+			dev.BlendFunc(IGLDevice::SrcAlpha, IGLDevice::OneMinusSrcAlpha);
 
 			// composite levels in the opposite direction
 			thruTexCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
@@ -126,12 +126,12 @@ namespace spades {
 
 				thru->Use();
 				qr.SetCoordAttributeIndex(thruPosition());
-				dev->BindTexture(IGLDevice::Texture2D, curLevel.GetTexture());
-				dev->BindFramebuffer(IGLDevice::Framebuffer, targLevel.GetFramebuffer());
-				dev->Viewport(0, 0, targLevel.GetWidth(), targLevel.GetHeight());
+				dev.BindTexture(IGLDevice::Texture2D, curLevel.GetTexture());
+				dev.BindFramebuffer(IGLDevice::Framebuffer, targLevel.GetFramebuffer());
+				dev.Viewport(0, 0, targLevel.GetWidth(), targLevel.GetHeight());
 				thruColor.SetValue(1.f, 1.f, 1.f, alpha);
 				qr.Draw();
-				dev->BindTexture(IGLDevice::Texture2D, 0);
+				dev.BindTexture(IGLDevice::Texture2D, 0);
 			}
 
 			// composite to the final image
@@ -140,22 +140,22 @@ namespace spades {
 
 			gammaMix->Use();
 			qr.SetCoordAttributeIndex(gammaMixPosition());
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D, topLevel.GetTexture());
-			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
-			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, input.GetTexture());
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D, topLevel.GetTexture());
+			dev.BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
+			dev.Viewport(0, 0, output.GetWidth(), output.GetHeight());
 			gammaMixTexture1.SetValue(0);
 			gammaMixTexture2.SetValue(1);
 			gammaMixMix1.SetValue(.8f, .8f, .8f);
 			gammaMixMix2.SetValue(.2f, .2f, .2f);
 			qr.Draw();
-			dev->BindTexture(IGLDevice::Texture2D, 0);
+			dev.BindTexture(IGLDevice::Texture2D, 0);
 
-			dev->ActiveTexture(0);
+			dev.ActiveTexture(0);
 
 			return output;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

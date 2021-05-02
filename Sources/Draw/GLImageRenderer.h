@@ -32,8 +32,8 @@ namespace spades {
 		class IGLDevice;
 		class GLRenderer;
 		class GLImageRenderer {
-			GLRenderer *renderer;
-			IGLDevice *device;
+			GLRenderer &renderer;
+			IGLDevice &device;
 			GLImage *image;
 
 			float invScreenWidthFactored;
@@ -58,7 +58,7 @@ namespace spades {
 			std::vector<uint32_t> indices;
 
 		public:
-			GLImageRenderer(GLRenderer *renderer);
+			GLImageRenderer(GLRenderer &renderer);
 			~GLImageRenderer();
 
 			void Flush();
@@ -69,5 +69,5 @@ namespace spades {
 			         float dy4, float sx1, float sy1, float sx2, float sy2, float sx3, float sy3,
 			         float sx4, float sy4, float r, float g, float b, float a);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

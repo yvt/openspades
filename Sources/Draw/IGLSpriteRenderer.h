@@ -32,5 +32,5 @@ namespace spades {
 			virtual void Clear() = 0;
 			virtual void Render() = 0;
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

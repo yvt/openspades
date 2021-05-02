@@ -72,5 +72,5 @@ DEFINE_SPADES_SETTING(r_water, "2");
 namespace spades {
 	namespace draw {
 		GLSettings::GLSettings() {}
-	}
-}
+	} // namespace draw
+} // namespace spades

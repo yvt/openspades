@@ -68,11 +68,9 @@ namespace spades {
 				case ClientCameraMode::NotJoined:
 				case ClientCameraMode::FirstPersonLocal:
 				case ClientCameraMode::FirstPersonFollow:
-				case ClientCameraMode::Free:
-					return false;
+				case ClientCameraMode::Free: return false;
 				case ClientCameraMode::ThirdPersonLocal:
-				case ClientCameraMode::ThirdPersonFollow:
-					return true;
+				case ClientCameraMode::ThirdPersonFollow: return true;
 			}
 			SPUnreachable();
 		}
@@ -83,11 +81,9 @@ namespace spades {
 				case ClientCameraMode::NotJoined:
 				case ClientCameraMode::ThirdPersonLocal:
 				case ClientCameraMode::ThirdPersonFollow:
-				case ClientCameraMode::Free:
-					return false;
+				case ClientCameraMode::Free: return false;
 				case ClientCameraMode::FirstPersonLocal:
-				case ClientCameraMode::FirstPersonFollow:
-					return true;
+				case ClientCameraMode::FirstPersonFollow: return true;
 			}
 			SPUnreachable();
 		}
@@ -96,13 +92,11 @@ namespace spades {
 			switch (mode) {
 				case ClientCameraMode::None:
 				case ClientCameraMode::NotJoined:
-				case ClientCameraMode::Free:
-					return false;
+				case ClientCameraMode::Free: return false;
 				case ClientCameraMode::ThirdPersonLocal:
 				case ClientCameraMode::ThirdPersonFollow:
 				case ClientCameraMode::FirstPersonLocal:
-				case ClientCameraMode::FirstPersonFollow:
-					return true;
+				case ClientCameraMode::FirstPersonFollow: return true;
 			}
 			SPUnreachable();
 		}
@@ -113,13 +107,11 @@ namespace spades {
 				case ClientCameraMode::NotJoined:
 				case ClientCameraMode::Free:
 				case ClientCameraMode::ThirdPersonLocal:
-				case ClientCameraMode::FirstPersonLocal:
-					return false;
+				case ClientCameraMode::FirstPersonLocal: return false;
 				case ClientCameraMode::ThirdPersonFollow:
-				case ClientCameraMode::FirstPersonFollow:
-					return true;
+				case ClientCameraMode::FirstPersonFollow: return true;
 			}
 			SPUnreachable();
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

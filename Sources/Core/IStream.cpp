@@ -20,10 +20,10 @@
 
 #include <algorithm>
 
-#include <Core/Debug.h>
 #include "Debug.h"
 #include "Exception.h"
 #include "IStream.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	IStream::~IStream() {}
@@ -111,70 +111,4 @@ namespace spades {
 			SPRaise("Failed to read 4 bytes");
 		return data;
 	}
-
-	StreamHandle::StreamHandle() : o(NULL) {}
-
-	StreamHandle::StreamHandle(IStream *stream) {
-		SPADES_MARK_FUNCTION();
-		if (!stream)
-			SPInvalidArgument("stream");
-		o = new SharedStream(stream);
-	}
-
-	StreamHandle::StreamHandle(const StreamHandle &handle) : o(handle.o) {
-		SPADES_MARK_FUNCTION_DEBUG();
-		o->Retain();
-	}
-
-	StreamHandle::~StreamHandle() {
-		SPADES_MARK_FUNCTION();
-		Reset();
-	}
-
-	spades::StreamHandle &StreamHandle::operator=(const spades::StreamHandle &h) {
-		SPADES_MARK_FUNCTION();
-		if (o != h.o) {
-			SharedStream *old = o;
-			o = h.o;
-			if (o) {
-				o->Retain();
-			}
-			if (old) {
-				old->Release();
-			}
-		}
-		return *this;
-	}
-
-	IStream *StreamHandle::operator->() const {
-		SPAssert(o);
-		return o->stream;
-	}
-
-	StreamHandle::operator class spades::IStream *() const {
-		SPAssert(o);
-		return o->stream;
-	}
-
-	StreamHandle::operator bool() const { return o->stream; }
-
-	void StreamHandle::Reset() {
-		if (o) {
-			o->Release();
-			o = NULL;
-		}
-	}
-
-	StreamHandle::SharedStream::SharedStream(IStream *s) : stream(s), refCount(1) {}
-
-	StreamHandle::SharedStream::~SharedStream() { delete stream; }
-
-	void StreamHandle::SharedStream::Retain() { refCount++; }
-
-	void StreamHandle::SharedStream::Release() {
-		SPAssert(refCount > 0);
-		refCount--;
-		if (refCount == 0)
-			delete this;
-	}
-}
+} // namespace spades

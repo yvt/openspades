@@ -37,7 +37,7 @@ namespace spades {
 
 			enum { Tiles = 64 };
 
-			IGLDevice *device;
+			IGLDevice &device;
 			GLSettings &settings;
 
 			int textureSize;
@@ -63,12 +63,12 @@ namespace spades {
 			void RenderShadowMapPass() override;
 
 		public:
-			GLSparseShadowMapRenderer(GLRenderer *);
+			GLSparseShadowMapRenderer(GLRenderer &);
 			~GLSparseShadowMapRenderer();
 			void Render() override;
 
 			bool Cull(const AABB3 &) override;
 			bool SphereCull(const Vector3 &center, float rad) override;
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

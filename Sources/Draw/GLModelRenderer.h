@@ -22,10 +22,10 @@
 
 #include <vector>
 
-#include <Client/IModel.h>
-#include <Client/IRenderer.h>
 #include "GLDynamicLight.h"
 #include "IGLDevice.h"
+#include <Client/IModel.h>
+#include <Client/IRenderer.h>
 
 namespace spades {
 	namespace draw {
@@ -35,8 +35,8 @@ namespace spades {
 		class GLModelRenderer {
 			friend class GLSparseShadowMapRenderer;
 
-			GLRenderer *renderer;
-			IGLDevice *device;
+			GLRenderer &renderer;
+			IGLDevice &device;
 
 			struct RenderModel {
 				GLModel *model;
@@ -47,7 +47,7 @@ namespace spades {
 			int modelCount;
 
 		public:
-			GLModelRenderer(GLRenderer *);
+			GLModelRenderer(GLRenderer &);
 			~GLModelRenderer();
 
 			void AddModel(GLModel *model, const client::ModelRenderParam &param);
@@ -60,5 +60,5 @@ namespace spades {
 
 			void Clear();
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

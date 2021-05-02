@@ -20,8 +20,6 @@
 
 #include <vector>
 
-#include <Core/Debug.h>
-#include <Core/Math.h>
 #include "GLFXAAFilter.h"
 #include "GLProgram.h"
 #include "GLProgramAttribute.h"
@@ -29,16 +27,18 @@
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
-		GLFXAAFilter::GLFXAAFilter(GLRenderer *renderer) : renderer(renderer) {
-			lens = renderer->RegisterProgram("Shaders/PostFilters/FXAA.program");
+		GLFXAAFilter::GLFXAAFilter(GLRenderer &renderer) : renderer(renderer) {
+			lens = renderer.RegisterProgram("Shaders/PostFilters/FXAA.program");
 		}
 		GLColorBuffer GLFXAAFilter::Filter(GLColorBuffer input) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
@@ -47,7 +47,7 @@ namespace spades {
 			static GLProgramUniform lensTexture("mainTexture");
 			static GLProgramUniform inverseVP("inverseVP");
 
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			lensPosition(lens);
 			lensTexture(lens);
@@ -61,13 +61,13 @@ namespace spades {
 			// composite to the final image
 
 			qr.SetCoordAttributeIndex(lensPosition());
-			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
-			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
-			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
+			dev.BindTexture(IGLDevice::Texture2D, input.GetTexture());
+			dev.BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
+			dev.Viewport(0, 0, output.GetWidth(), output.GetHeight());
 			qr.Draw();
-			dev->BindTexture(IGLDevice::Texture2D, 0);
+			dev.BindTexture(IGLDevice::Texture2D, 0);
 
 			return output;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

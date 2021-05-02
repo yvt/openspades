@@ -27,6 +27,7 @@ namespace spades {
 		public:
 			GLSettings();
 
+			// clang-format off
 			TypedItemHandle<bool> r_blitFramebuffer     { *this, "r_blitFramebuffer" };
 			TypedItemHandle<bool> r_bloom               { *this, "r_bloom" };
 			TypedItemHandle<float> r_cameraBlur         { *this, "r_cameraBlur" };
@@ -75,6 +76,7 @@ namespace spades {
 			TypedItemHandle<int> r_ssao                 { *this, "r_ssao", ItemFlags::Latch };
 			TypedItemHandle<bool> r_temporalAA          { *this, "r_temporalAA" };
 			TypedItemHandle<int> r_water                { *this, "r_water", ItemFlags::Latch };
+			// clang-format on
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

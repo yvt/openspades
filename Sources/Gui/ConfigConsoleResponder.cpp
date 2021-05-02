@@ -115,7 +115,7 @@ namespace spades {
 
 		Handle<ConsoleCommandCandidateIterator>
 		ConfigConsoleResponder::AutocompleteCommandName(const std::string &name) {
-			return {new ConfigNameIterator(name), false};
+			return Handle<ConfigNameIterator>::New(name).Cast<ConsoleCommandCandidateIterator>();
 		}
 	} // namespace gui
 } // namespace spades

@@ -176,10 +176,10 @@ namespace spades {
 		    : renderer(renderer), manager(manager) {
 			for (auto font = manager->fonts.begin(); font != manager->fonts.end(); ++font) {
 				auto imgPath = (*font)->imagePath;
-				auto *img = renderer->RegisterImage(imgPath.c_str()); // addref'd
+				auto img = renderer->RegisterImage(imgPath.c_str()).Unmanage();
 				images.push_back(img);
 			}
-			whiteImage.Set(renderer->RegisterImage("Gfx/White.tga"), false);
+			whiteImage = renderer->RegisterImage("Gfx/White.tga");
 
 			// SW renderer doesn't perform linear interpolation on
 			// rendering images, so size rounding must be done to
@@ -226,11 +226,11 @@ namespace spades {
 			auto glyph = FindGlyph(unicode);
 			if (glyph.img == nullptr) {
 				// no glyph found! draw box in the last resort
-				IImage *img = whiteImage;
-				renderer->DrawImage(img, AABB2(x, y, size, 1.f));
-				renderer->DrawImage(img, AABB2(x, y + size - 1.f, size, 1.f));
-				renderer->DrawImage(img, AABB2(x, y + 1.f, 1.f, size - 2.f));
-				renderer->DrawImage(img, AABB2(x + size - 1.f, y + 1.f, 1.f, size - 2.f));
+				const Handle<IImage> &img = whiteImage;
+				renderer->DrawImage(*img, AABB2(x, y, size, 1.f));
+				renderer->DrawImage(*img, AABB2(x, y + size - 1.f, size, 1.f));
+				renderer->DrawImage(*img, AABB2(x, y + 1.f, 1.f, size - 2.f));
+				renderer->DrawImage(*img, AABB2(x + size - 1.f, y + 1.f, 1.f, size - 2.f));
 				return;
 			}
 
@@ -309,5 +309,5 @@ namespace spades {
 			Draw(message, offset + MakeVector2(1, 1), scale, shadowColor);
 			Draw(message, offset, scale, color);
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

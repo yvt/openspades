@@ -30,41 +30,27 @@
 
 namespace spades {
 	namespace draw {
-		GLModelManager::GLModelManager(GLRenderer *r) {
+		GLModelManager::GLModelManager(GLRenderer &r) : renderer{r} { SPADES_MARK_FUNCTION(); }
+		GLModelManager::~GLModelManager() { SPADES_MARK_FUNCTION(); }
+
+		Handle<GLModel> GLModelManager::RegisterModel(const char *name) {
 			SPADES_MARK_FUNCTION();
 
-			renderer = r;
-		}
-		GLModelManager::~GLModelManager() {
-			SPADES_MARK_FUNCTION();
-
-			for (std::map<std::string, GLModel *>::iterator it = models.begin(); it != models.end();
-			     it++) {
-				it->second->Release();
-			}
-		}
-
-		GLModel *GLModelManager::RegisterModel(const char *name) {
-			SPADES_MARK_FUNCTION();
-
-			std::map<std::string, GLModel *>::iterator it;
-			it = models.find(std::string(name));
+			auto it = models.find(std::string(name));
 			if (it == models.end()) {
-				GLModel *m = CreateModel(name);
+				Handle<GLModel> m = CreateModel(name);
 				models[name] = m;
-				m->AddRef();
 				return m;
 			}
-			it->second->AddRef(); // model manager owns this reference
 			return it->second;
 		}
 
-		GLModel *GLModelManager::CreateModel(const char *name) {
+		Handle<GLModel> GLModelManager::CreateModel(const char *name) {
 			SPADES_MARK_FUNCTION();
 
-			Handle<VoxelModel> voxelModel{VoxelModelLoader::Load(name), false};
+			auto voxelModel = VoxelModelLoader::Load(name);
 
-			return static_cast<GLModel *>(renderer->CreateModelOptimized(voxelModel));
+			return renderer.CreateModelOptimized(*voxelModel).Cast<GLModel>();
 		}
 
 		void GLModelManager::ClearCache() { models.clear(); }

@@ -23,10 +23,6 @@
 #include <cstdlib>
 #include <deque>
 
-#include <Core/Debug.h>
-#include <Core/Debug.h>
-#include <Core/FileManager.h>
-#include <Core/IStream.h>
 #include "GameMap.h"
 #include "GameMapWrapper.h"
 #include "GameProperties.h"
@@ -37,6 +33,9 @@
 #include "Player.h"
 #include "Weapon.h"
 #include "World.h"
+#include <Core/Debug.h>
+#include <Core/FileManager.h>
+#include <Core/IStream.h>
 #include <Core/Settings.h>
 
 DEFINE_SPADES_SETTING(cg_debugHitTest, "0");
@@ -47,43 +46,12 @@ namespace spades {
 		World::World(const std::shared_ptr<GameProperties> &gameProperties)
 		    : gameProperties{gameProperties} {
 			SPADES_MARK_FUNCTION();
-
-			listener = NULL;
-
-			map = NULL;
-			mapWrapper = NULL;
-
-			localPlayerIndex = -1;
-			for (int i = 0; i < 128; i++) {
-				players.push_back((Player *)NULL);
-				playerPersistents.push_back(PlayerPersistent());
-			}
-
-			localPlayerIndex = 0;
-
-			time = 0.f;
-			mode = NULL;
 		}
-		World::~World() {
-			SPADES_MARK_FUNCTION();
-
-			for (std::list<Grenade *>::iterator it = grenades.begin(); it != grenades.end(); it++)
-				delete *it;
-			for (size_t i = 0; i < players.size(); i++)
-				if (players[i])
-					delete players[i];
-			if (mode) {
-				delete mode;
-			}
-			if (map) {
-				delete mapWrapper;
-				map->Release();
-			}
-		}
+		World::~World() { SPADES_MARK_FUNCTION(); }
 
 		size_t World::GetNumPlayers() {
 			size_t numPlayers = 0;
-			for (auto *p : players) {
+			for (const auto &p : players) {
 				if (p)
 					++numPlayers;
 			}
@@ -95,9 +63,9 @@ namespace spades {
 
 			ApplyBlockActions();
 
-			for (size_t i = 0; i < players.size(); i++)
-				if (players[i])
-					players[i]->Update(dt);
+			for (const auto &player : players)
+				if (player)
+					player->Update(dt);
 
 			while (!blockRegenerationQueue.empty()) {
 				auto it = blockRegenerationQueue.begin();
@@ -118,74 +86,52 @@ namespace spades {
 				blockRegenerationQueue.erase(it);
 			}
 
-			std::vector<std::list<Grenade *>::iterator> removedGrenades;
-			for (std::list<Grenade *>::iterator it = grenades.begin(); it != grenades.end(); it++) {
-				Grenade *g = *it;
-				if (g->Update(dt)) {
+			std::vector<decltype(grenades.begin())> removedGrenades;
+			for (auto it = grenades.begin(); it != grenades.end(); it++) {
+				Grenade &g = **it;
+				if (g.Update(dt)) {
 					removedGrenades.push_back(it);
 				}
 			}
-			for (size_t i = 0; i < removedGrenades.size(); i++)
-				grenades.erase(removedGrenades[i]);
+			for (auto it : removedGrenades)
+				grenades.erase(it);
 
 			time += dt;
 		}
 
-		void World::SetMap(spades::client::GameMap *newMap) {
+		void World::SetMap(Handle<GameMap> newMap) {
 			if (map == newMap)
 				return;
 
 			hitTestDebugger.reset();
 
 			if (map) {
-				map->Release();
-				delete mapWrapper;
+				mapWrapper.reset();
 			}
 
 			map = newMap;
 			if (map) {
-				map->AddRef();
-				mapWrapper = new GameMapWrapper(*map);
+				mapWrapper = stmp::make_unique<GameMapWrapper>(*map);
 				mapWrapper->Rebuild();
 			}
 		}
 
-		void World::AddGrenade(spades::client::Grenade *g) {
+		void World::AddGrenade(std::unique_ptr<Grenade> g) {
 			SPADES_MARK_FUNCTION_DEBUG();
 
-			grenades.push_back(g);
+			grenades.push_back(std::move(g));
 		}
 
-		std::vector<Grenade *> World::GetAllGrenades() {
-			SPADES_MARK_FUNCTION_DEBUG();
-
-			std::vector<Grenade *> g;
-			for (std::list<Grenade *>::iterator it = grenades.begin(); it != grenades.end(); it++) {
-				g.push_back(*it);
-			}
-			return g;
-		}
-
-		void World::SetPlayer(int i, spades::client::Player *p) {
+		void World::SetPlayer(int i, std::unique_ptr<Player> p) {
 			SPADES_MARK_FUNCTION();
-			SPAssert(i >= 0);
-			SPAssert(i < (int)players.size());
-			if (players[i] == p)
-				return;
-			if (players[i])
-				delete players[i];
-			players[i] = p;
-			if (listener)
+
+			players.at(i) = std::move(p);
+			if (listener) {
 				listener->PlayerObjectSet(i);
+			}
 		}
 
-		void World::SetMode(spades::client::IGameMode *m) {
-			if (mode == m)
-				return;
-			if (mode)
-				delete mode;
-			mode = m;
-		}
+		void World::SetMode(std::unique_ptr<IGameMode> m) { mode = std::move(m); }
 
 		void World::MarkBlockForRegeneration(const IntVector3 &blockLocation) {
 			UnmarkBlockForRegeneration(blockLocation);
@@ -345,7 +291,7 @@ namespace spades {
 		World::PlayerPersistent &World::GetPlayerPersistent(int index) {
 			SPAssert(index >= 0);
 			SPAssert(index < players.size());
-			return playerPersistents[index];
+			return playerPersistents.at(index);
 		}
 
 		std::vector<IntVector3> World::CubeLine(spades::IntVector3 v1, spades::IntVector3 v2,
@@ -437,15 +383,16 @@ namespace spades {
 		}
 
 		World::WeaponRayCastResult World::WeaponRayCast(spades::Vector3 startPos,
-		                                                spades::Vector3 dir, Player *exclude) {
+		                                                spades::Vector3 dir,
+		                                                stmp::optional<int> excludePlayerId) {
 			WeaponRayCastResult result;
-			Player *hitPlayer = NULL;
+			stmp::optional<int> hitPlayer;
 			float hitPlayerDistance = 0.f;
 			hitTag_t hitFlag = hit_None;
 
 			for (int i = 0; i < (int)players.size(); i++) {
-				Player *p = players[i];
-				if (p == NULL || p == exclude)
+				const auto &p = players[i];
+				if (!p || (excludePlayerId && *excludePlayerId == i))
 					continue;
 				if (p->GetTeamId() >= 2 || !p->IsAlive())
 					continue;
@@ -457,9 +404,9 @@ namespace spades {
 
 				if (hb.head.RayCast(startPos, dir, &hitPos)) {
 					float dist = (hitPos - startPos).GetLength();
-					if (hitPlayer == NULL || dist < hitPlayerDistance) {
-						if (hitPlayer != p) {
-							hitPlayer = p;
+					if (!hitPlayer || dist < hitPlayerDistance) {
+						if (hitPlayer != i) {
+							hitPlayer = i;
 							hitFlag = hit_None;
 						}
 						hitPlayerDistance = dist;
@@ -468,9 +415,9 @@ namespace spades {
 				}
 				if (hb.torso.RayCast(startPos, dir, &hitPos)) {
 					float dist = (hitPos - startPos).GetLength();
-					if (hitPlayer == NULL || dist < hitPlayerDistance) {
-						if (hitPlayer != p) {
-							hitPlayer = p;
+					if (!hitPlayer || dist < hitPlayerDistance) {
+						if (hitPlayer != i) {
+							hitPlayer = i;
 							hitFlag = hit_None;
 						}
 						hitPlayerDistance = dist;
@@ -480,9 +427,9 @@ namespace spades {
 				for (int j = 0; j < 3; j++) {
 					if (hb.limbs[j].RayCast(startPos, dir, &hitPos)) {
 						float dist = (hitPos - startPos).GetLength();
-						if (hitPlayer == NULL || dist < hitPlayerDistance) {
-							if (hitPlayer != p) {
-								hitPlayer = p;
+						if (!hitPlayer || dist < hitPlayerDistance) {
+							if (hitPlayer != i) {
+								hitPlayer = i;
 								hitFlag = hit_None;
 							}
 							hitPlayerDistance = dist;
@@ -501,17 +448,16 @@ namespace spades {
 			res2 = map->CastRay2(startPos, dir, 256);
 
 			if (res2.hit &&
-			    (hitPlayer == NULL || (res2.hitPos - startPos).GetLength() < hitPlayerDistance)) {
+			    (!hitPlayer || (res2.hitPos - startPos).GetLength() < hitPlayerDistance)) {
 				result.hit = true;
 				result.startSolid = res2.startSolid;
-				result.player = NULL;
 				result.hitFlag = hit_None;
 				result.blockPos = res2.hitBlock;
 				result.hitPos = res2.hitPos;
 			} else if (hitPlayer) {
 				result.hit = true;
 				result.startSolid = false; // FIXME: startSolid for player
-				result.player = hitPlayer;
+				result.playerId = hitPlayer;
 				result.hitPos = startPos + dir * hitPlayerDistance;
 				result.hitFlag = hitFlag;
 			} else {
@@ -524,11 +470,11 @@ namespace spades {
 		HitTestDebugger *World::GetHitTestDebugger() {
 			if (cg_debugHitTest) {
 				if (hitTestDebugger == nullptr) {
-					hitTestDebugger.reset(new HitTestDebugger(this));
+					hitTestDebugger = stmp::make_unique<HitTestDebugger>(this);
 				}
 				return hitTestDebugger.get();
 			}
 			return nullptr;
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

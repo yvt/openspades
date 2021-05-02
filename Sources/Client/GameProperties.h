@@ -67,5 +67,5 @@ namespace spades {
 
 			int GetMaxNumPlayerSlots() const { return manyPlayers ? 128 : 32; }
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

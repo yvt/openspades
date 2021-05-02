@@ -124,5 +124,5 @@ namespace spades {
 				return 0.f;
 			return s * fastRSqrt(s);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

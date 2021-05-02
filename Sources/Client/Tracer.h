@@ -8,16 +8,17 @@
 
 #pragma once
 
-#include <Core/Math.h>
 #include "ILocalEntity.h"
+#include <Core/Math.h>
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	namespace client {
 		class Client;
 		class IImage;
 		class Tracer : public ILocalEntity {
-			Client *client;
-			IImage *image;
+			Client &client;
+			Handle<IImage> image;
 			Vector3 startPos, dir;
 			float length;
 			float curDistance;
@@ -26,11 +27,11 @@ namespace spades {
 			bool firstUpdate;
 
 		public:
-			Tracer(Client *, Vector3 p1, Vector3 p2, float bulletVel);
+			Tracer(Client &, Vector3 p1, Vector3 p2, float bulletVel);
 			~Tracer();
 
 			bool Update(float dt) override;
 			void Render3D() override;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

@@ -19,6 +19,7 @@
  */
 
 #include <list>
+#include <memory>
 #include <unordered_map>
 
 #include <Client/IFont.h>
@@ -35,29 +36,29 @@ namespace spades {
 	namespace client {
 		class IImage;
 	}
-}
+} // namespace spades
 
 namespace spades {
 	namespace ngclient {
 		struct FTFaceWrapper;
 		class FTFont;
 
-		class FTFontSet : public RefCountedObject {
+		class FTFontSet {
 			friend class FTFont;
 			std::list<std::unique_ptr<FTFaceWrapper>> faces;
 
-		protected:
-			~FTFontSet();
-
 		public:
 			FTFontSet();
+			FTFontSet(const FTFontSet &) = delete;
+			void operator=(const FTFontSet &) = delete;
+			~FTFontSet();
+
 			void AddFace(const std::string &fileName);
 		};
 
 		/**
 		 * FreeType2 based font renderer.
 		 *
-		 
 		 * Warning: only one thread can access multiple FTFonts sharing the same FTFontSet
 		 *          at the same time.
 		 */
@@ -71,6 +72,7 @@ namespace spades {
 				GlyphImage(client::IImage &img, const AABB2 &bounds, const Vector2 &offset)
 				    : img(img), bounds(bounds), offset(offset) {}
 			};
+
 			struct Glyph {
 				FT_Face face;
 				uint32_t charIndex;
@@ -79,11 +81,13 @@ namespace spades {
 				stmp::optional<GlyphImage> blurImage;
 				Handle<Bitmap> bmp;
 			};
+
 			struct GlyphHash {
 				std::size_t operator()(const std::pair<FT_Face, uint32_t> &p) const {
 					return std::hash<FT_Face>()(p.first) ^ std::hash<uint32_t>()(p.second);
 				}
 			};
+
 			std::unordered_map<std::pair<FT_Face, uint32_t>, Glyph, GlyphHash> glyphs;
 			std::unordered_map<uint32_t, std::reference_wrapper<Glyph>> glyphMap;
 			float lineHeight;
@@ -93,13 +97,13 @@ namespace spades {
 
 			bool rendererIsLowQuality;
 
-			Handle<FTFontSet> fontSet;
+			std::shared_ptr<FTFontSet> fontSet;
 
 			struct Bin;
 			std::list<Bin> bins;
 			int binSize;
 
-			Glyph *GetGlyph(uint32_t code);
+			stmp::optional<Glyph &> GetGlyph(uint32_t code);
 			template <class T, class T2, class T3>
 			void SplitTextIntoGlyphs(const std::string &, T glyphHandler, T3 fallbackHandler,
 			                         T2 lineBreakHandler);
@@ -111,7 +115,7 @@ namespace spades {
 			~FTFont();
 
 		public:
-			FTFont(client::IRenderer *, FTFontSet *, float height, float lineHeight);
+			FTFont(client::IRenderer *, std::shared_ptr<FTFontSet>, float height, float lineHeight);
 
 			Vector2 Measure(const std::string &) override;
 
@@ -123,5 +127,5 @@ namespace spades {
 			void DrawShadow(const std::string &, const Vector2 &offset, float scale,
 			                const Vector4 &color, const Vector4 &shadowColor) override;
 		};
-	}
-}
+	} // namespace ngclient
+} // namespace spades

@@ -19,25 +19,24 @@
  */
 
 #include "GLImageRenderer.h"
-#include <Core/Debug.h>
-#include <Core/Debug.h>
-#include <Core/Exception.h>
 #include "GLImage.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 
 namespace spades {
 	namespace draw {
-		GLImageRenderer::GLImageRenderer(GLRenderer *r)
+		GLImageRenderer::GLImageRenderer(GLRenderer &r)
 		    : renderer(r),
-		      device(r->GetGLDevice()),
-		      invScreenWidthFactored(2.f / device->ScreenWidth()),
-		      invScreenHeightFactored(-2.f / device->ScreenHeight()) {
+		      device(r.GetGLDevice()),
+		      invScreenWidthFactored(2.f / device.ScreenWidth()),
+		      invScreenHeightFactored(-2.f / device.ScreenHeight()) {
 
 			SPADES_MARK_FUNCTION();
 			image = NULL;
 
-			program = renderer->RegisterProgram("Shaders/BasicImage.program");
+			program = renderer.RegisterProgram("Shaders/BasicImage.program");
 
 			program->Use();
 
@@ -79,33 +78,32 @@ namespace spades {
 
 			program->Use();
 
-			device->ActiveTexture(0);
+			device.ActiveTexture(0);
 			image->Bind(IGLDevice::Texture2D);
 
-			device->VertexAttribPointer((*positionAttribute)(), 2, IGLDevice::FloatType, false,
-			                            sizeof(ImageVertex), vertices.data());
-			device->VertexAttribPointer((*colorAttribute)(), 4, IGLDevice::FloatType, false,
-			                            sizeof(ImageVertex),
-			                            (const char *)vertices.data() + sizeof(float) * 4);
-			device->VertexAttribPointer((*textureCoordAttribute)(), 2, IGLDevice::FloatType, false,
-			                            sizeof(ImageVertex),
-			                            (const char *)vertices.data() + sizeof(float) * 2);
+			device.VertexAttribPointer((*positionAttribute)(), 2, IGLDevice::FloatType, false,
+			                           sizeof(ImageVertex), vertices.data());
+			device.VertexAttribPointer((*colorAttribute)(), 4, IGLDevice::FloatType, false,
+			                           sizeof(ImageVertex),
+			                           (const char *)vertices.data() + sizeof(float) * 4);
+			device.VertexAttribPointer((*textureCoordAttribute)(), 2, IGLDevice::FloatType, false,
+			                           sizeof(ImageVertex),
+			                           (const char *)vertices.data() + sizeof(float) * 2);
 
-			device->EnableVertexAttribArray((*positionAttribute)(), true);
-			device->EnableVertexAttribArray((*colorAttribute)(), true);
-			device->EnableVertexAttribArray((*textureCoordAttribute)(), true);
+			device.EnableVertexAttribArray((*positionAttribute)(), true);
+			device.EnableVertexAttribArray((*colorAttribute)(), true);
+			device.EnableVertexAttribArray((*textureCoordAttribute)(), true);
 
 			screenSize->SetValue(invScreenWidthFactored, invScreenHeightFactored);
 			textureSize->SetValue(image->GetInvWidth(), image->GetInvHeight());
 			texture->SetValue(0);
 
-			device->DrawElements(IGLDevice::Triangles,
-			                     static_cast<IGLDevice::Sizei>(indices.size()),
-			                     IGLDevice::UnsignedInt, indices.data());
+			device.DrawElements(IGLDevice::Triangles, static_cast<IGLDevice::Sizei>(indices.size()),
+			                    IGLDevice::UnsignedInt, indices.data());
 
-			device->EnableVertexAttribArray((*positionAttribute)(), false);
-			device->EnableVertexAttribArray((*colorAttribute)(), false);
-			device->EnableVertexAttribArray((*textureCoordAttribute)(), false);
+			device.EnableVertexAttribArray((*positionAttribute)(), false);
+			device.EnableVertexAttribArray((*colorAttribute)(), false);
+			device.EnableVertexAttribArray((*textureCoordAttribute)(), false);
 
 			vertices.clear();
 			indices.clear();
@@ -164,5 +162,5 @@ namespace spades {
 			indices.push_back(idx + 2);
 			indices.push_back(idx + 3);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -19,14 +19,15 @@
  */
 
 #include "ParticleSpriteEntity.h"
-#include <Core/Debug.h>
 #include "GameMap.h"
 #include "World.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace client {
-		ParticleSpriteEntity::ParticleSpriteEntity(Client *cli, IImage *image, Vector4 color)
-		    : image(image), color(color) {
+		ParticleSpriteEntity::ParticleSpriteEntity(Client &client, Handle<IImage> image,
+		                                           Vector4 color)
+		    : renderer(client.GetRenderer()), image(image), color(color) {
 			position = MakeVector3(0, 0, 0);
 			velocity = MakeVector3(0, 0, 0);
 			radius = 1.f;
@@ -41,23 +42,15 @@ namespace spades {
 			fadeInDuration = .1f;
 			fadeOutDuration = .5f;
 			additive = false;
-			blockHitAction = Delete;
+			blockHitAction = BlockHitAction::Delete;
 
-			if (image != NULL)
-				image->AddRef();
-
-			renderer = cli->GetRenderer();
-			if (cli->GetWorld())
-				map = cli->GetWorld()->GetMap();
+			if (client.GetWorld())
+				map = client.GetWorld()->GetMap();
 			else
 				map = NULL;
 		}
 
-		ParticleSpriteEntity::~ParticleSpriteEntity() {
-			if (image != NULL) {
-				image->Release();
-			}
-		}
+		ParticleSpriteEntity::~ParticleSpriteEntity() {}
 
 		void ParticleSpriteEntity::SetLifeTime(float lifeTime, float fadeIn, float fadeOut) {
 			lifetime = lifeTime;
@@ -95,9 +88,9 @@ namespace spades {
 			velocity.z += 32.f * dt * gravityScale;
 
 			// TODO: control clip action
-			if (blockHitAction != Ignore && map) {
+			if (blockHitAction != BlockHitAction::Ignore && map) {
 				if (map->ClipWorld(position.x, position.y, position.z)) {
-					if (blockHitAction == Delete) {
+					if (blockHitAction == BlockHitAction::Delete) {
 						return false;
 					} else {
 						IntVector3 lp2 = lastPos.Floor();
@@ -155,17 +148,9 @@ namespace spades {
 			if (additive)
 				col.w = 0.f;
 
-			renderer->SetColorAlphaPremultiplied(col);
-			renderer->AddSprite(image, position, radius, angle);
+			renderer.SetColorAlphaPremultiplied(col);
+			renderer.AddSprite(*image, position, radius, angle);
 		}
-		void ParticleSpriteEntity::SetImage(IImage *img) {
-			if (img == image)
-				return;
-			if (image != NULL)
-				image->Release();
-			image = img;
-			if (image != NULL)
-				image->AddRef();
-		}
-	}
-}
+		void ParticleSpriteEntity::SetImage(Handle<IImage> newImage) { image = newImage; }
+	} // namespace client
+} // namespace spades

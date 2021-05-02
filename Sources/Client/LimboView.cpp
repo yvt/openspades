@@ -45,8 +45,8 @@ namespace spades {
 			float menuHeight = menuWidth / 8.f;
 			float rowHeight = menuHeight + 3.f;
 
-			float left = (renderer->ScreenWidth() - contentsWidth) * .5f;
-			float top = renderer->ScreenHeight() - 150.f;
+			float left = (renderer.ScreenWidth() - contentsWidth) * .5f;
+			float top = renderer.ScreenHeight() - 150.f;
 
 			float teamX = left + 10.f;
 			float firstY = top + 35.f;
@@ -78,7 +78,7 @@ namespace spades {
 			                         AABB2(left + contentsWidth - 266.f, firstY + 4.f, 256.f, 64.f),
 			                         _Tr("Client", "Spawn")));
 
-			cursorPos = MakeVector2(renderer->ScreenWidth() * .5f, renderer->ScreenHeight() * .5f);
+			cursorPos = MakeVector2(renderer.ScreenWidth() * .5f, renderer.ScreenHeight() * .5f);
 
 			selectedTeam = 2;
 			selectedWeapon = RIFLE_WEAPON;
@@ -90,8 +90,8 @@ namespace spades {
 			cursorPos.y = y;
 
 			// clip
-			float w = renderer->ScreenWidth();
-			float h = renderer->ScreenHeight();
+			float w = renderer.ScreenWidth();
+			float h = renderer.ScreenHeight();
 
 			cursorPos.x = std::max(cursorPos.x, 0.f);
 			cursorPos.y = std::max(cursorPos.y, 0.f);
@@ -104,10 +104,10 @@ namespace spades {
 				for (size_t i = 0; i < items.size(); i++) {
 					MenuItem &item = items[i];
 					if (item.hover) {
-						IAudioDevice *dev = client->audioDevice;
+						IAudioDevice &dev = *client->audioDevice;
 						Handle<IAudioChunk> chunk =
-						  dev->RegisterSound("Sounds/Feedback/Limbo/Select.opus");
-						dev->PlayLocal(chunk, AudioParam());
+						  dev.RegisterSound("Sounds/Feedback/Limbo/Select.opus");
+						dev.PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 						switch (item.type) {
 							case MenuTeam1: selectedTeam = 0; break;
 							case MenuTeam2: selectedTeam = 1; break;
@@ -163,37 +163,35 @@ namespace spades {
 				if (!item.visible)
 					newHover = false;
 				if (newHover && !item.hover) {
-					IAudioDevice *dev = client->audioDevice;
+					IAudioDevice &dev = *client->audioDevice;
 					Handle<IAudioChunk> chunk =
-					  dev->RegisterSound("Sounds/Feedback/Limbo/Hover.opus");
-					dev->PlayLocal(chunk, AudioParam());
+					  dev.RegisterSound("Sounds/Feedback/Limbo/Hover.opus");
+					dev.PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 				}
 				item.hover = newHover;
 			}
 		}
 
 		void LimboView::Draw() {
-			Handle<IImage> menuItemImage = renderer->RegisterImage("Gfx/Limbo/MenuItem.png");
-			Handle<IImage> menuItemBigImage = renderer->RegisterImage("Gfx/Limbo/BigMenuItem.png");
-			IFont *font = client->fontManager->GetGuiFont();
+			Handle<IImage> menuItemImage = renderer.RegisterImage("Gfx/Limbo/MenuItem.png");
+			Handle<IImage> menuItemBigImage = renderer.RegisterImage("Gfx/Limbo/BigMenuItem.png");
+			IFont &font = client->fontManager->GetGuiFont();
 
-			float left = (renderer->ScreenWidth() - contentsWidth) * .5f;
-			float top = renderer->ScreenHeight() - 150.f;
+			float left = (renderer.ScreenWidth() - contentsWidth) * .5f;
+			float top = renderer.ScreenHeight() - 150.f;
 			{
 				std::string msg = _Tr("Client", "Select Team:");
 				Vector2 pos;
 				pos.x = left + 10.f;
 				pos.y = top + 10.f;
-				font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
-				                 MakeVector4(0, 0, 0, 0.4f));
+				font.DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.4f));
 			}
 			if (selectedTeam != 2) {
 				std::string msg = _Tr("Client", "Select Weapon:");
 				Vector2 pos;
 				pos.x = left + 260.f;
 				pos.y = top + 10.f;
-				font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
-				                 MakeVector4(0, 0, 0, 0.4f));
+				font.DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1), MakeVector4(0, 0, 0, 0.4f));
 			}
 
 			for (size_t i = 0; i < items.size(); i++) {
@@ -230,47 +228,47 @@ namespace spades {
 					fillColor = MakeVector4(.7f, .7f, .7f, 1.f) * .9f;
 				}
 
-				renderer->SetColorAlphaPremultiplied(fillColor);
+				renderer.SetColorAlphaPremultiplied(fillColor);
 				if (item.type == MenuSpawn) {
-					renderer->DrawImage(menuItemBigImage, item.rect);
+					renderer.DrawImage(menuItemBigImage, item.rect);
 
 					std::string msg = item.text;
-					IFont *bFont = client->fontManager->GetGuiFont();
-					Vector2 size = bFont->Measure(msg);
+					IFont &bFont = client->fontManager->GetGuiFont();
+					Vector2 size = bFont.Measure(msg);
 					Vector2 pos;
 					pos.x = item.rect.GetMinX() + (item.rect.GetWidth() - size.x) / 2.f + 2.f;
 					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f;
-					bFont->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
-					                  MakeVector4(0, 0, 0, 0.4f));
+					bFont.DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
+					                 MakeVector4(0, 0, 0, 0.4f));
 				} else {
-					renderer->DrawImage(menuItemImage, item.rect);
+					renderer.DrawImage(menuItemImage, item.rect);
 
 					std::string msg = item.text;
 					if (item.type == MenuTeam1)
 						msg = client->GetWorld()->GetTeam(0).name;
 					if (item.type == MenuTeam2)
 						msg = client->GetWorld()->GetTeam(1).name;
-					Vector2 size = font->Measure(msg);
+					Vector2 size = font.Measure(msg);
 					Vector2 pos;
 					pos.x = item.rect.GetMinX() + 5.f;
 					pos.y = item.rect.GetMinY() + (item.rect.GetHeight() - size.y) / 2.f;
-					font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
-					                 MakeVector4(0, 0, 0, 0.4f));
+					font.DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
+					                MakeVector4(0, 0, 0, 0.4f));
 					if (index > 0) {
 						std::stringstream ss;
 						ss << index;
 						msg = ss.str();
-						pos.x = item.rect.GetMaxX() - 5.f - font->Measure(msg).x;
-						font->DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
-						                 MakeVector4(0, 0, 0, 0.4f));
+						pos.x = item.rect.GetMaxX() - 5.f - font.Measure(msg).x;
+						font.DrawShadow(msg, pos, 1.f, MakeVector4(1, 1, 1, 1),
+						                MakeVector4(0, 0, 0, 0.4f));
 					}
 				}
 			}
 
-			Handle<IImage> cursor = renderer->RegisterImage("Gfx/Limbo/Cursor.png");
+			Handle<IImage> cursor = renderer.RegisterImage("Gfx/Limbo/Cursor.png");
 
-			renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
-			renderer->DrawImage(cursor, AABB2(cursorPos.x - 8, cursorPos.y - 8, 32, 32));
+			renderer.SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
+			renderer.DrawImage(cursor, AABB2(cursorPos.x - 8, cursorPos.y - 8, 32, 32));
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

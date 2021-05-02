@@ -73,7 +73,7 @@ namespace spades {
 			return {components[0], components[1], components[2], components[3],
 			        versionText.asString()};
 		}
-	}
+	} // namespace
 
 	class PackageUpdateManager::UpdateFeed {
 	public:
@@ -115,9 +115,7 @@ namespace spades {
 
 		// Protected members of the base class is only accessible by
 		// the current object, so...
-		void ReturnErrorVeneer(const std::string &reason) {
-			ReturnError(reason);
-		}
+		void ReturnErrorVeneer(const std::string &reason) { ReturnError(reason); }
 
 		class RequestThread : public Thread {
 		public:
@@ -133,12 +131,13 @@ namespace spades {
 					curl_easy_setopt(
 					  curl.get(), CURLOPT_WRITEFUNCTION,
 					  static_cast<unsigned long (*)(void *, unsigned long, unsigned long, void *)>(
-					    [](void *ptr, unsigned long size, unsigned long nmemb, void *data) -> unsigned long {
+					    [](void *ptr, unsigned long size, unsigned long nmemb,
+					       void *data) -> unsigned long {
 						    size_t dataSize = size * nmemb;
 						    reinterpret_cast<std::string *>(data)->append(
 						      reinterpret_cast<const char *>(ptr), dataSize);
 						    return dataSize;
-						}));
+					    }));
 					curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &responseBuffer);
 					curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, OpenSpades_VER_STR);
 
@@ -166,7 +165,7 @@ namespace spades {
 			if (m_thread) {
 				m_thread->Join();
 			} else {
-				m_thread.reset(new RequestThread{*this});
+				m_thread = stmp::make_unique<RequestThread>(*this);
 			}
 			m_thread->Start();
 		}
@@ -341,7 +340,7 @@ namespace spades {
 			std::string updateFeedType = jsonUpdateFeedType.asString();
 
 			if (updateFeedType == "Standard") {
-				m_updateFeed.reset(new StandardUpdateFeed(*this, jsonUpdateFeed));
+				m_updateFeed = stmp::make_unique<StandardUpdateFeed>(*this, jsonUpdateFeed);
 			} else {
 				SPRaise("Failed to parse PackageInfo.json: root.UpdateFeed.Type contains an "
 				        "unrecognizable value.");
@@ -411,4 +410,4 @@ namespace spades {
 			SPLog("Update feed is not available.");
 		}
 	}
-}
+} // namespace spades

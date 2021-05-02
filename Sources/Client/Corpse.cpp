@@ -19,13 +19,13 @@
  */
 
 #include "Corpse.h"
-#include <Core/Debug.h>
-#include <Core/Settings.h>
 #include "GameMap.h"
 #include "IModel.h"
 #include "IRenderer.h"
 #include "Player.h"
 #include "World.h"
+#include <Core/Debug.h>
+#include <Core/Settings.h>
 
 using namespace std;
 
@@ -33,23 +33,23 @@ DEFINE_SPADES_SETTING(r_corpseLineCollision, "1");
 
 namespace spades {
 	namespace client {
-		Corpse::Corpse(IRenderer *renderer, GameMap *map, Player *p)
-		    : renderer(renderer), map(map) {
+		Corpse::Corpse(IRenderer &renderer, GameMap &map, Player &p)
+		    : renderer{renderer}, map{map} {
 			SPADES_MARK_FUNCTION();
 
-			playerId = p->GetId();
+			playerId = p.GetId();
 
-			IntVector3 col = p->GetWorld()->GetTeam(p->GetTeamId()).color;
+			IntVector3 col = p.GetWorld().GetTeam(p.GetTeamId()).color;
 			color = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 
-			bool crouch = p->GetInput().crouch;
-			Vector3 front = p->GetFront();
+			bool crouch = p.GetInput().crouch;
+			Vector3 front = p.GetFront();
 
 			float yaw = atan2(front.y, front.x) + static_cast<float>(M_PI) * .5f;
 			// float pitch = -atan2(front.z, sqrt(front.x * front.x + front.y * front.y));
 
 			// lower axis
-			Matrix4 lower = Matrix4::Translate(p->GetOrigin());
+			Matrix4 lower = Matrix4::Translate(p.GetOrigin());
 			lower = lower * Matrix4::Rotate(MakeVector3(0, 0, 1), yaw);
 
 			Matrix4 torso;
@@ -84,8 +84,7 @@ namespace spades {
 				SetNode(Arm2, torso * MakeVector3(-0.2f, -.4f, .2f));
 			}
 
-			SetNode(Head,
-			        (nodes[Torso1].pos + nodes[Torso2].pos) * .5f + MakeVector3(0, 0, -0.6f));
+			SetNode(Head, (nodes[Torso1].pos + nodes[Torso2].pos) * .5f + MakeVector3(0, 0, -0.6f));
 		}
 
 		void Corpse::SetNode(NodeType n, spades::Vector3 v) {
@@ -99,9 +98,7 @@ namespace spades {
 			nodes[n].lastPos = v;
 			nodes[n].lastForce = MakeVector3(0, 0, 0);
 		}
-		void Corpse::SetNode(NodeType n, spades::Vector4 v) {
-			SetNode(n, v.GetXYZ());
-		}
+		void Corpse::SetNode(NodeType n, spades::Vector4 v) { SetNode(n, v.GetXYZ()); }
 
 		Corpse::~Corpse() {}
 
@@ -293,16 +290,16 @@ namespace spades {
 
 		static float fractf(float v) { return v - floorf(v); }
 
-		static void CheckEscape(GameMap *map, IntVector3 hitBlock, IntVector3 a, IntVector3 b,
+		static void CheckEscape(GameMap &map, IntVector3 hitBlock, IntVector3 a, IntVector3 b,
 		                        IntVector3 dir, float &bestDist, IntVector3 &bestDir) {
 			hitBlock += dir;
 			IntVector3 aa = a + dir;
 			IntVector3 bb = b + dir;
-			if (map->IsSolidWrapped(hitBlock.x, hitBlock.y, hitBlock.z))
+			if (map.IsSolidWrapped(hitBlock.x, hitBlock.y, hitBlock.z))
 				return;
-			if (map->IsSolidWrapped(aa.x, aa.y, aa.z))
+			if (map.IsSolidWrapped(aa.x, aa.y, aa.z))
 				return;
-			if (map->IsSolidWrapped(bb.x, bb.y, bb.z))
+			if (map.IsSolidWrapped(bb.x, bb.y, bb.z))
 				return;
 			float dist;
 			if (dir.x == 1) {
@@ -342,9 +339,9 @@ namespace spades {
 
 			IntVector3 hitBlock;
 
-			if (map->CastRay(n1.lastPos, n2.lastPos, 16.f, hitBlock)) {
-				GameMap::RayCastResult res1 = map->CastRay2(n1.lastPos, n2.lastPos - n1.lastPos, 8);
-				GameMap::RayCastResult res2 = map->CastRay2(n2.lastPos, n1.lastPos - n2.lastPos, 8);
+			if (map.CastRay(n1.lastPos, n2.lastPos, 16.f, hitBlock)) {
+				GameMap::RayCastResult res1 = map.CastRay2(n1.lastPos, n2.lastPos - n1.lastPos, 8);
+				GameMap::RayCastResult res2 = map.CastRay2(n2.lastPos, n1.lastPos - n2.lastPos, 8);
 
 				if (!res1.hit)
 					return;
@@ -532,9 +529,9 @@ namespace spades {
 
 				// node.vel *= damp;
 
-				if (!map->ClipBox(oldPos.x, oldPos.y, oldPos.z)) {
+				if (!map.ClipBox(oldPos.x, oldPos.y, oldPos.z)) {
 
-					if (map->ClipBox(node.pos.x, oldPos.y, oldPos.z)) {
+					if (map.ClipBox(node.pos.x, oldPos.y, oldPos.z)) {
 						node.vel.x = -node.vel.x * .2f;
 						if (fabsf(node.vel.x) < .3f)
 							node.vel.x = 0.f;
@@ -544,7 +541,7 @@ namespace spades {
 						node.vel.z *= .5f;
 					}
 
-					if (map->ClipBox(node.pos.x, node.pos.y, oldPos.z)) {
+					if (map.ClipBox(node.pos.x, node.pos.y, oldPos.z)) {
 						node.vel.y = -node.vel.y * .2f;
 						if (fabsf(node.vel.y) < .3f)
 							node.vel.y = 0.f;
@@ -554,7 +551,7 @@ namespace spades {
 						node.vel.z *= .5f;
 					}
 
-					if (map->ClipBox(node.pos.x, node.pos.y, node.pos.z)) {
+					if (map.ClipBox(node.pos.x, node.pos.y, node.pos.z)) {
 						node.vel.z = -node.vel.z * .2f;
 						if (fabsf(node.vel.z) < .3f)
 							node.vel.z = 0.f;
@@ -564,7 +561,7 @@ namespace spades {
 						node.vel.y *= .5f;
 					}
 
-					if (map->ClipBox(node.pos.x, node.pos.y, node.pos.z)) {
+					if (map.ClipBox(node.pos.x, node.pos.y, node.pos.z)) {
 						// TODO: getting out block
 						// node.pos = oldPos;
 						// node.vel *= .5f;
@@ -572,10 +569,10 @@ namespace spades {
 				}
 
 				/*
-				if(map->ClipBox(node.pos.x,
+				if(map.ClipBox(node.pos.x,
 				                node.pos.y,
 				                node.pos.z)){
-				    if(!map->ClipBox(node.pos.x,
+				    if(!map.ClipBox(node.pos.x,
 				                    node.pos.y,
 				                    oldPos.z)){
 				        node.vel.z = -node.vel.z * .2f;
@@ -583,7 +580,7 @@ namespace spades {
 				            node.vel.z = 0.f;
 				        node.pos.z = oldPos.z;
 				    }
-				    if(!map->ClipBox(node.pos.x,
+				    if(!map.ClipBox(node.pos.x,
 				                     oldPos.y,
 				                     node.pos.z)){
 				        node.vel.y = -node.vel.y * .2f;
@@ -591,7 +588,7 @@ namespace spades {
 				            node.vel.y = 0.f;
 				        node.pos.y = oldPos.y;
 				    }
-				    if(!map->ClipBox(oldPos.x,
+				    if(!map.ClipBox(oldPos.x,
 				                     node.pos.y,
 				                     node.pos.z)){
 				        node.vel.x = -node.vel.x * .2f;
@@ -621,7 +618,7 @@ namespace spades {
 			ModelRenderParam param;
 			param.customColor = color;
 
-			IModel *model;
+			Handle<IModel> model;
 			Matrix4 scaler = Matrix4::Scale(.1f);
 
 			// draw torso
@@ -641,14 +638,14 @@ namespace spades {
 
 				param.matrix = torso * scaler;
 
-				model = renderer->RegisterModel("Models/Player/Torso.kv6");
-				renderer->RenderModel(model, param);
+				model = renderer.RegisterModel("Models/Player/Torso.kv6");
+				renderer.RenderModel(*model, param);
 			}
 			// draw Head
 			{
 				Vector3 headBase = (torso * MakeVector3(0.0f, 0.f, 0.f)).GetXYZ();
 
-				model = renderer->RegisterModel("Models/Player/Head.kv6");
+				model = renderer.RegisterModel("Models/Player/Head.kv6");
 
 				Vector3 aX, aY, aZ;
 				Vector3 center = (nodes[Torso1].pos + nodes[Torso2].pos) * .5f;
@@ -661,7 +658,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(-aX, aY, -aZ, headBase) * scaler;
 
-				renderer->RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 			}
 
 			// draw Arms
@@ -669,7 +666,7 @@ namespace spades {
 				Vector3 arm1Base = (torso * MakeVector3(0.4f, 0.f, 0.2f)).GetXYZ();
 				Vector3 arm2Base = (torso * MakeVector3(-0.4f, 0.f, 0.2f)).GetXYZ();
 
-				model = renderer->RegisterModel("Models/Player/Arm.kv6");
+				model = renderer.RegisterModel("Models/Player/Arm.kv6");
 
 				Vector3 aX, aY, aZ;
 
@@ -680,7 +677,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, arm1Base) * scaler;
 
-				renderer->RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 
 				aZ = nodes[Arm2].pos - nodes[Torso2].pos;
 				aZ = aZ.Normalize();
@@ -689,7 +686,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, arm2Base) * scaler;
 
-				renderer->RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 			}
 
 			// draw Leg
@@ -697,7 +694,7 @@ namespace spades {
 				Vector3 leg1Base = (torso * MakeVector3(0.25f, 0.f, 0.9f)).GetXYZ();
 				Vector3 leg2Base = (torso * MakeVector3(-0.25f, 0.f, 0.9f)).GetXYZ();
 
-				model = renderer->RegisterModel("Models/Player/Leg.kv6");
+				model = renderer.RegisterModel("Models/Player/Leg.kv6");
 
 				Vector3 aX, aY, aZ;
 
@@ -708,7 +705,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, leg1Base) * scaler;
 
-				renderer->RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 
 				aZ = nodes[Leg2].pos - nodes[Torso4].pos;
 				aZ = aZ.Normalize();
@@ -717,7 +714,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, leg2Base) * scaler;
 
-				renderer->RenderModel(model, param);
+				renderer.RenderModel(*model, param);
 			}
 		}
 
@@ -736,7 +733,7 @@ namespace spades {
 
 			for (int i = 0; i < NodeCount; i++) {
 				IntVector3 outBlk;
-				if (map->CastRay(eye, nodes[i].pos, 256.f, outBlk))
+				if (map.CastRay(eye, nodes[i].pos, 256.f, outBlk))
 					return true;
 			}
 			return false;
@@ -746,5 +743,5 @@ namespace spades {
 			for (int i = 0; i < NodeCount; i++)
 				nodes[i].vel += v;
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

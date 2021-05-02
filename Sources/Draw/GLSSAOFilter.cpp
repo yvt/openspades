@@ -21,6 +21,7 @@
 #include <cmath>
 #include <vector>
 
+#include "GLImage.h"
 #include "GLProfiler.h"
 #include "GLProgram.h"
 #include "GLProgramAttribute.h"
@@ -28,7 +29,6 @@
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
 #include "GLSSAOFilter.h"
-#include "GLImage.h"
 #include "IGLDevice.h"
 #include <Core/Debug.h>
 #include <Core/Math.h>
@@ -36,22 +36,22 @@
 namespace spades {
 	namespace draw {
 
-		GLSSAOFilter::GLSSAOFilter(GLRenderer *renderer)
-		    : renderer(renderer), settings(renderer->GetSettings()) {
-			ssaoProgram = renderer->RegisterProgram("Shaders/PostFilters/SSAO.program");
+		GLSSAOFilter::GLSSAOFilter(GLRenderer &renderer)
+		    : renderer(renderer), settings(renderer.GetSettings()) {
+			ssaoProgram = renderer.RegisterProgram("Shaders/PostFilters/SSAO.program");
 			bilateralProgram =
-			  renderer->RegisterProgram("Shaders/PostFilters/BilateralFilter.program");
+			  renderer.RegisterProgram("Shaders/PostFilters/BilateralFilter.program");
 
-			ditherPattern = static_cast<GLImage *>(renderer->RegisterImage("Gfx/DitherPattern4x4.png"));
+			ditherPattern = renderer.RegisterImage("Gfx/DitherPattern4x4.png").Cast<GLImage>();
 		}
 
 		GLColorBuffer GLSSAOFilter::GenerateRawSSAOImage(int width, int height) {
 			SPADES_MARK_FUNCTION();
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			GLColorBuffer output =
-			  renderer->GetFramebufferManager()->CreateBufferHandle(width, height, 1);
+			  renderer.GetFramebufferManager()->CreateBufferHandle(width, height, 1);
 
 			{
 				GLProgram *program = ssaoProgram;
@@ -75,7 +75,7 @@ namespace spades {
 
 				program->Use();
 
-				const client::SceneDefinition &def = renderer->GetSceneDef();
+				const client::SceneDefinition &def = renderer.GetSceneDef();
 				zNearFar.SetValue(def.zNear, def.zFar);
 
 				fieldOfView.SetValue(std::tan(def.fovX * 0.5f), std::tan(def.fovY * 0.5f));
@@ -85,30 +85,32 @@ namespace spades {
 				float kernelSize = std::max(1.0f, std::min(width, height) * 0.0018f);
 				sampleOffsetScale.SetValue(kernelSize / (float)width, kernelSize / (float)height);
 
-				if (width < renderer->GetRenderWidth()) {
+				if (width < renderer.GetRenderWidth()) {
 					// 2x downsampling
 					texCoordRange.SetValue(0.25f / width, 0.25f / height, 1.f, 1.f);
 				} else {
 					texCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
 				}
 
-				dev->ActiveTexture(0);
+				dev.ActiveTexture(0);
 				depthTexture.SetValue(0);
-				dev->BindTexture(IGLDevice::Texture2D,
-				                 renderer->GetFramebufferManager()->GetDepthTexture());
+				dev.BindTexture(IGLDevice::Texture2D,
+				                renderer.GetFramebufferManager()->GetDepthTexture());
 
-				dev->ActiveTexture(1);
+				dev.ActiveTexture(1);
 				ditherTexture.SetValue(1);
 				ditherPattern->Bind(IGLDevice::Texture2D);
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
-				dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
+				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+				                 IGLDevice::Nearest);
+				dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+				                 IGLDevice::Nearest);
 
-				dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
-				dev->Viewport(0, 0, width, height);
+				dev.BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
+				dev.Viewport(0, 0, width, height);
 				qr.SetCoordAttributeIndex(positionAttribute());
 				qr.Draw();
-				dev->ActiveTexture(0);
-				dev->BindTexture(IGLDevice::Texture2D, 0);
+				dev.ActiveTexture(0);
+				dev.BindTexture(IGLDevice::Texture2D, 0);
 			}
 
 			return output;
@@ -119,13 +121,13 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			// do gaussian blur
 			GLProgram *program = bilateralProgram;
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			int w = width == -1 ? tex.GetWidth() : width;
 			int h = height == -1 ? tex.GetHeight() : height;
 
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, 1);
+			GLColorBuffer buf2 = renderer.GetFramebufferManager()->CreateBufferHandle(w, h, 1);
 
 			static GLProgramAttribute positionAttribute("positionAttribute");
 			static GLProgramUniform inputTexture("inputTexture");
@@ -147,36 +149,37 @@ namespace spades {
 			pixelShift(program);
 
 			inputTexture.SetValue(0);
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, tex.GetTexture());
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, tex.GetTexture());
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
 
 			depthTexture.SetValue(1);
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D,
-							 renderer->GetFramebufferManager()->GetDepthTexture());
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D,
+			                renderer.GetFramebufferManager()->GetDepthTexture());
 
 			texCoordRange.SetValue(0.f, 0.f, 1.f, 1.f);
 
 			unitShift.SetValue(direction ? 1.f / (float)width : 0.0f,
 			                   direction ? 0.0f : 1.f / (float)height);
 
-			pixelShift.SetValue(1.f / (float)width, 1.f / (float)height, (float)width, (float)height);
+			pixelShift.SetValue(1.f / (float)width, 1.f / (float)height, (float)width,
+			                    (float)height);
 
 			isUpsampling.SetValue(width > tex.GetWidth() ? 1 : 0);
 
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 			zNearFar.SetValue(def.zNear, def.zFar);
 
 			qr.SetCoordAttributeIndex(positionAttribute());
-			dev->Viewport(0, 0, w, h);
-			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
+			dev.Viewport(0, 0, w, h);
+			dev.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
 
-			dev->ActiveTexture(0);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Linear);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Linear);
+			dev.ActiveTexture(0);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Linear);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Linear);
 
 			return buf2;
 		}
@@ -184,25 +187,26 @@ namespace spades {
 		GLColorBuffer GLSSAOFilter::Filter() {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 
-			int width = renderer->GetRenderWidth();
-			int height = renderer->GetRenderHeight();
+			int width = renderer.GetRenderWidth();
+			int height = renderer.GetRenderHeight();
 
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
-			bool useLowQualitySSAO = renderer->IsRenderingMirror() || renderer->GetSettings().r_ssao >= 2;
-			GLColorBuffer ssao = useLowQualitySSAO ?
-				GenerateRawSSAOImage((width + 1) / 2, (height + 1) / 2) :
-			GenerateRawSSAOImage(width, height);
+			bool useLowQualitySSAO =
+			  renderer.IsRenderingMirror() || renderer.GetSettings().r_ssao >= 2;
+			GLColorBuffer ssao = useLowQualitySSAO
+			                       ? GenerateRawSSAOImage((width + 1) / 2, (height + 1) / 2)
+			                       : GenerateRawSSAOImage(width, height);
 			ssao = ApplyBilateralFilter(ssao, false, width, height);
 			ssao = ApplyBilateralFilter(ssao, true, width, height);
-			if (!renderer->IsRenderingMirror()) {
+			if (!renderer.IsRenderingMirror()) {
 				ssao = ApplyBilateralFilter(ssao, false, width, height);
 				ssao = ApplyBilateralFilter(ssao, true, width, height);
 			}
 
 			return ssao;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -29,11 +29,11 @@ namespace spades {
 
 		class GLBloomFilter {
 			GLProgram *thru;
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 
 		public:
-			GLBloomFilter(GLRenderer *);
+			GLBloomFilter(GLRenderer &);
 			GLColorBuffer Filter(GLColorBuffer);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

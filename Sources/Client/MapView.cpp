@@ -142,7 +142,7 @@ namespace spades {
 			return scrPos;
 		}
 
-		void MapView::DrawIcon(spades::Vector3 pos, spades::client::IImage *img, float rotation) {
+		void MapView::DrawIcon(spades::Vector3 pos, IImage &img, float rotation) {
 			if (pos.x < inRect.GetMinX() || pos.x > inRect.GetMaxX() || pos.y < inRect.GetMinY() ||
 			    pos.y > inRect.GetMaxY())
 				return;
@@ -155,8 +155,8 @@ namespace spades {
 			float c = rotation != 0.f ? cosf(rotation) : 1.f;
 			float s = rotation != 0.f ? sinf(rotation) : 0.f;
 			static const float coords[][2] = {{-1, -1}, {1, -1}, {-1, 1}};
-			Vector2 u = MakeVector2(img->GetWidth() * .5f, 0.f);
-			Vector2 v = MakeVector2(0.f, img->GetHeight() * .5f);
+			Vector2 u = MakeVector2(img.GetWidth() * .5f, 0.f);
+			Vector2 v = MakeVector2(0.f, img.GetHeight() * .5f);
 
 			Vector2 vt[3];
 			for (int i = 0; i < 3; i++) {
@@ -165,8 +165,8 @@ namespace spades {
 				vt[i].y = scrPos.y + ss.x * s + ss.y * c;
 			}
 
-			renderer->DrawImage(img, vt[0], vt[1], vt[2],
-			                    AABB2(0, 0, img->GetWidth(), img->GetHeight()));
+			renderer.DrawImage(img, vt[0], vt[1], vt[2],
+			                   AABB2(0, 0, img.GetWidth(), img.GetHeight()));
 		}
 
 		void MapView::SwitchScale() {
@@ -242,7 +242,7 @@ namespace spades {
 				return;
 
 			// The player to focus on
-			Player *focusPlayerPtr = nullptr;
+			stmp::optional<Player &> focusPlayerPtr;
 			Vector3 focusPlayerPos;
 			float focusPlayerAngle;
 
@@ -253,7 +253,7 @@ namespace spades {
 				focusPlayerPos = player.GetPosition();
 				focusPlayerAngle = atan2(front.x, -front.y);
 
-				focusPlayerPtr = &player;
+				focusPlayerPtr = player;
 			} else if (client->GetCameraMode() == ClientCameraMode::Free) {
 				focusPlayerPos = client->freeCameraState.position;
 				focusPlayerAngle =
@@ -267,16 +267,16 @@ namespace spades {
 			if (!world->GetLocalPlayer()) {
 				return;
 			}
-			Player &localPlayer = *world->GetLocalPlayer();
+			Player &localPlayer = world->GetLocalPlayer().value();
 
-			SPAssert(focusPlayerPtr);
-			Player &focusPlayer = *focusPlayerPtr;
+			Player &focusPlayer = focusPlayerPtr.value();
 
 			if (largeMap)
 				if (zoomState < .0001f)
 					return;
 
-			GameMap *map = world->GetMap();
+			Handle<GameMap> map = world->GetMap();
+			SPAssert(map);
 			Vector2 mapSize = MakeVector2(map->Width(), map->Height());
 
 			Vector2 center = {focusPlayerPos.x, focusPlayerPos.y};
@@ -291,7 +291,7 @@ namespace spades {
 			center = Mix(center, mapSize * .5f, zoomState);
 
 			Vector2 zoomedSize = {512, 512};
-			if (renderer->ScreenWidth() < 512.f || renderer->ScreenHeight() < 512.f)
+			if (renderer.ScreenWidth() < 512.f || renderer.ScreenHeight() < 512.f)
 				zoomedSize = MakeVector2(256, 256);
 			if (largeMap) {
 				float per = zoomState;
@@ -319,13 +319,13 @@ namespace spades {
 					inRect = inRect.Translated(0, mapSize.y - inRect.GetMaxY());
 			}
 
-			AABB2 outRect(renderer->ScreenWidth() - mapWndSize.x - 16.f, 16.f, mapWndSize.x,
+			AABB2 outRect(renderer.ScreenWidth() - mapWndSize.x - 16.f, 16.f, mapWndSize.x,
 			              mapWndSize.y);
 			if (largeMap) {
-				outRect.min = MakeVector2((renderer->ScreenWidth() - zoomedSize.x) * .5f,
-				                          (renderer->ScreenHeight() - zoomedSize.y) * .5f);
-				outRect.max = MakeVector2((renderer->ScreenWidth() + zoomedSize.x) * .5f,
-				                          (renderer->ScreenHeight() + zoomedSize.y) * .5f);
+				outRect.min = MakeVector2((renderer.ScreenWidth() - zoomedSize.x) * .5f,
+				                          (renderer.ScreenHeight() - zoomedSize.y) * .5f);
+				outRect.max = MakeVector2((renderer.ScreenWidth() + zoomedSize.x) * .5f,
+				                          (renderer.ScreenHeight() + zoomedSize.y) * .5f);
 			}
 
 			float alpha = 1.f;
@@ -335,11 +335,11 @@ namespace spades {
 
 			// fades bg
 			if (largeMap) {
-				Handle<IImage> bg = renderer->RegisterImage("Gfx/MapBg.png");
-				Vector2 scrSize = {renderer->ScreenWidth(), renderer->ScreenHeight()};
+				Handle<IImage> bg = renderer.RegisterImage("Gfx/MapBg.png");
+				Vector2 scrSize = {renderer.ScreenWidth(), renderer.ScreenHeight()};
 				float size = std::max(scrSize.x, scrSize.y);
-				renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, alpha * .5f));
-				renderer->DrawImage(
+				renderer.SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, alpha * .5f));
+				renderer.DrawImage(
 				  bg, AABB2((scrSize.x - size) * .5f, (scrSize.y - size) * .5f, size, size));
 			}
 
@@ -348,60 +348,60 @@ namespace spades {
 			float borderWidth;
 			AABB2 borderRect = outRect;
 			if (largeMap) {
-				border = renderer->RegisterImage("Gfx/MapBorder.png");
+				border = renderer.RegisterImage("Gfx/MapBorder.png");
 				borderWidth = 3.f * outRect.GetHeight() / zoomedSize.y;
 			} else {
-				border = renderer->RegisterImage("Gfx/MinimapBorder.png");
+				border = renderer.RegisterImage("Gfx/MinimapBorder.png");
 				borderWidth = 2.f;
 			}
 			borderRect = borderRect.Inflate(borderWidth - 8.f);
 
-			renderer->SetColorAlphaPremultiplied(MakeVector4(alpha, alpha, alpha, alpha));
-			renderer->DrawImage(border,
-			                    AABB2(borderRect.GetMinX() - 16, borderRect.GetMinY() - 16, 16, 16),
-			                    AABB2(0, 0, 16, 16));
-			renderer->DrawImage(border,
-			                    AABB2(borderRect.GetMaxX(), borderRect.GetMinY() - 16, 16, 16),
-			                    AABB2(16, 0, 16, 16));
-			renderer->DrawImage(border,
-			                    AABB2(borderRect.GetMinX() - 16, borderRect.GetMaxY(), 16, 16),
-			                    AABB2(0, 16, 16, 16));
-			renderer->DrawImage(border, AABB2(borderRect.GetMaxX(), borderRect.GetMaxY(), 16, 16),
-			                    AABB2(16, 16, 16, 16));
-			renderer->DrawImage(
+			renderer.SetColorAlphaPremultiplied(MakeVector4(alpha, alpha, alpha, alpha));
+			renderer.DrawImage(border,
+			                   AABB2(borderRect.GetMinX() - 16, borderRect.GetMinY() - 16, 16, 16),
+			                   AABB2(0, 0, 16, 16));
+			renderer.DrawImage(border,
+			                   AABB2(borderRect.GetMaxX(), borderRect.GetMinY() - 16, 16, 16),
+			                   AABB2(16, 0, 16, 16));
+			renderer.DrawImage(border,
+			                   AABB2(borderRect.GetMinX() - 16, borderRect.GetMaxY(), 16, 16),
+			                   AABB2(0, 16, 16, 16));
+			renderer.DrawImage(border, AABB2(borderRect.GetMaxX(), borderRect.GetMaxY(), 16, 16),
+			                   AABB2(16, 16, 16, 16));
+			renderer.DrawImage(
 			  border,
 			  AABB2(borderRect.GetMinX(), borderRect.GetMinY() - 16, borderRect.GetWidth(), 16),
 			  AABB2(16, 0, 0, 16));
-			renderer->DrawImage(
+			renderer.DrawImage(
 			  border, AABB2(borderRect.GetMinX(), borderRect.GetMaxY(), borderRect.GetWidth(), 16),
 			  AABB2(16, 16, 0, 16));
-			renderer->DrawImage(
+			renderer.DrawImage(
 			  border,
 			  AABB2(borderRect.GetMinX() - 16, borderRect.GetMinY(), 16, borderRect.GetHeight()),
 			  AABB2(0, 16, 16, 0));
-			renderer->DrawImage(
+			renderer.DrawImage(
 			  border, AABB2(borderRect.GetMaxX(), borderRect.GetMinY(), 16, borderRect.GetHeight()),
 			  AABB2(16, 16, 16, 0));
 
 			// draw map
-			renderer->SetColorAlphaPremultiplied(MakeVector4(alpha, alpha, alpha, alpha));
-			renderer->DrawFlatGameMap(outRect, inRect);
+			renderer.SetColorAlphaPremultiplied(MakeVector4(alpha, alpha, alpha, alpha));
+			renderer.DrawFlatGameMap(outRect, inRect);
 
 			this->inRect = inRect;
 			this->outRect = outRect;
 
 			// draw grid
 
-			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 0.8f * alpha));
-			Handle<IImage> dashLine = renderer->RegisterImage("Gfx/DashLine.tga");
+			renderer.SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 0.8f * alpha));
+			Handle<IImage> dashLine = renderer.RegisterImage("Gfx/DashLine.tga");
 			for (float x = 64.f; x < map->Width(); x += 64.f) {
 				float wx = (x - inRect.GetMinX()) / inRect.GetWidth();
 				if (wx < 0.f || wx >= 1.f)
 					continue;
 				wx = (wx * outRect.GetWidth()) + outRect.GetMinX();
 				wx = roundf(wx);
-				renderer->DrawImage(dashLine, MakeVector2(wx, outRect.GetMinY()),
-				                    AABB2(0, 0, 1.f, outRect.GetHeight()));
+				renderer.DrawImage(dashLine, MakeVector2(wx, outRect.GetMinY()),
+				                   AABB2(0, 0, 1.f, outRect.GetHeight()));
 			}
 			for (float y = 64.f; y < map->Height(); y += 64.f) {
 				float wy = (y - inRect.GetMinY()) / inRect.GetHeight();
@@ -409,13 +409,13 @@ namespace spades {
 					continue;
 				wy = (wy * outRect.GetHeight()) + outRect.GetMinY();
 				wy = roundf(wy);
-				renderer->DrawImage(dashLine, MakeVector2(outRect.GetMinX(), wy),
-				                    AABB2(0, 0, outRect.GetWidth(), 1.f));
+				renderer.DrawImage(dashLine, MakeVector2(outRect.GetMinX(), wy),
+				                   AABB2(0, 0, outRect.GetWidth(), 1.f));
 			}
 
 			// draw grid label
-			renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1) * (0.8f * alpha));
-			Handle<IImage> mapFont = renderer->RegisterImage("Gfx/Fonts/MapFont.tga");
+			renderer.SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1) * (0.8f * alpha));
+			Handle<IImage> mapFont = renderer.RegisterImage("Gfx/Fonts/MapFont.tga");
 			for (int i = 0; i < 8; i++) {
 				float startX = (float)i * 64.f;
 				float endX = startX + 64.f;
@@ -425,8 +425,7 @@ namespace spades {
 				  std::min((std::min(endX, inRect.GetMaxX()) - std::max(startX, inRect.GetMinX())) /
 				             (endX - startX) * 2.f,
 				           1.f);
-				renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1) *
-				                                     (fade * .8f * alpha));
+				renderer.SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1) * (fade * .8f * alpha));
 
 				float center = std::max(startX, inRect.GetMinX());
 				center = .5f * (center + std::min(endX, inRect.GetMaxX()));
@@ -437,8 +436,8 @@ namespace spades {
 
 				float fntX = static_cast<float>((i & 3) * 8);
 				float fntY = static_cast<float>((i >> 2) * 8);
-				renderer->DrawImage(mapFont, MakeVector2(wx - 4.f, outRect.GetMinY() + 4),
-				                    AABB2(fntX, fntY, 8, 8));
+				renderer.DrawImage(mapFont, MakeVector2(wx - 4.f, outRect.GetMinY() + 4),
+				                   AABB2(fntX, fntY, 8, 8));
 			}
 			for (int i = 0; i < 8; i++) {
 				float startY = (float)i * 64.f;
@@ -449,8 +448,7 @@ namespace spades {
 				  std::min((std::min(endY, inRect.GetMaxY()) - std::max(startY, inRect.GetMinY())) /
 				             (endY - startY) * 2.f,
 				           1.f);
-				renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1) *
-				                                     (fade * .8f * alpha));
+				renderer.SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1) * (fade * .8f * alpha));
 
 				float center = std::max(startY, inRect.GetMinY());
 				center = .5f * (center + std::min(endY, inRect.GetMaxY()));
@@ -461,148 +459,153 @@ namespace spades {
 
 				int fntX = (i & 3) * 8;
 				int fntY = (i >> 2) * 8 + 16;
-				renderer->DrawImage(mapFont, MakeVector2(outRect.GetMinX() + 4, wy - 4.f),
-				                    AABB2(fntX, fntY, 8, 8));
+				renderer.DrawImage(mapFont, MakeVector2(outRect.GetMinX() + 4, wy - 4.f),
+				                   AABB2(fntX, fntY, 8, 8));
 			}
 			// draw objects
 
 			const int iconMode = cg_minimapPlayerIcon;
 			const int colorMode = cg_minimapPlayerColor;
 
-			Handle<IImage> playerSMG = renderer->RegisterImage("Gfx/Map/SMG.png");
-			Handle<IImage> playerRifle = renderer->RegisterImage("Gfx/Map/Rifle.png");
-			Handle<IImage> playerShotgun = renderer->RegisterImage("Gfx/Map/Shotgun.png");
-			Handle<IImage> playerIcon = renderer->RegisterImage("Gfx/Map/Player.png");
-			Handle<IImage> viewIcon = renderer->RegisterImage("Gfx/Map/View.png");
+			Handle<IImage> playerSMG = renderer.RegisterImage("Gfx/Map/SMG.png");
+			Handle<IImage> playerRifle = renderer.RegisterImage("Gfx/Map/Rifle.png");
+			Handle<IImage> playerShotgun = renderer.RegisterImage("Gfx/Map/Shotgun.png");
+			Handle<IImage> playerIcon = renderer.RegisterImage("Gfx/Map/Player.png");
+			Handle<IImage> viewIcon = renderer.RegisterImage("Gfx/Map/View.png");
 
 			// draw player's icon
 			for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
-				Player *p = world->GetPlayer(i);
-				if (!p || !p->IsAlive()) {
+				auto maybePlayer = world->GetPlayer(i);
+				if (!maybePlayer) {
+					continue;
+				}
+
+				Player &p = maybePlayer.value();
+				if (!p.IsAlive()) {
 					// The player is non-existent or dead
 					continue;
 				}
-				if (!localPlayer.IsSpectator() && localPlayer.GetTeamId() != p->GetTeamId()) {
+				if (!localPlayer.IsSpectator() && localPlayer.GetTeamId() != p.GetTeamId()) {
 					// Duh
 					continue;
 				}
-				if (p->IsSpectator() && p == &localPlayer &&
+				if (p.IsSpectator() && &p == &localPlayer &&
 				    HasTargetPlayer(client->GetCameraMode())) {
 					// Don't draw white icon when spectating a player
 					continue;
 				}
-				if (p->IsSpectator() && p != &localPlayer) {
+				if (p.IsSpectator() && &p != &localPlayer) {
 					// Don't draw other spectators
 					continue;
 				}
 
 				IntVector3 iconColor =
 				  colorMode ? IntVector3::Make(palette[i][0], palette[i][1], palette[i][2])
-				            : world->GetTeam(p->GetTeamId()).color;
-				if (p->GetTeamId() >= 2)
+				            : world->GetTeam(p.GetTeamId()).color;
+				if (p.GetTeamId() >= 2)
 					iconColor =
 					  IntVector3::Make(200, 200, 200); // colorMode doesn't matter here, right?
 				Vector4 iconColorF = ModifyColor(iconColor);
 				iconColorF *= alpha;
 
-				Vector3 front = p->GetFront2D();
+				Vector3 front = p.GetFront2D();
 				float ang = atan2(front.x, -front.y);
-				if (p->IsSpectator() && client->GetCameraMode() == ClientCameraMode::Free) {
+				if (p.IsSpectator() && client->GetCameraMode() == ClientCameraMode::Free) {
 					ang = focusPlayerAngle;
 				}
 
 				// Draw the focused player's view
-				if (p == &focusPlayer) {
-					renderer->SetColorAlphaPremultiplied(iconColorF * 0.9f);
-					DrawIcon(p->IsSpectator() ? client->freeCameraState.position : p->GetPosition(),
-					         viewIcon, ang);
+				if (&p == &focusPlayer) {
+					renderer.SetColorAlphaPremultiplied(iconColorF * 0.9f);
+					DrawIcon(p.IsSpectator() ? client->freeCameraState.position : p.GetPosition(),
+					         *viewIcon, ang);
 				}
 
-				renderer->SetColorAlphaPremultiplied(iconColorF);
+				renderer.SetColorAlphaPremultiplied(iconColorF);
 				// use a different icon in minimap according to weapon of player
 				if (iconMode) {
 					WeaponType weapon = world->GetPlayer(i)->GetWeaponType();
 					if (weapon == WeaponType::SMG_WEAPON) {
-						DrawIcon(p->IsSpectator() ? client->freeCameraState.position
-						                          : p->GetPosition(),
-						         playerSMG, ang);
+						DrawIcon(p.IsSpectator() ? client->freeCameraState.position
+						                         : p.GetPosition(),
+						         *playerSMG, ang);
 					}
 
 					else if (weapon == WeaponType::RIFLE_WEAPON) {
-						DrawIcon(p->IsSpectator() ? client->freeCameraState.position
-						                          : p->GetPosition(),
-						         playerRifle, ang);
+						DrawIcon(p.IsSpectator() ? client->freeCameraState.position
+						                         : p.GetPosition(),
+						         *playerRifle, ang);
 					}
 
 					else if (weapon == WeaponType::SHOTGUN_WEAPON) {
-						DrawIcon(p->IsSpectator() ? client->freeCameraState.position
-						                          : p->GetPosition(),
-						         playerShotgun, ang);
+						DrawIcon(p.IsSpectator() ? client->freeCameraState.position
+						                         : p.GetPosition(),
+						         *playerShotgun, ang);
 					}
 				} else { // draw normal color
-					DrawIcon(p == &focusPlayer ? focusPlayerPos : p->GetPosition(), playerIcon,
+					DrawIcon(&p == &focusPlayer ? focusPlayerPos : p.GetPosition(), *playerIcon,
 					         ang);
 				}
 			}
 
-			IGameMode *mode = world->GetMode();
+			stmp::optional<IGameMode &> mode = world->GetMode();
 			if (mode && IGameMode::m_CTF == mode->ModeType()) {
-				CTFGameMode *ctf = static_cast<CTFGameMode *>(mode);
-				Handle<IImage> intelIcon = renderer->RegisterImage("Gfx/Map/Intel.png");
-				Handle<IImage> baseIcon = renderer->RegisterImage("Gfx/Map/CommandPost.png");
+				CTFGameMode &ctf = dynamic_cast<CTFGameMode &>(*mode);
+				Handle<IImage> intelIcon = renderer.RegisterImage("Gfx/Map/Intel.png");
+				Handle<IImage> baseIcon = renderer.RegisterImage("Gfx/Map/CommandPost.png");
 				for (int tId = 0; tId < 2; tId++) {
-					CTFGameMode::Team &team = ctf->GetTeam(tId);
+					CTFGameMode::Team &team = ctf.GetTeam(tId);
 					IntVector3 teamColor = world->GetTeam(tId).color;
 					Vector4 teamColorF = ModifyColor(teamColor);
 					teamColorF *= alpha;
 
 					// draw base
-					renderer->SetColorAlphaPremultiplied(teamColorF);
-					DrawIcon(team.basePos, baseIcon, 0.f);
+					renderer.SetColorAlphaPremultiplied(teamColorF);
+					DrawIcon(team.basePos, *baseIcon, 0.f);
 
 					// draw flag
-					if (!ctf->GetTeam(1 - tId).hasIntel) {
-						renderer->SetColorAlphaPremultiplied(teamColorF);
-						DrawIcon(team.flagPos, intelIcon, 0.f);
+					if (!ctf.GetTeam(1 - tId).hasIntel) {
+						renderer.SetColorAlphaPremultiplied(teamColorF);
+						DrawIcon(team.flagPos, *intelIcon, 0.f);
 					} else if (world->GetLocalPlayer()->GetTeamId() == 1 - tId) {
 						// local player's team is carrying
-						int cId = ctf->GetTeam(1 - tId).carrier;
+						int cId = ctf.GetTeam(1 - tId).carrier;
 
 						// in some game modes, carrier becomes invalid
 						if (cId < world->GetNumPlayerSlots()) {
-							Player *carrier = world->GetPlayer(cId);
+							auto carrier = world->GetPlayer(cId);
 							if (carrier &&
 							    carrier->GetTeamId() == world->GetLocalPlayer()->GetTeamId()) {
 
 								Vector4 col = teamColorF;
 								col *= fabsf(sinf(world->GetTime() * 4.f));
-								renderer->SetColorAlphaPremultiplied(col);
-								DrawIcon(carrier->GetPosition(), intelIcon, 0.f);
+								renderer.SetColorAlphaPremultiplied(col);
+								DrawIcon(carrier->GetPosition(), *intelIcon, 0.f);
 							}
 						}
 					}
 				}
 			} else if (mode && IGameMode::m_TC == mode->ModeType()) {
-				TCGameMode *tc = static_cast<TCGameMode *>(mode);
-				Handle<IImage> icon = renderer->RegisterImage("Gfx/Map/CommandPost.png");
-				int cnt = tc->GetNumTerritories();
+				TCGameMode &tc = dynamic_cast<TCGameMode &>(*mode);
+				Handle<IImage> icon = renderer.RegisterImage("Gfx/Map/CommandPost.png");
+				int cnt = tc.GetNumTerritories();
 				for (int i = 0; i < cnt; i++) {
-					TCGameMode::Territory *t = tc->GetTerritory(i);
+					TCGameMode::Territory &t = tc.GetTerritory(i);
 					IntVector3 teamColor = {128, 128, 128};
-					if (t->ownerTeamId < 2) {
-						teamColor = world->GetTeam(t->ownerTeamId).color;
+					if (t.ownerTeamId < 2) {
+						teamColor = world->GetTeam(t.ownerTeamId).color;
 					}
 					Vector4 teamColorF = ModifyColor(teamColor);
 					teamColorF *= alpha;
 
 					// draw base
-					renderer->SetColorAlphaPremultiplied(teamColorF);
-					DrawIcon(t->pos, icon, 0.f);
+					renderer.SetColorAlphaPremultiplied(teamColorF);
+					DrawIcon(t.pos, *icon, 0.f);
 				}
 			}
 
 			// draw tracers
-			Handle<IImage> tracerImage = renderer->RegisterImage("Gfx/Ball.png");
+			Handle<IImage> tracerImage = renderer.RegisterImage("Gfx/Ball.png");
 			const float tracerWidth = 2.0f;
 			const AABB2 tracerInRect{0.0f, 0.0f, tracerImage->GetWidth(), tracerImage->GetHeight()};
 
@@ -641,9 +644,9 @@ namespace spades {
 					                            line3.first + normal * tracerWidth,
 					                            line3.second - normal * tracerWidth};
 
-					renderer->SetColorAlphaPremultiplied(Vector4{1.0f, 0.8f, 0.6f, 1.0f} * alpha);
-					renderer->DrawImage(tracerImage, vertices[0], vertices[1], vertices[2],
-					                    tracerInRect);
+					renderer.SetColorAlphaPremultiplied(Vector4{1.0f, 0.8f, 0.6f, 1.0f} * alpha);
+					renderer.DrawImage(tracerImage, vertices[0], vertices[1], vertices[2],
+					                   tracerInRect);
 				}
 			}
 		}

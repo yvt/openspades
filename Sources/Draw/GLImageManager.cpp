@@ -29,7 +29,7 @@
 
 namespace spades {
 	namespace draw {
-		GLImageManager::GLImageManager(IGLDevice *dev) : device(dev), whiteImage(nullptr) {
+		GLImageManager::GLImageManager(IGLDevice &dev) : device(dev), whiteImage(nullptr) {
 			SPADES_MARK_FUNCTION();
 		}
 
@@ -71,9 +71,9 @@ namespace spades {
 		GLImage *GLImageManager::CreateImage(const std::string &name) {
 			SPADES_MARK_FUNCTION();
 
-			Handle<Bitmap> bmp(Bitmap::Load(name), false);
+			Handle<Bitmap> bmp = Bitmap::Load(name);
 
-			return GLImage::FromBitmap(bmp, device);
+			return GLImage::FromBitmap(*bmp, &device).Unmanage();
 		}
 
 		// draw all imaegs so that all textures are resident

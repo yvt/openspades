@@ -20,8 +20,6 @@
 
 #include <vector>
 
-#include <Core/Debug.h>
-#include <Core/Math.h>
 #include "GLDepthOfFieldFilter.h"
 #include "GLProfiler.h"
 #include "GLProgram.h"
@@ -30,6 +28,8 @@
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
@@ -37,25 +37,25 @@ namespace spades {
 			return (int)settings.r_depthOfField >= 2;
 		}
 
-		GLDepthOfFieldFilter::GLDepthOfFieldFilter(GLRenderer *renderer)
-		    : renderer(renderer), settings(renderer->GetSettings()) {
-			gaussProgram = renderer->RegisterProgram("Shaders/PostFilters/Gauss1D.program");
+		GLDepthOfFieldFilter::GLDepthOfFieldFilter(GLRenderer &renderer)
+		    : renderer(renderer), settings(renderer.GetSettings()) {
+			gaussProgram = renderer.RegisterProgram("Shaders/PostFilters/Gauss1D.program");
 			if (HighQualityDoFEnabled())
-				blurProgram = renderer->RegisterProgram("Shaders/PostFilters/DoFBlur2.program");
+				blurProgram = renderer.RegisterProgram("Shaders/PostFilters/DoFBlur2.program");
 			else
-				blurProgram = renderer->RegisterProgram("Shaders/PostFilters/DoFBlur.program");
-			cocGen = renderer->RegisterProgram("Shaders/PostFilters/DoFCoCGen.program");
-			cocMix = renderer->RegisterProgram("Shaders/PostFilters/DoFCoCMix.program");
-			gammaMix = renderer->RegisterProgram("Shaders/PostFilters/GammaMix.program");
-			finalMix = renderer->RegisterProgram("Shaders/PostFilters/DoFMix.program");
-			passthrough = renderer->RegisterProgram("Shaders/PostFilters/PassThrough.program");
+				blurProgram = renderer.RegisterProgram("Shaders/PostFilters/DoFBlur.program");
+			cocGen = renderer.RegisterProgram("Shaders/PostFilters/DoFCoCGen.program");
+			cocMix = renderer.RegisterProgram("Shaders/PostFilters/DoFCoCMix.program");
+			gammaMix = renderer.RegisterProgram("Shaders/PostFilters/GammaMix.program");
+			finalMix = renderer.RegisterProgram("Shaders/PostFilters/DoFMix.program");
+			passthrough = renderer.RegisterProgram("Shaders/PostFilters/PassThrough.program");
 		}
 
 		GLColorBuffer GLDepthOfFieldFilter::BlurCoC(GLColorBuffer buffer, float spread) {
 			SPADES_MARK_FUNCTION();
 			// do gaussian blur
 			GLProgram *program = gaussProgram;
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 			int w = buffer.GetWidth();
 			int h = buffer.GetHeight();
@@ -69,22 +69,22 @@ namespace spades {
 			blur_unitShift(program);
 			blur_textureUniform.SetValue(0);
 
-			dev->ActiveTexture(0);
+			dev.ActiveTexture(0);
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			// x-direction
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, 1);
-			dev->BindTexture(IGLDevice::Texture2D, buffer.GetTexture());
-			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
+			GLColorBuffer buf2 = renderer.GetFramebufferManager()->CreateBufferHandle(w, h, 1);
+			dev.BindTexture(IGLDevice::Texture2D, buffer.GetTexture());
+			dev.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			blur_unitShift.SetValue(spread / (float)w, 0.f);
 			qr.Draw();
 			buffer.Release();
 
 			// y-direction
-			GLColorBuffer buf3 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, 1);
-			dev->BindTexture(IGLDevice::Texture2D, buf2.GetTexture());
-			dev->BindFramebuffer(IGLDevice::Framebuffer, buf3.GetFramebuffer());
+			GLColorBuffer buf3 = renderer.GetFramebufferManager()->CreateBufferHandle(w, h, 1);
+			dev.BindTexture(IGLDevice::Texture2D, buf2.GetTexture());
+			dev.BindFramebuffer(IGLDevice::Framebuffer, buf3.GetFramebuffer());
 			blur_unitShift.SetValue(0.f, spread / (float)h);
 			qr.Draw();
 			buf2.Release();
@@ -96,15 +96,15 @@ namespace spades {
 		                                                float globalBlur, float nearBlur,
 		                                                float farBlur) {
 			SPADES_MARK_FUNCTION();
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
-			int w = dev->ScreenWidth();
-			int h = dev->ScreenHeight();
+			int w = dev.ScreenWidth();
+			int h = dev.ScreenHeight();
 			int w2 = HighQualityDoFEnabled() ? w : (w + 3) / 4;
 			int h2 = HighQualityDoFEnabled() ? h : (h + 3) / 4;
 
-			GLColorBuffer coc = renderer->GetFramebufferManager()->CreateBufferHandle(w2, h2, 1);
+			GLColorBuffer coc = renderer.GetFramebufferManager()->CreateBufferHandle(w2, h2, 1);
 
 			{
 				static GLProgramAttribute positionAttribute("positionAttribute");
@@ -133,7 +133,7 @@ namespace spades {
 
 				depthTexture.SetValue(0);
 
-				const client::SceneDefinition &def = renderer->GetSceneDef();
+				const client::SceneDefinition &def = renderer.GetSceneDef();
 				zNearFar.SetValue(def.zNear, def.zFar);
 
 				pixelShift.SetValue(1.f / (float)w, 1.f / (float)h);
@@ -151,12 +151,12 @@ namespace spades {
 				farBlurUniform.SetValue(-farBlur);
 
 				qr.SetCoordAttributeIndex(positionAttribute());
-				dev->BindTexture(IGLDevice::Texture2D,
-				                 renderer->GetFramebufferManager()->GetDepthTexture());
-				dev->BindFramebuffer(IGLDevice::Framebuffer, coc.GetFramebuffer());
-				dev->Viewport(0, 0, w2, h2);
+				dev.BindTexture(IGLDevice::Texture2D,
+				                renderer.GetFramebufferManager()->GetDepthTexture());
+				dev.BindFramebuffer(IGLDevice::Framebuffer, coc.GetFramebuffer());
+				dev.Viewport(0, 0, w2, h2);
 				qr.Draw();
-				dev->BindTexture(IGLDevice::Texture2D, 0);
+				dev.BindTexture(IGLDevice::Texture2D, 0);
 			}
 
 			if (HighQualityDoFEnabled()) {
@@ -168,7 +168,7 @@ namespace spades {
 			GLColorBuffer cocBlur = BlurCoC(coc, 1.f);
 
 			// mix
-			GLColorBuffer coc2 = renderer->GetFramebufferManager()->CreateBufferHandle(w2, h2, 1);
+			GLColorBuffer coc2 = renderer.GetFramebufferManager()->CreateBufferHandle(w2, h2, 1);
 
 			{
 				static GLProgramAttribute positionAttribute("positionAttribute");
@@ -182,18 +182,18 @@ namespace spades {
 				cocMix->Use();
 
 				cocBlurTexture.SetValue(1);
-				dev->ActiveTexture(1);
-				dev->BindTexture(IGLDevice::Texture2D, cocBlur.GetTexture());
+				dev.ActiveTexture(1);
+				dev.BindTexture(IGLDevice::Texture2D, cocBlur.GetTexture());
 
 				cocTexture.SetValue(0);
-				dev->ActiveTexture(0);
-				dev->BindTexture(IGLDevice::Texture2D, coc.GetTexture());
+				dev.ActiveTexture(0);
+				dev.BindTexture(IGLDevice::Texture2D, coc.GetTexture());
 
 				qr.SetCoordAttributeIndex(positionAttribute());
-				dev->BindFramebuffer(IGLDevice::Framebuffer, coc2.GetFramebuffer());
-				dev->Viewport(0, 0, w2, h2);
+				dev.BindFramebuffer(IGLDevice::Framebuffer, coc2.GetFramebuffer());
+				dev.Viewport(0, 0, w2, h2);
 				qr.Draw();
-				dev->BindTexture(IGLDevice::Texture2D, 0);
+				dev.BindTexture(IGLDevice::Texture2D, 0);
 			}
 
 			coc2 = BlurCoC(coc2, .5f);
@@ -207,7 +207,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			// do gaussian blur
 			GLProgram *program = blurProgram;
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 			int w = buffer.GetWidth();
 			int h = buffer.GetHeight();
@@ -225,11 +225,11 @@ namespace spades {
 			blur_offset(program);
 
 			blur_cocUniform.SetValue(1);
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D, coc.GetTexture());
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D, coc.GetTexture());
 
 			blur_textureUniform.SetValue(0);
-			dev->ActiveTexture(0);
+			dev.ActiveTexture(0);
 
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
 
@@ -238,9 +238,9 @@ namespace spades {
 			float sX = 1.f / (float)w, sY = 1.f / (float)h;
 			while (len > .5f) {
 				GLColorBuffer buf2 =
-				  renderer->GetFramebufferManager()->CreateBufferHandle(w2, h2, false);
-				dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
-				dev->BindTexture(IGLDevice::Texture2D, buffer.GetTexture());
+				  renderer.GetFramebufferManager()->CreateBufferHandle(w2, h2, false);
+				dev.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
+				dev.BindTexture(IGLDevice::Texture2D, buffer.GetTexture());
 				blur_offset.SetValue(offset.x * sX, offset.y * sY);
 				qr.Draw();
 				buffer = buf2;
@@ -256,12 +256,12 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			// do gaussian blur
 			GLProgram *program = gammaMix;
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 			int w = buffer1.GetWidth();
 			int h = buffer1.GetHeight();
 
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
+			GLColorBuffer buf2 = renderer.GetFramebufferManager()->CreateBufferHandle(w, h, false);
 
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
 			static GLProgramUniform blur_textureUniform1("texture1");
@@ -274,13 +274,13 @@ namespace spades {
 
 			blur_textureUniform1(program);
 			blur_textureUniform1.SetValue(1);
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D, buffer1.GetTexture());
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D, buffer1.GetTexture());
 
 			blur_textureUniform2(program);
 			blur_textureUniform2.SetValue(0);
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, buffer2.GetTexture());
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, buffer2.GetTexture());
 
 			blur_mix1(program);
 			blur_mix2(program);
@@ -289,10 +289,10 @@ namespace spades {
 			blur_mix2.SetValue(.5f, .5f, .5f);
 
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			// x-direction
-			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
+			dev.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
 			return buf2;
 		}
@@ -302,12 +302,12 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			// do gaussian blur
 			GLProgram *program = finalMix;
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
 
-			GLColorBuffer buf2 = renderer->GetFramebufferManager()->CreateBufferHandle(w, h, false);
+			GLColorBuffer buf2 = renderer.GetFramebufferManager()->CreateBufferHandle(w, h, false);
 
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
 			static GLProgramUniform blur_textureUniform1("mainTexture");
@@ -320,32 +320,32 @@ namespace spades {
 
 			blur_textureUniform1(program);
 			blur_textureUniform1.SetValue(3);
-			dev->ActiveTexture(3);
-			dev->BindTexture(IGLDevice::Texture2D, tex.GetTexture());
+			dev.ActiveTexture(3);
+			dev.BindTexture(IGLDevice::Texture2D, tex.GetTexture());
 
 			blur_textureUniform2(program);
 			blur_textureUniform2.SetValue(2);
-			dev->ActiveTexture(2);
-			dev->BindTexture(IGLDevice::Texture2D, blur1.GetTexture());
+			dev.ActiveTexture(2);
+			dev.BindTexture(IGLDevice::Texture2D, blur1.GetTexture());
 
 			blur_textureUniform3(program);
 			blur_textureUniform3.SetValue(1);
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D, blur2.GetTexture());
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D, blur2.GetTexture());
 
 			blur_textureUniform4(program);
 			blur_textureUniform4.SetValue(0);
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, coc.GetTexture());
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, coc.GetTexture());
 
 			blur_blurredOnlyUniform(program);
 			blur_blurredOnlyUniform.SetValue(HighQualityDoFEnabled() ? 1 : 0);
 
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			// x-direction
-			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
+			dev.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
 			return buf2;
 		}
@@ -354,13 +354,13 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			// do gaussian blur
 			GLProgram *program = passthrough;
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 			int w = tex.GetWidth();
 			int h = tex.GetHeight();
 
 			GLColorBuffer buf2 =
-			renderer->GetFramebufferManager()->CreateBufferHandle(w / 2, h / 2, false);
+			  renderer.GetFramebufferManager()->CreateBufferHandle(w / 2, h / 2, false);
 
 			static GLProgramAttribute blur_positionAttribute("positionAttribute");
 			static GLProgramUniform blur_textureUniform("mainTexture");
@@ -371,8 +371,8 @@ namespace spades {
 
 			blur_textureUniform(program);
 			blur_textureUniform.SetValue(0);
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, tex.GetTexture());
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, tex.GetTexture());
 
 			blur_colorUniform(program);
 			blur_colorUniform.SetValue(1.f, 1.f, 1.f, 1.f);
@@ -381,10 +381,10 @@ namespace spades {
 			blur_texCoordRangeUniform.SetValue(0.f, 0.f, 1.f, 1.f);
 
 			qr.SetCoordAttributeIndex(blur_positionAttribute());
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
-			dev->Viewport(0, 0, w / 2, h / 2);
-			dev->BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
+			dev.Viewport(0, 0, w / 2, h / 2);
+			dev.BindFramebuffer(IGLDevice::Framebuffer, buf2.GetFramebuffer());
 			qr.Draw();
 			return buf2;
 		}
@@ -394,19 +394,19 @@ namespace spades {
 		                                           float nearBlur, float farBlur) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			int w = input.GetWidth();
 			int h = input.GetHeight();
 
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			GLColorBuffer coc;
 
 			globalBlur = std::min(globalBlur * 3.f, 1.f);
 			{
-				GLProfiler::Context p(renderer->GetGLProfiler(), "CoC Computation");
+				GLProfiler::Context p(renderer.GetGLProfiler(), "CoC Computation");
 				coc = GenerateCoC(blurDepthRange, vignetteBlur, globalBlur, nearBlur, farBlur);
 			}
 
@@ -431,38 +431,38 @@ namespace spades {
 				maxCoc /= (float)divide;
 			}
 
-			dev->Viewport(0, 0, w / divide, h / divide);
+			dev.Viewport(0, 0, w / divide, h / divide);
 
 			GLColorBuffer buf1, buf2;
 			{
-				GLProfiler::Context p(renderer->GetGLProfiler(), "Blur 1");
+				GLProfiler::Context p(renderer.GetGLProfiler(), "Blur 1");
 				buf1 = Blur(lowbuf, coc, MakeVector2(0.f, -1.f) * maxCoc);
 			}
 			{
-				GLProfiler::Context p(renderer->GetGLProfiler(), "Blur 2");
+				GLProfiler::Context p(renderer.GetGLProfiler(), "Blur 2");
 				buf2 = Blur(lowbuf, coc, MakeVector2(-sin60, cos60) * maxCoc);
 				lowbuf.Release();
 			}
 			{
-				GLProfiler::Context p(renderer->GetGLProfiler(), "Mix 1");
+				GLProfiler::Context p(renderer.GetGLProfiler(), "Mix 1");
 				buf2 = AddMix(buf1, buf2);
 			}
 			// return buf2;
 			{
-				GLProfiler::Context p(renderer->GetGLProfiler(), "Blur 3");
+				GLProfiler::Context p(renderer.GetGLProfiler(), "Blur 3");
 				buf1 = Blur(buf1, coc, MakeVector2(-sin60, cos60) * maxCoc);
 			}
 			{
-				GLProfiler::Context p(renderer->GetGLProfiler(), "Blur 4");
+				GLProfiler::Context p(renderer.GetGLProfiler(), "Blur 4");
 				buf2 = Blur(buf2, coc, MakeVector2(sin60, cos60) * maxCoc);
 			}
 
-			dev->Viewport(0, 0, w, h);
+			dev.Viewport(0, 0, w, h);
 			{
-				GLProfiler::Context p(renderer->GetGLProfiler(), "Mix 2");
+				GLProfiler::Context p(renderer.GetGLProfiler(), "Mix 2");
 				GLColorBuffer output = FinalMix(input, buf1, buf2, coc);
 				return output;
 			}
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -46,13 +46,14 @@ namespace spades {
 				uint8_t padding2;
 			};
 
-			GLRenderer *renderer;
-			IGLDevice *device;
+			GLRenderer &renderer;
+			// TODO: `*this` might outlive `GLRenderer`. Needs a safeguard!
+			IGLDevice &device;
 			GLProgram *program;
 			GLProgram *dlightProgram;
 			GLProgram *shadowMapProgram;
-			GLImage *image;
-			GLImage *aoImage;
+			Handle<GLImage> image;
+			Handle<GLImage> aoImage;
 
 			IGLDevice::UInteger buffer;
 			IGLDevice::UInteger idxBuffer;
@@ -82,9 +83,9 @@ namespace spades {
 			~GLOptimizedVoxelModel();
 
 		public:
-			GLOptimizedVoxelModel(VoxelModel *, GLRenderer *r);
+			GLOptimizedVoxelModel(VoxelModel *, GLRenderer &r);
 
-			static void PreloadShaders(GLRenderer *);
+			static void PreloadShaders(GLRenderer &);
 
 			void Prerender(std::vector<client::ModelRenderParam> params, bool ghostPass) override;
 
@@ -98,5 +99,5 @@ namespace spades {
 
 			AABB3 GetBoundingBox() override { return boundingBox; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -20,11 +20,11 @@
 
 #pragma once
 
+#include "GLDynamicLight.h"
+#include "IGLDevice.h"
 #include <Client/IGameMapListener.h>
 #include <Client/IRenderer.h>
 #include <Core/Math.h>
-#include "GLDynamicLight.h"
-#include "IGLDevice.h"
 
 namespace spades {
 	namespace draw {
@@ -37,14 +37,14 @@ namespace spades {
 			friend class GLMapChunk;
 
 		protected:
-			GLRenderer *renderer;
-			IGLDevice *device;
+			GLRenderer &renderer;
+			IGLDevice &device;
 
 			GLProgram *depthonlyProgram;
 			GLProgram *basicProgram;
 			GLProgram *dlightProgram;
 			GLProgram *backfaceProgram;
-			GLImage *aoImage;
+			Handle<GLImage> aoImage;
 
 			IGLDevice::UInteger squareVertexBuffer;
 
@@ -78,10 +78,10 @@ namespace spades {
 			void RenderBackface();
 
 		public:
-			GLMapRenderer(client::GameMap *, GLRenderer *);
+			GLMapRenderer(client::GameMap *, GLRenderer &);
 			virtual ~GLMapRenderer();
 
-			static void PreloadShaders(GLRenderer *);
+			static void PreloadShaders(GLRenderer &);
 
 			void GameMapChanged(int x, int y, int z, client::GameMap *);
 
@@ -92,5 +92,5 @@ namespace spades {
 			void RenderSunlightPass();
 			void RenderDynamicLightPass(std::vector<GLDynamicLight> lights);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

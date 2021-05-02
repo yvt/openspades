@@ -62,27 +62,22 @@ namespace spades {
 			int height = img->h;
 			int pitch = img->pitch;
 
-			Handle<Bitmap> bmp;
-			bmp.Set(new Bitmap(width, height), false);
-			try {
-				unsigned char *outPixels = (unsigned char *)bmp->GetPixels();
+			auto bmp = Handle<Bitmap>::New(width, height);
+			unsigned char *outPixels = (unsigned char *)bmp->GetPixels();
 
-				if (pitch == width * 4) {
-					// if the pitch matches the requirement of Bitmap,
-					// just use it
-					memcpy(outPixels, inPixels, pitch * height);
-				} else {
-					// convert
-					for (int y = 0; y < height; y++) {
-						memcpy(outPixels, inPixels, width * 4);
-						outPixels += width * 4;
-						inPixels += pitch;
-					}
+			if (pitch == width * 4) {
+				// if the pitch matches the requirement of Bitmap,
+				// just use it
+				memcpy(outPixels, inPixels, pitch * height);
+			} else {
+				// convert
+				for (int y = 0; y < height; y++) {
+					memcpy(outPixels, inPixels, width * 4);
+					outPixels += width * 4;
+					inPixels += pitch;
 				}
-				return bmp.Unmanage();
-			} catch (...) {
-				throw;
 			}
+			return std::move(bmp).Unmanage();
 		}
 
 		void Save(IStream *, Bitmap *) override {

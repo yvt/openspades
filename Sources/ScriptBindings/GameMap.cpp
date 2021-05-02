@@ -194,22 +194,22 @@ namespace spades {
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("GameMap",
 													  "bool ClipBox(int, int, int)",
-													  asMETHODPR(GameMap, ClipBox, (int,int,int), bool),
+													  asMETHODPR(GameMap, ClipBox, (int,int,int) const, bool),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("GameMap",
 													  "bool ClipWorld(int, int, int)",
-													  asMETHODPR(GameMap, ClipBox, (int,int,int), bool),
+													  asMETHODPR(GameMap, ClipBox, (int,int,int) const, bool),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("GameMap",
 													  "bool ClipBox(float, float, float)",
-													  asMETHODPR(GameMap, ClipBox, (float,float,float), bool),
+													  asMETHODPR(GameMap, ClipBox, (float,float,float) const, bool),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("GameMap",
 													  "bool ClipWorld(float, float, float)",
-													  asMETHODPR(GameMap, ClipBox, (float,float,float), bool),
+													  asMETHODPR(GameMap, ClipBox, (float,float,float) const, bool),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("GameMap",

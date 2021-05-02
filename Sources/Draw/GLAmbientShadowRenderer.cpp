@@ -21,39 +21,40 @@
 #include <atomic>
 #include <cstdlib>
 
-#include <Client/GameMap.h>
 #include "GLAmbientShadowRenderer.h"
 #include "GLProfiler.h"
 #include "GLRenderer.h"
+#include <Client/GameMap.h>
 
 #include <Core/ConcurrentDispatch.h>
 
 namespace spades {
 	namespace draw {
 		class GLAmbientShadowRenderer::UpdateDispatch : public ConcurrentDispatch {
-			GLAmbientShadowRenderer *renderer;
+			GLAmbientShadowRenderer &renderer;
 
 		public:
-			std::atomic<bool> done {false};
-			UpdateDispatch(GLAmbientShadowRenderer *r) : renderer(r) { }
+			std::atomic<bool> done{false};
+			UpdateDispatch(GLAmbientShadowRenderer &r) : renderer(r) {}
 			void Run() override {
 				SPADES_MARK_FUNCTION();
 
-				renderer->UpdateDirtyChunks();
+				renderer.UpdateDirtyChunks();
 
 				done = true;
 			}
 		};
 
-		GLAmbientShadowRenderer::GLAmbientShadowRenderer(GLRenderer *r, client::GameMap *m)
-		    : renderer(r), device(r->GetGLDevice()), map(m) {
+		GLAmbientShadowRenderer::GLAmbientShadowRenderer(GLRenderer &r, client::GameMap &m)
+		    : renderer(r), device(r.GetGLDevice()), map(m) {
 			SPADES_MARK_FUNCTION();
 
-			for (int i = 0; i < NumRays; i++) {
-				Vector3 dir = MakeVector3(SampleRandomFloat(), SampleRandomFloat(), SampleRandomFloat());
+			for (auto &rayDir : rays) {
+				Vector3 dir =
+				  MakeVector3(SampleRandomFloat(), SampleRandomFloat(), SampleRandomFloat());
 				dir = dir.Normalize();
 				dir += 0.01f;
-				rays[i] = dir;
+				rayDir = dir;
 			}
 
 			w = map->Width();
@@ -66,36 +67,38 @@ namespace spades {
 
 			chunks = std::vector<Chunk>{static_cast<std::size_t>(chunkW * chunkH * chunkD)};
 
-			for (size_t i = 0; i < chunks.size(); i++) {
-				Chunk &c = chunks[i];
+			for (Chunk &c : chunks) {
 				float *data = (float *)c.data;
 				std::fill(data, data + ChunkSize * ChunkSize * ChunkSize * 2, 1.f);
 			}
 
-			for (int x = 0; x < chunkW; x++)
-				for (int y = 0; y < chunkH; y++)
+			for (int x = 0; x < chunkW; x++) {
+				for (int y = 0; y < chunkH; y++) {
 					for (int z = 0; z < chunkD; z++) {
 						Chunk &c = GetChunk(x, y, z);
 						c.cx = x;
 						c.cy = y;
 						c.cz = z;
 					}
+				}
+			}
 
-			SPLog("Chunk buffer allocated (%d bytes)", (int) sizeof(Chunk) * chunkW * chunkH * chunkD);
+			SPLog("Chunk buffer allocated (%d bytes)",
+			      (int)sizeof(Chunk) * chunkW * chunkH * chunkD);
 
 			// make texture
-			texture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture3D, texture);
-			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
-			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
-			device->TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapR,
-			                     IGLDevice::ClampToEdge);
-			device->TexImage3D(IGLDevice::Texture3D, 0, IGLDevice::RG, w, h, d + 1, 0,
-			                   IGLDevice::RG, IGLDevice::FloatType, NULL);
+			texture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture3D, texture);
+			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapS, IGLDevice::Repeat);
+			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapT, IGLDevice::Repeat);
+			device.TexParamater(IGLDevice::Texture3D, IGLDevice::TextureWrapR,
+			                    IGLDevice::ClampToEdge);
+			device.TexImage3D(IGLDevice::Texture3D, 0, IGLDevice::RG, w, h, d + 1, 0, IGLDevice::RG,
+			                  IGLDevice::FloatType, NULL);
 
 			SPLog("Chunk texture allocated");
 
@@ -103,8 +106,8 @@ namespace spades {
 			v.resize(w * h * 2);
 			std::fill(v.begin(), v.end(), 1.f);
 			for (int i = 0; i < d + 1; i++) {
-				device->TexSubImage3D(IGLDevice::Texture3D, 0, 0, 0, i, w, h, 1, IGLDevice::RG,
-				                      IGLDevice::FloatType, v.data());
+				device.TexSubImage3D(IGLDevice::Texture3D, 0, 0, 0, i, w, h, 1, IGLDevice::RG,
+				                     IGLDevice::FloatType, v.data());
 			}
 
 			SPLog("Chunk texture initialized");
@@ -118,7 +121,7 @@ namespace spades {
 				dispatch->Join();
 				delete dispatch;
 			}
-			device->DeleteTexture(texture);
+			device.DeleteTexture(texture);
 		}
 
 		/**
@@ -167,8 +170,9 @@ namespace spades {
 
 		void GLAmbientShadowRenderer::GameMapChanged(int x, int y, int z, client::GameMap *map) {
 			SPADES_MARK_FUNCTION_DEBUG();
-			if (map != this->map)
+			if (map != this->map.GetPointerOrNull()) {
 				return;
+			}
 
 			Invalidate(x - RayLength, y - RayLength, z - RayLength, x + RayLength, y + RayLength,
 			           z + RayLength);
@@ -177,12 +181,15 @@ namespace spades {
 		void GLAmbientShadowRenderer::Invalidate(int minX, int minY, int minZ, int maxX, int maxY,
 		                                         int maxZ) {
 			SPADES_MARK_FUNCTION_DEBUG();
-			if (minZ < 0)
+			if (minZ < 0) {
 				minZ = 0;
-			if (maxZ > d - 1)
+			}
+			if (maxZ > d - 1) {
 				maxZ = d - 1;
-			if (minX > maxX || minY > maxY || minZ > maxZ)
+			}
+			if (minX > maxX || minY > maxY || minZ > maxZ) {
 				return;
+			}
 
 			// these should be floor div
 			int cx1 = minX >> ChunkSizeBits;
@@ -192,8 +199,8 @@ namespace spades {
 			int cy2 = maxY >> ChunkSizeBits;
 			int cz2 = maxZ >> ChunkSizeBits;
 
-			for (int cx = cx1; cx <= cx2; cx++)
-				for (int cy = cy1; cy <= cy2; cy++)
+			for (int cx = cx1; cx <= cx2; cx++) {
+				for (int cy = cy1; cy <= cy2; cy++) {
 					for (int cz = cz1; cz <= cz2; cz++) {
 						Chunk &c = GetChunkWrapped(cx, cy, cz);
 						int originX = cx * ChunkSize;
@@ -224,16 +231,13 @@ namespace spades {
 							c.dirtyMaxZ = std::max(inMaxZ, c.dirtyMaxZ);
 						}
 					}
+				}
+			}
 		}
 
 		int GLAmbientShadowRenderer::GetNumDirtyChunks() {
-			int cnt = 0;
-			for (size_t i = 0; i < chunks.size(); i++) {
-				Chunk &c = chunks[i];
-				if (c.dirty)
-					cnt++;
-			}
-			return cnt;
+			return (int)std::count_if(chunks.begin(), chunks.end(),
+			                          [](const Chunk &c) { return c.dirty; });
 		}
 
 		void GLAmbientShadowRenderer::Update() {
@@ -242,38 +246,36 @@ namespace spades {
 					dispatch->Join();
 					delete dispatch;
 				}
-				dispatch = new UpdateDispatch(this);
+				dispatch = new UpdateDispatch(*this);
 				dispatch->Start();
 			}
 
 			// Count the number of chunks that need to be uploaded to GPU.
 			// This value is approximate but it should be okay for profiling use
-			int cnt = 0;
-			for (size_t i = 0; i < chunks.size(); i++) {
-				if (!chunks[i].transferDone.load())
-					cnt++;
-			}
-			GLProfiler::Context profiler(renderer->GetGLProfiler(), "Large Ambient Occlusion [>= %d chunk(s)]", cnt);
+			std::size_t numChunksToLoad = std::count_if(
+			  chunks.begin(), chunks.end(), [](const Chunk &c) { return !c.transferDone.load(); });
+			GLProfiler::Context profiler{renderer.GetGLProfiler(),
+			                             "Large Ambient Occlusion [>= %d chunk(s)]",
+			                             numChunksToLoad};
 
-			device->BindTexture(IGLDevice::Texture3D, texture);
-			for (size_t i = 0; i < chunks.size(); i++) {
-				Chunk &c = chunks[i];
+			device.BindTexture(IGLDevice::Texture3D, texture);
+			for (Chunk &c : chunks) {
 				if (!c.transferDone.exchange(true)) {
-					device->TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
-					                      c.cy * ChunkSize, c.cz * ChunkSize + 1, ChunkSize,
-					                      ChunkSize, ChunkSize, IGLDevice::RG,
-					                      IGLDevice::FloatType, c.data);
+					device.TexSubImage3D(IGLDevice::Texture3D, 0, c.cx * ChunkSize,
+					                     c.cy * ChunkSize, c.cz * ChunkSize + 1, ChunkSize,
+					                     ChunkSize, ChunkSize, IGLDevice::RG, IGLDevice::FloatType,
+					                     c.data);
 				}
 			}
 		}
 
 		void GLAmbientShadowRenderer::UpdateDirtyChunks() {
-			int dirtyChunkIds[256];
-			int numDirtyChunks = 0;
+			std::array<std::size_t, 256> dirtyChunkIds;
+			std::size_t numDirtyChunks = 0;
 			int nearDirtyChunks = 0;
 
 			// first, check only chunks in near range
-			Vector3 eyePos = renderer->GetSceneDef().viewOrigin;
+			Vector3 eyePos = renderer.GetSceneDef().viewOrigin;
 			int eyeX = (int)(eyePos.x) >> ChunkSizeBits;
 			int eyeY = (int)(eyePos.y) >> ChunkSizeBits;
 			int eyeZ = (int)(eyePos.z) >> ChunkSizeBits;
@@ -292,7 +294,7 @@ namespace spades {
 				if (c.dirty) {
 					dirtyChunkIds[numDirtyChunks++] = static_cast<int>(i);
 					nearDirtyChunks++;
-					if (numDirtyChunks >= 256)
+					if (numDirtyChunks >= dirtyChunkIds.size())
 						break;
 				}
 			}
@@ -303,7 +305,7 @@ namespace spades {
 					Chunk &c = chunks[i];
 					if (c.dirty) {
 						dirtyChunkIds[numDirtyChunks++] = static_cast<int>(i);
-						if (numDirtyChunks >= 256)
+						if (numDirtyChunks >= dirtyChunkIds.size())
 							break;
 					}
 				}
@@ -313,7 +315,7 @@ namespace spades {
 			for (int i = 0; i < 8; i++) {
 				if (numDirtyChunks <= 0)
 					break;
-                int idx = SampleRandomInt(0, numDirtyChunks - 1);
+				std::size_t idx = SampleRandomInt(std::size_t{0}, numDirtyChunks - 1);
 				Chunk &c = chunks[dirtyChunkIds[idx]];
 
 				// remove from list (fast)
@@ -503,5 +505,5 @@ namespace spades {
 			c.dirty = false;
 			c.transferDone = false;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

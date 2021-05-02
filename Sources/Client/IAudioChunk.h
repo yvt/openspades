@@ -23,13 +23,13 @@
 #include <Core/RefCountedObject.h>
 
 namespace spades {
-    namespace client {
-        class IAudioChunk : public RefCountedObject {
-        protected:
-            IAudioChunk() {}
-            ~IAudioChunk() {}
+	namespace client {
+		class IAudioChunk : public RefCountedObject {
+		protected:
+			IAudioChunk() {}
+			~IAudioChunk() {}
 
-        public:
-        };
-    }
-}
+		public:
+		};
+	} // namespace client
+} // namespace spades

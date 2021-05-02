@@ -131,7 +131,7 @@ namespace spades {
 				dev->BindTexture(IGLDevice::Texture2D, renderer->mapShadowRenderer->GetTexture());
 			} else {
 				// TODO: do this case properly
-				GLImage *img = (GLImage *)renderer->RegisterImage("Gfx/White.tga");
+				auto img = renderer->RegisterImage("Gfx/White.tga").Cast<GLImage>();
 				img->Bind(IGLDevice::Texture2D);
 			}
 			mapShadowTexture.SetValue(texStage);
@@ -298,5 +298,5 @@ namespace spades {
 
 			return texStage;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

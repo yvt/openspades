@@ -68,13 +68,37 @@ namespace stmp {
 			Allocator().construct(reinterpret_cast<T *>(&storage), std::forward<Args>(args)...);
 			has_some = true;
 		}
-		void operator=(const T &o) { reset(o); }
-		void operator=(T &&o) { reset(std::move(o)); }
+		void operator=(const T &o) {
+			if (has_some) {
+				**this = o;
+			} else {
+				reset(o);
+			}
+		}
+		void operator=(T &&o) {
+			if (has_some) {
+				**this = std::move(o);
+			} else {
+				reset(std::move(o));
+			}
+		}
 		void operator=(const optional &o) {
-			if (o)
+			if (has_some && o.has_some) {
+				**this = *o;
+			} else if (o.has_some) {
 				reset(*o);
-			else
+			} else {
 				reset();
+			}
+		}
+		void operator=(optional &&o) {
+			if (has_some && o.has_some) {
+				**this = *std::move(o);
+			} else if (o.has_some) {
+				reset(*std::move(o));
+			} else {
+				reset();
+			}
 		}
 
 		T *get_pointer() { return has_some ? reinterpret_cast<T *>(&storage) : nullptr; }
@@ -115,13 +139,13 @@ namespace stmp {
 			if (!has_some) {
 				throw bad_optional_access{};
 			}
-			return *get_pointer();
+			return std::move(*get_pointer());
 		}
 		const T &&value() const && {
 			if (!has_some) {
 				throw bad_optional_access{};
 			}
-			return *get_pointer();
+			return std::move(*get_pointer());
 		}
 
 		template <class U> T value_or(U &&default_value) const & {
@@ -131,14 +155,8 @@ namespace stmp {
 			return *this ? std::move(get()) : static_cast<T>(std::forward<U>(default_value));
 		}
 
-		T &operator->() {
-			assert(has_some);
-			return get();
-		}
-		const T &operator->() const {
-			assert(has_some);
-			return get();
-		}
+		T *operator->() { return &get(); }
+		const T *operator->() const { return &get(); }
 
 		T &operator*() {
 			assert(has_some);
@@ -150,7 +168,151 @@ namespace stmp {
 		}
 
 		explicit operator bool() const { return has_some; }
+
+		bool operator==(const optional &rhs) const {
+			return has_some == rhs.has_some && (!has_some || **this == *rhs);
+		}
+		bool operator!=(const optional &rhs) const {
+			return has_some != rhs.has_some || (has_some && **this != *rhs);
+		}
+
+		template <class U> bool operator==(const U &rhs) const { return has_some && **this == rhs; }
+		template <class U> bool operator!=(const U &rhs) const { return !has_some || **this != rhs; }
 	};
+
+	template <class T, class U>
+	typename std::enable_if<!std::is_reference<T>::value, bool>::type
+	operator==(const U &lhs, const optional<T> rhs) {
+		return rhs && lhs == *rhs;
+	}
+	template <class T, class U>
+	typename std::enable_if<!std::is_reference<T>::value, bool>::type
+	operator!=(const U &lhs, const optional<T> rhs) {
+		return !rhs || lhs != *rhs;
+	}
+
+	/**
+	 * Specialization of `optional` for references. Works very similarly to
+	 * pointers, but it's better at communicating the nullability.
+	 *
+	 * Boost's `optional` has this, while C++17's `optional` doesn't.
+	 */
+	template <class T> class optional<T &> {
+		T *ptr;
+
+	public:
+		optional() : ptr(nullptr) {}
+		optional(T *v) : ptr(v) {}
+		optional(T &v) : ptr(&v) {}
+		optional(const optional &o) : ptr(o.ptr) {}
+		void reset() { ptr = nullptr; }
+		void operator=(const optional &o) { ptr = o.ptr; }
+
+		T *get_pointer() { return ptr; }
+		const T *get_pointer() const { return ptr; }
+
+		T &get() {
+			assert(ptr);
+			return *get_pointer();
+		}
+		const T &get() const {
+			assert(ptr);
+			return *get_pointer();
+		}
+
+		T &value() {
+			if (!ptr) {
+				throw bad_optional_access{};
+			}
+			return *get_pointer();
+		}
+		const T &value() const {
+			if (!ptr) {
+				throw bad_optional_access{};
+			}
+			return *get_pointer();
+		}
+
+		template <class U> T &value_or(U &&default_value) const & {
+			return *this ? get() : static_cast<T>(std::forward<U>(default_value));
+		}
+		template <class U> T &value_or(U &&default_value) && {
+			return *this ? std::move(get()) : static_cast<T>(std::forward<U>(default_value));
+		}
+
+		T *operator->() { return &get(); }
+		const T *operator->() const { return &get(); }
+
+		T &operator*() { return get(); }
+		const T &operator*() const { return get(); }
+
+		explicit operator bool() const { return !!ptr; }
+
+		bool operator==(const optional &rhs) const { return ptr == rhs.ptr; }
+		bool operator!=(const optional &rhs) const { return ptr != rhs.ptr; }
+
+		bool operator==(const T *rhs) const { return ptr == rhs; }
+		bool operator!=(const T *rhs) const { return ptr != rhs; }
+	};
+
+	template <class T> bool operator==(const T *lhs, const optional<T &> rhs) {
+		return lhs == rhs.get_pointer();
+	}
+	template <class T> bool operator!=(const T *lhs, const optional<T &> rhs) {
+		return lhs != rhs.get_pointer();
+	}
+
+	template <class T> class optional<const T &> {
+		const T *ptr;
+
+	public:
+		optional() : ptr(nullptr) {}
+		optional(const T *v) : ptr(v) {}
+		optional(const T &v) : ptr(&v) {}
+		optional(const optional &o) : ptr(o.ptr) {}
+		void reset() { ptr = nullptr; }
+		void operator=(const optional &o) { ptr = o.ptr; }
+
+		const T *get_pointer() const { return ptr; }
+
+		const T &get() const {
+			assert(ptr);
+			return *get_pointer();
+		}
+
+		const T &value() const {
+			if (!ptr) {
+				throw bad_optional_access{};
+			}
+			return *get_pointer();
+		}
+
+		template <class U> T &value_or(U &&default_value) const & {
+			return *this ? get() : static_cast<T>(std::forward<U>(default_value));
+		}
+
+		const T *operator->() const { return &get(); }
+		const T &operator*() const { return get(); }
+
+		explicit operator bool() const { return !!ptr; }
+
+		bool operator==(const optional &rhs) const { return ptr == rhs.ptr; }
+		bool operator!=(const optional &rhs) const { return ptr != rhs.ptr; }
+
+		bool operator==(const T *rhs) const { return ptr == rhs; }
+		bool operator!=(const T *rhs) const { return ptr != rhs; }
+	};
+
+	template <class T> bool operator==(const T *lhs, const optional<const T &> rhs) {
+		return lhs == rhs.get_pointer();
+	}
+	template <class T> bool operator!=(const T *lhs, const optional<const T &> rhs) {
+		return lhs != rhs.get_pointer();
+	}
+
+	template <class T> optional<typename std::decay<T>::type> make_optional(T &&value) {
+		return {std::forward<T>(value)};
+	}
 
 	/** Safe atomic smart pointer. */
 	template <class T> class atomic_unique_ptr {
@@ -220,5 +382,10 @@ namespace stmp {
 
 	template <class Fn, class T> function<T, Fn> make_fn(T &&inner) {
 		return function<T, Fn>(std::move(inner));
+	}
+
+	/** Polyfill of `std::make_unique` for compilers which don't support it. */
+	template <class T, class... Args> std::unique_ptr<T> make_unique(Args &&... args) {
+		return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 	}
 } // namespace stmp

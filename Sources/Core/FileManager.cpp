@@ -29,7 +29,7 @@
 
 namespace spades {
 	static std::list<IFileSystem *> g_fileSystems;
-	IStream *FileManager::OpenForReading(const char *fn) {
+	std::unique_ptr<IStream> FileManager::OpenForReading(const char *fn) {
 		SPADES_MARK_FUNCTION();
 		if (!fn)
 			SPInvalidArgument("fn");
@@ -51,7 +51,7 @@ namespace spades {
 
 		SPFileNotFound(fn);
 	}
-	IStream *FileManager::OpenForWriting(const char *fn) {
+	std::unique_ptr<IStream> FileManager::OpenForWriting(const char *fn) {
 		SPADES_MARK_FUNCTION();
 		if (!fn)
 			SPInvalidArgument("fn");
@@ -117,15 +117,11 @@ namespace spades {
 	std::string FileManager::ReadAllBytes(const char *fn) {
 		SPADES_MARK_FUNCTION();
 
-		IStream *stream = OpenForReading(fn);
-		try {
-			std::string ret = stream->ReadAllBytes();
-			delete stream;
-			return ret;
-		} catch (...) {
-			delete stream;
-			throw;
-		}
+		auto stream = OpenForReading(fn);
+		SPAssert(stream);
+
+		std::string ret = stream->ReadAllBytes();
+		return ret;
 	}
 
 	std::vector<std::string> FileManager::EnumFiles(const char *path) {
@@ -147,8 +143,8 @@ namespace spades {
 	}
 
 	void FileManager::Close() {
-		for (auto *fs: g_fileSystems) {
+		for (auto *fs : g_fileSystems) {
 			delete fs;
 		}
-	}       
-}
+	}
+} // namespace spades

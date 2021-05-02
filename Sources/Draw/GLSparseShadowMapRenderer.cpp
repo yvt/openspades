@@ -19,21 +19,20 @@
  */
 
 #include "GLSparseShadowMapRenderer.h"
-#include <Core/Debug.h>
-#include <Core/Exception.h>
-#include <Core/Settings.h>
 #include "GLModel.h"
 #include "GLModelRenderer.h"
 #include "GLProfiler.h"
 #include "GLRenderer.h"
-#include "GLRenderer.h"
 #include "IGLDevice.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
+#include <Core/Settings.h>
 
 namespace spades {
 	namespace draw {
 
-		GLSparseShadowMapRenderer::GLSparseShadowMapRenderer(GLRenderer *r)
-		    : IGLShadowMapRenderer(r), device(r->GetGLDevice()), settings(r->GetSettings()) {
+		GLSparseShadowMapRenderer::GLSparseShadowMapRenderer(GLRenderer &r)
+		    : IGLShadowMapRenderer(r), device(r.GetGLDevice()), settings(r.GetSettings()) {
 			SPADES_MARK_FUNCTION();
 
 			textureSize = settings.r_shadowMapSize;
@@ -48,63 +47,63 @@ namespace spades {
 			minLod = 0;
 			maxLod = 15;
 
-			colorTexture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture2D, colorTexture);
-			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGB, textureSize, textureSize, 0,
-			                   IGLDevice::RGB, IGLDevice::UnsignedByte, NULL);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-			                     IGLDevice::ClampToEdge);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-			                     IGLDevice::ClampToEdge);
+			colorTexture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture2D, colorTexture);
+			device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGB, textureSize, textureSize, 0,
+			                  IGLDevice::RGB, IGLDevice::UnsignedByte, NULL);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+			                    IGLDevice::ClampToEdge);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+			                    IGLDevice::ClampToEdge);
 
-			texture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture2D, texture);
-			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24, textureSize,
-			                   textureSize, 0, IGLDevice::DepthComponent, IGLDevice::UnsignedInt,
-			                   NULL);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Linear);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-			                     IGLDevice::ClampToEdge);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-			                     IGLDevice::ClampToEdge);
+			texture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture2D, texture);
+			device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::DepthComponent24, textureSize,
+			                  textureSize, 0, IGLDevice::DepthComponent, IGLDevice::UnsignedInt,
+			                  NULL);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+			                    IGLDevice::ClampToEdge);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+			                    IGLDevice::ClampToEdge);
 
-			pagetableTexture = device->GenTexture();
-			device->BindTexture(IGLDevice::Texture2D, pagetableTexture);
-			device->TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, Tiles, Tiles, 0,
-			                   IGLDevice::BGRA, IGLDevice::UnsignedByte, NULL);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-			                     IGLDevice::ClampToEdge);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-			                     IGLDevice::ClampToEdge);
+			pagetableTexture = device.GenTexture();
+			device.BindTexture(IGLDevice::Texture2D, pagetableTexture);
+			device.TexImage2D(IGLDevice::Texture2D, 0, IGLDevice::RGBA8, Tiles, Tiles, 0,
+			                  IGLDevice::BGRA, IGLDevice::UnsignedByte, NULL);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+			                    IGLDevice::ClampToEdge);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+			                    IGLDevice::ClampToEdge);
 
-			framebuffer = device->GenFramebuffer();
-			device->BindFramebuffer(IGLDevice::Framebuffer, framebuffer);
-			device->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
-			                             IGLDevice::Texture2D, colorTexture, 0);
-			device->FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::DepthAttachment,
-			                             IGLDevice::Texture2D, texture, 0);
+			framebuffer = device.GenFramebuffer();
+			device.BindFramebuffer(IGLDevice::Framebuffer, framebuffer);
+			device.FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::ColorAttachment0,
+			                            IGLDevice::Texture2D, colorTexture, 0);
+			device.FramebufferTexture2D(IGLDevice::Framebuffer, IGLDevice::DepthAttachment,
+			                            IGLDevice::Texture2D, texture, 0);
 
-			device->BindFramebuffer(IGLDevice::Framebuffer, 0);
+			device.BindFramebuffer(IGLDevice::Framebuffer, 0);
 		}
 
 		GLSparseShadowMapRenderer::~GLSparseShadowMapRenderer() {
 			SPADES_MARK_FUNCTION();
 
-			device->DeleteTexture(texture);
-			device->DeleteTexture(pagetableTexture);
-			device->DeleteFramebuffer(framebuffer);
-			device->DeleteTexture(colorTexture);
+			device.DeleteTexture(texture);
+			device.DeleteTexture(pagetableTexture);
+			device.DeleteFramebuffer(framebuffer);
+			device.DeleteTexture(colorTexture);
 		}
 
 #define Segment GLSSMRSegment
@@ -159,7 +158,7 @@ namespace spades {
 			up = Vector3::Cross(lightDir, side).Normalize();
 
 			// build frustrum
-			client::SceneDefinition def = GetRenderer()->GetSceneDef();
+			client::SceneDefinition def = GetRenderer().GetSceneDef();
 			Vector3 frustrum[8];
 			float tanX = tanf(def.fovX * .5f);
 			float tanY = tanf(def.fovY * .5f);
@@ -246,10 +245,10 @@ namespace spades {
 
 			BuildMatrix(nearDist, farDist);
 
-			device->BindFramebuffer(IGLDevice::Framebuffer, framebuffer);
-			device->Viewport(0, 0, textureSize, textureSize);
-			device->ClearDepth(1.f);
-			device->Clear(IGLDevice::DepthBufferBit);
+			device.BindFramebuffer(IGLDevice::Framebuffer, framebuffer);
+			device.Viewport(0, 0, textureSize, textureSize);
+			device.ClearDepth(1.f);
+			device.Clear(IGLDevice::DepthBufferBit);
 
 			RenderShadowMapPass();
 		}
@@ -262,7 +261,7 @@ namespace spades {
 		static const size_t GroupNodeFlag = NoNode ^ (NoNode >> 1);
 
 		struct GLSparseShadowMapRenderer::Internal {
-			GLSparseShadowMapRenderer *renderer;
+			GLSparseShadowMapRenderer &renderer;
 			Vector3 cameraShadowCoord;
 
 			typedef int LodUnit;
@@ -468,12 +467,13 @@ namespace spades {
 				}
 			}
 
-			Internal(GLSparseShadowMapRenderer *r) : renderer(r) {
+			Internal(GLSparseShadowMapRenderer &r) : renderer(r) {
 
-				GLProfiler::Context profiler(r->GetRenderer()->GetGLProfiler(), "Sparse Page Table Generation");
+				GLProfiler::Context profiler(r.GetRenderer().GetGLProfiler(),
+				                             "Sparse Page Table Generation");
 
-				cameraShadowCoord = r->GetRenderer()->GetSceneDef().viewOrigin;
-				cameraShadowCoord = (r->matrix * cameraShadowCoord).GetXYZ();
+				cameraShadowCoord = r.GetRenderer().GetSceneDef().viewOrigin;
+				cameraShadowCoord = (r.matrix * cameraShadowCoord).GetXYZ();
 
 				// clear group maps
 				for (size_t x = 0; x < Tiles; x++)
@@ -481,7 +481,7 @@ namespace spades {
 						groupMap[x][y] = NoGroup;
 
 				const std::vector<GLModelRenderer::RenderModel> &rmodels =
-				  renderer->GetRenderer()->GetModelRenderer()->models;
+				  renderer.GetRenderer().GetModelRenderer()->models;
 				allInstances.reserve(256);
 				groups.reserve(64);
 				nodes.reserve(256);
@@ -501,7 +501,7 @@ namespace spades {
 
 						OBB3 instWorldBoundsOBB = inst.param->matrix * modelBounds;
 						// w should be 1, so this should wor
-						OBB3 instBoundsOBB = r->matrix * instWorldBoundsOBB;
+						OBB3 instBoundsOBB = r.matrix * instWorldBoundsOBB;
 						AABB3 instBounds = instBoundsOBB.GetBoundingAABB();
 
 						// frustrum(?) cull
@@ -554,7 +554,7 @@ namespace spades {
 					}
 				}
 
-				mapSize = r->settings.r_shadowMapSize;
+				mapSize = r.settings.r_shadowMapSize;
 			}
 
 			bool AddGroupToNode(size_t &nodeRef, int nx, int ny, int nw, int nh, size_t gId) {
@@ -564,8 +564,8 @@ namespace spades {
 					int w = g.tile2.x - g.tile1.x;
 					int h = g.tile2.y - g.tile1.y;
 					int lod = g.lod;
-					int minLod = renderer->minLod;
-					int maxLod = renderer->maxLod;
+					int minLod = renderer.minLod;
+					int maxLod = renderer.maxLod;
 					lod += lodBias;
 					if (lod < minLod)
 						lod = minLod;
@@ -655,7 +655,8 @@ namespace spades {
 				if (groups.empty())
 					return;
 
-				GLProfiler::Context profiler(renderer->GetRenderer()->GetGLProfiler(), "Pack [%d group(s)]", (int)groups.size());
+				GLProfiler::Context profiler(renderer.GetRenderer().GetGLProfiler(),
+				                             "Pack [%d group(s)]", (int)groups.size());
 
 				lodBias = 100;
 				if (TryPack()) {
@@ -700,11 +701,12 @@ namespace spades {
 		};
 
 		void GLSparseShadowMapRenderer::RenderShadowMapPass() {
-			Internal itnl(this);
+			Internal itnl(*this);
 			itnl.Pack();
 
 			{
-				GLProfiler::Context profiler(GetRenderer()->GetGLProfiler(), "Page Table Generation");
+				GLProfiler::Context profiler(GetRenderer().GetGLProfiler(),
+				                             "Page Table Generation");
 				for (int x = 0; x < Tiles; x++) {
 					for (int y = 0; y < Tiles; y++) {
 						size_t val = itnl.groupMap[x][y];
@@ -741,19 +743,20 @@ namespace spades {
 			}
 
 			{
-				GLProfiler::Context profiler(GetRenderer()->GetGLProfiler(), "Page Table Upload");
-				device->BindTexture(IGLDevice::Texture2D, pagetableTexture);
-				device->TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, Tiles, Tiles, IGLDevice::BGRA,
-				                      IGLDevice::UnsignedByte, pagetable);
+				GLProfiler::Context profiler(GetRenderer().GetGLProfiler(), "Page Table Upload");
+				device.BindTexture(IGLDevice::Texture2D, pagetableTexture);
+				device.TexSubImage2D(IGLDevice::Texture2D, 0, 0, 0, Tiles, Tiles, IGLDevice::BGRA,
+				                     IGLDevice::UnsignedByte, pagetable);
 			}
 
 			Matrix4 baseMatrix = matrix;
 			{
-				GLProfiler::Context profiler(GetRenderer()->GetGLProfiler(), "Shadow Maps [%d group(s)]", (int)itnl.groups.size());
+				GLProfiler::Context profiler(GetRenderer().GetGLProfiler(),
+				                             "Shadow Maps [%d group(s)]", (int)itnl.groups.size());
 				ModelRenderer mrend;
 				for (size_t i = 0; i < itnl.groups.size(); i++) {
 					Internal::Group &g = itnl.groups[i];
-					device->Viewport(g.rawX, g.rawY, g.rawW, g.rawH);
+					device.Viewport(g.rawX, g.rawY, g.rawW, g.rawH);
 
 					Vector3 dest1 = Internal::TileToShadowMapCoord(g.tile1);
 					Vector3 dest2 = Internal::TileToShadowMapCoord(g.tile2);
@@ -807,8 +810,8 @@ namespace spades {
 			             float yy = fabsf(vw.y);
 			             float rx = rad * vpWidth;
 			             float ry = rad * vpHeight;
-
+			 
 			             return xx < (1.f + rx) && yy < (1.f + ry);*/
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

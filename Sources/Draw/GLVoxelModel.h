@@ -47,12 +47,12 @@ namespace spades {
 				uint8_t nx, ny, nz;
 			};
 
-			GLRenderer *renderer;
-			IGLDevice *device;
+			GLRenderer &renderer;
+			IGLDevice &device;
 			GLProgram *program;
 			GLProgram *dlightProgram;
 			GLProgram *shadowMapProgram;
-			GLImage *aoImage;
+			Handle<GLImage> aoImage;
 
 			IGLDevice::UInteger buffer;
 			IGLDevice::UInteger idxBuffer;
@@ -75,9 +75,9 @@ namespace spades {
 			~GLVoxelModel();
 
 		public:
-			GLVoxelModel(VoxelModel *, GLRenderer *r);
+			GLVoxelModel(VoxelModel *, GLRenderer &r);
 
-			static void PreloadShaders(GLRenderer *);
+			static void PreloadShaders(GLRenderer &);
 
 			void Prerender(std::vector<client::ModelRenderParam> params, bool ghostPass) override;
 
@@ -91,5 +91,5 @@ namespace spades {
 
 			AABB3 GetBoundingBox() override { return boundingBox; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

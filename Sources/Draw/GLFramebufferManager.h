@@ -54,7 +54,7 @@ namespace spades {
 			};
 
 		private:
-			IGLDevice *device;
+			IGLDevice &device;
 			GLSettings &settings;
 
 			struct Buffer {
@@ -96,7 +96,7 @@ namespace spades {
 			std::vector<Buffer> buffers;
 
 		public:
-			GLFramebufferManager(IGLDevice *, GLSettings &, int renderWidth, int renderHeight);
+			GLFramebufferManager(IGLDevice &, GLSettings &, int renderWidth, int renderHeight);
 			~GLFramebufferManager();
 
 			/** setups device for scene rendering. */
@@ -132,5 +132,5 @@ namespace spades {
 
 		// name is too long, so shorten it!
 		typedef GLFramebufferManager::BufferHandle GLColorBuffer;
-	}
-}
+	} // namespace draw
+} // namespace spades

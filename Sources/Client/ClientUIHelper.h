@@ -42,5 +42,5 @@ namespace spades {
 			void AlertWarning(const std::string &);
 			void AlertError(const std::string &);
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

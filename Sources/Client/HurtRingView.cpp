@@ -32,7 +32,7 @@ namespace spades {
 		HurtRingView::HurtRingView(Client *cli) : client(cli), renderer(cli->GetRenderer()) {
 			SPADES_MARK_FUNCTION();
 
-			image = renderer->RegisterImage("Gfx/HurtRing2.png");
+			image = renderer.RegisterImage("Gfx/HurtRing2.png");
 		}
 
 		HurtRingView::~HurtRingView() {}
@@ -74,17 +74,17 @@ namespace spades {
 				return;
 			}
 
-			Player *p = w->GetLocalPlayer();
-			if (p == NULL || !p->IsAlive()) {
+			auto p = w->GetLocalPlayer();
+			if (!p || !p->IsAlive()) {
 				ClearAll();
 				return;
 			}
 
 			playerFront = p->GetFront2D();
 
-			float hurtRingSize = renderer->ScreenHeight() * .3f;
-			float cx = renderer->ScreenWidth() * .5f;
-			float cy = renderer->ScreenHeight() * .5f;
+			float hurtRingSize = renderer.ScreenHeight() * .3f;
+			float cx = renderer.ScreenWidth() * .5f;
+			float cy = renderer.ScreenHeight() * .5f;
 			static const float coords[][2] = {{-1, 1}, {1, 1}, {-1, 0}};
 
 			std::list<Item>::iterator it;
@@ -95,7 +95,7 @@ namespace spades {
 				if (fade > 1.f)
 					fade = 1.f;
 				Vector4 color = {fade, fade, fade, 0};
-				renderer->SetColorAlphaPremultiplied(color);
+				renderer.SetColorAlphaPremultiplied(color);
 
 				Vector3 dir = -item.dir;
 				float c = dir.x * playerFront.x + dir.y * playerFront.y;
@@ -108,9 +108,9 @@ namespace spades {
 					verts[i] = verts[i] * hurtRingSize + MakeVector2(cx, cy);
 				}
 
-				renderer->DrawImage(image, verts[0], verts[1], verts[2],
-				                    AABB2(0, 0, image->GetWidth(), image->GetHeight()));
+				renderer.DrawImage(image, verts[0], verts[1], verts[2],
+				                   AABB2(0, 0, image->GetWidth(), image->GetHeight()));
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

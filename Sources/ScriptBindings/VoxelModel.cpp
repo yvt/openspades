@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 #include <memory>
 #include <Core/VoxelModel.h>
@@ -23,8 +23,8 @@
 #include <Core/FileManager.h>
 
 namespace spades {
-	
-	
+
+
 	class VoxelModelRegistrar: public ScriptObjectRegistrar {
 		static VoxelModel *Factory(int w, int h, int d){
 			try{
@@ -37,8 +37,7 @@ namespace spades {
 		static VoxelModel *LoadFactory(const std::string& fn){
 			try{
 				std::unique_ptr<spades::IStream> stream{FileManager::OpenForReading(fn.c_str())};
-				VoxelModel *ret = VoxelModel::LoadKV6(stream.get());
-				return ret;
+				return VoxelModel::LoadKV6(*stream).Unmanage();
 			}catch(const std::exception& ex) {
 				ScriptContextUtils().SetNativeException(ex);
 				return nullptr;
@@ -52,7 +51,7 @@ namespace spades {
 			}
 			return m->GetSolidBitsAt(x, y);
 		}
-		
+
 		static uint32_t GetColor(int x, int y, int z,
 								 VoxelModel *m) {
 			if(x < 0 || y < 0 || x >= m->GetWidth() || y >= m->GetHeight() ||
@@ -62,7 +61,7 @@ namespace spades {
 			}
 			return m->GetColor(x, y, z);
 		}
-		
+
 		static bool IsSolid(int x, int y, int z,
 							VoxelModel *m) {
 			if(x < 0 || y < 0 || x >= m->GetWidth() || y >= m->GetHeight() ||
@@ -90,12 +89,12 @@ namespace spades {
 			}
 			m->SetSolid(x, y, z, col);
 		}
-		
-		
+
+
 	public:
 		VoxelModelRegistrar():
 		ScriptObjectRegistrar("VoxelModel") {}
-		
+
 		virtual void Register(ScriptManager *manager, Phase phase) {
 			asIScriptEngine *eng = manager->GetEngine();
 			int r;
@@ -177,7 +176,7 @@ namespace spades {
 			}
 		}
 	};
-	
+
 	static VoxelModelRegistrar registrar;
-	
+
 }

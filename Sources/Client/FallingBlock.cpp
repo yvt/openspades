@@ -19,8 +19,6 @@
  */
 
 #include "FallingBlock.h"
-#include <Core/Debug.h>
-#include <Core/Exception.h>
 #include "Client.h"
 #include "GameMap.h"
 #include "IModel.h"
@@ -28,6 +26,8 @@
 #include "ParticleSpriteEntity.h"
 #include "SmokeSpriteEntity.h"
 #include "World.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 #include <limits.h>
 
 namespace spades {
@@ -61,7 +61,8 @@ namespace spades {
 				zSum += v.z;
 			}
 
-			GameMap *map = client->GetWorld()->GetMap();
+			const Handle<GameMap> &map = client->GetWorld()->GetMap();
+			SPAssert(map);
 
 			// build voxel model
 			vmodel = new VoxelModel(maxX - minX + 1, maxY - minY + 1, maxZ - minZ + 1);
@@ -88,7 +89,7 @@ namespace spades {
 			matrix = Matrix4::Translate(matTrans);
 
 			// build renderer model
-			model = client->GetRenderer()->CreateModel(vmodel);
+			model = client->GetRenderer().CreateModel(*vmodel).Unmanage();
 
 			time = 0.f;
 		}
@@ -101,8 +102,10 @@ namespace spades {
 		bool FallingBlock::Update(float dt) {
 			time += dt;
 
-			GameMap *map = client->GetWorld()->GetMap();
+			const Handle<GameMap> &map = client->GetWorld()->GetMap();
 			Vector3 orig = matrix.GetOrigin();
+
+			SPAssert(map);
 
 			if (time > 1.f || map->ClipBox(orig.x, orig.y, orig.z)) {
 				// destroy
@@ -119,7 +122,7 @@ namespace spades {
 				Vector3 vmAxis2 = vmat.GetAxis(1);
 				Vector3 vmAxis3 = vmat.GetAxis(2);
 
-				Handle<IImage> img = client->GetRenderer()->RegisterImage("Gfx/White.tga");
+				Handle<IImage> img = client->GetRenderer().RegisterImage("Gfx/White.tga");
 
 				bool usePrecisePhysics = false;
 				float dist =
@@ -139,8 +142,8 @@ namespace spades {
 				client->grenadeVibration += impact / (dist + 5.f);
 				if (client->grenadeVibration > 1.f)
 					client->grenadeVibration = 1.f;
-				
-                auto *getRandom = SampleRandomFloat;
+
+				auto *getRandom = SampleRandomFloat;
 
 				for (int x = 0; x < w; x++) {
 					Vector3 p1 = vmOrigin + vmAxis1 * (float)x;
@@ -166,35 +169,36 @@ namespace spades {
 							Vector3 p3 = p2 + vmAxis3 * (float)z;
 
 							{
-								ParticleSpriteEntity *ent =
-								  new SmokeSpriteEntity(client, col, 70.f);
-								ent->SetTrajectory(p3, (MakeVector3(getRandom() - getRandom(),
-								                                    getRandom() - getRandom(),
-								                                    getRandom() - getRandom())) *
-								                         0.2f,
-								                   1.f, 0.f);
+								auto ent = stmp::make_unique<SmokeSpriteEntity>(*client, col, 70.f);
+								ent->SetTrajectory(
+								  p3,
+								  (MakeVector3(getRandom() - getRandom(), getRandom() - getRandom(),
+								               getRandom() - getRandom())) *
+								    0.2f,
+								  1.f, 0.f);
 								ent->SetRotation(getRandom() * (float)M_PI * 2.f);
 								ent->SetRadius(1.0f, 0.5f);
-								ent->SetBlockHitAction(ParticleSpriteEntity::Ignore);
+								ent->SetBlockHitAction(BlockHitAction::Ignore);
 								ent->SetLifeTime(1.0f + getRandom() * 0.5f, 0.f, 1.0f);
-								client->AddLocalEntity(ent);
+								client->AddLocalEntity(std::move(ent));
 							}
 
 							col.w = 1.f;
 							for (int i = 0; i < 6; i++) {
-								ParticleSpriteEntity *ent =
-								  new ParticleSpriteEntity(client, img, col);
-								ent->SetTrajectory(p3, MakeVector3(getRandom() - getRandom(),
-								                                   getRandom() - getRandom(),
-								                                   getRandom() - getRandom()) *
-								                         13.f,
+								auto ent = stmp::make_unique<ParticleSpriteEntity>(
+								  *client, img.GetPointerOrNull(), col);
+								ent->SetTrajectory(p3,
+								                   MakeVector3(getRandom() - getRandom(),
+								                               getRandom() - getRandom(),
+								                               getRandom() - getRandom()) *
+								                     13.f,
 								                   1.f, .6f);
 								ent->SetRotation(getRandom() * (float)M_PI * 2.f);
 								ent->SetRadius(0.35f + getRandom() * getRandom() * 0.1f);
 								ent->SetLifeTime(2.f, 0.f, 1.f);
 								if (usePrecisePhysics)
-									ent->SetBlockHitAction(ParticleSpriteEntity::BounceWeak);
-								client->AddLocalEntity(ent);
+									ent->SetBlockHitAction(BlockHitAction::BounceWeak);
+								client->AddLocalEntity(std::move(ent));
 							}
 						}
 					}
@@ -218,7 +222,7 @@ namespace spades {
 		void FallingBlock::Render3D() {
 			ModelRenderParam param;
 			param.matrix = matrix;
-			client->GetRenderer()->RenderModel(model, param);
+			client->GetRenderer().RenderModel(*model, param);
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

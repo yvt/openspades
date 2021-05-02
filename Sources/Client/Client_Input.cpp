@@ -27,8 +27,8 @@
 #include "IAudioChunk.h"
 #include "IAudioDevice.h"
 
-#include "ClientUI.h"
 #include "ChatWindow.h"
+#include "ClientUI.h"
 #include "Corpse.h"
 #include "LimboView.h"
 #include "MapView.h"
@@ -155,8 +155,8 @@ namespace spades {
 					SPAssert(world);
 					SPAssert(world->GetLocalPlayer());
 
-					Player *p = world->GetLocalPlayer();
-					if (p->IsAlive()) {
+					Player &p = world->GetLocalPlayer().value();
+					if (p.IsAlive()) {
 						float aimDownState = GetAimDownState();
 						x /= GetAimDownZoomScale();
 						y /= GetAimDownZoomScale();
@@ -194,7 +194,7 @@ namespace spades {
 						if (cg_invertMouseY)
 							y = -y;
 
-						p->Turn(x * 0.003f, y * 0.003f);
+						p.Turn(x * 0.003f, y * 0.003f);
 					}
 					break;
 				}
@@ -329,7 +329,7 @@ namespace spades {
 								if (cameraMode == ClientCameraMode::Free ||
 								    cameraMode == ClientCameraMode::ThirdPersonLocal) {
 									// Start with the local player
-									followedPlayerId = world->GetLocalPlayerIndex();
+									followedPlayerId = world->GetLocalPlayerIndex().value();
 								}
 								if (world->GetLocalPlayer()->IsSpectator() ||
 								    time > lastAliveTime + 1.3f) {
@@ -342,7 +342,7 @@ namespace spades {
 								if (cameraMode == ClientCameraMode::Free ||
 								    cameraMode == ClientCameraMode::ThirdPersonLocal) {
 									// Start with the local player
-									followedPlayerId = world->GetLocalPlayerIndex();
+									followedPlayerId = world->GetLocalPlayerIndex().value();
 								}
 								if (world->GetLocalPlayer()->IsSpectator() ||
 								    time > lastAliveTime + 1.3f) {
@@ -369,9 +369,9 @@ namespace spades {
 				}
 
 				if (world->GetLocalPlayer()) {
-					Player *p = world->GetLocalPlayer();
+					Player &p = world->GetLocalPlayer().value();
 
-					if (p->IsAlive() && p->GetTool() == Player::ToolBlock && down) {
+					if (p.IsAlive() && p.GetTool() == Player::ToolBlock && down) {
 						if (paletteView->KeyInput(name)) {
 							return;
 						}
@@ -379,11 +379,10 @@ namespace spades {
 
 					if (cg_debugCorpse) {
 						if (name == "p" && down) {
-							Corpse *corp;
-							Player *victim = world->GetLocalPlayer();
-							corp = new Corpse(renderer, map, victim);
-							corp->AddImpulse(victim->GetFront() * 32.f);
-							corpses.emplace_back(corp);
+							Player &victim = world->GetLocalPlayer().value();
+							auto corp = stmp::make_unique<Corpse>(*renderer, *map, victim);
+							corp->AddImpulse(victim.GetFront() * 32.f);
+							corpses.emplace_back(std::move(corp));
 
 							if (corpses.size() > corpseHardLimit) {
 								corpses.pop_front();
@@ -433,27 +432,29 @@ namespace spades {
 					} else if (CheckKey(cg_keyAltAttack, name)) {
 						auto lastVal = weapInput.secondary;
 						if (world->GetLocalPlayer()->IsToolWeapon() && (!cg_holdAimDownSight)) {
-							if (down && !world->GetLocalPlayer()->GetWeapon()->IsReloading()) {
+							if (down && !world->GetLocalPlayer()->GetWeapon().IsReloading()) {
 								weapInput.secondary = !weapInput.secondary;
 							}
 						} else {
 							weapInput.secondary = down;
 						}
 						if (world->GetLocalPlayer()->IsToolWeapon() && weapInput.secondary &&
-						    !lastVal && world->GetLocalPlayer()->GetWeapon()->TimeToNextFire() <= 0 &&
-						    !world->GetLocalPlayer()->GetWeapon()->IsReloading() &&
+						    !lastVal &&
+						    world->GetLocalPlayer()->GetWeapon().TimeToNextFire() <= 0 &&
+						    !world->GetLocalPlayer()->GetWeapon().IsReloading() &&
 						    GetSprintState() == 0.0f) {
 							AudioParam params;
 							params.volume = 0.08f;
 							Handle<IAudioChunk> chunk =
 							  audioDevice->RegisterSound("Sounds/Weapons/AimDownSightLocal.opus");
-							audioDevice->PlayLocal(chunk, MakeVector3(.4f, -.3f, .5f), params);
+							audioDevice->PlayLocal(chunk.GetPointerOrNull(),
+							                       MakeVector3(.4f, -.3f, .5f), params);
 						}
 					} else if (CheckKey(cg_keyReloadWeapon, name) && down) {
-						Weapon *w = world->GetLocalPlayer()->GetWeapon();
-						if (w->GetAmmo() < w->GetClipSize() && w->GetStock() > 0 &&
+						Weapon &w = world->GetLocalPlayer()->GetWeapon();
+						if (w.GetAmmo() < w.GetClipSize() && w.GetStock() > 0 &&
 						    (!world->GetLocalPlayer()->IsAwaitingReloadCompletion()) &&
-						    (!w->IsReloading()) &&
+						    (!w.IsReloading()) &&
 						    world->GetLocalPlayer()->GetTool() == Player::ToolWeapon) {
 							if (world->GetLocalPlayer()->IsToolWeapon()) {
 								if (weapInput.secondary) {
@@ -537,23 +538,23 @@ namespace spades {
 						mapView->SwitchScale();
 						Handle<IAudioChunk> chunk =
 						  audioDevice->RegisterSound("Sounds/Misc/SwitchMapZoom.opus");
-						audioDevice->PlayLocal(chunk, AudioParam());
+						audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 					} else if (CheckKey(cg_keyToggleMapZoom, name) && down) {
 						if (largeMapView->ToggleZoom()) {
 							Handle<IAudioChunk> chunk =
 							  audioDevice->RegisterSound("Sounds/Misc/OpenMap.opus");
-							audioDevice->PlayLocal(chunk, AudioParam());
+							audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 						} else {
 							Handle<IAudioChunk> chunk =
 							  audioDevice->RegisterSound("Sounds/Misc/CloseMap.opus");
-							audioDevice->PlayLocal(chunk, AudioParam());
+							audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 						}
 					} else if (CheckKey(cg_keyScoreboard, name)) {
 						scoreboardVisible = down;
 					} else if (CheckKey(cg_keyLimbo, name) && down) {
 						limbo->SetSelectedTeam(world->GetLocalPlayer()->GetTeamId());
 						limbo->SetSelectedWeapon(
-						  world->GetLocalPlayer()->GetWeapon()->GetWeaponType());
+						  world->GetLocalPlayer()->GetWeapon().GetWeaponType());
 						inGameLimbo = true;
 					} else if (CheckKey(cg_keySceneshot, name) && down) {
 						TakeScreenShot(true);
@@ -563,13 +564,14 @@ namespace spades {
 						TakeMapShot();
 					} else if (CheckKey(cg_keyFlashlight, name) && down) {
 						// spectators and dead players should not be able to toggle the flashlight
-						if (world->GetLocalPlayer()->IsSpectator() || !world->GetLocalPlayer()->IsAlive())
+						if (world->GetLocalPlayer()->IsSpectator() ||
+						    !world->GetLocalPlayer()->IsAlive())
 							return;
 						flashlightOn = !flashlightOn;
 						flashlightOnTime = time;
 						Handle<IAudioChunk> chunk =
 						  audioDevice->RegisterSound("Sounds/Player/Flashlight.opus");
-						audioDevice->PlayLocal(chunk, AudioParam());
+						audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
 					} else if (CheckKey(cg_keyAutoFocus, name) && down && (int)cg_manualFocus) {
 						autoFocusEnabled = true;
 					} else if (down) {
@@ -626,5 +628,5 @@ namespace spades {
 				}
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

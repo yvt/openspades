@@ -58,5 +58,5 @@ namespace spades {
 			void SaveImage(const std::map<int, PlayerHit> &hits,
 			               const std::vector<Vector3> &bullets);
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

@@ -45,6 +45,9 @@ namespace spades {
 			CTFGameMode();
 			~CTFGameMode();
 
+			CTFGameMode(const CTFGameMode &) = delete;
+			void operator=(const CTFGameMode &) = delete;
+
 			Team &GetTeam(int t);
 			int GetCaptureLimit() { return captureLimit; }
 			void SetCaptureLimit(int v) { captureLimit = v; }
@@ -59,5 +62,5 @@ namespace spades {
 			 */
 			void ResetTeamScoreAndIntelHoldingStatus();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades
