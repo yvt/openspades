@@ -9,7 +9,10 @@
 #include "Tracer.h"
 #include "Client.h"
 #include "IRenderer.h"
+#include <Core/Settings.h>
 #include <Draw/SWRenderer.h>
+
+DEFINE_SPADES_SETTING(cg_tracerLights, "1");
 
 namespace spades {
 	namespace client {
@@ -81,6 +84,31 @@ namespace spades {
 					r.SetColorAlphaPremultiplied(col * 0.4f);
 					r.AddLongSprite(*image, pos1, pos2, .05f);
 				}
+			}
+
+			// Add subtle dynamic light
+			if (cg_tracerLights) {
+				float startDist = curDistance;
+				float endDist = curDistance + visibleLength;
+
+				startDist = std::max(startDist, 0.f);
+				endDist = std::min(endDist, length);
+				if (startDist >= endDist) {
+					return;
+				}
+
+				Vector3 pos1 = startPos + dir * startDist;
+				Vector3 pos2 = startPos + dir * endDist;
+
+				DynamicLightParam light;
+				light.origin = pos1;
+				light.point2 = pos2;
+				light.color =
+				  MakeVector3(1.f, 0.5f, 0.2f) * 0.1f * ((endDist - startDist) / visibleLength);
+				light.radius = 10.f;
+				light.type = DynamicLightTypeLinear;
+				light.image = nullptr;
+				r.AddLight(light);
 			}
 		}
 
