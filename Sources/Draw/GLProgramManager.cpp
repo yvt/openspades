@@ -173,6 +173,13 @@ namespace spades {
 			} else {
 				finalSource += "#define USE_SSAO 0\n";
 			}
+			if (settings.r_radiosity.operator int() >= 2) {
+				finalSource += "#define USE_RADIOSITY 2\n";
+			} else if (settings.r_radiosity.operator int() >= 1) {
+				finalSource += "#define USE_RADIOSITY 1\n";
+			} else {
+				finalSource += "#define USE_RADIOSITY 0\n";
+			}
 
 			finalSource += text;
 

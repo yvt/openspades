@@ -29,6 +29,7 @@
 #include "GLFXAAFilter.h"
 #include "GLFlatMapRenderer.h"
 #include "GLFogFilter.h"
+#include "GLFogFilter2.h"
 #include "GLFramebufferManager.h"
 #include "GLImage.h"
 #include "GLImageManager.h"
@@ -103,6 +104,9 @@ namespace spades {
 			SPAssert(device);
 
 			SPLog("GLRenderer bootstrap");
+
+			// Report invalid settings via `SPLog`, which might be useful for diagnosis.
+			settings.ValidateSettings();
 
 			renderWidth = renderHeight = -1;
 
@@ -189,7 +193,9 @@ namespace spades {
 				temporalAAFilter.reset(new GLTemporalAAFilter(*this));
 			}
 
-			if (settings.r_fogShadow) {
+			if (settings.ShouldUseFogFilter2()) {
+				fogFilter2.reset(new GLFogFilter2(*this));
+			} else if (settings.r_fogShadow) {
 				GLFogFilter(*this);
 			}
 
@@ -235,6 +241,7 @@ namespace spades {
 			SPLog("GLRender finalizing");
 			SetGameMap(nullptr);
 			temporalAAFilter.reset();
+			fogFilter2.reset();
 			delete autoExposureFilter;
 			autoExposureFilter = NULL;
 			delete lensDustFilter;
@@ -855,15 +862,20 @@ namespace spades {
 					std::swap(view, viewMatrix);
 					projectionViewMatrix = projectionMatrix * viewMatrix;
 
-					if (settings.r_fogShadow && mapShadowRenderer &&
-					    fogColor.GetPoweredLength() > .000001f) {
+					if (settings.r_fogShadow && mapShadowRenderer) {
 						GLProfiler::Context p(*profiler, "Volumetric Fog");
 
 						GLFramebufferManager::BufferHandle handle;
-						GLFogFilter fogfilter(*this);
 
 						handle = fbManager->StartPostProcessing();
-						handle = fogfilter.Filter(handle);
+						if (settings.ShouldUseFogFilter2()) {
+							if (!fogFilter2) {
+								fogFilter2.reset(new GLFogFilter2(*this));
+							}
+							handle = fogFilter2->Filter(handle);
+						} else {
+							handle = GLFogFilter(*this).Filter(handle);
+						}
 						fbManager->CopyToMirrorTexture(handle.GetFramebuffer());
 					} else {
 						fbManager->CopyToMirrorTexture();
@@ -939,11 +951,16 @@ namespace spades {
 					GLProfiler::Context p(*profiler, "Preparation");
 					handle = fbManager->StartPostProcessing();
 				}
-				if (settings.r_fogShadow && mapShadowRenderer &&
-				    fogColor.GetPoweredLength() > .000001f) {
+				if (settings.r_fogShadow && mapShadowRenderer) {
 					GLProfiler::Context p(*profiler, "Volumetric Fog");
-					GLFogFilter fogfilter(*this);
-					handle = fogfilter.Filter(handle);
+					if (settings.ShouldUseFogFilter2()) {
+						if (!fogFilter2) {
+							fogFilter2.reset(new GLFogFilter2(*this));
+						}
+						handle = fogFilter2->Filter(handle);
+					} else {
+						handle = GLFogFilter(*this).Filter(handle);
+					}
 				}
 				device->BindFramebuffer(IGLDevice::Framebuffer, handle.GetFramebuffer());
 
@@ -1071,6 +1088,12 @@ namespace spades {
 					tint *= 1.f / std::min(std::min(tint.x, tint.y), tint.z);
 
 					float fogLuminance = (fogColor.x + fogColor.y + fogColor.z) * (1.0f / 3.0f);
+
+					if (settings.ShouldUseFogFilter2()) {
+						// `GLFogFilter2` adds a GI factor, so the fog receives some light
+						// even if the fog color is set to dark.
+						fogLuminance = fogLuminance * 0.9 + 0.2;
+					}
 
 					float exposure = powf(2.f, (float)settings.r_exposureValue * 0.5f);
 					handle =
@@ -1344,6 +1367,8 @@ namespace spades {
 			Prepare2DRendering(true);
 
 			profiler->EndFrame();
+
+			++frameNumber;
 		}
 
 		void GLRenderer::Flip() {

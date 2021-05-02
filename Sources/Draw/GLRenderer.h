@@ -56,6 +56,7 @@ namespace spades {
 		class GLSoftLitSpriteRenderer;
 		class GLAutoExposureFilter;
 		class GLTemporalAAFilter;
+		class GLFogFilter2;
 		class GLProfiler;
 
 		class GLRenderer : public client::IRenderer, public client::IGameMapListener {
@@ -109,6 +110,7 @@ namespace spades {
 			GLLensDustFilter *lensDustFilter;
 			GLAutoExposureFilter *autoExposureFilter;
 			std::unique_ptr<GLTemporalAAFilter> temporalAAFilter;
+			std::unique_ptr<GLFogFilter2> fogFilter2;
 
 			// used when r_ssao = 1. only valid while rendering objects
 			IGLDevice::UInteger ssaoBufferTexture;
@@ -131,6 +133,7 @@ namespace spades {
 			bool legacyColorPremultiply;
 
 			unsigned int lastTime;
+			std::uint32_t frameNumber = 0;
 
 			bool duringSceneRendering;
 
@@ -233,6 +236,8 @@ namespace spades {
 			const Matrix4 &GetProjectionMatrix() const { return projectionMatrix; }
 			const Matrix4 &GetProjectionViewMatrix() const { return projectionViewMatrix; }
 			const Matrix4 &GetViewMatrix() const { return viewMatrix; }
+
+			std::uint32_t GetFrameNumber() const { return frameNumber; }
 
 			bool IsRenderingMirror() const { return renderingMirror; }
 

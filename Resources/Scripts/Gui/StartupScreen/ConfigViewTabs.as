@@ -192,6 +192,20 @@ namespace spades {
                     _Tr("StartupScreen",
                         "Particles|" "Low:Artifact occurs when a particle intersects other objects.|" "Medium:Particle intersects objects smoothly.|" "High:Particle intersects objects smoothly, and some objects casts " "their shadow to particles.")));
 
+                cfg.AddRow(StartupScreenConfigSelectItemEditor(
+                    ui, StartupScreenConfig(ui, "r_fogShadow"), "0|1|2",
+                    _Tr("StartupScreen", "Volumetric Fog") + "|" +
+                    _Tr("StartupScreen", "None") + ":" +
+                    _Tr("StartupScreen", "Disables the volumetric fog effect.") + "|" +
+                    _Tr("StartupScreen", "Level 1") + ":"  +
+                    _Tr("StartupScreen",
+                        "Applies local illumination to the fog.") + "|" +
+                    _Tr("StartupScreen", "Level 2") + ":"  +
+                    _Tr("StartupScreen",
+                        "Applies both local illumination and global illumination to the fog.") + "\n\n" +
+                    _Tr("StartupScreen",
+                        "Warning: {0} must be enabled.", _Tr("StartupScreen", "Global Illumination"))));
+
                 {
                     StartupScreenComplexConfig cplx;
                     // r_mapSoftShadow is currently no-op
@@ -205,22 +219,17 @@ namespace spades {
                         _Tr("StartupScreen", "Shadows"),
                         _Tr("StartupScreen", "Non-static object casts a shadow.")));
                     cplx.AddEditor(StartupScreenConfigCheckItemEditor(
-                        ui, StartupScreenConfig(ui, "r_fogShadow"), "0", "1",
-                        _Tr("StartupScreen", "Volumetric Fog"),
-                        _Tr("StartupScreen",
-                            "Simulates shadow being casted to the fog particles using a " "super highly computationally demanding algorithm. ")));
-                    cplx.AddEditor(StartupScreenConfigCheckItemEditor(
                         ui, StartupScreenConfig(ui, "r_physicalLighting"), "0", "1",
                         _Tr("StartupScreen", "Physically Based Lighting"),
                         _Tr("StartupScreen",
                             "Uses more accurate approximation techniques to decide the brightness of objects.")));
 
                     cplx.AddPreset(
-                        StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "1|0|0|0"));
+                        StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "1|0|0"));
                     cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"),
-                                                                    "1|1|0|0"));
+                                                                    "1|1|0"));
                     cplx.AddPreset(
-                        StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|0|1"));
+                        StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|1"));
 
                     cfg.AddRow(StartupScreenConfigComplexItemEditor(
                         ui, cplx, _Tr("StartupScreen", "Direct Lights"),

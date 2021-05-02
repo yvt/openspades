@@ -35,6 +35,10 @@ vec3 DecodeRadiosityValue(vec3 val){
 	// reverse bias
 	val *= 1023. / 1022.;
 	val = (val * 2.) - 1.;
+#if USE_RADIOSITY == 1
+	// the low-precision radiosity texture uses a non-linear encoding
+	val *= val * sign(val);
+#endif
 	return val;
 }
 

@@ -95,11 +95,7 @@ namespace spades {
 			}
 
 			if (settings.r_radiosity) {
-				if ((int)settings.r_radiosity >= 2) {
-					shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosity.fs"));
-				} else {
-					shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosityLow.fs"));
-				}
+				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosity.fs"));
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosity.vs"));
 			} else {
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosityNull.fs"));
