@@ -51,6 +51,7 @@ SPADES_SETTING(cg_ragdoll);
 SPADES_SETTING(cg_ejectBrass);
 DEFINE_SPADES_SETTING(cg_animations, "1");
 SPADES_SETTING(cg_shake);
+SPADES_SETTING(r_hdr);
 DEFINE_SPADES_SETTING(cg_environmentalAudio, "1");
 DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
@@ -662,18 +663,18 @@ namespace spades {
 
 			// no flashlight if spectating other players while dead
 			if (client.flashlightOn && world->GetLocalPlayer()->IsAlive()) {
-				float brightness;
-				brightness = client.time - client.flashlightOnTime;
+				float brightness = client.time - client.flashlightOnTime;
 				brightness = 1.f - expf(-brightness * 5.f);
+				brightness *= r_hdr ? 3.0f : 1.5f;
 
 				// add flash light
 				DynamicLightParam light;
-				Handle<IImage> image = renderer.RegisterImage("Gfx/Spotlight.png");
+				Handle<IImage> image = renderer.RegisterImage("Gfx/Spotlight.jpg");
 				light.origin = (eyeMatrix * MakeVector3(0, -0.05f, -0.1f)).GetXYZ();
-				light.color = MakeVector3(1, .7f, .5f) * 1.5f * brightness;
-				light.radius = 40.f;
+				light.color = MakeVector3(1.0f, 0.7f, 0.5f) * brightness;
+				light.radius = 60.f;
 				light.type = DynamicLightTypeSpotlight;
-				light.spotAngle = 30.f * M_PI / 180.f;
+				light.spotAngle = 90.f * M_PI / 180.f;
 				light.spotAxis = GetFlashlightAxes();
 				light.image = image.GetPointerOrNull();
 				renderer.AddLight(light);
