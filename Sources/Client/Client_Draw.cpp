@@ -108,6 +108,7 @@ namespace spades {
 		void Client::TakeScreenShot(bool sceneOnly) {
 			SceneDefinition sceneDef = CreateSceneDefinition();
 			lastSceneDef = sceneDef;
+			UpdateMatrices();
 
 			// render scene
 			flashDlights = flashDlightsOld;

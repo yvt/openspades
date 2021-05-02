@@ -189,6 +189,8 @@ namespace spades {
 
 			// view
 			SceneDefinition lastSceneDef;
+			/** Derived from `lastSceneDef`. */
+			Matrix4 lastViewProjectionScreenMatrix;
 			float localFireVibrationTime;
 			float grenadeVibration;
 			float grenadeVibrationSlow;
@@ -331,7 +333,12 @@ namespace spades {
 			int nextScreenShotIndex;
 			int nextMapShotIndex;
 
+			/** Project the specified world-space position to a screen space. */
 			Vector3 Project(Vector3);
+
+			/** Recalculate `lastViewProjectionScreenMatrix` based on the current value of
+			 * `lastSceneDef`. */
+			void UpdateMatrices();
 
 			void DrawSplash();
 			void DrawStartupScreen();

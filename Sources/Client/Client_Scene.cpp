@@ -707,26 +707,17 @@ namespace spades {
 			renderer->EndScene();
 		}
 
+		void Client::UpdateMatrices() {
+			lastViewProjectionScreenMatrix =
+			  (Matrix4::Scale(renderer->ScreenWidth() * 0.5f, renderer->ScreenHeight() * -0.5f,
+			                  1.0f) *
+			   Matrix4::Translate(1.0f, -1.0f, 0.0f)) *
+			  lastSceneDef.ToOpenGLProjectionMatrix() * lastSceneDef.ToViewMatrix();
+		}
+
 		Vector3 Client::Project(spades::Vector3 v) {
-			v -= lastSceneDef.viewOrigin;
-
-			// transform to NDC
-			Vector3 v2;
-			v2.x = Vector3::Dot(v, lastSceneDef.viewAxis[0]);
-			v2.y = Vector3::Dot(v, lastSceneDef.viewAxis[1]);
-			v2.z = Vector3::Dot(v, lastSceneDef.viewAxis[2]);
-
-			float tanX = tanf(lastSceneDef.fovX * .5f);
-			float tanY = tanf(lastSceneDef.fovY * .5f);
-
-			v2.x /= tanX * v2.z;
-			v2.y /= tanY * v2.z;
-
-			// transform to IRenderer 2D coord
-			v2.x = (v2.x + 1.f) / 2.f * renderer->ScreenWidth();
-			v2.y = (-v2.y + 1.f) / 2.f * renderer->ScreenHeight();
-
-			return v2;
+			Vector4 screenHomV = lastViewProjectionScreenMatrix * v;
+			return screenHomV.GetXYZ() / screenHomV.w;
 		}
 	} // namespace client
 } // namespace spades
