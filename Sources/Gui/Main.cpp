@@ -604,9 +604,14 @@ int main(int argc, char **argv) {
 		}
 		pumpEvents();
 
+		// make sure the user sees the "pre-release version" text
+		bool forceStartupWindow =
+		  spades::PackageUpdateManager::GetInstance().GetCurrentVersionInfo().build < 4;
+
 		// everything is now ready!
 		if (!g_autoconnect) {
-			if (!((int)cl_showStartupWindow != 0 || splashWindow->IsStartupScreenRequested())) {
+			if (!((int)cl_showStartupWindow != 0 || splashWindow->IsStartupScreenRequested() ||
+			      forceStartupWindow)) {
 				splashWindow.reset();
 
 				SPLog("Starting main screen");

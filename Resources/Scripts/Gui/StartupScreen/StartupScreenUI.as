@@ -33,6 +33,7 @@ namespace spades {
         StartupScreenMainMenu @mainMenu;
 
         bool shouldExit = false;
+        bool isPrereleaseVersion;
 
         StartupScreenUI(Renderer @renderer, AudioDevice @audioDevice, FontManager @fontManager,
                         StartupScreenHelper @helper) {
@@ -49,6 +50,10 @@ namespace spades {
         }
 
         private void Init() {
+            // As per <https://github.com/yvt/openspades/wiki/PackageInfo.json/22830918e190c142a427e407caf8cfc47ae367cc#standard-scheme-for-offical-releases>
+            PackageUpdateManager@ updateManager = this.helper.PackageUpdateManager;
+            isPrereleaseVersion = updateManager.CurrentVersionInfo.Build < 4;
+
             @mainMenu = StartupScreenMainMenu(this);
             mainMenu.Bounds = manager.RootElement.Bounds;
             manager.RootElement.AddChild(mainMenu);
@@ -96,7 +101,19 @@ namespace spades {
             renderer.ColorNP = Vector4(1.f, 1.f, 1.f, 1.f);
             renderer.DrawImage(img, AABB2(10.f, 10.f, img.Width, img.Height));
 
-            manager.RunFrame(dt);
+			if (isPrereleaseVersion) {
+				Font @font = manager.RootElement.Font;
+				string text = "Pre-release Version";
+                Vector2 position(225.0f, 34.0f);
+                font.DrawShadow(text, position,
+                                1.0, Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+                                Vector4(1.0f, 0.5f, 0.5f, 1.0f));
+                font.DrawShadow(text, position,
+                                1.0, Vector4(1.0f, 0.7f, 0.7f, 1.0f),
+                                Vector4(1.0f, 0.5f, 0.5f, 1.0f));
+			}
+
+			manager.RunFrame(dt);
             manager.Render();
         }
 
