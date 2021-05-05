@@ -565,6 +565,10 @@ namespace spades {
             return slider;
         }
 
+        ConfigSlider @AddVolumeSlider(string caption, string configName) {
+            return AddSliderField(caption, configName, 0, 1, 0.01, ConfigNumberFormatter(0, "%", "", 100));
+        }
+
         void AddControl(string caption, string configName, bool enabled = true) {
             spades::ui::UIElement @container = CreateItem();
 
@@ -654,8 +658,7 @@ namespace spades {
                                     array<int> = {2, 1, 0});
 
             layouter.AddHeading(_Tr("Preferences", "Feedbacks"));
-            layouter.AddSliderField(_Tr("Preferences", "Chat Notify Sounds"), "cg_chatBeep",
-                                    0, 1, 0.01, ConfigNumberFormatter(0, "%", "", 100));
+            layouter.AddVolumeSlider(_Tr("Preferences", "Chat Notify Sounds"), "cg_chatBeep");
             layouter.AddToggleField(_Tr("Preferences", "Hit Indicator"), "cg_hitIndicator");
             layouter.AddToggleField(_Tr("Preferences", "Show Alerts"), "cg_alerts");
 
