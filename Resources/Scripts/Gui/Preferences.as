@@ -214,6 +214,7 @@ namespace spades {
         int digits;
         string suffix;
         string prefix;
+        float prescale = 1;
         ConfigNumberFormatter(int digits, string suffix) {
             this.digits = digits;
             this.suffix = suffix;
@@ -224,10 +225,18 @@ namespace spades {
             this.suffix = suffix;
             this.prefix = prefix;
         }
+        ConfigNumberFormatter(int digits, string suffix, string prefix, float prescale) {
+            this.digits = digits;
+            this.suffix = suffix;
+            this.prefix = prefix;
+            this.prescale = prescale;
+        }
         private string FormatInternal(float value) {
             if (value < 0.f) {
                 return "-" + Format(-value);
             }
+
+            value *= prescale;
 
             // do rounding
             float rounding = 0.5f;
@@ -646,7 +655,7 @@ namespace spades {
 
             layouter.AddHeading(_Tr("Preferences", "Feedbacks"));
             layouter.AddSliderField(_Tr("Preferences", "Chat Notify Sounds"), "cg_chatBeep",
-                                    0, 100, 1, ConfigNumberFormatter(0, "%"));
+                                    0, 1, 0.01, ConfigNumberFormatter(0, "%", "", 100));
             layouter.AddToggleField(_Tr("Preferences", "Hit Indicator"), "cg_hitIndicator");
             layouter.AddToggleField(_Tr("Preferences", "Show Alerts"), "cg_alerts");
 
