@@ -55,7 +55,7 @@
 
 #include "NetClient.h"
 
-DEFINE_SPADES_SETTING(cg_chatBeep, "100");
+DEFINE_SPADES_SETTING(cg_chatBeep, "1");
 
 DEFINE_SPADES_SETTING(cg_serverAlert, "1");
 
@@ -670,7 +670,7 @@ namespace spades {
 			if (!IsMuted()) {
 				Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Chat.opus");
 				AudioParam params;
-				params.volume = (int)cg_chatBeep / 100.f;
+				params.volume = (float)cg_chatBeep;
 				audioDevice->PlayLocal(chunk.GetPointerOrNull(), params);
 			}
 		}
