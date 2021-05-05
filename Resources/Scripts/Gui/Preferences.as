@@ -645,7 +645,8 @@ namespace spades {
                                     array<int> = {2, 1, 0});
 
             layouter.AddHeading(_Tr("Preferences", "Feedbacks"));
-            layouter.AddToggleField(_Tr("Preferences", "Chat Notify Sounds"), "cg_chatBeep");
+            layouter.AddSliderField(_Tr("Preferences", "Chat Notify Sounds"), "cg_chatBeep",
+                                    0, 100, 1, ConfigNumberFormatter(0, "%"));
             layouter.AddToggleField(_Tr("Preferences", "Hit Indicator"), "cg_hitIndicator");
             layouter.AddToggleField(_Tr("Preferences", "Show Alerts"), "cg_alerts");
 

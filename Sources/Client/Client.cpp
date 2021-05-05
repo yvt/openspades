@@ -55,7 +55,7 @@
 
 #include "NetClient.h"
 
-DEFINE_SPADES_SETTING(cg_chatBeep, "1");
+DEFINE_SPADES_SETTING(cg_chatBeep, "100");
 
 DEFINE_SPADES_SETTING(cg_serverAlert, "1");
 
@@ -667,9 +667,11 @@ namespace spades {
 				NetLog("[Team] %s (%s): %s", p.GetName().c_str(),
 				       world->GetTeam(p.GetTeamId()).name.c_str(), msg.c_str());
 
-			if ((!IsMuted()) && (int)cg_chatBeep) {
+			if (!IsMuted()) {
 				Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Chat.opus");
-				audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
+				AudioParam params;
+				params.volume = (int)cg_chatBeep / 100.f;
+				audioDevice->PlayLocal(chunk.GetPointerOrNull(), params);
 			}
 		}
 
