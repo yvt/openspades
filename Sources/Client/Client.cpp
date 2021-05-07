@@ -56,7 +56,7 @@
 #include "NetClient.h"
 
 DEFINE_SPADES_SETTING(cg_chatBeep, "1");
-DEFINE_SPADES_SETTING(cg_alerts_volume, "1");
+DEFINE_SPADES_SETTING(cg_alertSounds, "1");
 
 DEFINE_SPADES_SETTING(cg_serverAlert, "1");
 
@@ -539,7 +539,7 @@ namespace spades {
 		void Client::PlayAlertSound() {
 			Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Alert.opus");
 			AudioParam params;
-			params.volume = (float)cg_alerts_volume;
+			params.volume = (float)cg_alertSounds;
 			audioDevice->PlayLocal(chunk.GetPointerOrNull(), params);
 		}
 
