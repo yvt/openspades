@@ -82,7 +82,7 @@ DEFINE_SPADES_SETTING(cg_keySaveMap, "8");
 
 DEFINE_SPADES_SETTING(cg_switchToolByWheel, "1");
 DEFINE_SPADES_SETTING(cg_debugCorpse, "0");
-DEFINE_SPADES_SETTING(cg_alerts, "1");
+DEFINE_SPADES_SETTING(cg_alerts_show, "1");
 
 SPADES_SETTING(cg_manualFocus);
 DEFINE_SPADES_SETTING(cg_keyAutoFocus, "MiddleMouseButton");
@@ -481,7 +481,7 @@ namespace spades {
 							if (world->GetLocalPlayer()->IsToolSelectable(Player::ToolBlock)) {
 								SetSelectedTool(Player::ToolBlock);
 							} else {
-								if (cg_alerts)
+								if (cg_alerts_show)
 									ShowAlert(_Tr("Client", "Out of Blocks"), AlertType::Error);
 								else
 									PlayAlertSound();
@@ -493,7 +493,7 @@ namespace spades {
 							if (world->GetLocalPlayer()->IsToolSelectable(Player::ToolWeapon)) {
 								SetSelectedTool(Player::ToolWeapon);
 							} else {
-								if (cg_alerts)
+								if (cg_alerts_show)
 									ShowAlert(_Tr("Client", "Out of Ammo"), AlertType::Error);
 								else
 									PlayAlertSound();
@@ -505,7 +505,7 @@ namespace spades {
 							if (world->GetLocalPlayer()->IsToolSelectable(Player::ToolGrenade)) {
 								SetSelectedTool(Player::ToolGrenade);
 							} else {
-								if (cg_alerts)
+								if (cg_alerts_show)
 									ShowAlert(_Tr("Client", "Out of Grenades"), AlertType::Error);
 								else
 									PlayAlertSound();

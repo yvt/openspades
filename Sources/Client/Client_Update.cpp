@@ -53,7 +53,7 @@ SPADES_SETTING(cg_blood);
 DEFINE_SPADES_SETTING(cg_ejectBrass, "1");
 DEFINE_SPADES_SETTING(cg_hitFeedbackSoundGain, "0.2");
 
-SPADES_SETTING(cg_alerts);
+SPADES_SETTING(cg_alerts_show);
 SPADES_SETTING(cg_centerMessage);
 
 SPADES_SETTING(cg_shake);
@@ -1276,7 +1276,7 @@ namespace spades {
 		void Client::LocalPlayerBuildError(BuildFailureReason reason) {
 			SPADES_MARK_FUNCTION();
 
-			if (!cg_alerts) {
+			if (!cg_alerts_show) {
 				PlayAlertSound();
 				return;
 			}

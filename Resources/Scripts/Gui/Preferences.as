@@ -660,7 +660,7 @@ namespace spades {
             layouter.AddHeading(_Tr("Preferences", "Feedbacks"));
             layouter.AddVolumeSlider(_Tr("Preferences", "Chat Notify Sounds"), "cg_chatBeep");
             layouter.AddToggleField(_Tr("Preferences", "Hit Indicator"), "cg_hitIndicator");
-            layouter.AddToggleField(_Tr("Preferences", "Show Alerts"), "cg_alerts");
+            layouter.AddToggleField(_Tr("Preferences", "Show Alerts"), "cg_alerts_show");
 
             layouter.AddHeading(_Tr("Preferences", "AoS 0.75/0.76 Compatibility"));
             layouter.AddToggleField(_Tr("Preferences", "Allow Unicode"), "cg_unicode");
