@@ -56,6 +56,7 @@
 #include "NetClient.h"
 
 DEFINE_SPADES_SETTING(cg_chatBeep, "1");
+DEFINE_SPADES_SETTING(cg_alerts_volume, "1");
 
 DEFINE_SPADES_SETTING(cg_serverAlert, "1");
 
@@ -537,7 +538,9 @@ namespace spades {
 
 		void Client::PlayAlertSound() {
 			Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Alert.opus");
-			audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
+			AudioParam params;
+			params.volume = (float)cg_alerts_volume;
+			audioDevice->PlayLocal(chunk.GetPointerOrNull(), params);
 		}
 
 		/** Records chat message/game events to the log file. */
