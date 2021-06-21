@@ -22,7 +22,10 @@
 
 attribute vec2 positionAttribute;
 
+uniform mat4 viewProjectionMatrixInv;
+
 varying vec2 texCoord;
+varying vec4 viewcentricWorldPositionPartial;
 
 void main() {
 	vec2 pos = positionAttribute;
@@ -32,5 +35,6 @@ void main() {
 	gl_Position = vec4(scrPos, 0.5, 1.);
 
 	texCoord = pos;
+    viewcentricWorldPositionPartial = viewProjectionMatrixInv * vec4(pos, 0.0, 1.0);
 }
 
