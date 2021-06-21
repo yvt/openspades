@@ -25,8 +25,11 @@ uniform sampler2D previousTexture;
 uniform sampler2D processedInputTexture;
 uniform vec2 inverseVP;
 uniform mat4 reprojectionMatrix;
+uniform mat4 viewProjectionMatrixInv;
+uniform float fogDistance;
 
 varying vec2 texCoord;
+varying vec4 viewcentricWorldPositionPartial;
 /* UE4-style temporal AA. Implementation is based on my ShaderToy submission */
 
 // YUV-RGB conversion routine from Hyper3D
@@ -82,6 +85,19 @@ void main() {
 	vec4 lastColor = texture2D(previousTexture, reprojectedTexCoord.xy);
 
     // ------------------------------------------------------------------------
+    // Calculate the approximate fog factor
+    //
+    // It's used to prevent barely-visible objects from being blurred away.
+    vec4 viewcentricWorldPosition =
+      viewcentricWorldPositionPartial + viewProjectionMatrixInv * vec4(0.0, 0.0, inputZ, 0.0);
+    viewcentricWorldPosition.xyz /= viewcentricWorldPosition.w;
+
+    float voxlapDistanceSq = dot(viewcentricWorldPosition.xy, viewcentricWorldPosition.xy);
+    voxlapDistanceSq = min(voxlapDistanceSq, fogDistance * fogDistance);
+
+    float fogFactor = min(voxlapDistanceSq / (fogDistance * fogDistance), 1.0);
+
+    // ------------------------------------------------------------------------
     vec3 antialiased = lastColor.xyz;
     float mixRate = min(lastColor.w, 0.5);
 
@@ -121,11 +137,23 @@ void main() {
 
     mixRate = 1.0 / (1.0 / mixRate + 1.0);
 
-    vec3 diff = abs(antialiased - preclamping);
-    float clampAmount = max(max(diff.x, diff.y), diff.z);
+    // Increase the mix rate if the prediction is unreliable
+    {
+        vec3 diff = abs(antialiased - preclamping);
+        float clampAmount = max(max(diff.x, diff.y), diff.z);
+        mixRate += clampAmount * 8.0;
+    }
 
-    mixRate += clampAmount * 8.0;
-    mixRate = clamp(mixRate, 0.05, 0.5);
+	// Increase the mix rate if the fog factor is high
+    // (Prevents barely-visible objects from being blurred away)
+	{
+		float contrast = 1.0 - fogFactor;
+		const float contrastThreshold = 0.1;
+		const float contrastFactor = 2.0;
+		mixRate += max(0.0, contrastThreshold - contrast) / contrastThreshold * contrastFactor;
+	}
+
+	mixRate = clamp(mixRate, 0.05, 0.5);
 
     antialiased = decodePalYuv(antialiased);
 

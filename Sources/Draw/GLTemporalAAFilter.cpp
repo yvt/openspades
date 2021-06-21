@@ -203,6 +203,8 @@ namespace spades {
 			static GLProgramUniform processedInputTexture("processedInputTexture");
 			static GLProgramUniform reprojectionMatrix("reprojectionMatrix");
 			static GLProgramUniform inverseVP("inverseVP");
+			static GLProgramUniform viewProjectionMatrixInv("viewProjectionMatrixInv");
+			static GLProgramUniform fogDistance("fogDistance");
 
 			dev->Enable(IGLDevice::Blend, false);
 
@@ -213,6 +215,8 @@ namespace spades {
 			processedInputTexture(program);
 			reprojectionMatrix(program);
 			inverseVP(program);
+			viewProjectionMatrixInv(program);
+			fogDistance(program);
 
 			program->Use();
 
@@ -222,6 +226,8 @@ namespace spades {
 			depthTexture.SetValue(3);
 			reprojectionMatrix.SetValue(diffMatrix);
 			inverseVP.SetValue(1.f / input.GetWidth(), 1.f / input.GetHeight());
+			viewProjectionMatrixInv.SetValue(inverseNewMatrix);
+			fogDistance.SetValue(128.f);
 
 			// Perform temporal AA
 			// TODO: pre/post tone mapping to prevent aliasing near overbright area
