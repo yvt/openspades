@@ -148,7 +148,7 @@ namespace spades {
 				return;
 			// if there's invalid block around this block,
 			// rebuild tree
-			std::deque<CellPos> queue{1024};
+			std::deque<CellPos> queue;
 			queue.push_back(CellPos(x, y, z));
 			while (!queue.empty()) {
 				CellPos p = queue.front();
@@ -206,7 +206,7 @@ namespace spades {
 
 			// solid, but unlinked cells
 			std::vector<CellPos> unlinkedCells;
-			std::deque<CellPos> queue{1024};
+			std::deque<CellPos> queue;
 
 			// unlink children
 			for (size_t i = 0; i < cells.size(); i++) {
