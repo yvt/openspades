@@ -46,6 +46,7 @@ varying vec2 ambientOcclusionCoord;
 varying vec4 color;
 varying vec3 emissionColor;
 varying vec3 fogDensity;
+varying float sunlightShading;
 //varying vec2 detailCoord;
 
 void PrepareForShadow(vec3 worldOrigin, vec3 normal);
@@ -85,7 +86,7 @@ void main() {
 	normal = normalize(normal);
 	float sunlight = dot(normal, sunLightDirection);
 	sunlight = max(sunlight, 0.);
-	color.w *= sunlight;
+	sunlightShading = sunlight;
 
 	// ambient occlusion
 	float aoID = positionAttribute.w / 256.;

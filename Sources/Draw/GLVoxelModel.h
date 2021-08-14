@@ -41,7 +41,7 @@ namespace spades {
 
 				// color
 				uint8_t red, green, blue;
-				uint8_t diffuse;
+				uint8_t material;
 
 				// normal
 				uint8_t nx, ny, nz;
