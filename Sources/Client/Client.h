@@ -65,6 +65,7 @@ namespace spades {
 		class PaletteView;
 		class TCProgressView;
 		class ClientPlayer;
+		class BloodMarks;
 
 		class ClientUI;
 
@@ -329,6 +330,8 @@ namespace spades {
 			void RemoveInvisibleCorpses();
 			void RemoveAllLocalEntities();
 			void RemoveCorpseForPlayer(int playerId);
+
+			std::unique_ptr<BloodMarks> bloodMarks;
 
 			int nextScreenShotIndex;
 			int nextMapShotIndex;

@@ -44,6 +44,7 @@
 #include "ScoreboardView.h"
 #include "TCProgressView.h"
 
+#include "BloodMarks.h"
 #include "Corpse.h"
 #include "ILocalEntity.h"
 #include "SmokeSpriteEntity.h"
@@ -129,6 +130,7 @@ namespace spades {
 			scriptedUI =
 			  Handle<ClientUI>::New(renderer.GetPointerOrNull(), audioDev.GetPointerOrNull(),
 			                        fontManager.GetPointerOrNull(), this);
+			bloodMarks = stmp::make_unique<BloodMarks>(*this);
 
 			renderer->SetGameMap(nullptr);
 		}
