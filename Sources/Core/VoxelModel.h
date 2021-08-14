@@ -154,7 +154,13 @@ namespace spades {
 			GetSolidBitsAtUnchecked(x, y) |= mask;
 		}
 
-		/** Get the origin point. */
+		/**
+		 * Get the origin point.
+		 *
+		 * The model is translated by this vector. In contrary to what the name implies, this
+		 * does not represent an origin point (i.e., it does not translate the model by the
+		 * negation of this vector).
+		 */
 		Vector3 GetOrigin() const { return origin; }
 
 		/** Set the origin point. */
