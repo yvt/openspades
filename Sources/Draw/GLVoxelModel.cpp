@@ -155,7 +155,7 @@ namespace spades {
 			v.red = (uint8_t)(color);
 			v.green = (uint8_t)(color >> 8);
 			v.blue = (uint8_t)(color >> 16);
-			v.diffuse = 255;
+			v.material = (uint8_t)(color >> 24);
 			v.nx = nx;
 			v.ny = ny;
 			v.nz = nz;
@@ -236,7 +236,6 @@ namespace spades {
 							continue;
 
 						uint32_t color = model->GetColor(x, y, z);
-						color |= 0xff000000UL;
 
 						if (!model->IsSolid(x - 1, y, z))
 							EmitFace(model, x, y, z, -1, 0, 0, color);

@@ -25,6 +25,7 @@ varying vec3 emissionColor;
 varying vec2 ambientOcclusionCoord;
 //varying vec2 detailCoord;
 varying vec3 fogDensity;
+varying float sunlightShading;
 
 uniform sampler2D ambientOcclusionTexture;
 uniform sampler2D detailTexture;
@@ -38,7 +39,7 @@ void main() {
 	// color is linearized
 	gl_FragColor = color;
 
-	vec3 shading = vec3(color.w);
+	vec3 shading = vec3(sunlightShading);
 	
 	// FIXME: prepare for shadow?
 	shading *= EvaluateSunLight();
