@@ -788,10 +788,12 @@ namespace spades {
 
 			horzModifier *= sqrt(1 - pow(o.z, 4));
 
-			o += GetRight() * rec.x * triWave * horzModifier;
-			o += GetUp() * std::min(rec.y, std::max(0.f, upLimit)) * vertModifier;
-			o = o.Normalize();
-			SetOrientation(o);
+			if (this->IsLocalPlayer()) {
+				o += GetRight() * rec.x * triWave * horzModifier;
+				o += GetUp() * std::min(rec.y, std::max(0.f, upLimit)) * vertModifier;
+				o = o.Normalize();
+				SetOrientation(o);
+			}
 
 			reloadingServerSide = false;
 		}
