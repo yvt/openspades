@@ -69,6 +69,7 @@ SPADES_SETTING(cg_keyAltAttack);
 SPADES_SETTING(cg_keyCrouch);
 DEFINE_SPADES_SETTING(cg_screenshotFormat, "jpeg");
 DEFINE_SPADES_SETTING(cg_stats, "0");
+DEFINE_SPADES_SETTING(cg_statsColor, "0");
 DEFINE_SPADES_SETTING(cg_hideHud, "0");
 DEFINE_SPADES_SETTING(cg_playerNames, "2");
 DEFINE_SPADES_SETTING(cg_playerNameX, "0");
@@ -907,24 +908,33 @@ namespace spades {
 
 			char buf[256];
 			std::string str;
+			std::string strFps;
+			std::string strUps;
+			std::string strPing;
+			std::string strUpDown;
 
 			{
 				auto fps = fpsCounter.GetFps();
-				if (fps == 0.0)
+				if (fps == 0.0){
 					str += "--.-- fps";
-				else {
+				    strFps += "--.-- fps";
+					
+				}else {
 					sprintf(buf, "%.02f fps", fps);
 					str += buf;
+					strFps += buf;
 				}
 			}
 			{
 				// Display world updates per second
 				auto ups = upsCounter.GetFps();
-				if (ups == 0.0)
+				if (ups == 0.0){
 					str += ", --.-- ups";
-				else {
+				    strUps += ", --.-- ups";
+				}else {
 					sprintf(buf, ", %.02f ups", ups);
 					str += buf;
+					strUps += buf;
 				}
 			}
 
@@ -935,23 +945,111 @@ namespace spades {
 				sprintf(buf, ", ping: %dms, up/down: %.02f/%.02fkbps", ping, upbps / 1000.0,
 				        downbps / 1000.0);
 				str += buf;
+				
+				sprintf(buf, ", ping: %dms, ", ping);
+				
+				
+				strPing += buf;
+				
+				sprintf(buf, "up/down: %.02f/%.02fkbps", upbps / 1000.0,
+				        downbps / 1000.0);
+				
+				strUpDown += buf;
+				
+				
 			}
 
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
-			IFont &font = fontManager->GetGuiFont();
+			IFont *font = fontManager->GetGuiFont();
 			float margin = 5.f;
 
-			auto size = font.Measure(str);
+			IRenderer *r = renderer;
+			auto size = font->Measure(str);
 			size += Vector2(margin * 2.f, margin * 2.f);
 
 			auto pos = (Vector2(scrWidth, scrHeight) - size) * Vector2(0.5f, 1.f);
+			
+			float a = 0.f;
+			float a2 = 0.f;
+			
+			if((int)cg_statsColor == 0){
+			a = 1.f;
+			a2 = 0.5f;
+				
+			}
 
-			renderer->SetColorAlphaPremultiplied(Vector4(0.f, 0.f, 0.f, 0.5f));
-			renderer->DrawImage(nullptr, AABB2(pos.x, pos.y, size.x, size.y));
-			font.DrawShadow(str, pos + Vector2(margin, margin), 1.f, Vector4(1.f, 1.f, 1.f, 1.f),
-			                Vector4(0.f, 0.f, 0.f, 0.5f));
-		}
+			r->SetColorAlphaPremultiplied(Vector4(0.f, 0.f, 0.f, 0.5f));
+			r->DrawImage(nullptr, AABB2(pos.x, pos.y, size.x, size.y));
+			font->DrawShadow(str, pos + Vector2(margin, margin), 1.f, Vector4(1.f, 1.f, 1.f, a), Vector4(0.f, 0.f, 0.f, a2));
+			
+			if (cg_statsColor){
+			
+			//fps
+			auto fps = fpsCounter.GetFps();
+			
+			Vector4 fpsColor;
+			
+			if(fps >= 60){
+				
+			fpsColor = Vector4(0.f, 1.f, 0.f, 1.f);
+		    
+		    }else if(fps >= 20 && fps < 60){
+				
+			fpsColor = Vector4(1.f, 1.f, 0.f, 1.f);	
+			
+			}else{
+				
+			fpsColor = Vector4(1.f, 0.f, 0.f, 1.f);
+			}
+			
+			font->DrawShadow(strFps, pos + Vector2(margin, margin), 1.f, fpsColor, Vector4(0.f, 0.f, 0.f, 0.5f));
+			
+			//ups
+			auto ups = upsCounter.GetFps();
+			Vector4 upsColor;
+			
+			if(ups >= 9.00){
+				
+			upsColor = Vector4(0.f, 1.f, 0.f, 1.f);
+		    
+		    }else if(ups >= 8 && ups < 9){
+				
+			upsColor = Vector4(1.f, 1.f, 0.f, 1.f);	
+			
+			}else{
+				
+			upsColor = Vector4(1.f, 0.f, 0.f, 1.f);
+			}
+			
+			font->DrawShadow(strUps, pos + Vector2(70.f, 5.f), 1.f, upsColor, Vector4(0.f, 0.f, 0.f, 0.5f));
+			
+			//ping
+			auto ping = net->GetPing();
+			
+			Vector4 pingColor;
+			
+			if(ping <= 100){
+				
+			pingColor = Vector4(0.f, 1.f, 0.f, 1.f);
+		    
+		    }else if(ping >= 101 && ping < 290){
+				
+			pingColor = Vector4(1.f, 1.f, 0.f, 1.f);	
+			
+			}else{
+				
+			pingColor = Vector4(1.f, 0.f, 0.f, 1.f);
+			}
+			
+			
+			font->DrawShadow(strPing, pos + Vector2(136.f, 5.f), 1.f, pingColor, Vector4(0.f, 0.f, 0.f, 0.5f));
+			
+
+			//up-down
+			font->DrawShadow(strUpDown, pos + Vector2(230.f, 5.f), 1.f, Vector4(1.f, 1.f, 1.f, 1.f), Vector4(0.f, 0.f, 0.f, 0.5f));
+			
+			}
 
 		void Client::Draw2D() {
 			SPADES_MARK_FUNCTION();
