@@ -1539,6 +1539,7 @@ namespace spades {
 				}
 
 				wri.Update(lengthLabel, (uint8_t)(wri.GetPosition() - beginLabel));
+				enet_peer_send(peer, 0, wri.CreatePacket());
 			}
 		}
 
