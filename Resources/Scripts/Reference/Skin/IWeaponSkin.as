@@ -60,4 +60,9 @@ namespace spades {
         void ReloadedWeapon();
     }
 
+    // TODO: IWeaponSkin2
+
+    interface IWeaponSkin3 {
+        Vector3 MuzzlePosition { get; }
+    }
 }

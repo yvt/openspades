@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 yvt.jp. All rights reserved.
 //
 
+#include <algorithm>
+
 #include "Tracer.h"
 #include "Client.h"
 #include "IRenderer.h"
@@ -18,14 +20,17 @@ namespace spades {
 			dir = (p2 - p1).Normalize();
 			length = (p2 - p1).GetLength();
 
-			velocity *= 0.5f; // make it slower for visual effect
-
-			const float maxTimeSpread = 1.0f / 30.f;
-			const float shutterTime = 1.0f / 30.f;
+			const float maxTimeSpread = 1.0f / 60.f;
+			const float shutterTime = 1.0f / 100.f;
 
 			visibleLength = shutterTime * velocity;
 			curDistance = -visibleLength;
-			curDistance += maxTimeSpread * SampleRandomFloat();
+
+			// Randomize the starting position within the range of the shutter
+			// time. However, make sure the tracer is displayed for at least
+			// one frame.
+			curDistance +=
+			  std::min(length + visibleLength, maxTimeSpread * SampleRandomFloat() * velocity);
 
 			firstUpdate = true;
 
@@ -61,6 +66,8 @@ namespace spades {
 				Vector4 col = {1.f, .6f, .2f, 0.f};
 				r.AddDebugLine(pos1, pos2, Vector4{1.0f, 0.6f, 0.2f, 1.0f});
 			} else {
+				SceneDefinition sceneDef = client.GetLastSceneDef();
+
 				for (float step = 0.0f; step <= 1.0f; step += 0.1f) {
 					float startDist = curDistance;
 					float endDist = curDistance + visibleLength;
@@ -75,11 +82,16 @@ namespace spades {
 						continue;
 					}
 
+
 					Vector3 pos1 = startPos + dir * startDist;
 					Vector3 pos2 = startPos + dir * endDist;
 					Vector4 col = {1.f, .6f, .2f, 0.f};
+
+					float distanceToCamera = (pos2 - sceneDef.viewOrigin).GetLength();
+					float radius = 0.002f * distanceToCamera;
+
 					r.SetColorAlphaPremultiplied(col * 0.4f);
-					r.AddLongSprite(*image, pos1, pos2, .05f);
+					r.AddLongSprite(*image, pos1, pos2, radius);
 				}
 			}
 		}

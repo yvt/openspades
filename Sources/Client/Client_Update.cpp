@@ -52,6 +52,7 @@ DEFINE_SPADES_SETTING(cg_ragdoll, "1");
 SPADES_SETTING(cg_blood);
 DEFINE_SPADES_SETTING(cg_ejectBrass, "1");
 DEFINE_SPADES_SETTING(cg_hitFeedbackSoundGain, "0.2");
+DEFINE_SPADES_SETTING(cg_tracersFirstPerson, "1");
 
 SPADES_SETTING(cg_alerts);
 SPADES_SETTING(cg_centerMessage);
@@ -1105,10 +1106,22 @@ namespace spades {
 		                             spades::Vector3 hitPos) {
 			SPADES_MARK_FUNCTION();
 
-			// Do not display tracers for bullets fired by the local player
-			if (IsFirstPerson(GetCameraMode()) && GetCameraTargetPlayerId() == player.GetId()) {
+			bool isFirstPerson =
+			  IsFirstPerson(GetCameraMode()) && GetCameraTargetPlayerId() == player.GetId();
+
+			// If disabled, do not display tracers for bullets fired by the local player
+			if (!cg_tracersFirstPerson && isFirstPerson) {
 				return;
 			}
+
+			// The line segment containing `muzzlePos` and `hitPos` represents the accurate
+			// trajectory of the fired bullet (as far as the game physics is concerned), but
+			// displaying it as-is would make it seem fired from a skull gun. Rewrite
+			// the starting point with the visual muzzle point of the current weapon skin.
+			Handle<ClientPlayer> clientPlayer = clientPlayers[player.GetId()];
+			muzzlePos = clientPlayer->ShouldRenderInThirdPersonView()
+			              ? clientPlayer->GetMuzzlePosition()
+			              : clientPlayer->GetMuzzlePositionInFirstPersonView();
 
 			float vel;
 			switch (player.GetWeapon().GetWeaponType()) {
@@ -1116,6 +1129,12 @@ namespace spades {
 				case SMG_WEAPON: vel = 360.f; break;
 				case SHOTGUN_WEAPON: vel = 500.f; break;
 			}
+
+			// Not to give the false illusion that the bullets travel slow
+			if (isFirstPerson) {
+				vel *= 2.0f;
+			}
+
 			AddLocalEntity(stmp::make_unique<Tracer>(*this, muzzlePos, hitPos, vel));
 			AddLocalEntity(stmp::make_unique<MapViewTracer>(muzzlePos, hitPos, vel));
 		}
