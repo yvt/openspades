@@ -50,6 +50,13 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    ```
    (because of a bug in some distributions, you might also
    have to install more packages by `sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev`)
+   
+   *On Fedora or other RHEL-derived distributions*:
+   ```
+   sudo dnf install pkgconf-pkg-config glew-devel openssl-devel libcurl-devel SDL2-devel SDL2_image-devel \
+     freealut-devel xdg-utils freetype-devel opus-devel opusfile-devel \
+     libjpeg-devel libXinerama-devel libXft-devel cmake ImageMagick
+   ```
 
    *On other distributions*:
    Install corresponding packages from your repository (or compile from source).

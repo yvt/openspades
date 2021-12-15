@@ -378,7 +378,6 @@ namespace spades {
 			savedPlayerPos.resize(128);
 			savedPlayerFront.resize(128);
 			savedPlayerTeam.resize(128);
-			playerPosRecords.resize(128);
 
 			std::fill(savedPlayerTeam.begin(), savedPlayerTeam.end(), -1);
 
@@ -806,19 +805,6 @@ namespace spades {
 									if (p != GetWorld()->GetLocalPlayer()) {
 										p->SetPosition(pos);
 										p->SetOrientation(front);
-
-										PosRecord &rec = playerPosRecords[idx];
-										if (rec.valid) {
-											float timespan = GetWorld()->GetTime() - rec.time;
-											timespan = std::max(0.08f, timespan);
-											Vector3 vel = (pos - rec.pos) / timespan;
-											vel *= 1.f / 32.f;
-											p->SetVelocity(vel);
-										}
-
-										rec.valid = true;
-										rec.pos = pos;
-										rec.time = GetWorld()->GetTime();
 									}
 								}
 							}
@@ -1044,21 +1030,12 @@ namespace spades {
 					if (!name.empty()) // sometimes becomes empty
 						pers.name = name;
 
-					playerPosRecords[pId].valid = false;
-
 					if (pId == GetWorld()->GetLocalPlayerIndex()) {
 						client->LocalPlayerCreated();
 						lastPlayerInput = 0xffffffff;
 						lastWeaponInput = 0xffffffff;
 						SendHeldBlockColor(); // ensure block color synchronized
 					} else {
-						if (team < 2 && pId < (int)playerPosRecords.size()) {
-							PosRecord &rec = playerPosRecords[pId];
-
-							rec.valid = true;
-							rec.pos = pos;
-							rec.time = GetWorld()->GetTime();
-						}
 						if (savedPlayerTeam[pId] != team) {
 							client->PlayerJoinedTeam(pRef);
 
@@ -1315,7 +1292,6 @@ namespace spades {
 					GetWorld()->GetPlayerPersistent(p.GetId()).kills = 0;
 
 					savedPlayerTeam[p.GetId()] = -1;
-					playerPosRecords[p.GetId()].valid = false;
 					GetWorld()->SetPlayer(p.GetId(), NULL);
 					// TODO: message
 				} break;
@@ -1539,6 +1515,7 @@ namespace spades {
 				}
 
 				wri.Update(lengthLabel, (uint8_t)(wri.GetPosition() - beginLabel));
+				enet_peer_send(peer, 0, wri.CreatePacket());
 			}
 		}
 
@@ -1836,8 +1813,6 @@ namespace spades {
 
 			SPLog("World loaded. Processing saved packets (%d)...", (int)savedPackets.size());
 
-			for (size_t i = 0; i < playerPosRecords.size(); i++)
-				playerPosRecords[i].valid = false;
 			std::fill(savedPlayerTeam.begin(), savedPlayerTeam.end(), -1);
 
 			// do saved packets
