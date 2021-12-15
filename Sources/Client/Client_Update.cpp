@@ -402,15 +402,6 @@ namespace spades {
 				winp.secondary = false;
 			}
 
-			// don't allow to stand up when ceilings are too low
-			if (inp.crouch == false) {
-				if (player.GetInput().crouch) {
-					if (!player.TryUncrouch(false)) {
-						inp.crouch = true;
-					}
-				}
-			}
-
 			// don't allow jumping in the air
 			if (inp.jump) {
 				if (!player.IsOnGroundOrWade())
@@ -432,6 +423,9 @@ namespace spades {
 
 			player.SetInput(inp);
 			player.SetWeaponInput(winp);
+
+			// Uncrouching may be prevented by an obstacle
+			inp.crouch = player.GetInput().crouch;
 
 			// send player input
 			{
