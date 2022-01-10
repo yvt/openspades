@@ -323,7 +323,7 @@ namespace spades {
 			chatWindow->AddMessage(msg);
 
 			msg = world->GetTeam(teamId).name;
-			msg = _Tr("Client", "{0} Wins!", msg);
+			msg = _Tr("Client", "{0} wins!", msg);
 			NetLog("%s", msg.c_str());
 			centerMessageView->AddMessage(msg);
 
