@@ -836,6 +836,10 @@ namespace spades {
 			IRenderer &renderer = client.GetRenderer();
 			World *world = client.GetWorld();
 
+			/*
+			
+			No old death model
+
 			if (!p.IsAlive()) {
 				if (!cg_ragdoll) {
 					ModelRenderParam param;
@@ -849,6 +853,7 @@ namespace spades {
 				}
 				return;
 			}
+			*/
 
 			auto origin = p.GetOrigin();
 			sandboxedRenderer->SetClipBox(
