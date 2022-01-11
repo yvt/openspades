@@ -6,6 +6,8 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * No FOV cap (use cg_fov)
 * No falling blocks hindering visibility
 * A crosshair more akin to classic FPS games such as CS:GO
+* No ragdolls or corpses whatsoever
+* More information on kills where the killing blow was a headshot
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
@@ -26,11 +28,6 @@ This hides your viewmodel to give you extra visibility.
 Recommended: 0
 
 As simple as it gets. Turn particles on or off along with some extra stuff. This can and will hide grenade particles, which may be useful.
-
-### cg_ragdoll
-Recommended: 0
-
-Simple. Brings back the original death animation and ragdoll. (use this until i get find a way to get rid of them lol)
 
 ### r_vsync
 Recommended: 0
