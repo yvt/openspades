@@ -22,9 +22,9 @@ Recommended: 0
 This turns off those bullet casings when you fire. They disappear after a second or two, so they aren't really useful outside of cosmetic purposes.
 
 ### cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ
-Recommended: cg_viewWeaponY -100
+Recommended: cg_viewWeaponX 0 cg_viewWeaponY -100 cg_viewWeaponZ 0
 
-This hides your viewmodel to give you extra visibility.
+This hides your viewmodel to give you extra visibility. Messing with X and Z while the viewmodel is off-screen makes the ADS animation look unnatural and weird.
 
 ### cg_particles
 Recommended: 0
