@@ -9,6 +9,7 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * No ragdolls or corpses whatsoever
 * More information on kills where the killing blow was a headshot 
 * More concise kill and death messages both as the center message log and kill log
+* Encouraging words on the pause menu
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
