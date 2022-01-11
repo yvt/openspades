@@ -50,4 +50,4 @@ This turns on those fancy calculations for more precise and accurate sound.
 ### cg_fov
 Recommended: N/A
 
-FOV is very a preferential thing. Setting it directly in the console has no limit compared to the GUI.
+FOV is very a preferential thing. Nobody's judging you, go crazy and set it to 1 or 179
