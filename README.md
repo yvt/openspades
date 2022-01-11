@@ -22,6 +22,7 @@ This hides your viewmodel to give you extra visibility.
 
 ### cg_particles
 Recommended: 0
+
 As simple as it gets. Turn particles on or off along with some extra stuff. This can and will hide grenade particles, which may be useful.
 
 ### cg_ragdoll
