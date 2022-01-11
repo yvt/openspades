@@ -3,12 +3,11 @@
 ## What is it?
 OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades) that has
 
-* No FOV cap (use cg_fov)
+* No FOV cap
 * No falling blocks hindering visibility
 * A crosshair more akin to classic FPS games such as CS:GO
 * No ragdolls or corpses whatsoever
-* More information on kills where the killing blow was a headshot 
-* More concise kill and death messages both as the center message log and kill log
+* More concise yet informative kill and death messages in both as the center message log and kill log
 * Encouraging words on the pause menu! (I swear it's not cheating)
 
 ## How to build?
