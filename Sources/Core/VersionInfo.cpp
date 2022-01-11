@@ -13,7 +13,7 @@
 
 std::string VersionInfo::GetVersionInfo() {
 #if defined(OS_PLATFORM_LINUX)
-	return std::string("Linux");
+	return std::string("UNIX/Linux");
 #elif defined(TARGET_OS_MAC)
 	return std::string("Mac OS X");
 #elif defined(OS_PLATFORM_WINDOWS)
@@ -29,11 +29,11 @@ std::string VersionInfo::GetVersionInfo() {
 	} else if (IsWindows8OrGreater() && !IsWindows8Point1OrGreater()) {
 		windowsVersion = "Windows 8";
 	} else if (IsWindows8Point1OrGreater()) {
-		windowsVersion = "Windows 8.1";
+		windowsVersion = "Windows 10"; // Nobody uses 8.1... right?
 	} else {
 		// Default to Windows 10
 		// See https://github.com/yvt/openspades/pull/528 for reason.
-		windowsVersion = "Windows 10";
+		windowsVersion = "Windows 11";
 	}
 
 	// Might be a greater version, but the new Microsoft
