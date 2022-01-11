@@ -222,7 +222,8 @@ namespace spades {
 		void FallingBlock::Render3D() {
 			ModelRenderParam param;
 			param.matrix = matrix;
-			client->GetRenderer().RenderModel(*model, param);
+			// Remove falling blocks
+			// client->GetRenderer().RenderModel(*model, param);
 		}
 	} // namespace client
 } // namespace spades
