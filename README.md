@@ -7,7 +7,8 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * No falling blocks hindering visibility
 * A crosshair more akin to classic FPS games such as CS:GO
 * No ragdolls or corpses whatsoever
-* More information on kills where the killing blow was a headshot
+* More information on kills where the killing blow was a headshot 
+* More concise kill and death messages
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
