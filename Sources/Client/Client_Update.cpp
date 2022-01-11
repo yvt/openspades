@@ -829,9 +829,12 @@ namespace spades {
 				default: break;
 			}
 
-			// create ragdoll corpse
-			if (cg_ragdoll && victim.GetTeamId() < 2) {
-				auto corp = stmp::make_unique<Corpse>(*renderer, *map, victim);
+			/*
+				no ragdoll corpses
+
+			  create ragdoll corpse
+			  if (cg_ragdoll && victim.GetTeamId() < 2) {
+				  auto corp = stmp::make_unique<Corpse>(*renderer, *map, victim);
 
 				if (&victim == world->GetLocalPlayer())
 					lastMyCorpse = corp.get();
@@ -863,6 +866,7 @@ namespace spades {
 					RemoveInvisibleCorpses();
 				}
 			}
+			*/
 
 			// add chat message
 			std::string s;
@@ -877,34 +881,39 @@ namespace spades {
 			switch (kt) {
 				case KillTypeWeapon:
 					switch (w.GetWeaponType()) {
-						case RIFLE_WEAPON: cause += _Tr("Client", "Rifle"); break;
+						case RIFLE_WEAPON: cause += _Tr("Client", "RFL"); break;
 						case SMG_WEAPON: cause += _Tr("Client", "SMG"); break;
-						case SHOTGUN_WEAPON: cause += _Tr("Client", "Shotgun"); break;
+						case SHOTGUN_WEAPON: cause += _Tr("Client", "SHT"); break;
 						default: SPUnreachable();
 					}
 					break;
 				case KillTypeFall:
 					//! A cause of death shown in the kill feed.
-					cause += _Tr("Client", "Fall");
+					cause += _Tr("Client", "FAL");
 					break;
 				case KillTypeMelee:
 					//! A cause of death shown in the kill feed.
-					cause += _Tr("Client", "Melee");
+					cause += _Tr("Client", "MEL");
 					break;
-				case KillTypeGrenade: cause += _Tr("Client", "Grenade"); break;
+				case KillTypeGrenade: cause += _Tr("Client", "GRE"); break;
 				case KillTypeHeadshot:
 					//! A cause of death shown in the kill feed.
-					cause += _Tr("Client", "Headshot");
+					switch (w.GetWeaponType()) {
+						case RIFLE_WEAPON: cause += _Tr("Client", "RIF-HS"); break;
+						case SMG_WEAPON: cause += _Tr("Client", "SMG-HS"); break;
+						case SHOTGUN_WEAPON: cause += _Tr("Client", "SHT-HS"); break;
+						default: SPUnreachable();
+					}
 					break;
 				case KillTypeTeamChange:
 					//! A cause of death shown in the kill feed.
-					cause += _Tr("Client", "Team Change");
+					cause += _Tr("Client", "Team");
 					break;
 				case KillTypeClassChange:
 					//! A cause of death shown in the kill feed.
-					cause += _Tr("Client", "Weapon Change");
+					cause += _Tr("Client", "Weapon");
 					break;
-				default: cause += "???"; break;
+				default: cause += "SRV"; break;
 			}
 
 			s += " [";
@@ -939,9 +948,9 @@ namespace spades {
 					std::string msg;
 					if (&killer == local) {
 						if ((int)cg_centerMessage == 2)
-							msg = _Tr("Client", "You have killed {0}", victim.GetName());
+							msg = _Tr("Client", "You > {0}", victim.GetName());
 					} else {
-						msg = _Tr("Client", "You were killed by {0}", killer.GetName());
+						msg = _Tr("Client", "{0} > You", killer.GetName());
 					}
 					centerMessageView->AddMessage(msg);
 				}
