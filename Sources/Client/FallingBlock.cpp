@@ -38,8 +38,7 @@ namespace spades {
 		}
 
 		FallingBlock::~FallingBlock() {
-			model->Release();
-			vmodel->Release();
+			// stubbed
 		}
 
 		bool FallingBlock::Update(float dt) {
