@@ -151,38 +151,7 @@ namespace spades {
 
 							Vector3 p3 = p2 + vmAxis3 * (float)z;
 
-							{
-								auto ent = stmp::make_unique<SmokeSpriteEntity>(*client, col, 70.f);
-								ent->SetTrajectory(
-								  p3,
-								  (MakeVector3(getRandom() - getRandom(), getRandom() - getRandom(),
-								               getRandom() - getRandom())) *
-								    0.2f,
-								  1.f, 0.f);
-								ent->SetRotation(getRandom() * (float)M_PI * 2.f);
-								ent->SetRadius(1.0f, 0.5f);
-								ent->SetBlockHitAction(BlockHitAction::Ignore);
-								ent->SetLifeTime(1.0f + getRandom() * 0.5f, 0.f, 1.0f);
-								client->AddLocalEntity(std::move(ent));
-							}
-
 							col.w = 1.f;
-							for (int i = 0; i < 6; i++) {
-								auto ent = stmp::make_unique<ParticleSpriteEntity>(
-								  *client, img.GetPointerOrNull(), col);
-								ent->SetTrajectory(p3,
-								                   MakeVector3(getRandom() - getRandom(),
-								                               getRandom() - getRandom(),
-								                               getRandom() - getRandom()) *
-								                     13.f,
-								                   1.f, .6f);
-								ent->SetRotation(getRandom() * (float)M_PI * 2.f);
-								ent->SetRadius(0.35f + getRandom() * getRandom() * 0.1f);
-								ent->SetLifeTime(2.f, 0.f, 1.f);
-								if (usePrecisePhysics)
-									ent->SetBlockHitAction(BlockHitAction::BounceWeak);
-								client->AddLocalEntity(std::move(ent));
-							}
 						}
 					}
 				}
