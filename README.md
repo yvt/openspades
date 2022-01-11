@@ -9,4 +9,4 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
- 
+If you are on Linux and have all the dependencies installed there is a convenient [file](https://github.com/nonperforming/openspadesplus/blob/master/build.sh) that will run all the necessary commands to build OpenSpades+.
