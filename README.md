@@ -13,7 +13,7 @@ If you are on Linux and have all the dependencies installed there is a convenien
 
 ## Extra console commands
 cg_ejectBrass 0
-cg_viewWeaponY -100
+\ncg_viewWeaponY -100
 cg_particles 0
 cg_ragdoll 0
 r_bloom 0
