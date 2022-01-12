@@ -17,6 +17,7 @@ convert "$SRC_DIR/OpenSpades.ico" \
 
 convert tmp/256x256.png -resize 128x128 tmp/128x128.png
 rm tmp/40x40.png # nobody uses icons with such res
+# correct!
 
 for fn in tmp/*.png; do
 	RES=$( basename $fn | sed 's/.png//' )
