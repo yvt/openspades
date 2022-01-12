@@ -1,3 +1,4 @@
+#include "OpenSpadesPlus.h"
 #if __linux__
 	#define OS_PLATFORM_LINUX
 #elif TARGET_OS_MAC
@@ -14,12 +15,12 @@
 std::string VersionInfo::GetVersionInfo() {
 #if defined(OS_PLATFORM_LINUX)
 	return std::string("UNIX/Linux");
+
 #elif defined(TARGET_OS_MAC)
 	return std::string("Mac OS");
-#elif defined(OS_PLATFORM_WINDOWS)
-	
-	std::string windowsVersion;
 
+#elif defined(OS_PLATFORM_WINDOWS)
+	std::string windowsVersion;
 	if (IsWindowsXPOrGreater() && !IsWindowsVistaOrGreater()) {
 		windowsVersion = "Windows XP";
 	} else if (IsWindowsVistaOrGreater() && !IsWindows7OrGreater()) {
@@ -33,6 +34,8 @@ std::string VersionInfo::GetVersionInfo() {
 	} else {
 		windowsVersion = "Windows 11";
 	}
+	windowsVersion += " - OpenSpades+ Revision "
+	windowsVersion += osPlusVersion
 
 	// Might be a greater version, but the new Microsoft
 	// API doesn't support checking for specific versions.
