@@ -725,7 +725,7 @@ namespace spades {
 
 			// manual adjustment
 			viewWeaponOffset +=
-			  Vector3{cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ} * (1.f - aimDownState);
+			  Vector3{0.f, -100.f, 0.f} * (1.f - aimDownState);
 
 			asIScriptObject *skin;
 
@@ -836,10 +836,6 @@ namespace spades {
 			IRenderer &renderer = client.GetRenderer();
 			World *world = client.GetWorld();
 
-			/*
-			
-			No old death model
-
 			if (!p.IsAlive()) {
 				if (!cg_ragdoll) {
 					ModelRenderParam param;
@@ -853,7 +849,6 @@ namespace spades {
 				}
 				return;
 			}
-			*/
 
 			auto origin = p.GetOrigin();
 			sandboxedRenderer->SetClipBox(

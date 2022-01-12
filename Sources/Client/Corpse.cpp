@@ -478,15 +478,6 @@ namespace spades {
 			AngleSpring(Torso4, Leg2, Torso1, -1.f, -0.2f, dt);
 
 			Spring(Torso1, Torso2, Head, .6f, dt);
-			/*
-			AngleSpring(Torso1,
-			            Torso2, Head,
-			            0.5f, 1.f, dt);
-
-			AngleSpring(Torso2,
-			            Torso1, Head,
-			            0.5f, 1.f, dt);
-			 */
 
 			LineCollision(Torso1, Torso2, dt);
 			LineCollision(Torso2, Torso3, dt);
@@ -568,42 +559,6 @@ namespace spades {
 					}
 				}
 
-				/*
-				if(map.ClipBox(node.pos.x,
-				                node.pos.y,
-				                node.pos.z)){
-				    if(!map.ClipBox(node.pos.x,
-				                    node.pos.y,
-				                    oldPos.z)){
-				        node.vel.z = -node.vel.z * .2f;
-				        if(fabsf(node.vel.z) < .3f)
-				            node.vel.z = 0.f;
-				        node.pos.z = oldPos.z;
-				    }
-				    if(!map.ClipBox(node.pos.x,
-				                     oldPos.y,
-				                     node.pos.z)){
-				        node.vel.y = -node.vel.y * .2f;
-				        if(fabsf(node.vel.y) < .3f)
-				            node.vel.y = 0.f;
-				        node.pos.y = oldPos.y;
-				    }
-				    if(!map.ClipBox(oldPos.x,
-				                     node.pos.y,
-				                     node.pos.z)){
-				        node.vel.x = -node.vel.x * .2f;
-				        if(fabsf(node.vel.x) < .3f)
-				            node.vel.x = 0.f;
-				        node.pos.x = oldPos.x;
-				    }
-				    node.vel *= .8f;
-				    //node.pos = oldPos;
-
-				    if(node.vel.GetLength() < .02f){
-				        node.vel *= 0.f;
-				    }
-				}*/
-
 				node.lastPos = node.pos;
 				node.lastForce = node.vel;
 			}
@@ -639,7 +594,7 @@ namespace spades {
 				param.matrix = torso * scaler;
 
 				model = renderer.RegisterModel("Models/Player/Torso.kv6");
-				renderer.RenderModel(*model, param);
+				//renderer.RenderModel(*model, param);
 			}
 			// draw Head
 			{
@@ -658,7 +613,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(-aX, aY, -aZ, headBase) * scaler;
 
-				renderer.RenderModel(*model, param);
+				//renderer.RenderModel(*model, param);
 			}
 
 			// draw Arms
@@ -677,7 +632,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, arm1Base) * scaler;
 
-				renderer.RenderModel(*model, param);
+				//renderer.RenderModel(*model, param);
 
 				aZ = nodes[Arm2].pos - nodes[Torso2].pos;
 				aZ = aZ.Normalize();
@@ -686,7 +641,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, arm2Base) * scaler;
 
-				renderer.RenderModel(*model, param);
+				//renderer.RenderModel(*model, param);
 			}
 
 			// draw Leg
@@ -705,7 +660,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, leg1Base) * scaler;
 
-				renderer.RenderModel(*model, param);
+				//renderer.RenderModel(*model, param);
 
 				aZ = nodes[Leg2].pos - nodes[Torso4].pos;
 				aZ = aZ.Normalize();
@@ -714,7 +669,7 @@ namespace spades {
 				aX = Vector3::Cross(aY, aZ).Normalize();
 				param.matrix = Matrix4::FromAxis(aX, aY, aZ, leg2Base) * scaler;
 
-				renderer.RenderModel(*model, param);
+				//renderer.RenderModel(*model, param);
 			}
 		}
 
