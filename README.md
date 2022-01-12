@@ -7,7 +7,7 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * No falling blocks hindering visibility
 * No ejected shell or bullet casings
 * A crosshair more akin to classic FPS games such as CS:GO
-* No ragdolls or corpses whatsoever (use cg_ragdoll 0 until proper patch is implemented)
+* No ragdolls or corpses whatsoever
 * More concise yet informative kill and death messages in both as the center message log and kill log
 * Hides viewmodel
 * Encouraging words on the pause menu! (I swear it's not cheating)
@@ -23,7 +23,7 @@ This hides your viewmodel to give you extra visibility. Messing with X and Z whi
 ### cg_particles
 Recommended: 0
 
-As simple as it gets. Turn particles on or off along with some extra stuff. This can and will hide grenade particles, which may be useful.
+As simple as it gets. Turn particles on or off along with some extra settings. This can and will hide grenade particles, which may be useful.
 
 ### r_vsync
 Recommended: 0
@@ -43,4 +43,4 @@ This turns on those fancy calculations for more precise and accurate sound.
 ### cg_fov
 Recommended: N/A
 
-FOV is very a preferential thing. Nobody's judging you, go crazy and set it to 1 or 179
+FOV is very a preferential thing. Nobody's judging you, go crazy and set it to 1 or 179 (anything more or less breaks the game - though I'm not stopping you though!)
