@@ -28,7 +28,7 @@ As simple as it gets. Turn particles on or off along with some extra settings. T
 ### r_vsync
 Recommended: 0
 
-Unlimit refresh rate and decrease input delay. THIS WILL CRASH IN-GAME, TUNE IN STARTUP SETTINGS
+Unlimit refresh rate and decrease input delay.
 
 ### cl_fps
 Recommended: 0
