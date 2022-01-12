@@ -545,12 +545,12 @@ namespace spades {
 					switch (p.GetTool()) {
 						case Player::ToolBlock:
 							if (p.GetNumBlocks() == 0) {
-								msg = _Tr("Client", "Out of Block");
+								msg = _Tr("Client", "No blocks");
 							}
 							break;
 						case Player::ToolGrenade:
 							if (p.GetNumGrenades() == 0) {
-								msg = _Tr("Client", "Out of Grenade");
+								msg = _Tr("Client", "No grenades");
 							}
 							break;
 						case Player::ToolWeapon: {
@@ -558,10 +558,10 @@ namespace spades {
 							if (weap.IsReloading() || p.IsAwaitingReloadCompletion()) {
 								msg = _Tr("Client", "Reloading");
 							} else if (weap.GetAmmo() == 0 && weap.GetStock() == 0) {
-								msg = _Tr("Client", "Out of Ammo");
+								msg = _Tr("Client", "No reserve");
 							} else if (weap.GetStock() > 0 &&
 							           weap.GetAmmo() < weap.GetClipSize() / 4) {
-								msg = _Tr("Client", "Press [{0}] to Reload",
+								msg = _Tr("Client", "Reload",
 								          TranslateKeyName(cg_keyReloadWeapon));
 							}
 						} break;
@@ -604,9 +604,9 @@ namespace spades {
 					float secs = p.GetRespawnTime() - world->GetTime();
 
 					if (secs > 0.f)
-						msg = _Tr("Client", "You will respawn in: {0}", (int)ceilf(secs));
+						msg = _Tr("Client", "{0}", (int)ceilf(secs));
 					else
-						msg = _Tr("Client", "Waiting for respawn");
+						msg = _Tr("Client", "");
 
 					if (!msg.empty()) {
 						IFont &font = fontManager->GetGuiFont();
@@ -916,11 +916,11 @@ namespace spades {
 					str += buf;
 					break;
 				case ProtocolVersion::v076:
-					sprintf(buf, "v0.76 |");
+					sprintf(buf, "v0.76 | ");
 					str += buf;
 					break;
 				default: 
-					sprintf(buf, "v0.?? |");
+					sprintf(buf, "v0.?? | ");
 					str += buf;
 					break;
 			}
@@ -930,7 +930,7 @@ namespace spades {
 				if (fps == 0.0) // what? why is this even here? its not like itll be rendered or it'll not be on screen for long
 					str += "FPS: N/A |";
 				else {
-					sprintf(buf, "FPS: %.02f |", fps);
+					sprintf(buf, "FPS: %.02f | ", fps);
 					str += buf;
 				}
 			}
@@ -938,9 +938,9 @@ namespace spades {
 				// Display world updates per second
 				auto ups = upsCounter.GetFps();
 				if (ups == 0.0)
-					str += ", UPS: N/A |";
+					str += ", UPS: N/A | ";
 				else {
-					sprintf(buf, "UPS: %.02f |", ups);
+					sprintf(buf, "UPS: %.02f | ", ups);
 					str += buf;
 				}
 			}
@@ -949,7 +949,7 @@ namespace spades {
 				auto ping = net->GetPing();
 				auto upbps = net->GetUplinkBps();
 				auto downbps = net->GetDownlinkBps();
-				sprintf(buf, "Ping: %dms | UR/DR: %.02f/%.02fkbps", ping, upbps / 1000.0,
+				sprintf(buf, "Ping: %dms | UR/DR: %.02f/%.02fkbps	", ping, upbps / 1000.0,
 				        downbps / 1000.0);
 				str += buf;
 			}
