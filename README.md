@@ -5,6 +5,7 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 
 * No FOV cap
 * No falling blocks hindering visibility
+* No ejected shell or bullet casings
 * A crosshair more akin to classic FPS games such as CS:GO
 * No ragdolls or corpses whatsoever (use cg_ragdoll 0 until proper patch is implemented)
 * More concise yet informative kill and death messages in both as the center message log and kill log
