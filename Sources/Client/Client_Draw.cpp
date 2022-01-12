@@ -52,6 +52,7 @@
 #include "SmokeSpriteEntity.h"
 #include "TCProgressView.h"
 #include "Tracer.h"
+#include "OpenSpadesPlus.h"
 
 #include "GameMap.h"
 #include "Grenade.h"
@@ -908,7 +909,9 @@ namespace spades {
 			char buf[256];
 			std::string str;
 
-			str += "OS+: r4 |";
+			str += "OS+: r";
+			str += osPlusVersion;
+			str += " |"
 
 			switch (hostname.GetProtocolVersion()) {
 				case ProtocolVersion::v075:

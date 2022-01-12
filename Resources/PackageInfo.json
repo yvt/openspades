@@ -1,10 +1,11 @@
 {
-    "Version": [1, 0, 0, 4],
-    "VersionText": "Revision 4",
-    "UpdateFeed": {
+    "Version": [1, 0, 5, 0],
+    "VersionText": "Revision 5",
+    "UpdateFeed": 
+    {
         "Type": "Standard",
         "Platform": "SourceCode",
-        "URL": "https://raw.githubusercontent.com/nonperforming/openspadesplus/main/Resources/version.json"
+        "URL": "https://raw.githubusercontent.com/nonperforming/openspadesplus/main/version.json"
     }
 }
 
