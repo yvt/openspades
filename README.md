@@ -13,6 +13,7 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * Hides viewmodel
 * Encouraging words on the pause menu! (I swear it's not cheating)
 * More info in cg_stats (FPS and ping counter)
+* Allow spectators and dead people to use the flashlight
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
