@@ -482,7 +482,7 @@ namespace spades {
 								SetSelectedTool(Player::ToolBlock);
 							} else {
 								if (cg_alerts)
-									ShowAlert(_Tr("Client", "Out of Blocks"), AlertType::Error);
+									ShowAlert(_Tr("Client", "No blocks"), AlertType::Error);
 								else
 									PlayAlertSound();
 							}
@@ -494,7 +494,7 @@ namespace spades {
 								SetSelectedTool(Player::ToolWeapon);
 							} else {
 								if (cg_alerts)
-									ShowAlert(_Tr("Client", "Out of Ammo"), AlertType::Error);
+									ShowAlert(_Tr("Client", "No ammo"), AlertType::Error);
 								else
 									PlayAlertSound();
 							}
@@ -506,7 +506,7 @@ namespace spades {
 								SetSelectedTool(Player::ToolGrenade);
 							} else {
 								if (cg_alerts)
-									ShowAlert(_Tr("Client", "Out of Grenades"), AlertType::Error);
+									ShowAlert(_Tr("Client", "No grenades"), AlertType::Error);
 								else
 									PlayAlertSound();
 							}
