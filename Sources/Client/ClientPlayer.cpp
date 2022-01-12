@@ -53,9 +53,6 @@ DEFINE_SPADES_SETTING(cg_animations, "1");
 SPADES_SETTING(cg_shake);
 SPADES_SETTING(r_hdr);
 DEFINE_SPADES_SETTING(cg_environmentalAudio, "1");
-DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
-DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
-DEFINE_SPADES_SETTING(cg_viewWeaponZ, "0");
 DEFINE_SPADES_SETTING(cg_debugToolSkinAnchors, "0");
 
 namespace spades {
@@ -438,16 +435,6 @@ namespace spades {
 				Vector3 front = player.GetFront();
 				Vector3 right = player.GetRight();
 				Vector3 up = player.GetUp();
-
-				// Offset the view weapon according to the player movement
-				viewWeaponOffset.x += Vector3::Dot(vel, right) * scale;
-				viewWeaponOffset.y -= Vector3::Dot(vel, front) * scale;
-				viewWeaponOffset.z += Vector3::Dot(vel, up) * scale;
-
-				// Offset the view weapon according to the camera movement
-				Vector3 diff = front - lastFront;
-				viewWeaponOffset.x += Vector3::Dot(diff, right) * 0.05f;
-				viewWeaponOffset.z += Vector3::Dot(diff, up) * 0.05f;
 
 				lastFront = front;
 
@@ -840,7 +827,7 @@ namespace spades {
 				if (!cg_ragdoll) {
 					ModelRenderParam param;
 					param.matrix = Matrix4::Translate(p.GetOrigin() + MakeVector3(0, 0, 1));
-					param.matrix = param.matrix * Matrix4::Scale(.1f);
+					param.matrix = param.matrix * Matrix4::Scale(0.f); // incredibly hacky. please fix.
 					IntVector3 col = p.GetColor();
 					param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 
@@ -1293,11 +1280,37 @@ namespace spades {
 			// make dlight
 			client.MuzzleFire(muzzle, player.GetFront(), &player == world.GetLocalPlayer());
 
-			if (cg_ejectBrass) {
+			if (false) { // i tried patching this but i kept doing soimething wrong
+				// so i just did this instead. please fix this when you get the chance
+				float dist = (player.GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
 				if (dist < 130.f * 130.f) {
 					Handle<IModel> model;
 					Handle<IAudioChunk> snd = NULL;
 					Handle<IAudioChunk> snd2 = NULL;
+					switch (player.GetWeapon().GetWeaponType()) {
+						case RIFLE_WEAPON:
+							model = renderer.RegisterModel("Models/Weapons/Rifle/Casing.kv6");
+							snd =
+							  SampleRandomBool()
+							    ? audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.opus")
+							    : audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellDrop2.opus");
+							snd2 =
+							  audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellWater.opus");
+							break;
+						case SHOTGUN_WEAPON:
+							// FIXME: don't want to show shotgun't casing
+							// because it isn't ejected when firing
+							// model = renderer.RegisterModel("Models/Weapons/Shotgun/Casing.kv6");
+							break;
+						case SMG_WEAPON:
+							model = renderer.RegisterModel("Models/Weapons/SMG/Casing.kv6");
+							snd =
+							  SampleRandomBool()
+							    ? audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellDrop1.opus")
+							    : audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellDrop2.opus");
+							snd2 = audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellWater.opus");
+							break;
+					}
 					if (model) {
 						Vector3 origin = ShouldRenderInThirdPersonView()
 						                   ? GetCaseEjectPosition()
@@ -1314,6 +1327,8 @@ namespace spades {
 						auto ent = stmp::make_unique<GunCasing>(
 						  &client, model.GetPointerOrNull(), snd.GetPointerOrNull(),
 						  snd2.GetPointerOrNull(), origin, p.GetFront(), vel);
+
+						client.AddLocalEntity(std::move(ent));
 					}
 				}
 			}
