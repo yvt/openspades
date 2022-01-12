@@ -1,4 +1,5 @@
 # OpenSpades+
+# Revision 2
 
 ## What is it?
 OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades) that has
@@ -40,7 +41,17 @@ Recommended: 1
 
 This turns on those fancy calculations for more precise and accurate sound.
 
+### cg_stats
+Recommended: 1
+
+Show extra information such as accuracy (todo), FPS, ping, etc
+
 ### cg_fov
 Recommended: N/A
 
 FOV is very a preferential thing. Nobody's judging you, go crazy and set it to 1 or 179 (anything more or less breaks the game - though I'm not stopping you though!)
+
+## Other
+### To-do:
+Remove ragdolls and corpses cleaner
+Bump OpenSpades revision level in Client_Draw.cpp and in README.md
