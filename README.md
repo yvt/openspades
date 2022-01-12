@@ -1,5 +1,5 @@
 # OpenSpades+
-# Revision 3
+# Revision 4
 
 ## What is it?
 OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades) that has
