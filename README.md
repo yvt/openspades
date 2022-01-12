@@ -9,17 +9,16 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * No ejected shell or bullet casings
 * A crosshair more akin to classic FPS games such as CS:GO
 * No ragdolls or corpses whatsoever
-* More concise yet informative kill and death messages in both as the center message log and kill log
+* More concise and informative kill and death messages in both as the center message log and kill log
 * Hides viewmodel
 * Encouraging words on the pause menu! (I swear it's not cheating)
+* More info in cg_stats (FPS and ping counter)
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
 If you are on Linux and have all the dependencies installed there is a convenient [file](https://github.com/nonperforming/openspadesplus/blob/master/build.sh) that will run all the necessary commands to build OpenSpades+.
 
 ## Useful console variables
-
-This hides your viewmodel to give you extra visibility. Messing with X and Z while the viewmodel is off-screen makes the ADS animation look unnatural and weird.
 
 ### cg_particles
 Recommended: 0
@@ -53,5 +52,14 @@ FOV is very a preferential thing. Nobody's judging you, go crazy and set it to 1
 
 ## Other
 ### To-do:
-Remove ragdolls and corpses cleaner
-Bump OpenSpades revision level in Client_Draw.cpp and in README.md
+Remove ragdolls and corpses cleaner code
+
+Bump OpenSpades revision level in Client_Draw.cpp (911) and in README.md
+
+Accuracy in cg_stats or other
+
+Players left in cg_stats or other
+
+Reload progress bar below the crosshair or in cg_stats
+
+Shots left below crosshair and replacing icons (bottom right)
