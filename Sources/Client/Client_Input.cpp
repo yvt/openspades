@@ -563,16 +563,8 @@ namespace spades {
 					} else if (CheckKey(cg_keySaveMap, name) && down) {
 						TakeMapShot();
 					} else if (CheckKey(cg_keyFlashlight, name) && down) {
-						// spectators and dead players should not be able to toggle the flashlight
-						if (world->GetLocalPlayer()->IsSpectator() ||
-						    !world->GetLocalPlayer()->IsAlive())
-							return;
-						flashlightOn = !flashlightOn;
-						flashlightOnTime = time;
-						Handle<IAudioChunk> chunk =
-						  audioDevice->RegisterSound("Sounds/Player/Flashlight.opus");
-						audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
-					} else if (CheckKey(cg_keyAutoFocus, name) && down && (int)cg_manualFocus) {
+						
+						if (CheckKey(cg_keyAutoFocus, name) && down && (int)cg_manualFocus) {
 						autoFocusEnabled = true;
 					} else if (down) {
 						bool rev = (int)cg_switchToolByWheel > 0;
