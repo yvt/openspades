@@ -21,7 +21,7 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 If you are on Linux and have all the dependencies installed there is a convenient [file](https://github.com/nonperforming/openspadesplus/blob/master/build.sh) that will run all the necessary commands to build OpenSpades+.
 
 ## Why create this?
-The standard OpenSpades game is very awesome client and looks great, but in my opinion there are certain sacrifices or features that appeal to casual players but not always competitive players. The small lag spike when the barriers drop in Arena, distracting bullet casings being ejected every time you fire, a viewmodel that takes up a fifth of the screen, no weapon information on kills with a headshot, etc. I hope OpenSpades+ is easy to switch between and from OpenSpades as possible, but at the same time more competitive.
+The standard OpenSpades client is a very awesome Ace of Spades client and looks great at the same time, but in my opinion there are certain sacrifices or features that appeal to casual players but not always competitive players. A small lag spike when barriers drop in Arena, distracting bullet casings being ejected every time you fire, a viewmodel that takes up a fifth of the screen, no weapon information on kills with a headshot, etc. I hope OpenSpades+ is easy to switch between and from OpenSpades as possible, but at the same time more useful to competitive play.
 
 ## Useful console variables
 
