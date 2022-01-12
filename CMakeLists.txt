@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
 project(OpenSpades)
 
-set(OpenSpades_VERSION_MAJOR 0)
-set(OpenSpades_VERSION_MINOR 1)
-set(OpenSpades_VERSION_REVISION 5)
+set(OpenSpades_VERSION_MAJOR 1)
+set(OpenSpades_VERSION_MINOR 0)
+set(OpenSpades_VERSION_REVISION 3)
 
 set(OPENSPADES_FULL_VERSION "${OpenSpades_VERSION_MAJOR}.${OpenSpades_VERSION_MINOR}.${OpenSpades_VERSION_REVISION}")
 
@@ -341,14 +341,14 @@ endif(APPLE)
 #see http://www.cmake.org/cmake/help/v2.8.11/cpack.html
 set(CPACK_PACKAGE_NAME "OpenSpades+")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Basically competitive OpenSpades")
-set(CPACK_PACKAGE_DESCRIPTION "A fork of OpenSpades that is more sided towards competitiveness")
+set(CPACK_PACKAGE_DESCRIPTION "Basically competitive OpenSpades, I guess")
 set(CPACK_PACKAGE_VENDOR "yvt, non_performing, assorted")
 set(CPACK_PACKAGE_CONTACT "nonperforming on GitHub")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 SET(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "openspades+-${OPENSPADES_FULL_VERSION}")
-SET(CPACK_PACKAGE_FILE_NAME "openspades+-${OPENSPADES_FULL_VERSION}-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "openspadesplus-${OPENSPADES_FULL_VERSION}")
+SET(CPACK_PACKAGE_FILE_NAME "openspadesplus-${OPENSPADES_FULL_VERSION}-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "OpenSpades+ ${OPENSPADES_FULL_VERSION}")
 set(CPACK_PACKAGE_VERSION_MAJOR ${OpenSpades_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${OpenSpades_VERSION_MINOR})
@@ -358,13 +358,13 @@ SET(CPACK_TOPLEVEL_TAG "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 
 if(WIN32 AND NOT UNIX)
 
-	set(CPACK_NSIS_DISPLAY_NAME "OpenSpades ${OPENSPADES_FULL_VERSION}")
+	set(CPACK_NSIS_DISPLAY_NAME "OpenSpades+ ${OPENSPADES_FULL_VERSION}")
 	# There is a bug in NSIS that does not handle full unix paths properly. Make
 	# sure there is at least one set of four (4) backlasshes.
-	set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\openspades.exe")
+	set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\openspadesplus.exe")
 	# TODO: set(CPACK_PACKAGE_ICON  "")
-	set(CPACK_NSIS_HELP_LINK "https://sites.google.com/a/yvt.jp/openspades/")
-	set(CPACK_NSIS_URL_INFO_ABOUT "http://buildandshoot.com/viewforum.php?f=57")
+	set(CPACK_NSIS_HELP_LINK "https://github.com/nonperforming/openspadesplus/issues")
+	set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/nonperforming/openspadesplus")
 	SET(CPACK_NSIS_CONTACT "i@yvt.jp")
 	# TODO: SET(CPACK_NSIS_CREATE_ICONS_EXTRA "")
 	# TODO: SET(CPACK_NSIS_DELETE_ICONS_EXTRA "")
@@ -375,7 +375,7 @@ elseif(UNIX AND NOT APPLE)
 
 	# usage: `cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .. ; make package`
 	INCLUDE(InstallRequiredSystemLibraries)
-	set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "A fork of OpenSpades that is more sided towards competitiveness")
+	set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Basically competitive OpenSpades, I guess")
 	set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_SOURCE_DIR}/Resources/Unix/Control/postinst)
 	set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
 	SET(CPACK_STRIP_FILES "bin/openspades")
@@ -393,7 +393,7 @@ elseif(UNIX AND NOT APPLE)
 
 endif(WIN32 AND NOT UNIX)
 
-set(CPACK_PACKAGE_EXECUTABLES "openspades" "Launch OpenSpades")
+set(CPACK_PACKAGE_EXECUTABLES "openspadesplus" "Launch OpenSpades+")
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY FALSE)		#everyone hates a dir inside a zip named exactly like the zip
 include(CPack)
 
