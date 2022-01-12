@@ -829,45 +829,6 @@ namespace spades {
 				default: break;
 			}
 
-			/*
-				no ragdoll corpses
-
-			  create ragdoll corpse
-			  if (cg_ragdoll && victim.GetTeamId() < 2) {
-				  auto corp = stmp::make_unique<Corpse>(*renderer, *map, victim);
-
-				if (&victim == world->GetLocalPlayer())
-					lastMyCorpse = corp.get();
-
-				if (&killer != &victim && kt != KillTypeGrenade) {
-					Vector3 dir = victim.GetPosition() - killer.GetPosition();
-					dir = dir.Normalize();
-					if (kt == KillTypeMelee) {
-						dir *= 6.f;
-					} else {
-						if (killer.GetWeapon().GetWeaponType() == SMG_WEAPON) {
-							dir *= 2.8f;
-						} else if (killer.GetWeapon().GetWeaponType() == SHOTGUN_WEAPON) {
-							dir *= 4.5f;
-						} else {
-							dir *= 3.5f;
-						}
-					}
-					corp->AddImpulse(dir);
-				} else if (kt == KillTypeGrenade) {
-					corp->AddImpulse(MakeVector3(0, 0, -4.f - SampleRandomFloat() * 4.f));
-				}
-				corp->AddImpulse(victim.GetVelocity() * 32.f);
-				corpses.emplace_back(std::move(corp));
-
-				if (corpses.size() > corpseHardLimit) {
-					corpses.pop_front();
-				} else if (corpses.size() > corpseSoftLimit) {
-					RemoveInvisibleCorpses();
-				}
-			}
-			*/
-
 			// add chat message
 			std::string s;
 			s = ChatWindow::TeamColorMessage(killer.GetName(), killer.GetTeamId());

@@ -725,7 +725,7 @@ namespace spades {
 
 			// manual adjustment
 			viewWeaponOffset +=
-			  Vector3{cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ} * (1.f - aimDownState);
+			  Vector3{0.f, -100.f, 0.f} * (1.f - aimDownState);
 
 			asIScriptObject *skin;
 
@@ -836,10 +836,6 @@ namespace spades {
 			IRenderer &renderer = client.GetRenderer();
 			World *world = client.GetWorld();
 
-			/*
-			
-			No old death model
-
 			if (!p.IsAlive()) {
 				if (!cg_ragdoll) {
 					ModelRenderParam param;
@@ -853,7 +849,6 @@ namespace spades {
 				}
 				return;
 			}
-			*/
 
 			auto origin = p.GetOrigin();
 			sandboxedRenderer->SetClipBox(
@@ -1297,87 +1292,6 @@ namespace spades {
 
 			// make dlight
 			client.MuzzleFire(muzzle, player.GetFront(), &player == world.GetLocalPlayer());
-
-			if (cg_ejectBrass) {
-				float dist = (player.GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
-				if (dist < 130.f * 130.f) {
-					Handle<IModel> model;
-					Handle<IAudioChunk> snd = NULL;
-					Handle<IAudioChunk> snd2 = NULL;
-					switch (player.GetWeapon().GetWeaponType()) {
-						case RIFLE_WEAPON:
-							model = renderer.RegisterModel("Models/Weapons/Rifle/Casing.kv6");
-							snd =
-							  SampleRandomBool()
-							    ? audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellDrop1.opus")
-							    : audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellDrop2.opus");
-							snd2 =
-							  audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellWater.opus");
-							break;
-						case SHOTGUN_WEAPON:
-							// FIXME: don't want to show shotgun't casing
-							// because it isn't ejected when firing
-							// model = renderer.RegisterModel("Models/Weapons/Shotgun/Casing.kv6");
-							break;
-						case SMG_WEAPON:
-							model = renderer.RegisterModel("Models/Weapons/SMG/Casing.kv6");
-							snd =
-							  SampleRandomBool()
-							    ? audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellDrop1.opus")
-							    : audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellDrop2.opus");
-							snd2 = audioDevice.RegisterSound("Sounds/Weapons/SMG/ShellWater.opus");
-							break;
-					}
-					if (model) {
-						Vector3 origin = ShouldRenderInThirdPersonView()
-						                   ? GetCaseEjectPosition()
-						                   : GetCaseEjectPositionInFirstPersonView();
-
-						Vector3 vel;
-						vel = p.GetFront() * 0.5f + p.GetRight() + p.GetUp() * 0.2f;
-						switch (p.GetWeapon().GetWeaponType()) {
-							case SMG_WEAPON: vel -= p.GetFront() * 0.7f; break;
-							case SHOTGUN_WEAPON: vel *= .5f; break;
-							default: break;
-						}
-
-						auto ent = stmp::make_unique<GunCasing>(
-						  &client, model.GetPointerOrNull(), snd.GetPointerOrNull(),
-						  snd2.GetPointerOrNull(), origin, p.GetFront(), vel);
-
-						client.AddLocalEntity(std::move(ent));
-					}
-				}
-			}
-
-			// sound ambience estimation
-			auto ambience = ComputeAmbience();
-
-			asIScriptObject *skin;
-			// FIXME: what if current tool isn't weapon?
-			if (ShouldRenderInThirdPersonView()) {
-				skin = weaponSkin;
-			} else {
-				skin = weaponViewSkin;
-			}
-
-			{
-				ScriptIWeaponSkin2 interface(skin);
-				if (interface.ImplementsInterface()) {
-					interface.SetSoundEnvironment(ambience.room, ambience.size, ambience.distance);
-					interface.SetSoundOrigin(player.GetEye());
-				} else if (ShouldRenderInThirdPersonView() && !hasValidOriginMatrix) {
-					// Legacy skin scripts rely on OriginMatrix which is only updated when
-					// the player's location is within the fog range.
-					return;
-				}
-			}
-
-			{
-				ScriptIWeaponSkin interface(skin);
-				interface.WeaponFired();
-			}
-		}
 
 		void ClientPlayer::ReloadingWeapon() {
 			asIScriptObject *skin;
