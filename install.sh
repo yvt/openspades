@@ -1,3 +1,4 @@
 #!/bin/bash
 cd openspades.mk
-sudo make install 
+cd bin
+mv openspadesplus /bin/
