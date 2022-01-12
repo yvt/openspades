@@ -908,12 +908,29 @@ namespace spades {
 			char buf[256];
 			std::string str;
 
+			str += "OS+: r2";
+
+			switch (hostname.GetProtocolVersion()) {
+				case ProtocolVersion::v075:
+					sprintf(buf, "v0.75, ");
+					str += buf;
+					break;
+				case ProtocolVersion::v076:
+					sprintf(buf, "v0.76, ");
+					str += buf;
+					break;
+				default: 
+					sprintf(buf, "v0.??, ");
+					str += buf;
+					break;
+			}
+
 			{
 				auto fps = fpsCounter.GetFps();
-				if (fps == 0.0)
-					str += "--.-- fps";
+				if (fps == 0.0) // what? why is this even here? its not like itll be rendered or it'll not be on screen for long
+					str += "FPS: N/A, ";
 				else {
-					sprintf(buf, "%.02f fps", fps);
+					sprintf(buf, "FPS: %.02f, ", fps);
 					str += buf;
 				}
 			}
@@ -921,9 +938,9 @@ namespace spades {
 				// Display world updates per second
 				auto ups = upsCounter.GetFps();
 				if (ups == 0.0)
-					str += ", --.-- ups";
+					str += ", UPS: N/A, ";
 				else {
-					sprintf(buf, ", %.02f ups", ups);
+					sprintf(buf, "UPS: %.02f, ", ups);
 					str += buf;
 				}
 			}
@@ -932,7 +949,7 @@ namespace spades {
 				auto ping = net->GetPing();
 				auto upbps = net->GetUplinkBps();
 				auto downbps = net->GetDownlinkBps();
-				sprintf(buf, ", ping: %dms, up/down: %.02f/%.02fkbps", ping, upbps / 1000.0,
+				sprintf(buf, ", Ping: %dms, UR/DR: %.02f/%.02fkbps", ping, upbps / 1000.0,
 				        downbps / 1000.0);
 				str += buf;
 			}
