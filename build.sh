@@ -3,5 +3,8 @@ rm -r openspades.mk
 mkdir openspades.mk
 cd openspades.mk
 cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
-make -j 4
-echo Remember to move Resources into bin if you are not running install.sh
+make -j 8
+mv Resources bin
+cd bin
+mv openspades openspadesplus
+
