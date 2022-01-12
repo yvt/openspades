@@ -562,8 +562,7 @@ namespace spades {
 						TakeScreenShot(false);
 					} else if (CheckKey(cg_keySaveMap, name) && down) {
 						TakeMapShot();
-					} else if (CheckKey(cg_keyFlashlight, name) && down) {
-						
+					}
 						if (CheckKey(cg_keyAutoFocus, name) && down && (int)cg_manualFocus) {
 						autoFocusEnabled = true;
 					} else if (down) {
