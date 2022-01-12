@@ -911,7 +911,7 @@ namespace spades {
 
 			str += "OS+: r";
 			str += osPlusVersion;
-			str += " |"
+			str += " |";
 
 			switch (hostname.GetProtocolVersion()) {
 				case ProtocolVersion::v075:
