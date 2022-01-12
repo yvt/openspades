@@ -34,8 +34,8 @@ std::string VersionInfo::GetVersionInfo() {
 	} else {
 		windowsVersion = "Windows 11";
 	}
-	windowsVersion += " - OpenSpades+ Revision "
-	windowsVersion += osPlusVersion
+	windowsVersion += " - OpenSpades+ Revision ";
+	windowsVersion += osPlusVersion;
 
 	// Might be a greater version, but the new Microsoft
 	// API doesn't support checking for specific versions.
