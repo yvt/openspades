@@ -8,6 +8,7 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * A crosshair more akin to classic FPS games such as CS:GO
 * No ragdolls or corpses whatsoever (use cg_ragdoll 0 until proper patch is implemented)
 * More concise yet informative kill and death messages in both as the center message log and kill log
+* Hides viewmodel
 * Encouraging words on the pause menu! (I swear it's not cheating)
 
 ## How to build?
@@ -15,9 +16,6 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 If you are on Linux and have all the dependencies installed there is a convenient [file](https://github.com/nonperforming/openspadesplus/blob/master/build.sh) that will run all the necessary commands to build OpenSpades+.
 
 ## Useful console variables
-
-### cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ
-Recommended: cg_viewWeaponX 0 cg_viewWeaponY -100 cg_viewWeaponZ 0
 
 This hides your viewmodel to give you extra visibility. Messing with X and Z while the viewmodel is off-screen makes the ADS animation look unnatural and weird.
 
