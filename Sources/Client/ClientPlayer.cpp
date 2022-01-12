@@ -1293,6 +1293,60 @@ namespace spades {
 			// make dlight
 			client.MuzzleFire(muzzle, player.GetFront(), &player == world.GetLocalPlayer());
 
+			if (cg_ejectBrass) {
+				if (dist < 130.f * 130.f) {
+					Handle<IModel> model;
+					Handle<IAudioChunk> snd = NULL;
+					Handle<IAudioChunk> snd2 = NULL;
+					if (model) {
+						Vector3 origin = ShouldRenderInThirdPersonView()
+						                   ? GetCaseEjectPosition()
+						                   : GetCaseEjectPositionInFirstPersonView();
+
+						Vector3 vel;
+						vel = p.GetFront() * 0.5f + p.GetRight() + p.GetUp() * 0.2f;
+						switch (p.GetWeapon().GetWeaponType()) {
+							case SMG_WEAPON: vel -= p.GetFront() * 0.7f; break;
+							case SHOTGUN_WEAPON: vel *= .5f; break;
+							default: break;
+						}
+
+						auto ent = stmp::make_unique<GunCasing>(
+						  &client, model.GetPointerOrNull(), snd.GetPointerOrNull(),
+						  snd2.GetPointerOrNull(), origin, p.GetFront(), vel);
+					}
+				}
+			}
+
+			// sound ambience estimation
+			auto ambience = ComputeAmbience();
+
+			asIScriptObject *skin;
+			// FIXME: what if current tool isn't weapon?
+			if (ShouldRenderInThirdPersonView()) {
+				skin = weaponSkin;
+			} else {
+				skin = weaponViewSkin;
+			}
+
+			{
+				ScriptIWeaponSkin2 interface(skin);
+				if (interface.ImplementsInterface()) {
+					interface.SetSoundEnvironment(ambience.room, ambience.size, ambience.distance);
+					interface.SetSoundOrigin(player.GetEye());
+				} else if (ShouldRenderInThirdPersonView() && !hasValidOriginMatrix) {
+					// Legacy skin scripts rely on OriginMatrix which is only updated when
+					// the player's location is within the fog range.
+					return;
+				}
+			}
+
+			{
+				ScriptIWeaponSkin interface(skin);
+				interface.WeaponFired();
+			}
+		}
+
 		void ClientPlayer::ReloadingWeapon() {
 			asIScriptObject *skin;
 			// FIXME: what if current tool isn't weapon?
