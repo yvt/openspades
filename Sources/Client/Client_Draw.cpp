@@ -908,7 +908,7 @@ namespace spades {
 			char buf[256];
 			std::string str;
 
-			str += "OS+: r3 |";
+			str += "OS+: r4 |";
 
 			switch (hostname.GetProtocolVersion()) {
 				case ProtocolVersion::v075:

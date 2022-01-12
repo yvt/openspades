@@ -119,7 +119,21 @@ namespace spades {
 						}
 					}
 				}
-			} else if ("1" == key) {
+			} 
+			
+			if ("q" == key)
+			{
+				selectedTeam = 0;
+			}
+			else if ("w" == key)
+			{
+				selectedTeam = 1;
+			}
+			else if ("e" == key)
+			{
+				selectedTeam = 2;
+			}
+			else if ("1" == key) {
 				if (2 == selectedTeam) {
 					selectedTeam = 0;
 				} else {
