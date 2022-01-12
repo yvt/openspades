@@ -1,6 +1,6 @@
 {
-    "Version": [1, 0, 0, 3],
-    "VersionText": "Revision 3",
+    "Version": [1, 0, 0, 4],
+    "VersionText": "Revision 4",
     "UpdateFeed": {
         "Type": "Standard",
         "Platform": "SourceCode",
