@@ -53,9 +53,6 @@ DEFINE_SPADES_SETTING(cg_animations, "1");
 SPADES_SETTING(cg_shake);
 SPADES_SETTING(r_hdr);
 DEFINE_SPADES_SETTING(cg_environmentalAudio, "1");
-DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
-DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
-DEFINE_SPADES_SETTING(cg_viewWeaponZ, "0");
 DEFINE_SPADES_SETTING(cg_debugToolSkinAnchors, "0");
 
 namespace spades {
@@ -438,16 +435,6 @@ namespace spades {
 				Vector3 front = player.GetFront();
 				Vector3 right = player.GetRight();
 				Vector3 up = player.GetUp();
-
-				// Offset the view weapon according to the player movement
-				viewWeaponOffset.x += Vector3::Dot(vel, right) * scale;
-				viewWeaponOffset.y -= Vector3::Dot(vel, front) * scale;
-				viewWeaponOffset.z += Vector3::Dot(vel, up) * scale;
-
-				// Offset the view weapon according to the camera movement
-				Vector3 diff = front - lastFront;
-				viewWeaponOffset.x += Vector3::Dot(diff, right) * 0.05f;
-				viewWeaponOffset.z += Vector3::Dot(diff, up) * 0.05f;
 
 				lastFront = front;
 
@@ -840,7 +827,7 @@ namespace spades {
 				if (!cg_ragdoll) {
 					ModelRenderParam param;
 					param.matrix = Matrix4::Translate(p.GetOrigin() + MakeVector3(0, 0, 1));
-					param.matrix = param.matrix * Matrix4::Scale(.1f);
+					param.matrix = param.matrix * Matrix4::Scale(0.f); // incredibly hacky. please fix.
 					IntVector3 col = p.GetColor();
 					param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
 

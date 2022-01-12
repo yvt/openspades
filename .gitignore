@@ -63,6 +63,9 @@ OpenSpades.msvc/
 # Linux build path
 openspades.mk/
 
+# Last good build
+lastgoodbuild/
+
 # fltk / fluid output leftovers
 Sources/Gui/DetailConfigWindow.txt
 Sources/Gui/MainWindow.txt
