@@ -15,10 +15,6 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 If you are on Linux and have all the dependencies installed there is a convenient [file](https://github.com/nonperforming/openspadesplus/blob/master/build.sh) that will run all the necessary commands to build OpenSpades+.
 
 ## Useful console variables
-### cg_ejectBrass
-Recommended: 0
-
-This turns off those bullet casings when you fire. They disappear after a second or two, so they aren't really useful outside of cosmetic purposes.
 
 ### cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ
 Recommended: cg_viewWeaponX 0 cg_viewWeaponY -100 cg_viewWeaponZ 0
