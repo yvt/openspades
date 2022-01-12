@@ -9,7 +9,7 @@
         0,
         3
       ],
-      "VersionText": "1.0.3",
+      "VersionText": "Revision 3",
       "Platforms": 
       [
         "SourceCode"
@@ -18,7 +18,7 @@
       {
         "Info": "https://raw.githubusercontent.com/nonperforming/openspadesplus/master/README.md"
       }
-    }
+    },
     {
       "Version": 
       [
@@ -27,7 +27,7 @@
         0,
         4
       ],
-      "VersionText": "1.0.4",
+      "VersionText": "Revision 4",
       "Platforms": 
       [
         "SourceCode"
