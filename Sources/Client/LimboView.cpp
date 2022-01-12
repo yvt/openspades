@@ -121,7 +121,7 @@ namespace spades {
 				}
 			} 
 			
-			if ("q" == key)
+			else if ("q" == key)
 			{
 				selectedTeam = 0;
 			}
