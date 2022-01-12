@@ -1,9 +1,9 @@
 {
-    "Version": [0, 1, 5, 0],
-    "VersionText": "0.1.5+-git",
+    "Version": [1, 0, 0, 3],
+    "VersionText": "Revision 3",
     "UpdateFeed": {
         "Type": "Standard",
         "Platform": "SourceCode",
-        "URL": "http://openspades.yvt.jp/api/version.json"
+        "URL": "https://raw.githubusercontent.com/nonperforming/openspadesplus/master/Resources/version.json"
     }
 }
