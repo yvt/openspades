@@ -1,4 +1,4 @@
-#include "OpenSpadesPlus.h"
+#include <Client/OpenSpadesPlus.h>
 
 #if __linux__
 	#define OS_PLATFORM_LINUX
@@ -14,11 +14,22 @@
 #include "VersionInfo.h"
 
 std::string VersionInfo::GetVersionInfo() {
+
+std::string buffer;
+
 #if defined(OS_PLATFORM_LINUX)
-	return std::string("UNIX/Linux");
+	buffer = "UNIX/Linux";
+	buffer += " | OpenSpades+ Revision "; // i think this works
+	buffer += std::to_string(spades::client::plusVersion);
+	
+	return std::string(buffer);
 
 #elif defined(TARGET_OS_MAC)
-	return std::string("MacOS");
+	buffer = "Mac OS";
+	buffer += " | OpenSpades+ Revision "; // i think this works
+	buffer += std::to_string(spades::client::plusVersion);
+	
+	return std::string(buffer);
 
 #elif defined(OS_PLATFORM_WINDOWS)
 	std::string windowsVersion;
@@ -35,8 +46,8 @@ std::string VersionInfo::GetVersionInfo() {
 	} else {
 		windowsVersion = "Windows 11";
 	}
-	windowsVersion += " - OpenSpades+ Revision "; // i think this works
-	windowsVersion += std::to_string(plusVersion);
+	windowsVersion += " | OpenSpades+ Revision "; // i think this works
+	windowsVersion += std::to_string(spades::client::plusVersion);
 
 	// Might be a greater version, but the new Microsoft
 	// API doesn't support checking for specific versions.
@@ -45,14 +56,34 @@ std::string VersionInfo::GetVersionInfo() {
 		windowsVersion += " Server";
 	return windowsVersion;
 #elif defined(__FreeBSD__)
-	return std::string("FreeBSD");
+	buffer = "FreeBSD";
+	buffer += " | OpenSpades+ Revision "; // i think this works
+	buffer += std::to_string(spades::client::plusVersion);
+	
+	return std::string(buffer);
 #elif defined(__OpenBSD__)
-	return std::string("OpenBSD");
+	buffer = "OpenBSD";
+	buffer += " | OpenSpades+ Revision "; // i think this works
+	buffer += std::to_string(spades::client::plusVersion);
+	
+	return std::string(buffer);
 #elif defined(__NetBSD__)
-	return std::string("NetBSD");
+	buffer = "NetBSD";
+	buffer += " | OpenSpades+ Revision "; // i think this works
+	buffer += std::to_string(spades::client::plusVersion);
+	
+	return std::string(buffer);
 #elif defined(__HAIKU__)
-	return std::string("Haiku");
+	buffer = "Haiku OS";
+	buffer += " | OpenSpades+ Revision "; // i think this works
+	buffer += std::to_string(spades::client::plusVersion);
+	
+	return std::string(buffer);
 #else
-	return std::string("MacOS");
+	buffer = "Mac OS";
+	buffer += " | OpenSpades+ Revision "; // i think this works
+	buffer += std::to_string(spades::client::plusVersion);
+	
+	return std::string(buffer); // I honestly dont know anything else that would fall into Unknown. I do, however, know that on modern macs or something TARGET_OS_MAC supposedly fails or something??? Update libs or something.
 #endif
 }
