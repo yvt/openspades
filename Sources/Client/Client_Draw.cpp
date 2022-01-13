@@ -942,7 +942,7 @@ namespace spades {
 				// Display world updates per second
 				auto ups = upsCounter.GetFps();
 				if (ups == 0.0)
-					str += ", UPS: N/A | ";
+					str += "UPS: N/A | ";
 				else {
 					sprintf(buf, "UPS: %.02f | ", ups);
 					str += buf;
