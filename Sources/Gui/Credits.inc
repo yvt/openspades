@@ -3,31 +3,35 @@ static const char *credits = R"**(
 ${PACKAGE_STRING}
 
 
+
 Credits
 -------
 
-"yvt" - Most of the code, Japanese translation
+OpenSpades+
+___________
+
+"non_performing" - OpenSpades+ project lead
+
+Base
+----
+
+"yvt" - Most of the code
 "Dany0" - System profiler, ideas, etc.
 "learn_more" - CMake support, server browser, ideas, Win32 build guide
 "iamgreaser" - AoS 0.76 protocol support
 "Ericson2314" - Better installation guide
 "JoJoe_Stinky" - Win32 Icon, Killfeed icons
 "theunknownxy" - Fixes for the Linux support
-"noway421" - Russian translation, various testing, ideas
+"noway421" - various testing, ideas
 "pandaro" - Improvements to the Minimap
-"kmsi" - Korean translation
-"tungdil" - German translation
-"feikname" - Brazilian Portuguese translation, GUI ideas, wiki maintenance
+"feikname" - GUI ideas, wiki maintenance
 "VelocityRa" - Repo maintenance, VS2015 support, better random generator
 "Mailaender" - FreeDesktop definitions fixes
 "Chameleonhider" - Configurable player name drawing
 "CenturionFox" - Server Disconnect Screen
-"DarkDracoon" - European Portuguese translation
-"BrunoDiazU" - Spanish translation
 "teodor6140" - Headshot feedback "whack" sound
 
 And many others which weren't mentioned here.
-
 
 Translators
 -----------
@@ -42,24 +46,6 @@ Translators
 - Polish: João Rodrigues
 - Russian: "noway421", "ArionWT"
 - Spanish: "BrunoDiazU"
-
-
-Portions of program is based on following software
----------------------------------------------------
-
-pyspades
-
-Licensed by GPLv3. CREDITS/CONTRIBUTIONS/ACKNOWLEDGEMENTS:
-
-Mathias "Mat^2" Kaerlev - Most of the code
-"hompy" - Floating block detection, IRC client, general code, etc.
-"Triplefox" - Map generator code, network code, etc.
-"Sham" - Hosting and testing
-"Yourself" - Scripts
-"bildramer" - Floating block detection (A*) and misc. code
-"TheGrandmaster" - Tester, ideas and the official map
-"Tegu" - Logo, ideas, testing and the official map
-"Enari" - Testing, misc. code and ideas
 
 
 This program includes following components
