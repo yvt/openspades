@@ -46,9 +46,7 @@ namespace spades {
 		std::regex const v076regex{"(.*):0?\\.?76"};
 	} // namespace
 
-	ServerAddress ServAdd;
-
-	ServAdd.ServerAddress(std::string address, ProtocolVersion version)
+	ServerAddress::ServerAddress(std::string address, ProtocolVersion version)
 	    : mAddress(address), mVersion(version) {
 		std::smatch matchResult;
 
