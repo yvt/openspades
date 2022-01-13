@@ -104,7 +104,7 @@ Are you in a clan which plays OpenSpades regularly in a VC? Consider turning thi
 
 ## Other
 ### !!IMPORTANT!!
-Save files are kept seperate from OpenSpades. You can copy your SPConfig.cfg over to OSPlus.cfg, but OpenSpades+ uses different default options which you may find helpful. You can always set them manually however, see "Useful console variables"
+Save files and game files are kept seperate from OpenSpades. It is highly unlikely that OpenSpades+ will bork or modify an OpenSpades install in any way. To use your OpenSpades save file as a template for OpenSpades+, you can copy your SPConfig.cfg over to OSPlus.cfg. Please notice that OpenSpades+ uses different default options which you may find helpful. You can always set them manually however, see "Useful console variables"
 ### To-do:
 Remove ragdolls and corpses cleaner code
 
