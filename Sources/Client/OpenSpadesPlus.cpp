@@ -22,6 +22,6 @@
 
 namespace spades {
 	namespace client {
-    const int plusVersion = 5;
+    const int plusVersion = 6;
 	} // namespace client
 } // namespace spades
