@@ -21,6 +21,7 @@
 
 #include "OpenSpadesPlus.h"
 #include <iostream>
+#include <Core/Settings.h>
 
 DEFINE_SPADES_SETTING(p_hideViewmodel, "1");
 DEFINE_SPADES_SETTING(p_showCustomClientMessage, "0");
