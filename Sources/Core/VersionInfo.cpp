@@ -1,4 +1,5 @@
 #include "OpenSpadesPlus.h"
+
 #if __linux__
 	#define OS_PLATFORM_LINUX
 #elif TARGET_OS_MAC
@@ -34,8 +35,8 @@ std::string VersionInfo::GetVersionInfo() {
 	} else {
 		windowsVersion = "Windows 11";
 	}
-	windowsVersion += " - OpenSpades+ Revision ";
-	windowsVersion += osPlusVersion;
+	windowsVersion += " - OpenSpades+ Revision "; // i think this works
+	windowsVersion += to_string(osPlusVersion);
 
 	// Might be a greater version, but the new Microsoft
 	// API doesn't support checking for specific versions.
@@ -52,6 +53,6 @@ std::string VersionInfo::GetVersionInfo() {
 #elif defined(__HAIKU__)
 	return std::string("Haiku");
 #else
-	return std::string("Unknown OS");
+	return std::string("MacOS");
 #endif
 }
