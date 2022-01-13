@@ -7,4 +7,4 @@ make -j 8
 mv Resources bin
 cd bin
 mv openspades openspadesplus
-
+./openspadesplus
