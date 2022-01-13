@@ -215,7 +215,8 @@ namespace spades {
 			DrawSplash();
 
 			IFont &font = fontManager->GetGuiFont();
-			std::string str = _Tr("Client", "NOW LOADING");
+			std::string str = _Tr("Client", "Loading... OpenSpades+ Revision");
+			str += std::to_string(osPlusVersion);
 			Vector2 size = font.Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
 			pos -= size;
@@ -910,7 +911,7 @@ namespace spades {
 			std::string str;
 
 			str += "OS+: r";
-			str += to_string(osPlusVersion);
+			str += std::to_string(osPlusVersion);
 			str += " |";
 
 			switch (hostname.GetProtocolVersion()) {
