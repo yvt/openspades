@@ -21,7 +21,7 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
-If you are on Linux and have all the dependencies installed there is a convenient [file](https://github.com/nonperforming/openspadesplus/blob/master/build.sh) that will run all the necessary commands to build OpenSpades+. Occasionally there will be
+If you are on Linux and have all the dependencies installed there is a convenient [file](https://github.com/nonperforming/openspadesplus/blob/master/build.sh) that will run all the necessary commands to build OpenSpades+. Occasionally there will be bugs preventing you from launching or building the game - in that case, please download the source code from the latest Release or fix the bug yourself (please do send a PR).
 
 ## Why create this?
 The standard OpenSpades client is a very awesome Ace of Spades client while looking great at the same time, but in my opinion there are certain sacrifices or features that appeal to casual players but not always competitive players. A small lag spike when blocks are pulled from the ground (typically the barriers that drop in Arena), distracting bullet casings being ejected every time you fire, a view-model that takes up a fifth of the screen, no weapon information on kills with a headshot, etc. I hope OpenSpades+ is easy to switch between and from OpenSpades as possible, but at the same time more useful to competitive play.
