@@ -912,11 +912,11 @@ namespace spades {
 
 			str += "OS+: r";
 			str += std::to_string(plusVersion);
-			str += " |";
+			str += " | ";
 
 			switch (hostname.GetProtocolVersion()) {
 				case ProtocolVersion::v075:
-					sprintf(buf, "v0.75 |");
+					sprintf(buf, "v0.75 | ");
 					str += buf;
 					break;
 				case ProtocolVersion::v076:
@@ -953,7 +953,7 @@ namespace spades {
 				auto ping = net->GetPing();
 				auto upbps = net->GetUplinkBps();
 				auto downbps = net->GetDownlinkBps();
-				sprintf(buf, "Ping: %dms | UR/DR: %.02f/%.02fkbps	", ping, upbps / 1000.0,
+				sprintf(buf, "Ping: %dms | UR/DR: %.02f/%.02fkbps", ping, upbps / 1000.0,
 				        downbps / 1000.0);
 				str += buf;
 			}
