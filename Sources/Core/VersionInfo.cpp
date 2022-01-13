@@ -23,7 +23,7 @@ std::string buffer;
 // insert custom client here
 
 #if defined(OS_PLATFORM_LINUX)
-	buffer = "UNIX/Linux";
+	buffer = "GNU/Linux";
 	buffer += " | OpenSpades+ Revision "; // i think this works
 	buffer += std::to_string(spades::plus::revision);
 	
