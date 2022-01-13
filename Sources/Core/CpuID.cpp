@@ -72,7 +72,7 @@ namespace spades {
 			case CpuFeature::SSE3: return featureEcx & (1U << 0);
 			case CpuFeature::SSSE3: return featureEcx & (1U << 9);
 			case CpuFeature::FMA: return featureEcx & (1U << 12);
-			case CpuFeature::AVX: return featureEcx & (1U << 28);
+			case CpuFeature::AVX: return ((featureEcx & (1U << 28)) && (featureEcx & (1U << 27)));
 			case CpuFeature::AVX2: return subfeature & (1U << 5);
 			case CpuFeature::AVX512CD: return subfeature & (1U << 28);
 			case CpuFeature::AVX512ER: return subfeature & (1U << 27);
