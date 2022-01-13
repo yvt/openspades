@@ -54,7 +54,7 @@
 #include "NetClient.h"
 
 DEFINE_SPADES_SETTING(cg_blood, "1");
-DEFINE_SPADES_SETTING(cg_particles, "2");
+DEFINE_SPADES_SETTING(cg_particles, "0");
 DEFINE_SPADES_SETTING(cg_waterImpact, "1");
 SPADES_SETTING(cg_manualFocus);
 DEFINE_SPADES_SETTING(cg_autoFocusSpeed, "0.4");

@@ -31,7 +31,7 @@
 
 namespace spades {
 
-#define CONFIGFILE "SPConfig.cfg"
+#define CONFIGFILE "OSPlus.cfg"
 	static Settings *instance = NULL;
 
 	Settings *Settings::GetInstance() {

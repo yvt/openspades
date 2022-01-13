@@ -66,6 +66,9 @@ openspades.mk/
 # Last good build
 lastgoodbuild/
 
+# Bog standard build directory
+build/
+
 # fltk / fluid output leftovers
 Sources/Gui/DetailConfigWindow.txt
 Sources/Gui/MainWindow.txt
@@ -123,3 +126,4 @@ ipch/
 *.sln
 *.vcxproj
 OpenSpades.rc
+.vscode/settings.json

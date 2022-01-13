@@ -40,11 +40,11 @@
 
 #include "NetClient.h"
 
-DEFINE_SPADES_SETTING(cg_fov, "68");
+DEFINE_SPADES_SETTING(cg_fov, "90");
 DEFINE_SPADES_SETTING(cg_thirdperson, "0");
 DEFINE_SPADES_SETTING(cg_manualFocus, "0");
 DEFINE_SPADES_SETTING(cg_depthOfFieldAmount, "1");
-DEFINE_SPADES_SETTING(cg_shake, "1");
+DEFINE_SPADES_SETTING(cg_shake, "0");
 
 namespace spades {
 	namespace client {

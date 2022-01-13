@@ -69,7 +69,7 @@ SPADES_SETTING(cg_keyAttack);
 SPADES_SETTING(cg_keyAltAttack);
 SPADES_SETTING(cg_keyCrouch);
 DEFINE_SPADES_SETTING(cg_screenshotFormat, "jpeg");
-DEFINE_SPADES_SETTING(cg_stats, "0");
+DEFINE_SPADES_SETTING(cg_stats, "1");
 DEFINE_SPADES_SETTING(cg_hideHud, "0");
 DEFINE_SPADES_SETTING(cg_playerNames, "2");
 DEFINE_SPADES_SETTING(cg_playerNameX, "0");
@@ -653,21 +653,21 @@ namespace spades {
 			// Help messages (make sure to synchronize these with the keyboard input handler)
 			if (FollowsNonLocalPlayer(GetCameraMode())) {
 				if (GetCameraTargetPlayer().IsAlive()) {
-					addLine(_Tr("Client", "[{0}] Cycle camera mode", TranslateKeyName(cg_keyJump)));
+					addLine(_Tr("Client", "[{0}] to cycle camera mode", TranslateKeyName(cg_keyJump)));
 				}
-				addLine(_Tr("Client", "[{0}/{1}] Next/previous player",
+				addLine(_Tr("Client", "[{0}/{1}] to cycle players",
 				            TranslateKeyName(cg_keyAttack), TranslateKeyName(cg_keyAltAttack)));
 
 				if (GetWorld()->GetLocalPlayer()->IsSpectator()) {
-					addLine(_Tr("Client", "[{0}] Unfollow", TranslateKeyName(cg_keyReloadWeapon)));
+					addLine(_Tr("Client", "[{0}] to freecam", TranslateKeyName(cg_keyReloadWeapon)));
 				}
 			} else {
-				addLine(_Tr("Client", "[{0}/{1}] Follow a player", TranslateKeyName(cg_keyAttack),
+				addLine(_Tr("Client", "[{0}/{1}] to spectate a player", TranslateKeyName(cg_keyAttack),
 				            TranslateKeyName(cg_keyAltAttack)));
 			}
 
 			if (GetCameraMode() == ClientCameraMode::Free) {
-				addLine(_Tr("Client", "[{0}/{1}] Go up/down", TranslateKeyName(cg_keyJump),
+				addLine(_Tr("Client", "[{0}/{1}] to go up/down", TranslateKeyName(cg_keyJump),
 				            TranslateKeyName(cg_keyCrouch)));
 			}
 
@@ -912,10 +912,11 @@ namespace spades {
 
 			str += "OS+: r";
 			str += std::to_string(plus::revision);
-			str += " | ";
-
+//			str += " | ";
+/*
 			ServerAddress ServAddr;
-			str += ServAddr::ToString(false);
+			std::string buffer = ServAddr.ToString(false);
+			str += buffer;*/ // this shit dont work!!
 
 			switch (hostname.GetProtocolVersion()) {
 				case ProtocolVersion::v075:
