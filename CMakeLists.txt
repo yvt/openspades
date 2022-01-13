@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
 project(OpenSpades)
 
-set(OpenSpades_VERSION_MAJOR 1)
-set(OpenSpades_VERSION_MINOR 0)
-set(OpenSpades_VERSION_REVISION 5)
+set(OpenSpades_VERSION_MAJOR 0)
+set(OpenSpades_VERSION_MINOR 1)
+set(OpenSpades_VERSION_REVISION )
 
 set(OPENSPADES_FULL_VERSION "${OpenSpades_VERSION_MAJOR}.${OpenSpades_VERSION_MINOR}.${OpenSpades_VERSION_REVISION}")
 

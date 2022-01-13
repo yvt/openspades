@@ -44,8 +44,8 @@
 
 SPADES_SETTING(r_videoWidth);
 SPADES_SETTING(r_videoHeight);
-DEFINE_SPADES_SETTING(r_fullscreen, "0");
-DEFINE_SPADES_SETTING(r_vsync, "1");
+DEFINE_SPADES_SETTING(r_fullscreen, "1");
+DEFINE_SPADES_SETTING(r_vsync, "0");
 DEFINE_SPADES_SETTING(r_allowSoftwareRendering, "0");
 DEFINE_SPADES_SETTING(r_renderer, "gl");
 #ifdef __APPLE__

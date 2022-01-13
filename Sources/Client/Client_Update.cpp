@@ -48,11 +48,11 @@
 
 #include "NetClient.h"
 
-DEFINE_SPADES_SETTING(cg_ragdoll, "1");
+DEFINE_SPADES_SETTING(cg_ragdoll, "0");
 SPADES_SETTING(cg_blood);
-DEFINE_SPADES_SETTING(cg_ejectBrass, "1");
+DEFINE_SPADES_SETTING(cg_ejectBrass, "0");
 DEFINE_SPADES_SETTING(cg_hitFeedbackSoundGain, "0.2");
-DEFINE_SPADES_SETTING(cg_tracersFirstPerson, "1");
+DEFINE_SPADES_SETTING(cg_tracersFirstPerson, "0");
 
 SPADES_SETTING(cg_alerts);
 SPADES_SETTING(cg_centerMessage);

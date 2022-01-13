@@ -1,7 +1,7 @@
 // todo: rewrite this honestly shitty as fuck code
 // Don't Repeat Yourself
 
-#include <Client/OpenSpadesPlus.h>
+#include <Plus/OpenSpadesPlus.h>
 
 #if __linux__
 	#define OS_PLATFORM_LINUX
