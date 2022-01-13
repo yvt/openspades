@@ -24,6 +24,6 @@
 
 namespace spades {
 	namespace client {
-    extern osPlusVersion = 5;
+    extern int osPlusVersion = 5;
 	} // namespace client
 } // namespace spades
