@@ -2,6 +2,14 @@
 Credits
 -------
 
+OpenSpades+
+___________
+
+"non_performing" - OpenSpades+ project lead
+
+Base
+----
+
 "yvt" - Most of the code
 "Dany0" - System profiler, ideas, etc.
 "learn_more" - CMake support, server browser, ideas, Win32 build guide

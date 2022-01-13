@@ -60,6 +60,7 @@
 #include "World.h"
 
 #include "NetClient.h"
+#include "OpenSpadesPlus.h"
 
 DEFINE_SPADES_SETTING(cg_hitIndicator, "1");
 DEFINE_SPADES_SETTING(cg_debugAim, "0");
@@ -216,7 +217,7 @@ namespace spades {
 
 			IFont &font = fontManager->GetGuiFont();
 			std::string str = _Tr("Client", "Loading... OpenSpades+ Revision");
-			str += std::to_string(osPlusVersion);
+			str += std::to_string(plusVersion);
 			Vector2 size = font.Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
 			pos -= size;
@@ -911,7 +912,7 @@ namespace spades {
 			std::string str;
 
 			str += "OS+: r";
-			str += std::to_string(osPlusVersion);
+			str += std::to_string(plusVersion);
 			str += " |";
 
 			switch (hostname.GetProtocolVersion()) {

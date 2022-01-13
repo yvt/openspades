@@ -7,7 +7,7 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * No FOV cap
 * No falling blocks hindering visibility
 * No ejected shell or bullet casings
-* A crosshair more akin to classic FPS games such as CS:GO
+* A crosshair more akin to classic FPS games such as CS:GO (two to pick from currently)
 * No ragdolls or corpses whatsoever
 * More concise and informative kill and death messages in both as the center message log and kill log
 * Hides viewmodel
@@ -15,6 +15,7 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * More info in cg_stats (FPS and ping counter)
 * Allow spectators and dead people to use the flashlight
 * Change teams in Limbo menu by using the Q, W, and E keys
+* Less harsh flashlight
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)

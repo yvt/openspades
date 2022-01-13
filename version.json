@@ -37,5 +37,23 @@
         "Info": "https://raw.githubusercontent.com/nonperforming/openspadesplus/master/README.md"
       }
     }
+    {
+      "Version": 
+      [
+        1,
+        0,
+        0,
+        6
+      ],
+      "VersionText": "Revision 6",
+      "Platforms": 
+      [
+        "SourceCode"
+      ],
+      "Links": 
+      {
+        "Info": "https://raw.githubusercontent.com/nonperforming/openspadesplus/master/README.md"
+      }
+    }
   ]
 } 
