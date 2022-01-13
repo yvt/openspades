@@ -60,8 +60,6 @@ FOV is very a preferential thing. Nobody's judging you, go crazy and set it to 1
 ### To-do:
 Remove ragdolls and corpses cleaner code
 
-Bump OpenSpades revision level in Client_Draw.cpp (911) and in README.md
-
 Accuracy in cg_stats or other
 
 Players left in cg_stats or other
@@ -69,3 +67,7 @@ Players left in cg_stats or other
 Reload progress bar below the crosshair or in cg_stats
 
 Shots left below crosshair and replacing icons (bottom right)
+
+### On commit:
+
+Bump OpenSpades+ revision level in OpenSpadesPlus.cpp and in README.md
