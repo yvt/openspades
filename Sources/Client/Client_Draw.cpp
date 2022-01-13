@@ -910,7 +910,7 @@ namespace spades {
 			std::string str;
 
 			str += "OS+: r";
-			str += osPlusVersion;
+			str += to_string(osPlusVersion);
 			str += " |";
 
 			switch (hostname.GetProtocolVersion()) {
