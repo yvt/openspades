@@ -22,6 +22,8 @@ std::string VersionInfo::GetVersionInfo() {
 
 // insert custom client here
 
+// insert custom client here
+
 #if defined(OS_PLATFORM_LINUX)
 	buffer = "GNU/Linux";
 

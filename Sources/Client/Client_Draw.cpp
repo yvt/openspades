@@ -51,15 +51,15 @@
 #include "SmokeSpriteEntity.h"
 #include "TCProgressView.h"
 #include "Tracer.h"
-#include "OpenSpadesPlus.h"
+#include <Plus/OpenSpadesPlus.h>
 
 #include "GameMap.h"
 #include "Grenade.h"
 #include "Weapon.h"
 #include "World.h"
+#include <Core/ServerAddress.h>
 
 #include "NetClient.h"
-#include "OpenSpadesPlus.h"
 
 DEFINE_SPADES_SETTING(cg_hitIndicator, "1");
 DEFINE_SPADES_SETTING(cg_debugAim, "0");
@@ -216,7 +216,7 @@ namespace spades {
 
 			IFont &font = fontManager->GetGuiFont();
 			std::string str = _Tr("Client", "Loading... OpenSpades+ Revision");
-			str += std::to_string(plusVersion);
+			str += std::to_string(plus::revision);
 			Vector2 size = font.Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
 			pos -= size;
@@ -911,20 +911,22 @@ namespace spades {
 			std::string str;
 
 			str += "OS+: r";
-			str += std::to_string(plusVersion);
+			str += std::to_string(plus::revision);
 			str += " | ";
+
+			str += ServerAddress::ToString(false);
 
 			switch (hostname.GetProtocolVersion()) {
 				case ProtocolVersion::v075:
-					sprintf(buf, "v0.75 | ");
+					sprintf(buf, " | v0.75 | ");
 					str += buf;
 					break;
 				case ProtocolVersion::v076:
-					sprintf(buf, "v0.76 | ");
+					sprintf(buf, " | v0.76 | ");
 					str += buf;
 					break;
 				default: 
-					sprintf(buf, "v0.?? | ");
+					sprintf(buf, " | v0.?? | ");
 					str += buf;
 					break;
 			}
