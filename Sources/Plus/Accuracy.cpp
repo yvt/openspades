@@ -1,5 +1,6 @@
 /*
- Copyright (c) 2013 yvt
+
+ Copyright (c) 2022 non_performing
 
  This file is part of OpenSpades+.
 
@@ -15,13 +16,7 @@
  
  You should have received a copy of the GNU General Public License
  along with OpenSpades+. If not, see <http://www.gnu.org/licenses/>.
- */
 
-#include "OpenSpadesPlus.h"
-#include <iostream>
+*/
 
-namespace spades {
-	namespace client {
-    const int plusVersion = 6;
-	} // namespace client
-} // namespace spades
+#include "Accuracy.h"
