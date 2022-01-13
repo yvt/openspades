@@ -914,7 +914,8 @@ namespace spades {
 			str += std::to_string(plus::revision);
 			str += " | ";
 
-			str += ServerAddress::ToString(false);
+			ServerAddress ServAddr;
+			str += ServAddr::ToString(false);
 
 			switch (hostname.GetProtocolVersion()) {
 				case ProtocolVersion::v075:
