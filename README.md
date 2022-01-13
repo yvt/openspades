@@ -97,6 +97,11 @@ Default: 1
 
 Show FPS, Ping, OS+ version, Accuracy and IP of connected server when enabled. ***Highly recommended not to turn this off.***
 
+### cg_alertSounds
+Default: 1
+
+Are you in a clan which plays OpenSpades regularly in a VC? Consider turning this to off to prevent pubs from distracting you and making important sounds such as footsteps or gunfire harder to hear.
+
 ## Other
 ### !!IMPORTANT!!
 Save files are kept seperate from OpenSpades. You can copy your SPConfig.cfg over to OSPlus.cfg, but OpenSpades+ uses different default options which you may find helpful. You can always set them manually however, see "Useful console variables"
