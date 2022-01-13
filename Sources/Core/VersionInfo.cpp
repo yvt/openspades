@@ -1,3 +1,6 @@
+// todo: rewrite this honestly shitty as fuck code
+// Don't Repeat Yourself
+
 #include <Client/OpenSpadesPlus.h>
 
 #if __linux__
