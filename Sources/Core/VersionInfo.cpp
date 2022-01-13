@@ -1,4 +1,8 @@
-#include "OpenSpadesPlus.h"
+#include <Core/Settings.h>
+#include <Plus/OpenSpadesPlus.h>
+
+SPADES_SETTING(p_showCustomClientMessage);
+SPADES_SETTING(p_customClientMessage);
 
 #if __linux__
 	#define OS_PLATFORM_LINUX
@@ -8,53 +12,78 @@
 	#define OS_PLATFORM_WINDOWS
 	#include <Windows.h>
 	#include <sstream>
-	#include <VersionHelpers.h> // Requires windows 8.1 sdk at least
+	#include <VersionHelpers.h> // Requires Windows 10 SDK at least
 #endif
 
 #include "VersionInfo.h"
 
 std::string VersionInfo::GetVersionInfo() {
+	std::string buffer;
+
+// insert custom client here
+
 #if defined(OS_PLATFORM_LINUX)
-	return std::string("UNIX/Linux");
+	buffer = "GNU/Linux";
 
 #elif defined(TARGET_OS_MAC)
-	return std::string("MacOS");
+	buffer = "Mac OS";
 
 #elif defined(OS_PLATFORM_WINDOWS)
-	std::string windowsVersion;
-	if (IsWindowsXPOrGreater() && !IsWindowsVistaOrGreater()) {
-		windowsVersion = "Windows XP";
-	} else if (IsWindowsVistaOrGreater() && !IsWindows7OrGreater()) {
-		windowsVersion = "Windows Vista";
-	} else if (IsWindows7OrGreater() && !IsWindows8OrGreater()) {
-		windowsVersion = "Windows 7";
+	if (IsWindowsXPOrGreater() && !IsWindowsSP1OrGreater()) {
+		buffer = "Windows XP";
+	} else if (IsWindowsXPSP1OrGreater() && !IsWindowsXPSP2OrGreater()) {
+		buffer = "Windows XP Service Pack 1";
+	} else if (IsWindowsXPSP2OrGreater() && !IsWindowsXPSP3OrGreater()) {
+		buffer = "Windows XP Service Pack 2";
+	} else if (IsWindowsXPSP3OrGreater() && !IsWindowsVistaOrGreater()) {
+		buffer = "Windows XP Service Pack 3";
+	} else if (IsWindowsVistaOrGreater() && !IsWindowsVistaSP1OrGreater()) {
+		buffer = "Windows Vista";
+	} else if (IsWindowsVistaSP1OrGreater() && !IsWindowsVistaSP2OrGreater()){
+		buffer = "Windows Vista Service Pack 1"
+	} else if (IsWindowsVistaSP2OrGreater() && !IsWindows7OrGreater()) {
+		buffer = "Windows Vista Service Pack 2"
+	} else if (IsWindows7OrGreater() && !IsWindows7SP1OrGreater()) {
+		buffer = "Windows 7";
+	} else if (IsWindows7SP1OrGreater() && !IsWindows8OrGreater()) {
+		buffer = "Windows 7 Service Pack 1"
 	} else if (IsWindows8OrGreater() && !IsWindows8Point1OrGreater()) {
-		windowsVersion = "Windows 8";
-	} else if (IsWindows8Point1OrGreater()) {
-		windowsVersion = "Windows 10"; // Nobody uses 8.1... right?
+		buffer = "Windows 8";
+	} else if (IsWindows8Point1OrGreater() && !IsWindows10OrGreater()) {
+		buffer = "Windows 8.1";
+	} else if (IsWindows10OrGreater()) {
+		buffer = "Windows 10";
 	} else {
-		windowsVersion = "Windows 11";
+		buffer = "Windows 11";
 	}
-	windowsVersion += " - OpenSpades+ Revision "; // i think this works
-	windowsVersion += std::to_string(plusVersion);
-
-	// Might be a greater version, but the new Microsoft
-	// API doesn't support checking for specific versions.
 
 	if (IsWindowsServer())
-		windowsVersion += " Server";
-	return windowsVersion;
+		buffer += " Server";
+	return buffer;
 #elif defined(__FreeBSD__)
-	return std::string("FreeBSD");
-#elif defined(__DragonFly__)
-	return std::string("DragonFly BSD");
+	buffer = "FreeBSD";
 #elif defined(__OpenBSD__)
-	return std::string("OpenBSD");
+	buffer = "OpenBSD";
+#elif defined(__DragonFly__)
+	buffer = "DragonFly BSD";
 #elif defined(__NetBSD__)
-	return std::string("NetBSD");
+	buffer = "NetBSD";
 #elif defined(__HAIKU__)
-	return std::string("Haiku");
+	buffer = "Haiku OS";
 #else
-	return std::string("MacOS");
+	buffer = "Mac OS"; // I honestly dont know anything else that would fall into Unknown. I do, however, know that on modern macs or something TARGET_OS_MAC supposedly fails or something??? Update libs or something.
 #endif
+
+	buffer += " | OpenSpades+ Revision ";
+	buffer += std::to_string(spades::plus::revision);
+
+	if (p_showCustomClientMessage)
+	{
+		std::string message = p_customClientMessage;
+		
+		buffer += " | ";
+		buffer += message;
+	}
+
+	return std::string(buffer);
 }
