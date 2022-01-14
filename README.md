@@ -103,6 +103,11 @@ Default: 1
 
 Are you in a clan which plays OpenSpades regularly in a VC? Consider turning this to off to prevent pubs from distracting you and making important sounds such as footsteps or gunfire harder to hear.
 
+### cg_animations
+Default: 1
+
+Remove many animations, such at the scope-in animation when aiming down sights. This is enabled by default because it can be disorientating when quickly scoping in and out with a weapon.
+
 ## Other
 ### !!IMPORTANT!!
 Save files and game files are kept seperate from OpenSpades. It is highly unlikely that OpenSpades+ will bork or modify an OpenSpades install in any way. To use your OpenSpades config file as a template/your config file for OpenSpades+, you can copy your SPConfig.cfg over to OSPlus.cfg. Please notice that OpenSpades+ uses different default options which you may find helpful. You can always set them manually however, see ["Useful console variables"](https://github.com/nonperforming/openspadesplus#useful-console-variables)
