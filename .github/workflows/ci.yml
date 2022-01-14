@@ -27,6 +27,7 @@ jobs:
         
       - name: Update vcpkg
         run: vcpkg/vcpkg update
+             git pull
 
       - name: Build dependencies
         run: vcpkg/vcpkg install @vcpkg_x86-windows.txt
@@ -81,6 +82,7 @@ jobs:
         
       - name: Update vcpkg
         run: vcpkg/vcpkg update
+             git pull
 
       - name: Build dependencies
         run: vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
