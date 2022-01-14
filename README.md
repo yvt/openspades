@@ -119,9 +119,11 @@ Accuracy in cg_stats or other
 
 Players left in cg_stats or other
 
-Reload progress bar below the crosshair or in cg_stats
+Reload progress bar below the crosshair or in cg_stats - partially done in the form of percentage in "Reloading" text
 
 Shots left below crosshair and replacing icons (bottom right)
+
+Remove bullet icons
 
 ### On commit:
 
