@@ -20,10 +20,6 @@ SPADES_SETTING(p_customClientMessage);
 std::string VersionInfo::GetVersionInfo() {
 	std::string buffer;
 
-// insert custom client here
-
-// insert custom client here
-
 #if defined(OS_PLATFORM_LINUX)
 	buffer = "GNU/Linux";
 
