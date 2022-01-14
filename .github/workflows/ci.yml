@@ -14,16 +14,19 @@ jobs:
           submodules: true
           path: openspades
 
-      #- name: Cache vcpkg and dependencies
-        #uses: actions/cache@v2
-        #with:
-          #path: |
-            #vcpkg/installed
-            #!.git
-          #key: ${{ runner.os }}-${{ hashFiles('vcpkg_x86-windows.txt', '.gitmodules') }}
+      - name: Cache vcpkg and dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            vcpkg/installed
+            !.git
+          key: ${{ runner.os }}-${{ hashFiles('vcpkg_x86-windows.txt', '.gitmodules') }}
 
       - name: Bootstrap vcpkg
         run: vcpkg/bootstrap-vcpkg.bat
+        
+      - name: Update vcpkg
+        run: vcpkg/vcpkg update
 
       - name: Build dependencies
         run: vcpkg/vcpkg install @vcpkg_x86-windows.txt
@@ -75,6 +78,9 @@ jobs:
 
       - name: Bootstrap vcpkg
         run: vcpkg/bootstrap-vcpkg.sh
+        
+      - name: Update vcpkg
+        run: vcpkg/vcpkg update
 
       - name: Build dependencies
         run: vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
