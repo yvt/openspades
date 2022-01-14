@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 on:
   pull_request:
   push:
@@ -68,10 +68,14 @@ jobs:
           build-type: RelWithDebInfo
           configure-options: -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-osx -D CMAKE_OSX_ARCHITECTURES=x86_64
           parallel: 8
-          
-      - name: Upload to Release
-        uses: fnkr/github-action-ghr@v1
-        env:
-          GHR_COMPRESS: zip
-          GHR_PATH: openspades.mk/
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+        - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "nightly"
+          title: "Nightly Build - CI/CD"
+          prerelease: true
+          files: |
+            LICENSE.txt
+            openspades.mk/
+            *.app
