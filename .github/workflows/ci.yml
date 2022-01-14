@@ -77,7 +77,5 @@ jobs:
           title: "Nightly Build - CI/CD"
           prerelease: true
           files: |
-            /bin/OpenSpades.app
-            openspades.mk/bin/OpenSpades.app
-            openspades/openspades.mk/bin/OpenSpades.app
+            /Users/runner/work/openspadesplus/openspades.mk/bin/OpenSpades.app
             
