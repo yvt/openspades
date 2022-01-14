@@ -6,7 +6,7 @@ on:
 jobs:
   build-windows:
     name: Build (Windows)
-    runs-on: windows-2016
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -81,9 +81,6 @@ jobs:
         
       - name: Update vcpkg
         run: vcpkg/vcpkg update
-      
-      - name: git pull
-        run: git pull
 
       - name: Build dependencies
         run: vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
