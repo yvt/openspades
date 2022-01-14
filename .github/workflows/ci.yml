@@ -36,7 +36,7 @@ jobs:
           configure-options: -A Win32 -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x86-windows-static
           parallel: 8
 
-      - name: Archive OpenSpades.app
+      - name: Archive OpenSpades+
         uses: "thedoctor0/zip-release@master"
         with:
           type: 'zip'
