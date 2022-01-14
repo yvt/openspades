@@ -68,13 +68,15 @@ jobs:
           build-type: RelWithDebInfo
           configure-options: -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-osx -D CMAKE_OSX_ARCHITECTURES=x86_64
           parallel: 8
+          
+      - name: Archive OpenSpades.app
+        uses: "thedoctor0/zip-release@master"
+        with:
+          type: 'zip'
+          filename: 'macos.zip'
+          path: "/Users/runner/work/openspadesplus/openspades.mk/bin/OpenSpades.app"
       
-      - name: Compress
-        uses: "TonyBogdanov/zip@1.0"
-        with: 
-          args: zip -qq -r ./macos.zip /Users/runner/work/openspadesplus/openspades.mk/bin/OpenSpades.app
-      
-      - name: "Push release"
+      - name: "Push nightly release"
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
