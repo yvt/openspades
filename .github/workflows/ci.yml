@@ -76,6 +76,5 @@ jobs:
           title: "Nightly Build - CI/CD"
           prerelease: true
           files: |
-            LICENSE.txt
-            openspades.mk/
-            *.app
+            *.*
+            
