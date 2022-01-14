@@ -27,9 +27,6 @@ jobs:
         
       - name: Update vcpkg
         run: vcpkg/vcpkg update
-        
-      - name: git pull
-        run: git pull
 
       - name: Build dependencies
         run: vcpkg/vcpkg install @vcpkg_x86-windows.txt
