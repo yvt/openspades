@@ -1,7 +1,7 @@
 # OpenSpades+
 # Revision 7
 
-PLEASE READ THE ENTIRE README.md FILE BEFORE USING
+[PLEASE READ THE ENTIRE README.md FILE BEFORE USING](https://github.com/nonperforming/openspadesplus#important)
 ## What is it?
 OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades) that has
 
@@ -37,6 +37,7 @@ As simple as it gets. Turn particles on or off along with some extra settings. T
 Default: 0
 
 Setting this to 0 (model instead of dynamic ragdoll) seemingly has marginally less impact than when set to 1. There is no point in setting this to 1 since OpenSpades+ removes ragdolls and said model. ***Highly recommended not to turn this on.***
+
 ### r_vsync
 Default: 0
 
@@ -104,7 +105,8 @@ Are you in a clan which plays OpenSpades regularly in a VC? Consider turning thi
 
 ## Other
 ### !!IMPORTANT!!
-Save files and game files are kept seperate from OpenSpades. It is highly unlikely that OpenSpades+ will bork or modify an OpenSpades install in any way. To use your OpenSpades save file as a template for OpenSpades+, you can copy your SPConfig.cfg over to OSPlus.cfg. Please notice that OpenSpades+ uses different default options which you may find helpful. You can always set them manually however, see "Useful console variables"
+Save files and game files are kept seperate from OpenSpades. It is highly unlikely that OpenSpades+ will bork or modify an OpenSpades install in any way. To use your OpenSpades config file as a template/your config file for OpenSpades+, you can copy your SPConfig.cfg over to OSPlus.cfg. Please notice that OpenSpades+ uses different default options which you may find helpful. You can always set them manually however, see ["Useful console variables"](https://github.com/nonperforming/openspadesplus#useful-console-variables)
+
 ### To-do:
 Remove ragdolls and corpses cleaner code
 
