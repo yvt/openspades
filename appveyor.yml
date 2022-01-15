@@ -27,6 +27,7 @@ artifacts:
   openspadesplus/openspades.mk/
 
 for:
+-
   matrix:
     only:
       - image: Ubuntu
