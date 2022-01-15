@@ -1,16 +1,15 @@
-static const char *credits = R"**(
-
-${PACKAGE_STRING}
-
+static const char *credits = R"**(${PACKAGE_STRING}
 
 
 Credits
 -------
 
 OpenSpades+
-___________
+-----------
 
 "non_performing" - OpenSpades+ project lead
+"Nuceto" - Help with code
+"VierEck" - Help with code
 
 Base
 ----
