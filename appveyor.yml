@@ -54,24 +54,20 @@ for:
               - cd openspadesplus
               - ls
               - ./build.sh
-
-for:
-- matrix:
-    only:
-      - image: macOS-BigSur
-      - build_script:
-        - sh:
-          - brew install pkg-config
-          - git clone https://github.com/nonperforming/openspadesplus
-          - cd openspadesplus
-          - vcpkg/bootstrap-vcpkg.sh
-          - vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
-          - mkdir openspades.mk
-          - cd openspades.mk
-          - cmake -G Ninja .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_OSX_ARCHITECTURES=x86_64 -D CMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-osx
-          - ninja
-
-for:
+  - matrix:
+      only:
+        - image: macOS-BigSur
+        - build_script:
+          - sh:
+            - brew install pkg-config
+            - git clone https://github.com/nonperforming/openspadesplus
+            - cd openspadesplus
+            - vcpkg/bootstrap-vcpkg.sh
+            - vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
+            - mkdir openspades.mk
+            - cd openspades.mk
+            - cmake -G Ninja .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_OSX_ARCHITECTURES=x86_64 -D CMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-osx
+            - ninja
 - matrix:
   only:
     - image: Visual Studio 2015
