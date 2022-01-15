@@ -62,6 +62,7 @@
 
 #include <Plus/OpenSpadesPlus.h>
 #include <Core/ServerAddress.h>
+#include <Core/Settings.h>
 #include <algorithm>
 
 DEFINE_SPADES_SETTING(cg_hitIndicator, "1");
@@ -525,18 +526,7 @@ namespace spades {
 					}
 				}
 
-				std::string buffer;
-				int clip = weap.GetAmmo();
-				if (p.IsToolWeapon()) {
-					buffer += clip;
-					buffer += " / ";
-					buffer += clipSize;
-					sprintf(buffer); 
-					// thanks Nuceto! 
-					// based off https://github.com/Nuceto/NucetoSpades/commit/138526b0b7a6e2189ee6694acd60ed46a9dc21af
-				}else{
-				sprintf(buf, "%d",stockNum);
-				}
+				
 
 				Vector4 numberColor = {1, 1, 1, 1};
 
@@ -548,11 +538,25 @@ namespace spades {
 				}
 
 				char buf[64];
-				sprintf(buf, "%d", stockNum);
+
+				std::string buffer;
+				
+				int clip = weap.GetAmmo();
+				if (p.IsToolWeapon()) {
+					buffer += clip;
+					buffer += " / ";
+					buffer += clipSize;
+					sprintf(buffer); 
+					// thanks Nuceto! 
+					// based off https://github.com/Nuceto/NucetoSpades/commit/138526b0b7a6e2189ee6694acd60ed46a9dc21af
+				}else{
+				sprintf(buf, "%d",stockNum);
+				}
+				
 				IFont &font = fontManager->GetSquareDesignFont();
 				std::string stockStr = buf;
 				Vector2 size = font.Measure(stockStr);
-				Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f - iconHeight);
+				Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f);
 				pos -= size;
 				font.DrawShadow(stockStr, pos, 1.f, numberColor, MakeVector4(0, 0, 0, 0.5));
 
