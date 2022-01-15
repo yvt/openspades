@@ -16,7 +16,8 @@
 
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
-*/
+
+ */
 
 #include <cstdlib>
 
@@ -51,16 +52,17 @@
 #include "SmokeSpriteEntity.h"
 #include "TCProgressView.h"
 #include "Tracer.h"
-#include <Plus/OpenSpadesPlus.h>
 
 #include "GameMap.h"
 #include "Grenade.h"
 #include "Weapon.h"
 #include "World.h"
-#include <Core/ServerAddress.h>
-#include <algorithm>
 
 #include "NetClient.h"
+
+#include <Plus/OpenSpadesPlus.h>
+#include <Core/ServerAddress.h>
+#include <algorithm>
 
 DEFINE_SPADES_SETTING(cg_hitIndicator, "1");
 DEFINE_SPADES_SETTING(cg_debugAim, "0");
@@ -69,7 +71,7 @@ SPADES_SETTING(cg_keyJump);
 SPADES_SETTING(cg_keyAttack);
 SPADES_SETTING(cg_keyAltAttack);
 SPADES_SETTING(cg_keyCrouch);
-DEFINE_SPADES_SETTING(cg_screenshotFormat, "jpeg");
+DEFINE_SPADES_SETTING(cg_screenshotFormat, "png");
 DEFINE_SPADES_SETTING(cg_stats, "1");
 DEFINE_SPADES_SETTING(cg_hideHud, "0");
 DEFINE_SPADES_SETTING(cg_playerNames, "2");
@@ -216,7 +218,7 @@ namespace spades {
 			DrawSplash();
 
 			IFont &font = fontManager->GetGuiFont();
-			std::string str = _Tr("Client", "Loading... OpenSpades+ Revision");
+			std::string str = _Tr("Client", "OpenSpades+ Revision ");
 			str += std::to_string(plus::revision);
 			Vector2 size = font.Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
@@ -465,9 +467,8 @@ namespace spades {
 				//        does not submit sufficient information)
 				Weapon &weap = p.GetWeapon();
 				Handle<IImage> ammoIcon;
-				float iconWidth = 0.f;
-				float iconHeight = 0.f;
-				float spacing = 0.f;
+				float iconWidth, iconHeight;
+				float spacing = 2.f;
 				int stockNum;
 				int warnLevel;
 
@@ -475,12 +476,19 @@ namespace spades {
 					switch (weap.GetWeaponType()) {
 						case RIFLE_WEAPON:
 							ammoIcon = renderer->RegisterImage("Gfx/Bullet/7.62mm.png");
+							iconWidth = 6.f;
+							iconHeight = iconWidth * 4.f;
 							break;
 						case SMG_WEAPON:
 							ammoIcon = renderer->RegisterImage("Gfx/Bullet/9mm.png");
+							iconWidth = 4.f;
+							iconHeight = iconWidth * 4.f;
 							break;
 						case SHOTGUN_WEAPON:
 							ammoIcon = renderer->RegisterImage("Gfx/Bullet/12gauge.png");
+							iconWidth = 30.f;
+							iconHeight = iconWidth / 4.f;
+							spacing = -6.f;
 							break;
 						default: SPInvalidEnum("weap->GetWeaponType()", weap.GetWeaponType());
 					}
@@ -499,6 +507,8 @@ namespace spades {
 						} else {
 							renderer->SetColorAlphaPremultiplied(MakeVector4(0.4, 0.4, 0.4, 1));
 						}
+
+						//renderer->DrawImage(ammoIcon, AABB2(x, y, iconWidth, iconHeight));
 					}
 
 					stockNum = weap.GetStock();
@@ -507,33 +517,25 @@ namespace spades {
 					iconHeight = 0.f;
 					warnLevel = 0;
 
-				for (int i = 0; i < clipSize; i++) {
-						float x = scrWidth - 16.f - (float)(i + 1) * (iconWidth + spacing);
-						float y = scrHeight - 16.f - iconHeight;
-					}
-				}
-
 					switch (p.GetTool()) {
 						case Player::ToolSpade:
 						case Player::ToolBlock: stockNum = p.GetNumBlocks(); break;
 						case Player::ToolGrenade: stockNum = p.GetNumGrenades(); break;
 						default: SPInvalidEnum("p->GetTool()", p.GetTool());
 					}
-				
+				}
+
 				std::string buffer;
 				int clip = weap.GetAmmo();
 				if (p.IsToolWeapon()) {
 					buffer += clip;
 					buffer += " / ";
 					buffer += clipSize;
-
 					sprintf(buffer); 
 					// thanks Nuceto! 
 					// based off https://github.com/Nuceto/NucetoSpades/commit/138526b0b7a6e2189ee6694acd60ed46a9dc21af
-
 				}else{
 				sprintf(buf, "%d",stockNum);
-				}
 				}
 
 				Vector4 numberColor = {1, 1, 1, 1};
@@ -546,21 +548,13 @@ namespace spades {
 				}
 
 				char buf[64];
-				
-
+				sprintf(buf, "%d", stockNum);
 				IFont &font = fontManager->GetSquareDesignFont();
 				std::string stockStr = buf;
-				std::string clipStr = buff;
 				Vector2 size = font.Measure(stockStr);
-				Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f);
+				Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f - iconHeight);
 				pos -= size;
-				Vector4 color = Vector4{1, 1, 1, 1.0f};
-
-				if (p.IsToolWeapon()) {
-					font.DrawShadow(clipStr, pos, 1.f, color, MakeVector4(0, 0, 0, 1.0f));
-				}else{
-				font.DrawShadow(stockStr, pos, 1.f, numberColor, MakeVector4(0, 0, 0, 1.0f));
-        }
+				font.DrawShadow(stockStr, pos, 1.f, numberColor, MakeVector4(0, 0, 0, 0.5));
 
 				// draw "press ... to reload"
 				{
@@ -578,20 +572,17 @@ namespace spades {
 							}
 							break;
 						case Player::ToolWeapon: {
+							Weapon &weap = p.GetWeapon();
 							if (weap.IsReloading() || p.IsAwaitingReloadCompletion()) {
 								msg = _Tr("Client", "Reloading - ");
 								float progress = weap.GetReloadProgress();
-
 								progress = progress*100;
 								progress = round(progress);
 								progress = progress/100;
-
 								std::string Weapon2 = std::to_string(progress);
-
 								Weapon2.erase(std::remove(Weapon2.begin(), Weapon2.end(), "0."), Weapon2.end());
 								Weapon2 += "%";
 								msg += Weapon2;
-
 							} else if (weap.GetAmmo() == 0 && weap.GetStock() == 0) {
 								msg = _Tr("Client", "No reserve");
 							} else if (weap.GetStock() > 0 &&
@@ -688,7 +679,7 @@ namespace spades {
 				if (GetCameraTargetPlayer().IsAlive()) {
 					addLine(_Tr("Client", "[{0}] to cycle camera mode", TranslateKeyName(cg_keyJump)));
 				}
-				addLine(_Tr("Client", "[{0}/{1}] to cycle players",
+				addLine(_Tr("Client", "[{0}/{1}] to cycle between players",
 				            TranslateKeyName(cg_keyAttack), TranslateKeyName(cg_keyAltAttack)));
 
 				if (GetWorld()->GetLocalPlayer()->IsSpectator()) {
@@ -700,7 +691,7 @@ namespace spades {
 			}
 
 			if (GetCameraMode() == ClientCameraMode::Free) {
-				addLine(_Tr("Client", "[{0}/{1}] to go up/down", TranslateKeyName(cg_keyJump),
+				addLine(_Tr("Client", "[{0}/{1}] to ascend/decend", TranslateKeyName(cg_keyJump),
 				            TranslateKeyName(cg_keyCrouch)));
 			}
 
@@ -945,12 +936,13 @@ namespace spades {
 
 			str += "OS+: r";
 			str += std::to_string(plus::revision);
-//			str += " | ";
-/*
+			//str += " | ";
+			/*
 			ServerAddress ServAddr;
 			std::string buffer = ServAddr.ToString(false);
-			str += buffer;*/ // this shit dont work!!
-
+			str += buffer;
+			*/ 
+			// this shit dont work!!
 			switch (hostname.GetProtocolVersion()) {
 				case ProtocolVersion::v075:
 					sprintf(buf, " | v0.75 | ");
@@ -968,8 +960,8 @@ namespace spades {
 
 			{
 				auto fps = fpsCounter.GetFps();
-				if (fps == 0.0) // what? why is this even here? its not like itll be rendered or it'll not be on screen for long
-					str += "FPS: N/A |";
+				if (fps == 0.0)
+					str += "FPS: N/A | ";
 				else {
 					sprintf(buf, "FPS: %.02f | ", fps);
 					str += buf;
@@ -990,7 +982,7 @@ namespace spades {
 				auto ping = net->GetPing();
 				auto upbps = net->GetUplinkBps();
 				auto downbps = net->GetDownlinkBps();
-				sprintf(buf, "Ping: %dms | UR/DR: %.02f/%.02fkbps", ping, upbps / 1000.0,
+				sprintf(buf, "Ping: %dms | UL/DL: %.02f/%.02fkbps", ping, upbps / 1000.0,
 				        downbps / 1000.0);
 				str += buf;
 			}
