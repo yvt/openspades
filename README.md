@@ -1,9 +1,11 @@
 # OpenSpades+
-# Revision 7
+# Revision 8
+
+[![Build status](https://ci.appveyor.com/api/projects/status/gasnapxykby565ng?svg=true)](https://ci.appveyor.com/project/nonperforming/openspadesplus)
 
 [PLEASE READ THE ENTIRE README.md FILE BEFORE USING](https://github.com/nonperforming/openspadesplus#important)
-## What is it?
-OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades) that has
+## What is this?
+OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades) that has many competivive-sided tweaks such as
 
 * No FOV cap
 * No falling blocks hindering visibility
@@ -23,6 +25,9 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
 If you are on Linux and have all the dependencies installed there is a convenient [file](https://github.com/nonperforming/openspadesplus/blob/master/build.sh) that will run all the necessary commands to build OpenSpades+. Occasionally there will be bugs preventing you from launching or building the game - in that case, please download the source code from the latest Release or fix the bug yourself (please do send a PR).
 
+## What if I don't want to/can't build?
+Check the [Releases](https://github.com/nonperforming/openspadesplus/releases) tab for the latest stable release. Otherwise, check [AppVeyor](https://ci.appveyor.com/project/nonperforming/openspadesplus/build/artifacts) for the latest bleeding-edge releases.
+
 ## Why create this?
 The standard OpenSpades client is a very awesome Ace of Spades client while looking great at the same time, but in my opinion there are certain sacrifices or features that appeal to casual players but not always competitive players. A small lag spike when blocks are pulled from the ground (typically the barriers that drop in Arena), distracting bullet casings being ejected every time you fire, a view-model that takes up a fifth of the screen, no weapon information on kills with a headshot, etc. I hope OpenSpades+ is easy to switch between and from OpenSpades as possible, but at the same time more useful to competitive play.
 
@@ -31,7 +36,7 @@ The standard OpenSpades client is a very awesome Ace of Spades client while look
 ### cg_particles
 Default: 0
 
-As simple as it gets. Turn particles on or off along with some extra settings. This can and will hide grenade particles, which may be useful.
+As simple as it gets. Turn particles on or off along with some extra settings. This can and will hide grenade particles, which may be useful. THIS DOES NOT HIDE  TRACERS OR 
 
 ### cg_ragdoll
 Default: 0
@@ -107,6 +112,45 @@ Are you in a clan which plays OpenSpades regularly in a VC? Consider turning thi
 Default: 1
 
 Remove many animations, such at the scope-in animation when aiming down sights. This is enabled by default because it can be disorientating when quickly scoping in and out with a weapon.
+
+### p_hurtTint
+Default: 1
+
+Turns on or off tinting the screen when damaged (cooldown of 1.5 seconds) (STUB)
+
+### p_hurtBlood
+Default: 0
+
+Turns on or off the blood decals when damaged, which may obstruct vision and be a distraction in the most important time - a gunfight (cooldown of 1.5 seconds) (STUB)
+
+### p_hideViewmodel
+Default: 1
+
+Turns the viewmodel on or off. (STUB)
+
+### p_streamer
+Default: 0
+
+Hides the server IP from cg_stats and sanitises player names (STUB)
+
+### p_customClientMessage
+Default: Nothing
+
+Change your client info to something of your own. (STUB)
+
+### p_showCustomClientMessage
+Default: 0
+
+See `p_customClientMessage` (STUB)
+
+### p_showAccuracyUnderMap
+Default: 0
+
+(STUB)
+
+### p_showAccuracyInStats
+
+(STUB)
 
 ## Other
 ### !!IMPORTANT!!
