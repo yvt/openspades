@@ -519,6 +519,21 @@ namespace spades {
 						case Player::ToolGrenade: stockNum = p.GetNumGrenades(); break;
 						default: SPInvalidEnum("p->GetTool()", p.GetTool());
 					}
+				
+				std::string buffer;
+				int clip = weap.GetAmmo();
+				if (p.IsToolWeapon()) {
+					buffer += clip;
+					buffer += " / ";
+					buffer += clipSize;
+
+					sprintf(buffer); 
+					// thanks Nuceto! 
+					// based off https://github.com/Nuceto/NucetoSpades/commit/138526b0b7a6e2189ee6694acd60ed46a9dc21af
+
+				}else{
+				sprintf(buf, "%d",stockNum);
+				}
 				}
 
 				Vector4 numberColor = {1, 1, 1, 1};
@@ -531,24 +546,7 @@ namespace spades {
 				}
 
 				char buf[64];
-				char buff[64];
-
-				std::string buffer;
-				int clip = weap.GetAmmo();
-
-				if (p.IsToolWeapon()) {
-					buffer += clip;
-					buffer += " / ";
-					buffer += clipSize;
-
-					sprintf(buffer); 
-					// thanks Nuceto! 
-					// based off https://github.com/Nuceto/NucetoSpades/commit/138526b0b7a6e2189ee6694acd60ed46a9dc21af
-
-				}else{
-
-				sprintf(buf, "%d",stockNum);
-				}
+				
 
 				IFont &font = fontManager->GetSquareDesignFont();
 				std::string stockStr = buf;
