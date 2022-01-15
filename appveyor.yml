@@ -23,48 +23,48 @@ configuration:
 matrix:
 - fast_finish: true
 
+artifacts:
+- openspadesplus/openspades.mk/
+
 for:
 - matrix:
     only:
       - image: Ubuntu
-
-  build_script:
-  - sh: >-
-      sudo apt-get update
-      sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev libsdl2-image-dev libalut-dev xdg-utils libfreetype6-dev libopus-dev libopusfile-dev cmake imagemagick libjpeg-dev libxinerama-dev libxft-dev
-      git clone https://github.com/nonperforming/openspadesplus
-      cd openspadesplus
-      ls
-      ./build.sh
+       - build_script:
+            - sh: >-
+              sudo apt-get update
+              sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev libsdl2-image-dev libalut-dev xdg-utils libfreetype6-dev libopus-dev libopusfile-dev cmake imagemagick libjpeg-dev libxinerama-dev libxft-dev
+              git clone https://github.com/nonperforming/openspadesplus
+              cd openspadesplus
+              ls
+              ./build.sh
 
     only:
       - image: macOS-BigSur
-
-  build_script:
-  - sh: >-
-      xcode-select --install
-      sudo xcodebuild -license
-      curl https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
-      brew install pkg-config
-      git clone https://github.com/nonperforming/openspadesplus
-      cd openspadesplus
-      vcpkg/bootstrap-vcpkg.sh
-      vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
-      mkdir openspades.mk
-      cd openspades.mk
-      cmake -G Ninja .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_OSX_ARCHITECTURES=x86_64 -D CMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-osx
-      ninja
+       - build_script:
+        - sh: >-
+          xcode-select --install
+          sudo xcodebuild -license
+          curl https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
+          brew install pkg-config
+          git clone https://github.com/nonperforming/openspadesplus
+          cd openspadesplus
+          vcpkg/bootstrap-vcpkg.sh
+          vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
+          mkdir openspades.mk
+          cd openspades.mk
+          cmake -G Ninja .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_OSX_ARCHITECTURES=x86_64 -D CMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-osx
+          ninja
  
-    only:
-      - image: Visual Studio 2015
-
-  build_script:
-  - ps: >-
-      git clone https://github.com/nonperforming/openspadesplus
-      cd openspadesplus
-      vcpkg/bootstrap-vcpkg.bat
-      vcpkg/vcpkg install @vcpkg_x86-windows.txt
-      mkdir openspades.mk
-      cd openspades.mk
-      cmake -A Win32 -D CMAKE_BUILD_TYPE=RelWithDebInfo -D VCPKG_TARGET_TRIPLET=x86-windows-static
+   only:
+     - image: Visual Studio 2015
+      - build_script:
+       - ps: >-
+          git clone https://github.com/nonperforming/openspadesplus
+          cd openspadesplus
+          vcpkg/bootstrap-vcpkg.bat
+          vcpkg/vcpkg install @vcpkg_x86-windows.txt
+          mkdir openspades.mk
+          cd openspades.mk
+          cmake -A Win32 -D CMAKE_BUILD_TYPE=RelWithDebInfo -D VCPKG_TARGET_TRIPLET=x86-windows-static
       
