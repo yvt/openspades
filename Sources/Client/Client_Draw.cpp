@@ -81,17 +81,6 @@ namespace spades {
 
 		enum class ScreenshotFormat { Jpeg, Targa, Png };
 
-		Weapon &weap = p.GetWeapon();
-		Handle<IImage> ammoIcon;
-		float iconWidth = 0.f;
-		float iconHeight = 0.f;
-		float spacing = 2.f;
-		int stockNum;
-		int warnLevel = 0;
-		int clipSize = weap.GetClipSize();
-		int clip = weap.GetAmmo();
-		clipSize = std::max(clipSize, clip);
-
 		namespace {
 			ScreenshotFormat GetScreenshotFormat() {
 				if (EqualsIgnoringCase(cg_screenshotFormat, "jpeg")) {
@@ -470,10 +459,58 @@ namespace spades {
 			if (!cg_hideHud)
 				hurtRingView->Draw();
 
-			if (!cg_hideHud) { // Draw ammo amount removed
+			if (!cg_hideHud) {
+				// Draw ammo amount
+				// (Note: this cannot be displayed for a spectated player --- the server
+				//        does not submit sufficient information)
+				Weapon &weap = p.GetWeapon();
+				Handle<IImage> ammoIcon;
+				float iconWidth = 0.f;
+				float iconHeight = 0.f;
+				float spacing = 0.f;
+				int stockNum;
+				int warnLevel;
+
+				if (p.IsToolWeapon()) {
+					switch (weap.GetWeaponType()) {
+						case RIFLE_WEAPON:
+							ammoIcon = renderer->RegisterImage("Gfx/Bullet/7.62mm.png");
+							break;
+						case SMG_WEAPON:
+							ammoIcon = renderer->RegisterImage("Gfx/Bullet/9mm.png");
+							break;
+						case SHOTGUN_WEAPON:
+							ammoIcon = renderer->RegisterImage("Gfx/Bullet/12gauge.png");
+							break;
+						default: SPInvalidEnum("weap->GetWeaponType()", weap.GetWeaponType());
+					}
+
+					int clipSize = weap.GetClipSize();
+					int clip = weap.GetAmmo();
+
+					clipSize = std::max(clipSize, clip);
+
+					for (int i = 0; i < clipSize; i++) {
+						float x = scrWidth - 16.f - (float)(i + 1) * (iconWidth + spacing);
+						float y = scrHeight - 16.f - iconHeight;
+
+						if (clip >= i + 1) {
+							renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
+						} else {
+							renderer->SetColorAlphaPremultiplied(MakeVector4(0.4, 0.4, 0.4, 1));
+						}
+					}
+
+					stockNum = weap.GetStock();
+					warnLevel = weap.GetMaxStock() / 3;
+				} else {
+					iconHeight = 0.f;
+					warnLevel = 0;
+
 				for (int i = 0; i < clipSize; i++) {
 						float x = scrWidth - 16.f - (float)(i + 1) * (iconWidth + spacing);
 						float y = scrHeight - 16.f - iconHeight;
+					}
 				}
 
 					switch (p.GetTool()) {
