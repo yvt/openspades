@@ -72,6 +72,24 @@
       {
         "Info": "https://raw.githubusercontent.com/nonperforming/openspadesplus/master/README.md"
       }
+    },
+    {
+      "Version": 
+      [
+        1,
+        0,
+        0,
+        8
+      ],
+      "VersionText": "Revision 8",
+      "Platforms": 
+      [
+        "SourceCode"
+      ],
+      "Links": 
+      {
+        "Info": "https://raw.githubusercontent.com/nonperforming/openspadesplus/master/RevisionInfo/Revision8.md"
+      }
     }
   ]
 } 
