@@ -20,3 +20,5 @@
 */
 
 #pragma once
+
+extern int ammo;

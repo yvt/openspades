@@ -124,14 +124,14 @@ namespace spades {
 
 				std::string otherTeamName = chatWindow->TeamColorMessage(
 				  world->GetTeam(1 - p.GetTeamId()).name, 1 - p.GetTeamId());
-				msg = _Tr("Client", "{0} captured {1}'s intel", holderName, otherTeamName);
+				msg = _Tr("Client", "{1} +1 - {0}", holderName, otherTeamName);
 				chatWindow->AddMessage(msg);
 			}
 
 			if ((int)cg_centerMessage != 0) {
 				std::string holderName = p.GetName();
 				std::string otherTeamName = world->GetTeam(1 - p.GetTeamId()).name;
-				msg = _Tr("Client", "{0} captured {1}'s Intel.", holderName, otherTeamName);
+				msg = _Tr("Client", "{1} +1 - {0}", holderName, otherTeamName);
 				NetLog("%s", msg.c_str());
 				centerMessageView->AddMessage(msg);
 			}
@@ -155,14 +155,14 @@ namespace spades {
 				std::string holderName = chatWindow->TeamColorMessage(p.GetName(), p.GetTeamId());
 				std::string otherTeamName = chatWindow->TeamColorMessage(
 				  world->GetTeam(1 - p.GetTeamId()).name, 1 - p.GetTeamId());
-				msg = _Tr("Client", "{0} picked up {1}'s intel", holderName, otherTeamName);
+				msg = _Tr("Client", "{0} has {1}'s intel", holderName, otherTeamName);
 				chatWindow->AddMessage(msg);
 			}
 
 			if ((int)cg_centerMessage != 0) {
 				std::string holderName = p.GetName();
 				std::string otherTeamName = world->GetTeam(1 - p.GetTeamId()).name;
-				msg = _Tr("Client", "{0} picked up {1}'s Intel.", holderName, otherTeamName);
+				msg = _Tr("Client", "{0} has {1}'s Intel.", holderName, otherTeamName);
 				NetLog("%s", msg.c_str());
 				centerMessageView->AddMessage(msg);
 			}
@@ -276,13 +276,13 @@ namespace spades {
 
 			{
 				std::string msg;
-				msg = _Tr("Client", "{0} joined {1} team", p.GetName(),
+				msg = _Tr("Client", "{0} joined {1}", p.GetName(),
 				          chatWindow->TeamColorMessage(teamName, p.GetTeamId()));
 				chatWindow->AddMessage(msg);
 			}
 			{
 				std::string msg;
-				msg = _Tr("Client", "{0} joined {1} team", p.GetName(), teamName);
+				msg = _Tr("Client", "{0} joined {1}", p.GetName(), teamName);
 
 				auto col = p.GetTeamId() < 2 ? world->GetTeam(p.GetTeamId()).color
 				                             : IntVector3::Make(255, 255, 255);
