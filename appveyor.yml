@@ -21,7 +21,7 @@ configuration:
 - Release
 
 matrix:
-- fast_finish: true
+  fast_finish: true
 
 artifacts:
 - openspadesplus/openspades.mk/
