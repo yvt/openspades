@@ -588,7 +588,7 @@ namespace spades {
 								progress = round(progress);
 								progress = progress/100;
 								std::string Weapon2 = std::to_string(progress);
-								Weapon2.erase(std::remove(Weapon2.begin(), Weapon2.end(), "0."), Weapon2.end());
+								Weapon2.erase(Weapon2.begin() + 0, str.end() - 2);
 								Weapon2 += "%";
 								msg += Weapon2;
 							} else if (weap.GetAmmo() == 0 && weap.GetStock() == 0) {
