@@ -543,9 +543,9 @@ namespace spades {
 				
 				int clip = weap.GetAmmo();
 				if (p.IsToolWeapon()) {
-					buffer += clip;
+					buffer += weap.GetAmmo();
 					buffer += " / ";
-					buffer += clipSize;
+					buffer += weap.GetClipSize();
 					sprintf(buffer); 
 					// thanks Nuceto! 
 					// based off https://github.com/Nuceto/NucetoSpades/commit/138526b0b7a6e2189ee6694acd60ed46a9dc21af
