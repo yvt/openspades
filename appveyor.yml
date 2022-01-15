@@ -32,7 +32,7 @@ for:
     only:
       - image: Ubuntu
       - build_script:
-        - sh: echo Installing dependencies...
+        - sh: echo Installing dependencies
         - sh: sudo apt-get update
         - sh: sudo apt-get install pkg-config
         - sh: sudo apt-get install libglew-dev
