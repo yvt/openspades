@@ -233,6 +233,7 @@ namespace spades {
 		void Client::DrawDisconnectScreen() {}
 
 		void Client::DrawHurtSprites() {
+			// Draw random blood/dust-like imagines across the screen when damaged.
 			float per = (world->GetTime() - lastHurtTime) / 1.5f;
 			if (per > 1.f)
 				return;
@@ -272,7 +273,7 @@ namespace spades {
 
 		void Client::DrawHurtScreenEffect() {
 			SPADES_MARK_FUNCTION();
-
+			// Tint the entire screen red if damaged.
 			float scrWidth = renderer->ScreenWidth();
 			float scrHeight = renderer->ScreenHeight();
 			float wTime = world->GetTime();
@@ -538,20 +539,20 @@ namespace spades {
 				}
 
 				char buf[64];
-
-				std::string buffer;
-				
+				char buff[64];
 				int clip = weap.GetAmmo();
-				if (p.IsToolWeapon()) {
-					buffer += weap.GetAmmo();
-					buffer += " / ";
-					buffer += weap.GetClipSize();
-					sprintf(buffer); 
-					// thanks Nuceto! 
-					// based off https://github.com/Nuceto/NucetoSpades/commit/138526b0b7a6e2189ee6694acd60ed46a9dc21af
+
+				if (p->IsToolWeapon()) {
+					sprintf(buff, "%d", clip);
+        	sprintf(buf, "/ %d",stockNum);	
 				}else{
 				sprintf(buf, "%d",stockNum);
 				}
+
+				/*
+					Thanks Nuceto!
+					https://github.com/Nuceto/NucetoSpades/commit/138526b0b7a6e2189ee6694acd60ed46a9dc21af
+				*/
 				
 				IFont &font = fontManager->GetSquareDesignFont();
 				std::string stockStr = buf;
