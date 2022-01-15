@@ -32,51 +32,28 @@ for:
     only:
       - image: Ubuntu
       - build_script:
-        - sh: >-
-          echo Installing dependencies...
-
-          sudo apt-get update
-
-          sudo apt-get install pkg-config
-
-          sudo apt-get install libglew-dev
-
-          sudo apt-get install libcurl3-openssl-dev
-
-          sudo apt-get install libsdl2-image-dev
-
-          sudo apt-get install libalut-dev
-
-          sudo apt-get install libsdl2-dev
-
-          sudo apt-get install xdg-utils
-
-          sudo apt-get install libfreetype6-dev
-
-          sudo apt-get install libopus-dev
-
-          sudo apt-get install libopusfile-dev
-
-          sudo apt-get install imagemagick
-
-
-          sudo apt-get install libjpeg-dev
-          
-          sudo apt-get install libxinerama-dev
-
-          sudo apt-get install libxft-dev
-
-          echo Finished!
-          
-          echo Building OpenSpades+
-
-          git clone https://github.com/nonperforming/openspadesplus
-
-          cd openspadesplus
-
-          ls
-
-          ./build.sh
+        - sh: echo Installing dependencies...
+        - sh: sudo apt-get update
+        - sh: sudo apt-get install pkg-config
+        - sh: sudo apt-get install libglew-dev
+        - sh: sudo apt-get install libcurl3-openssl-dev
+        - sh: sudo apt-get install libsdl2-image-dev
+        - sh: sudo apt-get install libalut-dev
+        - sh: sudo apt-get install libsdl2-dev
+        - sh: sudo apt-get install xdg-utils
+        - sh: sudo apt-get install libfreetype6-dev
+        - sh: sudo apt-get install libopus-dev
+        - sh: sudo apt-get install libopusfile-dev
+        - sh: sudo apt-get install imagemagick
+        - sh: sudo apt-get install libjpeg-dev
+        - sh: sudo apt-get install libxinerama-dev
+        - sh: sudo apt-get install libxft-dev
+        - sh: echo Finished!
+        - sh: echo Building OpenSpades+
+        - sh: git clone https://github.com/nonperforming/openspadesplus
+        - sh: cd openspadesplus
+        - sh: ls
+        - sh: ./build.sh
 #  - matrix:
 #    only:
 #      - image: macOS-BigSur
