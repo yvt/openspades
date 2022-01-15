@@ -124,14 +124,14 @@ namespace spades {
 
 				std::string otherTeamName = chatWindow->TeamColorMessage(
 				  world->GetTeam(1 - p.GetTeamId()).name, 1 - p.GetTeamId());
-				msg = _Tr("Client", "{1} +1 - {0}", holderName, otherTeamName);
+				msg = _Tr("Client", "{1} +1", holderName);
 				chatWindow->AddMessage(msg);
 			}
 
 			if ((int)cg_centerMessage != 0) {
 				std::string holderName = p.GetName();
 				std::string otherTeamName = world->GetTeam(1 - p.GetTeamId()).name;
-				msg = _Tr("Client", "{1} +1 - {0}", holderName, otherTeamName);
+				msg = _Tr("Client", "{1} +1", holderName);
 				NetLog("%s", msg.c_str());
 				centerMessageView->AddMessage(msg);
 			}
@@ -249,13 +249,13 @@ namespace spades {
 
 			{
 				std::string msg;
-				msg = _Tr("Client", "Player {0} has left",
+				msg = _Tr("Client", "Player {0} disconnected",
 				          chatWindow->TeamColorMessage(p.GetName(), p.GetTeamId()));
 				chatWindow->AddMessage(msg);
 			}
 			{
 				std::string msg;
-				msg = _Tr("Client", "Player {0} has left", p.GetName());
+				msg = _Tr("Client", "{0} disconnected", p.GetName());
 
 				auto col = p.GetTeamId() < 2 ? world->GetTeam(p.GetTeamId()).color
 				                             : IntVector3::Make(255, 255, 255);

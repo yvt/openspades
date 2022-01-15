@@ -459,67 +459,28 @@ namespace spades {
 			if (!cg_hideHud)
 				hurtRingView->Draw();
 
-			if (!cg_hideHud) {
-				// Draw ammo amount
-				// (Note: this cannot be displayed for a spectated player --- the server
-				//        does not submit sufficient information)
+			if (!cg_hideHud) { // Draw ammo amount removed
 				Weapon &weap = p.GetWeapon();
 				Handle<IImage> ammoIcon;
-				float iconWidth, iconHeight;
+				float iconWidth = 0.f;
+				float iconHeight = 0.f;
 				float spacing = 2.f;
 				int stockNum;
-				int warnLevel;
+				int warnLevel = 0;
+				int clipSize = weap.GetClipSize();
+				int clip = weap.GetAmmo();
+				clipSize = std::max(clipSize, clip);
 
-				if (p.IsToolWeapon()) {
-					switch (weap.GetWeaponType()) {
-						case RIFLE_WEAPON:
-							ammoIcon = renderer->RegisterImage("Gfx/Bullet/7.62mm.png");
-							iconWidth = 6.f;
-							iconHeight = iconWidth * 4.f;
-							break;
-						case SMG_WEAPON:
-							ammoIcon = renderer->RegisterImage("Gfx/Bullet/9mm.png");
-							iconWidth = 4.f;
-							iconHeight = iconWidth * 4.f;
-							break;
-						case SHOTGUN_WEAPON:
-							ammoIcon = renderer->RegisterImage("Gfx/Bullet/12gauge.png");
-							iconWidth = 30.f;
-							iconHeight = iconWidth / 4.f;
-							spacing = -6.f;
-							break;
-						default: SPInvalidEnum("weap->GetWeaponType()", weap.GetWeaponType());
-					}
-
-					int clipSize = weap.GetClipSize();
-					int clip = weap.GetAmmo();
-
-					clipSize = std::max(clipSize, clip);
-
-					for (int i = 0; i < clipSize; i++) {
+				for (int i = 0; i < clipSize; i++) {
 						float x = scrWidth - 16.f - (float)(i + 1) * (iconWidth + spacing);
 						float y = scrHeight - 16.f - iconHeight;
-
-						if (clip >= i + 1) {
-							renderer->SetColorAlphaPremultiplied(MakeVector4(1, 1, 1, 1));
-						} else {
-							renderer->SetColorAlphaPremultiplied(MakeVector4(0.4, 0.4, 0.4, 1));
-						}
-
-						renderer->DrawImage(ammoIcon, AABB2(x, y, iconWidth, iconHeight));
-					}
-
-					stockNum = weap.GetStock();
-					warnLevel = weap.GetMaxStock() / 3;
-				} else {
-					iconHeight = 0.f;
-					warnLevel = 0;
+				}
 
 					switch (p.GetTool()) {
 						case Player::ToolSpade:
 						case Player::ToolBlock: stockNum = p.GetNumBlocks(); break;
 						case Player::ToolGrenade: stockNum = p.GetNumGrenades(); break;
-						default: SPInvalidEnum("p.GetTool()", p.GetTool());
+						default: SPInvalidEnum("p->GetTool()", p.GetTool());
 					}
 				}
 
@@ -534,51 +495,34 @@ namespace spades {
 
 				char buf[64];
 				char buff[64];
+
+				std::string buffer;
 				int clip = weap.GetAmmo();
 
 				if (p.IsToolWeapon()) {
-					sprintf(buff, "%d", clip);
-          sprintf(buf, "/ %d",stockNum);	// thanks Nuceto! 
-					// taken from https://github.com/Nuceto/NucetoSpades/commit/138526b0b7a6e2189ee6694acd60ed46a9dc21af
+					buffer += clip;
+					buffer += " / ";
+					buffer += clipSize;
+
+					sprintf(buffer); 
+					// thanks Nuceto! 
+					// based off https://github.com/Nuceto/NucetoSpades/commit/138526b0b7a6e2189ee6694acd60ed46a9dc21af
 
 				}else{
 
 				sprintf(buf, "%d",stockNum);
 				}
 
-				sprintf(buf, "%d", stockNum);
 				IFont &font = fontManager->GetSquareDesignFont();
 				std::string stockStr = buf;
 				std::string clipStr = buff;
 				Vector2 size = font.Measure(stockStr);
-				Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f - iconHeight);
-				Vector2 pos2 = MakeVector2(scrWidth - 50.f, scrHeight - 16.f - iconHeight);
-				Vector2 posSmg = MakeVector2(scrWidth - 50.f, scrHeight - 16.f - iconHeight);
-				Vector2 posSmg2 = MakeVector2(scrWidth - 65.f, scrHeight - 16.f - iconHeight);
-				posSmg -= size;
-				posSmg2 -= size;
+				Vector2 pos = MakeVector2(scrWidth - 16.f, scrHeight - 16.f);
 				pos -= size;
-				pos2 -= size;
 				Vector4 color = Vector4{1, 1, 1, 1.0f};
 
 				if (p.IsToolWeapon()) {
-
-					if (weap.GetWeaponType() == SMG_WEAPON)
-					{
-						if(clip >= 20 && clip < 31)
-						{
-							font.DrawShadow(clipStr, posSmg2, 1.f, color, MakeVector4(0, 0, 0, 1.0f));
-						} 
-						else
-						{
-							font.DrawShadow(clipStr, posSmg, 1.f, color, MakeVector4(0, 0, 0, 1.0f));
-						}
-					}
-					else
-					{
-						Vector4 color = Vector4{1, 1, 1, 1.0f};
-					}
-
+					font.DrawShadow(clipStr, pos, 1.f, color, MakeVector4(0, 0, 0, 1.0f));
 				}else{
 				font.DrawShadow(stockStr, pos, 1.f, numberColor, MakeVector4(0, 0, 0, 1.0f));
         }
@@ -586,7 +530,6 @@ namespace spades {
 				// draw "press ... to reload"
 				{
 					std::string msg = "";
-					// Weapon w = p.GetWeapon(); TODO: fix
 
 					switch (p.GetTool()) {
 						case Player::ToolBlock:
@@ -600,19 +543,20 @@ namespace spades {
 							}
 							break;
 						case Player::ToolWeapon: {
-							//Weapon &weap = p.GetWeapon();   TODO: fix
 							if (weap.IsReloading() || p.IsAwaitingReloadCompletion()) {
-								//msg = _Tr("Client", "Reloading - ");
-								msg = _Tr("Client", "Reloading");
-								//float progress = w->GetReloadProgress(); TODO: fix
+								msg = _Tr("Client", "Reloading - ");
+								float progress = weap.GetReloadProgress();
 
-								/*progress = progress*100;
+								progress = progress*100;
 								progress = round(progress);
 								progress = progress/100;
+
 								std::string Weapon2 = std::to_string(progress);
+
 								Weapon2.erase(std::remove(Weapon2.begin(), Weapon2.end(), "0."), Weapon2.end());
 								Weapon2 += "%";
-								msg += Weapon2;*/
+								msg += Weapon2;
+
 							} else if (weap.GetAmmo() == 0 && weap.GetStock() == 0) {
 								msg = _Tr("Client", "No reserve");
 							} else if (weap.GetStock() > 0 &&
