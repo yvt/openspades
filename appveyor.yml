@@ -24,7 +24,7 @@ matrix:
   fast_finish: true
 
 artifacts:
-- openspadesplus/openspades.mk/
+  openspadesplus/openspades.mk/
 
 for:
   - matrix:
