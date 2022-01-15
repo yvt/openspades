@@ -81,6 +81,17 @@ namespace spades {
 
 		enum class ScreenshotFormat { Jpeg, Targa, Png };
 
+		Weapon &weap = p.GetWeapon();
+		Handle<IImage> ammoIcon;
+		float iconWidth = 0.f;
+		float iconHeight = 0.f;
+		float spacing = 2.f;
+		int stockNum;
+		int warnLevel = 0;
+		int clipSize = weap.GetClipSize();
+		int clip = weap.GetAmmo();
+		clipSize = std::max(clipSize, clip);
+
 		namespace {
 			ScreenshotFormat GetScreenshotFormat() {
 				if (EqualsIgnoringCase(cg_screenshotFormat, "jpeg")) {
@@ -460,17 +471,6 @@ namespace spades {
 				hurtRingView->Draw();
 
 			if (!cg_hideHud) { // Draw ammo amount removed
-				Weapon &weap = p.GetWeapon();
-				Handle<IImage> ammoIcon;
-				float iconWidth = 0.f;
-				float iconHeight = 0.f;
-				float spacing = 2.f;
-				int stockNum;
-				int warnLevel = 0;
-				int clipSize = weap.GetClipSize();
-				int clip = weap.GetAmmo();
-				clipSize = std::max(clipSize, clip);
-
 				for (int i = 0; i < clipSize; i++) {
 						float x = scrWidth - 16.f - (float)(i + 1) * (iconWidth + spacing);
 						float y = scrHeight - 16.f - iconHeight;
