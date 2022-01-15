@@ -31,7 +31,7 @@ for:
     only:
       - image: Ubuntu
       - build_script:
-            - sh: >-
+            - sh:
               - echo Installing dependencies...
               - sudo apt-get update
               - sudo apt-get install pkg-config
@@ -60,7 +60,7 @@ for:
     only:
       - image: macOS-BigSur
       - build_script:
-        - sh: >-
+        - sh:
           - brew install pkg-config
           - git clone https://github.com/nonperforming/openspadesplus
           - cd openspadesplus
@@ -76,7 +76,7 @@ for:
   only:
     - image: Visual Studio 2015
     - build_script:
-      - ps: >-
+      - ps:
         - git clone https://github.com/nonperforming/openspadesplus
         - cd openspadesplus
         - vcpkg/bootstrap-vcpkg.bat
