@@ -37,8 +37,6 @@ for:
       ls
       ./build.sh
 
-for:
-- matrix:
     only:
       - image: macOS-BigSur
 
@@ -57,8 +55,6 @@ for:
       cmake -G Ninja .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_OSX_ARCHITECTURES=x86_64 -D CMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-osx
       ninja
  
-for:
-- matrix:
     only:
       - image: Visual Studio 2015
 
