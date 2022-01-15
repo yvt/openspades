@@ -10,6 +10,7 @@ OpenSpades+
 "non_performing" - OpenSpades+ project lead
 "Nuceto" - Help with code
 "VierEck" - Help with code
+"Pawn" - :)
 
 Base
 ----
