@@ -1,5 +1,5 @@
 # OpenSpades+
-# Revision 7
+# Revision 8
 
 [![Build status](https://ci.appveyor.com/api/projects/status/gasnapxykby565ng?svg=true)](https://ci.appveyor.com/project/nonperforming/openspadesplus)
 
