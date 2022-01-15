@@ -26,6 +26,7 @@
 #include <Core/Strings.h>
 #include <ScriptBindings/Config.h>
 #include <ScriptBindings/ScriptFunction.h>
+#include <Plus/OpenSpadesPlus.h>
 
 namespace spades {
 	namespace gui {
@@ -225,7 +226,11 @@ namespace spades {
 			img = renderer->RegisterImage("Gfx/White.tga");
 			renderer->DrawImage(img, AABB2(0, 0, scrSize.x, scrSize.y));
 
-			std::string str = _Tr("MainScreen", "NOW LOADING");
+			std::string str;
+
+			str += "OpenSpades+ Revision ";
+			str += std::to_string(plus::revision);
+
 			client::IFont &font = fontManager->GetGuiFont();
 			Vector2 size = font.Measure(str);
 			Vector2 pos = MakeVector2(scrSize.x - 16.f, scrSize.y - 16.f);
