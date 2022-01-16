@@ -10,7 +10,7 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * No FOV cap
 * No falling blocks hindering visibility
 * No ejected shell or bullet casings
-* A crosshair more akin to classic FPS games such as CS:GO (two to pick from currently, feel free to open a PR to add more!)
+* A crosshair more akin to classic FPS games such as CS:GO (seven to pick from currently, feel free to open a PR to add more! A viewer is probably in the works)
 * No ragdolls or corpses whatsoever
 * More concise and typically informative messages (Messages will **never** give less information than vanilla)
 * Hides the view-model that is distracting and takes up precious screen space
