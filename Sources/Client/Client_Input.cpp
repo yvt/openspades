@@ -562,8 +562,13 @@ namespace spades {
 						TakeScreenShot(false);
 					} else if (CheckKey(cg_keySaveMap, name) && down) {
 						TakeMapShot();
-					}
-						if (CheckKey(cg_keyAutoFocus, name) && down && (int)cg_manualFocus) {
+					} else if (CheckKey(cg_keyFlashlight, name) && down) {
+						flashlightOn = !flashlightOn;
+						flashlightOnTime = time;
+						Handle<IAudioChunk> chunk =
+							audioDevice->RegisterSound("Sounds/Player/Flashlight.opus");
+						audioDevice->PlayLocal(chunk.GetPointerOrNull(), AudioParam());
+					} else if (CheckKey(cg_keyAutoFocus, name) && down && (int)cg_manualFocus) {
 						autoFocusEnabled = true;
 					} else if (down) {
 						bool rev = (int)cg_switchToolByWheel > 0;
