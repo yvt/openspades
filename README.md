@@ -36,12 +36,12 @@ The standard OpenSpades client is a very awesome Ace of Spades client while look
 ### cg_particles
 Default: 0
 
-As simple as it gets. Turn particles on or off along with some extra settings. This can and will hide grenade particles, which may be useful. THIS DOES NOT HIDE  TRACERS OR 
+As simple as it gets. Turn particles on or off along with some extra settings. This can and will hide grenade particles, which may be useful. THIS DOES NOT HIDE  TRACERS
 
 ### cg_ragdoll
 Default: 0
 
-Setting this to 0 (model instead of dynamic ragdoll) seemingly has marginally less impact than when set to 1. There is no point in setting this to 1 since OpenSpades+ removes ragdolls and said model. ***Highly recommended not to turn this on.***
+Setting this to 0 (model instead of dynamic ragdoll) seemingly has marginally less impact than when set to 1. There is no point in setting this to 1 since OpenSpades+ removes ragdolls and said model.
 
 ### r_vsync
 Default: 0
@@ -61,7 +61,7 @@ No FPS cap.
 ### cg_environmentalAudio
 Default: 1
 
-This turns on those fancy calculations for more precise and accurate sound.
+This turns on those fancy calculations for more precise and accurate sound, though sounds may appear more quiet.
 
 ### cg_stats
 Default: 1
@@ -71,7 +71,7 @@ Show extra information such as accuracy (todo), FPS, ping, etc. ***Highly recomm
 ### cg_fov
 Default: 90
 
-FOV is very a preferential thing. For most people 90 fov is fine; though nobody's judging you, go crazy and set it to 1 or 179 (anything more or less breaks the game - though I'm not stopping you though!)
+FOV is very a preferential thing. For most people 90 FOV is fine; though nobody's judging you, go crazy and set it to 1 or 179 (anything more or less breaks the game - though I'm not stopping you though!)
 
 ### cg_ejectBrass
 Default: 0
@@ -136,7 +136,7 @@ Hides the server IP from cg_stats and sanitises player names (STUB)
 ### p_customClientMessage
 Default: Nothing
 
-Change your client info to something of your own. (STUB)
+Change your client info to something of your own. `p_showCustomClientMessage` has to be set to `1` for this variable to take effect (STUB)
 
 ### p_showCustomClientMessage
 Default: 0
