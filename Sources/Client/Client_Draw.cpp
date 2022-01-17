@@ -534,13 +534,6 @@ namespace spades {
 
 				Vector4 numberColor = {1, 1, 1, 1};
 
-				if (stockNum == 0) {
-					numberColor.y = 0.3f;
-					numberColor.z = 0.3f;
-				} else if (stockNum <= warnLevel) {
-					numberColor.z = 0.3f;
-				}
-
 				int clip = weap.GetAmmo();
 
 				Vector4 clipNumberColor = Vector4{1,1,1,1.f};
