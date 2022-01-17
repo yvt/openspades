@@ -34,6 +34,6 @@ DEFINE_SPADES_SETTING(p_streamer, "0");
 
 namespace spades {
 	namespace plus {
-    		const int revision = 7;
+    		const int revision = 8;
 	} // namespace client
 } // namespace spades
