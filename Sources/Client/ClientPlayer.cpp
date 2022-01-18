@@ -712,7 +712,7 @@ namespace spades {
 
 			// manual adjustment
 			viewWeaponOffset +=
-			  Vector3{0.f, -100.f, 0.f} * (1.f - aimDownState);
+			  Vector3{cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ} * (1.f - aimDownState);
 
 			asIScriptObject *skin;
 
