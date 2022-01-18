@@ -74,14 +74,14 @@ std::string VersionInfo::GetVersionInfo() {
 
 	buffer += " | OpenSpades+ Revision ";
 	buffer += std::to_string(spades::plus::revision);
-	return std::string(buffer);
 
 	if (p_showCustomClientMessage)
 	{
-		std::string message;
-		message = p_customClientMessage;
+		std::string message = p_customClientMessage;
 		
 		buffer += " | ";
 		buffer += message;
 	}
+
+	return std::string(buffer);
 }
