@@ -55,6 +55,11 @@ SPADES_SETTING(r_hdr);
 DEFINE_SPADES_SETTING(cg_environmentalAudio, "1");
 DEFINE_SPADES_SETTING(cg_debugToolSkinAnchors, "0");
 
+DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
+DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
+DEFINE_SPADES_SETTING(cg_viewWeaponZ, "0");
+SPADES_SETTING(p_hideViewmodel);
+
 namespace spades {
 	namespace client {
 
@@ -711,9 +716,18 @@ namespace spades {
 			}
 
 			// manual adjustment
-			viewWeaponOffset +=
-			  Vector3{cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ} * (1.f - aimDownState);
-
+			if (p_hideViewmodel)
+			{
+				viewWeaponOffset +=
+			  	Vector3{0.f, -100.f, 0.f} * (1.f - aimDownState); // incredibly hacky, please fix later
+					// TODO: fix
+			}
+			else
+			{
+				viewWeaponOffset +=
+			  	Vector3{cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ} * (1.f - aimDownState);
+			}
+			
 			asIScriptObject *skin;
 
 			if (currentTool == Player::ToolSpade) {
