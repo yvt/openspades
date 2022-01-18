@@ -360,7 +360,7 @@ namespace spades {
 						           world->GetLocalPlayer()->IsSpectator() &&
 						           followCameraState.enabled) {
 							if (down) {
-								// Unfollow
+								// Unfollow/freecam
 								followCameraState.enabled = false;
 							}
 							return;
@@ -575,7 +575,7 @@ namespace spades {
 						if (name == (rev ? "WheelDown" : "WheelUp")) {
 							if ((int)cg_manualFocus) {
 								// When DoF control is enabled,
-								// tool switch is overrided by focal length control.
+								// tool switch is overridden by focal length control.
 								float dist = 1.f / targetFocalLength;
 								dist = std::min(dist + 0.01f, 1.f);
 								targetFocalLength = 1.f / dist;
@@ -597,7 +597,7 @@ namespace spades {
 						} else if (name == (rev ? "WheelUp" : "WheelDown")) {
 							if ((int)cg_manualFocus) {
 								// When DoF control is enabled,
-								// tool switch is overrided by focal length control.
+								// tool switch is overridden by focal length control.
 								float dist = 1.f / targetFocalLength;
 								dist =
 								  std::max(dist - 0.01f, 1.f / 128.f); // limit to fog max distance
