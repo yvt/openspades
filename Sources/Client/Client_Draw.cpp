@@ -1279,10 +1279,10 @@ namespace spades {
 			Vector3 muzzle = ShouldRenderInThirdPersonView() ? GetMuzzlePosition()
 			                                                 : GetMuzzlePositionInFirstPersonView();
 
-			// make dlight
+			// make dynamic light
 			client.MuzzleFire(muzzle, player.GetFront(), &player == world.GetLocalPlayer());
 
-			if (false) { // i tried patching this but i kept doing soimething wrong
+			if (false) { // i tried patching this but i kept doing something wrong
 				// so i just did this instead. please fix this when you get the chance
 				float dist = (player.GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
 				if (dist < 130.f * 130.f) {

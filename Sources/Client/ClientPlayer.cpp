@@ -1291,7 +1291,7 @@ namespace spades {
 			Vector3 muzzle = ShouldRenderInThirdPersonView() ? GetMuzzlePosition()
 			                                                 : GetMuzzlePositionInFirstPersonView();
 
-			// make dlight
+			// make dynamic light
 			client.MuzzleFire(muzzle, player.GetFront(), &player == world.GetLocalPlayer());
 
 			if (cg_ejectBrass) {

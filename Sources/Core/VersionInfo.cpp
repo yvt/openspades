@@ -1,4 +1,4 @@
-#include <Client/Settings.h>
+#include <Core/Settings.h>
 #include <Plus/OpenSpadesPlus.h>
 
 SPADES_SETTING(p_showCustomClientMessage);
