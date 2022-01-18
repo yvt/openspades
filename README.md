@@ -91,12 +91,12 @@ This is the default for a reason. It is self explanatory.
 ### cg_tracersFirstPerson
 Default: 0
 
-Remove the bright yellow tracers that are shot by you, the player. Other tracers won't be affected.
+Remove the bright yellow tracers that are shot by you, the player. Other players' tracers won't be affected.
 
 ### cg_skipDeadPlayersWhenDead
 Default: 0
 
-Spectate where a player died, which can be great for callouts.
+Spectate where a player died, which can be great for callouts. ***Highly recommended not to turn this off.***
 
 ### cg_stats
 Default: 1
@@ -121,12 +121,12 @@ Turns on or off tinting the screen when damaged (cooldown of 1.5 seconds) (STUB)
 ### p_hurtBlood
 Default: 0
 
-Turns on or off the blood decals when damaged, which may obstruct vision and be a distraction in the most important time - a gunfight (cooldown of 1.5 seconds) (STUB)
+Turns on or off the blood decals when damaged, which may slightly obstruct vision and be a distraction in the most important time - a gunfight (cooldown of 1.5 seconds) (STUB)
 
 ### p_hideViewmodel
 Default: 1
 
-Turns the viewmodel on or off. (STUB)
+Turns the viewmodel on or off.
 
 ### p_streamer
 Default: 0
@@ -136,12 +136,12 @@ Hides the server IP from cg_stats and sanitises player names (STUB)
 ### p_customClientMessage
 Default: Nothing
 
-Change your client info to something of your own. `p_showCustomClientMessage` has to be set to `1` for this variable to take effect (STUB)
+Append text to your client info - anything you'd like. `p_showCustomClientMessage` has to be set to `1` for this variable to take effect
 
 ### p_showCustomClientMessage
 Default: 0
 
-See `p_customClientMessage` (STUB)
+See `p_customClientMessage`
 
 ### p_showAccuracyUnderMap
 Default: 0
