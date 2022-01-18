@@ -22,6 +22,9 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * Less harsh and digestible flashlight
 * Streamer-friendly (disable chat, hide ip, sanitize player names) ((todo))
 
+## But what if I want the viewmodel or the default crosshair?
+No problem! Almost all the changes here are implemented in such a way so that toggling a variable i.e `p_hideViewmodel` will turn on or off the change, sometimes with a relaunch. For crosshairs, if you want the default crosshair back but keep all the other changes, you just copy the contents of `Resources/Gfx/Crosshairs/Default` into `Resources/Gfx` for the default crosshair.
+
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
 If you are on Linux and have all the dependencies installed there is a convenient [file](https://github.com/nonperforming/openspadesplus/blob/master/build.sh) that will run all the necessary commands to build OpenSpades+. Occasionally there will be bugs preventing you from launching or building the game - in that case, please download the source code from the latest Release or fix the bug yourself (please do send a PR).
@@ -150,6 +153,12 @@ Default: 0
 (STUB)
 
 ### p_showAccuracyInStats
+Default: 1
+
+(STUB)
+
+### p_disableCorpse
+Default: 1
 
 (STUB)
 
