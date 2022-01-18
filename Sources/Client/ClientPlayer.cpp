@@ -712,7 +712,7 @@ namespace spades {
 
 			// manual adjustment
 			viewWeaponOffset +=
-			  Vector3{0.f, -100.f, 0.f} * (1.f - aimDownState);
+			  Vector3{cg_viewWeaponX, cg_viewWeaponY, cg_viewWeaponZ} * (1.f - aimDownState);
 
 			asIScriptObject *skin;
 
@@ -1280,8 +1280,7 @@ namespace spades {
 			// make dlight
 			client.MuzzleFire(muzzle, player.GetFront(), &player == world.GetLocalPlayer());
 
-			if (false) { // i tried patching this but i kept doing soimething wrong
-				// so i just did this instead. please fix this when you get the chance
+			if (cg_ejectBrass) {
 				float dist = (player.GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
 				if (dist < 130.f * 130.f) {
 					Handle<IModel> model;
