@@ -48,6 +48,7 @@ namespace spades {
 			virtual void PlayerJumped(Player &) = 0;
 			virtual void PlayerLanded(Player &, bool hurt) = 0;
 			virtual void PlayerFiredWeapon(Player &) = 0;
+			virtual void PlayerEjectedBrass(Player &) = 0;
 			virtual void PlayerDryFiredWeapon(Player &) = 0;
 			virtual void PlayerReloadingWeapon(Player &) = 0;
 			virtual void PlayerReloadedWeapon(Player &) = 0;

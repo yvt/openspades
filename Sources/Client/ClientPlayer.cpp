@@ -1293,6 +1293,41 @@ namespace spades {
 			// make dlight
 			client.MuzzleFire(muzzle, player.GetFront(), &player == world.GetLocalPlayer());
 
+			// sound ambience estimation
+			auto ambience = ComputeAmbience();
+
+			asIScriptObject *skin;
+			// FIXME: what if current tool isn't weapon?
+			if (ShouldRenderInThirdPersonView()) {
+				skin = weaponSkin;
+			} else {
+				skin = weaponViewSkin;
+			}
+
+			{
+				ScriptIWeaponSkin2 interface(skin);
+				if (interface.ImplementsInterface()) {
+					interface.SetSoundEnvironment(ambience.room, ambience.size, ambience.distance);
+					interface.SetSoundOrigin(player.GetEye());
+				} else if (ShouldRenderInThirdPersonView() && !hasValidOriginMatrix) {
+					// Legacy skin scripts rely on OriginMatrix which is only updated when
+					// the player's location is within the fog range.
+					return;
+				}
+			}
+
+			{
+				ScriptIWeaponSkin interface(skin);
+				interface.WeaponFired();
+			}
+		}
+
+		void ClientPlayer::EjectedBrass() {
+			const SceneDefinition &lastSceneDef = client.GetLastSceneDef();
+			IRenderer &renderer = client.GetRenderer();
+			IAudioDevice &audioDevice = client.GetAudioDevice();
+			Player &p = player;
+
 			if (cg_ejectBrass) {
 				float dist = (player.GetOrigin() - lastSceneDef.viewOrigin).GetPoweredLength();
 				if (dist < 130.f * 130.f) {
@@ -1310,9 +1345,7 @@ namespace spades {
 							  audioDevice.RegisterSound("Sounds/Weapons/Rifle/ShellWater.opus");
 							break;
 						case SHOTGUN_WEAPON:
-							// FIXME: don't want to show shotgun't casing
-							// because it isn't ejected when firing
-							// model = renderer.RegisterModel("Models/Weapons/Shotgun/Casing.kv6");
+							model = renderer.RegisterModel("Models/Weapons/Shotgun/Casing.kv6");
 							break;
 						case SMG_WEAPON:
 							model = renderer.RegisterModel("Models/Weapons/SMG/Casing.kv6");
@@ -1347,34 +1380,6 @@ namespace spades {
 						client.AddLocalEntity(std::move(ent));
 					}
 				}
-			}
-
-			// sound ambience estimation
-			auto ambience = ComputeAmbience();
-
-			asIScriptObject *skin;
-			// FIXME: what if current tool isn't weapon?
-			if (ShouldRenderInThirdPersonView()) {
-				skin = weaponSkin;
-			} else {
-				skin = weaponViewSkin;
-			}
-
-			{
-				ScriptIWeaponSkin2 interface(skin);
-				if (interface.ImplementsInterface()) {
-					interface.SetSoundEnvironment(ambience.room, ambience.size, ambience.distance);
-					interface.SetSoundOrigin(player.GetEye());
-				} else if (ShouldRenderInThirdPersonView() && !hasValidOriginMatrix) {
-					// Legacy skin scripts rely on OriginMatrix which is only updated when
-					// the player's location is within the fog range.
-					return;
-				}
-			}
-
-			{
-				ScriptIWeaponSkin interface(skin);
-				interface.WeaponFired();
 			}
 		}
 
