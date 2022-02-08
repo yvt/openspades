@@ -23,7 +23,7 @@
 #include <iostream>
 #include <Core/Settings.h>
 
-DEFINE_SPADES_SETTING(p_hideViewmodel, "1");
+DEFINE_SPADES_SETTING(p_viewmodel, "0");
 DEFINE_SPADES_SETTING(p_showCustomClientMessage, "0");
 DEFINE_SPADES_SETTING(p_customClientMessage, "");
 DEFINE_SPADES_SETTING(p_showIP, "1");
@@ -31,9 +31,11 @@ DEFINE_SPADES_SETTING(p_showAccuracyInStats, "1");
 DEFINE_SPADES_SETTING(p_showAccuracyUnderMap, "0");
 DEFINE_SPADES_SETTING(p_streamer, "0");
 
+DEFINE_SPADES_SETTING(p_hurtTint, "1");
+DEFINE_SPADES_SETTING(p_hurtBlood, "0");
 
 namespace spades {
 	namespace plus {
-    		const int revision = 8;
+    		const int revision = 9;
 	} // namespace client
 } // namespace spades

@@ -21,9 +21,10 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * Change teams in Limbo menu by using the Q, W, and E keys (todo: fix)
 * Less harsh and digestible flashlight
 * Streamer-friendly (disable chat, hide ip, sanitize player names) ((todo))
+* Extended player name length and no restriction to ASCII only (needs to be tested)
 
 ## But what if I want the viewmodel or the default crosshair?
-No problem! Almost all the changes here are implemented in such a way so that toggling a variable i.e `p_hideViewmodel` will turn on or off the change, sometimes with a relaunch. For crosshairs, if you want the default crosshair back but keep all the other changes, you just copy the contents of `Resources/Gfx/Crosshairs/Default` into `Resources/Gfx` for the default crosshair.
+No problem! Almost all the changes here are implemented in such a way so that toggling a variable i.e `p_viewmodel` will turn on or off the change, sometimes with a relaunch. For crosshairs, if you want the default crosshair back but keep all the other changes, you just copy the contents of `Resources/Gfx/Crosshairs/Default` into `Resources/Gfx` for the default crosshair.
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
@@ -127,8 +128,8 @@ Default: 0
 
 Turns on or off the blood decals when damaged, which may slightly obstruct vision and be a distraction in the most important time - a gunfight (cooldown of 1.5 seconds) (STUB)
 
-### p_hideViewmodel
-Default: 1
+### p_viewmodel
+Default: 0
 
 Turns the viewmodel on or off.
 
