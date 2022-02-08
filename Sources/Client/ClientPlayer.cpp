@@ -1332,7 +1332,11 @@ namespace spades {
 						Vector3 vel;
 						vel = p.GetFront() * 0.5f + p.GetRight() + p.GetUp() * 0.2f;
 						switch (p.GetWeapon().GetWeaponType()) {
-							case SMG_WEAPON: vel -= p.GetFront() * 0.7f; break;
+							case SMG_WEAPON:
+								vel -= p.GetFront() * (0.6f + SampleRandomFloat()/5);
+								vel += p.GetRight() * (SampleRandomFloat()/5 - 0.1f);
+								vel += p.GetUp() * (SampleRandomFloat()/5 - 0.1f);
+								break;
 							case SHOTGUN_WEAPON: vel *= .5f; break;
 							default: break;
 						}
