@@ -674,6 +674,7 @@ namespace spades {
             layouter.AddSliderField(_Tr("Preferences", "Minimap size"), "cg_minimapSize", 128, 256,
                                     8, ConfigNumberFormatter(0, " px"));
             layouter.AddToggleField(_Tr("Preferences", "Show Statistics"), "cg_stats");
+            layouter.AddToggleField(_Tr("Preferences", "Spectate Dead Players"), "cg_skipDeadPlayersWhenDead");
             
             layouter.AddHeading(_Tr("Preferences", "OpenSpades+"));
             layouter.AddToggleField(_Tr("Preferences", "Viewmodel"), "p_viewmodel");
@@ -690,6 +691,7 @@ namespace spades {
             layouter.AddToggleField(_Tr("Preferences", "Streamer Mode"), "p_streamer");
             layouter.AddToggleField(_Tr("Preferences", "Damage Tint"), "p_hurtTint");
             layouter.AddToggleField(_Tr("Preferences", "Damage Blood"), "p_hurtBlood");
+            layouter.AddToggleField(_Tr("Preferences", "Corpses"), "p_corpse");
 
             layouter.FinishLayout();
         }
