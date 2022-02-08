@@ -79,8 +79,8 @@ DEFINE_SPADES_SETTING(cg_playerNames, "2");
 DEFINE_SPADES_SETTING(cg_playerNameX, "0");
 DEFINE_SPADES_SETTING(cg_playerNameY, "0");
 
-DEFINE_SPADES_SETTING(p_hurtTint, "1");
-DEFINE_SPADES_SETTING(p_hurtBlood, "0");
+SPADES_SETTING(p_hurtTint);
+SPADES_SETTING(p_hurtBlood);
 
 namespace spades {
 	namespace client {

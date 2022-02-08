@@ -58,7 +58,7 @@ DEFINE_SPADES_SETTING(cg_debugToolSkinAnchors, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponX, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponY, "0");
 DEFINE_SPADES_SETTING(cg_viewWeaponZ, "0");
-SPADES_SETTING(p_hideViewmodel);
+SPADES_SETTING(p_viewmodel);
 
 namespace spades {
 	namespace client {
@@ -716,7 +716,7 @@ namespace spades {
 			}
 
 			// manual adjustment
-			if (p_hideViewmodel)
+			if (!p_viewmodel)
 			{
 				viewWeaponOffset +=
 			  	Vector3{0.f, -100.f, 0.f} * (1.f - aimDownState); // incredibly hacky, please fix later
