@@ -7,18 +7,20 @@
 ## What is this?
 OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades) that has many competivive-sided tweaks such as
 
+* The default settings falling more towards competitive play
 * No FOV cap
-* No falling blocks hindering visibility
-* No ejected shell or bullet casings
+* No falling blocks hindering visibility and possibly causing lag spikes
 * A crosshair more akin to classic FPS games such as CS:GO (seven to pick from currently, feel free to open a PR to add more!)
-* A custom map background (two currently, feel free to open a PR to add more!)
 * No ragdolls or corpses whatsoever
+* Hiding the view-model for extra screen space
+* (NYI) A streamer mode (disable global chat, Hide IP in stats, sanitize player names)
+* (NYI) Show player weapons on the scoreboard if the server allows it
+
+It also has some other features, though not as major
+
 * More concise and typically informative messages (messages will **never** give less information than vanilla)
-* Hides the view-model that is distracting and takes up precious screen space
-* Encouraging words on the pause menu! (I swear it's not cheating)
-* More info in the stats UI (FPS, Ping, OS+ version, (IP todo))
-* Allow ghosts to use the flashlight
-* Change teams in Limbo menu by using the Q, W, and E keys (todo: fix)
+* Cleaner stats interface along with some extras (OS+ revision, IP (todo))
+* Change teams in the Limbo menu by using the Q, W, and E keys (todo: fix)
 * Less harsh and digestible flashlight
 * Streamer-friendly (disable chat, hide ip, sanitize player names) ((todo))
 * Extended player name length and no restriction to ASCII only (needs to be tested)
@@ -29,15 +31,13 @@ No problem! Almost all the changes here are implemented in such a way so that to
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
-If you are on Linux and have all the dependencies installed there is a convenient [file](https://github.com/nonperforming/openspadesplus/blob/master/build.sh) that will run all the necessary commands to build OpenSpades+. Occasionally there will be bugs preventing you from launching or building the game - in that case, please download the source code from the latest Release or fix the bug yourself (please do send a PR).
+If you are on Linux and have all the dependencies installed there is a convenient [file](https://github.com/nonperforming/openspadesplus/blob/master/build.sh) that will run all the necessary commands to build OpenSpades+. Occasionally there will be bugs preventing you from launching or building the game (especially in the experimental branch) - in that case, please download the source code from the latest Release or fix the bug yourself (PR's welcome!).
 
 ## What if I don't want to/can't build?
 Check the [Releases](https://github.com/nonperforming/openspadesplus/releases) tab for the latest stable release. Otherwise, check [AppVeyor](https://ci.appveyor.com/project/nonperforming/openspadesplus/build/artifacts) for the latest bleeding-edge releases.
 
-## Why create this?
-The standard OpenSpades client is a very awesome Ace of Spades client while looking great at the same time, but in my opinion there are certain sacrifices or features that appeal to casual players but not always competitive players. A small lag spike when blocks are pulled from the ground (typically the barriers that drop in Arena), distracting bullet casings being ejected every time you fire, a view-model that takes up a fifth of the screen, no weapon information on kills with a headshot, etc. I hope OpenSpades+ is easy to switch between and from OpenSpades as possible, but at the same time more useful to competitive play.
-
 ## Useful console variables
+Most, if not all of these variables should be under the Options/Preferences menu, should you need it.
 
 ### cg_particles
 Default: 0
@@ -107,7 +107,7 @@ Spectate where a player died, which can be great for callouts. ***Highly recomme
 ### cg_stats
 Default: 1
 
-Show FPS, Ping, OS+ version, Accuracy and IP of connected server when enabled. ***Highly recommended not to turn this off.***
+Show FPS, Ping, OS+ revision, Accuracy (TODO) and IP (TODO) of connected server when enabled. ***Highly recommended not to turn this off.***
 
 ### cg_alertSounds
 Default: 1
@@ -166,7 +166,7 @@ Default: 0
 
 ## Other
 ### !!IMPORTANT!!
-Save files and game files are kept seperate from OpenSpades. It is highly unlikely that OpenSpades+ will bork or modify an OpenSpades install in any way. To use your OpenSpades config file as a template/your config file for OpenSpades+, you can copy your SPConfig.cfg over to OSPlus.cfg. Please notice that OpenSpades+ uses different default options which you may find helpful. You can always set them manually however, see ["Useful console variables"](https://github.com/nonperforming/openspadesplus#useful-console-variables)
+Save files and game files are kept seperate from OpenSpades. This does not include mod `.pak`s or folders, though it is planned for OpenSpades+ to load mods from the folder `OSMods` instead which allows you to have OpenSpades+ specific mods. It is nigh impossible that OpenSpades+ will bork or even modify an OpenSpades install in any way. To use your OpenSpades config file as a template/your config file for OpenSpades+, you can copy your `SPConfig.cfg` over to `OSPlus.cfg` in the same folder. Please notice that OpenSpades+ uses different default options which you may find helpful. You can always set them manually however, see ["Useful console variables"](https://github.com/nonperforming/openspadesplus#useful-console-variables)
 
 ### To-do:
 Remove ragdolls and corpses cleaner code
@@ -177,9 +177,9 @@ Players left in cg_stats or other
 
 Reload progress bar below the crosshair or in cg_stats - partially done in the form of percentage in "Reloading" text
 
-Shots left below crosshair and replacing icons (bottom right)
+Variable for muzzle flash/light when shooting (player)
 
-Remove bullet icons
+Load mods from a specific folder (i.e. OS+ specific weapon mods/soundmods)
 
 ### On commit:
 
