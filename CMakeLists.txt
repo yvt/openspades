@@ -329,8 +329,7 @@ if(APPLE)
 			OUTPUT ${PROJECT_BINARY_DIR}/libysrspades.dylib
 			WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
 			COMMAND
-				wget -c
-				https://openspadesmedia.yvt.jp/development-packages/YSRSpades/libysrspades.dylib
+				curl -O https://openspadesmedia.yvt.jp/development-packages/YSRSpades/libysrspades.dylib
 			)
 	endif (OPENSPADES_YSR)
 
