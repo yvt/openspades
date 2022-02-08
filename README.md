@@ -22,9 +22,10 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * Less harsh and digestible flashlight
 * Streamer-friendly (disable chat, hide ip, sanitize player names) ((todo))
 * Extended player name length and no restriction to ASCII only (needs to be tested)
+* Shows useful variables in the Preferences menu
 
 ## But what if I want the viewmodel or the default crosshair?
-No problem! Almost all the changes here are implemented in such a way so that toggling a variable i.e `p_viewmodel` will turn on or off the change, sometimes with a relaunch. For crosshairs, if you want the default crosshair back but keep all the other changes, you just copy the contents of `Resources/Gfx/Crosshairs/Default` into `Resources/Gfx` for the default crosshair.
+No problem! Almost all the changes here are implemented in such a way so that toggling a variable i.e toggling `p_viewmodel` will turn on or off the change, sometimes with a relaunch. For crosshairs, if you want the default crosshair back but keep all the other changes, you just copy the contents of `Resources/Gfx/Crosshairs/Default` into `Resources/Gfx` for the default crosshair.
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
@@ -41,7 +42,7 @@ The standard OpenSpades client is a very awesome Ace of Spades client while look
 ### cg_particles
 Default: 0
 
-As simple as it gets. Turn particles on or off along with some extra settings. This can and will hide grenade particles, which may be useful. THIS DOES NOT HIDE  TRACERS
+As simple as it gets. Turn particles on or off along with some extra settings. This can and will hide grenade particles, which may be useful. THIS DOES NOT HIDE TRACERS
 
 ### cg_ragdoll
 Default: 0
@@ -81,7 +82,7 @@ FOV is very a preferential thing. For most people 90 FOV is fine; though nobody'
 ### cg_ejectBrass
 Default: 0
 
-Disables the distracting shell casings when firing your weapon. ***Highly recommended not to turn this off.***
+Disables the distracting shell casings when firing your weapon. ***Highly recommended not to turn this on.***
 
 ### cg_shake
 Default: 0
@@ -101,7 +102,7 @@ Remove the bright yellow tracers that are shot by you, the player. Other players
 ### cg_skipDeadPlayersWhenDead
 Default: 0
 
-Spectate where a player died, which can be great for callouts. ***Highly recommended not to turn this off.***
+Spectate where a player died, which can be great for callouts. ***Highly recommended not to turn this on.***
 
 ### cg_stats
 Default: 1
@@ -111,7 +112,7 @@ Show FPS, Ping, OS+ version, Accuracy and IP of connected server when enabled. *
 ### cg_alertSounds
 Default: 1
 
-Are you in a clan which plays OpenSpades regularly in a VC? Consider turning this to off to prevent pubs from distracting you and making important sounds such as footsteps or gunfire harder to hear.
+Turns off the sound when attempting to switch to a weapon with no ammo, or when the server requests it.
 
 ### cg_animations
 Default: 1
@@ -126,7 +127,7 @@ Turns on or off tinting the screen when damaged (cooldown of 1.5 seconds) (STUB)
 ### p_hurtBlood
 Default: 0
 
-Turns on or off the blood decals when damaged, which may slightly obstruct vision and be a distraction in the most important time - a gunfight (cooldown of 1.5 seconds) (STUB)
+Turns on or off the blood decals when damaged, which may slightly obstruct vision and be a distraction in the most important time in the game - a gunfight (cooldown of 1.5 seconds) (STUB)
 
 ### p_viewmodel
 Default: 0
@@ -158,8 +159,8 @@ Default: 1
 
 (STUB)
 
-### p_disableCorpse
-Default: 1
+### p_corpse
+Default: 0
 
 (STUB)
 
