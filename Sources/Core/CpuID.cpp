@@ -28,6 +28,16 @@ namespace spades {
 		return regs;
 	}
 
+	static uint32_t xcr0() {
+#ifdef WIN32
+		return static_cast<uint32_t>(_xgetbv(0));
+#else
+		uint32_t a;
+		asm volatile("xgetbv" : "=a"(a) : "c"(0) : "%edx");
+		return a;
+#endif
+	}
+
 	CpuID::CpuID() {
 		uint32_t maxStdLevel;
 		{
@@ -42,6 +52,13 @@ namespace spades {
 			auto ar = cpuid(1);
 			featureEcx = ar[2];
 			featureEdx = ar[3];
+
+			// xsave/osxsave
+			if ((featureEcx & 26) && (featureEcx & 27)) {
+				auto x = xcr0();
+				featureXcr0Avx = ((x & 6) == 6);
+				featureXcr0Avx512 = ((x & 224) == 224);
+			}
 		}
 
 		{
@@ -72,12 +89,12 @@ namespace spades {
 			case CpuFeature::SSE3: return featureEcx & (1U << 0);
 			case CpuFeature::SSSE3: return featureEcx & (1U << 9);
 			case CpuFeature::FMA: return featureEcx & (1U << 12);
-			case CpuFeature::AVX: return featureEcx & (1U << 28);
-			case CpuFeature::AVX2: return subfeature & (1U << 5);
-			case CpuFeature::AVX512CD: return subfeature & (1U << 28);
-			case CpuFeature::AVX512ER: return subfeature & (1U << 27);
-			case CpuFeature::AVX512PF: return subfeature & (1U << 26);
-			case CpuFeature::AVX512F: return subfeature & (1U << 16);
+			case CpuFeature::AVX: return (featureXcr0Avx && (featureEcx & (1U << 28)));
+			case CpuFeature::AVX2: return (featureXcr0Avx && subfeature & (1U << 5));
+			case CpuFeature::AVX512CD: return (featureXcr0Avx512 && subfeature & (1U << 28));
+			case CpuFeature::AVX512ER: return (featureXcr0Avx512 && subfeature & (1U << 27));
+			case CpuFeature::AVX512PF: return (featureXcr0Avx512 && subfeature & (1U << 26));
+			case CpuFeature::AVX512F: return (featureXcr0Avx512 && subfeature & (1U << 16));
 			case CpuFeature::SimultaneousMT: return featureEdx & (1U << 28);
 		}
 	}
