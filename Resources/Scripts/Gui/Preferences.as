@@ -638,13 +638,14 @@ namespace spades {
             layouter.AddHeading(_Tr("Preferences", "Player Information"));
             ConfigField @nameField = layouter.AddInputField(
                 _Tr("Preferences", "Player Name"), "cg_playerName", not options.GameActive);
-            nameField.MaxLength = 15;
-            nameField.DenyNonAscii = true;
+            nameField.MaxLength = 1000;
+            nameField.DenyNonAscii = false;
 
             layouter.AddHeading(_Tr("Preferences", "Effects"));
             layouter.AddToggleField(_Tr("Preferences", "Blood"), "cg_blood");
             layouter.AddToggleField(_Tr("Preferences", "Ejecting Brass"), "cg_ejectBrass");
-            layouter.AddToggleField(_Tr("Preferences", "Ragdoll"), "cg_ragdoll");
+            //layouter.AddToggleField(_Tr("Preferences", "Ragdoll, "cg_ragdoll");
+            // todo: implement p_corpse
             layouter.AddToggleField(_Tr("Preferences", "Animations"), "cg_animations");
             layouter.AddChoiceField(_Tr("Preferences", "Camera Shake"), "cg_shake",
                                     array<string> = {_Tr("Preferences", "MORE"),
@@ -673,6 +674,25 @@ namespace spades {
             layouter.AddSliderField(_Tr("Preferences", "Minimap size"), "cg_minimapSize", 128, 256,
                                     8, ConfigNumberFormatter(0, " px"));
             layouter.AddToggleField(_Tr("Preferences", "Show Statistics"), "cg_stats");
+            layouter.AddToggleField(_Tr("Preferences", "Spectate Dead Players"), "cg_skipDeadPlayersWhenDead");
+            
+            layouter.AddHeading(_Tr("Preferences", "OpenSpades+"));
+            layouter.AddToggleField(_Tr("Preferences", "Viewmodel"), "p_viewmodel");
+            layouter.AddToggleField(_Tr("Preferences", "Show Custom Client Message"), "p_showCustomClientMessage");
+
+            ConfigField @clientField = layouter.AddInputField(
+                _Tr("Preferences", "Custom Client Message"), "p_customClientMessage", not options.GameActive);
+            clientField.MaxLength = 100;
+            clientField.DenyNonAscii = false;
+
+            layouter.AddToggleField(_Tr("Preferences", "Show IP (Stats)"), "p_showIP");
+            layouter.AddToggleField(_Tr("Preferences", "Accuracy (Stats)"), "p_showAccuracyInStats");
+            layouter.AddToggleField(_Tr("Preferences", "Accuracy (Map)"), "p_showAccuracyUnderMap");
+            layouter.AddToggleField(_Tr("Preferences", "Streamer Mode"), "p_streamer");
+            layouter.AddToggleField(_Tr("Preferences", "Damage Tint"), "p_hurtTint");
+            layouter.AddToggleField(_Tr("Preferences", "Damage Blood"), "p_hurtBlood");
+            layouter.AddToggleField(_Tr("Preferences", "Corpses"), "p_corpse");
+
             layouter.FinishLayout();
         }
     }

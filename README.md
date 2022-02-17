@@ -1,5 +1,5 @@
 # OpenSpades+
-# Revision 8
+# Revision 9
 
 [![Build status](https://ci.appveyor.com/api/projects/status/gasnapxykby565ng?svg=true)](https://ci.appveyor.com/project/nonperforming/openspadesplus)
 
@@ -22,12 +22,15 @@ It also has some other features, though not as major
 * Cleaner stats interface along with some extras (OS+ revision, IP (todo))
 * Change teams in the Limbo menu by using the Q, W, and E keys (todo: fix)
 * Less harsh and digestible flashlight
+* Streamer-friendly (disable chat, hide ip, sanitize player names) ((todo))
+* Extended player name length and no restriction to ASCII only (needs to be tested)
+* Shows useful variables in the Preferences menu
 * Allow ghosts to use the flashlight (bugged currently while in freecam)
 * A custom map background (two currently, feel free to open a PR to add more!)
 * Encouraging words on the pause menu! (I swear it's not cheating)
 
 ## But what if I want the viewmodel or the default crosshair?
-No problem! Almost all the changes here are implemented in such a way so that toggling a variable i.e `p_hideViewmodel` will turn on or off the change, sometimes with a relaunch. For crosshairs, if you want the default crosshair back but keep all the other changes, you just copy the contents of `Resources/Gfx/Crosshairs/Default` into `Resources/Gfx` for the default crosshair.
+No problem! Almost all the changes here are implemented in such a way so that toggling a variable i.e toggling `p_viewmodel` will turn on or off the change, sometimes with a relaunch. For crosshairs, if you want the default crosshair back but keep all the other changes, you just copy the contents of `Resources/Gfx/Crosshairs/Default` into `Resources/Gfx` for the default crosshair.
 
 ## How to build?
 [Just build like normal OpenSpades.](https://github.com/yvt/openspades/wiki/Building)
@@ -42,7 +45,7 @@ Most, if not all of these variables should be under the Options/Preferences menu
 ### cg_particles
 Default: 0
 
-As simple as it gets. Turn particles on or off along with some extra settings. This can and will hide grenade particles, which may be useful in case you missed the flash. THIS DOES NOT HIDE TRACERS
+As simple as it gets. Turn particles on or off along with some extra settings. This can and will hide grenade particles, which may be useful in case you missed the flash.
 
 ### cg_ragdoll
 Default: 0
@@ -82,7 +85,7 @@ FOV is very a preferential thing. For most people 90 FOV is fine; though nobody'
 ### cg_ejectBrass
 Default: 0
 
-Disables the distracting shell casings when firing your weapon. ***Highly recommended not to turn this off.***
+Disables the distracting shell casings when firing your weapon. ***Highly recommended not to turn this on.***
 
 ### cg_shake
 Default: 0
@@ -102,7 +105,7 @@ Remove the bright yellow tracers that are shot by you, the player. Other players
 ### cg_skipDeadPlayersWhenDead
 Default: 0
 
-Spectate where a player died, which can be great for callouts. ***Highly recommended not to turn this off.***
+Spectate where a player died, which can be great for callouts. ***Highly recommended not to turn this on.***
 
 ### cg_stats
 Default: 1
@@ -127,10 +130,10 @@ Turns on or off tinting the screen when damaged (cooldown of 1.5 seconds) (STUB)
 ### p_hurtBlood
 Default: 0
 
-Turns on or off the blood decals when damaged, which may slightly obstruct vision and be a distraction in the most important time - a gunfight (cooldown of 1.5 seconds) (STUB)
+Turns on or off the blood decals when damaged, which may slightly obstruct vision and be a distraction in the most important time in the game - a gunfight (cooldown of 1.5 seconds) (STUB)
 
-### p_hideViewmodel
-Default: 1
+### p_viewmodel
+Default: 0
 
 Turns the viewmodel on or off.
 
@@ -159,8 +162,8 @@ Default: 1
 
 (STUB)
 
-### p_disableCorpse
-Default: 1
+### p_corpse
+Default: 0
 
 (STUB)
 
