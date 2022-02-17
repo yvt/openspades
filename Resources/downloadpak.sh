@@ -28,7 +28,7 @@ if [ -f "$PAK_NAME" ]; then
 	exit 0
 fi
 
-curl "$PAK_URL" -o "$PAK_NAME"
+wget "$PAK_URL" -O "$PAK_NAME"
 unzip -o "$PAK_NAME" -d "$OUTPUT_DIR"
 
 # relocate paks to the proper location
