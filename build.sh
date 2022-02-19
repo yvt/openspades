@@ -1,9 +1,8 @@
 #!/bin/bash
-cd /home/edrian/Documents/GitHub/openspadesplus/
 rm -rf build
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j 8
 mv Resources bin
 cd bin
