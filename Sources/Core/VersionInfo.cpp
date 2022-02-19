@@ -20,8 +20,6 @@ SPADES_SETTING(p_customClientMessage);
 std::string VersionInfo::GetVersionInfo() {
 	std::string buffer;
 
-// insert custom client here
-
 #if defined(OS_PLATFORM_LINUX)
 	buffer = "GNU/Linux";
 
@@ -62,6 +60,8 @@ std::string VersionInfo::GetVersionInfo() {
 	return buffer;
 #elif defined(__FreeBSD__)
 	buffer = "FreeBSD";
+#elif defined(__DragonFly__)
+	buffer = "DragonFly BSD";
 #elif defined(__OpenBSD__)
 	buffer = "OpenBSD";
 #elif defined(__NetBSD__)
