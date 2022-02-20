@@ -671,7 +671,7 @@ namespace spades {
 #if defined(OS_PLATFORM_LINUX)
 			return "Linux";
 #elif defined(TARGET_OS_MAC)
-			return "MacOS";
+			return "Mac";
 #elif defined(OS_PLATFORM_WINDOWS)
 			return "Windows";
 #elif defined(__FreeBSD__)
