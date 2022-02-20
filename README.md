@@ -25,6 +25,9 @@ It also has some other features, though not as major
 * Streamer-friendly (disable chat, hide ip, sanitize player names) ((todo))
 * Extended player name length and no restriction to ASCII only (needs to be tested)
 * Shows useful variables in the Preferences menu
+* Allow ghosts to use the flashlight (bugged currently while in freecam)
+* A custom map background (two currently, feel free to open a PR to add more!)
+* Encouraging words on the pause menu! (I swear it's not cheating)
 
 ## But what if I want the viewmodel or the default crosshair?
 No problem! Almost all the changes here are implemented in such a way so that toggling a variable i.e toggling `p_viewmodel` will turn on or off the change, sometimes with a relaunch. For crosshairs, if you want the default crosshair back but keep all the other changes, you just copy the contents of `Resources/Gfx/Crosshairs/Default` into `Resources/Gfx` for the default crosshair.
