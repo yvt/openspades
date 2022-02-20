@@ -674,7 +674,7 @@ namespace spades {
             layouter.AddSliderField(_Tr("Preferences", "Minimap size"), "cg_minimapSize", 128, 256,
                                     8, ConfigNumberFormatter(0, " px"));
             layouter.AddToggleField(_Tr("Preferences", "Show Statistics"), "cg_stats");
-            layouter.AddToggleField(_Tr("Preferences", "Spectate Dead Players"), "cg_skipDeadPlayersWhenDead");
+            layouter.AddToggleField(_Tr("Preferences", "Skip Spectating Dead Players"), "cg_skipDeadPlayersWhenDead");
             
             layouter.AddHeading(_Tr("Preferences", "OpenSpades+"));
             layouter.AddToggleField(_Tr("Preferences", "Viewmodel"), "p_viewmodel");
