@@ -31,9 +31,9 @@ It also has some other features, though not as major
 
 This project also aims to be in line with OpenSpades [NotToDo](https://github.com/yvt/openspades/wiki/NotToDo) where applicable - i.e.
 * Show weapons on the leaderboard if the server has /weapon enabled (TODO)
- * Check if you can only see friendly team's weapons
+  * Check if you can only see friendly team's weapons
 * Show player health on mouse-over and scoreboard when server has /hp or /health enabled (TODO)
- * Check if you can only see friendly team HP
+  * Check if you can only see friendly team HP
 
 ## But what if I want the viewmodel or the default crosshair?
 No problem! Almost all the changes here are implemented in such a way so that toggling a variable i.e toggling `p_viewmodel` will turn on or off the change, sometimes with a relaunch. For crosshairs, if you want the default crosshair back but keep all the other changes, you just copy the contents of `Resources/Gfx/Crosshairs/Default` into `Resources/Gfx` for the default crosshair.
