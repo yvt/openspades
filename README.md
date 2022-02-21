@@ -13,8 +13,8 @@ OpenSpades+ is a modification of [OpenSpades](https://github.com/yvt/openspades)
 * A crosshair more akin to classic FPS games such as CS:GO (seven to pick from currently, feel free to open a PR to add more!)
 * No ragdolls or corpses whatsoever
 * Hiding the view-model for extra screen space
-* (NYI) A streamer mode (disable global chat, Hide IP in stats, sanitize player names)
-* (NYI) Show player weapons on the scoreboard if the server allows it
+* A streamer mode (disable global chat, Hide IP in stats, sanitize player names) (TODO)
+* Show player weapons on the scoreboard if the server allows it (TODO)
 
 It also has some other features, though not as major
 
