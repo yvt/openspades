@@ -128,6 +128,7 @@ ipch/
 OpenSpades.rc
 .vscode/settings.json
 
-
+# User preference
+# Crosshair
 Resources/Gfx/HitFeedback.png
 Resources/Gfx/Sight.tga

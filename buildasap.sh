@@ -1,5 +1,4 @@
 #!/bin/bash
-cd /home/edrian/Documents/GitHub/openspadesplus/
 rm -r build
 mkdir build
 cd build
