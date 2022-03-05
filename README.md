@@ -1,7 +1,9 @@
 # OpenSpades+
 # Revision 9
 
-[![Build status](https://ci.appveyor.com/api/projects/status/gasnapxykby565ng?svg=true)](https://ci.appveyor.com/project/nonperforming/openspadesplus)
+[![AppVeyor](https://img.shields.io/appveyor/build/nonperforming/openspadesplus?style=flat-square&logo=appveyor&cacheSeconds=60)](https://ci.appveyor.com/project/nonperforming/openspadesplus)
+[![Latest](https://img.shields.io/github/v/release/nonperforming/openspadesplus?style=flat-square&cacheSeconds=600)](https://github.com/nonperforming/openspadesplus/releases)
+[![License](https://img.shields.io/github/license/nonperforming/openspadesplus?style=flat-square&cacheSeconds=86400)](https://github.com/nonperforming/openspadesplus/blob/main/LICENSE)
 
 [PLEASE READ THE ENTIRE README.md FILE BEFORE USING](https://github.com/nonperforming/openspadesplus#important)
 ## What is this?
