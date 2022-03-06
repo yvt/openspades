@@ -317,9 +317,6 @@ namespace spades {
 			renderer->RegisterModel("Models/MapObjects/CheckPoint.kv6");
 			renderer->RegisterModel("Models/MapObjects/BlockCursorLine.kv6");
 			renderer->RegisterModel("Models/MapObjects/BlockCursorSingle.kv6");
-			renderer->RegisterImage("Gfx/Bullet/7.62mm.png");
-			renderer->RegisterImage("Gfx/Bullet/9mm.png");
-			renderer->RegisterImage("Gfx/Bullet/12gauge.png");
 			renderer->RegisterImage("Gfx/CircleGradient.png");
 			renderer->RegisterImage("Gfx/HurtSprite.png");
 			renderer->RegisterImage("Gfx/HurtRing2.png");
