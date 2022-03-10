@@ -138,7 +138,7 @@ namespace {
 			} else {
 				buf[0] = 0; // empty it, the file will now end up in the working directory :(
 			}
-			sprintf(fullBuf, "%sOpenSpadesCrash%d.dmp", buf,
+			sprintf(fullBuf, "%sOpenSpadesPlusCrash%d.dmp", buf,
 			        GetTickCount()); // some sort of randomization.
 			HANDLE hFile = CreateFile(fullBuf, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
 			                          FILE_ATTRIBUTE_NORMAL, NULL);
@@ -414,7 +414,7 @@ int main(int argc, char **argv) {
 		if (stat((xdg_data_home + "/openspades").c_str(), &info) != 0) {
 			if (stat((home + "/.openspades").c_str(), &info) != 0) {
 			} else if (info.st_mode & S_IFDIR) {
-				SPLog("Openspades directory in XDG_DATA_HOME not found, though old directory "
+				SPLog("OpenSpades directory in XDG_DATA_HOME not found, though old directory "
 				      "exists. Trying to resolve compatibility problem.");
 
 				if (rename((home + "/.openspades").c_str(),
@@ -451,7 +451,7 @@ int main(int argc, char **argv) {
 			SDL_InitSubSystem(SDL_INIT_VIDEO);
 			auto msg = spades::Format(
 			  "Failed to start recording log because of the following error:\n{0}\n\n"
-			  "OpenSpades will continue to run, but any critical events are not logged.",
+			  "OpenSpades+ will continue to run, but any critical events are not logged.",
 			  ex.what());
 			if (SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "OpenSpades Log System Failure",
 			                             msg.c_str(), splashWindow->GetWindow())) {
@@ -643,7 +643,7 @@ int main(int argc, char **argv) {
 
 		std::string msg = ex.what();
 		msg = _Tr("Main",
-		          "A serious error caused OpenSpades to stop working:\n\n{0}\n\nSee "
+		          "A serious error caused OpenSpades+ to stop working:\n\n{0}\n\nSee "
 		          "SystemMessages.log for more details.",
 		          msg);
 
@@ -651,7 +651,7 @@ int main(int argc, char **argv) {
 
 		SDL_InitSubSystem(SDL_INIT_VIDEO);
 		if (SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
-		                             _Tr("Main", "OpenSpades Fatal Error").c_str(), msg.c_str(),
+		                             _Tr("Main", "OpenSpades+ Fatal Error").c_str(), msg.c_str(),
 		                             nullptr)) {
 			// showing dialog failed.
 			// TODO: do appropriate action

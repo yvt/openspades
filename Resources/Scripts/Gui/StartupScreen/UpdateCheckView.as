@@ -101,12 +101,12 @@ namespace spades {
                 case PackageUpdateManagerReadyState::Loaded:
                     if (packageUpdateManager.UpdateAvailable) {
                         text =
-                            _Tr("UpdateCheck", "Version {0} is available! (You currently have {1})",
+                            _Tr("UpdateCheck", "Revision {0} is available! (You are on {1})",
                                 packageUpdateManager.LatestVersionInfo.Text,
                                 packageUpdateManager.CurrentVersionInfo.Text);
                     } else {
                         text = _Tr("UpdateCheck",
-                                   "You're using the latest version of OpenSpades. ({0})",
+                                   "You're using the latest revision of OpenSpades+. ({0})",
                                    packageUpdateManager.CurrentVersionInfo.Text);
                     }
                     break;

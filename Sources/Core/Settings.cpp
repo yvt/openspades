@@ -183,7 +183,7 @@ namespace spades {
 		SPLog("Saving preferences to " CONFIGFILE);
 		try {
 			std::string buffer;
-			buffer = "# OpenSpades config file\n"
+			buffer = "# OpenSpades+ config file\n"
 			         "#\n"
 			         "\n";
 
