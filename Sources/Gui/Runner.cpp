@@ -25,8 +25,8 @@
 #include <Core/Settings.h>
 #include <Core/Strings.h>
 
-DEFINE_SPADES_SETTING(r_videoWidth, "1024");
-DEFINE_SPADES_SETTING(r_videoHeight, "640");
+DEFINE_SPADES_SETTING(r_videoWidth, "1360");
+DEFINE_SPADES_SETTING(r_videoHeight, "768");
 
 namespace spades {
 	namespace gui {

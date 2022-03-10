@@ -46,7 +46,7 @@ DEFINE_SPADES_SETTING(cg_zoomedMouseSensScale, "1");
 DEFINE_SPADES_SETTING(cg_mouseExpPower, "1");
 DEFINE_SPADES_SETTING(cg_invertMouseY, "0");
 
-DEFINE_SPADES_SETTING(cg_holdAimDownSight, "0");
+DEFINE_SPADES_SETTING(cg_holdAimDownSight, "1");
 
 DEFINE_SPADES_SETTING(cg_keyAttack, "LeftMouseButton");
 DEFINE_SPADES_SETTING(cg_keyAltAttack, "RightMouseButton");

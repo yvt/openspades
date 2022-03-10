@@ -34,7 +34,7 @@
 #include <Core/Thread.h>
 #include <OpenSpades.h>
 
-DEFINE_SPADES_SETTING(cl_checkForUpdates, "0");
+DEFINE_SPADES_SETTING(cl_checkForUpdates, "1");
 
 namespace spades {
 	namespace {
