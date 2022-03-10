@@ -37,6 +37,6 @@ DEFINE_SPADES_SETTING(p_hurtBlood, "0");
 
 namespace spades {
 	namespace plus {
-    		const int revision = 9;
+    		const int revision = 10;
 	} // namespace client
 } // namespace spades

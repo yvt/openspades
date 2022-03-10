@@ -108,6 +108,24 @@
       {
         "Info": "https://raw.githubusercontent.com/nonperforming/openspadesplus/main/revisionInfo/Revision9.md"
       }
+    },
+    {
+      "Version": 
+      [
+        1,
+        0,
+        0,
+        9
+      ],
+      "VersionText": "Revision 10",
+      "Platforms": 
+      [
+        "SourceCode"
+      ],
+      "Links": 
+      {
+        "Info": "https://raw.githubusercontent.com/nonperforming/openspadesplus/main/revisionInfo/Revision10.md"
+      }
     }
   ]
 } 
