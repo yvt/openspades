@@ -1,9 +1,9 @@
 ---
 BasedOnStyle: LLVM
-IndentWidth: 4
+IndentWidth: 2
 ---
 Language: Cpp
-TabWidth: 4
+TabWidth: 2
 ContinuationIndentWidth: 2
 UseTab: ForIndentation
 ColumnLimit: 100
