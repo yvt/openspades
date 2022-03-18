@@ -134,8 +134,8 @@ r_lensFlare: 0                                                | r_lensFlare: 1
 r_lensFlareDynamic: 0                                         | r_lensFlareDynamic: 1
 r_mapSoftShadow: 0                                              r_mapSoftShadow: 0
 r_maxAnisotropy: 8                                              r_maxAnisotropy: 8
-r_modelShadows: 1                                               r_modelShadows: 1
-r_multisamples: 2                                             | r_multisamples: 0
+r_modelShadows: 0                                             | r_modelShadows: 1
+r_multisamples: 0                                               r_multisamples: 0
 r_occlusionQuery: 0                                             r_occlusionQuery: 0
 r_optimizedVoxelModel: 1                                        r_optimizedVoxelModel: 1
 r_physicalLighting: 0                                           r_physicalLighting: 0
