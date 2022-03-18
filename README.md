@@ -108,7 +108,7 @@ This is the default for a reason. It is self explanatory.
 ### cg_tracersFirstPerson
 Default: 0
 
-Remove the bright yellow tracers that are shot by you, the player. Other players' tracers won't be affected.
+Remove the bright yellow tracers that are shot by you, the player. Other players' tracers won't be affected. Note that this also affects the minimap.
 
 ### cg_skipDeadPlayersWhenDead
 Default: 0
