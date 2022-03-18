@@ -166,6 +166,13 @@ namespace spades {
 				  }));
 			}
 
+			// check openAL drivers
+			SPLog("Checking OpenAL available drivers");
+			openalDevices = audio::ALDevice::DeviceList();
+			for (const auto &d: openalDevices) {
+				SPLog("%s", d.c_str());
+			}
+
 			// check GL capabilities
 
 			SPLog("Performing ecapability query");
@@ -752,6 +759,13 @@ namespace spades {
 			reportLines.push_back(l);
 			report += text;
 			report += '\n';
+		}
+
+		int StartupScreenHelper::GetNumAudioOpenALDevices() { return static_cast<int>(openalDevices.size()); }
+		std::string StartupScreenHelper::GetAudioOpenALDevice(int index) {
+			if (index < 0 || index >= GetNumAudioOpenALDevices())
+				SPInvalidArgument("index");
+			return openalDevices[index];
 		}
 
 		int StartupScreenHelper::GetNumLocales() { return static_cast<int>(locales.size()); }
