@@ -421,6 +421,7 @@ namespace spades {
 
 			Internal() {
 				SPADES_MARK_FUNCTION();
+				std::vector<std::string> devs;
 
 				if (al::qalGetString(AL_EXTENSIONS)) {
 					std::vector<std::string> strs = Split(al::qalGetString(AL_EXTENSIONS), " ");
@@ -434,6 +435,7 @@ namespace spades {
 				const ALCchar *ext = al::qalcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
 				while (ext && *ext) {
 					SPLog("%s", ext);
+					devs.push_back(ext);
 					ext += (std::strlen(ext) + 1);
 				}
 				SPLog("-------------------");
@@ -442,6 +444,7 @@ namespace spades {
 				ext = al::qalcGetString(NULL, ALC_DEVICE_SPECIFIER);
 				while (ext && *ext) {
 					SPLog("%s", ext);
+					devs.push_back(ext);
 					ext += (std::strlen(ext) + 1);
 				}
 				SPLog("---------------");
@@ -450,7 +453,17 @@ namespace spades {
 					SPLog("Default device: %s", dev);
 				}
 
-				alDevice = al::qalcOpenDevice(NULL);
+				if (!(alDevice = al::qalcOpenDevice(NULL))) {
+					SPLog("Failed to open default OpenAL device");
+					for (const auto &d: devs) {
+						if (dev && *dev && !strcmp(dev, d.c_str()))
+							continue;
+						SPLog("Opening handle attempt on device: %s", d.c_str());
+						if ((alDevice = al::qalcOpenDevice(d.c_str())))
+							break;
+					}
+				}
+
 				if (!alDevice) {
 					if ((ext = al::qalcGetString(NULL, ALC_EXTENSIONS))) {
 						std::vector<std::string> strs = Split(ext, " ");
