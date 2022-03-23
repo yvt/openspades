@@ -285,10 +285,10 @@ if(UNIX AND NOT APPLE)
 	INSTALL(FILES Resources/Icons/openspades.xpm DESTINATION ${OPENSPADES_INSTALL_PIXMAP}/)
 
 	# binary file
-	INSTALL(PROGRAMS ${CMAKE_BINARY_DIR}/bin/openspades DESTINATION ${OPENSPADES_INSTALL_BINARY})
+	INSTALL(PROGRAMS ${CMAKE_BINARY_DIR}/bin/openspadesplus DESTINATION ${OPENSPADES_INSTALL_BINARY})
 
 	# desktop file
-	INSTALL(FILES Resources/Unix/Desktop/openspades.desktop DESTINATION ${OPENSPADES_INSTALL_DESKTOP}/)
+	INSTALL(FILES Resources/Unix/Desktop/openspadesplus.desktop DESTINATION ${OPENSPADES_INSTALL_DESKTOP}/)
 
 	# Currently there is no files in lib/openspades. But if you reading this message in future and want to
 	# place somewhere libs, binaries or other non-media stuff, place them in lib/openspades. Thank you.
@@ -303,8 +303,8 @@ if(APPLE)
 		MACOSX_BUNDLE_BUNDLE_VERSION ${OPENSPADES_FULL_VERSION}
 		MACOSX_BUNDLE_LONG_VERSION_STRING ${OPENSPADES_FULL_VERSION}
 		MACOSX_BUNDLE_SHORT_VERSION_STRING ${OPENSPADES_FULL_VERSION}
-		MACOSX_BUNDLE_GUI_IDENTIFIER jp.yvt.openspades
-		MACOSX_BUNDLE_BUNDLE_NAME OpenSpades)
+		MACOSX_BUNDLE_GUI_IDENTIFIER pf.non.openspadesplus
+		MACOSX_BUNDLE_BUNDLE_NAME OpenSpadesPlus)
 
 	set(BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Resources/Icons/OpenSpades.icns)
 	list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE)
