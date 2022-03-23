@@ -291,7 +291,6 @@ namespace spades {
 			audioDevice->RegisterSound("Sounds/Weapons/RestockLocal.opus");
 			audioDevice->RegisterSound("Sounds/Weapons/AimDownSightLocal.opus");
 			renderer->RegisterImage("Gfx/Ball.png");
-			renderer->RegisterModel("Models/Player/Dead.kv6");
 			renderer->RegisterImage("Gfx/Spotlight.jpg");
 			renderer->RegisterModel("Models/Weapons/Spade/Spade.kv6");
 			renderer->RegisterModel("Models/Weapons/Block/Block2.kv6");

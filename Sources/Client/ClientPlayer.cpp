@@ -837,20 +837,6 @@ namespace spades {
 			IRenderer &renderer = client.GetRenderer();
 			World *world = client.GetWorld();
 
-			if (!p.IsAlive()) {
-				if (!cg_ragdoll) {
-					ModelRenderParam param;
-					param.matrix = Matrix4::Translate(p.GetOrigin() + MakeVector3(0, 0, 1));
-					param.matrix = param.matrix * Matrix4::Scale(0.f); // incredibly hacky. please fix.
-					IntVector3 col = p.GetColor();
-					param.customColor = MakeVector3(col.x / 255.f, col.y / 255.f, col.z / 255.f);
-
-					Handle<IModel> model = renderer.RegisterModel("Models/Player/Dead.kv6");
-					renderer.RenderModel(*model, param);
-				}
-				return;
-			}
-
 			auto origin = p.GetOrigin();
 			sandboxedRenderer->SetClipBox(
 			  AABB3(origin - Vector3(2.f, 2.f, 4.f), origin + Vector3(2.f, 2.f, 2.f)));
