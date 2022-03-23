@@ -414,7 +414,55 @@ namespace spades {
 			clientPlayers[playerId]->Draw2D();
 
 			if (cg_hitIndicator && hitFeedbackIconState > 0.f && !cg_hideHud) {
-				Handle<IImage> img = renderer->RegisterImage("Gfx/HitFeedback.png");
+
+                switch (p_crosshairSet)
+                {
+                  case 1:
+                  {
+                    // Classic Green
+                  }
+
+                  case 2:
+                  {
+                    // Dot
+                  }
+
+                  case 3:
+                  {
+                    // Non's Own
+                  }
+
+                  case 4:
+                  {
+                    // Non's Own 2
+                  }
+
+                  case 5:
+                  {
+                    // Original/OpenSpades crosshair
+                  }
+
+                  case 10:
+                  {
+                    // Standard Green
+                  }
+
+                  case 11:
+                  {
+                    // Standard White
+                  }
+
+                  case 99:
+                  {
+                    // Voxlap
+                  }
+
+                  default:
+                  {
+                    // default back to Classic Green
+                  }
+                }
+                Handle<IImage> img = renderer->RegisterImage("Gfx/HitFeedback.png");
 				Vector2 pos = {scrWidth * .5f, scrHeight * .5f};
 				pos.x -= img->GetWidth() * .5f;
 				pos.y -= img->GetHeight() * .5f;
