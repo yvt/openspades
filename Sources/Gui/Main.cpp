@@ -387,8 +387,8 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		spades::g_userResourceDirectory =
-		  home + "/Library/Application Support/OpenSpades/Resources";
+		spades::g_userResourceDirectory = SDL_GetPrefPath(nullptr, "OpenSpades");
+		spades::g_userResourceDirectory += "Resources";
 
 		spades::FileManager::AddFileSystem(
 		  new spades::DirectoryFileSystem(spades::g_userResourceDirectory, true));
@@ -400,18 +400,19 @@ int main(int argc, char **argv) {
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(
 		  CMAKE_INSTALL_PREFIX "/" OPENSPADES_INSTALL_RESOURCES, false));
 
-		std::string xdg_data_home = home + "/.local/share";
+		std::string xdg_data_home = SDL_GetPrefPath(nullptr, "openspades");
 
 		if (getenv("XDG_DATA_HOME") == NULL) {
 			SPLog("XDG_DATA_HOME not defined. Assuming that XDG_DATA_HOME is ~/.local/share");
 		} else {
-			std::string xdg_data_home = getenv("XDG_DATA_HOME");
+			xdg_data_home = getenv("XDG_DATA_HOME");
+		        xdg_data_home += "/openspades";
 			SPLog("XDG_DATA_HOME is %s", xdg_data_home.c_str());
 		}
 
 		struct stat info;
 
-		if (stat((xdg_data_home + "/openspades").c_str(), &info) != 0) {
+		if (stat((xdg_data_home).c_str(), &info) != 0) {
 			if (stat((home + "/.openspades").c_str(), &info) != 0) {
 			} else if (info.st_mode & S_IFDIR) {
 				SPLog("Openspades directory in XDG_DATA_HOME not found, though old directory "
@@ -437,7 +438,7 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		spades::g_userResourceDirectory = xdg_data_home + "/openspades/Resources";
+		spades::g_userResourceDirectory = xdg_data_home + "Resources";
 
 		spades::FileManager::AddFileSystem(
 		  new spades::DirectoryFileSystem(spades::g_userResourceDirectory, true));
