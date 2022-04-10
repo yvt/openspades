@@ -680,6 +680,8 @@ namespace spades {
 			return "DragonFlyBSD";
 #elif defined(__OpenBSD__)
 			return "OpenBSD";
+#elif defined(__sun)
+			return "Solaris";
 #elif defined(__HAIKU__)
 			return "Haiku";
 #else
