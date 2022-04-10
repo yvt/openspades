@@ -145,7 +145,8 @@ namespace spades {
 					  curl.get(), CURLOPT_XFERINFOFUNCTION,
 					  static_cast<int (*)(void *, curl_off_t, curl_off_t, curl_off_t, curl_off_t)>(
 					    [](void *, curl_off_t total, curl_off_t downloaded, curl_off_t, curl_off_t) -> int {
-					    SPLog("Downloaded %zd bytes/%zd bytes", downloaded, total);
+					    if (total > 0)
+					        SPLog("Downloaded %zd bytes/%zd bytes", downloaded, total);
 					    return 0;
 					  }));
 
