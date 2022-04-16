@@ -102,6 +102,8 @@ namespace spades {
 			void operator=(const std::string &);
 			void operator=(int);
 			void operator=(float);
+			bool operator==(int);
+			bool operator!=(int);
 			operator std::string();
 			operator float();
 			operator int();
