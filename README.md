@@ -39,6 +39,8 @@ Once installed, you'll be able to launch OpenSpades from inside the desktop menu
 
 #### Building and installing from source
 GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
+   *On Debian-derived distributions, you can install GCC*:
+   ```sudo apt-get install build-essential```
 
 1. Install dependencies:
 
@@ -75,16 +77,17 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make
    ```
 
-4. Install OpenSpades (optional but recommended):
+4. Launching the game (follow the steps either A or B)
+    4.A Install OpenSpades (recommended):
+       `sudo make install`
+       **note**: If you have a previous installation of OpenSpades, you have to uninstall it manually by `sudo rm -rf /usr/local/share/games/openspades` before installing a new one.
+    4.B Portable
+        Copy the Resources directory into bin (or else the game won't launch):
+        ```cp -r ./Resources ./bin/```
+        If you plan on distributing it, remember to remove CMake files and folders from Resources.
+        Move the "/openspades.mk" folder somewhere else, for example `/home/user/Games`, or `/opt/games` and rename it to "/OpenSpades". Game launcher is in `~/bin/OpenSpades`.
 
-   `sudo make install`
-
-   **note**: If you have a previous installation of OpenSpades, you have to uninstall it manually by `sudo rm -rf /usr/local/share/games/openspades` before installing a new one.
-
-5. Launch:
-
-   `openspades` (if installed) or `cd $REPO_DIRECTORY/openspades.mk; bin/OpenSpades` and enjoy
-
+5. (Optional) Remove built project clone with its cache from your /home directory to save space (~100MB)
 
 ### On Windows (with Visual Studio)
 1. Get the required software if you haven't already:
