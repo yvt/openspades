@@ -87,7 +87,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
         If you plan on distributing it, remember to remove CMake files and folders from Resources.
         Move the "/openspades.mk" folder somewhere else, for example `/home/user/Games`, or `/opt/games` and rename it to "/OpenSpades". Game launcher is in `~/bin/OpenSpades`.
 
-5. (Optional) Remove built project clone with its cache from your /home directory to save space (~100MB)
+5. (Optional) Remove the source code and build outputs to save disk space (~100MB)
 
 ### On Windows (with Visual Studio)
 1. Get the required software if you haven't already:
