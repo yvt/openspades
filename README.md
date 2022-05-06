@@ -80,13 +80,13 @@ Once installed, you'll be able to launch OpenSpades from inside the desktop menu
    `sudo make install`
    **note**: If you have a previous installation of OpenSpades, you have to uninstall it manually \ by `sudo rm -rf /usr/local/share/games/openspades` before installing a new one.
 4.A.2. Launch the game by typing `openspades` into command line, or search for it from start menu.
-4.B.1. Portable
+4.B.1. Copying OpenSpades manually:
 4.B.2. Copy the Resources directory into bin (or else the game won't launch):
    ```cp -r ./Resources ./bin/```
    **note**: If you plan on distributing it, remember to remove CMake files and folders from Resources.
 4.B.3. Move the "/openspades.mk" folder somewhere else, for example `/home/user/Games`, or `/opt/games` \ and rename it to "/OpenSpades".
 4.B.4. Game's launcher is in `~/bin/OpenSpades` and you can create a shortcut for it on the desktop, or create a `.desktop` launcher placed in `/usr/share/applications/` for it to appear in Start Menu.
-
+   **note**: If you choose a direcotry outside of your `/home/user`, for example `opt/Games`, remember to *chmod* the game launcher's permissions to 755.
 5. (Optional) Remove the source code and build outputs to save disk space (~100MB)
 
 ### On Windows (with Visual Studio)
