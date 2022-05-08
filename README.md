@@ -37,8 +37,9 @@ flatpak install flathub jp.yvt.OpenSpades
 
 Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with `flatpak run jp.yvt.OpenSpades`
 
-#### Building and installing from source
+#### Building from source
 1. Install dependencies:
+
    *On Debian-derived distributions*:
    ```
    sudo apt-get install build-essential pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev \
@@ -55,7 +56,6 @@ Once installed, you'll be able to launch OpenSpades from inside the desktop menu
      freealut-devel xdg-utils freetype-devel opus-devel opusfile-devel \
      libjpeg-devel libXinerama-devel libXft-devel cmake ImageMagick
    ```
-
    *On other distributions*:
    Install corresponding packages from your repository (or compile from source).
    
@@ -75,31 +75,34 @@ Once installed, you'll be able to launch OpenSpades from inside the desktop menu
    cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make
    ```
 
-4. Launch the game (follow the steps either A or B)
+#### Installing and launching
 
-   **4.A.1. Install OpenSpades (recommended):**
-   
-      `sudo make install`
-      
-      **note**: If you have a previous installation of OpenSpades, you have to uninstall it manually by `sudo rm -rf /usr/local/share/games/openspades` before installing a new one.
+**To launch the built game without installing:**
+```
+cd $REPO_DIRECTORY/openspades.mk; bin/openspades
+```
 
-   4.A.2. Launch the game by typing `openspades` into command line, or search for it from start menu.
+**To install the game to your system (recommended), take the following steps:**
+   1. `sudo make install`
+      **note**: If you have a previous installation of OpenSpades, you have to uninstall it manually by `sudo rm -rf /usr/local/share/games/openspades` before installing a new one, or else it might load old resources.
 
-   **4.B.1. Copying OpenSpades manually:**
+   2. Launch the game by typing `openspades` into command line, or search for it from start menu.
 
-   4.B.2. Copy the Resources directory into bin (or else the game won't launch):
+**Alternatively, to install the game to a different directory, take the following steps:**
+
+   1. Copy the Resources directory into bin (or else the game won't launch):
 
       ```cp -r ./Resources ./bin/```
       
       **note**: If you plan on distributing it, remember to remove CMake files and folders from Resources.
 
-   4.B.3. Move the "/openspades.mk" folder somewhere else, for example `/home/user/Games`, or `/opt/games` and rename it to "/OpenSpades".
+   2. Move the "/openspades.mk" folder somewhere else, for example `/home/user/Games`, or `/opt/games` and rename it to "/OpenSpades".
 
-   4.B.4. The game's launcher is located at `bin/openspades`. You can create a shortcut for it on the desktop or a `.desktop` file placed in `/usr/share/applications/` for it to appear in Start Menu. Make sure to set the `bin` directory as the shortcut's working directory, or else you will get an error about missing resources.
+   3. The game's launcher is located at `bin/openspades`. You can create a shortcut for it on the desktop or a `.desktop` file placed in `/usr/share/applications/` for it to appear in Start Menu. Make sure to set the `bin` directory as the shortcut's working directory, or else you will get an error about missing resources.
 
-   **note**: If you choose a directory outside of your `/home/user`, for example `/opt/games`, remember to *chmod* the game launcher's permissions to 755.
+      **note**: If you choose a directory outside of your `/home/user`, for example `/opt/games`, remember to *chmod*  the game launcher's permissions to 755.
 
-5. (Optional) Remove the source code and build outputs to save disk space (~100MB)
+After successful installation, optionally you can remove the source code and build outputs to save disk space (~100MB)
 
 ### On Windows (with Visual Studio)
 1. Get the required software if you haven't already:
