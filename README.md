@@ -75,7 +75,7 @@ Once installed, you'll be able to launch OpenSpades from inside the desktop menu
    cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make
    ```
 
-4. Launching the game (follow the steps either A or B)
+4. Launch the game (follow the steps either A or B)
 
    **4.A.1. Install OpenSpades (recommended):**
    
@@ -95,9 +95,9 @@ Once installed, you'll be able to launch OpenSpades from inside the desktop menu
 
    4.B.3. Move the "/openspades.mk" folder somewhere else, for example `/home/user/Games`, or `/opt/games` and rename it to "/OpenSpades".
 
-   4.B.4. Game's launcher is in `~/bin/OpenSpades` and you can create a shortcut for it on the desktop, or create a `.desktop` launcher placed in `/usr/share/applications/` for it to appear in Start Menu (don't leave "Working Directory" blank, else an error of missing resources will appear).
+   4.B.4. The game's launcher is located at `bin/openspades`. You can create a shortcut for it on the desktop or a `.desktop` file placed in `/usr/share/applications/` for it to appear in Start Menu. Make sure to set the `bin` directory as the shortcut's working directory, or else you will get an error about missing resources.
 
-   **note**: If you choose a directory outside of your `/home/user`, for example `opt/Games`, remember to *chmod* the game launcher's permissions to 755.
+   **note**: If you choose a directory outside of your `/home/user`, for example `/opt/games`, remember to *chmod* the game launcher's permissions to 755.
 
 5. (Optional) Remove the source code and build outputs to save disk space (~100MB)
 
