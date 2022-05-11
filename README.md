@@ -134,7 +134,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 - Xcode Command Line Tools
 - CMake
 - pkg-config
-- gcc 6 or newer ( not clang! ) -- macOS 10.14 (Mojave) or earlier only
+- gcc 6 or newer (not clang!) — macOS 10.14 (Mojave) or earlier only
 - ninja
 
 #### Building
@@ -151,7 +151,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
     brew install gcc
     ```
     Using Nix:
-    - add ```$(nix-build '<nixpkgs>' -A pkg-config-unwrapped --no-out-link)/bin` to `PATH`.```
+    - Add `$(nix-build '<nixpkgs>' -A pkg-config-unwrapped --no-out-link)/bin` to `PATH`.
 	
 	
 2. Clone the Openspades repository:
@@ -176,7 +176,7 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    ninja
    ```
 
-5. Launch!
+5. Launch:
 
     ```bash
     open bin/OpenSpades.app
