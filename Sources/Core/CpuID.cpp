@@ -54,7 +54,7 @@ namespace spades {
 			featureEdx = ar[3];
 
 			// xsave/osxsave
-			if ((featureEcx & 26) && (featureEcx & 27)) {
+			if ((featureEcx & (1U << 28)) && (featureEcx & 26) && (featureEcx & 27)) {
 				auto x = xcr0();
 				featureXcr0Avx = ((x & 6) == 6);
 				featureXcr0Avx512 = ((x & 224) == 224);
@@ -89,7 +89,7 @@ namespace spades {
 			case CpuFeature::SSE3: return featureEcx & (1U << 0);
 			case CpuFeature::SSSE3: return featureEcx & (1U << 9);
 			case CpuFeature::FMA: return featureEcx & (1U << 12);
-			case CpuFeature::AVX: return (featureXcr0Avx && (featureEcx & (1U << 28)));
+			case CpuFeature::AVX: return featureXcr0Avx;
 			case CpuFeature::AVX2: return (featureXcr0Avx && subfeature & (1U << 5));
 			case CpuFeature::AVX512CD: return (featureXcr0Avx512 && subfeature & (1U << 28));
 			case CpuFeature::AVX512ER: return (featureXcr0Avx512 && subfeature & (1U << 27));
