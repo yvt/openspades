@@ -129,14 +129,44 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
 9. Download the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip), extract it, and copy `Nonfree/pak000-Nonfree.pak` to the `Resources` folder inside your build output directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE/Resources`. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
 
 ### On macOS (with Ninja)
-1. Get the latest version of Xcode and the OpenSpades source code. Install the following prerequisites:
-    - Xcode's command-line tools. Install them by `xcode-select --install` and `sudo xcodebuild -license`.
-    - CMake.
-    - Install `pkg-config` by one of the following methods:
-      - Homebrew: `brew install pkg-config`
-      - Nix: add `$(nix-build '<nixpkgs>' -A pkg-config-unwrapped --no-out-link)/bin` to `PATH`.
-2. `vcpkg/bootstrap-vcpkg.sh`
-3. `vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt`
+
+#### Requirements
+- Xcode Command Line Tools
+- CMake
+- pkg-config
+- gcc 6 or newer (not clang!) — macOS 10.14 (Mojave) or earlier only
+- ninja
+
+#### Building
+1. Install the Xcode Command Line Tools and other required build tools.
+
+    ```bash
+    xcode-select --install
+    ```
+    Using Homebrew:
+    ```
+    brew install cmake pkg-config ninja
+    
+    # If you are using macOS 10.14 (Mojave) or earlier:
+    brew install gcc
+    ```
+    Using Nix:
+    - Add `$(nix-build '<nixpkgs>' -A pkg-config-unwrapped --no-out-link)/bin` to `PATH`.
+	
+	
+2. Clone the Openspades repository:
+
+	```bash
+	git clone https://github.com/yvt/openspades.git --recurse-submodules && cd openspades
+	```
+	
+3. Bootstrap `vcpkg` and install the required packages:
+
+	```bash
+	vcpkg/bootstrap-vcpkg.sh
+	vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
+	```
+
 4. Create directory `openspades.mk` in the cloned/downloaded openspades repo and compile:
 
    ```bash
