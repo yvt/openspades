@@ -37,14 +37,14 @@ flatpak install flathub jp.yvt.OpenSpades
 
 Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with `flatpak run jp.yvt.OpenSpades`
 
-#### Building and installing from source
-GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 features heavily.
+### On Linux (from source)
 
+#### Building
 1. Install dependencies:
 
    *On Debian-derived distributions*:
    ```
-   sudo apt-get install pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev \
+   sudo apt-get install build-essential pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev \
      libsdl2-image-dev libalut-dev xdg-utils libfreetype6-dev libopus-dev \
      libopusfile-dev cmake imagemagick
    ```
@@ -53,13 +53,15 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    
    *On Fedora or other RHEL-derived distributions*:
    ```
-   sudo dnf install pkgconf-pkg-config glew-devel openssl-devel libcurl-devel SDL2-devel SDL2_image-devel \
+   sudo dnf install make automake gcc gcc-c++ kernel-devel pkgconf-pkg-config glew-devel \
+     openssl-devel libcurl-devel SDL2-devel SDL2_image-devel \
      freealut-devel xdg-utils freetype-devel opus-devel opusfile-devel \
      libjpeg-devel libXinerama-devel libXft-devel cmake ImageMagick
    ```
-
    *On other distributions*:
    Install corresponding packages from your repository (or compile from source).
+   
+   Building OpenSpades requires a C++ compiler, which is included in the dependencies above in case you don't have one installed yet.
 
 2. Clone OpenSpades repository:
 
@@ -75,16 +77,38 @@ GCC 4.9 / Clang 3.2 or later is recommended because OpenSpades relies on C++11 f
    cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make
    ```
 
-4. Install OpenSpades (optional but recommended):
+#### Installing and launching
 
-   `sudo make install`
+To launch the built game without installing:
+```
+cd $REPO_DIRECTORY/openspades.mk; bin/openspades
+```
 
-   **note**: If you have a previous installation of OpenSpades, you have to uninstall it manually by `sudo rm -rf /usr/local/share/games/openspades` before installing a new one.
+To install the game to your system (recommended), take the following steps:
+   1. Execute the following command:
+      ```
+      sudo make install
+      ```
+      **note**: If you have a previous installation of OpenSpades, you have to uninstall it manually by `sudo rm -rf /usr/local/share/games/openspades` before installing a new one, or else it might load old resources.
 
-5. Launch:
+   2. Launch the game by typing `openspades` into command line, or search for it from start menu.
 
-   `openspades` (if installed) or `cd $REPO_DIRECTORY/openspades.mk; bin/OpenSpades` and enjoy
+Alternatively, to install the game to a different directory, take the following steps:
 
+   1. Copy the Resources directory into bin (or else the game won't launch):
+
+      ```
+      cp -r ./Resources ./bin/
+      ```
+      **note**: If you plan on distributing it, remember to remove CMake files and folders from Resources.
+
+   2. Move the "/openspades.mk" folder somewhere else, for example `/home/user/Games`, or `/opt/games` and rename it to "/OpenSpades".
+
+   3. The game's launcher is located at `bin/openspades`. You can create a shortcut for it on the desktop or a `.desktop` file placed in `/usr/share/applications/` for it to appear in Start Menu. Make sure to set the `bin` directory as the shortcut's working directory, or else you will get an error about missing resources.
+
+      **note**: If you choose a directory outside of your `/home/user`, for example `/opt/games`, remember to *chmod*  the game launcher's permissions to 755.
+
+After successful installation, optionally you can remove the source code and build outputs to save disk space (~100MB).
 
 ### On Windows (with Visual Studio)
 1. Get the required software if you haven't already:
