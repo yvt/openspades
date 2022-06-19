@@ -292,7 +292,8 @@ static std::string Utf8FromWString(const wchar_t *ws) {
 /**
  * A wrapper of `SDL_GetPrefPath` returning a `std::string`.
  *
- * See [the documentation of `SDL_GetPrefPath`][1] for the usage.
+ * See [the documentation of `SDL_GetPrefPath`][1] for the usage. The returned
+ * path is terminated by a platform-specific path separator.
  *
  * [1]: https://wiki.libsdl.org/SDL_GetPrefPath
  */
@@ -427,7 +428,7 @@ int main(int argc, char **argv) {
 			      userDataDirectory.c_str());
 		} else {
 			userDataDirectory = getenv("XDG_DATA_HOME");
-			userDataDirectory += "/openspades";
+			userDataDirectory += "/openspades/";
 			SPLog("The user data directory is '%s' (determined based on $XDG_DATA_HOME)",
 			      userDataDirectory.c_str());
 		}
