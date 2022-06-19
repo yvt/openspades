@@ -419,26 +419,26 @@ int main(int argc, char **argv) {
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(
 		  CMAKE_INSTALL_PREFIX "/" OPENSPADES_INSTALL_RESOURCES, false));
 
-		std::string xdg_data_home = GetSDLPrefPath("openspades");
+		std::string userDataDirectory = GetSDLPrefPath("openspades");
 
 		if (getenv("XDG_DATA_HOME") == NULL) {
 			SPLog("XDG_DATA_HOME not defined. Assuming that XDG_DATA_HOME is ~/.local/share");
 		} else {
-			xdg_data_home = getenv("XDG_DATA_HOME");
-			xdg_data_home += "/openspades";
-			SPLog("XDG_DATA_HOME is %s", xdg_data_home.c_str());
+			userDataDirectory = getenv("XDG_DATA_HOME");
+			userDataDirectory += "/openspades";
+			SPLog("XDG_DATA_HOME is %s", userDataDirectory.c_str());
 		}
 
 		struct stat info;
 
-		if (stat(xdg_data_home.c_str(), &info) != 0) {
+		if (stat(userDataDirectory.c_str(), &info) != 0) {
 			if (stat((home + "/.openspades").c_str(), &info) != 0) {
 			} else if (info.st_mode & S_IFDIR) {
 				SPLog("Openspades directory in XDG_DATA_HOME not found, though old directory "
 				      "exists. Trying to resolve compatibility problem.");
 
 				if (rename((home + "/.openspades").c_str(),
-				           (xdg_data_home + "/openspades").c_str()) != 0) {
+				           (userDataDirectory + "/openspades").c_str()) != 0) {
 					SPLog("Failed to move old directory to new.");
 				} else {
 					SPLog("Successfully moved old directory.");
@@ -448,7 +448,8 @@ int main(int argc, char **argv) {
 						SDL_RWops *io = SDL_RWFromFile(
 						  (home + "/.openspades/CONTENT_MOVED_TO_NEW_DIR").c_str(), "wb");
 						if (io != NULL) {
-							std::string text = ("Content of this directory moved to " + xdg_data_home + "/openspades");
+							std::string text = ("Content of this directory moved to " +
+							                    userDataDirectory + "/openspades");
 							io->write(io, text.c_str(), text.length(), 1);
 							io->close(io);
 						}
@@ -457,7 +458,7 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		spades::g_userResourceDirectory = xdg_data_home + "Resources";
+		spades::g_userResourceDirectory = userDataDirectory + "Resources";
 
 		spades::FileManager::AddFileSystem(
 		  new spades::DirectoryFileSystem(spades::g_userResourceDirectory, true));
