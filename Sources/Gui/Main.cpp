@@ -288,6 +288,26 @@ static std::string Utf8FromWString(const wchar_t *ws) {
 }
 #endif
 
+#ifndef WIN32
+/**
+ * A wrapper of `SDL_GetPrefPath` returning a `std::string`.
+ *
+ * See [the documentation of `SDL_GetPrefPath`][1] for the usage.
+ *
+ * [1]: https://wiki.libsdl.org/SDL_GetPrefPath
+ */
+static std::string GetSDLPrefPath(const char *applicationName) {
+	char *path = SDL_GetPrefPath(nullptr, applicationName);
+	if (!path) {
+		SPRaise("SDL_GetPrefPath failed");
+	}
+	std::string path2 = path;
+	SDL_free(path);
+	return path2;
+
+}
+#endif
+
 int main(int argc, char **argv) {
 #ifdef WIN32
 	SetUnhandledExceptionFilter(UnhandledExceptionProc);
@@ -387,7 +407,7 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		spades::g_userResourceDirectory = SDL_GetPrefPath(nullptr, "OpenSpades");
+		spades::g_userResourceDirectory = GetSDLPrefPath("OpenSpades");
 		spades::g_userResourceDirectory += "Resources";
 
 		spades::FileManager::AddFileSystem(
@@ -400,7 +420,7 @@ int main(int argc, char **argv) {
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(
 		  CMAKE_INSTALL_PREFIX "/" OPENSPADES_INSTALL_RESOURCES, false));
 
-		std::string xdg_data_home = SDL_GetPrefPath(nullptr, "openspades");
+		std::string xdg_data_home = GetSDLPrefPath("openspades");
 
 		if (getenv("XDG_DATA_HOME") == NULL) {
 			SPLog("XDG_DATA_HOME not defined. Assuming that XDG_DATA_HOME is ~/.local/share");
