@@ -422,16 +422,20 @@ int main(int argc, char **argv) {
 		std::string userDataDirectory = GetSDLPrefPath("openspades");
 
 		if (getenv("XDG_DATA_HOME") == NULL) {
-			SPLog("XDG_DATA_HOME not defined. Assuming that XDG_DATA_HOME is ~/.local/share");
+			SPLog("XDG_DATA_HOME is not provided. Using the SDL 'pref dir' as "
+			      "the user data directory: '%s'",
+			      userDataDirectory.c_str());
 		} else {
 			userDataDirectory = getenv("XDG_DATA_HOME");
 			userDataDirectory += "/openspades";
-			SPLog("XDG_DATA_HOME is %s", userDataDirectory.c_str());
+			SPLog("The user data directory is '%s' (determined based on $XDG_DATA_HOME)",
+			      userDataDirectory.c_str());
 		}
 
 		struct stat info;
 
 		if (stat(userDataDirectory.c_str(), &info) != 0) {
+			// TODO: Remove this very old migration code
 			if (stat((home + "/.openspades").c_str(), &info) != 0) {
 			} else if (info.st_mode & S_IFDIR) {
 				SPLog("Openspades directory in XDG_DATA_HOME not found, though old directory "
