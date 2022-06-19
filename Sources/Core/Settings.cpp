@@ -382,6 +382,14 @@ namespace spades {
 	void Settings::ItemHandle::operator=(const std::string &value) { item->Set(value); }
 	void Settings::ItemHandle::operator=(int value) { item->Set(value); }
 	void Settings::ItemHandle::operator=(float value) { item->Set(value); }
+	bool Settings::ItemHandle::operator==(int value) {
+		item->Load();
+		return item->intValue == value;
+	}
+	bool Settings::ItemHandle::operator!=(int value) {
+		item->Load();
+		return item->intValue != value;
+	}
 	Settings::ItemHandle::operator std::string() {
 		item->Load();
 		return item->string;
