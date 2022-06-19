@@ -407,8 +407,7 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		spades::g_userResourceDirectory = GetSDLPrefPath("OpenSpades");
-		spades::g_userResourceDirectory += "Resources";
+		spades::g_userResourceDirectory = GetSDLPrefPath("OpenSpades") + "Resources";
 
 		spades::FileManager::AddFileSystem(
 		  new spades::DirectoryFileSystem(spades::g_userResourceDirectory, true));
@@ -426,13 +425,13 @@ int main(int argc, char **argv) {
 			SPLog("XDG_DATA_HOME not defined. Assuming that XDG_DATA_HOME is ~/.local/share");
 		} else {
 			xdg_data_home = getenv("XDG_DATA_HOME");
-		        xdg_data_home += "/openspades";
+			xdg_data_home += "/openspades";
 			SPLog("XDG_DATA_HOME is %s", xdg_data_home.c_str());
 		}
 
 		struct stat info;
 
-		if (stat((xdg_data_home).c_str(), &info) != 0) {
+		if (stat(xdg_data_home.c_str(), &info) != 0) {
 			if (stat((home + "/.openspades").c_str(), &info) != 0) {
 			} else if (info.st_mode & S_IFDIR) {
 				SPLog("Openspades directory in XDG_DATA_HOME not found, though old directory "
