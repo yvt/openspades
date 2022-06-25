@@ -143,6 +143,7 @@ namespace spades {
 					curl_easy_setopt(curl.get(), CURLOPT_NOPROGRESS, 0);
 					curl_easy_setopt(curl.get(), CURLOPT_LOW_SPEED_TIME, 30l);
 					curl_easy_setopt(curl.get(), CURLOPT_LOW_SPEED_LIMIT, 15l);
+					curl_easy_setopt(curl.get(), CURLOPT_CONNECTTIMEOUT, 30l);
 					curl_easy_setopt(
 					  curl.get(), CURLOPT_XFERINFOFUNCTION,
 					  static_cast<int (*)(void *, curl_off_t, curl_off_t, curl_off_t, curl_off_t)>(
