@@ -2447,7 +2447,7 @@ int asCScriptEngine::RegisterBehaviourToObjectType(asCObjectType *objectType, as
 
 int asCScriptEngine::SetTemplateRestrictions(asCObjectType *templateType, asCScriptFunction *func, const char *caller, const char *decl)
 {
-	asASSERT(templateType->flags && asOBJ_TEMPLATE);
+	asASSERT(templateType->flags & asOBJ_TEMPLATE);
 
 	for (asUINT subTypeIdx = 0; subTypeIdx < templateType->templateSubTypes.GetLength(); subTypeIdx++)
 	{

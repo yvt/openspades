@@ -20,7 +20,7 @@ IF (WIN32)
 		${PROJECT_SOURCE_DIR}/src/nvgl/glew/lib
 		DOC "The GLEW library")
 ELSE (WIN32)
-	FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h
+	FIND_PATH( GLEW_INCLUDE_DIR NAMES GL/glew.h glew.h
 		/usr/include
 		/usr/local/include
 		/sw/include

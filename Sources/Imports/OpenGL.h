@@ -14,7 +14,11 @@
 #include <OpenGL/gl3.h>
 #include <OpenGL/gl3ext.h>
 #else
+#ifndef __sun
 #include <GL/glew.h>
+#else
+#include <glew.h>
+#endif
 
 // v3.3 / GL_ARB_occlusion_query2
 #ifndef GL_ANY_SAMPLES_PASSED

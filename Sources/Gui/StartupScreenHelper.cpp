@@ -676,8 +676,12 @@ namespace spades {
 			return "Windows";
 #elif defined(__FreeBSD__)
 			return "FreeBSD";
+#elif defined(__DragonFly__)
+			return "DragonFlyBSD";
 #elif defined(__OpenBSD__)
 			return "OpenBSD";
+#elif defined(__sun)
+			return "Solaris";
 #elif defined(__HAIKU__)
 			return "Haiku";
 #else
