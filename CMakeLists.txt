@@ -247,6 +247,8 @@ else()
 	include_directories(${CURL_INCLUDE_DIRS})
 	include_directories(${FREETYPE_INCLUDE_DIRS})
 	include_directories(${OpusFile_INCLUDE_DIR})
+	include_directories(${Opus_INCLUDE_DIR})
+	include_directories(${Ogg_INCLUDE_DIR})
 endif()
 
 add_subdirectory(Resources)

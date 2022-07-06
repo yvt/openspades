@@ -110,6 +110,26 @@ Alternatively, to install the game to a different directory, take the following 
 
 After successful installation, optionally you can remove the source code and build outputs to save disk space (~100MB).
 
+#### On Linux (from source, by Nix Flakes)
+To build and run OpenSpades from the latest source code:
+
+```bash
+nix shell github:yvt/openspades -c openspades
+```
+
+To build and run OpenSpades for development:
+
+```bash
+git clone https://github.com/yvt/openspades.git && cd openspades
+nix develop
+# note: this will patch CMake files in the source tree
+cmakeBuildType=RelWithDebInfo cmakeConfigurePhase
+buildPhase
+bin/openspades
+```
+
+**note**: Nix Flakes are an experimental feature of Nix and must be enabled manually. See [this wiki article](https://nixos.wiki/wiki/Flakes) for how to do that.
+
 ### On Windows (with Visual Studio)
 1. Get the required software if you haven't already:
   * CMake 2.8+
