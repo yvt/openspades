@@ -234,7 +234,7 @@ namespace spades {
 						SPAssert(normal < 28);
 						int bright = brights[normal];
 #if ENABLE_SSE2
-						if (lvl == SWFeatureLevel::SSE2) {
+						if constexpr (lvl == SWFeatureLevel::SSE2) {
 							auto m = _mm_setr_epi32(color, 0, 0, 0);
 							auto f = _mm_set1_epi16(bright << 8);
 
