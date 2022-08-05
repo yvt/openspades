@@ -91,6 +91,10 @@ else()
 	if(NOT OpusFile_FOUND)
 		message(FATAL_ERROR "libopus/libopusfile not found, please install it (and make sure it's in your path)")
 	endif()
+	include(cmake/FindXext.cmake)
+	if(NOT XEXT_FOUND)
+		message(FATAL_ERROR "libXext, please install it (and make sure it's in your path)")
+	endif()
 endif()
 
 
