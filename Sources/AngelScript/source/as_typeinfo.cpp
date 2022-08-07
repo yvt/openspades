@@ -1,6 +1,6 @@
 /*
    AngelCode Scripting Library
-   Copyright (c) 2003-2016 Andreas Jonsson
+   Copyright (c) 2003-2020 Andreas Jonsson
 
    This software is provided 'as-is', without any express or implied
    warranty. In no event will the authors be held liable for any
@@ -95,7 +95,7 @@ int asCTypeInfo::Release() const
 		// internal references then it is time to delete the object type
 		if (internalRefCount.get() == 0)
 		{
-			// If the engine is no longer set, then it has already been 
+			// If the engine is no longer set, then it has already been
 			// released and we must take care of the deletion ourselves
 			asDELETE(const_cast<asCTypeInfo*>(this), asCTypeInfo);
 		}
@@ -119,7 +119,7 @@ int asCTypeInfo::ReleaseInternal()
 		// external references then it is time to delete the object type
 		if (externalRefCount.get() == 0)
 		{
-			// If the engine is no longer set, then it has already been 
+			// If the engine is no longer set, then it has already been
 			// released and we must take care of the deletion ourselves
 			asDELETE(const_cast<asCTypeInfo*>(this), asCTypeInfo);
 		}
@@ -166,7 +166,7 @@ void *asCTypeInfo::SetUserData(void *data, asPWORD type)
 
 void *asCTypeInfo::GetUserData(asPWORD type) const
 {
-	// There may be multiple threads reading, but when  
+	// There may be multiple threads reading, but when
 	// setting the user data nobody must be reading.
 	ACQUIRESHARED(engine->engineRWLock);
 
@@ -251,7 +251,7 @@ asDWORD asCTypeInfo::GetAccessMask() const
 }
 
 // interface
-int asCTypeInfo::GetProperty(asUINT index, const char **out_name, int *out_typeId, bool *out_isPrivate, bool *out_isProtected, int *out_offset, bool *out_isReference, asDWORD *out_accessMask) const
+int asCTypeInfo::GetProperty(asUINT index, const char **out_name, int *out_typeId, bool *out_isPrivate, bool *out_isProtected, int *out_offset, bool *out_isReference, asDWORD *out_accessMask, int *out_compositeOffset, bool *out_isCompositeIndirect) const
 {
 	UNUSED_VAR(index);
 	if (out_name) *out_name = 0;
@@ -261,64 +261,56 @@ int asCTypeInfo::GetProperty(asUINT index, const char **out_name, int *out_typeI
 	if (out_offset) *out_offset = 0;
 	if (out_isReference) *out_isReference = false;
 	if (out_accessMask) *out_accessMask = 0;
+	if (out_compositeOffset) *out_compositeOffset = 0;
+	if (out_isCompositeIndirect) *out_isCompositeIndirect = false;
 	return -1;
 }
 
-// yvt: prevents "error: 'this' pointer cannot be null in well-defined C++ code" compiler
-// warning.
-// Compilers are still allowed to do optimization based on the assumption that 'this'
-// pointer cannot be null in well-defined C++ code. This function is defined like this
-// to prevent them from doing that. (What a ugly hack!)
-bool (*volatile isNullPointer)(asCTypeInfo *) = [] (asCTypeInfo *ti)
-{
-	return !ti;
-};
-
 // internal
-asCObjectType *asCTypeInfo::CastToObjectType()
+asCObjectType *CastToObjectType(asCTypeInfo *ti)
 {
 	// Allow call on null pointer
-	if (isNullPointer(this)) return 0;
+	if (ti == 0) return 0;
 
 	// TODO: type: Should List pattern have its own type class?
-	if ((flags & (asOBJ_VALUE | asOBJ_REF | asOBJ_LIST_PATTERN)) && !(flags & asOBJ_FUNCDEF))
-		return reinterpret_cast<asCObjectType*>(this);
+	if ((ti->flags & (asOBJ_VALUE | asOBJ_REF | asOBJ_LIST_PATTERN)) && !(ti->flags & asOBJ_FUNCDEF))
+		return reinterpret_cast<asCObjectType*>(ti);
 
 	return 0;
 }
 
 // internal
-asCEnumType *asCTypeInfo::CastToEnumType()
+asCEnumType *CastToEnumType(asCTypeInfo *ti)
 {
-    // Allow call on null pointer
-    if (isNullPointer(this)) return 0;
+	// Allow call on null pointer
+	if (ti == 0) return 0;
 
-	if (flags & (asOBJ_ENUM))
-		return reinterpret_cast<asCEnumType*>(this);
+	if (ti->flags & (asOBJ_ENUM))
+		return reinterpret_cast<asCEnumType*>(ti);
 
 	return 0;
 }
 
 // internal
-asCTypedefType *asCTypeInfo::CastToTypedefType()
+asCTypedefType *CastToTypedefType(asCTypeInfo *ti)
 {
-    // Allow call on null pointer
-    if (isNullPointer(this)) return 0;
+	// Allow call on null pointer
+	if (ti == 0) return 0;
 
-	if (flags & (asOBJ_TYPEDEF))
-		return reinterpret_cast<asCTypedefType*>(this);
+	if (ti->flags & (asOBJ_TYPEDEF))
+		return reinterpret_cast<asCTypedefType*>(ti);
 
 	return 0;
 }
 
 // internal
-asCFuncdefType *asCTypeInfo::CastToFuncdefType()
+asCFuncdefType *CastToFuncdefType(asCTypeInfo *ti)
 {
-    // Allow call on null pointer
-    if (isNullPointer(this)) return 0;
+	// Allow call on null pointer
+	if (ti == 0) return 0;
 
-	if (flags & (asOBJ_FUNCDEF))
-		return reinterpret_cast<asCFuncdefType*>(this);
+	if (ti->flags & (asOBJ_FUNCDEF))
+		return reinterpret_cast<asCFuncdefType*>(ti);
 
 	return 0;
 }
@@ -364,13 +356,13 @@ asCEnumType::~asCEnumType()
 
 // interface
 asUINT asCEnumType::GetEnumValueCount() const
-{ 
-	return enumValues.GetLength(); 
+{
+	return enumValues.GetLength();
 }
 
 // interface
 const char *asCEnumType::GetEnumValueByIndex(asUINT index, int *outValue) const
-{ 
+{
 	if (outValue)
 		*outValue = 0;
 
@@ -397,7 +389,7 @@ void asCTypedefType::DestroyInternal()
 	// Release the object types held by the alias
 	if (aliasForType.GetTypeInfo())
 			aliasForType.GetTypeInfo()->ReleaseInternal();
-	
+
 	aliasForType = asCDataType::CreatePrimitive(ttVoid, false);
 
 	CleanUserData();
@@ -412,8 +404,8 @@ void asCTypedefType::DestroyInternal()
 
 // interface
 int asCTypedefType::GetTypedefTypeId() const
-{ 
-	return engine->GetTypeIdFromDataType(aliasForType); 
+{
+	return engine->GetTypeIdFromDataType(aliasForType);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -424,7 +416,8 @@ asCFuncdefType::asCFuncdefType(asCScriptEngine *en, asCScriptFunction *func) : a
 	asASSERT(func->funcdefType == 0);
 
 	// A function pointer is special kind of reference type
-	flags       = asOBJ_REF | asOBJ_FUNCDEF | (func->isShared ? asOBJ_SHARED : 0);
+	// It must be possible to garbage collect, as funcdefs can form circular references if used as delegates
+	flags       = asOBJ_REF | asOBJ_GC | asOBJ_FUNCDEF | (func->IsShared() ? asOBJ_SHARED : 0);
 	name        = func->name;
 	nameSpace   = func->nameSpace;
 	module      = func->module;
@@ -468,8 +461,8 @@ void asCFuncdefType::DestroyInternal()
 
 // interface
 asIScriptFunction *asCFuncdefType::GetFuncdefSignature() const
-{ 
-	return funcdef; 
+{
+	return funcdef;
 }
 
 // interface

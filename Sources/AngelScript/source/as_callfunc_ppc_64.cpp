@@ -1,6 +1,6 @@
 /*
    AngelCode Scripting Library
-   Copyright (c) 2003-2015 Andreas Jonsson
+   Copyright (c) 2003-2016 Andreas Jonsson
 
    This software is provided 'as-is', without any express or implied
    warranty. In no event will the authors be held liable for any
@@ -41,6 +41,10 @@
 
 #ifndef AS_MAX_PORTABILITY
 #ifdef AS_PPC_64
+#if AS_PTR_SIZE == 2
+// TODO: Add support for PPC 64bit platforms with 64bit pointers, for example Linux PPC64 (big endian) and PPC64 (little endian)
+#error This code has not been prepared for PPC with 64bit pointers. Most likely the ABI is different
+#else
 
 #include "as_callfunc.h"
 #include "as_scriptengine.h"
@@ -763,6 +767,7 @@ asQWORD CallSystemFunctionNative(asCContext *context, asCScriptFunction *descr, 
 
 END_AS_NAMESPACE
 
+#endif // AS_PTR_SIZE == 2
 #endif // AS_PPC_64
 #endif // AS_MAX_PORTABILITY
 

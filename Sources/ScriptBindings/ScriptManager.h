@@ -21,16 +21,16 @@
 #pragma once
 
 #include <AngelScript/include/angelscript.h>
-#include <AngelScript/addons/scriptany.h>
-#include <AngelScript/addons/scriptarray.h>
-#include <AngelScript/addons/scriptbuilder.h>
-#include <AngelScript/addons/scriptdictionary.h>
-#include <AngelScript/addons/scripthandle.h>
-#include <AngelScript/addons/scripthelper.h>
-#include <AngelScript/addons/scriptmath.h>
-#include <AngelScript/addons/scriptmathcomplex.h>
-#include <AngelScript/addons/scriptstdstring.h>
-#include <AngelScript/addons/weakref.h>
+#include <AngelScript/add_on/scriptany/scriptany.h>
+#include <AngelScript/add_on/scriptarray/scriptarray.h>
+#include <AngelScript/add_on/scriptbuilder/scriptbuilder.h>
+#include <AngelScript/add_on/scriptdictionary/scriptdictionary.h>
+#include <AngelScript/add_on/scripthandle/scripthandle.h>
+#include <AngelScript/add_on/scripthelper/scripthelper.h>
+#include <AngelScript/add_on/scriptmath/scriptmath.h>
+#include <AngelScript/add_on/scriptmath/scriptmathcomplex.h>
+#include <AngelScript/add_on/scriptstdstring/scriptstdstring.h>
+#include <AngelScript/add_on/weakref/weakref.h>
 #include <list>
 #include <mutex>
 

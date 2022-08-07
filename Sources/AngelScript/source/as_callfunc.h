@@ -1,6 +1,6 @@
 /*
    AngelCode Scripting Library
-   Copyright (c) 2003-2015 Andreas Jonsson
+   Copyright (c) 2003-2021 Andreas Jonsson
 
    This software is provided 'as-is', without any express or implied
    warranty. In no event will the authors be held liable for any
@@ -59,7 +59,7 @@ int CallSystemFunction(int id, asCContext *context);
 
 inline asPWORD FuncPtrToUInt(asFUNCTION_t func)
 {
-	// A little trickery as the C++ standard doesn't allow direct 
+	// A little trickery as the C++ standard doesn't allow direct
 	// conversion between function pointer and data pointer
 	union { asFUNCTION_t func; asPWORD idx; } u;
 	u.func = func;
@@ -100,7 +100,6 @@ struct asSSystemFunctionInterface
 	asFUNCTION_t         func;
 	int                  baseOffset;
 	internalCallConv     callConv;
-	int                  scriptReturnSize;
 	bool                 hostReturnInMemory;
 	bool                 hostReturnFloat;
 	int                  hostReturnSize;
@@ -108,6 +107,8 @@ struct asSSystemFunctionInterface
 	bool                 takesObjByVal;
 	asCArray<bool>       paramAutoHandles; // TODO: Should be able to remove this array. Perhaps the flags can be stored together with the inOutFlags in asCScriptFunction?
 	bool                 returnAutoHandle;
+	int                  compositeOffset;
+	bool                 isCompositeIndirect;
 	void                *auxiliary; // can be used for functors, e.g. by asCALL_THISCALL_ASGLOBAL or asCALL_THISCALL_OBJFIRST
 
 	struct SClean
@@ -118,28 +119,53 @@ struct asSSystemFunctionInterface
 	};
 	asCArray<SClean>     cleanArgs;
 
-	asSSystemFunctionInterface() {}
+	asSSystemFunctionInterface()
+	{ 
+		Clear(); 
+	}
 
 	asSSystemFunctionInterface(const asSSystemFunctionInterface &in)
 	{
 		*this = in;
 	}
 
+	void Clear()
+	{
+		func                = 0;
+		baseOffset          = 0;
+		callConv            = ICC_GENERIC_FUNC;
+		hostReturnInMemory  = false;
+		hostReturnFloat     = false;
+		hostReturnSize      = 0;
+		paramSize           = 0;
+		takesObjByVal       = false;
+		returnAutoHandle    = false;
+		compositeOffset     = 0;
+		isCompositeIndirect = false;
+		auxiliary           = 0;
+
+		paramAutoHandles.SetLength(0);
+		cleanArgs.SetLength(0);
+	}
+
 	asSSystemFunctionInterface &operator=(const asSSystemFunctionInterface &in)
 	{
-		func               = in.func;
-		baseOffset         = in.baseOffset;
-		callConv           = in.callConv;
-		scriptReturnSize   = in.scriptReturnSize;
-		hostReturnInMemory = in.hostReturnInMemory;
-		hostReturnFloat    = in.hostReturnFloat;
-		hostReturnSize     = in.hostReturnSize;
-		paramSize          = in.paramSize;
-		takesObjByVal      = in.takesObjByVal;
-		paramAutoHandles   = in.paramAutoHandles;
-		returnAutoHandle   = in.returnAutoHandle;
-		auxiliary          = in.auxiliary;
-		cleanArgs          = in.cleanArgs;
+		func                = in.func;
+		baseOffset          = in.baseOffset;
+		callConv            = in.callConv;
+		hostReturnInMemory  = in.hostReturnInMemory;
+		hostReturnFloat     = in.hostReturnFloat;
+		hostReturnSize      = in.hostReturnSize;
+		paramSize           = in.paramSize;
+		takesObjByVal       = in.takesObjByVal;
+		returnAutoHandle    = in.returnAutoHandle;
+		compositeOffset     = in.compositeOffset;
+		isCompositeIndirect = in.isCompositeIndirect;
+		auxiliary           = in.auxiliary;
+
+		cleanArgs           = in.cleanArgs;
+		paramAutoHandles    = in.paramAutoHandles;
+
 		return *this;
 	}
 };
