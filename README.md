@@ -37,7 +37,7 @@ flatpak install flathub jp.yvt.OpenSpades
 
 Once installed, you'll be able to launch OpenSpades from inside the desktop menu or from your terminal with `flatpak run jp.yvt.OpenSpades`
 
-### On Linux (from source)
+### On Unixes (from source)
 
 #### Building
 1. Install dependencies:
@@ -58,6 +58,14 @@ Once installed, you'll be able to launch OpenSpades from inside the desktop menu
      freealut-devel xdg-utils freetype-devel opus-devel opusfile-devel \
      libjpeg-devel libXinerama-devel libXft-devel cmake ImageMagick
    ```
+
+   *On FreeBSD*:
+   ```
+   sudo pkg install gmake automake pkgconf glew openssl curl sdl2 sdl2-image \
+     freealut xdg-utils freetype2 opus opusfile jpeg-turbo libXinerama libXft \
+     cmake ImageMagick7
+   ```
+
    *On other distributions*:
    Install corresponding packages from your repository (or compile from source).
    
