@@ -162,9 +162,7 @@ namespace spades {
 						if (CURLE_OK == reqret) {
 							ProcessResponse();
 						} else {
-							char buf[256];
-							snprintf(buf, sizeof(buf), "HTTP request error (%s).", curl_easy_strerror(reqret));
-							SPRaise(buf);
+							SPRaise("HTTP request error (%s).", curl_easy_strerror(reqret));
 						}
 					} else {
 						SPRaise("Failed to create cURL object.");
