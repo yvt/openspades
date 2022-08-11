@@ -438,7 +438,7 @@ namespace spades {
 	                          dev = NULL;
 				alDevice = al::qalcOpenDevice(dev);
 
-				if (!alDevice) {
+				if (UNLIKELY(!alDevice)) {
 					if ((ext = al::qalcGetString(NULL, ALC_EXTENSIONS))) {
 						std::vector<std::string> strs = Split(ext, " ");
 						SPLog("OpenAL ALC Extensions (NULL):");
@@ -463,7 +463,7 @@ namespace spades {
 				}
 
 				alContext = al::qalcCreateContext(alDevice, NULL);
-				if (!alContext) {
+				if (UNLIKELY(!alContext)) {
 					al::qalcCloseDevice(alDevice);
 					SPRaise("Failed to create OpenAL context.");
 				}
@@ -562,7 +562,7 @@ namespace spades {
 				SPADES_MARK_FUNCTION();
 
 				ALSrc *src = AllocChunk();
-				if (!src)
+				if (UNLIKELY(!src))
 					return;
 
 				src->stereo = chunk->GetFormat() == AL_FORMAT_STEREO16;
