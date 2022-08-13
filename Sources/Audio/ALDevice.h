@@ -45,6 +45,8 @@ namespace spades {
 
 			client::IAudioChunk *RegisterSound(const char *name) override;
 
+			static std::vector<std::string> DeviceList();
+
 			void ClearCache() override;
 
 			void SetGameMap(client::GameMap *) override;

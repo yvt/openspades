@@ -39,6 +39,7 @@ DEFINE_SPADES_SETTING(s_maxPolyphonics, "96");
 DEFINE_SPADES_SETTING(s_eax, "1");
 DEFINE_SPADES_SETTING(s_alPreciseErrorCheck, "1");
 DEFINE_SPADES_SETTING(s_gain, "1");
+DEFINE_SPADES_SETTING(s_openalDevice, "");
 
 // lm: seems to be missing for me..
 #ifndef ALC_ALL_DEVICES_SPECIFIER
@@ -421,6 +422,7 @@ namespace spades {
 
 			Internal() {
 				SPADES_MARK_FUNCTION();
+				const char *ext, *dev;
 
 				if (al::qalGetString(AL_EXTENSIONS)) {
 					std::vector<std::string> strs = Split(al::qalGetString(AL_EXTENSIONS), " ");
@@ -430,27 +432,12 @@ namespace spades {
 					}
 				}
 
-				SPLog("--- All devices ---");
-				const ALCchar *ext = al::qalcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
-				while (ext && *ext) {
-					SPLog("%s", ext);
-					ext += (std::strlen(ext) + 1);
-				}
-				SPLog("-------------------");
+				dev = s_openalDevice.CString();
+				SPLog("OpenAL opening device: %s", dev);
+				if (!strcmp(dev, "default"))
+	                          dev = NULL;
+				alDevice = al::qalcOpenDevice(dev);
 
-				SPLog("--- Devices ---");
-				ext = al::qalcGetString(NULL, ALC_DEVICE_SPECIFIER);
-				while (ext && *ext) {
-					SPLog("%s", ext);
-					ext += (std::strlen(ext) + 1);
-				}
-				SPLog("---------------");
-				const ALCchar *dev = al::qalcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
-				if (dev && *dev) {
-					SPLog("Default device: %s", dev);
-				}
-
-				alDevice = al::qalcOpenDevice(NULL);
 				if (UNLIKELY(!alDevice)) {
 					if ((ext = al::qalcGetString(NULL, ALC_EXTENSIONS))) {
 						std::vector<std::string> strs = Split(ext, " ");
@@ -558,7 +545,7 @@ namespace spades {
 			ALSrc *AllocChunk() {
 				SPADES_MARK_FUNCTION();
 
-                size_t start = SampleRandomInt<std::size_t>(0, srcs.size() - 1);
+				size_t start = SampleRandomInt<std::size_t>(0, srcs.size() - 1);
 				for (size_t i = 0; i < srcs.size(); i++) {
 					ALSrc *src = srcs[(i + start) % srcs.size()];
 					if (src->IsPlaying())
@@ -566,7 +553,7 @@ namespace spades {
 					return src;
 				}
 
-                ALSrc *src = SampleRandomElement(srcs);
+                		ALSrc *src = SampleRandomElement(srcs);
 				src->Terminate();
 				return src;
 			}
@@ -753,6 +740,19 @@ namespace spades {
 				throw;
 			}
 			d = new Internal();
+		}
+
+		std::vector<std::string> ALDevice::DeviceList() {
+			std::vector<std::string> devs;
+			const ALCchar *ext = al::qalcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
+			if (!ext || *ext == '\0')
+				ext = al::qalcGetString(NULL, ALC_DEVICE_SPECIFIER);
+			while (ext && *ext) {
+				devs.push_back(ext);
+				ext += std::strlen(ext) + 1;
+			}
+
+			return devs;
 		}
 
 		bool ALDevice::TryLoad() {
