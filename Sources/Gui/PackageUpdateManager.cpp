@@ -141,6 +141,9 @@ namespace spades {
 					curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &responseBuffer);
 					curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, OpenSpades_VER_STR);
 					curl_easy_setopt(curl.get(), CURLOPT_NOPROGRESS, 0);
+					curl_easy_setopt(curl.get(), CURLOPT_LOW_SPEED_TIME, 30l);
+					curl_easy_setopt(curl.get(), CURLOPT_LOW_SPEED_LIMIT, 15l);
+					curl_easy_setopt(curl.get(), CURLOPT_CONNECTTIMEOUT, 30l);
 					curl_easy_setopt(
 					  curl.get(), CURLOPT_XFERINFOFUNCTION,
 					  static_cast<int (*)(void *, curl_off_t, curl_off_t, curl_off_t, curl_off_t)>(
@@ -151,9 +154,11 @@ namespace spades {
 					  }));
 
 					m_parent.SetupCURLRequest(curl.get());
+					auto reqret = curl_easy_perform(curl.get());
 
-					if (curl_easy_perform(curl.get())) {
-						m_parent.ReturnErrorVeneer("HTTP request error.");
+					if (reqret) {
+						m_parent.ReturnErrorVeneer(
+						  Format("HTTP request error ({0}).", curl_easy_strerror(reqret)));
 						return;
 					}
 

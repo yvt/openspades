@@ -155,10 +155,14 @@ namespace spades {
 						curl_easy_setopt(cHandle.get(), CURLOPT_URL, cl_serverListUrl.CString());
 						curl_easy_setopt(cHandle.get(), CURLOPT_WRITEFUNCTION, curlWriteCallback);
 						curl_easy_setopt(cHandle.get(), CURLOPT_WRITEDATA, this);
-						if (0 == curl_easy_perform(cHandle.get())) {
+						curl_easy_setopt(cHandle.get(), CURLOPT_LOW_SPEED_TIME, 30l);
+						curl_easy_setopt(cHandle.get(), CURLOPT_LOW_SPEED_LIMIT, 15l);
+						curl_easy_setopt(cHandle.get(), CURLOPT_CONNECTTIMEOUT, 30l);
+						auto reqret = curl_easy_perform(cHandle.get());
+						if (CURLE_OK == reqret) {
 							ProcessResponse();
 						} else {
-							SPRaise("HTTP request error.");
+							SPRaise("HTTP request error (%s).", curl_easy_strerror(reqret));
 						}
 					} else {
 						SPRaise("Failed to create cURL object.");
