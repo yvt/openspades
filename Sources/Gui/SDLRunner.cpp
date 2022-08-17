@@ -479,11 +479,8 @@ namespace spades {
 #endif
 				}
 
-				int w = width;
-				int h = height;
-
 				window = SDL_CreateWindow(caption.c_str(), SDL_WINDOWPOS_CENTERED,
-				                          SDL_WINDOWPOS_CENTERED, w, h, sdlFlags);
+				                          SDL_WINDOWPOS_CENTERED, width, height, sdlFlags);
 
 				if (!window) {
 					std::string msg = SDL_GetError();
