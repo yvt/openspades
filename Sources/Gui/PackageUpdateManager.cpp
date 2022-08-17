@@ -157,9 +157,8 @@ namespace spades {
 					auto reqret = curl_easy_perform(curl.get());
 
 					if (reqret) {
-						char buf[256];
-						snprintf(buf, sizeof(buf), "HTTP request error (%s).", curl_easy_strerror(reqret));
-						m_parent.ReturnErrorVeneer(buf);
+						m_parent.ReturnErrorVeneer(
+						  Format("HTTP request error ({0}).", curl_easy_strerror(reqret)));
 						return;
 					}
 
