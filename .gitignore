@@ -63,6 +63,10 @@ OpenSpades.msvc/
 # Linux build path
 openspades.mk/
 
+# Nix
+/outputs
+/result
+
 # fltk / fluid output leftovers
 Sources/Gui/DetailConfigWindow.txt
 Sources/Gui/MainWindow.txt

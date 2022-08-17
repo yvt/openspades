@@ -44,10 +44,14 @@ std::string VersionInfo::GetVersionInfo() {
 	return windowsVersion;
 #elif defined(__FreeBSD__)
 	return std::string("FreeBSD");
+#elif defined(__DragonFly__)
+	return std::string("DragonFly BSD");
 #elif defined(__OpenBSD__)
 	return std::string("OpenBSD");
 #elif defined(__NetBSD__)
 	return std::string("NetBSD");
+#elif defined(__sun)
+	return std::string("Solaris / Illumos");
 #elif defined(__HAIKU__)
 	return std::string("Haiku");
 #else

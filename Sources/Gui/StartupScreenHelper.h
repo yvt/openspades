@@ -50,6 +50,7 @@ namespace spades {
 			void AddReport(const std::string &text = std::string(),
 			               Vector4 color = Vector4::Make(1.f, 1.f, 1.f, 1.f));
 
+			std::vector<std::string> openalDevices;
 			struct LocaleInfo {
 				std::string name;
 				std::string descriptionNative;
@@ -77,6 +78,9 @@ namespace spades {
 			int GetNumVideoModes();
 			int GetVideoModeWidth(int index);
 			int GetVideoModeHeight(int index);
+
+			int GetNumAudioOpenALDevices();
+			std::string GetAudioOpenALDevice(int index);
 
 			int GetNumReportLines();
 			std::string GetReport() { return report; }
