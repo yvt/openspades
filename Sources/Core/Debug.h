@@ -132,15 +132,18 @@ namespace spades {
 
 #ifdef __GNUC__
 #define DEPRECATED(func) func __attribute__((deprecated))
+#define PURE __attribute__((pure))
 #define LIKELY(cond)   __builtin_expect(!!(cond), true)
 #define UNLIKELY(cond) __builtin_expect(!!(cond), false)
 #elif defined(_MSC_VER)
 #define DEPRECATED(func) __declspec(deprecated) func
 #define LIKELY(cond)   (cond)
 #define UNLIKELY(cond) (cond)
+#define PURE
 #else
 #pragma message("WARNING: You need to implement DEPRECATED for this compiler")
 #define DEPRECATED(func) func
+#define PURE
 #pragma message("WARNING: You need to implement LIKELY/UNLIKELY for this compiler")
 #define LIKELY(cond)   (cond)
 #define UNLIKELY(cond) (cond)
