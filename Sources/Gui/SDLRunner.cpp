@@ -518,7 +518,8 @@ namespace spades {
 
 #ifndef __sun
 					if (rtype == RendererType::GL) {
-						if (r_vsync != 0 && SDL_GL_SetSwapInterval(r_vsync) != 0) {
+						int vsync = r_vsync;
+						if (vsync != 0 && SDL_GL_SetSwapInterval(vsync) != 0) {
 							SPRaise("SDL_GL_SetSwapInterval failed: %s", SDL_GetError());
 						}
 					}
