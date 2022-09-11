@@ -134,7 +134,7 @@ namespace spades {
                 cfg.AddRow(StartupScreenConfigSelectItemEditor(
                     ui, StartupScreenConfig(ui, "r_vsync"), "0|1|-1",
                     _Tr("StartupScreen",
-                        "Vertical Sync:Synchronizes screen updates to a monitor's refresh rate.|" "Off|" "On|" "Adaptative")));
+                        "Vertical Sync:Synchronizes screen updates to a monitor's refresh rate.|" "Off|" "On|" "Adaptive")));
 
                 {
                     StartupScreenComplexConfig cplx;
