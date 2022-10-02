@@ -32,7 +32,7 @@ namespace spades {
 		int GetNumSWRendererThreads();
 
 		template <class F> static void InvokeParallel(F f, unsigned int numThreads) {
-			SPAssert(numThreads <= 32);
+			SPAssume(numThreads <= 32);
 			std::array<std::unique_ptr<ConcurrentDispatch>, 32> disp;
 			for (auto i = 1U; i < numThreads; i++) {
 				auto ff = [i, &f]() { f(i); };

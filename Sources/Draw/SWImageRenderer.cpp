@@ -410,7 +410,7 @@ namespace spades {
 					if (depthTest) {
 						depthOut = depthBuffer + (y * fbW);
 					}
-					SPAssert(x1 < x2);
+					SPAssume(x1 < x2);
 					int width = x2 - x1;
 					SWImageGouraudInterpolator<level> vary(vary1, vary2, width);
 					int minX = std::max(x1, 0);
