@@ -131,11 +131,10 @@ namespace spades {
                     _Tr("StartupScreen",
                         "Uses a number representation which allows wider dynamic range during rendering process. " "Additionally, this allows color calculation whose value is in linear correspondence with actual energy, " "that is, physically accurate blending can be achieved.")));
 
-                cfg.AddRow(StartupScreenConfigCheckItemEditor(
-                    ui, StartupScreenConfig(ui, "r_vsync"), "0", "1",
-                    _Tr("StartupScreen", "V-Sync"),
+                cfg.AddRow(StartupScreenConfigSelectItemEditor(
+                    ui, StartupScreenConfig(ui, "r_vsync"), "0|1|-1",
                     _Tr("StartupScreen",
-                        "Enables frame rate synchronization.")));
+                        "Vertical Sync:Synchronizes screen updates to a monitor's refresh rate.|" "Off|" "On|" "Adaptive")));
 
                 {
                     StartupScreenComplexConfig cplx;
