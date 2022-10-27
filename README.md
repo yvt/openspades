@@ -79,11 +79,7 @@ Once installed, you'll be able to launch OpenSpades from inside the desktop menu
 
 3. Create directory `openspades.mk` in cloned/downloaded openspades repo and compile:
 
-   ```bash
-   mkdir openspades.mk
-   cd openspades.mk
-   cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make
-   ```
+   ```bash mkdir openspades.mk && cd openspades.mk && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make```
 
 #### Installing and launching
 
