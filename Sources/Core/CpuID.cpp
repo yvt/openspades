@@ -43,9 +43,11 @@ namespace spades {
 		{
 			auto ar = cpuid(0);
 			char buf[13];
-			buf[12] = 0;
 			maxStdLevel = ar[0];
-			memcpy(buf, ar.data() + 1, 12);
+			memcpy(&buf[0], &ar[1], 4);
+			memcpy(&buf[4], &ar[3], 4);
+			memcpy(&buf[8], &ar[2], 4);
+			buf[12] = 0;
 			vendor = buf;
 		}
 		{
