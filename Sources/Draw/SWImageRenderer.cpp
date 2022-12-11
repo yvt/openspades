@@ -351,7 +351,7 @@ namespace spades {
 
 				auto drawPixel = [mulR, mulG, mulB, mulA](uint32_t &dest, float &destDepth,
 				                                          uint32_t texture, float inDepth) {
-					if (depthTest) {
+					if constexpr(depthTest) {
 						if (inDepth > destDepth) {
 							return;
 						}
@@ -995,7 +995,7 @@ namespace spades {
 				}
 
 				float *const depthBuffer = r.depthBuffer;
-				if (depthTest) {
+				if constexpr(depthTest) {
 					SPAssert(depthBuffer != nullptr);
 				}
 
@@ -1034,7 +1034,7 @@ namespace spades {
 				mulCol = _mm_slli_epi16(mulCol, 8);
 
 				auto drawPixel = [mulCol, mulInv](uint32_t &dest, float &destDepth, float inDepth) {
-					if (depthTest) {
+					if constexpr (depthTest) {
 						if (inDepth > destDepth) {
 							return;
 						}
