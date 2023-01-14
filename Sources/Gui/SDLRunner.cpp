@@ -525,6 +525,10 @@ namespace spades {
 					}
 #endif
 
+					if (rtype == RendererType::SW) {
+						SDL_SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
+					}
+
 					RunClientLoop(renderer.GetPointerOrNull(), audio.GetPointerOrNull());
 
 					// `SDL_Window` and its associated resources will be inaccessible
