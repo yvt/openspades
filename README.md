@@ -46,7 +46,7 @@ Once installed, you'll be able to launch OpenSpades from inside the desktop menu
    ```
    sudo apt-get install build-essential pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev \
      libsdl2-image-dev libalut-dev xdg-utils libfreetype6-dev libopus-dev \
-     libopusfile-dev cmake imagemagick
+     libopusfile-dev cmake imagemagick zip unzip
    ```
    (because of a bug in some distributions, you might also
    have to install more packages by `sudo apt-get install libjpeg-dev libxinerama-dev libxft-dev`)
@@ -56,14 +56,15 @@ Once installed, you'll be able to launch OpenSpades from inside the desktop menu
    sudo dnf install make automake gcc gcc-c++ kernel-devel pkgconf-pkg-config glew-devel \
      openssl-devel libcurl-devel SDL2-devel SDL2_image-devel \
      freealut-devel xdg-utils freetype-devel opus-devel opusfile-devel \
-     libjpeg-devel libXinerama-devel libXft-devel cmake ImageMagick
+     libjpeg-devel libXinerama-devel libXft-devel cmake ImageMagick \
+     zip unzip
    ```
 
    *On FreeBSD*:
    ```
    sudo pkg install gmake automake pkgconf glew openssl curl sdl2 sdl2-image \
      freealut xdg-utils freetype2 opus opusfile jpeg-turbo libXinerama libXft \
-     cmake ImageMagick7
+     cmake ImageMagick7 zip unzip
    ```
 
    *On other distributions*:
