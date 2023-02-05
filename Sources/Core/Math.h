@@ -23,10 +23,12 @@
 #include <algorithm> // std::max / std::min
 #include <cstdint>   // uint32_t --> msvc
 #include <cmath>
+#include <cstring>
 #include <random>
 #include <string>
 #include <vector>
 #include <functional>
+#include <type_traits>
 #include <mutex>
 
 namespace spades {
@@ -973,6 +975,20 @@ namespace spades {
 	std::string TrimSpaces(const std::string &);
 
 	float SmoothStep(float);
+
+    /*
+     * binary safe cast, unlike traditional c++ cast operators, it needs to operate on a matching type size
+     *
+     * if the code updates to c++ 20 it can be dropped
+     */
+    template<bool dest, class src> using EnableIf = typename std::enable_if<dest, src>::type;
+    template<class dest, class src>
+    EnableIf<sizeof(dest) == sizeof(src) && std::is_trivially_copyable<dest>::value && std::is_trivially_copyable<src>::value, dest>
+    SafeCast(const src& s) {
+        dest d;
+        std::memcpy(&d, &s, sizeof(dest));
+        return d;
+    }
 }
 
 namespace std {

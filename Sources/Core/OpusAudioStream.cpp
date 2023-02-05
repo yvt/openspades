@@ -69,19 +69,19 @@ namespace spades {
 			switch (whence) {
 				case SEEK_CUR:
 					self.stream->SetPosition(
-					  static_cast<std::uint64_t>(offset + self.stream->GetPosition()));
+					  SafeCast<std::uint64_t>(offset + self.stream->GetPosition()));
 					break;
 				case SEEK_SET: self.stream->SetPosition(static_cast<std::uint64_t>(offset)); break;
 				case SEEK_END:
 					self.stream->SetPosition(
-					  static_cast<std::uint64_t>(offset + self.stream->GetLength()));
+					  SafeCast<std::uint64_t>(offset + self.stream->GetLength()));
 					break;
 			}
 			return 0;
 		};
 		opusCallback->tell = [](void *stream) -> opus_int64 {
 			auto &self = *reinterpret_cast<OpusAudioStream *>(stream);
-			return static_cast<opus_int64>(self.stream->GetPosition());
+			return SafeCast<opus_int64>(self.stream->GetPosition());
 		};
 		opusCallback->close = nullptr;
 
@@ -220,7 +220,7 @@ namespace spades {
 	void OpusAudioStream::SetPosition(uint64_t pos) {
 		pos = std::min(pos, GetLength());
 
-		op_pcm_seek(opusFile, static_cast<opus_int64>(pos / (channels * 4)));
+		op_pcm_seek(opusFile, SafeCast<opus_int64>(pos / (channels * 4)));
 
 		subsamplePosition = static_cast<int>(pos % (channels * 4));
 		if (subsamplePosition) {
