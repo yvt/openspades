@@ -44,7 +44,7 @@ Once installed, you'll be able to launch OpenSpades from inside the desktop menu
 
    *On Debian-derived distributions*:
    ```
-   sudo apt-get install build-essential pkg-config libglew-dev libcurl3-openssl-dev libsdl2-dev \
+   sudo apt-get install build-essential pkg-config libglew-dev libcurl4-openssl-dev libsdl2-dev \
      libsdl2-image-dev libalut-dev xdg-utils libfreetype6-dev libopus-dev \
      libopusfile-dev cmake imagemagick
    ```
