@@ -612,14 +612,16 @@ namespace spades {
 						clientPlayers[i]->AddToScene();
 
 						if (p && enemy->GetTeamId() != p->GetTeamId() && enemy->IsAlive()) {
-						  	Vector4 color = Vector4::Make(1, 1, 1, 1);
+							if (Vector3::Dot(p->GetEye(), enemy->GetPosition()) > 0.f) {
+								Vector4 color = Vector4::Make(1, 1, 1, 1);
 
-							Player::HitBoxes hb = enemy->GetHitBoxes();
-							AddDebugObjectToScene(hb.head, color);
-							AddDebugObjectToScene(hb.torso, color);
-							AddDebugObjectToScene(hb.limbs[0], color);
-							AddDebugObjectToScene(hb.limbs[1], color);
-							AddDebugObjectToScene(hb.limbs[2], color);
+								Player::HitBoxes hb = enemy->GetHitBoxes();
+								AddDebugObjectToScene(hb.head, color);
+								AddDebugObjectToScene(hb.torso, color);
+								AddDebugObjectToScene(hb.limbs[0], color);
+								AddDebugObjectToScene(hb.limbs[1], color);
+								AddDebugObjectToScene(hb.limbs[2], color);
+							}
 						}
 					}
 				}

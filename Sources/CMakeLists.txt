@@ -35,7 +35,7 @@ if(WIN32)
 			-i${CMAKE_CURRENT_BINARY_DIR}/OpenSpades.rc -o ${CMAKE_CURRENT_BINARY_DIR}/OpenSpades_rc.o)
 		SET(RESOURCE_FILES ${CMAKE_CURRENT_BINARY_DIR}/OpenSpades_rc.o)
 	else()
-		set(RESOURCE_FILES ${PROJECT_BINARY_DIR}/OpenSpades.rc Client/LocalPlayer.cpp Client/LocalPlayer.h)	# msvc
+		set(RESOURCE_FILES ${PROJECT_BINARY_DIR}/OpenSpades.rc)	# msvc
 	endif()
 endif()
 
