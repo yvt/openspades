@@ -486,10 +486,6 @@ namespace spades {
 					// The player is non-existent or dead
 					continue;
 				}
-				if (!localPlayer.IsSpectator() && localPlayer.GetTeamId() != p.GetTeamId()) {
-					// Duh
-					continue;
-				}
 				if (p.IsSpectator() && &p == &localPlayer &&
 				    HasTargetPlayer(client->GetCameraMode())) {
 					// Don't draw white icon when spectating a player
@@ -500,9 +496,7 @@ namespace spades {
 					continue;
 				}
 
-				IntVector3 iconColor =
-				  colorMode ? IntVector3::Make(palette[i][0], palette[i][1], palette[i][2])
-				            : world->GetTeam(p.GetTeamId()).color;
+				IntVector3 iconColor = world->GetTeam(p.GetTeamId()).color;
 				if (p.GetTeamId() >= 2)
 					iconColor =
 					  IntVector3::Make(200, 200, 200); // colorMode doesn't matter here, right?

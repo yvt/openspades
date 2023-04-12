@@ -604,11 +604,25 @@ namespace spades {
 			if (world) {
 				stmp::optional<Player &> p = world->GetLocalPlayer();
 
-				for (size_t i = 0; i < world->GetNumPlayerSlots(); i++)
-					if (world->GetPlayer(static_cast<unsigned int>(i))) {
+				for (size_t i = 0; i < world->GetNumPlayerSlots(); i++) {
+					stmp::optional<Player &> enemy = world->GetPlayer(static_cast<unsigned int>(i));
+
+					if (enemy) {
 						SPAssert(clientPlayers[i]);
 						clientPlayers[i]->AddToScene();
+
+						if (p && enemy->GetTeamId() != p->GetTeamId() && enemy->IsAlive()) {
+						  	Vector4 color = Vector4::Make(1, 1, 1, 1);
+
+							Player::HitBoxes hb = enemy->GetHitBoxes();
+							AddDebugObjectToScene(hb.head, color);
+							AddDebugObjectToScene(hb.torso, color);
+							AddDebugObjectToScene(hb.limbs[0], color);
+							AddDebugObjectToScene(hb.limbs[1], color);
+							AddDebugObjectToScene(hb.limbs[2], color);
+						}
 					}
+				}
 				auto &nades = world->GetAllGrenades();
 				for (auto &nade : nades) {
 					AddGrenadeToScene(*nade);
@@ -684,25 +698,6 @@ namespace spades {
 				renderer->AddLight(flashDlights[i]);
 			flashDlightsOld.clear();
 			flashDlightsOld.swap(flashDlights);
-
-			// draw player hottrack
-			// FIXME: don't use debug line
-			auto hottracked = HotTrackedPlayer();
-			if (hottracked) {
-				Player &player = std::get<0>(*hottracked);
-				hitTag_t tag = std::get<1>(*hottracked);
-
-				IntVector3 col = world->GetTeam(player.GetTeamId()).color;
-				Vector4 color = Vector4::Make(col.x / 255.f, col.y / 255.f, col.z / 255.f, 1.f);
-				Vector4 color2 = Vector4::Make(1, 1, 1, 1);
-
-				Player::HitBoxes hb = player.GetHitBoxes();
-				AddDebugObjectToScene(hb.head, (tag & hit_Head) ? color2 : color);
-				AddDebugObjectToScene(hb.torso, (tag & hit_Torso) ? color2 : color);
-				AddDebugObjectToScene(hb.limbs[0], (tag & hit_Legs) ? color2 : color);
-				AddDebugObjectToScene(hb.limbs[1], (tag & hit_Legs) ? color2 : color);
-				AddDebugObjectToScene(hb.limbs[2], (tag & hit_Arms) ? color2 : color);
-			}
 
 			renderer->EndScene();
 		}

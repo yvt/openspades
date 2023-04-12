@@ -129,8 +129,8 @@ namespace spades {
 
 			Player &player = world->GetPlayer(result.playerId.value()).value();
 
-			// don't hot track enemies (non-spectator only)
-			if (player.GetTeamId() != cameraTargetPlayer.GetTeamId() &&
+			// hot track enemies (non-spectator only)
+			if (player.GetTeamId() == cameraTargetPlayer.GetTeamId() &&
 			    cameraTargetPlayer.GetTeamId() < 2) {
 				return {};
 			}
