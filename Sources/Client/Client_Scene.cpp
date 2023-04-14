@@ -612,7 +612,7 @@ namespace spades {
 						clientPlayers[i]->AddToScene();
 
 						if (p && enemy->GetTeamId() != p->GetTeamId() && enemy->IsAlive()) {
-							if (Vector3::Dot(p->GetEye(), enemy->GetPosition()) > 0.f) {
+							if (Vector3::Dot(p->GetEye(), enemy->GetPosition()) > cos(((float)cg_fov/2) * static_cast<float>(M_PI) / 180.f)) {
 								Vector4 color = Vector4::Make(1, 1, 1, 1);
 
 								Player::HitBoxes hb = enemy->GetHitBoxes();
