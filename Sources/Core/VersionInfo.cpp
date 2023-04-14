@@ -15,7 +15,7 @@ std::string VersionInfo::GetVersionInfo() {
 #if defined(OS_PLATFORM_LINUX)
 	return std::string("Linux");
 #elif defined(TARGET_OS_MAC)
-	return std::string("Mac OS X");
+	return std::string("macOS");
 #elif defined(OS_PLATFORM_WINDOWS)
 	
 	std::string windowsVersion;
