@@ -156,9 +156,9 @@ bin/openspades
   * Make sure to update all git submodules, e.g., by `git clone ... --recurse-submodules`). Note that the GitHub website's ZIP download currently does not support submodules.
 4. Build libraries using vcpkg:
    ```bat
-   cd E:/Projects/openspades
-   vcpkg/bootstrap-vcpkg.bat
-   vcpkg/vcpkg install @vcpkg_x86-windows.txt
+   cd E:\Projects\openspades
+   vcpkg\bootstrap-vcpkg.bat
+   vcpkg\vcpkg install @vcpkg_x86-windows.txt
    ```
 
 5. Run CMake:
