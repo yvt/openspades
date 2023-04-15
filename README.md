@@ -156,30 +156,30 @@ bin/openspades
   * Make sure to update all git submodules, e.g., by `git clone ... --recurse-submodules`). Note that the GitHub website's ZIP download currently does not support submodules.
 4. Build libraries using vcpkg:
    ```bat
-   cd E:/Projects/openspades
-   vcpkg/bootstrap-vcpkg.bat
-   vcpkg/vcpkg install @vcpkg_x86-windows.txt
+   cd E:\Projects\openspades
+   vcpkg\bootstrap-vcpkg.bat
+   vcpkg\vcpkg install @vcpkg_x86-windows.txt
    ```
 
 5. Run CMake:
-  * Source: `E:/Projects/openspades`
-  * Binaries: `E:/Projects/openspades/OpenSpades.msvc`
+  * Source: `E:\Projects\openspades`
+  * Binaries: `E:\Projects\openspades\OpenSpades.msvc`
   * Generator:
     * For VS2019: `Visual Studio 16 (2019)`
     * For VS2017: `Visual Studio 15 (2017)`
     * For VS2015: `Visual Studio 14 (2015)`
   * Platform: `Win32`
-  * Toolchain file: `E:/Projects/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake`
+  * Toolchain file: `E:\Projects\openspades\vcpkg\scripts\buildsystems\vcpkg.cmake`
   * Add a new string entry `VCPKG_TARGET_TRIPLET=x86-windows-static`
 
-6. Open `E:/Projects/openspades/OpenSpades.msvc/OpenSpades.sln` in Visual Studio.
+6. Open `E:\Projects\openspades\OpenSpades.msvc\OpenSpades.sln` in Visual Studio.
 7. Build the solution.
  * The recommended build configuration is `MinSizeRel` or `Release` if you're not an developer
- * The default build output directory is `E:/projects/OpenSpades/OpenSpades.msvc/bin/BUILD_TYPE/`
+ * The default build output directory is `E:\projects\OpenSpades\OpenSpades.msvc\bin\BUILD_TYPE\`
 8. To get audio working, download a [Windows release of OpenSpades](https://github.com/yvt/openspades/releases), extract it, and copy the following dlls to the build output directory:
  * For OpenAL audio: `openal32.dll`
  * For YSR audio: `YSRSpades.dll`, `libgcc_s_dw2-1.dll`, `libstdc++-6.dll`, `pthreadGC2.dll`
-9. Download the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip), extract it, and copy `Nonfree/pak000-Nonfree.pak` to the `Resources` folder inside your build output directory, which is probably `E:/Projects/openspades/openspades.msvc/bin/BUILD_TYPE/Resources`. You can also copy the paks contained in `Official Mods/` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
+9. Download the [Non-free pak](https://github.com/yvt/openspades-paks/releases/download/r33/OpenSpadesDevPackage-r33.zip), extract it, and copy `Nonfree\pak000-Nonfree.pak` to the `Resources` folder inside your build output directory, which is probably `E:\Projects\openspades\openspades.msvc\bin\BUILD_TYPE\Resources`. You can also copy the paks contained in `Official Mods` folder of OpenSpades 0.0.12b to add more fonts and improve localization support of your build.
 
 ### On macOS (with Ninja)
 
