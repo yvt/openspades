@@ -348,6 +348,11 @@ namespace spades {
 			return a.x * b.x + a.y * b.y + a.z * b.z;
 		}
 
+		static float Distance(const Vector3 &a, const Vector3 &b) {
+			Vector3 diff = a - b;
+			return sqrtf(Dot(diff, diff));
+		}
+
 		static Vector3 Cross(const Vector3 &a, const Vector3 &b) {
 			return Make(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 		}

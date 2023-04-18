@@ -612,8 +612,17 @@ namespace spades {
 						clientPlayers[i]->AddToScene();
 
 						if (p && enemy->GetTeamId() != p->GetTeamId() && enemy->IsAlive()) {
-							if (Vector3::Dot(p->GetEye(), enemy->GetPosition()) > cos(((float)cg_fov/2) * static_cast<float>(M_PI) / 180.f)) {
-								Vector4 color = Vector4::Make(1, 1, 1, 1);
+							float fov_cos = cos((static_cast<float>(cg_fov)/2) * static_cast<float>(M_PI) / 180.f);
+
+							Vector3 enemy_position = enemy->GetPosition();
+							if (Vector3::Dot(p->GetEye(), enemy_position) > fov_cos) {
+							  	float distance = Vector3::Distance(p->GetPosition(), enemy_position);
+								float dist_range = distance / 250.f;
+								float c_elem = 1.f - (dist_range - static_cast<int>(dist_range));
+
+//								SPLog("Color: %f | Distance: %f", c_elem, distance);
+
+								Vector4 color = Vector4::Make(c_elem, c_elem, c_elem, 1.f);
 
 								Player::HitBoxes hb = enemy->GetHitBoxes();
 								AddDebugObjectToScene(hb.head, color);
