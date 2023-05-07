@@ -29,12 +29,7 @@ jobs:
         run: vcpkg/vcpkg install @vcpkg_x86-windows.txt
 
       - name: Build application
-        uses: ashutoshvarma/action-cmake-build@master
-        with:
-          build-dir: ${{ runner.workspace }}/openspades.mk
-          build-type: RelWithDebInfo
-          configure-options: -A Win32 -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x86-windows-static
-          parallel: 8
+        run: mkdir ${{ runner.workspace }}/openspades.mk; cd mkdir ${{ runner.workspace }}/openspades.mk; cmake .. -A Win32 -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x86-windows-static -j 8
 
   build-macos:
     name: Build (macOS)
@@ -61,12 +56,7 @@ jobs:
         run: vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
 
       - name: Build application
-        uses: ashutoshvarma/action-cmake-build@master
-        with:
-          build-dir: ${{ runner.workspace }}/openspades.mk
-          build-type: RelWithDebInfo
-          configure-options: -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-osx -D CMAKE_OSX_ARCHITECTURES=x86_64
-          parallel: 8
+        run: mkdir ${{ runner.workspace }}/openspades.mk; cd mkdir ${{ runner.workspace }}/openspades.mk; cmake .. -CMAKE_BUILD_TYPE RelWithDebInfo -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-osx -D CMAKE_OSX_ARCHITECTURES=x86_64 -j 8
   
   build-nix:
     name: Build (Linux + Nix)
