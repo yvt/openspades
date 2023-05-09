@@ -21,6 +21,7 @@
 #include "SdlFileStream.h"
 #include "Debug.h"
 #include "Exception.h"
+#include "Math.h"
 
 namespace spades {
 	SdlFileStream::SdlFileStream(SDL_RWops *f, bool ac) : ops(f), autoClose(ac) {
@@ -76,7 +77,7 @@ namespace spades {
 		if (pos == -1) {
 			SPRaise("This stream doesn't support seeking.");
 		}
-		return static_cast<uint64_t>(pos);
+		return SafeCast<uint64_t>(pos);
 	}
 
 	void SdlFileStream::SetPosition(uint64_t pos) {
@@ -86,7 +87,7 @@ namespace spades {
 			SPRaise("Currently SdlFileStream doesn't support 64-bit offset.");
 		}
 
-		if (SDL_RWseek(ops, static_cast<Sint64>(pos), RW_SEEK_SET) == -1) {
+		if (SDL_RWseek(ops, SafeCast<Sint64>(pos), RW_SEEK_SET) == -1) {
 			SPRaise("This stream doesn't support seeking.");
 		}
 	}
