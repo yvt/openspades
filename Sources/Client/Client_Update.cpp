@@ -28,6 +28,7 @@
 #include "IAudioChunk.h"
 #include "IAudioDevice.h"
 
+#include "BloodMarks.h"
 #include "CenterMessageView.h"
 #include "ChatWindow.h"
 #include "ClientPlayer.h"
@@ -238,6 +239,8 @@ namespace spades {
 					localEntities.erase(its[i]);
 				}
 			}
+
+			this->bloodMarks->Update(dt);
 
 			corpseDispatch.Join();
 
@@ -954,6 +957,37 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			SPAssert(type != HitTypeBlock);
+
+			// spatter blood
+			{
+				bool const byLocalPlayer = &by == world->GetLocalPlayer();
+
+				float const distance = (by.GetEye() - hitPos).GetLength();
+				Vector3 const direction = (by.GetEye() - hitPos).Normalize();
+
+				float frontSpeed = 8.0f;
+				float backSpeed = 0.0f;
+
+				if (type == HitTypeMelee) {
+					// Blunt
+					frontSpeed = 1.5f;
+				} else if (by.GetWeaponType() == RIFLE_WEAPON) {
+					// Penetrating
+					frontSpeed = 1.0f;
+					backSpeed = 21.0f;
+				} else if (by.GetWeaponType() == SMG_WEAPON && distance < 20.0f * SampleRandomFloat()) {
+					// Penetrating
+					frontSpeed = 1.0f;
+					backSpeed = 12.0f;
+				}
+
+				if (frontSpeed > 0.0f) {
+					bloodMarks->Spatter(hitPos, direction * frontSpeed, byLocalPlayer);
+				}
+				if (backSpeed > 0.0f) {
+					bloodMarks->Spatter(hitPos, direction * -backSpeed, byLocalPlayer);
+				}
+			}
 
 			// don't bleed local player
 			if (!IsFirstPerson(GetCameraMode()) || &GetCameraTargetPlayer() != &hurtPlayer) {
