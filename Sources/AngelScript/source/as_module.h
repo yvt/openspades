@@ -1,24 +1,24 @@
 /*
    AngelCode Scripting Library
-   Copyright (c) 2003-2015 Andreas Jonsson
+   Copyright (c) 2003-2020 Andreas Jonsson
 
-   This software is provided 'as-is', without any express or implied 
-   warranty. In no event will the authors be held liable for any 
+   This software is provided 'as-is', without any express or implied
+   warranty. In no event will the authors be held liable for any
    damages arising from the use of this software.
 
-   Permission is granted to anyone to use this software for any 
-   purpose, including commercial applications, and to alter it and 
+   Permission is granted to anyone to use this software for any
+   purpose, including commercial applications, and to alter it and
    redistribute it freely, subject to the following restrictions:
 
-   1. The origin of this software must not be misrepresented; you 
+   1. The origin of this software must not be misrepresented; you
       must not claim that you wrote the original software. If you use
-      this software in a product, an acknowledgment in the product 
+      this software in a product, an acknowledgment in the product
       documentation would be appreciated but is not required.
 
-   2. Altered source versions must be plainly marked as such, and 
+   2. Altered source versions must be plainly marked as such, and
       must not be misrepresented as being the original software.
 
-   3. This notice may not be removed or altered from any source 
+   3. This notice may not be removed or altered from any source
       distribution.
 
    The original version of this library can be located at:
@@ -65,7 +65,7 @@ struct asSNameSpace;
 struct sBindInfo
 {
 	asCScriptFunction *importedFunctionSignature;
-	asCString		   importFromModule;
+	asCString          importFromModule;
 	int                boundFunctionId;
 };
 
@@ -76,13 +76,13 @@ struct sObjectTypePair
 };
 
 
-// TODO: import: Remove function imports. When I have implemented function 
+// TODO: import: Remove function imports. When I have implemented function
 //               pointers the function imports should be deprecated.
 
 // TODO: Need a separate interface for compiling scripts. The asIScriptCompiler
 //       will have a target module, and will allow the compilation of an entire
 //       script or just individual functions within the scope of the module
-// 
+//
 //       With this separation it will be possible to compile the library without
 //       the compiler, thus giving a much smaller binary executable.
 
@@ -133,11 +133,6 @@ public:
 	// Type identification
 	virtual asUINT         GetObjectTypeCount() const;
 	virtual asITypeInfo   *GetObjectTypeByIndex(asUINT index) const;
-#ifdef AS_DEPRECATED
-	// Deprecated since 2.31.0, 2015-12-06
-	virtual asITypeInfo   *GetObjectTypeByName(const char *name) const;
-	virtual asITypeInfo   *GetObjectTypeByDecl(const char *decl) const;
-#endif
 	virtual int            GetTypeIdByDecl(const char *decl) const;
 	virtual asITypeInfo   *GetTypeInfoByName(const char *name) const;
 	virtual asITypeInfo   *GetTypeInfoByDecl(const char *decl) const;
@@ -145,11 +140,6 @@ public:
 	// Enums
 	virtual asUINT       GetEnumCount() const;
 	virtual asITypeInfo *GetEnumByIndex(asUINT index) const;
-#ifdef AS_DEPRECATED
-	// Deprecated since 2.31.0, 2015-12-06
-	virtual int          GetEnumValueCount(int enumTypeId) const;
-	virtual const char * GetEnumValueByIndex(int enumTypeId, asUINT index, int *outValue) const;
-#endif
 
 	// Typedefs
 	virtual asUINT       GetTypedefCount() const;
@@ -192,53 +182,74 @@ public:
 
 	int  CallInit(asIScriptContext *ctx);
 	void CallExit();
+	int  InitGlobalProp(asCGlobalProperty *prop, asIScriptContext *ctx);
 
 	void JITCompile();
 
 #ifndef AS_NO_COMPILER
-	int  AddScriptFunction(int sectionIdx, int declaredAt, int id, const asCString &name, const asCDataType &returnType, const asCArray<asCDataType> &params, const asCArray<asCString> &paramNames, const asCArray<asETypeModifiers> &inOutFlags, const asCArray<asCString *> &defaultArgs, bool isInterface, asCObjectType *objType = 0, bool isConstMethod = false, bool isGlobalFunction = false, bool isPrivate = false, bool isProtected = false, bool isFinal = false, bool isOverride = false, bool isShared = false, asSNameSpace *ns = 0);
+	int  AddScriptFunction(int sectionIdx, int declaredAt, int id, const asCString &name, const asCDataType &returnType, const asCArray<asCDataType> &params, const asCArray<asCString> &paramNames, const asCArray<asETypeModifiers> &inOutFlags, const asCArray<asCString *> &defaultArgs, bool isInterface, asCObjectType *objType = 0, bool isGlobalFunction = false, asSFunctionTraits funcTraits = asSFunctionTraits(), asSNameSpace *ns = 0);
 	int  AddScriptFunction(asCScriptFunction *func);
-	int  AddImportedFunction(int id, const asCString &name, const asCDataType &returnType, const asCArray<asCDataType> &params, const asCArray<asETypeModifiers> &inOutFlags, const asCArray<asCString *> &defaultArgs, asSNameSpace *ns, const asCString &moduleName);
+	int  AddImportedFunction(int id, const asCString &name, const asCDataType &returnType, const asCArray<asCDataType> &params, const asCArray<asETypeModifiers> &inOutFlags, const asCArray<asCString *> &defaultArgs, asSFunctionTraits funcTraits, asSNameSpace *ns, const asCString &moduleName);
 	int  AddFuncDef(const asCString &name, asSNameSpace *ns, asCObjectType *parent);
 #endif
 
 	int                GetNextImportedFunctionId();
 	asCScriptFunction *GetImportedFunction(int funcId) const;
-	asCTypeInfo       *GetType(const char *type, asSNameSpace *ns);
-	asCObjectType     *GetObjectType(const char *type, asSNameSpace *ns);
+	asCTypeInfo       *GetType(const asCString &type, asSNameSpace *ns) const;
+	asCObjectType     *GetObjectType(const char *type, asSNameSpace *ns) const;
 	asCGlobalProperty *AllocateGlobalProperty(const char *name, const asCDataType &dt, asSNameSpace *ns);
+	void               UninitializeGlobalProp(asCGlobalProperty *prop);
+	
+	// Adds the class type to the module. The module assumes ownership of the reference without increasing it
+	void               AddClassType(asCObjectType*);
+	// Adds the enum type to the module. The module assumes ownership of the reference without increasing it
+	void               AddEnumType(asCEnumType*);
+	// Adds the typedef to the module. The module assumes ownership of the reference without increasing it
+	void               AddTypeDef(asCTypedefType*);
+	// Adds the funcdef to the module. The module assumes ownership of the reference without increasing it
+	void               AddFuncDef(asCFuncdefType*);
+	// Replaces an existing funcdef with another (used for shared funcdefs). Doesn't add or release refCounts
+	void               ReplaceFuncDef(asCFuncdefType *oldType, asCFuncdefType *newType);
 
-	asCString name;
-
-	asCScriptEngine  *engine;
-	asCBuilder       *builder;
-	asCArray<asPWORD> userData;
-	asDWORD           accessMask;
-	asSNameSpace     *defaultNamespace;
+	asCString         m_name;
+	asCScriptEngine  *m_engine;
+	asCBuilder       *m_builder;
+	asCArray<asPWORD> m_userData;
+	asDWORD           m_accessMask;
+	asSNameSpace     *m_defaultNamespace;
 
 	// This array holds all functions, class members, factories, etc that were compiled with the module.
 	// These references hold an internal reference to the function object.
-	asCArray<asCScriptFunction *>     scriptFunctions; // increases ref count
-	// This array holds global functions declared in the module. These references are not counted, 
+	asCArray<asCScriptFunction *>     m_scriptFunctions; // increases ref count
+	// This array holds global functions declared in the module. These references are not counted,
 	// as the same pointer is always present in the scriptFunctions array too.
-	asCSymbolTable<asCScriptFunction> globalFunctions; // doesn't increase ref count
+	asCSymbolTable<asCScriptFunction> m_globalFunctions; // doesn't increase ref count
 	// This array holds imported functions in the module.
-	asCArray<sBindInfo *>             bindInformations; // increases ref count
+	asCArray<sBindInfo *>             m_bindInformations; // increases ref count
 	// This array holds template instance types created for the module's object types
-	asCArray<asCObjectType*>          templateInstances; // increases ref count
+	asCArray<asCObjectType*>          m_templateInstances; // increases ref count
 
 	// This array holds the global variables declared in the script
-	asCSymbolTable<asCGlobalProperty> scriptGlobals; // increases ref count
-	bool                              isGlobalVarInitialized;
+	asCSymbolTable<asCGlobalProperty> m_scriptGlobals; // increases ref count
+	bool                              m_isGlobalVarInitialized;
 
 	// This array holds class and interface types
-	asCArray<asCObjectType*>       classTypes; // increases ref count
+	asCArray<asCObjectType*>       m_classTypes; // increases ref count
 	// This array holds enum types
-	asCArray<asCEnumType*>         enumTypes; // increases ref count
+	asCArray<asCEnumType*>         m_enumTypes; // increases ref count
 	// This array holds typedefs
-	asCArray<asCTypedefType*>      typeDefs; // increases ref count
+	asCArray<asCTypedefType*>      m_typeDefs; // increases ref count
 	// This array holds the funcdefs declared in the module
-	asCArray<asCFuncdefType*>      funcDefs; // increases ref count
+	asCArray<asCFuncdefType*>      m_funcDefs; // increases ref count
+
+	// This map contains all the types (also contained in the arrays above) for quick lookup
+	// TODO: memory: Can we eliminate the arrays above?
+	asCMap<asSNameSpaceNamePair, asCTypeInfo*> m_typeLookup; // doesn't increase ref count
+
+	// This array holds types that have been explicitly declared with 'external'
+	asCArray<asCTypeInfo*>       m_externalTypes; // doesn't increase ref count
+	// This array holds functions that have been explicitly declared with 'external'
+	asCArray<asCScriptFunction*> m_externalFunctions; // doesn't increase ref count
 };
 
 END_AS_NAMESPACE

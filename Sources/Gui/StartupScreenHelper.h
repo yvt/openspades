@@ -30,7 +30,7 @@
 
 // scriptarray.h must be included after ScriptManager.h or it won't be able to
 // find angelscript.h
-#include <AngelScript/addons/scriptarray.h>
+#include <AngelScript/add_on/scriptarray/scriptarray.h>
 
 namespace spades {
 	class Serveritem;

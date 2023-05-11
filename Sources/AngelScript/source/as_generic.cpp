@@ -466,7 +466,7 @@ int asCGeneric::SetReturnObject(void *obj)
 		}
 		else
 		{
-			asSTypeBehaviour *beh = &dt->GetTypeInfo()->CastToObjectType()->beh;
+			asSTypeBehaviour *beh = &CastToObjectType(dt->GetTypeInfo())->beh;
 			if (obj && beh && beh->addref)
 				engine->CallObjectMethod(obj, beh->addref);
 		}
@@ -477,7 +477,7 @@ int asCGeneric::SetReturnObject(void *obj)
 		// Here we should just initialize that memory by calling the copy constructor
 		// or the default constructor followed by the assignment operator
 		void *mem = (void*)*(asPWORD*)&stackPointer[-AS_PTR_SIZE];
-		engine->ConstructScriptObjectCopy(mem, obj, dt->GetTypeInfo()->CastToObjectType());
+		engine->ConstructScriptObjectCopy(mem, obj, CastToObjectType(dt->GetTypeInfo()));
 		return 0;
 	}
 

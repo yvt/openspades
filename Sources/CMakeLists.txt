@@ -23,7 +23,7 @@ endif()
 
 add_subdirectory(AngelScript/projects/cmake)
 add_subdirectory(AngelScript/projects/cmake_addons)
-set(ANGELSCRIPT_LIBS Angelscript Angelscript_addons)
+set(ANGELSCRIPT_LIBS angelscript angelscript_add_on)
 
 include_directories(BEFORE ".")
 include_directories(BEFORE "json/include")
@@ -52,9 +52,9 @@ if(APPLE OR WIN32)
 	# the correct capitalization.
 	# We also want the correct capitalization on Windows.
 	set_target_properties(OpenSpades PROPERTIES OUTPUT_NAME OpenSpades)
-else(APPLE)
+else(APPLE OR WIN32)
 	set_target_properties(OpenSpades PROPERTIES OUTPUT_NAME openspades)
-endif(APPLE)
+endif(APPLE OR WIN32)
 
 if (APPLE)
 	# The built pak files are copied into the macOS application bundle. CMake
@@ -83,7 +83,7 @@ if(WIN32)
 	endforeach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
 endif()
 
-add_dependencies(OpenSpades Angelscript Angelscript_addons)
+add_dependencies(OpenSpades angelscript angelscript_add_on)
 
 if(WIN32)
 	source_group("Resources" ${RESOURCE_FILES})
