@@ -189,7 +189,7 @@ namespace spades {
 						uint32_t normal = *(mp++);
 						int z = static_cast<int>(data >> 24);
 						// SPAssert(z < d);
-						SPAssert(z >= 0);
+						SPAssume(z >= 0);
 
 						auto vv = v2 + tAxis3 * zvals[z];
 						if (vv.z < zNear)

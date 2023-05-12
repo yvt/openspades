@@ -102,6 +102,12 @@ namespace spades {
 #define __PRETTY_FUNCTION__ __FUNCDNAME__
 #endif
 
+#if defined(__GNUC__) && defined(__GNUC_MINOR__)
+#define GCCVERSION (__GNUC__ * 1000 + __GNUC_MINOR__)
+#else
+#define GCCVERSION 0
+#endif
+
 #define SPADES_MARK_FUNCTION()                                                                     \
 	static constexpr ::spades::reflection::Function thisFunction{__PRETTY_FUNCTION__, __FILE__,    \
 	                                                             __LINE__};                        \
@@ -122,6 +128,23 @@ namespace spades {
 	} while (0)
 #else
 #define SPAssert(cond) ((!(cond)) ? SPRaise("SPAssertion failed: %s", #cond) : (void)0)
+#endif
+
+#if NDEBUG
+#ifdef _MSC_VER
+#define SPAssume(cond) __assume(cond)
+#elif defined(__clang__) && __clang_major__ > 3
+#define SPAssume(cond) __builtin_assume(cond)
+#elif defined(__GNUC__) && GCCVERSION >= 4005
+#define SPAssume(cond)                                                                             \
+	do {                                                                                          \
+		if (!(cond)) __builtin_unreachable();                                                      \
+	} while (0)
+#else
+#define SPAssume(cond)
+#endif
+#else
+#define SPAssume(cond) SPAssert(cond)
 #endif
 
 #ifdef _MSC_VER

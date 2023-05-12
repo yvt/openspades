@@ -242,10 +242,10 @@ namespace spades {
 			int maxY = light.maxY;
 			int lightHeight = maxY - minY;
 
-			SPAssert(minX >= 0);
-			SPAssert(minY >= 0);
-			SPAssert(maxX <= fw);
-			SPAssert(maxY <= fh);
+			SPAssume(minX >= 0);
+			SPAssume(minY >= 0);
+			SPAssume(maxX <= fw);
+			SPAssume(maxY <= fh);
 
 			Vector3 lightCenter;
 			Vector3 diff = light.param.origin - sceneDef.viewOrigin;
