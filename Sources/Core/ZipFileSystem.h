@@ -44,7 +44,7 @@ namespace spades {
 
 		std::map<std::string, unz_file_pos_s> files;
 
-		ZipFileInputStream *currentStream;
+		std::unique_ptr<ZipFileInputStream> currentStream;
 
 		uint64_t cursorPos;
 
