@@ -102,6 +102,7 @@ namespace spades {
 				case SDLK_DELETE: return "Delete";
 				case SDLK_RETURN: return "Enter";
 				case SDLK_SLASH: return "/";
+				case SDLK_PAUSE: return "Paused";
 				default: return std::string(SDL_GetScancodeName(k.scancode));
 			}
 		}
