@@ -29,7 +29,13 @@ jobs:
         run: vcpkg/vcpkg install @vcpkg_x86-windows.txt
 
       - name: Build application
-        run: mkdir "${{ runner.workspace }}/openspades.mk"; cd "${{ runner.workspace }}/openspades.mk"; cmake .. -A Win32 -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x86-windows-static
+        run: |
+          mkdir "${{ runner.workspace }}/openspades/openspades.mk"
+          cd "${{ runner.workspace }}/openspades/openspades.mk"
+          cmake .. -A Win32 \
+            -D CMAKE_BUILD_TYPE=RelWithDebInfo \
+            -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake \
+            -D VCPKG_TARGET_TRIPLET=x86-windows-static
 
   build-macos:
     name: Build (macOS)
