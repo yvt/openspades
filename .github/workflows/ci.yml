@@ -29,6 +29,7 @@ jobs:
         run: vcpkg/vcpkg install @vcpkg_x86-windows.txt
 
       - name: Build application
+        shell: bash
         run: |
           mkdir "${{ runner.workspace }}/openspades/openspades.mk"
           cd "${{ runner.workspace }}/openspades/openspades.mk"
