@@ -28,15 +28,23 @@ jobs:
       - name: Build dependencies
         run: vcpkg/vcpkg install @vcpkg_x86-windows.txt
 
-      - name: Build application
+      - name: Configure application
         shell: bash
         run: |
           mkdir "${{ runner.workspace }}/openspades/openspades.mk"
           cd "${{ runner.workspace }}/openspades/openspades.mk"
-          cmake .. -A Win32 \
-            -D CMAKE_BUILD_TYPE=RelWithDebInfo \
-            -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake \
-            -D VCPKG_TARGET_TRIPLET=x86-windows-static
+          cmake -A Win32 `
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo `
+            -DCMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake `
+            -D VCPKG_TARGET_TRIPLET=x86-windows-static `
+            -S ${{ runner.workspace }}/openspades
+            -B ${{ runner.workspace }}/openspades/openspades.mk
+            
+      - name: Build application
+        shell: bash
+        run: |
+          cmake --build ${{ runner.workspace }}/openspades --config RelWithDebInfo --parallel 2
+            
 
   build-macos:
     name: Build (macOS)
@@ -61,9 +69,26 @@ jobs:
 
       - name: Build dependencies
         run: vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
-
+      - name: Configure application
+        run: |
+          mkdir "${{ runner.workspace }}/openspades/openspades.mk"
+          cd "${{ runner.workspace }}/openspades/openspades.mk"
+          cmake -A Win32 `
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo `
+            -DCMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake `
+            -D VCPKG_TARGET_TRIPLET=x86-windows-static `
+            -S ${{ runner.workspace }}/openspades
+            -B ${{ runner.workspace }}/openspades/openspades.mk
+            
       - name: Build application
-        run: mkdir "${{ runner.workspace }}/openspades/openspades.mk"; cd "${{ runner.workspace }}/openspades/openspades.mk"; cmake .. -CMAKE_BUILD_TYPE RelWithDebInfo -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake -D VCPKG_TARGET_TRIPLET=x64-osx -D CMAKE_OSX_ARCHITECTURES=x86_64
+        run: |
+          mkdir "${{ runner.workspace }}/openspades/openspades.mk" `
+          cd "${{ runner.workspace }}/openspades/openspades.mk" `
+          cmake .. `
+            -CMAKE_BUILD_TYPE RelWithDebInfo `
+            -DCMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake `
+            -D VCPKG_TARGET_TRIPLET=x64-osx `
+            -D CMAKE_OSX_ARCHITECTURES=x86_64
   
   build-nix:
     name: Build (Linux + Nix)
