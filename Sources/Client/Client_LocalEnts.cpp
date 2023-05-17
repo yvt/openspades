@@ -214,12 +214,15 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 
 			// distance cull
-			float distPowered = (origin - lastSceneDef.viewOrigin).GetPoweredLength();
-			if (distPowered > 150.f * 150.f)
+			float distance = (origin - lastSceneDef.viewOrigin).GetLength();
+			if (distance > 150.f)
 				return;
 
 			if ((int)cg_particles < 1)
 				return;
+
+			// Increase the visibility at distance
+			float distanceRadiusCorrection = 0.001f * distance;
 
 			Handle<IImage> img = renderer->RegisterImage("Gfx/White.tga");
 			Vector4 color = {c.x / 255.f, c.y / 255.f, c.z / 255.f, 1.f};
@@ -232,32 +235,32 @@ namespace spades {
 				                     7.f,
 				                   1.f, .9f);
 				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
-				ent->SetRadius(0.2f + SampleRandomFloat() * SampleRandomFloat() * 0.1f);
+				ent->SetRadius(0.2f + SampleRandomFloat() * SampleRandomFloat() * 0.1f + distanceRadiusCorrection);
 				ent->SetLifeTime(2.f, 0.f, 1.f);
-				if (distPowered < 16.f * 16.f)
+				if (distance < 96.f) {
 					ent->SetBlockHitAction(BlockHitAction::BounceWeak);
+				}
 				localEntities.emplace_back(std::move(ent));
 			}
 
 			if ((int)cg_particles < 2)
 				return;
 
-			if (distPowered < 32.f * 32.f) {
-				for (int i = 0; i < 16; i++) {
-					auto ent = stmp::make_unique<ParticleSpriteEntity>(*this, img, color);
-					ent->SetTrajectory(origin,
-					                   MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
-					                               SampleRandomFloat() - SampleRandomFloat(),
-					                               SampleRandomFloat() - SampleRandomFloat()) *
-					                     12.f,
-					                   1.f, .9f);
-					ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
-					ent->SetRadius(0.1f + SampleRandomFloat() * SampleRandomFloat() * 0.14f);
-					ent->SetLifeTime(2.f, 0.f, 1.f);
-					if (distPowered < 16.f * 16.f)
-						ent->SetBlockHitAction(BlockHitAction::BounceWeak);
-					localEntities.emplace_back(std::move(ent));
+			for (int i = 0; i < 24; i++) {
+				float maxVelocity = i < 4 ? 24.f : 13.f;
+				auto ent = stmp::make_unique<ParticleSpriteEntity>(*this, img, color);
+				ent->SetTrajectory(origin, MakeVector3(SampleRandomFloat() - SampleRandomFloat(),
+				                                       SampleRandomFloat() - SampleRandomFloat(),
+				                                       SampleRandomFloat() - SampleRandomFloat()) *
+				                             maxVelocity,
+				                   1.f, .9f);
+				ent->SetRotation(SampleRandomFloat() * (float)M_PI * 2.f);
+				ent->SetRadius(0.1f + SampleRandomFloat() * SampleRandomFloat() * 0.14f + distanceRadiusCorrection);
+				ent->SetLifeTime(2.f, 0.f, 1.f);
+				if (distance < 96.f) {
+					ent->SetBlockHitAction(BlockHitAction::BounceWeak);
 				}
+				localEntities.emplace_back(std::move(ent));
 			}
 
 			color += (MakeVector4(1, 1, 1, 1) - color) * .2f;
