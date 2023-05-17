@@ -106,6 +106,7 @@ namespace spades {
 
 			bool IsChangingTool();
 			void FiredWeapon();
+			void EjectedBrass();
 			void ReloadingWeapon();
 			void ReloadedWeapon();
 

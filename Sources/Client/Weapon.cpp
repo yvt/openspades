@@ -35,6 +35,7 @@ namespace spades {
 		      shooting(false),
 		      shootingPreviously(false),
 		      reloading(false),
+		      unejectedBrass(false),
 		      nextShotTime(0.f),
 		      reloadStartTime(-101.f),
 		      reloadEndTime(-100.f),
@@ -57,6 +58,8 @@ namespace spades {
 		}
 
 		void Weapon::SetShooting(bool b) { shooting = b; }
+
+		void Weapon::SetUnejectedBrass(bool b) { unejectedBrass = b; }
 
 		bool Weapon::IsReadyToShoot() {
 			return (ammo > 0 || !owner.IsLocalPlayer()) && time >= nextShotTime &&
@@ -87,6 +90,7 @@ namespace spades {
 				// Automatic operation of weapon.
 				if (time >= nextShotTime && (ammo > 0 || !ownerIsLocalPlayer)) {
 					fired = true;
+					unejectedBrass = true;
 
 					// Consume an ammo.
 					if (ammo > 0) {
@@ -97,6 +101,7 @@ namespace spades {
 						world.GetListener()->PlayerFiredWeapon(owner);
 					}
 					nextShotTime += GetDelay();
+					ejectBrassTime = time + GetEjectBrassTime();
 				} else if (time >= nextShotTime) {
 					dryFire = true;
 				}
@@ -138,6 +143,9 @@ namespace spades {
 							world.GetListener()->PlayerReloadedWeapon(owner);
 					}
 				}
+			} else if (unejectedBrass && time >= ejectBrassTime) {
+				unejectedBrass = false;
+				world.GetListener()->PlayerEjectedBrass(owner);
 			}
 			time += dt;
 
@@ -205,6 +213,7 @@ namespace spades {
 			int GetClipSize() override { return 10; }
 			int GetMaxStock() override { return 50; }
 			float GetReloadTime() override { return 2.5f; }
+			float GetEjectBrassTime() override { return 0.f; }
 			bool IsReloadSlow() override { return false; }
 			WeaponType GetWeaponType() override { return RIFLE_WEAPON; }
 			int GetDamage(HitType type, float distance) override {
@@ -232,6 +241,7 @@ namespace spades {
 			int GetClipSize() override { return 30; }
 			int GetMaxStock() override { return 120; }
 			float GetReloadTime() override { return 2.5f; }
+			float GetEjectBrassTime() override { return 0.f; }
 			bool IsReloadSlow() override { return false; }
 			WeaponType GetWeaponType() override { return SMG_WEAPON; }
 			int GetDamage(HitType type, float distance) override {
@@ -259,6 +269,7 @@ namespace spades {
 			int GetClipSize() override { return 6; }
 			int GetMaxStock() override { return 48; }
 			float GetReloadTime() override { return 0.5f; }
+			float GetEjectBrassTime() override { return 0.6f; }
 			bool IsReloadSlow() override { return true; }
 			WeaponType GetWeaponType() override { return SHOTGUN_WEAPON; }
 			int GetDamage(HitType type, float distance) override {
@@ -289,6 +300,7 @@ namespace spades {
 			int GetClipSize() override { return 8; }
 			int GetMaxStock() override { return 48; }
 			float GetReloadTime() override { return 2.5f; }
+			float GetEjectBrassTime() override { return 0.f; }
 			bool IsReloadSlow() override { return false; }
 			WeaponType GetWeaponType() override { return RIFLE_WEAPON; }
 			int GetDamage(HitType type, float distance) override {
@@ -321,6 +333,7 @@ namespace spades {
 			int GetClipSize() override { return 30; }
 			int GetMaxStock() override { return 150; }
 			float GetReloadTime() override { return 2.5f; }
+			float GetEjectBrassTime() override { return 0.f; }
 			bool IsReloadSlow() override { return false; }
 			WeaponType GetWeaponType() override { return SMG_WEAPON; }
 			int GetDamage(HitType type, float distance) override {
@@ -348,6 +361,7 @@ namespace spades {
 			int GetClipSize() override { return 8; }
 			int GetMaxStock() override { return 48; }
 			float GetReloadTime() override { return 0.4f; }
+			float GetEjectBrassTime() override { return 0.6f; }
 			bool IsReloadSlow() override { return true; }
 			WeaponType GetWeaponType() override { return SHOTGUN_WEAPON; }
 			int GetDamage(HitType type, float distance) override {
