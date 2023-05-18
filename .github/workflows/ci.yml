@@ -70,7 +70,7 @@ jobs:
         run: vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
       
       - name: Install ninja
-        uses: seanmiddleditch/install-ninja-build-tool@v3
+        uses: seanmiddleditch/gha-setup-ninja@v3
         
       - name: Configure application
         run: |
