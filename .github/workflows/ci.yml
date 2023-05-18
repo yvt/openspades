@@ -35,13 +35,11 @@ jobs:
           cmake .. -A Win32 `
             -DCMAKE_BUILD_TYPE=RelWithDebInfo `
             --toolchain ${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake `
-            -D VCPKG_TARGET_TRIPLET=x86-windows-static `
-            -S ${{ runner.workspace }}/openspades
-            -B ${{ runner.workspace }}/openspades/openspades.mk
+            -D VCPKG_TARGET_TRIPLET=x86-windows-static
             
       - name: Build application
         run: |
-          cmake --build ${{ runner.workspace }}/openspades --config RelWithDebInfo --parallel 2
+          cmake --build ${{ runner.workspace }}/openspades/openspades.mk --config RelWithDebInfo --parallel 2
             
 
   build-macos:
