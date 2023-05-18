@@ -39,7 +39,9 @@ jobs:
             
       - name: Build application
         run: |
-          cmake --build ${{ runner.workspace }}/openspades/openspades.mk --config RelWithDebInfo --parallel 2
+          cmake --build ${{ runner.workspace }}/openspades/openspades.mk `
+            --config RelWithDebInfo `
+            --parallel 2
             
 
   build-macos:
@@ -58,6 +60,7 @@ jobs:
           path: |
             vcpkg/installed
             !.git
+            ${GITHUB_WORKSPACE}/ninja-build
           key: ${{ runner.os }}-${{ hashFiles('vcpkg_x86_64-darwin.txt', '.gitmodules') }}
 
       - name: Bootstrap vcpkg
@@ -65,6 +68,9 @@ jobs:
 
       - name: Build dependencies
         run: vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
+      
+      - name: Install ninja
+        uses: seanmiddleditch/install-ninja-build-tool@v3
         
       - name: Configure application
         run: |
@@ -74,8 +80,6 @@ jobs:
             -DCMAKE_BUILD_TYPE=RelWithDebInfo `
             --toolchain =${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -D VCPKG_TARGET_TRIPLET=x64-osx `
-            -S ${{ runner.workspace }}/openspades
-            -B ${{ runner.workspace }}/openspades/openspades.mk
             
       - name: Build application
         run: |
