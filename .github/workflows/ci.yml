@@ -29,7 +29,6 @@ jobs:
         run: vcpkg/vcpkg install @vcpkg_x86-windows.txt
 
       - name: Configure application
-        shell: bash
         run: |
           mkdir "${{ runner.workspace }}/openspades/openspades.mk"
           cd "${{ runner.workspace }}/openspades/openspades.mk"
@@ -41,7 +40,6 @@ jobs:
             -B ${{ runner.workspace }}/openspades/openspades.mk
             
       - name: Build application
-        shell: bash
         run: |
           cmake --build ${{ runner.workspace }}/openspades --config RelWithDebInfo --parallel 2
             
