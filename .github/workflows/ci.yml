@@ -76,14 +76,15 @@ jobs:
         run: |
           mkdir "${{ runner.workspace }}/openspades/openspades.mk"
           cd "${{ runner.workspace }}/openspades/openspades.mk"
-          cmake .. -G Ninja `
-            -DCMAKE_BUILD_TYPE=RelWithDebInfo `
-            --toolchain ${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake `
-            -D VCPKG_TARGET_TRIPLET=x64-osx `
+          cmake -G Ninja .. \
+            -D CMAKE_BUILD_TYPE=RelWithDebInfo \
+            -D CMAKE_OSX_ARCHITECTURES=x86_64 \
+            --toolchain ${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake \
+            -D VCPKG_TARGET_TRIPLET=x64-osx \
             
       - name: Build application
         run: |
-          cd "${{ runner.workspace }}/openspades/openspades.mk" `
+          cd "${{ runner.workspace }}/openspades/openspades.mk" \
           ninja
   
   build-nix:
