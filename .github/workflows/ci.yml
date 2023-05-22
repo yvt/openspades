@@ -78,7 +78,7 @@ jobs:
           cd "${{ runner.workspace }}/openspades/openspades.mk"
           cmake .. -G Ninja `
             -DCMAKE_BUILD_TYPE=RelWithDebInfo `
-            --toolchain =${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake `
+            --toolchain ${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -D VCPKG_TARGET_TRIPLET=x64-osx `
             
       - name: Build application
