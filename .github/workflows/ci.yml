@@ -63,24 +63,25 @@ jobs:
             ${GITHUB_WORKSPACE}/ninja-build
           key: ${{ runner.os }}-${{ hashFiles('vcpkg_x86_64-darwin.txt', '.gitmodules') }}
 
+      - name: Install ninja
+        uses: seanmiddleditch/gha-setup-ninja@v3
+        
       - name: Bootstrap vcpkg
         run: vcpkg/bootstrap-vcpkg.sh
 
       - name: Build dependencies
-        run: vcpkg/vcpkg install @vcpkg_x86_64-darwin.txt
-      
-      - name: Install ninja
-        uses: seanmiddleditch/gha-setup-ninja@v3
+        run: vcpkg/vcpkg install "@vcpkg_x86_64-darwin.txt"
         
       - name: Configure application
         run: |
           mkdir "${{ runner.workspace }}/openspades/openspades.mk"
-          cd "${{ runner.workspace }}/openspades/openspades.mk"
-          cmake -G Ninja .. \
+          cmake -G Ninja \
             -D CMAKE_BUILD_TYPE=RelWithDebInfo \
             -D CMAKE_OSX_ARCHITECTURES=x86_64 \
-            --toolchain ${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake \
+            -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake \
             -D VCPKG_TARGET_TRIPLET=x64-osx \
+            -S ..
+            -B ${{ runner.workspace }}/openspades/openspades.mk
             
       - name: Build application
         run: |
