@@ -80,7 +80,7 @@ jobs:
             -D CMAKE_OSX_ARCHITECTURES=x86_64 \
             -D CMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}/openspades/vcpkg/scripts/buildsystems/vcpkg.cmake \
             -D VCPKG_TARGET_TRIPLET=x64-osx \
-            -S .. \
+            -S openspades \
             -B ${{ runner.workspace }}/openspades/openspades.mk
             
       - name: Build application
