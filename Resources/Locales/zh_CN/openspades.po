@@ -115,7 +115,7 @@ msgstr "方块已耗尽"
 #: Sources/Client/Client_Input.cpp:451 Sources/Client/Client_Input.cpp:506
 msgctxt "Client"
 msgid "Out of Grenades"
-msgstr "手雷以耗尽"
+msgstr "手雷已耗尽"
 
 #: Sources/Client/Client_NetHandler.cpp:89
 #: Sources/Client/Client_NetHandler.cpp:90
