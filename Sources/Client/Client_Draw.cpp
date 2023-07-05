@@ -94,11 +94,11 @@ namespace spades {
 
 			std::string TranslateKeyName(const std::string &name) {
 				if (name == "LeftMouseButton") {
-					return _Tr("Preferences", "Left Mouse Button");
+					return "LMB";
 				} else if (name == "RightMouseButton") {
-					return _Tr("Preferences", "Right Mouse Button");
+					return "RMB";
 				} else if (name.empty()) {
-					return _Tr("Preferences", "Unbound");
+					return _Tr("Client", "Unbound");
 				} else {
 					return name;
 				}

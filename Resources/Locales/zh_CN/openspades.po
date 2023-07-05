@@ -692,13 +692,13 @@ msgstr "绑定按键或按[Esc]取消..."
 #: Resources/Scripts/Gui/Preferences.as:418
 msgctxt "Preferences"
 msgid "Space"
-msgstr "空格键"
+msgstr "Space"
 
 #: Resources/Scripts/Gui/Preferences.as:420
 #: Resources/Scripts/Gui/Preferences.as:420
 msgctxt "Preferences"
 msgid "Unbound"
-msgstr "未分配"
+msgstr "未绑定"
 
 #: Resources/Scripts/Gui/Preferences.as:423
 #: Resources/Scripts/Gui/Preferences.as:423
@@ -1764,7 +1764,7 @@ msgstr "观察者"
 #: Sources/Client/Client_Draw.cpp:99
 msgctxt "Client"
 msgid "Unbound"
-msgstr "未分配"
+msgstr "未绑定"
 
 #: Sources/Client/Client_Draw.cpp:655
 msgctxt "Client"
@@ -1789,5 +1789,5 @@ msgstr "[{0}/{1}]跟随一个玩家"
 #: Sources/Client/Client_Draw.cpp:669
 msgctxt "Client"
 msgid "[{0}/{1}] Go up/down"
-msgstr "[{0}/{1}]上/下"
+msgstr "[{0}/{1}]向上/下"
 
