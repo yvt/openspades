@@ -60,7 +60,7 @@ namespace spades {
 			                         w ? w->GetTeam(1).name : "Team 2"));
 			items.push_back(MenuItem(MenuTeamSpectator,
 			                         AABB2(teamX, firstY + rowHeight * 2.f, menuWidth, menuHeight),
-			                         w ? w->GetTeam(2).name : "Spectator"));
+			                         w ? w->GetTeam(2).name : _Tr("Client", "Spectator")));
 
 			float weapX = left + 260.f;
 
