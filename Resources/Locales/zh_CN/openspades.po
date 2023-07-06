@@ -214,7 +214,7 @@ msgstr[0] "{0}个方块"
 #: Sources/Client/Client_Update.cpp:486 Sources/Client/Client_Update.cpp:512
 msgctxt "Client"
 msgid "-- blocks"
-msgstr "——个方块"
+msgstr "？个方块"
 
 #: Sources/Client/Client_Update.cpp:842 Sources/Client/LimboView.cpp:68
 #: Sources/Client/Client_Update.cpp:868 Sources/Client/LimboView.cpp:68
