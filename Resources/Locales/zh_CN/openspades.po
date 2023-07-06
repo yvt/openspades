@@ -20,13 +20,13 @@ msgstr ""
 #: Sources/Client/Client.cpp:585 Sources/Client/Client.cpp:586
 msgctxt "Client"
 msgid "Map saved: {0}"
-msgstr "地图已保存: {0}"
+msgstr "地图已保存：{0}"
 
 #: Sources/Client/Client.cpp:589 Sources/Client/Client.cpp:595
 #: Sources/Client/Client.cpp:590 Sources/Client/Client.cpp:596
 msgctxt "Client"
 msgid "Saving map failed: "
-msgstr "地图保存失败: "
+msgstr "地图保存失败："
 
 #. ! Prefix added to global chat messages.
 #. !
@@ -38,23 +38,23 @@ msgstr "地图保存失败: "
 #: Sources/Client/Client.cpp:633 Sources/Client/Client.cpp:634
 msgctxt "Client"
 msgid "[Global] "
-msgstr "[全体] "
+msgstr "【全体】"
 
 #: Sources/Client/Client_Draw.cpp:119 Sources/Client/Client_Draw.cpp:135
 msgctxt "Client"
 msgid "Sceneshot saved: {0}"
-msgstr "场景已保存: {0}"
+msgstr "场景已保存：{0}"
 
 #: Sources/Client/Client_Draw.cpp:121 Sources/Client/Client_Draw.cpp:137
 msgctxt "Client"
 msgid "Screenshot saved: {0}"
-msgstr "截图已保存: {0}"
+msgstr "截图已保存：{0}"
 
 #: Sources/Client/Client_Draw.cpp:125 Sources/Client/Client_Draw.cpp:131
 #: Sources/Client/Client_Draw.cpp:141 Sources/Client/Client_Draw.cpp:147
 msgctxt "Client"
 msgid "Screenshot failed: "
-msgstr "截图保存失败: "
+msgstr "截图保存失败："
 
 #: Sources/Client/Client_Draw.cpp:198 Sources/Client/Client_Draw.cpp:214
 msgctxt "Client"
@@ -64,7 +64,7 @@ msgstr "加载中"
 #: Sources/Client/Client_Draw.cpp:220 Sources/Client/Client_Draw.cpp:236
 msgctxt "Client"
 msgid "Disconnecting..."
-msgstr "正在断开连接..."
+msgstr "正在断开连接……"
 
 #: Sources/Client/Client_Draw.cpp:523 Sources/Client/Client_Draw.cpp:548
 msgctxt "Client"
@@ -90,17 +90,17 @@ msgstr "子弹已耗尽"
 #: Sources/Client/Client_Draw.cpp:539 Sources/Client/Client_Draw.cpp:564
 msgctxt "Client"
 msgid "Press [{0}] to Reload"
-msgstr "按[{0}]装弹"
+msgstr "[{0}]装弹"
 
 #: Sources/Client/Client_Draw.cpp:584 Sources/Client/Client_Draw.cpp:608
 msgctxt "Client"
 msgid "You will respawn in: {0}"
-msgstr "{0}秒后复活"
+msgstr "{0}秒后重新部署"
 
 #: Sources/Client/Client_Draw.cpp:586 Sources/Client/Client_Draw.cpp:610
 msgctxt "Client"
 msgid "Waiting for respawn"
-msgstr "等待复活"
+msgstr "等待重新部署"
 
 #: Sources/Client/Client_Draw.cpp:764 Sources/Client/Client_Draw.cpp:646
 msgctxt "Client"
@@ -145,13 +145,13 @@ msgstr "{0}占领了一个中立据点"
 #: Sources/Client/Client_NetHandler.cpp:128
 msgctxt "Client"
 msgid "{0} captured {1}'s intel"
-msgstr "{0}拿到了{1}的情报"
+msgstr "{0}获得了{1}的情报"
 
 #: Sources/Client/Client_NetHandler.cpp:134
 #: Sources/Client/Client_NetHandler.cpp:135
 msgctxt "Client"
 msgid "{0} captured {1}'s Intel."
-msgstr "{0}拿到了{1}的情报。"
+msgstr "{0}获得了{1}的情报。"
 
 #: Sources/Client/Client_NetHandler.cpp:158
 #: Sources/Client/Client_NetHandler.cpp:159
@@ -214,7 +214,7 @@ msgstr[0] "{0}个方块"
 #: Sources/Client/Client_Update.cpp:486 Sources/Client/Client_Update.cpp:512
 msgctxt "Client"
 msgid "-- blocks"
-msgstr "-- 方块"
+msgstr "——个方块"
 
 #: Sources/Client/Client_Update.cpp:842 Sources/Client/LimboView.cpp:68
 #: Sources/Client/Client_Update.cpp:868 Sources/Client/LimboView.cpp:68
@@ -282,27 +282,27 @@ msgstr "你被{0}杀死了"
 #: Sources/Client/Client_Update.cpp:1225 Sources/Client/Client_Update.cpp:1260
 msgctxt "Client"
 msgid "Insufficient blocks."
-msgstr "方块不足。"
+msgstr "方块不足"
 
 #: Sources/Client/Client_Update.cpp:1228 Sources/Client/Client_Update.cpp:1263
 msgctxt "Client"
 msgid "You cannot place a block there."
-msgstr "此处无法放置。"
+msgstr "此处无法放置"
 
 #: Sources/Client/LimboView.cpp:79 Sources/Client/LimboView.cpp:79
 msgctxt "Client"
 msgid "Spawn"
-msgstr "复活"
+msgstr "部署"
 
 #: Sources/Client/LimboView.cpp:183 Sources/Client/LimboView.cpp:183
 msgctxt "Client"
 msgid "Select Team:"
-msgstr "选择队伍:"
+msgstr "选择队伍："
 
 #: Sources/Client/LimboView.cpp:191 Sources/Client/LimboView.cpp:191
 msgctxt "Client"
 msgid "Select Weapon:"
-msgstr "选择武器:"
+msgstr "选择武器："
 
 #: Sources/Client/NetClient.cpp:422 Sources/Client/NetClient.cpp:425
 msgctxt "NetClient"
@@ -317,7 +317,7 @@ msgstr "未连接"
 #: Sources/Client/NetClient.cpp:498 Sources/Client/NetClient.cpp:516
 msgctxt "NetClient"
 msgid "Awaiting for state"
-msgstr "等待游戏中"
+msgstr "等待响应中"
 
 #: Sources/Client/NetClient.cpp:508 Sources/Client/NetClient.cpp:1277
 #: Sources/Client/NetClient.cpp:526 Sources/Client/NetClient.cpp:1346
@@ -328,7 +328,7 @@ msgstr "数据加载中"
 #: Sources/Client/NetClient.cpp:523 Sources/Client/NetClient.cpp:541
 msgctxt "NetClient"
 msgid "Loading snapshot ({0}/{1})"
-msgstr "数据加载中({0}/{1})"
+msgstr "数据加载中（{0}/{1}）"
 
 #: Sources/Client/NetClient.cpp:528 Sources/Client/NetClient.cpp:562
 #: Sources/Client/NetClient.cpp:546 Sources/Client/NetClient.cpp:609
@@ -341,7 +341,7 @@ msgstr "已连接"
 #: Sources/Client/NetClient.cpp:622 Sources/Client/NetClient.cpp:674
 msgctxt "NetClient"
 msgid "Still loading..."
-msgstr "继续加载中..."
+msgstr "继续加载中……"
 
 #: Sources/Client/NetClient.cpp:543 Sources/Client/NetClient.cpp:549
 #: Sources/Client/NetClient.cpp:579 Sources/Client/NetClient.cpp:584
@@ -407,9 +407,9 @@ msgctxt "Main"
 msgid "A serious error caused OpenSpades to stop working:\n\n"
 "{0}\n\n"
 "See SystemMessages.log for more details."
-msgstr "发生了一个严重错误，导致OpenSpades停止运行:\n\n"
+msgstr "发生了一个严重错误，导致OpenSpades停止运行：\n\n"
 "{0}\n\n"
-"更多详细信息请查看SystemMessages.log。"
+"更多细节请查看SystemMessages.log。"
 
 #: Sources/Gui/Main.cpp:612 Sources/Gui/Runner.cpp:62 Sources/Gui/Main.cpp:641
 #: Sources/Gui/Runner.cpp:62
@@ -504,7 +504,7 @@ msgstr "欢迎来到OpenSpades"
 #: Resources/Scripts/Gui/CreateProfileScreen.as:88
 msgctxt "CreateProfileScreen"
 msgid "Choose a player name:"
-msgstr "请输入玩家名称: "
+msgstr "请输入玩家名称："
 
 #: Resources/Scripts/Gui/CreateProfileScreen.as:96
 #: Resources/Scripts/Gui/CreateProfileScreen.as:96
@@ -576,13 +576,13 @@ msgstr "筛选"
 #: Resources/Scripts/Gui/MainScreen.as:465
 msgctxt "MainScreen"
 msgid "Empty"
-msgstr "无在线"
+msgstr "闲置"
 
 #: Resources/Scripts/Gui/MainScreen.as:474
 #: Resources/Scripts/Gui/MainScreen.as:474
 msgctxt "MainScreen"
 msgid "Not Full"
-msgstr "未满"
+msgstr "空余"
 
 #: Resources/Scripts/Gui/MainScreen.as:494
 #: Resources/Scripts/Gui/MainScreen.as:494
@@ -625,14 +625,14 @@ msgstr "地区"
 msgctxt "MainScreen"
 msgid "You were disconnected from the server because of the following reason:\n\n"
 "{0}"
-msgstr "与服务器断开连接，原因如下:\n\n"
+msgstr "与服务器断开连接，原因如下：\n\n"
 "{0}"
 
 #: Resources/Scripts/Gui/MainScreen.as:807
 #: Resources/Scripts/Gui/MainScreen.as:807
 msgctxt "MainScreen"
 msgid "Loading..."
-msgstr "加载中..."
+msgstr "加载中……"
 
 #: Resources/Scripts/Gui/MainScreen.as:825
 #: Resources/Scripts/Gui/MainScreen.as:825
@@ -686,7 +686,7 @@ msgstr "返回"
 #: Resources/Scripts/Gui/Preferences.as:407
 msgctxt "Preferences"
 msgid "Press Key to Bind or [Escape] to Cancel..."
-msgstr "绑定按键或按[Esc]取消..."
+msgstr "绑定按键/[Esc]取消……"
 
 #: Resources/Scripts/Gui/Preferences.as:418
 #: Resources/Scripts/Gui/Preferences.as:418
@@ -746,13 +746,13 @@ msgstr "鼠标中键"
 #: Resources/Scripts/Gui/Preferences.as:437
 msgctxt "Preferences"
 msgid "Mouse Button 4"
-msgstr "鼠标4键"
+msgstr "鼠标四键"
 
 #: Resources/Scripts/Gui/Preferences.as:439
 #: Resources/Scripts/Gui/Preferences.as:439
 msgctxt "Preferences"
 msgid "Mouse Button 5"
-msgstr "鼠标5键"
+msgstr "鼠标五键"
 
 #: Resources/Scripts/Gui/Preferences.as:613
 #: Resources/Scripts/Gui/Preferences.as:619
@@ -802,7 +802,7 @@ msgstr "效果"
 #: Resources/Scripts/Gui/Preferences.as:643
 msgctxt "Preferences"
 msgid "Blood"
-msgstr "血液飞溅"
+msgstr "血液"
 
 #: Resources/Scripts/Gui/Preferences.as:644
 #: Resources/Scripts/Gui/Preferences.as:644
@@ -852,7 +852,7 @@ msgstr "粒子效果"
 #: Resources/Scripts/Gui/Preferences.as:651
 msgctxt "Preferences"
 msgid "LESS"
-msgstr "减少"
+msgstr "减弱"
 
 #: Resources/Scripts/Gui/Preferences.as:654
 #: Resources/Scripts/Gui/Preferences.as:654
@@ -948,7 +948,7 @@ msgstr "鼠标灵敏度"
 #: Resources/Scripts/Gui/Preferences.as:684
 msgctxt "Preferences"
 msgid "ADS Mouse Sens. Scale"
-msgstr "开镜速度"
+msgstr "开镜鼠标灵敏度"
 
 #: Resources/Scripts/Gui/Preferences.as:686
 #: Resources/Scripts/Gui/Preferences.as:686
@@ -960,7 +960,7 @@ msgstr "鼠标加速"
 #: Resources/Scripts/Gui/Preferences.as:688
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
-msgstr "鼠标Y轴反转"
+msgstr "鼠标纵轴反转"
 
 #: Resources/Scripts/Gui/Preferences.as:689
 #: Resources/Scripts/Gui/Preferences.as:689
@@ -1074,7 +1074,7 @@ msgstr "小地图缩放"
 #: Resources/Scripts/Gui/Preferences.as:710
 msgctxt "Preferences"
 msgid "Toggle Map"
-msgstr "大地图"
+msgstr "切换地图"
 
 #: Resources/Scripts/Gui/Preferences.as:711
 #: Resources/Scripts/Gui/Preferences.as:711
@@ -1098,7 +1098,7 @@ msgstr "队伍聊天"
 #: Resources/Scripts/Gui/Preferences.as:714
 msgctxt "Preferences"
 msgid "Limbo Menu"
-msgstr "更换队伍/武器"
+msgstr "切换菜单"
 
 #: Resources/Scripts/Gui/Preferences.as:715
 #: Resources/Scripts/Gui/Preferences.as:715
@@ -1220,7 +1220,7 @@ msgstr "全屏模式"
 #: Resources/Scripts/Gui/StartupScreen.as:1103
 msgctxt "StartupScreen"
 msgid "By running in fullscreen mode OpenSpades occupies the screen, making it easier for you to concentrate on playing the game."
-msgstr "在全屏模式下运行，使您更容易专注于游戏。"
+msgstr "在全屏模式下运行可以让您更容易专注于游戏。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1110
 #: Resources/Scripts/Gui/StartupScreen.as:1492
@@ -1228,7 +1228,7 @@ msgstr "在全屏模式下运行，使您更容易专注于游戏。"
 #: Resources/Scripts/Gui/StartupScreen.as:1492
 msgctxt "StartupScreen"
 msgid "Backend"
-msgstr "渲染模式"
+msgstr "渲染器"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1113
 #: Resources/Scripts/Gui/StartupScreen.as:1113
@@ -1240,7 +1240,7 @@ msgstr "OpenGL"
 #: Resources/Scripts/Gui/StartupScreen.as:1117
 msgctxt "StartupScreen"
 msgid "OpenGL renderer uses your computer's graphics accelerator to generate the game screen."
-msgstr "OpenGL渲染使用GPU绘制游戏图像。"
+msgstr "OpenGL渲染器使用GPU绘制游戏图像。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1125
 #: Resources/Scripts/Gui/StartupScreen.as:1125
@@ -1252,7 +1252,7 @@ msgstr "软件"
 #: Resources/Scripts/Gui/StartupScreen.as:1129
 msgctxt "StartupScreen"
 msgid "Software renderer uses CPU to generate the game screen. Its quality and performance might be inferior to OpenGL renderer, but it works even with an unsupported GPU."
-msgstr "软件渲染使用CPU绘制游戏图像，当OpenGL不可用时选择。"
+msgstr "软件渲染器使用CPU绘制游戏图像，可在OpenGL不可用时选择。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1143
 #: Resources/Scripts/Gui/StartupScreen.as:1143
@@ -1260,9 +1260,9 @@ msgctxt "StartupScreen"
 msgid "Antialias:Enables a technique to improve the appearance of high-contrast edges.\n\n"
 "MSAA: Performs antialiasing by generating an intermediate high-resolution image. Looks best, but doesn't cope with some settings.\n\n"
 "FXAA: Performs antialiasing by smoothing artifacts out as a post-process.|Off|MSAA 2x|4x|FXAA"
-msgstr "抗锯齿:消除显示器输出的画面中图物边缘出现凹凸锯齿的技术。\n\n"
-"MSAA:多重采样抗锯齿。\n\n"
-"FXAA: 快速近似抗锯齿。|Off|MSAA 2x|4x|FXAA"
+msgstr "抗锯齿:消除显示器输出的画面中图物边缘出现的锯齿的技术。\n\n"
+"MSAA：多重采样抗锯齿。\n\n"
+"FXAA：快速近似抗锯齿。|关|两倍MSAA|四倍MSAA|FXAA"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1150
 #: Resources/Scripts/Gui/StartupScreen.as:1150
@@ -1436,7 +1436,7 @@ msgstr "后处理使图像看起来更真实。"
 #: Resources/Scripts/Gui/StartupScreen.as:1203
 msgctxt "StartupScreen"
 msgid "Particles|Low:Artifact occurs when a particle intersects other objects.|Medium:Particle intersects objects smoothly.|High:Particle intersects objects smoothly, and some objects casts their shadow to particles."
-msgstr "粒子|低:当粒子与其他物体相交时，会出现清晰的边界。|中:粒子与物体相交过度平滑。|高:平滑过渡，且一些物体将阴影投射在粒子上。"
+msgstr "粒子|低:当粒子与其他物体相交时，会出现清晰的边界。|中:平滑粒子与物体的相交过渡。|高:平滑过渡，且部分物体将阴影投射在粒子上。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1213
 #: Resources/Scripts/Gui/StartupScreen.as:1213
@@ -1448,7 +1448,7 @@ msgstr "动态光源"
 #: Resources/Scripts/Gui/StartupScreen.as:1215
 msgctxt "StartupScreen"
 msgid "Gives some objects an ability to emit light to give them an energy-emitting impression."
-msgstr "给一些物体发光的能力，使其具有“释放能量”的效果。"
+msgstr "给部分物体发光的能力，使其具有释放能量的效果。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1218
 #: Resources/Scripts/Gui/StartupScreen.as:1218
@@ -1502,7 +1502,7 @@ msgstr "控制光线对物体和空气的照射，直接影响其外观效果。
 #: Resources/Scripts/Gui/StartupScreen.as:1244
 msgctxt "StartupScreen"
 msgid "Water Shader|None:Water is rendered in the same way that normal blocks are done.|Level 1:Refraction and the reflected Sun are simulated.|Level 2:Waving water is simulated as well as reflection and refraction.|Level 3:Reflections and refractions are rendered at the highest quality using screen-space techniques."
-msgstr "水面渲染器|关闭:水面效果与普通方块效果相同。|低:模拟阳光的折射和反射。|中:模拟水面波动和折射反射。|高:使用屏幕空间技术渲染最高质量的折射和反射。"
+msgstr "水面渲染器|关闭:水面效果与普通方块效果相同。|一档:模拟阳光的折射和反射。|二档:模拟水面波动和折射反射。|三档:使用屏幕空间技术渲染最高质量的折射和反射。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1251
 #: Resources/Scripts/Gui/StartupScreen.as:1251
@@ -1526,7 +1526,7 @@ msgstr "特殊效果。"
 #: Resources/Scripts/Gui/StartupScreen.as:1273
 msgctxt "StartupScreen"
 msgid "Fast Mode:Reduces the image resolution to make the rendering faster.|Off|2x|4x"
-msgstr "高速模式:降低分辨率使渲染速度加快。|Off|2x|4x"
+msgstr "高速模式:降低分辨率使渲染速度加快。|关|两倍|四倍"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1486
 #: Resources/Scripts/Gui/StartupScreen.as:1486
@@ -1544,7 +1544,7 @@ msgstr "OpenAL"
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
 msgid "Uses an OpenAL-capable sound card to process sound. In most cases where there isn't such a sound card, software emulation is used."
-msgstr "使用支持OpenAL的声卡处理声音。在大多数没有声卡的情况下，使用软件模拟。"
+msgstr "使用支持OpenAL的声卡处理声音。在大多数没有声卡的情况下，将使用软件模拟。"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1508
 #: Resources/Scripts/Gui/StartupScreen.as:1508
@@ -1649,7 +1649,7 @@ msgstr "打开配置目录时发生未知错误。"
 #: Resources/Scripts/Gui/StartupScreen.as:1674
 msgctxt "StartupScreen"
 msgid "Are you sure to reset all settings? They include (but are not limited to):"
-msgstr "重置所有设置包括以下内容:"
+msgstr "是否确定重置所有设置？它们包括（但不限于）："
 
 #: Resources/Scripts/Gui/StartupScreen.as:1675
 #: Resources/Scripts/Gui/StartupScreen.as:1675
@@ -1661,7 +1661,7 @@ msgstr "所有视频/音频设置"
 #: Resources/Scripts/Gui/StartupScreen.as:1676
 msgctxt "StartupScreen"
 msgid "All key bindings"
-msgstr "全部绑定键"
+msgstr "全部键位"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1677
 #: Resources/Scripts/Gui/StartupScreen.as:1677
@@ -1673,13 +1673,13 @@ msgstr "玩家名称"
 #: Resources/Scripts/Gui/StartupScreen.as:1678
 msgctxt "StartupScreen"
 msgid "Other advanced settings only accessible through '{0}' tab and in-game commands"
-msgstr "高级设置"
+msgstr "其他高级设置只能通过{0}选项卡和游戏内命令访问"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1748
 #: Resources/Scripts/Gui/StartupScreen.as:1748
 msgctxt "StartupScreen"
 msgid "Unknown ({0})"
-msgstr "未知({0})"
+msgstr "未知（{0}）"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1750
 #: Resources/Scripts/Gui/StartupScreen.as:1764
@@ -1717,25 +1717,25 @@ msgstr "启用"
 #: Resources/Scripts/Gui/UpdateCheckView.as:47
 msgctxt "UpdateCheck"
 msgid "Show details..."
-msgstr "显示详细信息..."
+msgstr "显示详细信息……"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 #: Resources/Scripts/Gui/UpdateCheckView.as:102
 msgctxt "UpdateCheck"
 msgid "Version {0} is available! (You currently have {1})"
-msgstr "版本{0}可用！(当前版本{1})"
+msgstr "版本{0}可用！（当前版本{1}）"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 #: Resources/Scripts/Gui/UpdateCheckView.as:105
 msgctxt "UpdateCheck"
 msgid "You're using the latest version of OpenSpades. ({0})"
-msgstr "此OpenSpades是最新版本。({0})"
+msgstr "此OpenSpades是最新版本。（{0}）"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
 #: Resources/Scripts/Gui/UpdateCheckView.as:110
 msgctxt "UpdateCheck"
 msgid "Checking for updates..."
-msgstr "检查更新中..."
+msgstr "检查更新中……"
 
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
 #: Resources/Scripts/Gui/UpdateCheckView.as:113
