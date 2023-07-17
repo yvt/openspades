@@ -28,12 +28,12 @@
 
 namespace spades {
 	namespace client {
-		Weapon::Weapon(World *w, Player *p)
+		Weapon::Weapon(World &w, Player &p)
 		    : world(w),
 		      owner(p),
 		      time(0),
 		      shooting(false),
-			  shootingPreviously(false),
+		      shootingPreviously(false),
 		      reloading(false),
 		      nextShotTime(0.f),
 		      reloadStartTime(-101.f),
@@ -59,7 +59,7 @@ namespace spades {
 		void Weapon::SetShooting(bool b) { shooting = b; }
 
 		bool Weapon::IsReadyToShoot() {
-			return (ammo > 0 || !owner->IsLocalPlayer()) && time >= nextShotTime &&
+			return (ammo > 0 || !owner.IsLocalPlayer()) && time >= nextShotTime &&
 			       (!reloading || IsReloadSlow());
 		}
 
@@ -72,7 +72,7 @@ namespace spades {
 		bool Weapon::FrameNext(float dt) {
 			SPADES_MARK_FUNCTION();
 
-			bool ownerIsLocalPlayer = owner->IsLocalPlayer();
+			bool ownerIsLocalPlayer = owner.IsLocalPlayer();
 
 			bool fired = false;
 			bool dryFire = false;
@@ -93,8 +93,8 @@ namespace spades {
 						ammo--;
 					}
 
-					if (world->GetListener()) {
-						world->GetListener()->PlayerFiredWeapon(owner);
+					if (world.GetListener()) {
+						world.GetListener()->PlayerFiredWeapon(owner);
 					}
 					nextShotTime += GetDelay();
 				} else if (time >= nextShotTime) {
@@ -128,22 +128,22 @@ namespace spades {
 						slowReloadLeftCount--;
 						if (slowReloadLeftCount > 0)
 							Reload(false);
-						else if (world->GetListener())
-							world->GetListener()->PlayerReloadedWeapon(owner);
+						else if (world.GetListener())
+							world.GetListener()->PlayerReloadedWeapon(owner);
 					} else {
 						if (!ownerIsLocalPlayer) {
 							ammo = GetClipSize();
 						}
-						if (world->GetListener())
-							world->GetListener()->PlayerReloadedWeapon(owner);
+						if (world.GetListener())
+							world.GetListener()->PlayerReloadedWeapon(owner);
 					}
 				}
 			}
 			time += dt;
 
 			if (dryFire && !lastDryFire) {
-				if (world->GetListener())
-					world->GetListener()->PlayerDryFiredWeapon(owner);
+				if (world.GetListener())
+					world.GetListener()->PlayerDryFiredWeapon(owner);
 			}
 			lastDryFire = dryFire;
 			return fired;
@@ -163,7 +163,7 @@ namespace spades {
 		void Weapon::Reload(bool initial) {
 			SPADES_MARK_FUNCTION();
 
-			bool ownerIsLocalPlayer = owner->IsLocalPlayer();
+			bool ownerIsLocalPlayer = owner.IsLocalPlayer();
 
 			if (reloading)
 				return;
@@ -171,7 +171,7 @@ namespace spades {
 			// Is the clip already full?
 			if (ammo >= GetClipSize())
 				return;
-			
+
 			if (ownerIsLocalPlayer) {
 				if (stock == 0)
 					return;
@@ -186,8 +186,8 @@ namespace spades {
 			reloadStartTime = time;
 			reloadEndTime = time + GetReloadTime();
 
-			if (world->GetListener())
-				world->GetListener()->PlayerReloadingWeapon(owner);
+			if (world.GetListener())
+				world.GetListener()->PlayerReloadingWeapon(owner);
 		}
 
 		void Weapon::ForceReloadDone() {
@@ -199,7 +199,7 @@ namespace spades {
 
 		class RifleWeapon3 : public Weapon {
 		public:
-			RifleWeapon3(World *w, Player *p) : Weapon(w, p) {}
+			RifleWeapon3(World &w, Player &p) : Weapon(w, p) {}
 			std::string GetName() override { return "Rifle"; }
 			float GetDelay() override { return 0.5f; }
 			int GetClipSize() override { return 10; }
@@ -226,7 +226,7 @@ namespace spades {
 
 		class SMGWeapon3 : public Weapon {
 		public:
-			SMGWeapon3(World *w, Player *p) : Weapon(w, p) {}
+			SMGWeapon3(World &w, Player &p) : Weapon(w, p) {}
 			std::string GetName() override { return "SMG"; }
 			float GetDelay() override { return 0.1f; }
 			int GetClipSize() override { return 30; }
@@ -253,7 +253,7 @@ namespace spades {
 
 		class ShotgunWeapon3 : public Weapon {
 		public:
-			ShotgunWeapon3(World *w, Player *p) : Weapon(w, p) {}
+			ShotgunWeapon3(World &w, Player &p) : Weapon(w, p) {}
 			std::string GetName() override { return "Shotgun"; }
 			float GetDelay() override { return 1.f; }
 			int GetClipSize() override { return 6; }
@@ -283,7 +283,7 @@ namespace spades {
 
 		class RifleWeapon4 : public Weapon {
 		public:
-			RifleWeapon4(World *w, Player *p) : Weapon(w, p) {}
+			RifleWeapon4(World &w, Player &p) : Weapon(w, p) {}
 			std::string GetName() override { return "Rifle"; }
 			float GetDelay() override { return 0.6f; }
 			int GetClipSize() override { return 8; }
@@ -315,7 +315,7 @@ namespace spades {
 
 		class SMGWeapon4 : public Weapon {
 		public:
-			SMGWeapon4(World *w, Player *p) : Weapon(w, p) {}
+			SMGWeapon4(World &w, Player &p) : Weapon(w, p) {}
 			std::string GetName() override { return "SMG"; }
 			float GetDelay() override { return 0.1f; }
 			int GetClipSize() override { return 30; }
@@ -342,7 +342,7 @@ namespace spades {
 
 		class ShotgunWeapon4 : public Weapon {
 		public:
-			ShotgunWeapon4(World *w, Player *p) : Weapon(w, p) {}
+			ShotgunWeapon4(World &w, Player &p) : Weapon(w, p) {}
 			std::string GetName() override { return "Shotgun"; }
 			float GetDelay() override { return 0.8f; }
 			int GetClipSize() override { return 8; }
@@ -367,27 +367,26 @@ namespace spades {
 			int GetPelletSize() override { return 8; }
 		};
 
-		Weapon *Weapon::CreateWeapon(WeaponType type, Player *p, const GameProperties &gp) {
+		Weapon *Weapon::CreateWeapon(WeaponType type, Player &p, const GameProperties &gp) {
 			SPADES_MARK_FUNCTION();
 
 			switch (gp.protocolVersion) {
 				case ProtocolVersion::v075:
 					switch (type) {
-						case RIFLE_WEAPON: return new RifleWeapon3(p->GetWorld(), p);
-						case SMG_WEAPON: return new SMGWeapon3(p->GetWorld(), p);
-						case SHOTGUN_WEAPON: return new ShotgunWeapon3(p->GetWorld(), p);
+						case RIFLE_WEAPON: return new RifleWeapon3(p.GetWorld(), p);
+						case SMG_WEAPON: return new SMGWeapon3(p.GetWorld(), p);
+						case SHOTGUN_WEAPON: return new ShotgunWeapon3(p.GetWorld(), p);
 						default: SPInvalidEnum("type", type);
 					}
 				case ProtocolVersion::v076:
 					switch (type) {
-						case RIFLE_WEAPON: return new RifleWeapon4(p->GetWorld(), p);
-						case SMG_WEAPON: return new SMGWeapon4(p->GetWorld(), p);
-						case SHOTGUN_WEAPON: return new ShotgunWeapon4(p->GetWorld(), p);
+						case RIFLE_WEAPON: return new RifleWeapon4(p.GetWorld(), p);
+						case SMG_WEAPON: return new SMGWeapon4(p.GetWorld(), p);
+						case SHOTGUN_WEAPON: return new ShotgunWeapon4(p.GetWorld(), p);
 						default: SPInvalidEnum("type", type);
 					}
-                default:
-                    SPInvalidEnum("protocolVersion", gp.protocolVersion);
+				default: SPInvalidEnum("protocolVersion", gp.protocolVersion);
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

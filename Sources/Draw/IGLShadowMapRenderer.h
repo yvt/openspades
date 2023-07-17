@@ -34,21 +34,24 @@ namespace spades {
 		};
 
 		class IGLShadowMapRenderer {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 
 		protected:
 			virtual void RenderShadowMapPass();
 
 		public:
-			IGLShadowMapRenderer(GLRenderer *);
+			IGLShadowMapRenderer(GLRenderer &);
 			virtual ~IGLShadowMapRenderer() {}
 
-			GLRenderer *GetRenderer() { return renderer; }
+			GLRenderer &GetRenderer() { return renderer; }
 
+			/**
+			 * Clobbers the current framebuffer binding and viewport rectangle.
+			 */
 			virtual void Render() = 0;
 
 			virtual bool Cull(const AABB3 &) = 0;
 			virtual bool SphereCull(const Vector3 &center, float rad) = 0;
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

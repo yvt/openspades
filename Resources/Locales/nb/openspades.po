@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: openspades\n"
 "Report-Msgid-Bugs-To: i at yvt.jp\n"
 "POT-Creation-Date: 2016-12-25 23:47-0200\n"
-"PO-Revision-Date: 2020-04-19 14:46\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2020-12-20 06:27\n"
+"Last-Translator: \n"
 "Language-Team: Norwegian Bokmal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,8 +13,10 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: openspades\n"
+"X-Crowdin-Project-ID: 246828\n"
 "X-Crowdin-Language: nb\n"
 "X-Crowdin-File: openspades.pot\n"
+"X-Crowdin-File-ID: 1\n"
 "Language: nb_NO\n"
 
 #: Sources/Client/Client.cpp:585 Sources/Client/Client.cpp:586
@@ -95,7 +97,7 @@ msgstr "Trykk [{0}] for å lade om"
 #: Sources/Client/Client_Draw.cpp:584 Sources/Client/Client_Draw.cpp:608
 msgctxt "Client"
 msgid "You will respawn in: {0}"
-msgstr "Du vil bli gjenopplivet innen: {0}"
+msgstr "Du vil gjenoppstå innen: {0}"
 
 #: Sources/Client/Client_Draw.cpp:586 Sources/Client/Client_Draw.cpp:610
 msgctxt "Client"
@@ -183,7 +185,7 @@ msgstr "{0} mistet {1} sitt intel"
 #: Sources/Client/Client_NetHandler.cpp:255
 msgctxt "Client"
 msgid "Player {0} has left"
-msgstr "Spiller {0} har forlatt serveren"
+msgstr "Spiller {0} har forlatt tjeneren"
 
 #: Sources/Client/Client_NetHandler.cpp:257
 #: Sources/Client/Client_NetHandler.cpp:264
@@ -335,7 +337,7 @@ msgstr "Laster inn øyeblikksbilde ({0}/{1})"
 #: Sources/Client/NetClient.cpp:546 Sources/Client/NetClient.cpp:609
 msgctxt "NetClient"
 msgid "Connected"
-msgstr "Koblet til"
+msgstr "Tilkoblet"
 
 #: Sources/Client/NetClient.cpp:540 Sources/Client/NetClient.cpp:575
 #: Sources/Client/NetClient.cpp:627 Sources/Client/NetClient.cpp:558
@@ -432,7 +434,7 @@ msgstr "Tilbake til spillet"
 #: Resources/Scripts/Gui/ClientUI.as:205 Resources/Scripts/Gui/ClientUI.as:205
 msgctxt "Client"
 msgid "Chat Log"
-msgstr "Prate log"
+msgstr "Nettpratlogg"
 
 #: Resources/Scripts/Gui/ClientUI.as:212 Resources/Scripts/Gui/ClientUI.as:212
 msgctxt "Client"
@@ -457,7 +459,7 @@ msgstr "Avbryt"
 #: Resources/Scripts/Gui/ClientUI.as:500 Resources/Scripts/Gui/ClientUI.as:500
 msgctxt "Client"
 msgid "Chat Text"
-msgstr "Prate tekst"
+msgstr "Nettprat"
 
 #: Resources/Scripts/Gui/ClientUI.as:508 Resources/Scripts/Gui/ClientUI.as:508
 msgctxt "Client"
@@ -712,7 +714,7 @@ msgstr "Skift"
 #: Resources/Scripts/Gui/Preferences.as:425
 msgctxt "Preferences"
 msgid "Control"
-msgstr "Kontrol"
+msgstr "Kontroll"
 
 #: Resources/Scripts/Gui/Preferences.as:427
 #: Resources/Scripts/Gui/Preferences.as:427
@@ -742,7 +744,7 @@ msgstr "Høyre museknapp"
 #: Resources/Scripts/Gui/Preferences.as:435
 msgctxt "Preferences"
 msgid "Middle Mouse Button"
-msgstr "Mellom museknapp"
+msgstr "Midterste museknapp"
 
 #: Resources/Scripts/Gui/Preferences.as:437
 #: Resources/Scripts/Gui/Preferences.as:437
@@ -866,7 +868,7 @@ msgstr "Tilbakemelding"
 #: Resources/Scripts/Gui/Preferences.as:655
 msgctxt "Preferences"
 msgid "Chat Notify Sounds"
-msgstr "Varslingslyder for prat"
+msgstr "Varslingslyder for nettprat"
 
 #: Resources/Scripts/Gui/Preferences.as:656
 #: Resources/Scripts/Gui/Preferences.as:656
@@ -908,7 +910,7 @@ msgstr "Synsfelt"
 #: Resources/Scripts/Gui/Preferences.as:666
 msgctxt "Preferences"
 msgid "Minimap size"
-msgstr "Minimap størrelse"
+msgstr "Minikart størrelse"
 
 #: Resources/Scripts/Gui/Preferences.as:668
 #: Resources/Scripts/Gui/Preferences.as:668
@@ -938,7 +940,7 @@ msgstr "Alt. Angrep"
 #: Resources/Scripts/Gui/Preferences.as:681
 msgctxt "Preferences"
 msgid "Hold Aim Down Sight"
-msgstr "Hold Aim Down Sight"
+msgstr "Hold ned siktet"
 
 #: Resources/Scripts/Gui/Preferences.as:682
 #: Resources/Scripts/Gui/Preferences.as:682
@@ -962,7 +964,7 @@ msgstr "Eksponentiell kraft"
 #: Resources/Scripts/Gui/Preferences.as:688
 msgctxt "Preferences"
 msgid "Invert Y-axis Mouse Input"
-msgstr "Inverter Y-akse museinngang"
+msgstr "Inverter Y-akse musinngang"
 
 #: Resources/Scripts/Gui/Preferences.as:689
 #: Resources/Scripts/Gui/Preferences.as:689
@@ -1010,7 +1012,7 @@ msgstr "Sist brukte verktøy"
 #: Resources/Scripts/Gui/Preferences.as:696
 msgctxt "Preferences"
 msgid "Switch Tools by Wheel"
-msgstr "Bytte verktøy med hjulet"
+msgstr "Bytt verktøy med hjulet"
 
 #: Resources/Scripts/Gui/Preferences.as:698
 #: Resources/Scripts/Gui/Preferences.as:698
@@ -1088,13 +1090,13 @@ msgstr "Lommelykt"
 #: Resources/Scripts/Gui/Preferences.as:712
 msgctxt "Preferences"
 msgid "Global Chat"
-msgstr "Global prat"
+msgstr "Global nettprat"
 
 #: Resources/Scripts/Gui/Preferences.as:713
 #: Resources/Scripts/Gui/Preferences.as:713
 msgctxt "Preferences"
 msgid "Team Chat"
-msgstr "Lag prat"
+msgstr "Lag nettprat"
 
 #: Resources/Scripts/Gui/Preferences.as:714
 #: Resources/Scripts/Gui/Preferences.as:714
@@ -1204,7 +1206,7 @@ msgstr "Lukk"
 #: Resources/Scripts/Gui/StartupScreen.as:1085
 msgctxt "StartupScreen"
 msgid "Graphics Settings"
-msgstr "Graffikinnstillinger"
+msgstr "Grafikkinnstillinger"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1090
 #: Resources/Scripts/Gui/StartupScreen.as:1090
@@ -1242,7 +1244,7 @@ msgstr "OpenGL"
 #: Resources/Scripts/Gui/StartupScreen.as:1117
 msgctxt "StartupScreen"
 msgid "OpenGL renderer uses your computer's graphics accelerator to generate the game screen."
-msgstr "OpenGLgjengiveren bruker maskinens grafikkakselerator til å generere spillskjermen."
+msgstr "OpenGL-gjengiveren bruker maskinens grafikkakselerator til å generere spillskjermen."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1125
 #: Resources/Scripts/Gui/StartupScreen.as:1125
@@ -1254,7 +1256,7 @@ msgstr "Programvare"
 #: Resources/Scripts/Gui/StartupScreen.as:1129
 msgctxt "StartupScreen"
 msgid "Software renderer uses CPU to generate the game screen. Its quality and performance might be inferior to OpenGL renderer, but it works even with an unsupported GPU."
-msgstr "Programvaregjengiveren bruker prosessoren til å generere spillskjermen. Kvaliteten og ytelsen er muligens verre en OpenGLgjengiveren, men virker selv med en ustøttet grafikkakselerator."
+msgstr "Programvaregjengiveren bruker prosessoren til å generere spillskjermen. Kvaliteten og ytelsen er muligens verre en OpenGL-gjengiveren, men virker selv med en ustøttet grafikkakselerator."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1143
 #: Resources/Scripts/Gui/StartupScreen.as:1143
@@ -1270,7 +1272,7 @@ msgstr "Anti-alias: Aktiverer en teknikk som forbedrer utsendet til kanter med h
 #: Resources/Scripts/Gui/StartupScreen.as:1150
 msgctxt "StartupScreen"
 msgid "Global Illumination"
-msgstr "Global Illumination"
+msgstr "Global belysning"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1152
 #: Resources/Scripts/Gui/StartupScreen.as:1152
@@ -1306,7 +1308,7 @@ msgstr "Slører skjermen når du snur deg kjapt."
 #: Resources/Scripts/Gui/StartupScreen.as:1167
 msgctxt "StartupScreen"
 msgid "Lens Effect"
-msgstr "Linse effekt"
+msgstr "Linseeffekt"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1168
 #: Resources/Scripts/Gui/StartupScreen.as:1168
@@ -1324,7 +1326,7 @@ msgstr "Linsespredningsfilter"
 #: Resources/Scripts/Gui/StartupScreen.as:1171
 msgctxt "StartupScreen"
 msgid "Simulates light being scattered by dust on the camera lens."
-msgstr "Simulerer linsesprednings forårsaket av støv på kameralinsen."
+msgstr "Simulerer linsespredning forårsaket av støv på kameralinsen."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1174
 #: Resources/Scripts/Gui/StartupScreen.as:1174
@@ -1378,7 +1380,7 @@ msgstr "Slører til objekter som er ute av fokus."
 #: Resources/Scripts/Gui/StartupScreen.as:1186
 msgctxt "StartupScreen"
 msgid "Screen Space Ambient Occlusion"
-msgstr "Screen Space Ambient Occlusion"
+msgstr "Omgivelses okklusjon på skjermplass"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1187
 #: Resources/Scripts/Gui/StartupScreen.as:1187
@@ -1516,7 +1518,7 @@ msgstr "Med"
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 msgctxt "StartupScreen"
 msgid "Shader Effects"
-msgstr "Shadereffekter"
+msgstr "Shader-effekter"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1256
 #: Resources/Scripts/Gui/StartupScreen.as:1256
@@ -1546,7 +1548,7 @@ msgstr "OpenAL"
 #: Resources/Scripts/Gui/StartupScreen.as:1499
 msgctxt "StartupScreen"
 msgid "Uses an OpenAL-capable sound card to process sound. In most cases where there isn't such a sound card, software emulation is used."
-msgstr "Bruker et OpenAL kompatibelt lydkort til å prosessere lyden. I det fleste tilfeller det det ikke er er kompatibelt lydkort, så brukes programvare emulering."
+msgstr "Bruker et OpenAL kompatibelt lydkort til å prosessere lyden. I det fleste tilfeller det det ikke er et kompatibelt lydkort, så brukes programvareemulering."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1508
 #: Resources/Scripts/Gui/StartupScreen.as:1508
@@ -1558,7 +1560,7 @@ msgstr "YSR"
 #: Resources/Scripts/Gui/StartupScreen.as:1512
 msgctxt "StartupScreen"
 msgid "YSR is an experimental 3D HDR sound engine optimized for OpenSpades. It features several enhanced features including automatic load control, dynamics compressor, HRTF-based 3D audio, and high quality reverb."
-msgstr "YSR er en eksperimentell 3D HDR lydmotor som er optimisert for OpenSpades. Det inneholder flere forbedrede egenskaper som automatisk belastningskontroll, dynamisk compressor, HRTF-basert 3D lyd og høg kvalitets ekko."
+msgstr "YSR er en eksperimentell 3D HDR lydmotor som er optimisert for OpenSpades. Det inneholder flere forbedrede egenskaper som automatisk belastningskontroll, dynamisk compressor, HRTF-basert 3D lyd og ekko av høg kvalitet."
 
 #. ! The name of audio driver that outputs no audio.
 #: Resources/Scripts/Gui/StartupScreen.as:1523
@@ -1579,13 +1581,13 @@ msgstr "Deaktiverer lyd."
 #: Resources/Scripts/Gui/StartupScreen.as:1562
 msgctxt "StartupScreen"
 msgid "Polyphonics"
-msgstr "Polyphonics"
+msgstr "Polyfonikk"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1539
 #: Resources/Scripts/Gui/StartupScreen.as:1539
 msgctxt "StartupScreen"
 msgid "Specifies how many sounds can be played simultaneously. Higher value needs more processing power, so setting this too high might cause an overload (especially with a software emulation)."
-msgstr "Spesifiserer hvor mange lyder som kan bli spilt av samtidig. Høyere verdier trenger mer prosesseringskraft, så vis du setter av denne innstillingen for høyt, så kan det forårsake en overbelastning (spesielt med programvare emulering)."
+msgstr "Spesifiserer hvor mange lyder som kan spilles samtidig. Høyere verdier trenger mer prosesseringskraft, så vis du setter denne innstillingen for høyt, så kan det forårsake en overbelastning (spesielt med programvareemulering)."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1546
 #: Resources/Scripts/Gui/StartupScreen.as:1546
@@ -1597,7 +1599,7 @@ msgstr "EAX"
 #: Resources/Scripts/Gui/StartupScreen.as:1547
 msgctxt "StartupScreen"
 msgid "Enables extended features provided by the OpenAL driver to create more ambience."
-msgstr "Aktiverer utvidede egenskaper fra OpenAL driveren for å skape mer atmosfære."
+msgstr "Aktiverer utvidede egenskaper fra OpenAL-driveren for å skape mer atmosfære."
 
 #: Resources/Scripts/Gui/StartupScreen.as:1563
 #: Resources/Scripts/Gui/StartupScreen.as:1563
@@ -1615,19 +1617,19 @@ msgstr "Språk"
 #: Resources/Scripts/Gui/StartupScreen.as:1635
 msgctxt "StartupScreen"
 msgid "Tools"
-msgstr "Redskaper"
+msgstr "Verktøy"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1638
 #: Resources/Scripts/Gui/StartupScreen.as:1638
 msgctxt "StartupScreen"
 msgid "Reset All Settings"
-msgstr "Tilbakestill alle innstillinger"
+msgstr "Nullstill instillinger"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1647
 #: Resources/Scripts/Gui/StartupScreen.as:1647
 msgctxt "StartupScreen"
 msgid "Open Config Folder in Explorer"
-msgstr "Åpne konfigmappe i explorer"
+msgstr "Åpne konfigmappen i utforskeren"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1649
 #: Resources/Scripts/Gui/StartupScreen.as:1649
@@ -1663,7 +1665,7 @@ msgstr "Grafikk/lydinnstillinger"
 #: Resources/Scripts/Gui/StartupScreen.as:1676
 msgctxt "StartupScreen"
 msgid "All key bindings"
-msgstr "Bundne taster"
+msgstr "Alle tastebindinger"
 
 #: Resources/Scripts/Gui/StartupScreen.as:1677
 #: Resources/Scripts/Gui/StartupScreen.as:1677

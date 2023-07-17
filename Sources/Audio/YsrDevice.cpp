@@ -341,8 +341,8 @@ namespace spades {
 			spec.samples = (int)s_ysrBufferSize;
 			spec.channels = 2;
 
-			sdlAudioDevice = std::unique_ptr<SdlAudioDevice>(
-			  new SdlAudioDevice(nullptr, SDL_FALSE, spec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE));
+			sdlAudioDevice = stmp::make_unique<SdlAudioDevice>(nullptr, SDL_FALSE, spec,
+			                                                   SDL_AUDIO_ALLOW_FREQUENCY_CHANGE);
 
 			YsrContext::InitParam param;
 			param.maxPolyphonics = s_maxPolyphonics;

@@ -19,13 +19,14 @@
  */
 
 #include "GLShadowMapShader.h"
-#include <Core/Debug.h>
-#include <Core/Settings.h>
 #include "GLBasicShadowMapRenderer.h"
 #include "GLMapShadowRenderer.h"
 #include "GLProgramManager.h"
 #include "GLRenderer.h"
 #include "GLSparseShadowMapRenderer.h"
+#include <Core/Debug.h>
+#include <Core/Settings.h>
+#include <Core/TMPUtils.h>
 
 namespace spades {
 	namespace draw {
@@ -48,15 +49,18 @@ namespace spades {
 			return shaders;
 		}
 
-		IGLShadowMapRenderer *
-		GLShadowMapShader::CreateShadowMapRenderer(spades::draw::GLRenderer *r) {
+		std::unique_ptr<IGLShadowMapRenderer>
+		GLShadowMapShader::CreateShadowMapRenderer(GLRenderer &r) {
 			SPADES_MARK_FUNCTION();
-			auto &settings = r->GetSettings();
-			if (!settings.r_modelShadows)
-				return NULL;
-			if (settings.r_sparseShadowMaps)
-				return new GLSparseShadowMapRenderer(r);
-			return new GLBasicShadowMapRenderer(r);
+			auto &settings = r.GetSettings();
+			if (!settings.r_modelShadows) {
+				return {};
+			}
+			if (settings.r_sparseShadowMaps) {
+				return stmp::make_unique<GLSparseShadowMapRenderer>(r);
+			} else {
+				return stmp::make_unique<GLBasicShadowMapRenderer>(r);
+			}
 		}
 
 		int GLShadowMapShader::operator()(GLRenderer *renderer, spades::draw::GLProgram *program,
@@ -83,5 +87,5 @@ namespace spades {
 
 			return texStage;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

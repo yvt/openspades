@@ -43,5 +43,5 @@ namespace spades {
 			}
 			return loc;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

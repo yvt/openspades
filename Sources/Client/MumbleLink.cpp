@@ -143,4 +143,4 @@ namespace spades {
 		set_mumble_vector3(mumbleLinkedMemory->fCameraFront, player->GetFront());
 		set_mumble_vector3(mumbleLinkedMemory->fCameraTop, player->GetUp());
 	}
-}
+} // namespace spades

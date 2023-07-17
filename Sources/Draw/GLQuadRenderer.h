@@ -29,12 +29,12 @@ namespace spades {
 		 * load program by yourself, and GLQuadRenderer does
 		 * setting vertex attributes and drawing. */
 		class GLQuadRenderer {
-			IGLDevice *device;
+			IGLDevice &device;
 
 			IGLDevice::UInteger attrIndex;
 
 		public:
-			GLQuadRenderer(IGLDevice *);
+			GLQuadRenderer(IGLDevice &);
 			~GLQuadRenderer();
 
 			/** specifies the index of an attribute that
@@ -43,5 +43,5 @@ namespace spades {
 
 			void Draw();
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

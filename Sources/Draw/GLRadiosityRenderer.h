@@ -20,13 +20,13 @@
 
 #pragma once
 
+#include <atomic>
 #include <cstdint>
 #include <vector>
-#include <atomic>
 
+#include "IGLDevice.h"
 #include <Core/Debug.h>
 #include <Core/Math.h>
-#include "IGLDevice.h"
 
 namespace spades {
 	namespace client {
@@ -42,8 +42,8 @@ namespace spades {
 
 			class UpdateDispatch;
 			enum { ChunkSize = 16, ChunkSizeBits = 4, Envelope = 6 };
-			GLRenderer *renderer;
-			IGLDevice *device;
+			GLRenderer &renderer;
+			IGLDevice &device;
 			GLSettings &settings;
 			client::GameMap *map;
 
@@ -58,7 +58,7 @@ namespace spades {
 				int dirtyMinY = 0, dirtyMaxY = ChunkSize - 1;
 				int dirtyMinZ = 0, dirtyMaxZ = ChunkSize - 1;
 
-				std::atomic<bool> transferDone { true };
+				std::atomic<bool> transferDone{true};
 			};
 
 			IGLDevice::UInteger textureFlat;
@@ -102,7 +102,7 @@ namespace spades {
 				Vector3 base, x, y, z;
 			};
 
-			GLRadiosityRenderer(GLRenderer *renderer, client::GameMap *map);
+			GLRadiosityRenderer(GLRenderer &renderer, client::GameMap *map);
 			~GLRadiosityRenderer();
 
 			Result Evaluate(IntVector3);
@@ -116,5 +116,5 @@ namespace spades {
 			IGLDevice::UInteger GetTextureY() { return textureY; }
 			IGLDevice::UInteger GetTextureZ() { return textureZ; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -23,6 +23,7 @@
 #include <list>
 
 #include <Core/Math.h>
+#include <Core/RefCountedObject.h>
 
 namespace spades {
 	namespace client {
@@ -32,8 +33,8 @@ namespace spades {
 
 		class HurtRingView {
 			Client *client;
-			IRenderer *renderer;
-			IImage *image;
+			IRenderer &renderer;
+			Handle<IImage> image;
 
 			struct Item {
 				Vector3 dir;
@@ -52,5 +53,5 @@ namespace spades {
 			void Update(float dt);
 			void Draw();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

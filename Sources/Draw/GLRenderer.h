@@ -55,6 +55,8 @@ namespace spades {
 		class GLLensDustFilter;
 		class GLSoftLitSpriteRenderer;
 		class GLAutoExposureFilter;
+		class GLTemporalAAFilter;
+		class GLFogFilter2;
 		class GLProfiler;
 
 		class GLRenderer : public client::IRenderer, public client::IGameMapListener {
@@ -69,9 +71,12 @@ namespace spades {
 			};
 
 			Handle<IGLDevice> device;
-			GLFramebufferManager *fbManager;
-			client::GameMap *map;
+			std::unique_ptr<GLFramebufferManager> fbManager;
+			client::GameMap *map; // TODO: get rid of raw pointers
 			GLSettings settings;
+
+			int renderWidth;
+			int renderHeight;
 
 			std::unique_ptr<GLProfiler> profiler;
 
@@ -88,7 +93,8 @@ namespace spades {
 			GLImageManager *imageManager;
 			GLModelManager *modelManager;
 
-			IGLShadowMapRenderer *shadowMapRenderer;
+			// TODO: get rid of these abominations called raw pointers
+			std::unique_ptr<IGLShadowMapRenderer> shadowMapRenderer;
 			GLMapShadowRenderer *mapShadowRenderer;
 			GLMapRenderer *mapRenderer;
 			GLImageRenderer *imageRenderer;
@@ -96,13 +102,15 @@ namespace spades {
 			GLModelRenderer *modelRenderer;
 			IGLSpriteRenderer *spriteRenderer;
 			GLLongSpriteRenderer *longSpriteRenderer;
-			GLWaterRenderer *waterRenderer;
+			std::unique_ptr<GLWaterRenderer> waterRenderer;
 			GLAmbientShadowRenderer *ambientShadowRenderer;
 			GLRadiosityRenderer *radiosityRenderer;
 
 			GLCameraBlurFilter *cameraBlur;
 			GLLensDustFilter *lensDustFilter;
 			GLAutoExposureFilter *autoExposureFilter;
+			std::unique_ptr<GLTemporalAAFilter> temporalAAFilter;
+			std::unique_ptr<GLFogFilter2> fogFilter2;
 
 			// used when r_ssao = 1. only valid while rendering objects
 			IGLDevice::UInteger ssaoBufferTexture;
@@ -125,6 +133,7 @@ namespace spades {
 			bool legacyColorPremultiply;
 
 			unsigned int lastTime;
+			std::uint32_t frameNumber = 0;
 
 			bool duringSceneRendering;
 
@@ -141,28 +150,32 @@ namespace spades {
 			void EnsureSceneStarted();
 			void EnsureSceneNotStarted();
 
+			void UpdateRenderSize();
+
+			void Prepare2DRendering(bool reset = false);
+
 		protected:
 			~GLRenderer();
 
 		public:
-			GLRenderer(IGLDevice *glDevice);
+			GLRenderer(Handle<IGLDevice> glDevice);
 
 			void Init() override;
 			void Shutdown() override;
 
-			client::IImage *RegisterImage(const char *filename) override;
-			client::IModel *RegisterModel(const char *filename) override;
+			Handle<client::IImage> RegisterImage(const char *filename) override;
+			Handle<client::IModel> RegisterModel(const char *filename) override;
 
 			void ClearCache() override;
 
-			client::IImage *CreateImage(Bitmap *) override;
-			client::IModel *CreateModel(VoxelModel *) override;
-			client::IModel *CreateModelOptimized(VoxelModel *);
+			Handle<client::IImage> CreateImage(Bitmap &) override;
+			Handle<client::IModel> CreateModel(VoxelModel &) override;
+			Handle<client::IModel> CreateModelOptimized(VoxelModel &);
 
 			GLProgram *RegisterProgram(const std::string &name);
 			GLShader *RegisterShader(const std::string &name);
 
-			void SetGameMap(client::GameMap *) override;
+			void SetGameMap(stmp::optional<client::GameMap &>) override;
 			void SetFogColor(Vector3 v) override;
 			void SetFogDistance(float f) override { fogDistance = f; }
 
@@ -172,14 +185,14 @@ namespace spades {
 
 			void StartScene(const client::SceneDefinition &) override;
 
-			void RenderModel(client::IModel *, const client::ModelRenderParam &) override;
+			void RenderModel(client::IModel &, const client::ModelRenderParam &) override;
 
 			void AddLight(const client::DynamicLightParam &light) override;
 
 			void AddDebugLine(Vector3 a, Vector3 b, Vector4 color) override;
 
-			void AddSprite(client::IImage *, Vector3 center, float radius, float rotation) override;
-			void AddLongSprite(client::IImage *, Vector3 p1, Vector3 p2, float radius) override;
+			void AddSprite(client::IImage &, Vector3 center, float radius, float rotation) override;
+			void AddLongSprite(client::IImage &, Vector3 p1, Vector3 p2, float radius) override;
 
 			void EndScene() override;
 
@@ -188,28 +201,33 @@ namespace spades {
 			void SetColor(Vector4) override;
 			void SetColorAlphaPremultiplied(Vector4) override;
 
-			void DrawImage(client::IImage *, const Vector2 &outTopLeft) override;
-			void DrawImage(client::IImage *, const AABB2 &outRect) override;
-			void DrawImage(client::IImage *, const Vector2 &outTopLeft,
+			void DrawImage(stmp::optional<client::IImage &>, const Vector2 &outTopLeft) override;
+			void DrawImage(stmp::optional<client::IImage &>, const AABB2 &outRect) override;
+			void DrawImage(stmp::optional<client::IImage &>, const Vector2 &outTopLeft,
 			               const AABB2 &inRect) override;
-			void DrawImage(client::IImage *, const AABB2 &outRect, const AABB2 &inRect) override;
-			void DrawImage(client::IImage *, const Vector2 &outTopLeft, const Vector2 &outTopRight,
-			               const Vector2 &outBottomLeft, const AABB2 &inRect) override;
+			void DrawImage(stmp::optional<client::IImage &>, const AABB2 &outRect,
+			               const AABB2 &inRect) override;
+			void DrawImage(stmp::optional<client::IImage &>, const Vector2 &outTopLeft,
+			               const Vector2 &outTopRight, const Vector2 &outBottomLeft,
+			               const AABB2 &inRect) override;
 
 			void DrawFlatGameMap(const AABB2 &outRect, const AABB2 &inRect) override;
 
 			void FrameDone() override;
 			void Flip() override;
-			Bitmap *ReadBitmap() override;
+			Handle<Bitmap> ReadBitmap() override;
 
 			float ScreenWidth() override;
 			float ScreenHeight() override;
 
+			int GetRenderWidth() const { return renderWidth; }
+			int GetRenderHeight() const { return renderHeight; }
+
 			GLSettings &GetSettings() { return settings; }
-			IGLDevice *GetGLDevice() { return device; }
+			IGLDevice &GetGLDevice() { return *device; }
 			GLProfiler &GetGLProfiler() { return *profiler; }
-			GLFramebufferManager *GetFramebufferManager() { return fbManager; }
-			IGLShadowMapRenderer *GetShadowMapRenderer() { return shadowMapRenderer; }
+			GLFramebufferManager *GetFramebufferManager() { return fbManager.get(); }
+			IGLShadowMapRenderer *GetShadowMapRenderer() { return shadowMapRenderer.get(); }
 			GLAmbientShadowRenderer *GetAmbientShadowRenderer() { return ambientShadowRenderer; }
 			GLMapShadowRenderer *GetMapShadowRenderer() { return mapShadowRenderer; }
 			GLRadiosityRenderer *GetRadiosityRenderer() { return radiosityRenderer; }
@@ -218,6 +236,8 @@ namespace spades {
 			const Matrix4 &GetProjectionMatrix() const { return projectionMatrix; }
 			const Matrix4 &GetProjectionViewMatrix() const { return projectionViewMatrix; }
 			const Matrix4 &GetViewMatrix() const { return viewMatrix; }
+
+			std::uint32_t GetFrameNumber() const { return frameNumber; }
 
 			bool IsRenderingMirror() const { return renderingMirror; }
 
@@ -228,5 +248,5 @@ namespace spades {
 			bool BoxFrustrumCull(const AABB3 &);
 			bool SphereFrustrumCull(const Vector3 &center, float radius);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

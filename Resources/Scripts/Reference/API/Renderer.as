@@ -227,6 +227,7 @@ namespace spades {
     class DynamicLightParam {
         DynamicLightType type;
         Vector3 origin;
+        Vector3 point2;
         float radius;
         Vector3 color;
 

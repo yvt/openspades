@@ -23,10 +23,10 @@
 #include <cstdint>
 #include <vector>
 
-#include <Core/Math.h>
 #include "GLProgramAttribute.h"
 #include "GLProgramUniform.h"
 #include "IGLSpriteRenderer.h"
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
@@ -56,8 +56,8 @@ namespace spades {
 				float r, g, b, a;
 			};
 
-			GLRenderer *renderer;
-			IGLDevice *device;
+			GLRenderer &renderer;
+			IGLDevice &device;
 			GLSettings &settings;
 			std::vector<Sprite> sprites;
 
@@ -83,12 +83,12 @@ namespace spades {
 			void Flush();
 
 		public:
-			GLSpriteRenderer(GLRenderer *);
+			GLSpriteRenderer(GLRenderer &);
 			~GLSpriteRenderer();
 
 			void Add(GLImage *img, Vector3 center, float rad, float ang, Vector4 color) override;
 			void Clear() override;
 			void Render() override;
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2021 yvt
 
  This file is part of OpenSpades.
 
@@ -18,4 +18,15 @@
 
  */
 
-#include "Deque.h"
+attribute vec2 positionAttribute;
+
+varying vec2 texCoord;
+uniform vec2 inverseVP;
+
+void main() {
+	vec2 scrPos = positionAttribute * 2. - 1.;
+
+	gl_Position = vec4(scrPos, 0.5, 1.);
+
+	texCoord = positionAttribute / inverseVP;
+}

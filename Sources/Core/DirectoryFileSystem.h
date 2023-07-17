@@ -29,7 +29,7 @@ namespace spades {
 		std::string rootPath;
 		bool canWrite;
 
-		std::string physicalPath(const std::string &);
+		std::string PathToPhysical(const std::string &);
 
 	public:
 		DirectoryFileSystem(const std::string &root, bool canWrite = true);
@@ -37,8 +37,8 @@ namespace spades {
 
 		std::vector<std::string> EnumFiles(const char *) override;
 
-		IStream *OpenForReading(const char *) override;
-		IStream *OpenForWriting(const char *) override;
+		std::unique_ptr<IStream> OpenForReading(const char *) override;
+		std::unique_ptr<IStream> OpenForWriting(const char *) override;
 		bool FileExists(const char *) override;
 	};
 }

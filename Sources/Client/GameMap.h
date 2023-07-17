@@ -60,10 +60,10 @@ namespace spades {
 
 			void Save(IStream *);
 
-			int Width() { return DefaultWidth; }
-			int Height() { return DefaultHeight; }
-			int Depth() { return DefaultDepth; }
-			inline bool IsSolid(int x, int y, int z) {
+			int Width() const { return DefaultWidth; }
+			int Height() const { return DefaultHeight; }
+			int Depth() const { return DefaultDepth; }
+			inline bool IsSolid(int x, int y, int z) const {
 				SPAssert(x >= 0);
 				SPAssert(x < Width());
 				SPAssert(y >= 0);
@@ -74,7 +74,7 @@ namespace spades {
 			}
 
 			/** @return 0xHHBBGGRR where HH is health (up to 100) */
-			inline uint32_t GetColor(int x, int y, int z) {
+			inline uint32_t GetColor(int x, int y, int z) const {
 				SPAssert(x >= 0);
 				SPAssert(x < Width());
 				SPAssert(y >= 0);
@@ -84,11 +84,11 @@ namespace spades {
 				return colorMap[x][y][z];
 			}
 
-			inline uint64_t GetSolidMapWrapped(int x, int y) {
+			inline uint64_t GetSolidMapWrapped(int x, int y) const {
 				return solidMap[x & (Width() - 1)][y & (Height() - 1)];
 			}
 
-			inline bool IsSolidWrapped(int x, int y, int z) {
+			inline bool IsSolidWrapped(int x, int y, int z) const {
 				if (z < 0)
 					return false;
 				if (z >= Depth())
@@ -97,7 +97,7 @@ namespace spades {
 				       0;
 			}
 
-			inline uint32_t GetColorWrapped(int x, int y, int z) {
+			inline uint32_t GetColorWrapped(int x, int y, int z) const {
 				return colorMap[x & (Width() - 1)][y & (Height() - 1)][z & (Depth() - 1)];
 			}
 
@@ -137,14 +137,14 @@ namespace spades {
 			void AddListener(IGameMapListener *);
 			void RemoveListener(IGameMapListener *);
 
-			bool ClipBox(int x, int y, int z);
-			bool ClipWorld(int x, int y, int z);
+			bool ClipBox(int x, int y, int z) const;
+			bool ClipWorld(int x, int y, int z) const;
 
-			bool ClipBox(float x, float y, float z);
-			bool ClipWorld(float x, float y, float z);
+			bool ClipBox(float x, float y, float z) const;
+			bool ClipWorld(float x, float y, float z) const;
 
 			// vanila compat
-			bool CastRay(Vector3 v0, Vector3 v1, float length, IntVector3 &vOut);
+			bool CastRay(Vector3 v0, Vector3 v1, float length, IntVector3 &vOut) const;
 
 			// accurate and slow ray casting
 			struct RayCastResult {
@@ -154,7 +154,7 @@ namespace spades {
 				IntVector3 hitBlock;
 				IntVector3 normal;
 			};
-			RayCastResult CastRay2(Vector3 v0, Vector3 dir, int maxSteps);
+			RayCastResult CastRay2(Vector3 v0, Vector3 dir, int maxSteps) const;
 
 		private:
 			uint64_t solidMap[DefaultWidth][DefaultHeight];
@@ -162,7 +162,7 @@ namespace spades {
 			std::list<IGameMapListener *> listeners;
 			std::mutex listenersMutex;
 
-			bool IsSurface(int x, int y, int z);
+			bool IsSurface(int x, int y, int z) const;
 		};
 	} // namespace client
 } // namespace spades

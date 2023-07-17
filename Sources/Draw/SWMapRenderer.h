@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "SWFeatureLevel.h"
-#include "SWFeatureLevel.h"
 #include <Client/SceneDefinition.h>
 #include <Core/Math.h>
 #include <Core/MiniHeap.h>
@@ -44,11 +43,13 @@ namespace spades {
 			struct LinePixel;
 
 			int w, h;
-			SWRenderer *renderer;
+			SWRenderer &renderer;
 
 			SWFeatureLevel level;
 			client::SceneDefinition sceneDef;
 			Handle<client::GameMap> map;
+			// TODO: The following fields are only used during a function call
+			//		 to `Render`. Move them to a context struct?
 			Bitmap *frameBuf;
 			float *depthBuf;
 			std::vector<Line> lines;
@@ -74,12 +75,12 @@ namespace spades {
 			void RenderInner(const client::SceneDefinition &, Bitmap *fb, float *depthBuffer);
 
 		public:
-			SWMapRenderer(SWRenderer *r, client::GameMap *, SWFeatureLevel level);
+			SWMapRenderer(SWRenderer &r, client::GameMap *, SWFeatureLevel level);
 			~SWMapRenderer();
 
-			void Render(const client::SceneDefinition &, Bitmap *fb, float *depthBuffer);
+			void Render(const client::SceneDefinition &, Bitmap &fb, float *depthBuffer);
 
 			void UpdateRle(int x, int y);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

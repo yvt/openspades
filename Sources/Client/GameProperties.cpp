@@ -32,5 +32,5 @@ namespace spades {
 				SPLog("Enabled clearCorpseOnRespawn based on a server message heuristics");
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

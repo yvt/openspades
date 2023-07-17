@@ -28,13 +28,17 @@ namespace spades {
 		class GLProgram;
 		class GLSettings;
 		class GLColorCorrectionFilter {
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 			GLSettings &settings;
+			GLProgram *gaussProgram;
 			GLProgram *lens;
 
 		public:
-			GLColorCorrectionFilter(GLRenderer *);
-			GLColorBuffer Filter(GLColorBuffer, Vector3 tint);
+			GLColorCorrectionFilter(GLRenderer &);
+			/**
+			 * @param fogLuminance The luminance of the fog color. Must be in the sRGB color space.
+			 */
+			GLColorBuffer Filter(GLColorBuffer, Vector3 tint, float fogLuminance);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

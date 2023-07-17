@@ -19,20 +19,20 @@
  */
 
 #include "GLSpriteRenderer.h"
-#include <Core/Debug.h>
 #include "GLImage.h"
 #include "GLProgram.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
 #include "SWFeatureLevel.h"
+#include <Core/Debug.h>
 
 namespace spades {
 	namespace draw {
 
-		GLSpriteRenderer::GLSpriteRenderer(GLRenderer *renderer)
+		GLSpriteRenderer::GLSpriteRenderer(GLRenderer &renderer)
 		    : renderer(renderer),
-		      device(renderer->GetGLDevice()),
-		      settings(renderer->GetSettings()),
+		      device(renderer.GetGLDevice()),
+		      settings(renderer.GetSettings()),
 		      projectionViewMatrix("projectionViewMatrix"),
 		      rightVector("rightVector"),
 		      upVector("upVector"),
@@ -46,7 +46,7 @@ namespace spades {
 		      colorAttribute("colorAttribute") {
 			SPADES_MARK_FUNCTION();
 
-			program = renderer->RegisterProgram("Shaders/Sprite.program");
+			program = renderer.RegisterProgram("Shaders/Sprite.program");
 		}
 
 		GLSpriteRenderer::~GLSpriteRenderer() { SPADES_MARK_FUNCTION(); }
@@ -101,28 +101,28 @@ namespace spades {
 			spritePosAttribute(program);
 			colorAttribute(program);
 
-			projectionViewMatrix.SetValue(renderer->GetProjectionViewMatrix());
-			viewMatrix.SetValue(renderer->GetViewMatrix());
+			projectionViewMatrix.SetValue(renderer.GetProjectionViewMatrix());
+			viewMatrix.SetValue(renderer.GetViewMatrix());
 
-			fogDistance.SetValue(renderer->GetFogDistance());
+			fogDistance.SetValue(renderer.GetFogDistance());
 
-			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			const auto &viewOrigin = renderer.GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
-			Vector3 fogCol = renderer->GetFogColor();
+			Vector3 fogCol = renderer.GetFogColor();
 			fogCol *= fogCol;
 			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 
-			const client::SceneDefinition &def = renderer->GetSceneDef();
+			const client::SceneDefinition &def = renderer.GetSceneDef();
 			rightVector.SetValue(def.viewAxis[0].x, def.viewAxis[0].y, def.viewAxis[0].z);
 			upVector.SetValue(def.viewAxis[1].x, def.viewAxis[1].y, def.viewAxis[1].z);
 			texture.SetValue(0);
 
-			device->ActiveTexture(0);
+			device.ActiveTexture(0);
 
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(spritePosAttribute(), true);
-			device->EnableVertexAttribArray(colorAttribute(), true);
+			device.EnableVertexAttribArray(positionAttribute(), true);
+			device.EnableVertexAttribArray(spritePosAttribute(), true);
+			device.EnableVertexAttribArray(colorAttribute(), true);
 
 			for (size_t i = 0; i < sprites.size(); i++) {
 				Sprite &spr = sprites[i];
@@ -167,9 +167,9 @@ namespace spades {
 
 			Flush();
 
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(spritePosAttribute(), false);
-			device->EnableVertexAttribArray(colorAttribute(), false);
+			device.EnableVertexAttribArray(positionAttribute(), false);
+			device.EnableVertexAttribArray(spritePosAttribute(), false);
+			device.EnableVertexAttribArray(colorAttribute(), false);
 		}
 
 		void GLSpriteRenderer::Flush() {
@@ -178,22 +178,21 @@ namespace spades {
 			if (vertices.empty())
 				return;
 
-			device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].x));
-			device->VertexAttribPointer(spritePosAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].sx));
-			device->VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
-			                            sizeof(Vertex), &(vertices[0].r));
+			device.VertexAttribPointer(positionAttribute(), 4, IGLDevice::FloatType, false,
+			                           sizeof(Vertex), &(vertices[0].x));
+			device.VertexAttribPointer(spritePosAttribute(), 4, IGLDevice::FloatType, false,
+			                           sizeof(Vertex), &(vertices[0].sx));
+			device.VertexAttribPointer(colorAttribute(), 4, IGLDevice::FloatType, false,
+			                           sizeof(Vertex), &(vertices[0].r));
 
 			SPAssert(lastImage);
 			lastImage->Bind(IGLDevice::Texture2D);
 
-			device->DrawElements(IGLDevice::Triangles,
-			                     static_cast<IGLDevice::Sizei>(indices.size()),
-			                     IGLDevice::UnsignedInt, indices.data());
+			device.DrawElements(IGLDevice::Triangles, static_cast<IGLDevice::Sizei>(indices.size()),
+			                    IGLDevice::UnsignedInt, indices.data());
 
 			vertices.clear();
 			indices.clear();
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

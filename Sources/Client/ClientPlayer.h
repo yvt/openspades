@@ -39,11 +39,12 @@ namespace spades {
 
 		class SandboxedRenderer;
 
+		// TODO: Use `shared_ptr` instead of `RefCountedObject`
 		/** Representation of player which is used by
 		 * drawing/view layer of game client. */
 		class ClientPlayer : public RefCountedObject {
-			Client *client;
-			Player *player;
+			Client &client;
+			Player &player;
 
 			float sprintState;
 			float aimDownState;
@@ -88,19 +89,16 @@ namespace spades {
 
 			float GetLocalFireVibration();
 
-			bool ShouldRenderInThirdPersonView();
-
-			asIScriptObject *initScriptFactory(ScriptFunction &creator, IRenderer *renderer,
-			                                   IAudioDevice *audio);
+			// TODO: Naming convention violation
+			asIScriptObject *initScriptFactory(ScriptFunction &creator, IRenderer &renderer,
+			                                   IAudioDevice &audio);
 
 		protected:
 			~ClientPlayer();
 
 		public:
-			ClientPlayer(Player *p, Client *);
-			Player *GetPlayer() const { return player; }
-
-			void Invalidate();
+			ClientPlayer(Player &p, Client &);
+			Player &GetPlayer() const { return player; }
 
 			void Update(float dt);
 			void AddToScene();
@@ -114,7 +112,33 @@ namespace spades {
 			float GetAimDownState() { return aimDownState; }
 			float GetSprintState() { return sprintState; }
 
+			bool ShouldRenderInThirdPersonView();
+
+			/**
+			 * Get the world coordinates representing the position of the currently wielded weapon's
+			 * muzzle.
+			 */
+			Vector3 GetMuzzlePosition();
+
+			/**
+			 * Get the world coordinates representing the position of the currently wielded weapon's
+			 * muzzle, based on the player's first-person view rendering.
+			 */
+			Vector3 GetMuzzlePositionInFirstPersonView();
+
+			/**
+			 * Get the world coordinates representing the position of the currently wielded weapon's
+			 * case ejection port.
+			 */
+			Vector3 GetCaseEjectPosition();
+
+			/**
+			 * Get the world coordinates representing the position of the currently wielded weapon's
+			 * case ejection port, based on the player's first-person view rendering.
+			 */
+			Vector3 GetCaseEjectPositionInFirstPersonView();
+
 			Matrix4 GetEyeMatrix();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

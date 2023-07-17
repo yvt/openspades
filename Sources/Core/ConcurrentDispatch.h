@@ -40,7 +40,7 @@ namespace spades {
 		~DispatchQueue();
 		static DispatchQueue *GetThreadQueue();
 		void ProcessQueue();
-		void EnterEventLoop() throw();
+		void EnterEventLoop() noexcept;
 
 		void MarkSDLVideoThread();
 	};
@@ -56,7 +56,7 @@ namespace spades {
 		IRunnable *runnable;
 
 		void Execute();
-		void ExecuteProtected() throw();
+		void ExecuteProtected() noexcept;
 
 		// disable
 		ConcurrentDispatch(const ConcurrentDispatch &) {}

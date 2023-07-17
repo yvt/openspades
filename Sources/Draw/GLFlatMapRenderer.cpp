@@ -19,43 +19,37 @@
  */
 
 #include "GLFlatMapRenderer.h"
+#include "GLImage.h"
+#include "GLRenderer.h"
 #include <Client/GameMap.h>
 #include <Core/Bitmap.h>
 #include <Core/Debug.h>
-#include "GLImage.h"
-#include "GLRenderer.h"
 
 namespace spades {
 	namespace draw {
-		GLFlatMapRenderer::GLFlatMapRenderer(GLRenderer *r, client::GameMap *m)
+		GLFlatMapRenderer::GLFlatMapRenderer(GLRenderer &r, client::GameMap &m)
 		    : renderer(r), map(m) {
 			SPADES_MARK_FUNCTION();
 
-			chunkRows = m->Height() >> ChunkBits;
-			chunkCols = m->Width() >> ChunkBits;
+			chunkRows = m.Height() >> ChunkBits;
+			chunkCols = m.Width() >> ChunkBits;
 			for (int i = 0; i < chunkRows * chunkCols; i++)
 				chunkInvalid.push_back(false);
 
-			Handle<Bitmap> bmp(GenerateBitmap(0, 0, m->Width(), m->Height()), false);
-			try {
-				image = static_cast<GLImage *>(renderer->CreateImage(bmp));
-			} catch (...) {
-				throw;
-			}
+			Handle<Bitmap> bmp(GenerateBitmap(0, 0, m.Width(), m.Height()), false);
+			image = renderer.CreateImage(*bmp).Cast<GLImage>();
 
 			image->Bind(IGLDevice::Texture2D);
-			IGLDevice *dev = renderer->GetGLDevice();
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                  IGLDevice::Nearest);
-			dev->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                  IGLDevice::Nearest);
+			IGLDevice &dev = renderer.GetGLDevice();
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter, IGLDevice::Nearest);
+			dev.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter, IGLDevice::Nearest);
 		}
 
-		GLFlatMapRenderer::~GLFlatMapRenderer() { image->Release(); }
+		GLFlatMapRenderer::~GLFlatMapRenderer() {}
 
 		Bitmap *GLFlatMapRenderer::GenerateBitmap(int mx, int my, int w, int h) {
 			SPADES_MARK_FUNCTION();
-			Handle<Bitmap> bmp(new Bitmap(w, h), false);
+			auto bmp = Handle<Bitmap>::New(w, h);
 			try {
 				uint32_t *pixels = bmp->GetPixels();
 
@@ -76,19 +70,19 @@ namespace spades {
 			} catch (...) {
 				throw;
 			}
-			return bmp.Unmanage();
+			return std::move(bmp).Unmanage();
 		}
 
-		void GLFlatMapRenderer::GameMapChanged(int x, int y, int z, client::GameMap *map) {
-			if (map != this->map)
+		void GLFlatMapRenderer::GameMapChanged(int x, int y, int z, client::GameMap &map) {
+			if (this->map.GetPointerOrNull() != &map)
 				return;
 
 			SPAssert(x >= 0);
-			SPAssert(x < map->Width());
+			SPAssert(x < map.Width());
 			SPAssert(y >= 0);
-			SPAssert(y < map->Height());
+			SPAssert(y < map.Height());
 			SPAssert(z >= 0);
-			SPAssert(z < map->Depth());
+			SPAssert(z < map.Depth());
 
 			int chunkX = x >> ChunkBits;
 			int chunkY = y >> ChunkBits;
@@ -112,14 +106,14 @@ namespace spades {
 				  GenerateBitmap(chunkX * ChunkSize, chunkY * ChunkSize, ChunkSize, ChunkSize),
 				  false);
 				try {
-					image->SubImage(bmp, chunkX * ChunkSize, chunkY * ChunkSize);
+					image->SubImage(bmp.GetPointerOrNull(), chunkX * ChunkSize, chunkY * ChunkSize);
 				} catch (...) {
 					throw;
 				}
 				chunkInvalid[i] = false;
 			}
 
-			renderer->DrawImage(image, dest, src);
+			renderer.DrawImage(*image, dest, src);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -17,6 +17,7 @@
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+#include <memory>
 #include <tuple>
 
 #include <Core/IStream.h>
@@ -30,5 +31,5 @@ namespace spades {
 	 *  - If the writer hangs up, the reader will get an EOF for further reads.
 	 *  - If the reader hangs up, the writer silently discards the written data.
 	 */
-	std::tuple<IStream *, IStream *> CreatePipeStream();
+	std::tuple<std::unique_ptr<IStream>, std::unique_ptr<IStream>> CreatePipeStream();
 } // namespace spades

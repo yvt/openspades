@@ -20,8 +20,6 @@
 
 #include <vector>
 
-#include <Core/Debug.h>
-#include <Core/Math.h>
 #include "GLFogFilter.h"
 #include "GLMapShadowRenderer.h"
 #include "GLProgram.h"
@@ -30,16 +28,18 @@
 #include "GLQuadRenderer.h"
 #include "GLRenderer.h"
 #include "IGLDevice.h"
+#include <Core/Debug.h>
+#include <Core/Math.h>
 
 namespace spades {
 	namespace draw {
-		GLFogFilter::GLFogFilter(GLRenderer *renderer) : renderer(renderer) {
-			lens = renderer->RegisterProgram("Shaders/PostFilters/Fog.program");
+		GLFogFilter::GLFogFilter(GLRenderer &renderer) : renderer(renderer) {
+			lens = renderer.RegisterProgram("Shaders/PostFilters/Fog.program");
 		}
 		GLColorBuffer GLFogFilter::Filter(GLColorBuffer input) {
 			SPADES_MARK_FUNCTION();
 
-			IGLDevice *dev = renderer->GetGLDevice();
+			IGLDevice &dev = renderer.GetGLDevice();
 			GLQuadRenderer qr(dev);
 
 			static GLProgramAttribute lensPosition("positionAttribute");
@@ -57,7 +57,7 @@ namespace spades {
 			static GLProgramUniform fogColor("fogColor");
 			static GLProgramUniform fogDistance("fogDistance");
 
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 
 			lensPosition(lens);
 			lensShadowMapTexture(lens);
@@ -75,9 +75,9 @@ namespace spades {
 
 			lens->Use();
 
-			client::SceneDefinition def = renderer->GetSceneDef();
+			client::SceneDefinition def = renderer.GetSceneDef();
 			lensFov.SetValue(tanf(def.fovX * .5f), tanf(def.fovY * .5f));
-			if (renderer->IsRenderingMirror()) {
+			if (renderer.IsRenderingMirror()) {
 				def.viewOrigin.z = 63.f * 2.f - def.viewOrigin.z;
 				def.viewAxis[0].z = -def.viewAxis[0].z;
 				def.viewAxis[1].z = -def.viewAxis[1].z;
@@ -89,7 +89,7 @@ namespace spades {
 			lensViewAxisFront.SetValue(def.viewAxis[2].x, def.viewAxis[2].y, def.viewAxis[2].z);
 			zNearFar.SetValue(def.zNear, def.zFar);
 
-			Vector3 fogCol = renderer->GetFogColor();
+			Vector3 fogCol = renderer.GetFogColor();
 			fogCol *= fogCol; // linearize
 			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 
@@ -103,24 +103,24 @@ namespace spades {
 			// composite to the final image
 			GLColorBuffer output = input.GetManager()->CreateBufferHandle();
 
-			dev->Enable(IGLDevice::Blend, false);
+			dev.Enable(IGLDevice::Blend, false);
 			qr.SetCoordAttributeIndex(lensPosition());
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, input.GetTexture());
-			dev->ActiveTexture(1);
-			dev->BindTexture(IGLDevice::Texture2D, input.GetManager()->GetDepthTexture());
-			dev->ActiveTexture(2);
-			dev->BindTexture(IGLDevice::Texture2D, renderer->GetMapShadowRenderer()->GetTexture());
-			dev->ActiveTexture(3);
-			dev->BindTexture(IGLDevice::Texture2D,
-			                 renderer->GetMapShadowRenderer()->GetCoarseTexture());
-			dev->BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
-			dev->Viewport(0, 0, output.GetWidth(), output.GetHeight());
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, input.GetTexture());
+			dev.ActiveTexture(1);
+			dev.BindTexture(IGLDevice::Texture2D, input.GetManager()->GetDepthTexture());
+			dev.ActiveTexture(2);
+			dev.BindTexture(IGLDevice::Texture2D, renderer.GetMapShadowRenderer()->GetTexture());
+			dev.ActiveTexture(3);
+			dev.BindTexture(IGLDevice::Texture2D,
+			                renderer.GetMapShadowRenderer()->GetCoarseTexture());
+			dev.BindFramebuffer(IGLDevice::Framebuffer, output.GetFramebuffer());
+			dev.Viewport(0, 0, output.GetWidth(), output.GetHeight());
 			qr.Draw();
-			dev->ActiveTexture(0);
-			dev->BindTexture(IGLDevice::Texture2D, 0);
+			dev.ActiveTexture(0);
+			dev.BindTexture(IGLDevice::Texture2D, 0);
 
 			return output;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

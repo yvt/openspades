@@ -19,10 +19,10 @@
  */
 
 #include "GLDynamicLightShader.h"
-#include <Core/Settings.h>
 #include "GLImage.h"
 #include "GLProgramManager.h"
 #include "GLRenderer.h"
+#include <Core/Settings.h>
 
 namespace spades {
 	namespace draw {
@@ -32,11 +32,16 @@ namespace spades {
 		      dynamicLightRadius("dynamicLightRadius"),
 		      dynamicLightRadiusInversed("dynamicLightRadiusInversed"),
 		      dynamicLightSpotMatrix("dynamicLightSpotMatrix"),
-		      dynamicLightProjectionTexture("dynamicLightProjectionTexture")
+		      dynamicLightProjectionTexture("dynamicLightProjectionTexture"),
+		      dynamicLightIsLinear("dynamicLightIsLinear"),
+		      dynamicLightLinearDirection("dynamicLightLinearDirection"),
+		      dynamicLightLinearLength("dynamicLightLinearLength")
 
 		{
 			lastRenderer = NULL;
 		}
+
+		GLDynamicLightShader::~GLDynamicLightShader() {}
 
 		std::vector<GLShader *>
 		GLDynamicLightShader::RegisterShader(spades::draw::GLProgramManager *r) {
@@ -53,20 +58,24 @@ namespace spades {
 
 		int GLDynamicLightShader::operator()(GLRenderer *renderer, spades::draw::GLProgram *program,
 		                                     const GLDynamicLight &light, int texStage) {
+			// TODO: Raw pointers are not unique!
 			if (lastRenderer != renderer) {
-				whiteImage = static_cast<GLImage *>(renderer->RegisterImage("Gfx/White.tga"));
+				whiteImage = renderer->RegisterImage("Gfx/White.tga").Cast<GLImage>();
 				lastRenderer = renderer;
 			}
 
 			const client::DynamicLightParam &param = light.GetParam();
 
-			IGLDevice *device = renderer->GetGLDevice();
+			IGLDevice &device = renderer->GetGLDevice();
 			dynamicLightOrigin(program);
 			dynamicLightColor(program);
 			dynamicLightRadius(program);
 			dynamicLightRadiusInversed(program);
 			dynamicLightSpotMatrix(program);
 			dynamicLightProjectionTexture(program);
+			dynamicLightIsLinear(program);
+			dynamicLightLinearDirection(program);
+			dynamicLightLinearLength(program);
 
 			dynamicLightOrigin.SetValue(param.origin.x, param.origin.y, param.origin.z);
 			dynamicLightColor.SetValue(param.color.x, param.color.y, param.color.z);
@@ -74,7 +83,7 @@ namespace spades {
 			dynamicLightRadiusInversed.SetValue(1.f / param.radius);
 
 			if (param.type == client::DynamicLightTypeSpotlight) {
-				device->ActiveTexture(texStage);
+				device.ActiveTexture(texStage);
 				static_cast<GLImage *>(param.image)->Bind(IGLDevice::Texture2D);
 				dynamicLightProjectionTexture.SetValue(texStage);
 				texStage++;
@@ -82,13 +91,15 @@ namespace spades {
 				dynamicLightSpotMatrix.SetValue(light.GetProjectionMatrix());
 
 				// bad hack to make texture clamped to edge
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
-				                     IGLDevice::ClampToEdge);
-				device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
-				                     IGLDevice::ClampToEdge);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapS,
+				                    IGLDevice::ClampToEdge);
+				device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureWrapT,
+				                    IGLDevice::ClampToEdge);
 
-			} else {
-				device->ActiveTexture(texStage);
+				dynamicLightIsLinear.SetValue(0);
+			} else if (param.type == client::DynamicLightTypePoint ||
+			           param.type == client::DynamicLightTypeLinear) {
+				device.ActiveTexture(texStage);
 				whiteImage->Bind(IGLDevice::Texture2D);
 				dynamicLightProjectionTexture.SetValue(texStage);
 				texStage++;
@@ -97,11 +108,29 @@ namespace spades {
 				// UV is in a valid range so the fragments are not discarded.
 				dynamicLightSpotMatrix.SetValue(Matrix4::Translate(0.5, 0.5, 0.0) *
 				                                Matrix4::Scale(0.0));
+
+				if (param.type == client::DynamicLightTypeLinear) {
+					// Convert two endpoints to one endpoint + direction + length.
+					// `Vector3::Normalize` is no-op when the length is zero,
+					// therefore the zero-length case is handled.
+					Vector3 direction = param.point2 - param.origin;
+					float length = direction.GetLength();
+					direction = direction.Normalize();
+
+					dynamicLightLinearDirection.SetValue(direction.x, direction.y, direction.z);
+					dynamicLightLinearLength.SetValue(length);
+
+					dynamicLightIsLinear.SetValue(1);
+				} else {
+					dynamicLightIsLinear.SetValue(0);
+				}
+			} else {
+				SPUnreachable();
 			}
 
-			device->ActiveTexture(texStage);
+			device.ActiveTexture(texStage);
 
 			return texStage;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

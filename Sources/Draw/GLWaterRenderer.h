@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <vector>
 #include <cstdint>
+#include <vector>
 
 #include "IGLDevice.h"
 
@@ -33,16 +33,15 @@ namespace spades {
 		class GLRenderer;
 		class IGLDevice;
 		class GLProgram;
-        class GLSettings;
-		class GLWaterRenderer{
+		class GLSettings;
+		class GLWaterRenderer {
 			class IWaveTank;
 			class StandardWaveTank;
-            template <int SizeBits>
-			class FFTWaveTank;
+			template <int SizeBits> class FFTWaveTank;
 
-			GLRenderer *renderer;
-			IGLDevice *device;
-            GLSettings &settings;
+			GLRenderer &renderer;
+			IGLDevice &device;
+			GLSettings &settings;
 			client::GameMap *map;
 
 			std::vector<IWaveTank *> waveTanks;
@@ -54,7 +53,7 @@ namespace spades {
 
 			std::vector<uint32_t> bitmap;
 
-			IGLDevice::UInteger texture; // water color
+			IGLDevice::UInteger texture;     // water color
 			IGLDevice::UInteger waveTexture; // bumpmap
 
 			struct Vertex;
@@ -72,11 +71,12 @@ namespace spades {
 
 			void BuildVertices();
 			void MarkUpdate(int x, int y);
+
 		public:
-			GLWaterRenderer(GLRenderer *, client::GameMap *map);
+			GLWaterRenderer(GLRenderer &, client::GameMap *map);
 			~GLWaterRenderer();
 
-			static void PreloadShaders(GLRenderer *);
+			static void PreloadShaders(GLRenderer &);
 
 			void Render();
 
@@ -84,9 +84,7 @@ namespace spades {
 
 			void GameMapChanged(int x, int y, int z, client::GameMap *);
 
-			IGLDevice::UInteger GetOcclusionQuery() {
-				return occlusionQuery;
-			}
+			IGLDevice::UInteger GetOcclusionQuery() { return occlusionQuery; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

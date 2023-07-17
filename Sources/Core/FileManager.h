@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -30,8 +31,8 @@ namespace spades {
 		FileManager() {}
 
 	public:
-		static IStream *OpenForReading(const char *);
-		static IStream *OpenForWriting(const char *);
+		static std::unique_ptr<IStream> OpenForReading(const char *);
+		static std::unique_ptr<IStream> OpenForWriting(const char *);
 		static bool FileExists(const char *);
 		static void AddFileSystem(IFileSystem *);
 		static void AppendFileSystem(IFileSystem *);
@@ -40,4 +41,4 @@ namespace spades {
 		static std::string ReadAllBytes(const char *);
 		static void Close();
 	};
-};
+}; // namespace spades

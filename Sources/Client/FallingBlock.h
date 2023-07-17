@@ -47,5 +47,5 @@ namespace spades {
 			bool Update(float dt) override;
 			void Render3D() override;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

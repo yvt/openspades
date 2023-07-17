@@ -50,7 +50,6 @@ namespace spades {
 		                                           1}; // Goldish yellow
 		static const auto spectatorTeamId = 255;       // Spectators have a team id of 255
 
-
 		ScoreboardView::ScoreboardView(Client *client)
 		    : client(client), renderer(client->GetRenderer()) {
 			SPADES_MARK_FUNCTION();
@@ -62,14 +61,12 @@ namespace spades {
 			// Use GUI font if spectator string has special chars
 			auto spectatorString = _TrN("Client", "Spectator{1}", "Spectators{1}", "", "");
 			auto has_special_char =
-				std::find_if(spectatorString.begin(), spectatorString.end(),
-				[](char ch) {
-					return !(isalnum(static_cast<unsigned char>(ch)) || ch == '_');
-			}) != spectatorString.end();
+			  std::find_if(spectatorString.begin(), spectatorString.end(), [](char ch) {
+				  return !(isalnum(static_cast<unsigned char>(ch)) || ch == '_');
+			  }) != spectatorString.end();
 
-			spectatorFont = has_special_char ?
-				client->fontManager->GetMediumFont() :
-				client->fontManager->GetSquareDesignFont();
+			spectatorFont = has_special_char ? client->fontManager->GetMediumFont()
+			                                 : client->fontManager->GetSquareDesignFont();
 		}
 
 		ScoreboardView::~ScoreboardView() {}
@@ -81,7 +78,7 @@ namespace spades {
 				int cnt = tc->GetNumTerritories();
 				int num = 0;
 				for (int i = 0; i < cnt; i++)
-					if (tc->GetTerritory(i)->ownerTeamId == team)
+					if (tc->GetTerritory(i).ownerTeamId == team)
 						num++;
 				return num;
 			} else {
@@ -94,7 +91,8 @@ namespace spades {
 			return MakeVector4(c.x / 255.f, c.y / 255.f, c.z / 255.f, 1.f);
 		}
 
-		Vector4 ScoreboardView::AdjustColor(spades::Vector4 col, float bright, float saturation) const {
+		Vector4 ScoreboardView::AdjustColor(spades::Vector4 col, float bright,
+		                                    float saturation) const {
 			col.x *= bright;
 			col.y *= bright;
 			col.z *= bright;
@@ -129,18 +127,24 @@ namespace spades {
 				return;
 			}
 
-			IGameMode *mode = world->GetMode();
-			ctf = IGameMode::m_CTF == mode->ModeType() ? static_cast<CTFGameMode *>(mode) : NULL;
-			tc = IGameMode::m_TC == mode->ModeType() ? static_cast<TCGameMode *>(mode) : NULL;
+			// TODO: `ctf` and `tc` are only valid throughout the method call's
+			//       duration. Move them to a new context type
+			auto mode = world->GetMode();
+			ctf = IGameMode::m_CTF == mode->ModeType()
+			        ? dynamic_cast<CTFGameMode *>(mode.get_pointer())
+			        : NULL;
+			tc = IGameMode::m_TC == mode->ModeType()
+			       ? dynamic_cast<TCGameMode *>(mode.get_pointer())
+			       : NULL;
 
 			Handle<IImage> image;
-			IFont *font;
+			IFont &font = client->fontManager->GetSquareDesignFont();
 			Vector2 pos, size;
 			std::string str;
-			float scrWidth = renderer->ScreenWidth();
-			// float scrHeight = renderer->ScreenHeight();
+			float scrWidth = renderer.ScreenWidth();
+			// float scrHeight = renderer.ScreenHeight();
 			const Vector4 whiteColor = {1, 1, 1, 1};
-			Handle<IImage> whiteImage = renderer->RegisterImage("Gfx/White.tga");
+			Handle<IImage> whiteImage = renderer.RegisterImage("Gfx/White.tga");
 
 			float teamBarTop = 120.f;
 			float teamBarHeight = 60.f;
@@ -152,42 +156,41 @@ namespace spades {
 			float playersBottom = playersTop + playersHeight;
 
 			// draw shadow
-			image = renderer->RegisterImage("Gfx/Scoreboard/TopShadow.tga");
+			image = renderer.RegisterImage("Gfx/Scoreboard/TopShadow.tga");
 			size.y = 32.f;
-			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 0.2f));
-			renderer->DrawImage(image, AABB2(0, teamBarTop - size.y, scrWidth, size.y));
-			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 0.2f));
-			renderer->DrawImage(image, AABB2(0, playersBottom + size.y, scrWidth, -size.y));
+			renderer.SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 0.2f));
+			renderer.DrawImage(image, AABB2(0, teamBarTop - size.y, scrWidth, size.y));
+			renderer.SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 0.2f));
+			renderer.DrawImage(image, AABB2(0, playersBottom + size.y, scrWidth, -size.y));
 
 			// draw team bar
 			image = whiteImage;
-			renderer->SetColorAlphaPremultiplied(AdjustColor(GetTeamColor(0), 0.8f, 0.3f));
-			renderer->DrawImage(image, AABB2(0, teamBarTop, scrWidth * .5f, teamBarHeight));
-			renderer->SetColorAlphaPremultiplied(AdjustColor(GetTeamColor(1), 0.8f, 0.3f));
-			renderer->DrawImage(image,
-			                    AABB2(scrWidth * .5f, teamBarTop, scrWidth * .5f, teamBarHeight));
+			renderer.SetColorAlphaPremultiplied(AdjustColor(GetTeamColor(0), 0.8f, 0.3f));
+			renderer.DrawImage(image, AABB2(0, teamBarTop, scrWidth * .5f, teamBarHeight));
+			renderer.SetColorAlphaPremultiplied(AdjustColor(GetTeamColor(1), 0.8f, 0.3f));
+			renderer.DrawImage(image,
+			                   AABB2(scrWidth * .5f, teamBarTop, scrWidth * .5f, teamBarHeight));
 
-			image = renderer->RegisterImage("Gfx/Scoreboard/Grunt.png");
+			image = renderer.RegisterImage("Gfx/Scoreboard/Grunt.png");
 			size.x = 120.f;
 			size.y = 60.f;
-			renderer->DrawImage(
+			renderer.DrawImage(
 			  image, AABB2(contentsLeft, teamBarTop + teamBarHeight - size.y, size.x, size.y));
-			renderer->DrawImage(
+			renderer.DrawImage(
 			  image, AABB2(contentsRight, teamBarTop + teamBarHeight - size.y, -size.x, size.y));
 
-			font = client->fontManager->GetSquareDesignFont();
 			str = world->GetTeam(0).name;
 			pos.x = contentsLeft + 110.f;
 			pos.y = teamBarTop + 5.f;
-			font->Draw(str, pos + MakeVector2(0, 2), 1.f, MakeVector4(0, 0, 0, 0.5));
-			font->Draw(str, pos, 1.f, whiteColor);
+			font.Draw(str, pos + MakeVector2(0, 2), 1.f, MakeVector4(0, 0, 0, 0.5));
+			font.Draw(str, pos, 1.f, whiteColor);
 
 			str = world->GetTeam(1).name;
-			size = font->Measure(str);
+			size = font.Measure(str);
 			pos.x = contentsRight - 110.f - size.x;
 			pos.y = teamBarTop + 5.f;
-			font->Draw(str, pos + MakeVector2(0, 2), 1.f, MakeVector4(0, 0, 0, 0.5));
-			font->Draw(str, pos, 1.f, whiteColor);
+			font.Draw(str, pos + MakeVector2(0, 2), 1.f, MakeVector4(0, 0, 0, 0.5));
+			font.Draw(str, pos, 1.f, whiteColor);
 
 			// draw scores
 			int capLimit;
@@ -200,23 +203,23 @@ namespace spades {
 			}
 			if (capLimit != -1) {
 				str = Format("{0}-{1}", GetTeamScore(0), capLimit);
-				pos.x = scrWidth * .5f - font->Measure(str).x - 15.f;
+				pos.x = scrWidth * .5f - font.Measure(str).x - 15.f;
 				pos.y = teamBarTop + 5.f;
-				font->Draw(str, pos, 1.f, Vector4(1.f, 1.f, 1.f, 0.5f));
+				font.Draw(str, pos, 1.f, Vector4(1.f, 1.f, 1.f, 0.5f));
 
 				str = Format("{0}-{1}", GetTeamScore(1), capLimit);
 				pos.x = scrWidth * .5f + 15.f;
 				pos.y = teamBarTop + 5.f;
-				font->Draw(str, pos, 1.f, Vector4(1.f, 1.f, 1.f, 0.5f));
+				font.Draw(str, pos, 1.f, Vector4(1.f, 1.f, 1.f, 0.5f));
 			}
 
 			// players background
 			auto areSpectatorsPr = areSpectatorsPresent();
-			image = renderer->RegisterImage("Gfx/Scoreboard/PlayersBg.png");
-			renderer->SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 1.f));
-			renderer->DrawImage(image,
-			                    AABB2(0, playersTop, scrWidth,
-			                          playersHeight + (areSpectatorsPr ? spectatorsHeight : 0)));
+			image = renderer.RegisterImage("Gfx/Scoreboard/PlayersBg.png");
+			renderer.SetColorAlphaPremultiplied(MakeVector4(0, 0, 0, 1.f));
+			renderer.DrawImage(image,
+			                   AABB2(0, playersTop, scrWidth,
+			                         playersHeight + (areSpectatorsPr ? spectatorsHeight : 0)));
 
 			// draw players
 			DrawPlayers(0, contentsLeft, playersTop, (contentsRight - contentsLeft) * .5f,
@@ -237,7 +240,7 @@ namespace spades {
 
 		void ScoreboardView::DrawPlayers(int team, float left, float top, float width,
 		                                 float height) {
-			IFont *font = client->fontManager->GetGuiFont();
+			IFont &font = client->fontManager->GetGuiFont();
 			float rowHeight = 24.f;
 			char buf[256];
 			Vector2 size;
@@ -249,16 +252,17 @@ namespace spades {
 			std::vector<ScoreboardEntry> entries;
 
 			for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
-				Player *p = world->GetPlayer(i);
-				if (!p)
+				auto maybePlayer = world->GetPlayer(i);
+				if (!maybePlayer)
 					continue;
-				if (p->GetTeamId() != team)
+				Player &player = maybePlayer.value();
+				if (player.GetTeamId() != team)
 					continue;
 
 				ScoreboardEntry ent;
-				ent.name = p->GetName();
+				ent.name = player.GetName();
 				ent.score = world->GetPlayerPersistent(i).kills;
-				ent.alive = p->IsAlive();
+				ent.alive = player.IsAlive();
 				ent.id = i;
 				entries.push_back(ent);
 
@@ -284,29 +288,29 @@ namespace spades {
 				Vector4 color = white;
 
 				sprintf(buf, "#%d", ent.id); // FIXME: 1-base?
-				size = font->Measure(buf);
+				size = font.Measure(buf);
 
 				if (colormode == "1") {
 					IntVector3 Colorplayer =
 					  IntVector3::Make(palette[ent.id][0], palette[ent.id][1], palette[ent.id][2]);
 					Vector4 ColorplayerF = ModifyColor(Colorplayer);
 					ColorplayerF *= 1.0f;
-					font->Draw(buf, MakeVector2(colX + 35.f - size.x, rowY), 1.f, ColorplayerF);
+					font.Draw(buf, MakeVector2(colX + 35.f - size.x, rowY), 1.f, ColorplayerF);
 				} else {
-					font->Draw(buf, MakeVector2(colX + 35.f - size.x, rowY), 1.f, white);
+					font.Draw(buf, MakeVector2(colX + 35.f - size.x, rowY), 1.f, white);
 				}
 
 				color = ent.alive ? white : gray;
-				if (ent.id == world->GetLocalPlayerIndex())
+				if (stmp::make_optional(ent.id) == world->GetLocalPlayerIndex())
 					color = GetTeamColor(team);
 
-				font->Draw(ent.name, MakeVector2(colX + 45.f, rowY), 1.f, color);
+				font.Draw(ent.name, MakeVector2(colX + 45.f, rowY), 1.f, color);
 
 				color = white;
 
 				sprintf(buf, "%d", ent.score);
-				size = font->Measure(buf);
-				font->Draw(buf, MakeVector2(colX + colWidth - 10.f - size.x, rowY), 1.f, color);
+				size = font.Measure(buf);
+				font.Draw(buf, MakeVector2(colX + colWidth - 10.f - size.x, rowY), 1.f, color);
 
 				row++;
 				if (row >= maxRows) {
@@ -317,7 +321,7 @@ namespace spades {
 		}
 
 		void ScoreboardView::DrawSpectators(float top, float centerX) const {
-			IFont *font = client->fontManager->GetGuiFont();
+			IFont &font = client->fontManager->GetGuiFont();
 			char buf[256];
 			std::vector<ScoreboardEntry> entries;
 
@@ -326,14 +330,16 @@ namespace spades {
 			int numSpectators = 0;
 			float totalPixelWidth = 0;
 			for (int i = 0; i < world->GetNumPlayerSlots(); i++) {
-				Player *p = world->GetPlayer(i);
-				if (!p)
+				auto maybePlayer = world->GetPlayer(i);
+				if (!maybePlayer)
 					continue;
-				if (p->GetTeamId() != spectatorTeamId)
+				Player &player = maybePlayer.value();
+
+				if (player.GetTeamId() != spectatorTeamId)
 					continue;
 
 				ScoreboardEntry ent;
-				ent.name = p->GetName();
+				ent.name = player.GetName();
 				ent.id = i;
 				entries.push_back(ent);
 
@@ -342,7 +348,7 @@ namespace spades {
 				// Measure total width in pixels so that we can center align all the spectators
 				sprintf(buf, "#%d", ent.id);
 				totalPixelWidth +=
-				  font->Measure(buf).x + font->Measure(ent.name).x + xPixelSpectatorOffset;
+				  font.Measure(buf).x + font.Measure(ent.name).x + xPixelSpectatorOffset;
 			}
 			if (numSpectators == 0) {
 				return;
@@ -351,12 +357,11 @@ namespace spades {
 			strcpy(buf,
 			       _TrN("Client", "Spectator{1}", "Spectators{1}", numSpectators, ":").c_str());
 
-			auto isSquareFont = spectatorFont == client->fontManager->GetSquareDesignFont();
+			auto isSquareFont = spectatorFont == &client->fontManager->GetSquareDesignFont();
 			auto sizeSpecString = spectatorFont->Measure(buf);
-			spectatorFont->Draw(buf,
-				MakeVector2(centerX - sizeSpecString.x / 2, top + (isSquareFont ? 0 : 10)),
-				1.f,
-				spectatorTextColor);
+			spectatorFont->Draw(
+			  buf, MakeVector2(centerX - sizeSpecString.x / 2, top + (isSquareFont ? 0 : 10)), 1.f,
+			  spectatorTextColor);
 
 			auto yOffset = top + sizeSpecString.y;
 			auto halfTotalX = totalPixelWidth / 2;
@@ -366,12 +371,12 @@ namespace spades {
 				ScoreboardEntry &ent = entries[i];
 
 				sprintf(buf, "#%d", ent.id);
-				font->Draw(buf, MakeVector2(currentXoffset, yOffset), 1.f, spectatorIdColor);
+				font.Draw(buf, MakeVector2(currentXoffset, yOffset), 1.f, spectatorIdColor);
 
-				auto sizeName = font->Measure(ent.name);
-				auto sizeID = font->Measure(buf);
-				font->Draw(ent.name, MakeVector2(currentXoffset + sizeID.x + 5.f, yOffset), 1.f,
-				           white);
+				auto sizeName = font.Measure(ent.name);
+				auto sizeID = font.Measure(buf);
+				font.Draw(ent.name, MakeVector2(currentXoffset + sizeID.x + 5.f, yOffset), 1.f,
+				          white);
 
 				currentXoffset += sizeID.x + sizeName.x + xPixelSpectatorOffset;
 			}
@@ -379,11 +384,11 @@ namespace spades {
 
 		bool ScoreboardView::areSpectatorsPresent() const {
 			for (auto i = 0; i < client->GetWorld()->GetNumPlayerSlots(); i++) {
-				auto *p = world->GetPlayer(i);
-				if (p && p->GetTeamId() == spectatorTeamId)
+				auto p = world->GetPlayer(i);
+				if (p && p.value().GetTeamId() == spectatorTeamId)
 					return true;
 			}
 			return false;
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

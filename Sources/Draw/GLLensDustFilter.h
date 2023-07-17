@@ -21,7 +21,6 @@
 #pragma once
 
 #include <cstdint>
-#include <cstdint>
 #include <vector>
 
 #include "GLFramebufferManager.h"
@@ -36,8 +35,8 @@ namespace spades {
 			GLProgram *thru;
 			GLProgram *dust;
 			GLProgram *gauss1d;
-			GLImage *dustImg;
-			GLRenderer *renderer;
+			Handle<GLImage> dustImg;
+			GLRenderer &renderer;
 			IGLDevice::UInteger noiseTex;
 			std::vector<uint32_t> noise;
 			GLColorBuffer DownSample(GLColorBuffer, bool linearize = false);
@@ -45,9 +44,9 @@ namespace spades {
 			void UpdateNoise();
 
 		public:
-			GLLensDustFilter(GLRenderer *);
+			GLLensDustFilter(GLRenderer &);
 			~GLLensDustFilter();
 			GLColorBuffer Filter(GLColorBuffer);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

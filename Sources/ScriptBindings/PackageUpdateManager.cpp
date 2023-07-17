@@ -121,6 +121,10 @@ namespace spades{
 														asOFFSET(PackageUpdateManager::VersionInfo, revision));
 						manager->CheckError(r);
 						r = eng->RegisterObjectProperty("PackageUpdateManagerVersionInfo",
+														"int Build",
+														asOFFSET(PackageUpdateManager::VersionInfo, build));
+						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("PackageUpdateManagerVersionInfo",
 														"string Text",
 														asOFFSET(PackageUpdateManager::VersionInfo, text));
 						manager->CheckError(r);

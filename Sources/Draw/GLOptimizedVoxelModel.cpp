@@ -20,10 +20,6 @@
 
 #include <set>
 
-#include <Core/Bitmap.h>
-#include <Core/BitmapAtlasGenerator.h>
-#include <Core/Debug.h>
-#include <Core/Exception.h>
 #include "CellToTriangle.h"
 #include "GLDynamicLightShader.h"
 #include "GLImage.h"
@@ -35,43 +31,45 @@
 #include "GLShadowMapShader.h"
 #include "GLShadowShader.h"
 #include "IGLShadowMapRenderer.h"
+#include <Core/Bitmap.h>
+#include <Core/BitmapAtlasGenerator.h>
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 
 namespace spades {
 	namespace draw {
-		void GLOptimizedVoxelModel::PreloadShaders(spades::draw::GLRenderer *renderer) {
-			renderer->RegisterProgram("Shaders/OptimizedVoxelModel.program");
-			renderer->RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
-			renderer->RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
-			renderer->RegisterImage("Gfx/AmbientOcclusion.png");
+		void GLOptimizedVoxelModel::PreloadShaders(GLRenderer &renderer) {
+			renderer.RegisterProgram("Shaders/OptimizedVoxelModel.program");
+			renderer.RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
+			renderer.RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
+			renderer.RegisterImage("Gfx/AmbientOcclusion.png");
 		}
-		GLOptimizedVoxelModel::GLOptimizedVoxelModel(VoxelModel *m, GLRenderer *r) {
+		GLOptimizedVoxelModel::GLOptimizedVoxelModel(VoxelModel *m, GLRenderer &r)
+		    : renderer{r}, device{r.GetGLDevice()} {
 			SPADES_MARK_FUNCTION();
-
-			renderer = r;
-			device = r->GetGLDevice();
 
 			BuildVertices(m);
 			GenerateTexture();
 
-			program = renderer->RegisterProgram("Shaders/OptimizedVoxelModel.program");
+			program = renderer.RegisterProgram("Shaders/OptimizedVoxelModel.program");
 			dlightProgram =
-			  renderer->RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
+			  renderer.RegisterProgram("Shaders/OptimizedVoxelModelDynamicLit.program");
 			shadowMapProgram =
-			  renderer->RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
-			aoImage = (GLImage *)renderer->RegisterImage("Gfx/AmbientOcclusion.png");
+			  renderer.RegisterProgram("Shaders/OptimizedVoxelModelShadowMap.program");
+			aoImage = renderer.RegisterImage("Gfx/AmbientOcclusion.png").Cast<GLImage>();
 
-			buffer = device->GenBuffer();
-			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
-			device->BufferData(IGLDevice::ArrayBuffer,
-			                   static_cast<IGLDevice::Sizei>(vertices.size() * sizeof(Vertex)),
-			                   vertices.data(), IGLDevice::StaticDraw);
+			buffer = device.GenBuffer();
+			device.BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			device.BufferData(IGLDevice::ArrayBuffer,
+			                  static_cast<IGLDevice::Sizei>(vertices.size() * sizeof(Vertex)),
+			                  vertices.data(), IGLDevice::StaticDraw);
 
-			idxBuffer = device->GenBuffer();
-			device->BindBuffer(IGLDevice::ArrayBuffer, idxBuffer);
-			device->BufferData(IGLDevice::ArrayBuffer,
-			                   static_cast<IGLDevice::Sizei>(indices.size() * sizeof(uint32_t)),
-			                   indices.data(), IGLDevice::StaticDraw);
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			idxBuffer = device.GenBuffer();
+			device.BindBuffer(IGLDevice::ArrayBuffer, idxBuffer);
+			device.BufferData(IGLDevice::ArrayBuffer,
+			                  static_cast<IGLDevice::Sizei>(indices.size() * sizeof(uint32_t)),
+			                  indices.data(), IGLDevice::StaticDraw);
+			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 
 			origin = m->GetOrigin();
 			origin -= .5f; // (0,0,0) is center of voxel (0,0,0)
@@ -96,9 +94,8 @@ namespace spades {
 		GLOptimizedVoxelModel::~GLOptimizedVoxelModel() {
 			SPADES_MARK_FUNCTION();
 
-			image->Release();
-			device->DeleteBuffer(idxBuffer);
-			device->DeleteBuffer(buffer);
+			device.DeleteBuffer(idxBuffer);
+			device.DeleteBuffer(buffer);
 		}
 
 		void GLOptimizedVoxelModel::GenerateTexture() {
@@ -137,7 +134,7 @@ namespace spades {
 
 			std::vector<uint16_t>().swap(bmpIndex);
 
-			image = static_cast<GLImage *>(renderer->CreateImage(bmp));
+			image = renderer.CreateImage(*bmp).Cast<GLImage>();
 		}
 
 		uint8_t GLOptimizedVoxelModel::calcAOID(VoxelModel *m, int x, int y, int z, int ux, int uy,
@@ -355,7 +352,8 @@ namespace spades {
 							p3 += nn;
 							SPAssert(!model->IsSolid(p3.x, p3.y, p3.z));
 
-							uint8_t aoId = calcAOID(model, p3.x, p3.y, p3.z, ux, uy, uz, vx, vy, vz);
+							uint8_t aoId =
+							  calcAOID(model, p3.x, p3.y, p3.z, ux, uy, uz, vx, vy, vz);
 
 							if (aoId % 16 == 15) {
 								// These AOIDs are allocated for non-default materials.
@@ -535,13 +533,13 @@ namespace spades {
 		GLOptimizedVoxelModel::RenderShadowMapPass(std::vector<client::ModelRenderParam> params) {
 			SPADES_MARK_FUNCTION();
 
-			device->Enable(IGLDevice::CullFace, true);
-			device->Enable(IGLDevice::DepthTest, true);
+			device.Enable(IGLDevice::CullFace, true);
+			device.Enable(IGLDevice::DepthTest, true);
 
 			shadowMapProgram->Use();
 
 			static GLShadowMapShader shadowMapShader;
-			shadowMapShader(renderer, shadowMapProgram, 0);
+			shadowMapShader(&renderer, shadowMapProgram, 0);
 
 			static GLProgramUniform modelOrigin("modelOrigin");
 			modelOrigin(shadowMapProgram);
@@ -554,20 +552,20 @@ namespace spades {
 			positionAttribute(shadowMapProgram);
 			normalAttribute(shadowMapProgram);
 
-			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
-			device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
-			                            sizeof(Vertex), (void *)0);
+			device.BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			device.VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
+			                           sizeof(Vertex), (void *)0);
 			if (normalAttribute() != -1) {
-				device->VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
-				                            sizeof(Vertex), (void *)8);
+				device.VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
+				                           sizeof(Vertex), (void *)8);
 			}
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 
-			device->EnableVertexAttribArray(positionAttribute(), true);
+			device.EnableVertexAttribArray(positionAttribute(), true);
 			if (normalAttribute() != -1)
-				device->EnableVertexAttribArray(normalAttribute(), true);
+				device.EnableVertexAttribArray(normalAttribute(), true);
 
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
+			device.BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
 
 			for (size_t i = 0; i < params.size(); i++) {
 				const client::ModelRenderParam &param = params[i];
@@ -583,7 +581,7 @@ namespace spades {
 				if (param.depthHack)
 					continue;
 
-				if (!renderer->GetShadowMapRenderer()->SphereCull(param.matrix.GetOrigin(), rad)) {
+				if (!renderer.GetShadowMapRenderer()->SphereCull(param.matrix.GetOrigin(), rad)) {
 					continue;
 				}
 
@@ -600,53 +598,53 @@ namespace spades {
 				modelNormalMatrix(shadowMapProgram);
 				modelNormalMatrix.SetValue(modelMatrix);
 
-				device->DrawElements(IGLDevice::Triangles, numIndices, IGLDevice::UnsignedInt,
-				                     (void *)0);
+				device.DrawElements(IGLDevice::Triangles, numIndices, IGLDevice::UnsignedInt,
+				                    (void *)0);
 			}
 
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
+			device.BindBuffer(IGLDevice::ElementArrayBuffer, 0);
 
-			device->EnableVertexAttribArray(positionAttribute(), false);
+			device.EnableVertexAttribArray(positionAttribute(), false);
 			if (normalAttribute() != -1)
-				device->EnableVertexAttribArray(normalAttribute(), false);
+				device.EnableVertexAttribArray(normalAttribute(), false);
 
-			device->ActiveTexture(0);
-			device->BindTexture(IGLDevice::Texture2D, 0);
+			device.ActiveTexture(0);
+			device.BindTexture(IGLDevice::Texture2D, 0);
 		}
 
 		void GLOptimizedVoxelModel::RenderSunlightPass(std::vector<client::ModelRenderParam> params,
 		                                               bool ghostPass) {
 			SPADES_MARK_FUNCTION();
 
-			bool mirror = renderer->IsRenderingMirror();
+			bool mirror = renderer.IsRenderingMirror();
 
-			device->ActiveTexture(0);
+			device.ActiveTexture(0);
 			aoImage->Bind(IGLDevice::Texture2D);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Linear);
 
-			device->ActiveTexture(1);
+			device.ActiveTexture(1);
 			image->Bind(IGLDevice::Texture2D);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Nearest);
 
-			device->Enable(IGLDevice::CullFace, true);
-			device->Enable(IGLDevice::DepthTest, true);
+			device.Enable(IGLDevice::CullFace, true);
+			device.Enable(IGLDevice::DepthTest, true);
 
 			program->Use();
 
 			static GLShadowShader shadowShader;
-			shadowShader(renderer, program, 2);
+			shadowShader(&renderer, program, 2);
 
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(program);
-			fogDistance.SetValue(renderer->GetFogDistance());
+			fogDistance.SetValue(renderer.GetFogDistance());
 
 			static GLProgramUniform fogColor("fogColor");
 			fogColor(program);
-			Vector3 fogCol = renderer->GetFogColorForSolidPass();
+			Vector3 fogCol = renderer.GetFogColorForSolidPass();
 			fogCol *= fogCol; // linearize
 			fogColor.SetValue(fogCol.x, fogCol.y, fogCol.z);
 
@@ -674,7 +672,7 @@ namespace spades {
 
 			static GLProgramUniform viewOriginVector("viewOriginVector");
 			viewOriginVector(program);
-			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			const auto &viewOrigin = renderer.GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
 			// setup attributes
@@ -686,20 +684,20 @@ namespace spades {
 			textureCoordAttribute(program);
 			normalAttribute(program);
 
-			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
-			device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
-			                            sizeof(Vertex), (void *)0);
-			device->VertexAttribPointer(textureCoordAttribute(), 2, IGLDevice::UnsignedShort, false,
-			                            sizeof(Vertex), (void *)4);
-			device->VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
-			                            sizeof(Vertex), (void *)8);
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			device.BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			device.VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
+			                           sizeof(Vertex), (void *)0);
+			device.VertexAttribPointer(textureCoordAttribute(), 2, IGLDevice::UnsignedShort, false,
+			                           sizeof(Vertex), (void *)4);
+			device.VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false, sizeof(Vertex),
+			                           (void *)8);
+			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(textureCoordAttribute(), true);
-			device->EnableVertexAttribArray(normalAttribute(), true);
+			device.EnableVertexAttribArray(positionAttribute(), true);
+			device.EnableVertexAttribArray(textureCoordAttribute(), true);
+			device.EnableVertexAttribArray(normalAttribute(), true);
 
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
+			device.BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
 
 			for (size_t i = 0; i < params.size(); i++) {
 				const client::ModelRenderParam &param = params[i];
@@ -714,7 +712,7 @@ namespace spades {
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
-				if (!renderer->SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
+				if (!renderer.SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
 					continue;
 				}
 
@@ -725,12 +723,12 @@ namespace spades {
 				Matrix4 modelMatrix = param.matrix;
 				static GLProgramUniform projectionViewModelMatrix("projectionViewModelMatrix");
 				projectionViewModelMatrix(program);
-				projectionViewModelMatrix.SetValue(renderer->GetProjectionViewMatrix() *
+				projectionViewModelMatrix.SetValue(renderer.GetProjectionViewMatrix() *
 				                                   modelMatrix);
 
 				static GLProgramUniform viewModelMatrix("viewModelMatrix");
 				viewModelMatrix(program);
-				viewModelMatrix.SetValue(renderer->GetViewMatrix() * modelMatrix);
+				viewModelMatrix.SetValue(renderer.GetViewMatrix() * modelMatrix);
 
 				static GLProgramUniform modelMatrixU("modelMatrix");
 				modelMatrixU(program);
@@ -748,26 +746,26 @@ namespace spades {
 				modelOpacity.SetValue(param.opacity);
 
 				if (param.depthHack) {
-					device->DepthRange(0.f, 0.1f);
+					device.DepthRange(0.f, 0.1f);
 				}
 
-				device->DrawElements(IGLDevice::Triangles, numIndices, IGLDevice::UnsignedInt,
-				                     (void *)0);
+				device.DrawElements(IGLDevice::Triangles, numIndices, IGLDevice::UnsignedInt,
+				                    (void *)0);
 				if (param.depthHack) {
-					device->DepthRange(0.f, 1.f);
+					device.DepthRange(0.f, 1.f);
 				}
 			}
 
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
+			device.BindBuffer(IGLDevice::ElementArrayBuffer, 0);
 
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(textureCoordAttribute(), false);
-			device->EnableVertexAttribArray(normalAttribute(), false);
+			device.EnableVertexAttribArray(positionAttribute(), false);
+			device.EnableVertexAttribArray(textureCoordAttribute(), false);
+			device.EnableVertexAttribArray(normalAttribute(), false);
 
-			device->ActiveTexture(1);
-			device->BindTexture(IGLDevice::Texture2D, 0);
-			device->ActiveTexture(0);
-			device->BindTexture(IGLDevice::Texture2D, 0);
+			device.ActiveTexture(1);
+			device.BindTexture(IGLDevice::Texture2D, 0);
+			device.ActiveTexture(0);
+			device.BindTexture(IGLDevice::Texture2D, 0);
 		}
 
 		void
@@ -775,22 +773,22 @@ namespace spades {
 		                                              std::vector<GLDynamicLight> lights) {
 			SPADES_MARK_FUNCTION();
 
-			bool mirror = renderer->IsRenderingMirror();
+			bool mirror = renderer.IsRenderingMirror();
 
-			device->ActiveTexture(0);
+			device.ActiveTexture(0);
 			aoImage->Bind(IGLDevice::Texture2D);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Linear);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Linear);
 
-			device->ActiveTexture(1);
+			device.ActiveTexture(1);
 			image->Bind(IGLDevice::Texture2D);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
-			                     IGLDevice::Nearest);
-			device->TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
-			                     IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMinFilter,
+			                    IGLDevice::Nearest);
+			device.TexParamater(IGLDevice::Texture2D, IGLDevice::TextureMagFilter,
+			                    IGLDevice::Nearest);
 
-			device->Enable(IGLDevice::CullFace, true);
-			device->Enable(IGLDevice::DepthTest, true);
+			device.Enable(IGLDevice::CullFace, true);
+			device.Enable(IGLDevice::DepthTest, true);
 
 			dlightProgram->Use();
 
@@ -798,7 +796,7 @@ namespace spades {
 
 			static GLProgramUniform fogDistance("fogDistance");
 			fogDistance(dlightProgram);
-			fogDistance.SetValue(renderer->GetFogDistance());
+			fogDistance.SetValue(renderer.GetFogDistance());
 
 			static GLProgramUniform modelOrigin("modelOrigin");
 			modelOrigin(dlightProgram);
@@ -814,7 +812,7 @@ namespace spades {
 
 			static GLProgramUniform viewOriginVector("viewOriginVector");
 			viewOriginVector(dlightProgram);
-			const auto &viewOrigin = renderer->GetSceneDef().viewOrigin;
+			const auto &viewOrigin = renderer.GetSceneDef().viewOrigin;
 			viewOriginVector.SetValue(viewOrigin.x, viewOrigin.y, viewOrigin.z);
 
 			// setup attributes
@@ -826,20 +824,20 @@ namespace spades {
 			textureCoordAttribute(dlightProgram);
 			normalAttribute(dlightProgram);
 
-			device->BindBuffer(IGLDevice::ArrayBuffer, buffer);
-			device->VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
-			                            sizeof(Vertex), (void *)0);
-			device->VertexAttribPointer(textureCoordAttribute(), 2, IGLDevice::UnsignedShort, false,
-			                            sizeof(Vertex), (void *)4);
-			device->VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false,
-			                            sizeof(Vertex), (void *)8);
-			device->BindBuffer(IGLDevice::ArrayBuffer, 0);
+			device.BindBuffer(IGLDevice::ArrayBuffer, buffer);
+			device.VertexAttribPointer(positionAttribute(), 4, IGLDevice::UnsignedByte, false,
+			                           sizeof(Vertex), (void *)0);
+			device.VertexAttribPointer(textureCoordAttribute(), 2, IGLDevice::UnsignedShort, false,
+			                           sizeof(Vertex), (void *)4);
+			device.VertexAttribPointer(normalAttribute(), 3, IGLDevice::Byte, false, sizeof(Vertex),
+			                           (void *)8);
+			device.BindBuffer(IGLDevice::ArrayBuffer, 0);
 
-			device->EnableVertexAttribArray(positionAttribute(), true);
-			device->EnableVertexAttribArray(textureCoordAttribute(), true);
-			device->EnableVertexAttribArray(normalAttribute(), true);
+			device.EnableVertexAttribArray(positionAttribute(), true);
+			device.EnableVertexAttribArray(textureCoordAttribute(), true);
+			device.EnableVertexAttribArray(normalAttribute(), true);
 
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
+			device.BindBuffer(IGLDevice::ElementArrayBuffer, idxBuffer);
 
 			for (size_t i = 0; i < params.size(); i++) {
 				const client::ModelRenderParam &param = params[i];
@@ -853,7 +851,7 @@ namespace spades {
 				// frustrum cull
 				float rad = radius;
 				rad *= param.matrix.GetAxis(0).GetLength();
-				if (!renderer->SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
+				if (!renderer.SphereFrustrumCull(param.matrix.GetOrigin(), rad)) {
 					continue;
 				}
 
@@ -864,12 +862,12 @@ namespace spades {
 				Matrix4 modelMatrix = param.matrix;
 				static GLProgramUniform projectionViewModelMatrix("projectionViewModelMatrix");
 				projectionViewModelMatrix(dlightProgram);
-				projectionViewModelMatrix.SetValue(renderer->GetProjectionViewMatrix() *
+				projectionViewModelMatrix.SetValue(renderer.GetProjectionViewMatrix() *
 				                                   modelMatrix);
 
 				static GLProgramUniform viewModelMatrix("viewModelMatrix");
 				viewModelMatrix(dlightProgram);
-				viewModelMatrix.SetValue(renderer->GetViewMatrix() * modelMatrix);
+				viewModelMatrix.SetValue(renderer.GetViewMatrix() * modelMatrix);
 
 				static GLProgramUniform modelMatrixU("modelMatrix");
 				modelMatrixU(dlightProgram);
@@ -883,29 +881,29 @@ namespace spades {
 				modelNormalMatrix.SetValue(modelMatrix);
 
 				if (param.depthHack) {
-					device->DepthRange(0.f, 0.1f);
+					device.DepthRange(0.f, 0.1f);
 				}
 				for (size_t i = 0; i < lights.size(); i++) {
 					if (!lights[i].SphereCull(param.matrix.GetOrigin(), rad))
 						continue;
 
-					dlightShader(renderer, dlightProgram, lights[i], 2);
+					dlightShader(&renderer, dlightProgram, lights[i], 2);
 
-					device->DrawElements(IGLDevice::Triangles, numIndices, IGLDevice::UnsignedInt,
-					                     (void *)0);
+					device.DrawElements(IGLDevice::Triangles, numIndices, IGLDevice::UnsignedInt,
+					                    (void *)0);
 				}
 				if (param.depthHack) {
-					device->DepthRange(0.f, 1.f);
+					device.DepthRange(0.f, 1.f);
 				}
 			}
 
-			device->BindBuffer(IGLDevice::ElementArrayBuffer, 0);
+			device.BindBuffer(IGLDevice::ElementArrayBuffer, 0);
 
-			device->EnableVertexAttribArray(positionAttribute(), false);
-			device->EnableVertexAttribArray(textureCoordAttribute(), false);
-			device->EnableVertexAttribArray(normalAttribute(), false);
+			device.EnableVertexAttribArray(positionAttribute(), false);
+			device.EnableVertexAttribArray(textureCoordAttribute(), false);
+			device.EnableVertexAttribArray(normalAttribute(), false);
 
-			device->ActiveTexture(0);
+			device.ActiveTexture(0);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -25,17 +25,17 @@ namespace spades {
 		class Client;
 		class IRenderer;
 		class TCProgressView {
-			Client *client;
-			IRenderer *renderer;
+			Client &client;
+			IRenderer &renderer;
 
 			int lastTerritoryId;
 			float lastTerritoryTime;
 
 		public:
-			TCProgressView(Client *);
+			TCProgressView(Client &);
 			~TCProgressView();
 
 			void Draw();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

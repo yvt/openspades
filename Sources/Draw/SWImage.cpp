@@ -40,21 +40,21 @@ namespace spades {
 				col |= b | (g << 8) | (r << 16); // swap RGB/BGR
 				return col;
 			}
-		}
+		} // namespace
 
-		SWImage::SWImage(Bitmap *m)
-		    : ew(m->GetWidth()),
-		      eh(m->GetHeight()),
+		SWImage::SWImage(Bitmap &m)
+		    : ew(m.GetWidth()),
+		      eh(m.GetHeight()),
 		      isWhite(false),
-		      w(static_cast<float>(m->GetWidth())),
-		      h(static_cast<float>(m->GetHeight())),
+		      w(static_cast<float>(m.GetWidth())),
+		      h(static_cast<float>(m.GetHeight())),
 		      iw(1.f / w),
 		      ih(1.f / h) {
 			bmp.resize(ew * eh);
 
 			// premultiplied alpha
 			{
-				uint32_t *inpix = m->GetPixels();
+				uint32_t *inpix = m.GetPixels();
 				uint32_t *outpix = bmp.data();
 				bool foundNonWhite = false;
 				for (std::size_t i = ew * eh; i; i--) {
@@ -105,31 +105,24 @@ namespace spades {
 			isWhite = false;
 		}
 
-		SWImageManager::~SWImageManager() {
-			for (auto it = images.begin(); it != images.end(); it++)
-				it->second->Release();
-		}
+		SWImageManager::~SWImageManager() {}
 
-		SWImage *SWImageManager::RegisterImage(const std::string &name) {
+		Handle<SWImage> SWImageManager::RegisterImage(const std::string &name) {
 			auto it = images.find(name);
 			if (it == images.end()) {
-				Handle<Bitmap> vm;
-				vm.Set(Bitmap::Load(name), false);
-				auto *m = CreateImage(vm);
-				images.insert(std::make_pair(name, m));
-				m->AddRef();
-				return m;
-			} else {
-				auto *image = it->second;
-				image->AddRef();
+				Handle<Bitmap> bitmap = Bitmap::Load(name);
+				Handle<SWImage> image = CreateImage(*bitmap);
+				images.insert(std::make_pair(name, image));
 				return image;
+			} else {
+				return it->second;
 			}
 		}
 
-		SWImage *SWImageManager::CreateImage(Bitmap *vm) { return new SWImage(vm); }
-
-		void SWImageManager::ClearCache() {
-			images.clear();
+		Handle<SWImage> SWImageManager::CreateImage(Bitmap &bitmap) {
+			return Handle<SWImage>::New(bitmap);
 		}
-	}
-}
+
+		void SWImageManager::ClearCache() { images.clear(); }
+	} // namespace draw
+} // namespace spades

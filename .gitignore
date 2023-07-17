@@ -34,10 +34,6 @@ CMakeCache.txt
 *CMakeFiles/
 *.cmake
 
-# cmake input dir (optional)
-Sources/Externals/include/
-Sources/Externals/lib/
-
 # mac related
 *.DS_Store
 
@@ -66,6 +62,10 @@ OpenSpades.msvc/
 
 # Linux build path
 openspades.mk/
+
+# Nix
+/outputs
+/result
 
 # fltk / fluid output leftovers
 Sources/Gui/DetailConfigWindow.txt

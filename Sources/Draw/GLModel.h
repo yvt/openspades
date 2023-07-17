@@ -22,9 +22,9 @@
 
 #include <vector>
 
+#include "GLDynamicLight.h"
 #include <Client/IModel.h>
 #include <Client/IRenderer.h>
-#include "GLDynamicLight.h"
 
 namespace spades {
 	namespace draw {
@@ -55,5 +55,5 @@ namespace spades {
 			// members used when rendering by GLModelRenderer
 			int renderId;
 		};
-	}
-};
+	} // namespace draw
+};    // namespace spades

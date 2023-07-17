@@ -56,7 +56,7 @@ namespace spades {
 			/**
 			 * Returns `true` if the loading operation is complete, successful or not.
 			 */
-			bool IsComplete();
+			bool IsComplete() const;
 
 			/**
 			 * Blocks the current thread until the decoding is complete.
@@ -79,14 +79,14 @@ namespace spades {
 			 * If an exception occured while decoding the map, the exception will be rethrown when
 			 * this method is called.
 			 */
-			GameMap *TakeGameMap();
+			Handle<GameMap> TakeGameMap();
 
 		private:
 			struct Decoder;
 			struct Result;
 
 			/** A writable stream used to send undecoded data to the decoding thread. */
-			StreamHandle rawDataWriter;
+			std::unique_ptr<IStream> rawDataWriter;
 
 			/** A handle for the decoding thread. */
 			std::unique_ptr<Thread> decodingThread;

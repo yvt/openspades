@@ -72,6 +72,7 @@ SPADES_SETTING(r_vsync);
 SPADES_SETTING(r_renderer);
 SPADES_SETTING(r_swUndersampling);
 SPADES_SETTING(r_hdr);
+SPADES_SETTING(r_temporalAA);
 
 namespace spades {
 	namespace gui {
@@ -91,6 +92,10 @@ namespace spades {
 			scr = nullptr;
 		}
 
+		namespace {
+			std::regex const localeInfoRegex("[-a-zA-Z0-9_]+\\.json");
+		}
+
 		void StartupScreenHelper::ExamineSystem() {
 			SPADES_MARK_FUNCTION();
 
@@ -105,7 +110,6 @@ namespace spades {
 			auto localeDirectories = FileManager::EnumFiles("Locales");
 			locales.clear();
 			for (const std::string &localeInfoName : localeDirectories) {
-				static std::regex localeInfoRegex("[-a-zA-Z0-9_]+\\.json");
 				if (!std::regex_match(localeInfoName, localeInfoRegex)) {
 					continue;
 				}
@@ -160,6 +164,13 @@ namespace spades {
 						  return std::string();
 					  }
 				  }));
+			} else {
+				// check openAL drivers
+				SPLog("Checking OpenAL available drivers");
+				openalDevices = audio::ALDevice::DeviceList();
+				for (const auto &d: openalDevices) {
+					SPLog("%s", d.c_str());
+				}
 			}
 
 			// check GL capabilities
@@ -322,10 +333,12 @@ namespace spades {
 				                                          "GL_EXT_framebuffer_object",
 				                                          NULL};
 
-				SPLog("--- Extensions ---");
-				std::vector<std::string> strs = spades::Split(str, " ");
-				for (size_t i = 0; i < strs.size(); i++) {
-					SPLog("%s", strs[i].c_str());
+				if (str) {
+					SPLog("--- Extensions ---");
+					std::vector<std::string> strs = spades::Split(str, " ");
+					for (size_t i = 0; i < strs.size(); i++) {
+						SPLog("%s", strs[i].c_str());
+					}
 				}
 				SPLog("------------------");
 
@@ -369,10 +382,23 @@ namespace spades {
 						r_multisamples = 0;
 						SPLog("Disabling r_multisamples: no GL_EXT_framebuffer_blit");
 					}
+					if (r_temporalAA) {
+						r_temporalAA = 0;
+						SPLog("Disabling r_temporalAA: no GL_EXT_framebuffer_blit");
+					}
 					incapableConfigs.insert(
 					  std::make_pair("r_blitFramebuffer", [](std::string value) -> std::string {
 						  if (std::stoi(value) != 0) {
 							  return "r_blitFramebuffer is disabled because your video card "
+							         "doesn't support GL_EXT_framebuffer_blit.";
+						  } else {
+							  return std::string();
+						  }
+					  }));
+					incapableConfigs.insert(
+					  std::make_pair("r_temporalAA", [](std::string value) -> std::string {
+						  if (std::stoi(value) != 0) {
+							  return "r_temporalAA is disabled because your video card "
 							         "doesn't support GL_EXT_framebuffer_blit.";
 						  } else {
 							  return std::string();
@@ -657,8 +683,14 @@ namespace spades {
 			return "Windows";
 #elif defined(__FreeBSD__)
 			return "FreeBSD";
+#elif defined(__DragonFly__)
+			return "DragonFlyBSD";
 #elif defined(__OpenBSD__)
 			return "OpenBSD";
+#elif defined(__sun)
+			return "Solaris";
+#elif defined(__HAIKU__)
+			return "Haiku";
 #else
 			return std::string{};
 #endif
@@ -727,6 +759,13 @@ namespace spades {
 			reportLines.push_back(l);
 			report += text;
 			report += '\n';
+		}
+
+		int StartupScreenHelper::GetNumAudioOpenALDevices() { return static_cast<int>(openalDevices.size()); }
+		std::string StartupScreenHelper::GetAudioOpenALDevice(int index) {
+			if (index < 0 || index >= GetNumAudioOpenALDevices())
+				SPInvalidArgument("index");
+			return openalDevices[index];
 		}
 
 		int StartupScreenHelper::GetNumLocales() { return static_cast<int>(locales.size()); }

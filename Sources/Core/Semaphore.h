@@ -28,6 +28,8 @@ namespace spades {
 	public:
 		Semaphore(int initial = 1);
 		~Semaphore();
+		Semaphore(const Semaphore &) = delete;
+		void operator=(const Semaphore &) = delete;
 
 		void Post();
 		void Wait();
@@ -35,4 +37,4 @@ namespace spades {
 		void Lock() override { Wait(); }
 		void Unlock() override { Post(); }
 	};
-}
+} // namespace spades

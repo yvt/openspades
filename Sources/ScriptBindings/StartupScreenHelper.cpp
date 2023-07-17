@@ -73,6 +73,16 @@ namespace spades {
 												  asCALL_THISCALL);
 					manager->CheckError(r);
 					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "int GetNumAudioOpenALDevices()",
+												  asMETHOD(gui::StartupScreenHelper, GetNumAudioOpenALDevices),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
+												  "string GetAudioOpenALDevice(int)",
+												  asMETHOD(gui::StartupScreenHelper, GetAudioOpenALDevice),
+												  asCALL_THISCALL);
+					manager->CheckError(r);
+					r = eng->RegisterObjectMethod("StartupScreenHelper",
 												  "int GetNumReportLines()",
 												  asMETHOD(gui::StartupScreenHelper, GetNumReportLines),
 												  asCALL_THISCALL);

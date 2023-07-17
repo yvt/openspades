@@ -34,6 +34,28 @@
 
 namespace spades {
 
+	/**
+	 * A ref-counted object that internally holds a reference count.
+	 *
+	 * This type is used mainly for compatibility with AngelScript's GC
+	 * behavior as it's impossible to implement with `std::shared_ptr`. In
+	 * general cases, `std::unique_ptr` or `std::shared_ptr` is more suitable.
+	 *
+	 * # Conventions
+	 *
+	 *  - When storing a strong reference, use `Handle<T>`. Do not attempt to
+	 *    manually update the reference count unless absolutely necessary.
+	 *  - Under any circumstances, do not manually call its destructor.
+	 *  - Use `Handle<T>::New(...)` to consturct an object.
+	 *  - Methods receive `T` via a parameter of type `T&` or
+	 *    `stmp::optional<T&>`. They may create and hold a strong reference
+	 *    using `Handle::Handle(T&)`. Alternatively, they can use `Handle<T>`
+	 *    if it is apparent that they store the object as `Handle<T>`.
+	 *  - Methods return `T` via a return type `Handle<T>`.
+	 *
+	 * Note that `stmp::optional` nor `Handle` can be passed to/from AngelScript
+	 * safely.
+	 */
 	class RefCountedObject {
 		std::atomic<int> refCount;
 #if DEBUG_REFCOUNTED_OBJECT_LAST_RELEASE
@@ -46,11 +68,16 @@ namespace spades {
 
 	public:
 		RefCountedObject();
+		RefCountedObject(const RefCountedObject &) = delete;
+		void operator=(const RefCountedObject &) = delete;
 
 		void AddRef();
 		void Release();
 	};
 
+	/**
+	 * A nullable smart pointer for `T <: RefCountedObject`.
+	 */
 	template <typename T> class Handle {
 		T *ptr;
 
@@ -67,7 +94,11 @@ namespace spades {
 			if (ptr)
 				ptr->AddRef();
 		}
-		Handle(Handle<T> &&h) : ptr(h.MaybeUnmanage()) {}
+		Handle(Handle<T> &&h) : ptr(std::move(h).MaybeUnmanage()) {}
+		Handle(T &ref) : ptr{&ref} { ptr->AddRef(); }
+		Handle(stmp::optional<T &> ref) : ptr{ref.get_pointer()} { if (ptr)
+				ptr->AddRef();
+		}
 
 		template <class S> Handle(Handle<S> &&h) : ptr(h.MaybeUnmanage()) {}
 
@@ -79,23 +110,17 @@ namespace spades {
 		}
 
 		template <class... Args> static Handle New(Args &&... args) {
-			T *ptr = new T{std::forward<Args>(args)...};
+			T *ptr = new T(std::forward<Args>(args)...);
 			return {ptr, false};
 		}
 
-		T *operator->() {
+		T *operator->() const {
+			// TODO: Do not skip null check in release builds
 			SPAssert(ptr != NULL);
 			return ptr;
 		}
-		const T *operator->() const {
-			SPAssert(ptr != NULL);
-			return ptr;
-		}
-		T &operator*() {
-			SPAssert(ptr != NULL);
-			return *ptr;
-		}
-		const T &operator*() const {
+		T &operator*() const {
+			// TODO: Do not skip null check in release builds
 			SPAssert(ptr != NULL);
 			return *ptr;
 		}
@@ -114,19 +139,42 @@ namespace spades {
 		}
 		void operator=(T *p) { Set(p); }
 		void operator=(const Handle<T> &h) { Set(h.ptr, true); }
-		operator T *() { return ptr; }
-		T *Unmanage() {
+
+		operator stmp::optional<T &>() const { return ptr; }
+
+		/**
+		 * Get a nullable raw pointer. After the operation, the original `Handle`
+		 * still owns a reference to the referent (if any).
+		 *
+		 * This conversion have a danger of causing a pointer use-after-free if
+		 * used incorrectly. For example, `IImage *image = CreateImage().GetPointer();`
+		 * creates a dangling pointer because the temporary value `CreateImage()`
+		 * is destroyed right after initializing the variable, invalidating the
+		 * pointer returned by `GetPointer()`. This is why this conversion is
+		 * no longer supported as implicit casting.
+		 */
+		T *GetPointerOrNull() const { return ptr; }
+		/**
+		 * Convert a `Handle` to a raw pointer, transfering the ownership.
+		 * Throws an exception if the `Handle` is null.
+		 */
+		T *Unmanage() && {
 			SPAssert(ptr != NULL);
 			T *p = ptr;
 			ptr = NULL;
 			return p;
 		}
-		T *MaybeUnmanage() {
+		/**
+		 * Convert a `Handle` to a raw pointer, transfering the ownership.
+		 */
+		T *MaybeUnmanage() && {
 			T *p = ptr;
 			ptr = NULL;
 			return p;
 		}
-		operator bool() { return ptr != NULL; }
+		operator bool() const { return ptr != NULL; }
+
+		bool operator==(const Handle &rhs) const { return ptr == rhs.ptr; }
 
 		/**
 		 * Attempts to cast this `Handle<T>` to `Handle<S>` using `dynamic_cast`, consuming this
@@ -155,4 +203,4 @@ namespace spades {
 		 */
 		template <class S> Handle<S> Cast() const & { return Handle{*this}.Cast<S>(); }
 	};
-}
+} // namespace spades

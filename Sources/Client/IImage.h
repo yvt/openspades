@@ -40,5 +40,5 @@ namespace spades {
 			virtual float GetWidth() = 0;
 			virtual float GetHeight() = 0;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

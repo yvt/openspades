@@ -70,5 +70,5 @@ namespace spades {
 			 * @return next available texture stage */
 			int operator()(GLRenderer *renderer, GLProgram *, int firstTexStage);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

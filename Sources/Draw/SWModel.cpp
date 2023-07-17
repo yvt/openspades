@@ -20,32 +20,32 @@
 #include <memory>
 
 #include "SWModel.h"
-#include <Core/VoxelModelLoader.h>
 #include <Core/IStream.h>
+#include <Core/VoxelModelLoader.h>
 
 namespace spades {
 	namespace draw {
-		SWModel::SWModel(VoxelModel *m) : rawModel(m) {
-			center.x = m->GetWidth();
-			center.y = m->GetHeight();
-			center.z = m->GetDepth();
+		SWModel::SWModel(VoxelModel &m) : rawModel(m) {
+			center.x = m.GetWidth();
+			center.y = m.GetHeight();
+			center.z = m.GetDepth();
 			center *= 0.5f;
 			radius = center.GetLength();
 
-			int w = m->GetWidth();
-			int h = m->GetHeight();
-			int d = m->GetDepth();
+			int w = m.GetWidth();
+			int h = m.GetHeight();
+			int d = m.GetDepth();
 
 			for (int y = 0; y < h; y++) {
 				for (int x = 0; x < w; x++) {
 
 					renderDataAddr.push_back(static_cast<uint32_t>(renderData.size()));
 
-					uint64_t map = m->GetSolidBitsAt(x, y);
-					uint64_t map1 = x > 0 ? m->GetSolidBitsAt(x - 1, y) : 0;
-					uint64_t map2 = x < (w - 1) ? m->GetSolidBitsAt(x + 1, y) : 0;
-					uint64_t map3 = y > 0 ? m->GetSolidBitsAt(x, y - 1) : 0;
-					uint64_t map4 = y < (h - 1) ? m->GetSolidBitsAt(x, y + 1) : 0;
+					uint64_t map = m.GetSolidBitsAt(x, y);
+					uint64_t map1 = x > 0 ? m.GetSolidBitsAt(x - 1, y) : 0;
+					uint64_t map2 = x < (w - 1) ? m.GetSolidBitsAt(x + 1, y) : 0;
+					uint64_t map3 = y > 0 ? m.GetSolidBitsAt(x, y - 1) : 0;
+					uint64_t map4 = y < (h - 1) ? m.GetSolidBitsAt(x, y + 1) : 0;
 					map1 &= map2;
 					map1 &= map3;
 					map1 &= map4;
@@ -55,7 +55,7 @@ namespace spades {
 							continue;
 						if (z == 0 || z == (d - 1) || ((map >> (z - 1)) & 7ULL) != 7ULL ||
 						    (map1 & (1ULL << z)) == 0) {
-							uint32_t col = m->GetColor(x, y, z);
+							uint32_t col = m.GetColor(x, y, z);
 
 							uint32_t encodedColor;
 							encodedColor =
@@ -75,7 +75,7 @@ namespace spades {
 								for (int cx = -1; cx <= 1; cx++)
 									for (int cy = -1; cy <= 1; cy++)
 										for (int cz = -1; cz <= 1; cz++) {
-											if (m->IsSolid(x + cx, y + cy, z + cz)) {
+											if (m.IsSolid(x + cx, y + cy, z + cz)) {
 												nx -= cx;
 												ny -= cy;
 												nz -= cz;
@@ -106,9 +106,9 @@ namespace spades {
 		SWModel::~SWModel() {}
 
 		AABB3 SWModel::GetBoundingBox() {
-			VoxelModel *m = rawModel;
+			VoxelModel &m = *rawModel;
 			Vector3 minPos = {0, 0, 0};
-			Vector3 maxPos = {(float)m->GetWidth(), (float)m->GetHeight(), (float)m->GetDepth()};
+			Vector3 maxPos = {(float)m.GetWidth(), (float)m.GetHeight(), (float)m.GetDepth()};
 			auto origin = rawModel->GetOrigin() - .5f;
 			minPos += origin;
 			maxPos += origin;
@@ -123,33 +123,27 @@ namespace spades {
 			return boundingBox;
 		}
 
-		SWModelManager::~SWModelManager() {
-			for (auto it = models.begin(); it != models.end(); it++)
-				it->second->Release();
-		}
+		SWModelManager::~SWModelManager() {}
 
-		SWModel *SWModelManager::RegisterModel(const std::string &name) {
+		Handle<SWModel> SWModelManager::RegisterModel(const std::string &name) {
 			auto it = models.find(name);
 			if (it == models.end()) {
-				Handle<VoxelModel> vm;
-				vm.Set(VoxelModelLoader::Load(name.c_str()), false);
+				auto vm = VoxelModelLoader::Load(name.c_str());
 
-				SWModel *model = CreateModel(vm);
+				Handle<SWModel> model = CreateModel(*vm);
 				models.insert(std::make_pair(name, model));
 				model->AddRef();
 
 				return model;
 			} else {
-				SWModel *model = it->second;
-				model->AddRef();
-				return model;
+				return it->second;
 			}
 		}
 
-		SWModel *SWModelManager::CreateModel(spades::VoxelModel *vm) { return new SWModel(vm); }
-
-		void SWModelManager::ClearCache() {
-			models.clear();
+		Handle<SWModel> SWModelManager::CreateModel(spades::VoxelModel &vm) {
+			return Handle<SWModel>::New(vm);
 		}
-	}
-}
+
+		void SWModelManager::ClearCache() { models.clear(); }
+	} // namespace draw
+} // namespace spades

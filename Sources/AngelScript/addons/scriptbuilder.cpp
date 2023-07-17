@@ -1015,7 +1015,7 @@ string GetCurrentDir()
 	#else
 	return _getcwd(buffer, (int)1024);
 	#endif // _MSC_VER
-#elif defined(__APPLE__) || defined(__linux__)
+#elif defined(__APPLE__) || defined(__linux__) || defined(__sun)
 	return getcwd(buffer, 1024);
 #else
 	return "";

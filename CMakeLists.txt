@@ -3,59 +3,100 @@ project(OpenSpades)
 
 set(OpenSpades_VERSION_MAJOR 0)
 set(OpenSpades_VERSION_MINOR 1)
-set(OpenSpades_VERSION_REVISION 3)
+set(OpenSpades_VERSION_REVISION 5)
 
 set(OPENSPADES_FULL_VERSION "${OpenSpades_VERSION_MAJOR}.${OpenSpades_VERSION_MINOR}.${OpenSpades_VERSION_REVISION}")
 
 set(OS_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-set(CMAKE_PREFIX_PATH Sources/Externals)
+if(VCPKG_TARGET_TRIPLET)
+	set(USE_VCPKG ON)
+else()
+	set(USE_VCPKG OFF)
+endif()
 
 # Prefer GLVND OpenGL
 if(POLICY CMP0072)
 	cmake_policy(SET CMP0072 NEW)
 endif()
 
-include(cmake/FindSDL2.cmake)
-if(NOT SDL2_FOUND)
-	message(FATAL_ERROR "SDL 2.0 not found, set ENV{SDL2DIR} to point to SDL 2.0, and optionally set the cmake var SDL2_LIBRARY_TEMP to the lib dir")
-endif()
+if(USE_VCPKG)
+    find_package(Ogg CONFIG REQUIRED)
+    find_package(Opus CONFIG REQUIRED)
+    find_package(sdl2-image CONFIG REQUIRED)
+    find_package(SDL2 CONFIG REQUIRED)
+    find_package(freetype CONFIG REQUIRED)
 
-include(cmake/FindSDL2_image.cmake)
-if(NOT SDL2_IMAGE_FOUND)
-	message(FATAL_ERROR "SDL_image 2.0 not found, set ENV{SDL2DIR} to point to SDL 2.0, and optionally set the cmake var SDL2_LIBRARY_TEMP to the lib dir")
-endif()
+ 	if(NOT APPLE)
+ 		find_package(GLEW REQUIRED)
+ 		set(GLEW_LIBRARY GLEW::GLEW)
 
-include(FindOpenGL)
-if(NOT OPENGL_FOUND AND NOT OPENGL_XMESA_FOUND AND NOT OPENGL_GLU_FOUND)
-	message(FATAL_ERROR "OpenGL not found, please install it")
-endif()
-if(NOT APPLE)
-	include(cmake/FindGLEW2.cmake)
-	if(NOT GLEW_FOUND)
-		message(FATAL_ERROR "GLEW not found, please install it and make sure CMake can find it (add it to the PATH)")
+ 		find_package(CURL REQUIRED)
+ 		set(CURL_LIBRARY CURL::libcurl)
+ 	endif()
+
+    set(SDL2_LIBRARY SDL2::SDL2main SDL2::SDL2-static)
+    set(SDL2_IMAGE_LIBRARY SDL2::SDL2_image)
+    set(FREETYPE_LIBRARIES freetype)
+
+    if(APPLE)
+    	# Use system libraries
+		include(FindOpenGL)
+		include(FindCURL)
+    endif()
+
+	FIND_LIBRARY(OpusFile_LIBRARY
+	  NAMES opusfile
+	  PATH_SUFFIXES lib64 lib
+	  PATHS ${CMAKE_PREFIX_PATH}
+	)
+else()
+	include(cmake/FindSDL2.cmake)
+	if(NOT SDL2_FOUND)
+		message(FATAL_ERROR "SDL 2.0 not found, set ENV{SDL2DIR} to point to SDL 2.0, and optionally set the cmake var SDL2_LIBRARY_TEMP to the lib dir")
+	endif()
+
+	include(cmake/FindSDL2_image.cmake)
+	if(NOT SDL2_IMAGE_FOUND)
+		message(FATAL_ERROR "SDL_image 2.0 not found, set ENV{SDL2DIR} to point to SDL 2.0, and optionally set the cmake var SDL2_LIBRARY_TEMP to the lib dir")
+	endif()
+
+	include(FindOpenGL)
+	if(NOT OPENGL_FOUND AND NOT OPENGL_XMESA_FOUND AND NOT OPENGL_GLU_FOUND)
+		message(FATAL_ERROR "OpenGL not found, please install it")
+	endif()
+	if(NOT APPLE)
+		include(cmake/FindGLEW2.cmake)
+		if(NOT GLEW_FOUND)
+			message(FATAL_ERROR "GLEW not found, please install it and make sure CMake can find it (add it to the PATH)")
+		endif()
+	endif()
+
+	include(FindZLIB)
+	if(NOT ZLIB_FOUND)
+		message(FATAL_ERROR "ZLIB not found, manually set ZLIB_ROOT in CMake")
+	endif()
+
+	include(FindCURL)
+	if(NOT CURL_FOUND)
+		message(FATAL_ERROR "cURL not found, please install it (and make sure it's in your path)")
+	endif()
+
+	include(FindFreetype)
+	if(NOT FREETYPE_FOUND)
+		message(FATAL_ERROR "FreeType not found, please install it (and make sure it's in your path)")
+	endif()
+
+	include(cmake/FindOpus.cmake)
+	if(NOT OpusFile_FOUND)
+		message(FATAL_ERROR "libopus/libopusfile not found, please install it (and make sure it's in your path)")
+	endif()
+	include(cmake/FindXext.cmake)
+	if(NOT XEXT_FOUND)
+		message(FATAL_ERROR "libXext, please install it (and make sure it's in your path)")
 	endif()
 endif()
 
-include(FindZLIB)
-if(NOT ZLIB_FOUND)
-	message(FATAL_ERROR "ZLIB not found, manually set ZLIB_ROOT in CMake")
-endif()
-
-include(FindCURL)
-if(NOT CURL_FOUND)
-	message(FATAL_ERROR "cURL not found, please install it (and make sure it's in your path)")
-endif()
-
-include(FindFreetype)
-if(NOT FREETYPE_FOUND)
-	message(FATAL_ERROR "FreeType not found, please install it (and make sure it's in your path)")
-endif()
-
-include(cmake/FindOpus.cmake)
-if(NOT OpusFile_FOUND)
-	message(FATAL_ERROR "libopus/libopusfile not found, please install it (and make sure it's in your path)")
-endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
 	# GCC C++11 support
@@ -152,7 +193,9 @@ if(HAS_SOCKLEN_T)
     add_definitions(-DHAS_SOCKLEN_T=1)
 endif()
 
-option(OPENSPADES_RESOURCES "NO_OPENSPADES_RESOURCES" ON)
+option(OPENSPADES_RESOURCES "Build game assets" ON)
+option(OPENSPADES_NONFREE_RESOURCES "Download non-GPL game assets" ON)
+option(OPENSPADES_YSR "Download YSRSpades (closed-source audio backend; macOS only)" ON)
 
 # note that all paths are without trailing slash
 set(OPENSPADES_INSTALL_DOC       "share/doc/openspades" CACHE STRING "Directory for installing documentation. ")
@@ -193,24 +236,29 @@ endif()
 configure_file("${PROJECT_SOURCE_DIR}/OpenSpades.h.in" "${PROJECT_BINARY_DIR}/OpenSpades.h")
 configure_file("${PROJECT_SOURCE_DIR}/OpenSpades.rc.in" "${PROJECT_BINARY_DIR}/OpenSpades.rc")
 include_directories(BEFORE "${PROJECT_BINARY_DIR}")
-include_directories("${SDL2_INCLUDE_DIR}")
-include_directories("${SDL2_IMAGE_INCLUDE_DIR}")
-if(OPENGL_INCLUDE_DIR)
-	include_directories("${OPENGL_INCLUDE_DIR}")
+if(USE_VCPKG)
+	include_directories("${PROJECT_SOURCE_DIR}/vcpkg/installed/${VCPKG_TARGET_TRIPLET}/include")
+else()
+	include_directories("${SDL2_INCLUDE_DIR}")
+	include_directories("${SDL2_IMAGE_INCLUDE_DIR}")
+	if(OPENGL_INCLUDE_DIR)
+		include_directories("${OPENGL_INCLUDE_DIR}")
+	endif()
+	if(NOT APPLE)
+	include_directories("${GLEW_INCLUDE_DIR}")
+	endif()
+	include_directories("${ZLIB_INCLUDE_DIR}")
+	include_directories(${CURL_INCLUDE_DIRS})
+	include_directories(${FREETYPE_INCLUDE_DIRS})
+	include_directories(${OpusFile_INCLUDE_DIR})
+	include_directories(${Opus_INCLUDE_DIR})
+	include_directories(${Ogg_INCLUDE_DIR})
 endif()
-if(NOT APPLE)
-include_directories("${GLEW_INCLUDE_DIR}")
-endif()
-include_directories("${ZLIB_INCLUDE_DIR}")
-include_directories(${CURL_INCLUDE_DIRS})
-include_directories(${FREETYPE_INCLUDE_DIRS})
-include_directories(${OpusFile_INCLUDE_DIR})
 
 add_subdirectory(Resources)
 add_subdirectory(Sources)
 
-
-if(UNIX)
+if(UNIX AND NOT APPLE)
 	# various texts
 	INSTALL(FILES AUTHORS LICENSE README.md DESTINATION ${OPENSPADES_INSTALL_DOC}/)
 
@@ -228,15 +276,7 @@ if(UNIX)
 
 	if(OPENSPADES_RESOURCES)
 		# install asset paks (including non-GPL one)
-		install(FILES
-			${CMAKE_BINARY_DIR}/Resources/pak000-Nonfree.pak
-			${CMAKE_BINARY_DIR}/Resources/pak002-Base.pak
-			${CMAKE_BINARY_DIR}/Resources/pak005-Models.pak
-			${CMAKE_BINARY_DIR}/Resources/pak010-BaseSkin.pak
-			${CMAKE_BINARY_DIR}/Resources/pak050-Locales.pak
-			${CMAKE_BINARY_DIR}/Resources/pak999-References.pak
-			${CMAKE_BINARY_DIR}/Resources/font-unifont.pak
-			DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
+		install(FILES ${PAK_FILES} DESTINATION ${OPENSPADES_INSTALL_RESOURCES})
 	endif(OPENSPADES_RESOURCES)
 
 	# Package info (used for automatic update check)
@@ -259,9 +299,50 @@ if(UNIX)
 	# Currently there is no files in lib/openspades. But if you reading this message in future and want to
 	# place somewhere libs, binaries or other non-media stuff, place them in lib/openspades. Thank you.
 
-endif(UNIX)
+endif(UNIX AND NOT APPLE)
 
+if(APPLE)
+	# Create a macOS application bundle
+	set_target_properties(OpenSpades PROPERTIES
+		MACOSX_BUNDLE ON
+		MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/XSpades/XSpades-Info.plist
+		MACOSX_BUNDLE_BUNDLE_VERSION ${OPENSPADES_FULL_VERSION}
+		MACOSX_BUNDLE_LONG_VERSION_STRING ${OPENSPADES_FULL_VERSION}
+		MACOSX_BUNDLE_SHORT_VERSION_STRING ${OPENSPADES_FULL_VERSION}
+		MACOSX_BUNDLE_GUI_IDENTIFIER jp.yvt.openspades
+		MACOSX_BUNDLE_BUNDLE_NAME OpenSpades)
 
+	set(BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Resources/Icons/OpenSpades.icns)
+	list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE)
+	if(OPENSPADES_RESOURCES)
+		list(APPEND BUNDLE_RESOURCES ${PAK_FILES})
+		set_source_files_properties(${PAK_FILES}
+			PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+		add_dependencies(OpenSpades OpenSpades_Resources_DevPaks OpenSpades_Resources)
+	endif(OPENSPADES_RESOURCES)
+	list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Resources/PackageInfo.json)
+	set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/Resources/PackageInfo.json
+		PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+
+	if (OPENSPADES_YSR)
+		list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/libysrspades.dylib)
+
+		# Download `libysrspades.dylib` automatically
+		add_dependencies(OpenSpades OpenSpades_YSRSpades_Prebuilt)
+		add_custom_target(OpenSpades_YSRSpades_Prebuilt ALL COMMENT "Downloading libysrspades.dylib"
+			DEPENDS ${PROJECT_BINARY_DIR}/libysrspades.dylib)
+		add_custom_command(
+			OUTPUT ${PROJECT_BINARY_DIR}/libysrspades.dylib
+			WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+			COMMAND
+				wget -c
+				https://openspadesmedia.yvt.jp/development-packages/YSRSpades/libysrspades.dylib
+			)
+	endif (OPENSPADES_YSR)
+
+	set_target_properties(OpenSpades PROPERTIES RESOURCE "${BUNDLE_RESOURCES}")
+	target_sources(OpenSpades PRIVATE "${BUNDLE_RESOURCES}")
+endif(APPLE)
 
 #see http://www.cmake.org/cmake/help/v2.8.11/cpack.html
 set(CPACK_PACKAGE_NAME "OpenSpades")

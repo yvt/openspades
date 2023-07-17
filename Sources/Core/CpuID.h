@@ -36,6 +36,8 @@ namespace spades {
 		uint32_t featureEdx;
 		uint32_t subfeature;
 		std::string info;
+		bool featureXcr0Avx;
+		bool featureXcr0Avx512;
 
 	public:
 		CpuID();

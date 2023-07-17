@@ -34,22 +34,23 @@ namespace spades {
 			float progress; // 0 = team1 owns
 		};
 
-		TCProgressView::TCProgressView(Client *c) : client(c), renderer(c->GetRenderer()) {
+		TCProgressView::TCProgressView(Client &client)
+		    : client(client), renderer(client.GetRenderer()) {
 			lastTerritoryId = -1;
 		}
 
 		TCProgressView::~TCProgressView() {}
 
-		static TCProgressState StateForTerritory(TCGameMode::Territory *t, int myTeam) {
+		static TCProgressState StateForTerritory(TCGameMode::Territory &t, int myTeam) {
 			TCProgressState state;
-			if (t->capturingTeamId == -1) {
-				state.team1 = t->ownerTeamId;
+			if (t.capturingTeamId == -1) {
+				state.team1 = t.ownerTeamId;
 				state.team2 = 2;
 				state.progress = 0.f;
 			} else {
-				float prg = t->GetProgress();
-				state.team1 = t->ownerTeamId;
-				state.team2 = t->capturingTeamId;
+				float prg = t.GetProgress();
+				state.team1 = t.ownerTeamId;
+				state.team2 = t.capturingTeamId;
 				state.progress = prg;
 
 				if (state.team2 == myTeam) {
@@ -61,39 +62,42 @@ namespace spades {
 		}
 
 		void TCProgressView::Draw() {
-			World *w = client->GetWorld();
+			World *w = client.GetWorld();
 			if (!w) {
 				lastTerritoryId = -1;
 				return;
 			}
-			IGameMode *mode = w->GetMode();
+			stmp::optional<IGameMode &> mode = w->GetMode();
 			if (!mode || IGameMode::m_TC != mode->ModeType()) {
 				return;
 			}
-			TCGameMode *tc = static_cast<TCGameMode *>(mode);
+			TCGameMode &tc = dynamic_cast<TCGameMode &>(mode.value());
 
-			float scrW = renderer->ScreenWidth();
-			float scrH = renderer->ScreenHeight();
+			float scrW = renderer.ScreenWidth();
+			float scrH = renderer.ScreenHeight();
 
-			Handle<IImage> prgBg = renderer->RegisterImage("Gfx/TC/ProgressBg.png");
-			Handle<IImage> prgBar = renderer->RegisterImage("Gfx/TC/ProgressBar.png");
+			Handle<IImage> prgBg = renderer.RegisterImage("Gfx/TC/ProgressBg.png");
+			Handle<IImage> prgBar = renderer.RegisterImage("Gfx/TC/ProgressBar.png");
 
-			Player *p = w->GetLocalPlayer();
-			if (p && p->GetTeamId() < 2 && p->IsAlive()) {
+			stmp::optional<Player &> maybePlayer = w->GetLocalPlayer();
+			if (maybePlayer && maybePlayer.value().GetTeamId() < 2 &&
+			    maybePlayer.value().IsAlive()) {
+				Player &p = maybePlayer.value();
+
 				// show approaching territory
-				TCGameMode::Territory *nearTerritory = NULL;
+				stmp::optional<TCGameMode::Territory &> nearTerritory;
 				int nearTerId = 0;
 				float distance = 0.f;
-				int myTeam = p->GetTeamId();
+				int myTeam = p.GetTeamId();
 
-				int cnt = tc->GetNumTerritories();
+				int cnt = tc.GetNumTerritories();
 				for (int i = 0; i < cnt; i++) {
-					TCGameMode::Territory *t = tc->GetTerritory(i);
-					Vector3 diff = t->pos - p->GetEye();
+					TCGameMode::Territory &t = tc.GetTerritory(i);
+					Vector3 diff = t.pos - p.GetEye();
 					if (fabsf(diff.x) < 18.f && fabsf(diff.y) < 18.f && fabsf(diff.z) < 18.f) {
 						float dist = diff.GetPoweredLength();
-						if (nearTerritory == NULL || dist < distance) {
-							nearTerritory = t;
+						if (!nearTerritory || dist < distance) {
+							nearTerritory = &t;
 							nearTerId = i;
 							distance = dist;
 						}
@@ -106,45 +110,45 @@ namespace spades {
 					lastTerritoryTime = w->GetTime();
 				} else if (lastTerritoryId != -1 && w->GetTime() < lastTerritoryTime + 2.f) {
 					fade = 1.f - (w->GetTime() - lastTerritoryTime) / 2.f;
-					nearTerritory = tc->GetTerritory(lastTerritoryId);
+					nearTerritory = &tc.GetTerritory(lastTerritoryId);
 				}
 
 				if (nearTerritory) {
-					TCProgressState state = StateForTerritory(nearTerritory, myTeam);
+					TCProgressState state = StateForTerritory(*nearTerritory, myTeam);
 
 					float x = (scrW - 256.f) * .5f;
 					float y = scrH * 0.7f;
 
 					if (nearTerritory->ownerTeamId == 2) {
-						renderer->SetColorAlphaPremultiplied(MakeVector4(fade, fade, fade, fade));
+						renderer.SetColorAlphaPremultiplied(MakeVector4(fade, fade, fade, fade));
 					} else {
 						IntVector3 c = w->GetTeam(nearTerritory->ownerTeamId).color;
-						renderer->SetColorAlphaPremultiplied(
+						renderer.SetColorAlphaPremultiplied(
 						  MakeVector4(c.x / 255.f, c.y / 255.f, c.z / 255.f, 1) * fade);
 					}
-					renderer->DrawImage(prgBg, MakeVector2(x, y));
+					renderer.DrawImage(prgBg, MakeVector2(x, y));
 
 					// get away from border
 					state.progress += (.5f - state.progress) * 12.f / 256.f;
 
 					if (state.team1 != 2) {
 						IntVector3 c = w->GetTeam(state.team1).color;
-						renderer->SetColorAlphaPremultiplied(
+						renderer.SetColorAlphaPremultiplied(
 						  MakeVector4(c.x / 255.f, c.y / 255.f, c.z / 255.f, 1) * (fade * 0.8f));
-						renderer->DrawImage(prgBar, MakeVector2(x, y),
-						                    AABB2(0, 0, (1.f - state.progress) * 256.f, 32));
+						renderer.DrawImage(prgBar, MakeVector2(x, y),
+						                   AABB2(0, 0, (1.f - state.progress) * 256.f, 32));
 					}
 
 					if (state.team2 != 2) {
 						IntVector3 c = w->GetTeam(state.team2).color;
-						renderer->SetColorAlphaPremultiplied(
+						renderer.SetColorAlphaPremultiplied(
 						  MakeVector4(c.x / 255.f, c.y / 255.f, c.z / 255.f, 1) * (fade * 0.8f));
-						renderer->DrawImage(
+						renderer.DrawImage(
 						  prgBar, MakeVector2(x + (1.f - state.progress) * 256.f, y),
 						  AABB2((1.f - state.progress) * 256.f, 0, state.progress * 256.f, 32));
 					}
 
-					IFont *font = client->fontManager->GetGuiFont();
+					IFont &font = client.fontManager->GetGuiFont();
 					std::string str;
 
 					if (nearTerritory->ownerTeamId == 2) {
@@ -154,17 +158,17 @@ namespace spades {
 						str = _Tr("Client", "{0}'s Territory", str);
 					}
 
-					Vector2 size = font->Measure(str);
+					Vector2 size = font.Measure(str);
 					x = (scrW - size.x) * .5f;
 					y += 35.f;
 
-					font->DrawShadow(str, MakeVector2(x, y), 1.f, MakeVector4(1.f, 1.f, 1.f, fade),
-					                 MakeVector4(0, 0, 0, 0.5f * fade));
+					font.DrawShadow(str, MakeVector2(x, y), 1.f, MakeVector4(1.f, 1.f, 1.f, fade),
+					                MakeVector4(0, 0, 0, 0.5f * fade));
 				}
 			} else {
 				// unable to show nearby territory
 				lastTerritoryId = -1;
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

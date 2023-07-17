@@ -30,16 +30,16 @@ namespace spades {
 			GLProgram *thru;
 			GLProgram *computeGain;
 			GLProgram *preprocess;
-			GLRenderer *renderer;
+			GLRenderer &renderer;
 
 			// 1x1 of framebuffer that holds the scene brightness
 			IGLDevice::UInteger exposureFramebuffer;
 			IGLDevice::UInteger exposureTexture;
 
 		public:
-			GLAutoExposureFilter(GLRenderer *);
+			GLAutoExposureFilter(GLRenderer &);
 			~GLAutoExposureFilter();
 			GLColorBuffer Filter(GLColorBuffer, float dt);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -67,8 +67,8 @@ namespace spades {
 
 		std::vector<std::string> EnumFiles(const char *) override;
 
-		IStream *OpenForReading(const char *) override;
-		IStream *OpenForWriting(const char *) override;
+		std::unique_ptr<IStream> OpenForReading(const char *) override;
+		std::unique_ptr<IStream> OpenForWriting(const char *) override;
 		bool FileExists(const char *) override;
 	};
 }

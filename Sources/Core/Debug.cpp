@@ -40,8 +40,6 @@
 
 namespace spades {
 	namespace reflection {
-		Function::Function(const char *n, const char *f, int l) : name(n), file(f), line(l) {}
-
 		BacktraceEntryAdder::BacktraceEntryAdder(const BacktraceEntry &entry) {
 			bt = Backtrace::GetGlobalBacktrace();
 			if (bt)
@@ -194,7 +192,7 @@ namespace spades {
 		BoundedLogBuffer g_consoleLogBuffer;
 	} // namespace
 
-	static IStream *logStream = NULL;
+	static std::unique_ptr<IStream> logStream;
 	static bool attemptedToInitializeLog = false;
 	static std::string accumlatedLog;
 

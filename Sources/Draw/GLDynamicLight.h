@@ -33,6 +33,9 @@ namespace spades {
 			/** World-space clip planes (spotlight only) */
 			std::array<Plane3, 4> clipPlanes;
 
+			/** `(point2 - origin).GetPoweredLength()` (linear light only) */
+			float poweredLength;
+
 		public:
 			GLDynamicLight(const client::DynamicLightParam &param);
 			const client::DynamicLightParam &GetParam() const { return param; }
@@ -43,5 +46,5 @@ namespace spades {
 
 			bool SphereCull(const Vector3 &center, float radius) const;
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

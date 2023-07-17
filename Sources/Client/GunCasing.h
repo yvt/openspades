@@ -31,7 +31,7 @@ namespace spades {
 		class IAudioChunk;
 		class GunCasing : public ILocalEntity {
 			Client *client;
-			IRenderer *renderer;
+			IRenderer &renderer;
 			IModel *model;
 			Matrix4 matrix;
 			Vector3 rotAxis;
@@ -46,11 +46,12 @@ namespace spades {
 			float rotSpeed;
 
 		public:
+			// TODO: Replace pointers with references
 			GunCasing(Client *client, IModel *model, IAudioChunk *dropSound,
 			          IAudioChunk *waterSound, Vector3 pos, Vector3 dir, Vector3 flyDir);
 			~GunCasing();
 			bool Update(float dt) override;
 			void Render3D() override;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

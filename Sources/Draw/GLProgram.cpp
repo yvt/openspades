@@ -21,10 +21,10 @@
 #include <cstdio>
 #include <cstring>
 
-#include <Core/Debug.h>
-#include <Core/Exception.h>
 #include "GLProgram.h"
 #include "GLShader.h"
+#include <Core/Debug.h>
+#include <Core/Exception.h>
 
 namespace spades {
 	namespace draw {
@@ -37,9 +37,9 @@ namespace spades {
 			device->DeleteProgram(handle);
 		}
 
-		void GLProgram::Attach(spades::draw::GLShader *shader) {
+		void GLProgram::Attach(GLShader &shader) {
 			SPADES_MARK_FUNCTION();
-			device->AttachShader(handle, shader->GetHandle());
+			this->Attach(shader.GetHandle());
 		}
 
 		void GLProgram::Attach(IGLDevice::UInteger shader) {
@@ -98,5 +98,5 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			device->UseProgram(handle);
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

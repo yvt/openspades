@@ -33,13 +33,19 @@ float decodeDepth(float w, float near, float far){
 }
 
 void main() {
-    float centerDepth = texture2D(depthTexture, texCoord).x;
-    if (centerDepth >= 0.999999) {
+    float centerDepthRaw = texture2D(depthTexture, texCoord).x;
+
+    // A tangent at `texCoord` in `depthTexture`
+    float centerDepthRawDfdx = dFdx(centerDepthRaw);
+    float centerDepthRawDfdy = dFdy(centerDepthRaw);
+    float centerDepthRawDfdi =
+        dot(vec2(centerDepthRawDfdx, centerDepthRawDfdy), unitShift / vec2(dFdx(texCoord.x), dFdy(texCoord.y)));
+
+    if (centerDepthRaw >= 0.999999) {
         // skip background
         gl_FragColor = vec4(1.0);
         return;
     }
-    centerDepth = decodeDepth(centerDepth, zNearFar.x, zNearFar.y);
 
     vec2 sum = vec2(0.0000001);
     if (isUpsampling) {
@@ -47,6 +53,10 @@ void main() {
         inputOriginCoord *= pixelShift.xy * 2.0;
 
         for (float i = -4.0; i <= 4.0; i += 2.0) {
+            // Extrapolate the depth value using the tangent
+            float centerDepthRawInterpolated = centerDepthRaw + centerDepthRawDfdi * i;
+            float centerDepth = decodeDepth(centerDepthRawInterpolated, zNearFar.x, zNearFar.y);
+
             vec2 sampledCoord = inputOriginCoord + unitShift * i;
             float sampledDepth = texture2D(depthTexture, sampledCoord).x;
             sampledDepth = decodeDepth(sampledDepth, zNearFar.x, zNearFar.y);
@@ -61,6 +71,10 @@ void main() {
 
     } else {
         for (float i = -4.0; i <= 4.0; i += 1.0) {
+            // Extrapolate the depth value using the tangent
+            float centerDepthRawInterpolated = centerDepthRaw + centerDepthRawDfdi * i;
+            float centerDepth = decodeDepth(centerDepthRawInterpolated, zNearFar.x, zNearFar.y);
+
             vec2 sampledCoord = texCoord + unitShift * i;
             float sampledDepth = texture2D(depthTexture, sampledCoord).x;
             sampledDepth = decodeDepth(sampledDepth, zNearFar.x, zNearFar.y);

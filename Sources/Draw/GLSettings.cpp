@@ -18,6 +18,8 @@
 
  */
 
+#include <Core/Debug.h>
+
 #include "GLSettings.h"
 
 DEFINE_SPADES_SETTING(r_blitFramebuffer, "1");
@@ -57,16 +59,30 @@ DEFINE_SPADES_SETTING(r_optimizedVoxelModel, "1");
 DEFINE_SPADES_SETTING(r_physicalLighting, "0");
 DEFINE_SPADES_SETTING(r_radiosity, "0");
 DEFINE_SPADES_SETTING(r_saturation, "1");
+DEFINE_SPADES_SETTING(r_scale, "1");
+DEFINE_SPADES_SETTING(r_scaleFilter, "1");
 DEFINE_SPADES_SETTING(r_shadowMapSize, "2048");
+DEFINE_SPADES_SETTING(r_sharpen, "1");
 DEFINE_SPADES_SETTING(r_softParticles, "1");
 DEFINE_SPADES_SETTING(r_sparseShadowMaps, "1");
 DEFINE_SPADES_SETTING(r_srgb, "0");
 DEFINE_SPADES_SETTING(r_srgb2D, "1");
 DEFINE_SPADES_SETTING(r_ssao, "0");
+DEFINE_SPADES_SETTING(r_temporalAA, "0");
 DEFINE_SPADES_SETTING(r_water, "2");
 
 namespace spades {
 	namespace draw {
 		GLSettings::GLSettings() {}
-	}
-}
+
+		void GLSettings::ValidateSettings() {
+			if (this->r_fogShadow.operator int() == 2 && !this->ShouldUseFogFilter2()) {
+				SPLog("`r_fogShadow 2` is ignored because `r_radiosity` is disabled");
+			}
+		}
+
+		bool GLSettings::ShouldUseFogFilter2() {
+			return this->r_fogShadow.operator int() == 2 && !!this->r_radiosity.operator int();
+		}
+    } // namespace draw
+} // namespace spades

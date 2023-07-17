@@ -56,6 +56,7 @@
 #include "NetClient.h"
 
 DEFINE_SPADES_SETTING(cg_chatBeep, "1");
+DEFINE_SPADES_SETTING(cg_alertSounds, "1");
 
 DEFINE_SPADES_SETTING(cg_serverAlert, "1");
 
@@ -111,19 +112,23 @@ namespace spades {
 			renderer->SetFogDistance(128.f);
 			renderer->SetFogColor(MakeVector3(.8f, 1.f, 1.f));
 
-			chatWindow.reset(new ChatWindow(this, GetRenderer(), fontManager->GetGuiFont(), false));
-			killfeedWindow.reset(
-			  new ChatWindow(this, GetRenderer(), fontManager->GetGuiFont(), true));
+			chatWindow = stmp::make_unique<ChatWindow>(this, &GetRenderer(),
+			                                           &fontManager->GetGuiFont(), false);
+			killfeedWindow =
+			  stmp::make_unique<ChatWindow>(this, &GetRenderer(), &fontManager->GetGuiFont(), true);
 
-			hurtRingView.reset(new HurtRingView(this));
-			centerMessageView.reset(new CenterMessageView(this, fontManager->GetLargeFont()));
-			mapView.reset(new MapView(this, false));
-			largeMapView.reset(new MapView(this, true));
-			scoreboard.reset(new ScoreboardView(this));
-			limbo.reset(new LimboView(this));
-			paletteView.reset(new PaletteView(this));
-			tcView.reset(new TCProgressView(this));
-			scriptedUI.Set(new ClientUI(renderer, audioDev, fontManager, this), false);
+			hurtRingView = stmp::make_unique<HurtRingView>(this);
+			centerMessageView =
+			  stmp::make_unique<CenterMessageView>(this, &fontManager->GetLargeFont());
+			mapView = stmp::make_unique<MapView>(this, false);
+			largeMapView = stmp::make_unique<MapView>(this, true);
+			scoreboard = stmp::make_unique<ScoreboardView>(this);
+			limbo = stmp::make_unique<LimboView>(this);
+			paletteView = stmp::make_unique<PaletteView>(this);
+			tcView = stmp::make_unique<TCProgressView>(*this);
+			scriptedUI =
+			  Handle<ClientUI>::New(renderer.GetPointerOrNull(), audioDev.GetPointerOrNull(),
+			                        fontManager.GetPointerOrNull(), this);
 
 			renderer->SetGameMap(nullptr);
 		}
@@ -146,11 +151,6 @@ namespace spades {
 			scoreboardVisible = false;
 			flashlightOn = false;
 
-			for (size_t i = 0; i < clientPlayers.size(); i++) {
-				if (clientPlayers[i]) {
-					clientPlayers[i]->Invalidate();
-				}
-			}
 			clientPlayers.clear();
 
 			if (world) {
@@ -167,9 +167,9 @@ namespace spades {
 				// initialize player view objects
 				clientPlayers.resize(world->GetNumPlayerSlots());
 				for (size_t i = 0; i < world->GetNumPlayerSlots(); i++) {
-					Player *p = world->GetPlayer(static_cast<unsigned int>(i));
+					auto p = world->GetPlayer(static_cast<unsigned int>(i));
 					if (p) {
-						clientPlayers[i] = new ClientPlayer(p, this);
+						clientPlayers[i] = Handle<ClientPlayer>::New(*p, *this);
 					} else {
 						clientPlayers[i] = nullptr;
 					}
@@ -178,7 +178,7 @@ namespace spades {
 				world->SetListener(this);
 				map = world->GetMap();
 				renderer->SetGameMap(map);
-				audioDevice->SetGameMap(map);
+				audioDevice->SetGameMap(map.GetPointerOrNull());
 				NetLog("------ World Loaded ------");
 			} else {
 
@@ -220,11 +220,6 @@ namespace spades {
 			renderer->SetGameMap(nullptr);
 			audioDevice->SetGameMap(nullptr);
 
-			for (size_t i = 0; i < clientPlayers.size(); i++) {
-				if (clientPlayers[i]) {
-					clientPlayers[i]->Invalidate();
-				}
-			}
 			clientPlayers.clear();
 
 			scriptedUI->ClientDestroyed();
@@ -244,7 +239,7 @@ namespace spades {
 		/** Initiate an initialization which likely to take some time */
 		void Client::DoInit() {
 			renderer->Init();
-			SmokeSpriteEntity::Preload(renderer);
+			SmokeSpriteEntity::Preload(renderer.GetPointerOrNull());
 
 			renderer->RegisterImage("Textures/Fluid.png");
 			renderer->RegisterImage("Textures/WaterExpl.png");
@@ -297,8 +292,7 @@ namespace spades {
 			audioDevice->RegisterSound("Sounds/Weapons/AimDownSightLocal.opus");
 			renderer->RegisterImage("Gfx/Ball.png");
 			renderer->RegisterModel("Models/Player/Dead.kv6");
-			renderer->RegisterImage("Gfx/Spotlight.png");
-			renderer->RegisterImage("Gfx/Glare.png");
+			renderer->RegisterImage("Gfx/Spotlight.jpg");
 			renderer->RegisterModel("Models/Weapons/Spade/Spade.kv6");
 			renderer->RegisterModel("Models/Weapons/Block/Block2.kv6");
 			renderer->RegisterModel("Models/Weapons/Grenade/Grenade.kv6");
@@ -341,7 +335,7 @@ namespace spades {
 			mumbleLink.setIdentity(playerName);
 
 			SPLog("Started connecting to '%s'", hostname.ToString(true).c_str());
-			net.reset(new NetClient(this));
+			net = stmp::make_unique<NetClient>(this);
 			net->Connect(hostname);
 
 			// decide log file name
@@ -368,7 +362,7 @@ namespace spades {
 			fn2 = "NetLogs/" + fn2 + ".log";
 
 			try {
-				logStream.reset(FileManager::OpenForWriting(fn2.c_str()));
+				logStream = FileManager::OpenForWriting(fn2.c_str());
 				SPLog("Netlog Started at '%s'", fn2.c_str());
 			} catch (const std::exception &ex) {
 				SPLog("Failed to open netlog file '%s' (%s)", fn2.c_str(), ex.what());
@@ -421,7 +415,7 @@ namespace spades {
 
 			if (world) {
 				UpdateWorld(dt);
-				mumbleLink.update(world->GetLocalPlayer());
+				mumbleLink.update(world->GetLocalPlayer().get_pointer());
 			} else {
 				renderer->SetFogColor(MakeVector3(0.f, 0.f, 0.f));
 			}
@@ -448,6 +442,7 @@ namespace spades {
 			// CreateSceneDefinition also can be used for sounds
 			SceneDefinition sceneDef = CreateSceneDefinition();
 			lastSceneDef = sceneDef;
+			UpdateMatrices();
 
 			// Update sounds
 			try {
@@ -512,11 +507,11 @@ namespace spades {
 				}
 				net->SendJoin(team, weap, playerName, lastKills);
 			} else {
-				Player *p = world->GetLocalPlayer();
-				if (p->GetTeamId() != team) {
+				Player &p = world->GetLocalPlayer().value();
+				if (p.GetTeamId() != team) {
 					net->SendTeamChange(team);
 				}
-				if (team != 2 && p->GetWeapon()->GetWeaponType() != weap) {
+				if (team != 2 && p.GetWeapon().GetWeaponType() != weap) {
 					net->SendWeaponChange(weap);
 				}
 			}
@@ -575,7 +570,9 @@ namespace spades {
 
 		void Client::PlayAlertSound() {
 			Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Alert.opus");
-			audioDevice->PlayLocal(chunk, AudioParam());
+			AudioParam params;
+			params.volume = (float)cg_alertSounds;
+			audioDevice->PlayLocal(chunk.GetPointerOrNull(), params);
 		}
 
 		/** Records chat message/game events to the log file. */
@@ -619,8 +616,8 @@ namespace spades {
 				{
 					std::unique_ptr<IStream> stream(FileManager::OpenForWriting(name.c_str()));
 					try {
-						GameMap *map = GetWorld()->GetMap();
-						if (map == nullptr) {
+						const Handle<GameMap> &map = GetWorld()->GetMap();
+						if (!map) {
 							SPRaise("No map loaded");
 						}
 						map->Save(stream.get());
@@ -667,8 +664,7 @@ namespace spades {
 
 #pragma mark - Chat Messages
 
-		void Client::PlayerSentChatMessage(spades::client::Player *p, bool global,
-		                                   const std::string &msg) {
+		void Client::PlayerSentChatMessage(Player &p, bool global, const std::string &msg) {
 			{
 				std::string s;
 				if (global)
@@ -680,7 +676,7 @@ namespace spades {
 					//! but it actually can be.
 					//! The extra whitespace is not a typo.
 					s = _Tr("Client", "[Global] ");
-				s += ChatWindow::TeamColorMessage(p->GetName(), p->GetTeamId());
+				s += ChatWindow::TeamColorMessage(p.GetName(), p.GetTeamId());
 				s += ": ";
 				s += msg;
 				chatWindow->AddMessage(s);
@@ -689,26 +685,28 @@ namespace spades {
 				std::string s;
 				if (global)
 					s = "[Global] ";
-				s += p->GetName();
+				s += p.GetName();
 				s += ": ";
 				s += msg;
 
-				auto col = p->GetTeamId() < 2 ? world->GetTeam(p->GetTeamId()).color
-				                              : IntVector3::Make(255, 255, 255);
+				auto col = p.GetTeamId() < 2 ? world->GetTeam(p.GetTeamId()).color
+				                             : IntVector3::Make(255, 255, 255);
 
 				scriptedUI->RecordChatLog(
 				  s, MakeVector4(col.x / 255.f, col.y / 255.f, col.z / 255.f, 0.8f));
 			}
 			if (global)
-				NetLog("[Global] %s (%s): %s", p->GetName().c_str(),
-				       world->GetTeam(p->GetTeamId()).name.c_str(), msg.c_str());
+				NetLog("[Global] %s (%s): %s", p.GetName().c_str(),
+				       world->GetTeam(p.GetTeamId()).name.c_str(), msg.c_str());
 			else
-				NetLog("[Team] %s (%s): %s", p->GetName().c_str(),
-				       world->GetTeam(p->GetTeamId()).name.c_str(), msg.c_str());
+				NetLog("[Team] %s (%s): %s", p.GetName().c_str(),
+				       world->GetTeam(p.GetTeamId()).name.c_str(), msg.c_str());
 
-			if ((!IsMuted()) && (int)cg_chatBeep) {
+			if (!IsMuted()) {
 				Handle<IAudioChunk> chunk = audioDevice->RegisterSound("Sounds/Feedback/Chat.opus");
-				audioDevice->PlayLocal(chunk, AudioParam());
+				AudioParam params;
+				params.volume = (float)cg_chatBeep;
+				audioDevice->PlayLocal(chunk.GetPointerOrNull(), params);
 			}
 		}
 
@@ -748,8 +746,9 @@ namespace spades {
 
 			bool localPlayerIsSpectator = localPlayer.IsSpectator();
 
-			int nextId = FollowsNonLocalPlayer(GetCameraMode()) ? followedPlayerId
-			                                                    : world->GetLocalPlayerIndex();
+			int nextId = FollowsNonLocalPlayer(GetCameraMode())
+			               ? followedPlayerId
+			               : world->GetLocalPlayerIndex().value();
 			do {
 				reverse ? --nextId : ++nextId;
 
@@ -758,8 +757,8 @@ namespace spades {
 				if (nextId < 0)
 					nextId = static_cast<int>(world->GetNumPlayerSlots() - 1);
 
-				Player *p = world->GetPlayer(nextId);
-				if (p == nullptr || p->IsSpectator()) {
+				stmp::optional<Player &> p = world->GetPlayer(nextId);
+				if (!p || p->IsSpectator()) {
 					// Do not follow a non-existent player or spectator
 					continue;
 				}

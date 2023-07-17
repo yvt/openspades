@@ -20,23 +20,22 @@
 
 #pragma once
 
-#include <Core/Math.h>
 #include "Client.h"
 #include "ILocalEntity.h"
+#include <Core/Math.h>
 
 namespace spades {
 	namespace client {
 		class IImage;
 
+		enum class BlockHitAction { Delete, Ignore, BounceWeak };
+
 		class ParticleSpriteEntity : public ILocalEntity {
-		public:
-			enum BlockHitAction { Delete, Ignore, BounceWeak };
-
 		private:
-			IRenderer *renderer;
-			GameMap *map;
+			IRenderer &renderer;
+			Handle<GameMap> map;
 
-			IImage *image;
+			Handle<IImage> image;
 			Vector4 color;
 			bool additive;
 			BlockHitAction blockHitAction;
@@ -54,7 +53,7 @@ namespace spades {
 			float fadeOutDuration;
 
 		public:
-			ParticleSpriteEntity(Client *cli, IImage *image, Vector4 color);
+			ParticleSpriteEntity(Client &client, Handle<IImage> image, Vector4 color);
 
 			~ParticleSpriteEntity();
 
@@ -74,10 +73,10 @@ namespace spades {
 
 			void SetBlockHitAction(BlockHitAction act) { blockHitAction = act; }
 
-			void SetImage(IImage *img);
+			void SetImage(Handle<IImage> img);
 			void SetColor(Vector4 col) { color = col; }
 
-			IRenderer *GetRenderer() { return renderer; }
+			IRenderer &GetRenderer() { return renderer; }
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

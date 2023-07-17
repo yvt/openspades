@@ -1,53 +1,88 @@
 /*
  Copyright (c) 2013 yvt
- 
+
  This file is part of OpenSpades.
- 
+
  OpenSpades is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  OpenSpades is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with OpenSpades.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  */
 
 #include "ScriptManager.h"
 #include <Client/IRenderer.h>
 #include <Client/SceneDefinition.h>
+#include <Core/Bitmap.h>
 
 namespace spades {
 	namespace client{
-		
-		
-		
+
+
+
 		class RendererRegistrar: public ScriptObjectRegistrar {
-			static IModel *RegisterModel(const std::string& str,
-										 IRenderer *r) {
-				try{
-					IModel *m = r->RegisterModel(str.c_str());
-					m->AddRef();
-					return m;
-				}catch(const std::exception& ex) {
+			static void SetGameMap(GameMap *gameMap, IRenderer *r) {
+				try {
+					r->SetGameMap(gameMap);
+				} catch (const std::exception &ex) {
 					ScriptContextUtils().SetNativeException(ex);
-					return NULL;
 				}
 			}
-			static IImage *RegisterImage(const std::string& str,
-										 IRenderer *r) {
-				try{
-					IImage *im = r->RegisterImage(str.c_str());
-					im->AddRef();
-					return im;
-				}catch(const std::exception& ex) {
+			static IModel *RegisterModel(const std::string &str, IRenderer *r) {
+				try {
+					return r->RegisterModel(str.c_str()).Unmanage();
+				} catch (const std::exception &ex) {
+					ScriptContextUtils().SetNativeException(ex);
+					return {};
+				}
+			}
+			static IImage *RegisterImage(const std::string &str, IRenderer *r) {
+				try {
+					return r->RegisterImage(str.c_str()).Unmanage();
+				} catch (const std::exception &ex) {
 					ScriptContextUtils().SetNativeException(ex);
 					return nullptr;
+				}
+			}
+			static IImage *CreateImage(Bitmap *bitmap, IRenderer *r) {
+				try {
+					if (!bitmap) {
+						SPInvalidArgument("bitmap");
+					}
+					return r->CreateImage(*bitmap).Unmanage();
+				} catch (const std::exception &ex) {
+					ScriptContextUtils().SetNativeException(ex);
+					return nullptr;
+				}
+			}
+			static IModel *CreateModel(VoxelModel *model, IRenderer *r) {
+				try {
+					if (!model) {
+						SPInvalidArgument("model");
+					}
+					return r->CreateModel(*model).Unmanage();
+				} catch (const std::exception &ex) {
+					ScriptContextUtils().SetNativeException(ex);
+					return nullptr;
+				}
+			}
+			static void RenderModel(IModel *model, const ModelRenderParam &param,
+			                        IRenderer *r) {
+				try {
+					if (!model) {
+						SPInvalidArgument("model");
+					}
+					return r->RenderModel(*model, param);
+				} catch (const std::exception &ex) {
+					ScriptContextUtils().SetNativeException(ex);
 				}
 			}
 			static void AddDebugLine(const Vector3& a, const Vector3& b,
@@ -63,7 +98,10 @@ namespace spades {
 								  float rad, float rot,
 								  IRenderer *r) {
 				try{
-					return r->AddSprite(img, center, rad, rot);
+					if (!img) {
+						SPInvalidArgument("img");
+					}
+					return r->AddSprite(*img, center, rad, rot);
 				}catch(const std::exception& ex) {
 					ScriptContextUtils().SetNativeException(ex);
 				}
@@ -71,10 +109,13 @@ namespace spades {
 			static void AddLongSprite(IImage *img,
 									  const Vector3& p1,
 									  const Vector3& p2,
-								  float rad, 
+								  float rad,
 								  IRenderer *r) {
 				try{
-					return r->AddLongSprite(img, p1, p2, rad);
+					if (!img) {
+						SPInvalidArgument("img");
+					}
+					return r->AddLongSprite(*img, p1, p2, rad);
 				}catch(const std::exception& ex) {
 					ScriptContextUtils().SetNativeException(ex);
 				}
@@ -120,13 +161,59 @@ namespace spades {
 					ScriptContextUtils().SetNativeException(ex);
 				}
 			}
-			
 			static void SetFogColor(const Vector3& v,
 								 IRenderer *r){
 				try{
 					return r->SetFogColor(v);
 				}catch(const std::exception& ex) {
 					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void DrawImage1(IImage *image, const Vector2 &outTopLeft, IRenderer *self) {
+				try {
+					return self->DrawImage(image, outTopLeft);
+				} catch (const std::exception &ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void DrawImage2(IImage *image, const AABB2 &outRect, IRenderer *self) {
+				try {
+					return self->DrawImage(image, outRect);
+				} catch (const std::exception &ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void DrawImage3(IImage *image, const Vector2 &outTopLeft, const AABB2 &inRect,
+			                       IRenderer *self) {
+				try {
+					return self->DrawImage(image, outTopLeft, inRect);
+				} catch (const std::exception &ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void DrawImage4(IImage *image, const AABB2 &outRect, const AABB2 &inRect,
+			                       IRenderer *self) {
+				try {
+					return self->DrawImage(image, outRect, inRect);
+				} catch (const std::exception &ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static void DrawImage5(IImage *image, const Vector2 &outTopLeft,
+			                       const Vector2 &outTopRight, const Vector2 &outBottomLeft,
+			                       const AABB2 &inRect, IRenderer *self) {
+				try {
+					return self->DrawImage(image, outTopLeft, outTopRight, outBottomLeft, inRect);
+				} catch (const std::exception &ex) {
+					ScriptContextUtils().SetNativeException(ex);
+				}
+			}
+			static Bitmap *ReadBitmap(IRenderer *r){
+				try{
+					return r->ReadBitmap().Unmanage();
+				}catch(const std::exception& ex) {
+					ScriptContextUtils().SetNativeException(ex);
+					return nullptr;
 				}
 			}
 			static void ModelRenderParamFactory(ModelRenderParam *p) {
@@ -157,7 +244,7 @@ namespace spades {
 		public:
 			RendererRegistrar():
 			ScriptObjectRegistrar("Renderer"){
-				
+
 			}
 			virtual void Register(ScriptManager *manager, Phase phase) {
 				asIScriptEngine *eng = manager->GetEngine();
@@ -178,8 +265,8 @@ namespace spades {
 														 asMETHOD(IRenderer, Release),
 														 asCALL_THISCALL);
 						manager->CheckError(r);
-						
-						
+
+
 						r = eng->RegisterObjectType("ModelRenderParam",
 													sizeof(ModelRenderParam), asOBJ_VALUE|asOBJ_POD|asOBJ_APP_CLASS_CDAK);
 						manager->CheckError(r);
@@ -191,8 +278,8 @@ namespace spades {
 						manager->CheckError(r);
 						r = eng->RegisterEnum("DynamicLightType");
 						manager->CheckError(r);
-						
-						
+
+
 						break;
 					case PhaseObjectMember:
 						r = eng->RegisterEnumValue("DynamicLightType", "Point",
@@ -201,7 +288,10 @@ namespace spades {
 						r = eng->RegisterEnumValue("DynamicLightType", "Spotlight",
 												   DynamicLightTypeSpotlight);
 						manager->CheckError(r);
-						
+						r = eng->RegisterEnumValue("DynamicLightType", "Linear",
+												   DynamicLightTypeLinear);
+						manager->CheckError(r);
+
 						r = eng->RegisterObjectBehaviour("ModelRenderParam",
 														 asBEHAVE_CONSTRUCT,
 														 "void f()",
@@ -257,6 +347,10 @@ namespace spades {
 														asOFFSET(DynamicLightParam, origin));
 						manager->CheckError(r);
 						r = eng->RegisterObjectProperty("DynamicLightParam",
+														"Vector3 point2",
+														asOFFSET(DynamicLightParam, point2));
+						manager->CheckError(r);
+						r = eng->RegisterObjectProperty("DynamicLightParam",
 														"float radius",
 														asOFFSET(DynamicLightParam, radius));
 						manager->CheckError(r);
@@ -288,7 +382,7 @@ namespace spades {
 														"bool useLensFlare",
 														asOFFSET(DynamicLightParam, useLensFlare));
 						manager->CheckError(r);
-						
+
 						r = eng->RegisterObjectBehaviour("SceneDefinition",
 														 asBEHAVE_CONSTRUCT,
 														 "void f()",
@@ -371,19 +465,19 @@ namespace spades {
 														"float globalBlur",
 														asOFFSET(SceneDefinition, globalBlur));
 						manager->CheckError(r);
-						
+
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void Init()",
 													  asMETHOD(IRenderer, Init),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
-						
+
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void Shutdown()",
 													  asMETHOD(IRenderer, Shutdown),
 													  asCALL_THISCALL);
 						manager->CheckError(r);
-						
+
 						r = eng->RegisterObjectMethod("Renderer",
 													  "Image@ RegisterImage(const string& in)",
 													  asFUNCTION(RegisterImage),
@@ -405,18 +499,18 @@ namespace spades {
 						// (https://github.com/yvt/openspades/issues/687).
 						r = eng->RegisterObjectMethod("Renderer",
 													  "Image@ CreateImage(Bitmap@+)",
-													  asMETHOD(IRenderer, CreateImage),
-													  asCALL_THISCALL);
+													  asFUNCTION(CreateImage),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "Model@ CreateModel(VoxelModel@+)",
-													  asMETHOD(IRenderer, CreateModel),
-													  asCALL_THISCALL);
+													  asFUNCTION(CreateModel),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void set_GameMap(GameMap@+)",
-													  asMETHOD(IRenderer, SetGameMap),
-													  asCALL_THISCALL);
+													  asFUNCTION(SetGameMap),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void set_FogDistance(float)",
@@ -440,8 +534,8 @@ namespace spades {
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void AddModel(Model@+, const ModelRenderParam& in)",
-													  asMETHOD(IRenderer, RenderModel),
-													  asCALL_THISCALL);
+													  asFUNCTION(RenderModel),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void AddDebugLine(const Vector3&in, const Vector3&in, const Vector4&in)",
@@ -490,38 +584,28 @@ namespace spades {
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void DrawImage(Image@+, const Vector2& in)",
-													  asMETHODPR(IRenderer, DrawImage,
-																 (IImage*, const Vector2&),
-																 void),
-													  asCALL_THISCALL);
+													  asFUNCTION(DrawImage1),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void DrawImage(Image@+, const AABB2& in)",
-													  asMETHODPR(IRenderer, DrawImage,
-																 (IImage*, const AABB2&),
-																 void),
-													  asCALL_THISCALL);
+													  asFUNCTION(DrawImage2),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void DrawImage(Image@+, const Vector2&in, const AABB2& in)",
-													  asMETHODPR(IRenderer, DrawImage,
-																 (IImage*, const Vector2&, const AABB2&),
-																 void),
-													  asCALL_THISCALL);
+													  asFUNCTION(DrawImage3),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void DrawImage(Image@+, const AABB2&in, const AABB2& in)",
-													  asMETHODPR(IRenderer, DrawImage,
-																 (IImage*, const AABB2&, const AABB2&),
-																 void),
-													  asCALL_THISCALL);
+													  asFUNCTION(DrawImage4),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void DrawImage(Image@+, const Vector2&in, const Vector2&in, const Vector2&in, const AABB2& in)",
-													  asMETHODPR(IRenderer, DrawImage,
-																 (IImage*, const Vector2&, const Vector2&, const Vector2&, const AABB2&),
-																 void),
-													  asCALL_THISCALL);
+													  asFUNCTION(DrawImage5),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "void DrawFlatGameMap(const AABB2&in, const AABB2& in)",
@@ -540,8 +624,8 @@ namespace spades {
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "Bitmap@ ReadBitmap()",
-													  asMETHOD(IRenderer,ReadBitmap),
-													  asCALL_THISCALL);
+													  asFUNCTION(ReadBitmap),
+													  asCALL_CDECL_OBJLAST);
 						manager->CheckError(r);
 						r = eng->RegisterObjectMethod("Renderer",
 													  "float get_ScreenWidth()",
@@ -559,7 +643,7 @@ namespace spades {
 				}
 			}
 		};
-		
+
 		static RendererRegistrar registrar;
 	}
 }

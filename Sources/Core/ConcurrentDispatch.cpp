@@ -217,7 +217,7 @@ namespace spades {
 		Thread::CleanupExitedThreads();
 	}
 
-	void DispatchQueue::EnterEventLoop() throw() {
+	void DispatchQueue::EnterEventLoop() noexcept {
 		while (true) {
 			SyncQueueEntry *ent = internal->Wait();
 			ent->dispatch->ExecuteProtected();
@@ -317,7 +317,7 @@ namespace spades {
 		ent->Done();
 	}
 
-	void ConcurrentDispatch::ExecuteProtected() throw() {
+	void ConcurrentDispatch::ExecuteProtected() noexcept {
 		try {
 			Execute();
 		} catch (const std::exception &ex) {

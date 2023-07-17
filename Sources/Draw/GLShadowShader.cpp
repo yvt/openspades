@@ -95,11 +95,7 @@ namespace spades {
 			}
 
 			if (settings.r_radiosity) {
-				if ((int)settings.r_radiosity >= 2) {
-					shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosity.fs"));
-				} else {
-					shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosityLow.fs"));
-				}
+				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosity.fs"));
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosity.vs"));
 			} else {
 				shaders.push_back(r->RegisterShader("Shaders/Shadow/MapRadiosityNull.fs"));
@@ -131,7 +127,7 @@ namespace spades {
 				dev->BindTexture(IGLDevice::Texture2D, renderer->mapShadowRenderer->GetTexture());
 			} else {
 				// TODO: do this case properly
-				GLImage *img = (GLImage *)renderer->RegisterImage("Gfx/White.tga");
+				auto img = renderer->RegisterImage("Gfx/White.tga").Cast<GLImage>();
 				img->Bind(IGLDevice::Texture2D);
 			}
 			mapShadowTexture.SetValue(texStage);
@@ -289,8 +285,8 @@ namespace spades {
 					ssaoTexture.SetValue(texStage);
 					texStage++;
 
-					ssaoTextureUVScale.SetValue(1.0f / renderer->ScreenWidth(),
-					                            1.0f / renderer->ScreenHeight());
+					ssaoTextureUVScale.SetValue(1.0f / renderer->GetRenderWidth(),
+					                            1.0f / renderer->GetRenderHeight());
 				}
 			}
 
@@ -298,5 +294,5 @@ namespace spades {
 
 			return texStage;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

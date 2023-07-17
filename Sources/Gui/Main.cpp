@@ -22,7 +22,7 @@
 #include <memory>
 #include <regex>
 
-#if !defined(__APPLE__) && (__unix || __unix__)
+#if (!defined(__APPLE__) && (__unix || __unix__)) || defined(__HAIKU__)
 #include <sys/stat.h>
 #include <sys/types.h>
 #endif
@@ -190,11 +190,12 @@ namespace {
 		       binaryName);
 	}
 
+	std::regex const hostNameRegex{"aos://.*"};
+	std::regex const v075Regex{"(?:v=)?0?\\.?75"};
+	std::regex const v076Regex{"(?:v=)?0?\\.?76"};
+
 	int handleCommandLineArgument(int argc, char **argv, int &i) {
 		if (char *a = argv[i]) {
-			static std::regex hostNameRegex{"aos://.*"};
-			static std::regex v075Regex{"(?:v=)?0?\\.?75"};
-			static std::regex v076Regex{"(?:v=)?0?\\.?76"};
 
 			if (std::regex_match(a, hostNameRegex)) {
 				g_autoconnect = true;
@@ -233,9 +234,10 @@ namespace spades {
 		protected:
 			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                              spades::client::IAudioDevice *audio) override {
-				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				Handle<gui::View> innerView{new spades::client::Client(renderer, audio, addr, fontManager), false};
-				return new spades::gui::ConsoleScreen(renderer, audio, fontManager, std::move(innerView));
+				auto fontManager = Handle<client::FontManager>::New(renderer);
+				auto innerView = Handle<client::Client>::New(renderer, audio, addr, fontManager);
+				return new spades::gui::ConsoleScreen(renderer, audio, fontManager,
+													  std::move(innerView).Cast<gui::View>());
 			}
 
 		public:
@@ -249,9 +251,10 @@ namespace spades {
 		protected:
 			spades::gui::View *CreateView(spades::client::IRenderer *renderer,
 			                              spades::client::IAudioDevice *audio) override {
-				Handle<client::FontManager> fontManager(new client::FontManager(renderer), false);
-				Handle<gui::View> innerView{new spades::gui::MainScreen(renderer, audio, fontManager), false};
-				return new spades::gui::ConsoleScreen(renderer, audio, fontManager, std::move(innerView));
+				auto fontManager = Handle<client::FontManager>::New(renderer);
+				auto innerView = Handle<gui::MainScreen>::New(renderer, audio, fontManager);
+				return new spades::gui::ConsoleScreen(renderer, audio, fontManager,
+				                                      std::move(innerView).Cast<gui::View>());
 			}
 
 		public:
@@ -282,6 +285,27 @@ static std::string Utf8FromWString(const wchar_t *ws) {
 	std::string ss(s);
 	SDL_free(s);
 	return ss;
+}
+#endif
+
+#ifndef WIN32
+/**
+ * A wrapper of `SDL_GetPrefPath` returning a `std::string`.
+ *
+ * See [the documentation of `SDL_GetPrefPath`][1] for the usage. The returned
+ * path is terminated by a platform-specific path separator.
+ *
+ * [1]: https://wiki.libsdl.org/SDL_GetPrefPath
+ */
+static std::string GetSDLPrefPath(const char *applicationName) {
+	char *path = SDL_GetPrefPath(nullptr, applicationName);
+	if (!path) {
+		SPRaise("SDL_GetPrefPath failed");
+	}
+	std::string path2 = path;
+	SDL_free(path);
+	return path2;
+
 }
 #endif
 
@@ -384,8 +408,7 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		spades::g_userResourceDirectory =
-		  home + "/Library/Application Support/OpenSpades/Resources";
+		spades::g_userResourceDirectory = GetSDLPrefPath("OpenSpades") + "Resources";
 
 		spades::FileManager::AddFileSystem(
 		  new spades::DirectoryFileSystem(spades::g_userResourceDirectory, true));
@@ -397,25 +420,30 @@ int main(int argc, char **argv) {
 		spades::FileManager::AddFileSystem(new spades::DirectoryFileSystem(
 		  CMAKE_INSTALL_PREFIX "/" OPENSPADES_INSTALL_RESOURCES, false));
 
-		std::string xdg_data_home = home + "/.local/share";
+		std::string userDataDirectory = GetSDLPrefPath("openspades");
 
 		if (getenv("XDG_DATA_HOME") == NULL) {
-			SPLog("XDG_DATA_HOME not defined. Assuming that XDG_DATA_HOME is ~/.local/share");
+			SPLog("XDG_DATA_HOME is not provided. Using the SDL 'pref dir' as "
+			      "the user data directory: '%s'",
+			      userDataDirectory.c_str());
 		} else {
-			std::string xdg_data_home = getenv("XDG_DATA_HOME");
-			SPLog("XDG_DATA_HOME is %s", xdg_data_home.c_str());
+			userDataDirectory = getenv("XDG_DATA_HOME");
+			userDataDirectory += "/openspades/";
+			SPLog("The user data directory is '%s' (determined based on $XDG_DATA_HOME)",
+			      userDataDirectory.c_str());
 		}
 
 		struct stat info;
 
-		if (stat((xdg_data_home + "/openspades").c_str(), &info) != 0) {
+		if (stat(userDataDirectory.c_str(), &info) != 0) {
+			// TODO: Remove this very old migration code
 			if (stat((home + "/.openspades").c_str(), &info) != 0) {
 			} else if (info.st_mode & S_IFDIR) {
 				SPLog("Openspades directory in XDG_DATA_HOME not found, though old directory "
 				      "exists. Trying to resolve compatibility problem.");
 
 				if (rename((home + "/.openspades").c_str(),
-				           (xdg_data_home + "/openspades").c_str()) != 0) {
+				           (userDataDirectory + "/openspades").c_str()) != 0) {
 					SPLog("Failed to move old directory to new.");
 				} else {
 					SPLog("Successfully moved old directory.");
@@ -425,7 +453,8 @@ int main(int argc, char **argv) {
 						SDL_RWops *io = SDL_RWFromFile(
 						  (home + "/.openspades/CONTENT_MOVED_TO_NEW_DIR").c_str(), "wb");
 						if (io != NULL) {
-							std::string text = ("Content of this directory moved to " + xdg_data_home + "/openspades");
+							std::string text = ("Content of this directory moved to " +
+							                    userDataDirectory + "/openspades");
 							io->write(io, text.c_str(), text.length(), 1);
 							io->close(io);
 						}
@@ -434,7 +463,7 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		spades::g_userResourceDirectory = xdg_data_home + "/openspades/Resources";
+		spades::g_userResourceDirectory = userDataDirectory + "Resources";
 
 		spades::FileManager::AddFileSystem(
 		  new spades::DirectoryFileSystem(spades::g_userResourceDirectory, true));
@@ -549,12 +578,12 @@ int main(int argc, char **argv) {
 				}
 
 				if (spades::FileManager::FileExists(name.c_str())) {
-					spades::IStream *stream = spades::FileManager::OpenForReading(name.c_str());
-					uLong crc = computeCrc32ForStream(stream);
+					auto stream = spades::FileManager::OpenForReading(name.c_str());
+					uLong crc = computeCrc32ForStream(stream.get());
 
 					stream->SetPosition(0);
 
-					spades::ZipFileSystem *fs = new spades::ZipFileSystem(stream);
+					spades::ZipFileSystem *fs = new spades::ZipFileSystem(stream.release());
 					if (name[0] == '_' && false) { // last resort for #198
 						SPLog("Pak registered: %s: %08lx (marked as 'important')", name.c_str(),
 						      static_cast<unsigned long>(crc));
@@ -601,9 +630,14 @@ int main(int argc, char **argv) {
 		}
 		pumpEvents();
 
+		// make sure the user sees the "pre-release version" text
+		bool forceStartupWindow =
+		  spades::PackageUpdateManager::GetInstance().GetCurrentVersionInfo().build < 4;
+
 		// everything is now ready!
 		if (!g_autoconnect) {
-			if (!((int)cl_showStartupWindow != 0 || splashWindow->IsStartupScreenRequested())) {
+			if (!((int)cl_showStartupWindow != 0 || splashWindow->IsStartupScreenRequested() ||
+			      forceStartupWindow)) {
 				splashWindow.reset();
 
 				SPLog("Starting main screen");

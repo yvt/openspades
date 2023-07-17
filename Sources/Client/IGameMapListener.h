@@ -21,11 +21,11 @@
 #pragma once
 
 namespace spades {
-    namespace client {
-        class GameMap;
-        class IGameMapListener {
-        public:
-            virtual void GameMapChanged(int x, int y, int z, GameMap *) = 0;
-        };
-    }
-}
+	namespace client {
+		class GameMap;
+		class IGameMapListener {
+		public:
+			virtual void GameMapChanged(int x, int y, int z, GameMap *) = 0;
+		};
+	} // namespace client
+} // namespace spades

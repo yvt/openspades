@@ -330,7 +330,7 @@ namespace spades {
 		unzClose(zip);
 	}
 
-	IStream *ZipFileSystem::OpenForReading(const char *fn) {
+	std::unique_ptr<IStream> ZipFileSystem::OpenForReading(const char *fn) {
 		SPADES_MARK_FUNCTION();
 
 		if (currentStream) {
@@ -345,8 +345,7 @@ namespace spades {
 		try {
 			currentStream = new ZipFileInputStream(this, zip);
 			// load all data to allow seeking
-			DynamicMemoryStream *stream;
-			stream = new DynamicMemoryStream();
+			auto stream = stmp::make_unique<DynamicMemoryStream>();
 			try {
 				char buf[4096];
 				size_t rd;
@@ -358,7 +357,6 @@ namespace spades {
 				delete currentStream;
 				return stream;
 			} catch (...) {
-				delete stream;
 				delete currentStream;
 				throw;
 			}
@@ -368,7 +366,7 @@ namespace spades {
 		}
 	}
 
-	IStream *ZipFileSystem::OpenForWriting(const char *fn) {
+	std::unique_ptr<IStream> ZipFileSystem::OpenForWriting(const char *fn) {
 		SPADES_MARK_FUNCTION();
 		SPRaise("ZIP file system doesn't support writing");
 	}

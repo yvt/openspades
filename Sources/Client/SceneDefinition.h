@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2013 yvt
+ Copyright (c) 2021 yvt
 
  This file is part of OpenSpades.
 
@@ -56,6 +56,10 @@ namespace spades {
 				saturation = 1.f;
 				radialBlur = 0.f;
 			}
+
+			Matrix4 ToOpenGLProjectionMatrix() const;
+
+			Matrix4 ToViewMatrix() const;
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

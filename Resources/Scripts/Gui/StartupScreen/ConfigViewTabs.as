@@ -113,6 +113,7 @@ namespace spades {
             {
                 StartupScreenConfigView cfg(Manager);
 
+                // TODO: Add r_temporalAA when it's more complete
                 cfg.AddRow(StartupScreenConfigSelectItemEditor(
                     ui, StartupScreenGraphicsAntialiasConfig(ui), "0|2|4|fxaa",
                     _Tr("StartupScreen",
@@ -129,6 +130,11 @@ namespace spades {
                     _Tr("StartupScreen", "Linear HDR Rendering"),
                     _Tr("StartupScreen",
                         "Uses a number representation which allows wider dynamic range during rendering process. " "Additionally, this allows color calculation whose value is in linear correspondence with actual energy, " "that is, physically accurate blending can be achieved.")));
+
+                cfg.AddRow(StartupScreenConfigSelectItemEditor(
+                    ui, StartupScreenConfig(ui, "r_vsync"), "0|1|-1",
+                    _Tr("StartupScreen",
+                        "Vertical Sync:Synchronizes screen updates to a monitor's refresh rate.|" "Off|" "On|" "Adaptive")));
 
                 {
                     StartupScreenComplexConfig cplx;
@@ -191,6 +197,20 @@ namespace spades {
                     _Tr("StartupScreen",
                         "Particles|" "Low:Artifact occurs when a particle intersects other objects.|" "Medium:Particle intersects objects smoothly.|" "High:Particle intersects objects smoothly, and some objects casts " "their shadow to particles.")));
 
+                cfg.AddRow(StartupScreenConfigSelectItemEditor(
+                    ui, StartupScreenConfig(ui, "r_fogShadow"), "0|1|2",
+                    _Tr("StartupScreen", "Volumetric Fog") + "|" +
+                    _Tr("StartupScreen", "None") + ":" +
+                    _Tr("StartupScreen", "Disables the volumetric fog effect.") + "|" +
+                    _Tr("StartupScreen", "Level 1") + ":"  +
+                    _Tr("StartupScreen",
+                        "Applies local illumination to the fog.") + "|" +
+                    _Tr("StartupScreen", "Level 2") + ":"  +
+                    _Tr("StartupScreen",
+                        "Applies both local illumination and global illumination to the fog.") + "\n\n" +
+                    _Tr("StartupScreen",
+                        "Warning: {0} must be enabled.", _Tr("StartupScreen", "Global Illumination"))));
+
                 {
                     StartupScreenComplexConfig cplx;
                     // r_mapSoftShadow is currently no-op
@@ -204,22 +224,17 @@ namespace spades {
                         _Tr("StartupScreen", "Shadows"),
                         _Tr("StartupScreen", "Non-static object casts a shadow.")));
                     cplx.AddEditor(StartupScreenConfigCheckItemEditor(
-                        ui, StartupScreenConfig(ui, "r_fogShadow"), "0", "1",
-                        _Tr("StartupScreen", "Volumetric Fog"),
-                        _Tr("StartupScreen",
-                            "Simulates shadow being casted to the fog particles using a " "super highly computationally demanding algorithm. ")));
-                    cplx.AddEditor(StartupScreenConfigCheckItemEditor(
                         ui, StartupScreenConfig(ui, "r_physicalLighting"), "0", "1",
                         _Tr("StartupScreen", "Physically Based Lighting"),
                         _Tr("StartupScreen",
                             "Uses more accurate approximation techniques to decide the brightness of objects.")));
 
                     cplx.AddPreset(
-                        StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "1|0|0|0"));
+                        StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Low"), "1|0|0"));
                     cplx.AddPreset(StartupScreenComplexConfigPreset(_Tr("StartupScreen", "Medium"),
-                                                                    "1|1|0|0"));
+                                                                    "1|1|0"));
                     cplx.AddPreset(
-                        StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|0|1"));
+                        StartupScreenComplexConfigPreset(_Tr("StartupScreen", "High"), "1|1|1"));
 
                     cfg.AddRow(StartupScreenConfigComplexItemEditor(
                         ui, cplx, _Tr("StartupScreen", "Direct Lights"),
@@ -457,8 +472,11 @@ namespace spades {
         StartupScreenConfigView @configViewOpenAL;
         StartupScreenConfigView @configViewYSR;
 
+        StartupScreenAudioOpenALEditor @editOpenAL;
+
         private ConfigItem s_audioDriver("s_audioDriver");
         private ConfigItem s_eax("s_eax");
+        private ConfigItem s_openalDevice("s_openalDevice");
 
         StartupScreenAudioTab(StartupScreenUI @ui, Vector2 size) {
             super(ui.manager);
@@ -520,6 +538,7 @@ namespace spades {
             {
                 StartupScreenConfigView cfg(Manager);
 
+
                 cfg.AddRow(StartupScreenConfigSliderItemEditor(
                     ui, StartupScreenConfig(ui, "s_maxPolyphonics"), 16.0, 256.0, 8.0,
                     _Tr("StartupScreen", "Polyphonics"),
@@ -531,6 +550,13 @@ namespace spades {
                     ui, StartupScreenConfig(ui, "s_eax"), "0", "1", _Tr("StartupScreen", "EAX"),
                     _Tr("StartupScreen",
                         "Enables extended features provided by the OpenAL driver to create " "more ambience.")));
+                AddLabel(0.f, 90.f, 20.f, _Tr("StartupScreen", "Devices"));
+                {
+                    StartupScreenAudioOpenALEditor e(ui);
+                    AddChild(e);
+                    @editOpenAL = e;
+                    cfg.AddRow(editOpenAL);
+                }
 
                 cfg.Finalize();
                 cfg.SetHelpTextHandler(HelpTextHandler(this.HandleHelpText));
@@ -593,6 +619,71 @@ namespace spades {
                 ui.helper.CheckConfigCapability("s_audioDriver", "null").length == 0;
             configViewOpenAL.LoadConfig();
             configViewYSR.LoadConfig();
+	        editOpenAL.LoadConfig();
+		
+            s_openalDevice.StringValue = editOpenAL.openal.StringValue;
+        }
+    }
+
+    class StartupScreenAudioOpenALEditor : spades::ui::UIElement, LabelAddable {
+        StartupScreenUI @ui;
+        StartupScreenHelper @helper;
+        ConfigItem openal("openal");
+
+        spades::ui::Button @dropdownButton;
+
+        StartupScreenAudioOpenALEditor(StartupScreenUI @ui) {
+            super(ui.manager);
+            @this.ui = ui;
+            @helper = ui.helper;
+            {
+                StartupScreenDropdownListDropdownButton e(Manager);
+                AddChild(e);
+                e.Bounds = AABB2(80.f, 0.f, 400.f, 20.f);
+                @e.Activated = spades::ui::EventHandler(this.ShowDropdown);
+                @dropdownButton = e;
+            }
+        }
+
+        void LoadConfig() {
+            string drivername = openal.StringValue;
+            string name = _Tr("StartupScreen", "Default device", drivername);
+            if (drivername == "") {
+                name = _Tr("StartupScreen", "Default device");
+            }
+
+            int cnt = helper.GetNumAudioOpenALDevices();
+            for (int i = 0; i < cnt; i++) {
+                if (drivername == helper.GetAudioOpenALDevice(i)) {
+                    name = helper.GetAudioOpenALDevice(i);
+                }
+            }
+
+            dropdownButton.Caption = name;
+        }
+
+        private void ShowDropdown(spades::ui::UIElement @) {
+            string[] items = {_Tr("StartupScreen", "Default device")};
+            int cnt = helper.GetNumAudioOpenALDevices();
+            for (int i = 0; i < cnt; i++) {
+                string s = helper.GetAudioOpenALDevice(i);
+                items.insertLast(s);
+            }
+            spades::ui::ShowDropDownList(this, items,
+                    spades::ui::DropDownListHandler(this.DropdownHandler));
+        }
+
+        private void DropdownHandler(int index) {
+            if (index >= 0) {
+                if (index == 0) {
+                    openal = "default";
+                } else {
+                    openal = helper.GetAudioOpenALDevice(index - 1);
+                }
+
+                // Reload the startup screen so the language config takes effect
+                ui.Reload();
+            }
         }
     }
 

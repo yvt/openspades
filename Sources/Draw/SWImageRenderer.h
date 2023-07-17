@@ -71,5 +71,5 @@ namespace spades {
 			unsigned long long GetPixelsDrawn() { return pixelsDrawn; }
 			void ResetPixelStatistics() { pixelsDrawn = 0; }
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

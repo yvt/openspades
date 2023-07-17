@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <memory>
 #include <vector>
 
 #include "GLProgramUniform.h"
@@ -39,7 +40,7 @@ namespace spades {
 
 			static std::vector<GLShader *> RegisterShader(GLProgramManager *);
 
-			static IGLShadowMapRenderer *CreateShadowMapRenderer(GLRenderer *);
+			static std::unique_ptr<IGLShadowMapRenderer> CreateShadowMapRenderer(GLRenderer &);
 
 			/** setups shadow map shader.
 			 * note that this function sets the current active texture
@@ -48,5 +49,5 @@ namespace spades {
 			 * @return next available texture stage */
 			int operator()(GLRenderer *renderer, GLProgram *, int firstTexStage);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

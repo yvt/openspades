@@ -21,8 +21,8 @@
 #include "CTFGameMode.h"
 #include <Core/Debug.h>
 
-#include "World.h"
 #include "Player.h"
+#include "World.h"
 
 namespace spades {
 	namespace client {
@@ -51,5 +51,5 @@ namespace spades {
 				team.hasIntel = false;
 			}
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

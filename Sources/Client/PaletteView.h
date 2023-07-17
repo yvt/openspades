@@ -30,7 +30,7 @@ namespace spades {
 		class IRenderer;
 		class PaletteView {
 			Client *client;
-			IRenderer *renderer;
+			IRenderer &renderer;
 
 			int defaultColor;
 			std::vector<IntVector3> colors;
@@ -48,5 +48,5 @@ namespace spades {
 			void Update();
 			void Draw();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

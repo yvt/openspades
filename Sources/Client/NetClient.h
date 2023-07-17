@@ -21,12 +21,12 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
-#include <vector>
-#include <set>
 #include <cstdint>
+#include <memory>
+#include <set>
+#include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "PhysicsConstants.h"
 #include "Player.h"
@@ -121,16 +121,6 @@ namespace spades {
 			std::vector<Vector3> savedPlayerFront;
 			std::vector<int> savedPlayerTeam;
 
-			struct PosRecord {
-				float time;
-				bool valid;
-				Vector3 pos;
-
-				PosRecord() : valid(false) {}
-			};
-
-			std::vector<PosRecord> playerPosRecords;
-
 			std::vector<std::vector<char>> savedPackets;
 
 			int timeToTryMapLoad;
@@ -145,11 +135,11 @@ namespace spades {
 			bool HandleHandshakePackets(NetPacketReader &);
 			void HandleExtensionPacket(NetPacketReader &);
 			void HandleGamePacket(NetPacketReader &);
-			World *GetWorld();
-			Player *GetPlayer(int);
-			Player *GetPlayerOrNull(int);
-			Player *GetLocalPlayer();
-			Player *GetLocalPlayerOrNull();
+			stmp::optional<World &> GetWorld();
+			Player &GetPlayer(int);
+			stmp::optional<Player &> GetPlayerOrNull(int);
+			Player &GetLocalPlayer();
+			stmp::optional<Player &> GetLocalPlayerOrNull();
 
 			std::string DisconnectReasonString(uint32_t);
 
@@ -200,7 +190,7 @@ namespace spades {
 			void SendBlockLine(IntVector3 v1, IntVector3 v2);
 			void SendReload();
 			void SendTool();
-			void SendGrenade(Grenade *);
+			void SendGrenade(const Grenade &);
 			void SendHeldBlockColor();
 			void SendHit(int targetPlayerId, HitType type);
 			void SendChat(std::string, bool global);
@@ -211,5 +201,5 @@ namespace spades {
 			double GetDownlinkBps() { return bandwidthMonitor->GetDownlinkBps(); }
 			double GetUplinkBps() { return bandwidthMonitor->GetUplinkBps(); }
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

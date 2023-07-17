@@ -24,6 +24,7 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <tuple>
 
 #include "ClientCameraMode.h"
 #include "ILocalEntity.h"
@@ -180,14 +181,16 @@ namespace spades {
 			 */
 			bool CanLocalPlayerUseToolNow();
 
-			/** Retrieves `ClientPlayer` for the local player, or `nullptr` if it does not exist. */
-			ClientPlayer *GetLocalClientPlayer();
+			/** Retrieves `ClientPlayer` for the local player, or `{}` if it does not exist. */
+			stmp::optional<ClientPlayer &> GetLocalClientPlayer();
 
 			float toolRaiseState;
 			void SetSelectedTool(Player::ToolType, bool quiet = false);
 
 			// view
 			SceneDefinition lastSceneDef;
+			/** Derived from `lastSceneDef`. */
+			Matrix4 lastViewProjectionScreenMatrix;
 			float localFireVibrationTime;
 			float grenadeVibration;
 			float grenadeVibrationSlow;
@@ -301,7 +304,7 @@ namespace spades {
 			void SpawnPressed();
 			void NextSpawnPressed();
 
-			Player *HotTrackedPlayer(hitTag_t *hitFlag);
+			stmp::optional<std::tuple<Player &, hitTag_t>> HotTrackedPlayer();
 
 			// effects (local entity, etc)
 			std::vector<DynamicLightParam> flashDlights;
@@ -340,7 +343,12 @@ namespace spades {
 			int nextScreenShotIndex;
 			int nextMapShotIndex;
 
+			/** Project the specified world-space position to a screen space. */
 			Vector3 Project(Vector3);
+
+			/** Recalculate `lastViewProjectionScreenMatrix` based on the current value of
+			 * `lastSceneDef`. */
+			void UpdateMatrices();
 
 			void DrawSplash();
 			void DrawStartupScreen();
@@ -388,7 +396,7 @@ namespace spades {
 			void DrawStats();
 
 			void DrawScene();
-			void AddGrenadeToScene(Grenade *);
+			void AddGrenadeToScene(Grenade &);
 			void AddDebugObjectToScene(const OBB3 &, const Vector4 &col = MakeVector4(1, 1, 1, 1));
 			void DrawCTFObjects();
 			void DrawTCObjects();
@@ -428,24 +436,26 @@ namespace spades {
 
 			void SetWorld(World *);
 			World *GetWorld() const { return world.get(); }
-			void AddLocalEntity(ILocalEntity *ent) { localEntities.emplace_back(ent); }
+			void AddLocalEntity(std::unique_ptr<ILocalEntity> &&ent) {
+				localEntities.emplace_back(std::move(ent));
+			}
 
 			void MarkWorldUpdate();
 
-			IRenderer *GetRenderer() { return renderer; }
+			IRenderer &GetRenderer() { return *renderer; }
 			SceneDefinition GetLastSceneDef() { return lastSceneDef; }
-			IAudioDevice *GetAudioDevice() { return audioDevice; }
+			IAudioDevice &GetAudioDevice() { return *audioDevice; }
 
 			bool WantsToBeClosed() override;
 			bool IsMuted();
 
-			void PlayerSentChatMessage(Player *, bool global, const std::string &);
+			void PlayerSentChatMessage(Player &, bool global, const std::string &);
 			void ServerSentMessage(const std::string &);
 
-			void PlayerCapturedIntel(Player *);
-			void PlayerCreatedBlock(Player *);
-			void PlayerPickedIntel(Player *);
-			void PlayerDropIntel(Player *);
+			void PlayerCapturedIntel(Player &);
+			void PlayerCreatedBlock(Player &);
+			void PlayerPickedIntel(Player &);
+			void PlayerDropIntel(Player &);
 			void TeamCapturedTerritory(int teamId, int territoryId);
 			void TeamWon(int);
 			void JoinedGame();
@@ -453,34 +463,36 @@ namespace spades {
 			void PlayerDestroyedBlockWithWeaponOrTool(IntVector3);
 			void PlayerDiggedBlock(IntVector3);
 			void GrenadeDestroyedBlock(IntVector3);
-			void PlayerLeaving(Player *);
-			void PlayerJoinedTeam(Player *);
-			void PlayerSpawned(Player *);
+			void PlayerLeaving(Player &);
+			void PlayerJoinedTeam(Player &);
+			void PlayerSpawned(Player &);
 
+			// IWorldListener begin
 			void PlayerObjectSet(int) override;
-			void PlayerMadeFootstep(Player *) override;
-			void PlayerJumped(Player *) override;
-			void PlayerLanded(Player *, bool hurt) override;
-			void PlayerFiredWeapon(Player *) override;
-			void PlayerDryFiredWeapon(Player *) override;
-			void PlayerReloadingWeapon(Player *) override;
-			void PlayerReloadedWeapon(Player *) override;
-			void PlayerChangedTool(Player *) override;
-			void PlayerThrownGrenade(Player *, Grenade *) override;
-			void PlayerMissedSpade(Player *) override;
-			void PlayerRestocked(Player *) override;
+			void PlayerMadeFootstep(Player &) override;
+			void PlayerJumped(Player &) override;
+			void PlayerLanded(Player &, bool hurt) override;
+			void PlayerFiredWeapon(Player &) override;
+			void PlayerDryFiredWeapon(Player &) override;
+			void PlayerReloadingWeapon(Player &) override;
+			void PlayerReloadedWeapon(Player &) override;
+			void PlayerChangedTool(Player &) override;
+			void PlayerThrewGrenade(Player &, stmp::optional<const Grenade &>) override;
+			void PlayerMissedSpade(Player &) override;
+			void PlayerRestocked(Player &) override;
 
 			/** @deprecated use BulletHitPlayer */
-			void PlayerHitBlockWithSpade(Player *, Vector3 hitPos, IntVector3 blockPos,
+			void PlayerHitBlockWithSpade(Player &, Vector3 hitPos, IntVector3 blockPos,
 			                             IntVector3 normal) override;
-			void PlayerKilledPlayer(Player *killer, Player *victim, KillType) override;
+			void PlayerKilledPlayer(Player &killer, Player &victim, KillType) override;
 
-			void BulletHitPlayer(Player *hurtPlayer, HitType, Vector3 hitPos, Player *by) override;
+			void BulletHitPlayer(Player &hurtPlayer, HitType, Vector3 hitPos, Player &by,
+			                     std::unique_ptr<IBulletHitScanState> &stateCell) override;
 			void BulletHitBlock(Vector3, IntVector3 blockPos, IntVector3 normal) override;
-			void AddBulletTracer(Player *player, Vector3 muzzlePos, Vector3 hitPos) override;
-			void GrenadeExploded(Grenade *) override;
-			void GrenadeBounced(Grenade *) override;
-			void GrenadeDroppedIntoWater(Grenade *) override;
+			void AddBulletTracer(Player &player, Vector3 muzzlePos, Vector3 hitPos) override;
+			void GrenadeExploded(const Grenade &) override;
+			void GrenadeBounced(const Grenade &) override;
+			void GrenadeDroppedIntoWater(const Grenade &) override;
 
 			void BlocksFell(std::vector<IntVector3>) override;
 
@@ -489,6 +501,7 @@ namespace spades {
 			void LocalPlayerCreatedLineBlock(IntVector3, IntVector3) override;
 			void LocalPlayerHurt(HurtType type, bool sourceGiven, Vector3 source) override;
 			void LocalPlayerBuildError(BuildFailureReason reason) override;
+			// IWorldListener end
 		};
 	} // namespace client
 } // namespace spades

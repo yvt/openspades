@@ -61,8 +61,8 @@ namespace spades {
 				Edge() { node1 = node2 = NodeCount; }
 			};
 
-			IRenderer *renderer;
-			GameMap *map;
+			IRenderer &renderer;
+			GameMap &map;
 			Vector3 color;
 			int playerId;
 
@@ -85,7 +85,15 @@ namespace spades {
 			void LineCollision(NodeType a, NodeType b, float dt);
 
 		public:
-			Corpse(IRenderer *renderer, GameMap *map, Player *p);
+			/**
+			 * Construct a "corpse" client object.
+			 *
+			 * @param renderer The renderer. Must outlive `Corpse`.
+			 * @param map The game map, used for physics. Must outlive `Corpse`.
+			 * @param p The player to create a corpse from. Can be destroyed
+			 *			after `Corpse` is constructed.
+			 */
+			Corpse(IRenderer &renderer, GameMap &map, Player &p);
 			~Corpse();
 
 			void Update(float dt);
@@ -99,5 +107,5 @@ namespace spades {
 
 			void AddImpulse(Vector3);
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

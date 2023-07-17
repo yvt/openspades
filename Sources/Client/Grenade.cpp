@@ -28,14 +28,13 @@
 
 namespace spades {
 	namespace client {
-		Grenade::Grenade(World *w, Vector3 pos, Vector3 vel, float fuse) {
+		Grenade::Grenade(World &w, Vector3 pos, Vector3 vel, float fuse) : world{w} {
 			SPADES_MARK_FUNCTION();
 
 			position = pos;
 			velocity = vel;
 			this->fuse = fuse;
-			world = w;
-			orientation = Quaternion {0.0f, 0.0f, 0.0f, 1.0f};
+			orientation = Quaternion{0.0f, 0.0f, 0.0f, 1.0f};
 		}
 
 		Grenade::~Grenade() { SPADES_MARK_FUNCTION(); }
@@ -50,8 +49,8 @@ namespace spades {
 			}
 
 			if (MoveGrenade(dt) == 2) {
-				if (world->GetListener())
-					world->GetListener()->GrenadeBounced(this);
+				if (world.GetListener())
+					world.GetListener()->GrenadeBounced(*this);
 			}
 
 			return false;
@@ -60,8 +59,8 @@ namespace spades {
 		void Grenade::Explode() {
 			SPADES_MARK_FUNCTION();
 
-			if (world->GetListener())
-				world->GetListener()->GrenadeExploded(this);
+			if (world.GetListener())
+				world.GetListener()->GrenadeExploded(*this);
 		}
 
 		int Grenade::MoveGrenade(float fsynctics) {
@@ -74,17 +73,19 @@ namespace spades {
 
 			// Make it roll
 			float radius = 4.0f * 0.03f;
-			orientation = Quaternion::MakeRotation(Vector3(-velocity.y, velocity.x, 0.0f) * (f / radius)) * orientation;
+			orientation =
+			  Quaternion::MakeRotation(Vector3(-velocity.y, velocity.x, 0.0f) * (f / radius)) *
+			  orientation;
 			orientation = orientation.Normalize();
 
 			// Collision
 			IntVector3 lp = position.Floor();
 			IntVector3 lp2 = oldPos.Floor();
-			GameMap *m = world->GetMap();
+			Handle<GameMap> m = world.GetMap();
 
 			if (lp.z >= 63 && lp2.z < 63) {
-				if (world->GetListener())
-					world->GetListener()->GrenadeDroppedIntoWater(this);
+				if (world.GetListener())
+					world.GetListener()->GrenadeDroppedIntoWater(*this);
 			}
 
 			int ret = 0;
@@ -110,5 +111,5 @@ namespace spades {
 			}
 			return ret;
 		}
-	}
-}
+	} // namespace client
+} // namespace spades

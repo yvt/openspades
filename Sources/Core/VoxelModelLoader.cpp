@@ -77,7 +77,7 @@ namespace spades {
 		};
 	} // namespace
 
-	VoxelModel *VoxelModelLoader::Load(const char *path) {
+	Handle<VoxelModel> VoxelModelLoader::Load(const char *path) {
 		// Load the metadata file
 		std::string metadataPath = path;
 		{
@@ -112,7 +112,7 @@ namespace spades {
 		{
 			SPLog("Loading '%s' as a KV6 voxel model.", path);
 			std::unique_ptr<IStream> stream{FileManager::OpenForReading(path)};
-			voxelModel = Handle<VoxelModel>{VoxelModel::LoadKV6(stream.get()), false};
+			voxelModel = VoxelModel::LoadKV6(*stream);
 		}
 
 		// Apply transformation requested by the metadata
@@ -124,6 +124,6 @@ namespace spades {
 			voxelModel->ForceMaterial(*meta.forceMaterial);
 		}
 
-		return voxelModel.Unmanage();
+		return voxelModel;
 	}
 } // namespace spades

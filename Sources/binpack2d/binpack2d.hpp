@@ -217,13 +217,6 @@ public:
   /*const*/ Size  size;
   /*const*/ _T content;
   
-  Content( const Content<_T> &src )
-    : rotated(src.rotated),
-      coord(src.coord),
-      size(src.size),
-      content(src.content)
-  {}
-  
   Content( const _T &content, const Coord &coord, const Size &size, bool rotated )
     : 
       rotated(rotated),

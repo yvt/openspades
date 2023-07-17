@@ -36,5 +36,5 @@ namespace spades {
 			int operator()() { return loc; }
 			int operator()(GLProgram *);
 		};
-	}
-}
+	} // namespace draw
+} // namespace spades

@@ -22,8 +22,8 @@
 
 #include <vector>
 
-#include <Core/Math.h>
 #include "PhysicsConstants.h"
+#include <Core/Math.h>
 
 namespace spades {
 	namespace client {
@@ -53,7 +53,7 @@ namespace spades {
 				    : type(type), rect(rt), text(txt), hover(false) {}
 			};
 			Client *client;
-			IRenderer *renderer;
+			IRenderer &renderer;
 
 			std::vector<MenuItem> items;
 
@@ -77,5 +77,5 @@ namespace spades {
 
 			void Draw();
 		};
-	}
-}
+	} // namespace client
+} // namespace spades

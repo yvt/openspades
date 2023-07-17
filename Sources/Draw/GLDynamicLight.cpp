@@ -61,9 +61,15 @@ namespace spades {
 					clipPlanes[i] = Plane3::PlaneWithPointOnPlane(param.origin, planeN[i]);
 				}
 			}
+
+			if (param.type == client::DynamicLightTypeLinear) {
+				poweredLength = (param.point2 - param.origin).GetPoweredLength();
+			}
 		}
 
 		bool GLDynamicLight::Cull(const spades::AABB3 &box) const {
+			const client::DynamicLightParam &param = GetParam();
+
 			if (param.type == client::DynamicLightTypeSpotlight) {
 				for (const Plane3 &plane : clipPlanes) {
 					if (!PlaneCullTest(plane, box)) {
@@ -72,8 +78,19 @@ namespace spades {
 				}
 			}
 
-			const client::DynamicLightParam &param = GetParam();
-			return box.Inflate(param.radius) && param.origin;
+			AABB3 inflatedBox = box.Inflate(param.radius);
+
+			if (param.type == client::DynamicLightTypeLinear) {
+				Vector3 intersection;
+				// TODO: using `OBB3` here is overkill, but `AABB3` doesn't have `RayCast`
+				if (!OBB3(inflatedBox)
+				       .RayCast(param.origin, param.point2 - param.origin, &intersection)) {
+					return false;
+				}
+				return (intersection - param.origin).GetPoweredLength() <= poweredLength;
+			}
+
+			return inflatedBox && param.origin;
 		}
 
 		bool GLDynamicLight::SphereCull(const spades::Vector3 &center, float radius) const {
@@ -85,10 +102,13 @@ namespace spades {
 						return false;
 					}
 				}
+			} else if (param.type == client::DynamicLightTypeLinear) {
+				return Line3::MakeLineSegment(param.origin, param.point2).GetDistanceTo(center) <
+				       radius + param.radius;
 			}
 
 			float maxDistance = radius + param.radius;
 			return (center - param.origin).GetPoweredLength() < maxDistance * maxDistance;
 		}
-	}
-}
+	} // namespace draw
+} // namespace spades

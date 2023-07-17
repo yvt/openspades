@@ -26,18 +26,6 @@
 #include <Core/ThreadLocalStorage.h>
 
 namespace spades {
-	/*
-	 Vector3 Line3::Project(spades::Vector3 v,
-	 bool supposeUnbounded) {
-
-	 }
-
-	 float Line3::GetDistanceTo(spades::Vector3 v,
-	 bool supposeUnbounded){
-
-	 }
-	 */
-
 	namespace {
 		std::random_device r_device;
 		std::mt19937_64 global_rng{r_device()};
@@ -330,6 +318,12 @@ namespace spades {
 	}
 
 	bool OBB3::RayCast(spades::Vector3 start, spades::Vector3 dir, spades::Vector3 *hitPos) {
+		// inside?
+		if (*this && start) {
+			*hitPos = start;
+			return true;
+		}
+
 		Vector3 normX = {m.m[0], m.m[1], m.m[2]};
 		Vector3 normY = {m.m[4], m.m[5], m.m[6]};
 		Vector3 normZ = {m.m[8], m.m[9], m.m[10]};
@@ -343,12 +337,6 @@ namespace spades {
 		float dotX = Vector3::Dot(dir, normX);
 		float dotY = Vector3::Dot(dir, normY);
 		float dotZ = Vector3::Dot(dir, normZ);
-
-		// inside?
-		if (*this && start) {
-			*hitPos = start;
-			return true;
-		}
 
 		// x-plane hit test
 		if (dotX != 0.f) {
@@ -477,6 +465,24 @@ namespace spades {
 		ab += orig + axis3 + axis2;
 		ab += orig + axis3 + axis1 + axis2;
 		return ab;
+	}
+
+	Vector3 Line3::Project(Vector3 v, bool supposeUnbounded) {
+		Vector3 delta = v2 - v1;
+		Vector3 direction = delta.Normalize();
+		float length = delta.GetLength();
+		float positionOnLine = Vector3::Dot(v - v1, direction);
+		if ((end1 & !supposeUnbounded) && positionOnLine < 0.0f) {
+			positionOnLine = 0.0f;
+		};
+		if ((end2 & !supposeUnbounded) && positionOnLine > length) {
+			positionOnLine = length;
+		};
+		return v1 + direction * positionOnLine;
+	}
+
+	float Line3::GetDistanceTo(Vector3 v, bool supposeUnbounded) {
+		return (v - Project(v, supposeUnbounded)).GetLength();
 	}
 
 	std::string Replace(const std::string &text, const std::string &before,

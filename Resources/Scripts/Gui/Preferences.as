@@ -214,6 +214,7 @@ namespace spades {
         int digits;
         string suffix;
         string prefix;
+        float prescale = 1;
         ConfigNumberFormatter(int digits, string suffix) {
             this.digits = digits;
             this.suffix = suffix;
@@ -224,10 +225,18 @@ namespace spades {
             this.suffix = suffix;
             this.prefix = prefix;
         }
+        ConfigNumberFormatter(int digits, string suffix, string prefix, float prescale) {
+            this.digits = digits;
+            this.suffix = suffix;
+            this.prefix = prefix;
+            this.prescale = prescale;
+        }
         private string FormatInternal(float value) {
             if (value < 0.f) {
                 return "-" + Format(-value);
             }
+
+            value *= prescale;
 
             // do rounding
             float rounding = 0.5f;
@@ -556,6 +565,10 @@ namespace spades {
             return slider;
         }
 
+        ConfigSlider @AddVolumeSlider(string caption, string configName) {
+            return AddSliderField(caption, configName, 0, 1, 0.01, ConfigNumberFormatter(0, "%", "", 100));
+        }
+
         void AddControl(string caption, string configName, bool enabled = true) {
             spades::ui::UIElement @container = CreateItem();
 
@@ -645,9 +658,10 @@ namespace spades {
                                     array<int> = {2, 1, 0});
 
             layouter.AddHeading(_Tr("Preferences", "Feedbacks"));
-            layouter.AddToggleField(_Tr("Preferences", "Chat Notify Sounds"), "cg_chatBeep");
+            layouter.AddVolumeSlider(_Tr("Preferences", "Chat Notify Sounds"), "cg_chatBeep");
             layouter.AddToggleField(_Tr("Preferences", "Hit Indicator"), "cg_hitIndicator");
             layouter.AddToggleField(_Tr("Preferences", "Show Alerts"), "cg_alerts");
+            layouter.AddVolumeSlider(_Tr("Preferences", "Alert Sounds"), "cg_alertSounds");
 
             layouter.AddHeading(_Tr("Preferences", "AoS 0.75/0.76 Compatibility"));
             layouter.AddToggleField(_Tr("Preferences", "Allow Unicode"), "cg_unicode");
