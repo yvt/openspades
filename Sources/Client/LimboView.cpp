@@ -75,8 +75,13 @@ namespace spades {
 
 			//! The "Spawn" button that you press when you're ready to "spawn".
 			items.push_back(MenuItem(MenuSpawn,
-			                         AABB2(left + contentsWidth - 266.f, firstY + 4.f, 256.f, 64.f),
+			                         AABB2(left + contentsWidth - 266.f, firstY, 256.f, 48.f),
 			                         _Tr("Client", "Spawn")));
+
+			//! The next spawn button to activate the settings the next time you spawn
+			items.push_back(MenuItem(MenuNextSpawn,
+				                     AABB2(left + contentsWidth - 266.f, firstY + 52.f, 256.f, 48.f),
+					                 _Tr("Client", "Set For Next Spawn")));
 
 			cursorPos = MakeVector2(renderer.ScreenWidth() * .5f, renderer.ScreenHeight() * .5f);
 
@@ -116,6 +121,7 @@ namespace spades {
 							case MenuWeaponSMG: selectedWeapon = SMG_WEAPON; break;
 							case MenuWeaponShotgun: selectedWeapon = SHOTGUN_WEAPON; break;
 							case MenuSpawn: client->SpawnPressed(); break;
+							case MenuNextSpawn: client->NextSpawnPressed(); break;
 						}
 					}
 				}
@@ -156,6 +162,11 @@ namespace spades {
 						if (selectedTeam == 2) {
 							item.visible = false;
 						}
+						break;
+					case MenuNextSpawn:
+						if (client->GetWorld() && !(client->world->GetLocalPlayer() && client->world->GetLocalPlayer()->IsAlive() && !client->world->GetLocalPlayer()->IsSpectator()))
+							item.visible = false;
+						break;
 					default:;
 				}
 
@@ -229,7 +240,7 @@ namespace spades {
 				}
 
 				renderer.SetColorAlphaPremultiplied(fillColor);
-				if (item.type == MenuSpawn) {
+				if (item.type == MenuSpawn || item.type == MenuNextSpawn) {
 					renderer.DrawImage(menuItemBigImage, item.rect);
 
 					std::string msg = item.text;
