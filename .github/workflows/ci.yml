@@ -64,7 +64,9 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('vcpkg_x86_64-darwin.txt', '.gitmodules') }}
 
       - name: Install ninja
-        uses: seanmiddleditch/gha-setup-ninja@v3
+        run: |
+          pip3 install wheel setuptools
+          pip3 install ninja --upgrade
         
       - name: Bootstrap vcpkg
         run: vcpkg/bootstrap-vcpkg.sh
