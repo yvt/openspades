@@ -85,8 +85,7 @@ jobs:
             
       - name: Build application
         run: |
-          cd "${{ runner.workspace }}/openspades/openspades.mk" \
-          ninja
+          ninja --verbose -C "${{ runner.workspace }}/openspades/openspades.mk"
   
   build-nix:
     name: Build (Linux + Nix)
