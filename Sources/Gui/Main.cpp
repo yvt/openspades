@@ -506,6 +506,8 @@ int main(int argc, char **argv) {
 			SPLog("Supports AVX2: %s", cpuid.Supports(spades::CpuFeature::AVX2) ? "YES" : "NO");
 			SPLog("Supports AVX512F: %s",
 			      cpuid.Supports(spades::CpuFeature::AVX512F) ? "YES" : "NO");
+			SPLog("Supports AVX512FP16: %s",
+			      cpuid.Supports(spades::CpuFeature::AVX512FP16) ? "YES" : "NO");
 			SPLog("Supports AVX512CD: %s",
 			      cpuid.Supports(spades::CpuFeature::AVX512CD) ? "YES" : "NO");
 			SPLog("Supports AVX512ER: %s",

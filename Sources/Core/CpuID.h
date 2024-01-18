@@ -24,6 +24,7 @@ namespace spades {
 		AVX512ER,
 		AVX512PF,
 		AVX512F,
+		AVX512FP16,
 		SimultaneousMT
 	};
 
