@@ -137,7 +137,7 @@ buildPhase
 bin/openspades
 ```
 
-**note**: Nix Flakes are an experimental feature of Nix and must be enabled manually. See [this wiki article](https://nixos.wiki/wiki/Flakes) for how to do that.
+**note**: Nix Flakes are an experimental feature of Nix and must be enabled manually. See [this wiki article](https://wiki.nixos.org/wiki/Flakes) for how to do that.
 
 ### On Windows (with Visual Studio)
 1. Get the required software if you haven't already:
