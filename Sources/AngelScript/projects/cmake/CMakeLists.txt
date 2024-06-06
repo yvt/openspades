@@ -9,9 +9,6 @@ set(ANGELSCRIPT_SOURCE
         ../../source/as_builder.cpp
         ../../source/as_bytecode.cpp
         ../../source/as_callfunc.cpp
-        ../../source/as_callfunc_x86.cpp
-        ../../source/as_callfunc_x64_gcc.cpp
-        ../../source/as_callfunc_x64_msvc.cpp
         ../../source/as_compiler.cpp
         ../../source/as_configgroup.cpp
         ../../source/as_context.cpp
@@ -38,6 +35,23 @@ set(ANGELSCRIPT_SOURCE
         ../../source/as_variablescope.cpp
 )
 
+if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "aarch64")
+        enable_language(ASM)
+        if(CMAKE_ASM_COMPILER_WORKS)
+                set(ANGELSCRIPT_SOURCE ${ANGELSCRIPT_SOURCE} ../../source/as_callfunc_arm.cpp ../../source/as_callfunc_arm_gcc.S)
+        else()
+                message(FATAL ERROR "aarch64 target requires a working assembler")
+        endif(CMAKE_ASM_COMPILER_WORKS)
+endif()
+
+if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
+          set(ANGELSCRIPT_SOURCE "${ANGELSCRIPT_SOURCE}"
+                ../../source/as_callfunc_x86.cpp
+                ../../source/as_callfunc_x64_gcc.cpp
+                ../../source/as_callfunc_x64_msvc.cpp
+          )
+endif()
+
 if(MSVC AND CMAKE_CL_64)
             enable_language(ASM_MASM)
             if(CMAKE_ASM_MASM_COMPILER_WORKS)
@@ -45,15 +59,6 @@ if(MSVC AND CMAKE_CL_64)
             else()
                             message(FATAL ERROR "MSVC x86_64 target requires a working assembler")
             endif()
-endif()
-
-if(ANDROID)
-        enable_language(ASM)
-        if(CMAKE_ASM_COMPILER_WORKS)
-                set(ANGELSCRIPT_SOURCE ${ANGELSCRIPT_SOURCE} ../../source/as_callfunc_arm.cpp ../../source/as_callfunc_arm_gcc.S)
-        else()
-                message(FATAL ERROR "Android target requires a working assembler")
-        endif(CMAKE_ASM_COMPILER_WORKS)
 endif()
 
 set(ANGELSCRIPT_HEADERS
