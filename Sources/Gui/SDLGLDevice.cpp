@@ -133,7 +133,7 @@ namespace spades {
 
 #ifndef __APPLE__
 			GLenum err = glewInit();
-			if (GLEW_OK != err) {
+			if (GLEW_OK != err && GLEW_ERROR_NO_GLX_DISPLAY != err) {
 				SPRaise("GLEW error: %s", glewGetErrorString(err));
 			}
 #endif
