@@ -728,7 +728,7 @@
 			#undef STDCALL
 			#define STDCALL
 
-		#elif (defined(__arm64__))
+		#elif (defined(__arm64__) || defined(__aarch64__))
 			// The IPhone 5S+ uses an ARM64 processor
 
 			// AngelScript currently doesn't support native calling
@@ -750,7 +750,7 @@
 			#undef COMPLEX_RETURN_MASK
 			#define COMPLEX_RETURN_MASK (asOBJ_APP_CLASS_DESTRUCTOR | asOBJ_APP_CLASS_COPY_CONSTRUCTOR | asOBJ_APP_ARRAY)
 
-		#elif defined(__LP64__) && !defined(__ppc__) && !defined(__PPC__) && !defined(__arm64__)
+		#elif defined(__LP64__) && !defined(__ppc__) && !defined(__PPC__) && !defined(__arm64__) && !defined(__aarch64__)
 			// http://developer.apple.com/library/mac/#documentation/DeveloperTools/Conceptual/LowLevelABI/140-x86-64_Function_Calling_Conventions/x86_64.html#//apple_ref/doc/uid/TP40005035-SW1
 			#define AS_X64_GCC
 			#undef AS_NO_THISCALL_FUNCTOR_METHOD
@@ -849,7 +849,7 @@
 			#define THISCALL_PASS_OBJECT_POINTER_ON_THE_STACK
 			#define AS_X86
 			#undef AS_NO_THISCALL_FUNCTOR_METHOD
-		#elif defined(__LP64__) && !defined(__arm64__) && !defined(__PPC64__)
+		#elif defined(__LP64__) && !defined(__arm64__) && !defined(__aarch64__) && !defined(__PPC64__)
 			#define AS_X64_GCC
 			#undef AS_NO_THISCALL_FUNCTOR_METHOD
 			#define HAS_128_BIT_PRIMITIVES
