@@ -170,6 +170,9 @@ namespace spades {
 						m_active = false;
 						SDL_ShowCursor(1);
 					}
+					if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
+						view.KeyEvent("Pause", true);
+					}
 					break;
 				default: break;
 			}
