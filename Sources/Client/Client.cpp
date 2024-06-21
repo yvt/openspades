@@ -495,6 +495,9 @@ namespace spades {
 			if (team == 2)
 				team = 255;
 
+			// Reset next loadout since you manually spawn
+			this->nextSpawnConfig.reset();
+
 			if (!world->GetLocalPlayer() || world->GetLocalPlayer()->GetTeamId() >= 2) {
 				// join
 				if (team == 255) {
@@ -512,6 +515,35 @@ namespace spades {
 					net->SendWeaponChange(weap);
 				}
 			}
+		}
+
+		void Client::NextSpawnPressed() {
+			WeaponType selectedWeapon = limbo->GetSelectedWeapon();
+			if (!selectedWeapon)
+				selectedWeapon = RIFLE_WEAPON;
+
+			int selectedTeam = limbo->GetSelectedTeam();
+			inGameLimbo = false;
+			if (selectedTeam == 2)
+				selectedTeam = 255;
+
+			nextSpawnConfig = SpawnConfig {selectedTeam, selectedWeapon};
+
+			if (selectedTeam < 2) {
+				std::string teamName = world ? world->GetTeam(selectedTeam).name
+				                             : "Team " + std::to_string(selectedTeam + 1);
+				std::string prefixedWeaponName;
+				switch (selectedWeapon) {
+					case RIFLE_WEAPON: prefixedWeaponName = "a Rifle"; break;
+					case SMG_WEAPON: prefixedWeaponName = "an SMG"; break;
+					case SHOTGUN_WEAPON: prefixedWeaponName = "a Shotgun"; break;
+				};
+
+				ShowAlert(_Tr("Client", "You will join Team {0} with {1} on your next spawn.", teamName, prefixedWeaponName),
+				          AlertType::Notice);
+			} else
+				ShowAlert(_Tr("Client", "You will join the spectators on your next spawn."),
+				          AlertType::Notice);
 		}
 
 		void Client::ShowAlert(const std::string &contents, AlertType type) {

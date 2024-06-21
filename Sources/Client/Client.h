@@ -289,10 +289,20 @@ namespace spades {
 
 			bool inGameLimbo;
 
+			/*
+				nextSpawnConfig: Indicates values for next spawn. If set it means next spawn should abide by the config
+			*/
+			struct SpawnConfig {
+				int team;
+				WeaponType weapon;
+			};
+			stmp::optional<SpawnConfig> nextSpawnConfig;
+
 			float GetLocalFireVibration();
 			void CaptureColor();
 			bool IsLimboViewActive();
 			void SpawnPressed();
+			void NextSpawnPressed();
 
 			stmp::optional<std::tuple<Player &, hitTag_t>> HotTrackedPlayer();
 
