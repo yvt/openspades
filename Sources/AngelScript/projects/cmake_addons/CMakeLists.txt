@@ -1,35 +1,35 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 cmake_policy(SET CMP0003 NEW)
 
-project(Angelscript_addons)
+project(angelscript_add_on)
 
 set(ANGELSCRIPT_SOURCE
-        ../../addons/scriptany.cpp
-        ../../addons/scriptarray.cpp
-        ../../addons/scriptbuilder.cpp
-        ../../addons/scriptdictionary.cpp
-        ../../addons/scripthandle.cpp
-        ../../addons/scripthelper.cpp
-        ../../addons/scriptmath.cpp
-        ../../addons/scriptmathcomplex.cpp
-        ../../addons/scriptstdstring.cpp
-        ../../addons/scriptstdstring_utils.cpp
-        ../../addons/weakref.cpp
+        ../../add_on/scriptany/scriptany.cpp
+        ../../add_on/scriptarray/scriptarray.cpp
+        ../../add_on/scriptbuilder/scriptbuilder.cpp
+        ../../add_on/scriptdictionary/scriptdictionary.cpp
+        ../../add_on/scripthandle/scripthandle.cpp
+        ../../add_on/scripthelper/scripthelper.cpp
+        ../../add_on/scriptmath/scriptmath.cpp
+        ../../add_on/scriptmath/scriptmathcomplex.cpp
+        ../../add_on/scriptstdstring/scriptstdstring.cpp
+        ../../add_on/scriptstdstring/scriptstdstring_utils.cpp
+        ../../add_on/weakref/weakref.cpp
 )
 
 set(ANGELSCRIPT_HEADERS
         ../../include/angelscript.h
-        ../../addons/scriptany.h
-        ../../addons/scriptarray.h
-        ../../addons/scriptbuilder.h
-        ../../addons/scriptdictionary.h
-        ../../addons/scripthandle.h
-        ../../addons/scripthelper.h
-        ../../addons/scriptmath.h
-        ../../addons/scriptmathcomplex.h
-        ../../addons/scriptstdstring.h
-        ../../addons/weakref.h
+        ../../add_on/scriptany/scriptany.h
+        ../../add_on/scriptarray/scriptarray.h
+        ../../add_on/scriptbuilder/scriptbuilder.h
+        ../../add_on/scriptdictionary/scriptdictionary.h
+        ../../add_on/scripthandle/scripthandle.h
+        ../../add_on/scripthelper/scripthelper.h
+        ../../add_on/scriptmath/scriptmath.h
+        ../../add_on/scriptmath/scriptmathcomplex.h
+        ../../add_on/scriptstdstring/scriptstdstring.h
+        ../../add_on/weakref/weakref.h
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
@@ -41,14 +41,14 @@ if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" AND NOT APPLE)
         add_definitions(-fPIC)
 endif()
 
-add_library(Angelscript_addons STATIC ${ANGELSCRIPT_SOURCE} ${ANGELSCRIPT_HEADERS})
+add_library(angelscript_add_on STATIC ${ANGELSCRIPT_SOURCE} ${ANGELSCRIPT_HEADERS})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 find_package(Threads)
-target_link_libraries(Angelscript_addons ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(angelscript_add_on ${CMAKE_THREAD_LIBS_INIT})
 
 if(MSVC)
-        set_target_properties(Angelscript_addons PROPERTIES COMPILE_FLAGS "/MP")
+        set_target_properties(angelscript_add_on PROPERTIES COMPILE_FLAGS "/MP")
 endif(MSVC)
 
 set(RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/../../bin)

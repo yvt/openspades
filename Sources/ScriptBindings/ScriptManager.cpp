@@ -50,7 +50,7 @@ namespace spades {
 			
 		}
 	protected:
-		int  LoadScriptSection(const char *filename) override {
+		int  LoadScriptSection(const char *filename) {
 			if(filename[0] != '/') {
 				SPLog("Invalid script path detected: not starting with '/'");
 				return -1;

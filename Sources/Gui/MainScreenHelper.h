@@ -28,7 +28,7 @@
 #include <Core/TMPUtils.h>
 #include <ScriptBindings/ScriptManager.h>
 
-#include <AngelScript/addons/scriptarray.h>
+#include <AngelScript/add_on/scriptarray/scriptarray.h>
 
 namespace spades {
 	class ServerItem;
