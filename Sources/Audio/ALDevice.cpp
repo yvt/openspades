@@ -449,6 +449,15 @@ namespace spades {
 
 					SPRaise("Failed to open OpenAL device.");
 				}
+
+				alContext = al::qalcCreateContext(alDevice, NULL);
+				if (!alContext) {
+					al::qalcCloseDevice(alDevice);
+					SPRaise("Failed to create OpenAL context.");
+				}
+
+				al::qalcMakeContextCurrent(alContext);
+
 				SPLog("OpenAL Info:");
 				SPLog("  Vendor: %s", al::qalGetString(AL_VENDOR));
 				SPLog("  Version: %s", al::qalGetString(AL_VERSION));
@@ -461,14 +470,6 @@ namespace spades {
 						SPLog("  %s", strs[i].c_str());
 					}
 				}
-
-				alContext = al::qalcCreateContext(alDevice, NULL);
-				if (UNLIKELY(!alContext)) {
-					al::qalcCloseDevice(alDevice);
-					SPRaise("Failed to create OpenAL context.");
-				}
-
-				al::qalcMakeContextCurrent(alContext);
 
 				map = NULL;
 				roomHistoryPos = 0;
