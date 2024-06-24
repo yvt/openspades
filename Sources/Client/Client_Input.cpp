@@ -303,6 +303,14 @@ namespace spades {
 						}
 					}
 				}
+			} else if (name == "Paused") {
+				if (down && GetWorld()) {
+					if (inGameLimbo) {
+						inGameLimbo = false;
+					} else {
+						scriptedUI->EnterClientMenu();
+					}
+				}
 			} else if (world) {
 				if (IsLimboViewActive()) {
 					if (down) {
