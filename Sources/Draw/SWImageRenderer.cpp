@@ -78,10 +78,10 @@ namespace spades {
 					}
 					if (numSteps == 0)
 						numSteps = 1;
-					b.divisor = static_cast<unsigned int>(numSteps);
+					b.divisor = SafeCast<unsigned int>(numSteps);
 					b.dividend = 0;
 					b.largePos = start;
-					b.step = static_cast<unsigned int>(distance);
+					b.step = SafeCast<unsigned int>(distance);
 				} else {
 					mode = 0;
 					if (numSteps == 0) {
