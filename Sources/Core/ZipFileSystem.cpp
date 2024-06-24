@@ -58,7 +58,7 @@ namespace spades {
 			SPADES_MARK_FUNCTION();
 			if (streaming) {
 				unzCloseCurrentFile(zip);
-				SPAssert(this == fs->currentStream);
+				SPAssert(this == fs->currentStream.get());
 				fs->currentStream = NULL;
 			}
 		}
@@ -79,7 +79,7 @@ namespace spades {
 					SPRaise("Zip file close error: 0x%08x", ret);
 				}
 
-				SPAssert(this == fs->currentStream);
+				SPAssert(this == fs->currentStream.get());
 				fs->currentStream = NULL;
 			}
 		}
@@ -343,7 +343,7 @@ namespace spades {
 
 		unzOpenCurrentFile(zip);
 		try {
-			currentStream = new ZipFileInputStream(this, zip);
+			currentStream.reset(new ZipFileInputStream(this, zip));
 			// load all data to allow seeking
 			auto stream = stmp::make_unique<DynamicMemoryStream>();
 			try {
@@ -354,10 +354,8 @@ namespace spades {
 				}
 				currentStream->ForceCloseUnzipFile();
 				stream->SetPosition(0);
-				delete currentStream;
 				return stream;
 			} catch (...) {
-				delete currentStream;
 				throw;
 			}
 		} catch (...) {
