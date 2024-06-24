@@ -37,7 +37,9 @@ namespace spades {
 			bool shooting;
 			bool shootingPreviously;
 			bool reloading;
+			bool unejectedBrass;
 			float nextShotTime;
+			float ejectBrassTime;
 			float reloadStartTime;
 			float reloadEndTime;
 
@@ -56,6 +58,7 @@ namespace spades {
 			virtual int GetClipSize() = 0;
 			virtual int GetMaxStock() = 0;
 			virtual float GetReloadTime() = 0;
+			virtual float GetEjectBrassTime() = 0;
 			virtual bool IsReloadSlow() = 0;
 			virtual int GetDamage(HitType, float distance) = 0;
 			virtual WeaponType GetWeaponType() = 0;
@@ -70,6 +73,7 @@ namespace spades {
 			void Restock();
 			void Reset();
 			void SetShooting(bool);
+			void SetUnejectedBrass(bool);
 
 			/** @return true when fired. */
 			bool FrameNext(float);
@@ -82,6 +86,7 @@ namespace spades {
 
 			bool IsShooting() const { return shooting; }
 			bool IsReloading() const { return reloading; }
+			bool IsUnejectedBrass() const { return unejectedBrass; }
 			int GetAmmo() { return ammo; }
 			int GetStock() { return stock; }
 

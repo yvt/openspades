@@ -463,6 +463,7 @@ namespace spades {
 			void PlayerJumped(Player &) override;
 			void PlayerLanded(Player &, bool hurt) override;
 			void PlayerFiredWeapon(Player &) override;
+			void PlayerEjectedBrass(Player &) override;
 			void PlayerDryFiredWeapon(Player &) override;
 			void PlayerReloadingWeapon(Player &) override;
 			void PlayerReloadedWeapon(Player &) override;

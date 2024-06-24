@@ -639,6 +639,13 @@ namespace spades {
 
 			clientPlayers.at(p.GetId())->FiredWeapon();
 		}
+
+		void Client::PlayerEjectedBrass(spades::client::Player &p) {
+			SPADES_MARK_FUNCTION();
+
+			clientPlayers.at(p.GetId())->EjectedBrass();
+		}
+
 		void Client::PlayerDryFiredWeapon(spades::client::Player &p) {
 			SPADES_MARK_FUNCTION();
 
